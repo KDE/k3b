@@ -11,7 +11,6 @@ k3b_SOURCES = k3bcore.cpp k3bapplication.cpp k3bdiroperator.cpp kdndfileview.cpp
 			k3bjobprogressdialog.cpp k3binteractiondialog.cpp \
 			k3bjobprogresssystemtray.cpp k3bsystemproblemdialog.cpp \
 			k3bdevicecombobox.cpp \
-			k3bprojectmanager.cpp \
 			k3binterface.cpp k3binterface.skel \
 			k3bprojectinterface.cpp k3bprojectinterface.skel
 
