@@ -1,0 +1,10 @@
+[Desktop Entry]
+Actions=CreateK3bVcdProject
+Encoding=UTF-8
+ServiceTypes=video/mpeg
+
+[Desktop Action CreateK3bVcdProject]
+Exec=k3b --vcd %U
+Name=Create Video CD with K3b...
+Name[de]=Video-CD mit K3b erstellen...
+Icon=k3b
