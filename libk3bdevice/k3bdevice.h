@@ -206,8 +206,8 @@ namespace K3bCdDevice
      */
     const QString& mountDevice() const;
 
-    /** 
-     * Makes only sense to use with scsi devices 
+    /**
+     * Makes only sense to use with scsi devices
      * @return a string for use with the cdrtools
      * @deprecated
      */
@@ -235,7 +235,7 @@ namespace K3bCdDevice
     int cdTextCapable() const;
 
 
-    /** 
+    /**
      * internally K3b value.
      */
     void setCurrentWriteSpeed( int s ) { m_currentWriteSpeed = s; }
@@ -266,7 +266,7 @@ namespace K3bCdDevice
     void setMountDevice( const QString& d );
 
 
-    /** 
+    /**
      * checks if unit is ready (medium inserted and ready for command)
      *
      * Refers to the MMC command: TEST UNIT READY
@@ -319,7 +319,7 @@ namespace K3bCdDevice
      * Read the CD-TEXT of an audio or mixed-mode CD.
      */
     CdText readCdText() const;
-    
+
     /**
      * @return The DataMode of the track
      * @see K3bCdDevice::Track
@@ -396,7 +396,7 @@ namespace K3bCdDevice
      * @param currentMax If not 0 this will be filled with the Current/Maximum Descriptor value.
      * @param currentMax If not 0 this will be filled with the Current/Maximum Format Type.
      */
-    bool readFormatCapacity( int wantedFormat, K3b::Msf& result, 
+    bool readFormatCapacity( int wantedFormat, K3b::Msf& result,
 			     K3b::Msf* currentMax = 0, int* currentMaxFormat = 0 ) const;
 
     /**
@@ -412,7 +412,7 @@ namespace K3bCdDevice
     int dvdMediaType() const;
 
     /**
-     * Returnes the list of supported writing speeds as reported by 
+     * Returnes the list of supported writing speeds as reported by
      * mode page 2Ah.
      *
      * This only works with MMC3 compliant drives.
@@ -481,10 +481,10 @@ namespace K3bCdDevice
     /**
      * @param type specifies what value means:
      *             00b - value refers to a logical block adress
-     *             01b - value refers to a track number where 0 will treat the lead-in as if it 
+     *             01b - value refers to a track number where 0 will treat the lead-in as if it
      *                   were a logical track and ffh will read the invisible or incomplete track.
      *             10b - value refers to a session number
-     *             
+     *
      */
     bool readTrackInformation( unsigned char** data, int& dataLen, int type, unsigned long value ) const;
 
@@ -505,7 +505,7 @@ namespace K3bCdDevice
      * if true is returned dataLen specifies the actual length of *data which needs to be
      * deleted after using.
      */
-    bool getPerformance( unsigned char** data, int& dataLen, 
+    bool getPerformance( unsigned char** data, int& dataLen,
 			 unsigned int type,
 			 unsigned int dataType,
 			 unsigned int lba = 0 ) const;
@@ -534,7 +534,7 @@ namespace K3bCdDevice
      *                    010b - Formatted Q Sub-channel (16 bytes)
      *                    100b - Corrected and de-interleaved R-W Sub-channel (96 bytes)
      */
-    bool readCdMsf( unsigned char* data, 
+    bool readCdMsf( unsigned char* data,
 		    int dataLen,
 		    int sectorType,
 		    bool dap,
@@ -543,7 +543,7 @@ namespace K3bCdDevice
 		    bool sync,
 		    bool header,
 		    bool subHeader,
-		    bool userData,			    
+		    bool userData,
 		    bool edcEcc,
 		    int c2,
 		    int subChannel ) const;
@@ -565,7 +565,7 @@ namespace K3bCdDevice
      *                    010b - Formatted Q Sub-channel (16 bytes)
      *                    100b - Corrected and de-interleaved R-W Sub-channel (96 bytes)
      */
-    bool readCd( unsigned char* data, 
+    bool readCd( unsigned char* data,
 		 int dataLen,
 		 int sectorType,
 		 bool dap,
@@ -574,7 +574,7 @@ namespace K3bCdDevice
 		 bool sync,
 		 bool header,
 		 bool subHeader,
-		 bool userData,				    
+		 bool userData,
 		 bool edcEcc,
 		 int c2,
 		 int subChannel ) const;
@@ -598,7 +598,7 @@ namespace K3bCdDevice
      *                         03h - ISRC
      * @param trackNumber only valid if subchannelParam == 03h
      */
-    bool readSubChannel( unsigned char** data, 
+    bool readSubChannel( unsigned char** data,
 			 int& dataLen,
 			 unsigned int subchannelParam,
 			 unsigned int trackNumber ) const;
@@ -681,10 +681,13 @@ namespace K3bCdDevice
 
     bool m_supermount;
 
+    // only needed on FreeBSD
+    QString m_passDevice;
 
     class Private;
     Private* d;
     friend class DeviceManager;
+    friend class ScsiCommand;
   };
 
   /**
