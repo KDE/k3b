@@ -184,7 +184,10 @@ bool K3bMad::seekFirstHeader()
   // take way to long for non-mp3 files.
   //
   bool headerFound = findNextHeader();
-  while( !headerFound && !m_inputFile.atEnd() && m_inputFile.at() < 1024 ) {
+  QIODevice::Offset inputPos = streamPos();
+  while( !headerFound && 
+	 !m_inputFile.atEnd() && 
+	 streamPos() <= inputPos+1024 ) {
     headerFound = findNextHeader();
   }
 
@@ -214,6 +217,12 @@ bool K3bMad::eof() const
 QIODevice::Offset K3bMad::inputPos() const
 {
   return m_inputFile.at();
+}
+
+
+QIODevice::Offset K3bMad::streamPos() const
+{
+  return inputPos() - (madStream->bufend - madStream->this_frame + 1);
 }
 
 

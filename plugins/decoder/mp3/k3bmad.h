@@ -51,7 +51,18 @@ public:
 
   bool eof() const;
   bool inputError() const;
+
+  /**
+   * Current position in theinput file. This does NOT
+   * care about the status of the mad stream. Use streamPos()
+   * in that case.
+   */
   QIODevice::Offset inputPos() const;
+
+  /**
+   * Current absolut position of the decoder stream.
+   */
+  QIODevice::Offset streamPos() const;
   bool inputSeek( QIODevice::Offset pos );
 
   void initMad();
