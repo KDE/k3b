@@ -1,0 +1,6 @@
+$Id$
+
+This directory contains the WorkMan library.
+
+libworkman is a multi-plaform CD-Player library for creating various
+CD-Player-UIs.
