@@ -422,6 +422,10 @@ void K3bCdrdaoWriter::setCommonArguments()
 
   // display debug info
   *m_process << "-n" << "-v" << "2";
+
+  // we have the power to do what ever we want. ;)
+  *m_process << "--force";
+
   // eject
   if( m_eject && !m_forceNoEject )
     *m_process << "--eject";
