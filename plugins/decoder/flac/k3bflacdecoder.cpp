@@ -32,8 +32,8 @@
 #include <config.h>
 
 #if HAVE_TAGLIB
-#include <tag.h>
-#include <fileref.h>
+#include <taglib/tag.h>
+#include <taglib/flacfile.h>
 #endif
 
 K_EXPORT_COMPONENT_FACTORY( libk3bflacdecoder, K3bPluginFactory<K3bFLACDecoderFactory>( "libk3bflacdecoder" ) )
@@ -233,11 +233,12 @@ bool K3bFLACDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate, int
   if ((d->comments == 0) || (d->comments->get_num_comments() == 0)) {
     // no Vorbis comments, check for ID3 tags
     kdDebug() << "(K3bFLACDecoder) using taglib to read tag" << endl;
-    TagLib::FileRef f( QFile::encodeName(filename()) );
-
-    addMetaInfo( META_TITLE, TStringToQString( f.tag()->title() ) );
-    addMetaInfo( META_ARTIST, TStringToQString( f.tag()->artist() ) );
-    addMetaInfo( META_COMMENT, TStringToQString( f.tag()->comment() ) );
+    TagLib::FLAC::File f( QFile::encodeName(filename()) );
+    if( file.isOpen() ) {
+      addMetaInfo( META_TITLE, TStringToQString( f.tag()->title() ) );
+      addMetaInfo( META_ARTIST, TStringToQString( f.tag()->artist() ) );
+      addMetaInfo( META_COMMENT, TStringToQString( f.tag()->comment() ) );
+    }
   }
 #endif
 

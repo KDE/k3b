@@ -15,7 +15,6 @@
 
 #include "k3bmixeddoc.h"
 #include "k3bmixedjob.h"
-#include "k3bmixedview.h"
 
 #include <k3bdatadoc.h>
 #include <k3baudiodoc.h>
@@ -76,17 +75,6 @@ K3b::Msf K3bMixedDoc::length() const
 }
 
 
-K3bView* K3bMixedDoc::newView( QWidget* parent )
-{
-  // HACK since the docs need to know our view to be able to
-  // open the proper burn dialog
-  K3bMixedView* view = new K3bMixedView( this, parent );
-  m_dataDoc->setView( view );
-  m_audioDoc->setView( view );
-  return view;
-}
-
-
 int K3bMixedDoc::numOfTracks() const
 {
   return m_audioDoc->numOfTracks() + 1;
@@ -101,14 +89,7 @@ K3bBurnJob* K3bMixedDoc::newBurnJob( K3bJobHandler* hdl, QObject* parent )
 
 void K3bMixedDoc::addUrls( const KURL::List& urls )
 {
-  K3bMixedView* v = (K3bMixedView*)view();
-  K3bDirItem* dir = 0;
-  if( v )
-    dir = v->currentDir();
-  if( dir )
-    dataDoc()->slotAddUrlsToDir( urls, dir );
-  else
-    audioDoc()->addUrls( urls );
+  dataDoc()->addUrls( urls );
 }
 
 

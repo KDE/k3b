@@ -37,7 +37,6 @@
 
 // K3b-includes
 #include "k3bvcddoc.h"
-#include "k3bvcdview.h"
 #include "k3bvcdtrack.h"
 #include "k3bvcdjob.h"
 #include <k3bglobals.h>
@@ -378,12 +377,6 @@ void K3bVcdDoc::moveTrack( const K3bVcdTrack* track, const K3bVcdTrack* after )
     setPbcTracks();
 
     emit changed();
-}
-
-
-K3bView* K3bVcdDoc::newView( QWidget* parent )
-{
-    return new K3bVcdView( this, parent );
 }
 
 

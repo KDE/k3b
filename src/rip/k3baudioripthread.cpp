@@ -28,9 +28,6 @@
 #include <k3btrack.h>
 #include <k3bglobals.h>
 
-#include <songdb/k3bsong.h>
-#include <songdb/k3bsongmanager.h>
-
 #include <qfile.h>
 #include <qtimer.h>
 
@@ -238,19 +235,6 @@ void K3bAudioRipThread::run()
 
     if( success && !d->canceled ) {
       QString& filename = m_tracks[0].second;
-
-      if( !m_cddbEntry.cdArtist.isEmpty() &&
-	  !m_cddbEntry.cdTitle.isEmpty() ) {
-	kdDebug() << "(K3bAudioRipThread) creating new entry in SongDb." << endl;
-	K3bSong* song = new K3bSong( filename.right( filename.length() - 1 - filename.findRev("/") ),
-				     m_cddbEntry.cdTitle,
-				     m_cddbEntry.cdArtist,
-				     m_cddbEntry.cdTitle,
-				     m_cddbEntry.discid,
-				     0 );
-	K3bSongManager::instance()->addSong( filename.left(filename.findRev("/")), song );
-      }
-
       emitInfoMessage( i18n("Successfully ripped to %2.").arg(filename), K3bJob::INFO );
     }
   }
@@ -350,20 +334,6 @@ bool K3bAudioRipThread::ripTrack( int track, const QString& filename )
 	      d->encoder->closeFile();
 	    else
 	      d->waveFileWriter->close();
-	  }
-
-
-	  if( !m_singleFile &&
-	      !m_cddbEntry.artists[track-1].isEmpty() &&
-	      !m_cddbEntry.titles[track-1].isEmpty() ) {
-	    kdDebug() << "(K3bAudioRipThread) creating new entry in SongDb." << endl;
-	    K3bSong* song = new K3bSong( filename.right( filename.length() - 1 - filename.findRev("/") ),
-					 m_cddbEntry.cdTitle,
-					 m_cddbEntry.artists[track-1],
-					 m_cddbEntry.titles[track-1],
-					 m_cddbEntry.discid,
-					 track );
-	    K3bSongManager::instance()->addSong( filename.left(filename.findRev("/")), song );
 	  }
 
 	  return true;

@@ -15,8 +15,6 @@
 
 #include "k3bmovixdvddoc.h"
 #include "k3bmovixdvdjob.h"
-#include "k3bmovixdvdview.h"
-#include "k3bmovixdvdburndialog.h"
 
 #include <kconfig.h>
 
@@ -33,12 +31,6 @@ K3bMovixDvdDoc::~K3bMovixDvdDoc()
 K3bBurnJob* K3bMovixDvdDoc::newBurnJob( K3bJobHandler* hdl, QObject* parent )
 {
   return new K3bMovixDvdJob( this, hdl, parent );
-}
-
-
-K3bView* K3bMovixDvdDoc::newView( QWidget* parent )
-{
-  return new K3bMovixDvdView( this, parent );
 }
 
 

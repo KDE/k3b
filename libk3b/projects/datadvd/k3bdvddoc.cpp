@@ -16,7 +16,6 @@
 
 #include "k3bdvddoc.h"
 #include "k3bdvdjob.h"
-#include "k3bdvdview.h"
 
 #include <k3bisooptions.h>
 
@@ -35,12 +34,6 @@ K3bDvdDoc::~K3bDvdDoc()
 K3bBurnJob* K3bDvdDoc::newBurnJob( K3bJobHandler* hdl, QObject* parent )
 {
   return new K3bDvdJob( this, hdl, parent );
-}
-
-
-K3bView* K3bDvdDoc::newView( QWidget* parent )
-{
-  return new K3bDvdView( this, parent );
 }
 
 

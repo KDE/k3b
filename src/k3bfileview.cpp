@@ -18,6 +18,7 @@
 #include "k3b.h"
 #include "k3bdiroperator.h"
 #include "k3btoolbox.h"
+#include "k3bapplication.h"
 
 #include <qwidget.h>
 #include <qdragobject.h>
@@ -159,7 +160,7 @@ void K3bFileView::slotAddFilesToProject()
     files.append( it.current()->url() );
   }    
   if( !files.isEmpty() )
-    k3bMain()->addUrls( files );
+    k3bappcore->k3bMainWindow()->addUrls( files );
 }
 
 
@@ -183,7 +184,7 @@ void K3bFileView::slotFilterChanged()
 
 void K3bFileView::slotCheckActions()
 {
-  m_dirOp->actionCollection()->action("add_file_to_project")->setEnabled( k3bMain()->activeView() != 0 );
+  m_dirOp->actionCollection()->action("add_file_to_project")->setEnabled( k3bappcore->k3bMainWindow()->activeView() != 0 );
 }
 
 

@@ -39,10 +39,7 @@
 
 
 // application specific includes
-#include "k3bview.h"
 #include "k3bdoc.h"
-#include "k3bprojectmanager.h"
-//#include "k3bprojectinterface.h"
 #include <k3bglobals.h>
 #include <k3bdevice.h>
 #include <k3bmsf.h>
@@ -66,9 +63,6 @@ K3bDoc::K3bDoc( QObject* parent )
     m_modified(false),
     m_view(0)
 {
-  // register the project with the manager
-  k3bprojectmanager->addProject( this );
-
   m_burner = 0;
   m_onTheFly = true;
   m_overburn = false;
@@ -86,8 +80,6 @@ K3bDoc::K3bDoc( QObject* parent )
 
 K3bDoc::~K3bDoc()
 {
-  // remove the project from the manager
-  k3bprojectmanager->removeProject( this );
 }
 
 
@@ -136,14 +128,14 @@ void K3bDoc::addUrl( const KURL& url )
 }
 
 
-K3bView* K3bDoc::createView( QWidget* parent, const char* )
-{
-  K3bView* view = newView( parent );
-  view->setCaption( URL().fileName() );
-  m_view = view;
+// K3bView* K3bDoc::createView( QWidget* parent, const char* )
+// {
+//   K3bView* view = newView( parent );
+//   view->setCaption( URL().fileName() );
+//   m_view = view;
 
-  return view;
-}
+//   return view;
+// }
 
 
 void K3bDoc::setURL( const KURL& url )

@@ -104,6 +104,8 @@ public:
   QPtrList<K3bDevice::Device> cdWriter;
   QPtrList<K3bDevice::Device> dvdReader;
   QPtrList<K3bDevice::Device> dvdWriter;
+
+  bool checkWritingModes;
 };
 
 
@@ -120,6 +122,12 @@ K3bDevice::DeviceManager::DeviceManager( QObject* parent, const char* name )
 K3bDevice::DeviceManager::~DeviceManager()
 {
   delete d;
+}
+
+
+void K3bDevice::DeviceManager::setCheckWritingModes( bool b )
+{
+  d->checkWritingModes = b;
 }
 
 

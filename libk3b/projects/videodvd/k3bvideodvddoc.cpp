@@ -16,8 +16,6 @@
 
 #include "k3bvideodvddoc.h"
 #include "k3bvideodvdjob.h"
-#include "k3bvideodvdview.h"
-#include "k3bvideodvdburndialog.h"
 
 #include <k3bdiritem.h>
 
@@ -62,12 +60,6 @@ bool K3bVideoDvdDoc::newDocument()
 K3bBurnJob* K3bVideoDvdDoc::newBurnJob( K3bJobHandler* hdl, QObject* parent )
 {
   return new K3bVideoDvdJob( this, hdl, parent );
-}
-
-
-K3bView* K3bVideoDvdDoc::newView( QWidget* parent )
-{
-  return new K3bVideoDvdView( this, parent );
 }
 
 

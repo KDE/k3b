@@ -109,6 +109,8 @@ void K3bDevice::DiskInfoDetector::detect( Device* device )
   }
 
   d->device = device;
+  d->isVideoCd = false;
+  d->isVideoDvd = false;
 
   // reset
   delete d->iso9660;

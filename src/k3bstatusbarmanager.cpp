@@ -58,7 +58,7 @@ K3bStatusBarManager::K3bStatusBarManager( K3bMainWindow* parent )
   m_labelInfoMessage = new QLabel( " ", m_mainWindow->statusBar() );
 
   // setup version info
-  m_versionBox = new QLabel( QString("K3b %1").arg(k3bcore->version()), m_mainWindow->statusBar() );
+  m_versionBox = new QLabel( QString("K3b %1").arg(kapp->aboutData()->version()), m_mainWindow->statusBar() );
   m_versionBox->installEventFilter( this );
 
   // setup the statusbar

@@ -172,7 +172,7 @@ class K3bAudioDoc : public K3bDoc
   void loadDefaultSettings( KConfig* );
 
   /** reimplemented from K3bDoc */
-  K3bView* newView( QWidget* parent );
+  //  K3bView* newView( QWidget* parent );
 
  private:
   // the stuff for adding files

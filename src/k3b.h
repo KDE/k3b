@@ -58,26 +58,7 @@ namespace K3bDevice {
   class DeviceManager;
 }
 
-/** Access to the "lonely" K3bMainWindow Object */
-K3bMainWindow* k3bMain();
 
-
-/**
-  * The base class for K3b application windows. It sets up the main
-  * window and reads the config file as well as providing a menubar, toolbar
-  * and statusbar. In initView(), your main view is created as the MDI child window manager.
-  * Child windows are created in createClient(), which gets a document instance as it's document to
-  * display whereby one document can have several views.The MDI child is an instance of K3bView,
-  * the document an instance of K3bDoc.
-  * K3bMainWindow reimplements the methods that KDockMainWindow provides for main window handling and supports
-  * full session management as well as keyboard accelerator configuration by using KAccel.
-  * @see KDockMainWindow
-  * @see KApplication
-  * @see KConfig
-  * @see KAccel
-  *
-  * @author Sebastian Trueg
-  */
 class K3bMainWindow : public KParts::DockMainWindow
 {
   Q_OBJECT

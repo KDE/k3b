@@ -18,7 +18,7 @@
 
 #include "k3bthememanager.h"
 
-#include <kapplication.h>
+#include <k3bapplication.h>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
@@ -81,12 +81,12 @@ void K3bThemeOptionTab::readSettings()
 {
   m_viewTheme->clear();
 
-  k3bthememanager->loadThemes();
+  k3bappcore->themeManager()->loadThemes();
 
-  const QPtrList<K3bTheme>& themes = k3bthememanager->themes();
+  const QPtrList<K3bTheme>& themes = k3bappcore->themeManager()->themes();
   for( QPtrListIterator<K3bTheme> it( themes ); it.current(); ++it ) {
     ThemeViewItem* item = new ThemeViewItem( it.current(), m_viewTheme, m_viewTheme->lastItem() );
-    if( it.current() == k3bthememanager->currentTheme() )
+    if( it.current() == k3bappcore->themeManager()->currentTheme() )
       m_viewTheme->setSelected( item, true );
   }
 }
@@ -96,7 +96,7 @@ bool K3bThemeOptionTab::saveSettings()
 {
   ThemeViewItem* item = (ThemeViewItem*)m_viewTheme->selectedItem();
   if( item )
-    k3bthememanager->setCurrentTheme( item->theme );
+    k3bappcore->themeManager()->setCurrentTheme( item->theme );
 
   return true;
 }

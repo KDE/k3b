@@ -196,7 +196,7 @@ K3bDevice::Device::~Device()
 }
 
 
-bool K3bDevice::Device::init()
+bool K3bDevice::Device::init( bool bCheckWritingModes )
 {
   kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": init()" << endl;
 
@@ -244,7 +244,8 @@ bool K3bDevice::Device::init()
   // We do this before checking mode page 2A in case some readers allow changin
   // the write parameter page
   //
-  checkWritingModes();
+  if( bCheckWritingModes )
+    checkWritingModes();
 
   //
   // Most current drives support the 2A mode page
@@ -371,6 +372,16 @@ void K3bDevice::Device::checkForAncientWriters()
   else if( vendor().startsWith("HP") ) {
     if( description().startsWith("CD-Writer 6020") ) {
       m_writeModes = WRITINGMODE_TAO;
+      d->deviceType = DEVICE_CD_ROM|DEVICE_CD_R;
+      m_maxWriteSpeed = 2;
+      m_maxReadSpeed = 6;
+      m_bufferSize = 1024;
+      d->burnfree = false;
+    }
+  }
+  else if( vendor().startsWith( "PHILIPS" ) ) {
+    if( description().startsWith( "CDD2600" ) ) {
+      m_writeModes = WRITINGMODE_TAO|WRITINGMODE_SAO;
       d->deviceType = DEVICE_CD_ROM|DEVICE_CD_R;
       m_maxWriteSpeed = 2;
       m_maxReadSpeed = 6;

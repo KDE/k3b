@@ -279,13 +279,14 @@ void K3bAudioRippingDialog::slotStartClicked()
   if( encoder )
     thread->setFileType( m_optionWidget->extension() );
 
-  K3bJobProgressDialog ripDialog( kapp->mainWidget(), "Ripping" );
+  K3bJobProgressDialog ripDialog( parentWidget(), "Ripping" );
 
   K3bThreadJob job( thread, &ripDialog, this );
 
   hide();
   ripDialog.startJob(&job);
 
+  kdDebug() << "(K3bAudioRippingDialog) deleting ripthread." << endl;
   delete thread;
 
   close();
@@ -294,9 +295,9 @@ void K3bAudioRippingDialog::slotStartClicked()
 
 void K3bAudioRippingDialog::refresh()
 {
-  QString oldGroup = k3bcore->config()->group();
-  KConfig* c = k3bcore->config();
-  c->setGroup( "Audio Ripping" );
+//   QString oldGroup = k3bcore->config()->group();
+//   KConfig* c = k3bcore->config();
+//   c->setGroup( "Audio Ripping" );
 
   m_viewTracks->clear();
   d->filenames.clear();
@@ -417,7 +418,7 @@ void K3bAudioRippingDialog::refresh()
     d->playlistFilename = K3b::fixupPath( baseDir + "/" + filename );
   }
 
-  k3bcore->config()->setGroup( oldGroup );
+  //  k3bcore->config()->setGroup( oldGroup );
 }
 
 
@@ -436,6 +437,8 @@ void K3bAudioRippingDialog::loadK3bDefaults()
   
   m_optionWidget->loadDefaults();
   m_patternWidget->loadDefaults();
+
+  refresh();
 }
 
 void K3bAudioRippingDialog::loadUserDefaults( KConfig* c )
@@ -447,6 +450,8 @@ void K3bAudioRippingDialog::loadUserDefaults( KConfig* c )
 
   m_optionWidget->loadConfig( c );
   m_patternWidget->loadConfig( c );
+
+  refresh();
 }
 
 void K3bAudioRippingDialog::saveUserDefaults( KConfig* c )

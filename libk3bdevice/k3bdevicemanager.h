@@ -59,6 +59,19 @@ namespace K3bDevice {
       ~DeviceManager();
 
       /**
+       * By default the DeviceManager makes the Devices check their writing modes.
+       * This includes commands to be sent which require writing permissions on the
+       * devices and might take some time.
+       *
+       * So if you don't need the information about the writing modes use this method
+       * to speed up the device detection procedure.
+       *
+       * Be aware that this only refers to CD writing modes. If you only want to handle
+       * DVD devices it's always save to set this to false.
+       */
+      void setCheckWritingModes( bool b );
+
+      /**
        * \deprecated use findDevice( const QString& )
        */
       Device* deviceByName( const QString& );

@@ -17,7 +17,7 @@
 #include <config.h>
 
 
-#include "k3bcore.h"
+#include "k3bapplication.h"
 #include "k3bsystemproblemdialog.h"
 #include <k3btitlelabel.h>
 #include <k3bexternalbinmanager.h>
@@ -84,7 +84,7 @@ K3bSystemProblemDialog::K3bSystemProblemDialog( const QValueList<K3bSystemProble
   layout4->addWidget( pixmapLabelRight );
 
 
-  if( K3bTheme* theme = k3bthememanager->currentTheme() ) {
+  if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
     pixmapLabelLeft->setPaletteBackgroundColor( theme->backgroundColor() );
     pixmapLabelLeft->setPixmap( theme->pixmap( K3bTheme::MEDIA_LEFT ) );
     pixmapLabelRight->setPaletteBackgroundColor( theme->backgroundColor() );

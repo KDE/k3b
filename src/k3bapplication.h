@@ -25,7 +25,6 @@
 
 class K3bMainWindow;
 class K3bInterface;
-class K3bSongManager;
 class K3bAudioServer;
 class K3bThemeManager;
 
@@ -42,8 +41,6 @@ class K3bApplication : public KUniqueApplication
 
   int newInstance();
 
-  K3bMainWindow* k3bMainWindow() const;
-
   class Core;
 
  signals:
@@ -58,8 +55,8 @@ class K3bApplication : public KUniqueApplication
 
   K3bInterface* m_interface;
   Core* m_core;
-  K3bMainWindow* m_mainWindow;
   K3bAudioServer* m_audioServer;
+  K3bMainWindow* m_mainWindow;
 
   bool m_needToInit;
 };
@@ -83,8 +80,9 @@ class K3bApplication::Core : public K3bCore
   void readSettings( KConfig* c = 0 );
   void saveSettings( KConfig* c = 0 );
 
-  K3bSongManager* songManager() const { return m_songManager; }
-  K3bThemeManager* themeManger() const { return m_themeManager; }
+  K3bThemeManager* themeManager() const { return m_themeManager; }
+
+  K3bMainWindow* k3bMainWindow() const { return m_mainWindow; }
 
   static Core* k3bAppCore() { return s_k3bAppCore; }
 
@@ -95,10 +93,12 @@ class K3bApplication::Core : public K3bCore
   void initializationInfo( const QString& );
 
  private:
-  K3bSongManager* m_songManager;
   K3bThemeManager* m_themeManager;
+  K3bMainWindow* m_mainWindow;
 
   static Core* s_k3bAppCore;
+
+  friend class K3bApplication;
 };
 
 #endif

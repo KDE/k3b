@@ -38,7 +38,7 @@ class K3bMovixDvdDoc : public K3bMovixDoc
 
   void loadDefaultSettings( KConfig* );
 
-  K3bView* newView( QWidget* parent = 0 );
+  //  K3bView* newView( QWidget* parent = 0 );
 };
 
 #endif

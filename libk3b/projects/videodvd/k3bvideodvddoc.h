@@ -40,7 +40,7 @@ class K3bVideoDvdDoc : public K3bDvdDoc
   virtual QString documentType() const { return "video_dvd"; }
   virtual void loadDefaultSettings( KConfig* );
 
-  virtual K3bView* newView( QWidget* parent );
+  //  virtual K3bView* newView( QWidget* parent );
 
  private:
   K3bDirItem* m_videoTsDir;

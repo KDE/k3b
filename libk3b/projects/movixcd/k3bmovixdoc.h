@@ -22,7 +22,7 @@
 
 #include <qptrlist.h>
 
-class K3bView;
+//class K3bView;
 class KURL;
 class QDomElement;
 class K3bFileItem;
@@ -96,7 +96,7 @@ class K3bMovixDoc : public K3bDataDoc
 
   virtual void loadDefaultSettings( KConfig* );
 
-  virtual K3bView* newView( QWidget* parent = 0);
+  //  virtual K3bView* newView( QWidget* parent = 0);
 
  private slots:
   void slotDataItemRemoved( K3bDataItem* );

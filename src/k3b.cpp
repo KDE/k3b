@@ -64,24 +64,30 @@
 
 // application specific includes
 #include "k3b.h"
-#include "k3bcore.h"
+#include "k3bapplication.h"
 #include <k3bglobals.h>
 #include "k3bview.h"
 #include "k3bdirview.h"
-#include "audiocd/k3baudiodoc.h"
-#include "audiocd/k3baudioview.h"
+#include <k3baudiodoc.h>
+#include "k3baudioview.h"
 #include <k3bdevicemanager.h>
-#include "audiocd/k3baudiotrackdialog.h"
+#include "k3baudiotrackdialog.h"
 #include "option/k3boptiondialog.h"
 #include "k3bprojectburndialog.h"
-#include "datacd/k3bdatadoc.h"
-#include "datadvd/k3bdvddoc.h"
-#include "videodvd/k3bvideodvddoc.h"
-#include "datacd/k3bdataview.h"
-#include "mixedcd/k3bmixeddoc.h"
-#include "videocd/k3bvcddoc.h"
-#include "movixcd/k3bmovixdoc.h"
-#include "movixdvd/k3bmovixdvddoc.h"
+#include <k3bdatadoc.h>
+#include "k3bdataview.h"
+#include <k3bdvddoc.h>
+#include "k3bdvdview.h"
+#include <k3bvideodvddoc.h>
+#include "k3bvideodvdview.h"
+#include <k3bmixeddoc.h>
+#include "k3bmixedview.h"
+#include <k3bvcddoc.h>
+#include "k3bvcdview.h"
+#include <k3bmovixdoc.h>
+#include "k3bmovixview.h"
+#include <k3bmovixdvddoc.h>
+#include "k3bmovixdvdview.h"
 #include "k3bblankingdialog.h"
 #include "images/k3bcdimagewritingdialog.h"
 #include "images/k3bisoimagewritingdialog.h"
@@ -96,12 +102,12 @@
 #include "k3bfiletreeview.h"
 #include "k3bsidepanel.h"
 #include "k3bstdguiitems.h"
-#include "datadvd/k3bdvdformattingdialog.h"
+#include "k3bdvdformattingdialog.h"
 #include "dvdcopy/k3bdvdcopydialog.h"
 //#include "dvdcopy/k3bvideodvdcopydialog.h"
 #include "k3bprojectinterface.h"
 #include "k3bdataprojectinterface.h"
-#include <k3bprojectmanager.h>
+#include "k3bprojectmanager.h"
 #include "k3bwelcomewidget.h"
 #include <k3bpluginmanager.h>
 #include <k3bplugin.h>
@@ -111,18 +117,6 @@
 #include <k3biso9660.h>
 #include <k3bcuefileparser.h>
 #include <k3bdeviceselectiondialog.h>
-
-
-static K3bMainWindow* s_k3bMainWindow = 0;
-
-K3bMainWindow* k3bMain()
-{
-  if( !s_k3bMainWindow ) {
-    kdDebug() << "No K3bMainWindow found!" << endl;
-    exit(1);
-  }
-  return s_k3bMainWindow;
-}
 
 
 
@@ -155,8 +149,6 @@ K3bMainWindow::K3bMainWindow()
   d = new Private;
   d->projectManager = new K3bProjectManager( this );
   d->lastDoc = 0;
-
-  s_k3bMainWindow = this;
 
   setPlainCaption( i18n("K3b - The CD and DVD Kreator") );
 
@@ -197,7 +189,7 @@ K3bMainWindow::K3bMainWindow()
   connect( k3bcore, SIGNAL(busyInfoRequested(const QString&)), this, SLOT(showBusyInfo(const QString&)) );
   connect( k3bcore, SIGNAL(busyFinishRequested()), this, SLOT(endBusy()) );
 
-  connect( k3bthememanager, SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()) );
+  connect( k3bappcore->themeManager(), SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()) );
 }
 
 K3bMainWindow::~K3bMainWindow()
@@ -467,11 +459,47 @@ void K3bMainWindow::initView()
 }
 
 
-void K3bMainWindow::createClient(K3bDoc* doc)
+void K3bMainWindow::createClient( K3bDoc* doc )
 {
-  K3bView* w = doc->createView( m_documentTab );
+  // create the proper K3bView (maybe we should put this into some other class like K3bProjectManager)
+  K3bView* view = 0;
+  switch( doc->docType() ) {
+  case K3bDoc::AUDIO:
+    view = new K3bAudioView( static_cast<K3bAudioDoc*>(doc), m_documentTab );
+    break;
+  case K3bDoc::DATA:
+    view = new K3bDataView( static_cast<K3bDataDoc*>(doc), m_documentTab );
+    break; 
+  case K3bDoc::MIXED:
+    {
+      K3bMixedDoc* mixedDoc = static_cast<K3bMixedDoc*>(doc);
+      view = new K3bMixedView( mixedDoc, m_documentTab );
+      mixedDoc->dataDoc()->setView( view );
+      mixedDoc->audioDoc()->setView( view );
+      break; 
+    }
+  case K3bDoc::VCD:
+    view = new K3bVcdView( static_cast<K3bVcdDoc*>(doc), m_documentTab );
+    break; 
+  case K3bDoc::MOVIX:
+    view = new K3bMovixView( static_cast<K3bMovixDoc*>(doc), m_documentTab );
+    break;
+  case K3bDoc::MOVIX_DVD:
+    view = new K3bMovixDvdView( static_cast<K3bMovixDvdDoc*>(doc), m_documentTab );
+    break;
+  case K3bDoc::DVD:
+    view = new K3bDvdView( static_cast<K3bDvdDoc*>(doc), m_documentTab );
+    break;
+  case K3bDoc::VIDEODVD:
+    view = new K3bVideoDvdView( static_cast<K3bVideoDvdDoc*>(doc), m_documentTab );
+    break;
+  }
+
+  doc->setView( view );
+  view->setCaption( doc->URL().fileName() );
+
   m_documentTab->insertTab( doc );
-  m_documentTab->showPage( w );
+  m_documentTab->showPage( view );
 
   slotCurrentDocChanged();
 }
@@ -896,6 +924,9 @@ void K3bMainWindow::closeProject( K3bDoc* doc )
     d->projectInterfaceMap.remove( it );
   }
 
+  // remove the project from the manager
+  d->projectManager->removeProject( doc );
+
   // delete view and doc
   delete doc->view();
   delete doc;
@@ -1153,6 +1184,9 @@ K3bDoc* K3bMainWindow::slotNewMovixDvdDoc()
 
 void K3bMainWindow::initializeNewDoc( K3bDoc* doc )
 {
+  // register the project with the manager
+  d->projectManager->addProject( doc );
+
   doc->newDocument();
   doc->loadDefaultSettings( config() );
 
@@ -1522,7 +1556,7 @@ void K3bMainWindow::addUrls( const KURL::List& urls )
 
 void K3bMainWindow::slotClearProject()
 {
-  K3bDoc* doc = k3bprojectmanager->activeDoc();
+  K3bDoc* doc = d->projectManager->activeDoc();
   if( doc ) {
     if( KMessageBox::questionYesNo( this,
 				    i18n("Do you really want to clear the current project?"),
@@ -1539,7 +1573,7 @@ void K3bMainWindow::slotClearProject()
 
 void K3bMainWindow::slotThemeChanged()
 {
-  if( K3bTheme* theme = k3bthememanager->currentTheme() ) {
+  if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
     d->leftDocPicLabel->setPixmap( theme->pixmap( K3bTheme::PROJECT_LEFT ) );
     d->rightDocPicLabel->setPixmap( theme->pixmap( K3bTheme::PROJECT_RIGHT ) );
     d->centerDocLabel->setPaletteBackgroundColor( theme->backgroundColor() );

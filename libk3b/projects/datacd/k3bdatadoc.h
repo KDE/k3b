@@ -37,7 +37,7 @@ class K3bBootItem;
 class K3bFileCompilationSizeHandler;
 
 class KProgressDialog;
-class K3bView;
+//class K3bView;
 class KConfig;
 class QString;
 class QStringList;
@@ -166,7 +166,7 @@ class K3bDataDoc : public K3bDoc
   KIO::filesize_t m_oldSessionSize;
 
   /** reimplemented from K3bDoc */
-  virtual K3bView* newView( QWidget* parent );
+  //  virtual K3bView* newView( QWidget* parent );
 
  private:
   void prepareFilenamesInDir( K3bDirItem* dir );

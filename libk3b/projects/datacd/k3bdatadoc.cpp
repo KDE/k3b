@@ -18,7 +18,6 @@
 #include "k3bfileitem.h"
 #include "k3bdiritem.h"
 #include "k3bsessionimportitem.h"
-#include "k3bdataview.h"
 #include "k3bdatajob.h"
 #include "k3bbootitem.h"
 #include "k3bspecialdataitem.h"
@@ -105,12 +104,6 @@ bool K3bDataDoc::newDocument()
   m_isoOptions = K3bIsoOptions();
 
   return K3bDoc::newDocument();
-}
-
-
-K3bView* K3bDataDoc::newView( QWidget* parent )
-{
-  return new K3bDataView( this, parent );
 }
 
 

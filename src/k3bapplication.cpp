@@ -27,7 +27,6 @@
 #include <k3bdefaultexternalprograms.h>
 #include <k3bglobals.h>
 #include <k3bversion.h>
-#include <songdb/k3bsongmanager.h>
 #include <k3bdoc.h>
 #include "k3bsystemproblemdialog.h"
 #include <k3bthread.h>
@@ -82,12 +81,6 @@ K3bApplication::~K3bApplication()
 }
 
 
-K3bMainWindow* K3bApplication::k3bMainWindow() const
-{
-  return m_mainWindow;
-}
-
-
 void K3bApplication::init()
 {
   QGuardedPtr<K3bSplash> splash;
@@ -120,6 +113,7 @@ void K3bApplication::init()
   emit initializationInfo( i18n("Creating GUI...") );
 
   m_mainWindow = new K3bMainWindow();
+  m_core->m_mainWindow = m_mainWindow;
 
   m_interface = new K3bInterface( m_mainWindow );
   dcopClient()->setDefaultObject( m_interface->objId() );
@@ -335,18 +329,12 @@ K3bApplication::Core::Core( QObject* parent )
   : K3bCore( parent )
 {
   s_k3bAppCore = this;
-
-  // FIXME: this is bad stuff!!! Make this a normal instance and
-  //        only use it in the application
-  m_songManager = K3bSongManager::instance();
-
   m_themeManager = new K3bThemeManager( this );
 }
 
 
 K3bApplication::Core::~Core()
 {
-  delete m_songManager;  // this is bad stuff!!!
 }
 
 
@@ -411,7 +399,6 @@ void K3bApplication::Core::saveSettings( KConfig* cnf )
   QString oldGrp = c->group();
 
   m_themeManager->saveConfig( config() );
-  m_songManager->save();
 
   c->setGroup( oldGrp );
 }

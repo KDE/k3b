@@ -55,6 +55,7 @@ namespace K3bDevice
        */
       static const char* cdrdao_drivers[];
 
+      // FIXME: make this protected
       ~Device();
 
       /**
@@ -725,8 +726,11 @@ namespace K3bDevice
        * using the device.
        *
        * Should only be used by the DeviceManager.
+       *
+       * @param checkWritingModes if true the CD writing modes will be checked using 
+       *                          MMC_MODE_SELECT.
        */
-      bool init();
+      bool init( bool checkWritingModes = true );
 
       void setMountPoint( const QString& );
       void setMountDevice( const QString& );

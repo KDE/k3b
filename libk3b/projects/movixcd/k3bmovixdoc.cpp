@@ -15,7 +15,6 @@
 
 
 #include "k3bmovixdoc.h"
-#include "k3bmovixview.h"
 #include "k3bmovixjob.h"
 #include "k3bmovixfileitem.h"
 
@@ -44,12 +43,6 @@ K3bMovixDoc::K3bMovixDoc( QObject* parent )
 
 K3bMovixDoc::~K3bMovixDoc()
 {
-}
-
-
-K3bView* K3bMovixDoc::newView( QWidget* parent )
-{
-  return new K3bMovixView( this, parent );
 }
 
 

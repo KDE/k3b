@@ -33,7 +33,6 @@
 
 
 // forward declaration of the K3b classes
-class K3bView;
 class QTimer;
 class KTempFile;
 class K3bBurnJob;
@@ -82,7 +81,7 @@ class K3bDoc : public QObject
    *
    * TODO: remove this. Decide it somewhere in k3b
    */
-  K3bView* createView( QWidget* parent = 0, const char* name = 0 );
+  //  K3bView* createView( QWidget* parent = 0, const char* name = 0 );
 
   /** 
    * returns the K3bView created by newView() or null if none has been created
@@ -259,7 +258,7 @@ class K3bDoc : public QObject
   /**
    * TODO: move this to k3b
    */
-  virtual K3bView* newView( QWidget* parent = 0 ) = 0;
+  //  virtual K3bView* newView( QWidget* parent = 0 ) = 0;
 
  private slots:
   void slotChanged();

@@ -129,16 +129,20 @@ void K3bMovieView::reload()
     emit notSupportedDisc( m_device->devicename() );
     return;
   }
-  KDialog* infoDialog = new KDialog( this, "waitForDiskInfoDialog", true, WType_Popup|WDestructiveClose );
+  KDialog* infoDialog = new KDialog( this, "waitForDiskInfoDialog", true, WStyle_Customize|WStyle_NoBorder|WDestructiveClose );
   infoDialog->setCaption( i18n("Please Wait...") );
-  QHBoxLayout* infoLayout = new QHBoxLayout( infoDialog );
+  QHBoxLayout* lay = new QHBoxLayout( infoDialog );
+  lay->setAutoAdd( true );
+  QFrame* frame = new QFrame( infoDialog );
+  frame->setFrameStyle( QFrame::Box|QFrame::Plain );
+  frame->setLineWidth( 2 );
+  QHBoxLayout* infoLayout = new QHBoxLayout( frame );
   infoLayout->setSpacing( KDialog::spacingHint() );
   infoLayout->setMargin( KDialog::marginHint() );
   infoLayout->setAutoAdd( true );
-  QLabel* picLabel = new QLabel( infoDialog );
+  QLabel* picLabel = new QLabel( frame );
   picLabel->setPixmap( DesktopIcon( "cdwriter_unmount" ) );
-  (void)new QLabel( i18n("K3b is fetching information about title "), infoDialog );
-  m_fetchingInfoLabel = new QLabel( "<1>", infoDialog );
+  m_fetchingInfoLabel = new QLabel( i18n("K3b is fetching information about title %1...").arg( 1 ), frame );
   connect( m_tcWrapper, SIGNAL(tcprobeTitleParsed( int )), this, SLOT( slotUpdateInfoDialog( int )) );
   connect( m_tcWrapper, SIGNAL( successfulDvdCheck( bool )), infoDialog, SLOT( close() ));
   infoDialog->show();
@@ -179,11 +183,9 @@ void K3bMovieView::slotDvdChecked( bool successful )
     for( unsigned int i= 0; i < m_dvdTitles.count();  i++){
       K3bDvdContent *title = &(m_dvdTitles[ i ]);
       int t=title->getTitleSet();
-      QString strTitleset = QString::number( t );
-      if ( t < 10 )
-	strTitleset = "0" + strTitleset;
-      QString mainEntryAndKey = i18n("Titleset %1").arg( strTitleset );
-      kdDebug() << "(K3bMovieView) Titleset: " << QString::number( title->getTitleSet()) << " Title: " << QString::number( title->getTitleNumber() ) << endl;
+      QString mainEntryAndKey = i18n("Titleset %1").arg( t, 2 );
+      kdDebug() << "(K3bMovieView) Titleset: " << QString::number( title->getTitleSet())
+		<< " Title: " << QString::number( title->getTitleNumber() ) << endl;
       if( !existingTitlesets.contains( QString::number( title->getTitleSet()) ) ){
 	existingTitlesets << QString::number( title->getTitleSet());
 	K3bDvdRipListViewItem *item = new K3bDvdRipListViewItem( m_listView, mainEntryAndKey );
@@ -193,7 +195,7 @@ void K3bMovieView::slotDvdChecked( bool successful )
 	item->setTitleSet( true );
       }
       K3bDvdRipListViewItem *titleItem =  new K3bDvdRipListViewItem( m_listView->findItem( mainEntryAndKey, 0), 
-								     i18n("Title %1").arg(title->getTitleNumber() ),
+								     i18n("Title %1").arg( title->getTitleNumber(), 2 ),
 								     title->getStrTime(), 
 								     filterAudioList( title->getAudioList() ), 
 								     QString::number( title->getMaxChapters() ), 
@@ -265,7 +267,7 @@ void K3bMovieView::slotNotSupportedDisc()
 
 void K3bMovieView::slotUpdateInfoDialog( int i )
 {
-  m_fetchingInfoLabel->setText( "<"+QString::number( i )+">" );
+  m_fetchingInfoLabel->setText( i18n("K3b is fetching information about title %1...").arg( i ) );
 }
 
 void K3bMovieView::slotRip()

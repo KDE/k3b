@@ -15,7 +15,7 @@
 
 
 #include "k3bdirview.h"
-#include <k3bcore.h>
+#include "k3bapplication.h"
 
 #include "rip/k3baudiocdview.h"
 #include "rip/k3bvideocdview.h"
@@ -86,7 +86,7 @@ protected:
     QPainter p( this );
 
     QSize pixSize;
-    if( K3bTheme* theme = k3bthememanager->currentTheme() ) {
+    if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
       p.fillRect( e->rect(), theme->backgroundColor() );
       p.drawPixmap( 0, 0, theme->pixmap( K3bTheme::PROBING ) );
       pixSize = theme->pixmap( K3bTheme::PROBING ).size();

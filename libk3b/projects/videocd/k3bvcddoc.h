@@ -36,7 +36,7 @@
 class K3bApp;
 class K3bVcdTrack;
 class K3bVcdJob;
-class K3bView;
+//class K3bView;
 class QWidget;
 class QTimer;
 class QDomDocument;
@@ -52,6 +52,8 @@ class K3bVcdDoc : public K3bDoc
     public:
         K3bVcdDoc( QObject* );
         ~K3bVcdDoc();
+
+	int docType() const { return VCD; }
 
         enum vcdTypes { VCD11, VCD20, SVCD10, HQVCD, NONE};
 
@@ -154,7 +156,7 @@ class K3bVcdDoc : public K3bDoc
         void loadDefaultSettings( KConfig* );
 
         /** reimplemented from K3bDoc */
-        K3bView* newView( QWidget* parent );
+	//        K3bView* newView( QWidget* parent );
 
     private:
         K3bVcdTrack* createTrack( const KURL& url );

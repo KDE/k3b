@@ -16,15 +16,12 @@
 
 #include <k3bglobals.h>
 #include "k3baudiodoc.h"
-#include "k3baudioview.h"
 #include "k3baudiotrack.h"
 #include "k3baudiojob.h"
 #include "k3baudiofile.h"
 #include "k3baudiozerodata.h"
 #include <k3bcuefileparser.h>
 
-#include <songdb/k3bsong.h>
-#include <songdb/k3bsongmanager.h>
 #include <k3bthread.h>
 #include <k3bthreadjob.h>
 #include <k3bcore.h>
@@ -189,33 +186,24 @@ void K3bAudioDoc::addTracks( const KURL::List& urls, uint position )
     if( K3bAudioTrack* track = createTrack( url ) ) {
       addTrack( track, position );
 
-      // first search the songdb
-      K3bSong *song = K3bSongManager::instance()->findSong( url.path() );
-      if( song && !song->getArtist().isEmpty() && !song->getTitle().isEmpty() ){
-	track->setArtist( song->getArtist() );
-	track->setTitle( song->getTitle() );
-      }
+      //
+      // We need some evil hacking here because the meta info in the decoder will
+      // not be ready before it did not finish the analysing. So we somehow need to
+      // determine when this happens. With the current design that's a problem.
+      // So we check here if the decoder already finished and if so set the meta info
+      // right away. If not we set it in the housekeeping slot before the analysing
+      // thread is deleted.
+      //
+
+      K3bAudioDecoder* dec = static_cast<K3bAudioFile*>( track->firstSource() )->decoder();
+      if( dec->length() == 0 && dec->isValid() )
+	m_decoderMetaInfoSetMap[dec].append( track );
       else {
-
-	//
-	// We need some evil hacking here because the meta info in the decoder will
-	// not be ready before it did not finish the analysing. So we somehow need to
-	// determine when this happens. With the current design that's a problem.
-	// So we check here if the decoder already finished and if so set the meta info
-	// right away. If not we set it in the housekeeping slot before the analysing
-	// thread is deleted.
-	//
-
-	K3bAudioDecoder* dec = static_cast<K3bAudioFile*>( track->firstSource() )->decoder();
-	if( dec->length() == 0 && dec->isValid() )
-	  m_decoderMetaInfoSetMap[dec].append( track );
-	else {
-	  track->setTitle( dec->metaInfo( K3bAudioDecoder::META_TITLE ) );
-	  track->setArtist( dec->metaInfo( K3bAudioDecoder::META_ARTIST ) );
-	  track->setSongwriter( dec->metaInfo( K3bAudioDecoder::META_SONGWRITER ) );
-	  track->setComposer( dec->metaInfo( K3bAudioDecoder::META_COMPOSER ) );
-	  track->setCdTextMessage( dec->metaInfo( K3bAudioDecoder::META_COMMENT ) );
-	}
+	track->setTitle( dec->metaInfo( K3bAudioDecoder::META_TITLE ) );
+	track->setArtist( dec->metaInfo( K3bAudioDecoder::META_ARTIST ) );
+	track->setSongwriter( dec->metaInfo( K3bAudioDecoder::META_SONGWRITER ) );
+	track->setComposer( dec->metaInfo( K3bAudioDecoder::META_COMPOSER ) );
+	track->setCdTextMessage( dec->metaInfo( K3bAudioDecoder::META_COMMENT ) );
       }
     }
   }
@@ -489,12 +477,6 @@ void K3bAudioDoc::removeTrack( K3bAudioTrack* track )
 void K3bAudioDoc::moveTrack( K3bAudioTrack* track, K3bAudioTrack* after )
 {
   track->moveAfter( after );
-}
-
-
-K3bView* K3bAudioDoc::newView( QWidget* parent )
-{
-  return new K3bAudioView( this, parent );
 }
 
 

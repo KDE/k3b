@@ -16,7 +16,6 @@
 #include "k3baudiocdtracksource.h"
 #include "k3baudiotrack.h"
 #include "k3baudiodoc.h"
-#include "k3baudioview.h"
 
 #include <k3bthreadwidget.h>
 #include <k3btoc.h>

@@ -16,6 +16,7 @@
 #include "k3bcdcontentsview.h"
 
 #include <kcutlabel.h>
+#include <k3bapplication.h>
 #include <k3bthememanager.h>
 #include <k3bstdguiitems.h>
 
@@ -58,7 +59,7 @@ K3bCdContentsView::K3bCdContentsView( bool withHeader,
 
     mainGrid->addWidget( headerFrame, 0, 0 );
 
-    connect( k3bthememanager, SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()) );
+    connect( k3bappcore->themeManager(), SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()) );
 
     slotThemeChanged();
   }
@@ -112,7 +113,7 @@ void K3bCdContentsView::setRightPixmap( K3bTheme::PixmapType s )
 
 void K3bCdContentsView::slotThemeChanged()
 {
-  if( K3bTheme* theme = k3bthememanager->currentTheme() ) {
+  if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
     m_pixmapLabelLeft->setPixmap( theme->pixmap( m_leftPixmap ) );
     m_labelTitle->setPaletteBackgroundColor( theme->backgroundColor() );
     m_labelTitle->setPaletteForegroundColor( theme->foregroundColor() );

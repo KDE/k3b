@@ -18,7 +18,6 @@
 // the k3b stuff we need
 #include <k3bcore.h>
 #include <k3bdatadoc.h>
-#include <k3bdataview.h>
 #include <k3bdiritem.h>
 #include <k3bfileitem.h>
 #include <k3blistview.h>
@@ -59,8 +58,6 @@ public:
   K3bDataDoc* doc;
   QString pattern;
 
-  QCheckBox* checkRecursive;
-  QCheckBox* checkCompleteDoc;
   KComboBox* comboPattern;
   K3bListView* viewFiles;
   //  KProgressDialog* progressDialog;
@@ -84,7 +81,7 @@ K3bAudioMetainfoRenamerPluginWidget::K3bAudioMetainfoRenamerPluginWidget( K3bDoc
   //  d->progressDialog = 0;
 
   // pattern group
-  QGroupBox* patternGroup = new QGroupBox( 1, Qt::Vertical,
+  QGroupBox* patternGroup = new QGroupBox( 2, Qt::Horizontal,
 					   i18n("Rename Pattern"), this );
   patternGroup->setInsideMargin( KDialog::marginHint() );
   patternGroup->setInsideSpacing( KDialog::spacingHint() );
@@ -92,16 +89,7 @@ K3bAudioMetainfoRenamerPluginWidget::K3bAudioMetainfoRenamerPluginWidget( K3bDoc
   d->comboPattern = new KComboBox( patternGroup );
   d->comboPattern->setEditable( true );
 
-
-  // option group
-  QGroupBox* optionGroup = new QGroupBox( 3, Qt::Horizontal,
-					  i18n("Options"), this );
-  optionGroup->setInsideMargin( KDialog::marginHint() );
-  optionGroup->setInsideSpacing( KDialog::spacingHint() );
-
-  d->checkRecursive = new QCheckBox( i18n("Recursive"), optionGroup );
-  d->checkCompleteDoc = new QCheckBox( i18n("Complete project"), optionGroup );
-  d->scanButton = new QPushButton( i18n("Scan"), optionGroup );
+  d->scanButton = new QPushButton( i18n("Scan"), patternGroup );
 
   // the files view
   QGroupBox* filesGroup = new QGroupBox( 1, Qt::Horizontal,
@@ -120,15 +108,10 @@ K3bAudioMetainfoRenamerPluginWidget::K3bAudioMetainfoRenamerPluginWidget( K3bDoc
   box->setSpacing( KDialog::spacingHint() );
 
   box->addWidget( patternGroup );
-  box->addWidget( optionGroup );
   box->addWidget( filesGroup );
 
-
-  connect( d->checkCompleteDoc, SIGNAL(toggled(bool)), d->checkRecursive, SLOT(setDisabled(bool)) ); 
   connect( d->scanButton, SIGNAL(clicked()), this, SLOT(slotScanClicked()) );
 
-  QToolTip::add( d->checkRecursive, i18n("Recurse into subdirectories") );
-  QToolTip::add( d->checkCompleteDoc, i18n("Scan the whole project for renamable files") );
   QToolTip::add( d->scanButton, i18n("Scan for renamable files") );
   QWhatsThis::add( d->comboPattern, i18n("<qt>This specifies how the files should be renamed. "
 					 "Currently only the special strings <em>%a</em> (Artist), "
@@ -157,24 +140,18 @@ QString K3bAudioMetainfoRenamerPluginWidget::subTitle() const
 
 void K3bAudioMetainfoRenamerPluginWidget::loadDefaults()
 {
-  d->checkCompleteDoc->setChecked( false );
-  d->checkRecursive->setChecked( false );
   d->comboPattern->setEditText( "%a - %t" );
 }
 
 
 void K3bAudioMetainfoRenamerPluginWidget::readSettings( KConfig* c )
 {
-  d->checkCompleteDoc->setChecked( c->readBoolEntry( "complete doc", false ) );
-  d->checkRecursive->setChecked( c->readBoolEntry( "recursive", false ) );
   d->comboPattern->setEditText( c->readEntry( "rename pattern", "%a - %t" ) );
 }
 
 
 void K3bAudioMetainfoRenamerPluginWidget::saveSettings( KConfig* c )
 {
-  c->writeEntry( "complete doc", d->checkCompleteDoc->isChecked() );
-  c->writeEntry( "recursive", d->checkRecursive->isChecked() );
   c->writeEntry( "rename pattern", d->comboPattern->currentText() );
 }
 
@@ -194,13 +171,7 @@ void K3bAudioMetainfoRenamerPluginWidget::slotScanClicked()
 //       d->progressDialog->setAllowCancel(false);
 //     }
 
-// Fixme: do not use K3bDataView
-    K3bDirItem* dir = 0;
-    K3bDataView* view = dynamic_cast<K3bDataView*>( d->doc->view() );
-    if( !d->checkCompleteDoc->isChecked() && view )
-      dir = view->currentDir();
-    else
-      dir = d->doc->root();
+    K3bDirItem* dir = d->doc->root();
 
     // clear old searches
     d->viewFiles->clear();
@@ -255,12 +226,10 @@ void K3bAudioMetainfoRenamerPluginWidget::scanDir( K3bDirItem* dir, QListViewIte
 //       }
     }
     else if( item->isDir() ) {
-      if( d->checkCompleteDoc->isChecked() || d->checkRecursive->isChecked() ) {
-	// create dir item
-	KListViewItem* dirViewItem = new KListViewItem( viewRoot, item->k3bName() );
-	scanDir( (K3bDirItem*)item, dirViewItem );
-	dirViewItem->setOpen(true);
-      }
+      // create dir item
+      KListViewItem* dirViewItem = new KListViewItem( viewRoot, item->k3bName() );
+      scanDir( (K3bDirItem*)item, dirViewItem );
+      dirViewItem->setOpen(true);
     }
   }
 }

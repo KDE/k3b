@@ -348,6 +348,23 @@ AC_SUBST(taglib_libs)
 
 dnl ---------- END TAGLIB CHECK ----------
 
+
+# musicbrainz check from juk (thanks scott)
+KDE_CHECK_HEADER(tunepimp/tp_c.h,
+[
+        AC_DEFINE(HAVE_MUSICBRAINZ, 1, [have MusicBrainz])
+	have_musicbrainz=true
+        MB_LIBS="-lmusicbrainz -ltunepimp"
+], [
+        AC_DEFINE(HAVE_MUSICBRAINZ, 0, [have MusicBrainz])
+	have_musicbrainz=false
+        MB_LIBS=""
+])
+
+#AM_CONDITIONAL(link_lib_MB, test x$have_musicbrainz = xtrue)
+AC_SUBST(MB_LIBS)
+
+
 #AC_DEFINE(LIBK3B_VERSION, "0.11.98", [k3b library version])
 #AC_SUBST(LIBK3B_VERSION, 0.11.98)
 #AC_CONFIG_FILES([k3b/libk3b/libk3b.pc])

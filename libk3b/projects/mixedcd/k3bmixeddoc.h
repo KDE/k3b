@@ -25,7 +25,7 @@
 class QDomDocument;
 class QDomElement;
 class K3bBurnJob;
-class K3bView;
+//class K3bView;
 class QWidget;
 class KConfig;
 
@@ -57,6 +57,7 @@ class K3bMixedDoc : public K3bDoc
 		   DATA_SECOND_SESSION };
 
   int mixedType() const { return m_mixedType; }
+  int docType() const { return MIXED; }
 
   /**
    * Represent the structure of the doc as CD Table of Contents.
@@ -79,7 +80,7 @@ class K3bMixedDoc : public K3bDoc
   
   void loadDefaultSettings( KConfig* );
 
-  K3bView* newView( QWidget* parent );
+  //  K3bView* newView( QWidget* parent );
 
  private:
   K3bDataDoc* m_dataDoc;

@@ -106,5 +106,14 @@ if test x$compile_k3bsetup = xyes; then
 else
 	echo "Compile K3bSetup 2:                     no"
 fi
+
+echo ""
+
+if $have_musicbrainz; then
+	echo "Tag guessing using MusicBrainz         yes"
+else
+	echo "Tag guessing using MusicBrainz          no"
+fi
+
 echo "------------------------------------------"
 echo ""

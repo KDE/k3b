@@ -16,7 +16,7 @@
 #include "k3bwelcomewidget.h"
 #include "k3b.h"
 #include <k3bstdguiitems.h>
-#include <k3bcore.h>
+#include <k3bapplication.h>
 #include <k3bversion.h>
 #include <k3bthememanager.h>
 
@@ -38,7 +38,7 @@
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kpopupmenu.h>
-
+#include <kaboutdata.h>
 
 K3bWelcomeWidget::Display::Display( QWidget* parent )
   : QWidget( parent )
@@ -47,7 +47,7 @@ K3bWelcomeWidget::Display::Display( QWidget* parent )
   fnt.setBold(true);
   fnt.setPointSize( 16 );
   m_header = new QSimpleRichText( i18n("Welcome to K3b %1 - The CD and DVD Kreator")
-				  .arg( k3bcore->version() ), fnt );
+				  .arg( kapp->aboutData()->version() ), fnt );
   // set a large width just to be sure no linebreak occurs
   m_header->setWidth( 800 );
 
@@ -234,7 +234,7 @@ K3bWelcomeWidget::K3bWelcomeWidget( K3bMainWindow* mw, QWidget* parent, const ch
 
   connect( main, SIGNAL(dropped(const KURL::List&)), m_mainWindow, SLOT(addUrls(const KURL::List&)) );
 
-  connect( k3bthememanager, SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()) );
+  connect( k3bappcore->themeManager(), SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()) );
 
   slotThemeChanged();
 }
@@ -338,7 +338,7 @@ void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
 
 void K3bWelcomeWidget::slotThemeChanged()
 {
-  if( K3bTheme* theme = k3bthememanager->currentTheme() ) {
+  if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
     main->setPaletteBackgroundPixmap( theme->pixmap( K3bTheme::WELCOME_BG ) );
     main->setHeaderBackgroundColor( theme->backgroundColor() );
     main->setHeaderForegroundColor( theme->foregroundColor() );

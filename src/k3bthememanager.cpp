@@ -1,0 +1,259 @@
+/* 
+ *
+ * $Id$
+ * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This file is part of the K3b project.
+ * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * See the file "COPYING" for the exact licensing terms.
+ */
+
+#include "k3bthememanager.h"
+
+#include <kstandarddirs.h>
+#include <kglobalsettings.h>
+#include <ksimpleconfig.h>
+#include <kdebug.h>
+#include <kglobal.h>
+
+#include <qpixmap.h>
+#include <qfile.h>
+#include <qfileinfo.h>
+#include <qdir.h>
+#include <qstringlist.h>
+
+
+
+
+const QPixmap& K3bTheme::pixmap( const QString& name ) const
+{
+  QMap<QString, QPixmap>::const_iterator it = m_pixmapMap.find( name );
+  if( it != m_pixmapMap.end() )
+    return *it;
+
+  // try loading the image
+  if( QFile::exists( m_path + name + ".png" ) )
+    return *m_pixmapMap.insert( name, QPixmap( m_path + name + ".png" ) );
+    
+  kdDebug() << "(K3bTheme) " << m_name << ": could not load image " << name << endl;
+
+  return m_emptyPixmap;
+}
+
+
+const QPixmap& K3bTheme::pixmap( K3bTheme::PixmapType t ) const
+{
+  QString name;
+
+  switch( t ) {
+  case MEDIA_AUDIO:
+    name = "media_audio";
+    break;
+  case MEDIA_DATA:
+    name = "media_data";
+    break;
+  case MEDIA_VIDEO:
+    name = "media_video";
+    break;
+  case MEDIA_EMPTY:
+    name = "media_empty";
+    break;
+  case MEDIA_MIXED:
+    name = "media_mixed";
+    break;
+  case MEDIA_NONE:
+    name = "media_none";
+    break;
+  case MEDIA_LEFT:
+    name = "media_left";
+    break;
+  case PROGRESS_WORKING:
+    name = "progress_working";
+    break;
+  case PROGRESS_SUCCESS:
+    name = "progress_success";
+    break;
+  case PROGRESS_FAIL:
+    name = "progress_fail";
+    break;
+  case PROGRESS_RIGHT:
+    name = "progress_right";
+    break;
+  case SPLASH:
+    name = "splash";
+    break;
+  case PROBING:
+    name = "probing";
+    break;
+  case PROJECT_LEFT:
+    name = "project_left";
+    break;
+  case PROJECT_RIGHT:
+    name = "project_right";
+    break;
+  case WELCOME_BG:
+    name = "welcome_bg";
+    break;
+  default:
+    break;
+  }
+
+  return pixmap( name );
+}
+
+
+class K3bThemeManager::Private
+{
+public:
+  Private()
+    : currentTheme(&emptyTheme) {
+  }
+
+  QPtrList<K3bTheme> themes;
+  K3bTheme* currentTheme;
+  QString currentThemeName;
+
+  K3bTheme emptyTheme;
+};
+
+
+
+K3bThemeManager::K3bThemeManager( QObject* parent, const char* name )
+  : QObject( parent, name )
+{
+  d = new Private();
+  d->emptyTheme.m_name = "Empty Theme";
+}
+
+
+K3bThemeManager::~K3bThemeManager()
+{
+  delete d;
+}
+
+
+const QPtrList<K3bTheme>& K3bThemeManager::themes() const
+{
+  return d->themes;
+}
+
+
+K3bTheme* K3bThemeManager::currentTheme() const
+{
+  return d->currentTheme;
+}
+
+
+void K3bThemeManager::readConfig( KConfig* c )
+{
+  c->setGroup( "General Options" );
+  setCurrentTheme( c->readEntry( "current theme", "crystal" ) );
+}
+
+
+void K3bThemeManager::saveConfig( KConfig* c )
+{
+  c->setGroup( "General Options" );
+  if( !d->currentThemeName.isEmpty() )
+    c->writeEntry( "current theme", d->currentThemeName );
+}
+
+
+void K3bThemeManager::setCurrentTheme( const QString& name )
+{
+  if( name != d->currentThemeName ) {
+    if( K3bTheme* theme = findTheme( name ) )
+      setCurrentTheme( theme );
+  }
+}
+
+
+void K3bThemeManager::setCurrentTheme( K3bTheme* theme )
+{
+  if( !theme )
+    theme = findTheme( "crystal" ); // default
+
+  if( theme ) {
+    if( theme != d->currentTheme ) {
+      d->currentTheme = theme;
+      d->currentThemeName = theme->name();
+      
+      emit themeChanged();
+      emit themeChanged( theme );
+    }
+  }
+}
+
+
+K3bTheme* K3bThemeManager::findTheme( const QString& name ) const
+{
+  for( QPtrListIterator<K3bTheme> it( d->themes ); it.current(); ++it )
+    if( it.current()->name() == name )
+      return it.current();
+  return 0;
+}
+
+
+void K3bThemeManager::loadThemes()
+{
+  // first we cleanup the loaded themes
+  d->themes.setAutoDelete(true);
+  d->themes.clear();
+
+  QStringList dirs = KGlobal::dirs()->findDirs( "data", "k3b/pics" );
+  // now search for themes. As there may be multible themes with the same name
+  // we only use the names from this list and then use findResourceDir to make sure
+  // the local is preferred over the global stuff (like testing a theme by copying it
+  // to the .kde dir)
+  QStringList themeNames;
+  for( QStringList::const_iterator dirIt = dirs.begin(); dirIt != dirs.end(); ++dirIt ) {
+    QDir dir( *dirIt );
+    QStringList entries = dir.entryList( QDir::Dirs );
+    entries.remove( "." );
+    entries.remove( ".." );
+    // every theme dir needs to contain a k3b.theme file
+    for( QStringList::const_iterator entryIt = entries.begin(); entryIt != entries.end(); ++entryIt )
+      if( QFile::exists( *dirIt + *entryIt + "/k3b.theme" ) )
+	themeNames.append( *entryIt );
+  }
+
+  // now load the themes
+  for( QStringList::const_iterator themeIt = themeNames.begin(); themeIt != themeNames.end(); ++themeIt )
+    loadTheme( *themeIt );
+
+  // load the current theme
+  setCurrentTheme( findTheme(d->currentThemeName) );
+}
+
+
+void K3bThemeManager::loadTheme( const QString& name )
+{
+  QString path = KGlobal::dirs()->findResource( "data", "k3b/pics/" + name + "/k3b.theme" );
+  if( !path.isEmpty() ) {
+    K3bTheme* t = new K3bTheme();
+    t->m_name = name;
+    t->m_path = path.left( path.length() - 9 );
+    QFileInfo fi( t->m_path );
+    t->m_local = fi.isWritable();
+
+    // load the stuff
+    KSimpleConfig cfg( path, true );
+    t->m_author = cfg.readEntry( "Author" );
+    t->m_comment = cfg.readEntry( "Comment" );
+    t->m_version = cfg.readEntry( "Version" );
+    t->m_bgColor = KGlobalSettings::activeTitleColor();
+    t->m_fgColor = KGlobalSettings::activeTextColor();
+    t->m_bgColor = cfg.readColorEntry( "Backgroundcolor", &t->m_bgColor );
+    t->m_fgColor = cfg.readColorEntry( "Foregroundcolor", &t->m_fgColor );
+
+    d->themes.append( t );
+  }
+}
+
+
+#include "k3bthememanager.moc"

@@ -20,14 +20,12 @@
 #include <kdialogbase.h>
 
 class K3bCddbOptionTab;
-class K3bCddbLocalDBTab;
 class K3bDeviceOptionTab;
 class K3bBurningOptionTab;
 class K3bExternalBinOptionTab;
 class K3bMiscOptionTab;
 class K3bNotifyOptionTab;
 class K3bPluginOptionTab;
-// class  K3bPatternOptionTab;
 class K3bDivxOptionTab;
 class K3bThemeOptionTab;
 
@@ -72,12 +70,7 @@ class K3bOptionDialog : public KDialogBase
 
   // cddb tabs
   K3bCddbOptionTab *m_cddbOptionTab;
-  K3bCddbLocalDBTab *m_cddbLocalTab;
   void setupCddbPage();
-
-  // pattern tab
-/*   K3bPatternOptionTab *m_patternOptionTab; */
-/*   void setupPatternPage(); */
 
   // misc options
   K3bMiscOptionTab* m_miscOptionTab;
