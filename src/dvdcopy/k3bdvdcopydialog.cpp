@@ -169,13 +169,6 @@ K3bDvdCopyDialog::~K3bDvdCopyDialog()
 }
 
 
-void K3bDvdCopyDialog::show()
-{
-  init();
-  K3bInteractionDialog::show();
-}
-
-
 void K3bDvdCopyDialog::init()
 {
   // wenn readcd nicht nutzbar ist fällt der job auf QFile zurück. 
