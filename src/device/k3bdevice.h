@@ -5,32 +5,75 @@
 
 #include <qstring.h>
 
-class ScsiIf;
-
+struct cdrom_drive;
 
 
 class K3bDevice 
 {
  public:
-  K3bDevice( const char* );
-  K3bDevice( const QString & _vendor,
-	     const QString & _description,
-	     const QString & _version,
-	     bool _burner,
-	     bool _burnproof,
-	     int _maxReadSpeed,
-	     const QString & _devicename, int _maxBurnSpeed = 0 );
+  /**
+   * The available cdrdao drivers
+   */
+  static const char* cdrdao_drivers[13];
+  enum interface { SCSI, IDE };
 
-  ~K3bDevice();
+  /**
+   * create a K3bDevice from a cdrom_drive struct
+   * (cdparanoia-lib)
+   */
+  K3bDevice( cdrom_drive* );
+  virtual ~K3bDevice();
 
-  const QString& vendor() const { return m_vendor; }
-  const QString& description() const { return m_description; }
-  const QString& version() const { return m_version; }
-  bool burner() const { return m_burner; }
-  bool burnproof() const { return m_burnproof; }
-  int maxReadSpeed() const { return m_maxReadSpeed; }
-  const QString& devicename() const { return m_devicename; }
-  int maxWriteSpeed() const { return m_maxWriteSpeed; }
+  /**
+   * opens a cdrom_drive which then can be used
+   * for cdparanoia-methods like if it was opened
+   * with cdda_open().
+   * It must be closed with cdda_close after
+   * using it!
+   */
+  virtual cdrom_drive* openDriveStruct();
+
+  virtual int interfaceType() const = 0;
+
+  virtual const QString& vendor() const { return m_vendor; }
+  virtual const QString& description() const { return m_description; }
+  virtual const QString& version() const { return m_version; }
+  virtual bool           burner() const { return m_burner; }
+  virtual bool           burnproof() const { return m_burnproof; }
+  virtual int            maxReadSpeed() const { return m_maxReadSpeed; }
+  virtual const QString& devicename() const { return m_devicename; }
+  virtual int            maxWriteSpeed() const { return m_maxWriteSpeed; }
+  virtual const QString& cdrdaoDriver() const { return m_cdrdaoDriver; }
+
+  /**
+   * returns: 0 auto (no cdrdao-driver selected)
+   *          1 yes
+   *          2 no
+   */
+  virtual int cdTextCapable() const;
+
+  /**
+   * Use this if the speed was not detected correctly.
+   */
+  virtual void setMaxReadSpeed( int s ) { m_maxReadSpeed = s; }
+
+  /**
+   * Use this if the speed was not detected correctly.
+   */
+  virtual void setMaxWriteSpeed( int s ) { m_maxWriteSpeed = s; }
+
+  /**
+   * Use this if cdrdao is not able to autodetect the nessessary driver.
+   */
+  virtual void setCdrdaoDriver( const QString& d ) { m_cdrdaoDriver = d; }
+
+  /**
+   * Only used if the cdrdao-driver is NOT set to "auto".
+   * In that case it must be manually set because there
+   * is no way to autosense the cd-text capability.
+   */
+  virtual void setCdTextCapability( bool );
+
 
   /** checks if unit is ready, returns:
    * <ul>
@@ -41,10 +84,10 @@ class K3bDevice
    *  <li>4: not ready, tray out</li>
    * </ul>
    */
-  int isReady();  // no further const due to delete of m_scsiIf
+  virtual int isReady() const;
 
   /** not quite sure if this is nessesary! */
-  bool rezero();  // no further const due to delete of m_scsiIf
+  //  virtual bool rezero() const;
 
   /**
    * Saves the cd's total number of available blocks in "length"
@@ -62,32 +105,34 @@ class K3bDevice
    *  <li>-1: not ready, no disk in drive</li>
    * </ul>
    */
-  int isEmpty();
+  virtual int isEmpty() const;
 
-  bool init();
+  /**
+   * This must be reimplemented because
+   * it is called by K3bDeviceManager
+   * to initialize the device.
+   */
+  virtual bool init() = 0;
 
   /**
    * block or unblock the drive's tray
    * returns true on success and false on scsi-error
    */
-  bool block( bool ) const;
+  virtual bool block( bool ) const;
 
- private:
-  int getModePage( ScsiIf *_scsiIf, int pageCode, unsigned char *buf,
-		   long bufLen, unsigned char *modePageHeader,
-		   unsigned char *blockDesc, int showErrorMsg );
-
+ protected:
   QString m_vendor;
   QString m_description;
   QString m_version;
   bool m_burner;
   bool m_burnproof;
+  QString m_cdrdaoDriver;
+  int m_cdTextCapable;
   int m_maxReadSpeed;
-  QString m_devicename;
   int m_maxWriteSpeed;
-  // have to delete after action because if other operations use the scsibus/device program crashes
-  // no matter how to reset scsiIf
-  //ScsiIf* m_scsiIf;
+
+ private:
+  QString m_devicename;
 };
 
 

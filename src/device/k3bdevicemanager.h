@@ -9,6 +9,7 @@
 
 class KProcess;
 class K3bDevice;
+class KConfig;
 
 
 class K3bDeviceManager : public QObject 
@@ -53,21 +54,30 @@ class K3bDeviceManager : public QObject
   /**
    * Reads the device information from the config file.
    */
-  int readConfig();
+  bool readConfig( KConfig* );
+
+  bool saveConfig( KConfig* );
 
   /**
    * Clears the writers and readers list of devices.
    */
   void clear();
 
+  /**
+   * add a new device like "/dev/mebecdrom" to be sensed
+   * by the deviceManager.
+   */
+  K3bDevice* addDevice( const QString& );
+
  private:
   QList<K3bDevice> m_reader;
   QList<K3bDevice> m_writer;
   int m_foundDevices;
 
-  static const int DEV_ARRAY_SIZE = 16;
+  K3bDevice* scanDevice( const char *dev );
 
-  K3bDevice* scanDevice( const char *dev, int showErrorMsg = 1 );
+  static const int DEV_ARRAY_SIZE = 19;
+  static const char* deviceNames[DEV_ARRAY_SIZE];
 };
 
 #endif

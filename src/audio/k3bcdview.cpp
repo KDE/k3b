@@ -20,7 +20,6 @@
 #include "k3bcdda.h"
 #include "k3bcddacopy.h"
 #include "../k3b.h"
-#include "../k3boptiondialog.h"
 #include "../k3bglobals.h"
 #include "../k3bripperwidget.h"
 
@@ -39,6 +38,8 @@
 #include <kconfig.h>
 #include <klocale.h>
 #include <kdockwidget.h>
+#include <klistview.h>
+
 
 #define RELOAD_BUTTON_INDEX         0
 #define GRAB_BUTTON_INDEX             1

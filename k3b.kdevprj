@@ -109,7 +109,7 @@ sub_dirs=
 type=po
 
 [src/Makefile.am]
-files=src/main.cpp,src/k3b.cpp,src/k3b.h,src/k3bdoc.cpp,src/k3bdoc.h,src/k3bview.cpp,src/k3bview.h,src/k3bui.rc,src/k3b.desktop,src/lo32-app-k3b.png,src/lo16-app-k3b.png,src/k3bdirview.cpp,src/k3bdirview.h,src/k3bcopywidget.cpp,src/k3bcopywidget.h,src/k3bripperwidget.cpp,src/k3bripperwidget.h,src/k3bglobals.h,src/k3bprogressdialog.h,src/k3bprogressdialog.cpp,src/k3bstickybutton.cpp,src/k3bstickybutton.h,src/k3bfillstatusdisplay.cpp,src/k3bfillstatusdisplay.h,src/k3boptiondialog.cpp,src/k3boptiondialog.h,src/k3bburnprogressdialog.cpp,src/k3bburnprogressdialog.h,src/k3bjob.cpp,src/k3bjob.h,src/k3bprojectburndialog.cpp,src/k3bprojectburndialog.h,src/kcutlabel.cpp,src/kcutlabel.h,src/k3bglobals.cpp,src/nonsticky.png,src/sticky.png,src/hi16-app-k3b.png,src/hi32-app-k3b.png,src/hi48-app-k3b.png,src/kdiskfreesp.h,src/k3bfileview.cpp,src/k3bfileview.h
+files=src/main.cpp,src/k3b.cpp,src/k3b.h,src/k3bdoc.cpp,src/k3bdoc.h,src/k3bview.cpp,src/k3bview.h,src/k3bui.rc,src/k3b.desktop,src/lo32-app-k3b.png,src/lo16-app-k3b.png,src/k3bdirview.cpp,src/k3bdirview.h,src/k3bcopywidget.cpp,src/k3bcopywidget.h,src/k3bripperwidget.cpp,src/k3bripperwidget.h,src/k3bglobals.h,src/k3bprogressdialog.h,src/k3bprogressdialog.cpp,src/k3bstickybutton.cpp,src/k3bstickybutton.h,src/k3bfillstatusdisplay.cpp,src/k3bfillstatusdisplay.h,src/k3bburnprogressdialog.cpp,src/k3bburnprogressdialog.h,src/k3bjob.cpp,src/k3bjob.h,src/k3bprojectburndialog.cpp,src/k3bprojectburndialog.h,src/kcutlabel.cpp,src/kcutlabel.h,src/k3bglobals.cpp,src/nonsticky.png,src/sticky.png,src/hi16-app-k3b.png,src/hi32-app-k3b.png,src/hi48-app-k3b.png,src/kdiskfreesp.h,src/k3bfileview.cpp,src/k3bfileview.h
 sub_dirs=data,cdinfo,audio,device,kiotree,option
 type=prog_main
 
@@ -512,7 +512,7 @@ install_location=
 type=HEADER
 
 [src/device/Makefile.am]
-files=src/device/ScsiIf-common.cc,src/device/Sample.h,src/device/ScsiIf-linux.cc,src/device/ScsiIf.h,src/device/sg_err.cc,src/device/sg_err.h,src/device/util.cc,src/device/util.h,src/device/k3bdevice.h,src/device/k3bdevice.cpp,src/device/k3bdevicemanager.cpp,src/device/k3bdevicemanager.h,src/device/k3bemptydiscwaiter.cpp,src/device/k3bemptydiscwaiter.h
+files=src/device/ScsiIf-common.cc,src/device/Sample.h,src/device/ScsiIf-linux.cc,src/device/ScsiIf.h,src/device/sg_err.cc,src/device/sg_err.h,src/device/util.cc,src/device/util.h,src/device/k3bdevice.h,src/device/k3bdevice.cpp,src/device/k3bdevicemanager.cpp,src/device/k3bdevicemanager.h,src/device/k3bemptydiscwaiter.cpp,src/device/k3bemptydiscwaiter.h,src/device/k3bidedevice.cpp,src/device/k3bidedevice.h,src/device/k3bscsidevice.cpp,src/device/k3bscsidevice.h
 sharedlib_LDFLAGS=-version-info 0:0:1
 sharedlib_rootname=device
 sub_dirs=
@@ -573,6 +573,30 @@ install_location=
 type=SOURCE
 
 [src/device/k3bemptydiscwaiter.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/device/k3bidedevice.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/device/k3bidedevice.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/device/k3bscsidevice.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/device/k3bscsidevice.h]
 dist=true
 install=false
 install_location=
@@ -777,18 +801,6 @@ install_location=
 type=SOURCE
 
 [src/k3bjob.h]
-dist=true
-install=false
-install_location=
-type=HEADER
-
-[src/k3boptiondialog.cpp]
-dist=true
-install=false
-install_location=
-type=SOURCE
-
-[src/k3boptiondialog.h]
 dist=true
 install=false
 install_location=
@@ -1012,11 +1024,23 @@ install_location=$$(kde_datadir)/k3b/pics/nonsticky.png
 type=DATA
 
 [src/option/Makefile.am]
-files=src/option/k3boptioncddb.cpp,src/option/k3boptioncddb.h
+files=src/option/k3boptioncddb.cpp,src/option/k3boptioncddb.h,src/option/k3bdeviceoptiontab.h,src/option/k3bdeviceoptiontab.cpp,src/option/k3boptiondialog.cpp,src/option/k3boptiondialog.h
 sharedlib_LDFLAGS=-version-info 0:5:0
 sharedlib_rootname=option
 sub_dirs=
 type=static_library
+
+[src/option/k3bdeviceoptiontab.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/option/k3bdeviceoptiontab.h]
+dist=true
+install=false
+install_location=
+type=HEADER
 
 [src/option/k3boptioncddb.cpp]
 dist=true
@@ -1025,6 +1049,18 @@ install_location=
 type=SOURCE
 
 [src/option/k3boptioncddb.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/option/k3boptiondialog.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/option/k3boptiondialog.h]
 dist=true
 install=false
 install_location=

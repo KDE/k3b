@@ -1,5 +1,7 @@
 #include "k3bdevicemanager.h"
-#include "k3bdevice.h"
+#include "k3bidedevice.h"
+#include "k3bscsidevice.h"
+
 
 #include <qstring.h>
 #include <qstringlist.h>
@@ -11,12 +13,18 @@
 
 #include <iostream>
 
+typedef Q_INT16 size16;
+typedef Q_INT32 size32;
 
-static const char* deviceNames[] =
-  { "/dev/sg0", "/dev/sg1", "/dev/sg2", "/dev/sg3", "/dev/sg4", "/dev/sg5",
+extern "C" {
+#include <cdda_interface.h>
+}
+
+
+const char* K3bDeviceManager::deviceNames[] =
+  { "/dev/cdrom", "/dev/cdrecorder", "/dev/dvd", "/dev/sg0", "/dev/sg1", "/dev/sg2", "/dev/sg3", "/dev/sg4", "/dev/sg5",
     "/dev/sg6", "/dev/sg7", "/dev/sg8", "/dev/sg9", "/dev/sg10", "/dev/sg11", "/dev/sg12", "/dev/sg13",
     "/dev/sg14", "/dev/sg15" };
-
 
 
 
@@ -103,66 +111,148 @@ void K3bDeviceManager::clear()
 }
 
 
-int K3bDeviceManager::readConfig()
+bool K3bDeviceManager::readConfig( KConfig* c )
 {
-    KConfig* c = kapp->config();
-    m_foundDevices = 0;
+  m_foundDevices = 0;
 
-    if( c->hasGroup( "Devices" ) ) {
-      c->setGroup( "Devices" );
+  if( !c->hasGroup( "Devices" ) ) {
+    return false;
+  }
 
-      // read Readers
-      QStringList list = c->readListEntry( "Reader1" );
-      int devNum = 1;
-      while( !list.isEmpty() ) {
-	// create K3bDevice
-	if( list.count() < 5 )
-	  qDebug ( "(K3bDeviceManager) Corrupt entry in Kconfig file" );
-	else {
-	  m_reader.append( new K3bDevice( list[0], list[1],
-					  list[2], false, false,
-					  list[3].toInt(), list[4], 0 ) );
-	  m_foundDevices++;
-	}
-	devNum++;
-	list = c->readListEntry( QString( "Reader%1" ).arg( devNum ) );
+  c->setGroup( "Devices" );
+    
+  // read Readers
+  QStringList list = c->readListEntry( "Reader1" );
+  int devNum = 1;
+  while( !list.isEmpty() ) {
+
+    K3bDevice *dev;
+    dev = deviceByName( list[0] );
+
+    if( dev == 0 )
+      if( (dev = scanDevice( list[0] )) != 0 ) {
+	// new device found, add to list
+	if( dev->burner() )
+	  m_writer.append( dev );
+	else
+	  m_reader.append( dev );
       }
 
-      // read Writers
-      list = c->readListEntry( "Writer1" );
-      devNum = 1;
-      while( !list.isEmpty() ) {
-	// create K3bDevice
-	if( list.count() < 7 )
-	  qDebug( "(K3bDeviceManager) Corrupt entry in Kconfig file" );
-	else {
-	  m_writer.append( new K3bDevice ( list[0], list[1],
-					   list[2], true, ( list[5] == "yes" ),
-					   list[3].toInt(), list[6],
-					   list[4].toInt() ) );
-	  m_foundDevices++;
-	}
-	devNum++;
-	list = c->readListEntry( QString( "Writer%1" ).arg( devNum ) );
-      }
+    if( dev != 0 ) {
+      // device found, apply changes
+      if( list.count() > 1 )
+	dev->setMaxReadSpeed( list[1].toInt() );
     }
 
-    return m_foundDevices;
+    if( dev == 0 )
+      qDebug( "(K3bDeviceManager) Could not detect saved device %s.", list[0].latin1() );
 
-    // TODO: check for multible devices on one bus:target:lun
+    devNum++;
+    list = c->readListEntry( QString( "Reader%1" ).arg( devNum ) );
+  }
+
+  // read Writers
+  list = c->readListEntry( "Writer1" );
+  devNum = 1;
+  while( !list.isEmpty() ) {
+
+    K3bDevice *dev;
+    dev = deviceByName( list[0] );
+
+    if( dev == 0 )
+      if( (dev = scanDevice( list[0] )) != 0 ) {
+	// new device found, add to list
+	if( dev->burner() )
+	  m_writer.append( dev );
+	else
+	  m_reader.append( dev );
+      }
+
+    if( dev != 0 ) {
+      // device found, apply changes
+      if( list.count() > 1 )
+	dev->setMaxReadSpeed( list[1].toInt() );
+      if( list.count() > 2 )
+	dev->setMaxWriteSpeed( list[2].toInt() );
+      if( list.count() > 3 )
+	dev->setCdrdaoDriver( list[3] );
+      if( list.count() > 4 )
+	dev->setCdTextCapability( list[4] == "yes" );
+    }
+
+    if( dev == 0 )
+      qDebug( "(K3bDeviceManager) Could not detect saved device %s.", list[0].latin1() );
+
+    devNum++;
+    list = c->readListEntry( QString( "Writer%1" ).arg( devNum ) );
+  }
+
+
+  return true;
 }
 
 
-K3bDevice* K3bDeviceManager::scanDevice( const char *dev, int showErrorMsg )
+bool K3bDeviceManager::saveConfig( KConfig* c )
 {
-  K3bDevice* newDevice = new K3bDevice( dev );
+  // TODO: save the devices
+  return true;
+}
 
-  if( !newDevice->init() ) {
-    delete newDevice;
+
+K3bDevice* K3bDeviceManager::scanDevice( const char *dev )
+{
+  cdrom_drive *drive = cdda_identify( dev, CDDA_MESSAGE_PRINTIT, 0 );
+  if( drive == 0 ) {
+    qDebug( "(K3bDeviceManager) %s could not be opened.", dev );
     return 0;
   }
-  else
-    return newDevice;
+
+  if( deviceByName( drive->cdda_device_name ) != 0 ) {
+    qDebug( "(K3bDeviceManager) %s already detected as %s.", dev, drive->cdda_device_name );
+    cdda_close( drive );
+    return 0;
+  }
+
+  if( drive->interface == GENERIC_SCSI ) {
+    K3bScsiDevice* newDevice = new K3bScsiDevice( drive );
+    cdda_close( drive );
+    if( newDevice->init() )
+      return newDevice;
+    else {
+      qDebug("(K3bDeviceManager) Could not initialize device %s.", drive->cdda_device_name );
+      delete newDevice;
+      return 0;
+    }
+  }
+  else if( drive->interface == COOKED_IOCTL ) {
+    K3bIdeDevice* newDevice = new K3bIdeDevice( drive );
+    cdda_close( drive );
+    if( newDevice->init() )
+      return newDevice;
+    else {
+      qDebug("(K3bDeviceManager) Could not initialize device %s.", drive->cdda_device_name );
+      delete newDevice;
+      return 0;
+    }
+  }
+  else {
+    qDebug( "(K3bDeviceManager) %s is not generic-scsi or cooked-ioctl.", dev );
+    return 0;
+  }
 }
 
 
+K3bDevice* K3bDeviceManager::addDevice( const QString& devicename )
+{
+  K3bDevice *dev = scanDevice( devicename.latin1() );
+
+  if( dev == 0 )
+    return 0;
+
+  if( dev->burner() )
+    m_writer.append( dev );
+  else
+    m_reader.append( dev );
+
+  return dev;
+}

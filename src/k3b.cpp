@@ -49,7 +49,7 @@
 #include "audio/k3baudiotrackdialog.h"
 #include "k3bcopywidget.h"
 #include "k3bripperwidget.h"
-#include "k3boptiondialog.h"
+#include "option/k3boptiondialog.h"
 #include "k3bburnprogressdialog.h"
 #include "k3bprojectburndialog.h"
 #include "audio/k3baudiojob.h"
@@ -63,8 +63,10 @@
 K3bApp* k3bMain()
 {
   K3bApp* _app = dynamic_cast<K3bApp*>( kapp->mainWidget() );
-  if( !_app )
+  if( !_app ) {
     qDebug( "No K3bApp found!");
+    exit(1);
+  }
   return _app;
 }
 
@@ -778,9 +780,13 @@ void K3bApp::init()
 
   m_deviceManager = new K3bDeviceManager( this );
 
-  if( !m_deviceManager->readConfig() )
-    if( !m_deviceManager->scanbus() )
-      qDebug( "No SCSI-Devices found!" );
+  if( !m_deviceManager->scanbus() )
+    qDebug( "No Devices found!" );
+
+  if( config()->hasGroup("Devices") ) {
+    config()->setGroup( "Devices" );
+    m_deviceManager->readConfig( config() );
+  }
 			
   m_deviceManager->printDevices();
 }

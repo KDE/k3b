@@ -29,25 +29,27 @@ class QString;
 
 class KLineEdit;
 class KListBox;
-class KDialogBase;
+
 /**
-  *@author Sebastian Trueg
+  *@author Thomas Froescher
   */
 
 class K3bOptionCddb : public QWidget {
     Q_OBJECT
+
 public: 
-    K3bOptionCddb(KDialogBase *dialog, QFrame *parent, const char *name);
+    K3bOptionCddb(QFrame *parent, const char *name);
     ~K3bOptionCddb();
     void apply();
     void readSettings();
+
 private slots:
     void toggled(bool);
     void addCddbServer();
     void delCddbServer();
     void serverSelected(QListBoxItem*);
-private:
-    QFrame *m_frame;
+
+ private:
     QCheckBox *m_cddbLockup;
     QPushButton *m_addButton;
     QPushButton *m_delButton;
@@ -55,10 +57,9 @@ private:
     KLineEdit *m_cddbPortInput;
     KListBox *m_cddbServerList;
     QGroupBox *m_groupCddbServer;
-    KDialogBase *m_dialog;
-   void setup();
-   void fillInputFields(QString hostString);
 
+    void setup();
+    void fillInputFields(QString hostString);
 };
 
 #endif
