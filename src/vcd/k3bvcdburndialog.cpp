@@ -226,13 +226,17 @@ void K3bVcdBurnDialog::setupLabelTab()
   // ----------------------------------------------------------------------
 
   QLabel* labelVolumeId = new QLabel( i18n( "Volume &Label:" ), w, "labelVolumeId" );
+  QLabel* labelPublisher = new QLabel( i18n( "&Publisher:" ), w, "labelPublisher" );
   QLabel* labelAlbumId = new QLabel( i18n( "&Album Id:" ), w, "labelAlbumId" );
+  
   QLabel* labelVolumeCount = new QLabel( i18n( "Number of &Volumes in Album:" ), w, "labelVolumeCount" );
   QLabel* labelVolumeNumber = new QLabel( i18n( "This CD is &Sequence Number:" ), w, "labelVolumeNumber" );
 
   
   m_editVolumeId = new QLineEdit( w, "m_editVolumeId" );
+  m_editPublisher = new QLineEdit( w, "m_editPublisher" );
   m_editAlbumId = new QLineEdit( w, "m_editAlbumId" );
+  
   m_spinVolumeNumber = new QSpinBox( w, "m_editVolumeNumber" );
   m_spinVolumeCount = new QSpinBox( w, "m_editVolumeCount" );
 
@@ -259,24 +263,30 @@ void K3bVcdBurnDialog::setupLabelTab()
 
   grid->addWidget( labelVolumeId, 4, 0 );
   grid->addWidget( m_editVolumeId, 4, 1 );
-  grid->addWidget( labelAlbumId, 5, 0 );
-  grid->addWidget( m_editAlbumId, 5, 1 );
-  grid->addWidget( labelVolumeCount, 6, 0 );
-  grid->addWidget( m_spinVolumeCount, 6, 1 );
-  grid->addWidget( labelVolumeNumber, 7, 0 );
-  grid->addWidget( m_spinVolumeNumber, 7, 1 );
+  grid->addWidget( labelPublisher, 5, 0 );
+  grid->addWidget( m_editPublisher, 5, 1 );
+  grid->addWidget( labelAlbumId, 6, 0 );
+  grid->addWidget( m_editAlbumId, 6, 1 );
+  
+  grid->addWidget( labelVolumeCount, 7, 0 );
+  grid->addWidget( m_spinVolumeCount, 7, 1 );
+  grid->addWidget( labelVolumeNumber, 8, 0 );
+  grid->addWidget( m_spinVolumeNumber, 8, 1 );
 
   //  grid->addRowSpacing( 5, 15 );
-  grid->setRowStretch( 8, 1 );
+  grid->setRowStretch( 9, 1 );
 
   // buddies
   labelVolumeId->setBuddy( m_editVolumeId );
+  labelPublisher->setBuddy( m_editPublisher );
   labelAlbumId->setBuddy( m_editAlbumId );
+  
   labelVolumeCount->setBuddy( m_spinVolumeCount );
   labelVolumeNumber->setBuddy( m_spinVolumeNumber );
 
   // tab order
-  setTabOrder( m_editVolumeId, m_editAlbumId);
+  setTabOrder( m_editVolumeId, m_editPublisher);
+  setTabOrder( m_editPublisher, m_editAlbumId );
   setTabOrder( m_editAlbumId, m_spinVolumeCount );
   setTabOrder( m_spinVolumeCount, m_spinVolumeNumber );
 
@@ -306,8 +316,9 @@ void K3bVcdBurnDialog::loadDefaults()
   m_checkOnlyCreateImage->setChecked( false );
 
   m_editVolumeId->setText( "VIDEOCD" );
+  m_editPublisher->setText( "" );
   m_editAlbumId->setText( "" );
-
+  
   m_checkAutoDetect->setChecked( true );
   m_groupVcdFormat->setDisabled( true );
   
@@ -329,11 +340,6 @@ void K3bVcdBurnDialog::loadDefaults()
   }
 
   loadDefaultCdiConfig();    
-
-  // TODO: for the future
-  // m_editPublisher->setText( o->publisher() );
-  // m_editPreparer->setText( o->preparer() );
-  // m_editSystem->setText( o->systemId() );
 }
 
 void K3bVcdBurnDialog::saveSettings()
@@ -359,8 +365,9 @@ void K3bVcdBurnDialog::saveSettings()
   vcdDoc()->setVcdType(m_groupVcdFormat->id(m_groupVcdFormat->selected()));
   
   vcdDoc()->vcdOptions()->setVolumeId( m_editVolumeId->text() );
+  vcdDoc()->vcdOptions()->setPublisher( m_editPublisher->text() );
   vcdDoc()->vcdOptions()->setAlbumId( m_editAlbumId->text() );
-
+  
   vcdDoc()->vcdOptions()->setAutoDetect(m_checkAutoDetect->isChecked());
   vcdDoc()->vcdOptions()->setBrokenSVcdMode(m_checkNonCompliant->isChecked());
   vcdDoc()->vcdOptions()->setSector2336(m_check2336->isChecked());
@@ -428,6 +435,7 @@ void K3bVcdBurnDialog::readSettings()
   }
 
   m_editVolumeId->setText( vcdDoc()->vcdOptions()->volumeId() );
+  m_editPublisher->setText( vcdDoc()->vcdOptions()->publisher() );  
   m_editAlbumId->setText( vcdDoc()->vcdOptions()->albumId() );
 
   K3bProjectBurnDialog::readSettings();
@@ -466,6 +474,7 @@ void K3bVcdBurnDialog::loadUserDefaults()
   m_spinVolumeNumber->setValue( o.volumeNumber() );
 
   m_editVolumeId->setText( o.volumeId() );
+  m_editPublisher->setText( o.publisher() );
   m_editAlbumId->setText( o.albumId() );
         
   m_checkSimulate->setChecked( c->readBoolEntry( "dummy_mode", false ) );
@@ -490,6 +499,7 @@ void K3bVcdBurnDialog::saveUserDefaults()
   c->writeEntry( "only_create_image", m_checkOnlyCreateImage->isChecked() );
 
   o.setVolumeId( m_editVolumeId->text() );
+  o.setPublisher( m_editPublisher->text() );  
   o.setAlbumId( m_editAlbumId->text() );
   o.setAutoDetect(m_checkAutoDetect->isChecked());
   o.setBrokenSVcdMode(m_checkNonCompliant->isChecked());

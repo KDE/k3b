@@ -26,6 +26,7 @@
 K3bVcdOptions::K3bVcdOptions()
   : m_volumeID( i18n("Project name", "VIDEOCD") ),
     m_volumeSetId( "" ),
+    m_publisher( "" ),
     m_applicationId( "CDI/CDI_VCD.APP;1" ),
     m_systemId( "CD-RTOS CD-BRIDGE" ),
     m_vcdclass( "vcd" ),

@@ -74,6 +74,7 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
    // -----------------------------------------------------------
 
    QLineEdit* m_editVolumeId;
+   QLineEdit* m_editPublisher;
    QLineEdit* m_editAlbumId;
 
    QSpinBox* m_spinVolumeCount;
