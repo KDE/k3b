@@ -122,8 +122,13 @@ int K3bDevice::openDevice( const char* name, bool write )
     fd = ::open( name, flags );
 
   if( fd < 0 ) {
-    kdDebug() << "(K3bDevice::Device) Error: could not open device " << name << endl;
+    kdDebug() << "(K3bDevice::Device) Error: could not open device " 
+	      << name << ( write ? "for writing" : "for reading" ) << endl;
     fd = -1;
+
+    // at least open it read-only (which is sufficient for kernels < 2.6.8 anyway)
+    if( write )
+      return openDevice( name, false );
   }
 
   return fd;
@@ -377,6 +382,7 @@ bool K3bDevice::Device::init()
 	case FEATURE_CD_RW_CAV_WRITE:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD-RW CAV Write" << endl;
 	  d->deviceType |= CDRW;
+	  d->deviceType |= CDR;
 	  break;
 
 	case FEATURE_MRW:
@@ -576,6 +582,7 @@ bool K3bDevice::Device::init()
 	case FEATURE_CD_RW_MEDIA_WRITE_SUPPORT:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD-RW Media Write Support" << endl;
 	  d->deviceType |= CDRW;
+	  d->deviceType |= CDR;
 	  break;
 
 	  // 0x38- 0xFF reserved
