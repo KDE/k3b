@@ -1056,8 +1056,11 @@ void K3bDataDoc::importSession( const QString& path )
   d.progressBar()->setTotalSteps( dlist.count() );
 
   for( QStringList::Iterator it = dlist.begin(); it != dlist.end(); ++it ) {
-    createSessionImportItems( path + "/" + *it, root() );
-
+    createSessionImportItems( path + "/" + *it, root(), &d );
+    if( d.wasCancelled() ) {
+      clearImportedSession();
+      return;
+    }
     d.progressBar()->setValue( d.progressBar()->value() + 1 );
   }
 
@@ -1067,9 +1070,13 @@ void K3bDataDoc::importSession( const QString& path )
 }
 
 
-void K3bDataDoc::createSessionImportItems( const QString& path, K3bDirItem* parent )
+void K3bDataDoc::createSessionImportItems( const QString& path, K3bDirItem* parent, KProgressDialog* d )
 {
   kapp->processEvents();
+
+  if( d->wasCancelled() ) {
+    return;
+  }
 
   QFileInfo newF(path);
   K3bDataItem* oldItem = parent->find( newF.fileName() );
@@ -1104,7 +1111,7 @@ void K3bDataDoc::createSessionImportItems( const QString& path, K3bDirItem* pare
     dlist.remove("..");
 
     for( QStringList::Iterator it = dlist.begin(); it != dlist.end(); ++it ) {
-      createSessionImportItems( path + "/" + *it, dir );
+      createSessionImportItems( path + "/" + *it, dir, d );
     }
   }
   else {
@@ -1160,6 +1167,8 @@ void K3bDataDoc::clearImportedSession()
 
     item = m_oldSession.next();
   }
+
+  setMultiSessionMode( NONE );
 }
 
 

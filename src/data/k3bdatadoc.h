@@ -35,6 +35,7 @@ class K3bDirItem;
 class K3bFileItem;
 class K3bJob;
 
+class KProgressDialog;
 class K3bView;
 class QString;
 class QStringList;
@@ -139,7 +140,7 @@ class K3bDataDoc : public K3bDoc
   void loadDefaultSettings();
 
  private:
-  void createSessionImportItems( const QString& path, K3bDirItem* parent );
+  void createSessionImportItems( const QString& path, K3bDirItem* parent, KProgressDialog* );
 
   /**
    * load recursivly
