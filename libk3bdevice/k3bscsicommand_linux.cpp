@@ -60,8 +60,8 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
   if( m_device ) {
     if( !m_device->isOpen() ) {
       needToClose = true;
-      m_device->open( dir == TR_DIR_WRITE );
     }
+    m_device->open( dir == TR_DIR_WRITE );
     m_deviceHandle = m_device->handle();
   }
 

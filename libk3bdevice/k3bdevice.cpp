@@ -157,6 +157,7 @@ public:
 #ifdef Q_OS_FREEBSD
   struct cam_device *cam;
 #endif
+  bool openedReadWrite;
   bool burnfree;
 };
 
@@ -1967,6 +1968,11 @@ K3bDevice::Device::Handle K3bDevice::Device::handle() const
 
 bool K3bDevice::Device::open( bool write ) const
 {
+  if( d->openedReadWrite != write )
+    close();
+
+  d->openedReadWrite = write;
+
 #ifdef Q_OS_FREEBSD
   if( !d->cam ) {
     d->cam = cam_open_pass (m_passDevice.latin1(), (write ? O_RDWR : O_RDONLY),0 /* NULL */);

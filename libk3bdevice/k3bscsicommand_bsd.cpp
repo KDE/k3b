@@ -74,9 +74,10 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
   bool needToClose = false;
   if( !m_device->isOpen() ) {
     needToClose = true;
-    if( !m_device->open() )
-      return -1;
   }
+
+  if( !m_device->open( dir == TR_DIR_WRITE ) )
+    return -1;
 
   kdDebug() << "(K3bDevice::ScsiCommand) transport command " << QString::number((int)d->ccb.csio.cdb_io.cdb_bytes[0], 16) << ", length: " << (int)d->ccb.csio.cdb_len << endl;
   int ret=0;
