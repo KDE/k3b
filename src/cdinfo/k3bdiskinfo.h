@@ -1,4 +1,19 @@
+/***************************************************************************
+                          k3bdiskinfodetector.h  -  description
+                             -------------------
+    begin                : Tue May 14 2002
+    copyright            : (C) 2002 by Sebastian Trueg
+    email                : trueg@informatik.uni-freiburg.de
+ ***************************************************************************/
 
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 #ifndef K3BDISKINFO_H
 #define K3BDISKINFO_H
 
@@ -18,6 +33,7 @@ class K3bDiskInfo
     appendable(false), 
     noDisk(true),
     isVideoDvd(false),
+    isVCD(false),
     size(0),
     remaining(0),
     speed(0),
@@ -40,6 +56,7 @@ class K3bDiskInfo
   bool appendable;
   bool noDisk;
   bool isVideoDvd;
+  bool isVCD;
 
   unsigned long size;
   unsigned long remaining;
