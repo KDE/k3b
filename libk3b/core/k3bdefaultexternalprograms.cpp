@@ -182,14 +182,10 @@ bool K3bCdrecordProgram::scan( const QString& p )
       bin->addFeature( "cuefile" );
     
     // check if we run cdrecord as root
-    if( !getuid() )
-      bin->addFeature( "suidroot" );
-    else {
-      struct stat s;
-      if( !::stat( QFile::encodeName(path), &s ) ) {
-	if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
-	  bin->addFeature( "suidroot" );
-      }
+    struct stat s;
+    if( !::stat( QFile::encodeName(path), &s ) ) {
+      if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
+	bin->addFeature( "suidroot" );
     }
   }
   else {
@@ -276,14 +272,10 @@ bool K3bDvdrecordProgram::scan( const QString& p )
       bin->addFeature( "overburn" );
     
     // check if we run cdrecord as root
-    if( !getuid() )
-      bin->addFeature( "suidroot" );
-    else {
-      struct stat s;
-      if( !::stat( QFile::encodeName(path), &s ) ) {
-	if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
-	  bin->addFeature( "suidroot" );
-      }
+    struct stat s;
+    if( !::stat( QFile::encodeName(path), &s ) ) {
+      if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
+	bin->addFeature( "suidroot" );
     }
   }
   else {
@@ -366,14 +358,10 @@ bool K3bMkisofsProgram::scan( const QString& p )
       bin->addFeature( "sectype" );
 
     // check if we run mkisofs as root
-    if( !getuid() )
-      bin->addFeature( "suidroot" );
-    else {
-      struct stat s;
-      if( !::stat( QFile::encodeName(path), &s ) ) {
-	if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
-	  bin->addFeature( "suidroot" );
-      }
+    struct stat s;
+    if( !::stat( QFile::encodeName(path), &s ) ) {
+      if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
+	bin->addFeature( "suidroot" );
     }
   }
   else {
@@ -447,14 +435,10 @@ bool K3bReadcdProgram::scan( const QString& p )
       bin->addFeature( "clone" );
 
     // check if we run mkisofs as root
-    if( !getuid() )
-      bin->addFeature( "suidroot" );
-    else {
-      struct stat s;
-      if( !::stat( QFile::encodeName(path), &s ) ) {
-	if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
-	  bin->addFeature( "suidroot" );
-      }
+    struct stat s;
+    if( !::stat( QFile::encodeName(path), &s ) ) {
+      if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
+	bin->addFeature( "suidroot" );
     }
   }
   else {
@@ -544,14 +528,10 @@ bool K3bCdrdaoProgram::scan( const QString& p )
       bin->addFeature( "disable-burnproof" );
 
     // check if we run cdrdao as root
-    if( !getuid() )
-      bin->addFeature( "suidroot" );
-    else {
-      struct stat s;
-      if( !::stat( QFile::encodeName(path), &s ) ) {
-	if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
-	  bin->addFeature( "suidroot" );
-      }
+    struct stat s;
+    if( !::stat( QFile::encodeName(path), &s ) ) {
+      if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
+	bin->addFeature( "suidroot" );
     }
   }
   else {
@@ -800,14 +780,10 @@ bool K3bGrowisofsProgram::scan( const QString& p )
   bin->copyright = "Andy Polyakov <appro@fy.chalmers.se>";
 
   // check if we run growisofs as root
-  if( !getuid() )
-    bin->addFeature( "suidroot" );
-  else {
-    struct stat s;
-    if( !::stat( QFile::encodeName(path), &s ) ) {
-      if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
-	bin->addFeature( "suidroot" );
-    }
+  struct stat s;
+  if( !::stat( QFile::encodeName(path), &s ) ) {
+    if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
+      bin->addFeature( "suidroot" );
   }
 
   addBin( bin );
@@ -874,16 +850,12 @@ bool K3bDvdformatProgram::scan( const QString& p )
   bin->copyright = "Andy Polyakov <appro@fy.chalmers.se>";
 
   // check if we run dvd+rw-format as root
-  if( !getuid() )
-    bin->addFeature( "suidroot" );
-  else {
-    struct stat s;
-    if( !::stat( QFile::encodeName(path), &s ) ) {
-      if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
-	bin->addFeature( "suidroot" );
-    }
+  struct stat s;
+  if( !::stat( QFile::encodeName(path), &s ) ) {
+    if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
+      bin->addFeature( "suidroot" );
   }
-
+  
   addBin( bin );
   return true;
 }
@@ -1005,16 +977,12 @@ bool K3bCdda2wavProgram::scan( const QString& p )
   }
 
   // check if we run as root
-  if( !getuid() )
-    bin->addFeature( "suidroot" );
-  else {
-    struct stat s;
-    if( !::stat( QFile::encodeName(path), &s ) ) {
-      if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
-	bin->addFeature( "suidroot" );
-    }
+  struct stat s;
+  if( !::stat( QFile::encodeName(path), &s ) ) {
+    if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
+      bin->addFeature( "suidroot" );
   }
-
+ 
   addBin( bin );
   return true;
 }

@@ -39,6 +39,7 @@ ffmpeg decoder plugin. This includes support for wma audio files.
 Use DAO writing mode for data CDs when overwrite is enabled.
 Added option to load the last used settings in addition to the default user settings in every
 	action dialog.
+Show system device name in case the string representing two devices are equal.
 	
 0.11.10
 Support Mp3 files starting with multiple ID3 tags.

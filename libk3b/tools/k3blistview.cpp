@@ -704,6 +704,13 @@ void K3bListView::setNoItemText( const QString& text )
 }
 
 
+void K3bListView::viewportPaintEvent( QPaintEvent* e )
+{
+  KListView::viewportPaintEvent( e );
+}
+
+
+// FIXME: move this to viewportPaintEvent
 void K3bListView::drawContentsOffset( QPainter * p, int ox, int oy, int cx, int cy, int cw, int ch )
 {
   KListView::drawContentsOffset( p, ox, oy, cx, cy, cw, ch );

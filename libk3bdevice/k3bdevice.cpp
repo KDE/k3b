@@ -313,6 +313,14 @@ bool K3bDevice::Device::init()
 	      d->supportedProfiles |= MEDIA_DVD_RW_SEQ;
 	      d->deviceType |= DVDRW;
 	      break;
+	    case 0x15:
+	      d->supportedProfiles |= MEDIA_DVD_R_DL_SEQ;
+	      d->deviceType |= DVDRW;
+	      break;
+	    case 0x16:
+	      d->supportedProfiles |= MEDIA_DVD_R_DL_JUMP;
+	      d->deviceType |= DVDRW;
+	      break;
 	    case 0x1A:
 	      d->supportedProfiles |= MEDIA_DVD_PLUS_RW;
 	      d->deviceType |= DVDPRW;
@@ -610,6 +618,12 @@ bool K3bDevice::Device::init()
 	  break;
 
 	  // 0x33 0x38
+
+	case FEATURE_LAYER_JUMP_RECORDING:
+	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Layer Jump Recording" << endl;
+	  d->deviceType |= DVDRW;
+	  d->supportedProfiles |= MEDIA_DVD_R_DL_JUMP;
+	  break;
 
 	case FEATURE_CD_RW_MEDIA_WRITE_SUPPORT:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD-RW Media Write Support" << endl;
@@ -1244,6 +1258,8 @@ K3bDevice::Toc K3bDevice::Device::readToc() const
     //
     if( currentProfile() == MEDIA_DVD_ROM )
       mediaType = MEDIA_DVD_ROM;
+
+    // FIXME: add DVD-R Dual Layer
 
    switch( mediaType ) {
 
@@ -2079,6 +2095,8 @@ int K3bDevice::Device::currentProfile() const
     case 0x12: return MEDIA_DVD_RAM;
     case 0x13: return MEDIA_DVD_RW_OVWR;
     case 0x14: return MEDIA_DVD_RW_SEQ;
+    case 0x15: return MEDIA_DVD_R_DL_SEQ;
+    case 0x16: return MEDIA_DVD_R_DL_JUMP;
     case 0x1A: return MEDIA_DVD_PLUS_RW;
     case 0x1B: return MEDIA_DVD_PLUS_R;
     case 0x2B: return MEDIA_DVD_PLUS_R_DL;
@@ -2105,40 +2123,40 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
     unsigned char* data = 0;
     int dataLen = 0;
 
-    //
-    // Set writing mode to TAO.
-    // In RAW writing mode we do not get the values we want.
-    //
-    if( modeSense( &data, dataLen, 0x05 ) ) {
-      wr_param_page_05* mp = (struct wr_param_page_05*)(data+8);
+//     //
+//     // Set writing mode to TAO.
+//     // In RAW writing mode we do not get the values we want.
+//     //
+//     if( modeSense( &data, dataLen, 0x05 ) ) {
+//       wr_param_page_05* mp = (struct wr_param_page_05*)(data+8);
 
-      // reset some stuff to be on the safe side
-      mp->PS = 0;
-      mp->BUFE = 0;
-      mp->multi_session = 0;
-      mp->test_write = 0;
-      mp->LS_V = 0;
-      mp->copy = 0;
-      mp->fp = 0;
-      mp->host_appl_code= 0;
-      mp->session_format = 0;
-      mp->audio_pause_len[0] = 0;
-      mp->audio_pause_len[1] = 150;
+//       // reset some stuff to be on the safe side
+//       mp->PS = 0;
+//       mp->BUFE = 0;
+//       mp->multi_session = 0;
+//       mp->test_write = 0;
+//       mp->LS_V = 0;
+//       mp->copy = 0;
+//       mp->fp = 0;
+//       mp->host_appl_code= 0;
+//       mp->session_format = 0;
+//       mp->audio_pause_len[0] = 0;
+//       mp->audio_pause_len[1] = 150;
 
-      mp->write_type = 0x01;  // TAO
-      mp->track_mode = 4;     // MMC-4 says: 5, cdrecord uses 4 ?
-      mp->dbtype = 8;         // Mode 1
+//       mp->write_type = 0x01;  // TAO
+//       mp->track_mode = 4;     // MMC-4 says: 5, cdrecord uses 4 ???
+//       mp->dbtype = 8;         // Mode 1
 
-      if( !modeSelect( data, dataLen, 1, 0 ) ) {
-	kdDebug() << "(K3bDevice::Device) " << blockDeviceName()
-		  << ": modeSelect 0x05 failed!" << endl;
-      }
+//       if( !modeSelect( data, dataLen, 1, 0 ) ) {
+// 	kdDebug() << "(K3bDevice::Device) " << blockDeviceName()
+// 		  << ": modeSelect 0x05 failed!" << endl;
+//       }
 
-      delete [] data;
-    }
-    else
-      kdDebug() << "(K3bDevice::Device) " << blockDeviceName()
-		<< ": modeSense 0x05 failed!" << endl;
+//       delete [] data;
+//     }
+//     else
+//       kdDebug() << "(K3bDevice::Device) " << blockDeviceName()
+// 		<< ": modeSense 0x05 failed!" << endl;
 
 
     //
@@ -2292,7 +2310,7 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
 	}
 	else {
 	  kdDebug() << "(K3bDevice::Device) Unable to read DVD structure for num of layers." << endl;
-	  inf.m_numLayers = ( inf.m_mediaType == MEDIA_DVD_PLUS_R_DL ? 2 : 1 );
+	  inf.m_numLayers = ( (inf.m_mediaType & MEDIA_WRITABLE_DVD_DL) ? 2 : 1 );
 	}
       }
 
@@ -2324,6 +2342,8 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
       //
       if( inf.currentProfile() == MEDIA_DVD_ROM )
 	media = MEDIA_DVD_ROM;
+
+      // FIXME: add DVD-R Dual Layer
 
       switch( media ) {
       case MEDIA_CD_R:
@@ -2583,6 +2603,7 @@ int K3bDevice::Device::dvdMediaType() const
 	case 0x10: m = MEDIA_DVD_RAM; break;
 	case 0x20: m = MEDIA_DVD_R; break;
 	case 0x30: m = MEDIA_DVD_RW; break;
+	  // FIXME: add DVD-R Dual Layer
 	case 0x90: m = MEDIA_DVD_PLUS_RW; break;
 	case 0xA0: m = MEDIA_DVD_PLUS_R; break;
 	case 0xE0: m = MEDIA_DVD_PLUS_R_DL; break;
@@ -2746,102 +2767,126 @@ QValueList<int> K3bDevice::Device::determineSupportedWriteSpeeds() const
   QValueList<int> ret;
 
   if( burner() ) {
-    unsigned char* data = 0;
-    int dataLen = 0;
     bool dvd = isDVD();
 
     //
-    // First we try the 2A mode page
+    // Tests with all my drives resulted in 2A for CD and GET PERFORMANCE for DVD media
+    // as the valid method of speed detection.
     //
-    if( modeSense( &data, dataLen, 0x2A ) ) {
-      mm_cap_page_2A* mm = (mm_cap_page_2A*)&data[8];
-
-      if( dataLen > 32 ) {
-	// we have descriptors
-	int numDesc = from2Byte( mm->num_wr_speed_des );
-
-	// Some CDs writer returns the number of bytes that contain
-	// the descriptors rather than the number of descriptors
-	// Ensure number of descriptors claimed actually fits in the data
-	// returned by the mode sense command.
-	if( numDesc > ((dataLen - 32 - 8) / 4) )
-	  numDesc = (dataLen - 32 - 8) / 4;
-
-	cd_wr_speed_performance* wr = (cd_wr_speed_performance*)mm->wr_speed_des;
-
-	kdDebug() << "(K3bDevice::Device) " << blockDeviceName()
-		  << ":  Number of supported write speeds via 2A: "
-		  << numDesc << endl;
-
-
-	for( int i = 0; i < numDesc; ++i ) {
-	  int s = from2Byte( wr[i].wr_speed_supp );
-	  //
-	  // some DVD writers report CD writing speeds here
-	  // If that is the case we cannot rely on the reported speeds
-	  // and need to use the values gained from GET PERFORMANCE.
-	  //
-	  if( dvd && s < 1352 ) {
-	    kdDebug() << "(K3bDevice::Device) " << blockDeviceName()
-		      << " Invalid DVD speed: " << s << " KB/s" << endl;
-	    ret.clear();
-	    break;
-	  }
-	  else {
-	    kdDebug() << "(K3bDevice::Device) " << blockDeviceName()
-		      << " : " << s << " KB/s" << endl;
-
-	    if( dvd )
-	      s = fixupDvdWritingSpeed( s );
-
-	    // sort the list
-	    QValueList<int>::iterator it = ret.begin();
-	    while( it != ret.end() && *it < s )
-	      ++it;
-	    ret.insert( it, s );
-	  }
-	}
-      }
-
-      delete [] data;
+    if( !dvd ) {
+      if( !getSupportedWriteSpeedsVia2A( ret, false ) )
+	getSupportedWriteSpeedsViaGP( ret, false );
     }
-
-    if( getPerformance( &data, dataLen, 0x3, 0x0 ) ) {
-      int numDesc = (dataLen-8)/16;
-      kdDebug() << "(K3bDevice::Device) " << blockDeviceName()
-		<< ":  Number of supported write speeds via GET PERFORMANCE: "
-		<< numDesc << endl;
-
-      for( int i = 0; i < numDesc; ++i ) {
-	int s = from4Byte( &data[20+i*16] );
-	if( dvd && s < 1352 ) {
-	  //
-	  // Does this ever happen?
-	  //
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName()
-		    << " Invalid DVD speed: " << s << " KB/s" << endl;
-	}
-	else {
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName()
-		      << " : " << s << " KB/s" << endl;
-
-	  if( dvd )
-	    s = fixupDvdWritingSpeed( s );
-
-	  QValueList<int>::iterator it = ret.begin();
-	  while( it != ret.end() && *it < s )
-	    ++it;
-	  // the speed might already have been found in the 2a modepage
-	  if( it == ret.end() || *it != s )
-	    ret.insert( it, s );
-	}
-      }
-
-      delete [] data;
+    else {
+      if( !getSupportedWriteSpeedsViaGP( ret, true ) )
+	getSupportedWriteSpeedsVia2A( ret, true );
     }
   }
 
   return ret;
+}
+
+
+bool K3bDevice::Device::getSupportedWriteSpeedsVia2A( QValueList<int>& list, bool dvd ) const
+{
+  unsigned char* data = 0;
+  int dataLen = 0;
+  if( modeSense( &data, dataLen, 0x2A ) ) {
+    mm_cap_page_2A* mm = (mm_cap_page_2A*)&data[8];
+
+    if( dataLen > 32 ) {
+      // we have descriptors
+      int numDesc = from2Byte( mm->num_wr_speed_des );
+
+      // Some CDs writer returns the number of bytes that contain
+      // the descriptors rather than the number of descriptors
+      // Ensure number of descriptors claimed actually fits in the data
+      // returned by the mode sense command.
+      if( numDesc > ((dataLen - 32 - 8) / 4) )
+	numDesc = (dataLen - 32 - 8) / 4;
+
+      cd_wr_speed_performance* wr = (cd_wr_speed_performance*)mm->wr_speed_des;
+
+      kdDebug() << "(K3bDevice::Device) " << blockDeviceName()
+		<< ":  Number of supported write speeds via 2A: "
+		<< numDesc << endl;
+
+
+      for( int i = 0; i < numDesc; ++i ) {
+	int s = from2Byte( wr[i].wr_speed_supp );
+	//
+	// some DVD writers report CD writing speeds here
+	// If that is the case we cannot rely on the reported speeds
+	// and need to use the values gained from GET PERFORMANCE.
+	//
+	if( dvd && s < 1352 ) {
+	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName()
+		    << " Invalid DVD speed: " << s << " KB/s" << endl;
+	  list.clear();
+	  break;
+	}
+	else {
+	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName()
+		    << " : " << s << " KB/s" << endl;
+
+	  if( dvd )
+	    s = fixupDvdWritingSpeed( s );
+
+	  // sort the list
+	  QValueList<int>::iterator it = list.begin();
+	  while( it != list.end() && *it < s )
+	    ++it;
+	  list.insert( it, s );
+	}
+      }
+    }
+
+    delete [] data;
+  }
+
+  return !list.isEmpty();
+}
+
+
+bool K3bDevice::Device::getSupportedWriteSpeedsViaGP( QValueList<int>& list, bool dvd ) const
+{
+  unsigned char* data = 0;
+  int dataLen = 0;
+  if( getPerformance( &data, dataLen, 0x3, 0x0 ) ) {
+    int numDesc = (dataLen-8)/16;
+    kdDebug() << "(K3bDevice::Device) " << blockDeviceName()
+	      << ":  Number of supported write speeds via GET PERFORMANCE: "
+	      << numDesc << endl;
+
+    for( int i = 0; i < numDesc; ++i ) {
+      int s = from4Byte( &data[20+i*16] );
+      if( dvd && s < 1352 ) {
+	//
+	// Does this ever happen?
+	//
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName()
+		  << " Invalid DVD speed: " << s << " KB/s" << endl;
+      }
+      else {
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName()
+		  << " : " << s << " KB/s" << endl;
+
+	if( dvd )
+	  s = fixupDvdWritingSpeed( s );
+
+	QValueList<int>::iterator it = list.begin();
+	while( it != list.end() && *it < s )
+	  ++it;
+	// the speed might already have been found in the 2a modepage
+	if( it == list.end() || *it != s )
+	  list.insert( it, s );
+      }
+    }
+
+    delete [] data;
+  }
+
+  return !list.isEmpty();
 }
 
 

@@ -523,7 +523,7 @@ bool K3bDvdJob::waitForDvd()
 
   // double layer media
   if( m_doc->size() > 4700372992LL )
-    mt = K3bDevice::MEDIA_DVD_PLUS_R_DL;
+    mt = K3bDevice::MEDIA_WRITABLE_DVD;
 
   d->foundMedia = waitForMedia( m_doc->burner(), 
 				m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
@@ -566,7 +566,7 @@ bool K3bDvdJob::waitForDvd()
 	    emit infoMessage( i18n("Growing ISO9660 filesystem on DVD+RW."), INFO );
       }
       else if( d->foundMedia & K3bDevice::MEDIA_DVD_PLUS_R_DL )
-	emit infoMessage( i18n("Writing Dual-Layer DVD+R."), INFO );
+	emit infoMessage( i18n("Writing Double Layer DVD+R."), INFO );
       else
 	emit infoMessage( i18n("Writing DVD+R."), INFO );
     }

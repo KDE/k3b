@@ -189,7 +189,22 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 					 i18n("Install a more recent version of the cdrtools."),
 					 false ) );
     
-    if( !k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "suidroot" ) )
+#ifdef Q_OS_LINUX
+
+    //
+    // Since kernel 2.6.8 cdrecord is not able to use the SCSI subsystem when running suid root anymore
+    // So for now (until cdrecord has been properly patched) we ignore the suid root issue with kernel >= 2.6.8
+    //
+    if( K3b::kernelVersion() >= K3bVersion( 2, 6, 8 ) ) {
+      if( k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "suidroot" ) )
+	problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+					   i18n("%1 will be run with root privileges on kernel >= 2.6.8").arg("cdrecord"),
+					   i18n("Since Linux kernel 2.6.8 %1 will not work when run suid "
+						"root for security reasons anymore.").arg("cdrecord"),
+					   i18n("Use K3bSetup to solve this problem."),
+					   true ) );
+    }
+    else if( !k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "suidroot" ) && getuid() != 0 ) // not root
       problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
 					 i18n("%1 will be run without root privileges").arg("cdrecord"),
 					 i18n("It is highly recommended to configure cdrecord "
@@ -202,7 +217,8 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 					 i18n("Use K3bSetup to solve this problem."),
 					 true ) );
   }
-  
+#endif
+
   if( !k3bcore->externalBinManager()->foundBin( "cdrdao" ) ) {
     problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
 				       i18n("Unable to find %1 executable").arg("cdrdao"),
@@ -210,26 +226,19 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 				       i18n("Install the cdrdao package."),
 				       false ) );
   }
-  else if( !k3bcore->externalBinManager()->binObject( "cdrdao" )->hasFeature( "suidroot" ) ) {
-    problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
-				       i18n("%1 will be run without root privileges").arg("cdrdao"),
-				       i18n("It is highly recommended to configure cdrdao "
-					    "to run with root privileges to increase the "
-					    "overall stability of the burning process."),
-				       i18n("Use K3bSetup to solve this problem."),
-				       true ) );
+  else {
+#ifdef Q_OS_LINUX
+    if( K3b::kernelVersion() < K3bVersion( 2, 6, 8 ) &&
+	!k3bcore->externalBinManager()->binObject( "cdrdao" )->hasFeature( "suidroot" ) && getuid() != 0 )
+      problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+					 i18n("%1 will be run without root privileges").arg("cdrdao"),
+					 i18n("It is highly recommended to configure cdrdao "
+					      "to run with root privileges to increase the "
+					      "overall stability of the burning process."),
+					 i18n("Use K3bSetup to solve this problem."),
+					 true ) );
   }
-
-
-//   if( const K3bExternalBin* readcdBin = k3bcore->externalBinManager()->binObject( "readcd" ) )
-//     if( !readcdBin->hasFeature( "suidroot" ) )
-//       problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
-// 					 i18n("%1 does not run with root privileges").arg("readcd"),
-// 					 i18n("It is recommended to run readcd with root "
-// 					      "privileges."),
-// 					 i18n("Use K3bSetup to solve this problem."),
-// 					 true ) );
-
+#endif
 
   if( !k3bcore->deviceManager()->dvdWriter().isEmpty() ) {
     if( !k3bcore->externalBinManager()->foundBin( "growisofs" ) ) {

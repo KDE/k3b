@@ -684,7 +684,7 @@ bool K3bCdCopyJob::writeNextSession()
 
   // if session > 1 we wait for an appendable CD
   if( waitForMedia( m_writerDevice, 
-		    d->currentWrittenSession > 1 
+		    d->currentWrittenSession > 1 && !m_simulate
 		    ? K3bDevice::STATE_INCOMPLETE
 		    : K3bDevice::STATE_EMPTY,
 		    K3bDevice::MEDIA_WRITABLE_CD ) < 0 ) {

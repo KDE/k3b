@@ -282,10 +282,10 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
     if( usedWriteMode == K3b::WRITING_MODE_AUTO ) {
       // cdrecord seems to have problems when writing in mode2 in dao mode
       // so with cdrecord we use TAO
-      //      if( m_noFix || m_dataMode == K3b::MODE2 || !m_device->dao() )
+      if( m_noFix || m_dataMode == K3b::MODE2 || !m_device->dao() )
 	usedWriteMode = K3b::TAO;
-//       else
-// 	usedWriteMode = K3b::DAO;
+      else
+	usedWriteMode = K3b::DAO;
     }
 
     int usedApp = writingApp();

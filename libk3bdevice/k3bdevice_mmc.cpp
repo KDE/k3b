@@ -297,10 +297,10 @@ bool K3bDevice::Device::readTrackInformation( unsigned char** data, int& dataLen
 
 
 bool K3bDevice::Device::read10( unsigned char* data,
-				    int dataLen,
-				    unsigned long startAdress,
-				    unsigned int length,
-				    bool fua ) const
+				int dataLen,
+				unsigned long startAdress,
+				unsigned int length,
+				bool fua ) const
 {
   ::memset( data, 0, dataLen );
 
@@ -324,11 +324,11 @@ bool K3bDevice::Device::read10( unsigned char* data,
 
 
 bool K3bDevice::Device::read12( unsigned char* data,
-				    int dataLen,
-				    unsigned long startAdress,
-				    unsigned long length,
-				    bool streaming,
-				    bool fua ) const
+				int dataLen,
+				unsigned long startAdress,
+				unsigned long length,
+				bool streaming,
+				bool fua ) const
 {
   ::memset( data, 0, dataLen );
 
@@ -355,18 +355,18 @@ bool K3bDevice::Device::read12( unsigned char* data,
 
 
 bool K3bDevice::Device::readCd( unsigned char* data,
-				    int dataLen,
-				    int sectorType,
-				    bool dap,
-				    unsigned long startAdress,
-				    unsigned long length,
-				    bool sync,
-				    bool header,
-				    bool subHeader,
-				    bool userData,
-				    bool edcEcc,
-				    int c2,
-				    int subChannel ) const
+				int dataLen,
+				int sectorType,
+				bool dap,
+				unsigned long startAdress,
+				unsigned long length,
+				bool sync,
+				bool header,
+				bool subHeader,
+				bool userData,
+				bool edcEcc,
+				int c2,
+				int subChannel ) const
 {
   ::memset( data, 0, dataLen );
 
@@ -392,8 +392,9 @@ bool K3bDevice::Device::readCd( unsigned char* data,
     kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ CD failed!" << endl;
     return false;
   }
-  else
+  else {
     return true;
+  }
 }
 
 

@@ -73,6 +73,11 @@ K3bProjectBurnDialog::~K3bProjectBurnDialog(){
 }
 
 
+void K3bProjectBurnDialog::init()
+{
+  readSettings();
+}
+
 
 void K3bProjectBurnDialog::slotWriterChanged()
 {
@@ -149,8 +154,6 @@ int K3bProjectBurnDialog::exec( bool burn )
     m_buttonStart->hide();
     setDefaultButton( SAVE_BUTTON );
   }
-
-  readSettings();
 
   return K3bInteractionDialog::exec();
 }

@@ -46,6 +46,11 @@ class K3bDeviceBranch : public KFileTreeBranch
 
   K3bDevice::Device* device() const { return m_device; }
 
+  /**
+   * Adds or removes the blockdevicename from the branch name
+   */
+  void showBlockDeviceName( bool b );
+
  signals:
   /**
    * mountPoint is empty if not successful
@@ -136,6 +141,7 @@ class K3bFileTreeView : public KFileTreeView
    */
   void addDefaultBranches();
   void addCdDeviceBranches( K3bDevice::DeviceManager* );
+  void addDeviceBranch( K3bDevice::Device* dev );
 
   void followUrl( const KURL& url );
   void setTreeDirOnlyMode( bool b );

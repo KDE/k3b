@@ -36,6 +36,8 @@ K3bAudioDataSourceViewItem::K3bAudioDataSourceViewItem( K3bAudioTrackViewItem* p
   f.setItalic( true );
   setFont( 3, f );
 
+  setMarginVertical( 2 );
+
   // greyed out filename
   setForegroundColor( 5, listView()->palette().disabled().foreground() );
 

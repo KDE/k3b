@@ -182,17 +182,21 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
     switch( dh->diskInfo().mediaType() ) {
     case K3bDevice::MEDIA_DVD_ROM:
     case K3bDevice::MEDIA_DVD_PLUS_R_DL:
+    case K3bDevice::MEDIA_DVD_R_DL:
+    case K3bDevice::MEDIA_DVD_R_DL_SEQ:
+    case K3bDevice::MEDIA_DVD_R_DL_JUMP:
       if( !m_onlyCreateImage ) {
 	if( dh->diskInfo().numLayers() > 1 ) {
-	  if( !(m_writerDevice->supportedProfiles() & K3bDevice::MEDIA_DVD_PLUS_R_DL) ) {
-	    emit infoMessage( i18n("The writer does not support writing dual-layer DVDs."), ERROR );
+	  if( !(m_writerDevice->supportedProfiles() & K3bDevice::MEDIA_WRITABLE_DVD_DL) ) {
+	    emit infoMessage( i18n("The writer does not support writing Double Layer DVD."), ERROR );
 	    d->running = false;
 	    emit finished(false);
 	    return;
 	  }
+	  // FIXME: check for growisofs 5.22 (or whatever version is needed) for DVD-R DL
 	  else if( k3bcore->externalBinManager()->binObject( "growisofs" ) && 
 		   k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3bVersion( 5, 20 ) ) {
-	    emit infoMessage( i18n("Growisofs >= 5.20 is needed to write dual-layer DVDs."), ERROR );
+	    emit infoMessage( i18n("Growisofs >= 5.20 is needed to write Double Layer DVD+R."), ERROR );
 	    d->running = false;
 	    emit finished(false);
 	    return;
@@ -602,14 +606,14 @@ bool K3bDvdCopyJob::waitForDvd()
   else if( m_writingMode == K3b::WRITING_MODE_RES_OVWR ) // we treat DVD+R(W) as restricted overwrite media
     mt = K3bDevice::MEDIA_DVD_RW_OVWR|K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_PLUS_R;
   else
-    mt = K3bDevice::MEDIA_WRITABLE_DVD;
+    mt = K3bDevice::MEDIA_WRITABLE_DVD_SL;
 
   //
   // in case the source is a double layer DVD we made sure above that the writer
-  // is capable of writing DVD+R-DL and here we wait for a DL DVD
+  // is capable of writing DVD+R-DL or DVD-R DL and here we wait for a DL DVD
   //
   if( d->sourceDiskInfo.numLayers() > 1 ) {
-    mt = K3bDevice::MEDIA_DVD_PLUS_R_DL;
+    mt = K3bDevice::MEDIA_WRITABLE_DVD_DL;
   }
 
   int m = waitForMedia( m_writerDevice, K3bDevice::STATE_EMPTY, mt );
@@ -647,7 +651,7 @@ bool K3bDvdCopyJob::waitForDvd()
       if( m & K3bDevice::MEDIA_DVD_PLUS_RW )
 	emit infoMessage( i18n("Writing DVD+RW."), INFO );
       else if( m & K3bDevice::MEDIA_DVD_PLUS_R_DL )
-	emit infoMessage( i18n("Writing Dual-Layer DVD+R."), INFO );
+	emit infoMessage( i18n("Writing Double Layer DVD+R."), INFO );
       else
 	emit infoMessage( i18n("Writing DVD+R."), INFO );
     }

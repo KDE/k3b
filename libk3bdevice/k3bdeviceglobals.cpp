@@ -96,6 +96,13 @@ QString K3bDevice::mediaTypeString( int m, bool simple )
     s += i18n("DVD-R");
   if( m & MEDIA_DVD_R_SEQ && !simple )
     s += i18n("DVD-R Sequential");
+  if( m & MEDIA_DVD_R_DL ||
+      (simple && (m & (MEDIA_DVD_R_DL_SEQ|MEDIA_DVD_R_DL_JUMP))) )
+    s += i18n("DVD-R Dual Layer");
+  if( m & MEDIA_DVD_R_DL_SEQ )
+    s += i18n("DVD-R Dual Layer Sequential");
+  if( m & MEDIA_DVD_R_DL_JUMP )
+    s += i18n("DVD-R Dual Layer Jump");
   if( m & MEDIA_DVD_RAM )
     s += i18n("DVD-RAM");
   if( m & MEDIA_DVD_RW ||

@@ -713,24 +713,20 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	emit infoMessage( i18n("Most likely the burning failed due to low-quality media."), ERROR );
 	break;
       case UNKNOWN:
-	if( !wasSourceUnreadable() ) {
+	if( p->exitStatus() == 12 && K3b::kernelVersion() >= K3bVersion( 2, 6, 8 ) && m_cdrecordBinObject->hasFeature( "suidroot" ) ) {
+	  emit infoMessage( i18n("Since kernel version 2.6.8 cdrecord cannot use SCSI transport when running suid root anymore."), ERROR );
+	  emit infoMessage( i18n("You may use K3bSetup to solve this problem or remove the suid bit manually."), ERROR );
+	}
+	else if( !wasSourceUnreadable() ) {
 	  emit infoMessage( i18n("%1 returned an unknown error (code %2).")
 			    .arg(m_cdrecordBinObject->name()).arg(p->exitStatus()), 
 			    K3bJob::ERROR );
 	  emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
 	  
-	  if( !m_cdrecordBinObject->hasFeature( "suidroot" ) ) {
-	    emit infoMessage( i18n("Cdrecord is not being run with root privileges."), ERROR );
-	    emit infoMessage( i18n("This influences the stability of the burning process."), ERROR );
-#ifdef HAVE_K3BSETUP
-	    emit infoMessage( i18n("Use K3bSetup to solve this problem."), ERROR );    
-#endif
-	  }
-	  else {
-	    emit infoMessage( i18n("If you are running an unpatched cdrecord version..."), ERROR );
-	    emit infoMessage( i18n("...and this error also occurs with high quality media..."), ERROR );
-	    emit infoMessage( i18n("...please send me an email including the debugging output."), ERROR );
-	  }
+	  emit infoMessage( i18n("If you are running an unpatched cdrecord version..."), ERROR );
+	  emit infoMessage( i18n("...and this error also occurs with high quality media..."), ERROR );
+	  emit infoMessage( i18n("...and the K3b FAQ does not help you..."), ERROR );
+	  emit infoMessage( i18n("...please include the debugging output in your problem report."), ERROR );
 	}
 	break;
       }

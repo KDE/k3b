@@ -663,6 +663,9 @@ namespace K3bDevice
      */
     int rawTocDataWithBcdValues( unsigned char* data, int dataLen ) const;
 
+    bool getSupportedWriteSpeedsVia2A( QValueList<int>& list, bool dvd ) const;
+    bool getSupportedWriteSpeedsViaGP( QValueList<int>& list, bool dvd ) const;
+
     QString m_vendor;
     QString m_description;
     QString m_version;

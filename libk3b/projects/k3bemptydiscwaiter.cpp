@@ -135,8 +135,8 @@ int K3bEmptyDiscWaiter::waitForDisc( int mediaState, int mediaType, const QStrin
   if( (d->wantedMediaType & K3bDevice::MEDIA_WRITABLE_DVD) &&
 	   (d->wantedMediaType & K3bDevice::MEDIA_WRITABLE_CD) )
     m = i18n("CD-R(W) or DVD±R(W)");
-  else if( d->wantedMediaType == K3bDevice::MEDIA_DVD_PLUS_R_DL )
-    m = i18n("Dual-Layer DVD+R");
+  else if( d->wantedMediaType & K3bDevice::MEDIA_WRITABLE_DVD_DL )
+    m = i18n("Double Layer DVD±R");
   else if( d->wantedMediaType & K3bDevice::MEDIA_WRITABLE_DVD )
     m = i18n("DVD±R(W)");
   else

@@ -153,6 +153,8 @@ public:
       return;
     }
 
+    kdDebug() << "(K3bDataTrackReader) using buffer size of " << s_bufferSizeSectors << " blocks." << endl;
+
     unsigned char* buffer = new unsigned char[m_sectorSize*s_bufferSizeSectors];
 
     // 2. get it on
@@ -200,7 +202,7 @@ public:
 	  break;
 	}
       }
-      
+
       currentSector += readSectors;
 
       int percent = 100 * (currentSector.lba() - m_firstSector.lba() + 1 ) / 

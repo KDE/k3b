@@ -1,7 +1,7 @@
 /*
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2004 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
@@ -42,6 +42,7 @@
 #include <k3bdevice.h>
 #include <k3bexternalbinmanager.h>
 #include <k3bdefaultexternalprograms.h>
+#include <k3bglobals.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -78,7 +79,7 @@ K3bSetup2::K3bSetup2( QWidget *parent, const char *name, const QStringList& )
   m_aboutData = new KAboutData(I18N_NOOP("k3bsetup2"),
 			       I18N_NOOP("K3bSetup 2"),
 			       0, 0, KAboutData::License_GPL,
-			       I18N_NOOP("(c) 2003 Sebastian Trueg"));
+			       I18N_NOOP("(C) 2003-2004 Sebastian Trueg"));
   m_aboutData->addAuthor("Sebastian Trueg", 0, "trueg@k3b.org");
 
   setButtons( KCModule::Apply|KCModule::Cancel|KCModule::Ok|KCModule::Default );
@@ -207,29 +208,39 @@ void K3bSetup2::updatePrograms()
 
 	int perm = s.st_mode & 0007777;
 
-	bi->setText( 3, QString::number( perm, 8 ).rightJustify( 4, '0' ) + " " + fi.owner() + "." + fi.group() );
-	if( w->m_checkUseBurningGroup->isChecked() ) {
-	  if( perm != 0004710 ||
-	      fi.owner() != "root" ||
-	      fi.group() != burningGroup() ) {
-	    bi->setText( 4, "4710 root." + burningGroup() );
-	    if( bi->isOn() )
-	      d->changesNeeded = true;
-	  }
+	//
+	// Since kernel 2.6.8 cdrecord/cdrdao is not able to use the SCSI subsystem when running suid root anymore
+	// So for now (until cdrecord has been properly patched) we ignore the suid root issue with kernel >= 2.6.8
+	//
+
+	QString wantedGroup("root");
+	if( w->m_checkUseBurningGroup->isChecked() )
+	  wantedGroup = burningGroup();
+
+	int wantedPerm = 0;
+	if( K3b::kernelVersion() >= K3bVersion( 2, 6, 8 ) ) {
+	  if( w->m_checkUseBurningGroup->isChecked() )
+	    wantedPerm = 0000750;
 	  else
-	    bi->setText( 4, i18n("no change") );
+	    wantedPerm = 0000755;
 	}
 	else {
-	  if( perm != 0004711 ||
-	      fi.owner() != "root" ||
-	      fi.group() != "root" ) {
-	    bi->setText( 4, "4711 root.root" );
-	    if( bi->isOn() )
-	      d->changesNeeded = true;
-	  }
+	  if( w->m_checkUseBurningGroup->isChecked() )
+	    wantedPerm = 0004710;
 	  else
-	    bi->setText( 4, i18n("no change") );
+	    wantedPerm = 0004711;
 	}
+
+	bi->setText( 3, QString::number( perm, 8 ).rightJustify( 4, '0' ) + " " + fi.owner() + "." + fi.group() );
+	if( perm != wantedPerm ||
+	    fi.owner() != "root" ||
+	    fi.group() != wantedGroup ) {
+	  bi->setText( 4, QString("%1 root.%2").arg(wantedPerm,0,8).arg(wantedGroup) );
+	  if( bi->isOn() )
+	    d->changesNeeded = true;
+	}
+	else
+	  bi->setText( 4, i18n("no change") );
       }
     }
   }
@@ -376,10 +387,18 @@ void K3bSetup2::save()
 
 	if( ::chown( QFile::encodeName(dev->blockDeviceName()), (gid_t)-1, g->gr_gid ) )
 	  success = false;
+
+	if( dev->interfaceType() == K3bDevice::SCSI && QFile::exists( dev->genericDevice() ) )
+	  if( ::chmod( QFile::encodeName(dev->genericDevice()), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP ) )
+	    success = false;
       }
       else {
 	if( ::chmod( QFile::encodeName(dev->blockDeviceName()), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH ) )
 	  success = false;
+
+	if( dev->interfaceType() == K3bDevice::SCSI && QFile::exists( dev->genericDevice() ) )
+	  if( ::chmod( QFile::encodeName(dev->genericDevice()), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH ) )
+	    success = false;
       }
     }
   }
@@ -395,16 +414,35 @@ void K3bSetup2::save()
 
       K3bExternalBin* bin = d->listBinMap[checkItem];
 
+      //
+      // Since kernel 2.6.8 cdrecord/cdrdao is not able to use the SCSI subsystem when running suid root anymore
+      // So for now (until cdrecord has been properly patched) we ignore the suid root issue with kernel >= 2.6.8
+      //
+
       if( w->m_checkUseBurningGroup->isChecked() ) {
 	if( ::chown( QFile::encodeName(bin->path), (gid_t)0, g->gr_gid ) )
 	  success = false;
-	if( ::chmod( QFile::encodeName(bin->path), S_ISUID|S_IRWXU|S_IXGRP ) )
+
+	int perm = 0;
+	if( K3b::kernelVersion() >= K3bVersion( 2, 6, 8 ) )
+	  perm = S_IRWXU|S_IXGRP|S_IRGRP;
+	else
+	  perm = S_ISUID|S_IRWXU|S_IXGRP;
+
+	if( ::chmod( QFile::encodeName(bin->path), perm ) )
 	  success = false;
       }
       else {
 	if( ::chown( QFile::encodeName(bin->path), 0, 0 ) )
 	  success = false;
-	if( ::chmod( QFile::encodeName(bin->path), S_ISUID|S_IRWXU|S_IXGRP|S_IXOTH ) )
+
+	int perm = 0;
+	if( K3b::kernelVersion() >= K3bVersion( 2, 6, 8 ) )
+	  perm = S_IRWXU|S_IXGRP|S_IRGRP|S_IXOTH|S_IROTH;
+	else
+	  perm = S_ISUID|S_IRWXU|S_IXGRP|S_IXOTH;
+
+	if( ::chmod( QFile::encodeName(bin->path), perm ) )
 	  success = false;
       }
     }

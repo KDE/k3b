@@ -40,5 +40,13 @@ A: K3b determined the maximum writing speed the first time you start it. Since t
    To manually change it open the K3b settings in the device section and click on the value. You will 
    be presented with a spinbox which allows to change the speed.
 
+
 Q: I always get the error "trying to open /dev/scd0 exclusively" when trying to write with cdrecord.
 A: Cdrecord needs to be able to write to the generic devices /dev/sgX.
+
+
+Q: Writing fails with the following cdrecord message:
+     "Cannot allocate memory. Cannot get SCSI I/O buffer."
+A: Since kernel 2.6.9 suid root programs are not allowed to use the SCSI subsystem (or something like that)
+   To solve this issue either configure cdrecord to run without root privileges: chmod 755 /usr/bin/cdrecord
+   or run K3b as root (which is not recommended but works also).

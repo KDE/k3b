@@ -55,7 +55,34 @@ K3bDevice::Device* K3bDeviceComboBox::selectedDevice() const
 
 void K3bDeviceComboBox::addDevice( K3bDevice::Device* dev )
 {
-  insertItem( dev->vendor() + " " + dev->description() /*+ " (" + dev->blockDeviceName() + ")"*/ );
+  int devIndex = -2;
+  bool addDevice = false;
+  for( int i = 0; i < count(); ++i ) {
+    if( dev->vendor() == d->devices[i]->vendor() &&
+	dev->description() == d->devices[i]->description() ) {
+      addDevice = true;
+      if( devIndex < -1 ) // when devIndex == -1 we already found two devices.
+	devIndex = i;
+      else
+	devIndex = -1; // when there are already two or more equal devices they have already been updated
+    }
+  }
+
+  // update the existing device item
+  if( devIndex >= 0 ) {
+    changeItem( d->devices[devIndex]->vendor() + " " + 
+		d->devices[devIndex]->description() + 
+		" (" + d->devices[devIndex]->blockDeviceName() + ")",
+		devIndex );
+    d->deviceIndexMap[d->devices[devIndex]->devicename()] = devIndex;
+  }
+
+  // add the new device item
+  if( addDevice )
+    insertItem( dev->vendor() + " " + dev->description() + " (" + dev->blockDeviceName() + ")" );
+  else
+    insertItem( dev->vendor() + " " + dev->description() );
+
   d->deviceIndexMap[dev->devicename()] = count()-1;
   d->devices.resize( count() );
   d->devices.insert(count()-1, dev);

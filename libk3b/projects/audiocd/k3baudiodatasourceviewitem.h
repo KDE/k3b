@@ -39,6 +39,12 @@ class K3bAudioDataSourceViewItem : public K3bListViewItem
 
   void setSelected( bool s );
 
+  /**
+   * Does nothing becasue we don't want no branches here.
+   */
+  void paintBranches( QPainter*, const QColorGroup &,
+		      int, int, int ) {}
+
  private:
   K3bAudioTrackViewItem* m_trackViewItem;
   K3bAudioDataSource* m_source;

@@ -259,7 +259,7 @@ void K3bWriterSelectionWidget::insertWritingSpeedsUpTo( int max )
   if( d->dvd )
     m_comboSpeed->insertItem( i18n("Ignore") );
   if( !d->forceAutoSpeed ) {
-    if( K3bDevice::Device* dev = writerDevice() ) {
+    if( writerDevice() ) {
       // add speeds to combobox
       int i = 1;
       int speed = ( d->dvd ? 1385 : 175 );

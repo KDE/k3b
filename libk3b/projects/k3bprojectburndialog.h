@@ -172,6 +172,8 @@ class K3bProjectBurnDialog : public K3bInteractionDialog
    QSpinBox* m_spinCopies;
 
  private:
+   void init();
+
    K3bDoc* m_doc;
    K3bBurnJob* m_job;
    QTabWidget* m_tabWidget;

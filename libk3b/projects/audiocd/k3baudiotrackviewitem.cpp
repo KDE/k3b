@@ -21,6 +21,9 @@
 
 #include <kiconloader.h>
 
+#include <qpainter.h>
+
+
 K3bAudioTrackViewItem::K3bAudioTrackViewItem( K3bAudioTrackView* parent, 
 					      K3bAudioTrackViewItem* after, 
 					      K3bAudioTrack* track )
@@ -43,7 +46,7 @@ K3bAudioTrackViewItem::K3bAudioTrackViewItem( K3bAudioTrackView* parent,
   setEditor( 1, LINE );
   setEditor( 2, LINE );
 
-  setMarginVertical( 3 );
+  setMarginVertical( 5 );
 
   // italic type
   QFont f(listView()->font());
@@ -57,6 +60,27 @@ K3bAudioTrackViewItem::K3bAudioTrackViewItem( K3bAudioTrackView* parent,
 }
 
 
+void K3bAudioTrackViewItem::paintCell( QPainter* p, const QColorGroup& cg, int col, int width, int align )
+{
+  K3bListViewItem::paintCell( p, cg, col, width, align );
+
+  // draw the separator
+  if( listView()->firstChild() != this ) {
+    p->save();
+    p->setPen(Qt::lightGray);
+    p->drawLine( 0, 0, width, 0 );
+    p->restore();
+  }
+}
+
+
+void K3bAudioTrackViewItem::paintBranches( QPainter* p, const QColorGroup& cg, int w, int, int h )
+{
+  // we just want empty space
+  p->fillRect( QRect( 0, 0, w, h ), cg.base() );
+}
+
+
 QString K3bAudioTrackViewItem::text(int i) const
 {
   // to avoid crashes when the track has been deleted and this viewitem is still around
@@ -64,7 +88,7 @@ QString K3bAudioTrackViewItem::text(int i) const
     return QString::null;
 
   //
-  // We add two spaces after all strings (except the once renamable)
+  // We add two spaces after all strings (except the once renameable)
   // to increase readability
   //
 

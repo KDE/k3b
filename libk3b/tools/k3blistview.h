@@ -208,6 +208,15 @@ class K3bListView : public KListView
    */
   virtual void viewportResizeEvent( QResizeEvent* );
 
+  /**
+   * Reimplemented for internal reasons.
+   * Further reimplementations should call this function or else
+   * some features may not work correctly.
+   *
+   * The API is unaffected.
+   */
+  virtual void viewportPaintEvent(QPaintEvent*);
+
   virtual bool eventFilter( QObject*, QEvent* );
 
   K3bListViewItem* currentEditItem() const { return m_currentEditItem; }

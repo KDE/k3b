@@ -63,6 +63,22 @@ K3bDeviceBranch::K3bDeviceBranch( KFileTreeView* view, K3bDevice::Device* dev, K
 }
 
 
+void K3bDeviceBranch::showBlockDeviceName( bool b )
+{
+  if( b )
+    setName( QString("%1 - %2 (%3)")
+	     .arg(m_device->vendor())
+	     .arg(m_device->description())
+	     .arg(m_device->blockDeviceName()) );
+  else
+    setName( QString("%1 - %2")
+	     .arg(m_device->vendor())
+	     .arg(m_device->description()) );
+
+  root()->setText( 0, name() );
+}
+
+
 void K3bDeviceBranch::mount()
 {
   if( !m_device->mountPoint().isEmpty() ) {
@@ -284,20 +300,8 @@ void K3bFileTreeView::addCdDeviceBranches( K3bDevice::DeviceManager* dm )
   d->deviceBranchDict.clear();
 
   QPtrList<K3bDevice::Device>& devices = dm->allDevices();
-  for ( K3bDevice::Device* dev = devices.first(); dev != 0; dev = devices.next() ) {
-
-    K3bDeviceBranch* newBranch = new K3bDeviceBranch( this, dev );
-    addBranch( newBranch );
-
-    connect( newBranch, SIGNAL(mountFinished(K3bDeviceBranch*, const QString&)),
-	     this, SIGNAL(mountFinished(K3bDeviceBranch*, const QString&)) );
-    connect( newBranch, SIGNAL(unmountFinished(K3bDeviceBranch*, bool)),
-	     this, SIGNAL(unmountFinished(K3bDeviceBranch*, bool)) );
-
-    // add to maps
-    d->branchDeviceMap.insert( newBranch, dev );
-    d->deviceBranchDict.insert( (void*)dev, newBranch );
-  }
+  for ( K3bDevice::Device* dev = devices.first(); dev != 0; dev = devices.next() )
+    addDeviceBranch( dev );
 
   if( dm != d->deviceManager ) {
     if( d->deviceManager )
@@ -310,6 +314,45 @@ void K3bFileTreeView::addCdDeviceBranches( K3bDevice::DeviceManager* dm )
   }
 
   kdDebug() << "(K3bFileTreeView::addCdDeviceBranches) done" << endl;
+}
+
+
+void K3bFileTreeView::addDeviceBranch( K3bDevice::Device* dev )
+{
+  K3bDeviceBranch* newBranch = new K3bDeviceBranch( this, dev );
+  addBranch( newBranch );
+  
+  connect( newBranch, SIGNAL(mountFinished(K3bDeviceBranch*, const QString&)),
+	   this, SIGNAL(mountFinished(K3bDeviceBranch*, const QString&)) );
+  connect( newBranch, SIGNAL(unmountFinished(K3bDeviceBranch*, bool)),
+	   this, SIGNAL(unmountFinished(K3bDeviceBranch*, bool)) );
+  
+  // search for an equal device
+  int equalCnt = 0;
+  K3bDeviceBranch* equalBranch = 0;
+  for( QMap<KFileTreeBranch*, K3bDevice::Device*>::Iterator it = d->branchDeviceMap.begin();
+       it != d->branchDeviceMap.end(); ++it ) {
+    K3bDevice::Device* itDev = it.data();
+    K3bDeviceBranch* itBranch = (K3bDeviceBranch*)it.key();
+    if( itDev->vendor() == dev->vendor() &&
+	itDev->description() == dev->description() ) {
+      ++equalCnt;
+      equalBranch = itBranch;
+    }
+  }
+
+  // if there is at least one equal device add the block device name
+  // if there is more than one equal device they have been updated after
+  // adding the last one so there is no need to update more than two
+  if( equalCnt > 0 ) {
+    kdDebug() << "(K3bFileTreeView) equal branch" << endl;
+    newBranch->showBlockDeviceName(true);
+    equalBranch->showBlockDeviceName(true);
+  }
+
+  // add to maps
+  d->branchDeviceMap.insert( newBranch, dev );
+  d->deviceBranchDict.insert( (void*)dev, newBranch );
 }
 
 

@@ -46,6 +46,7 @@ namespace K3bDevice {
   const unsigned short FEATURE_DDCD_READ = 0x030;
   const unsigned short FEATURE_DDCD_R_WRITE = 0x031;
   const unsigned short FEATURE_DDCD_RW_WRITE = 0x032;
+  const unsigned short FEATURE_LAYER_JUMP_RECORDING = 0x033;
   const unsigned short FEATURE_CD_RW_MEDIA_WRITE_SUPPORT = 0x037;
   const unsigned short FEATURE_POWER_MANAGEMENT = 0x100;
   const unsigned short FEATURE_EMBEDDED_CHANGER = 0x102;
@@ -76,6 +77,7 @@ namespace K3bDevice {
    * @li DVDPR: Device can write DVD+R media.
    * @li DVDPRW: Device can write DVD+RW media.
    */
+  // TODO: remove this and also use MediaType
   enum DeviceType {
     CDR = 1,
     CDRW = 2,
@@ -125,31 +127,39 @@ namespace K3bDevice {
    * K3bDevice::Device::mediaType()
    */
   enum MediaType {
-    MEDIA_NONE = 0,
-    MEDIA_DVD_ROM = 1,
-    MEDIA_DVD_R = 2,
-    MEDIA_DVD_R_SEQ = 4,
-    MEDIA_DVD_RAM = 8,
-    MEDIA_DVD_RW = 16,
-    MEDIA_DVD_RW_OVWR = 32,
-    MEDIA_DVD_RW_SEQ = 64,
-    MEDIA_DVD_PLUS_RW = 128,
-    MEDIA_DVD_PLUS_R = 256,
-    MEDIA_DVD_PLUS_R_DL = 4096,
-    MEDIA_CD_ROM = 512,
-    MEDIA_CD_R = 1024,
-    MEDIA_CD_RW = 2048,
+    MEDIA_NONE = 0x0,
+    MEDIA_DVD_ROM = 0x1,
+    MEDIA_DVD_R = 0x2,
+    MEDIA_DVD_R_SEQ = 0x4,
+    MEDIA_DVD_R_DL = 0x8,
+    MEDIA_DVD_R_DL_SEQ = 0x10,
+    MEDIA_DVD_R_DL_JUMP = 0x20,
+    MEDIA_DVD_RAM = 0x40,
+    MEDIA_DVD_RW = 0x80,
+    MEDIA_DVD_RW_OVWR = 0x100,
+    MEDIA_DVD_RW_SEQ = 0x200,
+    MEDIA_DVD_PLUS_RW = 0x400,
+    MEDIA_DVD_PLUS_R = 0x800,
+    MEDIA_DVD_PLUS_R_DL = 0x1000,
+    MEDIA_CD_ROM = 0x2000,
+    MEDIA_CD_R = 0x4000,
+    MEDIA_CD_RW = 0x8000,
     MEDIA_WRITABLE_CD = MEDIA_CD_R | 
                         MEDIA_CD_RW,
-    MEDIA_WRITABLE_DVD = MEDIA_DVD_R | 
-                         MEDIA_DVD_R_SEQ | 
-                         MEDIA_DVD_RW |
-                         MEDIA_DVD_RW_OVWR |
-                         MEDIA_DVD_RW_SEQ |
-                         MEDIA_DVD_PLUS_RW |
-                         MEDIA_DVD_PLUS_R |
-                         MEDIA_DVD_PLUS_R_DL,
-    MEDIA_UNKNOWN = 32768
+    MEDIA_WRITABLE_DVD_SL = MEDIA_DVD_R | 
+                            MEDIA_DVD_R_SEQ | 
+                            MEDIA_DVD_RW |
+                            MEDIA_DVD_RW_OVWR |
+                            MEDIA_DVD_RW_SEQ |
+                            MEDIA_DVD_PLUS_RW |
+                            MEDIA_DVD_PLUS_R,
+    MEDIA_WRITABLE_DVD_DL = MEDIA_DVD_R_DL |
+                            MEDIA_DVD_R_DL_SEQ |
+                            MEDIA_DVD_R_DL_JUMP |
+                            MEDIA_DVD_PLUS_R_DL,
+    MEDIA_WRITABLE_DVD = MEDIA_WRITABLE_DVD_SL |
+                         MEDIA_WRITABLE_DVD_DL,
+    MEDIA_UNKNOWN = 0x1000000
   };
 
   inline bool isDvdMedia( int mediaType ) {

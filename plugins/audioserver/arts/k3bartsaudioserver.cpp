@@ -122,8 +122,8 @@ void K3bArtsAudioServer::detachClient( K3bAudioClient* c )
     m_clientMap.remove(it);
   }
 
-  if( m_clientMap.empty() )
-    cleanup();
+//   if( m_clientMap.empty() )
+//     cleanup();
 }
 
 
