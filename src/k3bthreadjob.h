@@ -35,7 +35,7 @@ class K3bThread;
  *   d.exec();
  *   delete job;
  * </pre>
- *
+ * Be aware that K3bThreadJob'd destructor does NOT delete the thread.
  */
 class K3bThreadJob : public K3bJob
 {
@@ -44,9 +44,9 @@ class K3bThreadJob : public K3bJob
  public:
   K3bThreadJob( QObject* parent = 0, const char* name = 0 );
   K3bThreadJob( K3bThread*, QObject* parent = 0, const char* name = 0 );
-  ~K3bThreadJob();
+  virtual ~K3bThreadJob();
 
-  void setThread( K3bThread* t ) { m_thread = t; }
+  void setThread( K3bThread* t );
   K3bThread* thread() const { return m_thread; }
 
  public slots:
@@ -57,7 +57,7 @@ class K3bThreadJob : public K3bJob
   /**
    * converts K3bThread events to K3bJob signals
    */
-  void customEvent( QCustomEvent* );
+  virtual void customEvent( QCustomEvent* );
 
  private:
   K3bThread* m_thread;

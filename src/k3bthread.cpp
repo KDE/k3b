@@ -16,6 +16,7 @@
 
 #include "k3bthread.h"
 #include "k3bprogressinfoevent.h"
+#include "k3bdataevent.h"
 
 #include <kdebug.h>
 
@@ -142,19 +143,19 @@ void K3bThread::emitDebuggingOutput(const QString& group, const QString& text)
     kdWarning() << "(K3bThread) call to emitDebuggingOutput() without eventHandler." << endl;
 }
 
-void K3bThread::emitWriteSpeed(int s)
+void K3bThread::emitData( const char* data, int len )
 {
   if( m_eventHandler )
-    qApp->postEvent( m_eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::WriteSpeed, s ) );
+    qApp->postEvent( m_eventHandler, new K3bDataEvent( data, len ) );
   else
-    kdWarning() << "(K3bThread) call to emitWriteSpeed() without eventHandler." << endl;
+    kdWarning() << "(K3bThread) call to emitData() without eventHandler." << endl;
 }
 
-void K3bThread::emitBufferStatus(int s)
+void K3bThread::emitNextTrack( int t, int n )
 {
-  if( m_eventHandler )
-    qApp->postEvent( m_eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::BufferStatus, s ) );
+  if( m_eventHandler ) 
+    qApp->postEvent( m_eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::NextTrack, t, n ) );
   else
-    kdWarning() << "(K3bThread) call to emitBufferStatus() without eventHandler." << endl;
+    kdWarning() << "(K3bThread) call to emitNextTrack() without eventHandler." << endl;
 }
 

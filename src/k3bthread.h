@@ -61,9 +61,8 @@ class K3bThread : public QThread
   void emitNewTask( const QString& job );
   void emitNewSubTask( const QString& job );
   void emitDebuggingOutput(const QString&, const QString&);
-
-  void emitWriteSpeed(int s);
-  void emitBufferStatus(int s);
+  void emitData( const char* data, int len );
+  void emitNextTrack( int track, int trackNum );
 
  private:
   QObject* m_eventHandler;

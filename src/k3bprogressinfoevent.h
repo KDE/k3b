@@ -70,7 +70,8 @@ class K3bProgressInfoEvent : public QCustomEvent
     NewSubTask,
     DebuggingOutput,
     BufferStatus,
-    WriteSpeed
+    WriteSpeed,
+    NextTrack
   };
 
  private:

@@ -259,8 +259,8 @@ namespace K3bCdDevice
      */
     bool block( bool ) const;
 
-    void eject();
-    void load();
+    bool eject();
+    bool load();
     int  mount();
     int  unmount();
 

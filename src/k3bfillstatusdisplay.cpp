@@ -20,6 +20,7 @@
 
 #include <tools/k3bdeviceselectiondialog.h>
 #include <device/k3bdevice.h>
+#include <device/k3bdevicehandler.h>
 #include <device/k3bmsf.h>
 
 #include <qevent.h>
@@ -114,7 +115,7 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
   }
   else {
     docSize = m_doc->size()/1024/1024;
-    cdSize = m_cdSize.mode1Form1Bytes()/1024/1024;
+    cdSize = m_cdSize.mode1Bytes()/1024/1024;
     maxValue = (cdSize > docSize ? cdSize : docSize) + 100;
     tolerance = 10;
   }
@@ -329,15 +330,25 @@ void K3bFillStatusDisplay::slotDetermineSize()
 {
   K3bDevice* dev = K3bDeviceSelectionDialog::selectWriter( parentWidget() );
   if( dev ) {
-    K3b::Msf size = dev->remainingSize();
-    if( size == 0 )
-      KMessageBox::error( parentWidget(), i18n("Could not get remaining size of disk in %1").arg(dev->devicename()) );
-    else {
-      m_displayWidget->setCdSize( size );
-      m_actionCustomSize->setChecked(true);
-      update();
-    }
+    connect( K3bCdDevice::sendCommand( K3bCdDevice::DeviceHandler::REMAININGSIZE, dev ),
+	     SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
+	     this,
+	     SLOT(slotRemainingSize(K3bCdDevice::DeviceHandler*)) );
   }
 }
+
+void K3bFillStatusDisplay::slotRemainingSize( K3bCdDevice::DeviceHandler* dh )
+{
+  if( dh->success() ) {
+    K3b::Msf size = dh->remainingSize();
+    m_displayWidget->setCdSize( size );
+    m_actionCustomSize->setChecked(true);
+    update();
+  }
+  else {
+    KMessageBox::error( parentWidget(), i18n("Could not get remaining size of disk.") );
+  }
+}
+
 
 #include "k3bfillstatusdisplay.moc"

@@ -55,8 +55,7 @@ namespace K3b
       void addFrames( int f );
 
       QString toString( bool showFrames = true ) const;
-      KIO::filesize_t mode1Form1Bytes() const;
-      KIO::filesize_t mode1Form2Bytes() const;
+      KIO::filesize_t mode1Bytes() const;
       KIO::filesize_t mode2Form1Bytes() const;
       KIO::filesize_t mode2Form2Bytes() const;
       KIO::filesize_t audioBytes() const;

@@ -31,6 +31,9 @@ class KActionCollection;
 class KPopupMenu;
 class QToolButton;
 
+namespace K3bCdDevice {
+  class DeviceHandler;
+};
 
 
 /**
@@ -91,6 +94,7 @@ class K3bFillStatusDisplay : public QFrame  {
   void slotMenuButtonClicked();
   void slotPopupMenu(const QPoint&);
   void slotDetermineSize();
+  void slotRemainingSize( K3bCdDevice::DeviceHandler* );
 
  private:
   KActionCollection* m_actionCollection;

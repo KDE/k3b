@@ -906,23 +906,28 @@ bool K3bCdDevice::CdDevice::rewritable()
   return ret;
 }
 
-void K3bCdDevice::CdDevice::eject()
+bool K3bCdDevice::CdDevice::eject()
 {
   if ( !KIO::findDeviceMountPoint(d->mountDeviceName).isEmpty() )
     unmount();
   if(open() != -1 ) {
-    ::ioctl( d->deviceFd, CDROMEJECT );
+    int r = ::ioctl( d->deviceFd, CDROMEJECT );
     close();
+    return (r == 0);
   }
+  else
+    return false;
 }
 
 
-void K3bCdDevice::CdDevice::load()
+bool K3bCdDevice::CdDevice::load()
 {
   if( open() != -1 ) {
-    ::ioctl( d->deviceFd, CDROMCLOSETRAY );
+    int r = ::ioctl( d->deviceFd, CDROMCLOSETRAY );
     close();
+    return (r == 0);
   }
+  return false;
 }
 
 int K3bCdDevice::CdDevice::mount()
@@ -933,7 +938,7 @@ int K3bCdDevice::CdDevice::mount()
 
   QString cmd("/bin/mount ");
   cmd += KProcess::quote(d->mountPoint);
-  if ( system(cmd.ascii()) == 0 )
+  if ( ::system(cmd.ascii()) == 0 )
     ret = 1;
 
   return ret;
@@ -947,7 +952,7 @@ int K3bCdDevice::CdDevice::unmount()
 
   QString cmd("/bin/umount ");
   cmd += KProcess::quote(d->mountPoint);
-  if (system(cmd.ascii()) == 0)
+  if (::system(cmd.ascii()) == 0)
     ret = 0;
 
   return ret;

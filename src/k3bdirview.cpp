@@ -27,6 +27,7 @@
 #include "k3bfiletreeview.h"
 #include "device/k3bdiskinfodetector.h"
 #include "cdinfo/k3bdiskinfoview.h"
+#include <device/k3bdevicehandler.h>
 
 #include <unistd.h>
 // QT-includes
@@ -300,7 +301,7 @@ void K3bDirView::slotEjectDisk()
   k3bMain()->endBusy();
 
   if( m_lastDevice ) {
-    m_lastDevice->eject();
+    K3bCdDevice::sendCommand( K3bCdDevice::DeviceHandler::EJECT, m_lastDevice );
     // TODO: check if this was the currently displayed device and if so return to home dir
   }
 }

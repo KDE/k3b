@@ -126,14 +126,9 @@ QString K3b::Msf::toString( bool showFrames ) const
 }
 
 
-KIO::filesize_t K3b::Msf::mode1Form1Bytes() const
+KIO::filesize_t K3b::Msf::mode1Bytes() const
 {
   return (KIO::filesize_t)2048 * ( (KIO::filesize_t)totalFrames() );
-}
-
-KIO::filesize_t K3b::Msf::mode1Form2Bytes() const
-{
-  return (KIO::filesize_t)2336 * ( (KIO::filesize_t)totalFrames() );
 }
 
 KIO::filesize_t K3b::Msf::mode2Form1Bytes() const
