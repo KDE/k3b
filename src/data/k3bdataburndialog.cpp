@@ -26,6 +26,7 @@
 #include "k3bdataimagesettingswidget.h"
 #include "k3bdataadvancedimagesettingswidget.h"
 #include "k3bdatavolumedescwidget.h"
+#include <k3bstdguiitems.h>
 
 #include <qcheckbox.h>
 #include <qframe.h>
@@ -103,8 +104,7 @@ K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const ch
   QFrame* f3 = new QFrame( this );
   QFrame* f4 = new QFrame( this );
 
-  m_checkOnlyCreateImage = new QCheckBox( m_optionGroup, "m_checkOnlyCreateImage" );
-  m_checkOnlyCreateImage->setText( i18n( "Only create image" ) );
+  m_checkOnlyCreateImage = K3bStdGuiItems::onlyCreateImagesCheckbox( m_optionGroup );
   m_optionGroupLayout->addWidget( m_checkOnlyCreateImage );
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
   m_optionGroupLayout->addItem( spacer );
@@ -117,13 +117,6 @@ K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const ch
   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkDao, SLOT(setDisabled(bool)) );
   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkSimulate, SLOT(setDisabled(bool)) );
   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotOnlyCreateImageToggled(bool)) );
-
-  QToolTip::add( m_checkOnlyCreateImage, i18n("Only create an ISO9660 image") );
-  QWhatsThis::add( m_checkOnlyCreateImage, i18n("<p>If this option is checked, K3b will only create an ISO9660 "
-						"image and not do any actual writing."
-						"<p>The image can later be written to a CD with most current CD writing "
-						"programs (including K3b of course).") );
-
 
   setupVolumeInfoTab( f2 );
   setupSettingsTab( f3 );
