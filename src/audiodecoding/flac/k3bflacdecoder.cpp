@@ -172,21 +172,21 @@ K3bFLACDecoder::K3bFLACDecoder( QObject* parent, const char* name )
 
 K3bFLACDecoder::~K3bFLACDecoder()
 {
+  delete d;
   cleanup();
 }
 
 void K3bFLACDecoder::cleanup()
 {
-  if(d) {
-    delete d;
-    d = 0;
-  }
+  // FIXME: this is a bad solution but I don't know the code well enough to fix it better.
+  delete d;
+  d = new Private(new QFile(filename()));
 }
 
 bool K3bFLACDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate, int& ch )
 {
-  if(d == 0)
-    d = new Private(new QFile(filename()));
+  delete d;
+  d = new Private(new QFile(filename()));
 
   frames = (unsigned long)ceil((d->samples * 75.0))/d->rate;
   samplerate = d->rate;
