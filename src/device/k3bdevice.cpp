@@ -867,12 +867,7 @@ bool K3bCdDevice::CdDevice::burnfree() const
 bool K3bCdDevice::CdDevice::isDVD() const
 {
   if( d->deviceType & ( DVDR | DVDRAM | DVD ) ) {
-    if( dvdMediaType() >= 0 )
-      return true;
-    else if( currentProfile() & (MEDIA_WRITABLE_DVD|MEDIA_DVD_ROM) )
-      return true;
-    else
-      return false;
+    return( dvdMediaType() >= 0 );
   }
   else
     return false;
@@ -1924,6 +1919,38 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
 	delete [] data;
       }
 
+
+
+      // 
+      // The mediatype needs to be set
+      //
+      inf.m_mediaType = dvdMediaType();
+	
+      if( inf.m_mediaType == -1 ) {
+	// probably it is a CD
+	if( inf.rewritable() )
+	  inf.m_mediaType = MEDIA_CD_RW;
+	else if( inf.empty() || inf.appendable() )
+	  inf.m_mediaType = MEDIA_CD_R;
+	else
+	  inf.m_mediaType = MEDIA_CD_ROM;
+      }
+    
+
+      // fix the number of sessions (since I get wrong values from disk_info with non-ide-scsi emulated drives
+      int sessions = numSessions();
+      if( sessions >= 0 ) {
+	inf.m_numSessions = sessions;
+      }
+      else {
+	kdDebug() << "(K3bCdDevice) could not get session info via READ TOC/PMA/ATIP." << endl;
+	if( inf.empty() ) {
+	  // just to fix the info for empty disks
+	  inf.m_numSessions = 0;
+	}
+      }
+
+
       //
       // Now we determine the size:
       // for empty and appendable CD-R(W) and DVD+R media this should be in the dInf->lead_out_X fields
@@ -1970,47 +1997,6 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
 	  }
 	}
       }
-
-      // 
-      // The mediatype needs to be set
-      //
-      inf.m_mediaType = -1;
-      if( inf.m_currentProfile > 0 ) {
-	inf.m_mediaType = inf.m_currentProfile;
-      }
-      else {
-	//
-	// prefere the mediatype as reported by the media since this way
-	// even ROM drives may report the correct type of writable media
-	//
-	int m = dvdMediaType();
-	if( m > 0 )
-	  inf.m_mediaType = dvdMediaType();
-	
-	if( inf.m_mediaType == -1 ) {
-	  // probably it is a CD
-	  if( inf.rewritable() )
-	    inf.m_mediaType = MEDIA_CD_RW;
-	  else if( inf.empty() || inf.appendable() )
-	    inf.m_mediaType = MEDIA_CD_R;
-	  else
-	    inf.m_mediaType = MEDIA_CD_ROM;
-	}
-      }
-    
-
-      // fix the number of sessions (since I get wrong values from disk_info with non-ide-scsi emulated drives
-      int sessions = numSessions();
-      if( sessions >= 0 ) {
-	inf.m_numSessions = sessions;
-      }
-      else {
-	kdDebug() << "(K3bCdDevice) could not get session info via READ TOC/PMA/ATIP." << endl;
-	if( inf.empty() ) {
-	  // just to fix the info for empty disks
-	  inf.m_numSessions = 0;
-	}
-      }
     }
    
     if( needToClose )
@@ -2055,6 +2041,16 @@ int K3bCdDevice::CdDevice::dvdMediaType() const
     if( cmd.transport( TR_DIR_READ, dvdheader, 20 ) ) {
       kdDebug() << "(K3bCdDevice::CdDevice) Unable to read DVD structure." << endl;
 
+      //
+      // Some DVD writers (like the Plextor DVDR 708A) fail here on empty DVD+R(W) media
+      // In that case we fall back to the current profile.
+      // We prefere the mediatype as reported by the media since this way
+      // even ROM drives may report the correct type of writable media.
+      //
+
+      m = currentProfile();
+      if( !(m & (MEDIA_WRITABLE_DVD|MEDIA_DVD_ROM)) )
+	m = -1;  // no profile information or CD media
     }
     else {
       switch( dvdheader[4]&0xF0 ) {
@@ -2068,7 +2064,7 @@ int K3bCdDevice::CdDevice::dvdMediaType() const
       }
     }
   }
-
+  
   return m;
 }
 
