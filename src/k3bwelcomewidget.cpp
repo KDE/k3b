@@ -26,6 +26,7 @@
 #include <qpainter.h>
 #include <qsimplerichtext.h>
 #include <qptrlist.h>
+#include <qmap.h>
 
 #include <kurl.h>
 #include <kurldrag.h>
@@ -35,7 +36,9 @@
 #include <kiconloader.h>
 #include <kglobal.h>
 #include <kconfig.h>
-
+#include <kdebug.h>
+#include <kpopupmenu.h>
+#include <kiconloader.h>
 
 
 K3bWelcomeWidget::Display::Display( QWidget* parent )
@@ -54,13 +57,45 @@ K3bWelcomeWidget::Display::Display( QWidget* parent )
 }
 
 
-void K3bWelcomeWidget::Display::rebuildGui( const KActionPtrList& actions )
+void K3bWelcomeWidget::Display::addAction( KAction* action )
+{
+  if( action ) {
+    m_actions.append(action);
+    rebuildGui();
+  }
+}
+
+
+void K3bWelcomeWidget::Display::removeAction( KAction* action )
+{
+  if( action ) {
+    m_actions.removeRef( action );
+    rebuildGui();
+  }
+}
+
+
+void K3bWelcomeWidget::Display::removeButton( QToolButton* b )
+{
+  removeAction( m_buttonMap[b] );
+}
+
+
+void K3bWelcomeWidget::Display::rebuildGui( const QPtrList<KAction>& actions )
+{
+  m_actions = actions;
+  rebuildGui();
+}
+
+
+void K3bWelcomeWidget::Display::rebuildGui()
 {
   // step 1: delete all old buttons in the buttons QPtrList<QToolButton>
+  m_buttonMap.clear();
   m_buttons.setAutoDelete(true);
   m_buttons.clear();
 
-  int numActions = actions.count();
+  int numActions = m_actions.count();
   if( numActions > 0 ) {
     // step 2: calculate rows and columns
     // for now we simply create 1-3 rows and as may cols as neccessary
@@ -77,8 +112,8 @@ void K3bWelcomeWidget::Display::rebuildGui( const KActionPtrList& actions )
       cols++;
 
     // step 3: create buttons
-    for( KActionPtrList::const_iterator it = actions.begin(); it != actions.end(); ++it ) {
-      KAction* a = *it;
+    for( QPtrListIterator<KAction> it( m_actions ); it.current(); ++it ) {
+      KAction* a = it.current();
 
       QToolButton* b = new QToolButton( this );
       b->setTextLabel( a->toolTip(), true );
@@ -92,6 +127,7 @@ void K3bWelcomeWidget::Display::rebuildGui( const KActionPtrList& actions )
       connect( b, SIGNAL(clicked()), a, SLOT(activate()) );
 
       m_buttons.append( b );
+      m_buttonMap.insert( b, a );
     }
 
     // step 4: calculate button size
@@ -99,7 +135,7 @@ void K3bWelcomeWidget::Display::rebuildGui( const KActionPtrList& actions )
     // we use the max of all sizes)
     QSize buttonSize = m_buttons.first()->sizeHint();
     for( QPtrListIterator<QToolButton> it( m_buttons ); it.current(); ++it ) {
-      buttonSize.expandedTo( it.current()->sizeHint() );
+      buttonSize = buttonSize.expandedTo( it.current()->sizeHint() );
     }
 
     // step 5: position buttons
@@ -111,6 +147,8 @@ void K3bWelcomeWidget::Display::rebuildGui( const KActionPtrList& actions )
 
       b->setGeometry( QRect( QPoint( 80+(col*buttonSize.width()), 80+(row*buttonSize.height()) ), 
 			     buttonSize ) );
+      b->show();
+
       col++;
       if( col == cols ) {
 	col = 0;
@@ -181,12 +219,24 @@ void K3bWelcomeWidget::loadConfig( KConfig* c )
     sl.append( "tools_copy_cd" );
   }
 
-  KActionPtrList actions;
+  QPtrList<KAction> actions;
   for( QStringList::const_iterator it = sl.begin(); it != sl.end(); ++it )
     if( KAction* a = m_mainWindow->actionCollection()->action( (*it).latin1() ) )
       actions.append(a);
 
   main->rebuildGui( actions );
+}
+
+
+void K3bWelcomeWidget::saveConfig( KConfig* c )
+{
+  c->setGroup( "Welcome Widget" );
+
+  QStringList sl;
+  for( QPtrListIterator<KAction> it( main->m_actions ); it.current(); ++it )
+    sl.append( it.current()->name() );
+
+  c->writeEntry( "welcome_actions", sl );
 }
 
 
@@ -203,6 +253,48 @@ void K3bWelcomeWidget::resizeEvent( QResizeEvent* e )
 
   main->resize( s );
   viewport()->resize( s );
+}
+
+
+void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
+{
+  if( e->button() == QMouseEvent::RightButton ) {
+    QMap<int, KAction*> map;
+    KPopupMenu pop;
+    KPopupMenu addPop;
+
+    KActionPtrList actions = m_mainWindow->actionCollection()->actions();
+    for( KActionPtrList::iterator it = actions.begin(); it != actions.end(); ++it ) {
+      KAction* a = *it;
+      // We only allow project and tools buttons but not the file_new action since this is
+      // the actionmenu containing all the other file_new actions and that would not make sense
+      // on a toolbutton
+      QString aname(a->name());
+      if( aname != "file_new"  &&
+	  ( aname.startsWith( "tools" ) || aname.startsWith( "file_new" ) ) )
+	map.insert( addPop.insertItem( a->iconSet(), a->text() ), a );
+    }
+    
+    int r = -1;
+
+    int removeAction = -1;
+    if( viewport()->childAt(e->pos())->inherits( "QToolButton" ) ) {
+      removeAction = pop.insertItem( SmallIcon("remove"), i18n("Remove button") );
+      pop.insertItem( i18n("Add button"), &addPop );
+      r = pop.exec( e->globalPos() );
+    }
+    else {
+      addPop.insertTitle( i18n("Add button"), -1, 0 );
+      r = addPop.exec( e->globalPos() );
+    }
+
+    if( r != -1 ) {
+      if( r == removeAction )
+	main->removeButton( (QToolButton*)viewport()->childAt(e->pos()) );
+      else
+	main->addAction( map[r] );
+    }
+  }
 }
 
 

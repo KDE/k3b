@@ -572,6 +572,8 @@ void K3bMainWindow::saveOptions()
   saveMainWindowSettings( m_config, "main_window_settings" );
 
   k3bcore->saveConfig();
+
+  d->welcomeWidget->saveConfig( config() );
 }
 
 

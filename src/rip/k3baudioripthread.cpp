@@ -275,7 +275,7 @@ bool K3bAudioRipThread::ripTrack( int track, const QString& filename )
     if( m_device->searchIndex0( tt.firstSector().lba(), tt.lastSector().lba(), sec ) ) {
       kdDebug() << "(K3bAudioRipThread) Pregap for track " << track << ": " 
 		<< sec << " offset: " << (sec != -1 ? sec-tt.firstSector().lba() : -1 ) << endl;
-      endSec = sec;
+      endSec = sec-1;
     }
     else
       emitInfoMessage( i18n("Unable to determine index 0 for Track %1.").arg(track), K3bJob::ERROR );

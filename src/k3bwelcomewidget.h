@@ -19,6 +19,7 @@
 
 #include <qscrollview.h>
 #include <qptrlist.h>
+#include <qmap.h>
 
 #include <kurl.h>
 #include <kaction.h>
@@ -31,7 +32,7 @@ class QPaintEvent;
 class QResizeEvent;
 class QSimpleRichText;
 class KConfig;
-
+class QMouseEvent;
 
 
 class K3bWelcomeWidget : public QScrollView
@@ -43,11 +44,13 @@ class K3bWelcomeWidget : public QScrollView
   ~K3bWelcomeWidget();
 
   void loadConfig( KConfig* c );
+  void saveConfig( KConfig* c );
 
   class Display;
 
  protected:
   void resizeEvent( QResizeEvent* );
+  void contentsMousePressEvent( QMouseEvent* e );
 
  private slots:
   void slotThemeChanged();
@@ -72,7 +75,11 @@ class K3bWelcomeWidget::Display : public QWidget
 
   QSize sizeHint() const { return m_size; }
 
-  void rebuildGui( const KActionPtrList& );
+  void addAction( KAction* );
+  void removeAction( KAction* );
+  void removeButton( QToolButton* );
+  void rebuildGui();
+  void rebuildGui( const QPtrList<KAction>& );
 
  signals:
   void dropped( const KURL::List& );
@@ -86,7 +93,11 @@ class K3bWelcomeWidget::Display : public QWidget
   QSimpleRichText* m_header;
   QSize m_size;
 
+  QPtrList<KAction> m_actions;
   QPtrList<QToolButton> m_buttons;
+  QMap<QToolButton*, KAction*> m_buttonMap;
+
+  friend class K3bWelcomeWidget;
 };
 
 
