@@ -87,7 +87,8 @@ void K3bDiskInfoDetector::fetchDiskInfo()
       m_info.remaining = m_info.size - inf[17]*4500 - inf[18]*75 - inf[19] - 4650;
       m_info.remainingString = QString("%1:%2:%3").arg(inf[17]).arg(inf[18]).arg(inf[19]);
     }
-  } 
+  } else
+    kdDebug() << "(K3bDiskInfoDetector) could not get disk info !" << endl;
 }
 
 void K3bDiskInfoDetector::fetchTocInfo()
@@ -102,7 +103,7 @@ void K3bDiskInfoDetector::fetchTocInfo()
     return;
   }
   
-  if ( (status = ::ioctl(m_cdfd,CDROM_DISC_STATUS)) != 0 )
+  if ( (status = ::ioctl(m_cdfd,CDROM_DISC_STATUS)) > 0 )
     switch (status) {
       case CDS_AUDIO:  m_info.tocType = K3bDiskInfo::AUDIO;
                        break;
@@ -117,7 +118,8 @@ void K3bDiskInfoDetector::fetchTocInfo()
                         finish(true);
                         return;  
 
-  }
+  } else 
+     kdDebug() << "(K3bDiskInfoDetector) disc status is " << status << " !" << endl;   
 
   struct cdrom_generic_command cmd;
   unsigned char dat[4];
@@ -132,7 +134,8 @@ void K3bDiskInfoDetector::fetchTocInfo()
   cmd.data_direction = CGC_DATA_READ;
   if ( ::ioctl(m_cdfd,CDROM_SEND_PACKET,&cmd) == 0 )
      m_info.sessions = dat[3];
-
+  else 
+    kdDebug() << "(K3bDiskInfoDetector) could not get session info !" << endl;
   if ( ::ioctl(m_cdfd,CDROMREADTOCHDR,&tochdr) != 0 )
   {
      kdDebug() << "(K3bDiskInfoDetector) could not get toc header !" << endl;
@@ -144,7 +147,8 @@ void K3bDiskInfoDetector::fetchTocInfo()
     ::memset(&tocentry,0,sizeof (struct cdrom_tocentry));
     tocentry.cdte_track = (i<=tochdr.cdth_trk1) ? i : CDROM_LEADOUT;
     tocentry.cdte_format = CDROM_LBA;
-    ::ioctl(m_cdfd,CDROMREADTOCENTRY,&tocentry);
+    if ( ::ioctl(m_cdfd,CDROMREADTOCENTRY,&tocentry) != 0)
+      kdDebug() << "(K3bDiskInfoDetector) error reading tocentry " << i << endl; 
     int startSec = tocentry.cdte_addr.lba;
     int control  = tocentry.cdte_ctrl & 0x0f;
     int mode     = tocentry.cdte_datamode;
