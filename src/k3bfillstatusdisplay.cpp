@@ -38,6 +38,7 @@
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kiconloader.h>
+#include <kio/global.h>
 
 
 K3bFillStatusDisplayWidget::K3bFillStatusDisplayWidget( K3bDoc* doc, QWidget* parent )
@@ -127,7 +128,7 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
 		 " " + K3b::framesToString( m_doc->length(), false ) + " min" );
   else
     p.drawText( rect(), Qt::AlignLeft | Qt::AlignVCenter, 
-		 QString().sprintf( " %.2f MB", ((float)m_doc->size())/1024.0/1024.0 ) );
+		 " " + KIO::convertSize( m_doc->size() ) );
 	
   // draw yellow if cdSize - tolerance < docSize
   if( docSize > cdSize - tolerance ) {
