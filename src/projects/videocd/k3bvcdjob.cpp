@@ -150,7 +150,7 @@ void K3bVcdJob::xmlGen()
     m_xmlFile = tempF.name();
     tempF.unlink();
 
-    emit infoMessage( i18n( "Create XML-file" ), K3bJob::INFO );
+    //    emit infoMessage( i18n( "Create XML-file" ), K3bJob::INFO );
 
     K3bVcdXmlView xmlView( m_doc );
 
@@ -161,7 +161,7 @@ void K3bVcdJob::xmlGen()
         emit finished( false );
     }
 
-    emit infoMessage( i18n( "XML-file successfully created" ), K3bJob::STATUS );
+    //    emit infoMessage( i18n( "XML-file successfully created" ), K3bJob::STATUS );
     emit debuggingOutput("K3bVcdXml:", xmlView.xmlString() );
 
     vcdxBuild();
@@ -177,7 +177,7 @@ void K3bVcdJob::vcdxBuild()
     delete m_process;
     m_process = new KProcess();
 
-    emit infoMessage( i18n( "Create Cue/Bin files ..." ), K3bJob::INFO );
+    emit infoMessage( i18n( "Creating Cue/Bin files ..." ), K3bJob::INFO );
     const K3bExternalBin* bin = k3bcore ->externalBinManager() ->binObject( "vcdxbuild" );
     if ( !bin ) {
         kdDebug() << "(K3bVcdJob) could not find vcdxbuild executable" << endl;
