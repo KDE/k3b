@@ -25,7 +25,12 @@
 #include "../k3bjob.h"
 #include "../tools/k3bwavefilewriter.h"
 #include "../cdinfo/k3bdiskinfo.h"
+
+#ifdef QT_THREAD_SUPPORT
+#include "k3baudioripthread.h"
+#else
 #include "k3baudiorip.h"
+#endif
 
 #include <cddb/k3bcddbquery.h>
 
@@ -37,7 +42,7 @@ class QStringList;
 class QFile;
 class K3bDevice;
 class K3bDiskInfoDetector;
-
+class QCustomEvent;
 
 /**
   *@author Sebastian Trueg
@@ -69,6 +74,13 @@ class K3bCddaCopy : public K3bJob
   void slotTrackOutput( const QByteArray& );
   void slotTrackFinished( bool );
 
+#ifdef QT_THREAD_SUPPORT
+  void slotCheckIfThreadStillRunning();
+
+ protected:
+  void customEvent( QCustomEvent* );
+#endif
+
  private:
   void createFilenames();
   bool createDirectory( const QString& dir );
@@ -78,7 +90,11 @@ class K3bCddaCopy : public K3bJob
   K3bDiskInfo m_diskInfo;
   K3bDevice* m_device;
 
+#ifdef QT_THREAD_SUPPORT
+  K3bAudioRipThread* m_audioRip;
+#else
   K3bAudioRip* m_audioRip;
+#endif
 
   bool m_bUsePattern;
 

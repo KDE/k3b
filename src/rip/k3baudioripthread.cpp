@@ -1,13 +1,16 @@
-#include "k3baudiorip.h"
+#ifdef QT_THREAD_SUPPORT
+
+#include "k3baudioripthread.h"
 #include "../device/k3bdevice.h"
 #include "../tools/k3bcdparanoialib.h"
+#include <k3bjob.h>
+#include <k3bprogressinfoevent.h>
 
-#include <qtimer.h>
 #include <qfile.h>
+#include <qapplication.h>
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kmessagebox.h>
 
 
 // from cdda_paranoia.h
@@ -26,7 +29,7 @@
 #define PARANOIA_CB_READERR       12
 
 
-static K3bAudioRip* s_audioRip = 0;
+static K3bAudioRipThread* s_audioRip = 0;
 
 void paranoiaCallback(long sector, int status)
 {
@@ -35,47 +38,69 @@ void paranoiaCallback(long sector, int status)
 
 
 
-K3bAudioRip::K3bAudioRip( QObject* parent )
-  : K3bJob( parent ),
+K3bAudioRipThread::K3bAudioRipThread( QObject* parent )
+  : QObject( parent ),
+    QThread(),
     m_paranoiaLib(0),
     m_device(0),
     m_paranoiaMode(3),
     m_paranoiaRetries(20),
     m_neverSkip(false),
-    m_track(1)
+    m_track(1),
+    m_eventReceiver(parent)
 {
-  m_rippingTimer = new QTimer( this );
-  connect( m_rippingTimer, SIGNAL(timeout()), this, SLOT(slotParanoiaRead()) );
 }
 
 
-K3bAudioRip::~K3bAudioRip()
+K3bAudioRipThread::~K3bAudioRipThread()
 {
   delete m_paranoiaLib;
 }
 
 
-void K3bAudioRip::start()
+void K3bAudioRipThread::start( QObject* eventReceiver )
+{
+  if( eventReceiver )
+    m_eventReceiver = eventReceiver;
+  QThread::start();
+}
+
+
+void K3bAudioRipThread::run()
 {
   if( !m_paranoiaLib ) {
     m_paranoiaLib = K3bCdparanoiaLib::create();
   }
 
   if( !m_paranoiaLib ) {
-    emit infoMessage( i18n("Could not load libcdparanoia."), ERROR );
-    emit finished(false);
+    if( m_eventReceiver ) qApp->postEvent( m_eventReceiver,
+					   new K3bProgressInfoEvent( K3bProgressInfoEvent::InfoMessage,
+								     i18n("Could not load libcdparanoia."),
+								     QString::null,
+								     K3bJob::ERROR ) );
+    if( m_eventReceiver ) qApp->postEvent( m_eventReceiver,
+					   new K3bProgressInfoEvent( K3bProgressInfoEvent::Finished,
+								     0 ) );
     return;
   }
 
   // try to open the device
   if( !m_device ) {
-    emit finished(false);
+    if( m_eventReceiver ) qApp->postEvent( m_eventReceiver,
+					   new K3bProgressInfoEvent( K3bProgressInfoEvent::Finished,
+								     0 ) );
     return;
   }
 
   if( !m_paranoiaLib->paranoiaInit( m_device->blockDeviceName() ) ) {
-    emit infoMessage( i18n("Could not open device %1").arg(m_device->blockDeviceName()), ERROR );
-    emit finished(false);
+    if( m_eventReceiver ) qApp->postEvent( m_eventReceiver,
+					   new K3bProgressInfoEvent( K3bProgressInfoEvent::InfoMessage,
+								     i18n("Could not open device %1").arg(m_device->blockDeviceName()),
+								     QString::null,
+								     K3bJob::ERROR ) );
+    if( m_eventReceiver ) qApp->postEvent( m_eventReceiver,
+					   new K3bProgressInfoEvent( K3bProgressInfoEvent::Finished,
+								     0 ) );
     return;
   }
 
@@ -85,11 +110,13 @@ void K3bAudioRip::start()
   m_lastSector = m_paranoiaLib->lastSector( m_track );
   
   if( firstSector < 0 || m_lastSector < 0 ) {
-    emit finished(false);
+    if( m_eventReceiver ) qApp->postEvent( m_eventReceiver,
+					   new K3bProgressInfoEvent( K3bProgressInfoEvent::Finished,
+								     0 ) );
     return;
   }
 
-  kdDebug() << "(K3bAudioRip) secotrs to read: " << m_lastSector - firstSector << endl;
+  kdDebug() << "(K3bAudioRipThread) sectors to read: " << m_lastSector - firstSector << endl;
 
   // status variable
   m_lastReadSector = 0;
@@ -107,28 +134,21 @@ void K3bAudioRip::start()
   m_paranoiaLib->paranoiaSeek( firstSector, SEEK_SET );
   m_currentSector = firstSector;
 
-  m_rippingTimer->start(0);
+  while( m_currentSector < m_lastSector ) {
+    if( m_bInterrupt){
+      kdDebug() << "(K3bAudioRipThread) Interrupt reading." << endl;
+      break;
+    } 
 
-  return;
-}
-
-
-void K3bAudioRip::slotParanoiaRead()
-{
-  if( m_bInterrupt){
-    kdDebug() << "(K3bAudioRip) Interrupt reading." << endl;
-    slotParanoiaFinished();
-  } 
-  else {
     // let the global paranoia callback have access to this
     // to emit signals
     s_audioRip = this;
     int16_t* buf = m_paranoiaLib->paranoiaRead( paranoiaCallback );
 
     if( 0 == buf ) {
-      kdDebug() << "(K3bAudioRip) Unrecoverable error in paranoia_read" << endl;
+      kdDebug() << "(K3bAudioRipThread) Unrecoverable error in paranoia_read" << endl;
       m_bError = true;
-      slotParanoiaFinished();
+      break;
     } 
     else {
       ++m_currentSector;
@@ -138,37 +158,38 @@ void K3bAudioRip::slotParanoiaRead()
       a.resetRawData( (char*)buf, CD_FRAMESIZE_RAW );
 
       ++m_sectorsRead;
-      emit percent( 100 * m_sectorsRead / m_sectorsAll );
-      
-      if ( m_currentSector >= m_lastSector ) {
-	slotParanoiaFinished();
-      }
+      if( m_eventReceiver ) qApp->postEvent( m_eventReceiver,
+					     new K3bProgressInfoEvent( K3bProgressInfoEvent::Progress,
+								       100 * m_sectorsRead / m_sectorsAll ) );	       
     }
   }
-}
 
-
-void K3bAudioRip::slotParanoiaFinished()
-{
-  kdDebug() << "(K3bAudioRip) read sectors: " << m_readSectors << endl;
-
-  m_rippingTimer->stop();
   m_paranoiaLib->paranoiaFree();
+  if( m_bInterrupt )
+    if( m_eventReceiver ) qApp->postEvent( m_eventReceiver,
+					   new K3bProgressInfoEvent( K3bProgressInfoEvent::Canceled ) );
 
-  if( m_bInterrupt || m_bError )
-    emit finished( false );
-  else
-    emit finished( true );
+  if( m_bInterrupt || m_bError ) {
+    if( m_eventReceiver ) qApp->postEvent( m_eventReceiver,
+					   new K3bProgressInfoEvent( K3bProgressInfoEvent::Finished,
+								     0 ) );
+  }
+  else {
+    if( m_eventReceiver ) qApp->postEvent( m_eventReceiver,
+					   new K3bProgressInfoEvent( K3bProgressInfoEvent::Finished,
+								     1 ) );
+  }
+
 }
 
 
-void K3bAudioRip::cancel()
+void K3bAudioRipThread::cancel()
 {
   m_bInterrupt = true;
 }
 
 
-void K3bAudioRip::createStatus( long sector, int status )
+void K3bAudioRipThread::createStatus( long sector, int status )
 {
   switch( status ) {
   case -1:
@@ -213,4 +234,6 @@ void K3bAudioRip::createStatus( long sector, int status )
   } 
 }
 
-#include "k3baudiorip.moc"
+#include "k3baudioripthread.moc"
+
+#endif

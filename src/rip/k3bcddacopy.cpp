@@ -23,13 +23,15 @@
 #include "k3bpatternparser.h"
 #include "../device/k3bdevice.h"
 #include "../cdinfo/k3bdiskinfodetector.h"
-#include "k3baudiorip.h"
 #include <tools/k3bcdparanoialib.h>
+#include <k3bprogressinfoevent.h>
 
 #include <qptrlist.h>
 #include <qstringlist.h>
 #include <qstring.h>
 #include <qdir.h>
+#include <qapplication.h>
+#include <qtimer.h>
 
 #include <klocale.h>
 #include <kio/global.h>
@@ -45,11 +47,19 @@ K3bCddaCopy::K3bCddaCopy( QObject* parent )
 {
   m_device = 0;
   
+#ifdef QT_THREAD_SUPPORT
+  m_audioRip = new K3bAudioRipThread( this );
+#else
   m_audioRip = new K3bAudioRip( this );
-  connect( m_audioRip, SIGNAL(percent(int)), this, SIGNAL(subPercent(int)) );
+#endif
+
   connect( m_audioRip, SIGNAL(output(const QByteArray&)), this, SLOT(slotTrackOutput(const QByteArray&)) );
+
+#ifndef QT_THREAD_SUPPORT
+  connect( m_audioRip, SIGNAL(percent(int)), this, SIGNAL(subPercent(int)) );
   connect( m_audioRip, SIGNAL(finished(bool)), this, SLOT(slotTrackFinished(bool)) );
   connect( m_audioRip, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
+#endif
 
   m_diskInfoDetector = new K3bDiskInfoDetector( this );
   connect( m_diskInfoDetector, SIGNAL(diskInfoReady(const K3bDiskInfo&)), 
@@ -156,19 +166,20 @@ void K3bCddaCopy::slotTrackOutput( const QByteArray& data )
   m_waveFileWriter.write( data.data(), data.size(), K3bWaveFileWriter::LittleEndian );
 
   m_bytesAll += data.size();
-  int progressBarValue = (int) (((double) m_bytesAll / (double) m_bytes ) * 100);
-
-  // avoid too many gui updates
-  if( m_lastOverallPercent < progressBarValue ) {
-    emit percent( progressBarValue );
-    m_lastOverallPercent = progressBarValue;
-  }
 }
 
 
 void K3bCddaCopy::cancel( ){
   m_audioRip->cancel();
   m_interrupt = true;
+
+#ifdef QT_THREAD_SUPPORT
+  // what if paranoia is stuck in paranoia_read?
+  // we need to terminate in that case
+  // wait for 1 second. I the thread still is working terminate it
+  // and trigger the finished slot manually
+  QTimer::singleShot( 1000, this, SLOT(slotCheckIfThreadStillRunning()) );
+#endif
 }
 
 
@@ -274,6 +285,74 @@ bool K3bCddaCopy::createDirectory( const QString& path )
   return true;
 }
 
+#ifdef QT_THREAD_SUPPORT
+void K3bCddaCopy::customEvent( QCustomEvent* e )
+{
+  K3bProgressInfoEvent* be = (K3bProgressInfoEvent*)e;
+  switch( be->type() ) {
+  case K3bProgressInfoEvent::Progress:
+    {
+      emit subPercent( be->firstValue() );
+      
+      int progressBarValue = (int) (((double) m_bytesAll / (double) m_bytes ) * 100);
+      
+      // avoid too many gui updates
+      if( m_lastOverallPercent < progressBarValue ) {
+	emit percent( progressBarValue );
+	m_lastOverallPercent = progressBarValue;
+      }
+    }
+    break;
+  case K3bProgressInfoEvent::SubProgress:
+ 
+    break;
+  case K3bProgressInfoEvent::ProcessedSize:
+ 
+    break;
+  case K3bProgressInfoEvent::ProcessedSubSize:
+ 
+    break;
+  case K3bProgressInfoEvent::InfoMessage:
+    emit infoMessage( be->firstString(), be->firstValue() ); 
+    break;
+  case K3bProgressInfoEvent::Started:
+ 
+    break;
+  case K3bProgressInfoEvent::Canceled:
+ 
+    break;
+  case K3bProgressInfoEvent::Finished:
+    // wait for the thread to finish
+    while( !m_audioRip->finished() )
+      qApp->processEvents();
+    slotTrackFinished( (bool)be->firstValue() ); 
+    break;
+  case K3bProgressInfoEvent::NewTask:
+ 
+    break;
+  case K3bProgressInfoEvent::NewSubTask:
+ 
+    break;
+  case K3bProgressInfoEvent::DebuggingOutput:
+ 
+    break;
+  case K3bProgressInfoEvent::BufferStatus:
+ 
+    break;
+  }
+}
+
+
+void K3bCddaCopy::slotCheckIfThreadStillRunning()
+{
+  if( m_audioRip->running() ) {
+    // this could happen if the thread is stuck in paranoia_read
+    // because of an unreadable cd
+    m_audioRip->terminate();
+    slotTrackFinished( false );
+  }
+}
+#endif
 
 #include "k3bcddacopy.moc"
 

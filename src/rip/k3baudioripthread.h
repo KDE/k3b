@@ -1,8 +1,8 @@
-#ifndef K3B_AUDIO_RIP
-#define K3B_AUDIO_RIP
+#ifndef K3B_AUDIO_RIP_THREAD_H
+#define K3B_AUDIO_RIP_THREAD_H
 
-
-#include <k3bjob.h>
+#include <qobject.h>
+#include <qthread.h>
 #include <qcstring.h>
 
 
@@ -12,16 +12,16 @@ class QTimer;
 class K3bCdparanoiaLib;
 
 
-class K3bAudioRip : public K3bJob
+class K3bAudioRipThread : public QObject, public QThread
 {
   Q_OBJECT
 
  public:
-  K3bAudioRip( QObject* parent = 0 );
-  ~K3bAudioRip();
+  K3bAudioRipThread( QObject* parent = 0 );
+  ~K3bAudioRipThread();
 
  public slots:
-  void start();
+  void start( QObject* eventReceiver = 0 );
   void cancel();
   void setParanoiaMode( int mode ) { m_paranoiaMode = mode; }
   void setMaxRetries( int r ) { m_paranoiaRetries = r; }
@@ -32,14 +32,12 @@ class K3bAudioRip : public K3bJob
  signals:
   void output( const QByteArray& );
 
- protected slots:
-  void slotParanoiaRead();
-  void slotParanoiaFinished();
-
  private:
+  /** reimplemented from QThread. Does the work */
+  void run();
+
   K3bCdparanoiaLib* m_paranoiaLib;
   K3bDevice* m_device;
-  QTimer* m_rippingTimer;
 
   long m_currentSector;
   long m_lastSector;
@@ -62,6 +60,7 @@ class K3bAudioRip : public K3bJob
   long m_overlap;
   long m_readSectors;
 
+  QObject* m_eventReceiver;
 
   // this friend function will call createStatus(long,int)
   friend void paranoiaCallback(long, int);
