@@ -35,16 +35,13 @@ K3bDeviceManager::K3bDeviceManager( QObject * parent )
 {
   m_reader.setAutoDelete( true );
   m_writer.setAutoDelete( true );
+  m_allDevices.setAutoDelete( false );
 }
 
 
 K3bDevice* K3bDeviceManager::deviceByName( const QString& name )
 {
-  for( K3bDevice* _dev = m_writer.first(); _dev; _dev = m_writer.next() )
-    if( _dev->genericDevice() == name || _dev->ioctlDevice() == name )
-      return _dev;
-
-  for( K3bDevice * _dev = m_reader.first(); _dev; _dev = m_reader.next() )
+  for( K3bDevice* _dev = m_allDevices.first(); _dev; _dev = m_allDevices.next() )
     if( _dev->genericDevice() == name || _dev->ioctlDevice() == name )
       return _dev;
 
@@ -69,6 +66,12 @@ QList<K3bDevice>& K3bDeviceManager::readingDevices()
 }
 
 
+QList<K3bDevice>& K3bDeviceManager::allDevices()
+{
+  return m_allDevices;
+}
+
+
 int K3bDeviceManager::scanbus()
 {
   m_foundDevices = 0;
@@ -80,6 +83,9 @@ int K3bDeviceManager::scanbus()
       else {
 	m_reader.append( dev );
       }
+
+      m_allDevices.append( dev );
+
       m_foundDevices++;
     }
   }
@@ -112,6 +118,7 @@ void K3bDeviceManager::clear()
     // clear current devices
   m_reader.clear();
   m_writer.clear();
+  m_allDevices.clear();
 }
 
 
@@ -140,6 +147,8 @@ bool K3bDeviceManager::readConfig( KConfig* c )
 	  m_writer.append( dev );
 	else
 	  m_reader.append( dev );
+
+	m_allDevices.append( dev );
       }
 
     if( dev != 0 ) {
@@ -172,6 +181,8 @@ bool K3bDeviceManager::readConfig( KConfig* c )
 	  m_writer.append( dev );
 	else
 	  m_reader.append( dev );
+
+	m_allDevices.append( dev );
       }
 
     if( dev != 0 ) {
@@ -193,6 +204,7 @@ bool K3bDeviceManager::readConfig( KConfig* c )
     list = c->readListEntry( QString( "Writer%1" ).arg( devNum ) );
   }
 
+  scanFstab();
 
   return true;
 }
@@ -291,6 +303,8 @@ K3bDevice* K3bDeviceManager::addDevice( const QString& devicename )
   else
     m_reader.append( dev );
 
+  m_allDevices.append( dev );
+
   return dev;
 }
 
@@ -301,7 +315,7 @@ void K3bDeviceManager::scanFstab()
   // for the mountPoints we need to use the ioctl-device name
   // since sg is no block device and so cannot be mounted
 
-  K3bDevice* dev = m_reader.first();
+  K3bDevice* dev = m_allDevices.first();
   while( dev != 0 ) {
     // mounting only makes sense with a working ioctlDevice
     // if we do not have permission to read the device ioctlDevice is empty
@@ -311,19 +325,6 @@ void K3bDeviceManager::scanFstab()
     if( fs != 0 )
       dev->setMountPoint( fs->fs_file );
 
-    dev = m_reader.next();
-  }
-
-  dev = m_writer.first();
-  while( dev != 0 ) {
-    // mounting only makes sense with a working ioctlDevice
-    // if we do not have permission to read the device ioctlDevice is empty
-    struct fstab* fs = 0;
-    if( !dev->ioctlDevice().isEmpty() ) 
-      fs = getfsspec( dev->ioctlDevice().latin1() );
-    if( fs != 0 )
-      dev->setMountPoint( fs->fs_file );
-
-    dev = m_writer.next();
+    dev = m_allDevices.next();
   }
 }

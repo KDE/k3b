@@ -27,11 +27,13 @@ class QToolButton;
 class QTimer;
 class K3bDoc;
 class K3bDevice;
+class K3bWriterSelectionWidget;
+
+
 
 /**
   *@author Sebastian Trueg
   */
-
 class K3bProjectBurnDialog : public KDialogBase
 {
    Q_OBJECT
@@ -55,7 +57,6 @@ class K3bProjectBurnDialog : public KDialogBase
    virtual void slotUser1();
    virtual void slotOk();
    virtual void slotCancel();
-   void slotRefreshWriterSpeeds();
    virtual void slotTempDirButtonPressed();
    void slotUpdateFreeTempSpace();
    void slotFreeTempSpace(const QString&, unsigned long, unsigned long, unsigned long);
@@ -76,9 +77,7 @@ class K3bProjectBurnDialog : public KDialogBase
    virtual void readSettings();
 	
  private:
-   QGroupBox* m_groupWriter;
-   QComboBox* m_comboSpeed;
-   QComboBox* m_comboWriter;
+   K3bWriterSelectionWidget* m_writerSelectionWidget;
 
    QGroupBox* m_groupTempDir;
    QLabel* m_labelCdSize;

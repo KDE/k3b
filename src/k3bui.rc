@@ -9,6 +9,7 @@
   <Menu name="tools"><text>&amp;Tools</text>
   	<Action name="tools_cd_info"/>
 	<Action name="tools_blank_cdrw"/>
+	<Action name="tools_write_iso"/>
   </Menu>
   <Menu name="settings">
   	<Action name="view_dir" append="show_merge"/>

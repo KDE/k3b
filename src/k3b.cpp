@@ -57,6 +57,7 @@
 #include "data/k3bdatajob.h"
 #include "cdinfo/k3bcdinfodialog.h"
 #include "k3bblankingdialog.h"
+#include "data/k3bisoimagewritingdialog.h"
 
 
 K3bMainWindow* k3bMain()
@@ -94,7 +95,6 @@ K3bMainWindow::K3bMainWindow()
 
   m_audioTrackDialog = 0;
   m_optionDialog = 0;
-  m_burnProgressDialog = 0;
 }
 
 K3bMainWindow::~K3bMainWindow()
@@ -138,6 +138,9 @@ void K3bMainWindow::initActions()
 
   actionToolsBlankCdrw = new KAction(i18n("&Blank CD-RW"), "cdrwblank", 0, this, SLOT(slotBlankCdrw()), 
 			       actionCollection(), "tools_blank_cdrw" );
+
+  actionToolsWriteIsoImage = new KAction(i18n("&Write Iso image"), "gear", 0, this, SLOT(slotWriteIsoImage()),
+					 actionCollection(), "tools_write_iso" );
 
   actionFileNewMenu->setStatusText(i18n("Creates a new project"));
   actionFileNewData->setStatusText( i18n("Creates a new data project") );
@@ -767,16 +770,15 @@ void K3bMainWindow::slotFileBurn()
 	    }
 				
 	    if( _view->burnDialog()->exec(true) == K3bProjectBurnDialog::Burn ) {
-	      if( !m_burnProgressDialog )
-		m_burnProgressDialog = new K3bBurnProgressDialog( this );
+		K3bBurnProgressDialog* burnProgressDialog = new K3bBurnProgressDialog( this );
 					
 	      K3bBurnJob* job = _view->getDocument()->newBurnJob();
 				
-	      m_burnProgressDialog->setJob( job );
+	      burnProgressDialog->setJob( job );
 					
 	      // BAD!!!! :-(( the job is deleted before the burnprocessdialog is hidden!!!
 	      connect( job, SIGNAL(finished( K3bJob* )), this, SLOT(slotJobFinished( K3bJob* )) );
-	      m_burnProgressDialog->show();
+	      burnProgressDialog->show();
 	      job->start();
 	    }
 	  }
@@ -900,5 +902,12 @@ void K3bMainWindow::slotBlankCdrw()
   // K3bBlankingDialog is modeless so don't use exec!
   // the dialog also does a delayed self-destrcut
   K3bBlankingDialog* d = new K3bBlankingDialog( this, "blankingdialog" );
+  d->show();
+}
+
+
+void K3bMainWindow::slotWriteIsoImage()
+{
+  K3bIsoImageWritingDialog* d = new K3bIsoImageWritingDialog( this, "isodialog" );
   d->show();
 }

@@ -20,6 +20,7 @@
 #include "k3bdoc.h"
 #include "device/k3bdevice.h"
 #include "device/k3bdevicemanager.h"
+#include "k3bwriterselectionwidget.h"
 
 #include <qcombobox.h>
 #include <qgroupbox.h>
@@ -50,7 +51,7 @@ K3bProjectBurnDialog::K3bProjectBurnDialog(K3bDoc* doc, QWidget *parent, const c
 	
   setButtonBoxOrientation( Vertical );
 
-  m_groupWriter = 0;
+  m_writerSelectionWidget = 0;
   m_groupTempDir = 0;
   m_labelCdSize = 0;
   m_labelFreeSpace = 0;
@@ -60,47 +61,14 @@ K3bProjectBurnDialog::K3bProjectBurnDialog(K3bDoc* doc, QWidget *parent, const c
 
 QGroupBox* K3bProjectBurnDialog::writerBox( QWidget* parent )
 {
-  if( m_groupWriter == 0 && parent != 0)
+  if( m_writerSelectionWidget == 0 && parent != 0)
     {
-      // --- setup device group ----------------------------------------------------
-      m_groupWriter = new QGroupBox( parent, "m_groupWriter" );
-      m_groupWriter->setTitle( i18n( "Burning Device" ) );
-      m_groupWriter->setColumnLayout(0, Qt::Vertical );
-      m_groupWriter->layout()->setSpacing( 0 );
-      m_groupWriter->layout()->setMargin( 0 );
-      QGridLayout* m_groupWriterLayout = new QGridLayout( m_groupWriter->layout() );
-      m_groupWriterLayout->setAlignment( Qt::AlignTop );
-      m_groupWriterLayout->setSpacing( spacingHint() );
-      m_groupWriterLayout->setMargin( marginHint() );
+      m_writerSelectionWidget = new K3bWriterSelectionWidget( parent );
 
-      QLabel* TextLabel1 = new QLabel( m_groupWriter, "TextLabel1" );
-      TextLabel1->setText( i18n( "Burning Speed" ) );
-
-      m_groupWriterLayout->addWidget( TextLabel1, 0, 1 );
-
-      m_comboSpeed = new QComboBox( FALSE, m_groupWriter, "m_comboSpeed" );
-      m_comboSpeed->setAutoMask( FALSE );
-      m_comboSpeed->setDuplicatesEnabled( FALSE );
-
-      m_groupWriterLayout->addWidget( m_comboSpeed, 1, 1 );
-
-      m_comboWriter = new QComboBox( FALSE, m_groupWriter, "m_comboWriter" );
-
-      m_groupWriterLayout->addWidget( m_comboWriter, 1, 0 );
-
-      QLabel* TextLabel1_2 = new QLabel( m_groupWriter, "TextLabel1_2" );
-      TextLabel1_2->setText( i18n( "Device" ) );
-
-      m_groupWriterLayout->addWidget( TextLabel1_2, 0, 0 );
-
-      m_groupWriterLayout->setColStretch( 0 , 1);
-      // --------------------------------------------------------- device group ---
-
-      connect( m_comboWriter, SIGNAL(activated(int)), this, SLOT(slotRefreshWriterSpeeds()) );
-      connect( m_comboWriter, SIGNAL(activated(int)), this, SIGNAL(writerChanged()) );
+      connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SIGNAL(writerChanged()) );
     }
   
-  return m_groupWriter;
+  return m_writerSelectionWidget;
 }
 
 
@@ -206,65 +174,21 @@ void K3bProjectBurnDialog::slotUser1()
   done( Burn );
 }
 
-void K3bProjectBurnDialog::slotRefreshWriterSpeeds()
-{
-  if( K3bDevice* _dev = writerDevice() ) {
-    // add speeds to combobox
-    m_comboSpeed->clear();
-    m_comboSpeed->insertItem( "1x" );
-    int _speed = 2;
-    while( _speed <= _dev->maxWriteSpeed() ) {
-      m_comboSpeed->insertItem( QString( "%1x" ).arg(_speed) );
-      _speed+=2;
-    }
-  }
-}
 
 K3bDevice* K3bProjectBurnDialog::writerDevice() const
 {
-  const QString s = m_comboWriter->currentText();
-
-  QString strDev = s.mid( s.find('(') + 1, s.find(')') - s.find('(') - 1 );
- 
-  K3bDevice* dev =  k3bMain()->deviceManager()->deviceByName( strDev );
-  if( !dev )
-    qDebug( "(K3bProjectBurnDialog) could not find device " + s );
-		
-  return dev;
+  if( m_writerSelectionWidget )
+    return m_writerSelectionWidget->writerDevice();
 }
 
 int K3bProjectBurnDialog::writerSpeed() const
 {
-  QString _strSpeed = m_comboSpeed->currentText();
-  _strSpeed.truncate( _strSpeed.find('x') );
-	
-  return _strSpeed.toInt();
+  if( m_writerSelectionWidget )	
+    return m_writerSelectionWidget->writerSpeed();
 }
 
 void K3bProjectBurnDialog::readSettings()
 {
-  if( m_groupWriter ) {
-    // -- read cd-writers ----------------------------------------------
-    QList<K3bDevice> _devices = k3bMain()->deviceManager()->burningDevices();
-    K3bDevice* _dev = _devices.first();
-    while( _dev ) {
-      m_comboWriter->insertItem( _dev->vendor() + " " + _dev->description() + " (" + _dev->genericDevice() + ")" );
-      _dev = _devices.next();
-    }
-	
-    slotRefreshWriterSpeeds();
-    
-    // -- reading current speed --------------------------------------
-    int _index = 0;
-    QString _strSpeed = QString::number(m_doc->speed()) + "x";
-    
-    for( int i = 0; i < m_comboSpeed->count(); i++ )
-      if( m_comboSpeed->text( i ) == _strSpeed )
-	_index = i;
-    
-    m_comboSpeed->setCurrentItem( _index );
-  }
-
   // read temp dir
   if( m_groupTempDir ) {
     k3bMain()->config()->setGroup( "General Options" );

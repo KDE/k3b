@@ -36,6 +36,7 @@
 #include <qhbox.h>
 #include <qheader.h>
 #include <qscrollbar.h>
+#include <qpoint.h>
 
 #include <kprogress.h>
 #include <klocale.h>
@@ -118,8 +119,8 @@ K3bBurnProgressDialog::PrivateStatusBarProgress::PrivateStatusBarProgress( QWidg
 
 
 
-K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name )
-  : KDialog(parent,name, true)
+K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name, bool modal, WFlags wf )
+  : KDialog(parent,name, modal, wf)
 {
   setCaption( i18n("Writing process") );
 
@@ -140,7 +141,11 @@ K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name 
 
 K3bBurnProgressDialog::~K3bBurnProgressDialog()
 {
-  //  delete m_statusBarProgress;
+  qDebug("(K3bBurnProgressDialog) deleted");
+
+  // this is bad but I really don't know how to handle the case! :-(
+  m_statusBarProgress->reparent( this, 0, QPoint(0,0) );
+  delete m_statusBarProgress;
 }
 
 
@@ -158,6 +163,15 @@ bool K3bBurnProgressDialog::eventFilter(QObject* object, QEvent* event)
   }
   else
     return KDialog::eventFilter( object, event );
+}
+
+
+void K3bBurnProgressDialog::closeEvent( QCloseEvent* e )
+{
+  if( m_buttonClose->isVisible() ) {
+    emit closed();
+    KDialog::closeEvent( e );
+  }
 }
 
 
@@ -265,7 +279,7 @@ void K3bBurnProgressDialog::setupGUI()
 void K3bBurnProgressDialog::setupConnections()
 {
   connect( m_buttonCancel, SIGNAL(clicked()), this, SLOT(slotCancelPressed()) );
-  connect( m_buttonClose, SIGNAL(clicked()), this, SLOT(accept()) );
+  connect( m_buttonClose, SIGNAL(clicked()), this, SLOT(close()) );
   connect( m_buttonShowDebug, SIGNAL(clicked()), this, SLOT(slotShowDebuggingOutput()) );
   connect( m_buttonBackground, SIGNAL(clicked()), this, SLOT(slotToBackground()) );
 }

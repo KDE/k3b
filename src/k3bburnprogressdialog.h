@@ -49,7 +49,7 @@ class K3bBurnProgressDialog : public KDialog  {
   Q_OBJECT
 
  public:
-  K3bBurnProgressDialog( QWidget *parent=0, const char *name=0);
+  K3bBurnProgressDialog( QWidget* = 0, const char* = 0, bool = true, WFlags = WDestructiveClose );
   ~K3bBurnProgressDialog();
 
   void setJob( K3bBurnJob* job );
@@ -76,6 +76,9 @@ class K3bBurnProgressDialog : public KDialog  {
 
   void slotToBackground();
 
+ signals:
+  void closed();
+
  protected:
   /**
    * only used for filtering out mouseclicks on the
@@ -83,11 +86,7 @@ class K3bBurnProgressDialog : public KDialog  {
    */
   bool eventFilter(QObject* object, QEvent* event);
 
-  /**
-   * reimplemented from QWidget since the user should really not
-   * close this widget another way than the close button!
-   */
-  void closeEvent( QCloseEvent* ) {}
+  void closeEvent( QCloseEvent* );
 
   void setupGUI();
   void setupConnections();

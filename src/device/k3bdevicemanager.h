@@ -42,6 +42,8 @@ class K3bDeviceManager : public QObject
    **/
   QList<K3bDevice>& readingDevices();
 
+  QList<K3bDevice>& allDevices();
+
   /** writes to stdout **/
   void printDevices();
 
@@ -72,6 +74,7 @@ class K3bDeviceManager : public QObject
  private:
   QList<K3bDevice> m_reader;
   QList<K3bDevice> m_writer;
+  QList<K3bDevice> m_allDevices;;
   int m_foundDevices;
 
   void scanFstab();

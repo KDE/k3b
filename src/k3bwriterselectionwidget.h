@@ -1,7 +1,7 @@
 /***************************************************************************
-                          k3bisoimagewritingdialog.h  -  description
+                          k3bwriterselectionwidget.h  -  description
                              -------------------
-    begin                : Fri Nov 30 2001
+    begin                : Mon Dec 3 2001
     copyright            : (C) 2001 by Sebastian Trueg
     email                : trueg@informatik.uni-freiburg.de
  ***************************************************************************/
@@ -15,50 +15,39 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef K3BISOIMAGEWRITINGDIALOG_H
-#define K3BISOIMAGEWRITINGDIALOG_H
+#ifndef K3BWRITERSELECTIONWIDGET_H
+#define K3BWRITERSELECTIONWIDGET_H
 
-#include <kdialogbase.h>
+#include <qgroupbox.h>
 
 
-class QCheckBox;
-class K3bWriterSelectionWidget;
-class KLineEdit;
-class QToolButton;
-class QLabel;
-class K3bIsoImageJob;
-
+class QComboBox;
+class K3bDevice;
 
 /**
   *@author Sebastian Trueg
   */
-class K3bIsoImageWritingDialog : public KDialogBase
+
+class K3bWriterSelectionWidget : public QGroupBox
 {
-Q_OBJECT
+   Q_OBJECT
 
  public: 
-  K3bIsoImageWritingDialog( QWidget* = 0, const char* = 0, bool = true );
-  ~K3bIsoImageWritingDialog();
+  K3bWriterSelectionWidget(QWidget *parent=0, const char *name=0);
+  ~K3bWriterSelectionWidget();
 
- protected slots:
-  void slotOk();
-  void slotClose();
-  void updateImageSize( const QString& );
-  void slotFindImageFile();
-  void slotWriterChanged();
+  int writerSpeed() const;
+  K3bDevice* writerDevice() const;
+
+ signals:
+  void writerChanged();
+
+ private slots:
+  void slotRefreshWriterSpeeds();
 
  private:
-  void setupGui();
-
-  K3bIsoImageJob* m_job;
-
-  K3bWriterSelectionWidget* m_writerSelectionWidget;
-  QCheckBox* m_checkDummy;
-  QCheckBox* m_checkDao;
-  QCheckBox* m_checkBurnProof;
-  QLabel*    m_labelImageSize;
-  KLineEdit* m_editImagePath;
-  QToolButton* m_buttonFindImageFile;
+  QComboBox* m_comboSpeed;
+  QComboBox* m_comboWriter;
 };
 
 #endif

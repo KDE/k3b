@@ -43,7 +43,6 @@ class K3bDirView;
 class K3bDeviceManager;
 class K3bAudioTrackDialog;
 class K3bOptionDialog;
-class K3bBurnProgressDialog;
 class K3bJob;
 
 
@@ -198,6 +197,7 @@ class K3bMainWindow : public KDockMainWindow
 
   void slotCdInfo();
   void slotBlankCdrw();
+  void slotWriteIsoImage();
 
   void slotNewAudioDoc();
   void slotNewDataDoc();
@@ -258,6 +258,7 @@ class K3bMainWindow : public KDockMainWindow
   KAction* actionFileExport;
   KAction* actionToolsCdInfo;
   KAction* actionToolsBlankCdrw;
+  KAction* actionToolsWriteIsoImage;
 	
   KToggleAction* actionViewToolBar;
   KToggleAction* actionViewStatusBar;
@@ -270,7 +271,6 @@ class K3bMainWindow : public KDockMainWindow
   K3bDirView* m_dirView;
   K3bAudioTrackDialog* m_audioTrackDialog;
   K3bOptionDialog* m_optionDialog;
-  K3bBurnProgressDialog* m_burnProgressDialog;
 	
   bool m_useID3TagForMp3Renaming;
   bool m_initialized;

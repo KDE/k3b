@@ -16,7 +16,7 @@ class KListView;
 class K3bDevice;
 class K3bBlankingJob;
 class KProgress;
-
+class K3bWriterSelectionWidget;
 
 
 class K3bBlankingDialog : public KDialogBase
@@ -28,7 +28,6 @@ Q_OBJECT
   ~K3bBlankingDialog();
 
  protected slots:
-  void slotRefreshWriterSpeeds();
   void slotUser1();
   void slotUser2();
   void slotInfoMessage( const QString& msg, int type );
@@ -39,12 +38,8 @@ Q_OBJECT
 
  private:
   void setupGui();
-  int writerSpeed() const;
-  K3bDevice* writerDevice() const;
   
-  QGroupBox* m_groupWriter;
-  QComboBox* m_comboSpeed;
-  QComboBox* m_comboWriter;
+  K3bWriterSelectionWidget* m_writerSelectionWidget;
 
   QButtonGroup* m_groupBlankType;
   QRadioButton* m_radioCompleteBlank;

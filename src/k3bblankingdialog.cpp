@@ -4,6 +4,7 @@
 #include "device/k3bdevicemanager.h"
 #include "k3b.h"
 #include "k3bblankingjob.h"
+#include "k3bwriterselectionwidget.h"
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -25,23 +26,12 @@
 
 K3bBlankingDialog::K3bBlankingDialog( QWidget* parent, const char* name )
   : KDialogBase( parent, name, false, i18n("Blanking CD-RW"), 
-		 KDialogBase::Help|KDialogBase::User2|KDialogBase::User1, 
+		 /*KDialogBase::Help|*/KDialogBase::User2|KDialogBase::User1, 
 		 KDialogBase::User1, true, i18n("Blank"), i18n("Close") )
 {
   setupGui();
   setButtonBoxOrientation( Qt::Vertical );
   m_groupBlankType->setButton( 0 );
-
-
-  // -- read cd-writers ----------------------------------------------
-  QList<K3bDevice> _devices = k3bMain()->deviceManager()->burningDevices();
-  K3bDevice* _dev = _devices.first();
-  while( _dev ) {
-    m_comboWriter->insertItem( _dev->vendor() + " " + _dev->description() + " (" + _dev->genericDevice() + ")" );
-    _dev = _devices.next();
-  }
-  
-  slotRefreshWriterSpeeds(); 
 
   m_job = 0;
 }
@@ -58,38 +48,7 @@ void K3bBlankingDialog::setupGui()
 {
   QFrame* frame = makeMainWidget();
 
-  // --- setup device group ----------------------------------------------------
-  m_groupWriter = new QGroupBox( frame, "m_groupWriter" );
-  m_groupWriter->setTitle( i18n( "Burning Device" ) );
-  m_groupWriter->setColumnLayout(0, Qt::Vertical );
-  m_groupWriter->layout()->setSpacing( 0 );
-  m_groupWriter->layout()->setMargin( 0 );
-  QGridLayout* groupWriterLayout = new QGridLayout( m_groupWriter->layout() );
-  groupWriterLayout->setAlignment( Qt::AlignTop );
-  groupWriterLayout->setSpacing( spacingHint() );
-  groupWriterLayout->setMargin( marginHint() );
-
-  QLabel* labelSpeed = new QLabel( m_groupWriter, "TextLabel1" );
-  labelSpeed->setText( i18n( "Burning Speed" ) );
-    
-  m_comboSpeed = new QComboBox( FALSE, m_groupWriter, "m_comboSpeed" );
-  m_comboSpeed->setAutoMask( FALSE );
-  m_comboSpeed->setDuplicatesEnabled( FALSE );
-    
-  m_comboWriter = new QComboBox( FALSE, m_groupWriter, "m_comboWriter" );
-
-  QLabel* labelDevice = new QLabel( m_groupWriter, "TextLabel1_2" );
-  labelDevice->setText( i18n( "Device" ) );
-
-  groupWriterLayout->addWidget( labelDevice, 0, 0 );
-  groupWriterLayout->addWidget( labelSpeed, 0, 1 );
-  groupWriterLayout->addWidget( m_comboWriter, 1, 0 );  
-  groupWriterLayout->addWidget( m_comboSpeed, 1, 1 );
-  
-  groupWriterLayout->setColStretch( 0, 1 );
-  
-  connect( m_comboWriter, SIGNAL(activated(int)), this, SLOT(slotRefreshWriterSpeeds()) );
-  // --------------------------------------------------------- device group ---
+  m_writerSelectionWidget = new K3bWriterSelectionWidget( frame );
 
 
   // --- setup the blynking type button group -----------------------------
@@ -138,7 +97,7 @@ void K3bBlankingDialog::setupGui()
   m_groupOptions = new QGroupBox( i18n("Options"), frame );
   m_groupOptions->setColumnLayout(0, Qt::Vertical );
   m_groupOptions->layout()->setSpacing( 0 );
-  m_groupOutput->layout()->setMargin( 0 );
+  m_groupOptions->layout()->setMargin( 0 );
   QVBoxLayout* groupOptionsLayout = new QVBoxLayout( m_groupOptions->layout() );
   groupOptionsLayout->setAlignment( Qt::AlignTop );
   groupOptionsLayout->setSpacing( spacingHint() );
@@ -155,46 +114,10 @@ void K3bBlankingDialog::setupGui()
   grid->setSpacing( spacingHint() );
   grid->setMargin( marginHint() );
 
-  grid->addMultiCellWidget( m_groupWriter, 0, 0, 0, 1 );
+  grid->addMultiCellWidget( m_writerSelectionWidget, 0, 0, 0, 1 );
   grid->addWidget( m_groupBlankType, 1, 0 );
   grid->addWidget( m_groupOptions, 1, 1 );
   grid->addMultiCellWidget( m_groupOutput, 2, 2, 0, 1 );
-}
-
-
-void K3bBlankingDialog::slotRefreshWriterSpeeds()
-{
-  if( K3bDevice* _dev = writerDevice() ) {
-    // add speeds to combobox
-    m_comboSpeed->clear();
-    m_comboSpeed->insertItem( "1x" );
-    int _speed = 2;
-    while( _speed <= _dev->maxWriteSpeed() ) {
-      m_comboSpeed->insertItem( QString( "%1x" ).arg(_speed) );
-      _speed+=2;
-    }
-  }
-}
-
-K3bDevice* K3bBlankingDialog::writerDevice() const
-{
-  const QString s = m_comboWriter->currentText();
-
-  QString strDev = s.mid( s.find('(') + 1, s.find(')') - s.find('(') - 1 );
- 
-  K3bDevice* dev =  k3bMain()->deviceManager()->deviceByName( strDev );
-  if( !dev )
-    qDebug( "(K3bBlankingDialog) could not find device " + s );
-		
-  return dev;
-}
-
-int K3bBlankingDialog::writerSpeed() const
-{
-  QString _strSpeed = m_comboSpeed->currentText();
-  _strSpeed.truncate( _strSpeed.find('x') );
-	
-  return _strSpeed.toInt();
 }
 
 
@@ -212,8 +135,8 @@ void K3bBlankingDialog::slotUser1()
     connect( m_job, SIGNAL(finished(K3bJob*)), this, SLOT(slotJobFinished()) );
   }
 
-  m_job->setDevice( writerDevice() );
-  m_job->setSpeed( writerSpeed() );
+  m_job->setDevice( m_writerSelectionWidget->writerDevice() );
+  m_job->setSpeed( m_writerSelectionWidget->writerSpeed() );
   m_job->setForce( m_checkForce->isChecked() );
 
   switch( m_groupBlankType->id( m_groupBlankType->selected() ) ) {
