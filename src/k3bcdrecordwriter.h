@@ -69,6 +69,9 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   bool m_stdin;
 
   int m_currentTrack;
+
+  enum CdrecordError { UNKNOWN, OVERSIZE };
+  int m_cdrecordError;
 };
 
 #endif

@@ -205,15 +205,21 @@ int K3bWriterSelectionWidget::writerSpeed() const
 
 int K3bWriterSelectionWidget::writingApp() const
 {
-  switch( m_groupCdWritingApp->id( m_groupCdWritingApp->selected() ) ) {
-  case 1:
-    return K3b::CDRECORD;
-  case 2:
-    return K3b::CDRDAO;
-  case 0:
-  default:
-    return K3b::DEFAULT;
+  KConfig* c = kapp->config();
+  c->setGroup("General Options");
+  if( c->readBoolEntry( "Manual writing app selection", false ) ) {
+    switch( m_groupCdWritingApp->id( m_groupCdWritingApp->selected() ) ) {
+    case 1:
+      return K3b::CDRECORD;
+    case 2:
+      return K3b::CDRDAO;
+    case 0:
+    default:
+      return K3b::DEFAULT;
+    }
   }
+  else
+    return K3b::DEFAULT;
 }
 
 

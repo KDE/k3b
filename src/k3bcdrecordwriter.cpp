@@ -25,6 +25,7 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qvaluelist.h>
+#include <qregexp.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -138,6 +139,7 @@ void K3bCdrecordWriter::start()
   kdDebug() << s << endl << flush;
 
   m_currentTrack = 0;
+  m_cdrecordError = UNKNOWN;
 
   emit newSubTask( i18n("Preparing write process...") );
 
@@ -273,6 +275,16 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
 	  emit percent( 100*made/size );
 	}
     }
+  else if( line.contains( "at speed" ) ) {
+    // parse the speed and inform the user if cdrdao switched it down
+    int pos = line.find( "at speed" );
+    int po2 = line.find( QRegExp("\\D"), pos + 9 );
+    int speed = line.mid( pos+9, po2-pos-9 ).toInt();
+    if( speed < burnSpeed() ) {
+      emit infoMessage( i18n("Medium does not support writing at %1x speed").arg(burnSpeed()), K3bJob::INFO );
+      emit infoMessage( i18n("Switching down burn speed to %1x").arg(speed), K3bJob::PROCESS );
+    }
+  }
   else if( line.startsWith( "Starting new" ) )
     {
       m_currentTrack++;
@@ -303,6 +315,12 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
     emit infoMessage( i18n("SAO, DAO recording not supported by the writer"), K3bJob::ERROR );
     emit infoMessage( i18n("Please turn off DAO (disk at once) and try again"), K3bJob::ERROR );
   }
+  else if( line.contains("Data may not fit") ) {
+    bool overburn = k3bMain()->config()->readBoolEntry( "Allow overburning", false );
+    if( overburn && m_cdrecordBinObject->hasFeature("overburn") )
+      emit infoMessage( i18n("Trying to write more than the official disk capacity"), K3bJob::INFO );
+    m_cdrecordError = OVERSIZE;
+  }
   else {
     // debugging
     kdDebug() << "(cdrecord) " << line << endl;
@@ -324,12 +342,23 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
       break;
 
     default:
-      // no recording device and also other errors!! :-(
-      emit infoMessage( i18n("Cdrecord returned an error! (code %1)").arg(p->exitStatus()), K3bJob::ERROR );
-      emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
-      emit infoMessage( i18n("Please send me an email with the last output..."), K3bJob::ERROR );
+      switch( m_cdrecordError ) {
+      case OVERSIZE:
+	if( k3bMain()->config()->readBoolEntry( "Allow overburning", false ) &&
+	    m_cdrecordBinObject->hasFeature("overburn") )
+	  emit infoMessage( i18n("Data did not fit on disk."), ERROR );
+	else
+	  emit infoMessage( i18n("Data does not fit on disk."), ERROR );
+	break;
+      case UNKNOWN:
+	// no recording device and also other errors!! :-(
+	emit infoMessage( i18n("Cdrecord returned an unknown error! (code %1)").arg(p->exitStatus()), 
+			  K3bJob::ERROR );
+	emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
+	emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
+	break;
+      }
       emit finished( false );
-      break;
     }
   }
   else {

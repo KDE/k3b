@@ -259,6 +259,7 @@ class K3bMainWindow : public KDockMainWindow
 
   void slotDataImportSession();
   void slotDataClearImportedSession();
+  void slotEditBootImages();
 
  private:
   void fileSave( K3bDoc* doc = 0 );
@@ -328,6 +329,7 @@ class K3bMainWindow : public KDockMainWindow
   // project actions
   KAction* actionDataImportSession;
   KAction* actionDataClearImportedSession;
+  KAction* actionDataEditBootImages;
 
   KDockWidget* mainDock;
   KDockWidget* dirDock;

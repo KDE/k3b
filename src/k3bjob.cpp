@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include "k3bjob.h"
+#include <k3bglobals.h>
 
 #include <klocale.h>
 #include <kprocess.h>
@@ -35,7 +36,8 @@ K3bJob::~K3bJob()
 
 
 K3bBurnJob::K3bBurnJob( QObject* parent )
-  : K3bJob( parent )
+  : K3bJob( parent ),
+    m_writeMethod( K3b::DEFAULT )
 {
 }
 

@@ -20,7 +20,10 @@
 
 #include <kdialogbase.h>
 
+#include "k3bdocsettings.h"
+
 class K3bDoc;
+class K3bBurnJob;
 class K3bBurnJob;
 
 
@@ -45,8 +48,11 @@ class K3bProjectBurnDialog : public KDialogBase
    K3bDoc* doc() const { return m_doc; }
 	
  protected slots:
+   /** burn */
    virtual void slotOk();
+   /** save */
    virtual void slotUser1();
+   /** cancel */
    virtual void slotUser2();
    virtual void slotCancel();
 
@@ -54,12 +60,20 @@ class K3bProjectBurnDialog : public KDialogBase
    virtual void loadUserDefaults() = 0;
    virtual void saveUserDefaults() = 0;
 
+/*    virtual void loadSettings( const K3bDocSettings& ) {} // this will be pure vitual in the future */
+/*    virtual K3bDocSettings settings() { return K3bDocSettings(); } // this will be pure vitual in the future */
+
  signals:
    void writerChanged();
 
  protected:
    virtual void saveSettings() {};
    virtual void readSettings() {};
+
+   /**
+    * use this to set additionell stuff in the job
+    */
+   virtual void prepareJob( K3bBurnJob* ) {};
 
    /**
     * The widget to add new stuff. Use instead of mainWidget()

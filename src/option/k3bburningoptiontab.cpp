@@ -29,7 +29,7 @@ K3bBurningOptionTab::K3bBurningOptionTab( QWidget* parent, const char* name )
   m_comboPregapFormat->setCurrentItem( 1 );
 
 
-  m_checkAllowWritingAppSelection->setDisabled( true );  // not implemented yet!
+  //  m_checkAllowWritingAppSelection->setDisabled( true );  // not implemented yet!
 }
 
 

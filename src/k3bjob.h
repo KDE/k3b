@@ -74,6 +74,17 @@ class K3bBurnJob : public K3bJob
   virtual K3bDoc* doc() const { return 0; }
   virtual K3bDevice* writer() const { return 0; }
 
+  /**
+   * use K3b::WritingApp
+   */
+  int writingApp() const { return m_writeMethod; }
+
+ public slots:
+  /**
+   * use K3b::WritingApp
+   */
+  void setWritingApp( int w ) { m_writeMethod = w; }
+
  signals:
   void bufferStatus( int );
 
@@ -106,5 +117,6 @@ class K3bBurnJob : public K3bJob
 
  private:
   QString m_notFinishedLine;
+  int m_writeMethod;
 };
 #endif

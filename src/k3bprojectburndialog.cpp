@@ -145,7 +145,7 @@ void K3bProjectBurnDialog::slotOk()
   saveSettings();
 
   m_job = m_doc->newBurnJob();
-  //  m_job->setWritingApp( m_writerSelectionWidget->writingApp() );
+  prepareJob( m_job );
 
   K3bBurnProgressDialog d( k3bMain() );
   d.setJob( m_job );
@@ -160,6 +160,32 @@ void K3bProjectBurnDialog::slotOk()
 
   done( Burn );
 }
+
+
+// void K3bProjectBurnDialog::loadDefaults()
+// {
+//   K3bDocSettings s = m_doc->settings();
+//   s.defaults();
+//   loadSettings( s );
+// }
+
+
+// void K3bProjectBurnDialog::loadUserDefaults()
+// {
+//   KConfig* c = k3bMain()->config();
+//   c->setGroup( "default " + m_doc->documentType() + " settings" );
+//   K3bDocSettings s = m_doc->settings();
+//   s.loadUserDefaults( c );
+//   loadSettings( s );
+// }
+
+
+// void K3bProjectBurnDialog::saveUserDefaults()
+// {
+//   KConfig* c = k3bMain()->config();
+//   c->setGroup( "default " + m_doc->documentType() + " settings" );
+//   settings().saveUserDefaults( c );
+// }
 
 
 #include "k3bprojectburndialog.moc"

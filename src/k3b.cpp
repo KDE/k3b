@@ -128,12 +128,13 @@ K3bMainWindow::K3bMainWindow()
 
   actionDataImportSession->setEnabled( false );
   actionDataClearImportedSession->setEnabled( false );
-
+  actionDataEditBootImages->setEnabled(false);
+  toolBar("dataToolBar")->hide();
 
   m_optionDialog = 0;
 
   // since the icons are not that good activate the text on the toolbar
-  toolBar()->setIconText( KToolBar::IconTextRight );
+  //  toolBar()->setIconText( KToolBar::IconTextRight );
 }
 
 K3bMainWindow::~K3bMainWindow()
@@ -220,6 +221,9 @@ void K3bMainWindow::initActions()
   actionDataClearImportedSession = new KAction(i18n("&Clear imported Session"), "gear", 0, this,
 					       SLOT(slotDataClearImportedSession()), actionCollection(),
 					       "project_data_clear_imported_session" );
+  actionDataEditBootImages = new KAction(i18n("&Edit boot images"), "cdtrack", 0, this,
+					 SLOT(slotEditBootImages()), actionCollection(),
+					 "project_data_edit_boot_images" );
 
   // ==============================================================================================================
 
@@ -953,10 +957,14 @@ void K3bMainWindow::slotCurrentDocChanged( QWidget* )
     case K3bDoc::DATA:
       actionDataClearImportedSession->setEnabled(true);
       actionDataImportSession->setEnabled(true);
+      actionDataEditBootImages->setEnabled(true);
+      toolBar("dataToolBar")->show();
       break;
     default:
       actionDataClearImportedSession->setEnabled(false);
       actionDataImportSession->setEnabled(false);
+      actionDataEditBootImages->setEnabled(false);
+      toolBar("dataToolBar")->hide();
     }
   }
 }
@@ -1136,5 +1144,16 @@ void K3bMainWindow::slotDataClearImportedSession()
     }
   }
 }
+
+
+void K3bMainWindow::slotEditBootImages()
+{
+  if( activeView() ) {
+    if( K3bDataView* view = dynamic_cast<K3bDataView*>(activeView()) ) {
+      view->editBootImages();
+    }
+  }
+}
+
 
 #include "k3b.moc"

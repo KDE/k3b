@@ -31,6 +31,9 @@
 // include files for KDE
 #include <kurl.h>
 
+#include "k3bdocsettings.h"
+
+
 // forward declaration of the K3b classes
 class K3bView;
 class QTimer;
@@ -133,6 +136,14 @@ class K3bDoc : public QObject
   void setSaved( bool b ) { m_saved = b; }
   bool saved() const { return m_saved; }
 
+  virtual K3bDocSettings settings() const { return m_settings; }
+
+  /**
+   * should return the name of the document type
+   * for saving the contents in a XML file
+   */
+  virtual QString documentType() const = 0;
+
  public slots:
   void updateAllViews();
   void setDummy( bool d );
@@ -169,11 +180,6 @@ class K3bDoc : public QObject
 
   bool saveGeneralDocumentData( QDomElement* );
   bool readGeneralDocumentData( const QDomElement& );
-  /**
-   * should return the name of the document type
-   * for saving the contents in a XML file
-   */
-  virtual QString documentType() const = 0;
 
   /**
    * load the default project settings from the app configuration
@@ -202,6 +208,8 @@ class K3bDoc : public QObject
   int m_writingApp;
 
   bool m_saved;
+
+  K3bDocSettings m_settings;
 };
 
 #endif // K3BDOC_H

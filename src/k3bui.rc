@@ -14,6 +14,7 @@
   <Menu name="project"><text>&amp;Project</text>
         <Action name="project_data_import_session"/>
         <Action name="project_data_clear_imported_session"/>
+	<Action name="project_data_edit_boot_images"/>
 	<Separator/>
   	<Action name="project_add_files"/>
   	<Action name="file_burn"/>
@@ -30,5 +31,10 @@
 	<Separator/>
 	<Action name="tools_copy_cd"/>
 	<Action name="tools_blank_cdrw"/>
+</ToolBar>
+<ToolBar name="dataToolBar">
+	<Action name="project_data_import_session"/>
+        <Action name="project_data_clear_imported_session"/>
+	<Action name="project_data_edit_boot_images"/>
 </ToolBar>
 </kpartgui>

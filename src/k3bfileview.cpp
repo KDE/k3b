@@ -83,19 +83,22 @@ void K3bFileView::setupGUI()
 
 
   // setup actions
-  KAction* actionPlay = new KAction( i18n("&Play"), "1rightarrow", 0, this, SLOT(slotAudioFilePlay()), 
+  KAction* actionPlay = new KAction( i18n("Play"), "1rightarrow", 0, this, SLOT(slotAudioFilePlay()), 
 				     m_dirOp->actionCollection(), "audio_file_play");
   KAction* actionEnqueue = new KAction( i18n("En&queue"), "1rightarrow", 0, this, SLOT(slotAudioFileEnqueue()), 
 					m_dirOp->actionCollection(), "audio_file_enqueue");
-  KAction* actionAddFilesToProject = new KAction( i18n("&Add to Project"), 0, this, SLOT(slotAddFilesToProject()), 
+  KAction* actionAddFilesToProject = new KAction( i18n("&Add to Project"), SHIFT+Key_Return, 
+						  this, SLOT(slotAddFilesToProject()), 
 						  m_dirOp->actionCollection(), "add_file_to_project");
 
-  KAction* actionUp = m_dirOp->actionCollection()->action("home");
-  KAction* actionHome = m_dirOp->actionCollection()->action("up");
+  KAction* actionHome = m_dirOp->actionCollection()->action("home");
+  KAction* actionBack = m_dirOp->actionCollection()->action("back");
+  KAction* actionUp = m_dirOp->actionCollection()->action("up");
   KAction* actionReload = m_dirOp->actionCollection()->action("reload");
 
 
   toolBox->addButton( actionUp );
+  toolBox->addButton( actionBack );
   toolBox->addButton( actionHome );
   toolBox->addButton( actionReload );
   toolBox->addSpacing();
