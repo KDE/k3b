@@ -206,12 +206,12 @@ void K3bCdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
       
     case K3bCdDevice::MIXED:
       audio = true;
-      if( dh->ngDiskInfo().numSessions() != 2 ) {
+      if( dh->ngDiskInfo().numSessions() != 2 || d->toc[0].type() != K3bCdDevice::Track::AUDIO ) {
 	emit infoMessage( i18n("K3b can only copy CD-Extra mixed mode CDs."), ERROR );
 	canCopy = false;
       }
       else
-	emit infoMessage( i18n("Copying Mixed Mode CD."), INFO );
+	emit infoMessage( i18n("Copying Enhanced Audio CD (CD-Extra)."), INFO );
       break;
 
     case K3bCdDevice::AUDIO:

@@ -357,7 +357,9 @@ void K3bCdCopyDialog::slotToggleAll()
    m_checkQueryCddb->setDisabled( m_groupCopyMode->selected() == m_radioCloneCopy );
    m_checkPrefereCdText->setDisabled( m_groupCopyMode->selected() == m_radioCloneCopy );
    m_checkIgnoreReadErrors->setDisabled( m_groupCopyMode->selected() == m_radioCloneCopy );
+
    m_checkNoCorrection->setEnabled( m_groupCopyMode->selected() == m_radioCloneCopy );
+
    m_writingModeWidget->setEnabled( !m_checkOnlyCreateImage->isChecked() );
 
    m_buttonStart->setEnabled( dev || m_checkOnlyCreateImage->isChecked() );

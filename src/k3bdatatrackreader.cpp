@@ -78,7 +78,7 @@ public:
       emitFinished(false);
       return;
     }
-
+    
     emitInfoMessage( i18n("Reading with sector size %1.").arg(m_sectorSize), K3bJob::INFO );
     kdDebug() << "(K3bDataTrackReader::WorkThread) reading " << (m_lastSector.lba() - m_firstSector.lba() + 1)
 	      << " sectors with sector size: " << m_sectorSize << endl;
@@ -185,12 +185,18 @@ public:
 
   // here we read every single sector for itself to find the troubleing ones
   bool retryRead( unsigned char* buffer, unsigned long startSector, unsigned int len ) {
+
+    emitInfoMessage( i18n("Problem while reading. Retrying from sector %1.").arg(startSector), K3bJob::WARNING );
+
     bool success = false;
     int i = 0;
     for( unsigned long sector = startSector; sector < startSector+len; ++sector ) {
       int retry = m_retries;
-      while( retry && !(success = read( &buffer[i], sector, 1 )) )
+      while( !m_canceled && retry && !(success = read( &buffer[i], sector, 1 )) )
 	--retry;
+
+      if( m_canceled )
+	return false;
 
       if( !success ) {
 	emitInfoMessage( i18n("Error while reading sector %1.").arg(sector), K3bJob::ERROR );
@@ -276,5 +282,3 @@ void K3bDataTrackReader::setImagePath( const QString& p )
   m_thread->m_imagePath = p;
   m_thread->m_fd = -1;
 }
-
-
