@@ -174,7 +174,7 @@ void K3bCdDevice::DiskInfoDetector::fetchExtraInfo()
 
       d->iso9660 = new K3bIso9660( d->device, startSec );
 
-      if( d->iso9660->open( IO_ReadOnly ) ) {
+      if( d->iso9660->open() ) {
 	//	d->iso9660->debug();
 
 	d->info.isoId = "CD001";
@@ -190,12 +190,12 @@ void K3bCdDevice::DiskInfoDetector::fetchExtraInfo()
 	  d->isVideoDvd = false;
 
 	  // We check for the VIDEO_TS directory and at least one .IFO file
-	  const KArchiveEntry* videoTsEntry = d->iso9660->directory()->entry( "VIDEO_TS" );
+	  const K3bIso9660Entry* videoTsEntry = d->iso9660->firstIsoDirEntry()->entry( "VIDEO_TS" );
 	  if( videoTsEntry )
 	    if( videoTsEntry->isDirectory() ) {
 	      kdDebug() << "(K3bDiskInfoDetector) found VIDEO_TS directory." << endl;
 
-	      const KArchiveDirectory* videoTsDir = dynamic_cast<const KArchiveDirectory*>( videoTsEntry );
+	      const K3bIso9660Directory* videoTsDir = static_cast<const K3bIso9660Directory*>( videoTsEntry );
 	      QStringList entries = videoTsDir->entries();
 	      for( QStringList::const_iterator it = entries.begin(); it != entries.end(); ++it ) {
 		if( (*it).right(4) == ".IFO" ) {
@@ -212,23 +212,24 @@ void K3bCdDevice::DiskInfoDetector::fetchExtraInfo()
 	  kdDebug() << "(K3bDiskInfoDetector) checking for VCD." << endl;
 
 	  // check for VCD
-	  const KArchiveEntry* vcdEntry = d->iso9660->directory()->entry( "VCD/INFO.VCD" );
-	  const KArchiveEntry* svcdEntry = d->iso9660->directory()->entry( "SVCD/INFO.SVD" );
+	  const K3bIso9660Entry* vcdEntry = d->iso9660->firstIsoDirEntry()->entry( "VCD/INFO.VCD" );
+	  const K3bIso9660Entry* svcdEntry = d->iso9660->firstIsoDirEntry()->entry( "SVCD/INFO.SVD" );
 	  const K3bIso9660File* vcdInfoFile = 0;
 	  if( vcdEntry ) {
 	    kdDebug() << "(K3bDiskInfoDetector) found vcd entry." << endl;
 	    if( vcdEntry->isFile() )
-	      vcdInfoFile = (const K3bIso9660File*)vcdEntry;
+	      vcdInfoFile = static_cast<const K3bIso9660File*>(vcdEntry);
 	  }
 	  if( svcdEntry && !vcdInfoFile ) {
 	    kdDebug() << "(K3bDiskInfoDetector) found svcd entry." << endl;
 	    if( svcdEntry->isFile() )
-	      vcdInfoFile = (const K3bIso9660File*)svcdEntry;
+	      vcdInfoFile = static_cast<const K3bIso9660File*>(svcdEntry);
 	  }
 
 	  if( vcdInfoFile ) {
-	    QByteArray buffer = vcdInfoFile->data( 0, 8 );
-	    QString info = QString::fromLocal8Bit( buffer.data(), 8 );
+	    char buffer[8];
+	    vcdInfoFile->read( 0, buffer, 8 );
+	    QString info = QString::fromLocal8Bit( buffer, 8 );
 	    kdDebug() << "(K3bDiskInfoDetector) VCD: " << info << endl;
 	    if ( info == QString("VIDEO_CD") ||
 		 info == QString("SUPERVCD") ||
