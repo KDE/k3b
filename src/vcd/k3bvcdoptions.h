@@ -47,6 +47,8 @@ class K3bVcdOptions
   const bool CdiSupport() const { return m_cdisupport; }
   const bool BrokenSVcdMode() const { return m_brokensvcdmode; }
   const bool Sector2336() const { return m_sector2336; }
+  const bool UpdateScanOffsets() const { return m_updatescanoffsets; }
+  const bool RelaxedAps() const { return m_relaxedaps; }
   const unsigned long long CDIsize() const {return m_cdisize;}
 
   void setAlbumId( const QString& s ) { m_albumID = s; }
@@ -66,6 +68,8 @@ class K3bVcdOptions
   void setCdiSupport( const bool& b ) { m_cdisupport = b; }
   void setBrokenSVcdMode( const bool& b ) { m_brokensvcdmode = b; }
   void setSector2336( const bool& b ) { m_sector2336 = b; }
+  void setUpdateScanOffsets( const bool& b ) { m_updatescanoffsets = b; }
+  void setRelaxedAps( const bool& b ) { m_relaxedaps = b; }
   
   bool checkCdiFiles();
   void save( KConfig* c );
@@ -73,7 +77,21 @@ class K3bVcdOptions
   static K3bVcdOptions load( KConfig* c );
   static K3bVcdOptions defaults();
 
+  void setPbcEnabled( const bool& b ) { m_pbcenabled = b; }
+  bool PbcEnabled() const { return m_pbcenabled; };
+
+  void setSegmentFolder( const bool& b ) { m_segmentfolder = b; }
+  bool SegmentFolder() const { return m_segmentfolder; };
+
+  void setRestriction( const int i ) { m_restriction = i; }
+  int Restriction() const { return m_restriction; };
+  
  private:
+  int m_restriction;
+
+  // pbc
+  bool m_pbcenabled;
+
   // volume descriptor
   QString m_volumeID;
   QString m_albumID;
@@ -91,12 +109,15 @@ class K3bVcdOptions
   int m_mpegversion;
   int m_volumeCount;
   int m_volumeNumber;
-  
+
   bool m_autodetect;
   bool m_cdisupport;
   bool m_brokensvcdmode;
   bool m_sector2336;
-
+  bool m_updatescanoffsets;
+  bool m_relaxedaps;
+  bool m_segmentfolder;
+  
   unsigned long long m_cdisize;
 };
 

@@ -35,11 +35,18 @@ K3bVcdTrack::K3bVcdTrack( QPtrList<K3bVcdTrack>* parent, const QString& filename
   m_parent = parent;
   m_title = QFileInfo(m_file).baseName(true);
 
-  m_previous = 0L;
-  m_next = 0L;
-  m_return = 0L;
-  m_default = 0L;
-  
+  m_pbcprevious = 0L;
+  m_pbcnext = 0L;
+  m_pbcreturn = 0L;
+  m_pbcdefault = 0L;
+
+  m_pbcprevious_enabled = false;
+  m_pbcnext_enabled = false;
+  m_pbcreturn_enabled = false;
+  m_pbcdefault_enabled = false;
+
+  m_pbcuserdefined = false;
+  m_segment = false;
 }
 
 

@@ -14,8 +14,10 @@
  */
 
 #include "k3bvcdoptions.h"
+#include <tools/k3bversion.h>
 
 #include <kconfig.h>
+#include <k3bcore.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 
@@ -24,9 +26,11 @@
 
 
 K3bVcdOptions::K3bVcdOptions()
-  : m_volumeID( i18n("Project name", "VIDEOCD") ),
+  : m_restriction( 0 ),
+    m_pbcenabled( false ),
+    m_volumeID( i18n("Project name", "VIDEOCD") ),
     m_volumeSetId( "" ),
-    m_publisher( "" ),
+    m_publisher( QString("K3b - Version %1").arg(k3bcore->version()) ),
     m_applicationId( "CDI/CDI_VCD.APP;1" ),
     m_systemId( "CD-RTOS CD-BRIDGE" ),
     m_vcdclass( "vcd" ),
@@ -37,7 +41,10 @@ K3bVcdOptions::K3bVcdOptions()
     m_autodetect( true ),
     m_cdisupport( false ),
     m_brokensvcdmode( false ),
-    m_sector2336( false )
+    m_sector2336( false ),
+    m_updatescanoffsets( false ),
+    m_relaxedaps( false ),
+    m_segmentfolder( true )
 {
 }
 
@@ -70,6 +77,11 @@ void K3bVcdOptions::save( KConfig* c )
   c->writeEntry( "cdi_support", m_cdisupport );
   c->writeEntry( "broken_svcd_mode", m_brokensvcdmode );
   c->writeEntry( "2336_sectors", m_sector2336 );
+  c->writeEntry( "UpdateScanOffsets", m_updatescanoffsets );
+  c->writeEntry( "RelaxedAps", m_relaxedaps );
+  c->writeEntry( "PbcEnabled", m_pbcenabled );
+  c->writeEntry( "SegmentFolder",  m_segmentfolder );
+  c->writeEntry( "Restriction",  m_restriction );
 }
 
 
@@ -88,6 +100,11 @@ K3bVcdOptions K3bVcdOptions::load( KConfig* c )
   options.setCdiSupport( c->readBoolEntry( "cdi_support", options.CdiSupport() ) );
   options.setBrokenSVcdMode( c->readBoolEntry( "broken_svcd_mode", options.BrokenSVcdMode() ) );
   options.setSector2336( c->readBoolEntry( "2336_sectors", options.Sector2336() ) );
+  options.setUpdateScanOffsets( c->readBoolEntry( "UpdateScanOffsets", options.UpdateScanOffsets() ) );
+  options.setRelaxedAps( c->readBoolEntry( "RelaxedAps", options.RelaxedAps() ) );
+  options.setPbcEnabled( c->readBoolEntry( "PbcEnabled", options.PbcEnabled() ) );
+  options.setSegmentFolder( c->readBoolEntry( "SegmentFolder", options.SegmentFolder() ) );
+  options.setRestriction( ( c->readEntry( "Restriction", QString("%1").arg(options.Restriction()) )).toInt() );
   
   return options;
 }

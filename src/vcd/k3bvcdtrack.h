@@ -38,23 +38,33 @@ class K3bVcdTrack
   const QString& title() const { return m_title; }
   void setTitle( const QString& t ) { m_title = t; }
 
-  void setPrevious(K3bVcdTrack* nav_previous) {m_previous = nav_previous;}
-  void setPrevious() {m_previous = 0L;}
-  K3bVcdTrack* Previous() {return m_previous;}
+  // PBC
+  void setPrevious(K3bVcdTrack* pbc_previous = 0L) {m_pbcprevious = pbc_previous;}
+  void setNext(K3bVcdTrack* pbc_next = 0L) {m_pbcnext = pbc_next;}
+  void setReturn(K3bVcdTrack* pbc_return = 0L) {m_pbcreturn = pbc_return;}
+  void setDefault(K3bVcdTrack* pbc_default = 0L) {m_pbcdefault = pbc_default;}
 
-  void setNext(K3bVcdTrack* nav_next) {m_next = nav_next;}
-  void setNext() {m_previous = 0L;}
-  K3bVcdTrack* Next() {return m_next;}
+  void setPreviousEnabled(bool pbc_previous_enabled) {m_pbcprevious_enabled = pbc_previous_enabled;}
+  void setNextEnabled(bool pbc_next_enabled) {m_pbcnext_enabled = pbc_next_enabled;}
+  void setReturnEnabled(bool pbc_return_enabled) {m_pbcreturn_enabled = pbc_return_enabled;}
+  void setDefaultEnabled(bool pbc_default_enabled) {m_pbcdefault_enabled = pbc_default_enabled;}
 
-  void setReturn(K3bVcdTrack* nav_return) {m_return = nav_return;}
-  void setReturn() {m_return = 0L;}
-  K3bVcdTrack* Return() {return m_return;}
+  void setUserDefined(bool pbc_userdefined) {m_pbcuserdefined = pbc_userdefined;}
+  void setSegment(bool segment) {m_segment = segment;}
+        
+  K3bVcdTrack* Previous() {return m_pbcprevious;}
+  K3bVcdTrack* Next() {return m_pbcnext;}
+  K3bVcdTrack* Return() {return m_pbcreturn;}
+  K3bVcdTrack* Default() {return m_pbcdefault;}
 
-  void setDefault(K3bVcdTrack* nav_default) {m_default = nav_default;}
-  void setDefault() {m_default = 0L;}
-  K3bVcdTrack* Default() {return m_default;}
-  
+  bool isPreviousEnabled() {return m_pbcprevious_enabled;}
+  bool isNextEnabled() {return m_pbcnext_enabled;}
+  bool isReturnEnabled() {return m_pbcreturn_enabled;}
+  bool isDefaultEnabled() {return m_pbcdefault_enabled;}
       
+  bool isPbcUserDefined() {return m_pbcuserdefined;}
+  bool isSegment() {return m_segment;}
+  
   // video
   int mpegType() const {return m_mpegtype;}
   int mpegVideoVersion() const {return m_mpegvideoversion;}
@@ -118,11 +128,22 @@ class K3bVcdTrack
   
  protected:
   QList<K3bVcdTrack>* m_parent;
-  K3bVcdTrack* m_previous;
-  K3bVcdTrack* m_next;
-  K3bVcdTrack* m_return;
-  K3bVcdTrack* m_default;
-      
+
+  // PBC
+  K3bVcdTrack* m_pbcprevious;
+  K3bVcdTrack* m_pbcnext;
+  K3bVcdTrack* m_pbcreturn;
+  K3bVcdTrack* m_pbcdefault;
+
+  bool m_pbcprevious_enabled;
+  bool m_pbcnext_enabled;
+  bool m_pbcreturn_enabled;
+  bool m_pbcdefault_enabled;
+
+  bool m_pbcuserdefined;
+  bool m_segment;
+  /***************************/
+
   int m_filetype;
   QFile m_file;
   QString m_title;

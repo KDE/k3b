@@ -64,26 +64,21 @@ bool K3bVcdXmlView::write(const QString& fname)
     elemOption.setAttribute("value", "true");
   }
 
-
   // Relaxed aps
-  /*
-  if (m_doc->vcdOptions()->RelaxesAps()) {
+  if (m_doc->vcdOptions()->RelaxedAps()) {
       QDomElement elemOption;
       elemOption = addSubElement(xmlDoc, root, "option");
       elemOption.setAttribute("name", "relaxed aps");
-      elemOption.setAttribute("value", "false");
+      elemOption.setAttribute("value", "true");
   }    
-  */
 
   // Update scan offsets
-  /*
   if (m_doc->vcdOptions()->UpdateScanOffsets()) {
       QDomElement elemOption;
       elemOption = addSubElement(xmlDoc, root, "option");
       elemOption.setAttribute("name", "update scan offsets");
-      elemOption.setAttribute("value", "false");
+      elemOption.setAttribute("value", "true");
   }
-  */
 
 
   // create info element
@@ -91,7 +86,7 @@ bool K3bVcdXmlView::write(const QString& fname)
   addSubElement(xmlDoc, elemInfo, "album-id", m_doc->vcdOptions()->albumId().upper());
   addSubElement(xmlDoc, elemInfo, "volume-count", m_doc->vcdOptions()->volumeCount());
   addSubElement(xmlDoc, elemInfo, "volume-number", m_doc->vcdOptions()->volumeNumber());
-  addSubElement(xmlDoc, elemInfo, "restriction", "0");
+  addSubElement(xmlDoc, elemInfo, "restriction", m_doc->vcdOptions()->Restriction());
 
 
   // create pvd element
@@ -104,9 +99,14 @@ bool K3bVcdXmlView::write(const QString& fname)
 
 
   // create filesystem element
+  QDomElement elemFileSystem = addSubElement(xmlDoc, root, "filesystem");
+
+  // SEGMENT folder, some standalone DVD-Player need this
+  if (m_doc->vcdOptions()->SegmentFolder())
+    addFolderElement(xmlDoc, elemFileSystem, "SEGMENT");
+  
   // create cdi element
   if (m_doc->vcdOptions()->CdiSupport()) {
-    QDomElement elemFileSystem = addSubElement(xmlDoc, root, "filesystem");
     QDomElement elemFolder = addFolderElement(xmlDoc, elemFileSystem, "CDI");
 
     addFileElement(xmlDoc, elemFolder, locate("data", "k3b/cdi/cdi_imag.rtf"), "CDI_IMAG.RTF", true);
@@ -120,16 +120,35 @@ bool K3bVcdXmlView::write(const QString& fname)
       addFileElement(xmlDoc, elemFolder, locate("data", "k3b/cdi/cdi_vcd.cfg"), "CDI_VCD.CFG");
   }
 
+//  // create segment-items element
+//  QDomElement elemsegmentItems = addSubElement(xmlDoc, root, "segment-items");
+
   // create sequence-items element
   QDomElement elemsequenceItems = addSubElement(xmlDoc, root, "sequence-items");
 
   // Add Tracks to XML
   QDomElement elemsequenceItem;
+  QDomElement elemsegmentItem;
   QListIterator<K3bVcdTrack> it( *m_doc->tracks() );
   for( ; it.current(); ++it ) {
-    elemsequenceItem = addSubElement(xmlDoc, elemsequenceItems, "sequence-item");
-    elemsequenceItem.setAttribute("src", QString("%1").arg(QFile::encodeName(it.current()->absPath())));
-    elemsequenceItem.setAttribute("id", QString("sequence-%1").arg(it.current()->index()));
+    if (!it.current()->isSegment()) {
+      elemsequenceItem = addSubElement(xmlDoc, elemsequenceItems, "sequence-item");
+      elemsequenceItem.setAttribute("src", QString("%1").arg(QFile::encodeName(it.current()->absPath())));
+      elemsequenceItem.setAttribute("id", QString("sequence-%1").arg(QString::number( it.current()->index() ).rightJustify( 3, '0' ) ));
+      if (m_doc->vcdOptions()->PbcEnabled() ) {
+        // TODO: pbc
+      }
+    }
+    else {
+      /*
+      elemsegmentItem = addSubElement(xmlDoc, elemsegmentItems, "segment-item");
+      elemsegmentItem.setAttribute("src", QString("%1").arg(QFile::encodeName(it.current()->absPath())));
+      elemsegmentItem.setAttribute("id", QString("segment-%1").arg(QString::number(it.current()->index() ).rightJustify( 3, '0' ) ));
+      */
+      if (m_doc->vcdOptions()->PbcEnabled() ) {
+        // TODO: pbc
+      }
+    }
   }
 
   QString xmlString = xmlDoc.toString();

@@ -407,6 +407,7 @@ void K3bVcdTrackDialog::setupPbcTab()
   m_labelAfterTimeout = new QLabel( i18n( "after timeout playing" ), groupPlay, "m_labelTimeout" );
 
   m_comboAfterTimeout = new QComboBox( groupPlay, "m_comboAfterTimeout" );
+  m_comboAfterTimeout->setMaximumWidth(280);
   m_comboAfterTimeout->setEnabled(false);
   
   groupPlayLayout->addWidget( labelPlaying, 1, 0 );
@@ -438,17 +439,22 @@ void K3bVcdTrackDialog::setupPbcTab()
   m_pbc_return = new QComboBox( groupPbc, "m_pbc_return" );
   m_pbc_default = new QComboBox( groupPbc, "m_pbc_default" );
 
+  m_pbc_previous->setMaximumWidth(280);
+  m_pbc_next->setMaximumWidth(280);
+  m_pbc_return->setMaximumWidth(280);
+  m_pbc_default->setMaximumWidth(280);
+  
   groupPbcLayout->addWidget(labelPbc_previous, 2, 0);
-  groupPbcLayout->addWidget(m_pbc_previous, 2, 1);
+  groupPbcLayout->addWidget(m_pbc_previous, 3, 0);
 
-  groupPbcLayout->addWidget(labelPbc_next, 3, 0);
-  groupPbcLayout->addWidget(m_pbc_next, 3, 1);
+  groupPbcLayout->addWidget(labelPbc_next, 4, 0);
+  groupPbcLayout->addWidget(m_pbc_next, 5, 0);
 
-  groupPbcLayout->addWidget(labelPbc_return, 4, 0);
-  groupPbcLayout->addWidget(m_pbc_return, 4, 1);
+  groupPbcLayout->addWidget(labelPbc_return, 6, 0);
+  groupPbcLayout->addWidget(m_pbc_return, 7, 0);
 
-  groupPbcLayout->addWidget(labelPbc_default, 5, 0);
-  groupPbcLayout->addWidget(m_pbc_default, 5, 1);
+  groupPbcLayout->addWidget(labelPbc_default, 8, 0);
+  groupPbcLayout->addWidget(m_pbc_default, 9, 0);
 
 
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -460,6 +466,7 @@ void K3bVcdTrackDialog::setupPbcTab()
   m_check_usekeys = new QCheckBox( i18n("Use numeric keys"), groupKey, "m_check_usekeys" );
   // m_list_keys = new QListView( groupKey, "m_list_keys" );
   m_list_keys = new K3bListView( groupKey, "m_list_keys" );
+  m_list_keys->setMaximumWidth(280);
   m_list_keys->setSorting(0);
   m_list_keys->addColumn(i18n("Key"));
   m_list_keys->addColumn(i18n("Playing"));
