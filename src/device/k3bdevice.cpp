@@ -1410,13 +1410,11 @@ bool K3bCdDevice::CdDevice::readRawToc( K3bCdDevice::Toc& toc ) const
 }
 
 
-K3bCdDevice::AlbumCdText K3bCdDevice::CdDevice::readCdText( unsigned int trackCount ) const
+K3bCdDevice::AlbumCdText K3bCdDevice::CdDevice::readCdText() const
 {
   // if the device is already opened we do not close it
   // to allow fast multible method calls in a row
   bool needToClose = !isOpen();
-
-  bool success = false;
 
   K3bCdDevice::AlbumCdText textData;
 
@@ -1424,152 +1422,12 @@ K3bCdDevice::AlbumCdText K3bCdDevice::CdDevice::readCdText( unsigned int trackCo
     unsigned char* data = 0;
     int dataLen = 0;
     
-    if( trackCount <= 0 ) {
-      // we need to determine the number of tracks first
-      if( readTocPmaAtip( &data, dataLen, 0, 0, 1 ) ) {
-	trackCount = data[3];
-
-	delete [] data;
-      }
-      else
-	kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": unable to determine number of tracks." << endl;
-    }
-
-    // if we failed to determine the trackCount it's still <= 0
-    if( trackCount > 0 ) {
-      if( readTocPmaAtip( &data, dataLen, 5, false, 0 ) ) {
-	if( dataLen > 4 ) {
-	  textData.resize( trackCount );
-
-	  cdtext_pack* pack = (cdtext_pack*)&data[4];
-
-	  kdDebug() << endl << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": CD_TEXT:" << endl;
-	  kdDebug() << " id1    | id2    | id3    | charps | blockn | dbcc | data           | crc |" << endl;
+    if( readTocPmaAtip( &data, dataLen, 5, false, 0 ) ) {
+      textData.setRawPackData( data, dataLen );
       
-	  for( int i = 0; i < (dataLen-4)/18; ++i ) {
-	    QString s;
-	    s += QString( " %1 |" ).arg( pack[i].id1, 6, 16 );
-	    s += QString( " %1 |" ).arg( pack[i].id2, 6 );
-	    s += QString( " %1 |" ).arg( pack[i].id3, 6 );
-	    s += QString( " %1 |" ).arg( pack[i].charpos, 6 );
-	    s += QString( " %1 |" ).arg( pack[i].blocknum, 6 );
-	    s += QString( " %1 |" ).arg( pack[i].dbcc, 4 );
-	    char str[12];
-	    sprintf( str, "%c%c%c%c%c%c%c%c%c%c%c%c",
-		     pack[i].data[0] == '\0' ? '°' : pack[i].data[0],
-		     pack[i].data[1] == '\0' ? '°' : pack[i].data[1],
-		     pack[i].data[2] == '\0' ? '°' : pack[i].data[2],
-		     pack[i].data[3] == '\0' ? '°' : pack[i].data[3],
-		     pack[i].data[4] == '\0' ? '°' : pack[i].data[4],
-		     pack[i].data[5] == '\0' ? '°' : pack[i].data[5],
-		     pack[i].data[6] == '\0' ? '°' : pack[i].data[6],
-		     pack[i].data[7] == '\0' ? '°' : pack[i].data[7],
-		     pack[i].data[8] == '\0' ? '°' : pack[i].data[8],
-		     pack[i].data[9] == '\0' ? '°' : pack[i].data[9],
-		     pack[i].data[10] == '\0' ? '°' : pack[i].data[10],
-		     pack[i].data[11] == '\0' ? '°' : pack[i].data[11] );
-	    s += QString( " %1 |" ).arg( "'" + QCString(str,13) + "'", 14 );
-	    //      s += QString( " %1 |" ).arg( QString::fromLatin1( (char*)pack[i].crc, 2 ), 3 );
-	    kdDebug() << s << endl;
-
-
-	    //
-	    // pack.data has a length of 12
-	    //
-	    // id1 tells us the tracknumber of the data (0 for global)
-	    // data may contain multible \0. In that case after every \0 the track number increases 1
-	    //
-
-	    char* nullPos = (char*)pack[i].data - 1;
-	
-	    unsigned int trackNo = pack[i].id2;
-	    while( nullPos && trackNo <= trackCount ) {
-	      char* nextNullPos = (char*)::memchr( nullPos+1, '\0', 11 - (nullPos - (char*)pack[i].data) );
-	      QString txtstr;	    
-	      if( nextNullPos ) // take all chars up to the next null
-		txtstr = QString::fromLocal8Bit( (char*)nullPos+1, nextNullPos - nullPos - 1 );
-	      else // take all chars to the end of the pack data (12 bytes)
-		txtstr = QString::fromLocal8Bit( (char*)nullPos+1, 11 - (nullPos - (char*)pack[i].data) );
-	  
-	      switch( pack[i].id1 ) {
-	      case 0x80: // Title
-		if( trackNo == 0 )
-		  textData.m_title.append( txtstr );
-		else
-		  textData.m_trackCdText[trackNo-1].m_title.append( txtstr );
-		break;
-
-	      case 0x81: // Performer
-		if( trackNo == 0 )
-		  textData.m_performer.append( txtstr );
-		else
-		  textData.m_trackCdText[trackNo-1].m_performer.append( txtstr );
-		break;
-
-	      case 0x82: // Writer
-		if( trackNo == 0 )
-		  textData.m_songwriter.append( txtstr );
-		else
-		  textData.m_trackCdText[trackNo-1].m_songwriter.append( txtstr );
-		break;
-
-	      case 0x83: // Composer
-		if( trackNo == 0 )
-		  textData.m_composer.append( txtstr );
-		else
-		  textData.m_trackCdText[trackNo-1].m_composer.append( txtstr );
-		break;
-
-	      case 0x84: // Arranger
-		if( trackNo == 0 )
-		  textData.m_arranger.append( txtstr );
-		else
-		  textData.m_trackCdText[trackNo-1].m_arranger.append( txtstr );
-		break;
-
-	      case 0x85: // Message
-		if( trackNo == 0 )
-		  textData.m_message.append( txtstr );
-		else
-		  textData.m_trackCdText[trackNo-1].m_message.append( txtstr );
-		break;
-
-	      case 0x86: // Disc identification
-		// only global
-		if( trackNo == 0 )
-		  textData.m_discId.append( txtstr );
-		break;
-
-	      case 0x8e: // Upc or isrc
-		if( trackNo == 0 )
-		  textData.m_upcEan.append( txtstr );
-		else
-		  textData.m_trackCdText[trackNo-1].m_isrc.append( txtstr );
-		break;
-
-		// TODO: support for binary data
-		// 0x88: TOC 
-		// 0x89: second TOC
-		// 0x8f: Size information
-
-	      default:
-		break;
-	      }
-	  
-	      trackNo++;
-	      nullPos = nextNullPos;
-	    }
-	  }
-	}
-	else
-	  kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << " zero-sized CD-TEXT: " << dataLen << endl; 
-
-	delete [] data;
-
-	success = true;
-      }
-    } // valid trackCount
-
+      delete [] data;
+    }
+    
     if( needToClose )
       close();
   }

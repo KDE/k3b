@@ -316,9 +316,8 @@ namespace K3bCdDevice
 
     /**
      * Read the CD-TEXT of an audio or mixed-mode CD.
-     * @param trackCount if specified this method doed not need to determine them which saves time.
      */
-    AlbumCdText readCdText( unsigned int trackCount = 0 ) const;
+    AlbumCdText readCdText() const;
     
     /**
      * @return The DataMode of the track

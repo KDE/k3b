@@ -222,7 +222,7 @@ QRegExp K3b::Msf::regExp()
 
 K3b::Msf K3b::Msf::fromSeconds( double ms )
 {
-  return K3b::Msf( ceil(ms*75.0) );
+  return K3b::Msf( static_cast<int>( ::ceil(ms*75.0) ) );
 }
 
 

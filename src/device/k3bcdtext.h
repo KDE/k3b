@@ -20,8 +20,6 @@
 #include <qstring.h>
 #include <qvaluevector.h>
 
-#include <kdebug.h>
-
 
 namespace K3bCdDevice
 {
@@ -82,6 +80,8 @@ namespace K3bCdDevice
       QString m_arranger;
       QString m_message;
       QString m_isrc;
+
+      friend class AlbumCdText;
     };
 
   class AlbumCdText
@@ -89,12 +89,15 @@ namespace K3bCdDevice
       friend class CdDevice;
 
     public:
-      AlbumCdText() {
-      }
+      AlbumCdText();
+      AlbumCdText( const unsigned char* data, int len );
+      AlbumCdText( const QByteArray& );
+      AlbumCdText( int size );
 
-      AlbumCdText( int size ) {
-	resize( size );
-      }
+      void setRawPackData( const unsigned char*, int );
+      void setRawPackData( const QByteArray& );
+
+      QByteArray rawPackData() const;
 
       unsigned int count() const {
 	return m_trackCdText.count();
@@ -129,17 +132,7 @@ namespace K3bCdDevice
 	return true;
       }
 
-      void clear() {
-	m_trackCdText.clear();
-	m_title.setLength(0);
-	m_performer.setLength(0);
-	m_songwriter.setLength(0);
-	m_composer.setLength(0);
-	m_arranger.setLength(0);
-	m_message.setLength(0);
-	m_discId.setLength(0);
-	m_upcEan.setLength(0);
-      }
+      void clear();
 
       const QString& title() const { return m_title; }
       const QString& performer() const { return m_performer; }
@@ -163,29 +156,7 @@ namespace K3bCdDevice
       const TrackCdText& trackCdText( int i ) const { return m_trackCdText[i]; }
       void addTrackCdText( const TrackCdText& t ) { m_trackCdText.append(t); }
 
-      void debug() {
-	// debug the stuff
-	kdDebug() << "CD-TEXT data:" << endl
-		  << "Global:" << endl
-		  << "  Title:      " << title() << endl
-		  << "  Performer:  " << performer() << endl
-		  << "  Songwriter: " << songwriter() << endl
-		  << "  Composer:   " << composer() << endl
-		  << "  Arranger:   " << arranger() << endl
-		  << "  Message:    " << message() << endl
-		  << "  Disc ID:    " << discId() << endl
-		  << "  Upc Ean:    " << upcEan() << endl;
-	for( unsigned int i = 0; i < m_trackCdText.count(); ++i ) {
-	  kdDebug() << "Track " << (i+1) << ":" << endl
-		    << "  Title:      " << trackCdText(i).title() << endl
-		    << "  Performer:  " << trackCdText(i).performer() << endl
-		    << "  Songwriter: " << trackCdText(i).songwriter() << endl
-		    << "  Composer:   " << trackCdText(i).composer() << endl
-		    << "  Arranger:   " << trackCdText(i).arranger() << endl
-		    << "  Message:    " << trackCdText(i).message() << endl
-		    << "  Isrc:       " << trackCdText(i).isrc() << endl;
-	}
-      }
+      void debug();
 	
     private:
       // TODO: remove this (see above)
