@@ -29,12 +29,10 @@
 #include <qstringlist.h>
 #include <qregexp.h>
 #include <qtimer.h>
-#include <qdatetime.h>
 
 #include <stdlib.h>
 
 
-static QTime s_time;
 
 
 K3bCddbQuery::K3bCddbQuery( QObject* parent, const char* name )
@@ -51,13 +49,22 @@ K3bCddbQuery::~K3bCddbQuery()
 
 void K3bCddbQuery::query( const K3bToc& toc )
 {
-  s_time = QTime::currentTime();
-
   m_bQueryFinishedEmited = false;
   m_toc = toc;
-  m_queryResult.clear();
+  m_inexactMatches.clear();
 
   QTimer::singleShot( 0, this, SLOT(doQuery()) );
+}
+
+
+void K3bCddbQuery::queryMatch( const K3bCddbResultHeader& header )
+{
+  m_header = header;
+  m_result = K3bCddbResultEntry();
+  m_result.category = header.category;
+  m_result.discid = header.discid;
+
+  QTimer::singleShot( 0, this, SLOT(doMatchQuery()) );
 }
 
 
@@ -71,8 +78,6 @@ const QStringList& K3bCddbQuery::categories()
 
 bool K3bCddbQuery::parseEntry( QTextStream& stream, K3bCddbResultEntry& entry )
 {
-  kdDebug() << "(K3bCddbQuery) parsing after " << s_time.msecsTo(QTime::currentTime()) << " msecs." << endl;
-
   entry.rawData = "";
 
   // parse data
@@ -238,22 +243,18 @@ QString K3bCddbQuery::queryString() const
 }
 
 
-bool K3bCddbQuery::parseExactMatch( const QString &line, K3bCddbResultEntry& entry )
+bool K3bCddbQuery::parseMatchHeader( const QString& line, K3bCddbResultHeader& header )
 {
-  QStringList buffer = QStringList::split( " ", line.mid(4) );
-  if( buffer.size() < 3 )
-    return false;
-  QString cat = buffer[0];
-  QString discid = buffer[1];
-  QString title = buffer[2];
-
-  kdDebug() << "(K3bCddbQuery) Found exact match: '" << cat << "' '" << discid << "' '" << title << "'" << endl;
-
-  emit infoMessage( i18n("Found exact match") );
-
-  entry.category = cat;
-  entry.discid = discid;
-
+  // format: category id title
+  // where title could be artist and title splitted with a /
+  header.category = line.section( ' ', 0, 0 );
+  header.discid = line.section( ' ', 1, 1 );
+  header.title = line.mid( header.category.length() + header.discid.length() + 2 );
+  int slashPos = header.title.find( "/" );
+  if( slashPos > 0 ) {
+    header.artist = header.title.left(slashPos).stripWhiteSpace();
+    header.title = header.title.mid( slashPos+1 ).stripWhiteSpace();
+  }
   return true;
 }
 

@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
@@ -12,23 +12,6 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-/***************************************************************************
-                          k3bcddbpquery.h  -  description
-                             -------------------
-    begin                : Sun Oct 7 2001
-    copyright            : (C) 2001 by Sebastian Trueg
-    email                : trueg@informatik.uni-freiburg.de
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
-
 
 #ifndef K3BCDDBP_QUERY_H
 #define K3BCDDBP_QUERY_H
@@ -38,6 +21,7 @@
 
 #include <qstring.h>
 #include <qvaluelist.h>
+#include <qtextstream.h>
 
 class QSocket;
 
@@ -59,10 +43,10 @@ class K3bCddbpQuery : public K3bCddbQuery
   void slotReadyRead();
   void slotError( int e );
   void doQuery();
+  void doMatchQuery();
 
  private:
   void cddbpQuit();
-  bool readFirstEntry();
   enum State { GREETING, HANDSHAKE, PROTO, QUERY, QUERY_DATA, READ, READ_DATA, QUIT };
 
   int m_state;
@@ -70,8 +54,8 @@ class K3bCddbpQuery : public K3bCddbQuery
   int m_port;
 
   QSocket* m_socket;
+  QTextStream m_stream;
 
-  QValueList<K3bCddbResultEntry> m_matches;
   QString m_parsingBuffer;
 };
 

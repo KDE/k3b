@@ -22,6 +22,16 @@
 #include <qstringlist.h>
 
 
+class K3bCddbResultHeader
+{
+ public:
+  QString category;
+  QString title;
+  QString artist;
+  QString discid;
+};
+
+
 class K3bCddbResultEntry
 {
  public:

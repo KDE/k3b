@@ -56,7 +56,7 @@ class K3bAudioCdView : public K3bCdContentsView
  private slots:
   void slotContextMenu( KListView*, QListViewItem*, const QPoint& );
   void slotItemRenamed( QListViewItem*, const QString&, int );
-  void slotCddbQueryFinished( bool success );
+  void slotCddbQueryFinished( int );
   void slotTrackSelectionChanged( QListViewItem* );
 
   void slotEditTrackCddb();

@@ -24,7 +24,6 @@
 #include <device/k3bmsf.h>
 #include <cddb/k3bcddb.h>
 #include <cddb/k3bcddbquery.h>
-#include <k3bcddbmultientriesdialog.h>
 #include <k3btoolbox.h>
 #include <kcutlabel.h>
 #include <k3bstdguiitems.h>
@@ -39,6 +38,7 @@
 #include <klineedit.h>
 #include <kcombobox.h>
 #include <kstandarddirs.h>
+#include <kdialogbase.h>
 
 #include <qlayout.h>
 #include <qheader.h>
@@ -162,10 +162,10 @@ K3bAudioCdView::K3bAudioCdView( QWidget* parent, const char *name )
 
   connect( m_cddb, SIGNAL(infoMessage(const QString&)),
 	   k3bMain(), SLOT(showBusyInfo(const QString&)) );
-  connect( m_cddb, SIGNAL(queryFinished(bool)),
+  connect( m_cddb, SIGNAL(queryFinished(int)),
 	   k3bMain(), SLOT(endBusy()) );
-  connect( m_cddb, SIGNAL(queryFinished(bool)),
-	   this, SLOT(slotCddbQueryFinished(bool)) );
+  connect( m_cddb, SIGNAL(queryFinished(int)),
+	   this, SLOT(slotCddbQueryFinished(int)) );
 
   initActions();
   slotTrackSelectionChanged(0);
@@ -426,63 +426,63 @@ void K3bAudioCdView::queryCddb()
 
   if( c->readBoolEntry( "use local cddb query", true ) || 
       c->readBoolEntry( "use remote cddb", false ) ) {
+
+    // disable all interaction
+    m_trackView->setEnabled(false);
+    m_toolBox->setEnabled(false);
+
     m_cddb->query( m_diskInfo.toc );
   }
 }
 
 
-void K3bAudioCdView::slotCddbQueryFinished( bool success )
+void K3bAudioCdView::slotCddbQueryFinished( int error )
 {
   k3bMain()->endBusy();
 
-  if( success ) {
-    K3bCddbResult result = m_cddb->result();
+  if( error == K3bCddbQuery::SUCCESS ) {
+    m_cddbInfo = m_cddb->result();
 
-    if( result.foundEntries() == 0 ) {
-      KMessageBox::information( this, i18n("No CDDB entry found"), i18n("CDDB") );
+    // save the entry locally
+    // K3bCddb only saves if it is configured, otherwise does nothing
+    m_cddb->saveEntry( m_cddbInfo );
+
+    //       kdDebug() << "cddb info:" << endl;
+    //       kdDebug() << "DTITLE:  '" << m_cddbInfo.cdTitle << "'" << endl;
+    //       kdDebug() << "DARTIST: '" << m_cddbInfo.cdArtist << "'" << endl;
+    //       kdDebug() << "DEXT:    '" << m_cddbInfo.cdExtInfo << "'" << endl;
+    //       kdDebug() << "DISCID:  '" << m_cddbInfo.discid << "'" << endl;
+
+    //       for( QStringList::const_iterator it = m_cddbInfo.titles.begin();
+    // 	   it != m_cddbInfo.titles.end(); ++it ) {
+    // 	kdDebug() << "TTITLE:  '" << *it << "'" << endl;
+    //       }
+    //       for( QStringList::const_iterator it = m_cddbInfo.artists.begin();
+    // 	   it != m_cddbInfo.artists.end(); ++it ) {
+    // 	kdDebug() << "TARTIST: '" << *it << "'" << endl;
+    //       }
+    //       for( QStringList::const_iterator it = m_cddbInfo.extInfos.begin();
+    // 	   it != m_cddbInfo.extInfos.end(); ++it ) {
+    // 	kdDebug() << "TEXT:    '" << *it << "'" << endl;
+    //       }
+
+    // now update the listview
+    for( QListViewItemIterator it( m_trackView ); it.current(); ++it ) {
+      AudioTrackViewItem* item = (AudioTrackViewItem*)it.current();
+      item->updateCddbData( m_cddbInfo );
     }
-    else {
-      int lastSelectedCddbEntry = 0;
-      if( result.foundEntries() > 1 ) {
-	lastSelectedCddbEntry = K3bCddbMultiEntriesDialog::selectCddbEntry( result, this );
-      }
-      m_cddbInfo = result.entry( lastSelectedCddbEntry );
 
-      // save the entry locally
-      // K3bCddb only saves if it is configured, otherwise does nothing
-      m_cddb->saveEntry( m_cddbInfo );
-
-//       kdDebug() << "cddb info:" << endl;
-//       kdDebug() << "DTITLE:  '" << m_cddbInfo.cdTitle << "'" << endl;
-//       kdDebug() << "DARTIST: '" << m_cddbInfo.cdArtist << "'" << endl;
-//       kdDebug() << "DEXT:    '" << m_cddbInfo.cdExtInfo << "'" << endl;
-//       kdDebug() << "DISCID:  '" << m_cddbInfo.discid << "'" << endl;
-
-//       for( QStringList::const_iterator it = m_cddbInfo.titles.begin();
-// 	   it != m_cddbInfo.titles.end(); ++it ) {
-// 	kdDebug() << "TTITLE:  '" << *it << "'" << endl;
-//       }
-//       for( QStringList::const_iterator it = m_cddbInfo.artists.begin();
-// 	   it != m_cddbInfo.artists.end(); ++it ) {
-// 	kdDebug() << "TARTIST: '" << *it << "'" << endl;
-//       }
-//       for( QStringList::const_iterator it = m_cddbInfo.extInfos.begin();
-// 	   it != m_cddbInfo.extInfos.end(); ++it ) {
-// 	kdDebug() << "TEXT:    '" << *it << "'" << endl;
-//       }
-
-      // now update the listview
-      for( QListViewItemIterator it( m_trackView ); it.current(); ++it ) {
-	AudioTrackViewItem* item = (AudioTrackViewItem*)it.current();
-	item->updateCddbData( m_cddbInfo );
-      }
-
-      updateDisplay();
-    }
+    updateDisplay();
+  }
+  else if( error == K3bCddbQuery::NO_ENTRY_FOUND ) {
+    KMessageBox::information( this, i18n("No CDDB entry found"), i18n("CDDB") );
   }
   else {
     KMessageBox::information( this, m_cddb->errorString(), i18n("Cddb error") );
   }
+
+  m_trackView->setEnabled(true);
+  m_toolBox->setEnabled(true);
 }
 
 

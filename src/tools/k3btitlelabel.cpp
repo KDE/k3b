@@ -83,7 +83,7 @@ void K3bTitleLabel::drawContents( QPainter* p )
   p->save();
 
   QRect r = contentsRect();
-  p->fillRect( r, QColor( 205, 210, 255 ) );
+  p->eraseRect( r );
 
   QFont f(font());
   f.setBold(true);

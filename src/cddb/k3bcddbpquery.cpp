@@ -18,18 +18,18 @@
 #include <qstringlist.h>
 #include <qsocket.h>
 #include <qtextstream.h>
-#include <qdatetime.h>
 
 #include <klocale.h>
 #include <kdebug.h>
 
-static QTime s_time;
+
 
 
 K3bCddbpQuery::K3bCddbpQuery( QObject* parent, const char* name )
   :K3bCddbQuery( parent, name )
 {
   m_socket = new QSocket( this );
+  m_stream.setDevice( m_socket );
 
   connect( m_socket, SIGNAL(connected()), this, SLOT(slotConnected()) );
   connect( m_socket, SIGNAL(hostFound()), this, SLOT(slotHostFound()) );
@@ -46,19 +46,30 @@ K3bCddbpQuery::~K3bCddbpQuery()
 
 void K3bCddbpQuery::doQuery()
 {
-  s_time = QTime::currentTime();
-
   setError( WORKING );
 
-  // TODO: set maximum cddb protocol level (5) with "cddb proto"
-
   m_state = GREETING;
-  m_matches.clear();
 
   // connect to the server
 
   m_socket->connectToHost( m_server, m_port );
   emit infoMessage( i18n("Searching %1 on port %2").arg(m_server).arg(m_port) );
+}
+
+
+void K3bCddbpQuery::doMatchQuery()
+{
+  // we should still be connected
+  // TODO: check this
+
+  QString read = QString( "cddb read %1 %2").arg( header().category ).arg( header().discid );
+  
+  m_state = READ;
+  m_parsingBuffer = "";
+  
+  kdDebug() <<  "(K3bCddbpQuery) Read: " << read << endl;
+
+  m_stream << read << endl << flush;
 }
 
 
@@ -70,8 +81,6 @@ void K3bCddbpQuery::slotHostFound()
 
 void K3bCddbpQuery::slotConnected()
 {
-  kdDebug() << "(K3bCddbQuery) connected after " << s_time.msecsTo(QTime::currentTime()) << " msecs." << endl;
-  s_time = QTime::currentTime();
   emit infoMessage( i18n("Connected") );
 }
 
@@ -86,20 +95,14 @@ void K3bCddbpQuery::slotConnectionClosed()
 void K3bCddbpQuery::cddbpQuit()
 {
   m_state = QUIT;
-  QTextStream stream( m_socket );
-  stream << "quit" << endl << flush;
+  m_stream << "quit" << endl << flush;
 }
 
 
 void K3bCddbpQuery::slotReadyRead()
 {
-  kdDebug() << "(K3bCddbQuery) read ready after " << s_time.msecsTo(QTime::currentTime()) << " msecs." << endl;
-  s_time = QTime::currentTime();
-
-  QTextStream stream( m_socket );
-
   while( m_socket->canReadLine() ) {
-    QString line = stream.readLine();
+    QString line = m_stream.readLine();
 
     //    kdDebug() << "(K3bCddbpQuery) line: " << line << endl;
 
@@ -109,8 +112,7 @@ void K3bCddbpQuery::slotReadyRead()
 	emit infoMessage( i18n("OK, read access") );
 	m_state = HANDSHAKE;
 
-	QTextStream stream( m_socket );
-	stream << "cddb hello " << handshakeString() << endl << flush;
+	m_stream << "cddb hello " << handshakeString() << endl << flush;
       }
 
       else {
@@ -126,8 +128,7 @@ void K3bCddbpQuery::slotReadyRead()
 
 	m_state = PROTO;
 
-	QTextStream stream( m_socket );
-	stream << "proto 5" << endl << flush;
+	m_stream << "proto 5" << endl << flush;
       }
 
       else {
@@ -146,33 +147,19 @@ void K3bCddbpQuery::slotReadyRead()
 	// just ignore the reply since it's not important for the functionality
 	m_state = QUERY;
 	
-	QTextStream stream( m_socket );
-	stream << queryString() << endl << flush;
+	m_stream << queryString() << endl << flush;
 	break;
       }
 
     case QUERY:
       if( getCode( line ) == 200 ) {
 	// parse exact match and send a read command
-	QString buffer = line.mid( 4 );
-	int pos = buffer.find( " " );
-	QString cat = buffer.left( pos );
-	buffer = buffer.mid( pos + 1 );
-	pos = buffer.find( " " );
-	QString discid = buffer.left( pos );
-	buffer = buffer.mid( pos + 1 );
-	QString title = buffer.stripWhiteSpace();
-
-	kdDebug() << "(K3bCddbpQuery) Found exact match: '" << cat << "' '" << discid << "' '" << title << "'" << endl;
+	K3bCddbResultHeader header;
+	parseMatchHeader( line.mid( 4 ), header );
 
 	emit infoMessage( i18n("Found exact match") );
 
-	K3bCddbResultEntry entry;
-	entry.category = cat;
-	entry.discid = discid;
-	m_matches.append( entry );
-
-	readFirstEntry();
+	queryMatch( header );
       }
 
       else if( getCode( line ) == 210 ) {
@@ -212,17 +199,14 @@ void K3bCddbpQuery::slotReadyRead()
 	// finished query
 	// go on reading
 
-	readFirstEntry();
+	emit inexactMatches( this );
+	return;
       }
       else {
-	QStringList match = QStringList::split( " ", line );
-
 	kdDebug() << "(K3bCddbpQuery) inexact match: " << line << endl;
-
-	K3bCddbResultEntry entry;
-	entry.category = match[0];
-	entry.discid = match[1];
-	m_matches.append( entry );
+	K3bCddbResultHeader header;
+	parseMatchHeader( line, header );
+	m_inexactMatches.append( header );
       }
       break;
 
@@ -235,7 +219,6 @@ void K3bCddbpQuery::slotReadyRead()
 
       else {
 	emit infoMessage( i18n("Could not read match") );
-	m_matches.erase( m_matches.begin() );  // remove the unreadable match
 	setError( READ_ERROR );
 	cddbpQuit();
       }
@@ -251,17 +234,10 @@ void K3bCddbpQuery::slotReadyRead()
 	kdDebug() << "(K3bCddbpQuery) query finished." << endl;
 
 	QTextStream strStream( m_parsingBuffer, IO_ReadOnly );
-	K3bCddbResultEntry entry = *m_matches.begin();
+	parseEntry( strStream, result() );
 
-	parseEntry( strStream, entry );
-
-	queryResult().addEntry( entry );
-	m_matches.erase( m_matches.begin() );
-	
-	if( !readFirstEntry() ) {
-	  setError( SUCCESS );
-	  cddbpQuit();
-	}
+	setError( SUCCESS );
+	cddbpQuit();
       }
 
       else {
@@ -274,25 +250,6 @@ void K3bCddbpQuery::slotReadyRead()
       break;
     }
   }
-}
-
-
-bool K3bCddbpQuery::readFirstEntry()
-{
-  if( m_matches.isEmpty() )
-    return false;
-
-  QString read = QString( "cddb read %1 %2").arg( m_matches.first().category ).arg( m_matches.first().discid );
-  
-  m_state = READ;
-  m_parsingBuffer = "";
-  
-  kdDebug() <<  "(K3bCddbpQuery) Read: " << read << endl;
-
-  QTextStream stream( m_socket );
-  stream << read << endl << flush;
-
-  return true;
 }
 
 

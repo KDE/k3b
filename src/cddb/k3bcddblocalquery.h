@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -38,8 +38,11 @@ class K3bCddbLocalQuery : public K3bCddbQuery
 
  protected:
   void doQuery();
+  void doMatchQuery();
 
  private:
+  QString preparePath( const QString& p );
+
   QString m_cddbDir;
   QValueList<K3bCddbResultEntry> m_matches;
 };

@@ -1,6 +1,6 @@
 /*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -43,10 +43,6 @@ class K3bAudioRipThread : public QObject, public QThread
   void setDevice( K3bDevice* dev ) { m_device = dev; }
   void setTrackToRip( unsigned int track ) { m_track = track; }
 
-#if QT_VERSION < 0x031000
-  void terminate();
-#endif
-
  signals:
   void output( const QByteArray& );
 
@@ -79,10 +75,6 @@ class K3bAudioRipThread : public QObject, public QThread
   long m_readSectors;
 
   QObject* m_eventReceiver;
-
-#if QT_VERSION < 0x031000
-  Qt::HANDLE thread_id;
-#endif
 
   // this friend function will call createStatus(long,int)
   friend void paranoiaCallback(long, int);

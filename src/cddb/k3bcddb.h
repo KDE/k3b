@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -49,7 +49,7 @@ class K3bCddb : public QObject
    * Do NOT call this before queryResult has
    * been emitted
    */
-  const K3bCddbResult& result() const;
+  const K3bCddbResultEntry& result() const;
 
  public slots:  
   /** query a cd and connect to the queryFinished signal */
@@ -58,7 +58,7 @@ class K3bCddb : public QObject
   void saveEntry( const K3bCddbResultEntry& );
 
  signals:
-  void queryFinished( bool success );
+  void queryFinished( int error );
   void submitFinished( bool success );
   void infoMessage( const QString& );
 
@@ -67,6 +67,7 @@ class K3bCddb : public QObject
   void remoteQuery();
   void slotQueryFinished( K3bCddbQuery* );
   void slotSubmitFinished( K3bCddbSubmit* );
+  void slotMultibleMatches( K3bCddbQuery* );
 
  private:
   K3bCddbQuery* getQuery( const QString& );

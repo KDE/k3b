@@ -32,7 +32,7 @@
 
 #include "device/k3btoc.h"
 #include "device/k3btrack.h"
-
+#include <k3bcddbmultientriesdialog.h>
 
 
 K3bCddb::K3bCddb( QObject* parent, const char* name )
@@ -120,12 +120,18 @@ void K3bCddb::remoteQuery()
 }
 
 
+void K3bCddb::slotMultibleMatches( K3bCddbQuery* query )
+{
+  query->queryMatch( K3bCddbMultiEntriesDialog::selectCddbEntry( query, 0 ) );
+}
+
+
 void K3bCddb::slotQueryFinished( K3bCddbQuery* query )
 {
   m_lastUsedQuery = query;
 
   if( query->error() == K3bCddbQuery::SUCCESS ) {
-    emit queryFinished( true );
+    emit queryFinished( K3bCddbQuery::SUCCESS );
   }
   else if( query == m_localQuery ) {
     m_iCurrentQueriedLocalDir++;
@@ -136,7 +142,7 @@ void K3bCddb::slotQueryFinished( K3bCddbQuery* query )
       remoteQuery();
     }
     else {
-      emit queryFinished( false );
+      emit queryFinished( query->error() );
     }
   }
   else {
@@ -145,7 +151,7 @@ void K3bCddb::slotQueryFinished( K3bCddbQuery* query )
       remoteQuery();
     }
     else {
-      emit queryFinished( false );
+      emit queryFinished( query->error() );
     }
   }
 }
@@ -164,6 +170,8 @@ K3bCddbQuery* K3bCddb::getQuery( const QString& s )
 	       this, SIGNAL(infoMessage(const QString&)) );
       connect( m_httpQuery, SIGNAL(queryFinished(K3bCddbQuery*)),
 	       this, SLOT(slotQueryFinished(K3bCddbQuery*)) );
+      connect( m_httpQuery, SIGNAL(inexactMatches(K3bCddbQuery*)),
+	       this, SLOT(slotMultibleMatches(K3bCddbQuery*)) );
     }
 
     m_httpQuery->setServer( server, port );
@@ -182,6 +190,8 @@ K3bCddbQuery* K3bCddb::getQuery( const QString& s )
 	       this, SIGNAL(infoMessage(const QString&)) );
       connect( m_cddbpQuery, SIGNAL(queryFinished(K3bCddbQuery*)),
 	       this, SLOT(slotQueryFinished(K3bCddbQuery*)) );
+      connect( m_cddbpQuery, SIGNAL(inexactMatches(K3bCddbQuery*)),
+	       this, SLOT(slotMultibleMatches(K3bCddbQuery*)) );
     }
 
     m_cddbpQuery->setServer( server, port );
@@ -199,6 +209,8 @@ void K3bCddb::localQuery()
 	     this, SIGNAL(infoMessage(const QString&)) );
     connect( m_localQuery, SIGNAL(queryFinished(K3bCddbQuery*)),
 	     this, SLOT(slotQueryFinished(K3bCddbQuery*)) );
+    connect( m_localQuery, SIGNAL(inexactMatches(K3bCddbQuery*)),
+	     this, SLOT(slotMultibleMatches(K3bCddbQuery*)) );
   }
   
   m_localQuery->setCddbDir( m_localCddbDirs[m_iCurrentQueriedLocalDir] );
@@ -230,9 +242,9 @@ QString K3bCddb::errorString() const
 }
 
 
-const K3bCddbResult& K3bCddb::result() const
+const K3bCddbResultEntry& K3bCddb::result() const
 {
-  return m_lastUsedQuery->queryResult();
+  return m_lastUsedQuery->result();
 }
 
 

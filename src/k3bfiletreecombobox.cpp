@@ -179,6 +179,9 @@ void K3bFileTreeComboBox::popdown()
 void K3bFileTreeComboBox::slotGoUrl()
 {
   // TODO: check if it's a device or an url
+  KURL url;
+  url.setPath( currentText() );
+  emit urlExecuted( url );
 }
 
 

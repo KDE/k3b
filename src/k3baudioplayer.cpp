@@ -15,7 +15,7 @@
 
 
 #include "k3baudioplayer.h"
-#include "tools/k3bglobals.h"
+#include <device/k3bmsf.h>
 #include "kcutlabel.h"
 
 #include <qlabel.h>
@@ -80,7 +80,7 @@ QString K3bPlayListViewItem::text( int c ) const
 
   case 1:
     if( m_length > 0 )
-      return K3b::framesToString( m_length );
+      return K3b::Msf(m_length).toString(false);
 
   default:
     return "";
@@ -157,8 +157,8 @@ K3bAudioPlayer::K3bAudioPlayer( QWidget* parent, const char* name )
   // initialize
   // ------------------------------------------------------------------------
   m_labelFilename    = new KCutLabel( i18n("no file"), this );
-  m_labelOverallTime = new QLabel( "00:00:00", this );
-  m_labelCurrentTime = new QLabel( "00:00:00", this );
+  m_labelOverallTime = new QLabel( "00:00", this );
+  m_labelCurrentTime = new QLabel( "00:00", this );
 
   m_viewPlayList = new K3bPlayListView( this );
 
@@ -540,13 +540,13 @@ void K3bAudioPlayer::setCurrentItem( QListViewItem* item )
 
 void K3bAudioPlayer::slotUpdateCurrentTime( int time )
 {
-  m_labelCurrentTime->setText( K3b::framesToString( time*75 ) );
+  m_labelCurrentTime->setText( K3b::Msf( time*75 ).toString(false) );
 }
 
 
 void K3bAudioPlayer::slotUpdateLength( long time )
 {
-  m_labelOverallTime->setText( K3b::framesToString( time*75 ) );
+  m_labelOverallTime->setText( K3b::Msf( time*75 ).toString(false) );
 }
 
 

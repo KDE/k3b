@@ -82,7 +82,10 @@ K3bAudioRippingDialog::K3bAudioRippingDialog(const K3bDiskInfo& diskInfo,
        it != m_trackNumbers.end(); ++it ) {
     length += m_diskInfo.toc[*it].length();
   }
-  setTitle( i18n("CD Ripping"), i18n("1 track (%1)", "%n tracks (%1)", m_trackNumbers.count()).arg(length.toString()) );
+  setTitle( i18n("CD Ripping"), 
+	    i18n("1 track (%1)", "%n tracks (%1)", m_trackNumbers.count()).arg(length.toString()) );
+
+  m_radioWav->setChecked(true);
 }
 
 
@@ -99,6 +102,8 @@ void K3bAudioRippingDialog::setupGui()
   m_viewTracks->addColumn(i18n( "File Size") );
   m_viewTracks->addColumn(i18n( "Type") );
   m_viewTracks->addColumn(i18n( "Path") );
+  m_viewTracks->setSorting(-1);
+  m_viewTracks->setAllColumnsShowFocus(true);
 
 
   QTabWidget* mainTab = new QTabWidget( frame );
@@ -178,7 +183,7 @@ void K3bAudioRippingDialog::setupGui()
 
   Form1Layout->addWidget( m_viewTracks, 0, 0 );
   Form1Layout->addWidget( mainTab, 1, 0 );
-
+  Form1Layout->setRowStretch( 0, 1 );
 
   setStartButtonText( i18n( "Start Ripping" ), i18n( "Starts copying the selected tracks") );
 
@@ -326,8 +331,9 @@ void K3bAudioRippingDialog::refresh()
     }
 
     (void)new KListViewItem( m_viewTracks,
+			     m_viewTracks->lastItem(),
 			     filename,
-			     K3b::framesToString( m_diskInfo.toc[index].length(), false ),
+			     K3b::Msf(m_diskInfo.toc[index].length()).toString(),
 			     KIO::convertSize( fileSize ),
 			     (m_diskInfo.toc[index].type() == K3bTrack::AUDIO ? i18n("Audio") : i18n("Data") ),
 			     directory );

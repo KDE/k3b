@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -42,21 +42,26 @@ K3bCddbMultiEntriesDialog::K3bCddbMultiEntriesDialog( QWidget* parent, const cha
   setMinimumSize( 280, 200 );
 }
 
-int K3bCddbMultiEntriesDialog::selectCddbEntry( const K3bCddbResult& query, QWidget* parent )
+const K3bCddbResultHeader& K3bCddbMultiEntriesDialog::selectCddbEntry( K3bCddbQuery* query, QWidget* parent )
 {
   K3bCddbMultiEntriesDialog d( parent );
 
-  for( int i = 0; i < query.foundEntries(); i++ ) {
+  const QValueList<K3bCddbResultHeader> headers = query->getInexactMatches();
+
+  int i = 1;
+  for( QValueListConstIterator<K3bCddbResultHeader> it = headers.begin();
+       it != headers.end(); ++it ) {
     d.m_listBox->insertItem( QString::number(i) + " " + 
-			     query.entry(i).cdArtist + " - " + 
-			     query.entry(i).cdTitle + " (" + 
-			     query.entry(i).category + ")" );
+			     (*it).artist + " - " + 
+			     (*it).title + " (" + 
+			     (*it).category + ")" );
+    ++i;
   }
 
   d.m_listBox->setSelected( 0, true );
 
   d.exec();
-  return ( d.m_listBox->currentItem() >= 0 ? d.m_listBox->currentItem() : 0 );
+  return headers[ d.m_listBox->currentItem() >= 0 ? d.m_listBox->currentItem() : 0 ];
 }
 
 

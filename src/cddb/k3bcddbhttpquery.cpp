@@ -65,7 +65,20 @@ void K3bCddbHttpQuery::doQuery()
   setError( WORKING );
   m_state = QUERY;
 
-  m_matches.clear();
+  emit infoMessage( i18n("Searching %1 on port %2").arg(m_server).arg(m_port) );
+
+  if( !connectToServer() ) {
+    setError( CONNECTION_ERROR );
+    emit infoMessage( i18n("Could not connect to host %1").arg(m_server) );
+    emitQueryFinished();
+  }
+}
+
+
+void K3bCddbHttpQuery::doMatchQuery()
+{
+  setError( WORKING );
+  m_state = READ;
 
   if( !connectToServer() ) {
     setError( CONNECTION_ERROR );
@@ -93,13 +106,13 @@ void K3bCddbHttpQuery::slotConnected()
     kdDebug() << "(K3bCddbHttpQuery) Query: " + query << endl;
 
     QTextStream stream( m_socket );
-    stream << query << "\n";
-    //    m_socket->flush();
+    stream << query << endl;
+    m_socket->flush();
   }
   else if( m_state == READ ) {
     // send read command for first entry
     QString query = createHttpUrl();
-    query.append( QString( "?cmd=cddb+read+%1+%2").arg( m_matches.first().category ).arg( m_matches.first().discid ) );
+    query.append( QString( "?cmd=cddb+read+%1+%2").arg( header().category ).arg( header().discid ) );
     query.append( "&hello=" );
     query.append( handshakeString().replace( QRegExp( "\\s" ), "+" ) );
     query.append( "&proto=5" );
@@ -111,8 +124,8 @@ void K3bCddbHttpQuery::slotConnected()
     kdDebug() <<  "(K3bCddbHttpQuery) Read: " << query << endl;
 
     QTextStream stream( m_socket );
-    stream << query << "\n";
-    //    m_socket->flush();
+    stream << query << endl;
+    m_socket->flush();
   }
   else 
     kdDebug() << "(K3bCddbHttpQuery) Wrong state in http mode" << endl;
@@ -123,30 +136,10 @@ void K3bCddbHttpQuery::slotConnectionClosed()
 {
   emit infoMessage( i18n("Connection closed") );
 
-  if( m_state == QUERY ) {
-    // the query was not successfull
-
-    setError( QUERY_ERROR );
+  if( m_state != FINISHED ) {
+    // some error occured
+    setError( FAILURE );
     emitQueryFinished();
-  }
-  else if( m_state == READ ) {
-    // successfull query
-
-    if( m_matches.isEmpty() ) {
-      // all matches read.
-      // finish
-      if( error() != READ_ERROR )
-	setError( SUCCESS );
-      emitQueryFinished();
-    }
-    else {
-      // connect to host to send the read command
-      if( !connectToServer() ) {
-	emit infoMessage( i18n("Could not connect to host %1").arg(m_currentlyConnectingServer) );
-	setError( CONNECTION_ERROR );
-	emitQueryFinished();
-      }
-    }
   }
 }
 
@@ -165,11 +158,10 @@ void K3bCddbHttpQuery::slotReadyRead()
     case QUERY:
       if( getCode( line ) == 200 ) {
 	// parse exact match and send a read command
-	K3bCddbResultEntry entry;
-	if( parseExactMatch( line, entry ) )
-	  m_matches.append( entry );
+	K3bCddbResultHeader header;
+	parseMatchHeader( line.mid(4), header );
 
-	m_state = READ;
+	queryMatch( header );
       }
 
       else if( getCode( line ) == 210 ) {
@@ -193,6 +185,7 @@ void K3bCddbHttpQuery::slotReadyRead()
 	kdDebug() << "(K3bCddbHttpQuery) no match found" << endl;
 	emit infoMessage( i18n("No match found") );
 	setError(NO_ENTRY_FOUND);
+	m_state = FINISHED;
 	emitQueryFinished();
 	m_socket->close();
 	return;
@@ -202,6 +195,7 @@ void K3bCddbHttpQuery::slotReadyRead()
 	kdDebug() << "(K3bCddbHttpQuery) Error while querying: " << line << endl;
 	emit infoMessage( i18n("Error while querying") );
 	setError(QUERY_ERROR);
+	m_state = FINISHED;
 	emitQueryFinished();
 	m_socket->close();
 	return;
@@ -213,17 +207,18 @@ void K3bCddbHttpQuery::slotReadyRead()
 	// finished query
 	// go on reading
 
-	m_state = READ;
+
+	// here we have the inexact matches headers and should emit the
+	// inexactMatches signal
+	emit inexactMatches( this );
       }
       else {
-	QStringList match = QStringList::split( " ", line );
-
 	kdDebug() << "(K3bCddbHttpQuery) inexact match: " << line << endl;
 
-	K3bCddbResultEntry entry;
-	entry.category = match[0];
-	entry.discid = match[1];
-	m_matches.append( entry );
+	// create a new resultHeader
+	K3bCddbResultHeader header;
+	parseMatchHeader( line, header );
+	m_inexactMatches.append(header);
       }
       break;
 
@@ -236,8 +231,8 @@ void K3bCddbHttpQuery::slotReadyRead()
 
       else {
 	emit infoMessage( i18n("Could not read match") );
-	m_matches.erase( m_matches.begin() );  // remove the unreadable match
 	setError(READ_ERROR);
+	m_state = FINISHED;
 	emitQueryFinished();
 	m_socket->close();
 	return;
@@ -254,13 +249,13 @@ void K3bCddbHttpQuery::slotReadyRead()
 	kdDebug() << "(K3bCddbHttpQuery query finished." << endl;
 
 	QTextStream strStream( m_parsingBuffer, IO_ReadOnly );
-	K3bCddbResultEntry entry = *m_matches.begin();
-	parseEntry( strStream, entry );
+	parseEntry( strStream, result() );
 
-	queryResult().addEntry( entry );
-	m_matches.erase( m_matches.begin() );
-	
-	m_state = READ;
+	setError(SUCCESS);
+	m_state = FINISHED;
+	emitQueryFinished();
+	m_socket->close();
+	return;
       }
 
       else {
@@ -303,7 +298,6 @@ bool K3bCddbHttpQuery::connectToServer()
 
   m_socket->connectToHost( server, port );
   //  m_socket->setAddress( server, port );
-  emit infoMessage( i18n("Searching %1 on port %2").arg(server).arg(port) );
   //  return ( m_socket->startAsyncConnect() == 0 );
   return true;
 }

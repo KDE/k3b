@@ -41,13 +41,9 @@ void K3bCddbLocalQuery::doQuery()
   emit infoMessage( i18n("Searching entry in %1").arg( m_cddbDir ) );
   kapp->processEvents(); //BAD!
 
-  QString path = m_cddbDir;
-  if( path.startsWith( "~" ) )
-    path.replace( 0, 1, QDir::homeDirPath() );
-  else if( !path.startsWith( "/" ) )
-    path.prepend( QDir::homeDirPath() );
-  if( path[path.length()-1] != '/' )
-    path.append( "/" );
+  m_matches.clear();
+
+  QString path = preparePath( m_cddbDir );
 
   kdDebug() << "(K3bCddbLocalQuery) searching in dir " << path << " for " 
 	    << QString::number( toc().discId(), 16 ) << endl;
@@ -68,10 +64,13 @@ void K3bCddbLocalQuery::doQuery()
 	QTextStream t( &f );
 	
 	K3bCddbResultEntry entry;
-	entry.category = *it;
-	entry.discid = QString::number( toc().discId(), 16 );
 	parseEntry( t, entry );
-	queryResult().addEntry( entry );
+	K3bCddbResultHeader header;
+	header.discid = QString::number( toc().discId(), 16 );
+	header.category = *it;
+	header.title = entry.cdTitle;
+	header.artist = entry.cdArtist;
+	m_inexactMatches.append(header);
       }
     }
     else {
@@ -79,15 +78,54 @@ void K3bCddbLocalQuery::doQuery()
     }
   }
 
-  if( queryResult().foundEntries() > 0 ) {
+  if( m_matches.count() > 0 ) {
     setError( SUCCESS );
+    if( m_matches.count() == 1 ) {
+      queryMatch( m_inexactMatches.first() );
+    }
+    else {
+      emit inexactMatches( this );
+    }
   }
   else {
     setError( NO_ENTRY_FOUND );
+    emit queryFinished( this );
   }
+}
 
+
+void K3bCddbLocalQuery::doMatchQuery()
+{
+  QString path = preparePath( m_cddbDir ) + header().category + "/" + header().discid;
+
+  QFile f( path );
+  if( !f.open( IO_ReadOnly ) ) {
+    kdDebug() << "(K3bCddbLocalQuery) Could not open file" << endl;
+    setError( READ_ERROR );
+  }
+  else {
+    QTextStream t( &f );
+    
+    parseEntry( t, result() );
+    result().discid = header().discid;
+    result().category = header().category;
+    setError( SUCCESS );
+  }
   emit queryFinished( this );
 }
 
+
+QString K3bCddbLocalQuery::preparePath( const QString& p ) 
+{
+  QString path = p;
+  if( path.startsWith( "~" ) )
+    path.replace( 0, 1, QDir::homeDirPath() );
+  else if( !path.startsWith( "/" ) )
+    path.prepend( QDir::homeDirPath() );
+  if( path[path.length()-1] != '/' )
+    path.append( "/" );
+
+  return path;
+}
 
 #include "k3bcddblocalquery.moc"

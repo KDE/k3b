@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -43,6 +43,7 @@ class K3bCddbHttpQuery : public K3bCddbQuery
 
  protected slots:
   void doQuery();
+ void doMatchQuery();
   void slotConnected();
   void slotConnectionClosed();
   void slotReadyRead();
@@ -53,7 +54,7 @@ class K3bCddbHttpQuery : public K3bCddbQuery
   bool connectToServer();
   QString createHttpUrl();
 
-  enum State { QUERY, QUERY_DATA, READ, READ_DATA };
+  enum State { QUERY, QUERY_DATA, READ, READ_DATA, FINISHED };
 
   int m_state;
   QString m_server;
@@ -69,8 +70,6 @@ class K3bCddbHttpQuery : public K3bCddbQuery
   QString m_parsingBuffer;
   bool m_bUseProxyServer;
   bool m_bUseKdeSettings;
-
-  QValueList<K3bCddbResultEntry> m_matches;
 };
 
 #endif

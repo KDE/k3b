@@ -63,6 +63,7 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
   pixmapLabelLeft->setScaledContents( FALSE );
   layout4->addWidget( pixmapLabelLeft );
   m_labelTitle = new K3bTitleLabel( headerFrame, "m_labelTitle" );
+  m_labelTitle->setPaletteBackgroundColor( QColor( 205, 210, 255 ) );
   layout4->addWidget( m_labelTitle );
   layout4->setStretchFactor( m_labelTitle, 1 );
   QLabel* pixmapLabelRight = new QLabel( headerFrame, "pixmapLabelRight" );

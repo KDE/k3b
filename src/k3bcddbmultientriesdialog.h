@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -20,6 +20,7 @@
 #include <kdialogbase.h>
 
 #include "cddb/k3bcddbquery.h"
+#include "cddb/k3bcddbresult.h"
 
 
 class QStringList;
@@ -35,7 +36,7 @@ class K3bCddbMultiEntriesDialog : public KDialogBase
  public:
   ~K3bCddbMultiEntriesDialog();
   
-  static int selectCddbEntry( const K3bCddbResult& query, QWidget* parent = 0 );
+  static const K3bCddbResultHeader& selectCddbEntry( K3bCddbQuery* query, QWidget* parent = 0 );
 
  protected:
   K3bCddbMultiEntriesDialog( QWidget* parent = 0, const char* name = 0);

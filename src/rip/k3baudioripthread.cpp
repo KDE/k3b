@@ -1,6 +1,6 @@
 /*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -13,7 +13,6 @@
  * See the file "COPYING" for the exact licensing terms.
  */
  
-#ifdef QT_THREAD_SUPPORT
 
 #include "k3baudioripthread.h"
 #include "../device/k3bdevice.h"
@@ -26,10 +25,6 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-
-#if QT_VERSION < 0x031000
-#include <pthread.h>
-#endif
 
 // from cdda_paranoia.h
 #define PARANOIA_CB_READ           0
@@ -83,27 +78,10 @@ void K3bAudioRipThread::start( QObject* eventReceiver )
   QThread::start();
 }
 
-#if QT_VERSION < 0x031000
-void K3bAudioRipThread::terminate()
-{
-  if ( this->finished() || !this->running() )
-    return;
-  if ( ! this->thread_id )
-    return;
-
-  kdDebug() << QString("(K3bAudioRipThread) terminate thread, id: %1 (%2)").arg(this->thread_id).arg(QThread::currentThread()) << endl;
-  pthread_cancel( this->thread_id );
-}
-#endif
 
 
 void K3bAudioRipThread::run()
 {
-#if QT_VERSION < 0x031000
-  thread_id = QThread::currentThread();
-  kdDebug() << QString("(K3bAudioRipThread) start thread, id: %1").arg(this->thread_id) << endl;
-#endif
-
   if( !m_paranoiaLib ) {
     m_paranoiaLib = K3bCdparanoiaLib::create();
   }
@@ -273,4 +251,3 @@ void K3bAudioRipThread::createStatus( long sector, int status )
 
 #include "k3baudioripthread.moc"
 
-#endif

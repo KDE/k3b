@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -111,13 +111,13 @@ K3bAudioCdTextWidget::K3bAudioCdTextWidget( QWidget* parent, const char* name )
   QToolTip::add( m_editSongwriter, i18n("CD-TEXT information field") );
   QToolTip::add( m_editComposer, i18n("CD-TEXT information field") );
 
-  QWhatsThis::add( m_editDisc_id, i18n("") );
-  QWhatsThis::add( m_editUpc_ean, i18n("") );
-  QWhatsThis::add( m_editMessage, i18n("") );
-  QWhatsThis::add( m_editPerformer, i18n("") );
-  QWhatsThis::add( m_editArranger, i18n("") );
-  QWhatsThis::add( m_editTitle, i18n("") );
-  QWhatsThis::add( m_editSongwriter, i18n("") );
+//   QWhatsThis::add( m_editDisc_id, i18n("") );
+//   QWhatsThis::add( m_editUpc_ean, i18n("") );
+//   QWhatsThis::add( m_editMessage, i18n("") );
+//   QWhatsThis::add( m_editPerformer, i18n("") );
+//   QWhatsThis::add( m_editArranger, i18n("") );
+//   QWhatsThis::add( m_editTitle, i18n("") );
+//   QWhatsThis::add( m_editSongwriter, i18n("") );
 }
 
 
