@@ -62,8 +62,8 @@ K3bAudioOnTheFlyJob::K3bAudioOnTheFlyJob( K3bAudioDoc* doc )
 
   // testing
   //-----------------------
-  m_testFile = new QFile( "/home/trueg/download/test_k3b_job.cd" );
-  m_testFile->open( IO_WriteOnly );
+//   m_testFile = new QFile( "/home/trueg/download/test_k3b_job.cd" );
+//   m_testFile->open( IO_WriteOnly );
   //-----------------------
 
 }
@@ -404,8 +404,8 @@ void K3bAudioOnTheFlyJob::slotTryWritingToProcess()
 
     // testing
     //----------------------
-    m_testFile->writeBlock( m_currentWrittenData, dataLength );
-    m_testFile->flush();
+//     m_testFile->writeBlock( m_currentWrittenData, dataLength );
+//     m_testFile->flush();
     //----------------------
   }
 } 

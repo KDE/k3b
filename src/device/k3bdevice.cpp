@@ -89,7 +89,7 @@ bool K3bDevice::init()
 
   qDebug( "(K3bDevice) %s max write: %i", m_devicename.latin1(), m_maxWriteSpeed );
   qDebug( "(K3bDevice) %s max read : %i", m_devicename.latin1(), m_maxReadSpeed );
-  qDebug("");
+
   delete _scsiIf;
   return true;
 }
@@ -288,7 +288,7 @@ bool K3bDevice::block( bool block ) const
 
   ScsiIf *scsiIf = new ScsiIf( m_devicename.latin1() );
   if (scsiIf->sendCmd(cmd, 6, NULL, 0, NULL, 0) != 0) {
-    qDebug( "(K3bDevice) Cannot block/unblock device %s", devicename.latin1() );
+    qDebug( "(K3bDevice) Cannot block/unblock device %s", m_devicename.latin1() );
     delete scsiIf;
     return false;
   }

@@ -84,7 +84,7 @@ class K3bAudioOnTheFlyJob : public K3bBurnJob  {
 
 
   // testing
-  QFile* m_testFile;
+  //  QFile* m_testFile;
 		
  signals:
   void writingLeadOut();
