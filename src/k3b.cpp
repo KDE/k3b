@@ -532,26 +532,33 @@ K3bDoc* K3bMainWindow::openDocument(const KURL& url)
 {
   slotStatusMsg(i18n("Opening file..."));
 
-  // check, if document already open. If yes, set the focus to the first view
-  K3bDoc* doc = d->projectManager->findByUrl( url );
-  if( doc ) {
-    doc->view()->setFocus();
+  //
+  // First we check if this is an iso image in case someone wants to open one this way
+  //
+  if( !isCdDvdImageAndIfSoOpenDialog( url ) ) {
+    // check, if document already open. If yes, set the focus to the first view
+    K3bDoc* doc = d->projectManager->findByUrl( url );
+    if( doc ) {
+      doc->view()->setFocus();
+      return doc;
+    }
+    
+    doc = K3bDoc::openDocument( url );
+    
+    if( doc == 0 ) {
+      KMessageBox::error (this,i18n("Could not open document!"), i18n("Error!"));
+      return 0;
+    }
+    
+    actionFileOpenRecent->addURL(url);
+    
+    // create the window
+    createClient(doc);
+
     return doc;
   }
-
-  doc = K3bDoc::openDocument( url );
-
-  if( doc == 0 ) {
-    KMessageBox::error (this,i18n("Could not open document!"), i18n("Error!"));
+  else
     return 0;
-  }
-
-  actionFileOpenRecent->addURL(url);
-
-  // create the window
-  createClient(doc);
-
-  return doc;
 }
 
 
@@ -671,13 +678,8 @@ void K3bMainWindow::slotFileOpen()
 				      this, 
 				      i18n("Open File") );
   if( !url.isEmpty() ) {
-    //
-    // First we check if this is an iso image in case someone wants to open one this way
-    //
-    if( !isCdDvdImageAndIfSoOpenDialog( url ) ) {
-      openDocument(url);
-      actionFileOpenRecent->addURL( url );
-    }
+    openDocument(url);
+    actionFileOpenRecent->addURL( url );
   }
 }
 

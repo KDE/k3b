@@ -201,6 +201,22 @@ K3bDoc* K3bDoc::openDocument(const KURL& url )
     // try reading an old plain document
     QFile f( tmpfile );
     if ( f.open( IO_ReadOnly ) ) {
+      //
+      // First check if this is really an xml file beacuse if this is a very big file
+      // the setContent method blocks for a very long time
+      //
+      char test[5];
+      if( f.readBlock( test, 5 ) ) {
+	if( ::strncmp( test, "<?xml", 5 ) ) {
+	  kdDebug() << "(K3bDoc) " << url.path() << " seems to be no xml file." << endl;
+	  return 0;
+	}
+	f.reset();
+      }
+      else {
+	kdDebug() << "(K3bDoc) could not read from file." << endl;
+	return 0;
+      }
       if( xmlDoc.setContent( &f ) )
 	success = true;
       f.close();
