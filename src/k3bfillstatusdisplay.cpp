@@ -172,9 +172,9 @@ void K3bFillStatusDisplay::showSize()
 {
   m_actionShowMegs->setChecked( true );
 
-  m_action74Min->setText( i18n("%1 MB").arg(650) );
-  m_action80Min->setText( i18n("%1 MB").arg(700) );
-  m_action100Min->setText( i18n("%1 MB").arg(880) );
+  m_action74Min->setText( i18n("650 MB"));
+  m_action80Min->setText( i18n("700 MB"));
+  m_action100Min->setText( i18n("880 MB") );
 
   m_showTime = false;
   update();
@@ -184,9 +184,11 @@ void K3bFillStatusDisplay::showTime()
 {
   m_actionShowMinutes->setChecked( true );
 
-  m_action74Min->setText( i18n("%1 minutes").arg(74) );
-  m_action80Min->setText( i18n("%1 minutes").arg(80) );
-  m_action100Min->setText( i18n("%1 minutes").arg(100) );
+  // if you have more than three strings, it might be easier to
+  // use i18n("unused", "%n minutes", 74);
+  m_action74Min->setText( i18n("74 minutes") );
+  m_action80Min->setText( i18n("80 minutes") );
+  m_action100Min->setText( i18n("100 minutes") );
 
   m_showTime = true;
   update();
