@@ -231,7 +231,11 @@ void K3bDvdFormattingJob::slotStderrLine( const QString& line )
 
 void K3bDvdFormattingJob::slotProcessFinished( KProcess* p )
 {
-  if( p->normalExit() ) {
+  if( d->canceled ) {
+    emit canceled();
+    d->success = false;
+  }
+  else if( p->normalExit() ) {
     if( p->exitStatus() == 0 ) {
       emit infoMessage( i18n("Formatting successfully finished"), K3bJob::SUCCESS );
 

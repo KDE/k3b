@@ -431,7 +431,9 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   // With Debian's script it starts with cdrecord
   //
 
-  else if( line.startsWith( "cdrecord" ) || line.startsWith( m_cdrecordBinObject->path ) ) {
+  else if( line.startsWith( "cdrecord" ) || 
+	   line.startsWith( m_cdrecordBinObject->path ) ||
+	   line.startsWith( m_cdrecordBinObject->path.left(m_cdrecordBinObject->path.length()-5) ) ) {
     // get rid of the path and the following colon and space
     QString errStr = line.mid( line.find(':') + 2 );
 

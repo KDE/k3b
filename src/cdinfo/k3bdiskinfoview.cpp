@@ -344,7 +344,7 @@ void K3bDiskInfoView::createMediaInfoItems( const K3bCdDevice::NextGenerationDis
   KListViewItem* atipItem = new HeaderViewItem( m_infoView, m_infoView->lastItem(), i18n("Media") );
   QString typeStr;
   if( info.currentProfile() != -1 )
-    typeStr = K3bCdDevice::mediaTypeString( info.mediaType() );
+    typeStr = K3bCdDevice::mediaTypeString( info.currentProfile() );
   else if( info.mediaType() == -1 )
     typeStr = i18n("Unknown (probably CD-ROM)");
   else

@@ -3,7 +3,8 @@ Support Mp3 files starting with multiple ID3 tags.
 Improved ~ handling in the QuickDirSelector.
 Save/Load composer fields in audio projects
 Save/Load default DVD Copy reading device
-	
+Fixed cdrecord output parsing on Debian
+
 0.11.9
 Fixed data project size calculation (for good this time).
 	

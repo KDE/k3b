@@ -266,21 +266,28 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
       kdDebug() << "(K3bEmptyDiscWaiter) ------ found DVD+RW as wanted." << endl;
 
       if( dh->ngDiskInfo().diskState() == K3bCdDevice::STATE_EMPTY ) {
-	// empty - preformat without asking
-	prepareErasingDialog();
 
-	K3bDvdFormattingJob job;
-	job.setDevice( d->device );
-	job.setQuickFormat( true );
-	job.setForce( false );
-	job.setForceNoEject( true );
-	
-	d->erasingInfoDialog->setText( i18n("Preformatting DVD+RW") );
-	connect( &job, SIGNAL(finished(bool)), this, SLOT(slotErasingFinished(bool)) );
-	connect( &job, SIGNAL(percent(int)), d->erasingInfoDialog, SLOT(setProgress(int)) );
-	connect( d->erasingInfoDialog, SIGNAL(cancelClicked()), &job, SLOT(cancel()) );
-	job.start(dh);
-	d->erasingInfoDialog->exec(true);
+	// special case: the formatting job
+	if( d->wantedMediaState & (K3bCdDevice::STATE_COMPLETE|K3bCdDevice::STATE_EMPTY) ) {
+	  finishWaiting( K3bCdDevice::MEDIA_DVD_PLUS_RW );
+	}
+	else {	
+	  // empty - preformat without asking
+	  prepareErasingDialog();
+	  
+	  K3bDvdFormattingJob job;
+	  job.setDevice( d->device );
+	  job.setQuickFormat( true );
+	  job.setForce( false );
+	  job.setForceNoEject( true );
+	  
+	  d->erasingInfoDialog->setText( i18n("Preformatting DVD+RW") );
+	  connect( &job, SIGNAL(finished(bool)), this, SLOT(slotErasingFinished(bool)) );
+	  connect( &job, SIGNAL(percent(int)), d->erasingInfoDialog, SLOT(setProgress(int)) );
+	  connect( d->erasingInfoDialog, SIGNAL(cancelClicked()), &job, SLOT(cancel()) );
+	  job.start(dh);
+	  d->erasingInfoDialog->exec(true);
+	}
       }
       else {
 	if( d->wantedMediaState == K3bCdDevice::STATE_EMPTY ) {
