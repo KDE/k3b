@@ -86,14 +86,21 @@ K3bWelcomeWidget::Display::Display( QWidget* parent )
   dataDvdDocButton->setTextPosition( QToolButton::Under );
   copyCdButton->setTextPosition( QToolButton::Under );
 
+  // determine the needed button size (since all buttons should be equal in size
+  // we use the max of all sizes)
+  QSize buttonSize = audioDocButton->sizeHint();
+  buttonSize = buttonSize.expandedTo( dataDocButton->sizeHint() );
+  buttonSize = buttonSize.expandedTo( dataDvdDocButton->sizeHint() );
+  buttonSize = buttonSize.expandedTo( copyCdButton->sizeHint() );
+
   // position the buttons
-  QRect r( QPoint(80, 80), audioDocButton->sizeHint() );
+  QRect r( QPoint(80, 80), buttonSize );
   audioDocButton->setGeometry( r );
-  r.moveBy( audioDocButton->sizeHint().width(), 0 );
+  r.moveBy( buttonSize.width(), 0 );
   dataDvdDocButton->setGeometry( r );
-  r.moveBy( 0, audioDocButton->sizeHint().height() );
+  r.moveBy( 0, buttonSize.height() );
   copyCdButton->setGeometry( r );
-  r.moveBy( -1 * audioDocButton->sizeHint().width(), 0 );
+  r.moveBy( -1 * buttonSize.width(), 0 );
   dataDocButton->setGeometry( r );
 
   m_size = QSize( QMAX(20+m_header->widthUsed(), 80+(audioDocButton->width()*2)),
