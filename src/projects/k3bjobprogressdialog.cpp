@@ -434,6 +434,8 @@ void K3bJobProgressDialog::slotFinished( bool success )
 
   m_job = 0;
 
+  m_logFile.close();
+
   if( success ) {
     m_pixLabel->setPixmap( k3bthememanager->currentTheme()->pixmap( "k3b_progress_dialog_success" ) );
 
@@ -558,6 +560,18 @@ void K3bJobProgressDialog::slotStarted()
   m_startTime = QTime::currentTime();
   if( KMainWindow* w = dynamic_cast<KMainWindow*>(kapp->mainWidget()) )
     m_plainCaption = w->caption();
+
+  // open the log file
+  m_logFile.setName( locateLocal( "appdata", "lastlog.log", true ) );
+  if( m_logFile.open( IO_WriteOnly ) ) {
+    QTextStream s( &m_logFile );
+    s << "System" << endl;
+    s << "-----------------------" << endl;
+    s << "K3b Version: " + k3bcore->version() << endl;
+    s << "KDE Version: " + QString(KDE::versionString()) << endl;
+    s << "QT Version:  " + QString(qVersion()) << endl;
+    s << endl << flush;
+  }
 }
 
 
@@ -572,6 +586,8 @@ void K3bJobProgressDialog::slotUpdateTime()
 void K3bJobProgressDialog::slotDebuggingOutput( const QString& type, const QString& output )
 {
   m_debugOutputMap[type].append(output);
+  QTextStream s( &m_logFile );
+  s << "[" << type << "] " << output << endl << flush;
 }
 
 

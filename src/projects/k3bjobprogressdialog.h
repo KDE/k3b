@@ -22,6 +22,7 @@
 #include <k3bjobhandler.h>
 
 #include <qdatetime.h>
+#include <qfile.h>
 
 class QVBoxLayout;
 class QHBoxLayout;
@@ -142,6 +143,7 @@ class K3bJobProgressDialog : public KDialog, public K3bJobHandler
   K3bJob* m_job;
   QTimer* m_timer;
   QTime m_startTime;
+  QFile m_logFile;
 
   QMap<QString, QStringList> m_debugOutputMap;
 
