@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>709</width>
-            <height>618</height>
+            <width>674</width>
+            <height>651</height>
         </rect>
     </property>
     <property name="caption">
@@ -312,11 +312,11 @@
                         </property>
                         <property name="text">
                             <string>&lt;p&gt;&lt;ul&gt;
-&lt;li&gt;%a - Will be replaced by the artist of the track
-&lt;li&gt;%t - Will be replaced by the title of the track
-&lt;li&gt;%n - Will be replaced by the track number
-&lt;li&gt;%e - Will be replaced by extended information about the track
-&lt;li&gt;%g - Will be replaced by the genre of the CD
+&lt;li&gt;%a - artist of the track
+&lt;li&gt;%t - title of the track
+&lt;li&gt;%n - track number
+&lt;li&gt;%e - extended information about the track
+&lt;li&gt;%g - genre of the CD
 &lt;/ul&gt;</string>
                         </property>
                         <property name="alignment">
@@ -337,10 +337,10 @@
                         </property>
                         <property name="text">
                             <string>&lt;p&gt;&lt;ul&gt;
-&lt;li&gt;%r - Will be replaced by the album artist (differs from %a only on soundtracks or compilations)
-&lt;li&gt;%m - Will be replaced by the album title
-&lt;li&gt;%x - Will be replaced by extended information about the CD
-&lt;li&gt;%d - Will be replaced by the current date
+&lt;li&gt;%r - album artist (differs from %a only on soundtracks or compilations)
+&lt;li&gt;%m - album title
+&lt;li&gt;%x - extended information about the CD
+&lt;li&gt;%d - current date
 &lt;/ul&gt;</string>
                         </property>
                         <property name="alignment">

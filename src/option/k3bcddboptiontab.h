@@ -21,9 +21,13 @@ class K3bCddbOptionTab : public base_K3bCddbOptionTab
   
   void slotLocalDirAdd();
   void slotLocalDirRemove();
+  void slotLocalDirDown();
+  void slotLocalDirUp();
 
   void slotCddbServerAdd();
   void slotCddbServerRemove();
+  void slotCddbServerDown();
+  void slotCddbServerUp();
 
   void slotServerTypeChanged();
 

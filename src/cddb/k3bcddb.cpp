@@ -82,17 +82,17 @@ void K3bCddb::readConfig( KConfig* c )
   // old config <= 0.7.3
   if( !httpServer.isEmpty() ) {
     for( QStringList::iterator it = httpServer.begin(); it != httpServer.end(); ++it ) {
-      m_cddbServer.append( "http " + *it );
+      m_cddbServer.append( "Http " + *it );
     }
   }
   if( !cddbpServer.isEmpty() ) {
     for( QStringList::iterator it = cddbpServer.begin(); it != cddbpServer.end(); ++it ) {
-      m_cddbServer.append( "cddbp " + *it );
+      m_cddbServer.append( "Cddbp " + *it );
     }
   }
 
   if( m_cddbServer.isEmpty() )
-    m_cddbServer.append( "http freedb.org:80" );
+    m_cddbServer.append( "Http freedb.org:80" );
 }
 
 
@@ -152,7 +152,7 @@ K3bCddbQuery* K3bCddb::getQuery( const QString& s )
   QString server = buf[0];
   int port = buf[1].toInt();
 
-  if( s.startsWith("http") ) {
+  if( s.startsWith("Http") ) {
     if( !m_httpQuery ) {
       m_httpQuery = new K3bCddbHttpQuery( this );
       connect( m_httpQuery, SIGNAL(infoMessage(const QString&)),
