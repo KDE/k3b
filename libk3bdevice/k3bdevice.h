@@ -730,7 +730,12 @@ namespace K3bDevice
     void searchIndexTransitions( long start, long end, K3bDevice::Track& track ) const;
     void checkWriteModes();
     void checkForAncientWriters();
-    bool rawTocDataWithBcdValues( unsigned char* data, int dataLen ) const;
+
+    /**
+     * Internal method which checks if the raw toc data has bcd values or hex.
+     * @return 0 if hex, 1 if bcd, -1 if none
+     */
+    int rawTocDataWithBcdValues( unsigned char* data, int dataLen ) const;
 
     QString m_vendor;
     QString m_description;
