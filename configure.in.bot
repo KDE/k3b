@@ -44,10 +44,9 @@ echo ""
 
 if test x$compile_k3bsetup = xyes; then
         AC_DEFINE(HAVE_K3BSETUP,1,[defined if K3bSetup is compiled])
-	echo "K3bSetup will be compiled."
+	echo "Compile K3bSetup 2:                   yes"
 else
-	echo "K3bSetup disabled because it's outdated."
-	echo "May be enabled with the --with-k3bsetup switch."	
+	echo "Compile K3bSetup 2:                   no"
 fi
 echo "-----------------------------------------"
 echo ""

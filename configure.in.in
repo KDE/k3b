@@ -183,9 +183,9 @@ AC_SUBST(ARTS_LIBS)
 
 KDE_CHECK_THREADING
 
-compile_k3bsetup=no
+compile_k3bsetup=yes
 AC_ARG_WITH(k3bsetup, 
-	[  --with-k3bsetup        compile ancient K3bSetup],
+	[  --with-k3bsetup[=ARG]     do compile K3bSetup2 KControl Module (default=yes)],
 	[compile_k3bsetup=$withval]
 )
 AM_CONDITIONAL(with_k3bsetup1, [test x$compile_k3bsetup = xyes])

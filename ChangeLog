@@ -34,6 +34,11 @@ sox encoder plugin to encode to all audio formats supported by sox (will anyone 
 encoder plugin that let's you specify a commandline to encode the data. Typical example would be calling lame to
 	encode to mp3.
 much better TOC reading. K3b now displays multisession info.
+m3u Playlist creation for ripped audio files
+replaced the old K3bSetup with a quite simple KControl Module which is only able to change the
+	needed permission for devices and external programs. Everything else is nowadays done
+	by the distros.
+
 	
 0.9
 support for eMovix 0.8.0rc2

@@ -1,5 +1,5 @@
 
 picsdir = $(kde_datadir)/k3b/pics
-pics_DATA = k3b_splash.png k3b_cd_copy.png k3bprojectview_left.png k3bprojectview_left_short.png k3bprojectview_right.png k3b_probing_cd.png diskinfo_audio.png diskinfo_data.png diskinfo_dvd.png diskinfo_empty.png diskinfo_left.png diskinfo_mixed.png k3b_progress_dialog_failed.png k3b_progress_dialog_success.png diskinfo_right.png k3b_3d_logo.png
+pics_DATA = k3b_splash.png k3b_cd_copy.png k3bprojectview_left.png k3bprojectview_left_short.png k3bprojectview_right.png k3b_probing_cd.png diskinfo_audio.png diskinfo_data.png diskinfo_dvd.png diskinfo_empty.png diskinfo_left.png diskinfo_mixed.png k3b_progress_dialog_failed.png k3b_progress_dialog_success.png diskinfo_right.png k3b_3d_logo.png k3bsetup2_guy.png
 
 EXTRA_DIST = $(pics_DATA)

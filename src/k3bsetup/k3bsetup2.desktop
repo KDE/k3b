@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Comment=K3bSetup 2 - modify permission for CD/DVD burning with K3b
+Exec=kcmshell k3bsetup2
+Keywords=K3bSetup2,k3bsetup2
+Name=K3bSetup 2
+Terminal=false
+Type=Application
+Icon=k3b
+X-KDE-FactoryName=k3bsetup2
+X-KDE-Library=k3bsetup2
+X-KDE-ModuleType=Library
+X-KDE-RootOnly=true
