@@ -94,8 +94,12 @@ int K3bCdDevice::openDevice( const char* name, bool write )
     fd = ::open( name, flags );
 
   if( fd < 0 ) {
-    kdDebug() << "(K3bDevice::Device) Error: could not open device " << name << endl;
+    kdDebug() << "(K3bDevice::Device) Error: could not open device " 
+	      << name << ( write ? "for writing" : "for reading" ) << endl;
     fd = -1;
+
+    if( write )
+      return openDevice( name, false );
   }
 
   return fd;
