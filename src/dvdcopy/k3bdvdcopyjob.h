@@ -59,6 +59,7 @@ class K3bDvdCopyJob : public K3bBurnJob
  private slots:
   void slotDiskInfoReady( K3bCdDevice::DeviceHandler* );
   void slotReaderProgress( int );
+  void slotReaderProcessedSize( int, int ); 
   void slotWriterProgress( int );
   void slotReaderFinished( bool );
   void slotWriterFinished( bool );

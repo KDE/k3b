@@ -200,7 +200,7 @@ void K3bDvdCopyJob::prepareReader()
   if( !d->readcdReader ) {
     d->readcdReader = new K3bReadcdReader( this );
     connect( d->readcdReader, SIGNAL(percent(int)), this, SLOT(slotReaderProgress(int)) );
-    connect( d->readcdReader, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSubSize(int, int)) );
+    connect( d->readcdReader, SIGNAL(processedSize(int, int)), this, SLOT(slotReaderProcessedSize(int, int)) );
     connect( d->readcdReader, SIGNAL(finished(bool)), this, SLOT(slotReaderFinished(bool)) );
     connect( d->readcdReader, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
     connect( d->readcdReader, SIGNAL(newTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
@@ -229,6 +229,7 @@ void K3bDvdCopyJob::prepareWriter()
   connect( d->writerJob, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
   connect( d->writerJob, SIGNAL(percent(int)), this, SLOT(slotWriterProgress(int)) );
   connect( d->writerJob, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSize(int, int)) );
+  connect( d->writerJob, SIGNAL(processedSubSize(int, int)), this, SIGNAL(processedSubSize(int, int)) );
   connect( d->writerJob, SIGNAL(buffer(int)), this, SIGNAL(bufferStatus(int)) );
   connect( d->writerJob, SIGNAL(writeSpeed(int, int)), this, SIGNAL(writeSpeed(int, int)) );
   connect( d->writerJob, SIGNAL(finished(bool)), this, SLOT(slotWriterFinished(bool)) );
@@ -258,6 +259,16 @@ void K3bDvdCopyJob::slotReaderProgress( int p )
     emit percent( p );
   else if( !m_onTheFly )
     emit percent( p/2 );
+}
+
+
+void K3bDvdCopyJob::slotReaderProcessedSize( int p, int c )
+{
+  if( !m_onTheFly || m_onlyCreateImage )
+    emit processedSubSize( p, c );
+
+  if( m_onlyCreateImage )
+    emit processedSize( p, c );
 }
 
 

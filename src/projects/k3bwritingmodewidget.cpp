@@ -102,8 +102,9 @@ void K3bWritingModeWidget::initWhatsThisHelp()
   if( d->modes & K3b::WRITING_MODE_RES_OVWR )
     wh += "<p><b>" + i18n("Restricted Overwrite") + "</b><br>" + s_ovwHelp + "</p>";
 
-  wh += "<p>Be aware that the writing mode is ignored when writing DVD+R(W) since "
-    "there is only one way to write them.";
+  if( d->modes & K3b::WRITING_MODE_RES_OVWR )
+    wh += "<p>" + i18n("Be aware that the writing mode is ignored when writing DVD+R(W) since "
+		       "there is only one way to write them.");
 
   QWhatsThis::add( this, wh );
 }

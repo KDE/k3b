@@ -55,7 +55,7 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const cha
 
   QHBox* cdSizeBox = new QHBox( this );
   cdSizeBox->setSpacing( KDialog::spacingHint() );
-  (void)new QLabel( i18n( "Size of CD" ), cdSizeBox, "TextLabel4" );
+  (void)new QLabel( i18n( "Size of Project" ), cdSizeBox, "TextLabel4" );
   m_labelCdSize = new QLabel( "                        ", cdSizeBox, "m_labelCdSize" );
   m_labelCdSize->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
 
