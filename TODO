@@ -1,6 +1,7 @@
 - audio ripping to mp3 (ogg)
 - video cd Mpeg Stills, photoalbum, portfolio
 - video cd Interactive Menues (automenues)
+- video cd split long mpegs (volume set)
 * video cd Navigation
 - make audio decoding pluggable
 * udf support
