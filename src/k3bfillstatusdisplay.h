@@ -33,7 +33,7 @@ class QToolButton;
 
 namespace K3bCdDevice {
   class DeviceHandler;
-};
+}
 
 
 /**

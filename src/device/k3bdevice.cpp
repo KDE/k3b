@@ -52,7 +52,7 @@ typedef Q_INT32 size32;
 #ifdef HAVE_RESMGR
 extern "C" {
 #include <resmgr.h>
-};
+}
 #endif
 
 #ifndef IDE_DISK_MAJOR

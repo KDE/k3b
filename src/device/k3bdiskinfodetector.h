@@ -68,7 +68,7 @@ namespace K3bCdDevice
     DiskInfo m_info;
     K3bTcWrapper* m_tcWrapper;
   };
-};
+}
 
 typedef K3bCdDevice::DiskInfoDetector K3bDiskInfoDetector;
 

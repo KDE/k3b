@@ -206,7 +206,7 @@ namespace K3bCdDevice
     uint8_t last;
     toc_track_descriptor_t descriptor;
   } toc_pma_atip_t;
-};
+}
 
 
 #endif

@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -22,7 +22,7 @@
 
 namespace KNotify {
   class KNotifyWidget;
-};
+}
 
 
 class K3bNotifyOptionTab : public QWidget

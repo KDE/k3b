@@ -140,7 +140,7 @@ namespace K3bCdDevice {
    * Takes care of SCSI and ATAPI.
    */
   QString externalBinDeviceParameter( K3bDevice* dev, const K3bExternalBin* );
-};
+}
 
 typedef K3bCdDevice::DeviceManager K3bDeviceManager;
 #endif

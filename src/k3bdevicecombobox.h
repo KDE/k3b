@@ -21,7 +21,7 @@
 
 namespace K3bCdDevice {
   class CdDevice;
-};
+}
 
 typedef K3bCdDevice::CdDevice K3bDevice;
 

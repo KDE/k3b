@@ -34,6 +34,6 @@ namespace K3b
    * Example: "some long text" -> "some...ext"
    */
   QString squeezeTextToWidth( const QFontMetrics& fm, const QString& fullText, int cutWidth );
-};
+}
 
 #endif

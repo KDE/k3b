@@ -67,7 +67,7 @@ QIODevice* KoFilterDev::createFilterDevice(KFilterBase* base, QFile* file)
 
    base->setDevice(file);
    return new KoFilterDev(base);
-};
+}
 #endif
 
 //static

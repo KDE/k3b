@@ -45,7 +45,7 @@ namespace K3bCdDevice
     int m_mode;
     QString m_title;
   };
-};
+}
 
 typedef K3bCdDevice::Track K3bTrack;
 

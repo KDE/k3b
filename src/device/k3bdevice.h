@@ -313,7 +313,7 @@ namespace K3bCdDevice
    * uses the resmgr
    */
   int openDevice( const char* name );
-};
+}
 
 typedef K3bCdDevice::CdDevice K3bDevice;
 

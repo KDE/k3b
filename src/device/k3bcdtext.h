@@ -103,6 +103,6 @@ namespace K3bCdDevice
 
       QValueVector<TrackCdText> m_trackCdText;
     };
-};
+}
 
 #endif

@@ -48,7 +48,7 @@ namespace K3bCdDevice
     int m_firstSector;
     //  int m_lastSector;
   };
-};
+}
 
 typedef K3bCdDevice::Toc K3bToc;
 

@@ -45,6 +45,6 @@ namespace K3bStdGuiItems
    * Make sure to set a layout margin of at least 2.
    */
   QFrame* purpleFrame( QWidget* parent = 0, const char* name = 0 );
-};
+}
 
 #endif

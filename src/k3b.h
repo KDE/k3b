@@ -55,7 +55,7 @@ class K3bStatusBarManager;
 
 namespace K3bCdDevice {
   class DeviceManager;
-};
+}
 
 /** Access to the "lonely" K3bMainWindow Object */
 K3bMainWindow* k3bMain();

@@ -77,7 +77,7 @@ namespace K3b
   bool operator>( const Msf&, const Msf& );
 
   kdbgstream& operator<<( kdbgstream&, const Msf& );
-};
+}
 
 typedef K3b::Msf K3bMsf;
 

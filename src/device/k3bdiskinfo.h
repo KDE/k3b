@@ -79,7 +79,7 @@ namespace K3bCdDevice
 
     CdDevice* device;
   };
-};
+}
 
 typedef K3bCdDevice::DiskInfo K3bDiskInfo;
 

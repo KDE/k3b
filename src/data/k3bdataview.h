@@ -30,7 +30,7 @@ class K3bFillStatusDisplay;
 
 namespace KIO {
   class Job;
-};
+}
 
 
 /**

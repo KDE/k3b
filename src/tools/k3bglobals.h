@@ -88,6 +88,6 @@ namespace K3b
 
   K3bVersion kernelVersion();
   QString systemName();
-};
+}
 
 #endif

@@ -32,7 +32,7 @@ class KAboutData;
 
 namespace K3bCdDevice {
   class DeviceManager;
-};
+}
 
 
 /**
