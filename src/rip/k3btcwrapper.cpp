@@ -89,11 +89,19 @@ void K3bTcWrapper::slotTcprobeExited( KProcess *p){
     //kdDebug() << "(K3bTcWrapper) Tcprobe error\n" << m_errorBuffer << endl;
     kdDebug() << "(K3bTcWrapper) Tcprobe finished" << endl;
     // split to lines
+    bool isDvd = false;
     QStringList errorLines = QStringList::split( "\n", m_errorBuffer );
     if( !m_firstProbeDone ) {
         // check dvd
-        QStringList::Iterator str = errorLines.begin();
-        if( !(*str).contains("tcprobe") && !(*str).contains("DVD image/device") ) {
+        for( QStringList::Iterator str = errorLines.begin(); str != errorLines.end(); str++ ) {
+            kdDebug() << (*str) << endl;
+            if( !(*str).contains("tcprobe") && !(*str).contains("DVD image/device") ) {
+                continue;
+            } else{
+                isDvd = true;
+            }
+        }
+        if( !isDvd ){
             kdDebug() << "(K3bTcWrapper) no readable dvd." << endl;
             emit successfulDvdCheck( false );
             return;
@@ -105,7 +113,13 @@ void K3bTcWrapper::slotTcprobeExited( KProcess *p){
             return;
         }
         // chekc
-        QString titles = errorLines[ 1 ];
+        QString titles; // errorLines[ m_titleLineIndex ];
+        for( QStringList::Iterator str = errorLines.begin(); str != errorLines.end(); str++ ) {
+            if( (*str).contains("DVD title") ) {
+                titles = (*str);
+                break;
+            }
+        }
         kdDebug() << titles << endl;
         int index = titles.find("DVD title");
         titles = titles.mid(index+10);
@@ -124,7 +138,13 @@ void K3bTcWrapper::slotTcprobeExited( KProcess *p){
     }
     if( m_currentTitle <= m_allTitle ){
         K3bDvdContent con( parseTcprobe() );
-        QString titles = errorLines[ 1 ];
+        QString titles; // = errorLines[ m_titleLineIndex ];
+        for( QStringList::Iterator str = errorLines.begin(); str != errorLines.end(); str++ ) {
+            if( (*str).contains("DVD title") ) {
+                titles = (*str);
+                break;
+            }
+        }
         kdDebug() << titles << endl;
         int index = titles.find(":");
         int end = titles.find("chap");
