@@ -65,7 +65,12 @@ void K3bTcWrapper::runTcprobe()
   //K3bProcess *p = new K3bProcess();
   emit tcprobeTitleParsed( m_currentTitle );
 
-  *p << bin->path << "-i" <<  m_device->blockDeviceName() << "-T" << QString::number(m_currentTitle);
+  bool usemountpoint = true;
+#ifndef Q_OS_FREEBSD
+  usemountpoint = false;
+#endif
+
+  *p << bin->path << "-i" <<  ( usemountpoint ? m_device->mountPoint() : m_device->blockDeviceName() ) << "-T" << QString::number(m_currentTitle);
   //p->setSplitStdout( true );
   connect( p, SIGNAL(receivedStderr(KProcess*, char*, int)), this, SLOT(slotParseTcprobeError(KProcess*, char*, int)) );
   connect( p, SIGNAL(receivedStdout(KProcess*, char*, int)), this, SLOT(slotParseTcprobeOutput(KProcess*, char*, int)) );
@@ -77,7 +82,7 @@ void K3bTcWrapper::runTcprobe()
   if( !p->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
     // something went wrong when starting the program
     // it "should" be the executable
-    kdDebug() << "(K3bDirView) Error during checking drive for DVD." << endl;
+    kdDebug() << "(K3bTcWrapper) Error during checking drive for DVD." << endl;
   }
 }
 
