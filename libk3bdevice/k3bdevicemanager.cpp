@@ -267,6 +267,10 @@ void K3bDevice::DeviceManager::LinuxDeviceScan()
   }
   info.close();
 
+#ifdef HAVE_RESMGR
+  int havenormaldevs = d->allDevices.count();
+#endif
+
   // try to find symlinks
   QString cmd = QString("find /dev -type l -printf \"%p\t%l\n\" | egrep '%1cdrom|dvd|cdwriter|cdrecorder' | cut -f1").arg(devstring);
   FILE *fd = popen(QFile::encodeName(cmd),"r");
@@ -281,6 +285,13 @@ void K3bDevice::DeviceManager::LinuxDeviceScan()
          d->addDeviceNode(device);
          kdDebug() << "(K3bDevice::DeviceManager) Link: " << device << " -> " << d->devicename() << endl;
        }
+#ifdef HAVE_RESMGR
+       // if we had no initial devices, add the symlinked devices.
+       if (!d) {
+         if (!havenormaldevs)
+           addDevice(device);
+       }
+#endif
      }
   }
   pclose(fd);
@@ -640,8 +651,18 @@ K3bDevice::Device* K3bDevice::DeviceManager::addDevice( const QString& devicenam
   QString resolved = resolveSymLink( devicename );
   kdDebug() << devicename << " resolved to " << resolved << endl;
 
-  if( !testForCdrom(resolved) )
+  if( !testForCdrom(resolved) ) {
+#ifdef HAVE_RESMGR
+    // With resmgr we might only be able to open the symlink name.
+    if (testForCdrom(devicename)) {
+      resolved = devicename;
+    } else {
+      return 0;
+    }
+#else
     return 0;
+#endif
+  }
 
   if ( K3bDevice::Device* oldDev = findDevice(resolved) ) {
     kdDebug() << "(K3bDevice::DeviceManager) dev " << resolved  << " already found" << endl;
