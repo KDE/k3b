@@ -65,7 +65,7 @@ public:
 
   // encoding settings
   bool manualBitrate;
-  // 1 to 10 -> 0.1 - 1
+  // 0 to 10 -> 0.0 - 1.0
   int qualityLevel;
   int bitrateUpper;
   int bitrateNominal;
@@ -129,8 +129,8 @@ bool K3bOggVorbisEncoder::initEncoderInternal()
 			      d->bitrateLower != -1 ? d->bitrateLower*1000 : -1 );
   }
   else {
-    if( d->qualityLevel < 1 )
-      d->qualityLevel = 1;
+    if( d->qualityLevel < 0 )
+      d->qualityLevel = 0;
     else if( d->qualityLevel > 10 )
       d->qualityLevel = 10;
 
@@ -444,8 +444,8 @@ long long K3bOggVorbisEncoderFactory::fileSize( const K3b::Msf& msf ) const
 
     int qualityLevel = c->readNumEntry( "quality level", 4 );
 
-    if( qualityLevel < 1 )
-      qualityLevel = 1;
+    if( qualityLevel < 0 )
+      qualityLevel = 0;
     else if( qualityLevel > 10 )
       qualityLevel = 10;
     return ( (msf.totalFrames()/75) * vorbis_q_bitrate[qualityLevel] * 1000 ) / 8;
