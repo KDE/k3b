@@ -342,7 +342,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   // Progress and toc parsing
   //
 
-  if( line.startsWith( "@01T" && m_totalSize == 0) ) // dvdrecord GUI mode
+  if( line.startsWith( "@01T" ) && m_totalSize == 0) // dvdrecord GUI mode
     {
       m_totalSize = line.mid(4).section(':', 0, 0).toInt();
     }
