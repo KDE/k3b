@@ -1,9 +1,8 @@
 - audio ripping to mp3 (ogg)
 - audio normalize
-* video cd (work in progress)
-* video cd cd-i support
 - video cd Mpeg Stills, photoalbum, portfolio
 - video cd Interactive Menues (automenues)
+* video cd Navigation
 - make audio decoding pluggable
 - udf support
 

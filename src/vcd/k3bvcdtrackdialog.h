@@ -1,6 +1,6 @@
 /*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
  *
  * This file is part of the K3b project.
@@ -21,19 +21,13 @@
 #include <qptrlist.h>
 
 class K3bVcdTrack;
-class QLineEdit;
-class QMultiLineEdit;
 class QLabel;
 class QCheckBox;
 class QComboBox;
-class KToggleAction;
-class KIntNumInput;
+class QListView;
+class QRadioButton;
 class KCutLabel;
 
-
-/**
-  *@author Sebastian Trueg
-  */
 
 class K3bVcdTrackDialog : public KDialogBase
 {
@@ -70,7 +64,20 @@ class K3bVcdTrackDialog : public KDialogBase
   QLabel* m_format_video;
   QLabel* m_size_video;
   QLabel* m_displaysize_video;
-
+  
+  QRadioButton* m_radio_playtime;
+  QRadioButton* m_radio_playforever;
+  QRadioButton* m_radio_waittime;
+  QRadioButton* m_radio_waitinfinite;
+  
+  QComboBox* m_nav_previous;
+  QComboBox* m_nav_next;
+  QComboBox* m_nav_return;
+  QComboBox* m_nav_default;
+  
+  QCheckBox* m_check_usekeys;
+  QListView* m_list_keys;
+  
   void setupGui();
   void fillGui();
 };

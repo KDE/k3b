@@ -18,12 +18,14 @@
 #include <qmultilineedit.h>
 #include <qlabel.h>
 #include <qlayout.h>
+#include <qlistview.h>
 #include <qgroupbox.h>
 #include <qframe.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qhbox.h>
 #include <qtabwidget.h>
+#include <qradiobutton.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -201,6 +203,66 @@ void K3bVcdTrackDialog::setupGui()
   QTabWidget* mainTabbed = new QTabWidget( frame );
 
   // /////////////////////////////////////////////////
+  // NAVIGATION TAB
+  // /////////////////////////////////////////////////
+  QWidget* navigationTab = new QWidget( mainTabbed );
+
+  QGridLayout* navGrid = new QGridLayout( navigationTab );
+  navGrid->setAlignment( Qt::AlignTop );
+  navGrid->setSpacing( spacingHint() );
+  navGrid->setMargin( marginHint() );
+
+  m_radio_playtime = new QRadioButton( i18n("Play"), navigationTab, "m_radio_playtime" );
+  m_radio_playforever = new QRadioButton( i18n("Play forever"), navigationTab, "m_radio_playforever" );
+  m_radio_waittime = new QRadioButton( i18n("Wait"), navigationTab, "m_radio_waittime" );
+  m_radio_waitinfinite = new QRadioButton( i18n("Wait infinite"), navigationTab, "m_radio_waitinfinite" );
+    
+  QLabel* labelNav_previous = new QLabel( i18n( "Privious:" ), navigationTab, "labelNav_previous" );
+  QLabel* labelNav_next  = new QLabel( i18n( "Next:" ), navigationTab, "labelNav_next" );
+  QLabel* labelNav_return  = new QLabel( i18n( "Return:" ), navigationTab, "labelNav_return" );
+  QLabel* labelNav_default  = new QLabel( i18n( "Default:" ), navigationTab, "labelNav_default" );
+
+  m_nav_previous = new QComboBox( navigationTab, "m_nav_previous" );
+  m_nav_next = new QComboBox( navigationTab, "m_nav_next" );
+  m_nav_return = new QComboBox( navigationTab, "m_nav_return" );
+  m_nav_default = new QComboBox( navigationTab, "m_nav_default" );
+
+  m_check_usekeys = new QCheckBox( i18n("Use numeric keys"), navigationTab, "m_check_usekeys" );
+  m_list_keys = new QListView( navigationTab, "m_list_keys" );
+  
+  QFrame* line1 = new QFrame( navigationTab );
+  line1->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+  QFrame* line2 = new QFrame( navigationTab );
+  line2->setFrameStyle( QFrame::VLine | QFrame::Sunken );
+
+  navGrid->addMultiCellWidget( m_radio_playtime, 1, 1, 0, 1 );
+  navGrid->addMultiCellWidget( m_radio_waitinfinite, 1, 1, 3, 5 );
+  navGrid->addMultiCellWidget( m_radio_playforever, 2, 2, 0, 1 );
+  navGrid->addMultiCellWidget( m_radio_waittime, 2, 2, 3, 5 );
+  
+  navGrid->addMultiCellWidget( line1, 3, 3, 0, 5 );
+  
+  navGrid->addWidget( labelNav_previous, 4, 0 );
+  navGrid->addMultiCellWidget( m_nav_previous, 4, 4, 1, 2 );
+
+  navGrid->addWidget( labelNav_next, 5, 0 );
+  navGrid->addMultiCellWidget( m_nav_next, 5, 5, 1, 2 );
+
+  navGrid->addWidget( labelNav_return, 6, 0 );
+  navGrid->addMultiCellWidget( m_nav_return, 6, 6, 1, 2 );
+
+  navGrid->addWidget( labelNav_default, 7, 0 );
+  navGrid->addMultiCellWidget( m_nav_default, 7, 7, 1, 2 );
+
+  navGrid->addMultiCellWidget( line2, 4, 7, 3, 3 );
+  
+  navGrid->addMultiCellWidget( m_check_usekeys, 4, 4, 3, 5 );
+  navGrid->addMultiCellWidget( m_list_keys, 5, 7, 3, 5 );
+  
+  navGrid->setRowStretch( 9, 1 );
+  
+  
+  // /////////////////////////////////////////////////
   // AUDIO TAB
   // /////////////////////////////////////////////////
   QWidget* audioTab = new QWidget( mainTabbed );
@@ -301,8 +363,8 @@ void K3bVcdTrackDialog::setupGui()
   videoGrid->addWidget( labelDisplaySize_Video, 7, 0 );
   videoGrid->addWidget( m_displaysize_video, 7, 1 );
 
-  videoGrid->setRowStretch( 8, 1 );
-
+  videoGrid->setRowStretch( 9, 1 );
+  
   // /////////////////////////////////////////////////
   // FILE-INFO BOX
   // /////////////////////////////////////////////////
@@ -351,6 +413,7 @@ void K3bVcdTrackDialog::setupGui()
   m_displaySize->setFont( f );
   // /////////////////////////////////////////////////
 
+  mainTabbed->addTab( navigationTab, i18n("Navigation") );  
   mainTabbed->addTab( videoTab, i18n("Video") );
   mainTabbed->addTab( audioTab, i18n("Audio") );
 
