@@ -33,6 +33,7 @@
 #include <qfile.h>
 #include <qtimer.h>
 #include <qevent.h>
+#include <qtooltip.h>
 
 
 
@@ -87,6 +88,11 @@ void K3bStatusBarManager::update()
     slotFreeTempSpace( path, size, 0, avail );
   else
     m_labelFreeTemp->setText(i18n("No info"));
+
+  if( path != QToolTip::textFor( m_labelFreeTemp->parentWidget() ) ) {
+    QToolTip::remove( m_labelFreeTemp->parentWidget() );
+    QToolTip::add( m_labelFreeTemp->parentWidget(), path );
+  }
 }
 
 
@@ -105,7 +111,7 @@ void K3bStatusBarManager::slotFreeTempSpace(const QString&,
     m_pixFreeTemp->setPixmap( SmallIcon("folder_green") );
 
   // update the display every second
-  QTimer::singleShot( 1000, this, SLOT(update()) );
+  QTimer::singleShot( 2000, this, SLOT(update()) );
 }
 
 
