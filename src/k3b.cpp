@@ -197,7 +197,7 @@ void K3bMainWindow::initActions()
   actionViewDocumentHeader = new KToggleAction(i18n("Show Document Header"), 0, this, SLOT(slotViewDocumentHeader()), 
 					       actionCollection(), "view_document_header");
 
-  actionToolsBlankCdrw = new KAction(i18n("&Blank CD-RW..."), "cdrwblank", 0, this, SLOT(slotBlankCdrw()),
+  actionToolsBlankCdrw = new KAction(i18n("&Erase CD-RW..."), "cdrwblank", 0, this, SLOT(slotBlankCdrw()),
 			       actionCollection(), "tools_blank_cdrw" );
   actionToolsDivxEncoding = new KAction(i18n("&Encode Video..."),"gear", 0, this, SLOT( slotDivxEncoding() ),
 			    actionCollection(), "tools_encode_video");

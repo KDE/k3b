@@ -28,8 +28,8 @@
 
 
 K3bBlankingDialog::K3bBlankingDialog( QWidget* parent, const char* name )
-  : KDialogBase( parent, name, true, i18n("Blanking CD-RW"), /*Help|*/User2|User1, User1, 
-		 false, KGuiItem( i18n("Blank"), "blank", i18n("Start blanking") ), KStdGuiItem::close() )
+  : KDialogBase( parent, name, true, i18n("Erase CD-RW"), /*Help|*/User2|User1, User1, 
+		 false, KGuiItem( i18n("&Erase"), "blank", i18n("Start erasing") ), KStdGuiItem::close() )
 {
   setupGui();
   setButtonBoxOrientation( Qt::Vertical );
@@ -58,7 +58,7 @@ void K3bBlankingDialog::setupGui()
 
 
   // --- setup the blanking type button group -----------------------------
-  m_groupBlankType = new QButtonGroup( i18n("Blanking type"), frame );
+  m_groupBlankType = new QButtonGroup( i18n("&Erase Type"), frame );
   m_groupBlankType->setExclusive( true );
   m_groupBlankType->setColumnLayout(0, Qt::Vertical );
   m_groupBlankType->layout()->setSpacing( 0 );
@@ -68,11 +68,11 @@ void K3bBlankingDialog::setupGui()
   groupBlankTypeLayout->setSpacing( spacingHint() );
   groupBlankTypeLayout->setMargin( marginHint() );
 
-  m_radioFastBlank = new QRadioButton( i18n("Fast"), m_groupBlankType );
-  m_radioCompleteBlank = new QRadioButton( i18n("Complete"), m_groupBlankType );
-  m_radioBlankTrack = new QRadioButton( i18n("Blank last track"), m_groupBlankType );
-  m_radioUncloseSession = new QRadioButton( i18n("Unclose last session"), m_groupBlankType );
-  m_radioBlankSession = new QRadioButton( i18n("Blank last session"), m_groupBlankType );
+  m_radioFastBlank = new QRadioButton( i18n("&Fast"), m_groupBlankType );
+  m_radioCompleteBlank = new QRadioButton( i18n("&Complete"), m_groupBlankType );
+  m_radioBlankTrack = new QRadioButton( i18n("Erase last &track"), m_groupBlankType );
+  m_radioUncloseSession = new QRadioButton( i18n("&Unclose last session"), m_groupBlankType );
+  m_radioBlankSession = new QRadioButton( i18n("Erase last &session"), m_groupBlankType );
 
   groupBlankTypeLayout->addWidget( m_radioFastBlank );
   groupBlankTypeLayout->addWidget( m_radioCompleteBlank );
@@ -110,7 +110,7 @@ void K3bBlankingDialog::setupGui()
   groupOptionsLayout->setMargin( marginHint() );
 
   m_checkForce = new QCheckBox( m_groupOptions );
-  m_checkForce->setText( i18n("Force\n(Try this if K3b\nis not able to\nblank a CD-RW in\nnormal mode)") );
+  m_checkForce->setText( i18n("F&orce\n(Try this if K3b\nis not able to\nblank a CD-RW in\nnormal mode)") );
 
   groupOptionsLayout->addWidget( m_checkForce );
   // ------------------------------------------------------------------------
@@ -132,7 +132,7 @@ void K3bBlankingDialog::slotUser1()
   // start the blankingjob and connect to the info-signal
   // disable the user1 button and enable the cancel button
   actionButton( KDialogBase::User1 )->setDisabled( true );
-  actionButton( KDialogBase::User2 )->setText( i18n("Cancel") );
+  actionButton( KDialogBase::User2 )->setText( i18n("&Cancel") );
   m_viewOutput->clear();
 
   if( m_job == 0 ) {
@@ -170,7 +170,7 @@ void K3bBlankingDialog::slotUser1()
 void K3bBlankingDialog::slotUser2()
 {
   if( m_job && m_job->active() ) {
-    if( KMessageBox::questionYesNo( this, i18n("Do you really want to cancel?"), i18n("Cancel") ) == KMessageBox::Yes )
+    if( KMessageBox::questionYesNo( this, i18n("Are you sure you want to cancel?"), i18n("Cancel") ) == KMessageBox::Yes )
       m_job->cancel();
     }
   else
@@ -207,7 +207,7 @@ void K3bBlankingDialog::slotJobFinished(bool)
 void K3bBlankingDialog::closeEvent( QCloseEvent* e )
 {
   if( m_job && m_job->active() ) {
-    if( KMessageBox::questionYesNo( this, i18n("Do you really want to cancel?"), i18n("Cancel") ) == KMessageBox::Yes ) {
+    if( KMessageBox::questionYesNo( this, i18n("Are you sure you want to cancel?"), i18n("Cancel") ) == KMessageBox::Yes ) {
       m_job->cancel();
       
       e->accept();

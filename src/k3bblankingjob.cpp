@@ -113,7 +113,7 @@ void K3bBlankingJob::start()
     }
   else
     {
-      emit infoMessage( i18n("Start blanking disk at speed %1...").arg(m_speed), K3bJob::STATUS );
+      emit infoMessage( i18n("Start erasing disk at speed %1...").arg(m_speed), K3bJob::STATUS );
     }
 }
 
