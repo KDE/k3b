@@ -3,7 +3,7 @@
 <author>Sebastian Trueg</author>
 <widget class="QWidget">
     <property name="name">
-        <cstring>Form1</cstring>
+        <cstring>K3bBootImagePropertiesWidget</cstring>
     </property>
     <property name="geometry">
         <rect>
