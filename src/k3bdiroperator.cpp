@@ -26,14 +26,20 @@
 K3bDirOperator::K3bDirOperator(const KURL& url, QWidget* parent, const char* name )
   : KDirOperator( url, parent, name )
 {
-  // add view-switching actions
-  KAction* detailedViewAction = actionCollection()->action("detailed view");
-  KAction* shortViewAction = actionCollection()->action("short view");
+//   // add view-switching actions (no need in KDE 3.1)
+//   KAction* detailedViewAction = actionCollection()->action("detailed view");
+//   KAction* shortViewAction = actionCollection()->action("short view");
 
-  KActionMenu* viewMenu = (KActionMenu*)actionCollection()->action("view menu");
-  viewMenu->insert( detailedViewAction, 0 );
-  viewMenu->insert( shortViewAction, 1 );
-  viewMenu->insert( new KActionSeparator( actionCollection() ), 2 );
+//   KActionMenu* viewMenu = (KActionMenu*)actionCollection()->action("view menu");
+//   viewMenu->insert( detailedViewAction, 0 );
+//   viewMenu->insert( shortViewAction, 1 );
+//   viewMenu->insert( new KActionSeparator( actionCollection() ), 2 );
+
+  // disable the del-key since we still have a focus problem and users keep
+  // deleting files when they want to remove project entries
+  KAction* aDelete = actionCollection()->action("delete");
+  if( aDelete )
+    aDelete->setAccel( 0 );
 }
 
 
