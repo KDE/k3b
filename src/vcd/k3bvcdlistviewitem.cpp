@@ -2,8 +2,9 @@
                           k3bvcdlistviewitem.cpp  -  description
                              -------------------
     begin                : Sam Nov 9 2002
-    copyright            : (C) 2002 by Sebastian Trueg
+    copyright            : (C) 2002 by Sebastian Trueg & Christian Kvasny
     email                : trueg@informatik.uni-freiburg.de
+                           chris@ckvsoft.at
  ***************************************************************************/
 
 /***************************************************************************
@@ -14,7 +15,6 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-// QT-includes
 
 #include "k3bvcdlistviewitem.h"
 #include "k3bvcdtrack.h"
@@ -26,19 +26,11 @@
 K3bVcdListViewItem::K3bVcdListViewItem( K3bVcdTrack* track, K3bListView* parent )
   : K3bListViewItem( parent ), m_track(track)
 {
-  init();
 }
 
 K3bVcdListViewItem::K3bVcdListViewItem( K3bVcdTrack* track, K3bListView* parent, QListViewItem* after )
   : K3bListViewItem( parent, after ), m_track(track)
 {
-  init();
-}
-
-
-void K3bVcdListViewItem::init()
-{
-  setEditor( 1, LINE );
 }
 
 
@@ -81,19 +73,6 @@ QString K3bVcdListViewItem::text(int i) const
     }
 }
 
-/*
-QString K3bVcdListViewItem::formatSize( unsigned long size) const {
-  double dSize = size;
-  if ( dSize >= 1024.0*1024.0) {
-    return QString("%1 MB").arg(dSize/(1024.0*1024.0),0,'f',2);
-  }
-  if ( dSize >= 1024.0) {
-    return QString("%1 KB").arg(dSize/(1024.0),0,'f',2);
-  }
-  return QString("%1 B").arg(size);
-}
-*/
-  
 void K3bVcdListViewItem::setText(int col, const QString& text )
 {
   KListViewItem::setText( col, text );

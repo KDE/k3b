@@ -2,8 +2,9 @@
                           k3bvcdlistviewitem.h  -  description
                              -------------------
     begin                : Sam Nov 9 2002
-    copyright            : (C) 2002 by Sebastian Trueg
+    copyright            : (C) 2002 by Sebastian Trueg & Christian Kvasny
     email                : trueg@informatik.uni-freiburg.de
+                           chris@ckvsoft.at
  ***************************************************************************/
 
 /***************************************************************************
@@ -43,9 +44,7 @@ class K3bVcdListViewItem : public K3bListViewItem  {
 
 
  private:
-  void init();
   K3bVcdTrack* m_track;
-  // QString formatSize( unsigned long size) const;
 };
 
 #endif
