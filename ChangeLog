@@ -9,6 +9,7 @@ Added checks for all TEAC R5XS compatible (and thus non-MMC) writers
 Fixed writing speed detection with some DVD writers
 Fixed capacity detection with some DVD writers
 Fixed VideoCD creation with enabled PBC
+Remember the last directory in the filebrowser.
 
 0.11.9
 Fixed data project size calculation (for good this time).

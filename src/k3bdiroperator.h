@@ -34,6 +34,16 @@ class K3bDirOperator : public KDirOperator
   K3bDirOperator( const KURL& urlName = KURL(), QWidget* parent = 0, const char* name = 0 );
   ~K3bDirOperator();
 
+  /**
+   * reimplemented from KDirOperator
+   */
+  void readConfig( KConfig* cfg, const QString& group );
+
+  /**
+   * reimplemented from KDirOperator
+   */
+  void writeConfig( KConfig* cfg, const QString& group );
+
  signals:
   void doubleClicked( KFileItem* item );
 

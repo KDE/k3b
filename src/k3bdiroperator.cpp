@@ -47,6 +47,30 @@ K3bDirOperator::~K3bDirOperator()
 }
 
 
+void K3bDirOperator::readConfig( KConfig* cfg, const QString& group )
+{
+  QString oldGroup = cfg->group();
+  cfg->setGroup( group );
+
+  KDirOperator::readConfig( cfg, group );
+  setURL( KURL::fromPathOrURL( cfg->readPathEntry( "last url", QDir::home().absPath() ) ), true );
+
+  cfg->setGroup( oldGroup );
+}
+
+
+void K3bDirOperator::writeConfig( KConfig* cfg, const QString& group )
+{
+  QString oldGroup = cfg->group();
+  cfg->setGroup( group );
+
+  KDirOperator::writeConfig( cfg, group );
+  cfg->writePathEntry( "last url", url().path() );
+
+  cfg->setGroup( oldGroup );
+}
+
+
 KFileView* K3bDirOperator::createView( QWidget* parent, KFile::FileView view )
 {
   KFileView* new_view = 0L;
