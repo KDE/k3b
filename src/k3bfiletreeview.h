@@ -41,8 +41,8 @@ class K3bDeviceBranch : public KFileTreeBranch
 
   K3bDevice* device() const { return m_device; }
 
- public slots:
-  bool populate( const KURL& url, KFileTreeViewItem* v );
+// public slots:
+//  bool populate( const KURL& url, KFileTreeViewItem* v );
 
  private:
   K3bDevice* m_device;

@@ -51,18 +51,18 @@ K3bDeviceBranch::K3bDeviceBranch( KFileTreeView* view, K3bDevice* dev, KFileTree
 }
 
 
-bool K3bDeviceBranch::populate( const KURL& url, KFileTreeViewItem* item )
-{
-  QString mp = KIO::findDeviceMountPoint( m_device->mountDevice() );
-  if( !mp.isEmpty() ) {
-    return KFileTreeBranch::populate( url, item );
-  }
-  else {
-    // if the device is not mounted we don't need to do anything
-    emit populateFinished( root() );
-    return true;
-  }
-}
+// bool K3bDeviceBranch::populate( const KURL& url, KFileTreeViewItem* item )
+// {
+//   QString mp = KIO::findDeviceMountPoint( m_device->mountDevice() );
+//   if( !mp.isEmpty() ) {
+//     return KFileTreeBranch::populate( url, item );
+//   }
+//   else {
+//     // if the device is not mounted we don't need to do anything
+//     emit populateFinished( root() );
+//     return true;
+//   }
+// }
 
 
 
