@@ -64,6 +64,7 @@ void K3bAudioBurnDialog::saveSettings()
 
 	doc()->setDao( m_checkDao->isChecked() );
 	doc()->setDummy( m_checkSimulate->isChecked() );
+	doc()->setOnTheFly( m_checkOnTheFly->isChecked() );
 	((K3bAudioDoc*)doc())->setPadding( m_checkPadding->isChecked() );
 	((K3bAudioDoc*)doc())->writeCdText( m_checkCdText->isChecked() );
 	
@@ -182,9 +183,9 @@ void K3bAudioBurnDialog::setupBurnTab( QFrame* frame )
     m_checkSimulate = new QCheckBox( m_groupOptions, "m_checkSimulate" );
     m_checkSimulate->setText( i18n( "Simulate Writing" ) );
 
-//    m_checkOnTheFly = new QCheckBox( m_groupOptions, "m_checkOnTheFly" );
-//    m_checkOnTheFly->setText( i18n( "Writing on the fly" ) );
-//    m_groupOptionsLayout->addWidget( m_checkOnTheFly );
+   m_checkOnTheFly = new QCheckBox( m_groupOptions, "m_checkOnTheFly" );
+   m_checkOnTheFly->setText( i18n( "Writing on the fly" ) );
+   m_groupOptionsLayout->addWidget( m_checkOnTheFly );
 
     m_checkPadding = new QCheckBox( m_groupOptions, "m_checkPadding" );
     m_checkPadding->setText( i18n( "Use Padding" ) );
@@ -207,8 +208,6 @@ void K3bAudioBurnDialog::setupBurnTab( QFrame* frame )
     // tab order
 
     connect( m_buttonFindDir, SIGNAL(clicked()), this, SLOT(slotFindDir()) );
-
-//    m_checkOnTheFly->setEnabled( false );
 }
 
 

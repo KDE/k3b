@@ -56,6 +56,8 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
 	QVBoxLayout* _box = new QVBoxLayout( this );
 	_box->addWidget( _main );
 	_box->addWidget( m_fillStatusDisplay );
+	_box->setSpacing( 5 );
+	_box->setMargin( 2 );
 
 	setupPopupMenu();	
 	connect( m_dataDirTree, SIGNAL(rightButtonClicked(QListViewItem*, const QPoint&, int)),
@@ -138,11 +140,19 @@ void K3bDataView::slotDropped( KListView* listView, QDropEvent* e, QListViewItem
 	QStringList _urls = QStringList::split("\r\n", droppedText );
 	
 	// get directory from "after"
-	if( dynamic_cast<K3bPrivateDataDirTree*>( listView ) ) {
-		emit dropped( _urls, ((K3bPrivateDataDirViewItem*)after)->dirItem() );
+	if( after ) {
+   	// if dropping on a dirItem: add it to this dir
+		if( dynamic_cast<K3bPrivateDataDirViewItem*>( after ) ) {
+			emit dropped( _urls, ((K3bPrivateDataDirViewItem*)after)->dirItem() );
+		}
+		else {
+       	// add to the parent of the item
+			emit dropped( _urls, ((K3bPrivateDataFileViewItem*)after)->fileItem()->parent() );
+		}
 	}
-	else if( K3bPrivateDataFileView* f = dynamic_cast<K3bPrivateDataFileView*>( listView ) ) {
-		emit dropped( _urls, f->currentDir() );
+	else {// after == 0
+		if( listView == m_dataFileView )
+			emit dropped( _urls, m_dataFileView->currentDir() );
 	}
 }
 
@@ -151,7 +161,8 @@ K3bDataView::K3bPrivateDataDirTree::K3bPrivateDataDirTree( K3bDataDoc* doc, QWid
 	: KListView( parent )
 {
  	setAcceptDrops( true );
-	setDropVisualizer( true );
+	setDropVisualizer( false );
+	setDropHighlighter( true );
 	setRootIsDecorated( true );
 	
 	addColumn( "Dir" );
@@ -185,6 +196,7 @@ K3bDataView::K3bPrivateDataFileView::K3bPrivateDataFileView( K3bDataDoc* doc, QW
 {
  	setAcceptDrops( true );
 	setDropVisualizer( false );
+	setDropHighlighter( true );
 	
 	addColumn( i18n("Name") );
 	addColumn( i18n("Type") );

@@ -31,7 +31,7 @@ class K3bDataDoc;
 class K3bDataItem
 {
 public: 
-	K3bDataItem( K3bDataDoc* doc, K3bDirItem* parent = 0 );
+	K3bDataItem( K3bDataDoc* doc, K3bDataItem* parent = 0 );
 	virtual ~K3bDataItem();
 	
 	K3bDirItem* parent() { return m_parentDir; }
@@ -49,6 +49,9 @@ public:
 	virtual QString localPath() = 0;
 		
 	virtual long k3bSize() const { return 0; }
+
+  /** adds the given dataItem to the current parent (can be the item itself if it is a K3bDirItem) */
+  virtual K3bDirItem* addDataItem( K3bDataItem* ) = 0;
 	
 private:
 	K3bDirItem* m_parentDir;

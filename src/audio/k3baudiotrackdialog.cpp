@@ -22,6 +22,7 @@
 #include <qgroupbox.h>
 #include <qframe.h>
 #include <qcheckbox.h>
+#include <qcombobox.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -33,6 +34,7 @@
 #include "k3baudiotrack.h"
 #include "../k3bstickybutton.h"
 #include "../kcutlabel.h"
+#include "../k3bglobals.h"
 
 
 K3bAudioTrackDialog::K3bAudioTrackDialog(QWidget *parent, const char *name )
@@ -45,6 +47,7 @@ K3bAudioTrackDialog::K3bAudioTrackDialog(QWidget *parent, const char *name )
 		
 	// set defaults
 	m_sticky = true;
+	m_bPregapSeconds = true;
 }
 
 K3bAudioTrackDialog::~K3bAudioTrackDialog()
@@ -130,10 +133,14 @@ void K3bAudioTrackDialog::updateView()
 		m_checkCopy->setChecked( m_track->copyProtection() );
 		m_checkPreEmp->setChecked( m_track->preEmp() );
 		
-		m_inputPregap->setValue( m_track->pregap() );
+		if( m_bPregapSeconds )
+		  m_inputPregap->setValue( m_track->pregap() / 75 );
+		else
+		  m_inputPregap->setValue( m_track->pregap() );
+
 		m_displayFileName->setText( m_track->fileName() );
-		m_displayLength->setText( m_track->length().toString() );
-		m_displaySize->setText( QString::number(m_track->size()) );
+		m_displayLength->setText( K3b::framesToString(m_track->length()) );
+		m_displaySize->setText( QString("%1 kb").arg(m_track->size() / 1024) );
 		
 		m_labelMimeType->setPixmap( KMimeType::pixmapForURL( KURL(m_track->absPath()) ) );
 	}
@@ -180,7 +187,7 @@ void K3bAudioTrackDialog::setupGui()
     _groupCdTextLayout->addWidget( _labelPerformer, 1, 0 );
 
     m_editPerformer = new QLineEdit( _groupCdText, "m_editPerformer" );
-	m_editPerformer->setMinimumWidth( 100 );
+    m_editPerformer->setMinimumWidth( 100 );
 	
     _groupCdTextLayout->addWidget( m_editPerformer, 1, 1 );
 
@@ -200,6 +207,7 @@ void K3bAudioTrackDialog::setupGui()
 
     QLabel* _labelMessage = new QLabel( _groupCdText, "_labelMessage" );
     _labelMessage->setText( i18n( "&Message" ) );
+    _labelMessage->setAlignment( Qt::AlignLeft | Qt::AlignTop );
 
     _groupCdTextLayout->addWidget( _labelMessage, 6, 0 );
 
@@ -265,14 +273,14 @@ void K3bAudioTrackDialog::setupGui()
     m_displayFileName->setAlignment( int( QLabel::AlignTop | QLabel::AlignLeft ) );
 
     _groupFileInfoLayout->addWidget( m_displayFileName, 0, 1 );
-    QSpacerItem* spacer_3 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
+    QSpacerItem* spacer_3 = new QSpacerItem( 2, 2 );
     _groupFileInfoLayout->addMultiCell( spacer_3, 1, 2, 0, 0 );
 
     QGridLayout* Layout1 = new QGridLayout;
     Layout1->setSpacing( spacingHint() );
     Layout1->setMargin( 0 );
 
-	Layout1->addMultiCell( new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding), 0, 1, 0, 0 );
+    // Layout1->addMultiCell( new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding), 0, 1, 0, 0 );
 
     QLabel* _labelSize = new QLabel( _groupFileInfo, "_labelSize" );
     _labelSize->setText( i18n( "Size" ) );
@@ -325,15 +333,21 @@ void K3bAudioTrackDialog::setupGui()
 
     _groupOptionsLayout->addWidget( m_inputPregap, 1, 0 );
 
+    m_comboPregapFormat = new QComboBox( _groupOptions );
+    m_comboPregapFormat->insertItem( i18n("Seconds" ) );
+    m_comboPregapFormat->insertItem( i18n("Frames" ) );
+
+    _groupOptionsLayout->addWidget( m_comboPregapFormat, 1, 1 );
+
     m_checkPreEmp = new QCheckBox( _groupOptions, "m_checkPreEmp" );
     m_checkPreEmp->setText( i18n( "Preemphasis" ) );
 
-    _groupOptionsLayout->addWidget( m_checkPreEmp, 0, 2 );
+    _groupOptionsLayout->addWidget( m_checkPreEmp, 0, 3 );
 
     m_checkCopy = new QCheckBox( _groupOptions, "m_checkCopy" );
     m_checkCopy->setText( i18n( "Copy protected" ) );
 
-    _groupOptionsLayout->addWidget( m_checkCopy, 1, 2 );
+    _groupOptionsLayout->addWidget( m_checkCopy, 1, 3 );
 
     mainLayout->addMultiCellWidget( _groupOptions, 1, 1, 0, 1 );
 //    mainLayout->addMultiCell( new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding), 2, 2, 0, 1 );
@@ -356,7 +370,8 @@ void K3bAudioTrackDialog::setupGui()
 
     // stretches
 //	mainLayout->setColStretch( 2, 1 );
-	mainLayout->setRowStretch( 2, 1 );
+//	mainLayout->setRowStretch( 2, 1 );
+	Layout1->setColStretch( 0, 1 );
 }
 
 void K3bAudioTrackDialog::setupConnections()
@@ -373,4 +388,23 @@ void K3bAudioTrackDialog::setupConnections()
 	
 	connect( m_inputPregap, SIGNAL(valueChanged(int)), this, SLOT(updatePregap(int)) );
 	connect( m_stickyButton, SIGNAL(toggled(bool)), this, SLOT(setSticky(bool)) );
+
+	connect( m_comboPregapFormat, SIGNAL(activated(const QString&)), 
+		 this, SLOT(slotChangePregapFormat(const QString&)) );
+}
+
+void K3bAudioTrackDialog::slotChangePregapFormat( const QString& str )
+{
+  if( str == i18n( "Seconds" ) ) {
+    if( !m_bPregapSeconds ) {
+      m_bPregapSeconds = true;
+      m_inputPregap->setValue( m_inputPregap->value() / 75 );
+    }
+  }
+  else {
+    if( m_bPregapSeconds ) {
+      m_bPregapSeconds = false;
+      m_inputPregap->setValue( m_inputPregap->value() * 75 );
+    }
+  }
 }

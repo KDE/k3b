@@ -43,6 +43,7 @@ class K3bApp;
 class K3bBurnJob;
 
 
+
 /**	K3bDoc provides a document object for a document-view model.
   *
   * The K3bDoc class provides a document object that can be used in conjunction with the classes
@@ -59,114 +60,119 @@ class K3bDoc : public QObject
 {
   Q_OBJECT
 
-  friend K3bView;
+    friend K3bView;
 
-public:
-    /** Constructor for the fileclass of the application */
-    K3bDoc( QObject* );
-    /** Destructor for the fileclass of the application */
-    ~K3bDoc();
+ public:
+  /** Constructor for the fileclass of the application */
+  K3bDoc( QObject* );
+  /** Destructor for the fileclass of the application */
+  ~K3bDoc();
 
-	enum DocType { AUDIO = 1, DATA = 2 };
+  enum DocType { AUDIO = 1, DATA = 2 };
 
-	int docType() const { return m_docType; }
+  int docType() const { return m_docType; }
 	
-    /** adds a view to the document which represents the document contents. Usually this is your main view. */
-    virtual void addView(K3bView *view);
-    /** removes a view from the list of currently connected views */
-    void removeView(K3bView *view);
-	/** gets called if a view is removed or added */
-	void changedViewList();
-    /** returns the first view instance */
-	K3bView* firstView(){ return pViewList->first(); };
-	/** returns true, if the requested view is the last view of the document */
-    bool isLastView();
-    /** This method gets called when the user is about to close a frame window. It checks, if more than one view
-    	* is connected to the document (then the frame can be closed), if pFrame is the last view and the document is
-    	* modified, the user gets asked if he wants to save the document.
-    	*/
-	bool canCloseFrame(K3bView* pFrame);
-    /** sets the modified flag for the document after a modifying action on the view connected to the document.*/
-    void setModified(bool _m=true){ modified=_m; };
-    /** returns if the document is modified or not. Use this to determine if your document needs saving by the user on closing.*/
-    bool isModified(){ return modified; };
-    /** deletes the document's contents */
-    virtual void deleteContents();
-    /** this virtual version only sets the modified flag */
-    virtual bool newDocument();
-    /** closes the acutal document */
-    void closeDocument();
-    /** loads the document by filename and format and emits the updateViews() signal */
-    bool openDocument(const KURL &url, const char *format=0);
-    /** saves the document under filename and format.*/	
-    bool saveDocument(const KURL &url, const char *format=0);
-    /** returns the KURL of the document */
-    const KURL& URL() const;
-    /** sets the URL of the document */
-	void setURL(const KURL& url);
+  /** adds a view to the document which represents the document contents. Usually this is your main view. */
+  virtual void addView(K3bView *view);
+  /** removes a view from the list of currently connected views */
+  void removeView(K3bView *view);
+  /** gets called if a view is removed or added */
+  void changedViewList();
+  /** returns the first view instance */
+  K3bView* firstView(){ return pViewList->first(); };
+  /** returns true, if the requested view is the last view of the document */
+  bool isLastView();
+  /** This method gets called when the user is about to close a frame window. It checks, if more than one view
+   * is connected to the document (then the frame can be closed), if pFrame is the last view and the document is
+   * modified, the user gets asked if he wants to save the document.
+   */
+  bool canCloseFrame(K3bView* pFrame);
+  /** sets the modified flag for the document after a modifying action on the view connected to the document.*/
+  void setModified(bool _m=true){ modified=_m; };
+  /** returns if the document is modified or not. Use this to determine if your document needs saving by the user on closing.*/
+  bool isModified(){ return modified; };
+  /** deletes the document's contents */
+  virtual void deleteContents();
+  /** this virtual version only sets the modified flag */
+  virtual bool newDocument();
+  /** closes the acutal document */
+  void closeDocument();
+  /** loads the document by filename and format and emits the updateViews() signal */
+  bool openDocument(const KURL &url, const char *format=0);
+  /** saves the document under filename and format.*/	
+  bool saveDocument(const KURL &url, const char *format=0);
+  /** returns the KURL of the document */
+  const KURL& URL() const;
+  /** sets the URL of the document */
+  void setURL(const KURL& url);
 	
-	  /** Create a new view */
-  	virtual K3bView* newView( QWidget* parent ) = 0;
+  /** Create a new view */
+  virtual K3bView* newView( QWidget* parent ) = 0;
 
-	const QString& projectName() const { return m_projectName; }
-	bool dao() const { return m_dao; }
-	bool dummy() const { return m_dummy; }
-	bool onTheFly() const { return m_onTheFly; }
-	int speed() const { return m_speed; }
-	K3bDevice* burner() const { return m_burner; }
-	virtual int size() = 0;
+  const QString& projectName() const { return m_projectName; }
+  bool dao() const { return m_dao; }
+  bool dummy() const { return m_dummy; }
+  bool onTheFly() const { return m_onTheFly; }
+  int speed() const { return m_speed; }
+  K3bDevice* burner() const { return m_burner; }
+  virtual int size() const = 0;
+  virtual int length() const = 0;
 
-	/**
-	 * After result() has been emitted this returns the error-code
-	 * to check the result.
-	 **/
-	int error() const;
-	QString errorString() const;
-	virtual int numOfTracks() const { return 1; }
+  /**
+   * After result() has been emitted this returns the error-code
+   * to check the result.
+   **/
+  int error() const;
+  QString errorString() const;
+  virtual int numOfTracks() const { return 1; }
 	
-	virtual K3bBurnJob* newBurnJob() = 0;
+  virtual K3bBurnJob* newBurnJob() = 0;
 	
-public slots:
-    /** calls repaint() on all views connected to the document object and is called by the view by which the document has been changed.
-     * As this view normally repaints itself, it is excluded from the paintEvent.
+ public slots:
+    /** calls repaint() on all views connected to the document object and is called 
+     *	by the view by which the document has been changed.
+     *  As this view normally repaints itself, it is excluded from the paintEvent.
      */
-    void updateAllViews(K3bView *sender);
-	void setDummy( bool d );
-	void setDao( bool d );
-	void setOnTheFly( bool b ) { m_onTheFly = b; }
-	void setSpeed( int speed );
-	void setBurner( K3bDevice* dev );
+  void updateAllViews(K3bView *sender);
+  void setDummy( bool d );
+  void setDao( bool d );
+  void setOnTheFly( bool b ) { m_onTheFly = b; }
+  void setSpeed( int speed );
+  void setBurner( K3bDevice* dev );
 	
-signals:
+ signals:
+	void errorMessage( const QString& );
+	void warningMessage( const QString& );
+	void infoMessage( const QString& );
 	void result();
 	void percent( int percent );
 	 	
-protected:
-  	/** when deriving from K3bDoc this method really opens the document since
-	      openDocument only opens a tempfile and calls this method. */
-	virtual bool loadDocumentData( QFile& f ) = 0;
+ protected:
+  /** when deriving from K3bDoc this method really opens the document since
+      openDocument only opens a tempfile and calls this method. */
+  virtual bool loadDocumentData( QFile& f ) = 0;
 	
-	/** when deriving from K3bDoc this method really saves the document since
-	    saveDocument only opens the file and calls this method. */
-  	virtual bool saveDocumentData( QFile& f ) = 0;
+  /** when deriving from K3bDoc this method really saves the document since
+      saveDocument only opens the file and calls this method. */
+  virtual bool saveDocumentData( QFile& f ) = 0;
 
-	KProcess* m_process;
+  KProcess* m_process;
 	
-	int  m_error;
-	int m_docType;
+  int  m_error;
+  int m_docType;
 
-private:
-    /** the modified flag of the current document */
-    bool modified;
-    KURL doc_url;
-    /** the list of the views currently connected to the document */
-    QList<K3bView> *pViewList;	
-	QString m_projectName;
-	K3bDevice* m_burner;
-	bool m_dao;
-	bool m_dummy;
-	bool m_onTheFly;
-	int  m_speed;
+ private:
+  /** the modified flag of the current document */
+  bool modified;
+  KURL doc_url;
+  /** the list of the views currently connected to the document */
+  QList<K3bView> *pViewList;	
+  QString m_projectName;
+  K3bDevice* m_burner;
+  bool m_dao;
+  bool m_dummy;
+  bool m_onTheFly;
+  int  m_speed;
 };
 
 #endif // K3BDOC_H

@@ -122,7 +122,9 @@ void K3bMp3Track::readTrackInfo( const QString& fileName )
 	if( _frameSize ) {
 	  int _frameNumber = (QFileInfo(m_file).size() - _id3TagSize ) / _frameSize;
 	  qDebug( " #frames: %i", _frameNumber );
-	  setLength(  _frameNumber * 26 / 10 );
+
+	  // cdrdao needs the length in frames where 75 frames are 1 second 
+	  setLength(  _frameNumber * 26 * 75 / 1000 );
 	}
       }
       else

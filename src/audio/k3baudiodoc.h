@@ -32,8 +32,7 @@ class K3bApp;
 class K3bAudioTrack;
 class QWidget;
 
-/**Document class for an audio project. It uses a @p K3bAudioProject
-to store the data and burn.
+/**Document class for an audio project. 
   *@author Sebastian Trueg
   */
 
@@ -52,7 +51,9 @@ public:
 
 	bool newDocument();
 
+	/** obsolet! USE length() ! **/
 	QTime audioSize() const;
+
 	bool padding() const;
 	int numberOfTracks() const { return m_tracks->count(); }
 
@@ -63,7 +64,8 @@ public:
 	K3bAudioTrack* take( uint i ) { return m_tracks->take( i ); }
 
 	/** get the current size of the project */
-	int size();
+	int size() const;
+	int length() const;
 	
 	// CD-Text
 	bool cdText() const { return m_cdText; }

@@ -35,9 +35,12 @@ K3bDirItem::~K3bDirItem()
 	delete m_children;
 }
 
-void K3bDirItem::addDataItem( K3bDataItem* item )
+K3bDirItem* K3bDirItem::addDataItem( K3bDataItem* item )
 {
-	m_children->append( item );
+	if( m_children->find( item ) == -1 )
+		m_children->append( item );
+	
+	return this;
 }
 
 K3bDataItem* K3bDirItem::takeDataItem( K3bDataItem* item )
@@ -92,7 +95,7 @@ QString K3bDirItem::localPath()
 
 
 K3bRootItem::K3bRootItem( K3bDataDoc* doc )
-	: K3bDirItem( "/", doc, 0 )
+	: K3bDirItem( "root", doc, 0 )
 {
 }
 

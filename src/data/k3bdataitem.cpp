@@ -19,14 +19,15 @@
 #include "k3bdiritem.h"
 
 
-K3bDataItem::K3bDataItem( K3bDataDoc* doc, K3bDirItem* parent )
+K3bDataItem::K3bDataItem( K3bDataDoc* doc, K3bDataItem* parent )
 {
-	m_parentDir = parent;
 	m_doc = doc;
 	
 	// add automagically like a qlistviewitem
 	if( parent )
-		parent->addDataItem( this );
+		m_parentDir = parent->addDataItem( this );
+	else
+		m_parentDir = 0;
 }
 
 K3bDataItem::~K3bDataItem()
@@ -38,6 +39,11 @@ K3bDataItem::~K3bDataItem()
 
 
 void K3bDataItem::setK3bName( const QString& name ) {
+	// test for not-allowed characters
+	if( name.contains('/') || name.contains('?') || name.contains('*') ) {
+		qDebug( "(K3bDataItem) name contained invalid characters!" );
+		return;
+	}
 	if( parent() ) {
 		QList<K3bDataItem>* _itemsInDir = parent()->children();
 		for( K3bDataItem* _it = _itemsInDir->first(); _it; _it = _itemsInDir->next() ) {

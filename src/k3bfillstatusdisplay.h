@@ -21,7 +21,10 @@
 #include <qframe.h>
 
 class QPainter;
+class QMouseEvent;
 class K3bDoc;
+class KAction;
+class KPopupMenu;
 
 
 /**
@@ -30,23 +33,30 @@ class K3bDoc;
 
 class K3bFillStatusDisplay : public QFrame  {
 
-   Q_OBJECT
+  Q_OBJECT
 
-public:
-	K3bFillStatusDisplay(K3bDoc* doc, QWidget *parent=0, const char *name=0);
-	~K3bFillStatusDisplay();
+ public:
+  K3bFillStatusDisplay(K3bDoc* doc, QWidget *parent=0, const char *name=0);
+  ~K3bFillStatusDisplay();
 
-	void showSize();
-	void showTime();
+ public slots:
+  void showSize();
+  void showTime();
 	
-protected:
-	void drawContents(QPainter*);
-	void drawSize(QPainter*);
-	void drawTime(QPainter*);
+ protected:
+  void mousePressEvent( QMouseEvent* );
+  void drawContents(QPainter*);
+  void drawSize(QPainter*);
+  void drawTime(QPainter*);
+  void setupPopupMenu();
 	
-private:
-	bool m_showTime;
-	K3bDoc* doc;
+ private:
+  bool m_showTime;
+  K3bDoc* doc;
+
+  KAction* m_showMinutes;
+  KAction* m_showMegs;
+  KPopupMenu* m_popup;
 };
 
 #endif

@@ -15,17 +15,22 @@
  *                                                                         *
  ***************************************************************************/
 
- namespace K3b
- {
-	enum Error { NOT_STARTED = 1, SUCCESS = 2, IMAGE_FINISHED = 3,
-				 CANCELED = 4, FILE_NOT_FOUND = 5,
-				 BUFFER_UNDERRUN = 6, WRITE_ERROR = 7,
-				 COULD_NOT_OPEN_IMAGE = 8, DEVICE_NOT_FOUND = 9,
-			 	NO_TRACKS = 10, WORKING = 11, CDRECORD_ERROR = 12,
-				 MPG123_ERROR = 13, WRONG_FILE_FORMAT = 14, CORRUPT_MP3 = 15,
-				 MALFORMED_URL = 16, DEVICE_ERROR = 17, IO_ERROR = 18,
-				 CDRDAO_ERROR = 19, MKISOFS_ERROR = 20};
+#include <qstring.h>
 
-	enum FileType { MP3 = 1, WAV = 2 };
-
- };
+namespace K3b
+{
+  enum Error { NOT_STARTED = 1, SUCCESS = 2, IMAGE_FINISHED = 3,
+	       CANCELED = 4, FILE_NOT_FOUND = 5,
+	       BUFFER_UNDERRUN = 6, WRITE_ERROR = 7,
+	       COULD_NOT_OPEN_IMAGE = 8, DEVICE_NOT_FOUND = 9,
+	       NO_TRACKS = 10, WORKING = 11, CDRECORD_ERROR = 12,
+	       MPG123_ERROR = 13, WRONG_FILE_FORMAT = 14, CORRUPT_MP3 = 15,
+	       MALFORMED_URL = 16, DEVICE_ERROR = 17, IO_ERROR = 18,
+	       CDRDAO_ERROR = 19, MKISOFS_ERROR = 20};
+  
+  enum FileType { MP3 = 1, WAV = 2 };
+  
+  
+	QString framesToString( int h, bool showFrames = true );
+/* 	bool parseFrames( const QString&, int& ); */
+};

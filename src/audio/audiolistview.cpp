@@ -41,15 +41,15 @@ void AudioListView::setupColumns(){
 	addColumn( "No" );
 	addColumn( "Artist (CD-Text)" );
 	addColumn( "Title (CD-Text)" );
-	addColumn( "Filename" );
 	addColumn( "Length" );
 	addColumn( "Pregap" );
+	addColumn( "Filename" );
 	
 	setItemsRenameable( true );
 	setRenameable( 0, false );
 	setRenameable( 1 );
 	setRenameable( 2 );
-	setRenameable( 5 );
+// 	setRenameable( 4 );
 }
 
 bool AudioListView::acceptDrag(QDropEvent* e) const{

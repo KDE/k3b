@@ -165,7 +165,7 @@ void K3bDataBurnDialog::setupBurnTab( QFrame* frame )
     m_groupTempDirLayout->addWidget( TextLabel1_3, 0, 0 );
 
     TextLabel2 = new QLabel( m_groupTempDir, "TextLabel2" );
-    TextLabel2->setText( i18n( "Space free on device" ) );
+    TextLabel2->setText( i18n( "Free space on device" ) );
 
     m_groupTempDirLayout->addWidget( TextLabel2, 2, 0 );
 

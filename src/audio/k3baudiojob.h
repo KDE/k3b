@@ -59,7 +59,7 @@ private:
 	void decodeNextFile();
 	void startWriting();
 	
-	KProcess m_process;
+	KShellProcess m_process;
 	K3bAudioDoc* m_doc;
 	K3bMp3DecodingJob* m_mp3Job;
 	K3bAudioTrack* m_currentProcessedTrack;

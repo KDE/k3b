@@ -21,7 +21,6 @@
 #include <qstring.h>
 #include <qfileinfo.h>
 #include <qfile.h>
-#include <qdatetime.h>
 #include <qlist.h>
 
 /**
@@ -30,81 +29,91 @@
 
 class K3bAudioTrack
 {
-public:
-	K3bAudioTrack( QList<K3bAudioTrack>* parent, const QString& filename );
-	K3bAudioTrack( const K3bAudioTrack& a );
-	~K3bAudioTrack();
+ public:
+  K3bAudioTrack( QList<K3bAudioTrack>* parent, const QString& filename );
+  virtual ~K3bAudioTrack();
 
-	QString fileName() const { return QFileInfo(m_file).fileName(); }
-	QString absPath() const { return QFileInfo(m_file).absFilePath(); }
-	const QString& bufferFile() const { return m_bufferFile; }
-	int  filetype() const { return m_filetype; }
-	int  pregap() const { return m_pregap; }
-	const QTime& length() const { return m_length; }
-	
-	const QString& artist() const { return m_artist; }
-	const QString& title() const { return m_title; }
-	const QString& arranger() const { return m_arranger; }
-	const QString& songwriter() const { return m_songwriter; }
-	const QString& isrc() const { return m_isrc; }
-	const QString& cdTextMessage() const { return m_cdTextMessage; }
-	const QString& album() const { return m_album; }
-	
-	bool copyProtection() const { return m_copy; }
-	bool preEmp() const { return m_preEmp; }
-	
-	/** Default vaule is 2 **/
-	void setPregap( int p ) { m_pregap = p; }
+  /** returns true if K3b is able to handle the file
+   *  which means that it can calculate the length of the track
+   *  and the file can be written to a cd.
+   **/
+  //virtual bool isValid() = 0;
 
- 	/**
- 	 * If the file is a mp3-file, it's mp3-tag is used
- 	 **/
-	void setArtist( const QString& a ) { m_artist = a; }
+  QString fileName() const { return QFileInfo(m_file).fileName(); }
+  QString absPath() const { return QFileInfo(m_file).absFilePath(); }
 
- 	/**
- 	 * If the file is a mp3-file, it's mp3-tag is used
- 	 **/
-	void setTitle( const QString& t ) { m_title = t; }
-	void setArranger( const QString& t ) { m_arranger = t; }
-	void setSongwriter( const QString& t ) { m_songwriter = t; }
-	void setIsrc( const QString& t ) { m_isrc = t; }
-	void setCdTextMessage( const QString& t ) { m_cdTextMessage = t; }
-	void setPreEmp( bool b ) { m_preEmp = b; }
-	void setCopyProtection( bool b ) { m_copy = b; }
-	
-	void setAlbum( const QString& t ) { m_album = t; }
-	
-	void setLength( const QTime& time ) { m_length = time; }
-	
-	void setBufferFile( const QString& file ) { m_bufferFile = file; }
-	/** returns the filesize of the track */
-	uint size() const;
-	/** returns the index in the list */
-	int index() const;
+  virtual QString bufferFile() const { return absPath(); }
 
-protected:
-	QList<K3bAudioTrack>* m_parent;
+  int filetype() const { return m_filetype; }
+  int pregap() const { return m_pregap; }
 
-private:	
-	QFile m_file;
-	QString m_bufferFile;
-	QTime m_length;
-	int  m_filetype;
-	int  m_pregap;
+  /** returns length of track in 1/100sec **/
+  int length() const { return m_length; }
 	
-	/** CD-Text: copy protection */
-	bool m_copy;
-	bool m_preEmp;
-	/** CD-Text: PERFORMER */
-	QString m_artist;
-	/** CD-Text: TITLE (track) */
-	QString m_title;
-	/** CD-Text: TITLE (cd) */
-	QString m_album;
-	QString m_arranger;
-	QString m_songwriter;
-	QString m_cdTextMessage;
-	QString m_isrc;
+  const QString& artist() const { return m_artist; }
+  const QString& title() const { return m_title; }
+  const QString& arranger() const { return m_arranger; }
+  const QString& songwriter() const { return m_songwriter; }
+  const QString& isrc() const { return m_isrc; }
+  const QString& cdTextMessage() const { return m_cdTextMessage; }
+  const QString& album() const { return m_album; }
+	
+  bool copyProtection() const { return m_copy; }
+  bool preEmp() const { return m_preEmp; }
+	
+  void setPregap( int p ) { m_pregap = p; }
+
+  /**
+   * If the file is a mp3-file, it's mp3-tag is used
+   **/
+  void setArtist( const QString& a ) { m_artist = a; }
+
+  /**
+   * If the file is a mp3-file, it's mp3-tag is used
+   **/
+  void setTitle( const QString& t ) { m_title = t; }
+  void setArranger( const QString& t ) { m_arranger = t; }
+  void setSongwriter( const QString& t ) { m_songwriter = t; }
+  void setIsrc( const QString& t ) { m_isrc = t; }
+  void setCdTextMessage( const QString& t ) { m_cdTextMessage = t; }
+  void setPreEmp( bool b ) { m_preEmp = b; }
+  void setCopyProtection( bool b ) { m_copy = b; }
+	
+  void setAlbum( const QString& t ) { m_album = t; }
+	
+  void setLength( int time ) { m_length = time; }
+	
+  virtual void setBufferFile( const QString& file );
+  /** returns the filesize of the track */
+  uint size() const;
+  /** returns the index in the list */
+  int index() const;
+
+ protected:
+  QList<K3bAudioTrack>* m_parent;
+  int m_filetype;
+  QFile m_file;
+
+ private:	
+  /** length of track in 1/100sec **/
+  int m_length;
+
+  /** frames: 75 frames are one second **/
+  int m_pregap;
+	
+  /** CD-Text: copy protection */
+  bool m_copy;
+  bool m_preEmp;
+  /** CD-Text: PERFORMER */
+  QString m_artist;
+  /** CD-Text: TITLE (track) */
+  QString m_title;
+  /** CD-Text: TITLE (cd) */
+  QString m_album;
+  QString m_arranger;
+  QString m_songwriter;
+  QString m_cdTextMessage;
+  QString m_isrc;
 };
 
 

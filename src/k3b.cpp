@@ -119,8 +119,8 @@ void K3bApp::initActions()
   fileExport = new KAction( i18n("E&xport..."), "revert", 0, this, SLOT(slotFileExport()), actionCollection(), "file_export" );
 
   fileNewMenu = new KActionMenu( i18n("&New Project"), "filenew", actionCollection(), "file_new" );
-  fileNewAudio = new KAction(i18n("New &Audio project"), "filenew", 0, this, SLOT(slotNewAudioDoc()), actionCollection(), "file_new_audio");
-  fileNewData = new KAction(i18n("New &Data project"),"filenew", 0, this, SLOT(slotNewDataDoc()), actionCollection(), "file_new_data");
+  fileNewAudio = new KAction(i18n("New &Audio project"), "sound", 0, this, SLOT(slotNewAudioDoc()), actionCollection(), "file_new_audio");
+  fileNewData = new KAction(i18n("New &Data project"),"tar", 0, this, SLOT(slotNewDataDoc()), actionCollection(), "file_new_data");
   fileNewMenu->insert( fileNewAudio );
   fileNewMenu->insert( fileNewData );
   fileNewMenu->setDelayed( false );
@@ -168,7 +168,7 @@ void K3bApp::initView()
   connect( m_documentTab, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotCurrentDocChanged(QWidget*)) );
 
   // add the cd-copy-widget to the tab
-  m_documentTab->addTab( new K3bCopyWidget( m_documentTab ), "&Copy CD" );
+//   m_documentTab->addTab( new K3bCopyWidget( m_documentTab ), "&Copy CD" );
 //  m_documentTab->addTab( new K3bRipperWidget( m_documentTab ), "&Ripping" );
 
   dirDock = createDockWidget( "DirDock", SmallIcon("idea") );

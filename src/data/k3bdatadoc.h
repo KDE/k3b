@@ -53,7 +53,8 @@ public:
 	void addView(K3bView* view);
 
 	bool newDocument();	
-	int size();
+	int size() const;
+	int length() const;
 	
 	const QString& name() const { return m_name; }
 	

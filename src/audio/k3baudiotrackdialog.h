@@ -26,6 +26,7 @@ class QLineEdit;
 class QMultiLineEdit;
 class QLabel;
 class QCheckBox;
+class QComboBox;
 class KToggleAction;
 class KIntNumInput;
 class K3bStickyButton;
@@ -61,6 +62,7 @@ protected slots:
 	void updatePregap( int );
 	void updatePreEmp( int );
 	void updateCopyProtection( int );
+	void slotChangePregapFormat( const QString& );
 			
 private:
 	K3bAudioTrack* m_track;
@@ -77,13 +79,15 @@ private:
     QLabel* m_displaySize;
     QLabel* m_displayLength;
     KIntNumInput* m_inputPregap;
+    QComboBox* m_comboPregapFormat;
     QCheckBox* m_checkPreEmp;
     QCheckBox* m_checkCopy;
 	
-	bool m_sticky;
+    bool m_sticky;
+    bool m_bPregapSeconds;
 	
-	void setupGui();
-	void setupConnections();
+    void setupGui();
+    void setupConnections();
 };
 
 #endif

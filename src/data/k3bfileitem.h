@@ -54,6 +54,9 @@ public:
 	QString localPath();
 	
 	long k3bSize() const;
+
+	/** adds the item to this' parent **/
+	K3bDirItem* addDataItem( K3bDataItem* item );
 	
 private:
 	QString m_isoName;

@@ -122,9 +122,17 @@ void K3bDataDoc::slotAddDirectory( const QString& url, K3bDirItem* parent )
 		qDebug( "(K3bDataDoc) tried to add url %s as directory which is no directory!", url.latin1() );
 		return;
 	}
-		
-	// TODO: test if dir already exists!!
 	
+	
+	QList<K3bDataItem>* _itemsInDir = parent->children();
+	for( K3bDataItem* _it = _itemsInDir->first(); _it; _it = _itemsInDir->next() ) {
+		if( _it->k3bName() == QDir(url).dirName() ) {
+			qDebug( "(K3bDataItem) already a file with that name in directory: " + _it->k3bName() );
+			emit infoMessage( "There was already a file with that name in directory: " + _it->k3bName() );
+			return;
+		}
+	}
+
 	K3bDirItem* _newDirItem = new K3bDirItem( QDir(url).dirName(), this, parent );
 	emit newDir( _newDirItem );
 	
@@ -145,6 +153,9 @@ void K3bDataDoc::slotAddDirectory( const QString& url, K3bDirItem* parent )
 
 void K3bDataDoc::addNewFile( const QString& path, K3bDirItem* dir )
 {
+	if( !dir)
+		dir = m_root;
+
 	K3bFileItem* _item =	new K3bFileItem( path, this, dir );
 	qDebug( "---- adding file " + _item->url().path() );
 	
@@ -162,7 +173,7 @@ void K3bDataDoc::addNewFile( const QString& path, K3bDirItem* dir )
 			_item->setK3bName( _artist + " - " + _title + ".mp3" );
 		}
 	}
-	
+
 	// test if already in directory
 	QList<K3bDataItem>* _itemsInDir = dir->children();
 	for( K3bDataItem* _it = _itemsInDir->first(); _it; _it = _itemsInDir->next() ) {
@@ -172,12 +183,12 @@ void K3bDataDoc::addNewFile( const QString& path, K3bDirItem* dir )
 			return;
 		}
 	}
-
+	
 	emit newFile( _item );
 }
 
 
-int K3bDataDoc::size()
+int K3bDataDoc::size() const
 {
 	K3bDataItem* item = root();
 	long _size = 0;
@@ -188,8 +199,14 @@ int K3bDataDoc::size()
 		item = item->nextSibling();
 	}
 	
-	// return size in Megs
-	return (int)(_size/1024/1024);
+	return (int)(_size);
+}
+
+
+int K3bDataDoc::length() const
+{
+  // TODO: fixme
+  return 0;
 }
 
 

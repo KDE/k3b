@@ -37,7 +37,7 @@ public:
 	~K3bDirItem();
 	
 	QList<K3bDataItem>* children() const { return m_children; }
-	void addDataItem( K3bDataItem* item );
+	K3bDirItem* addDataItem( K3bDataItem* item );
 	K3bDataItem* takeDataItem( K3bDataItem* item );
 	K3bDataItem* takeDataItem( int index );
 	/** reimplemented from K3bDataItem */

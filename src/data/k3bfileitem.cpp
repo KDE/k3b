@@ -94,3 +94,8 @@ QString K3bFileItem::localPath()
 {
 	return url().path();
 }
+
+K3bDirItem* K3bFileItem::addDataItem( K3bDataItem* item )
+{
+	return parent()->addDataItem( item );
+}

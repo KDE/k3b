@@ -33,6 +33,10 @@
 #include <iostream>
 #include <cmath>
 
+
+// TODO: connect to the finished signal and delete the temporary files!!!
+
+
 K3bAudioJob::K3bAudioJob( K3bAudioDoc* doc )
 	: K3bBurnJob( )
 {
@@ -281,16 +285,17 @@ void K3bAudioJob::start()
 	emit started();
 	
 	m_error = K3b::WORKING;
-	
-	if( (m_iNumFilesToDecode = m_doc->allMp3Decoded()) > 0 ) {
-		emit infoMessage( i18n("There are %1 files to decode...").arg(m_iNumFilesToDecode) );
+
+	if( !m_doc->onTheFly() ){
+	  if( (m_iNumFilesToDecode = m_doc->allMp3Decoded()) > 0 ) {
+	    emit infoMessage( i18n("There are %1 files to decode...").arg(m_iNumFilesToDecode) );
 		
-		// now use K3bMp3DecodingJob to decode all files
-		emit newTask( "Decoding files" );
-		decodeNextFile();
+	    // now use K3bMp3DecodingJob to decode all files
+	    emit newTask( "Decoding files" );
+	    decodeNextFile();
+	  }
 	}
-	else
-		startWriting();
+	startWriting();
 }
 
 
@@ -404,9 +409,9 @@ void K3bAudioJob::startWriting()
 	
 	firstTrack = true;
 	
-	if( m_doc->cdText() ) {
+	if( m_doc->onTheFly() || m_doc->cdText() ) {
 		// write in dao-mode
-		if( !m_doc->dao() ) {
+		if( m_doc->cdText() && !m_doc->dao() ) {
 			emit infoMessage( "CD-Text is only supported in DAO-mode.");
 			emit infoMessage("Swiching to DAO-mode.");
 			m_doc->setDao( true );
@@ -423,6 +428,33 @@ void K3bAudioJob::startWriting()
 		else {
 			// start a new cdrdao process
 			kapp->config()->setGroup("External Programs");
+
+			// ******** on-the-fly *********************************************************************
+			// *****************************************************************************************
+			// on the fly burning needs a mpg123-process
+
+			emit infoMessage( "Warning: Burning on-the-fly could cause buffer-underruns!" );
+			
+			m_process << kapp->config()->readEntry( "mpg123 path" );
+			m_process << "-s";    // stdout
+			
+			// add all the files to the command line
+			for( K3bAudioTrack* _track = m_doc->at(0); _track != 0; _track = m_doc->next() ) {
+			  if( _track->filetype() != K3b::MP3 ) {
+			    emit infoMessage( "Due to some endianess problems only pure mp3-cds can be burned on-the-fly so far!" );
+			    m_error = K3b::WRONG_FILE_FORMAT;
+			    emit finished(this);
+			    return;
+			  }
+			  
+			  m_process << _track->absPath();
+			}
+
+			m_process << "|";
+
+			// ************************************************************** on-the-fly ***************
+			// *****************************************************************************************
+
 			m_process << kapp->config()->readEntry( "cdrdao path" );
 			m_process << "write";
 
@@ -438,9 +470,11 @@ void K3bAudioJob::startWriting()
 			m_process << "-n";
 			
 			if( m_doc->dummy() )
-				m_process << "--simulate";
+			  m_process << "--simulate";
 			if( k3bMain()->eject() )
-				m_process << "--eject";
+			  m_process << "--eject";
+			if( m_doc->onTheFly() )
+			  m_process << "--swap";   // mpg123 creates wrong endianess
 			
 			// writing speed
 			m_process << "--speed" << QString::number(  m_doc->speed() );
