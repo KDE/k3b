@@ -1,6 +1,5 @@
 <!DOCTYPE UI><UI version="3.0" stdsetdef="1">
 <class>base_K3bPatternOptionTab</class>
-<author>Sebastian Trueg</author>
 <widget class="QWidget">
     <property name="name">
         <cstring>base_K3bPatternOptionTab</cstring>
@@ -9,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>734</width>
-            <height>640</height>
+            <width>706</width>
+            <height>811</height>
         </rect>
     </property>
     <property name="caption">
@@ -28,7 +27,7 @@
         </property>
         <widget class="QLabel">
             <property name="name">
-                <cstring>m_infoLabel</cstring>
+                <cstring>m_generalInfoLabel</cstring>
             </property>
             <property name="sizePolicy">
                 <sizepolicy>
@@ -39,30 +38,363 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>&lt;qt&gt;Here you can setup the audio cd ripping pattern which will state how your ripped tracks will be saved. You can use one of the predefined or define your own. You are free to add any text you want along with some special strings that will be replaced by the values gained from cddb. These special strings are:
-&lt;ul&gt;
-&lt;li&gt;%a - Will be replaced by the artist of the track&lt;/li&gt;
-&lt;li&gt;%t - Will be replaced by the title of the track&lt;/li&gt;
-&lt;li&gt;%n - Will be replaced by the track number&lt;/li&gt;
-&lt;li&gt;%e - Will be replaced by extended info about the track&lt;/li&gt;
-&lt;li&gt;%g - Will be replaced by the genre of the cd&lt;/li&gt;
-&lt;li&gt;%r - Will be replaced by the album artist (differs from %a only on soundtracks or compilations)&lt;/li&gt;
-&lt;li&gt;%m - Will be replaced by the album title&lt;/li&gt;
-&lt;li&gt;%x - Will be replaced by extended info about the cd&lt;/li&gt;
-&lt;li&gt;%d - Will be replaced by the current date&lt;/li&gt;
-&lt;/ul&gt;
-The directory pattern always describes a relative path which will be appended to the directory you choose in the cd ripping dialog. If you do not want any directory pattern just leave it blank.&lt;/qt&gt;</string>
+                <string>&lt;p&gt;Here you can setup the audio cd ripping pattern which states how your ripped tracks will be saved. The basic system allows to set some standard pattern. If you want to have full control over the pattern please use the advanced pattern system.</string>
             </property>
             <property name="alignment">
-                <set>WordBreak|AlignTop|AlignLeft</set>
+                <set>WordBreak|AlignTop</set>
             </property>
         </widget>
-        <widget class="QGroupBox">
+        <widget class="QTabWidget">
             <property name="name">
-                <cstring>m_groupDirectoryPattern</cstring>
+                <cstring>m_mainTabbed</cstring>
             </property>
-            <property name="title">
-                <string>Direcory Pattern</string>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Basic Pattern System</string>
+                </attribute>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>11</number>
+                    </property>
+                    <property name="spacing">
+                        <number>6</number>
+                    </property>
+                    <widget class="QLabel">
+                        <property name="name">
+                            <cstring>m_basicInfoLabel</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>1</hsizetype>
+                                <vsizetype>1</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="text">
+                            <string>&lt;p&gt;You are free to add any text in the fields of the filename pattern. This text will be added between the selected entries.</string>
+                        </property>
+                        <property name="alignment">
+                            <set>WordBreak|AlignTop</set>
+                        </property>
+                    </widget>
+                    <widget class="QGroupBox">
+                        <property name="name">
+                            <cstring>m_groupBasicDirectoryPattern</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Directory Pattern</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>11</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="QLabel" row="0" column="1">
+                                <property name="name">
+                                    <cstring>TextLabel2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Second directory</string>
+                                </property>
+                            </widget>
+                            <widget class="KComboBox" row="1" column="0">
+                                <property name="name">
+                                    <cstring>m_comboBasicDirectory1</cstring>
+                                </property>
+                            </widget>
+                            <widget class="KComboBox" row="1" column="1">
+                                <property name="name">
+                                    <cstring>m_comboBasicDirectory2</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>TextLabel1</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>First directory</string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QGroupBox">
+                        <property name="name">
+                            <cstring>m_groupBasicFilenamePattern</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Filename Pattern</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>11</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="KComboBox" row="0" column="0">
+                                <property name="name">
+                                    <cstring>m_comboBasicFilename1</cstring>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit" row="0" column="1">
+                                <property name="name">
+                                    <cstring>m_editBasicFilename1</cstring>
+                                </property>
+                            </widget>
+                            <widget class="KComboBox" row="0" column="2">
+                                <property name="name">
+                                    <cstring>m_comboBasicFilename2</cstring>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit" row="0" column="3">
+                                <property name="name">
+                                    <cstring>m_editBasicFilename2</cstring>
+                                </property>
+                            </widget>
+                            <widget class="KComboBox" row="0" column="4">
+                                <property name="name">
+                                    <cstring>m_comboBasicFilename3</cstring>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <spacer>
+                        <property name="name" stdset="0">
+                            <cstring>Spacer10</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </vbox>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Advanced Custom Pattern System</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>11</number>
+                    </property>
+                    <property name="spacing">
+                        <number>6</number>
+                    </property>
+                    <spacer row="4" column="1">
+                        <property name="name" stdset="0">
+                            <cstring>Spacer9</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QGroupBox" row="3" column="0" rowspan="1" colspan="2">
+                        <property name="name">
+                            <cstring>m_groupAdvancedFilenamePattern</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Filename Pattern</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>11</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="KComboBox" row="0" column="0" rowspan="1" colspan="3">
+                                <item>
+                                    <property name="text">
+                                        <string>%a - %t</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>Track %n - %t (%a)</string>
+                                    </property>
+                                </item>
+                                <property name="name">
+                                    <cstring>m_comboAdvancedFilenamePattern</cstring>
+                                </property>
+                                <property name="editable">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="contextMenuEnabled">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Insert your custom pattern here</string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QGroupBox" row="2" column="0" rowspan="1" colspan="2">
+                        <property name="name">
+                            <cstring>m_groupAdvancedDirectoryPattern</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Direcory Pattern</string>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>11</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="KComboBox">
+                                <item>
+                                    <property name="text">
+                                        <string>%r/%m</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>%g/%r - %m</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>music/ripped-tracks</string>
+                                    </property>
+                                </item>
+                                <property name="name">
+                                    <cstring>m_comboAdvancedDirectoryPattern</cstring>
+                                </property>
+                                <property name="editable">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="contextMenuEnabled">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Insert your custom pattern here</string>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <widget class="QLabel" row="1" column="0">
+                        <property name="name">
+                            <cstring>TextLabel1_2</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>1</hsizetype>
+                                <vsizetype>1</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="text">
+                            <string>&lt;p&gt;&lt;ul&gt;
+&lt;li&gt;%a - Will be replaced by the artist of the track
+&lt;li&gt;%t - Will be replaced by the title of the track
+&lt;li&gt;%n - Will be replaced by the track number
+&lt;li&gt;%e - Will be replaced by extended info about the track
+&lt;li&gt;%g - Will be replaced by the genre of the cd</string>
+                        </property>
+                        <property name="alignment">
+                            <set>WordBreak|AlignTop</set>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="1" column="1">
+                        <property name="name">
+                            <cstring>TextLabel2_2</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>1</hsizetype>
+                                <vsizetype>1</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="text">
+                            <string>&lt;p&gt;&lt;ul&gt;
+&lt;li&gt;%r - Will be replaced by the album artist (differs from %a only on soundtracks or compilations)
+&lt;li&gt;%m - Will be replaced by the album title
+&lt;li&gt;%x - Will be replaced by extended info about the cd
+&lt;li&gt;%d - Will be replaced by the current date</string>
+                        </property>
+                        <property name="alignment">
+                            <set>WordBreak|AlignTop</set>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
+                        <property name="name">
+                            <cstring>m_advancedInfoLabel</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>1</hsizetype>
+                                <vsizetype>1</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="text">
+                            <string>&lt;p&gt;You can use one of the predefined or define your own. You are free to add any text you want along with some special strings that will be replaced by the values gained from cddb. These special strings are:</string>
+                        </property>
+                        <property name="alignment">
+                            <set>WordBreak|AlignTop|AlignLeft</set>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+        </widget>
+        <widget class="QFrame">
+            <property name="name">
+                <cstring>m_boxReplace</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>Box</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
             </property>
             <grid>
                 <property name="name">
@@ -74,51 +406,23 @@ The directory pattern always describes a relative path which will be appended to
                 <property name="spacing">
                     <number>6</number>
                 </property>
-                <widget class="KLineEdit" row="1" column="1">
-                    <property name="name">
-                        <cstring>m_editDirectoryReplace</cstring>
+                <spacer row="0" column="2">
+                    <property name="name" stdset="0">
+                        <cstring>Spacer2</cstring>
                     </property>
-                    <property name="enabled">
-                        <bool>false</bool>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
                     </property>
-                    <property name="text">
-                        <string>_</string>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
                     </property>
-                </widget>
-                <widget class="KComboBox" row="0" column="0" rowspan="1" colspan="3">
-                    <item>
-                        <property name="text">
-                            <string>%r/%m</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>%g/%r - %m</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>music/ripped-tracks</string>
-                        </property>
-                    </item>
-                    <property name="name">
-                        <cstring>m_comboDirectoryPattern</cstring>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
                     </property>
-                    <property name="editable">
-                        <bool>true</bool>
-                    </property>
-                    <property name="contextMenuEnabled">
-                        <bool>false</bool>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="1" column="0">
-                    <property name="name">
-                        <cstring>m_checkDirectoryReplace</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Replace all blanks with:</string>
-                    </property>
-                </widget>
+                </spacer>
                 <spacer row="1" column="2">
                     <property name="name" stdset="0">
                         <cstring>Spacer1</cstring>
@@ -136,52 +440,15 @@ The directory pattern always describes a relative path which will be appended to
                         </size>
                     </property>
                 </spacer>
-            </grid>
-        </widget>
-        <widget class="QGroupBox">
-            <property name="name">
-                <cstring>m_groupFilenamePattern</cstring>
-            </property>
-            <property name="title">
-                <string>Filename Pattern</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>11</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
-                <widget class="KComboBox" row="0" column="0" rowspan="1" colspan="3">
-                    <item>
-                        <property name="text">
-                            <string>%a - %t</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Track %n - %t (%a)</string>
-                        </property>
-                    </item>
+                <widget class="KLineEdit" row="0" column="1">
                     <property name="name">
-                        <cstring>m_comboFilenamePattern</cstring>
+                        <cstring>m_editDirectoryReplace</cstring>
                     </property>
-                    <property name="editable">
-                        <bool>true</bool>
-                    </property>
-                    <property name="contextMenuEnabled">
+                    <property name="enabled">
                         <bool>false</bool>
                     </property>
-                </widget>
-                <widget class="QCheckBox" row="1" column="0">
-                    <property name="name">
-                        <cstring>m_checkFilenameReplace</cstring>
-                    </property>
                     <property name="text">
-                        <string>Replace all blanks with:</string>
+                        <string>_</string>
                     </property>
                 </widget>
                 <widget class="KLineEdit" row="1" column="1">
@@ -195,12 +462,47 @@ The directory pattern always describes a relative path which will be appended to
                         <string>_</string>
                     </property>
                 </widget>
-                <spacer row="1" column="2">
+                <widget class="QCheckBox" row="1" column="0">
+                    <property name="name">
+                        <cstring>m_checkFilenameReplace</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Replace all blanks in filename with:</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="0" column="0">
+                    <property name="name">
+                        <cstring>m_checkDirectoryReplace</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Replace all blanks in directory with:</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>m_groupExample</cstring>
+            </property>
+            <property name="title">
+                <string>Example</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>11</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <spacer>
                     <property name="name" stdset="0">
-                        <cstring>Spacer2</cstring>
+                        <cstring>Spacer8</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Vertical</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
@@ -212,25 +514,6 @@ The directory pattern always describes a relative path which will be appended to
                         </size>
                     </property>
                 </spacer>
-            </grid>
-        </widget>
-        <widget class="QGroupBox">
-            <property name="name">
-                <cstring>m_groupExample</cstring>
-            </property>
-            <property name="title">
-                <string>Example</string>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>11</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
                 <widget class="KSqueezedTextLabel">
                     <property name="name">
                         <cstring>m_labelExample</cstring>
@@ -241,48 +524,114 @@ The directory pattern always describes a relative path which will be appended to
                         </font>
                     </property>
                     <property name="frameShape">
-                        <enum>StyledPanel</enum>
+                        <enum>NoFrame</enum>
                     </property>
                     <property name="frameShadow">
-                        <enum>Sunken</enum>
+                        <enum>Plain</enum>
+                    </property>
+                    <property name="lineWidth">
+                        <number>0</number>
                     </property>
                     <property name="text">
-                        <string>Some sample text for layouting</string>
+                        <string>Some ...uting</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignCenter</set>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>This is how the ripped audio tracks will be saved</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;This is an example for the directory and filenaming when ripping audio tracks from a cd. The used names have nothing to do with your environment. They are set by the author ;-)</string>
                     </property>
                 </widget>
-            </hbox>
+                <spacer>
+                    <property name="name" stdset="0">
+                        <cstring>Spacer9_2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+            </vbox>
         </widget>
-        <spacer>
-            <property name="name" stdset="0">
-                <cstring>Spacer3</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
-            </property>
-        </spacer>
     </vbox>
 </widget>
 <connections>
     <connection>
-        <sender>m_comboDirectoryPattern</sender>
+        <sender>m_comboAdvancedDirectoryPattern</sender>
         <signal>textChanged(const QString&amp;)</signal>
         <receiver>base_K3bPatternOptionTab</receiver>
         <slot>slotUpdateExample()</slot>
     </connection>
     <connection>
-        <sender>m_checkDirectoryReplace</sender>
-        <signal>toggled(bool)</signal>
+        <sender>m_comboAdvancedFilenamePattern</sender>
+        <signal>textChanged(const QString&amp;)</signal>
         <receiver>base_K3bPatternOptionTab</receiver>
         <slot>slotUpdateExample()</slot>
+    </connection>
+    <connection>
+        <sender>m_editBasicFilename1</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>base_K3bPatternOptionTab</receiver>
+        <slot>slotUpdateExample()</slot>
+    </connection>
+    <connection>
+        <sender>m_editBasicFilename2</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>base_K3bPatternOptionTab</receiver>
+        <slot>slotUpdateExample()</slot>
+    </connection>
+    <connection>
+        <sender>m_comboBasicDirectory1</sender>
+        <signal>activated(int)</signal>
+        <receiver>base_K3bPatternOptionTab</receiver>
+        <slot>slotUpdateExample()</slot>
+    </connection>
+    <connection>
+        <sender>m_comboBasicDirectory2</sender>
+        <signal>activated(int)</signal>
+        <receiver>base_K3bPatternOptionTab</receiver>
+        <slot>slotUpdateExample()</slot>
+    </connection>
+    <connection>
+        <sender>m_comboBasicFilename1</sender>
+        <signal>activated(int)</signal>
+        <receiver>base_K3bPatternOptionTab</receiver>
+        <slot>slotUpdateExample()</slot>
+    </connection>
+    <connection>
+        <sender>m_comboBasicFilename2</sender>
+        <signal>activated(int)</signal>
+        <receiver>base_K3bPatternOptionTab</receiver>
+        <slot>slotUpdateExample()</slot>
+    </connection>
+    <connection>
+        <sender>m_comboBasicFilename3</sender>
+        <signal>activated(int)</signal>
+        <receiver>base_K3bPatternOptionTab</receiver>
+        <slot>slotUpdateExample()</slot>
+    </connection>
+    <connection>
+        <sender>m_mainTabbed</sender>
+        <signal>currentChanged(QWidget*)</signal>
+        <receiver>base_K3bPatternOptionTab</receiver>
+        <slot>slotUpdateExample()</slot>
+    </connection>
+    <connection>
+        <sender>m_checkFilenameReplace</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_editFilenameReplace</receiver>
+        <slot>setEnabled(bool)</slot>
     </connection>
     <connection>
         <sender>m_editDirectoryReplace</sender>
@@ -291,20 +640,8 @@ The directory pattern always describes a relative path which will be appended to
         <slot>slotUpdateExample()</slot>
     </connection>
     <connection>
-        <sender>m_comboFilenamePattern</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>base_K3bPatternOptionTab</receiver>
-        <slot>slotUpdateExample()</slot>
-    </connection>
-    <connection>
-        <sender>m_checkFilenameReplace</sender>
+        <sender>m_checkDirectoryReplace</sender>
         <signal>toggled(bool)</signal>
-        <receiver>base_K3bPatternOptionTab</receiver>
-        <slot>slotUpdateExample()</slot>
-    </connection>
-    <connection>
-        <sender>m_editFilenameReplace</sender>
-        <signal>textChanged(const QString&amp;)</signal>
         <receiver>base_K3bPatternOptionTab</receiver>
         <slot>slotUpdateExample()</slot>
     </connection>
@@ -317,8 +654,14 @@ The directory pattern always describes a relative path which will be appended to
     <connection>
         <sender>m_checkFilenameReplace</sender>
         <signal>toggled(bool)</signal>
-        <receiver>m_editFilenameReplace</receiver>
-        <slot>setEnabled(bool)</slot>
+        <receiver>base_K3bPatternOptionTab</receiver>
+        <slot>slotUpdateExample()</slot>
+    </connection>
+    <connection>
+        <sender>m_editFilenameReplace</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>base_K3bPatternOptionTab</receiver>
+        <slot>slotUpdateExample()</slot>
     </connection>
 </connections>
 <slots>

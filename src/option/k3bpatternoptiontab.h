@@ -40,6 +40,11 @@ class K3bPatternOptionTab : public base_K3bPatternOptionTab
   void slotUpdateExample();
 
  private:
+  QString basicDirectoryPattern();
+  QString basicFilenamePattern();
+  QString patternForName( const QString& name );
+  QString basicPatternItemFromIndex( int, bool );
+
   K3bCddbEntry m_exampleEntry;
 };
 

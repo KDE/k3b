@@ -33,7 +33,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kconfig.h>
-#include <kedittoolbar.h>
+
 
 
 // TODO: handle the default-settings
@@ -47,7 +47,6 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
   setupCddbPage();
   setupPatternPage();
   setupMiscPage();
-  setupToolBarTab();
 
   m_externalBinOptionTab->readSettings();
   m_cddbOptionTab->readSettings();
@@ -90,8 +89,6 @@ bool K3bOptionDialog::saveSettings()
   m_burningOptionTab->saveSettings();
   m_patternOptionTab->apply();
   m_externalBinOptionTab->saveSettings();
-  m_editToolbarWidget->save();
-  k3bMain()->createGUI();
 
   if( !m_miscOptionTab->saveSettings() )
     return false;
@@ -204,15 +201,4 @@ void K3bOptionDialog::setupMiscPage()
 }
 
 
-void K3bOptionDialog::setupToolBarTab()
-{
-  QFrame* frame = addPage( i18n("Toolbars"), i18n("Configure Toolbars"),
-			   KGlobal::instance()->iconLoader()->loadIcon( "configure_toolbars", KIcon::NoGroup, KIcon::SizeMedium ) );
-
-  QHBoxLayout* box = new QHBoxLayout( frame );
-  box->setSpacing(0);
-  box->setMargin(0);
-  m_editToolbarWidget = new KEditToolbarWidget( k3bMain()->actionCollection(), QString::null, true, frame );
-  box->addWidget( m_editToolbarWidget );
-}
 #include "k3boptiondialog.moc"
