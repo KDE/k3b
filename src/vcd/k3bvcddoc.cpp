@@ -282,6 +282,15 @@ void K3bVcdDoc::informAboutNotFoundFiles()
 
 void K3bVcdDoc::loadDefaultSettings()
 {
+  KConfig* c = k3bMain()->config();
+
+  c->setGroup( "default vcd settings" );
+
+  setDummy( c->readBoolEntry( "dummy_mode", false ) );
+  setDao( c->readBoolEntry( "dao", true ) );
+  setOnTheFly( c->readBoolEntry( "on_the_fly", false ) );
+
+  // m_removeBufferFiles = c->readBoolEntry( "remove_buffer_files", true );
 }
 
 

@@ -54,6 +54,9 @@ class K3bVcdDoc : public K3bDoc
   bool newDocument();
   int numOfTracks() const { return m_tracks->count(); }
 
+  const QString& vcdImage() const { return m_vcdImage; }
+  void setVcdImage( const QString& s ) { m_vcdImage = s; }
+  
   K3bVcdTrack* first() { return m_tracks->first(); }
   K3bVcdTrack* current() const { return m_tracks->current(); }
   K3bVcdTrack* next() { return m_tracks->next(); }
@@ -115,7 +118,8 @@ class K3bVcdDoc : public K3bDoc
 
 
   QStringList m_notFoundFiles;
-
+  QString m_vcdImage;
+  
   class PrivateUrlToAdd
     {
     public:
