@@ -400,9 +400,7 @@ K3bDirItem* K3bDataDoc::addEmptyDir( const QString& name, K3bDirItem* parent )
 
 KIO::filesize_t K3bDataDoc::size() const
 {
-  //return m_size;
-  //  return root()->k3bSize();
-  return m_sizeHandler->size() + m_oldSessionSize;
+  return m_sizeHandler->blocks().mode1Bytes() + m_oldSessionSize;
 }
 
 

@@ -28,6 +28,15 @@
 // or we just update the sizes!
 
 
+static long usedBlocks( const KIO::filesize_t& bytes )
+{
+  if( bytes % 2048 )
+    return bytes/2048 + 1;
+  else
+    return bytes/2048;
+}
+
+
 class InodeInfo
 {
 public:
@@ -57,6 +66,11 @@ public:
 
   KIO::filesize_t completeSize() const { return savedSize*number; }
 
+  /**
+   * In an iso9660 filesystem a file occupies complete blocks of 2048 bytes.
+   */
+  K3b::Msf blocks() const { return K3b::Msf( usedBlocks(savedSize) ); }
+
   QPtrList<K3bDataItem> items;
 };
 
@@ -70,6 +84,7 @@ public:
   QMap<K3bFileItem::Id, InodeInfo> inodeMap;
 
   KIO::filesize_t size;
+  K3b::Msf blocks;
 
   QPtrList<K3bDataItem> specialItems;
 };
@@ -94,6 +109,11 @@ const KIO::filesize_t& K3bFileCompilationSizeHandler::size() const
 }
 
 
+const K3b::Msf& K3bFileCompilationSizeHandler::blocks() const
+{
+  return d->blocks;
+}
+
 
 void K3bFileCompilationSizeHandler::addFile( K3bDataItem* item )
 {
@@ -101,6 +121,7 @@ void K3bFileCompilationSizeHandler::addFile( K3bDataItem* item )
     // special files do not have a corresponding local file
     // so we just add their k3bSize
     d->size += item->k3bSize();
+    d->blocks += usedBlocks(item->k3bSize());
     d->specialItems.append( item );
   }
   else if( item->isFile() ) {
@@ -111,7 +132,9 @@ void K3bFileCompilationSizeHandler::addFile( K3bDataItem* item )
 
     if( inodeInfo.number == 0 ) {
       inodeInfo.savedSize = item->k3bSize();
+
       d->size += item->k3bSize();
+      d->blocks += inodeInfo.blocks();
     }
 
     if( item->k3bSize() != inodeInfo.savedSize ) {
@@ -136,6 +159,7 @@ void K3bFileCompilationSizeHandler::removeFile( K3bDataItem* item )
     else {
       d->specialItems.removeRef( item );
       d->size -= item->k3bSize();
+      d->blocks -= usedBlocks(item->k3bSize());
     }
   }
   else if( item->isFile() ) {
@@ -154,8 +178,10 @@ void K3bFileCompilationSizeHandler::removeFile( K3bDataItem* item )
 
       inodeInfo.items.removeRef( item );
       inodeInfo.number--;
-      if( inodeInfo.number == 0 )
+      if( inodeInfo.number == 0 ) {
 	d->size -= inodeInfo.savedSize;
+	d->blocks -= inodeInfo.blocks();
+      }
     }
   }
 }
@@ -165,4 +191,5 @@ void K3bFileCompilationSizeHandler::clear()
 {
   d->inodeMap.clear();
   d->size = 0;
+  d->blocks = 0;
 }

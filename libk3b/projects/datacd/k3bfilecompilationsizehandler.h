@@ -18,6 +18,7 @@
 
 
 #include <kio/global.h>
+#include <k3bmsf.h>
 
 class K3bDataItem;
 
@@ -38,7 +39,16 @@ class K3bFileCompilationSizeHandler
   K3bFileCompilationSizeHandler();
   ~K3bFileCompilationSizeHandler();
 
+  /**
+   * This does NOT equal blocks() * 2048.
+   * This is the sum of the actual file sizes.
+   */
   const KIO::filesize_t& size() const;
+
+  /**
+   * Number of blocks the files will occupy.
+   */
+  const K3b::Msf& blocks() const;
 
   /**
    * This will increase the counter for the inode of

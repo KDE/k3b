@@ -58,7 +58,7 @@
 #include <kio/global.h>
 
 
-
+#include "k3bfilecompilationsizehandler.h"
 
 
 K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const char *name, bool modal )
@@ -107,6 +107,9 @@ K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const ch
       path.append( _doc->isoOptions().volumeID() + ".iso" );
   }
   m_tempDirSelectionWidget->setTempPath( path );
+
+
+  qDebug( "blocks: %d bytes: %d\n", _doc->sizeHandler()->blocks().lba(), _doc->sizeHandler()->size() );
 }
 
 K3bDataBurnDialog::~K3bDataBurnDialog(){

@@ -543,12 +543,11 @@ bool K3bIsoImager::addMkisofsParameters( bool printSize )
   //
   bool filesGreaterThan2Gb = false;
   K3bDataItem* item = m_doc->root();
-  while( item ) {
+  while( (item = item->nextSibling()) ) {
     if( item->isFile() && item->k3bSize() > 2LL*1024LL*1024LL*1024LL ) {
       filesGreaterThan2Gb = true;
       break;
-    }    
-    item = item->nextSibling();
+    }
   }
 
   if( filesGreaterThan2Gb )
@@ -855,22 +854,6 @@ QString K3bIsoImager::escapeGraftPoint( const QString& str )
 
 bool K3bIsoImager::prepareMkisofsFiles()
 {
-  //
-  // in case the doc contains files > 2gb we need to enable udf!
-  // since iso9660 does only support file sizes up to 2 gb
-  //
-  if( !m_doc->isoOptions().createUdf() ) {
-    K3bDataItem* item = m_doc->root();
-    while( (item = item->nextSibling()) ) {
-      if( item->isFile() && item->k3bSize() > (KIO::filesize_t)(2*1024*1024*1024) ) {
-	emit infoMessage( i18n("Enabled UDF extensions to support files bigger than 2 GB."), WARNING );
-	m_doc->isoOptions().setCreateUdf( true );
-	break;
-      }
-    }
-  }
-
-
   // write path spec file
   // ----------------------------------------------------
   int num = writePathSpec();

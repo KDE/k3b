@@ -141,10 +141,11 @@ QDragObject* K3bDataFileView::dragObject()
   KURL::List urls;
   for( QPtrListIterator<QListViewItem> it( selectedViewItems ); it.current(); ++it ) {
     K3bDataViewItem* dataViewItem = dynamic_cast<K3bDataViewItem*>( it.current() );
-    if( dataViewItem )
-      if( dataViewItem->dataItem()->isFile()
-	  &&  !dataViewItem->dataItem()->localPath().isEmpty() )
+    if( dataViewItem ) {
+//       if( dataViewItem->dataItem()->isFile()
+// 	  &&  !dataViewItem->dataItem()->localPath().isEmpty() )
 	urls.append( KURL::fromPathOrURL(dataViewItem->dataItem()->localPath()) );
+    }
     else
       kdDebug() << "no dataviewitem" << endl;
   }
