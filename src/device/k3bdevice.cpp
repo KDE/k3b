@@ -18,6 +18,7 @@
 #include "k3btrack.h"
 #include "k3btoc.h"
 
+
 #include <qstring.h>
 #include <qfile.h>
 
@@ -434,45 +435,9 @@ int K3bCdDevice::CdDevice::isEmpty()
     kdDebug() << "(K3bCdDevice)  Error: No disk in drive" << endl;
     ret = NO_DISK;
   } else {
-    struct cdrom_generic_command cmd;
-
-    unsigned char inf[32];
-
-    ::memset(&cmd,0,sizeof (struct cdrom_generic_command));
-    ::memset(inf,0,32);
-    cmd.cmd[0] = GPCMD_READ_DISC_INFO;
-    cmd.cmd[8] = 32;
-    cmd.buffer = inf;
-    cmd.buflen = 32;
-    cmd.data_direction = CGC_DATA_READ;
-    //
-    // Disc Information Block
-    // ======================
-    // Byte   0-1: Disk Information Length
-    // Byte     2: Bits 0-1 Disc Status: 0-empty,1-appendable,2-complete,3-other
-    //             Bits 2-3 State of last Session: 0-empty,1-incomplete,2-reserved,3-complete
-    //             Bit    4 Erasable, 1-cd-rw present
-    //             Bits 5-7 Reserved
-    // Byte     3: Number of first Track on Disk
-    // Byte     4: Number of Sessions (LSB)
-    // Byte     5: First Track in Last Session (LSB)
-    // Byte     6: Last Track in Last Session (LSB)
-    // Byte     7: Bits 0-4 Reserved
-    //             Bit    5 URU Unrestricted Use Bit
-    //             Bit    6 DBC_V Disc Bar Code Field is Valid
-    //             Bit    7 DID_V Disc Id Field is valid
-    // Byte     8: Disc Type: 0x00 CD-DA or CD-ROM, 0x10 CD-I, 0x20 CD-ROM XA, 0xFF undefined
-    //                        all other values reserved
-    // Byte     9: Number of Sessions (MSB)
-    // Byte    10: First Track in Last Session (MSB)
-    // Byte    11: Last Track in Last Session (MSB)
-    // Byte 12-15: Disc Identification
-    // Byte 16-19: Last Session Lead-In Start Time MSF (16-MSB 19-LSB)
-    // Byte 20-23: Last Possible Start Time for Start of Lead-Out MSF (20-MSB 23-LSB)
-    // Byte 24-31: Disc Bar Code
-    //
-    if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) == 0 ) {
-      switch( (int)(inf[2] & 0x03) ) {
+    disc_info_t inf;
+    if( getDiscInfo( &inf ) ) {
+      switch( inf.status ) {
       case 0:
         ret = EMPTY;
         break;
@@ -486,7 +451,8 @@ int K3bCdDevice::CdDevice::isEmpty()
         ret = NO_INFO;
         break;
       }
-    } else {
+    } 
+    else {
       kdDebug() << "(K3bCdDevice) could not get disk info !" << endl;
       ret = NO_INFO;
     }
@@ -494,8 +460,8 @@ int K3bCdDevice::CdDevice::isEmpty()
 
   if( needToClose )
     close();
-  return ret;
 
+  return ret;
 }
 
 K3b::Msf K3bCdDevice::CdDevice::discSize()
@@ -508,26 +474,13 @@ K3b::Msf K3bCdDevice::CdDevice::discSize()
   if (open() < 0)
     return ret;
 
-  struct cdrom_generic_command cmd;
-
-  unsigned char inf[32];
-
-  ::memset(&cmd,0,sizeof (struct cdrom_generic_command));
-  ::memset(inf,0,32);
-  cmd.cmd[0] = GPCMD_READ_DISC_INFO;
-  cmd.cmd[8] = 32;
-  cmd.buffer = inf;
-  cmd.buflen = 32;
-  cmd.data_direction = CGC_DATA_READ;
-  if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) == 0 ) {
-    if ( inf[21] != 0xFF && inf[22] != 0xFF && inf[23] != 0xFF ) {
-      ret.addMinutes((int)inf[21]);
-      ret.addSeconds((int)inf[22]);
-      ret.addFrames((int)inf[23]);
+  disc_info_t inf;
+  if( getDiscInfo( &inf ) ) {
+    if ( inf.lead_out_m != 0xFF && inf.lead_out_s != 0xFF && inf.lead_out_f != 0xFF ) {
+      ret = K3b::Msf( inf.lead_out_m, inf.lead_out_s, inf.lead_out_f );
       ret -= 150;
     }
-  } else
-    kdDebug() << "(K3bCdDevice) could not get disk info !" << endl;
+  }
 
   if( ret == 0 ) {
     kdDebug() << "(K3bCdDevice) getting disk size via toc." << endl;
@@ -548,45 +501,61 @@ K3b::Msf K3bCdDevice::CdDevice::discSize()
   return ret;
 }
 
-K3b::Msf K3bCdDevice::CdDevice::remainingSize()
+
+bool K3bCdDevice::CdDevice::getDiscInfo( K3bCdDevice::disc_info_t* info )
 {
   // if the device is already opened we do not close it
   // to allow fast multible method calls in a row
   bool needToClose = !isOpen();
+  bool success = true;
 
+  if (open() < 0)
+    return false;
+
+  struct cdrom_generic_command cmd;
+
+  ::memset(&cmd,0,sizeof (struct cdrom_generic_command));
+  ::memset(info, 0, sizeof(disc_info_t));
+
+  cmd.cmd[0] = GPCMD_READ_DISC_INFO;
+  cmd.cmd[8] = sizeof(disc_info_t);
+  cmd.buffer = (unsigned char*)info;
+  cmd.buflen = sizeof(disc_info_t);
+  cmd.data_direction = CGC_DATA_READ;
+
+  if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) ) {
+    success = false;
+    kdDebug() << "(K3bCdDevice::CdDevice) could not get disk info !" << endl;
+  }
+
+  if( needToClose )
+    close();
+
+  return success;
+}
+
+
+K3b::Msf K3bCdDevice::CdDevice::remainingSize()
+{
   K3b::Msf ret, size;
   bool empty = false;
   bool appendable = false;
 
-  if (open() < 0)
-    return ret;
+  disc_info_t inf;
 
-  struct cdrom_generic_command cmd;
-
-  unsigned char inf[32];
-
-  ::memset(&cmd,0,sizeof (struct cdrom_generic_command));
-  ::memset(inf,0,32);
-  cmd.cmd[0] = GPCMD_READ_DISC_INFO;
-  cmd.cmd[8] = 32;
-  cmd.buffer = inf;
-  cmd.buflen = 32;
-  cmd.data_direction = CGC_DATA_READ;
-  if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) == 0 ) {
-    if ( inf[17] != 0xFF && inf[18] != 0xFF && inf[19] != 0xFF ) {
-      ret = K3b::Msf( (int)inf[17], (int)inf[18], (int)inf[19] );
+  if( getDiscInfo( &inf ) ) {
+    if ( inf.lead_in_m != 0xFF && inf.lead_in_s != 0xFF && inf.lead_in_f != 0xFF ) {
+      ret = K3b::Msf( inf.lead_in_m, inf.lead_in_s, inf.lead_in_f );
     }
-    if ( inf[21] != 0xFF && inf[22] != 0xFF && inf[23] != 0xFF ) {
-      size = K3b::Msf( (int)inf[21], (int)inf[22], (int)inf[23] );
+    if ( inf.lead_out_m != 0xFF && inf.lead_out_s != 0xFF && inf.lead_out_f != 0xFF ) {
+      size = K3b::Msf( inf.lead_out_m, inf.lead_out_s, inf.lead_out_f );
     }
 
-    empty = ((int)(inf[2] & 0x03) == 0);
-    appendable = ((int)(inf[2] & 0x03) == 1);
-  } else
-    kdDebug() << "(K3bCdDevice) could not get disk info !" << endl;
-
-  if( needToClose )
-    close();
+    empty = !inf.status;
+    appendable = ( inf.status == 1 );
+  }
+  else
+    return 0;
 
   if( empty )
     return size - 150;
@@ -682,6 +651,9 @@ int K3bCdDevice::CdDevice::tocType()
   // 0x10 - CD-I
   // 0x20 - CD_XA
   //
+
+  // WHY DON'T WE DO THIS WITH DISC_INFO???
+
   if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) == 0 )
     if ( dat[7] == 0xA0 )
       ret = dat[13];
@@ -876,38 +848,18 @@ bool K3bCdDevice::CdDevice::block( bool b) const
 
 bool K3bCdDevice::CdDevice::rewritable()
 {
-  // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
-  bool needToClose = !isOpen();
-
   if( !burner() )  // no chance to detect empty discs in readers
     return false;
 
   if( isReady() != 0 )
     return false;
 
-  if( open() < 0 )
-    return false;
+  disc_info_t inf;
 
-  bool ret = false;
-  struct cdrom_generic_command cmd;
-  unsigned char inf[32];
-
-  ::memset(&cmd,0,sizeof (struct cdrom_generic_command));
-  ::memset(inf,0,32);
-  cmd.cmd[0] = GPCMD_READ_DISC_INFO;
-  cmd.cmd[8] = 32;
-  cmd.buffer = inf;
-  cmd.buflen = 32;
-  cmd.data_direction = CGC_DATA_READ;
-  if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) == 0 )
-    ret = (inf[2] >> 4 ) & 0x01;
+  if( getDiscInfo( &inf ) )
+    return inf.erasable;
   else
-    kdDebug() << "(K3bCdDevice) could not get disk info !" << endl;
-
-  if( needToClose )
-    close();
-  return ret;
+    return false;
 }
 
 bool K3bCdDevice::CdDevice::eject()

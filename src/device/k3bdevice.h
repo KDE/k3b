@@ -19,6 +19,7 @@
 
 #include <qstringlist.h>
 #include "k3bdiskinfo.h"
+#include "k3bmmc.h"
 
 #include "k3bmsf.h"
 
@@ -26,8 +27,8 @@
 
 namespace K3bCdDevice
 {
-
   class Toc;
+
 
   class CdDevice
   {
@@ -275,6 +276,8 @@ namespace K3bCdDevice
 
   protected:
     bool furtherInit();
+
+    bool getDiscInfo( K3bCdDevice::disc_info_t* info );
 
     QString m_vendor;
     QString m_description;
