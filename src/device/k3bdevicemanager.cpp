@@ -147,7 +147,7 @@ int K3bCdDevice::DeviceManager::scanbus()
   m_foundDevices = 0;
 
   QFile info("/proc/sys/dev/cdrom/info");
-  QString line;
+  QString line,devstring;
   info.open(IO_ReadOnly);
   info.readLine(line,80); // CD-ROM information, Id: cdrom.c 3.12 2000/10/18
   info.readLine(line,80); //
@@ -161,17 +161,35 @@ int K3bCdDevice::DeviceManager::scanbus()
       QRegExp re("[\t\n:]+");
       while ( !(dev = line.section(re, i, i)).isEmpty() )
       {
-        if( addDevice(QString("/dev/%1").arg(dev)) )
+        if( addDevice(QString("/dev/%1").arg(dev)) ) {
+          devstring += dev + "|";
           m_foundDevices++;
+        }
         else if ( dev.startsWith("sr") )
-          if( addDevice(QString("/dev/%1").arg(dev.replace(QRegExp("r"),"cd"))) )
+          if( addDevice(QString("/dev/%1").arg(dev.replace(QRegExp("r"),"cd"))) ) {
+            devstring += dev + "|";
             m_foundDevices++;
+        }
         ++i;
       }
     }
     break;
   }
   info.close();
+
+  // try to find symlinks
+  QString cmd = QString("find /dev -type l -printf \"%p\n\" | egrep '%1cdrom|dvd|cdwriter|cdrecorder'").arg(devstring);
+  FILE *fd = popen(cmd.ascii(),"r");
+  if (fd) {
+     QFile links;
+     QString device;
+     links.open(IO_ReadOnly,fd);
+     while ( links.readLine(device,80) > 0) {
+       addDevice(device.stripWhiteSpace());
+       kdDebug() << "(K3bDeviceManager) Link: " << device << endl;
+     }
+  }
+  pclose(fd);
 
   // we also check all these nodes to make sure to get all links and stuff
   static const char* devicenames[] = {
