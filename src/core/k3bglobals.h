@@ -114,6 +114,14 @@ namespace K3b
   QString prepareDir( const QString& dir );
 
   /**
+   * returns the parent dir of a path.
+   * CAUTION: this does only work well with absolut paths.
+   *
+   * Example: /usr/share/doc -> /usr/share/
+   */
+  QString parentDir( const QString& path );
+
+  /**
    * For now this just replaces multible occurences of / with a single /
    */
   QString fixupPath( const QString& );

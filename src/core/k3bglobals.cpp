@@ -157,6 +157,22 @@ QString K3b::prepareDir( const QString& dir )
 }
 
 
+QString K3b::parentDir( const QString& path )
+{
+  QString parent = path;
+  if( path[path.length()-1] == '/' )
+    parent.truncate( parent.length()-1 );
+
+  int pos = parent.findRev( '/' );
+  if( pos >= 0 )
+    parent.truncate( pos );
+  else // relative path, do anything...
+    parent = "/";
+
+  return parent;
+}
+
+
 QString K3b::fixupPath( const QString& path )
 {
   QString s;
