@@ -265,7 +265,11 @@ bool K3bDvdJob::prepareWriterJob()
   // these do only make sense with DVD-R(W)
   writer->setSimulate( m_doc->dummy() );
   writer->setBurnSpeed( m_doc->speed() );
-  writer->setWritingMode( m_doc->writingMode() );
+
+  if( m_doc->writingMode() == K3b::DAO ||
+      ( m_doc->writingMode() == K3b::WRITING_MODE_AUTO &&
+	m_doc->multiSessionMode() == K3bDataDoc::NONE ) )
+    writer->setWritingMode( K3b::DAO );
   
   if( m_doc->onTheFly() )
     writer->setImageToWrite( QString::null );  // read from stdin

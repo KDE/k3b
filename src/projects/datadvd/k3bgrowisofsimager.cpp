@@ -157,7 +157,8 @@ void K3bGrowisofsImager::start()
     *m_process << "-use-the-force-luke=dummy";
   if( ( m_doc->writingMode() == K3b::DAO || m_doc->writingMode() == K3b::WRITING_MODE_AUTO )
       && m_doc->multiSessionMode() == K3bDataDoc::NONE ) {
-    *m_process << "-use-the-force-luke=dao";  // does DAO apply to DVD+R? no.
+    *m_process << "-use-the-force-luke=dao";
+    *m_process << "--dvd-compat";
     d->gh->reset( true );
   }
   else

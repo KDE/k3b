@@ -62,6 +62,12 @@ class K3bGrowisofsWriter : public K3bAbstractWriter
   void setLayerBreak( long lb );
 
   /**
+   * Close the DVD to enable max DVD compatibility (uses the growisofs --dvd-compat parameter)
+   * This will also be used in DAO mode and when the layerBreak has been set.
+   */
+  void setCloseDvd( bool );
+
+  /**
    * set this to QString::null or an empty string to let the writer
    * read it's data from fd()
    */

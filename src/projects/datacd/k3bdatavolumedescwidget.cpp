@@ -20,6 +20,7 @@
 
 #include <qlineedit.h>
 #include <qspinbox.h>
+#include <qlabel.h>
 
 
 K3bDataVolumeDescWidget::K3bDataVolumeDescWidget( QWidget* parent, const char* name )
@@ -39,6 +40,14 @@ K3bDataVolumeDescWidget::K3bDataVolumeDescWidget( QWidget* parent, const char* n
 
   connect( m_spinVolumeSetSize, SIGNAL(valueChanged(int)),
 	   this, SLOT(slotVolumeSetSizeChanged(int)) );
+
+  // for now we hide the volume set stuff since it's not working anymore in mkisofs 2.01a34
+  textLabel1->hide();
+  textLabel2->hide();
+  TextLabel2->hide();
+  m_spinVolumeSetSize->hide();
+  m_spinVolumeSetNumber->hide();
+  m_editVolumeSetName->hide();
 }
 
 
@@ -64,8 +73,8 @@ void K3bDataVolumeDescWidget::save( K3bIsoOptions& o )
 {
   o.setVolumeID( m_editVolumeName->text() );
   o.setVolumeSetId( m_editVolumeSetName->text() );
-  o.setVolumeSetSize( m_spinVolumeSetSize->value() );
-  o.setVolumeSetNumber( m_spinVolumeSetNumber->value() );
+  o.setVolumeSetSize( 1/*m_spinVolumeSetSize->value() */);
+  o.setVolumeSetNumber( 1/*m_spinVolumeSetNumber->value() */);
   o.setPublisher( m_editPublisher->text() );
   o.setPreparer( m_editPreparer->text() );
   o.setSystemId( m_editSystem->text() );

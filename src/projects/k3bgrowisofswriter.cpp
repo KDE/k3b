@@ -42,6 +42,7 @@ class K3bGrowisofsWriter::Private
 public:
   Private()
     : writingMode( 0 ),
+      closeDvd(false),
       process( 0 ),
       growisofsBin( 0 ),
       trackSize(-1),
@@ -49,6 +50,7 @@ public:
   }
 
   int writingMode;
+  bool closeDvd;
   K3bProcess* process;
   const K3bExternalBin* growisofsBin;
   QString image;
@@ -181,9 +183,13 @@ bool K3bGrowisofsWriter::prepareProcess()
   // we check for existing filesystems ourselves, so we always force the overwrite...
   *d->process << "-use-the-force-luke=tty";
 
+  bool dvdCompat = d->closeDvd;
+
   // DL writing with forced layer break
-  if( d->layerBreak > 0 )
+  if( d->layerBreak > 0 ) {
     *d->process << "-use-the-force-luke=break:" + QString::number(d->layerBreak);
+    dvdCompat = true;
+  }
 
   // the tracksize parameter takes priority over the dao:tracksize parameter since growisofs 5.18
   else if( d->growisofsBin->version > K3bVersion( 5, 17 ) && d->trackSize > 0 )
@@ -194,6 +200,7 @@ bool K3bGrowisofsWriter::prepareProcess()
     *d->process << "-use-the-force-luke=dummy";
 
   if( d->writingMode == K3b::DAO ) {
+    dvdCompat = true;
     if( d->growisofsBin->version >= K3bVersion( 5, 15 ) && d->trackSize > 0 )
       *d->process << "-use-the-force-luke=dao:" + QString::number(d->trackSize + trackSizePadding);
     else
@@ -202,6 +209,9 @@ bool K3bGrowisofsWriter::prepareProcess()
   }
   else
     d->gh->reset(false);
+
+  if( dvdCompat )
+    *d->process << "--dvd-compat";
 
   //
   // Some DVD writers do not allow changing the writing speed so we allow
@@ -314,6 +324,12 @@ void K3bGrowisofsWriter::setTrackSize( long size )
 void K3bGrowisofsWriter::setLayerBreak( long lb )
 {
   d->layerBreak = lb;
+}
+
+
+void K3bGrowisofsWriter::setCloseDvd( bool b )
+{
+  d->closeDvd = b;
 }
 
 

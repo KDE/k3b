@@ -158,19 +158,21 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
     switch( dh->ngDiskInfo().mediaType() ) {
     case K3bCdDevice::MEDIA_DVD_ROM:
     case K3bCdDevice::MEDIA_DVD_PLUS_R_DL:
-      if( dh->ngDiskInfo().numLayers() > 1 ) {
-	if( !(m_writerDevice->supportedProfiles() & K3bCdDevice::MEDIA_DVD_PLUS_R_DL) ) {
-	  emit infoMessage( i18n("The writer does not support writing double layer DVDs."), ERROR );
-	  d->running = false;
-	  emit finished(false);
-	  return;
-	}
-	else if( k3bcore->externalBinManager()->binObject( "growisofs" ) && 
-		 k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3bVersion( 5, 20 ) ) {
-	  emit infoMessage( i18n("Growisofs >= 5.20 is needed to write double layer DVDs."), ERROR );
-	  d->running = false;
-	  emit finished(false);
-	  return;
+      if( !m_onlyCreateImage ) {
+	if( dh->ngDiskInfo().numLayers() > 1 ) {
+	  if( !(m_writerDevice->supportedProfiles() & K3bCdDevice::MEDIA_DVD_PLUS_R_DL) ) {
+	    emit infoMessage( i18n("The writer does not support writing double layer DVDs."), ERROR );
+	    d->running = false;
+	    emit finished(false);
+	    return;
+	  }
+	  else if( k3bcore->externalBinManager()->binObject( "growisofs" ) && 
+		   k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3bVersion( 5, 20 ) ) {
+	    emit infoMessage( i18n("Growisofs >= 5.20 is needed to write double layer DVDs."), ERROR );
+	    d->running = false;
+	    emit finished(false);
+	    return;
+	  }
 	}
       }
     case K3bCdDevice::MEDIA_DVD_R:
@@ -372,6 +374,7 @@ void K3bDvdCopyJob::prepareWriter()
   d->writerJob->setSimulate( m_simulate );
   d->writerJob->setBurnSpeed( m_speed );
   d->writerJob->setWritingMode( d->usedWritingMode );
+  d->writerJob->setCloseDvd( true );
  
   if( d->sourceDiskInfo.numLayers() > 1 ) {
     d->writerJob->setLayerBreak( d->sourceDiskInfo.firstLayerSize().lba() );
