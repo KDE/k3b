@@ -2,7 +2,6 @@
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
- *                    Klaus-Dieter Krannich <kd@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
@@ -852,7 +851,7 @@ bool K3bCdCopyJob::writeNextSession()
 	trackLen -= 2;
 
       if( track->mode() == K3bCdDevice::Track::MODE1 )
-	trackLen = trackLen * 2024;
+	trackLen = trackLen * 2048;
       else if( track->mode() == K3bCdDevice::Track::XA_FORM1 )
 	trackLen = trackLen * 2056; // see k3bdatatrackreader.h
       else

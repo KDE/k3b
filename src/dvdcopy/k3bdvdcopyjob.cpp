@@ -100,8 +100,6 @@ void K3bDvdCopyJob::start()
     emit infoMessage( i18n("Disabling on-the-fly writing."), INFO );
   }
 
-  // TODO: check the cd size and warn the user if not enough space
-
   emit infoMessage( i18n("Checking source media") + "...", INFO );
   emit newSubTask( i18n("Checking source media") );
 
@@ -217,6 +215,30 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
       emit finished(false);
       d->running = false;
       return;
+    }
+
+
+    if( !m_onTheFly ) {
+      //
+      // check free temp space
+      //
+      KIO::filesize_t imageSpaceNeeded = (KIO::filesize_t)(d->lastSector.lba()+1)*2048;
+      unsigned long avail, size;
+      QString pathToTest = m_imagePath.left( m_imagePath.findRev( '/' ) );
+      if( !K3b::kbFreeOnFs( pathToTest, size, avail ) ) {
+	emit infoMessage( i18n("Unable to determine free space in temporary directory '%1'.").arg(pathToTest), ERROR );
+	emit finished(false);
+	d->running = false;
+	return;
+      }
+      else {
+	if( avail < imageSpaceNeeded/1024 ) {
+	  emit infoMessage( i18n("Not enough space left in temporary directory."), ERROR );
+	  emit finished(false);
+	  d->running = false;
+	  return;
+	}
+      }
     }
 
 
