@@ -122,15 +122,15 @@ K3bMsf K3bCdDevice::DiskInfo::remainingSize() const
 {
   if( empty() )
     return capacity();
-  else if( appendable() )
-    return capacity() - m_usedCapacity;
 
   //
   // There is no way to properly determine the used size on an overwrite media
   // without having a look at the filesystem (or is there?)
   //
-  else if( mediaType() & (MEDIA_DVD_PLUS_RW|MEDIA_DVD_RW_OVWR) )
-    return capacity();
+  else if( appendable() ||
+	   mediaType() & (MEDIA_DVD_PLUS_RW|MEDIA_DVD_RW_OVWR) )
+    return capacity() - m_usedCapacity;
+
   else
     return 0;
 }
