@@ -197,7 +197,7 @@ void K3bOggVorbisDecoder::cleanup()
 
 bool K3bOggVorbisDecoder::seekInternal( const K3b::Msf& pos )
 {
-  return ( ov_time_seek( &d->oggVorbisFile, (double)pos.totalFrames()/75.0 ) == 0 );
+  return ( ov_pcm_seek( &d->oggVorbisFile, pos.pcmSamples() ) == 0 );
 }
 
 

@@ -62,7 +62,7 @@ public:
   {
   }
 
-  //  QValueVector<long> seekPositions;
+  QValueVector<unsigned long long> seekPositions;
 
   k3b_mad_char* inputBuffer;
 
@@ -77,8 +77,6 @@ public:
   bool bEndOfInput;
   bool bInputError;
   bool bOutputFinished;
-
-  unsigned long frameCount;
 
   char* outputBuffer;
   char* outputPointer;
@@ -213,14 +211,15 @@ bool K3bMadDecoder::initDecoderInternal()
 
   initMadStructures();
 
-  d->frameCount = 0;
-
   return true;
 }
 
 // streams data from file into stream
 void K3bMadDecoder::madStreamBuffer()
 {
+  if( d->bEndOfInput )
+    return;
+
   /* The input bucket must be filled if it becomes empty or if
    * it's the first execution of the loop.
    */
@@ -245,6 +244,7 @@ void K3bMadDecoder::madStreamBuffer()
     if( result < 0 ) {
       kdDebug() << "(K3bMadDecoder) read error on bitstream)" << endl;
       d->bInputError = true;
+      return;
     }
     else if( result == 0 ) {
       kdDebug() << "(K3bMadDecoder) end of input stream" << endl;
@@ -266,68 +266,43 @@ unsigned long K3bMadDecoder::countFrames()
   d->vbr = false;
   bool bFirstHeaderSaved = false;
 
-  //  d->seekPositions.clear();
+  d->seekPositions.clear();
+  d->seekPositions.append(0);
 
-  while( !d->bEndOfInput && !d->bInputError ) {
+  while( !error && decodeNextHeader() ) {
 
-    madStreamBuffer();
-
-    if( d->bInputError ) {
-      kdError() << "(K3bMadDecoder) Error while reading fron file." << endl;
+    if( !bFirstHeaderSaved ) {
+      bFirstHeaderSaved = true;
+      d->firstHeader = *d->madHeader;
     }
     else {
-      if( mad_header_decode( d->madHeader, d->madStream ) ) {
-	if( MAD_RECOVERABLE( d->madStream->error ) ) {
-	  kdDebug() << "(K3bMadDecoder) recoverable frame level error ("
-		    << mad_stream_errorstr(d->madStream) << ")" << endl;
-	}
-	else {
-	  if( d->madStream->error != MAD_ERROR_BUFLEN ) {
-	    kdDebug() << "(K3bMadDecoder) unrecoverable frame level error ("
-		      << mad_stream_errorstr(d->madStream) << endl;
-	    error = true;
-	    break;
-	  }
-	}
-      } // if( header not decoded )
+      if( d->madHeader->bitrate != d->firstHeader.bitrate )
+	d->vbr = true;
 
-      else {
-	// create the seek position
-	// current position in file + bytes to start of current frame in the buffer
-// 	long seekPos = d->inputFile.at() + (d->madStream->this_frame - d->madStream->buffer);
-// 	d->seekPositions.append( seekPos );
-
-	d->frameCount++;
-
-
-	if( !bFirstHeaderSaved ) {
-	  bFirstHeaderSaved = true;
-	  d->firstHeader = *d->madHeader;
-	}
-	else if( d->madHeader->bitrate != d->firstHeader.bitrate )
-	  d->vbr = true;
-
-	static mad_timer_t s_frameLen = mad_timer_zero;
-	if( mad_timer_compare( s_frameLen, d->madHeader->duration ) ) {
-	  // TODO: einfach hier nen Fehler rauswerfen, denn der MP3 Standard verlangt, dass jeder Frame die gleiche
-	  //       Länge hat
-	  kdDebug() << "(K3bMadDecoder) frame len differs: old: " 
-		    << s_frameLen.seconds << ":" << s_frameLen.fraction
-		    << " new: " << d->madHeader->duration.seconds << ":" << d->madHeader->duration.fraction << endl;
-	  s_frameLen = d->madHeader->duration;
-	}
-
-	mad_timer_add( d->madTimer, d->madHeader->duration );
+      if( mad_timer_compare( d->firstHeader.duration, d->madHeader->duration ) ) {
+	// The Mp3 standard needs every frame to have the same duration
+	kdDebug() << "(K3bMadDecoder) frame len differs: old: " 
+		  << d->firstHeader.duration.seconds << ":" << d->firstHeader.duration.fraction
+		  << " new: " << d->madHeader->duration.seconds << ":" << d->madHeader->duration.fraction << endl;
+	error = true;
       }
-    } // if( input ready )
+    }
 
-  } // for( 1000x )
+    //
+    // position in stream: postion in file minus the not yet used buffer
+    //
+    unsigned long long seekPos = d->inputFile.at() - (d->madStream->bufend - d->madStream->this_frame);
+
+    // save the number of bytes to be read to decode i-1 frames at position i
+    // in other words: when seeking to seekPos the next decoded frame will be i
+    d->seekPositions.append( seekPos );
+  }
 
   if( !d->bInputError && !error ) {
     // we need the length of the track to be multible of frames (1/75 second)
     float seconds = (float)d->madTimer->seconds + (float)d->madTimer->fraction/(float)MAD_TIMER_RESOLUTION;
     frames = (unsigned long)ceil(seconds * 75.0);
-    kdDebug() << "(K3bMadDecoder) length of track " << seconds << " MP3 Frames: " << d->frameCount <<  endl;
+    kdDebug() << "(K3bMadDecoder) length of track " << seconds << endl;
   }
 
   cleanup();
@@ -344,7 +319,6 @@ int K3bMadDecoder::decodeInternal( char* _data, int maxLen )
 
   bool bOutputBufferFull = false;
 
-
   while( !bOutputBufferFull && !d->bEndOfInput ) {
 
     // a mad_synth contains of the data of one mad_frame
@@ -354,27 +328,22 @@ int K3bMadDecoder::decodeInternal( char* _data, int maxLen )
     if( d->outputBufferEnd - d->outputPointer < 4*1152 ) {
       bOutputBufferFull = true;
     }
-    else {
-      bool success = madDecodeNextFrame();
-      if( !d->bEndOfInput && success ) {
-	// 
-	// Once decoded the frame is synthesized to PCM samples. No errors
-	// are reported by mad_synth_frame();
-	//
-	mad_synth_frame( d->madSynth, d->madFrame );
-
-	// this fills the output buffer
-	if( !createPcmSamples( d->madSynth ) ) {
-	  return -1;
-	}
-      }
-      else if( !success ) {
+    else if( madDecodeNextFrame() ) {
+      // 
+      // Once decoded the frame is synthesized to PCM samples. No errors
+      // are reported by mad_synth_frame();
+      //
+      mad_synth_frame( d->madSynth, d->madFrame );
+      
+      // this fills the output buffer
+      if( !createPcmSamples( d->madSynth ) ) {
 	return -1;
       }
-      // else EOF
-    } // output buffer not full yet
-
-  } // while loop
+    }
+    else if( d->bInputError ) {
+      return -1;
+    }
+  }
 
   // flush the output buffer
   size_t buffersize = d->outputPointer - d->outputBuffer;
@@ -385,26 +354,20 @@ int K3bMadDecoder::decodeInternal( char* _data, int maxLen )
 
 bool K3bMadDecoder::madDecodeNextFrame()
 {
-  if( d->bInputError ) {
+  if( d->bInputError || d->bEndOfInput ) {
     return false;
-  }
-  else if( d->bEndOfInput ) {
-    return true;
   }
 
   madStreamBuffer();
 
   if( mad_frame_decode( d->madFrame, d->madStream ) ) {
+    if( d->madStream->error == MAD_ERROR_BUFLEN ) {
+      return madDecodeNextFrame();
+    }
     if( MAD_RECOVERABLE( d->madStream->error )  ) {
       kdDebug() << "(K3bMadDecoder) recoverable frame level error ("
 		<< mad_stream_errorstr(d->madStream) << ")" << endl;
 
-      // try again
-      return madDecodeNextFrame();
-    }
-    // this should never be reached since we always fill the buffer before decoding
-    else if( d->madStream->error == MAD_ERROR_BUFLEN ) {
-      // try again
       return madDecodeNextFrame();
     }
     else {
@@ -415,10 +378,39 @@ bool K3bMadDecoder::madDecodeNextFrame()
     }
   }
   else {
-    d->frameCount++;
-
     mad_timer_add( d->madTimer, d->madFrame->header.duration );
+    return true;
+  }
+}
 
+
+bool K3bMadDecoder::decodeNextHeader()
+{
+  if( d->bInputError || d->bEndOfInput ) {
+    return false;
+  }
+
+  madStreamBuffer();
+
+  if( mad_header_decode( d->madHeader, d->madStream ) ) {
+    if( d->madStream->error == MAD_ERROR_BUFLEN ) {
+      return decodeNextHeader();
+    }
+    else if( MAD_RECOVERABLE( d->madStream->error ) ) {
+      kdDebug() << "(K3bMadDecoder) recoverable frame level error ("
+		<< mad_stream_errorstr(d->madStream) << ")" << endl;
+      
+      return decodeNextHeader();
+    }
+    else {
+      kdDebug() << "(K3bMadDecoder) unrecoverable frame level error ("
+		<< mad_stream_errorstr(d->madStream) << endl;
+      
+      return false;
+    }
+  }
+  else {
+    mad_timer_add( d->madTimer, d->madHeader->duration );
     return true;
   }
 }
@@ -496,30 +488,49 @@ void K3bMadDecoder::cleanup()
 
 bool K3bMadDecoder::seekInternal( const K3b::Msf& pos )
 {
-  return false;
+  //
+  // we need to reset the complete mad stuff 
+  //
+  if( !initDecoderInternal() )
+    return false;
 
-  // TODO: we need to reset the complete mad stuff with finish and init
+  //
+  // search a position
+  // This is all hacking, I don't really know what I am doing here... ;)
+  //
+  double mp3FrameSecs = static_cast<double>(d->firstHeader.duration.seconds) 
+    + static_cast<double>(d->firstHeader.duration.fraction) / static_cast<double>(MAD_TIMER_RESOLUTION);
 
-  // our seekpositions let us jump to every mp3 frame which is 1152/44100 seconds
-  // pos has a resolution of 1/75 seconds.
-  // So we need to fine tune after using d->seekPostions
-  // every block (1/75 seconds) has 588 samples
-  
-//   long mp3Frame = (long)((double)pos.totalFrames() / 75.0 * 44100.0 / 1152.0);
-//   long samples = mp3Frame * 1152;
-//   long neededSamples = pos.totalFrames() * 588;
-//   long diff = neededSamples - samples;
-//   // diff is what we need to skip when creating pcm samples?
+  double posSecs = static_cast<double>(pos.totalFrames()) / 75.0;
 
-//   // now prepare the stream for the new data
-//   d->madStream->error = MAD_ERROR_NONE;
-//   madStreamBuffer();
-//   // and skip the samples we do not need
+  // seekPosition to seek before frame i
+  unsigned int i = static_cast<unsigned int>( posSecs / mp3FrameSecs );
 
+  kdDebug() << "(K3bMadDecoder) SEEKING. Mp3 frame len: " << mp3FrameSecs << endl
+	    << "                         seek pos: " << posSecs << endl
+	    << "                         Mp3 frame to seek to: " << i << endl;
 
-//   d->inputFile.at( d->seekPositions[ mp3Frame ] );
+  // set the timer to the already decoded data which is i-1 frames
+  *d->madTimer = d->firstHeader.duration;
+  mad_timer_multiply( d->madTimer, i-1 );
 
-//   return true;
+  // seek in the input file behind the already decoded data
+  d->inputFile.at( d->seekPositions[i] );
+
+  // convert pos to mad_timer_t
+  mad_timer_t madPos;
+  madPos.seconds = pos.totalFrames()/75;
+  madPos.fraction = (pos.frames() * MAD_TIMER_RESOLUTION) / 75;
+
+  //
+  // Now we try to get as close to the requested position as possible by decoding
+  // some headers
+  //
+  while( mad_timer_compare( *d->madTimer, madPos ) < 0 )
+    if( !decodeNextHeader() )
+      return false;  // here EOF is also an error since we cannot seek beyond the file end
+
+  return true;
 }
 
 

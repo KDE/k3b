@@ -75,6 +75,7 @@ class K3bMadDecoder : public K3bAudioDecoder
   inline unsigned short linearRound( mad_fixed_t fixed );
   void madStreamBuffer();
   bool madDecodeNextFrame();
+  bool decodeNextHeader();
   bool createPcmSamples( mad_synth* );
 
   static const int INPUT_BUFFER_SIZE = 5*8192;
