@@ -36,7 +36,7 @@ METASOURCES = AUTO
 k3b_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 rcdir = $(kde_datadir)/k3b
-rc_DATA = k3bui.rc
+rc_DATA = k3bui.rc eventsrc
 
 messages: rc.cpp
 	$(EXTRACTRC) `find . -name "*.rc" -o -name "*.ui"` > rc.cpp

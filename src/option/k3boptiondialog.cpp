@@ -24,6 +24,7 @@
 #include "k3bpatternoptiontab.h"
 #include "k3bexternalbinoptiontab.h"
 #include "k3bmiscoptiontab.h"
+#include "k3bnotifyoptiontab.h"
 
 #include <qlayout.h>
 #include <qtooltip.h>
@@ -46,6 +47,7 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
   setupProgramsPage();
   setupCddbPage();
   setupPatternPage();
+  setupNotifyPage();
   setupMiscPage();
 
   m_externalBinOptionTab->readSettings();
@@ -55,6 +57,7 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
   m_burningOptionTab->readSettings();
   m_patternOptionTab->readSettings();
   m_miscOptionTab->readSettings();
+  m_notifyOptionTab->readSettings();
 
 
   // if we don't do this the dialog start really huge
@@ -89,6 +92,7 @@ bool K3bOptionDialog::saveSettings()
   m_burningOptionTab->saveSettings();
   m_patternOptionTab->apply();
   m_externalBinOptionTab->saveSettings();
+  m_notifyOptionTab->saveSettings();
 
   if( !m_miscOptionTab->saveSettings() )
     return false;
@@ -198,6 +202,20 @@ void K3bOptionDialog::setupMiscPage()
 
   m_miscOptionTab = new K3bMiscOptionTab( frame );
   box->addWidget( m_miscOptionTab );
+}
+
+
+void K3bOptionDialog::setupNotifyPage()
+{
+  QFrame* frame = addPage( i18n("Notifications"), i18n("System Notifications"),
+			   KGlobal::instance()->iconLoader()->loadIcon( "knotify", 
+									KIcon::NoGroup, KIcon::SizeMedium ) );
+  QVBoxLayout* box = new QVBoxLayout( frame );
+  box->setSpacing( 0 );
+  box->setMargin( 0 );
+
+  m_notifyOptionTab = new K3bNotifyOptionTab( frame );
+  box->addWidget( m_notifyOptionTab );
 }
 
 

@@ -56,6 +56,8 @@
 #include <kpixmap.h>
 #include <kpixmapeffect.h>
 #include <kglobal.h>
+#include <knotifyclient.h>
+
 
 
 class K3bBurnProgressDialog::PrivateDebugWidget : public KDialog
@@ -325,13 +327,17 @@ void K3bBurnProgressDialog::finished( bool success )
     m_progressTrack->setValue(100);
     m_labelTrackProgress->setText("");
     m_progressBuffer->setValue(0);
+
+    KNotifyClient::event( "SuccessfullyFinished" );
   }
   else {
-
     if( m_bCanceled )
       m_groupProgress->setTitle( i18n("Canceled") );
-    else
+    else {
       m_groupProgress->setTitle( i18n("Error") );
+
+      KNotifyClient::event( "FinishedWithError" );
+    }
   }
 
   m_buttonCancel->hide();
