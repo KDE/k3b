@@ -326,7 +326,7 @@ void K3bCdCopyDialog::slotStartClicked()
 
   d.startJob(job);
 
-  close();
+  show();
 }
 
 

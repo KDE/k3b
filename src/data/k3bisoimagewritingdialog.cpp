@@ -299,7 +299,7 @@ void K3bIsoImageWritingDialog::slotStartClicked()
 
   d.startJob(m_job);
 
-  close();
+  show();
 }
 
 

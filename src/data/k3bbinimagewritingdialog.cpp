@@ -241,7 +241,7 @@ void K3bBinImageWritingDialog::slotStartClicked()
     
     hide();
     d.startJob(m_job);
-    close();
+    show();
   } else
      KMessageBox::error( this, i18n("Please select a TOC File"), i18n("No TOC File"));
 }
