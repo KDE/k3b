@@ -63,10 +63,7 @@ class K3bView : public QWidget
 	
   /** returns a pointer to the document connected to the view*/
   K3bDoc *getDocument() const;
-
-  /** gets called to redraw the document contents if it has been modified */
-  void update(K3bView* pSender);
-		
+	
   virtual K3bProjectBurnDialog* burnDialog() = 0;
 
   virtual KActionCollection* actionCollection() const;

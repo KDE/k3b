@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 
+#include "../k3bglobals.h"
 #include "k3bcdda.h"
 #include "k3bcddacopy.h"
 #include "k3bcdview.h"
@@ -30,8 +31,6 @@
 
 #include <klocale.h>
 #include <kio/global.h>
-
-#define WAVHEADER_SIZE       44
 
 void paranoiaCallback(long, int){
   // Do we want to show info somewhere ?
@@ -136,7 +135,7 @@ bool K3bCddaCopy::paranoiaRead(struct cdrom_drive *drive, int track, QString des
         return false;
     }
     m_stream = new QDataStream( m_f );
-    writeWavHeader( m_stream, m_byteCount );
+    K3b::writeWavHeader( m_stream, m_byteCount );
     emit newSubTask( i18n("Copy ") + dest  );
 
     t = new QTimer( this );
@@ -204,36 +203,6 @@ void K3bCddaCopy::slotReadData(){
     }
 } // end while sector check
 
-void K3bCddaCopy::writeWavHeader(QDataStream *s, long byteCount) {
-  static char riffHeader[] =
-  {
-    0x52, 0x49, 0x46, 0x46, // 0  "AIFF"
-    0x00, 0x00, 0x00, 0x00, // 4  wavSize
-    0x57, 0x41, 0x56, 0x45, // 8  "WAVE"
-    0x66, 0x6d, 0x74, 0x20, // 12 "fmt "
-    0x10, 0x00, 0x00, 0x00, // 16
-    0x01, 0x00, 0x02, 0x00, // 20
-    0x44, 0xac, 0x00, 0x00, // 24
-    0x10, 0xb1, 0x02, 0x00, // 28
-    0x04, 0x00, 0x10, 0x00, // 32
-    0x64, 0x61, 0x74, 0x61, // 36 "data"
-    0x00, 0x00, 0x00, 0x00  // 40 byteCount
-  };
-
-  Q_INT32 wavSize(byteCount + 44 - 8);
-
-  riffHeader[4]   = (wavSize   >> 0 ) & 0xff;
-  riffHeader[5]   = (wavSize   >> 8 ) & 0xff;
-  riffHeader[6]   = (wavSize   >> 16) & 0xff;
-  riffHeader[7]   = (wavSize   >> 24) & 0xff;
-
-  riffHeader[40]  = (byteCount >> 0 ) & 0xff;
-  riffHeader[41]  = (byteCount >> 8 ) & 0xff;
-  riffHeader[42]  = (byteCount >> 16) & 0xff;
-  riffHeader[43]  = (byteCount >> 24) & 0xff;
-
-  s->writeRawBytes(riffHeader, WAVHEADER_SIZE);
-}
 
 #include "k3bcddacopy.moc"
 

@@ -60,6 +60,8 @@ K3bDoc::K3bDoc( QObject* parent )
   m_burnproof = true;
   m_error = K3b::NOT_STARTED;
   m_speed = 1;
+
+  m_writingApp = K3b::DEFAULT;
 }
 
 
@@ -125,14 +127,15 @@ bool K3bDoc::isLastView() {
 }
 
 
-void K3bDoc::updateAllViews(K3bView *sender)
+void K3bDoc::updateAllViews()
 {
   K3bView *w;
   for(w=pViewList->first(); w!=0; w=pViewList->next())
     {
-      w->update(sender);
+      w->update();
     }
 }
+
 
 void K3bDoc::setURL(const KURL &url)
 {
@@ -164,13 +167,13 @@ K3bDoc* K3bDoc::openDocument(const KURL& url )
 
   /////////////////////////////////////////////////
   QFile f( tmpfile );
+  bool success = true;
   if ( !f.open( IO_ReadOnly ) )
-    return 0;
+    success = false;
 
   QDomDocument xmlDoc;
   if( !xmlDoc.setContent( &f ) ) {
-    f.close();
-    return 0;
+    success = false;
   }
 
   f.close();
@@ -178,6 +181,10 @@ K3bDoc* K3bDoc::openDocument(const KURL& url )
   /////////////////////////////////////////////////
   KIO::NetAccess::removeTempFile( tmpfile );
 
+  if( !success ) {
+    qDebug( "(K3bDoc) could not open file " + url.path() );
+    return 0;
+  }
 
   // check the documents DOCTYPE
   K3bDoc* newDoc = 0;
@@ -185,6 +192,8 @@ K3bDoc* K3bDoc::openDocument(const KURL& url )
     newDoc = new K3bAudioDoc( k3bMain() );
   else if( xmlDoc.doctype().name() == "k3b_data_project" )
     newDoc = new K3bDataDoc( k3bMain() );
+  else
+    qDebug("(K3bDoc) unknown doc type: " + xmlDoc.doctype().name() );
       
   // ---------
   // load the data into the document	

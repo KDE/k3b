@@ -20,7 +20,7 @@ type=DATA
 addcxxflags=
 bin_program=k3b
 cxxflags=\s-O2 -g3 -Wall
-ldadd=-lid3 -lcdda_interface -lcdda_paranoia $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT)
+ldadd=-lid3 -lcdda_interface -lcdda_paranoia -lmad -lartskde $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT)
 ldflags=
 
 [General]
@@ -29,7 +29,7 @@ author=Sebastian Trueg
 configure_args=
 email=trueg@informatik.uni-freiburg.de
 kdevprj_version=1.3
-lfv_open_groups=GNU
+lfv_open_groups=GNU,Translations
 make_options=\s-j1
 makefiles=Makefile.am,src/Makefile.am,doc/Makefile.am,doc/en/Makefile.am,po/Makefile.am,src/data/Makefile.am,src/cdinfo/Makefile.am,src/audio/Makefile.am,src/device/Makefile.am,src/kiotree/Makefile.am,src/audio/input/Makefile.am,src/option/Makefile.am,src/rip/Makefile.am,src/kdelibs_patched/Makefile.am,src/libwm/Makefile.am,src/libwm/include/Makefile.am,src/rip/songdb/Makefile.am
 modifyMakefiles=true
@@ -105,16 +105,23 @@ install_location=
 type=DATA
 
 [po/Makefile.am]
+files=po/de.po
 sub_dirs=
 type=po
 
+[po/de.po]
+dist=false
+install=false
+install_location=
+type=PO
+
 [src/Makefile.am]
-files=src/main.cpp,src/k3b.cpp,src/k3b.h,src/k3bdoc.cpp,src/k3bdoc.h,src/k3bview.cpp,src/k3bview.h,src/k3bui.rc,src/k3b.desktop,src/lo32-app-k3b.png,src/lo16-app-k3b.png,src/k3bdirview.cpp,src/k3bdirview.h,src/k3bcopywidget.cpp,src/k3bcopywidget.h,src/k3bglobals.h,src/k3bfillstatusdisplay.cpp,src/k3bfillstatusdisplay.h,src/k3bburnprogressdialog.cpp,src/k3bburnprogressdialog.h,src/k3bjob.cpp,src/k3bjob.h,src/k3bprojectburndialog.cpp,src/k3bprojectburndialog.h,src/kcutlabel.cpp,src/kcutlabel.h,src/k3bglobals.cpp,src/hi16-app-k3b.png,src/hi32-app-k3b.png,src/hi48-app-k3b.png,src/kdiskfreesp.h,src/k3bfileview.cpp,src/k3bfileview.h,src/cddb.h,src/cddb.cpp,src/k3bcddb.cpp,src/k3bcddb.h,src/k3bblankingdialog.cpp,src/k3bblankingdialog.h,src/k3bblankingjob.cpp,src/k3bblankingjob.h,src/k3bexternalbinmanager.cpp,src/k3bexternalbinmanager.h,src/k3bsplash.h,src/k3bsplash.cpp,src/k3b-splash-naive.png,src/hi16-tools-cdinfo.png,src/hi22-tools-cdinfo.png,src/hi16-tools-cdrwblank.png,src/hi22-tools-cdrwblank.png,src/k3bwriterselectionwidget.cpp,src/k3bwriterselectionwidget.h,src/k3bprojecttabwidget.cpp,src/k3bprojecttabwidget.h,src/k3bprojecttabbar.cpp,src/k3bprojecttabbar.h
+files=src/main.cpp,src/k3b.cpp,src/k3b.h,src/k3bdoc.cpp,src/k3bdoc.h,src/k3bview.cpp,src/k3bview.h,src/k3bui.rc,src/k3b.desktop,src/lo32-app-k3b.png,src/lo16-app-k3b.png,src/k3bdirview.cpp,src/k3bdirview.h,src/k3bcopywidget.cpp,src/k3bcopywidget.h,src/k3bglobals.h,src/k3bfillstatusdisplay.cpp,src/k3bfillstatusdisplay.h,src/k3bburnprogressdialog.cpp,src/k3bburnprogressdialog.h,src/k3bjob.cpp,src/k3bjob.h,src/k3bprojectburndialog.cpp,src/k3bprojectburndialog.h,src/kcutlabel.cpp,src/kcutlabel.h,src/k3bglobals.cpp,src/hi16-app-k3b.png,src/hi32-app-k3b.png,src/hi48-app-k3b.png,src/kdiskfreesp.h,src/k3bfileview.cpp,src/k3bfileview.h,src/cddb.h,src/cddb.cpp,src/k3bcddb.cpp,src/k3bcddb.h,src/k3bblankingdialog.cpp,src/k3bblankingdialog.h,src/k3bblankingjob.cpp,src/k3bblankingjob.h,src/k3bexternalbinmanager.cpp,src/k3bexternalbinmanager.h,src/k3bsplash.h,src/k3bsplash.cpp,src/k3b-splash-naive.png,src/hi16-tools-cdinfo.png,src/hi22-tools-cdinfo.png,src/hi16-tools-cdrwblank.png,src/hi22-tools-cdrwblank.png,src/k3bwriterselectionwidget.cpp,src/k3bwriterselectionwidget.h,src/k3bprojecttabwidget.cpp,src/k3bprojecttabwidget.h,src/k3bprojecttabbar.cpp,src/k3bprojecttabbar.h,src/k3baudioplayer.cpp,src/k3baudioplayer.h,src/k3baudioplayerwidget.cpp,src/k3baudioplayerwidget.h
 sub_dirs=data,cdinfo,audio,device,kiotree,option,rip,kdelibs_patched,libwm
 type=prog_main
 
 [src/audio/Makefile.am]
-files=src/audio/audiolistview.cpp,src/audio/audiolistview.h,src/audio/audiolistviewitem.cpp,src/audio/audiolistviewitem.h,src/audio/k3baudiodoc.cpp,src/audio/k3baudiodoc.h,src/audio/k3baudiotrack.cpp,src/audio/k3baudiotrack.h,src/audio/k3baudioview.cpp,src/audio/k3baudioview.h,src/audio/k3baudioburndialog.cpp,src/audio/k3baudioburndialog.h,src/audio/k3baudiotrackdialog.cpp,src/audio/k3baudiotrackdialog.h,src/audio/k3baudiojob.cpp,src/audio/k3baudiojob.h,src/audio/k3baudioontheflyjob.cpp,src/audio/k3baudioontheflyjob.h
+files=src/audio/audiolistview.cpp,src/audio/audiolistview.h,src/audio/audiolistviewitem.cpp,src/audio/audiolistviewitem.h,src/audio/k3baudiodoc.cpp,src/audio/k3baudiodoc.h,src/audio/k3baudiotrack.cpp,src/audio/k3baudiotrack.h,src/audio/k3baudioview.cpp,src/audio/k3baudioview.h,src/audio/k3baudioburndialog.cpp,src/audio/k3baudioburndialog.h,src/audio/k3baudiotrackdialog.cpp,src/audio/k3baudiotrackdialog.h,src/audio/k3baudiojob.cpp,src/audio/k3baudiojob.h
 sub_dirs=input
 type=static_library
 
@@ -149,7 +156,7 @@ install_location=
 type=HEADER
 
 [src/audio/input/Makefile.am]
-files=src/audio/input/k3baudiomodule.h,src/audio/input/k3baudiomodulefactory.cpp,src/audio/input/k3baudiomodulefactory.h,src/audio/input/k3bmp3module.cpp,src/audio/input/k3bmp3module.h,src/audio/input/k3bwavmodule.cpp,src/audio/input/k3bwavmodule.h,src/audio/input/k3bexternalbinmodule.h,src/audio/input/k3bexternalbinmodule.cpp,src/audio/input/k3baudiomodule.cpp
+files=src/audio/input/k3baudiomodule.h,src/audio/input/k3baudiomodulefactory.cpp,src/audio/input/k3baudiomodulefactory.h,src/audio/input/k3bmp3module.cpp,src/audio/input/k3bmp3module.h,src/audio/input/k3baudiomodule.cpp
 sub_dirs=
 type=static_library
 
@@ -177,18 +184,6 @@ install=false
 install_location=
 type=HEADER
 
-[src/audio/input/k3bexternalbinmodule.cpp]
-dist=true
-install=false
-install_location=
-type=SOURCE
-
-[src/audio/input/k3bexternalbinmodule.h]
-dist=true
-install=false
-install_location=
-type=HEADER
-
 [src/audio/input/k3bmp3module.cpp]
 dist=true
 install=false
@@ -196,18 +191,6 @@ install_location=
 type=SOURCE
 
 [src/audio/input/k3bmp3module.h]
-dist=true
-install=false
-install_location=
-type=HEADER
-
-[src/audio/input/k3bwavmodule.cpp]
-dist=true
-install=false
-install_location=
-type=SOURCE
-
-[src/audio/input/k3bwavmodule.h]
 dist=true
 install=false
 install_location=
@@ -244,18 +227,6 @@ install_location=
 type=SOURCE
 
 [src/audio/k3baudiojob.h]
-dist=true
-install=false
-install_location=
-type=HEADER
-
-[src/audio/k3baudioontheflyjob.cpp]
-dist=true
-install=false
-install_location=
-type=SOURCE
-
-[src/audio/k3baudioontheflyjob.h]
 dist=true
 install=false
 install_location=
@@ -711,6 +682,30 @@ install_location=
 type=SOURCE
 
 [src/k3baudiodoc.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/k3baudioplayer.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/k3baudioplayer.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/k3baudioplayerwidget.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/k3baudioplayerwidget.h]
 dist=true
 install=false
 install_location=

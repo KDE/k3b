@@ -65,6 +65,9 @@
 #include "k3bexternalbinmanager.h"
 #include "k3bprojecttabwidget.h"
 #include "rip/songdb/k3bsongmanager.h"
+#include "k3baudioplayer.h"
+#include "k3baudioplayerwidget.h"
+
 
 
 K3bMainWindow* k3bMain()
@@ -105,11 +108,20 @@ K3bMainWindow::K3bMainWindow()
 
   // since the icons are not that good activate the text on the toolbar
   toolBar()->setIconText( KToolBar::IconTextRight );
+
+  m_audioPlayer = new K3bAudioPlayer( this, "k3b_audio_player" );
 }
 
 K3bMainWindow::~K3bMainWindow()
 {
   delete pDocList;
+}
+
+
+void K3bMainWindow::showEvent( QShowEvent* e )
+{
+  slotCheckDockWidgetStatus();
+  KDockMainWindow::showEvent( e );
 }
 
 
@@ -140,8 +152,11 @@ void K3bMainWindow::initActions()
   actionFileNewMenu->insert( actionFileNewData );
   actionFileNewMenu->setDelayed( false );
 
-  actionViewDirView = new KToggleAction(i18n("Show Directories"), "view_sidetree", 0, this, SLOT(slotShowDirView()), 
+  actionViewDirView = new KToggleAction(i18n("Show Directories"), 0, this, SLOT(slotShowDirView()), 
 				  actionCollection(), "view_dir");
+
+  actionViewAudioPlayer = new KToggleAction(i18n("Show Audio Player"), 0, this, SLOT(slotViewAudioPlayer()), 
+					    actionCollection(), "view_audio_player");
 
   actionToolsCdInfo = new KAction(i18n("CD &Info"), "cdinfo", 0, this, SLOT(slotCdInfo()), 
 			    actionCollection(), "tools_cd_info" );
@@ -188,15 +203,13 @@ void K3bMainWindow::initStatusBar()
 void K3bMainWindow::initView()
 {
   // setup main docking things
-  mainDock = createDockWidget( "Workspace", SmallIcon("idea") );
+  mainDock = createDockWidget( i18n("Workspace"), SmallIcon("idea") );
   setView( mainDock );
   setMainDockWidget( mainDock );
+  mainDock->setDockSite( KDockWidget::DockCorner );
   mainDock->setEnableDocking( KDockWidget::DockNone );
 
   QHBox* documentBox = new QHBox( mainDock );
-  m_viewsToolbar = new KToolBar( this, documentBox, "viewsToolBar" );
-  m_viewsToolbar->setEnableContextMenu(true); // seems not to work! :-(
-  m_viewsToolbar->setOrientation( Qt::Vertical );
   m_documentTab = new K3bProjectTabWidget( documentBox );
   mainDock->setWidget( documentBox );
   connect( m_documentTab, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotCurrentDocChanged(QWidget*)) );
@@ -207,13 +220,23 @@ void K3bMainWindow::initView()
   m_documentTab->insertAction( actionFileClose );
   m_documentTab->insertAction( actionFileBurn );
 
-  dirDock = createDockWidget( "DirDock", SmallIcon("idea") );
+  dirDock = createDockWidget( i18n("Dir View"), SmallIcon("idea") );
   m_dirView = new K3bDirView( dirDock );
   dirDock->setWidget( m_dirView );
   dirDock->setEnableDocking( KDockWidget::DockCorner );
-  dirDock->manualDock( mainDock, KDockWidget::DockLeft, 30 );
+  dirDock->manualDock( mainDock, KDockWidget::DockTop, 30 );
 
-  connect( dirDock, SIGNAL(headerCloseButtonClicked()), this, SLOT(slotDirDockHidden()) );
+  connect( dirDock, SIGNAL(iMBeingClosed()), this, SLOT(slotDirDockHidden()) );
+  connect( dirDock, SIGNAL(hasUndocked()), this, SLOT(slotDirDockHidden()) );
+
+  m_audioPlayerDock = createDockWidget( i18n("Audio Player"), SmallIcon("1rightarrow") );
+  m_audioPlayerWidget = new K3bAudioPlayerWidget( audioPlayer(), false, m_audioPlayerDock );
+  m_audioPlayerDock->setWidget( m_audioPlayerWidget );
+  m_audioPlayerDock->setEnableDocking( KDockWidget::DockBottom | KDockWidget::DockTop | KDockWidget::DockDesktop );
+  m_audioPlayerDock->manualDock( mainDock, KDockWidget::DockBottom, m_audioPlayerWidget->height() );
+
+  connect( m_audioPlayerDock, SIGNAL(iMBeingClosed()), this, SLOT(slotAudioPlayerHidden()) );
+  connect( m_audioPlayerDock, SIGNAL(hasUndocked()), this, SLOT(slotAudioPlayerHidden()) );
 }
 
 
@@ -273,7 +296,6 @@ void K3bMainWindow::saveOptions()
   m_config->writeEntry("Geometry", size());
   m_config->writeEntry("Show Toolbar", toolBar()->isVisible());
   m_config->writeEntry("Show Statusbar",statusBar()->isVisible());
-  m_config->writeEntry("Show DirView",m_dirView->isVisible());
   m_config->writeEntry("ToolBarPos", (int) toolBar("mainToolBar")->barPos());
   actionFileOpenRecent->saveEntries(m_config,"Recent Files");
 
@@ -282,6 +304,9 @@ void K3bMainWindow::saveOptions()
 
   // save dock positions!
   manager()->writeConfig( m_config, "Docking Config" );
+
+  m_config->setGroup( "External Programs" );
+  m_externalBinManager->saveConfig( m_config );
 }
 
 
@@ -615,30 +640,18 @@ void K3bMainWindow::slotStatusMsg(const QString &text)
 }
 
 
-void K3bMainWindow::slotShowDirView()
-{
-  // undock and hide or 'redock' and show
-  if( !dirDock->isVisible() ) {
-    dirDock->manualDock( mainDock, KDockWidget::DockLeft, 30 );
-    manager()->readConfig( m_config, "Docking Config" );
-    dirDock->show();
-    actionViewDirView->setChecked( true );
-  }
-  else {
-    dirDock->hide();
-    dirDock->undock();
-    actionViewDirView->setChecked( false );
-  }
-}
-
-
 void K3bMainWindow::slotSettingsConfigure()
 {
   if( !m_optionDialog )
     m_optionDialog = new K3bOptionDialog( this, "SettingsDialog", true );
 		
-  if( !m_optionDialog->isVisible() )
-    m_optionDialog->show();
+  if( !m_optionDialog->isVisible() ) {
+    m_optionDialog->exec();
+
+    // emit a changed signal everytime since we do not know if the user selected
+    // "apply" and "cancel" or "ok"
+    emit configChanged( m_config );
+  }
 }
 
 
@@ -653,86 +666,6 @@ void K3bMainWindow::showOptionDialog( int index )
     m_optionDialog->show();
 }
 
-
-void K3bMainWindow::searchExternalProgs()
-{
-  m_config->setGroup("External Programs");
-
-  QString _cdrdao;
-  QString _cdrecord;
-  QString _mpg123;
-  QString _sox;
-
-  if( !m_config->hasKey("cdrdao path") ) {
-    if( QFile::exists( "/usr/bin/cdrdao" ) ) {
-      _cdrdao = "/usr/bin/cdrdao";
-      qDebug("(K3bMainWindow) found cdrdao in " + _cdrdao );
-    }
-    else if( QFile::exists( "/usr/local/bin/cdrdao" ) ) {
-      _cdrdao = "/usr/local/bin/cdrdao";
-      qDebug("(K3bMainWindow) found cdrdao in " + _cdrdao );
-    }
-    else {
-      bool ok = true;
-      while( !QFile::exists( _cdrdao ) && ok )
-	_cdrdao = KLineEditDlg::getText( "Could not find cdrdao. Please insert the full path...", "cdrdao", &ok, this );
-    }
-    m_config->writeEntry( "cdrdao path", _cdrdao );
-  }
-
-  if( !m_config->hasKey("sox path") ) {
-    if( QFile::exists( "/usr/bin/sox" ) ) {
-      _sox = "/usr/bin/sox";
-      qDebug("(K3bMainWindow) found sox in " + _sox );
-    }
-    else if( QFile::exists( "/usr/local/bin/sox" ) ) {
-      _sox = "/usr/local/bin/sox";
-      qDebug("(K3bMainWindow) found sox in " + _sox );
-    }
-    else {
-      bool ok = true;
-      while( !QFile::exists( _sox ) && ok )
-	_sox = KLineEditDlg::getText( "Could not find sox. Please insert the full path...", "sox", &ok, this );
-    }
-    m_config->writeEntry( "sox path", _sox );
-  }
-
-  if( !m_config->hasKey("cdrecord path") ) {
-    if( QFile::exists( "/usr/bin/cdrecord" ) ) {
-      _cdrecord = "/usr/bin/cdrecord";
-      qDebug("(K3bMainWindow) found cdrecord in " + _cdrecord );
-    }
-    else if( QFile::exists( "/usr/local/bin/cdrecord" ) ) {
-      _cdrecord = "/usr/local/bin/cdrecord";
-      qDebug("(K3bMainWindow) found cdrecord in " + _cdrecord );
-    }
-    else {
-      bool ok = true;
-      while( !QFile::exists( _cdrecord ) && ok )
-	_cdrecord = KLineEditDlg::getText( "Could not find cdrecord. Please insert the full path...", "cdrecord", &ok, this );
-    }
-    m_config->writeEntry( "cdrecord path", _cdrecord );
-  }
-	
-  if( !m_config->hasKey( "mpg123 path" ) ) {
-    if( QFile::exists( "/usr/bin/mpg123" ) ) {
-      _mpg123 = "/usr/bin/mpg123";
-      qDebug("(K3bMainWindow) found mpg123 in " + _mpg123 );
-    }
-    else if( QFile::exists( "/usr/local/bin/mpg123" ) ) {
-      _mpg123 = "/usr/local/bin/mpg123";
-      qDebug("(K3bMainWindow) found mpg123 in " + _mpg123 );
-    }
-    else {
-      bool ok = true;
-      while( !QFile::exists( _mpg123 ) && ok )
-	_mpg123 = KLineEditDlg::getText( "Could not find mpg123. Please insert the full path...", "mpg123", &ok, this );
-    }
-    m_config->writeEntry( "mpg123 path", _mpg123 );
-  }
-	
-  m_config->sync();
-}
 
 void K3bMainWindow::slotNewAudioDoc()
 {
@@ -866,14 +799,6 @@ void K3bMainWindow::init()
 }
 
 
-void K3bMainWindow::slotDirDockHidden()
-{
-  // save dock positions!
-  manager()->writeConfig( m_config, "Docking Config" );
-  actionViewDirView->setChecked( false );
-}
-
-
 void K3bMainWindow::slotCurrentDocChanged( QWidget* w )
 {
   if( K3bView* view = dynamic_cast<K3bView*>(w) ) {
@@ -882,21 +807,11 @@ void K3bMainWindow::slotCurrentDocChanged( QWidget* w )
     actionFileSave->setEnabled( true );
     actionFileSaveAs->setEnabled( true );
     actionFileExport->setEnabled( true );
-
-    // update view-toolbar
-    m_viewsToolbar->clear();
-    QValueList<KAction*> actions = view->actionCollection()->actions();
-    for( QValueList<KAction*>::Iterator it = actions.begin(); it != actions.end(); ++it ) {
-      (*it)->plug( m_viewsToolbar );
-    }
   }
   else {
     actionFileClose->setEnabled( false );
     actionFileSave->setEnabled( false );
     actionFileSaveAs->setEnabled( false );
-
-    // update view-toolbar
-    m_viewsToolbar->clear();
   }
 }
 
@@ -921,7 +836,7 @@ QString K3bMainWindow::findTempFile( const QString& ending, const QString& d )
 bool K3bMainWindow::eject()
 {
   config()->setGroup( "General Options" );
-  return config()->readBoolEntry( "Eject when finished", true );
+  return !config()->readBoolEntry( "No cd eject", false );
 }
 
 
@@ -964,6 +879,39 @@ void K3bMainWindow::slotWriteIsoImage()
 void K3bMainWindow::slotK3bSetup()
 {
   KRun::runCommand( "kdesu k3bsetup" );
+}
+
+
+void K3bMainWindow::slotViewAudioPlayer()
+{
+  m_audioPlayerDock->changeHideShowState();
+  slotCheckDockWidgetStatus();
+}
+
+
+void K3bMainWindow::slotShowDirView()
+{
+  dirDock->changeHideShowState();
+  slotCheckDockWidgetStatus();
+}
+
+
+void K3bMainWindow::slotAudioPlayerHidden()
+{
+  actionViewAudioPlayer->setChecked( false );
+}
+
+
+void K3bMainWindow::slotDirDockHidden()
+{
+  actionViewDirView->setChecked( false );
+}
+
+
+void K3bMainWindow::slotCheckDockWidgetStatus()
+{
+  actionViewAudioPlayer->setChecked( m_audioPlayerDock->isVisible() );
+  actionViewDirView->setChecked( dirDock->isVisible() );
 }
 
 

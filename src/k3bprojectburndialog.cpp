@@ -47,6 +47,8 @@
 #include "kdiskfreesp.h"
 
 
+
+
 K3bProjectBurnDialog::K3bProjectBurnDialog(K3bDoc* doc, QWidget *parent, const char *name, bool modal )
   : KDialogBase( KDialogBase::Tabbed, i18n("Write CD"), User1|User2|Cancel, 
 		 User2, parent, name, modal, true, i18n("Write"), i18n("Save") )
@@ -64,7 +66,8 @@ K3bProjectBurnDialog::K3bProjectBurnDialog(K3bDoc* doc, QWidget *parent, const c
 }
 
 
-QGroupBox* K3bProjectBurnDialog::writerBox( QWidget* parent )
+// TODO: a burn dialog always needs a burner selection widget!
+QWidget* K3bProjectBurnDialog::writerBox( QWidget* parent )
 {
   if( m_writerSelectionWidget == 0 && parent != 0)
     {
@@ -77,7 +80,7 @@ QGroupBox* K3bProjectBurnDialog::writerBox( QWidget* parent )
 }
 
 
-QGroupBox* K3bProjectBurnDialog::tempDirBox( QWidget* parent )
+QWidget* K3bProjectBurnDialog::tempDirBox( QWidget* parent )
 {
   if( !m_groupTempDir && parent != 0 )
     {
@@ -173,7 +176,7 @@ int K3bProjectBurnDialog::exec( bool burn )
 void K3bProjectBurnDialog::slotUser2()
 {
   saveSettings();
-  m_doc->updateAllViews(0);
+  m_doc->updateAllViews();
   done( Saved );
 }
 
@@ -196,6 +199,7 @@ void K3bProjectBurnDialog::slotUser1()
   m_doc->disable();
 
   m_job = m_doc->newBurnJob();
+  //  m_job->setWritingApp( m_writerSelectionWidget->writingApp() );
 
   // will be deleted at close (WDestructiveClose)
   K3bBurnProgressDialog* d = new K3bBurnProgressDialog( k3bMain() );

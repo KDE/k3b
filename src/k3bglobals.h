@@ -20,6 +20,8 @@
 
 
 #include <qstring.h>
+#include <qdatastream.h>
+
 
 namespace K3b
 {
@@ -37,10 +39,16 @@ namespace K3b
   
   enum FileType { MP3 = 1, WAV = 2 };
   
+  enum WritingApp { DEFAULT, CDRECORD, CDRDAO };
   
   QString framesToString( int h, bool showFrames = true );
-  QString sizeToTime(long size);
+  QString sizeToTime( long size );
   /* 	bool parseFrames( const QString&, int& ); */
+
+  int waveLength( const char *filename, long offset,
+		  long *hdrlen, unsigned long *datalen );
+
+  void writeWavHeader( QDataStream *s, long byteCount );
 };
 
 #endif

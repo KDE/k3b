@@ -105,12 +105,15 @@ void K3bAudioPlayer::seek( long pos )
 {
   if( !m_playObject.isNull() ) {
     if( m_playObject.state() != Arts::posIdle ) {
-      if( pos < 0 )
+      if( pos < 0 ) {
 	m_playObject.seek( Arts::poTime() );
-      else if( m_playObject.overallTime().seconds < pos )
+      }
+      else if( m_playObject.overallTime().seconds < pos ) {
 	m_playObject.seek( m_playObject.overallTime() );
-      else
+      }
+      else if( pos != m_playObject.currentTime().seconds ) {
 	m_playObject.seek( Arts::poTime( pos, 0, -1, "" ) );
+      }
     }
   }
 }

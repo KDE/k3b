@@ -118,8 +118,8 @@ class K3bDoc : public QObject
   bool overburn() const { return m_overburn; }
   int speed() const { return m_speed; }
   K3bDevice* burner() const { return m_burner; }
-  virtual long size() const = 0;
-  virtual int length() const = 0;
+  virtual unsigned long size() const = 0;
+  virtual unsigned long length() const = 0;
 
   const QString& tempDir() const { return m_tempDir; }
 
@@ -132,13 +132,12 @@ class K3bDoc : public QObject
   virtual int numOfTracks() const { return 1; }
 	
   virtual K3bBurnJob* newBurnJob() = 0;
-	
+  
+  int writingApp() const { return m_writingApp; }
+  void setWritingApp( int a ) { m_writingApp = a; }
+
  public slots:
-  /** calls repaint() on all views connected to the document object and is called 
-   *	by the view by which the document has been changed.
-   *  As this view normally repaints itself, it is excluded from the paintEvent.
-   */
-  void updateAllViews(K3bView *sender);
+  void updateAllViews();
   void setDummy( bool d );
   void setDao( bool d );
   void setOnTheFly( bool b ) { m_onTheFly = b; }
@@ -194,6 +193,9 @@ class K3bDoc : public QObject
   bool m_burnproof;
   bool m_overburn;
   int  m_speed;
+
+  /** see k3bglobals.h */
+  int m_writingApp;
 };
 
 #endif // K3BDOC_H

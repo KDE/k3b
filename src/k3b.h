@@ -45,8 +45,10 @@ class K3bExternalBinManager;
 class K3bOptionDialog;
 class K3bJob;
 class K3bProjectTabWidget;
-class KToolBar;
 class K3bSongManager;
+class K3bAudioPlayer;
+class K3bAudioPlayerWidget;
+
 
 /** Access to the "lonely" K3bMainWindow Object */
 K3bMainWindow* k3bMain();
@@ -82,10 +84,11 @@ class K3bMainWindow : public KDockMainWindow
   /** opens a file specified by commandline option */
   void openDocumentFile(const KURL& url=0);
 
-  K3bDeviceManager* deviceManager() { return m_deviceManager; }
+  K3bDeviceManager*      deviceManager()      { return m_deviceManager; }
   K3bExternalBinManager* externalBinManager() { return m_externalBinManager; }
-  K3bSongManager* songManager() { return m_songManager; }
-  KConfig* config() { return m_config; }
+  K3bSongManager*        songManager()        { return m_songManager; }
+  K3bAudioPlayer*        audioPlayer()        { return m_audioPlayer; }
+  KConfig*               config()             { return m_config; }
 	
   /** does some initialisation like searching for external programs */
   void init();
@@ -107,6 +110,7 @@ class K3bMainWindow : public KDockMainWindow
 
  signals:
   void initializationInfo( const QString& );
+  void configChanged( KConfig* c );
 
  public slots:
   /** No descriptions */
@@ -166,6 +170,8 @@ class K3bMainWindow : public KDockMainWindow
    */
   bool canCloseDocument( K3bDoc* );
 
+  virtual void showEvent( QShowEvent* e );
+
  private slots:
   /** clears the document in the actual view to reuse it as the new document */
   void slotFileNew();
@@ -197,6 +203,11 @@ class K3bMainWindow : public KDockMainWindow
   /** toggles the statusbar
    */
   void slotViewStatusBar();
+
+  void slotViewAudioPlayer();
+  void slotAudioPlayerHidden();
+  void slotCheckDockWidgetStatus();
+
   /** changes the statusbar contents for the standard label permanently, used to indicate current actions.
    * @param text the text that is displayed in the statusbar
    */
@@ -238,9 +249,6 @@ class K3bMainWindow : public KDockMainWindow
   /** The MDI-Interface is managed by this tabbed view */
   K3bProjectTabWidget* m_documentTab;
 
-  /** The toolbar for the doc-specific actions */
-  KToolBar* m_viewsToolbar;
-
   /** a counter that gets increased each time the user creates a new document with "File"->"New" */
   int untitledCount;
   /** a list of all open documents. If the last window of a document gets closed, the installed eventFilter
@@ -248,9 +256,10 @@ class K3bMainWindow : public KDockMainWindow
    * is about to close the application. */
   QList<K3bDoc> *pDocList;	
 
-  K3bDeviceManager* m_deviceManager;
+  K3bDeviceManager*      m_deviceManager;
   K3bExternalBinManager* m_externalBinManager;
-  K3bSongManager*  m_songManager;
+  K3bSongManager*        m_songManager;
+  K3bAudioPlayer*        m_audioPlayer;
 
   // KAction pointers to enable/disable actions
   KActionMenu* actionFileNewMenu;
@@ -273,13 +282,16 @@ class K3bMainWindow : public KDockMainWindow
   KToggleAction* actionViewToolBar;
   KToggleAction* actionViewStatusBar;
   KToggleAction* actionViewDirView;
+  KToggleAction* actionViewAudioPlayer;
 
   KDockWidget* mainDock;
   KDockWidget* dirDock;
+  KDockWidget* m_audioPlayerDock;
 		
   // The K3b-specific widgets
   K3bDirView* m_dirView;
   K3bOptionDialog* m_optionDialog;
+  K3bAudioPlayerWidget* m_audioPlayerWidget;
 	
   bool m_useID3TagForMp3Renaming;
   bool m_initialized;

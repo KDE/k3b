@@ -51,7 +51,10 @@ class K3bAudioPlayerWidget : public QWidget
    void slotPaused();
    void slotStopped();
    void slotEnded();
-   void slotUpdateDisplay();
+   void slotUpdateSlider();
+   void slotUpdateCurrentTime( int time );
+   void slotUpdateLength( long l );
+   void slotUpdateFilename( const QString& filename );
 
  private:
    K3bAudioPlayer* m_player;

@@ -14,31 +14,9 @@ make
 make install (as root)
 
 
-
-To work properly cdrecord, cdrdao and mkisofs need root privileges.
-To do this you could either run k3b as root or do some additionel work:
-
-This is how I configured my system:
-	cdrecord, cdrdao, mkisofs are all part of the group "cdrecording" and owned by root:
-	This can be done by (as root for cdrecord): 
-		"chgrp cdrecording cdrecord"
-		"chown root cdrecord"
-
-	Then they are set suid root which means that they will be executed with
-	root privileges. This is done as follows: 
-		"chmod 4710 cdrecord"
-
-This configuration is based on the cdrecord-man-page.
-
-With K3b 0.4.2 came a new CD-Device-Management-System which needs access to the sgX devices.
-You need to either run K3b as root (bad) or gain write-access to the /dev/sgX devices (less bad).
-This could be done as root by typing the following commands (using the same group as above):
-
-	chgrp cdrecording /dev/sg*
-	chmod 660 /dev/sg*
-
-Sorry for that, but now K3b is able to detect the speed of most drives and if they support BURN-PROOF and if
-the cd is empty and stuff like that.
+K3b needs some special permission settings to work properly.
+With 0.5.2 comes the K3bSetup Wizard that will perform all the necessary steps.
+No need to do anything on your own!
 
 Have fun
 Sebastian Trueg

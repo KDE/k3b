@@ -17,12 +17,14 @@
 
 #include "k3bfileview.h"
 #include "k3b.h"
+#include "k3baudioplayer.h"
 
 #include <qwidget.h>
 #include <qdragobject.h>
 #include <qlayout.h>
 #include <qdir.h>
 #include <qvbox.h>
+#include <qlabel.h>
 
 #include <kfiledetailview.h>
 #include <klistview.h>
@@ -31,7 +33,9 @@
 #include <ktoolbar.h>
 #include <ktoolbarbutton.h>
 #include <kurl.h>
-
+#include <kfilefilter.h>
+#include <klocale.h>
+#include <kfileviewitem.h>
 
 
 
@@ -75,26 +79,103 @@ K3bFileView::~K3bFileView()
 void K3bFileView::setupGUI()
 {
   KToolBar* toolBar = new KToolBar( k3bMain(), this, "fileviewtoolbar" );
+  m_dirOp           = new KDirOperator( QDir::home().absPath(), this );
 
-  m_dirOp = new KDirOperator( QDir::home().absPath(), this );
+  // PrivateFileView just adds d'n'd support (replace with default detailView in KDE3)
   PrivateFileView* fileView = new PrivateFileView( m_dirOp, "fileview" );
   m_dirOp->setView( fileView );
   fileView->setSelectionMode( KFile::Extended );
+
+  KAction* actionPlay = new KAction( i18n("&Play"), "1rightarrow", 0, this, SLOT(slotAudioFilePlay()), 
+				     m_dirOp->actionCollection(), "audio_file_play");
 
   // add some actions to the toolbar
   m_dirOp->actionCollection()->action("up")->plug( toolBar );
   m_dirOp->actionCollection()->action("home")->plug( toolBar );
   m_dirOp->actionCollection()->action("reload")->plug( toolBar );
+  toolBar->insertSeparator();
+  actionPlay->plug( toolBar );
+  toolBar->insertSeparator();
+
+  KActionMenu* dirOpMenu = (KActionMenu*)m_dirOp->actionCollection()->action("popupMenu");
+  dirOpMenu->insert( actionPlay, 0 );
+  dirOpMenu->insert( new KActionSeparator( m_dirOp->actionCollection() ), 1 );
 
   // this has to be disabled since the user must NEVER change the fileview because
   // that would disable the dragging support! (obsolete in KDE3)
   m_dirOp->actionCollection()->action("view menu")->setEnabled( false );
+
+  // create filter selection combobox
+  QLabel* filterLabel = new QLabel( i18n("&Filter:"), toolBar, "filterLabel" );
+  m_filterWidget = new KFileFilter( toolBar, "filterwidget" );
+  m_filterWidget->setEditable( true );
+  QString filter = i18n("*|All files");
+  filter += "\n" + i18n("audio/x-mp3 audio/x-ogg audio/wav |Sound files");
+  filter += "\n" + i18n("audio/x-mp3 |MP3 sound files");
+  filter += "\n" + i18n("audio/x-ogg |Ogg Vorbis sound files");
+  m_filterWidget->setFilter(filter);
+
+  filterLabel->setBuddy(m_filterWidget);
+  connect( m_filterWidget, SIGNAL(filterChanged()), SLOT(slotFilterChanged()) );
+
+  connect( m_dirOp, SIGNAL(fileHighlighted(const KFileViewItem*)), this, SLOT(slotFileHighlighted(const KFileViewItem*)) );
 }
 
 
 void K3bFileView::setUrl(const KURL& url, bool forward)
 {
   m_dirOp->setURL( url, forward );
+}
+
+
+void K3bFileView::slotFileHighlighted( const KFileViewItem* item )
+{
+  // check if there are audio files under the selected ones
+  bool play = false;
+  for( QListIterator<KFileViewItem> it( *(m_dirOp->selectedItems()) ); it.current(); ++it ) {
+    if( k3bMain()->audioPlayer()->supportsMimetype(it.current()->mimetype()) ) {
+      play = true;
+      break;
+    }
+  }
+
+  if( play ) {
+    m_dirOp->actionCollection()->action( "audio_file_play" )->setEnabled( true );
+  }
+  else {
+    m_dirOp->actionCollection()->action( "audio_file_play" )->setEnabled( false );
+  }
+}
+
+
+void K3bFileView::slotAudioFilePlay()
+{
+  // play selected audio files
+  for( QListIterator<KFileViewItem> it( *(m_dirOp->selectedItems()) ); it.current(); ++it ) {
+    if( k3bMain()->audioPlayer()->supportsMimetype(it.current()->mimetype()) ) {
+      if( k3bMain()->audioPlayer()->playFile( it.current()->url().path() ) ) {
+	break;
+      }
+    }
+  }
+}
+
+
+void K3bFileView::slotFilterChanged()
+{
+  QString filter = m_filterWidget->currentFilter();
+  m_dirOp->clearFilter();
+
+  if( filter.find( '/' ) > -1 ) {
+    QStringList types = QStringList::split( " ", filter );
+    types.prepend( "inode/directory" );
+    m_dirOp->setMimeFilter( types );
+  }
+  else
+    m_dirOp->setNameFilter( filter );
+  
+  m_dirOp->rereadDir();
+  //  emit filterChanged( filter );
 }
 
 

@@ -44,11 +44,6 @@ K3bDoc *K3bView::getDocument() const
   return doc;
 }
 
-void K3bView::update(K3bView* pSender){
-  if(pSender != this)
-    QWidget::update();
-}
-
 
 KActionCollection* K3bView::actionCollection() const
 {

@@ -18,17 +18,22 @@
 #ifndef K3BWRITERSELECTIONWIDGET_H
 #define K3BWRITERSELECTIONWIDGET_H
 
-#include <qgroupbox.h>
+#include <qwidget.h>
 
 
 class QComboBox;
+class QRadioButton;
+class QButtonGroup;
+
 class K3bDevice;
+class KConfig;
+
+
 
 /**
   *@author Sebastian Trueg
   */
-
-class K3bWriterSelectionWidget : public QGroupBox
+class K3bWriterSelectionWidget : public QWidget
 {
    Q_OBJECT
 
@@ -39,15 +44,29 @@ class K3bWriterSelectionWidget : public QGroupBox
   int writerSpeed() const;
   K3bDevice* writerDevice() const;
 
+  /**
+   * returns K3b::WritingApp
+   * DEFAULT, CDRECORD, CDRDAO
+   */
+  int writingApp() const;
+
  signals:
   void writerChanged();
+  void writingAppChanged( int app );
 
  private slots:
   void slotRefreshWriterSpeeds();
+  void slotWritingAppSelected( int id );
+  void slotConfigChanged( KConfig* c );
 
  private:
   QComboBox* m_comboSpeed;
   QComboBox* m_comboWriter;
+
+  QButtonGroup* m_groupCdWritingApp;
+  QRadioButton* m_selectDefault;
+  QRadioButton* m_selectCdrecord;
+  QRadioButton* m_selectCdrdao;
 };
 
 #endif

@@ -20,51 +20,71 @@
 #include "device/k3bdevice.h"
 #include "device/k3bdevicemanager.h"
 #include "k3b.h"
+#include "k3bglobals.h"
 
 #include <klocale.h>
 #include <kdialog.h>
+#include <kconfig.h>
 
 #include <qcombobox.h>
 #include <qlabel.h>
 #include <qlayout.h>
-
+#include <qradiobutton.h>
+#include <qhbuttongroup.h>
 
 
 K3bWriterSelectionWidget::K3bWriterSelectionWidget(QWidget *parent, const char *name )
-  : QGroupBox( parent, name )
+  : QWidget( parent, name )
 {
-  setTitle( i18n( "Burning Device" ) );
-  setColumnLayout(0, Qt::Vertical );
-  layout()->setSpacing( 0 );
-  layout()->setMargin( 0 );
+  QGroupBox* groupWriter = new QGroupBox( this );
+  groupWriter->setTitle( i18n( "Burning Device" ) );
+  groupWriter->setColumnLayout(0, Qt::Vertical );
+  groupWriter->layout()->setSpacing( 0 );
+  groupWriter->layout()->setMargin( 0 );
 
-  QGridLayout* mainLayout = new QGridLayout( layout() );
-  mainLayout->setAlignment( Qt::AlignTop );
-  mainLayout->setSpacing( KDialog::spacingHint() );
-  mainLayout->setMargin( KDialog::marginHint() );
+  QGridLayout* groupWriterLayout = new QGridLayout( groupWriter->layout() );
+  groupWriterLayout->setAlignment( Qt::AlignTop );
+  groupWriterLayout->setSpacing( KDialog::spacingHint() );
+  groupWriterLayout->setMargin( KDialog::marginHint() );
 
-  QLabel* labelSpeed = new QLabel( this, "TextLabel1" );
+  QLabel* labelSpeed = new QLabel( groupWriter, "TextLabel1" );
   labelSpeed->setText( i18n( "Burning Speed" ) );
     
-  m_comboSpeed = new QComboBox( FALSE, this, "m_comboSpeed" );
+  m_comboSpeed = new QComboBox( FALSE, groupWriter, "m_comboSpeed" );
   m_comboSpeed->setAutoMask( FALSE );
   m_comboSpeed->setDuplicatesEnabled( FALSE );
     
-  m_comboWriter = new QComboBox( FALSE, this, "m_comboWriter" );
+  m_comboWriter = new QComboBox( FALSE, groupWriter, "m_comboWriter" );
 
-  QLabel* labelDevice = new QLabel( this, "TextLabel1_2" );
+  QLabel* labelDevice = new QLabel( groupWriter, "TextLabel1_2" );
   labelDevice->setText( i18n( "Device" ) );
 
-  mainLayout->addWidget( labelDevice, 0, 0 );
-  mainLayout->addWidget( labelSpeed, 0, 1 );
-  mainLayout->addWidget( m_comboWriter, 1, 0 );  
-  mainLayout->addWidget( m_comboSpeed, 1, 1 );
+  groupWriterLayout->addWidget( labelDevice, 0, 0 );
+  groupWriterLayout->addWidget( labelSpeed, 0, 1 );
+  groupWriterLayout->addWidget( m_comboWriter, 1, 0 );  
+  groupWriterLayout->addWidget( m_comboSpeed, 1, 1 );
+  groupWriterLayout->setColStretch( 0, 1 );
+
+
+  m_groupCdWritingApp = new QHButtonGroup( i18n("Writing Application"), this );
+  m_groupCdWritingApp->setExclusive( true );
+  m_selectDefault  = new QRadioButton( i18n("Default"), m_groupCdWritingApp );
+  m_selectCdrecord = new QRadioButton( i18n("Cdrecord"), m_groupCdWritingApp );
+  m_selectCdrdao   = new QRadioButton( i18n("Cdrdao"), m_groupCdWritingApp );
+
+
+  QGridLayout* mainLayout = new QGridLayout( this );
+  mainLayout->setAlignment( Qt::AlignTop );
+  mainLayout->setSpacing( KDialog::spacingHint() );
+  mainLayout->setMargin( 0 );
+
+  mainLayout->addWidget( groupWriter, 0, 0 );
+  mainLayout->addWidget( m_groupCdWritingApp, 1, 0 );
   
-  mainLayout->setColStretch( 0, 1 );
-  
+
   connect( m_comboWriter, SIGNAL(activated(int)), this, SLOT(slotRefreshWriterSpeeds()) );
   connect( m_comboWriter, SIGNAL(activated(int)), this, SIGNAL(writerChanged()) );
-
+  connect( m_groupCdWritingApp, SIGNAL(clicked(int)), this, SLOT(slotWritingAppSelected(int)) );
 
 
   // -- read cd-writers ----------------------------------------------
@@ -76,11 +96,29 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget(QWidget *parent, const char *
   }
   
   slotRefreshWriterSpeeds(); 
+  slotConfigChanged(k3bMain()->config());
+  m_groupCdWritingApp->setButton( 0 );
+
+  connect( k3bMain(), SIGNAL(configChanged(KConfig*)), this, SLOT(slotConfigChanged(KConfig*)) );
 }
 
 
 K3bWriterSelectionWidget::~K3bWriterSelectionWidget()
 {
+}
+
+
+void K3bWriterSelectionWidget::slotConfigChanged( KConfig* c )
+{
+  c->setGroup("General Options");
+  bool manualAppSelect = c->readBoolEntry( "Manual writing app selection", false );
+  if( manualAppSelect ) {
+    m_groupCdWritingApp->show();
+  }
+  else {
+    m_groupCdWritingApp->setButton( 0 );
+    m_groupCdWritingApp->hide();
+  }
 }
 
 
@@ -95,6 +133,23 @@ void K3bWriterSelectionWidget::slotRefreshWriterSpeeds()
       m_comboSpeed->insertItem( QString( "%1x" ).arg(_speed) );
       _speed+=2;
     }
+  }
+}
+
+
+void K3bWriterSelectionWidget::slotWritingAppSelected( int id )
+{
+  switch( id ) {
+  case 1:
+    emit writingAppChanged( K3b::CDRECORD );
+    break;
+  case 2:
+    emit writingAppChanged( K3b::CDRDAO );
+    break;
+  case 0:
+  default:
+    emit writingAppChanged( K3b::DEFAULT );
+    break;
   }
 }
 
@@ -119,6 +174,20 @@ int K3bWriterSelectionWidget::writerSpeed() const
   _strSpeed.truncate( _strSpeed.find('x') );
 	
   return _strSpeed.toInt();
+}
+
+
+int K3bWriterSelectionWidget::writingApp() const
+{
+  switch( m_groupCdWritingApp->id( m_groupCdWritingApp->selected() ) ) {
+  case 1:
+    return K3b::CDRECORD;
+  case 2:
+    return K3b::CDRDAO;
+  case 0:
+  default:
+    return K3b::DEFAULT;
+  }
 }
 
 

@@ -27,6 +27,7 @@
 #include <qslider.h>
 
 #include <kiconloader.h>
+#include <klocale.h>
 
 
 K3bAudioPlayerWidget::K3bAudioPlayerWidget( K3bAudioPlayer* player, bool skipButtons, QWidget *parent, const char *name )
@@ -36,21 +37,23 @@ K3bAudioPlayerWidget::K3bAudioPlayerWidget( K3bAudioPlayer* player, bool skipBut
 
   // initialize
   // ------------------------------------------------------------------------
-  m_labelFilename    = new QLabel( "filename", this );
+  m_labelFilename    = new QLabel( i18n("Playing no file"), this );
   m_labelOverallTime = new QLabel( "00:00:00", this );
   m_labelCurrentTime = new QLabel( "00:00:00", this );
 
   m_labelOverallTime->setAlignment( AlignHCenter | AlignVCenter );
   m_labelCurrentTime->setAlignment( AlignHCenter | AlignVCenter );
-  m_labelOverallTime->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
-  m_labelCurrentTime->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
+  m_labelOverallTime->setFrameStyle( QFrame::StyledPanel | QFrame::Plain );
+  m_labelCurrentTime->setFrameStyle( QFrame::StyledPanel | QFrame::Plain );
+  m_labelFilename->setFrameStyle( QFrame::StyledPanel | QFrame::Plain );
   m_labelOverallTime->setPalette( QPalette( QColor(238, 238, 205) ) );
   m_labelCurrentTime->setPalette( QPalette( QColor(238, 238, 205) ) );
+  m_labelFilename->setPalette( QPalette( QColor(238, 238, 205) ) );
   QFont font = m_labelOverallTime->font();
   font.setPointSize( 8 );
   m_labelOverallTime->setFont( font );
   m_labelCurrentTime->setFont( font );
-
+  m_labelFilename->setFont( font );
 
   m_buttonPlay = new QToolButton( this );
   m_buttonPause = new QToolButton( this );
@@ -95,6 +98,8 @@ K3bAudioPlayerWidget::K3bAudioPlayerWidget( K3bAudioPlayer* player, bool skipBut
 
   grid->addWidget( m_labelOverallTime, 0, 7 );
   grid->addWidget( m_labelCurrentTime, 1, 7 );
+
+  grid->setRowStretch( 2, 1 );
   // ------------------------------------------------------------------------
 
 
@@ -112,12 +117,15 @@ K3bAudioPlayerWidget::K3bAudioPlayerWidget( K3bAudioPlayer* player, bool skipBut
   connect( m_player, SIGNAL(started()), this, SLOT(slotStarted()) );
   connect( m_player, SIGNAL(started(const QString&)), this, SLOT(slotStarted(const QString&)) );
   connect( m_player, SIGNAL(stopped()), this, SLOT(slotStopped()) );
+  connect( m_player, SIGNAL(ended()), this, SLOT(slotEnded()) );
   connect( m_player, SIGNAL(paused()), this, SLOT(slotPaused()) );
 
   connect( m_seekSlider, SIGNAL(valueChanged(int)), m_player, SLOT(seek(int)) );
   connect( m_seekSlider, SIGNAL(sliderMoved(int)), m_player, SLOT(seek(int)) );
+  connect( m_seekSlider, SIGNAL(valueChanged(int)), this, SLOT(slotUpdateCurrentTime(int)) );
+  connect( m_seekSlider, SIGNAL(sliderMoved(int)), this, SLOT(slotUpdateCurrentTime(int)) );
 
-  connect( m_displayTimer, SIGNAL(timeout()), this, SLOT(slotUpdateDisplay()) );
+  connect( m_displayTimer, SIGNAL(timeout()), this, SLOT(slotUpdateSlider()) );
   // ------------------------------------------------------------------------
 
   init();
@@ -133,8 +141,8 @@ void K3bAudioPlayerWidget::init()
 {
   if( m_player ) {
     if( m_player->state() != K3bAudioPlayer::EMPTY ) {
-      m_labelFilename->setText( m_player->filename().mid(m_player->filename().findRev("/")+1) );
-      slotUpdateDisplay();
+      slotUpdateFilename( m_player->filename() );
+      slotUpdateSlider();
     }
     switch( m_player->state() ) {
     case K3bAudioPlayer::PLAYING:
@@ -171,9 +179,9 @@ void K3bAudioPlayerWidget::slotStarted()
 
 void K3bAudioPlayerWidget::slotStarted( const QString& filename )
 {
-  m_labelFilename->setText( filename.mid(filename.findRev("/")+1) );
+  slotUpdateFilename( filename );
   m_bLengthReady = false;
-  slotUpdateDisplay();
+  slotUpdateSlider();
   slotStarted();
 }
 
@@ -194,7 +202,12 @@ void K3bAudioPlayerWidget::slotStopped()
   m_buttonPause->setDisabled( true );
   m_buttonStop->setDisabled( true );
   
-  m_labelCurrentTime->setText( QTime().toString() );
+  // we need to disconnect here to avoid recursive value setting
+  // TODO: find a better solution (if there is any!)
+  m_seekSlider->disconnect(m_player);
+  m_seekSlider->setValue( 0 );
+  connect( m_seekSlider, SIGNAL(valueChanged(int)), m_player, SLOT(seek(int)) );
+  connect( m_seekSlider, SIGNAL(sliderMoved(int)), m_player, SLOT(seek(int)) );
       
   m_displayTimer->stop();
 }
@@ -206,19 +219,43 @@ void K3bAudioPlayerWidget::slotEnded()
 }
 
 
-void K3bAudioPlayerWidget::slotUpdateDisplay()
+void K3bAudioPlayerWidget::slotUpdateCurrentTime( int time )
+{
+  m_labelCurrentTime->setText( QTime().addSecs(time).toString() );
+}
+
+
+void K3bAudioPlayerWidget::slotUpdateLength( long time )
+{
+  m_labelOverallTime->setText( QTime().addSecs(time).toString() );
+}
+
+
+void K3bAudioPlayerWidget::slotUpdateFilename( const QString& filename )
+{
+  QString x;
+  int pos = filename.findRev("/");
+  if( pos < 0 ) // no slash
+    x = filename;
+  else
+    x = filename.mid(pos+1);
+
+  m_labelFilename->setText( i18n("Playing file: %1").arg(x) );
+}
+
+
+void K3bAudioPlayerWidget::slotUpdateSlider()
 {
   if( m_player ) {
-    m_labelCurrentTime->setText( QTime().addSecs(m_player->position()).toString() );
-
     // we need to set the length here because sometimes it is not ready in the beginning (??)
     if( !m_bLengthReady && m_player->length() > 0 ) {
-      m_labelOverallTime->setText( QTime().addSecs(m_player->length()).toString() );
+      slotUpdateLength( m_player->length() );
       m_seekSlider->setMaxValue( m_player->length() );
       m_bLengthReady = true;
     }
 
     // we need to disconnect here to avoid recursive value setting
+    // TODO: find a better solution (if there is any!)
     m_seekSlider->disconnect(m_player);
     m_seekSlider->setValue( m_player->position() );
     connect( m_seekSlider, SIGNAL(valueChanged(int)), m_player, SLOT(seek(int)) );

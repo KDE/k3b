@@ -70,11 +70,11 @@ class K3bProjectBurnDialog : public KDialogBase
    void writerChanged();
 
  protected:
-   QGroupBox* writerBox( QWidget* parent = 0 );
-   QGroupBox* tempDirBox( QWidget* parent = 0 );
+   QWidget* writerBox( QWidget* parent = 0 );
+   QWidget* tempDirBox( QWidget* parent = 0 );
 
    int writerSpeed() const;
-   int freeTempSpace() const { return m_freeTempSpace; }
+   unsigned long freeTempSpace() const { return m_freeTempSpace; }
    K3bDevice* writerDevice() const;
 	
    virtual void saveSettings() = 0;
@@ -89,7 +89,7 @@ class K3bProjectBurnDialog : public KDialogBase
    QLineEdit* m_editDirectory;
    QToolButton* m_buttonFindIsoImage;
    QTimer* m_freeTempSpaceTimer;
-   int m_freeTempSpace;
+   unsigned long m_freeTempSpace;
 
    K3bDoc* m_doc;
    K3bBurnJob* m_job;
