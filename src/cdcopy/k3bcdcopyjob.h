@@ -21,7 +21,6 @@
 #include "../k3bjob.h"
 #include "../k3bcdrdaowriter.h"
 
-
 class K3bProcess;
 class K3bDevice;
 class K3bDiskInfo;
@@ -55,9 +54,14 @@ class K3bCdCopyJob : public K3bBurnJob
   /** not usable for cdrdao (enabled by default) */
   void setTempPath( const QString& path ) { m_tempPath= path; }
   void setCopies( int c ) { m_copies = c; }
+
   void setFastToc( bool b ) { m_cdrdaowriter->setFastToc(b); }
   void setReadRaw( bool b ) { m_cdrdaowriter->setReadRaw(b); }
   void setParanoiaMode( int i ) { m_cdrdaowriter->setParanoiaMode(i); }
+  void setReadSubchan(K3bCdrdaoWriter::SubMode m) { m_cdrdaowriter->setReadSubchan(m); };
+  void setTaoSource(bool b) { m_cdrdaowriter->setTaoSource(b); };
+  void setTaoSourceAdjust(int a) { m_cdrdaowriter->setTaoSourceAdjust(a); };
+  void setForce(bool b) { m_cdrdaowriter->setForce(b); };
 
  private slots:
   void diskInfoReady( const K3bDiskInfo& info );
@@ -88,7 +92,6 @@ class K3bCdCopyJob : public K3bBurnJob
   QString m_job;
   K3bCdrdaoWriter *m_cdrdaowriter;
   K3bDiskInfoDetector* m_diskInfoDetector;
-  QUrlOperator *m_cp;
 };
 
 #endif

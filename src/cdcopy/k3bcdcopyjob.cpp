@@ -36,7 +36,6 @@
 #include <qstringlist.h>
 #include <qfile.h>
 #include <qregexp.h>
-#include <qurloperator.h>
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -73,14 +72,12 @@ m_job(QString("Reading")) {
     m_diskInfoDetector = new K3bDiskInfoDetector( this );
     connect( m_diskInfoDetector, SIGNAL(diskInfoReady(const K3bDiskInfo&)),
              this, SLOT(diskInfoReady(const K3bDiskInfo&)) );
-    m_cp = new QUrlOperator();
 }
 
 
 K3bCdCopyJob::~K3bCdCopyJob() {
     delete m_cdrdaowriter;
     delete m_diskInfoDetector;
-    delete m_cp;
 }
 
 
@@ -221,12 +218,6 @@ void K3bCdCopyJob::cdrdaoFinished(bool ok) {
                 i18n("%1 copies succsessfully created").arg(m_copies),K3bJob::INFO );
             finishAll(); 
         } else {
-            if ( m_copies > 1) {
-                if (m_finishedCopies == 1 && !m_onTheFly)
-                    m_cp->copy(m_tocFile,m_tocFile+QString(".bak"),false,false);
-                else if ( m_finishedCopies <= m_copies && !m_onTheFly )
-                    m_cp->copy(m_tocFile+QString(".bak"),m_tocFile,false,false);
-            }
             if( m_cdrdaowriter->burnDevice() == m_cdrdaowriter->sourceDevice() )
                 m_cdrdaowriter->sourceDevice()->eject();
             else if ( !m_onTheFly ) 
@@ -242,17 +233,12 @@ void K3bCdCopyJob::cdrdaoFinished(bool ok) {
 void K3bCdCopyJob::finishAll() {
     if( !m_keepImage && !m_onTheFly ) {
         if (QFile::exists(m_tocFile) )
-            QFile::remove
-                (m_tocFile);
-        if (QFile::exists(m_tocFile+QString(".bak")))
-            QFile::remove
-                (m_tocFile+QString(".bak"));
+            QFile::remove(m_tocFile);
         if (QFile::exists(m_tempPath))
-            QFile::remove
-                (m_tempPath);
+            QFile::remove(m_tempPath);
         emit infoMessage( i18n("Imagefiles removed"), K3bJob::STATUS );
     }
-    if( k3bMain()->eject() && m_onTheFly )
+    if( k3bMain()->eject() )
         m_cdrdaowriter->sourceDevice()->eject();
 
     emit finished( true );
@@ -261,16 +247,10 @@ void K3bCdCopyJob::finishAll() {
 
 void K3bCdCopyJob::cancelAll() {
     if (QFile::exists(m_tocFile) )
-        QFile::remove
-            (m_tocFile);
-    if (QFile::exists(m_tocFile+QString(".bak")))
-        QFile::remove
-            (m_tocFile+QString(".bak"));
+        QFile::remove(m_tocFile);
     if (QFile::exists(m_tempPath))
-        QFile::remove
-            (m_tempPath);
+        QFile::remove(m_tempPath);
     emit infoMessage( i18n("Canceled, temporary files removed"), K3bJob::STATUS );
-
 
     emit finished( false );
 }
