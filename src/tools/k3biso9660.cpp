@@ -226,7 +226,7 @@ K3bIso9660::~K3bIso9660()
 }
 
 /* callback function for libisofs */
-static int readf(char *buf, int start, int len,void *udata) 
+static int readf(char *buf, sector_t start, int len,void *udata) 
 {
   QIODevice* dev = ( static_cast<K3bIso9660*> (udata) )->device();
   

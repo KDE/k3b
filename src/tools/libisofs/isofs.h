@@ -23,6 +23,8 @@
 #include "iso_fs.h"
 #include "el_torito.h"
 
+typedef long sector_t;
+
 typedef struct _rr_entry {
 	int		len;	/* length of structure */
 	char	*name; /* Name from 'NM' */
@@ -61,20 +63,18 @@ typedef struct _boot_entry {
 	struct _boot_entry  *parent;
 	struct _boot_entry  *child;
 	char	data[32];
-}
- boot_entry;
+} boot_entry;
 
 typedef struct _boot_head {
 	struct validation_entry	ventry;
 	struct _boot_entry	*defentry;
 	struct _boot_entry  *sections;
-}
- boot_head;
+} boot_head;
 
 /**
  * this callback function needs to read 'len' sectors from 'start' into 'buf' 
  */
-typedef int readfunc(char *buf,int start, int len,void *);
+typedef int readfunc(char *buf,sector_t start, int len,void *);
 
 /**
  * ProcessDir uses this callback
@@ -103,7 +103,7 @@ time_t isodate_84261(char * p, int hs);
  * If the function fails, returns NULL
  * Don't forget to call FreeISO9660 after using the volume descriptor list!
  */
-iso_vol_desc *ReadISO9660(readfunc *read,int sector,void *udata);
+iso_vol_desc *ReadISO9660(readfunc *read,sector_t sector,void *udata);
 
 /**
  * Frees the linked list of volume descriptors.
@@ -135,7 +135,7 @@ int JolietLevel(struct iso_volume_descriptor *ivd);
 /**
  * Returns the size of the boot image (in 512 byte sectors)
  */
-int BootImageSize(readfunc *read,int media,int start,int len,void *udata);
+int BootImageSize(readfunc *read,int media,sector_t start,int len,void *udata);
 
 /**
  * Frees the boot catalog entries in 'boot'. If you ever called ReadBootTable,
@@ -146,6 +146,6 @@ void FreeBootTable(boot_head *boot);
 /**
  * Reads the boot catalog into 'head'. Don't forget to call FreeBootTable!
  */
-int ReadBootTable(readfunc *read,int sector, boot_head *head, void *udata);
+int ReadBootTable(readfunc *read,sector_t sector, boot_head *head, void *udata);
 
 #endif
