@@ -49,18 +49,29 @@ class K3bIsoImageJob : public K3bBurnJob
   void setBurnproof( bool );
   void setDao( bool );
   void setDummy( bool );
+  void setRawWrite( bool );
+  void setNoFix( bool );
+  void setWriteCueBin( bool b ) { m_writeCueBin = b; }
 
  protected slots:
   void slotParseCdrecordOutput( KProcess*, char*, int );
   void slotCdrecordFinished();
+  void slotCdrdaoFinished();
+  void slotWrite();
+  void slotWriteCueBin();
 		
  private:
-  KProcess* m_process;
+  KProcess* m_cdrecordProcess;
+  KProcess* m_cdrdaoProcess;
 
   int m_speed;
   bool m_burnproof;
   bool m_dao;
   bool m_dummy;
+  bool m_rawWrite;
+  bool m_noFix;
+  bool m_writeCueBin;
+
   K3bDevice* m_device;
   QString m_imagePath;
 };

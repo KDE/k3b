@@ -21,6 +21,7 @@
 #include "../device/k3bdevice.h"
 #include "../k3bwriterselectionwidget.h"
 #include "../k3btempdirselectionwidget.h"
+#include "k3bisovalidator.h"
 
 #include <qcheckbox.h>
 #include <qcombobox.h>
@@ -38,8 +39,6 @@
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
 #include <qfileinfo.h>
-#include <qvalidator.h>
-#include <qregexp.h>
 #include <qtabwidget.h>
 
 #include <kmessagebox.h>
@@ -429,7 +428,7 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
   _groupVolumeInfoLayout->addWidget( new QLabel( i18n( "Application ID" ), _groupVolumeInfo, "m_labelApplicationID" ), 5, 0 );
 
   // are this really the allowed characters? What about Joliet or UDF?
-  QRegExpValidator* isoValidator = new QRegExpValidator( QRegExp("([a-z]|[A-Z]|[0-9]|_)*"), this, "isoValidator" );
+  K3bIsoValidator* isoValidator = new K3bIsoValidator( this, "isoValidator" );
 
   m_editVolumeID = new KLineEdit( _groupVolumeInfo, "m_editVolumeID" );
   m_editVolumeID->setValidator( isoValidator );

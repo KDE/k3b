@@ -217,7 +217,7 @@ void K3bDataDoc::createDirItem( QFileInfo& f, K3bDirItem* parent )
 
     // symLink resolved
     if( f.absFilePath().startsWith( link.absFilePath() ) ) {
-      KMessageBox::error( k3bMain(), i18n("Found recursion in directory tree. Omitting") + QString("\n<b>%1</b>").arg(f.absFilePath()) );
+      KMessageBox::error( k3bMain(), i18n("Found recursion in directory tree. Omitting") + QString("\n%1").arg(f.absFilePath()) );
       return;
     }
   }

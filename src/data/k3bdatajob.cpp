@@ -312,9 +312,12 @@ void K3bDataJob::writeCD()
   if( manualBufferSize ) {
     *m_process << QString("fs=%1m").arg( k3bMain()->config()->readNumEntry( "Cdrecord buffer", 4 ) );
   }
+  bool overburn = k3bMain()->config()->readBoolEntry( "Allow overburning", false );
 
   if( m_doc->dummy() )
     *m_process << "-dummy";
+  if( overburn )
+    *m_process << "-overburn";
 
   // multisession
   if( m_doc->multiSessionMode() == K3bDataDoc::START ||
@@ -322,7 +325,6 @@ void K3bDataJob::writeCD()
     *m_process << "-multi";
   else if( m_doc->multiSessionMode() == K3bDataDoc::NONE && m_doc->dao() )
     *m_process << "-dao";
-
 
 
   if( k3bMain()->eject() )
@@ -395,7 +397,7 @@ void K3bDataJob::writeCD()
       else
 	emit infoMessage( i18n("Starting recording at %1x speed...").arg(m_doc->speed()), K3bJob::STATUS );
 	
-      emit newTask( i18n("Writing ISO") );
+      emit newTask( i18n("Writing data") );
       emit started();
     }
 }
@@ -440,8 +442,8 @@ void K3bDataJob::writeImage()
   else
     {
       m_imageFinished = false;
-      emit infoMessage( i18n("Creating ISO-image in %1").arg(m_doc->isoImage()), K3bJob::STATUS );
-      emit newSubTask( i18n("Creating ISO-image") );
+      emit infoMessage( i18n("Creating image in %1").arg(m_doc->isoImage()), K3bJob::STATUS );
+      emit newSubTask( i18n("Creating image") );
       emit started();
     }
 }
@@ -751,7 +753,7 @@ void K3bDataJob::slotCdrecordFinished()
     m_pathSpecFile = QString::null;
   }
 
-  if( m_doc->deleteImage() ) {
+  if( !m_doc->onTheFly() && m_doc->deleteImage() ) {
     QFile::remove( m_doc->isoImage() );
     m_doc->setIsoImage("");
   }
@@ -945,7 +947,7 @@ void K3bDataJob::cancelAll()
 
   // remove iso-image if it is unfinished or the user selected to remove image
   if( QFile::exists( m_doc->isoImage() ) ) {
-    if( m_doc->deleteImage() || !m_imageFinished ) {
+    if( !m_doc->onTheFly() && m_doc->deleteImage() || !m_imageFinished ) {
       emit infoMessage( i18n("Removing iso-image %1").arg(m_doc->isoImage()), K3bJob::STATUS );
       QFile::remove( m_doc->isoImage() );
       m_doc->setIsoImage("");

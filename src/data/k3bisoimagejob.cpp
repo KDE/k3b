@@ -30,6 +30,7 @@
 
 #include <qstring.h>
 #include <qfile.h>
+#include <qtimer.h>
 
 #include <iostream>
 
@@ -37,15 +38,25 @@
 K3bIsoImageJob::K3bIsoImageJob()
   : K3bBurnJob()
 {
-  m_process = new KProcess();
+  m_cdrecordProcess = new KProcess();
+  m_cdrdaoProcess = new KProcess();
 
   // connect to the cdrecord slots
-  connect( m_process, SIGNAL(processExited(KProcess*)),
+  connect( m_cdrecordProcess, SIGNAL(processExited(KProcess*)),
 	   this, SLOT(slotCdrecordFinished()) );
-  connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
+  connect( m_cdrecordProcess, SIGNAL(receivedStderr(KProcess*, char*, int)),
 	   this, SLOT(slotParseCdrecordOutput(KProcess*, char*, int)) );
-  connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
+  connect( m_cdrecordProcess, SIGNAL(receivedStdout(KProcess*, char*, int)),
 	   this, SLOT(slotParseCdrecordOutput(KProcess*, char*, int)) );
+
+  // connect to the cdrdao slots
+  connect( m_cdrdaoProcess, SIGNAL(processExited(KProcess*)),
+	   this, SLOT(slotCdrdaoFinished()) );
+  connect( m_cdrdaoProcess, SIGNAL(receivedStderr(KProcess*, char*, int)),
+	   this, SLOT(parseCdrdaoOutput(KProcess*, char*, int)) );
+  connect( m_cdrdaoProcess, SIGNAL(receivedStdout(KProcess*, char*, int)),
+	   this, SLOT(parseCdrdaoOutput(KProcess*, char*, int)) );
+
 
 
   m_dao = true;
@@ -57,7 +68,8 @@ K3bIsoImageJob::K3bIsoImageJob()
 
 K3bIsoImageJob::~K3bIsoImageJob()
 {
-  delete m_process;
+  delete m_cdrecordProcess;
+  delete m_cdrdaoProcess;
 }
 
 
@@ -97,6 +109,15 @@ void K3bIsoImageJob::setDummy( bool dummy )
   m_dummy = dummy;
 }
 
+void K3bIsoImageJob::setRawWrite( bool raw )
+{
+  m_rawWrite = raw;
+}
+
+void K3bIsoImageJob::setNoFix( bool noFix )
+{
+  m_noFix = noFix;
+}
 
 void K3bIsoImageJob::start()
 {
@@ -119,8 +140,18 @@ void K3bIsoImageJob::start()
 
   emit newSubTask( i18n("Preparing write process...") );
 
-  m_process->clearArguments();
-	
+
+  if( m_writeCueBin )
+    QTimer::singleShot( 0, this, SLOT(slotWriteCueBin()) );
+  else
+    QTimer::singleShot( 0, this, SLOT(slotWrite()) );
+}
+
+
+void K3bIsoImageJob::slotWrite()
+{
+  m_cdrecordProcess->clearArguments();
+
   // use cdrecord to burn the cd
   if( !k3bMain()->externalBinManager()->foundBin( "cdrecord" ) ) {
     qDebug("(K3bAudioJob) could not find cdrecord executable" );
@@ -129,45 +160,53 @@ void K3bIsoImageJob::start()
     return;
   }
 
-  *m_process << k3bMain()->externalBinManager()->binPath( "cdrecord" );
+  *m_cdrecordProcess << k3bMain()->externalBinManager()->binPath( "cdrecord" );
 	
   // and now we add the needed arguments...
   // display progress
-  *m_process << "-v";
+  *m_cdrecordProcess << "-v";
 
   k3bMain()->config()->setGroup( "General Options" );
   bool manualBufferSize = k3bMain()->config()->readBoolEntry( "Manual buffer size", false );
   if( manualBufferSize ) {
-    *m_process << QString("fs=%1m").arg( k3bMain()->config()->readNumEntry( "Cdrecord buffer", 4 ) );
+    *m_cdrecordProcess << QString("fs=%1m").arg( k3bMain()->config()->readNumEntry( "Cdrecord buffer", 4 ) );
   }
+  bool overburn = k3bMain()->config()->readBoolEntry( "Allow overburning", false );
+
+  if( overburn )
+    *m_cdrecordProcess << "-overburn";
 
   if( m_dummy )
-    *m_process << "-dummy";
-  if( m_dao )
-    *m_process << "-dao";
+    *m_cdrecordProcess << "-dummy";
+  if( m_rawWrite )
+    *m_cdrecordProcess << "-raw";
+  else if( m_dao )
+    *m_cdrecordProcess << "-dao";
+  if( m_noFix )
+    *m_cdrecordProcess << "-nofix";
   if( k3bMain()->eject() )
-    *m_process << "-eject";
+    *m_cdrecordProcess << "-eject";
   if( m_burnproof && m_device->burnproof() )
-    *m_process << "driveropts=burnproof";
+    *m_cdrecordProcess << "driveropts=burnproof";
 
   // add speed
   QString s = QString("-speed=%1").arg( m_speed );
-  *m_process << s;
+  *m_cdrecordProcess << s;
 
   // add the device (e.g. 0,0,0)
   s = QString("dev=%1").arg( m_device->busTargetLun() );
-  *m_process << s;
+  *m_cdrecordProcess << s;
 
   // additional parameters from config
   QStringList _params = kapp->config()->readListEntry( "cdrecord parameters" );
   for( QStringList::Iterator it = _params.begin(); it != _params.end(); ++it )
-    *m_process << *it;
+    *m_cdrecordProcess << *it;
 
-  *m_process << "-data" << m_imagePath;
+  *m_cdrecordProcess << "-data" << m_imagePath;
 			
 
   cout << "***** cdrecord parameters:\n";
-  const QValueList<QCString>& args = m_process->args();
+  const QValueList<QCString>& args = m_cdrecordProcess->args();
   for( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
     cout << *it << " ";
   }
@@ -182,7 +221,7 @@ void K3bIsoImageJob::start()
   }
 
 
-  if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) )
+  if( !m_cdrecordProcess->start( KProcess::NotifyOnExit, KProcess::AllOutput ) )
     {
       // something went wrong when starting the program
       // it "should" be the executable
@@ -202,10 +241,94 @@ void K3bIsoImageJob::start()
 }
 
 
+void K3bIsoImageJob::slotWriteCueBin()
+{
+  m_cdrdaoProcess->clearArguments();
+
+
+  if( !k3bMain()->externalBinManager()->foundBin( "cdrdao" ) ) {
+    qDebug("(K3bAudioJob) could not find cdrdao executable" );
+    emit infoMessage( i18n("Cdrdao executable not found."), K3bJob::ERROR );
+    emit finished( false );
+    return;
+  }
+
+  *m_cdrdaoProcess << k3bMain()->externalBinManager()->binPath( "cdrdao" );
+
+  *m_cdrdaoProcess << "write";
+
+  *m_cdrdaoProcess << "--device" << m_device->busTargetLun();
+  if( m_device->cdrdaoDriver() != "auto" ) {
+    *m_cdrdaoProcess << "--driver";
+    if( m_device->cdTextCapable() == 1 )
+      *m_cdrdaoProcess << QString("%1:0x00000010").arg( m_device->cdrdaoDriver() );
+    else
+      *m_cdrdaoProcess << m_device->cdrdaoDriver();
+  }
+    
+  // additional parameters from config
+  QStringList _params = kapp->config()->readListEntry( "cdrdao parameters" );
+  for( QStringList::Iterator it = _params.begin(); it != _params.end(); ++it )
+    *m_cdrdaoProcess << *it;
+
+  k3bMain()->config()->setGroup( "General Options" );
+  bool manualBufferSize = k3bMain()->config()->readBoolEntry( "Manual buffer size", false );
+  if( manualBufferSize ) {
+    *m_cdrdaoProcess << "--buffers" << QString::number( k3bMain()->config()->readNumEntry( "Cdrdao buffer", 32 ) );
+  }
+  bool overburn = k3bMain()->config()->readBoolEntry( "Allow overburning", false );
+
+  if( overburn )
+    *m_cdrdaoProcess << "--overburn";
+
+  if( m_dummy )
+    *m_cdrdaoProcess << "--simulate";
+  if( k3bMain()->eject() )
+    *m_cdrdaoProcess << "--eject";
+
+  // writing speed
+  *m_cdrdaoProcess << "--speed" << QString::number(  m_speed );
+    
+  // supress the 10 seconds gap to the writing
+  *m_cdrdaoProcess << "-n";
+    
+  // cue-file
+  *m_cdrdaoProcess << m_imagePath;
+
+
+
+  K3bEmptyDiscWaiter waiter( m_device, k3bMain() );
+  if( waiter.waitForEmptyDisc() == K3bEmptyDiscWaiter::CANCELED ) {
+    emit finished( false );
+    return;
+  }
+
+
+  if( !m_cdrdaoProcess->start( KProcess::NotifyOnExit, KProcess::AllOutput ) )
+    {
+      // something went wrong when starting the program
+      // it "should" be the executable
+      qDebug("(K3bIsoImageJob) could not start cdrdao");
+      emit infoMessage( i18n("Could not start cdrdao!"), K3bJob::ERROR );
+      emit finished( false );
+    }
+  else
+    {
+      if( m_dummy )
+	emit infoMessage( i18n("Starting simulation at %1x speed...").arg(m_speed), K3bJob::STATUS );
+      else
+	emit infoMessage( i18n("Starting recording at %1x speed...").arg(m_speed), K3bJob::STATUS );
+
+      emit newTask( i18n("Writing cue/bin image") );
+    }
+}
+
+
 void K3bIsoImageJob::cancel()
 {
-  if( m_process->isRunning() ) {
-    m_process->kill();
+  if( m_cdrdaoProcess->isRunning() || m_cdrecordProcess->isRunning() ) {
+    m_cdrecordProcess->kill();
+    m_cdrdaoProcess->kill();
 
     // we need to unlock the writer because cdrecord locked it while writing
     bool block = m_device->block( false );
@@ -351,10 +474,10 @@ void K3bIsoImageJob::slotCdrecordFinished()
 {
   bool unblock = false;
 
-  if( m_process->normalExit() )
+  if( m_cdrecordProcess->normalExit() )
     {
       // TODO: check the process' exitStatus()
-      switch( m_process->exitStatus() )
+      switch( m_cdrecordProcess->exitStatus() )
 	{
 	case 0:
 	  if( m_dummy )
@@ -367,7 +490,7 @@ void K3bIsoImageJob::slotCdrecordFinished()
 				
 	default:
 	  // no recording device and also other errors!! :-(
-	  emit infoMessage( i18n("Cdrecord returned some error! (code %1)").arg(m_process->exitStatus()), K3bJob::ERROR );
+	  emit infoMessage( i18n("Cdrecord returned some error! (code %1)").arg(m_cdrecordProcess->exitStatus()), K3bJob::ERROR );
 	  emit infoMessage( i18n("Sorry, no error handling yet! :-(("), K3bJob::ERROR );
 	  emit infoMessage( i18n("Please send me a mail with the last output..."), K3bJob::ERROR );
 	  emit finished( false );
@@ -380,6 +503,54 @@ void K3bIsoImageJob::slotCdrecordFinished()
       emit infoMessage( i18n("Cdrecord did not exit cleanly."), K3bJob::ERROR );
       emit finished( false );
       unblock = true;
+    }
+
+  if( unblock ) {
+    // we need to unlock the writer because cdrecord locked it while writing
+    bool block = m_device->block( false );
+    if( !block )
+      emit infoMessage( i18n("Could not unlock cd drive."), K3bJob::ERROR );
+    else if( k3bMain()->eject() )
+      m_device->eject();
+  }
+}
+
+
+void K3bIsoImageJob::slotCdrdaoFinished()
+{
+  bool unblock = false;
+
+  if( m_cdrdaoProcess->normalExit() )
+    {
+      // TODO: check the process' exitStatus()
+      switch( m_cdrdaoProcess->exitStatus() )
+	{
+	case 0:
+	  if( m_dummy )
+	    emit infoMessage( i18n("Simulation successfully completed"), K3bJob::STATUS );
+	  else
+	    emit infoMessage( i18n("Writing successfully completed"), K3bJob::STATUS );
+
+	  emit finished( true );
+	  break;
+				
+	default:
+	  // no recording device and also other errors!! :-(
+	  emit infoMessage( i18n("Cdrdao returned some error! (code %1)").arg(m_cdrdaoProcess->exitStatus()), K3bJob::ERROR );
+	  emit infoMessage( i18n("Sorry, no error handling yet!") + " :-((", K3bJob::ERROR );
+	  emit infoMessage( i18n("Please send me a mail with the last output..."), K3bJob::ERROR );
+	  unblock = true;
+
+	  emit finished( false );
+	  return;
+	}
+    }
+  else
+    {
+      emit infoMessage( i18n("Cdrdao did not exit cleanly!"), K3bJob::ERROR );
+      unblock = true;
+      emit finished( false );
+      return;
     }
 
   if( unblock ) {

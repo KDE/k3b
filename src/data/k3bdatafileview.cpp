@@ -21,12 +21,12 @@
 #include "k3bdataitem.h"
 #include "k3bdiritem.h"
 #include "k3bfileitem.h"
+#include "k3bisovalidator.h"
 
 #include "../klistviewlineedit.h"
 
-#include <qvalidator.h>
+
 #include <qdragobject.h>
-#include <qregexp.h>
 
 #include <klocale.h>
 
@@ -46,12 +46,13 @@ K3bDataFileView::K3bDataFileView( K3bDataView* view, K3bDataDoc* doc, QWidget* p
   addColumn( i18n("Name") );
   addColumn( i18n("Type") );
   addColumn( i18n("Size") );
+  addColumn( i18n("Local path") );
 
   setItemsRenameable( true );
   setSelectionModeExt( KListView::Extended );
 
   m_editor = new KListViewLineEdit( this );
-  m_editor->setValidator( new QRegExpValidator( QRegExp("([a-z]|[A-Z]|[0-9]|_)*"), m_editor ) );
+  m_editor->setValidator( new K3bIsoValidator( m_editor ) );
   
   m_doc = doc;
   m_currentDir = doc->root();

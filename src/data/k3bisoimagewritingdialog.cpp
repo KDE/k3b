@@ -22,6 +22,7 @@
 #include "../k3bwriterselectionwidget.h"
 #include "../k3bburnprogressdialog.h"
 #include "k3bisoimagejob.h"
+#include "../kcutlabel.h"
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -29,6 +30,9 @@
 #include <kfiledialog.h>
 #include <kstdguiitem.h>
 #include <kguiitem.h>
+#include <kiconloader.h>
+#include <kconfig.h>
+#include <kio/global.h>
 
 #include <qgroupbox.h>
 #include <qcheckbox.h>
@@ -42,17 +46,27 @@
 #include <qfont.h>
 #include <qfontmetrics.h>
 #include <qtoolbutton.h>
-
+#include <qpushbutton.h>
+#include <qtabwidget.h>
 
 
 K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( QWidget* parent, const char* name, bool modal )
-  : KDialogBase( parent, name, modal, i18n("Write ISO image to cd"), User1|User2,
-		 User1, true, KGuiItem( i18n("Write"), "write", i18n("Start writing") ), KStdGuiItem::close() )
+  : KDialogBase( parent, name, modal, i18n("Write image to cd"), User1|User2,
+		 User1, false, KGuiItem( i18n("Write"), "write", i18n("Start writing") ), KStdGuiItem::close() )
 {
   setupGui();
   setButtonBoxOrientation( Qt::Vertical );
 
+  connect( m_checkUseCueFile, SIGNAL(toggled(bool)), this, SLOT(slotCueBinChecked(bool)) );
+
   m_job = 0;
+
+  m_checkBurnProof->setChecked( true ); // enabled by default
+
+  slotWriterChanged();
+
+  k3bMain()->config()->setGroup("General Options");
+  m_editImagePath->setText( k3bMain()->config()->readEntry( "last written image", "" ) );
 }
 
 
@@ -74,56 +88,134 @@ void K3bIsoImageWritingDialog::setupGui()
   groupImage->setColumnLayout(0, Qt::Vertical );
   groupImage->layout()->setSpacing( 0 );
   groupImage->layout()->setMargin( 0 );
-  QHBoxLayout* groupImageLayout = new QHBoxLayout( groupImage->layout() );
+  QGridLayout* groupImageLayout = new QGridLayout( groupImage->layout() );
   groupImageLayout->setAlignment( Qt::AlignTop );
   groupImageLayout->setSpacing( spacingHint() );
   groupImageLayout->setMargin( marginHint() );
 
   m_editImagePath = new KLineEdit( groupImage );
   m_buttonFindImageFile = new QToolButton( groupImage );
-  m_buttonFindImageFile->setText( "..." );
+  m_buttonFindImageFile->setIconSet( SmallIconSet( "fileopen" ) );
   m_labelImageSize = new QLabel( groupImage );
-  m_labelImageSize->font().setBold(true);
+
+  QFont f( m_labelImageSize->font() );
+  f.setBold(true);
+  f.setItalic( true );
+  m_labelImageSize->setFont( f );
   m_labelImageSize->setFrameStyle( QFrame::Panel | QFrame::Sunken );
   m_labelImageSize->setMinimumWidth( m_labelImageSize->fontMetrics().width( "000 000 kb" ) );
-  QLabel* textSize = new QLabel( i18n("Size:"), groupImage );
+  m_labelImageSize->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
 
-  groupImageLayout->addWidget( m_editImagePath );
-  groupImageLayout->addWidget( m_buttonFindImageFile );
-  groupImageLayout->addWidget( textSize );
-  groupImageLayout->addWidget( m_labelImageSize );
+  m_isoInfoWidget = new QWidget( groupImage );
+
+  QGridLayout* isoInfoLayout = new QGridLayout( m_isoInfoWidget );
+  isoInfoLayout->setSpacing( spacingHint() );
+  isoInfoLayout->setMargin( 0 );
+
+  m_labelIsoId = new KCutLabel( m_isoInfoWidget );
+  m_labelIsoSystemId = new KCutLabel( m_isoInfoWidget );
+  m_labelIsoVolumeId = new KCutLabel( m_isoInfoWidget );
+  m_labelIsoVolumeSetId = new KCutLabel( m_isoInfoWidget );
+  m_labelIsoPublisherId = new KCutLabel( m_isoInfoWidget );
+  m_labelIsoPreparerId = new KCutLabel( m_isoInfoWidget );
+  m_labelIsoApplicationId = new KCutLabel( m_isoInfoWidget );
+
+  isoInfoLayout->addWidget( new QLabel( i18n("Id:"), m_isoInfoWidget ), 0, 0 );
+  isoInfoLayout->addWidget( m_labelIsoId, 0, 1 );
+  isoInfoLayout->addWidget( new QLabel( i18n("System Id:"), m_isoInfoWidget ), 1, 0 );
+  isoInfoLayout->addWidget( m_labelIsoSystemId, 1, 1 );
+  isoInfoLayout->addWidget( new QLabel( i18n("Volume Id:"), m_isoInfoWidget ), 2, 0 );
+  isoInfoLayout->addWidget( m_labelIsoVolumeId, 2, 1 );
+  isoInfoLayout->addWidget( new QLabel( i18n("Volume Set Id:"), m_isoInfoWidget ), 3, 0 );
+  isoInfoLayout->addWidget( m_labelIsoVolumeSetId, 3, 1 );
+  isoInfoLayout->addWidget( new QLabel( i18n("Publisher Id:"), m_isoInfoWidget ), 0, 3 );
+  isoInfoLayout->addWidget( m_labelIsoPublisherId, 0, 4 );
+  isoInfoLayout->addWidget( new QLabel( i18n("Preparer Id:"), m_isoInfoWidget ), 1, 3 );
+  isoInfoLayout->addWidget( m_labelIsoPreparerId, 1, 4 );
+  isoInfoLayout->addWidget( new QLabel( i18n("Application Id:"), m_isoInfoWidget ), 2, 3 );
+  isoInfoLayout->addWidget( m_labelIsoApplicationId, 2, 4 );
+
+  QFrame* isoInfoSpacerLine = new QFrame( m_isoInfoWidget );
+  isoInfoSpacerLine->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+
+  isoInfoLayout->addMultiCellWidget( isoInfoSpacerLine, 5, 5, 0, 4 );
+
+  isoInfoLayout->addColSpacing( 2, 10 );
+
+  f = m_labelIsoApplicationId->font();
+  f.setBold( true );
+  m_labelIsoId->setFont( f );
+  m_labelIsoSystemId->setFont( f );
+  m_labelIsoVolumeId->setFont( f );
+  m_labelIsoVolumeSetId->setFont( f );
+  m_labelIsoPublisherId->setFont( f );
+  m_labelIsoPreparerId->setFont( f );
+  m_labelIsoApplicationId->setFont( f );
+
+
+  m_generalInfoLabel = new QLabel( groupImage );
+  m_generalInfoLabel->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter | QLabel::AlignLeft ) );
+  m_generalInfoLabel->setFont( f );
+
+  QFrame* imageSpacerLine = new QFrame( groupImage );
+  imageSpacerLine->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+
+  groupImageLayout->addWidget( m_editImagePath, 0, 0 );
+  groupImageLayout->addWidget( m_buttonFindImageFile, 0, 1 );
+  groupImageLayout->addWidget( new QLabel( i18n("Size:"), groupImage ), 0, 2 );
+  groupImageLayout->addWidget( m_labelImageSize, 0, 3 );
+  groupImageLayout->addMultiCellWidget( imageSpacerLine, 1, 1, 0, 3 );
+  groupImageLayout->addMultiCellWidget( m_isoInfoWidget, 2, 2, 0, 3 );
+  groupImageLayout->addMultiCellWidget( m_generalInfoLabel, 3, 3, 0, 3 );
   // -----------------------------------------------------------------------
 
 
   // options
   // -----------------------------------------------------------------------
-  QGroupBox* groupOptions = new QGroupBox( i18n("Options"), frame );
-  groupOptions->setColumnLayout(0, Qt::Vertical );
-  groupOptions->layout()->setSpacing( 0 );
-  groupOptions->layout()->setMargin( 0 );
-  QGridLayout* groupOptionsLayout = new QGridLayout( groupOptions->layout() );
+  QTabWidget* optionTabbed = new QTabWidget( frame );
+
+  QWidget* optionTab = new QWidget( optionTabbed );
+  QGridLayout* groupOptionsLayout = new QGridLayout( optionTab );
   groupOptionsLayout->setAlignment( Qt::AlignTop );
   groupOptionsLayout->setSpacing( spacingHint() );
   groupOptionsLayout->setMargin( marginHint() );
 
-  m_checkBurnProof = new QCheckBox( i18n("Burnproof"), groupOptions );
-  m_checkDummy = new QCheckBox( i18n("Simulate"), groupOptions );
-  m_checkDao = new QCheckBox( i18n("Disc at once"), groupOptions );
+  m_checkBurnProof = new QCheckBox( i18n("Burnproof"), optionTab );
+  m_checkDummy = new QCheckBox( i18n("Simulate"), optionTab );
+  m_checkDao = new QCheckBox( i18n("Disc at once"), optionTab );
 
   groupOptionsLayout->addWidget( m_checkDummy, 0, 0 );
-  groupOptionsLayout->addWidget( m_checkDao, 0, 1 );
-  groupOptionsLayout->addWidget( m_checkBurnProof, 1, 0 );
+  groupOptionsLayout->addWidget( m_checkDao, 1, 0 );
+  groupOptionsLayout->addWidget( m_checkBurnProof, 2, 0 );
+
+  QWidget* advancedTab = new QWidget( optionTabbed );
+  QGridLayout* advancedTabLayout = new QGridLayout( advancedTab );
+  advancedTabLayout->setAlignment( Qt::AlignTop );
+  advancedTabLayout->setSpacing( spacingHint() );
+  advancedTabLayout->setMargin( marginHint() );
+
+  m_checkRawWrite = new QCheckBox( i18n("Raw writing"), advancedTab );
+  m_checkUseCueFile = new QCheckBox( i18n("Use cue-file"), advancedTab );
+  m_checkNoFix = new QCheckBox( i18n("Do not close session"), advancedTab );
+
+  advancedTabLayout->addWidget( m_checkNoFix, 0, 0 );
+  advancedTabLayout->addWidget( m_checkRawWrite, 1, 0 );
+  advancedTabLayout->addWidget( m_checkUseCueFile, 2, 0 );
+
+
+  optionTabbed->addTab( optionTab, i18n("Options") );
+  optionTabbed->addTab( advancedTab, i18n("Advanced") );
   // -----------------------------------------------------------------------
 
 
 
   QGridLayout* grid = new QGridLayout( frame );
   grid->setSpacing( spacingHint() );
-  grid->setMargin( marginHint() );
+  grid->setMargin( 0 );
 
   grid->addWidget( m_writerSelectionWidget, 0, 0 );
   grid->addWidget( groupImage, 1, 0 );
-  grid->addWidget( groupOptions, 2, 0 );
+  grid->addWidget( optionTabbed, 2, 0 );
 
   grid->setRowStretch( 2, 1 );
 
@@ -145,7 +237,16 @@ void K3bIsoImageWritingDialog::slotUser1()
     return;
   }
 
-  // TODO: check if it is really an iso-image
+  // save the path
+  k3bMain()->config()->setGroup("General Options");
+  k3bMain()->config()->writeEntry( "last written image", m_editImagePath->text() );
+
+  if( m_bIsoImage && m_checkRawWrite->isChecked() && !m_checkUseCueFile->isChecked() )
+    if( KMessageBox::warningContinueCancel( this, i18n("Writing an Iso9660 image in raw mode will lead to an unusable disk. "
+						       "Are you sure you want to continue?") )
+	== KMessageBox::Cancel )
+      return;
+					  
 
   // create the job
   if( m_job == 0 )
@@ -156,7 +257,17 @@ void K3bIsoImageWritingDialog::slotUser1()
   m_job->setBurnproof( m_checkBurnProof->isChecked() );
   m_job->setDummy( m_checkDummy->isChecked() );
   m_job->setDao( m_checkDao->isChecked() );
-  m_job->setImagePath( m_editImagePath->text() );
+  m_job->setRawWrite( m_checkRawWrite->isChecked() );
+  m_job->setNoFix( m_checkNoFix->isChecked() );
+
+  if( m_checkUseCueFile->isChecked() ) {
+    m_job->setImagePath( m_cuePath );
+    m_job->setWriteCueBin( true );
+  }
+  else {
+    m_job->setImagePath( m_editImagePath->text() );
+    m_job->setWriteCueBin( false );
+  }
 
   // create a progresswidget
   K3bBurnProgressDialog* d = new K3bBurnProgressDialog( k3bMain(), "burnProgress", false );
@@ -180,27 +291,143 @@ void K3bIsoImageWritingDialog::slotUser2()
 
 void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
 {
-  if( QFile::exists( path ) ) {
-    QFileInfo info( path );
-    if( info.isFile() ) {
-      QString s = QString::number( info.size()/1024 );
-      int i = s.length() - 3;
-      while( i > 0 ) {
-	s.insert( i, ' ' );
-	i -= 3;
+  m_bIsoImage = false;
+  m_bCueBinAvailable = false;
+
+
+  QFileInfo info( path );
+  if( info.isFile() ) {
+
+    // do not show the size here since path could be a cue file
+    long imageSize = info.size();
+
+
+    // ------------------------------------------------
+    // Test for iso9660 image
+    // ------------------------------------------------
+    char buf[17*2048];
+    
+    QFile f( path );
+    if( f.open( IO_Raw | IO_ReadOnly ) ) {
+      if( f.readBlock( buf, 17*2048 ) == 17*2048 ) {
+	// check if this is an ios9660-image
+	// the beginning of the 16th sector needs to have the following format:
+	
+	// first byte: 1
+	// second to 11th byte: 67, 68, 48, 48, 49, 1 (CD001)
+	// 12th byte: 0
+	
+	m_bIsoImage = ( buf[16*2048] == 1 &&
+			buf[16*2048+1] == 67 &&
+			buf[16*2048+2] == 68 &&
+			buf[16*2048+3] == 48 &&
+			buf[16*2048+4] == 48 &&
+			buf[16*2048+5] == 49 &&
+			buf[16*2048+6] == 1 &&
+			buf[16*2048+7] == 0 );
       }
-      m_labelImageSize->setText( s + " kb" );
+      
+      f.close();
     }
+
+
+
+    // ------------------------------------------------
+    // Test for cue/bin
+    // ------------------------------------------------
+
+    // TODO: check if cue-file has only one FILE-statement (otherwise say: unusabe cue-file: xxx.cue)
+
+    if( info.extension( false ) == "bin" || info.extension( false ) == "cue" ) {
+      // search the corresponding file
+      QString basename = path.left( path.length() - 3 );
+
+      // cdrdao does not use the FILE statement but the basename + the bin extension
+      bool binAvail = QFile::exists( basename + "bin" );
+      bool cueAvail = QFile::exists( basename + "cue" );
+
+      if( binAvail && cueAvail ) {
+	// TODO: check if the cue-file has only one FILE-statement as needed for cdrdao
+	m_bCueBinAvailable = true;
+	m_cuePath = basename + "cue";
+	m_binPath = basename + "bin";
+
+	imageSize = QFileInfo( m_binPath ).size();
+      }
+    }
+
+    // ------------------------------------------------
+    // Test for cdrecord-clone toc
+    // ------------------------------------------------
+
+    // TODO: check if xxx and xxx.toc could be found and if so enable clone option (only if cdrecord-clone is available)
+
+
+
+    // ------------------------------------------------
+    // Show file size
+    // ------------------------------------------------
+    m_labelImageSize->setText( KIO::convertSize( imageSize ) );
+
+    
+    if( m_bIsoImage ) {
+      QString str = QString::fromLatin1( &buf[16*2048+1], 5 ).stripWhiteSpace();
+      m_labelIsoId->setText( str.isEmpty() ? QString("-") : str );
+      str = QString::fromLatin1( &buf[16*2048+8], 32 ).stripWhiteSpace();
+      m_labelIsoSystemId->setText( str.isEmpty() ? QString("-") : str );
+      str = QString::fromLatin1( &buf[16*2048+40], 32 ).stripWhiteSpace();
+      m_labelIsoVolumeId->setText( str.isEmpty() ? QString("-") : str );
+      str = QString::fromLatin1( &buf[16*2048+190], 128 ).stripWhiteSpace();
+      m_labelIsoVolumeSetId->setText( str.isEmpty() ? QString("-") : str );
+      str = QString::fromLatin1( &buf[16*2048+318], 128 ).stripWhiteSpace();
+      m_labelIsoPublisherId->setText( str.isEmpty() ? QString("-") : str );
+      str = QString::fromLatin1( &buf[16*2048+446], 128 ).stripWhiteSpace();
+      m_labelIsoPreparerId->setText( str.isEmpty() ? QString("-") : str );
+      str = QString::fromLatin1( &buf[16*2048+574], 128 ).stripWhiteSpace();
+      m_labelIsoApplicationId->setText( str.isEmpty() ? QString("-") : str );
+      
+      m_isoInfoWidget->show();
+      
+      m_generalInfoLabel->setText( i18n("Seems to be an iso9660 image") );
+      m_checkUseCueFile->setChecked( false );
+      m_checkRawWrite->setChecked( false );
+    }
+    else {
+      m_isoInfoWidget->hide();
+      if( m_bCueBinAvailable ) {
+	m_generalInfoLabel->setText( i18n("Usable cue/bin combination found:\n%1\n%2").arg(m_cuePath).arg(m_binPath) );
+	m_checkUseCueFile->setChecked( true );
+      }
+      else {
+	m_generalInfoLabel->setText( i18n("Seems not to be a usable image file (or raw image)") );
+      }
+    }
+
+    if( m_bCueBinAvailable ) {
+      m_checkUseCueFile->setEnabled( true );
+    }
+    else {
+      m_checkUseCueFile->setChecked( false );
+      m_checkUseCueFile->setEnabled( false );
+    }
+  
+    // enable the Write-Button
+    actionButton( User1 )->setEnabled( true );
   }
   else {
+    m_isoInfoWidget->hide();
     m_labelImageSize->setText( "0 kb" );
+    m_generalInfoLabel->setText( i18n("No file") );
+    
+    // Disable the Write-Button
+    actionButton( User1 )->setDisabled( true );
   }
 }
 
 
 void K3bIsoImageWritingDialog::slotFindImageFile()
 {
-  QString newPath( KFileDialog::getOpenFileName( m_editImagePath->text(), QString::null, this, i18n("Choose iso image file") ) );
+  QString newPath( KFileDialog::getOpenFileName( m_editImagePath->text(), QString::null, this, i18n("Choose iso image file or cue/bin combination") ) );
   if( !newPath.isEmpty() )
     m_editImagePath->setText( newPath );
 }
@@ -215,6 +442,19 @@ void K3bIsoImageWritingDialog::slotWriterChanged()
   else {
     m_checkBurnProof->setEnabled( true );
   }
+}
+
+
+void K3bIsoImageWritingDialog::slotCueBinChecked( bool c )
+{
+  // raw writing is set in the cue-file so there is no use in allowing to set it when using one
+  // cdrdao has no option to not fixate a cd (DAO)
+  if( c ) {
+    m_checkRawWrite->setChecked( false );
+    m_checkNoFix->setChecked( false );
+  }
+  m_checkRawWrite->setDisabled( c );
+  m_checkNoFix->setDisabled( c );
 }
 
 

@@ -46,6 +46,7 @@ Q_OBJECT
   void updateImageSize( const QString& );
   void slotFindImageFile();
   void slotWriterChanged();
+  void slotCueBinChecked( bool c );
 
  private:
   void setupGui();
@@ -56,9 +57,31 @@ Q_OBJECT
   QCheckBox* m_checkDummy;
   QCheckBox* m_checkDao;
   QCheckBox* m_checkBurnProof;
+
+  QCheckBox* m_checkRawWrite;
+  QCheckBox* m_checkUseCueFile;
+  QCheckBox* m_checkNoFix;
+
   QLabel*    m_labelImageSize;
   KLineEdit* m_editImagePath;
   QToolButton* m_buttonFindImageFile;
+
+
+  QWidget* m_isoInfoWidget;
+  QLabel* m_labelIsoId;
+  QLabel* m_labelIsoSystemId;
+  QLabel* m_labelIsoVolumeId;
+  QLabel* m_labelIsoVolumeSetId;
+  QLabel* m_labelIsoPublisherId;
+  QLabel* m_labelIsoPreparerId;
+  QLabel* m_labelIsoApplicationId;
+
+  QLabel* m_generalInfoLabel;
+
+  bool m_bIsoImage;
+  bool m_bCueBinAvailable;
+  QString m_cuePath;
+  QString m_binPath;
 };
 
 #endif

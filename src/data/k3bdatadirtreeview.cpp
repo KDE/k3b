@@ -20,11 +20,10 @@
 #include "k3bdatadoc.h"
 #include "k3bdataitem.h"
 #include "k3bdiritem.h"
+#include "k3bisovalidator.h"
 
 #include <qdragobject.h>
 #include <qheader.h>
-#include <qvalidator.h>
-#include <qregexp.h>
 
 #include "../klistviewlineedit.h"
 
@@ -41,6 +40,7 @@ K3bDataDirTreeView::K3bDataDirTreeView( K3bDataView* view, K3bDataDoc* doc, QWid
   setFullWidth();
   setDragEnabled( true );
   setItemsMovable( false );
+  setAlternateBackground( QColor() );
 
   addColumn( "Dir" );
   header()->hide();
@@ -48,7 +48,7 @@ K3bDataDirTreeView::K3bDataDirTreeView( K3bDataView* view, K3bDataDoc* doc, QWid
   setItemsRenameable( true );
 
   m_editor = new KListViewLineEdit( this );
-  m_editor->setValidator( new QRegExpValidator( QRegExp("([a-z]|[A-Z]|[0-9]|_)*"), m_editor ) );
+  m_editor->setValidator( new K3bIsoValidator( m_editor ) );
 
   m_doc = doc;	
   m_root = new K3bDataRootViewItem( doc, this );

@@ -182,11 +182,6 @@ void K3bDataView::setupActions()
   m_actionRename = new KAction( i18n("Rename"), "edit", CTRL+Key_R, this, SLOT(slotRenameItem()), actionCollection() );
   m_actionCollection->insert( new KActionSeparator( this ) );
   m_actionParentDir = new KAction( i18n("Parent Directory"), "up", 0, this, SLOT(slotParentDir()), actionCollection() );
-
-  //TODO: disable remove by default since the root item cannot be removed and enable when items are there
-  //      we need to check if tree or fileview are active
-  //      for example: connect to the selected signals of both and check if it is a root item
-  //                   and check if items are left after removal
 }
 
 
@@ -202,34 +197,27 @@ void K3bDataView::setupPopupMenu()
   m_actionProperties->plug( m_popupMenu );
 }
 
+
 void K3bDataView::showPopupMenu( QListViewItem* item, const QPoint& point )
 {
+  m_actionParentDir->setEnabled( true );
+  m_actionRemove->setEnabled( true );
+  m_actionRename->setEnabled( true );
+
   if( item ) {
     if( item == m_dataDirTree->root() ) {
       m_actionRemove->setEnabled( false );
     }
-    else {
-      m_actionRemove->setEnabled( true );
-    }
-
-    if( m_dataFileView->currentDir() == m_doc->root() ) {
+    if( item == m_dataDirTree->root() || m_dataFileView->currentDir() == m_doc->root() ) {
       m_actionParentDir->setEnabled( false );
     }
-    else {
-      m_actionParentDir->setEnabled( true );
-    }
-
-    m_actionRemove->setEnabled( true );
-    m_actionRename->setEnabled( true );
-
-    m_popupMenu->popup( point );
   }
-  else if( m_dataFileView->hasFocus() ) {
+  else {
     m_actionRemove->setEnabled( false );
     m_actionRename->setEnabled( false );
-
-    m_popupMenu->popup( point );
   }
+
+  m_popupMenu->popup( point );
 }
 
 
@@ -327,7 +315,7 @@ void K3bDataView::slotProperties()
     }
   }
   else {
-    if( K3bDataViewItem* viewItem = dynamic_cast<K3bDataViewItem*>( m_dataFileView->currentItem() ) ) {
+    if( K3bDataViewItem* viewItem = dynamic_cast<K3bDataViewItem*>( m_dataFileView->selectedItems().first() ) ) {
       dataItem = viewItem->dataItem();
     }
     else {
@@ -459,6 +447,8 @@ QString K3bDataFileViewItem::text( int index ) const
     return m_fileItem->mimeComment();
   case 2:
     return KIO::convertSize( m_fileItem->size() );
+  case 3:
+    return m_fileItem->localPath();
   default:
     return "";
   }
