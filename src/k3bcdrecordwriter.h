@@ -67,6 +67,7 @@ class K3bCdrecordWriter : public K3bAbstractWriter
  private slots:
   void slotStdLine( const QString& line );
   void slotProcessExited(KProcess*);
+  void slotUnblockWhileCancellationFinished( bool success );
 
  private:
   const K3bExternalBin* m_cdrecordBinObject;

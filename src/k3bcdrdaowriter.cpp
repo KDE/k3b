@@ -22,6 +22,7 @@
 #include "device/k3bdevicemanager.h"
 #include "k3bprocess.h"
 #include "device/k3bdevice.h"
+#include "device/k3bdevicehandler.h"
 
 #include <qstring.h>
 #include <qstringlist.h>
@@ -409,39 +410,39 @@ void K3bCdrdaoWriter::start()
   m_cdrdaoBinObject = K3bExternalBinManager::self()->binObject("cdrdao");
 
   if( !m_cdrdaoBinObject )
-  {
-    emit infoMessage( i18n("Could not find cdrdao executable."), ERROR );
-    emit finished(false);
-    return;
-  }
+    {
+      emit infoMessage( i18n("Could not find cdrdao executable."), ERROR );
+      emit finished(false);
+      return;
+    }
 
   switch ( m_command )
-  {
-  case WRITE:
-  case COPY:
-    if (!m_tocFile.isEmpty())
     {
+    case WRITE:
+    case COPY:
+      if (!m_tocFile.isEmpty())
+	{
 
-      // if tocfile is a cuesheet than create symlinks to *.cue and the binary listed inside the cuesheet.
-      // now works without the .bin extension too.
-      if ( !cueSheet() ) {
-          m_backupTocFile = m_tocFile + ".k3bbak";
+	  // if tocfile is a cuesheet than create symlinks to *.cue and the binary listed inside the cuesheet.
+	  // now works without the .bin extension too.
+	  if ( !cueSheet() ) {
+	    m_backupTocFile = m_tocFile + ".k3bbak";
 
-          // workaround, cdrdao deletes the tocfile when --remote parameter is set
-          if ( !KIO::NetAccess::copy(m_tocFile,m_backupTocFile) )
-          {
-            kdDebug() << "(K3bCdrdaoWriter) could not backup " << m_tocFile << " to " << m_backupTocFile << endl;
-            emit infoMessage( i18n("Could not backup tocfile."), ERROR );
-            emit finished(false);
-            return;
-          }
-      }
+	    // workaround, cdrdao deletes the tocfile when --remote parameter is set
+	    if ( !KIO::NetAccess::copy(m_tocFile,m_backupTocFile) )
+	      {
+		kdDebug() << "(K3bCdrdaoWriter) could not backup " << m_tocFile << " to " << m_backupTocFile << endl;
+		emit infoMessage( i18n("Could not backup tocfile."), ERROR );
+		emit finished(false);
+		return;
+	      }
+	  }
+	}
+      break;
+    case BLANK:
+    case READ:
+      break;
     }
-    break;
-  case BLANK:
-  case READ:
-    break;
-  }
   prepareArgumentList();
   // set working dir to dir part of toc file (to allow rel names in toc-file)
   m_process->setWorkingDirectory(QUrl(m_tocFile).dirPath());
@@ -450,9 +451,9 @@ void K3bCdrdaoWriter::start()
   const QValueList<QCString>& args = m_process->args();
   QString s;
   for( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it )
-  {
-    s += *it + " ";
-  }
+    {
+      s += *it + " ";
+    }
   kdDebug() << s << flush << endl;
   emit debuggingOutput("cdrdao comand:", s);
 
@@ -460,67 +461,69 @@ void K3bCdrdaoWriter::start()
   reinitParser();
 
   switch ( m_command )
-  {
-  case READ:
-    emit newSubTask( i18n("Preparing read process...") );
-    break;
-  case WRITE:
-    emit newSubTask( i18n("Preparing write process...") );
-    break;
-  case COPY:
-    emit newSubTask( i18n("Preparing copy process...") );
-    break;
-  case BLANK:
-    emit newSubTask( i18n("Preparing blanking process...") );
-    break;
-  }
-  if( !m_process->start( KProcess::NotifyOnExit, m_stdin ? KProcess::All : KProcess::AllOutput ) )
-  {
-    // something went wrong when starting the program
-    // it "should" be the executable
-    kdDebug() << "(K3bCdrdaoWriter) could not start cdrdao" << endl;
-    emit infoMessage( i18n("Could not start cdrdao!"), K3bJob::ERROR );
-  }
-  else
-  {
-    switch ( m_command )
     {
-    case WRITE:
-      if( simulate() )
-      {
-        emit infoMessage(i18n("Starting dao simulation at %1x speed...").arg(burnSpeed()), 
-			 K3bJob::PROCESS );
-        emit newTask( i18n("Simulating") );
-      }
-      else
-      {
-        emit infoMessage( i18n("Starting dao writing at %1x speed...").arg(burnSpeed()), K3bJob::PROCESS );
-        emit newTask( i18n("Writing") );
-      }
-      break;
     case READ:
-      emit infoMessage(i18n("Starting reading..."), K3bJob::PROCESS );
-      emit newTask( i18n("Reading") );
+      emit newSubTask( i18n("Preparing read process...") );
+      break;
+    case WRITE:
+      emit newSubTask( i18n("Preparing write process...") );
       break;
     case COPY:
-      if( simulate() )
-      {
-        emit infoMessage(i18n("Starting simulation copy at %1x speed...").arg(burnSpeed()), K3bJob::PROCESS );
-        emit newTask( i18n("Simulating") );
-      }
-      else
-      {
-        emit infoMessage( i18n("Starting copy at %1x speed...").arg(burnSpeed()), K3bJob::PROCESS );
-        emit newTask( i18n("Copying") );
-      }
+      emit newSubTask( i18n("Preparing copy process...") );
       break;
     case BLANK:
-      emit infoMessage(i18n("Starting blanking..."), K3bJob::PROCESS );
-      emit newTask( i18n("Blanking") );
+      emit newSubTask( i18n("Preparing blanking process...") );
+      break;
     }
 
-    emit started();
-  }
+  if( !m_process->start( KProcess::NotifyOnExit, m_stdin ? KProcess::All : KProcess::AllOutput ) )
+    {
+      // something went wrong when starting the program
+      // it "should" be the executable
+      kdDebug() << "(K3bCdrdaoWriter) could not start cdrdao" << endl;
+      emit infoMessage( i18n("Could not start %1.").arg("cdrdao"), K3bJob::ERROR );
+      emit finished(false);
+    }
+  else
+    {
+      switch ( m_command )
+	{
+	case WRITE:
+	  if( simulate() )
+	    {
+	      emit infoMessage(i18n("Starting dao simulation at %1x speed...").arg(burnSpeed()), 
+			       K3bJob::PROCESS );
+	      emit newTask( i18n("Simulating") );
+	    }
+	  else
+	    {
+	      emit infoMessage( i18n("Starting dao writing at %1x speed...").arg(burnSpeed()), K3bJob::PROCESS );
+	      emit newTask( i18n("Writing") );
+	    }
+	  break;
+	case READ:
+	  emit infoMessage(i18n("Starting reading..."), K3bJob::PROCESS );
+	  emit newTask( i18n("Reading") );
+	  break;
+	case COPY:
+	  if( simulate() )
+	    {
+	      emit infoMessage(i18n("Starting simulation copy at %1x speed...").arg(burnSpeed()), K3bJob::PROCESS );
+	      emit newTask( i18n("Simulating") );
+	    }
+	  else
+	    {
+	      emit infoMessage( i18n("Starting copy at %1x speed...").arg(burnSpeed()), K3bJob::PROCESS );
+	      emit newTask( i18n("Copying") );
+	    }
+	  break;
+	case BLANK:
+	  emit infoMessage(i18n("Starting blanking..."), K3bJob::PROCESS );
+	  emit newTask( i18n("Blanking") );
+	}
+
+      emit started();
+    }
 }
 
 
@@ -528,29 +531,21 @@ void K3bCdrdaoWriter::cancel()
 {
   m_canceled = true;
 
-  if( m_process )
-  {
-    if( m_process->isRunning() )
-    {
+  if( m_process ) {
+    if( m_process->isRunning() ) {
       m_process->kill();
-      // we need to unlock the writer because cdrdao locked it while writing
-      if ( burnDevice() )
-      {
-        bool block = burnDevice()->block( false );
-        if( !block )
-          emit infoMessage( i18n("Could not unlock CD drive."), K3bJob::ERROR );
-        else if( m_eject )
-          burnDevice()->eject();
-      }
-      if ( m_command == COPY || m_command == READ )
-      {
-        bool block = m_sourceDevice->block( false );
-        if( !block )
-          emit infoMessage( i18n("Could not unlock CD drive."), K3bJob::ERROR );
-        else if( m_eject )
-          m_sourceDevice->eject();
-      }
-
+      
+      // we need to unlock the device because cdrdao locked it while writing
+      //
+      // FIXME: try to determine wheater we are writing or reading and choose
+      // the device to unblock based on that result.
+      //
+      if( m_command == READ )
+	connect( K3bCdDevice::unblock( m_sourceDevice ), SIGNAL(finished(bool)),
+		 this, SLOT(slotUnblockWhileCancellationFinished(bool)) );
+      else
+	connect( K3bCdDevice::unblock( burnDevice() ), SIGNAL(finished(bool)),
+		 this, SLOT(slotUnblockWhileCancellationFinished(bool)) );
     }
   }
 
@@ -558,6 +553,19 @@ void K3bCdrdaoWriter::cancel()
   emit canceled();
   emit finished( false );
 }
+
+
+void K3bCdrdaoWriter::slotUnblockWhileCancellationFinished( bool success )
+{
+  if( !success )
+    emit infoMessage( i18n("Could not unlock CD drive."), K3bJob::ERROR );
+  else if( m_eject )
+    K3bCdDevice::eject( burnDevice() );
+
+  emit canceled();
+  emit finished( false );
+}
+
 
 bool K3bCdrdaoWriter::cueSheet()
 {

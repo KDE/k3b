@@ -21,6 +21,7 @@
 #include <k3bprocess.h>
 #include <device/k3bdevice.h>
 #include <device/k3bdevicemanager.h>
+#include <device/k3bdevicehandler.h>
 #include <tools/k3bglobals.h>
 
 #include <qstring.h>
@@ -262,16 +263,22 @@ void K3bCdrecordWriter::cancel()
       m_process->kill();
 
       // we need to unlock the writer because cdrecord locked it while writing
-      bool block = burnDevice()->block( false );
-      if( !block )
-	emit infoMessage( i18n("Could not unlock CD drive."), K3bJob::ERROR );
-      else if( k3bMain()->eject() )
-	burnDevice()->eject();
+      connect( K3bCdDevice::unblock( burnDevice() ), SIGNAL(finished(bool)),
+	       this, SLOT(slotUnblockWhileCancellationFinished(bool)) );
     }
-    
-    emit canceled();
-    emit finished( false );
   }
+}
+
+
+void K3bCdrecordWriter::slotUnblockWhileCancellationFinished( bool success )
+{
+  if( !success )
+    emit infoMessage( i18n("Could not unlock CD drive."), K3bJob::ERROR );
+  else if( k3bMain()->eject() )
+    K3bCdDevice::eject( burnDevice() );
+
+  emit canceled();
+  emit finished( false );
 }
 
 

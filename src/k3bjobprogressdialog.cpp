@@ -410,6 +410,7 @@ void K3bJobProgressDialog::setJob( K3bJob* job )
   m_buttonClose->hide();
   m_buttonShowDebug->hide();
   m_buttonCancel->show();
+  m_buttonCancel->setEnabled(true);
   m_viewInfo->clear();
   m_progressPercent->setValue(0);
   m_progressSubPercent->setValue(0);
@@ -459,8 +460,10 @@ void K3bJobProgressDialog::slotCancelButtonPressed()
 {
   if( m_job )
     if( KMessageBox::questionYesNo( this, i18n("Do you really want to cancel?"), i18n("Cancel") ) == KMessageBox::Yes ) {
-      if( m_job )
+      if( m_job ) {
 	m_job->cancel();
+	m_buttonCancel->setDisabled(true);  // do not cancel twice
+      }
     }
 }
 
@@ -570,7 +573,7 @@ int K3bJobProgressDialog::startJob( K3bJob* job )
   bool wasShowModal = testWFlags( WShowModal );
   setWFlags( WShowModal );
   setResult( 0 );
-  
+
   show();
   
   // start the job after showing the dialog

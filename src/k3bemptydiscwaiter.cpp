@@ -158,10 +158,11 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( bool success )
 	
 	// this should not block for long since the device has been opened recently
 	if( d->device->rewritable() ) {
-	  if( KMessageBox::questionYesNo( this, i18n("K3b found a rewritable disk. Should it be erased?"),
+	  if( KMessageBox::questionYesNo( qApp->activeWindow(),
+					  i18n("K3b found a rewritable disk. Should it be erased?"),
 					  i18n("Found CD-RW") ) == KMessageBox::Yes ) {
 	    // start a k3bblankingjob
-	    K3bErasingInfoDialog infoDialog;
+	    K3bErasingInfoDialog infoDialog( qApp->activeWindow() );
 	    
 	    K3bBlankingJob job;
 	    job.setDevice( d->device );
@@ -227,7 +228,7 @@ void K3bEmptyDiscWaiter::finishWaiting( int code )
 
 int K3bEmptyDiscWaiter::wait( K3bDevice* device, bool appendable )
 {
-  K3bEmptyDiscWaiter d( device );
+  K3bEmptyDiscWaiter d( device, qApp->activeWindow() );
   return d.waitForEmptyDisc( appendable );
 }
 
