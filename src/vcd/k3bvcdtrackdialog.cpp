@@ -23,7 +23,6 @@
 #include <qlineedit.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qlistview.h>
 #include <qmultilineedit.h>
 #include <qpixmap.h>
 #include <qradiobutton.h>
@@ -42,7 +41,7 @@
 #include "../kcutlabel.h"
 #include "../device/k3bmsf.h"
 #include "../tools/k3bglobals.h"
-
+#include "../tools/k3blistview.h"
 
 K3bVcdTrackDialog::K3bVcdTrackDialog( QPtrList<K3bVcdTrack>& tracks, QPtrList<K3bVcdTrack>& selectedTracks, QWidget *parent, const char *name )
   : KDialogBase( KDialogBase::Plain, i18n("Video Track Properties"), KDialogBase::Ok,
@@ -237,6 +236,7 @@ void K3bVcdTrackDialog::fillGui()
   int iDefault = -1;
 
   K3bVcdTrack* track;
+  K3bListViewItem* item;
   for( track = m_tracks.first(); track; track = m_tracks.next() ) {
     QPixmap pm = KMimeType::pixmapForURL( KURL(track->absPath()), 0, KIcon::Desktop, 16 );
     QString s = i18n("%1 - Sequence-%2").arg(track->title()).arg(track->index() +1);
@@ -257,6 +257,9 @@ void K3bVcdTrackDialog::fillGui()
       iDefault = m_pbc_default->count() -1;
 
     m_comboAfterTimeout->insertItem(pm, s);
+
+    item = new K3bListViewItem(m_list_keys, QString("%1").arg(m_pbc_previous->count()), s);
+    item->setEditor( 1, K3bListViewItem::COMBO);
   }
 
   // add Event Disabled
@@ -455,7 +458,9 @@ void K3bVcdTrackDialog::setupPbcTab()
   groupKey->layout()->setMargin( marginHint() );
 
   m_check_usekeys = new QCheckBox( i18n("Use numeric keys"), groupKey, "m_check_usekeys" );
-  m_list_keys = new QListView( groupKey, "m_list_keys" );
+  // m_list_keys = new QListView( groupKey, "m_list_keys" );
+  m_list_keys = new K3bListView( groupKey, "m_list_keys" );
+  m_list_keys->setSorting(0);
   m_list_keys->addColumn(i18n("Key"));
   m_list_keys->addColumn(i18n("Playing"));
   m_list_keys->setResizeMode( QListView::LastColumn );

@@ -22,10 +22,10 @@
 #include <qtabwidget.h>
 
 class K3bVcdTrack;
+class K3bListView;
 class QLabel;
 class QCheckBox;
 class QComboBox;
-class QListView;
 class QRadioButton;
 class QButtonGroup;
 class KCutLabel;
@@ -85,7 +85,7 @@ class K3bVcdTrackDialog : public KDialogBase
   
   QCheckBox* m_check_usekeys;
   QCheckBox* m_check_overwritekeys;
-  QListView* m_list_keys;
+  K3bListView* m_list_keys;
 
   QSpinBox* m_spin_times;
   QSpinBox* m_spin_waittime;
