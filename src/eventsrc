@@ -1,12 +1,11 @@
 [!Global!]
 IconName=k3b
 Comment=K3b
-Comment[de]=de]=K3b
 
 [SuccessfullyFinished]
 Name=Process successful
 Name[da]=Processen lykkedes
-Name[de]=de]=Prozess erfolgreich
+Name[de]=Prozess erfolgreich
 Name[es]=Proceso con éxito
 Name[fr]=Processus réussi
 Name[it]=Processo riuscito
@@ -16,7 +15,7 @@ Name[pt_BR]=Processo bem-sucedido
 Name[sv]=Processen lyckades
 Comment=Process successfully finished
 Comment[da]=Processen afsluttedes korrekt
-Comment[de]=de]=Prozess erfolgreich abgeschlossen
+Comment[de]=Prozess erfolgreich abgeschlossen
 Comment[es]=Proceso terminado con éxito
 Comment[fr]=Processus terminé avec succès
 Comment[it]=Processo pienamente riuscito terminato
@@ -31,7 +30,7 @@ default_presentation=1
 [FinishedWithError]
 Name=Process error
 Name[da]=Procesfejl
-Name[de]=de}=Mit Fehlern beendet
+Name[de]=Mit Fehlern beendet
 Name[es]=Proceso con error
 Name[fr]=Erreur du processus
 Name[it]=Errore di Processo
@@ -41,7 +40,7 @@ Name[pt_BR]=Erro no Processo
 Name[sv]=Processfel
 Comment=Process finished with errors
 Comment[da]=Processen afsluttede med fejl
-Comment[de]=de]=Prozess mit Fehlern beendet
+Comment[de]=Prozess mit Fehlern beendet
 Comment[es]=Proceso terminado con errores
 Comment[fr]=Processus terminé avec des erreurs
 Comment[it]=Processo terminato con errori
@@ -55,7 +54,7 @@ default_presentation=1
 [UnknownAudioFileFormat]
 Name=Unknown format
 Name[da]=Ukendt format
-Name[de]=de]=Information
+Name[de]=Information
 Name[es]=Formato desconocido
 Name[fr]=Format inconnu
 Name[it]=Formato sconosciuto
@@ -65,7 +64,7 @@ Name[pt_BR]=Formato desconhecido
 Name[sv]=Okänt format
 Comment=Unknown audiofile format
 Comment[da]=Ukendt lydfil-format
-Comment[de]=de]=Unbekanntes Audiodateiformat
+Comment[de]=Unbekanntes Audiodateiformat
 Comment[es]=Formato de archivo de audio desconocido
 Comment[fr]=Format de fichier son inconnu
 Comment[it]=Formato di file audio sconosciuto
