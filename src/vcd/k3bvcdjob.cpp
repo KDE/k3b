@@ -165,7 +165,7 @@ void K3bVcdJob::vcdxGen()
     return;
   }
 
-  emit infoMessage( i18n("Writing XML-file"), K3bJob::STATUS );
+  emit infoMessage( i18n("Create XML-file"), K3bJob::STATUS );
   *m_process << k3bMain()->externalBinManager()->binPath( "vcdxgen" );
   // Label
   *m_process << "-l" << QString("%1").arg(m_doc->vcdOptions()->volumeId());
@@ -230,7 +230,7 @@ void K3bVcdJob::slotVcdxGenFinished()
     // TODO: check the process' exitStatus()
     switch( m_process->exitStatus() ) {
       case 0:
-        emit infoMessage( i18n("Write XML-file successfully"), K3bJob::STATUS );
+        emit infoMessage( i18n("XML-file successfully created"), K3bJob::STATUS );
         break;
     default:
       // no recording device and also other errors!! :-(
@@ -275,7 +275,7 @@ void K3bVcdJob::vcdxBuild()
   delete m_process;
   m_process = new KProcess();
 
-  emit infoMessage( i18n("Writing IMAGE-File."), K3bJob::STATUS );
+  emit infoMessage( i18n("Create Cue/Bin files ..."), K3bJob::STATUS );
   if( !k3bMain()->externalBinManager()->foundBin( "vcdxbuild" ) ) {
     kdDebug() << "(K3bVcdJob) could not find vcdxbuild executable" << endl;
     emit infoMessage( i18n("vcdxbuild executable not found."), K3bJob::ERROR );
@@ -412,7 +412,7 @@ void K3bVcdJob::slotVcdxBuildFinished()
     // TODO: check the process' exitStatus()
     switch( m_process->exitStatus() ) {
       case 0:
-        emit infoMessage( i18n("Image successfully created."), K3bJob::STATUS );
+        emit infoMessage( i18n("Cue/Bin files successfully created."), K3bJob::STATUS );
         break;
     default:
       emit infoMessage( i18n("vcdxbuild returned an error! (code %1)").arg(m_process->exitStatus()), K3bJob::ERROR );
@@ -515,7 +515,6 @@ void K3bVcdJob::cdrdaoWrite()
   connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
     this, SLOT(parseCdrdaoOutput(KProcess*, char*, int)) );
 
-
   if( !m_process->start( KProcess::NotifyOnExit, KProcess::All ) ) {
     // something went wrong when starting the program
     // it "should" be the executable
@@ -541,17 +540,9 @@ void K3bVcdJob::createCdrdaoProgress( int made, int size )
     kdDebug() << "(K3bVcdJob) got progress: " << made << ", " << size << endl;
     return;
   }
-
-  double f = (double)size / (double)m_doc->size();
-  // calculate track progress
-  int trackMade = (int)( (double)made -f*(double)m_bytesFinishedTracks );
-  int trackSize = (int)( f * (double)m_currentWrittenTrack->size() );
-  emit processedSubSize( trackMade, trackSize );
-  if( trackSize > 0 )
-    emit subPercent( 100*trackMade / trackSize );
-  else
-    kdDebug() << "(K3bVcdJob) got trackSize " << trackSize << endl;
-
+  
+  emit processedSubSize( made, size );
+  emit subPercent( 100*made / size );
   emit processedSize( made, size );
   emit percent( 66 + (34*made / size ) );
 }
