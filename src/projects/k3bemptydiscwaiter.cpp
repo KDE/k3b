@@ -259,43 +259,44 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
 
     // DVD+RW: if empty we need to preformat. Although growisofs does it before writing doing it here
     //         allows better control and a progress bar. If it's not empty we shoud check if there is 
-    //         already a filesystem on the media. DVD+RW is either empty or complete. Never appendable since
-    //         DVD+RW has no notion of multisession
+    //         already a filesystem on the media. 
     if( (d->wantedMediaType & K3bCdDevice::MEDIA_DVD_PLUS_RW) &&
 	(dh->ngDiskInfo().mediaType() & K3bCdDevice::MEDIA_DVD_PLUS_RW) ) {
 
       kdDebug() << "(K3bEmptyDiscWaiter) ------ found DVD+RW as wanted." << endl;
 
-      if( dh->ngDiskInfo().diskState() == K3bCdDevice::STATE_COMPLETE &&
-	  d->wantedMediaState == K3bCdDevice::STATE_EMPTY ) {
-	// check if the media contains a filesystem
-	K3bIso9660 isoF( d->device->open() );
-	bool hasIso = isoF.open();
-	d->device->close();
+      if( (dh->ngDiskInfo().diskState() == K3bCdDevice::STATE_COMPLETE ||
+	   dh->ngDiskInfo().diskState() == K3bCdDevice::STATE_INCOMPLETE) ) {
 
-	if( formatWithoutAsking || 
-	    !hasIso || 
-	    KMessageBox::questionYesNo( parentWidgetToUse(),
-					i18n("Found %1 media in %2 - %3. "
-					     "Should it be overwritten?")
-					.arg("DVD+RW")
-					.arg(d->device->vendor())
-					.arg(d->device->description()),
-					i18n("Found %1").arg("DVD+RW") ) == KMessageBox::Yes ) {
+	if( d->wantedMediaState == K3bCdDevice::STATE_EMPTY ) {
+	  // check if the media contains a filesystem
+	  K3bIso9660 isoF( d->device->open() );
+	  bool hasIso = isoF.open();
+	  d->device->close();
+	  
+	  if( formatWithoutAsking || 
+	      !hasIso || 
+	      KMessageBox::questionYesNo( parentWidgetToUse(),
+					  i18n("Found %1 media in %2 - %3. "
+					       "Should it be overwritten?")
+					  .arg("DVD+RW")
+					  .arg(d->device->vendor())
+					  .arg(d->device->description()),
+					  i18n("Found %1").arg("DVD+RW") ) == KMessageBox::Yes ) {
+	    finishWaiting( K3bCdDevice::MEDIA_DVD_PLUS_RW );
+	  }
+	  else {
+	    kdDebug() << "(K3bEmptyDiscWaiter) starting devicehandler: no DVD+RW overwrite" << endl;
+	    connect( K3bCdDevice::eject( d->device ), 
+		     SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
+		     this, 
+		     SLOT(startDeviceHandler()) );
+	  }
+	}
+	else {  // complete or appendable media wanted
+	  // the isofs will be grown
 	  finishWaiting( K3bCdDevice::MEDIA_DVD_PLUS_RW );
 	}
-	else {
-	  kdDebug() << "(K3bEmptyDiscWaiter) starting devicehandler: no DVD+RW overwrite" << endl;
-	  connect( K3bCdDevice::eject( d->device ), 
-		   SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
-		   this, 
-		   SLOT(startDeviceHandler()) );
-	}
-      }
-      else if( dh->ngDiskInfo().diskState() == K3bCdDevice::STATE_COMPLETE &&
-	       d->wantedMediaState != K3bCdDevice::STATE_EMPTY ) {
-	// the isofs will be grown
-	finishWaiting( K3bCdDevice::MEDIA_DVD_PLUS_RW );
       }
       else {
 	// empty - preformat without asking

@@ -1334,7 +1334,12 @@ void K3bDataDoc::slotTocRead( K3bCdDevice::DeviceHandler* dh )
     isoOptions().setVolumeID( iso.primaryDescriptor().volumeId );
     // TODO: also import some other pd fields
 
-    const K3bIso9660Directory* rootDir = iso.firstIsoDirEntry();
+    const K3bIso9660Directory* rootDir = iso.firstRRDirEntry();
+    if( !rootDir )
+      rootDir = iso.firstJolietDirEntry();
+    if( !rootDir )
+      rootDir = iso.firstIsoDirEntry();
+
     createSessionImportItems( rootDir, root() );
   }
   else {

@@ -244,8 +244,7 @@ class K3bIso9660::Private
 {
 public:
   Private() 
-    : rootDir(0),
-      cdDevice(0),
+    : cdDevice(0),
       fd(-1),
       closeFd(false),
       startSector(0) {
@@ -255,9 +254,9 @@ public:
 
   QPtrList<K3bIso9660Directory> elToritoDirs;
   QPtrList<K3bIso9660Directory> jolietDirs;
-  QPtrList<K3bIso9660Directory> isoDirs; // RockRidge
+  QPtrList<K3bIso9660Directory> isoDirs;
+  QPtrList<K3bIso9660Directory> rrDirs; // RockRidge
 
-  K3bIso9660Directory* rootDir;
   K3bIso9660SimplePrimaryDescriptor primaryDesc;
 
   K3bCdDevice::CdDevice* cdDevice;
@@ -381,7 +380,9 @@ static int mycallb(struct iso_directory_record *idr,void *udata)
       }
     }
     if(ParseRR(idr,&rr)>0) {
-      if (!special) path=rr.name;
+      iso->m_rr = true;
+      if (!special)
+	path=rr.name;
       symlink=rr.sl;
       access=rr.mode;
       time=0;//rr.st_mtime;
@@ -529,6 +530,9 @@ bool K3bIso9660::open()
   }
 
   while (desc) {
+
+    m_rr = false;
+
     switch (isonum_711(desc->data.type)) {
     case ISO_VD_BOOT:
 
@@ -573,13 +577,9 @@ bool K3bIso9660::open()
 	if( m_joliet )
 	  d->jolietDirs.append( dirent );
 	else {
+	  if( m_rr )
+	    d->rrDirs.append( dirent );
 	  d->isoDirs.append( dirent );
-	 
-	  // we use the first Iso/RR desc as our root
-	  // if the user needs anything else there are the firstXXXEntry() methods
-	  if( !d->rootDir ) {
-	    d->rootDir = dirent;
-	  }
 	}
 
 	level=0;
@@ -635,8 +635,6 @@ void K3bIso9660::close()
   d->elToritoDirs.clear();
   d->jolietDirs.clear();
   d->isoDirs.clear();
-
-  d->rootDir = 0;
 }
 
 
@@ -655,6 +653,12 @@ const K3bIso9660Directory* K3bIso9660::firstIsoDirEntry() const
 const K3bIso9660Directory* K3bIso9660::firstElToritoEntry() const
 {
   return d->elToritoDirs.first();
+}
+
+
+const K3bIso9660Directory* K3bIso9660::firstRRDirEntry() const
+{
+  return d->rrDirs.first();
 }
 
 
