@@ -66,7 +66,7 @@ void K3bAudioListView::setupColumns(){
 bool K3bAudioListView::acceptDrag(QDropEvent* e) const
 {
   // the first is for built-in item moving, the second for dropping urls
-  return ( KListView::acceptDrag(e) || QTextDrag::canDecode(e) );
+  return ( KListView::acceptDrag(e) || QUriDrag::canDecode(e) );
 }
 
 

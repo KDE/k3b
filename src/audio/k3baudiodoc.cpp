@@ -26,7 +26,7 @@
 #include "input/k3baudiomodule.h"
 #include "../rip/songdb/k3bsong.h"
 #include "../rip/songdb/k3bsongmanager.h"
-
+#include "../kstringlistdialog.h"
 
 // QT-includes
 #include <qstring.h>
@@ -45,6 +45,7 @@
 #include <kconfig.h>
 #include <klocale.h>
 #include <kstddirs.h>
+#include <kio/global.h>
 
 #include <iostream>
 
@@ -111,21 +112,21 @@ unsigned long K3bAudioDoc::length() const
 }
 
 
-void K3bAudioDoc::addUrl( const QString& url )
+void K3bAudioDoc::addUrl( const KURL& url )
 {
   addTrack( url, m_tracks->count() );
 }
 
 
-void K3bAudioDoc::addUrls( const QStringList& urls )
+void K3bAudioDoc::addUrls( const KURL::List& urls )
 {
   addTracks( urls, m_tracks->count() );
 }
 
 
-void K3bAudioDoc::addTracks(const QStringList& urls, uint position )
+void K3bAudioDoc::addTracks( const KURL::List& urls, uint position )
 {
-  for( QStringList::ConstIterator it = urls.begin(); it != urls.end(); it++ ) {
+  for( KURL::List::ConstIterator it = urls.begin(); it != urls.end(); it++ ) {
     urlsToAdd.enqueue( new PrivateUrlToAdd( *it, position++ ) );
     //cerr <<  "adding url to queue: " << *it;
   }
@@ -143,39 +144,40 @@ void K3bAudioDoc::slotWorkUrlQueue()
     if( lastAddedPosition > m_tracks->count() )
       lastAddedPosition = m_tracks->count();
 	
-    addedFile = KURL( item->url );
-    delete item;
-		
-    if( !addedFile.isValid() ) {
-      qDebug( addedFile.path() + " not valid" );
+    if( !item->url.isLocalFile() ) {
+      qDebug( item->url.path() + " no local file" );
       return;
     }
 	
-    if( !QFile::exists( addedFile.path() ) ) {
-      KMessageBox::error( kapp->mainWidget(), i18n("File not found: ") + addedFile.fileName() );
+    if( !QFile::exists( item->url.path() ) ) {
+      m_notFoundFiles.append( item->url.path() );
       return;
     }
 
     // TODO: check if it is a textfile and if so try to create a KURL from every line
     //       for now drop all non-local urls
     //       add all existing files
-    if( K3bAudioTrack* newTrack = createTrack( addedFile.path() ) )
+    if( K3bAudioTrack* newTrack = createTrack( item->url ) )
       addTrack( newTrack, lastAddedPosition );
+
+    delete item;
   }
 
   else {
     m_urlAddingTimer->stop();
 
     emit newTracks();
+
+    informAboutNotFoundFiles();
   }
 }
 
 
-K3bAudioTrack* K3bAudioDoc::createTrack( const QString& url )
+K3bAudioTrack* K3bAudioDoc::createTrack( const KURL& url )
 {
   unsigned long length = identifyWaveFile( url );
   if( length > 0 || K3bAudioModuleFactory::moduleAvailable( url ) ) {
-    K3bAudioTrack* newTrack =  new K3bAudioTrack( m_tracks, url );
+    K3bAudioTrack* newTrack =  new K3bAudioTrack( m_tracks, url.path() );
     if( length > 0 ) {
       newTrack->setLength( length );  // no module needed for wave files
       newTrack->setStatus( K3bAudioTrack::OK );
@@ -190,7 +192,7 @@ K3bAudioTrack* K3bAudioDoc::createTrack( const QString& url )
       //connect( module, SIGNAL(finished(bool)), this, SLOT(updateAllViews()) );
     }
 
-    K3bSong *song = k3bMain()->songManager()->findSong( url );
+    K3bSong *song = k3bMain()->songManager()->findSong( url.path() );
     if( song != 0 ){
       newTrack->setArtist( song->getArtist() );
       newTrack->setAlbum( song->getAlbum() );
@@ -200,14 +202,15 @@ K3bAudioTrack* K3bAudioDoc::createTrack( const QString& url )
     return newTrack;
   }
   else {
-    KMessageBox::error( kapp->mainWidget(), "(" + url + ")\n" + i18n("Only mp3 and wav audio files are supported."), 
+    KMessageBox::error( kapp->mainWidget(), "(" + url.path() + ")\n" + 
+			i18n("Only mp3 and wav audio files are supported."), 
 			i18n("Wrong file format") );		
     return 0;
   }
 }
 
 
-void K3bAudioDoc::addTrack(const QString& url, uint position )
+void K3bAudioDoc::addTrack(const KURL& url, uint position )
 {
   urlsToAdd.enqueue( new PrivateUrlToAdd( url, position ) );
 
@@ -341,7 +344,7 @@ bool K3bAudioDoc::loadDocumentData( QDomDocument* doc )
     QDomElement trackElem = trackNodes.item(i).toElement();
     QString url = trackElem.attributeNode( "url" ).value();
     if( !QFile::exists( url ) )
-      qDebug( "(K3bAudioDoc) Could not find file: " + url );
+      m_notFoundFiles.append( url );
     else {
 
       if( K3bAudioTrack* track = createTrack( url ) ) {
@@ -380,6 +383,8 @@ bool K3bAudioDoc::loadDocumentData( QDomDocument* doc )
 
 
   emit newTracks();
+
+  informAboutNotFoundFiles();
 
   return true;
 }
@@ -440,7 +445,7 @@ bool K3bAudioDoc::saveDocumentData( QDomDocument* doc )
   for( K3bAudioTrack* track = first(); track != 0; track = next() ) {
 
     QDomElement trackElem = doc->createElement( "track" );
-    trackElem.setAttribute( "url", track->absPath() );
+    trackElem.setAttribute( "url", KIO::decodeFileName(track->absPath()) );
 
     // add cd-text
     cdTextMain = doc->createElement( "cd-text" );
@@ -735,8 +740,10 @@ QString K3bAudioDoc::prepareForTocFile( const QString& str )
  * it is a 16bit stereo 44100 kHz wave file
  * Otherwise 0 is returned.
  */
-unsigned long K3bAudioDoc::identifyWaveFile( const QString& filename )
+unsigned long K3bAudioDoc::identifyWaveFile( const KURL& url )
 {
+  QString filename = url.path();
+
   QFile inputFile( filename );
   if( !inputFile.open(IO_ReadOnly) ) {
     qDebug("Could not open file: " + filename );
@@ -856,6 +863,18 @@ unsigned long K3bAudioDoc::identifyWaveFile( const QString& filename )
   }
   else {
     return chunkLen/2352;
+  }
+}
+
+
+void K3bAudioDoc::informAboutNotFoundFiles()
+{
+  if( !m_notFoundFiles.isEmpty() ) {
+    KStringListDialog d( m_notFoundFiles, i18n("Not found"), i18n("Could not find the following files:"), 
+			 true, k3bMain(), "notFoundFilesInfoDialog" );
+    d.exec();
+
+    m_notFoundFiles.clear();
   }
 }
 

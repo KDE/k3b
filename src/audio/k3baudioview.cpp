@@ -42,6 +42,8 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kapp.h>
+#include <kurldrag.h>
+
 
 
 K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name )
@@ -129,9 +131,8 @@ void K3bAudioView::slotDropped( KListView*, QDropEvent* e, QListViewItem* after 
   if( !e->isAccepted() )
     return;
 
-  QString droppedText;
-  QTextDrag::decode( e, droppedText );
-  QStringList urls = QStringList::split("\r\n", droppedText );
+  KURL::List urls;
+  KURLDrag::decode( e, urls );
   uint pos;
   if( after == 0L )
     pos = 0;

@@ -76,8 +76,6 @@ K3bMp3Module::~K3bMp3Module()
   delete [] m_outputBuffer;
 
   mad_stream_finish( m_madStream );
-
-  clearingUp();
 }
 
 
@@ -467,6 +465,8 @@ void K3bMp3Module::clearingUp()
 
   if( m_consumer )
     m_consumer->disconnect(this);
+
+  m_consumer = 0;
 }
 
 

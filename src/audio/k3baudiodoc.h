@@ -88,7 +88,7 @@ class K3bAudioDoc : public K3bDoc
 
   K3bBurnJob* newBurnJob();
 
-  static unsigned long identifyWaveFile( const QString& filename );
+  static unsigned long identifyWaveFile( const KURL& url );
 		
  public slots:
   /**
@@ -97,10 +97,10 @@ class K3bAudioDoc : public K3bDoc
    * the process is finished and check error()
    * to know about the result.
    **/
-  void addUrl( const QString& );
-  void addUrls( const QStringList& );
-  void addTrack( const QString&, uint );
-  void addTracks( const QStringList&, uint );
+  void addUrl( const KURL& url );
+  void addUrls( const KURL::List& );
+  void addTrack( const KURL&, uint );
+  void addTracks( const KURL::List&, uint );
   /** adds a track without any testing */
   void addTrack( K3bAudioTrack* track, uint position = 0 );
 
@@ -153,24 +153,23 @@ class K3bAudioDoc : public K3bDoc
   QString prepareForTocFile( const QString& str );
 
  private:
-  K3bAudioTrack* createTrack( const QString& url );
+  K3bAudioTrack* createTrack( const KURL& url );
+  void informAboutNotFoundFiles();
+
+  QStringList m_notFoundFiles;
 
   class PrivateUrlToAdd
     {
     public:
-      PrivateUrlToAdd( const QString& _url, int _pos )
-	: url( _url ), position(_pos) {}
-      QString url;
+      PrivateUrlToAdd( const KURL& u, int _pos )
+	: url( u ), position(_pos) {}
+      KURL url;
       int position;
     };
   /** Holds all the urls that have to be added to the list of tracks. **/
   QQueue<PrivateUrlToAdd> urlsToAdd;
   QTimer* m_urlAddingTimer;
 	
-  /** The last added file. This is saved even if the file not exists or
-	the url is malformed. */
-  KURL addedFile;
-
   QList<K3bAudioTrack>* m_tracks;
   K3bAudioTrack* m_lastAddedTrack;
 	
