@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2002 Thomas Froescher <tfroescher@k3b.org>
@@ -330,7 +330,7 @@ void K3bDvdRipperWidget::openEncodingDialog(){
     data.setProjectFile( projectFile );
     if( !data.projectLoaded() ){
       KMessageBox::error( this, i18n("Error while parsing file: %1").arg(projectFile),
-			  i18n("Error loading project") );
+			  i18n("Error Loading Project") );
       close();
       return;
     }
@@ -361,7 +361,7 @@ void K3bDvdRipperWidget::openEncodingDialog(){
     m_divxJob = new K3bDivXEncodingProcess( m_data, this );
 
     m_divxDialog = new K3bBurnProgressDialog( this, "Encoding", true );
-    m_divxDialog->setCaption( i18n("Encoding process") );
+    m_divxDialog->setCaption( i18n("Encoding Process") );
     m_divxDialog->setJob( m_divxJob );
 
     m_divxJob->start();

@@ -1,6 +1,6 @@
-/* 
+/*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -47,7 +47,7 @@ K3bDeviceSelectionDialog::K3bDeviceSelectionDialog( bool reader,
 
   QGridLayout* lay = new QGridLayout( plainPage() );
 
-  QLabel* label = new QLabel( text.isEmpty() ? i18n("Please select a device") : text, plainPage() );
+  QLabel* label = new QLabel( text.isEmpty() ? i18n("Please select a device:") : text, plainPage() );
   m_comboDevices = new QComboBox( plainPage() );
 
   lay->addWidget( label, 0, 0 );

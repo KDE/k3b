@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -137,8 +137,8 @@ void K3bCddbLocalDBTab::verifyDb(){
             m_logOutput->insertLine( (*it).local8Bit() );
         }
     } else {
-        QMessageBox::critical( this, i18n("Database Error"), 
-			       i18n("File does not exist <%1>.").arg(m_songListPath->text()), i18n("OK") );
+        QMessageBox::critical( this, i18n("Database Error"),
+			       i18n("File does not exist <%1>.").arg(m_songListPath->text()), i18n("&OK") );
     }
 }
 void K3bCddbLocalDBTab::findDbEntries(){

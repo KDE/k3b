@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -38,7 +38,7 @@
 
 
 K3bDataPropertiesDialog::K3bDataPropertiesDialog( K3bDataItem* dataItem, QWidget* parent, const char* name )
-  : KDialogBase( Plain, i18n("File properties"), Ok|Cancel, Ok, parent, name, true, true )
+  : KDialogBase( Plain, i18n("File Properties"), Ok|Cancel, Ok, parent, name, true, true )
 {
   m_dataItem = dataItem;
 

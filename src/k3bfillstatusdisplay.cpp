@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -239,7 +239,7 @@ void K3bFillStatusDisplay::setupPopupMenu()
 				     m_actionCollection, "fillstatus_80minutes" );
   m_action100Min = new KToggleAction( i18n("%1 MB").arg(880), 0, this, SLOT(slot100Minutes()), 
 				      m_actionCollection, "fillstatus_100minutes" );
-  m_actionCustomSize = new KToggleAction( i18n("custom..."), 0, this, SLOT(slotCustomSize()), 
+  m_actionCustomSize = new KToggleAction( i18n("Custom..."), 0, this, SLOT(slotCustomSize()),
 					  m_actionCollection, "fillstatus_custom_size" );
 
   m_action74Min->setExclusiveGroup( "cd_size" );
@@ -247,11 +247,11 @@ void K3bFillStatusDisplay::setupPopupMenu()
   m_action100Min->setExclusiveGroup( "cd_size" );
   m_actionCustomSize->setExclusiveGroup( "cd_size" );
 
-  m_actionDetermineSize = new KAction( i18n("From disk..."), "cdrom_unmount", 0,
+  m_actionDetermineSize = new KAction( i18n("From Disk..."), "cdrom_unmount", 0,
 				       this, SLOT(slotDetermineSize()), 
 				       m_actionCollection, "fillstatus_size_from_disk" );
  
-  m_popup->insertTitle( i18n("Show size in...") );
+  m_popup->insertTitle( i18n("Show Size In") );
   m_actionShowMinutes->plug( m_popup );
   m_actionShowMegs->plug( m_popup );
   m_popup->insertTitle( i18n("CD size") );
@@ -311,7 +311,7 @@ void K3bFillStatusDisplay::slot100Minutes()
 void K3bFillStatusDisplay::slotCustomSize()
 {
   bool ok;
-  QString size = KLineEditDlg::getText( i18n("Custom CD size"), i18n("Please specify the size of your CD in minutes:"), 
+  QString size = KLineEditDlg::getText( i18n("Custom CD Size"), i18n("Please specify the size of your CD in minutes:"), 
 					   "74", &ok, this, new QIntValidator( this ) );
   if( ok ) {
     m_displayWidget->setCdSize( size.toInt()*60*75 );

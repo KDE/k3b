@@ -246,7 +246,7 @@ void K3bDvdRippingProcess::preProcessingDvd( ) {
             }
         } else {
             KMessageBox::error(m_parent, i18n("K3b could not mount <%1>. Please run K3bSetup.").arg(dev->mountDevice()),
-                               i18n("I/O error") );
+                               i18n("I/O Error") );
             emit finished( false );
         }
     }
@@ -255,7 +255,7 @@ void K3bDvdRippingProcess::preProcessingDvd( ) {
 void K3bDvdRippingProcess::slotPreProcessingDvd( KIO::Job *resultJob) {
     if( resultJob->error() > 0 ) {
             KMessageBox::error(m_parent, i18n("K3b could not mount the DVD-device. Ensure that you have the rights to mount the DVD-drive."),
-                               i18n("I/O error") );
+                               i18n("I/O Error") );
             kdDebug() << "(K3bDvdRippingProcess) Mount DVD-device failed." << endl;
             m_preProcessingFailed = true;
             emit finished( false );
@@ -275,7 +275,7 @@ void K3bDvdRippingProcess::slotPreProcessingDvd() {
     if( !video_ts.exists() && !m_udfMount){
         m_preProcessingFailed = true;
         KMessageBox::error(m_parent, i18n("K3b could not mount the DVD-device. Ensure that you have the rights to mount the DVD-drive and that it supports either iso9660 or udf filesystem."),
-                           i18n("I/O error") );
+                           i18n("I/O Error") );
         kdDebug() << "(K3bDvdRippingProcess::slotPreProcessingDvD) Mount DVD-device failed." << endl;
         emit finished( false );
         return;
@@ -293,7 +293,7 @@ void K3bDvdRippingProcess::slotPreProcessingDvd() {
     if( !result ) {
         m_preProcessingFailed = true;
         KMessageBox::error(m_parent, i18n("K3b could not copy the ifo-files from %1.").arg( m_mountPoint + "/" + video),
-                           i18n("I/O error") );
+                           i18n("I/O Error") );
         kdDebug() << "(K3bDvdRippingProcess::slotPreProcessingDvD) Copy IFO files failed." << endl;
         emit finished( false );
     }
@@ -437,7 +437,7 @@ float K3bDvdRippingProcess::getAudioGain() {
         }
         f.close();
     } else {
-        QMessageBox::critical( 0, i18n("Ripping Error"), i18n("Unable to get data for audio normalizing. Use default of 1.0."), i18n("OK") );
+        QMessageBox::critical( 0, i18n("Ripping Error"), i18n("Unable to get data for audio normalizing. Use default of 1.0."), i18n("&OK") );
     }
     return result;
 }

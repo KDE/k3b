@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Thomas Froescher <tfroescher@k3b.org>
@@ -149,14 +149,14 @@ void K3bDivxDirectories::init(){
 }
 
 void K3bDivxDirectories::slotVideoClicked(){
-    QString path = KFileDialog::getOpenFileName( m_editVideoPath->text(), "*.xml", this, i18n("Select project file") );
+    QString path = KFileDialog::getOpenFileName( m_editVideoPath->text(), "*.xml", this, i18n("Select Project File") );
     if( !path.isEmpty() ) {
         m_editVideoPath->setText( path );
         emit dataChanged( );
     }
 }
 void K3bDivxDirectories::slotAviClicked(){
-    QString aviName = KFileDialog::getSaveFileName( m_editAviPath->text(), "*.avi", this, i18n("Save video as") );
+    QString aviName = KFileDialog::getSaveFileName( m_editAviPath->text(), "*.avi", this, i18n("Save Video As") );
     if( !aviName.isEmpty() ) {
         if( !aviName.endsWith(".avi") ){
             aviName += ".avi";

@@ -180,7 +180,7 @@ void K3bDiskInfoView::displayInfo( const K3bDiskInfo& info )
     m_labelTocType->setText( i18n("K3b was unable to retrieve disk information.") );
     m_labelDiskPix->setPixmap( QPixmap(locate( "data", "k3b/pics/diskinfo_nodisk.png" )) );
   } else if( info.noDisk ) {
-    (void)new QListViewItem( m_infoView, i18n("No disk") );
+    (void)new QListViewItem( m_infoView, i18n("No Disk") );
     m_labelTocType->setText( i18n("No disk in drive") );
     m_labelDiskPix->setPixmap( QPixmap(locate( "data", "k3b/pics/diskinfo_nodisk.png" )) );
   } else {
@@ -261,7 +261,7 @@ void K3bDiskInfoView::displayInfo( const K3bDiskInfo& info )
       if( m_infoView->childCount() )
         (void)new KListViewItem( m_infoView, m_infoView->lastChild() ); // empty spacer item
 
-      KListViewItem* iso9660Item = new HeaderViewItem( m_infoView, m_infoView->lastChild(), i18n("ISO9660 info") );
+      KListViewItem* iso9660Item = new HeaderViewItem( m_infoView, m_infoView->lastChild(), i18n("ISO9660 Info") );
       KListViewItem* iso9660Child = 0;
 
 //       iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
@@ -297,7 +297,7 @@ void K3bDiskInfoView::displayInfo( const K3bDiskInfo& info )
 
     KListViewItem* trackItem = new HeaderViewItem( m_infoView, m_infoView->lastChild(), i18n("Tracks") );
     if( info.toc.isEmpty() )
-      (void)new KListViewItem( trackItem, i18n("disk is empty") );
+      (void)new KListViewItem( trackItem, i18n("Disk is Empty") );
     else {
       // create header item
       KListViewItem* item = new KListViewItem( trackItem,

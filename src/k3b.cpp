@@ -248,10 +248,10 @@ void K3bMainWindow::initActions()
   // Data Project
   actionDataImportSession = new KAction(i18n("&Import Session"), "gear", 0, this, SLOT(slotDataImportSession()),
 					actionCollection(), "project_data_import_session" );
-  actionDataClearImportedSession = new KAction(i18n("&Clear imported Session"), "gear", 0, this,
+  actionDataClearImportedSession = new KAction(i18n("&Clear Imported Session"), "gear", 0, this,
 					       SLOT(slotDataClearImportedSession()), actionCollection(),
 					       "project_data_clear_imported_session" );
-  actionDataEditBootImages = new KAction(i18n("&Edit boot images"), "cdtrack", 0, this,
+  actionDataEditBootImages = new KAction(i18n("&Edit Boot Images"), "cdtrack", 0, this,
  					 SLOT(slotEditBootImages()), actionCollection(),
  					 "project_data_edit_boot_images" );
 
@@ -266,7 +266,7 @@ void K3bMainWindow::initActions()
   connect( m_fileTreeComboBox, SIGNAL(deviceExecuted(K3bDevice*)), m_dirView, SLOT(showDevice(K3bDevice* )) );
 
   KWidgetAction* fileTreeComboAction = new KWidgetAction( m_fileTreeComboBox,
-							  i18n("&Quick dir selector"),
+							  i18n("&Quick Dir Selector"),
 							  0, 0, 0,
 							  actionCollection(), "quick_dir_selector" );
   fileTreeComboAction->setAutoSized(true);
@@ -599,7 +599,7 @@ bool K3bMainWindow::canCloseDocument( K3bDoc* doc )
   }
 
   switch ( KMessageBox::warningYesNoCancel(this, i18n("%1 has unsaved data.").arg( doc->URL().fileName() ),
-					   i18n("Closing project..."), i18n("&Save"), i18n("&Discard") ) )
+					   i18n("Closing Project"), i18n("&Save"), i18n("&Discard") ) )
     {
     case KMessageBox::Yes:
       fileSave( doc );
@@ -711,7 +711,7 @@ void K3bMainWindow::fileSaveAs( K3bDoc* doc )
 
 	if( !QFile::exists(url) ||
 	    ( QFile::exists(url) &&
-	      KMessageBox::questionYesNo( this, i18n("Do you want to overwrite %1").arg(url), i18n("File exists...") )
+	      KMessageBox::questionYesNo( this, i18n("Do you want to overwrite %1").arg(url), i18n("File Exists") )
 	      == KMessageBox::Yes ) ) {
 
 	  if(!doc->saveDocument(url))
@@ -923,7 +923,7 @@ void K3bMainWindow::slotFileBurn()
       // test if there is something to burn
       if( doc->numOfTracks() == 0 || doc->size() == 0 ) {
 	KMessageBox::information( kapp->mainWidget(), i18n("Please add files to your project first!"),
-				  i18n("No data to burn"), QString::null, false );
+				  i18n("No Data to Burn"), QString::null, false );
       }
       else {
 	view->burnDialog();
@@ -1035,12 +1035,12 @@ void K3bMainWindow::slotProjectAddFiles()
   K3bDoc* doc = activeDoc();
 
   if( doc ) {
-    QStringList urls = KFileDialog::getOpenFileNames( ".", "*", this, i18n("Select Files to add to Project") );
+    QStringList urls = KFileDialog::getOpenFileNames( ".", "*", this, i18n("Select Files to Add to Project") );
     if( !urls.isEmpty() )
       doc->addUrls( urls );
   }
   else
-    KMessageBox::error( this, i18n("Please create a project before adding files"), i18n("No active Project"));
+    KMessageBox::error( this, i18n("Please create a project before adding files"), i18n("No Active Project"));
 }
 
 

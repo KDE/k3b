@@ -1,6 +1,6 @@
-/* 
+/*
  *
- * $Id: $
+ * $Id$
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
@@ -136,8 +136,8 @@ K3bSetup2FstabWidget::K3bSetup2FstabWidget( K3bListView* tv, QWidget* parent, co
   m_viewNoEntry->setRenameable( 1, true );
   m_viewNoEntry->setRenameable( 2, true );
 
-  m_viewNoEntry->setNoItemText( i18n("K3bSetup found fstab entries for all your drives.") + "\n"
-				+ i18n("No need to change the current setup.") );
+  m_viewNoEntry->setNoItemText( i18n("K3bSetup found fstab entries for all your drives.\n"
+				"No need to change the current setup.") );
 
   connect( m_viewNoEntry, SIGNAL(itemRenamed(QListViewItem*, const QString&, int)),
 	   this, SLOT(slotItemRenamed(QListViewItem*, const QString&, int)) );

@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>411</width>
-            <height>323</height>
+            <width>427</width>
+            <height>365</height>
         </rect>
     </property>
     <property name="caption">
@@ -67,7 +67,7 @@
                         <cstring>textLabel6</cstring>
                     </property>
                     <property name="text">
-                        <string>Additional MPlayer Options:</string>
+                        <string>Additional MPlayer options:</string>
                     </property>
                 </widget>
                 <widget class="QLabel" row="5" column="0">
@@ -75,7 +75,7 @@
                         <cstring>textLabel7</cstring>
                     </property>
                     <property name="text">
-                        <string>Unwanted MPlayer Options:</string>
+                        <string>Unwanted MPlayer options:</string>
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string></string>
@@ -141,7 +141,7 @@
                 <cstring>groupBox3</cstring>
             </property>
             <property name="title">
-                <string>Startup Behaviour</string>
+                <string>Startup Behavior</string>
             </property>
             <grid>
                 <property name="name">
@@ -188,7 +188,7 @@
                 </sizepolicy>
             </property>
             <property name="title">
-                <string>Behaviour After Playing</string>
+                <string>Behavior After Playing</string>
             </property>
             <hbox>
                 <property name="name">
@@ -256,6 +256,7 @@
 </connections>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
+    <includehint>qwidget.h</includehint>
     <includehint>kcombobox.h</includehint>
     <includehint>kcombobox.h</includehint>
     <includehint>kcombobox.h</includehint>

@@ -209,7 +209,7 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
                                                       i18n( "K3b will create a SVCD image from the given MPEG files, but these files must already be in SVCD format. K3b performs no resample on MPEG files yet." )
                                                       + i18n( "\n\nNote: Forcing mpeg2 as VCD is not supported by some standalone DVD players." ),
                                                       i18n( "Information" ),
-                                                      i18n( "OK" ),
+                                                      i18n( "&OK" ),
                                                       i18n( "Forcing VCD" ) ) == KMessageBox::No );
                 if ( force ) {
                     setVcdType( vcdTypes( 1 ) );

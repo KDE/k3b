@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -98,7 +98,7 @@ void K3bAudioListView::setupActions()
 {
   m_actionCollection = new KActionCollection( this );
 
-  m_actionProperties = new KAction( i18n("Properties..."), "misc",
+  m_actionProperties = new KAction( i18n("Properties"), "misc",
 				  0, this, SLOT(showPropertiesDialog()), 
 				    actionCollection(), "audio_properties" );
   m_actionRemove = new KAction( i18n( "Remove" ), "editdelete",
@@ -108,7 +108,7 @@ void K3bAudioListView::setupActions()
 			      0, this, SLOT(slotPlaySelected()), 
 			      actionCollection(), "audio_play" );
 
-  m_actionPlayAll = new KAction( i18n( "Play all" ), "1rightarrow",
+  m_actionPlayAll = new KAction( i18n( "Play All" ), "1rightarrow",
 				 0, this, SLOT(slotPlayAll()), 
 				 actionCollection(), "audio_play_all" );
 

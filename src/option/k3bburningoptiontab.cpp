@@ -117,14 +117,14 @@ void K3bBurningOptionTab::setupGui()
   groupVideoLayout->setSpacing( KDialog::spacingHint() );
   groupVideoLayout->setMargin( KDialog::marginHint() );
 
-  m_checkUsePbc = new QCheckBox( i18n("Use Playback Control (PBC) by default"), groupVideo );
-  m_labelPlayTime = new QLabel( i18n("Play each Sequence/Segment by default"), groupVideo );
+  m_checkUsePbc = new QCheckBox( i18n("Use playback control (PBC) by default"), groupVideo );
+  m_labelPlayTime = new QLabel( i18n("Play each sequence/segment by default"), groupVideo );
   m_spinPlayTime = new QSpinBox( groupVideo, "m_spinPlayTime" );
   m_spinPlayTime->setValue( 1 );
   m_spinPlayTime->setSuffix( i18n( " time(s)" ) );
   m_spinPlayTime->setSpecialValueText( i18n( "forever" ) );  
 
-  m_labelWaitTime = new QLabel( i18n("Time to wait after each Sequence/Segment by default"), groupVideo );
+  m_labelWaitTime = new QLabel( i18n("Time to wait after each sequence/segment by default"), groupVideo );
   m_spinWaitTime = new QSpinBox( groupVideo, "m_spinWaitTime" );
   m_spinWaitTime->setMinValue( -1 );
   m_spinWaitTime->setValue( 2 );
@@ -212,7 +212,7 @@ void K3bBurningOptionTab::setupGui()
 
 
 
-  QGroupBox* groupWritingApp = new QGroupBox( 0, Qt::Vertical, i18n("Writing applications"), advancedTab );
+  QGroupBox* groupWritingApp = new QGroupBox( 0, Qt::Vertical, i18n("Writing Applications"), advancedTab );
   groupWritingApp->layout()->setMargin( 0 );
   QGridLayout* bufferLayout = new QGridLayout( groupWritingApp->layout() );
   bufferLayout->setMargin( KDialog::marginHint() );
@@ -278,8 +278,8 @@ void K3bBurningOptionTab::setupGui()
   QToolTip::add( m_checkAllowWritingAppSelection, i18n("Allow to choose betweeen cdrecord and cdrdao") );
   QToolTip::add( m_checkUsePbc, i18n("Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 disc formats.") );
   QToolTip::add( m_checkUseNumKey, i18n("Use numeric keys to navigate chapters by default (In addition to 'Previous' and 'Next')") );
-  QToolTip::add( m_labelWaitTime, i18n("Time to wait after each Sequence/Segment by default.") );
-  QToolTip::add( m_labelPlayTime, i18n("Play each Sequence/Segment by default.") );
+  QToolTip::add( m_labelWaitTime, i18n("Time to wait after each sequence/segment by default.") );
+  QToolTip::add( m_labelPlayTime, i18n("Play each sequence/segment by default.") );
   
   QWhatsThis::add( m_checkUseID3Tag, i18n("<p>If this option is checked K3b will rename audio files "
 					  "that contain meta information (for example id3 tags in mp3 "

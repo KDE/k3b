@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -155,7 +155,7 @@ void K3bAudioRippingDialog::setupGui()
   advancedPageLayout->setSpacing( spacingHint() );
   mainTab->addTab( advancedPage, i18n("Advanced") );
 
-  QGroupBox* groupReading = new QGroupBox( 3, Qt::Vertical, i18n("Reading options"), advancedPage );
+  QGroupBox* groupReading = new QGroupBox( 3, Qt::Vertical, i18n("Reading Options"), advancedPage );
   groupReading->setInsideSpacing( spacingHint() );
   groupReading->setInsideMargin( marginHint() );
 
@@ -168,7 +168,7 @@ void K3bAudioRippingDialog::setupGui()
   m_checkNeverSkip = new QCheckBox( i18n("Never skip"), groupReading );
 
 
-  QGroupBox* groupMisc = new QGroupBox( 1, Qt::Vertical, i18n("Misc. options"), advancedPage );
+  QGroupBox* groupMisc = new QGroupBox( 1, Qt::Vertical, i18n("Misc. Options"), advancedPage );
   groupMisc->setInsideSpacing( spacingHint() );
   groupMisc->setInsideMargin( marginHint() );
   m_checkSingleFile = new QCheckBox( i18n("Create single file"), groupMisc );

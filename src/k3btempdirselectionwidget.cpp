@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -163,9 +163,9 @@ void K3bTempDirSelectionWidget::setSelectionMode( int mode )
   m_mode = mode;
 
   if( m_mode == DIR )
-    setTitle( i18n("Temporary directory") );
+    setTitle( i18n("Temporary Directory") );
   else
-    setTitle( i18n("Temporary file") );
+    setTitle( i18n("Temporary File") );
 }
 
 

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -126,15 +126,15 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   groupAudio->setInsideMargin( marginHint() );
   m_checkFastToc = new QCheckBox( i18n("Fast TOC"), groupAudio );
   QHBox *p = new QHBox( groupAudio );
-  p->setStretchFactor(new QLabel( i18n("Paranoia Mode:"), p ), 1 );
+  p->setStretchFactor(new QLabel( i18n("Paranoia mode:"), p ), 1 );
   m_comboParanoiaMode = K3bStdGuiItems::paranoiaModeComboBox( p );
 
   QGroupBox* groupRaw   = new QGroupBox( 2, Qt::Vertical, i18n("Read Raw"), advancedTab ); 
   groupRaw->setInsideSpacing( spacingHint() );
   groupRaw->setInsideMargin( marginHint() );
-  m_checkRawCopy = new QCheckBox( i18n("Raw Copy"), groupRaw );
+  m_checkRawCopy = new QCheckBox( i18n("Raw copy"), groupRaw );
   QHBox *s = new QHBox( groupRaw );
-  s->setStretchFactor(new QLabel( i18n("Read Subchan Mode:"), s ), 1 );
+  s->setStretchFactor(new QLabel( i18n("Read subchan mode:"), s ), 1 );
   m_comboSubchanMode = new QComboBox( s );
   m_comboSubchanMode->insertItem( "none" );
   m_comboSubchanMode->insertItem( "rw" );
@@ -143,9 +143,9 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   QGroupBox* groupTao   = new QGroupBox( 2, Qt::Vertical, i18n("Track at Once Source"), advancedTab ); 
   groupTao->setInsideSpacing( spacingHint() );
   groupTao->setInsideMargin( marginHint() );
-  m_checkTaoSource = new QCheckBox( i18n("TAO Source"), groupTao );
+  m_checkTaoSource = new QCheckBox( i18n("TAO source"), groupTao );
   QHBox *t = new QHBox( groupTao );
-  QLabel* taoSourceAdjustLabel = new QLabel( i18n("Tao Source Adjust:"), t);
+  QLabel* taoSourceAdjustLabel = new QLabel( i18n("Tao source adjust:"), t);
   t->setStretchFactor( taoSourceAdjustLabel, 1 );
   m_spinTaoSourceAdjust = new QSpinBox( t );
   m_spinTaoSourceAdjust->setMinValue( 1 );
@@ -157,7 +157,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   QGroupBox* groupOther = new QGroupBox( 2, Qt::Vertical, i18n("Other"), advancedTab ); 
   groupOther->setInsideSpacing( spacingHint() );
   groupOther->setInsideMargin( marginHint() );
-  m_checkForce = new QCheckBox( i18n("Force Write"), groupOther );
+  m_checkForce = new QCheckBox( i18n("Force write"), groupOther );
 
   advancedTabGrid->addWidget( groupAudio, 0, 0 );  
   advancedTabGrid->addWidget( groupRaw,   0, 1 );

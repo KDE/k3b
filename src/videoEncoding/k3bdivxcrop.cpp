@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Thomas Froescher <tfroescher@k3b.org>
@@ -84,7 +84,7 @@ picture only to cut off black borders."));
     m_sliderPreview = new QSlider( Horizontal,  this );
     m_sliderPreview->setValue( 5 );
     QWhatsThis::add( m_sliderPreview, i18n("Step through the video to find a light picture to do a proper cut of the black bars."));
-    QVButtonGroup *modeGroup = new QVButtonGroup( i18n("Resize mode"), this );
+    QVButtonGroup *modeGroup = new QVButtonGroup( i18n("Resize Mode"), this );
     modeGroup->layout()->setMargin( KDialog::marginHint() );
     m_buttonFast = new QRadioButton( i18n("Fast (-B)"), modeGroup );
     m_buttonExactly = new QRadioButton( i18n("Exact (-Z)"), modeGroup );
@@ -96,7 +96,7 @@ picture only to cut off black borders."));
     QGridLayout *cropLayout = new QGridLayout( groupCrop->layout() );
     cropLayout->setSpacing( KDialog::spacingHint() );
     cropLayout->setMargin( KDialog::marginHint() );
-    groupCrop->setTitle( i18n( "Crop parameters" ) );
+    groupCrop->setTitle( i18n( "Crop Parameters" ) );
     m_spinBottom = new KIntSpinBox( 0, 100, 8, 0, 10, groupCrop );
     m_spinTop = new KIntSpinBox( 0, 100, 8, 0, 10, groupCrop );
     m_spinLeft = new KIntSpinBox( 0, 100, 8, 0, 10, groupCrop );
@@ -119,7 +119,7 @@ picture only to cut off black borders."));
     QGridLayout *finalLayout = new QGridLayout( groupFinal->layout() );
     finalLayout->setSpacing( KDialog::spacingHint() );
     finalLayout->setMargin( KDialog::marginHint() );
-    groupFinal->setTitle( i18n( "Final video" ) );
+    groupFinal->setTitle( i18n( "Final Video" ) );
     QLabel *size = new QLabel( i18n("Size:"), groupFinal );
     QLabel *aspect = new QLabel( i18n("Aspect ratio:"), groupFinal );
     QLabel *quality = new QLabel( i18n("Video quality:"), groupFinal );

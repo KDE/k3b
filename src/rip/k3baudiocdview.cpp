@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -227,20 +227,20 @@ void K3bAudioCdView::initActions()
 						    m_actionCollection, "select_all" );
   KAction* actionDeselectAll = KStdAction::deselect( this, SLOT(slotDeselectAll()), 
 						     m_actionCollection, "deselect_all" );
-  KAction* actionSelect = new KAction( i18n("Select track"), 0, 0, this,
-				       SLOT(slotSelect()), actionCollection(), 
+  KAction* actionSelect = new KAction( i18n("Select Track"), 0, 0, this,
+				       SLOT(slotSelect()), actionCollection(),
 				       "select_track" );
-  KAction* actionDeselect = new KAction( i18n("Deselect track"), 0, 0, this,
-					 SLOT(slotDeselect()), actionCollection(), 
+  KAction* actionDeselect = new KAction( i18n("Deselect Track"), 0, 0, this,
+					 SLOT(slotDeselect()), actionCollection(),
 					 "deselect_track" );
-  KAction* actionEditTrackCddbInfo = new KAction( i18n("Edit cddb info"), "edit", 0, this,
-						  SLOT(slotEditTrackCddb()), actionCollection(), 
+  KAction* actionEditTrackCddbInfo = new KAction( i18n("Edit cddb Info"), "edit", 0, this,
+						  SLOT(slotEditTrackCddb()), actionCollection(),
 						  "edit_track_cddb" );
-  KAction* actionEditAlbumCddbInfo = new KAction( i18n("Edit album cddb info"), "edit", 0, this,
-						  SLOT(slotEditAlbumCddb()), actionCollection(), 
+  KAction* actionEditAlbumCddbInfo = new KAction( i18n("Edit Album cddb Info"), "edit", 0, this,
+						  SLOT(slotEditAlbumCddb()), actionCollection(),
 						  "edit_album_cddb" );
 
-  KAction* actionStartRip = new KAction( i18n("Start ripping"), "run", 0, this,
+  KAction* actionStartRip = new KAction( i18n("Start Ripping"), "run", 0, this,
 					 SLOT(startRip()), actionCollection(), "start_rip" );
 
   KAction* actionQueryCddb = new KAction( i18n("Query cddb"), "reload", 0, this,
@@ -306,7 +306,7 @@ void K3bAudioCdView::startRip()
 
   if( trackNumbers.count() == 0 ) {
     KMessageBox::error( this, i18n("Please select the tracks to rip."),
-			i18n("No tracks selected") );
+			i18n("No Tracks Selected") );
   }
   else {
     K3bAudioRippingDialog rip( m_diskInfo, 

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -162,7 +162,7 @@ QComboBox* K3bStdGuiItems::dataModeComboboxBox( QWidget* parent, const char* nam
 
 QCheckBox* K3bStdGuiItems::startMultisessionCheckBox( QWidget* parent, const char* name )
 {
-  QCheckBox* c = new QCheckBox( i18n("Start multisession cd"), parent, name );
+  QCheckBox* c = new QCheckBox( i18n("Start multisession CD"), parent, name );
   QToolTip::add( c, i18n("Do not close the disk to append additional sessions later") );
   QWhatsThis::add( c, i18n("<p>If this option is checked K3b will not close the cd and write "
 			   "a temporary table of contents.</p>"

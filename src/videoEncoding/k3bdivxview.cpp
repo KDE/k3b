@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Thomas Froescher <tfroescher@k3b.org>
@@ -140,7 +140,7 @@ void K3bDivxView::slotUser1(){
     m_divxJob = new K3bDivXEncodingProcess( m_codingData, this );
 
     m_divxDialog = new K3bJobProgressDialog( this, "Encoding", true );
-    m_divxDialog->setCaption( i18n("Encoding process") );
+    m_divxDialog->setCaption( i18n("Encoding Process") );
     m_divxDialog->setJob( m_divxJob );
 
     /*

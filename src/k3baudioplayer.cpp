@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -218,7 +218,7 @@ K3bAudioPlayer::K3bAudioPlayer( QWidget* parent, const char* name )
   m_actionRemove = new KAction( i18n( "Remove" ), "editdelete",
 				Key_Delete, this, SLOT(slotRemoveSelected()), 
 				this, "audioplayer_remove" );
-  m_actionClear = new KAction( i18n( "Clear list" ), "editclear",
+  m_actionClear = new KAction( i18n( "Clear List" ), "editclear",
 			       0, this, SLOT(clear()), 
 			       this, "audioplayer_clear" );
 

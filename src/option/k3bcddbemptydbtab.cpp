@@ -1,6 +1,6 @@
-/* 
+/*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -36,8 +36,8 @@ void K3bCddbEmptyDbTab::setup(){
     frameLayout->setMargin( KDialog::marginHint() );
 
     QFrame *line = new QFrame( this );
-    QPushButton *selectAll = new QPushButton( i18n("all"), this );
-    QPushButton *selectNone = new QPushButton( i18n("none"), this );
+    QPushButton *selectAll = new QPushButton( i18n("All"), this );
+    QPushButton *selectNone = new QPushButton( i18n("None"), this );
 }
 
 #include "k3bcddbemptydbtab.moc"

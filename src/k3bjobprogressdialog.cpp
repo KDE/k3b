@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -66,9 +66,9 @@ public:
 K3bJobProgressDialog::PrivateDebugWidget::PrivateDebugWidget( QMap<QString, QStringList>& map, QWidget* parent )
   : KDialog( parent, "debugViewDialog", true )
 {
-  setCaption( i18n("Debugging output") );
+  setCaption( i18n("Debugging Output") );
 
-  QPushButton* okButton = new QPushButton( i18n("OK"), this );
+  QPushButton* okButton = new QPushButton( i18n("&OK"), this );
   QTextView* debugView = new QTextView( this );
   QGridLayout* grid = new QGridLayout( this );
   grid->addMultiCellWidget( debugView, 0, 0, 0, 1 );
@@ -258,7 +258,7 @@ void K3bJobProgressDialog::setupGUI()
   layout5->addWidget( m_buttonCancel );
   m_buttonClose = new QPushButton( i18n("Close"), this );
   layout5->addWidget( m_buttonClose );
-  m_buttonShowDebug = new QPushButton( i18n("Show debugging output"), this );
+  m_buttonShowDebug = new QPushButton( i18n("Show Debugging Output"), this );
   layout5->addWidget( m_buttonShowDebug );
 
   mainLayout->addLayout( layout5 );

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -24,7 +24,7 @@ K3bBootImageDialog::K3bBootImageDialog( K3bDataDoc* doc,
 					QWidget* parent, 
 					const char* name, 
 					bool modal )
-  : KDialogBase( parent, name, modal, i18n("Boot images"), Ok )
+  : KDialogBase( parent, name, modal, i18n("Boot Images"), Ok )
 {
   m_bootImageView = new K3bBootImageView( doc, this );
   setMainWidget( m_bootImageView );

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  *
@@ -84,7 +84,7 @@ void K3bSetup2::setupGui()
   m_finishButton = new KPushButton( KStdGuiItem::apply(), this );
 
   m_taskView = new K3bListView( this );
-  m_taskView->addColumn( i18n("Tasks to perform with current settings") );
+  m_taskView->addColumn( i18n("Tasks to Perform with Current Settings") );
   m_taskView->addColumn( i18n("Status") );
   m_taskView->setFullWidth( true );
 

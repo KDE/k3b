@@ -60,7 +60,7 @@
                 </sizepolicy>
             </property>
             <property name="title">
-                <string>Gui Settings</string>
+                <string>GUI Settings</string>
             </property>
             <vbox>
                 <property name="name">

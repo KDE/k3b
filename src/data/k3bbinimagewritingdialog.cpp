@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Klaus-Dieter Krannich <kd@k3b.org>
@@ -157,7 +157,7 @@ void K3bBinImageWritingDialog::setupGui()
   advancedTabLayout->setMargin(marginHint());
   advancedTabLayout->setSpacing(spacingHint());
 
-  m_checkForce = new QCheckBox( i18n("Force Writing"), advancedTab );
+  m_checkForce = new QCheckBox( i18n("Force writing"), advancedTab );
 
   advancedTabLayout->addWidget( m_checkForce, 0, 0 );
   advancedTabLayout->setRowStretch( 1, 1 );
@@ -177,7 +177,7 @@ void K3bBinImageWritingDialog::setupGui()
 
   connect( m_buttonFindTocFile, SIGNAL(clicked()), this, SLOT(slotFindTocFile()) );
 
-  QToolTip::add( m_checkForce, i18n("Force Writing") );
+  QToolTip::add( m_checkForce, i18n("Force writing") );
   QToolTip::add( m_spinCopies, i18n("Number of copies") );
 
   QWhatsThis::add( m_checkForce, i18n("<p>Forces the execution of an operation that otherwise would not be "

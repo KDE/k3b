@@ -1,6 +1,6 @@
-/* 
+/*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -190,7 +190,7 @@ void K3bDataView::clearImportedSession()
 
 void K3bDataView::editBootImages()
 {
-  KDialogBase* d = new KDialogBase( this, "", true, i18n("Edit boot images"), 
+  KDialogBase* d = new KDialogBase( this, "", true, i18n("Edit Boot Images"), 
 				    KDialogBase::Ok, KDialogBase::Ok, true );
   d->setMainWidget( new K3bBootImageView( m_doc, d ) );
   d->exec();

@@ -99,7 +99,7 @@ void K3bFileTreeView::initActions()
 //   m_devicePopupMenu = new KActionMenu( m_actionCollection, "device_popup_menu" );
 //   m_urlPopupMenu = new KActionMenu( m_actionCollection, "url_popup_menu" );
 
-//   KAction* actionDiskInfo = new KAction( i18n("&Disk info"), "info", 0, this, SLOT(slotShowDiskInfo()),
+//   KAction* actionDiskInfo = new KAction( i18n("&Disk Info"), "info", 0, this, SLOT(slotShowDiskInfo()),
 // 					 m_actionCollection, "disk_info");
 //   KAction* actionUnmount = new KAction( i18n("&Unmount"), "cdrom_unmount", 0, this, SLOT(slotUnmountDisk()),
 // 					m_actionCollection, "disk_unmount");

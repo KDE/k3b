@@ -36,7 +36,7 @@ void K3bCDListView::startDrag(){
     QPtrList<QListViewItem> selectedList = selectedItems();
     if( selectedList.isEmpty() ){
         kdDebug() << "(K3bCDListView) no item selected. " << endl;
-        //KMessageBox::critical( this, i18n("Ripping Error"), i18n("Please select the title to rip."), i18n("OK") );
+        //KMessageBox::critical( this, i18n("Ripping Error"), i18n("Please select the title to rip."), i18n("&OK") );
         return;
     }
 

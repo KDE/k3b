@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -200,7 +200,7 @@ void K3bProjectBurnDialog::prepareGui()
   m_writerSelectionWidget = new K3bWriterSelectionWidget( w );
   m_tempDirSelectionWidget = new K3bTempDirSelectionWidget( w );
 
-  QGroupBox* groupWritingMode = new QGroupBox( 1, Qt::Vertical, i18n("Writing Mode:"), w );
+  QGroupBox* groupWritingMode = new QGroupBox( 1, Qt::Vertical, i18n("Writing Mode"), w );
   groupWritingMode->setInsideMargin( marginHint() );
   m_writingModeWidget = new K3bWritingModeWidget( groupWritingMode );
 

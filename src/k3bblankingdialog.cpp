@@ -113,8 +113,8 @@ void K3bBlankingDialog::setupGui()
 
   m_viewOutput = new KListView( m_groupOutput );
   m_viewOutput->setSorting(-1);
-  m_viewOutput->addColumn( i18n("type") );
-  m_viewOutput->addColumn( i18n("message") );
+  m_viewOutput->addColumn( i18n("Type") );
+  m_viewOutput->addColumn( i18n("Message") );
   m_viewOutput->header()->hide();
   groupOutputLayout->addWidget( m_viewOutput, 0, 0 );
   // ------------------------------------------------------------------------

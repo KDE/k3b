@@ -525,7 +525,7 @@ void K3bVcdTrackDialog::setupPbcTab()
     groupPlayLayout->addMultiCellWidget( m_comboAfterTimeout, 3, 3, 1, 3 );
 
     //////////////////////////////////////////////////////////////////////////////////////////
-    m_groupPbc = new QGroupBox( 0, Qt::Vertical, i18n( "Key pressed interaction" ), w );
+    m_groupPbc = new QGroupBox( 0, Qt::Vertical, i18n( "Key Pressed Interaction" ), w );
     m_groupPbc->layout() ->setSpacing( spacingHint() );
     m_groupPbc->layout() ->setMargin( marginHint() );
 
@@ -578,7 +578,7 @@ void K3bVcdTrackDialog::setupPbcKeyTab()
     grid->setSpacing( spacingHint() );
     grid->setMargin( marginHint() );
 
-    QGroupBox* groupKey = new QGroupBox( 4, Qt::Vertical, i18n( "Numeric keys" ), m_widgetnumkeys );
+    QGroupBox* groupKey = new QGroupBox( 4, Qt::Vertical, i18n( "Numeric Keys" ), m_widgetnumkeys );
     groupKey->setEnabled( false );
     groupKey->layout() ->setSpacing( spacingHint() );
     groupKey->layout() ->setMargin( marginHint() );
@@ -596,7 +596,7 @@ void K3bVcdTrackDialog::setupPbcKeyTab()
 
     grid->setRowStretch( 9, 4 );
 
-    m_mainTabbed->addTab( m_widgetnumkeys, i18n( "Numeric keys" ) );
+    m_mainTabbed->addTab( m_widgetnumkeys, i18n( "Numeric Keys" ) );
 }
 
 void K3bVcdTrackDialog::setupAudioTab()
@@ -612,11 +612,11 @@ void K3bVcdTrackDialog::setupAudioTab()
     grid->setMargin( marginHint() );
 
     QLabel* labelMpegVer_Audio = new QLabel( i18n( "Type:" ), w, "labelMpegVer_Audio" );
-    QLabel* labelDuration_Audio = new QLabel( i18n( "Estimated Duration:" ), w, "labelDuration_Audio" );
+    QLabel* labelDuration_Audio = new QLabel( i18n( "Estimated duration:" ), w, "labelDuration_Audio" );
     QLabel* labelRate_Audio = new QLabel( i18n( "Rate:" ), w, "labelRate_Audio" );
     QLabel* labelFramesize_Audio = new QLabel( i18n( "Frame size:" ), w, "labelFramesize_Audio" );
     QLabel* labelMode_Audio = new QLabel( i18n( "Mode:" ), w, "labelMode_Audio" );
-    QLabel* labelExtMode_Audio = new QLabel( i18n( "Ext. Mode:" ), w, "labelExtMode_Audio" );
+    QLabel* labelExtMode_Audio = new QLabel( i18n( "Ext. mode:" ), w, "labelExtMode_Audio" );
     QLabel* labelEmphasis_Audio = new QLabel( i18n( "Emphasis:" ), w, "labelEmphasis_Audio" );
     QLabel* labelCopyright_Audio = new QLabel( i18n( "Copyright:" ), w, "labelCopyright_Audio" );
 
@@ -690,12 +690,12 @@ void K3bVcdTrackDialog::setupVideoTab()
     grid->setMargin( marginHint() );
 
     QLabel* labelMpegVer_Video = new QLabel( i18n( "Type:" ), w, "labelMpegVer_Video" );
-    QLabel* labelDuration_Video = new QLabel( i18n( "Estimated Duration:" ), w, "labelDuration_Video" );
+    QLabel* labelDuration_Video = new QLabel( i18n( "Estimated duration:" ), w, "labelDuration_Video" );
     QLabel* labelRate_Video = new QLabel( i18n( "Rate:" ), w, "labelRate_Video" );
-    QLabel* labelChromaFormat_Video = new QLabel( i18n( "Chroma Format:" ), w, "labelChromaFormat_Video" );
-    QLabel* labelFormat_Video = new QLabel( i18n( "Video Format:" ), w, "labelFormat_Video" );
+    QLabel* labelChromaFormat_Video = new QLabel( i18n( "Chroma format:" ), w, "labelChromaFormat_Video" );
+    QLabel* labelFormat_Video = new QLabel( i18n( "Video format:" ), w, "labelFormat_Video" );
     QLabel* labelSize_Video = new QLabel( i18n( "Size:" ), w, "labelSize_Video" );
-    QLabel* labelDisplaySize_Video = new QLabel( i18n( "Display Size:" ), w, "labelDisplaySize_Video" );
+    QLabel* labelDisplaySize_Video = new QLabel( i18n( "Display size:" ), w, "labelDisplaySize_Video" );
 
     m_mpegver_video = new QLabel( w, "m_mpegver_video" );
     m_duration_video = new QLabel( w, "m_duration_video" );

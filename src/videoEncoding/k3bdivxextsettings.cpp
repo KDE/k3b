@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Thomas Froescher <tfroescher@k3b.org>
@@ -52,7 +52,7 @@ K3bDivxExtSettings::~K3bDivxExtSettings(){
 
 void K3bDivxExtSettings::setupGui(){
     setColumnLayout(0, Qt::Vertical );
-    setTitle( i18n( "Expert settings" ) );
+    setTitle( i18n( "Expert Settings" ) );
     layout()->setMargin( 0 );
     QGridLayout *mainLayout = new QGridLayout( layout() );
     mainLayout->setSpacing( KDialog::spacingHint() );

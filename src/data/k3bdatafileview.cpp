@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -52,9 +52,9 @@ K3bDataFileView::K3bDataFileView( K3bView* view, K3bDataDirTreeView* dirTreeView
   setItemsMovable( false );
   setAllColumnsShowFocus( true );
 
-  setNoItemText( i18n("Use drag'n'drop to add files and directories to the project.") +"\n"
-		 + i18n("To remove or rename files use the context menu.") + "\n"
-		 + i18n("After that press the burn button to write the CD.") );
+  setNoItemText( i18n("Use drag'n'drop to add files and directories to the project.\n"
+		 "To remove or rename files use the context menu.\n"
+		 "After that press the burn button to write the CD.") );
 
 
   addColumn( i18n("Name") );
@@ -215,7 +215,7 @@ void K3bDataFileView::setupActions()
 {
   m_actionCollection = new KActionCollection( this );
 
-  m_actionProperties = new KAction( i18n("Properties..."), "misc", 0, this, SLOT(slotProperties()),
+  m_actionProperties = new KAction( i18n("Properties"), "misc", 0, this, SLOT(slotProperties()),
 				    actionCollection(), "properties" );
   m_actionNewDir = new KAction( i18n("New Directory..."), "folder_new", CTRL+Key_N, this, SLOT(slotNewDir()),
 				actionCollection(), "new_dir" );
@@ -266,13 +266,13 @@ void K3bDataFileView::slotNewDir()
   QString name;
   bool ok;
 
-  name = KLineEditDlg::getText( i18n("Please insert the name for the new directory"),
-				i18n("New directory"), &ok, this );
+  name = KLineEditDlg::getText( i18n("Please insert the name for the new directory:"),
+				i18n("New Directory"), &ok, this );
 
   while( ok && K3bDataDoc::nameAlreadyInDir( name, parent ) ) {
-    name = KLineEditDlg::getText( i18n("A file with that name already exists. ")
-				  + i18n("Please insert the name for the new directory"),
-				  i18n("New directory"), &ok, this );
+    name = KLineEditDlg::getText( i18n("A file with that name already exists."
+                                  "Please insert the name for the new directory:"),
+				  i18n("New Directory"), &ok, this );
   }
 
   if( !ok )

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -263,7 +263,7 @@ void K3bDataDirTreeView::setupActions()
 {
   m_actionCollection = new KActionCollection( this );
 
-  m_actionProperties = new KAction( i18n("Properties..."), "misc", 0, this, SLOT(slotProperties()),
+  m_actionProperties = new KAction( i18n("Properties"), "misc", 0, this, SLOT(slotProperties()),
 				    actionCollection(), "properties" );
   m_actionNewDir = new KAction( i18n("New Directory..."), "folder_new", CTRL+Key_N, this, SLOT(slotNewDir()),
 				actionCollection(), "new_dir" );
@@ -314,13 +314,12 @@ void K3bDataDirTreeView::slotNewDir()
     QString name;
     bool ok;
 
-    name = KLineEditDlg::getText( i18n("Please insert the name for the new directory"),
-				  i18n("New directory"), &ok, this );
+    name = KLineEditDlg::getText( i18n("Please insert the name for the new directory:"),
+				  i18n("New Directory"), &ok, this );
 
     while( ok && K3bDataDoc::nameAlreadyInDir( name, parent ) ) {
-      name = KLineEditDlg::getText( i18n("A file with that name already exists. ")
-				    + i18n("Please insert the name for the new directory"),
-				    i18n("New directory"), &ok, this );
+      name = KLineEditDlg::getText( i18n("A file with that name already exists. Please insert the name for the new directory:"),
+				    i18n("New Directory"), &ok, this );
     }
 
     if( !ok )

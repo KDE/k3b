@@ -110,9 +110,9 @@ void K3bMovieView::setupGUI()
   m_listView = new KListView(this, "cdviewcontent");
   m_listView->addColumn( i18n("Titles" ) );
   m_listView->addColumn( i18n("Time" ) );
-  m_listView->addColumn( i18n("Language(s)" ) );
-  m_listView->addColumn( i18n("Chapter(s)" ) );
-  m_listView->addColumn( i18n("Angle(s)" ) );
+  m_listView->addColumn( i18n("Language" ) );
+  m_listView->addColumn( i18n("Chapter" ) );
+  m_listView->addColumn( i18n("Angle" ) );
   //m_listView->setColumnWidthMode( 0, QListView::Manual );
   m_listView->setItemsRenameable( false );
   m_listView->setRootIsDecorated( true );

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -634,8 +634,8 @@ K3bBurnJob* K3bAudioDoc::newBurnJob()
 void K3bAudioDoc::informAboutNotFoundFiles()
 {
   if( !m_notFoundFiles.isEmpty() ) {
-    KMessageBox::informationList( firstView(), i18n("Could not find the following files:"), 
- 				  m_notFoundFiles, i18n("Not found") );
+    KMessageBox::informationList( firstView(), i18n("Could not find the following files:"),
+ 				  m_notFoundFiles, i18n("Not Found") );
 
     m_notFoundFiles.clear();
   }

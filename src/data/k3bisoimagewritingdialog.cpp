@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -406,7 +406,7 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
 
 void K3bIsoImageWritingDialog::slotFindImageFile()
 {
-  QString newPath( KFileDialog::getOpenFileName( m_editImagePath->text(), QString::null, this, i18n("Choose ISO image file or cue/bin combination") ) );
+  QString newPath( KFileDialog::getOpenFileName( m_editImagePath->text(), QString::null, this, i18n("Choose ISO Image File or cue/bin Combination") ) );
   if( !newPath.isEmpty() )
     m_editImagePath->setText( newPath );
 }

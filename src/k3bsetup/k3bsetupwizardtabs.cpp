@@ -1,6 +1,6 @@
-/* 
+/*
  *
- * $Id: $
+ * $Id$
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
@@ -210,10 +210,10 @@ FstabEntriesTab::FstabEntriesTab( int i, int o, K3bSetupWizard* wizard )
   m_labelFstab->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
 
   m_viewFstab = new KListView( main, "m_viewFstab" );
-  m_viewFstab->addColumn( i18n( "CD drive" ) );
-  m_viewFstab->addColumn( i18n( "System device" ) );
-  m_viewFstab->addColumn( i18n( "Mount device (or link)" ) );
-  m_viewFstab->addColumn( i18n( "Mount point" ) );
+  m_viewFstab->addColumn( i18n( "CD Drive" ) );
+  m_viewFstab->addColumn( i18n( "System Device" ) );
+  m_viewFstab->addColumn( i18n( "Mount Device (or link)" ) );
+  m_viewFstab->addColumn( i18n( "Mount Point" ) );
   m_viewFstab->setAllColumnsShowFocus( true );
   m_viewFstab->setItemsRenameable( true );
   m_viewFstab->setRenameable( 0, false );
@@ -224,7 +224,7 @@ FstabEntriesTab::FstabEntriesTab( int i, int o, K3bSetupWizard* wizard )
   m_checkFstab = new QCheckBox( i18n("Let K3b setup create fstab entries"), main );
   m_checkFstab->setChecked( true );
 
-  m_buttonSelectMountPoint = new QPushButton( i18n("Select Mount Point"), main );
+  m_buttonSelectMountPoint = new QPushButton( i18n("Select Mount Point..."), main );
 
 
   mainGrid->addMultiCellWidget( m_labelFstab, 0, 0, 0, 1 );
@@ -326,7 +326,7 @@ void FstabEntriesTab::slotSelectMountPoint()
   K3bDeviceViewItem* deviceItem = dynamic_cast<K3bDeviceViewItem*>( m_viewFstab->selectedItem() );
   if( deviceItem != 0 ) {
     QString newMp = KFileDialog::getExistingDirectory( deviceItem->device->mountPoint(), this,
-						       i18n("Select new Mount Point for %1").arg(deviceItem->device->ioctlDevice()) );
+						       i18n("Select New Mount Point for %1").arg(deviceItem->device->ioctlDevice()) );
     if( !newMp.isEmpty() ) {
       deviceItem->setText( 2, newMp );
       deviceItem->device->setMountPoint( newMp );

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -121,7 +121,7 @@ void K3bBootImageView::showAdvancedOptions( bool show )
 
 void K3bBootImageView::slotNewBootImage()
 {
-  QString file = KFileDialog::getOpenFileName( QString::null, QString::null, this, i18n("Please choose a boot image") );
+  QString file = KFileDialog::getOpenFileName( QString::null, QString::null, this, i18n("Please Choose Boot Image") );
   if( !file.isEmpty() ) {
     m_doc->createBootItem( file );
     updateBootImages();

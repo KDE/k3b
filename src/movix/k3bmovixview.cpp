@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -58,17 +58,17 @@ K3bMovixView::K3bMovixView( K3bMovixDoc* doc, QWidget* parent, const char* name 
 
 
   // setup actions
-  m_actionProperties = new KAction( i18n("Properties..."), "misc",
+  m_actionProperties = new KAction( i18n("Properties"), "misc",
 				    0, this, SLOT(showPropertiesDialog()), 
 				    actionCollection(), "movix_show_props" );
   m_actionRemove = new KAction( i18n( "Remove" ), "editdelete",
 				Key_Delete, this, SLOT(slotRemoveItems()), 
 				actionCollection(), "movix_remove_item" );
-  m_actionRemoveSubTitle = new KAction( i18n( "Remove subtitle file" ), "editdelete",
-					0, this, SLOT(slotRemoveSubTitleItems()), 
+  m_actionRemoveSubTitle = new KAction( i18n( "Remove Subtitle File" ), "editdelete",
+					0, this, SLOT(slotRemoveSubTitleItems()),
 					actionCollection(), "movix_remove_subtitle_item" );
-  m_actionAddSubTitle = new KAction( i18n("Add subtitle file"), "",
-				     0, this, SLOT(slotAddSubTitleFile()), 
+  m_actionAddSubTitle = new KAction( i18n("Add Subtitle File"), "",
+				     0, this, SLOT(slotAddSubTitleFile()),
 				     actionCollection(), "movix_add_subtitle" );
 
   m_popupMenu = new KPopupMenu( this );

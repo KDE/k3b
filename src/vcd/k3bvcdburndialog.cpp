@@ -295,8 +295,8 @@ void K3bVcdBurnDialog::setupAdvancedTab()
 
     m_checkPbc = new QCheckBox( i18n( "Playback Control (PBC)" ), m_groupGeneric );
     m_checkSegmentFolder = new QCheckBox( i18n( "SEGMENT Folder must always be present" ), m_groupGeneric );
-    m_checkRelaxedAps = new QCheckBox( i18n( "Relaxed Aps" ), m_groupGeneric );
-    m_checkUpdateScanOffsets = new QCheckBox( i18n( "Update Scan Offsets" ), m_groupGeneric );
+    m_checkRelaxedAps = new QCheckBox( i18n( "Relaxed aps" ), m_groupGeneric );
+    m_checkUpdateScanOffsets = new QCheckBox( i18n( "Update scan offsets" ), m_groupGeneric );
 
     // -------------------------------------------- gaps & margins group ----
     m_groupGaps = new QGroupBox( 0, Qt::Vertical, i18n( "Gaps" ), w );
@@ -306,19 +306,19 @@ void K3bVcdBurnDialog::setupAdvancedTab()
     QGridLayout* groupGapsLayout = new QGridLayout( m_groupGaps->layout() );
     groupGapsLayout->setAlignment( Qt::AlignTop );
 
-    m_checkGaps = new QCheckBox( i18n( "Customize Gaps and Margins" ), m_groupGaps );
+    m_checkGaps = new QCheckBox( i18n( "Customize gaps and margins" ), m_groupGaps );
 
-    m_labelPreGapLeadout = new QLabel( i18n( "Leadout Pre Gap (0..300)" ), m_groupGaps, "labelPreGapLeadout" );
+    m_labelPreGapLeadout = new QLabel( i18n( "Leadout pre gap (0..300)" ), m_groupGaps, "labelPreGapLeadout" );
     m_spinPreGapLeadout = new QSpinBox( m_groupGaps, "m_spinPreGapLeadout" );
     m_spinPreGapLeadout->setMinValue( 0 );
     m_spinPreGapLeadout->setMaxValue( 300 );
 
-    m_labelPreGapTrack = new QLabel( i18n( "Track Pre Gap (0..300)" ), m_groupGaps, "labelPreGapTrack" );
+    m_labelPreGapTrack = new QLabel( i18n( "Track pre gap (0..300)" ), m_groupGaps, "labelPreGapTrack" );
     m_spinPreGapTrack = new QSpinBox( m_groupGaps, "m_spinPreGapTrack" );
     m_spinPreGapTrack->setMinValue( 0 );
     m_spinPreGapTrack->setMaxValue( 300 );
 
-    m_labelFrontMarginTrack = new QLabel( i18n( "Track Front Margin (0..150)" ), m_groupGaps, "labelFrontMarginTrack" );
+    m_labelFrontMarginTrack = new QLabel( i18n( "Track front margin (0..150)" ), m_groupGaps, "labelFrontMarginTrack" );
     m_spinFrontMarginTrack = new QSpinBox( m_groupGaps, "m_spinFrontMarginTrack" );
     m_spinFrontMarginTrack->setMinValue( 0 );
     m_spinFrontMarginTrack->setMaxValue( 150 );
@@ -327,7 +327,7 @@ void K3bVcdBurnDialog::setupAdvancedTab()
     m_spinFrontMarginTrackSVCD->setMaxValue( 150 );
     m_spinFrontMarginTrackSVCD->setHidden( true );
 
-    m_labelRearMarginTrack = new QLabel( i18n( "Track Rear Margin (0..150)" ), m_groupGaps, "labelRearMarginTrack" );
+    m_labelRearMarginTrack = new QLabel( i18n( "Track rear margin (0..150)" ), m_groupGaps, "labelRearMarginTrack" );
     m_spinRearMarginTrack = new QSpinBox( m_groupGaps, "m_spinRearMarginTrack" );
     m_spinRearMarginTrack->setMinValue( 0 );
     m_spinRearMarginTrack->setMaxValue( 150 );
@@ -360,7 +360,7 @@ void K3bVcdBurnDialog::setupAdvancedTab()
     QGridLayout* groupMiscLayout = new QGridLayout( m_groupMisc->layout() );
     groupMiscLayout->setAlignment( Qt::AlignTop );
 
-    m_labelRestriction = new QLabel( i18n( "Restriction Category (0..3)" ), m_groupMisc, "m_labelRestriction" );
+    m_labelRestriction = new QLabel( i18n( "Restriction category (0..3)" ), m_groupMisc, "m_labelRestriction" );
     m_spinRestriction = new QSpinBox( m_groupMisc, "m_spinRestriction" );
     m_spinRestriction->setMinValue( 0 );
     m_spinRestriction->setMaxValue( 3 );
@@ -397,7 +397,7 @@ void K3bVcdBurnDialog::setupVideoCdTab()
     m_groupOptions = new QGroupBox( 4, Qt::Vertical, i18n( "Options" ), w );
     m_checkAutoDetect = new QCheckBox( i18n( "Autodetect VideoCD type" ), m_groupOptions );
 
-    m_checkNonCompliant = new QCheckBox( i18n( "Enable Broken SVCD mode" ), m_groupOptions );
+    m_checkNonCompliant = new QCheckBox( i18n( "Enable broken SVCD mode" ), m_groupOptions );
     // Only available on SVCD Type
     m_checkNonCompliant->setEnabled( false );
     m_checkNonCompliant->setChecked( false );
@@ -443,12 +443,12 @@ void K3bVcdBurnDialog::setupLabelTab()
 
     // ----------------------------------------------------------------------
 
-    QLabel* labelVolumeId = new QLabel( i18n( "Volume &Label:" ), w, "labelVolumeId" );
+    QLabel* labelVolumeId = new QLabel( i18n( "Volume &label:" ), w, "labelVolumeId" );
     QLabel* labelPublisher = new QLabel( i18n( "&Publisher:" ), w, "labelPublisher" );
     QLabel* labelAlbumId = new QLabel( i18n( "&Album Id:" ), w, "labelAlbumId" );
 
-    QLabel* labelVolumeCount = new QLabel( i18n( "Number of &Volumes in Album:" ), w, "labelVolumeCount" );
-    QLabel* labelVolumeNumber = new QLabel( i18n( "This CD is &Sequence Number:" ), w, "labelVolumeNumber" );
+    QLabel* labelVolumeCount = new QLabel( i18n( "Number of &volumes in album:" ), w, "labelVolumeCount" );
+    QLabel* labelVolumeNumber = new QLabel( i18n( "This CD is &sequence number:" ), w, "labelVolumeNumber" );
 
 
     m_editVolumeId = new QLineEdit( w, "m_editVolumeId" );
