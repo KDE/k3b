@@ -145,7 +145,7 @@ class K3bAudioDecoder : public K3bPlugin
    * resampling and converting mono to stereo data.
    * This method may be time consuming.
    */
-  virtual bool analyseFileInternal( K3b::Msf* length, int* samplerate, int* channels ) = 0;
+  virtual bool analyseFileInternal( K3b::Msf& length, int& samplerate, int& channels ) = 0;
 
   /**
    * fill the already allocated data with maximal maxLen bytes of decoded samples.

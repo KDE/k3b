@@ -182,14 +182,14 @@ void K3bFLACDecoder::cleanup()
   }
 }
 
-bool K3bFLACDecoder::analyseFileInternal( K3b::Msf* frames, int* samplerate, int* ch )
+bool K3bFLACDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate, int& ch )
 {
   if(d == 0)
     d = new Private(new QFile(filename()));
 
-  *frames = (unsigned long)ceil((d->samples * 75.0))/d->rate;
-  *samplerate = d->rate;
-  *ch = 2;
+  frames = (unsigned long)ceil((d->samples * 75.0))/d->rate;
+  samplerate = d->rate;
+  ch = 2;
 
   return true;
 }

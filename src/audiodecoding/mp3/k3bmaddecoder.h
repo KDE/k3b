@@ -60,7 +60,7 @@ class K3bMadDecoder : public K3bAudioDecoder
   bool seekInternal( const K3b::Msf& );
 
  protected:
-  bool analyseFileInternal( K3b::Msf* frames, int* samplerate, int* ch );
+  bool analyseFileInternal( K3b::Msf& frames, int& samplerate, int& ch );
   bool initDecoderInternal();
 
   int decodeInternal( char* _data, int maxLen );

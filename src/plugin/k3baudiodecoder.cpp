@@ -99,7 +99,7 @@ void K3bAudioDecoder::setFilename( const QString& filename )
 bool K3bAudioDecoder::analyseFile()
 {
   cleanup();
-  bool ret = analyseFileInternal( &m_length, &d->samplerate, &d->channels );
+  bool ret = analyseFileInternal( m_length, d->samplerate, d->channels );
   if( ret ) {
     return ( ( d->channels == 1 || d->channels == 2 ) && m_length > 0 );
   }

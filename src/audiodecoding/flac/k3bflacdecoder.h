@@ -61,7 +61,7 @@ class K3bFLACDecoder : public K3bAudioDecoder
   QString technicalInfo( const QString& ) const;
 
  protected:
-  bool analyseFileInternal( K3b::Msf* frames, int* samplerate, int* ch );
+  bool analyseFileInternal( K3b::Msf& frames, int& samplerate, int& ch );
   bool initDecoderInternal();
 
   int decodeInternal( char* _data, int maxLen );

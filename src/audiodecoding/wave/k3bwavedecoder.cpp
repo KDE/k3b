@@ -259,13 +259,13 @@ int K3bWaveDecoder::decodeInternal( char* _data, int maxLen )
 }
 
 
-bool K3bWaveDecoder::analyseFileInternal( K3b::Msf* frames, int* samplerate, int* channels )
+bool K3bWaveDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate, int& channels )
 {
   // handling wave files is very easy...
   if( initDecoderInternal() ) {
-    *frames = d->size;
-    *samplerate = d->sampleRate;
-    *channels = d->channels;
+    frames = d->size;
+    samplerate = d->sampleRate;
+    channels = d->channels;
     return true;
   }
   else

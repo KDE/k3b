@@ -175,13 +175,13 @@ void K3bMadDecoder::initMadStructures()
 }
 
 
-bool K3bMadDecoder::analyseFileInternal( K3b::Msf* frames, int* samplerate, int* ch )
+bool K3bMadDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate, int& ch )
 {
   initDecoderInternal();
-  *frames = countFrames( samplerate );
-  if( *frames > 0 ) {
+  frames = countFrames( &samplerate );
+  if( frames > 0 ) {
     // we convert mono to stereo all by ourselves. :)
-    *ch = 2;
+    ch = 2;
     return true;
   }
   else

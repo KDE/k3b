@@ -81,7 +81,7 @@ bool K3bOggVorbisDecoder::openOggVorbisFile()
 }
 
 
-bool K3bOggVorbisDecoder::analyseFileInternal( K3b::Msf* frames, int* samplerate, int* ch )
+bool K3bOggVorbisDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate, int& ch )
 {
   cleanup();
 
@@ -102,9 +102,9 @@ bool K3bOggVorbisDecoder::analyseFileInternal( K3b::Msf* frames, int* samplerate
       if( !d->vInfo )
 	d->vInfo = ov_info( &d->oggVorbisFile, -1 /* current bitstream */ );
 
-      *frames = (unsigned long)ceil(seconds * 75.0);
-      *samplerate = d->vInfo->rate;
-      *ch = d->vInfo->channels;
+      frames = (unsigned long)ceil(seconds * 75.0);
+      samplerate = d->vInfo->rate;
+      ch = d->vInfo->channels;
       return true;
     }
   }
