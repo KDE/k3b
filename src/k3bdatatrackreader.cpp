@@ -55,6 +55,9 @@ public:
       return;
     }
 
+    // block the tray while we are reading
+    m_device->block(true);
+
     // 1. determine sector size by checking the first sectors mode
     //    if impossible or MODE2 (mode2 formless) finish(false)
 
@@ -157,6 +160,7 @@ public:
     }
 
     // cleanup
+    m_device->block(false);
     m_device->close();
     delete [] buffer;
 
