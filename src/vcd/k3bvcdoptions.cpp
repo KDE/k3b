@@ -29,15 +29,14 @@
 K3bVcdOptions::K3bVcdOptions()
   : m_volumeID( i18n("Project name", "VIDEOCD") ),
     m_volumeSetId( "" ),
+    m_applicationId( "CDI/CDI_VCD.APP;1" ),
+    m_systemId( "CD-RTOS CD-BRIDGE" ),
     m_volumeCount( 1 ),
     m_volumeNumber( 1 ),
     m_cdisupport( false ),
     m_brokensvcdmode( false ),
-    m_sector2336( false ),
-    m_applicationId( "CDI/CDI_VCD.APP;1" ),
-    m_systemId( "CD-RTOS CD-BRIDGE" )
+    m_sector2336( false )
 {
-
 }
 
 bool K3bVcdOptions::checkCdiFiles()
