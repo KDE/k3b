@@ -236,17 +236,10 @@ void K3bDirView::showDevice( K3bCdDevice::CdDevice* dev )
 
 void K3bDirView::slotDetectDiskInfo( K3bCdDevice::CdDevice* dev )
 {
-  // to speed things up we first check if the media is already mounted
-  QString mp = KIO::findDeviceMountPoint( dev->mountDevice() );
-  if( !m_bViewDiskInfo && !mp.isEmpty() ) {
-    slotDirActivated( mp );
-  }
-  else {
-    m_viewStack->raiseWidget( m_noViewView );
-    m_fileTreeView->setSelectedDevice( dev );
-    k3bcore->requestBusyInfo( i18n("Trying to fetch information about the inserted disk.") );
-    m_diskInfoDetector->detect( dev );
-  }
+  m_viewStack->raiseWidget( m_noViewView );
+  m_fileTreeView->setSelectedDevice( dev );
+  k3bcore->requestBusyInfo( i18n("Trying to fetch information about the inserted disk.") );
+  m_diskInfoDetector->detect( dev );
 }
 
 

@@ -461,7 +461,7 @@ void K3bFillStatusDisplay::slotRemainingSize( K3bCdDevice::DeviceHandler* dh )
       KMessageBox::error( parentWidget(), i18n("No media found.") );
     }
     else {
-      K3b::Msf size = dh->ngDiskInfo().remainingSize();
+      K3b::Msf size = dh->ngDiskInfo().capacity();
       if( size > 0 ) {    
 	d->displayWidget->setCdSize( size );
 	d->actionCustomSize->setChecked(true);
