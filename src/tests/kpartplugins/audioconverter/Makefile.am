@@ -1,4 +1,4 @@
-AM_CPPFLAGS = -I$(srcdir)/../../../core -I$(srcdir)/../../../tools -I$(srcdir)/../../../projects -I$(srcdir)/../../../projects/datacd $(all_includes)
+AM_CPPFLAGS = -I$(srcdir)/../../../core -I$(srcdir)/../../../tools -I$(srcdir)/../../../projects -I$(srcdir)/../../../projects/datacd -I$(srcdir)/../../../device -I$(srcdir)/../../../plugin $(all_includes)
 
 lib_LTLIBRARIES = libk3baudioconverterplugin.la
 
