@@ -27,7 +27,7 @@
 #include <qvaluelist.h>
 #include <qfont.h>
 #include <qpalette.h>
-
+#include <kkeydialog.h>
 // include files for KDE
 #include <kiconloader.h>
 #include <kmessagebox.h>
@@ -183,6 +183,8 @@ void K3bMainWindow::showEvent( QShowEvent* e )
 
 void K3bMainWindow::initActions()
 {
+    KStdAction::keyBindings( this, SLOT( slotConfigureKeys() ), actionCollection() );
+
   actionFileOpen = KStdAction::open(this, SLOT(slotFileOpen()), actionCollection());
   actionFileOpenRecent = KStdAction::openRecent(this, SLOT(slotFileOpenRecent(const KURL&)), actionCollection());
   actionFileSave = KStdAction::save(this, SLOT(slotFileSave()), actionCollection());
@@ -298,6 +300,11 @@ void K3bMainWindow::initActions()
   actionFileQuit->setStatusText(i18n("Quits the application"));
 }
 
+
+void K3bMainWindow::slotConfigureKeys()
+{
+    KKeyDialog::configure( actionCollection(), this );
+}
 
 void K3bMainWindow::initStatusBar()
 {
