@@ -83,104 +83,106 @@ K3bDoc* K3bAudioJob::doc() const
 
 void K3bAudioJob::start()
 {
-    emit started();
+  emit started();
 
-    m_written = true;
-    m_canceled = false;
-    m_errorOccuredAndAlreadyReported = false;
+  m_written = true;
+  m_canceled = false;
+  m_errorOccuredAndAlreadyReported = false;
 
 
-    // determine writing mode
-    if( m_doc->writingMode() == K3b::WRITING_MODE_AUTO ) {
-        // DAO is always the first choice
-        // should we consider choosing TAO if the writer does not support DAO?
-        // the problem is that there are none-DAO writers that are supported by cdrdao
-        m_usedWritingMode = K3b::DAO;
+  // determine writing mode
+  if( m_doc->writingMode() == K3b::WRITING_MODE_AUTO ) {
+    // DAO is always the first choice
+    // should we consider choosing TAO if the writer does not support DAO?
+    // the problem is that there are none-DAO writers that are supported by cdrdao
+    m_usedWritingMode = K3b::DAO;
+  }
+  else
+    m_usedWritingMode = m_doc->writingMode();
+
+  bool cdrecordOnTheFly = false;
+  bool cdrecordCdText = false;
+  if( k3bcore->externalBinManager()->binObject("cdrecord") ) {
+    cdrecordOnTheFly = k3bcore->externalBinManager()->binObject("cdrecord")->version >= K3bVersion( 2, 1, -1, "a13" );
+    cdrecordCdText = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "cdtext" );
+  }    
+
+  // determine writing app
+  if( writingApp() == K3b::DEFAULT ) {
+    if( m_usedWritingMode == K3b::DAO ) {
+      if( ( !cdrecordOnTheFly && m_doc->onTheFly() ) ||
+	  ( m_doc->cdText() &&
+	    // the inf-files we use do only support artist and title in the global section
+	    ( !m_doc->arranger().isEmpty() ||
+	      !m_doc->songwriter().isEmpty() ||
+	      !m_doc->composer().isEmpty() ||
+	      !m_doc->cdTextMessage().isEmpty() ||
+	      !cdrecordCdText )
+	    ) ||
+	  m_doc->hideFirstTrack()
+	  )
+	m_usedWritingApp = K3b::CDRDAO;
+      else
+	m_usedWritingApp = K3b::CDRECORD;
     }
     else
-        m_usedWritingMode = m_doc->writingMode();
+      m_usedWritingApp = K3b::CDRECORD;
+  }
+  else
+    m_usedWritingApp = writingApp();
 
-    if ( k3bcore->externalBinManager()->binObject("cdrecord") )
-    {
-        bool cdrecordOnTheFly = k3bcore->externalBinManager()->binObject("cdrecord")->version >= K3bVersion( 2, 1, -1, "a13" );
-        bool cdrecordCdText = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "cdtext" );
+  // on-the-fly writing with cdrecord >= 2.01a13
+  if( m_usedWritingApp == K3b::CDRECORD &&
+      m_doc->onTheFly() &&
+      !cdrecordOnTheFly ) {
+    emit infoMessage( i18n("On-the-fly writing with cdrecord < 2.01a13 not supported."), ERROR );
+    m_doc->setOnTheFly(false);
+  }
 
-        // determine writing app
-        if( writingApp() == K3b::DEFAULT ) {
-            if( m_usedWritingMode == K3b::DAO ) {
-                if( ( !cdrecordOnTheFly && m_doc->onTheFly() ) ||
-                    ( m_doc->cdText() &&
-                      // the inf-files we use do only support artist and title in the global section
-                      ( !m_doc->arranger().isEmpty() ||
-                        !m_doc->songwriter().isEmpty() ||
-                        !m_doc->composer().isEmpty() ||
-                        !m_doc->cdTextMessage().isEmpty() ||
-                        !cdrecordCdText )
-                        ) ||
-                    m_doc->hideFirstTrack()
-                    )
-                    m_usedWritingApp = K3b::CDRDAO;
-                else
-                    m_usedWritingApp = K3b::CDRECORD;
-            }
-            else
-                m_usedWritingApp = K3b::CDRECORD;
-        }
-        else
-            m_usedWritingApp = writingApp();
-        // on-the-fly writing with cdrecord >= 2.01a13
-        if( m_usedWritingApp == K3b::CDRECORD &&
-            m_doc->onTheFly() &&
-            !cdrecordOnTheFly ) {
-            emit infoMessage( i18n("On-the-fly writing with cdrecord < 2.01a13 not supported."), ERROR );
-            m_doc->setOnTheFly(false);
-        }
-
-        if( m_usedWritingApp == K3b::CDRECORD &&
-            m_doc->cdText() ) {
-            if( !cdrecordCdText ) {
-                emit infoMessage( i18n("Cdrecord %1 does not support CD-Text writing.").arg(k3bcore->externalBinManager()->binObject("cdrecord")->version), ERROR );
-                m_doc->writeCdText(false);
-            }
-            else {
-                if( !m_doc->arranger().isEmpty() )
-                    emit infoMessage( i18n("K3b does not support Album arranger CD-Text with cdrecord."), ERROR );
-                if( !m_doc->songwriter().isEmpty() )
-                    emit infoMessage( i18n("K3b does not support Album songwriter CD-Text with cdrecord."), ERROR );
-                if( !m_doc->composer().isEmpty() )
-                    emit infoMessage( i18n("K3b does not support Album composer CD-Text with cdrecord."), ERROR );
-                if( !m_doc->cdTextMessage().isEmpty() )
-                    emit infoMessage( i18n("K3b does not support Album comment CD-Text with cdrecord."), ERROR );
-            }
-        }
-
-        if( !m_doc->onlyCreateImages() && m_doc->onTheFly() ) {
-            if( !prepareWriter() ) {
-                cleanupAfterError();
-                emit finished(false);
-                return;
-            }
-
-            if( startWriting() ) {
-
-                // now the writer is running and we can get it's stdin
-                // we only use this method when writing on-the-fly since
-                // we cannot easily change the audioDecode fd while it's working
-                // which we would need to do since we write into several
-                // image files.
-                m_audioStreamer->writeToFd( m_writer->fd() );
-            }
-            else {
-                // startWriting() already did the cleanup
-                return;
-            }
-        }
-        else {
-            emit infoMessage( i18n("Creating image files in %1").arg(m_doc->tempDir()), INFO );
-            emit newTask( i18n("Creating image files") );
-        }
-        m_audioStreamer->start();
+  if( m_usedWritingApp == K3b::CDRECORD &&
+      m_doc->cdText() ) {
+    if( !cdrecordCdText ) {
+      emit infoMessage( i18n("Cdrecord %1 does not support CD-Text writing.").arg(k3bcore->externalBinManager()->binObject("cdrecord")->version), ERROR );
+      m_doc->writeCdText(false);
     }
+    else {
+      if( !m_doc->arranger().isEmpty() )
+	emit infoMessage( i18n("K3b does not support Album arranger CD-Text with cdrecord."), ERROR );
+      if( !m_doc->songwriter().isEmpty() )
+	emit infoMessage( i18n("K3b does not support Album songwriter CD-Text with cdrecord."), ERROR );
+      if( !m_doc->composer().isEmpty() )
+	emit infoMessage( i18n("K3b does not support Album composer CD-Text with cdrecord."), ERROR );
+      if( !m_doc->cdTextMessage().isEmpty() )
+	emit infoMessage( i18n("K3b does not support Album comment CD-Text with cdrecord."), ERROR );
+    }
+  }
+
+  if( !m_doc->onlyCreateImages() && m_doc->onTheFly() ) {
+    if( !prepareWriter() ) {
+      cleanupAfterError();
+      emit finished(false);
+      return;
+    }
+
+    if( startWriting() ) {
+
+      // now the writer is running and we can get it's stdin
+      // we only use this method when writing on-the-fly since
+      // we cannot easily change the audioDecode fd while it's working
+      // which we would need to do since we write into several
+      // image files.
+      m_audioStreamer->writeToFd( m_writer->fd() );
+    }
+    else {
+      // startWriting() already did the cleanup
+      return;
+    }
+  }
+  else {
+    emit infoMessage( i18n("Creating image files in %1").arg(m_doc->tempDir()), INFO );
+    emit newTask( i18n("Creating image files") );
+  }
+  m_audioStreamer->start();
 }
 
 

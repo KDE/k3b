@@ -188,10 +188,14 @@ void K3bAudioBurnDialog::slotSaveUserDefaults()
 void K3bAudioBurnDialog::toggleAllOptions()
 {
   K3bProjectBurnDialog::toggleAllOptions();
-  if ( k3bcore->externalBinManager()->binObject("cdrecord") )
-  {
-  bool cdrecordOnTheFly = k3bcore->externalBinManager()->binObject("cdrecord")->version >= K3bVersion( 2, 1, -1, "a13" );
-  bool cdrecordCdText = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "cdtext" );
+
+  bool cdrecordOnTheFly = false;
+  bool cdrecordCdText = false;
+  if ( k3bcore->externalBinManager()->binObject("cdrecord") ) {
+    cdrecordOnTheFly = k3bcore->externalBinManager()->binObject("cdrecord")->version
+      >= K3bVersion( 2, 1, -1, "a13" );
+    cdrecordCdText = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "cdtext" );
+  }
 
   if( m_writingModeWidget->writingMode() == K3b::TAO ||
       m_writingModeWidget->writingMode() == K3b::RAW ||
@@ -215,17 +219,6 @@ void K3bAudioBurnDialog::toggleAllOptions()
 
   // we are not able to normalize in on-the-fly mode
   m_checkNormalize->setDisabled( m_checkOnTheFly->isChecked() && !m_checkOnlyCreateImage->isChecked() );
-  }
-  else
-  {
-      m_checkOnTheFly->setEnabled( false );
-      m_checkOnTheFly->setChecked( false );
-      m_checkHideFirstTrack->setChecked(false);
-      m_checkHideFirstTrack->setEnabled(false);
-      m_cdtextWidget->setEnabled( false );
-      m_cdtextWidget->setChecked(false);
-      m_checkNormalize->setDisabled( true );
-  }
 }
 
 #include "k3baudioburndialog.moc"

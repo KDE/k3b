@@ -29,16 +29,16 @@
 
 
 K3bBinImageWritingJob::K3bBinImageWritingJob( QObject* parent )
-        : K3bBurnJob( parent ),
-        m_device(0),
-        m_simulate(false),
-        m_burnproof(false),
-        m_force(false),
-        m_noFix(false),
-        m_tocFile(0),
-        m_speed(2),
-        m_copies(1),
-        m_writer(0)
+  : K3bBurnJob( parent ),
+    m_device(0),
+    m_simulate(false),
+    m_burnproof(false),
+    m_force(false),
+    m_noFix(false),
+    m_tocFile(0),
+    m_speed(2),
+    m_copies(1),
+    m_writer(0)
 {
 }
 
@@ -79,10 +79,10 @@ bool K3bBinImageWritingJob::prepareWriter()
 
 
   const K3bExternalBin* cdrecordBin = k3bcore->externalBinManager()->binObject("cdrecord");
-  if ( writingApp() == K3b::DEFAULT && cdrecordBin && cdrecordBin->hasFeature("cuefile") )
-        setWritingApp( K3b::CDRECORD );
+  if( writingApp() == K3b::DEFAULT && cdrecordBin && cdrecordBin->hasFeature("cuefile") )
+    setWritingApp( K3b::CDRECORD );
 
-  if ( writingApp() == K3b::CDRDAO || writingApp() == K3b::DEFAULT ) {
+  if( writingApp() == K3b::CDRDAO || writingApp() == K3b::DEFAULT ) {
     // create cdrdao job
     K3bCdrdaoWriter* writer = new K3bCdrdaoWriter( m_device, this );
     writer->setSimulate( m_simulate );

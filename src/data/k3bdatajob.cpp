@@ -343,7 +343,7 @@ void K3bDataJob::slotWriterJobFinished( bool success )
 
 bool K3bDataJob::prepareWriterJob()
 {
-    delete m_writerJob;
+  delete m_writerJob;
 
   // It seems as if cdrecord is not able to append sessions in dao mode whereas cdrdao is
   if( m_usedWritingApp == K3b::CDRECORD )  {
@@ -378,7 +378,8 @@ bool K3bDataJob::prepareWriterJob()
     if( m_usedDataMode == K3b::MODE1 )
       writer->addArgument( "-data" );
     else {
-      if( k3bcore->externalBinManager()->binObject("cdrecord") && k3bcore->externalBinManager()->binObject("cdrecord")->version >= K3bVersion( 2, 1, -1, "a12" ) )
+      if( k3bcore->externalBinManager()->binObject("cdrecord") && 
+	  k3bcore->externalBinManager()->binObject("cdrecord")->version >= K3bVersion( 2, 1, -1, "a12" ) )
 	writer->addArgument( "-xa" );
       else
 	writer->addArgument( "-xa1" );

@@ -318,45 +318,35 @@ void K3bMixedBurnDialog::slotSaveUserDefaults()
 void K3bMixedBurnDialog::toggleAllOptions()
 {
     K3bProjectBurnDialog::toggleAllOptions();
-    if ( k3bcore->externalBinManager()->binObject("cdrecord") )
-    {
-        bool cdrecordOnTheFly =
-            k3bcore->externalBinManager()->binObject("cdrecord")->version
-            >= K3bVersion( 2, 1, -1, "a13" );
-        bool cdrecordCdText =
-            k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "cdtext" );
 
-        if( m_writingModeWidget->writingMode() == K3b::TAO ||
-            m_writingModeWidget->writingMode() == K3b::RAW ||
-            m_writerSelectionWidget->writingApp() == K3b::CDRECORD ) {
-            m_checkOnTheFly->setEnabled( cdrecordOnTheFly && !m_checkNormalize->isChecked() );
-            if( !cdrecordOnTheFly || m_checkNormalize->isChecked() )
-                m_checkOnTheFly->setChecked( false );
+  bool cdrecordOnTheFly = false;
+  bool cdrecordCdText = false;
+  if ( k3bcore->externalBinManager()->binObject("cdrecord") ) {
+    cdrecordOnTheFly = k3bcore->externalBinManager()->binObject("cdrecord")->version
+      >= K3bVersion( 2, 1, -1, "a13" );
+    cdrecordCdText = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "cdtext" );
+  }
 
-            m_cdtextWidget->setEnabled( cdrecordCdText );
-            if( !cdrecordCdText )
-                m_cdtextWidget->setChecked( false );
-        }
-        else {
-            m_checkOnTheFly->setEnabled( !m_checkNormalize->isChecked() );
-            if( m_checkNormalize->isChecked() )
-                m_checkOnTheFly->setChecked( false );
-            m_cdtextWidget->setEnabled( true );
-        }
+  if( m_writingModeWidget->writingMode() == K3b::TAO ||
+      m_writingModeWidget->writingMode() == K3b::RAW ||
+      m_writerSelectionWidget->writingApp() == K3b::CDRECORD ) {
+    m_checkOnTheFly->setEnabled( cdrecordOnTheFly && !m_checkNormalize->isChecked() );
+    if( !cdrecordOnTheFly || m_checkNormalize->isChecked() )
+      m_checkOnTheFly->setChecked( false );
 
-        // we are not able to normalize in on-the-fly mode
-        m_checkNormalize->setDisabled( m_checkOnTheFly->isChecked() );
-    }
-    else
-    {
-        m_checkOnTheFly->setEnabled( false );
-        m_checkOnTheFly->setChecked( false );
+    m_cdtextWidget->setEnabled( cdrecordCdText );
+    if( !cdrecordCdText )
+      m_cdtextWidget->setChecked( false );
+  }
+  else {
+    m_checkOnTheFly->setEnabled( !m_checkNormalize->isChecked() );
+    if( m_checkNormalize->isChecked() )
+      m_checkOnTheFly->setChecked( false );
+    m_cdtextWidget->setEnabled( true );
+  }
 
-        m_cdtextWidget->setEnabled( false );
-        m_cdtextWidget->setChecked( false );
-
-        m_checkNormalize->setDisabled( false );
-    }
+  // we are not able to normalize in on-the-fly mode
+  m_checkNormalize->setDisabled( m_checkOnTheFly->isChecked() );
 }
 
 
