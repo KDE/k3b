@@ -16,7 +16,6 @@
 #include "k3baudiojobtempdata.h"
 #include "k3baudiodoc.h"
 #include "k3baudiotrack.h"
-#include "k3baudiotocfilewriter.h"
 #include <tools/k3bglobals.h>
 #include <tools/k3bversion.h>
 #include <device/k3bmsf.h>
