@@ -196,10 +196,11 @@ void K3bAudioMetainfoRenamerPluginDialog::slotStartClicked()
 //     }
 
     K3bDirItem* dir = 0;
-    if( d->checkCompleteDoc->isChecked() )
-      dir = d->doc->root();
+    K3bDataView* view = dynamic_cast<K3bDataView*>( d->doc->view() );
+    if( !d->checkCompleteDoc->isChecked() && view )
+      dir = view->currentDir();
     else
-      dir = ((K3bDataView*)d->doc->view())->currentDir();
+      dir = d->doc->root();
 
     // clear old searches
     d->viewFiles->clear();
