@@ -1,6 +1,9 @@
 0.11.15
-Fixed writer detection issues with kernel >= 2.6.8
+Fixed writer detection issues with kernel >= 2.6.8 (this only means that K3b now openes the device
+	read/write when issuing the MODE SELECT command. Nothing more. Tests with kernel 2.6.9-rc2
+	on my system still produced problems)
 Fixed Sox encoder plugin.
+Fixed editing range for audio track length.
 
 0.11.14
 QT 3.1 compile fix (I keep forgetting these...)
