@@ -246,7 +246,7 @@ void K3bCdDevice::DeviceHandler::customEvent( QCustomEvent* e )
       kdDebug() << "(K3bCdDevice::DeviceHandler) thread emitted finished. Waiting for thread actually finishing" << endl;
       kdDebug() << "(K3bCdDevice::DeviceHandler) success: " << m_thread->success << endl;
       // wait for the thread to finish
-      while( m_thread->running() );
+      m_thread->wait();
       kdDebug() << "(K3bCdDevice::DeviceHandler) deleting thread." << endl;
       deleteLater();
     }
