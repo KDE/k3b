@@ -282,7 +282,7 @@ void K3bAudioJob::cancelAll()
     // we need to unlock the writer because cdrdao/cdrecord locked it while writing
     bool block = m_doc->burner()->block( false );
     if( !block )
-      emit infoMessage( i18n("Could not unlock cd drive."), K3bJob::ERROR );
+      emit infoMessage( i18n("Could not unlock CD drive."), K3bJob::ERROR );
     else
       m_doc->burner()->eject();
   }

@@ -172,8 +172,8 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
 					"an exact copy.") );
   QWhatsThis::add( m_checkSimulate, i18n("<p>If this option is checked K3b will perform all writing steps with the "
 					 "laser turned off."
-					 "<p>This is useful for example to test a higher writing speed "
-					 " or if your system is able to write on-the-fly.") );
+					 "<p>This is useful, for example, to test a higher writing speed "
+					 "or if your system is able to write on-the-fly.") );
   QWhatsThis::add( m_checkOnTheFly, i18n("<p>If this option is checked K3b will copy directly from the reading drive to the "
 					 "writer without creating an image first."
 					 "<p><b>Caution:</b> This may result in buffer underruns on slow systems. "

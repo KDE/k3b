@@ -85,13 +85,13 @@ K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( QWidget* parent, const char*
   // --------------------------------------------------------------------------------
   QWhatsThis::add( m_checkDummy, i18n("<p>If this option is checked K3b will perform all writing steps with the "
 				      "laser turned off."
-				      "<p>This is useful for example to test a higher writing speed "
-				      " or if your system is able to write on-the-fly.") );
-  QWhatsThis::add( m_checkDao, i18n("<p>If this option is checked K3b will write the cd in disk at once mode as "
-				    "compared to track at once (TAO)."
+				      "<p>This is useful, for example, to test a higher writing speed "
+				      "or if your system is able to write on-the-fly.") );
+  QWhatsThis::add( m_checkDao, i18n("<p>If this option is checked K3b will write the CD in 'disk at once' mode as "
+				    "compared to 'track at once' (TAO)."
 				    "<p>It is always recommended to use DAO where possible."
-				    "<p><b>Caution:</b> Only in DAO mode track pregaps other than 2 seconds are "
-				    "supported.") );
+				    "<p><b>Caution:</b> Track pregaps other than 2 seconds long are only supported "
+				    "in DAO mode.") );
   QWhatsThis::add( m_checkBurnProof, i18n("<p>If this option is checked K3b enables <em>BURN-PROOF</em>. This is "
 					  "a feature of the cd writer which avoids buffer underruns.") );
   QWhatsThis::add( m_checkUseCueFile, i18n("") );

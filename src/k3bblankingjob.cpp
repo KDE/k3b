@@ -126,7 +126,7 @@ void K3bBlankingJob::cancel()
     // we need to unlock the writer because cdrecord locked it while writing
     bool block = m_device->block( false );
     if( !block )
-      emit infoMessage( i18n("Could not unlock cd drive."), K3bJob::ERROR );
+      emit infoMessage( i18n("Could not unlock CD drive."), K3bJob::ERROR );
     //    else if( k3bMain()->eject() )
     // m_device->eject();
 

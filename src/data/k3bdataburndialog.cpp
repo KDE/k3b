@@ -382,10 +382,10 @@ void K3bDataBurnDialog::setupBurnTab( QFrame* frame )
   // -------------------------------------------------------------------------
   QWhatsThis::add( m_checkDummy, i18n("<p>If this option is checked K3b will perform all writing steps with the "
 				      "laser turned off."
-				      "<p>This is useful for example to test a higher writing speed "
-				      " or if your system is able to write on-the-fly.") );
+				      "<p>This is useful, for example, to test a higher writing speed "
+				      "or if your system is able to write on-the-fly.") );
   QWhatsThis::add( m_checkOnTheFly, i18n("<p>If this option is checked K3b will not create an image first but write "
-					 "the files directly to the cd."
+					 "the files directly to the CD."
 					 "<p><b>Caution:</b> Although this should work on most systems make sure "
 					 "the data is send to the writer fast enough.")
 					 + i18n("<p>It is recommended to try a simulation first.") );
@@ -396,11 +396,11 @@ void K3bDataBurnDialog::setupBurnTab( QFrame* frame )
   QWhatsThis::add( m_checkDeleteImage, i18n("<p>If this option is checked K3b will remove any created images after the "
 					    "writing has finished."
 					    "<p>Uncheck this if you want to keep the images.") );
-  QWhatsThis::add( m_checkDao, i18n("<p>If this option is checked K3b will write the cd in disk at once mode as "
-				    "compared to track at once (TAO)."
+  QWhatsThis::add( m_checkDao, i18n("<p>If this option is checked K3b will write the CD in 'disk at once' mode as "
+				    "compared to 'track at once' (TAO)."
 				    "<p>It is always recommended to use DAO where possible."
-				    "<p><b>Caution:</b> Only in DAO mode track pregaps other than 2 seconds are "
-				    "supported.") );
+				    "<p><b>Caution:</b> Track pregaps other than 2 seconds long are only supported "
+				    "in DAO mode.") );
   QWhatsThis::add( m_checkBurnProof, i18n("<p>If this option is checked K3b enables <em>BURN-PROOF</em>. This is "
 					  "a feature of the cd writer which avoids buffer underruns.") );
 }

@@ -91,10 +91,10 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
 
   // ToolTips
   // -------------------------------------------------------------------------
-  QToolTip::add( m_checkCdText, i18n("Create CD TEXT entries") );
-  QToolTip::add( m_checkDao, i18n("Write in disk at once mode") );
+  QToolTip::add( m_checkCdText, i18n("Create CD-TEXT entries") );
+  QToolTip::add( m_checkDao, i18n("Write in 'disk at once' mode") );
   QToolTip::add( m_checkOnTheFly, i18n("Decode audio files while writing") );
-  QToolTip::add( m_checkSimulate, i18n("Only simulate the writing processOnly simulate the writing process") );
+  QToolTip::add( m_checkSimulate, i18n("Only simulate the writing process") );
   QToolTip::add( m_checkHideFirstTrack, i18n("Hide the first track in the first pregap") );
   QToolTip::add( m_checkRemoveBufferFiles, i18n("Remove images from harddisk when finished") );
   QToolTip::add( m_editDisc_id, i18n("CD-TEXT information field") );
@@ -108,33 +108,33 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
   // What's This info
   // -------------------------------------------------------------------------
   QWhatsThis::add( m_checkCdText, i18n("<p>If this option is checked K3b uses some otherwise unused space on the audio "
-				       "cd to store additional information like the artist or the cd title."
-				       "<p>CD-TEXT is an extension to the audio cd standard introduced by Sony."
-				       "<p>CD-TEXT will only be usable on cd players that support this extension "
-				       "(mostly car cd player)."
-				       "<p>Since a CD-TEXT enhanced cd will work in any cd player it is never a bad "
+				       "CD to store additional information, like the artist or the CD title."
+				       "<p>CD-TEXT is an extension to the audio CD standard introduced by Sony."
+				       "<p>CD-TEXT will only be usable on CD players that support this extension "
+				       "(mostly car CD players)."
+				       "<p>Since a CD-TEXT enhanced CD will work in any CD player it is never a bad "
 				       "idea to enable this (if you specified the data).") );
-  QWhatsThis::add( m_checkDao, i18n("<p>If this option is checked K3b will write the cd in disk at once mode as "
-				    "compared to track at once (TAO)."
+  QWhatsThis::add( m_checkDao, i18n("<p>If this option is checked K3b will write the CD in 'disk at once mode' as "
+				    "compared to 'track at once' (TAO)."
 				    "<p>It is always recommended to use DAO where possible."
-				    "<p><b>Caution:</b> Only in DAO mode track pregaps other than 2 seconds are "
-				    "supported.") );
+				    "<p><b>Caution:</b> Track pregaps other than 2 seconds long are only supported "
+				    "in DAO mode.") );
   QWhatsThis::add( m_checkOnTheFly, i18n("<p>If this option is checked K3b will decode the audio files in memory "
 					 "while writing. This saves space on the harddisk and time."
 					 "<p><b>Caution:</b> Make sure your system is able to decode the files fast enough "
 					 "to avoid buffer underruns.")
 					 + i18n("<p>It is recommended to try a simulation first.") );
-  QWhatsThis::add( m_checkSimulate, i18n("<p>If this option is checked K3b will perform all writing steps with the "
+  QWhatsThis::add( m_checkSimulate, i18n("<p>If this option is checked, K3b will perform all writing steps with the "
 					 "laser turned off."
-					 "<p>This is useful for example to test a higher writing speed "
-					 " or if your system is able to write on-the-fly.") );
+					 "<p>This is useful, for example, to test a higher writing speed "
+					 "or if your system is able to write on-the-fly.") );
   QWhatsThis::add( m_checkHideFirstTrack, i18n("<p>If this option is checked K3b will <em>hide</em> the first track."
-					       "<p>The audio cd standard uses pregaps before every track on the cd. "
-					       "By default these last for 2 seconds and are still. Anyway in DAO mode it "
+					       "<p>The audio CD standard uses pregaps before every track on the CD. "
+					       "By default these last for 2 seconds and are silent. In DAO mode it "
 					       "is possible to have longer pregaps that contain some audio. In this case "
 					       "the first pregap will contain the complete first track."
-					       "<p>You will need to seek back from the beginning of the cd to listen to "
-					       "the first track. Try it, it's a funny thing! ;-)") );
+					       "<p>You will need to seek back from the beginning of the CD to listen to "
+					       "the first track. Try it, it's quite amusing!") );
   QWhatsThis::add( m_checkRemoveBufferFiles, i18n("<p>If this option is checked K3b will remove any created images after the "
 						  "writing has finished."
 						  "<p>Uncheck this if you want to keep the images.") );
@@ -322,7 +322,7 @@ void K3bAudioBurnDialog::slotOk()
 {
   // check if enough space in tempdir if not on-the-fly
   if( !m_checkOnTheFly->isChecked() && doc()->size()/1024 > m_tempDirSelectionWidget->freeTempSpace() )
-    KMessageBox::sorry( this, i18n("Not enough space in temp directory.") );
+    KMessageBox::sorry( this, i18n("Not enough space in temporary directory.") );
   else
     K3bProjectBurnDialog::slotOk();
 }
