@@ -111,11 +111,11 @@ bool K3bSetup::saveConfig()
 
 
   if( m_applyDevicePermissions )
-    applyDevicePermissions();
+    doApplyDevicePermissions();
   if( m_applyExternalBinPermission )
-    applyExternalProgramPermissions();
+    doApplyExternalProgramPermissions();
   if( m_createFstabEntries )
-    createFstabEntries();
+    doCreateFstabEntries();
 
   m_config->sync();
 
@@ -229,7 +229,7 @@ uint K3bSetup::createCdWritingGroup()
 }
 
 
-void K3bSetup::applyDevicePermissions()
+void K3bSetup::doApplyDevicePermissions()
 {
   uint groupId = createCdWritingGroup();
 
@@ -261,7 +261,7 @@ void K3bSetup::applyDevicePermissions()
 }
 
 
-void K3bSetup::applyExternalProgramPermissions()
+void K3bSetup::doApplyExternalProgramPermissions()
 {
   uint groupId = createCdWritingGroup();
 
@@ -287,7 +287,7 @@ void K3bSetup::applyExternalProgramPermissions()
 }
 
 
-void K3bSetup::createFstabEntries()
+void K3bSetup::doCreateFstabEntries()
 {
   qDebug("(K3bSetup) creating new /etc/fstab");
   qDebug("(K3bSetup) saving backup to /etc/fstab.k3bsetup");

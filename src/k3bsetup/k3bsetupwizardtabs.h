@@ -140,7 +140,6 @@ class PermissionTab : public K3bSetupTab
   QPushButton* m_buttonAddUser;
   QCheckBox*   m_checkPermissionsDevices;
   QCheckBox*   m_checkPermissionsExternalPrograms;
-  QLabel*      m_labelPermissions2;
   QPushButton* m_buttonPermissionsDetails;
   QGroupBox*   m_groupWriterGroup;
   QLineEdit*   m_editPermissionsGroup;
@@ -153,6 +152,14 @@ class FinishTab : public K3bSetupTab
 
  public:
   FinishTab( int, int, K3bSetupWizard* );
+
+  /* used to update info ;-) */
+  bool appropriate();
+
+ private:
+  void updateChangesView();
+
+  KListView* m_viewChanges;
 };
 
 #endif

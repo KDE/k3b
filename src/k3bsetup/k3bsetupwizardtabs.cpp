@@ -42,15 +42,15 @@ WelcomeTab::WelcomeTab( int i, int o, K3bSetupWizard* wizard )
   : K3bSetupTab( i, o, i18n("Welcome to K3bSetup"), wizard )
 {
   QLabel* label = new QLabel( this, "m_labelWelcome" );
-  label->setText( i18n( "Welcome to K3b Setup. This Wizard will help you to prepare your system for cd writing with K3b.\n"
+  label->setText( i18n( "<h1>Welcome to K3b Setup.</h1>"
+			"<p>This Wizard will help you to prepare your system for cd writing with K3b. "
 			"First of all: DO NOT fear linux permissions anymore. K3b Setup takes care of nearly everything."
 			" So if you are new to linux and know nothing about things like suid root don't panic!"
-			" Just click next.\n"
-			"If you know what is needed to write cds under linux and think you do not need a wizard like this"
+			" Just click next.</p>"
+			"<p>If you know what is needed to write cds under linux and think you do not need a wizard like this"
 			" please do not exit since there are some things special to K3b and K3b Setup will not change anything"
-			" on your system before you finished the setup.\n"
-			"\n"
-			"Thanx for using K3b." ) );
+			" on your system before you finished the setup.</p>"
+			"<p><b>Thanx for using K3b.</b></p>" ) );
   label->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter ) );
 
   setMainWidget( label );
@@ -71,29 +71,26 @@ DeviceTab::DeviceTab( int i, int o, K3bSetupWizard* wizard )
   QWidget* main = new QWidget( this );
   QGridLayout* mainGrid = new QGridLayout( main );
   mainGrid->setSpacing( KDialog::spacingHint() );
-  mainGrid->setMargin( KDialog::marginHint() );
+  mainGrid->setMargin( 0 );
 
   m_buttonAddDevice = new QPushButton( i18n( "Add device" ), main, "m_buttonAddDevice" );
 
   m_labelSetupDrives = new QLabel( main, "m_labelSetupDrives" );
-  m_labelSetupDrives->setText( i18n( "K3b Setup has detected the following CD drives. It tries hard to detect capabilities like the"
-				     " maximum read and write speed but does sometimes fail.\n"
-				     "Please check if all capabilities are detected correctly and change them manually if not"
-				     " by clicking twice on the value you want to change.\n"
-				     "You can add additional devices (like /dev/cdrom) if your drive has not been detected." ) );
+  m_labelSetupDrives->setText( i18n( "<p>K3b Setup has detected the following CD drives. It tries hard to detect "
+				     "capabilities like the maximum read and write speed but does sometimes fail.</p>"
+				     "<p>Please check if all capabilities are detected correctly and change them "
+				     "manually if not by clicking twice on the value you want to change.</p>"
+				     "<p>You can add additional devices (like /dev/cdrom) if your drive has not "
+				     "been detected.</p>" ) );
   m_labelSetupDrives->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
 
 
   QGroupBox* groupReader = new QGroupBox( i18n("Reading devices"), main );
-  groupReader->setColumnLayout(0, Qt::Vertical );
-  groupReader->layout()->setSpacing( 0 );
-  groupReader->layout()->setMargin( 0 );
-  QHBoxLayout* groupReaderLayout = new QHBoxLayout( groupReader->layout() );
-  groupReaderLayout->setSpacing( KDialog::spacingHint() );
-  groupReaderLayout->setMargin( KDialog::marginHint() );
+  groupReader->setColumnLayout(1, Qt::Vertical );
+  groupReader->layout()->setSpacing( KDialog::spacingHint() );
+  groupReader->layout()->setMargin( KDialog::marginHint() );
 
   m_viewSetupReader = new KListView( groupReader, "m_viewSetupReader" );
-  groupReaderLayout->addWidget( m_viewSetupReader );
   m_viewSetupReader->addColumn( i18n( "system device" ) );
   m_viewSetupReader->addColumn( i18n( "value" ) );
   m_viewSetupReader->header()->hide();
@@ -106,15 +103,11 @@ DeviceTab::DeviceTab( int i, int o, K3bSetupWizard* wizard )
 
 
   QGroupBox* groupWriter = new QGroupBox( i18n("Writing devices"), main );
-  groupWriter->setColumnLayout(0, Qt::Vertical );
-  groupWriter->layout()->setSpacing( 0 );
-  groupWriter->layout()->setMargin( 0 );
-  QHBoxLayout* groupWriterLayout = new QHBoxLayout( groupWriter->layout() );
-  groupWriterLayout->setSpacing( KDialog::spacingHint() );
-  groupWriterLayout->setMargin( KDialog::marginHint() );
+  groupWriter->setColumnLayout(1, Qt::Vertical );
+  groupWriter->layout()->setSpacing( KDialog::spacingHint() );
+  groupWriter->layout()->setMargin( KDialog::marginHint() );
 
   m_viewSetupWriter = new KListView( groupWriter, "m_viewSetupWriter" );
-  groupWriterLayout->addWidget( m_viewSetupWriter );
   m_viewSetupWriter->addColumn( i18n( "system device" ) );
   m_viewSetupWriter->addColumn( i18n( "value" ) );
   m_viewSetupWriter->header()->hide();
@@ -222,7 +215,12 @@ void DeviceTab::readSettings()
 
 bool DeviceTab::saveSettings()
 {
-  // for now all changes are made in the slots
+  if( setup()->deviceManager()->allDevices().isEmpty() )
+    if( KMessageBox::warningYesNo( this, i18n("K3b Setup did not find any cd devices on your system. "
+					      "K3b is not of much use without any. Do you really want to continue?"),
+				   i18n("Missing cd devices") ) == KMessageBox::No )
+      return false;
+
   return true;
 }
 
@@ -339,11 +337,13 @@ FstabEntriesTab::FstabEntriesTab( int i, int o, K3bSetupWizard* wizard )
   QWidget* main = new QWidget( this, "main" );
   QGridLayout* mainGrid = new QGridLayout( main ); 
   mainGrid->setSpacing( KDialog::spacingHint() );
-  mainGrid->setMargin( KDialog::marginHint() );
+  mainGrid->setMargin( 0 );
 
   m_labelFstab = new QLabel( main );
-  m_labelFstab->setText( i18n( "K3b Setup can create entries in /etc/fstab for each of the detected cd drives.\n"
-			       "Every user and especially K3b  will then be able to mount the devices." ) );
+  m_labelFstab->setText( i18n( "<p>On Linux cd devices are mounted into the file tree. Normally only root has "
+			       "permission to mount drives. K3b Setup can create entries in /etc/fstab for each of "
+			       "the detected cd drives. Every user and especially K3b will then be able to mount "
+			       "the devices on the given path.</p>" ) );
   m_labelFstab->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
 
   m_viewFstab = new KListView( main, "m_viewFstab" );
@@ -481,14 +481,14 @@ ExternalBinTab::ExternalBinTab( int i, int o, K3bSetupWizard* wizard )
   QWidget* main = new QWidget( this, "m_page5" );
   QGridLayout* mainGrid = new QGridLayout( main ); 
   mainGrid->setSpacing( KDialog::spacingHint() );
-  mainGrid->setMargin( KDialog::marginHint() );
+  mainGrid->setMargin( 0 );
 
   m_labelExternalPrograms = new QLabel( main, "m_labelExternalPrograms" );
-  m_labelExternalPrograms->setText( i18n( "K3b uses cdrdao, cdrecord and mkisofs to actually write the cds.\n"
+  m_labelExternalPrograms->setText( i18n( "<p>K3b uses cdrdao, cdrecord and mkisofs to actually write the cds. "
 					  "It is recommended to install these programs. K3b will run without them but major"
-					  " functions (for example cd writing ;-) will be disabled.\n"
-					  "K3b Setup tries to find the executables. You can change the paths manually if you"
-					  " want other versions to be used or K3b Setup did not find your installation." ) );
+					  " functions (for example cd writing ;-) will be disabled.</p>"
+					  "<p>K3b Setup tries to find the executables. You can change the paths manually if you"
+					  " want other versions to be used or K3b Setup did not find your installation.</p>" ) );
   m_labelExternalPrograms->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
 
   m_viewExternalPrograms = new KListView( main, "m_viewExternalPrograms" );
@@ -547,7 +547,7 @@ void ExternalBinTab::readSettings()
 
 bool ExternalBinTab::saveSettings()
 {
-  // for now all changes are made in the slots
+  // TODO: perhaps warn if no cd writing prog was found AND a cd writer was found
   return true;
 }
 
@@ -595,22 +595,27 @@ PermissionTab::PermissionTab( int i, int o, K3bSetupWizard* wizard )
   QWidget* main = new QWidget( this, "main" );
   QGridLayout* mainGrid = new QGridLayout( main ); 
   mainGrid->setSpacing( KDialog::spacingHint() );
-  mainGrid->setMargin( KDialog::marginHint() );
+  mainGrid->setMargin( 0 );
 
   m_labelPermissions1 = new QLabel( main, "m_labelPermissions1" );
-  m_labelPermissions1->setText( i18n( "The external programs need to be run as root since they need write access to the cd drives"
-				      " and run with higher priority. K3b also needs write access to the cd drives (for functions"
-				      " like detecting the capacity of a cd).\n"
-				      "If you know what you are doing you can skip this and setup the permissions for yourself.\n"
-				      "To learn more about what K3b Setup will do press \"Details\"." ) );
+  m_labelPermissions1->setText( i18n( "<p>The external programs need to be run as root since they need write access to "
+				      "the cd drives and run with higher priority. K3b also needs write access to the "
+				      "cd drives (for extended functionality like detecting the capacity of a cd).</p>"
+				      "<p>If you know what you are doing you can skip this and setup the permissions "
+				      "for yourself. But it is recommended to let K3bSetup make the changes "
+				      "(To learn more about what K3b Setup will do press <i>Details</i>).</p>"
+				      "<p>Please specify the users that will use K3b. You can also specify an alternative "
+				      "group name. If you do not know what that means just leave the default.</p>" ) );
   m_labelPermissions1->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
 
   m_groupUsers = new QGroupBox( main, "m_groupUsers" );
   m_groupUsers->setTitle( i18n( "K3b users" ) );
   m_groupUsers->setColumnLayout(0, Qt::Vertical );
-  m_groupUsers->layout()->setSpacing( 6 );
-  m_groupUsers->layout()->setMargin( 11 );
+  m_groupUsers->layout()->setSpacing( 0 );
+  m_groupUsers->layout()->setMargin( 0 );
   QGridLayout* groupUsersLayout = new QGridLayout( m_groupUsers->layout() );
+  groupUsersLayout->setSpacing( KDialog::spacingHint() );
+  groupUsersLayout->layout()->setMargin( KDialog::marginHint() );
   groupUsersLayout->setAlignment( Qt::AlignTop );
 
   m_boxUsers = new QListBox( m_groupUsers, "m_boxUsers" );
@@ -636,11 +641,6 @@ PermissionTab::PermissionTab( int i, int o, K3bSetupWizard* wizard )
 //   Line1->setFrameShadow( QFrame::Sunken );
 //   Line1->setFrameShape( QFrame::HLine );
 
-  m_labelPermissions2 = new QLabel( main, "m_labelPermissions2" );
-  m_labelPermissions2->setText( i18n( "Please specify the users that will use K3b. You can also specify an alternative group name."
-				      " If you do not know what that means just leave the default." ) );
-  m_labelPermissions2->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
-
   QVBoxLayout* Layout1 = new QVBoxLayout( 0, 0, 6, "Layout1"); 
   QSpacerItem* spacer_3 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
   Layout1->addItem( spacer_3 );
@@ -651,25 +651,21 @@ PermissionTab::PermissionTab( int i, int o, K3bSetupWizard* wizard )
 
   m_groupWriterGroup = new QGroupBox( main, "m_groupWriterGroup" );
   m_groupWriterGroup->setTitle( i18n( "cd writing group" ) );
-  m_groupWriterGroup->setColumnLayout(0, Qt::Vertical );
-  m_groupWriterGroup->layout()->setSpacing( 6 );
-  m_groupWriterGroup->layout()->setMargin( 11 );
-  QHBoxLayout* groupWriterGroupLayout = new QHBoxLayout( m_groupWriterGroup->layout() );
-  groupWriterGroupLayout->setAlignment( Qt::AlignTop );
+  m_groupWriterGroup->setColumnLayout(1, Qt::Vertical );
+  m_groupWriterGroup->layout()->setSpacing( KDialog::spacingHint() );
+  m_groupWriterGroup->layout()->setMargin( KDialog::marginHint() );
 
   m_editPermissionsGroup = new QLineEdit( m_groupWriterGroup, "LineEdit1" );
   m_editPermissionsGroup->setText( "cdrecording" );
-  groupWriterGroupLayout->addWidget( m_editPermissionsGroup );
 
 
   mainGrid->addMultiCellWidget( m_labelPermissions1, 0, 0, 0, 1 );
-  mainGrid->addMultiCellWidget( m_labelPermissions2, 1, 1, 0, 1 );
-  mainGrid->addMultiCellWidget( m_groupWriterGroup, 3, 3, 0, 1 );
-  mainGrid->addMultiCellWidget( m_groupUsers, 2, 2, 0, 1 );
-  mainGrid->addWidget( m_checkPermissionsDevices, 6, 0 );
-  mainGrid->addWidget( m_checkPermissionsExternalPrograms, 5, 0 );
-  //  mainGrid->addMultiCellWidget( Line1, 4, 4, 0, 1 );
-  mainGrid->addMultiCellLayout( Layout1, 5, 6, 1, 1 );
+  mainGrid->addMultiCellWidget( m_groupWriterGroup, 2, 2, 0, 1 );
+  mainGrid->addMultiCellWidget( m_groupUsers, 1, 1, 0, 1 );
+  mainGrid->addWidget( m_checkPermissionsDevices, 5, 0 );
+  mainGrid->addWidget( m_checkPermissionsExternalPrograms, 4, 0 );
+  //  mainGrid->addMultiCellWidget( Line1, 3, 3, 0, 1 );
+  mainGrid->addMultiCellLayout( Layout1, 4, 5, 1, 1 );
 
   mainGrid->setColStretch( 0, 1 );
 
@@ -694,8 +690,7 @@ void PermissionTab::readSettings()
 
 bool PermissionTab::saveSettings()
 {
-  if( !m_editPermissionsGroup->text().isEmpty() )
-    setup()->setCdWritingGroup( m_editPermissionsGroup->text() );
+  setup()->setCdWritingGroup( m_editPermissionsGroup->text() );
 
   setup()->clearUsers();
 
@@ -703,12 +698,26 @@ bool PermissionTab::saveSettings()
     setup()->addUser( m_boxUsers->item(i)->text() );
   }
 
-  if( m_checkPermissionsDevices->isChecked() )
-    setup()->setApplyDevicePermissions(true);
-  if( m_checkPermissionsExternalPrograms->isChecked() )
-    setup()->setApplyExternalBinPermissions(true);
+  setup()->setApplyDevicePermissions( m_checkPermissionsDevices->isChecked() );
+  setup()->setApplyExternalBinPermissions( m_checkPermissionsExternalPrograms->isChecked() );
 
-  // TODO: display some warning with don't show me again
+  if( ( m_checkPermissionsExternalPrograms->isChecked() || m_checkPermissionsDevices->isChecked() )
+      && m_editPermissionsGroup->text().isEmpty() ) {
+    KMessageBox::error( this, i18n("Please specify a cd writing group."), i18n("Missing group name") );
+    return false;
+  }
+
+  if( m_boxUsers->count() == 0 && m_checkPermissionsExternalPrograms->isChecked() )
+    if( KMessageBox::warningYesNo( this, i18n("You specified no users. Only root will be able to write cds. Continue?") )
+	== KMessageBox::No )
+      return false;
+
+  if( !m_checkPermissionsDevices->isChecked() && !setup()->deviceManager()->allDevices().isEmpty() )
+    if( KMessageBox::warningYesNo( this, i18n("You chose not to change device permissions. K3b will not be able "
+					       "to provide extended features like detection of writer capabilities. "
+					      "Continue?") ) 
+	== KMessageBox::No )
+      return false;
 
   return true;
 }
@@ -790,15 +799,65 @@ void PermissionTab::slotPermissionsDetails()
 FinishTab::FinishTab( int i, int o, K3bSetupWizard* wizard )
   : K3bSetupTab( i, o, i18n("Save your settings"), wizard )
 {
-  QLabel* finishedLabel = new QLabel( this, "finishedLabel" );
-  finishedLabel->setText( i18n("<b>Congratulations.</b><p>"
-			       "You finished the K3b Setup. Just press the Finish button to save your changes and then enjoy "
-			       "the new ease of cd writing with Linux/KDE.") );
+  QWidget* main = new QWidget( this );
+  QGridLayout* mainGrid = new QGridLayout( main );
+  mainGrid->setSpacing( KDialog::spacingHint() );
+  mainGrid->setMargin( 0 );
 
+  QLabel* finishedLabel = new QLabel( main, "finishedLabel" );
+  finishedLabel->setText( i18n("<h1>Congratulations.</h1>"
+			       "<p>You completed the K3b Setup. Just press the Finish button to save your changes "
+			       "and then enjoy the new ease of cd writing with Linux/KDE.</p>") );
+  finishedLabel->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
 
-  setMainWidget( finishedLabel );
+  QGroupBox* groupChanges = new QGroupBox( i18n("Changes"), main );
+  groupChanges->setColumnLayout( 1, Qt::Vertical );
+  groupChanges->layout()->setSpacing( KDialog::spacingHint() );
+  groupChanges->layout()->setMargin( KDialog::marginHint() );
+
+  m_viewChanges = new KListView( groupChanges );
+  m_viewChanges->addColumn( i18n("Setting") );
+  m_viewChanges->addColumn( i18n("Value") );
+  m_viewChanges->setRootIsDecorated( true );
+  m_viewChanges->setSorting( -1 );
+  m_viewChanges->header()->hide();
+
+  mainGrid->addWidget( finishedLabel, 0, 0 );
+  mainGrid->addWidget( groupChanges, 1, 0 );
+  mainGrid->setRowStretch( 1, 1 );
+
+  setMainWidget( main );
 }
 
+
+bool FinishTab::appropriate()
+{
+  // OK, this is really a hack, but it's kind of a beautiful one ;-)
+  updateChangesView();
+
+  return true;
+}
+
+
+void FinishTab::updateChangesView()
+{
+  m_viewChanges->clear();
+
+  KListViewItem* settingsRootItem = new KListViewItem( m_viewChanges, i18n("Settings") );
+  KListViewItem* settingsItem;
+
+  settingsItem = new KListViewItem( settingsRootItem, i18n("Create fstab entries for all cd devices") );
+  settingsItem->setPixmap( 1, (setup()->createFstabEntries() ? SmallIcon("apply") : SmallIcon("cancel")) );
+
+  settingsItem = new KListViewItem( settingsRootItem, i18n("Change permissions for all cd devices") );
+  settingsItem->setPixmap( 1, (setup()->applyDevicePermissions() ? SmallIcon("apply") : SmallIcon("cancel")) );
+
+  settingsItem = new KListViewItem( settingsRootItem, i18n("Change permissions for external programs") );
+  settingsItem->setPixmap( 1, (setup()->applyExternalProgramPermissions() ? SmallIcon("apply") : SmallIcon("cancel")) );
+  
+  settingsRootItem->setOpen( true );
+
+}
 
 // ========================================================================================================== FINISH-TAB ==
 

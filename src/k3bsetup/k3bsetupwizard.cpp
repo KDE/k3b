@@ -67,6 +67,14 @@ bool K3bSetupWizard::appropriate( QWidget* page ) const
 }
 
 
+void K3bSetupWizard::next()
+{
+  K3bSetupTab* currentTab = (K3bSetupTab*)currentPage();
+  if( currentTab->saveSettings() )
+    KWizard::next();
+}
+
+
 void K3bSetupWizard::accept()
 {
   m_setup->saveConfig();

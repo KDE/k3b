@@ -46,6 +46,10 @@ class K3bSetup : public QObject
   void setApplyExternalBinPermissions( bool b ) { m_applyExternalBinPermission = b; }
   void setCreateFstabEntries( bool b ) { m_createFstabEntries = b; }
 
+  bool applyExternalProgramPermissions() const { return m_applyExternalBinPermission; }
+  bool applyDevicePermissions() const { return m_applyDevicePermissions; }
+  bool createFstabEntries() const { return m_createFstabEntries; }
+
   void setCdWritingGroup( const QString& );
   void addUser( const QString& );
   void clearUsers();
@@ -58,9 +62,9 @@ class K3bSetup : public QObject
 
  private:
   uint createCdWritingGroup();
-  void applyExternalProgramPermissions();
-  void applyDevicePermissions();
-  void createFstabEntries();
+  void doApplyExternalProgramPermissions();
+  void doApplyDevicePermissions();
+  void doCreateFstabEntries();
 
   QString m_cdwritingGroup;
   QStringList m_userList;

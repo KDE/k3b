@@ -31,6 +31,7 @@ class K3bSetupWizard : public KWizard
 
  protected slots:
   void accept();
+  void next();
 
  protected:
   void closeEvent( QCloseEvent* );
