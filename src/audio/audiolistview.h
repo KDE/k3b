@@ -22,6 +22,7 @@
 #include <klistview.h>
 
 class QDragEnterEvent;
+class QDragObject;
 class QTimer;
 
 
@@ -41,6 +42,9 @@ class K3bAudioListView : public KListView
    */
   void insertItem( QListViewItem* );
 
+ signals:
+  void lengthReady();
+
  private:
   void setupColumns();
 
@@ -51,6 +55,7 @@ class K3bAudioListView : public KListView
 
  protected:
   bool acceptDrag(QDropEvent* e) const;
+  QDragObject* dragObject();
 };
 
 #endif

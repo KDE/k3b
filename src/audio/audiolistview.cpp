@@ -25,6 +25,8 @@
 #include <qtimer.h>
 
 #include <kiconloader.h>
+#include <kurl.h>
+#include <kurldrag.h>
 
 
 K3bAudioListView::K3bAudioListView(QWidget *parent, const char *name )
@@ -67,6 +69,23 @@ bool K3bAudioListView::acceptDrag(QDropEvent* e) const
 {
   // the first is for built-in item moving, the second for dropping urls
   return ( KListView::acceptDrag(e) || QUriDrag::canDecode(e) );
+}
+
+
+QDragObject* K3bAudioListView::dragObject()
+{
+  QPtrList<QListViewItem> list = selectedItems();
+
+  if( list.isEmpty() )
+    return 0;
+
+  QPtrListIterator<QListViewItem> it(list);
+  KURL::List urls;
+	
+  for( ; it.current(); ++it )
+    urls.append( KURL( ((K3bAudioListViewItem*)it.current())->audioTrack()->absPath() ) );
+
+  return KURLDrag::newDrag( urls, viewport() );
 }
 
 
@@ -125,8 +144,10 @@ void K3bAudioListView::slotAnimation()
       }
     }
 
-  if( !animate )
+  if( !animate ) {
     m_animationTimer->stop();
+    emit lengthReady();
+  }
 }
 
 

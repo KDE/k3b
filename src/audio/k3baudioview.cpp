@@ -71,6 +71,7 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
 	   this, SLOT(slotDropped(KListView*, QDropEvent*, QListViewItem*)) );
   connect( m_songlist, SIGNAL(moved( QPtrList<QListViewItem>&, QList<QListViewItem>&, QList<QListViewItem>& )),
 	   this, SLOT(slotItemsMoved( QPtrList<QListViewItem>&, QList<QListViewItem>&, QList<QListViewItem>& )) );
+  connect( m_songlist, SIGNAL(lengthReady()), m_fillStatusDisplay, SLOT(update()) );
 	
   connect( m_songlist, SIGNAL(rightButtonClicked(QListViewItem*, const QPoint&, int)),
 	   this, SLOT(showPopupMenu(QListViewItem*, const QPoint&)) );
