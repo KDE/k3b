@@ -32,7 +32,8 @@ bool K3bExceptions::brokenDaoAudio( K3bCdDevice::CdDevice* dev )
 
   if( dev->vendor().upper().startsWith("LITE-ON") )
     if( dev->description().upper().startsWith("LTR-32123S") ||
-	dev->description().upper().startsWith("LTR-40125S") )
+	dev->description().upper().startsWith("LTR-40125S") ||
+	dev->description().upper().contains("LTC-48161H") )
     return true;
 
   return false;
