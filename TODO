@@ -1,10 +1,13 @@
 - audio ripping to mp3 (ogg)
-- audio normalize
 - video cd Mpeg Stills, photoalbum, portfolio
 - video cd Interactive Menues (automenues)
 * video cd Navigation
 - make audio decoding pluggable
-- udf support
+* udf support
+- audio cd copy with cdda2wav & cdrecord
+- data cd copy with readcd & cdrecord
+* cd cloning with cdrecord-ProDVD
+- DVD writing with dvdrecord
 
 legend:
 - planned
