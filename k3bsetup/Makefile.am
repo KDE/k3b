@@ -1,4 +1,4 @@
-AM_CPPFLAGS = -I$(top_srcdir)/libk3b/core -I$(top_srcdir)/libk3b/tools -I$(top_srcdir)/libk3bdevice $(all_includes)
+AM_CPPFLAGS = -I$(srcdir)/../libk3b/core -I$(srcdir)/../libk3b/tools -I$(srcdir)/../libk3bdevice $(all_includes)
 
 METASOURCES = AUTO
 
@@ -6,7 +6,7 @@ METASOURCES = AUTO
 kde_module_LTLIBRARIES = kcm_k3bsetup2.la
 
 kcm_k3bsetup2_la_SOURCES = base_k3bsetup2.ui k3bsetup2.cpp
-kcm_k3bsetup2_la_LIBADD = $(LIB_KDEUI) $(top_builddir)/libk3b/libk3b.la
+kcm_k3bsetup2_la_LIBADD = $(LIB_KDEUI) ../libk3b/libk3b.la
 kcm_k3bsetup2_la_LDFLAGS = -module -avoid-version $(all_libraries) -no-undefined
 
 k3bsetup2_DATA = k3bsetup2.desktop

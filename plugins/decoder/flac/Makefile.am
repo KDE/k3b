@@ -1,10 +1,10 @@
-AM_CPPFLAGS = -I$(top_srcdir)/libk3b/plugin -I$(top_srcdir)/libk3bdevice $(all_includes)
+AM_CPPFLAGS = -I$(srcdir)/../../../libk3b/plugin -I$(srcdir)/../../../libk3bdevice $(all_includes)
 
 kde_module_LTLIBRARIES = libk3bflacdecoder.la
 
 libk3bflacdecoder_la_SOURCES = k3bflacdecoder.cpp
 
-libk3bflacdecoder_la_LIBADD = $(top_builddir)/libk3b/libk3b.la $(LIB_KDECORE) -lFLAC++ -lFLAC $(ID3_LIB) $(LIB_KDEUI)
+libk3bflacdecoder_la_LIBADD = ../../../libk3b/libk3b.la $(LIB_KDEUI) -lFLAC++ -lFLAC $(ID3_LIB) 
 libk3bflacdecoder_la_LDFLAGS = -avoid-version -module -no-undefined $(all_libraries)
 
 pluginsdir = $(kde_datadir)/k3b/plugins

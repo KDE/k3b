@@ -1,10 +1,10 @@
 noinst_LTLIBRARIES = libvideoEncoding.la
 
-AM_CPPFLAGS =  	-I$(top_srcdir)/libk3b/core \
-		-I$(top_srcdir)/libk3b/tools \
-		-I$(top_srcdir)/libk3b/projects \
+AM_CPPFLAGS =  	-I$(srcdir)/../../libk3b/core \
+		-I$(srcdir)/../../libk3b/tools \
+		-I$(srcdir)/../../libk3b/projects \
 		-I$(srcdir)/.. \
-		-I$(top_srcdir)/libk3bdevice \
+		-I$(srcdir)/../../libk3bdevice \
 		$(all_includes)
 
 METASOURCES = AUTO

@@ -1,4 +1,4 @@
-INCLUDES = -I$(srcdir)/.. -I$(top_srcdir)/libk3b/core -I$(top_srcdir)/libk3bdevice -I$(top_srcdir)/libk3b/projects -I$(top_srcdir)/libk3b/tools $(all_includes)
+INCLUDES = -I$(srcdir)/.. -I$(srcdir)/../../libk3b/core -I$(srcdir)/../../libk3bdevice -I$(srcdir)/../../libk3b/projects -I$(srcdir)/../../libk3b/tools $(all_includes)
 
 METASOURCES = AUTO
 

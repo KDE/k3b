@@ -2,7 +2,7 @@ bin_PROGRAMS = k3b
 
 k3b_SOURCES = k3bwelcomewidget.cpp k3bapplication.cpp k3bdiroperator.cpp kdndfileview.cpp k3bfiletreeview.cpp k3baudioplayer.cpp k3bprojecttabbar.cpp k3bprojecttabwidget.cpp k3bsplash.cpp k3bblankingdialog.cpp k3bfileview.cpp k3bdirview.cpp k3btoolbox.cpp k3b.cpp main.cpp k3bstatusbarmanager.cpp k3bfiletreecombobox.cpp k3breadcdreader.cpp k3binterface.cpp k3binterface.skel k3bprojectinterface.cpp k3bprojectinterface.skel k3bsystemproblemdialog.cpp k3bcdcontentsview.cpp k3bwriterspeedverificationdialog.cpp k3bdatatrackreader.cpp k3bsmartinstancereuser.cpp
 
-k3b_LDADD   = ./cdinfo/libcdinfo.la ./option/liboption.la ./rip/librip.la ./cdcopy/libcdcopy.la ./dvdcopy/libdvdcopy.la ./videoEncoding/libvideoEncoding.la ./images/libimagewriting.la $(top_builddir)/libk3bdevice/libk3bdevice.la $(top_builddir)/libk3b/libk3b.la $(ARTS_LIBS) -lkio -lkparts
+k3b_LDADD   = ./cdinfo/libcdinfo.la ./option/liboption.la ./rip/librip.la ./cdcopy/libcdcopy.la ./dvdcopy/libdvdcopy.la ./videoEncoding/libvideoEncoding.la ./images/libimagewriting.la ../libk3bdevice/libk3bdevice.la ../libk3b/libk3b.la $(ARTS_LIBS) -lkio -lkparts
 
 SUBDIRS = cdinfo option rip cdcopy images dvdcopy videoEncoding pics icons konqi mimetypes sounds
 
@@ -26,18 +26,18 @@ silentdir = $(kde_appsdir)/.hidden/
 # kde_wallpaperdir  Where general wallpapers should go to.
 
 # set the include path for X, qt and KDE
-AM_CPPFLAGS = 	-I$(top_srcdir)/libk3b/tools \
-		-I$(top_srcdir)/libk3b/core \
-		-I$(top_srcdir)/libk3b/cddb \
-		-I$(top_srcdir)/libk3bdevice \
-		-I$(top_srcdir)/libk3b/projects \
-		-I$(top_srcdir)/libk3b/projects/datacd \
-		-I$(top_srcdir)/libk3b/projects/datadvd \
-		-I$(top_srcdir)/libk3b/projects/audiocd \
-		-I$(top_srcdir)/libk3b/projects/videocd \
-		-I$(top_srcdir)/libk3b/projects/mixedcd \
-		-I$(top_srcdir)/libk3b/projects/movixcd \
-		-I$(top_srcdir)/libk3b/plugin \
+AM_CPPFLAGS = 	-I$(srcdir)/../libk3b/tools \
+		-I$(srcdir)/../libk3b/core \
+		-I$(srcdir)/../libk3b/cddb \
+		-I$(srcdir)/../libk3bdevice \
+		-I$(srcdir)/../libk3b/projects \
+		-I$(srcdir)/../libk3b/projects/datacd \
+		-I$(srcdir)/../libk3b/projects/datadvd \
+		-I$(srcdir)/../libk3b/projects/audiocd \
+		-I$(srcdir)/../libk3b/projects/videocd \
+		-I$(srcdir)/../libk3b/projects/mixedcd \
+		-I$(srcdir)/../libk3b/projects/movixcd \
+		-I$(srcdir)/../libk3b/plugin \
 		$(all_includes)
 
 METASOURCES = AUTO
