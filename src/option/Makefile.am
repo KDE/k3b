@@ -1,4 +1,4 @@
-INCLUDES = $(all_includes) -I$(top_srcdir)
+INCLUDES = $(all_includes) -I$(top_srcdir) -I$(srcdir)/..
 
 METASOURCES = AUTO
 
