@@ -114,8 +114,9 @@ void K3bCdrecordWriter::prepareArgumentList()
     else
       emit infoMessage( i18n("Cdrecord version <= 1.10 does not support overburning!"), INFO );
 
-  // additional parameters from config
-  QStringList params = kapp->config()->readListEntry( "cdrecord parameters" );
+  // additional user parameters from config
+  kapp->config()->setGroup("External Programs");
+  QStringList params = kapp->config()->readListEntry( "cdrecord user parameters" );
   for( QStringList::Iterator it = params.begin(); it != params.end(); ++it )
     *m_process << *it;
 }

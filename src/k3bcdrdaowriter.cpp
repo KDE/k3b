@@ -219,11 +219,6 @@ void K3bCdrdaoWriter::setWriteArguments() {
     if( overburn && m_cdrdaoBinObject->hasFeature("overburn") )
         *m_process << "--overburn";
 
-
-    // additional parameters from config
-    QStringList params = kapp->config()->readListEntry( "cdrdao parameters" );
-    for( QStringList::Iterator it=params.begin(); it != params.end(); ++it )
-        *m_process << *it;
 }
 
 void K3bCdrdaoWriter::setReadArguments() {
@@ -311,6 +306,14 @@ void K3bCdrdaoWriter::setBlankArguments() {
 }
 
 void K3bCdrdaoWriter::setCommonArguments() {
+
+    // additional user parameters from config
+    kapp->config()->setGroup("External Programs");
+    QStringList params = kapp->config()->readListEntry( "cdrdao user parameters" );
+    for( QStringList::Iterator it=params.begin(); it != params.end(); ++it )
+        *m_process << *it;
+
+
     // display debug info
     *m_process << "-n" << "-v" << "2";
     // eject
