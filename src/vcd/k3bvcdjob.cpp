@@ -129,7 +129,7 @@ void K3bVcdJob::start()
   emit started();
   m_canceled = false;
   
-  int pos = QString(m_doc->vcdImage()).find(".bin");
+  int pos = QString(m_doc->vcdImage()).find(".bin", QString(m_doc->vcdImage()).length() - 4);
   if (pos > 0) {
     m_cueFile = m_doc->vcdImage().left(pos) + ".cue";
   }

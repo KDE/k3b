@@ -286,8 +286,8 @@ void K3bVcdBurnDialog::setupLabelTab()
 void K3bVcdBurnDialog::slotOk()
 {
     
-  if( QFile::exists( m_tempDirSelectionWidget->tempPath() ) ) {
-    if( KMessageBox::questionYesNo( this, i18n("Do you want to overwrite %1").arg(m_tempDirSelectionWidget->tempPath()), i18n("File exists...") )
+  if( QFile::exists( vcdDoc()->vcdImage() ) ) {
+    if( KMessageBox::questionYesNo( this, i18n("Do you want to overwrite %1").arg(vcdDoc()->vcdImage()), i18n("File exists...") )
         != KMessageBox::Yes )
       return;
   }
@@ -349,8 +349,8 @@ void K3bVcdBurnDialog::saveSettings()
   doc()->setBurner( m_writerSelectionWidget->writerDevice() );
 
   vcdDoc()->setDeleteImage( m_checkRemoveBufferFiles->isChecked() );
-  // save image file path (.bin)
-  vcdDoc()->setVcdImage( m_tempDirSelectionWidget->tempPath() );
+  // save image file & path (.bin)
+  vcdDoc()->setVcdImage( m_tempDirSelectionWidget->tempPath() + m_editVolumeId->text() + ".bin");
 
   // TODO: save vcdType
   vcdDoc()->vcdOptions()->setVolumeId( m_editVolumeId->text() );
@@ -527,12 +527,15 @@ void K3bVcdBurnDialog::loadCdiConfig()
 
       QTextStream s( &cdi );
 
+      m_editCdiCfg->clear();
+      
       while ( !s.atEnd() )
             m_editCdiCfg->insertLine( s.readLine() );
 
       cdi.close();
       m_editCdiCfg->setEdited(false);
       m_editCdiCfg->setCursorPosition(0,0,false);
+      m_groupCdi->setEnabled(m_checkCdiSupport->isChecked());
     }
     else
       loadDefaultCdiConfig();
@@ -552,12 +555,15 @@ void K3bVcdBurnDialog::loadDefaultCdiConfig()
 
       QTextStream s( &cdi );
 
+      m_editCdiCfg->clear();
+      
       while ( !s.atEnd() )
             m_editCdiCfg->insertLine( s.readLine() );
 
       cdi.close();
       m_editCdiCfg->setEdited(false);
       m_editCdiCfg->setCursorPosition(0,0,false);
+      m_groupCdi->setEnabled(m_checkCdiSupport->isChecked());
     }
 }
 
@@ -578,7 +584,7 @@ void K3bVcdBurnDialog::slotSetImagePath()
     vcdDoc()->vcdOptions()->setVolumeId("VIDEOCD");
   }
 
-  path.append( vcdDoc()->vcdOptions()->volumeId() + ".bin" );
+  // path.append( vcdDoc()->vcdOptions()->volumeId() + ".bin" );
   m_tempDirSelectionWidget->setTempPath( path );
 }
 
