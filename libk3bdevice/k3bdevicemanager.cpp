@@ -284,12 +284,10 @@ void K3bDevice::DeviceManager::LinuxDeviceScan()
   //
   kdDebug() << "(K3bDevice::DeviceManager) SCANNING FOR GENERIC DEVICES." << endl;
   for( int i = 0; i < 16; i++ ) {
-    QString sgDev = QString("/dev/sg%1").arg(i);
+    QString sgDev = resolveSymLink( QString("/dev/sg%1").arg(i) );
     int bus, id, lun;
     if( determineBusIdLun( sgDev, bus, id, lun ) ) {
-      kdDebug() << "(K3bDevice::DeviceManager) found generic device: " << sgDev << endl;
       if( Device* dev = findDevice( bus, id, lun ) ) {
-	kdDebug() << "(K3bDevice::DeviceManager) found corresponding block device: " << dev->blockDeviceName() << endl;
 	dev->m_genericDevice = sgDev;
       }
     }

@@ -76,7 +76,7 @@ bool K3bDevice::Device::getFeature( unsigned char** data, int& dataLen, unsigned
 }
 
 
-bool K3bDevice::Device::supportsFeature( unsigned int feature ) const
+bool K3bDevice::Device::featureCurrent( unsigned int feature ) const
 {
   unsigned char* data = 0;
   int dataLen = 0;
@@ -91,6 +91,12 @@ bool K3bDevice::Device::supportsFeature( unsigned int feature ) const
   }
   else
     return false;
+}
+
+
+bool K3bDevice::Device::supportsFeature( unsigned int feature ) const
+{
+  return featureCurrent( feature );
 }
 
 
@@ -385,18 +391,18 @@ bool K3bDevice::Device::readCd( unsigned char* data,
 
 
 bool K3bDevice::Device::readCdMsf( unsigned char* data,
-				       int dataLen,
-				       int sectorType,
-				       bool dap,
-				       const K3b::Msf& startAdress,
-				       const K3b::Msf& endAdress,
-				       bool sync,
-				       bool header,
-				       bool subHeader,
-				       bool userData,
-				       bool edcEcc,
-				       int c2,
-				       int subChannel ) const
+				   int dataLen,
+				   int sectorType,
+				   bool dap,
+				   const K3b::Msf& startAdress,
+				   const K3b::Msf& endAdress,
+				   bool sync,
+				   bool header,
+				   bool subHeader,
+				   bool userData,
+				   bool edcEcc,
+				   int c2,
+				   int subChannel ) const
 {
   ::memset( data, 0, dataLen );
 
@@ -427,8 +433,8 @@ bool K3bDevice::Device::readCdMsf( unsigned char* data,
 
 
 bool K3bDevice::Device::readSubChannel( unsigned char** data, int& dataLen,
-					    unsigned int subchannelParam,
-					    unsigned int trackNumber ) const
+					unsigned int subchannelParam,
+					unsigned int trackNumber ) const
 {
   unsigned char header[2048];
   ::memset( header, 0, 2048 );
@@ -662,7 +668,7 @@ bool K3bDevice::Device::readCapacity( K3b::Msf& r ) const
 
 
 bool K3bDevice::Device::readFormatCapacity( int wantedFormat, K3b::Msf& r,
-						K3b::Msf* currentMax, int* currentMaxFormat ) const
+					    K3b::Msf* currentMax, int* currentMaxFormat ) const
 {
   bool success = false;
 
@@ -744,6 +750,47 @@ bool K3bDevice::Device::readDiscInfo( unsigned char** data, int& dataLen ) const
   else {
     kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ DISC INFORMATION length det failed" << endl;
   }
+
+  return false;
+}
+
+
+bool K3bDevice::Device::readDvdStructure( unsigned char** data, int& dataLen, 
+					  unsigned int format,
+					  unsigned int layer,
+					  unsigned long adress,
+					  unsigned int agid ) const
+{
+  unsigned char header[4];
+  ::memset( header, 0, 4 );
+
+  ScsiCommand cmd( this );
+  cmd[0] = MMC_READ_DVD_STRUCTURE;
+  cmd[2] = adress>>24;
+  cmd[3] = adress>>16;
+  cmd[4] = adress>>8;
+  cmd[5] = adress;
+  cmd[6] = layer;
+  cmd[7] = format;
+  cmd[10] = (agid<<6);
+
+  cmd[9] = 4;
+  if( cmd.transport( TR_DIR_READ, header, 2 ) == 0 ) {
+    // again with real length
+    dataLen = from2Byte( header ) + 4;
+    *data = new unsigned char[dataLen];
+    ::memset( *data, 0, dataLen );
+
+    cmd[8] = dataLen<<8;
+    cmd[9] = dataLen;
+    if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 )
+      return true;
+    else {
+      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ DVD STRUCTURE with real length failed." << endl;
+    }
+  }
+  else
+    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ DVD STRUCTURE length det failed" << endl;
 
   return false;
 }

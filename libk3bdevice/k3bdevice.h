@@ -31,8 +31,49 @@ struct cam_device;
 
 namespace K3bDevice
 {
-  class Toc;
+  const unsigned char FEATURE_PROFILE_LIST = 0x000;
+  const unsigned char FEATURE_CORE = 0x001;
+  const unsigned char FEATURE_MORPHING = 0x002;
+  const unsigned char FEATURE_REMOVABLE_MEDIA = 0x003;
+  const unsigned char FEATURE_WRITE_PROTECT = 0x004;
+  const unsigned char FEATURE_RANDOM_READABLE = 0x010;
+  const unsigned char FEATURE_MULTI_READ = 0x01D;
+  const unsigned char FEATURE_CD_READ = 0x01E;
+  const unsigned char FEATURE_DVD_READ = 0x01F;
+  const unsigned char FEATURE_RANDOM_WRITABLE = 0x020;
+  const unsigned char FEATURE_INCREMENTAL_STREAMING_WRITABLE = 0x021;
+  const unsigned char FEATURE_SECTOR_ERASABLE = 0x022;
+  const unsigned char FEATURE_FORMATTABLE = 0x023;
+  const unsigned char FEATURE_DEFECT_MANAGEMENT = 0x024;
+  const unsigned char FEATURE_WRITE_ONCE = 0x025;
+  const unsigned char FEATURE_RESTRICTED_OVERWRITE = 0x026;
+  const unsigned char FEATURE_CD_RW_CAV_WRITE = 0x027;
+  const unsigned char FEATURE_MRW = 0x028;
+  const unsigned char FEATURE_ENHANCED_DEFECT_REPORTING = 0x029;
+  const unsigned char FEATURE_DVD_PLUS_RW = 0x02A;
+  const unsigned char FEATURE_DVD_PLUS_R = 0x02B;
+  const unsigned char FEATURE_RIGID_RESTRICTED_OVERWRITE = 0x02C;
+  const unsigned char FEATURE_CD_TRACK_AT_ONCE = 0x02D;
+  const unsigned char FEATURE_CD_MASTERING = 0x02E;
+  const unsigned char FEATURE_DVD_R_RW_WRITE = 0x02F;
+  const unsigned char FEATURE_DDCD_READ = 0x030;
+  const unsigned char FEATURE_DDCD_R_WRITE = 0x031;
+  const unsigned char FEATURE_DDCD_RW_WRITE = 0x032;
+  const unsigned char FEATURE_CD_RW_MEDIA_WRITE_SUPPORT = 0x37;
+  const unsigned char FEATURE_POER_MANAGEMENT = 0x100;
+  const unsigned char FEATURE_EMBEDDED_CHANGER = 0x102;
+  const unsigned char FEATURE_CD_AUDIO_ANALOG_PLAY = 0x103;
+  const unsigned char FEATURE_MICROCODE_UPGRADE = 0x104;
+  const unsigned char FEATURE_TIMEOUT = 0x105;
+  const unsigned char FEATURE_DVD_CSS = 0x106;
+  const unsigned char FEATURE_REAL_TIME_STREAMING = 0x107;
+  const unsigned char FEATURE_LOGICAL_UNIT_SERIAL_NUMBER = 0x108;
+  const unsigned char FEATURE_DISC_CONTROL_BLOCKS = 0x10A;
+  const unsigned char FEATURE_DVD_CPRM = 0x10B;
+  const unsigned char FEATURE_FIRMWARE_DATE = 0x10C;
 
+
+  class Toc;
 
   class Device
   {
@@ -387,8 +428,11 @@ namespace K3bDevice
 
     /**
      * @returns true if the requested feature is supported and also current.
+     * @deprecated use featureCurrent
      */
     bool supportsFeature( unsigned int feature ) const;
+
+    bool featureCurrent( unsigned int feature ) const;
 
     /**
      * This is the method to use!
@@ -499,6 +543,16 @@ namespace K3bDevice
      *
      */
     bool readTrackInformation( unsigned char** data, int& dataLen, int type, unsigned long value ) const;
+
+    /**
+     * if true is returned dataLen specifies the actual length of *data which needs to be
+     * deleted after using.
+     */
+    bool readDvdStructure( unsigned char** data, int& dataLen, 
+			   unsigned int format = 0x0,
+			   unsigned int layer = 0x0,
+			   unsigned long adress = 0,
+			   unsigned int agid = 0x0 ) const;
 
     /**
      * if true is returned dataLen specifies the actual length of *data which needs to be

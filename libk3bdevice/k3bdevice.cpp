@@ -278,6 +278,8 @@ bool K3bDevice::Device::init()
 	// now i indexes the first byte of the feature dependant data
 	//
 
+	// FIXME: use the FEATURE_ constants
+
 	switch( feature ) {
 	case 0x000: // Profile List
 	  for( int j = 0; j < featureLen; j+=4 ) {
@@ -2132,19 +2134,9 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
 	  inf.m_mediaType = MEDIA_CD_ROM;
       }
       else {
-	// FIXME: introduce a proper readDvdStructure method
-	// 4 bytes header + 2048 bytes layer descriptor
-	unsigned char dvdheader[4+2048];
-	::memset( dvdheader, 0, 4+2048 );
-	ScsiCommand cmd( this );
-	cmd[0] = MMC_READ_DVD_STRUCTURE;
-	cmd[8] = (4+2048)>>8;
-	cmd[9] = 4+2048;
-	if( cmd.transport( TR_DIR_READ, dvdheader, 4+2048 ) ) {
-	  kdDebug() << "(K3bDevice::Device) Unable to read DVD structure for num of layers." << endl;
-	  inf.m_numLayers = ( inf.m_mediaType == MEDIA_DVD_PLUS_R_DL ? 2 : 1 );
-	}
-	else {
+	unsigned char* dvdheader = 0;
+	int dataLen = 0;
+	if( readDvdStructure( &dvdheader, dataLen ) ) {
 	  // some debugging stuff
 	  K3b::Msf sda, eda, ea0;
 	  sda = ( dvdheader[4+5]<<16 | dvdheader[4+6] << 8 | dvdheader[4+7] );
@@ -2178,6 +2170,12 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
 
 	  inf.m_numLayers = ((dvdheader[6]&0x60) == 0 ? 1 : 2);
 	  inf.m_firstLayerSize = da0;
+
+	  delete [] dvdheader;
+	}
+	else {
+	  kdDebug() << "(K3bDevice::Device) Unable to read DVD structure for num of layers." << endl;
+	  inf.m_numLayers = ( inf.m_mediaType == MEDIA_DVD_PLUS_R_DL ? 2 : 1 );
 	}
       }
 
@@ -2274,7 +2272,6 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
 	break;
       }
 
-	// FIXME: test this for Double layer
       case MEDIA_DVD_PLUS_R:
       case MEDIA_DVD_PLUS_R_DL:
 	if( inf.appendable() || inf.empty() ) {
@@ -2461,17 +2458,10 @@ int K3bDevice::Device::dvdMediaType() const
       //
 
       // 4 bytes header + 2048 bytes layer descriptor
-      unsigned char dvdheader[4+2048];
-      ::memset( dvdheader, 0, 4+2048 );
-      ScsiCommand cmd( this );
-      cmd[0] = MMC_READ_DVD_STRUCTURE;
-      cmd[8] = (4+2048)>>8;
-      cmd[9] = 4+2048;
-      if( cmd.transport( TR_DIR_READ, dvdheader, 4+2048 ) ) {
-	kdDebug() << "(K3bDevice::Device) Unable to read DVD structure." << endl;
-      }
-      else {
-	switch( dvdheader[4]&0xF0 ) {
+      unsigned char* data = 0;
+      int dataLen = 0;
+      if( readDvdStructure( &data, dataLen ) ) {
+	switch( data[4]&0xF0 ) {
 	case 0x00: m = MEDIA_DVD_ROM; break;
 	case 0x10: m = MEDIA_DVD_RAM; break;
 	case 0x20: m = MEDIA_DVD_R; break;
@@ -2481,6 +2471,8 @@ int K3bDevice::Device::dvdMediaType() const
 	case 0xE0: m = MEDIA_DVD_PLUS_R_DL; break;
 	default: break; // unknown
 	}
+
+	delete [] data;
       }
     }
   }
