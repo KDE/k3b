@@ -53,7 +53,6 @@ class K3bAudioJob : public K3bBurnJob  {
 	
  protected slots:
   void slotParseCdrecordOutput( KProcess*, char*, int );
-  void slotParseCdrdaoOutput( KProcess*, char* output, int len );
   void slotCdrecordFinished();
   void slotCdrdaoFinished();
   void slotModuleProgress( int percent );
@@ -63,7 +62,13 @@ class K3bAudioJob : public K3bBurnJob  {
   void slotDecodeNextFile();
 
   void slotProcessWroteStdin();
-	
+
+  /** reimplemented from K3bBurnJob */
+  void createCdrdaoProgress( int made, int size );
+
+  /** reimplemented from K3bBurnJob */
+  void startNewCdrdaoTrack();	
+
  private:
   void clearBufferFiles();
   void startWriting();

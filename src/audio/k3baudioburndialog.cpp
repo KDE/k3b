@@ -59,6 +59,26 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
 
   tab->addTab( f1, i18n("Burning") );
   tab->addTab( f2, i18n("CD-Text") );
+
+  // create advanced tab
+  QWidget* advancedTab = new QWidget( tab );
+  QGridLayout* advancedTabGrid = new QGridLayout( advancedTab );
+  advancedTabGrid->setSpacing( spacingHint() );
+  advancedTabGrid->setMargin( marginHint() );
+
+  QGroupBox* advancedOptionGroup = new QGroupBox( 1, Qt::Vertical, i18n("Options"), advancedTab );
+  QGroupBox* advancedGimmickGroup = new QGroupBox( 1, Qt::Vertical, i18n("Gimmicks"), advancedTab );
+
+  m_checkPadding = new QCheckBox( i18n( "Use Padding" ), advancedOptionGroup, "m_checkPadding" );
+  m_checkHideFirstTrack = new QCheckBox( i18n( "Hide first track" ), advancedGimmickGroup, "m_checkHideFirstTrack" );
+
+  advancedTabGrid->addWidget( advancedOptionGroup, 0, 0 );
+  advancedTabGrid->addWidget( advancedGimmickGroup, 1, 0 );
+  advancedTabGrid->setRowStretch( 2, 1 );
+
+  tab->addTab( advancedTab, i18n("Advanced") );
+
+
 	
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_tempDirSelectionWidget, SLOT(setDisabled(bool)) );
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkRemoveBufferFiles, SLOT(setDisabled(bool)) );
@@ -149,21 +169,13 @@ void K3bAudioBurnDialog::setupBurnTab( QFrame* frame )
   m_checkOnTheFly = new QCheckBox( m_groupOptions, "m_checkOnTheFly" );
   m_checkOnTheFly->setText( i18n( "Writing on the fly" ) );
 
-  m_checkPadding = new QCheckBox( m_groupOptions, "m_checkPadding" );
-  m_checkPadding->setText( i18n( "Use Padding" ) );
-
-  m_checkHideFirstTrack = new QCheckBox( m_groupOptions, "m_checkHideFirstTrack" );
-  m_checkHideFirstTrack->setText( i18n( "Hide first track" ) );
-
   m_checkRemoveBufferFiles = new QCheckBox( m_groupOptions, "m_checkRemoveBufferFiles" );
   m_checkRemoveBufferFiles->setText( i18n("Remove temp files") );
 
   m_groupOptionsLayout->addWidget( m_checkSimulate );
   m_groupOptionsLayout->addWidget( m_checkOnTheFly );
   m_groupOptionsLayout->addWidget( m_checkRemoveBufferFiles );
-  m_groupOptionsLayout->addWidget( m_checkPadding );
   m_groupOptionsLayout->addWidget( m_checkDao );
-  m_groupOptionsLayout->addWidget( m_checkHideFirstTrack );
   // --------------------------------------------------- options group ---
 
   m_tempDirSelectionWidget = new K3bTempDirSelectionWidget( frame );
@@ -268,7 +280,7 @@ void K3bAudioBurnDialog::loadDefaults()
   //  m_checkBurnProof->setChecked( true );
 
   m_checkCdText->setChecked( true );
-  m_checkPadding->setChecked( false );
+  m_checkPadding->setChecked( true );
   m_checkHideFirstTrack->setChecked( false );
   m_checkRemoveBufferFiles->setChecked( true );
 }

@@ -217,131 +217,36 @@ void K3bAudioJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 }
 
 
-void K3bAudioJob::slotParseCdrdaoOutput( KProcess*, char* output, int len )
+void K3bAudioJob::createCdrdaoProgress( int made, int size )
 {
-  QString buffer = QString::fromLatin1( output, len );
-	
-  // split to lines
-  QStringList lines = QStringList::split( "\n", buffer );
-	
-  // do every line
-  for( QStringList::Iterator str = lines.begin(); str != lines.end(); str++ )
-    {
-      *str = (*str).stripWhiteSpace();
+  double f = (double)size / (double)m_doc->size();
+  // calculate track progress
+  int trackMade = (int)( (double)made -f*(double)m_bytesFinishedTracks );
+  int trackSize = (int)( f * (double)m_currentWrittenTrack->size() );
+  emit processedSubSize( trackMade, trackSize );
+  emit subPercent( 100*trackMade / trackSize );
+  
+  emit processedSize( made, size );
+  if( !m_onTheFly ) {
+    // decoding is part of the overall progress
+    emit percent( m_decodingPercentage + ((100 - m_decodingPercentage) * made / size) );
+  }
+  else
+    emit percent( 100*made / size );
+}
 
 
-      emit debuggingOutput( "cdrdao", *str );
-
-
-      bool _debug = false;
-
-      // find some messages from cdrdao
-      // -----------------------------------------------------------------------------------------
-      if( (*str).startsWith( "Warning" ) || (*str).startsWith( "ERROR" ) ) {
-	// TODO: parse the error messages!!
-	emit infoMessage( *str, K3bJob::ERROR );
-      }
-      else if( (*str).startsWith( "Executing power" ) ) {
-	//emit infoMessage( i18n( *str ) );
-	emit newSubTask( i18n("Executing Power calibration") );
-      }
-      else if( (*str).startsWith( "Power calibration successful" ) ) {
-	emit infoMessage( i18n("Power calibration successful"), K3bJob::PROCESS );
-	emit newSubTask( i18n("Preparing burn process...") );
-      }
-      else if( (*str).startsWith( "Flushing cache" ) ) {
-	emit newSubTask( i18n("Flushing cache") );
-      }
-      else if( (*str).startsWith( "Writing CD-TEXT lead" ) ) {
-	emit newSubTask( i18n("Writing CD-Text leadin...") );
-      }
-      else if( (*str).startsWith( "Turning BURN-Proof on" ) ) {
-	emit infoMessage( i18n("Turning BURN-Proof on"), K3bJob::PROCESS );
-      }
-
-      else
-	_debug = true;
-      // -----------------------------------------------------------------------------------------
-
-
-      // check if cdrdao starts a new track
-      // -----------------------------------------------------------------------------------------
-      if( (*str).contains( "Writing track" ) ) {
-	// a new track has been started
-	if(!firstTrack) {
-	  m_bytesFinishedTracks += m_doc->at(m_currentWrittenTrackNumber)->size();
-	  m_currentWrittenTrackNumber++;
-	}
-	else
-	  firstTrack = false;
-
-	m_currentWrittenTrack = m_doc->at( m_currentWrittenTrackNumber );			
-	emit newSubTask( i18n("Writing track %1: '%2'").arg(m_currentWrittenTrackNumber + 1).arg(m_currentWrittenTrack->fileName()) );
-	
-	_debug = false;
-      }
-      // -----------------------------------------------------------------------------------------
-
-
-      // parse the progress
-      // -----------------------------------------------------------------------------------------
-      // here "contains" has to be used since cdrdao sometimes "forgets" to do a newline!!
-      if( (*str).contains( "Wrote " ) ) {
-	// percentage
-	int made, size, fifo;
-	bool ok;
-			
-	// --- parse already written mb ------
-	int pos1 = 6;
-	int pos2 = (*str).find("of");
-			
-	if( pos2 == -1 )
-	  return; // there is one line at the end of the writing process that has no 'of'
-			
-	made = (*str).mid( 6, pos2-pos1-1 ).toInt( &ok );
-	if( !ok )
-	  qDebug( "(K3bAudioJob) Parsing did not work for: " + (*str).mid( 6, pos2-pos1-1 ) );
-			
-	// ---- parse size ---------------------------
-	pos1 = pos2 + 2;
-	pos2 = (*str).find("MB");
-	size = (*str).mid( pos1, pos2-pos1-1 ).toInt(&ok);
-	if( !ok )
-	  qDebug( "(K3bAudioJob) Parsing did not work for: " + (*str).mid( pos1, pos2-pos1-1 ) );
-				
-	// ----- parsing fifo ---------------------------
-	pos1 = (*str).findRev(' ');
-	pos2 =(*str).findRev('%');
-	fifo = (*str).mid( pos1, pos2-pos1 ).toInt(&ok);
-	if( !ok )
-	  qDebug( "(K3bAudioJob) Parsing did not work for: " + (*str).mid( pos1, pos2-pos1 ) );
-			
-	emit bufferStatus( fifo );
-	
-	double f = (double)size / (double)m_doc->size();
-	// calculate track progress
-	int trackMade = (int)( (double)made -f*(double)m_bytesFinishedTracks );
-	int trackSize = (int)( f * (double)m_currentWrittenTrack->size() );
-	emit processedSubSize( trackMade, trackSize );
-	emit subPercent( 100*trackMade / trackSize );
-
-	emit processedSize( made, size );
-	if( !m_onTheFly ) {
-	  // decoding is part of the overall progress
-	  emit percent( m_decodingPercentage + ((100 - m_decodingPercentage) * made / size) );
-	}
-	else
-	  emit percent( 100*made / size );
-
-	_debug = false;
-      }
-      // -----------------------------------------------------------------------------------------
-      
-      if( _debug ) {
-	// debugging
-	qDebug("(cdrdao) " + *str);
-      }
-    }
+void K3bAudioJob::startNewCdrdaoTrack()
+{
+  if(!firstTrack) {
+    m_bytesFinishedTracks += m_doc->at(m_currentWrittenTrackNumber)->size();
+    m_currentWrittenTrackNumber++;
+  }
+  else
+    firstTrack = false;
+  
+  m_currentWrittenTrack = m_doc->at( m_currentWrittenTrackNumber );			
+  emit newSubTask( i18n("Writing track %1: '%2'").arg(m_currentWrittenTrackNumber + 1).arg(m_currentWrittenTrack->fileName()) );
 }
 
 
@@ -714,7 +619,11 @@ void K3bAudioJob::cdrdaoWrite()
   if( manualBufferSize ) {
     *m_process << "--buffers" << QString::number( k3bMain()->config()->readNumEntry( "Cdrdao buffer", 32 ) );
   }
-    
+  bool overburn = k3bMain()->config()->readBoolEntry( "Allow overburning", false );
+
+  if( overburn )
+    *m_process << "--overburn";
+
   if( m_doc->dummy() )
     *m_process << "--simulate";
   if( k3bMain()->eject() )
@@ -744,9 +653,9 @@ void K3bAudioJob::cdrdaoWrite()
   connect( m_process, SIGNAL(processExited(KProcess*)),
 	   this, SLOT(slotCdrdaoFinished()) );
   connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
-	   this, SLOT(slotParseCdrdaoOutput(KProcess*, char*, int)) );
+	   this, SLOT(parseCdrdaoOutput(KProcess*, char*, int)) );
   connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
-	   this, SLOT(slotParseCdrdaoOutput(KProcess*, char*, int)) );
+	   this, SLOT(parseCdrdaoOutput(KProcess*, char*, int)) );
 
     
   if( !m_process->start( KProcess::NotifyOnExit, KProcess::All ) ) {
@@ -792,6 +701,10 @@ void K3bAudioJob::cdrecordWrite()
   if( manualBufferSize ) {
     *m_process << QString("fs=%1m").arg( k3bMain()->config()->readNumEntry( "Cdrecord buffer", 4 ) );
   }
+  bool overburn = k3bMain()->config()->readBoolEntry( "Allow overburning", false );
+
+  if( overburn )
+    *m_process << "-overburn";
 
   if( m_doc->dummy() )
     *m_process << "-dummy";

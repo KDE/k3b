@@ -886,7 +886,7 @@ void K3bAudioDoc::loadDefaultSettings()
   //  setBurnproof( c->readBoolEntry( "burnproof", true ) );
 
   m_cdText = c->readBoolEntry( "cd_text", true );
-  m_padding = c->readBoolEntry( "padding", false );
+  m_padding = c->readBoolEntry( "padding", true );
   m_hideFirstTrack = c->readBoolEntry( "hide_first_track", false );
   m_removeBufferFiles = c->readBoolEntry( "remove_buffer_files", true );
 }

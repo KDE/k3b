@@ -50,7 +50,6 @@ class K3bAudioTrackDialog : public KDialogBase
   void slotChangePregapFormat( const QString& );
   void slotOk();
   void slotApply();
-  void slotCancel();
 			
  private:
   QList<K3bAudioTrack> m_tracks;
