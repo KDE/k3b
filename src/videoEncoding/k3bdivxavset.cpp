@@ -91,7 +91,7 @@ In 2-pass mode the video will be encoded twice. The first time, the video will o
     m_comboCd->insertItem( i18n("1 * 716 MB" ) );
     QWhatsThis::add( m_comboCd, wt_cd );
 
-    m_checkAc3Passthrough = new QCheckBox( i18n( "AC3 pass through mode" ), this );
+    m_checkAc3Passthrough = new QCheckBox( i18n( "AC3 pass-through mode" ), this );
     QWhatsThis::add( m_checkAc3Passthrough, i18n("Enable this if you want the orginal digital sound (AC3).") );
     // TODO
     m_checkAc3Passthrough->setEnabled( false );
@@ -124,13 +124,13 @@ In 2-pass mode the video will be encoded twice. The first time, the video will o
     m_mp3modeGroup->layout()->setSpacing( KDialog::spacingHint() );
     m_mp3modeGroup->layout()->setMargin( 0 ); //KDialog::marginHint() );
     m_mp3modeGroup->setFrameStyle( Plain | NoFrame );
-    m_buttonCbr = new QRadioButton( i18n("CBR"), m_mp3modeGroup );
-    m_buttonVbr = new QRadioButton( i18n("VBR"), m_mp3modeGroup );
+    m_buttonCbr = new QRadioButton( i18n("Constant Bitrate", "CBR"), m_mp3modeGroup );
+    m_buttonVbr = new QRadioButton( i18n("Variable Bitrate", "VBR"), m_mp3modeGroup );
     m_buttonVbr->setEnabled( false );
     m_mp3modeGroup->setButton( 0 );
-    QWhatsThis::add( m_mp3modeGroup, i18n("If set to CBR the mp3 encoding is done with a constant bitrate \
-,if set to VBR then a variable bitrate is used. Typically a variable bitrate gets better quality but is often out of sync.\
-you should first try it with some test encodings."));
+    QWhatsThis::add( m_mp3modeGroup, i18n("If set to CBR the MP3 encoding is done with a constant bitrate. \
+If set to VBR then a variable bitrate is used. Typically a variable bitrate gets better quality but is often out of sync. \
+You should try it first with some test encodings."));
 
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
 

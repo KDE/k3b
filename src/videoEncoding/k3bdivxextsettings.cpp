@@ -43,13 +43,13 @@ void K3bDivxExtSettings::setupGui(){
     mainLayout->setSpacing( KDialog::spacingHint() );
     mainLayout->setMargin( KDialog::marginHint() );
 
-    m_checkShutdown = new QCheckBox( i18n("Shutdown after encoding process finished."), this );
-    QWhatsThis::add( m_checkShutdown, i18n("If enabled K3b shuts' down the system after encoding has been finished. \
+    m_checkShutdown = new QCheckBox( i18n("Shutdown after encoding process finished"), this );
+    QWhatsThis::add( m_checkShutdown, i18n("If enabled, K3b shuts the system down after encoding has finished. \
 The shutdown command must be setuid to use it as normal user.") );
 
     m_checkWithoutAudio = new QCheckBox( i18n("Start encoding without detecting normalize parameter for audio."), this);
-    m_checkOnlyFirstPass = new QCheckBox( i18n("Do only the first pass of a two pass encoding."), this);
-    m_checkOnlySecondPass = new QCheckBox( i18n("Do only the second pass of a two pass encoding."), this);
+    m_checkOnlyFirstPass = new QCheckBox( i18n("Do only the first pass of a two-pass encoding."), this);
+    m_checkOnlySecondPass = new QCheckBox( i18n("Do only the second pass of a two-pass encoding."), this);
     m_lineTwoPassLog = new KLineEdit( m_data->getProjectDir()+"/tmp/divx4.log", this);
 
     // TODO

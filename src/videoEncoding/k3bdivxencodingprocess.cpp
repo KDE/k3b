@@ -45,7 +45,7 @@ void K3bDivXEncodingProcess::start(){
         infoMessage( i18n("Copy IFO files to vob directory."), INFO );
         copyIfos(); // copy IFO files to enable dvd import mode of transcode
     } else {
-        infoMessage( i18n("Disable audio normalizing."), INFO );
+        infoMessage( i18n("Disable audio normalizing"), INFO );
         deleteIfos();
     }
 }
