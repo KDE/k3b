@@ -90,14 +90,16 @@ KFileView* K3bDirOperator::createView( QWidget* parent, KFile::FileView view )
 void K3bDirOperator::slotIconViewItemDoubleClicked( QIconViewItem* item )
 {
   if( KFileIconViewItem* f = dynamic_cast<KFileIconViewItem*>( item ) )
-    emit doubleClicked( f->fileInfo() );
+    if( f->fileInfo()->isFile() )
+      emit doubleClicked( f->fileInfo() );
 }
 
 
 void K3bDirOperator::slotListViewItemDoubleClicked( QListViewItem* item )
 {
   if( KFileListViewItem* f = dynamic_cast<KFileListViewItem*>( item ) )
-    emit doubleClicked( f->fileInfo() );
+    if( f->fileInfo()->isFile() )
+      emit doubleClicked( f->fileInfo() );
 }
 
 
