@@ -26,8 +26,6 @@ CFLAGS = -O3
 noinst_LIBRARIES =	libmad.a
 #include_HEADERS =	mad.h
 
-EXTRA_DIST =		COPYRIGHT mad.h.sed
-
 exported_headers =  \
 	version.h fixed.h bit.h timer.h stream.h frame.h synth.h decoder.h
 
@@ -39,15 +37,16 @@ data_includes =  \
 
 libmad_a_SOURCES =  \
 	version.c fixed.c bit.c timer.c stream.c frame.c synth.c decoder.c  \
-	layer12.c layer3.c huffman.c $(noinst_headers) $(data_includes)
+	layer12.c layer3.c huffman.c 
 
 EXTRA_libmad_a_SOURCES =	imdct_l_arm.S #synth_mmx.S
 
-libmad_a_DEPENDENCIES =	@ASO_OBJS@
-libmad_a_LIBADD =		@ASO_OBJS@
+EXTRA_DIST = COPYRIGHT mad.h.sed $(noinst_headers) $(data_includes)
+libmad_a_DEPENDENCIES =	$(ASO_OBJS)
+libmad_a_LIBADD =	$(ASO_OBJS)
 
-#CFLAGS =	-Wall @CFLAGS@ $(ARCH) $(DEBUGGER) $(OPTIMIZER) $(PROFILER)
-#LDFLAGS =	@LDFLAGS@ $(PROFILER)
+#CFLAGS  +=	$(ARCH) $(DEBUGGER) $(OPTIMIZER) $(PROFILER)
+#LDFLAGS +=	$(PROFILER)
 
 INCLUDES =	$(FPM) $(ASO)
 
@@ -123,11 +122,8 @@ mad.h: $(top_builddir)/config.status $(top_builddir)/config.h Makefile.am  \
 	echo '}';  \
 	echo "# endif") | cat -s >$@
 
-libtool: $(LIBTOOL_DEPS)
-	$(SHELL) $(top_srcdir)/config.status --recheck
-
-.c.s:
-	$(COMPILE) -S $<
+#libtool: $(LIBTOOL_DEPS)
+#	$(SHELL) $(top_srcdir)/config.status --recheck
 
 again: clean all
 
