@@ -170,6 +170,10 @@ void K3bDvdRipperWidget::init( const QValueList<K3bDvdContent>& list ){
 }
 
 void K3bDvdRipperWidget::rip(){
+    QString path = m_editStaticRipPath->url();
+    if( path.endsWith("/") )
+        m_editStaticRipPath->setURL( path.left( path.length()-1 ) );
+
   if( !m_enoughSpace ) {
     KMessageBox::error( this, i18n("Not enough space left in %1").arg(m_editStaticRipPath->url()) );
     return;
@@ -239,9 +243,9 @@ void K3bDvdRipperWidget::slotSetDependDirs( const QString& p ) {
         kdDebug() << "(K3bDvdRipperWidget) new directory. Check existing: " << tmp << endl;
     }
     struct statfs fs;
-    ::statfs(tmp.latin1(),&fs);
+    ::statfs( QFile::encodeName( tmp ), &fs );
     unsigned int kBfak = (unsigned int)(fs.f_bsize/1024);
-    slotFreeTempSpace(tmp,fs.f_blocks*kBfak,(fs.f_blocks-fs.f_bfree)*kBfak,fs.f_bavail*kBfak);
+    slotFreeTempSpace( tmp, fs.f_blocks*kBfak, (fs.f_blocks-fs.f_bfree)*kBfak, fs.f_bavail*kBfak );
 }
 
 void K3bDvdRipperWidget::slotFreeTempSpace( const QString &, unsigned long kBSize,
@@ -261,6 +265,7 @@ void K3bDvdRipperWidget::slotFreeTempSpace( const QString &, unsigned long kBSiz
     QString overview = m_fillDisplay->freeWithDvd() + QString().sprintf( " / %.2f GBytes", ((float)kBSize)/1000000);
     m_hardDiskSpace->setText( overview );
 }
+
 bool K3bDvdRipperWidget::createDirs(){
   bool result = true;
   QString dir = m_editStaticRipPath->url();
