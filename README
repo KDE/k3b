@@ -15,6 +15,7 @@ These are the features:
        - writing on-the-fly
 	    - creating of file-tree via drag'n'drop (as easy as it could be)
             - removing files and directories from data tree
+            - moving files within the project
             - adding new empty directories to data tree
             - renaming of files (manually or automatically for mp3-files) (for joliet and rockrigde)
 	    - support for most of the mkisofs-options (I don't think anyone will ever use them! ;-))

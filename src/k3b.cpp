@@ -99,6 +99,11 @@ K3bMainWindow::K3bMainWindow()
   actionFileExport->setEnabled( false );
 
   m_optionDialog = 0;
+
+  // since the icons are not that good activate the text on the toolbar
+  QListIterator<KToolBar> it = toolBarIterator();
+  for( ; it.current(); ++it )
+    it.current()->setIconText( KToolBar::IconTextRight );
 }
 
 K3bMainWindow::~K3bMainWindow()

@@ -25,7 +25,7 @@
 
 
 K3bBlankingDialog::K3bBlankingDialog( QWidget* parent, const char* name )
-  : KDialogBase( parent, name, false, i18n("Blanking CD-RW"), 
+  : KDialogBase( parent, name, true, i18n("Blanking CD-RW"), 
 		 /*KDialogBase::Help|*/KDialogBase::User2|KDialogBase::User1, 
 		 KDialogBase::User1, true, i18n("Blank"), i18n("Close") )
 {
@@ -168,7 +168,7 @@ void K3bBlankingDialog::slotUser2()
       m_job->cancel();
     }
   else
-    close();
+    done(0);
 }
 
 

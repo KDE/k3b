@@ -129,7 +129,7 @@ QGroupBox* K3bProjectBurnDialog::tempDirBox( QWidget* parent )
 
       m_groupTempDirLayout->addWidget( m_buttonFindIsoImage, 1, 2 );
 
-      m_groupTempDirLayout->setColStretch( 1 , 1);
+      m_groupTempDirLayout->setColStretch( 1, 1 );
 
       m_freeTempSpaceTimer = new QTimer( this );
 
@@ -172,6 +172,7 @@ int K3bProjectBurnDialog::exec( bool burn )
 void K3bProjectBurnDialog::slotUser2()
 {
   saveSettings();
+  m_doc->updateAllViews(0);
   done( Saved );
 }
 

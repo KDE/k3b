@@ -94,7 +94,6 @@ K3bProjectBurnDialog* K3bDataView::burnDialog()
 {
   if( !m_burnDialog ) {
     m_burnDialog = new K3bDataBurnDialog( m_doc, k3bMain(), "databurndialog", true );
-    connect( m_burnDialog, SIGNAL(finished()), m_dataDirTree, SLOT(update()) );  // get changes
   }
 		
   return m_burnDialog;

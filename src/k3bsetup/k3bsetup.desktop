@@ -1,12 +1,12 @@
 # KDE Config File  
 [Desktop Entry]
 Type=Application
-Exec=k3b -caption "%c" %i %m  
+Exec=kdesu k3bsetup  
 Icon=k3b.png
 MiniIcon=k3b.png
 DocPath=k3b/index.html
-Comment=CD writing program
-Comment[de]=CD Brenn Programm
+Comment=Prepares the system for cd writing
+Comment[de]=
 Terminal=0
-Name=K3b
-Name[de]=K3b
+Name=K3b Setup
+Name[de]=K3b Setup

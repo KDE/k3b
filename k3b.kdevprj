@@ -109,7 +109,7 @@ sub_dirs=
 type=po
 
 [src/Makefile.am]
-files=src/main.cpp,src/k3b.cpp,src/k3b.h,src/k3bdoc.cpp,src/k3bdoc.h,src/k3bview.cpp,src/k3bview.h,src/k3bui.rc,src/k3b.desktop,src/lo32-app-k3b.png,src/lo16-app-k3b.png,src/k3bdirview.cpp,src/k3bdirview.h,src/k3bcopywidget.cpp,src/k3bcopywidget.h,src/k3bglobals.h,src/k3bstickybutton.cpp,src/k3bstickybutton.h,src/k3bfillstatusdisplay.cpp,src/k3bfillstatusdisplay.h,src/k3bburnprogressdialog.cpp,src/k3bburnprogressdialog.h,src/k3bjob.cpp,src/k3bjob.h,src/k3bprojectburndialog.cpp,src/k3bprojectburndialog.h,src/kcutlabel.cpp,src/kcutlabel.h,src/k3bglobals.cpp,src/nonsticky.png,src/sticky.png,src/hi16-app-k3b.png,src/hi32-app-k3b.png,src/hi48-app-k3b.png,src/kdiskfreesp.h,src/k3bfileview.cpp,src/k3bfileview.h,src/cddb.h,src/cddb.cpp,src/k3bcddb.cpp,src/k3bcddb.h,src/k3bblankingdialog.cpp,src/k3bblankingdialog.h,src/k3bblankingjob.cpp,src/k3bblankingjob.h,src/k3bexternalbinmanager.cpp,src/k3bexternalbinmanager.h,src/k3bsplash.h,src/k3bsplash.cpp,src/k3b-splash-naive.png,src/hi16-tools-cdinfo.png,src/hi22-tools-cdinfo.png,src/hi16-tools-cdrwblank.png,src/hi22-tools-cdrwblank.png,src/k3bwriterselectionwidget.cpp,src/k3bwriterselectionwidget.h
+files=src/main.cpp,src/k3b.cpp,src/k3b.h,src/k3bdoc.cpp,src/k3bdoc.h,src/k3bview.cpp,src/k3bview.h,src/k3bui.rc,src/k3b.desktop,src/lo32-app-k3b.png,src/lo16-app-k3b.png,src/k3bdirview.cpp,src/k3bdirview.h,src/k3bcopywidget.cpp,src/k3bcopywidget.h,src/k3bglobals.h,src/k3bfillstatusdisplay.cpp,src/k3bfillstatusdisplay.h,src/k3bburnprogressdialog.cpp,src/k3bburnprogressdialog.h,src/k3bjob.cpp,src/k3bjob.h,src/k3bprojectburndialog.cpp,src/k3bprojectburndialog.h,src/kcutlabel.cpp,src/kcutlabel.h,src/k3bglobals.cpp,src/hi16-app-k3b.png,src/hi32-app-k3b.png,src/hi48-app-k3b.png,src/kdiskfreesp.h,src/k3bfileview.cpp,src/k3bfileview.h,src/cddb.h,src/cddb.cpp,src/k3bcddb.cpp,src/k3bcddb.h,src/k3bblankingdialog.cpp,src/k3bblankingdialog.h,src/k3bblankingjob.cpp,src/k3bblankingjob.h,src/k3bexternalbinmanager.cpp,src/k3bexternalbinmanager.h,src/k3bsplash.h,src/k3bsplash.cpp,src/k3b-splash-naive.png,src/hi16-tools-cdinfo.png,src/hi22-tools-cdinfo.png,src/hi16-tools-cdrwblank.png,src/hi22-tools-cdrwblank.png,src/k3bwriterselectionwidget.cpp,src/k3bwriterselectionwidget.h,src/k3bprojecttabwidget.cpp,src/k3bprojecttabwidget.h,src/k3bprojecttabbar.cpp,src/k3bprojecttabbar.h
 sub_dirs=data,cdinfo,audio,device,kiotree,option,rip,kdelibs_patched,libwm
 type=prog_main
 
@@ -884,6 +884,30 @@ install=false
 install_location=
 type=HEADER
 
+[src/k3bprojecttabbar.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/k3bprojecttabbar.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/k3bprojecttabwidget.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/k3bprojecttabwidget.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
 [src/k3bsplash.cpp]
 dist=true
 install=false
@@ -891,18 +915,6 @@ install_location=
 type=SOURCE
 
 [src/k3bsplash.h]
-dist=true
-install=false
-install_location=
-type=HEADER
-
-[src/k3bstickybutton.cpp]
-dist=true
-install=false
-install_location=
-type=SOURCE
-
-[src/k3bstickybutton.h]
 dist=true
 install=false
 install_location=
@@ -1380,14 +1392,8 @@ install=false
 install_location=
 type=SOURCE
 
-[src/nonsticky.png]
-dist=true
-install=true
-install_location=$$(kde_datadir)/k3b/pics/nonsticky.png
-type=DATA
-
 [src/option/Makefile.am]
-files=src/option/k3bdeviceoptiontab.h,src/option/k3bdeviceoptiontab.cpp,src/option/k3boptiondialog.cpp,src/option/k3boptiondialog.h,src/option/k3bburningoptiontab.h,src/option/k3bburningoptiontab.cpp,src/option/k3bcddboptiontab.cpp,src/option/k3bcddboptiontab.h,src/option/k3brippingpatternoptiontab.cpp,src/option/k3brippingpatternoptiontab.h
+files=src/option/k3bdeviceoptiontab.h,src/option/k3bdeviceoptiontab.cpp,src/option/k3boptiondialog.cpp,src/option/k3boptiondialog.h,src/option/k3bburningoptiontab.h,src/option/k3bburningoptiontab.cpp,src/option/k3bcddboptiontab.cpp,src/option/k3bcddboptiontab.h,src/option/k3brippingpatternoptiontab.cpp,src/option/k3brippingpatternoptiontab.h,src/option/k3bexternalbinoptiontab.cpp,src/option/k3bexternalbinoptiontab.h
 sharedlib_LDFLAGS=-version-info 0:5:0
 sharedlib_rootname=option
 sub_dirs=
@@ -1424,6 +1430,18 @@ install_location=
 type=SOURCE
 
 [src/option/k3bdeviceoptiontab.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/option/k3bexternalbinoptiontab.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/option/k3bexternalbinoptiontab.h]
 dist=true
 install=false
 install_location=
@@ -1543,9 +1561,3 @@ dist=true
 install=false
 install_location=
 type=HEADER
-
-[src/sticky.png]
-dist=true
-install=true
-install_location=$$(kde_datadir)/k3b/pics/sticky.png
-type=DATA
