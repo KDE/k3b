@@ -275,12 +275,7 @@ const QString& K3bCdDevice::CdDevice::genericDevice() const
 
 QString K3bCdDevice::CdDevice::busTargetLun() const
 {
-#ifdef SUPPORT_IDE
-  if (d->interfaceType == IDE)
-    return QString("ATAPI:%1").arg(devicename().ascii());
-  else
-#endif
-    return QString("%1,%2,%3").arg(m_bus).arg(m_target).arg(m_lun);
+  return QString("%1,%2,%3").arg(m_bus).arg(m_target).arg(m_lun);
 }
 
 

@@ -23,6 +23,7 @@
 #include <qregexp.h>
 #include <qfile.h>
 #include <qfileinfo.h>
+#include <qptrlist.h>
 
 #include <unistd.h>
 #include <sys/stat.h>
@@ -93,6 +94,21 @@ K3bExternalProgram::K3bExternalProgram( const QString& name )
 K3bExternalProgram::~K3bExternalProgram()
 {
 }
+
+
+const K3bExternalBin* K3bExternalProgram::mostRecentBin() const
+{
+  QPtrListIterator<K3bExternalBin> it( m_bins );
+  K3bExternalBin* bin = *it;
+  ++it;
+  while( *it ) {
+    if( it.current()->version > bin->version )
+      bin = *it;
+    ++it;
+  }
+  return bin;
+}
+
 
 void K3bExternalProgram::addBin( K3bExternalBin* bin )
 {
@@ -379,6 +395,14 @@ K3bExternalBinManager* K3bExternalBinManager::self()
   return instance;
 }
 
+
+const K3bExternalBin* K3bExternalBinManager::mostRecentBinObject( const QString& name )
+{
+  if( K3bExternalProgram* p = program( name ) )
+    return p->mostRecentBin();
+  else
+    return 0;
+}
 
 #include "k3bexternalbinmanager.moc"
 

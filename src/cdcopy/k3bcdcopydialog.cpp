@@ -26,6 +26,7 @@
 #include <device/k3bdevicemanager.h>
 #include <k3bburnprogressdialog.h>
 #include <tools/k3bglobals.h>
+#include <tools/k3bexternalbinmanager.h>
 
 #include <kguiitem.h>
 #include <klocale.h>
@@ -172,26 +173,6 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   mainGrid->setRowStretch( 2, 1 );
 
 
-  // -- read cd-devices ----------------------------------------------
-  QPtrList<K3bDevice> devices = k3bcore->deviceManager()->readingDevices();
-  K3bDevice* dev = devices.first();
-  while( dev ) {
-    // cdrdao only supports SCSI devices
-    if( dev->interfaceType() == K3bDevice::SCSI )
-      m_comboSourceDevice->insertItem( dev->vendor() + " " + dev->description() + " (" + dev->blockDeviceName() + ")" );
-    dev = devices.next();
-  }
-  devices = k3bcore->deviceManager()->burningDevices();
-  dev = devices.first();
-  while( dev ) {
-    // cdrdao only supports SCSI devices
-    if( dev->interfaceType() == K3bDevice::SCSI )
-      m_comboSourceDevice->insertItem( dev->vendor() + " " + dev->description() + " (" + dev->blockDeviceName() + ")" );
-    dev = devices.next();
-  }
-  if ( !devices.first() )
-    m_buttonStart->setEnabled(false);
-
   connect( m_comboSourceDevice, SIGNAL(activated(int)), this, SLOT(slotSourceSelected()) );
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotSourceSelected()) );
 
@@ -207,9 +188,9 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
 
   connect( m_checkTaoSource, SIGNAL(toggled(bool)), m_spinTaoSourceAdjust, SLOT(setEnabled(bool)) );
   connect( m_checkTaoSource, SIGNAL(toggled(bool)), taoSourceAdjustLabel, SLOT(setEnabled(bool)) );
+
+  initReadingDevices();
   slotSourceSelected();
-
-
   slotLoadUserDefaults();
 
 
@@ -262,6 +243,32 @@ K3bCdCopyDialog::~K3bCdCopyDialog()
 {
 }
 
+
+void K3bCdCopyDialog::initReadingDevices()
+{
+  // simple thing: if the used cdrdao version and the kernel do support
+  // ATAPI we use it, otherwise we can only use SCSI devices
+  const K3bExternalBin* cdrdaoBin = k3bcore->externalBinManager()->binObject("cdrdao");
+
+  if( cdrdaoBin ) {
+    QPtrList<K3bDevice> devices = k3bcore->deviceManager()->allDevices();
+    K3bDevice* dev = devices.first();
+    while( dev ) {
+      if( dev->interfaceType() == K3bDevice::SCSI ||
+	  (K3bCdDevice::plainAtapiSupport() && cdrdaoBin->hasFeature("plain-atapi")) ||
+	  (K3bCdDevice::hackedAtapiSupport() && cdrdaoBin->hasFeature("hacked-atapi")) )
+	m_comboSourceDevice->insertItem( dev->vendor() + " " + dev->description() + " (" + dev->blockDeviceName() + ")" );
+      dev = devices.next();
+    }
+      
+    if ( !devices.first() )
+      m_buttonStart->setEnabled(false);
+  }
+  else {
+    kdError() << "(K3bCdCopyDialog) Could not find cdrdao." << endl;
+    m_buttonStart->setEnabled(false);
+  }
+}
 
 void K3bCdCopyDialog::slotSourceSelected()
 {

@@ -16,35 +16,41 @@
 
 
 #include "k3bglobals.h"
+#include <k3bversion.h>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kconfig.h>
 #include <kapplication.h>
+#include <kdebug.h>
 
 #include <qdatastream.h>
 #include <qdir.h>
 #include <qfile.h>
 
 #include <cmath>
+#include <sys/utsname.h>
 
 struct Sample {
-    unsigned char msbLeft;
-    unsigned char lsbLeft;
-    unsigned char msbRight;
-    unsigned char lsbRight;
+  unsigned char msbLeft;
+  unsigned char lsbLeft;
+  unsigned char msbRight;
+  unsigned char lsbRight;
 
-    short left (  ) const {
-        return ( msbLeft << 8 ) | lsbLeft;
-    } short right (  ) const {
-        return ( msbRight << 8 ) | lsbRight;
-    } void left ( short d ) {
-        msbLeft = d >> 8;
-        lsbLeft = d;
-    } void right ( short d ) {
-        msbRight = d >> 8;
-        lsbRight = d;
-    }
+  short left() const {
+    return ( msbLeft << 8 ) | lsbLeft;
+  } 
+  short right() const {
+    return ( msbRight << 8 ) | lsbRight;
+  } 
+  void left( short d ) {
+    msbLeft = d >> 8;
+    lsbLeft = d;
+  } 
+  void right( short d ) {
+    msbRight = d >> 8;
+    lsbRight = d;
+  }
 };
 
 QString K3b::framesToString( int h, bool showFrames )
@@ -143,4 +149,19 @@ QString K3b::defaultTempPath()
 QString K3b::prepareDir( const QString& dir )
 {
   return (dir + (dir[dir.length()-1] != '/' ? "/" : ""));
+}
+
+
+K3bVersion K3b::kernelVersion()
+{
+  // initialize kernel version
+  K3bVersion v;
+  utsname unameinfo;
+  if( ::uname(&unameinfo) == 0 ) {
+    v = unameinfo.release;
+    kdDebug() << "linux kernel version: " << v << endl;
+  }
+  else
+    kdError() << "could not determine Linux kernel version." << endl;
+  return v;
 }

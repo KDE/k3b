@@ -68,6 +68,7 @@ class K3bExternalProgram
   virtual ~K3bExternalProgram();
 
   const K3bExternalBin* defaultBin() const { return m_bins.getFirst(); }
+  const K3bExternalBin* mostRecentBin() const;
 
   void addUserParameter( const QString& );
   void setUserParameters( const QStringList& list ) { m_userParameters = list; }
@@ -143,6 +144,7 @@ class K3bExternalBinManager : public QObject
   bool foundBin( const QString& name );
   const QString& binPath( const QString& name );
   const K3bExternalBin* binObject( const QString& name );
+  const K3bExternalBin* mostRecentBinObject( const QString& name );
 
   K3bExternalProgram* program( const QString& ) const;
   const QMap<QString, K3bExternalProgram*>& programs() const { return m_programs; }

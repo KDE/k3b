@@ -29,97 +29,117 @@
 class KProcess;
 class KConfig;
 class K3bExternalBinManager;
-class cdrom_drive;
+class K3bExternalBin;
+
 
 namespace K3bCdDevice {
 
-class DeviceManager : public QObject
-{
-  Q_OBJECT
+  class DeviceManager : public QObject
+    {
+      Q_OBJECT
 
- public:
-  ~DeviceManager();
+    public:
+      ~DeviceManager();
 
-  static DeviceManager* self();
+      static DeviceManager* self();
 
-  K3bDevice* deviceByName( const QString& );
+      K3bDevice* deviceByName( const QString& );
 
-  K3bDevice* findDevice( int bus, int id, int lun );
-  K3bDevice* findDevice( const QString& devicename );
+      K3bDevice* findDevice( int bus, int id, int lun );
+      K3bDevice* findDevice( const QString& devicename );
+
+      /**
+       * Before getting the devices do a @ref scanbus().
+       * @return List of all writer devices.
+       */
+      QList<K3bDevice>& burningDevices();
+
+      /**
+       * Note that all burning devices can also be used as
+       * reading device and are not present in this list.
+       * Before getting the devices do a @ref scanbus().
+       * @return List of all reader devices without writer devices.
+       **/
+      QList<K3bDevice>& readingDevices();
+
+      QList<K3bDevice>& allDevices();
+
+
+      /** writes to stderr **/
+      void printDevices();
+
+      /**
+       * Returns number of found devices and constructs
+       * the lists m_burner and m_reader.
+       **/
+      int scanbus();
+
+      void scanFstab();
+
+      /**
+       * Reads the device information from the config file.
+       */
+      bool readConfig( KConfig* );
+
+      bool saveConfig( KConfig* );
+
+      /**
+       * Clears the writers and readers list of devices.
+       */
+      void clear();
+
+      /**
+       * add a new device like "/dev/mebecdrom" to be sensed
+       * by the deviceManager.
+       */
+      K3bDevice* addDevice( const QString& );
+
+    private slots:
+      void slotCollectStdout( KProcess*, char* data, int len );
+
+    private:
+      /**
+       * Constructs a device-manager and scans the scsi-bus
+       * for devices. Every instance of K3bDeviceManager on
+       * a machine is equal, so having multible instances
+       * does not make sense.
+       **/
+      DeviceManager();
+
+      bool testForCdrom( const QString& );
+      bool determineBusIdLun( const QString &dev, int& bus, int& id, int& lun );
+      void determineCapabilities(K3bDevice *dev);
+      QString resolveSymLink( const QString& path );
+
+      K3bExternalBinManager* m_externalBinManager;
+
+      QList<K3bDevice> m_reader;
+      QList<K3bDevice> m_writer;
+      QList<K3bDevice> m_allDevices;;
+      int m_foundDevices;
+
+      QString m_processOutput;
+
+    };
 
   /**
-   * Before getting the devices do a @ref scanbus().
-   * @return List of all writer devices.
+   * true if the kernel supports ATAPI devices without SCSI emulation.
+   * use in combination with the K3bExternalProgram feature "plain-atapi"
    */
-  QPtrList<K3bDevice>& burningDevices();
-
+  bool plainAtapiSupport();
+  
   /**
-   * Note that all burning devices can also be used as
-   * reading device and are not present in this list.
-   * Before getting the devices do a @ref scanbus().
-   * @return List of all reader devices without writer devices.
-   **/
-  QPtrList<K3bDevice>& readingDevices();
-
-  QPtrList<K3bDevice>& allDevices();
-
-
-  /** writes to stderr **/
-  void printDevices();
-
-  /**
-   * Returns number of found devices and constructs
-   * the lists m_burner and m_reader.
-   **/
-  int scanbus();
-
-  void scanFstab();
-
-  /**
-   * Reads the device information from the config file.
+   * true if the kernel supports ATAPI devices without SCSI emulation
+   * via the ATAPI: pseudo stuff
+   * use in combination with the K3bExternalProgram feature "hacked-atapi"
    */
-  bool readConfig( KConfig* );
-
-  bool saveConfig( KConfig* );
+  bool hackedAtapiSupport();
 
   /**
-   * Clears the writers and readers list of devices.
+   * Used to create a parameter for cdrecord, cdrdao or readcd.
+   * Takes care of SCSI and ATAPI.
    */
-  void clear();
-
-  /**
-   * add a new device like "/dev/mebecdrom" to be sensed
-   * by the deviceManager.
-   */
-  K3bDevice* addDevice( const QString& );
-
- private slots:
-  void slotCollectStdout( KProcess*, char* data, int len );
-
- private:
-  /**
-   * Constructs a device-manager and scans the scsi-bus
-   * for devices. Every instance of K3bDeviceManager on
-   * a machine is equal, so having multible instances
-   * does not make sense.
-   **/
-  DeviceManager();
-
-  bool testForCdrom( const QString& );
-  bool determineBusIdLun( const QString &dev, int& bus, int& id, int& lun );
-  void determineCapabilities(K3bDevice *dev);
-  QString resolveSymLink( const QString& path );
-
-  K3bExternalBinManager* m_externalBinManager;
-
-  QPtrList<K3bDevice> m_reader;
-  QPtrList<K3bDevice> m_writer;
-  QPtrList<K3bDevice> m_allDevices;;
-  int m_foundDevices;
-
-  QString m_processOutput;
-
-};
+  QString externalBinDeviceParameter( K3bDevice* dev, const K3bExternalBin* );
 };
 
 typedef K3bCdDevice::DeviceManager K3bDeviceManager;

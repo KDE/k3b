@@ -20,7 +20,7 @@
 #include <qstring.h>
 
 class KConfig;
-
+class K3bVersion;
 
 namespace K3b
 {
@@ -85,6 +85,8 @@ namespace K3b
    * makes sure a path ends with a "/"
    */
   QString prepareDir( const QString& dir );
+
+  K3bVersion kernelVersion();
 };
 
 #endif

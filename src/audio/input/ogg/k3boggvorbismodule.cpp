@@ -185,11 +185,11 @@ int K3bOggVorbisModule::analyseTrack( const QString& filename, unsigned long& si
 	  QString comment( vComment->user_comments[i] );
 	  QStringList values = QStringList::split( "=", comment );
 	  if( values.count() > 1 ) {
-	    if( values[0] == "title" )
+	    if( values[0].lower() == "title" )
 	      info.setTitle( values[1] );
-	    else if( values[0] == "artist" )
+	    else if( values[0].lower() == "artist" )
 	      info.setArtist( values[1] );
-	    else if( values[0] == "album" )
+	    else if( values[0].lower() == "album" )
 	      info.setAlbumTitle( values[1] );
 	  }
 	}

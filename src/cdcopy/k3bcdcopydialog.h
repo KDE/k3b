@@ -52,6 +52,8 @@ class K3bCdCopyDialog : public K3bInteractionDialog
   void slotLoadK3bDefaults();
 
  private:
+  void initReadingDevices();
+
   K3bWriterSelectionWidget* m_writerSelectionWidget;
   K3bTempDirSelectionWidget* m_tempDirSelectionWidget;
   QCheckBox* m_checkSimulate;

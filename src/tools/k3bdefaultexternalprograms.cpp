@@ -151,6 +151,12 @@ bool K3bCdrecordProgram::scan( const QString& p )
     return false;
   }
 
+  // FIXME: are these version correct?
+  if( bin->version >= K3bVersion("1.11a38") )
+    bin->addFeature( "plain-atapi" );
+  if( bin->version > K3bVersion("1.11a17") )
+    bin->addFeature( "hacked-atapi" );
+
   addBin( bin );
   return true;
 }
@@ -488,6 +494,12 @@ bool K3bCdrdaoProgram::scan( const QString& p )
     delete bin;
     return false;
   }
+
+
+  if( bin->version > K3bVersion("1.1.7") )
+    bin->addFeature( "plain-atapi" );
+  if( bin->version > K3bVersion("1.1.7") )
+    bin->addFeature( "hacked-atapi" );
 
   addBin(bin);
   return true;

@@ -439,111 +439,126 @@ bool K3bCdDevice::DeviceManager::saveConfig( KConfig* c )
 
 void K3bCdDevice::DeviceManager::determineCapabilities(K3bDevice *dev)
 {
-#ifndef SUPPORT_IDE
-  if (dev->interfaceType() == K3bDevice::IDE )
+  // we do not use the user configured cdrecord here since we want to make sure 
+  // to get all the capabilities of the system
+
+  const K3bExternalBin* cdrecordBin = m_externalBinManager->mostRecentBinObject( "cdrecord" );
+  if( !cdrecordBin ) {
+    kdError() << "(K3bDeviceManager) Could not find cdrecord. No proper device initialization possible." << endl;
     return;
-#endif
-  if( m_externalBinManager->foundBin( "cdrecord" ) )
-  {
-    kdDebug() << "(K3bDeviceManager) probing capabilities for device " << dev->blockDeviceName() << endl;
+  }
 
-    KProcess driverProc, capProc;
-    driverProc << m_externalBinManager->binPath( "cdrecord" );
-    driverProc << QString("dev=%1").arg(dev->busTargetLun());
-    driverProc << "-checkdrive";
-    connect( &driverProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
-             this, SLOT(slotCollectStdout(KProcess*, char*, int)) );
+  if (dev->interfaceType() == K3bDevice::IDE ) {
+    // only if the kernel and cdrecord support atapi
+    if( !(plainAtapiSupport() && cdrecordBin->hasFeature("plain-atapi") ) &&
+	!(hackedAtapiSupport() && cdrecordBin->hasFeature("hacked-atapi")) ) {
+      kdError() << "(K3bDeviceManager) no ATAPI support." << endl;
+      return;
+    }
+  }
 
-    m_processOutput = "";
 
-    driverProc.start( KProcess::Block, KProcess::Stdout );
-    // this should work for all drives
-    // so we are always able to say if a drive is a writer or not
-    if( driverProc.exitStatus() == 0 )
+  kdDebug() << "(K3bDeviceManager) probing capabilities for device " << dev->blockDeviceName() << endl;
+
+  KProcess driverProc, capProc;
+  driverProc << cdrecordBin->path;
+
+  driverProc << QString("dev=%1").arg(externalBinDeviceParameter(dev, cdrecordBin));
+
+  driverProc << "-checkdrive";
+  connect( &driverProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
+	   this, SLOT(slotCollectStdout(KProcess*, char*, int)) );
+
+  m_processOutput = "";
+
+  driverProc.start( KProcess::Block, KProcess::Stdout );
+  // this should work for all drives
+  // so we are always able to say if a drive is a writer or not
+  if( driverProc.exitStatus() == 0 )
     {
       dev->m_burner = true;
       dev->m_writeModes = 0;
       QStringList lines = QStringList::split( "\n", m_processOutput );
       for( QStringList::const_iterator it = lines.begin(); it != lines.end(); ++it )
-      {
-        const QString& line = *it;
+	{
+	  const QString& line = *it;
 
-        // no info in cdrecord <= 1.10 !!!!!
-        if( line.startsWith( "Supported modes" ) )
-        {
-          QStringList modes = QStringList::split( " ", line.mid(16) );
-          if( modes.contains( "SAO" ) )
-            dev->m_writeModes |= K3bDevice::SAO;
-          if( modes.contains( "TAO" ) )
-            dev->m_writeModes |= K3bDevice::TAO;
-          if( modes.contains( "PACKET" ) )
-            dev->m_writeModes |= K3bDevice::PACKET;
-          if( modes.contains( "SAO/R96R" ) )
-            dev->m_writeModes |= K3bDevice::SAO_R96R;
-          if( modes.contains( "SAO/R96P" ) )
-            dev->m_writeModes |= K3bDevice::SAO_R96P;
-          if( modes.contains( "RAW/R16" ) )
-            dev->m_writeModes |= K3bDevice::RAW_R16;
-          if( modes.contains( "RAW/R96R" ) )
-            dev->m_writeModes |= K3bDevice::RAW_R96R;
-          if( modes.contains( "RAW/R96P" ) )
-            dev->m_writeModes |= K3bDevice::RAW_R96P;
-          break;
-        }
-      }
+	  // no info in cdrecord <= 1.10 !!!!!
+	  if( line.startsWith( "Supported modes" ) )
+	    {
+	      QStringList modes = QStringList::split( " ", line.mid(16) );
+	      if( modes.contains( "SAO" ) )
+		dev->m_writeModes |= K3bDevice::SAO;
+	      if( modes.contains( "TAO" ) )
+		dev->m_writeModes |= K3bDevice::TAO;
+	      if( modes.contains( "PACKET" ) )
+		dev->m_writeModes |= K3bDevice::PACKET;
+	      if( modes.contains( "SAO/R96R" ) )
+		dev->m_writeModes |= K3bDevice::SAO_R96R;
+	      if( modes.contains( "SAO/R96P" ) )
+		dev->m_writeModes |= K3bDevice::SAO_R96P;
+	      if( modes.contains( "RAW/R16" ) )
+		dev->m_writeModes |= K3bDevice::RAW_R16;
+	      if( modes.contains( "RAW/R96R" ) )
+		dev->m_writeModes |= K3bDevice::RAW_R96R;
+	      if( modes.contains( "RAW/R96P" ) )
+		dev->m_writeModes |= K3bDevice::RAW_R96P;
+	      break;
+	    }
+	}
     }
 
-    // default to dao and tao if no write modes info was available (cdrecord <= 1.10)
-    // I include this hack because I think it's better to get an error:
-    //   "mode not supported" when trying to write instead of never getting to choose DAO!
-    if( dev->m_writeModes == 0 )
-      dev->m_writeModes = K3bDevice::SAO|K3bDevice::TAO;
+  // default to dao and tao if no write modes info was available (cdrecord <= 1.10)
+  // I include this hack because I think it's better to get an error:
+  //   "mode not supported" when trying to write instead of never getting to choose DAO!
+  if( dev->m_writeModes == 0 )
+    dev->m_writeModes = K3bDevice::SAO|K3bDevice::TAO;
 
-    dev->setDao( dev->supportsWriteMode( K3bDevice::SAO ) );
+  dev->setDao( dev->supportsWriteMode( K3bDevice::SAO ) );
 
 
 
-    // check drive capabilities
-    // does only work for generic-mmc drives
-    capProc << m_externalBinManager->binPath( "cdrecord" );
-    capProc << QString("dev=%1").arg(dev->busTargetLun());
-    capProc << "-prcap";
+  // check drive capabilities
+  // does only work for generic-mmc drives
+  capProc << cdrecordBin->path;
+  capProc << QString("dev=%1").arg(externalBinDeviceParameter(dev, cdrecordBin));
+  capProc << "-prcap";
 
-    connect( &capProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
-             this, SLOT(slotCollectStdout(KProcess*, char*, int)) );
+  connect( &capProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
+	   this, SLOT(slotCollectStdout(KProcess*, char*, int)) );
 
-    m_processOutput = "";
+  m_processOutput = "";
 
-    capProc.start( KProcess::Block, KProcess::Stdout );
+  capProc.start( KProcess::Block, KProcess::Stdout );
 
-    QStringList lines = QStringList::split( "\n", m_processOutput );
+  QStringList lines = QStringList::split( "\n", m_processOutput );
 
-    // parse output
-    for( QStringList::const_iterator it = lines.begin(); it != lines.end(); ++it )
+  // parse output
+  for( QStringList::const_iterator it = lines.begin(); it != lines.end(); ++it )
     {
       const QString& line = *it;
 
       if( line.startsWith("  ") )
-      {
-        if( line.contains("write CD-R media") )
-          dev->m_burner = !line.contains( "not" );
+	{
+	  if( line.contains("write CD-R media") )
+	    dev->m_burner = !line.contains( "not" );
 
-        else if( line.contains("write CD-RW media") )
-          dev->m_bWritesCdrw = !line.contains( "not" );
+	  else if( line.contains("write CD-RW media") )
+	    dev->m_bWritesCdrw = !line.contains( "not" );
 
-        else if( line.contains("Buffer-Underrun-Free recording") ||
-                 line.contains("support BURN-Proof") )
-          dev->m_burnproof = !line.contains( "not" );
+	  else if( line.contains("Buffer-Underrun-Free recording") ||
+		   line.contains("support BURN-Proof") )
+	    dev->m_burnproof = !line.contains( "not" );
 
-        else if( line.contains( "Maximum read  speed" ) ) //lukas: are there really two spaces? trueg: Yes, there are! ;)
-          dev->m_maxReadSpeed = K3b::round( line.mid( line.find(":")+1 ).toDouble() * 1000.0 / ( 2352.0 * 75.0 ) );
+	  else if( line.contains( "Maximum read  speed" ) ) //lukas: are there really two spaces? trueg: Yes, there are! ;)
+	    dev->m_maxReadSpeed = K3b::round( line.mid( line.find(":")+1 ).toDouble() * 1000.0 / ( 2352.0 * 75.0 ) );
 
-        else if( line.contains( "Maximum write speed" ) )
-          dev->m_maxWriteSpeed = K3b::round( line.mid( line.find(":")+1 ).toDouble() * 1000.0 / ( 2352.0 * 75.0 ) );
+	  else if( line.contains( "Maximum write speed" ) )
+	    dev->m_maxWriteSpeed = K3b::round( line.mid( line.find(":")+1 ).toDouble() * 1000.0 / ( 2352.0 * 75.0 ) );
 
-        else if( line.contains( "Buffer size" ) )
-          dev->m_bufferSize = line.mid( line.find(":")+1 ).toInt();
-      }
+	  else if( line.contains( "Buffer size" ) )
+	    dev->m_bufferSize = line.mid( line.find(":")+1 ).toInt();
+	}
       else if( line.startsWith("Vendor_info") )
         dev->m_vendor = line.mid( line.find(":")+3, 8 ).stripWhiteSpace();
       else if( line.startsWith("Identifikation") )
@@ -551,10 +566,9 @@ void K3bCdDevice::DeviceManager::determineCapabilities(K3bDevice *dev)
       else if( line.startsWith("Revision") )
         dev->m_version = line.mid( line.find(":")+3, 4 ).stripWhiteSpace();
       else
-        kdDebug() << "(K3bDeviceManager) unusable cdrecord output: " << line << endl;
+        kdDebug() << "(K3bDeviceManager) unused cdrecord output: " << line << endl;
 
     }
-  }
 }
 
 
@@ -780,5 +794,30 @@ K3bCdDevice::DeviceManager* K3bCdDevice::DeviceManager::self()
   return instance;
 }
 
+
+bool K3bCdDevice::plainAtapiSupport()
+{
+  // IMPROVEME!!!
+  return ( K3b::kernelVersion() >= K3bVersion("2.5.40") );
+}
+
+
+bool K3bCdDevice::hackedAtapiSupport()
+{
+  // IMPROVEME!!!
+  // FIXME: since when does the kernel support this?
+  return ( K3b::kernelVersion() >= K3bVersion("2.4") );
+}
+
+
+QString K3bCdDevice::externalBinDeviceParameter( K3bDevice* dev, const K3bExternalBin* bin )
+{
+  if( dev->interfaceType() == K3bDevice::SCSI )
+    return dev->busTargetLun();
+  else if( (plainAtapiSupport() && bin->hasFeature("plain-atapi") ) )
+    return dev->blockDeviceName();
+  else
+    return QString("ATAPI:%1").arg(dev->blockDeviceName());
+}
 
 #include "k3bdevicemanager.moc"

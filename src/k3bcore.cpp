@@ -29,6 +29,7 @@
 #include <kaboutdata.h>
 
 
+
 class K3bCore::Private {
 public:
   Private( const KAboutData* about )

@@ -398,67 +398,63 @@ void K3bDeviceWidget::updateDeviceListViews()
 									   dev,
 									   devRoot,
 									   versionItem );
-
-    // now add the SCSI specific items
-    if( dev->device->interfaceType() == K3bDevice::SCSI ) {
-      PrivateDeviceViewItem1* cdrdaoDriverItem = new PrivateDeviceViewItem1( PrivateDeviceViewItem1::t_cdrdaoDriver,
-									     dev,
-									     devRoot,
-									     maxReadSpeedItem );
-
-      // the writer specific items
-      if( dev->writer ) {
-	// add max write speed item after the maxreadspeed item
-	(void)new PrivateDeviceViewItem1( PrivateDeviceViewItem1::t_maxWriteSpeed,
-					  dev,
-					  devRoot,
-					  maxReadSpeedItem );
-
-	PrivateDeviceViewItem1* cdTextItem = new PrivateDeviceViewItem1( PrivateDeviceViewItem1::t_cdTextCapable,
-									 dev,
-									 devRoot,
-									 cdrdaoDriverItem );
-
-	PrivateDeviceViewItem2* burnfreeItem = new PrivateDeviceViewItem2( PrivateDeviceViewItem2::t_burnproof,
+    PrivateDeviceViewItem1* cdrdaoDriverItem = new PrivateDeviceViewItem1( PrivateDeviceViewItem1::t_cdrdaoDriver,
 									   dev,
 									   devRoot,
-									   cdTextItem );
+									   maxReadSpeedItem );
 
-	PrivateDeviceViewItem2* cdrwItem = new PrivateDeviceViewItem2( PrivateDeviceViewItem2::t_cdrw,
+    // now add the writer specific items
+    if( dev->writer ) {
+      // add max write speed item after the maxreadspeed item
+      (void)new PrivateDeviceViewItem1( PrivateDeviceViewItem1::t_maxWriteSpeed,
+					dev,
+					devRoot,
+					maxReadSpeedItem );
+      
+      PrivateDeviceViewItem1* cdTextItem = new PrivateDeviceViewItem1( PrivateDeviceViewItem1::t_cdTextCapable,
 								       dev,
 								       devRoot,
-								       burnfreeItem );
+								       cdrdaoDriverItem );
+      
+      PrivateDeviceViewItem2* burnfreeItem = new PrivateDeviceViewItem2( PrivateDeviceViewItem2::t_burnproof,
+									 dev,
+									 devRoot,
+									 cdTextItem );
+      
+      PrivateDeviceViewItem2* cdrwItem = new PrivateDeviceViewItem2( PrivateDeviceViewItem2::t_cdrw,
+								     dev,
+								     devRoot,
+								     burnfreeItem );
+      
+      PrivateDeviceViewItem2* daoItem = new PrivateDeviceViewItem2( PrivateDeviceViewItem2::t_dao,
+								    dev,
+								    devRoot,
+								    cdrwItem );
 
-	PrivateDeviceViewItem2* daoItem = new PrivateDeviceViewItem2( PrivateDeviceViewItem2::t_dao,
-								      dev,
-								      devRoot,
-								      cdrwItem );
-
-	// and at last the write modes
-	QString wm;
-	if( dev->device->supportsWriteMode( K3bDevice::SAO ) )
-	  wm += "SAO ";
-	if( dev->device->supportsWriteMode( K3bDevice::SAO_R96R ) )
-	  wm += "SAO/R96R ";
-	if( dev->device->supportsWriteMode( K3bDevice::SAO_R96P ) )
-	  wm += "SAO/R96P ";
-	if( dev->device->supportsWriteMode( K3bDevice::PACKET ) )
-	  wm += "PACKET ";
-	if( dev->device->supportsWriteMode( K3bDevice::TAO ) )
-	  wm += "TAO ";
-	if( dev->device->supportsWriteMode( K3bDevice::RAW_R16 ) )
-	  wm += "RAW/R16 ";
-	if( dev->device->supportsWriteMode( K3bDevice::RAW_R96R ) )
-	  wm += "RAW/R96R ";
-	if( dev->device->supportsWriteMode( K3bDevice::RAW_R96P ) )
-	  wm += "RAW/R96P ";
-
-	(new K3bListViewItem( devRoot, daoItem, i18n("Write modes:"), wm ))->setForegroundColor( 1, gray );
-      }
-
-      devRoot->setOpen(true);
+      // and at last the write modes
+      QString wm;
+      if( dev->device->supportsWriteMode( K3bDevice::SAO ) )
+	wm += "SAO ";
+      if( dev->device->supportsWriteMode( K3bDevice::SAO_R96R ) )
+	wm += "SAO/R96R ";
+      if( dev->device->supportsWriteMode( K3bDevice::SAO_R96P ) )
+	wm += "SAO/R96P ";
+      if( dev->device->supportsWriteMode( K3bDevice::PACKET ) )
+	wm += "PACKET ";
+      if( dev->device->supportsWriteMode( K3bDevice::TAO ) )
+	wm += "TAO ";
+      if( dev->device->supportsWriteMode( K3bDevice::RAW_R16 ) )
+	wm += "RAW/R16 ";
+      if( dev->device->supportsWriteMode( K3bDevice::RAW_R96R ) )
+	wm += "RAW/R96R ";
+      if( dev->device->supportsWriteMode( K3bDevice::RAW_R96P ) )
+	wm += "RAW/R96P ";
+      
+      (new K3bListViewItem( devRoot, daoItem, i18n("Write modes:"), wm ))->setForegroundColor( 1, gray );
     }
 
+    devRoot->setOpen(true);
+    
     dev = m_tempDevices.next();
   }
 

@@ -20,6 +20,7 @@
 #include <k3bexternalbinmanager.h>
 #include <k3bprocess.h>
 #include <device/k3bdevice.h>
+#include <device/k3bdevicemanager.h>
 #include <tools/k3bglobals.h>
 
 #include <qstring.h>
@@ -130,7 +131,7 @@ void K3bCdrecordWriter::prepareArgumentList()
     *m_process << "gracetime=2";  // 2 is the lowest allowed value (Joerg, why do you do this to us?)
     
   // Again we assume the device to be set!
-  *m_process << QString("dev=%1").arg(burnDevice()->busTargetLun());
+  *m_process << QString("dev=%1").arg(K3bCdDevice::externalBinDeviceParameter(burnDevice(), m_cdrecordBinObject));
   *m_process << QString("speed=%1").arg(burnSpeed());
     
   if( m_writingMode == K3b::DAO ) {
