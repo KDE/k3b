@@ -34,6 +34,7 @@ K3b now always writes a logfile in $(KDEHOME)/share/apps/k3b/lastlog.log
 New device configuration format which solves all issues with removable devices like USB.
 Using a ringbuffer for growisofs (based on pipebuf2)
 Copy CSS encrypted DVDs if libdvdcss is installed.
+Libsndfile decoder plugin. This includes support for AIFF audio files.
 	
 0.11.10
 Support Mp3 files starting with multiple ID3 tags.

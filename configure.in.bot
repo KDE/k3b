@@ -28,6 +28,16 @@ fi
 
 echo ""
 
+if $av_cv_sndfile; then
+	echo "libsndfile audio decoding support:      yes"
+else
+	echo "libsndfile audio decoding support:      no"
+	echo "    You are missing the libsndfile headers and libraries"
+	echo "    The libsndfile audio decoding plugin won't be compiled."
+fi
+
+echo ""
+
 if test x$have_flac = xyes; then
 	echo "FLAC support:                          yes"
 else
@@ -51,7 +61,7 @@ echo ""
 if test -n "$LIBSAMPLERATE"; then
         echo "Audio resampling:  using installed version"
 else
-        echo "Audio resampling:        using K3b version"
+        echo "Audio resampling:        using version bundled with K3b"
 fi
 
 echo ""
