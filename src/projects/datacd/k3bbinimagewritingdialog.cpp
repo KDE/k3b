@@ -131,14 +131,8 @@ void K3bBinImageWritingDialog::setupGui()
 
   // image group box
   // -----------------------------------------------------------------------
-  QGroupBox* groupImage = new QGroupBox( i18n("CUE/TOC File"), frame );
-  groupImage->setColumnLayout(0, Qt::Vertical );
-  groupImage->layout()->setSpacing( 0 );
-  groupImage->layout()->setMargin( 0 );
-  QGridLayout* groupImageLayout = new QGridLayout( groupImage->layout() );
-  groupImageLayout->setAlignment( Qt::AlignTop );
-  groupImageLayout->setSpacing( spacingHint() );
-  groupImageLayout->setMargin( marginHint() );
+  QGroupBox* groupImage = new QGroupBox( 1, Qt::Vertical, i18n("CUE/TOC File"), frame );
+  groupImage->layout()->setMargin( marginHint() );
 
   m_editTocPath = new KURLRequester( groupImage );
   m_editTocPath->setCaption( i18n("Choose TOC/CUE file") );
@@ -146,8 +140,6 @@ void K3bBinImageWritingDialog::setupGui()
   filter += "\n" + i18n("*.toc|Toc Files");
   filter += "\n" + i18n("*|All Files");
   m_editTocPath->setFilter(filter);
-
-  groupImageLayout->addWidget( m_editTocPath, 0, 0 );
 
   // options
   // -----------------------------------------------------------------------

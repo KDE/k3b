@@ -1,6 +1,7 @@
 0.10
 DVD writing support with the DVD+RW-tools by Andy Polyakov <appro@fy.chalmers.se>
 DVD formatting
+DVD Copy (pure data dvd copy without any video transcoding)
 CD Cloning with cdrtools >= 2.01a17
 device capabilities detection without cdrecord. This solves the long startup problem with ATAPI devices.
 moved audio ripping pattern configuration from options dialog to audio ripping dialog

@@ -119,7 +119,10 @@ bool K3bGrowisofsWriter::prepareProcess()
   *d->process << "-Z";
   QString s = burnDevice()->blockDeviceName() + "=";
   if( d->image.isEmpty() )
-    s += "/dev/fd/0";  // read from stdin
+    // read from stdin (in this case growisofs reads the size of the Iso9660 filesystem from it's header
+    //                  resulting in the restriction to iso9660 images. Thus we are not able to write pure
+    //                  udf images to stdin.)
+    s += "/dev/fd/0";
   else
     s += d->image;
 

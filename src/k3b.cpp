@@ -91,6 +91,7 @@
 #include "k3bstdguiitems.h"
 #include "datadvd/k3bdvdformattingdialog.h"
 #include "cdclone/k3bclonedialog.h"
+#include "dvdcopy/k3bdvdcopydialog.h"
 #include "k3bprojectinterface.h"
 #include <k3bprojectmanager.h>
 #include "k3bwelcomewidget.h"
@@ -282,6 +283,9 @@ void K3bMainWindow::initActions()
 
   (void)new KAction(i18n("C&lone CD..."), "cdcopy", 0, this, SLOT(slotCdClone()),
 		    actionCollection(), "tools_clone_cd" );
+
+  (void)new KAction(i18n("Copy &DVD..."), "cdcopy", 0, this, SLOT(slotDvdCopy()),
+		    actionCollection(), "tools_copy_dvd" );
 
   actionSettingsK3bSetup = new KAction(i18n("K3b &Setup"), "configure", 0, this, SLOT(slotK3bSetup()),
 				       actionCollection(), "settings_k3bsetup" );
@@ -1071,8 +1075,7 @@ void K3bMainWindow::slotEditToolbars()
   saveMainWindowSettings( m_config, "main_window_settings" );
   KEditToolbar dlg( factory() );
   connect(&dlg, SIGNAL(newToolbarConfig()), SLOT(slotNewToolBarConfig()));
-  if( dlg.exec() )
-    createGUI(0L);
+  dlg.exec();
 }
 
 
@@ -1180,6 +1183,13 @@ void K3bMainWindow::slotCdCopy()
 void K3bMainWindow::slotCdClone()
 {
   K3bCloneDialog d( this );
+  d.exec();
+}
+
+
+void K3bMainWindow::slotDvdCopy()
+{
+  K3bDvdCopyDialog d( this );
   d.exec();
 }
 
