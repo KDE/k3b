@@ -137,28 +137,37 @@ void K3bRipperWidget::setupGui()
   optionPageLayout->setStretchFactor( groupOptions, 1 );
 
 
+  // setup advanced page
+  // -------------------------------------------------------------------------------------------
   QWidget* advancedPage = new QWidget( mainTab );
   QGridLayout* advancedPageLayout = new QGridLayout( advancedPage );
   advancedPageLayout->setMargin( marginHint() );
   advancedPageLayout->setSpacing( spacingHint() );
   mainTab->addTab( advancedPage, i18n("Advanced") );
 
-  m_comboParanoiaMode = K3bStdGuiItems::paranoiaModeComboBox( advancedPage );
-  m_spinRetries = new QSpinBox( advancedPage );
+  QGroupBox* groupReading = new QGroupBox( 3, Qt::Vertical, i18n("Reading options"), advancedPage );
+  groupReading->setInsideSpacing( spacingHint() );
+  groupReading->setInsideMargin( marginHint() );
+
+  QHBox* paranoiaBox = new QHBox( groupReading );
+  (void)new QLabel( i18n("Paranoia mode:"), paranoiaBox );
+  m_comboParanoiaMode = K3bStdGuiItems::paranoiaModeComboBox( paranoiaBox );
+  QHBox* retriesBox = new QHBox( groupReading );
+  (void)new QLabel( i18n("Read retries:"), retriesBox );
+  m_spinRetries = new QSpinBox( retriesBox );
   m_spinRetries->setValue(20);
+  m_checkNeverSkip = new QCheckBox( i18n("Never skip"), groupReading );
 
-  m_checkNeverSkip = new QCheckBox( i18n("Never skip"), advancedPage );
 
-  m_checkSingleFile = new QCheckBox( i18n("Create single file"), advancedPage );
+  QGroupBox* groupMisc = new QGroupBox( 1, Qt::Vertical, i18n("Misc. options"), advancedPage );
+  groupMisc->setInsideSpacing( spacingHint() );
+  groupMisc->setInsideMargin( marginHint() );
+  m_checkSingleFile = new QCheckBox( i18n("Create single file"), groupMisc );
 
-  advancedPageLayout->addWidget( new QLabel( i18n("Paranoia mode:"), advancedPage ), 0, 0 );
-  advancedPageLayout->addWidget( m_comboParanoiaMode, 0, 1 );
-  advancedPageLayout->addWidget( new QLabel( i18n("Read retries:"), advancedPage ), 1, 0 );
-  advancedPageLayout->addWidget( m_spinRetries, 1, 1 );
-  advancedPageLayout->addMultiCellWidget( m_checkNeverSkip, 2, 2, 0, 1 );
-  advancedPageLayout->addMultiCellWidget( m_checkSingleFile, 3, 3, 0, 1 );
-  advancedPageLayout->setRowStretch( 4, 1 );
-  advancedPageLayout->setColStretch( 2, 1 );
+  advancedPageLayout->addWidget( groupReading, 0, 0 );
+  advancedPageLayout->addWidget( groupMisc, 0, 1 );
+  advancedPageLayout->setColStretch( 1, 1 );
+  // -------------------------------------------------------------------------------------------
 
 
   Form1Layout->addWidget( m_viewTracks, 0, 0 );
