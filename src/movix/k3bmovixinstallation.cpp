@@ -66,8 +66,8 @@ K3bMovixInstallation* K3bMovixInstallation::probeInstallation( const QString& pa
   // now check the supported mplayer-fontsets
   dir.cd( "mplayer-fonts" );
   inst->m_supportedSubtitleFonts = dir.entryList( QDir::Dirs );
-  inst->m_supportedLanguages.remove(".");
-  inst->m_supportedLanguages.remove("..");
+  inst->m_supportedSubtitleFonts.remove(".");
+  inst->m_supportedSubtitleFonts.remove("..");
   dir.cdUp();
   
   // now check the supported boot labels
@@ -80,7 +80,7 @@ K3bMovixInstallation* K3bMovixInstallation::probeInstallation( const QString& pa
   }
   QTextStream fs( &f );
   QString line = fs.readLine();
-  while( line != QString::null ) {
+  while( !line.isNull() ) {
     if( line.startsWith( "label" ) ) {
       inst->m_supportedBootLabels.append( line.mid( 5 ).stripWhiteSpace() );
     }
