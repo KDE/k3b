@@ -19,26 +19,6 @@
 #include <qglobal.h>
 #include <qstring.h>
 
-#include <sys/types.h>
-#ifdef Q_OS_LINUX
-/*
-**  Linux specific part.
-*/
-#  undef __STRICT_ANSI__
-#  include <linux/cdrom.h>
-#  define __STRICT_ANSI__
-#endif
-
-#ifdef Q_OS_FREEBSD
-/*
-** FreeBSD specific part.
-*/
-#  include <sys/types.h>
-#  include <stdio.h>
-#  include <camlib.h>
-#endif
-
-
 
 
 namespace K3bCdDevice

@@ -58,6 +58,8 @@ typedef unsigned char u8;
 #endif // Q_OS_LINUX
 
 #ifdef Q_OS_FREEBSD
+#include <stdio.h>
+#include <camlib.h>
 #define __BYTE_ORDER BYTE_ORDER
 #define __BIG_ENDIAN BIG_ENDIAN
 #define CD_FRAMESIZE_RAW 2352

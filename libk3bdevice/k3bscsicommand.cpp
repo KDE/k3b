@@ -22,10 +22,25 @@
 #include <errno.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/types.h>
 #include <sys/ioctl.h>
 #include <assert.h>
 
+#ifdef Q_OS_LINUX
+/*
+**  Linux specific part.
+*/
+#  undef __STRICT_ANSI__
+#  include <linux/cdrom.h>
+#  define __STRICT_ANSI__
+#endif
+
 #ifdef Q_OS_FREEBSD
+/*
+** FreeBSD specific part.
+*/
+#include <stdio.h>
+#include <camlib.h>
 #include <cam/scsi/scsi_message.h>
 #include <cam/scsi/scsi_pass.h>
 
