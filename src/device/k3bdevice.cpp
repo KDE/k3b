@@ -2110,7 +2110,7 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
 	else
 	  inf.m_mediaType = MEDIA_CD_ROM;
       }
-          else {
+      else {
 	// FIXME: introduce a proper readDvdStructure method
 	// 4 bytes header + 2048 bytes layer descriptor
 	unsigned char dvdheader[4+2048];
@@ -2914,9 +2914,9 @@ QValueList<int> K3bCdDevice::CdDevice::determineSupportedWriteSpeeds() const
 	  if( dvd && s > 2770 && s < 4155 )
 	    s = 3324; // 2.4x
 	  else if( dvd )
-	    s = 1385*(int)nearbyint( (double)s/1385.0 );
+	    s = 1385*(int)( (double)s/1385.0 + 0.5 );
 	  else
-	    s = 175*(int)nearbyint( (double)s/175.0 );
+	    s = 175*(int)( (double)s/175.0 + 0.5 );
 	  
 	  QValueList<int>::iterator it = ret.begin();
 	  while( it != ret.end() && *it < s )
