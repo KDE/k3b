@@ -369,6 +369,19 @@ void K3bDeviceOptionTab::updateDeviceInfoBox( PrivateTempDevice* tempDev )
       i++;
     }
 
+    // since cdrdao cannot use ide-devices there
+    // is no need to offer an option for those
+    if( dev->interfaceType() == K3bDevice::IDE ) {
+      m_comboDriver->hide();
+      m_labelDriver->hide();
+      m_line3->hide();
+    }
+    else {
+      m_comboDriver->show();
+      m_labelDriver->show();
+      m_line3->show();
+    }
+    
     if( dev->burner() ) {
       m_spinWriteSpeed->setValue( tempDev->maxWriteSpeed );
       m_checkBurnProof->setText( dev->burnproof() ? "yes" : "no" );
@@ -387,19 +400,6 @@ void K3bDeviceOptionTab::updateDeviceInfoBox( PrivateTempDevice* tempDev )
     }
     else {
       showWriterSpecificProps( false );
-
-      // since cdrdao cannot use ide-devices there
-      // is no need to offer an option for those
-      if( dev->interfaceType() == K3bDevice::IDE ) {
-	m_comboDriver->hide();
-	m_labelDriver->hide();
-	m_line3->hide();
-      }
-      else {
-	m_comboDriver->show();
-	m_labelDriver->show();
-	m_line3->show();
-      }
     }
   }
   else {
