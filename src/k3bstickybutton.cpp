@@ -22,6 +22,7 @@
 K3bStickyButton::K3bStickyButton(QWidget *parent, const char *name )
 	: QToolButton(parent,name)
 {
+	setFixedSize( 20, 20 );
 	setToggleButton( true );
 	setOnIconSet( SmallIconSet( "encrypted" ) );
 	setOffIconSet( SmallIconSet( "decrypted" ) );

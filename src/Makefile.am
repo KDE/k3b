@@ -1,10 +1,10 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 bin_PROGRAMS = k3b
-k3b_SOURCES = k3bstickybutton.cpp k3baudiotrackdialog.cpp k3bprogressdialog.cpp k3baudiotrack.cpp k3bdevicemanager.cpp audiolistviewitem.cpp audiolistview.cpp k3baudioview.cpp k3baudiodoc.cpp k3bripperwidget.cpp k3bcopywidget.cpp k3bdirview.cpp k3bview.cpp k3bdoc.cpp k3b.cpp main.cpp 
+k3b_SOURCES = k3baudioburndialog.cpp k3bstickybutton.cpp k3baudiotrackdialog.cpp k3bprogressdialog.cpp k3baudiotrack.cpp k3bdevicemanager.cpp audiolistviewitem.cpp audiolistview.cpp k3baudioview.cpp k3baudiodoc.cpp k3bripperwidget.cpp k3bcopywidget.cpp k3bdirview.cpp k3bview.cpp k3bdoc.cpp k3b.cpp main.cpp 
 k3b_LDADD   = -lkfile -lkdeui -lkdecore $(LIB_QT) $(LIBSOCKET)
 
 
-EXTRA_DIST = main.cpp k3b.cpp k3b.h k3bdoc.cpp k3bdoc.h k3bview.cpp k3bview.h k3bui.rc k3b.desktop lo32-app-k3b.png lo16-app-k3b.png k3bdirview.cpp k3bdirview.h k3bcopywidget.cpp k3bcopywidget.h k3bripperwidget.cpp k3bripperwidget.h k3baudiodoc.cpp k3baudiodoc.h k3baudioview.cpp k3baudioview.h audiolistview.cpp audiolistview.h audiolistviewitem.cpp audiolistviewitem.h k3bdevicemanager.cpp k3bdevicemanager.h k3baudiotrack.cpp k3baudiotrack.h k3bglobals.h k3bprogressdialog.h k3bprogressdialog.cpp k3baudiotrackdialog.cpp k3baudiotrackdialog.h k3bstickybutton.cpp k3bstickybutton.h 
+EXTRA_DIST = main.cpp k3b.cpp k3b.h k3bdoc.cpp k3bdoc.h k3bview.cpp k3bview.h k3bui.rc k3b.desktop lo32-app-k3b.png lo16-app-k3b.png k3bdirview.cpp k3bdirview.h k3bcopywidget.cpp k3bcopywidget.h k3bripperwidget.cpp k3bripperwidget.h k3baudiodoc.cpp k3baudiodoc.h k3baudioview.cpp k3baudioview.h audiolistview.cpp audiolistview.h audiolistviewitem.cpp audiolistviewitem.h k3bdevicemanager.cpp k3bdevicemanager.h k3baudiotrack.cpp k3baudiotrack.h k3bglobals.h k3bprogressdialog.h k3bprogressdialog.cpp k3baudiotrackdialog.cpp k3baudiotrackdialog.h k3bstickybutton.cpp k3bstickybutton.h k3baudioburndialog.cpp k3baudioburndialog.h 
 
 install-data-local:
 	$(mkinstalldirs) $(kde_appsdir)/Applications/

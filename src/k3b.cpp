@@ -17,7 +17,7 @@
 
 // include files for QT
 #include <qdir.h>
-#include <qprinter.h>
+#include <qfile.h>
 #include <qvbox.h>
 #include <qwhatsthis.h>
 #include <qtooltip.h>
@@ -34,15 +34,18 @@
 #include <klocale.h>
 #include <kconfig.h>
 #include <kstdaction.h>
+#include <klineeditdlg.h>
 
 // application specific includes
 #include "k3b.h"
 #include "k3bview.h"
 #include "k3bdirview.h"
 #include "k3baudiodoc.h"
+#include "k3bdevicemanager.h"
 
 
-K3bApp::K3bApp():KMainWindow(0,"K3b")
+K3bApp::K3bApp()
+	: KMainWindow(0,"K3b")
 {
   config=kapp->config();
   untitledCount=0;
@@ -61,6 +64,12 @@ K3bApp::K3bApp():KMainWindow(0,"K3b")
   // disable actions at startup
   fileSave->setEnabled(false);
   fileSaveAs->setEnabled(false);
+
+  searchExternalProgs();
+
+  //TODO: find cdrecord path
+  m_deviceManager = new K3bDeviceManager( m_cdrecord, this );
+  m_deviceManager->printDevices();
 }
 
 K3bApp::~K3bApp()
@@ -151,7 +160,7 @@ void K3bApp::openDocumentFile(const KURL& url)
     }
   }
 
-  doc = new K3bAudioDoc();
+  doc = new K3bAudioDoc( this, m_cdrecord, m_mpg123 );
   pDocList->append(doc);
   doc->newDocument();
   // Creates an untitled window if file is 0	
@@ -505,4 +514,35 @@ void K3bApp::slotShowDirView(){
 		m_dirView->show();
 	else
 		m_dirView->hide();
+}
+
+void K3bApp::searchExternalProgs()
+{
+	if( QFile::exists( "/usr/bin/cdrecord" ) ) {
+		m_cdrecord = "/usr/bin/cdrecord";
+		qDebug("(K3bApp) found cdrecord in " + m_cdrecord );
+	}
+	else if( QFile::exists( "/usr/local/bin/cdrecord" ) ) {
+		m_cdrecord = "/usr/local/bin/cdrecord";
+		qDebug("(K3bApp) found cdrecord in " + m_cdrecord );
+	}
+	else {
+		bool ok = true;
+		while( !QFile::exists( m_cdrecord ) && ok )
+			m_cdrecord = KLineEditDlg::getText( "Could not find cdrecord. Please insert the full path...", "cdrecord", &ok, this );
+	}
+		
+	if( QFile::exists( "/usr/bin/mpg123" ) ) {
+		m_mpg123 = "/usr/bin/mpg123";
+		qDebug("(K3bApp) found mpg123 in " + m_cdrecord );
+	}
+	else if( QFile::exists( "/usr/local/bin/mpg123" ) ) {
+		m_mpg123 = "/usr/local/bin/mpg123";
+		qDebug("(K3bApp) found mpg123 in " + m_cdrecord );
+	}
+	else {
+		bool ok = true;
+		while( !QFile::exists( m_mpg123 ) && ok )
+			m_mpg123 = KLineEditDlg::getText( "Could not find mpg123. Please insert the full path...", "mpg123", &ok, this );
+	}
 }

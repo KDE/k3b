@@ -40,9 +40,11 @@
 #include "k3bdoc.h"
 #include "k3bglobals.h"
 
-K3bDoc::K3bDoc( const QString& cdrecord )
+K3bDoc::K3bDoc( K3bApp* _k3bMain, const QString& cdrecord )
 	: m_cdrecord(cdrecord)
 {
+	m_k3bMain = _k3bMain;
+
 	pViewList = new QList<K3bView>;
 	pViewList->setAutoDelete(false);
 

@@ -36,8 +36,8 @@
 #include <iostream>
 
 
-K3bAudioDoc::K3bAudioDoc( const QString& cdrecord, const QString& mpg123 )
-	: K3bDoc( cdrecord ), m_mpg123( mpg123 )
+K3bAudioDoc::K3bAudioDoc( K3bApp* k3bMain, const QString& cdrecord, const QString& mpg123 )
+	: K3bDoc( k3bMain, cdrecord ), m_mpg123( mpg123 )
 {
 	m_currentBufferedTrack = 0;
 	m_lastAddedTrack = 0;

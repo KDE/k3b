@@ -36,6 +36,8 @@
 class K3bDoc;
 class K3bView;
 class K3bDirView;
+class K3bDeviceManager;
+
 
 /**
   * The base class for K3b application windows. It sets up the main
@@ -67,6 +69,8 @@ class K3bApp : public KMainWindow
     /** opens a file specified by commandline option
      */
     void openDocumentFile(const KURL& url=0);
+
+    K3bDeviceManager* deviceManager() { return m_deviceManager; };
 
   protected:
     /** queryClose is called by KTMainWindow on each closeEvent of a window. Against the
@@ -165,6 +169,8 @@ class K3bApp : public KMainWindow
     	* connections.
      */
     void initView();
+  /** No descriptions */
+  void searchExternalProgs();
 
     /** the configuration object of the application */
     KConfig *config;
@@ -179,6 +185,8 @@ class K3bApp : public KMainWindow
      * removes this document from the list. The document list is checked for modified documents when the user
      * is about to close the application. */
     QList<K3bDoc> *pDocList;	
+
+    K3bDeviceManager* m_deviceManager;
 
     // KAction pointers to enable/disable actions
     KAction* fileNew;
@@ -199,6 +207,10 @@ class K3bApp : public KMainWindow
 
     // The DirView Widget
     K3bDirView* m_dirView;
+
+    // path to cdrecord/mpg123
+    QString m_cdrecord;
+    QString m_mpg123;
 };
  
 #endif // K3B_H

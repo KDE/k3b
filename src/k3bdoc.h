@@ -39,7 +39,7 @@ class QTimer;
 class KTempFile;
 class K3bDevice;
 class KProcess;
-
+class K3bApp;
 
 /**	K3bDoc provides a document object for a document-view model.
   *
@@ -62,7 +62,7 @@ class K3bDoc : public QObject
 public:
     /** Constructor for the fileclass of the application
     	@param cdrecord path to cdrecord executable */
-    K3bDoc( const QString& cdrecord );
+    K3bDoc( K3bApp*, const QString& cdrecord );
     /** Destructor for the fileclass of the application */
     ~K3bDoc();
 
@@ -169,6 +169,8 @@ signals:
 	void timeLeft( const QTime& );
  	
 protected:
+	K3bApp* k3bMain() const { return m_k3bMain; }
+
   	/** when deriving from K3bDoc this method really opens the document since
 	      openDocument only opens a tempfile and calls this method. */
 	virtual bool loadDocumentData( QFile& f ) = 0;
@@ -204,6 +206,8 @@ private:
 	bool m_dummy;
 	bool m_eject;
 	int  m_speed;
+	
+	K3bApp* m_k3bMain;
 };
 
 #endif // K3BDOC_H

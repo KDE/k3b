@@ -28,6 +28,7 @@
 
 #include <kurl.h>
 
+class K3bApp;
 class K3bAudioTrack;
 class QWidget;
 
@@ -41,7 +42,7 @@ class K3bAudioDoc : public K3bDoc  {
 	Q_OBJECT
 	
 public:
-	K3bAudioDoc( const QString& cdrecord = "/usr/bin/cdrecord", const QString& mpg123 = "/usr/bin/mpg123");
+	K3bAudioDoc( K3bApp*, const QString& cdrecord = "/usr/bin/cdrecord", const QString& mpg123 = "/usr/bin/mpg123");
 	~K3bAudioDoc();
 	
   /** reimplemented from K3bDoc */
