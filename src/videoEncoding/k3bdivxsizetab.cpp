@@ -31,6 +31,7 @@
 
 K3bDivxSizeTab::K3bDivxSizeTab(K3bDivxCodecData *data, QWidget *parent, const char *name ) : QWidget(parent,name) {
      m_data = data;
+     m_initialized = false;
      setupGui();
 }
 
@@ -51,13 +52,19 @@ void K3bDivxSizeTab::setupGui(){
     mainLayout->setRowStretch( 0, 50 );
     //mainLayout->addItem( spacer, 3, 0);
     connect( m_resize, SIGNAL( sizeChanged() ), m_crop, SLOT( slotUpdateFinalSize() ) );
+    connect( m_crop, SIGNAL( cropChanged() ), m_resize, SLOT( slotUpdateView() ) );
 }
 
 void K3bDivxSizeTab::show(){
     QWidget::show();
     if( this->isEnabled() ){
-        m_crop->initPreview( );
-        m_resize->initView();
+        if( !m_initialized ){
+             m_crop->initPreview( );
+             m_resize->initView();
+        }
+        m_crop->updateView();
+        m_resize->slotUpdateView();
+        m_initialized = true;
     } else {
         KMessageBox::information( this, i18n("You must load a K3b DVD Project file and \n set a file name for the final AVI.") );
     }

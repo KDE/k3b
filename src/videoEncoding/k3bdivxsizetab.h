@@ -42,6 +42,7 @@ private:
     K3bDivxCrop *m_crop;
     K3bDivxInfoExtend *m_info;
     K3bDivxResize *m_resize;
+    bool m_initialized;
 
     void setupGui();
 };
