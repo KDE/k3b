@@ -16,6 +16,10 @@
 #ifndef _K3B_TRM_H_
 #define _K3B_TRM_H_
 
+#include <config.h>
+
+#if HAVE_MUSICBRAINZ
+
 #include <qobject.h>
 #include "ktrm.h"
 
@@ -69,4 +73,5 @@ class K3bTRMLookup : public QObject, public KTRMLookup
   ResultState m_resultState;
 };
 
+#endif
 #endif

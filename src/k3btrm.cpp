@@ -13,6 +13,8 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#if HAVE_MUSICBRAINZ
+
 #include "k3btrm.h"
 
 #include <kdebug.h>
@@ -65,3 +67,5 @@ void K3bTRMLookup::finished()
 }
 
 #include "k3btrm.moc"
+
+#endif
