@@ -5,18 +5,10 @@
 #include <qobject.h>
 #include <qcstring.h>
 
-typedef Q_INT32 size32;
-typedef Q_INT16 size16;
-
-extern "C" {
-#include <cdda_interface.h>
-#include <cdda_paranoia.h>
-}
-
 
 class K3bDevice;
 class QTimer;
-
+class K3bCdparanoiaLib;
 
 
 class K3bAudioRip : public QObject
@@ -31,6 +23,8 @@ class K3bAudioRip : public QObject
 
  public slots:
   void cancel();
+  void setParanoiaMode( int mode ) { m_paranoiaMode = mode; }
+  void setRetries( int r ) { m_paranoiaRetries = r; }
 
  signals:
   void output( const QByteArray& );
@@ -42,11 +36,7 @@ class K3bAudioRip : public QObject
   void slotParanoiaFinished();
 
  private:
-  cdrom_drive* open();
-  bool close();
-
-  cdrom_paranoia* m_paranoia;
-  cdrom_drive* m_cdromDrive;
+  K3bCdparanoiaLib* m_paranoiaLib;
   K3bDevice* m_device;
   QTimer* m_rippingTimer;
 
@@ -54,6 +44,9 @@ class K3bAudioRip : public QObject
   long m_lastSector;
   unsigned long m_sectorsRead;
   unsigned long m_sectorsAll;
+
+  int m_paranoiaMode;
+  int m_paranoiaRetries;
 
   bool m_bInterrupt;
   bool m_bError;

@@ -1,11 +1,13 @@
 #include "k3baudiorip.h"
 #include "../device/k3bdevice.h"
+#include "../tools/k3bcdparanoialib.h"
 
 #include <qtimer.h>
 #include <qfile.h>
 
 #include <kdebug.h>
-
+#include <klocale.h>
+#include <kmessagebox.h>
 
 
 void paranoiaCallback(long, int){
@@ -16,38 +18,47 @@ void paranoiaCallback(long, int){
 
 K3bAudioRip::K3bAudioRip( QObject* parent )
   : QObject( parent ),
-    m_cdromDrive( 0 )
+    m_paranoiaLib(0),
+    m_paranoiaMode(3),
+    m_paranoiaRetries(20)
 {
   m_rippingTimer = new QTimer( this );
   connect( m_rippingTimer, SIGNAL(timeout()), this, SLOT(slotParanoiaRead()) );
-  m_paranoia = 0;
-  m_device = 0;
 }
 
 
 K3bAudioRip::~K3bAudioRip()
 {
+  delete m_paranoiaLib;
 }
 
 
 bool K3bAudioRip::ripTrack( K3bDevice* dev, unsigned int track )
 {
+  if( !m_paranoiaLib )
+    m_paranoiaLib = K3bCdparanoiaLib::create();
+
+  if( !m_paranoiaLib ) {
+    KMessageBox::error( 0, i18n("Could not load libcd_paranoia. Please install.") );
+    return false;
+  }
+
   m_device = dev;
 
   // try to open the device
   if( !dev )
     return false;
 
-  if( !open() ) {
+  if( !m_paranoiaLib->paranoiaInit( dev->blockDeviceName() ) ) {
     kdDebug() << "(K3bAudioRip) Could not open device" << endl;
     return false;
   }
 
   m_bInterrupt = m_bError = false;
 
-  long firstSector = cdda_track_firstsector( open(), track );
-  m_lastSector = cdda_track_lastsector( open(), track );
-
+  long firstSector = m_paranoiaLib->firstSector( track );
+  m_lastSector = m_paranoiaLib->lastSector( track );
+  
   if( firstSector < 0 || m_lastSector < 0 )
     return false;
 
@@ -55,20 +66,10 @@ bool K3bAudioRip::ripTrack( K3bDevice* dev, unsigned int track )
   m_sectorsAll = m_lastSector - firstSector;
   m_sectorsRead = 0;
   
-  kdDebug() << "(K3bAudioRip) paranoia_init" << endl;
-  m_paranoia = paranoia_init( open() );
-  
-  if( 0 == m_paranoia ) {
-    kdDebug() << "(K3bAudioRip) paranoia_init failed" << endl;
-    return false;
-  }
-  
-  int paranoiaLevel = PARANOIA_MODE_FULL ^ PARANOIA_MODE_NEVERSKIP;
-  paranoia_modeset( m_paranoia, paranoiaLevel );
+  m_paranoiaLib->setParanoiaMode( m_paranoiaMode );
+  m_paranoiaLib->setMaxRetries( m_paranoiaRetries );
 
-  cdda_verbose_set( open(), CDDA_MESSAGE_PRINTIT, CDDA_MESSAGE_PRINTIT );
-
-  paranoia_seek( m_paranoia, firstSector, SEEK_SET );
+  m_paranoiaLib->paranoiaSeek( firstSector, SEEK_SET );
   m_currentSector = firstSector;
 
   m_rippingTimer->start(0);
@@ -84,7 +85,7 @@ void K3bAudioRip::slotParanoiaRead()
     slotParanoiaFinished();
   } 
   else {
-    int16_t* buf = paranoia_read( m_paranoia, paranoiaCallback );
+    int16_t* buf = m_paranoiaLib->paranoiaRead( paranoiaCallback );
 
     if( 0 == buf ) {
       kdDebug() << "(K3bAudioRip) Unrecoverable error in paranoia_read" << endl;
@@ -112,8 +113,7 @@ void K3bAudioRip::slotParanoiaRead()
 void K3bAudioRip::slotParanoiaFinished()
 {
   m_rippingTimer->stop();
-  paranoia_free(m_paranoia);
-  close();
+  m_paranoiaLib->paranoiaFree();
 
   if( m_bInterrupt || m_bError )
     emit finished( false );
@@ -127,32 +127,5 @@ void K3bAudioRip::cancel()
   m_bInterrupt = true;
 }
 
-
-cdrom_drive* K3bAudioRip::open()
-{
-  if( m_cdromDrive == 0 ) {
-    m_cdromDrive = cdda_identify( QFile::encodeName(m_device->devicename()), CDDA_MESSAGE_FORGETIT, 0 );
-    if( !m_cdromDrive ) {
-      kdDebug() << "(K3bAudioRip) Could not open device " << m_device->devicename() << endl;
-      return 0;
-    }
-    cdda_open( m_cdromDrive );
-    return m_cdromDrive;
-  }
-  else
-    return m_cdromDrive;
-}
-
-
-bool K3bAudioRip::close()
-{
-  if( m_cdromDrive == 0 )
-    return false;
-  else {
-    cdda_close( m_cdromDrive );
-    m_cdromDrive = 0;
-    return true;
-  }
-}
 
 #include "k3baudiorip.moc"
