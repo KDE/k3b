@@ -132,8 +132,8 @@ void K3bDataDoc::slotAddUrlsToDir( const KURL::List& urls, K3bDirItem* dirItem )
       const KURL& url = *it;
       if( K3b::filesize( url ) > (KIO::filesize_t)(2*1024*1024*1024) )
 	KMessageBox::error( qApp->activeWindow(), 
-			    i18n("The maximal file size is 2 GB. %1 is too big.").arg(url.path()),
-			    i18n("File too big") );
+			    i18n("The maximum file size is 2 GB. %1 is too large.").arg(url.path()),
+			    i18n("File Oversized") );
       else if( url.isLocalFile() && QFile::exists(url.path()) ) {
 	m_queuedToAddItems.append( new PrivateItemToAdd(url.path(), dirItem ) );
       }
