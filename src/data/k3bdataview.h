@@ -31,6 +31,8 @@ class K3bFillStatusDisplay;
 class KListView;
 class KPopupMenu;
 class KAction;
+class K3bProjectBurnDialog;
+class K3bDataBurnDialog;
 
 /**
   *@author Sebastian Trueg
@@ -43,6 +45,8 @@ class K3bDataView : public K3bView
 public:
 	K3bDataView(K3bDataDoc* doc, QWidget *parent=0, const char *name=0);
 	~K3bDataView();
+	
+	K3bProjectBurnDialog* burnDialog();
 	
 public slots:
 	void slotAddFile( K3bFileItem* );
@@ -75,6 +79,8 @@ private:
 	KAction* actionRename;
 		
 	K3bDataDoc* m_doc;
+	K3bDataBurnDialog* m_burnDialog;
+	
 	void setupPopupMenu();
 };
 

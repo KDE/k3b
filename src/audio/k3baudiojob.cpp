@@ -34,7 +34,7 @@
 #include <cmath>
 
 K3bAudioJob::K3bAudioJob( K3bAudioDoc* doc )
-	: K3bJob( )
+	: K3bBurnJob( )
 {
 	m_doc = doc;
 	m_mp3Job = 0L;
@@ -49,6 +49,13 @@ K3bAudioJob::~K3bAudioJob()
 	if( m_mp3Job )
 		delete m_mp3Job;
 }
+
+
+K3bDoc* K3bAudioJob::doc() const
+{
+	return m_doc;
+}
+
 
 void K3bAudioJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 {

@@ -147,7 +147,7 @@ void K3bMp3DecodingJob::slotParseMpg123Output( KProcess*, char* output, int len 
 				qDebug("parsing did not work for " + (*str).mid(15,5) );
 			
 			emit processedSize( made, made+togo );
-			emit percent( (int)((double)made/(double)(made+togo)) );
+			emit percent( 100 * made / (made+togo) );
 		}
 //		else {
 //			// debugging

@@ -33,7 +33,7 @@ class QTextView;
 class K3bDoc;
 class QTime;
 class K3bJob;
-
+class K3bBurnJob;
 
 /**
   *@author Sebastian Trueg
@@ -47,7 +47,7 @@ class K3bBurnProgressDialog : public KDialog  {
   K3bBurnProgressDialog( QWidget *parent=0, const char *name=0);
   ~K3bBurnProgressDialog();
 
-  void setJob( K3bJob* job );
+  void setJob( K3bBurnJob* job );
   /** reimplemented from QDialog since we need this to return imideately! */
   void show();
 
@@ -76,7 +76,7 @@ class K3bBurnProgressDialog : public KDialog  {
   QGridLayout* m_groupProgressLayout;
 
  private:
-  K3bJob* m_job;
+  K3bBurnJob* m_job;
 
  protected slots:
 //  void updateCdTimeProgress( const QTime& processedTime );
@@ -87,7 +87,8 @@ class K3bBurnProgressDialog : public KDialog  {
 
   void finished();
   void slotCancelPressed();
-  void slotNewSubJob(const QString& name);
+  void slotNewSubTask(const QString& name);
+  void slotNewTask(const QString& name);
 };
 
 #endif

@@ -19,22 +19,17 @@
 #define K3BAUDIOBURNDIALOG_H
 
 
-#include <kdialogbase.h>
+#include "../k3bprojectburndialog.h"
 
 #include <qvariant.h>
 #include <qwidget.h>
 
-class QVBoxLayout;
-class QHBoxLayout;
-class QGridLayout;
 class QCheckBox;
 class QComboBox;
 class QGroupBox;
 class QLabel;
 class QLineEdit;
-class QPushButton;
-class QTabWidget;
-class QGrid;
+class QToolButton;
 class QMultiLineEdit;
 
 
@@ -43,25 +38,21 @@ class K3bAudioDoc;
   *@author Sebastian Trueg
   */
 
-class K3bAudioBurnDialog : public KDialogBase  {
+class K3bAudioBurnDialog : public K3bProjectBurnDialog  {
 
    Q_OBJECT
 
 public:
-	K3bAudioBurnDialog(K3bAudioDoc*, QWidget *parent=0, const char *name=0, bool modal = true );
+	K3bAudioBurnDialog(K3bAudioDoc* doc, QWidget *parent=0, const char *name=0, bool modal = true );
 	~K3bAudioBurnDialog();
 
-	enum resultCode { Canceled = 0, Saved = 1, Burn = 2 };
-
-	/** shows the dialog with exec()
-		@param burn If true the dialog shows the Burn-button */
-	int exec( bool burn );
-	
 protected:
 	void setupBurnTab( QFrame* frame );
 	void setupCdTextTab( QFrame* frame );
-	
-	// the burn tab
+	void saveSettings();
+	void readSettings();
+
+  	// the burn tab
 	// ---------------------------------------------------------
     QLabel* m_labelCdSize;
     QLabel* m_labelFreeSpace;
@@ -71,8 +62,6 @@ protected:
     QCheckBox* m_checkDao;
     QCheckBox* m_checkOnTheFly;
     QCheckBox* m_checkPadding;
-    QComboBox* m_comboSpeed;
-    QComboBox* m_comboWriter;
     QCheckBox* m_checkSimulate;
 	// -----------------------------------------------------------
 	
@@ -85,16 +74,7 @@ protected:
     QMultiLineEdit* m_editMessage;
 	// -----------------------------------------------------------
 
-private:
-	K3bAudioDoc* doc;
-
 protected slots:
-  void saveSettings();
-  void slotUser1();
-  void slotOk();
-  void readSettings();
-  void slotCancel();
-  void slotRefreshWriterSpeeds();
   void slotFindDir();
 };
 

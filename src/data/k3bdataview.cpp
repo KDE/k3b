@@ -20,6 +20,8 @@
 #include "../k3bfillstatusdisplay.h"
 #include "k3bfileitem.h"
 #include "k3bdiritem.h"
+#include "../k3b.h"
+#include "k3bdataburndialog.h"
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -43,7 +45,8 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
 	: K3bView(doc, parent,name)
 {
 	m_doc = doc;
-
+	m_burnDialog = 0;
+	
 	// --- setup GUI ---------------------------------------------------
 	QSplitter* _main = new QSplitter( this );	
 	m_dataDirTree = new K3bPrivateDataDirTree( doc, _main );
@@ -70,6 +73,15 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
 }
 
 K3bDataView::~K3bDataView(){
+}
+
+
+K3bProjectBurnDialog* K3bDataView::burnDialog()
+{
+	if( !m_burnDialog )
+		m_burnDialog = new K3bDataBurnDialog( m_doc, k3bMain(), "databurndialog", true );
+		
+	return m_burnDialog;
 }
 
 

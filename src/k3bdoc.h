@@ -40,6 +40,7 @@ class KTempFile;
 class K3bDevice;
 class KProcess;
 class K3bApp;
+class K3bBurnJob;
 
 
 /**	K3bDoc provides a document object for a document-view model.
@@ -121,6 +122,8 @@ public:
 	int error() const;
 	QString errorString() const;
 	virtual int numOfTracks() const { return 1; }
+	
+	virtual K3bBurnJob* newBurnJob() = 0;
 	
 public slots:
     /** calls repaint() on all views connected to the document object and is called by the view by which the document has been changed.

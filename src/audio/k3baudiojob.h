@@ -33,7 +33,7 @@ class QString;
   *@author Sebastian Trueg
   */
 
-class K3bAudioJob : public K3bJob  {
+class K3bAudioJob : public K3bBurnJob  {
 
 	Q_OBJECT
 
@@ -41,7 +41,7 @@ public:
 	K3bAudioJob( K3bAudioDoc* doc );
 	~K3bAudioJob();
 
-	K3bAudioDoc* doc() { return m_doc; }
+	K3bDoc* doc() const;
 	
 public slots:
 	void start();
@@ -73,7 +73,6 @@ private:
 		
 signals:
 	void writingLeadOut();
-	void bufferStatus( int );
 };
 
 #endif

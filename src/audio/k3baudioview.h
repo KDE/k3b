@@ -33,6 +33,8 @@ class KPopupMenu;
 class KAction;
 class K3bAudioTrackDialog;
 class K3bFillStatusDisplay;
+class K3bAudioBurnDialog;
+class K3bProjectBurnDialog;
 
 
 /**
@@ -46,7 +48,9 @@ class K3bAudioView : public K3bView  {
 public: 
 	K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name = 0, int wflags = 0 );
 	~K3bAudioView();
-	
+
+	K3bProjectBurnDialog* burnDialog();
+		
 private:
 	void setupPopupMenu();
 	
@@ -56,7 +60,8 @@ private:
 	KPopupMenu* m_popupMenu;
 	K3bAudioTrackDialog* m_propertiesDialog;
 	K3bFillStatusDisplay* m_fillStatusDisplay;
-	
+	K3bAudioBurnDialog* m_burnDialog;
+		
 signals:
  	void dropped(const QStringList&, uint position);
 	 /** the item at position oldPos should be removed and reinserted at newPos */

@@ -19,6 +19,7 @@
 #include "k3bfileitem.h"
 #include "k3bdiritem.h"
 #include "k3bdataview.h"
+#include "k3bdatajob.h"
 
 #include <qdir.h>
 #include <qstring.h>
@@ -45,6 +46,7 @@ K3bDataDoc::~K3bDataDoc()
 	delete m_root;	
 }
 
+
 bool K3bDataDoc::newDocument()
 {
 	if( m_root )
@@ -53,7 +55,11 @@ bool K3bDataDoc::newDocument()
 	m_root = new K3bRootItem( this );
 	
 	m_name = "Dummyname";
-	
+	m_isoImage = QString::null;
+
+	m_createRockRidge = true;
+	m_createJoliet = false;
+		
 	return K3bDoc::newDocument();
 }
 
@@ -189,15 +195,20 @@ QString K3bDataDoc::writePathSpec( const QString& filename )
 }
 
 
-QString K3bDataDoc::dummyDir()
+const QString& K3bDataDoc::dummyDir()
 {
 	QDir _appDir( locateLocal( "appdata", "temp/" ) );
 	if( !_appDir.cd( "dummydir" ) ) {
 		_appDir.mkdir( "dummydir" );
 	}
-	m_dummyDir = _appDir.absPath();
+	m_dummyDir = _appDir.absPath() + "/";
 	
 	// TODO: test if dummy dir is empty
 	
-	return m_dummyDir + "/";
+	return m_dummyDir;
+}
+
+K3bBurnJob* K3bDataDoc::newBurnJob()
+{
+	return new K3bDataJob( this );
 }

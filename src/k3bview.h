@@ -26,6 +26,8 @@
 #include <qwidget.h>
 
 class K3bDoc;
+class K3bProjectBurnDialog;
+
 
 /** The K3bView class provides the view widget for the document instance connected to it and is displayed
  * as a MDI child window in the main view area of the K3bApp class instance. The K3bApp class also has an eventFilter()
@@ -49,26 +51,32 @@ class K3bView : public QWidget
 
   friend K3bDoc;
 
-  public:
+public:
     /** Constructor for the view
     	* @param pDoc  your document instance that the view represents. Create a document before calling the constructor
     	* or connect an already existing document to a new MDI child widget.*/
     K3bView(K3bDoc* pDoc, QWidget* parent, const char *name = 0, int wflags = 0);
+
     /** Destructor for the main view */
     ~K3bView();
-		/** returns a pointer to the document connected to the view*/
+	
+	/** returns a pointer to the document connected to the view*/
     K3bDoc *getDocument() const;
+
     /** gets called to redraw the document contents if it has been modified */
-		void update(K3bView* pSender);
+	void update(K3bView* pSender);
 		
-  protected:
+	virtual K3bProjectBurnDialog* burnDialog() = 0;
+	
+protected:
     /** overwritten QWidget::closeEvent() to catch closing views. Does nothing, as the closeEvents for
     * K3bView's are processed by K3bApp::eventFilter(), so this overwitten closeEvent is necessary
     * and has to be empty. Don't overwrite this method !
     */
     virtual void closeEvent(QCloseEvent* e);
-	  /** The document connected to the view, specified in the constructor */
-	  K3bDoc *doc;
+	
+	/** The document connected to the view, specified in the constructor */
+	K3bDoc *doc;
 };
 
 #endif // K3BVIEW_H

@@ -198,7 +198,7 @@ void K3bBurnProgressDialog::finished()
 }
 
 
-void K3bBurnProgressDialog::setJob( K3bJob* job )
+void K3bBurnProgressDialog::setJob( K3bBurnJob* job )
 {
 	// clear everything
 	m_buttonClose->hide();
@@ -208,7 +208,12 @@ void K3bBurnProgressDialog::setJob( K3bJob* job )
 	m_progressTrack->setValue(0);
 	m_progressCd->setValue(0);
 	m_labelFileName->setText("");
+	m_labelCdTime->setText("");
+	m_labelCdProgress->setText("");
+	m_labelTrackProgress->setText("");
 	m_groupProgress->setTitle( i18n( "Progress" ) );
+
+	m_progressTrack->setEnabled( false );
 
 	// disconnect from the former job
 	if( m_job )
@@ -224,18 +229,18 @@ void K3bBurnProgressDialog::setJob( K3bJob* job )
 	connect( job, SIGNAL(processedSubSize(int, int)), this, SLOT(updateTrackSizeProgress(int, int)) );
 	connect( job, SIGNAL(processedSize(int, int)), this, SLOT(updateCdSizeProgress(int, int)) );
 
-	connect( job, SIGNAL(newTask(const QString&)), m_groupProgress, SLOT(setTitle(const QString&)) );
-	connect( job, SIGNAL(newSubTask(const QString&)), this, SLOT(slotNewSubJob(const QString&)) );
+	connect( job, SIGNAL(newTask(const QString&)), this, SLOT(slotNewTask(const QString&)) );
+	connect( job, SIGNAL(newSubTask(const QString&)), this, SLOT(slotNewSubTask(const QString&)) );
 	connect( job, SIGNAL(finished(K3bJob*)), this, SLOT(finished()) );
 	
 
-	if( K3bAudioJob* ajob = dynamic_cast<K3bAudioJob*>( job ) )
+	if( job->doc() )
 	{
-		if( ajob->doc()->burner() )
-    		m_labelWriter->setText( "Writer: " + ajob->doc()->burner()->vendor + " " + ajob->doc()->burner()->description );
+		if( job->doc()->burner() )
+    		m_labelWriter->setText( "Writer: " + job->doc()->burner()->vendor + " " + job->doc()->burner()->description );
 
     	// connect to the "special" signals
-		connect( ajob, SIGNAL(bufferStatus(int)), m_progressBuffer, SLOT(setValue(int)) );
+		connect( job, SIGNAL(bufferStatus(int)), m_progressBuffer, SLOT(setValue(int)) );
 		
 		m_groupBuffer->setEnabled( true ); 	
 	}
@@ -258,9 +263,15 @@ void K3bBurnProgressDialog::show()
 }
 
 
-void K3bBurnProgressDialog::slotNewSubJob(const QString& name)
+void K3bBurnProgressDialog::slotNewSubTask(const QString& name)
 {
+	m_progressTrack->setEnabled( true );
 	m_labelFileName->setText(name);
 	m_labelTrackProgress->setText("");
 	m_progressTrack->setValue(0);
+}
+
+void K3bBurnProgressDialog::slotNewTask(const QString& name)
+{
+	m_groupProgress->setTitle( name );
 }

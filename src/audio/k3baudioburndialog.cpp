@@ -36,23 +36,19 @@
 #include <qtoolbutton.h>
 #include <qlist.h>
 #include <qstringlist.h>
+#include <qpoint.h>
 
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <kstddirs.h>
 
 K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const char *name, bool modal )
-	: KDialogBase( KDialogBase::Tabbed, i18n("Write Audio CD"), User1|Ok|Cancel, Ok, parent, name, modal, true, i18n("Write") )
+	: K3bProjectBurnDialog( _doc, parent, name, modal )
 {
-	doc = _doc;
-	
-	setButtonBoxOrientation( Vertical );
 	setupBurnTab( addPage( i18n("Burning") ) );
 	setupCdTextTab( addPage( i18n("CD-Text") ) );
 	
 	readSettings();
-	
-	connect( m_comboWriter, SIGNAL(activated(int)), this, SLOT(slotRefreshWriterSpeeds()) );
 }
 
 K3bAudioBurnDialog::~K3bAudioBurnDialog(){
@@ -66,61 +62,22 @@ void K3bAudioBurnDialog::saveSettings()
 	k3bMain()->config()->writeEntry( "Temp Dir", m_editDirectory->text() );
 	k3bMain()->config()->sync();
 
-	doc->setDao( m_checkDao->isChecked() );
-	doc->setDummy( m_checkSimulate->isChecked() );
-	doc->setPadding( m_checkPadding->isChecked() );
-	((K3bAudioDoc*)doc)->writeCdText( m_checkCdText->isChecked() );
+	doc()->setDao( m_checkDao->isChecked() );
+	doc()->setDummy( m_checkSimulate->isChecked() );
+	((K3bAudioDoc*)doc())->setPadding( m_checkPadding->isChecked() );
+	((K3bAudioDoc*)doc())->writeCdText( m_checkCdText->isChecked() );
 	
 	// -- saving current speed --------------------------------------
-	QString _strSpeed = m_comboSpeed->currentText();
-	_strSpeed.truncate( _strSpeed.find('x') );
-	doc->setSpeed( _strSpeed.toInt() );
+	doc()->setSpeed( writerSpeed() );
 	
 	// -- saving current device --------------------------------------
-	QString _str = m_comboWriter->currentText();
-	_str.truncate( _str.find('-') );
-	QStringList list = QStringList::split( ',', _str );
-	int bus = list[0].toInt();
-	int target = list[1].toInt();
-	int lun = list[2].toInt();
-	
-	doc->setBurner( k3bMain()->deviceManager()->deviceByBus( bus, target, lun ) );
+	doc()->setBurner( writerDevice() );
 	
 	// -- save Cd-Text ------------------------------------------------
-	((K3bAudioDoc*)doc)->setTitle( m_editTitle->text() );
-	((K3bAudioDoc*)doc)->setArtist( m_editArtist->text() );
-	((K3bAudioDoc*)doc)->setISRC( m_editISRC->text() );
-	((K3bAudioDoc*)doc)->setArranger( m_editArranger->text() );
-}
-
-
-void K3bAudioBurnDialog::slotUser1()
-{
-	saveSettings();
-	done( Burn );
-}
-
-
-int K3bAudioBurnDialog::exec( bool burn )
-{
-	if( burn )
-		actionButton(User1)->show();
-	else
-		actionButton(User1)->hide();
-		
-	return QDialog::exec();
-}
-
-
-void K3bAudioBurnDialog::slotOk()
-{
-	saveSettings();
-	done( Saved );
-}
-
-void K3bAudioBurnDialog::slotCancel()
-{
-	done( Canceled );
+	((K3bAudioDoc*)doc())->setTitle( m_editTitle->text() );
+	((K3bAudioDoc*)doc())->setArtist( m_editArtist->text() );
+	((K3bAudioDoc*)doc())->setISRC( m_editISRC->text() );
+	((K3bAudioDoc*)doc())->setArranger( m_editArranger->text() );
 }
 
 
@@ -130,36 +87,18 @@ void K3bAudioBurnDialog::readSettings()
 	k3bMain()->config()->setGroup( "General Options" );
 	m_editDirectory->setText( k3bMain()->config()->readEntry( "Temp Dir", locateLocal( "appdata", "temp/" ) ) );
 	
-	m_checkDao->setChecked( doc->dao() );
-	m_checkSimulate->setChecked( doc->dummy() );
-	m_checkPadding->setChecked( doc->padding() );
-	m_checkCdText->setChecked( ((K3bAudioDoc*)doc)->cdText() );
+	m_checkDao->setChecked( doc()->dao() );
+	m_checkSimulate->setChecked( doc()->dummy() );
+	m_checkPadding->setChecked( ((K3bAudioDoc*)doc())->padding() );
+	m_checkCdText->setChecked( ((K3bAudioDoc*)doc())->cdText() );
 
-	// -- reading current speed --------------------------------------
-	int _index = 0;
-	QString _strSpeed = QString::number(doc->speed()) + "x";
-	
-	for( int i = 0; i < m_comboSpeed->count(); i++ )
-		if( m_comboSpeed->text( i ) == _strSpeed )
-			_index = i;
-			
-	m_comboSpeed->setCurrentItem( _index );
-	
-	// -- read cd-writers ----------------------------------------------
-	QList<K3bDevice> _devices = k3bMain()->deviceManager()->burningDevices();
-	K3bDevice* _dev = _devices.first();
-	while( _dev ) {
-		m_comboWriter->insertItem( _dev->device() + " - " + _dev->vendor + " " + _dev->description );
-		_dev = _devices.next();
-	}
-	
-	slotRefreshWriterSpeeds();
-	
 	// read CD-Text ------------------------------------------------------------
-	m_editTitle->setText( ((K3bAudioDoc*)doc)->title() );
-	m_editArtist->setText( ((K3bAudioDoc*)doc)->artist() );
-	m_editISRC->setText( ((K3bAudioDoc*)doc)->isrc() );
-	m_editArranger->setText( ((K3bAudioDoc*)doc)->arranger() );
+	m_editTitle->setText( ((K3bAudioDoc*)doc())->title() );
+	m_editArtist->setText( ((K3bAudioDoc*)doc())->artist() );
+	m_editISRC->setText( ((K3bAudioDoc*)doc())->isrc() );
+	m_editArranger->setText( ((K3bAudioDoc*)doc())->arranger() );
+	
+	K3bProjectBurnDialog::readSettings();
 }
 
 
@@ -252,69 +191,12 @@ void K3bAudioBurnDialog::setupBurnTab( QFrame* frame )
     m_groupOptionsLayout->addWidget( m_checkDao );
     // --------------------------------------------------- options group ---
 
-    // --- device group ----------------------------------------------------
-    QGroupBox* m_groupDevice = new QGroupBox( frame, "m_groupDevice" );
-    m_groupDevice->setTitle( i18n( "Burning Device" ) );
-    m_groupDevice->setColumnLayout(0, Qt::Vertical );
-    m_groupDevice->layout()->setSpacing( 0 );
-    m_groupDevice->layout()->setMargin( 0 );
-    QGridLayout* m_groupDeviceLayout = new QGridLayout( m_groupDevice->layout() );
-    m_groupDeviceLayout->setAlignment( Qt::AlignTop );
-    m_groupDeviceLayout->setSpacing( spacingHint() );
-    m_groupDeviceLayout->setMargin( marginHint() );
-
-    QLabel* TextLabel1 = new QLabel( m_groupDevice, "TextLabel1" );
-    TextLabel1->setText( i18n( "Burning Speed" ) );
-
-    m_groupDeviceLayout->addWidget( TextLabel1, 0, 1 );
-
-    m_comboSpeed = new QComboBox( FALSE, m_groupDevice, "m_comboSpeed" );
-    m_comboSpeed->setAutoMask( FALSE );
-    m_comboSpeed->setDuplicatesEnabled( FALSE );
-
-    m_groupDeviceLayout->addWidget( m_comboSpeed, 1, 1 );
-
-    m_comboWriter = new QComboBox( FALSE, m_groupDevice, "m_comboWriter" );
-
-    m_groupDeviceLayout->addWidget( m_comboWriter, 1, 0 );
-
-    QLabel* TextLabel1_2 = new QLabel( m_groupDevice, "TextLabel1_2" );
-    TextLabel1_2->setText( i18n( "Device" ) );
-
-    m_groupDeviceLayout->addWidget( TextLabel1_2, 0, 0 );
-    // --------------------------------------------------------- device group ---
-
-
-//    // --- actions group --------------------------------------------------------
-//    QGroupBox* m_groupActions = new QGroupBox( frame, "m_groupActions" );
-//    m_groupActions->setLineWidth( 0 );
-//    m_groupActions->setTitle( i18n( "Actions to perform" ) );
-//    m_groupActions->setColumnLayout(0, Qt::Vertical );
-//    m_groupActions->layout()->setSpacing( 0 );
-//    m_groupActions->layout()->setMargin( 0 );
-//    QVBoxLayout* m_groupActionsLayout = new QVBoxLayout( m_groupActions->layout() );
-//    m_groupActionsLayout->setAlignment( Qt::AlignTop );
-//    m_groupActionsLayout->setSpacing( spacingHint() );
-//    m_groupActionsLayout->setMargin( marginHint() );
-//
-//    m_checkBufferFiles = new QCheckBox( m_groupActions, "m_checkBufferFiles" );
-//    m_checkBufferFiles->setText( i18n( "Cache Files" ) );
-//    m_groupActionsLayout->addWidget( m_checkBufferFiles );
-//
-//
-//    m_checkWrite = new QCheckBox( m_groupActions, "m_checkWrite" );
-//    m_checkWrite->setText( i18n( "Write" ) );
-//    m_groupActionsLayout->addWidget( m_checkWrite );
-//    // ---------------------------------------------------------- actions group ---
-
-
-//    frameLayout->addMultiCellWidget( m_groupActions, 0, 1, 0, 0 );
     frameLayout->addWidget( m_groupTempDir, 1, 1 );
     frameLayout->addWidget( m_groupOptions, 1, 0 );
-    frameLayout->addMultiCellWidget( m_groupDevice, 0, 0, 0, 1 );
+    writerBox()->reparent( frame, QPoint(0,0) );
+    frameLayout->addMultiCellWidget( writerBox(), 0, 0, 0, 1 );
 
     m_groupTempDirLayout->setColStretch( 1 , 1);
-    m_groupDeviceLayout->setColStretch( 0 , 1);
 	frameLayout->setRowStretch( 1, 1 );
 	frameLayout->setColStretch( 1, 1 );
 
@@ -393,27 +275,6 @@ void K3bAudioBurnDialog::setupCdTextTab( QFrame* frame )
     Line1->setFrameStyle( QFrame::VLine | QFrame::Sunken );
 
     frameLayout->addMultiCellWidget( Line1, 0, 2, 1, 1 );
-}
-
-
-void K3bAudioBurnDialog::slotRefreshWriterSpeeds()
-{
-	QString _s = m_comboWriter->currentText();
-	_s.truncate(_s.find('-') );
-	QStringList list = QStringList::split(  ',', _s );
-	int bus = list[0].toInt();
-	int target = list[1].toInt();
-	int lun = list[2].toInt();
-	K3bDevice* _dev =  k3bMain()->deviceManager()->deviceByBus( bus, target, lun );
-	
-	// add speeds to combobox
-	m_comboSpeed->clear();
-	m_comboSpeed->insertItem( "1x" );
-	int _speed = 2;
-	while( _speed <= _dev->maxWriteSpeed ) {
-		m_comboSpeed->insertItem( QString( "%1x" ).arg(_speed) );
-		_speed+=2;
-	}
 }
 
 

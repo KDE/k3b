@@ -30,7 +30,6 @@
 
 class K3bApp;
 class K3bAudioTrack;
-class K3bAudioBurnDialog;
 class QWidget;
 
 /**Document class for an audio project. It uses a @p K3bAudioProject
@@ -63,8 +62,6 @@ public:
 	K3bAudioTrack* at( uint i ) { return m_tracks->at( i ); }
 	K3bAudioTrack* take( uint i ) { return m_tracks->take( i ); }
 
-	K3bAudioBurnDialog* burnDialog();
-	
 	/** get the current size of the project */
 	int size();
 	
@@ -79,7 +76,9 @@ public:
 	int numOfTracks() const;
 	int allMp3Decoded() const;
 	K3bAudioTrack* nextTrackToDecode() const;
-	
+
+	K3bBurnJob* newBurnJob();
+		
 public slots:
 	/**
 	 * will test the file and add it to the project.
@@ -145,8 +144,6 @@ private:
 	
  	uint lastAddedPosition;
  	
-	K3bAudioBurnDialog* m_burnDialog;
-
  	// settings
  	/** if true the adding of files will take longer */
  	bool testFiles;

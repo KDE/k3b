@@ -22,6 +22,7 @@
 #include "audiolistviewitem.h"
 #include "k3baudiotrack.h"
 #include "k3baudiotrackdialog.h"
+#include "k3baudioburndialog.h"
 #include "../k3bfillstatusdisplay.h"
 
 // QT-includes
@@ -51,7 +52,8 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
 	m_fillStatusDisplay = new K3bFillStatusDisplay( doc, this );
 	m_fillStatusDisplay->showTime();
 	m_propertiesDialog = 0;
-		
+	m_burnDialog = 0;
+	
 	grid->addWidget( m_songlist, 0, 0 );
 	grid->addWidget( m_fillStatusDisplay, 1, 0 );
 
@@ -73,6 +75,15 @@ K3bAudioView::~K3bAudioView(){
 }
 
 
+K3bProjectBurnDialog* K3bAudioView::burnDialog()
+{
+	if( !m_burnDialog )
+		m_burnDialog = new K3bAudioBurnDialog( (K3bAudioDoc*)getDocument(), k3bMain(), "audioburndialog", true );
+		
+	return m_burnDialog;
+}
+
+
 void K3bAudioView::setupPopupMenu()
 {
 	m_popupMenu = new KPopupMenu( m_songlist, "AudioViewPopupMenu" );
@@ -82,6 +93,7 @@ void K3bAudioView::setupPopupMenu()
 	actionRemove->plug( m_popupMenu );
 	actionProperties->plug( m_popupMenu);
 }
+
 
 void K3bAudioView::addItem( K3bAudioTrack* _track )
 {

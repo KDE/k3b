@@ -51,10 +51,11 @@
 #include "k3bripperwidget.h"
 #include "k3boptiondialog.h"
 #include "k3bburnprogressdialog.h"
-#include "audio/k3baudioburndialog.h"
+#include "k3bprojectburndialog.h"
 #include "audio/k3baudiojob.h"
 #include "data/k3bdatadoc.h"
 #include "data/k3bdataview.h"
+#include "data/k3bdatajob.h"
 
 
 K3bApp* k3bMain()
@@ -659,10 +660,10 @@ void K3bApp::slotFileBurn()
 	QWidget* w = m_documentTab->currentPage();
 	if( w )
 	{
-		if( K3bAudioView* _view = dynamic_cast<K3bAudioView*>(w) ) {
-			K3bAudioDoc* doc = (K3bAudioDoc*)_view->getDocument();
+		if( K3bView* _view = dynamic_cast<K3bView*>(w) ) {
+			K3bDoc* doc = _view->getDocument();
 				
-			if( doc  )
+			if( doc )
 			{
 				// test if there is something to burn
 				if( doc->numOfTracks() == 0 ) {
@@ -670,11 +671,11 @@ void K3bApp::slotFileBurn()
 					return;
 				}
 				
-				if( doc->burnDialog()->exec(true) == K3bAudioBurnDialog::Burn ) {
+				if( _view->burnDialog()->exec(true) == K3bProjectBurnDialog::Burn ) {
 					if( !m_burnProgressDialog )
 						m_burnProgressDialog = new K3bBurnProgressDialog( this );
 					
-					K3bJob* job = new K3bAudioJob( (K3bAudioDoc*)_view->getDocument() );
+					K3bBurnJob* job = _view->getDocument()->newBurnJob();
 				
 					m_burnProgressDialog->setJob( job );
 					
@@ -685,6 +686,7 @@ void K3bApp::slotFileBurn()
 				}
 			}
 		}
+
 		else if( w->inherits( "K3bCopyWidget" ) ) {
 			// TODO: do whatever to copy a cd
 		}

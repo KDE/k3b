@@ -24,6 +24,7 @@ class K3bDataItem;
 class K3bRootItem;
 class K3bDirItem;
 class K3bFileItem;
+class K3bJob;
 
 class K3bView;
 class QString;
@@ -62,7 +63,17 @@ public:
 	/** returns an empty dummy dir for use with K3bDirItems.
 		Creates one if nessessary.
 		The dummy dir is used to create empty dirs on the iso-filesystem! */
-	QString dummyDir();
+	const QString& dummyDir();
+	const QString& isoImage() const { return m_isoImage; }
+	void setIsoImage( const QString& s ) { m_isoImage = s; }
+	
+	bool createRockRidge() const { return m_createRockRidge; }
+	bool createJoliet() const { return m_createJoliet; }
+
+	void setCreateRockRidge( bool b ) { m_createRockRidge = b; }
+	void setCreateJoliet( bool b ) { m_createJoliet = b; }
+		
+	K3bBurnJob* newBurnJob();
 	
 public slots:
 	/** add urls to the compilation.
@@ -88,6 +99,25 @@ private:
 	K3bRootItem* m_root;
 	QString m_name;
 	QString m_dummyDir;
+	QString m_isoImage;
+			
+	bool m_createRockRidge;    // -r or -R
+	bool m_createJoliet;             // -J
+	bool m_ISOallowLowercase;   // -allow-lowercase
+	bool m_ISOallowPeriodAtBegin;   // -L
+	bool m_ISOallow31charFilenames;  // -I
+	bool m_ISOomitVersionNumbers;   // -N
+	bool m_ISOmaxFilenameLength;     // -max-iso9660-filenames (forces -N)
+	bool m_ISOrelaxedFilenames;      // -relaxed-filenames
+	bool m_ISOnoIsoTranslate;        // -no-iso-translate
+	bool m_ISOallowMultiDot;          // -allow-multidot
+	bool m_ISOuntranslatedFilenames;   // -U (forces -d, -I, -L, -N, -relaxed-filenames, -allow-lowercase, -allow-multidot, -no-iso-translate)
+	bool m_noDeepDirectoryRelocation;   // -D
+	bool m_followSymbolicLinks;       // -f
+	bool m_hideRR_MOVED;  // -hide-rr-moved
+	bool m_createTRANS_TBL;    // -T
+	bool m_hideTRANS_TBL;    // -hide-joliet-trans-tbl
+	bool m_padding;           // -pad
 };
 
 #endif

@@ -22,6 +22,7 @@
 #include "k3baudiotrack.h"
 #include "../k3bprogressdialog.h"
 #include "k3baudioburndialog.h"
+#include "k3baudiojob.h"
 
 // QT-includes
 #include <qstring.h>
@@ -45,7 +46,6 @@
 K3bAudioDoc::K3bAudioDoc( QObject* parent )
 	: K3bDoc( parent )
 {
-	m_burnDialog = 0L;
 	m_tracks = 0L;
 	m_fileDecodingSuccessful = true;
 	m_cdText = true;
@@ -350,13 +350,13 @@ K3bView* K3bAudioDoc::newView( QWidget* parent )
 }
 
 
-bool K3bAudioDoc::loadDocumentData( QFile& f )
+bool K3bAudioDoc::loadDocumentData( QFile& )
 {
 	// TODO: so what? load the shit! ;-)
 	return true;
 }
 
-bool K3bAudioDoc::saveDocumentData( QFile& f )
+bool K3bAudioDoc::saveDocumentData( QFile& )
 {
 	// TODO: some saving work...
 	return true;
@@ -371,16 +371,6 @@ void K3bAudioDoc::addView(K3bView* view)
 	connect( v, SIGNAL(itemMoved(uint,uint)), this, SLOT(moveTrack(uint,uint)) );
 	
 	K3bDoc::addView( view );
-}
-
-
-K3bAudioBurnDialog* K3bAudioDoc::burnDialog()
-{
-	if( !m_burnDialog ) {
-		m_burnDialog = new K3bAudioBurnDialog( this, k3bMain(), "audioBurnDialog", true );
-	}
-		
-	return m_burnDialog;
 }
 
 
@@ -476,4 +466,9 @@ K3bAudioTrack* K3bAudioDoc::nextTrackToDecode() const
 			return i.current();
 	}
 	return 0;
+}
+
+K3bBurnJob* K3bAudioDoc::newBurnJob()
+{
+	return new K3bAudioJob( this );
 }

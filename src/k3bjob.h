@@ -21,9 +21,7 @@
 #include <qobject.h>
 
 class QString;
-//class K3bCdrecordJob;
-//class K3bCdrdaoJob;
-//class K3bDecodingJob;
+class K3bDoc;
 
 /**This is the baseclass for all the jobs in K3b which actually do the work like burning a cd!
   *@author Sebastian Trueg
@@ -57,11 +55,19 @@ class K3bJob : public QObject
   void newTrack();
   void newTask( const QString& job );
   void newSubTask( const QString& job );
-
-// public:
-//  static K3bCdrecordJob* createCdrecordJob( K3bDoc* doc );
-//  static K3bCdrdaoJob* createCdrdaoJob( K3bDoc* doc );
-//  static K3bDecodingJob* createDecodingJob( K3bDoc* doc );
 };
 
+
+class K3bBurnJob : public K3bJob
+{
+	Q_OBJECT
+	
+public:
+	K3bBurnJob( ) {}
+	
+	virtual K3bDoc* doc() const = 0;
+	
+signals:
+	void bufferStatus( int );
+};
 #endif
