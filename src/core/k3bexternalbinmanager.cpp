@@ -18,6 +18,7 @@
 #include <kdebug.h>
 #include <kprocess.h>
 #include <kconfig.h>
+#include <kdeversion.h>
 
 #include <qstring.h>
 #include <qregexp.h>
@@ -177,7 +178,12 @@ bool K3bExternalBinManager::readConfig( KConfig* c )
   loadDefaultSearchPath();
 
   if( c->hasKey( "search path" ) )
+
+#if KDE_IS_VERSION(3,1,3)
     setSearchPath( c->readPathListEntry( "search path" ) );
+#else
+    setSearchPath( c->readListEntry( "search path" ) );
+#endif
 
   search();
 

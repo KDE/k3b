@@ -38,6 +38,7 @@
 #include <knuminput.h>
 #include <kconfig.h>
 #include <kapplication.h>
+#include <kdeversion.h>
 
 
 K3bCddbOptionTab::K3bCddbOptionTab( QWidget* parent,  const char* name )
@@ -151,7 +152,12 @@ void K3bCddbOptionTab::readSettings()
   // new config
   QStringList cddbServer = c->readListEntry( "cddb server" );
 
+#if KDE_IS_VERSION(3,1,3)
   QStringList localCddbDirs = c->readPathListEntry( "local cddb dirs" );
+#else
+  QStringList localCddbDirs = c->readListEntry( "local cddb dirs" );
+#endif
+
 
   m_checkRemoteCddb->setChecked( c->readBoolEntry( "use remote cddb", false ) );
   m_checkUseLocalCddb->setChecked( c->readBoolEntry( "use local cddb query", true ) );
