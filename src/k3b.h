@@ -148,7 +148,8 @@ class K3bApp : public KDockMainWindow
     void slotFileSaveAs();
     /** asks for saving if the file is modified, then closes the actual file and window*/
     void slotFileClose();
-
+	
+	void slotFileExport();
 	void slotFileBurn();
 	void slotDirDockHidden();
 	void slotSettingsConfigure();
@@ -223,6 +224,7 @@ class K3bApp : public KDockMainWindow
     KAction* fileQuit;
     KAction* fileBurn;
 	KAction* settingsConfigure;
+	KAction* fileExport;
 	
     KToggleAction* viewToolBar;
     KToggleAction* viewStatusBar;

@@ -35,6 +35,7 @@ class QLineEdit;
 class QPushButton;
 class QTabWidget;
 class QGrid;
+class QMultiLineEdit;
 
 
 class K3bAudioDoc;
@@ -58,7 +59,8 @@ public:
 	
 protected:
 	void setupBurnTab( QFrame* frame );
-		
+	void setupCdTextTab( QFrame* frame );
+	
 	// the burn tab
 	// ---------------------------------------------------------
     QGroupBox* m_groupDevice;
@@ -69,6 +71,7 @@ protected:
     QCheckBox* m_checkDao;
     QCheckBox* m_checkOnTheFly;
     QCheckBox* m_checkPadding;
+	QCheckBox* m_checkCdText;
     QGroupBox* m_groupTempDir;
     QLabel* m_labelCdSize;
     QLabel* m_labelFreeSpace;
@@ -79,6 +82,15 @@ protected:
     QGridLayout* m_groupTempDirLayout;
 	// -----------------------------------------------------------
 	
+	// the cd-text-tab
+	// -----------------------------------------------------------
+    QLineEdit* m_editArranger;
+    QLineEdit* m_editISRC;
+    QLineEdit* m_editArtist;
+    QLineEdit* m_editTitle;
+    QMultiLineEdit* m_editMessage;
+	// -----------------------------------------------------------
+
 private:
 	K3bAudioDoc* doc;
 

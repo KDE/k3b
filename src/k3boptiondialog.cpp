@@ -152,6 +152,9 @@ void K3bOptionDialog::readPrograms()
     item->setText( 0, "cdda2wav"  );
     item->setText( 1,  config->readEntry( "cdda2wav path", "/usr/bin/cdda2wav" ) );
 
+    item = new QListViewItem( m_viewPrograms );
+    item->setText( 0, "cdrdao"  );
+    item->setText( 1,  config->readEntry( "cdrdao path", "/usr/bin/cdrdao" ) );
 }
 
 bool K3bOptionDialog::savePrograms()

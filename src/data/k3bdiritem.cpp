@@ -17,7 +17,11 @@
 
 #include "k3bdiritem.h"
 
-K3bDirItem::K3bDirItem()
+#include <qstring.h>
+
+
+K3bDirItem::K3bDirItem(const QString& name, K3bDirItem* parentDir)
+	: K3bDataItem( parentDir ), m_name( name )
 {
 }
 

@@ -43,6 +43,7 @@
 #include "k3bview.h"
 #include "k3bdirview.h"
 #include "audio/k3baudiodoc.h"
+#include "audio/k3baudioview.h"
 #include "k3bdevicemanager.h"
 #include "audio/k3baudiotrackdialog.h"
 #include "k3bcopywidget.h"
@@ -81,6 +82,7 @@ K3bApp::K3bApp()
   fileSave->setEnabled(false);
   fileSaveAs->setEnabled(false);
   fileBurn->setEnabled( false );
+  fileExport->setEnabled( false );
 
   m_audioTrackDialog = 0;
   m_optionDialog = 0;
@@ -103,6 +105,7 @@ void K3bApp::initActions()
   settingsConfigure = KStdAction::preferences(this, SLOT(slotSettingsConfigure()), actionCollection() );
 
   fileBurn = new KAction( i18n("&Burn..."), "cdwriter_unmount", 0, this, SLOT(slotFileBurn()), actionCollection(), "file_burn");
+  fileExport = new KAction( i18n("E&xport..."), "revert", 0, this, SLOT(slotFileExport()), actionCollection(), "file_export" );
 
   fileNewMenu = new KActionMenu( i18n("&New Project"), "filenew", actionCollection(), "file_new" );
   fileNewAudio = new KAction(i18n("New &Audio project"), "filenew", 0, this, SLOT(slotNewAudioDoc()), actionCollection(), "file_new_audio");
@@ -178,6 +181,9 @@ void K3bApp::createClient(K3bDoc* doc)
   m_documentTab->showPage( w );
 
   fileBurn->setEnabled( true );
+
+  if( dynamic_cast<K3bAudioDoc*>(doc) )
+  	fileExport->setEnabled( true );
 }
 
 void K3bApp::openDocumentFile(const KURL& url)
@@ -428,6 +434,22 @@ void K3bApp::slotFileSaveAs()
   slotStatusMsg(i18n("Ready."));
 }
 
+
+void K3bApp::slotFileExport()
+{
+	K3bAudioView* m = dynamic_cast<K3bAudioView*>( m_documentTab->currentPage() );
+	if( m ) {
+		QString file = KFileDialog::getSaveFileName( QDir::home().absPath(), "*.toc", k3bMain(), i18n("Export to cdrdao-toc-file") );
+		if( !file.isEmpty() ) {
+			if( ((K3bAudioDoc*)m->getDocument())->writeTOC( file ).isEmpty() )
+				KMessageBox::error( this, i18n("Could not write to file %1").arg( file ), i18n("I/O Error") );
+		}
+	}
+	else
+		qDebug( "(K3bApp) Tried to export from non-audio-view!");
+}
+
+
 void K3bApp::slotFileClose()
 {
   slotStatusMsg(i18n("Closing file..."));
@@ -649,6 +671,11 @@ void K3bApp::slotDirDockHidden()
 
 void K3bApp::slotCurrentDocChanged( QWidget* w )
 {
+	if( w->inherits( "K3bAudioView" ) )
+		fileExport->setEnabled( true );
+	else
+		fileExport->setEnabled( false );
+		
 	if( w->inherits( "K3bView" ) ) {
 		// activate actions for file-handling
 		fileClose->setEnabled( true );

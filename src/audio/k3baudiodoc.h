@@ -68,6 +68,15 @@ public:
 	/** get the current size of the project */
 	int size();
 	
+	// CD-Text
+	bool cdText() const { return m_cdText; }
+	const QString& title() const { return m_cdTextTitle; }
+	const QString& artist() const { return m_cdTextArtist; }
+	const QString& isrc() const { return m_cdTextISRC; }
+	const QString& arranger() const { return m_cdTextArranger; }
+
+	QString writeTOC( const QString& filename );
+	
 public slots:
 	/**
 	 * will test the file and add it to the project.
@@ -86,7 +95,14 @@ public slots:
 
 	void setPadding( bool p ) { m_padding = p; }
 	void cancel();
-	
+
+	// CD-Text
+	void writeCdText( bool b ) { m_cdText = b; }
+	void setTitle( const QString& v ) { m_cdTextTitle = v; }
+	void setArtist( const QString& v ) { m_cdTextArtist = v; }
+	void setISRC( const QString& v ) { m_cdTextISRC = v; }
+	void setArranger( const QString& v ) { m_cdTextArranger = v; }
+
 protected slots:
  	/** processes queue "urlsToAdd" **/
  	void addNextTrack();
@@ -160,6 +176,15 @@ private:
  	bool testFiles;
  	bool m_padding;
  	bool m_fileDecodingSuccessful;
+ 	
+ 	// CD-Text
+ 	// --------------------------------------------------
+ 	bool m_cdText;
+ 	QString m_cdTextTitle;
+ 	QString m_cdTextArtist;
+ 	QString m_cdTextISRC;
+ 	QString m_cdTextArranger;
+ 	// --------------------------------------------------
 };
 
 

@@ -19,7 +19,9 @@
 #define K3BFILEITEM_H
 
 
-#include <qfileinfo.h>
+#include "k3bdataitem.h"
+
+#include <kfileitem.h>
 #include <qstring.h>
 
 class K3bDataDoc;
@@ -29,9 +31,8 @@ class K3bDirItem;
   *@author Sebastian Trueg
   */
 
-// TODO: inherit from KIO::KFileItem or even use it instead of QFileInfo
 
-class K3bFileItem
+class K3bFileItem : public KFileItem, public K3bDataItem
 {
 public:
 	/**
@@ -41,7 +42,6 @@ public:
 	K3bFileItem( const QString& fileName, K3bDataDoc* doc, K3bDirItem* dir );
 	~K3bFileItem();
 	
-	K3bDirItem* dir() const { return m_dir; }
 	K3bFileItem* next() const { return m_next; }
 	K3bFileItem* prev() const { return m_prev; }
 	
@@ -62,13 +62,10 @@ public:
 private:
 	K3bDataDoc* doc;
 
-	K3bDirItem* m_dir;
 	/** the next item on the same level */
 	K3bFileItem* m_next;
 	/** the previous item on the same level */
 	K3bFileItem* m_prev;
-	
-	QFileInfo m_file;
 	
 	QString m_isoName;
 	QString m_joiletName;

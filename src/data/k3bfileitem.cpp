@@ -22,12 +22,13 @@
 #include <qfileinfo.h>
 #include <qstring.h>
 
+//#include <kurl.h>
+
 
 K3bFileItem::K3bFileItem( const QString& fileName, K3bDataDoc* doc, K3bDirItem* dir )
-	: m_file( fileName )
+	: KFileItem( -1, -1, fileName ), K3bDataItem( dir )
 {
 	this->doc = doc;
-	m_dir = dir;
 	m_next = 0;
 	m_prev = 0;
 	
@@ -42,7 +43,7 @@ K3bFileItem::~K3bFileItem()
 
 bool K3bFileItem::exists() const
 {
-	return m_file.exists();
+	return isLocalFile();
 }
 
 QString K3bFileItem::absIsoPath()

@@ -19,15 +19,26 @@
 #define K3BDIRITEM_H
 
 
+#include <qstring.h>
+#include <qlist.h>
+
+#include "k3bdataitem.h"
+
 /**
   *@author Sebastian Trueg
   */
 
-class K3bDirItem
+class K3bDirItem : public K3bDataItem
 {
 public: 
-	K3bDirItem();
+	K3bDirItem( const QString& name, K3bDirItem* parentDir = 0 );
 	~K3bDirItem();
+	
+	const QString& name() { return m_name; }
+	
+private:
+	QString m_name;
+	QList<K3bDataItem> m_children;
 };
 
 #endif

@@ -29,6 +29,7 @@
 #include <qstringlist.h>
 #include <qfile.h>
 #include <qdatetime.h>
+#include <qtextstream.h>
 
 // KDE-includes
 #include <kprocess.h>
@@ -48,6 +49,7 @@ K3bAudioDoc::K3bAudioDoc( QObject* parent )
 	m_burnDialog = 0L;
 	m_tracks = 0L;
 	m_fileDecodingSuccessful = true;
+	m_cdText = true;
 }
 
 K3bAudioDoc::~K3bAudioDoc()
@@ -376,6 +378,9 @@ void K3bAudioDoc::cdrecordFinished()
 
 void K3bAudioDoc::startRecording()
 {
+	// TODO: if dao() use cdrdao to write the cd in dao mode with cd-text ablity
+
+
 	m_process->disconnect();
 
 	m_currentProcessedTrack = at(0);
@@ -828,4 +833,57 @@ void K3bAudioDoc::cancel()
 		QFile::remove( lastTempFile );
 		lastTempFile = QString::null;
 	}
+}
+
+
+QString K3bAudioDoc::writeTOC( const QString& filename )
+{
+	QFile file( filename );
+	if( !file.open( IO_WriteOnly ) ) {
+		qDebug( "(K3bAudioDoc) Could not open toc-file %s", filename.latin1() );
+		return QString::null;
+	}
+	
+	QTextStream t(&file);
+	// --- writing the TOC -------------------
+	// header
+	t << "// TOC-file to use with cdrdao created by K3b" << "\n\n";
+	t << "CD_DA\n";
+	if( cdText() ) {
+		t << "CD-TEXT {" << "\n";
+		t << "\t" << "LANGUAGE_MAP { 0: EN }\n";
+		t << "\t" << "LANGUAGE 0 {\n";
+		t << "\t\t" << "TITLE " << "\"" << title() << "\"" << "\n";
+		t << "\t\t" << "PERFORMER " << "\"" << artist() << "\"" << "\n";
+		t << "\t" << "}" << "\n\n";
+	}
+	
+	// tracks
+	for( K3bAudioTrack* _track = at(0); _track != 0; _track = next() ) {
+		t << "TRACK AUDIO" << "\n";
+		if( cdText() ) {
+			t << "CD-TEXT {" << "\n";
+			t << "\t" << "LANGUAGE 0 {" << "\n";
+			t << "\t\t" << "TITLE " << "\"" << _track->title() << "\"" << "\n";
+			t << "\t\t" << "PERFORMER " << "\"" << _track->artist() << "\"" << "\n";
+			t << "\t" << "}" << "\n";
+			t << "}" << "\n";
+		}
+		if( _track->pregap() > 0 ) {
+			t << "PREGAP 0:" << _track->pregap() << ":0" << "\n";
+		}
+
+		t << "FILE ";
+		if( _track->bufferFile().isEmpty() ) {
+			// TODO: test if MP3 and do something about it!
+			t << "\"" << _track->absPath() << "\"" << " 0" << "\n";
+		}
+		else
+			t << "\"" << _track->bufferFile() << "\"" << " 0" << "\n";
+		t << "\n";
+	}
+	// --------------------------------- TOC --	
+	
+	file.close();
+	return filename;
 }
