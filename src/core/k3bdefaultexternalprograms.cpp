@@ -481,6 +481,10 @@ bool K3bCdrdaoProgram::scan( const QString& p )
     bin = new K3bExternalBin( this );
     bin->path = path;
     bin->version = out.output().mid( pos, endPos-pos );
+
+    pos = out.output().find( "(C)", endPos+1 ) + 4;
+    endPos = out.output().find( '\n', pos );
+    bin->copyright = out.output().mid( pos, endPos-pos );
   }
   else {
     kdDebug() << "(K3bCdrdaoProgram) could not start " << path << endl;
