@@ -92,7 +92,9 @@ class K3bVcdJob : public K3bBurnJob
   int m_speed;
   int m_stage;
   int m_currentWrittenTrackNumber;
-  
+
+  double m_createimageonlypercent;
+    
   bool firstTrack;
   bool m_burnProof;
   bool m_keepImage;

@@ -59,6 +59,7 @@ K3bVcdJob::K3bVcdJob( K3bVcdDoc* doc )
   m_currentWrittenTrackNumber = 0;
   m_bytesFinishedTracks = 0;
   m_writerJob = 0;
+  m_createimageonlypercent = 33.3;
   m_imageFinished = false;
 }
 
@@ -137,6 +138,9 @@ void K3bVcdJob::start()
     m_doc->setVcdImage(m_doc->vcdImage() + ".bin");
   }
 
+  if ( vcdDoc()->onlyCreateImage())
+    m_createimageonlypercent = 50.0;
+
   vcdxGen();
 }
 
@@ -185,6 +189,7 @@ void K3bVcdJob::vcdxGen()
     kdDebug() << "(K3bVcdJob) could not find vcdxgen executable" << endl;
     emit infoMessage( i18n("vcdxgen executable not found."), K3bJob::ERROR );
     cancelAll();
+    emit finished( false );
     return;
   }
 
@@ -312,6 +317,7 @@ void K3bVcdJob::vcdxBuild()
     kdDebug() << "(K3bVcdJob) could not find vcdxbuild executable" << endl;
     emit infoMessage( i18n("vcdxbuild executable not found."), K3bJob::ERROR );
     cancelAll();
+    emit finished( false );
     return;
   }
 
@@ -400,7 +406,7 @@ void K3bVcdJob::slotParseVcdxBuildOutput( KProcess*, char* output, int len )
 
           // this is the first of three processes.
           double relOverallWritten = ( (double)m_bytesFinishedTracks + (double)pos ) / (double)doc()->size();
-          emit percent( (int)(33.0 * relOverallWritten)  );
+          emit percent( (int)(m_createimageonlypercent * relOverallWritten)  );
 
           m_bytesFinished = pos;
           m_stage = stageScan;
@@ -408,8 +414,8 @@ void K3bVcdJob::slotParseVcdxBuildOutput( KProcess*, char* output, int len )
         }
         else if (oper == "write") {
           emit subPercent( (int) (100.0 * (double)pos / (double)size) );
-          emit processedSubSize( (pos*2352)/1024/1024, (size*2352)/1024/1024 );
-          emit percent( 33 + (int) (33.0 * (double)pos / (double)size) );
+          emit processedSubSize( (pos*2048)/1024/1024, (size*2048)/1024/1024 );
+          emit percent( (int) (m_createimageonlypercent + (m_createimageonlypercent * (double)pos / (double)size)) );
 
           m_stage = stageWrite;
         }
@@ -456,15 +462,15 @@ void K3bVcdJob::slotVcdxBuildFinished()
       emit infoMessage( i18n("vcdxbuild returned an error! (code %1)").arg(m_process->exitStatus()), K3bJob::ERROR );
       emit infoMessage( i18n("No error handling yet!"), K3bJob::ERROR );
       emit infoMessage( i18n("Please send me an email with the last output..."), K3bJob::ERROR );
-      emit finished( false );
       cancelAll();
+      emit finished( false );
       return;
     }
   }
   else {
     emit infoMessage( i18n("vcdxbuild not exit cleanly."), K3bJob::ERROR );
-    emit finished( false );
     cancelAll();
+    emit finished( false );
     return;
   }
 
@@ -519,6 +525,7 @@ bool K3bVcdJob::prepareWriterJob()
   }
   else {
     cancelAll();
+    emit finished( false );
     return false;
   }
 
@@ -539,7 +546,7 @@ bool K3bVcdJob::prepareWriterJob()
 
 void K3bVcdJob::slotWriterJobPercent( int p )
 {
-  emit percent( 67 + p/3 );
+  emit percent( (int)(66.6 + p / 3) );
 }
 
 void K3bVcdJob::slotWriterNextTrack( int t, int tt )
@@ -576,8 +583,8 @@ void K3bVcdJob::slotWriterJobFinished( bool success )
     emit finished(true);
   }
   else {
-    emit finished(false);
     cancelAll();
+    emit finished(false);
   }
 }
 

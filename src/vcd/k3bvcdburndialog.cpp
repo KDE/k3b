@@ -65,36 +65,26 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
   setupVideoCdTab();
   setupLabelTab();
 
-  QFileInfo fi( m_tempDirSelectionWidget->tempPath() );
-  QString path;
-
-  if( fi.isFile() )
-    path = fi.dirPath();
-  else
-    path = fi.filePath();
-
-  if( path[path.length()-1] != '/' )
-    path.append("/");
-
-  path.append( vcdDoc()->vcdOptions()->volumeId() + ".bin" );
-  // m_tempDirSelectionWidget->setTempPath( path );
-
+  slotSetImagePath();
+    
   readSettings();
-  if( K3bDevice* dev = m_writerSelectionWidget->writerDevice() )
-    m_checkBurnproof->setEnabled( dev->burnproof() );
 
-  connect( m_checkNonCompliant, SIGNAL(toggled(bool)), this, SLOT(slotNonCompliantToggled()) );
-  connect( m_check2336, SIGNAL(toggled(bool)), this, SLOT(slot2336Toggled()) );
   connect( m_spinVolumeCount, SIGNAL(valueChanged(int)), this, SLOT(slotSpinVolumeCount()) );
   connect( m_spinVolumeNumber, SIGNAL(valueChanged(int)), this, SLOT(slotSpinVolumeNumber()) );
 
+  connect( m_editAlbumId, SIGNAL(textChanged(const QString&)), this, SLOT(slotAlbumIdChanged()) );
+  connect( m_editVolumeId, SIGNAL(textChanged(const QString&)), this, SLOT(slotVolumeIdChanged()) );
+  connect( m_editVolumeId, SIGNAL(textChanged(const QString&)), this, SLOT(slotSetImagePath()) );
+  
+  connect( m_checkNonCompliant, SIGNAL(toggled(bool)), this, SLOT(slotNonCompliantToggled()) );
+  connect( m_check2336, SIGNAL(toggled(bool)), this, SLOT(slot2336Toggled()) );
   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotOnlyCreateImageChecked(bool)) );
   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_writerSelectionWidget, SLOT(setDisabled(bool)) );
   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkBurnproof, SLOT(setDisabled(bool)) );
   // connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_spinCopies, SLOT(setDisabled(bool)) );
   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkSimulate, SLOT(setDisabled(bool)) );
   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkRemoveBufferFiles, SLOT(setDisabled(bool)) );
-    
+        
   // ToolTips
   // -------------------------------------------------------------------------
   QToolTip::add( m_radioVcd11, i18n("Select Video CD Typ %1").arg("(VCD 1.1)") );
@@ -196,7 +186,7 @@ void K3bVcdBurnDialog::setupVideoCdTab()
   m_checkNonCompliant->setEnabled( false );
   m_checkNonCompliant->setChecked( false );
   
-  // TODO: set enabled to false, k3b canot resample now.
+  // TODO: enable this in the future, k3b canot resample now.
   m_groupVcdFormat->setEnabled(false);
 
   addPage( w, i18n("Settings") );
@@ -214,7 +204,7 @@ void K3bVcdBurnDialog::setupLabelTab()
   QLabel* labelVolumeCount = new QLabel( i18n( "Number of CDs in &Album:" ), w, "labelVolumeCount" );
   QLabel* labelVolumeNumber = new QLabel( i18n( "CD is &Number:" ), w, "labelVolumeNumber" );
 
-  m_editVolumeId = new QLineEdit( w, "m_editDisc_id" );
+  m_editVolumeId = new QLineEdit( w, "m_editVolumeId" );
   m_editAlbumId = new QLineEdit( w, "m_editAlbumId" );
   m_spinVolumeNumber = new QSpinBox( w, "m_editVolumeNumber" );
   m_spinVolumeCount = new QSpinBox( w, "m_editVolumeCount" );
@@ -261,13 +251,6 @@ void K3bVcdBurnDialog::setupLabelTab()
   // TODO: enable this in the future :)
   m_checkApplicationId->setEnabled(false);
 
-  /*
-  labelVolumeCount->setEnabled(false);
-  labelVolumeNumber->setEnabled(false);
-  m_spinVolumeCount->setEnabled(false);
-  m_spinVolumeNumber->setEnabled(false);
-  */
-
   addPage( w, i18n("Label") );
 }
 
@@ -280,10 +263,12 @@ void K3bVcdBurnDialog::slotOk()
     return;
   }
   else {
+    slotSetImagePath();
+    /*
     QFileInfo fi( m_tempDirSelectionWidget->tempPath() );
     if( fi.isDir() )
       m_tempDirSelectionWidget->setTempPath( fi.filePath() + "/image.bin" );
-
+    */
     if( QFile::exists( m_tempDirSelectionWidget->tempPath() ) ) {
       if( KMessageBox::questionYesNo( this, i18n("Do you want to overwrite %1").arg(m_tempDirSelectionWidget->tempPath()), i18n("File exists...") )
         != KMessageBox::Yes )
@@ -446,15 +431,34 @@ void K3bVcdBurnDialog::saveUserDefaults()
   m_tempDirSelectionWidget->saveConfig();
 }
 
+void K3bVcdBurnDialog::slotSetImagePath()
+{
+  QFileInfo fi( m_tempDirSelectionWidget->tempPath() );
+  QString path;
+
+  if( fi.isDir() || fi.extension(false) != "bin" )
+    path = fi.filePath();
+  else
+    path = fi.dirPath();
+
+  if( path[path.length()-1] != '/' )
+    path.append("/");
+
+  if ( vcdDoc()->vcdOptions()->volumeId().length() < 1 ) {
+    vcdDoc()->vcdOptions()->setVolumeId("VIDEOCD");
+  }
+
+  path.append( vcdDoc()->vcdOptions()->volumeId() + ".bin" );
+  m_tempDirSelectionWidget->setTempPath( path );
+}
+
 void K3bVcdBurnDialog::slotNonCompliantToggled()
 {
-  // trueg: shouldn't this be done when the user clicks "save" or "burn"?
   vcdDoc()->vcdOptions()->setBrokenSVcdMode(m_checkNonCompliant->isChecked());
 }
 
 void K3bVcdBurnDialog::slot2336Toggled()
 {
-  // trueg: shouldn't this be done when the user clicks "save" or "burn"?
   vcdDoc()->vcdOptions()->setSector2336(m_check2336->isChecked());
 }
 
@@ -468,6 +472,16 @@ void K3bVcdBurnDialog::slotSpinVolumeCount()
 void K3bVcdBurnDialog::slotSpinVolumeNumber()
 {
   vcdDoc()->vcdOptions()->setVolumeNumber(m_spinVolumeNumber->value());  
+}
+
+void K3bVcdBurnDialog::slotVolumeIdChanged()
+{
+  vcdDoc()->vcdOptions()->setVolumeId(m_editVolumeId->text());  
+}
+
+void K3bVcdBurnDialog::slotAlbumIdChanged()
+{
+  vcdDoc()->vcdOptions()->setAlbumId(m_editAlbumId->text());
 }
 
 void K3bVcdBurnDialog::slotOnlyCreateImageChecked( bool c )

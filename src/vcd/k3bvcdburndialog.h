@@ -92,6 +92,9 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
    void slotSpinVolumeCount();
    void slotSpinVolumeNumber();
    void slotOnlyCreateImageChecked(bool);
+   void slotSetImagePath();
+   void slotVolumeIdChanged();
+   void slotAlbumIdChanged();
 };
 
 #endif
