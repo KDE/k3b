@@ -125,6 +125,7 @@ private slots:
     void useStatic();
     void usePattern();
     void showPatternDialog();
+    void slotFindStaticDir();
 };
 
 #endif

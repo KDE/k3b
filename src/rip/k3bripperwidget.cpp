@@ -30,6 +30,7 @@
 #include <klistview.h>
 #include <klineedit.h>
 #include <kprogress.h>
+#include <kfiledialog.h>
 #include <kio/job.h>
 #include <kio/global.h>
 
@@ -141,7 +142,7 @@ void K3bRipperWidget::setupGui(){
     connect(m_useStatic, SIGNAL( clicked() ), this, SLOT( useStatic() ) );
     connect(m_usePattern, SIGNAL( clicked() ), this, SLOT( usePattern() ) );
     connect(m_buttonPattern, SIGNAL(clicked() ), this, SLOT( showPatternDialog() ) );
-
+    connect(m_buttonStaticDir, SIGNAL(clicked()), this, SLOT(slotFindStaticDir()) );
 }
 
 K3bRipperWidget::~K3bRipperWidget(){
@@ -223,6 +224,7 @@ void K3bRipperWidget::useStatic(){
     m_usePattern->setChecked( false );
     m_buttonPattern->setDisabled( true );
     m_editStaticRipPath->setEnabled( true );
+    m_buttonStaticDir->setEnabled( true );
     m_useCustomDir = false;
 }
 void K3bRipperWidget::usePattern(){
@@ -230,6 +232,7 @@ void K3bRipperWidget::usePattern(){
     m_useStatic->setChecked( false );
     m_buttonPattern->setEnabled( true );
     m_editStaticRipPath->setDisabled( true );
+    m_buttonStaticDir->setDisabled( true );
     m_useCustomDir = true;
     QString dir = m_parser->prepareDirectory( m_viewTracks->itemAtIndex( 0 ) );
     qDebug("dir: " + dir);
@@ -369,4 +372,12 @@ void K3bRipperWidget::waitForClose(){
 
 void K3bRipperWidget::slotRippingFinished(){
     // further development
+}
+
+void K3bRipperWidget::slotFindStaticDir()
+{
+  QString path = KFileDialog::getExistingDirectory( m_editStaticRipPath->text(), this, i18n("Select Ripping Directory") );
+  if( !path.isEmpty() ) {
+    m_editStaticRipPath->setText( path );
+  }
 }
