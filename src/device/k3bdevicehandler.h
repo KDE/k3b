@@ -51,7 +51,7 @@ namespace K3bCdDevice
        * This constructor is used by the global "quick" methods and should not be used
        * otherwise except for the same usage.
        */
-      DeviceHandler( int command, CdDevice*, const char* name );
+      DeviceHandler( int command, CdDevice*, const char* name = 0 );
 
       ~DeviceHandler();
 
@@ -81,7 +81,8 @@ namespace K3bCdDevice
 	UNBLOCK,
 	EJECT,
 	MOUNT,
-	UNMOUNT
+	UNMOUNT,
+	MEDIUM_STATE /* empty, appendable, full, no disk */
       };
 
     signals:

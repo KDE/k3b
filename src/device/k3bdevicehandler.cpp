@@ -72,6 +72,10 @@ public:
         errorCode = dev->unmount();
 	success = (errorCode >= 0 );
         break;
+      case MEDIUM_STATE:
+	errorCode = dev->isEmpty();
+	success = ( errorCode != K3bCdDevice::CdDevice::NO_INFO );
+	break;
       default:
 	success = false;
       }
