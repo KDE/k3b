@@ -60,6 +60,20 @@ namespace K3bDevice
   const unsigned char FEATURE_DDCD_R_WRITE = 0x031;
   const unsigned char FEATURE_DDCD_RW_WRITE = 0x032;
   const unsigned char FEATURE_CD_RW_MEDIA_WRITE_SUPPORT = 0x37;
+  /*
+  FIXME:
+../../libk3bdevice/k3bdevice.h:63: warning: large integer implicitly truncated to unsigned type
+../../libk3bdevice/k3bdevice.h:64: warning: large integer implicitly truncated to unsigned type
+../../libk3bdevice/k3bdevice.h:65: warning: large integer implicitly truncated to unsigned type
+../../libk3bdevice/k3bdevice.h:66: warning: large integer implicitly truncated to unsigned type
+../../libk3bdevice/k3bdevice.h:67: warning: large integer implicitly truncated to unsigned type
+../../libk3bdevice/k3bdevice.h:68: warning: large integer implicitly truncated to unsigned type
+../../libk3bdevice/k3bdevice.h:69: warning: large integer implicitly truncated to unsigned type
+../../libk3bdevice/k3bdevice.h:70: warning: large integer implicitly truncated to unsigned type
+../../libk3bdevice/k3bdevice.h:71: warning: large integer implicitly truncated to unsigned type
+../../libk3bdevice/k3bdevice.h:72: warning: large integer implicitly truncated to unsigned type
+../../libk3bdevice/k3bdevice.h:73: warning: large integer implicitly truncated to unsigned type
+   */
   const unsigned char FEATURE_POER_MANAGEMENT = 0x100;
   const unsigned char FEATURE_EMBEDDED_CHANGER = 0x102;
   const unsigned char FEATURE_CD_AUDIO_ANALOG_PLAY = 0x103;
