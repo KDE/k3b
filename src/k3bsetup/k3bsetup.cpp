@@ -20,6 +20,7 @@
 #include "../device/k3bdevicemanager.h"
 #include "../device/k3bdevice.h"
 #include "../tools/k3bexternalbinmanager.h"
+#include "../tools/k3bdefaultexternalprograms.h"
 #include "../tools/k3bglobals.h"
 
 #include <kconfig.h>
@@ -53,6 +54,7 @@ K3bSetup::K3bSetup( QObject* parent )
 
   // initialize external programs
   // ================================================
+  K3b::addDefaultPrograms( m_externalBinManager );
   m_externalBinManager->search();
 
   if( m_config->hasGroup("External Programs") ) {

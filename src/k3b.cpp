@@ -896,7 +896,7 @@ void K3bMainWindow::init()
   // ===============================================================================
   emit initializationInfo( i18n("Searching for external programs...") );
 
-  ::addDefaultPrograms( K3bExternalBinManager::self() );
+  K3b::addDefaultPrograms( K3bExternalBinManager::self() );
   K3bExternalBinManager::self()->search();
 
   if( globalConfig.hasGroup("External Programs") ) {

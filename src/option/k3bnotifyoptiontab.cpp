@@ -8,6 +8,9 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
+#include <kdeversion.h>
+
+#if KDE_IS_VERSION(3,1,0)
 
 #include "k3bnotifyoptiontab.h"
 
@@ -52,3 +55,4 @@ bool K3bNotifyOptionTab::saveSettings()
 }
 
 #include "k3bnotifyoptiontab.moc"
+#endif

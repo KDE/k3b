@@ -25,7 +25,7 @@
 
 
 
-void addDefaultPrograms( K3bExternalBinManager* m )
+void K3b::addDefaultPrograms( K3bExternalBinManager* m )
 {
   static const char* vcdTools[] =  { "vcdxgen",
 				     "vcdxbuild",

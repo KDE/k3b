@@ -16,8 +16,11 @@
 
 class K3bExternalBinManager;
 
+namespace K3b
+{
+  void addDefaultPrograms( K3bExternalBinManager* );
+};
 
-void addDefaultPrograms( K3bExternalBinManager* );
 
 class K3bCdrecordProgram : public K3bExternalProgram
 {
