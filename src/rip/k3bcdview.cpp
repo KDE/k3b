@@ -73,6 +73,8 @@ void K3bCdView::setupGUI()
   QVBoxLayout* layout = new QVBoxLayout( this );
   layout->setAutoAdd( true );
 
+  K3bToolBox* toolBox = new K3bToolBox( this );
+  toolBox->addButton( m_copyAction );
 
   m_actionCollection = new KActionCollection( this );
 
@@ -105,10 +107,8 @@ void K3bCdView::setupGUI()
 	   this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
   connect( m_listView, SIGNAL(selectionChanged()),
 	   this, SLOT(slotSelectionChanged()) );
-
-  K3bToolBox* toolBox = new K3bToolBox( this );
-  toolBox->addButton( m_copyAction );
 }
+
 
 
 void K3bCdView::setupActions()
@@ -135,12 +135,15 @@ void K3bCdView::showCdView( const K3bDiskInfo& info )
 
   int index = 1;
   for( K3bToc::const_iterator it = info.toc.begin(); it != info.toc.end(); ++it ) {
-    (void)new KListViewItem( m_listView, 
-			     QString::number(index).rightJustify( 2, '0' ),
-			     "", i18n("Track%1").arg(index),
-			     K3b::framesToString( (*it).length(), false ),
-			     KIO::convertSize( (*it).length() * 2352 ),
-			     (*it).type() == K3bTrack::AUDIO ? i18n("Audio") : i18n("Data") );
+
+    // for now skip data tracks since we are not able to rip them to iso
+    if( (*it).type() == K3bTrack::AUDIO )
+      (void)new KListViewItem( m_listView, 
+			       QString::number(index).rightJustify( 2, '0' ),
+			       "", i18n("Track%1").arg(index),
+			       K3b::framesToString( (*it).length(), false ),
+			       KIO::convertSize( (*it).length() * 2352 ),
+			       (*it).type() == K3bTrack::AUDIO ? i18n("Audio") : i18n("Data") );
 
     index++;
   }
