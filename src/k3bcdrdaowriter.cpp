@@ -36,6 +36,7 @@
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kio/netaccess.h>
+#include <kstandarddirs.h>
 
 #include <errno.h>
 #include <string.h>
@@ -336,7 +337,7 @@ void K3bCdrdaoWriter::setCommonArguments() {
 
     // TOC File
     if ( ! m_tocFile.isEmpty() )
-        *m_process << m_tocFile;
+      *m_process << m_backupTocFile;  // use the backup toc file here to make sure cdrdao does not delete the original
 }
 
 K3bCdrdaoWriter* K3bCdrdaoWriter::addArgument( const QString& arg ) {
@@ -357,15 +358,24 @@ void K3bCdrdaoWriter::start() {
     connect( m_process, SIGNAL(wroteStdin(KProcess*)),
              this, SIGNAL(dataWritten()) );
 
-    // workaround, cdrdao kill the tocfile when --remote parameter is set
-    // hope to fix it in the future
     switch ( m_command ) {
     case WRITE:
     case COPY:
-        if (!m_tocFile.isEmpty())
-            if ( !KIO::NetAccess::copy(m_tocFile,m_tocFile+QString(".bak")) )
-                kdDebug() << "(cdrdaowriter) backup tocfile " <<   m_tocFile << " failed." << endl;
-        break;
+      if (!m_tocFile.isEmpty()) {
+	// workaround, cdrdao deletes the tocfile when --remote parameter is set
+	
+	m_backupTocFile = locateLocal( "appdata", "temp/k3b_tocfile_backup" );
+	// we need to remove the file since copy does not overwrite
+	if( QFile::exists( m_backupTocFile ) )
+	  QFile::remove(m_backupTocFile);
+	if ( !KIO::NetAccess::copy(m_tocFile,m_backupTocFile) ) {
+	  kdDebug() << "(K3bCdrdaoWriter) could not backup " << m_tocFile << " to " << m_backupTocFile << endl;
+	  emit infoMessage( i18n("Could not backup tocfile."), ERROR );
+	  emit finished(false);
+	  return;
+	}
+      }
+      break;
     case BLANK:
     case READ:
         break;
@@ -460,21 +470,11 @@ void K3bCdrdaoWriter::cancel() {
             }
 
         }
-        switch ( m_command ) {
-        case WRITE:
-        case COPY:
-            if ( !m_tocFile.isEmpty() ) {
-                if ( !KIO::NetAccess::copy(m_tocFile+QString(".bak"),m_tocFile) )
-                    kdDebug() << "(cdrdaowriter) restore tocfile " <<   m_tocFile << " failed." << endl;
-                if ( !KIO::NetAccess::del(m_tocFile+QString(".bak")) )
-                    kdDebug() << "(cdrdaowriter) delete bak-file failed." << endl;
-            }
-            break;
-        case BLANK:
-        case READ:
-            break;
-        }
     }
+
+    if( QFile::exists( m_backupTocFile ) )
+      QFile::remove(m_backupTocFile);
+
     emit canceled();
     emit finished( false );
 }
@@ -487,20 +487,8 @@ void K3bCdrdaoWriter::slotStdLine( const QString& line ) {
 
 void K3bCdrdaoWriter::slotProcessExited( KProcess* p ) {
 
-    // rename toc-file before emit finished( ... );
-    switch ( m_command ) {
-    case WRITE:
-    case COPY:
-        if (!m_tocFile.isEmpty() )
-            if ( !KIO::NetAccess::copy(m_tocFile+QString(".bak"),m_tocFile) )
-                kdDebug() << "(cdrdaowriter) restore tocfile " <<   m_tocFile << " failed." << endl;
-        if ( !KIO::NetAccess::del(m_tocFile+QString(".bak")) )
-            kdDebug() << "(cdrdaowriter) delete bak-file failed." << endl;
-        break;
-    case BLANK:
-    case READ:
-        break;
-    }
+  if( QFile::exists( m_backupTocFile ) )
+    QFile::remove(m_backupTocFile);
 
     if( p->normalExit() ) {
         switch( p->exitStatus() ) {

@@ -107,6 +107,7 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
   K3bDevice* m_sourceDevice;
   QString    m_dataFile;
   QString    m_tocFile;
+  QString m_backupTocFile;
   bool       m_readRaw;
   bool       m_multi;
   bool       m_force;
