@@ -171,12 +171,15 @@ AC_SUBST(RESMGR_LIB)
 
 
 dnl Find aRts
+ARTS_LIBS=""
 KDE_CHECK_HEADERS(arts/artsflow.h,
 	[KDE_CHECK_HEADERS(arts/kmedia2.h,
-		[arts_available=yes],
+		[arts_available=yes
+	 	 ARTS_LIBS="-lartskde"],
 		[arts_available=no]
 	)]
 )
+AC_SUBST(ARTS_LIBS)
 
 KDE_CHECK_THREADING
 
