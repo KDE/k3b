@@ -22,8 +22,8 @@
 #include "../k3b.h"
 #include "../k3bdoc.h"
 #include "../k3bprocess.h"
+#include "../k3bemptydiscwaiter.h"
 #include "../device/k3bdevice.h"
-#include "../device/k3bemptydiscwaiter.h"
 #include "../tools/k3bexternalbinmanager.h"
 #include "../tools/k3bglobals.h"
 
@@ -154,9 +154,26 @@ void K3bVcdJob::vcdxGen()
   *m_process << "-l" << "VIDEOCD";
   // TODO: AlbumID
   // *m_process << "--info-album-id=" << "";
-  // TODO: Type
-  *m_process << "-t" << "vcd2";
 
+  // set vcdType
+  switch( ((K3bVcdDoc*)doc())->vcdType() ) {
+  case K3bVcdDoc::VCD11:
+        *m_process << "-t" << "vcd11";
+    break;
+  case K3bVcdDoc::VCD20:
+        *m_process << "-t" << "vcd2";
+    break;
+  case K3bVcdDoc::SVCD10:
+        *m_process << "-t" << "svcd";
+    break;
+  case K3bVcdDoc::HQVCD:
+        *m_process << "-t" << "hqvcd";
+    break;
+  default:
+        *m_process << "-t" << "vcd2";
+    break;
+  }
+  
   kdDebug() << QString("(K3bVcdJob) xmlfile = \"%1\"").arg(QFile::encodeName(m_xmlFile)) << endl;
   *m_process << "-o" << QString("%1").arg(QFile::encodeName(m_xmlFile));
 
@@ -256,9 +273,7 @@ void K3bVcdJob::vcdxBuild()
   // get image file path for binfile
   if( m_doc->vcdImage().isEmpty() )
     m_doc->setVcdImage( k3bMain()->findTempFile( "vcd" ) );
-
-  m_tocFile = QString("%1.toc").arg(m_doc->vcdImage());
-  
+      
   kdDebug() << QString("(K3bVcdJob) vcdImage = %1").arg(m_doc->vcdImage() ) << endl;
 
     
@@ -266,7 +281,10 @@ void K3bVcdJob::vcdxBuild()
 
   *m_process << "--progress" << "--gui";
 
-  *m_process << QString("--cdrdao-file=%1").arg( m_doc->vcdImage() );
+  // *m_process << QString("--cdrdao-file=%1").arg( m_doc->vcdImage() );
+
+  *m_process << QString("--cue-file=%1.cue").arg( m_doc->vcdImage() );
+  *m_process << QString("--bin-file=%1").arg( m_doc->vcdImage() );
   
   *m_process << QString("%1").arg(QFile::encodeName(m_xmlFile));;
 
@@ -416,7 +434,6 @@ void K3bVcdJob::slotVcdxBuildFinished()
   if( QFile::exists( m_xmlFile ) )
     QFile::remove( m_xmlFile );
     
-  // emit finished( true );
   this->cdrdaoWrite();
 }
 
@@ -431,13 +448,18 @@ void K3bVcdJob::slotCollectOutput( KProcess*, char* output, int len )
 // cdrdao stuff
 void K3bVcdJob::cdrdaoWrite()
 {
-  firstTrack = true;
-
   if( !k3bMain()->externalBinManager()->foundBin( "cdrdao" ) ) {
     kdDebug() << "(K3bVcdJob) could not find cdrdao executable" << endl;
     emit infoMessage( i18n("cdrdao executable not found."), K3bJob::ERROR );
     cancelAll();
     emit finished( false );
+    return;
+  }
+
+  K3bEmptyDiscWaiter waiter( m_doc->burner(), k3bMain() );
+
+  if( waiter.waitForEmptyDisc() == K3bEmptyDiscWaiter::CANCELED ) {
+    cancel();
     return;
   }
 
@@ -484,16 +506,16 @@ void K3bVcdJob::cdrdaoWrite()
   // supress the 10 seconds gap to the writing
   *m_process << "-n";
 
-  // toc-file
-  *m_process << QString("\"%1\"").arg(QFile::encodeName(m_tocFile));
-
+  // cue-file
+  *m_process << QString("\"%1.cue\"").arg(QFile::encodeName( m_doc->vcdImage() ));
+  
   // connect to the cdrdao slots
   connect( m_process, SIGNAL(processExited(KProcess*)),
-	   this, SLOT(slotCdrdaoFinished()) );
+    this, SLOT(slotCdrdaoFinished()) );
   connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
-	   this, SLOT(parseCdrdaoOutput(KProcess*, char*, int)) );
+    this, SLOT(parseCdrdaoOutput(KProcess*, char*, int)) );
   connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
-	   this, SLOT(parseCdrdaoOutput(KProcess*, char*, int)) );
+    this, SLOT(parseCdrdaoOutput(KProcess*, char*, int)) );
 
 
   if( !m_process->start( KProcess::NotifyOnExit, KProcess::All ) ) {
@@ -534,20 +556,6 @@ void K3bVcdJob::createCdrdaoProgress( int made, int size )
 
   emit processedSize( made, size );
   emit percent( 66 + (34*made / size ) );
-}
-
-void K3bVcdJob::startNewCdrdaoTrack()
-{
-  if(!firstTrack) {
-    m_bytesFinishedTracks += m_doc->at(m_currentWrittenTrackNumber)->size();
-    m_currentWrittenTrackNumber++;
-  }
-  else
-    firstTrack = false;
-
-  m_currentWrittenTrack = m_doc->at( m_currentWrittenTrackNumber );
-  emit newSubTask( i18n("Writing track %1: '%2'").arg(m_currentWrittenTrackNumber + 1).arg(m_currentWrittenTrack->fileName()) );
-  kdDebug() << QString("(K3bVcdJob) Writing track %1: Filename: %2").arg(m_currentWrittenTrackNumber + 1).arg(m_currentWrittenTrack->absPath());
 }
 
 void K3bVcdJob::slotCdrdaoFinished()

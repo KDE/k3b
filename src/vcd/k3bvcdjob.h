@@ -57,7 +57,7 @@ class K3bVcdJob : public K3bBurnJob
         
  private:
   void createCdrdaoProgress( int made, int size );
-  void startNewCdrdaoTrack();
+  // void startNewCdrdaoTrack();
   void vcdxGen();
   void vcdxBuild();
   
@@ -95,6 +95,7 @@ class K3bVcdJob : public K3bBurnJob
 
   QString m_tempPath;
   QString m_tocFile;
+  QString m_cueFile;
   QString m_xmlFile;
   QString m_collectedOutput;
     
