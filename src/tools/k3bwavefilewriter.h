@@ -1,0 +1,74 @@
+/***************************************************************************
+                          k3bwavefilewriter.h  -  description
+                             -------------------
+    begin                : Wed Feb 27 2002
+    copyright            : (C) 2002 by Sebastian Trueg
+    email                : trueg@informatik.uni-freiburg.de
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+#ifndef K3BWAVEFILEWRITER_H
+#define K3BWAVEFILEWRITER_H
+
+#include <qstring.h>
+#include <qfile.h>
+#include <qdatastream.h>
+
+/**
+ * @author Sebastian Trueg
+ * Creates wave files from 16bit stereo little or big endian
+ * sound samples
+ */
+class K3bWaveFileWriter 
+{
+ public: 
+
+  enum Endianess { BigEndian, LittleEndian };
+
+  K3bWaveFileWriter();
+  ~K3bWaveFileWriter();
+
+  /**
+   * open a new wave file.
+   * closes any opened file.
+   */
+  bool open( const QString& filename );
+
+  bool isOpen();
+  const QString& filename() const;
+
+  /**
+   * closes the file.
+   * Length of the wave file will be written into the header.
+   * If no data has been written to the file except the header
+   * it will be removed.
+   */
+  void close();
+
+  /**
+   * write 16bit samples to the file.
+   * @param e the endianess of the data
+   *          (it will be swapped to little endian byte order if nessesary)
+   */
+  void write( const char* data, int len, Endianess e = BigEndian );
+
+ private:
+  void writeEmptyHeader();
+  void updateHeader();
+
+  QFile m_outputFile;
+  QDataStream m_outputStream;
+  QString m_filename;
+
+  long m_dataWritten;
+};
+
+#endif

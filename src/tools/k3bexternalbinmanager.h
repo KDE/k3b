@@ -6,7 +6,7 @@
 
 static const char* binPrograms[] =  { "mkisofs", "cdrecord", "cdrdao", "mpg123", "sox",
                     "transcode", "tccat", "tcprobe", "tcscan", "tcextract" };
-static const char* binVersions[] =  { "1.13", "1.9", "1.1.3", "unknown", "unknown",
+static const char* binVersions[] =  { "1.13", "1.9", "1.1.3", "1.59", "unknown",
                     "0.6.0pre3", "0.6.0pre3", "0.6.0pre3", "0.6.0pre3", "0.6.0pre3" };
 static const char* searchPaths[] = { "/usr/bin/", "/usr/local/bin/",
 				       "/usr/sbin/", "/usr/local/sbin/",
