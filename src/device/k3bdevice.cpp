@@ -215,7 +215,7 @@ bool K3bDevice::cdCapacity( long* length )
   cmd[0] = 0x25; // READ CD-ROM CAPACITY
 
   if( m_scsiIf->sendCmd(cmd, 10, NULL, 0, data, 8, 0) != 0 ) {
-    qDebug("(K3bDevice) Cannot read capacity of device " + devicename );
+    qDebug("(K3bDevice) Cannot read capacity of device " + m_devicename );
     return false;
   }
   
