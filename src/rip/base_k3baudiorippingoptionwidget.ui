@@ -70,7 +70,7 @@
                         <cstring>m_checkCreatePlaylist</cstring>
                     </property>
                     <property name="text">
-                        <string>Create m3u Playlist</string>
+                        <string>Create m3u playlist</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Create playlist for the ripped files</string>
@@ -139,8 +139,8 @@ playlist will look something like: &lt;em&gt;cool/track1.ogg&lt;/em&gt;.</string
                         <string>Rip all tracks to a single file</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;If this option is checked K3b will create only one 
-audio file no matter how many tracks are ripped. This 
+                        <string>&lt;p&gt;If this option is checked K3b will create only one
+audio file no matter how many tracks are ripped. This
 file will contain all tracks one after the other.
 &lt;p&gt;This might be useful to rip a live album or a radio play.
 &lt;p&gt;&lt;b&gt;Caution:&lt;/b&gt; The file will have the name of the first track.</string>

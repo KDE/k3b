@@ -333,15 +333,15 @@ void K3bCloneJob::removeImageFiles()
 QString K3bCloneJob::jobDescription() const
 {
   if( m_onlyCreateImage )
-    return i18n("Creating clone image");
+    return i18n("Creating Clone Image");
   else if( m_onlyBurnExistingImage ) {
     if( m_simulate )
-      return i18n("Simulating clone image");
+      return i18n("Simulating Clone Image");
     else
-      return i18n("Burning clone image");
+      return i18n("Burning Clone Image");
   }
   else if( m_simulate )
-    return i18n("Simulating CD cloning");
+    return i18n("Simulating CD Cloning");
   else
     return i18n("Cloning CD");
 }

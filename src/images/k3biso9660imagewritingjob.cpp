@@ -372,7 +372,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
 				       i18n("K3b does not support simulation with DVD+R(W) media. "
 					    "Do you really want to continue? The media will be written "
 					    "for real."),
-				       i18n("No simulation with DVD+R(W)") ) == KMessageBox::No ) {
+				       i18n("No Simulation with DVD+R(W)") ) == KMessageBox::No ) {
 	  return false;
 	}
       }
@@ -411,11 +411,11 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
 QString K3bIso9660ImageWritingJob::jobDescription() const
 {
   if( m_simulate )
-    return i18n("Simulating ISO9660 image");
+    return i18n("Simulating ISO9660 Image");
   else
-    return ( i18n("Burning ISO9660 image")
+    return ( i18n("Burning ISO9660 Image")
 	     + ( m_copies > 1 
-		 ? i18n(" - %n copy", " - %n copies", m_copies) 
+		 ? i18n(" - %n Copy", " - %n Copies", m_copies) 
 		 : QString::null ) );
 }
 

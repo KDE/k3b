@@ -213,9 +213,9 @@ void K3bBinImageWritingJob::slotNextTrack( int t, int tt )
 
 QString K3bBinImageWritingJob::jobDescription() const
 {
-  return ( i18n("Writing cue/bin image")
+  return ( i18n("Writing cue/bin Image")
 	   + ( m_copies > 1 
-	       ? i18n(" - %n copy", " - %n copies", m_copies) 
+	       ? i18n(" - %n Copy", " - %n Copies", m_copies) 
 	       : QString::null ) );
 }
 

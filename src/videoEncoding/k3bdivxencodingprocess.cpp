@@ -413,7 +413,7 @@ void K3bDivXEncodingProcess::slotFinishedRestoreBackup(){
 
 QString K3bDivXEncodingProcess::jobDescription() const
 {
-  return i18n("Encoding video");
+  return i18n("Encoding Video");
 }
 
 QString K3bDivXEncodingProcess::jobDetails() const

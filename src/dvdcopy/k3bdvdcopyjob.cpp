@@ -741,13 +741,13 @@ QString K3bDvdCopyJob::jobDescription() const
   }
   else if( m_simulate ) {
     if( m_onTheFly )
-      return i18n("Simulating DVD Copy on-the-fly");
+      return i18n("Simulating DVD Copy On-The-Fly");
     else
       return i18n("Simulating DVD Copy");
   }
   else {
     if( m_onTheFly )
-      return i18n("Copying DVD on-the-fly");
+      return i18n("Copying DVD On-The-Fly");
     else
       return i18n("Copying DVD");
   }

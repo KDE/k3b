@@ -415,9 +415,9 @@ QString K3bAudioProjectConvertingThread::findRelativePath( const QString& absPat
 QString K3bAudioProjectConvertingThread::jobDescription() const 
 {
   if( m_cddbEntry.cdTitle.isEmpty() )
-    return i18n("Converting audio tracks");
+    return i18n("Converting Audio Tracks");
   else
-    return i18n("Converting audio tracks from '%1'").arg(m_cddbEntry.cdTitle);
+    return i18n("Converting Audio Tracks From '%1'").arg(m_cddbEntry.cdTitle);
 }
 
 QString K3bAudioProjectConvertingThread::jobDetails() const 

@@ -757,7 +757,7 @@ void K3bMainWindow::slotFileOpen()
   KURL::List urls = KFileDialog::getOpenURLs( QString::null,
 					      i18n("*.k3b|K3b Projects"),
 					      this,
-					      i18n("Open File(s)") );
+					      i18n("Open Files") );
   for( KURL::List::iterator it = urls.begin(); it != urls.end(); ++it ) {
     openDocument( *it );
     actionFileOpenRecent->addURL( *it );

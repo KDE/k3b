@@ -1154,13 +1154,13 @@ QString K3bCdCopyJob::jobDescription() const
   }
   else if( m_simulate ) {
     if( m_onTheFly )
-      return i18n("Simulating CD Copy on-the-fly");
+      return i18n("Simulating CD Copy On-The-Fly");
     else
       return i18n("Simulating CD Copy");
   }
   else {
     if( m_onTheFly )
-      return i18n("Copying CD on-the-fly");
+      return i18n("Copying CD On-The-Fly");
     else
       return i18n("Copying CD");
   }

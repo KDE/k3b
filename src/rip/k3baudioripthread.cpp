@@ -576,9 +576,9 @@ QString K3bAudioRipThread::findRelativePath( const QString& absPath, const QStri
 QString K3bAudioRipThread::jobDescription() const 
 {
   if( m_cddbEntry.cdTitle.isEmpty() )
-    return i18n("Ripping audio tracks");
+    return i18n("Ripping Audio Tracks");
   else
-    return i18n("Ripping audio tracks from '%1'").arg(m_cddbEntry.cdTitle);
+    return i18n("Ripping Audio Tracks From '%1'").arg(m_cddbEntry.cdTitle);
 }
 
 QString K3bAudioRipThread::jobDetails() const 

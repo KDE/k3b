@@ -48,7 +48,7 @@ void K3bDataImageSettingsWidget::slotJolietToggled( bool on )
 				   "will only see the ISO9660 filenames."
 				   "<p>If you do not intend to use the CD/DVD on a Windows "
 				   "system it is safe to disable Joliet."),
-			      i18n("Joliet extensions disabled"),
+			      i18n("Joliet Extensions Disabled"),
 			      "warning_about_joliet" );
   }
 }

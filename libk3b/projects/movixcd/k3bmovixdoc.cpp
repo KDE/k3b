@@ -91,7 +91,7 @@ void K3bMovixDoc::addMovixFile( const KURL& url, int pos )
     bool ok = true;
     do {
       newName = KInputDialog::getText( i18n("Enter New Filename"),
-					i18n("A file with that name already exists. Please enter a new name."), 
+					i18n("A file with that name already exists. Please enter a new name:"), 
 				       newName, &ok, 0 );
     } while( ok && nameAlreadyInDir( newName, root() ) );
     

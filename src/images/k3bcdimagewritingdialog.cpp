@@ -755,7 +755,7 @@ void K3bCdImageWritingDialog::slotMd5JobFinished( bool success )
 void K3bCdImageWritingDialog::slotMd5SumCompare()
 {
   bool ok;
-  QString md5sumToCompare = KInputDialog::getText( i18n("MD5 Sum check"),
+  QString md5sumToCompare = KInputDialog::getText( i18n("MD5 Sum Check"),
 						   i18n("Please insert the MD5 Sum to compare:"),
 						   QString::null,
 						   &ok,
