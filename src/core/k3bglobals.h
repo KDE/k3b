@@ -69,9 +69,6 @@ namespace K3b
 
   int round( double );
 
-  QString globalConfig();
-
-
   /**
    * This checks the free space on the filesystem path is in.
    * We use this since we encountered problems with the KDE version.

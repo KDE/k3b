@@ -95,30 +95,6 @@ int main(int argc, char *argv[]) {
 		  << " current is: " << KGlobal::locale()->language() << endl;
 
 
-    //   if (app.isRestored())
-    //     {
-    //       RESTORE(K3bMainWindow);
-    //     }
-    //   else
-    //     {
-
-#ifdef HAVE_K3BSETUP
-    if( !QFile::exists( K3b::globalConfig() ) ) {
-      if( KMessageBox::warningYesNo( 0, i18n("It appears that you have not run K3bSetup yet. "
-					     "It is recommended to do so. "
-					     "Should K3bSetup be started?"),
-				     i18n("K3b Setup"), KStdGuiItem::yes(), KStdGuiItem::no(),
-				     i18n("Don't prompt me again.") ) == KMessageBox::Yes ) {
-	KProcess p;
-	p << "kdesu" << "k3bsetup --lang " + KGlobal::locale()->language();
-	if( !p.start( KProcess::DontCare ) )
-	  KMessageBox::error( 0, i18n("Could not find kdesu to run K3bSetup with root privileges. "
-				      "Please run it manually as root.") );
-	exit(0);
-      }
-    }
-#endif
-
     app.config()->setGroup( "General Options" );
     K3bSplash* splash = 0;
     if( app.config()->readBoolEntry("Show splash", true) ) {

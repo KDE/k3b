@@ -85,11 +85,6 @@ void K3bDeviceOptionTab::slotRefreshButtonClicked()
   k3bcore->deviceManager()->clear();
   k3bcore->deviceManager()->scanbus();
   
-  KConfig globalConfig( K3b::globalConfig() );
-  
-  globalConfig.setGroup( "Devices" );
-  k3bcore->deviceManager()->readConfig( &globalConfig );
-
   m_deviceWidget->init();
 }
 

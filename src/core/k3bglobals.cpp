@@ -98,14 +98,6 @@ int K3b::round( double d )
 }
 
 
-QString K3b::globalConfig()
-{
-  // this is a little not to hard hack to ensure that we get the "global" k3b appdir
-  // k3b_cd_copy.png should always be in $KDEDIR/share/apps/k3b/pics/
-  return KGlobal::dirs()->findResourceDir( "data", "k3b/pics/k3b_cd_copy.png" ) + "k3b/k3bsetup";
-}
-
-
 QString K3b::findUniqueFilePrefix( const QString& _prefix, const QString& path )
 {
   QString url;

@@ -101,9 +101,7 @@ void K3bCore::init()
 {
   emit initializationInfo( i18n("Reading Options...") );
 
-  KConfig globalConfig( K3b::globalConfig() );
   config()->setGroup( "General Options" );
-  K3bVersion globalConfigVersion( globalConfig.readEntry( "config version", "0.1" ) );
   K3bVersion configVersion( config()->readEntry( "config version", "0.1" ) );
 
   // external bin manager
@@ -111,11 +109,6 @@ void K3bCore::init()
   emit initializationInfo( i18n("Searching for external programs...") );
 
   d->externalBinManager->search();
-
-  if( globalConfig.hasGroup("External Programs") ) {
-    globalConfig.setGroup( "External Programs" );
-    d->externalBinManager->readConfig( &globalConfig );
-  }
 
   if( config()->hasGroup("External Programs") ) {
     config()->setGroup( "External Programs" );
@@ -133,12 +126,6 @@ void K3bCore::init()
 
   if( !d->deviceManager->scanbus() )
     kdDebug() << "No Devices found!" << endl;
-
-  if( globalConfig.hasGroup("Devices") ) {
-    globalConfig.setGroup( "Devices" );
-
-    d->deviceManager->readConfig( &globalConfig );
-  }
 
   if( config()->hasGroup("Devices") ) {
     config()->setGroup( "Devices" );
