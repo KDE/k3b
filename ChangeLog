@@ -7,6 +7,9 @@ Added missed VCD 3.0 track interpretation option for SVCD's
 New Lame encoding plugin providing a proper configuration dialog.
 Added Bookmarks
 Fixed window layering problem with windowmanagers != kwm
+Added KPart plugin which converts a list of audio files into one of the supported encoder formats.
+Allow disabling of CD-Text reading in cd-copy to overcome problems with CD-Text on some drives.
+Check CD-Text crc when copying
 Fixed incorrect PBC order, PBC now should work on all "standalone" DVD Players
 Fixed waittime bug for PBC infinite timeout.
 
