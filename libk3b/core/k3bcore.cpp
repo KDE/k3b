@@ -23,6 +23,7 @@
 #include <k3bglobals.h>
 #include <k3bversion.h>
 #include <k3bjob.h>
+#include <k3bthreadwidget.h>
 
 #include <klocale.h>
 #include <kconfig.h>
@@ -70,6 +71,9 @@ K3bCore::K3bCore( const K3bVersion& version, KConfig* c, QObject* parent, const 
   d->externalBinManager = new K3bExternalBinManager( this );
   d->deviceManager = new K3bDevice::DeviceManager( this );
   K3b::addDefaultPrograms( d->externalBinManager );
+
+  // create the thread widget instance in the GUI thread
+  K3bThreadWidget::instance();
 }
 
 

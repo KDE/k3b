@@ -47,12 +47,12 @@ class K3bDeviceSelectionDialog : public KDialogBase
   K3bDevice::Device* selectedDevice() const;
 
   static K3bDevice::Device* selectWriter( QWidget* parent, 
-					      const QString& text = QString::null );
+					  const QString& text = QString::null );
   static K3bDevice::Device* selectDevice( QWidget* parent, 
-					      const QString& text = QString::null );
+					  const QString& text = QString::null );
   static K3bDevice::Device* selectDevice( QWidget* parent, 
-					      const QPtrList<K3bDevice::Device>& devices,
-					      const QString& text = QString::null );
+					  const QPtrList<K3bDevice::Device>& devices,
+					  const QString& text = QString::null );
 
  private:
   class Private;

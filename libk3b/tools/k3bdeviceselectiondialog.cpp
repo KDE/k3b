@@ -56,6 +56,8 @@ K3bDeviceSelectionDialog::K3bDeviceSelectionDialog( QWidget* parent,
   QLabel* label = new QLabel( text.isEmpty() ? i18n("Please select a device:") : text, plainPage() );
   d->comboDevices = new K3bDeviceComboBox( plainPage() );
 
+  //  lay->setMargin( marginHint() );
+  lay->setSpacing( spacingHint() );
   lay->addWidget( label, 0, 0 );
   lay->addWidget( d->comboDevices, 1, 0 );
   lay->setRowStretch( 2, 1 );

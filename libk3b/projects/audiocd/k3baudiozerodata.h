@@ -22,9 +22,10 @@ class K3bAudioZeroData : public K3bAudioDataSource
 {
  public:
   K3bAudioZeroData( const K3b::Msf& msf = 150 );
+  K3bAudioZeroData( const K3bAudioZeroData& );
   ~K3bAudioZeroData();
 
-  K3b::Msf length() const { return m_length; }
+  K3b::Msf originalLength() const { return m_length; }
   void setLength( const K3b::Msf& msf );
 
   QString type() const;
@@ -35,7 +36,15 @@ class K3bAudioZeroData : public K3bAudioDataSource
 
   K3bAudioDataSource* copy() const;
 
-  K3bAudioDataSource* split( const K3b::Msf& pos );
+  /**
+   * Only changes the length
+   */
+  void setStartOffset( const K3b::Msf& );
+
+  /**
+   * Only changes the length
+   */
+  void setEndOffset( const K3b::Msf& );
 
  private:
   K3b::Msf m_length;

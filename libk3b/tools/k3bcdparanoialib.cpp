@@ -143,7 +143,7 @@ public:
   Private() 
     : drive(0),
       paranoia(0),
-      paranoiaMode(3),
+      paranoiaMode(1),
       neverSkip(false),
       maxRetries(20),
       device(0),
@@ -417,6 +417,11 @@ K3bCdparanoiaLib* K3bCdparanoiaLib::create()
 
 bool K3bCdparanoiaLib::initParanoia( K3bDevice::Device* dev, const K3bDevice::Toc& toc )
 {
+  if( !dev ) {
+    kdError() << "(K3bCdparanoiaLib::initParanoia) dev = 0!" << endl;
+    return false;
+  }
+
   paranoiaFree();
 
   // since we use cdparanoia to open the device it is important to close

@@ -29,15 +29,15 @@ class K3bAudioFile : public K3bAudioDataSource
 {
  public:
   K3bAudioFile( K3bAudioDecoder*, K3bAudioDoc* );
+  K3bAudioFile( const K3bAudioFile& );
   ~K3bAudioFile();
 
   const QString& filename() const;
-  K3b::Msf length() const;
 
   /**
    * The complete length of the file used by this source.
    */
-  K3b::Msf fileLength() const;
+  K3b::Msf originalLength() const;
 
   QString type() const;
   QString sourceComment() const;
@@ -46,42 +46,15 @@ class K3bAudioFile : public K3bAudioDataSource
 
   K3bAudioDecoder* decoder() const { return m_decoder; }
 
-  /**
-   * Set the start offset from the beginning of the file.
-   */
-  void setStartOffset( const K3b::Msf& );
-
-  /**
-   * Set the end offset from the beginning of the file. The endOffset sector
-   * is not included in the data.
-   * The maximum value is fileLength() which means to use all data.
-   * 0 means the same as fileLength().
-   * This has to be bigger than the start offset.
-   */
-  void setEndOffset( const K3b::Msf& );
-
-  const K3b::Msf& startOffset() const { return m_startOffset; }
-  const K3b::Msf& endOffset() const { return m_endOffset; }
-
-  /**
-   * Get the last used sector in the file.
-   */
-  K3b::Msf lastSector() const;
-
   bool seek( const K3b::Msf& );
 
   int read( char* data, unsigned int max );
 
   K3bAudioDataSource* copy() const;
 
-  K3bAudioDataSource* split( const K3b::Msf& pos );
-
  private:
-  void fixupOffsets();
-  K3bAudioDecoder* m_decoder;
   K3bAudioDoc* m_doc;
-  K3b::Msf m_startOffset;
-  K3b::Msf m_endOffset;
+  K3bAudioDecoder* m_decoder;
 
   unsigned long long m_decodedData;
 };

@@ -37,7 +37,7 @@ class K3bCdparanoiaLib
  public:
   ~K3bCdparanoiaLib();
 
-  /** default: 3 */
+  /** default: 1 */
   void setParanoiaMode( int );
   void setNeverSkip( bool b );
 

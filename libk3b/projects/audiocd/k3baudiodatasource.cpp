@@ -26,6 +26,16 @@ K3bAudioDataSource::K3bAudioDataSource()
 }
 
 
+K3bAudioDataSource::K3bAudioDataSource( const K3bAudioDataSource& source )
+  : m_track( 0 ),
+    m_prev( 0 ),
+    m_next( 0 ),
+    m_startOffset( source.m_startOffset ),
+    m_endOffset( source.m_endOffset )
+{
+}
+
+
 K3bAudioDataSource::~K3bAudioDataSource()
 {
   take();
@@ -127,4 +137,74 @@ void K3bAudioDataSource::emitChange()
 {
   if( m_track )
     m_track->sourceChanged( this );
+}
+
+
+K3bAudioDataSource* K3bAudioDataSource::split( const K3b::Msf& pos )
+{
+  if( pos < length() ) {
+    K3bAudioDataSource* s = copy();
+    s->setStartOffset( startOffset() + pos );
+    s->setEndOffset( endOffset() );
+    setEndOffset( startOffset() + pos );
+    s->moveAfter( this );
+    emitChange();
+    return s;
+  }
+  else
+    return 0;
+}
+
+
+K3b::Msf K3bAudioDataSource::lastSector() const
+{
+  if( endOffset() > 0 )
+    return endOffset()-1;
+  else
+    return originalLength()-1;
+}
+
+
+K3b::Msf K3bAudioDataSource::length() const
+{
+  if( originalLength() == 0 )
+    return 0;
+  else if( lastSector() < m_startOffset )
+    return 1;
+  else
+    return lastSector() - m_startOffset + 1;
+}
+
+
+void K3bAudioDataSource::setStartOffset( const K3b::Msf& msf )
+{
+  m_startOffset = msf;
+  fixupOffsets();
+  emitChange();
+}
+
+
+void K3bAudioDataSource::setEndOffset( const K3b::Msf& msf )
+{
+  m_endOffset = msf;
+  fixupOffsets();
+  emitChange();
+}
+
+
+void K3bAudioDataSource::fixupOffsets()
+{
+  // no length available yet
+  if( originalLength() == 0 )
+    return;
+
+  if( startOffset() >= originalLength() ) {
+    setStartOffset( 0 );
+  }
+  if( endOffset() > originalLength() ) {
+    setEndOffset( 0 ); // whole source
+  }
+  if( endOffset() > 0 && endOffset() <= startOffset() ) {
+    setEndOffset( startOffset() );
+  }
 }

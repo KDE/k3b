@@ -72,8 +72,8 @@ void K3bAudioDataSourceViewItem::setText( int col, const QString& text )
 	zero->setLength( f );
     }
   }
-
-  KListViewItem::setText( col, text );
+  else
+    KListViewItem::setText( col, text );
 }
 
 

@@ -81,6 +81,7 @@ class K3bAudioJob : public K3bBurnJob
   void normalizeFiles();
   bool writeTocFile();
   bool writeInfFiles();
+  bool checkAudioSources();
 
   K3bAudioDoc* m_doc;
   K3bAudioImager* m_audioImager;

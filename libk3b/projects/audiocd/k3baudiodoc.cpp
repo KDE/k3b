@@ -466,6 +466,8 @@ void K3bAudioDoc::addTrack( K3bAudioTrack* track, uint position )
     else
       track->moveAfter( m_lastTrack );  // just to be sure it's anywhere...
   }
+
+  emit changed();
 }
 
 
@@ -729,7 +731,8 @@ bool K3bAudioDoc::saveDocumentData( QDomElement* docElem )
     QDomElement sourcesParent = doc.createElement( "sources" );
 
     for( K3bAudioDataSource* source = track->firstSource(); source; source = source->next() ) {
-      // TODO: better have something like isFile() or isSilence()
+      // TODO: save a source element with a type attribute and start- and endoffset
+      //       then distict between the different source types.
       if( K3bAudioFile* file = dynamic_cast<K3bAudioFile*>(source) ) {
 	QDomElement sourceElem = doc.createElement( "file" );
 	sourceElem.setAttribute( "url", file->filename() );
@@ -737,11 +740,14 @@ bool K3bAudioDoc::saveDocumentData( QDomElement* docElem )
 	sourceElem.setAttribute( "end_offset", file->endOffset().toString() );
 	sourcesParent.appendChild( sourceElem );
       }
-      else {
-	K3bAudioZeroData* zero = static_cast<K3bAudioZeroData*>(source);
+      else if( K3bAudioZeroData* zero = dynamic_cast<K3bAudioZeroData*>(source) ) {
 	QDomElement sourceElem = doc.createElement( "silence" );
 	sourceElem.setAttribute( "length", zero->length().toString() );
 	sourcesParent.appendChild( sourceElem );
+      }
+      else {
+	kdError() << "(K3bAudioDoc) saving sources other than file or zero not supported yet." << endl;
+	return false;
       }
     }
     trackElem.appendChild( sourcesParent );

@@ -23,6 +23,7 @@
 #include "k3baudionormalizejob.h"
 #include "k3baudiojobtempdata.h"
 #include "k3baudiomaxspeedjob.h"
+#include "k3baudiocdtracksource.h"
 #include <k3bdevicemanager.h>
 #include <k3bdevicehandler.h>
 #include <k3bdevice.h>
@@ -122,6 +123,11 @@ void K3bAudioJob::start()
     d->copies = 1;
 
   emit newTask( i18n("Preparing data") );
+
+  if( m_doc->onTheFly() && !checkAudioSources() ) {
+    emit infoMessage( i18n("Unable to write on-the-fly with these audio sources."), WARNING );
+    m_doc->setOnTheFly(false);
+  }
 
   // we don't need this when only creating image and it is possible
   // that the burn device is null
@@ -672,6 +678,40 @@ bool K3bAudioJob::writeInfFiles()
 
     track = track->next();
   }
+  return true;
+}
+
+
+// checks if the doc contains sources from an audio cd which cannot be read on-the-fly
+bool K3bAudioJob::checkAudioSources()
+{
+  K3bAudioTrack* track = m_doc->firstTrack();
+  K3bAudioDataSource* source = track->firstSource();
+  
+  while( source ) {
+
+    if( K3bAudioCdTrackSource* cdSource = dynamic_cast<K3bAudioCdTrackSource*>(source) ) {
+      //
+      // If which cases we cannot wite on-the-fly:
+      // 1. the writing device contains one of the audio cds
+      // 2. Well, one of the cds is missing
+      //
+      K3bDevice::Device* dev = cdSource->searchForAudioCD();
+      if( !dev || dev == writer() )
+	return false;
+      else
+	cdSource->setDevice( dev );
+    }
+
+    // next source
+    source = source->next();
+    if( !source ) {
+      track = track->next();
+      if( track )
+	source = track->firstSource();
+    }
+  }
+
   return true;
 }
 

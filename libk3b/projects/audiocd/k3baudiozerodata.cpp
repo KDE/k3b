@@ -29,6 +29,14 @@ K3bAudioZeroData::K3bAudioZeroData( const K3b::Msf& len )
 }
 
 
+K3bAudioZeroData::K3bAudioZeroData( const K3bAudioZeroData& zero )
+  : K3bAudioDataSource( zero ),
+    m_length( zero.m_length ),
+    m_writtenData( 0 )
+{
+}
+
+
 K3bAudioZeroData::~K3bAudioZeroData()
 {
 }
@@ -43,8 +51,7 @@ void K3bAudioZeroData::setLength( const K3b::Msf& msf )
 
   m_writtenData = 0;
 
-  if( track() )
-    track()->sourceChanged( this );
+  emitChange();
 }
 
 
@@ -86,20 +93,23 @@ int K3bAudioZeroData::read( char* data, unsigned int max )
 
 K3bAudioDataSource* K3bAudioZeroData::copy() const
 {
-  K3bAudioZeroData* zero = new K3bAudioZeroData( length() );
-  return zero;
+  return new K3bAudioZeroData( *this );
 }
 
 
-K3bAudioDataSource* K3bAudioZeroData::split( const K3b::Msf& pos )
+void K3bAudioZeroData::setStartOffset( const K3b::Msf& pos )
 {
-  if( pos < length() ) {
-    K3bAudioZeroData* zero = new K3bAudioZeroData( length()-pos );
-    setLength( pos );
-    zero->moveAfter( this );
-    emitChange();
-    return zero;
-  }
+  if( pos >= length() )
+    setLength( 1 );
   else
-    return 0;
+    setLength( length() - pos );
+}
+
+
+void K3bAudioZeroData::setEndOffset( const K3b::Msf& pos )
+{
+  if( pos < 1 )
+    setLength( 1 );
+  else
+    setLength( pos );
 }

@@ -24,6 +24,8 @@
 #include "k3baudiotracksplitdialog.h"
 #include "k3baudiofile.h"
 #include "k3baudiotrackplayer.h"
+#include "k3baudiocdtrackdrag.h"
+#include "k3baudiocdtracksource.h"
 
 #include <k3bview.h>
 #include <k3bcdtextvalidator.h>
@@ -169,8 +171,8 @@ void K3bAudioTrackView::setupActions()
 
 bool K3bAudioTrackView::acceptDrag(QDropEvent* e) const
 {
-  // the first is for built-in item moving, the second for dropping urls
-  return ( KListView::acceptDrag(e) || KURLDrag::canDecode(e) );
+  // the first is for built-in item moving, the second for dropping urls, the third for dropping audio tracks
+  return ( KListView::acceptDrag(e) || KURLDrag::canDecode(e) || K3bAudioCdTrackDrag::canDecode(e) );
 }
 
 
@@ -331,7 +333,31 @@ void K3bAudioTrackView::slotDropped( QDropEvent* e, QListViewItem* parent, QList
       }
     }
   }
-  else {
+  else if( K3bAudioCdTrackDrag::canDecode( e ) ) {
+    kdDebug() << "(K3bAudioTrackView) audiocdtrack dropped." << endl;
+    K3bDevice::Toc toc;
+    K3bDevice::Device* dev = 0;
+    K3bCddbResultEntry cddb;
+    int trackNumber;
+
+    K3bAudioCdTrackDrag::decode( e, toc, trackNumber, cddb, &dev );
+
+    // for now we just create one source
+    K3bAudioCdTrackSource* source = new K3bAudioCdTrackSource( toc, trackNumber, cddb, dev );
+    if( trackParent )
+      source->moveAfter( sourceAfter );
+    else {
+      K3bAudioTrack* track = new K3bAudioTrack();
+      track->setPerformer( cddb.artists[trackNumber-1] );
+      track->setTitle( cddb.titles[trackNumber-1] );
+      track->addSource( source );
+      if( trackAfter )
+	track->moveAfter( trackAfter );
+      else
+	m_doc->addTrack( track, 0 );
+    }
+  }
+  else{
     KURL::List urls;
     KURLDrag::decode( e, urls );
 
