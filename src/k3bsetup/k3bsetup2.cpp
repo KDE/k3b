@@ -32,6 +32,7 @@
 #include <kstandarddirs.h>
 #include <kglobal.h>
 #include <kconfig.h>
+#include <kdeversion.h>
 
 #include "k3bsetup2.h"
 #include "base_k3bsetup2.h"
@@ -113,9 +114,12 @@ K3bSetup2::K3bSetup2( QWidget *parent, const char *name, const QStringList& )
   d->deviceManager->scanbus();
 
   load();
-  if (getuid() != 0 /*|| !d->config->checkConfigFilesWritable( true )*/) {
-      makeReadOnly();
-  }
+  if (getuid() != 0 
+#if KDE_IS_VERSION(3,1,90)
+      || !d->config->checkConfigFilesWritable( true )
+#endif
+      )
+    makeReadOnly();
 }
 
 
