@@ -41,10 +41,10 @@ class K3bDevice
    *  <li>4: not ready, tray out</li>
    * </ul>
    */
-  int isReady() const;
+  int isReady();  // no further const due to delete of m_scsiIf
 
   /** not quite sure if this is nessesary! */
-  bool rezero() const;
+  bool rezero();  // no further const due to delete of m_scsiIf
 
   /**
    * Saves the cd's total number of available blocks in "length"
@@ -67,7 +67,7 @@ class K3bDevice
   bool init();
 
  private:
-  int getModePage( int pageCode, unsigned char *buf,
+  int getModePage( ScsiIf *_scsiIf, int pageCode, unsigned char *buf,
 		   long bufLen, unsigned char *modePageHeader,
 		   unsigned char *blockDesc, int showErrorMsg );
 
@@ -79,8 +79,9 @@ class K3bDevice
   int m_maxReadSpeed;
   QString m_devicename;
   int m_maxWriteSpeed;
-
-  ScsiIf* m_scsiIf;
+  // have to delete after action because if other operations use the scsibus/device program crashes
+  // no matter how to reset scsiIf
+  //ScsiIf* m_scsiIf;
 };
 
 

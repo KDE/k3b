@@ -7,7 +7,7 @@
 K3bDevice::K3bDevice( const char* devicename )
 {
   m_devicename = devicename;
-  m_scsiIf = new ScsiIf( devicename );
+  //m_scsiIf = new ScsiIf( devicename );
 }
 
 
@@ -23,21 +23,23 @@ K3bDevice::K3bDevice( const QString & _vendor,
     m_burnproof( _burnproof ), m_maxReadSpeed( _maxReadSpeed ),
     m_devicename( _devicename ), m_maxWriteSpeed( _maxBurnSpeed ) 
 {
-  m_scsiIf = new ScsiIf( m_devicename.latin1() );
+  //m_scsiIf = new ScsiIf( m_devicename.latin1() );
 }
 
 
 K3bDevice::~K3bDevice()
 {
-  delete m_scsiIf;
+  //delete m_scsiIf;
 }
 
 
 bool K3bDevice::init()
 {
   qDebug( "(K3bDevice) Initializing device %s...", m_devicename.latin1() );
-  if( m_scsiIf->init() != 0 ) {
+  ScsiIf  *_scsiIf = new ScsiIf( m_devicename.latin1() );
+  if( _scsiIf->init() != 0 ) {
     qDebug( "(K3bDevice) Could not open device " + m_devicename );
+    delete _scsiIf;
     return false;
   }
 
@@ -56,7 +58,7 @@ bool K3bDevice::init()
   cmd[5] = 0xff;
 
   qDebug( "(K3bDevice) Setting device %s to maximum speed.", m_devicename.latin1() );
-  if (m_scsiIf->sendCmd(cmd, 12, NULL, 0, NULL, 0, 0) != 0) {
+  if (_scsiIf->sendCmd(cmd, 12, NULL, 0, NULL, 0, 0) != 0) {
     qDebug("(K3bDevice) Cannot set device %s to maximum speed.", m_devicename.latin1() );
   }
   // -----------------------------------------------------------------------
@@ -65,8 +67,9 @@ bool K3bDevice::init()
   unsigned char mp[32];
 
   qDebug ( "(K3bDevice) Get device information for device %s.", m_devicename.latin1() );
-  if( getModePage( 0x2a, mp, 32, NULL, NULL, 0 ) != 0 ) {
+  if( getModePage( _scsiIf,  0x2a, mp, 32, NULL, NULL, 0 ) != 0 ) {
     qDebug( "(K3bDevice) Cannot retrieve drive capabilities mode page from device %s.", m_devicename.latin1() );
+    delete _scsiIf;
     return false;
   }
 
@@ -79,15 +82,15 @@ bool K3bDevice::init()
   m_maxWriteSpeed /= 176;
   m_burner = ( m_maxWriteSpeed > 0 ) ? true : false;
 
-  m_description = m_scsiIf->product();
-  m_vendor = m_scsiIf->vendor();
-  m_version = m_scsiIf->revision();
+  m_description = _scsiIf->product();
+  m_vendor = _scsiIf->vendor();
+  m_version = _scsiIf->revision();
 
 
   qDebug( "(K3bDevice) %s max write: %i", m_devicename.latin1(), m_maxWriteSpeed );
   qDebug( "(K3bDevice) %s max read : %i", m_devicename.latin1(), m_maxReadSpeed );
   qDebug("");
-
+  delete _scsiIf;
   return true;
 }
 
@@ -99,37 +102,41 @@ bool K3bDevice::init()
 //         2: not ready
 //         3: not ready, no disk in drive
 //         4: not ready, tray out
-int K3bDevice::isReady() const
+int K3bDevice::isReady()
 {
+  ScsiIf *_scsiIf = new ScsiIf( m_devicename.latin1() );
   unsigned char cmd[6];
   const unsigned char *sense;
   int senseLen;
 
   memset(cmd, 0, 6);
 
-  switch( m_scsiIf->sendCmd(cmd, 6, NULL, 0, NULL, 0, 0) )
+  switch( _scsiIf->sendCmd(cmd, 6, NULL, 0, NULL, 0, 0) )
     {
     case 1:
       return 1;
 
     case 2:
-      sense = m_scsiIf->getSense(senseLen);
+      sense = _scsiIf->getSense(senseLen);
     
       int code = sense[2] & 0x0f;
       
       if( code == 0x02 ) {
 	// not ready
-	return 2;
+	  delete _scsiIf;
+     return 2;
       }
       else if( code != 0x06 ) {
-	m_scsiIf->printError();
-	return 1;
+	_scsiIf->printError();
+	  delete _scsiIf;
+     return 1;
       }
       else {
-	return 0;
+	  delete _scsiIf;
+     return 0;
       }
     }
-
+  delete _scsiIf;
   return 0;
 }
 
@@ -137,19 +144,20 @@ int K3bDevice::isReady() const
 // reset device to initial state
 // return: 0: OK
 //         1: scsi command failed
-bool K3bDevice::rezero() const
+bool K3bDevice::rezero()
 {
+  ScsiIf *_scsiIf = new ScsiIf( m_devicename.latin1() );
   unsigned char cmd[6];
-
   memset(cmd, 0, 6);
-
   cmd[0] = 0x01;
   
-  if( m_scsiIf->sendCmd(cmd, 6, NULL, 0, NULL, 0, 0) != 0 ) {
+  if( _scsiIf->sendCmd(cmd, 6, NULL, 0, NULL, 0, 0) != 0 ) {
     qDebug( "Cannot rezero unit." );
+    delete _scsiIf;
     return false;
   }
 
+  delete _scsiIf;
   return true;
 }
 
@@ -162,7 +170,7 @@ bool K3bDevice::rezero() const
 // return: 0: OK
 //         1: scsi command failed
 //         2: buffer too small for requested mode page
-int K3bDevice::getModePage( int pageCode, unsigned char *buf,
+int K3bDevice::getModePage( ScsiIf *_scsiIf, int pageCode, unsigned char *buf,
 			    long bufLen, unsigned char *modePageHeader,
 			    unsigned char *blockDesc, int showErrorMsg )
 {
@@ -179,7 +187,7 @@ int K3bDevice::getModePage( int pageCode, unsigned char *buf,
   cmd[7] = dataLen >> 8;
   cmd[8] = dataLen;
 
-  if( m_scsiIf->sendCmd( cmd, 10, NULL, 0, data, dataLen, showErrorMsg ) != 0 ) {
+  if( _scsiIf->sendCmd( cmd, 10, NULL, 0, data, dataLen, showErrorMsg ) != 0 ) {
     delete[]data;
     return 1;
   }
@@ -243,6 +251,7 @@ int K3bDevice::getModePage( int pageCode, unsigned char *buf,
 
 int K3bDevice::isEmpty()
 {
+  ScsiIf *_scsiIf = new ScsiIf( m_devicename.latin1() );
   unsigned char cmd[10];
   unsigned long dataLen = 34;
   unsigned char data[34];
@@ -255,10 +264,11 @@ int K3bDevice::isEmpty()
   cmd[7] = dataLen >> 8;
   cmd[8] = dataLen;
 
-  if (m_scsiIf->sendCmd(cmd, 10, NULL, 0, data, dataLen, 0) != 0) {
+  if (_scsiIf->sendCmd(cmd, 10, NULL, 0, data, dataLen, 0) != 0) {
     qDebug( "(K3bDevice) Could not check if disk in %s is empty.", m_devicename.latin1() );
+    delete _scsiIf;
     return -1;
   }
-
+  delete _scsiIf;
   return (data[2] & 0x03);
 }

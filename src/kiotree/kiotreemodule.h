@@ -20,7 +20,8 @@
 #define kiotreemodule_h
 
 #include <qobject.h>
-#include <kiotree.h>
+#include "kiotree.h"
+
 class QDragObject;
 class KioTreeItem;
 class KioTreeTopLevelItem;

@@ -25,12 +25,13 @@ class CDDB;
 
 class K3bCddb {
   public:
-    K3bCddb( QString * src, QString * dest );
+    K3bCddb( );
+    K3bCddb( bool, QString, unsigned int );
     ~K3bCddb(  );
     /**
 	* Searches for a cd in a drive and open the drive.
 	*/
-    struct cdrom_drive *pickDrive( QString newPath );
+    //struct cdrom_drive *pickDrive( QString newPath );
     /**
 	* Reads the content and parses for cddb entries if enabled.
 	*/
@@ -42,16 +43,29 @@ class K3bCddb {
     /**
     *
     */
-    void update( struct cdrom_drive* );
+    void update( QString *device );
+	/**
+	* Closes the current connection to drive. Must be called if cd has changed.
+	*/
+    //void closeDrive(struct cdrom_drive *drive);
+
+    void setServer(QString server) { m_cddbServer = server; };
+    void setPort(unsigned int port) { m_cddbPort = port; };
+    /**
+    * Generates instance of cddb and enables cddb use.
+    */
+    void setUseCddb(bool useCddb);
+
     QStringList getTitles() { return titles; };
     QString getAlbum() { return cd_album; };
-    QString getArtitst() { return cd_artist; };
-    struct cdrom_drive *cdr;
+    QString getArtist() { return cd_artist; };
+
   private:
-    bool useCDDB;
-    QString cddbServer;
-    QString wavInfoFile;
-    int cddbPort;
+    bool m_useCddb;
+    CDDB *m_cddb;
+    QString m_cddbServer;
+    unsigned int m_cddbPort;
+
     int trackIndex;
     unsigned int discid;
     int tracks;
@@ -59,10 +73,8 @@ class K3bCddb {
     QString cd_artist;
     QStringList titles;
     bool is_audio[100];
-    CDDB *cddb;
     bool based_on_cddb;
     QString s_track;
-    void storeCddbData(  );
 };
 
 #endif
