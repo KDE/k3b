@@ -166,16 +166,16 @@ void K3bSystemProblemDialog::checkSystem()
 					 i18n("Install a more recent version of the cdrtools."),
 					 false ) );
     
-//     if( !k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "suidroot" ) )
-//       problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
-// 					 i18n("%1 does not run with root privileges").arg("cdrecord"),
-// 					 i18n("cdrecord needs to run with root privileges "
-// 					      "to be able to access the cd devices, "
-// 					      "use real time scheduling, and "
-// 					      "set a non-standard fifo buffer. This is also "
-// 					      "true when using SuSE's resmgr."),
-// 					 i18n("Use K3bSetup to solve this problem."),
-// 					 true ) );
+    if( !k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "suidroot" ) )
+      problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+					 i18n("%1 does not run with root privileges").arg("cdrecord"),
+					 i18n("cdrecord needs to run with root privileges "
+					      "to be able to access the cd devices, "
+					      "use real time scheduling, and "
+					      "set a non-standard fifo buffer. This is also "
+					      "true when using SuSE's resmgr."),
+					 i18n("Use K3bSetup to solve this problem."),
+					 true ) );
   }
   
   if( !k3bcore->externalBinManager()->foundBin( "cdrdao" ) ) {
@@ -188,27 +188,27 @@ void K3bSystemProblemDialog::checkSystem()
 				       i18n("Install the cdrdao package."),
 				       false ) );
   }
-//   else if( !k3bcore->externalBinManager()->binObject( "cdrdao" )->hasFeature( "suidroot" ) ) {
-//     problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
-// 				       i18n("%1 does not run with root privileges").arg("cdrdao"),
-// 				       i18n("cdrdao needs to run with root privileges "
-// 					    "to be able to access the cd devices and "
-// 					    "use real time scheduling."
-// 					    "This is also true when using SuSE's resmgr."),
-// 				       i18n("Use K3bSetup to solve this problem."),
-// 				       true ) );
-//   }
+  else if( !k3bcore->externalBinManager()->binObject( "cdrdao" )->hasFeature( "suidroot" ) ) {
+    problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+				       i18n("%1 does not run with root privileges").arg("cdrdao"),
+				       i18n("cdrdao needs to run with root privileges "
+					    "to be able to access the cd devices and "
+					    "use real time scheduling."
+					    "This is also true when using SuSE's resmgr."),
+				       i18n("Use K3bSetup to solve this problem."),
+				       true ) );
+  }
 
 
-//   if( const K3bExternalBin* readcdBin = k3bcore->externalBinManager()->binObject( "readcd" ) )
-//     if( !readcdBin->hasFeature( "suidroot" ) )
-//       problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
-// 					 i18n("%1 does not run with root privileges").arg("readcd"),
-// 					 i18n("Readcd needs to run with root privileges "
-// 					      "to be able to access the cd devices unless "
-// 					      "using SuSE's resmgr with a patched readcd."),
-// 					 i18n("Use K3bSetup to solve this problem."),
-// 					 true ) );
+  if( const K3bExternalBin* readcdBin = k3bcore->externalBinManager()->binObject( "readcd" ) )
+    if( !readcdBin->hasFeature( "suidroot" ) )
+      problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+					 i18n("%1 does not run with root privileges").arg("readcd"),
+					 i18n("Readcd needs to run with root privileges "
+					      "to be able to access the cd devices unless "
+					      "using SuSE's resmgr with a patched readcd."),
+					 i18n("Use K3bSetup to solve this problem."),
+					 true ) );
 
 
   if( !k3bcore->deviceManager()->dvdWriter().isEmpty() ) {
@@ -238,17 +238,6 @@ void K3bSystemProblemDialog::checkSystem()
 					   i18n("Install a more recent version of growisofs."),
 					   false ) );
       }
-
-//       if( !k3bcore->externalBinManager()->binObject( "growisofs" )->hasFeature( "suidroot" ) ) {
-// 	problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
-// 					   i18n("%1 does not run with root privileges").arg("growisofs"),
-// 					   i18n("It is recommended to run %1 with "
-// 						"root privileges so it is able to access "
-// 						"all devices. Another solution would be to give "
-// 						"the user write access to the devices.").arg("growisofs"),
-// 					   i18n("Use K3bSetup to solve this problem."),
-// 					   true ) );
-//       }
     }
 
     if( !k3bcore->externalBinManager()->foundBin( "dvd+rw-format" ) ) {
@@ -258,16 +247,6 @@ void K3bSystemProblemDialog::checkSystem()
 					 i18n("Install the dvd+rw-tools package."),
 					 false ) );
     }
-//     else if( !k3bcore->externalBinManager()->binObject( "dvd+rw-format" )->hasFeature( "suidroot" ) ) {
-// 	problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
-// 					   i18n("%1 does not run with root privileges").arg("dvd+rw-format"),
-// 					   i18n("It is recommended to run %1 with "
-// 						"root privileges so it is able to access "
-// 						"all devices. Another solution would be to give "
-// 						"the user write access to the devices.").arg("dvd+rw-format"),
-// 					   i18n("Use K3bSetup to solve this problem."),
-// 					   true ) );
-//     }
   }
 
   // 2. ATAPI devices

@@ -51,12 +51,14 @@ class K3bThemeManager::Private
 {
 public:
   Private()
-    : currentTheme(0) {
+    : currentTheme(&emptyTheme) {
   }
 
   QPtrList<K3bTheme> themes;
   K3bTheme* currentTheme;
   QString currentThemeName;
+
+  K3bTheme emptyTheme;
 };
 
 
@@ -65,6 +67,8 @@ K3bThemeManager::K3bThemeManager( QObject* parent, const char* name )
   : QObject( parent, name )
 {
   d = new Private();
+  d->emptyTheme.m_name = "Empty Theme";
+
   s_k3bThemeManager = this;
 }
 
@@ -90,7 +94,7 @@ K3bTheme* K3bThemeManager::currentTheme() const
 void K3bThemeManager::readConfig( KConfig* c )
 {
   c->setGroup( "General Options" );
-  setCurrentTheme( c->readEntry( "current theme" ) );
+  setCurrentTheme( c->readEntry( "current theme", "crystal" ) );
 }
 
 
@@ -107,23 +111,20 @@ void K3bThemeManager::setCurrentTheme( const QString& name )
   if( name != d->currentThemeName ) {
     if( K3bTheme* theme = findTheme( name ) )
       setCurrentTheme( theme );
-    else
-      setCurrentTheme( d->themes.first() );
   }
 }
 
 
 void K3bThemeManager::setCurrentTheme( K3bTheme* theme )
 {
-  if( theme != d->currentTheme ) {
-    d->currentTheme = theme;
-    if( theme )
+  if( theme ) {
+    if( theme != d->currentTheme ) {
+      d->currentTheme = theme;
       d->currentThemeName = theme->name();
-    else
-      d->currentThemeName = QString::null;
-    
-    emit themeChanged();
-    emit themeChanged( theme );
+      
+      emit themeChanged();
+      emit themeChanged( theme );
+    }
   }
 }
 

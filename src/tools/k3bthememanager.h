@@ -68,6 +68,11 @@ class K3bThemeManager : public QObject
   ~K3bThemeManager();
 
   const QPtrList<K3bTheme>& themes() const;
+
+  /**
+   * This is never null. If no theme could be found an empty dummy theme
+   * will be returnes which does not contains any pixmaps.
+   */
   K3bTheme* currentTheme() const;
   K3bTheme* findTheme( const QString& ) const;
 

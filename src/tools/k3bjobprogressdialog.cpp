@@ -394,7 +394,7 @@ void K3bJobProgressDialog::slotFinished( bool success )
   m_job = 0;
 
   if( success ) {
-    m_pixLabel->setPixmap( QPixmap(locate( "appdata", "pics/k3b_progress_dialog_success.png" )) );
+    m_pixLabel->setPixmap( k3bthememanager->currentTheme()->pixmap( "k3b_progress_dialog_success" ) );
 
     m_labelTask->setText( i18n("Success!") );
     m_labelTask->setPaletteForegroundColor( Qt::darkGreen );
@@ -406,7 +406,7 @@ void K3bJobProgressDialog::slotFinished( bool success )
     KNotifyClient::event( "SuccessfullyFinished" );
   }
   else {
-    m_pixLabel->setPixmap( QPixmap(locate( "appdata", "pics/k3b_progress_dialog_failed.png" )) );
+    m_pixLabel->setPixmap( k3bthememanager->currentTheme()->pixmap( "k3b_progress_dialog_failed" ) );
 
     m_labelTask->setPaletteForegroundColor( Qt::red );
 
@@ -447,7 +447,7 @@ void K3bJobProgressDialog::setJob( K3bJob* job )
   m_labelSubTask->setText("");
   m_labelProcessedSize->setText("");
   m_labelSubProcessedSize->setText("");
-  m_labelTask->setPaletteForegroundColor( paletteForegroundColor() );
+  m_labelTask->setPaletteForegroundColor( k3bthememanager->currentTheme()->foregroundColor() );
   m_debugOutputMap.clear();
 
 
