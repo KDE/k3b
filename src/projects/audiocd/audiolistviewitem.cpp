@@ -99,12 +99,5 @@ QString K3bAudioListViewItem::key( int, bool ) const
 {
   // The tracks should be sorted according to their track-number :-)
   // although Red book only supports 99 tracks this goes up to 999 - it does not hurt ;-)
-
-  QString num = QString::number( m_track->index() );
-  if( num.length() == 1 )
-    return "00" + num;
-  else if( num.length() == 2 )
-    return "0" + num;
-  
-  return num;
+  return QString::number( m_track->index() ).rightJustify( 3, '0' );
 }
