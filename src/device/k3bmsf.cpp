@@ -203,3 +203,8 @@ bool K3b::operator>( const K3b::Msf& m1, const K3b::Msf& m2 )
 {
   return ( m1.totalFrames() > m2.totalFrames() );
 }
+
+kdbgstream& K3b::operator<<( kdbgstream& s, const Msf& m )
+{
+  return s << m.toString();
+}
