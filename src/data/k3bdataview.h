@@ -62,6 +62,8 @@ class K3bDataView : public K3bView
    void slotRenameItem();
    void slotRemoveItem();
    void slotNewDir();
+   void slotParentDir();
+   void slotProperties();
 		
  private:
    K3bDataDirTreeView* m_dataDirTree;
@@ -72,11 +74,14 @@ class K3bDataView : public K3bView
    KAction* m_actionRemove;
    KAction* m_actionRename;
    KAction* m_actionNewDir;
+   KAction* m_actionProperties;
+   KAction* m_actionParentDir;
 		
    K3bDataDoc* m_doc;
    K3bDataBurnDialog* m_burnDialog;
 	
    void setupPopupMenu();
+   void setupActions();
 };
 
 
@@ -108,6 +113,11 @@ class K3bDataDirViewItem : public K3bDataViewItem
   K3bDirItem* dirItem() const { return m_dirItem; }
   K3bDataItem* dataItem() const;
 
+  /**
+   * reimplemented to have directories always sorted before files
+   */
+  QString key( int, bool ) const;
+
  private:
   K3bDirItem* m_dirItem;
 };
@@ -127,6 +137,11 @@ class K3bDataFileViewItem : public K3bDataViewItem
 
   K3bFileItem* fileItem() const { return m_fileItem; }
   K3bDataItem* dataItem() const;
+
+  /**
+   * reimplemented to have directories always sorted before files
+   */
+  QString key( int, bool ) const;
 	
  private:
   K3bFileItem* m_fileItem;

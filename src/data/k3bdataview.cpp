@@ -22,6 +22,8 @@
 #include "k3bdiritem.h"
 #include "../k3b.h"
 #include "k3bdataburndialog.h"
+#include "k3bdatapropertiesdialog.h"
+
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -61,7 +63,9 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
   _box->setSpacing( 5 );
   _box->setMargin( 2 );
 
+  setupActions();
   setupPopupMenu();	
+
   connect( m_dataDirTree, SIGNAL(rightButtonClicked(QListViewItem*, const QPoint&, int)),
 	   this, SLOT(showPopupMenu(QListViewItem*, const QPoint&)) );
   connect( m_dataFileView, SIGNAL(rightButtonClicked(QListViewItem*, const QPoint&, int)),
@@ -74,6 +78,7 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
 	   this, SLOT(slotDropped(KListView*, QDropEvent*, QListViewItem*, QListViewItem*)) );
 
   connect( m_dataDirTree, SIGNAL(dirSelected(K3bDirItem*)), m_dataFileView, SLOT(slotSetCurrentDir(K3bDirItem*)) );
+  connect( m_dataFileView, SIGNAL(dirSelected(K3bDirItem*)), m_dataDirTree, SLOT(setCurrentDir(K3bDirItem*)) );
 
   connect( m_doc, SIGNAL(newFileItems()), m_dataDirTree, SLOT(updateContents()) );
   connect( m_doc, SIGNAL(newFileItems()), m_dataFileView, SLOT(updateContents()) );
@@ -163,21 +168,67 @@ bool K3bDataView::acceptDrag( QDropEvent* e ) const
 }
 
 
+void K3bDataView::setupActions()
+{
+  m_actionProperties = new KAction( i18n("Properties..."), "misc", 0, this, SLOT(slotProperties()), actionCollection() );
+  m_actionCollection->insert( new KActionSeparator( this ) );
+  m_actionNewDir = new KAction( i18n("New Directory..."), "folder_new", CTRL+Key_N, this, SLOT(slotNewDir()), actionCollection() );
+  m_actionRemove = new KAction( i18n("Remove"), "editdelete", Key_Delete, this, SLOT(slotRemoveItem()), actionCollection() );
+  m_actionRename = new KAction( i18n("Rename"), "edit", CTRL+Key_R, this, SLOT(slotRenameItem()), actionCollection() );
+  m_actionCollection->insert( new KActionSeparator( this ) );
+  m_actionParentDir = new KAction( i18n("Parent Directory"), "up", 0, this, SLOT(slotParentDir()), actionCollection() );
+
+  //TODO: disable remove by default since the root item cannot be removed and enable when items are there
+  //      we need to check if tree or fileview are active
+  //      for example: connect to the selected signals of both and check if it is a root item
+  //                   and check if items are left after removal
+
+  // TODO: add properties-action
+  //       for dir and files: local file/dir info, project filename change and info
+  //       for root item: doc properties without write-button
+}
+
+
 void K3bDataView::setupPopupMenu()
 {
   m_popupMenu = new KPopupMenu( this, "DataViewPopupMenu" );
-  m_actionRename = new KAction( i18n("&Rename"), SmallIcon( "edit" ), CTRL+Key_R, this, SLOT(slotRenameItem()), this );
-  m_actionRemove = new KAction( i18n( "&Remove" ), SmallIcon( "editdelete" ), Key_Delete, this, SLOT(slotRemoveItem()), this );
-  m_actionNewDir = new KAction( i18n( "&New Directory" ), SmallIcon( "folder_new" ), CTRL+Key_N, this, SLOT(slotNewDir()), this );
+  m_actionParentDir->plug( m_popupMenu );
+  m_popupMenu->insertSeparator();
   m_actionRemove->plug( m_popupMenu );
   m_actionRename->plug( m_popupMenu);
   m_actionNewDir->plug( m_popupMenu);
+  m_popupMenu->insertSeparator();
+  m_actionProperties->plug( m_popupMenu );
 }
 
-void K3bDataView::showPopupMenu( QListViewItem* _item, const QPoint& _point )
+void K3bDataView::showPopupMenu( QListViewItem* item, const QPoint& point )
 {
-  if( _item )
-    m_popupMenu->popup( _point );
+  if( item ) {
+    if( item == m_dataDirTree->root() ) {
+      m_actionRemove->setEnabled( false );
+    }
+    else {
+      m_actionRemove->setEnabled( true );
+    }
+
+    if( m_dataFileView->currentDir() == m_doc->root() ) {
+      m_actionParentDir->setEnabled( false );
+    }
+    else {
+      m_actionParentDir->setEnabled( true );
+    }
+
+    m_actionRemove->setEnabled( true );
+    m_actionRename->setEnabled( true );
+
+    m_popupMenu->popup( point );
+  }
+  else if( m_dataFileView->hasFocus() ) {
+    m_actionRemove->setEnabled( false );
+    m_actionRename->setEnabled( false );
+
+    m_popupMenu->popup( point );
+  }
 }
 
 
@@ -234,7 +285,52 @@ void K3bDataView::slotRemoveItem()
 }
 
 
+void K3bDataView::slotParentDir()
+{
+  if( m_dataFileView->hasFocus() ) {
+    if( m_dataFileView->currentDir() != m_doc->root() ) {
+      m_dataFileView->slotSetCurrentDir( m_dataFileView->currentDir()->parent() );
+      m_dataDirTree->setCurrentDir( m_dataFileView->currentDir() );
+    }
+  }
+  else if( m_dataDirTree->hasFocus() ) {
+    if( m_dataDirTree->currentItem() != m_dataDirTree->root() )
+      if( K3bDataDirViewItem* k = dynamic_cast<K3bDataDirViewItem*>( m_dataDirTree->currentItem() ) ) {
+	m_dataDirTree->setCurrentDir( k->dirItem()->parent() );
+	m_dataFileView->slotSetCurrentDir( k->dirItem()->parent() );
+      }
+  }
+}
 
+
+void K3bDataView::slotProperties()
+{
+  K3bDataItem* dataItem = 0;
+
+  // get selected item
+  if( m_dataDirTree->hasFocus() ) {
+    if( dynamic_cast<K3bDataRootViewItem*>( m_dataDirTree->currentItem() ) ) {
+      burnDialog()->exec( false );
+    }
+    else if( K3bDataViewItem* viewItem = dynamic_cast<K3bDataViewItem*>( m_dataDirTree->currentItem() ) ) {
+      dataItem = viewItem->dataItem();
+    }
+  }
+  else {
+    if( K3bDataViewItem* viewItem = dynamic_cast<K3bDataViewItem*>( m_dataFileView->currentItem() ) ) {
+      dataItem = viewItem->dataItem();
+    }
+    else {
+      // default to current dir
+      dataItem = m_dataFileView->currentDir();
+    }
+  }
+
+  if( dataItem ) {
+    K3bDataPropertiesDialog d( dataItem, this );
+    d.exec();
+  }
+}
 
 
 // =================================================================================
@@ -306,6 +402,17 @@ void K3bDataDirViewItem::setText(int col, const QString& text )
   KListViewItem::setText( col, text );
 }
 
+
+QString K3bDataDirViewItem::key( int col, bool a ) const
+{
+  if( a ) {
+    return "0" + text(col);
+  }
+  else {
+    return "1" + text(col);
+  }
+}
+
 	
 K3bDataFileViewItem::K3bDataFileViewItem( K3bFileItem* file, QListView* parent )
   : K3bDataViewItem( parent )
@@ -354,6 +461,17 @@ void K3bDataFileViewItem::setText(int col, const QString& text )
     fileItem()->setK3bName( text );
 		
   KListViewItem::setText( col, text );
+}
+
+
+QString K3bDataFileViewItem::key( int col, bool a ) const
+{
+  if( a ) {
+    return "1" + text(col);
+  }
+  else {
+    return "0" + text(col);
+  }
 }
 
 

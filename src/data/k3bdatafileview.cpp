@@ -53,6 +53,7 @@ K3bDataFileView::K3bDataFileView( K3bDataView* view, K3bDataDoc* doc, QWidget* p
   updateContents();
 
   connect( m_doc, SIGNAL(itemRemoved(K3bDataItem*)), this, SLOT(slotDataItemRemoved(K3bDataItem*)) );
+  connect( this, SIGNAL(executed(QListViewItem*)), this, SLOT(slotExecuted(QListViewItem*)) );
 }
 
 
@@ -118,6 +119,15 @@ void K3bDataFileView::slotDataItemRemoved( K3bDataItem* item )
 	  }
 	} // for it
     }
+}
+
+
+void K3bDataFileView::slotExecuted( QListViewItem* item )
+{
+  if( K3bDataDirViewItem* k = dynamic_cast<K3bDataDirViewItem*>( item ) ) {
+    slotSetCurrentDir( k->dirItem() );
+    emit dirSelected( currentDir() );
+  }
 }
 
 

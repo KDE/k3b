@@ -43,6 +43,9 @@ class K3bDataFileView : public KListView
   ~K3bDataFileView() {}
 	
   K3bDirItem* currentDir() const { return m_currentDir; }
+
+ signals:
+  void dirSelected( K3bDirItem* );
 	
  public slots:
   void slotSetCurrentDir( K3bDirItem* );
@@ -50,6 +53,7 @@ class K3bDataFileView : public KListView
 	
  private slots:
   void slotDataItemRemoved( K3bDataItem* );
+  void slotExecuted( QListViewItem* );
 
  protected:
   bool acceptDrag(QDropEvent* e) const;

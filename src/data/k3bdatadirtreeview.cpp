@@ -148,4 +148,18 @@ void K3bDataDirTreeView::slotDataItemRemoved( K3bDataItem* item )
 }
 
 
+void K3bDataDirTreeView::setCurrentDir( K3bDirItem* dirItem )
+{
+  if( m_itemMap.contains( dirItem ) ) {
+    setCurrentItem( m_itemMap[dirItem] );
+    m_itemMap[dirItem]->setOpen(true);
+    if( m_itemMap[dirItem] != root() )
+      m_itemMap[dirItem]->parent()->setOpen(true);
+  }
+  else {
+    qDebug("Tried to set unknown dirItem to current");
+  }
+}
+
+
 #include "k3bdatadirtreeview.moc"

@@ -61,6 +61,7 @@ class K3bDataDirTreeView : public KListView
 
  public slots:
   void updateContents();
+  void setCurrentDir( K3bDirItem* );
 	
  private slots:
   void slotExecuted( QListViewItem* );

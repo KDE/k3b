@@ -35,12 +35,14 @@ class K3bDataItem
   virtual ~K3bDataItem();
 	
   K3bDirItem* parent() { return m_parentDir; }
-  //	void setParentDir( K3bDirItem* dir ) { m_parentDir = dir; }
 	
   K3bDataDoc* doc() const { return m_doc; }
   const QString& k3bName();
   void setK3bName( const QString& );
-  /** returns the path as defined by the k3b-hierachy, NOT starting with a slash (since this is used for graft-points!) */
+  /** 
+   * returns the path as defined by the k3b-hierachy, NOT starting with a slash (since this is used for graft-points!) 
+   * directories have a trailing "/"
+   */
   virtual QString k3bPath();
 
   virtual K3bDataItem* nextSibling();
