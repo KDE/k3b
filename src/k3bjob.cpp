@@ -42,7 +42,7 @@ K3bBurnJob::K3bBurnJob( QObject* parent )
 
 void K3bBurnJob::parseCdrdaoOutput( KProcess*, char* data, int len )
 {
-  QString buffer = QString::fromLatin1( data, len );
+  QString buffer = QString::fromLocal8Bit( data, len );
   QStringList lines = QStringList::split( "\n", buffer );
 
   if( !m_notFinishedLine.isEmpty() ) {
@@ -64,7 +64,7 @@ void K3bBurnJob::parseCdrdaoOutput( KProcess*, char* data, int len )
     --it;
     lines.remove( it );
   }
-  
+
   for( it = lines.begin(); it != lines.end(); ++it ) {
     QString& str = *it;
     if( str[0] == '\r' )
@@ -129,34 +129,34 @@ void K3bBurnJob::parseCdrdaoLine( const QString& str )
     // percentage
     int made, size, fifo;
     bool ok;
-			
+
     // --- parse already written mb ------
     int pos1 = 6;
     int pos2 = (str).find("of");
-			
+
     if( pos2 == -1 )
       return; // there is one line at the end of the writing process that has no 'of'
-			
+
     made = (str).mid( 6, pos2-pos1-1 ).toInt( &ok );
     if( !ok )
       kdDebug() << "(K3bBurnJob) Parsing did not work for: " << (str).mid( 6,  pos2-pos1-1 ) << endl;
-			
+
     // ---- parse size ---------------------------
     pos1 = pos2 + 2;
     pos2 = (str).find("MB");
     size = (str).mid( pos1, pos2-pos1-1 ).toInt(&ok);
     if( !ok )
       kdDebug() << "(K3bBurnJob) Parsing did not work for: " << (str).mid( pos1,  pos2-pos1-1 ) << endl;
-				
+
     // ----- parsing fifo ---------------------------
     pos1 = (str).findRev(' ');
     pos2 =(str).findRev('%');
     fifo = (str).mid( pos1, pos2-pos1 ).toInt(&ok);
     if( !ok )
       kdDebug() << "(K3bBurnJob) Parsing did not work for: " << (str).mid( pos1, pos2-pos1 ) << endl;
-			
+
     emit bufferStatus( fifo );
-	
+
     // let the derived classes do whatever they want...
     createCdrdaoProgress( made, size );
   }

@@ -183,7 +183,7 @@ void K3bDataJob::slotMsInfoFetched()
   }
 
   kdDebug() << "(K3bDataJob) msinfo parsed: " << m_msInfo << endl;
-		
+
   if( m_msInfo.isEmpty() ) {
     emit infoMessage( i18n("Could not retrieve multisession information from disk."), K3bJob::ERROR );
     emit infoMessage( i18n("The disk is either empty or not appendable."), K3bJob::ERROR );
@@ -224,7 +224,7 @@ void K3bDataJob::fetchIsoSize()
   }
   kdDebug() << s << endl << flush;
 
-	
+
   connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
 	   this, SLOT(slotCollectOutput(KProcess*, char*, int)) );
   connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
@@ -234,7 +234,7 @@ void K3bDataJob::fetchIsoSize()
 
   m_collectedOutput = QString::null;
   m_isoSize = QString::null;
-			
+
   if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
     kdDebug() << "(K3bDataJob) could not start mkisofs: " << kapp->config()->readEntry( "mkisofs path" ) << endl;
     emit infoMessage( i18n("Could not start mkisofs!"), K3bJob::ERROR );
@@ -270,7 +270,7 @@ void K3bDataJob::slotIsoSizeFetched()
       }
     }
   }
-    
+
   kdDebug() << "(K3bDataJob) iso size parsed: " << m_isoSize << endl;
 
   if( m_isoSize.isEmpty() ) {
@@ -317,7 +317,7 @@ void K3bDataJob::writeCD()
     *m_process << m_doc->dummyDir();
     *m_process << "|";
   }
-		
+
   // use cdrecord to burn the cd
   if( !k3bMain()->externalBinManager()->foundBin( "cdrecord" ) ) {
     kdDebug() << "(K3bAudioJob) could not find cdrecord executable" << endl;
@@ -385,7 +385,7 @@ void K3bDataJob::writeCD()
   else
     *m_process << m_doc->isoImage();
 
-		
+
   // debugging output
   //   cout << "***** mkisofs parameters:\n";
   //   QStrList* _args = m_process->args();
@@ -396,7 +396,7 @@ void K3bDataJob::writeCD()
   //   }
   //   cout << endl << flush;
 
-			
+
   // connect to the cdrecord slots
   connect( m_process, SIGNAL(processExited(KProcess*)),
 	   this, SLOT(slotCdrecordFinished()) );
@@ -404,7 +404,7 @@ void K3bDataJob::writeCD()
 	   this, SLOT(slotParseCdrecordOutput(KProcess*, char*, int)) );
   connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
 	   this, SLOT(slotParseCdrecordOutput(KProcess*, char*, int)) );
-	
+
   if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) )
     {
       // something went wrong when starting the program
@@ -427,7 +427,7 @@ void K3bDataJob::writeCD()
 	emit infoMessage( i18n("Starting simulation at %1x speed...").arg(m_doc->speed()), K3bJob::STATUS );
       else
 	emit infoMessage( i18n("Starting recording at %1x speed...").arg(m_doc->speed()), K3bJob::STATUS );
-	
+
       emit newTask( i18n("Writing data") );
       emit started();
     }
@@ -439,17 +439,17 @@ void K3bDataJob::writeImage()
   // get image file path
   if( m_doc->isoImage().isEmpty() )
     m_doc->setIsoImage( k3bMain()->findTempFile( "iso" ) );
-		
+
   delete m_process;
   m_process = new KProcess();
-			
+
   if( !addMkisofsParameters() ) {
     cancelAll();
     return;
   }
-	
+
   *m_process << "-o" << m_doc->isoImage();
-	
+
   // add empty dummy dir since one path-spec is needed
   *m_process << m_doc->dummyDir();
 
@@ -460,13 +460,13 @@ void K3bDataJob::writeImage()
 	   this, SLOT(slotParseMkisofsOutput(KProcess*, char*, int)) );
   //	connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
   //			 this, SLOT(slotParseMkisofsOutput(KProcess*, char*, int)) );
-		
+
   if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) )
     {
       // something went wrong when starting the program
       // it "should" be the executable
       kdDebug() << "(K3bDataJob) could not start mkisofs" << endl;
-				
+
       emit infoMessage( i18n("Could not start mkisofs!"), K3bJob::ERROR );
       cancelAll();
     }
@@ -491,15 +491,15 @@ void K3bDataJob::cancel()
 
 void K3bDataJob::slotParseMkisofsOutput( KProcess*, char* output, int len )
 {
-  QString buffer = QString::fromLatin1( output, len );
+  QString buffer = QString::fromLocal8Bit( output, len );
 
 
   emit debuggingOutput( "mkisofs", buffer );
 
-	
+
   // split to lines
   QStringList lines = QStringList::split( "\n", buffer );
-	
+
   // do every line
   for( QStringList::Iterator str = lines.begin(); str != lines.end(); str++ )
     {
@@ -538,15 +538,15 @@ void K3bDataJob::slotParseMkisofsOutput( KProcess*, char* output, int len )
 
 void K3bDataJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 {
-  QString buffer = QString::fromLatin1( output, len );
-	
+  QString buffer = QString::fromLocal8Bit( output, len );
+
 
   emit debuggingOutput( "cdrecord", buffer );
 
 
   // split to lines
   QStringList lines = QStringList::split( "\n", buffer );
-	
+
   // do every line
   for( QStringList::Iterator str = lines.begin(); str != lines.end(); str++ )
     {
@@ -554,14 +554,14 @@ void K3bDataJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
       if( (*str).startsWith( "Track" ) )
 	{
 	  //			kdDebug() << "Parsing line [[" << *str << "]]"endl;
-			
+
 	  if( (*str).contains( "fifo", false ) > 0 )
 	    {
 	      // parse progress
 	      int num, made, size, fifo;
 	      bool ok;
 
-	      // --- parse number of track ---------------------------------------				
+	      // --- parse number of track ---------------------------------------
 	      // ----------------------------------------------------------------------
 	      int pos1 = 5;
 	      int pos2 = (*str).find(':');
@@ -570,11 +570,11 @@ void K3bDataJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 		continue;
 	      }
 	      // now pos2 to the first colon :-)
-	      num = (*str).mid(pos1,pos2-pos1).toInt(&ok);				
+	      num = (*str).mid(pos1,pos2-pos1).toInt(&ok);
 	      if(!ok)
 		kdDebug() << "parsing did not work" << endl;
-				
-	      // --- parse already written Megs -----------------------------------				
+
+	      // --- parse already written Megs -----------------------------------
 	      // ----------------------------------------------------------------------
 	      pos1 = (*str).find(':');
 	      if( pos1 == -1 ) {
@@ -591,7 +591,7 @@ void K3bDataJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 	      made = (*str).mid(pos1,pos2-pos1).toInt(&ok);
 	      if(!ok)
 		kdDebug() << "parsing did not work" << endl;
-					
+
 	      // --- parse total size of track ---------------------------------------
 	      // ------------------------------------------------------------------------
 	      pos1 = (*str).find("MB");
@@ -604,7 +604,7 @@ void K3bDataJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 	      size = (*str).mid(pos2,pos1-pos2).toInt(&ok);
 	      if(!ok)
 		kdDebug() << "parsing did not work" << endl;
-				
+
 	      // --- parse status of fifo --------------------------------------------
 	      // ------------------------------------------------------------------------
 	      pos1 = (*str).find("fifo");
@@ -632,7 +632,7 @@ void K3bDataJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 	      // when writing an image the image creating process
 	      // is treated as half of the whole process
 	      // when writing on-the-fly subPercent is parsed
-	      // from the mkisofs output 
+	      // from the mkisofs output
 
 	      if( m_doc->onTheFly() ) {
 		emit percent( 100*made/size );
@@ -706,7 +706,7 @@ void K3bDataJob::slotMkisofsFinished()
 	case 0:
 	  emit infoMessage( i18n("Image successfully created in %1").arg(m_doc->isoImage()), K3bJob::STATUS );
 	  m_imageFinished = true;
-				
+
 	  if( m_doc->onlyCreateImage() ) {
 
 	    // weird, but possible
@@ -722,7 +722,7 @@ void K3bDataJob::slotMkisofsFinished()
 	    writeCD();
 	  }
 	  break;
-				
+
 	default:
 	  emit infoMessage( i18n("mkisofs returned an error. (code %1)").arg(m_process->exitStatus()), K3bJob::ERROR );
 	  emit infoMessage( i18n("No error handling yet!"), K3bJob::ERROR );
@@ -760,7 +760,7 @@ void K3bDataJob::slotCdrecordFinished()
 
 	  emit finished( true );
 	  break;
-				
+
 	default:
 	  // no recording device and also other errors!! :-(
 	  emit infoMessage( i18n("cdrecord returned an error! (code %1)").arg(m_process->exitStatus()), K3bJob::ERROR );
@@ -806,9 +806,9 @@ bool K3bDataJob::addMkisofsParameters()
 
     // it has to be the device we are writing to cause only this makes sense
     *m_process << "-M" << m_doc->burner()->busTargetLun();//genericDevice();
-    *m_process << "-C" << m_msInfo;  
+    *m_process << "-C" << m_msInfo;
   }
-	
+
   // add the arguments
   *m_process << "-gui";
   *m_process << "-graft-points";
@@ -825,7 +825,7 @@ bool K3bDataJob::addMkisofsParameters()
     *m_process << "-p" << "\"" + m_doc->isoOptions().preparer() + "\"";
   if( !m_doc->isoOptions().systemId().isEmpty() )
     *m_process << "-sysid" << "\"" + m_doc->isoOptions().systemId() + "\"";
-		
+
   if( m_doc->isoOptions().createRockRidge() ) {
     if( m_doc->isoOptions().preserveFilePermissions() )
       *m_process << "-R";
@@ -846,13 +846,13 @@ bool K3bDataJob::addMkisofsParameters()
     if( m_doc->isoOptions().ISOallowPeriodAtBegin()  )
       *m_process << "-L";
     if( m_doc->isoOptions().ISOallow31charFilenames()  )
-      *m_process << "-l";	
-    if( m_doc->isoOptions().ISOomitVersionNumbers() && !m_doc->isoOptions().ISOmaxFilenameLength() )	
-      *m_process << "-N";		
+      *m_process << "-l";
+    if( m_doc->isoOptions().ISOomitVersionNumbers() && !m_doc->isoOptions().ISOmaxFilenameLength() )
+      *m_process << "-N";
     if( m_doc->isoOptions().ISOrelaxedFilenames()  )
-      *m_process << "-relaxed-filenames";		
+      *m_process << "-relaxed-filenames";
     if( m_doc->isoOptions().ISOallowLowercase()  )
-      *m_process << "-allow-lowercase";		
+      *m_process << "-allow-lowercase";
     if( m_doc->isoOptions().ISOnoIsoTranslate()  )
       *m_process << "-no-iso-translate";
     if( m_doc->isoOptions().ISOallowMultiDot()  )
@@ -860,20 +860,20 @@ bool K3bDataJob::addMkisofsParameters()
     if( m_doc->isoOptions().ISOomitTrailingPeriod() )
       *m_process << "-d";
   }
-		
+
   if( m_doc->isoOptions().ISOmaxFilenameLength()  )
-    *m_process << "-max-iso9660-filenames";	
+    *m_process << "-max-iso9660-filenames";
   if( m_noDeepDirectoryRelocation  )
-    *m_process << "-D";	
+    *m_process << "-D";
 
 
   if( m_doc->isoOptions().followSymbolicLinks() )
     *m_process << "-f";
 
   if( m_doc->isoOptions().createTRANS_TBL()  )
-    *m_process << "-T";	
+    *m_process << "-T";
   if( m_doc->isoOptions().hideTRANS_TBL()  )
-    *m_process << "-hide-joliet-trans-tbl";	
+    *m_process << "-hide-joliet-trans-tbl";
 
   *m_process << "-iso-level" << QString::number(m_doc->isoOptions().ISOLevel());
 
@@ -894,9 +894,9 @@ bool K3bDataJob::addMkisofsParameters()
 
 void K3bDataJob::slotCollectOutput( KProcess*, char* output, int len )
 {
-  emit debuggingOutput( "misc", QString::fromLatin1( output, len ) );
+  emit debuggingOutput( "misc", QString::fromLocal8Bit( output, len ) );
 
-  m_collectedOutput += QString::fromLatin1( output, len );
+  m_collectedOutput += QString::fromLocal8Bit( output, len );
 }
 
 
@@ -906,25 +906,25 @@ bool K3bDataJob::writePathSpec( const QString& filename )
   if( !file.open( IO_WriteOnly ) ) {
     return false;
   }
-	
+
   QTextStream t(&file);
 
   // start writing the path-specs
   // iterate over all the dataItems
 //   K3bDataItem* item = m_doc->root()->nextSibling();
 
-	
+
 //   while( item ) {
-//     t << escapeGraftPoint( m_doc->treatWhitespace(item->k3bPath()) ) 
+//     t << escapeGraftPoint( m_doc->treatWhitespace(item->k3bPath()) )
 //       << "=" << escapeGraftPoint( item->localPath() ) << "\n";
-		
+
 //     item = item->nextSibling();
 //   }
 
-  writePathSpecForDir( m_doc->root(), t );	
+  writePathSpecForDir( m_doc->root(), t );
 
   file.close();
-  
+
   return true;
 }
 
@@ -963,12 +963,12 @@ void K3bDataJob::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream )
     unsigned int jolietMaxLength = 64;
     while( begin < sortedChildren.count() ) {
       if( sortedChildren.at(begin)->k3bName().length() > jolietMaxLength ) {
-	kdDebug() << "(K3bDataJob) filename to long for joliet: " 
+	kdDebug() << "(K3bDataJob) filename to long for joliet: "
 		  << sortedChildren.at(begin)->k3bName() << endl;
 	sameNameCount = 1;
-	
-	while( begin + sameNameCount < sortedChildren.count() && 
-	       sortedChildren.at( begin + sameNameCount )->k3bName().left(jolietMaxLength) 
+
+	while( begin + sameNameCount < sortedChildren.count() &&
+	       sortedChildren.at( begin + sameNameCount )->k3bName().left(jolietMaxLength)
 	       == sortedChildren.at(begin)->k3bName().left(jolietMaxLength) )
 	  sameNameCount++;
 
@@ -988,11 +988,11 @@ void K3bDataJob::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream )
 	  jolietName.append( extension );
 	  sortedChildren.at(i)->setJolietName( jolietName );
 
-	  kdDebug() << "(K3bDataJob) set joliet name for " 
+	  kdDebug() << "(K3bDataJob) set joliet name for "
 		    << sortedChildren.at(i)->k3bName() << " to "
 		    << jolietName << endl;
 	}
-		      
+
 	begin += sameNameCount;
       }
       else {
@@ -1011,7 +1011,7 @@ void K3bDataJob::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream )
 	  continue;
       }
 
-      stream << escapeGraftPoint( m_doc->treatWhitespace(item->jolietPath()) ) 
+      stream << escapeGraftPoint( m_doc->treatWhitespace(item->jolietPath()) )
 	     << "=" << escapeGraftPoint( item->localPath() ) << "\n";
     }
   }
@@ -1025,7 +1025,7 @@ void K3bDataJob::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream )
       if( m_doc->isoOptions().discardSymlinks() && item->isSymLink() )
 	continue;
 
-      stream << escapeGraftPoint( m_doc->treatWhitespace(item->k3bPath()) ) 
+      stream << escapeGraftPoint( m_doc->treatWhitespace(item->k3bPath()) )
 	     << "=" << escapeGraftPoint( item->localPath() ) << "\n";
     }
   }
@@ -1056,7 +1056,7 @@ bool K3bDataJob::writeRRHideFile( const QString& filename )
 // 	K3bDirItem* parent = item->parent();
 // 	if( parent )
 // 	  item = parent->nextChild( item );
-// 	else 
+// 	else
 // 	  item = 0;
 //       }
 //       else
@@ -1129,7 +1129,7 @@ void K3bDataJob::cancelAll()
     if( m_process->isRunning() ) {
       m_process->disconnect(this);
       m_process->kill();
-      
+
       if( !m_doc->onlyCreateImage() ) {
 	// we need to unlock the writer because cdrdao/cdrecord locked it while writing
 	bool block = m_doc->burner()->block( false );
@@ -1165,7 +1165,7 @@ QString K3bDataJob::escapeGraftPoint( const QString& str )
 
   newStr.replace( QRegExp( "\\\\\\\\" ), "\\\\\\\\\\\\\\\\" );
   newStr.replace( QRegExp( "=" ), "\\=" );
-    
+
   return newStr;
 }
 

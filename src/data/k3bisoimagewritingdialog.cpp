@@ -277,7 +277,7 @@ void K3bIsoImageWritingDialog::slotUser1()
 // 						       "Are you sure you want to continue?") )
 // 	== KMessageBox::Cancel )
 //       return;
-					  
+
 
   // create the job
   if( m_job == 0 )
@@ -336,17 +336,17 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
     // Test for iso9660 image
     // ------------------------------------------------
     char buf[17*2048];
-    
+
     QFile f( path );
     if( f.open( IO_Raw | IO_ReadOnly ) ) {
       if( f.readBlock( buf, 17*2048 ) == 17*2048 ) {
 	// check if this is an ios9660-image
 	// the beginning of the 16th sector needs to have the following format:
-	
+
 	// first byte: 1
 	// second to 11th byte: 67, 68, 48, 48, 49, 1 (CD001)
 	// 12th byte: 0
-	
+
 	m_bIsoImage = ( buf[16*2048] == 1 &&
 			buf[16*2048+1] == 67 &&
 			buf[16*2048+2] == 68 &&
@@ -356,7 +356,7 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
 			buf[16*2048+6] == 1 &&
 			buf[16*2048+7] == 0 );
       }
-      
+
       f.close();
     }
 
@@ -399,25 +399,25 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
     // ------------------------------------------------
     m_labelImageSize->setText( KIO::convertSize( imageSize ) );
 
-    
+
     if( m_bIsoImage ) {
-      QString str = QString::fromLatin1( &buf[16*2048+1], 5 ).stripWhiteSpace();
+      QString str = QString::fromLocal8Bit( &buf[16*2048+1], 5 ).stripWhiteSpace();
       m_labelIsoId->setText( str.isEmpty() ? QString("-") : str );
-      str = QString::fromLatin1( &buf[16*2048+8], 32 ).stripWhiteSpace();
+      str = QString::fromLocal8Bit( &buf[16*2048+8], 32 ).stripWhiteSpace();
       m_labelIsoSystemId->setText( str.isEmpty() ? QString("-") : str );
-      str = QString::fromLatin1( &buf[16*2048+40], 32 ).stripWhiteSpace();
+      str = QString::fromLocal8Bit( &buf[16*2048+40], 32 ).stripWhiteSpace();
       m_labelIsoVolumeId->setText( str.isEmpty() ? QString("-") : str );
-      str = QString::fromLatin1( &buf[16*2048+190], 128 ).stripWhiteSpace();
+      str = QString::fromLocal8Bit( &buf[16*2048+190], 128 ).stripWhiteSpace();
       m_labelIsoVolumeSetId->setText( str.isEmpty() ? QString("-") : str );
-      str = QString::fromLatin1( &buf[16*2048+318], 128 ).stripWhiteSpace();
+      str = QString::fromLocal8Bit( &buf[16*2048+318], 128 ).stripWhiteSpace();
       m_labelIsoPublisherId->setText( str.isEmpty() ? QString("-") : str );
-      str = QString::fromLatin1( &buf[16*2048+446], 128 ).stripWhiteSpace();
+      str = QString::fromLocal8Bit( &buf[16*2048+446], 128 ).stripWhiteSpace();
       m_labelIsoPreparerId->setText( str.isEmpty() ? QString("-") : str );
-      str = QString::fromLatin1( &buf[16*2048+574], 128 ).stripWhiteSpace();
+      str = QString::fromLocal8Bit( &buf[16*2048+574], 128 ).stripWhiteSpace();
       m_labelIsoApplicationId->setText( str.isEmpty() ? QString("-") : str );
-      
+
       m_isoInfoWidget->show();
-      
+
       m_generalInfoLabel->setText( i18n("Seems to be an ISO9660 image") );
       m_checkUseCueFile->setChecked( false );
       //      m_checkRawWrite->setChecked( false );
@@ -440,7 +440,7 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
       m_checkUseCueFile->setChecked( false );
       m_checkUseCueFile->setEnabled( false );
     }
-  
+
     // enable the Write-Button
     actionButton( User1 )->setEnabled( true );
   }
@@ -448,7 +448,7 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
     m_isoInfoWidget->hide();
     m_labelImageSize->setText( "0 kb" );
     m_generalInfoLabel->setText( i18n("No file") );
-    
+
     // Disable the Write-Button
     actionButton( User1 )->setDisabled( true );
   }

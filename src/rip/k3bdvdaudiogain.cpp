@@ -89,12 +89,12 @@ void K3bDvdAudioGain::closeStdin( ){
 }
 
 void K3bDvdAudioGain::slotParseOutput( KProcess *p, char *buffer, int len ){
-    QString tmp = QString::fromLatin1( buffer, len );
+    QString tmp = QString::fromLocal8Bit( buffer, len );
     kdDebug() << "(K3bDvdAudioGain) AudioProcessing output: " << tmp << endl;
 }
 
 void K3bDvdAudioGain::slotParseError( KProcess *p, char *buffer, int len ){
-    QString tmp = QString::fromLatin1( buffer, len );
+    QString tmp = QString::fromLocal8Bit( buffer, len );
     kdDebug() << "(K3bDvdAudioGain) AudioProcessing error: " << tmp << endl;
 }
 

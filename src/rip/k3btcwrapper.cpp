@@ -68,7 +68,7 @@ void K3bTcWrapper::runTcprobe()
   connect( p, SIGNAL(receivedStderr(KProcess*, char*, int)), this, SLOT(slotParseTcprobeError(KProcess*, char*, int)) );
   connect( p, SIGNAL(receivedStdout(KProcess*, char*, int)), this, SLOT(slotParseTcprobeOutput(KProcess*, char*, int)) );
   connect( p, SIGNAL(processExited(KProcess*)), this, SLOT(slotTcprobeExited( KProcess* )) );
-  
+
   if( !p->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
     // something went wrong when starting the program
     // it "should" be the executable
@@ -77,11 +77,11 @@ void K3bTcWrapper::runTcprobe()
 }
 
 void K3bTcWrapper::slotParseTcprobeOutput( KProcess *p, char *text, int len){
-    m_outputBuffer += QString::fromLatin1( text, len );
+    m_outputBuffer += QString::fromLocal8Bit( text, len );
 }
 
 void K3bTcWrapper::slotParseTcprobeError( KProcess *p, char *text, int len){
-    m_errorBuffer += QString::fromLatin1( text, len );
+    m_errorBuffer += QString::fromLocal8Bit( text, len );
 }
 
 void K3bTcWrapper::slotTcprobeExited( KProcess *p){

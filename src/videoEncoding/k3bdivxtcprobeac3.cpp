@@ -51,13 +51,13 @@ void K3bDivXTcprobeAc3::parseAc3Bitrate( K3bDivxCodecData* data){
 }
 
 void K3bDivXTcprobeAc3::slotParseOutput( KProcess* p, char* buffer, int length ){
-    QString tmp = QString::fromLatin1( buffer, length );
+    QString tmp = QString::fromLocal8Bit( buffer, length );
     m_buffer += tmp;
     kdDebug() << "(K3bDivXTcprobeAc3) Output:" << tmp << endl;
 }
 
 void K3bDivXTcprobeAc3::slotParseError( KProcess* p, char* buffer, int length ){
-    QString tmp = QString::fromLatin1( buffer, length );
+    QString tmp = QString::fromLocal8Bit( buffer, length );
     m_buffer += tmp;
     kdDebug() << "(K3bDivXTcprobeAc3) Error:" <<tmp << endl;
 }

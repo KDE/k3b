@@ -19,37 +19,37 @@
 static const int NUM_BIN_PROGRAMS = 9;
 static const int NUM_SEARCH_PATHS = 5;
 
-static const char* binPrograms[] =  { "mkisofs", 
-				      "cdrecord", 
+static const char* binPrograms[] =  { "mkisofs",
+				      "cdrecord",
 				      "cdrdao",
-				      "transcode", 
-				      "tcprobe", 
-				      "tccat", 
-				      "tcscan", 
-				      "tcextract", 
+				      "transcode",
+				      "tcprobe",
+				      "tccat",
+				      "tcscan",
+				      "tcextract",
 				      "tcdecode" };
-static const char* binVersions[] =  { "1.13", 
-				      "1.9", 
+static const char* binVersions[] =  { "1.13",
+				      "1.9",
 				      "1.1.3",
-				      "0.6.0pre3", 
-				      "0.6.0pre3", 
-				      "0.6.0pre3", 
-				      "0.6.0pre3", 
-				      "0.6.0pre3", 
+				      "0.6.0pre3",
+				      "0.6.0pre3",
+				      "0.6.0pre3",
+				      "0.6.0pre3",
+				      "0.6.0pre3",
 				      "0.6.0pre3" };
-static const char* binVersionFlag[] =  { "--version", 
-					 "--version", 
-					 "--version", 
-					 "-version", 
-					 "-version", 
-					 "-version", 
-					 "-version", 
-					 "-version", 
+static const char* binVersionFlag[] =  { "--version",
+					 "--version",
+					 "--version",
+					 "-version",
+					 "-version",
+					 "-version",
+					 "-version",
+					 "-version",
 					 "-version" };
- 
-static const char* searchPaths[] = { "/usr/bin/", 
+
+static const char* searchPaths[] = { "/usr/bin/",
 				     "/usr/local/bin/",
-				     "/usr/sbin/", 
+				     "/usr/sbin/",
 				     "/usr/local/sbin/",
 				     "/opt/schily/bin/" };
 
@@ -307,7 +307,7 @@ void K3bExternalBinManager::slotParseOutputVersion( KProcess* p, char* data, int
 
 
 void K3bExternalBinManager::slotParseCdrtoolsVersion( KProcess*p, char* data, int len ){
-    QString buffer = QString::fromLatin1( data, len );
+    QString buffer = QString::fromLocal8Bit( data, len );
     int start = buffer.find( QRegExp("[0-9]") );
     int findStart = ( start > -1 ? start : 0 );
     int end   = buffer.find( ' ', findStart );
@@ -331,7 +331,7 @@ void K3bExternalBinManager::slotParseCdrtoolsVersion( KProcess*p, char* data, in
 void K3bExternalBinManager::slotParseCdrdaoVersion( KProcess*, char* data, int len )
 {
   if( m_binMap.contains( "cdrdao" ) ) {
-    QString buffer = QString::fromLatin1( data, len );
+    QString buffer = QString::fromLocal8Bit( data, len );
     QStringList lines = QStringList::split( "\n", buffer );
 
     for( QStringList::Iterator str = lines.begin(); str != lines.end(); str++ ) {
@@ -355,7 +355,7 @@ void K3bExternalBinManager::slotParseTranscodeVersion( KProcess* p, char* data, 
     kdDebug() << "version parsing for " << p->name() << endl;
     if( m_binMap.contains( name ) ) {
         kdDebug() << "version parsing" << endl;
-        QString buffer = QString::fromLatin1( data, len );
+        QString buffer = QString::fromLocal8Bit( data, len );
         QStringList lines = QStringList::split( "\n", buffer );
 
         for( QStringList::Iterator str = lines.begin(); str != lines.end(); str++ ) {

@@ -283,7 +283,7 @@ void K3bDivxCrop::slotPreviewChanged( int v ){
 }
 
 void K3bDivxCrop::slotParseProcess( KProcess* p, char *data, int len){
-    QString tmp = QString::fromLatin1( data, len );
+    QString tmp = QString::fromLocal8Bit( data, len );
     kdDebug() << tmp << endl;
 }
 

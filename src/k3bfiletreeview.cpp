@@ -31,7 +31,7 @@
 
 
 K3bDeviceBranch::K3bDeviceBranch( KFileTreeView* view, K3bDevice* dev, KFileTreeViewItem* item )
-  : KFileTreeBranch( view, KURL(), i18n("Drive: ") + dev->vendor(), 
+  : KFileTreeBranch( view, KURL(), i18n("Drive: %1").arg(dev->vendor()),
 		     ( dev->burner()
 		       ? SmallIcon("cdwriter_unmount")
 		       : SmallIcon("cdrom_unmount") ),

@@ -30,8 +30,8 @@
 static const char *description =
 	I18N_NOOP("K3bSetup");
 // INSERT A DESCRIPTION FOR YOUR APPLICATION HERE
-	
-	
+
+
 static KCmdLineOptions options[] =
 {
   { 0, 0, 0 }
@@ -40,8 +40,6 @@ static KCmdLineOptions options[] =
 
 int main(int argc, char *argv[])
 {
-  KLocale::setMainCatalogue( "k3b" );
-
   KAboutData aboutData( "k3bsetup", I18N_NOOP("K3bSetup"),
     "0.1", description, KAboutData::License_GPL,
     "(c) 2001, Sebastian Trueg", 0, 0, "trueg@informatik.uni-freiburg.de");
@@ -50,7 +48,7 @@ int main(int argc, char *argv[])
   KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
 
   KApplication a;
-
+  KLocale::setMainCatalogue( "k3b" );
 
   if (getuid()) {
     KMessageBox::error(0, i18n("K3b Setup must be run as root!"));
@@ -61,7 +59,7 @@ int main(int argc, char *argv[])
 
   K3bSetupWizard *k3bsetup = new K3bSetupWizard( &setup );
   a.setMainWidget(k3bsetup);
-  k3bsetup->show();  
+  k3bsetup->show();
 
   return a.exec();
 }

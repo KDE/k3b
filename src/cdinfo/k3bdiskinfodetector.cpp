@@ -162,7 +162,7 @@ void K3bDiskInfoDetector::slotDiskInfoFinished()
 	QString value = str.mid( str.find(":")+1 ).stripWhiteSpace();
 	m_info.empty = (value == "yes");
       }
-	       
+
       else if( str.startsWith("Toc Type") ) {
 	// not used...
       }
@@ -217,7 +217,7 @@ void K3bDiskInfoDetector::fetchTocInfo()
   m_process->clearArguments();
   m_process->disconnect();
 
-  if( m_device->interfaceType() == K3bDevice::IDE || 
+  if( m_device->interfaceType() == K3bDevice::IDE ||
       !k3bMain()->externalBinManager()->foundBin( "cdrecord" ) ) {
     kdDebug() << "(K3bDiskInfoDetector) using cdparanoia" << endl;
     fetchIdeInformation();
@@ -264,7 +264,7 @@ void K3bDiskInfoDetector::slotTocInfoFinished()
       emit diskInfoReady( m_info );
   }
   else {
-    // parse the track list    
+    // parse the track list
     // usable output is:
     // track:
 
@@ -281,7 +281,7 @@ void K3bDiskInfoDetector::slotTocInfoFinished()
       if( str.startsWith("track:") ) {
 	// cdrecord produces the following outout:
 	// <tracknumber> lba: <startSector> (<...>) <startTime> adr: 1 control: <trackType> mode: <trackMode>
-	// the last tracknumber will always be "lout", the leadout of the cd which we only use to determine the 
+	// the last tracknumber will always be "lout", the leadout of the cd which we only use to determine the
 	// length of the last track
 
 	// we just want the startSector, the trackType, and the trackMode
@@ -353,7 +353,7 @@ void K3bDiskInfoDetector::slotTocInfoFinished()
     // now determine the toc type
     determineTocType();
 
-  
+
     // atip is only readable on cd-writers
     if( m_device->burner() ) {
       fetchDiskInfo();
@@ -376,13 +376,13 @@ void K3bDiskInfoDetector::fetchIsoInfo()
   char buf[17*2048];
 
   if( f.readBlock( buf, 17*2048 ) == 17*2048 ) {
-    m_info.isoId = QString::fromLatin1( &buf[16*2048+1], 5 ).stripWhiteSpace();
-    m_info.isoSystemId = QString::fromLatin1( &buf[16*2048+8], 32 ).stripWhiteSpace();
-    m_info.isoVolumeId = QString::fromLatin1( &buf[16*2048+40], 32 ).stripWhiteSpace();
-    m_info.isoVolumeSetId = QString::fromLatin1( &buf[16*2048+190], 128 ).stripWhiteSpace();
-    m_info.isoPublisherId = QString::fromLatin1( &buf[16*2048+318], 128 ).stripWhiteSpace();
-    m_info.isoPreparerId = QString::fromLatin1( &buf[16*2048+446], 128 ).stripWhiteSpace();
-    m_info.isoApplicationId = QString::fromLatin1( &buf[16*2048+574], 128 ).stripWhiteSpace();
+    m_info.isoId = QString::fromLocal8Bit( &buf[16*2048+1], 5 ).stripWhiteSpace();
+    m_info.isoSystemId = QString::fromLocal8Bit( &buf[16*2048+8], 32 ).stripWhiteSpace();
+    m_info.isoVolumeId = QString::fromLocal8Bit( &buf[16*2048+40], 32 ).stripWhiteSpace();
+    m_info.isoVolumeSetId = QString::fromLocal8Bit( &buf[16*2048+190], 128 ).stripWhiteSpace();
+    m_info.isoPublisherId = QString::fromLocal8Bit( &buf[16*2048+318], 128 ).stripWhiteSpace();
+    m_info.isoPreparerId = QString::fromLocal8Bit( &buf[16*2048+446], 128 ).stripWhiteSpace();
+    m_info.isoApplicationId = QString::fromLocal8Bit( &buf[16*2048+574], 128 ).stripWhiteSpace();
   }
 
   f.close();
@@ -431,12 +431,12 @@ void K3bDiskInfoDetector::slotIsDvd( bool dvd )
 
 void K3bDiskInfoDetector::slotCollectStdout( KProcess*, char* data, int len )
 {
-  m_collectedStdout.append( QString::fromLatin1( data, len ) );
+  m_collectedStdout.append( QString::fromLocal8Bit( data, len ) );
 }
 
 void K3bDiskInfoDetector::slotCollectStderr( KProcess*, char* data, int len )
 {
-  m_collectedStderr.append( QString::fromLatin1( data, len ) );
+  m_collectedStderr.append( QString::fromLocal8Bit( data, len ) );
 }
 
 
@@ -455,7 +455,7 @@ void K3bDiskInfoDetector::fetchIdeInformation()
     emit diskInfoReady( m_info );
     return;
   }
-  
+
   m_info.noDisk = false;
   m_info.empty = ( drive->tracks == 0 );
 
@@ -515,7 +515,7 @@ void K3bDiskInfoDetector::determineTocType()
   if( audioTracks + dataTracks > 0 ) {
     m_info.empty = false;
     m_info.noDisk = false;
-    
+
     calculateDiscId();
   }
   else {
@@ -540,7 +540,7 @@ void K3bDiskInfoDetector::calculateDiscId()
   l /= 75;
   id = ( ( id % 0xff ) << 24 ) | ( l << 8 ) | m_info.toc.count();
   m_info.toc.setDiscId( id );
-  
+
   kdDebug() << "(K3bDiskInfoDetector) calculated disk id: " << id << endl;
 }
 

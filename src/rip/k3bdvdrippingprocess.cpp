@@ -203,7 +203,7 @@ void K3bDvdRippingProcess::slotParseOutput( KProcess *p, char *text, int len){
     }
 }
 float K3bDvdRippingProcess::tccatParsedBytes( char *text, int len){
-    QString tmp = QString::fromLatin1( text, len );
+    QString tmp = QString::fromLocal8Bit( text, len );
     float blocks = 0;
     if( tmp.contains("blocks (") ){
         int index = tmp.find("blocks (");
@@ -213,13 +213,13 @@ float K3bDvdRippingProcess::tccatParsedBytes( char *text, int len){
         float startBlocks = start.toFloat();
         tmp=tmp.mid(end+1);
         end = tmp.find( ")" );
-        tmp= tmp.mid( 0, end); // end value        
+        tmp= tmp.mid( 0, end); // end value
         blocks = (tmp.toFloat()-startBlocks)*2048;
     }
     kdDebug() << "(K3bDvdRippingProcess) Parsed bytes: " << QString::number(blocks, 'f') << endl;
     return blocks;
 }
-             
+
 void K3bDvdRippingProcess::preProcessingDvd( ){
     if( !m_dvdOrgFilenameDetected ){
         kdDebug() << "(K3bDvdRippingProcess) Mount dvd to copy IFO files." << endl;

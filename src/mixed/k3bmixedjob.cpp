@@ -73,7 +73,7 @@ void K3bMixedJob::slotSizeCalculationFinished( int status, int size )
     m_isoImageFile = new QFile( "/home/trueg/tmp/image.iso" );
     m_isoImageFile->open( IO_WriteOnly );
     m_isoImageFileStream = new QDataStream( m_isoImageFile );
-    m_isoImager->start();    
+    m_isoImager->start();
   }
   else {
     emit finished(false);

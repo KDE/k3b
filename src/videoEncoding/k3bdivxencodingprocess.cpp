@@ -29,7 +29,7 @@
 
 K3bDivXEncodingProcess::K3bDivXEncodingProcess(K3bDivxCodecData *data, QWidget *parent, const char *name ) : K3bJob( ) {
     m_data = data;
-    connect( this, SIGNAL( finished( bool )), SLOT( slotShutdown( bool ) )); 
+    connect( this, SIGNAL( finished( bool )), SLOT( slotShutdown( bool ) ));
 }
 
 K3bDivXEncodingProcess::~K3bDivXEncodingProcess(){
@@ -107,7 +107,7 @@ void K3bDivXEncodingProcess::slotStartEncoding(){
      QString debugPass("");
      if( m_data->getParaAc3().length() > 1 ){
          *m_process << m_data->getParaAc3();
-         debugPass += m_data->getParaAc3();         
+         debugPass += m_data->getParaAc3();
      } else {
          *m_process << m_data->getParaAudioResample()  << m_data->getParaAudioBitrate() << m_data->getParaAudioGain();
          debugPass = debugPass + m_data->getParaAudioResample() + m_data->getParaAudioBitrate() + m_data->getParaAudioGain();
@@ -115,7 +115,7 @@ void K3bDivXEncodingProcess::slotStartEncoding(){
      *m_process << m_data->getParaDeinterlace();
      *m_process << " -o " << m_data->getAviFile();
      kdDebug() << "(K3bDivXEncodingProcess)  Out: " + m_data->getParaDeinterlace() + " -o " + m_data->getAviFile()<< endl;
-     
+
      int top = m_data->getCropTop();
      int left = m_data->getCropLeft();
      int bottom = m_data->getCropBottom();
@@ -210,7 +210,7 @@ void K3bDivXEncodingProcess::slotParseEncoding( KProcess *p, char *buffer, int l
                m_speedTrigger = 400;
         }
         m_speedFlag = 0;
-        QString tmp = QString::fromLatin1( buffer, len );
+        QString tmp = QString::fromLocal8Bit( buffer, len );
         m_debugBuffer += tmp;
         kdDebug() << tmp << endl;
         int index = tmp.find( "]" );
@@ -259,7 +259,7 @@ void K3bDivXEncodingProcess::slotParseAudio( KProcess *p, char *buffer, int len)
             if( m_speedInitialFlag == 50)
                m_speedTrigger = 40;
         }
-        QString tmp = QString::fromLatin1( buffer, len );
+        QString tmp = QString::fromLocal8Bit( buffer, len );
         m_debugBuffer += tmp;
         if( tmp.contains("rescale") ){
             int scale = tmp.find( "rescale" );
@@ -267,7 +267,7 @@ void K3bDivXEncodingProcess::slotParseAudio( KProcess *p, char *buffer, int len)
             float f = tmp.toFloat();
             m_data->setAudioGain( QString::number( f, 'f', 3 ) );
             kdDebug() << "K3bDivxEncodingProcess) Audio gain: " + m_data->getAudioGain() << endl;
-            infoMessage( i18n("Gain for normalizing is: ") + m_data->getAudioGain(), INFO );
+            infoMessage( i18n("Gain for normalizing is: %1").arg(m_data->getAudioGain()), INFO );
         }
         //kdDebug() <<  tmp << endl;
         int index = tmp.find( "%" );

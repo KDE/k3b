@@ -35,8 +35,8 @@
 #include <kio/netaccess.h>
 
 
-K3bMiscOptionTab::K3bMiscOptionTab(QWidget *parent, const char *name ) 
-  : QWidget(parent,name) 
+K3bMiscOptionTab::K3bMiscOptionTab(QWidget *parent, const char *name )
+  : QWidget(parent,name)
 {
   m_checkShowSplash = new QCheckBox( i18n("Show splash screen"), this );
   m_checkShowSystemTrayProgress = new QCheckBox( i18n("Show progress in system tray"), this );
@@ -95,7 +95,7 @@ bool K3bMiscOptionTab::saveSettings()
   }
 
   if( !fi.exists() ) {
-    if( KMessageBox::questionYesNo( this, i18n("Directory does not exist. Create?"), 
+    if( KMessageBox::questionYesNo( this, i18n("Directory does not exist. Create?"),
 				    i18n("Create Directory") ) == KMessageBox::Yes ) {
       if( !KIO::NetAccess::mkdir( fi.absFilePath() ) ) {
 	KMessageBox::error( this, i18n("Unable to create directory\n(%1)").arg(fi.absFilePath()) );
@@ -127,7 +127,7 @@ bool K3bMiscOptionTab::saveSettings()
 
 void K3bMiscOptionTab::slotGetTempDir()
 {
-  QString dir = KFileDialog::getExistingDirectory( m_editTempDir->text(), this, "Select Temp Directory" );
+  QString dir = KFileDialog::getExistingDirectory( m_editTempDir->text(), this, i18n("Select Temp Directory") );
   if( !dir.isEmpty() ) {
     m_editTempDir->setText( dir );
   }

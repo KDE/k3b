@@ -163,7 +163,7 @@ void K3bIsoImageJob::slotWrite()
   }
 
   *m_cdrecordProcess << k3bMain()->externalBinManager()->binPath( "cdrecord" );
-	
+
   // and now we add the needed arguments...
   // display progress
   *m_cdrecordProcess << "-v";
@@ -205,7 +205,7 @@ void K3bIsoImageJob::slotWrite()
     *m_cdrecordProcess << *it;
 
   *m_cdrecordProcess << "-data" << m_imagePath;
-			
+
 
   kdDebug() << "***** cdrecord parameters:\n";
   const QValueList<QCString>& args = m_cdrecordProcess->args();
@@ -269,7 +269,7 @@ void K3bIsoImageJob::slotWriteCueBin()
     else
       *m_cdrdaoProcess << m_device->cdrdaoDriver();
   }
-    
+
   // additional parameters from config
   QStringList _params = kapp->config()->readListEntry( "cdrdao parameters" );
   for( QStringList::Iterator it = _params.begin(); it != _params.end(); ++it )
@@ -292,10 +292,10 @@ void K3bIsoImageJob::slotWriteCueBin()
 
   // writing speed
   *m_cdrdaoProcess << "--speed" << QString::number(  m_speed );
-    
+
   // supress the 10 seconds gap to the writing
   *m_cdrdaoProcess << "-n";
-    
+
   // cue-file
   *m_cdrdaoProcess << m_imagePath;
 
@@ -352,15 +352,15 @@ void K3bIsoImageJob::cancel()
 
 void K3bIsoImageJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 {
-  QString buffer = QString::fromLatin1( output, len );
-	
+  QString buffer = QString::fromLocal8Bit( output, len );
+
 
   emit debuggingOutput( "cdrecord", buffer );
 
 
   // split to lines
   QStringList lines = QStringList::split( "\n", buffer );
-	
+
   // do every line
   for( QStringList::Iterator str = lines.begin(); str != lines.end(); str++ )
     {
@@ -368,14 +368,14 @@ void K3bIsoImageJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
       if( (*str).startsWith( "Track" ) )
 	{
 	  //	kdDebug() << "Parsing line [[" << *str << "]]" << endl;
-			
+
 	  if( (*str).contains( "fifo", false ) > 0 )
 	    {
 	      // parse progress
 	      int num, made, size, fifo;
 	      bool ok;
 
-	      // --- parse number of track ---------------------------------------				
+	      // --- parse number of track ---------------------------------------
 	      // ----------------------------------------------------------------------
 	      int pos1 = 5;
 	      int pos2 = (*str).find(':');
@@ -384,11 +384,11 @@ void K3bIsoImageJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 		continue;
 	      }
 	      // now pos2 to the first colon :-)
-	      num = (*str).mid(pos1,pos2-pos1).toInt(&ok);				
+	      num = (*str).mid(pos1,pos2-pos1).toInt(&ok);
 	      if(!ok)
 		kdDebug() << "parsing did not work" << endl;
-				
-	      // --- parse already written Megs -----------------------------------				
+
+	      // --- parse already written Megs -----------------------------------
 	      // ----------------------------------------------------------------------
 	      pos1 = (*str).find(':');
 	      if( pos1 == -1 ) {
@@ -405,7 +405,7 @@ void K3bIsoImageJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 	      made = (*str).mid(pos1,pos2-pos1).toInt(&ok);
 	      if(!ok)
 		kdDebug() << "parsing did not work" << endl;
-					
+
 	      // --- parse total size of track ---------------------------------------
 	      // ------------------------------------------------------------------------
 	      pos1 = (*str).find("MB");
@@ -418,7 +418,7 @@ void K3bIsoImageJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 	      size = (*str).mid(pos2,pos1-pos2).toInt(&ok);
 	      if(!ok)
 		kdDebug() << "parsing did not work" << endl;
-				
+
 	      // --- parse status of fifo --------------------------------------------
 	      // ------------------------------------------------------------------------
 	      pos1 = (*str).find("fifo");
@@ -494,7 +494,7 @@ void K3bIsoImageJob::slotCdrecordFinished()
 
 	  emit finished( true );
 	  break;
-				
+
 	default:
 	  // no recording device and also other errors!! :-(
 	  emit infoMessage( i18n("cdrecord returned an error! (code %1)").arg(m_cdrecordProcess->exitStatus()), K3bJob::ERROR );
@@ -540,7 +540,7 @@ void K3bIsoImageJob::slotCdrdaoFinished()
 
 	  emit finished( true );
 	  break;
-				
+
 	default:
 	  // no recording device and also other errors!! :-(
 	  emit infoMessage( i18n("cdrdao returned an error! (code %1)").arg(m_cdrdaoProcess->exitStatus()), K3bJob::ERROR );

@@ -37,13 +37,13 @@
 
 
 K3bProjectBurnDialog::K3bProjectBurnDialog(K3bDoc* doc, QWidget *parent, const char *name, bool modal )
-  : KDialogBase( parent, name, modal, i18n("Write CD"), Ok|User1|User2, User1, false, 
-		 KGuiItem( i18n("Save"), "filesave", i18n("Save Settings and close"), 
-			   i18n("Saves the settings to the project and closes the burn dialog.") ),
-		 KStdGuiItem::cancel() )
+  : KDialogBase( parent, name, modal, i18n("Write CD"), Ok|User1|User2, User1, false,
+                 KGuiItem( i18n("Save"), "filesave", i18n("Save Settings and close"),
+                           i18n("Saves the settings to the project and closes the burn dialog.") ),
+                 KStdGuiItem::cancel() )
 {
   m_doc = doc;
-	
+
   setButtonBoxOrientation( Vertical );
   setButtonText( Ok, i18n("Write") );
   m_job = 0;
@@ -111,7 +111,7 @@ int K3bProjectBurnDialog::exec( bool burn )
   }
 
   readSettings();
-		
+
   return KDialogBase::exec();
 }
 

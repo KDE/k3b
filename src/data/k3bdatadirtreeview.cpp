@@ -56,8 +56,9 @@ K3bDataDirTreeView::K3bDataDirTreeView( K3bView* view, K3bDataDoc* doc, QWidget*
   header()->hide();
 
   setValidator( new K3bIsoValidator( this, "val", false ) );
-	
-  m_doc = doc;	
+
+  m_doc = doc;
+
   m_root = new K3bDataRootViewItem( doc, this );
   m_itemMap.insert( doc->root(), m_root );
 
@@ -87,7 +88,7 @@ void K3bDataDirTreeView::slotExecuted( QListViewItem* item )
 
 
 bool K3bDataDirTreeView::acceptDrag(QDropEvent* e) const{
-  return ( e->source() == viewport() || QUriDrag::canDecode(e) || 
+  return ( e->source() == viewport() || QUriDrag::canDecode(e) ||
 	   ( m_fileView && e->source() == m_fileView->viewport() ) );
 }
 
@@ -119,7 +120,7 @@ void K3bDataDirTreeView::slotDropped( QDropEvent* e, QListViewItem*, QListViewIt
 	else
 	  kdDebug() << "no dataviewitem" << endl;
       }
-	
+
       m_doc->moveItems( selectedDataItems, parent );
     }
     else if( e->source() == viewport() ) {
@@ -181,7 +182,7 @@ void K3bDataDirTreeView::updateContents()
       // check if we have an entry and if not, create one
       // we can assume that a listViewItem for the parent exists
       // since we go top to bottom
-      if( K3bDirItem* dirItem = dynamic_cast<K3bDirItem*>( item ) ) 
+      if( K3bDirItem* dirItem = dynamic_cast<K3bDirItem*>( item ) )
 	{
 	  if( !m_itemMap.contains(dirItem) ) {
 	    K3bDataDirViewItem* parentViewItem = m_itemMap[dirItem->parent()];
@@ -213,7 +214,7 @@ void K3bDataDirTreeView::updateContents()
 	K3bDirItem* dirItem = dirViewItem->dirItem();
 	dirViewItem->setPixmap( 0, dirItem->depth() > 7 ? SmallIcon( "folder_red" ) : SmallIcon( "folder" ) );
       }
-    
+
     ++it;
   }
 
@@ -252,13 +253,13 @@ void K3bDataDirTreeView::setupActions()
 {
   m_actionCollection = new KActionCollection( this );
 
-  m_actionProperties = new KAction( i18n("Properties..."), "misc", 0, this, SLOT(slotProperties()), 
+  m_actionProperties = new KAction( i18n("Properties..."), "misc", 0, this, SLOT(slotProperties()),
 				    actionCollection(), "properties" );
-  m_actionNewDir = new KAction( i18n("New Directory..."), "folder_new", CTRL+Key_N, this, SLOT(slotNewDir()), 
+  m_actionNewDir = new KAction( i18n("New Directory..."), "folder_new", CTRL+Key_N, this, SLOT(slotNewDir()),
 				actionCollection(), "new_dir" );
-  m_actionRemove = new KAction( i18n("Remove"), "editdelete", Key_Delete, this, SLOT(slotRemoveItem()), 
+  m_actionRemove = new KAction( i18n("Remove"), "editdelete", Key_Delete, this, SLOT(slotRemoveItem()),
 				actionCollection(), "remove" );
-  m_actionRename = new KAction( i18n("Rename"), "edit", CTRL+Key_R, this, SLOT(slotRenameItem()), 
+  m_actionRename = new KAction( i18n("Rename"), "edit", CTRL+Key_R, this, SLOT(slotRenameItem()),
 				actionCollection(), "rename" );
 
   m_popupMenu = new KActionMenu( m_actionCollection, "contextMenu" );
@@ -295,23 +296,23 @@ void K3bDataDirTreeView::slotNewDir()
 {
   if( K3bDataDirViewItem* vI = dynamic_cast<K3bDataDirViewItem*>(currentItem()) ) {
     K3bDirItem* parent = vI->dirItem();
-    
+
     QString name;
     bool ok;
-    
+
     name = KLineEditDlg::getText( i18n("Please insert the name for the new directory"),
-				  "New directory", &ok, this );
-    
+				  i18n("New directory"), &ok, this );
+
     while( ok && K3bDataDoc::nameAlreadyInDir( name, parent ) ) {
       name = KLineEditDlg::getText( i18n("A file with that name already exists. ")
 				    + i18n("Please insert the name for the new directory"),
-				    "New directory", &ok, this );
+				    i18n("New directory"), &ok, this );
     }
-    
+
     if( !ok )
       return;
-    
-    
+
+
     m_doc->addEmptyDir( name, parent );
   }
 }

@@ -104,7 +104,7 @@ void K3bDvdRipperWidget::setupGui(){
     m_checkStartEncoding->setEnabled( false );
     optionsLayout->addMultiCellWidget( m_checkOpenEncoding, 0, 0, 0, 0);
     optionsLayout->addMultiCellWidget( m_checkStartEncoding, 1, 1, 0, 0);
-    
+
     QGroupBox *groupSize = new QGroupBox( i18n( "Available Space" ), frame, "size" );
     groupSize->setColumnLayout(0, Qt::Vertical );
     QGridLayout *sizeLayout = new QGridLayout( groupSize->layout() );
@@ -120,7 +120,7 @@ void K3bDvdRipperWidget::setupGui(){
     mainLayout->addMultiCellWidget( groupPattern, 0, 0, 0, 1 );
     mainLayout->addMultiCellWidget( groupSize, 1, 1, 0, 1 );
     mainLayout->addMultiCellWidget( ripOptions, 2, 2, 0, 1 );
-    
+
     setButtonApplyText( i18n( "Start Ripping" ), i18n( "This starts the DVD copy.") );
     connect( this, SIGNAL( closeClicked() ), this, SLOT( close() ) );
     connect( this, SIGNAL( applyClicked() ), this, SLOT(rip() ) );
@@ -272,7 +272,7 @@ void K3bDvdRipperWidget::checkSize(  ){
 }
 
 void K3bDvdRipperWidget::slotParseError( KProcess *p, char *text, int len ){
-    QString tmp = QString::fromLatin1( text, len );
+    QString tmp = QString::fromLocal8Bit( text, len );
     kdDebug() << "(K3bDvdRipperWidget) Parse output for size: " << tmp << endl;
     // must be the first line, ignore other. NO, not for encrypted DVDs
     if( !m_detectTitleSizeDone ){

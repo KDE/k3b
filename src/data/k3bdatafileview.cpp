@@ -53,10 +53,10 @@ K3bDataFileView::K3bDataFileView( K3bView* view, K3bDataDirTreeView* dirTreeView
   setAllColumnsShowFocus( true );
 
   setNoItemText( i18n("Use drag'n'drop to add files and directories to the project.") +"\n"
-		 + i18n("To remove or rename files use the context menu.") + "\n" 
+		 + i18n("To remove or rename files use the context menu.") + "\n"
 		 + i18n("After that press the burn button to write the CD.") );
 
-	
+
   addColumn( i18n("Name") );
   addColumn( i18n("Type") );
   addColumn( i18n("Size") );
@@ -65,8 +65,11 @@ K3bDataFileView::K3bDataFileView( K3bView* view, K3bDataDirTreeView* dirTreeView
 
   setSelectionModeExt( KListView::Extended );
 
+  m_editor = new KListViewLineEdit( this );
+  m_editor->setValidator( new K3bIsoValidator( m_editor ) );
+
   setValidator( new K3bIsoValidator( this, "val", false ) );
-  
+
   m_doc = doc;
   m_currentDir = doc->root();
   updateContents();
@@ -106,9 +109,9 @@ void K3bDataFileView::updateContents()
   clear();
 
   // perhaps we should check if the K3bDirItem m_currentDir still exists
-	
+
   //  kdDebug() << "(K3bDataFileView) reloading current dir: " << m_currentDir->k3bName() << endl;
-	
+
   for( QListIterator<K3bDataItem> it( *m_currentDir->children() ); it.current(); ++it ) {
     if( it.current()->isDir() )
       (void)new K3bDataDirViewItem( (K3bDirItem*)it.current(), this );
@@ -122,7 +125,7 @@ void K3bDataFileView::updateContents()
 //       (void)new K3bDataFileViewItem( _item, this );
 //     }
   }
-	
+
   //  kdDebug() << "(K3bDataFileView) reloading finished" << endl;
 }
 
@@ -181,12 +184,12 @@ void K3bDataFileView::slotDropped( QDropEvent* e, QListViewItem*, QListViewItem*
 
 void K3bDataFileView::slotDataItemRemoved( K3bDataItem* item )
 {
-  if( item == currentDir() ) 
+  if( item == currentDir() )
     {
       slotSetCurrentDir( item->parent() );
-      
+
     }
-  if( item->parent() == currentDir() ) 
+  if( item->parent() == currentDir() )
     {
       QListViewItemIterator it(this);
       for( ; it.current(); ++it )
@@ -222,15 +225,15 @@ void K3bDataFileView::setupActions()
 {
   m_actionCollection = new KActionCollection( this );
 
-  m_actionProperties = new KAction( i18n("Properties..."), "misc", 0, this, SLOT(slotProperties()), 
+  m_actionProperties = new KAction( i18n("Properties..."), "misc", 0, this, SLOT(slotProperties()),
 				    actionCollection(), "properties" );
-  m_actionNewDir = new KAction( i18n("New Directory..."), "folder_new", CTRL+Key_N, this, SLOT(slotNewDir()), 
+  m_actionNewDir = new KAction( i18n("New Directory..."), "folder_new", CTRL+Key_N, this, SLOT(slotNewDir()),
 				actionCollection(), "new_dir" );
-  m_actionRemove = new KAction( i18n("Remove"), "editdelete", Key_Delete, this, SLOT(slotRemoveItem()), 
+  m_actionRemove = new KAction( i18n("Remove"), "editdelete", Key_Delete, this, SLOT(slotRemoveItem()),
 				actionCollection(), "remove" );
-  m_actionRename = new KAction( i18n("Rename"), "edit", CTRL+Key_R, this, SLOT(slotRenameItem()), 
+  m_actionRename = new KAction( i18n("Rename"), "edit", CTRL+Key_R, this, SLOT(slotRenameItem()),
 				actionCollection(), "rename" );
-  m_actionParentDir = new KAction( i18n("Parent Directory"), "up", 0, this, SLOT(slotParentDir()), 
+  m_actionParentDir = new KAction( i18n("Parent Directory"), "up", 0, this, SLOT(slotParentDir()),
 				   actionCollection(), "parent_dir" );
 
   m_popupMenu = new KActionMenu( m_actionCollection, "contextMenu" );
@@ -273,12 +276,12 @@ void K3bDataFileView::slotNewDir()
   bool ok;
 
   name = KLineEditDlg::getText( i18n("Please insert the name for the new directory"),
-				"New directory", &ok, this );
+				i18n("New directory"), &ok, this );
 
   while( ok && K3bDataDoc::nameAlreadyInDir( name, parent ) ) {
     name = KLineEditDlg::getText( i18n("A file with that name already exists. ")
 				  + i18n("Please insert the name for the new directory"),
-				  "New directory", &ok, this );
+				  i18n("New directory"), &ok, this );
   }
 
   if( !ok )
@@ -336,6 +339,5 @@ void K3bDataFileView::slotProperties()
   else
     m_view->burnDialog( false );
 }
-
 
 #include "k3bdatafileview.moc"

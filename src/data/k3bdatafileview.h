@@ -20,6 +20,7 @@
 
 #include "../tools/k3blistview.h"
 
+#include "../klistviewlineedit.h"
 
 class K3bDataDoc;
 class K3bDirItem;
@@ -37,21 +38,21 @@ class QPainter;
   *@author Sebastian Trueg
   */
 
-class K3bDataFileView : public K3bListView  
+class K3bDataFileView : public K3bListView
 {
   Q_OBJECT
 
  public:
   K3bDataFileView( K3bView*, K3bDataDirTreeView*, K3bDataDoc*, QWidget* parent );
   ~K3bDataFileView();
-	
+
   K3bDirItem* currentDir() const { return m_currentDir; }
 
   KActionCollection* actionCollection() const { return m_actionCollection; }
 
  signals:
   void dirSelected( K3bDirItem* );
-	
+
  public slots:
   void slotSetCurrentDir( K3bDirItem* );
   void updateContents();
@@ -86,6 +87,7 @@ class K3bDataFileView : public K3bListView
   K3bDataDoc* m_doc;
   K3bDirItem* m_currentDir;
   K3bDataDirTreeView* m_treeView;
+  KListViewLineEdit* m_editor;
 };
 
 #endif

@@ -17,7 +17,7 @@
 
 
 K3bIsoImager::K3bIsoImager( K3bExternalBinManager* exbm, K3bDataDoc* doc, QObject* parent, const char* name )
-  : K3bJob( parent, name ), 
+  : K3bJob( parent, name ),
     m_externalBinManager( exbm ),
     m_doc( doc ),
     m_noDeepDirectoryRelocation( false ),
@@ -47,6 +47,7 @@ void K3bIsoImager::resume()
     if( m_process->isRunning() )
       m_process->resume();
 }
+
 
 void K3bIsoImager::slotReceivedStderr( const QString& line )
 {
@@ -164,7 +165,7 @@ void K3bIsoImager::calculateSize()
   m_collectedMkisofsPrintSizeStdout = QString::null;
   m_collectedMkisofsPrintSizeStderr = QString::null;
   m_mkisofsPrintSizeResult = 0;
-			
+
   if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
     emit infoMessage( i18n("Could not start mkisofs!"), K3bJob::ERROR );
     cleanup();
@@ -177,13 +178,13 @@ void K3bIsoImager::calculateSize()
 
 void K3bIsoImager::slotCollectMkisofsPrintSizeStderr(KProcess*, char* data , int len)
 {
-  m_collectedMkisofsPrintSizeStderr.append( QString::fromLatin1( data, len ) );
+  m_collectedMkisofsPrintSizeStderr.append( QString::fromLocal8Bit( data, len ) );
 }
 
 
 void K3bIsoImager::slotCollectMkisofsPrintSizeStdout(KProcess*, char* data, int len )
 {
-  m_collectedMkisofsPrintSizeStdout.append( QString::fromLatin1( data, len ) );
+  m_collectedMkisofsPrintSizeStdout.append( QString::fromLocal8Bit( data, len ) );
 }
 
 
@@ -248,12 +249,12 @@ void K3bIsoImager::start()
 //   connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
 // 	   this, SLOT(slotReceivedStderr(KProcess*, char*, int)) );
 
-  connect( m_process, SIGNAL(stderrLine( const QString& )), 
+  connect( m_process, SIGNAL(stderrLine( const QString& )),
 	   this, SLOT(slotReceivedStderr( const QString& )) );
 
   connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
 	   this, SLOT(slotReceivedStdout(KProcess*, char*, int)) );
-	
+
   if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput) )
     {
       // something went wrong when starting the program
@@ -291,12 +292,12 @@ bool K3bIsoImager::addMkisofsParameters()
 
   // add multisession info
   if( m_importSession ) {
-    
+
     // it has to be the device we are writing to cause only this makes sense
     *m_process << "-M" << m_doc->burner()->busTargetLun();
     *m_process << "-C" << m_multiSessionInfo;
   }
-	
+
   // add the arguments
   *m_process << "-gui";
   *m_process << "-graft-points";
@@ -313,7 +314,7 @@ bool K3bIsoImager::addMkisofsParameters()
     *m_process << "-p" << "\"" + m_doc->isoOptions().preparer() + "\"";
   if( !m_doc->isoOptions().systemId().isEmpty() )
     *m_process << "-sysid" << "\"" + m_doc->isoOptions().systemId() + "\"";
-		
+
   if( m_doc->isoOptions().createRockRidge() ) {
     if( m_doc->isoOptions().preserveFilePermissions() )
       *m_process << "-R";
@@ -336,13 +337,13 @@ bool K3bIsoImager::addMkisofsParameters()
     if( m_doc->isoOptions().ISOallowPeriodAtBegin()  )
       *m_process << "-L";
     if( m_doc->isoOptions().ISOallow31charFilenames()  )
-      *m_process << "-l";	
-    if( m_doc->isoOptions().ISOomitVersionNumbers() && !m_doc->isoOptions().ISOmaxFilenameLength() )	
-      *m_process << "-N";		
+      *m_process << "-l";
+    if( m_doc->isoOptions().ISOomitVersionNumbers() && !m_doc->isoOptions().ISOmaxFilenameLength() )
+      *m_process << "-N";
     if( m_doc->isoOptions().ISOrelaxedFilenames()  )
-      *m_process << "-relaxed-filenames";		
+      *m_process << "-relaxed-filenames";
     if( m_doc->isoOptions().ISOallowLowercase()  )
-      *m_process << "-allow-lowercase";		
+      *m_process << "-allow-lowercase";
     if( m_doc->isoOptions().ISOnoIsoTranslate()  )
       *m_process << "-no-iso-translate";
     if( m_doc->isoOptions().ISOallowMultiDot()  )
@@ -350,20 +351,20 @@ bool K3bIsoImager::addMkisofsParameters()
     if( m_doc->isoOptions().ISOomitTrailingPeriod() )
       *m_process << "-d";
   }
-		
+
   if( m_doc->isoOptions().ISOmaxFilenameLength()  )
-    *m_process << "-max-iso9660-filenames";	
+    *m_process << "-max-iso9660-filenames";
 
   if( m_noDeepDirectoryRelocation  )
-    *m_process << "-D";	
+    *m_process << "-D";
 
   if( m_doc->isoOptions().followSymbolicLinks() )
     *m_process << "-f";
 
   if( m_doc->isoOptions().createTRANS_TBL()  )
-    *m_process << "-T";	
+    *m_process << "-T";
   if( m_doc->isoOptions().hideTRANS_TBL()  )
-    *m_process << "-hide-joliet-trans-tbl";	
+    *m_process << "-hide-joliet-trans-tbl";
 
   *m_process << "-iso-level" << QString::number(m_doc->isoOptions().ISOLevel());
 
@@ -388,14 +389,14 @@ bool K3bIsoImager::writePathSpec( const QString& filename )
   if( !file.open( IO_WriteOnly ) ) {
     return false;
   }
-	
+
   QTextStream t(&file);
 
   // recursive path spec writing
-  writePathSpecForDir( m_doc->root(), t );	
+  writePathSpecForDir( m_doc->root(), t );
 
   file.close();
-  
+
   return true;
 }
 
@@ -434,12 +435,12 @@ void K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream
     unsigned int jolietMaxLength = 64;
     while( begin < sortedChildren.count() ) {
       if( sortedChildren.at(begin)->k3bName().length() > jolietMaxLength ) {
-	kdDebug() << "(K3bIsoImager) filename to long for joliet: " 
+	kdDebug() << "(K3bIsoImager) filename to long for joliet: "
 		  << sortedChildren.at(begin)->k3bName() << endl;
 	sameNameCount = 1;
-	
-	while( begin + sameNameCount < sortedChildren.count() && 
-	       sortedChildren.at( begin + sameNameCount )->k3bName().left(jolietMaxLength) 
+
+	while( begin + sameNameCount < sortedChildren.count() &&
+	       sortedChildren.at( begin + sameNameCount )->k3bName().left(jolietMaxLength)
 	       == sortedChildren.at(begin)->k3bName().left(jolietMaxLength) )
 	  sameNameCount++;
 
@@ -459,11 +460,11 @@ void K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream
 	  jolietName.append( extension );
 	  sortedChildren.at(i)->setJolietName( jolietName );
 
-	  kdDebug() << "(K3bIsoImager) set joliet name for " 
+	  kdDebug() << "(K3bIsoImager) set joliet name for "
 		    << sortedChildren.at(i)->k3bName() << " to "
 		    << jolietName << endl;
 	}
-		      
+
 	begin += sameNameCount;
       }
       else {
@@ -478,7 +479,7 @@ void K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream
       if( m_doc->isoOptions().discardSymlinks() && item->isSymLink() )
 	continue;
 
-      stream << escapeGraftPoint( m_doc->treatWhitespace(item->jolietPath()) ) 
+      stream << escapeGraftPoint( m_doc->treatWhitespace(item->jolietPath()) )
 	     << "=" << escapeGraftPoint( item->localPath() ) << "\n";
     }
   }
@@ -492,7 +493,7 @@ void K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream
       if( m_doc->isoOptions().discardSymlinks() && item->isSymLink() )
 	continue;
 
-      stream << escapeGraftPoint( m_doc->treatWhitespace(item->k3bPath()) ) 
+      stream << escapeGraftPoint( m_doc->treatWhitespace(item->k3bPath()) )
 	     << "=" << escapeGraftPoint( item->localPath() ) << "\n";
     }
   }
@@ -523,7 +524,7 @@ bool K3bIsoImager::writeRRHideFile( const QString& filename )
 // 	K3bDirItem* parent = item->parent();
 // 	if( parent )
 // 	  item = parent->nextChild( item );
-// 	else 
+// 	else
 // 	  item = 0;
 //       }
 //       else
@@ -566,7 +567,7 @@ QString K3bIsoImager::escapeGraftPoint( const QString& str )
 
   newStr.replace( QRegExp( "\\\\\\\\" ), "\\\\\\\\\\\\\\\\" );
   newStr.replace( QRegExp( "=" ), "\\=" );
-    
+
   return newStr;
 }
 
