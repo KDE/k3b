@@ -129,8 +129,6 @@ class K3bDoc : public QObject
   int writingMode() const { return m_writingMode; }
   bool dummy() const { return m_dummy; }
   bool onTheFly() const { return m_onTheFly; }
-  bool burnproof() const { return m_burnproof; }
-  bool overburn() const { return m_overburn; }
   bool removeImages() const { return m_removeImages; }
   bool onlyCreateImages() const { return m_onlyCreateImages; }
   int copies() const { return m_copies; }
@@ -172,10 +170,8 @@ class K3bDoc : public QObject
   void setDummy( bool d );
   void setWritingMode( int m ) { m_writingMode = m; }
   void setOnTheFly( bool b ) { m_onTheFly = b; }
-  void setOverburn( bool b ) { m_overburn = b; }
   void setSpeed( int speed );
   void setBurner( K3bDevice::Device* dev );
-  void setBurnproof( bool b ) { m_burnproof = b; }
   void setTempDir( const QString& dir ) { m_tempDir = dir; }
   void setRemoveImages( bool b ) { m_removeImages = b; }
   void setOnlyCreateImages( bool b ) { m_onlyCreateImages = b; }
@@ -209,8 +205,6 @@ class K3bDoc : public QObject
   K3bDevice::Device* m_burner;
   bool m_dummy;
   bool m_onTheFly;
-  bool m_burnproof;
-  bool m_overburn;
   bool m_removeImages;
   bool m_onlyCreateImages;
   int  m_speed;

@@ -345,6 +345,11 @@ void K3bAudioJob::slotAudioDecoderFinished( bool success )
     return;
 
   if( !success ) {
+    if( m_audioImager->lastErrorType() == K3bAudioImager::ERROR_FD_WRITE ) {
+      // this means that the writer job failed so let's use the error handling there.
+      return;
+    }
+
     emit infoMessage( i18n("Error while decoding audio tracks."), ERROR );
     cleanupAfterError();
     emit finished(false);

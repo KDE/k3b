@@ -45,16 +45,6 @@ K3bDoc::K3bDoc( QObject* parent )
     m_modified(false),
     m_view(0)
 {
-  m_burner = 0;
-  m_onTheFly = true;
-  m_overburn = false;
-  m_speed = 0;  // Auto
-
-  m_writingApp = K3b::DEFAULT;
-  m_writingMode = K3b::WRITING_MODE_AUTO;
-  m_saved = false;
-
-  m_copies = 1;
   connect( this, SIGNAL(changed()), this, SLOT(slotChanged()) );
 }
 
@@ -119,7 +109,17 @@ const KURL& K3bDoc::URL() const
 bool K3bDoc::newDocument()
 {
   setModified( false );
+
   m_copies = 1;
+  m_burner = 0;
+  m_onTheFly = true;
+  m_speed = 0;  // Auto
+  m_onlyCreateImages = false;
+  m_removeImages = true;
+  m_dummy = false;
+  m_writingApp = K3b::DEFAULT;
+  m_writingMode = K3b::WRITING_MODE_AUTO;
+  m_saved = false;
 
   return true;
 }

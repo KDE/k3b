@@ -45,6 +45,8 @@ public:
 
     emitStarted();
 
+    lastError = K3bAudioImager::ERROR_UNKNOWN;
+
     //
     // 
     //
@@ -97,17 +99,10 @@ public:
 	else {
 	  if( ::write( m_fd, reinterpret_cast<void*>(buffer), read ) != read ) {
 	    kdDebug() << "(K3bAudioImager::WorkThread) writing to fd " << m_fd << " failed." << endl;
+	    lastError = K3bAudioImager::ERROR_FD_WRITE;
 	    emitFinished(false);
 	    return;
 	  }
-	}
-
-	if( read < 0 ) {
-	  emitInfoMessage( i18n("Error while decoding track %1.").arg(trackNumber), K3bJob::ERROR );
-	  kdDebug() << "(K3bAudioImager::WorkThread) read error on track " << trackNumber
-		    << " at pos " << K3b::Msf(trackRead/2352) << endl;
-	  emitFinished(false);
-	  return;
 	}
 
 	if( m_canceled ) {
@@ -128,6 +123,15 @@ public:
 	emitProcessedSize( totalRead/1024/1024, totalSize/1024/1024 );
       }
 
+      if( read < 0 ) {
+	emitInfoMessage( i18n("Error while decoding track %1.").arg(trackNumber), K3bJob::ERROR );
+	kdDebug() << "(K3bAudioImager::WorkThread) read error on track " << trackNumber
+		  << " at pos " << K3b::Msf(trackRead/2352) << endl;
+	lastError = K3bAudioImager::ERROR_DECODING_TRACK;
+	emitFinished(false);
+	return;
+      }
+
       track = track->next();
       trackNumber++;
       imageFileIt++;
@@ -144,6 +148,7 @@ public:
   bool m_canceled;
   int m_fd;
   QStringList m_imageNames;
+  K3bAudioImager::ErrorType lastError;
 
 private:
   K3bAudioDoc* m_doc;
@@ -175,6 +180,12 @@ void K3bAudioImager::setImageFilenames( const QStringList& p )
 {
   m_thread->m_imageNames = p;
   m_thread->m_fd = -1;
+}
+
+
+K3bAudioImager::ErrorType K3bAudioImager::lastErrorType() const
+{
+  return m_thread->lastError;
 }
 
 #include "k3baudioimager.moc"

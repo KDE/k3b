@@ -41,6 +41,14 @@ class K3bAudioImager : public K3bThreadJob
    */
   void setImageFilenames( const QStringList& p );
 
+  enum ErrorType {
+    ERROR_FD_WRITE,
+    ERROR_DECODING_TRACK,
+    ERROR_UNKNOWN
+  };
+
+  ErrorType lastErrorType() const;
+
  private:
   K3bAudioDoc* m_doc;
 

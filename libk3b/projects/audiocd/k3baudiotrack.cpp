@@ -490,8 +490,8 @@ K3bDevice::Track K3bAudioTrack::toCdTrack() const
   }
 
   K3bDevice::Track cdTrack( firstSector, 
-			      firstSector + length() - 1,
-			      K3bDevice::Track::AUDIO );
+			    firstSector + length() - 1,
+			    K3bDevice::Track::AUDIO );
 
     // FIXME: auch im audiotrack copy permitted
   cdTrack.setCopyPermitted( !copyProtection() );

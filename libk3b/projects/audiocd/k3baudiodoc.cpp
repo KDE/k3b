@@ -108,6 +108,8 @@ bool K3bAudioDoc::newDocument()
   while( m_firstTrack )
     delete m_firstTrack->take();
 
+  m_normalize = false;
+  m_hideFirstTrack = false;
   m_cdText = false;
   m_cdTextData.clear();
   m_audioRippingParanoiaMode = 0;
