@@ -51,7 +51,7 @@ public:
 	
   KIO::filesize_t k3bSize() const;
 
-  K3bDirItem* getDirItem() const;
+  K3bDirItem* getDirItem();
 	
   bool isSymLink() const { return isLink(); }
 

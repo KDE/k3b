@@ -38,7 +38,7 @@ class K3bDirItem : public K3bDataItem
   K3bDirItem( const QString& name, K3bDataDoc*, K3bDirItem* parentDir = 0 );
   ~K3bDirItem();
 	
-  K3bDirItem* getDirItem() const;
+  K3bDirItem* getDirItem();
 
   QPtrList<K3bDataItem>* children() const { return m_children; }
   K3bDirItem* addDataItem( K3bDataItem* item );
@@ -58,8 +58,8 @@ class K3bDirItem : public K3bDataItem
 
   KIO::filesize_t k3bSize() const;
 
-  int numFiles() const;
-  int numDirs() const;
+  long numFiles() const;
+  long numDirs() const;
 
   /**
    * returns true if item is a subItem of 
@@ -74,10 +74,13 @@ class K3bDirItem : public K3bDataItem
 	
  private:
   void updateSize( KIO::filesize_t s );
+  void updateFiles( long files, long dirs );
 
   QPtrList<K3bDataItem>* m_children;
 
   KIO::filesize_t m_size;
+  long m_files;
+  long m_dirs;
 };
 
 

@@ -121,7 +121,7 @@ QString K3bFileItem::localPath()
   return url().path();
 }
 
-K3bDirItem* K3bFileItem::getDirItem() const
+K3bDirItem* K3bFileItem::getDirItem()
 {
   return parent();
 }

@@ -23,7 +23,9 @@
 
 K3bDirItem::K3bDirItem(const QString& name, K3bDataDoc* doc, K3bDirItem* parentDir)
   : K3bDataItem( doc, parentDir ),
-    m_size(0)
+    m_size(0),
+    m_files(0),
+    m_dirs(0)
 {
   m_k3bName = name;
   m_jolietName = name;
@@ -47,7 +49,7 @@ K3bDirItem::~K3bDirItem()
     parent()->takeDataItem(this);
 }
 
-K3bDirItem* K3bDirItem::getDirItem() const
+K3bDirItem* K3bDirItem::getDirItem()
 {
   return this;
 }
@@ -57,6 +59,10 @@ K3bDirItem* K3bDirItem::addDataItem( K3bDataItem* item )
   if( m_children->find( item ) == -1 ) {
     m_children->append( item );
     updateSize( item->k3bSize() );
+    if( item->isDir() )
+      updateFiles( ((K3bDirItem*)item)->numFiles(), ((K3bDirItem*)item)->numDirs()+1 );
+    else
+      updateFiles( 1, 0 );
   }
 	
   return this;
@@ -76,6 +82,10 @@ K3bDataItem* K3bDirItem::takeDataItem( int index )
 {
   K3bDataItem* item = m_children->take( index );
   updateSize( -1*item->k3bSize() );
+  if( item->isDir() )
+    updateFiles( -1*((K3bDirItem*)item)->numFiles(), -1*((K3bDirItem*)item)->numDirs()-1 );
+  else
+    updateFiles( -1, 0 );
 
   return item;
 }
@@ -196,8 +206,9 @@ bool K3bDirItem::isSubItem( K3bDataItem* item ) const
 }
 
 
-int K3bDirItem::numFiles() const
+long K3bDirItem::numFiles() const
 {
+  return m_files;
   int num = 0;
 
   QListIterator<K3bDataItem> it( *m_children );
@@ -209,8 +220,9 @@ int K3bDirItem::numFiles() const
 }
 
 
-int K3bDirItem::numDirs() const
+long K3bDirItem::numDirs() const
 {
+  return m_dirs;
   return m_children->count() - numFiles();
 }
 
@@ -233,4 +245,12 @@ void K3bDirItem::updateSize( KIO::filesize_t s )
   m_size += s;
   if( parent() )
     parent()->updateSize( s );
+}
+
+void K3bDirItem::updateFiles( long files, long dirs )
+{
+  m_files += files;
+  m_dirs += dirs;
+  if( parent() )
+    parent()->updateFiles( files, dirs );
 }

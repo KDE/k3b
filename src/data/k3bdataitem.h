@@ -59,7 +59,7 @@ class K3bDataItem
   virtual KIO::filesize_t k3bSize() const { return 0; }
 
   /** returnes the dir of the item (or the item if it's a dir) */
-  virtual K3bDirItem* getDirItem() const = 0;
+  virtual K3bDirItem* getDirItem() = 0;
 
   virtual void reparent( K3bDirItem* );
 

@@ -71,7 +71,7 @@ bool K3bDataDoc::newDocument()
     delete m_root;
 		
   m_root = new K3bRootItem( this );
-  m_size = 0;
+  //  m_size = 0;
 	
   m_name = "Dummyname";
   m_isoImage = QString::null;
@@ -315,7 +315,7 @@ K3bFileItem* K3bDataDoc::createFileItem( QFileInfo& f, K3bDirItem* parent )
 
 
   K3bFileItem* newK3bItem = new K3bFileItem( f.absFilePath(), this, parent, newName );
-  m_size += newK3bItem->k3bSize();
+  //  m_size += newK3bItem->k3bSize();
 
   return newK3bItem;
 }
@@ -353,8 +353,8 @@ K3bDirItem* K3bDataDoc::addEmptyDir( const QString& name, K3bDirItem* parent )
 
 unsigned long long K3bDataDoc::size() const
 {
-  return m_size;	
-  //  return root()->k3bSize();
+  //return m_size;	
+  return root()->k3bSize();
 }
 
 
@@ -576,7 +576,7 @@ bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
 
       else {
 	K3bFileItem* newK3bItem = new K3bFileItem( urlElem.text(), this, parent, elem.attributeNode( "name" ).value() );
-	m_size += newK3bItem->k3bSize();
+	//	m_size += newK3bItem->k3bSize();
       }
     }
   }
@@ -806,7 +806,7 @@ void K3bDataDoc::removeItem( K3bDataItem* item )
 
   if( item->isRemoveable() ) {
     // the item takes care of it's parent!
-    m_size -= item->k3bSize();
+    //    m_size -= item->k3bSize();
     emit itemRemoved( item );
     delete item;
   }
@@ -1110,7 +1110,7 @@ void K3bDataDoc::createSessionImportItems( const QString& path, K3bDirItem* pare
     item->setWriteToCd(false);
     item->setExtraInfo( i18n("From previous session") );
     m_oldSession.append( item );
-    m_size += item->k3bSize();
+    //    m_size += item->k3bSize();
   }
 }
 
@@ -1150,7 +1150,7 @@ void K3bDataDoc::clearImportedSession()
     }
     else {
       m_oldSession.remove();
-      m_size -= item->k3bSize();
+      //      m_size -= item->k3bSize();
       emit itemRemoved( item );
       delete item;
     }
@@ -1191,7 +1191,7 @@ K3bFileItem* K3bDataDoc::createBootItem( const QString& filename )
 {
   K3bFileItem* boot = new K3bFileItem( filename, 
 				       this, bootImageDir() );
-  m_size += boot->k3bSize();
+  //  m_size += boot->k3bSize();
   emit newFileItems();
 
   return boot;
