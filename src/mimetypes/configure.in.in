@@ -1,4 +1,4 @@
-AC_MSG_CHECKING([if we need to add mime types for KDE 3.1])
+AC_MSG_CHECKING([if we need to add mime types for KDE <= 3.1.4])
 
 # Not sure if it is the best check for the KDE version but at least it works
 MIMETYPE_KDEVERSION=`$KDECONFIG --version 2>/dev/null \
