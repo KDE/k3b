@@ -42,7 +42,7 @@ short_info=K3b - The CD Creator - The best software to write cds under linux.
 sub_dir=src/
 version=0.6.0pre2
 version_control=CVS
-workspace=1
+workspace=126062085
 
 [INSTALL]
 dist=true
@@ -118,7 +118,7 @@ install_location=
 type=PO
 
 [src/Makefile.am]
-files=src/main.cpp,src/k3b.cpp,src/k3b.h,src/k3bdoc.cpp,src/k3bdoc.h,src/k3bview.cpp,src/k3bview.h,src/k3bui.rc,src/k3b.desktop,src/lo32-app-k3b.png,src/lo16-app-k3b.png,src/k3bdirview.cpp,src/k3bdirview.h,src/k3bfillstatusdisplay.cpp,src/k3bfillstatusdisplay.h,src/k3bburnprogressdialog.cpp,src/k3bburnprogressdialog.h,src/k3bjob.cpp,src/k3bjob.h,src/k3bprojectburndialog.cpp,src/k3bprojectburndialog.h,src/kcutlabel.cpp,src/kcutlabel.h,src/hi16-app-k3b.png,src/hi32-app-k3b.png,src/hi48-app-k3b.png,src/kdiskfreesp.h,src/k3bfileview.cpp,src/k3bfileview.h,src/cddb.h,src/cddb.cpp,src/k3bcddb.cpp,src/k3bcddb.h,src/k3bblankingdialog.cpp,src/k3bblankingdialog.h,src/k3bblankingjob.cpp,src/k3bblankingjob.h,src/k3bsplash.h,src/k3bsplash.cpp,src/k3b-splash-naive.png,src/hi16-tools-cdinfo.png,src/hi22-tools-cdinfo.png,src/hi16-tools-cdrwblank.png,src/hi22-tools-cdrwblank.png,src/k3bwriterselectionwidget.cpp,src/k3bwriterselectionwidget.h,src/k3bprojecttabwidget.cpp,src/k3bprojecttabwidget.h,src/k3bprojecttabbar.cpp,src/k3bprojecttabbar.h,src/k3baudioplayer.cpp,src/k3baudioplayer.h,src/k3bcddbmultientriesdialog.cpp,src/k3bcddbmultientriesdialog.h,src/kstringlistdialog.cpp,src/kstringlistdialog.h,src/klistviewlineedit.h,src/k3bfiletreeview.cpp,src/k3bfiletreeview.h,src/k3bcdcontentsview.h,src/k3b_cd_copy.png,src/k3btempdirselectionwidget.cpp,src/k3btempdirselectionwidget.h,src/hi22-tools-cdcopy.png,src/hi32-tools-cdcopy.png
+files=src/main.cpp,src/k3b.cpp,src/k3b.h,src/k3bdoc.cpp,src/k3bdoc.h,src/k3bview.cpp,src/k3bview.h,src/k3bui.rc,src/k3b.desktop,src/lo32-app-k3b.png,src/lo16-app-k3b.png,src/k3bdirview.cpp,src/k3bdirview.h,src/k3bfillstatusdisplay.cpp,src/k3bfillstatusdisplay.h,src/k3bburnprogressdialog.cpp,src/k3bburnprogressdialog.h,src/k3bjob.cpp,src/k3bjob.h,src/k3bprojectburndialog.cpp,src/k3bprojectburndialog.h,src/kcutlabel.cpp,src/kcutlabel.h,src/hi16-app-k3b.png,src/hi32-app-k3b.png,src/hi48-app-k3b.png,src/kdiskfreesp.h,src/k3bfileview.cpp,src/k3bfileview.h,src/cddb.h,src/cddb.cpp,src/k3bcddb.cpp,src/k3bcddb.h,src/k3bblankingdialog.cpp,src/k3bblankingdialog.h,src/k3bblankingjob.cpp,src/k3bblankingjob.h,src/k3bsplash.h,src/k3bsplash.cpp,src/k3b-splash-naive.png,src/hi16-tools-cdinfo.png,src/hi22-tools-cdinfo.png,src/hi16-tools-cdrwblank.png,src/hi22-tools-cdrwblank.png,src/k3bwriterselectionwidget.cpp,src/k3bwriterselectionwidget.h,src/k3bprojecttabwidget.cpp,src/k3bprojecttabwidget.h,src/k3bprojecttabbar.cpp,src/k3bprojecttabbar.h,src/k3baudioplayer.cpp,src/k3baudioplayer.h,src/k3bcddbmultientriesdialog.cpp,src/k3bcddbmultientriesdialog.h,src/kstringlistdialog.cpp,src/kstringlistdialog.h,src/klistviewlineedit.h,src/k3bfiletreeview.cpp,src/k3bfiletreeview.h,src/k3bcdcontentsview.h,src/k3b_cd_copy.png,src/k3btempdirselectionwidget.cpp,src/k3btempdirselectionwidget.h,src/hi22-tools-cdcopy.png,src/hi32-tools-cdcopy.png,src/kdndfileview.cpp,src/kdndfileview.h,src/k3bdiroperator.cpp,src/k3bdiroperator.h
 sub_dirs=data,cdinfo,audio,device,option,rip,libwm,tools,cdcopy,dvd
 type=prog_main
 
@@ -358,7 +358,7 @@ install_location=
 type=HEADER
 
 [src/data/Makefile.am]
-files=src/data/k3bfileitem.cpp,src/data/k3bfileitem.h,src/data/k3bdiritem.cpp,src/data/k3bdiritem.h,src/data/k3bdatadoc.h,src/data/k3bdataitem.cpp,src/data/k3bdataitem.h,src/data/k3bdatadoc.cpp,src/data/k3bdataview.cpp,src/data/k3bdataview.h,src/data/k3bdatajob.cpp,src/data/k3bdatajob.h,src/data/k3bdataburndialog.cpp,src/data/k3bdataburndialog.h,src/data/k3bdatafileview.cpp,src/data/k3bdatafileview.h,src/data/k3bdatadirtreeview.cpp,src/data/k3bdatadirtreeview.h,src/data/k3bisoimagejob.h,src/data/k3bisoimagejob.cpp,src/data/k3bisoimagewritingdialog.cpp,src/data/k3bisoimagewritingdialog.h,src/data/k3bdatapropertiesdialog.cpp,src/data/k3bdatapropertiesdialog.h
+files=src/data/k3bfileitem.cpp,src/data/k3bfileitem.h,src/data/k3bdiritem.cpp,src/data/k3bdiritem.h,src/data/k3bdatadoc.h,src/data/k3bdataitem.cpp,src/data/k3bdataitem.h,src/data/k3bdatadoc.cpp,src/data/k3bdataview.cpp,src/data/k3bdataview.h,src/data/k3bdatajob.cpp,src/data/k3bdatajob.h,src/data/k3bdataburndialog.cpp,src/data/k3bdataburndialog.h,src/data/k3bdatafileview.cpp,src/data/k3bdatafileview.h,src/data/k3bdatadirtreeview.cpp,src/data/k3bdatadirtreeview.h,src/data/k3bisoimagejob.h,src/data/k3bisoimagejob.cpp,src/data/k3bisoimagewritingdialog.cpp,src/data/k3bisoimagewritingdialog.h,src/data/k3bdatapropertiesdialog.cpp,src/data/k3bdatapropertiesdialog.h,src/data/k3bisovalidator.cpp,src/data/k3bisovalidator.h
 sub_dirs=
 type=static_library
 
@@ -506,8 +506,20 @@ install=false
 install_location=
 type=HEADER
 
+[src/data/k3bisovalidator.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/data/k3bisovalidator.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
 [src/device/Makefile.am]
-files=src/device/ScsiIf-common.cc,src/device/Sample.h,src/device/ScsiIf-linux.cc,src/device/ScsiIf.h,src/device/sg_err.cc,src/device/sg_err.h,src/device/util.cc,src/device/util.h,src/device/k3bdevice.h,src/device/k3bdevice.cpp,src/device/k3bdevicemanager.cpp,src/device/k3bdevicemanager.h,src/device/k3bemptydiscwaiter.cpp,src/device/k3bemptydiscwaiter.h,src/device/k3bidedevice.cpp,src/device/k3bidedevice.h,src/device/k3bscsidevice.cpp,src/device/k3bscsidevice.h,src/device/k3btoc.cpp,src/device/k3btoc.h,src/device/k3btrack.cpp,src/device/k3btrack.h
+files=src/device/ScsiIf-common.cc,src/device/Sample.h,src/device/ScsiIf-linux.cc,src/device/ScsiIf.h,src/device/sg_err.cc,src/device/sg_err.h,src/device/util.cc,src/device/util.h,src/device/k3bdevice.h,src/device/k3bdevice.cpp,src/device/k3bdevicemanager.cpp,src/device/k3bdevicemanager.h,src/device/k3bemptydiscwaiter.cpp,src/device/k3bemptydiscwaiter.h,src/device/k3bidedevice.cpp,src/device/k3bidedevice.h,src/device/k3bscsidevice.cpp,src/device/k3bscsidevice.h,src/device/k3btoc.cpp,src/device/k3btoc.h,src/device/k3btrack.cpp,src/device/k3btrack.h,src/device/k3bdevicewidget.h,src/device/k3bdevicewidget.cpp
 sharedlib_LDFLAGS=-version-info 0:0:1
 sharedlib_rootname=device
 sub_dirs=
@@ -556,6 +568,18 @@ install_location=
 type=SOURCE
 
 [src/device/k3bdevicemanager.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/device/k3bdevicewidget.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/device/k3bdevicewidget.h]
 dist=true
 install=false
 install_location=
@@ -646,7 +670,7 @@ install_location=
 type=HEADER
 
 [src/dvd/Makefile.am]
-files=src/dvd/k3bdvddoc.cpp,src/dvd/k3bdvddoc.h,src/dvd/k3bdvdview.cpp,src/dvd/k3bdvdview.h,src/dvd/k3bdvddirectories.cpp,src/dvd/k3bdvddirectories.h,src/dvd/k3bdvdavset.cpp,src/dvd/k3bdvdavset.h,src/dvd/k3bdvdavextend.cpp,src/dvd/k3bdvdavextend.h,src/dvd/k3bdvdbasetab.cpp,src/dvd/k3bdvdbasetab.h,src/dvd/k3bdvdsizetab.cpp,src/dvd/k3bdvdsizetab.h,src/dvd/k3bdvdcodecdata.cpp,src/dvd/k3bdvdcodecdata.h,src/dvd/k3bdvdinfo.cpp,src/dvd/k3bdvdinfo.h,src/dvd/k3bdvdcrop.cpp,src/dvd/k3bdvdcrop.h,src/dvd/k3bdvdpreview.cpp,src/dvd/k3bdvdpreview.h
+files=src/dvd/k3bdvddoc.cpp,src/dvd/k3bdvddoc.h,src/dvd/k3bdvdview.cpp,src/dvd/k3bdvdview.h,src/dvd/k3bdvddirectories.cpp,src/dvd/k3bdvddirectories.h,src/dvd/k3bdvdavset.cpp,src/dvd/k3bdvdavset.h,src/dvd/k3bdvdavextend.cpp,src/dvd/k3bdvdavextend.h,src/dvd/k3bdvdbasetab.cpp,src/dvd/k3bdvdbasetab.h,src/dvd/k3bdvdsizetab.cpp,src/dvd/k3bdvdsizetab.h,src/dvd/k3bdvdcodecdata.cpp,src/dvd/k3bdvdcodecdata.h,src/dvd/k3bdvdinfo.cpp,src/dvd/k3bdvdinfo.h,src/dvd/k3bdvdcrop.cpp,src/dvd/k3bdvdcrop.h,src/dvd/k3bdvdpreview.cpp,src/dvd/k3bdvdpreview.h,src/dvd/k3bdvdinfoextend.cpp,src/dvd/k3bdvdinfoextend.h,src/dvd/k3bdvdresize.cpp,src/dvd/k3bdvdresize.h
 sharedlib_LDFLAGS=-version-info 0:0:0
 sharedlib_rootname=dvd
 sub_dirs=
@@ -748,6 +772,18 @@ install=false
 install_location=
 type=HEADER
 
+[src/dvd/k3bdvdinfoextend.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/dvd/k3bdvdinfoextend.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
 [src/dvd/k3bdvdpreview.cpp]
 dist=true
 install=false
@@ -755,6 +791,18 @@ install_location=
 type=SOURCE
 
 [src/dvd/k3bdvdpreview.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/dvd/k3bdvdresize.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/dvd/k3bdvdresize.h]
 dist=true
 install=false
 install_location=
@@ -994,6 +1042,18 @@ install=false
 install_location=
 type=HEADER
 
+[src/k3bdiroperator.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/k3bdiroperator.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
 [src/k3bdirview.cpp]
 dist=true
 install=false
@@ -1174,6 +1234,18 @@ sub_dirs=
 type=static_library
 
 [src/kdiskfreesp.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/kdndfileview.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/kdndfileview.h]
 dist=true
 install=false
 install_location=
