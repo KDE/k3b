@@ -6,6 +6,7 @@ Comment[xx]=xxK3bxx
 
 [SuccessfullyFinished]
 Name=Process successful
+Name[bg]=Обработката е успешна
 Name[ca]=Procés amb èxit
 Name[cs]=Proces úspěšný
 Name[da]=Processen lykkedes
@@ -31,6 +32,7 @@ Name[tg]=Бомуваффақият ба анҷом расид
 Name[xx]=xxProcess successfulxx
 Name[zh_CN]=处理成功
 Comment=Process successfully finished
+Comment[bg]=Обработката приключи успешно
 Comment[ca]=Procés finalitzat amb èxit
 Comment[cs]=Proces úspěšně dokončen
 Comment[da]=Processen afsluttedes korrekt
@@ -61,6 +63,7 @@ default_presentation=1
 
 [FinishedWithError]
 Name=Process error
+Name[bg]=Грешка при обработката
 Name[ca]=Procés amb error
 Name[cs]=Chyba procesu
 Name[da]=Procesfejl
@@ -88,6 +91,7 @@ Name[tr]=İşlemde hata var
 Name[xx]=xxProcess errorxx
 Name[zh_CN]=处理错误
 Comment=Process finished with errors
+Comment[bg]=Обработката приключи с грешки
 Comment[ca]=Procés finalitzat amb errors
 Comment[cs]=Proces ukončen s chybami
 Comment[da]=Processen afsluttede med fejl
@@ -117,6 +121,7 @@ default_presentation=1
 
 [WaitingForMedium]
 Name=Waiting for medium
+Name[bg]=Очаква се медия
 Name[ca]=S'espera un medi
 Name[cs]=Čekám na médium
 Name[da]=Venter på mediet
@@ -142,6 +147,7 @@ Name[tg]=Интизори расона
 Name[xx]=xxWaiting for mediumxx
 Name[zh_CN]=等待存储介质
 Comment=The user needs to insert a medium
+Comment[bg]=Потребителят трябва да постави медия в устройството
 Comment[ca]=L'usuari necessita inserir un medi
 Comment[cs]=Uživatel musí vložit médium
 Comment[da]=Brugeren må indsætte et medie
