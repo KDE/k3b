@@ -68,11 +68,13 @@ void K3bOggVorbisModule::startDecoding()
   }
   else {
     if( ov_open( file, m_oggVorbisFile, 0, 0 ) ) {
-      kdDebug() << "(K3bOggVorbisModule) " << audioTrack()->absPath() << " seems to to be an ogg vorbis file." << endl;
+      kdDebug() << "(K3bOggVorbisModule) " << audioTrack()->absPath() << " seems not to to be an ogg vorbis file." << endl;
       fclose( file );
       emit finished( false );
     }
     else {
+      kdDebug() << "(K3bOggVorbisModule) start decoding of file " << audioTrack()->absPath() << endl;
+
       m_rawDataLengthToStream = audioTrack()->length()*2352;
       m_rawDataAlreadyStreamed = 0;
 
@@ -100,13 +102,17 @@ void K3bOggVorbisModule::cancel()
 void K3bOggVorbisModule::decode()
 {
   if( m_bDecodingInProgress ) {
+ 
     long bytesRead = ov_read( m_oggVorbisFile, m_outputBuffer, OUTPUT_BUFFER_SIZE, 1, 2, 1, &m_currentOggVorbisSection );
 
     if( bytesRead == OV_HOLE ) {
+      // TODO: I think we can go on here?
+
       kdDebug() << "(K3bOggVorbisModule) OV_HOLE" << endl;
       
       ov_clear( m_oggVorbisFile );
 
+      m_bDecodingInProgress = false;
       m_decodingTimer->stop();
       emit finished( false );
     }
@@ -116,6 +122,36 @@ void K3bOggVorbisModule::decode()
 
       ov_clear( m_oggVorbisFile );
 
+      m_bDecodingInProgress = false;
+      m_decodingTimer->stop();
+      emit finished( false );
+    }
+
+    else if( bytesRead < 0 ) {
+
+      // TODO: add a method in the upcoming vorbisLib class that returnes
+      // an error string
+      // #define OV_FALSE      -1
+      // #define OV_EOF        -2
+      // #define OV_HOLE       -3
+
+      // #define OV_EREAD      -128
+      // #define OV_EFAULT     -129
+      // #define OV_EIMPL      -130
+      // #define OV_EINVAL     -131
+      // #define OV_ENOTVORBIS -132
+      // #define OV_EBADHEADER -133
+      // #define OV_EVERSION   -134
+      // #define OV_ENOTAUDIO  -135
+      // #define OV_EBADPACKET -136
+      // #define OV_EBADLINK   -137
+      // #define OV_ENOSEEK    -138
+
+      kdDebug() << "(K3bOggVorbisModule) Error: " << bytesRead << endl;
+
+      ov_clear( m_oggVorbisFile );
+
+      m_bDecodingInProgress = false;
       m_decodingTimer->stop();
       emit finished( false );
     }
@@ -136,7 +172,9 @@ void K3bOggVorbisModule::decode()
 	m_rawDataAlreadyStreamed += bytesToOutput;
       }
       else {
+	kdDebug() << "(K3bOggVorbisModule) successfully finished decoding file " << audioTrack()->absPath() << endl;
 	// finished with success
+	m_bDecodingInProgress = false;
 	m_decodingTimer->stop();
 
 	ov_clear( m_oggVorbisFile );

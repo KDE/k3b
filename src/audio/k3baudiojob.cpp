@@ -526,12 +526,14 @@ void K3bAudioJob::slotModuleOutput( const unsigned char* data, int len )
 void K3bAudioJob::slotModuleFinished( bool success )
 {
   m_currentDecodedTrack->module()->disconnect(this);
+  m_currentDecodedTrack->module()->setConsumer( 0 );
 
   if( m_onTheFly ) {
     if( success ) {
       // check if the data fits the track's length
       if( m_currentModuleDataLength != m_currentDecodedTrack->size() ) {
-	kdDebug() << "(K3bAudioOnTheFlyJob) track size: " << m_currentDecodedTrack->size() << "i and module output: " << m_currentModuleDataLength << "i" << endl;
+	kdDebug() << "(K3bAudioOnTheFlyJob) track size: " << m_currentDecodedTrack->size() 
+		  << "i and module output: " << m_currentModuleDataLength << "i" << endl;
       }
 
       kdDebug() << "(K3bAudioOnTheFlyJob) finished streaming track " << m_currentDecodedTrackNumber << "." << endl;
@@ -567,7 +569,8 @@ void K3bAudioJob::slotModuleFinished( bool success )
 
   m_currentDecodedTrackNumber++;
   m_currentDecodedTrack = m_doc->at(m_currentDecodedTrackNumber);
-  kdDebug() << "(K3bAudioJob) m_currentDecodedTrack = " << ((m_currentDecodedTrack ? "x" : "null")) << endl;
+  kdDebug() << "(K3bAudioJob) m_currentDecodedTrack = " 
+	    << ((m_currentDecodedTrack ?  m_currentDecodedTrack->absPath() : "null")) << endl;
 
   QTimer::singleShot(0, this, SLOT(slotDecodeNextFile()) );
 }
