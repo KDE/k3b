@@ -106,8 +106,11 @@ void K3bDataDirTreeView::updateContents()
       // since we go top to bottom
       if( K3bDirItem* dirItem = dynamic_cast<K3bDirItem*>( item ) ) 
 	{
-	  if( !m_itemMap.contains(dirItem) )
-	    m_itemMap.insert( dirItem, new K3bDataDirViewItem( dirItem, m_itemMap[dirItem->parent()] ) );
+	  if( !m_itemMap.contains(dirItem) ) {
+	    K3bDataDirViewItem* parentViewItem = m_itemMap[dirItem->parent()];
+	    m_itemMap.insert( dirItem, new K3bDataDirViewItem( dirItem, parentViewItem ) );
+	    parentViewItem->setOpen( true );
+	  }
 	}
 
       item = item->nextSibling();

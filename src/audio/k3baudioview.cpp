@@ -100,12 +100,12 @@ void K3bAudioView::setupPopupMenu()
 {
   m_popupMenu = new KPopupMenu( m_songlist, "AudioViewPopupMenu" );
   m_popupMenu->insertTitle( i18n( "Track Options" ) );
-  actionProperties = new KAction( i18n("&Properties"), SmallIcon( "edit" ), 
+  m_actionProperties = new KAction( i18n("&Properties"), SmallIcon( "edit" ), 
 				  CTRL+Key_P, this, SLOT(showPropertiesDialog()), this );
-  actionRemove = new KAction( i18n( "&Remove" ), SmallIcon( "editdelete" ), 
-			      Key_Delete, this, SLOT(removeTrack()), this );
-  actionRemove->plug( m_popupMenu );
-  actionProperties->plug( m_popupMenu);
+  m_actionRemove = new KAction( i18n( "&Remove" ), SmallIcon( "editdelete" ), 
+			      Key_Delete, this, SLOT(slotRemoveTracks()), this );
+  m_actionRemove->plug( m_popupMenu );
+  m_actionProperties->plug( m_popupMenu);
 }
 
 
@@ -161,34 +161,43 @@ void K3bAudioView::showPopupMenu( QListViewItem* _item, const QPoint& _point )
 
 void K3bAudioView::showPropertiesDialog()
 {
-  QList<K3bAudioTrack> selectedTracks;
-  QList<QListViewItem> selectedItems = m_songlist->selectedItems();
-  for( QListViewItem* item = selectedItems.first(); item != 0; item = selectedItems.next() ) {
-    AudioListViewItem* audioItem = dynamic_cast<AudioListViewItem*>(item);
-    if( audioItem ) {
-      selectedTracks.append( audioItem->audioTrack() );
-    }
-  }
-
-  if( !selectedTracks.isEmpty() ) {
-    K3bAudioTrackDialog* d = new K3bAudioTrackDialog( selectedTracks, this );
+  QList<K3bAudioTrack> selected = selectedTracks();
+  if( !selected.isEmpty() ) {
+    K3bAudioTrackDialog* d = new K3bAudioTrackDialog( selected, this );
     d->exec();
     delete d;
   }
 }
 
 
-
-
-void K3bAudioView::removeTrack()
+QList<K3bAudioTrack> K3bAudioView::selectedTracks()
 {
-  AudioListViewItem* _track = (AudioListViewItem*)m_songlist->selectedItem();
-  if( _track ) {
-    ((K3bAudioDoc*)doc)->removeTrack( _track->audioTrack()->index() );
+  QList<K3bAudioTrack> _selectedTracks;
+  QList<QListViewItem> selectedItems = m_songlist->selectedItems();
+  for( QListViewItem* item = selectedItems.first(); item != 0; item = selectedItems.next() ) {
+    AudioListViewItem* audioItem = dynamic_cast<AudioListViewItem*>(item);
+    if( audioItem ) {
+      _selectedTracks.append( audioItem->audioTrack() );
+    }
+  }
+
+  return _selectedTracks;
+}
+
+
+void K3bAudioView::slotRemoveTracks()
+{
+  QList<K3bAudioTrack> selected = selectedTracks();
+  if( !selected.isEmpty() ) {
+
+    for( K3bAudioTrack* track = selected.first(); track != 0; track = selected.next() ) {
+      ((K3bAudioDoc*)doc)->removeTrack( track->index() );
 		
-    // not best, I think we should connect to doc.removedTrack (but while there is only one view this is not important!)
-    m_itemMap.remove( _track->audioTrack() );
-    delete _track;
+      // not best, I think we should connect to doc.removedTrack (but while there is only one view this is not important!)
+      QListViewItem* viewItem = m_itemMap[track];
+      m_itemMap.remove( track );
+      delete viewItem;
+    }
   }
 }
 

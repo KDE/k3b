@@ -91,56 +91,15 @@ K3bDataView::~K3bDataView(){
 
 K3bProjectBurnDialog* K3bDataView::burnDialog()
 {
-  if( !m_burnDialog )
+  if( !m_burnDialog ) {
     m_burnDialog = new K3bDataBurnDialog( m_doc, k3bMain(), "databurndialog", true );
+    connect( m_burnDialog, SIGNAL(finished()), this, SLOT(update()) );  // get changes
+  }
 		
   return m_burnDialog;
 }
 
 
-void K3bDataView::slotAddFile( K3bFileItem* file )
-{
-  if( m_dataFileView->currentDir() == file->parent() )
-    m_dataFileView->updateContents();
-	
-  m_fillStatusDisplay->repaint();
-}
-
-
-void K3bDataView::slotAddDir( K3bDirItem* dirItem )
-{
-  K3bDirItem* parentDir = dirItem->parent();
-	
-  if( !parentDir ) {
-    (void)new K3bDataDirViewItem( dirItem, m_dataDirTree->root() );
-    parentDir = m_doc->root();
-  }
-  else {
-    QListViewItemIterator _it(m_dataDirTree);
-    for( ; _it.current(); ++_it )
-      {
-	K3bDataDirViewItem* _dirViewItem = (K3bDataDirViewItem*)_it.current();
-	if( _dirViewItem->dirItem() == dirItem->parent() ) {
-	  (void)new K3bDataDirViewItem( dirItem, _it.current() );
-	  break;
-	}
-      }
-			
-    // add to root by default
-    if( !_it.current() ) {
-      qDebug("(K3bDataView) could not find corresponding listViewItem to %s", dirItem->parent()->k3bName().latin1() );
-      (void)new K3bDataDirViewItem( dirItem, m_dataDirTree->root() );
-      parentDir = m_doc->root();
-    }
-  }
-
-  if( m_dataFileView->currentDir() == parentDir )
-    m_dataFileView->updateContents();
-		
-  m_fillStatusDisplay->repaint();
-}
-	
-	
 void K3bDataView::slotDropped( KListView* listView, QDropEvent* e, QListViewItem* after )
 {
   if( !e->isAccepted() )
@@ -151,27 +110,106 @@ void K3bDataView::slotDropped( KListView* listView, QDropEvent* e, QListViewItem
   QStringList _urls = QStringList::split("\r\n", droppedText );
 	
 
-  if( listView == m_dataFileView &&
-      m_dataFileView->itemAt( e->pos() ) == 0 )
-    emit dropped( _urls, m_dataFileView->currentDir() );
+  if( listView == m_dataFileView && m_dataFileView->itemAt( e->pos() ) == 0 )
+    m_doc->slotAddURLs( _urls, m_dataFileView->currentDir() );
 
   // get directory from "after"
   else if( after ) {
     // if dropping on a dirItem: add it to this dir
     if( dynamic_cast<K3bDataDirViewItem*>( after ) ) {
-      emit dropped( _urls, ((K3bDataDirViewItem*)after)->dirItem() );
+      m_doc->slotAddURLs( _urls, ((K3bDataDirViewItem*)after)->dirItem() );
     }
     else {
       // add to the parent of the item
-      emit dropped( _urls, ((K3bDataFileViewItem*)after)->fileItem()->parent() );
+      m_doc->slotAddURLs( _urls, ((K3bDataFileViewItem*)after)->fileItem()->parent() );
     }
   }
   else {// after == 0
     if( listView == m_dataFileView )
-      emit dropped( _urls, m_dataFileView->currentDir() );
+      m_doc->slotAddURLs( _urls, m_dataFileView->currentDir() );
   }
 }
 
+
+void K3bDataView::setupPopupMenu()
+{
+  m_popupMenu = new KPopupMenu( this, "DataViewPopupMenu" );
+  m_actionRename = new KAction( i18n("&Rename"), SmallIcon( "edit" ), CTRL+Key_R, this, SLOT(slotRenameItem()), this );
+  m_actionRemove = new KAction( i18n( "&Remove" ), SmallIcon( "editdelete" ), Key_Delete, this, SLOT(slotRemoveItem()), this );
+  m_actionNewDir = new KAction( i18n( "&New Directory" ), SmallIcon( "folder_new" ), CTRL+Key_N, this, SLOT(slotNewDir()), this );
+  m_actionRemove->plug( m_popupMenu );
+  m_actionRename->plug( m_popupMenu);
+  m_actionNewDir->plug( m_popupMenu);
+}
+
+void K3bDataView::showPopupMenu( QListViewItem* _item, const QPoint& _point )
+{
+  if( _item )
+    m_popupMenu->popup( _point );
+}
+
+
+void K3bDataView::slotNewDir()
+{
+  bool ok;
+  QString name = KLineEditDlg::getText( i18n("Please insert the name for the new directory"),
+					"New directory", &ok, k3bMain() );
+  if( !ok )
+    return;
+
+  K3bDirItem* parent;
+  if( m_dataDirTree->hasFocus() ) 
+    {
+      parent = ( (K3bDataDirViewItem*)m_dataDirTree->currentItem() )->dirItem();
+    }
+  else
+    {
+      parent = m_dataFileView->currentDir();
+    }
+
+  m_doc->addEmptyDir( name, parent );
+}
+
+void K3bDataView::slotRenameItem()
+{
+  if( m_dataDirTree->hasFocus() ) {
+    m_dataDirTree->rename( m_dataDirTree->currentItem(), 0 );
+  }
+  else if( m_dataFileView->hasFocus() ) {
+    m_dataFileView->rename( m_dataFileView->currentItem(), 0 );
+  }
+  else
+    qDebug("(K3bDataView) slotRenameItem() without selected item!");
+}
+
+
+void K3bDataView::slotRemoveItem()
+{
+  if( m_dataDirTree->hasFocus() && m_dataDirTree->currentItem() ) {
+    if( K3bDataDirViewItem* dirViewItem = dynamic_cast<K3bDataDirViewItem*>( m_dataDirTree->currentItem() ) )
+      m_doc->removeItem( dirViewItem->dirItem() );
+  }
+  else if( m_dataFileView->hasFocus() ) {
+    QList<QListViewItem> items = m_dataFileView->selectedItems();
+    QListIterator<QListViewItem> it( items );
+    for(; it.current(); ++it ) {
+      if( K3bDataDirViewItem* d = dynamic_cast<K3bDataDirViewItem*>( it.current() ) )
+	m_doc->removeItem( d->dirItem() );
+      else if ( K3bDataFileViewItem* f = dynamic_cast<K3bDataFileViewItem*>( it.current() ) )
+	m_doc->removeItem( f->fileItem() );
+    }
+  }
+  else
+    qDebug("(K3bDataView) slotRemoveItem() without selected item!");
+}
+
+
+
+
+
+// =================================================================================
+// ViewItems
+// =================================================================================
 
 K3bDataDirViewItem::K3bDataDirViewItem( K3bDirItem* dir, QListView* parent )
   : KListViewItem( parent )
@@ -300,62 +338,6 @@ void K3bDataRootViewItem::setText( int col, const QString& text )
 }
 
 
-void K3bDataView::setupPopupMenu()
-{
-  m_popupMenu = new KPopupMenu( this, "DataViewPopupMenu" );
-  //	m_popupMenu->insertTitle( i18n( "File Options" ) );
-  actionRename = new KAction( i18n("&Rename"), SmallIcon( "rename" ), CTRL+Key_R, this, SLOT(slotRenameItem()), this );
-  actionRemove = new KAction( i18n( "&Remove" ), SmallIcon( "editdelete" ), Key_Delete, this, SLOT(slotRemoveItem()), this );
-  actionNewDir = new KAction( i18n( "&New Directory" ), SmallIcon( "foler_new" ), CTRL+Key_N, this, SLOT(slotNewDir()), this );
-  actionRemove->plug( m_popupMenu );
-  actionRename->plug( m_popupMenu);
-  actionNewDir->plug( m_popupMenu);
-}
-
-void K3bDataView::showPopupMenu( QListViewItem* _item, const QPoint& _point )
-{
-  if( _item->listView() == m_dataDirTree )
-    actionRemove->setEnabled(false);   // needed since removing directories in treeView causes K3b to crash! FIXME!!!
-  else
-    actionRemove->setEnabled(true);
-
-  if( _item )
-    m_popupMenu->popup( _point );
-}
-
-
-void K3bDataView::slotNewDir()
-{
-  bool ok;
-  QString name = KLineEditDlg::getText( i18n("Please insert the name for the new directory"),
-					"New directory", &ok, k3bMain() );
-  if( !ok )
-    return;
-
-  K3bDirItem* parent;
-  if( m_dataDirTree->hasFocus() ) 
-    {
-      parent = ( (K3bDataDirViewItem*)m_dataDirTree->currentItem() )->dirItem();
-    }
-  else
-    {
-      parent = m_dataFileView->currentDir();
-    }
-
-  m_doc->addEmptyDir( name, parent );
-}
-
-void K3bDataView::slotRenameItem()
-{
-  if( m_dataDirTree->hasFocus() ) {
-    m_dataDirTree->rename( m_dataDirTree->currentItem(), 0 );
-  }
-  else if( m_dataFileView->hasFocus() ) {
-    m_dataFileView->rename( m_dataFileView->currentItem(), 0 );
-  }
-  else
-    qDebug("(K3bDataView) slotRenameItem() without selected item!");
-}
 
 
 // void K3bDataView::slotItemRemoved( K3bDataItem* item )
@@ -392,28 +374,6 @@ void K3bDataView::slotRenameItem()
 
 //   m_fillStatusDisplay->repaint();	
 // }
-
-
-
-void K3bDataView::slotRemoveItem()
-{
-  if( m_dataDirTree->hasFocus() && m_dataDirTree->currentItem() ) {
-    if( K3bDataDirViewItem* dirViewItem = dynamic_cast<K3bDataDirViewItem*>( m_dataDirTree->currentItem() ) )
-      m_doc->removeItem( dirViewItem->dirItem() );
-  }
-  else if( m_dataFileView->hasFocus() ) {
-    QList<QListViewItem> items = m_dataFileView->selectedItems();
-    QListIterator<QListViewItem> it( items );
-    for(; it.current(); ++it ) {
-      if( K3bDataDirViewItem* d = dynamic_cast<K3bDataDirViewItem*>( it.current() ) )
-	m_doc->removeItem( d->dirItem() );
-      else if ( K3bDataFileViewItem* f = dynamic_cast<K3bDataFileViewItem*>( it.current() ) )
-	m_doc->removeItem( f->fileItem() );
-    }
-  }
-  else
-    qDebug("(K3bDataView) slotRemoveItem() without selected item!");
-}
 
 
 #include "k3bdataview.moc"

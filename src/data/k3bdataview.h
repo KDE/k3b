@@ -50,11 +50,6 @@ class K3bDataView : public K3bView
 	
    K3bProjectBurnDialog* burnDialog();
 	
- public slots:
-   void slotAddFile( K3bFileItem* );
-   void slotAddDir( K3bDirItem* );
-/*    void slotItemRemoved( K3bDataItem* ); */
-	
  protected slots:
    /** generates a dropped signal */
    void slotDropped( KListView*, QDropEvent* e, QListViewItem* after );
@@ -63,18 +58,15 @@ class K3bDataView : public K3bView
    void slotRemoveItem();
    void slotNewDir();
 		
- signals:
-   void dropped(const QStringList&, K3bDirItem* );
-	
  private:
    K3bDataDirTreeView* m_dataDirTree;
    K3bDataFileView* m_dataFileView;
    K3bFillStatusDisplay* m_fillStatusDisplay;
 		
    KPopupMenu* m_popupMenu;
-   KAction* actionRemove;
-   KAction* actionRename;
-   KAction* actionNewDir;
+   KAction* m_actionRemove;
+   KAction* m_actionRename;
+   KAction* m_actionNewDir;
 		
    K3bDataDoc* m_doc;
    K3bDataBurnDialog* m_burnDialog;

@@ -34,6 +34,7 @@ K3bDataFileView::K3bDataFileView( K3bDataDoc* doc, QWidget* parent )
   setAcceptDrops( true );
   setDropVisualizer( false );
   setDropHighlighter( true );
+  setDragEnabled( true );
 	
   addColumn( i18n("Name") );
   addColumn( i18n("Type") );
@@ -55,7 +56,6 @@ K3bDataFileView::K3bDataFileView( K3bDataDoc* doc, QWidget* parent )
 void K3bDataFileView::slotSetCurrentDir( K3bDirItem* dir )
 {
   if( dir ) {
-    qDebug( "(K3bDataFileView) setting current dir to " + dir->k3bName() );
     m_currentDir = dir;
     updateContents();
   }
@@ -94,26 +94,22 @@ void K3bDataFileView::slotDataItemRemoved( K3bDataItem* item )
   if( item == currentDir() ) 
     {
       slotSetCurrentDir( item->parent() );
+      
     }
-  else if( item->parent() == currentDir() ) 
+  if( item->parent() == currentDir() ) 
     {
-      qDebug("(K3bDataView) seaching in fileView for viewItems to delete");
       QListViewItemIterator it(this);
       for( ; it.current(); ++it )
 	{
 	  if( K3bDataDirViewItem* dirViewItem = dynamic_cast<K3bDataDirViewItem*>(it.current()) ) {
-	    qDebug("   found dirViewItem ... comparing ... ");
 	    if( dirViewItem->dirItem() == item ) {
 	      delete it.current();
-	      qDebug( "(K3bDataView) found listViewItem to remove in fileView: %s", item->k3bName().latin1() );
 	      break;
 	    }
 	  }
 	  else if( K3bDataFileViewItem* fileViewItem = dynamic_cast<K3bDataFileViewItem*>(it.current()) ) {
-	    qDebug("   found fileViewItem ... comparing ... ");
 	    if( fileViewItem->fileItem() == item ) {
 	      delete it.current();
-	      qDebug( "(K3bDataView) found listViewItem to remove in fileView: %s", item->k3bName().latin1() );
 	      break;
 	    }
 	  }

@@ -89,9 +89,6 @@ K3bView* K3bDataDoc::newView( QWidget* parent )
 
 void K3bDataDoc::addView(K3bView* view)
 {
-  K3bDataView* v = (K3bDataView*)view;
-  connect( v, SIGNAL(dropped(const QStringList&, K3bDirItem*)), this, SLOT(slotAddURLs(const QStringList&, K3bDirItem*)) );
-	
   K3bDoc::addView( view );
 }
 
@@ -563,8 +560,6 @@ void K3bDataDoc::saveDataItem( K3bDataItem* item, QDomDocument* doc, QDomElement
 
 void K3bDataDoc::removeItem( K3bDataItem* item )
 {
-  qDebug( "(K3bDataDoc) remove item " + item->k3bName() );
-	
   if( item == root() )
     qDebug( "(K3bDataDoc) tried to remove root-entry!");
   else {
@@ -577,9 +572,7 @@ void K3bDataDoc::removeItem( K3bDataItem* item )
     }
 
     // the item takes care about it's parent!
-    qDebug( "(K3bDataDoc) now it should be save to delete the item!");
     delete item;
-    qDebug( "(K3bDataDoc) now the item has been deleted!");
   }
 }
 

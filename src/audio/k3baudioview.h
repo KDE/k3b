@@ -22,6 +22,8 @@
 
 #include <qstringlist.h>
 #include <qmap.h>
+#include <qlist.h>
+
 
 class AudioListView;
 class AudioListViewItem;
@@ -58,8 +60,8 @@ class K3bAudioView : public K3bView  {
 
   K3bAudioDoc* m_doc;
 	
-  KAction* actionProperties;
-  KAction* actionRemove;
+  KAction* m_actionProperties;
+  KAction* m_actionRemove;
   AudioListView* m_songlist;
   KPopupMenu* m_popupMenu;
   K3bFillStatusDisplay* m_fillStatusDisplay;
@@ -68,7 +70,8 @@ class K3bAudioView : public K3bView  {
   QTimer* m_displayRefreshTimer;
 
   QMap<K3bAudioTrack*, AudioListViewItem*> m_itemMap;
-		
+  QList<K3bAudioTrack> selectedTracks();
+
  signals:
   void dropped(const QStringList&, uint position);
   /** the item at position oldPos should be removed and reinserted at newPos */
@@ -83,7 +86,7 @@ class K3bAudioView : public K3bView  {
   void slotItemMoved( QListViewItem*, QListViewItem*, QListViewItem* );
   void showPopupMenu( QListViewItem* _item, const QPoint& );
   void showPropertiesDialog();
-  void removeTrack();
+  void slotRemoveTracks();
 };
 
 #endif
