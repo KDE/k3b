@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -21,7 +21,8 @@
 #include "k3bdatajob.h"
 #include "../k3b.h"
 #include "../tools/kstringlistdialog.h"
-#include "k3bbootimage.h"
+#include "k3bbootitem.h"
+#include "k3bspecialdataitem.h"
 
 
 #include <stdlib.h>
@@ -66,11 +67,15 @@ K3bDataDoc::~K3bDataDoc()
 
 bool K3bDataDoc::newDocument()
 {
+  m_bootImages.clear();
+  m_bootCataloge = 0;
+
   if( m_root )
     delete m_root;
 		
   m_root = new K3bRootItem( this );
   //  m_size = 0;
+
 	
   m_name = "Dummyname";
   m_isoImage = QString::null;
@@ -826,7 +831,7 @@ void K3bDataDoc::removeItem( K3bDataItem* item )
     delete item;
   }
   else
-    kdDebug() << "(K3bDataDoc) tried to remove non-movable entry!" << endl;
+    kdDebug() << "(K3bDataDoc) tried to remove non-removable entry!" << endl;
 }
 
 
@@ -1174,16 +1179,6 @@ void K3bDataDoc::clearImportedSession()
 }
 
 
-QString K3bDataDoc::bootCatalogePath()
-{
-  if( m_bootCataloge ) {
-    return m_bootCataloge->k3bPath();
-  }
-  else 
-    return QString::null;
-}
-
-
 K3bDirItem* K3bDataDoc::bootImageDir()
 {
   K3bDataItem* b = m_root->find( "boot" );
@@ -1203,12 +1198,33 @@ K3bDirItem* K3bDataDoc::bootImageDir()
 
 K3bFileItem* K3bDataDoc::createBootItem( const QString& filename )
 {
-  K3bFileItem* boot = new K3bFileItem( filename, 
+  K3bBootItem* boot = new K3bBootItem( filename, 
 				       this, bootImageDir() );
-  //  m_size += boot->k3bSize();
+
+  m_bootImages.append(boot);
+
+  if( !m_bootCataloge ) {
+    m_bootCataloge = new K3bSpecialDataItem( this, 0, bootImageDir(), "boot.cataloge" );
+    m_bootCataloge->setRemoveable(false);
+    m_bootCataloge->setHideable(false);
+    m_bootCataloge->setWriteToCd(false);
+    m_bootCataloge->setExtraInfo( i18n("El Torito boot cataloge file") );
+  }
+
   emit newFileItems();
 
   return boot;
+}
+
+
+void K3bDataDoc::removeBootItem( K3bBootItem* item )
+{
+  m_bootImages.removeRef(item);
+  if( m_bootImages.isEmpty() ) {
+    emit itemRemoved( m_bootCataloge );
+    delete m_bootCataloge;
+    m_bootCataloge = 0;
+  }
 }
 
 #include "k3bdatadoc.moc"

@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -18,19 +18,42 @@
 #define K3BSPECIALDATAITEM_H
 
 #include "k3bdataitem.h"
+#include "k3bdiritem.h"
 
+#include <kio/global.h>
+
+/**
+ * This can be used to create fake items like the boot cataloge
+ * It's mainly a K3bDataItem where everything has to be set manually
+ */
 class K3bSpecialDataItem : public K3bDataItem
 {
  public:
-  K3bSpecialDataItem( K3bDataDoc* doc, long size, K3bDataItem* parent = 0 );
-  virtual ~K3bSpecialDataItem();
+  K3bSpecialDataItem( K3bDataDoc* doc, KIO::filesize_t size, K3bDirItem* parent = 0, const QString& k3bName = QString::null )
+    : K3bDataItem( doc, parent ),
+    m_k3bSize( size )
+    {
+      setK3bName( k3bName );
+
+      // add automagically like a qlistviewitem
+      if( parent )
+	parent->addDataItem( this );
+    }
+
+  virtual ~K3bSpecialDataItem() {
+    // remove this from parentdir
+    if( parent() )
+      parent()->takeDataItem( this );
+  }
 
   virtual QString localPath() { return ""; }
 
-  virtual long k3bSize() const { return m_k3bSize; }
+  virtual KIO::filesize_t k3bSize() const { return m_k3bSize; }
+
+  virtual K3bDirItem* getDirItem() { return parent(); }
 
  private:
-  long m_k3bSize;
+  KIO::filesize_t m_k3bSize;
 };
 
 #endif

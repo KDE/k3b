@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -31,7 +31,7 @@
 
 
 K3bFileItem::K3bFileItem( const QString& filePath, K3bDataDoc* doc, K3bDirItem* dir, const QString& k3bName )
-  : KFileItem( -1, -1, KURL::encode_string(filePath) ), K3bDataItem( doc, dir )
+  : KFileItem( 0, 0, KURL::encode_string(filePath) ), K3bDataItem( doc, dir )
 {
   if( k3bName.isEmpty() )
     m_k3bName = QFileInfo(filePath).fileName();

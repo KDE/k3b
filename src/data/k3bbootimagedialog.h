@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -19,8 +19,7 @@
 
 #include <kdialogbase.h>
 
-class K3bBootImagePropertiesWidget;
-class K3bBootImage;
+class K3bBootImageView;
 class K3bDataDoc;
 
 
@@ -29,8 +28,7 @@ class K3bBootImageDialog : public KDialogBase
   Q_OBJECT
 
  public:
-  K3bBootImageDialog( K3bBootImage*, 
-		      K3bDataDoc*, 
+  K3bBootImageDialog( K3bDataDoc*, 
 		      QWidget* parent = 0, 
 		      const char* name = 0, 
 		      bool modal = true );
@@ -38,14 +36,9 @@ class K3bBootImageDialog : public KDialogBase
 
  private slots:
   void slotOk();
-  void slotCancel();
-  void slotImageFileChanged( const QString& filename );
 
  private:
-  K3bBootImagePropertiesWidget* m_bootImageWidget;
-
-  K3bBootImage* m_bootImage;
-  K3bDataDoc* m_doc;
+  K3bBootImageView* m_bootImageView;
 };
 
 #endif

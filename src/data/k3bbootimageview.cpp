@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -16,26 +16,33 @@
 #include "k3bbootimageview.h"
 
 #include "k3bdatadoc.h"
-#include "k3bbootimage.h"
-#include "k3bbootimagedialog.h"
+#include "k3bbootitem.h"
 
 #include <klocale.h>
 #include <klistview.h>
+#include <kfiledialog.h>
 
 #include <qpushbutton.h>
 #include <qstring.h>
+#include <qvalidator.h>
+#include <qgroupbox.h>
+#include <qlineedit.h>
+#include <qcheckbox.h>
+#include <qradiobutton.h>
+#include <qbuttongroup.h>
+
 
 
 class K3bBootImageView::PrivateBootImageViewItem : public KListViewItem
 {
 public:
-  PrivateBootImageViewItem( K3bBootImage* image, QListView* parent ) 
+  PrivateBootImageViewItem( K3bBootItem* image, QListView* parent ) 
     : KListViewItem( parent ), 
       m_image( image ) {
 
   }
 
-  PrivateBootImageViewItem( K3bBootImage* image, QListView* parent, QListViewItem* after )
+  PrivateBootImageViewItem( K3bBootItem* image, QListView* parent, QListViewItem* after )
     : KListViewItem( parent, after ),
       m_image( image ) {
 
@@ -43,23 +50,21 @@ public:
 
   QString text( int col ) const {
     if( col == 0 ) {
-      switch( m_image->imageType ) {
-      case K3bBootImage::FLOPPY:
+      if( m_image->imageType() == K3bBootItem::FLOPPY )
 	return i18n("Floppy");
-      case K3bBootImage::HARDDISK:
+      else
 	return i18n("Harddisk");
-      }
     }
     else if( col == 1 )
-      return m_image->fileItem->localPath();
+      return m_image->localPath();
     else
       return QString::null;
   }
 
-  K3bBootImage* bootImage() const { return m_image; }
+  K3bBootItem* bootImage() const { return m_image; }
 
 private:
-  K3bBootImage* m_image;
+  K3bBootItem* m_image;
 };
 
 
@@ -67,57 +72,136 @@ K3bBootImageView::K3bBootImageView( K3bDataDoc* doc, QWidget* parent, const char
   : base_K3bBootImageView( parent, name ),
     m_doc(doc)
 {
-  connect( buttonNew, SIGNAL(clicked()), 
+  connect( m_buttonNew, SIGNAL(clicked()), 
 	   this, SLOT(slotNewBootImage()) );
-  connect( buttonEdit, SIGNAL(clicked()), 
-	   this, SLOT(slotEditBootImage()) );
-  connect( buttonDelete, SIGNAL(clicked()), 
+  connect( m_buttonDelete, SIGNAL(clicked()), 
 	   this, SLOT(slotDeleteBootImage()) );
+  connect( m_buttonToggleOptions, SIGNAL(clicked()),
+	   this, SLOT(slotToggleOptions()) );
+  connect( m_viewImages, SIGNAL(selectionChanged()),
+	   this, SLOT(slotSelectionChanged()) );
+
+  QIntValidator* v = new QIntValidator( this );
+  m_editLoadSegment->setValidator( v );
+  m_editLoadSize->setValidator( v );
 
   updateBootImages();
+
+  showAdvancedOptions( false );
+  loadBootItemSettings(0);
 }
 
 K3bBootImageView::~K3bBootImageView()
 {
 }
 
-void K3bBootImageView::slotNewBootImage()
-{
-  // TODO: maximum is 63
 
-  K3bBootImageDialog d( 0, m_doc, this );
-  if( d.exec() == KDialogBase::Ok )
-    updateBootImages();
+void K3bBootImageView::slotToggleOptions()
+{
+  showAdvancedOptions( !m_groupOptions->isVisible() );
 }
 
 
-void K3bBootImageView::slotEditBootImage()
+void K3bBootImageView::showAdvancedOptions( bool show )
 {
-  QListViewItem* item = viewImages->selectedItem();
-  if( item ) {
-    K3bBootImageDialog d( ((PrivateBootImageViewItem*)item)->bootImage(), m_doc, this );
-    d.exec();
+  if( show ) {
+    m_groupOptions->show();
+    m_buttonToggleOptions->setText( i18n("Hide Advanced Options") );
+  }
+  else {
+    m_groupOptions->hide();
+    m_buttonToggleOptions->setText( i18n("Show Advanced Options") );
+  }
+}
+
+
+void K3bBootImageView::slotNewBootImage()
+{
+  QString file = KFileDialog::getOpenFileName( QString::null, QString::null, this, i18n("Please choose a boot image") );
+  if( !file.isEmpty() ) {
+    m_doc->createBootItem( file );
+    updateBootImages();
   }
 }
 
 
 void K3bBootImageView::slotDeleteBootImage()
 {
-  QListViewItem* item = viewImages->selectedItem();
+  QListViewItem* item = m_viewImages->selectedItem();
   if( item ) {
-    K3bBootImage* i = ((PrivateBootImageViewItem*)item)->bootImage();
+    K3bBootItem* i = ((PrivateBootImageViewItem*)item)->bootImage();
     delete item;
-    m_doc->bootImages().removeRef( i );
+    m_doc->removeItem( i );
   }
+}
+
+
+void K3bBootImageView::slotSelectionChanged()
+{
+  QListViewItem* item = m_viewImages->selectedItem();
+  if( item )
+    loadBootItemSettings( ((PrivateBootImageViewItem*)item)->bootImage() );
+  else
+    loadBootItemSettings( 0 );
 }
 
 
 void K3bBootImageView::updateBootImages()
 {
-  viewImages->clear();
-  for( QPtrListIterator<K3bBootImage> it( m_doc->bootImages() ); it.current(); ++it ) {
-    (void)new PrivateBootImageViewItem( *it, viewImages, 
-					viewImages->lastItem() );
+  m_viewImages->clear();
+  for( QPtrListIterator<K3bBootItem> it( m_doc->bootImages() ); it.current(); ++it ) {
+    (void)new PrivateBootImageViewItem( *it, m_viewImages, 
+					m_viewImages->lastItem() );
+  }
+}
+
+
+void K3bBootImageView::loadBootItemSettings( K3bBootItem* item )
+{
+  // this is needed to prevent the slots to change stuff
+  m_loadingItem = true;
+
+  if( item ) {
+    m_groupOptions->setEnabled(true);
+    m_groupImageType->setEnabled(true);
+
+    m_checkNoBoot->setChecked( item->noBoot() );
+    m_checkNoEmulate->setChecked( item->noEmulate() );
+    m_checkInfoTable->setChecked( item->bootInfoTable() );
+    m_editLoadSegment->setText( QString::number( item->loadSegment() ) );
+    m_editLoadSize->setText( QString::number( item->loadSize() ) );
+
+    if( item->imageType() == K3bBootItem::FLOPPY )
+      m_radioFloppy->setChecked(true);
+    else
+      m_radioHarddisk->setChecked(true);      
+  }
+  else {
+    m_groupOptions->setEnabled(false);
+    m_groupImageType->setEnabled(false);
+  }
+
+  m_loadingItem = false;
+}
+
+
+void K3bBootImageView::slotOptionsChanged()
+{
+  if( !m_loadingItem ) {
+    QListViewItem* item = m_viewImages->selectedItem();
+    if( item ) {
+      K3bBootItem* i = ((PrivateBootImageViewItem*)item)->bootImage();
+      
+      i->setNoEmulate( m_checkNoEmulate->isChecked() );
+      i->setNoBoot( m_checkNoBoot->isChecked() );
+      i->setBootInfoTable( m_checkInfoTable->isChecked() );
+      i->setLoadSegment( m_editLoadSegment->text().toInt() ); 
+      i->setLoadSize( m_editLoadSize->text().toInt() ); 
+      if( m_radioFloppy->isChecked() )
+	i->setImageType( K3bBootItem::FLOPPY );
+      else
+	i->setImageType( K3bBootItem::HARDDISK );
+    }
   }
 }
 

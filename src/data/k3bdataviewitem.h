@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -22,6 +22,7 @@ class K3bDataItem;
 class K3bFileItem;
 class K3bDirItem;
 class K3bDataDoc;
+class K3bSpecialDataItem;
 
 class QPainter;
 class QColorGroup;
@@ -33,7 +34,7 @@ class K3bDataViewItem : public K3bListViewItem
  public:
   K3bDataViewItem( QListView* parent );
   K3bDataViewItem( QListViewItem* parent );
-  ~K3bDataViewItem();
+  virtual ~K3bDataViewItem();
 	
   virtual K3bDataItem* dataItem() const { return 0; }
 
@@ -110,6 +111,28 @@ class K3bDataRootViewItem : public K3bDataDirViewItem
 		
  private:
   K3bDataDoc* m_doc;
+};
+
+
+class K3bSpecialDataViewItem : public K3bDataViewItem
+{
+ public:
+  K3bSpecialDataViewItem( K3bSpecialDataItem*, QListView* );
+
+  QString text( int ) const;
+
+  /** reimplemented from QListViewItem */
+  void setText(int col, const QString& text );
+
+  K3bDataItem* dataItem() const { return m_dataItem; }
+
+  /**
+   * reimplemented to have directories always sorted before files
+   */
+  QString key( int, bool ) const;
+
+ private:
+  K3bDataItem* m_dataItem;
 };
 
 #endif

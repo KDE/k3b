@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -20,6 +20,7 @@
 #include "k3bdataitem.h"
 #include "k3bdiritem.h"
 #include "k3bfileitem.h"
+#include "k3bspecialdataitem.h"
 #include "k3bisovalidator.h"
 #include "k3bdatapropertiesdialog.h"
 #include "k3bdatadirtreeview.h"
@@ -111,8 +112,10 @@ void K3bDataFileView::updateContents()
   for( QListIterator<K3bDataItem> it( *m_currentDir->children() ); it.current(); ++it ) {
     if( it.current()->isDir() )
       (void)new K3bDataDirViewItem( (K3bDirItem*)it.current(), this );
-    else
+    else if( it.current()->isFile() )
       (void)new K3bDataFileViewItem( (K3bFileItem*)it.current(), this );
+    else
+      (void)new K3bSpecialDataViewItem( (K3bSpecialDataItem*)it.current(), this );
 
 //     if( K3bDirItem* _item = dynamic_cast<K3bDirItem*>( _it.current() ) ) {
 //       (void)new K3bDataDirViewItem( _item, this );

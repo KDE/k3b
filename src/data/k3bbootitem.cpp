@@ -13,33 +13,27 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-
-#include "k3bbootimagedialog.h"
-#include "k3bbootimageview.h"
+#include "k3bbootitem.h"
+#include "k3bdatadoc.h"
 
 #include <klocale.h>
 
+#include <qptrlist.h>
 
-K3bBootImageDialog::K3bBootImageDialog( K3bDataDoc* doc, 
-					QWidget* parent, 
-					const char* name, 
-					bool modal )
-  : KDialogBase( parent, name, modal, i18n("Boot images"), Ok )
+
+K3bBootItem::K3bBootItem( const QString& fileName, K3bDataDoc* doc, K3bDirItem* dir, const QString& k3bName )
+  : K3bFileItem( fileName, doc, dir, k3bName ),
+    m_noEmulate(false),
+    m_noBoot(false),
+    m_bootInfoTable(false),
+    m_loadSegment(-1),
+    m_loadSize(-1),
+    m_imageType(FLOPPY)
 {
-  m_bootImageView = new K3bBootImageView( doc, this );
-  setMainWidget( m_bootImageView );
+  setExtraInfo( i18n("El Torito Boot image") );
 }
 
-
-K3bBootImageDialog::~K3bBootImageDialog()
+K3bBootItem::~K3bBootItem()
 {
+  doc()->removeBootItem(this);
 }
-
-
-void K3bBootImageDialog::slotOk()
-{
-  //  m_bootImageView->save();
-  done( Ok );
-}
-
-#include "k3bbootimagedialog.moc"

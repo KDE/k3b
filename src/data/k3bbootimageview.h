@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -20,6 +20,7 @@
 #include "base_k3bbootimageview.h"
 
 class K3bDataDoc;
+class K3bBootItem;
 
 
 class K3bBootImageView : public base_K3bBootImageView
@@ -32,14 +33,23 @@ public:
 
  private slots:
   void slotNewBootImage();
-  void slotEditBootImage();
   void slotDeleteBootImage();
+  void slotToggleOptions();
+  void slotSelectionChanged();
+
+  /* reimplemeted from base_...*/
+  void slotOptionsChanged();
 
  private:
   void updateBootImages();
+  void showAdvancedOptions( bool );
+  void loadBootItemSettings( K3bBootItem* );
+
   class PrivateBootImageViewItem;
 
   K3bDataDoc* m_doc;
+
+  bool m_loadingItem;
 };
 
 #endif

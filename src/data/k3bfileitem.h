@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -53,6 +53,7 @@ public:
   K3bDirItem* getDirItem();
 	
   bool isSymLink() const { return isLink(); }
+  bool isFile() const { return true; }
 
   /** returns true if the item is not a link or 
    *  if the link's destination is part of the compilation */

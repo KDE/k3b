@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -17,6 +17,7 @@
 
 #include "k3bfileitem.h"
 #include "k3bdiritem.h"
+#include "k3bspecialdataitem.h"
 #include "k3bdatadoc.h"
 
 #include <kio/global.h>
@@ -268,5 +269,56 @@ void K3bDataRootViewItem::setText( int col, const QString& text )
   if( col == 0 )
     m_doc->isoOptions().setVolumeID( text );
 
-  KListViewItem::setText( col, text );
+  K3bDataViewItem::setText( col, text );
+}
+
+
+K3bSpecialDataViewItem::K3bSpecialDataViewItem( K3bSpecialDataItem* item, QListView* parent )
+  : K3bDataViewItem( parent ),
+    m_dataItem(item)
+{
+  setPixmap( 0, SmallIcon("unknown") );
+}
+
+QString K3bSpecialDataViewItem::text( int col ) const
+{
+  switch( col ) {
+  case 0:
+    return m_dataItem->k3bName();
+  case 1:
+    return "-";
+  case 2:
+    return KIO::convertSize( m_dataItem->k3bSize() );
+  default:
+    return "";
+  }
+}
+
+
+void K3bSpecialDataViewItem::setText(int col, const QString& text )
+{
+  if( col == 0 )
+    m_dataItem->setK3bName( text );
+
+  K3bDataViewItem::setText( col, text );
+}
+
+
+QString K3bSpecialDataViewItem::key( int col, bool a ) const
+{
+  if( col == 2 ) {
+    // to have correct sorting we need to justify the size in bytes
+    // 100 TB should be enough for the next year... ;-)
+    // but unsigned long is way to small for 100TB in bytes!! :(
+
+    if( a )
+      return "1" + QString::number( (unsigned long)m_dataItem->k3bSize() ).rightJustify( 16, '0' );
+    else
+      return "0" + QString::number( (unsigned long)m_dataItem->k3bSize() ).rightJustify( 16, '0' );
+  }
+
+  if( a )
+    return "1" + text(col);
+  else
+    return "0" + text(col);
 }

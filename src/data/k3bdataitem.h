@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -63,6 +63,7 @@ class K3bDataItem
   virtual void reparent( K3bDirItem* );
 
   virtual bool isDir() const { return false; }
+  virtual bool isFile() const { return false; }
   virtual bool isSymLink() const { return false; }	
 
   bool hideOnRockRidge() const;

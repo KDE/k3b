@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -34,7 +34,7 @@ class K3bRootItem;
 class K3bDirItem;
 class K3bFileItem;
 class K3bJob;
-class K3bBootImage;
+class K3bBootItem;
 
 class KProgressDialog;
 class K3bView;
@@ -111,11 +111,13 @@ class K3bDataDoc : public K3bDoc
 
   K3bIsoOptions& isoOptions() { return m_isoOptions; }
 
-  QPtrList<K3bBootImage>& bootImages() { return m_bootImages; }
-  QString bootCatalogePath();
+  const QPtrList<K3bBootItem>& bootImages() { return m_bootImages; }
+  K3bDataItem* bootCataloge() { return m_bootCataloge; }
 
   K3bDirItem* bootImageDir();
   K3bFileItem* createBootItem( const QString& filename );
+  /** this will just remove it from the list of boot items, not remove it from the doc */
+  void removeBootItem( K3bBootItem* );
 
  public slots:
   /** add urls to the compilation.
@@ -203,7 +205,7 @@ class K3bDataDoc : public K3bDoc
 
   // boot cd stuff
   K3bDataItem* m_bootCataloge;
-  QPtrList<K3bBootImage> m_bootImages;
+  QPtrList<K3bBootItem> m_bootImages;
 
   friend class K3bMixedDoc;
 };
