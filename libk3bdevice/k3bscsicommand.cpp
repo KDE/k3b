@@ -25,10 +25,6 @@
 #include <sys/ioctl.h>
 #include <assert.h>
 
-#ifdef Q_OS_LINUX
-// Linux has all its headers alread included from the k3b headers
-#endif
-
 #ifdef Q_OS_FREEBSD
 #include <cam/scsi/scsi_message.h>
 #include <cam/scsi/scsi_pass.h>
@@ -92,57 +88,12 @@ public:
 #ifdef Q_OS_LINUX
   struct cdrom_generic_command cmd;
   struct request_sense sense;
-  
+
 #endif
 #ifdef Q_OS_FREEBSD
-  bool closecam;
-  struct cam_device  *cam;
   union ccb ccb;
 #endif
-  
-  Private();
-  ~Private();
-  void clear();
 };
-
-K3bCdDevice::ScsiCommand::Private::Private()
-{
-#ifdef Q_OS_FREEBSD
-  cam = 0;
-#endif
-  clear();
-}
-
-K3bCdDevice::ScsiCommand::Private::~Private()
-{
-#ifdef Q_OS_FREEBSD
-  if (cam && closecam) {
-    cam_close_device(cam);
-    cam = 0;
-  }
-#endif
-}
-
-void K3bCdDevice::ScsiCommand::Private::clear()
-{
-#ifdef Q_OS_FREEBSD
-  memset (&ccb,0,sizeof(ccb));
-  if (!cam)
-    return;
-  ccb.ccb_h.path_id    = cam->path_id;
-  ccb.ccb_h.target_id  = cam->target_id;
-  ccb.ccb_h.target_lun = cam->target_lun;
-#endif
-
-#ifdef Q_OS_LINUX
-  ::memset( &cmd, 0, sizeof(struct cdrom_generic_command) );
-  ::memset( &sense, 0, sizeof(struct request_sense) );
-
-  cmd.quiet = 1;
-  cmd.sense = &sense;
-#endif
-}
-
 
 K3bCdDevice::ScsiCommand::ScsiCommand( int fd )
   : d(new Private),
@@ -162,34 +113,10 @@ K3bCdDevice::ScsiCommand::ScsiCommand( const K3bCdDevice::CdDevice* dev )
   // to allow fast multible method calls in a row
   m_needToCloseDevice = !m_device->isOpen();
 
-#ifdef Q_OS_LINUX
   m_fd = m_device->open();
-#endif
-
-#ifdef Q_OS_FREEBSD
-  d->closecam = true;
-  d->cam = cam_open_pass (m_device->m_passDevice.latin1(),O_RDWR,0 /* NULL */);
-  kdDebug() << "(K3bCdDevice::ScsiCommand) open device " << m_device->m_passDevice
-	    << ((d->cam)?" succeeded.":" failed.") << endl;
-  m_fd = 0;
-#endif
 
   clear();
 }
-
-
-#ifdef Q_OS_FREEBSD
-K3bCdDevice::ScsiCommand::ScsiCommand( const K3bCdDevice::CdDevice*dev , struct cam_device *cam)
-  : d(0),
-    m_fd(0),
-    m_device(dev)
-{
-  d = new Private;
-  d->closecam = false;
-  d->cam = cam;
-  clear();
-}
-#endif
 
 
 K3bCdDevice::ScsiCommand::~ScsiCommand()
@@ -202,19 +129,31 @@ K3bCdDevice::ScsiCommand::~ScsiCommand()
 
 void K3bCdDevice::ScsiCommand::clear()
 {
-  d->clear();
+#ifdef Q_OS_LINUX
+  ::memset( &d->cmd, 0, sizeof(struct cdrom_generic_command) );
+  ::memset( &d->sense, 0, sizeof(struct request_sense) );
+
+  d->cmd.quiet = 1;
+  d->cmd.sense = &sense;
+#endif
+#ifdef Q_OS_FREEBSD
+  memset (&d->ccb,0,sizeof(ccb));
+  if (!m_device || !m_device->cam()) return;
+  d->ccb.ccb_h.path_id    = m_device->cam()->path_id;
+  d->ccb.ccb_h.target_id  = m_device->cam()->target_id;
+  d->ccb.ccb_h.target_lun = m_device->cam()->target_lun;
+#endif
 }
 
 
 unsigned char& K3bCdDevice::ScsiCommand::operator[]( size_t i )
 {
+#ifdef Q_OS_LINUX
+  return d->cmd.cmd[i];
+#endif
 #ifdef Q_OS_FREEBSD
   d->ccb.csio.cdb_len = i+1;
   return d->ccb.csio.cdb_io.cdb_bytes[i];
-#endif
-
-#ifdef Q_OS_LINUX
-  return d->cmd.cmd[i];
 #endif
 }
 
@@ -254,7 +193,7 @@ int K3bCdDevice::ScsiCommand::transport( TransportDirection dir,
 #endif
 
 #ifdef Q_OS_FREEBSD
-  if (!d->cam)
+  if (!m_device || !m_device->cam())
     return -1;
   kdDebug() << "(K3bCdDevice::ScsiCommand) transport command " << QString::number((int)d->ccb.csio.cdb_io.cdb_bytes[0], 16) << ", length: " << (int)d->ccb.csio.cdb_len << endl;
   int ret=0;
@@ -265,7 +204,7 @@ int K3bCdDevice::ScsiCommand::transport( TransportDirection dir,
     direction |= (dir & TR_DIR_READ)?CAM_DIR_IN : CAM_DIR_OUT;
   cam_fill_csio (&(d->ccb.csio), 1, 0 /* NULL */, direction | CAM_DEV_QFRZDIS, MSG_SIMPLE_Q_TAG, (u_int8_t *)data, len, sizeof(d->ccb.csio.sense_data), d->ccb.csio.cdb_len, 30*1000);
   unsigned char * sense = (unsigned char *)&d->ccb.csio.sense_data;
-  if ((ret = cam_send_ccb(d->cam, &d->ccb)) < 0)
+  if ((ret = cam_send_ccb(m_device->cam(), &d->ccb)) < 0)
     {
       kdDebug() << "(K3bCdDevice::ScsiCommand) transport failed: " << ret << endl;
       goto dump_error;
@@ -292,7 +231,7 @@ int K3bCdDevice::ScsiCommand::transport( TransportDirection dir,
       d->ccb.csio.data_ptr  = _sense;
       d->ccb.csio.dxfer_len = sizeof(_sense);
       d->ccb.csio.sense_len = 0;
-      ret = cam_send_ccb(d->cam, &d->ccb);
+      ret = cam_send_ccb(m_device->cam(), &d->ccb);
 
       // FIXME: remove this goto stuff! It has no place in a C++ application.
 

@@ -112,9 +112,6 @@ namespace K3bCdDevice
     public:
       ScsiCommand( int fd );
       ScsiCommand( const CdDevice* );
-#ifdef Q_OS_FREEBSD
-      ScsiCommand( const CdDevice* , struct cam_device *); // FBSD
-#endif
       ~ScsiCommand();
 
       void clear();
