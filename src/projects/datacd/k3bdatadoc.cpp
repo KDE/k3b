@@ -60,6 +60,7 @@ K3bDataDoc::K3bDataDoc( QObject* parent )
   connect( m_queuedToAddItemsTimer, SIGNAL(timeout()), this, SLOT(slotAddQueuedItems()) );
 
   m_sizeHandler = new K3bFileCompilationSizeHandler();
+  m_oldSessionSizeHandler = new K3bFileCompilationSizeHandler();
 
   // FIXME: remove the newFileItems() signal and replace it with the changed signal
   connect( this, SIGNAL(newFileItems()), this, SIGNAL(changed()) );
@@ -69,6 +70,7 @@ K3bDataDoc::~K3bDataDoc()
 {
   delete m_root;
   delete m_sizeHandler;
+  delete m_oldSessionSizeHandler;
 }
 
 
@@ -326,6 +328,16 @@ KIO::filesize_t K3bDataDoc::size() const
   //return m_size;
   //  return root()->k3bSize();
   return m_sizeHandler->size();
+}
+
+
+KIO::filesize_t K3bDataDoc::burningSize() const
+{
+  if( m_multisessionMode == NONE ||
+      m_multisessionMode == START )
+    return size();
+
+  return size() - m_oldSessionSizeHandler->size();
 }
 
 
@@ -1147,7 +1159,7 @@ void K3bDataDoc::importSession( const QString& path )
   clearImportedSession();
 
   // set multisession option
-  if( m_multisessionMode != CONTINUE && m_multisessionMode != FINISH )
+  if( m_multisessionMode != FINISH )
     m_multisessionMode = CONTINUE;
 
   // add all files from cd as readonly fileitems
@@ -1234,13 +1246,14 @@ void K3bDataDoc::createSessionImportItems( const QString& path, K3bDirItem* pare
     item->setWriteToCd(false);
     item->setExtraInfo( i18n("From previous session") );
     m_oldSession.append( item );
-    //    m_sizeHandler->addFile( newF.absFilePath() );
+    m_oldSessionSizeHandler->addFile( item );
   }
 }
 
 
 void K3bDataDoc::clearImportedSession()
 {
+  m_oldSessionSizeHandler->clear();
   m_oldSession.setAutoDelete(false);
   K3bDataItem* item = m_oldSession.first();
   while( !m_oldSession.isEmpty() ) {

@@ -159,6 +159,8 @@ void K3bAudioRippingDialog::setupGui()
   QGroupBox* groupFileType = new QGroupBox( 1, Qt::Vertical, i18n("File Type"), optionPage );
   m_comboFileType = new QComboBox( groupFileType );
 
+  // TODO: add a button for configuring the plugins
+
   optionPageLayout->addWidget( groupOptions );
   optionPageLayout->addWidget( groupFileType );
   optionPageLayout->setStretchFactor( groupOptions, 1 );

@@ -249,16 +249,21 @@ void K3bGrowisofsImager::slotReceivedStderr( const QString& line )
       emit newSubTask( i18n("Writing data") );
     }
 
+    //
+    // Here we use m_doc->burningSize() to prevent wrong values when the user
+    // imported a session.
+    //
+
     int p = K3bIsoImager::parseProgress( line );
     if( p != -1 ) {
-      d->speedEst->dataWritten( p*m_doc->size()/1024/100 );
+      d->speedEst->dataWritten( p*m_doc->burningSize()/1024/100 );
       if( p > d->lastPercent ) {
 	emit percent( p );
 	d->lastPercent = p;
       }
       int ps = p*m_doc->size()/1024/1024/100;
       if( ps > d->lastProcessedSize ) {
-	emit processedSize( ps, m_doc->size()/1024/1024 );
+	emit processedSize( ps, m_doc->burningSize()/1024/1024 );
 	d->lastProcessedSize = ps;
       }
     }

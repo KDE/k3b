@@ -25,7 +25,7 @@
 
 
 class K3bPluginFactory;
-
+class QWidget;
 
 
 /**
@@ -68,6 +68,8 @@ class K3bPluginManager : public QObject
    * Removes the plugin from memory.
    */
   void unloadPlugin( K3bPluginFactory* );
+
+  int execPluginDialog( K3bPluginFactory*, QWidget* parent = 0, const char* name = 0 );
 
  private:
   class Private;

@@ -67,6 +67,11 @@ class K3bDataDoc : public K3bDoc
 
   virtual bool newDocument();
   virtual KIO::filesize_t size() const;
+
+  /**
+   * This is used for multisession where size() also returnes the imported session's size
+   */
+  virtual KIO::filesize_t burningSize() const;
   virtual K3b::Msf length() const;
 
   const QString& name() const { return m_name; }
@@ -148,6 +153,7 @@ class K3bDataDoc : public K3bDoc
   virtual QString documentType() const;
 
   K3bFileCompilationSizeHandler* m_sizeHandler;
+  K3bFileCompilationSizeHandler* m_oldSessionSizeHandler;
 
   virtual K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
 

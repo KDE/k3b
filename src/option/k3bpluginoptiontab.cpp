@@ -100,25 +100,8 @@ bool K3bPluginOptionTab::saveSettings()
 void K3bPluginOptionTab::slotConfigureButtonClicked()
 {
   QListViewItem* item = m_viewPlugins->selectedItem();
-  if( PluginViewItem* pi = dynamic_cast<PluginViewItem*>( item ) ) {
-    KDialogBase dlg( this, 
-		     "pluginConfigDlg", 
-		     true,
-		     i18n("Configure plugin %1").arg( pi->pluginFactory->name() ) );
-    
-    K3bPluginConfigWidget* configWidget = pi->pluginFactory->createConfigWidget( &dlg );
-    if( configWidget ) {
-      dlg.setMainWidget( configWidget );
-      connect( &dlg, SIGNAL(applyClicked()), configWidget, SLOT(saveConfig()) );
-      connect( &dlg, SIGNAL(okClicked()), configWidget, SLOT(saveConfig()) );
-      configWidget->loadConfig();
-      dlg.exec();
-      delete configWidget;
-    }
-    else {
-      KMessageBox::sorry( this, i18n("No settings available for plugin %1.").arg( pi->pluginFactory->name() ) );
-    }
-  }
+  if( PluginViewItem* pi = dynamic_cast<PluginViewItem*>( item ) )
+    k3bpluginmanager->execPluginDialog( pi->pluginFactory, this );
 }
 
 

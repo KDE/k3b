@@ -15,12 +15,15 @@
 
 #include "k3bpluginmanager.h"
 #include "k3bpluginfactory.h"
+#include "k3bpluginconfigwidget.h"
 
 #include <kdebug.h>
 #include <ksimpleconfig.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
+#include <kdialogbase.h>
+#include <kmessagebox.h>
 
 #include <qptrlist.h>
 #include <qmap.h>
@@ -147,6 +150,30 @@ void K3bPluginManager::unloadPlugin( K3bPluginFactory* factory )
 int K3bPluginManager::pluginSystemVersion() const
 {
   return 1;
+}
+
+
+int K3bPluginManager::execPluginDialog( K3bPluginFactory* f, QWidget* parent, const char* name )
+{
+  KDialogBase dlg( parent, 
+		   name, 
+		   true,
+		   i18n("Configure plugin %1").arg( f->name() ) );
+  
+  K3bPluginConfigWidget* configWidget = f->createConfigWidget( &dlg );
+  if( configWidget ) {
+    dlg.setMainWidget( configWidget );
+    connect( &dlg, SIGNAL(applyClicked()), configWidget, SLOT(saveConfig()) );
+    connect( &dlg, SIGNAL(okClicked()), configWidget, SLOT(saveConfig()) );
+    configWidget->loadConfig();
+    int r = dlg.exec();
+    delete configWidget;
+    return r;
+  }
+  else {
+    KMessageBox::sorry( parent, i18n("No settings available for plugin %1.").arg( f->name() ) );
+    return 0;
+  }
 }
 
 #include "k3bpluginmanager.moc"
