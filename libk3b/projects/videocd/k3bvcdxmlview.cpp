@@ -175,9 +175,9 @@ bool K3bVcdXmlView::write( const QString& fname )
     if ( !m_doc->vcdOptions()->haveSequence() )  {
             QString filename;
             if  ( m_doc->vcdOptions()->mpegVersion() == 1 )
-                filename = locate( "data", "k3b/extra/k3bphotoVCD.mpg" );
+                filename = locate( "data", "k3b/extra/k3bphotovcd.mpg" );
             else
-                filename = locate( "data", "k3b/extra/k3bphotoSVCD.mpg" );
+                filename = locate( "data", "k3b/extra/k3bphotosvcd.mpg" );
 
             elemsequenceItem = addSubElement( xmlDoc, elemsequenceItems, "sequence-item" );
             elemsequenceItem.setAttribute( "src", QString( "%1" ).arg( QFile::encodeName(  filename ) ) );

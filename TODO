@@ -1,4 +1,3 @@
-* video cd Navigation
 * integrated Audio CD player
 
 - video cd photoalbum, portfolio
@@ -9,6 +8,7 @@
 
 + video cd ripping
 + video cd mpeg-still support
++ video cd Navigation
 
 legend:
 - planned
