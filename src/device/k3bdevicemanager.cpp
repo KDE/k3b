@@ -249,7 +249,7 @@ K3bDevice* K3bDeviceManager::scanDevice( const char *dev )
     if( newDevice->init() )
       return newDevice;
     else {
-      qDebug("(K3bDeviceManager) Could not initialize device %s.", drive->cdda_device_name );
+      qDebug("(K3bDeviceManager) Could not initialize device %s.", newDevice->devicename().latin1() );
       delete newDevice;
       return 0;
     }
@@ -260,7 +260,7 @@ K3bDevice* K3bDeviceManager::scanDevice( const char *dev )
     if( newDevice->init() )
       return newDevice;
     else {
-      qDebug("(K3bDeviceManager) Could not initialize device %s.", drive->cdda_device_name );
+      qDebug("(K3bDeviceManager) Could not initialize device %s.", newDevice->devicename().latin1() );
       delete newDevice;
       return 0;
     }
