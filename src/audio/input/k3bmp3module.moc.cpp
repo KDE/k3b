@@ -1,7 +1,7 @@
 /****************************************************************************
 ** K3bMp3Module meta object code from reading C++ file 'k3bmp3module.h'
 **
-** Created: Sat Oct 20 13:44:46 2001
+** Created: Thu Nov 1 18:10:55 2001
 **      by: The Qt MOC ($Id$)
 **
 ** WARNING! All changes made in this file will be lost!
