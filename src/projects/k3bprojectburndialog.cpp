@@ -154,7 +154,7 @@ int K3bProjectBurnDialog::exec( bool burn )
       KMessageBox::information( this, 
 				i18n("K3b did not find a suitable writer. "
 				     "You will only be able to create an image."),
-				i18n("No Writer available."),
+				i18n("No Writer Available"),
 				"project_no_writer" );
   }
   else {

@@ -54,7 +54,7 @@
 K3bDvdCopyDialog::K3bDvdCopyDialog( QWidget* parent, const char* name, bool modal )
   : K3bInteractionDialog( parent, name,
 			  i18n("DVD Copy"),
-			  i18n("No Video transcoding!"),
+			  i18n("No video transcoding!"),
 			  START_BUTTON|CANCEL_BUTTON,
 			  START_BUTTON,
 			  modal ),
@@ -199,7 +199,7 @@ void K3bDvdCopyDialog::slotStartClicked()
     if( QFile::exists( m_tempDirSelectionWidget->tempPath() ) ) {
       if( KMessageBox::warningYesNo( this,
 				     i18n("Do you want to overwrite %1?").arg(m_tempDirSelectionWidget->tempPath()),
-				     i18n("File exists...") )
+				     i18n("File Exists") )
 	  != KMessageBox::Yes )
 	return;
     }

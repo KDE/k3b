@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -145,7 +145,7 @@ K3bExternalBinWidget::K3bExternalBinWidget( K3bExternalBinManager* manager, QWid
   parametersTabLayout->setSpacing( KDialog::spacingHint() );
   m_parameterView = new KListView( parametersTab );
   parametersTabLayout->addWidget( m_parameterView, 1, 0 );
-  parametersTabLayout->addWidget( new QLabel( i18n("User Parameters have to be separated by space."), parametersTab ), 0, 0 );
+  parametersTabLayout->addWidget( new QLabel( i18n("User parameters have to be separated by space."), parametersTab ), 0, 0 );
 
   parametersTabLayout->setRowStretch( 1, 1 );
 

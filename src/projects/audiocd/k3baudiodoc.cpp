@@ -605,7 +605,7 @@ void K3bAudioDoc::informAboutNotFoundFiles()
   }
   if( !m_unknownFileFormatFiles.isEmpty() ) {
     KMessageBox::informationList( view(), i18n("Unable to handle the following files due to an unsupported format:"),
- 				  m_unknownFileFormatFiles, i18n("Unsupported format") );
+ 				  m_unknownFileFormatFiles, i18n("Unsupported Format") );
 
     m_unknownFileFormatFiles.clear();
   }

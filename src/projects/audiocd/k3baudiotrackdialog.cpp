@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -317,8 +317,8 @@ void K3bAudioTrackDialog::setupGui()
   m_displayFileName = new KCutLabel( groupFileInfo );
   m_displayFileName->setText( i18n( "Filename" ) );
   m_displayFileName->setAlignment( int( QLabel::AlignTop | QLabel::AlignLeft ) );
-  QLabel* labelSize = new QLabel( i18n( "Size" ), groupFileInfo, "labelSize" );
-  QLabel* labelLength = new QLabel( i18n( "Length"), groupFileInfo, "labelLength" );
+  QLabel* labelSize = new QLabel( i18n( "Size:" ), groupFileInfo, "labelSize" );
+  QLabel* labelLength = new QLabel( i18n( "Length:"), groupFileInfo, "labelLength" );
   m_displaySize = new QLabel( groupFileInfo, "m_displaySize" );
   m_displaySize->setText( "0.0 MB" );
   m_displaySize->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );

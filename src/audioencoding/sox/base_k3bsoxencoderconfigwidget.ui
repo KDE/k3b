@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>339</width>
-            <height>157</height>
+            <width>419</width>
+            <height>201</height>
         </rect>
     </property>
     <property name="caption">
@@ -75,12 +75,12 @@
                         <widget class="QComboBox" row="2" column="1">
                             <item>
                                 <property name="text">
-                                    <string>Signed linear</string>
+                                    <string>Signed Linear</string>
                                 </property>
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>Unsigned linear</string>
+                                    <string>Unsigned Linear</string>
                                 </property>
                             </item>
                             <item>
@@ -110,7 +110,7 @@
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>Floating-point</string>
+                                    <string>Floating-Point</string>
                                 </property>
                             </item>
                             <property name="name">
@@ -143,7 +143,7 @@
                                 <cstring>textLabel4</cstring>
                             </property>
                             <property name="text">
-                                <string>Data Size:</string>
+                                <string>Data size:</string>
                             </property>
                         </widget>
                         <widget class="QLabel" row="2" column="0">
@@ -151,7 +151,7 @@
                                 <cstring>textLabel3</cstring>
                             </property>
                             <property name="text">
-                                <string>Data Encoding:</string>
+                                <string>Data encoding:</string>
                             </property>
                         </widget>
                         <widget class="QLabel" row="0" column="0">
@@ -193,7 +193,7 @@
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>16-bit words</string>
+                                    <string>16-bit Words</string>
                                 </property>
                             </item>
                             <item>

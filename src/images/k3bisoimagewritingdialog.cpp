@@ -460,10 +460,10 @@ void K3bIsoImageWritingDialog::slotMd5SumCompare()
   if( ok ) {
     if( md5sumToCompare.utf8() == m_md5Job->hexDigest() )
       KMessageBox::information( this, i18n("The MD5 Sum of %1 equals the specified.").arg(m_editImagePath->url()),
-				i18n("MD5 Sums are equal") );
+				i18n("MD5 Sums Equal") );
     else
       KMessageBox::sorry( this, i18n("The MD5 Sum of %1 differs from the specified.").arg(m_editImagePath->url()),
-			  i18n("MD5 Sums differ") );
+			  i18n("MD5 Sums Differ") );
   }
 }
 

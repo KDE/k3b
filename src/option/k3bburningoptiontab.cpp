@@ -117,13 +117,13 @@ void K3bBurningOptionTab::setupGui()
   groupVideoLayout->setMargin( KDialog::marginHint() );
 
   m_checkUsePbc = new QCheckBox( i18n("Use playback control (PBC) by default"), groupVideo );
-  m_labelPlayTime = new QLabel( i18n("Play each sequence/segment by default"), groupVideo );
+  m_labelPlayTime = new QLabel( i18n("Play each sequence/segment by default:"), groupVideo );
   m_spinPlayTime = new QSpinBox( groupVideo, "m_spinPlayTime" );
   m_spinPlayTime->setValue( 1 );
   m_spinPlayTime->setSuffix( i18n( " time(s)" ) );
-  m_spinPlayTime->setSpecialValueText( i18n( "forever" ) );  
+  m_spinPlayTime->setSpecialValueText( i18n( "forever" ) );
 
-  m_labelWaitTime = new QLabel( i18n("Time to wait after each sequence/segment by default"), groupVideo );
+  m_labelWaitTime = new QLabel( i18n("Time to wait after each sequence/segment by default:"), groupVideo );
   m_spinWaitTime = new QSpinBox( groupVideo, "m_spinWaitTime" );
   m_spinWaitTime->setMinValue( -1 );
   m_spinWaitTime->setValue( 2 );

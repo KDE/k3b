@@ -474,8 +474,8 @@ void K3bVcdTrackDialog::prepareGui()
     m_displayFileName->setText( i18n( "Filename" ) );
     m_displayFileName->setAlignment( int( QLabel::AlignTop | QLabel::AlignLeft ) );
 
-    QLabel* labelSize = new QLabel( i18n( "Size" ), groupFileInfo, "labelSize" );
-    QLabel* labelLength = new QLabel( i18n( "Length" ), groupFileInfo, "labelLength" );
+    QLabel* labelSize = new QLabel( i18n( "Size:" ), groupFileInfo, "labelSize" );
+    QLabel* labelLength = new QLabel( i18n( "Length:" ), groupFileInfo, "labelLength" );
 
     m_displaySize = new QLabel( groupFileInfo, "m_displaySize" );
     m_displaySize->setText( "0.0 MB" );
@@ -530,7 +530,7 @@ void K3bVcdTrackDialog::setupPbcTab()
     groupOptions->layout() ->setSpacing( spacingHint() );
     groupOptions->layout() ->setMargin( marginHint() );
 
-    m_check_pbc = new QCheckBox( i18n( "Enable Playback Control (for the hole CD)" ), groupOptions, "m_check_pbc" );
+    m_check_pbc = new QCheckBox( i18n( "Enable playback control (for the whole CD)" ), groupOptions, "m_check_pbc" );
 
     m_check_usekeys = new QCheckBox( i18n( "Use numeric keys" ), groupOptions, "m_check_usekeys" );
     m_check_usekeys->setEnabled( false );

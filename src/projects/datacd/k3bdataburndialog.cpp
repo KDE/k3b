@@ -233,7 +233,7 @@ void K3bDataBurnDialog::slotStartClicked()
     if( QFile::exists( m_tempDirSelectionWidget->tempPath() ) ) {
       if( KMessageBox::warningYesNo( this,
 				     i18n("Do you want to overwrite %1?").arg(m_tempDirSelectionWidget->tempPath()),
-				     i18n("File exists...") )
+				     i18n("File Exists") )
 	  != KMessageBox::Yes )
 	return;
     }

@@ -390,7 +390,7 @@ void K3bDvdRippingProcess::saveConfig() {
     QFile f( m_dirname + "/k3bDVDRip.xml" );
     if( f.exists() ) {
         QString dontAskAgainName = "Overwrite k3bDVDRip.xml";
-        int button = KMessageBox::questionYesNo(qApp->activeWindow(), i18n("Log file already exists. Overwrite?"), i18n("Ripping error"),
+        int button = KMessageBox::questionYesNo(qApp->activeWindow(), i18n("Log file already exists. Overwrite?"), i18n("Ripping Error"),
         KStdGuiItem::yes(), KStdGuiItem::no(), dontAskAgainName) ;
         if( button != KMessageBox::Yes ) {
             kdDebug() << "(K3bDvdRippingProcess) Couldn't save ripping datas." << endl;

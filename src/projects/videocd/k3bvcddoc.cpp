@@ -447,7 +447,7 @@ void K3bVcdDoc::informAboutNotFoundFiles()
 {
     if ( !m_notFoundFiles.isEmpty() ) {
         KMessageBox::informationList( view(), i18n( "Could not find the following files:" ),
-                                      m_notFoundFiles, i18n( "Not found" ) );
+                                      m_notFoundFiles, i18n( "Not Found" ) );
 
         m_notFoundFiles.clear();
     }

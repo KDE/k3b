@@ -53,9 +53,9 @@ void K3bDivxExtSettings::setupGui() {
     QWhatsThis::add( m_checkShutdown, i18n("If enabled, K3b shuts the system down after encoding has finished."
         "This only works in when using Kdm.") );
 
-    m_checkWithoutAudio = new QCheckBox( i18n("Start encoding without detecting normalize parameter for audio."), this);
-    m_checkOnlyFirstPass = new QCheckBox( i18n("Do only the first pass of a two-pass encoding."), this);
-    m_checkOnlySecondPass = new QCheckBox( i18n("Do only the second pass of a two-pass encoding."), this);
+    m_checkWithoutAudio = new QCheckBox( i18n("Start encoding without detecting normalize parameter for audio"), this);
+    m_checkOnlyFirstPass = new QCheckBox( i18n("Do only the first pass of a two-pass encoding"), this);
+    m_checkOnlySecondPass = new QCheckBox( i18n("Do only the second pass of a two-pass encoding"), this);
     m_lineTwoPassLog = new KLineEdit( m_data->getProjectDir()+"/tmp/divx4.log", this);
 
     // TODO

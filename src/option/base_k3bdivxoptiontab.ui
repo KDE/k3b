@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>627</width>
+            <width>772</width>
             <height>240</height>
         </rect>
     </property>
@@ -79,7 +79,7 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Video Quality:</string>
+                        <string>Video quality:</string>
                     </property>
                 </widget>
                 <widget class="KDoubleNumInput" row="0" column="3">
@@ -165,7 +165,7 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>AVI Size:</string>
+                        <string>AVI size:</string>
                     </property>
                 </widget>
                 <widget class="KIntNumInput" row="3" column="3">
@@ -240,25 +240,6 @@
                     </property>
                     <widget class="QRadioButton">
                         <property name="name">
-                            <cstring>radioButton15_2</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>150</x>
-                                <y>0</y>
-                                <width>42</width>
-                                <height>20</height>
-                            </rect>
-                        </property>
-                        <property name="text">
-                            <string>off</string>
-                        </property>
-                        <property name="buttonGroupId">
-                            <number>2</number>
-                        </property>
-                    </widget>
-                    <widget class="QRadioButton">
-                        <property name="name">
                             <cstring>radioButton14_2</cstring>
                         </property>
                         <property name="geometry">
@@ -286,13 +267,32 @@
                             </rect>
                         </property>
                         <property name="text">
-                            <string>width</string>
+                            <string>Width</string>
                         </property>
                         <property name="buttonGroupId">
                             <number>0</number>
                         </property>
                         <property name="whatsThis" stdset="0">
                             <string>K3b automatically calculate the bitrate or the width to get the video quality set above. If you select &lt;b&gt;width&lt;/b&gt;, K3b will increase/decrease the AVI size so that it gets the video quality. If you select the&lt;b&gt; AVI size&lt;/b&gt; the width will be increased/decreased to fit the quality.</string>
+                        </property>
+                    </widget>
+                    <widget class="QRadioButton">
+                        <property name="name">
+                            <cstring>radioButton15_2</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>150</x>
+                                <y>0</y>
+                                <width>42</width>
+                                <height>20</height>
+                            </rect>
+                        </property>
+                        <property name="text">
+                            <string>Off</string>
+                        </property>
+                        <property name="buttonGroupId">
+                            <number>2</number>
                         </property>
                     </widget>
                 </widget>
@@ -329,7 +329,7 @@
 </widget>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>knuminput.h</includehint>
+    <includehint>kdoublenuminput.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>

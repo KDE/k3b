@@ -64,7 +64,7 @@ void K3bDivxAVSet::setupGui() {
     QLabel *cds = new QLabel( i18n( "CDs:" ), this );
     QString wt_cd( i18n( "Select how many CDs the final encoded video should have. You can select CDRs with a size of 650MB and 700MB." ) );
     QWhatsThis::add( cds, wt_cd );
-    m_mp3bitrate = new QLabel( i18n( "MP3 Bitrate:" ), this );
+    m_mp3bitrate = new QLabel( i18n( "MP3 bitrate:" ), this );
     QString wt_mp3( i18n( "Select bitrate of the audio track. MP3 can be encoded with constant or variable bitrate and joint stereo. AC3 passthrough must be disabled to use MP3." ) );
     QWhatsThis::add( m_mp3bitrate, wt_mp3 );
     QLabel *codec = new QLabel( i18n( "Video codec:" ), this );

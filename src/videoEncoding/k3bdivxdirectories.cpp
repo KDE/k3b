@@ -195,7 +195,7 @@ void K3bDivxDirectories::slotVideoEdited( const QString& text){
         kdDebug() << "(K3bDivxDirectories) File exists: " << text << endl;
         m_data->setProjectFile( text );
         if( !m_data->projectLoaded() ){
-            KMessageBox::error( this, i18n("Error loading project"), i18n("Error while parsing file: %1").arg(text) );
+            KMessageBox::error( this, i18n("Error Loading Project"), i18n("Error while parsing file: %1").arg(text) );
             m_data->setProjectFile( "" );
             return;
         }

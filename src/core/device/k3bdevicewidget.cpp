@@ -462,7 +462,7 @@ void K3bDeviceWidget::updateDeviceListViews()
 void K3bDeviceWidget::slotNewDevice()
 {
   bool ok;
-  QString newDevicename = KLineEditDlg::getText( i18n("Please enter the device name where K3b should search\n for a new drive (example: /dev/mebecdrom):"), "/dev/", &ok, this );
+  QString newDevicename = KLineEditDlg::getText( i18n("Please enter the device name where K3b should search\nfor a new drive (example: /dev/mebecdrom):"), "/dev/", &ok, this );
 
   if( ok ) {
     if( K3bDevice* dev = m_deviceManager->addDevice( newDevicename ) ) {

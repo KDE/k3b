@@ -49,13 +49,13 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const cha
 
   QHBox* freeTempSpaceBox = new QHBox( this );
   freeTempSpaceBox->setSpacing( KDialog::spacingHint() );
-  (void)new QLabel( i18n( "Free space in temporary directory" ), freeTempSpaceBox, "TextLabel2" );
+  (void)new QLabel( i18n( "Free space in temporary directory:" ), freeTempSpaceBox, "TextLabel2" );
   m_labelFreeSpace = new QLabel( "                       ",freeTempSpaceBox, "m_labelFreeSpace" );
   m_labelFreeSpace->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
 
   QHBox* cdSizeBox = new QHBox( this );
   cdSizeBox->setSpacing( KDialog::spacingHint() );
-  (void)new QLabel( i18n( "Size of Project" ), cdSizeBox, "TextLabel4" );
+  (void)new QLabel( i18n( "Size of project:" ), cdSizeBox, "TextLabel4" );
   m_labelCdSize = new QLabel( "                        ", cdSizeBox, "m_labelCdSize" );
   m_labelCdSize->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
 

@@ -316,17 +316,17 @@ void K3bVcdBurnDialog::setupAdvancedTab()
 
     m_checkGaps = new QCheckBox( i18n( "Customize gaps and margins" ), m_groupGaps );
 
-    m_labelPreGapLeadout = new QLabel( i18n( "Leadout pre gap (0..300)" ), m_groupGaps, "labelPreGapLeadout" );
+    m_labelPreGapLeadout = new QLabel( i18n( "Leadout pre gap (0..300):" ), m_groupGaps, "labelPreGapLeadout" );
     m_spinPreGapLeadout = new QSpinBox( m_groupGaps, "m_spinPreGapLeadout" );
     m_spinPreGapLeadout->setMinValue( 0 );
     m_spinPreGapLeadout->setMaxValue( 300 );
 
-    m_labelPreGapTrack = new QLabel( i18n( "Track pre gap (0..300)" ), m_groupGaps, "labelPreGapTrack" );
+    m_labelPreGapTrack = new QLabel( i18n( "Track pre gap (0..300):" ), m_groupGaps, "labelPreGapTrack" );
     m_spinPreGapTrack = new QSpinBox( m_groupGaps, "m_spinPreGapTrack" );
     m_spinPreGapTrack->setMinValue( 0 );
     m_spinPreGapTrack->setMaxValue( 300 );
 
-    m_labelFrontMarginTrack = new QLabel( i18n( "Track front margin (0..150)" ), m_groupGaps, "labelFrontMarginTrack" );
+    m_labelFrontMarginTrack = new QLabel( i18n( "Track front margin (0..150):" ), m_groupGaps, "labelFrontMarginTrack" );
     m_spinFrontMarginTrack = new QSpinBox( m_groupGaps, "m_spinFrontMarginTrack" );
     m_spinFrontMarginTrack->setMinValue( 0 );
     m_spinFrontMarginTrack->setMaxValue( 150 );
@@ -335,7 +335,7 @@ void K3bVcdBurnDialog::setupAdvancedTab()
     m_spinFrontMarginTrackSVCD->setMaxValue( 150 );
     m_spinFrontMarginTrackSVCD->setHidden( true );
 
-    m_labelRearMarginTrack = new QLabel( i18n( "Track rear margin (0..150)" ), m_groupGaps, "labelRearMarginTrack" );
+    m_labelRearMarginTrack = new QLabel( i18n( "Track rear margin (0..150):" ), m_groupGaps, "labelRearMarginTrack" );
     m_spinRearMarginTrack = new QSpinBox( m_groupGaps, "m_spinRearMarginTrack" );
     m_spinRearMarginTrack->setMinValue( 0 );
     m_spinRearMarginTrack->setMaxValue( 150 );
@@ -368,7 +368,7 @@ void K3bVcdBurnDialog::setupAdvancedTab()
     QGridLayout* groupMiscLayout = new QGridLayout( m_groupMisc->layout() );
     groupMiscLayout->setAlignment( Qt::AlignTop );
 
-    m_labelRestriction = new QLabel( i18n( "Restriction category (0..3)" ), m_groupMisc, "m_labelRestriction" );
+    m_labelRestriction = new QLabel( i18n( "Restriction category (0..3):" ), m_groupMisc, "m_labelRestriction" );
     m_spinRestriction = new QSpinBox( m_groupMisc, "m_spinRestriction" );
     m_spinRestriction->setMinValue( 0 );
     m_spinRestriction->setMaxValue( 3 );
@@ -410,7 +410,7 @@ void K3bVcdBurnDialog::setupVideoCdTab()
     m_checkNonCompliant->setEnabled( false );
     m_checkNonCompliant->setChecked( false );
 
-    m_check2336 = new QCheckBox( i18n( "Use 2336 byte Sectors" ), m_groupOptions );
+    m_check2336 = new QCheckBox( i18n( "Use 2336 byte sectors" ), m_groupOptions );
 
     m_checkCdiSupport = new QCheckBox( i18n( "Enable CD-i support" ), m_groupOptions );
 
@@ -534,7 +534,7 @@ void K3bVcdBurnDialog::slotStartClicked()
 {
 
     if ( QFile::exists( vcdDoc() ->vcdImage() ) ) {
-        if ( KMessageBox::questionYesNo( this, i18n( "Do you want to overwrite %1" ).arg( vcdDoc() ->vcdImage() ), i18n( "File exists..." ) )
+        if ( KMessageBox::questionYesNo( this, i18n( "Do you want to overwrite %1" ).arg( vcdDoc() ->vcdImage() ), i18n( "File Exists" ) )
                 != KMessageBox::Yes )
             return ;
     }

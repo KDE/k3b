@@ -68,7 +68,7 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
 
 
   // the data actions
-  (void)new KAction(i18n("&Import Session"), "gear", 0, this, SLOT(importSession()),
+  (void)new KAction(i18n("&Import Session..."), "gear", 0, this, SLOT(importSession()),
 		    actionCollection(), "project_data_import_session" );
   (void)new KAction(i18n("&Clear Imported Session"), "gear", 0, this,
 		    SLOT(clearImportedSession()), actionCollection(),

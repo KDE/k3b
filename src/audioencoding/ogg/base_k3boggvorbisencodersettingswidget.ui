@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>325</width>
-            <height>175</height>
+            <width>460</width>
+            <height>215</height>
         </rect>
     </property>
     <property name="caption">
@@ -101,7 +101,7 @@
                         <cstring>m_radioManual</cstring>
                     </property>
                     <property name="text">
-                        <string>Manual Settings:</string>
+                        <string>Manual settings:</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton" row="0" column="0" rowspan="1" colspan="2">
@@ -109,7 +109,7 @@
                         <cstring>m_radioQualityLevel</cstring>
                     </property>
                     <property name="text">
-                        <string>Quality Level:</string>
+                        <string>Quality level:</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -146,7 +146,7 @@
                                 <cstring>m_checkBitrateUpper</cstring>
                             </property>
                             <property name="text">
-                                <string>Upper Bitrate:</string>
+                                <string>Upper bitrate:</string>
                             </property>
                         </widget>
                         <widget class="QCheckBox" row="2" column="0">
@@ -154,7 +154,7 @@
                                 <cstring>m_checkBitrateLower</cstring>
                             </property>
                             <property name="text">
-                                <string>Lower Bitrate:</string>
+                                <string>Lower bitrate:</string>
                             </property>
                         </widget>
                         <widget class="KIntNumInput" row="0" column="1">
@@ -234,7 +234,7 @@
                                 </sizepolicy>
                             </property>
                             <property name="text">
-                                <string>Nominal Bitrate:</string>
+                                <string>Nominal bitrate:</string>
                             </property>
                         </widget>
                     </grid>

@@ -499,7 +499,7 @@ void K3bAudioCdView::slotCddbQueryFinished( int error )
     updateDisplay();
   }
   else if( error == K3bCddbQuery::NO_ENTRY_FOUND ) {
-    KMessageBox::information( this, i18n("No CDDB entry found"), i18n("CDDB") );
+    KMessageBox::information( this, i18n("No CDDB entry found."), i18n("CDDB") );
   }
   else {
     KMessageBox::information( this, m_cddb->errorString(), i18n("Cddb error") );

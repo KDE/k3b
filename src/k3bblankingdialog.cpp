@@ -234,20 +234,20 @@ void K3bBlankingDialog::slotWritingAppChanged(int app)
   d->comboTypeMap[1] = K3bBlankingJob::Complete;
   d->typeComboMap[K3bBlankingJob::Complete] = 1;
 
-  whatsThisInfo = "<p>" + i18n("Blanking Mode:") +
+  whatsThisInfo = "<p>" + i18n("Blanking mode:") +
     "<p><b>" + i18n("Fast") + "</b><br>" + wsFast;
   whatsThisInfo += "<p><b>" + i18n("Complete") + "</b><br>" + wsComplete;
 
   if ( app != K3b::CDRDAO ) {
-    m_comboEraseMode->insertItem( i18n("Erase last track") );
+    m_comboEraseMode->insertItem( i18n("Erase Last Track") );
     d->comboTypeMap[2] = K3bBlankingJob::Track;
     d->typeComboMap[K3bBlankingJob::Track] = 2;
-    whatsThisInfo += "<p><b>" + i18n("Erase last track") + "</b><br>" + wsTrack;
-    m_comboEraseMode->insertItem( i18n("Unclose last session") );
+    whatsThisInfo += "<p><b>" + i18n("Erase Last Track") + "</b><br>" + wsTrack;
+    m_comboEraseMode->insertItem( i18n("Unclose Last Session") );
     d->comboTypeMap[3] = K3bBlankingJob::Unclose;
     d->typeComboMap[K3bBlankingJob::Unclose] = 3;
     whatsThisInfo += "<p><b>" + i18n("Unclose last session") + "</b><br>" + wsUnclose;
-    m_comboEraseMode->insertItem( i18n("Erase last session") );
+    m_comboEraseMode->insertItem( i18n("Erase Last Session") );
     d->comboTypeMap[4] = K3bBlankingJob::Session;
     d->typeComboMap[K3bBlankingJob::Session] = 4;
     whatsThisInfo += "<p><b>" + i18n("Erase last session") + "</b><br>" + wsSession;

@@ -124,7 +124,7 @@ K3bCloneDialog::K3bCloneDialog( QWidget* parent, const char* name, bool modal )
   advancedTabGrid->setSpacing( spacingHint() );
   advancedTabGrid->setMargin( marginHint() );
 
-  m_checkNoCorr = new QCheckBox( i18n("No Correction"), advancedTab );
+  m_checkNoCorr = new QCheckBox( i18n("No correction"), advancedTab );
   advancedTabGrid->addWidget( m_checkNoCorr, 0, 0 );
   advancedTabGrid->setRowStretch( 1, 1 );
 
@@ -218,7 +218,7 @@ void K3bCloneDialog::slotStartClicked()
   if( QFile::exists( m_tempDirSelectionWidget->tempPath() ) ) {
     if( KMessageBox::warningYesNo( this,
 				   i18n("Do you want to overwrite %1?").arg(m_tempDirSelectionWidget->tempPath()),
-				   i18n("File exists...") )
+				   i18n("File Exists") )
 	!= KMessageBox::Yes )
       return;
   }
@@ -226,7 +226,7 @@ void K3bCloneDialog::slotStartClicked()
   if( QFile::exists( m_tempDirSelectionWidget->tempPath() + ".toc" ) ) {
     if( KMessageBox::warningYesNo( this,
 				   i18n("Do you want to overwrite %1?").arg(m_tempDirSelectionWidget->tempPath() + ".toc"),
-				   i18n("File exists...") )
+				   i18n("File Exists") )
 	!= KMessageBox::Yes )
       return;
   }

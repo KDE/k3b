@@ -52,7 +52,7 @@
                         <cstring>m_buttonNew</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;New</string>
+                        <string>&amp;New...</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Add new boot image</string>

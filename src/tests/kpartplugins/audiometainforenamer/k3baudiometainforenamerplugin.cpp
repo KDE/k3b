@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -73,7 +73,7 @@ K3bAudioMetainfoRenamerPluginDialog::K3bAudioMetainfoRenamerPluginDialog( K3bDat
 									  QWidget* parent, 
 									  const char* name )
   : K3bInteractionDialog( parent, name,
-			  i18n("Rename audio files"),
+			  i18n("Rename Audio Files"),
 			  i18n("Based on meta info"),
 			  START_BUTTON|CANCEL_BUTTON|SAVE_BUTTON )
 {
@@ -104,12 +104,12 @@ K3bAudioMetainfoRenamerPluginDialog::K3bAudioMetainfoRenamerPluginDialog( K3bDat
   optionGroup->setInsideSpacing( spacingHint() );
 
   d->checkRecursive = new QCheckBox( i18n("Recursive"), optionGroup );
-  d->checkCompleteDoc = new QCheckBox( i18n("Complete Project"), optionGroup );
+  d->checkCompleteDoc = new QCheckBox( i18n("Complete project"), optionGroup );
 
 
   // the files view
   QGroupBox* filesGroup = new QGroupBox( 1, Qt::Horizontal,
-					  i18n("Found files"), main );
+					  i18n("Found Files"), main );
   filesGroup->setInsideMargin( marginHint() );
   filesGroup->setInsideSpacing( spacingHint() );
 
@@ -388,7 +388,7 @@ K3bAudioMetainfoRenamerPlugin::K3bAudioMetainfoRenamerPlugin( QObject* parent,
 							      const QStringList& )
   : KParts::Plugin( parent, name )
 {
-  (void) new KAction( "&Rename audio files",
+  (void) new KAction( "&Rename Audio Files",
 		      0, 0,
 		      this, SLOT(slotDoRename()),
 		      actionCollection(), "rename_audio_files_plugin" );

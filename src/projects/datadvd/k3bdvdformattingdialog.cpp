@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -67,7 +67,7 @@ K3bDvdFormattingDialog::K3bDvdFormattingDialog( QWidget* parent, const char* nam
   groupOptions->layout()->setMargin( marginHint() );
   groupOptions->layout()->setSpacing( spacingHint() );
   m_checkForce = new QCheckBox( i18n("Force"), groupOptions );
-  m_checkQuickFormat = new QCheckBox( i18n("Quick Format"), groupOptions );
+  m_checkQuickFormat = new QCheckBox( i18n("Quick format"), groupOptions );
 
   QGridLayout* grid = new QGridLayout( frame );
   grid->setMargin( 0 );

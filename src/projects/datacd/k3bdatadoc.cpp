@@ -1113,7 +1113,7 @@ void K3bDataDoc::informAboutNotFoundFiles()
 {
   if( !m_notFoundFiles.isEmpty() ) {
     KMessageBox::informationList( qApp->activeWindow(), i18n("Could not find the following files:"),
- 				  m_notFoundFiles, i18n("Not found") );
+ 				  m_notFoundFiles, i18n("Not Found") );
     m_notFoundFiles.clear();
   }
 

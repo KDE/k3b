@@ -324,7 +324,7 @@ void K3bFillStatusDisplay::setupPopupMenu()
   d->popup->insertTitle( i18n("Show Size In") );
   d->actionShowMinutes->plug( d->popup );
   d->actionShowMegs->plug( d->popup );
-  d->popup->insertTitle( i18n("CD size") );
+  d->popup->insertTitle( i18n("CD Size") );
   d->action74Min->plug( d->popup );
   d->action80Min->plug( d->popup );
   d->action100Min->plug( d->popup );

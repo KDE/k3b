@@ -288,7 +288,7 @@
                         <cstring>m_checkPreservePermissions</cstring>
                     </property>
                     <property name="text">
-                        <string>Preserve file permissions (Backup)</string>
+                        <string>Preserve file permissions (backup)</string>
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>&lt;p&gt;If this option is checked, all files on the resulting CD will have exactly the same permissions as the source files. (Otherwise all files will have equal permissions and be owned by root).

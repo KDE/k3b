@@ -58,7 +58,7 @@ K3bMovixView::K3bMovixView( K3bMovixDoc* doc, QWidget* parent, const char* name 
   m_actionRemoveSubTitle = new KAction( i18n( "Remove Subtitle File" ), "editdelete",
 					0, this, SLOT(slotRemoveSubTitleItems()),
 					actionCollection(), "movix_remove_subtitle_item" );
-  m_actionAddSubTitle = new KAction( i18n("Add Subtitle File"), "",
+  m_actionAddSubTitle = new KAction( i18n("Add Subtitle File..."), "",
 				     0, this, SLOT(slotAddSubTitleFile()),
 				     actionCollection(), "movix_add_subtitle" );
 

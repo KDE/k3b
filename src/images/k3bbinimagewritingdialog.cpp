@@ -135,7 +135,7 @@ void K3bBinImageWritingDialog::setupGui()
   groupImage->layout()->setMargin( marginHint() );
 
   m_editTocPath = new KURLRequester( groupImage );
-  m_editTocPath->setCaption( i18n("Choose TOC/CUE file") );
+  m_editTocPath->setCaption( i18n("Choose TOC/CUE File") );
   QString filter = i18n("*.cue|Cue Files");
   filter += "\n" + i18n("*.toc|Toc Files");
   filter += "\n" + i18n("*|All Files");
