@@ -109,7 +109,7 @@ void K3bVcdListView::setupPopupMenu()
     m_popupMenu->insertSeparator();
     m_actionProperties->plug( m_popupMenu );
     m_popupMenu->insertSeparator();
-    m_doc->view()->actionCollection() ->action( "project_burn" ) ->plug( m_popupMenu );
+    m_view->actionCollection() ->action( "project_burn" ) ->plug( m_popupMenu );
 }
 
 
