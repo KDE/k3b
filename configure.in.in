@@ -9,6 +9,15 @@ AC_SUBST(ASFLAGS)
 
 #AC_PROG_CC
 
+linux_scsi=no
+AC_MSG_CHECKING(for linux scsi headers)
+AC_TRY_COMPILE([
+	#include <sys/types.h>
+	#include <linux/../scsi/scsi.h> /* cope with silly includes */
+	],[],[linux_scsi=yes
+	])
+AC_MSG_RESULT($linux_scsi)
+
 
 CDPARANOIA_LIBS==""
 AC_MSG_CHECKING(for cdparanoia headers)
@@ -403,3 +412,6 @@ test -n "$debug"    && CFLAGS="$CFLAGS $debug"
 test -n "$optimize" && CFLAGS="$CFLAGS $optimize"
 test -n "$profile"  && CFLAGS="$CFLAGS $profile" LDFLAGS="$LDFLAGS $profile"
 
+if test "x$linux_scsi" = "xno" -o "x$cdda_paranoia" = "xno" ; then
+	DO_NOT_COMPILE="$DO_NOT_COMPILE k3b"
+fi
