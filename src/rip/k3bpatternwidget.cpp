@@ -17,8 +17,8 @@
 
 #include "k3bpatternwidget.h"
 #include "k3bpatternparser.h"
-#include "../kiotree/kiotree.h"
 #include "../k3bcddb.h"
+#include "../k3bfiletreeview.h"
 
 #include <qwidget.h>
 #include <qlistview.h>
@@ -88,8 +88,8 @@ void K3bPatternWidget::setup(){
 
     QVGroupBox *groupPatternDirTree = new QVGroupBox(m_groupPatternDir, "filename_patterndir" );
     groupPatternDirTree->setTitle( i18n( "Base Directory" ) );
-    m_kioTree = new KioTree( groupPatternDirTree );
-    m_kioTree->addTopLevelDir( KURL( QDir::homeDirPath() ) , "Home" );
+    m_kioTree = new K3bFileTreeView( groupPatternDirTree );
+    m_kioTree->addDefaultBranches();
     //QToolTip::add( m_kioTree, i18n("Basic directory where the songs will be ripped to."));
     m_dirs1 = new QVButtonGroup( i18n("Directory group 1"), m_groupPatternDir );
     m_radioDir1Artist = new QRadioButton(i18n("Artist"), m_dirs1);
@@ -240,7 +240,7 @@ void K3bPatternWidget::setup(){
 
     connect( m_dirs1, SIGNAL(clicked(int)), this, SLOT(slotShowFinalDirPattern()) );
     connect( m_dirs2, SIGNAL(clicked(int)), this, SLOT(slotShowFinalDirPattern()) );
-    connect( m_kioTree, SIGNAL(urlActivated( const KURL& )), this, SLOT( slotDirTree( const KURL& )) );
+    connect( m_kioTree, SIGNAL(urlExecuted( const KURL& )), this, SLOT( slotDirTree( const KURL& )) );
     connect( m_spaceReplaceFile, SIGNAL( clicked() ), this, SLOT( slotFileReplaceSpace()) );
     connect( m_spaceReplaceDir, SIGNAL( clicked() ), this, SLOT( slotShowFinalDirPattern()) );
     connect( m_checkSlashFile, SIGNAL( clicked() ), this, SLOT( slotUpdateView()) );
@@ -368,7 +368,7 @@ void K3bPatternWidget::readSettings(){
     showFinalFilePattern();
     // setup directory pattern
     m_basePath = c->readEntry("dirBasePath", QDir::homeDirPath() );
-    m_kioTree->followURL( KURL( m_basePath ) );
+    m_kioTree->followUrl( KURL( m_basePath ) );
     index = c->readNumEntry( "dirGroup1", 0 );
     m_dirs1->setButton( index );
     index = c->readNumEntry( "dirGroup2", 1 );

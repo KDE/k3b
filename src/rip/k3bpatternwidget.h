@@ -31,7 +31,7 @@ class QRadioButton;
 class QVButtonGroup;
 class QButtonGroup;
 class KLineEdit;
-class KioTree;
+class K3bFileTreeView;
 class KURL;
 class K3bPatternParser;
 
@@ -67,7 +67,7 @@ private:
     QRadioButton *m_radioDir2None;
     //QCheckBox *m_alwaysUseDir;
     QCheckBox *m_spaceReplaceDir;
-    KioTree *m_kioTree;
+    K3bFileTreeView *m_kioTree;
     QVButtonGroup *m_dirs1;
     QVButtonGroup *m_dirs2;
     QString m_basePath;
