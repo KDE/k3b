@@ -19,6 +19,7 @@
 
 #include <qstringlist.h>
 #include "../cdinfo/k3bdiskinfo.h"
+#include "k3bmsf.h"
 
 /* #define SUPPORT_IDE */
 
@@ -219,8 +220,8 @@ class K3bDevice
   bool isDVD();
   K3bDiskInfo::type diskType();
   int numSessions();
-  int discSize();
-  int remainingSize();
+  const K3b::Msf discSize();
+  const K3b::Msf remainingSize();
 
   /**
    * block or unblock the drive's tray

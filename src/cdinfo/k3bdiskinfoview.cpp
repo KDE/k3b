@@ -219,14 +219,14 @@ void K3bDiskInfoView::displayInfo( const K3bDiskInfo& info )
       if( info.size > 0 )
 	atipChild = new KListViewItem( atipItem, atipChild,
 				       i18n("Size:"),
-				       i18n("%1 min").arg( K3b::framesToString(info.size) ),
-				       i18n("%2 MB").arg(info.size*2048/1024/1024) );
+				       i18n("%1 min").arg(info.size.toString()),
+				       i18n("%2 MB").arg((unsigned long)(info.size.mode1Form1Bytes()/1024/1024) ));
 
       if( info.remaining > 0 )
 	atipChild = new KListViewItem( atipItem, atipChild,
 				       i18n("Remaining:"), 
-				       i18n("%1 min").arg( K3b::framesToString(info.remaining) ),
-				       i18n("%2 MB").arg(info.remaining*2048/1024/1024) );
+				       i18n("%1 min").arg( info.remaining.toString() ),
+				       i18n("%2 MB").arg((unsigned long)(info.remaining.mode1Form1Bytes()/1024/1024) ));
 
       if( !info.mediumManufactor.isEmpty() ) {
 	atipChild = new TwoColumnViewItem( atipItem, atipChild,

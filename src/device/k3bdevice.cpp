@@ -357,8 +357,8 @@ int K3bDevice::isEmpty()
   
 }
 
-int K3bDevice::discSize() {
-  int ret = -1;
+const K3b::Msf K3bDevice::discSize() {
+  K3b::Msf ret(-1);
   int cdromfd = ::open( devicename().ascii(), O_RDONLY | O_NONBLOCK );
   if (cdromfd < 0) {
     kdDebug() << "(K3bDevice) Error: could not open device." << endl;
@@ -378,7 +378,9 @@ int K3bDevice::discSize() {
   cmd.data_direction = CGC_DATA_READ;
   if ( ::ioctl(cdromfd,CDROM_SEND_PACKET,&cmd) == 0 ) {
     if ( inf[21] != 0xFF && inf[22] != 0xFF && inf[23] != 0xFF ) 
-      ret = (int)(inf[21] << 16) | (int)(inf[22] << 8) | (int)inf[23];
+      ret.setMinutes((int)inf[21]);
+      ret.setSeconds((int)inf[22]);
+      ret.setFrames((int)inf[23]);
   } else 
     kdDebug() << "(K3bDevice) could not get disk info !" << endl;
   
@@ -387,8 +389,8 @@ int K3bDevice::discSize() {
   
 }
 
-int K3bDevice::remainingSize() {
-  int ret = -1;
+const K3b::Msf K3bDevice::remainingSize() {
+  K3b::Msf ret(-1);
   int cdromfd = ::open( devicename().ascii(), O_RDONLY | O_NONBLOCK );
   if (cdromfd < 0) {
     kdDebug() << "(K3bDevice) Error: could not open device." << endl;
@@ -408,7 +410,9 @@ int K3bDevice::remainingSize() {
   cmd.data_direction = CGC_DATA_READ;
   if ( ::ioctl(cdromfd,CDROM_SEND_PACKET,&cmd) == 0 ) {
     if ( inf[17] != 0xFF && inf[18] != 0xFF && inf[19] != 0xFF ) 
-      ret = (int)(inf[17] << 16) |  (int)(inf[18] << 8) | (int)inf[19];
+      ret.setMinutes((int)inf[17]);
+      ret.setSeconds((int)inf[18]);
+      ret.setFrames((int)inf[19]);
   } else 
     kdDebug() << "(K3bDevice) could not get disk info !" << endl;
   

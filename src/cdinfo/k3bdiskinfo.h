@@ -19,7 +19,7 @@
 
 
 #include "../device/k3btoc.h"
-
+#include "../device/k3bmsf.h"
 #include <qstring.h>
 
 class K3bDevice;
@@ -48,8 +48,6 @@ class K3bDiskInfo
   K3bToc toc;
   QString mediumManufactor;
   QString mediumType;
-  QString sizeString;
-  QString remainingString;
 
   bool empty;
   bool cdrw;
@@ -58,8 +56,8 @@ class K3bDiskInfo
   bool isVideoDvd;
   bool isVCD;
 
-  unsigned long size;
-  unsigned long remaining;
+  K3b::Msf size;
+  K3b::Msf remaining;
 
   int speed;
   int sessions;

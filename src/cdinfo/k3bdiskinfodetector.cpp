@@ -78,19 +78,16 @@ void K3bDiskInfoDetector::fetchDiskInfo()
   m_info.appendable = (empty < 2);
   m_info.empty = (empty == 0);
   m_info.cdrw = (m_device->rewritable() == 1);
-  int size = m_device->discSize();
-  if ( size != -1 ) {
-    m_info.size = ((size >> 16) & 0xFF)*4500 + ((size >> 8) & 0xFF)*75 + (size & 0xFF) - 150;
-    m_info.sizeString = K3b::framesToString(m_info.size);
+  K3b::Msf size = m_device->discSize();
+  if ( size != K3b::Msf(-1) ) {
+    m_info.size = size - 150;
   }
   if ( m_info.empty ) {
     m_info.remaining = m_info.size;
-    m_info.remainingString = m_info.sizeString;
   } else {
     size = m_device->remainingSize();
-    if ( size != -1 ) {
-      m_info.remaining = m_info.size - ((size >> 16) & 0xFF)*4500 - ((size >> 8) & 0xFF)*75 - (size & 0xFF) - 4650;
-      m_info.remainingString = K3b::framesToString(m_info.remaining);
+    if ( size != K3b::Msf(-1) ) {
+      m_info.remaining = m_info.size - size - 4650;
     }
   }
 
