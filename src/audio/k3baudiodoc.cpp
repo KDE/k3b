@@ -35,16 +35,14 @@
 #include <kurl.h>
 #include <kapp.h>
 #include <kmessagebox.h>
+#include <kconfig.h>
 
 #include <iostream>
 
 
-K3bAudioDoc::K3bAudioDoc( K3bApp* k3bMain, const QString& cdrecord, const QString& mpg123 )
-	: K3bDoc( k3bMain, cdrecord ), m_mpg123( mpg123 )
+K3bAudioDoc::K3bAudioDoc( K3bApp* k3bMain )
+	: K3bDoc( k3bMain )
 {
-	if( !QFile::exists( m_mpg123 ) )
-		qDebug( "(K3bAudioDoc) could not find mpg123!" );
-		
 	m_burnDialog = 0L;
 	m_tracks = 0L;
 }
@@ -361,10 +359,11 @@ void K3bAudioDoc::startRecording()
 	m_process->disconnect();
 
 	m_currentProcessedTrack = at(0);
-	
+
+	kapp->config()->setGroup("External Programs");	
 	// OK, we need a new cdrecord process...
 	m_process->clearArguments();
-	*m_process << m_cdrecord;
+	*m_process << kapp->config()->readEntry( "cdrecord path" );
 
 	// and now we add the needed arguments...
 	// display progress
@@ -461,9 +460,11 @@ void K3bAudioDoc::bufferFiles( )
 		return;
 	}
 
+	kapp->config()->setGroup( "External Programs");
+	
 	// start a new mpg123 process for this track
 	m_process->clearArguments();
-	*m_process << m_mpg123;
+	*m_process << kapp->config()->readEntry( "mpg123 path" );
 	lastTempFile = findTempFile( "wav" );
 	*m_process << "-v";
 	*m_process << "-w";
@@ -627,11 +628,13 @@ void K3bAudioDoc::addMp3File( const QString& fileName, uint position )
 	
 	lastAddedPosition = position;
 	
+	kapp->config()->setGroup( "External Programs" );
+	
 	// test the file with mpg123
 	// at this point we assume that the file exists
 	m_process->disconnect();
 	m_process->clearArguments();
-	*m_process << m_mpg123;
+	*m_process << kapp->config()->readEntry( "mpg123 path" );
 	*m_process << "-v";
 	*m_process << "-t";
 	if( !testFiles )

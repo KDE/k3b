@@ -41,6 +41,8 @@ class K3bView;
 class K3bDirView;
 class K3bDeviceManager;
 class K3bAudioTrackDialog;
+class K3bOptionDialog;
+
 
 /**
   * The base class for K3b application windows. It sets up the main
@@ -135,6 +137,7 @@ class K3bApp : public KDockMainWindow
 
 	void slotFileBurn();
 	void slotDirDockHidden();
+	void slotSettingsConfigure();
 	
 	/** checks if the currently visible tab is a k3bview
 	or not and dis- or enables some actions */
@@ -182,10 +185,6 @@ class K3bApp : public KDockMainWindow
 
     /** the configuration object of the application */
     KConfig *m_config;
-    /** pWorkspace is the MDI frame widget that handles MDI child widgets. Inititalized in
-     * initView()
-     */
-    QWorkspace *pWorkspace;
 
     /** The MDI-Interface is managed by this tabbed view */
     QTabWidget* m_documentTab;
@@ -209,12 +208,10 @@ class K3bApp : public KDockMainWindow
     KAction* fileClose;
     KAction* fileQuit;
     KAction* fileBurn;
-    KAction* windowTile;
-    KAction* windowCascade;
-
+	KAction* settingsConfigure;
+	
     KToggleAction* viewToolBar;
     KToggleAction* viewStatusBar;
-    KActionMenu* windowMenu;
     KActionMenu* fileNewMenu;
 
     KToggleAction* viewDirView;
@@ -227,7 +224,8 @@ class K3bApp : public KDockMainWindow
     K3bDirView* m_dirView;
 
     K3bAudioTrackDialog* m_audioTrackDialog;
-
+	K3bOptionDialog* m_optionDialog;
+	
     // path to cdrecord/mpg123
     QString m_cdrecord;
     QString m_mpg123;

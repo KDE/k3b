@@ -18,21 +18,21 @@ public:
 				 const QString& _vendor,
 				 const QString& _version,
 				 bool _burner,
-				 QArray<int> _readSpeed,
-				 QArray<int> _burnSpeed = QArray<int>())
+				 int _maxReadSpeed,
+				 int _maxBurnSpeed = 0)
 		:id(_id), device(_device), description(_description), vendor(_vendor), version(_version), burner(_burner),
-			readSpeed(_readSpeed), burnSpeed(_burnSpeed) {}
+			maxReadSpeed(_maxReadSpeed), maxBurnSpeed(_maxBurnSpeed) {}
 			
 //	~K3bDevice();
 
-	const int id;
-	const QString device;
-	const QString description;
-	const QString vendor;
-	const QString version;
-	const bool burner;
-	const QArray<int> readSpeed;
-	const QArray<int> burnSpeed;
+	int id;
+	QString device;
+	QString description;
+	QString vendor;
+	QString version;
+	bool burner;
+	int maxReadSpeed;
+	int maxBurnSpeed;
 };
 
 
@@ -46,10 +46,8 @@ public:
 	 * for devices. Every instance of K3bDeviceManager on
 	 * a machine is equal, so having multible instances
 	 * does not make sense.
-	 * @param cdrecord While K3b uses cdrecord for all
-	 *                 low level shit we need this.
 	 **/
-	K3bDeviceManager( const QString& cdrecord, QObject* parent );
+	K3bDeviceManager( QObject* parent );
 	~K3bDeviceManager();
 
 	const QList<K3bDevice>& burningDevices();
@@ -67,7 +65,6 @@ protected slots:
 	
 private:
 	QList<K3bDevice> m_writer, m_reader;
-	const QString m_cdrecord;
 
 	/**
 	 * Returns number of found devices and constructs

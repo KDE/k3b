@@ -33,8 +33,8 @@ K3bRipperWidget::K3bRipperWidget(QWidget *parent, const char *name )
 	: QWidget(parent,name)
 {
     Form1Layout = new QGridLayout( this );
-    Form1Layout->setSpacing( 6 );
-    Form1Layout->setMargin( 11 );
+    Form1Layout->setSpacing( 5 );
+    Form1Layout->setMargin( 2 );
 
     GroupBox3 = new QGroupBox( this, "GroupBox3" );
     GroupBox3->setTitle( tr( "Reading Device" ) );

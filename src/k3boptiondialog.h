@@ -1,7 +1,7 @@
 /***************************************************************************
-                          audiolistview.cpp  -  description
+                          k3boptiondialog.h  -  description
                              -------------------
-    begin                : Tue Mar 27 2001
+    begin                : Tue Apr 17 2001
     copyright            : (C) 2001 by Sebastian Trueg
     email                : trueg@informatik.uni-freiburg.de
  ***************************************************************************/
@@ -15,43 +15,41 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "audiolistview.h"
+#ifndef K3BOPTIONDIALOG_H
+#define K3BOPTIONDIALOG_H
 
-#include <qevent.h>
-#include <qdragobject.h>
-#include <qheader.h>
+#include <kdialogbase.h>
 
+class KListView;
+class QLabel;
+class QListViewItem;
+class QPushButton;
 
-AudioListView::AudioListView(QWidget *parent, const char *name )
- : KListView(parent,name)
+/**
+  *@author Sebastian Trueg
+  */
+
+class K3bOptionDialog : public KDialogBase
 {
- 	setAcceptDrops( true );
-	setDropVisualizer( true );
-	setAllColumnsShowFocus( true );
-	setDragEnabled( true );
-		
-	setupColumns();
-	header()->setClickEnabled( false );
-}
+   Q_OBJECT
 
-AudioListView::~AudioListView(){
-}
-
-void AudioListView::setupColumns(){
-	addColumn( "No" );
-	addColumn( "Artist (CD-Text)" );
-	addColumn( "Title (CD-Text)" );
-	addColumn( "Filename" );
-	addColumn( "Length" );
-	addColumn( "Pregap" );
+public:
+	K3bOptionDialog(QWidget *parent=0, const char *name=0, bool modal = true);
+	~K3bOptionDialog();
 	
-	setItemsRenameable( true );
-	setRenameable( 0, false );
-	setRenameable( 1 );
-	setRenameable( 2 );
-	setRenameable( 5 );
-}
+protected slots:
+	void slotOk();
+	void slotApply();
+	
+private:
+    KListView* m_viewPrograms;
+    QPushButton* m_buttonSearch;
+    QLabel* m_labelInfo;
 
-bool AudioListView::acceptDrag(QDropEvent* e) const{
-	return ( e->source() == viewport() || QTextDrag::canDecode(e) );
-}
+    void setupProgramsPage();
+
+    void readPrograms();
+    bool savePrograms();
+};
+
+#endif

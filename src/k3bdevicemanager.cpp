@@ -5,12 +5,14 @@
 #include <qlist.h>
 
 #include <kprocess.h>
+#include <kapp.h>
+#include <kconfig.h>
 
 #include <iostream>
 
 
-K3bDeviceManager::K3bDeviceManager( const QString& cdrecord, QObject* parent )
-: QObject(parent), m_cdrecord(cdrecord)
+K3bDeviceManager::K3bDeviceManager( QObject* parent )
+: QObject(parent)
 {
 	if( scanbus() < 1 )
 		qDebug( "(K3bDeviceManager) No SCSI-devices found.");
@@ -37,10 +39,12 @@ const QList<K3bDevice>& K3bDeviceManager::readingDevices()
 
 int K3bDeviceManager::scanbus()
 {
+	kapp->config()->setGroup("External Programs");
+	
 	// Use KProcess in block-mode while this should take less
 	// than a second!
 	KProcess* process = new KProcess();
-	*process << m_cdrecord;	
+	*process << kapp->config()->readEntry( "cdrecord path" );
 	*process << "-scanbus";
 	
 //	connect( process, SIGNAL(processExited(KProcess*)),
@@ -50,7 +54,8 @@ int K3bDeviceManager::scanbus()
 	connect( process, SIGNAL(receivedStderr(KProcess*, char*, int)),
 			 this, SLOT(parseCdrecordOutput(KProcess*, char*, int)) );
 	
-	process->start( KProcess::Block, KProcess::AllOutput );
+	if( !process->start( KProcess::Block, KProcess::AllOutput ) )
+		qDebug( "(K3bDeviceManager) could not start cdrecord: %s", kapp->config()->readEntry( "cdrecord path" ).latin1() );
 	
 	delete process;
 	return m_reader.count() + m_writer.count();
@@ -90,8 +95,8 @@ void K3bDeviceManager::parseCdrecordOutput( KProcess* p, char* output, int len )
 				
 			// make new device
 			// TODO: what about the speed? And what about the type (reader/writer)?
-			m_reader.append( new K3bDevice( id, dev, descr, vendor, version, QArray<int>(),QArray<int>() ) );
-			m_writer.append( new K3bDevice( id, dev, descr, vendor, version, QArray<int>(),QArray<int>() ) );
+			m_reader.append( new K3bDevice( id, dev, descr, vendor, version, true, 32,12 ) );
+			m_writer.append( new K3bDevice( id, dev, descr, vendor, version, true, 32,12 ) );
 		}
 	} // for
 }
@@ -107,5 +112,4 @@ void K3bDeviceManager::printDevices()
 	for( K3bDevice* dev = m_writer.first(); dev != 0; dev = m_writer.next() ) {
 		cout << "  " << dev->id << ": " << dev->device << " " << dev->vendor << " " << dev->description << " " << dev->version << endl;
 	}
-
 }

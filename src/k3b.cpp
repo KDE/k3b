@@ -46,6 +46,9 @@
 #include "k3bdevicemanager.h"
 #include "k3baudiotrackdialog.h"
 #include "k3bcopywidget.h"
+#include "k3bripperwidget.h"
+#include "k3boptiondialog.h"
+
 
 K3bApp::K3bApp()
 	: KDockMainWindow(0,"K3b")
@@ -70,6 +73,7 @@ K3bApp::K3bApp()
   fileBurn->setEnabled( false );
 
   m_audioTrackDialog = 0;
+  m_optionDialog = 0;
 }
 
 K3bApp::~K3bApp()
@@ -86,6 +90,7 @@ void K3bApp::initActions()
   fileQuit = KStdAction::quit(this, SLOT(slotFileQuit()), actionCollection());
   viewToolBar = KStdAction::showToolbar(this, SLOT(slotViewToolBar()), actionCollection());
   viewStatusBar = KStdAction::showStatusbar(this, SLOT(slotViewStatusBar()), actionCollection());
+  settingsConfigure = KStdAction::preferences(this, SLOT(slotSettingsConfigure()), actionCollection() );
 
   fileBurn = new KAction( i18n("&Burn..."), 0, this, SLOT(slotFileBurn()), actionCollection(), "file_burn");
 
@@ -98,12 +103,12 @@ void K3bApp::initActions()
 
   viewDirView = new KToggleAction(i18n("Show Directories"), 0, this, SLOT(slotShowDirView()), actionCollection(), "view_dir");
 
-  fileNewMenu->setStatusText(i18n("Creates a new document"));
-  fileOpen->setStatusText(i18n("Opens an existing document"));
+  fileNewMenu->setStatusText(i18n("Creates a new project"));
+  fileOpen->setStatusText(i18n("Opens an existing project"));
   fileOpenRecent->setStatusText(i18n("Opens a recently used file"));
-  fileSave->setStatusText(i18n("Saves the actual document"));
-  fileSaveAs->setStatusText(i18n("Saves the actual document as..."));
-  fileClose->setStatusText(i18n("Closes the actual document"));
+  fileSave->setStatusText(i18n("Saves the actual project"));
+  fileSaveAs->setStatusText(i18n("Saves the actual project as..."));
+  fileClose->setStatusText(i18n("Closes the actual project"));
   fileQuit->setStatusText(i18n("Quits the application"));
 
   viewToolBar->setStatusText(i18n("Enables/disables the toolbar"));
@@ -144,6 +149,7 @@ void K3bApp::initView()
 
   // add the cd-copy-widget to the tab
   m_documentTab->addTab( new K3bCopyWidget( m_documentTab ), "&Copy CD" );
+  m_documentTab->addTab( new K3bRipperWidget( m_documentTab ), "&Ripping" );
 
   dirDock = createDockWidget( "DirDock", SmallIcon("idea") );
   m_dirView = new K3bDirView( dirDock );
@@ -182,7 +188,7 @@ void K3bApp::openDocumentFile(const KURL& url)
     }
   }
 
-  doc = new K3bAudioDoc( this, m_cdrecord, m_mpg123 );
+  doc = new K3bAudioDoc( this );
   pDocList->append(doc);
   doc->newDocument();
   // Creates an untitled window if file is 0	
@@ -376,7 +382,7 @@ void K3bApp::slotFileSave()
 {
   slotStatusMsg(i18n("Saving file..."));
 
-  K3bView* m = (K3bView*)pWorkspace->activeWindow();
+  K3bView* m = dynamic_cast<K3bView*>(m_documentTab->currentPage() );
   if( m )
   {
     K3bDoc* doc = m->getDocument();
@@ -398,7 +404,7 @@ void K3bApp::slotFileSaveAs()
         i18n("*.k3b|K3b Projects"), this, i18n("Save as..."));
   if(!url.isEmpty())
   {
-    K3bView* m = (K3bView*)pWorkspace->activeWindow();
+  K3bView* m = dynamic_cast<K3bView*>(m_documentTab->currentPage() );
     if( m )
     {
       K3bDoc* doc =	m->getDocument();
@@ -511,44 +517,62 @@ void K3bApp::slotShowDirView()
 	}
 }
 
+
+void K3bApp::slotSettingsConfigure()
+{
+	if( !m_optionDialog )
+		m_optionDialog = new K3bOptionDialog( this, "SettingsDialog", true );
+		
+	if( !m_optionDialog->isVisible() )
+		m_optionDialog->exec();
+}
+
 void K3bApp::searchExternalProgs()
 {
-	// TODO: check if already in config!
-
-	if( QFile::exists( "/usr/bin/cdrecord" ) ) {
-		m_cdrecord = "/usr/bin/cdrecord";
-		qDebug("(K3bApp) found cdrecord in " + m_cdrecord );
+	m_config->setGroup("External Programs");
+	
+	if( !m_config->hasKey("cdrecord path") ) {
+		if( QFile::exists( "/usr/bin/cdrecord" ) ) {
+			m_cdrecord = "/usr/bin/cdrecord";
+			qDebug("(K3bApp) found cdrecord in " + m_cdrecord );
+		}
+		else if( QFile::exists( "/usr/local/bin/cdrecord" ) ) {
+			m_cdrecord = "/usr/local/bin/cdrecord";
+			qDebug("(K3bApp) found cdrecord in " + m_cdrecord );
+		}
+		else {
+			bool ok = true;
+			while( !QFile::exists( m_cdrecord ) && ok )
+				m_cdrecord = KLineEditDlg::getText( "Could not find cdrecord. Please insert the full path...", "cdrecord", &ok, this );
+		}
+		m_config->writeEntry( "cdrecord path", m_cdrecord );
 	}
-	else if( QFile::exists( "/usr/local/bin/cdrecord" ) ) {
-		m_cdrecord = "/usr/local/bin/cdrecord";
-		qDebug("(K3bApp) found cdrecord in " + m_cdrecord );
+	
+	if( !m_config->hasKey( "mpg123 path" ) ) {
+		if( QFile::exists( "/usr/bin/mpg123" ) ) {
+			m_mpg123 = "/usr/bin/mpg123";
+			qDebug("(K3bApp) found mpg123 in " + m_cdrecord );
+		}
+		else if( QFile::exists( "/usr/local/bin/mpg123" ) ) {
+			m_mpg123 = "/usr/local/bin/mpg123";
+			qDebug("(K3bApp) found mpg123 in " + m_cdrecord );
+		}
+		else {
+			bool ok = true;
+			while( !QFile::exists( m_mpg123 ) && ok )
+				m_mpg123 = KLineEditDlg::getText( "Could not find mpg123. Please insert the full path...", "mpg123", &ok, this );
+		}
+		m_config->writeEntry( "mpg123 path", m_mpg123 );
 	}
-	else {
-		bool ok = true;
-		while( !QFile::exists( m_cdrecord ) && ok )
-			m_cdrecord = KLineEditDlg::getText( "Could not find cdrecord. Please insert the full path...", "cdrecord", &ok, this );
-	}
-		
-	if( QFile::exists( "/usr/bin/mpg123" ) ) {
-		m_mpg123 = "/usr/bin/mpg123";
-		qDebug("(K3bApp) found mpg123 in " + m_cdrecord );
-	}
-	else if( QFile::exists( "/usr/local/bin/mpg123" ) ) {
-		m_mpg123 = "/usr/local/bin/mpg123";
-		qDebug("(K3bApp) found mpg123 in " + m_cdrecord );
-	}
-	else {
-		bool ok = true;
-		while( !QFile::exists( m_mpg123 ) && ok )
-			m_mpg123 = KLineEditDlg::getText( "Could not find mpg123. Please insert the full path...", "mpg123", &ok, this );
-	}
+	
+	m_config->sync();
 }
 
 void K3bApp::newAudioDoc()
 {
   slotStatusMsg(i18n("Creating new Audio Project."));
 
-  K3bAudioDoc* doc = new K3bAudioDoc( this, m_cdrecord, m_mpg123 );
+  K3bAudioDoc* doc = new K3bAudioDoc( this );
   pDocList->append(doc);
   doc->newDocument();
 
@@ -582,7 +606,7 @@ void K3bApp::slotFileBurn()
 	if( w )
 	{
 		if( w->inherits( "K3bView" ) ) {
-			K3bDoc* doc = m->getDocument();
+			K3bDoc* doc = ((K3bView*)w)->getDocument();
 			doc->showBurnDialog();
 		}
 		else if( w->inherits( "K3bCopyWidget" ) ) {
@@ -596,7 +620,7 @@ void K3bApp::init()
 {
   searchExternalProgs();
 
-  m_deviceManager = new K3bDeviceManager( m_cdrecord, this );
+  m_deviceManager = new K3bDeviceManager( this );
   m_deviceManager->printDevices();
 }
 

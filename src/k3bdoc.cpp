@@ -40,8 +40,8 @@
 #include "k3bdoc.h"
 #include "k3bglobals.h"
 
-K3bDoc::K3bDoc( K3bApp* _k3bMain, const QString& cdrecord )
-	: QObject( _k3bMain ), m_cdrecord(cdrecord)
+K3bDoc::K3bDoc( K3bApp* _k3bMain )
+	: QObject( _k3bMain )
 {
 	m_k3bMain = _k3bMain;
 
@@ -54,9 +54,6 @@ K3bDoc::K3bDoc( K3bApp* _k3bMain, const QString& cdrecord )
 	m_dao = true;
 	m_error = K3b::NOT_STARTED;
 	m_speed = 1;
-
-	if( !QFile::exists( m_cdrecord ) )
-		qDebug( "(K3bDoc) could not find cdrecord!" );
 }
 
 

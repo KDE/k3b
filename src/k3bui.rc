@@ -6,7 +6,7 @@
   	<Action name="file_burn"/>
   </Menu>
   <Menu name="settings">
-  	<Action name="view_dir"/>
+  	<Action name="view_dir" merge="show_merge"/>
   </Menu>
 </MenuBar>
 <ToolBar name="mainToolBar">

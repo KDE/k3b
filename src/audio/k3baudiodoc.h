@@ -43,7 +43,7 @@ class K3bAudioDoc : public K3bDoc  {
 	Q_OBJECT
 	
 public:
-	K3bAudioDoc( K3bApp*, const QString& cdrecord = "/usr/bin/cdrecord", const QString& mpg123 = "/usr/bin/mpg123");
+	K3bAudioDoc( K3bApp* );
 	~K3bAudioDoc();
 	
 	/** reimplemented from K3bDoc */
@@ -148,9 +148,6 @@ private:
 	K3bAudioTrack* m_currentProcessedTrack;
 	K3bAudioTrack* m_lastAddedTrack;
 	
-	/** path to mpg123 executable **/
-	QString m_mpg123;
-
  	QString lastTempFile;
  	uint lastAddedPosition;
  	

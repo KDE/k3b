@@ -60,9 +60,8 @@ class K3bDoc : public QObject
   friend K3bView;
 
 public:
-    /** Constructor for the fileclass of the application
-    	@param cdrecord path to cdrecord executable */
-    K3bDoc( K3bApp*, const QString& cdrecord );
+    /** Constructor for the fileclass of the application */
+    K3bDoc( K3bApp* );
     /** Destructor for the fileclass of the application */
     ~K3bDoc();
 
@@ -190,9 +189,6 @@ protected:
 
 	QString findTempFile( const QString& ending );
 
-	/** path to cdrecord executable **/
-	QString m_cdrecord;
-	
 	QTimer* m_timer;
 	KProcess* m_process;
 	

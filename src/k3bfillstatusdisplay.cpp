@@ -27,12 +27,12 @@
 K3bFillStatusDisplay::K3bFillStatusDisplay(K3bDoc* _doc, QWidget *parent, const char *name )
 	 : QFrame(parent,name)
 {
+	// TODO: use DisplayType!!
+
 	doc = _doc;
-//	setBackgroundColor( Qt::white );
-	setMinimumHeight( (int)((double)QFont::defaultFont().pixelSize() * 1.5) );
 	
+	setMinimumHeight( (int)((double)QFont::defaultFont().pixelSize() * 1.5) );
 	setFrameStyle( Panel | Sunken );
-	setLineWidth( 2 );
 }
 
 K3bFillStatusDisplay::~K3bFillStatusDisplay()

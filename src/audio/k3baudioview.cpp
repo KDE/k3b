@@ -44,7 +44,8 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
  : K3bView( pDoc, parent, name, wflags )
 {
 	QGridLayout* grid = new QGridLayout( this );
-	grid->setSpacing( 6 );
+	grid->setSpacing( 5 );
+	grid->setMargin( 2 );
 	
 	m_songlist = new AudioListView( this );
 	m_fillStatusDisplay = new K3bFillStatusDisplay( doc, this );
