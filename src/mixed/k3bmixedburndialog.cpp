@@ -20,6 +20,7 @@
 #include <data/k3bdataadvancedimagesettingswidget.h>
 #include <data/k3bdatavolumedescwidget.h>
 #include <data/k3bdatadoc.h>
+#include <audio/k3baudiodoc.h>
 #include <device/k3bdevice.h>
 #include <k3bwriterselectionwidget.h>
 #include <k3btempdirselectionwidget.h>
@@ -27,6 +28,7 @@
 #include <tools/k3bglobals.h>
 #include <audio/k3baudiocdtextwidget.h>
 #include <tools/k3bdatamodewidget.h>
+#include <device/k3bmsf.h>
 
 #include <qtabwidget.h>
 #include <qcheckbox.h>
@@ -54,6 +56,10 @@ K3bMixedBurnDialog::K3bMixedBurnDialog( K3bMixedDoc* doc, QWidget *parent, const
   : K3bProjectBurnDialog( doc, parent, name, modal ), m_doc(doc)
 {
   prepareGui();
+
+  setTitle( i18n("Mixed Project"), i18n("1 track (%1 minutes)", 
+					"%n tracks (%1 minutes)", 
+					m_doc->numOfTracks()).arg(m_doc->length().toString()) );
 
   m_checkOnlyCreateImage->hide();
 
@@ -92,7 +98,7 @@ K3bMixedBurnDialog::K3bMixedBurnDialog( K3bMixedDoc* doc, QWidget *parent, const
 
 void K3bMixedBurnDialog::setupSettingsPage()
 {
-  QWidget* w = new QWidget( k3bMainWidget() );
+  QWidget* w = new QWidget( this );
 
   QGroupBox* groupDataMode = new QGroupBox( 1, Qt::Vertical, i18n("Datatrack Mode"), w );
   m_dataModeWidget = new K3bDataModeWidget( groupDataMode );
@@ -232,7 +238,7 @@ void K3bMixedBurnDialog::readSettings()
 }
 
 
-void K3bMixedBurnDialog::loadDefaults()
+void K3bMixedBurnDialog::slotLoadK3bDefaults()
 {
    m_checkSimulate->setChecked( false );
    m_checkDao->setChecked( true );
@@ -253,7 +259,7 @@ void K3bMixedBurnDialog::loadDefaults()
 }
 
 
-void K3bMixedBurnDialog::loadUserDefaults()
+void K3bMixedBurnDialog::slotLoadUserDefaults()
 {
   KConfig* c = kapp->config();
   c->setGroup( "default mixed settings" );
@@ -292,7 +298,7 @@ void K3bMixedBurnDialog::loadUserDefaults()
 }
 
 
-void K3bMixedBurnDialog::saveUserDefaults()
+void K3bMixedBurnDialog::slotSaveUserDefaults()
 {
   KConfig* c = kapp->config();
 

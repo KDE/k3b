@@ -58,11 +58,12 @@
 
 
 K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( QWidget* parent, const char* name, bool modal )
-  : KDialogBase( parent, name, modal, i18n("Write Image to CD"), User1|User2,
-		 User1, false, KGuiItem( i18n("Write"), "write", i18n("Start writing") ), KStdGuiItem::close() )
+  : K3bInteractionDialog( parent, name, i18n("Write Iso9660 Image to CD"), QString::null,
+			  START_BUTTON|CANCEL_BUTTON,
+			  START_BUTTON,
+			  modal )
 {
   setupGui();
-  setButtonBoxOrientation( Qt::Vertical );
 
   m_job = 0;
   m_md5Job = new K3bMd5Job( this );
@@ -75,6 +76,7 @@ K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( QWidget* parent, const char*
   m_checkBurnProof->setChecked( true ); // enabled by default
 
   slotWriterChanged();
+  slotLoadUserDefaults();
 
   kapp->config()->setGroup("General Options");
   m_editImagePath->setText( kapp->config()->readEntry( "last written image", "" ) );
@@ -90,7 +92,7 @@ K3bIsoImageWritingDialog::~K3bIsoImageWritingDialog()
 
 void K3bIsoImageWritingDialog::setupGui()
 {
-  QFrame* frame = makeMainWidget();
+  QWidget* frame = mainWidget();
 
   m_writerSelectionWidget = new K3bWriterSelectionWidget( frame );
 
@@ -244,14 +246,11 @@ void K3bIsoImageWritingDialog::setupGui()
   connect( m_editImagePath, SIGNAL(textChanged(const QString&)), this, SLOT(updateImageSize(const QString&)) );
   connect( m_buttonFindImageFile, SIGNAL(clicked()), this, SLOT(slotFindImageFile()) );
 
-  m_checkDao->setChecked( true );
-  m_checkDummy->setChecked( false );
-
   slotWriterChanged();
 }
 
 
-void K3bIsoImageWritingDialog::slotUser1()
+void K3bIsoImageWritingDialog::slotStartClicked()
 {
   // check if the image exists
   if( !QFile::exists( m_editImagePath->text() ) ) {
@@ -289,13 +288,7 @@ void K3bIsoImageWritingDialog::slotUser1()
   m_job->start();
   d.exec();
 
-  slotClose();
-}
-
-
-void K3bIsoImageWritingDialog::slotUser2()
-{
-  slotClose();
+  close();
 }
 
 
@@ -384,7 +377,7 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
     }
 
     // enable the Write-Button
-    actionButton( User1 )->setEnabled( true );
+    m_buttonStart->setEnabled( true );
   }
   else {
     m_isoInfoWidget->hide();
@@ -393,7 +386,7 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
     m_md5Label->setText( "" );
 
     // Disable the Write-Button
-    actionButton( User1 )->setDisabled( true );
+    m_buttonStart->setDisabled( true );
   }
 }
 
@@ -437,6 +430,37 @@ void K3bIsoImageWritingDialog::slotMd5JobFinished( bool success )
 
   m_md5Label->show();
   m_md5ProgressWidget->hide();
+}
+
+
+void K3bIsoImageWritingDialog::slotLoadUserDefaults()
+{
+  KConfig* c = kapp->config();
+  c->setGroup( "Iso9660 image writing" );
+
+  m_checkDao->setChecked( c->readBoolEntry("dao", true ) );
+  m_checkDummy->setChecked( c->readBoolEntry("simulate", false ) );
+  m_checkBurnProof->setChecked( c->readBoolEntry("burnproof", true ) );
+  m_checkNoFix->setChecked( c->readBoolEntry("multisession", false ) );
+}
+
+void K3bIsoImageWritingDialog::slotSaveUserDefaults()
+{
+  KConfig* c = kapp->config();
+  c->setGroup( "Iso9660 image writing" );
+
+  c->writeEntry( "dao", m_checkDao->isChecked() );
+  c->writeEntry( "simulate", m_checkDummy->isChecked() );
+  c->writeEntry( "burnproof", m_checkBurnProof->isChecked() );
+  c->writeEntry( "multisession", m_checkNoFix->isChecked() );
+}
+
+void K3bIsoImageWritingDialog::slotLoadK3bDefaults()
+{
+  m_checkDao->setChecked( true );
+  m_checkDummy->setChecked( false );
+  m_checkBurnProof->setChecked( true );
+  m_checkNoFix->setChecked( false );
 }
 
 #include "k3bisoimagewritingdialog.moc"

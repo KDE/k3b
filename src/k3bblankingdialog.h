@@ -17,7 +17,7 @@
 #ifndef K3B_BLANKING_DIALOG_H
 #define K3B_BLANKING_DIALOG_H
 
-#include <kdialogbase.h>
+#include <k3binteractiondialog.h>
 #include "device/k3bdevice.h"
 
 class QString;
@@ -34,7 +34,7 @@ class KProgress;
 class K3bWriterSelectionWidget;
 
 
-class K3bBlankingDialog : public KDialogBase
+class K3bBlankingDialog : public K3bInteractionDialog
 {
 Q_OBJECT
 
@@ -43,15 +43,14 @@ Q_OBJECT
   ~K3bBlankingDialog();
 
  protected slots:
-  void slotUser1();
-  void slotUser2();
+  void slotStartClicked();
   void slotInfoMessage( const QString& msg, int type );
-  void slotJobFinished( bool );
   void slotWriterChanged();
   void slotWritingAppChanged( int );
 
- protected:
-  void closeEvent( QCloseEvent* );
+  void slotLoadK3bDefaults();
+  void slotLoadUserDefaults();
+  void slotSaveUserDefaults();
 
  private:
   void setupGui();

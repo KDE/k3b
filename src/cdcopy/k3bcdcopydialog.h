@@ -19,7 +19,7 @@
 #define K3BCDCOPYDIALOG_H
 
 
-#include <kdialogbase.h>
+#include <k3binteractiondialog.h>
 #include <device/k3bdevice.h>
 
 class K3bWriterSelectionWidget;
@@ -32,7 +32,7 @@ class QComboBox;
 /**
   *@author Sebastian Trueg
   */
-class K3bCdCopyDialog : public KDialogBase  
+class K3bCdCopyDialog : public K3bInteractionDialog
 {
   Q_OBJECT
 
@@ -45,8 +45,11 @@ class K3bCdCopyDialog : public KDialogBase
  private slots:
   void slotSourceSelected();
   void slotOnlyCreateImageChecked(bool);
-  void slotUser1();
-  void slotUser2();
+  void slotStartClicked();
+
+  void slotLoadUserDefaults();
+  void slotSaveUserDefaults();
+  void slotLoadK3bDefaults();
 
  private:
   K3bWriterSelectionWidget* m_writerSelectionWidget;

@@ -118,11 +118,11 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
   void loadDefaultCdiConfig();
   
  protected slots:
-   void slotOk();
+   void slotStartClicked();
 
-   void loadDefaults();
-   void loadUserDefaults();
-   void saveUserDefaults();
+   void slotLoadK3bDefaults();
+   void slotLoadUserDefaults();
+   void slotSaveUserDefaults();
 
    void slotGapsChecked(bool);
    void slotSpinVolumeCount();

@@ -17,7 +17,7 @@
 #ifndef K3BISOIMAGEWRITINGDIALOG_H
 #define K3BISOIMAGEWRITINGDIALOG_H
 
-#include <kdialogbase.h>
+#include <k3binteractiondialog.h>
 
 
 class QCheckBox;
@@ -34,7 +34,7 @@ class KProgress;
 /**
   *@author Sebastian Trueg
   */
-class K3bIsoImageWritingDialog : public KDialogBase
+class K3bIsoImageWritingDialog : public K3bInteractionDialog
 {
   Q_OBJECT
 
@@ -45,12 +45,15 @@ class K3bIsoImageWritingDialog : public KDialogBase
   void setImage( const KURL& url );
 
  protected slots:
-  void slotUser1();
-  void slotUser2();
+  void slotStartClicked();
   void updateImageSize( const QString& );
   void slotFindImageFile();
   void slotWriterChanged();
   void slotMd5JobFinished( bool );
+
+  void slotLoadUserDefaults();
+  void slotSaveUserDefaults();
+  void slotLoadK3bDefaults();
 
  private:
   void setupGui();

@@ -41,15 +41,32 @@
 #include <kconfig.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
+#include <kio/global.h>
 
 
 K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char *name, bool modal )
   : K3bProjectBurnDialog( _doc, parent, name, modal )
 {
-
   m_vcdDoc = _doc;
 
   prepareGui();
+
+  QString vcdType;
+  switch( m_vcdDoc->vcdType() ) {
+  case K3bVcdDoc::VCD11:
+    vcdType = i18n("Video CD (Version 1.1)");
+  case K3bVcdDoc::VCD20:
+    vcdType = i18n("Video CD (Version 2.0)");
+  case K3bVcdDoc::SVCD10:
+    vcdType = i18n("Super Video CD");
+  case K3bVcdDoc::HQVCD:
+    vcdType = i18n("High Quality Video CD");
+  default:
+    vcdType = i18n("Video CD");
+  }
+
+  setTitle( vcdType, i18n("1 MPEG (%1)", "%n MPEGs (%1)", 
+			  m_vcdDoc->tracks()->count()).arg(KIO::convertSize(m_vcdDoc->size())) );
 
   m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRDAO );
 
@@ -230,7 +247,7 @@ K3bVcdBurnDialog::~K3bVcdBurnDialog()
 
 void K3bVcdBurnDialog::setupAdvancedTab()
 {
-  QWidget* w = new QWidget( k3bMainWidget() );
+  QWidget* w = new QWidget( this );
 
   // ---------------------------------------------------- generic group ----
   m_groupGeneric = new QGroupBox( 5, Qt::Vertical, i18n("Generic"), w );
@@ -314,7 +331,7 @@ void K3bVcdBurnDialog::setupAdvancedTab()
 
 void K3bVcdBurnDialog::setupVideoCdTab()
 {
-  QWidget* w = new QWidget( k3bMainWidget() );
+  QWidget* w = new QWidget( this );
 
   // ---------------------------------------------------- Format group ----
   m_groupVcdFormat = new QButtonGroup( 4, Qt::Vertical, i18n("Type"), w );
@@ -356,7 +373,7 @@ void K3bVcdBurnDialog::setupVideoCdTab()
 
 void K3bVcdBurnDialog::setupLabelTab()
 {
-  QWidget* w = new QWidget( k3bMainWidget() );
+  QWidget* w = new QWidget( this );
 
   // ----------------------------------------------------------------------
   // noEdit
@@ -443,7 +460,7 @@ void K3bVcdBurnDialog::setupLabelTab()
 }
 
 
-void K3bVcdBurnDialog::slotOk()
+void K3bVcdBurnDialog::slotStartClicked()
 {
     
   if( QFile::exists( vcdDoc()->vcdImage() ) ) {
@@ -452,13 +469,12 @@ void K3bVcdBurnDialog::slotOk()
       return;
   }
 
-  K3bProjectBurnDialog::slotOk();
+  K3bProjectBurnDialog::slotStartClicked();
 }
 
 
-void K3bVcdBurnDialog::loadDefaults()
+void K3bVcdBurnDialog::slotLoadK3bDefaults()
 {
-
   K3bVcdOptions o = K3bVcdOptions::defaults();
   
   m_checkDao->setChecked( true );
@@ -648,7 +664,7 @@ void K3bVcdBurnDialog::readSettings()
   loadCdiConfig();
 }
 
-void K3bVcdBurnDialog::loadUserDefaults()
+void K3bVcdBurnDialog::slotLoadUserDefaults()
 {
   KConfig* c = k3bMain()->config();
 
@@ -702,7 +718,7 @@ void K3bVcdBurnDialog::loadUserDefaults()
 }
 
 
-void K3bVcdBurnDialog::saveUserDefaults()
+void K3bVcdBurnDialog::slotSaveUserDefaults()
 {
   KConfig* c = k3bMain()->config();
   K3bVcdOptions o;

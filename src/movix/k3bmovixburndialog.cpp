@@ -32,6 +32,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
+#include <kio/global.h>
 
 #include <qcheckbox.h>
 #include <qlayout.h>
@@ -45,6 +46,9 @@ K3bMovixBurnDialog::K3bMovixBurnDialog( K3bMovixDoc* doc, QWidget* parent, const
     m_installation(0)
 {
   prepareGui();
+
+  setTitle( i18n("eMovix Project"), 
+	    i18n("1 file (%1)", "%n files (%1)", m_doc->movixFileItems().count()).arg(KIO::convertSize(m_doc->size())) );
 
   m_movixOptionsWidget = new K3bMovixOptionsWidget( this );
   addPage( m_movixOptionsWidget, i18n("eMovix") );
@@ -99,17 +103,17 @@ void K3bMovixBurnDialog::setupSettingsPage()
 }
 
 
-void K3bMovixBurnDialog::loadDefaults()
+void K3bMovixBurnDialog::slotLoadK3bDefaults()
 {
 }
 
 
-void K3bMovixBurnDialog::loadUserDefaults()
+void K3bMovixBurnDialog::slotLoadUserDefaults()
 {
 }
 
 
-void K3bMovixBurnDialog::saveUserDefaults()
+void K3bMovixBurnDialog::slotSaveUserDefaults()
 {
 }
 
@@ -169,12 +173,12 @@ void K3bMovixBurnDialog::readSettings()
   }
   else {
     KMessageBox::error( this, i18n("Could not find eMovix installation in %1").arg(path) );
-    slotCancel();
+    slotCancelClicked();
   }
 }
 
 
-void K3bMovixBurnDialog::slotOk()
+void K3bMovixBurnDialog::slotStartClicked()
 {
   if( m_checkOnlyCreateImage->isChecked() ||
       !m_checkOnTheFly->isChecked() ) {
@@ -201,7 +205,7 @@ void K3bMovixBurnDialog::slotOk()
       return;
 				    
     
-  K3bProjectBurnDialog::slotOk();
+  K3bProjectBurnDialog::slotStartClicked();
 }
 
 

@@ -17,7 +17,7 @@
 #ifndef K3BPROJECTBURNDIALOG_H
 #define K3BPROJECTBURNDIALOG_H
 
-#include <kdialogbase.h>
+#include <k3binteractiondialog.h>
 
 
 class K3bDoc;
@@ -33,7 +33,7 @@ class QVBoxLayout;
 /**
   *@author Sebastian Trueg
   */
-class K3bProjectBurnDialog : public KDialogBase
+class K3bProjectBurnDialog : public K3bInteractionDialog
 {
    Q_OBJECT
 
@@ -51,16 +51,10 @@ class K3bProjectBurnDialog : public KDialogBase
 	
  protected slots:
    /** burn */
-   virtual void slotOk();
+   virtual void slotStartClicked();
    /** save */
-   virtual void slotUser1();
-   /** cancel */
-   virtual void slotUser2();
-   virtual void slotCancel();
-
-   virtual void loadDefaults() = 0;
-   virtual void loadUserDefaults() = 0;
-   virtual void saveUserDefaults() = 0;
+   virtual void slotSaveClicked();
+   virtual void slotCancelClicked();
 
    /**
     * gets called if the user changed the writer
@@ -90,11 +84,6 @@ class K3bProjectBurnDialog : public KDialogBase
     */
    virtual void prepareJob( K3bBurnJob* ) {};
 
-   /**
-    * The widget to add new stuff. Use instead of mainWidget()
-    */
-   QWidget* k3bMainWidget() { return m_k3bMainWidget; }
-
    void prepareGui();
    void addPage( QWidget*, const QString& title );
 
@@ -112,12 +101,7 @@ class K3bProjectBurnDialog : public KDialogBase
  private:
    K3bDoc* m_doc;
    K3bBurnJob* m_job;
-   QWidget* m_k3bMainWidget;
    QTabWidget* m_tabWidget;
-
-   QPushButton* m_buttonLoadDefaults;
-   QPushButton* m_buttonSaveUserDefaults;
-   QPushButton* m_buttonLoadUserDefaults;
 };
 
 #endif

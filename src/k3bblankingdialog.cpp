@@ -17,7 +17,6 @@
 
 #include "device/k3bdevice.h"
 #include "device/k3bdevicemanager.h"
-#include "k3b.h"
 #include "k3bblankingjob.h"
 #include "k3bwriterselectionwidget.h"
 #include "k3bdiskerasinginfodialog.h"
@@ -29,6 +28,8 @@
 #include <kiconloader.h>
 #include <kguiitem.h>
 #include <kstdguiitem.h>
+#include <kconfig.h>
+#include <kapplication.h>
 
 #include <qgroupbox.h>
 #include <qbuttongroup.h>
@@ -45,17 +46,18 @@
 
 
 K3bBlankingDialog::K3bBlankingDialog( QWidget* parent, const char* name )
-  : KDialogBase( parent, name, true, i18n("Erase CD-RW"), /*Help|*/User2|User1, User1, 
-		 false, KGuiItem( i18n("&Erase"), "blank", i18n("Start erasing") ), KStdGuiItem::close() )
+  : K3bInteractionDialog( parent, name, i18n("Erase CD-RW") )
 {
+  setCancelButtonText( i18n("Close") );
   setupGui();
-  setButtonBoxOrientation( Qt::Vertical );
+
   m_groupBlankType->setButton( 0 );
 
   m_job = 0;
 
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotWriterChanged()) );
   connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(slotWritingAppChanged(int)) );
+  slotLoadUserDefaults();
   slotWriterChanged();
 }
 
@@ -69,7 +71,7 @@ K3bBlankingDialog::~K3bBlankingDialog()
 
 void K3bBlankingDialog::setupGui()
 {
-  QFrame* frame = makeMainWidget();
+  QWidget* frame = mainWidget();
 
   m_writerSelectionWidget = new K3bWriterSelectionWidget( frame );
 
@@ -145,18 +147,16 @@ void K3bBlankingDialog::setupGui()
 }
 
 
-void K3bBlankingDialog::slotUser1()
+void K3bBlankingDialog::slotStartClicked()
 {
   // start the blankingjob and connect to the info-signal
   // disable the user1 button and enable the cancel button
-  actionButton( KDialogBase::User1 )->setDisabled( true );
-  actionButton( KDialogBase::User2 )->setText( i18n("&Cancel") );
   m_viewOutput->clear();
 
   if( m_job == 0 ) {
     m_job = new K3bBlankingJob();
-    connect( m_job, SIGNAL(infoMessage(const QString&,int)), this, SLOT(slotInfoMessage(const QString&,int)) );
-    connect( m_job, SIGNAL(finished(bool)), this, SLOT(slotJobFinished(bool)) );
+    connect( m_job, SIGNAL(infoMessage(const QString&,int)), 
+	     this, SLOT(slotInfoMessage(const QString&,int)) );
   }
 
   m_job->setDevice( m_writerSelectionWidget->writerDevice() );
@@ -186,17 +186,6 @@ void K3bBlankingDialog::slotUser1()
 }
 
 
-void K3bBlankingDialog::slotUser2()
-{
-  if( m_job && m_job->active() ) {
-    if( KMessageBox::questionYesNo( this, i18n("Are you sure you want to cancel?"), i18n("Cancel") ) == KMessageBox::Yes )
-      m_job->cancel();
-    }
-  else
-    done(0);
-}
-
-
 void K3bBlankingDialog::slotInfoMessage( const QString& str, int type )
 {
   QListViewItem* item = new QListViewItem( m_viewOutput, m_viewOutput->lastItem(), QString::null, str );
@@ -216,30 +205,6 @@ void K3bBlankingDialog::slotInfoMessage( const QString& str, int type )
 }
 
 
-void K3bBlankingDialog::slotJobFinished(bool)
-{
-  actionButton( KDialogBase::User1 )->setEnabled( true );
-  actionButton( KDialogBase::User2 )->setText( i18n("Close") );
-}
-
-
-void K3bBlankingDialog::closeEvent( QCloseEvent* e )
-{
-  if( m_job && m_job->active() ) {
-    if( KMessageBox::questionYesNo( this, i18n("Are you sure you want to cancel?"), i18n("Cancel") ) == KMessageBox::Yes ) {
-      m_job->cancel();
-      
-      e->accept();
-    }
-    else
-      e->ignore();
-  }
-  else {
-    e->accept();
-  }
-}
-
-
 void K3bBlankingDialog::slotWriterChanged()
 {
   // check if it is a cdrw writer
@@ -249,9 +214,9 @@ void K3bBlankingDialog::slotWriterChanged()
     return;
 
   if( dev->writesCdrw() )
-    actionButton( KDialogBase::User1 )->setEnabled( true );
+    m_buttonStart->setEnabled( true );
   else {
-    actionButton( KDialogBase::User1 )->setEnabled( false );
+    m_buttonStart->setEnabled( false );
     QListViewItem* item = new QListViewItem( m_viewOutput, m_viewOutput->lastItem(),
 					     i18n("%1 does not support CD-RW writing.").arg(dev->devicename()) );
     item->setPixmap( 0, SmallIcon( "stop" ) );
@@ -269,6 +234,54 @@ void K3bBlankingDialog::slotWritingAppChanged(int app)
     m_radioUncloseSession->setEnabled(true);
     m_radioBlankSession->setEnabled(true);
   }
+}
+
+
+void K3bBlankingDialog::slotLoadK3bDefaults()
+{
+  m_radioFastBlank->setChecked(true);
+  m_checkForce->setChecked(false);
+}
+
+void K3bBlankingDialog::slotLoadUserDefaults()
+{
+  KConfig* c = kapp->config();
+  c->setGroup( "CDRW Erasing" );
+
+  QString mode = c->readEntry( "erase_mode" );
+  if( mode == "complete" )
+    m_radioCompleteBlank->setChecked(true);
+  else if( mode == "session" )
+    m_radioBlankSession->setChecked(true);
+  else if( mode == "track" )
+    m_radioBlankTrack->setChecked(true);
+  else if( mode == "unclose_session" )
+    m_radioUncloseSession->setChecked(true);
+  else
+    m_radioFastBlank->setChecked(true);
+
+  m_checkForce->setChecked( c->readBoolEntry( "force", false ) );
+}
+
+void K3bBlankingDialog::slotSaveUserDefaults()
+{
+  KConfig* c = kapp->config();
+  c->setGroup( "CDRW Erasing" );
+
+  QString mode;
+  if( m_radioCompleteBlank->isChecked() )
+    mode = "complete";
+  else if( m_radioBlankSession->isChecked() )
+    mode = "session";
+  else if( m_radioBlankTrack->isChecked() )
+    mode = "track";
+  else if( m_radioUncloseSession->isChecked() )
+    mode = "unclose_session";
+  else
+    mode = "fast";
+  c->writeEntry( "erase_mode", mode );
+
+  c->writeEntry( "force", m_checkForce->isChecked() );
 }
 
 #include "k3bblankingdialog.moc"

@@ -16,7 +16,6 @@
 
 #include "k3bbinimagewritingdialog.h"
 #include "k3bbinimagewritingjob.h"
-#include <k3b.h>
 #include <tools/k3bglobals.h>
 #include <device/k3bdevicemanager.h>
 #include <device/k3bdevice.h>
@@ -34,6 +33,7 @@
 #include <kurl.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
+#include <kapplication.h>
 
 #include <qgroupbox.h>
 #include <qlayout.h>
@@ -72,16 +72,15 @@
 
 
 K3bBinImageWritingDialog::K3bBinImageWritingDialog( QWidget* parent, const char* name, bool modal )
-  : KDialogBase( parent, name, modal, i18n("Write Bin/Cue Image to CD"), User1|User2,
-		 User1, false, KGuiItem( i18n("Write"), "write", i18n("Start writing") ), KStdGuiItem::close() )
+  : K3bInteractionDialog( parent, name, i18n("Write Bin/Cue Image to CD"), QString::null,
+			  START_BUTTON|CANCEL_BUTTON,
+			  START_BUTTON,
+			  modal )
 {
    m_job = 0;
-   k3bMain()->config()->setGroup( "General Options" );
 
    setupGui();
    m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRDAO );
-  
-   setButtonBoxOrientation( Qt::Vertical );
 }
 
 
@@ -94,7 +93,7 @@ K3bBinImageWritingDialog::~K3bBinImageWritingDialog()
 
 void K3bBinImageWritingDialog::setupGui()
 {
-  QFrame* frame = makeMainWidget();
+  QWidget* frame = mainWidget();
 
   m_writerSelectionWidget = new K3bWriterSelectionWidget( frame );
 
@@ -187,7 +186,7 @@ void K3bBinImageWritingDialog::setupGui()
 }
 
 
-void K3bBinImageWritingDialog::slotUser1()
+void K3bBinImageWritingDialog::slotStartClicked()
 {
   if( m_job == 0 )
     m_job = new K3bBinImageWritingJob();
@@ -209,15 +208,9 @@ void K3bBinImageWritingDialog::slotUser1()
 
      m_job->start();
      d.exec();
-     slotClose();
+     close();
   } else
      KMessageBox::error( this, i18n("Please select a TOC File"), i18n("No TOC File"));
-}
-
-
-void K3bBinImageWritingDialog::slotUser2()
-{
-  slotClose();
 }
 
 
@@ -239,5 +232,37 @@ void K3bBinImageWritingDialog::slotFindTocFile()
 void K3bBinImageWritingDialog::slotWriterChanged()
 {
 }
+
+void K3bBinImageWritingDialog::slotLoadUserDefaults()
+{
+  KConfig* c = kapp->config();
+  c->setGroup( "CueBin image writing" );
+
+  m_checkSimulate->setChecked( c->readBoolEntry( "simulate", false ) );
+  m_checkMulti->setChecked( c->readBoolEntry( "multisession", false ) );
+  m_checkForce->setChecked( c->readBoolEntry( "force", false ) );
+  m_spinCopies->setValue( c->readNumEntry( "copies", 1 ) );
+}
+
+
+void K3bBinImageWritingDialog::slotSaveUserDefaults()
+{
+  KConfig* c = kapp->config();
+  c->setGroup( "CueBin image writing" );
+
+  c->writeEntry( "simulate", m_checkSimulate->isChecked() );
+  c->writeEntry( "multisession", m_checkMulti->isChecked() );
+  c->writeEntry( "force", m_checkForce->isChecked() );
+  c->writeEntry( "copies", m_spinCopies->value() );
+}
+
+void K3bBinImageWritingDialog::slotLoadK3bDefaults()
+{
+  m_checkSimulate->setChecked( false );
+  m_checkMulti->setChecked( false );
+  m_checkForce->setChecked( false );
+  m_spinCopies->setValue(1);
+}
+
 
 #include "k3bbinimagewritingdialog.moc"

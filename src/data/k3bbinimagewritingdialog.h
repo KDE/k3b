@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Klaus-Dieter Krannich <kd@k3b.org>
  *
  * This file is part of the K3b project.
@@ -17,7 +17,7 @@
 #ifndef K3BBINIMAGEWRITINGDIALOG_H
 #define K3BBINIMAGEWRITINGDIALOG_H
 
-#include <kdialogbase.h>
+#include <k3binteractiondialog.h>
 #include <kurl.h>
 #include <klineedit.h>
 #include <qcheckbox.h>
@@ -30,7 +30,7 @@
 /**
   *@author Klaus-Dieter Krannich
   */
-class K3bBinImageWritingDialog : public KDialogBase
+class K3bBinImageWritingDialog : public K3bInteractionDialog
 {
 Q_OBJECT
 
@@ -41,10 +41,15 @@ Q_OBJECT
   void setTocFile( const KURL& url );
 
  protected slots:
-  void slotUser1();
-  void slotUser2();
+  void slotStartClicked();
+
   void slotFindTocFile();
   void slotWriterChanged();
+
+  void slotLoadUserDefaults();
+  void slotSaveUserDefaults();
+  void slotLoadK3bDefaults();
+
  private:
   void setupGui();
 

@@ -56,9 +56,9 @@ class K3bAudioBurnDialog : public K3bProjectBurnDialog
    K3bAudioDoc* m_doc;
 
  protected slots:
-   void loadDefaults();
-   void loadUserDefaults();
-   void saveUserDefaults();
+   void slotLoadK3bDefaults();
+   void slotLoadUserDefaults();
+   void slotSaveUserDefaults();
    void toggleAllOptions();
 };
 

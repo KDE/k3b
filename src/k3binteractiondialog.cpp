@@ -102,7 +102,7 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
   }
   else
     m_buttonCancel = 0;
-  QSpacerItem* spacer_2 = new QSpacerItem( 10, 240, QSizePolicy::Minimum, QSizePolicy::Expanding );
+  QSpacerItem* spacer_2 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding );
   layout5->addItem( spacer_2 );
 
   mainGrid->addMultiCellLayout( layout5, 1, 2, 1, 1 );
@@ -113,7 +113,7 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
   QHBoxLayout* layout2 = new QHBoxLayout( 0, 0, 6, "layout2"); 
   m_buttonK3bDefaults = new QPushButton( i18n("K3b Defaults"), this, "m_buttonK3bDefaults" );
   layout2->addWidget( m_buttonK3bDefaults );
-  QSpacerItem* spacer = new QSpacerItem( 221, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
+  QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
   layout2->addItem( spacer );
   m_buttonUserDefaults = new QPushButton( i18n("User Defaults"), this, "m_buttonUserDefaults" );
   layout2->addWidget( m_buttonUserDefaults );
@@ -187,7 +187,7 @@ void K3bInteractionDialog::setTitle( const QString& title, const QString& subTit
 void K3bInteractionDialog::setMainWidget( QWidget* w )
 {
   w->reparent( this, QPoint(0,0) );
-  mainGrid->addWidget( w, 0, 1 );
+  mainGrid->addWidget( w, 1, 0 );
 }
 
 QWidget* K3bInteractionDialog::mainWidget()
@@ -228,6 +228,12 @@ void K3bInteractionDialog::slotCancelClicked()
 void K3bInteractionDialog::slotSaveClicked()
 {
   emit saveClicked();
+}
+
+
+void K3bInteractionDialog::setDefaultButton( int b )
+{
+  m_defaultButton = b;
 }
 
 

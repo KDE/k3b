@@ -71,13 +71,13 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    K3bDataModeWidget* m_dataModeWidget;
 
  protected slots:
-   void slotOk();
+   void slotStartClicked();
    void saveSettings();
    void readSettings();
 
-   void loadDefaults();
-   void loadUserDefaults();
-   void saveUserDefaults();
+   void slotLoadK3bDefaults();
+   void slotLoadUserDefaults();
+   void slotSaveUserDefaults();
 };
 
 #endif

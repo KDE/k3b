@@ -53,9 +53,9 @@ class K3bMixedBurnDialog : public K3bProjectBurnDialog
    void saveSettings();
    void readSettings();
 
-   void loadDefaults();
-   void loadUserDefaults();
-   void saveUserDefaults();
+   void slotLoadK3bDefaults();
+   void slotLoadUserDefaults();
+   void slotSaveUserDefaults();
    void slotToggleEverything();
 
  private:

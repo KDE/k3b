@@ -45,59 +45,18 @@
 
 
 K3bProjectBurnDialog::K3bProjectBurnDialog(K3bDoc* doc, QWidget *parent, const char *name, bool modal )
-  : KDialogBase( parent, name, modal, i18n("Write CD"), Ok|User1|User2, User1, false,
-                 KGuiItem( i18n("Save"), "filesave", i18n("Save Settings and close"),
-                           i18n("Saves the settings to the project and closes the burn dialog.") ),
-                 KStdGuiItem::cancel() ),
+  : K3bInteractionDialog( parent, name, i18n("Project"), QString::null, 
+			  START_BUTTON|SAVE_BUTTON|CANCEL_BUTTON, START_BUTTON, modal ),
     m_writerSelectionWidget(0),
     m_tempDirSelectionWidget(0)
 {
   m_doc = doc;
 
-  setButtonBoxOrientation( Vertical );
-  setButtonText( Ok, i18n("Write") );
+  setSaveButtonText( i18n("Save"), i18n("Save Settings and close"),
+		     i18n("Saves the settings to the project and closes the burn dialog.") );
+  setStartButtonText( i18n("Write") );
+
   m_job = 0;
-
-  QWidget* box = new QWidget( this );
-  setMainWidget( box );
-
-  m_k3bMainWidget = new QVBox( box );
-
-  QGridLayout* grid = new QGridLayout( box );
-  grid->setSpacing( spacingHint() );
-  grid->setMargin( 0 );
-
-  m_buttonLoadDefaults = new QPushButton( i18n("Defaults"), box );
-  m_buttonLoadUserDefaults = new QPushButton( i18n("User Defaults"), box );
-  m_buttonSaveUserDefaults = new QPushButton( i18n("Save User Defaults"), box );
-
-  grid->addMultiCellWidget( m_k3bMainWidget, 0, 0, 0, 3 );
-  grid->addWidget( m_buttonLoadDefaults, 1, 0 );
-  grid->addWidget( m_buttonLoadUserDefaults, 1, 2 );
-  grid->addWidget( m_buttonSaveUserDefaults, 1, 3 );
-  grid->setRowStretch( 0, 1 );
-  grid->setColStretch( 1, 1 );
-
-  connect( m_buttonLoadDefaults, SIGNAL(clicked()), this, SLOT(loadDefaults()) );
-  connect( m_buttonLoadUserDefaults, SIGNAL(clicked()), this, SLOT(loadUserDefaults()) );
-  connect( m_buttonSaveUserDefaults, SIGNAL(clicked()), this, SLOT(saveUserDefaults()) );
-
-
-  // ToolTips
-  // -------------------------------------------------------------------------
-  QToolTip::add( m_buttonLoadDefaults, i18n("Load K3b default settings") );
-  QToolTip::add( m_buttonLoadUserDefaults, i18n("Load user default settings") );
-  QToolTip::add( m_buttonSaveUserDefaults, i18n("Save user default settings for new projects") );
-
-  // What's This info
-  // -------------------------------------------------------------------------
-  QWhatsThis::add( m_buttonLoadDefaults, i18n("<p>This sets all options back to K3b defaults.") );
-  QWhatsThis::add( m_buttonLoadUserDefaults, i18n("<p>This loads the settings saved with the <em>Save User Defaults</em> "
-						  "button.") );
-  QWhatsThis::add( m_buttonSaveUserDefaults, i18n("<p>Saves the current settings as the default for all new projects."
-						  "<p>These settings can also be loaded with the <em>User Defaults</em> "
-						  "button."
-						  "<p><b>The K3b defaults are not overwritten by this!</b>") );
 }
 
 
@@ -151,17 +110,17 @@ void K3bProjectBurnDialog::toggleAllOptions()
       m_checkDao->setEnabled( false );
     }
 
-    actionButton(Ok)->setDisabled(false);
+    m_buttonStart->setDisabled(false);
   }
   else
-    actionButton(Ok)->setDisabled(true);
+    m_buttonStart->setDisabled(true);
 
   m_checkSimulate->setDisabled( m_checkOnlyCreateImage->isChecked() );
   m_checkOnTheFly->setDisabled( m_checkOnlyCreateImage->isChecked() );
   m_checkRemoveBufferFiles->setDisabled( m_checkOnlyCreateImage->isChecked() || m_checkOnTheFly->isChecked() );
   if( m_checkOnlyCreateImage->isChecked() ) {
     m_checkRemoveBufferFiles->setChecked(false);
-    actionButton(Ok)->setDisabled(false);
+    m_buttonStart->setDisabled(false);
   }
   m_tempDirSelectionWidget->setDisabled( m_checkOnTheFly->isChecked() && !m_checkOnlyCreateImage->isChecked() );
   m_writerSelectionWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
@@ -171,25 +130,21 @@ void K3bProjectBurnDialog::toggleAllOptions()
 int K3bProjectBurnDialog::exec( bool burn )
 {
   if( burn && m_job == 0 ) {
-    showButton(Ok, true );
-    actionButton(Ok)->setDefault(true);
-    actionButton(User1)->setDefault(false);
-    actionButton(User1)->clearFocus();
+    m_buttonStart->show();
+    setDefaultButton( START_BUTTON );
   }
   else {
-    showButton(Ok, false );
-    actionButton(User1)->setDefault(false);
-    actionButton(Ok)->setDefault(true);
-    actionButton(Ok)->clearFocus();
+    m_buttonStart->hide();
+    setDefaultButton( SAVE_BUTTON );
   }
 
   readSettings();
 
-  return KDialogBase::exec();
+  return K3bInteractionDialog::exec();
 }
 
 
-void K3bProjectBurnDialog::slotUser1()
+void K3bProjectBurnDialog::slotSaveClicked()
 {
   saveSettings();
   m_doc->updateAllViews();
@@ -197,18 +152,13 @@ void K3bProjectBurnDialog::slotUser1()
 }
 
 
-void K3bProjectBurnDialog::slotUser2()
+void K3bProjectBurnDialog::slotCancelClicked()
 {
   done( Canceled );
 }
 
 
-void K3bProjectBurnDialog::slotCancel()
-{
-  done( Canceled );
-}
-
-void K3bProjectBurnDialog::slotOk()
+void K3bProjectBurnDialog::slotStartClicked()
 {
   if( m_job ) {
     KMessageBox::sorry( k3bMain(), i18n("K3b is already working on this project!"), i18n("Error") );
@@ -253,7 +203,8 @@ void K3bProjectBurnDialog::slotOk()
 
 void K3bProjectBurnDialog::prepareGui()
 {
-  m_tabWidget = new QTabWidget( m_k3bMainWidget );
+  m_tabWidget = new QTabWidget( this );
+  setMainWidget( m_tabWidget );
   QWidget* w = new QWidget( m_tabWidget );
   m_tabWidget->addTab( w, i18n("Writing") );
   m_writerSelectionWidget = new K3bWriterSelectionWidget( w );

@@ -57,6 +57,7 @@ class K3bInteractionDialog : public KDialog
 
   void setMainWidget( QWidget* w );
   void setTitle( const QString& title, const QString& subTitle = QString::null );
+  void setDefaultButton( int b );
 
   /**
    * If no mainWidget has been set a plain page will be created.

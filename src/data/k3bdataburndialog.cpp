@@ -53,7 +53,7 @@
 #include <kstandarddirs.h>
 #include <kfiledialog.h>
 #include <kcombobox.h>
-
+#include <kio/global.h>
 
 
 
@@ -63,6 +63,8 @@ K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const ch
   : K3bProjectBurnDialog( _doc, parent, name, modal )
 {
   prepareGui();
+
+  setTitle( i18n("Data Project"), i18n("Size: %1").arg( KIO::convertSize(_doc->size()) ) );
 
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
   m_optionGroupLayout->addItem( spacer );
@@ -229,7 +231,7 @@ void K3bDataBurnDialog::setupSettingsTab()
 }
 
 
-void K3bDataBurnDialog::slotOk()
+void K3bDataBurnDialog::slotStartClicked()
 {
   if( m_checkOnlyCreateImage->isChecked() ||
       !m_checkOnTheFly->isChecked() ) {
@@ -256,11 +258,11 @@ void K3bDataBurnDialog::slotOk()
       return;
 				    
     
-  K3bProjectBurnDialog::slotOk();
+  K3bProjectBurnDialog::slotStartClicked();
 }
 
 
-void K3bDataBurnDialog::loadDefaults()
+void K3bDataBurnDialog::slotLoadK3bDefaults()
 {
   m_checkSimulate->setChecked( false );
   m_checkDao->setChecked( true );
@@ -279,7 +281,7 @@ void K3bDataBurnDialog::loadDefaults()
 }
 
 
-void K3bDataBurnDialog::loadUserDefaults()
+void K3bDataBurnDialog::slotLoadUserDefaults()
 {
   KConfig* c = kapp->config();
   c->setGroup( "default data settings" );
@@ -308,7 +310,7 @@ void K3bDataBurnDialog::loadUserDefaults()
 }
 
 
-void K3bDataBurnDialog::saveUserDefaults()
+void K3bDataBurnDialog::slotSaveUserDefaults()
 {
   KConfig* c = kapp->config();
 

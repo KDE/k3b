@@ -20,17 +20,20 @@
 #include "k3bcdcopyjob.h"
 #include <k3bwriterselectionwidget.h>
 #include <k3btempdirselectionwidget.h>
-#include <k3b.h>
+#include <k3bcore.h>
 #include <k3bstdguiitems.h>
 #include <device/k3bdevice.h>
 #include <device/k3bdevicemanager.h>
 #include <k3bburnprogressdialog.h>
+#include <tools/k3bglobals.h>
 
 #include <kguiitem.h>
 #include <klocale.h>
 #include <kstdguiitem.h>
 #include <kstandarddirs.h>
 #include <kmessagebox.h> 
+#include <kconfig.h>
+#include <kapplication.h>
 
 #include <qcheckbox.h>
 #include <qspinbox.h>
@@ -43,15 +46,18 @@
 #include <qtabwidget.h>
 #include <qwhatsthis.h>
 #include <qhbox.h>
+#include <qpushbutton.h>
 
 
 K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal )
-  : KDialogBase( KDialogBase::Plain, i18n("Copy CD"), User1|User2, User1, parent, name, modal, false, 
-		 KGuiItem( i18n("&Copy"), "copy", i18n("Start CD Copy") ), KStdGuiItem::close() )
+  : K3bInteractionDialog( parent, name, i18n("CD Copy"), QString::null,
+			  START_BUTTON|CANCEL_BUTTON,
+			  START_BUTTON,
+			  modal )
 {
-  setButtonBoxOrientation( Qt::Vertical );
+  setStartButtonText( i18n("Start CD Copy") );
 
-  QFrame* main = plainPage();
+  QWidget* main = mainWidget();
 
   QGridLayout* mainGrid = new QGridLayout( main );
   mainGrid->setSpacing( spacingHint() );
@@ -167,7 +173,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
 
 
   // -- read cd-devices ----------------------------------------------
-  QPtrList<K3bDevice> devices = k3bMain()->deviceManager()->readingDevices();
+  QPtrList<K3bDevice> devices = k3bcore->deviceManager()->readingDevices();
   K3bDevice* dev = devices.first();
   while( dev ) {
     // cdrdao only supports SCSI devices
@@ -175,7 +181,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
       m_comboSourceDevice->insertItem( dev->vendor() + " " + dev->description() + " (" + dev->blockDeviceName() + ")" );
     dev = devices.next();
   }
-  devices = k3bMain()->deviceManager()->burningDevices();
+  devices = k3bcore->deviceManager()->burningDevices();
   dev = devices.first();
   while( dev ) {
     // cdrdao only supports SCSI devices
@@ -184,7 +190,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
     dev = devices.next();
   }
   if ( !devices.first() )
-     enableButton(User1,false);
+    m_buttonStart->setEnabled(false);
 
   connect( m_comboSourceDevice, SIGNAL(activated(int)), this, SLOT(slotSourceSelected()) );
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotSourceSelected()) );
@@ -203,7 +209,8 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   connect( m_checkTaoSource, SIGNAL(toggled(bool)), taoSourceAdjustLabel, SLOT(setEnabled(bool)) );
   slotSourceSelected();
 
-  m_checkDeleteImages->setChecked( true );
+
+  slotLoadUserDefaults();
 
 
   // ToolTips
@@ -273,7 +280,7 @@ K3bDevice* K3bCdCopyDialog::readingDevice() const
 
   QString strDev = s.mid( s.find('(') + 1, s.find(')') - s.find('(') - 1 );
  
-  K3bDevice* dev =  k3bMain()->deviceManager()->deviceByName( strDev );
+  K3bDevice* dev =  k3bcore->deviceManager()->deviceByName( strDev );
   if( !dev )
     kdDebug() << "(K3bCdCopyDialog) could not find device " << s << endl;
 		
@@ -281,7 +288,7 @@ K3bDevice* K3bCdCopyDialog::readingDevice() const
 }
 
 
-void K3bCdCopyDialog::slotUser1()
+void K3bCdCopyDialog::slotStartClicked()
 {
   K3bCdCopyJob* job = new K3bCdCopyJob( this );
   
@@ -311,7 +318,7 @@ void K3bCdCopyDialog::slotUser1()
   job->setForce(m_checkForce->isChecked());
 
   // create a progresswidget
-  K3bBurnProgressDialog d( k3bMain(), "burnProgress", 
+  K3bBurnProgressDialog d( this, "burnProgress", 
 			   true /*!m_checkOnTheFly->isChecked() && !m_checkOnlyCreateImage->isChecked()*/,
 			   !m_checkOnlyCreateImage->isChecked() );
 
@@ -322,13 +329,7 @@ void K3bCdCopyDialog::slotUser1()
   job->start();
   d.exec();
 
-  slotClose();
-}
-
-
-void K3bCdCopyDialog::slotUser2()
-{
-  slotClose();
+  close();
 }
 
 
@@ -337,11 +338,73 @@ void K3bCdCopyDialog::slotOnlyCreateImageChecked( bool c )
   if( c ) 
     m_checkDeleteImages->setChecked( false );
   if ( !m_writerSelectionWidget->writerDevice() )
-       enableButton(User1,c);
+    m_buttonStart->setEnabled(c);
     
   // check if we can enable on-the-fly
   slotSourceSelected();
 }
 
+
+void K3bCdCopyDialog::slotLoadUserDefaults()
+{
+  KConfig* c = kapp->config();
+  c->setGroup( "CD Copy" );
+
+  m_checkSimulate->setChecked( c->readBoolEntry( "simulate", false ) );
+  m_checkOnTheFly->setChecked( c->readBoolEntry( "on_the_fly", false ) );
+  m_checkDeleteImages->setChecked( c->readBoolEntry( "delete_images", true ) );
+  m_checkFastToc->setChecked( c->readBoolEntry( "fast_toc", false ) );
+  m_checkRawCopy->setChecked( c->readBoolEntry( "raw_copy", false ) );
+  m_checkTaoSource->setChecked( c->readBoolEntry( "tao_source", false ) );
+  m_checkForce->setChecked( c->readBoolEntry( "force", false ) );
+  m_spinTaoSourceAdjust->setValue( c->readNumEntry( "tao_source_adjust", 2 ) );
+  m_checkOnlyCreateImage->setChecked( c->readBoolEntry( "only_create_image", false ) );
+  m_comboParanoiaMode->setCurrentItem( c->readNumEntry( "paranoia_mode", 3 ) );
+
+  QString subChMode = c->readEntry( "subchannel_mode", "none" );
+  if( subChMode == "rw" )
+    m_comboSubchanMode->setCurrentItem(1);
+  else if( subChMode == "rw_raw" )
+    m_comboSubchanMode->setCurrentItem(2);
+  else
+    m_comboSubchanMode->setCurrentItem(0); // none
+
+  m_spinCopies->setValue( c->readNumEntry( "copies", 1 ) );
+}
+
+void K3bCdCopyDialog::slotSaveUserDefaults()
+{
+  KConfig* c = kapp->config();
+  c->setGroup( "CD Copy" );
+
+  c->writeEntry( "simulate", m_checkSimulate->isChecked() );
+  c->writeEntry( "on_the_fly", m_checkOnTheFly->isChecked() );
+  c->writeEntry( "delete_images", m_checkDeleteImages->isChecked() );
+  c->writeEntry( "fast_toc", m_checkFastToc->isChecked() );
+  c->writeEntry( "raw_copy", m_checkRawCopy->isChecked() );
+  c->writeEntry( "tao_source", m_checkTaoSource->isChecked() );
+  c->writeEntry( "force", m_checkForce->isChecked() );
+  c->writeEntry( "tao_source_adjust", m_spinTaoSourceAdjust->value() );
+  c->writeEntry( "only_create_image", m_checkOnlyCreateImage->isChecked() );
+  c->writeEntry( "paranoia_mode", m_comboParanoiaMode->currentText().toInt() );
+  c->writeEntry( "subchannel_mode", m_comboSubchanMode->currentText() );
+  c->writeEntry( "copies", m_spinCopies->value() );
+}
+
+void K3bCdCopyDialog::slotLoadK3bDefaults()
+{
+  m_checkSimulate->setChecked( false );
+  m_checkOnTheFly->setChecked( false );
+  m_checkDeleteImages->setChecked( true );
+  m_checkFastToc->setChecked( false );
+  m_checkRawCopy->setChecked( false );
+  m_checkTaoSource->setChecked( false );
+  m_checkForce->setChecked( false );
+  m_spinTaoSourceAdjust->setValue(2);
+  m_checkOnlyCreateImage->setChecked( false );
+  m_comboParanoiaMode->setCurrentItem(3);
+  m_comboSubchanMode->setCurrentItem(0); // none
+  m_spinCopies->setValue(1);
+}
 
 #include "k3bcdcopydialog.moc"

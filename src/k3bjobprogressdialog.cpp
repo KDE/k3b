@@ -256,7 +256,7 @@ void K3bJobProgressDialog::setupGUI()
   mainLayout->addWidget( line2 );
 
   QHBoxLayout* layout5 = new QHBoxLayout( 0, 0, 6, "layout5"); 
-  QSpacerItem* spacer = new QSpacerItem( 471, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
+  QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
   layout5->addItem( spacer );
 
   m_buttonCancel = new QPushButton( i18n("Cancel"), this, "m_buttonCancel" );
