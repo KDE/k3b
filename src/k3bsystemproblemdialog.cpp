@@ -345,44 +345,10 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 						  "(or select as the default) a more recent version of %1.").arg("cdrdao"),
 					     false ) );
 	}
-	else if( !k3bcore->externalBinManager()->binObject( "cdrdao" )->hasFeature( "plain-atapi") ) {
-	  problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
-					     i18n("cdrdao has problems with ATAPI writers"),
-					     i18n("When K3b %1 was released no version of cdrdao "
-						  "was able to write without SCSI emulation. "
-						  "Although it is possible that there actually "
-						  "is a version with ATAPI support it is unlikely.").arg(k3bcore->version()),
-					     i18n("A solution is to enable "
-						  "ide-scsi (SCSI emulation) for all devices. "
-						  "You may also install a more recent version of cdrdao "
-						  "which supports ATAPI devices."),
-					     false ) );
-	}
       }
     }
   }
 
-  if( atapiReader ) { 
-
-    if( k3bcore->externalBinManager()->foundBin( "cdrdao" ) ) {
-      
-      if( !( k3bcore->externalBinManager()->binObject( "cdrdao" )->hasFeature( "hacked-atapi" ) &&
-	     K3b::hackedAtapiSupport() ) &&
-	  !( k3bcore->externalBinManager()->binObject( "cdrdao" )->hasFeature( "plain-atapi" ) &&
-	     K3b::plainAtapiSupport() ) ) {
-	problems.append( K3bSystemProblem( K3bSystemProblem::WARNING,
-					   i18n("No support for ATAPI with cdrdao"),
-					   i18n("You will not be able to use all your reading devices "
-						"as copy sources since there is at least one not "
-						"configured to use SCSI emulation and your system does "
-						"not support ATAPI with cdrdao."),
-					   i18n("The best and recommended solution is to enable "
-						"ide-scsi (SCSI emulation) for all devices. "
-						"This way you won't have any problems."),
-					   false ) );
-      }
-    }
-  }
 
   kdDebug() << "(K3bCore) System problems:" << endl;
   for( QValueList<K3bSystemProblem>::const_iterator it = problems.begin();
