@@ -113,7 +113,7 @@ public:
   PrivateTempDevice* dev;
 
 protected:
-  void stateChanged( bool on ) {
+  void stateChange( bool on ) {
     switch(m_type) {
     case t_cdrw:
       dev->cdrw = on;

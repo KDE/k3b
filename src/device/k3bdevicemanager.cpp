@@ -349,29 +349,28 @@ K3bDevice* K3bDeviceManager::initializeScsiDevice( const QString& devname, int b
     // so we are always able to say if a drive is a writer or not
     if( driverProc.exitStatus() == 0 ) {
       dev->m_burner = true;
+      dev->m_writeModes = 0;
       QStringList lines = QStringList::split( "\n", m_processOutput );
       for( QStringList::const_iterator it = lines.begin(); it != lines.end(); ++it ) {
 	const QString& line = *it;
 	if( line.startsWith( "Supported modes" ) ) {
 	  QStringList modes = QStringList::split( " ", line.mid(16) );
-	  int w = 0;
 	  if( modes.contains( "SAO" ) )
-	    w |= K3bDevice::SAO;
+	    dev->m_writeModes |= K3bDevice::SAO;
 	  if( modes.contains( "TAO" ) )
-	    w |= K3bDevice::TAO;
+	    dev->m_writeModes |= K3bDevice::TAO;
 	  if( modes.contains( "PACKET" ) )
-	    w |= K3bDevice::PACKET;
+	    dev->m_writeModes |= K3bDevice::PACKET;
 	  if( modes.contains( "SAO/R96R" ) )
-	    w |= K3bDevice::SAO_R96R;
+	    dev->m_writeModes |= K3bDevice::SAO_R96R;
 	  if( modes.contains( "SAO/R96P" ) )
-	    w |= K3bDevice::SAO_R96P;
+	    dev->m_writeModes |= K3bDevice::SAO_R96P;
 	  if( modes.contains( "RAW/R16" ) )
-	    w |= K3bDevice::RAW_R16;
+	    dev->m_writeModes |= K3bDevice::RAW_R16;
 	  if( modes.contains( "RAW/R96R" ) )
-	    w |= K3bDevice::RAW_R96R;
+	    dev->m_writeModes |= K3bDevice::RAW_R96R;
 	  if( modes.contains( "RAW/R96P" ) )
-	    w |= K3bDevice::RAW_R96P;
-	  dev->m_writeModes = w;
+	    dev->m_writeModes |= K3bDevice::RAW_R96P;
 	  break;
 	}
       }
