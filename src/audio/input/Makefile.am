@@ -1,4 +1,4 @@
-INCLUDES = $(all_includes)
+INCLUDES = -I$(top_builddir)/k3b/src/audio/input/mp3 $(all_includes)
 
 METASOURCES = AUTO
 
