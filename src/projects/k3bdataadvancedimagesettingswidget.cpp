@@ -121,47 +121,23 @@ class K3bDataAdvancedImageSettingsWidget::PrivateCheckViewItem : public QCheckLi
 {
 public:
   PrivateCheckViewItem( QListView* parent, const QString& text, Type tt = Controller )
-    : QCheckListItem( parent, text, tt ),
-      m_bEnabled(true) {
+    : QCheckListItem( parent, text, tt ) {
   }
 
   PrivateCheckViewItem( QListViewItem* parent, const QString& text, Type tt = Controller )
-    : QCheckListItem( parent, text, tt ), 
-      m_bEnabled(true) {
+    : QCheckListItem( parent, text, tt ) {
   }
 
-  void setOn( bool b ) {
-    if( m_bEnabled )
-      QCheckListItem::setOn(b);
-
+protected:
+  void stateChange( bool on ) {
     // enable or disable all children
     QListViewItem* item = firstChild();
     while( item ) {
-      PrivateCheckViewItem* pi = (PrivateCheckViewItem*)item;
-      if( pi )
-	pi->setEnabled(!b);
+      if( PrivateCheckViewItem* pi = dynamic_cast<PrivateCheckViewItem*>(item) )
+	pi->setEnabled( !on );
       item = item->nextSibling();
     }
   }
-
-  void setEnabled( bool b ) {
-    if( b != m_bEnabled ) {
-      m_bEnabled = b;
-      repaint();
-    }
-  }
-
-  void paintCell( QPainter* p, const QColorGroup& cg, int column, int width, int align ) {
-    QColorGroup ncg(cg);
-    if( !m_bEnabled )
-      ncg.setColor( QColorGroup::Text, gray );
-
-    QCheckListItem::paintCell( p, ncg, column, width, align );
-  }
-
-
-private:
-  bool m_bEnabled;
 };
 
 
@@ -175,34 +151,34 @@ K3bDataAdvancedImageSettingsWidget::K3bDataAdvancedImageSettingsWidget( QWidget*
 
   // create all the view items
   m_checkAllowUntranslatedFilenames = new PrivateCheckViewItem( m_viewIsoSettings, 
-								i18n( "Allow untranslated filenames" ), 
+								i18n( "Allow untranslated ISO9660 filenames" ), 
 								QCheckListItem::CheckBox );
   m_checkAllowMaxLengthFilenames = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
-							     i18n( "Allow max length filenames (37 characters)" ),
+							     i18n( "Allow max length ISO9660 filenames (37 characters)" ),
 							     QCheckListItem::CheckBox );
   m_checkAllowFullAscii = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
-						    i18n( "Allow full ASCII charset" ),
+						    i18n( "Allow full ASCII charset for ISO9660 filenames" ),
 						    QCheckListItem::CheckBox );
   m_checkAllowOther = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
-						i18n( "Allow ~ and #" ),
+						i18n( "Allow ~ and # in ISO9660 filenames" ),
 						QCheckListItem::CheckBox );
   m_checkAllowLowercaseCharacters = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
-							      i18n( "Allow lowercase characters" ),
+							      i18n( "Allow lowercase characters in ISO9660 filenames" ),
 							      QCheckListItem::CheckBox );
   m_checkAllowMultiDot = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
-						   i18n( "Allow multiple dots" ),
+						   i18n( "Allow multiple dots in ISO9660 filenames" ),
 						   QCheckListItem::CheckBox );
   m_checkAllow31CharFilenames = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
-							  i18n( "Allow 31 character filenames" ),
+							  i18n( "Allow 31 character ISO9660 filenames" ),
 							  QCheckListItem::CheckBox );
   m_checkAllowBeginningPeriod = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
-							  i18n( "Allow leading period" ),
+							  i18n( "Allow leading period in ISO9660 filenames" ),
 							  QCheckListItem::CheckBox );
   m_checkOmitVersionNumbers = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
-							i18n( "Omit version numbers" ),
+							i18n( "Omit version numbers in ISO9660 filenames" ),
 							QCheckListItem::CheckBox );
   m_checkOmitTrailingPeriod = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
-							i18n( "Omit trailing period" ),
+							i18n( "Omit trailing period in ISO9660 filenames" ),
 							QCheckListItem::CheckBox );
 
   m_checkAllowUntranslatedFilenames->setOpen(true);

@@ -18,6 +18,7 @@
 #include "k3bapplication.h"
 #include "k3bemptydiscwaiter.h"
 #include "k3bjobprogressosd.h"
+#include "k3bdebuggingoutputdialog.h"
 #include <k3bjob.h>
 #include <kcutlabel.h>
 #include <k3bdevice.h>
@@ -31,7 +32,6 @@
 #include <qgroupbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <qtextedit.h>
 #include <qlayout.h>
 #include <qvariant.h>
 #include <qtooltip.h>
@@ -47,10 +47,7 @@
 #include <qfont.h>
 #include <qeventloop.h>
 #include <qfile.h>
-#include <qtextstream.h>
-#include <qclipboard.h>
 #include <qapplication.h>
-#include <qcursor.h>
 
 #include <kprogress.h>
 #include <klocale.h>
@@ -66,89 +63,6 @@
 #include <kmainwindow.h>
 #include <kstdguiitem.h>
 #include <kpushbutton.h>
-#include <kfiledialog.h>
-#include <kglobalsettings.h>
-
-
-class K3bJobProgressDialog::PrivateDebugWidget : public KDialogBase
-{
-public:
-  PrivateDebugWidget( QMap<QString, QStringList>&, QWidget* parent );
-
-private:
-  void slotUser1();
-  void slotUser2();
-
-  QTextEdit* debugView;
-};
-
-
-K3bJobProgressDialog::PrivateDebugWidget::PrivateDebugWidget( QMap<QString, QStringList>& map, QWidget* parent )
-  : KDialogBase( parent, "debugViewDialog", true, i18n("Debugging Output"), Close|User1|User2, Close, 
-		 false, 
-		 KStdGuiItem::saveAs(), 
-		 KGuiItem( i18n("Copy"), "editcopy" ) )
-{
-  setButtonTip( User1, i18n("Save to file") );
-  setButtonTip( User2, i18n("Copy to clipboard") );
-
-  debugView = new QTextEdit( this );
-  debugView->setReadOnly(true);
-  debugView->setTextFormat( QTextEdit::PlainText );
-  debugView->setCurrentFont( KGlobalSettings::fixedFont() );
-  debugView->setWordWrap( QTextEdit::NoWrap );
-
-  setMainWidget( debugView );
-
-  // the following may take some time
-  QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
-
-  // add the debugging output
-  for( QMap<QString, QStringList>::Iterator itMap = map.begin(); itMap != map.end(); ++itMap ) {
-    QStringList& list = itMap.data();
-    debugView->append( itMap.key() + "\n" );
-    debugView->append( "-----------------------\n" );
-    for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it ) {
-       QStringList lines = QStringList::split( "\n", *it );
-       // do every line
-       for( QStringList::Iterator str = lines.begin(); str != lines.end(); str++ )
-	 debugView->append( *str + "\n" );
-    }
-    debugView->append( "\n" );
-  }
-
-  QApplication::restoreOverrideCursor();
-
-  resize( 600, 300 );
-}
-
-
-void K3bJobProgressDialog::PrivateDebugWidget::slotUser1()
-{
-  QString filename = KFileDialog::getSaveFileName();
-  if( !filename.isEmpty() ) {
-    QFile f( filename );
-    if( !f.exists() || KMessageBox::warningYesNo( this,
-						  i18n("Do you want to overwrite %1?").arg(filename),
-						  i18n("File Exists") )
-	== KMessageBox::Yes ) {
-
-      if( f.open( IO_WriteOnly ) ) {
-	QTextStream t( &f );
-	t << debugView->text();
-      }
-      else {
-	KMessageBox::error( this, i18n("Could not open file %1").arg(filename) );
-      }
-    }
-  }
-}
-
-
-void K3bJobProgressDialog::PrivateDebugWidget::slotUser2()
-{
-  QApplication::clipboard()->setText( debugView->text(), QClipboard::Clipboard );
-}
 
 
 
@@ -333,7 +247,7 @@ void K3bJobProgressDialog::setupGUI()
 
   QFrame* line2 = new QFrame( this, "line2" );
   line2->setFrameShape( QFrame::HLine );
-  line2->setFrameShadow( QFrame::Sunken );
+ line2->setFrameShadow( QFrame::Sunken );
   mainLayout->addWidget( line2 );
 
   QHBoxLayout* layout5 = new QHBoxLayout( 0, 0, 6, "layout5"); 
@@ -597,29 +511,7 @@ void K3bJobProgressDialog::slotStarted()
   if( KMainWindow* w = dynamic_cast<KMainWindow*>(kapp->mainWidget()) )
     m_plainCaption = w->caption();
 
-  // open the log file
-  m_logFile.setName( locateLocal( "appdata", "lastlog.log", true ) );
-  m_logFile.open( IO_WriteOnly );
-
-  // system info in the log file
-  slotDebuggingOutput( "System", "K3b Version: " + k3bcore->version() );
-  slotDebuggingOutput( "System", "KDE Version: " + QString(KDE::versionString()) );
-  slotDebuggingOutput( "System", "QT Version:  " + QString(qVersion()) );
-  slotDebuggingOutput( "System", "Kernel:      " + K3b::kernelVersion() );
-  
-  // devices in the logfile
-  for( QPtrListIterator<K3bDevice::Device> it( k3bcore->deviceManager()->allDevices() ); *it; ++it ) {
-    K3bDevice::Device* dev = *it;
-    slotDebuggingOutput( "Devices", 
-			 QString( "%1 (%2, %3) at %4 [%5] [%6] [%7]" )
-			 .arg( dev->vendor() + " " + dev->description() + " " + dev->version() )
-			 .arg( dev->blockDeviceName() )
-			 .arg( dev->genericDevice() )
-			 .arg( dev->mountPoint() )
-			 .arg( K3bDevice::deviceTypeString( dev->type() ) )
-			 .arg( K3bDevice::mediaTypeString( dev->supportedProfiles() ) )
-			 .arg( K3bDevice::writingModeString( dev->writingModes() ) ) );
-  }
+  m_logFile.open();
 }
 
 
@@ -634,14 +526,14 @@ void K3bJobProgressDialog::slotUpdateTime()
 void K3bJobProgressDialog::slotDebuggingOutput( const QString& type, const QString& output )
 {
   m_debugOutputMap[type].append(output);
-  QTextStream s( &m_logFile );
-  s << "[" << type << "] " << output << endl << flush;
+  m_logFile.addOutput( type, output );
 }
 
 
 void K3bJobProgressDialog::slotShowDebuggingOutput()
 {
-  PrivateDebugWidget debugWidget( m_debugOutputMap, this );
+  K3bDebuggingOutputDialog debugWidget( this );
+  debugWidget.setOutput( m_debugOutputMap );
   debugWidget.exec();
 }
 

@@ -62,6 +62,8 @@ void K3bBlankingJob::start()
   if( m_device == 0 )
     return;
 
+  emit started();
+
   if( !KIO::findDeviceMountPoint( m_device->mountDevice() ).isEmpty() ) {
     emit infoMessage( i18n("Unmounting disk"), INFO );
     // unmount the cd
@@ -124,6 +126,8 @@ void K3bBlankingJob::slotStartErasing()
   connect(m_writerJob, SIGNAL(finished(bool)), this, SLOT(slotFinished(bool)));
   connect(m_writerJob, SIGNAL(infoMessage( const QString&, int)),
           this,SIGNAL(infoMessage( const QString&, int)));
+  connect( m_writerJob, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
 
   if( waitForMedia( m_device,  
 		    K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE,

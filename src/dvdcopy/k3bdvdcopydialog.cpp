@@ -244,6 +244,7 @@ void K3bDvdCopyDialog::slotStartClicked()
   
   hide();
   dlg->startJob( m_job );
+  show();
   delete dlg;
 }
 

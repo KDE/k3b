@@ -2966,6 +2966,7 @@ void K3bDevice::Device::checkWritingModes()
     // requirement
     //
 
+    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": checking for TAO" << endl;
     if( modeSelect( buffer, dataLen, 1, 0 ) ) {
       m_writeModes |= WRITINGMODE_TAO;
       d->deviceType |= DEVICE_CD_R;
@@ -2973,6 +2974,7 @@ void K3bDevice::Device::checkWritingModes()
       // WRITINGMODE_SAO
       mp->write_type = 0x02; // Session-at-once
 
+      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": checking for SAO" << endl;
       if( modeSelect( buffer, dataLen, 1, 0 ) )
 	m_writeModes |= WRITINGMODE_SAO;
 
@@ -2981,16 +2983,19 @@ void K3bDevice::Device::checkWritingModes()
 // 	m_writeModes |= WRITINGMODE_RAW_R16;
 //       }
 
+      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": checking for SAO_R96P" << endl;
       mp->dbtype = 2;        // Raw data with P-W Sub-channel (2448 bytes)
       if( modeSelect( buffer, dataLen, 1, 0 ) ) {
 	m_writeModes |= WRITINGMODE_SAO_R96P;
       }
 
+      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": checking for SAO_R96R" << endl;
       mp->dbtype = 3;        // Raw data with P-W raw Sub-channel (2448 bytes)
       if( modeSelect( buffer, dataLen, 1, 0 ) ) {
 	m_writeModes |= WRITINGMODE_SAO_R96R;
       }
 
+      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": checking for RAW_R16" << endl;
       // WRITINGMODE_RAW
       mp->write_type = 0x03; // WRITINGMODE_RAW
       mp->dbtype = 1;        // Raw data with P and Q Sub-channel (2368 bytes)
@@ -2999,12 +3004,14 @@ void K3bDevice::Device::checkWritingModes()
 	m_writeModes |= WRITINGMODE_RAW_R16;
       }
 
+      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": checking for RAW_R96P" << endl;
       mp->dbtype = 2;        // Raw data with P-W Sub-channel (2448 bytes)
       if( modeSelect( buffer, dataLen, 1, 0 ) ) {
 	m_writeModes |= WRITINGMODE_RAW;
 	m_writeModes |= WRITINGMODE_RAW_R96P;
       }
 
+      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": checking for RAW_R96R" << endl;
       mp->dbtype = 3;        // Raw data with P-W raw Sub-channel (2448 bytes)
       if( modeSelect( buffer, dataLen, 1, 0 ) ) {
 	m_writeModes |= WRITINGMODE_RAW;

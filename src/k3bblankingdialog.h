@@ -54,7 +54,6 @@ Q_OBJECT
 
  protected slots:
   void slotStartClicked();
-  void slotInfoMessage( const QString& msg, int type );
   void slotWriterChanged();
   void slotWritingAppChanged( int );
   void slotJobFinished( bool );
@@ -68,8 +67,6 @@ Q_OBJECT
   K3bWriterSelectionWidget* m_writerSelectionWidget;
 
   QComboBox* m_comboEraseMode;
-  QGroupBox* m_groupOutput;
-  KListView* m_viewOutput;
 
   class Private;
   Private* d;

@@ -122,7 +122,12 @@ dnl this will define WORDS_BIGENDIAN or do nothing
 AC_C_BIGENDIAN()
 
 dnl === Ogg Vorbis Test - Begin ===
-AC_ARG_WITH(oggvorbis, AS_HELP_STRING([--without-oggvorbis], [build without OggVorbis support (default=no)]), [ac_cv_use_oggvorbis=$withval], [ac_cv_use_oggvorbis=yes])
+AC_ARG_WITH(
+	oggvorbis, 
+	AS_HELP_STRING([--without-oggvorbis], [build without OggVorbis support (default=no)]), 
+	[ac_cv_use_oggvorbis=$withval], 
+	[ac_cv_use_oggvorbis=yes]
+)
 
 if test "$ac_cv_use_oggvorbis" = "yes"; then
 
@@ -150,7 +155,12 @@ AM_CONDITIONAL(include_OGG, [test x$ogg_vorbis = xyes])
 dnl === Ogg Vorbis Test - End ===
 
 dnl === libmad MPEG decoder check - begin ===
-AC_ARG_WITH(libmad, AS_HELP_STRING([--without-libmad], [build without libmad support (default=no)]), [ac_cv_use_libmad=$withval], [ac_cv_use_libmad=yes])
+AC_ARG_WITH(
+	libmad, 
+	AS_HELP_STRING([--without-libmad], [build without libmad support (default=no)]), 
+	[ac_cv_use_libmad=$withval], 
+	[ac_cv_use_libmad=yes]
+)
 
 if test "$ac_cv_use_libmad" = "yes"; then
   MAD_LIB=""
@@ -180,7 +190,13 @@ if test -z "$PKG_CONFIG"; then
     AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
 fi
 
-AC_ARG_WITH(sndfile, AS_HELP_STRING([--without-sndfile], [build without libsndfile support (default=no)]), [ac_cv_use_sndfile=$withval], [ac_cv_use_sndfile=yes])
+AC_ARG_WITH(
+	sndfile, 
+	AS_HELP_STRING([--without-sndfile], 
+	[build without libsndfile support (default=no)]), 
+	[ac_cv_use_sndfile=$withval], 
+	[ac_cv_use_sndfile=yes]
+)
 
 if test "$ac_cv_use_sndfile" = "yes"; then
   SNDFILE_CFLAGS=""
@@ -218,7 +234,12 @@ dnl === test for libsndfile - end ===
 
 
 dnl === test for FLAC++ and FLAC - begin ====
-AC_ARG_WITH(flac, AS_HELP_STRING([--without-flac], [build without FLAC support (default=no)]), [ac_cv_use_flac=$withval], [ac_cv_use_flac=yes])
+AC_ARG_WITH(
+	flac, 
+	AS_HELP_STRING([--without-flac], [build without FLAC support (default=no)]), 
+	[ac_cv_use_flac=$withval], 
+	[ac_cv_use_flac=yes]
+)
 
 have_flac=no
 if test "$ac_cv_use_flac" = "yes"; then
@@ -249,8 +270,14 @@ fi
 AM_CONDITIONAL(include_FLAC, [test x$have_flac = xyes])
 dnl === test for FLAC++ and FLAC - end ====
 
+
 dnl === test for LAME - begin ====
-AC_ARG_WITH(lame, AS_HELP_STRING([--without-lame], [build without LAME support (default=no)]), [ac_cv_use_lame=$withval], [ac_cv_use_lame=yes])
+AC_ARG_WITH(
+	lame, 
+	AS_HELP_STRING([--without-lame], [build without LAME support (default=no)]), 
+	[ac_cv_use_lame=$withval], 
+	[ac_cv_use_lame=yes]
+)
 
 have_lame=no
 if test "$ac_cv_use_lame" = "yes"; then
@@ -265,8 +292,14 @@ fi
 AM_CONDITIONAL(include_LAME, [test x$have_lame = xyes])
 dnl === test for LAME - end ====
 
+
 dnl === check for resmgr - begin ============
-AC_ARG_WITH(resmgr, AS_HELP_STRING([--without-resmgr], [build without ResMgr support (default=no)]), [ac_cv_use_resmgr=$withval], [ac_cv_use_resmgr=yes])
+AC_ARG_WITH(
+	resmgr, 
+	AS_HELP_STRING([--without-resmgr], [build without ResMgr support (default=no)]), 
+	[ac_cv_use_resmgr=$withval], 
+	[ac_cv_use_resmgr=yes]
+)
 
 if test "$ac_cv_use_resmgr" = "yes"; then
   RESMGR_LIB=""
@@ -280,9 +313,12 @@ if test "$ac_cv_use_resmgr" = "yes"; then
 fi
 dnl === check for resmgr - end ============
 
-AC_ARG_WITH(external-libsamplerate,
+
+AC_ARG_WITH(
+	external-libsamplerate,
 	[  --with-external-libsamplerate   use the libsamplerate provided by the system (default=yes)],
-	[external_sampletrate=$withval], [external_sampletrate=yes]
+	[external_sampletrate=$withval], 
+	[external_sampletrate=yes]
 )
 
 LIBSAMPLERATE=""
@@ -321,7 +357,8 @@ fi
 KDE_CHECK_THREADING
 
 compile_k3bsetup=yes
-AC_ARG_WITH(k3bsetup, 
+AC_ARG_WITH(
+	k3bsetup, 
 	[  --with-k3bsetup[=ARG]     do compile K3bSetup2 KControl Module (default=yes)],
 	[compile_k3bsetup=$withval]
 )

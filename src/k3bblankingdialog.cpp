@@ -14,6 +14,8 @@
  */
 
 #include "k3bblankingdialog.h"
+#include "k3bdebuggingoutputdialog.h"
+#include "k3bdebuggingoutputfile.h"
 
 #include <k3bdevice.h>
 #include <k3bdevicemanager.h>
@@ -56,6 +58,8 @@ public:
 
   K3bBlankingJob* job;
   K3bProgressDialog* erasingDlg;
+  K3bDebuggingOutputDialog* debugDialog;
+  K3bDebuggingOutputFile debugFile;
   QMap<int, int> comboTypeMap;
   QMap<int, int> typeComboMap;
 
@@ -72,6 +76,7 @@ K3bBlankingDialog::K3bBlankingDialog( QWidget* parent, const char* name )
 			  "CDRW Erasing" )
 {
   d = new Private();
+  d->debugDialog = new K3bDebuggingOutputDialog( this );
 
   setCancelButtonText( i18n("Close") );
   setupGui();
@@ -103,37 +108,11 @@ void K3bBlankingDialog::setupGui()
   m_comboEraseMode = new QComboBox( groupBlankType );
   // ----------------------------------------------------------------------
 
-
-  // ----- setup the putput group ------------------------------------------
-  m_groupOutput = new QGroupBox( 1, Qt::Vertical, i18n("Output"), frame );
-  m_groupOutput->layout()->setSpacing( spacingHint() );
-  m_groupOutput->layout()->setMargin( marginHint() );
-
-  m_viewOutput = new KListView( m_groupOutput );
-  m_viewOutput->setSorting(-1);
-  m_viewOutput->addColumn( i18n("Type") );
-  m_viewOutput->addColumn( i18n("Message") );
-  m_viewOutput->header()->hide();
-  // ------------------------------------------------------------------------
-
-  // -- setup option group --------------------------------------------------
-//   QGroupBox* groupOptions = new QGroupBox( 1, Qt::Vertical, i18n("Options"), frame );
-//   groupOptions->layout()->setSpacing( spacingHint() );
-//   groupOptions->layout()->setMargin( marginHint() );
-
-//   m_checkForce = new QCheckBox( i18n("&Force"), groupOptions );
-//   QToolTip::add( m_checkForce, i18n("Try this if K3b is not able to blank a CD-RW in normal mode") );
-  // ------------------------------------------------------------------------
-
-
   QGridLayout* grid = new QGridLayout( frame );
   grid->setSpacing( spacingHint() );
   grid->setMargin( 0 );
-
-  grid->addMultiCellWidget( m_writerSelectionWidget, 0, 0, 0, 0 );
+  grid->addWidget( m_writerSelectionWidget, 0, 0 );
   grid->addWidget( groupBlankType, 1, 0 );
-  //  grid->addWidget( groupOptions, 1, 1 );
-  grid->addMultiCellWidget( m_groupOutput, 2, 2, 0, 0 );
 }
 
 
@@ -141,12 +120,15 @@ void K3bBlankingDialog::slotStartClicked()
 {
   // start the blankingjob and connect to the info-signal
   // disable the user1 button and enable the cancel button
-  m_viewOutput->clear();
+  d->debugDialog->clear();
+  d->debugFile.open();
 
   if( d->job == 0 ) {
     d->job = new K3bBlankingJob( this, this );
-    connect( d->job, SIGNAL(infoMessage(const QString&,int)), 
-	     this, SLOT(slotInfoMessage(const QString&,int)) );
+    connect( d->job, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+	     d->debugDialog, SLOT(addOutput(const QString&, const QString&)) );
+    connect( d->job, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+	     &d->debugFile, SLOT(addOutput(const QString&, const QString&)) );
     connect( d->job, SIGNAL(finished(bool)), 
 	     this, SLOT(slotJobFinished(bool)) );
   }
@@ -154,7 +136,7 @@ void K3bBlankingDialog::slotStartClicked()
   d->job->setDevice( m_writerSelectionWidget->writerDevice() );
   d->job->setSpeed( m_writerSelectionWidget->writerSpeed() );
   // why should one ever not want to force?
-  d->job->setForce( true /*m_checkForce->isChecked()*/ );
+  d->job->setForce( true );
   d->job->setWritingApp(m_writerSelectionWidget->writingApp());
   d->job->setMode( d->comboTypeMap[m_comboEraseMode->currentItem()] );
 
@@ -163,29 +145,13 @@ void K3bBlankingDialog::slotStartClicked()
 
   connect( d->erasingDlg, SIGNAL(cancelClicked()), d->job, SLOT(cancel()) );
 
+  hide();
   d->jobRunning = true;
   d->job->start();
   if( d->jobRunning ) // in case the job already finished in the start slot
     d->erasingDlg->exec(false);
-}
 
-
-void K3bBlankingDialog::slotInfoMessage( const QString& str, int type )
-{
-  QListViewItem* item = new QListViewItem( m_viewOutput, m_viewOutput->lastItem(), QString::null, str );
-
-  // set the icon
-  switch( type ) {
-  case K3bJob::ERROR:
-    item->setPixmap( 0, SmallIcon( "stop" ) );
-    break;
-  case K3bJob::INFO:
-    item->setPixmap( 0, SmallIcon( "cdwriter_unmount" ) );
-    break;
-  case K3bJob::SUCCESS:
-  default:
-    item->setPixmap( 0, SmallIcon( "ok" ) );
-  }
+  show();
 }
 
 
@@ -193,12 +159,15 @@ void K3bBlankingDialog::slotJobFinished( bool success )
 {
   d->jobRunning = false;
   d->erasingDlg->hide();
+  d->debugFile.close();
 
   if( success )
     KMessageBox::information( this, i18n("Successfully erased CD-RW."),
 			      i18n("Success") );
-  else
-    KMessageBox::error( this, i18n("Erasing failed.") );
+  else if( KMessageBox::warningYesNo( this, 
+				      i18n("The Erasing process failed. Do you want to see the debugging output?"),
+				      i18n("Erasing failed.") ) == KMessageBox::Yes )
+    d->debugDialog->exec();
 }
 
 
@@ -214,9 +183,7 @@ void K3bBlankingDialog::slotWriterChanged()
     m_buttonStart->setEnabled( true );
   else {
     m_buttonStart->setEnabled( false );
-    QListViewItem* item = new QListViewItem( m_viewOutput, m_viewOutput->lastItem(),
-					     i18n("%1 does not support CD-RW writing.").arg(dev->devicename()) );
-    item->setPixmap( 0, SmallIcon( "stop" ) );
+    KMessageBox::sorry( this, i18n("%1 does not support CD-RW writing.").arg(dev->devicename()) );
   }
 }
 
@@ -279,7 +246,6 @@ void K3bBlankingDialog::loadK3bDefaults()
 {
   m_writerSelectionWidget->loadDefaults();
   m_comboEraseMode->setCurrentItem( d->typeComboMap[K3bBlankingJob::Fast] );
-  //  m_checkForce->setChecked(false);
 }
 
 void K3bBlankingDialog::loadUserDefaults( KConfigBase* c )
@@ -300,8 +266,6 @@ void K3bBlankingDialog::loadUserDefaults( KConfigBase* c )
     else if( mode == "unclose_session" )
       m_comboEraseMode->setCurrentItem( d->typeComboMap[K3bBlankingJob::Unclose] );
   }
-
-  //  m_checkForce->setChecked( c->readBoolEntry( "force", false ) );
 }
 
 void K3bBlankingDialog::saveUserDefaults( KConfigBase* c )
@@ -325,8 +289,6 @@ void K3bBlankingDialog::saveUserDefaults( KConfigBase* c )
     break;
   }
   c->writeEntry( "erase_mode", mode );
-
-  //  c->writeEntry( "force", m_checkForce->isChecked() );
 
   m_writerSelectionWidget->saveConfig( c );
 }

@@ -861,8 +861,7 @@ bool K3bCdCopyJob::writeNextSession()
     if( usedWritingMode == K3b::WRITING_MODE_AUTO ) {
       // use DAO in overwriting mode when not writing multi-session or multi-track
       k3bcore->config()->setGroup("General Options");
-      if( k3bcore->config()->readBoolEntry( "Allow overburning", false ) &&
-	  m_writerDevice->dao() &&
+      if( m_writerDevice->dao() &&
 	  d->toc.count() == 1 && 
 	  !multi )
  	usedWritingMode = K3b::DAO;

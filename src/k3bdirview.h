@@ -71,7 +71,6 @@ class K3bDirView : public QVBox
  protected slots:
   void slotDirActivated( const KURL& );
   void slotDirActivated( const QString& );
-  void slotUpdateURLCombo( const KURL& url );
   void slotMountDevice( K3bDevice::Device* dev );
   void slotMountFinished( K3bDeviceBranch*, const QString& );
   void slotDiskInfoReady( K3bDevice::DiskInfoDetector* );
@@ -88,6 +87,9 @@ class K3bDirView : public QVBox
   void slotSetReadSpeed();
   //  void slotEjectFinished();
   void slotFileTreeContextMenu( K3bDevice::Device* dev, const QPoint& p );
+
+ signals:
+  void urlEntered( const KURL& );
 
  private:
   QWidgetStack* m_viewStack;

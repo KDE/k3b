@@ -438,6 +438,7 @@ void K3bMainWindow::initView()
   connect( m_fileTreeComboBox, SIGNAL(urlExecuted(const KURL&)), m_dirView, SLOT(showUrl(const KURL& )) );
   connect( m_fileTreeComboBox, SIGNAL(deviceExecuted(K3bDevice::Device*)), m_dirView,
 	   SLOT(showDevice(K3bDevice::Device* )) );
+  connect( m_dirView, SIGNAL(urlEntered(const KURL&)), m_fileTreeComboBox, SLOT(setUrl(const KURL&)) );
 
   KWidgetAction* fileTreeComboAction = new KWidgetAction( m_fileTreeComboBox,
 							  i18n("&Quick Dir Selector"),

@@ -324,6 +324,7 @@ void K3bCdCopyDialog::slotStartClicked()
   
   hide();
   dlg->startJob( burnJob );
+  show();
   delete dlg;
   delete burnJob;
 }

@@ -19,6 +19,8 @@
 
 #include <kdialog.h>
 
+#include "k3bdebuggingoutputfile.h"
+
 #include <k3bjobhandler.h>
 
 #include <qdatetime.h>
@@ -135,9 +137,6 @@ class K3bJobProgressDialog : public KDialog, public K3bJobHandler
 
   QGridLayout* m_frameExtraInfoLayout;
 
-  // debugging output display
-  class PrivateDebugWidget;
-
  private:
   class Private;
   Private* d;
@@ -145,7 +144,7 @@ class K3bJobProgressDialog : public KDialog, public K3bJobHandler
   K3bJob* m_job;
   QTimer* m_timer;
   QTime m_startTime;
-  QFile m_logFile;
+  K3bDebuggingOutputFile m_logFile;
 
   QMap<QString, QStringList> m_debugOutputMap;
 

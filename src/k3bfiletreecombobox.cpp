@@ -100,9 +100,15 @@ void K3bFileTreeComboBox::slotDeviceExecuted( K3bDevice::Device* dev )
 
 void K3bFileTreeComboBox::slotUrlExecuted( const KURL& url )
 {
+  setUrl( url );
+  emit urlExecuted( url );
+}
+
+
+void K3bFileTreeComboBox::setUrl( const KURL& url )
+{
   setEditText( SmallIcon("folder"), url.path() );
   popdown();
-  emit urlExecuted( url );
 }
 
 

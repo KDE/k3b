@@ -285,7 +285,7 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
   connect( m_fileTreeView, SIGNAL(unmountFinished(K3bDeviceBranch*, bool)),
 	   this, SLOT(slotUnmountFinished(K3bDeviceBranch*, bool)) );
   connect( m_fileView, SIGNAL(urlEntered(const KURL&)), m_fileTreeView, SLOT(followUrl(const KURL&)) );
-  connect( m_fileView, SIGNAL(urlEntered(const KURL&)), this, SLOT(slotUpdateURLCombo(const KURL&)) );
+  connect( m_fileView, SIGNAL(urlEntered(const KURL&)), this, SIGNAL(urlEntered(const KURL&)) );
 }
 
 K3bDirView::~K3bDirView()
@@ -510,12 +510,6 @@ void K3bDirView::slotSetReadSpeed()
 //     KMessageBox::sorry( this, i18n("No device selected.") );
 //   }
 // }
-
-void K3bDirView::slotUpdateURLCombo( const KURL& )
-{
-//   m_urlCombo->setEditText( url.path() );
-}
-
 
 void K3bDirView::slotDirActivated( const QString& url )
 {

@@ -43,6 +43,7 @@ class K3bFileTreeComboBox : public KComboBox
   void setCurrentText( const QString& );
 
  public slots:
+  void setUrl( const KURL& url );
   void slotGoUrl();
 
  signals:
