@@ -227,16 +227,15 @@ void K3bApp::openDocumentFile(const KURL& url)
 
 void K3bApp::saveOptions()
 {	
-qDebug("Saving options!");
-
   m_config->setGroup("General Options");
   m_config->writeEntry("Geometry", size());
   m_config->writeEntry("Show Toolbar", toolBar()->isVisible());
   m_config->writeEntry("Show Statusbar",statusBar()->isVisible());
+  m_config->writeEntry("Show DirView",m_dirView->isVisible());
   m_config->writeEntry("ToolBarPos", (int) toolBar("mainToolBar")->barPos());
   fileOpenRecent->saveEntries(m_config,"Recent Files");
 
-  m_config->writeEntry("Temp Dir", "/usr/cdburn/");
+  // TODO: save dock positions!
 }
 
 

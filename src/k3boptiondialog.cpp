@@ -54,6 +54,8 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
 	
 	readPrograms();
 	readDevices();
+	
+	resize( 620, 500 );
 }
 
 
@@ -216,6 +218,7 @@ void K3bOptionDialog::setupDevicePage()
     m_groupReaderLayout->setMargin( marginHint() );
 
     m_viewDevicesReader = new KListView( m_groupReader, "m_viewDevicesReader" );
+    m_viewDevicesReader->addColumn( "" );
 	m_viewDevicesReader->addColumn( i18n("Bus") );
     m_viewDevicesReader->addColumn( i18n( "Target" ) );
 	m_viewDevicesReader->addColumn( i18n( "Lun" ) );
@@ -239,6 +242,7 @@ void K3bOptionDialog::setupDevicePage()
     m_groupWriterLayout->setMargin( marginHint() );
 
     m_viewDevicesWriter = new KListView( m_groupWriter, "m_viewDevicesWriter" );
+    m_viewDevicesWriter->addColumn( "" );
 	m_viewDevicesWriter->addColumn( i18n("Bus") );
 	m_viewDevicesWriter->addColumn( i18n("Target") );
     m_viewDevicesWriter->addColumn( i18n( "Lun" ) );
@@ -253,16 +257,17 @@ void K3bOptionDialog::setupDevicePage()
     frameLayout->addMultiCellWidget( m_groupWriter, 2, 2, 0, 1 );
 
     m_viewDevicesReader->setItemsRenameable( true );
-    m_viewDevicesReader->setRenameable( 0, true );
+    m_viewDevicesReader->setRenameable( 0, false );
 	m_viewDevicesReader->setRenameable( 1, true );
 	m_viewDevicesReader->setRenameable( 2, true );
 	m_viewDevicesReader->setRenameable( 3, true );
 	m_viewDevicesReader->setRenameable( 4, true );
 	m_viewDevicesReader->setRenameable( 5, true );
 	m_viewDevicesReader->setRenameable( 6, true );
+	m_viewDevicesReader->setRenameable( 7, true );
 
 	m_viewDevicesWriter->setItemsRenameable( true );
-	m_viewDevicesWriter->setRenameable( 0, true );
+	m_viewDevicesWriter->setRenameable( 0, false );
 	m_viewDevicesWriter->setRenameable( 1, true );
 	m_viewDevicesWriter->setRenameable( 2, true );
 	m_viewDevicesWriter->setRenameable( 3, true );
@@ -270,7 +275,8 @@ void K3bOptionDialog::setupDevicePage()
 	m_viewDevicesWriter->setRenameable( 5, true );
 	m_viewDevicesWriter->setRenameable( 6, true );
 	m_viewDevicesWriter->setRenameable( 7, true );
-
+	m_viewDevicesWriter->setRenameable( 8, true );
+	
 	// POPUP Menu
 	m_menuDevices = new KActionMenu( "Devices", SmallIconSet("blockdevice"), this, "DevicesPopup" );
 	m_actionNewDevice = new KAction( "New Device", 0, this, SLOT(slotNewDevice()), this );
@@ -309,13 +315,13 @@ void K3bOptionDialog::readDevices()
 		// add item to m_viewDevices
 		item = new QListViewItem( m_viewDevicesReader );
 		item->setPixmap( 0, KGlobal::instance()->iconLoader()->loadIcon( "cdrom_unmount", KIcon::NoGroup, KIcon::SizeSmall ) );
-		item->setText( 0, QString::number(dev->bus) );
-		item->setText( 1, QString::number(dev->target) );
-		item->setText( 2, QString::number(dev->lun) );
-		item->setText( 3, dev->vendor );
-		item->setText( 4, dev->description );
-		item->setText( 5, dev->version );
-		item->setText( 6, QString::number(dev->maxReadSpeed) );
+		item->setText( 1, QString::number(dev->bus) );
+		item->setText( 2, QString::number(dev->target) );
+		item->setText( 3, QString::number(dev->lun) );
+		item->setText( 4, dev->vendor );
+		item->setText( 5, dev->description );
+		item->setText( 6, dev->version );
+		item->setText( 7, QString::number(dev->maxReadSpeed) );
 		dev = dm->readingDevices().next();
 	}
 	
@@ -326,14 +332,14 @@ void K3bOptionDialog::readDevices()
 		// add item to m_viewDevices
 		item = new QListViewItem( m_viewDevicesWriter );
 		item->setPixmap( 0, KGlobal::instance()->iconLoader()->loadIcon( "cdwriter_unmount", KIcon::NoGroup, KIcon::SizeSmall ) );
-		item->setText( 0, QString::number(dev->bus) );
-		item->setText( 1, QString::number(dev->target) );
-		item->setText( 2, QString::number(dev->lun) );
-		item->setText( 3, dev->vendor );
-		item->setText( 4, dev->description );
-		item->setText( 5, dev->version );
-		item->setText( 6, QString::number(dev->maxReadSpeed) );
-		item->setText( 7, QString::number(dev->maxWriteSpeed) );
+		item->setText( 1, QString::number(dev->bus) );
+		item->setText( 2, QString::number(dev->target) );
+		item->setText( 3, QString::number(dev->lun) );
+		item->setText( 4, dev->vendor );
+		item->setText( 5, dev->description );
+		item->setText( 6, dev->version );
+		item->setText( 7, QString::number(dev->maxReadSpeed) );
+		item->setText( 8, QString::number(dev->maxWriteSpeed) );
 		dev = dm->burningDevices().next();
 	}
 }
@@ -410,13 +416,13 @@ void K3bOptionDialog::saveDevices()
 		QListViewItem* item = m_viewDevicesReader->firstChild();
 		while( item ) {
 			QStringList list;
-			list.append( item->text(0) ); // device
-			list.append( item->text(1) );
+			list.append( item->text(1) ); // device
 			list.append( item->text(2) );
-			list.append( item->text(3) ); // vendor
-			list.append( item->text(4) ); // description
-			list.append( item->text(5) ); // version
-			list.append( item->text(6) ); // max readspeed
+			list.append( item->text(3) );
+			list.append( item->text(4) ); // vendor
+			list.append( item->text(5) ); // description
+			list.append( item->text(6) ); // version
+			list.append( item->text(7) ); // max readspeed
 			
 			entryName = QString( "Reader%1").arg(entryNum);
 			c->writeEntry( entryName, list );
@@ -429,14 +435,14 @@ void K3bOptionDialog::saveDevices()
 		item = m_viewDevicesWriter->firstChild();
 		while( item ) {
 			QStringList list;
-			list.append( item->text(0) ); // device
-			list.append( item->text(1) );
+			list.append( item->text(1) ); // device
 			list.append( item->text(2) );
-			list.append( item->text(3) ); // vendor
-			list.append( item->text(4) ); // description
-			list.append( item->text(5) ); // version
-			list.append( item->text(6) ); // max readspeed
-			list.append( item->text(7) ); // max writespeed
+			list.append( item->text(3) );
+			list.append( item->text(4) ); // vendor
+			list.append( item->text(5) ); // description
+			list.append( item->text(6) ); // version
+			list.append( item->text(7) ); // max readspeed
+			list.append( item->text(8) ); // max writespeed
 			
 			entryName = QString( "Writer%1").arg(entryNum);
 			c->writeEntry( entryName, list );
