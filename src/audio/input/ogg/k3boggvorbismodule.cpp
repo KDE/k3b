@@ -73,11 +73,12 @@ int K3bOggVorbisModule::decodeInternal( const char** _data )
   long bytesRead = ov_read( m_oggVorbisFile, m_outputBuffer, OUTPUT_BUFFER_SIZE, 1, 2, 1, &m_currentOggVorbisSection );
 
   if( bytesRead == OV_HOLE ) {
-    // TODO: I think we can go on here?
+    // I think we can go on here?
 
     kdDebug() << "(K3bOggVorbisModule) OV_HOLE" << endl;
-      
-    return -1;
+
+    // recursive new try
+    return decodeInternal(_data);
   }
 
   else if( bytesRead == OV_EBADLINK ) {
