@@ -9,7 +9,7 @@
 #include <qfontmetrics.h>
 #include <qpainter.h>
 
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 
 
 K3bSplash::K3bSplash( QWidget* parent, const char* name )

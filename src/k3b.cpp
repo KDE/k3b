@@ -38,7 +38,7 @@
 #include <kconfig.h>
 #include <kstdaction.h>
 #include <klineeditdlg.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <krun.h>
 #include <kurl.h>
 #include <ktoolbar.h>

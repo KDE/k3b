@@ -32,7 +32,7 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <klocale.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 
 #include <qstring.h>
 #include <qstringlist.h>

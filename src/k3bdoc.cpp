@@ -34,7 +34,7 @@
 #include <kio/netaccess.h>
 #include <kprocess.h>
 #include <kapplication.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <klocale.h>
 #include <kconfig.h>
 

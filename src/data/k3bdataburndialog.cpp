@@ -45,7 +45,7 @@
 #include <klineedit.h>
 #include <klocale.h>
 #include <kconfig.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kfiledialog.h>
 
 

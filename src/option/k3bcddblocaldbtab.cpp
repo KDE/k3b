@@ -35,7 +35,7 @@
 #include <kdialog.h>
 #include <klineedit.h>
 #include <kapplication.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kfiledialog.h>
 #include <kdebug.h>
 

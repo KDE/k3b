@@ -49,7 +49,7 @@
 #include <kurl.h>
 #include <klocale.h>
 #include <kautomount.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kio/file.h>
 #include <kio/global.h>
 #include <krun.h>

@@ -29,7 +29,7 @@
 #include <kconfig.h>
 #include <kdialog.h>
 #include <kfiledialog.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <kiconloader.h>
 #include <kio/netaccess.h>

@@ -27,7 +27,7 @@
 #include <kconfig.h>
 #include <ksimpleconfig.h>
 #include <kiconloader.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <klistview.h>
 
 #include <qcombobox.h>
