@@ -19,6 +19,9 @@
 #include <k3bjob.h>
 #include <kcutlabel.h>
 #include <k3bdevice.h>
+#include <k3bdevicemanager.h>
+#include <k3bdeviceglobals.h>
+#include <k3bglobals.h>
 #include <k3bstdguiitems.h>
 #include <k3bcore.h>
 #include <k3bversion.h>
@@ -92,13 +95,6 @@ K3bJobProgressDialog::PrivateDebugWidget::PrivateDebugWidget( QMap<QString, QStr
 
   debugView = new QTextView( this );
   setMainWidget( debugView );
-
-  debugView->append( "System\n" );
-  debugView->append( "-----------------------\n" );
-  debugView->append( QString("K3b Version:%1 \n").arg( k3bcore->version() ) );
-  debugView->append( QString( "KDE Version: %1\n").arg( KDE::versionString() ) );
-  debugView->append( QString( "QT Version: %1\n" ).arg( qVersion() ) );
-  debugView->append( "\n" );
 
   // the following may take some time
   QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
@@ -557,6 +553,26 @@ void K3bJobProgressDialog::slotStarted()
   m_startTime = QTime::currentTime();
   if( KMainWindow* w = dynamic_cast<KMainWindow*>(kapp->mainWidget()) )
     m_plainCaption = w->caption();
+
+  // system info in the log file
+  slotDebuggingOutput( "System", "K3b Version: " + k3bcore->version() );
+  slotDebuggingOutput( "System", "KDE Version: " + QString(KDE::versionString()) );
+  slotDebuggingOutput( "System", "QT Version:  " + QString(qVersion()) );
+  slotDebuggingOutput( "System", "Kernel:      " + K3b::kernelVersion() );
+  
+  // devices in the logfile
+  for( QPtrListIterator<K3bCdDevice::CdDevice> it( k3bcore->deviceManager()->allDevices() ); *it; ++it ) {
+    K3bCdDevice::CdDevice* dev = *it;
+    slotDebuggingOutput( "Devices", 
+			 QString( "%1 (%2, %3) at %4 [%5] [%6] [%7]" )
+			 .arg( dev->vendor() + " " + dev->description() + " " + dev->version() )
+			 .arg( dev->blockDeviceName() )
+			 .arg( dev->genericDevice() )
+			 .arg( dev->mountPoint() )
+			 .arg( K3bCdDevice::deviceTypeString( dev->type() ) )
+			 .arg( K3bCdDevice::mediaTypeString( dev->supportedProfiles() ) )
+			 .arg( K3bCdDevice::writingModeString( dev->writingModes() ) ) );
+  }
 }
 
 

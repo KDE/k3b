@@ -44,10 +44,10 @@ K3bDataVolumeDescWidget::K3bDataVolumeDescWidget( QWidget* parent, const char* n
   // for now we hide the volume set stuff since it's not working anymore in mkisofs 2.01a34
   textLabel1->hide();
   textLabel2->hide();
-  TextLabel2->hide();
+//  TextLabel2->hide();
   m_spinVolumeSetSize->hide();
   m_spinVolumeSetNumber->hide();
-  m_editVolumeSetName->hide();
+  //  m_editVolumeSetName->hide();
 }
 
 

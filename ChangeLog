@@ -1,5 +1,6 @@
 0.11.19
 Finally fixed mp3 file detection (I feared I was never going to find the problem)
+Fixed bug which made the DataDvdJob delete an image even if none was created.
 
 0.11.18
 Fixed Cd-Text loading in audio projects.
