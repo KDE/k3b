@@ -117,7 +117,7 @@ unsigned long long K3bVcdDoc::size() const
 
 unsigned long long K3bVcdDoc::length() const
 {
-  return size();
+  return size() / 2352;
 }
 
 void K3bVcdDoc::addUrl( const KURL& url )

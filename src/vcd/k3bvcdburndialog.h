@@ -78,7 +78,6 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
    // the video-label-tab
    // -----------------------------------------------------------
 
-   QCheckBox* m_checkApplicationId;
    QLineEdit* m_editVolumeId;
    QLineEdit* m_editAlbumId;
 

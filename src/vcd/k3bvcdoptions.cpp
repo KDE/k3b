@@ -24,7 +24,8 @@
 
 K3bVcdOptions::K3bVcdOptions()
   : m_volumeID( i18n("Project name", "VIDEOCD") ),
-    m_applicationID( "K3B" ),
+    m_applicationId( "CDI/CDI_VCD.APP;1" ),
+    m_systemId( "CD-RTOS CD-BRIDGE" ),    
     m_volumeSetId( "" ),
     m_brokensvcdmode( false ),
     m_sector2336( false ),
@@ -41,7 +42,6 @@ void K3bVcdOptions::save( KConfig* c )
   c->writeEntry( "album_id", m_albumID );
   c->writeEntry( "preparer", m_preparer );
   c->writeEntry( "publisher", m_publisher );
-  c->writeEntry( "system_id", m_systemId );
   c->writeEntry( "volume_set_id", m_volumeSetId );
   c->writeEntry( "broken_svcd_mode", m_brokensvcdmode );
   c->writeEntry( "2336_sectors", m_sector2336 );
@@ -58,7 +58,6 @@ K3bVcdOptions K3bVcdOptions::load( KConfig* c )
   options.setAlbumId( c->readEntry( "album_id", options.albumId() ) );
   options.setPreparer( c->readEntry( "preparer", options.preparer() ) );
   options.setPublisher( c->readEntry( "publisher", options.publisher() ) );
-  options.setSystemId( c->readEntry( "system_id", options.systemId() ) );
   options.setVolumeSetId( c->readEntry( "volume_set_id", options.volumeSetId() ) );
   options.setBrokenSVcdMode( c->readBoolEntry( "broken_svcd_mode", options.BrokenSVcdMode() ) );
   options.setSector2336( c->readBoolEntry( "2336_sectors", options.Sector2336() ) );

@@ -94,7 +94,6 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
   QToolTip::add( m_checkNonCompliant, i18n("Non-compliant compatibility mode for broken devices") );
   QToolTip::add( m_check2336, i18n("Use 2336 byte sectors for output") );
 
-  QToolTip::add(m_checkApplicationId, i18n("Write ISO application id for Video CD") );
   QToolTip::add(m_editVolumeId, i18n("Specify ISO volume label for Video CD") );
   QToolTip::add(m_editAlbumId, i18n("Specify album id for VideoCD set") );
   QToolTip::add(m_spinVolumeNumber, i18n("Specify album set sequence number ( <= volume-count )") );
@@ -180,9 +179,14 @@ void K3bVcdBurnDialog::setupVideoCdTab()
 
   // ---------------------------------------------------- Format group ----
   m_groupVcdFormat = new QButtonGroup( 4, Qt::Vertical, i18n("Format"), w );
+  QCheckBox* m_checkAutoDetect = new QCheckBox( i18n( "Autodetect" ), m_groupVcdFormat );
+  m_checkAutoDetect->setChecked( true );
+
   m_radioVcd11 = new QRadioButton( i18n( "VideoCD 1.1" ), m_groupVcdFormat );
   m_radioVcd20 = new QRadioButton( i18n( "VideoCD 2.0" ), m_groupVcdFormat );
   m_radioSvcd10 = new QRadioButton( i18n( "Super-VideoCD" ), m_groupVcdFormat );
+
+
   m_groupVcdFormat->setExclusive(true);
 
   // ---------------------------------------------------- Options group ---
@@ -239,14 +243,28 @@ void K3bVcdBurnDialog::setupLabelTab()
 {
   QWidget* w = new QWidget( k3bMainWidget() );
 
-  m_checkApplicationId = new QCheckBox( i18n( "Write Application Id" ), w, "m_checkApplicationId" );
+  // ----------------------------------------------------------------------
+  // noEdit
+  QLabel* labelSystemId = new QLabel( i18n( "System Id:" ), w, "labelSystemId" );
+  QLabel* labelApplicationId = new QLabel( i18n( "Aplication Id:" ), w, "labelApplicationId" );
+  QLineEdit* editSystemId = new QLineEdit( w, "editSystemId" );
+  QLineEdit* editApplicationId = new QLineEdit( w, "editApplicationId" );
+
+  editSystemId->setText( vcdDoc()->vcdOptions()->systemId() );
+  editSystemId->setReadOnly( true );
+
+  editApplicationId->setText( vcdDoc()->vcdOptions()->applicationId() );
+  editApplicationId->setReadOnly( true );
+  QToolTip::add(editApplicationId, i18n("ISO application id for Video CD") );
 
   // ----------------------------------------------------------------------
+
   QLabel* labelVolumeId = new QLabel( i18n( "Volume &Label:" ), w, "labelVolumeId" );
   QLabel* labelAlbumId = new QLabel( i18n( "&Album Id:" ), w, "labelAlbumId" );
   QLabel* labelVolumeCount = new QLabel( i18n( "Number of &Volumes in Album:" ), w, "labelVolumeCount" );
-  QLabel* labelVolumeNumber = new QLabel( i18n( "This is &Sequence Number:" ), w, "labelVolumeNumber" );
+  QLabel* labelVolumeNumber = new QLabel( i18n( "This CD is &Sequence Number:" ), w, "labelVolumeNumber" );
 
+  
   m_editVolumeId = new QLineEdit( w, "m_editVolumeId" );
   m_editAlbumId = new QLineEdit( w, "m_editAlbumId" );
   m_spinVolumeNumber = new QSpinBox( w, "m_editVolumeNumber" );
@@ -265,20 +283,24 @@ void K3bVcdBurnDialog::setupLabelTab()
   grid->setMargin( marginHint() );
   grid->setSpacing( spacingHint() );
 
-  grid->addMultiCellWidget( m_checkApplicationId, 0, 0, 0, 1 );
-  grid->addMultiCellWidget( line, 1, 1, 0, 1 );
+  grid->addWidget( labelSystemId, 1, 0 );
+  grid->addWidget( editSystemId, 1, 1 );
+  grid->addWidget( labelApplicationId, 2, 0 );
+  grid->addWidget( editApplicationId, 2, 1 );
 
-  grid->addWidget( labelVolumeId, 2, 0 );
-  grid->addWidget( m_editVolumeId, 2, 1 );
-  grid->addWidget( labelAlbumId, 3, 0 );
-  grid->addWidget( m_editAlbumId, 3, 1 );
-  grid->addWidget( labelVolumeCount, 4, 0 );
-  grid->addWidget( m_spinVolumeCount, 4, 1 );
-  grid->addWidget( labelVolumeNumber, 5, 0 );
-  grid->addWidget( m_spinVolumeNumber, 5, 1 );
+  grid->addMultiCellWidget( line, 3, 3, 0, 1 );
+
+  grid->addWidget( labelVolumeId, 4, 0 );
+  grid->addWidget( m_editVolumeId, 4, 1 );
+  grid->addWidget( labelAlbumId, 5, 0 );
+  grid->addWidget( m_editAlbumId, 5, 1 );
+  grid->addWidget( labelVolumeCount, 6, 0 );
+  grid->addWidget( m_spinVolumeCount, 6, 1 );
+  grid->addWidget( labelVolumeNumber, 7, 0 );
+  grid->addWidget( m_spinVolumeNumber, 7, 1 );
 
   //  grid->addRowSpacing( 5, 15 );
-  grid->setRowStretch( 6, 1 );
+  grid->setRowStretch( 8, 1 );
 
   // buddies
   labelVolumeId->setBuddy( m_editVolumeId );
@@ -290,9 +312,6 @@ void K3bVcdBurnDialog::setupLabelTab()
   setTabOrder( m_editVolumeId, m_editAlbumId);
   setTabOrder( m_editAlbumId, m_spinVolumeCount );
   setTabOrder( m_spinVolumeCount, m_spinVolumeNumber );
-
-  // TODO: enable this in the future :)
-  m_checkApplicationId->setEnabled(false);
 
   addPage( w, i18n("Label") );
 }
@@ -330,8 +349,6 @@ void K3bVcdBurnDialog::loadDefaults()
   m_checkBurnproof->setChecked( true );
   m_checkRemoveBufferFiles->setChecked( true );
   m_checkOnlyCreateImage->setChecked( false );
-
-  m_checkApplicationId->setChecked( false );
 
   m_editVolumeId->setText( "VIDEOCD" );
   m_editAlbumId->setText( "" );

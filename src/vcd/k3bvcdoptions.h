@@ -29,6 +29,8 @@ class K3bVcdOptions
   K3bVcdOptions();
 
   const QString& systemId() const { return m_systemId; }
+  const QString& applicationId() const { return m_applicationId; }
+  
   const QString& albumId() const { return m_albumID; }
   const QString& volumeId() const { return m_volumeID; }
   const QString& volumeSetId() const { return m_volumeSetId; }
@@ -41,7 +43,6 @@ class K3bVcdOptions
   const bool BrokenSVcdMode() const { return m_brokensvcdmode; }
   const bool Sector2336() const { return m_sector2336; }
 
-  void setSystemId( const QString& s ) { m_systemId = s; }
   void setAlbumId( const QString& s ) { m_albumID = s; }
   void setVolumeId( const QString& s ) { m_volumeID = s; }
   void setVolumeSetId( const QString& s ) { m_volumeSetId = s; }
@@ -63,12 +64,14 @@ class K3bVcdOptions
   // volume descriptor
   QString m_volumeID;
   QString m_albumID;
-  QString m_applicationID;  
-  QString m_preparer;
-  QString m_publisher;
-  QString m_systemId;
   QString m_volumeSetId;
 
+  QString m_preparer;
+  QString m_publisher;
+
+  QString m_applicationId;
+  QString m_systemId;
+  
   int m_volumeCount;
   int m_volumeNumber;
     
