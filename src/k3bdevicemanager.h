@@ -59,18 +59,23 @@ public:
 
 	/** writes to stdout **/
 	void printDevices();
-
-protected slots:
-	void parseCdrecordOutput( KProcess* p, char* output, int len );
 	
-private:
-	QList<K3bDevice> m_writer, m_reader;
-
 	/**
 	 * Returns number of found devices and constructs
 	 * the lists m_burner and m_reader.
 	 **/
 	int scanbus();
+	int readConfig();
+	void clear();
+	
+protected slots:
+	void parseCdrecordOutput( KProcess* p, char* output, int len );
+	
+private:
+	QList<K3bDevice> m_reader;
+	QList<K3bDevice> m_writer;
+	
+	int m_foundDevices;
 };
 
 #endif

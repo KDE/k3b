@@ -120,7 +120,7 @@ void K3bAudioDoc::write()
 	}
 }
 
-void K3bAudioDoc::writeImage( const QString& filename )
+void K3bAudioDoc::writeImage( const QString& )
 {
 	// since cdrecord does not support this it will not work
 	// before i implement it on my own (and i hope so!)

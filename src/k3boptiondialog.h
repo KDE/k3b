@@ -62,14 +62,16 @@ private:
 	
 	void setupDevicePage();
 	void readDevices();
-	
-	/** If true the devices are written to the KConfig */
+	void saveDevices();
+
 	bool devicesChanged;
-	
+			
 private slots:
 	void slotRefreshDevices();
 	void slotNewDevice();
 	void slotRemoveDevice();
+	void slotDevicesChanged();
+
 };
 
 #endif

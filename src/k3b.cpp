@@ -104,9 +104,10 @@ void K3bApp::initActions()
 
   fileBurn = new KAction( i18n("&Burn..."), 0, this, SLOT(slotFileBurn()), actionCollection(), "file_burn");
 
-  fileNewMenu = new KActionMenu( i18n("&New Project"), BarIconSet("filenew"), actionCollection(), "file_new" );
-  fileNewAudio = new KAction(i18n("New &Audio project"), SmallIconSet("filenew"), 0, this, SLOT(slotNewAudioDoc()), actionCollection(), "file_new_audio");
-  fileNewData = new KAction(i18n("New &Data project"), SmallIconSet("filenew"), 0, this, SLOT(slotNewDataDoc()), actionCollection(), "file_new_data");
+//  SmallIconSet("filenew")
+  fileNewMenu = new KActionMenu( i18n("&New Project"), 0, actionCollection(), "file_new" );
+  fileNewAudio = new KAction(i18n("New &Audio project"), 0, 0, this, SLOT(slotNewAudioDoc()), actionCollection(), "file_new_audio");
+  fileNewData = new KAction(i18n("New &Data project"), 0, 0, this, SLOT(slotNewDataDoc()), actionCollection(), "file_new_data");
   fileNewMenu->insert( fileNewAudio );
   fileNewMenu->insert( fileNewData );
   fileNewMenu->setDelayed( false );
@@ -628,10 +629,19 @@ void K3bApp::slotFileBurn()
 
 void K3bApp::init()
 {
-  searchExternalProgs();
+	searchExternalProgs();
 
-  m_deviceManager = new K3bDeviceManager( this );
-  m_deviceManager->printDevices();
+	m_deviceManager = new K3bDeviceManager( this );
+
+	if( !m_deviceManager->readConfig() )
+		if( !m_deviceManager->scanbus() )
+			qDebug( "No SCSI-Devices found!" );
+			
+	m_deviceManager->printDevices();
+
+  // debugging
+  m_config->setGroup("General Options");
+  m_config->writeEntry("tempdir", QString::null);
 }
 
 

@@ -47,7 +47,7 @@ void K3bView::update(K3bView* pSender){
 }
 
 
-void K3bView::closeEvent(QCloseEvent* e){
+void K3bView::closeEvent(QCloseEvent*){
 
 // DO NOT CALL QWidget::closeEvent(e) here !!
 // This will accept the closing by QCloseEvent::accept() by default.

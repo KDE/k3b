@@ -89,7 +89,7 @@ void K3bAudioView::addItem( K3bAudioTrack* _track )
 	m_fillStatusDisplay->repaint();
 }
 
-void K3bAudioView::slotDropped( KListView* listView, QDropEvent* e, QListViewItem* after )
+void K3bAudioView::slotDropped( KListView*, QDropEvent* e, QListViewItem* after )
 {
 	if( !e->isAccepted() )
 		return;
@@ -108,14 +108,13 @@ void K3bAudioView::slotDropped( KListView* listView, QDropEvent* e, QListViewIte
 	emit dropped( _urls, _pos );
 }
 
-void K3bAudioView::slotItemMoved( QListViewItem* item, QListViewItem* afterFirst, QListViewItem* afterNow )
+void K3bAudioView::slotItemMoved( QListViewItem* item, QListViewItem*, QListViewItem* afterNow )
 {
 	if( !item)
 		return;
 		
-	AudioListViewItem *_item, *_first, *_now;
+	AudioListViewItem *_item, *_now;
 	_item = (AudioListViewItem*)item;
-	//_first = (AudioListViewItem*)afterFirst;
 	_now = (AudioListViewItem*)afterNow;
 	
 	uint before, after;

@@ -30,13 +30,16 @@
 #include <qfile.h>
 #include <qlist.h>
 #include <qgroupbox.h>
+#include <qstringlist.h>
 
 #include <klistview.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kconfig.h>
+#include <ksimpleconfig.h>
 #include <kapp.h>
 #include <kmessagebox.h>
+#include <kstddirs.h>
 
 
 K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
@@ -64,6 +67,8 @@ void K3bOptionDialog::slotOk()
 	
 	bAccept = bAccept && savePrograms();
 
+	saveDevices();
+	
 	if( bAccept )
 		accept();
 }
@@ -72,6 +77,7 @@ void K3bOptionDialog::slotApply()
 {
 	// save all the shit!
 	savePrograms();
+	saveDevices();
 }
 
 
@@ -177,7 +183,7 @@ bool K3bOptionDialog::savePrograms()
 void K3bOptionDialog::setupDevicePage()
 {
 	QFrame* frame = addPage( i18n("Devices"), i18n("Setup SCSI CD Devices"),
-		KGlobal::instance()->iconLoader()->loadIcon( "disc", KIcon::NoGroup, KIcon::SizeMedium ) );
+		KGlobal::instance()->iconLoader()->loadIcon( "blockdevice", KIcon::NoGroup, KIcon::SizeMedium ) );
 
     QGridLayout* frameLayout = new QGridLayout( frame );
     frameLayout->setSpacing( spacingHint() );
@@ -268,7 +274,16 @@ void K3bOptionDialog::setupDevicePage()
 	connect( m_buttonRefreshDevices, SIGNAL(clicked()), this, SLOT(slotRefreshDevices()) );
 	connect( m_buttonNewDevice, SIGNAL(clicked()), this, SLOT(slotNewDevice()) );
 	connect( m_buttonRemoveDevice, SIGNAL(clicked()), this, SLOT(slotRemoveDevice()) );
+
+	connect( m_viewDevicesReader, SIGNAL(itemRenamed(QListViewItem*)), this, SLOT(slotDevicesChanged()) );
+	connect( m_viewDevicesWriter, SIGNAL(itemRenamed(QListViewItem*)), this, SLOT(slotDevicesChanged()) );
 }
+
+void K3bOptionDialog::slotDevicesChanged()
+{
+	devicesChanged = true;
+}
+
 
 void K3bOptionDialog::readDevices()
 {
@@ -308,6 +323,22 @@ void K3bOptionDialog::readDevices()
 
 void K3bOptionDialog::slotRefreshDevices()
 {
+	KSimpleConfig cfg( kapp->dirs()->findResource( "config", "k3brc" ) );
+	if( cfg.hasGroup( "Devices" ) ) {
+		// remove all old device entrys
+		cfg.deleteGroup("Devices");
+	}
+
+	// clear the lists
+	m_viewDevicesReader->clear();
+	m_viewDevicesWriter->clear();
+	
+	// reread devices
+	k3bMain()->deviceManager()->clear();
+	k3bMain()->deviceManager()->scanbus();
+	readDevices();
+	
+	devicesChanged = false;
 }
 
 
@@ -318,4 +349,54 @@ void K3bOptionDialog::slotNewDevice()
 
 void K3bOptionDialog::slotRemoveDevice()
 {
+}
+
+
+void K3bOptionDialog::saveDevices()
+{
+	// only save devices to KConfig if the devices have been changed
+	if( devicesChanged ) {
+		KConfig* c = kapp->config();
+		c->setGroup("Devices");
+		QString entryName;
+		int entryNum = 1;
+		
+		QListViewItem* item = m_viewDevicesReader->firstChild();
+		while( item ) {
+			QStringList list;
+			list.append( item->text(0) ); // device
+			list.append( item->text(1) ); // vendor
+			list.append( item->text(2) ); // description
+			list.append( item->text(3) ); // version
+			list.append( item->text(4) ); // max readspeed
+			
+			entryName = QString( "Reader%1").arg(entryNum);
+			c->writeEntry( entryName, list );
+
+			item = item->nextSibling();			
+			entryNum++;
+		}
+		
+		entryNum = 1;
+		item = m_viewDevicesWriter->firstChild();
+		while( item ) {
+			QStringList list;
+			list.append( item->text(0) ); // device
+			list.append( item->text(1) ); // vendor
+			list.append( item->text(2) ); // description
+			list.append( item->text(3) ); // version
+			list.append( item->text(4) ); // max readspeed
+			list.append( item->text(5) ); // max writespeed
+			
+			entryName = QString( "Writer%1").arg(entryNum);
+			c->writeEntry( entryName, list );
+			
+			item = item->nextSibling();
+			entryNum++;
+		}
+		
+		// update Device Manager
+		k3bMain()->deviceManager()->clear();
+		k3bMain()->deviceManager()->readConfig();
+	}
 }
