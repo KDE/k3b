@@ -50,6 +50,7 @@ public:
 
   K3bThroughputEstimator* speedEst;
   bool running;
+  bool usingBurnfree;
 };
 
 
@@ -163,8 +164,12 @@ void K3bCdrecordWriter::prepareProcess()
   if( simulate() )
     *m_process << "-dummy";
     
+  d->usingBurnfree = false;
   if( burnproof() ) {
     if( burnDevice()->burnproof() ) {
+
+      d->usingBurnfree = true;
+
       // with cdrecord 1.11a02 burnproof was renamed to burnfree
       if( m_cdrecordBinObject->version < K3bVersion( "1.11a02" ) )
 	*m_process << "driveropts=burnproof";
@@ -516,6 +521,9 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   else if( line.contains( "Drive needs to reload the media" ) ) {
     emit infoMessage( i18n("Reloading of media required"), K3bJob::PROCESS );
   }
+  else if( line.contains( "The current problem looks like a buffer underrun" ) ) {
+    m_cdrecordError = BUFFER_UNDERRUN;
+  }
   else if( line.contains( "Drive does not support SAO" ) ) {
     emit infoMessage( i18n("DAO (Disk At Once) recording not supported with this writer"), K3bJob::ERROR );
     emit infoMessage( i18n("Please choose TAO (Track At Once) and try again"), K3bJob::ERROR );
@@ -551,6 +559,9 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   }
   else if( line.contains("Input/output error.") ) {
     emit infoMessage( i18n("Input/output error. Not necessarily serious."), ERROR );
+  }
+  else if( line.contains( "Permission denied. Cannot open" ) ) {
+    m_cdrecordError = PERMISSION_DENIED;
   }
   else if( line.startsWith( "Re-load disk and hit" ) ) {
     // this happens on some notebooks where cdrecord is not able to close the
@@ -591,6 +602,9 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
     default:
       kdDebug() << "(K3bCdrecordWriter) error: " << p->exitStatus() << endl;
 
+      if( m_cdrecordError == UNKNOWN && m_lastFifoValue <= 3 )
+	m_cdrecordError = BUFFER_UNDERRUN;
+
       switch( m_cdrecordError ) {
       case OVERSIZE:
 	if( k3bcore->config()->readBoolEntry( "Allow overburning", false ) &&
@@ -621,17 +635,23 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	emit infoMessage( i18n("Unable to open new session."), ERROR );
 	emit infoMessage( i18n("Probably a problem with the medium."), ERROR );
 	break;
-      case UNKNOWN:
-	if( m_lastFifoValue <= 3 ) {
+      case PERMISSION_DENIED:
+	emit infoMessage( i18n("%1 has no permission to open the device.").arg("Cdrecord"), ERROR );
+	emit infoMessage( i18n("You may use K3bsetup2 to solve this problem."), ERROR );
+	break;
+      case BUFFER_UNDERRUN:
 	  emit infoMessage( i18n("Probably a buffer underrun occurred."), ERROR );
-	}
-	else {
-	  // no recording device and also other errors!! :-(
-	  emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg(m_cdrecordBinObject->name()).arg(p->exitStatus()), 
-			    K3bJob::ERROR );
-	  emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
-	  emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
-	}
+	  if( !d->usingBurnfree && burnDevice()->burnproof() )
+	    emit infoMessage( i18n("Please enable Burnfree or choose a lower burning speed."), ERROR );
+	  else
+	    emit infoMessage( i18n("Please choose a lower burning speed."), ERROR );
+	break;
+      case UNKNOWN:
+	// no recording device and also other errors!! :-(
+	emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg(m_cdrecordBinObject->name()).arg(p->exitStatus()), 
+			  K3bJob::ERROR );
+	emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
+	emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
 	break;
       }
       d->running = false;
