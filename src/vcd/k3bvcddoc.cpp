@@ -182,7 +182,7 @@ void K3bVcdDoc::slotWorkUrlQueue()
 
 K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
 {
-  kdDebug() << QString("(K3bVcdDoc) createTrack url.path = ").arg(url.path()) << endl;
+  kdDebug() << QString("(K3bVcdDoc) createTrack url.path = %1").arg(url.path()) << endl;
   int i = identifyMpegFile( url );
   uint mpeg = m_mpegFactory->getMpegFileType( url );
   if (mpeg > 0) {
