@@ -21,6 +21,7 @@
 #include <device/k3bdevice.h>
 #include <device/k3bdevicemanager.h>
 #include <k3bprocess.h>
+#include <k3bmsf.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -40,6 +41,8 @@ public:
       fdToWriteTo(-1),
       canceled(false) {
   }
+
+  K3b::Msf firstSector, lastSector;
 
   K3bProcess* process;
   const K3bExternalBin* readcdBinObject;
@@ -170,6 +173,8 @@ void K3bReadcdReader::start()
   if( m_c2Scan )
     *d->process << "-c2scan";
 
+  if( d->firstSector < d->lastSector )
+    *d->process << QString("sectors=%1-%2").arg(d->firstSector.lba()).arg(d->lastSector.lba());
 
   // additional user parameters from config
   const QStringList& params = d->readcdBinObject->userParameters();
@@ -257,7 +262,7 @@ void K3bReadcdReader::slotStdLine( const QString& line )
       kdError() << "(K3bReadcdReader) problemSector parsing error in line: " 
 		<< line.mid( pos, line.find( QRegExp("\\D"), pos )-pos-1 ) << endl;
     }
-    emit infoMessage( i18n("Retrying from sector %1.").arg(problemSector), PROCESS );
+    emit infoMessage( i18n("Retrying from sector %1.").arg(problemSector), INFO );
   }
 
   else if( (pos = line.find("Error on sector")) >= 0 ) {
@@ -306,6 +311,11 @@ void K3bReadcdReader::slotProcessExited( KProcess* p )
 }
 
 
+void K3bReadcdReader::setSectorRange( const K3b::Msf& first, const K3b::Msf& last )
+{
+  d->firstSector = first;
+  d->lastSector = last;
+}
 
 #include "k3breadcdreader.moc"
 

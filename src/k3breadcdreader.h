@@ -19,12 +19,16 @@
 
 #include <k3bjob.h>
 
+
 class K3bProcess;
 class KProcess;
 class K3bExternalBin;
 namespace K3bCdDevice {
   class CdDevice;
 };
+namespace K3b {
+  class Msf;
+}
 
 
 class K3bReadcdReader : public K3bJob
@@ -51,6 +55,8 @@ class K3bReadcdReader : public K3bJob
   void setAbortOnError( bool b ) { m_noError = !b; }
   void setC2Scan( bool b ) { m_c2Scan = b; }
   void setClone( bool b ) { m_clone = b; }
+
+  void setSectorRange( const K3b::Msf&, const K3b::Msf& );
 
   void setImagePath( const QString& p ) { m_imagePath = p; }
 
