@@ -253,6 +253,11 @@ namespace K3bCdDevice
      */
     int getTrackDataMode(int track);
 
+     /**
+     *  returns the DataMode of the track
+     */
+    int getTrackHeader(int lba);
+
    /**
      * block or unblock the drive's tray
      * returns true on success and false on scsi-error

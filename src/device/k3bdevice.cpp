@@ -624,6 +624,7 @@ int K3bCdDevice::CdDevice::getTrackDataMode(int track)
   cmd.quiet = 1;
   cmd.buffer = dat;
   cmd.buflen = 8;
+  cmd.timeout = 4*60*1000;
   cmd.data_direction = CGC_DATA_READ;
 
   //
@@ -631,6 +632,45 @@ int K3bCdDevice::CdDevice::getTrackDataMode(int track)
     ret = dat[6] & 0x0F;
   else
     kdDebug() << "(K3bCdDevice) could not get track info !" << endl;
+
+  if( needToClose )
+    close();
+  return ret;
+}
+
+int K3bCdDevice::CdDevice::getTrackHeader(int lba)
+{
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
+  int ret=-1;
+  if (open() < 0)
+    return ret;
+
+  struct cdrom_generic_command cmd;
+  unsigned char dat[8];
+
+  ::memset(&cmd,0,sizeof (struct cdrom_generic_command));
+  ::memset(dat,0,8);
+  cmd.cmd[0] = GPCMD_READ_HEADER;
+  cmd.cmd[1] = 2; // lba
+  cmd.cmd[3] = (lba & 0xFF0000 ) >> 16;
+  cmd.cmd[4] = (lba & 0x00FF00 ) >> 8;
+  cmd.cmd[5] = (lba & 0x0000FF );
+
+  cmd.cmd[8] = 8;
+  cmd.quiet = 1;
+  cmd.buffer = dat;
+  cmd.buflen = 8;
+  cmd.timeout = 4*60*1000;
+  cmd.data_direction = CGC_DATA_READ;
+
+  //
+  if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) == 0 )
+    ret = dat[0];
+  else
+    kdDebug() << "(K3bCdDevice) could not get track header !" << endl;
 
   if( needToClose )
     close();
