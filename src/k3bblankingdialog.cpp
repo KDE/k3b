@@ -225,7 +225,7 @@ void K3bBlankingDialog::slotWritingAppChanged(int app)
 				   "as writing the complete CD.");
   static QString wsFast = i18n("Erases just the TOC, the PMA, and the pregap.");
   static QString wsTrack = i18n("Erases just the last track.");
-  static QString wsUnclose = i18n("Uncloses the last session to make it possible to append "
+  static QString wsUnclose = i18n("Reopen the last session to make it possible to append "
 				  "further data.");
   static QString wsSession = i18n("Erases the last session of a multisession CD.");
 
@@ -251,10 +251,10 @@ void K3bBlankingDialog::slotWritingAppChanged(int app)
     d->comboTypeMap[2] = K3bBlankingJob::Track;
     d->typeComboMap[K3bBlankingJob::Track] = 2;
     whatsThisInfo += "<p><b>" + i18n("Erase Last Track") + "</b><br>" + wsTrack;
-    m_comboEraseMode->insertItem( i18n("Unclose Last Session") );
+    m_comboEraseMode->insertItem( i18n("Reopen last Session") );
     d->comboTypeMap[3] = K3bBlankingJob::Unclose;
     d->typeComboMap[K3bBlankingJob::Unclose] = 3;
-    whatsThisInfo += "<p><b>" + i18n("Unclose last session") + "</b><br>" + wsUnclose;
+    whatsThisInfo += "<p><b>" + i18n("Reopen last session") + "</b><br>" + wsUnclose;
     m_comboEraseMode->insertItem( i18n("Erase Last Session") );
     d->comboTypeMap[4] = K3bBlankingJob::Session;
     d->typeComboMap[K3bBlankingJob::Session] = 4;
