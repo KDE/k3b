@@ -63,7 +63,7 @@ void K3bBlankingJob::start()
   }
 
   *m_process << k3bMain()->externalBinManager()->binPath( "cdrecord" );
-  *m_process << QString("dev=%1").arg( m_device->devicename() );
+  *m_process << QString("dev=%1").arg( m_device->busTargetLun() );
   *m_process << QString("speed=%1").arg(m_speed);
   if( m_force )
     *m_process << "-force";
