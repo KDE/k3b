@@ -13,22 +13,6 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-/***************************************************************************
-                          k3bdivxview.cpp  -  description
-                             -------------------
-    begin                : Sun Mar 31 2002
-    copyright            : (C) 2002 by Sebastian Trueg
-    email                : trueg@informatik.uni-freiburg.de
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
 
 #include "k3bdivxview.h"
 #include "k3bdivxcodecdata.h"
@@ -43,6 +27,8 @@
 #include <qgrid.h>
 #include <qfile.h>
 #include <qdir.h>
+#include <qtabwidget.h>
+#include <qpushbutton.h>
 
 #include <kdialog.h>
 #include <klocale.h>
@@ -54,112 +40,126 @@
 #include <kdebug.h>
 
 K3bDivxView::K3bDivxView( QWidget* parent, const char *name)
-    : KDialogBase( KDialogBase::Tabbed, i18n("Encoding Video"), User1|User2,
-		 User1, 0, 0, true, false, KGuiItem( i18n("Encode"), "encode", i18n("Start encoding") ), KStdGuiItem::close() ){
-
-           //KDialogBase::Close|KDialogBase::Apply, KDialogBase::Apply, parent, name ) {
-
-  setButtonBoxOrientation( Qt::Vertical );
+  : K3bInteractionDialog( parent, name, i18n("Encoding Video") ),
+    m_divxJob(0)
+{
   m_codingData = new K3bDivxCodecData();
   setupGui();
 }
 
 K3bDivxView::K3bDivxView(K3bDivxCodecData *data, QWidget* parent, const char *name)
-    : KDialogBase( KDialogBase::Tabbed, i18n("Encoding Video"), User1|User2,
-		 User1, 0, 0, true, false, KGuiItem( i18n("Encode"), "encode", i18n("Start encoding") ), KStdGuiItem::close() ){
-
-           //KDialogBase::Close|KDialogBase::Apply, KDialogBase::Apply, parent, name ) {
-
-  setButtonBoxOrientation( Qt::Vertical );
+  : K3bInteractionDialog( parent, name, i18n("Encoding Video") ),
+    m_divxJob(0)
+{
   m_codingData = data; 
   setupGui();
 }
 
-K3bDivxView::~K3bDivxView(){
-    delete m_codingData;
+K3bDivxView::~K3bDivxView()
+{
+  delete m_codingData;
+  delete m_divxJob;
 }
 
-void K3bDivxView::setupGui(){
-    QGrid *gridBasic = addGridPage(0, Horizontal, i18n("Basic Audio/Video settings") );
-    gridBasic->layout()->setSpacing( KDialog::spacingHint() );
-    gridBasic->layout()->setMargin( 0 );//KDialog::marginHint() );
+void K3bDivxView::setupGui()
+{
+  setStartButtonText( i18n("Encode"), i18n("Start encoding") );
 
-    QGrid *gridSize = addGridPage(1, Horizontal, i18n("Advanced Audio/Video settings") );
-    gridSize->layout()->setSpacing( KDialog::spacingHint() );
-    gridSize->layout()->setMargin( 0 );//  KDialog::marginHint() );
+  // no default settings yet
+  m_buttonK3bDefaults->setDisabled(true);
+  m_buttonUserDefaults->setDisabled(true);
+  m_buttonSaveUserDefaults->setDisabled(true);
 
-    QGrid *gridAdvanced = addGridPage(1, Horizontal, i18n("Expert settings") );
-    gridAdvanced->layout()->setSpacing( KDialog::spacingHint() );
-    gridAdvanced->layout()->setMargin( 0 );//  KDialog::marginHint() );
 
-    m_baseTab = new K3bDivxBaseTab( m_codingData, gridBasic, "basetab" );
-    m_sizeTab = new K3bDivxSizeTab( m_codingData, gridSize, "sizetab");
-    m_advancedTab = new K3bDivxAdvancedTab( m_codingData, gridAdvanced, "advancedtab");
-    m_baseTab->setMinimumWidth( 750 );
-    m_baseTab->setMinimumHeight( 500 );
+  QTabWidget* mainTab = new QTabWidget( this );
+  setMainWidget( mainTab );
 
-    m_sizeTab->setDisabled( true );
-    enableButton( KDialogBase::User1, false );
+  QGrid *gridBasic = new QGrid( 0, mainTab );
+  mainTab->addTab( gridBasic, i18n("Basic Audio/Video settings") );
+  gridBasic->layout()->setSpacing( KDialog::spacingHint() );
+  gridBasic->layout()->setMargin( 0 );//KDialog::marginHint() );
 
-    (QGridLayout(gridBasic->layout())).addWidget( m_baseTab, 0,0 );
-    (QGridLayout(gridSize->layout())).addWidget( m_sizeTab, 0,0 );
-    (QGridLayout(gridAdvanced->layout())).addWidget( m_advancedTab, 0,0 );
+  QGrid *gridSize = new QGrid( 0, mainTab );
+  mainTab->addTab( gridSize, i18n("Advanced Audio/Video settings") );
+  gridSize->layout()->setSpacing( KDialog::spacingHint() );
+  gridSize->layout()->setMargin( 0 );//  KDialog::marginHint() );
 
-    connect( m_baseTab, SIGNAL( projectLoaded() ), this, SLOT( slotEnableSizeTab() ) );
+  QGrid *gridAdvanced = new QGrid( 0, mainTab );
+  mainTab->addTab( gridAdvanced, i18n("Expert settings") );
+  gridAdvanced->layout()->setSpacing( KDialog::spacingHint() );
+  gridAdvanced->layout()->setMargin( 0 );//  KDialog::marginHint() );
+
+  m_baseTab = new K3bDivxBaseTab( m_codingData, gridBasic, "basetab" );
+  m_sizeTab = new K3bDivxSizeTab( m_codingData, gridSize, "sizetab");
+  m_advancedTab = new K3bDivxAdvancedTab( m_codingData, gridAdvanced, "advancedtab");
+  m_baseTab->setMinimumWidth( 750 );
+  m_baseTab->setMinimumHeight( 500 );
+
+  m_sizeTab->setDisabled( true );
+  m_buttonStart->setDisabled( true );
+
+  (QGridLayout(gridBasic->layout())).addWidget( m_baseTab, 0,0 );
+  (QGridLayout(gridSize->layout())).addWidget( m_sizeTab, 0,0 );
+  (QGridLayout(gridAdvanced->layout())).addWidget( m_advancedTab, 0,0 );
+
+  connect( m_baseTab, SIGNAL( projectLoaded() ), this, SLOT( slotEnableSizeTab() ) );
 }
 
 /**
-* 1 - AviFile exists
-* 2 - Avifile is directory
-*/
-int K3bDivxView::checkSettings(){
-    QDir d( m_codingData->getAviFile() );
-    if( d.exists() ){
-        KMessageBox::error ( this, i18n("You must choose a filename for the final video."), i18n("Settings Error") );
-        return 2;
+ * 1 - AviFile exists
+ * 2 - Avifile is directory
+ */
+int K3bDivxView::checkSettings()
+{
+  QDir d( m_codingData->getAviFile() );
+  if( d.exists() ){
+    KMessageBox::error ( this, i18n("You must choose a filename for the final video."), 
+			 i18n("Settings Error") );
+    return 2;
+  }
+  if( QFile::exists( m_codingData->getAviFile() )){
+    if( KMessageBox::warningYesNo( this, 
+				   i18n("File <%1> already exists. "
+					"Do you want to overwrite it?").arg( m_codingData->getAviFile()) ,
+				   i18n( "Settings Error" ) ) == KMessageBox::No ) {
+      return 1;
     }
-    if( QFile::exists( m_codingData->getAviFile() )){
-        if( KMessageBox::No == KMessageBox::warningYesNo ( this, i18n("File <%1> already exists. Do you want to overwrite it?").arg( m_codingData->getAviFile()) ,i18n( "Settings Error" ) )){
-            return 1;
-        }
-    }
-    return 0;
+  }
+  return 0;
 }
 
-void K3bDivxView::slotEnableSizeTab(){
-    kdDebug() << "(K3bDivxView::slotEnableSizeTab)" << endl;
-    m_sizeTab->setEnabled( true );
-    m_advancedTab->slotUpdateView();
-    enableButton( KDialogBase::User1, true );
+void K3bDivxView::slotEnableSizeTab()
+{
+  kdDebug() << "(K3bDivxView::slotEnableSizeTab)" << endl;
+  m_sizeTab->setEnabled( true );
+  m_advancedTab->slotUpdateView();
+  m_buttonStart->setEnabled(true);
 }
 
-void K3bDivxView::slotUser1(){
-    if( checkSettings() > 0 ){
-         return;
-    }
+void K3bDivxView::slotStartClicked()
+{
+  if( checkSettings() > 0 ){
+    return;
+  }
+  if( !m_divxJob )
     m_divxJob = new K3bDivXEncodingProcess( m_codingData, this );
 
-    m_divxDialog = new K3bJobProgressDialog( this, "Encoding", true );
-    m_divxDialog->setCaption( i18n("Encoding Process") );
-    m_divxDialog->setJob( m_divxJob );
+  K3bJobProgressDialog d( this, "Encoding", true );
+  d.startJob( m_divxJob );
 
-    /*
+  /*
     K3bDivxExtraRipStatus *ripStatus = new K3bDivxExtraRipStatus( m_ripDialog );
     connect( m_ripJob, SIGNAL( dataRate( float )), ripStatus, SLOT( slotDataRate( float )) );
     connect( m_ripJob, SIGNAL( estimatedTime( unsigned int )), ripStatus, SLOT( slotEstimatedTime( unsigned int )) );
     m_ripDialog->setExtraInfo( ripStatus );
-    */
-    m_divxJob->start();
-    m_divxDialog->exec();
+  */
 }
 
-void K3bDivxView::slotUser2(){
-    slotClose();
-}
 
-void K3bDivxView::slotUpdateView(){
-    kdDebug() << "(K3bDivxView::slotUpdateView)" << endl;
-    m_baseTab->slotUpdateView();
+void K3bDivxView::slotUpdateView()
+{
+  kdDebug() << "(K3bDivxView::slotUpdateView)" << endl;
+  m_baseTab->slotUpdateView();
 }
 
 #include "k3bdivxview.moc"

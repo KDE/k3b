@@ -17,7 +17,7 @@
 #ifndef K3BDVDVIEW_H
 #define K3BDVDVIEW_H
 
-#include <kdialogbase.h>
+#include <k3binteractiondialog.h>
 
 //class K3bDivxDoc;
 class K3bDivxDirectories;
@@ -33,30 +33,33 @@ class K3bDivxAdvancedTab;
   *@author Sebastian Trueg
   */
 
-class K3bDivxView : public KDialogBase  {
-     Q_OBJECT
-public:
-    K3bDivxView( QWidget* parent=0, const char *name=0 );
-    K3bDivxView( K3bDivxCodecData *data, QWidget* parent=0, const char *name=0);
-    ~K3bDivxView();
-public slots:
-    void slotUpdateView();
-private slots:
-    void slotUser1();
-    void slotUser2();
-    void slotEnableSizeTab();
+class K3bDivxView : public K3bInteractionDialog
+{
+  Q_OBJECT;
 
-private:
-    K3bDivxCodecData *m_codingData;
-    //K3bDivxDoc* m_doc;
-    K3bDivxBaseTab *m_baseTab;
-    K3bDivxSizeTab *m_sizeTab;
-    K3bDivxAdvancedTab *m_advancedTab;
-    K3bDivXEncodingProcess *m_divxJob;
-    K3bJobProgressDialog *m_divxDialog;
+ public:
+  K3bDivxView( QWidget* parent=0, const char *name=0 );
+  K3bDivxView( K3bDivxCodecData *data, QWidget* parent=0, const char *name=0);
+  ~K3bDivxView();
 
-    void setupGui();
-    int checkSettings();
+ public slots:
+  void slotUpdateView();
+
+ private slots:
+  void slotStartClicked();
+  void slotEnableSizeTab();
+
+ private:
+  K3bDivxCodecData *m_codingData;
+  //K3bDivxDoc* m_doc;
+  K3bDivxBaseTab *m_baseTab;
+  K3bDivxSizeTab *m_sizeTab;
+  K3bDivxAdvancedTab *m_advancedTab;
+  K3bDivXEncodingProcess *m_divxJob;
+  K3bJobProgressDialog *m_divxDialog;
+  
+  void setupGui();
+  int checkSettings();
 };
 
 #endif
