@@ -28,6 +28,7 @@
 #include <qregexp.h>
 #include <qfile.h>
 #include <qdir.h>
+#include <qtimer.h>
 
 #include <klocale.h>
 #include <kconfig.h>
@@ -199,6 +200,18 @@ K3bCddb::K3bCddb( QObject* parent, const char* name )
   connect( m_socket, SIGNAL(connectionClosed()), this, SLOT(slotConnectionClosed()) );
   connect( m_socket, SIGNAL(error(int)), this, SLOT(slotError(int)) );
   connect( m_socket, SIGNAL(readyRead()), this, SLOT(slotReadyRead()) );
+
+  m_cddbCategories.append( "rock" );
+  m_cddbCategories.append( "blues" );
+  m_cddbCategories.append( "misc" );
+  m_cddbCategories.append( "classical" );
+  m_cddbCategories.append( "country" );
+  m_cddbCategories.append( "data" );
+  m_cddbCategories.append( "folk" );
+  m_cddbCategories.append( "jazz" );
+  m_cddbCategories.append( "newage" );
+  m_cddbCategories.append( "reggea" );
+  m_cddbCategories.append( "soundtrack" );
 }
 
 
@@ -586,9 +599,17 @@ void K3bCddb::slotReadyRead()
 	kdDebug() << "(K3bCddb) query finished." << endl;
 
 	QTextStream strStream( m_parsingBuffer, IO_ReadOnly );
-	m_query.addEntry( parseEntry( strStream ) );
+	K3bCddbEntry entry = *m_matches.begin();
+	parseEntry( strStream, entry );
+
+	m_query.addEntry( entry );
 	m_matches.erase( m_matches.begin() );
 	
+	// write entry to local cddb dir
+	if( m_bSaveCddbEntriesLocally ) {
+	  saveLocalEntry( entry, m_parsingBuffer );
+	}
+
 	if( m_queryType == CDDBP ) {	
 	  if( !readFirstEntry() ) {
 	    m_error = SUCCESS;
@@ -633,10 +654,8 @@ bool K3bCddb::readFirstEntry()
 }
 
 
-K3bCddbEntry K3bCddb::parseEntry( QTextStream& stream )
+bool K3bCddb::parseEntry( QTextStream& stream, K3bCddbEntry& entry )
 {
-  K3bCddbEntry entry;
-
   // parse data
   QString line;
   while( !(line = stream.readLine()).isNull() ) {
@@ -645,7 +664,6 @@ K3bCddbEntry K3bCddb::parseEntry( QTextStream& stream )
   
     if( line.startsWith( "DISCID" ) ) {
       // TODO: this could me several discids seperated by comma!
-      
     }
     
     else if( line.startsWith( "DTITLE" ) ) {
@@ -666,7 +684,6 @@ K3bCddbEntry K3bCddb::parseEntry( QTextStream& stream )
 	  entry.titles.append( "" );
 	
 	entry.titles[trackNum] += line.mid( eqSgnPos+1 );
-	kdDebug() << "set title to: " << line.mid( eqSgnPos<<1 ) << " is now: " << entry.titles[trackNum] << endl;
       }
     }
     
@@ -749,7 +766,7 @@ K3bCddbEntry K3bCddb::parseEntry( QTextStream& stream )
   entry.cdArtist.replace( QRegExp("\\\\\\\\n"), "\\n" );
   entry.cdExtInfo.replace( QRegExp("\\\\\\\\n"), "\\n" );
 
-  return entry;
+  return true;
 }
 
 
@@ -795,54 +812,52 @@ void K3bCddb::searchLocalDir()
     return;
   }
 
+
   emit infoMessage( i18n("Searching entry in %1").arg( m_localCddbDirs[m_iCurrentLocalDir] ) );
+  kapp->processEvents(); //BAD!
 
+  QString path = m_localCddbDirs[m_iCurrentLocalDir];
+  if( path.startsWith( "~" ) )
+    path.replace( 0, 1, QDir::homeDirPath() + "/" );
+  else if( !path.startsWith( "/" ) )
+    path.prepend( QDir::homeDirPath() + "/" );
+  if( path[path.length()-1] != '/' )
+    path.append( "/" );
 
-  m_localCddbFile = m_localCddbDirs[m_iCurrentLocalDir];
-  if( m_localCddbFile.startsWith( "~" ) )
-      m_localCddbFile.replace( 0, 1, QDir::homeDirPath() + "/" );
-  else if( !m_localCddbFile.startsWith( "/" ) )
-    m_localCddbFile.prepend( QDir::homeDirPath() + "/" );
-  if( m_localCddbFile[m_localCddbFile.length()-1] != '/' )
-    m_localCddbFile.append( "/" );
+  for( QStringList::const_iterator it = m_cddbCategories.begin();
+       it != m_cddbCategories.end(); ++it ) {
 
-  m_localCddbFile.append( QString::number( m_toc.discId(), 16 ) );
+    QString file = path + *it + "/" +  QString::number( m_toc.discId(), 16 );
 
-  connect( KIO::stat( KURL( m_localCddbFile ), false ),
-	   SIGNAL(result(KIO::Job*)),
-	   this,
-	   SLOT(statJobFinished(KIO::Job*)) );
-}
-
-
-void K3bCddb::statJobFinished( KIO::Job* job )
-{
-  KIO::StatJob* sj = (KIO::StatJob*)job;
-
-  // Here we could do further KIO::Error checking
-  // but that is not really important
-
-  if( sj->error() == 0 ) {
-    // found file
-
-    QFile f( m_localCddbFile );
-    if( !f.open( IO_ReadOnly ) ) {
-      kdDebug() << "(K3bCddb) Could not open file" << endl;
-      m_iCurrentLocalDir++;
-      searchLocalDir();
+    if( QFile::exists( file ) ) {
+      // found file
+      
+      QFile f( file );
+      if( !f.open( IO_ReadOnly ) ) {
+	kdDebug() << "(K3bCddb) Could not open file" << endl;
+      }
+      else {
+	QTextStream t( &f );
+	
+	K3bCddbEntry entry;
+	entry.category = *it;
+	entry.discid = QString::number( m_toc.discId(), 16 );
+	parseEntry( t, entry );
+	m_query.addEntry( entry );
+      }
     }
     else {
-      QTextStream t( &f );
-      
-      m_query.addEntry( parseEntry( t ) );
-      m_error = SUCCESS;
-      emit queryFinished( this );
+      kdDebug() << "(K3bCddb) Could not find local entry" << endl;
     }
   }
+
+  if( m_query.foundEntries() > 0 ) {
+    m_error = SUCCESS;
+    emit queryFinished( this );
+  }
   else {
-    kdDebug() << "(K3bCddb) Could not find local entry" << endl;
     m_iCurrentLocalDir++;
-    searchLocalDir();
+    QTimer::singleShot( 0, this, SLOT(searchLocalDir()) );
   }
 }
 
@@ -927,6 +942,51 @@ bool K3bCddb::connectToHttpServer( unsigned int i )
   emit infoMessage( i18n("Searching %1 on port %2").arg(server).arg(port) );
 
   return true;
+}
+
+
+bool K3bCddb::saveLocalEntry( const K3bCddbEntry& entry, const QString& data )
+{
+  QString path = m_localCddbDirs[0];
+  if( path.startsWith( "~" ) )
+    path.replace( 0, 1, QDir::homeDirPath() + "/" );
+  else if( !path.startsWith( "/" ) )
+    path.prepend( QDir::homeDirPath() + "/" );
+  if( path[path.length()-1] != '/' )
+    path.append( "/" );
+
+  if( QFile::exists( path ) ) {
+    // if the category dir does not exists
+    // create it
+
+    path += entry.category;
+
+    if( !QFile::exists( path ) ) {
+      if( !QDir().mkdir( path ) ) {
+	kdDebug() << "(K3bCddb) could not create directory: " << path << endl;
+	return false;
+      }
+    }
+
+    // we always overwrite existing entries
+    path += "/" + entry.discid;
+    QFile entryFile( path );
+    if( !entryFile.open( IO_WriteOnly ) ) {
+      kdDebug() << "(K3bCddb) could not create file: " << path << endl;
+      return false;
+    }
+    else {
+      kdDebug() << "(K3bCddb) creating file: " << path << endl;
+      QTextStream entryStream( &entryFile );
+      entryStream << data;
+      entryFile.close();
+      return true;
+    }
+  }
+  else {
+    kdDebug() << "(K3bCddb) could not find directory: " << m_localCddbDirs[0] << endl;
+    return false;
+  }
 }
 
 

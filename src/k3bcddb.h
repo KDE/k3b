@@ -79,6 +79,8 @@ class K3bCddb : public QObject
   int queryType() const { return m_queryType; }
   const K3bCddbQuery& queryResult() const { return m_query; }
 
+  const QStringList& categories() const { return m_cddbCategories; }
+
   enum Error { SUCCESS = 0, 
 	       NO_ENTRY_FOUND, 
 	       QUERY_ERROR,
@@ -109,10 +111,11 @@ class K3bCddb : public QObject
   void slotReadyRead();
   void slotError( int e );
 
-  void statJobFinished( KIO::Job* );
+  //  void statJobFinished( KIO::Job* );
 
  private:
-  K3bCddbEntry parseEntry( QTextStream& );
+  bool parseEntry( QTextStream&, K3bCddbEntry& );
+  bool saveLocalEntry( const K3bCddbEntry& entry, const QString& data );
   bool readFirstEntry();
   int  getCode( const QString& );
   bool splitServerPort( const QString&, QString& server, int& port );
@@ -138,8 +141,9 @@ class K3bCddb : public QObject
   unsigned int m_iCurrentQueriedServer;
   unsigned int m_iCurrentLocalDir;
 
-  QString m_localCddbFile;
   QString m_currentlyConnectingServer;
+
+  QStringList m_cddbCategories;
 
   // config
   QStringList m_cddbpServer;

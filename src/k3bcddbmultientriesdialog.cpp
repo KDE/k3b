@@ -43,12 +43,15 @@ K3bCddbMultiEntriesDialog::K3bCddbMultiEntriesDialog( QWidget* parent, const cha
   setMinimumSize( 280, 200 );
 }
 
-int K3bCddbMultiEntriesDialog::selectCddbEntry( const K3bCddbQuery& query, QWidget* parent = 0 )
+int K3bCddbMultiEntriesDialog::selectCddbEntry( const K3bCddbQuery& query, QWidget* parent )
 {
   K3bCddbMultiEntriesDialog d( parent );
 
   for( int i = 0; i < query.foundEntries(); i++ ) {
-    d.m_listBox->insertItem( QString::number(i) + " " + query.entry(i).cdArtist + " - " + query.entry(i).cdTitle );
+    d.m_listBox->insertItem( QString::number(i) + " " + 
+			     query.entry(i).cdArtist + " - " + 
+			     query.entry(i).cdTitle + " (" + 
+			     query.entry(i).category + ")" );
   }
 
   d.m_listBox->setSelected( 0, true );
