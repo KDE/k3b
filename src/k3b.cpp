@@ -99,6 +99,10 @@ K3bApp::K3bApp()
 
   // not implemented yet
   fileOpen->setEnabled(false);
+
+  // setup audio cd drives here because we need access to the device manager
+  init();
+  m_dirView->setupAudioDrives(m_deviceManager);
 }
 
 K3bApp::~K3bApp()

@@ -34,7 +34,7 @@ class QWidgetStack;
 class QCheckBox;
 
 class K3bDevice;
-
+class K3bOptionCddb;
 /**
   *@author Sebastian Trueg
   */
@@ -47,8 +47,8 @@ class K3bOptionDialog : public KDialogBase
   K3bOptionDialog(QWidget *parent=0, const char *name=0, bool modal = true);
   ~K3bOptionDialog();
 	
-  enum m_configPageIndex { Devices = 0, Programs = 1 };
-  
+  enum m_configPageIndex { Devices = 0, Programs = 1, Cddb = 2 };
+		
  protected slots:
   void slotOk();
   void slotApply();
@@ -102,6 +102,7 @@ class K3bOptionDialog : public KDialogBase
     QString devicename;
     int maxWriteSpeed;
   };
+
   QList<PrivateTempDevice> m_tempReader;
   QList<PrivateTempDevice> m_tempWriter;
 
@@ -133,7 +134,10 @@ class K3bOptionDialog : public KDialogBase
   void saveBurningSettings();
 	
   bool devicesChanged;
-			
+	
+  // cddb tab
+  K3bOptionCddb *m_cddbPage;
+  void setupCddbPage();		
  private slots:
   void slotDeviceSelected(QListViewItem*);
   void slotDeviceInfoRenamed( QListViewItem* );

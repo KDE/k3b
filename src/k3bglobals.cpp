@@ -17,7 +17,7 @@
 
 
 #include "k3bglobals.h"
-
+#include "device/Sample.h"
 
 QString K3b::framesToString( int h, bool showFrames )
 {
@@ -37,6 +37,10 @@ QString K3b::framesToString( int h, bool showFrames )
   return str;
 }
 
+QString K3b::sizeToTime(long size){
+	int h = size / sizeof(Sample) / 588;
+	return framesToString(h, false);
+}
 // bool K3b::parseFrames( const QString& str, int& value )
 // {
 // 	bool ok;

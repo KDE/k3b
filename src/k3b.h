@@ -81,7 +81,8 @@ class K3bApp : public KDockMainWindow
     /** opens a file specified by commandline option */
     void openDocumentFile(const KURL& url=0);
 
-    K3bDeviceManager* deviceManager() { return m_deviceManager; };
+   K3bDeviceManager* deviceManager() { return m_deviceManager; };
+   K3bOptionDialog* optionDialog() { return m_optionDialog; };
 	K3bAudioTrackDialog* audioTrackDialog();
 	KConfig* config() { return m_config; }
 	

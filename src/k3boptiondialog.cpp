@@ -19,6 +19,7 @@
 #include "device/k3bdevicemanager.h"
 #include "device/k3bdevice.h"
 #include "k3b.h"
+#include "option/k3boptioncddb.h"
 
 #include <qheader.h>
 #include <qlabel.h>
@@ -36,8 +37,10 @@
 #include <qpoint.h>
 #include <qxembed.h>
 #include <qwidgetstack.h>
+#include <qhbox.h>
 
 #include <klistview.h>
+#include <klistbox.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kconfig.h>
@@ -48,6 +51,7 @@
 #include <kaction.h>
 #include <dcopclient.h>
 #include <kprocess.h>
+#include <klineedit.h>
 
 
 K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
@@ -58,18 +62,21 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
   setupBurningPage();
   setupDevicePage();	
   setupProgramsPage();
+  setupCddbPage();
   //	setupPermissionPage();
 	
   readBurningSettings();
   readPrograms();
   readDevices();
-	
+  m_cddbPage->readSettings();
+  	
   resize( 620, 500 );
 }
 
 
 K3bOptionDialog::~K3bOptionDialog()
 {
+	delete m_cddbPage;
 }
 
 
@@ -92,6 +99,7 @@ void K3bOptionDialog::slotApply()
   saveBurningSettings();
   savePrograms();
   saveDevices();
+  m_cddbPage->apply();
 }
 
 
@@ -613,8 +621,6 @@ void K3bOptionDialog::saveDevices()
   }
 }
 
-
-
 void K3bOptionDialog::slotDeviceSelected( QListViewItem* item )
 {
   KListView* listView = (KListView*)item->listView();
@@ -693,3 +699,11 @@ void K3bOptionDialog::saveBurningSettings()
 	
   k3bMain()->setUseID3TagForMp3Renaming( m_checkUseID3Tag->isChecked() );
 }
+
+void K3bOptionDialog::setupCddbPage()
+{
+  QFrame* frame = addPage( i18n("CDDB"), i18n("Setup the cddb server"),
+			   KGlobal::instance()->iconLoader()->loadIcon( "gear", KIcon::NoGroup, KIcon::SizeMedium ) );
+  m_cddbPage = new K3bOptionCddb(frame, "cddbpage");
+}
+

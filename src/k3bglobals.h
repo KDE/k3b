@@ -36,6 +36,7 @@ namespace K3b
   
   
 	QString framesToString( int h, bool showFrames = true );
+   QString sizeToTime(long size);
 /* 	bool parseFrames( const QString&, int& ); */
 };
 
