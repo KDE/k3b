@@ -11,7 +11,7 @@ fi
 
 echo ""
 
-if test HAVE_LIBMAD; then
+if test -n "$MAD_LIB"; then
 	echo "Mp3 decoding support (libmad):        yes"
 	if test HAVE_LIBID3; then
 		echo "    ID3 Tag handling with libid3:     yes"
@@ -26,10 +26,28 @@ fi
 
 echo ""
 
-if test HAVE_RESMGR; then
+if test -n "$RESMGR_LIB"; then
 	echo "Resmgr support:                       yes"
 else
 	echo "Resmgr support:                       no"
+fi
+
+echo ""
+
+if test x$arts_available = xyes; then
+	echo "Audioplayer available (aRts)          yes"
+else
+	echo "Audioplayer available (aRts)          no"
+fi
+
+echo ""
+
+if test x$compile_k3bsetup = xyes; then
+        AC_DEFINE(HAVE_K3BSETUP,1,[defined if K3bSetup is compiled])
+	echo "K3bSetup will be compiled."
+else
+	echo "K3bSetup disabled because it's outdated."
+	echo "May be enabled with the --with-k3bsetup switch."	
 fi
 echo "-----------------------------------------"
 echo ""

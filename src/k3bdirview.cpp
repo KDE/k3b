@@ -315,6 +315,8 @@ void K3bDirView::slotUnlockDevice()
 
 void K3bDirView::slotUnmountDisk()
 {
+  kdDebug() << "(K3bDirView) slotUnmountDisk()" << endl;
+
   k3bcore->requestBusyInfo( i18n("Unmounting disk.") );
   K3bDeviceBranch* branch = m_fileTreeView->branch( m_lastDevice );
   if( branch ) {
@@ -329,8 +331,11 @@ void K3bDirView::slotUnmountDisk()
 
 void K3bDirView::slotUnmountFinished( K3bDeviceBranch*, bool success )
 {
+  kdDebug() << "(K3bDirView) slotUnmountFinished()" << endl;
+
   k3bcore->requestBusyFinish();
   m_fileView->setAutoUpdate( true );
+  m_fileView->reload();
 
   if( success && d->ejectRequested )
     K3bCdDevice::eject( m_lastDevice );
@@ -338,6 +343,8 @@ void K3bDirView::slotUnmountFinished( K3bDeviceBranch*, bool success )
 
 void K3bDirView::slotEjectDisk()
 {
+  kdDebug() << "(K3bDirView) slotEjectDisk()" << endl;
+
   k3bcore->requestBusyInfo( i18n("Ejecting disk.") );
   K3bDeviceBranch *branch = m_fileTreeView->branch( m_lastDevice );
   if( branch ) {

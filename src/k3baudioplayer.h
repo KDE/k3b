@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -18,9 +18,13 @@
 #define K3BAUDIOPLAYER_H
 
 #include <klistview.h>
+
+#include <config.h>
+
+#ifdef HAVE_ARTS_KMEDIA2_H
 #include <arts/kmedia2.h>
 #include <arts/kartsdispatcher.h>
-
+#endif
 
 class QTimer;
 class QLabel;
@@ -169,9 +173,10 @@ Q_OBJECT
   void slotShowContextMenu( KListView*, QListViewItem* item, const QPoint& p );
 
  private:
+#ifdef HAVE_ARTS_KMEDIA2_H
   Arts::PlayObject m_playObject;
   KArtsDispatcher m_dispatcher;
-
+#endif
   QString m_filename;
 
   QLabel* m_labelFilename;

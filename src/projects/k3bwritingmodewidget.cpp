@@ -79,9 +79,11 @@ void K3bWritingModeWidget::initWhatsThisHelp()
 				  "software instead of the writer device.<br>"
 				  "Try this if your CD writer fails to write in DAO and TAO.");
   static QString s_seqHelp = i18n("Incremental sequential is the default writing mode for DVD-R(W). "
-				  "It allows multisession DVD-R(W)s. It only applies to DVD-R(W). bla bla bla. FIXME");
+				  "It allows multisession DVD-R(W)s. It only applies to DVD-R(W).");
   static QString s_ovwHelp = i18n("Restricted Overwrite allows to use a DVD-RW just like a DVD-RAM "
-				  "or a DVD+RW. bla bla bla. FIXME");
+				  "or a DVD+RW. The media may just be overwritten. It is not possible "
+				  "to write multisession DVD-RWs in this mode but K3b uses growisofs "
+				  "to grow an Iso9660 filesystem within the first session.");
 
   QWhatsThis::remove( this );
   QString wh =
@@ -99,6 +101,9 @@ void K3bWritingModeWidget::initWhatsThisHelp()
     wh += "<p><b>" + i18n("Incremental") + "</b><br>" + s_seqHelp + "</p>";
   if( d->modes & K3b::WRITING_MODE_RES_OVWR )
     wh += "<p><b>" + i18n("Restricted Overwrite") + "</b><br>" + s_ovwHelp + "</p>";
+
+  wh += "<p>Be aware that the writing mode is ignored when writing DVD+R(W) since "
+    "there is only one way to write them.";
 
   QWhatsThis::add( this, wh );
 }

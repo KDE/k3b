@@ -231,16 +231,16 @@ void K3bSystemProblemDialog::checkSystem()
 					   false ) );
       }
 
-      if( !k3bcore->externalBinManager()->binObject( "growisofs" )->hasFeature( "suidroot" ) ) {
-	problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
-					   i18n("%1 does not run with root privileges").arg("growisofs"),
-					   i18n("It is recommended to run %1 with "
-						"root privileges so it is able to access "
-						"all devices. Another solution would be to give "
-						"the user write access to the devices.").arg("growisofs"),
-					   i18n("Use K3bSetup to solve this problem."),
-					   true ) );
-      }
+//       if( !k3bcore->externalBinManager()->binObject( "growisofs" )->hasFeature( "suidroot" ) ) {
+// 	problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+// 					   i18n("%1 does not run with root privileges").arg("growisofs"),
+// 					   i18n("It is recommended to run %1 with "
+// 						"root privileges so it is able to access "
+// 						"all devices. Another solution would be to give "
+// 						"the user write access to the devices.").arg("growisofs"),
+// 					   i18n("Use K3bSetup to solve this problem."),
+// 					   true ) );
+//       }
     }
 
     if( !k3bcore->externalBinManager()->foundBin( "dvd+rw-format" ) ) {
@@ -250,16 +250,16 @@ void K3bSystemProblemDialog::checkSystem()
 					 i18n("Install the dvd+rw-tools package."),
 					 false ) );
     }
-    else if( !k3bcore->externalBinManager()->binObject( "dvd+rw-format" )->hasFeature( "suidroot" ) ) {
-	problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
-					   i18n("%1 does not run with root privileges").arg("dvd+rw-format"),
-					   i18n("It is recommended to run %1 with "
-						"root privileges so it is able to access "
-						"all devices. Another solution would be to give "
-						"the user write access to the devices.").arg("dvd+rw-format"),
-					   i18n("Use K3bSetup to solve this problem."),
-					   true ) );
-    }
+//     else if( !k3bcore->externalBinManager()->binObject( "dvd+rw-format" )->hasFeature( "suidroot" ) ) {
+// 	problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+// 					   i18n("%1 does not run with root privileges").arg("dvd+rw-format"),
+// 					   i18n("It is recommended to run %1 with "
+// 						"root privileges so it is able to access "
+// 						"all devices. Another solution would be to give "
+// 						"the user write access to the devices.").arg("dvd+rw-format"),
+// 					   i18n("Use K3bSetup to solve this problem."),
+// 					   true ) );
+//     }
   }
 
   // 2. ATAPI devices
@@ -322,10 +322,8 @@ void K3bSystemProblemDialog::checkSystem()
 
       if( k3bcore->externalBinManager()->foundBin( "cdrdao" ) ) {
 
-	if( !( k3bcore->externalBinManager()->binObject( "cdrdao" )->hasFeature( "hacked-atapi" ) &&
-	       K3bCdDevice::hackedAtapiSupport() ) &&
-	    !( k3bcore->externalBinManager()->binObject( "cdrdao" )->hasFeature( "plain-atapi" ) &&
-	       K3bCdDevice::plainAtapiSupport() ) ) {
+	if( !k3bcore->externalBinManager()->binObject( "cdrdao" )->hasFeature( "hacked-atapi" ) &&
+	    !k3bcore->externalBinManager()->binObject( "cdrdao" )->hasFeature( "plain-atapi") ) {
 	  problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
 					     i18n("%1 %2 does not support ATAPI").arg("cdrdao").arg(k3bcore->externalBinManager()->binObject("cdrdao")->version),
 					     i18n("The configured version of %1 does not "
@@ -346,9 +344,10 @@ void K3bSystemProblemDialog::checkSystem()
 						  "was able to write without SCSI emulation. "
 						  "Although it is possible that there actually "
 						  "is a version with ATAPI support it is unlikely.").arg(k3bcore->version()),
-					     i18n("The best and recommended solution is to enable "
-						  "ide-scsi (SCSI emulation) for all writer devices. "
-						  "This way you won't have any problems."),
+					     i18n("A solution is to enable "
+						  "ide-scsi (SCSI emulation) for all devices. "
+						  "You may also install a more recent version of cdrdao "
+						  "which supports ATAPI devices."),
 					     false ) );
 	}
       }

@@ -1,10 +1,14 @@
+if with_k3bsetup1
+K3BSETUP1_BUILD = k3bsetup
+endif
+
 bin_PROGRAMS = k3b
 
 k3b_SOURCES = k3bwelcomewidget.cpp k3bapplication.cpp k3bdiroperator.cpp kdndfileview.cpp k3bfiletreeview.cpp k3bcddbmultientriesdialog.cpp k3baudioplayer.cpp k3bprojecttabbar.cpp k3bprojecttabwidget.cpp k3bsplash.cpp k3bblankingdialog.cpp k3bfileview.cpp k3bdirview.cpp k3btoolbox.cpp k3b.cpp main.cpp k3bstatusbarmanager.cpp k3bfiletreecombobox.cpp k3breadcdreader.cpp k3binterface.cpp k3binterface.skel k3bprojectinterface.cpp k3bprojectinterface.skel k3bsystemproblemdialog.cpp
 
 k3b_LDADD   = ./cdinfo/libcdinfo.la ./option/liboption.la ./rip/librip.la ./cdcopy/libcdcopy.la ./dvdcopy/libdvdcopy.la ./cdclone/libcdclone.la ./videoEncoding/libvideoEncoding.la ./plugin/libk3bplugin.la -lartskde -lkio -lkparts ./core/libk3bcore.la ./tools/libk3btools.la ./projects/libk3bproject.la ./images/libimagewriting.la
 
-SUBDIRS = core tools plugin projects cddb cdinfo option rip cdcopy cdclone images dvdcopy videoEncoding pics icons konqi mimetypes k3bsetup tests audiodecoding audioencoding
+SUBDIRS = core tools plugin projects cddb cdinfo option rip cdcopy cdclone images dvdcopy videoEncoding pics icons konqi mimetypes tests audiodecoding audioencoding $(K3BSETUP1_BUILD)
 
 apps_DATA = k3b.desktop
 appsdir = $(kde_appsdir)/Multimedia

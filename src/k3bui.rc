@@ -34,6 +34,7 @@
 
   <Menu name="help"><text>&amp;Help</text>
  	<Action name="help_show_tip" />
+	<Action name="help_check_system" />	
   </Menu>
 </MenuBar>
 

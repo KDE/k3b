@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -21,6 +21,8 @@
 #include <qwidget.h>
 #include <qptrlist.h>
 
+#include <klistview.h>
+
 
 class K3bExternalBinManager;
 class QPushButton;
@@ -28,6 +30,8 @@ class KListView;
 class QTabWidget;
 class KEditListBox;
 class QListViewItem;
+class K3bExternalProgram;
+class K3bExternalBin;
 
 
 class K3bExternalBinWidget : public QWidget
@@ -37,6 +41,9 @@ class K3bExternalBinWidget : public QWidget
  public:
   K3bExternalBinWidget( K3bExternalBinManager*, QWidget* parent = 0, const char* name = 0 );
   ~K3bExternalBinWidget();
+
+  class K3bExternalBinViewItem;
+  class K3bExternalProgramViewItem;
 
  public slots:
   void rescan();
@@ -59,10 +66,42 @@ class K3bExternalBinWidget : public QWidget
   QPushButton* m_defaultButton;
   QPushButton* m_rescanButton;
 
-  class K3bExternalBinViewItem;
-  class K3bExternalProgramViewItem;
-
   QPtrList<K3bExternalProgramViewItem> m_programRootItems;
+};
+
+
+class K3bExternalBinWidget::K3bExternalProgramViewItem : public KListViewItem
+{
+ public:
+  K3bExternalProgramViewItem( K3bExternalProgram* p, QListView* parent );
+  
+  K3bExternalProgram* program() const { return m_program; }
+  
+ protected:
+  void paintCell( QPainter* p, const QColorGroup& cg, int column, int width, int align );
+  
+ private:
+  K3bExternalProgram* m_program;
+};
+
+
+
+class K3bExternalBinWidget::K3bExternalBinViewItem : public KListViewItem
+{
+ public:
+  K3bExternalBinViewItem( K3bExternalBin* bin, K3bExternalProgramViewItem* parent );
+
+  K3bExternalBin* bin() const { return m_bin; }
+  K3bExternalProgramViewItem* parentProgramItem() const { return m_parent; }
+
+  bool isDefault() const { return m_default; }
+  void setDefault( bool b );
+
+ private:
+  K3bExternalBin* m_bin;
+  K3bExternalProgramViewItem* m_parent;
+
+  bool m_default;
 };
 
 

@@ -84,12 +84,13 @@ void K3bDeviceBranch::unmount()
 {
   QString mp = KIO::findDeviceMountPoint( m_device->mountDevice() );
   if( mp.isEmpty() ) {
+    emit unmountFinished( this, true );   
+  }
+  else {
     setAutoUpdate(false);
     connect( KIO::unmount( device()->mountPoint(), false ), SIGNAL(result(KIO::Job*)),
 	     this, SLOT( slotUnmountFinished(KIO::Job*) ) );
   }
-  else
-    emit unmountFinished( this, true );   
 }
 
 

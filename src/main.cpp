@@ -32,6 +32,8 @@
 #include <k3bglobals.h>
 
 
+#include <config.h>
+
 
 static const char *description =
     I18N_NOOP("K3b is a CD burning program that has two aims:\nusability and as many features as possible.");
@@ -94,6 +96,7 @@ int main(int argc, char *argv[]) {
     //   else
     //     {
 
+#ifdef HAVE_K3BSETUP
     if( !QFile::exists( K3b::globalConfig() ) ) {
       if( KMessageBox::warningYesNo( 0, i18n("It appears that you have not run K3bSetup yet. "
 					     "It is recommended to do so. "
@@ -108,6 +111,7 @@ int main(int argc, char *argv[]) {
 	exit(0);
       }
     }
+#endif
 
     app.config()->setGroup( "General Options" );
     K3bSplash* splash = 0;

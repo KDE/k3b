@@ -37,62 +37,28 @@
 #include <klistview.h>
 
 
-class K3bExternalBinViewItem;
-
-
-class K3bExternalBinWidget::K3bExternalProgramViewItem : public KListViewItem
-{
-public:
-  K3bExternalProgramViewItem( K3bExternalProgram* p, QListView* parent );
-
-  K3bExternalProgram* program() const { return m_program; }
-
-protected:
-  void paintCell( QPainter* p, const QColorGroup& cg, int column, int width, int align ) {
-    if( column == 0 ) {
-      QFont f( p->font() );
-      f.setBold(true);
-      p->setFont(f);
-    }
-
-    KListViewItem::paintCell(p, cg, column, width, align );
-  }
-
-private:
-  K3bExternalProgram* m_program;
-};
-
-
-
-class K3bExternalBinWidget::K3bExternalBinViewItem : public KListViewItem
-{
-public:
-  K3bExternalBinViewItem( K3bExternalBin* bin, K3bExternalProgramViewItem* parent );
-
-  K3bExternalBin* bin() const { return m_bin; }
-  K3bExternalProgramViewItem* parentProgramItem() const { return m_parent; }
-
-  bool isDefault() const { return m_default; }
-  void setDefault( bool b ) {
-    m_default = b;
-    if( b )
-      setPixmap( 0, SmallIcon( "ok" ) );
-    else
-      setPixmap( 0, SmallIcon( "gear" ) );
-  }
-
-private:
-  K3bExternalBin* m_bin;
-  K3bExternalProgramViewItem* m_parent;
-
-  bool m_default;
-};
 
 
 K3bExternalBinWidget::K3bExternalProgramViewItem::K3bExternalProgramViewItem( K3bExternalProgram* p, QListView* parent )
   : KListViewItem( parent ), m_program(p)
 {
   setText( 0, p->name() );
+}
+
+
+void K3bExternalBinWidget::K3bExternalProgramViewItem::paintCell( QPainter* p, 
+								  const QColorGroup& cg, 
+								  int column, 
+								  int width, 
+								  int align )
+{
+  if( column == 0 ) {
+    QFont f( p->font() );
+    f.setBold(true);
+    p->setFont(f);
+  }
+  
+  KListViewItem::paintCell(p, cg, column, width, align );
 }
 
 
@@ -104,6 +70,16 @@ K3bExternalBinWidget::K3bExternalBinViewItem::K3bExternalBinViewItem( K3bExterna
   setText( 2, bin->features().join(", ") );
   
   setDefault(false);
+}
+
+
+void K3bExternalBinWidget::K3bExternalBinViewItem::setDefault( bool b )
+{
+  m_default = b;
+  if( b )
+    setPixmap( 0, SmallIcon( "ok" ) );
+  else
+    setPixmap( 0, SmallIcon( "gear" ) );
 }
 
 

@@ -98,6 +98,7 @@
 #include "k3bwelcomewidget.h"
 #include "plugin/k3bpluginmanager.h"
 #include "plugin/k3bpluginfactory.h"
+#include <k3bsystemproblemdialog.h>
 
 
 static K3bMainWindow* s_k3bMainWindow = 0;
@@ -289,6 +290,9 @@ void K3bMainWindow::initActions()
 
   (void)new KAction(i18n("Copy &DVD..."), "cdcopy", 0, this, SLOT(slotDvdCopy()),
 		    actionCollection(), "tools_copy_dvd" );
+
+  (void)new KAction( i18n("System Check"), 0, 0, SLOT(slotCheckSystem()),
+		     actionCollection(), "help_check_system" );
 
   actionSettingsK3bSetup = new KAction(i18n("K3b &Setup"), "configure", 0, this, SLOT(slotK3bSetup()),
 				       actionCollection(), "settings_k3bsetup" );
@@ -1338,6 +1342,11 @@ void K3bMainWindow::setProjectsHidable( bool hidable )
       slotShowProjectView();
   }
   //  actionViewProjectView->setEnabled( hidable );
+}
+
+void K3bMainWindow::slotCheckSystem()
+{
+  K3bSystemProblemDialog::checkSystem();
 }
 
 #include "k3b.moc"

@@ -154,6 +154,7 @@ class K3bMainWindow : public KParts::DockMainWindow
 
   void slotConfigureKeys();
   void slotShowTips();
+  void slotCheckSystem();
 
  signals:
   void initializationInfo( const QString& );

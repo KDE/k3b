@@ -1,21 +1,16 @@
+kde_module_LTLIBRARIES = libkcm_k3bsetup2.la
 
-####### kdevelop will overwrite this part!!! (begin)##########
-bin_PROGRAMS = k3bsetup
-k3bsetup_SOURCES = k3bsetup2.cpp k3bsetup2page.cpp k3bsetup2finishpage.cpp k3bsetup2task.cpp main.cpp
-k3bsetup_LDADD   = ./fstab/libfstab.la ./permissions/libpermissions.la ../tools/libtools.la ../device/libdevice.la $(LIB_KIO)
-k3bsetup_LDFLAGS = $(all_libraries)
+AM_CPPFLAGS = -I$(srcdir)/../core -I$(srcdir)/../core/device $(all_includes)
 
-SUBDIRS = fstab permissions
+libkcm_k3bsetup2_la_METASOURCES=AUTO
 
-EXTRA_DIST = main.cpp k3bsetup2.cpp
+libkcm_k3bsetup2_la_SOURCES = k3bsetup2.cpp 
+libkcm_k3bsetup2_la_LIBADD = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) -l$(srcdir)/../core/libk3bcore.la
+libkcm_k3bsetup2_la_LDFLAGS = $(all_libraries) -module -avoid-version -no-undefined   
 
-KDE_ICON = k3bsetup
 
-apps_DATA = k3bsetup.desktop
-appsdir = $(kde_appsdir)/Applications
+messages:
+        $(XGETTEXT) $(libkcm_k3bsetup2_la_SOURCES) -o $(podir)/k3bsetup2.pot
 
-# set the include path for X, qt and KDE
-INCLUDES= $(all_includes) -I$(srcdir)/..
-
-METASOURCES = AUTO
-
+data_DATA = k3bsetup2.desktop
+datadir = $(kde_appsdir)/Settings/Sound

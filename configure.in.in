@@ -172,13 +172,17 @@ AC_SUBST(RESMGR_LIB)
 
 dnl Find aRts
 KDE_CHECK_HEADERS(arts/artsflow.h,
-		,
-		AC_MSG_ERROR(Cannot find artsflow header. This is part of the arts-devel package.)
-		)
-
-KDE_CHECK_HEADERS(arts/kmedia2.h,
-		,
-		AC_MSG_ERROR(Cannot find kmedia2 header. This is part of the kdemultimedia-devel package.)
-		)
+	[KDE_CHECK_HEADERS(arts/kmedia2.h,
+		[arts_available=yes],
+		[arts_available=no]
+	)]
+)
 
 KDE_CHECK_THREADING
+
+compile_k3bsetup=no
+AC_ARG_WITH(k3bsetup, 
+	[  --with-k3bsetup        compile ancient K3bSetup],
+	[compile_k3bsetup=$withval]
+)
+AM_CONDITIONAL(with_k3bsetup1, [test x$compile_k3bsetup = xyes])
