@@ -46,6 +46,7 @@ void K3bMiscOptionTab::readSettings()
   m_checkShowSplash->setChecked( c->readBoolEntry("Show splash", true) );
   m_checkShowSystemTrayProgress->setChecked( c->readBoolEntry( "Show progress in system tray", true ) );
   m_checkHideMainWindowWhileWriting->setChecked( c->readBoolEntry( "hide main window while writing", false ) );
+  m_checkSystemConfig->setChecked( c->readBoolEntry( "check system config", true ) );
 
   QString tempdir = c->readEntry( "Temp Dir", KGlobal::dirs()->resourceDirs( "tmp" ).first() );
   m_editTempDir->setURL( tempdir );
@@ -59,6 +60,7 @@ bool K3bMiscOptionTab::saveSettings()
   c->writeEntry( "Show splash", m_checkShowSplash->isChecked() );
   c->writeEntry( "Show progress in system tray", m_checkShowSystemTrayProgress->isChecked() );
   c->writeEntry( "hide main window while writing", m_checkHideMainWindowWhileWriting->isChecked() );
+  c->writeEntry( "check system config", m_checkSystemConfig->isChecked() );
 
   QString tempDir = m_editTempDir->url();
   QFileInfo fi( tempDir );

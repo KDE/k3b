@@ -502,8 +502,12 @@ void K3bMainWindow::readOptions()
   // initialize the recent file list
   actionFileOpenRecent->loadEntries(m_config,"Recent Files");
 
-  // read dock-positions
-  manager()->readConfig( m_config, "Docking Config" );
+  // do not read dock-positions from a config that has been saved by an old version
+  K3bVersion configVersion( m_config->readEntry( "config version", "0.1" ) );
+  if( configVersion >= K3bVersion("0.9") )
+    manager()->readConfig( m_config, "Docking Config" );
+  else
+    kdDebug() << "(K3bMainWindow) ignoring docking config from K3b version " << configVersion << endl;
 
   m_config->setGroup("ISO Options");
   m_useID3TagForMp3Renaming = m_config->readBoolEntry("Use ID3 Tag for mp3 renaming", false);

@@ -26,6 +26,9 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <ktextedit.h>
+#include <kconfig.h>
+#include <kapplication.h>
+
 
 
 K3bSystemProblem::K3bSystemProblem( int t,
@@ -118,10 +121,17 @@ K3bSystemProblemDialog::K3bSystemProblemDialog( const QValueList<K3bSystemProble
   view->setText(text);
   view->setCursorPosition(0,0);
   view->ensureCursorVisible();
+}
 
 
-  // not implemented yet!
-  m_checkDontShowAgain->hide();
+void K3bSystemProblemDialog::closeEvent( QCloseEvent* e )
+{
+  if( m_checkDontShowAgain->isChecked() ) {
+    kapp->config()->setGroup( "General Options" );
+    kapp->config()->writeEntry( "check system config", false );
+  }
+
+  e->accept();
 }
 
 #include "k3bsystemproblemdialog.moc"

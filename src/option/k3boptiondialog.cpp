@@ -76,7 +76,10 @@ void K3bOptionDialog::slotOk()
 {
   if( saveSettings() ) {
     accept();
-    k3bcore->checkSystem();
+
+    kapp->config()->setGroup( "General Options" );
+    if( kapp->config()->readBoolEntry( "check system config", true ) )
+      k3bcore->checkSystem();
   }
 }
 

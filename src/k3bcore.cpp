@@ -142,15 +142,16 @@ void K3bCore::init()
 
   // ===============================================================================
   emit initializationInfo( i18n("Reading local Song database...") );
-  config()->setGroup( "General" );
+  config()->setGroup( "General Options" );
 
   QString filename = config()->readEntry( "songlistPath", locateLocal("data", "k3b") + "/songlist.xml" );
   d->songManager = new K3bSongManager( this );
   d->songManager->load( filename );
 
-
-  emit initializationInfo( i18n("Checking System") );
-  checkSystem();
+  if( config()->readBoolEntry( "check system config", true ) ) {
+    emit initializationInfo( i18n("Checking System") );
+    checkSystem();
+  }
 
   emit initializationInfo( i18n("Ready.") );
 }
@@ -158,6 +159,8 @@ void K3bCore::init()
 
 void K3bCore::saveConfig()
 {
+  config()->setGroup( "General Options" );
+  config()->writeEntry( "config version", version() );
   config()->setGroup( "Devices" );
   deviceManager()->saveConfig( config() );
   config()->setGroup( "External Programs" );

@@ -49,6 +49,33 @@
         </widget>
         <widget class="QGroupBox">
             <property name="name">
+                <cstring>groupBox3</cstring>
+            </property>
+            <property name="title">
+                <string>System</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>m_checkSystemConfig</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Check System Configuration</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Check system Configuration</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;If this option is checked K3b will check the system configuration for any problems on startup and when the the user changes the settings.</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
                 <cstring>groupBox2</cstring>
             </property>
             <property name="sizePolicy">

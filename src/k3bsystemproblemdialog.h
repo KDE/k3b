@@ -24,6 +24,7 @@
 
 class QPushButton;
 class QCheckBox;
+class QCloseEvent;
 
 
 class K3bSystemProblem
@@ -57,6 +58,9 @@ class K3bSystemProblemDialog : public KDialog
   K3bSystemProblemDialog( const QValueList<K3bSystemProblem>&,
 			  QWidget* parent = 0, 
 			  const char* name = 0 );
+
+ protected:
+  void closeEvent( QCloseEvent* );
 
  private:
   QPushButton* m_closeButton;
