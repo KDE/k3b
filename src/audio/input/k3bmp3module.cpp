@@ -13,9 +13,8 @@
 #include <qfile.h>
 #include <qtimer.h>
 
+#include <stdlib.h>
 #include <cmath>
-
-
 
 
 K3bMp3Module::K3bMp3Module( K3bAudioTrack* track )
@@ -30,8 +29,8 @@ K3bMp3Module::K3bMp3Module( K3bAudioTrack* track )
   m_bDecodingInProgress = false;
   m_bEndOfInput = false;
 
-  m_inputBuffer  = new (unsigned char)[INPUT_BUFFER_SIZE];
-  m_outputBuffer = new (unsigned char)[OUTPUT_BUFFER_SIZE];
+  m_inputBuffer  = new unsigned char[INPUT_BUFFER_SIZE];
+  m_outputBuffer = new unsigned char[OUTPUT_BUFFER_SIZE];
 
   m_outputPointer   = m_outputBuffer;
   m_outputBufferEnd = m_outputBuffer + OUTPUT_BUFFER_SIZE;
@@ -151,9 +150,9 @@ void K3bMp3Module::fillInputBuffer()
 	}
 			
       // Fill-in the buffer. 
-      readSize = m_inputFile.readBlock( (char*)readStart, readSize );
-      if( readSize <= 0 ) {
-	if( readSize < 0 )
+      Q_LONG result = m_inputFile.readBlock( (char*)readStart, readSize );
+      if( result <= 0 ) {
+	if( result < 0 )
 	  qDebug("(K3bMp3Module) read error on bitstream)" );
 	else
 	  qDebug("(K3bMp3Module) end of input stream" );
@@ -164,7 +163,7 @@ void K3bMp3Module::fillInputBuffer()
       else 
 	{
 	  // Pipe the new buffer content to libmad's stream decoder facility.
-	  mad_stream_buffer( m_madStream, m_inputBuffer, readSize + remaining );
+	  mad_stream_buffer( m_madStream, m_inputBuffer, result + remaining );
 	  m_madStream->error = MAD_ERROR_NONE;
 	}
     }
@@ -280,7 +279,7 @@ void K3bMp3Module::slotDecodeNextFrame()
 	  memset( m_outputPointer, 0, freeBuffer );
 	  m_outputPointer += ( freeBuffer > dataToPad ? dataToPad : freeBuffer );
 
-	  qDebug("(K3bMp3Module) padding data with %i zeros.", ( freeBuffer > dataToPad ? dataToPad : freeBuffer ) );
+	  qDebug("(K3bMp3Module) padding data with %li zeros.", ( freeBuffer > dataToPad ? dataToPad : freeBuffer ) );
 	}
 	else {
 	  break;
@@ -354,7 +353,7 @@ void K3bMp3Module::slotDecodeNextFrame()
   if( m_rawDataAlreadyStreamed + buffersize > m_rawDataLengthToStream ) {
     bytesToOutput = m_rawDataLengthToStream - m_rawDataAlreadyStreamed;
     qDebug("(K3bMp3Module) decoded data was longer than calculated length. Cutting data." );
-    qDebug("(K3bMp3Module) bytes to stream: %li; bytes already streamed: %li; bytes in buffer: %li.",
+    qDebug("(K3bMp3Module) bytes to stream: %li; bytes already streamed: %li; bytes in buffer: %i.",
 	   m_rawDataLengthToStream, m_rawDataAlreadyStreamed, buffersize );
   }
   
