@@ -82,7 +82,7 @@ void K3bWelcomeWidget::Display::rebuildGui( const KActionPtrList& actions )
 
       QToolButton* b = new QToolButton( this );
       b->setTextLabel( a->toolTip(), true );
-      b->setTextLabel( a->text() );
+      b->setTextLabel( a->text(), false );
       b->setIconSet( a->iconSet(KIcon::Desktop) );
       b->setUsesTextLabel( true );
       b->setUsesBigPixmap( true );

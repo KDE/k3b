@@ -296,11 +296,11 @@ void K3bMainWindow::initActions()
   actionCdCopy = new KAction(i18n("&Copy CD..."), "cdcopy", 0, this, SLOT(slotCdCopy()),
 			     actionCollection(), "tools_copy_cd" );
 
-  (void)new KAction(i18n("C&lone CD..."), "cdcopy", 0, this, SLOT(slotCdClone()),
-		    actionCollection(), "tools_clone_cd" );
+  KAction* actionToolsCloneCd = new KAction(i18n("C&lone CD..."), "cdcopy", 0, this, SLOT(slotCdClone()),
+					    actionCollection(), "tools_clone_cd" );
 
-  (void)new KAction(i18n("Copy &DVD..."), "cdcopy", 0, this, SLOT(slotDvdCopy()),
-		    actionCollection(), "tools_copy_dvd" );
+  KAction* actionToolsDvdCopy = new KAction(i18n("Copy &DVD..."), "cdcopy", 0, this, SLOT(slotDvdCopy()),
+					    actionCollection(), "tools_copy_dvd" );
 
   (void)new KAction( i18n("System Check"), 0, 0, this, SLOT(slotCheckSystem()),
 		     actionCollection(), "help_check_system" );
@@ -344,16 +344,23 @@ void K3bMainWindow::initActions()
 
 
 
-  actionFileNewMenu->setStatusText(i18n("Creates a new project"));
-  actionFileNewData->setStatusText( i18n("Creates a new data CD project") );
-  actionFileNewAudio->setStatusText( i18n("Creates a new audio CD project") );
-  actionToolsBlankCdrw->setStatusText( i18n("Opens CD-blanking dialog") );
-  actionFileOpen->setStatusText(i18n("Opens an existing project"));
-  actionFileOpenRecent->setStatusText(i18n("Opens a recently used file"));
-  actionFileSave->setStatusText(i18n("Saves the actual project"));
-  actionFileSaveAs->setStatusText(i18n("Saves the actual project as..."));
-  actionFileClose->setStatusText(i18n("Closes the actual project"));
-  actionFileQuit->setStatusText(i18n("Quits the application"));
+  actionFileNewMenu->setToolTip(i18n("Creates a new project"));
+  actionFileNewData->setToolTip( i18n("Creates a new data CD project") );
+  actionFileNewAudio->setToolTip( i18n("Creates a new audio CD project") );
+  actionFileNewMovixDvd->setToolTip( i18n("Creates a new eMovix DVD project") );
+  actionFileNewDvd->setToolTip( i18n("Creates a new data DVD project") );
+  actionFileNewMovix->setToolTip( i18n("Creates a new eMovix CD project") );
+  actionFileNewVcd->setToolTip( i18n("Creates a new Video CD project") );
+  actionToolsBlankCdrw->setToolTip( i18n("Opens CD-blanking dialog") );
+  actionCdCopy->setToolTip( i18n("Open the CD Copy dialog") );
+  actionToolsDvdCopy->setToolTip( i18n("Open the DVD Copy dialog") );
+  actionToolsCloneCd->setToolTip( i18n("Open the CD Cloning dialog") );
+  actionFileOpen->setToolTip(i18n("Opens an existing project"));
+  actionFileOpenRecent->setToolTip(i18n("Opens a recently used file"));
+  actionFileSave->setToolTip(i18n("Saves the actual project"));
+  actionFileSaveAs->setToolTip(i18n("Saves the actual project as..."));
+  actionFileClose->setToolTip(i18n("Closes the actual project"));
+  actionFileQuit->setToolTip(i18n("Quits the application"));
 }
 
 
