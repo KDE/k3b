@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>base_K3bOggVorbisEncoderSettingsWidget</class>
 <author>Sebastian Trueg</author>
 <widget class="QWidget">
@@ -88,6 +88,9 @@
                     </property>
                     <property name="orientation">
                         <enum>Horizontal</enum>
+                    </property>
+                    <property name="tickmarks">
+                        <enum>Below</enum>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Controls the quality of the encoded files</string>
@@ -260,6 +263,8 @@
         </spacer>
     </vbox>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>m_radioQualityLevel</sender>
@@ -306,9 +311,6 @@
 </connections>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>

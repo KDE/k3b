@@ -315,6 +315,13 @@ namespace K3bCdDevice
     Toc readToc() const;
 
     /**
+     * Append ISRC and MCN to the TOC if found
+     * This has been moved to a seperate method since it can take a very long time
+     * to scan for all ISRCs.
+     */
+    void readIsrcMcn( Toc& toc ) const;
+
+    /**
      * Read the CD-TEXT of an audio or mixed-mode CD.
      */
     AlbumCdText readCdText() const;

@@ -43,7 +43,9 @@ class K3bAudioEncoderFactory : public K3bPluginFactory
   /**
    * This should return the fileextensions supported by the filetype written in the
    * encoder.
-   * May return an empty list.
+   * May return an empty list in which case the encoder will not be usable (this may come
+   * in handy if the encoder is based on some external program or lib which is not 
+   * available on runtime.)
    */
   virtual QStringList extensions() const = 0;
 
@@ -62,6 +64,14 @@ class K3bAudioEncoderFactory : public K3bPluginFactory
 
 
 
+/**
+ * The base class for all audio encoders.
+ * Do not be alarmed by the number of methods since most of them
+ * do not need to be touched. They are just there to keep the API 
+ * clean and extendable.
+ *
+ * see the skeleton files for further help.
+ */
 class K3bAudioEncoder : public K3bPlugin
 {
   Q_OBJECT
@@ -70,30 +80,50 @@ class K3bAudioEncoder : public K3bPlugin
   K3bAudioEncoder( QObject* parent = 0, const char* name = 0 );
   virtual ~K3bAudioEncoder();
 
+  // TODO: if the following methods are to be activated the config methods in
+  //       K3bPluginConfigWidget also need to be changed since they do not allow
+  //       to use an extern config object yet.
+  //       Perhaps these two methods should even go into K3bPlugin.
+  /**
+   * This calls readConfig using the k3bcore config object
+   */
+  // void readConfig();
+
+  /**
+   * Force the plugin to read it's configuration
+   */
+  // virtual void readConfig( KConfig* );
+
   /**
    * The default implementation openes the file for writing with 
    * writeData. Normally this does not need to be reimplemented.
-   * @param extension the filetype to be used. 
+   * @param extension the filetype to be used.
+   *
    */
+  // TODO: add third parameter: const K3b::Msf& length
   virtual bool openFile( const QString& extension, const QString& filename );
+
 
   /**
    * The default implementation returnes true if openFile (default implementation) has been
-   * successfully called. Normally this does not need to be reimplemented.
+   * successfully called. Normally this does not need to be reimplemented but it has to be 
+   * if openFile is reimplemented.
    */
   virtual bool isOpen() const;
 
   /**
    * The default implementation closes the file opened by openFile
    * (default implementation) 
-   * Normally this does not need to be reimplemented.
+   * Normally this does not need to be reimplemented but it has to be 
+   * if openFile is reimplemented.
    */
   virtual void closeFile();
 
   /**
    * The default implementation returnes the filename set in openFile
    * or QString::null if no file has been opened.
-   * Normally this does not need to be reimplemented.
+   * Normally this does not need to be reimplemented but it has to be 
+   * if openFile is reimplemented.
    */
   virtual const QString& filename() const;
 
@@ -161,6 +191,7 @@ class K3bAudioEncoder : public K3bPlugin
    * Should return the amount of actually written bytes (may be 0) and -1
    * on error.
    */
+  // TODO: use Q_INT16* instead of char*
   virtual long encodeInternal( const char*, Q_ULONG len ) = 0;
 
   /**

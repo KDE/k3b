@@ -1,0 +1,689 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>base_K3bLameEncoderSettingsWidget</class>
+<author>Sebastian Trueg</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>Form1</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>375</width>
+            <height>445</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QTabWidget">
+            <property name="name">
+                <cstring>m_mainTab</cstring>
+            </property>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Settings</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QGroupBox" row="0" column="1" rowspan="2" colspan="1">
+                        <property name="name">
+                            <cstring>groupBox3</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Options</string>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>m_checkCopyright</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Mark Copyrighted</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Mark the encoded file as being copyrighted.</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>m_checkOriginal</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Mark as Original</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Mark the encoded file as being a copy.</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>m_checkISO</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Strict ISO compliance</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Enforce strict ISO compliance</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>&lt;p&gt;If this option is checked LAME will enforce the 7680 bit limitation on total frame size.&lt;br&gt;
+This  results  in  many  wasted bits for high bitrate encodings but will ensure strict ISO compatibility. This compatibility might be important for hardware players.</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>m_checkError</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Error Protection</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Turn on CRC error protection.</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>&lt;p&gt;If this option is checked a cyclic redundancy check (CRC) code will be added to each frame, allowing to  detect  transmission  errors  that could  occur on the MP3 stream. However, it takes 16 bits per frame that would otherwise be used for encoding, and then will slightly reduce the sound quality.</string>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <widget class="QGroupBox" row="0" column="0">
+                        <property name="name">
+                            <cstring>groupBox2</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Mode</string>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="KComboBox">
+                                <item>
+                                    <property name="text">
+                                        <string>Stereo</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>Joint Stereo</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>Mono</string>
+                                    </property>
+                                </item>
+                                <property name="name">
+                                    <cstring>m_comboMode</cstring>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Select the channel mode.</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>&lt;p&gt;Select the channel mode of the resulting Mp3 file:
+&lt;p&gt;&lt;b&gt;Stereo&lt;/b&gt;&lt;br&gt;
+In this mode, the encoder makes no use of potentially existing correlations between the two input channels. It can, however, negotiate the bit demand between both channel, i.e. give one channel more bits if the other contains silence or needs less bits because of a lower complexity.
+&lt;p&gt;&lt;b&gt;Joint-Stereo&lt;/b&gt;&lt;br&gt;
+In this mode, the encoder will make use of a correlation between both channels. The signal will be matrixed into a sum ("mid"), computed by L+R, and difference ("side") signal, computed by L-R, and more bits are allocated to the mid channel. This will effectively increase the bandwidth if the signal does not  have  too much stereo separation, thus giving a significant gain in encoding quality.
+&lt;p&gt;&lt;b&gt;Mono&lt;/b&gt;&lt;br&gt;
+The input will be encoded as a mono signal. If it was a stereo signal, it will be downsampled to mono. The downmix is calculated as the sum of the left and right channel, attenuated by 6 dB.</string>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
+                    <widget class="QGroupBox" row="1" column="0">
+                        <property name="name">
+                            <cstring>groupBox6</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>5</hsizetype>
+                                <vsizetype>5</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>1</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="title">
+                            <string>Filetype</string>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="KComboBox">
+                                <item>
+                                    <property name="text">
+                                        <string>Constant Bitrate</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>Variable Bitrate</string>
+                                    </property>
+                                </item>
+                                <property name="name">
+                                    <cstring>m_comboBitrate</cstring>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Choose between a constant or a variable bitrate.</string>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
+                    <widget class="QFrame" row="2" column="0" rowspan="1" colspan="2">
+                        <property name="name">
+                            <cstring>frame7</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>5</hsizetype>
+                                <vsizetype>5</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>24</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="frameShape">
+                            <enum>NoFrame</enum>
+                        </property>
+                        <property name="frameShadow">
+                            <enum>Plain</enum>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>0</number>
+                            </property>
+                            <widget class="QButtonGroup">
+                                <property name="name">
+                                    <cstring>m_groupVariableBitrate</cstring>
+                                </property>
+                                <property name="title">
+                                    <string>Variable Bitrate</string>
+                                </property>
+                                <vbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QLayoutWidget">
+                                        <property name="name">
+                                            <cstring>layout8</cstring>
+                                        </property>
+                                        <hbox>
+                                            <property name="name">
+                                                <cstring>unnamed</cstring>
+                                            </property>
+                                            <widget class="QRadioButton">
+                                                <property name="name">
+                                                    <cstring>m_radioQualityLevel</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>Quality Level:</string>
+                                                </property>
+                                                <property name="checked">
+                                                    <bool>true</bool>
+                                                </property>
+                                            </widget>
+                                            <widget class="KIntNumInput">
+                                                <property name="name">
+                                                    <cstring>m_spinQualityLevel</cstring>
+                                                </property>
+                                                <property name="whatsThis" stdset="0">
+                                                    <string>&lt;p&gt;Let LAME choose the proper settings for variable bitrate based on a quality setting.
+&lt;p&gt;The quality increases along with the filesize from 0 to 9, 9 resulting in the highest quality.
+&lt;p&gt;The default setting is 5 which provides a good quality at a moderate filesize.</string>
+                                                </property>
+                                            </widget>
+                                        </hbox>
+                                    </widget>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>m_radioManual</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Manual settings:</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QFrame">
+                                        <property name="name">
+                                            <cstring>frame5</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="frameShape">
+                                            <enum>NoFrame</enum>
+                                        </property>
+                                        <property name="frameShadow">
+                                            <enum>Plain</enum>
+                                        </property>
+                                        <grid>
+                                            <property name="name">
+                                                <cstring>unnamed</cstring>
+                                            </property>
+                                            <property name="margin">
+                                                <number>0</number>
+                                            </property>
+                                            <widget class="KComboBox" row="2" column="2">
+                                                <item>
+                                                    <property name="text">
+                                                        <string>32 kbps</string>
+                                                    </property>
+                                                </item>
+                                                <item>
+                                                    <property name="text">
+                                                        <string>40 kbps</string>
+                                                    </property>
+                                                </item>
+                                                <item>
+                                                    <property name="text">
+                                                        <string>56 kbps</string>
+                                                    </property>
+                                                </item>
+                                                <item>
+                                                    <property name="text">
+                                                        <string>48 kbps</string>
+                                                    </property>
+                                                </item>
+                                                <item>
+                                                    <property name="text">
+                                                        <string>64 kbps</string>
+                                                    </property>
+                                                </item>
+                                                <item>
+                                                    <property name="text">
+                                                        <string>80 kbps</string>
+                                                    </property>
+                                                </item>
+                                                <item>
+                                                    <property name="text">
+                                                        <string>96 kbps</string>
+                                                    </property>
+                                                </item>
+                                                <item>
+                                                    <property name="text">
+                                                        <string>112 kbps</string>
+                                                    </property>
+                                                </item>
+                                                <item>
+                                                    <property name="text">
+                                                        <string>128 kbps</string>
+                                                    </property>
+                                                </item>
+                                                <item>
+                                                    <property name="text">
+                                                        <string>160 kbps</string>
+                                                    </property>
+                                                </item>
+                                                <item>
+                                                    <property name="text">
+                                                        <string>192 kbps</string>
+                                                    </property>
+                                                </item>
+                                                <item>
+                                                    <property name="text">
+                                                        <string>224 kbps</string>
+                                                    </property>
+                                                </item>
+                                                <item>
+                                                    <property name="text">
+                                                        <string>256 kbps</string>
+                                                    </property>
+                                                </item>
+                                                <item>
+                                                    <property name="text">
+                                                        <string>320 kbps</string>
+                                                    </property>
+                                                </item>
+                                                <property name="name">
+                                                    <cstring>m_comboMinimumBitrate</cstring>
+                                                </property>
+                                                <property name="enabled">
+                                                    <bool>false</bool>
+                                                </property>
+                                            </widget>
+                                            <spacer row="0" column="0" rowspan="3" colspan="1">
+                                                <property name="name">
+                                                    <cstring>spacer2</cstring>
+                                                </property>
+                                                <property name="orientation">
+                                                    <enum>Horizontal</enum>
+                                                </property>
+                                                <property name="sizeType">
+                                                    <enum>Fixed</enum>
+                                                </property>
+                                                <property name="sizeHint">
+                                                    <size>
+                                                        <width>20</width>
+                                                        <height>70</height>
+                                                    </size>
+                                                </property>
+                                            </spacer>
+                                            <widget class="KComboBox" row="0" column="2">
+                                                <item>
+                                                    <property name="text">
+                                                        <string>32 kbps</string>
+                                                    </property>
+                                                </item>
+                                                <item>
+                                                    <property name="text">
+                                                        <string>40 kbps</string>
+                                                    </property>
+                                                </item>
+                                                <item>
+                                                    <property name="text">
+                                                        <string>56 kbps</string>
+                                                    </property>
+                                                </item>
+                                                <item>
+                                                    <property name="text">
+                                                        <string>48 kbps</string>
+                                                    </property>
+                                                </item>
+                                                <item>
+                                                    <property name="text">
+                                                        <string>64 kbps</string>
+                                                    </property>
+                                                </item>
+                                                <item>
+                                                    <property name="text">
+                                                        <string>80 kbps</string>
+                                                    </property>
+                                                </item>
+                                                <item>
+                                                    <property name="text">
+                                                        <string>96 kbps</string>
+                                                    </property>
+                                                </item>
+                                                <item>
+                                                    <property name="text">
+                                                        <string>112 kbps</string>
+                                                    </property>
+                                                </item>
+                                                <item>
+                                                    <property name="text">
+                                                        <string>128 kbps</string>
+                                                    </property>
+                                                </item>
+                                                <item>
+                                                    <property name="text">
+                                                        <string>160 kbps</string>
+                                                    </property>
+                                                </item>
+                                                <item>
+                                                    <property name="text">
+                                                        <string>192 kbps</string>
+                                                    </property>
+                                                </item>
+                                                <item>
+                                                    <property name="text">
+                                                        <string>224 kbps</string>
+                                                    </property>
+                                                </item>
+                                                <item>
+                                                    <property name="text">
+                                                        <string>256 kbps</string>
+                                                    </property>
+                                                </item>
+                                                <item>
+                                                    <property name="text">
+                                                        <string>320 kbps</string>
+                                                    </property>
+                                                </item>
+                                                <property name="name">
+                                                    <cstring>m_comboMaximumBitrate</cstring>
+                                                </property>
+                                                <property name="enabled">
+                                                    <bool>false</bool>
+                                                </property>
+                                            </widget>
+                                            <widget class="QCheckBox" row="0" column="1">
+                                                <property name="name">
+                                                    <cstring>m_checkBitrateMaximum</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>Maximum bitrate:</string>
+                                                </property>
+                                            </widget>
+                                            <widget class="QCheckBox" row="2" column="1">
+                                                <property name="name">
+                                                    <cstring>m_checkBitrateMinimum</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>Minimum bitrate:</string>
+                                                </property>
+                                            </widget>
+                                            <widget class="QCheckBox" row="1" column="1">
+                                                <property name="name">
+                                                    <cstring>m_checkBitrateAverage</cstring>
+                                                </property>
+                                                <property name="sizePolicy">
+                                                    <sizepolicy>
+                                                        <hsizetype>1</hsizetype>
+                                                        <vsizetype>0</vsizetype>
+                                                        <horstretch>1</horstretch>
+                                                        <verstretch>0</verstretch>
+                                                    </sizepolicy>
+                                                </property>
+                                                <property name="text">
+                                                    <string>Average bitrate:</string>
+                                                </property>
+                                            </widget>
+                                            <widget class="QSpinBox" row="1" column="2">
+                                                <property name="name">
+                                                    <cstring>m_spinAverageBitrate</cstring>
+                                                </property>
+                                                <property name="enabled">
+                                                    <bool>false</bool>
+                                                </property>
+                                                <property name="suffix">
+                                                    <string> kbps</string>
+                                                </property>
+                                                <property name="buttonSymbols">
+                                                    <enum>UpDownArrows</enum>
+                                                </property>
+                                                <property name="maxValue">
+                                                    <number>310</number>
+                                                </property>
+                                                <property name="minValue">
+                                                    <number>8</number>
+                                                </property>
+                                            </widget>
+                                        </grid>
+                                    </widget>
+                                </vbox>
+                            </widget>
+                            <widget class="QGroupBox">
+                                <property name="name">
+                                    <cstring>m_groupConstantBitrate</cstring>
+                                </property>
+                                <property name="title">
+                                    <string>Constant Bitrate</string>
+                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="KComboBox">
+                                        <item>
+                                            <property name="text">
+                                                <string>32 kbps</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>40 kbps</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>56 kbps</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>48 kbps</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>64 kbps</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>80 kbps</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>96 kbps</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>112 kbps</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>128 kbps</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>160 kbps</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>192 kbps</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>224 kbps</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>256 kbps</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>320 kbps</string>
+                                            </property>
+                                        </item>
+                                        <property name="name">
+                                            <cstring>m_comboConstantBitrate</cstring>
+                                        </property>
+                                    </widget>
+                                </hbox>
+                            </widget>
+                        </vbox>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Advanced</string>
+                </attribute>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QGroupBox">
+                        <property name="name">
+                            <cstring>groupBox1</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Encoder Quality</string>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="KIntNumInput">
+                                <property name="name">
+                                    <cstring>m_spinEncoderQuality</cstring>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Choose the noise shaping &amp; psycho acoustic algorithm.</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>&lt;p&gt;Bitrate is of course the main influence on quality. The higher the bitrate, the higher the quality. But for a given bitrate, we have a choice of algorithms to determine the best scalefactors and huffman encoding (noise shaping).
+&lt;p&gt;The quality increases from 0 to 9 while the encoding speed drops.
+&lt;p&gt;9 uses the slowest &amp; best possible version of all algorithms.
+&lt;p&gt;&lt;b&gt;7 is the recommended setting&lt;/b&gt; while 4 still produced reasonable quality at good speed.
+&lt;p&gt;0 disables almost all algorithms including psy-model resulting in poor quality.
+&lt;p&gt;&lt;b&gt;This setting has no influence on the size of the resulting file.&lt;/b&gt;</string>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
+                </vbox>
+            </widget>
+        </widget>
+    </vbox>
+</widget>
+<customwidgets>
+</customwidgets>
+<connections>
+    <connection>
+        <sender>m_radioManual</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>frame5</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_checkBitrateMaximum</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_comboMaximumBitrate</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_checkBitrateAverage</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_spinAverageBitrate</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_checkBitrateMinimum</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_comboMinimumBitrate</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_radioQualityLevel</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_spinQualityLevel</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+</connections>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+</includehints>
+</UI>

@@ -1241,35 +1241,37 @@ K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc() const
       if( success )
 	fixupToc( toc );
     }
-
-    if( success ) {
-      // read MCN and ISRC of all tracks
-      QCString mcn;
-      if( readMcn( mcn ) ) {
-	toc.setMcn( mcn );
-	kdDebug() << "(K3bCdDevice::CdDevice) found MCN: " << mcn << endl;
-      }
-      else
-	kdDebug() << "(K3bCdDevice::CdDevice) no MCN found." << endl;
-
-      for( unsigned int i = 1; i <= toc.count(); ++i ) {
-	QCString isrc;
-	if( toc[i-1].type() == Track::AUDIO ) {
-	  if( readIsrc( i, isrc ) ) {
-	    kdDebug() << "(K3bCdDevice::CdDevice) found ISRC for track " << i << ": " << isrc << endl;
-	    toc[i-1].setIsrc( isrc );
-	  }
-	  else
-	    kdDebug() << "(K3bCdDevice::CdDevice) no ISRC found for track " << i << endl;
-	}
-      }
-    }
   }
 
   if( needToClose )
     close();
 
   return toc;
+}
+
+
+void K3bCdDevice::CdDevice::readIsrcMcn( K3bCdDevice::Toc& toc ) const
+{
+  // read MCN and ISRC of all tracks
+  QCString mcn;
+  if( readMcn( mcn ) ) {
+    toc.setMcn( mcn );
+    kdDebug() << "(K3bCdDevice::CdDevice) found MCN: " << mcn << endl;
+  }
+  else
+    kdDebug() << "(K3bCdDevice::CdDevice) no MCN found." << endl;
+
+  for( unsigned int i = 1; i <= toc.count(); ++i ) {
+    QCString isrc;
+    if( toc[i-1].type() == Track::AUDIO ) {
+      if( readIsrc( i, isrc ) ) {
+	kdDebug() << "(K3bCdDevice::CdDevice) found ISRC for track " << i << ": " << isrc << endl;
+	toc[i-1].setIsrc( isrc );
+      }
+      else
+	kdDebug() << "(K3bCdDevice::CdDevice) no ISRC found for track " << i << endl;
+    }
+  }
 }
 
 

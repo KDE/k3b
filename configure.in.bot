@@ -38,6 +38,16 @@ fi
 
 echo ""
 
+if test x$have_lame = xyes; then
+	echo "Lame Mp3 encoder plugin:               yes"
+else
+	echo "Lame Mp3 encoder plugin                 no"
+	echo "    You are missing the Lame headers and libraries"
+	echo "    The Lame Mp3 encoding plugin won't be compiled."
+fi
+
+echo ""
+
 if test -n "$LIBSAMPLERATE"; then
         echo "Audio resampling:  using installed version"
 else

@@ -166,6 +166,8 @@ void K3bCdCopyJob::start()
 
   emit newSubTask( i18n("Reading Table of Contents") );
 
+  // FIXME: read ISRCs and MCN
+
   connect( K3bCdDevice::diskInfo( m_readerDevice ), SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
 	   this, SLOT(slotDiskInfoReady(K3bCdDevice::DeviceHandler*)) );
 }

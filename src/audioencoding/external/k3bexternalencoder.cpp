@@ -13,6 +13,9 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#include <config.h>
+
+
 #include "k3bexternalencoder.h"
 #include "base_k3bexternalencoderconfigwidget.h"
 
@@ -66,11 +69,17 @@ static QValueList<K3bExternalEncoder::Command> readCommands()
 
   // some defaults
   if( cmds.isEmpty() ) {
-    K3bExternalEncoder::Command lameCmd, flacCmd;
+    // check if the lame encoding plugin has been compiled
+#ifndef HAVE_LAME
+    K3bExternalEncoder::Command lameCmd;
     lameCmd.name = "Mp3 (Lame)";
     lameCmd.extension = "mp3";
     lameCmd.command = "lame -h --tt %t --ta %a --ty %y --tc %c - %f"; 
 
+    cl.append( lameCmd );
+#endif
+
+    K3bExternalEncoder::Command flacCmd;
     flacCmd.name = "Flac";
     flacCmd.extension = "flac";
     flacCmd.command = "flac "
@@ -86,7 +95,6 @@ static QValueList<K3bExternalEncoder::Command> readCommands()
       "-T TITLE=%t "
       "-";
 
-    cl.append( lameCmd );
     cl.append( flacCmd );
   }
 
