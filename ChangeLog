@@ -1,3 +1,9 @@
+0.11.2
+K3bProcess now has a clean API and a non-stupid implementation which fixes the kde 3.2 issue
+way better than the hotfix from 0.11.1.
+Fixed a crash at K3b start which happened with ROM drives that return zero length modepage 0x05 data.
+Bugfix: added the -dvd-video option to growisofs in on-the-fly mode for VideoDVD
+
 0.11.1
 fixed an issue introduced with KDE 3.2rc1 which caused on-the-fly data writing to fail all the time.
   (If you need to know: For some reason KProcess makes the Stdin fd O_NONBLOCK. This way mkisofs is

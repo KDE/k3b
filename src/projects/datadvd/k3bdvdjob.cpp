@@ -151,6 +151,7 @@ void K3bDvdJob::prepareGrowisofsImager()
 {
   if( !m_growisofsImager ) {
     m_growisofsImager = new K3bGrowisofsImager( m_doc, this );
+    m_growisofsImager->setVideoDvd( m_videoDvd );
     connect( m_growisofsImager, SIGNAL(infoMessage(const QString&, int)), 
 	     this, SIGNAL(infoMessage(const QString&, int)) );
     connect( m_growisofsImager, SIGNAL(percent(int)), this, SLOT(slotGrowisofsImagerPercent(int)) );
