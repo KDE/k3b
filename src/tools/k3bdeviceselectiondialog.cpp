@@ -37,8 +37,8 @@ K3bDeviceSelectionDialog::K3bDeviceSelectionDialog( bool reader,
 						    bool modal )
   : KDialogBase( KDialogBase::Plain, 
 		 i18n("Device Selection"), 
-		 KDialogBase::Ok, 
-		 KDialogBase::Ok,
+		 Ok|Cancel, 
+		 Ok,
 		 parent,
 		 name,
 		 modal )
@@ -98,8 +98,10 @@ K3bDevice* K3bDeviceSelectionDialog::selectedDevice() const
 K3bDevice* K3bDeviceSelectionDialog::selectWriter( QWidget* parent, const QString& text )
 {
   K3bDeviceSelectionDialog d( false, true, parent, 0, text );
-  d.exec();
-  return d.selectedDevice();
+  if( d.exec() == Accepted )
+    return d.selectedDevice();
+  else
+    return 0;
 }
 
 
