@@ -97,4 +97,14 @@ void K3bMixedView::burnDialog( bool withWritingButton )
   d.exec( withWritingButton );
 }
 
+
+K3bDirItem* K3bMixedView::currentDir() const
+{
+  if( m_widgetStack->visibleWidget() == m_dataFileView )
+    return m_dataFileView->currentDir();
+  else
+    return 0;
+}
+
+
 #include "k3bmixedview.moc"

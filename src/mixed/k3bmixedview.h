@@ -12,7 +12,7 @@ class K3bDataFileView;
 class K3bDataDirTreeView;
 class K3bAudioListView;
 class QListViewItem;
-
+class K3bDirItem;
 
 class K3bMixedView : public K3bView
 {
@@ -23,6 +23,8 @@ class K3bMixedView : public K3bView
   ~K3bMixedView();
 
   void burnDialog( bool withWritingButton = true );
+
+  K3bDirItem* currentDir() const;
 
  private slots:
   void treeSelectionChanged( QListViewItem* );

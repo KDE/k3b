@@ -67,13 +67,21 @@ K3bBurnJob* K3bMixedDoc::newBurnJob()
 
 void K3bMixedDoc::addUrl( const KURL& url )
 {
-
+  KURL::List urls(url);
+  addUrls(urls);
 }
 
 
 void K3bMixedDoc::addUrls( const KURL::List& urls )
 {
+  K3bMixedView* view = (K3bMixedView*)firstView();
+  K3bDirItem* dir = view->currentDir();
+  if( dir )
+    dataDoc()->slotAddUrlsToDir( urls, dir );
+  else
+    audioDoc()->addUrls( urls );
 
+  setModified( true );
 }
 
 
@@ -168,6 +176,7 @@ bool K3bMixedDoc::saveDocumentData( QDomElement* docElem )
   }
   mixedElem.appendChild( mixedTypeElem );
 
+  setModified( false );
 
   return true;
 }
