@@ -1,16 +1,22 @@
+<<<<<<< k3b.spec
+%define name    k3b
+%define version 0.8
+%define release 1asp
 %define distversion %( perl -e '$_=\<\>;/(\\d+)\\.(\\d)\\.?(\\d)?/; print "$1$2".($3||0)' /etc/*-release)
-Summary:   An awesome CD burining utility
+
+Summary:   CD-Burner for KDE3
 Name:      k3b
-Version:   0.7.4
+Version:   0.8
 Release:   %{_vendor}_%{distversion}
 Copyright: GPL
-Vendor:    Sebastian Trueg <trueg@informatik.uni-freiburg.de>
+Vendor:    Sebastian Trueg <trueg@k3b.org>
 Url:       http://k3b.sourceforge.net
-Packager:  Sebastian Trueg <trueg@informatik.uni-freiburg.de>
+Icon:      k3b.png
+Packager:  Sebastian Trueg <trueg@k3b.org>
 Group:     Archiving/Cd burning
-Source:    k3b-0.7.4.tar.gz
-BuildRoot:  /tmp/%{name}-%{version}
-Prefix: `kde-config --prefix`
+Source:    k3b-%{version}.tar.gz
+BuildRoot: /tmp/%{name}-%{version}
+Prefix:    `kde-config --prefix`
 
 %description
 K3b - The CD Creator - Writing cds under linux made easy.
