@@ -848,6 +848,16 @@ void K3bCdDevice::CdDevice::checkForAncientWriters()
       d->burnfree = false;
     }
   }
+  else if( vendor().startsWith( "PHILIPS" ) ) {
+    if( description().startsWith( "CDD2600" ) ) {
+      m_writeModes = TAO|SAO;
+      d->deviceType = CDROM|CDR;
+      m_maxWriteSpeed = 2;
+      m_maxReadSpeed = 6;
+      m_bufferSize = 1024;
+      d->burnfree = false;
+    }
+  }
 }
 
 

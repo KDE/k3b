@@ -58,6 +58,7 @@ public:
 #ifdef HAVE_LIBID3
     id3Tag = 0;
 #endif
+    mad_header_init( &firstHeader );
   }
 
   K3bMad* handle;
