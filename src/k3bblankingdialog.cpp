@@ -7,6 +7,8 @@
 
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <klistview.h>
+#include <kiconloader.h>
 
 #include <qgroupbox.h>
 #include <qbuttongroup.h>
@@ -18,7 +20,7 @@
 #include <qtextview.h>
 #include <qcombobox.h>
 #include <qlabel.h>
-
+#include <qheader.h>
 
 
 K3bBlankingDialog::K3bBlankingDialog( QWidget* parent, const char* name )
@@ -125,7 +127,10 @@ void K3bBlankingDialog::setupGui()
   groupOutputLayout->setSpacing( spacingHint() );
   groupOutputLayout->setMargin( marginHint() );
 
-  m_viewOutput = new QTextView( m_groupOutput );
+  m_viewOutput = new KListView( m_groupOutput );
+  m_viewOutput->addColumn( "type" );
+  m_viewOutput->addColumn( "message" );
+  m_viewOutput->header()->hide();
   groupOutputLayout->addWidget( m_viewOutput, 0, 0 );
   // ------------------------------------------------------------------------
 
@@ -199,11 +204,11 @@ void K3bBlankingDialog::slotUser1()
   // disable the user1 button and enable the cancel button
   actionButton( KDialogBase::User1 )->setDisabled( true );
   actionButton( KDialogBase::User2 )->setText( i18n("Cancel") );
-  m_viewOutput->setText("");
+  m_viewOutput->clear();
 
   if( m_job == 0 ) {
     m_job = new K3bBlankingJob();
-    connect( m_job, SIGNAL(infoMessage(const QString&)), this, SLOT(slotInfoMessage(const QString&)) );
+    connect( m_job, SIGNAL(infoMessage(const QString&,int)), this, SLOT(slotInfoMessage(const QString&,int)) );
     connect( m_job, SIGNAL(finished(K3bJob*)), this, SLOT(slotJobFinished()) );
   }
 
@@ -244,9 +249,22 @@ void K3bBlankingDialog::slotUser2()
 }
 
 
-void K3bBlankingDialog::slotInfoMessage( const QString& str )
+void K3bBlankingDialog::slotInfoMessage( const QString& str, int type )
 {
-  m_viewOutput->append( str + "\n" );
+  QListViewItem* item = new QListViewItem( m_viewOutput, m_viewOutput->lastItem(), QString::null, str );
+
+  // set the icon
+  switch( type ) {
+  case K3bJob::ERROR:
+    item->setPixmap( 0, kapp->iconLoader()->loadIcon( "stop", KIcon::Small, 16 ) );
+    break;
+  case K3bJob::PROCESS:
+    item->setPixmap( 0, kapp->iconLoader()->loadIcon( "cdwriter_unmount", KIcon::Small, 16 ) );
+    break;
+  case K3bJob::STATUS:
+  default:
+    item->setPixmap( 0, kapp->iconLoader()->loadIcon( "ok", KIcon::Small, 16 ) );
+  }
 }
 
 

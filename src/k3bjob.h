@@ -37,6 +37,8 @@ class K3bJob : public QObject
 
   virtual bool active() const { return false; }
 
+  enum MessageType { STATUS, PROCESS, ERROR };
+
  protected:
   K3bJob();
   int m_error;
@@ -46,12 +48,12 @@ class K3bJob : public QObject
   virtual void cancel() = 0;
 
  signals:
-  void infoMessage( const QString& msg );
+  void infoMessage( const QString& msg, int type );
   void percent( int p );
   void subPercent( int p );
   void started();
   void canceled();
-  void finished( K3bJob* );
+  void finished( K3bJob* job );
   void processedSize( int processed, int size );
   void processedSubSize( int processed, int size );
   void newTrack();

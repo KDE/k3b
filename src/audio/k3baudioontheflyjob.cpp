@@ -102,14 +102,14 @@ void K3bAudioOnTheFlyJob::slotParseCdrdaoOutput( KProcess*, char* output, int le
       // -----------------------------------------------------------------------------------------
       if( (*str).startsWith( "Warning" ) || (*str).startsWith( "ERROR" ) ) {
 	// TODO: parse the error messages!!
-	emit infoMessage( *str );
+	emit infoMessage( *str, K3bJob::ERROR );
       }
       else if( (*str).startsWith( "Executing power" ) ) {
 	//emit infoMessage( i18n( *str ) );
 	emit newSubTask( i18n("Executing Power calibration") );
       }
       else if( (*str).startsWith( "Power calibration successful" ) ) {
-	emit infoMessage( i18n("Power calibration successful") );
+	emit infoMessage( i18n("Power calibration successful"), K3bJob::PROCESS );
 	emit newSubTask( i18n("Preparing burn process...") );
       }
       else if( (*str).startsWith( "Flushing cache" ) ) {
@@ -119,7 +119,7 @@ void K3bAudioOnTheFlyJob::slotParseCdrdaoOutput( KProcess*, char* output, int le
 	emit newSubTask( i18n("Writing CD-Text leadin...") );
       }
       else if( (*str).startsWith( "Turning BURN-Proof on" ) ) {
-	emit infoMessage( i18n("Turning BURN-Proof on") );
+	emit infoMessage( i18n("Turning BURN-Proof on"), K3bJob::PROCESS );
       }
 
       else
@@ -140,7 +140,6 @@ void K3bAudioOnTheFlyJob::slotParseCdrdaoOutput( KProcess*, char* output, int le
 	  firstTrack = false;
 			
 	emit newSubTask( i18n("Writing track %1: '%2'").arg(m_iNumTracksAlreadyWritten + 1).arg(m_doc->at(m_iNumTracksAlreadyWritten)->fileName()) );
-	emit infoMessage( *str );
 	
 	_debug = false;
       }
@@ -206,7 +205,7 @@ void K3bAudioOnTheFlyJob::slotParseCdrdaoOutput( KProcess*, char* output, int le
 void K3bAudioOnTheFlyJob::cancel()
 {
   if( error() == K3b::WORKING ) {
-    emit infoMessage( i18n("Writing canceled.") );
+    emit infoMessage( i18n("Writing canceled."), K3bJob::STATUS );
 
 
     // cancel the module!!!
@@ -238,8 +237,8 @@ void K3bAudioOnTheFlyJob::start()
 	
   m_error = K3b::WORKING;
 
-  emit infoMessage( i18n("Waiting for all tracks' length to be calculated.") );
-  emit infoMessage( i18n("This might take a while on slower systems.") );
+  emit infoMessage( i18n("Waiting for all tracks' length to be calculated."), K3bJob::STATUS );
+  emit infoMessage( i18n("This might take a while on slower systems."), K3bJob::STATUS );
   emit newSubTask( i18n("Preparing write process...") );
 
   m_waitingForLengthTimer->start(100);
@@ -282,17 +281,17 @@ void K3bAudioOnTheFlyJob::slotStartWriting()
 
   // write in dao-mode
   if( !m_doc->dao() ) {
-    emit infoMessage( i18n("On-the-fly writing is only supported in DAO-mode.") );
-    emit infoMessage( i18n( "Swiching to DAO-mode.") );
+    emit infoMessage( i18n("On-the-fly writing is only supported in DAO-mode."), K3bJob::STATUS );
+    emit infoMessage( i18n( "Swiching to DAO-mode."), K3bJob::STATUS );
     m_doc->setDao( true );
   }
 		
   // use cdrdao to burn the cd
-  emit infoMessage( i18n("Writing TOC-file") );
+  emit infoMessage( i18n("Writing TOC-file"), K3bJob::STATUS );
   m_tocFile = m_doc->writeTOC( locateLocal( "appdata", "temp/" ) + "k3btemptoc.toc" );
 
   if( m_tocFile.isEmpty() ) {
-    emit infoMessage( i18n("Could not write TOC-file %1").arg( m_tocFile ) );
+    emit infoMessage( i18n("Could not write TOC-file %1").arg( m_tocFile ), K3bJob::ERROR );
     m_error = K3b::IO_ERROR;
     emit finished( this );
   }
@@ -391,7 +390,7 @@ void K3bAudioOnTheFlyJob::slotStartWriting()
 	  QFile::remove( m_tocFile );
 	  m_tocFile = QString::null;
 	  
-	  emit infoMessage( i18n("Could not start cdrdao!") );
+	  emit infoMessage( i18n("Could not start cdrdao!"), K3bJob::ERROR );
 	  emit finished( this );
 	}
       else
@@ -400,9 +399,9 @@ void K3bAudioOnTheFlyJob::slotStartWriting()
 
 	  m_error = K3b::WORKING;
 	  if( m_doc->dummy() )
-	    emit infoMessage( i18n("Starting simulation at %1x speed...").arg(m_doc->speed()) );
+	    emit infoMessage( i18n("Starting simulation at %1x speed...").arg(m_doc->speed()), K3bJob::STATUS );
 	  else
-	    emit infoMessage( i18n("Starting recording at %1x speed...").arg(m_doc->speed()) );
+	    emit infoMessage( i18n("Starting recording at %1x speed...").arg(m_doc->speed()), K3bJob::STATUS );
 
 	  m_currentModuleDataLength = 0;
 	  m_streamingStarted = false;
@@ -480,13 +479,13 @@ void K3bAudioOnTheFlyJob::slotModuleFinished( bool success )
       }
     }
     else {
-      emit infoMessage( i18n("All tracks streamed") );
+      emit infoMessage( i18n("All tracks streamed"), K3bJob::STATUS );
       qDebug("(K3bAudioOnTheFlyJob) All tracks streamed. Closing cdrdao's Stdin."  );
       m_process.closeStdin();
     }
   }
   else {
-    emit infoMessage( i18n("Error while streaming file") );
+    emit infoMessage( i18n("Error while streaming file"), K3bJob::ERROR );
     m_process.closeStdin();
   }
 }
@@ -502,16 +501,16 @@ void K3bAudioOnTheFlyJob::slotCdrdaoFinished()
 	case 0:
 	  m_error = K3b::SUCCESS;
 	  if( doc()->dummy() )
-	    emit infoMessage( i18n("Simulation successfully completed") );
+	    emit infoMessage( i18n("Simulation successfully completed"), K3bJob::STATUS );
 	  else
-	    emit infoMessage( i18n("Writing successfully completed") );
+	    emit infoMessage( i18n("Writing successfully completed"), K3bJob::STATUS );
 	  break;
 				
 	default:
 	  // no recording device and also other errors!! :-(
-	  emit infoMessage( i18n("Cdrdao returned some error!") );
-	  emit infoMessage( i18n("Sorry, no error handling yet! :-((") );
-	  emit infoMessage( i18n("Please send me a mail with the last output...") );
+	  emit infoMessage( i18n("Cdrdao returned some error!"), K3bJob::ERROR );
+	  emit infoMessage( i18n("Sorry, no error handling yet! :-(("), K3bJob::ERROR );
+	  emit infoMessage( i18n("Please send me a mail with the last output..."), K3bJob::ERROR );
 	  m_error = K3b::CDRDAO_ERROR;
 	  break;
 	}
@@ -519,7 +518,7 @@ void K3bAudioOnTheFlyJob::slotCdrdaoFinished()
   else
     {
       m_error = K3b::CDRDAO_ERROR;
-      emit infoMessage( i18n("Cdrdao did not exit cleanly!") );
+      emit infoMessage( i18n("Cdrdao did not exit cleanly!"), K3bJob::ERROR );
     }
 
   // remove toc-file

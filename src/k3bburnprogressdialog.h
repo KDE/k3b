@@ -31,7 +31,7 @@ class QGroupBox;
 class QLabel;
 class KProgress;
 class QPushButton;
-class QTextView;
+class KListView;
 class K3bDoc;
 class QTime;
 class QTimer;
@@ -67,7 +67,7 @@ class K3bBurnProgressDialog : public KDialog  {
   void setupConnections();
 	
   QGroupBox* m_groupInfo;
-  QTextView* m_viewInfo;
+  KListView* m_viewInfo;
   QPushButton* m_buttonCancel;
   QPushButton* m_buttonClose;
   QPushButton* m_buttonShowDebug;
@@ -105,7 +105,7 @@ class K3bBurnProgressDialog : public KDialog  {
   void updateCdSizeProgress( int processed, int size );
   //  void updateTrackTimeProgress( const QTime& processedTrackTime );
   void updateTrackSizeProgress( int processed, int size );
-  void displayInfo( const QString& infoString );
+  void displayInfo( const QString& infoString, int type );
 
   void mapDebuggingOutput( const QString&, const QString& );
 

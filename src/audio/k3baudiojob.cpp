@@ -168,7 +168,6 @@ void K3bAudioJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 	    firstTrack = false;
 				
 	  emit newSubTask( i18n("Writing track %1: '%2'").arg(m_iNumTracksAlreadyWritten + 1).arg(m_doc->at(m_iNumTracksAlreadyWritten)->fileName()) );
-	  emit infoMessage( *str );
 	}
       else {
 	// debugging
@@ -200,14 +199,14 @@ void K3bAudioJob::slotParseCdrdaoOutput( KProcess*, char* output, int len )
       // -----------------------------------------------------------------------------------------
       if( (*str).startsWith( "Warning" ) || (*str).startsWith( "ERROR" ) ) {
 	// TODO: parse the error messages!!
-	emit infoMessage( *str );
+	emit infoMessage( *str, K3bJob::ERROR );
       }
       else if( (*str).startsWith( "Executing power" ) ) {
 	//emit infoMessage( i18n( *str ) );
 	emit newSubTask( i18n(*str) );
       }
       else if( (*str).startsWith( "Power calibration successful" ) ) {
-	emit infoMessage( i18n("Power calibration successful") );
+	emit infoMessage( i18n("Power calibration successful"), K3bJob::PROCESS );
 	emit newSubTask( i18n("Preparing burn process...") );
       }
       else if( (*str).startsWith( "Flushing cache" ) ) {
@@ -217,7 +216,7 @@ void K3bAudioJob::slotParseCdrdaoOutput( KProcess*, char* output, int len )
 	emit newSubTask( i18n("Writing CD-Text leadin...") );
       }
       else if( (*str).startsWith( "Turning BURN-Proof on" ) ) {
-	emit infoMessage( i18n("Turning BURN-Proof on") );
+	emit infoMessage( i18n("Turning BURN-Proof on"), K3bJob::PROCESS );
       }
 
       else
@@ -238,7 +237,6 @@ void K3bAudioJob::slotParseCdrdaoOutput( KProcess*, char* output, int len )
 	  firstTrack = false;
 			
 	emit newSubTask( i18n("Writing track %1: '%2'").arg(m_iNumTracksAlreadyWritten + 1).arg(m_doc->at(m_iNumTracksAlreadyWritten)->fileName()) );
-	emit infoMessage( *str );
 	
 	_debug = false;
       }
@@ -305,7 +303,7 @@ void K3bAudioJob::cancel()
 {
   if( error() == K3b::WORKING ) {
     m_process.kill();
-    emit infoMessage("Writing canceled.");
+    emit infoMessage( i18n("Writing canceled."), K3bJob::STATUS );
 	
     // remove toc-file
     if( QFile::exists( m_tocFile ) ) {
@@ -329,7 +327,7 @@ void K3bAudioJob::start()
 	
   m_error = K3b::WORKING;
 
-  emit infoMessage( i18n("Buffering files") );
+  emit infoMessage( i18n("Buffering files"), K3bJob::STATUS );
   emit newTask( i18n("Buffering files") );
 
   createTrackInfo();
@@ -346,14 +344,14 @@ void K3bAudioJob::slotCdrecordFinished()
 	{
 	case 0:
 	  m_error = K3b::SUCCESS;
-	  emit infoMessage( i18n("Burning successfully finished") );
+	  emit infoMessage( i18n("Burning successfully finished"), K3bJob::STATUS );
 	  break;
 				
 	default:
 	  // no recording device and also other errors!! :-(
-	  emit infoMessage( i18n("Cdrecord returned some error!") );
-	  emit infoMessage( i18n("Sorry, no error handling yet!") + " :-((" );
-	  emit infoMessage( i18n("Please send me a mail with the last output...") );
+	  emit infoMessage( i18n("Cdrecord returned some error!"), K3bJob::ERROR );
+	  emit infoMessage( i18n("Sorry, no error handling yet!") + " :-((", K3bJob::ERROR );
+	  emit infoMessage( i18n("Please send me a mail with the last output..."), K3bJob::ERROR );
 	  m_error = K3b::CDRECORD_ERROR;
 	  break;
 	}
@@ -361,7 +359,7 @@ void K3bAudioJob::slotCdrecordFinished()
   else
     {
       m_error = K3b::CDRECORD_ERROR;
-      emit infoMessage( i18n("Cdrecord did not exit cleanly!") );
+      emit infoMessage( i18n("Cdrecord did not exit cleanly!"), K3bJob::ERROR );
     }
 
 
@@ -383,14 +381,14 @@ void K3bAudioJob::slotCdrdaoFinished()
 	{
 	case 0:
 	  m_error = K3b::SUCCESS;
-	  emit infoMessage( i18n("Burning successfully finished") );
+	  emit infoMessage( i18n("Burning successfully finished"), K3bJob::STATUS );
 	  break;
 				
 	default:
 	  // no recording device and also other errors!! :-(
-	  emit infoMessage( i18n("Cdrdao returned some error!") );
-	  emit infoMessage( i18n("Sorry, no error handling yet!") + " :-((" );
-	  emit infoMessage( i18n("Please send me a mail with the last output...") );
+	  emit infoMessage( i18n("Cdrdao returned some error!"), K3bJob::ERROR );
+	  emit infoMessage( i18n("Sorry, no error handling yet!") + " :-((", K3bJob::ERROR );
+	  emit infoMessage( i18n("Please send me a mail with the last output..."), K3bJob::ERROR );
 	  m_error = K3b::CDRDAO_ERROR;
 	  break;
 	}
@@ -398,7 +396,7 @@ void K3bAudioJob::slotCdrdaoFinished()
   else
     {
       m_error = K3b::CDRDAO_ERROR;
-      emit infoMessage( i18n("Cdrdao did not exit cleanly!") );
+      emit infoMessage( i18n("Cdrdao did not exit cleanly!"), K3bJob::ERROR );
     }
 
   // remove toc-file
@@ -437,7 +435,7 @@ void K3bAudioJob::decodeNextFile()
     KURL bufferFile = audioModule->writeToWav( k3bMain()->findTempFile( "wav", doc()->tempDir() ) );
     if( bufferFile.isEmpty() ) {
       qDebug( "(K3bAudioJob) Could not buffer file: " + m_currentTrackInfo->track->absPath() );
-      emit infoMessage( i18n("Could not buffer file: '%1'").arg( m_currentTrackInfo->track->fileName() ) );
+      emit infoMessage( i18n("Could not buffer file: '%1'").arg( m_currentTrackInfo->track->fileName() ), K3bJob::ERROR );
 
       m_error = K3b::IO_ERROR;
       emit finished( this );
@@ -489,23 +487,23 @@ void K3bAudioJob::startWriting()
   if( m_doc->dao() || m_doc->cdText() || m_doc->hideFirstTrack() ) {
     // write in dao-mode
     if( m_doc->cdText() && !m_doc->dao() ) {
-      emit infoMessage( i18n("CD-Text is only supported in DAO-mode.") );
-      emit infoMessage( i18n("Swiching to DAO-mode.") );
+      emit infoMessage( i18n("CD-Text is only supported in DAO-mode."), K3bJob::STATUS );
+      emit infoMessage( i18n("Swiching to DAO-mode."), K3bJob::STATUS );
       m_doc->setDao( true );
     }
     else if( m_doc->hideFirstTrack() && !m_doc->dao() ) {
-      emit infoMessage( i18n("Hiding first track is only supported in DAO-mode.") );
-      emit infoMessage( i18n("Swiching to DAO-mode.") );
+      emit infoMessage( i18n("Hiding first track is only supported in DAO-mode."), K3bJob::STATUS );
+      emit infoMessage( i18n("Swiching to DAO-mode."), K3bJob::STATUS );
       m_doc->setDao( true );
     }
 		
     // use cdrdao to burn the cd
-    emit infoMessage( i18n("Writing TOC-file") );
+    emit infoMessage( i18n("Writing TOC-file"), K3bJob::STATUS );
     m_tocFile = locateLocal( "appdata", "temp/" ) + "k3btemptoc.toc";
     if( !m_doc->writeTOC( m_tocFile ) ) {
 
       qDebug( "(K3bAudioJob) Could not write TOC-file." );
-      emit infoMessage( i18n("Could not write correct TOC-file.") );
+      emit infoMessage( i18n("Could not write correct TOC-file."), K3bJob::ERROR );
 
       m_error = K3b::IO_ERROR;
       emit finished( this );
@@ -574,13 +572,16 @@ void K3bAudioJob::startWriting()
 	  QFile::remove( m_tocFile );
 	  m_tocFile = QString::null;
 
-	  emit infoMessage( i18n("Could not start cdrdao!") );
+	  emit infoMessage( i18n("Could not start cdrdao!"), K3bJob::ERROR );
 	  emit finished( this );
 	}
       else
 	{
 	  m_error = K3b::WORKING;
-	  emit infoMessage( i18n("Start recording at %1x speed...").arg(m_doc->speed()) );
+	  if( m_doc->dummy() )
+	    emit infoMessage( i18n("Starting simulation at %1x speed...").arg(m_doc->speed()), K3bJob::STATUS );
+	  else
+	    emit infoMessage( i18n("Starting recording at %1x speed...").arg(m_doc->speed()), K3bJob::STATUS );
 	  emit started();
 	}
     }
@@ -657,13 +658,16 @@ void K3bAudioJob::startWriting()
 	// it "should" be the executable
 	qDebug("(K3bAudioJob) could not start cdrecord");
 	m_error = K3b::CDRECORD_ERROR;
-	emit infoMessage( i18n("Could not start cdrecord!") );
+	emit infoMessage( i18n("Could not start cdrecord!"), K3bJob::ERROR );
 	emit finished( this );
       }
     else
       {
 	m_error = K3b::WORKING;
-	emit infoMessage( i18n("Start recording at %1x speed...").arg(m_doc->speed()) );
+	if( m_doc->dummy() )
+	  emit infoMessage( i18n("Starting simulation at %1x speed...").arg(m_doc->speed()), K3bJob::STATUS );
+	else
+	  emit infoMessage( i18n("Starting recording at %1x speed...").arg(m_doc->speed()), K3bJob::STATUS );
 	emit started();
       }
 	
@@ -709,7 +713,7 @@ void K3bAudioJob::clearBufferFiles()
 {
   // TODO: add option to not delete the buffer files!
 
-  emit infoMessage( i18n("Removing temporary files!") );
+  emit infoMessage( i18n("Removing temporary files!"), K3bJob::STATUS );
 
   for( SAudioTrackInfo* info = m_trackInfoList.first(); info != 0; info = m_trackInfoList.next() ) {
     info->track->setBufferFile( QString::null );

@@ -12,7 +12,7 @@ class QRadioButton;
 class QCheckBox;
 class QComboBox;
 class QCloseEvent;
-class QTextView;
+class KListView;
 class K3bDevice;
 class K3bBlankingJob;
 class KProgress;
@@ -31,7 +31,7 @@ Q_OBJECT
   void slotRefreshWriterSpeeds();
   void slotUser1();
   void slotUser2();
-  void slotInfoMessage( const QString& );
+  void slotInfoMessage( const QString& msg, int type );
   void slotJobFinished();
 
  protected:
@@ -57,7 +57,7 @@ Q_OBJECT
   QCheckBox* m_checkForce;
 
   QGroupBox* m_groupOutput;
-  QTextView* m_viewOutput;
+  KListView* m_viewOutput;
 
   K3bBlankingJob* m_job;
 };

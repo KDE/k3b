@@ -33,11 +33,15 @@
 #include <qstring.h>
 #include <qtextview.h>
 #include <qhbox.h>
+#include <qheader.h>
+#include <qscrollbar.h>
 
 #include <kprogress.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-
+#include <klistview.h>
+#include <kapp.h>
+#include <kiconloader.h>
 
 
 
@@ -112,9 +116,12 @@ void K3bBurnProgressDialog::setupGUI()
   m_groupInfoLayout->setSpacing( spacingHint() );
   m_groupInfoLayout->setMargin( marginHint() );
 
-  m_viewInfo = new QTextView( m_groupInfo, "m_viewInfo" );
+  m_viewInfo = new KListView( m_groupInfo, "m_viewInfo" );
   m_viewInfo->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)7, m_viewInfo->sizePolicy().hasHeightForWidth() ) );
   m_viewInfo->setMinimumSize( QSize( 500, 0 ) );
+  m_viewInfo->addColumn( "type" );
+  m_viewInfo->addColumn( "info" );
+  m_viewInfo->header()->hide();
   m_groupInfoLayout->addWidget( m_viewInfo );
 
   mainLayout->addMultiCellWidget( m_groupInfo, 0, 0, 0, 3 );
@@ -224,9 +231,25 @@ void K3bBurnProgressDialog::updateTrackSizeProgress( int processedTrackSize, int
 //}
 
 
-void K3bBurnProgressDialog::displayInfo( const QString& infoString )
+void K3bBurnProgressDialog::displayInfo( const QString& infoString, int type )
 {
-  m_viewInfo->append( infoString + "\n" );
+  QListViewItem* item = new QListViewItem( m_viewInfo, m_viewInfo->lastItem(), QString::null, infoString );
+
+  // set the icon
+  switch( type ) {
+  case K3bJob::ERROR:
+    item->setPixmap( 0, kapp->iconLoader()->loadIcon( "stop", KIcon::Small, 16 ) );
+    break;
+  case K3bJob::PROCESS:
+    item->setPixmap( 0, kapp->iconLoader()->loadIcon( "cdwriter_unmount", KIcon::Small, 16 ) );
+    break;
+  case K3bJob::STATUS:
+  default:
+    item->setPixmap( 0, kapp->iconLoader()->loadIcon( "ok", KIcon::Small, 16 ) );
+  }
+
+  // scroll down
+  //m_viewInfo->verticalScrollBar()->setValue( m_viewInfo->verticalScrollBar()->maxValue() );
 }
 
 
@@ -252,7 +275,7 @@ void K3bBurnProgressDialog::setJob( K3bBurnJob* job )
   m_buttonClose->hide();
   m_buttonShowDebug->hide();
   m_buttonCancel->show();
-  m_viewInfo->setText("");
+  m_viewInfo->clear();
   m_progressBuffer->setValue(0);
   m_progressTrack->setValue(0);
   m_progressCd->setValue(0);
@@ -274,7 +297,7 @@ void K3bBurnProgressDialog::setJob( K3bBurnJob* job )
   m_job = job;
 	
   // connect to all the shit
-  connect( job, SIGNAL(infoMessage(const QString&)), this, SLOT(displayInfo(const QString&)) );
+  connect( job, SIGNAL(infoMessage(const QString&,int)), this, SLOT(displayInfo(const QString&,int)) );
 	
   connect( job, SIGNAL(percent(int)), m_progressCd, SLOT(setValue(int)) );
   connect( job, SIGNAL(subPercent(int)), m_progressTrack, SLOT(setValue(int)) );

@@ -103,13 +103,13 @@ void K3bBlankingJob::start()
       // it "should" be the executable
       qDebug("(K3bBlankingJob) could not start cdrecord");
       m_error = K3b::CDRECORD_ERROR;
-      emit infoMessage( "could not start cdrecord!" );
+      emit infoMessage( i18n("Could not start cdrecord!"), K3bJob::ERROR );
       emit finished( this );
     }
   else
     {
       m_error = K3b::WORKING;
-      emit infoMessage( i18n("Start blanking disc at speed %1...").arg(m_speed) );
+      emit infoMessage( i18n("Start blanking disc at speed %1...").arg(m_speed), K3bJob::STATUS );
     }
 }
 
@@ -139,13 +139,13 @@ void K3bBlankingJob::slotCdrecordFinished()
 	{
 	case 0:
 	  m_error = K3b::SUCCESS;
-	  emit infoMessage( i18n("Process successfully finished") );
+	  emit infoMessage( i18n("Process successfully finished"), K3bJob::STATUS );
 	  break;
 				
 	default:
 	  // no recording device and also other errors!! :-(
-	  emit infoMessage( i18n("Cdrecord returned some error!") );
-	  emit infoMessage( i18n("Sorry, no error handling yet! :-((") );
+	  emit infoMessage( i18n("Cdrecord returned some error!"), K3bJob::ERROR );
+	  emit infoMessage( i18n("Sorry, no error handling yet! :-(("), K3bJob::ERROR );
 	  m_error = K3b::CDRECORD_ERROR;
 	  break;
 	}
@@ -153,7 +153,7 @@ void K3bBlankingJob::slotCdrecordFinished()
   else
     {
       m_error = K3b::CDRECORD_ERROR;
-      emit infoMessage( i18n("Cdrecord did not exit cleanly.") );
+      emit infoMessage( i18n("Cdrecord did not exit cleanly."), K3bJob::ERROR );
     }
 		
   emit finished( this );

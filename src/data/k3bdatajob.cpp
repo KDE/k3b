@@ -67,7 +67,7 @@ void K3bDataJob::start()
   if( m_doc->onTheFly() ) {
     m_pathSpecFile = locateLocal( "appdata", "temp/" ) + "k3b_" + QTime::currentTime().toString() + ".mkisofs";
     if( !writePathSpec( m_pathSpecFile ) ) {
-      emit infoMessage( i18n("Could not write to temporary file %1").arg( m_pathSpecFile ) );
+      emit infoMessage( i18n("Could not write to temporary file %1").arg( m_pathSpecFile ), K3bJob::ERROR );
       emit finished( this );
     }
 		
@@ -85,7 +85,7 @@ void K3bDataJob::start()
 				
     if( !m_process->start( KProcess::Block, KProcess::AllOutput ) ) {
       qDebug( "(K3bDataJob) could not start mkisofs: %s", kapp->config()->readEntry( "mkisofs path" ).latin1() );
-      emit infoMessage( i18n("Could not start mkisofs!") );
+      emit infoMessage( i18n("Could not start mkisofs!"), K3bJob::ERROR );
       m_error = K3b::MKISOFS_ERROR;
       delete m_process;
       emit finished(this);
@@ -95,8 +95,8 @@ void K3bDataJob::start()
     delete m_process;
 
     if( m_isoSize.isEmpty() ) {
-      emit infoMessage( i18n("Could not retrieve size of data. On-the-fly writing did not work.") );
-      emit infoMessage( i18n("Please creata an image first!") );
+      emit infoMessage( i18n("Could not retrieve size of data. On-the-fly writing did not work."), K3bJob::ERROR );
+      emit infoMessage( i18n("Please creata an image first!"), K3bJob::ERROR );
       m_error = K3b::MKISOFS_ERROR;
       emit finished(this);
       return;
@@ -171,16 +171,16 @@ void K3bDataJob::start()
 	// it "should" be the executable
 	qDebug("(K3bDataJob) could not start mkisofs/cdrecord");
 	m_error = K3b::CDRECORD_ERROR;
-	emit infoMessage( "could not start mkisofs/cdrecord!" );
+	emit infoMessage( i18n("Could not start mkisofs/cdrecord!"), K3bJob::ERROR );
 	emit finished( this );
       }
     else
       {
 	m_error = K3b::WORKING;
 	if( m_doc->dummy() )
-	  emit infoMessage( i18n("Starting simulation at %1x speed...").arg(m_doc->speed()) );
+	  emit infoMessage( i18n("Starting simulation at %1x speed...").arg(m_doc->speed()), K3bJob::STATUS );
 	else
-	  emit infoMessage( i18n("Starting recording at %1x speed...").arg(m_doc->speed()) );
+	  emit infoMessage( i18n("Starting recording at %1x speed...").arg(m_doc->speed()), K3bJob::STATUS );
 	
 	emit newTask( i18n("Writing ISO") );
 	emit started();
@@ -198,7 +198,7 @@ void K3bDataJob::writeImage()
 {
   m_pathSpecFile = locateLocal( "appdata", "temp/" ) + "k3b_" + QTime::currentTime().toString() + ".mkisofs";
   if( !writePathSpec( m_pathSpecFile ) ) {
-    emit infoMessage( i18n("Could not write to temporary file %1").arg( m_pathSpecFile ) );
+    emit infoMessage( i18n("Could not write to temporary file %1").arg( m_pathSpecFile ), K3bJob::ERROR );
     emit finished( this );
   }
 	
@@ -235,14 +235,14 @@ void K3bDataJob::writeImage()
       QFile::remove( m_pathSpecFile );
       m_pathSpecFile = QString::null;
 		
-      emit infoMessage( i18n("Could not start mkisofs!") );
+      emit infoMessage( i18n("Could not start mkisofs!"), K3bJob::ERROR );
       emit finished( this );
     }
   else
     {
       m_error = K3b::WORKING;
       m_imageFinished = false;
-      emit infoMessage( i18n("Creating ISO-image in %1").arg(m_doc->isoImage()) );
+      emit infoMessage( i18n("Creating ISO-image in %1").arg(m_doc->isoImage()), K3bJob::STATUS );
       emit newSubTask( i18n("Creating ISO-image") );
       emit started();
     }
@@ -310,16 +310,16 @@ void K3bDataJob::writeCD()
       // it "should" be the executable
       qDebug("(K3bDataJob) could not start cdrecord");
       m_error = K3b::CDRECORD_ERROR;
-      emit infoMessage( "could not start cdrecord!" );
+      emit infoMessage( i18n("Could not start cdrecord!"), K3bJob::ERROR );
       emit finished( this );
     }
   else
     {
       m_error = K3b::WORKING;
       if( m_doc->dummy() )
-	emit infoMessage( i18n("Starting simulation at %1x speed...").arg(m_doc->speed()) );
+	emit infoMessage( i18n("Starting simulation at %1x speed...").arg(m_doc->speed()), K3bJob::STATUS );
       else
-	emit infoMessage( i18n("Starting recording at %1x speed...").arg(m_doc->speed()) );
+	emit infoMessage( i18n("Starting recording at %1x speed...").arg(m_doc->speed()), K3bJob::STATUS );
 
       emit newTask( i18n("Writing ISO") );
     }
@@ -330,7 +330,7 @@ void K3bDataJob::cancel()
 {
   if( m_process->isRunning() ) {
     m_process->kill();
-    emit infoMessage("Writing canceled.");
+    emit infoMessage( i18n("Writing canceled."), K3bJob::STATUS );
 	
     // remove toc-file
     if( QFile::exists( m_pathSpecFile ) ) {
@@ -341,13 +341,13 @@ void K3bDataJob::cancel()
     // remove iso-image if it is unfinished or the user selected to remove image
     if( QFile::exists( m_doc->isoImage() ) ) {
       if( m_doc->deleteImage() || !m_imageFinished ) {
-	emit infoMessage( i18n("Removing iso-image %s", m_doc->isoImage().latin1() ) );
+	emit infoMessage( i18n("Removing iso-image %s", m_doc->isoImage().latin1() ), K3bJob::STATUS );
 	QFile::remove( m_doc->isoImage() );
 	m_doc->setIsoImage("");
 	m_pathSpecFile = QString::null;
       }
       else {
-	emit infoMessage( i18n("Image successfully created in ") + m_doc->isoImage() );	
+	emit infoMessage( i18n("Image successfully created in ") + m_doc->isoImage(), K3bJob::STATUS );	
       }
     }
 				
@@ -520,19 +520,19 @@ void K3bDataJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 	emit newSubTask( i18n("Fixating") );
       }
       else if( (*str).contains("seconds.") ) {
-	emit infoMessage( "in " + (*str).mid( (*str).find("seconds") - 2 ) );
+	emit infoMessage( "in " + (*str).mid( (*str).find("seconds") - 2 ), K3bJob::PROCESS );
       }
       else if( (*str).startsWith( "Writing pregap" ) ) {
 	emit newSubTask( i18n("Writing pregap") );
       }
       else if( (*str).startsWith( "Performing OPC" ) ) {
-	emit infoMessage( i18n("Performing OPC") );
+	emit infoMessage( i18n("Performing OPC"), K3bJob::PROCESS );
       }
       else if( (*str).startsWith( "Sending" ) ) {
-	emit infoMessage( i18n("Sending CUE sheet") );
+	emit infoMessage( i18n("Sending CUE sheet"), K3bJob::PROCESS );
       }
       else if( (*str).contains( "Turning BURN-Proof" ) ) {
-	emit infoMessage( i18n("Enabled BURN-Proof") );
+	emit infoMessage( i18n("Enabled BURN-Proof"), K3bJob::PROCESS );
       }
       else if( (*str).contains( "done, estimate" ) ) {
 
@@ -573,7 +573,7 @@ void K3bDataJob::slotMkisofsFinished()
 	{
 	case 0:
 	  m_error = K3b::SUCCESS;
-	  emit infoMessage( i18n("Image successfully created in %1").arg(m_doc->isoImage()) );
+	  emit infoMessage( i18n("Image successfully created in %1").arg(m_doc->isoImage()), K3bJob::STATUS );
 	  m_imageFinished = true;
 				
 	  if( m_doc->onlyCreateImage() ) {
@@ -582,7 +582,7 @@ void K3bDataJob::slotMkisofsFinished()
 	    if( m_doc->deleteImage() ) {
 	      QFile::remove( m_doc->isoImage() );
 	      m_doc->setIsoImage("");
-	      emit infoMessage( i18n("Removed image file %1").arg(m_doc->isoImage()) );
+	      emit infoMessage( i18n("Removed image file %1").arg(m_doc->isoImage()), K3bJob::STATUS );
 	    }
 
 	    emit finished(this);
@@ -594,9 +594,9 @@ void K3bDataJob::slotMkisofsFinished()
 	  break;
 				
 	default:
-	  emit infoMessage( i18n("Mkisofs returned some error. (code %1)").arg(m_process->exitStatus()) );
-	  emit infoMessage( "Sorry, no error handling yet! :-((" );
-	  emit infoMessage( "Please send me a mail with the last output..." );
+	  emit infoMessage( i18n("Mkisofs returned some error. (code %1)").arg(m_process->exitStatus()), K3bJob::ERROR );
+	  emit infoMessage( i18n("Sorry, no error handling yet! :-(("), K3bJob::ERROR );
+	  emit infoMessage( i18n("Please send me a mail with the last output..."), K3bJob::ERROR );
 	  m_error = K3b::MKISOFS_ERROR;
 	  break;
 	}
@@ -604,7 +604,7 @@ void K3bDataJob::slotMkisofsFinished()
   else
     {
       m_error = K3b::MKISOFS_ERROR;
-      emit infoMessage( i18n("Mkisofs did not exit cleanly.") );
+      emit infoMessage( i18n("Mkisofs did not exit cleanly."), K3bJob::ERROR );
     }
 
   // remove toc-file
@@ -629,16 +629,16 @@ void K3bDataJob::slotCdrecordFinished()
 	case 0:
 	  m_error = K3b::SUCCESS;
 	  if( m_doc->dummy() )
-	    emit infoMessage( i18n("Simulation successfully finished") );
+	    emit infoMessage( i18n("Simulation successfully finished"), K3bJob::STATUS );
 	  else
-	    emit infoMessage( i18n("Writing successfully finished") );
+	    emit infoMessage( i18n("Writing successfully finished"), K3bJob::STATUS );
 	  break;
 				
 	default:
 	  // no recording device and also other errors!! :-(
-	  emit infoMessage( i18n("Cdrecord returned some error! (code %1)").arg(m_process->exitStatus()) );
-	  emit infoMessage( "Sorry, no error handling yet! :-((" );
-	  emit infoMessage( "Please send me a mail with the last output..." );
+	  emit infoMessage( i18n("Cdrecord returned some error! (code %1)").arg(m_process->exitStatus()), K3bJob::ERROR );
+	  emit infoMessage( i18n("Sorry, no error handling yet! :-(("), K3bJob::ERROR );
+	  emit infoMessage( i18n("Please send me a mail with the last output..."), K3bJob::ERROR );
 	  m_error = K3b::CDRECORD_ERROR;
 	  break;
 	}
@@ -646,7 +646,7 @@ void K3bDataJob::slotCdrecordFinished()
   else
     {
       m_error = K3b::CDRECORD_ERROR;
-      emit infoMessage( i18n("Cdrecord did not exit cleanly.") );
+      emit infoMessage( i18n("Cdrecord did not exit cleanly."), K3bJob::ERROR );
     }
 
   // remove path-spec-file
