@@ -390,7 +390,7 @@ void K3bMainWindow::openDocumentFile(const KURL& url)
 
   if( doc == 0 )
     {
-      KMessageBox::error (this,i18n("Could not open document !"), i18n("Error !"));
+      KMessageBox::error (this,i18n("Could not open document!"), i18n("Error!"));
       return;	
     }
 
@@ -611,7 +611,7 @@ void K3bMainWindow::fileSave( K3bDoc* doc )
       fileSaveAs( doc );
     else
       if( !doc->saveDocument(doc->URL()) )
-	KMessageBox::error (this,i18n("Could not save the current document !"), i18n("I/O Error !"));
+	KMessageBox::error (this,i18n("Could not save the current document!"), i18n("I/O Error"));
   }
 }
 
@@ -655,7 +655,7 @@ void K3bMainWindow::fileSaveAs( K3bDoc* doc )
 
 	  if(!doc->saveDocument(url))
 	    {
-	      KMessageBox::error (this,i18n("Could not save the current document !"), i18n("I/O Error !"));
+	      KMessageBox::error (this,i18n("Could not save the current document!"), i18n("I/O Error"));
 	      return;
 	    }
 	  doc->changedViewList();
