@@ -85,4 +85,39 @@ void K3bMsfEdit::setLineWidth( int v )
   editor()->setLineWidth( v );
 }
 
+void K3bMsfEdit::setValue( int v )
+{
+  int i = editor()->cursorPosition();
+  QSpinBox::setValue( v );
+  editor()->setCursorPosition( i );
+}
+
+void K3bMsfEdit::stepUp()
+{
+  setValue( value() + currentStepValue() );
+}
+
+void K3bMsfEdit::stepDown()
+{
+  setValue( value() - currentStepValue() );
+}
+
+int K3bMsfEdit::currentStepValue() const
+{
+  int val = 1;
+
+  // look if we are currently editing minutes or seconds
+  QString text = editor()->text();
+  if( text.length() == 8 ) {
+    text = text.mid( editor()->cursorPosition() );
+    int num = text.contains( ':' );
+    if( num == 1 )
+      val = 75;
+    else if( num == 2 )
+      val = 60*75;
+  }
+
+  return val;
+}
+
 #include "k3bmsfedit.moc"
