@@ -70,6 +70,8 @@ QList<K3bDevice>& K3bDeviceManager::readingDevices()
 
 int K3bDeviceManager::scanbus()
 {
+  qDebug("***************************************+++scanbus");
+
   m_foundDevices = 0;
   for( int i = 0; i < DEV_ARRAY_SIZE; i++ ) {
     if( K3bDevice *dev = scanDevice( deviceNames[i] ) ) {

@@ -1,0 +1,274 @@
+#include "k3bscsidevice.h"
+
+#include "ScsiIf.h"
+
+typedef Q_INT16 size16;
+typedef Q_INT32 size32;
+
+extern "C" {
+#include <cdda_interface.h>
+}
+
+
+K3bScsiDevice::K3bScsiDevice( cdrom_drive* drive )
+  : K3bDevice( drive )
+{
+}
+
+
+K3bScsiDevice::~K3bScsiDevice()
+{
+}
+
+
+bool K3bScsiDevice::init()
+{
+  qDebug( "(K3bScsiDevice) Initializing device %s...", devicename().latin1() );
+  ScsiIf  scsiIf( devicename().latin1() );
+  if( scsiIf.init() != 0 ) {
+    qDebug( "(K3bScsiDevice) Could not open device " + devicename() );
+    return false;
+  }
+
+
+  // taken from cdrdao's GenericMMC driver
+  // this should (hopefully) work with most cd-drives
+  // -----------------------------------------------------------------------
+  unsigned char cmd[12];
+  memset(cmd, 0, 12);
+
+  cmd[0] = 0xbb; // SET CD SPEED
+  cmd[2] = 0xff; // select maximum read speed
+  cmd[3] = 0xff;
+  cmd[4] = 0xff; // select maximum write speed
+  cmd[5] = 0xff;
+
+  qDebug( "(K3bScsiDevice) Setting device %s to maximum speed.", devicename().latin1() );
+  if (scsiIf.sendCmd(cmd, 12, NULL, 0, NULL, 0, 0) != 0) {
+    qDebug("(K3bScsiDevice) Cannot set device %s to maximum speed.", devicename().latin1() );
+  }
+  // -----------------------------------------------------------------------
+
+
+  unsigned char mp[32];
+
+  qDebug ( "(K3bScsiDevice) Get device information for device %s.", devicename().latin1() );
+  if( getModePage( &scsiIf,  0x2a, mp, 32, NULL, NULL, 0 ) != 0 ) {
+    qDebug( "(K3bScsiDevice) Cannot retrieve drive capabilities mode page from device %s.", devicename().latin1() );
+    return false;
+  }
+
+  m_burnproof = ( mp[4] & 0x80 ) ? true : false;
+  //  int accurateAudioStream = mp[5] & 0x02 ? 1 : 0;
+  // speed must be diveded by 176
+  m_maxReadSpeed = ( mp[14] << 8 ) | mp[15];
+  m_maxReadSpeed  /= 176;
+  m_maxWriteSpeed = ( mp[20] << 8 ) | mp[21];
+  m_maxWriteSpeed /= 176;
+  m_burner = ( m_maxWriteSpeed > 0 ) ? true : false;
+
+  m_description = scsiIf.product();
+  m_vendor = scsiIf.vendor();
+  m_version = scsiIf.revision();
+
+
+  qDebug( "(K3bScsiDevice) %s max write: %i", devicename().latin1(), m_maxWriteSpeed );
+  qDebug( "(K3bScsiDevice) %s max read : %i", devicename().latin1(), m_maxReadSpeed );
+
+  return true;
+}
+
+
+
+// checks if unit is ready
+// return: 0: OK
+//         1: scsi command failed
+//         2: not ready
+//         3: not ready, no disk in drive
+//         4: not ready, tray out
+int K3bScsiDevice::isReady() const
+{
+  ScsiIf scsiIf( devicename().latin1() );
+  unsigned char cmd[6];
+  const unsigned char *sense;
+  int senseLen;
+
+  memset(cmd, 0, 6);
+
+  switch( scsiIf.sendCmd(cmd, 6, NULL, 0, NULL, 0, 0) )
+    {
+    case 1:
+      return 1;
+
+    case 2:
+      sense = scsiIf.getSense(senseLen);
+    
+      int code = sense[2] & 0x0f;
+      
+      if( code == 0x02 ) {
+	// not ready
+	return 2;
+      }
+      else if( code != 0x06 ) {
+	scsiIf.printError();
+	return 1;
+      }
+      else {
+	return 0;
+      }
+    }
+
+  return 0;
+}
+
+
+// reset device to initial state
+// return: 0: OK
+//         1: scsi command failed
+// bool K3bScsiDevice::rezero()
+// {
+//   ScsiIf scsiIf( devicename().latin1() );
+//   unsigned char cmd[6];
+//   memset(cmd, 0, 6);
+//   cmd[0] = 0x01;
+  
+//   if( scsiIf.sendCmd(cmd, 6, NULL, 0, NULL, 0, 0) != 0 ) {
+//     qDebug( "Cannot rezero unit." );
+//     return false;
+//   }
+
+//   return true;
+// }
+
+
+// Requests mode page 'pageCode' from device and places it into given
+// buffer of maximum length 'bufLen'.
+// modePageHeader: if != NULL filled with mode page header (8 bytes)
+// blockDesc     : if != NULL filled with block descriptor (8 bytes),
+//                 buffer is zeroed if no block descriptor is received
+// return: 0: OK
+//         1: scsi command failed
+//         2: buffer too small for requested mode page
+int K3bScsiDevice::getModePage( ScsiIf *_scsiIf, int pageCode, unsigned char *buf,
+			    long bufLen, unsigned char *modePageHeader,
+			    unsigned char *blockDesc, int showErrorMsg )
+{
+  unsigned char cmd[10];
+  long dataLen = bufLen + 8 /*mode parameter header */ + 100 /*spare for block descriptors */ ;
+  unsigned char *data = new ( unsigned char )[dataLen];
+
+  memset( cmd, 0, 10 );
+  memset( data, 0, dataLen );
+  memset( buf, 0, bufLen );
+
+  cmd[0] = 0x5a;      // MODE SENSE
+  cmd[2] = pageCode & 0x3f;
+  cmd[7] = dataLen >> 8;
+  cmd[8] = dataLen;
+
+  if( _scsiIf->sendCmd( cmd, 10, NULL, 0, data, dataLen, showErrorMsg ) != 0 ) {
+    delete[]data;
+    return 1;
+  }
+
+  long modeDataLen = ( data[0] << 8 ) | data[1];
+  long blockDescLen = ( data[6] << 8 ) | data[7];
+
+  if( modePageHeader != NULL )
+    memcpy( modePageHeader, data, 8 );
+
+  if( blockDesc != NULL ) {
+    if( blockDescLen >= 8 )
+      memcpy( blockDesc, data + 8, 8 );
+    else
+      memset( blockDesc, 0, 8 );
+  }
+
+  if( modeDataLen > blockDescLen + 6 ) {
+    unsigned char *modePage = data + blockDescLen + 8;
+    long modePageLen = modePage[1] + 2;
+
+    if( modePageLen > bufLen )
+      modePageLen = bufLen;
+
+    memcpy( buf, modePage, modePageLen );
+    delete[]data;
+    return 0;
+  } else {
+    qDebug( "No mode page data received." );
+    delete[]data;
+    return 1;
+  }
+}
+
+
+// Reads the cd-rom capacity and stores the total number of available blocks
+// in 'length'.
+// return: 0: OK
+//         1: SCSI command failed
+// bool K3bScsiDevice::cdCapacity( long* length )
+// {
+//   unsigned char cmd[10];
+//   unsigned char data[8];
+
+//   memset(cmd, 0, 10);
+//   memset(data, 0, 8);
+
+//   cmd[0] = 0x25; // READ CD-ROM CAPACITY
+
+//   if( m_scsiIf->sendCmd(cmd, 10, NULL, 0, data, 8, 0) != 0 ) {
+//     qDebug("(K3bScsiDevice) Cannot read capacity of device " + m_devicename );
+//     return false;
+//   }
+  
+//   *length = (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
+//   // *length += 1;
+
+//   return true;
+// }
+
+
+int K3bScsiDevice::isEmpty() const
+{
+  ScsiIf scsiIf( devicename().latin1() );
+  unsigned char cmd[10];
+  unsigned long dataLen = 34;
+  unsigned char data[34];
+
+  // perform READ DISK INFORMATION
+  memset(cmd, 0, 10);
+  memset(data, 0, dataLen);
+
+  cmd[0] = 0x51; // READ DISK INFORMATION
+  cmd[7] = dataLen >> 8;
+  cmd[8] = dataLen;
+
+  if (scsiIf.sendCmd(cmd, 10, NULL, 0, data, dataLen, 0) != 0) {
+    qDebug( "(K3bScsiDevice) Could not check if disk in %s is empty.", devicename().latin1() );
+    return -1;
+  }
+
+  return (data[2] & 0x03);
+}
+
+
+bool K3bScsiDevice::block( bool block ) const
+{
+  unsigned char cmd[6];
+
+  memset(cmd, 0, 6);
+
+  cmd[0] = 0x1e;
+  
+  if (block) {
+    cmd[4] |= 0x01;
+  }
+
+  ScsiIf scsiIf( devicename().latin1() );
+  if (scsiIf.sendCmd(cmd, 6, NULL, 0, NULL, 0) != 0) {
+    qDebug( "(K3bScsiDevice) Cannot block/unblock device %s", devicename().latin1() );
+    return false;
+  }
+
+  return true;
+}
