@@ -199,7 +199,7 @@ K3bMovixListView::~K3bMovixListView()
 bool K3bMovixListView::acceptDrag(QDropEvent* e) const
 {
   // the first is for built-in item moving, the second for dropping urls
-  return ( K3bListView::acceptDrag(e) || QUriDrag::canDecode(e) );
+  return ( K3bListView::acceptDrag(e) || KURLDrag::canDecode(e) );
 }
 
 

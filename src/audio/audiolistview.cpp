@@ -135,7 +135,7 @@ void K3bAudioListView::setupPopupMenu()
 bool K3bAudioListView::acceptDrag(QDropEvent* e) const
 {
   // the first is for built-in item moving, the second for dropping urls
-  return ( KListView::acceptDrag(e) || QUriDrag::canDecode(e) );
+  return ( KListView::acceptDrag(e) || KURLDrag::canDecode(e) );
 }
 
 

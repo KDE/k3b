@@ -88,7 +88,7 @@ void K3bDataDirTreeView::slotExecuted( QListViewItem* item )
 
 
 bool K3bDataDirTreeView::acceptDrag(QDropEvent* e) const{
-  return ( e->source() == viewport() || QUriDrag::canDecode(e) ||
+  return ( e->source() == viewport() || KURLDrag::canDecode(e) ||
 	   ( m_fileView && e->source() == m_fileView->viewport() ) );
 }
 

@@ -130,7 +130,7 @@ void K3bDataFileView::updateContents()
 
 
 bool K3bDataFileView::acceptDrag(QDropEvent* e) const{
-  return ( e->source() == viewport() || QUriDrag::canDecode(e) || e->source() == m_treeView->viewport() );
+  return ( e->source() == viewport() || KURLDrag::canDecode(e) || e->source() == m_treeView->viewport() );
 }
 
 
