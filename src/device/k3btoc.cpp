@@ -3,16 +3,16 @@
 #include <qstring.h>
 
 
-K3bToc::K3bToc()
-  : QValueList<K3bTrack>()
+K3bCdDevice::Toc::Toc()
+  : QValueList<K3bCdDevice::Track>()
 {
   m_discId = 0;
   m_firstSector = -1;
 }
 
 
-K3bToc::K3bToc( const K3bToc& toc )
-  : QValueList<K3bTrack>( toc ),
+K3bCdDevice::Toc::Toc( const Toc& toc )
+  : QValueList<K3bCdDevice::Track>( toc ),
     m_artist( toc.artist() ),
     m_album( toc.album() )
 {
@@ -21,18 +21,18 @@ K3bToc::K3bToc( const K3bToc& toc )
 }
 
 
-K3bToc::K3bToc( const QString& artist, const QString& album )
-  : QValueList<K3bTrack>(), m_artist( artist ), m_album( album )
+K3bCdDevice::Toc::Toc( const QString& artist, const QString& album )
+  : QValueList<K3bCdDevice::Track>(), m_artist( artist ), m_album( album )
 {
 }
 
 
-K3bToc::~K3bToc()
+K3bCdDevice::Toc::~Toc()
 {
 }
 
 
-K3bToc& K3bToc::operator=( const K3bToc& toc )
+K3bCdDevice::Toc& K3bCdDevice::Toc::operator=( const Toc& toc )
 {
   if( &toc == this ) return *this;
 
@@ -42,25 +42,25 @@ K3bToc& K3bToc::operator=( const K3bToc& toc )
   m_firstSector = toc.firstSector();
   m_discId = toc.discId();
 
-  QValueList<K3bTrack>::operator=( toc );
+  QValueList<K3bCdDevice::Track>::operator=( toc );
 
   return *this;
 }
 
 
-unsigned int K3bToc::discId() const
+unsigned int K3bCdDevice::Toc::discId() const
 {
   return m_discId;
 }
 
 
-int K3bToc::firstSector() const
+int K3bCdDevice::Toc::firstSector() const
 {
   return m_firstSector;
 }
 
 
-int K3bToc::lastSector() const
+int K3bCdDevice::Toc::lastSector() const
 {
   if( isEmpty() )
     return 0;
@@ -69,7 +69,7 @@ int K3bToc::lastSector() const
 }
 
 
-int K3bToc::length() const
+int K3bCdDevice::Toc::length() const
 {
   return lastSector() - m_firstSector;
 }

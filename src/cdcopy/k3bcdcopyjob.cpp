@@ -21,8 +21,8 @@
 #include "../tools/k3bexternalbinmanager.h"
 #include "../k3bemptydiscwaiter.h"
 #include "../device/k3bdevice.h"
-#include "../cdinfo/k3bdiskinfo.h"
-#include "../cdinfo/k3bdiskinfodetector.h"
+#include "../device/k3bdiskinfo.h"
+#include "../device/k3bdiskinfodetector.h"
 
 #include "../remote.h"
 

@@ -1,6 +1,6 @@
-/* 
+/*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Klaus-Dieter Krannich <kd@k3b.org>
  *
  * This file is part of the K3b project.
@@ -19,8 +19,8 @@
 #include "../tools/k3bexternalbinmanager.h"
 #include "../k3bemptydiscwaiter.h"
 #include "../device/k3bdevice.h"
-#include "../cdinfo/k3bdiskinfo.h"
-#include "../cdinfo/k3bdiskinfodetector.h"
+#include "../device/k3bdiskinfo.h"
+#include "../device/k3bdiskinfodetector.h"
 
 #include <k3bprocess.h>
 #include <kconfig.h>

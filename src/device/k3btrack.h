@@ -3,35 +3,40 @@
 
 #include <qstring.h>
 
-
-class K3bTrack
+namespace K3bCdDevice
 {
- public:
-  enum track_type { AUDIO, DATA };
-  enum track_mode { MODE1, MODE2, UNKNOWN };
 
-  K3bTrack();
-  K3bTrack( const K3bTrack& );
-  K3bTrack( int firstSector, int lastSector, int type, int mode = UNKNOWN, const QString& = QString::null );
-  K3bTrack& operator=( const K3bTrack& );
+  class Track
+  {
+  public:
+    enum track_type { AUDIO, DATA };
+    enum track_mode { MODE1, MODE2, UNKNOWN };
 
-  const QString& title() const { return m_title; }
-  int type() const { return m_type; }
-  int mode() const { return m_mode; }
-  int firstSector() const { return m_firstSector; }
-  int lastSector() const { return m_lastSector; }
-  int length() const;
+    Track();
+    Track( const Track& );
+    Track( int firstSector, int lastSector, int type, int mode = UNKNOWN, const QString& = QString::null );
+    Track& operator=( const Track& );
 
-  void setTitle( const QString& );
+    const QString& title() const { return m_title; }
+    int type() const { return m_type; }
+    int mode() const { return m_mode; }
+    int firstSector() const { return m_firstSector; }
+    int lastSector() const { return m_lastSector; }
+    int length() const;
 
-  bool isEmpty() const;
+    void setTitle( const QString& );
 
- private:
-  int m_firstSector;
-  int m_lastSector;
-  int m_type;
-  int m_mode;
-  QString m_title;
+    bool isEmpty() const;
+
+  private:
+    int m_firstSector;
+    int m_lastSector;
+    int m_type;
+    int m_mode;
+    QString m_title;
+  };
 };
+
+typedef K3bCdDevice::Track K3bTrack;
 
 #endif

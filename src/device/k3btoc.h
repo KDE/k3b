@@ -7,51 +7,56 @@
 
 class QString;
 
-/**
- * A list of K3bTracks that represents the contents
- * of a cd.
- * The Toc deletes all its tracks when it is deleted and
- * deletes removed tracks.
- */
-class K3bToc : public QValueList<K3bTrack>
+namespace K3bCdDevice
 {
- public:
-  K3bToc();
-  /** deep copy */
-  K3bToc( const K3bToc& );
-  /** create empty toc with artist and album info set */
-  K3bToc( const QString&, const QString& );
-  /** deletes all tracks */
-  ~K3bToc();
-  /** deep copy */
-  K3bToc& operator=( const K3bToc& );
-
   /**
-   * CDDB disc Id
+   * A list of K3bTracks that represents the contents
+   * of a cd.
+   * The Toc deletes all its tracks when it is deleted and
+   * deletes removed tracks.
    */
-  unsigned int discId() const;
+  class Toc : public QValueList<K3bTrack>
+  {
+  public:
+    Toc();
+    /** deep copy */
+    Toc( const Toc& );
+    /** create empty toc with artist and album info set */
+    Toc( const QString&, const QString& );
+    /** deletes all tracks */
+    ~Toc();
+    /** deep copy */
+    Toc& operator=( const Toc& );
 
-  /**
-   * The first track's first sector could differ from the disc's
-   * first sector if there is a pregap before index 1
-   */
-  int firstSector() const;
-  int lastSector() const;
-  const QString& artist() const { return m_artist; }
-  const QString& album() const { return m_album; }
-  int length() const;
+    /**
+     * CDDB disc Id
+     */
+    unsigned int discId() const;
 
-  void setArtist( const QString& s ) { m_artist = s; }
-  void setAlbum( const QString& s ) { m_album = s; }
-  void setDiscId( unsigned int id ) { m_discId = id; }
-  void setFirstSector( int i ) { m_firstSector = i; }
+    /**
+     * The first track's first sector could differ from the disc's
+     * first sector if there is a pregap before index 1
+     */
+    int firstSector() const;
+    int lastSector() const;
+    const QString& artist() const { return m_artist; }
+    const QString& album() const { return m_album; }
+    int length() const;
 
- private:
-  unsigned int m_discId;
-  int m_firstSector;
-  //  int m_lastSector;
-  QString m_artist;
-  QString m_album;
+    void setArtist( const QString& s ) { m_artist = s; }
+    void setAlbum( const QString& s ) { m_album = s; }
+    void setDiscId( unsigned int id ) { m_discId = id; }
+    void setFirstSector( int i ) { m_firstSector = i; }
+
+  private:
+    unsigned int m_discId;
+    int m_firstSector;
+    //  int m_lastSector;
+    QString m_artist;
+    QString m_album;
+  };
 };
+
+typedef K3bCdDevice::Toc K3bToc;
 
 #endif

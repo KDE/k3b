@@ -67,7 +67,7 @@
 #include "k3b.h"
 #include "rip/k3bmovieview.h"
 #include "k3bfiletreeview.h"
-#include "cdinfo/k3bdiskinfodetector.h"
+#include "device/k3bdiskinfodetector.h"
 #include "cdinfo/k3bdiskinfoview.h"
 
 class K3bNoViewView : public QWidget
@@ -95,10 +95,10 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
   : QVBox(parent, name), m_bViewDiskInfo(false), m_lastDevice(0)
 {
   m_diskInfoDetector = new K3bDiskInfoDetector( this );
-  connect( m_diskInfoDetector, SIGNAL(diskInfoReady(const K3bDiskInfo&)),
+  connect( m_diskInfoDetector, SIGNAL(diskInfoReady(const K3bCdDevice::DiskInfo&)),
 	   k3bMain(), SLOT(endBusy()) );
-  connect( m_diskInfoDetector, SIGNAL(diskInfoReady(const K3bDiskInfo&)),
-	   this, SLOT(slotDiskInfoReady(const K3bDiskInfo&)) );
+  connect( m_diskInfoDetector, SIGNAL(diskInfoReady(const K3bCdDevice::DiskInfo&)),
+	   this, SLOT(slotDiskInfoReady(const K3bCdDevice::DiskInfo&)) );
 
   //  KToolBar* toolBar = new KToolBar( this, "dirviewtoolbar" );
 

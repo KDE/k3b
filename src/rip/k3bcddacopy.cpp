@@ -22,7 +22,7 @@
 #include "k3bripperwidget.h"
 #include "k3bpatternparser.h"
 #include "../device/k3bdevice.h"
-#include "../cdinfo/k3bdiskinfodetector.h"
+#include "../device/k3bdiskinfodetector.h"
 #include <tools/k3bcdparanoialib.h>
 #include <k3bprogressinfoevent.h>
 
@@ -63,8 +63,8 @@ K3bCddaCopy::K3bCddaCopy( QObject* parent )
 #endif
 
   m_diskInfoDetector = new K3bDiskInfoDetector( this );
-  connect( m_diskInfoDetector, SIGNAL(diskInfoReady(const K3bDiskInfo&)), 
-	   this, SLOT(slotDiskInfoReady(const K3bDiskInfo&)) );
+  connect( m_diskInfoDetector, SIGNAL(diskInfoReady(const K3bCdDevice::DiskInfo&)), 
+	   this, SLOT(slotDiskInfoReady(const K3bCdDevice::DiskInfo&)) );
 }
 
 K3bCddaCopy::~K3bCddaCopy()

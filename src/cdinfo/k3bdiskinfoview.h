@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -19,8 +19,8 @@
 #define K3BDISKINFOVIEW_H
 
 #include "../k3bcdcontentsview.h"
+#include "../device/k3bdiskinfo.h"
 
-class K3bDiskInfo;
 class QLabel;
 class KListView;
 
