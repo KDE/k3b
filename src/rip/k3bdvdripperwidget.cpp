@@ -347,8 +347,8 @@ void K3bDvdRipperWidget::openEncodingDialog(){
 
   data.setAviFile( m_editStaticRipPath->url() + "/video-k3b.avi");
   K3bDivxView d(&data, this, "divx");
-  d.exec();
   d.slotUpdateView();
+  d.exec();
 
   close();
 
