@@ -70,7 +70,7 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
   // the data actions
   KAction* actionImportSession = new KAction(i18n("&Import Session..."), "gear", 0, this, SLOT(importSession()),
 					     actionCollection(), "project_data_import_session" );
-  actionImportSession->setToolTip( i18n("Import a previous session from an appendable data media.") );
+  actionImportSession->setToolTip( i18n("Import a previous session from an appendable data medium.") );
   KAction* actionClearSession = new KAction(i18n("&Clear Imported Session"), "gear", 0, this,
 					    SLOT(clearImportedSession()), actionCollection(),
 					    "project_data_clear_imported_session" );
