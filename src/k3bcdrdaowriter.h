@@ -22,7 +22,8 @@
 
 
 #include "k3babstractwriter.h"
-#include "k3bcdrdaoparser.h"
+#include "remote.h"
+
 #include <qsocket.h>
 #include <qsocketdevice.h>
 
@@ -49,6 +50,13 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
    */
   K3bCdrdaoWriter* addArgument( const QString& );
   K3bDevice* sourceDevice() { return m_sourceDevice; };
+
+ private:
+  void reinitParser();
+  void parseCdrdaoLine( const QString& line );
+  void parseCdrdaoWrote( const QString& line );
+  void parseCdrdaoError( const QString& line ); 
+  void parseCdrdaoMessage(QSocket *comSock);	  
 
  public slots:
   void start();
@@ -81,10 +89,9 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
   void slotStdLine( const QString& line );
   void slotProcessExited(KProcess*);
   void getCdrdaoMessage();
-  void slotUnknownCdrdaoLine( const QString& );
-  void slotProcessedSize(int, int);
 
  private:
+  void unknownCdrdaoLine( const QString& );
   void prepareArgumentList();
   void setWriteArguments();
   void setReadArguments();
@@ -116,13 +123,19 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
   const K3bExternalBin* m_cdrdaoBinObject;
   K3bProcess* m_process;
 
-  int m_currentTrack;
   int m_cdrdaoComm[2];
   QSocket         *m_comSock;
-  K3bCdrdaoParser *m_parser;
 
   bool m_stdin;
   bool m_writeSpeedInitialized;
+
+// parser
+
+  int m_size;
+  int m_currentTrack;
+  struct ProgressMsg* m_oldMsg;
+  struct ProgressMsg* m_newMsg;
+
 };
 
 #endif
