@@ -130,6 +130,11 @@ void K3bCdDevice::AlbumCdText::setRawPackData( const unsigned char* data, int le
 
     for( int i = 0; i < (len-r)/18; ++i ) {
 
+      if( pack[i].dbcc ) {
+	kdDebug() << "(K3bCdDevice::AlbumCdText) Double byte code not supported" << endl;
+	return;
+      }
+
       //
       // pack.data has a length of 12
       //
@@ -148,9 +153,9 @@ void K3bCdDevice::AlbumCdText::setRawPackData( const unsigned char* data, int le
 	char* nextNullPos = (char*)::memchr( nullPos+1, '\0', 11 - (nullPos - (char*)pack[i].data) );
 	QString txtstr;	    
 	if( nextNullPos ) // take all chars up to the next null
-	  txtstr = QString::fromUtf8( (char*)nullPos+1, nextNullPos - nullPos - 1 );
+	  txtstr = QString::fromLatin1( (char*)nullPos+1, nextNullPos - nullPos - 1 );
 	else // take all chars to the end of the pack data (12 bytes)
-	  txtstr = QString::fromUtf8( (char*)nullPos+1, 11 - (nullPos - (char*)pack[i].data) );
+	  txtstr = QString::fromLatin1( (char*)nullPos+1, 11 - (nullPos - (char*)pack[i].data) );
 	  
 	switch( pack[i].id1 ) {
 	case 0x80: // Title
