@@ -1554,7 +1554,7 @@ K3bProjectBurnDialog* K3bDataDoc::newBurnDialog( QWidget* parent, const char* na
 void K3bDataDoc::slotBurn()
 {
   if( burningSize() == 0 ) {
-    KMessageBox::information( qApp->activeWindow(), i18n("Please add files to your project first!"),
+    KMessageBox::information( qApp->activeWindow(), i18n("Please add files to your project first."),
 			      i18n("No Data to Burn"), QString::null, false );
   }
   else {

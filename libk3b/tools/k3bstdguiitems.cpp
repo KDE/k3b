@@ -31,8 +31,8 @@ QCheckBox* K3bStdGuiItems::simulateCheckbox( QWidget* parent, const char* name )
   QWhatsThis::add( c, i18n("<p>If this option is checked K3b will perform all writing steps with the "
 			   "laser turned off."
 			   "<p>This is useful, for example, to test a higher writing speed "
-			   "or if your system is able to write on-the-fly."
-			   "<p><b>Caution:</b> DVD+R(W) does not support simulation write.") );
+			   "or whether your system is able to write on-the-fly."
+			   "<p><b>Caution:</b> DVD+R(W) does not support simulated writing.") );
   QToolTip::add( c, i18n("Only simulate the writing process") );
   return c;
 }
@@ -56,14 +56,14 @@ QCheckBox* K3bStdGuiItems::burnproofCheckbox( QWidget* parent, const char* name 
   QWhatsThis::add( c, i18n("<p>If this option is checked, K3b enables <em>Burnfree</em> "
 			   "(or <em>Just Link</em>). This is "
 			   "a feature of the CD writer which avoids buffer underruns."
-			   "<p>Without <em>burnfree</em> if the writer would not get any more "
-			   "data a buffer underrun would occur since the writer needs "
+			   "<p>Without <em>burnfree</em>, if the writer cannot get any more "
+			   "data a buffer underrun would occurs, since the writer needs "
 			   "a constant stream of data to write the cd."
 			   "<p>With <em>burnfree</em> the writer can <em>mark</em> the current "
-			   "position of the laser and get back to it when the buffer is filled again."
-			   "But since this means having little data gaps on the cd <b>it is "
+			   "position of the laser and get back to it when the buffer is filled again;"
+			   "but, since this means having little data gaps on the cd, <b>it is "
 			   "highly recommended to always choose an appropriate writing "
-			   "speed to prevent the usage of burnfree, especially for audio cds</b> "
+			   "speed to prevent the usage of burnfree, especially for audio CDs</b> "
 			   "(in the worst case one would hear the gap)."
 			   "<p><em>Burnfree</em> was formally known as <em>Burnproof</em> but since "
 			   "it has become part of the MMC standard it was renamed.") );
@@ -87,7 +87,7 @@ QCheckBox* K3bStdGuiItems::removeImagesCheckbox( QWidget* parent, const char* na
   QWhatsThis::add( c, i18n("<p>If this option is checked, K3b will remove any created images after the "
 			   "writing has finished."
 			   "<p>Uncheck this if you want to keep the images.") );
-  QToolTip::add( c, i18n("Remove images from harddisk when finished") );
+  QToolTip::add( c, i18n("Remove images from disk when finished") );
   return c;
 }
 
@@ -107,13 +107,13 @@ QCheckBox* K3bStdGuiItems::cdTextCheckbox( QWidget* parent, const char* name )
 {
   QCheckBox* c = new QCheckBox( i18n("Write CD-TEXT"), parent, name );
   QToolTip::add( c, i18n("Create CD-TEXT entries") );
-  QWhatsThis::add( c, i18n("<p>If this option is checked K3b uses some otherwise unused space on the audio "
+  QWhatsThis::add( c, i18n("<p>If this option is checked K3b uses some otherwise-unused space on the audio "
 			   "CD to store additional information, like the artist or the CD title."
 			   "<p>CD-TEXT is an extension to the audio CD standard introduced by Sony."
 			   "<p>CD-TEXT will only be usable on CD players that support this extension "
 			   "(mostly car CD players)."
-			   "<p>Since a CD-TEXT enhanced CD will work in any CD player it is never a bad "
-			   "idea to enable this (if you specified the data).") );
+			   "<p>Since a CD-TEXT-enhanced CDs will work in any CD player it is never a bad "
+			   "idea to enable this (if you specify CD-TEXT data).") );
   return c;
 }
 
@@ -126,7 +126,7 @@ QComboBox* K3bStdGuiItems::paranoiaModeComboBox( QWidget* parent, const char* na
   c->insertItem( "2" );
   c->insertItem( "3" );
   c->setCurrentItem( 3 );
-  QToolTip::add( c, i18n("Set the paranoia level for reading audio cds") );
+  QToolTip::add( c, i18n("Set the paranoia level for reading audio CDs") );
   QWhatsThis::add( c, i18n("<p>Sets the correction mode for digital audio extraction."
 			   "<ul><li>0: No checking, data is copied directly from the drive. "
 			   "<li>1: Perform overlapped reading to avoid jitter.</li>"
@@ -140,10 +140,10 @@ QComboBox* K3bStdGuiItems::paranoiaModeComboBox( QWidget* parent, const char* na
 QCheckBox* K3bStdGuiItems::startMultisessionCheckBox( QWidget* parent, const char* name )
 {
   QCheckBox* c = new QCheckBox( i18n("Start multisession CD"), parent, name );
-  QToolTip::add( c, i18n("Do not close the disk to append additional sessions later") );
-  QWhatsThis::add( c, i18n("<p>If this option is checked K3b will not close the cd and write "
+  QToolTip::add( c, i18n("Do not close the disk to allow additional sessions to be added later") );
+  QWhatsThis::add( c, i18n("<p>If this option is checked K3b will not close the cd, and will write "
 			   "a temporary table of contents.</p>"
-			   "<p>This allows further sessions to be appended to the CD.</p>") );
+			   "<p>This allows further sessions to be appended to the CD later.</p>") );
   return c;
 }
 
@@ -157,7 +157,7 @@ QCheckBox* K3bStdGuiItems::normalizeCheckBox( QWidget* parent, const char* name 
 			   "where different recording levels on different albums can cause the volume "
 			   "to vary greatly from song to song."
 			   "<p><b>Be aware that K3b currently does not support normalizing when writing "
-			   "on the fly!</b>") );
+			   "on the fly.</b>") );
   return c;
 }
 
@@ -166,10 +166,10 @@ QCheckBox* K3bStdGuiItems::verifyCheckBox( QWidget* parent, const char* name )
 {
   QCheckBox* c = new QCheckBox( i18n("Verify written data"), parent, name );
   QToolTip::add( c, i18n("Compare MD5 Sums of all written files") );
-  QWhatsThis::add( c, i18n("<p>If this option is checked after the successful "
-			   "writing K3b will compare the MD5 Sums of all written "
-			   "files with their local sources to verify the "
-			   "correctness of the process.") );
+  QWhatsThis::add( c, i18n("<p>If this option is checked, then after successfully "
+			   "writing the disk K3b will compare the MD5 Sums of all written "
+			   "files with their local sources to verify that the "
+			   "disk has been written correctly.") );
   return c;
 }
 

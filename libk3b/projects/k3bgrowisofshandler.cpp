@@ -97,7 +97,7 @@ void K3bGrowisofsHandler::handleLine( const QString& line )
     emit newSubTask( i18n("Closing Track")  );
   }
   else if( line.contains( "closing disc" ) ) {
-    emit newSubTask( i18n("Closing Disc")  );
+    emit newSubTask( i18n("Closing Disk")  );
   }
   else if( line.contains( "closing session" ) ) {
     emit newSubTask( i18n("Closing Session")  );
@@ -118,7 +118,7 @@ void K3bGrowisofsHandler::handleLine( const QString& line )
     emit infoMessage( i18n("Removing reference to lead-out."), K3bJob::INFO );
   }
   else if( line.contains( "copying volume descriptor" ) ) {
-    emit infoMessage( i18n("Modifying Iso9660 volume descriptor"), K3bJob::INFO );
+    emit infoMessage( i18n("Modifying ISO9660 volume descriptor"), K3bJob::INFO );
   }
   else if( line.contains( "FEATURE 21h is not on" ) ) {
     if( !m_dao ) {

@@ -195,7 +195,7 @@ void K3bInteractionDialog::initToolTipsAndWhatsThis()
   QWhatsThis::add( m_buttonSaveUserDefaults, i18n("<p>Saves the current settings as the default for all new projects."
 						  "<p>These settings can also be loaded with the <em>User Defaults</em> "
 						  "button."
-						  "<p><b>The K3b defaults are not overwritten by this!</b>") );
+						  "<p><b>The K3b defaults are not overwritten by this.</b>") );
 }
 
 

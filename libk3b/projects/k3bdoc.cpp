@@ -457,7 +457,7 @@ void K3bDoc::loadDefaultSettings( KConfig* c )
 void K3bDoc::slotBurn()
 {
   if( numOfTracks() == 0 || size() == 0 ) {
-    KMessageBox::information( qApp->activeWindow(), i18n("Please add files to your project first!"),
+    KMessageBox::information( qApp->activeWindow(), i18n("Please add files to your project first."),
 			      i18n("No Data to Burn"), QString::null, false );
   }
   else {

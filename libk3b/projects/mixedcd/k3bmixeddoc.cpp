@@ -260,7 +260,7 @@ void K3bMixedDoc::loadDefaultSettings( KConfig* c )
 void K3bMixedDoc::slotBurn()
 {
   if( m_audioDoc->numOfTracks() == 0 || m_dataDoc->size() == 0 ) {
-    KMessageBox::information( qApp->activeWindow(), i18n("Please add files and audio titles to your project first!"),
+    KMessageBox::information( qApp->activeWindow(), i18n("Please add files and audio titles to your project first."),
 			      i18n("No Data to Burn"), QString::null, false );
   }
   else {

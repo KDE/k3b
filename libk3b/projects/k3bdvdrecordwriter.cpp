@@ -105,7 +105,7 @@ void K3bDvdrecordWriter::prepareProcess()
     if( m_cdrecordBinObject->hasFeature("overburn") )
       *m_process << "-overburn";
     else
-      emit infoMessage( i18n("Cdrecord %1 does not support overburning!").arg(m_cdrecordBinObject->version), INFO );
+      emit infoMessage( i18n("Cdrecord %1 does not support overburning.").arg(m_cdrecordBinObject->version), INFO );
     
   // additional user parameters from config
   const QStringList& params = m_cdrecordBinObject->userParameters();

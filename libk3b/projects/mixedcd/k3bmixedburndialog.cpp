@@ -144,26 +144,26 @@ void K3bMixedBurnDialog::setupSettingsPage()
 void K3bMixedBurnDialog::createContextHelp()
 {
   QToolTip::add( m_radioMixedTypeFirstTrack, i18n("First track will contain the data") );
-  QWhatsThis::add( m_radioMixedTypeFirstTrack, i18n("<p><b>Standard mixed mode cd 1</b>"
+  QWhatsThis::add( m_radioMixedTypeFirstTrack, i18n("<p><b>Standard mixed mode CD 1</b>"
 						    "<p>K3b will write the data track before all "
 						    "audio tracks."
-						    "<p>This mode should only be used for cds that are unlikely to "
-						    "be played on a hifi audio cd player."
+						    "<p>This mode should only be used for CDs that are unlikely to "
+						    "be played on a hifi audio CD player."
 						    "<p><b>Caution:</b> It could lead to problems with some older "
-						    "hifi audio cd player that try to play the data track.") );
+						    "hifi audio CD players that try to play the data track.") );
 
   QToolTip::add( m_radioMixedTypeLastTrack, i18n("Last track will contain the data") );
-  QWhatsThis::add( m_radioMixedTypeLastTrack, i18n("<p><b>Standard mixed mode cd 2</b>"
+  QWhatsThis::add( m_radioMixedTypeLastTrack, i18n("<p><b>Standard mixed mode CD 2</b>"
 						   "<p>K3b will write the data track after all "
 						   "audio tracks."
-						    "<p>This mode should only be used for cds that are unlikely to "
-						    "be played on a hifi audio cd player."
+						    "<p>This mode should only be used for CDs that are unlikely to "
+						    "be played on a hifi audio CD player."
 						   "<p><b>Caution:</b> It could lead to problems with some older "
-						   "hifi audio cd player that try to play the data track.") );
+						   "hifi audio CD players that try to play the data track.") );
 
   QToolTip::add( m_radioMixedTypeSessions, i18n("The data will be written in a second session") );
   QWhatsThis::add( m_radioMixedTypeSessions, i18n("<p><b>Blue book cd</b>"
-						  "<p>K3b will create a multisession cd with "
+						  "<p>K3b will create a multisession CD with "
 						  "2 sessions. The first session will contain all "
 						  "audio tracks and the second session will contain "
 						  "a mode 2 form 1 data track."
@@ -171,12 +171,12 @@ void K3bMixedBurnDialog::createContextHelp()
 						  "standard (also known as <em>Extended Audio CD</em>, "
 						  "<em>CD-Extra</em>, or <em>CD Plus</em>) "
 						  "and has the advantage that a hifi audio "
-						  "cd player will just recognize the first session "
+						  "CD player will only recognize the first session "
 						  "and ignore the second session with the data track."
-						  "<p>If the cd is intended to be used in a hifi audio cd player "
+						  "<p>If the CD is intended to be used in a hifi audio cd player "
 						  "this is the recommended mode."
 						  "<p>Some older CD-ROMs may have problems reading "
-						  "a blue book cd since it's a multisession cd.") );
+						  "a blue book CD since it is a multisession CD.") );
 }
 
 

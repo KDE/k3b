@@ -52,7 +52,7 @@ K3bDvdBurnDialog::K3bDvdBurnDialog( K3bDvdDoc* doc, QWidget *parent, const char 
 {
   prepareGui();
 
-  setTitle( i18n("Dvd Project"), i18n("Size: %1").arg( KIO::convertSize(doc->size()) ) );
+  setTitle( i18n("DVD Project"), i18n("Size: %1").arg( KIO::convertSize(doc->size()) ) );
 
   // for now we just put the verify checkbox on the main page...
   m_checkVerify = K3bStdGuiItems::verifyCheckBox( m_optionGroup );

@@ -155,7 +155,7 @@ void K3bDataVerifyingJob::slotTocRead( K3bDevice::DeviceHandler* dh )
 
     d->iso9660 = new K3bIso9660( d->device, startSec );
     if( !d->iso9660->open() ) {
-      emit infoMessage( i18n("Unable to read Iso9660 filesystem."), ERROR );
+      emit infoMessage( i18n("Unable to read ISO9660 filesystem."), ERROR );
       finishVerification(false);
     }
     else {

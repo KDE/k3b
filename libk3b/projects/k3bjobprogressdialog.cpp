@@ -451,7 +451,7 @@ void K3bJobProgressDialog::slotFinished( bool success )
   if( success ) {
     m_pixLabel->setPixmap( k3bthememanager->currentTheme()->pixmap( "k3b_progress_dialog_success" ) );
 
-    m_labelTask->setText( i18n("Success!") );
+    m_labelTask->setText( i18n("Success.") );
     m_labelTask->setPaletteForegroundColor( Qt::darkGreen );
     m_labelSubTask->setText( QString::null );
 
@@ -467,9 +467,9 @@ void K3bJobProgressDialog::slotFinished( bool success )
     m_labelTask->setPaletteForegroundColor( Qt::red );
 
     if( m_bCanceled )
-      m_labelTask->setText( i18n("Canceled!") );
+      m_labelTask->setText( i18n("Canceled.") );
     else
-      m_labelTask->setText( i18n("Error!") );
+      m_labelTask->setText( i18n("Error.") );
    
     KNotifyClient::event( "FinishedWithError" );
   }

@@ -29,10 +29,11 @@
                 <string>Create CD-Text entries</string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>&lt;p&gt;If this option is checked K3b uses some otherwise unused space on the audio CD to store additional information, like the artist or the CD title.
-&lt;p&gt;CD-Text is an extension to the audio CD standard introduced by Sony.
-&lt;p&gt;CD-Text will only be usable on CD players that support this extension (mostly car CD players).
-&lt;p&gt;Since a CD-Text enhanced CD will work in any CD player it is never a bad idea to enable this (if you specified the data).</string>
+                <string>&lt;p&gt;If this option is checked K3b uses some otherwise-unused space on the audio CD to store additional information, like the artist or the CD title.
+&lt;p&gt;CD-TEXT is an extension to the audio CD standard introduced by Sony.
+&lt;p&gt;CD-TEXT will only be usable on CD players that support this extension (mostly car CD players).
+&lt;p&gt;Since a CD-TEXT-enhanced CD will work in any CD player it is never a bad idea to enable this 
+(if you specify CD-TEXT data).</string>
             </property>
         </widget>
         <widget class="QLabel" row="3" column="0">

@@ -321,7 +321,7 @@ void K3bMixedJob::slotIsoImagerFinished( bool success )
     return;
 
   if( !success ) {
-    emit infoMessage( i18n("Error while creating iso image."), ERROR );
+    emit infoMessage( i18n("Error while creating ISO image."), ERROR );
     cleanupAfterError();
 
     emit finished( false );
@@ -335,7 +335,7 @@ void K3bMixedJob::slotIsoImagerFinished( bool success )
     }
   }
   else {
-    emit infoMessage( i18n("Iso image successfully created."), SUCCESS );
+    emit infoMessage( i18n("ISO image successfully created."), SUCCESS );
 
     if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
       m_currentAction = WRITING_ISO_IMAGE;
@@ -741,7 +741,7 @@ void K3bMixedJob::slotWriterNextTrack( int t, int )
 			   ? QString::null
 			   : " (" + track->artist() + " - " + track->title() + ")" ) );
   else
-    emit newSubTask( i18n("Writing track %1 of %2 (%3)").arg(t).arg(m_doc->numOfTracks()).arg(i18n("Iso9660 data")) );
+    emit newSubTask( i18n("Writing track %1 of %2 (%3)").arg(t).arg(m_doc->numOfTracks()).arg(i18n("ISO9660 data")) );
 }
 
 
@@ -908,9 +908,9 @@ void K3bMixedJob::createIsoImage()
   m_isoImageFilePath = m_tempFilePrefix + "_datatrack.iso";
 
   if( !m_doc->onTheFly() )
-    emit newTask( i18n("Creating iso image file") );
-  emit newSubTask( i18n("Creating iso image in %1").arg(m_isoImageFilePath) );
-  emit infoMessage( i18n("Creating iso image in %1").arg(m_isoImageFilePath), INFO );
+    emit newTask( i18n("Creating ISO image file") );
+  emit newSubTask( i18n("Creating ISO image in %1").arg(m_isoImageFilePath) );
+  emit infoMessage( i18n("Creating ISO image in %1").arg(m_isoImageFilePath), INFO );
 
   m_isoImager->writeToImageFile( m_isoImageFilePath );
   m_isoImager->start();
@@ -1167,7 +1167,7 @@ QString K3bMixedJob::jobDescription() const
 
 QString K3bMixedJob::jobDetails() const
 {
-  return ( i18n("%1 tracks (%2 minutes audio data, %3 Iso9660 data)")
+  return ( i18n("%1 tracks (%2 minutes audio data, %3 ISO9660 data)")
 	   .arg(m_doc->numOfTracks())
 	   .arg(m_doc->audioDoc()->length().toString())
 	   .arg(KIO::convertSize(m_doc->dataDoc()->size()))

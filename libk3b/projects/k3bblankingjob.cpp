@@ -158,12 +158,12 @@ void K3bBlankingJob::slotFinished(bool success)
   }
   else {
     if( m_canceled ) {
-      emit infoMessage( i18n("Canceled!"), ERROR );
+      emit infoMessage( i18n("Canceled."), ERROR );
       emit canceled();
     }
     else {
       emit infoMessage( i18n("Blanking error "), K3bJob::ERROR );
-      emit infoMessage( i18n("Sorry, no error handling yet! :-(("), K3bJob::ERROR );
+      emit infoMessage( i18n("Sorry, no error handling yet."), K3bJob::ERROR );
     }
     emit finished( false );
   }

@@ -40,14 +40,14 @@ K3bDataModeWidget::K3bDataModeWidget( QWidget* parent, const char* name )
 			      "<p><b>Mode 1</b><br>"
 			      "This is the <em>original</em> writing mode as introduced in the "
 			      "<em>Yellow Book</em> standard. It is the preferred mode when writing "
-			      "pure data cds.</p>"
+			      "pure data CDs.</p>"
 			      "<p><b>Mode 2</b><br>"
 			      "To be exact <em>XA Mode 2 Form 1</em>, but since the "
 			      "other modes are rarely used it is common to refer to it as <em>Mode 2</em>.</p>"
 			      "<p><b>Auto</b><br>"
 			      "lets K3b select the best suited data mode.</p>"
-			      "<p><b>Be aware:</b> Do not mix different modes on one cd. "
-			      "Some older drives may have problems reading mode 1 multisession cds.") );
+			      "<p><b>Be aware:</b> Do not mix different modes on one CD. "
+			      "Some older drives may have problems reading mode 1 multisession CDs.") );
 }
 
 

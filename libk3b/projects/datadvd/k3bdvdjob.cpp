@@ -271,7 +271,7 @@ void K3bDvdJob::slotIsoImagerFinished( bool success )
   }
   
   else {
-    emit infoMessage( i18n("Error while creating iso image"), ERROR );
+    emit infoMessage( i18n("Error while creating ISO image"), ERROR );
     cleanup();
     emit finished( false );
   }
@@ -563,10 +563,10 @@ bool K3bDvdJob::waitForDvd()
 	      m_doc->multiSessionMode() == K3bDataDoc::START )
 	    emit infoMessage( i18n("Writing DVD+RW."), INFO );
 	  else
-	    emit infoMessage( i18n("Growing Iso9660 filesystem on DVD+RW."), INFO );
+	    emit infoMessage( i18n("Growing ISO9660 filesystem on DVD+RW."), INFO );
       }
       else if( d->foundMedia & K3bDevice::MEDIA_DVD_PLUS_R_DL )
-	emit infoMessage( i18n("Writing DVD+R Double Layer."), INFO );
+	emit infoMessage( i18n("Writing Dual-Layer DVD+R."), INFO );
       else
 	emit infoMessage( i18n("Writing DVD+R."), INFO );
     }
@@ -592,7 +592,7 @@ bool K3bDvdJob::waitForDvd()
 	    m_doc->multiSessionMode() == K3bDataDoc::START )
 	  emit infoMessage( i18n("Writing DVD-RW in restricted overwrite mode."), INFO );
 	else
-	  emit infoMessage( i18n("Growing Iso9660 filesystem on DVD-RW in restricted overwrite mode."), INFO );
+	  emit infoMessage( i18n("Growing ISO9660 filesystem on DVD-RW in restricted overwrite mode."), INFO );
       }
       else if( d->foundMedia & (K3bDevice::MEDIA_DVD_RW_SEQ|
 		    K3bDevice::MEDIA_DVD_RW) ) {
@@ -680,12 +680,12 @@ QString K3bDvdJob::jobDetails() const
       !m_doc->dummy() &&
       !(m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
 	m_doc->multiSessionMode() == K3bDataDoc::FINISH) )
-    return i18n("Iso9660 Filesystem (Size: %1) - %n copy",
-		"Iso9660 Filesystem (Size: %1) - %n copies",
+    return i18n("ISO9660 Filesystem (Size: %1) - %n copy",
+		"ISO9660 Filesystem (Size: %1) - %n copies",
 		m_doc->copies())
       .arg(KIO::convertSize( m_doc->size() ));
   else
-    return i18n("Iso9660 Filesystem (Size: %1)")
+    return i18n("ISO9660 Filesystem (Size: %1)")
       .arg(KIO::convertSize( m_doc->size() ));
 }
 
