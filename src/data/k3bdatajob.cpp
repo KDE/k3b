@@ -306,9 +306,9 @@ void K3bDataJob::writeCD()
   // create a kshellprocess and do it on the fly!
 
   delete m_process;
-  m_process = new KShellProcess();
 
   if( m_doc->onTheFly() ) {
+    m_process = new KShellProcess();
     if( !addMkisofsParameters() ) {
       cancelAll();
       return;
@@ -318,6 +318,8 @@ void K3bDataJob::writeCD()
     *m_process << m_doc->dummyDir();
     *m_process << "|";
   }
+  else
+    m_process = new KProcess();
 
   // use cdrecord to burn the cd
   if( !k3bMain()->externalBinManager()->foundBin( "cdrecord" ) ) {
@@ -349,7 +351,7 @@ void K3bDataJob::writeCD()
   if( m_doc->dummy() )
     *m_process << "-dummy";
   if( overburn )
-    *m_process << "-overburn";
+    *m_process << "-overburn";  // this only seems to work in non-the-fly modus
 
   // multisession
   if( m_doc->multiSessionMode() == K3bDataDoc::START ||
@@ -442,6 +444,8 @@ void K3bDataJob::writeCD()
 
 void K3bDataJob::writeImage()
 {
+  kdDebug() << "(K3bDataJob) writeImage()" << endl;
+
   // get image file path
   if( m_doc->isoImage().isEmpty() )
     m_doc->setIsoImage( k3bMain()->findTempFile( "iso" ) );

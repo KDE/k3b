@@ -1167,8 +1167,6 @@ void K3bDataDoc::clearImportedSession()
 
     item = m_oldSession.next();
   }
-
-  setMultiSessionMode( NONE );
 }
 
 

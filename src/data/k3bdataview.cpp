@@ -166,6 +166,7 @@ void K3bDataView::slotMountFinished( KIO::Job* job )
 void K3bDataView::clearImportedSession()
 {
   m_doc->clearImportedSession();
+  m_doc->setMultiSessionMode( K3bDataDoc::NONE );
 }
 
 #include "k3bdataview.moc"
