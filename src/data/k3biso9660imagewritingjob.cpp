@@ -39,6 +39,7 @@ K3bIso9660ImageWritingJob::K3bIso9660ImageWritingJob()
     m_device(0),
     m_noFix(false),
     m_speed(2),
+    m_dataMode(K3b::AUTO),
     m_writer(0),
     m_tocFile(0)
 {
@@ -100,7 +101,16 @@ bool K3bIso9660ImageWritingJob::prepareWriter()
   if( m_writer )
     delete m_writer;
 
-  if( writingApp() == K3b::CDRECORD || writingApp() == K3b::DEFAULT ) {
+  int usedApp = writingApp();
+  if( usedApp == K3b::DEFAULT ) {
+    if( m_dataMode == K3b::MODE2 && m_dao )
+      usedApp = K3b::CDRDAO;
+    if(	m_noFix && m_dao )
+      usedApp = K3b::CDRDAO;
+  }
+
+  // cdrecord seems to have problems with mode2 in DAO
+  if( usedApp == K3b::CDRECORD ) {
     K3bCdrecordWriter* writer = new K3bCdrecordWriter( m_device, this );
 
     writer->setDao( m_dao );
@@ -111,8 +121,11 @@ bool K3bIso9660ImageWritingJob::prepareWriter()
 
     if( m_noFix ) {
       writer->addArgument("-multi");
-      writer->addArgument("-xa2");
     }
+
+    if( (m_dataMode == K3b::AUTO && m_noFix) ||
+	m_dataMode == K3b::MODE2 )
+      writer->addArgument("-xa1");
     else
       writer->addArgument("-data");
 
@@ -134,10 +147,11 @@ bool K3bIso9660ImageWritingJob::prepareWriter()
     m_tocFile->setAutoDelete(true);
 
     if( QTextStream* s = m_tocFile->textStream() ) {
-      if( m_noFix ) {
+      if( (m_dataMode == K3b::AUTO && m_noFix) ||
+	  m_dataMode == K3b::MODE2 ) {
 	*s << "CD_ROM_XA" << "\n";
 	*s << "\n";
-	*s << "TRACK MODE2" << "\n";
+	*s << "TRACK MODE2_FORM1" << "\n";
       }
       else {
 	*s << "CD_ROM" << "\n";

@@ -261,12 +261,14 @@ void K3bIsoImager::calculateSize()
 
 void K3bIsoImager::slotCollectMkisofsPrintSizeStderr(KProcess*, char* data , int len)
 {
+  emit debuggingOutput( "mkisofs", QString::fromLocal8Bit( data, len ) );
   m_collectedMkisofsPrintSizeStderr.append( QString::fromLocal8Bit( data, len ) );
 }
 
 
 void K3bIsoImager::slotCollectMkisofsPrintSizeStdout(KProcess*, char* data, int len )
 {
+  emit debuggingOutput( "mkisofs", QString::fromLocal8Bit( data, len ) );
   m_collectedMkisofsPrintSizeStdout.append( QString::fromLocal8Bit( data, len ) );
 }
 

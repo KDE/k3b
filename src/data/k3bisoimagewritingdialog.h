@@ -30,6 +30,8 @@ class KURL;
 class K3bMd5Job;
 class KActiveLabel;
 class KProgress;
+class K3bDataModeWidget;
+
 
 /**
   *@author Sebastian Trueg
@@ -66,6 +68,7 @@ class K3bIsoImageWritingDialog : public K3bInteractionDialog
   QCheckBox* m_checkDao;
   QCheckBox* m_checkBurnProof;
   QCheckBox* m_checkNoFix;
+  K3bDataModeWidget* m_dataModeWidget;
 
   QLabel*    m_labelImageSize;
   KLineEdit* m_editImagePath;

@@ -52,6 +52,7 @@ class K3bIso9660ImageWritingJob : public K3bBurnJob
   void setDao( bool b ) { m_dao = b; }
   void setSimulate( bool b ) { m_simulate = b; }
   void setNoFix( bool b ) { m_noFix = b; }
+  void setDataMode( int m ) { m_dataMode = m; }
 
  protected slots:
   void slotWriterJobFinished( bool );
@@ -65,6 +66,7 @@ class K3bIso9660ImageWritingJob : public K3bBurnJob
   K3bDevice* m_device;
   bool m_noFix;
   int m_speed;
+  int m_dataMode;
 
   QString m_imagePath;
 

@@ -97,8 +97,10 @@ void K3bDataJob::start()
 
 
   if( writingApp() == K3b::CDRECORD || 
-      (writingApp() == K3b::DEFAULT && !(m_doc->dao() && !m_doc->multiSessionMode() == K3bDataDoc::NONE)) )
-    m_usedWritingApp = K3b::CDRECORD;
+      (writingApp() == K3b::DEFAULT && 
+       !(m_doc->dao() && !m_doc->multiSessionMode() == K3bDataDoc::NONE) &&
+       m_doc->dataMode() != K3b::MODE2 ) )
+    m_usedWritingApp = K3b::CDRECORD;  // cdrecord seems to have problems writing xa 1 disks? At least on my system!
   else 
     m_usedWritingApp = K3b::CDRDAO;
 
@@ -469,7 +471,7 @@ void K3bDataJob::cancelAll()
 
   // remove iso-image if it is unfinished or the user selected to remove image
   if( QFile::exists( m_doc->isoImage() ) ) {
-    if( !m_doc->onTheFly() && m_doc->deleteImage() || !m_imageFinished ) {
+    if( !m_doc->onTheFly() && (m_doc->deleteImage() || !m_imageFinished) ) {
       emit infoMessage( i18n("Removing ISO image %1").arg(m_doc->isoImage()), K3bJob::STATUS );
       QFile::remove( m_doc->isoImage() );
       m_doc->setIsoImage("");

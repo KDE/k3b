@@ -24,6 +24,8 @@
 #include <kcutlabel.h>
 #include <k3bstdguiitems.h>
 #include <tools/k3bmd5job.h>
+#include <tools/k3bdatamodewidget.h>
+#include <tools/k3bglobals.h>
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -223,8 +225,11 @@ void K3bIsoImageWritingDialog::setupGui()
   advancedTabLayout->setMargin( marginHint() );
 
   m_checkNoFix = K3bStdGuiItems::startMultisessionCheckBox( advancedTab );
+  m_dataModeWidget = new K3bDataModeWidget( advancedTab );
 
-  advancedTabLayout->addWidget( m_checkNoFix, 0, 0 );
+  advancedTabLayout->addWidget( new QLabel( i18n("Datatrack Mode"), advancedTab ), 0, 0 );
+  advancedTabLayout->addWidget( m_dataModeWidget, 0, 1 );
+  advancedTabLayout->addMultiCellWidget( m_checkNoFix, 1, 1, 0, 1 );
 
 
   optionTabbed->addTab( optionTab, i18n("Options") );
@@ -274,6 +279,7 @@ void K3bIsoImageWritingDialog::slotStartClicked()
   m_job->setSimulate( m_checkDummy->isChecked() );
   m_job->setDao( m_checkDao->isChecked() );
   m_job->setNoFix( m_checkNoFix->isChecked() );
+  m_job->setDataMode( m_dataModeWidget->dataMode() );
 
   m_job->setImagePath( m_editImagePath->text() );
 
@@ -442,6 +448,14 @@ void K3bIsoImageWritingDialog::slotLoadUserDefaults()
   m_checkDummy->setChecked( c->readBoolEntry("simulate", false ) );
   m_checkBurnProof->setChecked( c->readBoolEntry("burnproof", true ) );
   m_checkNoFix->setChecked( c->readBoolEntry("multisession", false ) );
+
+  QString datamode = c->readEntry( "data_track_mode" );
+  if( datamode == "mode1" )
+    m_dataModeWidget->setDataMode( K3b::MODE1 );
+  else if( datamode == "mode2" )
+    m_dataModeWidget->setDataMode( K3b::MODE2 );
+  else
+    m_dataModeWidget->setDataMode( K3b::AUTO );
 }
 
 void K3bIsoImageWritingDialog::slotSaveUserDefaults()
@@ -453,6 +467,15 @@ void K3bIsoImageWritingDialog::slotSaveUserDefaults()
   c->writeEntry( "simulate", m_checkDummy->isChecked() );
   c->writeEntry( "burnproof", m_checkBurnProof->isChecked() );
   c->writeEntry( "multisession", m_checkNoFix->isChecked() );
+
+  QString datamode;
+  if( m_dataModeWidget->dataMode() == K3b::MODE1 )
+    datamode = "mode1";
+  else if( m_dataModeWidget->dataMode() == K3b::MODE2 )
+    datamode = "mode2";
+  else
+    datamode = "auto";
+  c->writeEntry( "data_track_mode", datamode );
 }
 
 void K3bIsoImageWritingDialog::slotLoadK3bDefaults()
@@ -461,6 +484,7 @@ void K3bIsoImageWritingDialog::slotLoadK3bDefaults()
   m_checkDummy->setChecked( false );
   m_checkBurnProof->setChecked( true );
   m_checkNoFix->setChecked( false );
+  m_dataModeWidget->setDataMode( K3b::AUTO );
 }
 
 #include "k3bisoimagewritingdialog.moc"
