@@ -1,9 +1,16 @@
 /***************************************************************************
+                             k3b -  description
+                             -------------------
+    copyright            : (C) 2002 by Sebastian Trueg
+    email                : trueg@informatik.uni-freiburg.de
+ ***************************************************************************/
+
+/***************************************************************************
                           k3bvcdjob.h  -  description
                              -------------------
     begin                : Mon Nov 4 2002
-    copyright            : (C) 2002 by Sebastian Trueg
-    email                : trueg@informatik.uni-freiburg.de
+    copyright            : (C) 2002 by Christian Kvasny
+    email                : chris@ckvsoft.at
  ***************************************************************************/
 
 /***************************************************************************
@@ -94,7 +101,6 @@ class K3bVcdJob : public K3bBurnJob
   bool m_readRaw;
 
   QString m_tempPath;
-  QString m_tocFile;
   QString m_cueFile;
   QString m_xmlFile;
   QString m_collectedOutput;
