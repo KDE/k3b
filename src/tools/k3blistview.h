@@ -30,7 +30,7 @@ class QResizeEvent;
 class QComboBox;
 class QSpinBox;
 class QLineEdit;
-class QFocusEvent;
+class QEvent;
 class QValidator;
 class K3bMsfEdit;
 
@@ -167,7 +167,8 @@ class K3bListView : public KListView
   virtual void drawContentsOffset ( QPainter * p, int ox, int oy, int cx, int cy, int cw, int ch );
   virtual void resizeEvent( QResizeEvent* );
   virtual void paintEmptyArea( QPainter*, const QRect& rect );
-  virtual void focusOutEvent( QFocusEvent* );
+
+  virtual bool eventFilter( QObject*, QEvent* );
 
   K3bListViewItem* currentEditItem() const { return m_currentEditItem; }
   int currentEditColumn() const { return m_currentEditColumn; }

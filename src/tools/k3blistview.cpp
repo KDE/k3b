@@ -629,6 +629,7 @@ QWidget* K3bListView::prepareEditor( K3bListViewItem* item, int col )
 	       this, SLOT(slotEditorComboBoxActivated(const QString&)) );
       if( m_validator )
 	m_editorComboBox->setValidator( m_validator );
+      m_editorComboBox->installEventFilter( this );
     }
     m_editorComboBox->clear();
     if( item->comboStrings( col ).isEmpty() ) {
@@ -645,12 +646,11 @@ QWidget* K3bListView::prepareEditor( K3bListViewItem* item, int col )
   case K3bListViewItem::LINE:
     if( !m_editorLineEdit ) {
       m_editorLineEdit = new QLineEdit( viewport() );
-      connect( m_editorLineEdit, SIGNAL(returnPressed()),
-	       this, SLOT(slotEditorLineEditReturnPressed()) );
       m_editorLineEdit->setFrameStyle( QFrame::Box | QFrame::Plain );
       m_editorLineEdit->setLineWidth(1);
       if( m_validator )
 	m_editorLineEdit->setValidator( m_validator );
+      m_editorLineEdit->installEventFilter( this );
     }
 
     m_editorLineEdit->setText( item->text( col ) );
@@ -661,6 +661,7 @@ QWidget* K3bListView::prepareEditor( K3bListViewItem* item, int col )
       m_editorSpinBox = new QSpinBox( viewport() );
       connect( m_editorSpinBox, SIGNAL(valueChanged(int)),
 	       this, SLOT(slotEditorSpinBoxValueChanged(int)) );
+      m_editorSpinBox->installEventFilter( this );
     }
     // set the range
     m_editorSpinBox->setValue( item->text(col).toInt() );
@@ -673,6 +674,7 @@ QWidget* K3bListView::prepareEditor( K3bListViewItem* item, int col )
 //       m_editorMsfEdit->setLineWidth(1);
       connect( m_editorMsfEdit, SIGNAL(valueChanged(int)),
 	       this, SLOT(slotEditorMsfEditValueChanged(int)) );
+      m_editorMsfEdit->installEventFilter( this );
     }
     m_editorMsfEdit->setText( item->text(col) );
     return m_editorMsfEdit;
@@ -842,15 +844,6 @@ void K3bListView::slotEditorButtonClicked( K3bListViewItem* item, int col )
 }
 
 
-void K3bListView::focusOutEvent( QFocusEvent* e )
-{
-  // This should be enabled but due to the problem with the document view always loosing
-  // the focus it's not.
-  //  hideEditor();
-  KListView::focusOutEvent( e );
-}
-
-
 void K3bListView::setValidator( QValidator* v )
 {
   m_validator = v;
@@ -858,6 +851,31 @@ void K3bListView::setValidator( QValidator* v )
     m_editorLineEdit->setValidator( v );
   if( m_editorComboBox )
     m_editorComboBox->setValidator( v );
+}
+
+
+bool K3bListView::eventFilter( QObject* o, QEvent* e )
+{
+  if( e->type() == QEvent::KeyPress && 
+      static_cast<QKeyEvent*>(e)->key() == Key_Return ) {
+    if( o == m_editorLineEdit ) {
+      slotEditorLineEditReturnPressed();
+    }
+    else if( o == m_editorMsfEdit || o == m_editorSpinBox ) {
+      if( K3bListViewItem* nextItem = dynamic_cast<K3bListViewItem*>( m_currentEditItem->nextSibling() ) )
+	editItem( nextItem, currentEditColumn() );
+      else
+	hideEditor();
+    }
+  }
+  else if( e->type() == QEvent::FocusOut &&
+	   ( o == m_editorSpinBox ||
+	     o == m_editorMsfEdit ||
+	     o == m_editorLineEdit ||
+	     o == m_editorComboBox ) )
+    hideEditor();
+
+  return KListView::eventFilter( o, e );
 }
 
 
