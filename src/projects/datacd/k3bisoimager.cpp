@@ -630,9 +630,9 @@ bool K3bIsoImager::addMkisofsParameters()
       else if( bootItem->imageType() == K3bBootItem::NONE ) {
 	*m_process << "-no-emul-boot";
 	if( bootItem->loadSegment() > 0 )
-	  *m_process << "-boot-load-seg" << bootItem->loadSegment() ;
+	  *m_process << "-boot-load-seg" << QString::number(bootItem->loadSegment());
 	if( bootItem->loadSegment() > 0 )
-	  *m_process << "-boot-load-size" << bootItem->loadSize() ;
+	  *m_process << "-boot-load-size" << QString::number(bootItem->loadSize());
       }
 
       if( bootItem->imageType() != K3bBootItem::NONE && bootItem->noBoot() )
