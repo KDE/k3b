@@ -177,7 +177,7 @@ bool K3bCdDevice::CdDevice::init()
   cmd.clear();
   ::memset( buf, 0, sizeof(buf) );
   struct inquiry* inq = (struct inquiry*)buf;
-  cmd[0] = 0x12;  // INQUIRY
+  cmd[0] = MMC::INQUIRY;
   cmd[4] = sizeof(buf);
   cmd[5] = 0;
   if( cmd.transport( TR_DIR_READ, buf, sizeof(buf) ) ) {
@@ -200,7 +200,7 @@ bool K3bCdDevice::CdDevice::init()
 
   unsigned char header[8];
   ::memset( header, 0, 8 );
-  cmd[0] = 0x46;	// GET CONFIGURATION
+  cmd[0] = MMC::GET_CONFIGURATION;
   cmd[8] = 8;
   if( cmd.transport( TR_DIR_READ, header, 8 ) ) {
     kdDebug() << "(K3bCdDevice) " << blockDeviceName() << ": GET_CONFIGURATION failed." << endl;
@@ -852,7 +852,7 @@ bool K3bCdDevice::CdDevice::isDVD() const
 bool K3bCdDevice::CdDevice::isReady() const
 {
   ScsiCommand cmd( this );
-  cmd[0] = 0x00; // TEST UNIT READY
+  cmd[0] = MMC::TEST_UNIT_READY;
   return( cmd.transport() == 0 );
 }
 
@@ -943,7 +943,7 @@ bool K3bCdDevice::CdDevice::readDiscInfo( unsigned char** data, int& dataLen ) c
   ::memset( header, 0, 2 );
 
   ScsiCommand cmd( this );
-  cmd[0] = 0x51;   // READ DISC INFORMATION
+  cmd[0] = MMC::READ_DISK_INFORMATION;
   cmd[8] = 2;
 
   if( cmd.transport( TR_DIR_READ, header, 2 ) == 0 ) {
@@ -1707,7 +1707,7 @@ bool K3bCdDevice::CdDevice::fixupToc( K3bCdDevice::Toc& toc ) const
 bool K3bCdDevice::CdDevice::block( bool b ) const
 {
   ScsiCommand cmd( this );
-  cmd[0] = 0x1E;   // ALLOW MEDIA REMOVAL
+  cmd[0] = MMC::PREVENT_ALLOW_MEDIUM_REMOVAL;
   cmd[4] = b ? 0x1 : 0x0;
   int r = cmd.transport();
 
@@ -1739,7 +1739,7 @@ bool K3bCdDevice::CdDevice::eject() const
   block(false);
 
   ScsiCommand cmd( this );
-  cmd[0] = 0x1B;   // START/STOP UNIT
+  cmd[0] = MMC::START_STOP_UNIT;
 
   // Since all other eject methods I saw also start the unit before ejecting
   // we do it also although I don't know why...
@@ -1755,7 +1755,7 @@ bool K3bCdDevice::CdDevice::eject() const
 bool K3bCdDevice::CdDevice::load() const
 {
   ScsiCommand cmd( this );
-  cmd[0] = 0x1B;   // START/STOP UNIT
+  cmd[0] = MMC::START_STOP_UNIT;
   cmd[4] = 0x3;    // LoEj = 1, Start = 1
   return !cmd.transport();
 }
@@ -1899,7 +1899,7 @@ int K3bCdDevice::CdDevice::currentProfile() const
   ::memset( profileBuf, 0, 8 );
 
   ScsiCommand cmd( this );
-  cmd[0] = 0x46;	// GET CONFIGURATION
+  cmd[0] = MMC::GET_CONFIGURATION;
   cmd[1] = 1;
   cmd[8] = 8;
 
@@ -1957,8 +1957,6 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
       }
       inf.m_currentProfile = profile;
     }
-
-    ScsiCommand cmd( this );
 
     if( inf.diskState() != STATE_NO_MEDIA ) {
 
@@ -2129,7 +2127,7 @@ int K3bCdDevice::CdDevice::dvdMediaType() const
   unsigned char dvdheader[20];
   ::memset( dvdheader, 0, 20 );
   ScsiCommand cmd( this );
-  cmd[0] = 0xad;  // READ DVD STRUCTURE;
+  cmd[0] = MMC::READ_DVD_STRUCTURE;
   cmd[9] = 20;
   if( cmd.transport( TR_DIR_READ, dvdheader, 20 ) ) {
     kdDebug() << "(K3bCdDevice::CdDevice) Unable to read DVD structure." << endl;
@@ -2154,7 +2152,7 @@ int K3bCdDevice::CdDevice::dvdMediaType() const
 bool K3bCdDevice::CdDevice::readCapacity( K3b::Msf& r ) const
 {
   ScsiCommand cmd( this );
-  cmd[0] = 0x25;  // READ CAPACITY
+  cmd[0] = MMC::READ_CAPACITY;
   unsigned char buf[8];
   ::memset( buf, 0, 8 );
   if( cmd.transport( TR_DIR_READ, buf, 8 ) == 0 ) {
@@ -2174,7 +2172,7 @@ bool K3bCdDevice::CdDevice::readFormatCapacity( K3b::Msf& r ) const
   ::memset( header, 0, 4 );
 
   ScsiCommand cmd( this );
-  cmd[0] = 0x23;  // READ FORMAT CAPACITIES;
+  cmd[0] = MMC::READ_FORMAT_CAPACITIES;
   cmd[8] = 4;
   if( cmd.transport( TR_DIR_READ, header, 4 ) == 0 ) {
     int realLength = header[3] + 4;
@@ -2247,7 +2245,7 @@ bool K3bCdDevice::CdDevice::modeSense( unsigned char** pageData, int& pageLen, i
   ::memset( header, 0, 8 );
 
   ScsiCommand cmd( this );
-  cmd[0] = 0x5A;	// MODE SENSE
+  cmd[0] = MMC::MODE_SENSE;
   cmd[1] = 0x08;        // Disable Block Descriptors
   cmd[2] = page;
   cmd[8] = 8;           // first we determine the data length
@@ -2273,7 +2271,7 @@ bool K3bCdDevice::CdDevice::modeSense( unsigned char** pageData, int& pageLen, i
 bool K3bCdDevice::CdDevice::modeSelect( unsigned char* page, int pageLen, bool pf, bool sp ) const
 {
   ScsiCommand cmd( this );
-  cmd[0] = 0x55;	// MODE SELECT
+  cmd[0] = MMC::MODE_SELECT;
   cmd[1] = ( sp ? 1 : 0 ) | ( pf ? 0x10 : 0 );
   cmd[7] = pageLen>>8;
   cmd[8] = pageLen;
@@ -2389,7 +2387,7 @@ bool K3bCdDevice::CdDevice::readTocPmaAtip( unsigned char** data, int& dataLen, 
   ::memset( header, 0, 2 );
 
   ScsiCommand cmd( this );
-  cmd[0] = 0x43;  // READ TOC/PMA/ATIP
+  cmd[0] = MMC::READ_TOC_PMA_ATIP;
   cmd[1] = ( time ? 0x2 : 0x0 );
   cmd[2] = format & 0x0F;
   cmd[6] = track;
@@ -2427,7 +2425,7 @@ bool K3bCdDevice::CdDevice::mechanismStatus( unsigned char** data, int& dataLen 
   ::memset( header, 0, 8 );
 
   ScsiCommand cmd( this );
-  cmd[0] = 0xbd;  // MECHANISM STATUS
+  cmd[0] = MMC::MECHANISM_STATUS;
   cmd[9] = 8;     // first we read the header
   if( cmd.transport( TR_DIR_READ, header, 8 ) == 0 ) {
     // again with real length
@@ -2503,7 +2501,7 @@ bool K3bCdDevice::CdDevice::read10( unsigned char* data,
   ::memset( data, 0, dataLen );
 
   ScsiCommand cmd( this );
-  cmd[0] = 0x28;  // READ 10
+  cmd[0] = MMC::READ_10;
   cmd[1] = ( fua ? 0x8 : 0x0 );
   cmd[2] = startAdress>>24;
   cmd[3] = startAdress>>16;
@@ -2531,7 +2529,7 @@ bool K3bCdDevice::CdDevice::read12( unsigned char* data,
   ::memset( data, 0, dataLen );
 
   ScsiCommand cmd( this );
-  cmd[0] = 0xa8;  // READ 12
+  cmd[0] = MMC::READ_12;
   cmd[1] = ( fua ? 0x8 : 0x0 );
   cmd[2] = startAdress>>24;
   cmd[3] = startAdress>>16;
@@ -2569,7 +2567,7 @@ bool K3bCdDevice::CdDevice::readCd( unsigned char* data,
   ::memset( data, 0, dataLen );
 
   ScsiCommand cmd( this );
-  cmd[0] = 0xbe;  // READ CD
+  cmd[0] = MMC::READ_CD;
   cmd[1] = (sectorType<<2 & 0x1c) | ( dap ? 0x2 : 0x0 );
   cmd[2] = startAdress>>24;
   cmd[3] = startAdress>>16;
@@ -2603,7 +2601,7 @@ bool K3bCdDevice::CdDevice::readSubChannel( unsigned char** data, int& dataLen,
   ::memset( header, 0, 4 );
 
   ScsiCommand cmd( this );
-  cmd[0] = 0x42;    // READ SUB-CHANNEL
+  cmd[0] = MMC::READ_SUB_CHANNEL;
   cmd[2] = 0x40;    // SUBQ
   cmd[3] = subchannelParam;
   cmd[6] = trackNumber;   // only used when subchannelParam == 03h (ISRC)
@@ -2639,7 +2637,7 @@ bool K3bCdDevice::CdDevice::readTrackInformation( unsigned char** data, int& dat
   ::memset( header, 0, 4 );
 
   ScsiCommand cmd( this );
-  cmd[0] = 0x52;    // READ TRACK INFORMATION
+  cmd[0] = MMC::READ_TRACK_INFORMATION;
 
   switch( type ) {
   case 0:
@@ -2752,7 +2750,7 @@ int K3bCdDevice::CdDevice::getIndex( unsigned long lba ) const
 bool K3bCdDevice::CdDevice::seek( unsigned long lba ) const
 {
   ScsiCommand cmd( this );
-  cmd[0] = 0x2b;    // SEEK (10)
+  cmd[0] = MMC::SEEK_10;
   cmd[2] = lba>>24;
   cmd[3] = lba>>16;
   cmd[4] = lba>>8;
@@ -2837,7 +2835,7 @@ bool K3bCdDevice::CdDevice::getFeature( unsigned char** data, int& dataLen, unsi
   ::memset( header, 0, 8 );
 
   ScsiCommand cmd( this );
-  cmd[0] = 0x46;   // GET CONFIGURATION
+  cmd[0] = MMC::GET_CONFIGURATION;
   cmd[1] = 2;      // read only specified feature
   cmd[2] = feature>>8;
   cmd[3] = feature;

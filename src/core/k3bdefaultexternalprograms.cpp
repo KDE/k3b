@@ -524,7 +524,7 @@ bool K3bCdrdaoProgram::scan( const QString& p )
   // SuSE 9.0 ships with a patched cdrdao 1.1.7 which contains an updated libschily
   if( bin->version > K3bVersion( 1, 1, 7 ) || 
       bin->version == K3bVersion( 1, 1, 7, "-suse" ) ) {
-    bin->addFeature( "plain-atapi" );
+    //    bin->addFeature( "plain-atapi" );
     bin->addFeature( "hacked-atapi" );
   }
 

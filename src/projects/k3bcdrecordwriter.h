@@ -20,7 +20,6 @@
 
 #include "k3babstractwriter.h"
 
-#include <qvaluelist.h>
 #include <qstringlist.h>
 
 class K3bExternalBin;
@@ -99,7 +98,7 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   QStringList m_arguments;
 
  private:  
-  int m_currentTrack;
+  unsigned int m_currentTrack;
   int m_totalTracks;
   int m_totalSize;
   int m_alreadyWritten;
@@ -107,8 +106,6 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   int m_lastFifoValue;
 
   int m_cdrecordError;
-
-  QValueList<int> m_trackSizes;
 
   bool m_forceNoEject;
 

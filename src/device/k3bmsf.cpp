@@ -14,6 +14,8 @@
  */
 
 #include "k3bmsf.h"
+#include <qregexp.h>
+
 
 K3b::Msf::Msf()
   : m_minutes(0),
@@ -169,6 +171,43 @@ void K3b::Msf::makeValid()
     m_frames = 0;
   }
 }
+
+
+
+K3b::Msf K3b::Msf::fromString( const QString& s )
+{
+  //
+  // An MSF can have the following formats:
+  // 100        (treated as frames)
+  // 100:23     (minutes:seconds)
+  // 100:23:72  (minutes:seconds:frames)
+  // 100:23.72  (minutes:seconds.frames)
+  //
+  static QRegExp rx( "(\\d+)(?::([0-5]?\\d)(?:[:\\.]((?:[0-6]?\\d)|(?:7[0-4])))?)?" );
+
+  K3b::Msf msf;
+
+  if( rx.exactMatch( s ) ) {
+    //
+    // first number - cap(1)
+    // second number - cap(2)
+    // third number - cap(3)
+    //
+    if( rx.cap(2).isEmpty() ) {
+      msf.m_frames = rx.cap(1).toInt();
+    }
+    else {
+      msf.m_minutes = rx.cap(1).toInt();
+      msf.m_seconds = rx.cap(2).toInt();
+      msf.m_frames = rx.cap(3).toInt();
+    }
+  }
+
+  msf.makeValid();
+
+  return msf;
+}
+
 
 
 K3b::Msf K3b::operator+( const K3b::Msf& m1, const K3b::Msf& m2 )

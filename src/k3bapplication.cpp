@@ -31,6 +31,7 @@
 #include <k3bthread.h>
 #include <k3bpluginmanager.h>
 #include <k3bthememanager.h>
+#include <k3bmsf.h>
 
 #include <ktip.h>
 #include <klocale.h>

@@ -63,6 +63,17 @@ namespace K3b
       KIO::filesize_t mode2Form2Bytes() const;
       KIO::filesize_t audioBytes() const;
 
+      /**
+       * Convert a string representation into an Msf object.
+       *
+       * Valid strings include:
+       * \li 100       - treated as 100 frames
+       * \li 100:23    - treated as 100 minutes and 23 seconds
+       * \li 100:23:57 - treated as 100 minutes, 23 seconds, and 57 frames
+       * \li 100:23.57 - treated as 100 minutes, 23 seconds, and 57 frames
+       */
+      static Msf fromString( const QString& );
+
     private:
       void makeValid();
       int m_minutes;

@@ -75,7 +75,7 @@ K3bDoc::K3bDoc( QObject* parent )
   m_onTheFly = true;
   m_overburn = false;
   m_burnproof = true;
-  m_speed = 1;
+  m_speed = 0;  // Auto
 
   m_writingApp = K3b::DEFAULT;
   m_writingMode = K3b::WRITING_MODE_AUTO;
@@ -431,7 +431,9 @@ void K3bDoc::loadDefaultSettings( KConfig* c )
   setOnlyCreateImages( c->readBoolEntry( "only_create_image", false ) );
 
   setBurner( k3bcore->deviceManager()->findDevice( c->readEntry( "writer_device" ) ) );
-  setSpeed( c->readNumEntry( "writing_speed", burner() ? burner()->currentWriteSpeed() : 1 ) );
+
+  // Default = 0 (Auto)
+  setSpeed( c->readNumEntry( "writing_speed", burner() ? burner()->currentWriteSpeed() : 0 ) );
 }
 
 

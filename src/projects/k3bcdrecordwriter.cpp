@@ -54,6 +54,13 @@ public:
   bool running;
   bool usingBurnfree;
   int usedSpeed;
+
+  struct Track {
+    int size;
+    bool audio;
+  };
+
+  QValueList<Track> tracks;
 };
 
 
@@ -173,7 +180,7 @@ void K3bCdrecordWriter::prepareProcess()
       emit infoMessage( i18n("Writer does not support disk at once (DAO) recording"), WARNING );
   }
   else if( m_writingMode == K3b::RAW ) {
-      *m_process << "-raw";
+    *m_process << "-raw";
   }
     
   if( simulate() )
@@ -192,7 +199,7 @@ void K3bCdrecordWriter::prepareProcess()
 	*m_process << "driveropts=burnfree";
     }
     else
-      emit infoMessage( i18n("Writer does not support buffer underrun free recording (BURNPROOF)"), WARNING );
+      emit infoMessage( i18n("Writer does not support buffer underrun free recording (Burnfree)"), WARNING );
   }
   
   if( m_cue && !m_cueFile.isEmpty() ) {
@@ -276,7 +283,7 @@ void K3bCdrecordWriter::start()
   m_cdrecordError = UNKNOWN;
   m_totalTracksParsed = false;
   m_alreadyWritten = 0;
-  m_trackSizes.clear();
+  d->tracks.clear();
   m_totalSize = 0;
 
   emit newSubTask( i18n("Preparing write process...") );
@@ -343,8 +350,14 @@ bool K3bCdrecordWriter::write( const char* data, int len )
 
 void K3bCdrecordWriter::slotStdLine( const QString& line )
 {
+  static QRegExp s_burnfreeCounterRx( "^BURN\\-Free\\swas\\s(\\d+)\\stimes\\sused" );
+
   emit debuggingOutput( m_cdrecordBinObject->name(), line );
   
+  //
+  // Progress and toc parsing
+  //
+
   if( line.startsWith( "Track " ) )
     {
       if( !m_totalTracksParsed ) {
@@ -352,16 +365,20 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
 	// we always extract the tracknumber to get the highest at last
 	bool ok;
 	int tt = line.mid( 6, 2 ).toInt(&ok);
+
 	if( ok ) {
+	  struct Private::Track track;
+	  track.audio  = ( line.mid( 10, 5 ) == "audio" );
+
 	  m_totalTracks = tt;
 
 	  int sizeStart = line.find( QRegExp("\\d"), 10 );
 	  int sizeEnd = line.find( "MB", sizeStart );
-	  int ts = line.mid( sizeStart, sizeEnd-sizeStart ).toInt(&ok);
+	  track.size = line.mid( sizeStart, sizeEnd-sizeStart ).toInt(&ok);
 	  
 	  if( ok ) {
-	    m_trackSizes.append(ts);
-	    m_totalSize += ts;
+	    d->tracks.append(track);
+	    m_totalSize += track.size;
 	  }
 	  else
 	    kdDebug() << "(K3bCdrecordWriter) track number parse error: " 
@@ -454,11 +471,11 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
 	  // so we just use the track sizes and do a bit of math...
 	  //
 
-	  if( (int)m_trackSizes.count() > m_currentTrack-1 &&
+	  if( (int)d->tracks.count() > m_currentTrack-1 &&
 	      size > 0 ) {
-	    double convV = (double)m_trackSizes[m_currentTrack-1]/(double)size;
+	    double convV = (double)d->tracks[m_currentTrack-1].size/(double)size;
 	    made = (int)((double)made * convV);
-	    size = m_trackSizes[m_currentTrack-1];
+	    size = d->tracks[m_currentTrack-1].size;
 	  }
 	  else {
 	    kdError() << "(K3bCdrecordWriter) Did not parse all tracks sizes!" << endl;
@@ -477,6 +494,73 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
 	  d->speedEst->dataWritten( (m_alreadyWritten+made)*1024 );
 	}
     }
+
+  //
+  // Cdrecord starts all error and warning messages with it's path
+  //
+
+  else if( line.startsWith( m_cdrecordBinObject->path ) ) {
+    // get rid of the path and the following colon and space
+    QString errStr = line.mid( m_cdrecordBinObject->path.length() + 2 );
+
+    if( errStr.startsWith( "Drive does not support SAO" ) ) {
+      emit infoMessage( i18n("DAO (Disk At Once) recording not supported with this writer"), K3bJob::ERROR );
+      emit infoMessage( i18n("Please choose TAO (Track At Once) and try again"), K3bJob::ERROR );
+    }
+    else if( errStr.startsWith( "Drive does not support RAW" ) ) {
+      emit infoMessage( i18n("RAW recording not supported with this writer"), K3bJob::ERROR );
+    }
+    else if( errStr.startsWith("Input/output error.") ) {
+      emit infoMessage( i18n("Input/output error. Not necessarily serious."), WARNING );
+    }
+    else if( errStr.startsWith("shmget failed") ) {
+      m_cdrecordError = SHMGET_FAILED;
+    }
+    else if( errStr.startsWith("OPC failed") ) {
+      m_cdrecordError = OPC_FAILED;
+    }
+    else if( errStr.startsWith( "Drive needs to reload the media" ) ) {
+      emit infoMessage( i18n("Reloading of media required"), K3bJob::INFO );
+    }
+    else if( errStr.startsWith( "The current problem looks like a buffer underrun" ) ) {
+      m_cdrecordError = BUFFER_UNDERRUN;
+    }
+    else if( errStr.startsWith("WARNING: Data may not fit") ) {
+      k3bcore->config()->setGroup( "General Options" );
+      bool overburn = k3bcore->config()->readBoolEntry( "Allow overburning", false );
+      if( overburn && m_cdrecordBinObject->hasFeature("overburn") )
+	emit infoMessage( i18n("Trying to write more than the official disk capacity"), K3bJob::WARNING );
+      m_cdrecordError = OVERSIZE;
+    }
+    else if( errStr.startsWith("Bad Option") ) {
+      m_cdrecordError = BAD_OPTION;
+      // parse option
+      int pos = line.find( "Bad Option" ) + 13;
+      int len = line.length() - pos - 1;
+      emit infoMessage( i18n("No valid %1 option: %2").arg(m_cdrecordBinObject->name()).arg(line.mid(pos, len)), 
+			ERROR );
+    }
+    else if( errStr.startsWith("Cannot set speed/dummy") ) {
+      m_cdrecordError = CANNOT_SET_SPEED;
+    }
+    else if( errStr.startsWith("Cannot open new session") ) {
+      m_cdrecordError = CANNOT_OPEN_NEW_SESSION;
+    }
+    else if( errStr.startsWith("Cannot send CUE sheet") ) {
+      m_cdrecordError = CANNOT_SEND_CUE_SHEET;
+    }
+    else if( errStr.startsWith( "Trying to use ultra high speed medium on improper writer" ) ) {
+      m_cdrecordError = HIGH_SPEED_MEDIUM;
+    }
+    else if( errStr.startsWith( "Permission denied. Cannot open" ) ) {
+      m_cdrecordError = PERMISSION_DENIED;
+    }
+  }
+
+  //
+  // All other messages
+  //
+
   else if( line.contains( "at speed" ) ) {
     // parse the speed and inform the user if cdrdao switched it down
     int pos = line.find( "at speed" );
@@ -490,8 +574,8 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   else if( line.startsWith( "Starting new" ) ) {
     m_totalTracksParsed = true;
     if( m_currentTrack > 0 ) {// nothing has been written at the start of track 1
-      if( (int)m_trackSizes.count() > m_currentTrack-1 )
-	m_alreadyWritten += m_trackSizes[m_currentTrack-1];
+      if( (int)d->tracks.count() > m_currentTrack-1 )
+	m_alreadyWritten += d->tracks[m_currentTrack-1].size;
       else
 	kdError() << "(K3bCdrecordWriter) Did not parse all tracks sizes!" << endl;
     }
@@ -499,6 +583,15 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
       emit infoMessage( i18n("Starting writing"), INFO );
 
     m_currentTrack++;
+
+    if( m_currentTrack > d->tracks.count() ) {
+      kdDebug() << "(K3bCdrecordWriter) need to add dummy track struct." << endl;
+      struct Private::Track t;
+      t.size = 1;
+      t.audio = false;
+      d->tracks.append(t);
+    }
+
     kdDebug() << "(K3bCdrecordWriter) writing track " << m_currentTrack << " of " << m_totalTracks << " tracks." << endl;
     emit nextTrack( m_currentTrack, m_totalTracks );
   }
@@ -530,57 +623,11 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   else if( line.startsWith( "Sending" ) ) {
     emit infoMessage( i18n("Sending CUE sheet"), K3bJob::INFO );
   }
-  else if( line.contains( "Turning BURN-Proof" ) ) {
-    emit infoMessage( i18n("Enabled BURN-Proof"), K3bJob::INFO );
+  else if( line.startsWith( "Turning BURN-Free on" ) || line.startsWith( "BURN-Free is ON") ) {
+    emit infoMessage( i18n("Enabled Burnfree"), K3bJob::INFO );
   }
-  else if( line.contains( "Drive needs to reload the media" ) ) {
-    emit infoMessage( i18n("Reloading of media required"), K3bJob::INFO );
-  }
-  else if( line.contains( "The current problem looks like a buffer underrun" ) ) {
-    m_cdrecordError = BUFFER_UNDERRUN;
-  }
-  else if( line.contains( "Drive does not support SAO" ) ) {
-    emit infoMessage( i18n("DAO (Disk At Once) recording not supported with this writer"), K3bJob::ERROR );
-    emit infoMessage( i18n("Please choose TAO (Track At Once) and try again"), K3bJob::ERROR );
-  }
-  else if( line.contains("Data may not fit") ) {
-    k3bcore->config()->setGroup( "General Options" );
-    bool overburn = k3bcore->config()->readBoolEntry( "Allow overburning", false );
-    if( overburn && m_cdrecordBinObject->hasFeature("overburn") )
-      emit infoMessage( i18n("Trying to write more than the official disk capacity"), K3bJob::WARNING );
-    m_cdrecordError = OVERSIZE;
-  }
-  else if( line.contains("Bad Option") ) {
-    m_cdrecordError = BAD_OPTION;
-    // parse option
-    int pos = line.find( "Bad Option" ) + 13;
-    int len = line.length() - pos - 1;
-    emit infoMessage( i18n("No valid %1 option: %2").arg(m_cdrecordBinObject->name()).arg(line.mid(pos, len)), 
-		      ERROR );
-  }
-  else if( line.contains("shmget failed") ) {
-    m_cdrecordError = SHMGET_FAILED;
-  }
-  else if( line.contains("OPC failed") ) {
-    m_cdrecordError = OPC_FAILED;
-  }
-  else if( line.contains("Cannot set speed/dummy") ) {
-    m_cdrecordError = CANNOT_SET_SPEED;
-  }
-  else if( line.contains("Cannot open new session") ) {
-    m_cdrecordError = CANNOT_OPEN_NEW_SESSION;
-  }
-  else if( line.contains("Cannot send CUE sheet") ) {
-    m_cdrecordError = CANNOT_SEND_CUE_SHEET;
-  }
-  else if( line.contains("Input/output error.") ) {
-    emit infoMessage( i18n("Input/output error. Not necessarily serious."), WARNING );
-  }
-  else if( line.contains( "Permission denied. Cannot open" ) ) {
-    m_cdrecordError = PERMISSION_DENIED;
-  }
-  else if( line.contains( "Trying to use ultra high speed medium on improper writer" ) ) {
-    m_cdrecordError = HIGH_SPEED_MEDIUM;
+  else if( line.startsWith( "Turning BURN-Free off" ) ) {
+    emit infoMessage( i18n("Disabled Burnfree"), K3bJob::WARNING );
   }
   else if( line.startsWith( "Re-load disk and hit" ) ) {
     // this happens on some notebooks where cdrecord is not able to close the
@@ -591,6 +638,12 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
     // now send a <CR> to cdrecord
     // hopefully this will do it since I have no possibility to test it!
     m_process->writeStdin( "\n", 1 );
+  }
+  else if( s_burnfreeCounterRx.search( line ) ) {
+    bool ok;
+    int num = s_burnfreeCounterRx.cap(1).toInt(&ok);
+    if( ok )
+      emit infoMessage( i18n("Burnfree was used %1 times.").arg(num), INFO );
   }
   else {
     // debugging
@@ -701,7 +754,7 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 
 void K3bCdrecordWriter::slotThroughput( int t )
 {
-  emit writeSpeed( t, 150 );
+  emit writeSpeed( t, d->tracks[m_currentTrack-1].audio ? 175 : 150 );
 }
 
 #include "k3bcdrecordwriter.moc"

@@ -17,8 +17,8 @@
 #include "k3bdevicemanager.h"
 #include "k3bdevice.h"
 #include "k3bdeviceglobals.h"
-#include "k3bmmc.h"
 #include "k3bscsicommand.h"
+#include "k3bmmc.h"
 
 #include <qstring.h>
 #include <qstringlist.h>
@@ -61,6 +61,9 @@ typedef unsigned char u8;
 #include <scsi/scsi.h>
 #include <linux/major.h>
 
+
+// stupid stupid rat creaturs! (defines)
+#undef INQUIRY
 
 
 
@@ -441,7 +444,7 @@ bool K3bCdDevice::DeviceManager::testForCdrom(const QString& devicename)
     ::memset( buf, 0, sizeof(buf) );
 
     ScsiCommand cmd( cdromfd );
-    cmd[0] = 0x12;  // INQUIRY
+    cmd[0] = MMC::INQUIRY;
     cmd[4] = sizeof(buf);
     cmd[5] = 0;
 
