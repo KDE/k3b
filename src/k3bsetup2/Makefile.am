@@ -2,7 +2,7 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 bin_PROGRAMS = k3bsetup
 k3bsetup_SOURCES = k3bsetup2.cpp k3bsetup2page.cpp k3bsetup2finishpage.cpp k3bsetup2task.cpp main.cpp
-k3bsetup_LDADD   = ./fstab/libfstab.la ./permissions/libpermissions.la ../tools/libtools.la ../device/libdevice.la -lcdda_interface $(LIB_KIO)
+k3bsetup_LDADD   = ./fstab/libfstab.la ./permissions/libpermissions.la ../tools/libtools.la ../device/libdevice.la $(LIB_KIO)
 k3bsetup_LDFLAGS = $(all_libraries)
 
 SUBDIRS = fstab permissions
