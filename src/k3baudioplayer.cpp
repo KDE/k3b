@@ -627,8 +627,6 @@ void K3bAudioPlayer::slotRemoveSelected()
 
 void K3bAudioPlayer::slotShowContextMenu( KListView*lstView, QListViewItem* item, const QPoint& p )
 {
-    if( lstView->childCount()==0 )
-        return;
   if( item )
     m_actionRemove->setEnabled( true );
   else
