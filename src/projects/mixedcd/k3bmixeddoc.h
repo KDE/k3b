@@ -38,6 +38,8 @@ class K3bMixedDoc : public K3bDoc
 
   bool newDocument();
 
+  bool isModified() const;
+
   KIO::filesize_t size() const;
   K3b::Msf length() const;
 

@@ -56,9 +56,6 @@ class K3bAudioListView : public K3bListView
 
   QPtrList<K3bAudioTrack> selectedTracks();
 
- signals:
-  void lengthReady();
-
  private:
   void setupColumns();
   void setupPopupMenu();

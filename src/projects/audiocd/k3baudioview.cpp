@@ -40,9 +40,6 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
   m_songlist = new K3bAudioListView( this, pDoc, this );
   setMainWidget( m_songlist );
   fillStatusDisplay()->showTime();
-
-  connect( m_songlist, SIGNAL(lengthReady()), fillStatusDisplay(), SLOT(update()) );
-  connect( m_doc, SIGNAL(newTracks()), fillStatusDisplay(), SLOT(update()) );
 }
 
 K3bAudioView::~K3bAudioView(){

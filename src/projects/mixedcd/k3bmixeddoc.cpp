@@ -38,6 +38,11 @@ K3bMixedDoc::K3bMixedDoc( QObject* parent )
 {
   m_dataDoc = new K3bDataDoc( this );
   m_audioDoc = new K3bAudioDoc( this );
+
+  connect( m_dataDoc, SIGNAL(changed()),
+	   this, SIGNAL(changed()) );
+  connect( m_audioDoc, SIGNAL(changed()),
+	   this, SIGNAL(changed()) );
 }
 
 
@@ -52,6 +57,12 @@ bool K3bMixedDoc::newDocument()
   m_audioDoc->newDocument();
 
   return K3bDoc::newDocument();
+}
+
+
+bool K3bMixedDoc::isModified() const
+{
+  return ( m_audioDoc->isModified() || m_dataDoc->isModified() );
 }
 
 
@@ -94,8 +105,6 @@ void K3bMixedDoc::addUrls( const KURL::List& urls )
     dataDoc()->slotAddUrlsToDir( urls, dir );
   else
     audioDoc()->addUrls( urls );
-
-  setModified( true );
 }
 
 
@@ -190,7 +199,8 @@ bool K3bMixedDoc::saveDocumentData( QDomElement* docElem )
   }
   mixedElem.appendChild( mixedTypeElem );
 
-  setModified( false );
+  m_audioDoc->setModified( false );
+  m_dataDoc->setModified( false );
 
   return true;
 }
@@ -206,10 +216,10 @@ void K3bMixedDoc::loadDefaultSettings( KConfig* c )
   // load mixed type
   if( c->readEntry( "mixed_type" ) == "last_track" )
     m_mixedType = DATA_LAST_TRACK;
-  else if( c->readEntry( "mixed_type" ) == "second_session" )
-    m_mixedType = DATA_SECOND_SESSION;
-  else
+  else if( c->readEntry( "mixed_type" ) == "first_track" )
     m_mixedType = DATA_FIRST_TRACK;
+  else
+    m_mixedType = DATA_SECOND_SESSION;
 
   QString datamode = c->readEntry( "data_track_mode" );
   if( datamode == "mode1" )

@@ -55,12 +55,6 @@ K3bMixedView::K3bMixedView( K3bMixedDoc* doc, QWidget* parent, const char* name 
   connect( m_mixedDirTreeView, SIGNAL(dataTreeSelected()), 
 	   this, SLOT(slotDataTreeSelected()) );
 
-  connect( m_audioListView, SIGNAL(lengthReady()), fillStatusDisplay(), SLOT(update()) );
-  connect( m_doc->audioDoc(), SIGNAL(newTracks()), fillStatusDisplay(), SLOT(update()) );
-  connect( m_doc->dataDoc(), SIGNAL(itemRemoved(K3bDataItem*)), fillStatusDisplay(), SLOT(update()) );
-  connect( m_doc->dataDoc(), SIGNAL(newFileItems()), fillStatusDisplay(), SLOT(update()) );
-
-
   m_widgetStack->raiseWidget( m_dataFileView );
 
   // split

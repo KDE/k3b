@@ -230,7 +230,6 @@ void K3bAudioListView::slotAnimation()
 
   if( !animate ) {
     m_animationTimer->stop();
-    emit lengthReady();
   }
 }
 

@@ -113,16 +113,19 @@ void K3bMixedBurnDialog::setupSettingsPage()
   m_checkNormalize = K3bStdGuiItems::normalizeCheckBox( groupNormalize );
 
   m_groupMixedType = new QButtonGroup( 4, Qt::Vertical, i18n("Mixed Mode Type"), w );
-  // standard mixed mode
-  m_radioMixedTypeFirstTrack = new QRadioButton( i18n("Data in first track"), m_groupMixedType );
-  // is this a standard?
-  m_radioMixedTypeLastTrack = new QRadioButton( i18n("Data in last track"), m_groupMixedType );
 
   // Enhanced music CD/CD Extra/CD Plus format (Blue Book)
   // to fulfill the standard we also need the special file structure
   // but in the case of our simple mixed mode cd we allow to create blue book cds without
   // these special files and directories
   m_radioMixedTypeSessions = new QRadioButton( i18n("Data in second session (CD-Extra)"), m_groupMixedType );
+
+  // standard mixed mode
+  m_radioMixedTypeFirstTrack = new QRadioButton( i18n("Data in first track"), m_groupMixedType );
+
+  // is this a standard?
+  m_radioMixedTypeLastTrack = new QRadioButton( i18n("Data in last track"), m_groupMixedType );
+
   m_groupMixedType->setExclusive(true);
 
   QGridLayout* grid = new QGridLayout( w );
@@ -244,7 +247,7 @@ void K3bMixedBurnDialog::slotLoadK3bDefaults()
   m_cdtextWidget->setChecked( false );
   m_checkNormalize->setChecked(false);
 
-  m_radioMixedTypeFirstTrack->setChecked(true);
+  m_radioMixedTypeSessions->setChecked(true);
 
   m_dataModeWidget->setDataMode( K3b::DATA_MODE_AUTO );
 
@@ -268,10 +271,10 @@ void K3bMixedBurnDialog::slotLoadUserDefaults()
   // load mixed type
   if( c->readEntry( "mixed_type" ) == "last_track" )
     m_radioMixedTypeLastTrack->setChecked(true);
-  else if( c->readEntry( "mixed_type" ) == "second_session" )
-    m_radioMixedTypeSessions->setChecked(true);
-  else
+  else if( c->readEntry( "mixed_type" ) == "first_track" )
     m_radioMixedTypeFirstTrack->setChecked(true);
+  else
+    m_radioMixedTypeSessions->setChecked(true);
 
   m_dataModeWidget->loadConfig(c);
 

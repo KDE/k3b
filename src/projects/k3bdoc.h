@@ -98,7 +98,7 @@ class K3bDoc : public QObject
    * returns if the document is modified or not. Use this to determine 
    * if your document needs saving by the user on closing.
    */
-  bool isModified() { return m_modified; }
+  virtual bool isModified() { return m_modified; }
 
   /**
    * Subclasses should call this when reimplementing.
