@@ -283,7 +283,7 @@ void K3bAudioJob::cancelAll()
     bool block = m_doc->burner()->block( false );
     if( !block )
       emit infoMessage( i18n("Could not unlock CD drive."), K3bJob::ERROR );
-    else
+    else if ( k3bMain()->eject() )
       m_doc->burner()->eject();
   }
 

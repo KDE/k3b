@@ -90,8 +90,8 @@ int main(int argc, char *argv[])
 	K3bSplash* splash = new K3bSplash( k3bMainWidget );
 	splash->connect( k3bMainWidget, SIGNAL(initializationInfo(const QString&)), SLOT(addInfo(const QString&)) );
 
-	// kill the splash after 15 seconds
-	QTimer::singleShot( 15000, splash, SLOT(close()) );
+	// kill the splash after 5 seconds
+	QTimer::singleShot( 5000, splash, SLOT(close()) );
 
 	splash->show();
       }

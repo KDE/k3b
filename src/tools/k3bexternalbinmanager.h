@@ -4,6 +4,7 @@
 #include <qmap.h>
 #include <qobject.h>
 #include <qstring.h>
+#include <qstringlist.h>
 #include <qptrlist.h>
 
 
@@ -24,8 +25,12 @@ class K3bExternalBin
   const QString& name() const;
   bool isEmpty() const;
 
+  bool hasFeature( const QString& ) const;
+  void addFeature( const QString& );
+
  private:
   QString m_name;
+  QStringList m_features;
 };
 
 

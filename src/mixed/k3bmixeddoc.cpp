@@ -26,6 +26,8 @@ bool K3bMixedDoc::newDocument()
   m_dataDoc->isoOptions().setVolumeID( i18n("Project name", "Mixed") );
   m_audioDoc->newDocument();
 
+  // TODO: overwrite default settings with mixed defaults
+
   return K3bDoc::newDocument();
 }
 

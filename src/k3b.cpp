@@ -848,7 +848,8 @@ void K3bMainWindow::slotFileBurn()
     if( doc ) {
       // test if there is something to burn
       if( doc->numOfTracks() == 0 ) {
-	KMessageBox::information( kapp->mainWidget(), "There is nothing to burn!", "So what?", QString::null, false );
+	KMessageBox::information( kapp->mainWidget(), i18n("Please add files to your project first!"), 
+				  i18n("No data to burn"), QString::null, false );
       }
       else {
 	view->burnDialog();

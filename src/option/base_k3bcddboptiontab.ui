@@ -597,7 +597,7 @@
                                     <cstring>m_checkCddbp</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Query server via native cddbp instead of http (usefull for a local cddbp server)</string>
+                                    <string>Query server via native cddbp instead of http (useful for a local cddbp server)</string>
                                 </property>
                             </widget>
                             <widget class="QFrame">

@@ -184,21 +184,22 @@ void K3bAudioTrackDialog::setupGui()
   optionsGrid->setSpacing( spacingHint() );
   optionsGrid->setMargin( marginHint() );
 
-  QGroupBox* groupPregap = new QGroupBox( 2, Qt::Horizontal, i18n( "Pre&gap" ), optionsTab );
-  groupPregap->layout()->setMargin( marginHint() );
-  groupPregap->layout()->setSpacing( spacingHint() );
-  m_inputPregap       = new KIntNumInput( groupPregap, "m_inputPregap" );
-  m_comboPregapFormat = new QComboBox( groupPregap );
+  QLabel* labelPregap = new QLabel( i18n("&Pregap:"), optionsTab );
+  m_inputPregap       = new KIntNumInput( optionsTab, "m_inputPregap" );
+  m_comboPregapFormat = new QComboBox( optionsTab );
+  labelPregap->setBuddy( m_inputPregap );
 
-  m_checkPreEmp       = new QCheckBox( i18n( "Preemphasis" ), optionsTab, "m_checkPreEmp" );
-  m_checkCopy         = new QCheckBox( i18n( "Copy protected" ), optionsTab, "m_checkCopy" );
+  m_checkPreEmp       = new QCheckBox( i18n( "Pr&eemphasis" ), optionsTab, "m_checkPreEmp" );
+  m_checkCopy         = new QCheckBox( i18n( "&Copy protected" ), optionsTab, "m_checkCopy" );
 
   m_comboPregapFormat->insertItem( i18n("Seconds" ) );
   m_comboPregapFormat->insertItem( i18n("Frames" ) );
 
-  optionsGrid->addMultiCellWidget( groupPregap, 0, 1, 1, 1 );
-  optionsGrid->addWidget( m_checkPreEmp, 0, 0 );
-  optionsGrid->addWidget( m_checkCopy, 1, 0 );
+  optionsGrid->addWidget( labelPregap, 0, 0 );
+  optionsGrid->addWidget( m_inputPregap, 0, 1 );
+  optionsGrid->addWidget( m_comboPregapFormat, 0, 2 );
+  optionsGrid->addMultiCellWidget( m_checkPreEmp, 1, 1, 0, 2 );
+  optionsGrid->addMultiCellWidget( m_checkCopy, 2, 2, 0, 2 );
 
   optionsGrid->setRowStretch( 3, 1 );
   // /////////////////////////////////////////////////

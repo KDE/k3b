@@ -73,6 +73,29 @@ const QString& K3bExternalBin::name() const
 }
 
 
+bool K3bExternalBin::hasFeature( const QString& f ) const
+{
+  return m_features.contains( f );
+}
+
+
+void K3bExternalBin::addFeature( const QString& f )
+{
+  m_features.append( f );
+
+  // cdrecord features:
+  // -clone
+  // gracetime
+  // -overburn
+
+  // readcd features:
+  // -clone
+
+  // mkisofs features:
+  // -udf
+}
+
+
 K3bExternalBinManager::K3bExternalBinManager( QObject* parent )
   : QObject( parent )
 {

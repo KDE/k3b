@@ -257,6 +257,9 @@ void K3bAudioDoc::removeTrack( K3bAudioTrack* track )
 
 void K3bAudioDoc::moveTrack( const K3bAudioTrack* track, const K3bAudioTrack* after )
 {
+  if( track == after )
+    return;
+
   // set the current item to track
   m_tracks->findRef( track );
   // take the current item

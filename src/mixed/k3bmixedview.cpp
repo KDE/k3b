@@ -1,6 +1,8 @@
 #include "k3bmixedview.h"
 
 #include "k3bmixeddoc.h"
+#include "k3bmixedburndialog.h"
+
 #include "../audio/k3baudiodoc.h"
 #include "../data/k3bdatadirtreeview.h"
 #include "../data/k3bdataviewitem.h"
@@ -25,6 +27,7 @@ K3bMixedView::K3bMixedView( K3bMixedDoc* doc, QWidget* parent, const char* name 
   m_dataDirTreeView = new K3bDataDirTreeView( this, doc->dataDoc(), splitter );
   m_widgetStack = new QWidgetStack( splitter );
   m_dataFileView = new K3bDataFileView( this, m_dataDirTreeView, doc->dataDoc(), m_widgetStack );
+  m_dataDirTreeView->setFileView( m_dataFileView );
   m_audioListView = new K3bAudioListView( this, doc->audioDoc(), m_widgetStack );
 
   m_fillStatusDisplay = new K3bFillStatusDisplay( doc, this );
@@ -71,7 +74,8 @@ void K3bMixedView::slotUrlsDropped( const KURL::List& urls, QListViewItem* item 
 
 void K3bMixedView::burnDialog( bool withWritingButton )
 {
-  kdDebug() << "MixedView::burnDialog - not implemented yet" << endl;
+  K3bMixedBurnDialog d( m_doc, this );
+  d.exec( withWritingButton );
 }
 
 #include "k3bmixedview.moc"

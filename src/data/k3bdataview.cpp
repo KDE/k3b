@@ -48,6 +48,7 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
   QSplitter* mainSplitter = new QSplitter( this );	
   m_dataDirTree = new K3bDataDirTreeView( this, doc, mainSplitter );
   m_dataFileView = new K3bDataFileView( this, m_dataDirTree, doc, mainSplitter );
+  m_dataDirTree->setFileView( m_dataFileView );
   m_fillStatusDisplay = new K3bFillStatusDisplay( doc, this );
 	
   QVBoxLayout* box = new QVBoxLayout( this );
