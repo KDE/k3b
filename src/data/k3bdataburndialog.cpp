@@ -21,10 +21,10 @@
 #include "../device/k3bdevice.h"
 #include "../k3bwriterselectionwidget.h"
 #include "../k3btempdirselectionwidget.h"
-#include "k3bisovalidator.h"
 #include "../k3bisooptions.h"
 #include "k3bdataimagesettingswidget.h"
 #include "k3bdataadvancedimagesettingswidget.h"
+#include "k3bdatavolumedescwidget.h"
 
 #include <qcheckbox.h>
 #include <qframe.h>
@@ -107,8 +107,8 @@ K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const ch
   setupSettingsTab( f3 );
   setupAdvancedTab( f4 );
 
-  //  connect( m_checkDiscardSymLinks, SIGNAL(toggled(bool)), m_checkFollowSymbolicLinks, SLOT(setDisabled(bool)) );
-  //  connect( m_checkCreateRockRidge, SIGNAL(toggled(bool)), m_checkDiscardSymLinks, SLOT(setEnabled(bool)) );
+  connect( m_imageSettingsWidget->m_checkDiscardAllLinks, SIGNAL(toggled(bool)), 
+	   m_advancedImageSettingsWidget->m_checkFollowSymbolicLinks, SLOT(setDisabled(bool)) );
 	
   tab->addTab( f1, i18n("Burning") );
   tab->addTab( f2, i18n("Volume Desc") );
@@ -157,15 +157,8 @@ void K3bDataBurnDialog::saveSettings()
   // save iso image settings
   m_imageSettingsWidget->save( ((K3bDataDoc*)doc())->isoOptions() );
   m_advancedImageSettingsWidget->save( ((K3bDataDoc*)doc())->isoOptions() );
-
+  m_volumeDescWidget->save( ((K3bDataDoc*)doc())->isoOptions() );
 	
-  ((K3bDataDoc*)doc())->isoOptions().setVolumeID( m_editVolumeID->text() );
-  ((K3bDataDoc*)doc())->isoOptions().setVolumeSetId( m_editVolumeSetId->text() );
-  ((K3bDataDoc*)doc())->isoOptions().setApplicationID( m_editApplicationID->text() );
-  ((K3bDataDoc*)doc())->isoOptions().setSystemId( m_editSystemId->text() );
-  ((K3bDataDoc*)doc())->isoOptions().setPublisher( m_editPublisher->text() );
-  ((K3bDataDoc*)doc())->isoOptions().setPreparer( m_editPreparer->text() );
-  // ------------------------------------- saving mkisofs-options --
 
   // save image file path
   ((K3bDataDoc*)doc())->setIsoImage( m_tempDirSelectionWidget->tempPath() );  
@@ -191,14 +184,6 @@ void K3bDataBurnDialog::readSettings()
   m_checkOnlyCreateImage->setChecked( ((K3bDataDoc*)doc())->onlyCreateImage() );
   m_checkDeleteImage->setChecked( ((K3bDataDoc*)doc())->deleteImage() );
 	
-  m_editVolumeID->setText(  ((K3bDataDoc*)doc())->isoOptions().volumeID() );
-  m_editVolumeSetId->setText(  ((K3bDataDoc*)doc())->isoOptions().volumeSetId() );
-  m_editApplicationID->setText(  ((K3bDataDoc*)doc())->isoOptions().applicationID() );
-  m_editSystemId->setText(  ((K3bDataDoc*)doc())->isoOptions().systemId() );
-  m_editPublisher->setText(  ((K3bDataDoc*)doc())->isoOptions().publisher() );
-  m_editPreparer->setText(  ((K3bDataDoc*)doc())->isoOptions().preparer() );
-
-
   // read multisession 
   switch( ((K3bDataDoc*)doc())->multiSessionMode() ) {
   case K3bDataDoc::START:
@@ -221,6 +206,7 @@ void K3bDataBurnDialog::readSettings()
 
   m_imageSettingsWidget->load( ((K3bDataDoc*)doc())->isoOptions() );
   m_advancedImageSettingsWidget->load( ((K3bDataDoc*)doc())->isoOptions() );
+  m_volumeDescWidget->load( ((K3bDataDoc*)doc())->isoOptions() );
 
   K3bProjectBurnDialog::readSettings();
 }
@@ -357,73 +343,9 @@ void K3bDataBurnDialog::setupVolumeInfoTab( QFrame* frame )
   frameLayout->setSpacing( spacingHint() );
   frameLayout->setMargin( marginHint() );
 
-  QLabel* labelVolumeId = new QLabel( i18n( "&Volume name:" ), frame, "m_labelVolumeID" );
-  QLabel* labelVolumeSetId = new QLabel( i18n( "Volume &set name:" ), frame, "m_labelVolumeSetID" );
-  QLabel* labelPublisher = new QLabel( i18n( "&Publisher:" ), frame, "m_labelPublisher" );
-  QLabel* labelPreparer = new QLabel( i18n( "P&reparer:" ), frame, "m_labelPreparer" );
-  QLabel* labelSystemId = new QLabel( i18n( "S&ystem:" ), frame, "m_labelSystemID" );
-  QLabel* labelApplication = new QLabel( i18n( "&Application:" ), frame, "m_labelApplicationID" );
+  m_volumeDescWidget = new K3bDataVolumeDescWidget( frame );
 
-  frameLayout->addWidget( labelVolumeId, 0, 0 );
-  frameLayout->addWidget( labelVolumeSetId, 1, 0 );
-  frameLayout->addWidget( labelPublisher, 2, 0 );
-  frameLayout->addWidget( labelPreparer, 3, 0 );
-  frameLayout->addWidget( labelSystemId, 4, 0 );
-  frameLayout->addWidget( labelApplication, 5, 0 );
-
-  // are this really the allowed characters? What about Joliet or UDF?
-  K3bIsoValidator* isoValidator = new K3bIsoValidator( this, "isoValidator" );
-
-  m_editVolumeID = new KLineEdit( frame, "m_editVolumeID" );
-  m_editVolumeID->setValidator( isoValidator );
-  m_editVolumeID->setMaxLength( 32 );
-  m_editVolumeSetId = new KLineEdit( frame, "m_editVolumeSetID" );
-  m_editVolumeSetId->setValidator( isoValidator );
-  m_editVolumeSetId->setMaxLength( 128 );
-  m_editPublisher = new KLineEdit( frame, "m_editPublisher" );
-  m_editPublisher->setValidator( isoValidator );
-  m_editPublisher->setMaxLength( 128 );
-  m_editPreparer = new KLineEdit( frame, "m_editPreparer" );
-  m_editPreparer->setValidator( isoValidator );
-  m_editPreparer->setMaxLength( 128 );
-  m_editSystemId = new KLineEdit( frame, "m_editSystemID" );
-  m_editSystemId->setValidator( isoValidator );
-  m_editSystemId->setMaxLength( 32 );
-  m_editApplicationID = new KLineEdit( frame, "m_editApplicationID" );
-  m_editApplicationID->setValidator( isoValidator );
-  m_editApplicationID->setMaxLength( 128 );
-
-  frameLayout->addWidget( m_editVolumeID, 0, 1 );
-  frameLayout->addWidget( m_editVolumeSetId, 1, 1 );
-  frameLayout->addWidget( m_editPublisher, 2, 1 );
-  frameLayout->addWidget( m_editPreparer, 3, 1 );
-  frameLayout->addWidget( m_editSystemId, 4, 1 );
-  frameLayout->addWidget( m_editApplicationID, 5, 1 );
-
-  frameLayout->setRowStretch( 6, 1 );
-
-  labelVolumeId->setBuddy( m_editVolumeID );
-  labelVolumeSetId->setBuddy( m_editVolumeSetId );
-  labelPublisher->setBuddy( m_editPublisher );
-  labelPreparer->setBuddy( m_editPreparer );
-  labelSystemId->setBuddy( m_editSystemId );
-  labelApplication->setBuddy( m_editApplicationID );
-
-
-
-  QToolTip::add( m_editSystemId, i18n("") );
-  QToolTip::add( m_editVolumeID, i18n("") );
-  QToolTip::add( m_editVolumeSetId, i18n("") );
-  QToolTip::add( m_editPublisher, i18n("") );
-  QToolTip::add( m_editPreparer, i18n("") );
-  QToolTip::add( m_editApplicationID, i18n("") );
-
-  QWhatsThis::add( m_editSystemId, i18n("") );
-  QWhatsThis::add( m_editVolumeID, i18n("") );
-  QWhatsThis::add( m_editVolumeSetId, i18n("") );
-  QWhatsThis::add( m_editPublisher, i18n("") );
-  QWhatsThis::add( m_editPreparer, i18n("") );
-  QWhatsThis::add( m_editApplicationID, i18n("") );
+  frameLayout->addWidget( m_volumeDescWidget, 0, 0 );
 }
 
 
@@ -501,17 +423,6 @@ void K3bDataBurnDialog::slotOk()
 }
 
 
-void K3bDataBurnDialog::slotConvertAllToUpperCase()
-{
-  m_editApplicationID->setText( m_editApplicationID->text().upper() );
-  m_editSystemId->setText( m_editSystemId->text().upper() );
-  m_editVolumeID->setText( m_editVolumeID->text().upper() );
-  m_editVolumeSetId->setText( m_editVolumeSetId->text().upper() );
-  m_editPublisher->setText( m_editPublisher->text().upper() );
-  m_editPreparer->setText( m_editPreparer->text().upper() );
-}
-
-
 void K3bDataBurnDialog::slotOnlyCreateImageToggled( bool on )
 {
   m_checkDeleteImage->setChecked( !on );
@@ -530,6 +441,7 @@ void K3bDataBurnDialog::loadDefaults()
 
   m_imageSettingsWidget->load( K3bIsoOptions::defaults() );
   m_advancedImageSettingsWidget->load( K3bIsoOptions::defaults() );
+  m_volumeDescWidget->load( K3bIsoOptions::defaults() );
 }
 
 
@@ -549,6 +461,7 @@ void K3bDataBurnDialog::loadUserDefaults()
   K3bIsoOptions o = K3bIsoOptions::load( c );
   m_imageSettingsWidget->load( o );
   m_advancedImageSettingsWidget->load( o );
+  m_volumeDescWidget->load( o );
 }
 
 
@@ -569,6 +482,7 @@ void K3bDataBurnDialog::saveUserDefaults()
   K3bIsoOptions o;
   m_imageSettingsWidget->save( o );
   m_advancedImageSettingsWidget->save( o );
+  m_volumeDescWidget->save( o );
   o.save( c );
 
 

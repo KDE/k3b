@@ -1,0 +1,153 @@
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<class>base_K3bDataVolumeDescWidget</class>
+<author>Sebastian Trueg</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>base_K3bDataVolumeDescWidget</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>600</width>
+            <height>480</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Volume Descriptor</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <property name="spacing">
+            <number>6</number>
+        </property>
+        <widget class="QLabel" row="5" column="0">
+            <property name="name">
+                <cstring>TextLabel6</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Application:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>m_editApplication</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="1" column="1">
+            <property name="name">
+                <cstring>m_editVolumeSetName</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="2" column="0">
+            <property name="name">
+                <cstring>TextLabel3</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Publisher:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>m_editPublisher</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="4" column="0">
+            <property name="name">
+                <cstring>TextLabel5</cstring>
+            </property>
+            <property name="text">
+                <string>S&amp;ystem:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>m_editSystem</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="3" column="0">
+            <property name="name">
+                <cstring>TextLabel4</cstring>
+            </property>
+            <property name="text">
+                <string>P&amp;reparer:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>m_editPreparer</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="0" column="1">
+            <property name="name">
+                <cstring>m_editVolumeName</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="2" column="1">
+            <property name="name">
+                <cstring>m_editPublisher</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="3" column="1">
+            <property name="name">
+                <cstring>m_editPreparer</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="4" column="1">
+            <property name="name">
+                <cstring>m_editSystem</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="5" column="1">
+            <property name="name">
+                <cstring>m_editApplication</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>TextLabel1</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Volume name:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>m_editVolumeName</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>TextLabel2</cstring>
+            </property>
+            <property name="text">
+                <string>Volume &amp;set name:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>m_editVolumeSetName</cstring>
+            </property>
+        </widget>
+        <spacer row="6" column="1">
+            <property name="name" stdset="0">
+                <cstring>Spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+    </grid>
+</widget>
+<tabstops>
+    <tabstop>m_editVolumeName</tabstop>
+    <tabstop>m_editVolumeSetName</tabstop>
+    <tabstop>m_editPublisher</tabstop>
+    <tabstop>m_editPreparer</tabstop>
+    <tabstop>m_editSystem</tabstop>
+    <tabstop>m_editApplication</tabstop>
+</tabstops>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

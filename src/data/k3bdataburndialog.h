@@ -33,6 +33,8 @@ class K3bDataDoc;
 class KLineEdit;
 class K3bDataImageSettingsWidget;
 class K3bDataAdvancedImageSettingsWidget;
+class K3bDataVolumeDescWidget;
+
 
 /**
   *@author Sebastian Trueg
@@ -66,14 +68,9 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    K3bWriterSelectionWidget* m_writerSelectionWidget;
    // ----------------------------------------------
 
-   // --- settings tab ---------------------------
-   KLineEdit* m_editSystemId;
-   KLineEdit* m_editVolumeID;
-   KLineEdit* m_editVolumeSetId;
-   KLineEdit* m_editPublisher;
-   KLineEdit* m_editPreparer;
-   KLineEdit* m_editApplicationID;
+   K3bDataVolumeDescWidget* m_volumeDescWidget;
 
+   // --- settings tab ---------------------------
    K3bDataImageSettingsWidget* m_imageSettingsWidget;
    // ----------------------------------------------
 	
@@ -98,12 +95,6 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    void loadDefaults();
    void loadUserDefaults();
    void saveUserDefaults();
-
-   /**
-    * converts all the ISO-header field strings
-    * to upercase
-    */
-   void slotConvertAllToUpperCase();
 
    void slotOnlyCreateImageToggled( bool on );
 };
