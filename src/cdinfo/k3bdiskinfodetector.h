@@ -7,6 +7,7 @@
 typedef Q_INT32 size32;
 
 #include "k3bdiskinfo.h"
+#include "../rip/k3btcwrapper.h"
 
 
 class K3bDevice;
@@ -22,9 +23,8 @@ class K3bDiskInfoDetector : public QObject
 
  public slots:
   void detect( K3bDevice* dev );
- 
   /**
-   * no diskInfoReady signal will be emitted 
+   * no diskInfoReady signal will be emitted
    */
   void finish(bool success);
 
@@ -36,10 +36,13 @@ class K3bDiskInfoDetector : public QObject
   void fetchTocInfo();
   void fetchIsoInfo();
   void calculateDiscId();
+  void testForVideoDvd();
+  void slotIsVideoDvd( bool dvd );
 
  private:
   K3bDevice* m_device;
   K3bDiskInfo m_info;
+  K3bTcWrapper* m_tcWrapper;
   int m_cdfd;
 };
 

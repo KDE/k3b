@@ -16,10 +16,11 @@ class K3bDiskInfo
     : empty(false), 
     cdrw(false), 
     appendable(false), 
-    noDisk(true), 
-    size(0), 
+    noDisk(true),
+    isVideoDvd(false),
+    size(0),
     remaining(0),
-    speed(0), 
+    speed(0),
     sessions(0),
     tocType(UNKNOWN),
     valid(false),
@@ -38,6 +39,7 @@ class K3bDiskInfo
   bool cdrw;
   bool appendable;
   bool noDisk;
+  bool isVideoDvd;
 
   unsigned long size;
   unsigned long remaining;

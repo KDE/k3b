@@ -20,7 +20,8 @@
 
 
 K3bDiskInfoDetector::K3bDiskInfoDetector( QObject* parent )
-  : QObject( parent )
+  : QObject( parent ),
+  m_tcWrapper(0)
 {
 }
 
@@ -188,9 +189,9 @@ void K3bDiskInfoDetector::fetchTocInfo()
     m_info.empty = false;
     m_info.noDisk = false;
     m_info.tocType = K3bDiskInfo::DVD;
-  }    
-
-  finish(true);
+    testForVideoDvd();
+  } else
+     finish(true);
 }
 
 void K3bDiskInfoDetector::fetchIsoInfo()
@@ -229,5 +230,36 @@ void K3bDiskInfoDetector::calculateDiscId()
 
   kdDebug() << "(K3bDiskInfoDetector) calculated disk id: " << id << endl;
 }
+
+void K3bDiskInfoDetector::testForVideoDvd()
+{
+
+  if( K3bTcWrapper::supportDvd() ) {
+    // check if it is a dvd we can display
+
+    if( !m_tcWrapper ) {
+      kdDebug() << "(K3bDiskInfoDetector) testForVideoDvd" << endl;
+      m_tcWrapper = new K3bTcWrapper( this );
+      connect( m_tcWrapper, SIGNAL(successfulDvdCheck(bool)), this, SLOT(slotIsVideoDvd(bool)) );
+    }
+
+    m_tcWrapper->isDvdInsert( m_device );
+
+  }
+  else
+    finish(true);
+}
+
+void K3bDiskInfoDetector::slotIsVideoDvd( bool dvd )
+{
+  if( dvd ) {
+    m_info.empty = false;
+    m_info.noDisk = false;
+    m_info.isVideoDvd = true;
+  }
+
+  finish(true);
+}
+
 
 #include "k3bdiskinfodetector.moc"

@@ -1,6 +1,6 @@
-/* 
+/*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -208,9 +208,13 @@ void K3bDirView::slotDiskInfoReady( const K3bDiskInfo& info )
     m_bViewDiskInfo = false;
   }
   else if( info.tocType == K3bDiskInfo::DVD  ) {
-    m_movieView->setDevice( info.device );
-    m_viewStack->raiseWidget( m_movieView );
-    m_movieView->reload();
+    if( info.isVideoDvd ) {
+      m_movieView->setDevice( info.device );
+      m_viewStack->raiseWidget( m_movieView );
+      m_movieView->reload();
+    }
+    else
+      slotMountDevice( info.device );
   }
   else if( info.tocType == K3bDiskInfo::DATA  ) {
     slotMountDevice( info.device );
