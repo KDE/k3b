@@ -250,14 +250,23 @@ void K3bFilmView::slotDvdChecked( bool successful ){
 
 void K3bFilmView::slotTitleSelected(QListViewItem*item){
     int row = m_titleView->itemIndex( item );
+    qDebug(" Item row %i", row);
     QString tmp = item->text(0);
     if( tmp.contains( i18n("Title") ) ){
-        row = tmp.right(1).toInt()-1;
+        if(row > 8){
+            row = tmp.right(2).toInt()-1;
+        } else {
+            row = tmp.right(1).toInt()-1;
+        }
     } else {
         if( item->text(0).right(1).toInt() != 1){
             QMessageBox::critical( this, i18n("DVD Error"), i18n("Angle information not supported, title selection always use angle 1."), i18n("Ok") );
         } else {
-            row = item->parent()->text(0).right(1).toInt() - 1;
+            if( row > 8 ){
+                    row = item->parent()->text(0).right(2).toInt() - 1;
+                } else {
+                    row = item->parent()->text(0).right(1).toInt() - 1;
+                }
         }
     }
     kdDebug() << "(K3bFilmView) Show title information for entry <" << row << ">" << endl;
