@@ -47,7 +47,7 @@ K3bAudioDataSource* K3bAudioDataSource::take()
     
     m_prev = m_next = 0;
     
-    m_track->sourceChanged( this );
+    emitChange();
     m_track = 0;
   }
 
@@ -82,7 +82,7 @@ void K3bAudioDataSource::moveAfter( K3bAudioDataSource* source )
   m_next = oldNext;
 
   m_track = source->track();
-  m_track->sourceChanged( this );
+  emitChange();
 }
 
 
@@ -117,5 +117,12 @@ void K3bAudioDataSource::moveAhead( K3bAudioDataSource* source )
   if( !m_prev )
     m_track->setFirstSource( this );
 
-  m_track->sourceChanged( this );
+  emitChange();
+}
+
+
+void K3bAudioDataSource::emitChange()
+{
+  if( m_track )
+    m_track->sourceChanged( this );
 }

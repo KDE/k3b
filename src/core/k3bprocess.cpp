@@ -20,6 +20,11 @@
 
 #include <qstringlist.h>
 #include <qsocketnotifier.h>
+#include <qthread.h>
+#include <qptrqueue.h>
+#include <qmutex.h>
+#include <qevent.h>
+#include <qapplication.h>
 
 #include <kdebug.h>
 
@@ -28,10 +33,14 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <fcntl.h>
+#include <string.h>
+#include <errno.h>
+
+// some bogus event number
+static const QEvent::Type StderrEvent = (QEvent::Type)1111;
 
 
-
-class K3bProcess::Private
+class K3bProcess::Data
 {
 public:
   QString unfinishedStdoutLine;
@@ -42,26 +51,76 @@ public:
 
   bool rawStdin;
   bool rawStdout;
+  bool threadedStderr;
 
   int in[2];
   int out[2];
+  int stderr[2];
+
+  bool suppressEmptyLines;
+
+  QPtrQueue<QString> stderrQueue;
+  QMutex stderrMutex;
+};
+
+
+class K3bProcess::StderrThread : public QThread
+{
+public:
+  StderrThread( K3bProcess* process )
+    : QThread(),
+      m_process(process),
+      m_data(process->d) {
+  }
+
+  // It is important that stderr is blocking!
+
+  void run() {
+    kdDebug() << "(K3bProcess::StderrThread) reading from " << m_data->stderr[0] << endl;
+    char buffer[1024];
+    int r = 0;
+    while( ( r = ::read( m_data->stderr[0], buffer, 1024 ) ) > 0 ) {
+      // queue the data
+      QStringList lines = K3bProcess::splitOutput( buffer, r, 
+						   unfinishedLine, 
+						   m_data->suppressEmptyLines );
+      m_data->stderrMutex.lock();
+      for( QStringList::iterator it = lines.begin(); it != lines.end(); ++it )
+	m_data->stderrQueue.enqueue( new QString( *it ) );
+      m_data->stderrMutex.unlock();
+
+      if( !m_data->stderrQueue.isEmpty() )
+	QApplication::postEvent( m_process, new QEvent( StderrEvent ) );
+    }
+    if( r < 0 )
+      kdDebug() << "(K3bProcess::StderrThread) read error: " << r << " (" << strerror(errno) << ")" << endl;
+    kdDebug() << "(K3bProcess::StderrThread) finished" << endl;
+  }
+
+  K3bProcess* m_process;
+  K3bProcess::Data* m_data;
+  QString unfinishedLine;
 };
 
 
 K3bProcess::K3bProcess()
   : KProcess(),
-    m_bSplitStdout(false),
-    m_suppressEmptyLines(true)
+    m_bSplitStdout(false)
 {
-  d = new Private();
+  d = new Data();
   d->dupStdinFd = d->dupStdoutFd = -1;
   d->rawStdout = d->rawStdin = false;
   d->in[0] = d->in[1] = -1;
   d->out[0] = d->out[1] = -1;
+  d->suppressEmptyLines = true;
+  d->threadedStderr = false;
+  m_stderrThread = 0;
 }
 
 K3bProcess::~K3bProcess()
 {
+  delete m_stderrThread;
+  d->stderrQueue.setAutoDelete(true);
   delete d;
 }
 
@@ -107,24 +166,79 @@ bool K3bProcess::start( RunMode run, Communication com )
 	     this, SLOT(slotSplitStdout(KProcess*, char*, int)) );
   }
 
-  return KProcess::start( run, com );
+  if( KProcess::start( run, com ) ) {
+    if( d->threadedStderr ) {
+      if( !m_stderrThread )
+	m_stderrThread = new StderrThread( this );
+      m_stderrThread->start();
+    }
+     
+    return true;
+  }
+  else
+    return false;
 }
 
 
 void K3bProcess::slotSplitStdout( KProcess*, char* data, int len )
 {
-  if( m_bSplitStdout )
-    splitOutput( data, len, true );
+  if( m_bSplitStdout ) {
+    QStringList lines = splitOutput( data, len, d->unfinishedStdoutLine, d->suppressEmptyLines );
+
+    for( QStringList::iterator it = lines.begin(); it != lines.end(); ++it ) {
+      QString& str = *it;
+      
+      // just to be sure since something in splitOutput does not do this right
+      if( d->suppressEmptyLines && str.isEmpty() )
+	continue;
+
+      emit stdoutLine( str );
+    }
+  }
 }
 
 
 void K3bProcess::slotSplitStderr( KProcess*, char* data, int len )
 {
-  splitOutput( data, len, false );
+  QStringList lines = splitOutput( data, len, d->unfinishedStderrLine, d->suppressEmptyLines );
+
+  for( QStringList::iterator it = lines.begin(); it != lines.end(); ++it ) {
+    QString& str = *it;
+
+    // just to be sure since something in splitOutput does not do this right
+    if( d->suppressEmptyLines && str.isEmpty() )
+      continue;
+
+    emit stderrLine( str );
+  }
 }
 
 
-void K3bProcess::splitOutput( char* data, int len, bool stdout )
+bool K3bProcess::event( QEvent* e )
+{
+  if( e->type() == StderrEvent ) {
+    handleStderrQueue();
+    return true;
+  }
+  else
+    return KProcess::event(e);
+}
+
+
+void K3bProcess::handleStderrQueue()
+{
+  while( !d->stderrQueue.isEmpty() ) {
+    d->stderrMutex.lock();
+    QString* line = d->stderrQueue.dequeue();
+    d->stderrMutex.unlock();
+    emit stderrLine( *line );
+    delete line;
+  }
+}
+
+
+QStringList K3bProcess::splitOutput( char* data, int len, 
+				     QString& unfinishedLine, bool suppressEmptyLines )
 {
   //
   // The stderr splitting is mainly used for parsing of messages
@@ -146,18 +260,16 @@ void K3bProcess::splitOutput( char* data, int len, bool stdout )
       buffer += data[i];
   }
 
-  QStringList lines = QStringList::split( '\n', buffer, !m_suppressEmptyLines );
+  QStringList lines = QStringList::split( '\n', buffer, !suppressEmptyLines );
 
   // in case we suppress empty lines we need to handle the following separately
   // to make sure we join unfinished lines correctly
-  if( m_suppressEmptyLines && buffer[0] == '\n' )
+  if( suppressEmptyLines && buffer[0] == '\n' )
     lines.prepend( QString::null );
 
-  QString* unfinishedLine = ( stdout ? &d->unfinishedStdoutLine : &d->unfinishedStderrLine );
-
-  if( !unfinishedLine->isEmpty() ) {
-    lines.first().prepend( *unfinishedLine );
-    *unfinishedLine = "";
+  if( !unfinishedLine.isEmpty() ) {
+    lines.first().prepend( unfinishedLine );
+    unfinishedLine.truncate(0);
 
     kdDebug() << "(K3bProcess)           joined line: '" << (lines.first()) << "'" << endl;
   }
@@ -171,24 +283,13 @@ void K3bProcess::splitOutput( char* data, int len, bool stdout )
   if( hasUnfinishedLine ) {
     kdDebug() << "(K3bProcess) found unfinished line: '" << lines.last() << "'" << endl;
     kdDebug() << "(K3bProcess)             last char: '" << buffer.right(1) << "'" << endl;
-    *unfinishedLine = lines.last();
+    unfinishedLine = lines.last();
     it = lines.end();
     --it;
     lines.remove(it);
   }
 
-  for( it = lines.begin(); it != lines.end(); ++it ) {
-    QString& str = *it;
-
-    // just to be sure since something above does not do this right
-    if( str.isEmpty() )
-      continue;
-
-    if( stdout )
-      emit stdoutLine( str );
-    else
-      emit stderrLine( str );
-  }
+  return lines;
 }
 
 
@@ -223,6 +324,24 @@ int K3bProcess::setupCommunication( Communication comm )
       }
     }
 
+    if( d->threadedStderr ) {
+      if(socketpair(AF_UNIX, SOCK_STREAM, 0, d->stderr) == 0 ) {
+	fcntl(d->stderr[0], F_SETFD, FD_CLOEXEC);
+	fcntl(d->stderr[1], F_SETFD, FD_CLOEXEC);
+      }
+      else {
+	if( d->rawStdin || d->dupStdinFd ) {
+	  close(d->in[0]);
+	  close(d->in[1]);
+	}
+	if( d->rawStdout || d->dupStdoutFd ) {
+	  close(d->out[0]);
+	  close(d->out[1]);
+	}
+	return 0;
+      }
+    }
+
     return 1;
   }
   else
@@ -240,6 +359,16 @@ void K3bProcess::commClose()
     close(d->out[0]);
     d->out[0] = -1;
   }
+  if( d->threadedStderr ) {
+
+    // clear out the queue just in case
+    // anything is left
+    m_stderrThread->wait();
+    handleStderrQueue();
+
+    close(d->stderr[0]);
+    d->stderr[0] = -1;
+  }
 
   KProcess::commClose();
 }
@@ -253,7 +382,10 @@ int K3bProcess::commSetupDoneP()
     close(d->in[0]);
   if( d->rawStdout || d->dupStdoutFd )
     close(d->out[1]);
-  d->in[0] = d->out[1] = -1;
+  if( d->threadedStderr )
+    close(d->stderr[1]);
+
+  d->in[0] = d->out[1] = d->stderr[1] = -1;
 
   return ok;
 }
@@ -285,6 +417,13 @@ int K3bProcess::commSetupDoneC()
   else if( d->rawStdin ) {
     if( ::dup2( d->in[0], STDIN_FILENO ) < 0 ) {
       kdDebug() << "(K3bProcess) Error while dup( " << d->in[0] << ", " << STDIN_FILENO << endl;
+      ok = 0;
+    }
+  }
+
+  if( d->threadedStderr ) {
+    if( ::dup2( d->stderr[1], STDERR_FILENO ) < 0 ) {
+      kdDebug() << "(K3bProcess) Error while dup( " << d->stderr[1] << ", " << STDERR_FILENO << endl;
       ok = 0;
     }
   }
@@ -360,6 +499,18 @@ void K3bProcess::setRawStdout(bool b)
   }
   else
     d->rawStdout = false;
+}
+
+
+void K3bProcess::setThreadedStderr(bool b)
+{
+  d->threadedStderr = b;
+}
+
+
+void K3bProcess::setSuppressEmptyLines( bool b )
+{
+  d->suppressEmptyLines = b;
 }
 
 

@@ -102,8 +102,8 @@ void K3bThread::cancel()
 void K3bThread::emitInfoMessage( const QString& msg, int type )
 {
   if( d->eventHandler ) 
-    qApp->postEvent( d->eventHandler,
-		     new K3bProgressInfoEvent( K3bProgressInfoEvent::InfoMessage, msg, QString::null, type ) );
+    QApplication::postEvent( d->eventHandler,
+			     new K3bProgressInfoEvent( K3bProgressInfoEvent::InfoMessage, msg, QString::null, type ) );
   else
     kdWarning() << "(K3bThread) call to emitInfoMessage() without eventHandler." << endl;
 }
@@ -111,8 +111,8 @@ void K3bThread::emitInfoMessage( const QString& msg, int type )
 void K3bThread::emitPercent( int p )
 {
   if( d->eventHandler ) 
-    qApp->postEvent( d->eventHandler,
-		     new K3bProgressInfoEvent( K3bProgressInfoEvent::Progress, p ) );
+    QApplication::postEvent( d->eventHandler,
+			     new K3bProgressInfoEvent( K3bProgressInfoEvent::Progress, p ) );
   else
     kdWarning() << "(K3bThread) call to emitPercent() without eventHandler." << endl;
 }
@@ -120,8 +120,8 @@ void K3bThread::emitPercent( int p )
 void K3bThread::emitSubPercent( int p )
 {
   if( d->eventHandler ) 
-    qApp->postEvent( d->eventHandler,
-		     new K3bProgressInfoEvent( K3bProgressInfoEvent::SubProgress, p ) );
+    QApplication::postEvent( d->eventHandler,
+			     new K3bProgressInfoEvent( K3bProgressInfoEvent::SubProgress, p ) );
   else
     kdWarning() << "(K3bThread) call to emitSubPercent() without eventHandler." << endl;
 }
@@ -129,7 +129,7 @@ void K3bThread::emitSubPercent( int p )
 void K3bThread::emitStarted()
 {
   if( d->eventHandler )
-    qApp->postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::Started ) );
+    QApplication::postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::Started ) );
   else
     kdWarning() << "(K3bThread) call to emitStarted() without eventHandler." << endl;
 }
@@ -137,7 +137,7 @@ void K3bThread::emitStarted()
 void K3bThread::emitCanceled()
 {
   if( d->eventHandler )
-    qApp->postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::Canceled ) );
+    QApplication::postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::Canceled ) );
   else
     kdWarning() << "(K3bThread) call to emitCanceled() without eventHandler." << endl;
 }
@@ -145,7 +145,7 @@ void K3bThread::emitCanceled()
 void K3bThread::emitFinished( bool success )
 {
   if( d->eventHandler ) 
-    qApp->postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::Finished, success ) );
+    QApplication::postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::Finished, success ) );
   else
     kdWarning() << "(K3bThread) call to emitFinished() without eventHandler." << endl;
 }
@@ -153,7 +153,7 @@ void K3bThread::emitFinished( bool success )
 void K3bThread::emitProcessedSize( int p, int size )
 {
   if( d->eventHandler ) 
-    qApp->postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::ProcessedSize, p, size ) );
+    QApplication::postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::ProcessedSize, p, size ) );
   else
     kdWarning() << "(K3bThread) call to emitProcessedSize() without eventHandler." << endl;
 }
@@ -161,7 +161,7 @@ void K3bThread::emitProcessedSize( int p, int size )
 void K3bThread::emitProcessedSubSize( int p, int size )
 {
   if( d->eventHandler ) 
-    qApp->postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::ProcessedSubSize, p, size ) );
+    QApplication::postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::ProcessedSubSize, p, size ) );
   else
     kdWarning() << "(K3bThread) call to emitProcessedSubSize() without eventHandler." << endl;
 }
@@ -169,7 +169,7 @@ void K3bThread::emitProcessedSubSize( int p, int size )
 void K3bThread::emitNewTask( const QString& job )
 {
   if( d->eventHandler ) 
-    qApp->postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::NewTask, job ) );
+    QApplication::postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::NewTask, job ) );
   else
     kdWarning() << "(K3bThread) call to emitNewTask() without eventHandler." << endl;
 }
@@ -177,7 +177,7 @@ void K3bThread::emitNewTask( const QString& job )
 void K3bThread::emitNewSubTask( const QString& job )
 {
   if( d->eventHandler ) 
-    qApp->postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::NewSubTask, job ) );
+    QApplication::postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::NewSubTask, job ) );
   else
     kdWarning() << "(K3bThread) call to emitNewSubTask() without eventHandler." << endl;
 }
@@ -185,7 +185,7 @@ void K3bThread::emitNewSubTask( const QString& job )
 void K3bThread::emitDebuggingOutput(const QString& group, const QString& text)
 {
   if( d->eventHandler )
-    qApp->postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::DebuggingOutput, group, text ) );
+    QApplication::postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::DebuggingOutput, group, text ) );
   else
     kdWarning() << "(K3bThread) call to emitDebuggingOutput() without eventHandler." << endl;
 }
@@ -193,7 +193,7 @@ void K3bThread::emitDebuggingOutput(const QString& group, const QString& text)
 void K3bThread::emitData( const char* data, int len )
 {
   if( d->eventHandler )
-    qApp->postEvent( d->eventHandler, new K3bDataEvent( data, len ) );
+    QApplication::postEvent( d->eventHandler, new K3bDataEvent( data, len ) );
   else
     kdWarning() << "(K3bThread) call to emitData() without eventHandler." << endl;
 }
@@ -201,7 +201,7 @@ void K3bThread::emitData( const char* data, int len )
 void K3bThread::emitNextTrack( int t, int n )
 {
   if( d->eventHandler ) 
-    qApp->postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::NextTrack, t, n ) );
+    QApplication::postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::NextTrack, t, n ) );
   else
     kdWarning() << "(K3bThread) call to emitNextTrack() without eventHandler." << endl;
 }

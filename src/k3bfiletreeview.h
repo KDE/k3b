@@ -166,6 +166,8 @@ class K3bFileTreeView : public KFileTreeView
  private slots:
   void slotItemExecuted( QListViewItem* item );
   void slotContextMenu( KListView*, QListViewItem*, const QPoint& );
+  void slotSettingsChangedK3b(int category);
+  void slotMouseButtonClickedK3b( int btn, QListViewItem *item, const QPoint &pos, int c );
 
  private:
   void initActions();

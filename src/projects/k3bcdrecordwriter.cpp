@@ -147,6 +147,7 @@ void K3bCdrecordWriter::prepareProcess()
   //  m_process->setPriority( KProcess::PrioHighest );
   m_process->setSplitStdout(true);
   m_process->setSuppressEmptyLines(true);
+  m_process->setThreadedStderr(true);
   m_process->setRawStdin(true);  // we only use stdin when writing on-the-fly
   connect( m_process, SIGNAL(stdoutLine(const QString&)), this, SLOT(slotStdLine(const QString&)) );
   connect( m_process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotStdLine(const QString&)) );

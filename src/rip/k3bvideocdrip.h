@@ -17,7 +17,7 @@
 #define K3BVIDEOCDRIP_H
 
 #include <k3bjob.h>
-#include <device/k3bdiskinfo.h>
+#include <k3bdiskinfo.h>
 #include "k3bvideocdrippingoptions.h"
 
 class QString;

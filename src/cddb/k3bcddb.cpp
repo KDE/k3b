@@ -67,11 +67,7 @@ void K3bCddb::readConfig( KConfig* c )
   // new config
   m_cddbServer = c->readListEntry( "cddb server" );
 
-#if KDE_IS_VERSION(3,1,3)
   m_localCddbDirs = c->readPathListEntry( "local cddb dirs" );
-#else
-  m_localCddbDirs = c->readListEntry( "local cddb dirs" );
-#endif
 
   m_proxyServer = c->readEntry( "proxy server" );
   m_proxyPort = c->readNumEntry( "proxy port" );
@@ -142,7 +138,7 @@ void K3bCddb::slotQueryFinished( K3bCddbQuery* query )
     m_lastResult = m_lastUsedQuery->result();
 
     // make sure the result has the requested discid since otherwise local saving does not make much sense
-    m_lastResult.discid = QString::number( m_toc.discId(), 16 );
+    m_lastResult.discid = QString::number( m_toc.discId(), 16 ).rightJustify( 8, '0' );
 
     emit queryFinished( K3bCddbQuery::SUCCESS );
   }

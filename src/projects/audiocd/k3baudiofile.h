@@ -70,9 +70,11 @@ class K3bAudioFile : public K3bAudioDataSource
 
   bool seek( const K3b::Msf& );
 
-  int read( char* data, int max );
+  int read( char* data, unsigned int max );
 
   K3bAudioDataSource* copy() const;
+
+  K3bAudioDataSource* split( const K3b::Msf& pos );
 
  private:
   void fixupOffsets();
@@ -80,7 +82,7 @@ class K3bAudioFile : public K3bAudioDataSource
   K3b::Msf m_startOffset;
   K3b::Msf m_endOffset;
 
-  long long m_decodedData;
+  unsigned long long m_decodedData;
 };
 
 #endif

@@ -29,6 +29,8 @@
 #include <kaction.h>
 #include <kio/global.h>
 #include <kfileitem.h>
+#include <kapplication.h>
+#include <kglobalsettings.h>
 
 #include <qdir.h>
 #include <qevent.h>
@@ -208,10 +210,14 @@ K3bFileTreeView::K3bFileTreeView( QWidget *parent, const char *name )
   m_dirOnlyMode = true;
   m_menuEnabled = false;
 
-  //connect( this, SIGNAL(currentChanged(QListViewItem*)), this, SLOT(slotItemExecuted(QListViewItem*)) );
   connect( this, SIGNAL(executed(QListViewItem*)), this, SLOT(slotItemExecuted(QListViewItem*)) );
   connect( this, SIGNAL(contextMenu(KListView*, QListViewItem* , const QPoint& )),
 	   this, SLOT(slotContextMenu(KListView*, QListViewItem* , const QPoint& )) );
+
+  // we always simulate the single click
+  slotSettingsChangedK3b(KApplication::SETTINGS_MOUSE);
+  if (kapp)
+    connect( kapp, SIGNAL(settingsChanged(int)), SLOT(slotSettingsChangedK3b(int)) );
 
   initActions();
 }
@@ -480,6 +486,28 @@ void K3bFileTreeView::setSelectedDevice(K3bCdDevice::CdDevice* dev)
 K3bDeviceBranch* K3bFileTreeView::branch( K3bCdDevice::CdDevice* dev )
 {
   return d->deviceBranchDict.find( (void*)dev );
+}
+
+
+void K3bFileTreeView::slotSettingsChangedK3b(int category)
+{
+  // we force single click like konqueror does. This really should be done in KFileTreeView
+
+  if( category == KApplication::SETTINGS_MOUSE ) {
+    disconnect(this, SIGNAL(mouseButtonClicked(int, QListViewItem*, const QPoint &, int)),
+	       this, SLOT(slotMouseButtonClickedK3b(int, QListViewItem*, const QPoint &, int)));
+
+    if( !KGlobalSettings::singleClick() )
+      connect(this, SIGNAL(mouseButtonClicked(int, QListViewItem*, const QPoint &, int)),
+	      this, SLOT(slotMouseButtonClickedK3b(int, QListViewItem*, const QPoint &, int)));
+  }
+}
+
+
+void K3bFileTreeView::slotMouseButtonClickedK3b( int btn, QListViewItem *item, const QPoint &pos, int c )
+{
+  if( (btn == LeftButton) && item )
+    emitExecute(item, pos, c);
 }
 
 #include "k3bfiletreeview.moc"

@@ -28,6 +28,7 @@ class K3bVersion;
 class KConfig;
 class KAboutData;
 class K3bJob;
+class K3bAudioServer;
 
 
 namespace K3bCdDevice {
@@ -57,6 +58,7 @@ class K3bCore : public QObject
 
   K3bCdDevice::DeviceManager* deviceManager() const;
   K3bExternalBinManager* externalBinManager() const;
+  K3bAudioServer* audioServer() const;
 
   const K3bVersion& version() const;
 

@@ -84,7 +84,7 @@ void K3bDvdBooktypeJob::setForceNoEject( bool b )
 
 QString K3bDvdBooktypeJob::jobDescription() const
 {
-  return i18n("Changing  DVD±R(W) booktype");
+  return i18n("Changing DVD±R(W) booktype");
 }
 
 

@@ -37,6 +37,8 @@ class K3bAudioDataSourceViewItem : public K3bListViewItem
 
   bool animate();
 
+  void setSelected( bool s );
+
  private:
   K3bAudioTrackViewItem* m_trackViewItem;
   K3bAudioDataSource* m_source;

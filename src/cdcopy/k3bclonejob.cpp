@@ -19,6 +19,7 @@
 #include <k3bcdrecordwriter.h>
 #include <k3bexternalbinmanager.h>
 #include <k3bdevice.h>
+#include <k3bdevicehandler.h>
 #include <k3bglobals.h>
 #include <k3bcore.h>
 
@@ -114,6 +115,8 @@ void K3bCloneJob::start()
     startWriting();
   }
   else {
+    emit burning( false );
+
     prepareReader();
 
     if( waitForMedia( readingDevice(),
@@ -225,8 +228,10 @@ void K3bCloneJob::slotWriterFinished( bool success )
 
     emit infoMessage( i18n("Successfully written clone copy %1.").arg(d->doneCopies), INFO );
 
-    if( d->doneCopies < m_copies )
+    if( d->doneCopies < m_copies ) {
+      K3bCdDevice::eject( writer() );
       startWriting();
+    }
     else {
       if( m_removeImageFiles )
 	removeImageFiles();
@@ -262,8 +267,11 @@ void K3bCloneJob::slotReadingFinished( bool success )
     emit infoMessage( i18n("Successfully read disk."), INFO );
     if( m_onlyCreateImage )
       emit finished(true);
-    else
+    else {
+      if( writer() == readingDevice() )
+	K3bCdDevice::eject( writer() );
       startWriting();
+    }
   }
   else {
     emit infoMessage( i18n("Error while reading disk."), ERROR );
@@ -276,6 +284,8 @@ void K3bCloneJob::slotReadingFinished( bool success )
 
 void K3bCloneJob::startWriting()
 {
+  emit burning( true );
+
   // start writing
   prepareWriter();
     

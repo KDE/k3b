@@ -34,6 +34,7 @@ class QMouseEvent;
 class QDragMoveEvent;
 class QTimer;
 class KPopupMenu;
+class QPainter;
 
 
 class K3bAudioTrackView : public K3bListView
@@ -62,6 +63,7 @@ class K3bAudioTrackView : public K3bListView
   KAction* m_actionAddSilence;
   KAction* m_actionMergeTracks;
   KAction* m_actionSplitSource;
+  KAction* m_actionSplitTrack;
   KActionCollection* m_actionCollection;
 
   bool m_updatingColumnWidths;
@@ -87,7 +89,9 @@ class K3bAudioTrackView : public K3bListView
   void slotRemove();
   void slotMergeTracks();
   void slotSplitSource();
+  void slotSplitTrack();
   void showPopupMenu( KListView*, QListViewItem* item, const QPoint& pos );
+  void slotProperties();
 
  protected:
   void keyPressEvent( QKeyEvent* e );

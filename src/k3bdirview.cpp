@@ -236,6 +236,13 @@ void K3bDirView::showDevice( K3bCdDevice::CdDevice* dev )
 }
 
 
+void K3bDirView::showDiskInfo( K3bCdDevice::CdDevice* dev )
+{
+  m_bViewDiskInfo = true;
+  slotDetectDiskInfo( dev );
+}
+
+
 void K3bDirView::slotDetectDiskInfo( K3bCdDevice::CdDevice* dev )
 {
   // to speed things up we first check if the media is already mounted
@@ -318,8 +325,7 @@ void K3bDirView::slotFileTreeContextMenu( K3bCdDevice::CdDevice* dev, const QPoi
 void K3bDirView::slotShowDiskInfo()
 {
   if( m_lastDevice ) {
-    m_bViewDiskInfo = true;
-    slotDetectDiskInfo( m_lastDevice );
+    showDiskInfo( m_lastDevice );
   }
 }
 

@@ -66,6 +66,7 @@ class K3bDirView : public QVBox
   void saveConfig( KConfig* c );
   void showUrl( const KURL& );
   void showDevice( K3bCdDevice::CdDevice* );
+  void showDiskInfo( K3bCdDevice::CdDevice* dev );
   
  protected slots:
   void slotDirActivated( const KURL& );
@@ -74,9 +75,9 @@ class K3bDirView : public QVBox
   void slotMountDevice( K3bCdDevice::CdDevice* dev );
   void slotMountFinished( K3bDeviceBranch*, const QString& );
   void slotDiskInfoReady( K3bCdDevice::DiskInfoDetector* );
+  void slotDetectDiskInfo( K3bCdDevice::CdDevice* dev );
   void reload();
   void home();
-  void slotDetectDiskInfo( K3bCdDevice::CdDevice* dev );
   void slotShowDiskInfo();
   void slotUnlockDevice();
   void slotLockDevice();

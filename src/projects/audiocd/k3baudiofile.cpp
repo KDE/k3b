@@ -94,12 +94,14 @@ K3b::Msf K3bAudioFile::lastSector() const
 void K3bAudioFile::setStartOffset( const K3b::Msf& msf )
 {
   m_startOffset = msf;
+  emitChange();
 }
 
 
 void K3bAudioFile::setEndOffset( const K3b::Msf& msf )
 {
   m_endOffset = msf;
+  emitChange();
 }
 
 
@@ -118,7 +120,7 @@ bool K3bAudioFile::seek( const K3b::Msf& msf )
 }
 
 
-int K3bAudioFile::read( char* data, int max )
+int K3bAudioFile::read( char* data, unsigned int max )
 {
   fixupOffsets();
 
@@ -140,12 +142,18 @@ int K3bAudioFile::read( char* data, int max )
 // been calculated
 void K3bAudioFile::fixupOffsets()
 {
-  if( m_startOffset >= fileLength() )
+  if( m_startOffset >= fileLength() ) {
     m_startOffset = 0;
-  if( m_endOffset > fileLength() )
+    emitChange();
+  }
+  if( m_endOffset > fileLength() ) {
     m_endOffset = 0; // whole file
-  if( m_endOffset > 0 && m_endOffset <= m_startOffset )
+    emitChange();
+  }
+  if( m_endOffset > 0 && m_endOffset <= m_startOffset ) {
     m_endOffset = m_startOffset;
+    emitChange();
+  }
 }
 
 
@@ -155,4 +163,20 @@ K3bAudioDataSource* K3bAudioFile::copy() const
   file->m_startOffset = m_startOffset;
   file->m_endOffset = m_endOffset;
   return file;
+}
+
+
+K3bAudioDataSource* K3bAudioFile::split( const K3b::Msf& pos )
+{
+  if( pos < length() ) {
+    K3bAudioFile* file = new K3bAudioFile( decoder(), doc() );
+    file->m_startOffset = m_startOffset + pos;
+    file->m_endOffset = m_endOffset;
+    m_endOffset = m_startOffset + pos;
+    file->moveAfter( this );
+    emitChange();
+    return file;
+  }
+  else
+    return 0;
 }

@@ -71,7 +71,7 @@ bool K3bAudioZeroData::seek( const K3b::Msf& msf )
 }
 
 
-int K3bAudioZeroData::read( char* data, int max )
+int K3bAudioZeroData::read( char* data, unsigned int max )
 {
   if( m_writtenData + max > length().audioBytes() )
     max = length().audioBytes() - m_writtenData;
@@ -88,4 +88,18 @@ K3bAudioDataSource* K3bAudioZeroData::copy() const
 {
   K3bAudioZeroData* zero = new K3bAudioZeroData( doc(), length() );
   return zero;
+}
+
+
+K3bAudioDataSource* K3bAudioZeroData::split( const K3b::Msf& pos )
+{
+  if( pos < length() ) {
+    K3bAudioZeroData* zero = new K3bAudioZeroData( doc(), length()-pos );
+    setLength( pos );
+    zero->moveAfter( this );
+    emitChange();
+    return zero;
+  }
+  else
+    return 0;
 }

@@ -102,6 +102,21 @@ public:
       }
     }
 
+
+    //
+    // As long as we do not know how to determine th emax read buffer properly we simply determine it
+    // by trying. :)
+    //
+    s_bufferSizeSectors = 128;
+    unsigned char* buffer = new unsigned char[m_sectorSize*128];
+    while( !read( buffer, m_firstSector.lba(), s_bufferSizeSectors ) ) {
+      kdDebug() << "(K3bDataTrackReader) determine max read sectors: "
+		<< s_bufferSizeSectors << " too high." << endl;
+      s_bufferSizeSectors--;
+    }
+    kdDebug() << "(K3bDataTrackReader) determine max read sectors: " 
+	      << s_bufferSizeSectors << " is max." << endl;
+
     // 2. get it on
     K3b::Msf currentSector = m_firstSector;
     bool writeError = false;
@@ -109,7 +124,6 @@ public:
     int lastPercent = 0;
     unsigned long lastReadMb = 0;
     int bufferLen = s_bufferSizeSectors*m_sectorSize;
-    unsigned char* buffer = new unsigned char[bufferLen];
     while( !m_canceled && currentSector <= m_lastSector ) {
 
       int readSectors = QMIN( bufferLen/m_sectorSize, m_lastSector.lba()-currentSector.lba()+1 );

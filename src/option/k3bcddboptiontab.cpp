@@ -152,12 +152,7 @@ void K3bCddbOptionTab::readSettings()
   // new config
   QStringList cddbServer = c->readListEntry( "cddb server" );
 
-#if KDE_IS_VERSION(3,1,3)
   QStringList localCddbDirs = c->readPathListEntry( "local cddb dirs" );
-#else
-  QStringList localCddbDirs = c->readListEntry( "local cddb dirs" );
-#endif
-
 
   m_checkRemoteCddb->setChecked( c->readBoolEntry( "use remote cddb", false ) );
   m_checkUseLocalCddb->setChecked( c->readBoolEntry( "use local cddb query", true ) );
@@ -253,11 +248,7 @@ void K3bCddbOptionTab::apply()
   if( c->hasKey( "cddbp server" ) )
     c->deleteEntry( "cddbp server" );
 
-#if KDE_IS_VERSION(3,1,3)
   c->writePathEntry( "local cddb dirs", localCddbDirs );
-#else
-  c->writeEntry( "local cddb dirs", localCddbDirs );
-#endif
 }
 
 

@@ -21,6 +21,7 @@
 #include "k3baudiotrackdialog.h"
 #include "k3baudiodoc.h"
 #include "k3baudiozerodata.h"
+#include "k3baudiotracksplitdialog.h"
 
 #include <k3bview.h>
 #include <k3bcdtextvalidator.h>
@@ -32,6 +33,8 @@
 #include <qptrlist.h>
 #include <qstringlist.h>
 #include <qevent.h>
+#include <qpixmap.h>
+#include <qpainter.h>
 
 #include <kurl.h>
 #include <kurldrag.h>
@@ -40,11 +43,6 @@
 #include <kpopupmenu.h>
 #include <kiconloader.h>
 #include <kapplication.h>
-
-#define XK_MISCELLANY
-#include <X11/keysymdef.h>
-#undef XK_MISCELLANY
-
 
 
 K3bAudioTrackView::K3bAudioTrackView( K3bAudioDoc* doc, QWidget* parent, const char* name )
@@ -80,7 +78,7 @@ K3bAudioTrackView::K3bAudioTrackView( K3bAudioDoc* doc, QWidget* parent, const c
   connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
 	   this, SLOT(showPopupMenu(KListView*, QListViewItem*, const QPoint&)) );
   connect( this, SIGNAL(doubleClicked(QListViewItem*, const QPoint&, int)),
-	   this, SLOT(showPropertiesDialog()) );
+	   this, SLOT(slotProperties()) );
 
   connect( doc, SIGNAL(changed()),
 	   this, SLOT(slotChanged()) );
@@ -90,6 +88,10 @@ K3bAudioTrackView::K3bAudioTrackView( K3bAudioDoc* doc, QWidget* parent, const c
 	   this, SLOT(slotTrackRemoved(K3bAudioTrack*)) );
 
   slotChanged();
+
+  // a little background pix hack because I am simply incapable of doing it another way. :(
+//   static QPixmap s_bgPix("/tmp/trueg/audio_bg.png");
+//   setK3bBackgroundPixmap( s_bgPix, TOP_LEFT );
 }
 
 
@@ -128,7 +130,7 @@ void K3bAudioTrackView::setupActions()
   m_popupMenu = new KPopupMenu( this );
 
   m_actionProperties = new KAction( i18n("Properties"), "misc",
-				    0, this, SLOT(showPropertiesDialog()), 
+				    0, this, SLOT(slotProperties()), 
 				    actionCollection(), "track_properties" );
   m_actionRemove = new KAction( i18n( "Remove" ), "editdelete",
 				Key_Delete, this, SLOT(slotRemove()), 
@@ -143,8 +145,9 @@ void K3bAudioTrackView::setupActions()
   m_actionSplitSource = new KAction( i18n("Source to Track"), "misc",
 				     0, this, SLOT(slotSplitSource()),
 				     actionCollection(), "source_split" );
-
-  // TODO: add more actions (add source, merge tracks, split source,...)
+  m_actionSplitTrack = new KAction( i18n("Split Track..."), 0,
+				    0, this, SLOT(slotSplitTrack()),
+				    actionCollection(), "track_split" );
 }
 
 
@@ -693,6 +696,19 @@ void K3bAudioTrackView::slotSplitSource()
 }
 
 
+void K3bAudioTrackView::slotSplitTrack()
+{
+  QListViewItem* item = selectedItems().first();
+  if( K3bAudioTrackViewItem* tv = dynamic_cast<K3bAudioTrackViewItem*>(item) ) {
+    K3b::Msf pos;
+    if( K3bAudioTrackSplitDialog::getSplitPos( tv->track(), pos, this ) ) {
+      // TODO: should we fix the position to make sure tracks are at least 4 seconds long
+      tv->track()->split( pos );
+    }
+  }
+}
+
+
 void K3bAudioTrackView::showPopupMenu( KListView*, QListViewItem* item, const QPoint& pos )
 {
   QPtrList<K3bAudioTrack> tracks;
@@ -715,6 +731,10 @@ void K3bAudioTrackView::showPopupMenu( KListView*, QListViewItem* item, const QP
     m_popupMenu->insertSeparator();
     m_actionSplitSource->plug( m_popupMenu );
   }
+  else if( numTracks == 1 && numSources == 0 ) {
+    m_popupMenu->insertSeparator();
+    m_actionSplitTrack->plug( m_popupMenu );
+  }
   else if( numTracks > 1 && numSources == 0 ) {
     m_popupMenu->insertSeparator();
     m_actionMergeTracks->plug( m_popupMenu );
@@ -725,6 +745,24 @@ void K3bAudioTrackView::showPopupMenu( KListView*, QListViewItem* item, const QP
   m_doc->actionCollection()->action( "project_burn" )->plug( m_popupMenu );
 
   m_popupMenu->popup( pos );
+}
+
+
+void K3bAudioTrackView::slotProperties()
+{
+  QPtrList<K3bAudioTrack> tracks;
+  QPtrList<K3bAudioDataSource> sources;
+  getSelectedItems( tracks, sources );
+
+  // TODO: add tracks from sources to tracks
+
+  if( !tracks.isEmpty() ) {
+    K3bAudioTrackDialog d( tracks, this );
+    d.exec();
+  }
+  else {
+    m_doc->slotProperties();
+  }
 }
 
 #include "k3baudiotrackview.moc"

@@ -48,10 +48,11 @@ K3bAudioProjectCddbPlugin::K3bAudioProjectCddbPlugin( QObject* parent,
     m_cddb(0),
     m_progress(0)
 {
-  (void) new KAction( i18n("&Query Cddb for Audio project"),
-		      0, 0,
-		      this, SLOT(slotQuery()),
-		      actionCollection(), "audio_project_cddb_plugin" );
+  KAction* a = new KAction( i18n("&Query Cddb for Audio project"),
+			    0, 0,
+			    this, SLOT(slotQuery()),
+			    actionCollection(), "audio_project_cddb_plugin" );
+  a->setToolTip( i18n("Query a cddb entry for the current audio project.") );
 }
 
 

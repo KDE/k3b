@@ -44,7 +44,8 @@ public:
     : writingMode( 0 ),
       process( 0 ),
       growisofsBin( 0 ),
-      trackSize(-1) {
+      trackSize(-1),
+      trackSizePadding(0) {
   }
 
   int writingMode;
@@ -68,6 +69,9 @@ public:
 
   // used in DAO with growisofs >= 5.15
   long trackSize;
+  long trackSizePadding;
+
+  unsigned long long overallSizeFromOutput;
 };
 
 
@@ -114,6 +118,15 @@ int K3bGrowisofsWriter::fd() const
 
 bool K3bGrowisofsWriter::closeFd()
 {
+  // do the padding
+  if( d->trackSizePadding > 0 ) {
+    kdDebug() << "(K3bGrowisofsWriter) padding with " << d->trackSizePadding << " blocks." << endl;
+    char buf[d->trackSizePadding*2048];
+    ::memset( buf, 0, d->trackSizePadding*2048 );
+    if( ::write( fd(), buf, d->trackSizePadding*2048 ) < d->trackSizePadding*2048 )
+      kdDebug() << "(K3bGrowisofsWriter) FAILED to pad." << endl;
+  }
+
   return ( !::close( fd() ) );
 }
 
@@ -289,7 +302,17 @@ void K3bGrowisofsWriter::setWritingMode( int m )
 
 void K3bGrowisofsWriter::setTrackSize( long size )
 {
-  d->trackSize = size;
+  // for now growisofs want it to be a multiple of 16 (1 ECC block: 16*2048 bytes)
+  // although I don't think it's necessary we simply pad
+  if( size % 16 ) {
+    d->trackSizePadding = (16 - size%16);
+    d->trackSize = size + d->trackSizePadding;
+  }
+  else {
+    d->trackSizePadding = 0;
+    d->trackSize = size;
+  }
+  kdDebug() << "(K3bGrowisofsWriter) need to pad " << d->trackSizePadding << " blocks." << endl;
 }
 
 
@@ -314,16 +337,16 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
     int pos = line.find( "/" );
     unsigned long long done = K3b::toULongLong( line.left( pos ) );  // TODO: for QT 3.2: toULongLong
     bool ok = true;
-    unsigned long long size = K3b::toULongLong( line.mid( pos+1, line.find( "(", pos ) - pos - 1 ), &ok ); // TODO: for QT 3.2: toULongLong
+    d->overallSizeFromOutput = K3b::toULongLong( line.mid( pos+1, line.find( "(", pos ) - pos - 1 ), &ok ); // TODO: for QT 3.2: toULongLong
     if( ok ) {
-      int p = (int)(100 * done / size);
+      int p = (int)(100 * done / d->overallSizeFromOutput);
       if( p > d->lastProgress ) {
 	emit percent( p );
 	d->lastProgress = p;
       }
       if( (unsigned int)(done/1024/1024) > d->lastProgressed ) {
 	d->lastProgressed = (unsigned int)(done/1024/1024);
-	emit processedSize( d->lastProgressed, (int)(size/1024/1024)  );
+	emit processedSize( d->lastProgressed, (int)(d->overallSizeFromOutput/1024/1024)  );
       }
 
       // try parsing write speed (since growisofs 5.11)
@@ -364,6 +387,11 @@ void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
 
   if( p->normalExit() ) {
     if( p->exitStatus() == 0 ) {
+
+      // the output stops before 100%, so we do it manually
+      emit percent( 100 );
+      emit processedSize( d->overallSizeFromOutput/1024/1024,
+			  d->overallSizeFromOutput/1024/2024 );
 
       int s = d->speedEst->average();
       if( s > 0 )

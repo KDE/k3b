@@ -158,3 +158,24 @@ bool K3bAudioTrackViewItem::animate()
   }
   return animate;
 }
+
+
+void K3bAudioTrackViewItem::setSelected( bool s )
+{
+  K3bListViewItem::setSelected(s);
+
+  // we also select or unselect all source items
+  QListViewItem* item = firstChild();
+  while( item ) {
+    item->setSelected(s);
+    item = item->nextSibling();
+  }
+}
+
+
+void K3bAudioTrackViewItem::insertItem( QListViewItem* item )
+{
+  K3bListViewItem::insertItem( item );
+  if( isSelected() )
+    item->setSelected(true);
+}

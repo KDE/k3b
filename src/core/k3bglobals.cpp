@@ -144,9 +144,10 @@ QString K3b::findTempFile( const QString& ending, const QString& d )
 
 QString K3b::defaultTempPath()
 {
-  QString url;
+  QString oldGroup = kapp->config()->group();
   kapp->config()->setGroup( "General Options" );
-  url = kapp->config()->readPathEntry( "Temp Dir", KGlobal::dirs()->resourceDirs( "tmp" ).first() );
+  QString url = kapp->config()->readPathEntry( "Temp Dir", KGlobal::dirs()->resourceDirs( "tmp" ).first() );
+  kapp->config()->setGroup( oldGroup );
   return prepareDir(url);
 }
 

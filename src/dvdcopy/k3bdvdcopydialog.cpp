@@ -254,6 +254,8 @@ void K3bDvdCopyDialog::slotLoadUserDefaults()
 
   m_writingModeWidget->loadConfig( c );
 
+  m_tempDirSelectionWidget->setTempPath( K3b::defaultTempPath() );
+
   m_checkSimulate->setChecked( c->readBoolEntry( "simulate", false ) );
   m_checkOnTheFly->setChecked( c->readBoolEntry( "on_the_fly", false ) );
   m_checkOnlyCreateImage->setChecked( c->readBoolEntry( "only_create_image", false ) );
@@ -292,6 +294,9 @@ void K3bDvdCopyDialog::slotSaveUserDefaults()
   c->writeEntry( "copies", m_spinCopies->value() );
 
   m_writerSelectionWidget->saveConfig( c );
+
+  if( m_tempDirSelectionWidget->isEnabled() )
+    m_tempDirSelectionWidget->saveConfig();
 }
 
 

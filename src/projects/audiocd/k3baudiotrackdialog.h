@@ -20,19 +20,12 @@
 
 #include <kdialogbase.h>
 
+#include <k3bmsf.h>
+
 #include <qptrlist.h>
 
 class K3bAudioTrack;
-class QLineEdit;
-class QTextEdit;
-class QLabel;
-class QCheckBox;
-class QComboBox;
-class KToggleAction;
-class KIntNumInput;
-class KCutLabel;
-class K3bMsfEdit;
-
+class K3bAudioTrackWidget;
 
 /**
   *@author Sebastian Trueg
@@ -50,30 +43,12 @@ class K3bAudioTrackDialog : public KDialogBase
   void slotOk();
   void slotApply();
 
-  void slotTrackStartChanged( int value );
-  void slotTrackEndChanged( int value );
   void updateTrackLengthDisplay();
 
  private:
   QPtrList<K3bAudioTrack> m_tracks;
 
-  QLineEdit* m_editPerformer;
-  QLineEdit* m_editTitle;
-  QTextEdit* m_editMessage;
-  QLineEdit* m_editArranger;
-  QLineEdit* m_editSongwriter;
-  QLineEdit* m_editComposer;
-  QLineEdit* m_editIsrc;
-  QLabel* m_labelMimeType;
-  KCutLabel* m_displayFileName;
-  QLabel* m_displaySize;
-  QLabel* m_displayLength;
-  K3bMsfEdit* m_inputPregap;
-  QCheckBox* m_checkPreEmp;
-  QCheckBox* m_checkCopy;
-
-  K3bMsfEdit* m_editTrackStart;
-  K3bMsfEdit* m_editTrackEnd;
+  K3bAudioTrackWidget* m_audioTrackWidget;
 
   void setupGui();
   void setupConnections();

@@ -23,6 +23,7 @@
 
 
 class K3bExternalBin;
+class QEvent;
 
 
 /**
@@ -119,6 +120,13 @@ class K3bProcess : public KProcess
    */
   void setRawStdout(bool b);
 
+  /**
+   * Process stderr in another thread to make it non-blocking.
+   */
+  void setThreadedStderr(bool b);
+
+  bool event( QEvent* );
+
   class OutputCollector;
 
  public slots:
@@ -127,7 +135,7 @@ class K3bProcess : public KProcess
   /**
    * default is true
    */
-  void setSuppressEmptyLines( bool b ) { m_suppressEmptyLines = b; }
+  void setSuppressEmptyLines( bool b );
 
  private slots:
   void slotSplitStderr( KProcess*, char*, int );
@@ -165,14 +173,15 @@ class K3bProcess : public KProcess
   void commClose();
 
  private:
-  void splitOutput( char*, int, bool );
+  void handleStderrQueue();
+  static QStringList splitOutput( char*, int, QString&, bool );
 
-  class Private;
-  Private* d;
+  class Data;
+  Data* d;
+  class StderrThread;
+  StderrThread* m_stderrThread;
 
   bool m_bSplitStdout;
-
-  bool m_suppressEmptyLines;
 };
 
 

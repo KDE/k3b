@@ -117,6 +117,15 @@ K3b::Msf K3bAudioTrack::index0() const
 }
 
 
+K3b::Msf K3bAudioTrack::postGap() const
+{
+  if( next() )
+    return m_index0Offset;
+  else
+    return 0;
+}
+
+
 void K3bAudioTrack::setIndex0( const K3b::Msf& msf )
 {
   m_index0Offset = length() - msf;
@@ -352,7 +361,7 @@ bool K3bAudioTrack::seek( const K3b::Msf& msf )
 }
 
 
-int K3bAudioTrack::read( char* data, int max )
+int K3bAudioTrack::read( char* data, unsigned int max )
 {
   if( !m_currentSource ) {
     m_currentSource = m_firstSource;
@@ -391,6 +400,47 @@ K3bAudioTrack* K3bAudioTrack::copy() const
   }
 
   return track;
+}
+
+
+K3bAudioTrack* K3bAudioTrack::split( const K3b::Msf& pos )
+{
+  if( pos < length() ) {
+    // search the source
+    // pos will be the first sector of the new track
+    K3b::Msf currentPos;
+    K3bAudioDataSource* source = firstSource();
+    while( source && currentPos + source->length() <= pos ) {
+      currentPos += source->length();
+      source = source->next();
+    }
+
+    K3bAudioDataSource* splitSource = 0;
+    if( currentPos > 0 && currentPos == pos ) {
+      // no need to split a source
+      splitSource = source;
+    }
+    else {
+      splitSource = source->split( pos - currentPos );
+    }
+
+    // the new track should include all sources from splitSource and below
+    K3bAudioTrack* splitTrack = new K3bAudioTrack( doc() );
+    source = splitSource;
+    while( source ) {
+      K3bAudioDataSource* addSource = source;
+      source = source->next();
+      splitTrack->addSource( addSource );
+    }
+
+    emit changed( this );
+
+    splitTrack->moveAfter( this );
+
+    return splitTrack;
+  }
+  else
+    return 0;
 }
 
 

@@ -19,7 +19,7 @@
 
 #include "k3bcore.h"
 #include "k3bsystemproblemdialog.h"
-#include "tools/k3btitlelabel.h"
+#include <k3btitlelabel.h>
 #include <k3bexternalbinmanager.h>
 #include <k3bstdguiitems.h>
 #include <k3bexternalbinmanager.h>

@@ -225,13 +225,14 @@ void K3bAudioCdView::reload()
   bool useCddb = ( c->readBoolEntry( "use local cddb query", true ) || 
 		   c->readBoolEntry( "use remote cddb", false ) );
 
-  if( m_cdText.isEmpty() ||
-      ( useCddb && KMessageBox::questionYesNo( this, 
-					       i18n("Found Cd-Text. Do you want to use it instead of querying CDDB?"),
-					       i18n("Found Cd-Text"), 
-					       KStdGuiItem::yes(),
-					       KStdGuiItem::no(),
-					       "prefereCdTextOverCddb" ) == KMessageBox::No ) )
+  if( useCddb &&
+      ( m_cdText.isEmpty() ||
+	KMessageBox::questionYesNo( this, 
+				    i18n("Found Cd-Text. Do you want to use it instead of querying CDDB?"),
+				    i18n("Found Cd-Text"), 
+				    KStdGuiItem::yes(),
+				    KStdGuiItem::no(),
+				    "prefereCdTextOverCddb" ) == KMessageBox::No ) )
     queryCddb();
   else
     enableInteraction(true);
@@ -285,11 +286,12 @@ void K3bAudioCdView::initActions()
   m_popupMenu->insert( actionStartRip );
 
   // setup the toolbox
+  m_toolBox->addButton( actionStartRip );
+  m_toolBox->addSpacing();
   m_toolBox->addButton( actionQueryCddb );
   m_toolBox->addButton( actionSaveCddbLocally );
   m_toolBox->addButton( actionEditTrackCddbInfo );
   m_toolBox->addButton( actionEditAlbumCddbInfo );
-  m_toolBox->addButton( actionStartRip );
 }
 
 

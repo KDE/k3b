@@ -24,7 +24,6 @@ class K3bVideoDvdDoc;
 
 /**
  * This class heavily depends on K3bDvdJob and uses some of it's internals.
- * This is bad design but makes this classes code very small.
  */
 class K3bVideoDvdJob : public K3bDvdJob
 {
@@ -37,8 +36,8 @@ class K3bVideoDvdJob : public K3bDvdJob
   virtual QString jobDescription() const;
   virtual QString jobDetails() const;
 
- public slots:
-  void start();
+/*  public slots: */
+/*   void start(); */
 
  private:
   void prepareIsoImager();

@@ -138,6 +138,7 @@ void K3bAudioRippingDialog::setupGui()
   QTabWidget* mainTab = new QTabWidget( frame );
 
   m_optionWidget = new base_K3bAudioRippingOptionWidget( mainTab );
+  m_optionWidget->m_editBaseDir->setMode( KFile::Directory );
   mainTab->addTab( m_optionWidget, i18n("Options") );
 
   m_optionWidget->m_buttonConfigurePlugin->setIconSet( SmallIconSet( "gear" ) );

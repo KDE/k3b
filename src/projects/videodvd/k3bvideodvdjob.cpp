@@ -43,38 +43,38 @@ K3bVideoDvdJob::~K3bVideoDvdJob()
 }
 
 
-void K3bVideoDvdJob::start()
-{
-  emit started();
+// void K3bVideoDvdJob::start()
+// {
+//   emit started();
 
-  m_canceled = false;
-  m_writingStarted = false;
+//   m_canceled = false;
+//   m_writingStarted = false;
 
-  if( m_doc->dummy() )
-    m_doc->setVerifyData( false );
+//   if( m_doc->dummy() )
+//     m_doc->setVerifyData( false );
 
-  if( !m_doc->onTheFly() || m_doc->onlyCreateImages() ) {
-    emit newTask( i18n("Writing data") );
-    emit burning(false);
-    writeImage();
-  }
-  else {
-    prepareIsoImager();
+//   if( !m_doc->onTheFly() || m_doc->onlyCreateImages() ) {
+//     emit newTask( i18n("Writing data") );
+//     emit burning(false);
+//     writeImage();
+//   }
+//   else {
+//     prepareIsoImager();
     
-    if( prepareWriterJob() ) {
-      if( waitForDvd() ) {
-	emit burning(true);
-	m_writerJob->start();
-	m_isoImager->writeToFd( m_writerJob->fd() );
-	m_isoImager->start();
-      }
-      else
-	emit finished(false);
-    }
-    else
-      emit finished(false);
-  }
-}
+//     if( prepareWriterJob() ) {
+//       if( waitForDvd() ) {
+// 	emit burning(true);
+// 	m_writerJob->start();
+// 	m_isoImager->writeToFd( m_writerJob->fd() );
+// 	m_isoImager->start();
+//       }
+//       else
+// 	emit finished(false);
+//     }
+//     else
+//       emit finished(false);
+//   }
+// }
 
 
 void K3bVideoDvdJob::prepareIsoImager()

@@ -65,7 +65,6 @@ static KCmdLineOptions options[] =
 
 int main( int argc, char* argv[] )
 {
-
   KAboutData aboutData( "k3b", I18N_NOOP("K3b"),
 			"0.11.94", description, KAboutData::License_GPL,
 			I18N_NOOP("(c) 1999 - 2004, Sebastian Trueg and the K3b Team"), 0, "http://www.k3b.org" );

@@ -172,6 +172,8 @@ QString K3bDataDirViewItem::text( int index ) const
     return m_dirItem->k3bName();
   case 1:
     return i18n("Directory");
+  case 2:
+    return KIO::convertSize( m_dirItem->k3bSize() );
   default:
     return "";
   }
@@ -212,7 +214,9 @@ QString K3bDataFileViewItem::text( int index ) const
   case 3:
     return m_fileItem->localPath();
   case 4:
-    return ( m_fileItem->isValid() ? m_fileItem->linkDest() : m_fileItem->linkDest() + i18n(" (broken)") );
+    return ( m_fileItem->isValid()
+	     ? m_fileItem->linkDest()
+	     : m_fileItem->linkDest() + " (" + i18n("outside of project") + ")" );
   default:
     return "";
   }

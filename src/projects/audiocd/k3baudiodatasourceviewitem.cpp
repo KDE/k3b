@@ -91,3 +91,10 @@ bool K3bAudioDataSourceViewItem::animate()
     return false;
   }
 }
+
+
+void K3bAudioDataSourceViewItem::setSelected( bool s )
+{
+  if( s || !m_trackViewItem->isSelected() )
+    K3bListViewItem::setSelected(s);
+}

@@ -31,9 +31,11 @@ class K3bAudioZeroData : public K3bAudioDataSource
   QString sourceComment() const;
 
   bool seek( const K3b::Msf& );
-  int read( char* data, int max );
+  int read( char* data, unsigned int max );
 
   K3bAudioDataSource* copy() const;
+
+  K3bAudioDataSource* split( const K3b::Msf& pos );
 
  private:
   K3b::Msf m_length;

@@ -90,6 +90,11 @@ class K3bAudioTrack : public QObject
   void setCopyProtection( bool b ) { m_copy = b; emit changed(this); }
 
   K3b::Msf index0() const;
+  /**
+   * The length of the postgap, ie. the number of blocks with index0.
+   * This is always 0 for the last track.
+   */
+  K3b::Msf postGap() const;
   void setIndex0( const K3b::Msf& );
 
   /**
@@ -144,7 +149,7 @@ class K3bAudioTrack : public QObject
    *
    * @return number of read bytes
    */
-  int read( char* data, int max );
+  int read( char* data, unsigned int max );
 
   /**
    * called by K3bAudioDataSource because of the lack of signals
@@ -156,6 +161,13 @@ class K3bAudioTrack : public QObject
    * but not beeing part of some list.
    */
   K3bAudioTrack* copy() const;
+
+  /**
+   * Split the track at position pos and return the splitted track
+   * on success.
+   * The new track will be moved after this track.
+   */
+  K3bAudioTrack* split( const K3b::Msf& pos );
 
   /**
    * Is this track in a list

@@ -19,6 +19,7 @@
 		<Action name="tools_write_dvd_iso" />
 	</Menu>
 	<Action name="tools_encode_video" />
+	<Action name="tools_disk_info" />
   </Menu>
 
   <Menu name="settings">

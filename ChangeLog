@@ -23,7 +23,9 @@ Show writer buffer state in addition to fifo buffer when writing CDs.
 Implemented multible copies in all projects.
 Fixed read and save setting in VideoCD project.
 Big parts of the audio project have been rewritten to have a way better design.
-	
+K3b now always writes a logfile in $(KDEHOME)/share/apps/k3b/lastlog.log
+New device configuration format which solves all issues with removable devices like USB.
+
 0.11.10
 Support Mp3 files starting with multiple ID3 tags.
 Improved ~ handling in the QuickDirSelector.

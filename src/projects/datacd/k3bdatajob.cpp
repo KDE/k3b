@@ -136,6 +136,7 @@ void K3bDataJob::start()
     emit burning(false);
 
     // no sense continuing the same session twice
+    // FIXME: why not?
     d->copies = 1;
 
     m_msInfoFetcher->setDevice( d->doc->burner() );

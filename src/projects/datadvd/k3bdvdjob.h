@@ -60,6 +60,7 @@ class K3bDvdJob : public K3bBurnJob
   void writeImage();
 
   bool waitForDvd();
+  bool startWriting();
 
   K3bIsoImager* m_isoImager;
   K3bGrowisofsImager* m_growisofsImager;
@@ -69,6 +70,7 @@ class K3bDvdJob : public K3bBurnJob
   bool m_writingStarted;
 
  protected slots:
+  void slotSizeCalculationFinished(int, int);
   void slotIsoImagerFinished( bool success );
   void slotIsoImagerPercent(int);
   void slotGrowisofsImagerPercent(int);

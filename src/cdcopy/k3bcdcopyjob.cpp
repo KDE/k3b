@@ -937,7 +937,7 @@ void K3bCdCopyJob::slotSessionReaderFinished( bool success )
 	if( !m_onlyCreateImages ) {
 	  if( m_readerDevice == m_writerDevice ) {
 	    // eject the media
-	    m_readerDevice->eject();
+	    K3bCdDevice::eject( m_readerDevice );
 	  }
 	  
 	  if( !writeNextSession() ) {
@@ -989,6 +989,8 @@ void K3bCdCopyJob::slotWriterFinished( bool success )
 
       if( !m_simulate && d->doneCopies < m_copies ) {
 	// start next copy
+	K3bCdDevice::eject( m_writerDevice );
+
 	d->currentWrittenSession = 1;
 	d->currentReadSession = 1;
 	if( writeNextSession() ) {

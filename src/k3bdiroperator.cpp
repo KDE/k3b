@@ -69,7 +69,15 @@ void K3bDirOperator::readConfig( KConfig* cfg, const QString& group )
   cfg->setGroup( group );
 
   KDirOperator::readConfig( cfg, group );
-  setURL( KURL::fromPathOrURL( cfg->readPathEntry( "last url", QDir::home().absPath() ) ), true );
+
+  //
+  // There seems to be a bug in the KDELibs which makes setURL crash on
+  // some systems when used with a non-existing url
+  //
+  QString lastUrl = cfg->readPathEntry( "last url", QDir::home().absPath() );
+  if( !QFile::exists(lastUrl) )
+    lastUrl = QDir::home().absPath();
+  setURL( KURL::fromPathOrURL(lastUrl), true );
 
   cfg->setGroup( oldGroup );
 }

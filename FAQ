@@ -39,3 +39,6 @@ A: K3b determined the maximum writing speed the first time you start it. Since t
    writer always depends on the mounted medium this may not be the real max. 
    To manually change it open the K3b settings in the device section and click on the value. You will 
    be presented with a spinbox which allows to change the speed.
+
+Q: I always get the error "trying to open /dev/scd0 exclusively" when trying to write with cdrecord.
+A: Cdrecord needs to be able to write to the generic devices /dev/sgX.

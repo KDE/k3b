@@ -22,6 +22,7 @@
 #include <k3bglobals.h>
 #include <k3bversion.h>
 #include <k3bjob.h>
+#include <k3bartsaudioserver.h>
 
 #include <klocale.h>
 #include <kconfig.h>
@@ -35,13 +36,15 @@
 class K3bCore::Private {
 public:
   Private( const K3bVersion& about )
-    : version( about ) {
+    : version( about ),
+      audioServer(0) {
   }
 
   KConfig* config;
   K3bVersion version;
   K3bDeviceManager* deviceManager;
   K3bExternalBinManager* externalBinManager;
+  K3bAudioServer* audioServer;
 
   QPtrList<K3bJob> runningJobs;
 };
@@ -87,6 +90,19 @@ K3bCdDevice::DeviceManager* K3bCore::deviceManager() const
 K3bExternalBinManager* K3bCore::externalBinManager() const
 {
   return d->externalBinManager;
+}
+
+
+K3bAudioServer* K3bCore::audioServer() const
+{
+  if( !d->audioServer ) {
+    K3bCore* that = const_cast<K3bCore*>(this);
+    if( K3bArtsAudioServer::artsAvailable() )
+      d->audioServer = new K3bArtsAudioServer( that );
+    else
+      kdDebug() << "(K3bCore) arts unavailable. No other server implemented yet." << endl;
+  }
+  return d->audioServer;
 }
 
 

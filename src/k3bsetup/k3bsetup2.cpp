@@ -143,11 +143,7 @@ K3bSetup2::K3bSetup2( QWidget *parent, const char *name, const QStringList& )
   //
   QTimer::singleShot( 0, this, SLOT(updateViews()) );
 
-  if (getuid() != 0
-#if KDE_IS_VERSION(3,1,90)
-      || !d->config->checkConfigFilesWritable( true )
-#endif
-      )
+  if( getuid() != 0 || !d->config->checkConfigFilesWritable( true ) )
     makeReadOnly();
 }
 

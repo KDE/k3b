@@ -46,7 +46,7 @@ class K3bAudioDataSource
   /**
    * Read data from the source.
    */
-  virtual int read( char* data, int max ) = 0;
+  virtual int read( char* data, unsigned int max ) = 0;
 
   /**
    * Type of the data in readable form.
@@ -83,6 +83,19 @@ class K3bAudioDataSource
    * but has the same doc.
    */
   virtual K3bAudioDataSource* copy() const = 0;
+
+  /**
+   * Split the source at position pos and return the splitted source
+   * on success.
+   * The new source will be moved after this source.
+   */
+  virtual K3bAudioDataSource* split( const K3b::Msf& pos ) = 0;
+
+ protected:
+  /**
+   * Informs the parent track about changes.
+   */
+  void emitChange();
 
  private:
   K3bAudioDoc* m_doc;

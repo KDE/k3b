@@ -2528,10 +2528,15 @@ bool K3bCdDevice::CdDevice::modeSense( unsigned char** pageData, int& pageLen, i
     cmd[8] = pageLen;
     if( cmd.transport( TR_DIR_READ, *pageData, pageLen ) == 0 )
       return true;
-    else
+    else {
       delete [] *pageData;
+      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": MODE SENSE with real length "
+		<< pageLen << " failed." << endl;
+    }
   }
-
+  else
+    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": MODE SENSE length det failed." << endl;
+    
   return false;
 }
 
@@ -2762,7 +2767,10 @@ int K3bCdDevice::CdDevice::determineMaximalWriteSpeed() const
   for( QValueList<int>::iterator it = list.begin(); it != list.end(); ++it )
     ret = QMAX( ret, *it );
 
-  return ret;
+  if( ret > 0 )
+    return ret;
+  else
+    return m_maxWriteSpeed;
 }
 
 
@@ -2784,6 +2792,14 @@ QValueList<int> K3bCdDevice::CdDevice::determineSupportedWriteSpeeds() const
       if( dataLen > 32 ) {
 	// we have descriptors
 	int numDesc = from2Byte( mm->num_wr_speed_des );
+
+	// Some CDs writer returns the number of bytes that contain
+	// the descriptors rather than the number of descriptors
+	// Ensure number of descriptors claimed actually fits in the data
+	// returned by the mode sense command.
+	if( numDesc > ((dataLen - 32 - 8) / 4) )
+	  numDesc = (dataLen - 32 - 8) / 4;
+
 	cd_wr_speed_performance* wr = (cd_wr_speed_performance*)mm->wr_speed_des;      
 
 	kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 

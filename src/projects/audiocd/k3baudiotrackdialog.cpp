@@ -14,7 +14,6 @@
  */
 
 
-#include <qlineedit.h>
 #include <qtextedit.h>
 #include <qlabel.h>
 #include <qlayout.h>
@@ -32,8 +31,11 @@
 #include <kmimetype.h>
 #include <kurl.h>
 #include <kio/global.h>
+#include <klineedit.h>
 
 #include "k3baudiotrackdialog.h"
+#include "k3baudioeditorwidget.h"
+#include "k3baudiotrackwidget.h"
 #include "k3baudiotrack.h"
 #include <k3bvalidators.h>
 #include <kcutlabel.h>
@@ -54,80 +56,14 @@
 
 
 K3bAudioTrackDialog::K3bAudioTrackDialog( QPtrList<K3bAudioTrack>& tracks, QWidget *parent, const char *name )
-  : KDialogBase( KDialogBase::Plain, i18n("Audio Track Properties"), KDialogBase::Ok|KDialogBase::Cancel|KDialogBase::Apply,
+  : KDialogBase( KDialogBase::Plain, i18n("Audio Track Properties"), 
+		 KDialogBase::Ok|KDialogBase::Cancel|KDialogBase::Apply,
 		 KDialogBase::Ok, parent, name )
 {
   m_tracks = tracks;
 
   setupGui();
   setupConnections();
-	
-//   if( !m_tracks.isEmpty() ) {
-
-//     K3bAudioTrack* track = m_tracks.first();
-
-//     QString allTrackNames = track->filename();
-//     K3b::Msf allTrackLength = track->length();
-//     KIO::filesize_t allTrackSize = track->size();
-
-//     m_editTitle->setText( track->title() );
-//     m_editPerformer->setText( track->artist() );
-//     m_editArranger->setText( track->arranger() );
-//     m_editSongwriter->setText( track->songwriter() );
-//     m_editComposer->setText( track->composer() );
-//     m_editIsrc->setText( track->isrc() );
-//     m_editMessage->setText( track->cdTextMessage() );
-    
-//     m_checkCopy->setChecked( track->copyProtection() );
-//     m_checkPreEmp->setChecked( track->preEmp() );
-    
-//     m_inputPregap->setMsfValue( track->pregap() );
-    
-//     for( track = m_tracks.next(); track != 0; track = m_tracks.next() ) {
-
-//       allTrackNames += ("\n" + track->filename());
-//       allTrackLength += track->length();
-//       allTrackSize += track->size();
-
-
-//       if( track->title() != m_editTitle->text() )
-// 	m_editTitle->setText( QString::null );
-
-//       if( track->artist() != m_editPerformer->text() )
-// 	m_editPerformer->setText( QString::null );
-
-//       if( track->arranger() != m_editArranger->text() )
-// 	m_editArranger->setText( QString::null );
-
-//       if( track->songwriter() != m_editSongwriter->text() )
-// 	m_editSongwriter->setText( QString::null );
-
-//       if( track->composer() != m_editComposer->text() )
-// 	m_editComposer->setText( QString::null );
-
-//       if( track->isrc() != m_editIsrc->text() )
-// 	m_editIsrc->setText( QString::null );
-
-//       if( track->cdTextMessage() != m_editMessage->text() )
-// 	m_editMessage->setText( QString::null );
-
-//       if( track->copyProtection() != m_checkCopy->isChecked() )
-// 	m_checkCopy->setNoChange();
-
-//       if( track->preEmp() != m_checkPreEmp->isChecked() )
-// 	m_checkPreEmp->setNoChange();
-
-//       // ignore the pregap for the time being...
-//     }
-
-//     m_displayFileName->setText( allTrackNames );
-//     m_displayLength->setText( allTrackLength.toString() );
-//     m_displaySize->setText( KIO::convertSize(allTrackSize) );
-
-//     m_labelMimeType->setPixmap( KMimeType::pixmapForURL( KURL(m_tracks.first()->path()), 0, KIcon::Desktop, 48 ) );
-//   }
-
-  m_editTitle->setFocus();
 }
 
 K3bAudioTrackDialog::~K3bAudioTrackDialog()
@@ -144,56 +80,22 @@ void K3bAudioTrackDialog::slotOk()
 
 void K3bAudioTrackDialog::slotApply()
 {
-  // apply all changes to all tracks
-//   for( K3bAudioTrack* track = m_tracks.first(); track != 0; track = m_tracks.next() ) {
-    
-//     if( m_editTitle->edited() )
-//       track->setTitle( m_editTitle->text() );
-
-//     if( m_editPerformer->edited() )
-//       track->setArtist( m_editPerformer->text() );
-
-//     if( m_editArranger->edited() )
-//       track->setArranger( m_editArranger->text() );
-
-//     if( m_editSongwriter->edited() )
-//       track->setSongwriter( m_editSongwriter->text() );
-
-//     if( m_editComposer->edited() )
-//       track->setComposer( m_editComposer->text() );
-
-//     if( m_editIsrc->edited() )
-//       track->setIsrc( m_editIsrc->text() );
-
-//     if( m_editMessage->isModified() )
-//       track->setCdTextMessage( m_editMessage->text() );
-
-//     if( m_checkCopy->state() != QButton::NoChange )
-//       track->setCopyProtection( m_checkCopy->isChecked() );
-
-//     if( m_checkPreEmp->state() != QButton::NoChange )
-//       track->setPreEmp( m_checkPreEmp->isChecked() );
-
-//     track->setPregap( m_inputPregap->msfValue() );
-//   }
-
-//   if( m_tracks.count() == 1 ) {
-//     m_tracks.first()->setTrackStart( m_editTrackStart->msfValue() );
-//     m_tracks.first()->setTrackEnd( m_editTrackEnd->msfValue() );
-//   }
+  m_audioTrackWidget->save();
 }
 
 
 void K3bAudioTrackDialog::setupGui()
 {
-//   QFrame* frame = plainPage();
+  QFrame* frame = plainPage();
 
-//   QGridLayout* mainLayout = new QGridLayout( frame );
-//   mainLayout->setSpacing( spacingHint() );
-//   mainLayout->setMargin( 0 );
+  QGridLayout* mainLayout = new QGridLayout( frame );
+  mainLayout->setSpacing( spacingHint() );
+  mainLayout->setMargin( 0 );
 
-//   QTabWidget* mainTabbed = new QTabWidget( frame );
-
+  QTabWidget* mainTabbed = new QTabWidget( frame );
+  m_audioTrackWidget = new K3bAudioTrackWidget( m_tracks, mainTabbed );
+  mainTabbed->addTab( m_audioTrackWidget, i18n("Track Properties") );
+  mainLayout->addWidget( mainTabbed, 0, 0 );
 
 //   // /////////////////////////////////////////////////
 //   // OPTIONS TAB
@@ -211,15 +113,6 @@ void K3bAudioTrackDialog::setupGui()
 //   m_checkPreEmp       = new QCheckBox( i18n( "Pr&eemphasis" ), optionsTab, "m_checkPreEmp" );
 //   m_checkCopy         = new QCheckBox( i18n( "&Copy protected" ), optionsTab, "m_checkCopy" );
 
-//   QWhatsThis::add( m_checkPreEmp, i18n( "Preemphasis is mainly used in audio processing.\n"
-// 					"Higher frequencies in audio signals usually have "
-// 					"lower amplitudes.\n"
-// 					"This can lead to bad signal quality on noisy "
-// 					"transmission because the high frequencies might become "
-// 					"too weak. To avoid this effect, high frequencies are "
-// 					"amplified before transmission (preemphasis); "
-// 					"the receiver will then weaken them accordingly for "
-// 					"playback." ) );
 
 //   optionsGrid->addWidget( labelPregap, 0, 0 );
 //   optionsGrid->addWidget( m_inputPregap, 0, 1 );
@@ -439,30 +332,13 @@ void K3bAudioTrackDialog::setupConnections()
 }
 
 
-void K3bAudioTrackDialog::slotTrackStartChanged( int value )
-{
-  // make sure a track is always at least 4 seconds in length as defined in 
-  // the Red Book
-//   m_editTrackEnd->setRange( value + 300, m_tracks.first()->fileLength().totalFrames() );
-//   updateTrackLengthDisplay();
-}
-
-
-void K3bAudioTrackDialog::slotTrackEndChanged( int value )
-{
-  // make sure a track is always at least 4 seconds in length as defined in 
-  // the Red Book
-//   m_editTrackStart->setRange( 0, value - 300 );
-//   updateTrackLengthDisplay();
-}
-
-
 void K3bAudioTrackDialog::updateTrackLengthDisplay()
 {
 //   K3b::Msf len = m_editTrackEnd->msfValue() - m_editTrackStart->msfValue();
 //   m_displayLength->setText( len.toString() );
 //   m_displaySize->setText( KIO::convertSize(len.audioBytes()) );
 }
+
 
 
 #include "k3baudiotrackdialog.moc"

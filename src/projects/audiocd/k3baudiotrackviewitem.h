@@ -42,6 +42,15 @@ class K3bAudioTrackViewItem : public K3bListViewItem
   void setText( int col, const QString& text );
   QString text( int i ) const;
 
+  /**
+   * @reimpl
+   */
+  void setSelected( bool s );
+  /**
+   * @reimpl
+   */
+  void insertItem( QListViewItem* item );
+
  private:
   K3bAudioTrack* m_track;
   bool m_alreadyRemoved;

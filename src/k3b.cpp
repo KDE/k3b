@@ -89,7 +89,7 @@
 #include "cdcopy/k3bcdcopydialog.h"
 #include "videoEncoding/k3bdivxview.h"
 #include "k3btempdirselectionwidget.h"
-#include "tools/k3bbusywidget.h"
+#include <k3bbusywidget.h>
 #include "k3bstatusbarmanager.h"
 #include "k3bfiletreecombobox.h"
 #include "k3bfiletreeview.h"
@@ -107,6 +107,7 @@
 #include <k3bthememanager.h>
 #include <k3biso9660.h>
 #include <k3bcuefileparser.h>
+#include <k3bdeviceselectiondialog.h>
 
 
 static K3bMainWindow* s_k3bMainWindow = 0;
@@ -304,28 +305,14 @@ void K3bMainWindow::initActions()
   (void)new KAction( i18n("System Check"), 0, 0, this, SLOT(slotCheckSystem()),
 		     actionCollection(), "help_check_system" );
 
+  KAction* actionToolsDiskInfo = new KAction( i18n("Diskinfo"), 0, 0, this, SLOT(slotToolsDiskInfo()),
+					      actionCollection(), "tools_disk_info" );
+
 #ifdef HAVE_K3BSETUP
   actionSettingsK3bSetup = new KAction(i18n("K3b &Setup"), "configure", 0, this, SLOT(slotK3bSetup()),
 				       actionCollection(), "settings_k3bsetup" );
 #endif
 
-  // Project actions (TODO: these should go into K3bDoc and it's subclasses)
-  // ==============================================================================================================
-
-  // Data Project
-//   actionDataImportSession = new KAction(i18n("&Import Session"), "gear", 0, this, SLOT(slotDataImportSession()),
-// 					actionCollection(), "project_data_import_session" );
-//   actionDataClearImportedSession = new KAction(i18n("&Clear Imported Session"), "gear", 0, this,
-// 					       SLOT(slotDataClearImportedSession()), actionCollection(),
-// 					       "project_data_clear_imported_session" );
-//   actionDataEditBootImages = new KAction(i18n("&Edit Boot Images"), "cdtrack", 0, this,
-//  					 SLOT(slotEditBootImages()), actionCollection(),
-//  					 "project_data_edit_boot_images" );
-
-//   m_dataProjectActions.append( actionDataImportSession );
-//   m_dataProjectActions.append( actionDataClearImportedSession );
-//   m_dataProjectActions.append( actionDataEditBootImages );
-  // ==============================================================================================================
 
   // --- filetreecombobox-toolbar -------------------------------------------------------------------
   K3bFileTreeComboBox* m_fileTreeComboBox = new K3bFileTreeComboBox( 0 );
@@ -361,6 +348,7 @@ void K3bMainWindow::initActions()
   actionFileSaveAs->setToolTip(i18n("Saves the actual project as..."));
   actionFileClose->setToolTip(i18n("Closes the actual project"));
   actionFileQuit->setToolTip(i18n("Quits the application"));
+  actionToolsDiskInfo->setToolTip( i18n("Retrieve informationabout inserted media") );
 
   // make sure the tooltips are used for the menu
   actionCollection()->setHighlightingEnabled( true );
@@ -1515,6 +1503,15 @@ bool K3bMainWindow::isCdDvdImageAndIfSoOpenDialog( const KURL& url )
   }
   else
     return false;
+}
+
+
+void K3bMainWindow::slotToolsDiskInfo()
+{
+  K3bCdDevice::CdDevice* dev = K3bDeviceSelectionDialog::selectDevice( this, i18n("Please select a CD/DVD device") );
+  if( dev ) {
+    m_dirView->showDiskInfo( dev );
+  }			  
 }
 
 #include "k3b.moc"

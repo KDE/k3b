@@ -463,9 +463,9 @@ bool K3bIsoImager::addMkisofsParameters()
 {
   // add multisession info
   if( !m_multiSessionInfo.isEmpty() ) {
-    *m_process << "-C" << m_multiSessionInfo;
+    *m_process << "-cdrecord-params" << m_multiSessionInfo;
     if( m_device )
-      *m_process << "-M" << m_device->blockDeviceName();
+      *m_process << "-prev-session" << m_device->blockDeviceName();
   }
 
   // add the arguments
@@ -475,11 +475,11 @@ bool K3bIsoImager::addMkisofsParameters()
   if( !m_doc->isoOptions().volumeID().isEmpty() ) {
     QString s = m_doc->isoOptions().volumeID();
     s.truncate(32);  // ensure max length
-    *m_process << "-V" << s;
+    *m_process << "-volid" << s;
   }
   else {
     emit infoMessage( i18n("No volume id specified. Using default."), WARNING );
-    *m_process << "-V" << "CDROM";
+    *m_process << "-volid" << "CDROM";
   }
 
   QString s = m_doc->isoOptions().volumeSetId();
@@ -488,22 +488,29 @@ bool K3bIsoImager::addMkisofsParameters()
 
   s = m_doc->isoOptions().applicationID();
   s.truncate(128);  // ensure max length
-  *m_process << "-A" << s;
+  *m_process << "-appid" << s;
 
   s = m_doc->isoOptions().publisher();
   s.truncate(128);  // ensure max length
-  *m_process << "-P" << s;
+  *m_process << "-publisher" << s;
 
   s = m_doc->isoOptions().preparer();
   s.truncate(128);  // ensure max length
-  *m_process << "-p" << s;
+  *m_process << "-preparer" << s;
 
   s = m_doc->isoOptions().systemId();
   s.truncate(32);  // ensure max length
   *m_process << "-sysid" << s;
 
-  *m_process << "-volset-size" << QString::number(m_doc->isoOptions().volumeSetSize());
-  *m_process << "-volset-seqno" << QString::number(m_doc->isoOptions().volumeSetNumber());
+  int volsetSize = m_doc->isoOptions().volumeSetSize();
+  int volsetSeqNo = m_doc->isoOptions().volumeSetNumber();
+  if( volsetSeqNo > volsetSize ) {
+    kdDebug() << "(K3bIsoImager) invalid volume set sequence number: " << volsetSeqNo 
+	      << " with volume set size: " << volsetSize << endl;
+    volsetSeqNo = volsetSize;
+  }
+  *m_process << "-volset-size" << QString::number(volsetSize);
+  *m_process << "-volset-seqno" << QString::number(volsetSeqNo);
 
   if( m_sortWeightFile ) {
     *m_process << "-sort" << m_sortWeightFile->name();
@@ -511,15 +518,15 @@ bool K3bIsoImager::addMkisofsParameters()
 
   if( m_doc->isoOptions().createRockRidge() ) {
     if( m_doc->isoOptions().preserveFilePermissions() )
-      *m_process << "-R";
+      *m_process << "-rock";
     else
-      *m_process << "-r";
+      *m_process << "-rational-rock";
     if( m_rrHideFile )
       *m_process << "-hide-list" << m_rrHideFile->name();
   }
 
   if( m_doc->isoOptions().createJoliet() ) {
-    *m_process << "-J";
+    *m_process << "-joliet";
     if( m_doc->isoOptions().jolietLong() )
       *m_process << "-joliet-long";
     if( m_jolietHideFile )
@@ -530,15 +537,15 @@ bool K3bIsoImager::addMkisofsParameters()
     *m_process << "-udf";
 
   if( m_doc->isoOptions().ISOuntranslatedFilenames()  ) {
-    *m_process << "-U";
+    *m_process << "-untranslated-filenames";
   }
   else {
     if( m_doc->isoOptions().ISOallowPeriodAtBegin()  )
-      *m_process << "-L";
+      *m_process << "-allow-leading-dots";
     if( m_doc->isoOptions().ISOallow31charFilenames()  )
-      *m_process << "-l";
+      *m_process << "-full-iso9660-filenames";
     if( m_doc->isoOptions().ISOomitVersionNumbers() && !m_doc->isoOptions().ISOmaxFilenameLength() )
-      *m_process << "-N";
+      *m_process << "-omit-version-number";
     if( m_doc->isoOptions().ISOrelaxedFilenames()  )
       *m_process << "-relaxed-filenames";
     if( m_doc->isoOptions().ISOallowLowercase()  )
@@ -548,20 +555,20 @@ bool K3bIsoImager::addMkisofsParameters()
     if( m_doc->isoOptions().ISOallowMultiDot()  )
       *m_process << "-allow-multidot";
     if( m_doc->isoOptions().ISOomitTrailingPeriod() )
-      *m_process << "-d";
+      *m_process << "-omit-period";
   }
 
   if( m_doc->isoOptions().ISOmaxFilenameLength()  )
     *m_process << "-max-iso9660-filenames";
 
   if( m_noDeepDirectoryRelocation  )
-    *m_process << "-D";
+    *m_process << "-disable-deep-relocation";
 
   if( m_doc->isoOptions().followSymbolicLinks() )
-    *m_process << "-f";
+    *m_process << "-follow-links";
 
   if( m_doc->isoOptions().createTRANS_TBL()  )
-    *m_process << "-T";
+    *m_process << "-translation-table";
   if( m_doc->isoOptions().hideTRANS_TBL()  )
     *m_process << "-hide-joliet-trans-tbl";
 
@@ -583,7 +590,7 @@ bool K3bIsoImager::addMkisofsParameters()
 
       K3bBootItem* bootItem = *it;
 
-      *m_process << "-b";
+      *m_process << "-eltorito-boot";
       *m_process << bootItem->writtenPath();
 
       if( bootItem->imageType() == K3bBootItem::HARDDISK ) {
@@ -605,7 +612,7 @@ bool K3bIsoImager::addMkisofsParameters()
       first = false;
     }
 
-    *m_process << "-c" << m_doc->bootCataloge()->writtenPath();
+    *m_process << "-eltorito-catalog" << m_doc->bootCataloge()->writtenPath();
   }
 
 
