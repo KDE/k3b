@@ -22,7 +22,7 @@
 #include <qwidget.h>
 #include <qlist.h>
 
-#include "k3btoc.h"
+#include "../device/k3btoc.h"
 
 class KAction;
 class K3bDevice;

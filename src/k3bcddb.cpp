@@ -26,8 +26,8 @@
 #include "cddb.h"
 #include "k3b.h"
 
-#include "cdinfo/k3btoc.h"
-#include "cdinfo/k3btrack.h"
+#include "device/k3btoc.h"
+#include "device/k3btrack.h"
 
 
 

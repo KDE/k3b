@@ -304,7 +304,7 @@ install_location=
 type=HEADER
 
 [src/cdinfo/Makefile.am]
-files=src/cdinfo/k3bcdinfo.cpp,src/cdinfo/k3bcdinfo.h,src/cdinfo/k3bcdinfodialog.cpp,src/cdinfo/k3bcdinfodialog.h,src/cdinfo/k3btoc.cpp,src/cdinfo/k3btoc.h,src/cdinfo/k3btrack.cpp,src/cdinfo/k3btrack.h
+files=src/cdinfo/k3bcdinfo.cpp,src/cdinfo/k3bcdinfo.h,src/cdinfo/k3bcdinfodialog.cpp,src/cdinfo/k3bcdinfodialog.h
 sub_dirs=
 type=static_library
 
@@ -327,30 +327,6 @@ install_location=
 type=SOURCE
 
 [src/cdinfo/k3bcdinfodialog.h]
-dist=true
-install=false
-install_location=
-type=HEADER
-
-[src/cdinfo/k3btoc.cpp]
-dist=true
-install=false
-install_location=
-type=SOURCE
-
-[src/cdinfo/k3btoc.h]
-dist=true
-install=false
-install_location=
-type=HEADER
-
-[src/cdinfo/k3btrack.cpp]
-dist=true
-install=false
-install_location=
-type=SOURCE
-
-[src/cdinfo/k3btrack.h]
 dist=true
 install=false
 install_location=
@@ -494,7 +470,7 @@ install_location=
 type=HEADER
 
 [src/device/Makefile.am]
-files=src/device/ScsiIf-common.cc,src/device/Sample.h,src/device/ScsiIf-linux.cc,src/device/ScsiIf.h,src/device/sg_err.cc,src/device/sg_err.h,src/device/util.cc,src/device/util.h,src/device/k3bdevice.h,src/device/k3bdevice.cpp,src/device/k3bdevicemanager.cpp,src/device/k3bdevicemanager.h,src/device/k3bemptydiscwaiter.cpp,src/device/k3bemptydiscwaiter.h,src/device/k3bidedevice.cpp,src/device/k3bidedevice.h,src/device/k3bscsidevice.cpp,src/device/k3bscsidevice.h
+files=src/device/ScsiIf-common.cc,src/device/Sample.h,src/device/ScsiIf-linux.cc,src/device/ScsiIf.h,src/device/sg_err.cc,src/device/sg_err.h,src/device/util.cc,src/device/util.h,src/device/k3bdevice.h,src/device/k3bdevice.cpp,src/device/k3bdevicemanager.cpp,src/device/k3bdevicemanager.h,src/device/k3bemptydiscwaiter.cpp,src/device/k3bemptydiscwaiter.h,src/device/k3bidedevice.cpp,src/device/k3bidedevice.h,src/device/k3bscsidevice.cpp,src/device/k3bscsidevice.h,src/device/k3btoc.cpp,src/device/k3btoc.h,src/device/k3btrack.cpp,src/device/k3btrack.h
 sharedlib_LDFLAGS=-version-info 0:0:1
 sharedlib_rootname=device
 sub_dirs=
@@ -579,6 +555,30 @@ install_location=
 type=SOURCE
 
 [src/device/k3bscsidevice.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/device/k3btoc.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/device/k3btoc.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/device/k3btrack.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/device/k3btrack.h]
 dist=true
 install=false
 install_location=

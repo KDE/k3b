@@ -18,8 +18,8 @@
 #include "k3bcdinfo.h"
 
 #include "../device/k3bdevice.h"
-#include "k3btoc.h"
-#include "k3btrack.h"
+#include "../device/k3btoc.h"
+#include "../device/k3btrack.h"
 #include "../k3bcddb.h"
 
 #include <qlayout.h>

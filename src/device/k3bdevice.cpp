@@ -1,6 +1,6 @@
 #include "k3bdevice.h"
-#include "../cdinfo/k3btrack.h"
-#include "../cdinfo/k3btoc.h"
+#include "k3btrack.h"
+#include "k3btoc.h"
 
 #include <qstring.h>
 
