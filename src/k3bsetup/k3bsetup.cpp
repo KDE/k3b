@@ -293,30 +293,33 @@ void K3bSetup::doApplyDevicePermissions( uint groupId )
 void K3bSetup::doApplyExternalProgramPermissions( uint groupId )
 {
   static const char* programs[] = { "cdrecord",
-				    "mkisofs",
 				    "cdrdao" };
-  static const int NUM_PROGRAMS = 3;
+  static const int NUM_PROGRAMS = 2;
 
   for( int i = 0; i < NUM_PROGRAMS; ++i ) {
-    const K3bExternalBin* binObject = m_externalBinManager->binObject( programs[i] );
+    const K3bExternalProgram* p = m_externalBinManager->program( programs[i] );
 
     emit writingSetting( i18n("Changing permissions for %1.").arg( programs[i] ) );
 
-    if( QFile::exists(binObject->path) ) {
-      if( !binObject->version.isEmpty() ) {
-	kdDebug() << "(K3bSetup) setting permissions for " << programs[i] << "." << endl;
-	chown( QFile::encodeName(binObject->path), 0, groupId );
-	chmod( QFile::encodeName(binObject->path), S_ISUID|S_IRUSR|S_IWUSR|S_IXUSR|S_IXGRP );
-	emit settingWritten( true, i18n("Success") );
+    for( QPtrListIterator<K3bExternalBin> it( p->bins() ); it.current(); ++it ) {
+      const K3bExternalBin* binObject = *it;
+
+      if( QFile::exists(binObject->path) ) {
+	if( !binObject->version.isEmpty() ) {
+	  kdDebug() << "(K3bSetup) setting permissions for " << programs[i] << "." << endl;
+	  chown( QFile::encodeName(binObject->path), 0, groupId );
+	  chmod( QFile::encodeName(binObject->path), S_ISUID|S_IRUSR|S_IWUSR|S_IXUSR|S_IXGRP );
+	  emit settingWritten( true, i18n("Success") );
+	}
+	else {
+	  emit settingWritten( false, i18n("%1 is not a %2 executable.").arg(binObject->path).arg(programs[i]) );
+	  kdDebug() << "(K3bSetup) " << binObject->path << " is not " << programs[i] << "." << endl;
+	}
       }
       else {
-	emit settingWritten( false, i18n("%1 is not a %2 executable.").arg(binObject->path).arg(programs[i]) );
-	kdDebug() << "(K3bSetup) " << binObject->path << " is not " << programs[i] << "." << endl;
+	emit settingWritten( false, i18n("Could not find %1.").arg(programs[i]) );
+	kdDebug() << "(K3bSetup) could not find " << programs[i] << "." << endl;
       }
-    }
-    else {
-      emit settingWritten( false, i18n("Could not find %1.").arg(programs[i]) );
-      kdDebug() << "(K3bSetup) could not find " << programs[i] << "." << endl;
     }
   }
 }
