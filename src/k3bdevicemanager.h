@@ -12,8 +12,9 @@ class KProcess;
 class K3bDevice 
 {
  public:
-  K3bDevice() {}
+  K3bDevice() { bus = target = lun = maxReadSpeed = maxWriteSpeed = 0; burner = 0; burnproof = 0;}
   K3bDevice( K3bDevice * );
+  K3bDevice( const K3bDevice& );
   K3bDevice( int _bus, int _target, int _lun,
 	     const QString & _vendor,
 	     const QString & _description,

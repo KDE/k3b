@@ -18,6 +18,16 @@ static const char* deviceNames[] =
     "/dev/sg14", "/dev/sg15" };
 
 
+
+K3bDevice::K3bDevice( const K3bDevice& device )
+  : bus( device.bus ), target( device.target ), lun( device.lun ), vendor( device.vendor ),
+    description( device.description ), version( device.version ), burner( device.burner ),
+    burnproof( device.burnproof ), maxReadSpeed( device.maxReadSpeed ),
+    devicename( device.devicename ), maxWriteSpeed( device.maxWriteSpeed ) 
+{
+}
+
+
 QString K3bDevice::device()
 {
   return QString( "%1,%2,%3" ).arg( bus ).arg( target ).arg( lun );
@@ -159,11 +169,10 @@ int K3bDeviceManager::readConfig()
 	if( list.count() < 8 )
 	  qDebug( "(K3bDeviceManager) Corrupt entry in Kconfig file" );
 	else {
-	  //TODO
 	  m_writer.append( new K3bDevice ( list[0].toInt(), list[1].toInt(),
 					   list[2].toInt(), list[3], list[4],
-					   list[5], true, false,
-					   list[6].toInt(), list[8],
+					   list[5], true, ( list[8] == "yes" ),
+					   list[6].toInt(), list[9],
 					   list[7].toInt() ) );
 	  m_foundDevices++;
 	}
