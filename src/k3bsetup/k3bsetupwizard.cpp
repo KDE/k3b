@@ -26,7 +26,8 @@
 
 
 K3bSetupWizard::K3bSetupWizard( K3bSetup* setup, QWidget* parent,  const char* name, bool modal, WFlags fl )
-    : KWizard( parent, name, modal, fl )
+  : KWizard( parent, name, modal, fl ),
+    m_accepted(false)
 {
   // create the K3bSetup instance
   m_setup = setup;
@@ -65,10 +66,17 @@ void K3bSetupWizard::showPage( QWidget* page )
 							    
 void K3bSetupWizard::closeEvent( QCloseEvent* e )
 {
-  if( KMessageBox::questionYesNo( this, i18n("Do you really want to discard all changes?"), i18n("Close") ) == KMessageBox::Yes )
-    e->accept();
+  if( !m_accepted ) {
+    if( KMessageBox::questionYesNo( this, 
+				    i18n("Do you really want to discard all changes?"), 
+				  i18n("Close") )
+	== KMessageBox::Yes )
+      e->accept();
+    else
+      e->ignore();
+  }
   else
-    e->ignore();
+    e->accept();
 }
 
 
@@ -109,6 +117,8 @@ void K3bSetupWizard::accept()
 			     "Thank you for using K3b. Have a lot of fun!") );
 
   KMessageBox::information( this, finishMessage, i18n("K3b Setup Finished") );
+
+  m_accepted = true;
 
   KWizard::accept();
 }
