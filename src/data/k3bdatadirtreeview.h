@@ -46,7 +46,7 @@ class K3bDataDirTreeView : public K3bListView
 
  public:
   K3bDataDirTreeView( K3bView*, K3bDataDoc*, QWidget* parent );
-  ~K3bDataDirTreeView();
+  virtual ~K3bDataDirTreeView();
 
   K3bDataDirViewItem* root() { return m_root; }
 		
@@ -54,14 +54,16 @@ class K3bDataDirTreeView : public K3bListView
 
   KActionCollection* actionCollection() const { return m_actionCollection; }
 
+ public slots:
+  void updateContents();
+  void setCurrentDir( K3bDirItem* );
+
  signals:
-  void urlsDropped( const KURL::List&, QListViewItem* parent );
+  //  void urlsDropped( const KURL::List&, QListViewItem* parent );
+  void dirSelected( K3bDirItem* );
 
  protected:
   bool acceptDrag(QDropEvent* e) const;
-	
- private:
-  void setupActions();
 
   KActionCollection* m_actionCollection;
   KActionMenu* m_popupMenu;
@@ -69,6 +71,12 @@ class K3bDataDirTreeView : public K3bListView
   KAction* m_actionRename;
   KAction* m_actionNewDir;
   KAction* m_actionProperties;
+
+ protected slots:
+  virtual void slotDropped( QDropEvent* e, QListViewItem* after, QListViewItem* parent );
+
+ private:
+  void setupActions();
 
   K3bView* m_view;
 
@@ -82,22 +90,14 @@ class K3bDataDirTreeView : public K3bListView
    */
   QMap<K3bDirItem*, K3bDataDirViewItem*> m_itemMap;
 
- public slots:
-  void updateContents();
-  void setCurrentDir( K3bDirItem* );
-
  private slots:
   void slotExecuted( QListViewItem* );
   void slotDataItemRemoved( K3bDataItem* );
-  void slotDropped( QDropEvent* e, QListViewItem* after, QListViewItem* parent );
   void showPopupMenu( KListView*, QListViewItem* _item, const QPoint& );
   void slotRenameItem();
   void slotRemoveItem();
   void slotNewDir();
   void slotProperties();
-
- signals:
-  void dirSelected( K3bDirItem* );
 };
 
 #endif

@@ -9,7 +9,7 @@ class K3bMixedDoc;
 class QWidgetStack;
 class K3bFillStatusDisplay;
 class K3bDataFileView;
-class K3bDataDirTreeView;
+class K3bMixedDirTreeView;
 class K3bAudioListView;
 class QListViewItem;
 class K3bDirItem;
@@ -27,21 +27,19 @@ class K3bMixedView : public K3bView
   K3bDirItem* currentDir() const;
 
  private slots:
-  void treeSelectionChanged( QListViewItem* );
-  void slotUrlsDropped( const KURL::List& urls, QListViewItem* item );
+  void slotAudioTreeSelected();
+  void slotDataTreeSelected();
 
  private:
   K3bMixedDoc* m_doc;
 
   QWidgetStack* m_widgetStack;
 
-  K3bDataDirTreeView* m_dataDirTreeView;
+  K3bMixedDirTreeView* m_mixedDirTreeView;
   K3bDataFileView* m_dataFileView;
   K3bAudioListView* m_audioListView;
 
   K3bFillStatusDisplay* m_fillStatusDisplay;
-
-  QListViewItem* m_audioTreeItem;
 };
 
 #endif
