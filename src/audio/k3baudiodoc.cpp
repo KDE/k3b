@@ -15,12 +15,12 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "k3b.h"
-#include "k3bglobals.h"
+#include "../k3b.h"
+#include "../k3bglobals.h"
 #include "k3baudiodoc.h"
 #include "k3baudioview.h"
 #include "k3baudiotrack.h"
-#include "k3bprogressdialog.h"
+#include "../k3bprogressdialog.h"
 #include "k3baudioburndialog.h"
 #include "k3baudioburninfodialog.h"
 

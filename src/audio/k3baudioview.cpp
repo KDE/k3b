@@ -15,14 +15,14 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "k3b.h"
+#include "../k3b.h"
 #include "k3baudioview.h"
 #include "k3baudiodoc.h"
 #include "audiolistview.h"
 #include "audiolistviewitem.h"
 #include "k3baudiotrack.h"
 #include "k3baudiotrackdialog.h"
-#include "k3bfillstatusdisplay.h"
+#include "../k3bfillstatusdisplay.h"
 
 // QT-includes
 #include <qlayout.h>

@@ -18,7 +18,7 @@
 #ifndef K3BAUDIOVIEW_H
 #define K3BAUDIOVIEW_H
 
-#include "k3bview.h"
+#include "../k3bview.h"
 
 #include <qstringlist.h>
 

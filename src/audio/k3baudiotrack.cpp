@@ -16,7 +16,7 @@
  ***************************************************************************/
 
 #include "k3baudiotrack.h"
-#include "k3bglobals.h"
+#include "../k3bglobals.h"
 
 #include <qstring.h>
 #include <qfileinfo.h>
