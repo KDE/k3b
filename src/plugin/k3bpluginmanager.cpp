@@ -67,7 +67,7 @@ void K3bPluginManager::loadPlugin( const QString& fileName )
   c.setGroup( "K3b Plugin" );
 
   // read the lib
-  KLibFactory* factory = KLibLoader::self()->factory( c.readEntry( "lib" ) );
+  KLibFactory* factory = KLibLoader::self()->factory( c.readEntry( "lib" ).latin1() );
   if( factory ) {
     K3bPluginFactory* k3bFactory = dynamic_cast<K3bPluginFactory*>( factory );
     if( k3bFactory ) {
@@ -105,7 +105,7 @@ void K3bPluginManager::unloadPlugin( K3bPluginFactory* factory )
   QString lib = d->factories[factory];
   d->factories.erase( factory );
 
-  KLibLoader::self()->unloadLibrary( lib );
+  KLibLoader::self()->unloadLibrary( lib.latin1() );
 }
 
 #include "k3bpluginmanager.moc"
