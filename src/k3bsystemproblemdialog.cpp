@@ -248,7 +248,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 					   i18n("Used %1 version %2 is outdated").arg("growisofs").arg(k3bcore->externalBinManager()->binObject( "growisofs" )->version),
 					   i18n("K3b needs at least growisofs version 5.10 to write dvds. "
 						"All older versions will not work and K3b will refuse to use them."),
-					   i18n("Install a more recent version of growisofs."),
+					   i18n("Install a more recent version of %1.").arg("growisofs"),
 					   false ) );
       }
       else if( k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3bVersion( 5, 12 ) ) {
@@ -268,6 +268,20 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 					 i18n("Install the dvd+rw-tools package."),
 					 false ) );
     }
+  }
+
+  if( !k3bcore->externalBinManager()->foundBin( "mkisofs" ) ) {
+
+  }
+  else if( k3bcore->externalBinManager()->binObject( "mkisofs" )->version < K3bVersion( 1, 14 ) ) {
+      problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+					 i18n("Used %1 version %2 is outdated")
+					 .arg("mkisofs")
+					 .arg(k3bcore->externalBinManager()->binObject( "mkisofs" )->version),
+					 i18n("K3b needs at least mkisofs version 1.14. Older versions may introduce problems "
+					      "when creating data projects."),
+					 i18n("Install a more recent version of %1.").arg("mkisofs"),
+					 false ) );
   }
 
   // 2. ATAPI devices

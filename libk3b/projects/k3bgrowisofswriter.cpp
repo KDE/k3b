@@ -243,7 +243,7 @@ bool K3bGrowisofsWriter::prepareProcess()
     d->gh->reset(false);
 
   if( dvdCompat )
-    *d->process << "--dvd-compat";
+    *d->process << "-dvd-compat";
 
   //
   // Some DVD writers do not allow changing the writing speed so we allow

@@ -538,7 +538,29 @@ bool K3bIsoImager::addMkisofsParameters( bool printSize )
       *m_process << "-hide-joliet-list" << m_jolietHideFile->name();
   }
 
-  if( m_doc->isoOptions().createUdf() )
+  //
+  // Check if we have files > 2 GB and enable udf in that case.
+  //
+  bool filesGreaterThan2Gb = false;
+  K3bDataItem* item = m_doc->root();
+  while( item ) {
+    if( item->isFile() && item->k3bSize() > 2LL*1024LL*1024LL*1024LL ) {
+      filesGreaterThan2Gb = true;
+      break;
+    }    
+    item = item->nextSibling();
+  }
+
+  if( filesGreaterThan2Gb )
+    emit infoMessage( i18n("Found files bigger than 2 GB. These files will only be fully accessible if mounted with UDF."),
+		      WARNING );
+  
+  bool udf = m_doc->isoOptions().createUdf();
+  if( !udf && filesGreaterThan2Gb ) {
+    emit infoMessage( i18n("Enabling UDF extension."), INFO );
+    udf = true;
+  }
+  if( udf )
     *m_process << "-udf";
 
   if( m_doc->isoOptions().ISOuntranslatedFilenames()  ) {

@@ -87,6 +87,21 @@ void K3bGrowisofsHandler::handleLine( const QString& line )
     emit newSubTask( i18n("Flushing Cache")  );
     emit infoMessage( i18n("Flushing the cache may take some time."), K3bJob::INFO );
   }
+
+  // FIXME: I think this starts with dev->blockDeviceName() so we could improve parsing with:
+  //        if( line.startsWith( dev->blockDeviceName() ) ) {
+  //              line = line.mid( dev->blockDeviceName().length() );
+  //              if( line.startsWith( "closing.....
+
+  else if( line.contains( "closing track" ) ) {
+    emit newSubTask( i18n("Closing Track")  );
+  }
+  else if( line.contains( "closing disc" ) ) {
+    emit newSubTask( i18n("Closing Disc")  );
+  }
+  else if( line.contains( "closing session" ) ) {
+    emit newSubTask( i18n("Closing Session")  );
+  }
   else if( line.contains( "updating RMA" ) ) {
     emit newSubTask( i18n("Updating RMA") );
     emit infoMessage( i18n("Updating RMA") + "...", K3bJob::INFO );
