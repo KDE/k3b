@@ -253,9 +253,9 @@ K3bDirItem* K3bDataDoc::createDirItem( QFileInfo& f, K3bDirItem* parent )
   c->setGroup( "Data project settings" );
 
   int dirFilter = QDir::All;
-  if( c->readBoolEntry( "List hidden files", false ) )
+  if( c->readBoolEntry( "Add hidden files", true ) )
     dirFilter |= QDir::Hidden;
-  if( c->readBoolEntry( "List system files", false ) )
+  if( c->readBoolEntry( "Add system files", false ) )
     dirFilter |= QDir::System;
 
   QStringList dlist = QDir( f.absFilePath() ).entryList( dirFilter );
