@@ -187,7 +187,7 @@ class K3bDevice
   void load() const;
 
  protected:
-  bool furtherInit();
+  virtual bool furtherInit();
 
   QString m_vendor;
   QString m_description;

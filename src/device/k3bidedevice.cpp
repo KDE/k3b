@@ -34,7 +34,8 @@ bool K3bIdeDevice::furtherInit()
   else {
     struct hd_driveid hdId;
     ::ioctl( cdromfd, HDIO_GET_IDENTITY, &hdId );
-    
+
+    m_vendor = "Unknown"; // FIXME    
     m_description = QString::fromLatin1((const char*)hdId.model, 40).stripWhiteSpace();
     m_version = QString::fromLatin1((const char*)hdId.fw_rev, 8).stripWhiteSpace();
 

@@ -35,28 +35,6 @@ typedef Q_INT16 size16;
 typedef Q_INT32 size32;
 
 
-const char* K3bDeviceManager::deviceNames[] =
-  { "/dev/cdrom", 
-    "/dev/cdrecorder", 
-    "/dev/dvd",
-    "/dev/sg0",
-    "/dev/sg1", 
-    "/dev/sg2", 
-    "/dev/sg3", 
-    "/dev/sg4",
-    "/dev/sg5",
-    "/dev/sg6", 
-    "/dev/sg7", 
-    "/dev/sg8", 
-    "/dev/sg9", 
-    "/dev/sg10", 
-    "/dev/sg11",
-    "/dev/sg12",
-    "/dev/sg13",
-    "/dev/sg14",
-    "/dev/sg15" };
-
-
 
 
 K3bDeviceManager::K3bDeviceManager( )
@@ -135,9 +113,36 @@ QPtrList<K3bDevice>& K3bDeviceManager::allDevices()
 int K3bDeviceManager::scanbus()
 {
   m_foundDevices = 0;
-  for( int i = 0; i < DEV_ARRAY_SIZE; i++ ) {
-    if( addDevice( deviceNames[i] ) )
+
+  static const char* devicenames[] = { "/dev/hda",
+				       "/dev/hdb",
+				       "/dev/hdc",
+				       "/dev/hdd",
+				       "/dev/hde",
+				       "/dev/hdf",
+				       "/dev/hdg",
+				       "/dev/hdh",
+				       "/dev/hdi",
+				       "/dev/hdj",
+				       "/dev/hdk",
+				       "/dev/hdl",
+				       "/dev/dvd",
+				       "/dev/cdrom",
+				       "/dev/cdrecorder",
+				       0 };
+  int i = 0;
+  while( devicenames[i] ) {
+    if( addDevice( devicenames[i] ) )
       m_foundDevices++;
+    ++i;
+  }
+  for( int i = 0; i < 16; i++ ) {
+    if( addDevice( QString("/dev/scd%1").arg(i).latin1() ) )
+      m_foundDevices++;
+  }
+  for( int i = 0; i < 16; i++ ) {
+    if( addDevice( QString("/dev/sr%1").arg(i).latin1() ) )
+    m_foundDevices++;
   }
 
   scanFstab();

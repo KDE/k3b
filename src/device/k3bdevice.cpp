@@ -49,6 +49,8 @@ K3bDevice::K3bDevice( const QString& devname )
 
   d->blockDeviceName = devname;
 
+  d->allNodes.append(devname);
+
   m_cdrdaoDriver = "auto";
   m_cdTextCapable = 0;
   m_maxWriteSpeed = 0;

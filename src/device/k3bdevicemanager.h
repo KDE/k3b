@@ -103,9 +103,6 @@ class K3bDeviceManager : public QObject
 
   K3bDevice* initializeScsiDevice( const QString& devname, int bus, int target, int lun );
   K3bDevice* initializeIdeDevice( const QString& );
-
-  static const int DEV_ARRAY_SIZE = 19;
-  static const char* deviceNames[DEV_ARRAY_SIZE];
 };
 
 #endif
