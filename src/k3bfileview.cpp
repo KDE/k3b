@@ -183,9 +183,9 @@ void K3bFileView::slotAddFilesToProject()
   if( !k3bMain()->activeDoc() )
     KMessageBox::error( this, i18n("Please create a project before adding files"), i18n("No active Project"));
   else {
-    QStringList files;
+    KURL::List files;
     for( QListIterator<KFileItem> it( *(m_dirOp->selectedItems()) ); it.current(); ++it ) {
-      files.append( it.current()->url().path() );
+      files.append( it.current()->url() );
     }
     
     if( !files.isEmpty() )
