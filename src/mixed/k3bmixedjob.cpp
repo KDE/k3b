@@ -579,7 +579,7 @@ bool K3bMixedJob::writeTocFile()
 
 
     // debugging
-    KIO::NetAccess::copy( m_tocFile->name(), k3bMain()->findTempFile( "toc" ) );
+    //    KIO::NetAccess::copy( m_tocFile->name(), k3bMain()->findTempFile( "toc" ) );
 
     return true;
   }
