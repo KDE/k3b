@@ -20,7 +20,7 @@
 #include <klocale.h>
 
 #include <qthread.h>
-
+#include <qfont.h>
 
 
 class K3bAudioConverterViewItem::LengthThread : public QThread
@@ -52,9 +52,14 @@ K3bAudioConverterViewItem::K3bAudioConverterViewItem( const QString& url,
     m_lengthReady(false),
     m_path(url)
 {
-  setText( 0, url.section( '/', -1 ) );
-  setText( 1, dec->fileType() );
+  setText( 0, " " + url.section( '/', -1 ) + " " );
+  setText( 1, " " + dec->fileType() + " " );
   setText( 2, i18n("calculating...") );
+
+  // italic type
+  QFont f(listView()->font());
+  f.setItalic( true );
+  setFont( 1, f );
 
   dec->setFilename( url );
 
@@ -71,7 +76,8 @@ K3bAudioConverterViewItem::~K3bAudioConverterViewItem()
 
 void K3bAudioConverterViewItem::setLength( const K3b::Msf& len )
 {
-  setText( 2, len.toString() );
+  setText( 2, " " + len.toString() + " " );
+  setText( 1, " " + m_decoder->fileType() + " " ); // might have changed (mp3)
   m_lengthReady = true;
 }
 

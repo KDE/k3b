@@ -90,40 +90,7 @@
                         </widget>
                     </hbox>
                 </widget>
-                <widget class="KListView">
-                    <column>
-                        <property name="text">
-                            <string>Filename</string>
-                        </property>
-                        <property name="clickable">
-                            <bool>true</bool>
-                        </property>
-                        <property name="resizable">
-                            <bool>true</bool>
-                        </property>
-                    </column>
-                    <column>
-                        <property name="text">
-                            <string>Filetype</string>
-                        </property>
-                        <property name="clickable">
-                            <bool>true</bool>
-                        </property>
-                        <property name="resizable">
-                            <bool>true</bool>
-                        </property>
-                    </column>
-                    <column>
-                        <property name="text">
-                            <string>Length</string>
-                        </property>
-                        <property name="clickable">
-                            <bool>true</bool>
-                        </property>
-                        <property name="resizable">
-                            <bool>true</bool>
-                        </property>
-                    </column>
+                <widget class="K3bAudioConverterView">
                     <property name="name">
                         <cstring>viewFiles</cstring>
                     </property>
@@ -214,10 +181,31 @@
     </vbox>
 </widget>
 <customwidgets>
+    <customwidget>
+        <class>K3bAudioConverterView</class>
+        <header location="global">k3baudioconverterview.h</header>
+        <sizehint>
+            <width>-1</width>
+            <height>-1</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>7</hordata>
+            <verdata>7</verdata>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+        <pixmap>image0</pixmap>
+    </customwidget>
 </customwidgets>
+<images>
+    <image name="image0">
+        <data format="PNG" length="953">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000038049444154789cb5954f681c7514c73fb319eb1b49e53798c20e44d985409393ace025d843725cec610511f5d414a4205eea456c2908b5a2bd09c5433420a4c941680f427a08989e361731814a47487057589d8144e67728ceabdd763cfc667793d4bf071ffc1876f6cde77de7bd37ef7945513030cff32ac018e00315c02bcfdf59519e47401f785814c5236f00bef8fec5a767a667ce596b1792343999ddcbfe81e7cc5a4b67a7b3bbf9ede60a7dbe007e05eefb03a5cb5f2e9f8b9ee56353cfa9a1685f114aedbe8304e535ef9754df69ec7698d245b9b4755b03e053202b5d19b3d62e987a4e6ad7c8b20ea00481923f10d29e90ed2b20841350af2b320e5a0690e31045b005af01d7878a013f49939335b4845a8240b87bc7b0f1b525deb68096ae426d5a986f1966e780bebb2f02c0734078507125bb97a17d1d42db1bb0f259ea1e1a17ead306f121e929dd1f94a58f52d2aee18d337220a8cb18706c00f69c160802b87b474aa832f77295664b084f00a2a846b46fe5ac2ca6acada654ab359aaf86801d80c700af72108c0ff90361e3a61d42df7c4b08230b62c9f6846f6e66345b010bef5401e1c6aac5ee8f0a5cb2bcd1cf129cf684f87b8b3186664bc0b7e0835ac3d25525deb6647b70f67cc8e6baf38d6397a68356e188b9ea2b51ad7cfd127aed8a2ba299105e382588c99969b88a255d2d13f91760d7a7ce41c4e5344b0cd7ae28f1b60b2802f5c9c0fdef0f607230157fae389c708e9d9ea21ab2791ba7d408d5aa21ed592e5f4888b742921dd70d512d388a391c27efbbe6af4d09dd5da57d2ba7f97a40b667983d25449301972f40dab57cf8760755c54c088d464ed23bd4728f2b967168b60c002b8b29edf59cb3e7431a73506b64bcfb411d5335586bd1be32dfaa124d3d26f86866dc673a3b0769cf70633565e96acae6ba3033232090ec24e8be0e9ffc6ec3d2391d21fee10f65002eacb52338ca2b670453adb1f695eb86787b14dc4c08cd568df686c5aaa20ad60ea105500cc19d9dce6eb7c314c747f0664b989d8b886343d275f7a3c980c68b39d114cc9f8e9c483f23de52805f808740e1154581e779013eef355e924b5154b65a9fe1c894411b1e4a9c22be602dc45b4a922a36e53af039f023e5a07f0237993e017e62b415feedf91958065ac0f3c08981e20a6e2a85c033e535a01c28470b7cc48af2f57320c36d906cb89a3ccff3812781a74ae831fedbcefbbd84ff06dcf7feaf65fa072f36954b309390920000000049454e44ae426082</data>
+    </image>
+</images>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>klistview.h</includehint>
+    <includehint>k3baudioconverterview.h</includehint>
     <includehint>kurlrequester.h</includehint>
     <includehint>kpushbutton.h</includehint>
 </includehints>

@@ -24,6 +24,7 @@
 #include <k3binteractiondialog.h>
 
 class base_K3bAudioConverterWidget;
+class QDropEvent;
 
 
 class K3bAudioConverterPluginDialog : public K3bInteractionDialog
@@ -36,6 +37,7 @@ class K3bAudioConverterPluginDialog : public K3bInteractionDialog
 
  public slots:
   void addFile( const KURL& url );
+  void addFiles( const KURL::List& urls );
 
  protected slots:
   void slotLoadK3bDefaults();
@@ -48,6 +50,7 @@ class K3bAudioConverterPluginDialog : public K3bInteractionDialog
   void slotClear();
   void slotConfigureEncoder();
   void slotToggleAll();
+  void slotDropped( QDropEvent* );
 
  private:
   void loadAudioEncoder();

@@ -17,6 +17,7 @@
 #include "base_k3baudioconverterwidget.h"
 #include "k3baudioconverterviewitem.h"
 #include "k3baudioconverterjob.h"
+#include "k3baudioconverterview.h"
 
 // the k3b stuff we need
 #include <k3bcore.h>
@@ -35,6 +36,7 @@
 #include <kgenericfactory.h>
 #include <kurlrequester.h>
 #include <kfiledialog.h>
+#include <kurldrag.h>
 
 #include <qstring.h>
 #include <qpushbutton.h>
@@ -45,6 +47,7 @@
 #include <qintdict.h>
 #include <qcombobox.h>
 #include <qfileinfo.h>
+#include <qevent.h>
 
 
 class K3bAudioConverterPluginDialog::Private
@@ -82,6 +85,8 @@ K3bAudioConverterPluginDialog::K3bAudioConverterPluginDialog( QWidget* parent,
 	   this, SLOT(slotConfigureEncoder()) );
 
   connect( m_w->comboFormat, SIGNAL(activated(int)), this, SLOT(slotToggleAll()) );
+  connect( m_w->viewFiles, SIGNAL(dropped(QDropEvent*, QListViewItem*)),
+	   this, SLOT(slotDropped(QDropEvent*)) );
 
   loadAudioEncoder();
   slotLoadUserDefaults();
@@ -119,12 +124,19 @@ void K3bAudioConverterPluginDialog::loadAudioEncoder()
 
 void K3bAudioConverterPluginDialog::slotAddFiles()
 {
-  KURL::List urls = KFileDialog::getOpenURLs( ".", "*|All Files", 
+  KURL::List urls = KFileDialog::getOpenURLs( QString::null,
+					      "*|All Files", 
 					      this, 
 					      i18n("Select Audio Files to convert") );
-  for( KURL::List::iterator it = urls.begin();
-       it != urls.end(); ++it )
-    addFile( *it );
+  addFiles( urls );
+}
+
+
+void K3bAudioConverterPluginDialog::slotDropped( QDropEvent* e )
+{
+  KURL::List urls;
+  KURLDrag::decode( e, urls );
+  addFiles( urls );
 }
 
 
@@ -221,6 +233,14 @@ void K3bAudioConverterPluginDialog::slotStartClicked()
 }
 
 
+void K3bAudioConverterPluginDialog::addFiles( const KURL::List& urls )
+{
+  for( KURL::List::const_iterator it = urls.begin();
+       it != urls.end(); ++it )
+    addFile( *it );
+}
+
+
 void K3bAudioConverterPluginDialog::addFile( const KURL& url )
 {
   QPtrList<K3bPluginFactory> fl = k3bpluginmanager->factories( "AudioDecoder" );
@@ -235,6 +255,7 @@ void K3bAudioConverterPluginDialog::addFile( const KURL& url )
 
   KMessageBox::sorry( this, i18n("Unknown format: %1").arg(url.path()) );
 }
+
 
 
 
