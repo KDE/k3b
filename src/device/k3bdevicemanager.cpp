@@ -498,6 +498,7 @@ K3bDevice::interface K3bDeviceManager::determineInterfaceType(const QString &dev
     } else if ( SCSI_BLK_MAJOR( cdromStat.st_rdev>>8 ) ) {
       ret = K3bDevice::SCSI;
     }
+
     ::close(cdromfd);
     return ret;
 }
@@ -521,9 +522,9 @@ bool K3bDeviceManager::testForCdrom(const QString& devicename) {
         if( ::ioctl(cdromfd, CDROM_CLEAR_OPTIONS, CDO_AUTO_CLOSE) < 0 ) {
           kdDebug() << devicename << " seems not to be a cdrom device: " << strerror(errno) << endl;
         } else {
-	  ret = true;
+	        ret = true;
           kdDebug() << devicename << " seems to be cdrom" << endl;
-	}
+	      }
     }
     ::close( cdromfd );
     return ret;
@@ -638,7 +639,7 @@ bool K3bDeviceManager::determineBusIdLun( const QString& dev, int& bus, int& id,
         kdDebug() << "could not open device " << dev << " (" << strerror(errno) << ")" << endl;
         return false;
     }
-    
+
     struct stat cdromStat;
     ::fstat( cdromfd, &cdromStat );
 
@@ -660,8 +661,9 @@ bool K3bDeviceManager::determineBusIdLun( const QString& dev, int& bus, int& id,
             kdDebug() << "bus: " << bus << ", id: " << id << ", lun: " << lun << endl;
             ret = true;
         }
-    } else
+    }
 #ifdef SUPPORT_IDE 
+    else  
       if( IDE_DISK_MAJOR( cdromStat.st_rdev>>8 ) ) {
         bus = 0;
         lun = 0;
@@ -670,7 +672,7 @@ bool K3bDeviceManager::determineBusIdLun( const QString& dev, int& bus, int& id,
         ret = true;
       }
 #endif
-   
+
     ::close(cdromfd);
     return ret;
 }

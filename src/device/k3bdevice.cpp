@@ -329,7 +329,6 @@ int K3bDevice::isEmpty()
 // Byte 24-31: Disc Bar Code
 //        
     if ( ::ioctl(cdromfd,CDROM_SEND_PACKET,&cmd) == 0 ) {
-      ::close( cdromfd );
       ret = (inf[2] & 0x03);
     } else { 
       kdDebug() << "(K3bDevice) could not get disk info !" << endl;
@@ -433,7 +432,7 @@ int K3bDevice::numSessions() {
   if ( ::ioctl(cdromfd,CDROM_SEND_PACKET,&cmd) == 0 )
      ret = dat[3];
   else 
-    kdDebug() << "(K3bDiskInfoDetector) could not get session info !" << endl;
+    kdDebug() << "(K3bDevice) could not get session info !" << endl;
 
   ::close( cdromfd );
   return ret;
@@ -453,7 +452,8 @@ bool K3bDevice::block( bool b) const
     kdDebug() << "(K3bDevice) Cannot block/unblock device " << devicename() << endl;
   else
     ret = true;
-    
+
+  ::close(cdromfd);  
   return ret;   
 }
 
