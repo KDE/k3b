@@ -66,7 +66,7 @@
 #include "device/k3bdevicemanager.h"
 #include "device/k3bdevice.h"
 #include "k3b.h"
-#include "rip/k3bfilmview.h"
+#include "rip/k3bmovieview.h"
 #include "k3bfiletreeview.h"
 #include "cdinfo/k3bdiskinfodetector.h"
 #include "cdinfo/k3bdiskinfoview.h"
@@ -91,7 +91,7 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
   m_viewStack    = new QWidgetStack( m_mainSplitter );
   m_fileView     = new K3bFileView(m_viewStack, "fileView");
   m_cdView       = new K3bCdView(m_viewStack, "cdview");
-  m_filmView     = new K3bFilmView(m_viewStack, "filmview");
+  m_movieView     = new K3bMovieView(m_viewStack, "movieview");
   m_infoView     = new K3bDiskInfoView(m_viewStack, "infoView");
 
   m_noViewView = new QWidget( m_viewStack );
@@ -200,9 +200,9 @@ void K3bDirView::slotDiskInfoReady( const K3bDiskInfo& info )
     m_bViewDiskInfo = false;
   }
   else if( info.tocType == K3bDiskInfo::DVD  ) {
-    m_filmView->setDevice( info.device );
-    m_viewStack->raiseWidget( m_filmView );
-    m_filmView->reload();
+    m_movieView->setDevice( info.device );
+    m_viewStack->raiseWidget( m_movieView );
+    m_movieView->reload();
   }
   else if( info.tocType == K3bDiskInfo::DATA  ) {
     slotMountDevice( info.device );

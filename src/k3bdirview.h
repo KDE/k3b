@@ -30,7 +30,7 @@ class QSplitter;
 class KURL;
 class K3bCdView;
 class K3bFileView;
-class K3bFilmView;
+class K3bMovieView;
 class K3bDeviceManager;
 class KComboBox;
 class K3bFileTreeView;
@@ -76,7 +76,7 @@ class K3bDirView : public QVBox
   QScrollView* m_scroll;
 
   K3bCdView*   m_cdView;
-  K3bFilmView* m_filmView;
+  K3bMovieView* m_movieView;
   K3bFileView* m_fileView;
   K3bDiskInfoView* m_infoView;
 
