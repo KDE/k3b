@@ -55,7 +55,8 @@ K3bCloneJob::K3bCloneJob( QObject* parent, const char* name )
     m_speed(1),
     m_copies(1),
     m_onlyCreateImage(false),
-    m_onlyBurnExistingImage(false)
+    m_onlyBurnExistingImage(false),
+    m_readRetries(3)
 {
   d = new Private;
 }
