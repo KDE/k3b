@@ -109,6 +109,8 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
     QToolTip::add
         ( m_checkNonCompliant, i18n( "Non-compliant compatibility mode for broken devices" ) );
     QToolTip::add
+        ( m_checkVCD30interpretation, i18n( "Chinese VCD3.0 track interpretation" ) );
+    QToolTip::add
         ( m_check2336, i18n( "Use 2336 byte sectors for output" ) );
 
     QToolTip::add
@@ -211,8 +213,9 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
 
     QWhatsThis::add
         ( m_checkNonCompliant, i18n( "<ul><li>Rename <b>\"/MPEG2\"</b> folder on SVCDs to (non-compliant) \"/MPEGAV\".</li>"
-                                     "<li>Enables the use of the (deprecated) signature <b>\"ENTRYSVD\"</b> instead of <b>\"ENTRYVCD\"</b> for the file <b>\"/SVCD/ENTRY.SVD\"</b>.</li>"
-                                     "<li>Enables the use of the (deprecated) Chinese <b>\"/SVCD/TRACKS.SVD\"</b> format which differs from the format defined in the <b>IEC-62107</b> specification.</li></ul>"
+                                     "<li>Enables the use of the (deprecated) signature <b>\"ENTRYSVD\"</b> instead of <b>\"ENTRYVCD\"</b> for the file <b>\"/SVCD/ENTRY.SVD\"</b>.</li></ul>" ) );
+    QWhatsThis::add
+        ( m_checkVCD30interpretation, i18n( "<ul><li>Enables the use of the (deprecated) Chinese <b>\"/SVCD/TRACKS.SVD\"</b> format which differs from the format defined in the <b>IEC-62107</b> specification.</li></ul>"
                                      "<p><b>The differences are most exposed on SVCDs containing more than one video track.</b>" ) );
 
     QWhatsThis::add
@@ -442,7 +445,7 @@ void K3bVcdBurnDialog::setupVideoCdTab()
 
     // ---------------------------------------------------- Options group ---
 
-    m_groupOptions = new QGroupBox( 4, Qt::Vertical, i18n( "Options" ), w );
+    m_groupOptions = new QGroupBox( 5, Qt::Vertical, i18n( "Options" ), w );
     m_checkAutoDetect = new QCheckBox( i18n( "Autodetect VideoCD type" ), m_groupOptions );
 
     m_checkNonCompliant = new QCheckBox( i18n( "Enable broken SVCD mode" ), m_groupOptions );
@@ -450,6 +453,11 @@ void K3bVcdBurnDialog::setupVideoCdTab()
     m_checkNonCompliant->setEnabled( false );
     m_checkNonCompliant->setChecked( false );
 
+    m_checkVCD30interpretation = new QCheckBox( i18n( "Enable %1 track interpretation" ).arg( "VCD 3.0" ), m_groupOptions );
+    // Only available on SVCD Type
+    m_checkVCD30interpretation->setEnabled( false );
+    m_checkVCD30interpretation->setChecked( false );
+    
     m_check2336 = new QCheckBox( i18n( "Use 2336 byte sectors" ), m_groupOptions );
 
     m_checkCdiSupport = new QCheckBox( i18n( "Enable CD-i support" ), m_groupOptions );
@@ -598,7 +606,7 @@ void K3bVcdBurnDialog::slotLoadK3bDefaults()
 
     m_check2336->setChecked( o.Sector2336() );
     m_checkNonCompliant->setChecked( o.NonCompliantMode() );
-
+    m_checkVCD30interpretation->setChecked( o.VCD30interpretation() );
     m_spinVolumeCount->setValue( o.volumeCount() );
     m_spinVolumeNumber->setMaxValue( o.volumeCount() );
     m_spinVolumeNumber->setValue( o.volumeNumber() );
@@ -675,6 +683,7 @@ void K3bVcdBurnDialog::saveSettings()
 
     vcdDoc() ->vcdOptions() ->setAutoDetect( m_checkAutoDetect->isChecked() );
     vcdDoc() ->vcdOptions() ->setNonCompliantMode( m_checkNonCompliant->isChecked() );
+    vcdDoc() ->vcdOptions() ->setVCD30interpretation( m_checkVCD30interpretation->isChecked() );
     vcdDoc() ->vcdOptions() ->setSector2336( m_check2336->isChecked() );
 
     vcdDoc() ->vcdOptions() ->setCdiSupport( m_checkCdiSupport->isChecked() );
@@ -713,7 +722,8 @@ void K3bVcdBurnDialog::readSettings()
     m_checkOnlyCreateImage->setChecked( vcdDoc() ->onlyCreateImages() );
 
     m_checkNonCompliant->setEnabled( false );
-
+    m_checkVCD30interpretation->setEnabled( false );
+    
     // read vcdType
     switch ( ( ( K3bVcdDoc* ) doc() ) ->vcdType() ) {
         case K3bVcdDoc::VCD11:
@@ -725,6 +735,7 @@ void K3bVcdBurnDialog::readSettings()
         case K3bVcdDoc::SVCD10:
             m_radioSvcd10->setChecked( true );
             m_checkNonCompliant->setEnabled( true );
+            m_checkVCD30interpretation->setEnabled( true );
             break;
         case K3bVcdDoc::HQVCD:
             m_radioHqVcd10->setChecked( true );
@@ -749,15 +760,20 @@ void K3bVcdBurnDialog::readSettings()
 
     if ( m_radioSvcd10->isChecked() ) {
         m_checkNonCompliant->setChecked( vcdDoc() ->vcdOptions() ->NonCompliantMode() );
+        m_checkVCD30interpretation->setChecked( vcdDoc() ->vcdOptions() ->VCD30interpretation() );
     } else if ( m_radioHqVcd10->isChecked() ) {
         // NonCompliant only for SVCD
         m_checkNonCompliant->setChecked( false );
         m_checkNonCompliant->setEnabled( false );
+        m_checkVCD30interpretation->setChecked( false );
+        m_checkVCD30interpretation->setEnabled( false );
     }
     else {
         // NonCompliant only for SVCD
         m_checkNonCompliant->setChecked( false );
         m_checkNonCompliant->setEnabled( false );
+        m_checkVCD30interpretation->setChecked( false );
+        m_checkVCD30interpretation->setEnabled( false );
         // CD-I only for VCD and CD-i application was found :)
         if ( vcdDoc() ->vcdOptions() ->checkCdiFiles() ) {
             m_checkCdiSupport->setEnabled( true );
@@ -810,9 +826,12 @@ void K3bVcdBurnDialog::slotLoadUserDefaults()
 
     if ( m_radioSvcd10->isChecked() ) {
         m_checkNonCompliant->setChecked( o.NonCompliantMode() );
+        m_checkVCD30interpretation->setChecked( o.VCD30interpretation() );
     } else {
         m_checkNonCompliant->setChecked( false );
         m_checkNonCompliant->setEnabled( false );
+        m_checkVCD30interpretation->setChecked( false );
+        m_checkVCD30interpretation->setEnabled( false );
         if ( vcdDoc() ->vcdOptions() ->checkCdiFiles() ) {
             m_checkCdiSupport->setEnabled( true );
             m_checkCdiSupport->setChecked( o.CdiSupport() );
@@ -857,6 +876,7 @@ void K3bVcdBurnDialog::slotSaveUserDefaults()
     o.setAlbumId( m_editAlbumId->text() );
     o.setAutoDetect( m_checkAutoDetect->isChecked() );
     o.setNonCompliantMode( m_checkNonCompliant->isChecked() );
+    o.setVCD30interpretation( m_checkVCD30interpretation->isChecked() );
     o.setSector2336( m_check2336->isChecked() );
     o.setVolumeCount( m_spinVolumeCount->value() );
     o.setVolumeNumber( m_spinVolumeNumber->value() );
@@ -971,6 +991,8 @@ void K3bVcdBurnDialog::slotVcdTypeClicked( int i )
 
             m_checkNonCompliant->setEnabled( false );
             m_checkNonCompliant->setChecked( false );
+            m_checkVCD30interpretation->setEnabled( false );
+            m_checkVCD30interpretation->setChecked( false );
             m_checkUpdateScanOffsets->setEnabled( false );
             m_checkUpdateScanOffsets->setChecked( false );
             break;
@@ -981,6 +1003,8 @@ void K3bVcdBurnDialog::slotVcdTypeClicked( int i )
 
             m_checkNonCompliant->setEnabled( false );
             m_checkNonCompliant->setChecked( false );
+            m_checkVCD30interpretation->setEnabled( false );
+            m_checkVCD30interpretation->setChecked( false );
             m_checkUpdateScanOffsets->setEnabled( false );
             m_checkUpdateScanOffsets->setChecked( false );
             break;
@@ -991,6 +1015,7 @@ void K3bVcdBurnDialog::slotVcdTypeClicked( int i )
             m_groupCdi->setEnabled( false );
 
             m_checkNonCompliant->setEnabled( true );
+            m_checkVCD30interpretation->setEnabled( true );
             m_checkUpdateScanOffsets->setEnabled( true );
             break;
         case 3:
@@ -1001,6 +1026,8 @@ void K3bVcdBurnDialog::slotVcdTypeClicked( int i )
 
             m_checkNonCompliant->setEnabled( false );
             m_checkNonCompliant->setChecked( false );
+            m_checkVCD30interpretation->setEnabled( false );
+            m_checkVCD30interpretation->setChecked( false );
             m_checkUpdateScanOffsets->setEnabled( true );
             break;
     }

@@ -51,6 +51,7 @@ class K3bVcdOptions
         const bool AutoDetect() const { return m_autodetect; }
         const bool CdiSupport() const { return m_cdisupport; }
         const bool NonCompliantMode() const { return m_brokensvcdmode; }
+        const bool VCD30interpretation() const { return m_VCD30interpretation; }
         const bool Sector2336() const { return m_sector2336; }
         const bool UpdateScanOffsets() const { return m_updatescanoffsets; }
         const bool RelaxedAps() const { return m_relaxedaps; }
@@ -80,6 +81,7 @@ class K3bVcdOptions
         void setAutoDetect( const bool& b ) { m_autodetect = b; }
         void setCdiSupport( const bool& b ) { m_cdisupport = b; }
         void setNonCompliantMode( const bool& b ) { m_brokensvcdmode = b; }
+        void setVCD30interpretation( const bool& b ) { m_VCD30interpretation = b; }
         void setSector2336( const bool& b ) { m_sector2336 = b; }
         void setUpdateScanOffsets( const bool& b ) { m_updatescanoffsets = b; }
         void setRelaxedAps( const bool& b ) { m_relaxedaps = b; }
@@ -142,6 +144,7 @@ class K3bVcdOptions
         bool m_autodetect;
         bool m_cdisupport;
         bool m_brokensvcdmode;
+        bool m_VCD30interpretation;
         bool m_sector2336;
         bool m_updatescanoffsets;
         bool m_relaxedaps;

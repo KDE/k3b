@@ -66,6 +66,7 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
         QGroupBox* m_groupOptions;
         QCheckBox* m_checkAutoDetect;
         QCheckBox* m_checkNonCompliant;
+        QCheckBox* m_checkVCD30interpretation;
         QCheckBox* m_check2336;
 
         // CD-i

@@ -52,6 +52,7 @@ K3bVcdOptions::K3bVcdOptions()
         m_autodetect( true ),
         m_cdisupport( false ),
         m_brokensvcdmode( false ),
+        m_VCD30interpretation( false ),
         m_sector2336( false ),
         m_updatescanoffsets( false ),
         m_relaxedaps( false ),
@@ -92,6 +93,7 @@ void K3bVcdOptions::save( KConfig* c )
     c->writeEntry( "autodetect", m_autodetect );
     c->writeEntry( "cdi_support", m_cdisupport );
     c->writeEntry( "broken_svcd_mode", m_brokensvcdmode );
+    c->writeEntry( "VCD30interpretation", m_VCD30interpretation );
     c->writeEntry( "2336_sectors", m_sector2336 );
     c->writeEntry( "UpdateScanOffsets", m_updatescanoffsets );
     c->writeEntry( "RelaxedAps", m_relaxedaps );
@@ -120,6 +122,7 @@ K3bVcdOptions K3bVcdOptions::load( KConfig* c )
     options.setAutoDetect( c->readBoolEntry( "autodetect", options.AutoDetect() ) );
     options.setCdiSupport( c->readBoolEntry( "cdi_support", options.CdiSupport() ) );
     options.setNonCompliantMode( c->readBoolEntry( "broken_svcd_mode", options.NonCompliantMode() ) );
+    options.setVCD30interpretation( c->readBoolEntry( "VCD30interpretation", options.VCD30interpretation() ) );
     options.setSector2336( c->readBoolEntry( "2336_sectors", options.Sector2336() ) );
     options.setUpdateScanOffsets( c->readBoolEntry( "UpdateScanOffsets", options.UpdateScanOffsets() ) );
     options.setRelaxedAps( c->readBoolEntry( "RelaxedAps", options.RelaxedAps() ) );

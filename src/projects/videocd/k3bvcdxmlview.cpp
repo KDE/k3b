@@ -64,6 +64,14 @@ bool K3bVcdXmlView::write( const QString& fname )
         elemOption.setAttribute( "value", "true" );
     }
 
+    // VCD3.0 track interpretation
+    if ( m_doc->vcdOptions() ->VCD30interpretation() ) {
+        QDomElement elemOption;
+        elemOption = addSubElement( xmlDoc, root, "option" );
+        elemOption.setAttribute( "name", "svcd vcd30 tracksvd" );
+        elemOption.setAttribute( "value", "true" );
+    }
+
     // Relaxed aps
     if ( m_doc->vcdOptions() ->RelaxedAps() ) {
         QDomElement elemOption;
