@@ -44,7 +44,8 @@ K3bThread::~K3bThread()
 
 void K3bThread::cancel()
 {
-  terminate();
+  if( running() )
+    terminate();
   if( m_eventHandler ) {
     emitCanceled();
     emitFinished(false);
