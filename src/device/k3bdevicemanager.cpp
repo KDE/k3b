@@ -353,6 +353,8 @@ K3bDevice* K3bDeviceManager::initializeScsiDevice( const QString& devname, int b
       QStringList lines = QStringList::split( "\n", m_processOutput );
       for( QStringList::const_iterator it = lines.begin(); it != lines.end(); ++it ) {
 	const QString& line = *it;
+
+	// no info in cdrecord <= 1.10 !!!!!
 	if( line.startsWith( "Supported modes" ) ) {
 	  QStringList modes = QStringList::split( " ", line.mid(16) );
 	  if( modes.contains( "SAO" ) )
@@ -374,8 +376,15 @@ K3bDevice* K3bDeviceManager::initializeScsiDevice( const QString& devname, int b
 	  break;
 	}
       }
-      dev->setDao( dev->supportsWriteMode( K3bDevice::SAO ) );
     }
+
+    // default to dao and tao if no write modes info was available (cdrecord <= 1.10)
+    // I include this hack because I think it's better to get an error:
+    //   "mode not supported" when trying to write instead of never getting to choose DAO!
+    if( dev->m_writeModes == 0 )
+      dev->m_writeModes = K3bDevice::SAO|K3bDevice::TAO;
+
+    dev->setDao( dev->supportsWriteMode( K3bDevice::SAO ) );
 
 
 
