@@ -115,8 +115,7 @@ void K3bDataJob::start()
     }
 
     if( !KIO::findDeviceMountPoint( m_doc->burner()->mountDevice() ).isEmpty() ) {
-      // TODO: enable me after message freeze
-      // emit infoMessage( i18n("Unmounting disk"), INFO );
+      emit infoMessage( i18n("Unmounting disk"), INFO );
       // unmount the cd
       connect( KIO::unmount( m_doc->burner()->mountPoint(), false ), SIGNAL(result(KIO::Job*)),
 	       m_msInfoFetcher, SLOT(start()) );
@@ -155,7 +154,7 @@ void K3bDataJob::writeImage()
 {
   emit newTask( i18n("Writing data") );
 
-  if( m_doc->onTheFly() ) {
+  if( m_doc->onTheFly() && !m_doc->onlyCreateImage() ) {
     m_isoImager->calculateSize();
   }
   else {
@@ -250,14 +249,6 @@ void K3bDataJob::slotIsoImagerFinished( bool success )
       m_imageFinished = true;
     
       if( m_doc->onlyCreateImage() ) {
-	
-	// weird, but possible
-	if( m_doc->deleteImage() ) {
-	  QFile::remove( m_doc->isoImage() );
-	  m_doc->setIsoImage("");
-	  emit infoMessage( i18n("Removed image file %1").arg(m_doc->isoImage()), K3bJob::STATUS );
-	}
-      
 	emit finished( true );
       }
       else {
