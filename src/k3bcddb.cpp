@@ -35,6 +35,8 @@
 #include <kio/job.h>
 #include <kio/global.h>
 
+#include <stdlib.h>
+
 #include "k3bcddb.h"
 
 #include "device/k3btoc.h"
