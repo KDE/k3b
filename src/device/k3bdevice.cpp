@@ -272,3 +272,28 @@ int K3bDevice::isEmpty()
   delete _scsiIf;
   return (data[2] & 0x03);
 }
+
+
+bool K3bDevice::block( bool block ) const
+{
+  unsigned char cmd[6];
+
+  memset(cmd, 0, 6);
+
+  cmd[0] = 0x1e;
+  
+  if (block) {
+    cmd[4] |= 0x01;
+  }
+
+  ScsiIf *scsiIf = new ScsiIf( m_devicename.latin1() );
+  if (scsiIf->sendCmd(cmd, 6, NULL, 0, NULL, 0) != 0) {
+    qDebug( "(K3bDevice) Cannot block/unblock device %s", devicename.latin1() );
+    delete scsiIf;
+    return false;
+  }
+
+  delete scsiIf;
+
+  return true;
+}

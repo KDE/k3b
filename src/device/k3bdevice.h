@@ -66,6 +66,12 @@ class K3bDevice
 
   bool init();
 
+  /**
+   * block or unblock the drive's tray
+   * returns true on success and false on scsi-error
+   */
+  bool block( bool ) const;
+
  private:
   int getModePage( ScsiIf *_scsiIf, int pageCode, unsigned char *buf,
 		   long bufLen, unsigned char *modePageHeader,
