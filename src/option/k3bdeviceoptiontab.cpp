@@ -53,7 +53,7 @@ K3bDeviceOptionTab::K3bDeviceOptionTab( QWidget* parent, const char* name )
   // ------------------------------------------------
   m_labelDevicesInfo = new QLabel( this, "m_labelDevicesInfo" );
   m_labelDevicesInfo->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter | QLabel::AlignLeft ) );
-  m_labelDevicesInfo->setText( i18n( "K3b tries to detect all your devices properly. Sometimes this does not work for the read or the write speed. In this case you can change them manually. \nYou can add not detected devices and change the cdrdao driver for the generic scsi drives." ) );
+  m_labelDevicesInfo->setText( i18n( "K3b tries to detect all your devices properly. Sometimes this does not work for the read or the write speed. In this case you can change them manually. You can add not detected devices and change the cdrdao driver for the generic scsi drives." ) );
 
   frameLayout->addMultiCellWidget( m_labelDevicesInfo, 0, 0, 0, 1 );
   // ------------------------------------------------
@@ -135,34 +135,49 @@ K3bDeviceOptionTab::K3bDeviceOptionTab( QWidget* parent, const char* name )
   groupDeviceInfoLayout->setSpacing( KDialog::spacingHint() );
   groupDeviceInfoLayout->setMargin( KDialog::marginHint() );
 
-  QLabel* TextLabel1 = new QLabel( i18n( "System devicename" ), m_groupDeviceInfo, "TextLabel1" );
+  QLabel* TextLabel1 = new QLabel( i18n( "System devicename:" ), m_groupDeviceInfo, "TextLabel1" );
   m_labelDevicename = new QLabel( m_groupDeviceInfo, "m_labelDevicename" );
-  QLabel* labelInterfaceText = new QLabel( i18n("Interface type"), m_groupDeviceInfo, "interfaceText" );
+  QLabel* labelInterfaceText = new QLabel( i18n("Interface type:"), m_groupDeviceInfo, "interfaceText" );
   m_labelDeviceInterface = new QLabel( m_groupDeviceInfo );
-  QLabel* TextLabel7 = new QLabel( i18n( "Version" ), m_groupDeviceInfo, "TextLabel7" );
+  QLabel* TextLabel7 = new QLabel( i18n( "Firmware version:" ), m_groupDeviceInfo, "TextLabel7" );
   m_labelVendor = new QLabel( m_groupDeviceInfo, "m_labelVendor" );
-  QLabel* TextLabel5 = new QLabel( i18n( "Vendor" ), m_groupDeviceInfo, "TextLabel5" );
+  QLabel* TextLabel5 = new QLabel( i18n( "Vendor:" ), m_groupDeviceInfo, "TextLabel5" );
   m_labelDescription = new QLabel( m_groupDeviceInfo, "m_labelDescription" );
   m_labelVersion = new QLabel( m_groupDeviceInfo, "m_labelVersion" );
-  QLabel* TextLabel6 = new QLabel( i18n( "Model" ), m_groupDeviceInfo, "TextLabel6" );
+  QLabel* TextLabel6 = new QLabel( i18n( "Model:" ), m_groupDeviceInfo, "TextLabel6" );
   QFrame* line1 = new QFrame( m_groupDeviceInfo, "line1" );
   line1->setFrameStyle( QFrame::HLine | QFrame::Sunken );
   m_spinReadSpeed = new KIntNumInput( m_groupDeviceInfo, "m_spinReadSpeed" );
-  QLabel* labelReadSpeed = new QLabel( i18n( "Max read speed" ), m_groupDeviceInfo, "labelReadSpeed" );
+  QLabel* labelReadSpeed = new QLabel( i18n( "Max read speed:" ), m_groupDeviceInfo, "labelReadSpeed" );
   QFrame* line2 = new QFrame( m_groupDeviceInfo, "line2" );
   line2->setFrameStyle( QFrame::HLine | QFrame::Sunken );
-  m_labelWriteSpeed = new QLabel( i18n( "Max write speed" ), m_groupDeviceInfo, "labelWriteSpeed" );
+  m_labelWriteSpeed = new QLabel( i18n( "Max write speed:" ), m_groupDeviceInfo, "labelWriteSpeed" );
   m_spinWriteSpeed = new KIntNumInput( m_groupDeviceInfo, "m_spinWriteSpeed" );
   m_comboDriver = new QComboBox( FALSE, m_groupDeviceInfo, "m_comboDriver" );
-  m_labelDriver = new QLabel( i18n( "Cdrdao driver" ), m_groupDeviceInfo, "labelDriver" );
+  m_labelDriver = new QLabel( i18n( "Cdrdao driver:" ), m_groupDeviceInfo, "labelDriver" );
   m_comboCdText = new QComboBox( false, m_groupDeviceInfo, "m_comboCdText" );
-  m_labelBurnProof = new QLabel( i18n( "BURN-Proof" ), m_groupDeviceInfo, "labelBurnProof" );
+  m_labelBurnProof = new QLabel( i18n( "BURN-Proof:" ), m_groupDeviceInfo, "labelBurnProof" );
   m_checkBurnProof = new QLabel( m_groupDeviceInfo, "m_checkBurnProof" );
-  m_labelCdText = new QLabel( i18n( "Write CD-Text" ), m_groupDeviceInfo, "labelCdText" );
+  m_labelCdText = new QLabel( i18n( "Write CD-Text:" ), m_groupDeviceInfo, "labelCdText" );
   m_line3 = new QFrame( m_groupDeviceInfo, "line3" );
   m_line3->setFrameStyle( QFrame::HLine | QFrame::Sunken );
 
 
+  // set the backgroud colors of the labels that display the actual values
+  m_labelDevicename->setBackgroundColor( Qt::white );
+  m_labelDeviceInterface->setBackgroundColor( Qt::white );
+  m_labelVersion->setBackgroundColor( Qt::white );
+  m_labelVendor->setBackgroundColor( Qt::white );
+  m_labelDescription->setBackgroundColor( Qt::white );
+  m_checkBurnProof->setBackgroundColor( Qt::white );
+
+
+  m_labelDevicename->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
+  m_labelDeviceInterface->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
+  m_labelVersion->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
+  m_labelVendor->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
+  m_labelDescription->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
+  m_checkBurnProof->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
 
 
 
@@ -356,12 +371,11 @@ void K3bDeviceOptionTab::updateDeviceInfoBox( PrivateTempDevice* tempDev )
     // disable all
     showWriterSpecificProps( false );
     m_labelDevicename->setText( "" );
+    m_labelDeviceInterface->setText( "" );
     m_labelVendor->setText( "" );
     m_labelDescription->setText( "" );
     m_labelVersion->setText( "" );
     m_spinReadSpeed->setValue( 0 );
-
-    m_groupDeviceInfo->setDisabled( true );
   }    
 }
 

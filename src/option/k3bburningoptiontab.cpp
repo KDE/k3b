@@ -40,7 +40,7 @@ void K3bBurningOptionTab::setupGui()
   m_groupAudio->setTitle( i18n( "Audio project" ) );
   m_groupAudio->setColumnLayout(0, Qt::Vertical );
   m_groupAudio->layout()->setSpacing( 0 );
-  m_groupAudio->layout()->setMargin( 0 );
+  m_groupAudio->layout()->setMargin( KDialog::marginHint() );
   QGridLayout* groupAudioLayout = new QGridLayout( m_groupAudio->layout() );
   groupAudioLayout->setAlignment( Qt::AlignTop );
   groupAudioLayout->setSpacing( KDialog::spacingHint() );
@@ -49,7 +49,7 @@ void K3bBurningOptionTab::setupGui()
   m_editDefaultPregap = new KIntNumInput( m_groupAudio );
   m_comboPregapFormat = new QComboBox( m_groupAudio );
 
-  QLabel* labelDefaultPregap = new QLabel( i18n("Default pregap"), m_groupAudio );
+  QLabel* labelDefaultPregap = new QLabel( i18n("Default pregap:"), m_groupAudio );
 
   groupAudioLayout->addWidget( labelDefaultPregap, 0, 0 );
   groupAudioLayout->addWidget( m_editDefaultPregap, 1, 0 );
@@ -69,7 +69,7 @@ void K3bBurningOptionTab::setupGui()
   m_groupData->setTitle( i18n( "Data project" ) );
   m_groupData->setColumnLayout(0, Qt::Vertical );
   m_groupData->layout()->setSpacing( 0 );
-  m_groupData->layout()->setMargin( 0 );
+  m_groupData->layout()->setMargin( KDialog::marginHint() );
   QGridLayout* groupDataLayout = new QGridLayout( m_groupData->layout() );
   groupDataLayout->setAlignment( Qt::AlignTop );
   groupDataLayout->setSpacing( KDialog::spacingHint() );
@@ -88,13 +88,13 @@ void K3bBurningOptionTab::setupGui()
   m_groupMisc->setTitle( i18n( "Misc" ) );
   m_groupMisc->setColumnLayout(0, Qt::Vertical );
   m_groupMisc->layout()->setSpacing( 0 );
-  m_groupMisc->layout()->setMargin( 0 );
+  m_groupMisc->layout()->setMargin( KDialog::marginHint() );
   QGridLayout* groupMiscLayout = new QGridLayout( m_groupMisc->layout() );
   groupMiscLayout->setAlignment( Qt::AlignTop );
   groupMiscLayout->setSpacing( KDialog::spacingHint() );
   groupMiscLayout->setMargin( KDialog::marginHint() );
 
-  QLabel* labelTempDir = new QLabel( i18n("Default temp directory"), m_groupMisc );
+  QLabel* labelTempDir = new QLabel( i18n("Default temp directory:"), m_groupMisc );
   m_editTempDir = new QLineEdit( m_groupMisc );
   m_buttonTempDir = new QToolButton( m_groupMisc );
   m_buttonTempDir->setText( "..." );
@@ -117,6 +117,9 @@ void K3bBurningOptionTab::setupGui()
   grid->addWidget( m_groupAudio, 0, 0 );
   grid->addWidget( m_groupData, 0, 1 );
   grid->addMultiCellWidget( m_groupMisc, 1, 1, 0, 1 );
+
+  // we do not want the groups to take more space than they require
+  grid->setRowStretch( 2, 1 );
 }
 
 

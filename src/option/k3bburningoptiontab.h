@@ -32,8 +32,8 @@ Q_OBJECT
  private:
   void setupGui();
 
-  QGroupBox*    m_groupAudio;
   QGroupBox*    m_groupData;
+  QGroupBox*    m_groupAudio;
   QGroupBox*    m_groupMisc;
 
   QCheckBox*    m_checkUseID3Tag;

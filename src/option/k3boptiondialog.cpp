@@ -70,6 +70,10 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
   m_cddbPage->readSettings();
   m_deviceOptionTab->readDevices();
   m_burningOptionTab->readSettings();
+
+  // if we don't do this the dialog start really huge
+  // because of the label in the device-tab
+  resize( 800, 700 );
 }
 
 
@@ -243,7 +247,7 @@ void K3bOptionDialog::slotDefault()
 
 void K3bOptionDialog::setupBurningPage()
 {
-  QFrame* frame = addPage( i18n("Burning"), i18n("Some Burning Settings"),
+  QFrame* frame = addPage( i18n("Burning"), i18n("Burning Settings"),
 			   KGlobal::instance()->iconLoader()->loadIcon( "cdwriter_unmount", KIcon::NoGroup, KIcon::SizeMedium ) );
 		
   QGridLayout* _frameLayout = new QGridLayout( frame );
@@ -270,7 +274,7 @@ void K3bOptionDialog::setupCddbPage()
 
 void K3bOptionDialog::setupDevicePage()
 {
-  QFrame* frame = addPage( i18n("Devices"), i18n("Setup SCSI CD Devices"),
+  QFrame* frame = addPage( i18n("Devices"), i18n("Setup CD Devices"),
 			   KGlobal::instance()->iconLoader()->loadIcon( "blockdevice", KIcon::NoGroup, KIcon::SizeMedium ) );
 
   QHBoxLayout* box = new QHBoxLayout( frame );
