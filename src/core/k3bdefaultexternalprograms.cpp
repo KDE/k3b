@@ -845,7 +845,7 @@ bool K3bDvdformatProgram::scan( const QString& p )
   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
     // different locales make searching for the +- char difficult
     // so we simply ignore it.
-    int pos = out.output().find( QRegExp("DVD.RW format utility") );
+    int pos = out.output().find( QRegExp("DVD.?RW format utility") );
     if( pos < 0 )
       return false;
 
