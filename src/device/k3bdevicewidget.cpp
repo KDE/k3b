@@ -42,6 +42,8 @@
 #include <qframe.h>
 #include <qheader.h>
 #include <qstring.h>
+#include <qlineedit.h>
+
 
 
 
@@ -179,6 +181,9 @@ K3bDeviceWidget::K3bDeviceWidget( K3bDeviceManager* manager, QWidget *parent, co
   m_labelCdText = new QLabel( i18n( "Write CD-Text:" ), m_groupDeviceInfo, "labelCdText" );
   m_line3 = new QFrame( m_groupDeviceInfo, "line3" );
   m_line3->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+  m_labelWriteModesLabel = new QLabel( i18n("Writes modes:"), m_groupDeviceInfo );
+  m_labelWriteModes = new QLineEdit( m_groupDeviceInfo );
+  m_labelWriteModes->setReadOnly(true);
 
 
   // set the backgroud colors of the labels that display the actual values
@@ -187,7 +192,6 @@ K3bDeviceWidget::K3bDeviceWidget( K3bDeviceManager* manager, QWidget *parent, co
   m_labelVersion->setBackgroundColor( Qt::white );
   m_labelVendor->setBackgroundColor( Qt::white );
   m_labelDescription->setBackgroundColor( Qt::white );
-
 
   m_labelDevicename->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
   m_labelDeviceInterface->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
@@ -223,6 +227,9 @@ K3bDeviceWidget::K3bDeviceWidget( K3bDeviceManager* manager, QWidget *parent, co
   groupDeviceInfoLayout->addWidget( m_checkCdrw, 13, 1 );
   groupDeviceInfoLayout->addWidget( m_labelDao, 14, 0 );
   groupDeviceInfoLayout->addWidget( m_checkDao, 14, 1 );
+  groupDeviceInfoLayout->addWidget( m_labelWriteModesLabel, 15, 0 );
+  groupDeviceInfoLayout->addWidget( m_labelWriteModes, 15, 1 );
+
 
 
   frameLayout->addWidget( groupDevices, 0, 0 );
@@ -379,6 +386,25 @@ void K3bDeviceWidget::updateDeviceInfoBox( PrivateTempDevice* tempDev )
       m_checkCdrw->setChecked( tempDev->cdrw );
       m_checkDao->setChecked( tempDev->dao );       
       slotCdrdaoDriverChanged( tempDev->cdrdaoDriver );
+
+      QString wm;
+      if( tempDev->device->supportsWriteMode( K3bDevice::SAO ) )
+	wm += "SAO ";
+      if( tempDev->device->supportsWriteMode( K3bDevice::SAO_R96R ) )
+	wm += "SAO/R96R ";
+      if( tempDev->device->supportsWriteMode( K3bDevice::SAO_R96P ) )
+	wm += "SAO/R96P ";
+      if( tempDev->device->supportsWriteMode( K3bDevice::PACKET ) )
+	wm += "PACKET ";
+      if( tempDev->device->supportsWriteMode( K3bDevice::TAO ) )
+	wm += "TAO ";
+      if( tempDev->device->supportsWriteMode( K3bDevice::RAW_R16 ) )
+	wm += "RAW/R16 ";
+      if( tempDev->device->supportsWriteMode( K3bDevice::RAW_R96R ) )
+	wm += "RAW/R96R ";
+      if( tempDev->device->supportsWriteMode( K3bDevice::RAW_R96P ) )
+	wm += "RAW/R96P ";
+      m_labelWriteModes->setText( wm );
 
       showWriterSpecificProps( true );
     }
@@ -537,6 +563,8 @@ void K3bDeviceWidget::showWriterSpecificProps( bool b )
     m_checkCdrw->show();
     m_labelDao->show();
     m_checkDao->show();
+    m_labelWriteModes->show();
+    m_labelWriteModesLabel->show();
   }
   else {
     m_labelWriteSpeed->hide();
@@ -549,6 +577,8 @@ void K3bDeviceWidget::showWriterSpecificProps( bool b )
     m_checkCdrw->hide();
     m_labelDao->hide();
     m_checkDao->hide();
+    m_labelWriteModes->hide();
+    m_labelWriteModesLabel->hide();
   }
 }
 

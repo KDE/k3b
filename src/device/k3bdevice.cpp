@@ -305,3 +305,9 @@ const QStringList& K3bDevice::deviceNodes() const
 {
   return d->allNodes;
 }
+
+
+bool K3bDevice::supportsWriteMode( K3bDevice::WriteMode w )
+{
+  return (m_writeModes & w);
+}

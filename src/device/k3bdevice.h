@@ -30,6 +30,14 @@ class K3bDevice
 		    COMPLETE = 2,
 		    NO_DISK = -1,
 		    NO_INFO = -2 };
+  enum WriteMode { SAO = 1,
+		   TAO = 2,
+		   PACKET = 4,
+		   SAO_R96P = 8,
+		   SAO_R96R = 16,
+		   RAW_R16 = 32,
+		   RAW_R96P = 64,
+		   RAW_R96R = 128 };
 
   /**
    * create a K3bDevice from a cdrom_drive struct
@@ -186,6 +194,8 @@ class K3bDevice
   void eject() const;
   void load() const;
 
+  bool supportsWriteMode( WriteMode );
+
  protected:
   virtual bool furtherInit();
 
@@ -208,6 +218,8 @@ class K3bDevice
   int m_lun;
 
   int m_bufferSize;
+
+  int m_writeModes;
 
  private:
   class Private;

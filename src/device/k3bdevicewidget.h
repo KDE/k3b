@@ -34,6 +34,7 @@ class QListViewItem;
 class QString;
 class K3bDevice;
 class K3bDeviceManager;
+class QLineEdit;
 
 
 /**
@@ -99,6 +100,8 @@ class K3bDeviceWidget : public QWidget
   QLabel*       m_labelCdrw;
   QLabel*       m_labelDao;
   QLabel*       m_labelWriteSpeed;
+  QLineEdit*       m_labelWriteModes;
+  QLabel* m_labelWriteModesLabel;
   QFrame*       m_line3;
   KIntNumInput* m_spinReadSpeed;
   KIntNumInput* m_spinWriteSpeed;

@@ -347,9 +347,38 @@ K3bDevice* K3bDeviceManager::initializeScsiDevice( const QString& devname, int b
     driverProc.start( KProcess::Block, KProcess::Stdout );
     // this should work for all drives
     // so we are always able to say if a drive is a writer or not
-    dev->m_burner = ( driverProc.exitStatus() == 0 );
+    if( driverProc.exitStatus() == 0 ) {
+      dev->m_burner = true;
+      QStringList lines = QStringList::split( "\n", m_processOutput );
+      for( QStringList::const_iterator it = lines.begin(); it != lines.end(); ++it ) {
+	const QString& line = *it;
+	if( line.startsWith( "Supported modes" ) ) {
+	  QStringList modes = QStringList::split( " ", line.mid(16) );
+	  int w = 0;
+	  if( modes.contains( "SAO" ) )
+	    w |= K3bDevice::SAO;
+	  if( modes.contains( "TAO" ) )
+	    w |= K3bDevice::TAO;
+	  if( modes.contains( "PACKET" ) )
+	    w |= K3bDevice::PACKET;
+	  if( modes.contains( "SAO/R96R" ) )
+	    w |= K3bDevice::SAO_R96R;
+	  if( modes.contains( "SAO/R96P" ) )
+	    w |= K3bDevice::SAO_R96P;
+	  if( modes.contains( "RAW/R16" ) )
+	    w |= K3bDevice::RAW_R16;
+	  if( modes.contains( "RAW/R96R" ) )
+	    w |= K3bDevice::RAW_R96R;
+	  if( modes.contains( "RAW/R96P" ) )
+	    w |= K3bDevice::RAW_R96P;
+	  dev->m_writeModes = w;
+	  break;
+	}
+      }
+      dev->setDao( dev->supportsWriteMode( K3bDevice::SAO ) );
+    }
 
-    dev->setDao( m_processOutput.contains("SAO") );
+
 
     // check drive capabilities
     // does only work for generic-mmc drives
@@ -475,6 +504,8 @@ K3bDevice* K3bDeviceManager::addDevice( const QString& devicename )
       else
 	device = initializeScsiDevice( resolved, bus, target, lun );
     }
+    else
+      kdDebug() << "(K3bDeviceManager) could not determine bus id lun" << endl;
   }
 
 
