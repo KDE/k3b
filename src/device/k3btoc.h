@@ -21,8 +21,6 @@ namespace K3bCdDevice
     Toc();
     /** deep copy */
     Toc( const Toc& );
-    /** create empty toc with artist and album info set */
-    Toc( const QString&, const QString& );
     /** deletes all tracks */
     ~Toc();
     /** deep copy */
@@ -32,6 +30,7 @@ namespace K3bCdDevice
      * CDDB disc Id
      */
     unsigned int discId() const;
+    unsigned int calculateDiscId();
 
     /**
      * The first track's first sector could differ from the disc's
@@ -39,12 +38,8 @@ namespace K3bCdDevice
      */
     int firstSector() const;
     int lastSector() const;
-    const QString& artist() const { return m_artist; }
-    const QString& album() const { return m_album; }
     int length() const;
 
-    void setArtist( const QString& s ) { m_artist = s; }
-    void setAlbum( const QString& s ) { m_album = s; }
     void setDiscId( unsigned int id ) { m_discId = id; }
     void setFirstSector( int i ) { m_firstSector = i; }
 
@@ -52,8 +47,6 @@ namespace K3bCdDevice
     unsigned int m_discId;
     int m_firstSector;
     //  int m_lastSector;
-    QString m_artist;
-    QString m_album;
   };
 };
 

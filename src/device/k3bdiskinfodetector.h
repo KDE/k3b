@@ -54,7 +54,6 @@ namespace K3bCdDevice
   private:
     void fetchExtraInfo();
     void fetchIsoInfo();
-    void calculateDiscId();
     void testForVideoDvd();
     void testForVCD();
 

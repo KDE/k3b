@@ -12,18 +12,10 @@ K3bCdDevice::Toc::Toc()
 
 
 K3bCdDevice::Toc::Toc( const Toc& toc )
-  : QValueList<K3bCdDevice::Track>( toc ),
-    m_artist( toc.artist() ),
-    m_album( toc.album() )
+  : QValueList<K3bCdDevice::Track>( toc )
 {
   m_firstSector = toc.firstSector();
   m_discId = toc.discId();
-}
-
-
-K3bCdDevice::Toc::Toc( const QString& artist, const QString& album )
-  : QValueList<K3bCdDevice::Track>(), m_artist( artist ), m_album( album )
-{
 }
 
 
@@ -35,9 +27,6 @@ K3bCdDevice::Toc::~Toc()
 K3bCdDevice::Toc& K3bCdDevice::Toc::operator=( const Toc& toc )
 {
   if( &toc == this ) return *this;
-
-  m_artist = toc.artist();
-  m_album = toc.album();
 
   m_firstSector = toc.firstSector();
   m_discId = toc.discId();
@@ -72,4 +61,26 @@ int K3bCdDevice::Toc::lastSector() const
 int K3bCdDevice::Toc::length() const
 {
   return lastSector() - m_firstSector;
+}
+
+
+unsigned int K3bCdDevice::Toc::calculateDiscId()
+{
+  // calculate cddb-id
+  unsigned int id = 0;
+  for( K3bToc::iterator it = begin(); it != end(); ++it ) {
+    unsigned int n = (*it).firstSector() + 150;
+    n /= 75;
+    while( n > 0 ) {
+      id += n % 10;
+      n /= 10;
+    }
+  }
+  unsigned int l = length();
+  l /= 75;
+  id = ( ( id % 0xff ) << 24 ) | ( l << 8 ) | count();
+
+  setDiscId( id );
+
+  return discId();
 }

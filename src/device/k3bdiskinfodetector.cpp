@@ -83,8 +83,8 @@ void K3bCdDevice::DiskInfoDetector::fetchExtraInfo()
 {
   if (m_info.tocType != DiskInfo::AUDIO)
     fetchIsoInfo();
-  else
-    calculateDiscId();
+
+  m_info.toc.calculateDiscId();
 
   testForVCD();
 }
@@ -114,27 +114,6 @@ void K3bCdDevice::DiskInfoDetector::fetchIsoInfo()
   m_device->close();
 }
 
-
-
-void K3bCdDevice::DiskInfoDetector::calculateDiscId()
-{
-  // calculate cddb-id
-  unsigned int id = 0;
-  for( K3bToc::iterator it = m_info.toc.begin(); it != m_info.toc.end(); ++it ) {
-    unsigned int n = (*it).firstSector() + 150;
-    n /= 75;
-    while( n > 0 ) {
-      id += n % 10;
-      n /= 10;
-    }
-  }
-  unsigned int l = m_info.toc.lastSector() - m_info.toc.firstSector();
-  l /= 75;
-  id = ( ( id % 0xff ) << 24 ) | ( l << 8 ) | m_info.toc.count();
-  m_info.toc.setDiscId( id );
-
-  kdDebug() << "(K3bDiskInfoDetector) calculated disk id: " << id << endl;
-}
 
 void K3bCdDevice::DiskInfoDetector::testForVideoDvd()
 {
