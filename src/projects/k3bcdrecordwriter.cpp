@@ -176,8 +176,11 @@ void K3bCdrecordWriter::prepareProcess()
   if( m_writingMode == K3b::DAO || m_cue ) {
     if( burnDevice()->dao() )
       *m_process << "-dao";
-    else
+    else {
+      if( m_cdrecordBinObject->hasFeature( "tao" ) )
+	*m_process << "-tao";
       emit infoMessage( i18n("Writer does not support disk at once (DAO) recording"), WARNING );
+    }
   }
   else if( m_writingMode == K3b::RAW ) {
     *m_process << "-raw";
