@@ -16,7 +16,6 @@
 #include "k3baudiocdview.h"
 #include "k3baudiorippingdialog.h"
 
-#include <k3b.h>
 #include <device/k3btoc.h>
 #include <device/k3bdiskinfo.h>
 #include <k3blistview.h>
@@ -27,6 +26,7 @@
 #include <k3btoolbox.h>
 #include <kcutlabel.h>
 #include <k3bstdguiitems.h>
+#include <k3bcore.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -161,9 +161,9 @@ K3bAudioCdView::K3bAudioCdView( QWidget* parent, const char *name )
   m_cddb = new K3bCddb( this );
 
   connect( m_cddb, SIGNAL(infoMessage(const QString&)),
-	   k3bMain(), SLOT(showBusyInfo(const QString&)) );
+	   k3bcore, SLOT(requestBusyInfo(const QString&)) );
   connect( m_cddb, SIGNAL(queryFinished(int)),
-	   k3bMain(), SLOT(endBusy()) );
+	   k3bcore, SLOT(requestBusyFinish()) );
   connect( m_cddb, SIGNAL(queryFinished(int)),
 	   this, SLOT(slotCddbQueryFinished(int)) );
 
@@ -420,7 +420,7 @@ void K3bAudioCdView::slotEditAlbumCddb()
 
 void K3bAudioCdView::queryCddb()
 {
-  KConfig* c = kapp->config();
+  KConfig* c = k3bcore->config();
   c->setGroup("Cddb");
 
   m_cddb->readConfig( c );
@@ -439,7 +439,7 @@ void K3bAudioCdView::queryCddb()
 
 void K3bAudioCdView::slotCddbQueryFinished( int error )
 {
-  k3bMain()->endBusy();
+  k3bcore->requestBusyFinish();
 
   if( error == K3bCddbQuery::SUCCESS ) {
     m_cddbInfo = m_cddb->result();

@@ -159,4 +159,14 @@ void K3bCore::saveConfig()
 }
 
 
+void K3bCore::requestBusyInfo( const QString& text )
+{
+  emit busyInfoRequested( text );
+}
+
+void K3bCore::requestBusyFinish()
+{
+  emit busyFinishRequested();
+}
+
 #include "k3bcore.moc"

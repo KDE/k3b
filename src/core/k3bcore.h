@@ -61,8 +61,30 @@ class K3bCore : public QObject
 
   static K3bCore* k3bCore() { return s_k3bCore; }
 
+ public slots:
+  /**
+   * This will just emit the busyInfoRequested signal
+   * Anyone may connect to it and show the string to the
+   * user in some way.
+   */
+  void requestBusyInfo( const QString& );
+  void requestBusyFinish();
+
  signals:
+  /**
+   * This is used for showing info in the K3b splashscreen
+   * and should really be moved somewhere else!
+   */
   void initializationInfo( const QString& );
+
+  /**
+   * Any component may request busy info
+   * In the K3b main app this will be displayed
+   * as a moving square in the taskbar
+   */
+  void busyInfoRequested( const QString& );
+
+  void busyFinishRequested();
 
  private:
   class Private;

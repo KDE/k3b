@@ -20,7 +20,7 @@
 #include "k3bdivxsizetab.h"
 #include "k3bdivxadvancedtab.h"
 #include "k3bdivxencodingprocess.h"
-#include "../k3bjobprogressdialog.h"
+#include <k3bjobprogressdialog.h>
 
 #include <qlayout.h>
 #include <qsizepolicy.h>

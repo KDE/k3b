@@ -149,8 +149,6 @@ class K3bMainWindow : public KParts::DockMainWindow
   /** No descriptions */
   void slotWarningMessage(const QString&);
 
-  void showBusyInfo( const QString& str );
-  void endBusy();
   void slotViewAudioPlayer();
 
   void slotConfigureKeys();
@@ -274,6 +272,9 @@ class K3bMainWindow : public KParts::DockMainWindow
   void slotEditBootImages();
 
   void setProjectsHidable( bool );
+
+  void showBusyInfo( const QString& str );
+  void endBusy();
 
  private:
   void fileSave( K3bDoc* doc = 0 );

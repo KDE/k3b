@@ -59,21 +59,21 @@
 #include <k3bglobals.h>
 #include "k3bview.h"
 #include "k3bdirview.h"
-#include "audio/k3baudiodoc.h"
-#include "audio/k3baudioview.h"
+#include "audiocd/k3baudiodoc.h"
+#include "audiocd/k3baudioview.h"
 #include "device/k3bdevicemanager.h"
-#include "audio/k3baudiotrackdialog.h"
+#include "audiocd/k3baudiotrackdialog.h"
 #include "option/k3boptiondialog.h"
 #include "k3bprojectburndialog.h"
-#include "data/k3bdatadoc.h"
-#include "dvd/k3bdvddoc.h"
-#include "data/k3bdataview.h"
-#include "mixed/k3bmixeddoc.h"
-#include "vcd/k3bvcddoc.h"
-#include "movix/k3bmovixdoc.h"
+#include "datacd/k3bdatadoc.h"
+#include "datadvd/k3bdvddoc.h"
+#include "datacd/k3bdataview.h"
+#include "mixedcd/k3bmixeddoc.h"
+#include "videocd/k3bvcddoc.h"
+#include "movixcd/k3bmovixdoc.h"
 #include "k3bblankingdialog.h"
-#include "data/k3bisoimagewritingdialog.h"
-#include "data/k3bbinimagewritingdialog.h"
+#include "datacd/k3bisoimagewritingdialog.h"
+#include "datacd/k3bbinimagewritingdialog.h"
 #include <k3bexternalbinmanager.h>
 #include "k3bprojecttabwidget.h"
 #include "k3baudioplayer.h"
@@ -85,7 +85,7 @@
 #include "k3bfiletreecombobox.h"
 #include "k3bfiletreeview.h"
 #include "k3bstdguiitems.h"
-#include "dvd/k3bdvdformattingdialog.h"
+#include "datadvd/k3bdvdformattingdialog.h"
 #include "cdclone/k3bclonedialog.h"
 #include "k3bprojectinterface.h"
 
@@ -168,6 +168,11 @@ K3bMainWindow::K3bMainWindow()
   actionDataImportSession->setEnabled( false );
   actionDataClearImportedSession->setEnabled( false );
   actionDataEditBootImages->setEnabled(false);
+
+
+  // connect to the busy signals
+  connect( k3bcore, SIGNAL(busyInfoRequested(const QString&)), this, SLOT(showBusyInfo(const QString&)) );
+  connect( k3bcore, SIGNAL(busyFinishRequested()), this, SLOT(endBusy()) );
 }
 
 K3bMainWindow::~K3bMainWindow()

@@ -24,10 +24,9 @@
 #include <k3bdefaultexternalprograms.h>
 #include <k3bglobals.h>
 #include <k3bversion.h>
-#include <rip/songdb/k3bsongmanager.h>
+#include <songdb/k3bsongmanager.h>
 #include <k3bdoc.h>
 #include <k3bsystemproblemdialog.h>
-#include <rip/songdb/k3bsongmanager.h>
 
 #include <ktip.h>
 #include <klocale.h>
@@ -49,7 +48,7 @@ K3bApplication::K3bApplication()
 {
   m_core = new K3bCore( aboutData(), this );
 
-  m_songManager = new K3bSongManager( this );
+  m_songManager = K3bSongManager::instance();  // this is bad stuff!!!
 
   connect( m_core, SIGNAL(initializationInfo(const QString&)),
 	   SIGNAL(initializationInfo(const QString&)) );
@@ -63,6 +62,7 @@ K3bApplication::~K3bApplication()
 {
   // we must not delete m_mainWindow here, QApplication takes care of it
   delete m_interface;
+  delete m_songManager;  // this is bad stuff!!!
 }
 
 
@@ -80,7 +80,7 @@ void K3bApplication::init()
   config()->setGroup( "General Options" );
 
   QString filename = config()->readPathEntry( "songlistPath", locateLocal("data", "k3b") + "/songlist.xml" );
-  m_songManager->load( filename );
+  K3bSongManager::instance()->load( filename );
 
   emit initializationInfo( i18n("Creating GUI...") );
 

@@ -1,4 +1,4 @@
-AM_CPPFLAGS= -I$(srcdir)/../core -I$(srcdir)/../tools -I$(srcdir)/.. $(all_includes)
+AM_CPPFLAGS= -I$(srcdir)/../core -I$(srcdir)/../tools -I$(srcdir)/../projects -I$(srcdir)/.. $(all_includes)
 
 METASOURCES = AUTO
 
@@ -9,5 +9,5 @@ librip_la_SOURCES = base_k3bcddbpatternwidget.ui k3bdvdriplistviewitem.cpp k3bmo
 
 librip_la_LIBADD = ../cddb/libcddb.la 
 #AM_LDFLAGS = dvdread
-SUBDIRS = songdb 
+#SUBDIRS = songdb 
 

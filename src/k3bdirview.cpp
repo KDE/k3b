@@ -15,8 +15,7 @@
 
 
 #include "k3bdirview.h"
-#include "k3b.h"
-#include "k3bcore.h"
+#include <k3bcore.h>
 
 #include "rip/k3baudiocdview.h"
 #include "k3bfileview.h"
@@ -102,7 +101,7 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
 {
   m_diskInfoDetector = new K3bDiskInfoDetector( this );
   connect( m_diskInfoDetector, SIGNAL(diskInfoReady(const K3bCdDevice::DiskInfo&)),
-	   k3bMain(), SLOT(endBusy()) );
+	   k3bcore, SLOT(requestBusyFinish()) );
   connect( m_diskInfoDetector, SIGNAL(diskInfoReady(const K3bCdDevice::DiskInfo&)),
 	   this, SLOT(slotDiskInfoReady(const K3bCdDevice::DiskInfo&)) );
 
@@ -207,7 +206,7 @@ void K3bDirView::slotDetectDiskInfo( K3bDevice* dev )
 {
   m_viewStack->raiseWidget( m_noViewView );
   m_fileTreeView->setSelectedDevice( dev );
-  k3bMain()->showBusyInfo( i18n("Trying to fetch information about the inserted disk.") );
+  k3bcore->requestBusyInfo( i18n("Trying to fetch information about the inserted disk.") );
   m_diskInfoDetector->detect( dev );
 }
 
@@ -309,7 +308,7 @@ void K3bDirView::slotUnlockDevice()
 
 void K3bDirView::slotUnmountDisk()
 {
-  k3bMain()->showBusyInfo( i18n("Unmounting disk.") );
+  k3bcore->requestBusyInfo( i18n("Unmounting disk.") );
   K3bDeviceBranch *branch = dynamic_cast<K3bDeviceBranch *>(m_fileTreeView->currentKFileTreeViewItem()->branch());
   if( branch ) {
     if( m_fileView->url().isParentOf( branch->device()->mountPoint() ) )
@@ -328,7 +327,7 @@ void K3bDirView::slotUnmountFinished( KIO::Job* job )
   if( job->error() ) {
     job->showErrorDialog( this );
   }
-  k3bMain()->endBusy();
+  k3bcore->requestBusyFinish();
 }
 
 void K3bDirView::slotEjectDisk()
@@ -375,7 +374,7 @@ void K3bDirView::slotDirActivated( const KURL& url )
 {
   // cancel any previous disk info retrieval
 //   m_diskInfoDetector->cancel();
-  k3bMain()->endBusy();
+  k3bcore->requestBusyFinish();
 
   m_fileView->setUrl(url, true);
 //   m_urlCombo->setEditText( url.path() );

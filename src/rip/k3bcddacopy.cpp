@@ -24,8 +24,8 @@
 #include <k3bapplication.h>
 #include <k3bglobals.h>
 
-#include "songdb/k3bsong.h"
-#include "songdb/k3bsongmanager.h"
+#include <songdb/k3bsong.h>
+#include <songdb/k3bsongmanager.h>
 
 #include <qptrlist.h>
 #include <qstringlist.h>
@@ -205,7 +205,7 @@ void K3bCddaCopy::slotTrackFinished( bool success )
 				 m_cddbEntry.titles[m_currentRippedTrackNumber-1],
 				 m_cddbEntry.discid,
 				 m_currentRippedTrackNumber );
-    k3bapp->songManager()->addSong( m_currentWrittenFile.left(m_currentWrittenFile.findRev("/")), song );
+    K3bSongManager::instance()->addSong( m_currentWrittenFile.left(m_currentWrittenFile.findRev("/")), song );
 
 
     ++m_currentTrackIndex;
