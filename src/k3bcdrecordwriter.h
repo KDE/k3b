@@ -85,6 +85,8 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   int m_totalSize;
   int m_alreadyWritten;
 
+  int m_lastFifoValue;
+
   enum CdrecordError { UNKNOWN, 
 		       OVERSIZE, 
 		       BAD_OPTION, 
