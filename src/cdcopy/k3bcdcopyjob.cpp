@@ -948,6 +948,7 @@ void K3bCdCopyJob::slotWriterFinished( bool success )
 
       if( !m_simulate && d->doneCopies < m_copies ) {
 	// start next copy
+	K3bCdDevice::eject( m_writerDevice );
 	d->currentWrittenSession = 1;
 	d->currentReadSession = 1;
 	if( writeNextSession() ) {

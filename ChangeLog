@@ -3,6 +3,7 @@ Qt 3.1 compile fix
 Honor the manual writing app selection for automatic CDRW erasing.
 K3b now refuses to use transcode >= 0.6.12 for dvd ripping. The next major version will
 	be able to use new transcode versions.
+Properly eject the written media between multiple cd (clone) copies
 	
 0.11.10
 Support Mp3 files starting with multiple ID3 tags.
