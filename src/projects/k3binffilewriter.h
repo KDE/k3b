@@ -25,7 +25,7 @@
 namespace K3bCdDevice {
   class Track;
   class TrackCdText;
-  class AlbumCdText;
+  class CdText;
 }
 
 
@@ -83,7 +83,7 @@ class K3bInfFileWriter
   void setTrackArranger( const QString& s ) { m_trackArranger = s; }
   void setTrackMessage( const QString& s ) { m_trackMessage = s; }
 
-  void setAlbumCdText( const K3bCdDevice::AlbumCdText& );
+  void setCdText( const K3bCdDevice::CdText& );
   void setAlbumTitle( const QString& s ) { m_albumTitle = s; }
   void setAlbumPerformer( const QString& s ) { m_albumPerformer = s; }
 

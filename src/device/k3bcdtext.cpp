@@ -77,30 +77,30 @@ namespace K3bCdDevice {
 
 
 
-K3bCdDevice::AlbumCdText::AlbumCdText()
+K3bCdDevice::CdText::CdText()
 {
 }
 
 
-K3bCdDevice::AlbumCdText::AlbumCdText( const unsigned char* data, int len )
+K3bCdDevice::CdText::CdText( const unsigned char* data, int len )
 {
   setRawPackData( data, len );
 }
 
 
-K3bCdDevice::AlbumCdText::AlbumCdText( const QByteArray& b )
+K3bCdDevice::CdText::CdText( const QByteArray& b )
 {
   setRawPackData( b );
 }
 
 
-K3bCdDevice::AlbumCdText::AlbumCdText( int size )
+K3bCdDevice::CdText::CdText( int size )
 {
   resize( size );
 }
 
 
-void K3bCdDevice::AlbumCdText::clear()
+void K3bCdDevice::CdText::clear()
 {
   m_trackCdText.clear();
   m_title.setLength(0);
@@ -114,13 +114,13 @@ void K3bCdDevice::AlbumCdText::clear()
 }
 
 
-void K3bCdDevice::AlbumCdText::setRawPackData( const unsigned char* data, int len )
+void K3bCdDevice::CdText::setRawPackData( const unsigned char* data, int len )
 {
   clear();
 
   int r = len%18;
   if( r > 0 && r != 4 ) {
-    kdDebug() << "(K3bCdDevice::AlbumCdText) invalid cdtext size: " << len << endl;
+    kdDebug() << "(K3bCdDevice::CdText) invalid cdtext size: " << len << endl;
   }
   else if( len-r > 0 ) {
     debugRawTextPackData( &data[r], len-r );
@@ -131,17 +131,23 @@ void K3bCdDevice::AlbumCdText::setRawPackData( const unsigned char* data, int le
     for( int i = 0; i < (len-r)/18; ++i ) {
 
       if( pack[i].dbcc ) {
-	kdDebug() << "(K3bCdDevice::AlbumCdText) Double byte code not supported" << endl;
+	kdDebug() << "(K3bCdDevice::CdText) Double byte code not supported" << endl;
 	return;
       }
 
+      //
+      // For some reason all crc bits are inverted.
+      //
       pack[i].crc[0] ^= 0xff;
       pack[i].crc[1] ^= 0xff;
 
       Q_UINT16 crc = K3bCrc::calcX25( reinterpret_cast<unsigned char*>(&pack[i]), 18 );
 
+      pack[i].crc[0] ^= 0xff;
+      pack[i].crc[1] ^= 0xff;
+
       if( crc != 0x0000 )
-	kdDebug() << "(K3bCdDevice::AlbumCdText) CRC invalid!" << endl;
+	kdDebug() << "(K3bCdDevice::CdText) CRC invalid!" << endl;
 
 
       //
@@ -249,16 +255,16 @@ void K3bCdDevice::AlbumCdText::setRawPackData( const unsigned char* data, int le
     resize( i );
   }
   else
-    kdDebug() << "(K3bCdDevice::AlbumCdText) zero-sized CD-TEXT: " << len << endl; 
+    kdDebug() << "(K3bCdDevice::CdText) zero-sized CD-TEXT: " << len << endl; 
 }
 
 
-void K3bCdDevice::AlbumCdText::setRawPackData( const QByteArray& b )
+void K3bCdDevice::CdText::setRawPackData( const QByteArray& b )
 {
   setRawPackData( reinterpret_cast<const unsigned char*>(b.data()), b.size() );
 }
 
-QByteArray K3bCdDevice::AlbumCdText::rawPackData() const
+QByteArray K3bCdDevice::CdText::rawPackData() const
 { 
   // FIXME: every pack block may only consist of up to 255 packs.
 
@@ -328,7 +334,7 @@ QByteArray K3bCdDevice::AlbumCdText::rawPackData() const
 }
 
 
-void K3bCdDevice::AlbumCdText::appendByteArray( QByteArray& a, const QByteArray& b ) const
+void K3bCdDevice::CdText::appendByteArray( QByteArray& a, const QByteArray& b ) const
 {
   unsigned int oldSize = a.size();
   a.resize( oldSize + b.size() );
@@ -337,7 +343,7 @@ void K3bCdDevice::AlbumCdText::appendByteArray( QByteArray& a, const QByteArray&
 
 
 // this method also creates completely empty packs
-QByteArray K3bCdDevice::AlbumCdText::createPackData( int packType, unsigned int& packCount ) const
+QByteArray K3bCdDevice::CdText::createPackData( int packType, unsigned int& packCount ) const
 {
   QByteArray data;
   unsigned int dataFill = 0;
@@ -417,7 +423,7 @@ QByteArray K3bCdDevice::AlbumCdText::createPackData( int packType, unsigned int&
 }
 
 
-void K3bCdDevice::AlbumCdText::savePack( cdtext_pack* pack, QByteArray& data, unsigned int& dataFill ) const
+void K3bCdDevice::CdText::savePack( cdtext_pack* pack, QByteArray& data, unsigned int& dataFill ) const
 {
   // create CRC
   Q_UINT16 crc = K3bCrc::calcX25( reinterpret_cast<unsigned char*>(pack), sizeof(cdtext_pack)-2 );
@@ -440,7 +446,7 @@ void K3bCdDevice::AlbumCdText::savePack( cdtext_pack* pack, QByteArray& data, un
 
 
 // track 0 means global cdtext
-const QString& K3bCdDevice::AlbumCdText::textForPackType( int packType, unsigned int track ) const
+const QString& K3bCdDevice::CdText::textForPackType( int packType, unsigned int track ) const
 {
   switch( packType ) {
   default:
@@ -496,7 +502,7 @@ const QString& K3bCdDevice::AlbumCdText::textForPackType( int packType, unsigned
 
 
 // count the overall length of a certain packtype texts
-unsigned int K3bCdDevice::AlbumCdText::textLengthForPackType( int packType ) const
+unsigned int K3bCdDevice::CdText::textLengthForPackType( int packType ) const
 {
   unsigned int len = 0;
   for( unsigned int i = 0; i <= m_trackCdText.count(); ++i )
@@ -526,7 +532,48 @@ QCString K3bCdDevice::encodeCdText( const QString& s, bool* illegalChars )
 }
 
 
-void K3bCdDevice::AlbumCdText::debug() const
+bool K3bCdDevice::CdText::checkCrc( const QByteArray& rawData )
+{
+  return checkCrc( reinterpret_cast<const unsigned char*>(rawData.data()), rawData.size() );
+}
+
+
+bool K3bCdDevice::CdText::checkCrc( const unsigned char* data, int len )
+{
+  int r = len%18;
+  if( r > 0 && r != 4 ) {
+    kdDebug() << "(K3bCdDevice::CdText) invalid cdtext size: " << len << endl;
+    return false;
+  }
+  else {
+    len -= r;
+
+    // TODO: what if the crc field is not used? All zeros?
+
+    for( int i = 0; i < (len-r)/18; ++i ) {
+      cdtext_pack* pack = (cdtext_pack*)&data[r];
+
+      //
+      // For some reason all crc bits are inverted.
+      //
+      pack[i].crc[0] ^= 0xff;
+      pack[i].crc[1] ^= 0xff;
+
+      int crc = K3bCrc::calcX25( reinterpret_cast<unsigned char*>(&pack[i]), 18 );
+
+      pack[i].crc[0] ^= 0xff;
+      pack[i].crc[1] ^= 0xff;
+
+      if( crc != 0x0000 )
+	return false;
+    }
+
+    return true;
+  }
+}
+
+
+void K3bCdDevice::CdText::debug() const
 {
   // debug the stuff
   kdDebug() << "CD-TEXT data:" << endl

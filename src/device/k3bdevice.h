@@ -289,12 +289,6 @@ namespace K3bCdDevice
     bool isDVD() const;
 
     /**
-     * returnes the complete diskinfo. This includes the toc.
-     * @deprecated use @p ngDiskInfo()
-     */
-    DiskInfo diskInfo();
-
-    /**
      * @return The number of sessions on the media.
      */
     int numSessions() const;
@@ -324,7 +318,7 @@ namespace K3bCdDevice
     /**
      * Read the CD-TEXT of an audio or mixed-mode CD.
      */
-    AlbumCdText readCdText() const;
+    CdText readCdText() const;
     
     /**
      * @return The DataMode of the track
@@ -387,7 +381,7 @@ namespace K3bCdDevice
     /**
      * This is the method to use!
      */
-    NextGenerationDiskInfo ngDiskInfo() const;
+    DiskInfo diskInfo() const;
 
     /**
      * Refers to MMC command READ CAPACITY

@@ -156,7 +156,7 @@ void K3bDiskInfoView::displayInfo( const K3bCdDevice::DiskInfo& )
 
 void K3bDiskInfoView::displayInfo( K3bCdDevice::DiskInfoDetector* did )
 {
-  const K3bCdDevice::NextGenerationDiskInfo& ngInfo = did->ngDiskInfo();
+  const K3bCdDevice::DiskInfo& ngInfo = did->diskInfo();
   const K3bCdDevice::Toc& toc = did->toc();
 
   m_infoView->clear();
@@ -344,7 +344,7 @@ void K3bDiskInfoView::reload()
 }
 
 
-void K3bDiskInfoView::createMediaInfoItems( const K3bCdDevice::NextGenerationDiskInfo& info )
+void K3bDiskInfoView::createMediaInfoItems( const K3bCdDevice::DiskInfo& info )
 {
   KListViewItem* atipItem = new HeaderViewItem( m_infoView, m_infoView->lastItem(), i18n("Media") );
   QString typeStr;

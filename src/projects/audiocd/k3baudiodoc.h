@@ -84,7 +84,7 @@ class K3bAudioDoc : public K3bDoc
   const QString& upc_ean() const { return m_cdTextData.upcEan(); }
   const QString& cdTextMessage() const { return m_cdTextData.message(); }
 
-  const K3bCdDevice::AlbumCdText& cdTextData() const { return m_cdTextData; }
+  const K3bCdDevice::CdText& cdTextData() const { return m_cdTextData; }
 
   int numOfTracks() const;
 
@@ -191,7 +191,7 @@ class K3bAudioDoc : public K3bDoc
  	
   // CD-Text
   // --------------------------------------------------
-  K3bCdDevice::AlbumCdText m_cdTextData;
+  K3bCdDevice::CdText m_cdTextData;
   bool m_cdText;
   QString m_cdTextTitle;
   QString m_cdTextArtist;

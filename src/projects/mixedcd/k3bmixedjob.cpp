@@ -592,7 +592,7 @@ void K3bMixedJob::addAudioTracks( K3bCdrecordWriter* writer )
 
   // add raw cdtext data
   if( m_doc->audioDoc()->cdText() ) {
-    K3bCdDevice::AlbumCdText td = m_doc->audioDoc()->cdTextData();
+    K3bCdDevice::CdText td = m_doc->audioDoc()->cdTextData();
     for( QPtrListIterator<K3bAudioTrack> it( *m_doc->audioDoc()->tracks() ); it.current(); ++it )
       td.addTrackCdText( (*it)->cdText() );
     writer->setRawCdText( td.rawPackData() );

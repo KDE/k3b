@@ -175,7 +175,7 @@ void K3bInfFileWriter::setTrackCdText( const K3bCdDevice::TrackCdText& cdtext )
 }
 
 
-void K3bInfFileWriter::setAlbumCdText( const K3bCdDevice::AlbumCdText& cdtext )
+void K3bInfFileWriter::setCdText( const K3bCdDevice::CdText& cdtext )
 {
   setAlbumTitle( cdtext.title() );
   setAlbumPerformer( cdtext.performer() );

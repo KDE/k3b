@@ -128,6 +128,9 @@ void K3bGrowisofsHandler::handleLine( const QString& line )
     else
       kdDebug() << "(K3bGrowisofsHandler) parsing error: '" << line.mid( pos, endPos-pos ) << "'" << endl;
   }
+  else if( line.startsWith("Buffer fill") ) {
+    emit deviceBuffer( line.mid(13, line.find('%',13)-13).toInt() );
+  }
 
   else {
     kdDebug() << "(growisofs) " << line << endl;

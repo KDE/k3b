@@ -94,50 +94,6 @@ namespace K3bCdDevice
   }
 
 
-  class CdDevice;
-
-  class DiskInfo
-  {
-  public:
-    DiskInfo();
-
-    enum type { UNKNOWN, NODISC, AUDIO, DATA, MIXED, DVD };
-
-    int mediaType;
-
-    Toc toc;
-    QString mediumManufactor;
-    QString mediumType;
-
-    bool empty;
-    bool cdrw;
-    bool appendable;
-    bool noDisk;
-    bool isVideoDvd;
-    bool isVCD;
-
-    K3b::Msf size;
-    K3b::Msf remaining;
-
-    int speed;
-    int sessions;
-    int tocType;
-
-    // iso stuff
-    QString isoId;
-    QString isoSystemId;
-    QString isoVolumeId;
-    QString isoVolumeSetId;
-    QString isoPublisherId;
-    QString isoPreparerId;
-    QString isoApplicationId;
-    int     isoSize;
-
-    bool valid;
-
-    CdDevice* device;
-  };
-
 
   /**
    * This class is directly accociated to a strcuture from 
@@ -151,11 +107,11 @@ namespace K3bCdDevice
    * Writers should never give the STATE_UNKNOWN state. CD-ROM or DVD-ROM
    * drives on the other hand may have trouble determining the state of the disk.
    */
-  class NextGenerationDiskInfo
+  class DiskInfo
     {
     public:
-      NextGenerationDiskInfo();
-      ~NextGenerationDiskInfo();
+      DiskInfo();
+      ~DiskInfo();
 
       /**
        * Returnes the state of the disk.
@@ -257,10 +213,8 @@ namespace K3bCdDevice
       friend class CdDevice;
     };
 
-  //  kdbgstream& operator<<( kdbgstream& s, const NextGenerationDiskInfo& ngInf );
+  //  kdbgstream& operator<<( kdbgstream& s, const DiskInfo& ngInf );
 }
 
-
-typedef K3bCdDevice::DiskInfo K3bDiskInfo;
 
 #endif

@@ -128,20 +128,20 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
     d->running = false;
   }
 
-  if( dh->ngDiskInfo().empty() || dh->ngDiskInfo().diskState() == K3bCdDevice::STATE_NO_MEDIA ) {
+  if( dh->diskInfo().empty() || dh->diskInfo().diskState() == K3bCdDevice::STATE_NO_MEDIA ) {
     emit infoMessage( i18n("No source media found."), ERROR );
     emit finished(false);
     d->running = false;
   }
   else {
-    if( dh->ngDiskInfo().capacity() > K3b::Msf( 510*60*75 ) ) {
+    if( dh->diskInfo().capacity() > K3b::Msf( 510*60*75 ) ) {
       kdDebug() << "(K3bDvdCopyJob) DVD too large." << endl;
 
       if( KMessageBox::warningYesNo( qApp->activeWindow(), 
 				     i18n("The source DVD seems to be too large (%1) to make its contents fit on "
 					  "a normal writable DVD media which have a capacity of approximately "
 					  "4.3 Gigabytes. Do you really want to continue?")
-				     .arg(KIO::convertSize( dh->ngDiskInfo().capacity().mode1Bytes() ) ),
+				     .arg(KIO::convertSize( dh->diskInfo().capacity().mode1Bytes() ) ),
 				     i18n("Source DVD too large") ) == KMessageBox::No ) {
 	emit canceled();
 	emit finished(false);
@@ -168,7 +168,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
     // With growisofs 5.15 we have the option to specify the size of the image to be written in DAO mode.
     //
 
-    switch( dh->ngDiskInfo().mediaType() ) {
+    switch( dh->diskInfo().mediaType() ) {
     case K3bCdDevice::MEDIA_DVD_ROM:
     case K3bCdDevice::MEDIA_DVD_R:
     case K3bCdDevice::MEDIA_DVD_R_SEQ:
@@ -176,7 +176,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
     case K3bCdDevice::MEDIA_DVD_RW_SEQ:
     case K3bCdDevice::MEDIA_DVD_PLUS_R:
 
-      if( dh->ngDiskInfo().numSessions() > 1 ) {
+      if( dh->diskInfo().numSessions() > 1 ) {
 	emit infoMessage( i18n("K3b does not support copying multi-session DVDs."), ERROR );
 	emit finished(false);
 	d->running = false;

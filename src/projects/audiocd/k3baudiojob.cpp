@@ -86,10 +86,10 @@ void K3bAudioJob::start()
 {
   emit started();
 
-//       K3bCdDevice::AlbumCdText td = m_doc->cdTextData();
+//       K3bCdDevice::CdText td = m_doc->cdTextData();
 //       for( QPtrListIterator<K3bAudioTrack> it( *m_doc->tracks() ); it.current(); ++it )
 // 	td.addTrackCdText( (*it)->cdText() );
-//       K3bCdDevice::AlbumCdText(td.rawPackData()).debug();
+//       K3bCdDevice::CdText(td.rawPackData()).debug();
 //       emit finished(true);
 //       return;
 
@@ -324,7 +324,7 @@ bool K3bAudioJob::prepareWriter()
     writer->addArgument( "-useinfo" );
 
     if( m_doc->cdText() ) {
-      K3bCdDevice::AlbumCdText td = m_doc->cdTextData();
+      K3bCdDevice::CdText td = m_doc->cdTextData();
       for( QPtrListIterator<K3bAudioTrack> it( *m_doc->tracks() ); it.current(); ++it )
 	td.addTrackCdText( (*it)->cdText() );
       writer->setRawCdText( td.rawPackData() );

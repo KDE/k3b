@@ -26,25 +26,6 @@
 
 
 K3bCdDevice::DiskInfo::DiskInfo()
-  : mediaType(0),
-    empty(false),
-    cdrw(false),
-    appendable(false),
-    noDisk(true),
-    isVideoDvd(false),
-    isVCD(false),
-    size(0),
-    remaining(0),
-    speed(0),
-    sessions(0),
-    tocType(UNKNOWN),
-    valid(false),
-    device(0)
-{
-}
-
-
-K3bCdDevice::NextGenerationDiskInfo::NextGenerationDiskInfo()
   : m_mediaType(MEDIA_UNKNOWN),
     m_currentProfile(MEDIA_UNKNOWN),
     m_diskState(STATE_UNKNOWN),
@@ -57,60 +38,60 @@ K3bCdDevice::NextGenerationDiskInfo::NextGenerationDiskInfo()
 }
 
 
-K3bCdDevice::NextGenerationDiskInfo::~NextGenerationDiskInfo()
+K3bCdDevice::DiskInfo::~DiskInfo()
 {
 }
 
 
-int K3bCdDevice::NextGenerationDiskInfo::diskState() const
+int K3bCdDevice::DiskInfo::diskState() const
 {
   return m_diskState;
 }
 
 
-int K3bCdDevice::NextGenerationDiskInfo::lastSessionState() const
+int K3bCdDevice::DiskInfo::lastSessionState() const
 {
   return m_lastSessionState;
 }
 
 
-int K3bCdDevice::NextGenerationDiskInfo::bgFormatState() const
+int K3bCdDevice::DiskInfo::bgFormatState() const
 {
   return m_bgFormatState;
 }
 
 
-bool K3bCdDevice::NextGenerationDiskInfo::empty() const
+bool K3bCdDevice::DiskInfo::empty() const
 {
   return diskState() == STATE_EMPTY;
 }
 
 
-bool K3bCdDevice::NextGenerationDiskInfo::rewritable() const
+bool K3bCdDevice::DiskInfo::rewritable() const
 {
   return m_rewritable;
 }
 
 
-bool K3bCdDevice::NextGenerationDiskInfo::appendable() const
+bool K3bCdDevice::DiskInfo::appendable() const
 {
   return diskState() == STATE_INCOMPLETE;
 }
 
 
-int K3bCdDevice::NextGenerationDiskInfo::mediaType() const
+int K3bCdDevice::DiskInfo::mediaType() const
 {
   return m_mediaType;
 }
 
 
-bool K3bCdDevice::NextGenerationDiskInfo::isDvdMedia() const
+bool K3bCdDevice::DiskInfo::isDvdMedia() const
 {
   return K3bCdDevice::isDvdMedia( mediaType() );
 }
 
 
-int K3bCdDevice::NextGenerationDiskInfo::numSessions() const
+int K3bCdDevice::DiskInfo::numSessions() const
 {
   if( empty() )
     return 0;
@@ -119,7 +100,7 @@ int K3bCdDevice::NextGenerationDiskInfo::numSessions() const
 }
 
 
-int K3bCdDevice::NextGenerationDiskInfo::numTracks() const
+int K3bCdDevice::DiskInfo::numTracks() const
 {
   if( empty() )
     return 0;
@@ -128,7 +109,7 @@ int K3bCdDevice::NextGenerationDiskInfo::numTracks() const
 }
 
 
-K3bMsf K3bCdDevice::NextGenerationDiskInfo::remainingSize() const
+K3bMsf K3bCdDevice::DiskInfo::remainingSize() const
 {
   if( empty() )
     return capacity();
@@ -146,21 +127,21 @@ K3bMsf K3bCdDevice::NextGenerationDiskInfo::remainingSize() const
 }
 
 
-K3bMsf K3bCdDevice::NextGenerationDiskInfo::capacity() const
+K3bMsf K3bCdDevice::DiskInfo::capacity() const
 {
   return (m_capacity == 0 ? size() : m_capacity);
 }
 
 
-K3bMsf K3bCdDevice::NextGenerationDiskInfo::size() const
+K3bMsf K3bCdDevice::DiskInfo::size() const
 {
   return m_usedCapacity;
 }
 
 
-void K3bCdDevice::NextGenerationDiskInfo::debug() const
+void K3bCdDevice::DiskInfo::debug() const
 {
-  kdDebug() << "NextGenerationDiskInfo:" << endl
+  kdDebug() << "DiskInfo:" << endl
 	    << "Mediatype:       " << K3bCdDevice::mediaTypeString( mediaType() ) << endl
 	    << "Current Profile: " << K3bCdDevice::mediaTypeString( currentProfile() ) << endl
 	    << "Disk state:      " << ( diskState() == K3bCdDevice::STATE_EMPTY ? 
@@ -203,9 +184,9 @@ void K3bCdDevice::NextGenerationDiskInfo::debug() const
 }
 
 
-// kdbgstream& K3bCdDevice::operator<<( kdbgstream& s, const K3bCdDevice::NextGenerationDiskInfo& ngInf )
+// kdbgstream& K3bCdDevice::operator<<( kdbgstream& s, const K3bCdDevice::DiskInfo& ngInf )
 // {
-//    s << "NextGenerationDiskInfo:" << endl
+//    s << "DiskInfo:" << endl
 //      << "Mediatype:       " << K3bCdDevice::mediaTypeString( ngInf.mediaType() ) << endl
 //      << "Current Profile: " << K3bCdDevice::mediaTypeString( ngInf.currentProfile() ) << endl
 //      << "Disk state:      " << ( ngInf.diskState() == K3bCdDevice::STATE_EMPTY ? 

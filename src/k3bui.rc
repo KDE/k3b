@@ -21,9 +21,6 @@
 	<Action name="tools_encode_video" />
   </Menu>
 
-  <Menu name="plugins"><text>Plugins</text>
-  </Menu>
-
   <Menu name="settings">
   	<Action name="view_show_project_view" append="show_merge" />
   	<Action name="view_dir_tree" append="show_merge" />

@@ -1,1 +1,1 @@
-SUBDIRS = audiometainforenamer
+SUBDIRS = audiometainforenamer audioconverter

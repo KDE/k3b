@@ -36,91 +36,68 @@ public:
     success = false;
 
     if( dev ) {
-      dev->open();
-      switch( command ) {
-      case DISKINFO:
-	// FIXME: we need a better method to check if
-	// this succeeded
-	success = (dev->open() != -1);
-	ngInfo = dev->ngDiskInfo();
+      success = (dev->open() != -1);
+      if( command & DISKINFO ) {
+	ngInfo = dev->diskInfo();
 	if( !ngInfo.empty() ) {
 	  toc = dev->readToc();
 	  if( toc.contentType() == AUDIO ||
 	      toc.contentType() == MIXED )
 	    cdText = dev->readCdText();
 	}
-	break;
-      case NG_DISKINFO:
-	// FIXME: we need a better method to check if
-	// this succeeded
-	success = (dev->open() != -1);
-	ngInfo = dev->ngDiskInfo();
-	break;
-      case TOC:
-      case TOCTYPE:
-	toc = dev->readToc();
-	success = true;
-	break;
-      case CD_TEXT:
-	cdText = dev->readCdText();
-	success = !cdText.isEmpty();
-	break;
-      case CD_TEXT_RAW:
-	{
-	  unsigned char* data = 0;
-	  int dataLen = 0;
-	  if( dev->readTocPmaAtip( &data, dataLen, 5, false, 0 ) ) {
-	    // we need more than the header and a multible of 18 bytes to have valid CD-TEXT
-	    if( dataLen > 4 && dataLen%sizeof(cdtext_pack) == 4 ) {
-	      cdTextRaw.assign( reinterpret_cast<char*>(data), dataLen );
-	      success = true;
-	    }
-	    else {
-	      kdDebug() << "(K3bCdDevice::DeviceHandler) invalid CD-TEXT length: " << dataLen << endl;
-	      delete [] data;
-	      success = false;
-	    }
-	  }
-	  else
-	    success = false;
-	}
-	break;
-      case DISKSIZE:
-	info.size = dev->discSize();
-	success = (info.size != 0);
-	break;
-      case REMAININGSIZE:
-	info.remaining = dev->remainingSize();
-	success = (info.remaining != 0);
-	break;
-      case NUMSESSIONS:
-	info.sessions = dev->numSessions();
-	success = true;
-	break;
-      case BLOCK:
-	success = dev->block( true );
-	break;
-      case UNBLOCK:
-	success = dev->block( false );
-	break;
-      case EJECT:
-	success = dev->eject();
-	break;
-      case LOAD:
-	success = dev->load();
-	break;
-      case RELOAD:
-	success = dev->eject();
-	success = success && dev->load();
-	break;
-      case MEDIUM_STATE:
-	//	info.mediaType = dev->mediaType();
-	errorCode = dev->isEmpty();
-	success = ( errorCode != K3bCdDevice::CdDevice::NO_INFO );
-	break;
-      default:
-	success = false;
       }
+
+      if( command & (NG_DISKINFO|
+		     DISKSIZE|
+		     REMAININGSIZE|
+		     NUMSESSIONS) ) {
+	ngInfo = dev->diskInfo();
+      }
+
+      if( command & (TOC|TOCTYPE) ) {
+	toc = dev->readToc();
+      }
+
+      if( command & CD_TEXT ) {
+	cdText = dev->readCdText();
+	success = (success && !cdText.isEmpty());
+      }
+
+      if( command & CD_TEXT_RAW ) {
+	unsigned char* data = 0;
+	int dataLen = 0;
+	if( dev->readTocPmaAtip( &data, dataLen, 5, false, 0 ) ) {
+	  // we need more than the header and a multible of 18 bytes to have valid CD-TEXT
+	  if( dataLen > 4 && dataLen%sizeof(cdtext_pack) == 4 ) {
+	    cdTextRaw.assign( reinterpret_cast<char*>(data), dataLen );
+	  }
+	  else {
+	    kdDebug() << "(K3bCdDevice::DeviceHandler) invalid CD-TEXT length: " << dataLen << endl;
+	    delete [] data;
+	    success = false;
+	  }
+	}
+	else
+	  success = false;
+      }
+
+      if( command & BLOCK )
+	success = (success && dev->block( true ));
+
+      if( command & UNBLOCK )
+	success = (success && dev->block( false ));
+
+      //
+      // It is important that eject is performed before load
+      // since the RELOAD command is a combination of both
+      //
+
+      if( command & EJECT )
+	success = (success && dev->eject());
+
+      if( command & LOAD )
+	success = (success && dev->load());
+
       dev->close();
     }
     emitFinished(success);
@@ -129,10 +106,9 @@ public:
   bool success;
   int errorCode;
   int command;
-  DiskInfo info;
-  NextGenerationDiskInfo ngInfo;
+  DiskInfo ngInfo;
   Toc toc;
-  AlbumCdText cdText;
+  CdText cdText;
   QByteArray cdTextRaw;
   CdDevice* dev;
 };
@@ -183,13 +159,8 @@ bool K3bCdDevice::DeviceHandler::success() const
   return m_thread->success;
 }
 
-// const K3bCdDevice::DiskInfo& K3bCdDevice::DeviceHandler::diskInfo() const
-// {
-//   return m_thread->info;
-// }
 
-
-const K3bCdDevice::NextGenerationDiskInfo& K3bCdDevice::DeviceHandler::ngDiskInfo() const
+const K3bCdDevice::DiskInfo& K3bCdDevice::DeviceHandler::diskInfo() const
 {
   return m_thread->ngInfo;
 }
@@ -200,7 +171,7 @@ const K3bCdDevice::Toc& K3bCdDevice::DeviceHandler::toc() const
   return m_thread->toc;
 }
 
-const K3bCdDevice::AlbumCdText& K3bCdDevice::DeviceHandler::cdText() const
+const K3bCdDevice::CdText& K3bCdDevice::DeviceHandler::cdText() const
 {
   return m_thread->cdText;
 }
@@ -212,14 +183,14 @@ const QByteArray& K3bCdDevice::DeviceHandler::cdTextRaw() const
 }
 
 
-const K3b::Msf& K3bCdDevice::DeviceHandler::diskSize() const
+K3b::Msf K3bCdDevice::DeviceHandler::diskSize() const
 {
-  return m_thread->info.size;
+  return m_thread->ngInfo.capacity();
 }
 
-const K3b::Msf& K3bCdDevice::DeviceHandler::remainingSize() const
+K3b::Msf K3bCdDevice::DeviceHandler::remainingSize() const
 {
-  return m_thread->info.remaining;
+  return m_thread->ngInfo.remainingSize();
 }
 
 int K3bCdDevice::DeviceHandler::tocType() const
@@ -229,7 +200,7 @@ int K3bCdDevice::DeviceHandler::tocType() const
 
 int K3bCdDevice::DeviceHandler::numSessions() const
 {
-  return m_thread->info.sessions;
+  return m_thread->ngInfo.numSessions();
 }
 
 void K3bCdDevice::DeviceHandler::setDevice( CdDevice* dev )

@@ -560,15 +560,6 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   else if( line.startsWith( "Fixating" ) ) {
     emit newSubTask( i18n("Fixating") );
   }
-  else if( line.contains("seconds.") ) {
-    int pos2 = line.find("seconds.") - 2;
-    int pos1 = line.findRev( QRegExp("\\D"), pos2 ) + 1;
-    int secs = line.mid(pos1, pos2-pos1+1).toInt();
-    if( secs > 0 )
-      emit infoMessage( i18n("Starting in 1 second", 
-			     "Starting in %n seconds", 
-			     secs), K3bJob::INFO );
-  }
   else if( line.startsWith( "Writing lead-in" ) ) {
     m_totalTracksParsed = true;
     emit newSubTask( i18n("Writing Leadin") );

@@ -128,7 +128,7 @@ void K3bMsInfoFetcher::getMsInfo()
 void K3bMsInfoFetcher::slotMediaDetectionFinished( K3bCdDevice::DeviceHandler* h )
 {
   if( h->success() ) {
-    m_dvd = h->ngDiskInfo().isDvdMedia();
+    m_dvd = h->diskInfo().isDvdMedia();
   }
   else {
     // for now we just default to cd and go on with the detecting

@@ -85,6 +85,8 @@ K3bGrowisofsWriter::K3bGrowisofsWriter( K3bCdDevice::CdDevice* dev, K3bJobHandle
 	   this,SIGNAL(infoMessage(const QString&, int)) );
   connect( d->gh, SIGNAL(newSubTask(const QString&)),
 	   this, SIGNAL(newSubTask(const QString&)) );
+  connect( d->gh, SIGNAL(deviceBuffer(int)),
+	   this, SIGNAL(deviceBuffer(int)) );
 }
 
 

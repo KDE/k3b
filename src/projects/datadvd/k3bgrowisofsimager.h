@@ -51,6 +51,7 @@ class K3bGrowisofsImager : public K3bIsoImager
 
  signals:
   void writeSpeed( int, int );
+  void deviceBuffer( int );
 
  protected slots:
   virtual void slotReceivedStderr( const QString& );

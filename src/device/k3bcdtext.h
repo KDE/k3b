@@ -100,18 +100,18 @@ namespace K3bCdDevice
       QString m_message;
       QString m_isrc;
 
-      friend class AlbumCdText;
+      friend class CdText;
     };
 
-  class AlbumCdText
+  class CdText
     {
       friend class CdDevice;
 
     public:
-      AlbumCdText();
-      AlbumCdText( const unsigned char* data, int len );
-      AlbumCdText( const QByteArray& );
-      AlbumCdText( int size );
+      CdText();
+      CdText( const unsigned char* data, int len );
+      CdText( const QByteArray& );
+      CdText( int size );
 
       void setRawPackData( const unsigned char*, int );
       void setRawPackData( const QByteArray& );
@@ -176,6 +176,13 @@ namespace K3bCdDevice
       void addTrackCdText( const TrackCdText& t ) { m_trackCdText.append(t); }
 
       void debug() const;
+
+      /**
+       * Returns false if found a crc error in the raw cdtext block or it has a
+       * wrong length.
+       */
+      static bool checkCrc( const unsigned char*, int );
+      static bool checkCrc( const QByteArray& );
 	
     private:
       // TODO: remove this (see above)

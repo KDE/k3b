@@ -68,6 +68,8 @@ K3bGrowisofsImager::K3bGrowisofsImager( K3bDataDoc* doc, K3bJobHandler* jh, QObj
 	   this,SIGNAL(infoMessage(const QString&, int)) );
   connect( d->gh, SIGNAL(newSubTask(const QString&)),
 	   this, SIGNAL(newSubTask(const QString&)) );
+  connect( d->gh, SIGNAL(deviceBuffer(int)),
+	   this, SIGNAL(deviceBuffer(int)) );
 }
 
 

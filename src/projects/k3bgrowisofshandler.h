@@ -54,6 +54,7 @@ class K3bGrowisofsHandler : public QObject
  signals:
   void infoMessage( const QString&, int );
   void newSubTask( const QString& );
+  void deviceBuffer( int );
 
  private:
   int m_error;

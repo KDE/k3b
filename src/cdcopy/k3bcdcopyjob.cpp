@@ -185,17 +185,17 @@ void K3bCdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
     //
     bool canCopy = true;
     bool audio = false;
-    d->numSessions = dh->ngDiskInfo().numSessions();
-    d->doNotCloseLastSession = (dh->ngDiskInfo().diskState() == K3bCdDevice::STATE_INCOMPLETE);
+    d->numSessions = dh->diskInfo().numSessions();
+    d->doNotCloseLastSession = (dh->diskInfo().diskState() == K3bCdDevice::STATE_INCOMPLETE);
     switch( dh->toc().contentType() ) {
     case K3bCdDevice::DATA:
       // check if every track is in it's own session
       // only then we copy the cd
-      if( (int)dh->toc().count() != dh->ngDiskInfo().numSessions() ) {
+      if( (int)dh->toc().count() != dh->diskInfo().numSessions() ) {
 	emit infoMessage( i18n("K3b does not copy CDs containing multiple data tracks."), ERROR );
 	canCopy = false;
       }
-      else if( dh->ngDiskInfo().numSessions() > 1 )
+      else if( dh->diskInfo().numSessions() > 1 )
 	emit infoMessage( i18n("Copying Multisession Data CD."), INFO );
       else
 	emit infoMessage( i18n("Copying Data CD."), INFO );
@@ -203,7 +203,7 @@ void K3bCdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
       
     case K3bCdDevice::MIXED:
       audio = true;
-      if( dh->ngDiskInfo().numSessions() != 2 || d->toc[0].type() != K3bCdDevice::Track::AUDIO ) {
+      if( dh->diskInfo().numSessions() != 2 || d->toc[0].type() != K3bCdDevice::Track::AUDIO ) {
 	emit infoMessage( i18n("K3b can only copy CD-Extra mixed mode CDs."), ERROR );
 	canCopy = false;
       }
@@ -367,13 +367,18 @@ void K3bCdCopyJob::searchCdText()
 void K3bCdCopyJob::slotCdTextReady( K3bCdDevice::DeviceHandler* dh )
 {
   if( dh->success() ) {
-    K3bCdDevice::AlbumCdText cdt( dh->cdTextRaw() );
-    emit infoMessage( i18n("Found CD-TEXT (%1 - %2).").arg(cdt.performer()).arg(cdt.title()), SUCCESS );
+    if( K3bCdDevice::CdText::checkCrc( dh->cdTextRaw() ) ) {
+      K3bCdDevice::CdText cdt( dh->cdTextRaw() );
+      emit infoMessage( i18n("Found CD-TEXT (%1 - %2).").arg(cdt.performer()).arg(cdt.title()), SUCCESS );
+      d->haveCdText = true;
+      d->cdTextRaw = dh->cdTextRaw();
+    }
+    else {
+      emit infoMessage( i18n("Found corrupted CD-TEXT. Ignoring it."), WARNING );
+      d->haveCdText = false;
+    }
 
-    d->cdTextRaw = dh->cdTextRaw();
-    d->haveCdText = true;
-
-    if( m_preferCdText )
+    if( d->haveCdText && m_preferCdText )
       startCopy();
     else
       queryCddb();  

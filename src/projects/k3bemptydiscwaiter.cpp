@@ -228,7 +228,7 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
   c->setGroup( "General Options" );
   bool formatWithoutAsking = c->readBoolEntry( "auto rewritable erasing", false );
 
-  if( dh->ngDiskInfo().diskState() == K3bCdDevice::STATE_NO_MEDIA ) {
+  if( dh->diskInfo().diskState() == K3bCdDevice::STATE_NO_MEDIA ) {
     d->labelFoundMedia->setText( i18n("No media") );
     showDialog();
     QTimer::singleShot( 1000, this, SLOT(startDeviceHandler()) );
@@ -236,17 +236,17 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
   }
 
   QString mediaState;
-  if( dh->ngDiskInfo().diskState() == K3bCdDevice::STATE_COMPLETE )
+  if( dh->diskInfo().diskState() == K3bCdDevice::STATE_COMPLETE )
     mediaState = i18n("complete");
-  else if( dh->ngDiskInfo().diskState() == K3bCdDevice::STATE_INCOMPLETE )
+  else if( dh->diskInfo().diskState() == K3bCdDevice::STATE_INCOMPLETE )
     mediaState = i18n("appendable");
-  else if( dh->ngDiskInfo().diskState() == K3bCdDevice::STATE_EMPTY )
+  else if( dh->diskInfo().diskState() == K3bCdDevice::STATE_EMPTY )
     mediaState = i18n("empty");
 
   if( !mediaState.isEmpty() )
     mediaState = " (" + mediaState +")";
 
-  d->labelFoundMedia->setText( K3bCdDevice::mediaTypeString( dh->ngDiskInfo().mediaType() ) 
+  d->labelFoundMedia->setText( K3bCdDevice::mediaTypeString( dh->diskInfo().mediaType() ) 
 			       + mediaState );
 
   if( dh->success() ) {
@@ -261,11 +261,11 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
     //         allows better control and a progress bar. If it's not empty we shoud check if there is 
     //         already a filesystem on the media. 
     if( (d->wantedMediaType & K3bCdDevice::MEDIA_DVD_PLUS_RW) &&
-	(dh->ngDiskInfo().mediaType() & K3bCdDevice::MEDIA_DVD_PLUS_RW) ) {
+	(dh->diskInfo().mediaType() & K3bCdDevice::MEDIA_DVD_PLUS_RW) ) {
 
       kdDebug() << "(K3bEmptyDiscWaiter) ------ found DVD+RW as wanted." << endl;
 
-      if( dh->ngDiskInfo().diskState() == K3bCdDevice::STATE_EMPTY ) {
+      if( dh->diskInfo().diskState() == K3bCdDevice::STATE_EMPTY ) {
 
 	// special case for the formatting job which wants to preformat itself!
 	if( d->wantedMediaState & K3bCdDevice::STATE_COMPLETE &&
@@ -337,7 +337,7 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
     else if( (d->wantedMediaType & (K3bCdDevice::MEDIA_DVD_RW|
 				    K3bCdDevice::MEDIA_DVD_RW_SEQ|
 				    K3bCdDevice::MEDIA_DVD_RW_OVWR) ) &&
-	     (dh->ngDiskInfo().mediaType() & (K3bCdDevice::MEDIA_DVD_RW|
+	     (dh->diskInfo().mediaType() & (K3bCdDevice::MEDIA_DVD_RW|
 					      K3bCdDevice::MEDIA_DVD_RW_SEQ|
 					      K3bCdDevice::MEDIA_DVD_RW_OVWR) ) ) {
 
@@ -349,13 +349,13 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
       // restr. ovw. and seq. incr. requested
 
       // we have exactly what was requested
-      if( (d->wantedMediaType & dh->ngDiskInfo().currentProfile()) &&
-	  (d->wantedMediaState & dh->ngDiskInfo().diskState()) ) {
-	finishWaiting( dh->ngDiskInfo().currentProfile() );
+      if( (d->wantedMediaType & dh->diskInfo().currentProfile()) &&
+	  (d->wantedMediaState & dh->diskInfo().diskState()) ) {
+	finishWaiting( dh->diskInfo().currentProfile() );
       }
 
       // DVD-RW in restr. overwrite may just------  be overwritten
-      else if( (dh->ngDiskInfo().currentProfile() & K3bCdDevice::MEDIA_DVD_RW_OVWR) &&
+      else if( (dh->diskInfo().currentProfile() & K3bCdDevice::MEDIA_DVD_RW_OVWR) &&
 	  (d->wantedMediaType & K3bCdDevice::MEDIA_DVD_RW_OVWR) &&
 	  (d->wantedMediaState == K3bCdDevice::STATE_EMPTY) ) {
 
@@ -371,7 +371,7 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
 	    KMessageBox::questionYesNo( parentWidgetToUse(),
 					i18n("Found %1 media in %2 - %3. "
 					     "Should it be overwritten?")
-					.arg(K3bCdDevice::mediaTypeString(dh->ngDiskInfo().currentProfile()))
+					.arg(K3bCdDevice::mediaTypeString(dh->diskInfo().currentProfile()))
 					.arg(d->device->vendor())
 					.arg(d->device->description()),
 					i18n("Found %1").arg("DVD-RW") ) == KMessageBox::Yes ) {
@@ -387,17 +387,17 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
       }
       // formatting
       else if( ( (d->wantedMediaType & K3bCdDevice::MEDIA_DVD_RW_OVWR) &&
-		 (dh->ngDiskInfo().currentProfile() & K3bCdDevice::MEDIA_DVD_RW_SEQ) &&
+		 (dh->diskInfo().currentProfile() & K3bCdDevice::MEDIA_DVD_RW_SEQ) &&
 		 !(d->wantedMediaType & K3bCdDevice::MEDIA_DVD_RW_SEQ) ) ||
 
 	       ( (d->wantedMediaType & K3bCdDevice::MEDIA_DVD_RW_SEQ) &&
-		 (dh->ngDiskInfo().currentProfile() & K3bCdDevice::MEDIA_DVD_RW_OVWR) &&
+		 (dh->diskInfo().currentProfile() & K3bCdDevice::MEDIA_DVD_RW_OVWR) &&
 		 !(d->wantedMediaType & K3bCdDevice::MEDIA_DVD_RW_OVWR) ) ||
 
 	       ( (d->wantedMediaType & K3bCdDevice::MEDIA_DVD_RW_SEQ) &&
-		 (dh->ngDiskInfo().currentProfile() & K3bCdDevice::MEDIA_DVD_RW_SEQ) &&
+		 (dh->diskInfo().currentProfile() & K3bCdDevice::MEDIA_DVD_RW_SEQ) &&
 		 (d->wantedMediaState == K3bCdDevice::STATE_EMPTY) &&
-		 (dh->ngDiskInfo().diskState() != K3bCdDevice::STATE_EMPTY) ) ) {
+		 (dh->diskInfo().diskState() != K3bCdDevice::STATE_EMPTY) ) ) {
 
 	kdDebug() << "(K3bEmptyDiscWaiter) ------ DVD-RW needs to be formated." << endl;
 
@@ -405,7 +405,7 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
 	    KMessageBox::questionYesNo( parentWidgetToUse(),
 					i18n("Found %1 media in %2 - %3. "
 					     "Should it be formatted?")
-					.arg( K3bCdDevice::mediaTypeString(dh->ngDiskInfo().currentProfile()) )
+					.arg( K3bCdDevice::mediaTypeString(dh->diskInfo().currentProfile()) )
 					.arg(d->device->vendor())
 					.arg(d->device->description()),
 					i18n("Found %1").arg("DVD-RW") ) == KMessageBox::Yes ) {
@@ -419,7 +419,7 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
 	  // we prefere the current mode of the media if no special mode has been requested
 	  job.setMode( ( (d->wantedMediaType & K3bCdDevice::MEDIA_DVD_RW_SEQ) &&
 			 (d->wantedMediaType & K3bCdDevice::MEDIA_DVD_RW_OVWR) )
-		       ? ( dh->ngDiskInfo().currentProfile() == K3bCdDevice::MEDIA_DVD_RW_OVWR
+		       ? ( dh->diskInfo().currentProfile() == K3bCdDevice::MEDIA_DVD_RW_OVWR
 			   ? K3b::WRITING_MODE_RES_OVWR
 			   : K3b::WRITING_MODE_INCR_SEQ )
 		       : ( (d->wantedMediaType & K3bCdDevice::MEDIA_DVD_RW_SEQ) 
@@ -460,25 +460,25 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
     // /////////////////////////////////////////////////////////////
 
     // we have exactly what was requested
-    else if( (d->wantedMediaType & dh->ngDiskInfo().mediaType()) &&
-	     (d->wantedMediaState & dh->ngDiskInfo().diskState()) )
-      finishWaiting( dh->ngDiskInfo().mediaType() );
+    else if( (d->wantedMediaType & dh->diskInfo().mediaType()) &&
+	     (d->wantedMediaState & dh->diskInfo().diskState()) )
+      finishWaiting( dh->diskInfo().mediaType() );
 
-    else if( (dh->ngDiskInfo().currentProfile() != K3bCdDevice::MEDIA_UNKNOWN) &&
-	     (d->wantedMediaType & dh->ngDiskInfo().currentProfile()) &&
-	     (d->wantedMediaState & dh->ngDiskInfo().diskState()) )
-      finishWaiting( dh->ngDiskInfo().mediaType() );
+    else if( (dh->diskInfo().currentProfile() != K3bCdDevice::MEDIA_UNKNOWN) &&
+	     (d->wantedMediaType & dh->diskInfo().currentProfile()) &&
+	     (d->wantedMediaState & dh->diskInfo().diskState()) )
+      finishWaiting( dh->diskInfo().mediaType() );
 
     // this is for CD drives that are not able to determine the state of a disk
-    else if( dh->ngDiskInfo().diskState() == K3bCdDevice::STATE_UNKNOWN && 
-	     dh->ngDiskInfo().mediaType() == K3bCdDevice::MEDIA_CD_ROM &&
+    else if( dh->diskInfo().diskState() == K3bCdDevice::STATE_UNKNOWN && 
+	     dh->diskInfo().mediaType() == K3bCdDevice::MEDIA_CD_ROM &&
 	     d->wantedMediaType & K3bCdDevice::MEDIA_CD_ROM )
-      finishWaiting( dh->ngDiskInfo().mediaType() );
+      finishWaiting( dh->diskInfo().mediaType() );
 
     // format CD-RW
-    else if( (d->wantedMediaType & dh->ngDiskInfo().mediaType()) &&
+    else if( (d->wantedMediaType & dh->diskInfo().mediaType()) &&
 	     (d->wantedMediaState & K3bCdDevice::STATE_EMPTY) &&
-	     dh->ngDiskInfo().rewritable() ) {
+	     dh->diskInfo().rewritable() ) {
 	
       if( formatWithoutAsking ||
 	  KMessageBox::questionYesNo( parentWidgetToUse(),

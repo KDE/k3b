@@ -27,7 +27,7 @@ class K3bIso9660;
 namespace K3bCdDevice {
   class DiskInfoDetector;
   class DiskInfo;
-  class NextGenerationDiskInfo;
+  class DiskInfo;
 }
 
 class K3bDiskInfoView : public K3bCdContentsView
@@ -45,7 +45,7 @@ class K3bDiskInfoView : public K3bCdContentsView
   void displayInfo( K3bCdDevice::DiskInfoDetector* );
 
  private:
-  void createMediaInfoItems( const K3bCdDevice::NextGenerationDiskInfo& info );
+  void createMediaInfoItems( const K3bCdDevice::DiskInfo& info );
   void createIso9660InfoItems( const K3bIso9660* iso );
 
   KListView* m_infoView;

@@ -38,10 +38,9 @@ public:
   }
 
   CdDevice* device;
-  DiskInfo info;
-  NextGenerationDiskInfo ngDiskInfo;
+  DiskInfo diskInfo;
   Toc toc;
-  AlbumCdText cdText;
+  CdText cdText;
   K3bIso9660* iso9660;
 
   bool isVideoDvd;
@@ -78,13 +77,13 @@ K3bCdDevice::CdDevice* K3bCdDevice::DiskInfoDetector::device() const
 // }
 
 
-const K3bCdDevice::NextGenerationDiskInfo& K3bCdDevice::DiskInfoDetector::ngDiskInfo() const
+const K3bCdDevice::DiskInfo& K3bCdDevice::DiskInfoDetector::diskInfo() const
 {
-  return d->ngDiskInfo;
+  return d->diskInfo;
 }
 
 
-const K3bCdDevice::AlbumCdText& K3bCdDevice::DiskInfoDetector::cdText() const
+const K3bCdDevice::CdText& K3bCdDevice::DiskInfoDetector::cdText() const
 {
   return d->cdText;
 }
@@ -154,7 +153,7 @@ void K3bCdDevice::DiskInfoDetector::fetchExtraInfo()
 
       unsigned long startSec = 0;
 
-      if( d->ngDiskInfo.numSessions() > 1 ) {
+      if( d->diskInfo.numSessions() > 1 ) {
 	// We use the last data track
 	// this way we get the latest session on a ms cd
 	Toc::const_iterator it = toc().end();
@@ -187,7 +186,7 @@ void K3bCdDevice::DiskInfoDetector::fetchExtraInfo()
 // 	d->info.isoApplicationId = d->iso9660->primaryDescriptor().applicationId;
 	
 
-	if( K3bCdDevice::isDvdMedia( d->ngDiskInfo.mediaType() ) ) {
+	if( K3bCdDevice::isDvdMedia( d->diskInfo.mediaType() ) ) {
 	  d->isVideoDvd = false;
 
 	  // We check for the VIDEO_TS directory and at least one .IFO file
@@ -263,12 +262,12 @@ void K3bCdDevice::DiskInfoDetector::slotDeviceHandlerFinished( K3bCdDevice::Devi
   bool success = handler->success();
   if( success ) {
     //    d->info = handler->diskInfo();
-    d->ngDiskInfo = handler->ngDiskInfo();
-    d->ngDiskInfo.debug();
+    d->diskInfo = handler->diskInfo();
+    d->diskInfo.debug();
     d->cdText = handler->cdText();
 
     // some debugging
-    AlbumCdText x( d->cdText.rawPackData() );
+    CdText x( d->cdText.rawPackData() );
 
     d->toc = handler->toc();
     fetchExtraInfo();

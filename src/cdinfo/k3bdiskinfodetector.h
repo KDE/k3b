@@ -45,8 +45,8 @@ namespace K3bCdDevice
     ~DiskInfoDetector();
 
     //    const DiskInfo& diskInfo() const;
-    const NextGenerationDiskInfo& ngDiskInfo() const;
-    const AlbumCdText& cdText() const;
+    const DiskInfo& diskInfo() const;
+    const CdText& cdText() const;
     const Toc& toc() const;
 
     const K3bIso9660* iso9660() const;

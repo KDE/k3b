@@ -1180,7 +1180,14 @@ K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc() const
 
   if( isDVD() ) {
     int mediaType = dvdMediaType();
-    switch( mediaType ) {
+    //
+    // Use the profile if available because DVD-ROM units need to treat DVD+-R(W) media as DVD-ROM
+    // if supported at all
+    //
+    if( currentProfile() == MEDIA_DVD_ROM )
+      mediaType = MEDIA_DVD_ROM;
+
+   switch( mediaType ) {
 
     case MEDIA_DVD_ROM:
     case MEDIA_DVD_RW_OVWR:
@@ -1502,13 +1509,13 @@ bool K3bCdDevice::CdDevice::readRawToc( K3bCdDevice::Toc& toc ) const
 }
 
 
-K3bCdDevice::AlbumCdText K3bCdDevice::CdDevice::readCdText() const
+K3bCdDevice::CdText K3bCdDevice::CdDevice::readCdText() const
 {
   // if the device is already opened we do not close it
   // to allow fast multible method calls in a row
   bool needToClose = !isOpen();
 
-  K3bCdDevice::AlbumCdText textData;
+  K3bCdDevice::CdText textData;
 
   if( open() != -1 ) {
     unsigned char* data = 0;
@@ -1778,84 +1785,6 @@ bool K3bCdDevice::CdDevice::isOpen() const
 }
 
 
-K3bCdDevice::DiskInfo K3bCdDevice::CdDevice::diskInfo()
-{
-  kdDebug() << "(K3bCdDevice) DEPRECATED! USE NextGenerationDiskInfo!" << endl;
-
-  // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
-  bool needToClose = !isOpen();
-
-  DiskInfo info;
-  info.device = this;
-
-  if( open() != -1 ) {
-    info.mediaType = 0;  // removed the mediaType method. use ngDiskInfo
-    bool ready = isReady();
-    if( ready ) {
-      info.toc = readToc();
-      switch( info.toc.contentType() ) {
-      case AUDIO:
-	info.tocType = DiskInfo::AUDIO;
-	break;
-      case DATA:
-	if( isDVD() )
-	  info.tocType = DiskInfo::DVD;
-	else
-	  info.tocType = DiskInfo::DATA;
-	break;
-      case MIXED:
-	  info.tocType = DiskInfo::MIXED;
-	  break;
-      default:
-	info.tocType = DiskInfo::UNKNOWN;
-	break;
-      }
-      info.valid = true;
-
-      if( info.tocType == DiskInfo::NODISC ) {
-        kdDebug() << "(K3bCdDevice::CdDevice::diskInfo) no disk." << endl;
-        info.noDisk = true;
-      } else if( info.tocType != DiskInfo::UNKNOWN ) {
-        kdDebug() << "(K3bCdDevice::CdDevice::diskInfo) valid disk." << endl;
-        info.noDisk = false;
-        info.sessions = numSessions();
-        if( burner() ) {
-          kdDebug() << "(K3bCdDevice::CdDevice::diskInfo) burner." << endl;
-          int empty = isEmpty();
-          info.appendable = (empty == APPENDABLE);
-          info.empty = (empty == EMPTY);
-          info.cdrw = rewritable();
-          info.size = discSize();
-          info.remaining = remainingSize();
-        }
-      } else  {  // info.tocType == DiskInfo::UNKNOWN, maybe empty disc
-        if( burner() ) {
-          if ( isEmpty() == EMPTY ) {
-            info.noDisk = false;
-            info.empty = true;
-            info.appendable = true;
-            info.size = info.remaining = discSize();
-            info.cdrw = rewritable();
-            info.sessions = 0;
-          }
-        }
-      }
-    }
-    else {  // no disk or tray open
-      kdDebug() << "(K3bCdDevice::CdDevice::diskInfo) no disk or tray open." << endl;
-      info.valid = true;
-      info.noDisk = true;
-    }
-  }
-
-  if( needToClose )
-    close();
-
-  return info;
-}
-
-
 int K3bCdDevice::CdDevice::supportedProfiles() const
 {
   return d->supportedProfiles;
@@ -1897,9 +1826,9 @@ int K3bCdDevice::CdDevice::currentProfile() const
 }
 
 
-K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
+K3bCdDevice::DiskInfo K3bCdDevice::CdDevice::diskInfo() const
 {
-  NextGenerationDiskInfo inf;
+  DiskInfo inf;
   inf.m_diskState = STATE_UNKNOWN;
 
   // if the device is already opened we do not close it
@@ -2081,6 +2010,13 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
       // for complete disks we may use the READ_CAPACITY command or the start sector from the leadout
       //
       int media = inf.mediaType();
+      //
+      // Use the profile if available because DVD-ROM units need to treat DVD+-R(W) media as DVD-ROM
+      // if supported at all
+      //
+      if( inf.currentProfile() == MEDIA_DVD_ROM )
+	media = MEDIA_DVD_ROM;
+
       switch( media ) {
       case MEDIA_CD_R:
       case MEDIA_CD_RW:

@@ -255,8 +255,8 @@ void K3bDirView::slotDetectDiskInfo( K3bCdDevice::CdDevice* dev )
 void K3bDirView::slotDiskInfoReady( K3bCdDevice::DiskInfoDetector* did )
 {
   if( m_bViewDiskInfo || 
-      did->ngDiskInfo().diskState() == K3bCdDevice::STATE_EMPTY || 
-      did->ngDiskInfo().diskState() == K3bCdDevice::STATE_NO_MEDIA ) {
+      did->diskInfo().diskState() == K3bCdDevice::STATE_EMPTY || 
+      did->diskInfo().diskState() == K3bCdDevice::STATE_NO_MEDIA ) {
 
     // show cd info
     m_viewStack->raiseWidget( m_infoView );

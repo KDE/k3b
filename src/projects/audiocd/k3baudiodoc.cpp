@@ -302,11 +302,12 @@ K3bAudioTrack* K3bAudioDoc::createTrack( const KURL& url )
   QPtrList<K3bPluginFactory> fl = k3bpluginmanager->factories( "AudioDecoder" );
   for( QPtrListIterator<K3bPluginFactory> it( fl );
        it.current(); ++it ) {
-    if( ((K3bAudioDecoderFactory*)it.current())->canDecode( url ) ) {
+    K3bAudioDecoderFactory* f = static_cast<K3bAudioDecoderFactory*>( it.current() );
+    if( f->canDecode( url ) ) {
       kdDebug() << "(K3bAudioDoc) using " << it.current()->className() << " for decoding of " << url.path() << endl;
       K3bAudioTrack* newTrack =  new K3bAudioTrack( m_tracks, url.path() );
       connect( newTrack, SIGNAL(changed()), this, SLOT(slotTrackChanged()) );
-      newTrack->setModule( (K3bAudioDecoder*)((K3bAudioDecoderFactory*)it.current())->createPlugin() );
+      newTrack->setModule( static_cast<K3bAudioDecoder*>(f->createPlugin()) );
       return newTrack;
     }
   }

@@ -160,7 +160,7 @@ void K3bAudioRipThread::run()
 
   if( d->encoderFactory ) {
     delete d->encoder;
-    d->encoder = (K3bAudioEncoder*)d->encoderFactory->createPlugin();
+    d->encoder = static_cast<K3bAudioEncoder*>(d->encoderFactory->createPlugin());
   }
   else if( !d->waveFileWriter ) {
     d->waveFileWriter = new K3bWaveFileWriter();

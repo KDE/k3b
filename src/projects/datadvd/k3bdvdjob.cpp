@@ -44,6 +44,9 @@ public:
 
   K3bDataVerifyingJob* verificationJob;
   bool imageError;
+
+  int copies;
+  int copiesDone;
 };
 
 
@@ -88,9 +91,13 @@ void K3bDvdJob::start()
 
   m_canceled = false;
   m_writingStarted = false;
+  d->copies = m_doc->copies();
+  d->copiesDone = 0;
 
-  if( m_doc->dummy() )
+  if( m_doc->dummy() ) {
     m_doc->setVerifyData( false );
+    d->copies = 1;
+  }
 
   if( !m_doc->onTheFly() || m_doc->onlyCreateImages() ) {
     emit newTask( i18n("Writing data") );
@@ -153,6 +160,7 @@ void K3bDvdJob::prepareGrowisofsImager()
     connect( m_growisofsImager, SIGNAL(percent(int)), this, SLOT(slotGrowisofsImagerPercent(int)) );
     connect( m_growisofsImager, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSize(int, int)) );
     connect( m_growisofsImager, SIGNAL(writeSpeed(int, int)), this, SIGNAL(writeSpeed(int, int)) );
+    connect( m_growisofsImager, SIGNAL(deviceBuffer(int)), this, SIGNAL(deviceBuffer(int)) );
     connect( m_growisofsImager, SIGNAL(finished(bool)), this, SLOT(slotWritingFinished(bool)) );
     connect( m_growisofsImager, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
     connect( m_growisofsImager, SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
@@ -164,16 +172,23 @@ void K3bDvdJob::prepareGrowisofsImager()
 
 void K3bDvdJob::slotIsoImagerPercent( int p )
 {
-  if( !m_doc->onTheFly() || m_doc->onlyCreateImages() )
+  if( m_doc->onlyCreateImages() ) {
     emit subPercent( p );
-
-  if( m_doc->onlyCreateImages() )
     emit percent( p );
+  }
   else if( !m_doc->onTheFly() ) {
-    if( m_doc->verifyData() ) 
-      emit percent( p/3 );
-    else
-      emit percent( p/2 );
+    double totalTasks = d->copies;
+    double tasksDone = d->copiesDone; // =0 when creating an image
+    if( m_doc->verifyData() ) {
+      totalTasks*=2;
+      tasksDone*=2;
+    }
+    if( !m_doc->onTheFly() ) {
+      totalTasks+=1.0;
+    }
+
+    emit subPercent( p );
+    emit percent( (int)((100.0*tasksDone + (double)p) / totalTasks) );
   }
 }
 
@@ -182,10 +197,18 @@ void K3bDvdJob::slotGrowisofsImagerPercent( int p )
 {
   emit subPercent( p );
 
-  if( m_doc->verifyData() )
-    emit percent( p/2 );
-  else
-    emit percent( p );
+  double totalTasks = d->copies;
+  double tasksDone = d->copiesDone;
+  if( m_doc->verifyData() ) {
+    totalTasks*=2;
+    tasksDone*=2;
+  }
+  if( !m_doc->onTheFly() ) {
+    totalTasks+=1.0;
+    tasksDone+=1.0;
+  }
+
+  emit percent( (int)((100.0*tasksDone + (double)p) / totalTasks) );
 
   if( !m_writingStarted ) {
     m_writingStarted = true;
@@ -280,6 +303,7 @@ bool K3bDvdJob::prepareWriterJob()
   //  connect( m_writerJob, SIGNAL(processedSubSize(int, int)), this, SIGNAL(processedSubSize(int, int)) );
   //  connect( m_writerJob, SIGNAL(nextTrack(int, int)), this, SLOT(slotWriterNextTrack(int, int)) );
   connect( m_writerJob, SIGNAL(buffer(int)), this, SIGNAL(bufferStatus(int)) );
+  connect( m_writerJob, SIGNAL(deviceBuffer(int)), this, SIGNAL(deviceBuffer(int)) );
   connect( m_writerJob, SIGNAL(writeSpeed(int, int)), this, SIGNAL(writeSpeed(int, int)) );
   connect( m_writerJob, SIGNAL(finished(bool)), this, SLOT(slotWritingFinished(bool)) );
   //  connect( m_writerJob, SIGNAL(dataWritten()), this, SLOT(slotDataWritten()) );
@@ -294,19 +318,18 @@ bool K3bDvdJob::prepareWriterJob()
 
 void K3bDvdJob::slotWriterJobPercent( int p )
 {
-  if( m_doc->onTheFly() ) {
-    emit subPercent( p );
-    if( m_doc->verifyData() )
-      emit percent( 50 + p/2 ); 
-    else
-      emit percent( p );
+  double totalTasks = d->copies;
+  double tasksDone = d->copiesDone;
+  if( m_doc->verifyData() ) {
+    totalTasks*=2;
+    tasksDone*=2;
   }
-  else {
-    if( m_doc->verifyData() )
-      emit percent( 33 + p/3 ); 
-    else
-      emit percent( 50 + p/2 );
+  if( !m_doc->onTheFly() ) {
+    totalTasks+=1.0;
+    tasksDone+=1.0;
   }
+
+  emit percent( (int)((100.0*tasksDone + (double)p) / totalTasks) );
 }
 
 
@@ -344,8 +367,29 @@ void K3bDvdJob::slotWritingFinished( bool success )
 
       d->verificationJob->start();
     }
-    else
-      emit finished(true);
+    else {
+      d->copiesDone++;
+
+      if( d->copiesDone < d->copies ) {
+	K3bCdDevice::eject( m_doc->burner() );
+
+	emit burning(true);
+	if( waitForDvd() ) {
+	  if( m_doc->onTheFly() )
+	    m_growisofsImager->start();
+	  else
+	    m_writerJob->start();	    
+	}
+	else {
+	  cleanup();
+	  emit finished(false);
+	}
+      }
+      else {
+	cleanup();
+	emit finished(true);
+      }
+    }
   }
   else {
     cleanup();
@@ -356,12 +400,15 @@ void K3bDvdJob::slotWritingFinished( bool success )
 
 void K3bDvdJob::slotVerificationProgress( int p )
 {
-  // we simply think of the verification as 1/2 or 1/3 of the work...
-  if( m_doc->onTheFly() )
-    emit percent( 50 + p/2 );
-  else {
-    emit percent( 66 + p/3 );
+  double totalTasks = d->copies*2;
+  double tasksDone = d->copiesDone*2 + 1; // the writing of the current copy has already been finished
+
+  if( !m_doc->onTheFly() ) {
+    totalTasks+=1.0;
+    tasksDone+=1.0;
   }
+  
+  emit percent( (int)((100.0*tasksDone + (double)p) / totalTasks) );
 }
 
 
@@ -373,13 +420,33 @@ void K3bDvdJob::slotVerificationFinished( bool success )
     return;
   }
 
-  cleanup();
-
-  k3bcore->config()->setGroup("General Options");
-  if( !k3bcore->config()->readBoolEntry( "No cd eject", false ) )
-    K3bCdDevice::eject( m_doc->burner() );
+  d->copiesDone++;
   
-  emit finished( success );
+  if( success && d->copiesDone < d->copies ) {
+    K3bCdDevice::eject( m_doc->burner() );
+    
+    emit burning(true);
+
+    if( waitForDvd() ) {
+      if( m_doc->onTheFly() )
+	m_growisofsImager->start();
+      else
+	m_writerJob->start();	    
+    }
+    else {
+      cleanup();
+      emit finished(false);
+    }
+  }
+  else {
+    cleanup();
+    
+    k3bcore->config()->setGroup("General Options");
+    if( !k3bcore->config()->readBoolEntry( "No cd eject", false ) )
+      K3bCdDevice::eject( m_doc->burner() );
+  
+    emit finished( success );
+  }
 }
 
 
@@ -557,7 +624,16 @@ QString K3bDvdJob::jobDescription() const
 
 QString K3bDvdJob::jobDetails() const
 {
-  return i18n("Iso9660 Filesystem (Size: %1)").arg(KIO::convertSize( m_doc->size() ));
+  if( m_doc->copies() > 1 && 
+      !m_doc->dummy() &&
+      !(m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
+	m_doc->multiSessionMode() == K3bDataDoc::FINISH) )
+    return i18n("Iso9660 Filesystem (Size: %1) - %2 copies")
+      .arg(KIO::convertSize( m_doc->size() ))
+      .arg(m_doc->copies());
+  else
+    return i18n("Iso9660 Filesystem (Size: %1)")
+      .arg(KIO::convertSize( m_doc->size() ));
 }
 
 #include "k3bdvdjob.moc"

@@ -57,13 +57,12 @@ namespace K3bCdDevice
 
       ~DeviceHandler();
 
-      //      const DiskInfo& diskInfo() const;
-      const NextGenerationDiskInfo& ngDiskInfo() const;
+      const DiskInfo& diskInfo() const;
       const Toc& toc() const;
-      const AlbumCdText& cdText() const;
+      const CdText& cdText() const;
       const QByteArray& cdTextRaw() const;
-      const K3b::Msf& diskSize() const;
-      const K3b::Msf& remainingSize() const;
+      K3b::Msf diskSize() const;
+      K3b::Msf remainingSize() const;
       int tocType() const;
       int numSessions() const;
 
@@ -76,21 +75,64 @@ namespace K3bCdDevice
       int errorCode() const;
 
       enum Command {
-	DISKINFO,
-	NG_DISKINFO,
-	TOC,
-	CD_TEXT,
-	CD_TEXT_RAW,
-	DISKSIZE,
-	REMAININGSIZE,
-	TOCTYPE,
-	NUMSESSIONS,
-	BLOCK,
-	UNBLOCK,
-	EJECT,
-	LOAD,
-	RELOAD,
-	MEDIUM_STATE /* empty, appendable, full, no disk */
+	/**
+	 * Always successfull, even with an empty or no media at all!
+	 */
+	NG_DISKINFO = 1, // TODO: rename this into DISKINFO
+	/**
+	 * Always successfull, even with an empty or no media at all!
+	 */
+	TOC = 2,
+	/**
+	 * Successful if the media contains CD-Text.
+	 */
+	CD_TEXT = 4,
+	/**
+	 * Successful if the media contains CD-Text.
+	 */
+	CD_TEXT_RAW = 8,
+	/**
+	 * Always successfull, even with an empty or no media at all!
+	 */
+	DISKSIZE = 16,
+	/**
+	 * Always successfull, even with an empty or no media at all!
+	 */
+	REMAININGSIZE = 32,
+	/**
+	 * Always successfull, even with an empty or no media at all!
+	 */
+	TOCTYPE = 64,
+	/**
+	 * Always successfull, even with an empty or no media at all!
+	 */
+	NUMSESSIONS = 128,
+	/**
+	 * Successful if the drive could be blocked.
+	 */
+	BLOCK = 256,
+	/**
+	 * Successful if the drive could be unblocked.
+	 */
+	UNBLOCK = 512,
+	/**
+	 * Successful if the media was ejected.
+	 */
+	EJECT = 1024,
+	/**
+	 * Successful if the media was loaded
+	 */
+	LOAD = 2048,
+	RELOAD = EJECT|LOAD,
+	/**
+	 * Retrieves NG_DISKINFO, TOC, and CD-Text in case of an audio or mixed
+	 * mode cd.
+	 * The only difference to NG_DISKINFO|TOC|CD_TEXT is that no CD-Text is not
+	 * considered an error.
+	 *
+	 * Always successfull, even with an empty or no media at all!
+	 */
+	DISKINFO = 4096  // TODO: rename this in somthing like: DISKINFO_COMPLETE
       };
 
     signals:

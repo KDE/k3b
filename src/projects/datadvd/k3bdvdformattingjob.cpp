@@ -308,7 +308,7 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler*
 
     // emit info about what kind of media has been found
 
-    if( !(dh->ngDiskInfo().mediaType() & (K3bCdDevice::MEDIA_DVD_RW|
+    if( !(dh->diskInfo().mediaType() & (K3bCdDevice::MEDIA_DVD_RW|
 					  K3bCdDevice::MEDIA_DVD_RW_SEQ|
 					  K3bCdDevice::MEDIA_DVD_RW_OVWR|
 					  K3bCdDevice::MEDIA_DVD_PLUS_RW)) ) {
@@ -332,13 +332,13 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler*
     //
 
 
-    if( dh->ngDiskInfo().mediaType() == K3bCdDevice::MEDIA_DVD_PLUS_RW ) {
+    if( dh->diskInfo().mediaType() == K3bCdDevice::MEDIA_DVD_PLUS_RW ) {
       emit infoMessage( i18n("Found %1 media.").arg(K3bCdDevice::mediaTypeString(K3bCdDevice::MEDIA_DVD_PLUS_RW)),
 						    INFO );
 
       // mode is ignored
 
-      if( dh->ngDiskInfo().empty() ) {
+      if( dh->diskInfo().empty() ) {
 	// 
 	// The DVD+RW is blank and needs to be initially formatted
 	//
@@ -374,20 +374,20 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler*
       emit infoMessage( i18n("Found %1 media.").arg(K3bCdDevice::mediaTypeString(K3bCdDevice::MEDIA_DVD_RW)),
 			INFO );
 
-      if( dh->ngDiskInfo().currentProfile() != K3bCdDevice::MEDIA_UNKNOWN ) {
-	emit infoMessage( i18n("Formatted in %1 mode.").arg(K3bCdDevice::mediaTypeString(dh->ngDiskInfo().currentProfile())), INFO );	
+      if( dh->diskInfo().currentProfile() != K3bCdDevice::MEDIA_UNKNOWN ) {
+	emit infoMessage( i18n("Formatted in %1 mode.").arg(K3bCdDevice::mediaTypeString(dh->diskInfo().currentProfile())), INFO );	
 	
 
 	//
 	// Is it possible to have an empty DVD-RW in restricted overwrite mode???? I don't think so.
 	//
 	
-	if( dh->ngDiskInfo().empty() &&
+	if( dh->diskInfo().empty() &&
 	    (d->mode == K3b::WRITING_MODE_AUTO ||
 	     (d->mode == K3b::WRITING_MODE_INCR_SEQ && 
-	      dh->ngDiskInfo().currentProfile() == K3bCdDevice::MEDIA_DVD_RW_SEQ) ||
+	      dh->diskInfo().currentProfile() == K3bCdDevice::MEDIA_DVD_RW_SEQ) ||
 	     (d->mode == K3b::WRITING_MODE_RES_OVWR && 
-	      dh->ngDiskInfo().currentProfile() == K3bCdDevice::MEDIA_DVD_RW_OVWR) )
+	      dh->diskInfo().currentProfile() == K3bCdDevice::MEDIA_DVD_RW_OVWR) )
 	    ) {
 	  emit infoMessage( i18n("Media is already empty."), INFO );
 	  if( d->force )
@@ -395,10 +395,10 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler*
 	  else
 	    format = false;
 	}
-	else if( dh->ngDiskInfo().currentProfile() == K3bCdDevice::MEDIA_DVD_RW_OVWR &&
+	else if( dh->diskInfo().currentProfile() == K3bCdDevice::MEDIA_DVD_RW_OVWR &&
 		 d->mode != K3b::WRITING_MODE_INCR_SEQ ) {
 	  emit infoMessage( i18n("No need to format %1 media more than once.")
-			    .arg(K3bCdDevice::mediaTypeString(dh->ngDiskInfo().currentProfile())), INFO );
+			    .arg(K3bCdDevice::mediaTypeString(dh->diskInfo().currentProfile())), INFO );
 	  emit infoMessage( i18n("It may simply be overwritten."), INFO );
 
 	  if( d->force )
@@ -411,7 +411,7 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler*
 	if( format ) {
 	  if( d->mode == K3b::WRITING_MODE_AUTO ) {
 	    // just format in the same mode as the media is currently formatted
-	    blank = (dh->ngDiskInfo().currentProfile() == K3bCdDevice::MEDIA_DVD_RW_SEQ);
+	    blank = (dh->diskInfo().currentProfile() == K3bCdDevice::MEDIA_DVD_RW_SEQ);
 	  }
 	  else {
 	    blank = (d->mode == K3b::WRITING_MODE_INCR_SEQ);

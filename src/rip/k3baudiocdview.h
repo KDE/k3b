@@ -93,7 +93,7 @@ class K3bAudioCdView : public K3bCdContentsView
 
   K3bCddb* m_cddb;
 
-  K3bCdDevice::AlbumCdText m_cdText;
+  K3bCdDevice::CdText m_cdText;
 };
 
 
