@@ -88,7 +88,7 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( K3bDataItem* dataItem, QWidget
     m_labelLocalLocation->setText( localLocation );
   }
   else {
-    labelMimeType->setPixmap( KMimeType::pixmapForURL( KURL( "/" ), 0, KIcon::SizeLarge ) );
+    labelMimeType->setPixmap( KMimeType::pixmapForURL( KURL( "/" )) );
     m_labelType->setText( i18n("Directory") );
     label1->hide();
     label2->hide();
