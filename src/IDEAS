@@ -2,3 +2,15 @@ wie in KOffice K3bDoc von KParts::ReadWritePart ableiten
 in KOffice ist der view von KParts::PartBase abgeleitet. Warum das?
 alle actions, die das doc ändern, auch ins doc packen.
 alle actions, die nur für die ansicht da sind (zb. properties dialog) in den view
+
+da wir verschiedene projekt-typen für den gleichen mimetype haben macht ein ReadWritePartWrapper,
+der aufgrund des doctypes entscheidet, welches K3bDoc benötigt wird, mehr Sinn. Das hieße,
+dass es einen K3bPart gibt, der alle Projekte beinhaltet. Die einzelnen Projekte könnten allerdings auch wieder 
+dynamisch hinzugeladen werden, so dass immer nur das gerade benötigte K3bDoc im Speicher ist.
+Der Wrapper muss dann nur den externalbin- und den devicemanager initialisieren und den kostore öffnen. Dann alle
+K3bDocFactories (wenn ein K3bDoc als eine Art plugin dynamisch hinzugeladen werden soll) fragen, ob sie
+den projekttyp unterstützen und wenn ja, eine instanz erzeugen und das dokument laden.
+Wie sieht es dann mit dem erstellen eines neuen dokumentes aus? Ev. Könnte der Wrapper hier alle Factories nach
+dem projecttyp fragen und für jeden eine Action erstellen.
+K3b selber benutzt dann nicht den Wrapper, sondern macht alles selber. Das hieße redundanten Code in K3b und dem
+Wrapper.
