@@ -68,6 +68,9 @@ K3bFileTreeComboBox::K3bFileTreeComboBox( QWidget* parent, const char* name )
   connect( m_fileTreeView, SIGNAL(urlExecuted(const KURL&)),
 	   this, SLOT(slotUrlExecuted(const KURL&)) );
 
+  connect( lineEdit(), SIGNAL(returnPressed()),
+	   this, SLOT(slotGoUrl()) );
+
   // TODO: subclass KURLCompletition to support the dev:/ stuff and block any non-local urls
 }
 
