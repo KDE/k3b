@@ -79,7 +79,7 @@ void K3bCddbLocalDBTab::setup(){
 
   QGridLayout *_extLayout = new QGridLayout( _groupExtension->layout() );
   m_dbHandlingTab = new QTabWidget( _groupExtension, "tabs");
-  m_logOutput = new QMultiLineEdit( m_logOutput, "log");
+  m_logOutput = new QMultiLineEdit( m_dbHandlingTab, "log" );
   m_dbHandlingTab->addTab( m_logOutput, i18n("Log") );
   QPushButton *clear = new QPushButton( i18n("Clear"), _groupExtension );
   QPushButton *verify = new QPushButton( i18n("Verify"), _groupExtension );
@@ -93,14 +93,14 @@ void K3bCddbLocalDBTab::setup(){
   _extLayout->addMultiCellWidget( verify, 1,1,3,3 );
   _extLayout->addMultiCellWidget( find, 2,2,3,3 );
   _extLayout->addMultiCellWidget( add, 3,3,3,3 );
-  _extLayout->setColStretch( 0, 50 );
+  _extLayout->setColStretch( 0, 1 );
 
   find->setDisabled( true );
   add->setDisabled( true );
 
   frameLayout->addWidget( localServerSettings, 0, 0 );
   frameLayout->addWidget( _groupExtension, 1, 0 );
-  frameLayout->setRowStretch( 1, 20 );
+  frameLayout->setRowStretch( 1, 1 );
   connect( browse, SIGNAL( clicked() ), this, SLOT( browseDb( )) );
   connect( clear, SIGNAL( clicked() ), this, SLOT( clearDb( )) );
   connect( verify, SIGNAL( clicked() ), this, SLOT( verifyDb( )) );
