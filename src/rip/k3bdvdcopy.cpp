@@ -57,7 +57,7 @@ void K3bDvdCopy::start(){
     connect( m_ripProcess, SIGNAL( infoMessage(const QString&, int) ), this, SIGNAL( infoMessage(const QString&, int) ) );
     connect( m_ripProcess, SIGNAL( newSubTask(const QString&) ), this, SIGNAL( newSubTask(const QString&) ) );
     connect( m_ripProcess, SIGNAL( finished( bool ) ), this, SLOT( ripFinished( bool ) ) );
-    connect( m_ripProcess, SIGNAL( percent( unsigned int ) ), this, SLOT( slotPercent( unsigned int ) ) );
+    connect( m_ripProcess, SIGNAL( percent( int ) ), this, SLOT( slotPercent( int ) ) );
     connect( m_ripProcess, SIGNAL( rippedBytesPerPercent( unsigned long ) ), this, SLOT( slotDataRate( unsigned long ) ) );
 
     m_ripProcess->start();
