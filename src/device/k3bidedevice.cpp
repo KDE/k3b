@@ -15,16 +15,28 @@ K3bIdeDevice::K3bIdeDevice( cdrom_drive* drive )
   QString model( drive->drive_model );
 
   // the cd_paranoia-lib puts vendor, model, and version in one string
-  // we need to split it in the future
+  // we need to split it
 
- m_description = model;
+  if( (int i = model.find("ATAPI")) != -1 )
+    model.remove( i, 5 );
+  if( (int i = model.find("compatible")) != -1 )
+    model.remove( i, 10 );
 
- m_burner = false;
- m_burnproof = false;
- m_maxWriteSpeed = -1;
+  model.stripWhiteSpace();
 
- // we could use cdda_speed_set to test the reading speed
- // for example from 100 down to 1 until it returns TR_OK
+  // we assume that all letters up to the first white space 
+  // belong to the vendor string and the rest is the model
+  // description
+
+  m_vendor = model.left( model.find(' ') ).stripWhiteSpace();
+  m_description = model.mid( model.find(' ') ).stripWhiteSpace();
+  
+  m_burner = false;
+  m_burnproof = false;
+  m_maxWriteSpeed = -1;
+
+  // we could use cdda_speed_set to test the reading speed
+  // for example from 100 down to 1 until it returns TR_OK
 }
 
 K3bIdeDevice::~K3bIdeDevice()
