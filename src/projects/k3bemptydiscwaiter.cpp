@@ -265,15 +265,12 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
 
       kdDebug() << "(K3bEmptyDiscWaiter) ------ found DVD+RW as wanted." << endl;
 
-      //
-      // for now we do not only check fr the bg format state but also if the media is empty
-      // since I do not know if the bg format state is reported by all drives... (probably it is)
-      //
-      if( dh->ngDiskInfo().diskState() == K3bCdDevice::STATE_EMPTY ||
-	  dh->ngDiskInfo().bgFormatState() & (K3bCdDevice::BG_FORMAT_NONE|K3bCdDevice::BG_FORMAT_INCOMPLETE) ) {
+      if( dh->ngDiskInfo().diskState() == K3bCdDevice::STATE_EMPTY ) {
 
 	// special case for the formatting job which wants to preformat itself!
-	if( d->wantedMediaState & (K3bCdDevice::STATE_COMPLETE|K3bCdDevice::STATE_EMPTY) ) {
+	if( d->wantedMediaState & K3bCdDevice::STATE_COMPLETE &&
+	    d->wantedMediaState & K3bCdDevice::STATE_EMPTY ) {
+	  kdDebug() << "(K3bEmptyDiscWaiter) special case: DVD*RW for the formatting job." << endl;
 	  finishWaiting( K3bCdDevice::MEDIA_DVD_PLUS_RW );
 	}
 	else {

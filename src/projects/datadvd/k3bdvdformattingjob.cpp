@@ -336,8 +336,7 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler*
 
       // mode is ignored
 
-      if( dh->ngDiskInfo().empty() ||
-	  dh->ngDiskInfo().bgFormatState() & (K3bCdDevice::BG_FORMAT_NONE|K3bCdDevice::BG_FORMAT_INCOMPLETE) ) {
+      if( dh->ngDiskInfo().empty() ) {
 	// 
 	// The DVD+RW is blank and needs to be initially formatted
 	//
