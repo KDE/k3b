@@ -32,7 +32,8 @@ K3bDataDirTreeView::K3bDataDirTreeView( K3bDataDoc* doc, QWidget* parent )
   setDropVisualizer( false );
   setDropHighlighter( true );
   setRootIsDecorated( true );
-	
+  setAlternateBackground( QColor() );  // disable alternate bg
+
   addColumn( "Dir" );
   header()->hide();
 	

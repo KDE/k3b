@@ -38,6 +38,8 @@ K3bDataJob::K3bDataJob( K3bDataDoc* doc )
 {
   m_doc = doc;
   m_process = 0;
+
+  m_imageFinished = true;
 }
 
 K3bDataJob::~K3bDataJob()
@@ -215,6 +217,7 @@ void K3bDataJob::writeImage()
   else
     {
       m_error = K3b::WORKING;
+      m_imageFinished = false;
       emit infoMessage( i18n("Start writing iso-image to %1").arg(m_doc->isoImage()) );
       emit newTask( i18n("Writing ISO-image") );
       emit started();
@@ -297,12 +300,41 @@ void K3bDataJob::writeCD()
 
 void K3bDataJob::cancel()
 {
+  if( m_process->isRunning() ) {
+    m_process->kill();
+    emit infoMessage("Writing canceled.");
+	
+    // remove toc-file
+    if( QFile::exists( m_pathSpecFile ) ) {
+      QFile::remove( m_pathSpecFile );
+      m_pathSpecFile = QString::null;
+    }
+
+    // remove iso-image if it is unfinished or the user selected to remove image
+    if( QFile::exists( m_doc->isoImage() ) ) {
+      if( m_doc->deleteImage() || !m_imageFinished ) {
+	emit infoMessage( i18n("Removing iso-image %s", m_doc->isoImage().latin1() ) );
+	QFile::remove( m_doc->isoImage() );
+	m_pathSpecFile = QString::null;
+      }
+      else {
+	emit infoMessage( i18n("Image successfully created in ") + m_doc->isoImage() );	
+      }
+    }
+				
+    m_error = K3b::CANCELED;
+    emit finished( this );
+  }
 }
 
 
 void K3bDataJob::slotParseMkisofsOutput( KProcess*, char* output, int len )
 {
   QString buffer = QString::fromLatin1( output, len );
+
+
+  emit debuggingOutput( "mkisofs", buffer );
+
 	
   // split to lines
   QStringList lines = QStringList::split( "\n", buffer );
@@ -333,6 +365,10 @@ void K3bDataJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 {
   QString buffer = QString::fromLatin1( output, len );
 	
+
+  emit debuggingOutput( "cdrecord", buffer );
+
+
   // split to lines
   QStringList lines = QStringList::split( "\n", buffer );
 	
@@ -463,9 +499,10 @@ void K3bDataJob::slotMkisofsFinished()
 	  m_error = K3b::SUCCESS;
 	  emit percent( 100 );
 	  emit infoMessage( "Image successfully created" );
+	  m_imageFinished = true;
 				
 	  if( m_doc->onlyCreateImage() ) {
-	    emit infoMessage( "Images written to " + m_doc->isoImage() );
+	    emit infoMessage( i18n("Image successfully created in ") + m_doc->isoImage() );
 	    emit finished(this);
 	  }
 	  else {
@@ -487,6 +524,12 @@ void K3bDataJob::slotMkisofsFinished()
       m_error = K3b::MKISOFS_ERROR;
       emit infoMessage( "Mkisofs did not exit cleanly!" );
     }
+
+  // remove toc-file
+  if( QFile::exists( m_pathSpecFile ) ) {
+    QFile::remove( m_pathSpecFile );
+    m_pathSpecFile = QString::null;
+  }
 
   emit finished( this );
 
@@ -521,9 +564,11 @@ void K3bDataJob::slotCdrecordFinished()
       emit infoMessage( "cdrecord did not exit cleanly!" );
     }
 
-  // remove pathspec-file
-  QFile::remove( m_pathSpecFile );
-  m_pathSpecFile = "";
+  // remove toc-file
+  if( QFile::exists( m_pathSpecFile ) ) {
+    QFile::remove( m_pathSpecFile );
+    m_pathSpecFile = QString::null;
+  }
 
   // remove image-file
   if( m_doc->deleteImage() ) {

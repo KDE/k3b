@@ -32,35 +32,37 @@ class QString;
 
 class K3bDataJob : public K3bBurnJob
 {
-	Q_OBJECT
+  Q_OBJECT
 	
-public:
-	K3bDataJob( K3bDataDoc* );
-	~K3bDataJob();
+ public:
+  K3bDataJob( K3bDataDoc* );
+  ~K3bDataJob();
 	
-	K3bDoc* doc() const;
+  K3bDoc* doc() const;
 		
-public slots:
-	void cancel();
-	void start();
+ public slots:
+  void cancel();
+  void start();
 
-protected slots:
-	void slotParseCdrecordOutput( KProcess*, char*, int );
-	void slotParseMkisofsOutput( KProcess*, char*, int );
-	void slotMkisofsFinished();
-	void slotCdrecordFinished();
-	void slotParseMkisofsSize(KProcess*, char*, int);
+ protected slots:
+  void slotParseCdrecordOutput( KProcess*, char*, int );
+  void slotParseMkisofsOutput( KProcess*, char*, int );
+  void slotMkisofsFinished();
+  void slotCdrecordFinished();
+  void slotParseMkisofsSize(KProcess*, char*, int);
 		
-private:
-	K3bDataDoc* m_doc;
-	QString m_pathSpecFile;
-	KProcess* m_process;
+ private:
+  K3bDataDoc* m_doc;
+  QString m_pathSpecFile;
+  KProcess* m_process;
 
-	QString m_isoSize;
+  bool m_imageFinished;
+
+  QString m_isoSize;
 		
-	void writeImage();
-	void writeCD();
-	void addMkisofsParameters();
+  void writeImage();
+  void writeCD();
+  void addMkisofsParameters();
 };
 
 #endif
