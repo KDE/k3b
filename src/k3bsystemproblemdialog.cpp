@@ -192,7 +192,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
     
     if( !k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "suidroot" ) )
       problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
-					 i18n("%1 does not run with root privileges").arg("cdrecord"),
+					 i18n("%1 will be run without root privileges").arg("cdrecord"),
 					 i18n("It is highly recommended to configure cdrecord "
 					      "to run with root privileges. Only then cdrecord "
 					      "runs with high priority which increases the overall "
@@ -213,7 +213,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
   }
   else if( !k3bcore->externalBinManager()->binObject( "cdrdao" )->hasFeature( "suidroot" ) ) {
     problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
-				       i18n("%1 does not run with root privileges").arg("cdrdao"),
+				       i18n("%1 will be run without root privileges").arg("cdrdao"),
 				       i18n("It is highly recommended to configure cdrdao "
 					    "to run with root privileges to increase the "
 					    "overall stability of the burning process."),
@@ -289,14 +289,14 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
   bool atapiWriter = false;
   for( QPtrListIterator<K3bDevice::Device> it( k3bcore->deviceManager()->readingDevices() );
        it.current(); ++it ) {
-    if( it.current()->interfaceType() == K3bDevice::Device::IDE ) {
+    if( it.current()->interfaceType() == K3bDevice::IDE ) {
       atapiReader = true;
       break;
     }
   }
   for( QPtrListIterator<K3bDevice::Device> it( k3bcore->deviceManager()->burningDevices() );
        it.current(); ++it ) {
-    if( it.current()->interfaceType() == K3bDevice::Device::IDE ) {
+    if( it.current()->interfaceType() == K3bDevice::IDE ) {
       atapiWriter = true;
       break;
     }

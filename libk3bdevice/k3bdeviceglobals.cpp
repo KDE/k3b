@@ -26,23 +26,23 @@
 QString K3bDevice::deviceTypeString( int t )
 {
   QStringList s;
-  if( t & K3bDevice::Device::CDR )
+  if( t & K3bDevice::CDR )
     s += i18n("CD-R");
-  if( t & K3bDevice::Device::CDRW )
+  if( t & K3bDevice::CDRW )
     s += i18n("CD-RW");
-  if( t & K3bDevice::Device::CDROM )
+  if( t & K3bDevice::CDROM )
     s += i18n("CD-ROM");
-  if( t & K3bDevice::Device::DVD )
+  if( t & K3bDevice::DVD )
     s += i18n("DVD-ROM");
-  if( t & K3bDevice::Device::DVDRAM )
+  if( t & K3bDevice::DVDRAM )
     s += i18n("DVD-RAM");
-  if( t & K3bDevice::Device::DVDR )
+  if( t & K3bDevice::DVDR )
     s += i18n("DVD-R");
-  if( t & K3bDevice::Device::DVDRW )
+  if( t & K3bDevice::DVDRW )
     s += i18n("DVD-RW");
-  if( t & K3bDevice::Device::DVDPR )
+  if( t & K3bDevice::DVDPR )
     s += i18n("DVD+R");
-  if( t & K3bDevice::Device::DVDPRW )
+  if( t & K3bDevice::DVDPRW )
     s += i18n("DVD+RW");
 
   if( s.isEmpty() )
@@ -55,23 +55,23 @@ QString K3bDevice::deviceTypeString( int t )
 QString K3bDevice::writingModeString( int m )
 {
   QStringList s;
-  if( m & K3bDevice::Device::SAO )
+  if( m & K3bDevice::SAO )
     s += i18n("SAO");
-  if( m & K3bDevice::Device::TAO )
+  if( m & K3bDevice::TAO )
     s += i18n("TAO");
-  if( m & K3bDevice::Device::RAW )
+  if( m & K3bDevice::RAW )
     s += i18n("RAW");
-  if( m & K3bDevice::Device::PACKET )
+  if( m & K3bDevice::PACKET )
     s += i18n("PACKET");
-  if( m & K3bDevice::Device::SAO_R96P )
+  if( m & K3bDevice::SAO_R96P )
     s += i18n("SAO/R96P");
-  if( m & K3bDevice::Device::SAO_R96R )
+  if( m & K3bDevice::SAO_R96R )
     s += i18n("SAO/R96R");
-  if( m & K3bDevice::Device::RAW_R16 )
+  if( m & K3bDevice::RAW_R16 )
     s += i18n("SAO/R16");
-  if( m & K3bDevice::Device::RAW_R96P )
+  if( m & K3bDevice::RAW_R96P )
     s += i18n("RAW/R96P");
-  if( m & K3bDevice::Device::RAW_R96R )
+  if( m & K3bDevice::RAW_R96R )
     s += i18n("RAW/R96R");
 
   if( s.isEmpty() )

@@ -294,17 +294,49 @@ bool K3bDevice::Device::init()
 	    short profile = from2Byte( &profiles[i+j] );
 
 	    switch (profile) {
-	    case 0x10: d->supportedProfiles |= MEDIA_DVD_ROM; break;
-	    case 0x11: d->supportedProfiles |= MEDIA_DVD_R_SEQ; break;
-	    case 0x12: d->supportedProfiles |= MEDIA_DVD_RAM; break;
-	    case 0x13: d->supportedProfiles |= MEDIA_DVD_RW_OVWR; break;
-	    case 0x14: d->supportedProfiles |= MEDIA_DVD_RW_SEQ; break;
-	    case 0x1A: d->supportedProfiles |= MEDIA_DVD_PLUS_RW; break;
-	    case 0x1B: d->supportedProfiles |= MEDIA_DVD_PLUS_R; break;
-	    case 0x2B: d->supportedProfiles |= MEDIA_DVD_PLUS_R_DL; break;
-	    case 0x08: d->supportedProfiles |= MEDIA_CD_ROM; break;
-	    case 0x09: d->supportedProfiles |= MEDIA_CD_R; break;
-	    case 0x0A: d->supportedProfiles |= MEDIA_CD_RW; break;
+	    case 0x10:
+	      d->supportedProfiles |= MEDIA_DVD_ROM;
+	      d->deviceType |= DVD;
+	      break;
+	    case 0x11:
+	      d->supportedProfiles |= MEDIA_DVD_R_SEQ;
+	      d->deviceType |= DVDR;
+	      break;
+	    case 0x12:
+	      d->supportedProfiles |= MEDIA_DVD_RAM;
+	      break;
+	    case 0x13:
+	      d->supportedProfiles |= MEDIA_DVD_RW_OVWR;
+	      d->deviceType |= DVDRW;
+	      break;
+	    case 0x14:
+	      d->supportedProfiles |= MEDIA_DVD_RW_SEQ;
+	      d->deviceType |= DVDRW;
+	      break;
+	    case 0x1A:
+	      d->supportedProfiles |= MEDIA_DVD_PLUS_RW;
+	      d->deviceType |= DVDPRW;
+	      break;
+	    case 0x1B: 
+	      d->supportedProfiles |= MEDIA_DVD_PLUS_R;
+	      d->deviceType |= DVDPR;
+	      break;
+	    case 0x2B:
+	      d->supportedProfiles |= MEDIA_DVD_PLUS_R_DL;
+	      d->deviceType |= DVDPR;
+	      break;
+	    case 0x08:
+	      d->supportedProfiles |= MEDIA_CD_ROM;
+	      d->deviceType |= CDROM;
+	      break;
+	    case 0x09:
+	      d->supportedProfiles |= MEDIA_CD_R;
+	      d->deviceType |= CDR;
+	      break;
+	    case 0x0A:
+	      d->supportedProfiles |= MEDIA_CD_RW;
+	      d->deviceType |= CDRW;
+	      break;
 	    default:
 	      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " unknown profile: "
 			<< profile << endl;
@@ -847,7 +879,7 @@ void K3bDevice::Device::checkForAncientWriters()
 }
 
 
-K3bDevice::Device::interface K3bDevice::Device::interfaceType()
+K3bDevice::Interface K3bDevice::Device::interfaceType()
 {
   if( m_bus != -1 && m_target != -1 && m_lun != -1 )
     return SCSI;
@@ -989,26 +1021,18 @@ bool K3bDevice::Device::isDVD() const
 }
 
 
-bool K3bDevice::Device::isReady() const
-{
-  ScsiCommand cmd( this );
-  cmd[0] = MMC_TEST_UNIT_READY;
-  return( cmd.transport() == 0 );
-}
-
-
 int K3bDevice::Device::isEmpty() const
 {
   // if the device is already opened we do not close it
   // to allow fast multible method calls in a row
   bool needToClose = !isOpen();
 
-  int ret = NO_INFO;
+  int ret = STATE_UNKNOWN;
   if( !open() )
-    return NO_INFO;
+    return STATE_UNKNOWN;
 
-  if( !isReady() )
-    return NO_DISK;
+  if( !testUnitReady() )
+    return STATE_NO_MEDIA;
 
   unsigned char* data = 0;
   int dataLen = 0;
@@ -1017,16 +1041,16 @@ int K3bDevice::Device::isEmpty() const
     disc_info_t* inf = (disc_info_t*)data;
     switch( inf->status ) {
     case 0:
-      ret = EMPTY;
+      ret = STATE_EMPTY;
       break;
     case 1:
-      ret = APPENDABLE;
+      ret = STATE_INCOMPLETE;
       break;
     case 2:
-      ret = COMPLETE;
+      ret = STATE_COMPLETE;
       break;
     default:
-      ret = NO_INFO;
+      ret = STATE_UNKNOWN;
       break;
     }
 
@@ -2122,7 +2146,7 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
     // We do this with requesting the current profile. If it is 0 no media
     // should be loaded. On an error we just go on.
     //
-    if( !isReady() ) {
+    if( !testUnitReady() ) {
       // no disk or tray open
       inf.m_diskState = STATE_NO_MEDIA;
       inf.m_mediaType = MEDIA_NONE;

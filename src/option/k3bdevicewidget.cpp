@@ -275,7 +275,7 @@ void K3bDeviceWidget::updateDeviceListViews()
 
     // create the read-only info items
     K3bListViewItem* systemDeviceItem = new K3bListViewItem( devRoot, i18n("System device name:") );
-    if( dev->device->interfaceType() == K3bDevice::Device::SCSI )
+    if( dev->device->interfaceType() == K3bDevice::SCSI )
       systemDeviceItem->setText( 1, QString("%1 (%2)").arg(dev->device->devicename()).arg(dev->device->busTargetLun()) );
     else
       systemDeviceItem->setText( 1, dev->device->devicename() );
@@ -283,7 +283,7 @@ void K3bDeviceWidget::updateDeviceListViews()
 
     K3bListViewItem* interfaceItem = new K3bListViewItem( devRoot, systemDeviceItem,
 							  i18n("Interface type:"),
-							  ( dev->device->interfaceType() == K3bDevice::Device::SCSI ?
+							  ( dev->device->interfaceType() == K3bDevice::SCSI ?
 							    i18n("Generic SCSI") :
 							    i18n("ATAPI") ) );
     interfaceItem->setForegroundColor( 1, gray );
@@ -305,24 +305,29 @@ void K3bDeviceWidget::updateDeviceListViews()
     // drive type
     // --------------------------------
     K3bListViewItem* typeItem = new K3bListViewItem( devRoot, versionItem,
-						     i18n("Writes CDs:"),
+						     i18n("Writes CD-R:"),
 						     dev->device->writesCd() ? i18n("yes") : i18n("no") );
     typeItem->setForegroundColor( 1, gray );
     typeItem = new K3bListViewItem( devRoot, typeItem,
-				    i18n("Writes CD/RWs:"),
+				    i18n("Writes CD-RW:"),
 				    dev->device->writesCdrw() ? i18n("yes") : i18n("no") );
     typeItem->setForegroundColor( 1, gray );
     typeItem = new K3bListViewItem( devRoot, typeItem, 
-				    i18n("Reads DVDs:"),
+				    i18n("Reads DVD:"),
 				    dev->device->readsDvd() ? i18n("yes") : i18n("no") );
     typeItem->setForegroundColor( 1, gray );
     typeItem = new K3bListViewItem( devRoot, typeItem,
-				    i18n("Writes DVD-R(W)s:"),
+				    i18n("Writes DVD-R(W):"),
 				    dev->device->writesDvdMinus() ? i18n("yes") : i18n("no") );
     typeItem->setForegroundColor( 1, gray );
     typeItem = new K3bListViewItem( devRoot, typeItem,
-				    i18n("Writes DVD+R(W)s:"),
+				    i18n("Writes DVD+R(W):"),
 				    dev->device->writesDvdPlus() ? i18n("yes") : i18n("no") );
+    typeItem->setForegroundColor( 1, gray );
+    typeItem = new K3bListViewItem( devRoot, typeItem,
+				    i18n("Writes DVD+R Dual Layer:"),
+				    (dev->device->supportedProfiles() & K3bDevice::MEDIA_DVD_PLUS_R_DL)
+				    ? i18n("yes") : i18n("no") );
     typeItem->setForegroundColor( 1, gray );
     // --------------------------------
 

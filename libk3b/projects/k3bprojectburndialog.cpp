@@ -89,8 +89,8 @@ void K3bProjectBurnDialog::toggleAllOptions()
 {
   if( K3bDevice::Device* dev = m_writerSelectionWidget->writerDevice() ) {
     if( m_dvd ) {
-      if( (dev->type() & (K3bDevice::Device::DVDPR|K3bDevice::Device::DVDPRW)) &&
-	  !(dev->type() & (K3bDevice::Device::DVDR|K3bDevice::Device::DVDRW)) ) {
+      if( (dev->type() & (K3bDevice::DVDPR|K3bDevice::DVDPRW)) &&
+	  !(dev->type() & (K3bDevice::DVDR|K3bDevice::DVDRW)) ) {
 	// no simulation support for DVD+R(W) only drives
 	m_checkSimulate->setChecked(false);
 	m_checkSimulate->setEnabled(false);

@@ -677,7 +677,7 @@ K3bDevice::Device* K3bDevice::DeviceManager::addDevice( K3bDevice::Device *devic
 
     // not every drive is able to read CDs
     // there are some 1st generation DVD writer that cannot
-    if( device->type() & Device::CDROM )
+    if( device->type() & K3bDevice::CDROM )
       d->cdReader.append( device );
     if( device->readsDvd() )
       d->dvdReader.append( device );

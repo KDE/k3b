@@ -104,8 +104,8 @@ void K3bCloneJob::start()
     return;
   }
 
-  if( !writer()->supportsWriteMode( K3bDevice::Device::RAW_R96R ) &&
-      !writer()->supportsWriteMode( K3bDevice::Device::RAW_R16 ) ) {
+  if( !writer()->supportsWriteMode( K3bDevice::RAW_R96R ) &&
+      !writer()->supportsWriteMode( K3bDevice::RAW_R16 ) ) {
     emit infoMessage( i18n("CD writer %1 does not support cloning.")
 		      .arg(writer()->vendor())
 		      .arg(writer()->description()), ERROR );

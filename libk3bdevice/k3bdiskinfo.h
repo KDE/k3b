@@ -17,6 +17,7 @@
 #ifndef _K3B_DISKINFO_H_
 #define _K3B_DISKINFO_H_
 
+#include <k3bdevicetypes.h>
 
 #include <k3btoc.h>
 #include <k3bmsf.h>
@@ -30,74 +31,6 @@ class kdbgstream;
 
 namespace K3bDevice
 {
-  enum State { 
-    STATE_UNKNOWN = 256,
-    STATE_NO_MEDIA = 0,
-    STATE_COMPLETE = 1, 
-    STATE_INCOMPLETE = 2,
-    STATE_EMPTY = 4
-  };
-
-  enum BackGroundFormattingState {
-    BG_FORMAT_NONE = 0,
-    BG_FORMAT_INCOMPLETE = 1,
-    BG_FORMAT_IN_PROGRESS = 2,
-    BG_FORMAT_COMPLETE = 3
-  };
-
-  /**
-   * Defines the different media types as retured by 
-   * K3bDevice::Device::mediaType()
-   */
-  enum MediaType { MEDIA_NONE = 0,
-		   MEDIA_DVD_ROM = 1,
-		   MEDIA_DVD_R = 2,
-		   MEDIA_DVD_R_SEQ = 4,
-		   MEDIA_DVD_RAM = 8,
-		   MEDIA_DVD_RW = 16,
-		   MEDIA_DVD_RW_OVWR = 32,
-		   MEDIA_DVD_RW_SEQ = 64,
-		   MEDIA_DVD_PLUS_RW = 128,
-		   MEDIA_DVD_PLUS_R = 256,
-		   MEDIA_DVD_PLUS_R_DL = 4096,
-		   MEDIA_CD_ROM = 512,
-		   MEDIA_CD_R = 1024,
-		   MEDIA_CD_RW = 2048,
-		   MEDIA_WRITABLE_CD = MEDIA_CD_R | 
-		                       MEDIA_CD_RW,
-		   MEDIA_WRITABLE_DVD = MEDIA_DVD_R | 
-		                        MEDIA_DVD_R_SEQ | 
-		                        MEDIA_DVD_RW |
-		                        MEDIA_DVD_RW_OVWR |
-		                        MEDIA_DVD_RW_SEQ |
-		                        MEDIA_DVD_PLUS_RW |
-		                        MEDIA_DVD_PLUS_R |
-		                        MEDIA_DVD_PLUS_R_DL,
-		   MEDIA_UNKNOWN = 32768
-  };
-
-  inline bool isDvdMedia( int mediaType ) {
-    return ( mediaType == MEDIA_DVD_ROM || 
-	     mediaType == MEDIA_DVD_R || 
-	     mediaType == MEDIA_DVD_R_SEQ || 
-	     mediaType == MEDIA_DVD_RW || 
-	     mediaType == MEDIA_DVD_RW_OVWR || 
-	     mediaType == MEDIA_DVD_RW_SEQ || 
-	     mediaType == MEDIA_DVD_PLUS_RW || 
-	     mediaType == MEDIA_DVD_PLUS_R ||
-	     mediaType == MEDIA_DVD_PLUS_R_DL );
-  }
-
-  inline bool isRewritableMedia( int mediaType ) {
-    return ( mediaType == MEDIA_DVD_RW ||
-	     mediaType == MEDIA_DVD_RW_OVWR || 
-	     mediaType == MEDIA_DVD_RW_SEQ || 
-	     mediaType == MEDIA_DVD_PLUS_RW || 
-	     mediaType == MEDIA_CD_RW );
-  }
-
-
-
   /**
    * This class is directly accociated to a strcuture from 
    * the MMC draft READ_DISK_INFO.

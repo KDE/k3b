@@ -26,6 +26,13 @@ to make the code more readable.
 #include <string.h>
 
 
+bool K3bDevice::Device::testUnitReady() const
+{
+  ScsiCommand cmd( this );
+  cmd[0] = MMC_TEST_UNIT_READY;
+  return( cmd.transport() == 0 );
+}
+
 
 bool K3bDevice::Device::getFeature( unsigned char** data, int& dataLen, unsigned int feature ) const
 {

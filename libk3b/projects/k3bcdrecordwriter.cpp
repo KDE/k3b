@@ -191,11 +191,11 @@ void K3bCdrecordWriter::prepareProcess()
     }
   }
   else if( m_writingMode == K3b::RAW ) {
-    if( burnDevice()->supportsWriteMode( K3bDevice::Device::RAW_R96R ) )
+    if( burnDevice()->supportsWriteMode( K3bDevice::RAW_R96R ) )
       *m_process << "-raw96r";
-    else if( burnDevice()->supportsWriteMode( K3bDevice::Device::RAW_R16 ) )
+    else if( burnDevice()->supportsWriteMode( K3bDevice::RAW_R16 ) )
       *m_process << "-raw16";
-    else if( burnDevice()->supportsWriteMode( K3bDevice::Device::RAW_R96P ) )
+    else if( burnDevice()->supportsWriteMode( K3bDevice::RAW_R96P ) )
       *m_process << "-raw96p";
     else {
       emit infoMessage( i18n("Writer does not support raw writing."), WARNING );
@@ -570,7 +570,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
     emit nextTrack( m_currentTrack, m_totalTracks );
   }
   else if( line.startsWith( "Fixating" ) ) {
-    emit newSubTask( i18n("Closing Disc") );
+    emit newSubTask( i18n("Closing Session") );
   }
   else if( line.startsWith( "Writing lead-in" ) ) {
     m_totalTracksParsed = true;
