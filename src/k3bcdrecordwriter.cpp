@@ -212,7 +212,7 @@ void K3bCdrecordWriter::start()
   m_cdrecordError = UNKNOWN;
   m_totalTracksParsed = false;
   m_alreadyWritten = 0;
-  m_trackSize = 0;
+  m_trackSizes.clear();
   m_totalSize = 0;
 
   emit newSubTask( i18n("Preparing write process...") );
@@ -226,12 +226,26 @@ void K3bCdrecordWriter::start()
   }
   else {
     if( simulate() ) {
-      emit infoMessage( i18n("Starting simulation at %1x speed...").arg(burnSpeed()), K3bJob::PROCESS );
       emit newTask( i18n("Simulating") );
+      if( m_writingMode == K3b::DAO )
+	emit infoMessage( i18n("Starting dao simulation at %1x speed...").arg(burnSpeed()), 
+			  K3bJob::PROCESS );
+      else if( m_writingMode == K3b::RAW )
+	emit infoMessage( i18n("Starting raw simulation at %1x speed...").arg(burnSpeed()), 
+			  K3bJob::PROCESS );
+      else
+	emit infoMessage( i18n("Starting tao simulation at %1x speed...").arg(burnSpeed()), 
+			  K3bJob::PROCESS );
     }
     else {
-      emit infoMessage( i18n("Starting writing at %1x speed...").arg(burnSpeed()), K3bJob::PROCESS );
       emit newTask( i18n("Writing") );
+
+      if( m_writingMode == K3b::DAO )
+	emit infoMessage( i18n("Starting dao writing at %1x speed...").arg(burnSpeed()), K3bJob::PROCESS );
+      else if( m_writingMode == K3b::RAW )
+	emit infoMessage( i18n("Starting raw writing at %1x speed...").arg(burnSpeed()), K3bJob::PROCESS );
+      else
+	emit infoMessage( i18n("Starting tao writing at %1x speed...").arg(burnSpeed()), K3bJob::PROCESS );
     }
 
     m_writeSpeedInitialized = false;
@@ -284,6 +298,8 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
 	int sizeStart = line.find( QRegExp("\\d"), 10 );
 	int sizeEnd = line.find( "MB", sizeStart );
 	int ts = line.mid( sizeStart, sizeEnd-sizeStart ).toInt();
+
+	m_trackSizes.append(ts);
 	m_totalSize += ts;
       }
 
@@ -358,7 +374,20 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
 	  // -------------------------------------------------------------------
 	  // -------- parsing finished --------------------------------------
 
+
 	  emit buffer( fifo );
+
+	  //
+	  // cdrecord's output sucks a bit.
+	  // we get track sizes that differ from the sizes in the progress
+	  // info since these are dependant on the writing mode.
+	  // so we just use the track sizes and do a bit of math...
+	  //
+
+	  double convV = (double)m_trackSizes[m_currentTrack-1]/(double)size;
+	  made = (int)((double)made * convV);
+	  size = m_trackSizes[m_currentTrack-1];
+
 	  emit processedSubSize( made, size );
 	  emit subPercent( 100*made/size );
 
@@ -369,8 +398,6 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
 
 	  createEstimatedWriteSpeed( m_alreadyWritten+made, !m_writeSpeedInitialized );
 	  m_writeSpeedInitialized = true;
-
-	  m_trackSize = size;
 	}
     }
   else if( line.contains( "at speed" ) ) {
@@ -383,15 +410,14 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
       emit infoMessage( i18n("Switching down burn speed to %1x").arg(speed), K3bJob::PROCESS );
     }
   }
-  else if( line.startsWith( "Starting new" ) )
-    {
-      m_totalTracksParsed = true;
-      m_alreadyWritten += m_trackSize;
-      kdDebug() << "(K3bCdrecordWriter) writing " << m_totalTracks << " tracks." << endl;
-      m_currentTrack++;
-      emit nextTrack( m_currentTrack, m_totalTracks );
-      //      emit newSubTask( i18n("Writing track %1").arg(m_currentTrack) );
-    }
+  else if( line.startsWith( "Starting new" ) ) {
+    m_totalTracksParsed = true;
+    if( m_currentTrack > 0 ) // nothing has been written at the start of track 1
+      m_alreadyWritten += m_trackSizes[m_currentTrack-1];
+    m_currentTrack++;
+    kdDebug() << "(K3bCdrecordWriter) writing track " << m_currentTrack << " of " << m_totalTracks << " tracks." << endl;
+    emit nextTrack( m_currentTrack, m_totalTracks );
+  }
   else if( line.startsWith( "Fixating" ) ) {
     emit newSubTask( i18n("Fixating") );
   }

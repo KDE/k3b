@@ -20,6 +20,8 @@
 
 #include "k3babstractwriter.h"
 
+#include <qvaluelist.h>
+
 class K3bExternalBin;
 class K3bProcess;
 class K3bCdDevice::CdDevice;
@@ -80,7 +82,6 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   int m_currentTrack;
   int m_totalTracks;
   int m_totalSize;
-  int m_trackSize;
   int m_alreadyWritten;
 
   enum CdrecordError { UNKNOWN, 
@@ -94,6 +95,8 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   int m_cdrecordError;
 
   bool m_writeSpeedInitialized;
+
+  QValueList<int> m_trackSizes;
 };
 
 #endif
