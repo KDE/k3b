@@ -377,6 +377,10 @@ bool K3bVcdJob::prepareWriterJob()
     if ( m_writerJob )
         delete m_writerJob;
 
+    const K3bExternalBin* cdrecordBin = k3bcore->externalBinManager()->binObject("cdrecord");
+    if ( writingApp() == K3b::DEFAULT && cdrecordBin->hasFeature("cuefile") )
+        setWritingApp( K3b::CDRECORD );
+        
     if ( writingApp() == K3b::CDRDAO || writingApp() == K3b::DEFAULT ) {
         K3bCdrdaoWriter * writer = new K3bCdrdaoWriter( m_doc->burner(), this );
         // create cdrdao job
@@ -392,10 +396,21 @@ bool K3bVcdJob::prepareWriterJob()
 
         m_writerJob = writer;
 
-    } else {
-        cancelAll();
-        emit finished( false );
-        return false;
+    } else if ( writingApp() == K3b::CDRECORD ) {
+        K3bCdrecordWriter * writer = new K3bCdrecordWriter( m_doc->burner(), this );
+        // create cdrecord job
+
+        writer->setSimulate( m_doc->dummy() );
+        writer->setBurnSpeed( m_doc->speed() );
+        writer->setBurnproof( m_doc->burnproof() );
+        writer->setProvideStdin( false );
+        writer->setDao( true );
+
+        writer->prepareArgumentList();
+        writer->addArgument( QString("cuefile=%1").arg( m_cueFile ) );
+
+        m_writerJob = writer;
+
     }
 
     connect( m_writerJob, SIGNAL( infoMessage( const QString&, int ) ), this, SIGNAL( infoMessage( const QString&, int ) ) );

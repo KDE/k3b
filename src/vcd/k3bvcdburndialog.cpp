@@ -38,11 +38,13 @@
 #include "k3bvcddoc.h"
 #include "k3bvcdoptions.h"
 #include <device/k3bdevice.h>
+#include <k3bcore.h>
 #include <k3bwriterselectionwidget.h>
 #include <k3btempdirselectionwidget.h>
 #include <k3bstdguiitems.h>
 #include <tools/k3bglobals.h>
 #include <tools/k3bwritingmodewidget.h>
+#include <tools/k3bexternalbinmanager.h>
 #include "tools/k3biso646validator.h"
 
 K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char *name, bool modal )
@@ -69,7 +71,11 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
     setTitle( vcdType, i18n( "1 MPEG (%1)", "%n MPEGs (%1)",
                              m_vcdDoc->tracks() ->count() ).arg( KIO::convertSize( m_vcdDoc->size() ) ) );
 
-    m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRDAO );
+    const K3bExternalBin* cdrecordBin = k3bcore->externalBinManager()->binObject("cdrecord");
+    if ( cdrecordBin->hasFeature("cuefile") )
+        m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRDAO|K3b::CDRECORD );
+    else
+        m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRDAO );    
 
     m_checkOnTheFly->hide();
 
