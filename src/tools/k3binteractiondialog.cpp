@@ -269,17 +269,25 @@ void K3bInteractionDialog::keyPressEvent( QKeyEvent* e )
   case Key_Enter:
   case Key_Return:
     // if the process finished this closes the dialog
-    if( m_defaultButton == START_BUTTON )
-      slotStartClicked();
-    else if( m_defaultButton == CANCEL_BUTTON )
-      slotCancelClicked();
-    else if( m_defaultButton == SAVE_BUTTON )
-      saveClicked();
+    if( m_defaultButton == START_BUTTON ) {
+      if( m_buttonStart->isEnabled() )
+	slotStartClicked();
+    }
+    else if( m_defaultButton == CANCEL_BUTTON ) {
+      if( m_buttonCancel->isEnabled() )
+	slotCancelClicked();
+    }
+    else if( m_defaultButton == SAVE_BUTTON ) {
+      if( m_buttonSave->isEnabled() )
+	saveClicked();
+    }
     break;
   case Key_Escape:
     // simulate button clicks
-    if( m_buttonCancel )
-      slotCancelClicked();
+    if( m_buttonCancel ) {
+      if( m_buttonCancel->isEnabled() )
+	slotCancelClicked();
+    }
     break;
   default:
     // nothing
