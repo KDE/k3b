@@ -1,7 +1,7 @@
 [Desktop Entry]
 Actions=CreateK3bDataProject
 Encoding=UTF-8
-ServiceTypes=inode/directory,all/allfiles
+ServiceTypes=all/allfiles,inode/directory
 
 [Desktop Action CreateK3bDataProject]
 Exec=k3b --data %U

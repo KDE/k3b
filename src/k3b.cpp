@@ -1015,6 +1015,14 @@ void K3bMainWindow::slotWriteIsoImage()
 }
 
 
+void K3bMainWindow::slotWriteIsoImage( const KURL& url )
+{
+  K3bIsoImageWritingDialog d( this, "isodialog" );
+  d.setImage( url );
+  d.exec();
+}
+
+
 void K3bMainWindow::slotProjectAddFiles()
 {
   K3bDoc* doc = activeDoc();

@@ -27,7 +27,7 @@ class KLineEdit;
 class QToolButton;
 class QLabel;
 class K3bIsoImageJob;
-
+class KURL;
 
 /**
   *@author Sebastian Trueg
@@ -39,6 +39,8 @@ Q_OBJECT
  public: 
   K3bIsoImageWritingDialog( QWidget* = 0, const char* = 0, bool = true );
   ~K3bIsoImageWritingDialog();
+
+  void setImage( const KURL& url );
 
  protected slots:
   void slotUser1();

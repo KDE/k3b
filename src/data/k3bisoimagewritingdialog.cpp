@@ -37,6 +37,7 @@
 #include <kiconloader.h>
 #include <kconfig.h>
 #include <kio/global.h>
+#include <kurl.h>
 
 #include <qgroupbox.h>
 #include <qcheckbox.h>
@@ -501,5 +502,10 @@ void K3bIsoImageWritingDialog::slotCueBinChecked( bool c )
   m_checkNoFix->setDisabled( c );
 }
 
+
+void K3bIsoImageWritingDialog::setImage( const KURL& url )
+{
+  m_editImagePath->setText( url.path() );
+}
 
 #include "k3bisoimagewritingdialog.moc"

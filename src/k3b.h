@@ -128,6 +128,7 @@ class K3bMainWindow : public KDockMainWindow
   void slotNewMixedDoc();
   void slotBlankCdrw();
   void slotWriteIsoImage();
+  void slotWriteIsoImage( const KURL& url );
   // encoding dialog for transcode encoding utility
   void slotDivxEncoding();
   void slotCdCopy();

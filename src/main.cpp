@@ -45,6 +45,7 @@ static KCmdLineOptions options[] =
     { "data", I18N_NOOP("Create a new data project and add all given files"), 0 },
     { "audio", I18N_NOOP("Create a new audio project and add all given files"), 0 },
     { "copy", I18N_NOOP("Open the cd copy dialog"), 0 },
+    { "image", I18N_NOOP("Write an ISO or bin/cue image to cd"), 0 },
     { 0, 0, 0 }
     // INSERT YOUR COMMANDLINE OPTIONS HERE
   };
@@ -120,6 +121,9 @@ int main(int argc, char *argv[])
 	for( int i = 0; i < args->count(); i++ ) {
 	  doc->addUrl( args->url(i) );
 	}
+      }
+      else if( args->isSet( "image" ) ) {
+	k3bMainWidget->slotWriteIsoImage( args->url(0) );
       }
       else if(args->count()) {
 	for( int i = 0; i < args->count(); i++ ) {
