@@ -2249,38 +2249,18 @@ bool K3bCdDevice::CdDevice::readFormatCapacity( K3b::Msf& r ) const
 
 bool K3bCdDevice::CdDevice::readSectorsRaw(unsigned char *buf, int start, int count) const
 {
-  // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
-  bool needToClose = !isOpen();
-
-
-  if (open() != -1) {
-    ScsiCommand cmd( open() );
-    cmd[0] = 0xbe;  // GPCMD_READ_CD;
-    cmd[1] = 0; // all types
-    cmd[2] = (start >> 24) & 0xff;
-    cmd[3] = (start >> 16) & 0xff;
-    cmd[4] = (start >>  8) & 0xff;
-    cmd[5] = start & 0xff;
-    cmd[6] = (count >> 16) & 0xff;
-    cmd[7] = (count >>  8) & 0xff;
-    cmd[8] = count & 0xff;
-    cmd[9] = 0x80 | 0x40 | 0x20 | 0x10 | 0x08;
-                 // DATA_SYNC | DATA_ALLHEADER | DATA_USER | DATA_EDC;
-
-    if( cmd.transport( TR_DIR_READ, buf, count*2352 ) ) {
-      kdError() << "(K3bCdDevice::CdDevice) Cannot read raw sectors." << endl;
-      return false;
-    }
-
-
-    if( needToClose )
-      close();
-
-    return true;
-  }
-  else
-    return false;
+  return readCd( buf, count*2352,
+		 0,      // all sector types
+		 false,  // no dap
+		 start, 
+		 count,
+		 true, // SYNC
+		 true, // HEADER
+		 true, // SUBHEADER
+		 true, // USER DATA
+		 true, // EDC/ECC
+		 0,    // no c2 info
+		 0 );
 }
 
 
@@ -2582,6 +2562,61 @@ int K3bCdDevice::CdDevice::determineOptimalWriteSpeed() const
     delete [] data;
   }
 
+  if( needToClose )
+    close();
+
+  return ret;
+}
+
+
+bool K3bCdDevice::CdDevice::readCd( unsigned char* data, 
+				    int dataLen,
+				    int sectorType,
+				    bool dap,
+				    unsigned long startAdress,
+				    unsigned long length,
+				    bool sync,
+				    bool header,
+				    bool subHeader,
+				    bool userData,				    
+				    bool edcEcc,
+				    int c2,
+				    int subChannel ) const
+{
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
+  if( open() < 0 )
+    return false;
+
+  bool ret = true;
+
+  ::memset( data, 0, dataLen );
+
+  ScsiCommand cmd( open() );
+  cmd[0] = 0xbe;  // READ CD
+  cmd[1] = (sectorType<<2 & 0x1c) | ( dap ? 0x2 : 0x0 );
+  cmd[2] = startAdress>>24;
+  cmd[3] = startAdress>>16;
+  cmd[4] = startAdress>>8;
+  cmd[5] = startAdress;
+  cmd[6] = length>>16;
+  cmd[7] = length>>8;
+  cmd[8] = length;
+  cmd[9] = ( ( sync      ? 0x80 : 0x0 ) | 
+	     ( subHeader ? 0x40 : 0x0 ) | 
+	     ( header    ? 0x20 : 0x0 ) |
+	     ( userData  ? 0x10 : 0x0 ) |
+	     ( edcEcc    ? 0x8  : 0x0 ) |
+	     ( c2<<1 & 0x6 ) );
+  cmd[10] = subChannel & 0x7;
+
+  if( cmd.transport( TR_DIR_READ, data, dataLen ) ) {
+    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ CD failed!" << endl;
+    ret = false;
+  }
+  
   if( needToClose )
     close();
 
