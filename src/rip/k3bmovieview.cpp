@@ -133,7 +133,7 @@ QString K3bMovieView::filterAudioList( QStringList *al ){
         if( lang[1].contains("bit") || lang[1].contains("drc") ){
             lang[1] = "??";
         }
-        result += "\n" + lang[1] + " (" + lang[0] + "/" + lang.last() +"), ";
+        result += lang[1] + " (" + lang[0] + "/" + lang.last() +"), ";
         kdDebug() << result << endl;
     }
     return result.left( result.length()-2);
@@ -175,7 +175,6 @@ void K3bMovieView::slotDvdChecked( bool successful ){
 									  QString::number( title->getMaxChapters() ), 
 									  title->getAngles()->join(",") );
            titleItem->setHiddenTitle( title->getTitleNumber( ));
-	   titleItem->setMultiLinesEnabled( true );
            if( title->getFrames() > maxFrames ){
                maxFrames = title->getFrames();
                longestTitle = titleItem;
