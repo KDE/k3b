@@ -35,7 +35,7 @@ K3bCddbMultiEntriesDialog::K3bCddbMultiEntriesDialog( QWidget* parent, const cha
   layout->setSpacing( spacingHint() );
   layout->setMargin( 0 );
 
-  QLabel* infoLabel = new QLabel( i18n("K3b found multible inexact cddb entries. Please select one."), frame );
+  QLabel* infoLabel = new QLabel( i18n("K3b found multiple inexact cddb entries. Please select one."), frame );
   infoLabel->setAlignment( WordBreak );
 
   m_listBox = new KListBox( frame, "list_box");
