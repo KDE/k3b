@@ -38,7 +38,8 @@
 
 
 K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const char *name )
-  : QGroupBox( 4, Qt::Vertical, i18n( "Temp Directory" ), parent, name )
+  : QGroupBox( 4, Qt::Vertical, i18n( "Temp Directory" ), parent, name ),
+    m_labelCdSize(0)
 {
   layout()->setSpacing( KDialog::spacingHint() );
   layout()->setMargin( KDialog::marginHint() );
@@ -54,11 +55,6 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const cha
   m_labelFreeSpace = new QLabel( "                       ",freeTempSpaceBox, "m_labelFreeSpace" );
   m_labelFreeSpace->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
 
-  QHBox* cdSizeBox = new QHBox( this );
-  cdSizeBox->setSpacing( KDialog::spacingHint() );
-  (void)new QLabel( i18n( "Size of project:" ), cdSizeBox, "TextLabel4" );
-  m_labelCdSize = new QLabel( "                        ", cdSizeBox, "m_labelCdSize" );
-  m_labelCdSize->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
 
   connect( m_editDirectory, SIGNAL(openFileDialog(KURLRequester*)),
 	   this, SLOT(slotTempDirButtonPressed(KURLRequester*)) );
@@ -96,10 +92,12 @@ void K3bTempDirSelectionWidget::slotFreeTempSpace(const QString&,
 
   m_freeTempSpace = kbAvail;
 
-  if( m_freeTempSpace < m_requestedSize/1024 )
-    m_labelCdSize->setPaletteForegroundColor( red );
-  else
-    m_labelCdSize->setPaletteForegroundColor( m_labelFreeSpace->paletteForegroundColor() );
+  if( m_labelCdSize ) {
+    if( m_freeTempSpace < m_requestedSize/1024 )
+      m_labelCdSize->setPaletteForegroundColor( red );
+    else
+      m_labelCdSize->setPaletteForegroundColor( m_labelFreeSpace->paletteForegroundColor() );
+  }
   QTimer::singleShot( 1000, this, SLOT(slotUpdateFreeTempSpace()) );
 }
 
@@ -197,6 +195,13 @@ void K3bTempDirSelectionWidget::setSelectionMode( int mode )
 void K3bTempDirSelectionWidget::setNeededSize( KIO::filesize_t bytes )
 {
   m_requestedSize = bytes;
+  if( !m_labelCdSize ) {
+    QHBox* cdSizeBox = new QHBox( this );
+    cdSizeBox->setSpacing( KDialog::spacingHint() );
+    (void)new QLabel( i18n( "Size of project:" ), cdSizeBox, "TextLabel4" );
+    m_labelCdSize = new QLabel( KIO::convertSize(bytes), cdSizeBox, "m_labelCdSize" );
+    m_labelCdSize->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
+  }
   m_labelCdSize->setText( KIO::convertSize(bytes) );
 }
 
