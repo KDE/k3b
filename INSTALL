@@ -1,5 +1,5 @@
-Installing K3b 0.7
-------------------
+Installing K3b 0.7.x
+--------------------
 
 
 Before installing K3b please make sure you have at least the following installed on your sytem:
@@ -13,7 +13,7 @@ After that it's all the same:
 
 ./configure
 
-or try ./configure --help to leaarn about the options.
+or try ./configure --help to learn about the options.
 Mostly you will like to set the kde3 directory via:
 
 ./configure --prefix=<mykde3base>

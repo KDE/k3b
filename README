@@ -21,9 +21,9 @@ These are the features so far:
    - adding new empty directories to data tree
    - renaming of files (manually or automatically for mp3-files) (for joliet and rockrigde)
    - support for most of the mkisofs-options (I don't think anyone will ever use them! ;-))
-   - multisession support
+   - multisession support (including importing old sessions)
 
- - writing existing iso-images to cd
+ - writing existing iso-images and cue/bin images to cd
 
  - cd copy (data, audio, mixed mode)
 
@@ -41,7 +41,7 @@ These are the features so far:
 
  - Retrieving cd info and toc
 
- - Support for ATAPI drives without SCSI-emulation for reading
+ - Support for ATAPI drives without SCSI-emulation for reading (only audio and dvd ripping so far)
 
  - integrated full featured audio player
 
