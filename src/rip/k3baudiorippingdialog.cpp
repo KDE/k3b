@@ -80,10 +80,11 @@ K3bAudioRippingDialog::K3bAudioRippingDialog(const K3bDiskInfo& diskInfo,
   K3b::Msf length;
   for( QValueList<int>::const_iterator it = m_trackNumbers.begin();
        it != m_trackNumbers.end(); ++it ) {
-    length += m_diskInfo.toc[*it].length();
+    length += m_diskInfo.toc[*it-1].length();
   }
   setTitle( i18n("CD Ripping"), 
-	    i18n("1 track (%1)", "%n tracks (%1)", m_trackNumbers.count()).arg(length.toString()) );
+	    i18n("1 track (%1)", "%n tracks (%1)", 
+		 m_trackNumbers.count()).arg(length.toString()) );
 
   m_radioWav->setChecked(true);
 }
