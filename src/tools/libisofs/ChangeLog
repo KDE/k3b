@@ -1,0 +1,9 @@
+K3b Changes
+- renamed the st_xxx time fileds in rr_entry to rr_st_xxx to make it compile
+
+0.1 -> 0.2
+
+- Critical directory parsing bug fixed
+- Call backs only if some sanity checks on the directory entry succeeds 
+  (length checks to avoid buffer overrun if received corrupt data)
+- Preliminary El Torito boot specification support (No multiple boot entries yet)

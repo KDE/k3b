@@ -29,6 +29,7 @@
 #include <k3bwritingmodewidget.h>
 #include <k3bcore.h>
 #include <k3blistview.h>
+#include <k3biso9660.h>
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -272,6 +273,7 @@ void K3bIsoImageWritingDialog::slotStartClicked()
 
 void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
 {
+  m_md5Job->cancel();
   m_infoView->clear();
   d->md5SumItem = 0;
 
@@ -282,39 +284,13 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
 
     unsigned long imageSize = info.size();
 
-
     // ------------------------------------------------
     // Test for iso9660 image
     // ------------------------------------------------
-    char buf[17*2048];
+    K3bIso9660 isoF( path );
+    if( isoF.open( IO_ReadOnly ) ) {
+      isoF.debug();
 
-    QFile f( path );
-    if( f.open( IO_Raw | IO_ReadOnly ) ) {
-      if( f.readBlock( buf, 17*2048 ) == 17*2048 ) {
-	// check if this is an ios9660-image
-	// the beginning of the 16th sector needs to have the following format:
-
-	// first byte: 1
-	// second to 11th byte: 67, 68, 48, 48, 49, 1 (CD001)
-	// 12th byte: 0
-
-	d->isIsoImage = ( buf[16*2048] == 1 &&
-			buf[16*2048+1] == 67 &&
-			buf[16*2048+2] == 68 &&
-			buf[16*2048+3] == 48 &&
-			buf[16*2048+4] == 48 &&
-			buf[16*2048+5] == 49 &&
-			buf[16*2048+6] == 1 &&
-			buf[16*2048+7] == 0 );
-      }
-
-      f.close();
-    }
-
-    // ------------------------------------------------
-    // Show file size
-    // ------------------------------------------------
-    if( d->isIsoImage ) {
       K3bListViewItem* isoRootItem = new K3bListViewItem( m_infoView, m_infoView->lastItem(),
 							  i18n("Iso9660 image") );
       isoRootItem->setForegroundColor( 0, Qt::gray );
@@ -324,37 +300,56 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
 						   i18n("Filesize:"), KIO::convertSize( imageSize ) );
       item->setForegroundColor( 0, Qt::gray );
 
-      QString str = QString::fromLocal8Bit( &buf[16*2048+8], 32 ).stripWhiteSpace();
-      item = new K3bListViewItem( isoRootItem, m_infoView->lastItem(),
-				  i18n("System:"), str.isEmpty() ? QString("-") : str );
+      item = new K3bListViewItem( isoRootItem, 
+				  m_infoView->lastItem(),
+				  i18n("System:"), 
+				  isoF.primaryDescriptor().systemId.isEmpty()
+				  ? QString("-") 
+				  : isoF.primaryDescriptor().systemId );
       item->setForegroundColor( 0, Qt::gray );
 
-      str = QString::fromLocal8Bit( &buf[16*2048+40], 32 ).stripWhiteSpace();
-      item = new K3bListViewItem( isoRootItem, m_infoView->lastItem(),
-				  i18n("Volume:"), str.isEmpty() ? QString("-") : str );
+      item = new K3bListViewItem( isoRootItem, 
+				  m_infoView->lastItem(),
+				  i18n("Volume:"), 
+				  isoF.primaryDescriptor().volumeId.isEmpty() 
+				  ? QString("-") 
+				  : isoF.primaryDescriptor().volumeId );
       item->setForegroundColor( 0, Qt::gray );
 
-      str = QString::fromLocal8Bit( &buf[16*2048+190], 128 ).stripWhiteSpace();
-      item = new K3bListViewItem( isoRootItem, m_infoView->lastItem(),
-				  i18n("Volume Set:"), str.isEmpty() ? QString("-") : str );
+      item = new K3bListViewItem( isoRootItem, 
+				  m_infoView->lastItem(),
+				  i18n("Volume Set:"), 
+				  isoF.primaryDescriptor().volumeSetId.isEmpty()
+				  ? QString("-")
+				  : isoF.primaryDescriptor().volumeSetId );
       item->setForegroundColor( 0, Qt::gray );
 
-      str = QString::fromLocal8Bit( &buf[16*2048+318], 128 ).stripWhiteSpace();
-      item = new K3bListViewItem( isoRootItem, m_infoView->lastItem(),
-				  i18n("Publisher:"), str.isEmpty() ? QString("-") : str );
+      item = new K3bListViewItem( isoRootItem, 
+				  m_infoView->lastItem(),
+				  i18n("Publisher:"), 
+				  isoF.primaryDescriptor().publisherId.isEmpty() 
+				  ? QString("-") 
+				  : isoF.primaryDescriptor().publisherId );
       item->setForegroundColor( 0, Qt::gray );
 
-      str = QString::fromLocal8Bit( &buf[16*2048+446], 128 ).stripWhiteSpace();
-      item = new K3bListViewItem( isoRootItem, m_infoView->lastItem(),
-				  i18n("Preparer:"), str.isEmpty() ? QString("-") : str );
+      item = new K3bListViewItem( isoRootItem, 
+				  m_infoView->lastItem(),
+				  i18n("Preparer:"), 
+				  isoF.primaryDescriptor().preparerId.isEmpty() 
+				  ? QString("-") : isoF.primaryDescriptor().preparerId );
       item->setForegroundColor( 0, Qt::gray );
 
-      str = QString::fromLocal8Bit( &buf[16*2048+574], 128 ).stripWhiteSpace();
-      item = new K3bListViewItem( isoRootItem, m_infoView->lastItem(),
-				  i18n("Application:"), str.isEmpty() ? QString("-") : str );
+      item = new K3bListViewItem( isoRootItem, 
+				  m_infoView->lastItem(),
+				  i18n("Application:"), 
+				  isoF.primaryDescriptor().applicationId.isEmpty()
+				  ? QString("-") 
+				  : isoF.primaryDescriptor().applicationId );
       item->setForegroundColor( 0, Qt::gray );
 
       isoRootItem->setOpen( true );
+
+      isoF.close();
     }
     else {
       K3bListViewItem* item = new K3bListViewItem( m_infoView, m_infoView->lastItem(),
