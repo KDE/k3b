@@ -34,6 +34,7 @@
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 #include <kurlrequester.h>
+#include <kio/global.h>
 
 
 K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const char *name )
@@ -196,7 +197,7 @@ void K3bTempDirSelectionWidget::setSelectionMode( int mode )
 void K3bTempDirSelectionWidget::setNeededSize( unsigned long bytes )
 {
   m_requestedSize = bytes;
-  m_labelCdSize->setText( QString().sprintf( " %.2f MB", ((float)bytes)/1024.0/1024.0 ) );
+  m_labelCdSize->setText( KIO::convertSize(bytes) );
 }
 
 
