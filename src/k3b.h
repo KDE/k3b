@@ -121,6 +121,12 @@ class K3bMainWindow : public KDockMainWindow
 
   KSystemTray* systemTray() const { return m_systemTray; }
 
+
+ public slots:
+  void slotNewAudioDoc();
+  void slotNewDataDoc();
+  void slotNewMixedDoc();
+
  signals:
   void initializationInfo( const QString& );
   void configChanged( KConfig* c );
@@ -244,10 +250,6 @@ class K3bMainWindow : public KDockMainWindow
   void slotDivxEncoding();
   void slotCdCopy();
   void slotK3bSetup();
-
-  void slotNewAudioDoc();
-  void slotNewDataDoc();
-  void slotNewMixedDoc();
 
   void slotProjectAddFiles();
 
