@@ -401,7 +401,7 @@ void K3bAudioListView::drawContentsOffset ( QPainter * p, int ox, int oy, int cx
     p->drawText( ox+20, oy+30, 
 		 i18n("Use drag'n'drop to add audio files to the project.") );
     p->drawText( ox+20, oy+30+ p->fontMetrics().lineSpacing(), 
-		 i18n("After that press the burn button to write the cd.") );
+		 i18n("After that press the burn button to write the CD.") );
   }
 }
 
