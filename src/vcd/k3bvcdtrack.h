@@ -55,10 +55,14 @@ class K3bVcdTrack
         void setPbcTrack( int, K3bVcdTrack* pbctrack = 0L );
         void setPbcNonTrack( int, int );
         void setUserDefined( int, bool );
+        void setPlayTime( int t ) { m_pbcplaytime = t; }
+        void setWaitTime( int t ) { m_pbcwaittime = t; }
 
         K3bVcdTrack* getPbcTrack( const int& );
         int getNonPbcTrack( const int& );
         bool isPbcUserDefined( int );
+				int getPlayTime() { return m_pbcplaytime; }
+				int getWaitTime() { return m_pbcwaittime; }
 
         // video
         int mpegType() const { return m_mpegtype; }
@@ -130,7 +134,10 @@ class K3bVcdTrack
         QMap<int, K3bVcdTrack*> m_pbctrackmap;  // Pbc Tracks (Previous, Next, ...)
         QMap<int, int> m_pbcnontrackmap;             // Pbc NON Track types (Previous, Next, ...)
         QMap<int, bool> m_pbcusrdefmap;              // Pbc is userdefined or defaults (Previous, Next, ...)
-        /*********************************************************************************************/
+
+				int m_pbcplaytime;
+				int m_pbcwaittime;
+				/*********************************************************************************************/
 
         bool m_segment;
         int m_filetype;

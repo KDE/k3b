@@ -119,6 +119,9 @@ void K3bVcdTrackDialog::slotApply()
     setPbcTrack( selectedTrack, m_pbc_default, K3bVcdTrack::DEFAULT );
     setPbcTrack( selectedTrack, m_comboAfterTimeout, K3bVcdTrack::AFTERTIMEOUT );
 
+		selectedTrack->setPlayTime( m_spin_times->value() );
+		selectedTrack->setWaitTime( m_spin_waittime->value() );
+
 }
 
 void K3bVcdTrackDialog::fillGui()
@@ -383,6 +386,10 @@ void K3bVcdTrackDialog::fillGui()
         m_comboAfterTimeout->setCurrentItem( m_tracks.count() + selectedTrack->getNonPbcTrack( K3bVcdTrack::AFTERTIMEOUT ) );
     else
         m_comboAfterTimeout->setCurrentItem( iAfterTimeOut );
+
+
+		m_spin_times->setValue( selectedTrack->getPlayTime() );
+		m_spin_waittime->setValue( selectedTrack->getWaitTime() );
 
 }
 
