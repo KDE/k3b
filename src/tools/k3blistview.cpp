@@ -56,7 +56,7 @@ public:
     : showProgress(false),
       progressValue(0),
       totalProgressSteps(100),
-      margin(1) {
+      margin(0) {
     editorType = NONE;
     button = false;
     comboEditable = false;
@@ -170,6 +170,20 @@ K3bListViewItem::~K3bListViewItem()
     delete m_columns;
 }
 
+
+void K3bListViewItem::init()
+{
+  m_columns = 0;
+  m_vMargin = 0;
+}
+
+
+int K3bListViewItem::width( const QFontMetrics& fm, const QListView* lv, int c ) const
+{
+  return KListViewItem::width( fm, lv, c ) + getColumnInfo(c)->margin*2;
+}
+
+
 void K3bListViewItem::setEditor( int column, int editor, const QStringList& cs )
 {
   ColumnInfo* colInfo = getColumnInfo(column);
@@ -203,12 +217,6 @@ K3bListViewItem::ColumnInfo* K3bListViewItem::getColumnInfo( int col ) const
   }
 
   return info;
-}
-
-
-void K3bListViewItem::init()
-{
-  m_columns = 0;
 }
 
 
@@ -287,7 +295,7 @@ void K3bListViewItem::setTotalSteps( int col, int steps )
 }
 
 
-void K3bListViewItem::setMargin( int col, int margin )
+void K3bListViewItem::setMarginHorizontal( int col, int margin )
 {
   ColumnInfo* info = getColumnInfo( col );
   info->margin = margin;
@@ -296,9 +304,26 @@ void K3bListViewItem::setMargin( int col, int margin )
 }
 
 
+void K3bListViewItem::setMarginVertical( int margin )
+{
+  m_vMargin = margin;
+  repaint();
+}
+
+
+void K3bListViewItem::setup()
+{
+  KListViewItem::setup();
+
+  setHeight( height() + 2*m_vMargin );
+}
+
+
 void K3bListViewItem::paintCell( QPainter* p, const QColorGroup& cg, int col, int width, int align )
 {
   ColumnInfo* info = getColumnInfo( col );
+
+  p->save();
 
   QFont oldFont( p->font() );
   QFont newFont = info->fontSet ? info->font : oldFont;
@@ -309,133 +334,90 @@ void K3bListViewItem::paintCell( QPainter* p, const QColorGroup& cg, int col, in
   if( info->backgroundColorSet )
     cgh.setColor( QColorGroup::Base, info->backgroundColor );
 
+  // the margin (we can only translate horizontally since height() is used for painting)
+  p->translate( info->margin, 0 );
+
   if( info->showProgress ) {
-
-    QStyle::SFlags flags = QStyle::Style_Default;
-    if( listView()->isEnabled() )
-        flags |= QStyle::Style_Enabled;
-    if( listView()->hasFocus() )
-        flags |= QStyle::Style_HasFocus;
-
-    // the QPainter is translated so 0, 0 is the upper left of our paint rect
-    QRect r( 0, 0, width, height() );
-
-    // create the double buffer pixmap
-    static QPixmap *doubleBuffer = 0;
-    if( !doubleBuffer )
-      doubleBuffer = new QPixmap;
-    doubleBuffer->resize( width, height() );
-
-    QPainter dbPainter( doubleBuffer );
-
-     // clear the background (we cannot use paintEmptyArea since it's protected in QListView)
-     if( K3bListView* lv = dynamic_cast<K3bListView*>(listView()) )
-       lv->paintEmptyArea( &dbPainter, r );
-     else
-       dbPainter.fillRect( 0, 0, width, height(), 
-			   cgh.brush( QPalette::backgroundRoleFromMode(listView()->viewport()->backgroundMode()) ) );
-
-    // this might be a stupid hack but most styles do not reimplement drawPrimitive PE_ProgressBarChunk
-    // so this way the user is happy....
-    static QProgressBar* s_dummyProgressBar = 0;
-    if( !s_dummyProgressBar ) {
-      s_dummyProgressBar = new QProgressBar();
-    }
-
-    s_dummyProgressBar->setTotalSteps( info->totalProgressSteps );
-    s_dummyProgressBar->setProgress( info->progressValue );
-
-    // we want a little margin
-    r.setLeft( r.left()+info->margin );
-    r.setWidth( r.width()-info->margin*2 );
-    r.setTop( r.top()+info->margin );
-    r.setHeight( r.height()-info->margin*2 );
-
-    // some styles use the widget's geometry
-    s_dummyProgressBar->setGeometry( r );
-
-    listView()->style().drawControl(QStyle::CE_ProgressBarContents, &dbPainter, s_dummyProgressBar, r, cgh, flags );
-    listView()->style().drawControl(QStyle::CE_ProgressBarLabel, &dbPainter, s_dummyProgressBar, r, cgh, flags );
-
-    // now we really paint the progress in the listview
-    p->drawPixmap( 0, 0, *doubleBuffer );
-
-    //
-    // Since the QStyle API is so unflexible we need to copy the functionality of
-    // QStyle::drawControl :(
-    //
-
-
-//     // Correct the highlight color if same as background,
-//     // or else we cannot see the progress...
-//     if( cgh.highlight() == cgh.background() )
-//       cgh.setColor( QColorGroup::Highlight, listView()->palette().active().highlight() );
-
-//     // draw the contents
-//     bool reverse = QApplication::reverseLayout();
-//     int fw = 2;
-//     int w = r.width() - 2*fw;
-
-//     const int unit_width = listView()->style().pixelMetric( QStyle::PM_ProgressBarChunkWidth );
-//     int u;
-//     if ( unit_width > 1 )
-//       u = (r.width()+unit_width/3) / unit_width;
-//     else
-//       u = w / unit_width;
-//     int p_v = info->progressValue;
-//     int t_s = 100;
-
-//     if ( u > 0 && p_v >= INT_MAX / u && t_s >= u ) {
-//       // scale down to something usable.
-//       p_v /= u;
-//       t_s /= u;
-//     }
-
-//     // nu < tnu, if last chunk is only a partial chunk
-//     int tnu, nu;
-//     tnu = nu = p_v * u / t_s;
-    
-//     if (nu * unit_width > w)
-//       nu--;
-
-//     // Draw nu units out of a possible u of unit_width
-//     // width, each a rectangle bordered by background
-//     // color, all in a sunken panel with a percentage text
-//     // display at the end.
-//     int x = 0;
-//     int x0 = reverse ? r.right() - ((unit_width > 1) ?
-// 				    unit_width : fw) : r.x() + fw;
-//     for (int i=0; i<nu; i++) {
-//       listView()->style().drawPrimitive( QStyle::PE_ProgressBarChunk, p,
-// 					 QRect( x0+x, r.y(), unit_width, r.height() ),
-// 					 cgh, QStyle::Style_Default );
-//       x += reverse ? -unit_width: unit_width;
-//     }
-
-//     // Draw the last partial chunk to fill up the
-//     // progressbar entirely
-//     if (nu < tnu) {
-//       int pixels_left = w - (nu*unit_width);
-//       int offset = reverse ? x0+x+unit_width-pixels_left : x0+x;
-//       listView()->style().drawPrimitive( QStyle::PE_ProgressBarChunk, p,
-// 					 QRect( offset, r.y(), pixels_left,
-// 						r.height() ), cgh, QStyle::Style_Default );
-//     }
-
-//     // draw the label
-//     QColor penColor = cgh.highlightedText();
-//     QColor *pcolor = 0;
-//     if( p_v*2 >= 100 )
-//       pcolor = &penColor;
-//     listView()->style().drawItem(p, r, AlignCenter | SingleLine, cgh, flags & QStyle::Style_Enabled, 0,
-// 				 QString( "%1 %" ).arg(info->progressValue), -1, pcolor );
+    paintProgressBar( p, cgh, col, width-2*info->margin );
   }
-  else
-    KListViewItem::paintCell( p, cgh, col, width, align );
+  else {
+    KListViewItem::paintCell( p, cgh, col, width-2*info->margin, align );
 
-  p->setFont( oldFont );
+    // in case this is the selected row has a margin we need to repaint the selection bar
+    if( isSelected() &&
+	(col == 0 || listView()->allColumnsShowFocus()) &&
+	info->margin > 0 ) {
+
+      p->fillRect( -1*info->margin, 0, 0, height(),
+		   cg.brush( QColorGroup::Highlight ) );
+      p->fillRect( width, 0, width+info->margin, height(),
+		   cg.brush( QColorGroup::Highlight ) );
+    }
+    else { // in case we use the KListView alternate color stuff
+      p->fillRect( -1*info->margin, 0, 0, height(),
+		   cg.brush( QColorGroup::Base ) );
+      p->fillRect( width, 0, width+info->margin, height(),
+		   cg.brush( QColorGroup::Base ) );
+    }
+  }
+
+  p->restore();
 }
 
+
+void K3bListViewItem::paintProgressBar( QPainter* p, const QColorGroup& cgh, int col, int width )
+{
+  ColumnInfo* info = getColumnInfo( col );
+
+  QStyle::SFlags flags = QStyle::Style_Default;
+  if( listView()->isEnabled() )
+    flags |= QStyle::Style_Enabled;
+  if( listView()->hasFocus() )
+    flags |= QStyle::Style_HasFocus;
+
+  // the QPainter is translated so 0, m_vMargin is the upper left of our paint rect
+  QRect r( 0, m_vMargin, width, height()-2*m_vMargin );
+
+  // we want a little additional margin
+  r.setLeft( r.left()+1 );
+  r.setWidth( r.width()-2 );
+  r.setTop( r.top()+1 );
+  r.setHeight( r.height()-2 );
+
+  // create the double buffer pixmap
+  static QPixmap *doubleBuffer = 0;
+  if( !doubleBuffer )
+    doubleBuffer = new QPixmap;
+  doubleBuffer->resize( width, height() );
+
+  QPainter dbPainter( doubleBuffer );
+
+  // clear the background (we cannot use paintEmptyArea since it's protected in QListView)
+  if( K3bListView* lv = dynamic_cast<K3bListView*>(listView()) )
+    lv->paintEmptyArea( &dbPainter, r );
+  else
+    dbPainter.fillRect( 0, 0, width, height(), 
+			cgh.brush( QPalette::backgroundRoleFromMode(listView()->viewport()->backgroundMode()) ) );
+
+  // this might be a stupid hack but most styles do not reimplement drawPrimitive PE_ProgressBarChunk
+  // so this way the user is happy....
+  static QProgressBar* s_dummyProgressBar = 0;
+  if( !s_dummyProgressBar ) {
+    s_dummyProgressBar = new QProgressBar();
+  }
+
+  s_dummyProgressBar->setTotalSteps( info->totalProgressSteps );
+  s_dummyProgressBar->setProgress( info->progressValue );
+
+  // some styles use the widget's geometry
+  s_dummyProgressBar->setGeometry( r );
+
+  listView()->style().drawControl(QStyle::CE_ProgressBarContents, &dbPainter, s_dummyProgressBar, r, cgh, flags );
+  listView()->style().drawControl(QStyle::CE_ProgressBarLabel, &dbPainter, s_dummyProgressBar, r, cgh, flags );
+
+  // now we really paint the progress in the listview
+  p->drawPixmap( 0, 0, *doubleBuffer );
+}
 
 
 // ///////////////////////////////////////////////

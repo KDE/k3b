@@ -71,6 +71,13 @@ class K3bListViewItem : public KListViewItem
 
   virtual ~K3bListViewItem();
 
+  /**
+   * reimplemented from KListViewItem
+   */
+  void setup();
+
+  virtual int width( const QFontMetrics& fm, const QListView* lv, int c ) const;
+
   void setEditor( int col, int type, const QStringList& = QStringList() );
   void setButton( int col, bool );
 
@@ -87,19 +94,29 @@ class K3bListViewItem : public KListViewItem
   void setDisplayProgressBar( int col, bool );
   void setProgress( int, int );
   void setTotalSteps( int col, int steps );
+
   /**
-   * For now only used for the progressbar
+   * The margin left and right of the cell
    */
-  void setMargin( int col, int margin );
+  void setMarginHorizontal( int col, int margin );
+
+  /**
+   * The top and button margin of the cell
+   */
+  void setMarginVertical( int margin );
 
   virtual void paintCell( QPainter* p, const QColorGroup& cg, int col, int width, int align );
 
  private:
+  void paintProgressBar( QPainter* p, const QColorGroup& cgh, int col, int width );
+
   class ColumnInfo;
   mutable ColumnInfo* m_columns;
 
   ColumnInfo* getColumnInfo( int ) const;
   void init();
+
+  int m_vMargin;
 };
 
 
@@ -123,7 +140,7 @@ class K3bListView : public KListView
   void editorButtonClicked( K3bListViewItem*, int );
 
  public slots:
-  void setNoItemText( const QString& );
+   void setNoItemText( const QString& );
   //  void setNoItemPixmap( const QPixmap& );
   void setNoItemVerticalMargin( int i ) { m_noItemVMargin = i; }
   void setNoItemHorizontalMargin( int i ) { m_noItemHMargin = i; }
