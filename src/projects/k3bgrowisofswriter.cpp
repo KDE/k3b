@@ -150,9 +150,6 @@ bool K3bGrowisofsWriter::prepareProcess()
 
   QString s = burnDevice()->blockDeviceName() + "=";
   if( d->image.isEmpty() )
-    // read from stdin (in this case growisofs reads the size of the Iso9660 filesystem from it's header
-    //                  resulting in the restriction to iso9660 images. Thus we are not able to write pure
-    //                  udf images to stdin.)
     s += "/dev/fd/0";
   else
     s += d->image;
@@ -166,14 +163,14 @@ bool K3bGrowisofsWriter::prepareProcess()
   // we check for existing filesystems ourselves, so we always force the overwrite...
   *d->process << "-use-the-force-luke=tty";
 
-  if( d->growisofsBin->version > K3bVersion( 5, 17, -1 ) && d->trackSize > 0 )
+  if( d->growisofsBin->version > K3bVersion( 5, 17, -1 ) && d->trackSize > 0 && d->image.isEmpty() )
     *d->process << "-use-the-force-luke=tracksize:" + QString::number(d->trackSize);
 
   // this only makes sense for DVD-R(W) media
   if( simulate() )
     *d->process << "-use-the-force-luke=dummy";
   if( d->writingMode == K3b::DAO ) {
-    if( d->growisofsBin->version >= K3bVersion( 5, 15, -1 ) && d->trackSize > 0 )
+    if( d->growisofsBin->version >= K3bVersion( 5, 15, -1 ) && d->trackSize > 0 && d->image.isEmpty() )
       *d->process << "-use-the-force-luke=dao:" + QString::number(d->trackSize);
     else
       *d->process << "-use-the-force-luke=dao";
