@@ -3,9 +3,6 @@
 - video cd split long mpegs (volume set)
 * video cd Navigation
 * video cd ripping
-* udf support
-- audio cd copy with cdda2wav & cdrecord
-- data cd copy with readcd & cdrecord
 
 legend:
 - planned
