@@ -50,9 +50,9 @@ bool K3bVcdXmlView::write(const QString& fname)
   root.setAttribute("class", m_doc->vcdOptions()->vcdClass());
   root.setAttribute("version", m_doc->vcdOptions()->vcdVersion());
   xmlDoc.appendChild( root );
-  
+
   // create option elements
-  
+
   // Broken SVCD mode - NonCompliantMode
   if (m_doc->vcdOptions()->NonCompliantMode()) {
     QDomElement elemOption;
@@ -71,16 +71,49 @@ bool K3bVcdXmlView::write(const QString& fname)
       elemOption = addSubElement(xmlDoc, root, "option");
       elemOption.setAttribute("name", "relaxed aps");
       elemOption.setAttribute("value", "true");
-  }    
+  }
 
   // Update scan offsets
   if (m_doc->vcdOptions()->UpdateScanOffsets()) {
       QDomElement elemOption;
       elemOption = addSubElement(xmlDoc, root, "option");
       elemOption.setAttribute("name", "update scan offsets");
-      elemOption.setAttribute("value", "true");
+      elemOption.setAttribute("value","true");
+
   }
 
+  // Gaps & Margins
+  if (m_doc->vcdOptions()->UseGaps()) {
+      QDomElement elemOption;
+      elemOption = addSubElement(xmlDoc, root, "option");
+      elemOption.setAttribute("name", "leadout pregap");
+      elemOption.setAttribute("value", m_doc->vcdOptions()->PreGapLeadout() );
+
+      elemOption = addSubElement(xmlDoc, root, "option");
+      elemOption.setAttribute("name", "track pregap");
+      elemOption.setAttribute("value", m_doc->vcdOptions()->PreGapTrack() );
+
+      // margin only for vcd available, svcd hqvcd allways 0
+      if (m_doc->vcdOptions()->vcdClass() == "vcd" ) {
+      	elemOption = addSubElement(xmlDoc, root, "option");
+      	elemOption.setAttribute("name", "track front margin");
+      	elemOption.setAttribute("value", m_doc->vcdOptions()->FrontMarginTrack() );
+
+      	elemOption = addSubElement(xmlDoc, root, "option");
+      	elemOption.setAttribute("name", "track rear margin");
+      	elemOption.setAttribute("value", m_doc->vcdOptions()->RearMarginTrack() );
+      }
+      else {
+      	elemOption = addSubElement(xmlDoc, root, "option");
+      	elemOption.setAttribute("name", "track front margin");
+      	elemOption.setAttribute("value", 0 );
+
+      	elemOption = addSubElement(xmlDoc, root, "option");
+      	elemOption.setAttribute("name", "track rear margin");
+      	elemOption.setAttribute("value", 0 );
+      }
+
+  }
 
   // create info element
   QDomElement elemInfo = addSubElement(xmlDoc, root, "info");

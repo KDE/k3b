@@ -36,6 +36,10 @@ K3bVcdOptions::K3bVcdOptions()
     m_systemId( "CD-RTOS CD-BRIDGE" ),
     m_vcdclass( "vcd" ),
     m_vcdversion( "2.0" ),
+    m_pregapleadout( 150 ),
+    m_pregaptrack( 150 ),
+    m_frontmargintrack( 30 ),
+    m_rearmargintrack( 45 ),
     m_mpegversion( 1 ),
     m_volumeCount( 1 ),
     m_volumeNumber( 1 ),
@@ -45,7 +49,8 @@ K3bVcdOptions::K3bVcdOptions()
     m_sector2336( false ),
     m_updatescanoffsets( false ),
     m_relaxedaps( false ),
-    m_segmentfolder( true )
+    m_segmentfolder( true ),
+    m_usegaps( false )
 {
 }
 
@@ -54,7 +59,7 @@ bool K3bVcdOptions::checkCdiFiles()
   m_cdisize = 0;
   if( !QFile::exists( locate("data","k3b/cdi/cdi_imag.rtf") )) return false;
   if( !QFile::exists( locate("data","k3b/cdi/cdi_text.fnt") )) return false;
-  if( !QFile::exists( locate("data","k3b/cdi/cdi_vcd.app") )) return false;  
+  if( !QFile::exists( locate("data","k3b/cdi/cdi_vcd.app") )) return false;
   if( !QFile::exists( locate("data","k3b/cdi/cdi_vcd.cfg") )) return false;
 
   m_cdisize += QFile( locate("data","k3b/cdi/cdi_imag.rtf") ).size();
@@ -83,6 +88,11 @@ void K3bVcdOptions::save( KConfig* c )
   c->writeEntry( "PbcEnabled", m_pbcenabled );
   c->writeEntry( "SegmentFolder",  m_segmentfolder );
   c->writeEntry( "Restriction",  m_restriction );
+  c->writeEntry( "PreGapLeadout", m_pregapleadout );
+  c->writeEntry( "PreGapTrack", m_pregaptrack );
+  c->writeEntry( "FrontMarginTrack", m_frontmargintrack );
+  c->writeEntry( "RearMarginTrack", m_rearmargintrack );
+  c->writeEntry( "UseGaps", m_usegaps );
 }
 
 
@@ -106,7 +116,12 @@ K3bVcdOptions K3bVcdOptions::load( KConfig* c )
   options.setPbcEnabled( c->readBoolEntry( "PbcEnabled", options.PbcEnabled() ) );
   options.setSegmentFolder( c->readBoolEntry( "SegmentFolder", options.SegmentFolder() ) );
   options.setRestriction( ( c->readEntry( "Restriction", QString("%1").arg(options.Restriction()) )).toInt() );
-  
+  options.setPreGapLeadout( ( c->readEntry( "PreGapLeadout", QString("%1").arg( options.PreGapLeadout()) )).toInt() );
+  options.setPreGapTrack( ( c->readEntry( "PreGapTrack", QString("%1").arg( options.PreGapTrack()) )).toInt() );
+  options.setFrontMarginTrack( ( c->readEntry( "FrontMarginTrack", QString("%1").arg( options.FrontMarginTrack()) )).toInt() );
+  options.setRearMarginTrack( ( c->readEntry( "RearMarginTrack", QString("%1").arg( options.RearMarginTrack()) )).toInt() );
+  options.setUseGaps( c->readBoolEntry( "UseGaps", options.UseGaps() ) );
+
   return options;
 }
 

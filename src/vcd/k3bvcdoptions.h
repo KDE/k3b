@@ -37,7 +37,12 @@ class K3bVcdOptions
 
   const QString& vcdClass() const { return m_vcdclass; }
   const QString& vcdVersion() const { return m_vcdversion; }
-  
+
+  const int PreGapLeadout() { return m_pregapleadout; }
+  const int PreGapTrack() { return m_pregaptrack; }
+  const int FrontMarginTrack() { return m_frontmargintrack; }
+  const int RearMarginTrack() { return m_rearmargintrack; }
+
   const int mpegVersion() const { return m_mpegversion; }
 
   const int volumeCount() const { return m_volumeCount; }
@@ -49,6 +54,7 @@ class K3bVcdOptions
   const bool Sector2336() const { return m_sector2336; }
   const bool UpdateScanOffsets() const { return m_updatescanoffsets; }
   const bool RelaxedAps() const { return m_relaxedaps; }
+  const bool UseGaps() const { return m_usegaps; }
   const unsigned long long CDIsize() const {return m_cdisize;}
 
   void setAlbumId( const QString& s ) { m_albumID = s; }
@@ -59,18 +65,24 @@ class K3bVcdOptions
 
   void setVcdClass( const QString& s ) { m_vcdclass = s; }
   void setVcdVersion( const QString& s ) { m_vcdversion = s; }
-  
+
+  void setPreGapLeadout( const int i) {m_pregapleadout = i;}
+  void setPreGapTrack( const int i) {m_pregapleadout = i;}
+  void setFrontMarginTrack( const int i) {m_frontmargintrack = i;}
+  void setRearMarginTrack( const int i) {m_rearmargintrack = i;}
+
   void setMpegVersion( const int v ) { m_mpegversion = v; }
   void setVolumeCount( const int c ) { m_volumeCount = c; }
   void setVolumeNumber( const int n ) { m_volumeNumber = n; }
-  
+
   void setAutoDetect( const bool& b ) { m_autodetect = b; }
   void setCdiSupport( const bool& b ) { m_cdisupport = b; }
   void setNonCompliantMode( const bool& b ) { m_brokensvcdmode = b; }
   void setSector2336( const bool& b ) { m_sector2336 = b; }
   void setUpdateScanOffsets( const bool& b ) { m_updatescanoffsets = b; }
   void setRelaxedAps( const bool& b ) { m_relaxedaps = b; }
-  
+  void setUseGaps( const bool& b ) { m_usegaps = b; }
+
   bool checkCdiFiles();
   void save( KConfig* c );
 
@@ -85,7 +97,7 @@ class K3bVcdOptions
 
   void setRestriction( const int i ) { m_restriction = i; }
   int Restriction() const { return m_restriction; };
-  
+
  private:
   int m_restriction;
 
@@ -105,7 +117,12 @@ class K3bVcdOptions
 
   QString m_vcdclass;
   QString m_vcdversion;
-    
+
+  int m_pregapleadout;
+  int m_pregaptrack;
+  int m_frontmargintrack;
+  int m_rearmargintrack;
+
   int m_mpegversion;
   int m_volumeCount;
   int m_volumeNumber;
@@ -117,7 +134,9 @@ class K3bVcdOptions
   bool m_updatescanoffsets;
   bool m_relaxedaps;
   bool m_segmentfolder;
-  
+  bool m_usegaps;
+
+
   unsigned long long m_cdisize;
 };
 
