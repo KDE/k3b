@@ -85,7 +85,7 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
     pixmapLabelLeft->setPaletteBackgroundColor( theme->backgroundColor() );
     pixmapLabelLeft->setPixmap( theme->pixmap( K3bTheme::DIALOG_LEFT ) );
     pixmapLabelRight->setPaletteBackgroundColor( theme->backgroundColor() );
-    pixmapLabelRight->setPixmap( theme->pixmap( K3bTheme::DIALOG_NONE ) );
+    pixmapLabelRight->setPixmap( theme->pixmap( K3bTheme::DIALOG_RIGHT ) );
     m_labelTitle->setPaletteBackgroundColor( theme->backgroundColor() );
     m_labelTitle->setPaletteForegroundColor( theme->foregroundColor() );
   }
