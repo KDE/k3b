@@ -16,7 +16,9 @@
 #include "k3bcuefileparser.h"
 
 #include <qfile.h>
+#include <qfileinfo.h>
 #include <qtextstream.h>
+#include <qregexp.h>
 
 #include <kdebug.h>
 
@@ -45,24 +47,35 @@ void K3bCueFileParser::readFile()
     QString line = s.readLine();
     while( !line.isNull() ) {
       if( line.startsWith( "FILE" ) ) {
-	QString dataFile = line.mid(5);
-	// strip "
-	// FIXME: Does the cue syntax allow " or '??
-	if( dataFile[0] == '"' || dataFile[0] == '\'' ) {
-	  dataFile = dataFile.mid(1);
-	  dataFile.truncate(dataFile.length()-1);
-	}
 
-	// find data file
-	if( dataFile[0] == '/' ) {
-	  setImageFilename( dataFile );
-	}
-	else {
-	  // relative path
-	  setImageFilename( filename().mid( 0, filename().findRev('/') + 1 ) + dataFile );
-	}
+	kdDebug() << "(K3bCueFileParser) found FILE statement: " << line << endl;
 
-	setValid( QFile::exists( imageFilename() ) );
+	line.stripWhiteSpace();
+
+	// extract the filename from the FILE statement
+	// cdrecord 2.01a19 does only support binary, motorola, au, and wave
+	QRegExp rx( "(FILE)(\\s*)([\"\']?[^\"\']*[\"\']?)(\\s*)(BINARY|MOTOROLA|AU|WAVE)" );
+	int pos = rx.search( line );
+	if( pos > -1 ) {
+	  QString dataFile = rx.cap(3);
+	  if( dataFile[0] == '\"' || dataFile[0] == '\'' ) {
+	    dataFile = dataFile.mid(1);
+	    dataFile.truncate(dataFile.length()-1);
+	  }
+
+	  // find data file
+	  if( dataFile[0] == '/' ) {
+	    setImageFilename( dataFile );
+	  }
+	  else {
+	    // relative path
+	    setImageFilename( filename().mid( 0, filename().findRev('/') + 1 ) + dataFile );
+	  }
+
+	  kdDebug() << "(K3bCueFileParser) trying bin file: " << dataFile << endl;
+
+	  setValid( QFileInfo( imageFilename() ).isFile() );
+	}
       }
 
       line = s.readLine();

@@ -422,14 +422,16 @@ void K3bCdImageWritingDialog::slotUpdateImage( const QString& path )
       // once again we try both path and path.cue
       K3bCueFileParser cp;
 
-      if( path.right(4).lower() == ".cue" ) {
+      if( path.right(4).lower() == ".cue" )
 	cp.openFile( path );
-	if( cp.isValid() ) {
-	  d->tocFile = path;
-	  d->imageFile = cp.imageFilename();
-	}
-      }
+      else if( path.right(4).lower() == ".bin" )
+	cp.openFile( path.left( path.length()-3) + "cue" );
 
+      if( cp.isValid() ) {
+	d->tocFile = cp.filename();
+	d->imageFile = cp.imageFilename();
+      }
+      
       if( d->imageFile.isEmpty() ) {
 	cp.openFile( path + ".cue" );
 	if( cp.isValid() ) {
