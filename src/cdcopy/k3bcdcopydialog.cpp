@@ -43,8 +43,8 @@
 
 
 K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal )
-  : KDialogBase( KDialogBase::Plain, i18n("K3b CD Copy"), User1|User2, User1, parent, name, modal, false, 
-		 KGuiItem( i18n("Copy"), "copy", i18n("Start CD copy") ), KStdGuiItem::close() )
+  : KDialogBase( KDialogBase::Plain, i18n("Duplicate CD"), User1|User2, User1, parent, name, modal, false, 
+		 KGuiItem( i18n("&Duplicate"), "copy", i18n("Start making duplicate") ), KStdGuiItem::close() )
 {
   setButtonBoxOrientation( Qt::Vertical );
 
@@ -80,10 +80,10 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   groupCopies->setInsideSpacing( spacingHint() );
   groupCopies->setInsideMargin( marginHint() );
 
-  m_checkSimulate = new QCheckBox( i18n("Simulate writing"), groupOptions );
-  m_checkOnTheFly = new QCheckBox( i18n("Writing on the fly"), groupOptions );
+  m_checkSimulate = new QCheckBox( i18n("&Simulate writing"), groupOptions );
+  m_checkOnTheFly = new QCheckBox( i18n("&Writing on the fly"), groupOptions );
   //  m_checkOnlyCreateImage = new QCheckBox( i18n("Only create images"),groupOptions );
-  m_checkDeleteImages = new QCheckBox( i18n("Delete images"), groupOptions );
+  m_checkDeleteImages = new QCheckBox( i18n("&Delete images"), groupOptions );
 
   QLabel* pixLabel = new QLabel( groupCopies );
   pixLabel->setPixmap( locate( "appdata", "pics/k3b_cd_copy.png" ) );
@@ -102,7 +102,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   optionTabGrid->setColStretch( 1, 1 );
 
 
-  tabWidget->addTab( optionTab, i18n("Options") );
+  tabWidget->addTab( optionTab, i18n("&Options") );
 
 
   // advanced tab ------------------
@@ -118,7 +118,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   advancedTabGrid->addWidget( m_checkRawCopy, 1, 0 );
   advancedTabGrid->setRowStretch( 2, 1 );
 
-  tabWidget->addTab( advancedTab, i18n("Advanced") );
+  tabWidget->addTab( advancedTab, i18n("&Advanced") );
 
 
 
@@ -162,7 +162,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   QToolTip::add( m_checkOnTheFly, i18n("Copy directly without creating an image") );
   QToolTip::add( m_checkDeleteImages, i18n("Remove images from harddisk when finished") );
   //  QToolTip::add( m_checkOnlyCreateImage, i18n("Only create an image of the disk, no writing") );
-  QToolTip::add( m_comboSourceDevice, i18n("Select the drive with the CD to copy") );
+  QToolTip::add( m_comboSourceDevice, i18n("Select the drive with the CD to duplicatey") );
   QToolTip::add( m_spinCopies, i18n("Number of copies") );
   QToolTip::add( m_checkRawCopy, i18n("Write all data sectors as 2352 byte blocks") );
 

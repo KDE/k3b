@@ -69,7 +69,7 @@ void K3bBlankingDialog::setupGui()
   groupBlankTypeLayout->setMargin( marginHint() );
 
   m_radioFastBlank = new QRadioButton( i18n("&Fast"), m_groupBlankType );
-  m_radioCompleteBlank = new QRadioButton( i18n("&Complete"), m_groupBlankType );
+  m_radioCompleteBlank = new QRadioButton( i18n("Co&mplete"), m_groupBlankType );
   m_radioBlankTrack = new QRadioButton( i18n("Erase last &track"), m_groupBlankType );
   m_radioUncloseSession = new QRadioButton( i18n("&Unclose last session"), m_groupBlankType );
   m_radioBlankSession = new QRadioButton( i18n("Erase last &session"), m_groupBlankType );

@@ -42,7 +42,7 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const cha
   layout()->setSpacing( KDialog::spacingHint() );
   layout()->setMargin( KDialog::marginHint() );
 
-  (void)new QLabel( i18n( "Write image file to:" ), this, "TextLabel1_3" );
+  (void)new QLabel( i18n( "Wri&te image file to:" ), this, "TextLabel1_3" );
 
   QHBox* urlRequesterBox = new QHBox( this );
   urlRequesterBox->setSpacing( KDialog::spacingHint() );
