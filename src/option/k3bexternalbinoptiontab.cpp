@@ -114,26 +114,26 @@ void K3bExternalBinOptionTab::readSettings()
   }
 
 
-  item = new KListViewItem( m_viewPrograms, item );
-  item->setPixmap( 0, m_manager->foundBin( "mpg123" ) ? SmallIcon("ok") : SmallIcon("stop") );
-  item->setText( 1, "mpg123" );
-  item->setText( 3, m_manager->binPath( "mpg123" ) );
-  K3bExternalBin* mpg123Bin = m_manager->binObject( "mpg123" );
-  if( mpg123Bin ) {
-    item->setText( 2, mpg123Bin->version );
-    item->setText( 4, mpg123Bin->parameters );
-  }
+//   item = new KListViewItem( m_viewPrograms, item );
+//   item->setPixmap( 0, m_manager->foundBin( "mpg123" ) ? SmallIcon("ok") : SmallIcon("stop") );
+//   item->setText( 1, "mpg123" );
+//   item->setText( 3, m_manager->binPath( "mpg123" ) );
+//   K3bExternalBin* mpg123Bin = m_manager->binObject( "mpg123" );
+//   if( mpg123Bin ) {
+//     item->setText( 2, mpg123Bin->version );
+//     item->setText( 4, mpg123Bin->parameters );
+//   }
 
 
-  item = new KListViewItem( m_viewPrograms, item );
-  item->setPixmap( 0, m_manager->foundBin( "sox" ) ? SmallIcon("ok") : SmallIcon("stop") );
-  item->setText( 1, "sox" );
-  item->setText( 3, m_manager->binPath( "sox" ) );
-  K3bExternalBin* soxBin = m_manager->binObject( "sox" );
-  if( soxBin ) {
-    item->setText( 2, soxBin->version );
-    item->setText( 4, soxBin->parameters );
-  }
+//   item = new KListViewItem( m_viewPrograms, item );
+//   item->setPixmap( 0, m_manager->foundBin( "sox" ) ? SmallIcon("ok") : SmallIcon("stop") );
+//   item->setText( 1, "sox" );
+//   item->setText( 3, m_manager->binPath( "sox" ) );
+//   K3bExternalBin* soxBin = m_manager->binObject( "sox" );
+//   if( soxBin ) {
+//     item->setText( 2, soxBin->version );
+//     item->setText( 4, soxBin->parameters );
+//   }
 }
 
 

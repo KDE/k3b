@@ -768,20 +768,20 @@ void K3bSetupWizard::updateExternalPrograms()
   item->setText( 3, m_externalBinManager->binPath( "cdrdao" ) );
 
 
-  item = new KListViewItem( m_viewExternalPrograms, item );
-  //  item->setText( 0, m_externalBinManager->foundBin( "mpg123" ) ? i18n("yes") : i18n("no") );
-  item->setPixmap( 0, m_externalBinManager->foundBin( "mpg123" ) ? SmallIcon( "ok" ) : SmallIcon( "stop" ) );
-  item->setText( 1, "mpg123" );
-  item->setText( 2, m_externalBinManager->binObject( "mpg123" )->version );
-  item->setText( 3, m_externalBinManager->binPath( "mpg123" ) );
+//   item = new KListViewItem( m_viewExternalPrograms, item );
+//   //  item->setText( 0, m_externalBinManager->foundBin( "mpg123" ) ? i18n("yes") : i18n("no") );
+//   item->setPixmap( 0, m_externalBinManager->foundBin( "mpg123" ) ? SmallIcon( "ok" ) : SmallIcon( "stop" ) );
+//   item->setText( 1, "mpg123" );
+//   item->setText( 2, m_externalBinManager->binObject( "mpg123" )->version );
+//   item->setText( 3, m_externalBinManager->binPath( "mpg123" ) );
 
 
-  item = new KListViewItem( m_viewExternalPrograms, item );
-  //  item->setText( 0, m_externalBinManager->foundBin( "sox" ) ? i18n("yes") : i18n("no") );
-  item->setPixmap( 0, m_externalBinManager->foundBin( "sox" ) ? SmallIcon( "ok" ) : SmallIcon( "stop" ) );
-  item->setText( 1, "sox" );
-  item->setText( 2, m_externalBinManager->binObject( "sox" )->version );
-  item->setText( 3, m_externalBinManager->binPath( "sox" ) );
+//   item = new KListViewItem( m_viewExternalPrograms, item );
+//   //  item->setText( 0, m_externalBinManager->foundBin( "sox" ) ? i18n("yes") : i18n("no") );
+//   item->setPixmap( 0, m_externalBinManager->foundBin( "sox" ) ? SmallIcon( "ok" ) : SmallIcon( "stop" ) );
+//   item->setText( 1, "sox" );
+//   item->setText( 2, m_externalBinManager->binObject( "sox" )->version );
+//   item->setText( 3, m_externalBinManager->binPath( "sox" ) );
 }
 
 

@@ -37,8 +37,8 @@ K3bExternalBinManager::K3bExternalBinManager( QObject* parent )
   m_binMap.insert("mkisofs", new K3bExternalBin( "mkisofs" ));
   m_binMap.insert("cdrecord", new K3bExternalBin( "cdrecord" ));
   m_binMap.insert("cdrdao", new K3bExternalBin( "cdrdao" ));
-  m_binMap.insert("mpg123", new K3bExternalBin( "mpg123" ));
-  m_binMap.insert("sox", new K3bExternalBin( "sox" ));
+//   m_binMap.insert("mpg123", new K3bExternalBin( "mpg123" ));
+//   m_binMap.insert("sox", new K3bExternalBin( "sox" ));
 }
 
 
@@ -141,56 +141,56 @@ void K3bExternalBinManager::search()
   }
 
 
-  // search for mpg123
-  for( int i = 0; i < NUM_SEARCH_PATHS; i++ ) {
+//   // search for mpg123
+//   for( int i = 0; i < NUM_SEARCH_PATHS; i++ ) {
 
-    QString bin = QString("%1%2").arg(searchPaths[i]).arg("mpg123");
-    if( QFile::exists( bin ) ) {
+//     QString bin = QString("%1%2").arg(searchPaths[i]).arg("mpg123");
+//     if( QFile::exists( bin ) ) {
 
-      m_process->clearArguments();
-      m_process->disconnect();
-      *m_process << bin;
-      connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
-	       this, SLOT(slotParseMpg123Version(KProcess*, char*, int)) );
-      m_process->start( KProcess::Block, KProcess::Stderr );
-      if( m_binMap["mpg123"]->version.isEmpty() ) {
-	qDebug("(K3bExternalBinManager) " + bin + " seems not to be mpg123.");
-      }
-      else {
-	m_binMap["mpg123"]->path = bin;
-	break;  // bin found
-      }
-    }
-  }
-  if( m_binMap["mpg123"]->path.isEmpty() ) {
-    qDebug("(K3bExternalBinManager) Could not find mpg123");
-  }
+//       m_process->clearArguments();
+//       m_process->disconnect();
+//       *m_process << bin;
+//       connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
+// 	       this, SLOT(slotParseMpg123Version(KProcess*, char*, int)) );
+//       m_process->start( KProcess::Block, KProcess::Stderr );
+//       if( m_binMap["mpg123"]->version.isEmpty() ) {
+// 	qDebug("(K3bExternalBinManager) " + bin + " seems not to be mpg123.");
+//       }
+//       else {
+// 	m_binMap["mpg123"]->path = bin;
+// 	break;  // bin found
+//       }
+//     }
+//   }
+//   if( m_binMap["mpg123"]->path.isEmpty() ) {
+//     qDebug("(K3bExternalBinManager) Could not find mpg123");
+//   }
 
 
-  // search for sox
-  for( int i = 0; i < NUM_SEARCH_PATHS; i++ ) {
+//   // search for sox
+//   for( int i = 0; i < NUM_SEARCH_PATHS; i++ ) {
 
-    QString bin = QString("%1%2").arg(searchPaths[i]).arg("sox");
-    if( QFile::exists( bin ) ) {
+//     QString bin = QString("%1%2").arg(searchPaths[i]).arg("sox");
+//     if( QFile::exists( bin ) ) {
 
-      m_process->clearArguments();
-      m_process->disconnect();
-      *m_process << bin << "-h";
-      connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
-	       this, SLOT(slotParseSoxVersion(KProcess*, char*, int)) );
-      m_process->start( KProcess::Block, KProcess::Stderr );
-      if( m_binMap["sox"]->version.isEmpty() ) {
-	qDebug("(K3bExternalBinManager) " + bin + " seems not to be sox.");
-      }
-      else {
-	m_binMap["sox"]->path = bin;
-	break;  // bin found
-      }
-    }
-  }
-  if( m_binMap["sox"]->path.isEmpty() ) {
-    qDebug("(K3bExternalBinManager) Could not find sox");
-  }
+//       m_process->clearArguments();
+//       m_process->disconnect();
+//       *m_process << bin << "-h";
+//       connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
+// 	       this, SLOT(slotParseSoxVersion(KProcess*, char*, int)) );
+//       m_process->start( KProcess::Block, KProcess::Stderr );
+//       if( m_binMap["sox"]->version.isEmpty() ) {
+// 	qDebug("(K3bExternalBinManager) " + bin + " seems not to be sox.");
+//       }
+//       else {
+// 	m_binMap["sox"]->path = bin;
+// 	break;  // bin found
+//       }
+//     }
+//   }
+//   if( m_binMap["sox"]->path.isEmpty() ) {
+//     qDebug("(K3bExternalBinManager) Could not find sox");
+//   }
 }
 
 
@@ -248,39 +248,39 @@ void K3bExternalBinManager::checkVersions()
     }
   }
 
-  binO = binObject("mpg123");
-  if( binO ) {
-    binO->version = QString::null;
-    if( QFile::exists( binO->path ) ) {
+//   binO = binObject("mpg123");
+//   if( binO ) {
+//     binO->version = QString::null;
+//     if( QFile::exists( binO->path ) ) {
 
-      m_process->clearArguments();
-      m_process->disconnect();
-      *m_process << binO->path;
-      connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
-	       this, SLOT(slotParseMpg123Version(KProcess*, char*, int)) );
-      m_process->start( KProcess::Block, KProcess::Stderr );
-      if( m_binMap["mpg123"]->version.isEmpty() ) {
-	qDebug("(K3bExternalBinManager) " + binO->path + " seems not to be mpg123.");
-      }
-    }
-  }
+//       m_process->clearArguments();
+//       m_process->disconnect();
+//       *m_process << binO->path;
+//       connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
+// 	       this, SLOT(slotParseMpg123Version(KProcess*, char*, int)) );
+//       m_process->start( KProcess::Block, KProcess::Stderr );
+//       if( m_binMap["mpg123"]->version.isEmpty() ) {
+// 	qDebug("(K3bExternalBinManager) " + binO->path + " seems not to be mpg123.");
+//       }
+//     }
+//   }
 
-  binO = binObject("sox");
-  if( binO ) {
-    binO->version = QString::null;
-    if( QFile::exists( binO->path ) ) {
+//   binO = binObject("sox");
+//   if( binO ) {
+//     binO->version = QString::null;
+//     if( QFile::exists( binO->path ) ) {
 
-      m_process->clearArguments();
-      m_process->disconnect();
-      *m_process << binO->path << "-h";
-      connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
-	       this, SLOT(slotParseSoxVersion(KProcess*, char*, int)) );
-      m_process->start( KProcess::Block, KProcess::Stderr );
-      if( m_binMap["sox"]->version.isEmpty() ) {
-	qDebug("(K3bExternalBinManager) " + binO->path + " seems not to be sox.");
-      }
-    }
-  }
+//       m_process->clearArguments();
+//       m_process->disconnect();
+//       *m_process << binO->path << "-h";
+//       connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
+// 	       this, SLOT(slotParseSoxVersion(KProcess*, char*, int)) );
+//       m_process->start( KProcess::Block, KProcess::Stderr );
+//       if( m_binMap["sox"]->version.isEmpty() ) {
+// 	qDebug("(K3bExternalBinManager) " + binO->path + " seems not to be sox.");
+//       }
+//     }
+//   }
 }
 
 
@@ -328,45 +328,45 @@ void K3bExternalBinManager::slotParseCdrdaoVersion( KProcess*, char* data, int l
 }
 
 
-void K3bExternalBinManager::slotParseMpg123Version( KProcess*, char* data, int len )
-{
-  if( m_binMap.contains( "mpg123" ) ) {
-    QString buffer = QString::fromLatin1( data, len );
-    QStringList lines = QStringList::split( "\n", buffer );
+// void K3bExternalBinManager::slotParseMpg123Version( KProcess*, char* data, int len )
+// {
+//   if( m_binMap.contains( "mpg123" ) ) {
+//     QString buffer = QString::fromLatin1( data, len );
+//     QStringList lines = QStringList::split( "\n", buffer );
     
-    for( QStringList::Iterator str = lines.begin(); str != lines.end(); str++ ) {
-      if( (*str).contains( "Version" ) ) {
-	int start = (*str).find( "Version" ) + 8;
-	int findStart = ( start > -1 ? start : 0 );
-	int end   = (*str).find( ' ', findStart );
+//     for( QStringList::Iterator str = lines.begin(); str != lines.end(); str++ ) {
+//       if( (*str).contains( "Version" ) ) {
+// 	int start = (*str).find( "Version" ) + 8;
+// 	int findStart = ( start > -1 ? start : 0 );
+// 	int end   = (*str).find( ' ', findStart );
 	
-	if( start > -1 && end > -1 ) {
-	  m_binMap["mpg123"]->version = (*str).mid( start, end-start );
-	  break;   // version found
-	}
-      }
-    }
-  }
-}
+// 	if( start > -1 && end > -1 ) {
+// 	  m_binMap["mpg123"]->version = (*str).mid( start, end-start );
+// 	  break;   // version found
+// 	}
+//       }
+//     }
+//   }
+// }
 
 
-void K3bExternalBinManager::slotParseSoxVersion( KProcess*, char* data, int len )
-{
-  if( m_binMap.contains( "sox" ) ) {
-    QString buffer = QString::fromLatin1( data, len );
-    QStringList lines = QStringList::split( "\n", buffer );
+// void K3bExternalBinManager::slotParseSoxVersion( KProcess*, char* data, int len )
+// {
+//   if( m_binMap.contains( "sox" ) ) {
+//     QString buffer = QString::fromLatin1( data, len );
+//     QStringList lines = QStringList::split( "\n", buffer );
     
-    for( QStringList::Iterator str = lines.begin(); str != lines.end(); str++ ) {
-      if( (*str).contains( "Version" ) ) {
-	int start = (*str).find( "Version" ) + 8;
-	if( start > -1 ) {
-	  m_binMap["sox"]->version = (*str).mid( start );
-	  break;   // version found
-	}
-      }
-    }
-  }
-}
+//     for( QStringList::Iterator str = lines.begin(); str != lines.end(); str++ ) {
+//       if( (*str).contains( "Version" ) ) {
+// 	int start = (*str).find( "Version" ) + 8;
+// 	if( start > -1 ) {
+// 	  m_binMap["sox"]->version = (*str).mid( start );
+// 	  break;   // version found
+// 	}
+//       }
+//     }
+//   }
+// }
 
 
 bool K3bExternalBinManager::readConfig( KConfig* c )
@@ -398,24 +398,24 @@ bool K3bExternalBinManager::readConfig( KConfig* c )
       qDebug( "(K3bExternalBinManager) config contains invalid cdrdao path");
     }
   }
-  if( c->hasKey( "mpg123 path" ) ) {
-    QString path = c->readEntry( "mpg123 path" );
-    if( QFile::exists( path ) ) {
-      m_binMap["mpg123"]->path = path;
-    }
-    else {
-      qDebug( "(K3bExternalBinManager) config contains invalid mpg123 path");
-    }
-  }
-  if( c->hasKey( "sox path" ) ) {
-    QString path = c->readEntry( "sox path" );
-    if( QFile::exists( path ) ) {
-      m_binMap["sox"]->path = path;
-    }
-    else {
-      qDebug( "(K3bExternalBinManager) config contains invalid sox path");
-    }
-  }
+//   if( c->hasKey( "mpg123 path" ) ) {
+//     QString path = c->readEntry( "mpg123 path" );
+//     if( QFile::exists( path ) ) {
+//       m_binMap["mpg123"]->path = path;
+//     }
+//     else {
+//       qDebug( "(K3bExternalBinManager) config contains invalid mpg123 path");
+//     }
+//   }
+//   if( c->hasKey( "sox path" ) ) {
+//     QString path = c->readEntry( "sox path" );
+//     if( QFile::exists( path ) ) {
+//       m_binMap["sox"]->path = path;
+//     }
+//     else {
+//       qDebug( "(K3bExternalBinManager) config contains invalid sox path");
+//     }
+//   }
 
   return true;
 }
@@ -432,11 +432,11 @@ bool K3bExternalBinManager::saveConfig( KConfig* c )
   if( QFile::exists( m_binMap["cdrdao"]->path ) )
     c->writeEntry( "cdrdao path", m_binMap["cdrdao"]->path );
 
-  if( QFile::exists( m_binMap["mpg123"]->path ) )
-    c->writeEntry( "mpg123 path", m_binMap["mpg123"]->path );
+//   if( QFile::exists( m_binMap["mpg123"]->path ) )
+//     c->writeEntry( "mpg123 path", m_binMap["mpg123"]->path );
 
-  if( QFile::exists( m_binMap["sox"]->path ) )
-    c->writeEntry( "sox path", m_binMap["sox"]->path );
+//   if( QFile::exists( m_binMap["sox"]->path ) )
+//     c->writeEntry( "sox path", m_binMap["sox"]->path );
 
 
   return true;

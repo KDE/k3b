@@ -24,6 +24,7 @@
 #include "k3baudiotrackdialog.h"
 #include "k3baudioburndialog.h"
 #include "../k3bfillstatusdisplay.h"
+#include "../k3baudioplayer.h"
 
 // QT-includes
 #include <qlayout.h>
@@ -96,22 +97,27 @@ K3bProjectBurnDialog* K3bAudioView::burnDialog()
 
 void K3bAudioView::setupActions()
 {
-  m_actionProperties = new KAction( i18n("Properties"), "misc", 
+  m_actionProperties = new KAction( i18n("Properties..."), "misc", 
 				  0, this, SLOT(showPropertiesDialog()), actionCollection() );
   m_actionRemove = new KAction( i18n( "Remove" ), "editdelete", 
 			      Key_Delete, this, SLOT(slotRemoveTracks()), actionCollection() );
+  m_actionPlay = new KAction( i18n( "Play" ), "1rightarrow", 
+			      0, this, SLOT(slotPlayTrack()), actionCollection() );
 
   // disabled by default
   m_actionRemove->setEnabled(false);
   m_actionProperties->setEnabled(false);
+  m_actionPlay->setEnabled(false);
 }
 
 
 void K3bAudioView::setupPopupMenu()
 {
   m_popupMenu = new KPopupMenu( m_songlist, "AudioViewPopupMenu" );
-  //  m_popupMenu->insertTitle( i18n( "Track Options" ) );
+  m_actionPlay->plug( m_popupMenu );
+  m_popupMenu->insertSeparator();
   m_actionRemove->plug( m_popupMenu );
+  m_popupMenu->insertSeparator();
   m_actionProperties->plug( m_popupMenu);
 }
 
@@ -204,6 +210,7 @@ void K3bAudioView::slotRemoveTracks()
   if( m_doc->numOfTracks() == 0 ) {
     m_actionRemove->setEnabled(false);
     m_actionProperties->setEnabled(false);
+    m_actionPlay->setEnabled(false);
   }
 }
 
@@ -246,11 +253,23 @@ void K3bAudioView::slotUpdateItems()
    if( m_doc->numOfTracks() > 0 ) {
      m_actionRemove->setEnabled(true);
      m_actionProperties->setEnabled(true);
+     m_actionPlay->setEnabled(true);
    }
    else {
      m_actionRemove->setEnabled(false);
      m_actionProperties->setEnabled(false);
+     m_actionPlay->setEnabled(false);
    }
+}
+
+
+void K3bAudioView::slotPlayTrack()
+{
+  // for now just play current track
+  QList<K3bAudioTrack> selected = selectedTracks();
+  if( !selected.isEmpty() ) {
+    k3bMain()->audioPlayer()->playFile( selected.first()->absPath() );
+  }
 }
 
 

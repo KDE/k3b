@@ -62,6 +62,8 @@ class K3bAudioView : public K3bView  {
 	
   KAction* m_actionProperties;
   KAction* m_actionRemove;
+  KAction* m_actionPlay;
+
   K3bAudioListView* m_songlist;
   KPopupMenu* m_popupMenu;
   K3bFillStatusDisplay* m_fillStatusDisplay;
@@ -85,6 +87,7 @@ class K3bAudioView : public K3bView  {
   void showPopupMenu( QListViewItem* _item, const QPoint& );
   void showPropertiesDialog();
   void slotRemoveTracks();
+  void slotPlayTrack();
 };
 
 #endif
