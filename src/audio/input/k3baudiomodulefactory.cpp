@@ -2,6 +2,7 @@
 
 #include "k3baudiomodulefactory.h"
 #include "mp3/k3bmp3module.h"
+#include "wave/k3bwavemodule.h"
 #include "../k3baudiotrack.h"
 
 #ifdef OGG_VORBIS
@@ -20,6 +21,9 @@ K3bAudioModuleFactory::K3bAudioModuleFactory()
 {
   // create an instance of all available modules 
   // (This should be plugins in the future)
+
+  m_modules.append( new K3bWaveModule( this ) );
+
   m_modules.append( new K3bMp3Module( this ) );
 
 #ifdef OGG_VORBIS

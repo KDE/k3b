@@ -226,14 +226,14 @@ bool K3bAudioDoc::readM3uFile( const KURL& url, int pos )
 
 K3bAudioTrack* K3bAudioDoc::createTrack( const KURL& url )
 {
-  unsigned long length = identifyWaveFile( url );
-  if( length > 0 || K3bAudioModuleFactory::self()->moduleAvailable( url ) ) {
+  //  unsigned long length = identifyWaveFile( url );
+  if( /*length > 0 || */ K3bAudioModuleFactory::self()->moduleAvailable( url ) ) {
     K3bAudioTrack* newTrack =  new K3bAudioTrack( m_tracks, url.path() );
-    if( length > 0 ) {
+    /*    if( length > 0 ) {
       newTrack->setLength( length );  // no module needed for wave files
       newTrack->setStatus( K3bAudioTrack::OK );
     }
-    else {
+    else {*/
       K3bAudioModule* module = K3bAudioModuleFactory::self()->createModule( newTrack );
       newTrack->setModule( module );
 
@@ -241,7 +241,7 @@ K3bAudioTrack* K3bAudioDoc::createTrack( const KURL& url )
       // will be displayed properly
       // FIXME: it does not seem to work. The filldisplay is not updated at all
       //connect( module, SIGNAL(finished(bool)), this, SLOT(updateAllViews()) );
-    }
+      //    }
 
     K3bSong *song = k3bMain()->songManager()->findSong( url.path() );
     if( song != 0 ){
@@ -254,8 +254,7 @@ K3bAudioTrack* K3bAudioDoc::createTrack( const KURL& url )
   }
   else {
     KMessageBox::error( kapp->mainWidget(), "(" + url.path() + ")\n" +
-      i18n("Only MP3, Ogg Vorbis and WAV audio files are supported."),
-      i18n("Wrong File Format") );		
+			i18n("Wrong File Format") );		
     return 0;
   }
 }
