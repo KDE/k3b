@@ -1,19 +1,18 @@
-/***************************************************************************
-                          k3boptiondialog.cpp  -  description
-                             -------------------
-    begin                : Tue Apr 17 2001
-    copyright            : (C) 2001 by Sebastian Trueg
-    email                : trueg@informatik.uni-freiburg.de
- ***************************************************************************/
+/* 
+ *
+ * $Id: $
+ * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This file is part of the K3b project.
+ * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * See the file "COPYING" for the exact licensing terms.
+ */
 
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
 
 #include "k3boptiondialog.h"
 #include "../k3b.h"
@@ -34,10 +33,8 @@
 #include <kiconloader.h>
 #include <kconfig.h>
 #include <kdeversion.h>
-
-#if KDE_IS_VERSION(3,1,0)
 #include "k3bnotifyoptiontab.h"
-#endif
+
 
 // TODO: handle the default-settings
 
@@ -59,10 +56,7 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
   m_burningOptionTab->readSettings();
   m_patternOptionTab->readSettings();
   m_miscOptionTab->readSettings();
-
-#if KDE_IS_VERSION(3,1,0)
   m_notifyOptionTab->readSettings();
-#endif
 
   // if we don't do this the dialog start really huge
   // because of the label in the device-tab
@@ -96,10 +90,7 @@ bool K3bOptionDialog::saveSettings()
   m_burningOptionTab->saveSettings();
   m_patternOptionTab->apply();
   m_externalBinOptionTab->saveSettings();
-
-#if KDE_IS_VERSION(3,1,0)
   m_notifyOptionTab->saveSettings();
-#endif
 
   if( !m_miscOptionTab->saveSettings() )
     return false;
@@ -214,7 +205,6 @@ void K3bOptionDialog::setupMiscPage()
 
 void K3bOptionDialog::setupNotifyPage()
 {
-#if KDE_IS_VERSION(3,1,0)
   QFrame* frame = addPage( i18n("Notifications"), i18n("System Notifications"),
 			   KGlobal::instance()->iconLoader()->loadIcon( "knotify", 
 									KIcon::NoGroup, KIcon::SizeMedium ) );
@@ -224,7 +214,6 @@ void K3bOptionDialog::setupNotifyPage()
 
   m_notifyOptionTab = new K3bNotifyOptionTab( frame );
   box->addWidget( m_notifyOptionTab );
-#endif
 }
 
 
