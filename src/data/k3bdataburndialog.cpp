@@ -71,7 +71,7 @@ void K3bDataBurnDialog::saveSettings()
   doc()->setDao( m_checkDao->isChecked() );
   doc()->setDummy( m_checkDummy->isChecked() );
   doc()->setOnTheFly( m_checkOnTheFly->isChecked() );
-  doc()->setBurnProof( m_checkBurnProof->isChecked() );
+  doc()->setBurnproof( m_checkBurnProof->isChecked() );
   ((K3bDataDoc*)doc())->setOnlyCreateImage( m_checkOnlyCreateImage->isChecked() );
   ((K3bDataDoc*)doc())->setDeleteImage( m_checkDeleteImage->isChecked() );
 			
@@ -138,7 +138,7 @@ void K3bDataBurnDialog::readSettings()
   m_checkDao->setChecked( doc()->dao() );
   m_checkDummy->setChecked( doc()->dummy() );
   m_checkOnTheFly->setChecked( doc()->onTheFly() );
-  m_checkBurnProof->setChecked( doc()->burnProof() );
+  m_checkBurnProof->setChecked( doc()->burnproof() );
   m_checkOnlyCreateImage->setChecked( ((K3bDataDoc*)doc())->onlyCreateImage() );
   m_checkDeleteImage->setChecked( ((K3bDataDoc*)doc())->deleteImage() );
 	

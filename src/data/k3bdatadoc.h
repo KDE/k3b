@@ -70,6 +70,8 @@ class K3bDataDoc : public K3bDoc
 	
   /** writes a mkisofs-path-spec file with graft-points **/
   QString writePathSpec( const QString& fileName );
+
+  QString treatWhitespace( const QString& );
 	
   /** returns an empty dummy dir for use with K3bDirItems.
       Creates one if nessessary.
@@ -160,8 +162,6 @@ class K3bDataDoc : public K3bDoc
 
   QString documentType() const;
 
-  QString treatWhitespace( const QString& );
- 	 		
  private:
   /**
    * load recursivly

@@ -18,6 +18,8 @@
 #include "k3bdatajob.h"
 
 #include "k3bdatadoc.h"
+#include "k3bdataitem.h"
+#include "k3bdiritem.h"
 #include "../k3b.h"
 #include "../k3bglobals.h"
 #include "../device/k3bdevice.h"
@@ -31,6 +33,7 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qdatetime.h>
+#include <qtextstream.h>
 
 #include <iostream>
 
@@ -122,7 +125,7 @@ void K3bDataJob::start()
       *m_process << "-dao";
     if( k3bMain()->eject() )
       *m_process << "-eject";
-    if( m_doc->burnProof() && m_doc->burner()->burnproof() )
+    if( m_doc->burnproof() && m_doc->burner()->burnproof() )
       *m_process << "driveropts=burnproof";
 
     // add speed
@@ -174,7 +177,11 @@ void K3bDataJob::start()
     else
       {
 	m_error = K3b::WORKING;
-	emit infoMessage( i18n("Start recording at %1x speed...").arg(m_doc->speed()) );
+	if( m_doc->dummy() )
+	  emit infoMessage( i18n("Starting simulation at %1x speed...").arg(m_doc->speed()) );
+	else
+	  emit infoMessage( i18n("Starting recording at %1x speed...").arg(m_doc->speed()) );
+	
 	emit newTask( i18n("Writing ISO") );
 	emit started();
       }
@@ -261,7 +268,7 @@ void K3bDataJob::writeCD()
     *m_process << "-dao";
   if( k3bMain()->eject() )
     *m_process << "-eject";
-  if( m_doc->burnProof() && m_doc->burner()->burnproof() )
+  if( m_doc->burnproof() && m_doc->burner()->burnproof() )
     *m_process << "driveropts=burnproof";
 
   // add speed
@@ -771,3 +778,32 @@ bool K3bDataJob::writePathSpec( const QString& filename )
   file.close();
   return filename;
 }
+
+/*
+void K3bDataJob::splitDoc()
+{
+  m_splittedLists.setAutoDelete( true );
+  m_splittedLists.clear();
+
+  // very easy and dump first splitting
+
+  K3bDataItem* item = m_doc->root();
+  long size = 0;
+  QList<K3bDataItem> *newList = new QList<K3bDataItem>();
+
+  while( item ) {
+
+    item = item->nextSibling();
+
+    if( size + item->size() < 650 ) {    // we should let the user choose the size of the images
+      newList->append( item );
+      size += item->size();
+    }
+    else {
+      m_splittedLists.append( newList );
+      newList = new QList<K3bDataItem>();
+      size = 0;
+    }
+  }
+}
+*/

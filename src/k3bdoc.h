@@ -109,7 +109,7 @@ class K3bDoc : public QObject
   bool dao() const { return m_dao; }
   bool dummy() const { return m_dummy; }
   bool onTheFly() const { return m_onTheFly; }
-  bool burnProof() const { return m_burnProof; }
+  bool burnproof() const { return m_burnproof; }
   bool overburn() const { return m_overburn; }
   int speed() const { return m_speed; }
   K3bDevice* burner() const { return m_burner; }
@@ -140,7 +140,7 @@ class K3bDoc : public QObject
   void setOverburn( bool b ) { m_overburn = b; }
   void setSpeed( int speed );
   void setBurner( K3bDevice* dev );
-  void setBurnProof( bool b ) { m_burnProof = b; }
+  void setBurnproof( bool b ) { m_burnproof = b; }
   void setTempDir( const QString& dir ) { m_tempDir = dir; }
 	
  signals:
@@ -186,7 +186,7 @@ class K3bDoc : public QObject
   bool m_dao;
   bool m_dummy;
   bool m_onTheFly;
-  bool m_burnProof;
+  bool m_burnproof;
   bool m_overburn;
   int  m_speed;
 };
