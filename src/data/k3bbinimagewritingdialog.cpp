@@ -35,15 +35,15 @@
 #include <kurl.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
+
 #include <qgroupbox.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qtabwidget.h>
-#include <qhbox.h>
-#include <qvbox.h>
 #include <qtabwidget.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
+#include <qgroupbox.h>
 
 
 K3bBinImageWritingDialog::K3bBinImageWritingDialog( QWidget* parent, const char* name, bool modal )
@@ -94,29 +94,48 @@ void K3bBinImageWritingDialog::setupGui()
   // -----------------------------------------------------------------------
   QTabWidget* tabOptions = new QTabWidget( frame );
 
-  QVBox* optionTab = new QVBox( tabOptions );
-  optionTab->setMargin(10);
-  optionTab->setSpacing(10);
+  QWidget* optionTab = new QWidget( tabOptions );
+  QGridLayout* optionTabLayout = new QGridLayout( optionTab );
+  optionTabLayout->setMargin(marginHint());
+  optionTabLayout->setSpacing(spacingHint());
 
-  m_checkSimulate = K3bStdGuiItems::simulateCheckbox( optionTab );
-  m_checkMulti    = new QCheckBox( i18n("Multisession"), optionTab );
+  QGroupBox* groupOptions = new QGroupBox( 5, Qt::Vertical, i18n("Options"), optionTab );
+  groupOptions->setInsideSpacing( spacingHint() );
+  groupOptions->setInsideMargin( marginHint() );
 
-  QHBox* boxCopies = new QHBox(optionTab);
-  m_spinCopies    = new QSpinBox( boxCopies );
+  m_checkSimulate = K3bStdGuiItems::simulateCheckbox( groupOptions );
+  m_checkMulti    = new QCheckBox( i18n("Multisession"), groupOptions );
+
+  QGroupBox* groupCopies = new QGroupBox( 2, Qt::Horizontal, i18n("Copies"), optionTab );
+  groupCopies->setInsideSpacing( spacingHint() );
+  groupCopies->setInsideMargin( marginHint() );
+
+  QLabel* pixLabel = new QLabel( groupCopies );
+  pixLabel->setPixmap( locate( "appdata", "pics/k3b_cd_copy.png" ) );
+  pixLabel->setScaledContents( false );
+  m_spinCopies = new QSpinBox( groupCopies );
   m_spinCopies->setMinValue( 1 );
   m_spinCopies->setMaxValue( 99 );
-  QLabel *c = new QLabel( i18n("Copies"),  boxCopies);
-  boxCopies->setStretchFactor(c,1);
-  boxCopies->setSpacing(10);
+
+  optionTabLayout->addWidget( groupOptions, 0, 0 );
+  optionTabLayout->addWidget( groupCopies, 0, 1 );
 
   tabOptions->addTab( optionTab, i18n("&Options") );
 
-  QVBox* advancedTab = new QVBox( tabOptions );
-  advancedTab->setMargin(10);
-  advancedTab->setSpacing(10);
+  // advanced tab
+  // ------------
+  QWidget* advancedTab = new QWidget( tabOptions );
+  QGridLayout* advancedTabLayout = new QGridLayout( advancedTab );
+  advancedTabLayout->setMargin(marginHint());
+  advancedTabLayout->setSpacing(spacingHint());
+
   m_checkForce = new QCheckBox( i18n("Force Writing"), advancedTab );
 
+  advancedTabLayout->addWidget( m_checkForce, 0, 0 );
+  advancedTabLayout->setRowStretch( 1, 1 );
+
   tabOptions->addTab( advancedTab, i18n("&Advanced") );
+
 
   QGridLayout* grid = new QGridLayout( frame );
   grid->setSpacing( spacingHint() );
@@ -126,7 +145,7 @@ void K3bBinImageWritingDialog::setupGui()
   grid->addWidget( groupImage, 1, 0 );
   grid->addWidget( tabOptions, 2, 0 );
 
-  grid->setRowStretch( 3, 1 );
+  grid->setRowStretch( 2, 1 );
 
   connect( m_buttonFindTocFile, SIGNAL(clicked()), this, SLOT(slotFindTocFile()) );
 
@@ -136,9 +155,9 @@ void K3bBinImageWritingDialog::setupGui()
 
   QWhatsThis::add( m_checkMulti, i18n("<p>If this option is checked, the Image is written as the first "
 					 "session of a multisession CD "
-           "<p>It is possible to append another session on such disks.") );
+				      "<p>It is possible to append another session on such disks.") );
   QWhatsThis::add( m_checkForce, i18n("<p>Forces the execution of an operation that otherwise would not be "
-              "performed. ") );
+				      "performed. ") );
   QWhatsThis::add( m_spinCopies, i18n("<p>Select how many copies you want K3b to create from the Image.") );
 
   slotWriterChanged();  
