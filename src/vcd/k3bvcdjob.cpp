@@ -195,6 +195,13 @@ void K3bVcdJob::vcdxGen()
 
   emit infoMessage( i18n("Create XML-file"), K3bJob::INFO );
   *m_process << k3bMain()->externalBinManager()->binPath( "vcdxgen" );
+
+  // additional user parameters from config
+  kapp->config()->setGroup("External Programs");
+  QStringList params = kapp->config()->readListEntry( "vcdxgen user parameters" );
+  for( QStringList::Iterator it = params.begin(); it != params.end(); ++it )
+    *m_process << *it;
+
   // Label
   *m_process << "-l" << QString("%1").arg(m_doc->vcdOptions()->volumeId());
   // AlbumID
@@ -204,10 +211,8 @@ void K3bVcdJob::vcdxGen()
   // VolumeNumber
   *m_process << QString("--volume-number=%1").arg(m_doc->vcdOptions()->volumeNumber());
   
-  if ( vcdDoc()->vcdOptions()->BrokenSVcdMode() ) {
-    kdDebug() << "(K3bVcdJop) Broken Svcd Mode = on" << endl;
+  if ( vcdDoc()->vcdOptions()->BrokenSVcdMode() )
     *m_process << "--broken-svcd-mode";
-  }
 
   // set vcdType
   switch( vcdDoc()->vcdType() ) {
@@ -344,6 +349,13 @@ void K3bVcdJob::vcdxBuild()
   }
 
   *m_process << k3bMain()->externalBinManager()->binPath( "vcdxbuild" );
+
+  // additional user parameters from config
+  kapp->config()->setGroup("External Programs");
+  QStringList params = kapp->config()->readListEntry( "vcdxbuild user parameters" );
+  for( QStringList::Iterator it = params.begin(); it != params.end(); ++it )
+    *m_process << *it;
+
 
   if ( vcdDoc()->vcdOptions()->BrokenSVcdMode() ) {
     kdDebug() << "(K3bVcdJop) Write 2336 Sectors = on" << endl;
