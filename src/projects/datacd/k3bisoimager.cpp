@@ -408,6 +408,7 @@ void K3bIsoImager::start()
   if( !mkisofsBin->copyright.isEmpty() )
     emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3").arg("mkisofs").arg(mkisofsBin->version).arg(mkisofsBin->copyright), INFO );
 
+
   *m_process << mkisofsBin->path;
 
   if( !prepareMkisofsFiles() ||
@@ -661,7 +662,7 @@ bool K3bIsoImager::addMkisofsParameters()
 }
 
 
-bool K3bIsoImager::writePathSpec()
+int K3bIsoImager::writePathSpec()
 {
   delete m_pathSpecFile;
   m_pathSpecFile = new KTempFile();
@@ -669,29 +670,25 @@ bool K3bIsoImager::writePathSpec()
 
   if( QTextStream* t = m_pathSpecFile->textStream() ) {
     // recursive path spec writing
-    bool success = writePathSpecForDir( m_doc->root(), *t );
+    int num = writePathSpecForDir( m_doc->root(), *t );
 
     m_pathSpecFile->close();
-    return success;
+    return num;
   }
   else
-    return false;
+    return -1;
 }
 
 
-bool K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream )
+int K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream )
 {
   if( dirItem->depth() > 7 ) {
     kdDebug() << "(K3bIsoImager) found directory depth > 7. Enabling no deep directory relocation." << endl;
     m_noDeepDirectoryRelocation = true;
   }
 
-  // if joliet is enabled we need to cut long names since mkisofs is not able to do it
-//   if( m_doc->isoOptions().createJoliet() ) {
-//     createJolietFilenames( dirItem );
-//   }
-
   // now create the graft points
+  int num = 0;
   for( QPtrListIterator<K3bDataItem> it( *dirItem->children() ); it.current(); ++it ) {
     K3bDataItem* item = it.current();
     if(
@@ -707,45 +704,52 @@ bool K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream
 	  )
        ) {
 
-      // some versions of mkisofs seem to have a bug that prevents to use filenames
-      // that contain one or more backslashes
-      if( item->k3bPath().contains("\\") )
-	m_containsFilesWithMultibleBackslashes = true;
+      if( QFile::exists(item->localPath()) ) {
+	num++;
 
-      if( m_doc->isoOptions().createJoliet() )
-	stream << escapeGraftPoint( m_doc->treatWhitespace(item->jolietPath()) );
-      else
-	stream << escapeGraftPoint( m_doc->treatWhitespace(item->k3bPath()) );
-      stream << "=";
-      if( m_doc->bootImages().containsRef( dynamic_cast<K3bBootItem*>(item) ) ) { // boot-image-backup-hack
-
-	// create temp file
-	KTempFile temp;
-	QString tempPath = temp.name();
-	temp.unlink();
-
-	if( !KIO::NetAccess::copy( it.current()->localPath(), tempPath ) ) {
-	  emit infoMessage( i18n("Could not write to temporary file %1").arg(tempPath), ERROR );
-	  return false;
+	// some versions of mkisofs seem to have a bug that prevents to use filenames
+	// that contain one or more backslashes
+	if( item->k3bPath().contains("\\") )
+	  m_containsFilesWithMultibleBackslashes = true;
+	
+	if( m_doc->isoOptions().createJoliet() )
+	  stream << escapeGraftPoint( m_doc->treatWhitespace(item->jolietPath()) );
+	else
+	  stream << escapeGraftPoint( m_doc->treatWhitespace(item->k3bPath()) );
+	stream << "=";
+	if( m_doc->bootImages().containsRef( dynamic_cast<K3bBootItem*>(item) ) ) { // boot-image-backup-hack
+	  
+	  // create temp file
+	  KTempFile temp;
+	  QString tempPath = temp.name();
+	  temp.unlink();
+	  
+	  if( !KIO::NetAccess::copy( item->localPath(), tempPath ) ) {
+	    emit infoMessage( i18n("Could not write to temporary file %1").arg(tempPath), ERROR );
+	    return -1;
+	  }
+	  
+	  m_tempFiles.append(tempPath);
+	  stream << escapeGraftPoint( tempPath ) << "\n";
 	}
-
-	m_tempFiles.append(tempPath);
-	stream << escapeGraftPoint( tempPath ) << "\n";
+	else
+	  stream << escapeGraftPoint( item->localPath() ) << "\n";
       }
       else
-	stream << escapeGraftPoint( item->localPath() ) << "\n";
+	emit infoMessage( i18n("Could not find %1. Skipping...").arg(item->localPath()), WARNING );
+    }
+
+    // recursively write graft points for all subdirs
+    if( item->isDir() ) {
+      int x = writePathSpecForDir( dynamic_cast<K3bDirItem*>(item), stream );
+      if( x >= 0 )
+	num += x;
+      else
+	return -1;
     }
   }
 
-  bool success = true;
-
-  // recursively write graft points for all subdirs
-  for( QPtrListIterator<K3bDataItem> it( *dirItem->children() ); it.current(); ++it ) {
-    if( K3bDirItem* item = dynamic_cast<K3bDirItem*>(it.current()) )
-      success = success && writePathSpecForDir( item, stream );
-  }
-
-  return success;
+  return num;
 }
 
 
@@ -840,8 +844,13 @@ bool K3bIsoImager::prepareMkisofsFiles()
 {
   // write path spec file
   // ----------------------------------------------------
-  if( !writePathSpec() ) {
+  int num = writePathSpec();
+  if( num < 0 ) {
     emit infoMessage( i18n("Could not write temporary file"), K3bJob::ERROR );
+    return false;
+  }
+  else if( num == 0 ) {
+    emit infoMessage( i18n("No files to be written."), K3bJob::ERROR );
     return false;
   }
 
@@ -891,6 +900,5 @@ void K3bIsoImager::informAboutCutJolietNames()
     }
   }
 }
-
 
 #include "k3bisoimager.moc"

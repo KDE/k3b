@@ -103,11 +103,17 @@ class K3bIsoImager : public K3bJob
   void outputData();
   void init();
   virtual void cleanup();
-  bool writePathSpec();
+
+  /**
+   * @returns The number of entries written or -1 on error
+   */
+  int writePathSpec();
   bool writeRRHideFile();
   bool writeJolietHideFile();
   bool writeSortWeightFile();
-  bool writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream );
+
+  // used by writePathSpec
+  int writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream );
   QString escapeGraftPoint( const QString& str );
 
   int parseProgress( const QString& );
