@@ -406,7 +406,6 @@ bool K3bVcdJob::prepareWriterJob()
         writer->setProvideStdin( false );
         writer->setDao( true );
         writer->setCueFile( m_cueFile );
-        writer->prepareArgumentList();
 
         m_writerJob = writer;
 

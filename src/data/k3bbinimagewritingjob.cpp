@@ -109,7 +109,6 @@ bool K3bBinImageWritingJob::prepareWriter()
     writer->setBurnSpeed( m_speed );
     writer->setProvideStdin( false );
     writer->setCueFile ( m_tocFile );
-    writer->prepareArgumentList();
 
     if( m_noFix ) {
       writer->addArgument("-multi");
