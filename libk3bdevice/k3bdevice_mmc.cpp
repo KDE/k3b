@@ -83,7 +83,7 @@ bool K3bDevice::Device::featureCurrent( unsigned int feature ) const
   if( getFeature( &data, dataLen, feature ) ) {
     bool success = false;
     if( dataLen >= 11 )
-      success = ( data[10]&1 );  // check the current flag
+      success = ( data[8+2]&1 );  // check the current flag
 
     delete [] data;
 
@@ -171,7 +171,7 @@ bool K3bDevice::Device::getPerformance( unsigned char** data, int& dataLen,
   cmd[10] = type;
   if( cmd.transport( TR_DIR_READ, header, 8 + 16 ) == 0 ) {
     // again with real length
-    dataLen = from4Byte( header ) + 8;
+    dataLen = from4Byte( header ) + 4;
 
     *data = new unsigned char[dataLen];
     ::memset( *data, 0, dataLen );
@@ -777,11 +777,12 @@ bool K3bDevice::Device::readDvdStructure( unsigned char** data, int& dataLen,
   cmd[9] = 4;
   if( cmd.transport( TR_DIR_READ, header, 2 ) == 0 ) {
     // again with real length
-    dataLen = from2Byte( header ) + 4;
+    dataLen = from2Byte( header ) + 2;
+
     *data = new unsigned char[dataLen];
     ::memset( *data, 0, dataLen );
 
-    cmd[8] = dataLen<<8;
+    cmd[8] = dataLen>>8;
     cmd[9] = dataLen;
     if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 )
       return true;

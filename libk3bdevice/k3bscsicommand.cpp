@@ -193,7 +193,7 @@ K3bDevice::ScsiCommand::ScsiCommand( int fd )
   : d(new Private),
     m_fd(fd),
     m_device(0),
-    m_printErrors(false)
+    m_printErrors(true)
 {
   clear();
 }
@@ -203,7 +203,7 @@ K3bDevice::ScsiCommand::ScsiCommand( const K3bDevice::Device* dev )
   : d(new Private),
     m_fd(-1),
     m_device(dev),
-    m_printErrors(false)
+    m_printErrors(true)
 {
   // if the device is already opened we do not close it
   // to allow fast multible method calls in a row

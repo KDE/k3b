@@ -2200,14 +2200,12 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
 	  inf.m_mediaType = MEDIA_CD_ROM;
       }
       else {
-	unsigned char* dvdheader = 0;
-	int dataLen = 0;
-	if( readDvdStructure( &dvdheader, dataLen ) ) {
+	if( readDvdStructure( &data, dataLen ) ) {
 	  // some debugging stuff
 	  K3b::Msf sda, eda, ea0;
-	  sda = ( dvdheader[4+5]<<16 | dvdheader[4+6] << 8 | dvdheader[4+7] );
-	  eda = ( dvdheader[4+9]<<16 | dvdheader[4+10] << 8 | dvdheader[4+11] );
-	  ea0 = ( dvdheader[4+13]<<16 | dvdheader[4+14] << 8 | dvdheader[4+15] );
+	  sda = ( data[4+5]<<16 | data[4+6] << 8 | data[4+7] );
+	  eda = ( data[4+9]<<16 | data[4+10] << 8 | data[4+11] );
+	  ea0 = ( data[4+13]<<16 | data[4+14] << 8 | data[4+15] );
 
 	  kdDebug() << "First sec data area: " << sda.toString()
 		    << " (LBA " << QString::number(sda.lba())
@@ -2234,10 +2232,10 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
 		    << ") (" << QString::number(da1.mode1Bytes()) << " Bytes) ("
 		    << KIO::convertSize(da1.mode1Bytes()) << ")" << endl;
 
-	  inf.m_numLayers = ((dvdheader[6]&0x60) == 0 ? 1 : 2);
+	  inf.m_numLayers = ((data[6]&0x60) == 0 ? 1 : 2);
 	  inf.m_firstLayerSize = da0;
 
-	  delete [] dvdheader;
+	  delete [] data;
 	}
 	else {
 	  kdDebug() << "(K3bDevice::Device) Unable to read DVD structure for num of layers." << endl;
