@@ -34,6 +34,7 @@
 #include <kconfig.h>
 #include <kiconloader.h>
 #include <klistview.h>
+#include <kconfig.h>
 
 
 
@@ -111,9 +112,13 @@ void K3bCdInfo::slotTestDevice()
       if( !m_cdinfo->toc.isEmpty() ) {
 	m_cdinfo->tocInfo_valid = true;
 
-	if( K3bCddb::appendCddbInfo( m_cdinfo->toc ) ) {
-	  m_cdinfo->cddbInfo_valid = true;
-	}
+	KConfig* c = kapp->config();
+	c->setGroup( "Cddb" );
+
+	if( c->readBoolEntry( "useCddb", false ) )
+	  if( K3bCddb::appendCddbInfo( m_cdinfo->toc ) ) {
+	    m_cdinfo->cddbInfo_valid = true;
+	  }
       }
 
       qDebug( "(K3bCdInfo) Finished." );

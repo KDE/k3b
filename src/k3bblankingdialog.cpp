@@ -140,7 +140,9 @@ void K3bBlankingDialog::setupGui()
   groupOptionsLayout->setSpacing( spacingHint() );
   groupOptionsLayout->setMargin( marginHint() );
 
-  m_checkForce = new QCheckBox( i18n("Force"), m_groupOptions );
+  m_checkForce = new QCheckBox( m_groupOptions );
+  m_checkForce->setText( i18n("Force\n(Try this if K3b\nis not able to\nblank a cdrw in\nnormal mode)") );
+
   groupOptionsLayout->addWidget( m_checkForce );
   // ------------------------------------------------------------------------
 

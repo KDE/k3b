@@ -38,6 +38,7 @@ K3bDataFileView::K3bDataFileView( K3bDataDoc* doc, QWidget* parent )
   addColumn( i18n("Size") );
 
   setItemsRenameable( true );
+  setSelectionModeExt( KListView::Konqueror );
   
   m_doc = doc;
   m_currentDir = doc->root();

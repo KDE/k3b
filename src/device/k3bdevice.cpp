@@ -2,6 +2,7 @@
 #include "../cdinfo/k3btrack.h"
 #include "../cdinfo/k3btoc.h"
 
+#include <qstring.h>
 
 typedef Q_INT16 size16;
 typedef Q_INT32 size32;
@@ -109,7 +110,7 @@ K3bToc K3bDevice::readToc()
     int lastSector = cdda_track_lastsector( drive, i );
     int type = ( cdda_track_audiop( drive, i ) ? K3bTrack::AUDIO : K3bTrack::DATA );
 
-    toc.append( new K3bTrack(firstSector, lastSector, type) );
+    toc.append( new K3bTrack(firstSector, lastSector, type, QString("Track %1").arg(i)) );
   }
 
   close();

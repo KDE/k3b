@@ -62,6 +62,7 @@ bool K3bDataDoc::newDocument()
     delete m_root;
 		
   m_root = new K3bRootItem( this );
+  m_size = 0;
 	
   m_name = "Dummyname";
   m_isoImage = QString::null;
@@ -143,6 +144,7 @@ void K3bDataDoc::slotAddQueuedItems()
 	  else
 	    {
 	      K3bFileItem* newK3bItem = new K3bFileItem( item->fileInfo.absFilePath(), this, item->parent );
+	      m_size += newK3bItem->k3bSize();
 
 	      if( k3bMain()->useID3TagForMp3Renaming() && newK3bItem->mimetype() == "audio/x-mp3" ) {
 		ID3_Tag tag( item->fileInfo.absFilePath().latin1() );
@@ -182,18 +184,19 @@ K3bDirItem* K3bDataDoc::addEmptyDir( const QString& name, K3bDirItem* parent )
 }
 
 
-int K3bDataDoc::size() const
+long K3bDataDoc::size() const
 {
-  K3bDataItem* item = root();
-  long _size = 0;
+//   K3bDataItem* item = root();
+//   long _size = 0;
 	
-  while( item ) {
-    _size+=item->k3bSize();
+//   while( item ) {
+//     _size+=item->k3bSize();
 		
-    item = item->nextSibling();
-  }
-	
-  return (int)(_size);
+//     item = item->nextSibling();
+//   }
+
+  return m_size;	
+  //  return root()->k3bSize();
 }
 
 
@@ -236,6 +239,12 @@ void K3bDataDoc::removeItem( K3bDataItem* item )
   else {
     emit itemRemoved( item );
 	
+    m_size -= item->k3bSize();
+    if( m_size < 0 ) {
+      qDebug( "(K3bDataDoc) Size of project is: %i, that CANNOT be! Will exit", m_size );
+      exit(0);
+    }
+
     // the item takes care about it's parent!
     qDebug( "(K3bDataDoc) now it should be save to delete the item!");
     delete item;

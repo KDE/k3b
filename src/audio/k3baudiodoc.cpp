@@ -90,8 +90,8 @@ bool K3bAudioDoc::newDocument()
 
 
 
-int K3bAudioDoc::size() const {
-  int size = 0;
+long K3bAudioDoc::size() const {
+  long size = 0;
   for( K3bAudioTrack* _t = m_tracks->first(); _t; _t = m_tracks->next() ) {
     size += _t->size();
   }	

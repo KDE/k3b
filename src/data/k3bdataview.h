@@ -53,7 +53,7 @@ class K3bDataView : public K3bView
  public slots:
    void slotAddFile( K3bFileItem* );
    void slotAddDir( K3bDirItem* );
-   void slotItemRemoved( K3bDataItem* );
+/*    void slotItemRemoved( K3bDataItem* ); */
 	
  protected slots:
    /** generates a dropped signal */

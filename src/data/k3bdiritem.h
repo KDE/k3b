@@ -49,6 +49,8 @@ class K3bDirItem : public K3bDataItem
   QString localPath();
 
   bool alreadyInDirectory( const QString& fileName );
+
+  long k3bSize() const;
 	
  private:
   QList<K3bDataItem>* m_children;

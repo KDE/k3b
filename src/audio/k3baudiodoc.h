@@ -66,7 +66,7 @@ class K3bAudioDoc : public K3bDoc
   K3bAudioTrack* take( uint i ) { return m_tracks->take( i ); }
 
   /** get the current size of the project */
-  int size() const;
+  long size() const;
   int length() const;
 	
   // CD-Text

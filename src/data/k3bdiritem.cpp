@@ -118,3 +118,14 @@ bool K3bDirItem::alreadyInDirectory( const QString& fileName )
   }
   return false;
 }
+
+
+long K3bDirItem::k3bSize() const
+{
+  QListIterator<K3bDataItem> it( *m_children );
+  long size = 0;
+  for( ; it.current(); ++it )
+    size += it.current()->k3bSize();
+
+  return size;
+}

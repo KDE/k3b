@@ -37,6 +37,7 @@
 #include <qlayout.h>
 #include <qdragobject.h>
 #include <qheader.h>
+#include <qlist.h>
 
 #include <assert.h>
 
@@ -354,53 +355,58 @@ void K3bDataView::slotRenameItem()
 }
 
 
-void K3bDataView::slotItemRemoved( K3bDataItem* item )
-{
-  // we only need to search in the fileView if it currently displays the corresponding directory
-  if( item == m_dataFileView->currentDir() ) {
-    qDebug( "(K3bDataView) fileView currently displays a deleted directory. Setting to parent.");
-    m_dataFileView->slotSetCurrentDir( item->parent() );
-  }
-  else if( item->parent() == m_dataFileView->currentDir() ) {
-    qDebug("(K3bDataView) seaching in fileView for viewItems to delete");
-    QListViewItemIterator _it2(m_dataFileView);
-    for( ; _it2.current(); ++_it2 )
-      {
-	if( K3bDataDirViewItem* _dirViewItem = dynamic_cast<K3bDataDirViewItem*>(_it2.current()) ) {
-	  qDebug("   found dirViewItem ... comparing ... ");
-	  if( _dirViewItem->dirItem() == item ) {
-	    delete _it2.current();
-	    qDebug( "(K3bDataView) found listViewItem to remove in fileView: %s", item->k3bName().latin1() );
-	    break;
-	  }
-	}
-	else if( K3bDataFileViewItem* _fileViewItem = dynamic_cast<K3bDataFileViewItem*>(_it2.current()) ) {
-	  qDebug("   found fileViewItem ... comparing ... ");
-	  if( _fileViewItem->fileItem() == item ) {
-	    delete _it2.current();
-	    qDebug( "(K3bDataView) found listViewItem to remove in fileView: %s", item->k3bName().latin1() );
-	    break;
-	  }
-	}
+// void K3bDataView::slotItemRemoved( K3bDataItem* item )
+// {
+//   // we only need to search in the fileView if it currently displays the corresponding directory
+//   if( item == m_dataFileView->currentDir() ) {
+//     qDebug( "(K3bDataView) fileView currently displays a deleted directory. Setting to parent.");
+//     m_dataFileView->slotSetCurrentDir( item->parent() );
+//   }
+//   else if( item->parent() == m_dataFileView->currentDir() ) {
+//     qDebug("(K3bDataView) seaching in fileView for viewItems to delete");
+//     QListViewItemIterator _it2(m_dataFileView);
+//     for( ; _it2.current(); ++_it2 )
+//       {
+// 	if( K3bDataDirViewItem* _dirViewItem = dynamic_cast<K3bDataDirViewItem*>(_it2.current()) ) {
+// 	  qDebug("   found dirViewItem ... comparing ... ");
+// 	  if( _dirViewItem->dirItem() == item ) {
+// 	    delete _it2.current();
+// 	    qDebug( "(K3bDataView) found listViewItem to remove in fileView: %s", item->k3bName().latin1() );
+// 	    break;
+// 	  }
+// 	}
+// 	else if( K3bDataFileViewItem* _fileViewItem = dynamic_cast<K3bDataFileViewItem*>(_it2.current()) ) {
+// 	  qDebug("   found fileViewItem ... comparing ... ");
+// 	  if( _fileViewItem->fileItem() == item ) {
+// 	    delete _it2.current();
+// 	    qDebug( "(K3bDataView) found listViewItem to remove in fileView: %s", item->k3bName().latin1() );
+// 	    break;
+// 	  }
+// 	}
 			
-      } // for _it2
-  }
+//       } // for _it2
+//   }
 
-  m_fillStatusDisplay->repaint();	
-}
+//   m_fillStatusDisplay->repaint();	
+// }
 
 
 
 void K3bDataView::slotRemoveItem()
 {
   if( m_dataDirTree->hasFocus() && m_dataDirTree->currentItem() ) {
-    m_doc->removeItem( ((K3bDataDirViewItem*)m_dataDirTree->currentItem())->dirItem() );
+    if( K3bDataDirViewItem* dirViewItem = dynamic_cast<K3bDataDirViewItem*>( m_dataDirTree->currentItem() ) )
+      m_doc->removeItem( dirViewItem->dirItem() );
   }
-  else if( m_dataFileView->hasFocus() && m_dataFileView->currentItem() ) {
-    if( K3bDataDirViewItem* d = dynamic_cast<K3bDataDirViewItem*>( m_dataFileView->currentItem() ) )
-      m_doc->removeItem( d->dirItem() );
-    else if ( K3bDataFileViewItem* f = dynamic_cast<K3bDataFileViewItem*>( m_dataFileView->currentItem() ) )
-      m_doc->removeItem( f->fileItem() );
+  else if( m_dataFileView->hasFocus() ) {
+    QList<QListViewItem> items = m_dataFileView->selectedItems();
+    QListIterator<QListViewItem> it( items );
+    for(; it.current(); ++it ) {
+      if( K3bDataDirViewItem* d = dynamic_cast<K3bDataDirViewItem*>( it.current() ) )
+	m_doc->removeItem( d->dirItem() );
+      else if ( K3bDataFileViewItem* f = dynamic_cast<K3bDataFileViewItem*>( it.current() ) )
+	m_doc->removeItem( f->fileItem() );
+    }
   }
   else
     qDebug("(K3bDataView) slotRemoveItem() without selected item!");

@@ -120,7 +120,7 @@ class K3bDoc : public QObject
   bool burnProof() const { return m_burnProof; }
   int speed() const { return m_speed; }
   K3bDevice* burner() const { return m_burner; }
-  virtual int size() const = 0;
+  virtual long size() const = 0;
   virtual int length() const = 0;
 
   const QString& tempDir() const { return m_tempDir; }

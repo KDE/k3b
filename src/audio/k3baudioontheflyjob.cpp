@@ -316,6 +316,13 @@ void K3bAudioOnTheFlyJob::slotTryStart()
 
     // device
     m_process << "--device" << m_doc->burner()->devicename();
+    if( m_doc->burner()->cdrdaoDriver() != "auto" ) {
+      m_process << "--driver";
+      if( m_doc->burner()->cdTextCapable() == 1 )
+	m_process << QString("%1:0x00000010").arg( m_doc->burner()->cdrdaoDriver() );
+      else
+	m_process << m_doc->burner()->cdrdaoDriver();
+    }
 			
     // additional parameters from config
     QStringList _params = kapp->config()->readListEntry( "cdrdao parameters" );
