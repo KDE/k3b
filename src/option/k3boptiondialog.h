@@ -34,6 +34,7 @@ class K3bDevice;
 class K3bCddbOptionTab;
 class K3bDeviceOptionTab;
 class K3bBurningOptionTab;
+class K3bRippingPatternOptionTab;
 
 
 /**
@@ -75,6 +76,13 @@ class K3bOptionDialog : public KDialogBase
   // cddb tab
   K3bCddbOptionTab *m_cddbOptionTab;
   void setupCddbPage();		
+
+  // ripping pattern tab
+  K3bRippingPatternOptionTab *m_rippingPatternOptionTab;
+  void setupRippingPatternPage();
+  //void readGeneralRippingOption();
+  //void applyGeneralRippingOption();
+  //QCheckBox *m_usePattern;
 };
 
 #endif

@@ -20,6 +20,7 @@
 #include "k3bcddboptiontab.h"
 #include "k3bdeviceoptiontab.h"
 #include "k3bburningoptiontab.h"
+#include "k3brippingpatternoptiontab.h"
 
 #include <qheader.h>
 #include <qlabel.h>
@@ -38,6 +39,7 @@
 #include <qxembed.h>
 #include <qwidgetstack.h>
 #include <qhbox.h>
+#include <qvgroupbox.h>
 
 #include <klistview.h>
 #include <klistbox.h>
@@ -64,13 +66,15 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
   setupDevicePage();	
   setupProgramsPage();
   setupCddbPage();
+  setupRippingPatternPage();
   //	setupPermissionPage();
 	
   readPrograms();
   m_cddbOptionTab->readSettings();
   m_deviceOptionTab->readDevices();
   m_burningOptionTab->readSettings();
-
+  m_rippingPatternOptionTab->readSettings();
+  //readGeneralRippingOption();
   // if we don't do this the dialog start really huge
   // because of the label in the device-tab
   resize( 800, 700 );
@@ -102,6 +106,8 @@ void K3bOptionDialog::slotApply()
   m_cddbOptionTab->apply();
   m_deviceOptionTab->saveDevices();
   m_burningOptionTab->saveSettings();
+  m_rippingPatternOptionTab->apply();
+  //applyGeneralRippingOption();
 
   kapp->config()->sync();
 }
@@ -280,6 +286,23 @@ void K3bOptionDialog::setupDevicePage()
   QHBoxLayout* box = new QHBoxLayout( frame );
   box->setSpacing(0);
   box->setMargin(0);
-  m_deviceOptionTab = new K3bDeviceOptionTab( frame, "deviceOptionTab" );  
+  m_deviceOptionTab = new K3bDeviceOptionTab( frame, "deviceOptionTab" );
   box->addWidget( m_deviceOptionTab );
 }
+
+void K3bOptionDialog::setupRippingPatternPage()
+{
+  QFrame* frame = addPage( i18n("Ripping"), i18n("Setup Ripping Patterns"),
+			   KGlobal::instance()->iconLoader()->loadIcon( "blockdevice", KIcon::NoGroup, KIcon::SizeMedium ) );
+
+  QVBoxLayout* box = new QVBoxLayout( frame );
+  box->setSpacing( 0 );
+  //KDialog::spacingHint() );
+  box->setMargin( 0 ); //KDialog::marginHint() );
+
+  m_rippingPatternOptionTab = new K3bRippingPatternOptionTab( frame, "rippingPatternOptionTab" );
+  box->addWidget( m_rippingPatternOptionTab );
+  QString album("album");
+  m_rippingPatternOptionTab->init( album );
+}
+

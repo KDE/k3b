@@ -88,11 +88,11 @@ void K3bCddbOptionTab::setup(){
   serverLayout->addMultiCellWidget( serverSettings, 0, 0, 0, 2 );
   serverLayout->addMultiCellWidget( m_addButton, 0, 0, 3, 3 );
   serverLayout->addMultiCellWidget( m_delButton, 1, 1, 3, 3 );
-  serverLayout->addMultiCellWidget( m_cddbServerList, 1, 2, 0, 2 );
-  serverLayout->setRowStretch(2, 50);
+  serverLayout->addMultiCellWidget( m_cddbServerList, 1, 1, 0, 2 );
+  serverLayout->setRowStretch(1, 10);
   serverLayout->setColStretch(0, 50);
-  frameLayout->addMultiCellWidget( groupCddbOptions, 0, 0, 0, 4 );
-  frameLayout->addMultiCellWidget( m_groupCddbServer, 1, 5, 0, 4 );
+  frameLayout->addWidget( groupCddbOptions, 0, 0 );
+  frameLayout->addWidget( m_groupCddbServer, 1, 0 );
 
   connect( m_cddbLockup, SIGNAL(toggled(bool)), this, SLOT(toggled(bool)) );
   connect( m_addButton, SIGNAL(clicked()), this, SLOT(addCddbServer()) );
