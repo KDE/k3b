@@ -139,8 +139,19 @@ void K3bDataDoc::slotAddUrlsToDir( const KURL::List& urls, K3bDirItem* dirItem )
   for( KURL::List::ConstIterator it = urls.begin(); it != urls.end(); ++it ) 
     {
       const KURL& url = *it;
-      if( url.isLocalFile() && QFile::exists(url.path()) )
-	m_queuedToAddItems.enqueue( new PrivateItemToAdd(url.path(), dirItem ) );
+      if( url.isLocalFile() && QFile::exists(url.path()) ) {
+
+	// mkisofs seems to have a bug that prevents us to use filenames 
+	// that contain one or more backslashes
+	// -----------------------------------------------------------------------
+	if( url.path().contains( "\\\\" ) ) {
+	  m_mkisofsBuggyFiles.append( url.path() );
+	}
+	// -----------------------------------------------------------------------
+
+	else
+	  m_queuedToAddItems.enqueue( new PrivateItemToAdd(url.path(), dirItem ) );
+      }
       else
 	m_notFoundFiles.append( url.path() );
     }
@@ -495,8 +506,19 @@ bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
     if( !QFile::exists( urlElem.text() ) )
       m_notFoundFiles.append( urlElem.text() );
     else {
-      K3bFileItem* newK3bItem = new K3bFileItem( urlElem.text(), this, parent, elem.attributeNode( "name" ).value() );
-      m_size += newK3bItem->k3bSize();
+
+      // mkisofs seems to have a bug that prevents us to use filenames 
+      // that contain one or more backslashes
+      // -----------------------------------------------------------------------
+      if( urlElem.text().contains( "\\\\" ) ) {
+	m_mkisofsBuggyFiles.append( urlElem.text() );
+      }
+      // -----------------------------------------------------------------------
+
+      else {
+	K3bFileItem* newK3bItem = new K3bFileItem( urlElem.text(), this, parent, elem.attributeNode( "name" ).value() );
+	m_size += newK3bItem->k3bSize();
+      }
     }
   }
   else if( elem.nodeName() == "directory" ) {
@@ -689,7 +711,7 @@ void K3bDataDoc::removeItem( K3bDataItem* item )
     qDebug( "(K3bDataDoc) tried to remove root-entry!");
   else {
     emit itemRemoved( item );
-	
+    
     m_size -= item->k3bSize();
     if( m_size < 0 ) {
       qDebug( "(K3bDataDoc) Size of project is: %i, that CANNOT be! Will exit! PLEASE REPORT!", (int)m_size );
@@ -852,6 +874,20 @@ void K3bDataDoc::informAboutNotFoundFiles()
 
     m_notFoundFiles.clear();
   }
+
+
+  // mkisofs seems to have a bug that prevents us to use filenames 
+  // that contain one or more backslashes
+  // -----------------------------------------------------------------------
+  if( !m_mkisofsBuggyFiles.isEmpty() ) {
+    KStringListDialog d( m_mkisofsBuggyFiles, i18n("Sorry"), i18n("Due to a bug in mkisofs K3b is not able to handle "
+								  "filenames that contain one or more backslashes:"), 
+			 true, k3bMain() );
+    d.exec();
+
+    m_mkisofsBuggyFiles.clear();
+  }
+  // -----------------------------------------------------------------------
 }
 
 

@@ -62,6 +62,7 @@ public:
   QString m_isoName;
   QString m_joiletName;
   QString m_rockRidgeName;
+  unsigned long m_size;
 };
 
 #endif

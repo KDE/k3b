@@ -128,6 +128,8 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
     * to upercase
     */
    void slotConvertAllToUpperCase();
+
+   void slotOnlyCreateImageToggled( bool on );
 };
 
 #endif

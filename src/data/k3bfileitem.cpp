@@ -33,6 +33,10 @@ K3bFileItem::K3bFileItem( const QString& filePath, K3bDataDoc* doc, K3bDirItem* 
   else
     m_k3bName = k3bName;
 
+
+  // we do this to avoid problems with removed or renamed files
+  m_size = size();
+
   //	m_isoName = doc()->isoName( this );
   //	m_joiletName = m_rockRidgeName = m_file.name();
 }
@@ -45,7 +49,7 @@ K3bFileItem::~K3bFileItem()
 
 long K3bFileItem::k3bSize() const
 {
-  return size();
+  return m_size;
 }
 
 

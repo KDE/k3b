@@ -39,6 +39,7 @@
 #include <qdatetime.h>
 #include <qtextstream.h>
 #include <qfile.h>
+#include <qregexp.h>
 
 #include <iostream>
 
@@ -80,7 +81,6 @@ void K3bDataJob::start()
   if( !writePathSpec( m_pathSpecFile ) ) {
     emit infoMessage( i18n("Could not write to temporary file %1").arg( m_pathSpecFile ), K3bJob::ERROR );
     cancelAll();
-    emit finished( false );
     return;
   }
 
@@ -102,7 +102,7 @@ void K3bDataJob::fetchMultiSessionInfo()
 {
   K3bEmptyDiscWaiter waiter( m_doc->burner(), k3bMain() );
   if( waiter.waitForEmptyDisc( true ) == K3bEmptyDiscWaiter::CANCELED ) {
-    cancel();
+    cancelAll();
     return;
   }
 
@@ -116,7 +116,6 @@ void K3bDataJob::fetchMultiSessionInfo()
     qDebug("(K3bAudioJob) could not find cdrecord executable" );
     emit infoMessage( i18n("Cdrecord executable not found."), K3bJob::ERROR );
     cancelAll();
-    emit finished( false );
     return;
   }
 
@@ -140,7 +139,6 @@ void K3bDataJob::fetchMultiSessionInfo()
     qDebug( "(K3bDataJob) could not start cdrecord" );
     emit infoMessage( i18n("Could not start cdrecord!"), K3bJob::ERROR );
     cancelAll();
-    emit finished( false );
     return;
   }
 }
@@ -171,7 +169,6 @@ void K3bDataJob::slotMsInfoFetched()
     emit infoMessage( i18n("Could not retrieve multisession information from disk."), K3bJob::ERROR );
     emit infoMessage( i18n("The disk is either empty or not appendable."), K3bJob::ERROR );
     cancelAll();
-    emit finished( false );
     return;
   }
   else if( m_doc->onTheFly() ) {
@@ -222,7 +219,6 @@ void K3bDataJob::fetchIsoSize()
     qDebug( "(K3bDataJob) could not start mkisofs: %s", kapp->config()->readEntry( "mkisofs path" ).latin1() );
     emit infoMessage( i18n("Could not start mkisofs!"), K3bJob::ERROR );
     cancelAll();
-    emit finished( false );
     return;
   }
 }
@@ -252,7 +248,6 @@ void K3bDataJob::slotIsoSizeFetched()
     emit infoMessage( i18n("Could not retrieve size of data. On-the-fly writing did not work."), K3bJob::ERROR );
     emit infoMessage( i18n("Please create an image first!"), K3bJob::ERROR );
     cancelAll();
-    emit finished( false );
   }
   else {
     writeCD();
@@ -268,7 +263,7 @@ void K3bDataJob::writeCD()
 
     K3bEmptyDiscWaiter waiter( m_doc->burner(), k3bMain() );
     if( waiter.waitForEmptyDisc() == K3bEmptyDiscWaiter::CANCELED ) {
-      cancel();
+      cancelAll();
       return;
     }
   }
@@ -284,7 +279,6 @@ void K3bDataJob::writeCD()
   if( m_doc->onTheFly() ) {
     if( !addMkisofsParameters() ) {
       cancelAll();
-      emit finished( false );
       return;
     }
 
@@ -298,7 +292,6 @@ void K3bDataJob::writeCD()
     qDebug("(K3bAudioJob) could not find cdrecord executable" );
     emit infoMessage( i18n("Cdrecord executable not found."), K3bJob::ERROR );
     cancelAll();
-    emit finished( false );
     return;
   }
 
@@ -386,7 +379,6 @@ void K3bDataJob::writeCD()
       qDebug("(K3bDataJob) could not start mkisofs/cdrecord");
       emit infoMessage( i18n("Could not start mkisofs/cdrecord!"), K3bJob::ERROR );
       cancelAll();
-      emit finished( false );
     }
   else
     {
@@ -420,7 +412,6 @@ void K3bDataJob::writeImage()
 			
   if( !addMkisofsParameters() ) {
     cancelAll();
-    emit finished( false );
     return;
   }
 	
@@ -443,13 +434,8 @@ void K3bDataJob::writeImage()
       // it "should" be the executable
       qDebug("(K3bDataJob) could not start mkisofs");
 				
-      // remove pathspec-file
-      QFile::remove( m_pathSpecFile );
-      m_pathSpecFile = QString::null;
-		
       emit infoMessage( i18n("Could not start mkisofs!"), K3bJob::ERROR );
       cancelAll();
-      emit finished( false );
     }
   else
     {
@@ -463,39 +449,10 @@ void K3bDataJob::writeImage()
 
 void K3bDataJob::cancel()
 {
-  if( m_process->isRunning() ) {
-    m_process->kill();
-
-    // we need to unlock the writer because cdrecord locked it while writing
-    bool block = m_doc->burner()->block( false );
-    if( !block )
-      emit infoMessage( i18n("Could not unlock cd drive."), K3bJob::ERROR );
-    //    else if( k3bMain()->eject() )
-    // m_doc->burner()->eject();
-      
-	
-    // remove toc-file
-    if( QFile::exists( m_pathSpecFile ) ) {
-      QFile::remove( m_pathSpecFile );
-      m_pathSpecFile = QString::null;
-    }
-
-    // remove iso-image if it is unfinished or the user selected to remove image
-    if( QFile::exists( m_doc->isoImage() ) ) {
-      if( m_doc->deleteImage() || !m_imageFinished ) {
-	emit infoMessage( i18n("Removing iso-image %1").arg(m_doc->isoImage()), K3bJob::STATUS );
-	QFile::remove( m_doc->isoImage() );
-	m_doc->setIsoImage("");
-	m_pathSpecFile = QString::null;
-      }
-      else {
-	emit infoMessage( i18n("Image successfully created in %1").arg(m_doc->isoImage()), K3bJob::STATUS );
-      }
-    }
-  }	
-
   emit infoMessage( i18n("Writing canceled."), K3bJob::ERROR );
-  emit finished( false );
+  emit canceled();
+
+  cancelAll();
 }
 
 
@@ -737,14 +694,14 @@ void K3bDataJob::slotMkisofsFinished()
 	  emit infoMessage( i18n("Mkisofs returned some error. (code %1)").arg(m_process->exitStatus()), K3bJob::ERROR );
 	  emit infoMessage( i18n("Sorry, no error handling yet! :-(("), K3bJob::ERROR );
 	  emit infoMessage( i18n("Please send me a mail with the last output..."), K3bJob::ERROR );
-	  emit finished( false );
+	  cancelAll();
 	  break;
 	}
     }
   else
     {
       emit infoMessage( i18n("Mkisofs did not exit cleanly."), K3bJob::ERROR );
-      emit finished( false );
+      cancelAll();
     }
 
   // remove toc-file
@@ -919,9 +876,10 @@ bool K3bDataJob::writePathSpec( const QString& filename )
   // start writing the path-specs
   // iterate over all the dataItems
   K3bDataItem* item = m_doc->root()->nextSibling();
+
 	
   while( item ) {
-    t << m_doc->treatWhitespace(item->k3bPath()) << "=" << item->localPath() << "\n";
+    t << escapeGraftPoint( m_doc->treatWhitespace(item->k3bPath()) ) << "=" << escapeGraftPoint( item->localPath() ) << "\n";
 		
     item = item->nextSibling();
   }
@@ -973,14 +931,9 @@ void K3bDataJob::cancelAll()
       bool block = m_doc->burner()->block( false );
       if( !block )
 	emit infoMessage( i18n("Could not unlock cd drive."), K3bJob::ERROR );
+      else if( k3bMain()->eject() )
+	m_doc->burner()->eject();
     }
-
-  // remove toc-file
-  //   if( QFile::exists( m_tocFile ) ) {
-  //      qDebug("(K3bAudioOnTheFlyJob) Removing temporary TOC-file");
-  //      QFile::remove( m_tocFile );
-  //   }
-  //   m_tocFile = QString::null;
 
   // remove path-spec-file
   if( QFile::exists( m_pathSpecFile ) ) {
@@ -988,10 +941,30 @@ void K3bDataJob::cancelAll()
     m_pathSpecFile = QString::null;
   }
 
-  if( m_doc->deleteImage() ) {
-    QFile::remove( m_doc->isoImage() );
-    m_doc->setIsoImage("");
+  // remove iso-image if it is unfinished or the user selected to remove image
+  if( QFile::exists( m_doc->isoImage() ) ) {
+    if( m_doc->deleteImage() || !m_imageFinished ) {
+      emit infoMessage( i18n("Removing iso-image %1").arg(m_doc->isoImage()), K3bJob::STATUS );
+      QFile::remove( m_doc->isoImage() );
+      m_doc->setIsoImage("");
+    }
+    else {
+      emit infoMessage( i18n("Image successfully created in %1").arg(m_doc->isoImage()), K3bJob::STATUS );
+    }
   }
+
+  emit finished( false );
+}
+
+
+QString K3bDataJob::escapeGraftPoint( const QString& str )
+{
+  QString newStr( str );
+
+  newStr.replace( QRegExp( "\\\\\\\\" ), "\\\\\\\\" );
+  newStr.replace( QRegExp( "=" ), "\\\\=" );
+    
+  return newStr;
 }
 
 

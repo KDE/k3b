@@ -301,6 +301,7 @@ void K3bDataBurnDialog::setupBurnTab( QFrame* frame )
   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkBurnProof, SLOT(setDisabled(bool)) );
   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkDao, SLOT(setDisabled(bool)) );
   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkDummy, SLOT(setDisabled(bool)) );
+  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotOnlyCreateImageToggled(bool)) );
 
   frameLayout->setRowStretch( 1, 1 );
   frameLayout->setColStretch( 1, 1 );
@@ -758,6 +759,12 @@ void K3bDataBurnDialog::slotConvertAllToUpperCase()
   m_editVolumeSetId->setText( m_editVolumeSetId->text().upper() );
   m_editPublisher->setText( m_editPublisher->text().upper() );
   m_editPreparer->setText( m_editPreparer->text().upper() );
+}
+
+
+void K3bDataBurnDialog::slotOnlyCreateImageToggled( bool on )
+{
+  m_checkDeleteImage->setChecked( !on );
 }
 
 

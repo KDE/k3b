@@ -60,6 +60,8 @@ class K3bDataJob : public K3bBurnJob
   void cancelAll();
 		
  private:
+  QString escapeGraftPoint( const QString& str );
+
   K3bDataDoc* m_doc;
   QString m_pathSpecFile;
   KProcess* m_process;
