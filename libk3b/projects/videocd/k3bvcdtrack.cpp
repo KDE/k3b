@@ -378,29 +378,28 @@ const QString K3bVcdTrack::audio_type2str( unsigned int version, unsigned int au
 {
     kdDebug() << "K3bVcdTrack::audio_type2str() version:" << version << " audio_mode:" << audio_mode << " audio_type:" << audio_type << endl;
 
-    const QString audio_types[ 3 ][ 5 ] = {
-                                              {
-                                                  i18n( "unknown" ),
-                                                  i18n( "invalid" ),
-                                                  "",
-                                                  "",
-                                                  ""
-                                              },
-                                              {
-                                                  i18n( "no audio" ),
-                                                  i18n( "stereo" ),
-                                                  i18n( "joint stereo" ),
-                                                  i18n( "dual channel" ),
-                                                  i18n( "single channel" )
-                                              },
-                                              {
-                                                  "",
-                                                  i18n( "dual channel" ),
-                                                  i18n( "surround sound" ),
-                                                  "",
-                                                  ""
-                                              }
-                                          };
+    QString audio_types[ 3 ][ 5 ] = {
+                                        {
+                                            i18n( "unknown" ),
+                                            i18n( "invalid" ),
+                                            QString::null,
+                                            QString::null,
+                                            QString::null
+                                        },
+                                        {
+                                            i18n( "stereo" ),
+                                            i18n( "joint stereo" ),
+                                            i18n( "dual channel" ),
+                                            i18n( "single channel" )
+                                        },
+                                        {
+                                            QString::null,
+                                            i18n( "dual channel" ),
+                                            i18n( "surround sound" ),
+                                            QString::null,
+                                            QString::null
+                                        }
+                                    };
     switch ( version ) {
         case K3bMpegInfo::MPEG_VERS_MPEG1:
             return audio_types[ 1 ][ audio_mode ];
