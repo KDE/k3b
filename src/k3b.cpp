@@ -65,6 +65,7 @@
 #include "data/k3bdatadoc.h"
 #include "data/k3bdataview.h"
 #include "mixed/k3bmixeddoc.h"
+#include "vcd/k3bvcddoc.h"
 #include "k3bblankingdialog.h"
 #include "data/k3bisoimagewritingdialog.h"
 #include "tools/k3bexternalbinmanager.h"
@@ -100,7 +101,8 @@ K3bMainWindow::K3bMainWindow()
   m_audioUntitledCount = 0;
   m_dataUntitledCount = 0;
   m_mixedUntitledCount = 0;
-
+  m_vcdUntitledCount = 0;
+  
   pDocList = new QPtrList<K3bDoc>();
   pDocList->setAutoDelete(true);
 
@@ -173,10 +175,14 @@ void K3bMainWindow::initActions()
 			    actionCollection(), "file_new_data");
   actionFileNewMixed = new KAction(i18n("New &Mixed Mode Project"),"tar", 0, this, SLOT(slotNewMixedDoc()),
 				   actionCollection(), "file_new_mixed");
+  actionFileNewVcd = new KAction(i18n("New &Vcd Project"),"video", 0, this, SLOT(slotNewVcdDoc()),
+				   actionCollection(), "file_new_vcd");
+
 
   actionFileNewMenu->insert( actionFileNewAudio );
   actionFileNewMenu->insert( actionFileNewData );
   actionFileNewMenu->insert( actionFileNewMixed );
+  actionFileNewMenu->insert( actionFileNewVcd );  
   actionFileNewMenu->setDelayed( false );
 
   actionProjectAddFiles = new KAction( i18n("&Add Files..."), "filenew", 0, this, SLOT(slotProjectAddFiles()), 
@@ -848,6 +854,23 @@ void K3bMainWindow::slotNewMixedDoc()
   createClient(doc);
 }
 
+void K3bMainWindow::slotNewVcdDoc()
+{
+  slotStatusMsg(i18n("Creating new Vcd Project."));
+
+  K3bVcdDoc* doc = new K3bVcdDoc( this );
+  pDocList->append(doc);
+  doc->newDocument();
+
+  m_vcdUntitledCount++;
+  QString fileName=QString(i18n("Video%1")).arg(m_vcdUntitledCount);
+  KURL url;
+  url.setFileName(fileName);
+  doc->setURL(url);
+
+  // create the window
+  createClient(doc);
+}
 
 void K3bMainWindow::slotDivxEncoding(){
     slotStatusMsg(i18n("Creating new video encoding project."));
