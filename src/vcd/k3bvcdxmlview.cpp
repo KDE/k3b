@@ -41,7 +41,8 @@ bool K3bVcdXmlView::write(const QString& fname)
 {
 
   QDomDocument xmlDoc( "videocd PUBLIC \"-//GNU//DTD VideoCD//EN\" \"http://www.gnu.org/software/vcdimager/videocd.dtd\"" );
-  xmlDoc.appendChild( xmlDoc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"iso-8859-1\"" ) );
+  // xmlDoc.appendChild( xmlDoc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"iso-8859-1\"" ) );
+  xmlDoc.appendChild( xmlDoc.createProcessingInstruction( "xml", "version=\"1.0\"" ) );
 
   // create root element
   QDomElement root = xmlDoc.createElement("videocd");
@@ -88,7 +89,6 @@ bool K3bVcdXmlView::write(const QString& fname)
   addSubElement(xmlDoc, elemInfo, "volume-number", m_doc->vcdOptions()->volumeNumber());
   addSubElement(xmlDoc, elemInfo, "restriction", m_doc->vcdOptions()->Restriction());
 
-
   // create pvd element
   QDomElement elemPvd = addSubElement(xmlDoc, root, "pvd");
   addSubElement(xmlDoc, elemPvd, "volume-id", m_doc->vcdOptions()->volumeId().upper());
@@ -120,31 +120,39 @@ bool K3bVcdXmlView::write(const QString& fname)
       addFileElement(xmlDoc, elemFolder, locate("data", "k3b/cdi/cdi_vcd.cfg"), "CDI_VCD.CFG");
   }
 
-//  // create segment-items element
-//  QDomElement elemsegmentItems = addSubElement(xmlDoc, root, "segment-items");
+  // sequence-items element & segment-items element
+  QDomElement elemsequenceItems;
+  QDomElement elemsegmentItems;
 
-  // create sequence-items element
-  QDomElement elemsequenceItems = addSubElement(xmlDoc, root, "sequence-items");
-
-  // Add Tracks to XML
+  // sequence-item element & segment-item element
   QDomElement elemsequenceItem;
   QDomElement elemsegmentItem;
+  
+  // Add Tracks to XML
   QListIterator<K3bVcdTrack> it( *m_doc->tracks() );
   for( ; it.current(); ++it ) {
     if (!it.current()->isSegment()) {
+      // sequence-items element needed at least a sequence to fit the XML
+      if (elemsequenceItems.isNull())
+        elemsequenceItems = addSubElement(xmlDoc, root, "sequence-items");
+
       elemsequenceItem = addSubElement(xmlDoc, elemsequenceItems, "sequence-item");
       elemsequenceItem.setAttribute("src", QString("%1").arg(QFile::encodeName(it.current()->absPath())));
       elemsequenceItem.setAttribute("id", QString("sequence-%1").arg(QString::number( it.current()->index() ).rightJustify( 3, '0' ) ));
+
       if (m_doc->vcdOptions()->PbcEnabled() ) {
         // TODO: pbc
       }
     }
     else {
-      /*
+        // sequence-items element needs at least one segment to fit the XML
+      if (elemsegmentItems.isNull())
+        elemsegmentItems = addSubElement(xmlDoc, root, "segment-items");
+
       elemsegmentItem = addSubElement(xmlDoc, elemsegmentItems, "segment-item");
       elemsegmentItem.setAttribute("src", QString("%1").arg(QFile::encodeName(it.current()->absPath())));
       elemsegmentItem.setAttribute("id", QString("segment-%1").arg(QString::number(it.current()->index() ).rightJustify( 3, '0' ) ));
-      */
+
       if (m_doc->vcdOptions()->PbcEnabled() ) {
         // TODO: pbc
       }
@@ -181,7 +189,7 @@ QDomElement K3bVcdXmlView::addSubElement(QDomDocument& doc, QDomElement& parent,
 {
   QDomElement element = doc.createElement( name );
   parent.appendChild( element );
-  if (value) {
+  if (value >= 0 ) {
     QDomText t = doc.createTextNode( QString("%1").arg( value ) );
     element.appendChild( t );
   }

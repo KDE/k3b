@@ -168,26 +168,26 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
 
    QWhatsThis::add( m_checkPbc, i18n("<p>Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 disc formats."
                                         "<p>PBC allows control of the playback of play items and the possibility of interaction with the user through the remote control or some other input device available.") );
-   // TODO: Don' know what i should write here :)
-   // QWhatsThis::add( m_checkSegmentFolder, i18n(""
-   //                                     "") );
+
+   QWhatsThis::add( m_checkSegmentFolder, i18n("<p>Here you can specify that the folder <b>SEGMENT</b> be always present."
+                                        "<p>Some DVD player needs the folder around a faultless rendition to grant.") );
 
    QWhatsThis::add( m_checkRelaxedAps, i18n("<p>An Access Point Sector, APS, is an MPEG video sector on the VCD/SVCD which is suitable to be jumped to directly."
-                                         "<p>APS are required for entry points and scantables. APS have to fulfill the requirement to precede every I-frame by a GOP header which shall be preceded by a sequence header in its turn."
-                                         "<p>The start codes of these 3 items are required to be contained all in the same mpeg pack/sector, thus forming a so-called access point sector."
-                                         "<p>This requirement can be relaxed by enabling the relaxed aps option, i.e. every sector containing an I-frame will be regarded as an APS."
-                                         "<p><b>Warning:</b> The sequence header is needed for a playing device to figure out display parameters, such as display resolution and frame rate, relaxing the aps requirement may lead to non-working entry points.") );
+                                        "<p>APS are required for entry points and scantables. APS have to fulfill the requirement to precede every I-frame by a GOP header which shall be preceded by a sequence header in its turn."
+                                        "<p>The start codes of these 3 items are required to be contained all in the same mpeg pack/sector, thus forming a so-called access point sector."
+                                        "<p>This requirement can be relaxed by enabling the relaxed aps option, i.e. every sector containing an I-frame will be regarded as an APS."
+                                        "<p><b>Warning:</b> The sequence header is needed for a playing device to figure out display parameters, such as display resolution and frame rate, relaxing the aps requirement may lead to non-working entry points.") );
 
    QWhatsThis::add( m_checkUpdateScanOffsets, i18n("<p>According to the specification, it is mandatory for Super Video CD's to encode scan information data into user data blocks in the picture layer of all intra coded picture."
-                                         "<p>It can be used by playing devices for implementing fast forward & fast reverse scanning."
-                                         "<p>The already existing scan information data can be updated by enabling the update scan offsets option.") );
+                                        "<p>It can be used by playing devices for implementing fast forward & fast reverse scanning."
+                                        "<p>The already existing scan information data can be updated by enabling the update scan offsets option.") );
 
    QWhatsThis::add( m_spinRestriction, i18n("<p>Viewing Restriction may be interpreted by the playing device."
-                                         "<p>The allowed range goes from 0 to 3."
-                                         "<ul><li>0 = unrestricted, free to view for all</li>"
-                                         "<li>3 = restricted, content not suitable for ages under 18</li></ul>"
-                                         "<p>Actually the exact meaning is not defined and is player dependant!"
-                                         "<p><b>Most players ignore that value.<b>") );
+                                        "<p>The allowed range goes from 0 to 3."
+                                        "<ul><li>0 = unrestricted, free to view for all</li>"
+                                        "<li>3 = restricted, content not suitable for ages under 18</li></ul>"
+                                        "<p>Actually the exact meaning is not defined and is player dependant!"
+                                        "<p><b>Most players ignore that value.<b>") );
 
 }
 
