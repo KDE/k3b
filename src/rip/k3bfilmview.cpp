@@ -19,6 +19,7 @@
 #include "k3btcwrapper.h"
 #include "../k3b.h"
 #include "k3bdvdcontent.h"
+#include "k3bdvdripperwidget.h"
 
 #include <qstring.h>
 #include <qlayout.h>
@@ -28,18 +29,21 @@
 #include <qlabel.h>
 #include <qvaluelist.h>
 #include <qstringlist.h>
+#include <qlistview.h>
+#include <qmessagebox.h>
+#include <qpushbutton.h>
 
 #include <kiconloader.h>
 #include <ktoolbar.h>
+#include <ktoolbarbutton.h>
 #include <kprocess.h>
 #include <klocale.h>
 #include <klistview.h>
 #include <kdialog.h>
+#include <kapp.h>
+#include <kconfig.h>
+#include <kaction.h>
 
-#include <qgrid.h>
-
-#define RELOAD_BUTTON_INDEX         0
-#define GRAB_BUTTON_INDEX             1
 
 K3bFilmView::K3bFilmView(QWidget *parent, const char *name ) : QWidget(parent,name) {
     m_tcWrapper = new K3bTcWrapper();
@@ -49,16 +53,18 @@ K3bFilmView::K3bFilmView(QWidget *parent, const char *name ) : QWidget(parent,na
 }
 
 K3bFilmView::~K3bFilmView(){
+    delete m_tcWrapper;
 }
 
 void K3bFilmView::setupGui(){
     KToolBar *toolBar = new KToolBar( k3bMain(), this, "filmviewtoolbar" );
-
     KIconLoader *_il = new KIconLoader("k3b");
-    toolBar->insertButton( _il->iconPath("reload", KIcon::Toolbar), 	RELOAD_BUTTON_INDEX);
-    toolBar->insertButton( _il->iconPath("editcopy", KIcon::Toolbar), 	GRAB_BUTTON_INDEX);
-    KToolBarButton *_buttonGrab = toolBar->getButton(GRAB_BUTTON_INDEX);
-    KToolBarButton *_buttonReload = toolBar->getButton(RELOAD_BUTTON_INDEX);
+    KAction *reload = new KAction( i18n("&Reload"), _il->iconPath("reload", KIcon::Toolbar), 0, this,
+                               SLOT( slotReload()), this);
+    KAction *grab = new KAction(i18n("&Rip CD"), _il->iconPath("editcopy", KIcon::Toolbar), 0, this,
+                               SLOT( slotRip()), this);
+    reload->plug( toolBar );
+    grab->plug( toolBar );
 
     QGroupBox *mainAVGroup = new QGroupBox( this );
     mainAVGroup->setColumnLayout(0, Qt::Vertical );
@@ -85,7 +91,8 @@ void K3bFilmView::setupGui(){
     m_chapterView->setSorting( -1 );
     m_chapterView->setColumnWidthMode( 0, QListView::Maximum );
     QVGroupBox *_groupAudio = new QVGroupBox( i18n("Audio"), mainAVGroup, "audiogroup" );
-    m_audioView = new KListView( _groupAudio );
+    QVGroupBox *_groupAudioTracks = new QVGroupBox( i18n("Tracks"), _groupAudio, "videogrouptitle" );
+    m_audioView = new KListView( _groupAudioTracks );
     m_audioView->addColumn( i18n("Language" ) );
     m_audioView->setItemsRenameable( false );
     m_audioView->setSorting( -1 );
@@ -94,6 +101,24 @@ void K3bFilmView::setupGui(){
     // we need the right order
     m_audioView->setShowSortIndicator(false);
     m_audioView->setAllColumnsShowFocus(true);
+    QHGroupBox *_groupChapterButton = new QHGroupBox( _groupVideoChapter, "buttonvideogroup" );
+    _groupChapterButton->setFrameStyle( QFrame::NoFrame );
+    _groupChapterButton->layout()->setSpacing(0);
+    _groupChapterButton->layout()->setMargin(0);
+    _groupChapterButton->addSpace(0);
+    QHGroupBox *_groupAudioButton = new QHGroupBox( _groupAudioTracks, "buttonaudiogroup" );
+    _groupAudioButton->setFrameStyle( QFrame::NoFrame );
+    _groupAudioButton->layout()->setSpacing(0);
+    _groupAudioButton->layout()->setMargin(0);
+    _groupAudioButton->addSpace(0);
+    QPushButton *_audioAllButton = new QPushButton( i18n("all"),  _groupAudioButton );
+    _audioAllButton->setFixedSize( 60, 20 );
+    QPushButton *_audioNoneButton = new QPushButton( i18n("none"),  _groupAudioButton );
+    _audioNoneButton->setFixedSize( 60, 20 );
+    QPushButton *_chapterAllButton = new QPushButton( i18n("all"),  _groupChapterButton );
+    _chapterAllButton->setFixedSize( 60, 20 );
+    QPushButton *_chapterNoneButton = new QPushButton( i18n("none"),  _groupChapterButton );
+    _chapterNoneButton->setFixedSize( 60, 20 );
 
     QGroupBox *_groupInfo = new QGroupBox( i18n("General Information"), mainAVGroup, "infogroup" );
     _groupInfo->setColumnLayout(0, Qt::Vertical );
@@ -143,7 +168,13 @@ void K3bFilmView::setupGui(){
     _layout->setColStretch( 3, 2 );
     // connect to the actions
     //connect( _buttonReload, SIGNAL(clicked()), this, SLOT(reload()) );
-    //connect( _buttonGrab, SIGNAL(clicked()), this, SLOT(prepareRipping()) );
+    connect( m_titleView, SIGNAL( executed( QListViewItem* ) ), this, SLOT( slotTitleSelected( QListViewItem* ) ) );
+    //connect( m_chapterView, SIGNAL( executed( QListViewItem* ) ), this, SLOT( slotChapterSelected( QListViewItem* ) ) );
+    //connect( m_audioView, SIGNAL( executed( QListViewItem* ) ), this, SLOT( slotAudioSelected( QListViewItem* ) ) );
+    connect( _audioAllButton, SIGNAL( clicked( ) ), this, SLOT( slotAudioButtonAll( ) ) );
+    connect( _audioNoneButton, SIGNAL( clicked( ) ), this, SLOT( slotAudioButtonNone( ) ) );
+    connect( _chapterAllButton, SIGNAL( clicked( ) ), this, SLOT( slotChapterButtonAll( ) ) );
+    connect( _chapterNoneButton, SIGNAL( clicked( ) ), this, SLOT( slotChapterButtonNone( ) ) );
 }
 
 
@@ -151,19 +182,18 @@ void K3bFilmView::setDevice( const QString& device ){
     m_device = device;
 }
 
-void K3bFilmView::show(){
+void K3bFilmView::showAndCheck(){
     /*
-    if( !m_initialized){
+    if( !m_initialized ){
         m_initialized=true;
-        setupGUI();
-    }
     */
     // check if transcode tool installed
-    if( !m_tcWrapper->supportDvd() ) {
+   if( !m_tcWrapper->supportDvd() ) {
         emit notSupportedDisc( m_device );
         return;
-    }
-    m_tcWrapper->checkDvd( m_device );
+   }
+   m_tcWrapper->checkDvd( m_device );
+   this->show();
 }
 // ------------------------------------------
 // slots
@@ -177,11 +207,15 @@ void K3bFilmView::slotDvdChecked( bool successful ){
         for( unsigned int i= m_dvdTitles.count(); i > 0; i--){
             QCheckListItem *item = new QCheckListItem( m_titleView, i18n("Title ") + QString::number( i ), QCheckListItem::Controller );
             item->setOpen( true );
+            // angle parsing not possible at the moment, more than one angle not supported
+            // get Dvdcontent from dvdtitles->getMaxAngle()
             QCheckListItem *itemChild = new QCheckListItem( item, i18n("Angle 1"), QCheckListItem::CheckBox );
         }
         if( m_titleView->childCount() > 0 ) {
             m_titleView->setCurrentItem( m_titleView->itemAtIndex( 0 ) );
-            slotTitleSelected( 0 );
+            slotTitleSelected( m_titleView->currentItem() );
+            setCheckBoxes( m_audioView, TRUE );
+            setCheckBoxes( m_chapterView, TRUE );
         }
         qDebug("(K3bFilmView) show");
         QWidget::show();
@@ -190,34 +224,111 @@ void K3bFilmView::slotDvdChecked( bool successful ){
     }
 }
 
-void K3bFilmView::slotTitleSelected( int row ){
+void K3bFilmView::slotTitleSelected(QListViewItem*item){
+    int row = m_titleView->itemIndex( item );
+    QString tmp = item->text(0);
+    if( tmp.contains( i18n("Title") ) ){
+        row = tmp.right(1).toInt()-1;
+    } else {
+        if( item->text(0).right(1).toInt() != 1){
+            QMessageBox::critical( this, i18n("DVD Error"), i18n("Angle information not supported, title selection always use angle 1."), i18n("Ok") );
+        } else {
+            row = item->parent()->text(0).right(1).toInt() - 1;
+        }
+    }
+    qDebug("(K3bFilmView) Show title information for entry <%i>", row);
+    if( row >= 0 ){
         K3bDvdContent *title = &(m_dvdTitles[ row ]);
         // get data from tcwrapper
-        m_input->setText( title->m_input );
-        m_mode->setText( title->m_mode );
-        m_res->setText( title->m_res );
-        m_aspect->setText( title->m_aspect );
-        m_time->setText( title->m_time );
-        m_video->setText( title->m_video );
-        m_audio->setText( title->m_audio );
-        m_frames->setText( title->m_frames );
-        m_framerate->setText( title->m_framerate );
+        m_input->setText( title->getInput() );
+        m_mode->setText( title->getMode() );
+        m_res->setText( title->getStrRes() );
+        m_aspect->setText( title->getStrAspect() );
+        m_time->setText( title->getStrTime() );
+        m_video->setText( title->getVideo() );
+        m_audio->setText( title->getAudio() );
+        m_frames->setText( title->getStrFrames() );
+        m_framerate->setText( title->getStrFramerate() );
 	
         m_chapterView->clear();
         m_audioView->clear();
-        int end = title->m_audioList.count();
+        int end = title->getAudioList()->count();
         QStringList::Iterator str;
         for( int i = end-1; i >= 0; i-- ) {
-            str = title->m_audioList.at( i );
+            str = title->getAudioList()->at( i );
             QCheckListItem *item = new QCheckListItem( m_audioView, (*str), QCheckListItem::CheckBox );
         }
-        for( int i= title->chapters; i> 0; i-- ){
+        for( int i= title->getMaxChapters(); i> 0; i-- ){
             QCheckListItem *item = new QCheckListItem( m_chapterView, i18n("Chapter ")+QString::number(i), QCheckListItem::CheckBox );
         }
+    }
 }
 
 void K3bFilmView::slotNotSupportedDisc(){
     emit notSupportedDisc( m_device );
 }
 
+void K3bFilmView::slotChapterButtonAll(){
+    setCheckBoxes( m_chapterView, TRUE );
+}
+void K3bFilmView::slotChapterButtonNone(){
+    setCheckBoxes( m_chapterView, FALSE );
+}
+void K3bFilmView::slotAudioButtonAll(){
+    setCheckBoxes( m_audioView, TRUE );
+}
+void K3bFilmView::slotAudioButtonNone(){
+    setCheckBoxes( m_audioView, FALSE );
+}
+void K3bFilmView::slotRip(){
+    K3bDvdRipperWidget *ripWidget = new K3bDvdRipperWidget( m_device, this, "dvdrip");
+    DvdTitle::Iterator dvd;
+    int c = m_titleView->childCount();
+    qDebug("(K3bFilmView) titles %i", c);
+    DvdTitle toRipTitles;
+    QCheckListItem *item = dynamic_cast<QCheckListItem*>( m_titleView->firstChild( ) );
+    int title = 0;
+    bool addToRipTitles = false;
+    while( item !=0 ){
+        if( item->type() == QCheckListItem::Controller ){
+            qDebug("item " + item->text(0) );
+            dvd = m_dvdTitles.at( title );
+            int c  = item->childCount();
+            if( c > 0 ){
+                QCheckListItem *child = dynamic_cast<QCheckListItem*>(item->firstChild( ) );
+                qDebug("child " + child->text() );
+                if( child->isOn() ){
+                    qDebug("(K3bDvdFilmView) Add title %i with angle %i.", title+1, 1 );
+                    ( *dvd ).addAngle( QString::number( 1 ) );
+                    addToRipTitles = true;
+                }
+                for( int i=1; i < c; i++){
+                    if( dynamic_cast<QCheckListItem*>(item->nextSibling( ) )->isOn() ){
+                        qDebug("(K3bDvdFilmView) Add more title %i with angle %i.", i+1);
+                        ( *dvd ).addAngle( QString::number( i+1 ) );
+                    }
+                }
+                if( addToRipTitles ) {
+                    toRipTitles.append( *dvd );
+                    addToRipTitles = false;
+                }
+            }   // end if c>0 , there are angles
+        }     // end if controller
+        item = dynamic_cast<QCheckListItem*>(item->nextSibling() );
+        title++;
+    }
+    if( toRipTitles.isEmpty() ){
+         QMessageBox::critical( this, i18n("Ripping Error"), i18n("Select an title/angle to rip."), i18n("Ok") );
+    } else {
+        ripWidget->init( toRipTitles );
+        ripWidget->show();
+    }
+}
+
+void K3bFilmView::setCheckBoxes( KListView *view, bool status ){
+    int count =  view->childCount();
+    for( int i = 0; i < count; i++) {
+        dynamic_cast<QCheckListItem*> (view->itemAtIndex( i ))->setOn( status );
+    }
+}
 #include "k3bfilmview.moc"

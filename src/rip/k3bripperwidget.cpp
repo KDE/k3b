@@ -38,7 +38,6 @@
 #include <kio/job.h>
 #include <kio/global.h>
 
-
 #include <qarray.h>
 #include <qgroupbox.h>
 #include <qheader.h>
@@ -59,8 +58,8 @@
 #include <qcheckbox.h>
 #include <qfont.h>
 
-K3bRipperWidget::K3bRipperWidget(QString device, K3bCddb *cddb, const char *name )
-	: QWidget( 0, name)
+K3bRipperWidget::K3bRipperWidget(const QString& device, K3bCddb *cddb, QWidget *parent, const char *name )
+	: KDialogBase( parent, name, true, i18n("Ripping CD"), KDialogBase::Close|KDialogBase::Ok)
 {
     m_device = device;
     m_cddb = cddb;
@@ -87,12 +86,12 @@ K3bRipperWidget::K3bRipperWidget(QString device, K3bCddb *cddb, const char *name
 }
 
 void K3bRipperWidget::setupGui(){
-    this->setCaption(i18n("Ripping CD") );
-    Form1Layout = new QGridLayout( this );
+    QFrame *frame = makeMainWidget();
+    Form1Layout = new QGridLayout( frame );
     Form1Layout->setSpacing( KDialog::spacingHint() );
     Form1Layout->setMargin( KDialog::marginHint() );
 
-    QVGroupBox *groupListView = new QVGroupBox(this, "list" );
+    QVGroupBox *groupListView = new QVGroupBox(frame, "list" );
     m_viewTracks = new KListView( groupListView, "m_viewTracks" );
     m_viewTracks->addColumn(i18n( "No") );
     m_viewTracks->addColumn(i18n( "Artist") );
@@ -101,7 +100,7 @@ void K3bRipperWidget::setupGui(){
     m_viewTracks->addColumn(i18n( "Size") );
     m_viewTracks->addColumn(i18n( "Filename") );
 
-    QGroupBox *groupPattern = new QGroupBox( this, "pattern" );
+    QGroupBox *groupPattern = new QGroupBox( frame, "pattern" );
     groupPattern->setColumnLayout(0, Qt::Vertical );
     groupPattern->setTitle( i18n( "Destination Directory" ) );
     QGridLayout *optionsLayout = new QGridLayout( groupPattern->layout() );
@@ -136,27 +135,22 @@ void K3bRipperWidget::setupGui(){
     optionsLayout ->addMultiCellWidget( m_buttonStaticDir, 4, 4, 1, 1);
     optionsLayout ->setColStretch( 0, 10 );
 
-    QHGroupBox *groupClose = new QHGroupBox( this, "close" );
+    QHGroupBox *groupClose = new QHGroupBox( frame, "close" );
     groupClose->setTitle( i18n( "General" ) );
     m_closeAfterRipping = new QCheckBox(i18n("Close immediatly after ripping is finished."), groupClose, "check_close");
-
-    m_buttonStart = new QPushButton( this, "m_buttonStart" );
-    m_buttonStart->setText( i18n( "Start Ripping" ) );
-    QPushButton *buttonClose = new QPushButton( this, "buttonClose" );
-    buttonClose->setText( i18n( "Close" ) );
 
     Form1Layout->addMultiCellWidget( groupListView, 0, 0, 0, 3 );
     Form1Layout->addMultiCellWidget( groupPattern, 1, 1, 0, 3 );
     Form1Layout->addMultiCellWidget( groupClose, 2, 2, 0, 3 );
-    Form1Layout->addMultiCellWidget( m_buttonStart, 3, 3, 3, 3 );
-    Form1Layout->addMultiCellWidget( buttonClose, 3, 3, 2, 2 );
     Form1Layout->setColStretch( 0, 20 );
 
     m_parser = new K3bPatternParser( &m_dirPatternList, &m_filePatternList, m_cddb );
 
-    connect( buttonClose, SIGNAL(clicked() ), this, SLOT( close() ) );
+    setButtonOKText( i18n( "Start Ripping" ), i18n( "This starts copying the audio CD.") );
+
+    connect( this, SIGNAL( closeClicked() ), this, SLOT( close() ) );
     connect( m_closeAfterRipping, SIGNAL(clicked() ), this, SLOT( slotCloseAfterRipping() ) );
-    connect(m_buttonStart, SIGNAL(clicked() ), this, SLOT(rip() ) );
+    connect( this, SIGNAL(okClicked() ), this, SLOT(rip() ) );
     connect(m_useStatic, SIGNAL( clicked() ), this, SLOT( useStatic() ) );
     connect(m_usePattern, SIGNAL( clicked() ), this, SLOT( usePattern() ) );
     connect(m_buttonPattern, SIGNAL(clicked() ), this, SLOT( showPatternDialog() ) );

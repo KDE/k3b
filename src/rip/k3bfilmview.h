@@ -22,6 +22,7 @@
 #include <qvaluelist.h>
 
 class QString;
+class QListViewItem;
 class QLabel;
 class KProcess;
 class KListView;
@@ -37,9 +38,10 @@ public:
     K3bFilmView(QWidget *parent=0, const char *name=0);
     ~K3bFilmView();
     void setDevice( const QString& device );
-    void show();
+    void showAndCheck();
 private:
     QString m_device;
+    bool m_initialized;
     K3bTcWrapper *m_tcWrapper;
     KListView *m_chapterView;
     KListView *m_titleView;
@@ -48,8 +50,8 @@ private:
     QLabel *m_video, *m_audio, *m_frames, *m_framerate;
     typedef QValueList<K3bDvdContent> DvdTitle;
     DvdTitle m_dvdTitles;
-
     void setupGui();
+    void setCheckBoxes( KListView *m_audioView, bool status );
 
 signals:
     void notSupportedDisc( const QString& device );
@@ -57,7 +59,13 @@ signals:
 private slots:
     void slotDvdChecked( bool successful );
     void slotNotSupportedDisc();
-    void slotTitleSelected( int row );
+    void slotTitleSelected(QListViewItem*item);
+    void slotAudioButtonAll();
+    void slotAudioButtonNone();
+    void slotChapterButtonAll();
+    void slotChapterButtonNone();
+    void slotRip();
+    //void slotReload();
 };
 
 #endif

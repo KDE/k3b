@@ -39,6 +39,7 @@
 #include <kapp.h>
 #include <kconfig.h>
 #include <klocale.h>
+#include <kaction.h>
 #include <klistview.h>
 #include <kpopupmenu.h>
 #include <kio/global.h>
@@ -96,11 +97,11 @@ void K3bCdView::setupGUI(){
 
   KAction* reloadAction   = KStdAction::redisplay( this, SLOT(reload()), m_actionCollection );
   KAction* copyAction     = KStdAction::copy( this, SLOT(prepareRipping()), m_actionCollection );
-  KAction* viewModeAction = new KAction( i18n("&Selection Mode"), "view_choose", 0, this, 
+  KAction* viewModeAction = new KAction( i18n("&Selection Mode"), "view_choose", 0, this,
 					 SLOT(changeSelectionMode()), m_actionCollection );
-  KAction* playAction     = new KAction( i18n("&Play"), "1rightarrow", 0, this, SLOT(play()), 
+  KAction* playAction     = new KAction( i18n("&Play"), "1rightarrow", 0, this, SLOT(play()),
 					 m_actionCollection );
-  KAction* stopAction     = new KAction( i18n("&Stop"), "player_stop", 0, this, SLOT(stop()), 
+  KAction* stopAction     = new KAction( i18n("&Stop"), "player_stop", 0, this, SLOT(stop()),
 					 m_actionCollection );
 
   reloadAction->plug( toolBar );
@@ -113,8 +114,7 @@ void K3bCdView::setupGUI(){
   m_cddb = new K3bCddb();
   m_cdda = new K3bCdda();
   m_parser = new K3bPatternParser( &m_dirPatternList, &m_filePatternList, m_cddb );
-
-  connect( m_listView, SIGNAL(rightButtonClicked ( QListViewItem *, const QPoint &, int )), 
+  connect( m_listView, SIGNAL(rightButtonClicked ( QListViewItem *, const QPoint &, int )),
 	   this, SLOT(slotMenuActivated(QListViewItem*, const QPoint &, int) ) );
 }
 
@@ -335,9 +335,8 @@ void K3bCdView::prepareRipping(){
     QMessageBox::critical( this, i18n("Ripping Error"), i18n("Please select the title to rip."), i18n("Ok") );
     return;
   }
-  K3bRipperWidget *rip = new K3bRipperWidget(m_device, m_cddb );
+  K3bRipperWidget *rip = new K3bRipperWidget(m_device, m_cddb, this );
   //K3bRipperWidget *rip = new K3bRipperWidget(m_device, m_cddb, this);
-  rip->show();
   qDebug("(K3bCdView) show ripperwidget.");
   QListViewItem *item;
   int arraySize = selectedList.count();
@@ -356,6 +355,7 @@ void K3bCdView::prepareRipping(){
   }
   rip->setData( filelist, tracklist, sizelist);
   rip->init();
+  rip->show();
   //this->setDisabled(true);
 }
 

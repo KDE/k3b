@@ -1,7 +1,7 @@
 /***************************************************************************
-                          k3btcwrapper.h  -  description
+                          k3bdvdaudiogain.h  -  description
                              -------------------
-    begin                : Sat Feb 23 2002
+    begin                : Sun Mar 10 2002
     copyright            : (C) 2002 by Sebastian Trueg
     email                : trueg@informatik.uni-freiburg.de
  ***************************************************************************/
@@ -15,53 +15,37 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef K3BTCWRAPPER_H
-#define K3BTCWRAPPER_H
+#ifndef K3BDVDAUDIOGAIN_H
+#define K3BDVDAUDIOGAIN_H
 
 #include <qobject.h>
-#include <qstring.h>
-#include <qstringlist.h>
 
+class KShellProcess;
 class KProcess;
-class K3bDvdContent;
+class QString;
 /**
   *@author Sebastian Trueg
   */
 
-class K3bTcWrapper : public QObject  {
+class K3bDvdAudioGain : public QObject  {
     Q_OBJECT
-public: 
-    K3bTcWrapper();
-    ~K3bTcWrapper();
-    /* Returns true if transcode tools installed
-    */
-    bool supportDvd();
-    void checkDvd( const QString&);
-    QValueList<K3bDvdContent> getDvdTitles() const;
-
-private slots:
-  void slotParseTcprobeOutput( KProcess *p, char *text, int index);
-  void slotParseTcprobeError( KProcess *p, char *text, int index);
-  void slotTcprobeExited( KProcess* );
-	
+public:
+    K3bDvdAudioGain( const QString& dir);
+    ~K3bDvdAudioGain();
+    bool start();
+    void writeStdin( const char*, int len );
+    void closeStdin( );
+    void kill();
 signals:
-    void notSupportedDisc();
-    void successfulDvdCheck( bool );
-
+    void finished();
 private:
-    QString m_errorBuffer;
-    QString m_outputBuffer;
-    typedef QValueList<K3bDvdContent> DvdTitle;
-    DvdTitle m_dvdTitles;
-    bool m_firstProbeDone;
-    int m_currentTitle;
-    int m_allTitle;
-    int m_allAngle;
-    QString m_device;
-
-
-    K3bDvdContent* parseTcprobe();
-    void runTcprobe( const QString& );
+    KShellProcess *m_audioProcess;
+    QString m_dirname;
+private slots:
+    void slotParseOutput( KProcess *p, char *buffer, int len );
+    void slotParseError( KProcess *p, char *buffer, int len );
+    void slotExited( KProcess *p);
+    void slotWroteStdin( KProcess *p);
 };
 
 #endif

@@ -21,7 +21,8 @@
 #include <qwidget.h>
 #include <qvbox.h>
 #include <qarray.h>
-#include <qthread.h>
+//#include <qthread.h>
+#include <kdialogbase.h>
 #include <qstringlist.h>
 
 class K3bCddaCopy;
@@ -49,11 +50,11 @@ class K3bBurnProgressDialog;
 /**
   *@author Sebastian Trueg
   */
-class K3bRipperWidget : public QWidget {
+class K3bRipperWidget : public KDialogBase {
    Q_OBJECT
 
 public: 
-    K3bRipperWidget(QString device, K3bCddb *cddb, const char *name=0);
+    K3bRipperWidget(const QString& device, K3bCddb *cddb, QWidget *parent, const char *name=0);
     ~K3bRipperWidget();
 
     //QGroupBox* GroupBox3;
@@ -61,7 +62,7 @@ public:
     //QPushButton* m_buttonRefresh;
     KListView* m_viewTracks;
     //QLabel* TextLabel2;
-    QPushButton* m_buttonStart;
+    //QPushButton* m_buttonStart;
     QPushButton* m_buttonStaticDir;
     QPushButton* m_buttonPattern;
     KLineEdit *m_editStaticRipPath;
