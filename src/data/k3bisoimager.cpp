@@ -337,6 +337,15 @@ void K3bIsoImager::start()
   else
     m_process->dupStdout( m_fdToWriteTo );
 
+
+  kdDebug() << "***** mkisofs parameters:\n";
+  const QValueList<QCString>& args = m_process->args();
+  QString s;
+  for( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
+    s += *it + " ";
+  }
+  kdDebug() << s << endl << flush;
+
   if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput) ) {
     // something went wrong when starting the program
     // it "should" be the executable

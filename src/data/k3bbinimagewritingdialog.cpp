@@ -81,6 +81,8 @@ K3bBinImageWritingDialog::K3bBinImageWritingDialog( QWidget* parent, const char*
 
    setupGui();
    m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRDAO );
+
+   slotLoadUserDefaults();
 }
 
 

@@ -28,11 +28,14 @@
 #include <k3bstdguiitems.h>
 #include <tools/k3bglobals.h>
 #include <tools/k3bdatamodewidget.h>
+#include <k3bisooptions.h>
 
 #include <klocale.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <kio/global.h>
+#include <kapplication.h>
+#include <kconfig.h>
 
 #include <qcheckbox.h>
 #include <qlayout.h>
@@ -105,16 +108,88 @@ void K3bMovixBurnDialog::setupSettingsPage()
 
 void K3bMovixBurnDialog::slotLoadK3bDefaults()
 {
+  m_checkSimulate->setChecked( false );
+  m_checkDao->setChecked( true );
+  m_checkOnTheFly->setChecked( true );
+  m_checkBurnproof->setChecked( true );
+  m_checkStartMultiSesssion->setChecked( false );
+  m_checkRemoveBufferFiles->setChecked( true );
+  m_checkOnlyCreateImage->setChecked( false );
+  m_dataModeWidget->setDataMode( K3b::AUTO );
+
+  m_imageSettingsWidget->load( K3bIsoOptions::defaults() );
+  m_advancedImageSettingsWidget->load( K3bIsoOptions::defaults() );
+  m_volumeDescWidget->load( K3bIsoOptions::defaults() );
+
+  m_movixOptionsWidget->loadDefaults();
+
+  toggleAllOptions();
 }
 
 
 void K3bMovixBurnDialog::slotLoadUserDefaults()
 {
+  KConfig* c = kapp->config();
+  c->setGroup( "default movix settings" );
+
+  m_checkSimulate->setChecked( c->readBoolEntry( "simulate", false ) );
+  m_checkDao->setChecked( c->readBoolEntry( "dao", true ) );
+  m_checkOnTheFly->setChecked( c->readBoolEntry( "on_the_fly", true ) );
+  m_checkBurnproof->setChecked( c->readBoolEntry( "burnproof", true ) );
+  m_checkRemoveBufferFiles->setChecked( c->readBoolEntry( "remove_image", true ) );
+  m_checkOnlyCreateImage->setChecked( c->readBoolEntry( "only_create_image", false ) );
+  m_checkStartMultiSesssion->setChecked( c->readBoolEntry( "start_multisession", false ) );
+
+  QString datamode = c->readEntry( "data_track_mode" );
+  if( datamode == "mode1" )
+    m_dataModeWidget->setDataMode( K3b::MODE1 );
+  else if( datamode == "mode2" )
+    m_dataModeWidget->setDataMode( K3b::MODE2 );
+  else
+    m_dataModeWidget->setDataMode( K3b::AUTO );
+
+  K3bIsoOptions o = K3bIsoOptions::load( c );
+  m_imageSettingsWidget->load( o );
+  m_advancedImageSettingsWidget->load( o );
+  m_volumeDescWidget->load( o );
+
+  m_movixOptionsWidget->loadConfig(c);
+
+  toggleAllOptions();
 }
 
 
 void K3bMovixBurnDialog::slotSaveUserDefaults()
 {
+  KConfig* c = kapp->config();
+
+  c->setGroup( "default movix settings" );
+
+  c->writeEntry( "simulate", m_checkSimulate->isChecked() );
+  c->writeEntry( "dao", m_checkDao->isChecked() );
+  c->writeEntry( "on_the_fly", m_checkOnTheFly->isChecked() );
+  c->writeEntry( "burnproof", m_checkBurnproof->isChecked() );
+  c->writeEntry( "remove_image", m_checkRemoveBufferFiles->isChecked() );
+  c->writeEntry( "only_create_image", m_checkOnlyCreateImage->isChecked() );
+  c->writeEntry( "start_multisession", m_checkStartMultiSesssion->isChecked() );
+
+  QString datamode;
+  if( m_dataModeWidget->dataMode() == K3b::MODE1 )
+    datamode = "mode1";
+  else if( m_dataModeWidget->dataMode() == K3b::MODE2 )
+    datamode = "mode2";
+  else
+    datamode = "auto";
+  c->writeEntry( "data_track_mode", datamode );
+
+
+  K3bIsoOptions o;
+  m_imageSettingsWidget->save( o );
+  m_advancedImageSettingsWidget->save( o );
+  m_volumeDescWidget->save( o );
+  o.save( c );
+
+  m_movixOptionsWidget->saveConfig(c);
 }
 
 

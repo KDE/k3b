@@ -30,7 +30,7 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <klistview.h>
-#include <klineedit.h>
+#include <kurlrequester.h>
 #include <kfiledialog.h>
 #include <kio/global.h>
 #include <kiconloader.h>
@@ -121,9 +121,8 @@ void K3bAudioRippingDialog::setupGui()
   groupOptionsLayout->setSpacing( spacingHint() );
 
   QLabel* destLabel = new QLabel( i18n("Destination Base Directory"), groupOptions );
-  m_editStaticRipPath = new KLineEdit( groupOptions, "staticeditpattern");
-  m_buttonStaticDir = new QToolButton( groupOptions, "m_buttonStaticDir" );
-  m_buttonStaticDir->setIconSet( SmallIconSet( "fileopen" ) );
+  m_editStaticRipPath = new KURLRequester( groupOptions, "staticeditpattern");
+  m_editStaticRipPath->setMode( KFile::Directory );
   QFrame* line1 = new QFrame( groupOptions, "line1" );
   line1->setFrameStyle( QFrame::HLine | QFrame::Sunken );
   m_checkUsePattern = new QCheckBox( i18n("Use directory and filename pattern"), groupOptions );
@@ -131,8 +130,7 @@ void K3bAudioRippingDialog::setupGui()
   m_buttonPattern->setIconSet( SmallIconSet( "gear" ) );
 
   groupOptionsLayout->addMultiCellWidget( destLabel, 0, 0, 0, 1 );
-  groupOptionsLayout->addWidget( m_editStaticRipPath, 1, 0 );
-  groupOptionsLayout->addWidget( m_buttonStaticDir, 1, 1 );
+  groupOptionsLayout->addMultiCellWidget( m_editStaticRipPath, 1, 1, 0, 1 );
   groupOptionsLayout->addMultiCellWidget( line1, 2, 2, 0, 1 );
   groupOptionsLayout->addWidget( m_checkUsePattern, 3, 0 );
   groupOptionsLayout->addWidget( m_buttonPattern, 3, 1 );
@@ -188,7 +186,6 @@ void K3bAudioRippingDialog::setupGui()
   setStartButtonText( i18n( "Start Ripping" ), i18n( "Starts copying the selected tracks") );
 
   connect( m_buttonPattern, SIGNAL(clicked() ), this, SLOT(showPatternDialog()) );
-  connect( m_buttonStaticDir, SIGNAL(clicked()), this, SLOT(slotFindStaticDir()) );
   connect( m_checkUsePattern, SIGNAL(toggled(bool)), this, SLOT(refresh()) );
   connect( m_radioWav, SIGNAL(toggled(bool)), this, SLOT(refresh()) );
   connect( m_radioOgg, SIGNAL(toggled(bool)), this, SLOT(refresh()) );
@@ -233,7 +230,7 @@ void K3bAudioRippingDialog::slotStartClicked()
   KConfig* c = kapp->config();
   c->setGroup( "Ripping" );
 
-  c->writeEntry( "last ripping directory", m_editStaticRipPath->text() );
+  c->writeEntry( "last ripping directory", m_editStaticRipPath->url() );
   QString filetype;
   if( m_radioOgg->isChecked() )
     filetype = "ogg";
@@ -253,7 +250,7 @@ void K3bAudioRippingDialog::slotStartClicked()
 
   job->setCddbEntry( m_cddbEntry );
   job->setUsePattern( m_checkUsePattern->isChecked() );
-  job->setBaseDirectory( m_editStaticRipPath->text() );
+  job->setBaseDirectory( m_editStaticRipPath->url() );
   job->setCopyTracks( m_trackNumbers );
   job->setParanoiaMode( m_comboParanoiaMode->currentText().toInt() );
   job->setMaxRetries( m_spinRetries->value() );
@@ -339,22 +336,15 @@ void K3bAudioRippingDialog::refresh()
 }
 
 
-void K3bAudioRippingDialog::slotFindStaticDir() {
-  QString path = KFileDialog::getExistingDirectory( m_editStaticRipPath->text(), this, i18n("Select Ripping Directory") );
-  if( !path.isEmpty() ) {
-    m_editStaticRipPath->setText( path );
-  }
-}
-
 void K3bAudioRippingDialog::setStaticDir( const QString& path ){
-    m_editStaticRipPath->setText( path );
+    m_editStaticRipPath->setURL( path );
 }
 
 
 void K3bAudioRippingDialog::slotLoadK3bDefaults()
 {
   // set reasonable defaults
-  m_editStaticRipPath->setText( QDir::homeDirPath() );
+  m_editStaticRipPath->setURL( QDir::homeDirPath() );
   m_checkUsePattern->setChecked( true );
 
   m_comboParanoiaMode->setCurrentItem( 3 );
@@ -368,7 +358,7 @@ void K3bAudioRippingDialog::slotLoadUserDefaults()
   KConfig* c = k3bMain()->config();
   c->setGroup( "Audio Ripping" );
 
-  m_editStaticRipPath->setText( c->readEntry( "last ripping directory", QDir::homeDirPath() ) );
+  m_editStaticRipPath->setURL( c->readEntry( "last ripping directory", QDir::homeDirPath() ) );
   m_checkUsePattern->setChecked( c->readBoolEntry( "use_pattern", true ) );
 
   m_comboParanoiaMode->setCurrentItem( c->readNumEntry( "paranoia_mode", 3 ) );
@@ -382,7 +372,7 @@ void K3bAudioRippingDialog::slotSaveUserDefaults()
   KConfig* c = k3bMain()->config();
   c->setGroup( "Audio Ripping" );
 
-  c->writeEntry( "last ripping directory", m_editStaticRipPath->text() );
+  c->writeEntry( "last ripping directory", m_editStaticRipPath->url() );
   c->writeEntry( "use_pattern", m_checkUsePattern->isChecked() );
 
   c->writeEntry( "paranoia_mode", m_comboParanoiaMode->currentText().toInt() );

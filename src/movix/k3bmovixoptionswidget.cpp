@@ -20,6 +20,7 @@
 
 #include <kcombobox.h>
 #include <klocale.h>
+#include <kconfig.h>
 
 #include <qcheckbox.h>
 #include <qspinbox.h>
@@ -75,6 +76,79 @@ void K3bMovixOptionsWidget::saveSettings( K3bMovixDoc* doc )
   doc->setRandomPlay( m_checkRandomPlay->isChecked() );
 }
 
+
+void K3bMovixOptionsWidget::loadDefaults()
+{
+  m_comboSubtitleFontset->setCurrentItem( 0 ); // default
+  m_spinLoop->setValue( 1 );
+  m_editAdditionalMplayerOptions->setText( QString::null );
+  m_editUnwantedMplayerOptions->setText( QString::null );
+  m_comboBootMessageLanguage->setCurrentItem( 0 ); // default
+  m_comboDefaultBootLabel->setCurrentItem( 0 );  // default
+  m_checkShutdown->setChecked( false );
+  m_checkReboot->setChecked( false );
+  m_checkEject->setChecked( false );
+  m_checkRandomPlay->setChecked( false );
+}
+
+
+void K3bMovixOptionsWidget::loadConfig( KConfig* c )
+{
+  QString s = c->readEntry("subtitle_fontset");
+  if( !s.isEmpty() && s != "none" && m_comboSubtitleFontset->contains(s) )
+    m_comboSubtitleFontset->setCurrentItem( s, false );
+  else
+    m_comboSubtitleFontset->setCurrentItem( 0 ); // none
+
+  m_spinLoop->setValue( c->readNumEntry("loop", 1 ) );
+  m_editAdditionalMplayerOptions->setText( c->readEntry( "additional_mplayer_options" ) );
+  m_editUnwantedMplayerOptions->setText( c->readEntry( "unwanted_mplayer_options" ) );
+
+  s = c->readEntry("boot_message_language");
+  if( !s.isEmpty() && s != "default" && m_comboBootMessageLanguage->contains(s) )
+    m_comboBootMessageLanguage->setCurrentItem( s, false );
+  else
+    m_comboBootMessageLanguage->setCurrentItem( 0 ); // default
+
+  s = c->readEntry( "default_boot_label" );
+  if( !s.isEmpty() && s != "default" && m_comboDefaultBootLabel->contains(s) )
+    m_comboDefaultBootLabel->setCurrentItem( s, false );
+  else
+    m_comboDefaultBootLabel->setCurrentItem( 0 );  // default
+
+  m_checkShutdown->setChecked( c->readBoolEntry( "shutdown", false) );
+  m_checkReboot->setChecked( c->readBoolEntry( "reboot", false ) );
+  m_checkEject->setChecked( c->readBoolEntry( "eject", false ) );
+  m_checkRandomPlay->setChecked( c->readBoolEntry( "random_play", false ) );
+}
+
+
+void K3bMovixOptionsWidget::saveConfig( KConfig* c )
+{
+  if( m_comboSubtitleFontset->currentItem() == 0 )
+    c->writeEntry( "subtitle_fontset", "none" );
+  else
+    c->writeEntry( "subtitle_fontset", m_comboSubtitleFontset->currentText() );
+
+  c->writeEntry( "loop", m_spinLoop->value() );
+  c->writeEntry( "additional_mplayer_options", m_editAdditionalMplayerOptions->text() );
+  c->writeEntry( "unwanted_mplayer_options", m_editUnwantedMplayerOptions->text() );
+
+  if( m_comboBootMessageLanguage->currentItem() == 0 )
+    c->writeEntry( "boot_message_language", "default" );
+  else
+    c->writeEntry( "boot_message_language", m_comboBootMessageLanguage->currentText() );
+
+  if( m_comboDefaultBootLabel->currentItem() == 0 )
+    c->writeEntry( "default_boot_label", "default" );
+  else
+    c->writeEntry( "default_boot_label", m_comboDefaultBootLabel->currentText() );
+
+  c->writeEntry( "shutdown", m_checkShutdown->isChecked() );
+  c->writeEntry( "reboot", m_checkReboot->isChecked() );
+  c->writeEntry( "eject", m_checkEject->isChecked() );
+  c->writeEntry( "random_play", m_checkRandomPlay->isChecked() );
+}
 
 #include "k3bmovixoptionswidget.moc"
 

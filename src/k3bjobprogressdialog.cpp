@@ -42,6 +42,7 @@
 #include <qpainter.h>
 #include <qregion.h>
 #include <qpointarray.h>
+#include <qeventloop.h>
 
 #include <kprogress.h>
 #include <klocale.h>
@@ -666,7 +667,7 @@ int K3bJobProgressDialog::startJob( K3bJob* job )
   m_job->start();
 
   in_loop = TRUE;
-  qApp->enter_loop();
+  QApplication::eventLoop()->enterLoop();
   
   if ( !wasShowModal )
     clearWFlags( WShowModal );
@@ -692,7 +693,7 @@ void K3bJobProgressDialog::hide()
   
   if ( in_loop ) {
     in_loop = FALSE;
-    qApp->exit_loop();
+    QApplication::eventLoop()->exitLoop();
   }
 }
 

@@ -27,14 +27,13 @@
 #include "../device/k3bdiskinfo.h"
 
 class KListView;
-class KLineEdit;
-class QToolButton;
+class KURLRequester;
 class QButtonGroup;
 class QRadioButton;
 class QCheckBox;
 class QSpinBox;
 class QComboBox;
-
+class QToolButton;
 
 /**
   *@author Sebastian Trueg
@@ -60,9 +59,8 @@ class K3bAudioRippingDialog : public K3bInteractionDialog
   QValueList<int> m_trackNumbers;
 
   KListView*    m_viewTracks;
-  QToolButton*  m_buttonStaticDir;
   QToolButton*  m_buttonPattern;
-  KLineEdit*    m_editStaticRipPath;
+  KURLRequester* m_editStaticRipPath;
   QCheckBox*    m_checkUsePattern;
 
   QButtonGroup* m_groupFileType;
@@ -81,7 +79,6 @@ class K3bAudioRippingDialog : public K3bInteractionDialog
  private slots:
   void slotStartClicked();
   void showPatternDialog();
-  void slotFindStaticDir();
 
   void slotLoadK3bDefaults();
   void slotLoadUserDefaults();

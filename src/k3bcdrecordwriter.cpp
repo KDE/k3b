@@ -392,6 +392,9 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   else if( line.contains("Cannot send CUE sheet") ) {
     m_cdrecordError = CANNOT_SEND_CUE_SHEET;
   }
+  else if( line.contains("Input/output error.") ) {
+    emit infoMessage( i18n("Input/output error"), ERROR );
+  }
   else {
     // debugging
     kdDebug() << "(cdrecord) " << line << endl;

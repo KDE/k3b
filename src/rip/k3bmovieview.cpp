@@ -279,7 +279,7 @@ void K3bMovieView::slotUpdateInfoDialog( int i ){
 }
 
 void K3bMovieView::slotRip(){
-    K3bDvdRipperWidget *ripWidget = new K3bDvdRipperWidget( m_device->devicename(), this, "dvdrip");
+    K3bDvdRipperWidget ripWidget( m_device->devicename(), this, "dvdrip");
     DvdTitle::Iterator dvd;
     int title = m_ripTitle->getHiddenTitle( );
     kdDebug() << QString::number(title) << " Title" << endl;
@@ -287,8 +287,8 @@ void K3bMovieView::slotRip(){
     // clear old angle selection if already used
     dvd = m_dvdTitles.at( title-1 );
     toRipTitles.append( *dvd );
-    ripWidget->init( toRipTitles );
-    ripWidget->show();
+    ripWidget.init( toRipTitles );
+    ripWidget.exec();
 }
 void K3bMovieView::slotContextMenu( KListView*, QListViewItem *lvi, const QPoint& p ){
   m_ripTitle = dynamic_cast<K3bDvdRipListViewItem*>(lvi);
