@@ -16,6 +16,7 @@
 
 #include "k3bjob.h"
 #include <k3bglobals.h>
+#include <k3bcore.h>
 
 #include <klocale.h>
 #include <kprocess.h>
@@ -28,10 +29,31 @@ K3bJob::K3bJob( K3bJobHandler* handler, QObject* parent, const char* name )
   : QObject( parent, name ),
     m_jobHandler( handler )
 {
+  //
+  // Connect to the started and finished signals to properly register
+  // ourselves with the K3bCore.
+  // Be aware that this means a job always needs to emit those signals.
+  //
+  connect( this, SIGNAL(started()),
+	   this, SLOT(slotStarted()) );
+  connect( this, SIGNAL(finished(bool)),
+	   this, SLOT(slotFinished(bool)) );
 }
 
 K3bJob::~K3bJob()
 {
+}
+
+
+void K3bJob::slotStarted()
+{
+  k3bcore->registerJob( this );
+}
+
+
+void K3bJob::slotFinished( bool )
+{
+  k3bcore->unregisterJob( this );
 }
 
 

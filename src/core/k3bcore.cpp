@@ -21,12 +21,15 @@
 #include <k3bdefaultexternalprograms.h>
 #include <k3bglobals.h>
 #include <k3bversion.h>
+#include <k3bjob.h>
 
 #include <klocale.h>
 #include <kconfig.h>
 #include <kaboutdata.h>
 #include <kstandarddirs.h>
 #include <kapplication.h>
+
+#include <qptrlist.h>
 
 
 class K3bCore::Private {
@@ -39,6 +42,8 @@ public:
   K3bVersion version;
   K3bDeviceManager* deviceManager;
   K3bExternalBinManager* externalBinManager;
+
+  QPtrList<K3bJob> runningJobs;
 };
 
 
@@ -160,6 +165,24 @@ void K3bCore::requestBusyInfo( const QString& text )
 void K3bCore::requestBusyFinish()
 {
   emit busyFinishRequested();
+}
+
+
+void K3bCore::registerJob( K3bJob* job )
+{
+  d->runningJobs.append( job );
+}
+
+
+void K3bCore::unregisterJob( K3bJob* job )
+{
+  d->runningJobs.removeRef( job );
+}
+
+
+bool K3bCore::jobsRunning() const
+{
+  return !d->runningJobs.isEmpty();
 }
 
 #include "k3bcore.moc"

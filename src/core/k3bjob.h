@@ -101,6 +101,10 @@ class K3bJob : public QObject, public K3bJobHandler
    */
   void slotNewSubTask( const QString& str );
 
+ private slots:
+  void slotStarted();
+  void slotFinished( bool );
+
  private:
   K3bJobHandler* m_jobHandler;
 };

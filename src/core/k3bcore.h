@@ -27,6 +27,7 @@ class K3bExternalBinManager;
 class K3bVersion;
 class KConfig;
 class KAboutData;
+class K3bJob;
 
 
 namespace K3bCdDevice {
@@ -49,6 +50,8 @@ class K3bCore : public QObject
   K3bCore( const K3bVersion&, KConfig* = 0, QObject* parent = 0, const char* name = 0 );
   virtual ~K3bCore();
 
+  bool jobsRunning() const;
+
   void init();
   void saveConfig();
 
@@ -69,6 +72,14 @@ class K3bCore : public QObject
    */
   void requestBusyInfo( const QString& );
   void requestBusyFinish();
+
+  /**
+   * Every running job registers itself with the core.
+   * For now this is only used to determine if some job
+   * is running.
+   */
+  void registerJob( K3bJob* job );
+  void unregisterJob( K3bJob* job );
 
  signals:
   /**
