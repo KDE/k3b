@@ -12,6 +12,8 @@ K3bDataVolumeDescWidget::K3bDataVolumeDescWidget( QWidget* parent, const char* n
   // are this really the allowed characters? What about Joliet or UDF?
   K3bIsoValidator* isoValidator = new K3bIsoValidator( this, "isoValidator" );
 
+  // TODO: no whitespaces! They get converted to "_" in the DataJob and the IsoImager
+
   m_editVolumeName->setValidator( isoValidator );
   m_editVolumeSetName->setValidator( isoValidator );
   m_editPublisher->setValidator( isoValidator );

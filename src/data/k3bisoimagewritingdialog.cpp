@@ -188,8 +188,7 @@ void K3bIsoImageWritingDialog::setupGui()
   m_labelIsoApplicationId->setFont( f );
 
 
-  m_generalInfoLabel = new QLabel( groupImage );
-  m_generalInfoLabel->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter | QLabel::AlignLeft ) );
+  m_generalInfoLabel = new KCutLabel( groupImage );
   m_generalInfoLabel->setFont( f );
 
   QFrame* imageSpacerLine = new QFrame( groupImage );
