@@ -47,7 +47,7 @@ static const char *description = I18N_NOOP("K3bSetup prepares the system for CD 
 static KCmdLineOptions options[] =
 {
   { "lang <language>", I18N_NOOP("Specify a particular language"), 0 },
-  { 0, 0, 0 }
+  KCmdLineLastOption
   // INSERT YOUR COMMANDLINE OPTIONS HERE
 };
 

@@ -1,6 +1,6 @@
-/* 
+/*
  *
- * $Id: $
+ * $Id$
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
@@ -49,7 +49,7 @@ static const char *description =
 static KCmdLineOptions options[] =
 {
   { "lang <language>", I18N_NOOP("Specify a particular language"), 0 },
-  { 0, 0, 0 }
+  KCmdLineLastOption
 };
 
 int main(int argc, char *argv[])
