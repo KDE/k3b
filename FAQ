@@ -23,12 +23,16 @@ A: Most likely you installed K3b in the wrong directory. All KDE programs are in
      ./configure --prefix=`kde-config --prefix`
    That will install K3b relative to the correct path.
 
+
 Q: The linking always breaks with the missing -laudio.
 A: You need to install NAS.
+
 
 Q: Where can I find K3bSetup2?
 A: K3bSetup2 is a KControlCenter Module. You can find it in the System Administration section or start
    it manually with "kdesu kcmshell k3bsetup2".
+   There also is a script since K3b 0.11 called k3bsetup.
+
 
 Q: My writer supports writing at speed X but K3b shows Y as a max.
 A: K3b determined the maximum writing speed the first time you start it. Since the speed reported by the 

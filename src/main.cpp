@@ -51,6 +51,7 @@ static KCmdLineOptions options[] =
         { "emovixdvd", I18N_NOOP("Create a new eMovix DVD project and add all given files"), 0 },
         { "videodvd", I18N_NOOP("Create a new Video DVD project and add all given files"), 0 },
         { "copycd", I18N_NOOP("Open the CD copy dialog"), 0 },
+        { "copydvd", I18N_NOOP("Open the DVD copy dialog"), 0 },
         { "cdimage", I18N_NOOP("Write a CD image to a CD-R(W)"), 0 },
 	{ "erasecd", I18N_NOOP("Erase a CDRW"), 0 },
 	{ "formatdvd", I18N_NOOP("Format a DVD-RW or DVD+RW"), 0 },

@@ -81,22 +81,29 @@ protected:
     if( m_track->module()->analyseFile() ) {
       m_track->setStatus( 0 );
 
-      // first search the songdb
-      K3bSong *song = K3bSongManager::instance()->findSong( m_track->path() );
-      if( song != 0 ){
-	m_track->setArtist( song->getArtist() );
-	//      newM_Track->setAlbum( song->getAlbum() );
-	m_track->setTitle( song->getTitle() );
-      }
-      else {
-	// no song found, try the module
-	m_track->setTitle( m_track->module()->metaInfo( K3bAudioDecoder::META_TITLE ) );
-	m_track->setPerformer( m_track->module()->metaInfo( K3bAudioDecoder::META_ARTIST ) );
-      }
+      // 
+      // Do not overwrite loaded cd-text data
+      // FIXME: this is a bad solution :(
+      //
+      if( m_track->cdText().isEmpty() ) {
+
+	// first search the songdb
+	K3bSong *song = K3bSongManager::instance()->findSong( m_track->path() );
+	if( song != 0 ){
+	  m_track->setArtist( song->getArtist() );
+	  //      newM_Track->setAlbum( song->getAlbum() );
+	  m_track->setTitle( song->getTitle() );
+	}
+	else {
+	  // no song found, try the module
+	  m_track->setTitle( m_track->module()->metaInfo( K3bAudioDecoder::META_TITLE ) );
+	  m_track->setPerformer( m_track->module()->metaInfo( K3bAudioDecoder::META_ARTIST ) );
+	}
 	
-      m_track->setComposer( m_track->module()->metaInfo( K3bAudioDecoder::META_COMPOSER ) );
-      m_track->setSongwriter( m_track->module()->metaInfo( K3bAudioDecoder::META_SONGWRITER ) );
-      m_track->setCdTextMessage( m_track->module()->metaInfo( K3bAudioDecoder::META_COMMENT ) );
+	m_track->setComposer( m_track->module()->metaInfo( K3bAudioDecoder::META_COMPOSER ) );
+	m_track->setSongwriter( m_track->module()->metaInfo( K3bAudioDecoder::META_SONGWRITER ) );
+	m_track->setCdTextMessage( m_track->module()->metaInfo( K3bAudioDecoder::META_COMMENT ) );
+      }
     }
     else
       m_track->setStatus( -1 );
