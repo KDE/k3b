@@ -165,7 +165,6 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
   if( m_data.count() <= 0 ) {
     if( p->normalExit() ) {
       if( p->exitStatus() == 0 ) {
-	emit infoMessage( i18n("mkisofs finished successfully."), STATUS );
 	emit finished( true );
       }
       else  {

@@ -312,6 +312,10 @@ bool K3bMkisofsProgram::scan( const QString& p )
       bin->addFeature( "dvd-video" );
     if( out.output().contains( "-joliet-long" ) )
       bin->addFeature( "joliet-long" );
+    if( out.output().contains( "-xa" ) )
+      bin->addFeature( "xa" );
+    if( out.output().contains( "-sectype" ) )
+      bin->addFeature( "sectype" );
 
     // check if we run mkisofs as root
     if( !getuid() )

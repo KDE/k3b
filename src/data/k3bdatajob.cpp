@@ -18,8 +18,9 @@
 #include "k3bdatadoc.h"
 #include "k3bisoimager.h"
 #include "k3bmsinfofetcher.h"
-#include <k3b.h>
+#include <k3bcore.h>
 #include <tools/k3bglobals.h>
+#include <tools/k3bversion.h>
 #include <device/k3bdevice.h>
 #include <device/k3btoc.h>
 #include <device/k3btrack.h>
@@ -376,8 +377,12 @@ bool K3bDataJob::prepareWriterJob()
 
     if( m_usedDataMode == K3b::MODE1 )
       writer->addArgument( "-data" );
-    else
-      writer->addArgument( "-xa1" );
+    else {
+      if( k3bcore->externalBinManager()->binObject("cdrecord")->version >= K3bVersion( 2, 1, -1, "a12" ) )
+	writer->addArgument( "-xa" );
+      else
+	writer->addArgument( "-xa1" );
+    }
 
     if( m_doc->onTheFly() ) {
       writer->addArgument( QString("-tsize=%1s").arg(m_isoImager->size()) )->addArgument("-");
@@ -498,9 +503,9 @@ void K3bDataJob::determineWritingMode()
 
   // determine the writing mode
   if( m_doc->writingMode() == K3b::WRITING_MODE_AUTO ) {
-    if( m_doc->multiSessionMode() == K3bDataDoc::NONE )
-      m_usedWritingMode = K3b::DAO;
-    else
+//     if( m_doc->multiSessionMode() == K3bDataDoc::NONE )
+//       m_usedWritingMode = K3b::DAO;
+//     else
       m_usedWritingMode = K3b::TAO;
   }
   else

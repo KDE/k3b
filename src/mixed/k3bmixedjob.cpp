@@ -33,13 +33,15 @@
 #include <tools/k3bwavefilewriter.h>
 #include <tools/k3bglobals.h>
 #include <tools/k3bexternalbinmanager.h>
+#include <tools/k3bversion.h>
 #include <k3bemptydiscwaiter.h>
-#include <k3b.h>
+#include <k3bcore.h>
 #include <k3bcdrecordwriter.h>
 #include <k3bcdrdaowriter.h>
 
 #include <qfile.h>
 #include <qdatastream.h>
+#include <qapplication.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -338,6 +340,9 @@ void K3bMixedJob::slotWriterFinished( bool success )
 
   if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION && m_currentAction == WRITING_AUDIO_IMAGE ) {
     // reload the media
+
+    // FIXME: use DeviceHandler::reload
+
     emit infoMessage( i18n("Reloading the media"), INFO );
     m_doc->burner()->eject();
     qApp->processEvents();
@@ -593,10 +598,6 @@ bool K3bMixedJob::writeTocFile()
   
     m_tocFile->close();
 
-
-    // debugging
-    //    KIO::NetAccess::copy( m_tocFile->name(), k3bMain()->findTempFile( "toc" ) );
-
     return true;
   }
   else 
@@ -639,8 +640,12 @@ void K3bMixedJob::addAudioTracks( K3bCdrecordWriter* writer )
 void K3bMixedJob::addDataTrack( K3bCdrecordWriter* writer )
 {
   // add data track
-  if(  m_usedDataMode == K3b::MODE2 )
-    writer->addArgument( "-xa1" );
+  if(  m_usedDataMode == K3b::MODE2 ) {
+    if( k3bcore->externalBinManager()->binObject("cdrecord")->version >= K3bVersion( 2, 1, -1, "a12" ) )
+      writer->addArgument( "-xa" );
+    else
+      writer->addArgument( "-xa1" );
+  }
   else
     writer->addArgument( "-data" );
 

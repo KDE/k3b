@@ -21,6 +21,9 @@
 #include <k3bcdrdaowriter.h>
 #include <tools/k3bglobals.h>
 #include <k3bemptydiscwaiter.h>
+#include <k3bcore.h>
+#include <tools/k3bversion.h>
+#include <tools/k3bexternalbinmanager.h>
 
 #include <kdebug.h>
 #include <kconfig.h>
@@ -152,8 +155,12 @@ bool K3bIso9660ImageWritingJob::prepareWriter()
       writer->addArgument( "-raw" );
 
     if( (m_dataMode == K3b::AUTO && m_noFix) ||
-	m_dataMode == K3b::MODE2 )
-      writer->addArgument("-xa1");
+	m_dataMode == K3b::MODE2 ) {
+      if( k3bcore->externalBinManager()->binObject("cdrecord")->version >= K3bVersion( 2, 1, -1, "a12" ) )
+	writer->addArgument( "-xa" );
+      else
+	writer->addArgument( "-xa1" );
+    }
     else
       writer->addArgument("-data");
 
