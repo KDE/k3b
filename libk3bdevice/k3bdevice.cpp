@@ -1305,7 +1305,7 @@ K3bDevice::Toc K3bDevice::Device::readToc() const
 
     case MEDIA_DVD_RW:
     case MEDIA_DVD_RW_SEQ:
-      // is multisession possible??
+      // is multisession possible?
       readFormattedToc( toc, true );
       break;
 
@@ -1420,7 +1420,7 @@ bool K3bDevice::Device::readFormattedToc( K3bDevice::Toc& toc, bool dvd ) const
 	  track.m_firstSector = from4Byte( trackInfo->track_start );
 	  track.m_lastSector = track.m_firstSector + from4Byte( trackInfo->track_size ) - 1;
 	  track.m_session = (int)(trackInfo->session_number_m<<8 & 0xf0 |
-				  trackInfo->session_number_l & 0x0f);  //FIXME: is this BCD??
+				  trackInfo->session_number_l & 0x0f);  //FIXME: is this BCD?
 
 	  control = trackInfo->track_mode;
 
@@ -2126,7 +2126,7 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
       mp->audio_pause_len[1] = 150;
 
       mp->write_type = 0x01;  // TAO
-      mp->track_mode = 4;     // MMC-4 says: 5, cdrecord uses 4 ???
+      mp->track_mode = 4;     // MMC-4 says: 5, cdrecord uses 4 ?
       mp->dbtype = 8;         // Mode 1
 
       if( !modeSelect( data, dataLen, 1, 0 ) ) {
@@ -2491,7 +2491,7 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
 // 	    if( trackInfo->nwa_v ) {
 // 	      K3b::Msf nwa = from4Byte( trackInfo->next_writable );
 // 	      kdDebug() << "(K3bDevice::Device) Next writale adress valid: " << nwa.toString() << endl;
-// 	      inf.m_remaining = inf.m_capacity - nwa - 150;  // reserve space for pre-gap after lead-in (??)
+// 	      inf.m_remaining = inf.m_capacity - nwa - 150;  // reserve space for pre-gap after lead-in (?)
 // 	    }
 // 	    else {
 // 	      kdDebug() << "(K3bDevice::Device) Next writale adress invalid." << endl;
@@ -2658,7 +2658,7 @@ void K3bDevice::Device::checkWriteModes()
 
     // TAO
     mp->write_type = 0x01;  // Track-at-once
-    mp->track_mode = 4;     // MMC-4 says: 5, cdrecord uses 4 ???
+    mp->track_mode = 4;     // MMC-4 says: 5, cdrecord uses 4 ?
     mp->dbtype = 8;         // Mode 1
 
     //    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": modeselect TAO data: " << endl;
