@@ -175,7 +175,6 @@ K3bDvdContent K3bTcWrapper::parseTcprobe(){
             } else {
 	      // input mode
 	      kdDebug() << "(K3bTcWrapper) input mode" << endl;
-	      
                 QStringList mode = QStringList::split( " ", tmp );
                 title.setInput( mode[0] );
                 title.setMode( mode[1] );
@@ -224,7 +223,7 @@ K3bDvdContent K3bTcWrapper::parseTcprobe(){
     return title;
 }
 
-QValueList<K3bDvdContent> K3bTcWrapper::getDvdTitles( ) const {
+const QValueList<K3bDvdContent>& K3bTcWrapper::getDvdTitles( ) const {
     return m_dvdTitles;
 }
 

@@ -43,7 +43,7 @@ class K3bTcWrapper : public QObject
   static bool supportDvd();
   void checkDvdContent( K3bDevice* );
   void isDvdInsert( K3bDevice* device );
-  QValueList<K3bDvdContent> getDvdTitles() const;
+  const QValueList<K3bDvdContent>& getDvdTitles() const;
 
 private slots:
   void slotParseTcprobeOutput( KProcess *p, char *text, int index);
