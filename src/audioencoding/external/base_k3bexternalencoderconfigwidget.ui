@@ -173,7 +173,7 @@
                             </property>
                             <property name="text">
                                 <string>&lt;p&gt;&lt;b&gt;Command&lt;/b&gt;&lt;br&gt;
-The command at least has to contain the filename (%f). Metainfo may be set with:&lt;br&gt;
+The command must at least contain the filename (%f). Metainfo may be set with:&lt;br&gt;
 &lt;b&gt;%t&lt;/b&gt; - Title; &lt;b&gt;%a&lt;/b&gt; - Artist; &lt;b&gt;%c&lt;/b&gt; - Comment; &lt;b&gt;%n&lt;/b&gt; - Track number;&lt;br&gt;
 &lt;b&gt;%m&lt;/b&gt; - Album Title; &lt;b&gt;%r&lt;/b&gt; - Album Artist; &lt;b&gt;%x&lt;/b&gt; - Album comment; &lt;b&gt;%y&lt;/b&gt; - Year&lt;br&gt;
 Be aware that these values might be empty.&lt;br&gt;
