@@ -894,10 +894,9 @@ const QString& K3bDataDoc::dummyDir()
   QDir _appDir( locateLocal( "appdata", "temp/" ) );
   if( !_appDir.cd( "dummydir" ) ) {
     _appDir.mkdir( "dummydir" );
+    _appDir.cd( "dummydir" );
   }
   m_dummyDir = _appDir.absPath() + "/";
-	
-  // TODO: test if dummy dir is empty
 	
   return m_dummyDir;
 }
