@@ -575,9 +575,10 @@ bool K3bCdDevice::DeviceManager::saveConfig( KConfig* c )
 bool K3bCdDevice::DeviceManager::testForCdrom(const QString& devicename)
 {
 #ifdef Q_OS_FREEBSD
+  Q_UNUSED(devicename);
   return true;
 #endif
-
+#ifdef Q_OS_LINUX
   bool ret = false;
   int cdromfd = K3bCdDevice::openDevice( devicename.ascii() );
   if (cdromfd < 0) {
@@ -620,6 +621,7 @@ bool K3bCdDevice::DeviceManager::testForCdrom(const QString& devicename)
 
   ::close( cdromfd );
   return ret;
+#endif
 }
 
 K3bCdDevice::CdDevice* K3bCdDevice::DeviceManager::addDevice( const QString& devicename )
@@ -762,7 +764,7 @@ void K3bCdDevice::DeviceManager::scanFstab()
     if( !dev )
       dev = findDevice( md );
 #endif
-      
+
     //
     // Maybe the fstab contains a device we did not find before?
     //
