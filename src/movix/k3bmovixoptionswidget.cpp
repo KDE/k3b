@@ -57,6 +57,7 @@ void K3bMovixOptionsWidget::readSettings( K3bMovixDoc* doc )
   m_checkShutdown->setChecked( doc->shutdown() );
   m_checkReboot->setChecked( doc->reboot() );
   m_checkEject->setChecked( doc->ejectDisk() );
+  m_checkRandomPlay->setChecked( doc->randomPlay() );
 }
 
 
@@ -71,6 +72,7 @@ void K3bMovixOptionsWidget::saveSettings( K3bMovixDoc* doc )
   doc->setAdditionalMPlayerOptions( m_editAdditionalMplayerOptions->text() );
   doc->setUnwantedMPlayerOptions( m_editUnwantedMplayerOptions->text() );
   doc->setLoopPlaylist( m_spinLoop->value() );
+  doc->setRandomPlay( m_checkRandomPlay->isChecked() );
 }
 
 

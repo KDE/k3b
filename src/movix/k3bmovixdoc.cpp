@@ -65,6 +65,7 @@ bool K3bMovixDoc::newDocument()
   m_ejectDisk = false;
   m_reboot = false;
   m_shutdown = false;
+  m_randomPlay = false;
 
   return K3bDataDoc::newDocument();
 }

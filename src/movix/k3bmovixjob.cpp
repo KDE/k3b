@@ -210,6 +210,8 @@ bool K3bMovixJob::writeMovixRcFile()
       *s << "reboot=y" << endl;
     if( m_doc->ejectDisk() )
       *s << "eject=y" << endl;
+    if( m_doc->randomPlay() )
+      *s << "random=y" << endl;
 
     m_movixRcFile->close();    
     return true;

@@ -38,6 +38,8 @@ class K3bMovixDoc : public K3bDataDoc
   K3bMovixDoc( QObject* parent = 0 );
   ~K3bMovixDoc();
 
+  int docType() const { return MOVIX; }
+
   K3bView* newView( QWidget* parent = 0);
   K3bBurnJob* newBurnJob();
 
@@ -51,6 +53,7 @@ class K3bMovixDoc : public K3bDataDoc
   bool shutdown() const { return m_shutdown; }
   bool reboot() const { return m_reboot; }
   bool ejectDisk() const { return m_ejectDisk; }
+  bool randomPlay() const { return m_randomPlay; }
   const QString& subtitleFontset() const { return m_subtitleFontset; }
   const QString& bootMessageLanguage() const { return m_bootMessageLanguage; }
   const QString& defaultBootLabel() const { return m_defaultBootLabel; }
@@ -58,15 +61,16 @@ class K3bMovixDoc : public K3bDataDoc
   const QString& unwantedMPlayerOptions() const { return m_unwantedMPlayerOptions; }
   int loopPlaylist() const { return m_loopPlaylist; }
 
- void setShutdown( bool v ) { m_shutdown = v; }
- void setSeboot( bool v ) { m_reboot = v; }
- void setEjectDisk( bool v ) { m_ejectDisk = v; }
- void setSubtitleFontset( const QString& v ) { m_subtitleFontset = v; }
- void setBootMessageLanguage( const QString& v ) { m_bootMessageLanguage = v; }
- void setDefaultBootLabel( const QString& v ) { m_defaultBootLabel = v; }
- void setAdditionalMPlayerOptions( const QString& v ) { m_additionalMPlayerOptions = v; }
- void setUnwantedMPlayerOptions( const QString& v ) { m_unwantedMPlayerOptions = v; }
- void setLoopPlaylist( int v ) { m_loopPlaylist = v; }
+  void setShutdown( bool v ) { m_shutdown = v; }
+  void setSeboot( bool v ) { m_reboot = v; }
+  void setEjectDisk( bool v ) { m_ejectDisk = v; }
+  void setRandomPlay( bool v ) { m_randomPlay = v; }
+  void setSubtitleFontset( const QString& v ) { m_subtitleFontset = v; }
+  void setBootMessageLanguage( const QString& v ) { m_bootMessageLanguage = v; }
+  void setDefaultBootLabel( const QString& v ) { m_defaultBootLabel = v; }
+  void setAdditionalMPlayerOptions( const QString& v ) { m_additionalMPlayerOptions = v; }
+  void setUnwantedMPlayerOptions( const QString& v ) { m_unwantedMPlayerOptions = v; }
+  void setLoopPlaylist( int v ) { m_loopPlaylist = v; }
 
 
  signals:
@@ -98,6 +102,7 @@ class K3bMovixDoc : public K3bDataDoc
   bool m_shutdown;
   bool m_reboot;
   bool m_ejectDisk;
+  bool m_randomPlay;
   QString m_subtitleFontset;
   QString m_bootMessageLanguage;
   QString m_defaultBootLabel;

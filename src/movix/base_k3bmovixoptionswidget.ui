@@ -10,7 +10,7 @@
             <x>0</x>
             <y>0</y>
             <width>600</width>
-            <height>396</height>
+            <height>510</height>
         </rect>
     </property>
     <property name="caption">
@@ -31,7 +31,7 @@
                 <enum>Sunken</enum>
             </property>
             <property name="title">
-                <string>MPlayer Options</string>
+                <string>Playback Options</string>
             </property>
             <grid>
                 <property name="name">
@@ -112,6 +112,20 @@
                         <cstring>m_comboSubtitleFontset</cstring>
                     </property>
                 </widget>
+                <widget class="QCheckBox" row="4" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>m_checkRandomPlay</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Play files randomly</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>The files are played in random order</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;If this option is checked the order in which the files are played is determined randomly everytime it is played.</string>
+                    </property>
+                </widget>
                 <widget class="QLabel" row="1" column="0">
                     <property name="name">
                         <cstring>textLabel3</cstring>
@@ -176,11 +190,11 @@
             <property name="title">
                 <string>Behaviour After Playing</string>
             </property>
-            <vbox>
+            <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QCheckBox">
+                <widget class="QCheckBox" row="0" column="0">
                     <property name="name">
                         <cstring>m_checkShutdown</cstring>
                     </property>
@@ -194,21 +208,7 @@
                         <string>&lt;p&gt;If this option is checked the PC will be shut down after MPlayer has finished playing.</string>
                     </property>
                 </widget>
-                <widget class="QCheckBox">
-                    <property name="name">
-                        <cstring>m_checkReboot</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Reboot</string>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Reboot after playing has finished</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;If this option is checked the PC will be rebooted after MPlayer has finished playing.</string>
-                    </property>
-                </widget>
-                <widget class="QCheckBox">
+                <widget class="QCheckBox" row="1" column="0" rowspan="1" colspan="2">
                     <property name="name">
                         <cstring>m_checkEject</cstring>
                     </property>
@@ -222,7 +222,21 @@
                         <string>&lt;p&gt;If this option is checked the disk will be ejected after MPlayer has finished.</string>
                     </property>
                 </widget>
-            </vbox>
+                <widget class="QCheckBox" row="0" column="1">
+                    <property name="name">
+                        <cstring>m_checkReboot</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Reboot</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Reboot after playing has finished</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;If this option is checked the PC will be rebooted after MPlayer has finished playing.</string>
+                    </property>
+                </widget>
+            </grid>
         </widget>
     </vbox>
 </widget>

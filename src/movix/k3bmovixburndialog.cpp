@@ -32,6 +32,7 @@
 
 #include <qcheckbox.h>
 #include <qlayout.h>
+#include <qgroupbox.h>
 
 
 K3bMovixBurnDialog::K3bMovixBurnDialog( K3bMovixDoc* doc, QWidget* parent, const char* name, bool modal )
@@ -50,15 +51,24 @@ K3bMovixBurnDialog::K3bMovixBurnDialog( K3bMovixDoc* doc, QWidget* parent, const
   addPage( m_volumeDescWidget, i18n("Volume Desc") );
 
   // create image settings tab
-  m_imageSettingsWidget = new K3bDataImageSettingsWidget( this );
-  m_imageSettingsWidget->layout()->setMargin( marginHint() );
-  addPage( m_imageSettingsWidget, i18n("Data Settings") );
+  QWidget* w = new QWidget( this );
+  QVBoxLayout* wl = new QVBoxLayout( w );
+  wl->setAutoAdd(true);
+  wl->setMargin( marginHint() );
+  wl->setSpacing( spacingHint() );
+  m_imageSettingsWidget = new K3bDataImageSettingsWidget( w );
+  QGroupBox* groupMultisession = new QGroupBox( 1, Qt::Vertical, i18n("Multisession"), w );
+  m_checkStartMultiSesssion = new QCheckBox( i18n("&Start multisession"), groupMultisession );
+
+  addPage( w, i18n("Data Settings") );
 
   // create advanced image settings tab
   m_advancedImageSettingsWidget = new K3bDataAdvancedImageSettingsWidget( this );
   m_advancedImageSettingsWidget->layout()->setMargin( marginHint() );
   addPage( m_advancedImageSettingsWidget, i18n("Advanced") );
 
+  QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
+  m_optionGroupLayout->addItem( spacer );
 }
 
 
@@ -94,7 +104,7 @@ void K3bMovixBurnDialog::saveSettings()
   m_doc->setBurnproof( m_checkBurnproof->isChecked() );
   m_doc->setOnlyCreateImage( m_checkOnlyCreateImage->isChecked() );
   m_doc->setDeleteImage( m_checkRemoveBufferFiles->isChecked() );
-
+  m_doc->setMultiSessionMode( m_checkStartMultiSesssion->isChecked() ? K3bDataDoc::START : K3bDataDoc::NONE );
 			
   // -- saving current speed --------------------------------------
   m_doc->setSpeed( m_writerSelectionWidget->writerSpeed() );
@@ -121,6 +131,7 @@ void K3bMovixBurnDialog::readSettings()
   m_checkBurnproof->setChecked( doc()->burnproof() );
   m_checkOnlyCreateImage->setChecked( m_doc->onlyCreateImage() );
   m_checkRemoveBufferFiles->setChecked( m_doc->deleteImage() );
+  m_checkStartMultiSesssion->setChecked( m_doc->multiSessionMode() == K3bDataDoc::START );
 
   m_imageSettingsWidget->load( m_doc->isoOptions() );
   m_advancedImageSettingsWidget->load( m_doc->isoOptions() );
