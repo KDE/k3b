@@ -178,7 +178,7 @@ void K3bTempDirSelectionWidget::saveConfig()
   if( m_mode == FILE )
     path.truncate( path.findRev("/") );
 
-  kapp->config()->writeEntry( "Temp Dir", K3b::prepareDir(path) );
+  kapp->config()->writePathEntry( "Temp Dir", K3b::prepareDir(path) );
 
   //  k3bMain()->configChanged(kapp->config());
 }

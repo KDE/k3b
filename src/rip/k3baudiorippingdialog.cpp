@@ -360,7 +360,7 @@ void K3bAudioRippingDialog::slotLoadUserDefaults()
   KConfig* c = k3bcore->config();
   c->setGroup( "Audio Ripping" );
 
-  m_editStaticRipPath->setURL( c->readEntry( "last ripping directory", QDir::homeDirPath() ) );
+  m_editStaticRipPath->setURL( c->readPathEntry( "last ripping directory", QDir::homeDirPath() ) );
   m_checkUsePattern->setChecked( c->readBoolEntry( "use_pattern", true ) );
 
   m_comboParanoiaMode->setCurrentItem( c->readNumEntry( "paranoia_mode", 3 ) );
@@ -374,7 +374,7 @@ void K3bAudioRippingDialog::slotSaveUserDefaults()
   KConfig* c = k3bcore->config();
   c->setGroup( "Audio Ripping" );
 
-  c->writeEntry( "last ripping directory", m_editStaticRipPath->url() );
+  c->writePathEntry( "last ripping directory", m_editStaticRipPath->url() );
   c->writeEntry( "use_pattern", m_checkUsePattern->isChecked() );
 
   c->writeEntry( "paranoia_mode", m_comboParanoiaMode->currentText().toInt() );
