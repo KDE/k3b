@@ -31,7 +31,8 @@
 #include <klineedit.h>
 #include <kdebug.h>
 
-K3bDivxExtSettings::K3bDivxExtSettings( K3bDivxCodecData *data, QWidget *parent, const char *name ) : QGroupBox( parent, name ) {
+K3bDivxExtSettings::K3bDivxExtSettings( K3bDivxCodecData *data, QWidget *parent, const char *name ) 
+  : QGroupBox( parent, name ) {
     m_data = data;
     setupGui();
 }

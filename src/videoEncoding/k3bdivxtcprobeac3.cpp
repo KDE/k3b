@@ -23,22 +23,31 @@
 #include <kprocess.h>
 #include <kdebug.h>
 
-K3bDivXTcprobeAc3::K3bDivXTcprobeAc3(){
+K3bDivXTcprobeAc3::K3bDivXTcprobeAc3()
+  : m_process(0),
+    m_util(0)
+{
 }
-K3bDivXTcprobeAc3::~K3bDivXTcprobeAc3(){
+
+K3bDivXTcprobeAc3::~K3bDivXTcprobeAc3()
+{
+  if( m_process ) delete m_process;
+  if( m_util ) delete m_util;
 }
 
 void K3bDivXTcprobeAc3::parseAc3Bitrate( K3bDivxCodecData* data){
     m_data = data;
-    m_util = new K3bDivxHelper;
+    if( !m_util ) {
+      m_util = new K3bDivxHelper;
+      connect( m_util, SIGNAL( finished( bool ) ), this, SLOT( slotInternalParsing() ));
+    }
     m_util->deleteIfos( m_data );
-    connect( m_util, SIGNAL( finished( bool ) ), this, SLOT( slotInternalParsing() ));
 }
 
 void K3bDivXTcprobeAc3::slotInternalParsing(){
      kdDebug() << "(K3bDivXTcprobeAc3:parseAc3Bitrate) Search ac3 bitrate." << endl;
-     delete m_util;
      m_buffer = "";
+     if( m_process ) delete m_process;
      m_process = new KShellProcess;
      const K3bExternalBin *tcprobeBin = k3bcore->externalBinManager()->binObject("tcprobe");
 
@@ -82,7 +91,6 @@ void K3bDivXTcprobeAc3::slotParsingExited( KProcess* ){
             nextTrack = true;
         }
     }
-    delete m_process;
     emit finished();
 }
 

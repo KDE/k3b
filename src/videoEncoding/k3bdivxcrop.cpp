@@ -44,7 +44,8 @@
 #include <kdirsize.h>
 #include <kdebug.h>
 
-K3bDivxCrop::K3bDivxCrop( K3bDivxCodecData *data, QWidget *parent, const char *name ) : QGroupBox( parent, name ) {
+K3bDivxCrop::K3bDivxCrop( K3bDivxCodecData *data, QWidget *parent, const char *name )
+  : QGroupBox( parent, name ) {
     m_data = data;
     m_previewOffset = 0;
     setupGui();

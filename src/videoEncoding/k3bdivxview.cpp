@@ -59,10 +59,7 @@ K3bDivxView::K3bDivxView(K3bDivxCodecData *data, QWidget* parent, const char *na
 
 K3bDivxView::~K3bDivxView(){
     delete m_codingData;
-    delete m_baseTab;
-    delete m_sizeTab;
     delete m_advancedTab;
-    delete m_divxJob;
 }
 
 void K3bDivxView::setupGui()

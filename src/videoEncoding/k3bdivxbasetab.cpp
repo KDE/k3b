@@ -13,22 +13,6 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-/***************************************************************************
-                          k3bdivxbasetab.cpp  -  description
-                             -------------------
-    begin                : Mon Apr 1 2002
-    copyright            : (C) 2002 by Sebastian Trueg
-    email                : trueg@informatik.uni-freiburg.de
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
 
 #include "k3bdivxbasetab.h"
 #include "k3bdivxcodecdata.h"
@@ -44,9 +28,10 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-K3bDivxBaseTab::K3bDivxBaseTab( K3bDivxCodecData *data, QWidget *parent, const char *name ) : QWidget(parent,name) {
-    m_data = data;
-    setupGui();
+K3bDivxBaseTab::K3bDivxBaseTab( K3bDivxCodecData *data, QWidget *parent, const char *name ) 
+  : QWidget(parent,name) {
+  m_data = data;
+  setupGui();
 }
 
 K3bDivxBaseTab::~K3bDivxBaseTab(){

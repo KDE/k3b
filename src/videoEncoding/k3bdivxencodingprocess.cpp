@@ -28,12 +28,15 @@
 
 
 K3bDivXEncodingProcess::K3bDivXEncodingProcess( K3bDivxCodecData *data, QWidget* parent, const char *name )
-  : K3bJob( parent, name ) {
+  : K3bJob( parent, name ),
+    m_process(0) {
   m_data = data;
-  connect( this, SIGNAL( finished( bool ) ), SLOT( slotShutdown( bool ) ) );
 }
 
-K3bDivXEncodingProcess::~K3bDivXEncodingProcess() {}
+K3bDivXEncodingProcess::~K3bDivXEncodingProcess() 
+{
+  if( m_process ) delete m_process;
+}
 
 void K3bDivXEncodingProcess::start() {
   m_pass = 0;
@@ -70,6 +73,7 @@ void K3bDivXEncodingProcess::slotFinishedCopyIfos(KIO::Job* job){
 
 void K3bDivXEncodingProcess::slotStartAudioProcessing( ) {
     kdDebug() << "(K3bDivXEncodingProcess) Run transcode." << endl;
+    if( m_process ) delete m_process;
     m_process = new KShellProcess;
     const K3bExternalBin *tccatBin = k3bcore->externalBinManager() ->binObject( "tccat" );
     const K3bExternalBin *tcextractBin = k3bcore->externalBinManager() ->binObject( "tcextract" );
@@ -110,6 +114,7 @@ void K3bDivXEncodingProcess::slotStartEncoding() {
     QString debugPass( "" );
     kdDebug() << "(K3bDivXEncodingProcess) Run transcode." << endl;
     const K3bExternalBin *transcodeBin = k3bcore->externalBinManager() ->binObject( "transcode" );
+    if( m_process ) delete m_process;
     m_process = new KShellProcess;
 
     *m_process << "nice" << "-10";
@@ -267,24 +272,20 @@ void K3bDivXEncodingProcess::slotParseEncoding( KProcess *, char *buffer, int le
 void K3bDivXEncodingProcess::slotEncodingExited( KProcess *p ) {
   kdDebug() << "(K3bDivxEncodingProcess) Encoding finished" << endl;
   if ( m_interalInterrupt ) {
-    delete m_process;
     restoreBackupFiles();
     emit debuggingOutput( "Videoencoding (transcode)", m_debugBuffer );
     emit finished( false );
   } else if ( !p->normalExit() ) {
     infoMessage( i18n( "Video generation aborted by user." ), STATUS );
     kdDebug() << "(K3bDivxEncodingProcess) Aborted encoding" << endl;
-    delete m_process;
     restoreBackupFiles();
     emit debuggingOutput( "Videoencoding (transcode)", m_debugBuffer );
     emit finished( false );
   } else {
-    delete m_process;
     if ( m_pass == 1 ) {
       kdDebug() << "(K3bDivxEncodingProcess) Start second pass." << endl;
       slotStartEncoding();
     } else {
-        delete m_process;
         if ( m_pass == 1 ) { // one pass mode is m_pass=0
             kdDebug() << "(K3bDivxEncodingProcess) Start second pass." << endl;
             slotStartEncoding();
@@ -344,19 +345,9 @@ void K3bDivXEncodingProcess::slotAudioExited( KProcess * p ) {
   infoMessage( i18n( "Preprocessing audio completed." ), STATUS );
   kdDebug() << "(K3bDivxEncodingProcess) Audio gain detection finished" << endl;
   if ( p->normalExit() ) {
-    delete m_process;
     deleteIfos(); // delete ifos and slotStartEncoding( );
   } else {
     slotEncodingExited( p );
-  }
-}
-void K3bDivXEncodingProcess::slotShutdown( bool b ) {
-  if ( b ) { // successful finished
-    m_process = new KShellProcess;
-    *m_process << "shutdown" << "-h" << "now";
-    if ( !m_process->start( KProcess::DontCare ) ) {
-      kdDebug() << "(K3bDivXEncodingProcess) Shutdown failed." << endl;
-    }
   }
 }
 

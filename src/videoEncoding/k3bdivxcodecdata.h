@@ -22,9 +22,6 @@
 
 #include <qdatetime.h>
 
-/**
-  *@author Sebastian Trueg
-  */
 
 class K3bDivxCodecData {
 public:

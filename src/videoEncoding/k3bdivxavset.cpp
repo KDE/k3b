@@ -13,22 +13,6 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-/***************************************************************************
-      k3bdvdavset.cpp  -  description
-         -------------------
-begin                : Sun Mar 31 2002
-copyright            : (C) 2002 by Sebastian Trueg
-email                : trueg@informatik.uni-freiburg.de
-***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
 
 #include "k3bdivxavset.h"
 #include "k3bdivxcodecdata.h"
@@ -55,13 +39,18 @@ static long audioBitrate[] = { 64000L, 96000L, 112000L, 128000L, 160000L, 192000
 static QString codec[] = { "xvid", "divx4", "divx5", "xvidcvs" };
 static int cdSizes[] = { 650, 700, 1300, 1400, 695, 705 };
 
-K3bDivxAVSet::K3bDivxAVSet( K3bDivxCodecData *data, QWidget *parent, const char *name ) : QGroupBox( parent, name ) {
+K3bDivxAVSet::K3bDivxAVSet( K3bDivxCodecData *data, QWidget *parent, const char *name ) 
+  : QGroupBox( parent, name ),
+    m_parser(0) {
     m_data = data;
     m_lengthSecs = 0;
     setupGui();
 }
 
-K3bDivxAVSet::~K3bDivxAVSet() {}
+K3bDivxAVSet::~K3bDivxAVSet() 
+{
+  if( m_parser ) delete m_parser;
+}
 
 void K3bDivxAVSet::setupGui() {
     setColumnLayout( 0, Qt::Vertical );
@@ -250,9 +239,11 @@ void K3bDivxAVSet::slotAc3Passthrough( int mode ) {
         m_mp3modeGroup->setEnabled( false );
         m_comboMp3->setEnabled( false );
         if ( !m_data->isAc3Set() ) {
+	  if( !m_parser ) {
             m_parser = new K3bDivXTcprobeAc3();
-            m_parser->parseAc3Bitrate( m_data );
             connect( m_parser, SIGNAL( finished() ), this, SLOT( slotAc3Scaned() ) );
+	  }
+	  m_parser->parseAc3Bitrate( m_data );
         }
     }
 }
@@ -269,8 +260,8 @@ void K3bDivxAVSet::slotViewAc3Bitrate() {
 
 void K3bDivxAVSet::slotAc3Scaned() {
     updateView();
-    disconnect( m_parser, SIGNAL( finished() ), this, SLOT( slotAc3Scaned() ) );
     delete m_parser;
+    m_parser = 0;
 }
 
 void K3bDivxAVSet::slotCustomBitrate( int size ) {

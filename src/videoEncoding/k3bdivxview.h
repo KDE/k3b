@@ -29,9 +29,7 @@ class K3bDivxSizeTab;
 class K3bDivXEncodingProcess;
 class K3bJobProgressDialog;
 class K3bDivxAdvancedTab;
-/**
-  *@author Sebastian Trueg
-  */
+
 
 class K3bDivxView : public K3bInteractionDialog
 {

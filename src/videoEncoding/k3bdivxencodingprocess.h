@@ -26,11 +26,11 @@ class KProcess;
 class KShellProcess;
 
 /**
-  *@author Sebastian Trueg
+  *@author Thomas Froescher
   */
-
 class K3bDivXEncodingProcess : public K3bJob  {
    Q_OBJECT
+
 public:
     K3bDivXEncodingProcess(K3bDivxCodecData *data, QWidget *parent=0, const char *name=0);
     ~K3bDivXEncodingProcess();
@@ -41,6 +41,7 @@ public:
 public slots:
     void start();
     void cancel();
+
 private slots:
     void slotEncodingExited( KProcess *p );
     void slotParseEncoding( KProcess *p, char *buffer, int lenght);
@@ -48,7 +49,6 @@ private slots:
     void slotParseAudio( KProcess *p, char *buffer, int lenght);
     void slotStartAudioProcessing( );
     void slotStartEncoding();
-    void slotShutdown( bool );
     void slotFinishedCheckVobDirectory( );
     void slotFinishedRestoreBackup();
     void slotFinishedCopyIfos(KIO::Job*);

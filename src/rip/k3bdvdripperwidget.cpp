@@ -381,12 +381,12 @@ void K3bDvdRipperWidget::prepareDataForEncoding(){
 void K3bDvdRipperWidget::openEncodingDialog(){
   kdDebug() << "(K3bDvdRipperWidget:preparedDataForEncoding)" << endl;
 
-  K3bDivxCodecData data;
+  K3bDivxCodecData* data = new K3bDivxCodecData;
   QString projectFile(m_editStaticRipPath->url() + "/k3bDVDRip.xml");
   QFile f( projectFile );
   if( f.exists() ) {
-    data.setProjectFile( projectFile );
-    if( !data.projectLoaded() ){
+    data->setProjectFile( projectFile );
+    if( !data->projectLoaded() ){
       KMessageBox::error( this, i18n("Error while parsing file: %1").arg(projectFile),
 			  i18n("Error Loading Project") );
       close();
@@ -394,8 +394,10 @@ void K3bDvdRipperWidget::openEncodingDialog(){
     }
   }
 
-  data.setAviFile( m_editStaticRipPath->url() + "/video-k3b.avi");
-  K3bDivxView d(&data, this, "divx");
+  data->setAviFile( m_editStaticRipPath->url() + "/video-k3b.avi");
+
+  // the divx view takes care of deleting the K3bDivxCodecData
+  K3bDivxView d(data, this, "divx");
   d.slotUpdateView();
   d.exec();
 

@@ -13,22 +13,6 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-/***************************************************************************
-                          k3bdivxextsettings.h  -  description
-                             -------------------
-    begin                : Tue Jul 30 2002
-    copyright            : (C) 2002 by Sebastian Trueg
-    email                : trueg@informatik.uni-freiburg.de
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
 
 #ifndef K3BDIVXEXTSETTINGS_H
 #define K3BDIVXEXTSETTINGS_H
@@ -39,9 +23,6 @@ class K3bDivxCodecData;
 class QCheckBox;
 class KLineEdit;
 
-/**
-  *@author Sebastian Trueg
-  */
 
 class K3bDivxExtSettings : public QGroupBox  {
    Q_OBJECT
