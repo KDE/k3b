@@ -24,10 +24,13 @@
 
 
 class K3bDataDoc;
+class K3bDataItem;
 class K3bFileItem;
 class K3bDirItem;
 class K3bFillStatusDisplay;
 class KListView;
+class KPopupMenu;
+class KAction;
 
 /**
   *@author Sebastian Trueg
@@ -44,11 +47,15 @@ public:
 public slots:
 	void slotAddFile( K3bFileItem* );
 	void slotAddDir( K3bDirItem* );
+	void slotItemRemoved( K3bDataItem* );
 	
 protected slots:
 	/** generates a dropped signal */
 	void slotDropped( KListView*, QDropEvent* e, QListViewItem* after );
-	
+	void showPopupMenu( QListViewItem* _item, const QPoint& );
+	void slotRenameItem();
+	void slotRemoveItem();
+		
 signals:
 	void dropped(const QStringList&, K3bDirItem* );
 	
@@ -57,12 +64,18 @@ private:
 	class K3bPrivateDataFileView;
 	class K3bPrivateDataDirViewItem;
 	class K3bPrivateDataFileViewItem;
+	class K3bPrivateDataRootViewItem;
 	
 	K3bPrivateDataDirTree* m_dataDirTree;
 	K3bPrivateDataFileView* m_dataFileView;
 	K3bFillStatusDisplay* m_fillStatusDisplay;
 		
+	KPopupMenu* m_popupMenu;
+	KAction* actionRemove;
+	KAction* actionRename;
+		
 	K3bDataDoc* m_doc;
+	void setupPopupMenu();
 };
 
 
@@ -93,6 +106,7 @@ signals:
 };
 
 
+
 class K3bDataView::K3bPrivateDataFileView : public KListView
 {
 	friend K3bDataView;
@@ -120,6 +134,7 @@ private:
 };
 
 
+
 class K3bDataView::K3bPrivateDataDirViewItem : public QListViewItem
 {
 public:
@@ -127,7 +142,10 @@ public:
 	K3bPrivateDataDirViewItem( K3bDirItem* dir, QListViewItem* parent );
 	~K3bPrivateDataDirViewItem() {}
 	
-	QString text( int ) const;
+	virtual QString text( int ) const;
+	
+	/** reimplemented from QListViewItem */
+	void setText(int col, const QString& text );
 
 	K3bDirItem* dirItem() const { return m_dirItem; }
 	
@@ -145,10 +163,26 @@ public:
 	
 	QString text( int ) const;
 
+	/** reimplemented from QListViewItem */
+	void setText(int col, const QString& text );
+
 	K3bFileItem* fileItem() const { return m_fileItem; }
 	
 private:
 	K3bFileItem* m_fileItem;
+};
+
+
+class K3bDataView::K3bPrivateDataRootViewItem : public K3bPrivateDataDirViewItem
+{
+public:
+	K3bPrivateDataRootViewItem( K3bDataDoc*, QListView* parent );
+	~K3bPrivateDataRootViewItem() {}
+	
+	QString text( int ) const;
+		
+private:
+	K3bDataDoc* m_doc;
 };
 
 #endif

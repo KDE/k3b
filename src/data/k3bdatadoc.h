@@ -20,6 +20,7 @@
 
 #include "../k3bdoc.h"
 
+class K3bDataItem;
 class K3bDirItem;
 class K3bFileItem;
 
@@ -49,6 +50,11 @@ public:
 	bool newDocument();	
 	int size();
 	
+	const QString& name() const { return m_name; }
+	
+	/** Informs all views that an item has been removed */
+	void removeItem( K3bDataItem* item );
+	
 public slots:
 	/** add urls to the compilation.
 	  * @param dir the directory where to add the urls, by default this is the root directory.
@@ -63,6 +69,7 @@ signals:
 	// TODO: remove files ???
 
 	void signalAddDirectory( const QString& url, K3bDirItem* dir );
+	void itemRemoved( K3bDataItem* );
 	
 private slots:
 	void slotAddDirectory( const QString& url, K3bDirItem* dir );
@@ -75,6 +82,7 @@ protected:
 	
 private:
 	K3bDirItem* m_root;
+	QString m_name;
 };
 
 #endif

@@ -31,5 +31,17 @@ K3bDataItem::K3bDataItem( K3bDataDoc* doc, K3bDirItem* parent )
 
 K3bDataItem::~K3bDataItem()
 {
-	// TODO: inform doc so that it can emit a signal (not nessessary if only one view)
+	// remove his from parentdir
+	if( m_parentDir )
+		m_parentDir->takeDataItem( this );
+}
+
+
+void K3bDataItem::setK3bName( const QString& name ){
+	m_k3bName = name;
+}
+
+
+const QString& K3bDataItem::k3bName(){
+	return m_k3bName;
 }

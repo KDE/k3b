@@ -21,9 +21,10 @@
 #include <qlist.h>
 
 K3bDirItem::K3bDirItem(const QString& name, K3bDataDoc* doc, K3bDirItem* parentDir)
-	: K3bDataItem( doc, parentDir ), m_name( name )
+	: K3bDataItem( doc, parentDir )
 {
 	m_children = new QList<K3bDataItem>();
+	setK3bName( name );
 }
 
 K3bDirItem::~K3bDirItem()

@@ -30,7 +30,7 @@ K3bDataDoc::K3bDataDoc( QObject* parent )
 {
 	m_docType = DATA;
 	m_root = 0;
-	
+		
 //	connect( this, SIGNAL(signalAddDirectory(const QString&, K3bDirItem*)),
 //					this, SLOT(slotAddDirectory( const QString&, K3bDirItem*)) );
 }
@@ -45,7 +45,9 @@ bool K3bDataDoc::newDocument()
 	if( m_root )
 		delete m_root;
 		
-	m_root = new K3bDirItem( "/", this, 0 );
+	m_root = new K3bDirItem( "ISO-CD", this, 0 );
+	
+	m_name = "Dummyname";
 	
 	return K3bDoc::newDocument();
 }
@@ -63,6 +65,7 @@ void K3bDataDoc::addView(K3bView* view)
 	connect( v, SIGNAL(dropped(const QStringList&, K3bDirItem*)), this, SLOT(slotAddURLs(const QStringList&, K3bDirItem*)) );
 	connect( this, SIGNAL(newDir(K3bDirItem*)), v, SLOT(slotAddDir(K3bDirItem*)) );
 	connect( this, SIGNAL(newFile(K3bFileItem*)), v, SLOT(slotAddFile(K3bFileItem*)) );
+	connect( this, SIGNAL(itemRemoved(K3bDataItem*)), v, SLOT(slotItemRemoved(K3bDataItem*)) );
 	
 	K3bDoc::addView( view );
 }
@@ -72,7 +75,7 @@ void K3bDataDoc::slotAddURLs( const QStringList& urls, K3bDirItem* dirItem )
 	if( !dirItem )
 		dirItem = m_root;
 
-	qDebug( "(K3bDataDoc) adding urls to %s", dirItem->name().latin1() );
+	qDebug( "(K3bDataDoc) adding urls to %s", dirItem->k3bName().latin1() );
 				
 	for( QStringList::ConstIterator _it = urls.begin(); _it != urls.end(); ++_it ) {
 		// test if url directory or file
@@ -83,6 +86,7 @@ void K3bDataDoc::slotAddURLs( const QStringList& urls, K3bDirItem* dirItem )
 		}
 		else {
 			qDebug("       -file-");
+			// TODO: test if already in compilation (shall we allow equal files with different names?)
 			emit newFile( new K3bFileItem( *_it, this, dirItem ) );
 		}
 	}
@@ -99,6 +103,8 @@ void K3bDataDoc::slotAddDirectory( const QString& url, K3bDirItem* parent )
 		return;
 	}
 		
+	// TODO: test if dir already exists!!
+	
 	K3bDirItem* _newDirItem = new K3bDirItem( QDir(url).dirName(), this, parent );
 	emit newDir( _newDirItem );
 	
@@ -133,4 +139,21 @@ bool K3bDataDoc::saveDocumentData( QFile& )
 {
 	// TODO: some saving work...
 	return true;
+}
+
+
+void K3bDataDoc::removeItem( K3bDataItem* item )
+{
+	qDebug( "(K3bDataDoc) remove item " + item->k3bName() );
+	
+	if( item == root() )
+		qDebug( "(K3bDataDoc) tried to remove root-entry!");
+	else {
+		emit itemRemoved( item );
+	
+		// the item takes care about it's parent!
+		qDebug( "(K3bDataDoc) now it should be save to delete the item!");
+		delete item;
+		qDebug( "(K3bDataDoc) now the item has been deleted!");
+	}
 }

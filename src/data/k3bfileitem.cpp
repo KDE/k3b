@@ -25,9 +25,10 @@
 //#include <kurl.h>
 
 
-K3bFileItem::K3bFileItem( const QString& fileName, K3bDataDoc* doc, K3bDirItem* dir )
-	: KFileItem( -1, -1, fileName ), K3bDataItem( doc, dir )
+K3bFileItem::K3bFileItem( const QString& filePath, K3bDataDoc* doc, K3bDirItem* dir )
+	: KFileItem( -1, -1, filePath ), K3bDataItem( doc, dir )
 {
+	setK3bName( name() );
 //	m_isoName = doc()->isoName( this );
 //	m_joiletName = m_rockRidgeName = m_file.name();
 }

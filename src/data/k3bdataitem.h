@@ -22,6 +22,8 @@
 class K3bDirItem;
 class K3bDataDoc;
 
+#include <qstring.h>
+
 /**
   *@author Sebastian Trueg
   */
@@ -36,10 +38,13 @@ public:
 //	void setParentDir( K3bDirItem* dir ) { m_parentDir = dir; }
 	
 	K3bDataDoc* doc() const { return m_doc; }
+	const QString& k3bName();
+	void setK3bName( const QString& );
 	
 private:
 	K3bDirItem* m_parentDir;
 	K3bDataDoc* m_doc;
+	QString m_k3bName;
 };
 
 #endif

@@ -37,13 +37,11 @@ public:
 	~K3bDirItem();
 	
 	QList<K3bDataItem>* children() const { return m_children; }
-	const QString& name() { return m_name; }
 	void addDataItem( K3bDataItem* item );
 	K3bDataItem* takeDataItem( K3bDataItem* item );
 	K3bDataItem* takeDataItem( int index );
 	
 private:
-	QString m_name;
 	QList<K3bDataItem>* m_children;
 };
 
