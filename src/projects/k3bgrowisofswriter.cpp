@@ -130,6 +130,7 @@ bool K3bGrowisofsWriter::prepareProcess()
   d->process = new K3bProcess();
   d->process->setRunPrivileged(true);
   d->process->setSplitStdout(true);
+  d->process->setRawStdin(true);
   connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotReceivedStderr(const QString&)) );
   connect( d->process, SIGNAL(stdoutLine(const QString&)), this, SLOT(slotReceivedStderr(const QString&)) );
   connect( d->process, SIGNAL(processExited(KProcess*)), this, SLOT(slotProcessExited(KProcess*)) );
