@@ -20,6 +20,7 @@
 #include <qobject.h>
 
 #include "../k3baudiotitlemetainfo.h"
+#include <k3bmsf.h>
 
 #include <kurl.h>
 
@@ -42,13 +43,23 @@ class K3bAudioModule : public QObject
   /**
    * returnes K3bAudioTitleMetaInfo::FileStatus
    * at least size has to be set in all derived classes
+   * TODO: remove this status stuff and let the method return the size.
+   *      ev. ists doch besser, wieder ein modul pro track zu machen. So viel speicher ist
+   *      das ja nun auch nicht. Dann ist die verwaltung nur wieder einfacher. Eine Factory könnte dann
+   *      für jedes modul das canDecode übernehmen (so wie im plugin-system vorgesehen)
+   *      Das hier sollte dann eher eine init methode sein. Danzu sollte es eine "K3b::Msf size()" methode
+   *      geben. Metainfo benötigt dann auch keinen Dateinamen mehr. Der sollte auch über eine methode
+   *      zugänglich sein. die init methode könnte dann bei mp3 den seek-index bauen.
+   *      Auch wäre endlich mal eine generelle MAD-Wrapper klasse sinnvoll.
    */
   virtual int analyseTrack( const QString& filename, 
 			    unsigned long& size ) = 0;
 
-  // TODO: use KFileMetaInfo in this method as a backup
+  /**
+   * The default implementation uses KFileMetaInfo
+   */
   virtual bool metaInfo( const QString&,
-			 K3bAudioTitleMetaInfo& ) { return false; }
+			 K3bAudioTitleMetaInfo& );
 
   bool initDecoding( const QString& filename, unsigned long trackSize );
 
@@ -63,6 +74,12 @@ class K3bAudioModule : public QObject
    * cleanup after decoding like closing files.
    */
   virtual void cleanup();
+
+  /**
+   * Seek to the position pos.
+   * returnes true on success;
+   */
+  virtual bool seek( const K3b::Msf& pos ) = 0;
 
  protected:
   virtual bool initDecodingInternal( const QString& filename ) = 0;

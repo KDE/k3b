@@ -58,7 +58,7 @@ class K3bIso9660ImageWritingJob : public K3bBurnJob
   void slotWriterJobFinished( bool );
 		
  private:
-  bool prepareWriter();
+  bool prepareWriter( int mediaType );
 
   int m_writingMode;
   bool m_simulate;

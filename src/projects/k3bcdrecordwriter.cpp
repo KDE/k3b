@@ -444,6 +444,9 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
       else
 	kdError() << "(K3bCdrecordWriter) Did not parse all tracks sizes!" << endl;
     }
+    else
+      emit infoMessage( i18n("Starting writing"), PROCESS );
+
     m_currentTrack++;
     kdDebug() << "(K3bCdrecordWriter) writing track " << m_currentTrack << " of " << m_totalTracks << " tracks." << endl;
     emit nextTrack( m_currentTrack, m_totalTracks );

@@ -18,6 +18,7 @@
 #include "k3bmovixview.h"
 #include "k3bmovixjob.h"
 #include "k3bmovixfileitem.h"
+#include "k3bmovixburndialog.h"
 
 #include <k3bdiritem.h>
 #include <k3bfileitem.h>
@@ -451,6 +452,12 @@ void K3bMovixDoc::loadDefaultSettings( KConfig* c )
   setEjectDisk( c->readBoolEntry( "eject", false ) );
   setRandomPlay( c->readBoolEntry( "random_play", false ) );
   setNoDma( c->readBoolEntry( "no_dma", false ) );
+}
+
+
+K3bProjectBurnDialog* K3bMovixDoc::newBurnDialog( QWidget* parent, const char* name )
+{
+  return new K3bMovixBurnDialog( this, parent, name, true );
 }
 
 #include "k3bmovixdoc.moc"

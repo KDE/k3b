@@ -24,6 +24,7 @@ class K3bCdDevice::CdDevice;
 class K3bDataJob;
 class KTempFile;
 class K3bMovixInstallation;
+class K3bMovixDocPreparer;
 class K3bDirItem;
 class K3bFileItem;
 
@@ -49,27 +50,11 @@ class K3bMovixJob : public K3bBurnJob
   void slotDataJobFinished( bool );
 
  private:
-  bool writePlaylistFile();
-  bool writeIsolinuxConfigFile();
-  bool writeMovixRcFile();
-  bool addMovixFiles();
-
-  void cleanUp();
-
   K3bMovixDoc* m_doc;
   K3bDataJob* m_dataJob;
-  K3bMovixInstallation* m_installation;
+  K3bMovixDocPreparer* m_movixDocPreparer;
 
   bool m_canceled;
-
-  KTempFile* m_playlistFile;
-  KTempFile* m_isolinuxConfigFile;
-  KTempFile* m_movixRcFile;
-
-  K3bDirItem* m_isolinuxDir;
-  K3bDirItem* m_movixDir;
-  K3bDirItem* m_mplayerDir;
-  K3bFileItem* m_playlistFileItem;
 };
 
 #endif

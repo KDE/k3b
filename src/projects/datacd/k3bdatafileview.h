@@ -68,6 +68,7 @@ class K3bDataFileView : public K3bListView
 
  protected:
   bool acceptDrag(QDropEvent* e) const;
+  QDragObject* dragObject();
 
  private:
   void setupActions();

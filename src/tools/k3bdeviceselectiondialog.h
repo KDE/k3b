@@ -20,25 +20,35 @@
 
 
 #include <kdialogbase.h>
-#include "device/k3bdevice.h"
 
-class QComboBox;
+namespace K3bCdDevice {
+  class CdDevice;
+}
+
 
 class K3bDeviceSelectionDialog : public KDialogBase
 {
   Q_OBJECT
 
  public:
-  K3bDeviceSelectionDialog( bool reader, bool writer, QWidget* parent = 0, 
-			    const char* name = 0, const QString& text = "", bool modal = false );
+  K3bDeviceSelectionDialog( QWidget* parent = 0, 
+			    const char* name = 0, 
+			    const QString& text = QString::null, 
+			    bool modal = false );
   ~K3bDeviceSelectionDialog();
 
-  K3bDevice* selectedDevice() const;
+  void addDevice( K3bCdDevice::CdDevice* );
+  K3bCdDevice::CdDevice* selectedDevice() const;
 
-  static K3bDevice* selectWriter( QWidget* parent, const QString& text = "" );
+  static K3bCdDevice::CdDevice* selectWriter( QWidget* parent, 
+					      const QString& text = QString::null );
+  static K3bCdDevice::CdDevice* selectDevice( QWidget* parent, 
+					      const QPtrList<K3bCdDevice::CdDevice>& devices,
+					      const QString& text = QString::null );
 
  private:
-  QComboBox* m_comboDevices;
+  class Private;
+  Private* d;
 };
 
 #endif

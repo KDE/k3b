@@ -115,6 +115,7 @@ void K3bAudioListView::setupPopupMenu()
   m_popupMenu->insertSeparator();
   m_actionProperties->plug( m_popupMenu );
   m_popupMenu->insertSeparator();
+  m_doc->actionCollection()->action("project_burn")->plug( m_popupMenu );
 }
 
 
@@ -263,7 +264,7 @@ void K3bAudioListView::showPropertiesDialog()
     }
   }
   else {
-    m_view->burnDialog( false );
+    m_doc->slotProperties();
   }
 }
 

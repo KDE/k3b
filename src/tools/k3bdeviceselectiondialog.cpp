@@ -29,9 +29,14 @@
 #include <klocale.h>
 
 
-K3bDeviceSelectionDialog::K3bDeviceSelectionDialog( bool reader, 
-						    bool writer, 
-						    QWidget* parent, 
+class K3bDeviceSelectionDialog::Private
+{
+public:
+  QComboBox* comboDevices;
+};
+
+
+K3bDeviceSelectionDialog::K3bDeviceSelectionDialog( QWidget* parent, 
 						    const char* name, 
 						    const QString& text,
 						    bool modal )
@@ -43,36 +48,16 @@ K3bDeviceSelectionDialog::K3bDeviceSelectionDialog( bool reader,
 		 name,
 		 modal )
 {
-  if( !reader && !writer )
-    reader = true;
+  d = new Private();
 
   QGridLayout* lay = new QGridLayout( plainPage() );
 
   QLabel* label = new QLabel( text.isEmpty() ? i18n("Please select a device:") : text, plainPage() );
-  m_comboDevices = new QComboBox( plainPage() );
+  d->comboDevices = new QComboBox( plainPage() );
 
   lay->addWidget( label, 0, 0 );
-  lay->addWidget( m_comboDevices, 1, 0 );
+  lay->addWidget( d->comboDevices, 1, 0 );
   lay->setRowStretch( 2, 1 );
-
-  if( writer ) {
-    // -- read cd-writers ----------------------------------------------
-    QPtrList<K3bDevice> devices = k3bcore->deviceManager()->burningDevices();
-    K3bDevice* dev = devices.first();
-    while( dev ) {
-      m_comboDevices->insertItem( dev->vendor() + " " + dev->description() + " (" + dev->ioctlDevice() + ")" );
-      dev = devices.next();
-    }
-  }
-  if( reader ) {
-    // -- read cd-writers ----------------------------------------------
-    QPtrList<K3bDevice> devices = k3bcore->deviceManager()->readingDevices();
-    K3bDevice* dev = devices.first();
-    while( dev ) {
-      m_comboDevices->insertItem( dev->vendor() + " " + dev->description() + " (" + dev->ioctlDevice() + ")" );
-      dev = devices.next();
-    }
-  }
 }
 
 
@@ -81,9 +66,15 @@ K3bDeviceSelectionDialog::~K3bDeviceSelectionDialog()
 }
 
 
+void K3bDeviceSelectionDialog::addDevice( K3bCdDevice::CdDevice* dev )
+{
+  d->comboDevices->insertItem( dev->vendor() + " " + dev->description() + " (" + dev->ioctlDevice() + ")" );
+}
+
+
 K3bDevice* K3bDeviceSelectionDialog::selectedDevice() const
 {
-  const QString& s = m_comboDevices->currentText();
+  const QString& s = d->comboDevices->currentText();
 
   QString strDev = s.mid( s.find('(') + 1, s.find(')') - s.find('(') - 1 );
  
@@ -95,13 +86,24 @@ K3bDevice* K3bDeviceSelectionDialog::selectedDevice() const
 }
 
 
-K3bDevice* K3bDeviceSelectionDialog::selectWriter( QWidget* parent, const QString& text )
+K3bCdDevice::CdDevice* K3bDeviceSelectionDialog::selectDevice( QWidget* parent, 
+							       const QPtrList<K3bCdDevice::CdDevice>& devices,
+							       const QString& text )
 {
-  K3bDeviceSelectionDialog d( false, true, parent, 0, text );
-  if( d.exec() == Accepted )
-    return d.selectedDevice();
+  K3bDeviceSelectionDialog dlg( parent, 0, text );
+  for( QPtrListIterator<K3bCdDevice::CdDevice> it( devices ); it.current(); ++it )
+    dlg.addDevice( it.current() );
+
+  if( dlg.exec() == Accepted )
+    return dlg.selectedDevice();
   else
     return 0;
+}
+
+
+K3bDevice* K3bDeviceSelectionDialog::selectWriter( QWidget* parent, const QString& text )
+{
+  return selectDevice( parent, k3bcore->deviceManager()->burningDevices(), text );
 }
 
 

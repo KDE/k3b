@@ -15,14 +15,15 @@
 
 
 #include "k3bdatadirtreeview.h"
+#include "k3bdatafileview.h"
 #include "k3bdataview.h"
 #include "k3bdatadoc.h"
 #include "k3bdataitem.h"
 #include "k3bdiritem.h"
-#include "k3bisovalidator.h"
 #include "k3bdatapropertiesdialog.h"
 #include "k3bdataviewitem.h"
 #include <k3bview.h>
+#include <k3bvalidators.h>
 
 #include <qdragobject.h>
 #include <qheader.h>
@@ -54,7 +55,7 @@ K3bDataDirTreeView::K3bDataDirTreeView( K3bView* view, K3bDataDoc* doc, QWidget*
   addColumn( i18n("Directory") );
   header()->hide();
 
-  setValidator( new K3bIsoValidator( this, "val", false ) );
+  setValidator( K3bValidators::iso9660Validator( false, this ) );
 
   m_doc = doc;
 
@@ -279,7 +280,7 @@ void K3bDataDirTreeView::setupActions()
   m_popupMenu->insert( new KActionSeparator( this ) );
   m_popupMenu->insert( m_actionProperties );
   m_popupMenu->insert( new KActionSeparator( this ) );
-  //  m_popupMenu->insert( k3bMain()->actionCollection()->action("file_burn") );
+  m_popupMenu->insert( m_doc->actionCollection()->action("project_burn") );
 }
 
 
@@ -358,7 +359,7 @@ void K3bDataDirTreeView::slotProperties()
     }
   }
   else
-    m_view->burnDialog( false );
+    m_doc->slotProperties();
 }
 
 #include "k3bdatadirtreeview.moc"

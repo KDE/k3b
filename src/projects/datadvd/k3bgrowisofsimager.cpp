@@ -43,7 +43,7 @@ public:
 
 
 
-K3bGrowisofsImager::K3bGrowisofsImager( K3bDvdDoc* doc, QObject* parent, const char* name )
+K3bGrowisofsImager::K3bGrowisofsImager( K3bDataDoc* doc, QObject* parent, const char* name )
   : K3bIsoImager( doc, parent, name ),
     m_doc(doc)
 {
@@ -127,7 +127,7 @@ void K3bGrowisofsImager::start()
     *m_process << "-use-the-force-luke=dummy";
   if( m_doc->writingMode() == K3b::DAO && m_doc->multiSessionMode() == K3bDataDoc::NONE )
     *m_process << "-use-the-force-luke=dao";  // does DAO apply to DVD+R?
-  if( m_doc->speed() != 0 )
+  if( m_doc->speed() == 1 )
     *m_process << QString("-speed=%1").arg(m_doc->speed());
   // -------------------------------- DVD-R(W)
 
@@ -167,6 +167,9 @@ void K3bGrowisofsImager::start()
   }
   kdDebug() << s << endl << flush;
   emit debuggingOutput("growisofs comand:", s);
+
+
+  informAboutCutJolietNames();
 
 
   emit newSubTask( i18n("Preparing write process...") );

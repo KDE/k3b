@@ -71,6 +71,11 @@ class K3bWriterSelectionWidget : public QWidget
    */
   void setDvd( bool );
 
+  /**
+   * A simple hack to disable the speed selection for DVD formatting
+   */
+  void setForceAutoSpeed( bool );
+
  signals:
   void writerChanged();
   void writingAppChanged( int app );

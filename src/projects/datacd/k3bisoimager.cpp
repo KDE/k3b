@@ -45,6 +45,7 @@ K3bIsoImager::K3bIsoImager( K3bDataDoc* doc, QObject* parent, const char* name )
     m_pathSpecFile(0),
     m_rrHideFile(0),
     m_jolietHideFile(0),
+    m_sortWeightFile(0),
     m_process( 0 ),
     m_processSuspended(false),
     m_processExited(false),
@@ -224,6 +225,7 @@ void K3bIsoImager::cleanup()
   delete m_pathSpecFile;
   delete m_rrHideFile;
   delete m_jolietHideFile;
+  delete m_sortWeightFile;
 
   // remove boot-images-temp files
   for( QStringList::iterator it = m_tempFiles.begin();
@@ -231,7 +233,7 @@ void K3bIsoImager::cleanup()
     QFile::remove( *it );
   m_tempFiles.clear();
 
-  m_pathSpecFile = m_jolietHideFile = m_rrHideFile = 0;
+  m_pathSpecFile = m_jolietHideFile = m_rrHideFile = m_sortWeightFile = 0;
 
   delete m_process;
   m_process = 0;
@@ -423,6 +425,9 @@ void K3bIsoImager::start()
   kdDebug() << s << endl << flush;
   emit debuggingOutput("mkisofs comand:", s);
 
+
+  informAboutCutJolietNames();
+
   if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput) ) {
     // something went wrong when starting the program
     // it "should" be the executable
@@ -503,6 +508,10 @@ bool K3bIsoImager::addMkisofsParameters()
 
   *m_process << "-volset-size" << QString::number(m_doc->isoOptions().volumeSetSize());
   *m_process << "-volset-seqno" << QString::number(m_doc->isoOptions().volumeSetNumber());
+
+  if( m_sortWeightFile ) {
+    *m_process << "-sort" << m_sortWeightFile->name();
+  }
 
   if( m_doc->isoOptions().createRockRidge() ) {
     if( m_doc->isoOptions().preserveFilePermissions() )
@@ -616,9 +625,9 @@ bool K3bIsoImager::addMkisofsParameters()
 
 bool K3bIsoImager::writePathSpec()
 {
-    delete m_pathSpecFile;
-    m_pathSpecFile = new KTempFile();
-    m_pathSpecFile->setAutoDelete(true);
+  delete m_pathSpecFile;
+  m_pathSpecFile = new KTempFile();
+  m_pathSpecFile->setAutoDelete(true);
 
   if( QTextStream* t = m_pathSpecFile->textStream() ) {
     // recursive path spec writing
@@ -640,9 +649,9 @@ bool K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream
   }
 
   // if joliet is enabled we need to cut long names since mkisofs is not able to do it
-  if( m_doc->isoOptions().createJoliet() ) {
-    createJolietFilenames( dirItem );
-  }
+//   if( m_doc->isoOptions().createJoliet() ) {
+//     createJolietFilenames( dirItem );
+//   }
 
   // now create the graft points
   for( QPtrListIterator<K3bDataItem> it( *dirItem->children() ); it.current(); ++it ) {
@@ -705,8 +714,7 @@ bool K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream
 
 bool K3bIsoImager::writeRRHideFile()
 {
-  if( m_rrHideFile )
-    delete m_rrHideFile;
+  delete m_rrHideFile;
   m_rrHideFile = new KTempFile();
   m_rrHideFile->setAutoDelete(true);
 
@@ -716,18 +724,8 @@ bool K3bIsoImager::writeRRHideFile()
     while( item ) {
       if( item->hideOnRockRidge() ) {
 	if( !item->isDir() )  // hiding directories does not work (all dirs point to the dummy-dir)
-	  *t << escapeGraftPoint( item->localPath() ) << "\n";
-	//       if( item->isDir() ) {
-	// 	K3bDirItem* parent = item->parent();
-	// 	if( parent )
-	// 	  item = parent->nextChild( item );
-	// 	else
-	// 	  item = 0;
-	//       }
-	//       else
-	//	item = item->nextSibling();
+	  *t << escapeGraftPoint( item->localPath() ) << endl;
       }
-      //    else
       item = item->nextSibling();
     }
 
@@ -741,8 +739,7 @@ bool K3bIsoImager::writeRRHideFile()
 
 bool K3bIsoImager::writeJolietHideFile()
 {
-  if( m_jolietHideFile )
-    delete m_jolietHideFile;
+  delete m_jolietHideFile;
   m_jolietHideFile = new KTempFile();
   m_jolietHideFile->setAutoDelete(true);
 
@@ -752,12 +749,37 @@ bool K3bIsoImager::writeJolietHideFile()
     while( item ) {
       if( item->hideOnRockRidge() ) {
 	if( !item->isDir() )  // hiding directories does not work (all dirs point to the dummy-dir)
-	  *t << escapeGraftPoint( item->localPath() ) << "\n";
+	  *t << escapeGraftPoint( item->localPath() ) << endl;
       }
       item = item->nextSibling();
     }
 
     m_jolietHideFile->close();
+    return true;
+  }
+  else
+    return false;
+}
+
+
+bool K3bIsoImager::writeSortWeightFile()
+{
+  delete m_sortWeightFile;
+  m_sortWeightFile = new KTempFile();
+  m_sortWeightFile->setAutoDelete(true);
+
+  if( QTextStream* t = m_sortWeightFile->textStream() ) {
+    //
+    // We need to write the local path in combination with the sort weight
+    // mkisofs will take care of multible entries for one local file and always
+    // use the highest weight
+    //
+    K3bDataItem* item = m_doc->root();
+    while( (item = item->nextSibling()) ) {  // we skip the root here
+      if( item->sortWeight() != 0 )
+	*t << escapeGraftPoint( item->localPath() ) << " " << item->sortWeight() << endl;
+    }
+
     return true;
   }
   else
@@ -799,79 +821,34 @@ bool K3bIsoImager::prepareMkisofsFiles()
     }
   }
 
+  if( !writeSortWeightFile() ) {
+    emit infoMessage( i18n("Could not write temporary file"), K3bJob::ERROR );
+    return false;
+  }
+
   return true;
 }
 
 
-void K3bIsoImager::createJolietFilenames( K3bDirItem* dirItem )
+void K3bIsoImager::informAboutCutJolietNames()
 {
-  // create new joliet names and use jolietPath for graftpoints
-  // sort dirItem->children entries and rename all to fit joliet
-  // which is about x characters
+  // now that the command has been set up we check if some filenames get crippled due to an enabled Joliet extension
+  if( m_doc->isoOptions().createJoliet() ) {
+    QPtrList<K3bDataItem> cutFiles;
+    K3bDataItem* item = m_doc->root();
+    while( (item = item->nextSibling()) )  // we skip the root here
+      if( item->k3bName() != item->jolietName() )
+	cutFiles.append(item);
 
-  kdDebug() << "(K3bIsoImager) creating joliet names for directory: " << dirItem->k3bName() << endl;
+    if( !cutFiles.isEmpty() ) {
+      emit infoMessage( i18n("Some filenames need to be shortened due to the 64 char restriction of the Joliet extensions."), INFO );
+      emit infoMessage( i18n("See the debugging output for details."), INFO );
 
-  QPtrList<K3bDataItem> sortedChildren;
-
-  // insertion sort
-  for( QPtrListIterator<K3bDataItem> it( *dirItem->children() ); it.current(); ++it ) {
-    K3bDataItem* item = it.current();
-
-    unsigned int i = 0;
-    while( i < sortedChildren.count() && item->k3bName() > sortedChildren.at(i)->k3bName() )
-      ++i;
-
-    sortedChildren.insert( i, item );
-  }
-
-  unsigned int begin = 0;
-  unsigned int sameNameCount = 0;
-  unsigned int jolietMaxLength = 64;
-  while( begin < sortedChildren.count() ) {
-    if( sortedChildren.at(begin)->k3bName().length() > jolietMaxLength ) {
-      kdDebug() << "(K3bIsoImager) filename to long for joliet: "
-		<< sortedChildren.at(begin)->k3bName() << endl;
-      sameNameCount = 1;
-
-      while( begin + sameNameCount < sortedChildren.count() &&
-	     sortedChildren.at( begin + sameNameCount )->k3bName().left(jolietMaxLength)
-	     == sortedChildren.at(begin)->k3bName().left(jolietMaxLength) )
-	sameNameCount++;
-
-      kdDebug() << "(K3bIsoImager) found " << sameNameCount << " files with same joliet name" << endl;
-
-      if( sameNameCount > 1 ) {
-	kdDebug() << "(K3bIsoImager) cutting filenames." << endl;
-
-	unsigned int charsForNumber = QString::number(sameNameCount).length();
-	for( unsigned int i = begin; i < begin + sameNameCount; i++ ) {
-	  // we always reserve 5 chars for the extension
-	  QString extension = sortedChildren.at(i)->k3bName().right(5);
-	  if( !extension.contains(".") )
-	    extension = "";
-	  else
-	    extension = extension.mid( extension.find(".") );
-	  QString jolietName = sortedChildren.at(i)->k3bName().left(jolietMaxLength-charsForNumber-extension.length()-1);
-	  jolietName.append( " " );
-	  jolietName.append( QString::number( i-begin ).rightJustify( charsForNumber, '0') );
-	  jolietName.append( extension );
-	  sortedChildren.at(i)->setJolietName( jolietName );
-
-	  kdDebug() << "(K3bIsoImager) set joliet name for "
-		    << sortedChildren.at(i)->k3bName() << " to "
-		    << jolietName << endl;
-	}
+      for( QPtrListIterator<K3bDataItem> it( cutFiles ); it.current(); ++it ) {
+	item = it.current();
+	emit debuggingOutput( i18n("Filenames cut for Joliet conformance"),
+			      item->k3bName() + " -> " + item->jolietName() );
       }
-      else {
-	kdDebug() << "(K3bIsoImager) single file -> no change." << endl;
-	sortedChildren.at(begin)->setJolietName( sortedChildren.at(begin)->k3bName() );
-      }
-
-      begin += sameNameCount;
-    }
-    else {
-      sortedChildren.at(begin)->setJolietName( sortedChildren.at(begin)->k3bName() );
-      begin++;
     }
   }
 }

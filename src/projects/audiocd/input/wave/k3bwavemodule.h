@@ -45,6 +45,8 @@ class K3bWaveModule : public K3bAudioModule
 
   void cleanup();
 
+  bool seek( const K3b::Msf& );
+
  protected:
   bool initDecodingInternal( const QString& filename );
   int decodeInternal( char* _data, int maxLen );
@@ -56,6 +58,8 @@ class K3bWaveModule : public K3bAudioModule
   static unsigned long le_a_to_u_long( unsigned char* a );
 
   QFile* m_file;
+
+  long m_headerLength;
 };
 
 

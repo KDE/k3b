@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -13,21 +13,29 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#ifndef _K3B_MOVIX_DVD_DOC_H_
+#define _K3B_MOVIX_DVD_DOC_H_
 
-#ifndef K3BISOVALIDATOR_H
-#define K3BISOVALIDATOR_H
+#include <k3bmovixdoc.h>
 
-#include <qvalidator.h>
 
-/**
- * A Validator for all values in a data project
- * @author Sebastian Trueg
- */
-class K3bIsoValidator : public QRegExpValidator
+class K3bMovixDvdDoc : public K3bMovixDoc
 {
- public: 
-  K3bIsoValidator( QObject* parent = 0, const char* name = 0, bool allowEmpty = true );
-  ~K3bIsoValidator();
+  Q_OBJECT
+
+ public:
+  K3bMovixDvdDoc( QObject* parent = 0 );
+  ~K3bMovixDvdDoc();
+
+  int docType() const { return MOVIX_DVD; }
+
+  K3bBurnJob* newBurnJob();
+
+ protected:
+  QString documentType() const { return "movixdvd"; }
+
+  K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
+  K3bView* newView( QWidget* parent = 0 );
 };
 
 #endif

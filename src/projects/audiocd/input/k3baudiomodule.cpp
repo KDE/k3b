@@ -17,6 +17,7 @@
 #include "k3baudiomodule.h"
 
 #include <kdebug.h>
+#include <kfilemetainfo.h>
 
 
 K3bAudioModule::K3bAudioModule( QObject* parent, const char* name )
@@ -84,5 +85,26 @@ int K3bAudioModule::decode( char* _data, int maxLen )
 void K3bAudioModule::cleanup()
 {
 }
+
+
+bool K3bAudioModule::metaInfo( const QString& filename, K3bAudioTitleMetaInfo& info )
+{
+  KFileMetaInfo metaInfo( filename );
+
+  if( metaInfo.isValid() ) {
+
+    KFileMetaInfoItem artistItem = metaInfo.item( "Artist" );
+    KFileMetaInfoItem titleItem = metaInfo.item( "Title" );
+    
+    if( artistItem.isValid() )
+      info.setArtist( artistItem.string() );
+
+    if( titleItem.isValid() )
+      info.setTitle( titleItem.string() );
+  }
+
+  return true;
+}
+
 
 #include "k3baudiomodule.moc"

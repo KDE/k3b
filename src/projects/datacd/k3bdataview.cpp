@@ -16,11 +16,13 @@
 
 #include "k3bdataview.h"
 #include "k3bdatadoc.h"
-#include "../k3bfillstatusdisplay.h"
 #include "k3bdataburndialog.h"
 #include "k3bbootimageview.h"
+#include "k3bdatadirtreeview.h"
+#include "k3bdatafileview.h"
 #include <device/k3bdevice.h>
 #include <k3bdeviceselectiondialog.h>
+#include <k3bfillstatusdisplay.h>
 #include <k3bcore.h>
 
 #include <klocale.h>
@@ -63,17 +65,36 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
 
   m_dataDirTree->updateContents();
   m_dataFileView->updateContents();
+
+
+  // the data actions
+  (void)new KAction(i18n("&Import Session"), "gear", 0, this, SLOT(importSession()),
+		    actionCollection(), "project_data_import_session" );
+  (void)new KAction(i18n("&Clear Imported Session"), "gear", 0, this,
+		    SLOT(clearImportedSession()), actionCollection(),
+		    "project_data_clear_imported_session" );
+  (void)new KAction(i18n("&Edit Boot Images"), "cdtrack", 0, this,
+		    SLOT(editBootImages()), actionCollection(),
+		    "project_data_edit_boot_images" );
+
+
+  // this is just for testing (or not?)
+  // most likely every project type will have it's rc file in the future
+  // we only add the additional actions since K3bView already added the default actions
+  setXML( "<!DOCTYPE kpartgui SYSTEM \"kpartgui.dtd\">"
+	  "<kpartgui name=\"k3bproject\" version=\"1\">"
+	  "<MenuBar>"
+	  " <Menu name=\"project\"><text>&amp;Project</text>"
+	  "  <Action name=\"project_data_import_session\"/>"
+	  "  <Action name=\"project_data_clear_imported_session\"/>"
+	  "  <Action name=\"project_data_edit_boot_images\"/>"
+	  " </Menu>"
+	  "</MenuBar>"
+	  "</kpartgui>", true );
 }
 
 
 K3bDataView::~K3bDataView(){
-}
-
-
-void K3bDataView::burnDialog( bool withWriting )
-{
-  K3bDataBurnDialog d( m_doc, this, "databurndialog", true );
-  d.exec( withWriting );
 }
 
 
@@ -185,6 +206,7 @@ void K3bDataView::editBootImages()
 				    KDialogBase::Ok, KDialogBase::Ok, true );
   d->setMainWidget( new K3bBootImageView( m_doc, d ) );
   d->exec();
+  delete d;
 }
 
 #include "k3bdataview.moc"

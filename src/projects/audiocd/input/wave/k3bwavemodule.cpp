@@ -233,13 +233,13 @@ unsigned long K3bWaveModule::identifyWaveFile( QFile* f )
   }
 
   // found data chunk
-  int headerLen = f->at();
+  m_headerLength = f->at();
   unsigned long size = le_a_to_u_long(chunk.cksize);
-  if( headerLen + size > (unsigned long)f->size() ) {
+  if( m_headerLength + size > (unsigned long)f->size() ) {
     kdDebug() << "(K3bWaveModule) " << f->name() << ": file length " << f->size() 
-    << " does not match length from WAVE header " << headerLen << " + " << size
+    << " does not match length from WAVE header " << m_headerLength << " + " << size
     << " - using actual length." << endl;
-    size = (f->size() - headerLen);
+    size = (f->size() - m_headerLength);
   }
 
   // we pad to a multible of 2352 bytes
@@ -262,5 +262,12 @@ bool K3bWaveModule::canDecode( const KURL& url )
 
   return (identifyWaveFile( &f ) > 0);
 }
+
+
+bool K3bWaveModule::seek( const K3b::Msf& pos )
+{
+  return( m_file->at( m_headerLength + (pos.totalFrames()*2352) ) );
+}
+
 
 #include "k3bwavemodule.moc"

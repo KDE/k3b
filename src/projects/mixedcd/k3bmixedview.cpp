@@ -92,13 +92,6 @@ void K3bMixedView::slotDataTreeSelected()
 }
 
 
-void K3bMixedView::burnDialog( bool withWritingButton )
-{
-  K3bMixedBurnDialog d( m_doc, this );
-  d.exec( withWritingButton );
-}
-
-
 K3bDirItem* K3bMixedView::currentDir() const
 {
   if( m_widgetStack->visibleWidget() == m_dataFileView )

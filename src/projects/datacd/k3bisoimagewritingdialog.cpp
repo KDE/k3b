@@ -61,7 +61,7 @@
 
 
 K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( QWidget* parent, const char* name, bool modal )
-  : K3bInteractionDialog( parent, name, i18n("Write Iso9660 Image to CD"), QString::null,
+  : K3bInteractionDialog( parent, name, i18n("Burn Iso9660 Image to CD/DVD"), QString::null,
 			  START_BUTTON|CANCEL_BUTTON,
 			  START_BUTTON,
 			  modal )
@@ -108,7 +108,7 @@ void K3bIsoImageWritingDialog::setupGui()
 
   // image group box
   // -----------------------------------------------------------------------
-  QGroupBox* groupImage = new QGroupBox( i18n("Image to Write"), frame );
+  QGroupBox* groupImage = new QGroupBox( i18n("Image to Burn"), frame );
   groupImage->setColumnLayout(0, Qt::Vertical );
   groupImage->layout()->setSpacing( 0 );
   groupImage->layout()->setMargin( 0 );
@@ -407,11 +407,6 @@ void K3bIsoImageWritingDialog::slotWriterChanged()
   if (m_writerSelectionWidget->writerDevice()) {
     m_buttonStart->setEnabled( true );
 
-    if( m_writerSelectionWidget->writingApp() == K3b::CDRDAO )
-      m_writingModeWidget->setSupportedModes( K3b::DAO );
-    else
-      m_writingModeWidget->setSupportedModes( 0xFF );  // default is cdrecord and cdrecord supports all modes
-
     if( !m_writerSelectionWidget->writerDevice()->burnproof() ) {
       m_checkBurnProof->setChecked( false );
       m_checkBurnProof->setDisabled( true );
@@ -419,6 +414,32 @@ void K3bIsoImageWritingDialog::slotWriterChanged()
     else {
       m_checkBurnProof->setEnabled( true );
     }
+
+    if( m_writerSelectionWidget->writerDevice()->writesDvd() )
+      m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRECORD|K3b::CDRDAO|K3b::GROWISOFS );
+    else
+      m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRECORD|K3b::CDRDAO );
+
+
+    if( m_writerSelectionWidget->writingApp() == K3b::CDRDAO )
+      m_writingModeWidget->setSupportedModes( K3b::DAO );
+    else if ( m_writerSelectionWidget->writingApp() == K3b::CDRECORD )
+      m_writingModeWidget->setSupportedModes( K3b::TAO|K3b::DAO|K3b::RAW );
+    else if( m_writerSelectionWidget->writingApp() == K3b::GROWISOFS )
+      m_writingModeWidget->setSupportedModes( K3b::DAO|K3b::WRITING_MODE_INCR_SEQ|K3b::WRITING_MODE_RES_OVWR );
+    else if( m_writerSelectionWidget->writerDevice()->writesDvd() )
+      m_writingModeWidget->setSupportedModes( 0xff ); // all modes
+    else
+      m_writingModeWidget->setSupportedModes( K3b::TAO|K3b::DAO|K3b::RAW ); // stuff supported by cdrecord
+    
+
+    // no multisessioning and data mode selection when writing DVDs
+    m_checkNoFix->setEnabled( !(m_writingModeWidget->writingMode() & (K3b::WRITING_MODE_RES_OVWR|
+								      K3b::WRITING_MODE_INCR_SEQ)) &&
+			      m_writerSelectionWidget->writingApp() != K3b::GROWISOFS );
+    m_dataModeWidget->setEnabled( !(m_writingModeWidget->writingMode() & (K3b::WRITING_MODE_RES_OVWR|
+									  K3b::WRITING_MODE_INCR_SEQ)) &&
+				  m_writerSelectionWidget->writingApp() != K3b::GROWISOFS );
   }
   else {
     m_buttonStart->setEnabled( false );

@@ -20,6 +20,7 @@
 #include <k3bcore.h>
 #include <k3bdeviceselectiondialog.h>
 #include <device/k3bdevice.h>
+#include <device/k3bdevicemanager.h>
 #include <device/k3bdevicehandler.h>
 #include <device/k3bmsf.h>
 
@@ -411,9 +412,13 @@ void K3bFillStatusDisplay::slotPopupMenu( const QPoint& p )
 
 void K3bFillStatusDisplay::slotDetermineSize()
 {
-  K3bDevice* dev = K3bDeviceSelectionDialog::selectWriter( parentWidget() );
+  K3bDevice* dev = K3bDeviceSelectionDialog::selectDevice( parentWidget(), 
+							   d->showDvdSizes 
+							   ? k3bcore->deviceManager()->dvdWriter() 
+							   : k3bcore->deviceManager()->cdWriter() );
+
   if( dev ) {
-    connect( K3bCdDevice::sendCommand( K3bCdDevice::DeviceHandler::REMAININGSIZE, dev ),
+    connect( K3bCdDevice::sendCommand( K3bCdDevice::DeviceHandler::NG_DISKINFO, dev ),
 	     SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
 	     this,
 	     SLOT(slotRemainingSize(K3bCdDevice::DeviceHandler*)) );
@@ -423,7 +428,7 @@ void K3bFillStatusDisplay::slotDetermineSize()
 void K3bFillStatusDisplay::slotRemainingSize( K3bCdDevice::DeviceHandler* dh )
 {
   if( dh->success() ) {
-    K3b::Msf size = dh->remainingSize();
+    K3b::Msf size = dh->ngDiskInfo().remainingSize();
     d->displayWidget->setCdSize( size );
     d->actionCustomSize->setChecked(true);
     update();

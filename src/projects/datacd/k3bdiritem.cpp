@@ -21,6 +21,9 @@
 #include <qstring.h>
 #include <qptrlist.h>
 
+#include <kdebug.h>
+
+
 K3bDirItem::K3bDirItem(const QString& name, K3bDataDoc* doc, K3bDirItem* parentDir)
   : K3bDataItem( doc, parentDir ),
     m_size(0),
@@ -78,6 +81,8 @@ K3bDirItem* K3bDirItem::addDataItem( K3bDataItem* item )
       updateFiles( 1, 0 );
     }
   }
+
+  revalidate();
 	
   return this;
 }
@@ -103,6 +108,8 @@ K3bDataItem* K3bDirItem::takeDataItem( int index )
     doc()->sizeHandler()->removeFile( item );
     updateFiles( -1, 0 );
   }
+
+  revalidate();
 
   return item;
 }
@@ -163,7 +170,7 @@ K3bDataItem* K3bDirItem::find( const QString& filename ) const
 }
 
 
-K3bDataItem* K3bDirItem::findByPath( const QString& p ) const
+K3bDataItem* K3bDirItem::findByPath( const QString& p )
 {
   if( p.isEmpty() || p == "/" )
     return this;
@@ -258,6 +265,115 @@ void K3bDirItem::updateFiles( long files, long dirs )
 }
 
 
+
+//
+// mkisofs is not able to cut the joliet names so we do it ourselves.
+//
+void K3bDirItem::revalidate()
+{
+  // create new joliet names and use jolietPath for graftpoints
+  // sort dirItem->children entries and rename all to fit joliet
+  // which is about x characters
+
+  kdDebug() << "(K3bIsoImager) creating joliet names for directory: " << k3bName() << endl;
+
+  // insertion sort
+  QPtrList<K3bDataItem> sortedChildren;
+  for( QPtrListIterator<K3bDataItem> it( *children() ); it.current(); ++it ) {
+    K3bDataItem* item = it.current();
+
+    unsigned int i = 0;
+    while( i < sortedChildren.count() && item->k3bName() > sortedChildren.at(i)->k3bName() )
+      ++i;
+
+    sortedChildren.insert( i, item );
+  }
+
+
+//   // first of all we need to make sure that no two items with the same name exist
+//   QPtrListIterator<K3bDataItem> it( sortedChildren );
+//   QPtrListIterator<K3bDataItem> it2( sortedChildren );
+//   ++it2;
+//   // this is used to check if a k3bName already contains a counter suffix
+//   // containing of a space, an integer in brackets and a dot or the end of the
+//   // string. The dot should follow the extension (so it's the last dot in the string)
+//   QRegExp countChecker( "\\s\\(\\d+\\)[\\.(?!\\.+)$]" );
+//   while( it.current() && it2.current() ) {
+//     K3bDataItem* item1 = it.current();
+//     K3bDataItem* item2 = it2.current();
+//     if( item1->k3bName() == item2->k3bName() ) {
+//       QString newName = item2->k3bName();
+
+//       // check if the name already ends in a count (i)
+//       int pos = countChecker.search( item2->k3bName() );
+//       if( pos >= 0 ) {
+// 	// increase the counter
+
+//       }
+//       // append a count (i)
+//       item2->setK3bName( item2->k3bName() + 
+//     }
+//   }
+
+
+  unsigned int begin = 0;
+  unsigned int sameNameCount = 0;
+  unsigned int jolietMaxLength = 64;
+  //  unsigned int jolietLongMaxLength = 103;
+  while( begin < sortedChildren.count() ) {
+    if( sortedChildren.at(begin)->k3bName().length() > jolietMaxLength ) {
+      kdDebug() << "(K3bIsoImager) filename to long for joliet: "
+		<< sortedChildren.at(begin)->k3bName() << endl;
+      sameNameCount = 1;
+
+      while( begin + sameNameCount < sortedChildren.count() &&
+	     sortedChildren.at( begin + sameNameCount )->k3bName().left(jolietMaxLength)
+	     == sortedChildren.at(begin)->k3bName().left(jolietMaxLength) )
+	sameNameCount++;
+
+      kdDebug() << "(K3bIsoImager) found " << sameNameCount << " files with same joliet name" << endl;
+
+      if( sameNameCount > 1 ) {
+	kdDebug() << "(K3bIsoImager) cutting filenames." << endl;
+
+	unsigned int charsForNumber = QString::number(sameNameCount).length();
+	for( unsigned int i = begin; i < begin + sameNameCount; i++ ) {
+	  // we always reserve 5 chars for the extension
+	  QString extension = sortedChildren.at(i)->k3bName().right(5);
+	  if( !extension.contains(".") )
+	    extension = "";
+	  else
+	    extension = extension.mid( extension.find(".") );
+	  QString jolietName = sortedChildren.at(i)->k3bName().left(jolietMaxLength-charsForNumber-extension.length()-1);
+	  jolietName.append( " " );
+	  jolietName.append( QString::number( i-begin ).rightJustify( charsForNumber, '0') );
+	  jolietName.append( extension );
+	  sortedChildren.at(i)->setJolietName( jolietName );
+
+	  kdDebug() << "(K3bIsoImager) set joliet name for "
+		    << sortedChildren.at(i)->k3bName() << " to "
+		    << jolietName << endl;
+	}
+      }
+      else {
+	kdDebug() << "(K3bIsoImager) single file -> just cutting." << endl;
+	QString extension = sortedChildren.at(begin)->k3bName().mid( sortedChildren.at(begin)->k3bName().findRev(".") );
+	if( extension.length() > 5 )
+	  extension = QString::null;
+	sortedChildren.at(begin)->setJolietName( sortedChildren.at(begin)->k3bName().left(jolietMaxLength-extension.length())
+						 + extension );
+      }
+
+      begin += sameNameCount;
+    }
+    else {
+      sortedChildren.at(begin)->setJolietName( sortedChildren.at(begin)->k3bName() );
+      begin++;
+    }
+  }
+}
+
+
 K3bRootItem::K3bRootItem( K3bDataDoc* doc )
   : K3bDirItem( "root", doc, 0 )
 {
@@ -292,3 +408,4 @@ void K3bRootItem::setK3bName( const QString& text )
 {
   doc()->isoOptions().setVolumeID( text );
 }
+

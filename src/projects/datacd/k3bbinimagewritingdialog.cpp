@@ -88,7 +88,7 @@
 */
 
 K3bBinImageWritingDialog::K3bBinImageWritingDialog( QWidget* parent, const char* name, bool modal )
-  : K3bInteractionDialog( parent, name, i18n("Write Bin/Cue Image to CD"), QString::null,
+  : K3bInteractionDialog( parent, name, i18n("Burn Bin/Cue Image to CD"), QString::null,
 			  START_BUTTON|CANCEL_BUTTON,
 			  START_BUTTON,
 			  modal )

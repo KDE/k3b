@@ -188,11 +188,27 @@ void K3bDvdFormattingJob::slotStderrLine( const QString& line )
 
   emit debuggingOutput( "dvd+rw-format", line );
 
+  // parsing for the -gui mode (to come...)
   int pos = line.find( "blanking" );
   if( pos < 0 )
     pos = line.find( "formatting" );
   if( pos >= 0 ) {
     int endPos = line.find( QRegExp("[^\\d\\.]"), pos );
+    bool ok;
+    int progress = (int)(line.mid( pos, endPos - pos ).toDouble(&ok));
+    if( ok ) {
+      d->lastProgressValue = progress;
+      emit percent( progress );
+    }
+    else {
+      kdDebug() << "(K3bDvdFormattingJob) parsing error: '" << line.mid( pos, endPos - pos ) << "'" << endl;
+    }
+  }
+
+  // parsing for \b\b... stuff 
+  else if( !line.startsWith("*") ) {
+    int pos = line.find( QRegExp("\\d") );
+    int endPos = line.find( QRegExp("[^\\d\\.]"), pos ) - 1;
     bool ok;
     int progress = (int)(line.mid( pos, endPos - pos ).toDouble(&ok));
     if( ok ) {

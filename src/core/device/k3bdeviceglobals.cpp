@@ -124,11 +124,10 @@ QString K3bCdDevice::mediaTypeString( int m )
 void K3bCdDevice::debugBitfield( unsigned char* data, long len )
 {
   for( int i = 0; i < len; ++i ) {
-    QString index, num, bitString;
+    QString index, bitString;
     index.sprintf( "%4i", i );
-    num.sprintf( "%4i", data[i] );
     for( int bp = 7; bp >= 0; --bp )
-      bitString += ( data[i] & (1<<bp) ? "1 " : "0 " );
-    kdDebug() << index << num << bitString << endl;
+      bitString[7-bp] = ( data[i] & (1<<bp) ? '1' : '0' );
+    kdDebug() << index << " - " << bitString << " - " << (int)data[i] << endl;
   }
 }

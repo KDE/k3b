@@ -60,7 +60,7 @@ K3bProjectBurnDialog::K3bProjectBurnDialog( K3bDoc* doc, QWidget *parent, const 
 
   setSaveButtonText( i18n("Save"), i18n("Save Settings and close"),
 		     i18n("Saves the settings to the project and closes the burn dialog.") );
-  setStartButtonText( i18n("Write") );
+  setStartButtonText( i18n("Burn") );
 
   m_job = 0;
 }
@@ -171,7 +171,6 @@ int K3bProjectBurnDialog::exec( bool burn )
 void K3bProjectBurnDialog::slotSaveClicked()
 {
   saveSettings();
-  m_doc->updateAllViews();
   done( Saved );
 }
 

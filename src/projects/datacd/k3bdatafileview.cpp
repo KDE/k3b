@@ -21,7 +21,7 @@
 #include "k3bdiritem.h"
 #include "k3bfileitem.h"
 #include "k3bspecialdataitem.h"
-#include "k3bisovalidator.h"
+#include <k3bvalidators.h>
 #include "k3bdatapropertiesdialog.h"
 #include "k3bdatadirtreeview.h"
 #include "k3bdataviewitem.h"
@@ -64,7 +64,7 @@ K3bDataFileView::K3bDataFileView( K3bView* view, K3bDataDirTreeView* dirTreeView
 
   setSelectionModeExt( KListView::Extended );
 
-  setValidator( new K3bIsoValidator( this, "val", false ) );
+  setValidator( K3bValidators::iso9660Validator( false, this ) );
 
   m_doc = doc;
   m_currentDir = doc->root();
@@ -128,8 +128,32 @@ void K3bDataFileView::updateContents()
 }
 
 
-bool K3bDataFileView::acceptDrag(QDropEvent* e) const{
-  return ( e->source() == viewport() || KURLDrag::canDecode(e) || e->source() == m_treeView->viewport() );
+QDragObject* K3bDataFileView::dragObject()
+{
+  QPtrList<QListViewItem> selectedViewItems = selectedItems();
+  KURL::List urls;
+  for( QPtrListIterator<QListViewItem> it( selectedViewItems ); it.current(); ++it ) {
+    K3bDataViewItem* dataViewItem = dynamic_cast<K3bDataViewItem*>( it.current() );
+    if( dataViewItem )
+      if( dataViewItem->dataItem()->isFile()
+	  &&  !dataViewItem->dataItem()->localPath().isEmpty() )
+	urls.append( dataViewItem->dataItem()->localPath() );
+    else
+      kdDebug() << "no dataviewitem" << endl;
+  }
+
+  if( urls.isEmpty() )
+    return 0;
+
+  return KURLDrag::newDrag( urls, viewport() );
+}
+
+
+bool K3bDataFileView::acceptDrag(QDropEvent* e) const
+{
+  return ( e->source() == viewport() || 
+	   KURLDrag::canDecode(e) || 
+	   e->source() == m_treeView->viewport() );
 }
 
 
@@ -234,7 +258,7 @@ void K3bDataFileView::setupActions()
   m_popupMenu->insert( new KActionSeparator( this ) );
   m_popupMenu->insert( m_actionProperties );
   m_popupMenu->insert( new KActionSeparator( this ) );
-  //  m_popupMenu->insert( k3bMain()->actionCollection()->action("file_burn") );
+  m_popupMenu->insert( m_doc->actionCollection()->action("project_burn") );
 }
 
 
@@ -327,7 +351,7 @@ void K3bDataFileView::slotProperties()
     d.exec();
   }
   else
-    m_view->burnDialog( false );
+    m_doc->slotProperties();
 }
 
 

@@ -15,8 +15,10 @@
 
 #include "k3bdvdview.h"
 #include "k3bdvddoc.h"
-#include "k3bdvdburndialog.h"
 #include <k3bfillstatusdisplay.h>
+#include <k3bdatafileview.h>
+
+#include <klocale.h>
 
 
 K3bDvdView::K3bDvdView( K3bDvdDoc* doc, QWidget *parent, const char *name )
@@ -25,6 +27,10 @@ K3bDvdView::K3bDvdView( K3bDvdDoc* doc, QWidget *parent, const char *name )
   m_doc = doc;
 
   fillStatusDisplay()->showDvdSizes(true);
+
+  m_dataFileView->setNoItemText( i18n("Use drag'n'drop to add files and directories to the project.\n"
+				      "To remove or rename files use the context menu.\n"
+				      "After that press the burn button to write the DVD.") );
 }
 
 
@@ -32,11 +38,5 @@ K3bDvdView::~K3bDvdView()
 {
 }
 
-
-void K3bDvdView::burnDialog( bool withWriting )
-{
-  K3bDvdBurnDialog d( m_doc, this, "databurndialog", true );
-  d.exec( withWriting );
-}
 
 #include "k3bdvdview.moc"

@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -14,21 +14,24 @@
  */
 
 
-#include "k3bisovalidator.h"
+#ifndef _K3B_MOVIX_DVD_VIEW_H_
+#define _K3B_MOVIX_DVD_VIEW_H_
 
-#include <qregexp.h>
+#include <k3bmovixview.h>
+
+class K3bMovixDvdDoc;
 
 
-K3bIsoValidator::K3bIsoValidator( QObject* parent, const char* name, bool allowEmpty )
-  : QRegExpValidator( parent, name )
+class K3bMovixDvdView : public K3bMovixView
 {
-  if( allowEmpty )
-    setRegExp( QRegExp( "[^/$\\\"%]*" ) );
-  else
-    setRegExp( QRegExp( "[^/$\\\"%]+" ) );
-}
+  Q_OBJECT
 
+ public:
+  K3bMovixDvdView( K3bMovixDvdDoc* doc, QWidget *parent = 0, const char *name = 0 );
+  ~K3bMovixDvdView();
 
-K3bIsoValidator::~K3bIsoValidator()
-{
-}
+ private:
+  K3bMovixDvdDoc* m_doc;
+};
+
+#endif

@@ -30,7 +30,7 @@ K3bView::K3bView( K3bDoc* pDoc, QWidget *parent, const char* name )
   : QWidget( parent, name )
 {
   m_doc = pDoc;
-  m_actionCollection = new KActionCollection( this );
+  //  m_actionCollection = new KActionCollection( this );
 
   QGridLayout* grid = new QGridLayout( this );
 
@@ -40,6 +40,25 @@ K3bView::K3bView( K3bDoc* pDoc, QWidget *parent, const char* name )
   grid->setRowStretch( 0, 1 );
   grid->setSpacing( 5 );
   grid->setMargin( 2 );
+
+  // merge doc actions
+  actionCollection()->addDocCollection( pDoc->actionCollection() );
+
+  // this is just for testing (or not?)
+  // most likely every project type will have it's rc file in the future
+  setXML( "<!DOCTYPE kpartgui SYSTEM \"kpartgui.dtd\">"
+	  "<kpartgui name=\"k3bproject\" version=\"1\">"
+	  "<MenuBar>"
+	  " <Menu name=\"project\"><text>&amp;Project</text>"
+	  "  <Action name=\"project_burn\"/>"
+	  "  <Action name=\"project_properties\"/>"
+	  " </Menu>"
+	  "</MenuBar>"
+	  "<ToolBar name=\"projectToolBar\" index=\"1\">"
+	  "  <Action name=\"project_burn\"/>"
+	  "  <Action name=\"project_properties\"/>"
+	  " </ToolBar>"
+	  "</kpartgui>", true );
 }
 
 K3bView::~K3bView()
@@ -53,19 +72,10 @@ void K3bView::setMainWidget( QWidget* w )
 }
 
 
-KActionCollection* K3bView::actionCollection() const
-{
-  return m_actionCollection; 
-}
-
-
-void K3bView::closeEvent(QCloseEvent*)
-{
-  // DO NOT CALL QWidget::closeEvent(e) here !!
-  // This will accept the closing by QCloseEvent::accept() by default.
-  // The installed eventFilter() in K3bMainWindow takes care for closing the widget
-  // or ignoring the close event
-}
+// KActionCollection* K3bView::actionCollection() const
+// {
+//   return m_actionCollection; 
+// }
 
 
 #include "k3bview.moc"

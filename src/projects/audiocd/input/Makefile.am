@@ -1,4 +1,4 @@
-AM_CPPFLAGS= -I$(srcdir)/../../../core -Imp3 -I$(srcdir)/../.. $(all_includes)
+AM_CPPFLAGS= -I$(srcdir)/../../../core -I$(srcdir)/../../../core/device -Imp3 -I$(srcdir)/../.. $(all_includes)
 
 METASOURCES = AUTO
 

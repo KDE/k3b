@@ -41,8 +41,6 @@ class K3bMixedDoc : public K3bDoc
   KIO::filesize_t size() const;
   K3b::Msf length() const;
 
-  K3bView* newView( QWidget* parent );
-
   int numOfTracks() const;
 
   K3bBurnJob* newBurnJob();
@@ -57,6 +55,7 @@ class K3bMixedDoc : public K3bDoc
   int mixedType() const { return m_mixedType; }
 
  public slots:
+  void slotBurn();
   void setMixedType( MixedType t ) { m_mixedType = t; }
   void addUrls( const KURL::List& urls );
 
@@ -66,6 +65,9 @@ class K3bMixedDoc : public K3bDoc
   QString documentType() const { return "mixed"; }
   
   void loadDefaultSettings( KConfig* );
+
+  K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
+  K3bView* newView( QWidget* parent );
 
  private:
   K3bDataDoc* m_dataDoc;

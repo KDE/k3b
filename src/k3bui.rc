@@ -1,7 +1,10 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="k3b" version="2">
+<kpartgui name="k3b" version="4">
 <MenuBar>
-  <Action name="window_menu" />
+  <Menu name="project"><text>&amp;Project</text>
+  	<Action name="project_add_files" />
+  </Menu>
+
   <Menu name="tools"><text>&amp;Tools</text>
   	<Action name="tools_copy_cd" />
   	<Action name="tools_clone_cd" />
@@ -11,12 +14,10 @@
         <Action name="tools_write_bin" />
 	<Action name="tools_encode_video" />
   </Menu>
-  <Menu name="project"><text>&amp;Project</text>
-  	<Action name="project_add_files" />
-  	<Action name="file_burn" />
-	<WeakSeparator />
-	<ActionList name="data_project_actions" />
+
+  <Menu name="plugins"><text>Plugins</text>
   </Menu>
+
   <Menu name="settings">
   	<Action name="view_show_project_view" append="show_merge" />
   	<Action name="view_dir_tree" append="show_merge" />
@@ -24,20 +25,36 @@
   	<Action name="view_audio_player" append="show_merge" />
   	<Action name="view_document_header" append="show_merge" />
   </Menu>
-  <Menu name="help" append="about_merge"><text>&amp;Help</text>
-	<Action name="show_tips"/>
+
+  <Menu name="help"><text>&amp;Help</text>
+ 	<Action name="help_show_tip" />
   </Menu>
 </MenuBar>
-<ToolBar name="mainToolBar">
-	<Action name="file_burn" />
-	<Separator />
-	<Action name="tools_copy_cd" />
-	<Action name="tools_blank_cdrw" />
-	<WeakSeparator />
-	<ActionList name="data_project_actions" />
+
+<ToolBar name="mainToolBar" noMerge="1">
+	<Action name="file_new" />
+	<Action name="file_open" />
+	<Action name="file_save" />
 </ToolBar>
-<ToolBar name="quickDirSelector" newline="true" fullWidth="true"><text>&amp;Quick Dir Selector</text>
+
+<ToolBar name="toolsToolBar"><text>Tools</text>
+	<Action name="tools_copy_cd" />
+	<Action name="tools_clone_cd" />
+	<Action name="tools_blank_cdrw" />
+	<Action name="tools_format_dvd" />
+</ToolBar>
+	
+<ToolBar name="quickDirSelector" newline="true" fullWidth="true"><text>Quick Dir Selector</text>
 	<Action name="quick_dir_selector" />
 	<Action name="go_url" />
 </ToolBar>
+
+<State name="state_project_active">
+	<enable>
+		<Action name="file_save" />
+		<Action name="file_save_as" />
+		<Action name="file_close" />
+	  	<Action name="project_add_files" />		
+	</enable>
+</State>
 </kpartgui>

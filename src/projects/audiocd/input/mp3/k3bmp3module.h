@@ -38,9 +38,10 @@ class K3bMp3Module : public K3bAudioModule
   bool canDecode( const KURL& url );
 
   int analyseTrack( const QString& filename, unsigned long& size );
-  bool metaInfo( const QString& filename, K3bAudioTitleMetaInfo& info );
 
   void cleanup();
+
+  bool seek( const K3b::Msf& );
 
  protected:
   bool initDecodingInternal( const QString& filename );
@@ -49,7 +50,8 @@ class K3bMp3Module : public K3bAudioModule
  private:
   int countFrames( unsigned long& frames );
   inline unsigned short linearRound( mad_fixed_t fixed );
-  void fillInputBuffer();
+  void madStreamBuffer();
+  bool madDecodeNextFrame();
   bool createPcmSamples( mad_synth* );
   unsigned int resampleBlock( mad_fixed_t const *source, 
 			      unsigned int nsamples, 
@@ -57,44 +59,12 @@ class K3bMp3Module : public K3bAudioModule
 			      mad_fixed_t& last,
 			      mad_fixed_t& step );
 
-  bool m_bEndOfInput;
-  bool m_bInputError;
-  bool m_bOutputFinished;
-
-  mad_stream*   m_madStream;
-  mad_frame*    m_madFrame;
-  mad_header*   m_madHeader;
-  mad_synth*    m_madSynth;
-  mad_timer_t*  m_madTimer;
-
-  // needed for resampling
-  // ----------------------------------
-  bool m_bFrameNeedsResampling;
-  mad_fixed_t m_madResampledRatio;
-
-  // left channel
-  mad_fixed_t m_madResampledStepLeft;
-  mad_fixed_t m_madResampledLastLeft;
-  mad_fixed_t* m_madResampledLeftChannel;
-
-  // right channel
-  mad_fixed_t m_madResampledStepRight;
-  mad_fixed_t m_madResampledLastRight;
-  mad_fixed_t* m_madResampledRightChannel;
-  // ----------------------------------
-
-  unsigned long m_frameCount;
-
-  unsigned char* m_inputBuffer;
-  char* m_outputBuffer;
-  char* m_outputPointer;
-  char* m_outputBufferEnd;
-
-  QFile m_inputFile;
-
   static const int INPUT_BUFFER_SIZE = 5*8192;
 
   static int MaxAllowedRecoverableErrors;
+
+  class Private;
+  Private* d;
 };
 
 

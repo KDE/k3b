@@ -129,6 +129,7 @@ class K3bMainWindow : public KParts::DockMainWindow
   K3bDoc* slotNewMixedDoc();
   K3bDoc* slotNewVcdDoc();
   K3bDoc* slotNewMovixDoc();
+  K3bDoc* slotNewMovixDvdDoc();
   K3bDoc* slotNewDvdDoc();
 
   void slotBlankCdrw();
@@ -185,13 +186,6 @@ class K3bMainWindow : public KParts::DockMainWindow
    */
   virtual void readProperties(KConfig *_cfg);
 
-  /** event filter to catch close events for MDI child windows and is installed in createClient() on every child window.
-   * Closing a window calls the eventFilter first which removes the view from the connected documents' view list. If the
-   * last view is going to be closed, the eventFilter() tests if the document is modified; if yes, it asks the user to
-   * save the document. If the document title contains "Untitled", slotFileSaveAs() gets called to get a save name and path.
-   */
-  virtual bool eventFilter(QObject* object, QEvent* event);
-
   /** creates a new child window. The document that will be connected to it
    * has to be created before and the instances filled, with e.g. openDocument().
    * Then call createClient() to get a new MDI child window.
@@ -229,7 +223,6 @@ class K3bMainWindow : public KParts::DockMainWindow
   /** asks for saving if the file is modified, then closes the actual file and window*/
   void slotFileClose();
 
-  void slotFileBurn();
   void slotDirTreeDockHidden();
   void slotContentsDockHidden();
   void slotProjectDockHidden();
@@ -238,7 +231,7 @@ class K3bMainWindow : public KParts::DockMainWindow
 
   /** checks if the currently visible tab is a k3bview
       or not and dis- or enables some actions */
-  void slotCurrentDocChanged( QWidget* w );
+  void slotCurrentDocChanged();
 
   void slotFileQuit();
 
@@ -304,6 +297,7 @@ class K3bMainWindow : public KParts::DockMainWindow
   int m_mixedUntitledCount;
   int m_vcdUntitledCount;
   int m_movixUntitledCount;
+  int m_movixDvdUntitledCount;
   int m_dvdUntitledCount;
 
   K3bAudioPlayer*        m_audioPlayer;
@@ -315,6 +309,7 @@ class K3bMainWindow : public KParts::DockMainWindow
   KAction* actionFileNewMixed;
   KAction* actionFileNewVcd;
   KAction* actionFileNewMovix;
+  KAction* actionFileNewMovixDvd;
   KAction* actionFileNewDvd;
   KAction* actionFileOpen;
   KRecentFilesAction* actionFileOpenRecent;

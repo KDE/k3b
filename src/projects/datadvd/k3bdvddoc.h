@@ -29,11 +29,13 @@ class K3bDvdDoc : public K3bDataDoc
   virtual int docType() const { return DVD; }
 
   virtual K3bBurnJob* newBurnJob();
-  virtual K3bView* newView( QWidget* parent );
 
  protected:
   virtual QString documentType() const { return "dvd"; }
   virtual void loadDefaultSettings( KConfig* );
+
+  virtual K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
+  virtual K3bView* newView( QWidget* parent );
 };
 
 #endif

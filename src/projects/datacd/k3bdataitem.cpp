@@ -27,7 +27,8 @@ K3bDataItem::K3bDataItem( K3bDataDoc* doc, K3bDataItem* parent )
     m_bRenameable(true),
     m_bMovable(true),
     m_bHideable(true),
-    m_bWriteToCd(true)
+    m_bWriteToCd(true),
+    m_sortWeigth(0)
 {
   m_doc = doc;
   m_bHideOnRockRidge = m_bHideOnJoliet = false;
@@ -61,6 +62,8 @@ void K3bDataItem::setK3bName( const QString& name ) {
 //   }
 
   m_k3bName = name;
+  if( parent() )
+    parent()->revalidate();
 }
 
 

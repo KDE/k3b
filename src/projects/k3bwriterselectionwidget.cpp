@@ -376,6 +376,8 @@ void K3bWriterSelectionWidget::slotWriterChanged()
 
 void K3bWriterSelectionWidget::setSupportedWritingApps( int i )
 {
+  int oldApp = writingApp();
+
   m_comboWritingApp->clear();
 
   m_comboWritingApp->insertItem( i18n("Auto") );
@@ -390,6 +392,8 @@ void K3bWriterSelectionWidget::setSupportedWritingApps( int i )
     m_comboWritingApp->insertItem( "growisofs" );
   if( i & K3b::DVD_RW_FORMAT )
     m_comboWritingApp->insertItem( "dvd+rw-format" );
+
+  setWritingApp( oldApp );
 }
 
 
@@ -416,5 +420,10 @@ void K3bWriterSelectionWidget::loadDefaults()
   setWritingApp( K3b::DEFAULT );
 }
 
+
+void K3bWriterSelectionWidget::setForceAutoSpeed( bool b )
+{
+  m_comboSpeed->setDisabled(b);
+}
 
 #include "k3bwriterselectionwidget.moc"

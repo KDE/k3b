@@ -34,8 +34,10 @@
 
 #include "k3baudiotrackdialog.h"
 #include "k3baudiotrack.h"
+#include <k3bvalidators.h>
 #include <kcutlabel.h>
 #include <device/k3bmsf.h>
+#include <k3bvalidators.h>
 
 
 K3bAudioTrackDialog::K3bAudioTrackDialog( QPtrList<K3bAudioTrack>& tracks, QWidget *parent, const char *name )
@@ -248,6 +250,14 @@ void K3bAudioTrackDialog::setupGui()
   //  m_editPerformer->setMinimumWidth( 100 );
   m_editMessage->setWordWrap( QTextEdit::WidgetWidth );
   line1->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+  m_editIsrc->setValidator( K3bValidators::isrcValidator( m_editIsrc ) );
+  QValidator* cdTextVal = K3bValidators::cdTextValidator( this );
+  m_editPerformer->setValidator( cdTextVal );
+  m_editTitle->setValidator( cdTextVal );
+  //  m_editMessage->setValidator( cdTextVal );
+  m_editArranger->setValidator( cdTextVal );
+  m_editSongwriter->setValidator( cdTextVal );
+  m_editComposer->setValidator( cdTextVal );
 
 
   cdTextTabLayout->addWidget( labelPerformer, 1, 0 );

@@ -30,8 +30,6 @@ class K3bDvdView : public K3bDataView
   K3bDvdView( K3bDvdDoc* doc, QWidget *parent = 0, const char *name = 0 );
   ~K3bDvdView();
 
-  void burnDialog( bool );
-
  private:
   K3bDvdDoc* m_doc;
 };

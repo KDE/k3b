@@ -24,7 +24,6 @@
 #include <qptrlist.h>
 
 #include <kdebug.h>
-#include "k3bdevice.h"
 
 class KProcess;
 class KConfig;
@@ -34,6 +33,8 @@ class K3bExternalBin;
 
 namespace K3bCdDevice {
 
+  class CdDevice;
+
   class DeviceManager : public QObject
     {
       Q_OBJECT
@@ -42,17 +43,17 @@ namespace K3bCdDevice {
       DeviceManager( K3bExternalBinManager*, QObject* parent = 0, const char* name = 0 );
       ~DeviceManager();
 
-      K3bDevice* deviceByName( const QString& );
+      CdDevice* deviceByName( const QString& );
 
-      K3bDevice* findDevice( int bus, int id, int lun );
-      K3bDevice* findDevice( const QString& devicename );
+      CdDevice* findDevice( int bus, int id, int lun );
+      CdDevice* findDevice( const QString& devicename );
 
       /**
        * Before getting the devices do a @ref scanbus().
        * @return List of all cd writer devices.
        * @deprecated use cdWriter
        */
-      QPtrList<K3bDevice>& burningDevices();
+      QPtrList<CdDevice>& burningDevices();
 
       /**
        * Note that all burning devices can also be used as
@@ -61,14 +62,14 @@ namespace K3bCdDevice {
        * @return List of all reader devices without writer devices.
        * @deprecated use cdReader
        **/
-      QPtrList<K3bDevice>& readingDevices();
+      QPtrList<CdDevice>& readingDevices();
 
-      QPtrList<K3bDevice>& allDevices();
+      QPtrList<CdDevice>& allDevices();
 
-      QPtrList<K3bDevice>& cdWriter();
-      QPtrList<K3bDevice>& cdReader();
-      QPtrList<K3bDevice>& dvdWriter();
-      QPtrList<K3bDevice>& dvdReader();
+      QPtrList<CdDevice>& cdWriter();
+      QPtrList<CdDevice>& cdReader();
+      QPtrList<CdDevice>& dvdWriter();
+      QPtrList<CdDevice>& dvdReader();
 
       /** writes to stderr **/
       void printDevices();
@@ -96,7 +97,7 @@ namespace K3bCdDevice {
        * add a new device like "/dev/mebecdrom" to be sensed
        * by the deviceManager.
        */
-      K3bDevice* addDevice( const QString& );
+      CdDevice* addDevice( const QString& );
 
     private slots:
       void slotCollectStdout( KProcess*, char* data, int len );
@@ -104,7 +105,7 @@ namespace K3bCdDevice {
     private:
       bool testForCdrom( const QString& );
       bool determineBusIdLun( const QString &dev, int& bus, int& id, int& lun );
-      void determineCapabilities(K3bDevice *dev);
+      void determineCapabilities(CdDevice *dev);
       QString resolveSymLink( const QString& path );
 
       K3bExternalBinManager* m_externalBinManager;
@@ -134,7 +135,7 @@ namespace K3bCdDevice {
    * Used to create a parameter for cdrecord, cdrdao or readcd.
    * Takes care of SCSI and ATAPI.
    */
-  QString externalBinDeviceParameter( K3bDevice* dev, const K3bExternalBin* );
+  QString externalBinDeviceParameter( CdDevice* dev, const K3bExternalBin* );
 }
 
 typedef K3bCdDevice::DeviceManager K3bDeviceManager;

@@ -1598,8 +1598,7 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo()
 	// we set it here so we have the info even if the call to GPCMD_READ_TOC_PMA_ATIP failes
 	inf.m_numSessions = dInf.n_sessions_l | (dInf.n_sessions_m << 8);
 
-	// the value in dInf includes the lead-out.
-	inf.m_numTracks = ( (dInf.last_track_m<<8) | dInf.last_track_l) - 1;
+	//	inf.m_numTracks = ( (dInf.last_track_m<<8) | dInf.last_track_l);
 
 	// MMC-4 says that only CD-R(W) should return proper sizes here. 
 	// Does that means that lead_out_r is rather useless?
@@ -1675,17 +1674,17 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo()
 	// We first try READ TRACK INFO MMC command since the cdrom.h toc stuff seems not to work
 	// properly on DVD media.
 	//
-	if( inf.numTracks() == 1 ) {
+	//	if( inf.numTracks() == 1 ) {
 	  // read the last track's last sector
 	  unsigned char trackHeader[32];
 	  ::memset( &cmd, 0, sizeof(struct cdrom_generic_command) );
 	  ::memset( trackHeader, 0, 32 );
 	  cmd.cmd[0] = 0x52;	// READ TRACK INFORMATION
-	  cmd.cmd[1] = inf.numTracks();
-	  cmd.cmd[2] = inf.numTracks()>>24;
-	  cmd.cmd[3] = inf.numTracks()>>16;
-	  cmd.cmd[4] = inf.numTracks()>>8;
-	  cmd.cmd[5] = inf.numTracks();
+	  cmd.cmd[1] = 1; // T_inv - the invisible or incomplete track
+	  cmd.cmd[2] = 0xFF;
+	  cmd.cmd[3] = 0xFF;
+	  cmd.cmd[4] = 0xFF;
+	  cmd.cmd[5] = 0xFF;
 	  cmd.cmd[8] = 32;
 	  cmd.cmd[9] = 0;
 	  cmd.buffer = trackHeader;
@@ -1705,9 +1704,10 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo()
 	    }
 	  }
 	  else {
-	    inf.m_capacity = trackHeader[24]<<24|trackHeader[25]<<16|trackHeader[26]<<8|trackHeader[27];
+	    // not sure about this....
+	    inf.m_capacity = trackHeader[8]<<24|trackHeader[9]<<16|trackHeader[10]<<8|trackHeader[11];
 	  }
-	}
+	  //	}
       }
 
 
@@ -1957,6 +1957,9 @@ bool K3bCdDevice::CdDevice::modeSense( int page, unsigned char* pageData, int pa
   // to allow fast multible method calls in a row
   bool needToClose = !isOpen();
 
+  if( open() < 0 )
+    return false;
+
   bool ret = false;
 
   struct cdrom_generic_command cmd;
@@ -1984,6 +1987,9 @@ bool K3bCdDevice::CdDevice::modeSelect( unsigned char* page, int pageLen, bool p
   // if the device is already opened we do not close it
   // to allow fast multible method calls in a row
   bool needToClose = !isOpen();
+
+  if( open() < 0 )
+    return false;
 
   bool ret = false;
 
@@ -2013,6 +2019,9 @@ void K3bCdDevice::CdDevice::checkWriteModes()
   // to allow fast multible method calls in a row
   bool needToClose = !isOpen();
 
+  if (open() < 0)
+    return;
+
   // header size is 8
   unsigned char buffer[100];
   ::memset( buffer, 0, 100 );
@@ -2040,8 +2049,17 @@ void K3bCdDevice::CdDevice::checkWriteModes()
     mp->fp = 0;
     mp->host_appl_code= 0;
     mp->session_format = 0;
+    mp->audio_pause_len[0] = (150 >> 8) & 0xFF;
+    mp->audio_pause_len[1] = 150 & 0xFF;
 
     m_writeModes = 0;
+
+    buffer[0] = 0;
+    buffer[1] = 0;
+//     buffer[2] = 0;
+//     buffer[3] = 0;
+    buffer[4] = 0;
+    buffer[5] = 0;
 
     // TAO
     mp->write_type = 0x01;  // Track-at-once
@@ -2052,7 +2070,7 @@ void K3bCdDevice::CdDevice::checkWriteModes()
     debugBitfield( buffer, dataLen+8 );
 
 
-    if( modeSelect( buffer, dataLen+8, 1, 0 ) )
+    if( modeSelect( buffer, dataLen+2, 1, 0 ) )
       m_writeModes |= TAO;
     else
       kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": modeSelect with TAO failed." << endl;

@@ -34,9 +34,7 @@ class K3bMovixView : public K3bView
 
  public:
   K3bMovixView( K3bMovixDoc* doc, QWidget* parent = 0, const char* name = 0 );
-  ~K3bMovixView();
-
-  void burnDialog( bool withWritingButton = true );
+  virtual ~K3bMovixView();
 
  private slots:
   void slotContextMenuRequested(QListViewItem*, const QPoint& , int );
@@ -45,9 +43,10 @@ class K3bMovixView : public K3bView
   void showPropertiesDialog();
   void slotAddSubTitleFile();
 
- private:
+ protected:
   K3bMovixListView* m_listView;
 
+ private:
   K3bMovixDoc* m_doc;
 
   KAction* m_actionProperties;

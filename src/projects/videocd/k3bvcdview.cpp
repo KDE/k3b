@@ -50,11 +50,4 @@ K3bVcdView::~K3bVcdView()
 {}
 
 
-void K3bVcdView::burnDialog( bool withWriting )
-{
-    K3bVcdBurnDialog d( ( K3bVcdDoc* ) getDocument(), this, "vcdburndialog", true );
-    d.exec( withWriting );
-}
-
-
 #include "k3bvcdview.moc"

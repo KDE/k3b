@@ -48,11 +48,4 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
 K3bAudioView::~K3bAudioView(){
 }
 
-
-void K3bAudioView::burnDialog( bool withWriting )
-{
-  K3bAudioBurnDialog d( (K3bAudioDoc*)getDocument(), this, "audioburndialog", true );
-  d.exec( withWriting );
-}
-
 #include "k3baudioview.moc"

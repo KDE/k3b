@@ -109,7 +109,7 @@ void K3bVcdListView::setupPopupMenu()
     m_popupMenu->insertSeparator();
     m_actionProperties->plug( m_popupMenu );
     m_popupMenu->insertSeparator();
-    //    k3bMain() ->actionCollection() ->action( "file_burn" ) ->plug( m_popupMenu );
+    m_doc->actionCollection()->action( "project_burn" ) ->plug( m_popupMenu );
 }
 
 
@@ -200,7 +200,7 @@ void K3bVcdListView::showPropertiesDialog()
             repaint();
         }
     } else {
-        m_view->burnDialog( false );
+        m_doc->slotProperties();
     }
 }
 

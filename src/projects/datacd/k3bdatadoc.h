@@ -24,7 +24,6 @@
 #include <qptrlist.h>
 #include <qfileinfo.h>
 #include <qstringlist.h>
-#include <qptrlist.h>
 
 #include <kurl.h>
 #include <kio/global.h>
@@ -65,11 +64,6 @@ class K3bDataDoc : public K3bDoc
   enum mutiSessionModes { NONE, START, CONTINUE, FINISH };
 
   K3bRootItem* root() const { return m_root; }
-
-  /** reimplemented from K3bDoc */
-  virtual K3bView* newView( QWidget* parent );
-  /** reimplemented from K3bDoc */
-  void addView(K3bView* view);
 
   virtual bool newDocument();
   virtual KIO::filesize_t size() const;
@@ -150,6 +144,11 @@ class K3bDataDoc : public K3bDoc
   virtual QString documentType() const;
 
   K3bFileCompilationSizeHandler* m_sizeHandler;
+
+  virtual K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
+
+  /** reimplemented from K3bDoc */
+  virtual K3bView* newView( QWidget* parent );
 
  private:
   void createSessionImportItems( const QString& path, K3bDirItem* parent, KProgressDialog* );

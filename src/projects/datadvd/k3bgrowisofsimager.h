@@ -21,7 +21,8 @@
 
 
 
-class K3bDvdDoc;
+class K3bDataDoc;
+
 namespace K3bCdDevice {
   class DeviceHandler;
   class CdDevice;
@@ -41,7 +42,7 @@ class K3bGrowisofsImager : public K3bIsoImager
   Q_OBJECT
 
  public:
-  K3bGrowisofsImager( K3bDvdDoc* doc, QObject* parent = 0, const char* name = 0 );
+  K3bGrowisofsImager( K3bDataDoc* doc, QObject* parent = 0, const char* name = 0 );
   virtual ~K3bGrowisofsImager();
 
  public slots:
@@ -57,7 +58,7 @@ class K3bGrowisofsImager : public K3bIsoImager
   const K3bExternalBin* m_growisofsBin;
   const K3bExternalBin* m_mkisofsBin;
 
-  K3bDvdDoc* m_doc;
+  K3bDataDoc* m_doc;
 
   class Private;
   Private* d;

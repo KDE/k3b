@@ -25,13 +25,16 @@
 #include <k3bglobals.h>
 #include <k3bemptydiscwaiter.h>
 #include <device/k3bdevice.h>
+#include <device/k3bdevicehandler.h>
+#include <device/k3bdiskinfo.h>
+#include <device/k3bdeviceglobals.h>
 
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kapplication.h>
 
 
-K3bDvdJob::K3bDvdJob( K3bDvdDoc* doc, QObject* parent )
+K3bDvdJob::K3bDvdJob( K3bDataDoc* doc, QObject* parent )
   : K3bBurnJob( parent ),
     m_doc( doc ),
     m_isoImager( 0 ),
@@ -77,7 +80,7 @@ void K3bDvdJob::start()
   }
   else {
     prepareGrowisofsImager();
-
+    
     if( waitForDvd() )
       m_growisofsImager->start();
     else
@@ -341,29 +344,65 @@ void K3bDvdJob::cleanup()
 
 bool K3bDvdJob::waitForDvd()
 {
+  int mt = 0;
+  if( m_doc->writingMode() == K3b::WRITING_MODE_INCR_SEQ || m_doc->writingMode() == K3b::DAO )
+    mt = K3bCdDevice::MEDIA_DVD_RW_SEQ|K3bCdDevice::MEDIA_DVD_R_SEQ;
+  else if( m_doc->writingMode() == K3b::WRITING_MODE_RES_OVWR ) // we treat DVD+R(W) as restricted overwrite media
+    mt = K3bCdDevice::MEDIA_DVD_RW_OVWR|K3bCdDevice::MEDIA_DVD_PLUS_RW|K3bCdDevice::MEDIA_DVD_PLUS_R;
+  else
+    mt = K3bCdDevice::MEDIA_WRITABLE_DVD;
+
   int m = K3bEmptyDiscWaiter::wait( m_doc->burner(), 
 				    m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
 				    m_doc->multiSessionMode() == K3bDataDoc::FINISH,
-				    K3bCdDevice::MEDIA_WRITABLE_DVD );
+				    mt );
   if( m == -1 ) {
     cancel();
     return false;
   }
-  else if( m & (K3bCdDevice::MEDIA_DVD_PLUS_RW|K3bCdDevice::MEDIA_DVD_PLUS_R) ) {
-    if( m_doc->dummy() ) {
-      if( KMessageBox::warningYesNo( qApp->activeWindow(),
-				     i18n("K3b does not support simulation with DVD+R(W) media. "
-					  "Do you really want to continue? The media will be written "
-					  "for real."),
-				     i18n("No simulation with DVD+R(W)") ) == KMessageBox::No ) {
-	cancel();
-	return false;
+  
+  if( m == 0 ) {
+    emit infoMessage( i18n("Forced by user. Growisofs will be called eithout further tests."), INFO );
+  }
+
+  else {
+    if( m & (K3bCdDevice::MEDIA_DVD_PLUS_RW|K3bCdDevice::MEDIA_DVD_PLUS_R) ) {
+      if( m_doc->dummy() ) {
+	if( KMessageBox::warningYesNo( qApp->activeWindow(),
+				       i18n("K3b does not support simulation with DVD+R(W) media. "
+					    "Do you really want to continue? The media will be written "
+					    "for real."),
+				       i18n("No simulation with DVD+R(W)") ) == KMessageBox::No ) {
+	  cancel();
+	  return false;
+	}
+      }
+      
+      if( m_doc->speed() > 0 ) {
+	emit infoMessage( i18n("DVD+R(W) writers do take care of the writing speed themselves."), INFO );
+	emit infoMessage( i18n("The K3b writing speed setting is ignored for DVD+R(W) media."), INFO );
+      }
+
+      if( m & K3bCdDevice::MEDIA_DVD_PLUS_RW ) {
+	  if( m_doc->multiSessionMode() == K3bDataDoc::NONE ||
+	      m_doc->multiSessionMode() == K3bDataDoc::START )
+	    emit infoMessage( i18n("Writing DVD+RW."), INFO );
+	  else
+	    emit infoMessage( i18n("Growing Iso9660 filesystem on DVD+RW."), INFO );
       }
     }
-     
-    if( m_doc->speed() > 0 ) {
-      emit infoMessage( i18n("DVD+R(W) writers do take care of the writing speed themselves."), INFO );
-      emit infoMessage( i18n("The K3b writing speed setting is ignored for DVD+R(W) media."), INFO );
+    else if( m & K3bCdDevice::MEDIA_DVD_RW_OVWR ) {
+      if( m_doc->multiSessionMode() == K3bDataDoc::NONE ||
+	  m_doc->multiSessionMode() == K3bDataDoc::START )
+	emit infoMessage( i18n("Writing DVD-RW in restricted overwrite mode."), INFO );
+      else
+	emit infoMessage( i18n("Growing Iso9660 filesystem on DVD-RW in restricted overwrite mode."), INFO );
+    }
+    else if( m & (K3bCdDevice::MEDIA_DVD_RW_SEQ|
+		  K3bCdDevice::MEDIA_DVD_R_SEQ|
+		  K3bCdDevice::MEDIA_DVD_R|
+		  K3bCdDevice::MEDIA_DVD_RW) ) {
+      emit infoMessage( i18n("Writing DVD-R(W) in sequential mode."), INFO );
     }
   }
 

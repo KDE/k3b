@@ -52,11 +52,6 @@ class K3bVcdDoc : public K3bDoc
         K3bVcdDoc( QObject* );
         ~K3bVcdDoc();
 
-        /** reimplemented from K3bDoc */
-        K3bView* newView( QWidget* parent );
-        /** reimplemented from K3bDoc */
-        void addView( K3bView* view );
-
         enum vcdTypes { VCD11, VCD20, SVCD10, HQVCD, NONE};
 
         bool newDocument();
@@ -121,6 +116,11 @@ class K3bVcdDoc : public K3bDoc
         QString documentType() const;
 
         void loadDefaultSettings( KConfig* );
+
+	K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
+
+        /** reimplemented from K3bDoc */
+        K3bView* newView( QWidget* parent );
 
     private:
         K3bVcdTrack* createTrack( const KURL& url );

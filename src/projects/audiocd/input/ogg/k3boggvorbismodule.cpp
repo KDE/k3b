@@ -64,6 +64,8 @@ bool K3bOggVorbisModule::initDecodingInternal( const QString& filename )
     return false;
   }
 
+  kdDebug() << "(K3bOggVorbisModule) file " << filename << " seekable? " << ov_seekable(m_oggVorbisFile) << endl;
+
   return true;
 }
 
@@ -241,6 +243,12 @@ bool K3bOggVorbisModule::metaInfo( const QString& filename, K3bAudioTitleMetaInf
 void K3bOggVorbisModule::cleanup()
 {
   ov_clear( m_oggVorbisFile );
+}
+
+
+bool K3bOggVorbisModule::seek( const K3b::Msf& pos )
+{
+  return ( ov_pcm_seek( m_oggVorbisFile, pos.totalFrames() ) == 0 );
 }
 
 #include "k3boggvorbismodule.moc"

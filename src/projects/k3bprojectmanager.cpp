@@ -20,6 +20,7 @@
 #include <qptrlist.h>
 
 #include <kurl.h>
+#include <kdebug.h>
 
 
 class K3bProjectManager::Private
@@ -60,19 +61,29 @@ const QPtrList<K3bDoc>& K3bProjectManager::projects() const
 
 void K3bProjectManager::addProject( K3bDoc* doc )
 {
+  kdDebug() << "(K3bProjectManager) adding doc " << doc->URL().path() << endl;
+
   d->projects.append(doc);
   emit newProject( doc );
 }
 
 
-void K3bProjectManager::closeProject( K3bDoc* doc )
+void K3bProjectManager::removeProject( K3bDoc* doc )
 {
-  if( d->projects.findRef(doc) != 0 ) {
-    d->projects.removeRef(doc);
-    emit closingProject(doc);
-
-    delete doc;
+  // 
+  // QPtrList.findRef seems to be buggy. Everytime we search for the 
+  // first added item it is not found!
+  //
+  for( QPtrListIterator<K3bDoc> it( d->projects );
+       it.current(); ++it ) {
+    if( it.current() == doc ) {
+      d->projects.removeRef(doc);
+      emit closingProject(doc);
+      
+      return;
+    }
   }
+  kdDebug() << "(K3bProjectManager) unable to find doc: " << doc->URL().path() << endl;
 }
 
 
@@ -96,9 +107,16 @@ bool K3bProjectManager::isEmpty() const
 
 void K3bProjectManager::setActive( K3bDoc* doc )
 {
-  if( d->projects.findRef(doc) != -1 ) {
-    d->activeProject = doc;
-    emit activeProjectChanged(doc);
+  // 
+  // QPtrList.findRef seems to be buggy. Everytime we search for the 
+  // first added item it is not found!
+  //
+  for( QPtrListIterator<K3bDoc> it( d->projects );
+       it.current(); ++it ) {
+    if( it.current() == doc ) {
+      d->activeProject = doc;
+      emit activeProjectChanged(doc);
+    }
   }
 }
 

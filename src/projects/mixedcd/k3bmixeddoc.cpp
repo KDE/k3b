@@ -16,6 +16,7 @@
 #include "k3bmixeddoc.h"
 #include "k3bmixedjob.h"
 #include "k3bmixedview.h"
+#include "k3bmixedburndialog.h"
 
 #include <k3bdatadoc.h>
 #include <k3baudiodoc.h>
@@ -28,6 +29,8 @@
 #include <klocale.h>
 #include <kconfig.h>
 #include <kapplication.h>
+#include <kmessagebox.h>
+
 
 
 K3bMixedDoc::K3bMixedDoc( QObject* parent )
@@ -84,8 +87,10 @@ K3bBurnJob* K3bMixedDoc::newBurnJob()
 
 void K3bMixedDoc::addUrls( const KURL::List& urls )
 {
-  K3bMixedView* view = (K3bMixedView*)firstView();
-  K3bDirItem* dir = view->currentDir();
+  K3bMixedView* v = (K3bMixedView*)view();
+  K3bDirItem* dir = 0;
+  if( v )
+    dir = v->currentDir();
   if( dir )
     dataDoc()->slotAddUrlsToDir( urls, dir );
   else
@@ -219,6 +224,30 @@ void K3bMixedDoc::loadDefaultSettings( KConfig* c )
   dataDoc()->isoOptions() = o;
 }
 
+
+void K3bMixedDoc::slotBurn()
+{
+  if( m_audioDoc->numOfTracks() == 0 || m_dataDoc->size() == 0 ) {
+    KMessageBox::information( qApp->activeWindow(), i18n("Please add files and audio titles to your project first!"),
+			      i18n("No Data to Burn"), QString::null, false );
+  }
+  else {
+    K3bProjectBurnDialog* dlg = newBurnDialog( qApp->activeWindow() );
+    if( dlg ) {
+      dlg->exec(true);
+      delete dlg;
+    }
+    else {
+      kdDebug() << "(K3bDoc) Error: no burndialog available." << endl;
+    }
+  }
+}
+
+
+K3bProjectBurnDialog* K3bMixedDoc::newBurnDialog( QWidget* parent, const char* name )
+{
+  return new K3bMixedBurnDialog( this, parent, name, true );
+}
 
 #include "k3bmixeddoc.moc"
 

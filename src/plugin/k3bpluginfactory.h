@@ -33,6 +33,9 @@ class K3bPluginConfigWidget;
  * <pre>
  *   K_EXPORT_COMPONENT_FACTORY( libkspread, KSpreadFactory )
  * </pre>
+ *
+ * Every plugin needs to install a XXX.plugin file in the k3b/plugins directory.
+ * The plugin group and the library have to set at least.
  */
 class K3bPluginFactory : public KLibFactory
 {

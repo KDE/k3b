@@ -132,7 +132,7 @@ bool K3bGrowisofsWriter::prepareProcess()
     *d->process << "-use-the-force-luke=dummy";
   if( d->writingMode == K3b::DAO )
     *d->process << "-use-the-force-luke=dao";  // does DAO apply to DVD+R?
-  if( burnSpeed() != 0 )
+  if( burnSpeed() == 1 )
     *d->process << QString("-speed=%1").arg(burnSpeed());
   // -------------------------------- DVD-R(W)
 

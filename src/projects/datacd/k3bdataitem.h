@@ -74,6 +74,9 @@ class K3bDataItem
   virtual void setHideOnRockRidge( bool b );
   virtual void setHideOnJoliet( bool b );
 
+  virtual long sortWeight() const { return m_sortWeigth; }
+  virtual void setSortWeigth( long w ) { m_sortWeigth = w; }
+
   virtual int depth() const;
 
   virtual bool isValid() const { return true; }
@@ -113,6 +116,8 @@ class K3bDataItem
   bool m_bHideable;
   bool m_bWriteToCd;
   QString m_extraInfo;
+
+  long m_sortWeigth;
 };
 
 #endif

@@ -95,6 +95,16 @@ void K3bBurnProgressDialog::setBurnJob( K3bBurnJob* burnJob )
 }
 
 
+void K3bBurnProgressDialog::slotFinished( bool success )
+{
+  K3bJobProgressDialog::slotFinished( success );
+  if( success ) {
+    m_labelWritingSpeed->setEnabled( false );
+    m_progressWritingBuffer->setEnabled( false );
+  }
+}
+
+
 void K3bBurnProgressDialog::slotBufferStatus( int b )
 {
   m_progressWritingBuffer->setFormat( "%p%" );

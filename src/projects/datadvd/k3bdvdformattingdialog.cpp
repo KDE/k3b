@@ -54,6 +54,7 @@ K3bDvdFormattingDialog::K3bDvdFormattingDialog( QWidget* parent, const char* nam
 
   m_writerSelectionWidget = new K3bWriterSelectionWidget( true, frame );
   m_writerSelectionWidget->setSupportedWritingApps( K3b::DVD_RW_FORMAT );
+  m_writerSelectionWidget->setForceAutoSpeed(true);
 
   QGroupBox* groupWritingMode = new QGroupBox( 1, Qt::Vertical, i18n("Writing Mode"), frame );
   groupWritingMode->layout()->setMargin( marginHint() );

@@ -36,8 +36,6 @@ class K3bMixedView : public K3bView
   K3bMixedView( K3bMixedDoc* doc, QWidget* parent = 0, const char* name = 0 );
   ~K3bMixedView();
 
-  void burnDialog( bool withWritingButton = true );
-
   K3bDirItem* currentDir() const;
 
  private slots:

@@ -24,14 +24,15 @@ class KURL;
 
 
 
-#define k3bprojectmanager K3bProjectManager::instance();
+#define k3bprojectmanager K3bProjectManager::instance()
 
 
 /**
  * The K3bProjectManager is the core of the project lib.
  * It may be compared to K3bCore, the core of the core lib. ;)
  * It is mainly used to allow access to all currently open 
- * projects.
+ * projects. You ALWAYS need an instance when using K3bDocs
+ * since K3bDoc calls the add and remove methods
  */
 class K3bProjectManager : public QObject
 {
@@ -50,8 +51,15 @@ class K3bProjectManager : public QObject
   static K3bProjectManager* instance() { return s_k3bProjectManager; }
 
  public slots:
+  /**
+   * Called by K3bDoc. No need to add projects manually.
+   */
   void addProject( K3bDoc* );
-  void closeProject( K3bDoc* );
+
+  /**
+   * Called by K3bDoc. No need to remove projects manually.
+   */
+  void removeProject( K3bDoc* );
   void setActive( K3bDoc* );
 
  signals:

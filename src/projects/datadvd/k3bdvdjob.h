@@ -21,7 +21,7 @@
 
 #include <qfile.h>
 
-class K3bDvdDoc;
+class K3bDataDoc;
 class K3bGrowisofsImager;
 class K3bGrowisofsWriter;
 class K3bIsoImager;
@@ -33,7 +33,10 @@ class K3bDvdJob : public K3bBurnJob
   Q_OBJECT
 
  public:
-  K3bDvdJob( K3bDvdDoc*, QObject* parent = 0 );
+  /**
+   * To be more flexible we allow writing of any data doc
+   */
+  K3bDvdJob( K3bDataDoc*, QObject* parent = 0 );
   virtual ~K3bDvdJob();
 
   K3bDoc* doc() const;
@@ -63,7 +66,7 @@ class K3bDvdJob : public K3bBurnJob
   void slotWritingFinished( bool );
 
  private:
-  K3bDvdDoc* m_doc;
+  K3bDataDoc* m_doc;
   K3bIsoImager* m_isoImager;
   K3bGrowisofsImager* m_growisofsImager;
   K3bGrowisofsWriter* m_writerJob;

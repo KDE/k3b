@@ -81,8 +81,11 @@ void K3bProcess::splitOutput( char* data, int len, bool stdout )
 
   QString buffer;
   for( int i = 0; i < len; i++ ) {
-    while( data[i] == '\b' )  // we skip all backspaces.
-      i++;
+    if( data[i] == '\b' ) {
+      while( data[i] == '\b' )  // we replace multible backspaces with a single line feed
+	i++;
+      buffer += '\n';
+    }
     if( data[i] == '\r' )
       buffer += '\n';
     else if( data[i] == '\t' )  // replace tabs with a single space

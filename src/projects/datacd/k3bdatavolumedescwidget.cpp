@@ -16,7 +16,7 @@
 #include "k3bdatavolumedescwidget.h"
 
 #include "k3bisooptions.h"
-#include "k3bisovalidator.h"
+#include <k3bvalidators.h>
 
 #include <qlineedit.h>
 #include <qspinbox.h>
@@ -28,7 +28,7 @@ K3bDataVolumeDescWidget::K3bDataVolumeDescWidget( QWidget* parent, const char* n
   // the maximal number of characters that can be inserted are set in the ui file!
 
   // are this really the allowed characters? What about Joliet or UDF?
-  K3bIsoValidator* isoValidator = new K3bIsoValidator( this, "isoValidator" );
+  QValidator* isoValidator = K3bValidators::iso9660Validator( true, this );
 
   m_editVolumeName->setValidator( isoValidator );
   m_editVolumeSetName->setValidator( isoValidator );

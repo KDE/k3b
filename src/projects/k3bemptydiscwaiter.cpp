@@ -136,7 +136,7 @@ int K3bEmptyDiscWaiter::waitForDisc( int mediaState, int mediaType, const QStrin
   QString m;
   if( (d->wantedMediaType & K3bCdDevice::MEDIA_WRITABLE_DVD) &&
       (d->wantedMediaType & K3bCdDevice::MEDIA_WRITABLE_CD) )
-    m = i18n("CD-R or DVD+-R");
+    m = i18n("CD-R(W) or DVD+-R(W)");
   else if( d->wantedMediaType & K3bCdDevice::MEDIA_WRITABLE_DVD )
     m = i18n("DVD+-R(W)");
   else
@@ -227,11 +227,37 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
 	     d->wantedMediaType & K3bCdDevice::MEDIA_CD_ROM )
       finishWaiting( dh->ngDiskInfo().mediaType() );
 
-    // a DVD+RW or a DVD-RW in restrcited overwrite mode may simply be overwritten
-    else if( (d->wantedMediaType & (K3bCdDevice::MEDIA_DVD_RW|K3bCdDevice::MEDIA_DVD_PLUS_RW)) &&
-	     (dh->ngDiskInfo().currentProfile() & (K3bCdDevice::MEDIA_DVD_PLUS_RW|K3bCdDevice::MEDIA_DVD_RW_OVWR)) )
+
+    //
+    // We may have a request for DVD-RW restr. ovwr. or DVD-RW seq
+    // in this case we may need to format even if the media is empty, just to get it into the correct mode
+    // AND: growisofs does not simply overwrite DVD-RW restr. ovwr. media. We need to format it here
+    //      how DVD+RW media is treated I don't know.... (we simply think of growisofs formatting it for now...)
+    //
+
+
+    // a DVD+RW may simply be overwritten
+    else if( (d->wantedMediaType & K3bCdDevice::MEDIA_DVD_PLUS_RW) &&
+	     (dh->ngDiskInfo().mediaType() & K3bCdDevice::MEDIA_DVD_PLUS_RW) )
 	finishWaiting( dh->ngDiskInfo().mediaType() );
-    else if( (d->wantedMediaType & dh->ngDiskInfo().mediaType()) &&
+
+    // check for DVD-R(W) and it's writing modes
+    else if( dh->ngDiskInfo().currentProfile() == K3bCdDevice::MEDIA_DVD_RW_SEQ &&
+	     d->wantedMediaType & K3bCdDevice::MEDIA_DVD_RW_SEQ )
+      finishWaiting( K3bCdDevice::MEDIA_DVD_RW_SEQ );
+    else if( dh->ngDiskInfo().currentProfile() == K3bCdDevice::MEDIA_DVD_R_SEQ &&
+	     d->wantedMediaType & K3bCdDevice::MEDIA_DVD_R_SEQ )
+      finishWaiting( K3bCdDevice::MEDIA_DVD_R_SEQ );
+    else if( dh->ngDiskInfo().currentProfile() == K3bCdDevice::MEDIA_DVD_RW_OVWR &&
+	     d->wantedMediaType & K3bCdDevice::MEDIA_DVD_RW_OVWR )
+      finishWaiting( K3bCdDevice::MEDIA_DVD_RW_OVWR );
+
+    // we also format if we find a DVD-RW in the "wrong" mode
+    else if( ( d->wantedMediaType & dh->ngDiskInfo().mediaType() ||
+	       ( d->wantedMediaType & K3bCdDevice::MEDIA_DVD_RW_OVWR &&
+		 dh->ngDiskInfo().currentProfile() == K3bCdDevice::MEDIA_DVD_RW_SEQ ) ||
+	       ( d->wantedMediaType & K3bCdDevice::MEDIA_DVD_RW_SEQ &&
+		 dh->ngDiskInfo().currentProfile() == K3bCdDevice::MEDIA_DVD_RW_OVWR ) ) && 
 	     (d->wantedMediaState & K3bCdDevice::STATE_EMPTY) &&
 	     dh->ngDiskInfo().rewritable() ) {
 	
@@ -270,11 +296,19 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
 	}
 	else {
 	  //
-	  // format a DVD-RW in sequential mode
+	  // format a DVD-RW
 	  //
 	  K3bDvdFormattingJob job;
 	  job.setDevice( d->device );
-	  job.setMode( K3b::WRITING_MODE_INCR_SEQ );
+	  // we prefere the current mode of the media if no special mode has been requested
+	  job.setMode( d->wantedMediaType & K3bCdDevice::MEDIA_DVD_RW_SEQ &&
+		       d->wantedMediaType & K3bCdDevice::MEDIA_DVD_RW_OVWR
+		       ? ( dh->ngDiskInfo().currentProfile() == K3bCdDevice::MEDIA_DVD_RW_OVWR
+			   ? K3b::WRITING_MODE_RES_OVWR
+			   : K3b::WRITING_MODE_INCR_SEQ )
+		       : ( d->wantedMediaType & K3bCdDevice::MEDIA_DVD_RW_SEQ 
+			   ? K3b::WRITING_MODE_INCR_SEQ 
+			   : K3b::WRITING_MODE_RES_OVWR ) );
 	  job.setQuickFormat( true );
 	  job.setForce( false );
 	  job.setForceNoEject(true);

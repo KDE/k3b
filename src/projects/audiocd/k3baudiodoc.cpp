@@ -49,7 +49,6 @@
 #include <kstandarddirs.h>
 #include <kio/global.h>
 #include <kdebug.h>
-#include <knotifyclient.h>
 
 #include <iostream>
 
@@ -168,27 +167,6 @@ void K3bAudioDoc::addTracks( const KURL::List& urls, uint position )
 {
   for( KURL::List::ConstIterator it = urls.begin(); it != urls.end(); it++ ) {
     urlsToAdd.enqueue( new PrivateUrlToAdd( *it, position++ ) );
-    //cerr <<  "adding url to queue: " << *it;
-
-    // append at the end by default
-//     if( position > m_tracks->count() )
-//       position = m_tracks->count();
-	
-//     if( !(*it).isLocalFile() ) {
-//       //      kdDebug() << item->url.path() << " no local file" << endl;
-//       return;
-//     }
-	
-//     if( !QFile::exists( (*it).path() ) ) {
-//       m_notFoundFiles.append( (*it).path() );
-//       return;
-//     }
-
-//     if( !readM3uFile( *it, position ) )
-//       if( K3bAudioTrack* newTrack = createTrack( *it ) )
-// 	addTrack( newTrack, position );
-
-//     position++;
   }
 
   m_urlAddingTimer->start(0);
@@ -282,9 +260,7 @@ K3bAudioTrack* K3bAudioDoc::createTrack( const KURL& url )
     return newTrack;
   }
   else {
-    KNotifyClient::event( "UnknownAudioFileFormat", i18n("Unknown file format: '%1'").arg(url.path()) );
-//     KMessageBox::error( kapp->mainWidget(), "(" + url.path() + ")\n" +
-// 			i18n("Wrong File Format") );		
+    m_unknownFileFormatFiles.append( url.path() );
     return 0;
   }
 }
@@ -596,12 +572,6 @@ bool K3bAudioDoc::saveDocumentData( QDomElement* docElem )
 }
 
 
-void K3bAudioDoc::addView(K3bView* view)
-{
-  K3bDoc::addView( view );
-}
-
-
 int K3bAudioDoc::numOfTracks() const
 {
   return m_tracks->count();
@@ -623,10 +593,16 @@ K3bBurnJob* K3bAudioDoc::newBurnJob()
 void K3bAudioDoc::informAboutNotFoundFiles()
 {
   if( !m_notFoundFiles.isEmpty() ) {
-    KMessageBox::informationList( firstView(), i18n("Could not find the following files:"),
+    KMessageBox::informationList( view(), i18n("Could not find the following files:"),
  				  m_notFoundFiles, i18n("Not Found") );
 
     m_notFoundFiles.clear();
+  }
+  if( !m_unknownFileFormatFiles.isEmpty() ) {
+    KMessageBox::informationList( view(), i18n("Unable to handle the following files due to an unsupported format:"),
+ 				  m_unknownFileFormatFiles, i18n("Unsupported format") );
+
+    m_unknownFileFormatFiles.clear();
   }
 }
 
@@ -693,5 +669,10 @@ void K3bAudioDoc::determineAudioMetaInfo( K3bAudioTrack* track )
   }
 }
 
+
+K3bProjectBurnDialog* K3bAudioDoc::newBurnDialog( QWidget* parent, const char* name )
+{
+  return new K3bAudioBurnDialog( this, parent, name, true );
+}
 
 #include "k3baudiodoc.moc"

@@ -78,10 +78,10 @@ void K3bWritingModeWidget::initWhatsThisHelp()
   static QString s_rawHelp = i18n("RAW writing mode. The error correction data is created by the "
 				  "software instead of the writer device.<br>"
 				  "Try this if your CD writer fails to write in DAO and TAO.");
-  static QString s_seqHelp = i18n("Incremental writing allows multisession. It only applies to DVD-R(W). "
-				  "Bla bla bla. FIXME");
+  static QString s_seqHelp = i18n("Incremental sequential is the default writing mode for DVD-R(W). "
+				  "It allows multisession DVD-R(W)s. It only applies to DVD-R(W). bla bla bla. FIXME");
   static QString s_ovwHelp = i18n("Restricted Overwrite allows to use a DVD-RW just like a DVD-RAM "
-				  "or a DVD+RW. Bla bla bla. FIXME");
+				  "or a DVD+RW. bla bla bla. FIXME");
 
   QWhatsThis::remove( this );
   QString wh =

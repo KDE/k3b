@@ -78,13 +78,6 @@ K3bMovixView::~K3bMovixView()
 }
 
 
-void K3bMovixView::burnDialog( bool withWritingButton )
-{
-  K3bMovixBurnDialog d( m_doc, this );
-  d.exec( withWritingButton );
-}
-
-
 void K3bMovixView::slotContextMenuRequested(QListViewItem* item, const QPoint& p, int )
 {
   if( item ) {
@@ -112,7 +105,7 @@ void K3bMovixView::showPropertiesDialog()
     d.exec();
   }
   else
-    burnDialog( false );
+    m_doc->slotProperties();
 }
 
 

@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -18,6 +18,7 @@
 
 #include <kaction.h>
 #include <klocale.h>
+#include <kdebug.h>
 #include <qevent.h>
 
 

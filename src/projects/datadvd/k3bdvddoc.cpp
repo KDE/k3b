@@ -17,6 +17,7 @@
 #include "k3bdvddoc.h"
 #include "k3bdvdjob.h"
 #include "k3bdvdview.h"
+#include "k3bdvdburndialog.h"
 
 #include <k3bisooptions.h>
 
@@ -49,6 +50,12 @@ void K3bDvdDoc::loadDefaultSettings( KConfig* c )
   K3bDoc::loadDefaultSettings(c);
 
   isoOptions() = K3bIsoOptions::load( c );
+}
+
+
+K3bProjectBurnDialog* K3bDvdDoc::newBurnDialog( QWidget* parent, const char* name )
+{
+  return new K3bDvdBurnDialog( this, parent, name, true );
 }
 
 //#include "k3bdvddoc.moc"

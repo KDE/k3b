@@ -54,7 +54,7 @@ class K3bDirItem : public K3bDataItem
 
   bool alreadyInDirectory( const QString& fileName ) const;
   K3bDataItem* find( const QString& filename ) const;
-  K3bDataItem* findByPath( const QString& ) const;
+  K3bDataItem* findByPath( const QString& );
 
   KIO::filesize_t k3bSize() const;
 
@@ -71,6 +71,12 @@ class K3bDirItem : public K3bDataItem
   bool isDir() const { return true; }
 
   virtual bool isRemoveable() const;
+
+  /**
+   * Makes sure that all subitems have different names.
+   * This also involves renaming and updating the jolietnames.
+   */
+  virtual void revalidate();
 	
  private:
   /**

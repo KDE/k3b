@@ -28,6 +28,7 @@
 #include <qfont.h>
 #include <qpalette.h>
 #include <qmap.h>
+#include <qwidgetstack.h>
 
 #include <kkeydialog.h>
 // include files for KDE
@@ -42,6 +43,7 @@
 #include <kstandarddirs.h>
 #include <kprocess.h>
 #include <kurl.h>
+#include <kurllabel.h>
 #include <ktoolbar.h>
 #include <kstatusbar.h>
 #include <kglobalsettings.h>
@@ -50,6 +52,7 @@
 #include <ksystemtray.h>
 #include <kaboutdata.h>
 #include <ktip.h>
+#include <kxmlguifactory.h>
 
 #include <stdlib.h>
 
@@ -71,6 +74,7 @@
 #include "mixedcd/k3bmixeddoc.h"
 #include "videocd/k3bvcddoc.h"
 #include "movixcd/k3bmovixdoc.h"
+#include "movixdvd/k3bmovixdvddoc.h"
 #include "k3bblankingdialog.h"
 #include "datacd/k3bisoimagewritingdialog.h"
 #include "datacd/k3bbinimagewritingdialog.h"
@@ -89,6 +93,7 @@
 #include "cdclone/k3bclonedialog.h"
 #include "k3bprojectinterface.h"
 #include <k3bprojectmanager.h>
+#include "k3bwelcomewidget.h"
 
 
 static K3bMainWindow* s_k3bMainWindow = 0;
@@ -110,6 +115,11 @@ public:
   QMap<K3bDoc*, K3bProjectInterface*> projectInterfaceMap;
 
   K3bProjectManager* projectManager;
+  K3bDoc* lastDoc;
+
+  QWidgetStack* documentStack;
+  K3bWelcomeWidget* welcomeWidget;
+  QWidget* documentHull;
 };
 
 
@@ -119,6 +129,7 @@ K3bMainWindow::K3bMainWindow()
 {
   d = new Private;
   d->projectManager = new K3bProjectManager( this );
+  d->lastDoc = 0;
 
   s_k3bMainWindow = this;
 
@@ -130,6 +141,7 @@ K3bMainWindow::K3bMainWindow()
   m_mixedUntitledCount = 0;
   m_vcdUntitledCount = 0;
   m_movixUntitledCount = 0;
+  m_movixDvdUntitledCount = 0;
   m_dvdUntitledCount = 0;
 
   //setup splitter behaviour
@@ -155,21 +167,12 @@ K3bMainWindow::K3bMainWindow()
   m_documentTab->insertAction( actionFileSave );
   m_documentTab->insertAction( actionFileSaveAs );
   m_documentTab->insertAction( actionFileClose );
-  m_documentTab->insertAction( actionFileBurn );
 
   readOptions();
 
-  ///////////////////////////////////////////////////////////////////
+  // /////////////////////////////////////////////////////////////////
   // disable actions at startup
-  actionFileSave->setEnabled(false);
-  actionFileSaveAs->setEnabled(false);
-  actionFileBurn->setEnabled( false );
-  actionProjectAddFiles->setEnabled( false );
-
-  actionDataImportSession->setEnabled( false );
-  actionDataClearImportedSession->setEnabled( false );
-  actionDataEditBootImages->setEnabled(false);
-
+  slotStateChanged( "state_project_active", KXMLGUIClient::StateReverse );
 
   // connect to the busy signals
   connect( k3bcore, SIGNAL(busyInfoRequested(const QString&)), this, SLOT(showBusyInfo(const QString&)) );
@@ -205,14 +208,11 @@ void K3bMainWindow::initActions()
   actionSettingsConfigure = KStdAction::preferences(this, SLOT(slotSettingsConfigure()), actionCollection() );
 
   // the tip action
-  (void)KStdAction::tipOfDay(this, SLOT(slotShowTips()), actionCollection(), "show_tips" );
+  (void)KStdAction::tipOfDay(this, SLOT(slotShowTips()), actionCollection() );
   (void)KStdAction::keyBindings( this, SLOT( slotConfigureKeys() ), actionCollection() );
 
   KStdAction::configureToolbars(this, SLOT(slotEditToolbars()), actionCollection());
   setStandardToolBarMenuEnabled(true);
-
-  actionFileBurn = new KAction( i18n("&Burn..."), "cdwriter_unmount", CTRL + Key_B, this, SLOT(slotFileBurn()),
-			  actionCollection(), "file_burn");
 
   actionFileNewMenu = new KActionMenu( i18n("&New Project"), "filenew", actionCollection(), "file_new" );
   actionFileNewAudio = new KAction(i18n("New &Audio CD Project"), "sound", 0, this, SLOT(slotNewAudioDoc()),
@@ -225,6 +225,8 @@ void K3bMainWindow::initActions()
 				   actionCollection(), "file_new_vcd");
   actionFileNewMovix = new KAction(i18n("New &eMovix CD Project"),"video", 0, this, SLOT(slotNewMovixDoc()),
 				   actionCollection(), "file_new_movix");
+  actionFileNewMovixDvd = new KAction(i18n("New &eMovix DVD Project"),"video", 0, this, SLOT(slotNewMovixDvdDoc()),
+				      actionCollection(), "file_new_movix_dvd");
   actionFileNewDvd = new KAction(i18n("New Data &DVD Project"), "dvd_unmount", 0, this, SLOT(slotNewDvdDoc()),
 				 actionCollection(), "file_new_dvd");
 
@@ -235,6 +237,7 @@ void K3bMainWindow::initActions()
   actionFileNewMenu->insert( actionFileNewVcd );
   actionFileNewMenu->insert( actionFileNewMovix );
   actionFileNewMenu->insert( actionFileNewDvd );
+  actionFileNewMenu->insert( actionFileNewMovixDvd );
   actionFileNewMenu->setDelayed( false );
 
   actionProjectAddFiles = new KAction( i18n("&Add Files..."), "filenew", 0, this, SLOT(slotProjectAddFiles()),
@@ -257,14 +260,14 @@ void K3bMainWindow::initActions()
 
   actionToolsBlankCdrw = new KAction( i18n("&Erase CD-RW..."), "cdrwblank", 0, this, SLOT(slotBlankCdrw()),
 				      actionCollection(), "tools_blank_cdrw" );
-  /*KAction* actionToolsFormatDVD = */(void)new KAction( i18n("&Format DVD±RW..."), "cdrwblank", 0, this, SLOT(slotFormatDvd()),
+  /*KAction* actionToolsFormatDVD = */(void)new KAction( i18n("&Format DVD-RW/DVD+RW..."), "cdrwblank", 0, this, SLOT(slotFormatDvd()),
 							 actionCollection(), "tools_format_dvd" );
   actionToolsDivxEncoding = new KAction(i18n("&Encode Video..."),"gear", 0, this, SLOT( slotDivxEncoding() ),
 			    actionCollection(), "tools_encode_video");
-  actionToolsWriteIsoImage = new KAction(i18n("&Write ISO Image..."), "gear", 0, this, SLOT(slotWriteIsoImage()),
+  actionToolsWriteIsoImage = new KAction(i18n("&Burn ISO Image..."), "gear", 0, this, SLOT(slotWriteIsoImage()),
 					 actionCollection(), "tools_write_iso" );
 
-  actionToolsWriteBinImage = new KAction(i18n("&Write Bin/Cue Image..."), "gear", 0, this, SLOT(slotWriteBinImage()),
+  actionToolsWriteBinImage = new KAction(i18n("&Burn Bin/Cue Image..."), "gear", 0, this, SLOT(slotWriteBinImage()),
 					 actionCollection(), "tools_write_bin" );
 
   actionCdCopy = new KAction(i18n("&Copy CD..."), "cdcopy", 0, this, SLOT(slotCdCopy()),
@@ -277,22 +280,22 @@ void K3bMainWindow::initActions()
 				       actionCollection(), "settings_k3bsetup" );
 
 
-  // Project actions
+  // Project actions (TODO: these should go into K3bDoc and it's subclasses)
   // ==============================================================================================================
 
   // Data Project
-  actionDataImportSession = new KAction(i18n("&Import Session"), "gear", 0, this, SLOT(slotDataImportSession()),
-					actionCollection(), "project_data_import_session" );
-  actionDataClearImportedSession = new KAction(i18n("&Clear Imported Session"), "gear", 0, this,
-					       SLOT(slotDataClearImportedSession()), actionCollection(),
-					       "project_data_clear_imported_session" );
-  actionDataEditBootImages = new KAction(i18n("&Edit Boot Images"), "cdtrack", 0, this,
- 					 SLOT(slotEditBootImages()), actionCollection(),
- 					 "project_data_edit_boot_images" );
+//   actionDataImportSession = new KAction(i18n("&Import Session"), "gear", 0, this, SLOT(slotDataImportSession()),
+// 					actionCollection(), "project_data_import_session" );
+//   actionDataClearImportedSession = new KAction(i18n("&Clear Imported Session"), "gear", 0, this,
+// 					       SLOT(slotDataClearImportedSession()), actionCollection(),
+// 					       "project_data_clear_imported_session" );
+//   actionDataEditBootImages = new KAction(i18n("&Edit Boot Images"), "cdtrack", 0, this,
+//  					 SLOT(slotEditBootImages()), actionCollection(),
+//  					 "project_data_edit_boot_images" );
 
-  m_dataProjectActions.append( actionDataImportSession );
-  m_dataProjectActions.append( actionDataClearImportedSession );
-  m_dataProjectActions.append( actionDataEditBootImages );
+//   m_dataProjectActions.append( actionDataImportSession );
+//   m_dataProjectActions.append( actionDataClearImportedSession );
+//   m_dataProjectActions.append( actionDataEditBootImages );
   // ==============================================================================================================
 
   // --- filetreecombobox-toolbar -------------------------------------------------------------------
@@ -364,17 +367,17 @@ void K3bMainWindow::initView()
   connect( mainDock, SIGNAL(hasUndocked()), this, SLOT(slotProjectDockHidden()) );
 
 
-//   mainDock->setDockSite( KDockWidget::DockCorner );
-//   mainDock->setEnableDocking( KDockWidget::DockFullDocking/*DockNone*/ );
-
-
   // --- Document Dock ----------------------------------------------------------------------------
-  QWidget* documentHull = new QWidget( mainDock );
-  QGridLayout* documentHullLayout = new QGridLayout( documentHull );
+  d->documentStack = new QWidgetStack( mainDock );
+  mainDock->setWidget( d->documentStack );
+
+  d->documentHull = new QWidget( d->documentStack );
+  d->documentStack->addWidget( d->documentHull );
+  QGridLayout* documentHullLayout = new QGridLayout( d->documentHull );
   documentHullLayout->setMargin( 2 );
   documentHullLayout->setSpacing( 0 );
 
-  m_documentHeader = K3bStdGuiItems::purpleFrame( documentHull );
+  m_documentHeader = K3bStdGuiItems::purpleFrame( d->documentHull );
   QGridLayout* documentHeaderLayout = new QGridLayout( m_documentHeader );
   documentHeaderLayout->setMargin( 2 );
   documentHeaderLayout->setSpacing( 0 );
@@ -400,14 +403,30 @@ void K3bMainWindow::initView()
   documentHeaderLayout->setColStretch( 1, 1 );
 
   // add the document tab to the styled document box
-  m_documentTab = new K3bProjectTabWidget( documentHull );
+  m_documentTab = new K3bProjectTabWidget( d->documentHull );
   //  m_documentTab->setPalette( oldPal );
 
   documentHullLayout->addWidget( m_documentHeader, 0, 0 );
   documentHullLayout->addWidget( m_documentTab, 1, 0 );
 
-  mainDock->setWidget( documentHull );
-  connect( m_documentTab, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotCurrentDocChanged(QWidget*)) );
+  connect( m_documentTab, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotCurrentDocChanged()) );
+
+
+  d->welcomeWidget = new K3bWelcomeWidget( d->documentStack );
+  d->welcomeWidget->m_topPixLabel->setPixmap( QPixmap(locate( "data", "k3b/pics/k3bprojectview_left.png" )) );
+  d->welcomeWidget->m_bottomPixLabel->setPixmap( QPixmap(locate( "data", "k3b/pics/k3bprojectview_right.png" )) );
+
+  connect( d->welcomeWidget->m_buttonDataCD, SIGNAL(leftClickedURL()),
+	   this, SLOT(slotNewDataDoc()) );
+  connect( d->welcomeWidget->m_buttonDataDVD, SIGNAL(leftClickedURL()),
+	   this, SLOT(slotNewDvdDoc()) );
+  connect( d->welcomeWidget->m_buttonAudioCD, SIGNAL(leftClickedURL()),
+	   this, SLOT(slotNewAudioDoc()) );
+  connect( d->welcomeWidget->m_buttonCopyCD, SIGNAL(leftClickedURL()),
+	   this, SLOT(slotCdCopy()) );
+
+  d->documentStack->addWidget( d->welcomeWidget );
+  d->documentStack->raiseWidget( d->welcomeWidget );
   // ---------------------------------------------------------------------------------------------
 
 
@@ -448,19 +467,11 @@ void K3bMainWindow::initView()
 
 void K3bMainWindow::createClient(K3bDoc* doc)
 {
-  K3bView* w = doc->newView( m_documentTab );
-  w->installEventFilter(this);
-  doc->addView(w);
-  w->setIcon(kapp->miniIcon());
+  K3bView* w = doc->createView( m_documentTab );
   m_documentTab->insertTab( w, w->caption(), 0 );
   m_documentTab->showPage( w );
 
-  actionFileBurn->setEnabled( true );
-  actionFileSave->setEnabled( true );
-  actionFileSaveAs->setEnabled( true );
-  actionProjectAddFiles->setEnabled( true );
-
-  slotCurrentDocChanged( m_documentTab->currentPage() );
+  slotCurrentDocChanged();
 
   setProjectsHidable( false );
 }
@@ -492,8 +503,7 @@ K3bDoc* K3bMainWindow::openDocument(const KURL& url)
   // check, if document already open. If yes, set the focus to the first view
   K3bDoc* doc = d->projectManager->findByUrl( url );
   if( doc ) {
-    K3bView* view = doc->firstView();
-    view->setFocus();
+    doc->view()->setFocus();
     return doc;
   }
   
@@ -505,8 +515,6 @@ K3bDoc* K3bMainWindow::openDocument(const KURL& url)
   }
 
   actionFileOpenRecent->addURL(url);
-
-  d->projectManager->addProject(doc);
 
   // create the window
   createClient(doc);
@@ -582,59 +590,6 @@ bool K3bMainWindow::queryClose()
   }
 
   return true;
-}
-
-
-bool K3bMainWindow::eventFilter(QObject* object, QEvent* event)
-{
-  if( (event->type() == QEvent::Close) && ((K3bMainWindow*)object != this) )
-    {
-      QCloseEvent* e=(QCloseEvent*)event;
-
-      K3bView* pView = (K3bView*)object;
-      if( pView ) {
-	K3bDoc* pDoc = pView->getDocument();
-
-	// ---------------------------------
-	// if it is not the last view we can remove it
-	// if it is the last view we need to ask the user (that is done in canCloseDocument())
-	// since K3bView has set the WDestructiveClose flag there is no need wondering about
-	// the proper garbage collection with the views
-	// ---------------------------------
-	if( ( pDoc->isLastView() && canCloseDocument(pDoc) )  ||
-	    !pDoc->isLastView() ) {
-
-	  pDoc->removeView( pView );
-	  m_documentTab->removePage( pView );
-
-	  slotCurrentDocChanged( m_documentTab->currentPage() );
-
-	  // ---------------------------------
-	  // if it was the last view we removed the doc should be removed
-	  // ---------------------------------
-	  if( !pDoc->firstView() ) {
-	    QMap<K3bDoc*, K3bProjectInterface*>::iterator it = d->projectInterfaceMap.find( pDoc );
-	    if( it != d->projectInterfaceMap.end() ) {
-	      // delete the interface
-	      delete it.data();
-	      d->projectInterfaceMap.remove( it );
-	    }
-	    d->projectManager->closeProject( pDoc );
-	  }
-	  e->accept();
-	  return false;
-	}
-	else {
-	  e->ignore();
-	  return true;
-	}
-
-	if( !activeDoc() )
-	  setProjectsHidable(true);
-      }
-    }
-
-  return QWidget::eventFilter( object, event );    // standard event processing
 }
 
 
@@ -735,35 +690,33 @@ void K3bMainWindow::fileSaveAs( K3bDoc* doc )
 
     QString url = KFileDialog::getSaveFileName(QDir::currentDirPath(),
 					       i18n("*.k3b|K3b Projects"), this, i18n("Save As"));
-
-
-    if(!url.isEmpty())
-      {
-
-	// default to ending ".k3b"
-	if( url.mid( url.findRev('.')+1 ) != "k3b" ) {
-	  if( url[ url.length()-1 ] != '.' )
-	    url += ".";
-	  url += "k3b";
-	}
-
-	if( !QFile::exists(url) ||
-	    ( QFile::exists(url) &&
-	      KMessageBox::questionYesNo( this, i18n("Do you want to overwrite %1").arg(url), i18n("File Exists") )
-	      == KMessageBox::Yes ) ) {
-
-	  if(!doc->saveDocument(url))
-	    {
-	      KMessageBox::error (this,i18n("Could not save the current document!"), i18n("I/O Error"));
-	      return;
-	    }
-	  doc->changedViewList();
-	  K3bView* view = doc->firstView();
-	  m_documentTab->changeTab( view, view->caption() );  // CAUTION: Does not work for multible views!
-
-	  actionFileOpenRecent->addURL(url);
-	}
+    
+    
+    if( !url.isEmpty() ) {
+      
+      // default to ending ".k3b"
+      if( url.mid( url.findRev('.')+1 ) != "k3b" ) {
+	if( url[ url.length()-1 ] != '.' )
+	  url += ".";
+	url += "k3b";
       }
+
+      if( !QFile::exists(url) ||
+	  ( QFile::exists(url) &&
+	    KMessageBox::questionYesNo( this, i18n("Do you want to overwrite %1").arg(url), i18n("File Exists") )
+	    == KMessageBox::Yes ) ) {
+
+	if( !doc->saveDocument(url) ) {
+	  KMessageBox::error (this,i18n("Could not save the current document!"), i18n("I/O Error"));
+	  return;
+	}
+
+	K3bView* view = doc->view();
+	m_documentTab->changeTab( view, view->caption() );
+
+	actionFileOpenRecent->addURL(url);
+      }
+    }
   }
 }
 
@@ -772,18 +725,39 @@ void K3bMainWindow::slotFileClose()
 {
   slotStatusMsg(i18n("Closing file..."));
 
-  if( K3bView* view = activeView() ) {
-    view->close(true);
+  if( K3bView* pView = activeView() ) {
+    if( pView ) {
+      K3bDoc* pDoc = pView->doc();
+
+      if( canCloseDocument(pDoc) ) {
+	
+	// unplug the actions
+	if( factory() ) {
+	  if( d->lastDoc == pDoc ) {
+	    factory()->removeClient( d->lastDoc->view() );
+	    d->lastDoc = 0;
+	  }
+	}
+
+	// remove the view from the project tab
+	m_documentTab->removePage( pView );
+	
+	// remove the DCOP interface
+	QMap<K3bDoc*, K3bProjectInterface*>::iterator it = d->projectInterfaceMap.find( pDoc );
+	if( it != d->projectInterfaceMap.end() ) {
+	  // delete the interface
+	  delete it.data();
+	  d->projectInterfaceMap.remove( it );
+	}
+	
+	// delete view and doc
+	delete pView;
+	delete pDoc;
+      }
+    }
   }
   
-  if( d->projectManager->isEmpty() ) {
-    actionFileSave->setEnabled(false);
-    actionFileSaveAs->setEnabled(false);
-    actionFileBurn->setEnabled( false );
-    actionProjectAddFiles->setEnabled( false );
-  }
-
-  slotCurrentDocChanged(0);
+  slotCurrentDocChanged();
 }
 
 
@@ -980,9 +954,30 @@ K3bDoc* K3bMainWindow::slotNewMovixDoc()
 }
 
 
+K3bDoc* K3bMainWindow::slotNewMovixDvdDoc()
+{
+  slotStatusMsg(i18n("Creating new eMovix DVD Project."));
+
+  K3bMovixDvdDoc* doc = new K3bMovixDvdDoc( this );
+  initializeNewDoc( doc );
+
+  m_movixDvdUntitledCount++;
+  QString fileName=i18n("eMovixDVD%1").arg(m_movixDvdUntitledCount);
+  if( doc->isoOptions().volumeID().isEmpty() )
+    doc->isoOptions().setVolumeID( i18n("eMovixDVD%1").arg(m_movixDvdUntitledCount) );
+  KURL url;
+  url.setFileName(fileName);
+  doc->setURL(url);
+
+  // create the window
+  createClient(doc);
+
+  return doc;
+}
+
+
 void K3bMainWindow::initializeNewDoc( K3bDoc* doc )
 {
-  d->projectManager->addProject(doc);
   doc->newDocument();
   doc->loadDefaultSettings( config() );
 
@@ -1012,51 +1007,47 @@ void K3bMainWindow::slotDivxEncoding()
 }
 
 
-// TODO: move this into K3bDoc
-void K3bMainWindow::slotFileBurn()
-{
-  K3bView* view = activeView();
-
-  if( view ) {
-    K3bDoc* doc = view->getDocument();
-
-    if( doc ) {
-      // test if there is something to burn
-      if( doc->numOfTracks() == 0 || doc->size() == 0 ) {
-	KMessageBox::information( kapp->mainWidget(), i18n("Please add files to your project first!"),
-				  i18n("No Data to Burn"), QString::null, false );
-      }
-      else {
-	view->burnDialog();
-      }
-    }
-  }
-}
-
-
-void K3bMainWindow::slotCurrentDocChanged( QWidget* )
+void K3bMainWindow::slotCurrentDocChanged()
 {
   // check the doctype
-  K3bView* view = activeView();
-  if( view ) {
-    d->projectManager->setActive( view->getDocument() );
+  K3bView* v = activeView();
+  if( v ) {
+    d->projectManager->setActive( v->doc() );
 
-    unplugActionList( "data_project_actions" );
+    //
+    // There are two possiblities to plug the project actions:
+    // 1. Through KXMLGUIClient::plugActionList
+    //    This way we just ask the View for the actionCollection (which it should merge with
+    //    the doc's) and plug it into the project menu.
+    //    Advantage: easy and clear to handle
+    //    Disadvantage: we may only plug all actions at once into one menu
+    //
+    // 2. Through merging the doc as a KXMLGUIClient
+    //    This way every view is a KXMLGUIClient and it's GUI is just merged into the MainWindow's.
+    //    Advantage: flexible
+    //    Disadvantage: every view needs it's own XML file
+    //                  
+    //
 
-    switch( view->getDocument()->docType() ) {
-    case K3bDoc::DATA:
-    case K3bDoc::DVD:
-      actionDataClearImportedSession->setEnabled(true);
-      actionDataImportSession->setEnabled(true);
-      actionDataEditBootImages->setEnabled(true);
-      unplugActionList( "data_project_actions" );
-      plugActionList( "data_project_actions", m_dataProjectActions );
-      break;
-    default:
-      actionDataClearImportedSession->setEnabled(false);
-      actionDataImportSession->setEnabled(false);
-      actionDataEditBootImages->setEnabled(false);
+    if( factory() ) {
+      if( d->lastDoc )
+	factory()->removeClient( d->lastDoc->view() );
+      factory()->addClient( v );
+      d->lastDoc = v->doc();
     }
+    else
+      kdDebug() << "(K3bMainWindow) ERROR: could not get KXMLGUIFactory instance." << endl;
+  }
+
+  if( d->projectManager->isEmpty() ) {
+    d->documentStack->raiseWidget( d->welcomeWidget );
+    slotStateChanged( "state_project_active", KXMLGUIClient::StateReverse );
+  }
+  else {
+    d->documentStack->raiseWidget( d->documentHull );
+    // make sure the document header is shown (or not)
+    slotViewDocumentHeader();
+    slotStateChanged( "state_project_active", KXMLGUIClient::StateNoReverse );
   }
 }
 
@@ -1073,8 +1064,6 @@ void K3bMainWindow::slotEditToolbars()
 
 void K3bMainWindow::slotNewToolBarConfig()
 {
-  //  createGUI(0L);
-  slotCurrentDocChanged(0);  // make sure the project-specific actions get activated
   applyMainWindowSettings( m_config, "main_window_settings" );
 }
 

@@ -24,8 +24,9 @@
 // include files for Qt
 #include <qwidget.h>
 
+#include <kxmlguiclient.h>
+
 class K3bDoc;
-class K3bProjectBurnDialog;
 class KActionCollection;
 class K3bFillStatusDisplay;
 
@@ -33,11 +34,9 @@ class K3bFillStatusDisplay;
 /** 
  *
  */
-class K3bView : public QWidget
+class K3bView : public QWidget, public KXMLGUIClient
 {
   Q_OBJECT
-
-    friend class K3bDoc;
 
  public:
   /** 
@@ -52,25 +51,17 @@ class K3bView : public QWidget
    */
   K3bDoc* getDocument() const { return m_doc; }
   K3bDoc* doc() const { return m_doc; }
-	
-  virtual void burnDialog( bool withWritingButton = true ) = 0;
 
-  virtual KActionCollection* actionCollection() const;
+  //  virtual KActionCollection* actionCollection() const;
 
   void setMainWidget( QWidget* );
 
  protected:
-  /** overwritten QWidget::closeEvent() to catch closing views. Does nothing, as the closeEvents for
-   * K3bView's are processed by K3bMainWindow::eventFilter(), so this overwitten closeEvent is necessary
-   * and has to be empty. Don't overwrite this method !
-   */
-  virtual void closeEvent(QCloseEvent* e);
-
   K3bFillStatusDisplay* fillStatusDisplay() const { return m_fillStatusDisplay; }
 
  private:
   K3bDoc* m_doc;
-  KActionCollection* m_actionCollection;
+  //  KActionCollection* m_actionCollection;
   K3bFillStatusDisplay* m_fillStatusDisplay;
 };
 

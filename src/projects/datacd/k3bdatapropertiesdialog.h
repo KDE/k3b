@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -52,6 +52,7 @@ Q_OBJECT
 
   QCheckBox* m_checkHideOnRockRidge;
   QCheckBox* m_checkHideOnJoliet;
+  KLineEdit* m_editSortWeight;
 
   K3bDataItem* m_dataItem;
 };

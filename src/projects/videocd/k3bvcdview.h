@@ -42,8 +42,6 @@ class K3bVcdView : public K3bView
         K3bVcdView( K3bVcdDoc* pDoc, QWidget* parent, const char *name = 0 );
         ~K3bVcdView();
 
-        void burnDialog( bool );
-
     private:
         K3bVcdDoc* m_doc;
 

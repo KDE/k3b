@@ -413,10 +413,6 @@ QString K3bVcdDoc::documentType() const
     return "vcd";
 }
 
-void K3bVcdDoc::addView( K3bView* view )
-{
-    K3bDoc::addView( view );
-}
 
 K3bBurnJob* K3bVcdDoc::newBurnJob()
 {
@@ -426,7 +422,7 @@ K3bBurnJob* K3bVcdDoc::newBurnJob()
 void K3bVcdDoc::informAboutNotFoundFiles()
 {
     if ( !m_notFoundFiles.isEmpty() ) {
-        KMessageBox::informationList( firstView(), i18n( "Could not find the following files:" ),
+        KMessageBox::informationList( view(), i18n( "Could not find the following files:" ),
                                       m_notFoundFiles, i18n( "Not found" ) );
 
         m_notFoundFiles.clear();
@@ -895,6 +891,12 @@ bool K3bVcdDoc::saveDocumentData( QDomElement* docElem )
     docElem->appendChild( contentsElem );
 
     return true;
+}
+
+
+K3bProjectBurnDialog* K3bVcdDoc::newBurnDialog( QWidget* parent, const char* name )
+{
+  return new K3bVcdBurnDialog( this, parent, name, true );
 }
 
 #include "k3bvcddoc.moc"

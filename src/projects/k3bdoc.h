@@ -37,9 +37,12 @@ class K3bView;
 class QTimer;
 class KTempFile;
 class K3bBurnJob;
+class K3bProjectBurnDialog;
 class QDomDocument;
 class QDomElement;
 class KConfig;
+class KActionCollection;
+
 
 namespace K3bCdDevice {
   class CdDevice;
@@ -56,8 +59,6 @@ class K3bDoc : public QObject
 {
   Q_OBJECT
 
-    friend class K3bView;
-
  public:
   K3bDoc( QObject* = 0 );
   virtual ~K3bDoc();
@@ -68,42 +69,53 @@ class K3bDoc : public QObject
     MIXED, 
     VCD, 
     MOVIX,
+    MOVIX_DVD,
     DVD,
     VIDEODVD 
   };
 
-  virtual void disable();
-  virtual void enable();
+  virtual KActionCollection* actionCollection() const { return m_actionCollection; }
 
   virtual int docType() const { return m_docType; }
 
-  /** adds a view to the document which represents the document contents. Usually this is your main view. */
-  virtual void addView(K3bView *view);
-  /** removes a view from the list of currently connected views */
-  void removeView(K3bView *view);
-  /** gets called if a view is removed or added */
-  void changedViewList();
-  /** returns the first view instance */
-  K3bView* firstView(){ return pViewList->first(); };
-  /** returns true, if the requested view is the last view of the document */
-  bool isLastView();
+  /** 
+   * Create a new view
+   * This should only be called once.
+   */
+  K3bView* createView( QWidget* parent = 0, const char* name = 0 );
+
+  /** 
+   * returns the K3bView created by newView() or null if none has been created
+   */
+  K3bView* view() const { return m_view; }
 
   /** 
    * sets the modified flag for the document after a modifying action on the view connected to the document.
    */
-  void setModified(bool _m=true){ modified=_m; };
+  void setModified( bool m = true) { m_modified = m; }
 
   /** 
    * returns if the document is modified or not. Use this to determine 
    * if your document needs saving by the user on closing.
    */
-  bool isModified(){ return modified; };
+  bool isModified() { return m_modified; }
 
   /**
    * Subclasses should call this when reimplementing.
+   * Sets some defaults.
+   * TODO: Basicly this is not needed at all in the
+   * K3b project structures as it may all be done in the constructor
+   * since one K3bDoc will never be reused (except we introduce a 
+   * method to clear a project which has been requested by a user.)
    */
   virtual bool newDocument();
 
+  /**
+   * Since we have several types of K3b projects we cannot follow the standard and
+   * allow opening an URL in an already created doc. So this static method checks
+   * the type of the saved project and creates a appropriate project object or 0
+   * if no K3b project has been found.
+   */
   static K3bDoc* openDocument(const KURL &url);
 
   /**
@@ -116,10 +128,6 @@ class K3bDoc : public QObject
   /** sets the URL of the document */
   void setURL(const KURL& url);
 
-  /** Create a new view */
-  virtual K3bView* newView( QWidget* parent ) = 0;
-
-  virtual const QString& projectName() const { return m_projectName; }
   int writingMode() const { return m_writingMode; }
   bool dummy() const { return m_dummy; }
   bool onTheFly() const { return m_onTheFly; }
@@ -159,7 +167,16 @@ class K3bDoc : public QObject
   void changed();
 
  public slots:
-  void updateAllViews();
+  /**
+   * Default impl. brings up the burnDialog via newBurnDialog() with writing
+   */
+  virtual void slotBurn();
+
+  /**
+   * Default impl. brings up the burnDialog via newBurnDialog() without writing
+   */
+  virtual void slotProperties();
+
   void setDummy( bool d );
   void setWritingMode( int m ) { m_writingMode = m; }
   void setOnTheFly( bool b ) { m_onTheFly = b; }
@@ -219,13 +236,18 @@ class K3bDoc : public QObject
 
   //  K3bProjectInterface* m_dcopInterface;
 
+  /**
+   * Protected since the BurnDialog is not part of the API.
+   */
+  virtual K3bProjectBurnDialog* newBurnDialog( QWidget* = 0, const char* = 0 ) = 0;
+  virtual K3bView* newView( QWidget* parent = 0 ) = 0;
+
  private:
   /** the modified flag of the current document */
-  bool modified;
+  bool m_modified;
   KURL doc_url;
-  /** the list of the views currently connected to the document */
-  QPtrList<K3bView> *pViewList;
-  QString m_projectName;
+
+  K3bView* m_view;
   QString m_tempDir;
   K3bCdDevice::CdDevice* m_burner;
   bool m_dummy;
@@ -242,6 +264,8 @@ class K3bDoc : public QObject
   int m_writingMode;
 
   bool m_saved;
+
+  KActionCollection* m_actionCollection;
 };
 
 #endif // K3BDOC_H

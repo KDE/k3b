@@ -13,6 +13,17 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+
+//
+// Some notes on mp3:
+// A mp3 Frame is always samples/samplerate seconds in length
+//
+//
+//
+// What we need are raw 16 bit stereo samples at 44100 Hz which results in 588 samples
+// per block (2352 bytes: 32*588 bit). 1 second are 75 blocks.
+//
+
 #include "k3bmp3module.h"
 #include "../../k3baudiotrack.h"
 
@@ -21,13 +32,13 @@
 #include <kconfig.h>
 #include <kprocess.h>
 #include <klocale.h>
-#include <kfilemetainfo.h>
 #include <kdebug.h>
 #include <kmimetype.h>
 
 #include <qstring.h>
 #include <qfileinfo.h>
 #include <qfile.h>
+#include <qvaluevector.h>
 
 #include <stdlib.h>
 #include <cmath>
@@ -39,113 +50,159 @@ typedef unsigned char k3b_mad_char;
 int K3bMp3Module::MaxAllowedRecoverableErrors = 10;
 
 
+class K3bMp3Module::Private
+{
+public:
+  QValueVector<long> seekPositions;
+
+  k3b_mad_char* inputBuffer;
+
+  mad_stream*   madStream;
+  mad_frame*    madFrame;
+  mad_header*   madHeader;
+  mad_synth*    madSynth;
+  mad_timer_t*  madTimer;
+
+  bool bEndOfInput;
+  bool bInputError;
+  bool bOutputFinished;
+
+  // needed for resampling
+  // ----------------------------------
+  bool bFrameNeedsResampling;
+  mad_fixed_t madResampledRatio;
+
+  // left channel
+  mad_fixed_t madResampledStepLeft;
+  mad_fixed_t madResampledLastLeft;
+  mad_fixed_t* madResampledLeftChannel;
+
+  // right channel
+  mad_fixed_t madResampledStepRight;
+  mad_fixed_t madResampledLastRight;
+  mad_fixed_t* madResampledRightChannel;
+  // ----------------------------------
+
+  unsigned long frameCount;
+
+  char* outputBuffer;
+  char* outputPointer;
+  char* outputBufferEnd;
+
+  QFile inputFile;
+};
+
+
 K3bMp3Module::K3bMp3Module( QObject* parent, const char* name )
   : K3bAudioModule( parent, name )
 {
-  m_inputBuffer  = new k3b_mad_char[INPUT_BUFFER_SIZE];
+  d = new Private();
 
-  m_madStream = new mad_stream;
-  m_madFrame  = new mad_frame;
-  m_madHeader = new mad_header;
-  m_madSynth  = new mad_synth;
-  m_madTimer  = new mad_timer_t;
+  d->inputBuffer  = new k3b_mad_char[INPUT_BUFFER_SIZE];
+
+  d->madStream = new mad_stream;
+  d->madFrame  = new mad_frame;
+  d->madHeader = new mad_header;
+  d->madSynth  = new mad_synth;
+  d->madTimer  = new mad_timer_t;
 
 
   // resampling
   // a 32 kHz frame has 1152 bytes
   // so to resample it we need about 1587 bytes for resampling
   // all other resampling needs at most 1152 bytes
-  m_madResampledLeftChannel = new mad_fixed_t[1600];
-  m_madResampledRightChannel = new mad_fixed_t[1600];
+  d->madResampledLeftChannel = new mad_fixed_t[1600];
+  d->madResampledRightChannel = new mad_fixed_t[1600];
 }
 
 
 K3bMp3Module::~K3bMp3Module()
 {
-  delete [] m_inputBuffer;
+  delete [] d->inputBuffer;
 
-  delete [] m_madResampledLeftChannel;
-  delete [] m_madResampledRightChannel;
+  delete [] d->madResampledLeftChannel;
+  delete [] d->madResampledRightChannel;
 
-  delete m_madStream;
-  delete m_madFrame;
-  delete m_madHeader;
-  delete m_madSynth;
-  delete m_madTimer;
+  delete d->madStream;
+  delete d->madFrame;
+  delete d->madHeader;
+  delete d->madSynth;
+  delete d->madTimer;
+
+  delete d;
 }
 
 
 bool K3bMp3Module::initDecodingInternal( const QString& filename )
 {
-  m_bOutputFinished = false;
-  m_bEndOfInput = false;
-  m_bFrameNeedsResampling = false;
-  m_bInputError = false;
+  d->bOutputFinished = false;
+  d->bEndOfInput = false;
+  d->bFrameNeedsResampling = false;
+  d->bInputError = false;
     
   // just to be sure
-  m_inputFile.close();
-  m_inputFile.setName( filename );
-  if( !m_inputFile.open( IO_ReadOnly ) ) {
+  d->inputFile.close();
+  d->inputFile.setName( filename );
+  if( !d->inputFile.open( IO_ReadOnly ) ) {
     kdError() << "(K3bMp3Module) could not open file " << filename << endl;
     return false;
   }
 
-  memset( m_inputBuffer, 0, INPUT_BUFFER_SIZE );
+  memset( d->inputBuffer, 0, INPUT_BUFFER_SIZE );
 
-  mad_stream_init( m_madStream );
-  mad_timer_reset( m_madTimer );
-  mad_frame_init( m_madFrame );
-  mad_header_init( m_madHeader );
-  mad_synth_init( m_madSynth );
+  mad_stream_init( d->madStream );
+  mad_timer_reset( d->madTimer );
+  mad_frame_init( d->madFrame );
+  mad_header_init( d->madHeader );
+  mad_synth_init( d->madSynth );
 
-  m_frameCount = 0;
+  d->frameCount = 0;
 
   // reset the resampling status structures
-  m_madResampledStepLeft = 0;
-  m_madResampledLastLeft = 0;
-  m_madResampledStepRight = 0;
-  m_madResampledLastRight = 0;
+  d->madResampledStepLeft = 0;
+  d->madResampledLastLeft = 0;
+  d->madResampledStepRight = 0;
+  d->madResampledLastRight = 0;
 
   return true;
 }
 
 // streams data from file into stream
-// returnes length of data
-void K3bMp3Module::fillInputBuffer()
+void K3bMp3Module::madStreamBuffer()
 {
   /* The input bucket must be filled if it becomes empty or if
    * it's the first execution of the loop.
    */
-  if( m_madStream->buffer == 0 || m_madStream->error == MAD_ERROR_BUFLEN ) {
+  if( d->madStream->buffer == 0 || d->madStream->error == MAD_ERROR_BUFLEN ) {
     long readSize, remaining;
     unsigned char* readStart;
 
-    if( m_madStream->next_frame != 0 ) {
-      remaining = m_madStream->bufend - m_madStream->next_frame;
-      memmove( m_inputBuffer, m_madStream->next_frame, remaining );
-      readStart = m_inputBuffer + remaining;
+    if( d->madStream->next_frame != 0 ) {
+      remaining = d->madStream->bufend - d->madStream->next_frame;
+      memmove( d->inputBuffer, d->madStream->next_frame, remaining );
+      readStart = d->inputBuffer + remaining;
       readSize = INPUT_BUFFER_SIZE - remaining;
     }
     else {
       readSize  = INPUT_BUFFER_SIZE;
-      readStart = m_inputBuffer;
+      readStart = d->inputBuffer;
       remaining = 0;
     }
 			
     // Fill-in the buffer. 
-    Q_LONG result = m_inputFile.readBlock( (char*)readStart, readSize );
+    Q_LONG result = d->inputFile.readBlock( (char*)readStart, readSize );
     if( result < 0 ) {
       kdDebug() << "(K3bMp3Module) read error on bitstream)" << endl;
-      m_bInputError = true;
+      d->bInputError = true;
     }
     else if( result == 0 ) {
       kdDebug() << "(K3bMp3Module) end of input stream" << endl;
-      m_bEndOfInput = true;
+      d->bEndOfInput = true;
     }
     else {
       // Pipe the new buffer content to libmad's stream decoder facility.
-      mad_stream_buffer( m_madStream, m_inputBuffer, result + remaining );
-      m_madStream->error = MAD_ERROR_NONE;
+      mad_stream_buffer( d->madStream, d->inputBuffer, result + remaining );
+      d->madStream->error = MAD_ERROR_NONE;
     }
   }
 }
@@ -154,26 +211,27 @@ void K3bMp3Module::fillInputBuffer()
 int K3bMp3Module::countFrames( unsigned long& frames )
 {
   int ret = K3bAudioTitleMetaInfo::OK;
+  d->seekPositions.clear();
 
-  while( !m_bEndOfInput && !m_bInputError ) {
+  while( !d->bEndOfInput && !d->bInputError ) {
 
-    fillInputBuffer();
+    madStreamBuffer();
 
-    if( m_bInputError ) {
+    if( d->bInputError ) {
       kdError() << "(K3bMp3Module) Error while reading fron file." << endl;
     }
     else {
-      if( mad_header_decode( m_madHeader, m_madStream ) ) {
-	if( MAD_RECOVERABLE( m_madStream->error ) ) {
+      if( mad_header_decode( d->madHeader, d->madStream ) ) {
+	if( MAD_RECOVERABLE( d->madStream->error ) ) {
 	  kdDebug() << "(K3bMp3Module) recoverable frame level error ("
-		    << mad_stream_errorstr(m_madStream) << ")" << endl;
+		    << mad_stream_errorstr(d->madStream) << ")" << endl;
 
 	  ret = K3bAudioTitleMetaInfo::RECOVERABLE;
 	}
 	else {
-	  if( m_madStream->error != MAD_ERROR_BUFLEN ) {
+	  if( d->madStream->error != MAD_ERROR_BUFLEN ) {
 	    kdDebug() << "(K3bMp3Module) unrecoverable frame level error ("
-		      << mad_stream_errorstr(m_madStream) << endl;
+		      << mad_stream_errorstr(d->madStream) << endl;
 	    ret = K3bAudioTitleMetaInfo::CORRUPT;
 	    break;
 	  }
@@ -181,19 +239,34 @@ int K3bMp3Module::countFrames( unsigned long& frames )
       } // if( header not decoded )
 
       else {
-	m_frameCount++;
+	// create the seek position
+	// current position in file + bytes to start of current frame in the buffer
+	long seekPos = d->inputFile.at() + (d->madStream->this_frame - d->madStream->buffer);
+	d->seekPositions.append( seekPos );
 
-	mad_timer_add( m_madTimer, m_madHeader->duration );
+	d->frameCount++;
+
+	static mad_timer_t s_frameLen = mad_timer_zero;
+	if( mad_timer_compare( s_frameLen, d->madHeader->duration ) ) {
+	  // TODO: einfach hier nen Fehler rauswerfen, denn der MP3 Standard verlangt, dass jeder Frame die gleiche
+	  //       Länge hat
+	  kdDebug() << "(K3bMp3Module) frame len differs: old: " 
+		    << s_frameLen.seconds << ":" << s_frameLen.fraction
+		    << " new: " << d->madHeader->duration.seconds << ":" << d->madHeader->duration.fraction << endl;
+	  s_frameLen = d->madHeader->duration;
+	}
+
+	mad_timer_add( d->madTimer, d->madHeader->duration );
       }
     } // if( input ready )
 
   } // for( 1000x )
 
-  if( !m_bInputError && ret != K3bAudioTitleMetaInfo::CORRUPT ) {
+  if( !d->bInputError && ret != K3bAudioTitleMetaInfo::CORRUPT ) {
     // we need the length of the track to be multible of frames (1/75 second)
-    float seconds = (float)m_madTimer->seconds + (float)m_madTimer->fraction/(float)MAD_TIMER_RESOLUTION;
+    float seconds = (float)d->madTimer->seconds + (float)d->madTimer->fraction/(float)MAD_TIMER_RESOLUTION;
     frames = (unsigned long)ceil(seconds * 75.0);
-    kdDebug() << "(K3bMp3Module) length of track " << seconds << endl;
+    kdDebug() << "(K3bMp3Module) length of track " << seconds << " MP3 Frames: " << d->frameCount <<  endl;
   }
 
   cleanup();
@@ -204,14 +277,14 @@ int K3bMp3Module::countFrames( unsigned long& frames )
 
 int K3bMp3Module::decodeInternal( char* _data, int maxLen )
 {
-  m_outputBuffer = _data;
-  m_outputBufferEnd = m_outputBuffer + maxLen;
-  m_outputPointer = m_outputBuffer;
+  d->outputBuffer = _data;
+  d->outputBufferEnd = d->outputBuffer + maxLen;
+  d->outputPointer = d->outputBuffer;
 
   bool bOutputBufferFull = false;
 
 
-  while( !bOutputBufferFull ) {
+  while( !bOutputBufferFull && !d->bEndOfInput ) {
 
     // a mad_synth contains of the data of one mad_frame
     // one mad_frame represents a mp3-frame which is always 1152 samples
@@ -219,66 +292,77 @@ int K3bMp3Module::decodeInternal( char* _data, int maxLen )
     // since one sample has 16 bit
     // special case: resampling from 32000 Hz: this results 1587 samples per channel
     // so to always have enough free buffer we use 4*1600 (This is bad, this needs some redesign!)
-    if( m_outputBufferEnd - m_outputPointer < 4*1600 ) {
+    if( d->outputBufferEnd - d->outputPointer < 4*1600 ) {
       bOutputBufferFull = true;
     }
     else {
-
-      fillInputBuffer();
-
-      if( m_bInputError ) {
-	kdError() << "(K3bMp3Module) Error while reading fron file." << endl;
+      bool success = madDecodeNextFrame();
+      if( !d->bEndOfInput && success ) {
+	// 
+	// Once decoded the frame is synthesized to PCM samples. No errors
+	// are reported by mad_synth_frame();
+	//
+	mad_synth_frame( d->madSynth, d->madFrame );
+	
+	// this does the resampling if needed
+	// and fills the output buffer
+	if( !createPcmSamples( d->madSynth ) ) {
+	  return -1;
+	}
+      }
+      else if( !success ) {
 	return -1;
       }
-      else if( m_bEndOfInput ) {
-	kdDebug() << "(K3bMp3Module) end of input." << endl;
-	return 0;
-      }
-      else {
-	if( mad_frame_decode( m_madFrame, m_madStream ) ) {
-	  if( MAD_RECOVERABLE( m_madStream->error ) ) {
-	    kdDebug() << "(K3bMp3Module) recoverable frame level error ("
-		      << mad_stream_errorstr(m_madStream) << ")" << endl;
-	  }
-	  else {
-	    if( m_madStream->error != MAD_ERROR_BUFLEN ) {
-	      kdDebug() << "(K3bMp3Module) unrecoverable frame level error ("
-			<< mad_stream_errorstr(m_madStream) << endl;
-
-	      return -1;
-	    }
-	  }
-	} // mad frame could not be decoded
-
-	else {
-  
-	  m_frameCount++;
-
-	  mad_timer_add( m_madTimer, m_madFrame->header.duration );
-
-	  /* Once decoded the frame is synthesized to PCM samples. No errors
-	   * are reported by mad_synth_frame();
-	   */
-	  mad_synth_frame( m_madSynth, m_madFrame );
-
-	  // this does the resampling if needed
-	  // and fills the output buffer
-	  if( !createPcmSamples( m_madSynth ) ) {
-	    return -1;
-	  }
-
-	} // mad frame successfully decoded
-
-      } // input ready
-
+      // else EOF
     } // output buffer not full yet
 
   } // while loop
 
   // flush the output buffer
-  size_t buffersize = m_outputPointer - m_outputBuffer;
+  size_t buffersize = d->outputPointer - d->outputBuffer;
 	    
   return buffersize;
+}
+
+
+bool K3bMp3Module::madDecodeNextFrame()
+{
+  if( d->bInputError ) {
+    return false;
+  }
+  else if( d->bEndOfInput ) {
+    return true;
+  }
+
+  madStreamBuffer();
+
+  if( mad_frame_decode( d->madFrame, d->madStream ) ) {
+    if( MAD_RECOVERABLE( d->madStream->error )  ) {
+      kdDebug() << "(K3bMp3Module) recoverable frame level error ("
+		<< mad_stream_errorstr(d->madStream) << ")" << endl;
+
+      // try again
+      return madDecodeNextFrame();
+    }
+    // this should never be reached since we always fill the buffer before decoding
+    else if( d->madStream->error == MAD_ERROR_BUFLEN ) {
+      // try again
+      return madDecodeNextFrame();
+    }
+    else {
+      kdDebug() << "(K3bMp3Module) unrecoverable frame level error ("
+		<< mad_stream_errorstr(d->madStream) << endl;
+      
+      return false;
+    }
+  }
+  else {
+    d->frameCount++;
+
+    mad_timer_add( d->madTimer, d->madFrame->header.duration );
+
+    return true;
+  }
 }
 
 
@@ -324,31 +408,31 @@ bool K3bMp3Module::createPcmSamples( mad_synth* synth )
 
     switch ( synth->pcm.samplerate ) {
     case 48000:
-      m_madResampledRatio = resample_table[0];
+      d->madResampledRatio = resample_table[0];
       break;
     case 44100:
-      m_madResampledRatio = resample_table[1];
+      d->madResampledRatio = resample_table[1];
       break;
     case 32000:
-      m_madResampledRatio = resample_table[2];
+      d->madResampledRatio = resample_table[2];
       break;
     case 24000:
-      m_madResampledRatio = resample_table[3];
+      d->madResampledRatio = resample_table[3];
       break;
     case 22050:
-      m_madResampledRatio = resample_table[4];
+      d->madResampledRatio = resample_table[4];
       break;
     case 16000:
-      m_madResampledRatio = resample_table[5];
+      d->madResampledRatio = resample_table[5];
       break;
     case 12000:
-      m_madResampledRatio = resample_table[6];
+      d->madResampledRatio = resample_table[6];
       break;
     case 11025:
-      m_madResampledRatio = resample_table[7];
+      d->madResampledRatio = resample_table[7];
       break;
     case  8000:
-      m_madResampledRatio = resample_table[8];
+      d->madResampledRatio = resample_table[8];
       break;
     default:
       kdDebug() << "(K3bMp3Module) Error: not a supported samplerate: " << synth->pcm.samplerate << endl;
@@ -357,13 +441,13 @@ bool K3bMp3Module::createPcmSamples( mad_synth* synth )
     }
 
 
-    resampleBlock( leftChannel, synth->pcm.length, m_madResampledLeftChannel, m_madResampledLastLeft, 
-		   m_madResampledStepLeft );
-    nsamples = resampleBlock( rightChannel, synth->pcm.length, m_madResampledRightChannel, 
-			      m_madResampledLastRight, m_madResampledStepRight );
+    resampleBlock( leftChannel, synth->pcm.length, d->madResampledLeftChannel, d->madResampledLastLeft, 
+		   d->madResampledStepLeft );
+    nsamples = resampleBlock( rightChannel, synth->pcm.length, d->madResampledRightChannel, 
+			      d->madResampledLastRight, d->madResampledStepRight );
 
-    leftChannel = m_madResampledLeftChannel;
-    rightChannel = m_madResampledRightChannel;
+    leftChannel = d->madResampledLeftChannel;
+    rightChannel = d->madResampledRightChannel;
   }
 
 
@@ -375,8 +459,8 @@ bool K3bMp3Module::createPcmSamples( mad_synth* synth )
       
       /* Left channel */
       sample = linearRound( leftChannel[i] );
-      *(m_outputPointer++) = (sample >> 8) & 0xff;
-      *(m_outputPointer++) = sample & 0xff;
+      *(d->outputPointer++) = (sample >> 8) & 0xff;
+      *(d->outputPointer++) = sample & 0xff;
       
       /* Right channel. If the decoded stream is monophonic then
        * the right output channel is the same as the left one.
@@ -384,12 +468,12 @@ bool K3bMp3Module::createPcmSamples( mad_synth* synth )
       if( synth->pcm.channels == 2 )
 	sample = linearRound( rightChannel[i] );
       
-      *(m_outputPointer++) = (sample >> 8) & 0xff;
-      *(m_outputPointer++) = sample & 0xff;
+      *(d->outputPointer++) = (sample >> 8) & 0xff;
+      *(d->outputPointer++) = sample & 0xff;
       
       // this should not happen since we only decode if the
       // output buffer has enough free space
-      if( m_outputPointer == m_outputBufferEnd && i+1 < nsamples ) {
+      if( d->outputPointer == d->outputBufferEnd && i+1 < nsamples ) {
 	kdDebug() <<  "(K3bMp3Module) buffer overflow!" << endl;
 	return false;
       }
@@ -428,7 +512,7 @@ unsigned int K3bMp3Module::resampleBlock( mad_fixed_t const *source,
  	last + mad_f_mul(*source - last, step) 
  	: last;
 
-       step += m_madResampledRatio;
+       step += d->madResampledRatio;
       if (((step + 0x00000080L) & 0x0fffff00L) == 0)
 	step = (step + 0x00000080L) & ~0x0fffffffL;
     }
@@ -445,7 +529,7 @@ unsigned int K3bMp3Module::resampleBlock( mad_fixed_t const *source,
       *source + mad_f_mul(source[1] - source[0], step) 
       : *source;
 
-    step += m_madResampledRatio;
+    step += d->madResampledRatio;
     if (((step + 0x00000080L) & 0x0fffff00L) == 0)
       step = (step + 0x00000080L) & ~0x0fffffffL;
   }
@@ -463,12 +547,39 @@ unsigned int K3bMp3Module::resampleBlock( mad_fixed_t const *source,
 
 void K3bMp3Module::cleanup()
 {
-  m_inputFile.close();
+  d->inputFile.close();
 
-  mad_frame_finish( m_madFrame );
-  mad_header_finish( m_madHeader );
-  mad_synth_finish( m_madSynth );
-  mad_stream_finish( m_madStream );
+  mad_frame_finish( d->madFrame );
+  mad_header_finish( d->madHeader );
+  mad_synth_finish( d->madSynth );
+  mad_stream_finish( d->madStream );
+}
+
+
+bool K3bMp3Module::seek( const K3b::Msf& pos )
+{
+  // TODO: we need to reset the complete mad stuff with finish and init
+
+  // our seekpositions let us jump to every mp3 frame which is 1152/44100 seconds
+  // pos has a resolution of 1/75 seconds.
+  // So we need to fine tune after using d->seekPostions
+  // every block (1/75 seconds) has 588 samples
+  
+  long mp3Frame = (long)((double)pos.totalFrames() / 75.0 * 44100.0 / 1152.0);
+  long samples = mp3Frame * 1152;
+  long neededSamples = pos.totalFrames() * 588;
+  long diff = neededSamples - samples;
+  // diff is what we need to skip when creating pcm samples?
+
+  // now prepare the stream for the new data
+  d->madStream->error = MAD_ERROR_NONE;
+  madStreamBuffer();
+  // and skip the samples we do not need
+
+
+  d->inputFile.at( d->seekPositions[ mp3Frame ] );
+
+  return true;
 }
 
 
@@ -577,24 +688,6 @@ int K3bMp3Module::analyseTrack( const QString& filename, unsigned long& size )
 {
   initDecodingInternal( filename );
   return countFrames( size );
-}
-
-
-bool K3bMp3Module::metaInfo( const QString& filename, K3bAudioTitleMetaInfo& info )
-{
-  KFileMetaInfo metaInfo( filename );
-  if( !metaInfo.isEmpty() && metaInfo.isValid() ) {
-    
-    KFileMetaInfoItem artistItem = metaInfo.item( "Artist" );
-    KFileMetaInfoItem titleItem = metaInfo.item( "Title" );
-    
-    if( artistItem.isValid() )
-      info.setArtist( artistItem.string() );
-
-    if( titleItem.isValid() )
-      info.setTitle( titleItem.string() );
-  }
-  return true;
 }
 
 #include "k3bmp3module.moc"

@@ -27,6 +27,8 @@
 #include <qcheckbox.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
+#include <qtabwidget.h>
+#include <qvalidator.h>
 
 #include <klineedit.h>
 #include <kiconloader.h>
@@ -38,7 +40,7 @@
 
 
 K3bDataPropertiesDialog::K3bDataPropertiesDialog( K3bDataItem* dataItem, QWidget* parent, const char* name )
-  : KDialogBase( Plain, i18n("File Properties"), Ok|Cancel, Ok, parent, name, true, true )
+  : KDialogBase( Plain, i18n("File Properties"), Ok|Cancel, Ok, parent, name, true, false )
 {
   m_dataItem = dataItem;
 
@@ -133,19 +135,45 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( K3bDataItem* dataItem, QWidget
 
   // OPTIONS
   // /////////////////////////////////////////////////
+  QTabWidget* optionTab = new QTabWidget( plainPage() );
   line = new QFrame( plainPage() );
   line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
-  grid->addMultiCellWidget( line, 9, 9, 0, 2 );
-  m_checkHideOnRockRidge = new QCheckBox( i18n("Hide on Rockridge"), plainPage() );
-  m_checkHideOnJoliet = new QCheckBox( i18n("Hide on Joliet"), plainPage() );
 
-  grid->addMultiCellWidget( m_checkHideOnRockRidge, 10, 10, 0, 2 );
-  grid->addMultiCellWidget( m_checkHideOnJoliet, 11, 11, 0, 2 );
-  grid->setRowStretch( 12, 1 );
+  grid->addMultiCellWidget( line, 9, 9, 0, 2 );
+  grid->addMultiCellWidget( optionTab, 11, 11, 0, 2 );
+  grid->setRowStretch( 10, 1 );
+
+  QWidget* hideBox = new QWidget( optionTab );
+  QGridLayout* hideBoxGrid = new QGridLayout( hideBox );
+  hideBoxGrid->setSpacing( spacingHint() );
+  hideBoxGrid->setMargin( marginHint() );
+  m_checkHideOnRockRidge = new QCheckBox( i18n("Hide on Rockridge"), hideBox );
+  m_checkHideOnJoliet = new QCheckBox( i18n("Hide on Joliet"), hideBox );
+  hideBoxGrid->addWidget( m_checkHideOnRockRidge, 0, 0 );
+  hideBoxGrid->addWidget( m_checkHideOnJoliet, 1, 0 );
+  hideBoxGrid->setRowStretch( 2, 1 );
+//   grid->addMultiCellWidget( m_checkHideOnRockRidge, 10, 10, 0, 2 );
+//   grid->addMultiCellWidget( m_checkHideOnJoliet, 11, 11, 0, 2 );
+
+  QWidget* sortingBox = new QWidget( optionTab );
+  QGridLayout* sortingBoxGrid = new QGridLayout( sortingBox );
+  sortingBoxGrid->setSpacing( spacingHint() );
+  sortingBoxGrid->setMargin( marginHint() );
+  m_editSortWeight = new KLineEdit( sortingBox );
+  m_editSortWeight->setValidator( new QIntValidator( -2147483647, 2147483647, m_editSortWeight ) );
+  m_editSortWeight->setAlignment( Qt::AlignRight );
+  sortingBoxGrid->addWidget( new QLabel( i18n("Sort weight:"), sortingBox ), 0, 0 );
+  sortingBoxGrid->addWidget( m_editSortWeight, 0, 1 );
+  sortingBoxGrid->setColStretch( 1, 1 );
+  sortingBoxGrid->setRowStretch( 1, 1 );
+
+  optionTab->addTab( hideBox, i18n("Options") );
+  optionTab->addTab( sortingBox, i18n("Advanced") );
 
 
   m_checkHideOnJoliet->setChecked( dataItem->hideOnJoliet() );
   m_checkHideOnRockRidge->setChecked( dataItem->hideOnRockRidge() );
+  m_editSortWeight->setText( QString::number(dataItem->sortWeight()) );
 
   // if the parent is hidden the value cannot be changed (see K3bDataItem::setHide...)
   if( dataItem->parent() ) {
@@ -154,13 +182,14 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( K3bDataItem* dataItem, QWidget
   }
 
   if( !dataItem->isHideable() ) {
-    m_checkHideOnJoliet->hide();
-    m_checkHideOnRockRidge->hide();
-    line->hide();
+    m_checkHideOnJoliet->setDisabled(true);
+    m_checkHideOnRockRidge->setDisabled(true);
+    //    line->hide();
   }
 
-//   QToolTip::add( m_checkHideOnRockRidge, i18n("") );
-//   QToolTip::add( m_checkHideOnJoliet, i18n("") );
+  QToolTip::add( m_checkHideOnRockRidge, i18n("Hide this file in the RockRidge filesystem") );
+  QToolTip::add( m_checkHideOnJoliet, i18n("Hide this file in the Joliet filesystem") );
+  QToolTip::add( m_editSortWeight, i18n("Modify the physical sorting") );
   QWhatsThis::add( m_checkHideOnRockRidge, i18n("<p>If this option is checked, the file or directory "
 						"(and its entire contents) will be hidden on the "
 						"ISO9660 and RockRidge filesystem.</p>"
@@ -175,7 +204,16 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( K3bDataItem* dataItem, QWidget
 					     "files for RockRidge and Joliet, which can be managed "
 					     "by hiding README.joliet on RockRidge and README.rr "
 					     "on the Joliet filesystem.</p>") );
-
+  QWhatsThis::add( m_editSortWeight, i18n("<p>This value modifies the physical sort order of the files "
+					  "in the Iso9660 filesystem. A higher weighting means that the "
+					  "file will be located closer to the beginning of the image "
+					  "(and the disk)."
+					  "<p>This option is useful in order to optimize the data layout "
+					  "on a CD."
+					  "<p><b>Caution:</b> This does not sort the order of the file "
+					  "names that appear in the Iso9660 directory."
+					  "It sorts the order in which the file data is "
+					  "written to the image.") );
 
   m_editName->setReadOnly( !dataItem->isRenameable() );
   m_editName->setFocus();
@@ -193,6 +231,7 @@ void K3bDataPropertiesDialog::slotOk()
   m_dataItem->setK3bName( m_editName->text() );
   m_dataItem->setHideOnRockRidge( m_checkHideOnRockRidge->isChecked() );
   m_dataItem->setHideOnJoliet( m_checkHideOnJoliet->isChecked() );
+  m_dataItem->setSortWeigth( m_editSortWeight->text().toInt() );
 
   KDialogBase::slotOk();
 }

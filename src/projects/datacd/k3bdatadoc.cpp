@@ -22,8 +22,10 @@
 #include "k3bbootitem.h"
 #include "k3bspecialdataitem.h"
 #include "k3bfilecompilationsizehandler.h"
+#include "k3bdataburndialog.h"
 #include <k3bcore.h>
 #include <k3bglobals.h>
+#include <k3bmsf.h>
 
 #include <stdlib.h>
 
@@ -41,7 +43,6 @@
 #include <kstatusbar.h>
 #include <klocale.h>
 #include <klineeditdlg.h>
-#include <kmimemagic.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
 #include <kglobal.h>
@@ -100,12 +101,6 @@ K3bView* K3bDataDoc::newView( QWidget* parent )
 }
 
 
-void K3bDataDoc::addView(K3bView* view)
-{
-  K3bDoc::addView( view );
-}
-
-
 void K3bDataDoc::addUrls( const KURL::List& urls )
 {
   slotAddUrlsToDir( urls );
@@ -116,13 +111,7 @@ void K3bDataDoc::slotAddUrlsToDir( const KURL::List& urls, K3bDirItem* dirItem )
 {
   if( !dirItem ) {
     kdDebug() << "(K3bDataDoc) DirItem = 0 !!!!!" << endl;
-
-    // get current dir from first view (it should better be the current active view)
-    K3bDataView* view = (K3bDataView*)firstView();
-    if( view )
-      dirItem = view->currentDir();
-    else
-      dirItem = root();
+    dirItem = root();
   }
 
   for( KURL::List::ConstIterator it = urls.begin(); it != urls.end(); ++it )
@@ -578,6 +567,8 @@ bool K3bDataDoc::loadDocumentDataHeader( QDomElement headerElem )
 
 bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
 {
+  K3bDataItem* newItem = 0;
+
   if( elem.nodeName() == "file" ) {
     QDomElement urlElem = elem.firstChild().toElement();
     if( urlElem.isNull() ) {
@@ -587,30 +578,36 @@ bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
 
     if( !QFile::exists( urlElem.text() ) )
       m_notFoundFiles.append( urlElem.text() );
+
+    else if( !elem.attribute( "bootimage" ).isEmpty() ) {
+      K3bBootItem* bootItem = new K3bBootItem( urlElem.text(), 
+					       this, 
+					       parent, 
+					       elem.attributeNode( "name" ).value() );
+      if( elem.attribute( "bootimage" ) == "floppy" )
+	bootItem->setImageType( K3bBootItem::FLOPPY );
+      else if( elem.attribute( "bootimage" ) == "harddisk" )
+	bootItem->setImageType( K3bBootItem::HARDDISK );
+      else
+	bootItem->setImageType( K3bBootItem::NONE );
+      bootItem->setNoBoot( elem.attribute( "no_boot" ) == "yes" );
+      bootItem->setBootInfoTable( elem.attribute( "boot_info_table" ) == "yes" );
+      bootItem->setLoadSegment( elem.attribute( "load_segment" ).toInt() );
+      bootItem->setLoadSize( elem.attribute( "load_size" ).toInt() );
+      
+      m_bootImages.append(bootItem);
+      
+      // TODO: save location of the cataloge file
+      createBootCatalogeItem(parent);
+      
+      newItem = bootItem;
+    }
+
     else {
-
-      if( !elem.attribute( "bootimage" ).isEmpty() ) {
-	K3bBootItem* bootItem = new K3bBootItem( urlElem.text(), this, parent, elem.attributeNode( "name" ).value() );
-	if( elem.attribute( "bootimage" ) == "floppy" )
-	  bootItem->setImageType( K3bBootItem::FLOPPY );
-	else if( elem.attribute( "bootimage" ) == "harddisk" )
-	  bootItem->setImageType( K3bBootItem::HARDDISK );
-	else
-	  bootItem->setImageType( K3bBootItem::NONE );
-	bootItem->setNoBoot( elem.attribute( "no_boot" ) == "yes" );
-	bootItem->setBootInfoTable( elem.attribute( "boot_info_table" ) == "yes" );
-	bootItem->setLoadSegment( elem.attribute( "load_segment" ).toInt() );
-	bootItem->setLoadSize( elem.attribute( "load_size" ).toInt() );
-
-	m_bootImages.append(bootItem);
-
-	// TODO: save location of the cataloge file
-	createBootCatalogeItem(parent);
-      }
-      else {
-	(void)new K3bFileItem( urlElem.text(), this, parent, elem.attributeNode( "name" ).value() );
-	//	m_sizeHandler->addFile( urlElem.text() );
-      }
+      newItem = new K3bFileItem( urlElem.text(), 
+				 this, 
+				 parent, 
+				 elem.attributeNode( "name" ).value() );
     }
   }
   else if( elem.nodeName() == "directory" ) {
@@ -623,13 +620,16 @@ bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
 	return false;
     }
 
+    newItem = newDirItem;
   }
   else {
     kdDebug() << "(K3bDataDoc) wrong tag in files-section: " << elem.nodeName() << endl;
     return false;
   }
 
-
+  // load the sort weight
+  if( newItem )
+    newItem->setSortWeigth( elem.attribute( "sort_weight", "0" ).toInt() );
 
   return true;
 }
@@ -868,6 +868,9 @@ void K3bDataDoc::saveDataItem( K3bDataItem* item, QDomDocument* doc, QDomElement
       subElem.appendChild( doc->createTextNode( fileItem->localPath() ) );
       topElem.appendChild( subElem );
 
+      if( item->sortWeight() != 0 )
+	topElem.setAttribute( "sort_weight", QString::number(item->sortWeight()) );
+
       parent->appendChild( topElem );
 
       // add boot options as attributes to preserve compatibility to older K3b versions
@@ -889,6 +892,9 @@ void K3bDataDoc::saveDataItem( K3bDataItem* item, QDomDocument* doc, QDomElement
   else if( K3bDirItem* dirItem = dynamic_cast<K3bDirItem*>( item ) ) {
     QDomElement topElem = doc->createElement( "directory" );
     topElem.setAttribute( "name", dirItem->k3bName() );
+
+    if( item->sortWeight() != 0 )
+      topElem.setAttribute( "sort_weight", QString::number(item->sortWeight()) );
 
     QPtrListIterator<K3bDataItem> it( *dirItem->children() );
     for( ; it.current(); ++it ) {
@@ -1316,5 +1322,12 @@ void K3bDataDoc::removeBootItem( K3bBootItem* item )
     emit changed();
   }
 }
+
+
+K3bProjectBurnDialog* K3bDataDoc::newBurnDialog( QWidget* parent, const char* name )
+{
+  return new K3bDataBurnDialog( this, parent, name, true );
+}
+
 
 #include "k3bdatadoc.moc"

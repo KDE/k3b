@@ -44,6 +44,8 @@ class K3bOggVorbisModule : public K3bAudioModule
 
   void cleanup();
 
+  bool seek( const K3b::Msf& );
+
  protected:
   bool initDecodingInternal( const QString& filename );
   int decodeInternal( char* _data, int maxLen );

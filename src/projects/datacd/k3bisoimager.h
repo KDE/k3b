@@ -69,16 +69,6 @@ class K3bIsoImager : public K3bJob
   K3bCdDevice::CdDevice* device() const { return m_device; }
   K3bDataDoc* doc() const { return m_doc; }
 
-  /**
-   * This will set jolietName of all dataItems that are direct
-   * children of dirItem. 
-   * The only thing this method does is cutting filenames whose
-   * first 64 characters occure more that once since mkisofs seems to
-   * have problems with that.
-   * If Joliet is not used there is no need to cut the filenames.
-   */
-  static void createJolietFilenames( K3bDirItem* dirItem );
-
  signals:
   void sizeCalculated( int exitCode, int size );
 
@@ -89,6 +79,13 @@ class K3bIsoImager : public K3bJob
   //  void data( char* data, int len );
 
  protected:
+  /**
+   * This method just creates some user information about the filenames
+   * that need to be cut in order to fulfill the 64 char restriction of
+   * the joliet extensions.
+   */
+  void informAboutCutJolietNames();
+
   bool addMkisofsParameters();
 
   /**
@@ -102,6 +99,7 @@ class K3bIsoImager : public K3bJob
   bool writePathSpec();
   bool writeRRHideFile();
   bool writeJolietHideFile();
+  bool writeSortWeightFile();
   bool writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream );
   QString escapeGraftPoint( const QString& str );
 
@@ -110,6 +108,7 @@ class K3bIsoImager : public K3bJob
   KTempFile* m_pathSpecFile;
   KTempFile* m_rrHideFile;
   KTempFile* m_jolietHideFile;
+  KTempFile* m_sortWeightFile;
 
   K3bProcess* m_process;
 

@@ -50,11 +50,6 @@ class K3bAudioDoc : public K3bDoc
   K3bAudioDoc( QObject* );
   ~K3bAudioDoc();
 	
-  /** reimplemented from K3bDoc */
-  K3bView* newView( QWidget* parent );
-  /** reimplemented from K3bDoc */
-  void addView(K3bView* view);
-
   bool newDocument();
 
   bool padding() const;
@@ -151,6 +146,11 @@ class K3bAudioDoc : public K3bDoc
 
   void loadDefaultSettings( KConfig* );
 
+  K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
+
+  /** reimplemented from K3bDoc */
+  K3bView* newView( QWidget* parent );
+
  private:
   K3bAudioTrack* createTrack( const KURL& url );
   void informAboutNotFoundFiles();
@@ -158,6 +158,7 @@ class K3bAudioDoc : public K3bDoc
 
 
   QStringList m_notFoundFiles;
+  QStringList m_unknownFileFormatFiles;
 
   class PrivateUrlToAdd
     {

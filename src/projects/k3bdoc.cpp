@@ -24,6 +24,7 @@
 #include <qtimer.h>
 #include <qdom.h>
 #include <qtextstream.h>
+#include <qapplication.h>
 
 // include files for KDE
 #include <klocale.h>
@@ -35,10 +36,14 @@
 #include <kstandarddirs.h>
 #include <kconfig.h>
 #include <kdebug.h>
+#include <kaction.h>
+
 
 // application specific includes
 #include "k3bview.h"
 #include "k3bdoc.h"
+#include "k3bprojectburndialog.h"
+#include "k3bprojectmanager.h"
 //#include "k3bprojectinterface.h"
 #include <k3bglobals.h>
 #include <device/k3bdevice.h>
@@ -48,6 +53,7 @@
 #include <k3bvcddoc.h>
 #include <k3bmixeddoc.h>
 #include <k3bmovixdoc.h>
+#include <k3bmovixdvddoc.h>
 #include <k3bdvddoc.h>
 #include <k3bcore.h>
 #include <device/k3bdevicemanager.h>
@@ -57,11 +63,12 @@
 
 
 K3bDoc::K3bDoc( QObject* parent )
-  : QObject( parent )
+  : QObject( parent ),
+    m_view(0)
     //    m_dcopInterface( 0 )
 {
-  pViewList = new QPtrList<K3bView>;
-  pViewList->setAutoDelete(false);
+  // register the project with the manager
+  k3bprojectmanager->addProject( this );
 
   m_burner = 0;
   m_onTheFly = true;
@@ -72,12 +79,21 @@ K3bDoc::K3bDoc( QObject* parent )
   m_writingApp = K3b::DEFAULT;
   m_writingMode = K3b::WRITING_MODE_AUTO;
   m_saved = false;
+
+  m_actionCollection = new KActionCollection( this );
+
+  (void)new KAction( i18n("&Burn..."), "cdwriter_unmount", CTRL + Key_B, this, SLOT(slotBurn()),
+		     actionCollection(), "project_burn");
+  (void)new KAction( i18n("&Properties..."), "edit", CTRL + Key_P, this, SLOT(slotProperties()),
+		     actionCollection(), "project_properties");
 }
 
 
 K3bDoc::~K3bDoc()
 {
-  delete pViewList;
+  // remove the project from the manager
+  k3bprojectmanager->removeProject( this );
+
 //   if( m_dcopInterface )
 //     delete m_dcopInterface;
 }
@@ -124,51 +140,20 @@ void K3bDoc::addUrl( const KURL& url )
 }
 
 
-void K3bDoc::addView(K3bView *view)
+K3bView* K3bDoc::createView( QWidget* parent, const char* )
 {
-  pViewList->append(view);
-  changedViewList();
+  m_view = newView( parent );
+  m_view->setCaption( URL().fileName() );
+
+  return m_view;
 }
 
-void K3bDoc::removeView(K3bView *view)
+
+void K3bDoc::setURL( const KURL& url )
 {
-  pViewList->remove(view);
-  if(!pViewList->isEmpty())
-    changedViewList();
-}
-
-void K3bDoc::changedViewList(){
-
-  K3bView *w;
-  if( (int)pViewList->count() == 1 ) {
-    w = pViewList->first();
-    w->setCaption( URL().fileName() );
-  }
-  else{
-    int i;
-    for( i = 1, w = pViewList->first(); w != 0; i++, w = pViewList->next() )
-      w->setCaption( QString(URL().fileName()+":%1").arg(i) );
-  }
-}
-
-bool K3bDoc::isLastView() {
-  return ((int) pViewList->count() == 1);
-}
-
-
-void K3bDoc::updateAllViews()
-{
-  K3bView *w;
-  for(w=pViewList->first(); w!=0; w=pViewList->next())
-    {
-      w->update();
-    }
-}
-
-
-void K3bDoc::setURL(const KURL &url)
-{
-  doc_url=url;
+  doc_url = url;
+  if( view() )
+    view()->setCaption( url.fileName() );
 }
 
 const KURL& K3bDoc::URL() const
@@ -179,7 +164,7 @@ const KURL& K3bDoc::URL() const
 
 bool K3bDoc::newDocument()
 {
-  modified=false;
+  setModified( false );
 
   return true;
 }
@@ -243,6 +228,8 @@ K3bDoc* K3bDoc::openDocument(const KURL& url )
     newDoc = new K3bMixedDoc( 0 );
   else if( xmlDoc.doctype().name() == "k3b_movix_project" )
     newDoc = new K3bMovixDoc( 0 );
+  else if( xmlDoc.doctype().name() == "k3b_movixdvd_project" )
+    newDoc = new K3bMovixDvdDoc( 0 );
   else if( xmlDoc.doctype().name() == "k3b_dvd_project" )
     newDoc = new K3bDvdDoc( 0 );
   else {
@@ -300,8 +287,8 @@ bool K3bDoc::saveDocument(const KURL& url )
     QTextStream xmlStream( &dev );
     xmlDoc.save( xmlStream, 0 );
 
-    modified = false;
-    doc_url = url;
+    setModified( false );
+    setURL( url );
   }
 
   // close the document inside the store
@@ -400,24 +387,24 @@ bool K3bDoc::readGeneralDocumentData( const QDomElement& elem )
 }
 
 
-void K3bDoc::disable()
-{
-  K3bView* view = pViewList->first();
-  while( view ) {
-    view->setDisabled( true );
-    view = pViewList->next();
-  }
-}
+// void K3bDoc::disable()
+// {
+//   K3bView* view = pViewList->first();
+//   while( view ) {
+//     view->setDisabled( true );
+//     view = pViewList->next();
+//   }
+// }
 
 
-void K3bDoc::enable()
-{
-  K3bView* view = pViewList->first();
-  while( view ) {
-    view->setEnabled( true );
-    view = pViewList->next();
-  }
-}
+// void K3bDoc::enable()
+// {
+//   K3bView* view = pViewList->first();
+//   while( view ) {
+//     view->setEnabled( true );
+//     view = pViewList->next();
+//   }
+// }
 
 
 void K3bDoc::loadDefaultSettings( KConfig* c )
@@ -442,6 +429,38 @@ void K3bDoc::loadDefaultSettings( KConfig* c )
 
   setSpeed( c->readNumEntry( "writing_speed", 1 ) );
   setBurner( k3bcore->deviceManager()->findDevice( c->readEntry( "writer_device" ) ) );
+}
+
+
+void K3bDoc::slotBurn()
+{
+  if( numOfTracks() == 0 || size() == 0 ) {
+    KMessageBox::information( qApp->activeWindow(), i18n("Please add files to your project first!"),
+			      i18n("No Data to Burn"), QString::null, false );
+  }
+  else {
+    K3bProjectBurnDialog* dlg = newBurnDialog( qApp->activeWindow() );
+    if( dlg ) {
+      dlg->exec(true);
+      delete dlg;
+    }
+    else {
+      kdDebug() << "(K3bDoc) Error: no burndialog available." << endl;
+    }
+  }
+}
+
+
+void K3bDoc::slotProperties()
+{
+  K3bProjectBurnDialog* dlg = newBurnDialog( qApp->activeWindow() );
+  if( dlg ) {
+    dlg->exec(false);
+    delete dlg;
+  }
+  else {
+    kdDebug() << "(K3bDoc) Error: no burndialog available." << endl;
+  }
 }
 
 #include "k3bdoc.moc"
