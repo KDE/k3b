@@ -362,7 +362,7 @@ bool K3bDvdJob::waitForDvd()
   }
   
   if( m == 0 ) {
-    emit infoMessage( i18n("Forced by user. Growisofs will be called eithout further tests."), INFO );
+    emit infoMessage( i18n("Forced by user. Growisofs will be called without further tests."), INFO );
   }
 
   else {
