@@ -8,6 +8,7 @@ New Lame encoding plugin providing a proper configuration dialog.
 Added Bookmarks
 Fixed window layering problem with windowmanagers != kwm
 Fixed incorrect PBC order, PBC now should work on all "standalone" DVD Players
+Fixed waittime bug for PBC infinite timeout.
 
 0.11.10
 Support Mp3 files starting with multiple ID3 tags.
