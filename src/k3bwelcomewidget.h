@@ -43,6 +43,9 @@ class K3bWelcomeWidget : public QScrollView
  protected:
   void resizeEvent( QResizeEvent* );
 
+ private slots:
+  void slotThemeChanged();
+
  private:
   K3bMainWindow* m_mainWindow;
   Display* main;

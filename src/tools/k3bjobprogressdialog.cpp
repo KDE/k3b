@@ -22,6 +22,7 @@
 #include <k3bstdguiitems.h>
 #include <k3bcore.h>
 #include <k3bversion.h>
+#include <k3bthememanager.h>
 
 #include <qgroupbox.h>
 #include <qlabel.h>
@@ -145,14 +146,11 @@ void K3bJobProgressDialog::setupGUI()
   headerLayout->setMargin( 2 ); // to make sure the frame gets displayed
   headerLayout->setSpacing( 0 );
   m_pixLabel = new QLabel( headerFrame, "m_pixLabel" );
-  m_pixLabel->setPaletteBackgroundColor( QColor( 205, 210, 255 ) );
-  m_pixLabel->setPixmap( QPixmap(locate( "appdata", "pics/k3bprojectview_left.png" )) );
   m_pixLabel->setScaledContents( FALSE );
   headerLayout->addWidget( m_pixLabel );
 
   QFrame* frame4 = new QFrame( headerFrame, "frame4" );
   frame4->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 1, 0, frame4->sizePolicy().hasHeightForWidth() ) );
-  frame4->setPaletteBackgroundColor( QColor( 205, 210, 255 ) );
   frame4->setFrameShape( QFrame::NoFrame );
   frame4->setFrameShadow( QFrame::Raised );
   QVBoxLayout* frame4Layout = new QVBoxLayout( frame4, 6, 3, "frame4Layout"); 
@@ -175,7 +173,6 @@ void K3bJobProgressDialog::setupGUI()
   // ------------------------------------------------------------------------------------------
 
 
-
   m_viewInfo = new KListView( this, "m_viewInfo" );
   m_viewInfo->addColumn( "" );
   m_viewInfo->addColumn( i18n( "Message" ) );
@@ -194,7 +191,6 @@ void K3bJobProgressDialog::setupGUI()
 
   QFrame* frame5 = new QFrame( progressHeaderFrame, "frame5" );
   frame5->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 1, 0, frame5->sizePolicy().hasHeightForWidth() ) );
-  frame5->setPaletteBackgroundColor( QColor( 205, 210, 255 ) );
   frame5->setFrameShape( QFrame::NoFrame );
   frame5->setFrameShadow( QFrame::Raised );
   QVBoxLayout* frame5Layout = new QVBoxLayout( frame5, 6, 3, "frame5Layout"); 
@@ -212,13 +208,30 @@ void K3bJobProgressDialog::setupGUI()
   progressHeaderLayout->addWidget( frame5 );
 
   QLabel* pixmapLabel2 = new QLabel( progressHeaderFrame, "pixmapLabel2" );
-  pixmapLabel2->setPaletteBackgroundColor( QColor( 205, 210, 255 ) );
-  pixmapLabel2->setPixmap( QPixmap(locate( "data", "k3b/pics/k3bprojectview_right.png" )) );
   pixmapLabel2->setScaledContents( FALSE );
   progressHeaderLayout->addWidget( pixmapLabel2 );
   mainLayout->addWidget( progressHeaderFrame );
   // ------------------------------------------------------------------------------------------
 
+  if( K3bTheme* theme = k3bthememanager->currentTheme() ) {
+    m_pixLabel->setPaletteBackgroundColor( theme->backgroundColor() );
+    m_labelJob->setPaletteBackgroundColor( theme->backgroundColor() );
+    m_labelJobDetails->setPaletteBackgroundColor( theme->backgroundColor() );
+    m_labelElapsedTime->setPaletteBackgroundColor( theme->backgroundColor() );
+    m_labelTask->setPaletteBackgroundColor( theme->backgroundColor() );
+
+    m_pixLabel->setPaletteForegroundColor( theme->foregroundColor() );
+    m_labelJob->setPaletteForegroundColor( theme->foregroundColor() );
+    m_labelJobDetails->setPaletteForegroundColor( theme->foregroundColor() );
+    m_labelElapsedTime->setPaletteForegroundColor( theme->foregroundColor() );
+    m_labelTask->setPaletteForegroundColor( theme->foregroundColor() );
+
+    m_pixLabel->setPixmap( theme->pixmap( "k3bprojectview_left" ) );
+    frame4->setPaletteBackgroundColor( theme->backgroundColor() );
+    frame5->setPaletteBackgroundColor( theme->backgroundColor() );
+    pixmapLabel2->setPaletteBackgroundColor( theme->backgroundColor() );
+    pixmapLabel2->setPixmap( theme->pixmap( "k3bprojectview_right" ) );
+  }
 
 
 

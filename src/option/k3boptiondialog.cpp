@@ -23,6 +23,7 @@
 //#include "k3bpatternoptiontab.h"
 #include "k3bexternalbinoptiontab.h"
 #include "k3bmiscoptiontab.h"
+#include "k3bthemeoptiontab.h"
 #include "k3bpluginoptiontab.h"
 #include <k3bsystemproblemdialog.h>
 #include "k3bdivxoptiontab.h"
@@ -58,6 +59,7 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
 // 		 KGlobal::instance()->iconLoader()->loadIcon( "gear", KIcon::NoGroup, KIcon::SizeMedium ) );
 
   setupPluginPage();
+  setupThemePage();
   setupMiscPage();
   //not yet enabled for the next version
   //setupDivxPage();
@@ -72,6 +74,7 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
   m_notifyOptionTab->readSettings();
   m_pluginOptionTab->readSettings();
   //m_divxOptionTab->readSettings();
+  m_themeOptionTab->readSettings();
 
   // if we don't do this the dialog start really huge
   // because of the label in the device-tab
@@ -114,6 +117,8 @@ bool K3bOptionDialog::saveSettings()
   m_externalBinOptionTab->saveSettings();
   m_notifyOptionTab->saveSettings();
   //m_divxOptionTab->saveSettings();
+
+  m_themeOptionTab->saveSettings();
 
   if( !m_miscOptionTab->saveSettings() )
     return false;
@@ -254,6 +259,21 @@ void K3bOptionDialog::setupPluginPage()
   m_pluginOptionTab = new K3bPluginOptionTab( frame );
   box->addWidget( m_pluginOptionTab );
 }
+
+
+void K3bOptionDialog::setupThemePage()
+{
+  QFrame* frame = addPage( i18n("Themes"), i18n("K3b GUI Themes"),
+			   KGlobal::instance()->iconLoader()->loadIcon( "style",
+									KIcon::NoGroup, KIcon::SizeMedium ) );
+  QVBoxLayout* box = new QVBoxLayout( frame );
+  box->setSpacing( 0 );
+  box->setMargin( 0 );
+
+  m_themeOptionTab = new K3bThemeOptionTab( frame );
+  box->addWidget( m_themeOptionTab );
+}
+
 
 void K3bOptionDialog::setupDivxPage()
 {

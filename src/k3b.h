@@ -274,6 +274,8 @@ class K3bMainWindow : public KParts::DockMainWindow
   void showBusyInfo( const QString& str );
   void endBusy();
 
+  void slotThemeChanged();
+
  private:
   void fileSave( K3bDoc* doc = 0 );
   void fileSaveAs( K3bDoc* doc = 0 );

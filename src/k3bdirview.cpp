@@ -26,6 +26,7 @@
 #include <device/k3bdevicehandler.h>
 #include <device/k3bdevice.h>
 #include <device/k3bdevicemanager.h>
+#include <k3bthememanager.h>
 
 #include <unistd.h>
 // QT-includes
@@ -77,17 +78,23 @@ class K3bNoViewView : public QWidget
 public:
   K3bNoViewView( QWidget* parent )
     : QWidget( parent ) {
-    setPaletteBackgroundColor( QColor(201, 208, 255) );
   }
 
 protected:
-  void paintEvent( QPaintEvent* ) {
+  void paintEvent( QPaintEvent* e ) {
     QPainter p( this );
 
-    QPixmap pix(locate( "data", "k3b/pics/k3b_probing_cd.png" ));
-    p.drawPixmap( 0, 0, pix );
-    p.setPen( Qt::white );
-    p.drawText( pix.width() + 10, pix.height() /3, i18n("K3b is trying to retrieve information about the inserted disk.") );
+    QSize pixSize;
+    if( K3bTheme* theme = k3bthememanager->currentTheme() ) {
+      p.fillRect( e->rect(), theme->backgroundColor() );
+      p.drawPixmap( 0, 0, theme->pixmap( "k3b_probing_cd" ) );
+      pixSize = theme->pixmap( "k3b_probing_cd" ).size();
+      p.setPen( theme->foregroundColor() );
+    }
+
+    p.drawText( pixSize.width() + 10, 
+		pixSize.height() /3, 
+		i18n("K3b is trying to retrieve information about the inserted disk.") );
   }
 };
 

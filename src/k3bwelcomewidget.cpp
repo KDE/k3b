@@ -18,6 +18,7 @@
 #include <k3bstdguiitems.h>
 #include <k3bcore.h>
 #include <k3bversion.h>
+#include <k3bthememanager.h>
 
 #include <qpixmap.h>
 #include <qtoolbutton.h>
@@ -48,7 +49,6 @@ K3bWelcomeWidget::Display::Display( QWidget* parent )
 
   setAcceptDrops( true );
   setBackgroundMode( PaletteBase );
-  setPaletteBackgroundPixmap( locate( "appdata", "pics/k3b_3d_logo.png" ) );
 
   // now we add the buttons with fixed coordinates
   audioDocButton = new QToolButton( this );
@@ -149,6 +149,10 @@ K3bWelcomeWidget::K3bWelcomeWidget( K3bMainWindow* mw, QWidget* parent, const ch
   connect( main->copyCdButton, SIGNAL(clicked()), m_mainWindow, SLOT(slotCdCopy()) );
 
   connect( main, SIGNAL(dropped(const KURL::List&)), m_mainWindow, SLOT(addUrls(const KURL::List&)) );
+
+  connect( k3bthememanager, SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()) );
+
+  slotThemeChanged();
 }
 
 
@@ -173,10 +177,12 @@ void K3bWelcomeWidget::resizeEvent( QResizeEvent* e )
 }
 
 
-// void K3bWelcomeWidget::slotMailClick( const QString& address, const QString& )
-// {
-//   kapp->invokeMailer( address, "K3b: " );
-// }
+void K3bWelcomeWidget::slotThemeChanged()
+{
+  if( K3bTheme* theme = k3bthememanager->currentTheme() ) {
+    main->setPaletteBackgroundPixmap( theme->pixmap( "k3b_3d_logo" ) );
+  }
+}
 
 
 #include "k3bwelcomewidget.moc"

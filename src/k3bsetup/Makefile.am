@@ -6,7 +6,7 @@ METASOURCES = AUTO
 kde_module_LTLIBRARIES = kcm_k3bsetup2.la
 
 kcm_k3bsetup2_la_SOURCES = base_k3bsetup2.ui k3bsetup2.cpp
-kcm_k3bsetup2_la_LIBADD = $(LIB_KDEUI) ../core/libk3bcore.la
+kcm_k3bsetup2_la_LIBADD = $(LIB_KDEUI) ../core/libk3bcore.la ../tools/libk3btools.la
 kcm_k3bsetup2_la_LDFLAGS = -module -avoid-version $(all_libraries) -no-undefined
 
 k3bsetup2_DATA = k3bsetup2.desktop

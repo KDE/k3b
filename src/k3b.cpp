@@ -103,7 +103,7 @@
 #include "plugin/k3bpluginfactory.h"
 #include <k3bsystemproblemdialog.h>
 #include <k3baudiodecoder.h>
-
+#include <k3bthememanager.h>
 
 
 static K3bMainWindow* s_k3bMainWindow = 0;
@@ -130,12 +130,15 @@ public:
   QWidgetStack* documentStack;
   K3bWelcomeWidget* welcomeWidget;
   QWidget* documentHull;
+
+  QLabel* leftDocPicLabel;
+  QLabel* centerDocLabel;
+  QLabel* rightDocPicLabel;
 };
 
 
 K3bMainWindow::K3bMainWindow()
   : DockMainWindow(0,"K3b")
-
 {
   d = new Private;
   d->projectManager = new K3bProjectManager( this );
@@ -187,6 +190,8 @@ K3bMainWindow::K3bMainWindow()
   // connect to the busy signals
   connect( k3bcore, SIGNAL(busyInfoRequested(const QString&)), this, SLOT(showBusyInfo(const QString&)) );
   connect( k3bcore, SIGNAL(busyFinishRequested()), this, SLOT(endBusy()) );
+
+  connect( k3bthememanager, SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()) );
 }
 
 K3bMainWindow::~K3bMainWindow()
@@ -405,24 +410,20 @@ void K3bMainWindow::initView()
   documentHeaderLayout->setMargin( 2 );
   documentHeaderLayout->setSpacing( 0 );
 
-  QLabel* leftDocPicLabel = new QLabel( m_documentHeader );
-  QLabel* centerDocLabel = new QLabel( m_documentHeader );
-  QLabel* rightDocPicLabel = new QLabel( m_documentHeader );
+  d->leftDocPicLabel = new QLabel( m_documentHeader );
+  d->centerDocLabel = new QLabel( m_documentHeader );
+  d->rightDocPicLabel = new QLabel( m_documentHeader );
 
-  leftDocPicLabel->setPixmap( QPixmap(locate( "data", "k3b/pics/k3bprojectview_left_short.png" )) );
-  rightDocPicLabel->setPixmap( QPixmap(locate( "data", "k3b/pics/k3bprojectview_right.png" )) );
-  centerDocLabel->setText( i18n("Current Projects") );
-  centerDocLabel->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
-  centerDocLabel->setPaletteBackgroundColor( QColor(201, 208, 255) );
-  //  centerDocLabel->setPaletteForegroundColor( Qt::white );
-  QFont f(centerDocLabel->font());
+  d->centerDocLabel->setText( i18n("Current Projects") );
+  d->centerDocLabel->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
+  QFont f(d->centerDocLabel->font());
   f.setBold(true);
   f.setPointSize( 12 );
-  centerDocLabel->setFont(f);
+  d->centerDocLabel->setFont(f);
 
-  documentHeaderLayout->addWidget( leftDocPicLabel, 0, 0 );
-  documentHeaderLayout->addWidget( centerDocLabel, 0, 1 );
-  documentHeaderLayout->addWidget( rightDocPicLabel, 0, 2 );
+  documentHeaderLayout->addWidget( d->leftDocPicLabel, 0, 0 );
+  documentHeaderLayout->addWidget( d->centerDocLabel, 0, 1 );
+  documentHeaderLayout->addWidget( d->rightDocPicLabel, 0, 2 );
   documentHeaderLayout->setColStretch( 1, 1 );
 
   // add the document tab to the styled document box
@@ -585,6 +586,8 @@ void K3bMainWindow::readOptions()
 
   slotViewDocumentHeader();
   slotCheckDockWidgetStatus();
+
+  slotThemeChanged();
 }
 
 
@@ -1408,5 +1411,17 @@ void K3bMainWindow::slotClearProject()
     }
   }
 }
+
+
+void K3bMainWindow::slotThemeChanged()
+{
+  if( K3bTheme* theme = k3bthememanager->currentTheme() ) {
+    d->leftDocPicLabel->setPixmap( theme->pixmap( "k3bprojectview_left_short" ) );
+    d->rightDocPicLabel->setPixmap( theme->pixmap( "k3bprojectview_right" ) );
+    d->centerDocLabel->setPaletteBackgroundColor( theme->backgroundColor() );
+    d->centerDocLabel->setPaletteForegroundColor( theme->foregroundColor() );
+  }
+}
+
 
 #include "k3b.moc"

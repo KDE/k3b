@@ -24,6 +24,7 @@
 #include <k3bstdguiitems.h>
 #include <k3blistview.h>
 #include <k3biso9660.h>
+#include <k3bthememanager.h>
 
 #include <qlabel.h>
 #include <qlayout.h>
@@ -133,10 +134,8 @@ K3bDiskInfoView::K3bDiskInfoView( QWidget* parent, const char* name )
   // header
   // ----------------------------------------------------------------------------
   QFrame* headerFrame = K3bStdGuiItems::purpleFrame( this );
-  QLabel* labelLeftPic = new QLabel( headerFrame );
-  labelLeftPic->setPixmap( QPixmap(locate( "data", "k3b/pics/diskinfo_left.png" )) );
+  m_labelLeftPic = new QLabel( headerFrame );
   m_labelTocType = new QLabel( headerFrame );
-  m_labelTocType->setPaletteBackgroundColor( QColor(201, 208, 255) );
   m_labelDiskPix = new QLabel( headerFrame );
 
   QFont f(m_labelTocType->font() );
@@ -147,7 +146,7 @@ K3bDiskInfoView::K3bDiskInfoView( QWidget* parent, const char* name )
   QHBoxLayout* headerLayout = new QHBoxLayout( headerFrame );
   headerLayout->setMargin( 2 );
   headerLayout->setSpacing( 0 );
-  headerLayout->addWidget( labelLeftPic );
+  headerLayout->addWidget( m_labelLeftPic );
   headerLayout->addWidget( m_labelTocType );
   headerLayout->addWidget( m_labelDiskPix );
   headerLayout->setStretchFactor( m_labelTocType, 1 );
@@ -184,42 +183,55 @@ void K3bDiskInfoView::displayInfo( const K3bCdDevice::DiskInfo& )
 
 void K3bDiskInfoView::displayInfo( K3bCdDevice::DiskInfoDetector* did )
 {
+  if( K3bTheme* theme = k3bthememanager->currentTheme() ) {
+    m_labelLeftPic->setPixmap( theme->pixmap( "diskinfo_left" ) );
+    m_labelTocType->setPaletteBackgroundColor( theme->backgroundColor() );
+    m_labelTocType->setPaletteForegroundColor( theme->foregroundColor() );
+  }
+
   const K3bCdDevice::DiskInfo& info = did->diskInfo();
 
   m_infoView->clear();
 
   if( !info.valid ) {
     m_labelTocType->setText( i18n("K3b was unable to retrieve disk information.") );
-    m_labelDiskPix->setPixmap( QPixmap(locate( "data", "k3b/pics/diskinfo_nodisk.png" )) );
+    if( K3bTheme* theme = k3bthememanager->currentTheme() )
+      m_labelDiskPix->setPixmap( theme->pixmap( "diskinfo_nodisk" ) );
   } 
   else if( info.noDisk ) {
     (void)new QListViewItem( m_infoView, i18n("No Disk") );
     m_labelTocType->setText( i18n("No disk in drive") );
-    m_labelDiskPix->setPixmap( QPixmap(locate( "data", "k3b/pics/diskinfo_nodisk.png" )) );
+    if( K3bTheme* theme = k3bthememanager->currentTheme() )
+      m_labelDiskPix->setPixmap( theme->pixmap( "diskinfo_nodisk" ) );
   }
   else {
 
     if( info.empty ) {
       m_labelTocType->setText( i18n("Disk is empty") );
-      m_labelDiskPix->setPixmap( QPixmap(locate( "data", "k3b/pics/diskinfo_empty.png" )) );
+      if( K3bTheme* theme = k3bthememanager->currentTheme() )
+	m_labelDiskPix->setPixmap( theme->pixmap( "diskinfo_empty" ) );
     } 
     else {
       switch( info.tocType ) {
       case K3bDiskInfo::AUDIO:
         m_labelTocType->setText( i18n("Audio CD") );
-        m_labelDiskPix->setPixmap( QPixmap(locate( "data", "k3b/pics/diskinfo_audio.png" )) );
+	if( K3bTheme* theme = k3bthememanager->currentTheme() )
+	  m_labelDiskPix->setPixmap( theme->pixmap( "diskinfo_audio" ) );
         break;
       case K3bDiskInfo::DATA:
         m_labelTocType->setText( info.isVCD ? i18n("Video CD") : i18n("Data CD") );
-        m_labelDiskPix->setPixmap( QPixmap(locate( "data", "k3b/pics/diskinfo_data.png" )) );
+	if( K3bTheme* theme = k3bthememanager->currentTheme() )
+	  m_labelDiskPix->setPixmap( theme->pixmap( "diskinfo_data" ) );
         break;
       case K3bDiskInfo::MIXED:
         m_labelTocType->setText( info.isVCD ? i18n("Video CD") : i18n("Mixed mode CD") );
-        m_labelDiskPix->setPixmap( QPixmap(locate( "data", "k3b/pics/diskinfo_mixed.png" )) );
+	if( K3bTheme* theme = k3bthememanager->currentTheme() )
+	  m_labelDiskPix->setPixmap( theme->pixmap( "diskinfo_mixed" ) );
         break;
       case K3bDiskInfo::DVD:
         m_labelTocType->setText( info.isVideoDvd ? i18n("Video DVD") : i18n("DVD") );
-        m_labelDiskPix->setPixmap( QPixmap(locate( "data", "k3b/pics/diskinfo_dvd.png" )) );
+	if( K3bTheme* theme = k3bthememanager->currentTheme() )
+	  m_labelDiskPix->setPixmap( theme->pixmap( "diskinfo_dvd" ) );
         break;
       }
     }
@@ -435,6 +447,7 @@ void K3bDiskInfoView::createIso9660InfoItems( const K3bIso9660* iso )
 
   iso9660Item->setOpen( true );
 }
+
 
 #include "k3bdiskinfoview.moc"
 

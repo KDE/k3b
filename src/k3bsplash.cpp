@@ -15,6 +15,8 @@
 
 #include "k3bsplash.h"
 
+#include <k3bthememanager.h>
+
 #include <qapplication.h>
 #include <qlabel.h>
 #include <qpixmap.h>
@@ -41,9 +43,8 @@ K3bSplash::K3bSplash( QWidget* parent, const char* name )
   copyrightLabel->setAlignment( AlignRight );
 
   QLabel* picLabel = new QLabel( this );
-  QPixmap pixmap;
-  if( pixmap.load( locate( "appdata", "pics/k3b_splash.png" ) ) )
-    picLabel->setPixmap( pixmap );
+  if( K3bTheme* theme = k3bthememanager->currentTheme() )
+    picLabel->setPixmap( theme->pixmap( "k3b_splash" ) );
 
   m_infoBox = new QLabel( this );
   m_infoBox->setMargin( 2 );

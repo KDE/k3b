@@ -29,6 +29,8 @@ class K3bNotifyOptionTab;
 class K3bPluginOptionTab;
 // class  K3bPatternOptionTab;
 class K3bDivxOptionTab;
+class K3bThemeOptionTab;
+
 
 /**
   *@author Sebastian Trueg
@@ -89,10 +91,13 @@ class K3bOptionDialog : public KDialogBase
   K3bPluginOptionTab* m_pluginOptionTab;
   void setupPluginPage();
 
-    // divx options
+  // divx options
   K3bDivxOptionTab* m_divxOptionTab;
   void setupDivxPage();
 
+  // theme options
+  K3bThemeOptionTab* m_themeOptionTab;
+  void setupThemePage();
 };
 
 #endif

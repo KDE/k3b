@@ -50,6 +50,7 @@ class K3bDiskInfoView : public K3bCdContentsView
 
   QLabel* m_labelDiskPix;
   QLabel* m_labelTocType;
+  QLabel* m_labelLeftPic;
 
   KListView* m_infoView;
 

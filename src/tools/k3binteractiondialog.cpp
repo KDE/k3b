@@ -19,6 +19,8 @@
 #include "kcutlabel.h"
 #include "k3bstdguiitems.h"
 
+#include <k3bthememanager.h>
+
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
@@ -59,21 +61,25 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
   layout4->setMargin( 2 ); // to make sure the frame gets displayed
   layout4->setSpacing( 0 );
   QLabel* pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabelLeft" );
-  pixmapLabelLeft->setPaletteBackgroundColor( QColor( 205, 210, 255 ) );
-  pixmapLabelLeft->setPixmap( QPixmap(locate( "appdata", "pics/diskinfo_left.png" )) );
   pixmapLabelLeft->setScaledContents( FALSE );
   layout4->addWidget( pixmapLabelLeft );
   m_labelTitle = new K3bTitleLabel( headerFrame, "m_labelTitle" );
-  m_labelTitle->setPaletteBackgroundColor( QColor( 205, 210, 255 ) );
   layout4->addWidget( m_labelTitle );
   layout4->setStretchFactor( m_labelTitle, 1 );
   QLabel* pixmapLabelRight = new QLabel( headerFrame, "pixmapLabelRight" );
-  pixmapLabelRight->setPaletteBackgroundColor( QColor( 205, 210, 255 ) );
-  pixmapLabelRight->setPixmap( QPixmap(locate( "appdata", "pics/diskinfo_right.png" )) );
   pixmapLabelRight->setScaledContents( FALSE );
   layout4->addWidget( pixmapLabelRight );
 
   mainGrid->addMultiCellWidget( headerFrame, 0, 0, 0, 1 );
+
+  if( K3bTheme* theme = k3bthememanager->currentTheme() ) {
+    pixmapLabelLeft->setPaletteBackgroundColor( theme->backgroundColor() );
+    pixmapLabelLeft->setPixmap( theme->pixmap( "diskinfo_left" ) );
+    pixmapLabelRight->setPaletteBackgroundColor( theme->backgroundColor() );
+    pixmapLabelRight->setPixmap( theme->pixmap( "diskinfo_right" ) );
+    m_labelTitle->setPaletteBackgroundColor( theme->backgroundColor() );
+    m_labelTitle->setPaletteForegroundColor( theme->foregroundColor() );
+  }
 
 
   // action buttons

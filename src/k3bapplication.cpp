@@ -29,6 +29,7 @@
 #include <k3bsystemproblemdialog.h>
 #include <k3bthread.h>
 #include <k3bpluginmanager.h>
+#include <k3bthememanager.h>
 
 #include <ktip.h>
 #include <klocale.h>
@@ -55,6 +56,10 @@ K3bApplication::K3bApplication()
   connect( m_core, SIGNAL(initializationInfo(const QString&)),
 	   SIGNAL(initializationInfo(const QString&)) );
   s_k3bApp = this;
+
+  K3bThemeManager* themeManager = new K3bThemeManager( this );
+  themeManager->loadThemes();
+  themeManager->readConfig( config() );
 
   connect( this, SIGNAL(shutDown()), SLOT(slotShutDown()) );
 }
@@ -203,6 +208,8 @@ void K3bApplication::slotShutDown()
   songManager()->save();
 
   K3bThread::waitUntilFinished();
+
+  k3bthememanager->saveConfig( config() );
 }
 
 #include "k3bapplication.moc"

@@ -98,13 +98,13 @@ int main(int argc, char *argv[]) {
     app.config()->setGroup( "General Options" );
     K3bSplash* splash = 0;
     if( app.config()->readBoolEntry("Show splash", true) ) {
-        splash = new K3bSplash( 0 );
-        splash->connect( &app, SIGNAL(initializationInfo(const QString&)), SLOT(addInfo(const QString&)) );
-
-        // kill the splash after 5 seconds
-        QTimer::singleShot( 5000, splash, SLOT(close()) );
-
-        splash->show();
+      splash = new K3bSplash( 0 );
+      splash->connect( &app, SIGNAL(initializationInfo(const QString&)), SLOT(addInfo(const QString&)) );
+      
+      // kill the splash after 5 seconds
+      QTimer::singleShot( 5000, splash, SLOT(close()) );
+      
+      splash->show();
     }
 
     // this will init everything

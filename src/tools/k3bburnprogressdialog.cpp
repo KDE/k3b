@@ -19,6 +19,7 @@
 #include "k3bjob.h"
 #include "device/k3bdevice.h"
 #include "k3bstdguiitems.h"
+#include <k3bthememanager.h>
 
 #include <kglobal.h>
 #include <kprogress.h>
@@ -45,7 +46,6 @@ K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name,
   headerLayout->setMargin( 2 );
   m_labelWriter = new QLabel( headerFrame );
   headerLayout->addWidget( m_labelWriter );
-  m_labelWriter->setPaletteBackgroundColor( QColor( 205, 210, 255 ) );
   QFont textLabel14_font( m_labelWriter->font() );
   textLabel14_font.setBold( TRUE );
   m_labelWriter->setFont( textLabel14_font );
@@ -62,6 +62,11 @@ K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name,
   line1->setFrameShadow( QFrame::Sunken );
 
   m_frameExtraInfoLayout->addMultiCellWidget( line1, 1, 2, 1, 1 );
+
+  if( K3bTheme* theme = k3bthememanager->currentTheme() ) {
+    m_labelWriter->setPaletteBackgroundColor( theme->backgroundColor() );
+    m_labelWriter->setPaletteForegroundColor( theme->foregroundColor() );
+  }
 }
 
 K3bBurnProgressDialog::~K3bBurnProgressDialog()

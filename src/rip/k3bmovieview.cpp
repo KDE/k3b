@@ -23,6 +23,7 @@
 #include <kcutlabel.h>
 #include <k3btoolbox.h>
 #include <k3bstdguiitems.h>
+#include <k3bthememanager.h>
 
 #include <qstring.h>
 #include <qlayout.h>
@@ -61,6 +62,10 @@ K3bMovieView::K3bMovieView(QWidget *parent, const char *name )
 	   this, SLOT( slotDvdChecked( bool )) );
   setupGUI();
   setupActions();
+
+  slotThemeChanged();
+
+  connect( k3bthememanager, SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()) );
 }
 
 
@@ -81,24 +86,21 @@ void K3bMovieView::setupGUI()
   QFrame* headerFrame = K3bStdGuiItems::purpleFrame( this );
   QHBoxLayout* headerLayout = new QHBoxLayout( headerFrame ); 
   headerLayout->setMargin( 2 );  // to make sure the frame gets displayed
-  QLabel* pixmapLabel1 = new QLabel( headerFrame, "pixmapLabel1" );
-  pixmapLabel1->setPixmap( QPixmap(locate( "appdata", "pics/diskinfo_left.png" )) );
-  pixmapLabel1->setScaledContents( FALSE );
-  headerLayout->addWidget( pixmapLabel1 );
+  m_pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabel1" );
+  m_pixmapLabelLeft->setScaledContents( FALSE );
+  headerLayout->addWidget( m_pixmapLabelLeft );
 
   m_labelTitle = new QLabel( i18n("Video DVD"), headerFrame, "m_labelTitle" );
   m_labelTitle->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 1, 0, m_labelTitle->sizePolicy().hasHeightForWidth() ) );
-  m_labelTitle->setPaletteBackgroundColor( QColor( 205, 210, 255 ) );
   QFont m_labelTitle_font( m_labelTitle->font() );
   m_labelTitle_font.setPointSize( 12 );
   m_labelTitle_font.setBold( TRUE );
   m_labelTitle->setFont( m_labelTitle_font ); 
   headerLayout->addWidget( m_labelTitle );
 
-  QLabel* pixmapLabel2 = new QLabel( headerFrame, "pixmapLabel2" );
-  pixmapLabel2->setPixmap( QPixmap(locate( "appdata", "pics/diskinfo_dvd.png" )) );
-  pixmapLabel2->setScaledContents( FALSE );
-  headerLayout->addWidget( pixmapLabel2 );
+  m_pixmapLabelRight = new QLabel( headerFrame, "pixmapLabel2" );
+  m_pixmapLabelRight->setScaledContents( FALSE );
+  headerLayout->addWidget( m_pixmapLabelRight );
 
 
   // toolbox
@@ -311,6 +313,17 @@ void K3bMovieView::slotContextMenu( KListView*, QListViewItem *lvi, const QPoint
   m_popupMenu->exec(p);
 }
 
+
+
+void K3bMovieView::slotThemeChanged()
+{
+  if( K3bTheme* theme = k3bthememanager->currentTheme() ) {
+    m_pixmapLabelLeft->setPixmap( theme->pixmap( "diskinfo_left" ) );
+    m_labelTitle->setPaletteBackgroundColor( theme->backgroundColor() );
+    m_labelTitle->setPaletteForegroundColor( theme->foregroundColor() );
+    m_pixmapLabelRight->setPixmap( theme->pixmap( "diskinfo_dvd" ) );
+  }
+}
 
 
 #include "k3bmovieview.moc"

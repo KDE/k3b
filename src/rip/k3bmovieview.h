@@ -71,6 +71,9 @@ private:
     void setupActions();
     QString filterAudioList( QStringList* );
 
+    QLabel* m_pixmapLabelLeft;
+    QLabel* m_pixmapLabelRight;
+
 private slots:
     void slotDvdChecked( bool successful );
     void slotNotSupportedDisc();
@@ -79,6 +82,7 @@ private slots:
     void slotUpdateInfoDialog( int i);
     void slotContextMenu( KListView*, QListViewItem*, const QPoint& p);
 
+    void slotThemeChanged();
 };
 
 #endif
