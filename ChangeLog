@@ -2,7 +2,8 @@
 Fixed Cd-Text loading in audio projects.
 Fixed data project character restrictions.
 Little improvements to the device capabilities detection.
-
+Once again improved writing speed detection. Hopefully this is the last time. ;)
+	
 0.11.17
 Fixed some DVD writing speed detection issues.
 Always write pure Data CDs in TAO mode when using cdrecord since DAO fails on so many

@@ -586,7 +586,16 @@ void K3bDataJob::determineWritingMode()
   // which is basicly to always use TAO since so many writers have problems to write Data CDs in DAO
   // mode. Is there any drawback?
   if( d->doc->writingMode() == K3b::WRITING_MODE_AUTO ) {
-    d->usedWritingMode = K3b::TAO;
+    // use DAO for overburned CDs
+    // TODO: put this into the cdreocrdwriter and decide based on the size of the
+    // track
+    k3bcore->config()->setGroup("General Options");
+    if( k3bcore->config()->readBoolEntry( "Allow overburning", false ) &&
+        writer()->dao() &&
+        d->doc->multiSessionMode() == K3bDataDoc::NONE )
+      d->usedWritingMode = K3b::DAO;
+    else
+      d->usedWritingMode = K3b::TAO;
   }
   else
     d->usedWritingMode = d->doc->writingMode();

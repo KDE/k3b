@@ -356,7 +356,7 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
     bool ok = true;
     unsigned long long size = K3b::toULongLong( line.mid( pos+1, line.find( "(", pos ) - pos - 1 ), &ok ); // TODO: for QT 3.2: toULongLong
     if( ok ) {
-      int p = (int)(100 * done / size);
+      int p = (int)(100ULL * done / size);
       if( p > d->lastProgress ) {
 	emit percent( p );
 	d->lastProgress = p;

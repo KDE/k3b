@@ -224,6 +224,9 @@ K3bDeviceWidget::K3bDeviceWidget( K3bDeviceManager* manager, QWidget *parent, co
   connect( m_buttonRefreshDevices, SIGNAL(clicked()), this, SIGNAL(refreshButtonClicked()) );
   connect( m_buttonAddDevice, SIGNAL(clicked()), this, SLOT(slotNewDevice()) );
   // ------------------------------------------------
+
+  // makes K3b crash
+  m_buttonRefreshDevices->hide();
 }
 
 

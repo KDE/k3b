@@ -249,16 +249,22 @@ void K3bWriterSelectionWidget::slotConfigChanged( KConfig* c )
 
 void K3bWriterSelectionWidget::slotRefreshWriterSpeeds()
 {
+  insertWritingSpeedsUpTo( writerDevice()->maxWriteSpeed() );
+}
+
+
+void K3bWriterSelectionWidget::insertWritingSpeedsUpTo( int max )
+{
   clearSpeedCombo();
   m_comboSpeed->insertItem( i18n("Auto") );
   if( d->dvd )
     m_comboSpeed->insertItem( i18n("Ignore") );
   if( !d->forceAutoSpeed ) {
-    if( K3bDevice* dev = writerDevice() ) {
+    if( writerDevice() ) {
       // add speeds to combobox
       int i = 1;
       int speed = ( d->dvd ? 1385 : 175 );
-      while( i*speed <= dev->maxWriteSpeed() ) {
+      while( i*speed <= max ) {
 	insertSpeedItem( i*speed );
 	i = ( i == 1 ? 2 : i+2 );
       }
@@ -472,9 +478,10 @@ void K3bWriterSelectionWidget::slotDetermineSupportedWriteSpeeds()
     }
     else {
       QValueList<int> speeds = writerDevice()->determineSupportedWriteSpeeds();
+
+      // MMC1 devices do not report all supported write speeds
       if( speeds.isEmpty() ) {
-	QApplication::restoreOverrideCursor();
-	KMessageBox::error( this, i18n("Unable to determine the supported writing speeds.") );
+	insertWritingSpeedsUpTo( writerDevice()->determineMaximalWriteSpeed() );
       }
       else {
 	int lastSpeed = writerSpeed();
