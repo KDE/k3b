@@ -4,7 +4,7 @@
 <author>Sebastian Trueg</author>
 <widget class="QWidget">
     <property name="name">
-        <cstring>Form1</cstring>
+        <cstring>K3bAudioCDTextWidget</cstring>
     </property>
     <property name="geometry">
         <rect>
@@ -305,31 +305,31 @@
     <connection>
         <sender>m_buttonCopyTitle</sender>
         <signal>clicked()</signal>
-        <receiver>Form1</receiver>
+        <receiver>K3bAudioCDTextWidget</receiver>
         <slot>slotCopyTitle()</slot>
     </connection>
     <connection>
         <sender>m_buttonCopyArranger</sender>
         <signal>clicked()</signal>
-        <receiver>Form1</receiver>
+        <receiver>K3bAudioCDTextWidget</receiver>
         <slot>slotCopyArranger()</slot>
     </connection>
     <connection>
         <sender>m_buttonCopyComposer</sender>
         <signal>clicked()</signal>
-        <receiver>Form1</receiver>
+        <receiver>K3bAudioCDTextWidget</receiver>
         <slot>slotCopyComposer()</slot>
     </connection>
     <connection>
         <sender>m_buttonCopyPerformer</sender>
         <signal>clicked()</signal>
-        <receiver>Form1</receiver>
+        <receiver>K3bAudioCDTextWidget</receiver>
         <slot>slotCopyPerformer()</slot>
     </connection>
     <connection>
         <sender>m_buttonCopySongwriter</sender>
         <signal>clicked()</signal>
-        <receiver>Form1</receiver>
+        <receiver>K3bAudioCDTextWidget</receiver>
         <slot>slotCopySongwriter()</slot>
     </connection>
 </connections>
