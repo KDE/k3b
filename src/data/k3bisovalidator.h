@@ -27,7 +27,7 @@
 class K3bIsoValidator : public QRegExpValidator
 {
  public: 
-  K3bIsoValidator( QObject* parent = 0, const char* name = 0 );
+  K3bIsoValidator( QObject* parent = 0, const char* name = 0, bool allowEmpty = true );
   ~K3bIsoValidator();
 };
 

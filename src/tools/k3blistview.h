@@ -35,6 +35,7 @@ class QComboBox;
 class QSpinBox;
 class QLineEdit;
 class QFocusEvent;
+class QValidator;
 
 class K3bListView;
 
@@ -111,6 +112,8 @@ class K3bListView : public KListView
   //  void setNoItemPixmap( const QPixmap& );
   void setNoItemVerticalMargin( int i ) { m_noItemVMargin = i; }
   void setNoItemHorizontalMargin( int i ) { m_noItemHMargin = i; }
+  void setDoubleClickForEdit( bool b ) { m_doubleClickForEdit = b; }
+  void setValidator( QValidator* v );
 
  private slots:
   void updateEditorSize();
@@ -162,10 +165,16 @@ class K3bListView : public KListView
   K3bListViewItem* m_currentEditItem;
   int m_currentEditColumn;
 
+  bool m_doubleClickForEdit;
+  QListViewItem* m_lastClickedItem;
+
   QPushButton* m_editorButton;
   QComboBox* m_editorComboBox;
   QSpinBox* m_editorSpinBox;
   QLineEdit* m_editorLineEdit;
+
+  // TODO: think about a more universal solution!
+  QValidator* m_validator;
 };
 
 

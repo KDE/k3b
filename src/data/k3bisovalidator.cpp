@@ -20,10 +20,13 @@
 #include <qregexp.h>
 
 
-K3bIsoValidator::K3bIsoValidator( QObject* parent, const char* name )
+K3bIsoValidator::K3bIsoValidator( QObject* parent, const char* name, bool allowEmpty )
   : QRegExpValidator( parent, name )
 {
-  setRegExp( QRegExp( "[^/$\\\"%]*" ) );
+  if( allowEmpty )
+    setRegExp( QRegExp( "[^/$\\\"%]*" ) );
+  else
+    setRegExp( QRegExp( "[^/$\\\"%]+" ) );
 }
 
 

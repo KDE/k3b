@@ -35,12 +35,11 @@
 #include <klineeditdlg.h>
 #include <kiconloader.h>
 
-#include "../klistviewlineedit.h"
 #include <kdebug.h>
 
 
 K3bDataDirTreeView::K3bDataDirTreeView( K3bView* view, K3bDataDoc* doc, QWidget* parent )
-  : KListView( parent ), m_view(view)
+  : K3bListView( parent ), m_view(view)
 {
   m_fileView = 0;
 
@@ -55,12 +54,9 @@ K3bDataDirTreeView::K3bDataDirTreeView( K3bView* view, K3bDataDoc* doc, QWidget*
 
   addColumn( i18n("Directory") );
   header()->hide();
+
+  setValidator( new K3bIsoValidator( this, "val", false ) );
 	
-//   setItemsRenameable( true );
-
-  m_editor = new KListViewLineEdit( this );
-  m_editor->setValidator( new K3bIsoValidator( m_editor ) );
-
   m_doc = doc;	
   m_root = new K3bDataRootViewItem( doc, this );
   m_itemMap.insert( doc->root(), m_root );
@@ -69,7 +65,6 @@ K3bDataDirTreeView::K3bDataDirTreeView( K3bView* view, K3bDataDoc* doc, QWidget*
   connect( this, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(slotExecuted(QListViewItem*)) );
   connect( m_doc, SIGNAL(itemRemoved(K3bDataItem*)), this, SLOT(slotDataItemRemoved(K3bDataItem*)) );
   connect( m_doc, SIGNAL(newFileItems()), this, SLOT(updateContents()) );
-  connect( m_editor, SIGNAL(done(QListViewItem*,int)), this, SLOT(doneEditing(QListViewItem*,int)) );
   connect( this, SIGNAL(contextMenu(KListView*,QListViewItem*, const QPoint&)),
 	   this, SLOT(showPopupMenu(KListView*,QListViewItem*, const QPoint&)) );
   connect( this, SIGNAL(dropped(QDropEvent*, QListViewItem*, QListViewItem*)),
@@ -81,14 +76,6 @@ K3bDataDirTreeView::K3bDataDirTreeView( K3bView* view, K3bDataDoc* doc, QWidget*
 
 K3bDataDirTreeView::~K3bDataDirTreeView()
 {
-}
-
-
-void K3bDataDirTreeView::rename( QListViewItem* item, int c )
-{
-  // we only allow renaming of data items
-  if( dynamic_cast<K3bDataDirViewItem*>(item) )
-    m_editor->load( item, c );
 }
 
 
@@ -332,7 +319,7 @@ void K3bDataDirTreeView::slotNewDir()
 
 void K3bDataDirTreeView::slotRenameItem()
 {
-  rename( currentItem(), 0 );
+  showEditor( (K3bListViewItem*)currentItem(), 0 );
 }
 
 

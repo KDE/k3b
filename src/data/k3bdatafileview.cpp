@@ -28,8 +28,6 @@
 #include "../k3b.h"
 #include "../k3bview.h"
 
-#include "../klistviewlineedit.h"
-
 
 #include <qdragobject.h>
 #include <qpainter.h>
@@ -65,11 +63,9 @@ K3bDataFileView::K3bDataFileView( K3bView* view, K3bDataDirTreeView* dirTreeView
   addColumn( i18n("Local Path") );
   addColumn( i18n("Link") );
 
-//   setItemsRenameable( true );
   setSelectionModeExt( KListView::Extended );
 
-  m_editor = new KListViewLineEdit( this );
-  m_editor->setValidator( new K3bIsoValidator( m_editor ) );
+  setValidator( new K3bIsoValidator( this, "val", false ) );
   
   m_doc = doc;
   m_currentDir = doc->root();
@@ -79,7 +75,6 @@ K3bDataFileView::K3bDataFileView( K3bView* view, K3bDataDirTreeView* dirTreeView
   connect( m_doc, SIGNAL(itemRemoved(K3bDataItem*)), this, SLOT(slotDataItemRemoved(K3bDataItem*)) );
   connect( m_doc, SIGNAL(newFileItems()), this, SLOT(updateContents()) );
   connect( this, SIGNAL(executed(QListViewItem*)), this, SLOT(slotExecuted(QListViewItem*)) );
-  connect( m_editor, SIGNAL(done(QListViewItem*,int)), this, SLOT(doneEditing(QListViewItem*,int)) );
   connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
 	   this, SLOT(showPopupMenu(KListView*, QListViewItem*, const QPoint&)) );
   connect( this, SIGNAL(dropped(QDropEvent*, QListViewItem*, QListViewItem*)),
@@ -94,12 +89,6 @@ K3bDataFileView::~K3bDataFileView()
 }
 
 
-void K3bDataFileView::rename( QListViewItem* item, int c )
-{
-  m_editor->load( item, c );
-}
-
-
 void K3bDataFileView::slotSetCurrentDir( K3bDirItem* dir )
 {
   if( dir ) {
@@ -111,6 +100,8 @@ void K3bDataFileView::slotSetCurrentDir( K3bDirItem* dir )
 
 void K3bDataFileView::updateContents()
 {
+  hideEditor();
+
   // clear view
   clear();
 
@@ -300,7 +291,7 @@ void K3bDataFileView::slotNewDir()
 
 void K3bDataFileView::slotRenameItem()
 {
-  rename( currentItem(), 0 );
+  showEditor( (K3bListViewItem*)currentItem(), 0 );
 }
 
 

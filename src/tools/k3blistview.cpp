@@ -32,6 +32,7 @@ A KlistView with feature to display text and pixmap if no item is in the view.
 #include <qspinbox.h>
 #include <qlineedit.h>
 #include <qevent.h>
+#include <qvalidator.h>
 
 
 // ///////////////////////////////////////////////
@@ -227,6 +228,9 @@ K3bListView::K3bListView( QWidget* parent, const char* name )
   m_editorLineEdit = 0;
   m_currentEditItem = 0;
   m_currentEditColumn = 0;
+  m_doubleClickForEdit = true;
+  m_lastClickedItem = 0;
+  m_validator = 0;
 }
 
 K3bListView::~K3bListView()
@@ -242,10 +246,11 @@ void K3bListView::slotClicked( QListViewItem* item, const QPoint&, int col )
   hideEditor();
 
   if( K3bListViewItem* k3bItem = dynamic_cast<K3bListViewItem*>(item) ) {
-    if( k3bItem->needButton(col) || k3bItem->editorType( col ) != K3bListViewItem::NONE ) {
+    if( m_lastClickedItem == item || !m_doubleClickForEdit )
       showEditor( k3bItem, col );
-    }
   }
+
+  m_lastClickedItem = item;
 }
 
 
@@ -307,6 +312,10 @@ void K3bListView::placeEditor( K3bListViewItem* item, int col )
     r.setX( r.x() + item->pixmap(col)->width() );
   }
 
+  r.setX( r.x() + item->depth() * treeStepSize() );
+  if( rootIsDecorated() )
+    r.setX( r.x() + treeStepSize() );
+
   if( item->needButton(col) ) {
     prepareButton( item, col );
     m_editorButton->setFixedHeight( r.height() );
@@ -344,6 +353,8 @@ QWidget* K3bListView::prepareEditor( K3bListViewItem* item, int col )
       m_editorComboBox = new QComboBox( viewport() );
       connect( m_editorComboBox, SIGNAL(activated(const QString&)), 
 	       this, SLOT(slotEditorComboBoxActivated(const QString&)) );
+      if( m_validator )
+	m_editorComboBox->setValidator( m_validator );
     }
     m_editorComboBox->clear();
     if( item->comboStrings( col ).isEmpty() ) {
@@ -364,6 +375,8 @@ QWidget* K3bListView::prepareEditor( K3bListViewItem* item, int col )
 	       this, SLOT(slotEditorLineEditReturnPressed()) );
       m_editorLineEdit->setFrameStyle( QFrame::Box | QFrame::Plain );
       m_editorLineEdit->setLineWidth(1);
+      if( m_validator )
+	m_editorLineEdit->setValidator( m_validator );
     }
 
     m_editorLineEdit->setText( item->text( col ) );
@@ -390,8 +403,16 @@ void K3bListView::setCurrentItem( QListViewItem* i )
     return;
 
   if( m_currentEditItem )
-    if( m_currentEditItem->editorType(m_currentEditColumn) == K3bListViewItem::LINE )
-      slotEditorLineEditReturnPressed();
+    if( m_currentEditItem->editorType(m_currentEditColumn) == K3bListViewItem::LINE ) {
+      if( m_editorLineEdit->validator() ) {
+	QString str = m_editorLineEdit->text();
+	int pos = 0;
+	if( m_editorLineEdit->validator()->validate( str, pos ) == QValidator::Acceptable )
+	  slotEditorLineEditReturnPressed();
+      }
+      else
+	slotEditorLineEditReturnPressed();
+    }
 
   hideEditor();
   m_currentEditItem = 0;
@@ -521,6 +542,16 @@ void K3bListView::focusOutEvent( QFocusEvent* e )
   // the focus it's not.
   //  hideEditor();
   KListView::focusOutEvent( e );
+}
+
+
+void K3bListView::setValidator( QValidator* v )
+{
+  m_validator = v;
+  if( m_editorLineEdit ) 
+    m_editorLineEdit->setValidator( v );
+  if( m_editorComboBox )
+    m_editorComboBox->setValidator( v );
 }
 
 

@@ -130,6 +130,9 @@ class K3bDoc : public QObject
   int writingApp() const { return m_writingApp; }
   void setWritingApp( int a ) { m_writingApp = a; }
 
+  void setSaved( bool b ) { m_saved = b; }
+  bool saved() const { return m_saved; }
+
  public slots:
   void updateAllViews();
   void setDummy( bool d );
@@ -197,6 +200,8 @@ class K3bDoc : public QObject
 
   /** see k3bglobals.h */
   int m_writingApp;
+
+  bool m_saved;
 };
 
 #endif // K3BDOC_H

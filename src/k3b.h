@@ -278,7 +278,10 @@ class K3bMainWindow : public KDockMainWindow
   K3bProjectTabWidget* m_documentTab;
 
   /** a counter that gets increased each time the user creates a new document with "File"->"New" */
-  int untitledCount;
+  int m_audioUntitledCount;
+  int m_dataUntitledCount;
+  int m_mixedUntitledCount;
+
   /** a list of all open documents. If the last window of a document gets closed, the installed eventFilter
    * removes this document from the list. The document list is checked for modified documents when the user
    * is about to close the application. */

@@ -26,7 +26,6 @@ class K3bDirItem;
 class K3bDataView;
 class K3bDataItem;
 class QDropEvent;
-class KListViewLineEdit;
 class KActionCollection;
 class KActionMenu;
 class KAction;
@@ -56,7 +55,6 @@ class K3bDataFileView : public K3bListView
  public slots:
   void slotSetCurrentDir( K3bDirItem* );
   void updateContents();
-  void rename( QListViewItem* item, int	col );
 
  private slots:
   void slotDataItemRemoved( K3bDataItem* );
@@ -88,7 +86,6 @@ class K3bDataFileView : public K3bListView
   K3bDataDoc* m_doc;
   K3bDirItem* m_currentDir;
   K3bDataDirTreeView* m_treeView;
-  KListViewLineEdit* m_editor;
 };
 
 #endif

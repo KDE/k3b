@@ -63,6 +63,8 @@ K3bDoc::K3bDoc( QObject* parent )
   m_speed = 1;
 
   m_writingApp = K3b::DEFAULT;
+
+  m_saved = false;
 }
 
 

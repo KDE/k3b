@@ -97,7 +97,10 @@ K3bMainWindow::K3bMainWindow()
   setPlainCaption( i18n("K3b - The CD Kreator") );
 
   m_config = kapp->config();
-  untitledCount = 0;
+  m_audioUntitledCount = 0;
+  m_dataUntitledCount = 0;
+  m_mixedUntitledCount = 0;
+
   pDocList = new QPtrList<K3bDoc>();
   pDocList->setAutoDelete(true);
 
@@ -609,11 +612,12 @@ void K3bMainWindow::fileSave( K3bDoc* doc )
     doc = activeDoc();
   }
   if( doc != 0 ) {
-    if( doc->URL().fileName().contains(i18n("Untitled")) )
+    if( !doc->saved() )
       fileSaveAs( doc );
     else
       if( !doc->saveDocument(doc->URL()) )
 	KMessageBox::error (this,i18n("Could not save the current document!"), i18n("I/O Error"));
+    doc->setSaved(true);
   }
 }
 
@@ -779,8 +783,8 @@ void K3bMainWindow::slotNewAudioDoc()
   pDocList->append(doc);
   doc->newDocument();
 
-  untitledCount+=1;
-  QString fileName=QString(i18n("Untitled%1")).arg(untitledCount);
+  m_audioUntitledCount++;
+  QString fileName = QString(i18n("Audio%1")).arg(m_audioUntitledCount);
   KURL url;
   url.setFileName(fileName);
   doc->setURL(url);
@@ -797,8 +801,9 @@ void K3bMainWindow::slotNewDataDoc()
   pDocList->append(doc);
   doc->newDocument();
 
-  untitledCount+=1;
-  QString fileName=QString(i18n("Untitled%1")).arg(untitledCount);
+  m_dataUntitledCount++;
+  QString fileName = QString(i18n("Data%1")).arg(m_dataUntitledCount);
+  doc->isoOptions().setVolumeID( QString(i18n("Data%1")).arg(m_dataUntitledCount) );
   KURL url;
   url.setFileName(fileName);
   doc->setURL(url);
@@ -816,8 +821,8 @@ void K3bMainWindow::slotNewMixedDoc()
   pDocList->append(doc);
   doc->newDocument();
 
-  untitledCount+=1;
-  QString fileName=QString(i18n("Untitled%1")).arg(untitledCount);
+  m_mixedUntitledCount++;
+  QString fileName=QString(i18n("Mixed%1")).arg(m_mixedUntitledCount);
   KURL url;
   url.setFileName(fileName);
   doc->setURL(url);
