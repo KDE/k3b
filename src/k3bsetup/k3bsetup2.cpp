@@ -21,6 +21,7 @@
 #include <qlineedit.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
+#include <qscrollview.h>
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -83,6 +84,24 @@ K3bSetup2::K3bSetup2( QWidget *parent, const char *name, const QStringList& )
   QHBoxLayout* box = new QHBoxLayout( this );
   box->setAutoAdd(true);
   box->setMargin(0);
+  box->setSpacing( KDialog::spacingHint() );
+
+  QScrollView* labelScroll = new QScrollView( this );
+  QLabel* label = new QLabel( i18n("<p>This simple setup assistant is able to set the permissions needed by K3b in order to "
+				   "burn CDs and DVDs. "
+				   "<p>It does not take things like devfs or resmgr into account. In most cases this is not a "
+				   "problem but on some systems the permissions may be altered the next time you login or restart "
+				   "your computer. In those cases it is best to consult the distribution documentation."
+				   "<p><b>Caution:</b> Although K3bSetup 2 should not be able "
+				   "to mess up your system no guarantee can be given."), labelScroll->viewport() );
+  label->setMargin( 5 );
+  //  label->setBackgroundMode( PaletteBase );
+  labelScroll->addChild( label );
+  labelScroll->viewport()->setPaletteBackgroundPixmap( locate( "data", "k3b/pics/crystal/k3b_3d_logo.png" ) );
+  label->setPaletteBackgroundPixmap( locate( "data", "k3b/pics/crystal/k3b_3d_logo.png" ) );
+  labelScroll->setFixedWidth( 200 );
+  label->setFixedWidth( labelScroll->contentsRect().width() );
+  label->setFixedHeight( label->heightForWidth( labelScroll->contentsRect().width() ) );
 
   w = new base_K3bSetup2( this );
   //  w->m_pixLabel->setPixmap( locate( "data", "k3b/pics/k3bsetup_1.png" ) );
@@ -103,7 +122,7 @@ K3bSetup2::K3bSetup2( QWidget *parent, const char *name, const QStringList& )
 
 
   d->externalBinManager = new K3bExternalBinManager( this );
-  d->deviceManager = new K3bCdDevice::DeviceManager( d->externalBinManager, this );
+  d->deviceManager = new K3bCdDevice::DeviceManager( this );
 
   // these are the only programs that need special permissions
   d->externalBinManager->addProgram( new K3bReadcdProgram() );

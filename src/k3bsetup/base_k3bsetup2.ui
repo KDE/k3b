@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>647</width>
-            <height>605</height>
+            <width>500</width>
+            <height>450</height>
         </rect>
     </property>
     <property name="caption">
@@ -22,83 +22,6 @@
         <property name="margin">
             <number>0</number>
         </property>
-        <widget class="QFrame">
-            <property name="name">
-                <cstring>frame3</cstring>
-            </property>
-            <property name="frameShape">
-                <enum>StyledPanel</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Sunken</enum>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>2</number>
-                </property>
-                <property name="spacing">
-                    <number>0</number>
-                </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>m_labelInfo</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>0</hsizetype>
-                            <vsizetype>5</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>1</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>175</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>175</width>
-                            <height>32767</height>
-                        </size>
-                    </property>
-                    <property name="paletteBackgroundColor">
-                        <color>
-                            <red>201</red>
-                            <green>208</green>
-                            <blue>255</blue>
-                        </color>
-                    </property>
-                    <property name="margin">
-                        <number>5</number>
-                    </property>
-                    <property name="text">
-                        <string>&lt;p&gt;This simple setup assistant is able to set the permissions needed by K3b in order to
-burn CDs and DVDs.
-&lt;p&gt;It does not take things like devfs or resmgr into account. In most cases this is not a 
-problem but on some systems the permissions may be altered the next time you login or restart 
-your computer. In those cases it is best to consult the distribution documentation.
-&lt;p&gt;&lt;b&gt;Caution:&lt;/b&gt; Although K3bSetup 2 should not be able
-to mess up your system no guarantee can be given.</string>
-                    </property>
-                    <property name="alignment">
-                        <set>WordBreak|AlignTop|AlignHCenter</set>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>m_pixLabel</cstring>
-                    </property>
-                    <property name="scaledContents">
-                        <bool>false</bool>
-                    </property>
-                </widget>
-            </vbox>
-        </widget>
         <widget class="QLayoutWidget">
             <property name="name">
                 <cstring>layout6</cstring>
