@@ -56,9 +56,14 @@ class K3bCdCopyDialog : public KDialogBase
   QCheckBox* m_checkDeleteImages;
   QCheckBox* m_checkFastToc;
   QCheckBox* m_checkRawCopy;
+  QCheckBox* m_checkTaoSource;
+  QCheckBox* m_checkForce;
+  QSpinBox*  m_spinTaoSourceAdjust;
+
   QCheckBox* m_checkOnlyCreateImage;
   QComboBox* m_comboSourceDevice;
   QComboBox* m_comboParanoiaMode;
+  QComboBox* m_comboSubchanMode;
   QSpinBox* m_spinCopies;
 };
 
