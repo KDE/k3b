@@ -84,6 +84,9 @@ K3bBinImageWritingDialog::K3bBinImageWritingDialog( QWidget* parent, const char*
    m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRDAO );
 
    slotLoadUserDefaults();
+
+   kapp->config()->setGroup("General Options");
+   m_editTocPath->setText( kapp->config()->readEntry( "last written bin/cue image", "" ) );
 }
 
 
@@ -204,11 +207,15 @@ void K3bBinImageWritingDialog::slotStartClicked()
 
   if (!m_editTocPath->text().isEmpty()) {
 
-     K3bBurnProgressDialog d( kapp->mainWidget(), "burnProgress", true );
-  
-     hide();
-     d.startJob(m_job);
-     close();
+    // save the path
+    kapp->config()->setGroup("General Options");
+    kapp->config()->writeEntry( "last written bin/cue image", m_editTocPath->text() );
+
+    K3bBurnProgressDialog d( kapp->mainWidget(), "burnProgress", true );
+    
+    hide();
+    d.startJob(m_job);
+    close();
   } else
      KMessageBox::error( this, i18n("Please select a TOC File"), i18n("No TOC File"));
 }
