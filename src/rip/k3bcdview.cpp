@@ -22,6 +22,7 @@
 #include "../k3bcddbmultientriesdialog.h"
 #include "../kcutlabel.h"
 #include "../k3btoolbox.h"
+#include "k3bcdlistview.h"
 
 #include <qlayout.h>
 #include <qmessagebox.h>
@@ -29,6 +30,8 @@
 #include <qfile.h>
 #include <qlabel.h>
 #include <qptrlist.h>
+#include <qevent.h>
+#include <qdragobject.h>
 
 #include <kiconloader.h>
 #include <kapplication.h>
@@ -42,7 +45,6 @@
 #include <kstdaction.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
-
 
 
 
@@ -89,7 +91,7 @@ void K3bCdView::setupGUI()
 //   m_labelCdExtInfo = new QLabel( cdInfoBox );
 
 
-  m_listView = new KListView(this, "cdviewcontent");
+  m_listView = new K3bCDListView(this, "cdviewcontent");
   m_listView->addColumn(i18n( "No.") );
   m_listView->addColumn(i18n( "Artist") );
   m_listView->addColumn(i18n( "Title") );
@@ -101,17 +103,15 @@ void K3bCdView::setupGUI()
   m_listView->setShowSortIndicator(true);
   m_listView->setAllColumnsShowFocus(true);
   m_listView->setSelectionMode( QListView::Extended );
+  m_listView->setDragEnabled( true );
 
   connect( m_listView, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
 	   this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
   connect( m_listView, SIGNAL(selectionChanged()),
 	   this, SLOT(slotSelectionChanged()) );
-
   K3bToolBox* toolBox = new K3bToolBox( this );
   toolBox->addButton( m_copyAction );
 }
-
-
 
 void K3bCdView::setupActions()
 {
@@ -266,7 +266,6 @@ void K3bCdView::slotPrepareRipping()
 
   rip.exec();
 }
-
 
 void K3bCdView::slotSelectAll()
 {

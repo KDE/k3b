@@ -41,8 +41,10 @@ class K3bCddb;
 class K3bCdda;
 class K3bCddaCopy;
 class K3bPatternParser;
+class K3bCDListView;
 class KListView;
 class QListViewItem;
+
 //class QPoint;
 class KActionCollection;
 class K3bDevice;
@@ -76,6 +78,7 @@ class K3bCdView : public K3bCdContentsView
  signals:
   void notSupportedDisc( const QString& );
 
+
  private slots:
   void slotCddbQueryFinished( K3bCddb* );
   void slotPrepareRipping();
@@ -91,7 +94,7 @@ class K3bCdView : public K3bCdContentsView
   K3bCddb *m_cddb;
   K3bCdda *m_cdda;
 
-  KListView *m_listView;
+  K3bCDListView *m_listView;
   //  QListViewItem *m_testItemPattern;
 
   K3bCddbQuery m_lastQuery;
