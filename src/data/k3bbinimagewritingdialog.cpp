@@ -21,6 +21,7 @@
 #include "../device/k3bdevice.h"
 #include "../k3bwriterselectionwidget.h"
 #include "../k3bburnprogressdialog.h"
+#include "../k3bstdguiitems.h"
 #include "k3bbinimagewritingjob.h"
 #include <k3bstdguiitems.h>
 
@@ -39,6 +40,8 @@
 #include <qlabel.h>
 #include <qtabwidget.h>
 #include <qhbox.h>
+#include <qvbox.h>
+#include <qtabwidget.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
 
@@ -89,36 +92,31 @@ void K3bBinImageWritingDialog::setupGui()
 
   // options
   // -----------------------------------------------------------------------
-  QGroupBox* groupOptions = new QGroupBox( i18n("Options"), frame );
-  groupOptions->setColumnLayout(0, Qt::Vertical );
-  groupOptions->layout()->setSpacing( 0 );
-  groupOptions->layout()->setMargin( 0 );
-  QGridLayout* groupOptionsLayout = new QGridLayout( groupOptions->layout() );
-  groupOptionsLayout->setAlignment( Qt::AlignTop );
-  groupOptionsLayout->setSpacing( spacingHint() );
-  groupOptionsLayout->setMargin( marginHint() );
+  QTabWidget* tabOptions = new QTabWidget( frame );
 
-  m_checkSimulate = K3bStdGuiItems::simulateCheckbox( groupOptions );
-  m_checkMulti    = new QCheckBox( i18n("Multisession"), groupOptions );
-  m_checkForce    = new QCheckBox( i18n("Force Writing"), groupOptions );
+  QVBox* optionTab = new QVBox( tabOptions );
+  optionTab->setMargin(10);
+  optionTab->setSpacing(10);
 
-  QHBox* boxCopies = new QHBox(groupOptions);
+  m_checkSimulate = K3bStdGuiItems::simulateCheckbox( optionTab );
+  m_checkMulti    = new QCheckBox( i18n("Multisession"), optionTab );
+
+  QHBox* boxCopies = new QHBox(optionTab);
   m_spinCopies    = new QSpinBox( boxCopies );
   m_spinCopies->setMinValue( 1 );
   m_spinCopies->setMaxValue( 99 );
   QLabel *c = new QLabel( i18n("Copies"),  boxCopies);
-  boxCopies->setStretchFactor(c,8);
+  boxCopies->setStretchFactor(c,1);
   boxCopies->setSpacing(10);
-  groupOptionsLayout->addWidget( m_checkSimulate, 0, 0 );
-  groupOptionsLayout->addWidget( m_checkMulti, 1, 0 );
 
-  // This should go to an advanced tab!
-  groupOptionsLayout->addWidget( m_checkForce, 2, 0 );
+  tabOptions->addTab( optionTab, i18n("&Options") );
 
-  groupOptionsLayout->addWidget( boxCopies, 3, 0 );
+  QVBox* advancedTab = new QVBox( tabOptions );
+  advancedTab->setMargin(10);
+  advancedTab->setSpacing(10);
+  m_checkForce = new QCheckBox( i18n("Force Writing"), advancedTab );
 
-  // -----------------------------------------------------------------------
-
+  tabOptions->addTab( advancedTab, i18n("&Advanced") );
 
   QGridLayout* grid = new QGridLayout( frame );
   grid->setSpacing( spacingHint() );
@@ -126,9 +124,9 @@ void K3bBinImageWritingDialog::setupGui()
 
   grid->addWidget( m_writerSelectionWidget, 0, 0 );
   grid->addWidget( groupImage, 1, 0 );
-  grid->addWidget( groupOptions, 2, 0 );
+  grid->addWidget( tabOptions, 2, 0 );
 
-  grid->setRowStretch( 2, 1 );
+  grid->setRowStretch( 3, 1 );
 
   connect( m_buttonFindTocFile, SIGNAL(clicked()), this, SLOT(slotFindTocFile()) );
 
