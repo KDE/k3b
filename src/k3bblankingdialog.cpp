@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -161,23 +161,17 @@ void K3bBlankingDialog::slotUser1()
   m_job->setSpeed( m_writerSelectionWidget->writerSpeed() );
   m_job->setForce( m_checkForce->isChecked() );
 
-  switch( m_groupBlankType->id( m_groupBlankType->selected() ) ) {
-  case 1:
-    m_job->setMode( K3bBlankingJob::Fast );
-    break;
-  case 2:
+  if( m_radioCompleteBlank->isChecked() )
     m_job->setMode( K3bBlankingJob::Complete );
-    break;
-  case 3:
+  else if( m_radioFastBlank->isChecked() )
+    m_job->setMode( K3bBlankingJob::Fast );
+  else if( m_radioBlankTrack->isChecked() )
     m_job->setMode( K3bBlankingJob::Track );
-    break;
-  case 4:
+  else if( m_radioUncloseSession->isChecked() )
     m_job->setMode( K3bBlankingJob::Unclose );
-    break;
-  case 5:
+  else // m_radioBlankSession->isChecked()
     m_job->setMode( K3bBlankingJob::Session );
-    break;
-  }
+
 
   K3bErasingInfoDialog d;
 
