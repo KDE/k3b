@@ -178,11 +178,8 @@ void K3bCddaCopy::cancel( ){
   // we need to terminate in that case
   // wait for 1 second. I the thread still is working terminate it
   // and trigger the finished slot manually
-#if QT_VERSION >= 0x030100
-  QTimer::singleShot( 1000, this, SLOT(slotCheckIfThreadStillRunning()) );
-#else
   emit infoMessage( i18n("Cancellation could take a while..."), INFO );
-#endif
+  QTimer::singleShot( 1000, this, SLOT(slotCheckIfThreadStillRunning()) );
 #endif
 }
 
@@ -354,6 +351,8 @@ void K3bCddaCopy::slotCheckIfThreadStillRunning()
     // because of an unreadable cd
 #if QT_VERSION >= 0x030100
     ((QThread*)m_audioRip)->terminate(); // only QT 3.1.x
+#else
+    m_audioRip->terminate();
 #endif
     slotTrackFinished( false );
   }

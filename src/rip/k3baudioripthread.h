@@ -29,6 +29,10 @@ class K3bAudioRipThread : public QObject, public QThread
   void setDevice( K3bDevice* dev ) { m_device = dev; }
   void setTrackToRip( unsigned int track ) { m_track = track; }
 
+#if QT_VERSION < 0x031000
+  void terminate();
+#endif
+
  signals:
   void output( const QByteArray& );
 
@@ -62,6 +66,10 @@ class K3bAudioRipThread : public QObject, public QThread
 
   QObject* m_eventReceiver;
 
+#if QT_VERSION < 0x031000
+  Qt::HANDLE thread_id;
+#endif
+  
   // this friend function will call createStatus(long,int)
   friend void paranoiaCallback(long, int);
 };
