@@ -89,7 +89,10 @@ class K3bCdCopyJob : public K3bBurnJob
   QString m_tempPath;
   QString m_tocFile;
 
-  QString m_job;
+  enum Task { READING, WRITING };
+
+  int m_job; // Task
+
   K3bCdrdaoWriter *m_cdrdaowriter;
   K3bDiskInfoDetector* m_diskInfoDetector;
 };
