@@ -154,7 +154,7 @@ K3bMainWindow::K3bMainWindow()
   m_movixDvdUntitledCount = 0;
   m_dvdUntitledCount = 0;
 
-  //setup splitter behaviour
+  //setup splitter behavior
   manager()->setSplitterHighResolution(true);
   manager()->setSplitterOpaqueResize(true);
   manager()->setSplitterKeepSize(true);

@@ -70,7 +70,7 @@ class K3bAudioDecoder : public K3bPlugin
 
   /**
    * Since this may take a while depending on the filetype it is best
-   * to run it in a seperate thread.
+   * to run it in a separate thread.
    */
   bool analyseFile();
 

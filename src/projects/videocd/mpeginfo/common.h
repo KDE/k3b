@@ -195,7 +195,7 @@ user_data;
 /*  The following Macros ensure compatibility for glibc < 2.2+ and kernel < 2.4
     It also gives opportunity to support large files (>4 Go) such as DVDs
 	_OFF_d and _OFF_x are used in format strings of printf. They refer to the off_t type
-	and substitute to %lld %llx resp, whith large file support and %ld %lx otherwise.
+	and substitute to %lld %llx resp, with large file support and %ld %lx otherwise.
  
 	FSEEK substitutes to the new fseeko function if possible or becomes standard fseek otherwise
 	FTELL does the same with ftello and ftell

@@ -173,9 +173,9 @@ void K3bWelcomeWidget::resizeEvent( QResizeEvent* e )
 }
 
 
-// void K3bWelcomeWidget::slotMailClick( const QString& adress, const QString& )
+// void K3bWelcomeWidget::slotMailClick( const QString& address, const QString& )
 // {
-//   kapp->invokeMailer( adress, "K3b: " );
+//   kapp->invokeMailer( address, "K3b: " );
 // }
 
 

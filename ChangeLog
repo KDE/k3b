@@ -6,7 +6,7 @@ CD Cloning with cdrtools >= 2.01a17
 device capabilities detection without cdrecord. This solves the long startup problem with ATAPI devices.
 moved audio ripping pattern configuration from options dialog to audio ripping dialog
 option to automatically erase CD-RWs and DVD-RWs without asking before writing
-dragging files from a data project to the audio player (basicly it's just a KURLDrag so it may be dragged
+dragging files from a data project to the audio player (basically it's just a KURLDrag so it may be dragged
 	everywhere)
 K3b is now divided in three libs and the main application: libk3bcore, libk3btools, and libk3bproject
 	this makes creating KParts-plugins easy. Two examples can be found in the tests/kpartplugins dir
@@ -86,7 +86,7 @@ videocd:
    fixed autodetection VCD Typ (now the user can turn off this feature)
 added audio volume normalization
 added udf support to data project
-user commands for external programs are seperated by space now since the comma just 
+user commands for external programs are separated by space now since the comma just 
    made problems for options like "--driver generic-mmc" which had to be specified
    as "--driver, generic-mmc"
 support for newer versions of cdrecord which have a slighly changed user interface

@@ -48,7 +48,7 @@ class K3bDeviceBranch : public KFileTreeBranch
 
  signals:
   /**
-   * mountPoint is empty if not successfull
+   * mountPoint is empty if not successful
    */
   void mountFinished( K3bDeviceBranch*, const QString& mountPoint );
   void unmountFinished( K3bDeviceBranch*, bool success );

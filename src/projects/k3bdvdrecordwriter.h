@@ -22,7 +22,7 @@
 class K3bCdDevice::CdDevice;
 
 /**
- * Basicly this is just a wrapper around K3bCdrecordWriter
+ * Basically this is just a wrapper around K3bCdrecordWriter
  * which uses another K3bExternalBin and ignores the writingMode setting.
  */
 class K3bDvdrecordWriter : public K3bCdrecordWriter

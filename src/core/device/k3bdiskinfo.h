@@ -139,7 +139,7 @@ namespace K3bCdDevice
    *
    * Before using any values one should check diskState != STATE_UNKNOWN or
    * diskState == STATE_NO_MEDIA.
-   * That may mean that no disk is in the drive or an error occured.
+   * That may mean that no disk is in the drive or an error occurred.
    * Writers should never give the STATE_UNKNOWN state. CD-ROM or DVD-ROM
    * drives on the other hand may have trouble determining the state of the disk.
    */

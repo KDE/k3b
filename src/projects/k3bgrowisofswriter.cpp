@@ -419,7 +419,7 @@ void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
 	// Doku says: warning at exit
 	// Example: mkisofs error
 	//          unable to reload
-	// So basicly this is just for mkisofs failure since we do not let growisofs reload the media
+	// So basically this is just for mkisofs failure since we do not let growisofs reload the media
 	emit infoMessage( i18n("Warning at exit: (1)"), ERROR );
 	emit infoMessage( i18n("Most likely mkisofs failed in some way."), ERROR );
       }

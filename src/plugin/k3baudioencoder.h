@@ -108,7 +108,7 @@ class K3bAudioEncoder : public K3bPlugin
 
   /**
    * Returnes the amount of actually written bytes or -1 if an error
-   * occured.
+   * occurred.
    */
   long encode( const char*, Q_ULONG len );
 

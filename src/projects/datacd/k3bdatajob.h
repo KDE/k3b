@@ -77,7 +77,7 @@ class K3bDataJob : public K3bBurnJob
 
   /**
    * Just a little helper method that makes subclassing easier.
-   * Basicly used for DVD writing.
+   * Basically used for DVD writing.
    */
   virtual void waitForDisk();
 		

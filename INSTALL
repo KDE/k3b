@@ -2,7 +2,7 @@ Installing K3b 0.9
 ------------------
 
 
-Before installing K3b please make sure you have at least the following installed on your sytem:
+Before installing K3b please make sure you have at least the following installed on your system:
  - the QT3 library (at least version 3.1)
  - the KDE3 libraries (at least version 3.1)
  

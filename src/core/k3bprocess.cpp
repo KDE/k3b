@@ -110,7 +110,7 @@ void K3bProcess::splitOutput( char* data, int len, bool stdout )
 
   QStringList lines = QStringList::split( '\n', buffer, !m_suppressEmptyLines );
 
-  // in case we suppress empty lines we need to handle the following seperately
+  // in case we suppress empty lines we need to handle the following separately
   // to make sure we join unfinished lines correctly
   if( m_suppressEmptyLines && buffer[0] == '\n' )
     lines.prepend( QString::null );

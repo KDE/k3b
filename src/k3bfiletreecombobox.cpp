@@ -107,7 +107,7 @@ void K3bFileTreeComboBox::slotUrlExecuted( const KURL& url )
 
 void K3bFileTreeComboBox::setEditText( const QPixmap& pix, const QString& t )
 {
-  // QComboBox::changeItem() doesn't honour the pixmap when
+  // QComboBox::changeItem() doesn't honor the pixmap when
   // using an editable combobox, so we just remove and insert
   
   setUpdatesEnabled( false );

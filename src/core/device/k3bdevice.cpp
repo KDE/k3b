@@ -2215,9 +2215,9 @@ bool K3bCdDevice::CdDevice::readFormatCapacity( K3b::Msf& r ) const
       cmd[8] = realLength & 0xFF;
       if( cmd.transport( TR_DIR_READ, buffer, realLength ) == 0 ) {
 	//
-	// now find the 00h format type since that contains the number of adressable blocks
+	// now find the 00h format type since that contains the number of addressable blocks
 	// and the block size used for formatting the whole media.
-	// There may be multible occurences of this descriptor (MMC4 says so) but I think it's
+	// There may be multible occurrences of this descriptor (MMC4 says so) but I think it's
 	// sufficient to read the first one
 	// 00h may not be supported by the unit (e.g. CD-RW)
 	// for this case we fall back to the first descriptor (the current/maximum descriptor)
