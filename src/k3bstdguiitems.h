@@ -20,6 +20,7 @@
 class QWidget;
 class QCheckBox;
 class QComboBox;
+class QFrame;
 
 
 namespace K3bStdGuiItems
@@ -34,6 +35,13 @@ namespace K3bStdGuiItems
   QComboBox* paranoiaModeComboBox( QWidget* parent = 0, const char* name = 0 );
   QComboBox* dataModeComboboxBox( QWidget* parent = 0, const char* name = 0 );
   QCheckBox* startMultisessionCheckBox( QWidget* parent = 0, const char* name = 0 );
+
+  /**
+   * Creates a sunken purple frame that can be used to display Ayo's artwork.
+   * Mainly used as header in dialogs.
+   * Make sure to set a layout margin of at least 2.
+   */
+  QFrame* purpleFrame( QWidget* parent = 0, const char* name = 0 );
 };
 
 #endif

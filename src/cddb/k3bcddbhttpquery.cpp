@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -158,7 +158,7 @@ void K3bCddbHttpQuery::slotReadyRead()
   while( m_socket->canReadLine() ) {
     QString line = stream.readLine();
 
-    kdDebug() << "(K3bCddbHttpQuery) line: " << line << endl;
+    //    kdDebug() << "(K3bCddbHttpQuery) line: " << line << endl;
 
     switch( m_state ) {
 
@@ -247,7 +247,7 @@ void K3bCddbHttpQuery::slotReadyRead()
 
     case READ_DATA:
 
-      kdDebug() << "parsing line: " << line << endl;
+      //      kdDebug() << "parsing line: " << line << endl;
 
       if( line.startsWith( "." ) ) {
 	

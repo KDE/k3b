@@ -19,6 +19,8 @@
 #include <qtooltip.h>
 #include <qwhatsthis.h>
 #include <qcombobox.h>
+#include <qframe.h>
+#include <qpalette.h>
 
 #include <klocale.h>
 
@@ -166,4 +168,76 @@ QCheckBox* K3bStdGuiItems::startMultisessionCheckBox( QWidget* parent, const cha
 			   "a temporary table of contents.</p>"
 			   "<p>This allows further sessions to be appended to the CD.</p>") );
   return c;
+}
+
+
+QFrame* K3bStdGuiItems::purpleFrame( QWidget* parent, const char* name )
+{
+  QFrame* frame = new QFrame( parent, name );
+
+  // we change the complette palette
+  // the colors were created by the QT Designer
+  // most of them will never be used...
+
+  QPalette pal;
+  QColorGroup cg;
+  cg.setColor( QColorGroup::Foreground, Qt::black );
+  cg.setColor( QColorGroup::Button, QColor( 205, 210, 255) );
+  cg.setColor( QColorGroup::Light, Qt::white );
+  cg.setColor( QColorGroup::Midlight, QColor( 230, 232, 255) );
+  cg.setColor( QColorGroup::Dark, QColor( 102, 105, 127) );
+  cg.setColor( QColorGroup::Mid, QColor( 137, 140, 170) );
+  cg.setColor( QColorGroup::Text, Qt::black );
+  cg.setColor( QColorGroup::BrightText, Qt::white );
+  cg.setColor( QColorGroup::ButtonText, Qt::black );
+  cg.setColor( QColorGroup::Base, Qt::white );
+  cg.setColor( QColorGroup::Background, QColor( 205, 210, 255) );
+  cg.setColor( QColorGroup::Shadow, Qt::black );
+  cg.setColor( QColorGroup::Highlight, QColor( 0, 0, 128) );
+  cg.setColor( QColorGroup::HighlightedText, Qt::white );
+  cg.setColor( QColorGroup::Link, Qt::black );
+  cg.setColor( QColorGroup::LinkVisited, Qt::black );
+  pal.setActive( cg );
+  cg.setColor( QColorGroup::Foreground, Qt::black );
+  cg.setColor( QColorGroup::Button, QColor( 205, 210, 255) );
+  cg.setColor( QColorGroup::Light, Qt::white );
+  cg.setColor( QColorGroup::Midlight, QColor( 243, 244, 255) );
+  cg.setColor( QColorGroup::Dark, QColor( 102, 105, 127) );
+  cg.setColor( QColorGroup::Mid, QColor( 137, 140, 170) );
+  cg.setColor( QColorGroup::Text, Qt::black );
+  cg.setColor( QColorGroup::BrightText, Qt::white );
+  cg.setColor( QColorGroup::ButtonText, Qt::black );
+  cg.setColor( QColorGroup::Base, Qt::white );
+  cg.setColor( QColorGroup::Background, QColor( 205, 210, 255) );
+  cg.setColor( QColorGroup::Shadow, Qt::black );
+  cg.setColor( QColorGroup::Highlight, QColor( 0, 0, 128) );
+  cg.setColor( QColorGroup::HighlightedText, Qt::white );
+  cg.setColor( QColorGroup::Link, QColor( 0, 0, 192) );
+  cg.setColor( QColorGroup::LinkVisited, QColor( 128, 0, 128) );
+  pal.setInactive( cg );
+  cg.setColor( QColorGroup::Foreground, QColor( 128, 128, 128) );
+  cg.setColor( QColorGroup::Button, QColor( 205, 210, 255) );
+  cg.setColor( QColorGroup::Light, Qt::white );
+  cg.setColor( QColorGroup::Midlight, QColor( 243, 244, 255) );
+  cg.setColor( QColorGroup::Dark, QColor( 102, 105, 127) );
+  cg.setColor( QColorGroup::Mid, QColor( 137, 140, 170) );
+  cg.setColor( QColorGroup::Text, QColor( 128, 128, 128) );
+  cg.setColor( QColorGroup::BrightText, Qt::white );
+  cg.setColor( QColorGroup::ButtonText, QColor( 128, 128, 128) );
+  cg.setColor( QColorGroup::Base, Qt::white );
+  cg.setColor( QColorGroup::Background, QColor( 205, 210, 255) );
+  cg.setColor( QColorGroup::Shadow, Qt::black );
+  cg.setColor( QColorGroup::Highlight, QColor( 0, 0, 128) );
+  cg.setColor( QColorGroup::HighlightedText, Qt::white );
+  cg.setColor( QColorGroup::Link, QColor( 0, 0, 192) );
+  cg.setColor( QColorGroup::LinkVisited, QColor( 128, 0, 128) );
+  pal.setDisabled( cg );
+
+  frame->setPalette( pal );
+  frame->setFrameShape( QFrame::StyledPanel );
+  frame->setFrameShadow( QFrame::Sunken );
+  frame->setLineWidth( 2 );
+  frame->setMargin( 2 );
+
+  return frame;
 }

@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -98,6 +98,9 @@ void K3bCddb::readConfig( KConfig* c )
 void K3bCddb::query( const K3bToc& toc )
 {
   m_toc = toc;
+
+  // make sure we have a valid discId
+  m_toc.calculateDiscId();
 
   if( m_bLocalCddbQuery ) {
     m_iCurrentQueriedLocalDir = 0;

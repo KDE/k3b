@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -151,7 +151,7 @@ K3bPatternOptionTab::~K3bPatternOptionTab()
 void K3bPatternOptionTab::readSettings()
 {
   KConfig* c = kapp->config();
-  c->setGroup("Ripping");
+  c->setGroup("Audio Ripping");
 
   // basic system
   QString bd1 = c->readEntry( "basic directory 1", "Artist" );
@@ -226,7 +226,7 @@ void K3bPatternOptionTab::readSettings()
 void K3bPatternOptionTab::apply()
 {
   KConfig* c = kapp->config();
-  c->setGroup("Ripping");
+  c->setGroup("Audio Ripping");
 
   // basic system
   c->writeEntry( "basic directory 1", basicPatternItemFromIndex(m_comboBasicDirectory1->currentItem(), true) );

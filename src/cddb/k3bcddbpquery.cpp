@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
@@ -13,32 +13,17 @@
  */
 
 
-/***************************************************************************
-                          k3bcddbpquery.cpp  -  description
-                             -------------------
-    begin                : Sun Oct 7 2001
-    copyright            : (C) 2001 by Sebastian Trueg
-    email                : trueg@informatik.uni-freiburg.de
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
-
-
 #include "k3bcddbpquery.h"
 
 #include <qstringlist.h>
 #include <qsocket.h>
 #include <qtextstream.h>
+#include <qdatetime.h>
 
 #include <klocale.h>
 #include <kdebug.h>
+
+static QTime s_time;
 
 
 K3bCddbpQuery::K3bCddbpQuery( QObject* parent, const char* name )
@@ -61,6 +46,8 @@ K3bCddbpQuery::~K3bCddbpQuery()
 
 void K3bCddbpQuery::doQuery()
 {
+  s_time = QTime::currentTime();
+
   setError( WORKING );
 
   // TODO: set maximum cddb protocol level (5) with "cddb proto"
@@ -83,6 +70,8 @@ void K3bCddbpQuery::slotHostFound()
 
 void K3bCddbpQuery::slotConnected()
 {
+  kdDebug() << "(K3bCddbQuery) connected after " << s_time.msecsTo(QTime::currentTime()) << " msecs." << endl;
+  s_time = QTime::currentTime();
   emit infoMessage( i18n("Connected") );
 }
 
@@ -98,18 +87,21 @@ void K3bCddbpQuery::cddbpQuit()
 {
   m_state = QUIT;
   QTextStream stream( m_socket );
-  stream << "quit\n";
+  stream << "quit" << endl << flush;
 }
 
 
 void K3bCddbpQuery::slotReadyRead()
 {
+  kdDebug() << "(K3bCddbQuery) read ready after " << s_time.msecsTo(QTime::currentTime()) << " msecs." << endl;
+  s_time = QTime::currentTime();
+
   QTextStream stream( m_socket );
 
   while( m_socket->canReadLine() ) {
     QString line = stream.readLine();
 
-    kdDebug() << "(K3bCddbpQuery) line: " << line << endl;
+    //    kdDebug() << "(K3bCddbpQuery) line: " << line << endl;
 
     switch( m_state ) {
     case GREETING:
@@ -118,7 +110,7 @@ void K3bCddbpQuery::slotReadyRead()
 	m_state = HANDSHAKE;
 
 	QTextStream stream( m_socket );
-	stream << "cddb hello " << handshakeString() << "\n";
+	stream << "cddb hello " << handshakeString() << endl << flush;
       }
 
       else {
@@ -135,7 +127,7 @@ void K3bCddbpQuery::slotReadyRead()
 	m_state = PROTO;
 
 	QTextStream stream( m_socket );
-	stream << "proto 5\n";
+	stream << "proto 5" << endl << flush;
       }
 
       else {
@@ -155,7 +147,7 @@ void K3bCddbpQuery::slotReadyRead()
 	m_state = QUERY;
 	
 	QTextStream stream( m_socket );
-	stream << queryString() << "\n";
+	stream << queryString() << endl << flush;
 	break;
       }
 
@@ -252,7 +244,7 @@ void K3bCddbpQuery::slotReadyRead()
 
     case READ_DATA:
 
-      kdDebug() << "(K3bCddbpQuery) parsing line: " << line << endl;
+      //      kdDebug() << "(K3bCddbpQuery) parsing line: " << line << endl;
 
       if( line.startsWith( "." ) ) {
 	
@@ -260,6 +252,7 @@ void K3bCddbpQuery::slotReadyRead()
 
 	QTextStream strStream( m_parsingBuffer, IO_ReadOnly );
 	K3bCddbResultEntry entry = *m_matches.begin();
+
 	parseEntry( strStream, entry );
 
 	queryResult().addEntry( entry );
@@ -297,7 +290,7 @@ bool K3bCddbpQuery::readFirstEntry()
   kdDebug() <<  "(K3bCddbpQuery) Read: " << read << endl;
 
   QTextStream stream( m_socket );
-  stream << read << "\n";
+  stream << read << endl << flush;
 
   return true;
 }

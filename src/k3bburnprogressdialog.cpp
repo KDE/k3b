@@ -18,6 +18,7 @@
 
 #include <k3bjob.h>
 #include <device/k3bdevice.h>
+#include <k3bstdguiitems.h>
 
 #include <kglobal.h>
 #include <kprogress.h>
@@ -39,14 +40,18 @@ K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name,
   m_frameExtraInfoLayout->addWidget( m_labelWritingSpeed, 2, 2 );
   m_frameExtraInfoLayout->addWidget( new QLabel( i18n("Estimated writing speed:"), m_frameExtraInfo ), 1, 2 );
 
-  m_labelWriter = new QLabel( m_frameExtraInfo );
+  QFrame* headerFrame = K3bStdGuiItems::purpleFrame( m_frameExtraInfo );
+  QHBoxLayout* headerLayout = new QHBoxLayout( headerFrame );
+  headerLayout->setMargin( 2 );
+  m_labelWriter = new QLabel( headerFrame );
+  headerLayout->addWidget( m_labelWriter );
   m_labelWriter->setPaletteBackgroundColor( QColor( 205, 210, 255 ) );
   QFont textLabel14_font( m_labelWriter->font() );
   textLabel14_font.setBold( TRUE );
   m_labelWriter->setFont( textLabel14_font ); 
-  m_labelWriter->setMargin( 6 );
+  m_labelWriter->setMargin( 3 );
 
-  m_frameExtraInfoLayout->addMultiCellWidget( m_labelWriter, 0, 0, 0, 2 );
+  m_frameExtraInfoLayout->addMultiCellWidget( headerFrame, 0, 0, 0, 2 );
   m_frameExtraInfoLayout->addWidget( new QLabel( i18n("Buffer status:"), m_frameExtraInfo ), 1, 0 );
 
   m_progressWritingBuffer = new KProgress( m_frameExtraInfo, "m_progressWritingBuffer" );
@@ -55,7 +60,6 @@ K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name,
   QFrame* line1 = new QFrame( m_frameExtraInfo, "line1" );
   line1->setFrameShape( QFrame::VLine );
   line1->setFrameShadow( QFrame::Sunken );
-  line1->setFrameShape( QFrame::VLine );
 
   m_frameExtraInfoLayout->addMultiCellWidget( line1, 1, 2, 1, 1 );
 }

@@ -14,7 +14,7 @@
  */
 
 #include "k3baudiocdview.h"
-#include "k3bripperwidget.h"
+#include "k3baudiorippingdialog.h"
 
 #include <k3b.h>
 #include <device/k3btoc.h>
@@ -26,7 +26,8 @@
 #include <cddb/k3bcddbquery.h>
 #include <k3bcddbmultientriesdialog.h>
 #include <k3btoolbox.h>
-
+#include <kcutlabel.h>
+#include <k3bstdguiitems.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -84,14 +85,15 @@ K3bAudioCdView::K3bAudioCdView( QWidget* parent, const char *name )
 
   // header
   // ----------------------------------------------------------------------------------
-  QHBoxLayout* headerLayout = new QHBoxLayout( 0, 0, 0, "headerLayout"); 
-
-  QLabel* pixmapLabel1 = new QLabel( this, "pixmapLabel1" );
+  QFrame* headerFrame = K3bStdGuiItems::purpleFrame( this );
+  QHBoxLayout* headerLayout = new QHBoxLayout( headerFrame ); 
+  headerLayout->setMargin( 2 );  // to make sure the frame gets displayed
+  QLabel* pixmapLabel1 = new QLabel( headerFrame, "pixmapLabel1" );
   pixmapLabel1->setPixmap( QPixmap(locate( "appdata", "pics/diskinfo_left.png" )) );
   pixmapLabel1->setScaledContents( FALSE );
   headerLayout->addWidget( pixmapLabel1 );
 
-  m_labelTitle = new QLabel( this, "m_labelTitle" );
+  m_labelTitle = new KCutLabel( headerFrame, "m_labelTitle" );
   m_labelTitle->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 1, 0, m_labelTitle->sizePolicy().hasHeightForWidth() ) );
   m_labelTitle->setPaletteBackgroundColor( QColor( 205, 210, 255 ) );
   QFont m_labelTitle_font( m_labelTitle->font() );
@@ -100,7 +102,7 @@ K3bAudioCdView::K3bAudioCdView( QWidget* parent, const char *name )
   m_labelTitle->setFont( m_labelTitle_font ); 
   headerLayout->addWidget( m_labelTitle );
 
-  QLabel* pixmapLabel2 = new QLabel( this, "pixmapLabel2" );
+  QLabel* pixmapLabel2 = new QLabel( headerFrame, "pixmapLabel2" );
   pixmapLabel2->setPixmap( QPixmap(locate( "appdata", "pics/diskinfo_audio.png" )) );
   pixmapLabel2->setScaledContents( FALSE );
   headerLayout->addWidget( pixmapLabel2 );
@@ -127,7 +129,7 @@ K3bAudioCdView::K3bAudioCdView( QWidget* parent, const char *name )
   m_trackView->setSelectionMode( QListView::Single );
   m_trackView->setDragEnabled( true );
   m_trackView->addColumn( "" );
-  m_trackView->addColumn( i18n("No") );
+  m_trackView->addColumn( "" );
   m_trackView->addColumn( i18n("Artist") );
   m_trackView->addColumn( i18n("Title") );
   m_trackView->addColumn( i18n("Length") );
@@ -151,7 +153,7 @@ K3bAudioCdView::K3bAudioCdView( QWidget* parent, const char *name )
   connect( m_trackView, SIGNAL(selectionChanged(QListViewItem*)), 
 	   this, SLOT(slotTrackSelectionChanged(QListViewItem*)) );
 
-  mainGrid->addLayout( headerLayout, 0, 0 );
+  mainGrid->addWidget( headerFrame, 0, 0 );
   mainGrid->addLayout( toolBoxLayout, 1, 0 );
   mainGrid->addWidget( m_trackView, 2, 0 );
 
@@ -307,10 +309,10 @@ void K3bAudioCdView::startRip()
 			i18n("No tracks selected") );
   }
   else {
-    K3bRipperWidget rip( m_diskInfo, 
-			 m_cddbInfo, 
-			 trackNumbers, 
-			 this );
+    K3bAudioRippingDialog rip( m_diskInfo, 
+			       m_cddbInfo, 
+			       trackNumbers, 
+			       this );
     rip.exec();
   }
 }
@@ -450,24 +452,24 @@ void K3bAudioCdView::slotCddbQueryFinished( bool success )
       // K3bCddb only saves if it is configured, otherwise does nothing
       m_cddb->saveEntry( m_cddbInfo );
 
-      kdDebug() << "cddb info:" << endl;
-      kdDebug() << "DTITLE:  '" << m_cddbInfo.cdTitle << "'" << endl;
-      kdDebug() << "DARTIST: '" << m_cddbInfo.cdArtist << "'" << endl;
-      kdDebug() << "DEXT:    '" << m_cddbInfo.cdExtInfo << "'" << endl;
-      kdDebug() << "DISCID:  '" << m_cddbInfo.discid << "'" << endl;
+//       kdDebug() << "cddb info:" << endl;
+//       kdDebug() << "DTITLE:  '" << m_cddbInfo.cdTitle << "'" << endl;
+//       kdDebug() << "DARTIST: '" << m_cddbInfo.cdArtist << "'" << endl;
+//       kdDebug() << "DEXT:    '" << m_cddbInfo.cdExtInfo << "'" << endl;
+//       kdDebug() << "DISCID:  '" << m_cddbInfo.discid << "'" << endl;
 
-      for( QStringList::const_iterator it = m_cddbInfo.titles.begin();
-	   it != m_cddbInfo.titles.end(); ++it ) {
-	kdDebug() << "TTITLE:  '" << *it << "'" << endl;
-      }
-      for( QStringList::const_iterator it = m_cddbInfo.artists.begin();
-	   it != m_cddbInfo.artists.end(); ++it ) {
-	kdDebug() << "TARTIST: '" << *it << "'" << endl;
-      }
-      for( QStringList::const_iterator it = m_cddbInfo.extInfos.begin();
-	   it != m_cddbInfo.extInfos.end(); ++it ) {
-	kdDebug() << "TEXT:    '" << *it << "'" << endl;
-      }
+//       for( QStringList::const_iterator it = m_cddbInfo.titles.begin();
+// 	   it != m_cddbInfo.titles.end(); ++it ) {
+// 	kdDebug() << "TTITLE:  '" << *it << "'" << endl;
+//       }
+//       for( QStringList::const_iterator it = m_cddbInfo.artists.begin();
+// 	   it != m_cddbInfo.artists.end(); ++it ) {
+// 	kdDebug() << "TARTIST: '" << *it << "'" << endl;
+//       }
+//       for( QStringList::const_iterator it = m_cddbInfo.extInfos.begin();
+// 	   it != m_cddbInfo.extInfos.end(); ++it ) {
+// 	kdDebug() << "TEXT:    '" << *it << "'" << endl;
+//       }
 
       // now update the listview
       for( QListViewItemIterator it( m_trackView ); it.current(); ++it ) {

@@ -19,6 +19,7 @@
 #include "../device/k3bdiskinfo.h"
 #include "../device/k3bdiskinfodetector.h"
 #include "../tools/k3bglobals.h"
+#include "../k3bstdguiitems.h"
 
 #include <qlabel.h>
 #include <qlayout.h>
@@ -30,6 +31,7 @@
 #include <qpalette.h>
 #include <qpixmap.h>
 #include <qregion.h>
+#include <qframe.h>
 
 #include <kdialog.h>
 #include <klocale.h>
@@ -124,26 +126,29 @@ K3bDiskInfoView::K3bDiskInfoView( QWidget* parent, const char* name )
   mainLayout->setMargin( 2 );
   mainLayout->setSpacing( 0 );
 
-  QLabel* labelLeftPic = new QLabel( this );
+  // header
+  // ----------------------------------------------------------------------------
+  QFrame* headerFrame = K3bStdGuiItems::purpleFrame( this );
+  QLabel* labelLeftPic = new QLabel( headerFrame );
   labelLeftPic->setPixmap( QPixmap(locate( "data", "k3b/pics/diskinfo_left.png" )) );
-  m_labelTocType = new QLabel( this );
+  m_labelTocType = new QLabel( headerFrame );
   m_labelTocType->setPaletteBackgroundColor( QColor(201, 208, 255) );
-  m_labelDiskPix = new QLabel( this );
+  m_labelDiskPix = new QLabel( headerFrame );
 
   QFont f(m_labelTocType->font() );
   f.setBold( true );
   f.setPointSize( f.pointSize() + 2 );
   m_labelTocType->setFont( f );
 
-  QHBoxLayout* headerLayout = new QHBoxLayout;
-  headerLayout->setMargin( 0 );
+  QHBoxLayout* headerLayout = new QHBoxLayout( headerFrame );
+  headerLayout->setMargin( 2 );
   headerLayout->setSpacing( 0 );
   headerLayout->addWidget( labelLeftPic );
   headerLayout->addWidget( m_labelTocType );
   headerLayout->addWidget( m_labelDiskPix );
   headerLayout->setStretchFactor( m_labelTocType, 1 );
 
-  mainLayout->addLayout( headerLayout );
+  mainLayout->addWidget( headerFrame );
 
   m_infoView = new KListView( this );
   mainLayout->addWidget( m_infoView );

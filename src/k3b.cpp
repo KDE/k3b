@@ -82,7 +82,7 @@
 #include "k3bstatusbarmanager.h"
 #include "k3bfiletreecombobox.h"
 #include "k3bfiletreeview.h"
-
+#include "k3bstdguiitems.h"
 
 
 static K3bMainWindow* s_k3bMainWindow = 0;
@@ -324,12 +324,12 @@ void K3bMainWindow::initView()
   // --- Document Dock ----------------------------------------------------------------------------
   QWidget* documentHull = new QWidget( mainDock );
   QGridLayout* documentHullLayout = new QGridLayout( documentHull );
-  documentHullLayout->setMargin( 0 );
+  documentHullLayout->setMargin( 2 );
   documentHullLayout->setSpacing( 0 );
 
-  m_documentHeader = new QWidget( documentHull );
+  m_documentHeader = K3bStdGuiItems::purpleFrame( documentHull );
   QGridLayout* documentHeaderLayout = new QGridLayout( m_documentHeader );
-  documentHeaderLayout->setMargin( 0 );
+  documentHeaderLayout->setMargin( 2 );
   documentHeaderLayout->setSpacing( 0 );
 
   QLabel* leftDocPicLabel = new QLabel( m_documentHeader );
@@ -341,9 +341,10 @@ void K3bMainWindow::initView()
   centerDocLabel->setText( i18n("Current Projects") );
   centerDocLabel->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
   centerDocLabel->setPaletteBackgroundColor( QColor(201, 208, 255) );
-  centerDocLabel->setPaletteForegroundColor( Qt::white );
+  //  centerDocLabel->setPaletteForegroundColor( Qt::white );
   QFont f(centerDocLabel->font());
   f.setBold(true);
+  f.setPointSize( 12 );
   centerDocLabel->setFont(f);
 
   documentHeaderLayout->addWidget( leftDocPicLabel, 0, 0 );

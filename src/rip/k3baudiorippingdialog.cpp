@@ -1,21 +1,20 @@
-/***************************************************************************
-                          k3bripperwidget.cpp  -  description
-                             -------------------
-    begin                : Tue Mar 27 2001
-    copyright            : (C) 2001 by Sebastian Trueg
-    email                : trueg@informatik.uni-freiburg.de
- ***************************************************************************/
+/* 
+ *
+ * $Id$
+ * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This file is part of the K3b project.
+ * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * See the file "COPYING" for the exact licensing terms.
+ */
 
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
 
-#include "k3bripperwidget.h"
+#include "k3baudiorippingdialog.h"
 #include "k3bcddacopy.h"
 #include "k3bcdview.h"
 #include "k3bpatternparser.h"
@@ -62,8 +61,10 @@
 
 
 
-K3bRipperWidget::K3bRipperWidget(const K3bDiskInfo& diskInfo, const K3bCddbResultEntry& entry, const QValueList<int>& tracks,
-				 QWidget *parent, const char *name )
+K3bAudioRippingDialog::K3bAudioRippingDialog(const K3bDiskInfo& diskInfo, 
+					     const K3bCddbResultEntry& entry, 
+					     const QValueList<int>& tracks,
+					     QWidget *parent, const char *name )
   : K3bInteractionDialog( parent, name ),
     m_diskInfo( diskInfo ), 
     m_cddbEntry( entry ), 
@@ -86,7 +87,7 @@ K3bRipperWidget::K3bRipperWidget(const K3bDiskInfo& diskInfo, const K3bCddbResul
 }
 
 
-void K3bRipperWidget::setupGui()
+void K3bAudioRippingDialog::setupGui()
 {
   QWidget *frame = mainWidget();
   QGridLayout* Form1Layout = new QGridLayout( frame );
@@ -162,7 +163,6 @@ void K3bRipperWidget::setupGui()
   QHBox* retriesBox = new QHBox( groupReading );
   (void)new QLabel( i18n("Read retries:"), retriesBox );
   m_spinRetries = new QSpinBox( retriesBox );
-  m_spinRetries->setValue(20);
   m_checkNeverSkip = new QCheckBox( i18n("Never skip"), groupReading );
 
 
@@ -192,7 +192,7 @@ void K3bRipperWidget::setupGui()
 }
 
 
-void K3bRipperWidget::setupContextHelp()
+void K3bAudioRippingDialog::setupContextHelp()
 {
   QToolTip::add( m_spinRetries, i18n("Maximal number of read retries") );
   QWhatsThis::add( m_spinRetries, i18n("<p>This specifies the maximum number of retries to "
@@ -213,29 +213,18 @@ void K3bRipperWidget::setupContextHelp()
 }
 
 
-K3bRipperWidget::~K3bRipperWidget()
+K3bAudioRippingDialog::~K3bAudioRippingDialog()
 {
 }
 
 
-void K3bRipperWidget::init()
+void K3bAudioRippingDialog::init()
 {
-  KConfig* c = k3bMain()->config();
-  c->setGroup( "Ripping" );
-
-  QString filetype = c->readEntry( "last used filetype", "wav" );
-  m_radioWav->setChecked( filetype == "wav" );
-  m_radioOgg->setChecked( filetype == "ogg" );
-  m_radioMp3->setChecked( filetype == "mp3" );
-
-  m_editStaticRipPath->setText( c->readEntry( "last ripping directory", QDir::homeDirPath() ) );
-  m_checkUsePattern->setChecked( !m_cddbEntry.cdArtist.isEmpty() &&
-				 m_cddbEntry.titles.count() >= m_diskInfo.toc.count() );
-
+  slotLoadUserDefaults();
   refresh();
 }
 
-void K3bRipperWidget::slotStartClicked()
+void K3bAudioRippingDialog::slotStartClicked()
 {
   KConfig* c = kapp->config();
   c->setGroup( "Ripping" );
@@ -280,7 +269,7 @@ void K3bRipperWidget::slotStartClicked()
 }
 
 
-void K3bRipperWidget::showPatternDialog()
+void K3bAudioRippingDialog::showPatternDialog()
 {
   k3bMain()->showOptionDialog( 4 );
   refresh();
@@ -288,10 +277,10 @@ void K3bRipperWidget::showPatternDialog()
 
 
 
-void K3bRipperWidget::refresh()
+void K3bAudioRippingDialog::refresh()
 {
   KConfig* c = kapp->config();
-  c->setGroup( "Ripping" );
+  c->setGroup( "Audio Ripping" );
 
   m_viewTracks->clear();
 
@@ -347,16 +336,56 @@ void K3bRipperWidget::refresh()
 }
 
 
-void K3bRipperWidget::slotFindStaticDir() {
+void K3bAudioRippingDialog::slotFindStaticDir() {
   QString path = KFileDialog::getExistingDirectory( m_editStaticRipPath->text(), this, i18n("Select Ripping Directory") );
   if( !path.isEmpty() ) {
     m_editStaticRipPath->setText( path );
   }
 }
 
-void K3bRipperWidget::setStaticDir( const QString& path ){
+void K3bAudioRippingDialog::setStaticDir( const QString& path ){
     m_editStaticRipPath->setText( path );
 }
 
 
-#include "k3bripperwidget.moc"
+void K3bAudioRippingDialog::slotLoadK3bDefaults()
+{
+  // set reasonable defaults
+  m_editStaticRipPath->setText( QDir::homeDirPath() );
+  m_checkUsePattern->setChecked( true );
+
+  m_comboParanoiaMode->setCurrentItem( 3 );
+  m_spinRetries->setValue(20);
+  m_checkNeverSkip->setChecked( false );
+  m_checkSingleFile->setChecked( false );
+}
+
+void K3bAudioRippingDialog::slotLoadUserDefaults()
+{
+  KConfig* c = k3bMain()->config();
+  c->setGroup( "Audio Ripping" );
+
+  m_editStaticRipPath->setText( c->readEntry( "last ripping directory", QDir::homeDirPath() ) );
+  m_checkUsePattern->setChecked( c->readBoolEntry( "use_pattern", true ) );
+
+  m_comboParanoiaMode->setCurrentItem( c->readNumEntry( "paranoia_mode", 3 ) );
+  m_spinRetries->setValue( c->readNumEntry( "read_retries", 20 ) );
+  m_checkNeverSkip->setChecked( c->readBoolEntry( "never_skip", false ) );
+  m_checkSingleFile->setChecked( c->readBoolEntry( "single_file", false ) );
+}
+
+void K3bAudioRippingDialog::slotSaveUserDefaults()
+{
+  KConfig* c = k3bMain()->config();
+  c->setGroup( "Audio Ripping" );
+
+  c->writeEntry( "last ripping directory", m_editStaticRipPath->text() );
+  c->writeEntry( "use_pattern", m_checkUsePattern->isChecked() );
+
+  c->writeEntry( "paranoia_mode", m_comboParanoiaMode->currentText().toInt() );
+  c->writeEntry( "read_retries", m_spinRetries->value() );
+  c->writeEntry( "never_skip", m_checkNeverSkip->isChecked() );
+  c->writeEntry( "single_file", m_checkSingleFile->isChecked() );
+}
+
+#include "k3baudiorippingdialog.moc"

@@ -9,7 +9,7 @@ k3b_SOURCES = k3bcore.cpp k3bapplication.cpp k3bdiroperator.cpp kdndfileview.cpp
 			k3bcdrdaowriter.cpp \
 			k3bthread.cpp \
 			k3bthreadjob.cpp \
-			k3bjobprogressdialog.cpp
+			k3bjobprogressdialog.cpp k3binteractiondialog.cpp
 
 
 k3b_LDADD   = ./data/libdata.la ./mixed/libmixed.la ./vcd/libvcd.la ./movix/libmovix.la ./cdinfo/libcdinfo.la ./audio/libaudio.la ./device/libdevice.la ./option/liboption.la ./rip/librip.la ./rip/songdb/libsongdb.la ./tools/libtools.la ./tools/kostore/libkostore.la ./cdcopy/libcdcopy.la ./videoEncoding/libvideoEncoding.la ./plugin/libk3bplugin.la $(OGG_VORBISLIBS) -lartskde  -lkio -lkparts $(RESMGR_LIB)

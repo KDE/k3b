@@ -29,8 +29,12 @@
 #include <qstringlist.h>
 #include <qregexp.h>
 #include <qtimer.h>
+#include <qdatetime.h>
 
 #include <stdlib.h>
+
+
+static QTime s_time;
 
 
 K3bCddbQuery::K3bCddbQuery( QObject* parent, const char* name )
@@ -47,12 +51,11 @@ K3bCddbQuery::~K3bCddbQuery()
 
 void K3bCddbQuery::query( const K3bToc& toc )
 {
+  s_time = QTime::currentTime();
+
   m_bQueryFinishedEmited = false;
   m_toc = toc;
   m_queryResult.clear();
-
-  // make sure we have a valid discId
-  m_toc.calculateDiscId();
 
   QTimer::singleShot( 0, this, SLOT(doQuery()) );
 }
@@ -68,6 +71,8 @@ const QStringList& K3bCddbQuery::categories()
 
 bool K3bCddbQuery::parseEntry( QTextStream& stream, K3bCddbResultEntry& entry )
 {
+  kdDebug() << "(K3bCddbQuery) parsing after " << s_time.msecsTo(QTime::currentTime()) << " msecs." << endl;
+
   entry.rawData = "";
 
   // parse data
@@ -102,7 +107,7 @@ bool K3bCddbQuery::parseEntry( QTextStream& stream, K3bCddbResultEntry& entry )
       if( !ok )
 	kdDebug() << "(K3bCddbQuery) !!! PARSE ERROR: " << line << endl;
       else {
-	kdDebug() << "(K3bCddbQuery) Track title for track " << trackNum << endl;
+	//	kdDebug() << "(K3bCddbQuery) Track title for track " << trackNum << endl;
 	
 	// make sure the list is big enough
 	while( entry.titles.count() <= trackNum )
@@ -123,7 +128,7 @@ bool K3bCddbQuery::parseEntry( QTextStream& stream, K3bCddbResultEntry& entry )
       if( !ok )
 	kdDebug() << "(K3bCddbQuery) !!! PARSE ERROR: " << line << endl;
       else {
-	kdDebug() << "(K3bCddbQuery) Track extr track " << trackNum << endl;
+	//	kdDebug() << "(K3bCddbQuery) Track extr track " << trackNum << endl;
 
 	// make sure the list is big enough
 	while( entry.extInfos.count() <= trackNum )
@@ -134,7 +139,7 @@ bool K3bCddbQuery::parseEntry( QTextStream& stream, K3bCddbResultEntry& entry )
     }
     
     else if( line.startsWith( "#" ) ) {
-      kdDebug() <<  "(K3bCddbQuery) comment: " << line << endl;
+      //      kdDebug() <<  "(K3bCddbQuery) comment: " << line << endl;
     }
     
     else {
@@ -173,23 +178,23 @@ bool K3bCddbQuery::parseEntry( QTextStream& stream, K3bCddbResultEntry& entry )
   // replace all "\\n" with "\n"
   for( QStringList::iterator it = entry.titles.begin();
        it != entry.titles.end(); ++it ) {
-    (*it).replace( QRegExp("\\\\\\\\n"), "\\n" );
+    (*it).replace( "\\\\\\\\n", "\\n" );
   }
 
   for( QStringList::iterator it = entry.artists.begin();
        it != entry.artists.end(); ++it ) {
-    (*it).replace( QRegExp("\\\\\\\\n"), "\\n" );
+    (*it).replace( "\\\\\\\\n", "\\n" );
   }
 
   for( QStringList::iterator it = entry.extInfos.begin();
        it != entry.extInfos.end(); ++it ) {
-    (*it).replace( QRegExp("\\\\\\\\n"), "\\n" );
+    (*it).replace( "\\\\\\\\n", "\\n" );
   }
 
-  entry.cdTitle.replace( QRegExp("\\\\\\\\n"), "\\n" );
-  entry.cdArtist.replace( QRegExp("\\\\\\\\n"), "\\n" );
-  entry.cdExtInfo.replace( QRegExp("\\\\\\\\n"), "\\n" );
-  entry.genre.replace( QRegExp("\\\\\\\\n"), "\\n" );
+  entry.cdTitle.replace( "\\\\\\\\n", "\\n" );
+  entry.cdArtist.replace( "\\\\\\\\n", "\\n" );
+  entry.cdExtInfo.replace( "\\\\\\\\n", "\\n" );
+  entry.genre.replace( "\\\\\\\\n", "\\n" );
 
   return true;
 }

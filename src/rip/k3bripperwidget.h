@@ -18,9 +18,9 @@
 #ifndef K3BRIPPERWIDGET_H
 #define K3BRIPPERWIDGET_H
 
+#include <k3binteractiondialog.h>
 
 #include <qvbox.h>
-#include <kdialogbase.h>
 #include <qstringlist.h>
 
 #include <cddb/k3bcddbquery.h>
@@ -34,12 +34,13 @@ class QButtonGroup;
 class QRadioButton;
 class QCheckBox;
 class QSpinBox;
+class QComboBox;
 
 
 /**
   *@author Sebastian Trueg
   */
-class K3bRipperWidget : public KDialogBase
+class K3bRipperWidget : public K3bInteractionDialog
 {
   Q_OBJECT
 
@@ -78,8 +79,7 @@ class K3bRipperWidget : public KDialogBase
   void setupContextHelp();
   
  private slots:
-  void slotUser1();
-  void slotOk();
+  void slotStartClicked();
   void showPatternDialog();
   void slotFindStaticDir();
 };

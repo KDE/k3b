@@ -19,6 +19,7 @@
 #include <kcutlabel.h>
 #include <device/k3bdevice.h>
 #include <k3b.h>
+#include <k3bstdguiitems.h>
 
 #include <qgroupbox.h>
 #include <qlabel.h>
@@ -128,24 +129,29 @@ K3bJobProgressDialog::K3bJobProgressDialog( QWidget* parent,
 
 void K3bJobProgressDialog::setupGUI()
 {
-  QVBoxLayout* Form1Layout = new QVBoxLayout( this, 11, 6, "Form1Layout"); 
+  QVBoxLayout* mainLayout = new QVBoxLayout( this, 11, 6, "mainLayout"); 
 
-  QHBoxLayout* layout1 = new QHBoxLayout( 0, 0, 0, "layout1"); 
 
-  m_pixLabel = new QLabel( this, "m_pixLabel" );
+  // header 
+  // ------------------------------------------------------------------------------------------
+  QFrame* headerFrame = K3bStdGuiItems::purpleFrame( this );
+  QHBoxLayout* headerLayout = new QHBoxLayout( headerFrame ); 
+  headerLayout->setMargin( 2 ); // to make sure the frame gets displayed
+  headerLayout->setSpacing( 0 );
+  m_pixLabel = new QLabel( headerFrame, "m_pixLabel" );
   m_pixLabel->setPaletteBackgroundColor( QColor( 205, 210, 255 ) );
   m_pixLabel->setPixmap( QPixmap(locate( "appdata", "pics/k3bprojectview_left.png" )) );
   m_pixLabel->setScaledContents( FALSE );
-  layout1->addWidget( m_pixLabel );
+  headerLayout->addWidget( m_pixLabel );
 
-  QFrame* frame4 = new QFrame( this, "frame4" );
+  QFrame* frame4 = new QFrame( headerFrame, "frame4" );
   frame4->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 1, 0, frame4->sizePolicy().hasHeightForWidth() ) );
   frame4->setPaletteBackgroundColor( QColor( 205, 210, 255 ) );
   frame4->setFrameShape( QFrame::NoFrame );
   frame4->setFrameShadow( QFrame::Raised );
   QVBoxLayout* frame4Layout = new QVBoxLayout( frame4, 6, 3, "frame4Layout"); 
 
-  m_labelJob = new QLabel( frame4, "m_labelJob" );
+  m_labelJob = new KCutLabel( frame4, "m_labelJob" );
   QFont m_labelJob_font(  m_labelJob->font() );
   m_labelJob_font.setPointSize( 12 );
   m_labelJob_font.setBold( TRUE );
@@ -153,12 +159,16 @@ void K3bJobProgressDialog::setupGUI()
   m_labelJob->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
   frame4Layout->addWidget( m_labelJob );
 
-  m_labelJobDetails = new QLabel( frame4, "m_labelJobDetails" );
+  m_labelJobDetails = new KCutLabel( frame4, "m_labelJobDetails" );
   m_labelJobDetails->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 0, 1, m_labelJobDetails->sizePolicy().hasHeightForWidth() ) );
   m_labelJobDetails->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
   frame4Layout->addWidget( m_labelJobDetails );
-  layout1->addWidget( frame4 );
-  Form1Layout->addLayout( layout1 );
+  headerLayout->addWidget( frame4 );
+
+  mainLayout->addWidget( headerFrame );
+  // ------------------------------------------------------------------------------------------
+
+
 
   m_viewInfo = new KListView( this, "m_viewInfo" );
   m_viewInfo->addColumn( "" );
@@ -166,11 +176,17 @@ void K3bJobProgressDialog::setupGUI()
   m_viewInfo->setFullWidth( TRUE );
   m_viewInfo->header()->hide();
   m_viewInfo->setSorting(-1);
-  Form1Layout->addWidget( m_viewInfo );
+  mainLayout->addWidget( m_viewInfo );
 
-  QHBoxLayout* layout2 = new QHBoxLayout( 0, 0, 0, "layout2"); 
 
-  QFrame* frame5 = new QFrame( this, "frame5" );
+  // progress header
+  // ------------------------------------------------------------------------------------------
+  QFrame* progressHeaderFrame = K3bStdGuiItems::purpleFrame( this );
+  QHBoxLayout* progressHeaderLayout = new QHBoxLayout( progressHeaderFrame ); 
+  progressHeaderLayout->setMargin( 2 );
+  progressHeaderLayout->setSpacing( 0 );
+
+  QFrame* frame5 = new QFrame( progressHeaderFrame, "frame5" );
   frame5->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 1, 0, frame5->sizePolicy().hasHeightForWidth() ) );
   frame5->setPaletteBackgroundColor( QColor( 205, 210, 255 ) );
   frame5->setFrameShape( QFrame::NoFrame );
@@ -187,14 +203,18 @@ void K3bJobProgressDialog::setupGUI()
   m_labelElapsedTime = new QLabel( frame5, "m_labelElapsedTime" );
   m_labelElapsedTime->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 0, 1, m_labelElapsedTime->sizePolicy().hasHeightForWidth() ) );
   frame5Layout->addWidget( m_labelElapsedTime );
-  layout2->addWidget( frame5 );
+  progressHeaderLayout->addWidget( frame5 );
 
-  QLabel* pixmapLabel2 = new QLabel( this, "pixmapLabel2" );
+  QLabel* pixmapLabel2 = new QLabel( progressHeaderFrame, "pixmapLabel2" );
   pixmapLabel2->setPaletteBackgroundColor( QColor( 205, 210, 255 ) );
   pixmapLabel2->setPixmap( QPixmap(locate( "data", "k3b/pics/k3bprojectview_right.png" )) );
   pixmapLabel2->setScaledContents( FALSE );
-  layout2->addWidget( pixmapLabel2 );
-  Form1Layout->addLayout( layout2 );
+  progressHeaderLayout->addWidget( pixmapLabel2 );
+  mainLayout->addWidget( progressHeaderFrame );
+  // ------------------------------------------------------------------------------------------
+
+
+
 
   QHBoxLayout* layout3 = new QHBoxLayout( 0, 0, 6, "layout3"); 
 
@@ -204,10 +224,10 @@ void K3bJobProgressDialog::setupGUI()
   m_labelSubProcessedSize = new QLabel( this, "m_labelSubProcessedSize" );
   m_labelSubProcessedSize->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
   layout3->addWidget( m_labelSubProcessedSize );
-  Form1Layout->addLayout( layout3 );
+  mainLayout->addLayout( layout3 );
 
   m_progressSubPercent = new KProgress( this, "m_progressSubPercent" );
-  Form1Layout->addWidget( m_progressSubPercent );
+  mainLayout->addWidget( m_progressSubPercent );
 
   QHBoxLayout* layout4 = new QHBoxLayout( 0, 0, 6, "layout4"); 
 
@@ -217,10 +237,10 @@ void K3bJobProgressDialog::setupGUI()
   m_labelProcessedSize = new QLabel( this, "m_labelProcessedSize" );
   m_labelProcessedSize->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
   layout4->addWidget( m_labelProcessedSize );
-  Form1Layout->addLayout( layout4 );
+  mainLayout->addLayout( layout4 );
 
   m_progressPercent = new KProgress( this, "m_progressPercent" );
-  Form1Layout->addWidget( m_progressPercent );
+  mainLayout->addWidget( m_progressPercent );
 
   m_frameExtraInfo = new QFrame( this, "m_frameExtraInfo" );
   m_frameExtraInfo->setFrameShape( QFrame::NoFrame );
@@ -228,12 +248,12 @@ void K3bJobProgressDialog::setupGUI()
   m_frameExtraInfoLayout = new QGridLayout( m_frameExtraInfo ); 
   m_frameExtraInfoLayout->setMargin(0);
   m_frameExtraInfoLayout->setSpacing( spacingHint() );
-  Form1Layout->addWidget( m_frameExtraInfo );
+  mainLayout->addWidget( m_frameExtraInfo );
 
   QFrame* line2 = new QFrame( this, "line2" );
   line2->setFrameShape( QFrame::HLine );
   line2->setFrameShadow( QFrame::Sunken );
-  Form1Layout->addWidget( line2 );
+  mainLayout->addWidget( line2 );
 
   QHBoxLayout* layout5 = new QHBoxLayout( 0, 0, 6, "layout5"); 
   QSpacerItem* spacer = new QSpacerItem( 471, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
@@ -246,7 +266,7 @@ void K3bJobProgressDialog::setupGUI()
   m_buttonShowDebug = new QPushButton( i18n("Show debugging output"), this );
   layout5->addWidget( m_buttonShowDebug );
 
-  Form1Layout->addLayout( layout5 );
+  mainLayout->addLayout( layout5 );
 }
 
 /*
