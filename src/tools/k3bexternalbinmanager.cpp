@@ -9,6 +9,9 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 
+#include <unistd.h>
+#include <sys/stat.h>
+
 
 
 static const char* transcodeTools[] =  { "transcode",
@@ -136,6 +139,17 @@ K3bExternalBin* K3bExternalBinManager::probeCdrecord( const QString& path )
       bin->addFeature( "cdtext" );
     if( m_gatheredOutput.contains( "-clone" ) )  // cdrecord ProDVD
       bin->addFeature( "clone" );
+
+    // check if we run cdrecord as root
+    if( !getuid() )
+      bin->addFeature( "suidroot" );
+    else {
+      struct stat s;
+      if( !::stat( path.latin1(), &s ) ) {
+	if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
+	  bin->addFeature( "suidroot" );
+      }
+    }
   }
   else {
     kdDebug() << "(K3bExternalBinManager) could not start " << bin->path << endl;
@@ -256,6 +270,17 @@ K3bExternalBin* K3bExternalBinManager::probeCdrdao( const QString& path )
       bin->addFeature( "overburn" );
     if( m_gatheredOutput.contains( "--multi" ) )
       bin->addFeature( "multisession" );
+
+    // check if we run cdrdao as root
+    if( !getuid() )
+      bin->addFeature( "suidroot" );
+    else {
+      struct stat s;
+      if( !::stat( path.latin1(), &s ) ) {
+	if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
+	  bin->addFeature( "suidroot" );
+      }
+    }
   }
   else {
     kdDebug() << "(K3bExternalBinManager) could not start " << bin->path << endl;
