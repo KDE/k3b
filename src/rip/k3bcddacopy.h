@@ -1,20 +1,18 @@
-/***************************************************************************
-                          k3bcddacopy.h  -  description
-                             -------------------
-    begin                : Sun Nov 4 2001
-    copyright            : (C) 2001 by Sebastian Trueg
-    email                : trueg@informatik.uni-freiburg.de
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
-
+/*
+ *
+ * $Id: $
+ * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This file is part of the K3b project.
+ * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * See the file "COPYING" for the exact licensing terms.
+ */
+ 
 #ifndef K3BCDDACOPY_H
 #define K3BCDDACOPY_H
 
@@ -71,7 +69,7 @@ class K3bCddaCopy : public K3bJob
   void cancel();
 
  private slots:
-  void slotDiskInfoReady( const K3bDiskInfo& );
+  void slotDiskInfoReady( const K3bCdDevice::DiskInfo& );
   void slotTrackOutput( const QByteArray& );
   void slotTrackFinished( bool );
 

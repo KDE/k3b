@@ -1,3 +1,18 @@
+/*
+ *
+ * $Id: $
+ * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This file is part of the K3b project.
+ * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * See the file "COPYING" for the exact licensing terms.
+ */
+ 
 #ifdef QT_THREAD_SUPPORT
 
 #include "k3baudioripthread.h"
@@ -86,7 +101,7 @@ void K3bAudioRipThread::run()
 {
 #if QT_VERSION < 0x031000
   thread_id = QThread::currentThread();
-  kdDebug() << QString("(K3bAudioRipThread) start thread, id: %1").arg(this->thread_id) << endl;  
+  kdDebug() << QString("(K3bAudioRipThread) start thread, id: %1").arg(this->thread_id) << endl;
 #endif
 
   if( !m_paranoiaLib ) {
