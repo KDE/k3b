@@ -2,10 +2,10 @@
 Support for all global CD-Text fields with cdrecord.
 Some GUI changes: cleaned up the action dialogs, moved the burnfree option to the global settings dialog
 	since turning it off should be a very seldomly used task.
-Added support for multiple copies to the projects (in progress)
+Added support for multiple copies to the projects.
 Added missed VCD 3.0 track interpretation option for SVCD's
 New Lame encoding plugin providing a proper configuration dialog.
-Added Bookmarks
+Added Bookmarks to the file browser (for some reason they are not updated properly yet)
 Fixed window layering problem with windowmanagers != kwm
 Added KPart plugin which converts a list of audio files into one of the supported encoder formats.
 Allow disabling of CD-Text reading in cd-copy to overcome problems with CD-Text on some drives.
@@ -20,11 +20,18 @@ K3b now smartly reuses already running instances if they are idle. Example: you 
 	a new instance is started.
 Create cue files for an audio CD ripped into one single file
 Show writer buffer state in addition to fifo buffer when writing CDs.
-Implemented multible copies in all projects.
 Fixed read and save setting in VideoCD project.
-Big parts of the audio project have been rewritten to have a way better design.
+Big parts of the audio project have been rewritten to have a way better design:
+	- K3b now does not create additional silence between the tracks by default
+          the pregap is treated as part of the previous track like in all other
+          writing applications.
+        - Instead it's possible to add additional silence manually to a track.
+        - Allow multible sources for one track.
+        - Split tracks, merge tracks.
+        - Improved track dialog.
 K3b now always writes a logfile in $(KDEHOME)/share/apps/k3b/lastlog.log
 New device configuration format which solves all issues with removable devices like USB.
+Using a ringbuffer for growisofs (based on pipebuf2)
 
 0.11.10
 Support Mp3 files starting with multiple ID3 tags.
