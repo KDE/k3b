@@ -29,11 +29,11 @@ class K3bDoc;
 
 class K3bJob : public QObject
 {
-	Q_OBJECT
+  Q_OBJECT
 
  public:
-	int error() { return m_error; }
-	virtual ~K3bJob();
+  int error() { return m_error; }
+  virtual ~K3bJob();
 
  protected:
   K3bJob();
@@ -55,19 +55,20 @@ class K3bJob : public QObject
   void newTrack();
   void newTask( const QString& job );
   void newSubTask( const QString& job );
+  void debuggingOutput(const QString&, const QString&);
 };
 
 
 class K3bBurnJob : public K3bJob
 {
-	Q_OBJECT
+  Q_OBJECT
 	
-public:
-	K3bBurnJob( ) {}
+ public:
+  K3bBurnJob( ) {}
 	
-	virtual K3bDoc* doc() const = 0;
+  virtual K3bDoc* doc() const = 0;
 	
-signals:
-	void bufferStatus( int );
+ signals:
+  void bufferStatus( int );
 };
 #endif

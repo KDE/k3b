@@ -105,16 +105,9 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
   QPushButton* _buttonReload = new QPushButton( _actionReload->iconSet(), "", box2 );
 	
   // add the buttons and the fileview in the layout
-  //	QGridLayout* _buttonLayout = new QGridLayout;
-  //	_buttonLayout->setMargin( 5 );
-  //	_buttonLayout->setSpacing( 0 );
-  //	_buttonLayout->addWidget( _buttonUp, 0, 0 );
-  //	_buttonLayout->addWidget( _buttonHome, 0, 1 );
-  //	_buttonLayout->addWidget( _buttonReload, 0, 2 );
   _box2Layout->addWidget( _buttonUp, 0, 0 );
   _box2Layout->addWidget( _buttonHome, 0, 1 );
   _box2Layout->addWidget( _buttonReload, 0, 2 );
-  //	_box2Layout->addLayout( _buttonLayout, 0, 0 );
   _box2Layout->addMultiCellWidget( m_fileView, 2, 2, 0, 3 );
   _box2Layout->setRowStretch( 2, 1 );
 	
@@ -129,6 +122,7 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
   connect( _buttonReload, SIGNAL(clicked()), _actionReload, SLOT(activate()) );
 
   connect( m_kiotree, SIGNAL(urlActivated(const KURL&)), this, SLOT(slotDirActivated(const KURL&)) );	
+  connect( m_fileView, SIGNAL(urlEntered(const KURL&)), m_kiotree, SLOT(followURL(const KURL&)) );
 }
 
 

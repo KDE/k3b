@@ -69,6 +69,10 @@ void K3bAudioJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 {
   QString buffer = QString::fromLatin1( output, len );
 	
+
+  emit debuggingOutput( "cdrecord", buffer );
+
+
   // split to lines
   QStringList lines = QStringList::split( "\n", buffer );
 	
@@ -182,6 +186,10 @@ void K3bAudioJob::slotParseCdrdaoOutput( KProcess*, char* output, int len )
 {
   QString buffer = QString::fromLatin1( output, len );
 	
+
+  emit debuggingOutput( "cdrdao", buffer );
+
+
   // split to lines
   QStringList lines = QStringList::split( "\n", buffer );
 	
@@ -433,6 +441,8 @@ void K3bAudioJob::decodeNextFile()
       connect( m_mp3Job, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSubSize(int, int)) );
       connect( m_mp3Job, SIGNAL(percent(int)), this, SIGNAL(subPercent(int)) );
       connect( m_mp3Job, SIGNAL(infoMessage(const QString&)), this, SIGNAL(infoMessage(const QString&)) );
+      connect( m_mp3Job, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+	       this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
       connect( m_mp3Job, SIGNAL(finished(K3bJob*)), this, SLOT(slotMp3JobFinished()) );
     }
     else

@@ -21,6 +21,8 @@
 #include <kdialog.h>
 
 #include <qvariant.h>
+#include <qmap.h>
+#include <qstringlist.h>
 
 class QVBoxLayout;
 class QHBoxLayout;
@@ -36,6 +38,7 @@ class QTimer;
 class K3bJob;
 class K3bBurnJob;
 class KCutLabel;
+class QCloseEvent;
 
 /**
   *@author Sebastian Trueg
@@ -54,6 +57,12 @@ class K3bBurnProgressDialog : public KDialog  {
   void show();
 
  protected:
+  /**
+   * reimplemented from QWidget since the user should really not
+   * close this widget another way than the close button!
+   */
+  void closeEvent( QCloseEvent* ) {}
+
   void setupGUI();
   void setupConnections();
 	
@@ -61,6 +70,7 @@ class K3bBurnProgressDialog : public KDialog  {
   QTextView* m_viewInfo;
   QPushButton* m_buttonCancel;
   QPushButton* m_buttonClose;
+  QPushButton* m_buttonShowDebug;
   QGroupBox* m_groupBuffer;
   KProgress* m_progressBuffer;
   QGroupBox* m_groupProgress;
@@ -77,10 +87,18 @@ class K3bBurnProgressDialog : public KDialog  {
   QHBoxLayout* m_groupBufferLayout;
   QGridLayout* m_groupProgressLayout;
 
+  // debugging output display
+  class PrivateDebugWidget : public KDialog {
+  public:
+    PrivateDebugWidget( QMap<QString, QStringList>&, QWidget* parent );
+  };
+
  private:
   K3bBurnJob* m_job;
   QTimer* m_timer;
   int m_time;
+
+  QMap<QString, QStringList> m_debugOutputMap;
 
  protected slots:
 //  void updateCdTimeProgress( const QTime& processedTime );
@@ -89,12 +107,16 @@ class K3bBurnProgressDialog : public KDialog  {
   void updateTrackSizeProgress( int processed, int size );
   void displayInfo( const QString& infoString );
 
+  void mapDebuggingOutput( const QString&, const QString& );
+
   void finished();
   void slotCancelPressed();
   void slotNewSubTask(const QString& name);
   void slotNewTask(const QString& name);
   void started();
   void slotUpdateTime();
+
+  void slotShowDebuggingOutput();
 };
 
 #endif

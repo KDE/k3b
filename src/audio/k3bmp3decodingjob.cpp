@@ -131,6 +131,10 @@ void K3bMp3DecodingJob::slotParseMpg123Output( KProcess*, char* output, int len 
 {
   QString buffer = QString::fromLatin1( output, len );
 	
+
+  emit debuggingOutput( "mpg123", buffer );
+
+
   // split to lines
   QStringList lines = QStringList::split( "\n", buffer );
 	

@@ -37,33 +37,33 @@ class QSplitter;
 
 
 class K3bDirView : public QVBox  {
-   Q_OBJECT
+  Q_OBJECT
 
-public:
-	K3bDirView(QWidget *parent=0, const char *name=0);
-	~K3bDirView();
+ public:
+  K3bDirView(QWidget *parent=0, const char *name=0);
+  ~K3bDirView();
 
-protected slots:
-	void slotViewChanged( KFileView* newView );
+ protected slots:
+  void slotViewChanged( KFileView* newView );
   void slotDirActivated( const KURL& );
 	
-private:     	
-	class PrivateFileView;
+ private:     	
+  class PrivateFileView;
 
-	KDirOperator* m_fileView;
-	QSplitter* m_mainSplitter;
+  KDirOperator* m_fileView;
+  QSplitter* m_mainSplitter;
 
-	KioTree* m_kiotree;
+  KioTree* m_kiotree;
 };
 
 
 class K3bDirView::PrivateFileView : public KFileDetailView
 {
-public:
-	PrivateFileView( QWidget* parent, const char* name );
+ public:
+  PrivateFileView( QWidget* parent, const char* name );
       	
-protected:
-	QDragObject* dragObject() const;
+ protected:
+  QDragObject* dragObject() const;
 }; // class PrivateFileView
 
 #endif

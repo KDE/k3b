@@ -60,8 +60,6 @@ class KioTree : public KListView/*, public KDirNotify*/  // we do not need kdirn
   KioTree( /*KioTreePart *parent,*/ QWidget *parentWidget );
   virtual ~KioTree();
 
-  void followURL( const KURL &url );
-
   /**
    * @return the current (i.e. selected) item
    */
@@ -85,6 +83,7 @@ class KioTree : public KListView/*, public KDirNotify*/  // we do not need kdirn
  public slots:
   virtual void setContentsPos( int x, int y );
   void addTopLevelDir( const KURL& url, const QString& name ); 
+  void followURL( const KURL &url );
 
  protected:
   virtual void contentsDragEnterEvent( QDragEnterEvent *e );
