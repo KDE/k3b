@@ -39,9 +39,9 @@ K3bScsiDevice::~K3bScsiDevice()
 //         4: not ready, tray out
 int K3bScsiDevice::isReady() const
 {
-  ScsiIf scsiIf( QFile::encodeName(genericDevice()) );
+  ScsiIf scsiIf( QFile::encodeName(devicename()) );
   if( scsiIf.init() != 0 ) {
-    kdDebug() << "(K3bScsiDevice) Could not open device " << genericDevice() << endl;
+    kdDebug() << "(K3bScsiDevice) Could not open device " << devicename() << endl;
     return 1;
   }
 
@@ -80,9 +80,9 @@ int K3bScsiDevice::isReady() const
 
 bool K3bScsiDevice::rewritable()
 {
-  ScsiIf scsiIf( QFile::encodeName(genericDevice()) );
+  ScsiIf scsiIf( QFile::encodeName(devicename()) );
   if( scsiIf.init() != 0 ) {
-    kdDebug() << "(K3bScsiDevice) Could not open device " << genericDevice() << endl;
+    kdDebug() << "(K3bScsiDevice) Could not open device " << devicename() << endl;
     return false;
   }
 
@@ -111,7 +111,7 @@ bool K3bScsiDevice::rewritable()
 //         1: scsi command failed
 // bool K3bScsiDevice::rezero()
 // {
-//   ScsiIf scsiIf( genericDevice().latin1() );
+//   ScsiIf scsiIf( devicename().latin1() );
 //   unsigned char cmd[6];
 //   memset(cmd, 0, 6);
 //   cmd[0] = 0x01;
@@ -201,7 +201,7 @@ int K3bScsiDevice::getModePage( ScsiIf *_scsiIf, int pageCode, unsigned char *bu
 //   cmd[0] = 0x25; // READ CD-ROM CAPACITY
 
 //   if( m_scsiIf->sendCmd(cmd, 10, NULL, 0, data, 8, 0) != 0 ) {
-//     kdDebug() << "(K3bScsiDevice) Cannot read capacity of device " << m_genericDevice << endl;
+//     kdDebug() << "(K3bScsiDevice) Cannot read capacity of device " << m_devicename << endl;
 //     return false;
 //   }
   
@@ -214,9 +214,9 @@ int K3bScsiDevice::getModePage( ScsiIf *_scsiIf, int pageCode, unsigned char *bu
 
 int K3bScsiDevice::isEmpty()
 {
-  ScsiIf scsiIf( QFile::encodeName(genericDevice()) );
+  ScsiIf scsiIf( QFile::encodeName(devicename()) );
   if( scsiIf.init() != 0 ) {
-    kdDebug() << "(K3bScsiDevice) Could not open device " << genericDevice() << endl;
+    kdDebug() << "(K3bScsiDevice) Could not open device " << devicename() << endl;
     return -1;
   }
 
@@ -233,7 +233,7 @@ int K3bScsiDevice::isEmpty()
   cmd[8] = dataLen;
 
   if (scsiIf.sendCmd(cmd, 10, NULL, 0, data, dataLen, 0) != 0) {
-    kdDebug() << "(K3bScsiDevice) Could not check if disk in " << genericDevice() << " is empty." << endl;
+    kdDebug() << "(K3bScsiDevice) Could not check if disk in " << devicename() << " is empty." << endl;
     return -1;
   }
 
@@ -253,14 +253,14 @@ bool K3bScsiDevice::block( bool block ) const
     cmd[4] |= 0x01;
   }
 
-  ScsiIf scsiIf( QFile::encodeName(genericDevice()) );
+  ScsiIf scsiIf( QFile::encodeName(devicename()) );
   if( scsiIf.init() != 0 ) {
-    kdDebug() << "(K3bScsiDevice) Could not open device " << genericDevice() << endl;
+    kdDebug() << "(K3bScsiDevice) Could not open device " << devicename() << endl;
     return false;
   }
 
   if (scsiIf.sendCmd(cmd, 6, NULL, 0, NULL, 0) != 0) {
-    kdDebug() << "(K3bScsiDevice) Cannot block/unblock device " << genericDevice() << endl;
+    kdDebug() << "(K3bScsiDevice) Cannot block/unblock device " << devicename() << endl;
     return false;
   }
 
