@@ -2,15 +2,15 @@
 #ifndef K3BSPLASH_H
 #define K3BSPLASH_H
 
-#include <qwidget.h>
+#include <qvbox.h>
 
-class QListBox;
+class QLabel;
 class QMouseEvent;
 class QPaintEvent;
 class QString;
 
 
-class K3bSplash : public QWidget
+class K3bSplash : public QVBox
 {
 Q_OBJECT
 
@@ -23,10 +23,10 @@ Q_OBJECT
 
  protected:
   void mousePressEvent( QMouseEvent* );
-  void paintEvent( QPaintEvent* );
+  //  void paintEvent( QPaintEvent* );
 
  private:
-  QListBox* m_infoBox;
+  QLabel* m_infoBox;
 };
 
 #endif
