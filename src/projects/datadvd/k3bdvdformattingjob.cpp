@@ -309,8 +309,10 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler*
 
     // emit info about what kind of media has been found
 
-    if( dh->ngDiskInfo().mediaType() != K3bCdDevice::MEDIA_DVD_RW &&
-	dh->ngDiskInfo().mediaType() != K3bCdDevice::MEDIA_DVD_PLUS_RW ) {
+    if( !(dh->ngDiskInfo().mediaType() & (K3bCdDevice::MEDIA_DVD_RW|
+					  K3bCdDevice::MEDIA_DVD_RW_SEQ|
+					  K3bCdDevice::MEDIA_DVD_RW_OVWR|
+					  K3bCdDevice::MEDIA_DVD_PLUS_RW)) ) {
       emit infoMessage( i18n("No rewritable DVD media found. Unable to format."), ERROR );
       emit finished(false);
       d->running = false;
@@ -373,9 +375,8 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler*
       emit infoMessage( i18n("Found %1 media.").arg(K3bCdDevice::mediaTypeString(K3bCdDevice::MEDIA_DVD_RW)),
 			INFO );
 
-      if( dh->ngDiskInfo().currentProfile() != -1 ) {
-	emit infoMessage( i18n("Formatted in %1 mode.").arg(K3bCdDevice::mediaTypeString(dh->ngDiskInfo().currentProfile())), INFO );
-
+      if( dh->ngDiskInfo().currentProfile() != K3bCdDevice::MEDIA_UNKNOWN ) {
+	emit infoMessage( i18n("Formatted in %1 mode.").arg(K3bCdDevice::mediaTypeString(dh->ngDiskInfo().currentProfile())), INFO );	
 
 	//
 	// Is it possible to have an empty DVD-RW in restricted overwrite mode???? I don't think so.

@@ -724,7 +724,6 @@ void K3bCdDevice::CdDevice::checkForAncientWriters()
 {
   // TODO: add a boolean which determines if this device is non-MMC so we may warn the user at K3b startup about it
 
-
   //
   // There are a lot writers out there which behave like the TEAC R5XS
   //
@@ -1186,6 +1185,30 @@ K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc() const
     case MEDIA_DVD_RW_OVWR:
     case MEDIA_DVD_PLUS_RW:
       {
+	unsigned char* data = 0;
+	int dataLen = 0;
+	if( readTrackInformation( &data, dataLen, 0x1, 0x1 ) ) {
+	  track_info_t* trackInfo = (track_info_t*)data;
+	  
+	  Track track;
+	  track.m_firstSector = 0;
+	  track.m_lastSector = from4Byte( trackInfo->track_size ) - 1;
+	  track.m_session = 1;
+	  track.m_type = Track::DATA;
+	  track.m_mode = Track::DVD;
+	  track.m_copyPermitted = ( mediaType != MEDIA_DVD_ROM );
+	  track.m_preEmphasis = ( mediaType != MEDIA_DVD_ROM );
+	  
+	  toc.append( track );
+	  
+	  delete [] data;
+	  
+	  break;
+	}
+	else
+	  kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+		    << "READ TRACK INFORMATION for toc failed." << endl;
+
 	K3b::Msf size;
 	if( readCapacity( size ) ) {
 	  Track track;
@@ -1198,13 +1221,15 @@ K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc() const
 	  track.m_preEmphasis = ( mediaType != MEDIA_DVD_ROM );
 
 	  toc.append( track );
+
+	  break;
 	}
-	else {
-	  kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << "READ CAPACITY failed." << endl;
-	  readFormattedToc( toc );
-	}
+	else
+	  kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+		    << "READ CAPACITY for toc failed." << endl;
       }
-      break;
+
+      // fallthrough...
 
     case MEDIA_DVD_R:
     case MEDIA_DVD_R_SEQ:
@@ -1849,7 +1874,7 @@ int K3bCdDevice::CdDevice::currentProfile() const
   if( cmd.transport( TR_DIR_READ, profileBuf, 8 ) ) {
     kdDebug() << "(K3bCdDevice) GET_CONFIGURATION failed." << endl;
 
-    return -1;
+    return MEDIA_UNKNOWN;
   }
   else {
     short profile = from2Byte( &profileBuf[6] );
@@ -1865,7 +1890,7 @@ int K3bCdDevice::CdDevice::currentProfile() const
     case 0x08: return MEDIA_CD_ROM;
     case 0x09: return MEDIA_CD_R;
     case 0x0A: return MEDIA_CD_RW;
-    default: return -1;
+    default: return MEDIA_UNKNOWN;
     }
   }
 }
@@ -1881,6 +1906,45 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
   bool needToClose = !isOpen();
 
   if( open() != -1 ) {
+
+    unsigned char* data = 0;
+    int dataLen = 0;
+
+    //
+    // Set writing mode to TAO.
+    // In RAW writing mode we do not get the values we want.
+    //
+    if( modeSense( &data, dataLen, 0x05 ) ) {
+      wr_param_page_05* mp = (struct wr_param_page_05*)(data+8);
+	    
+      // reset some stuff to be on the safe side
+      mp->PS = 0;
+      mp->BUFE = 0;
+      mp->multi_session = 0;
+      mp->test_write = 0;
+      mp->LS_V = 0;
+      mp->copy = 0;
+      mp->fp = 0;
+      mp->host_appl_code= 0;
+      mp->session_format = 0;
+      mp->audio_pause_len[0] = 0;
+      mp->audio_pause_len[1] = 150;
+
+      mp->write_type = 0x01;  // TAO
+      mp->track_mode = 4;     // MMC-4 says: 5, cdrecord uses 4 ???
+      mp->dbtype = 8;         // Mode 1
+
+      if( !modeSelect( data, dataLen, 1, 0 ) ) {
+	kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName()
+		  << ": modeSelect 0x05 failed!" << endl;
+      }
+
+      delete [] data;
+    }
+    else
+      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+		<< ": modeSense 0x05 failed!" << endl;
+
 
     //
     // The first thing to do should be: checking if a media is loaded
@@ -1903,9 +1967,6 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
 
     if( inf.diskState() != STATE_NO_MEDIA ) {
 
-      unsigned char* data = 0;
-      int dataLen = 0;
-      
       if( readDiscInfo( &data, dataLen ) ) {
 	disc_info_t* dInf = (disc_info_t*)data;
 	//
@@ -1941,6 +2002,8 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
 	  break;
 	}
 
+	inf.m_bgFormatState = dInf->bg_f_status&0x3;
+
 	inf.m_numTracks = (dInf->last_track_l & 0xff) | (dInf->last_track_m<<8 & 0xff00);
 	if( inf.diskState() == STATE_EMPTY )
 	  inf.m_numTracks = 0;
@@ -1953,21 +2016,28 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
 	// This is the Last Possible Lead-Out Start Adress in HMSF format
 	// This is only valid for CD-R(W) and DVD+R media.
 	// For complete media this shall be filled with 0xff
-	// 
-	inf.m_capacity = K3b::Msf( dInf->lead_out_m + dInf->lead_out_r*60, 
-				   dInf->lead_out_s, 
-				   dInf->lead_out_f ) - 150;
+	//
+	if( dInf->lead_out_m != 0xff &&
+	    dInf->lead_out_r != 0xff &&
+	    dInf->lead_out_s != 0xff &&
+	    dInf->lead_out_f != 0xff )
+	  inf.m_capacity = K3b::Msf( dInf->lead_out_m + dInf->lead_out_r*60, 
+				     dInf->lead_out_s, 
+				     dInf->lead_out_f ) - 150;
 
 	//
 	// This is the position where the next Session shall be recorded in HMSF format
 	// This is only valid for CD-R(W) and DVD+R media.
 	// For complete media this shall be filled with 0xff
 	//
-	if( inf.appendable() )
-	  inf.m_remaining = inf.capacity() - K3b::Msf( dInf->lead_in_m + dInf->lead_in_r*60, 
-						       dInf->lead_in_s, 
-						       dInf->lead_in_f ) - 4500;
-
+	if( dInf->lead_in_m != 0xff &&
+	    dInf->lead_in_r != 0xff &&
+	    dInf->lead_in_s != 0xff &&
+	    dInf->lead_in_f != 0xff )
+	  inf.m_usedCapacity = K3b::Msf( dInf->lead_in_m + dInf->lead_in_r*60, 
+					 dInf->lead_in_s, 
+					 dInf->lead_in_f ) - 4500;
+	
 	delete [] data;
       }
 
@@ -1978,7 +2048,7 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
       //
       inf.m_mediaType = dvdMediaType();
 	
-      if( inf.m_mediaType == -1 ) {
+      if( inf.m_mediaType == MEDIA_UNKNOWN ) {
 	// probably it is a CD
 	if( inf.rewritable() )
 	  inf.m_mediaType = MEDIA_CD_RW;
@@ -2005,103 +2075,213 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
 
       //
       // Now we determine the size:
-      // for empty and appendable CD-R(W) and DVD+R media this should be in the dInf->lead_out_X fields
+
       // for all empty and appendable media READ FORMAT CAPACITIES should return the proper unformatted size
       // for complete disks we may use the READ_CAPACITY command or the start sector from the leadout
       //
+      int media = inf.mediaType();
+      switch( media ) {
+      case MEDIA_CD_R:
+      case MEDIA_CD_RW:
+	//
+	// for empty and appendable media capacity and usedCapacity should be filled in from
+	// diskinfo above. If not they are both still 0
+	//
+	if( inf.m_capacity != 0 &&
+	    ( inf.diskState() == STATE_EMPTY || inf.m_usedCapacity != 0 ) ) {
+	  // done.
+	  break;
+	}
 
-      if( inf.diskState() == STATE_EMPTY ||
-	  inf.diskState() == STATE_INCOMPLETE ) {
-
-	if( !(inf.mediaType() & MEDIA_WRITABLE_CD|MEDIA_DVD_PLUS_R) ) {
-	  K3b::Msf readFrmtCap;
-	  if( readFormatCapacity( readFrmtCap ) ) {
-	    kdDebug() << "(K3bCdDevice::CdDevice) READ FORMAT CAPACITY: " << readFrmtCap.toString()
-		      << " capacity from DISK INFO: " << inf.m_capacity.toString() << endl;
-	    if( readFrmtCap > 0 )
-	      inf.m_capacity = readFrmtCap;
+      default:
+      case MEDIA_CD_ROM:
+	if( inf.m_capacity > 0 && inf.m_usedCapacity == 0 )
+	  inf.m_usedCapacity = inf.m_capacity;
+	
+	if( inf.m_usedCapacity == 0 ) {
+	  K3b::Msf readCap;
+	  if( readCapacity( readCap ) ) {
+	    kdDebug() << "(K3bCdDevice::CdDevice) READ CAPACITY: " << readCap.toString()
+		      << " other capacity: " << inf.m_capacity.toString() << endl;
+	    //
+	    // READ CAPACITY returns the last written sector
+	    // that means the size is actually readCap + 1
+	    //
+	    inf.m_usedCapacity = readCap + 1;
+	  }
+	  else {
+	    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName()
+		      << " Falling back to readToc for capacity." << endl;
+	    inf.m_usedCapacity = readToc().length();
 	  }
 	}
 
-	if( inf.diskState() == STATE_INCOMPLETE ) {
-
-	  //
-	  // Set writing mode to TAO.
-	  // In RAW writing mode we do not get the values we want.
-	  //
-	  if( modeSense( &data, dataLen, 0x05 ) ) {
-	    wr_param_page_05* mp = (struct wr_param_page_05*)(data+8);
-	    
-	    // reset some stuff to be on the safe side
-	    mp->PS = 0;
-	    mp->BUFE = 0;
-	    mp->multi_session = 0;
-	    mp->test_write = 0;
-	    mp->LS_V = 0;
-	    mp->copy = 0;
-	    mp->fp = 0;
-	    mp->host_appl_code= 0;
-	    mp->session_format = 0;
-	    mp->audio_pause_len[0] = 0;
-	    mp->audio_pause_len[1] = 150;
-
-	    mp->write_type = 0x01;  // TAO
-	    mp->track_mode = 4;     // MMC-4 says: 5, cdrecord uses 4 ???
-	    mp->dbtype = 8;         // Mode 1
-
-	    if( !modeSelect( data, dataLen, 1, 0 ) ) {
-	      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": modeSelect 0x05 failed!" << endl;
-	    }
-
-	    delete [] data;
-	  }
-	  else
-	    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": modeSense 0x05 failed!" << endl;
-
-
-	  // read next writable adress
-	  if( readTrackInformation( &data, dataLen, 0x1, 0xff ) ) {
-	    track_info_t* trackInfo = (track_info_t*)data;
-	    if( trackInfo->nwa_v ) {
-	      K3b::Msf nwa = from4Byte( trackInfo->next_writable );
-	      kdDebug() << "(K3bCdDevice::CdDevice) Next writale adress valid: " << nwa.toString() << endl;
-	      inf.m_remaining = inf.m_capacity - nwa - 150;  // reserve space for pre-gap after lead-in (??)
-	    }
-	    else {
-	      kdDebug() << "(K3bCdDevice::CdDevice) Next writale adress invalid." << endl;
-	    }
-
-	    delete [] data;
-	  }
-	}
-      }
-      else {
+      case MEDIA_DVD_ROM: {
 	K3b::Msf readCap;
 	if( readCapacity( readCap ) ) {
 	  kdDebug() << "(K3bCdDevice::CdDevice) READ CAPACITY: " << readCap.toString()
 		    << " other capacity: " << inf.m_capacity.toString() << endl;
-
 	  //
 	  // READ CAPACITY returns the last written sector
 	  // that means the size is actually readCap + 1
 	  //
-	  inf.m_capacity = readCap + 1;
+	  inf.m_usedCapacity = readCap + 1;
 	}
 	else {
-	  kdDebug() << "(K3bCdDevice) READ CAPACITY failed. Falling back to READ TRACK INFO." << endl;
-
-	  if( readTrackInformation( &data, dataLen, 0x1, 0xff ) ) {
+	  //
+	  // Only one track, use it's size
+	  //
+	  if( readTrackInformation( &data, dataLen, 0x1, 0x1 ) ) {
 	    track_info_t* trackInfo = (track_info_t*)data;
-	    inf.m_capacity = from4Byte( trackInfo->track_start );
-
+	    inf.m_usedCapacity = from4Byte( trackInfo->track_size );
 	    delete [] data;
 	  }
-	  else {
-	    kdDebug() << "(K3bCdDevice) Falling back to readToc." << endl;
-	    inf.m_capacity = readToc().length();
+	  else
+	    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName()
+		      << "READ TRACK INFORMATION for DVD-ROM failed." << endl;
+	}
+
+	break;
+      }
+
+      case MEDIA_DVD_PLUS_R:
+	if( inf.appendable() || inf.empty() ) {
+	  //
+	  // get remaining space via the invisible track
+	  //
+	  if( readTrackInformation( &data, dataLen, 0x1, 0xff ) ) {
+	    track_info_t* trackInfo = (track_info_t*)data;
+	    inf.m_usedCapacity = from4Byte( trackInfo->track_start );
+	    inf.m_capacity = from4Byte( trackInfo->track_start ) + from4Byte( trackInfo->track_size );
+	    delete [] data;
 	  }
 	}
+	else {
+	  if( readTrackInformation( &data, dataLen, 0x1, inf.numTracks() ) ) {
+	    track_info_t* trackInfo = (track_info_t*)data;
+	    inf.m_capacity = inf.m_usedCapacity
+	      = from4Byte( trackInfo->track_start ) + from4Byte( trackInfo->track_size );
+	    delete [] data;
+	  }
+	}
+	break;
+
+      case MEDIA_DVD_R:
+      case MEDIA_DVD_R_SEQ:
+	//
+	// get data from the incomplete track (which is NOT the invisible track 0xff)
+	// This will fail in case the media is complete!
+	//
+	if( readTrackInformation( &data, dataLen, 0x1, inf.numTracks()+1 ) ) {
+	  track_info_t* trackInfo = (track_info_t*)data;
+	  inf.m_usedCapacity = from4Byte( trackInfo->track_start );
+	  inf.m_capacity = from4Byte( trackInfo->free_blocks ) + from4Byte( trackInfo->track_start );
+	  delete [] data;
+	}
+
+	//
+	// Get the "really" used space without border-out
+	//
+	if( !inf.empty() ) {
+	  K3b::Msf readCap;
+	  if( readCapacity( readCap ) ) {
+	    //
+	    // READ CAPACITY returns the last written sector
+	    // that means the size is actually readCap + 1
+	    //
+	    inf.m_usedCapacity = readCap + 1;
+	  }
+	  else
+	    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+		      << " READ CAPACITY for DVD-R failed." << endl;
+	}
+
+	break;
+
+      case MEDIA_DVD_RW:
+      case MEDIA_DVD_RW_SEQ:
+	// only one track on a DVD-RW media
+	if( readTrackInformation( &data, dataLen, 0x1, 0x1 ) ) {
+	  track_info_t* trackInfo = (track_info_t*)data;
+	  if( inf.empty() )
+	    inf.m_capacity = from4Byte( trackInfo->track_size );
+	  else
+	    inf.m_usedCapacity = from4Byte( trackInfo->track_size );
+	  delete [] data;
+	}
+	break;
+
+      case MEDIA_DVD_PLUS_RW: {
+	K3b::Msf currentMax;
+	int currentMaxFormat = 0;
+	if( readFormatCapacity( 0x26, inf.m_capacity, &currentMax, &currentMaxFormat ) ) {
+	  if( inf.bgFormatState() != BG_FORMAT_NONE )
+	    inf.m_usedCapacity = currentMax;
+	  else
+	    inf.m_usedCapacity = 0;
+       	}
+	else
+	  kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+		    << " READ FORMAT CAPACITIES for DVD+RW failed." << endl;
+
+	break;
       }
+     
+      case MEDIA_DVD_RW_OVWR:
+	inf.m_numSessions = 1;
+	if( readTrackInformation( &data, dataLen, 0x1, 0x1 ) ) {
+	  track_info_t* trackInfo = (track_info_t*)data;
+	  inf.m_usedCapacity = inf.m_capacity = from4Byte( trackInfo->track_size );
+	  delete [] data;
+	}
+	break;
+      }
+
+
+
+// 	  // read next writable adress
+// 	  if( readTrackInformation( &data, dataLen, 0x1, 0xff ) ) {
+// 	    track_info_t* trackInfo = (track_info_t*)data;
+// 	    if( trackInfo->nwa_v ) {
+// 	      K3b::Msf nwa = from4Byte( trackInfo->next_writable );
+// 	      kdDebug() << "(K3bCdDevice::CdDevice) Next writale adress valid: " << nwa.toString() << endl;
+// 	      inf.m_remaining = inf.m_capacity - nwa - 150;  // reserve space for pre-gap after lead-in (??)
+// 	    }
+// 	    else {
+// 	      kdDebug() << "(K3bCdDevice::CdDevice) Next writale adress invalid." << endl;
+// 	    }
+
+// 	    delete [] data;
+// 	  }
+// 	}
+//       }
+//       else {
+// 	K3b::Msf readCap;
+// 	if( readCapacity( readCap ) ) {
+// 	  kdDebug() << "(K3bCdDevice::CdDevice) READ CAPACITY: " << readCap.toString()
+// 		    << " other capacity: " << inf.m_capacity.toString() << endl;
+
+// 	  //
+// 	  // READ CAPACITY returns the last written sector
+// 	  // that means the size is actually readCap + 1
+// 	  //
+// 	  inf.m_capacity = readCap + 1;
+// 	}
+// 	else {
+// 	  kdDebug() << "(K3bCdDevice) READ CAPACITY failed. Falling back to READ TRACK INFO." << endl;
+
+// 	  if( readTrackInformation( &data, dataLen, 0x1, 0xff ) ) {
+// 	    track_info_t* trackInfo = (track_info_t*)data;
+// 	    inf.m_capacity = from4Byte( trackInfo->track_start );
+
+// 	    delete [] data;
+// 	  }
+// 	  else {
+// 	    kdDebug() << "(K3bCdDevice) Falling back to readToc." << endl;
+// 	    inf.m_capacity = readToc().length();
+// 	  }
+// 	}
+//       }
     }
    
     if( needToClose )
@@ -2114,7 +2294,7 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
 
 int K3bCdDevice::CdDevice::cdMediaType() const
 {
-  int m = -1;
+  int m = MEDIA_UNKNOWN;
 
   unsigned char* data = 0;
   int dataLen = 0;
@@ -2135,39 +2315,39 @@ int K3bCdDevice::CdDevice::cdMediaType() const
 
 int K3bCdDevice::CdDevice::dvdMediaType() const
 {
-  int m = -1;
+  int m = MEDIA_UNKNOWN;
 
   if( readsDvd() ) {
-    // 4 bytes header + 2048 bytes layer descriptor
-    unsigned char dvdheader[4+2048];
-    ::memset( dvdheader, 0, 4+2048 );
-    ScsiCommand cmd( this );
-    cmd[0] = MMC::READ_DVD_STRUCTURE;
-    cmd[8] = (4+2048)>>8;
-    cmd[9] = 4+2048;
-    if( cmd.transport( TR_DIR_READ, dvdheader, 4+2048 ) ) {
-      kdDebug() << "(K3bCdDevice::CdDevice) Unable to read DVD structure." << endl;
+    m = currentProfile();
+    if( !(m & (MEDIA_WRITABLE_DVD|MEDIA_DVD_ROM)) )
+      m = MEDIA_UNKNOWN;  // no profile information or CD media
 
+    if( m & (MEDIA_UNKNOWN|MEDIA_DVD_ROM) ) {
       //
-      // Some DVD writers (like the Plextor DVDR 708A) fail here on empty DVD+R(W) media
-      // In that case we fall back to the current profile.
       // We prefere the mediatype as reported by the media since this way
       // even ROM drives may report the correct type of writable media.
       //
 
-      m = currentProfile();
-      if( !(m & (MEDIA_WRITABLE_DVD|MEDIA_DVD_ROM)) )
-	m = -1;  // no profile information or CD media
-    }
-    else {
-      switch( dvdheader[4]&0xF0 ) {
-      case 0x00: m = MEDIA_DVD_ROM; break;
-      case 0x10: m = MEDIA_DVD_RAM; break;
-      case 0x20: m = MEDIA_DVD_R; break;
-      case 0x30: m = MEDIA_DVD_RW; break;
-      case 0x90: m = MEDIA_DVD_PLUS_RW; break;
-      case 0xA0: m = MEDIA_DVD_PLUS_R; break;
-      default: m = -1; break; // unknown
+      // 4 bytes header + 2048 bytes layer descriptor
+      unsigned char dvdheader[4+2048];
+      ::memset( dvdheader, 0, 4+2048 );
+      ScsiCommand cmd( this );
+      cmd[0] = MMC::READ_DVD_STRUCTURE;
+      cmd[8] = (4+2048)>>8;
+      cmd[9] = 4+2048;
+      if( cmd.transport( TR_DIR_READ, dvdheader, 4+2048 ) ) {
+	kdDebug() << "(K3bCdDevice::CdDevice) Unable to read DVD structure." << endl;
+      }
+      else {
+	switch( dvdheader[4]&0xF0 ) {
+	case 0x00: m = MEDIA_DVD_ROM; break;
+	case 0x10: m = MEDIA_DVD_RAM; break;
+	case 0x20: m = MEDIA_DVD_R; break;
+	case 0x30: m = MEDIA_DVD_RW; break;
+	case 0x90: m = MEDIA_DVD_PLUS_RW; break;
+	case 0xA0: m = MEDIA_DVD_PLUS_R; break;
+	default: break; // unknown
+	}
       }
     }
   }
@@ -2192,10 +2372,10 @@ bool K3bCdDevice::CdDevice::readCapacity( K3b::Msf& r ) const
 }
 
 
-bool K3bCdDevice::CdDevice::readFormatCapacity( K3b::Msf& r ) const
+bool K3bCdDevice::CdDevice::readFormatCapacity( int wantedFormat, K3b::Msf& r, 
+						K3b::Msf* currentMax, int* currentMaxFormat ) const
 {
   bool success = false;
-  r = 0;
 
   // the maximal length as stated in MMC4
   static const unsigned int maxLen = 4 + (8*31);
@@ -2214,6 +2394,11 @@ bool K3bCdDevice::CdDevice::readFormatCapacity( K3b::Msf& r ) const
     kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << " READ FORMAT CAPACITY: Current/Max "
 	      << (int)(buffer[8]&0x3) << " " << from4Byte( &buffer[4] ) << endl;
 
+    if( currentMax )
+      *currentMax = from4Byte( &buffer[4] );
+    if( currentMaxFormat )
+      *currentMaxFormat = (int)(buffer[8]&0x3);
+
     //
     // Descriptor Type:
     // 0 - reserved
@@ -2221,28 +2406,18 @@ bool K3bCdDevice::CdDevice::readFormatCapacity( K3b::Msf& r ) const
     // 2 - formatted. Here we get the used capacity (lead-in to last lead-out/border-out)
     // 3 - No media present
     //
-    int descType = buffer[8] & 0x03;
-    if( descType == 1 ) {
-      r = from4Byte( &buffer[4] );
-      success = true;
-    }
-    else {
-      //
-      // now find the 00h format type since that contains the number of adressable blocks
-      // and the block size used for formatting the whole media.
-      // There may be multible occurences of this descriptor (MMC4 says so).We use the max.
-      // 00h may not be supported by the unit (e.g. CD-RW)
-      // for this case we fall back to the first descriptor (the current/maximum descriptor)
-      //
-      for( int i = 12; i < realLength-4; ++i ) {
-	kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << " READ FORMAT CAPACITY: "
-		  << (int)(buffer[i+4]>>2) << " " << from4Byte( &buffer[i] ) << endl;
+    for( int i = 12; i < realLength-4; i+=8 ) {
+      int format = (int)((buffer[i+4]>>2)&0x3f);
+      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << " READ FORMAT CAPACITY: "
+		<< format << " " << from4Byte( &buffer[i] )
+		<< " " << (int)( buffer[i+5] << 16 & 0xFF0000 |
+				 buffer[i+6] << 8  & 0xFF00 |
+				 buffer[i+7]       & 0xFF ) << endl;
 
-	if( (buffer[i+4]>>2) == 0 ) {
-	  // found the descriptor
-	  r = QMAX( (int)from4Byte( &buffer[i] ), r.lba() );
-	  success = true;
-	}
+      if( format == wantedFormat ) {
+	// found the descriptor
+	r = QMAX( (int)from4Byte( &buffer[i] ), r.lba() );
+	success = true;
       }
     }
   }
@@ -2547,25 +2722,54 @@ QValueList<int> K3bCdDevice::CdDevice::determineSupportedWriteSpeeds() const
   if( burner() ) {
     unsigned char* data = 0;
     int dataLen = 0;
-    if( modeSense( &data, dataLen, 0x2A ) ) {
+    int numDesc = 0;
+
+    //
+    // first try GET PERFORMANCE
+    //
+    if( getPerformance( &data, dataLen, 0x3, 0x0 ) ) {
+      numDesc = (dataLen-8)/16;
+      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+		<< ":  Number of supported write speeds via GET PERFORMANCE: "
+		<< numDesc << endl;
+      
+      for( int i = 0; i < numDesc; ++i ) {
+	int speed = from4Byte( &data[20+i*16] );
+	QValueList<int>::iterator it = ret.begin();
+	while( it != ret.end() && *it < speed )
+	  ++it;
+	ret.insert( it, speed );
+
+	kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+		  << " : " << speed << " KB/s" << endl;
+      }
+
+      delete [] data;
+    }
+
+    if( numDesc == 0 && modeSense( &data, dataLen, 0x2A ) ) {
       mm_cap_page_2A* mm = (mm_cap_page_2A*)&data[8];
 
       if( dataLen > 32 ) {
 	// we have descriptors
-	int numDes = from2Byte( mm->num_wr_speed_des );
+	numDesc = from2Byte( mm->num_wr_speed_des );
 	cd_wr_speed_performance* wr = (cd_wr_speed_performance*)mm->wr_speed_des;      
 
-	kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ":  Number of supported write speeds: "
-		  << numDes << endl;
+	kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+		  << ":  Number of supported write speeds via 2A: "
+		  << numDesc << endl;
 		
 
-	for( int i = 0; i < numDes; ++i ) {
+	for( int i = 0; i < numDesc; ++i ) {
 	  // sort the list
 	  int s = from2Byte( wr[i].wr_speed_supp );
 	  QValueList<int>::iterator it = ret.begin();
 	  while( it != ret.end() && *it < s )
 	    ++it;
 	  ret.insert( it, s );
+
+	  kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+		    << " : " << s << " KB/s" << endl;
 	}
       }
       else if( dataLen > 19 ) {
@@ -2573,7 +2777,8 @@ QValueList<int> K3bCdDevice::CdDevice::determineSupportedWriteSpeeds() const
 	ret.append( from2Byte( mm->max_write_speed ) );
       }
       else
-	kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": no writing speed info. No MMC drive?" << endl;
+	kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName()
+		  << ": no writing speed info. No MMC drive?" << endl;
 
       delete [] data;
     }
@@ -3175,4 +3380,50 @@ bool K3bCdDevice::CdDevice::readMcn( QCString& mcn ) const
   }
   else
     return false;
+}
+
+
+bool K3bCdDevice::CdDevice::getPerformance( unsigned char** data, int& dataLen, 
+					    unsigned int type,
+					    unsigned int dataType,
+					    unsigned int lba ) const
+{
+  unsigned char header[2048];
+  ::memset( header, 0, 2048 );
+
+  ScsiCommand cmd( this );
+  cmd[0] = MMC::GET_PERFORMANCE;
+  cmd[1] = dataType;
+  cmd[2] = lba >> 24;
+  cmd[3] = lba >> 16;
+  cmd[4] = lba >> 8;
+  cmd[5] = lba;
+  cmd[9] = 0;      // first we read only the header
+  cmd[10] = type;
+  if( cmd.transport( TR_DIR_READ, header, 8 ) == 0 ) {
+    // again with real length
+    dataLen = from4Byte( header ) + 8;
+
+    *data = new unsigned char[dataLen];
+    ::memset( *data, 0, dataLen );
+
+    int numDesc = (dataLen-8)/16;
+
+    cmd[8] = numDesc>>8;
+    cmd[9] = numDesc;
+    if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
+      return true;
+    }
+    else {
+      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName()
+		<< ": GET PERFORMANCE with real length "
+		<< dataLen << " failed." << endl;
+      delete [] *data;
+    }
+  }
+  else
+    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+	      << ": GET PERFORMANCE length det failed." << endl;
+
+  return false;
 }

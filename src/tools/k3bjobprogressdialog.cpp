@@ -93,11 +93,11 @@ K3bJobProgressDialog::PrivateDebugWidget::PrivateDebugWidget( QMap<QString, QStr
   debugView = new QTextView( this );
   setMainWidget( debugView );
 
-  debugView->append( i18n( "System\n" ) );
+  debugView->append( "System\n" );
   debugView->append( "-----------------------\n" );
-  debugView->append( i18n( "K3b Version:%1 \n" ).arg( k3bcore->version() ) );
-  debugView->append( i18n( "KDE Version: %1\n").arg( KDE::versionString() ) );
-  debugView->append( i18n( "QT Version: %1\n" ).arg( qVersion() ) );
+  debugView->append( QString("K3b Version:%1 \n").arg( k3bcore->version() ) );
+  debugView->append( QString( "KDE Version: %1\n").arg( KDE::versionString() ) );
+  debugView->append( QString( "QT Version: %1\n" ).arg( qVersion() ) );
   debugView->append( "\n" );
 
   // the following may take some time
