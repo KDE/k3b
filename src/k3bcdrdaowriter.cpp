@@ -29,7 +29,7 @@
 #include <qstringlist.h>
 #include <qvaluelist.h>
 #include <qregexp.h>
-#include <kio/job.h>
+#include <qfile.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -63,8 +63,7 @@ K3bCdrdaoWriter::K3bCdrdaoWriter( K3bDevice* dev, QObject* parent, const char* n
         m_cdrdaoBinObject(K3bExternalBinManager::self()->binObject("cdrdao")),
         m_process(0),
         m_comSock(0),
-        m_parser(new K3bCdrdaoParser()) 
-{
+m_parser(new K3bCdrdaoParser()) {
     QPtrList<K3bDevice> devices;
     K3bDevice *d;
     if ( !dev ) {
@@ -135,7 +134,7 @@ K3bCdrdaoWriter::~K3bCdrdaoWriter() {
 
 
 void K3bCdrdaoWriter::prepareArgumentList() {
- 
+
     // binary
     *m_process << m_cdrdaoBinObject->path;
 
@@ -259,7 +258,7 @@ void K3bCdrdaoWriter::setReadArguments() {
         *m_process << "--session"
         << QString("%1").arg(m_session);
 
-   // fast TOC
+    // fast TOC
     if ( m_fastToc )
         *m_process << "--fast-toc";
 
@@ -343,17 +342,19 @@ void K3bCdrdaoWriter::start() {
 
     // workaround, cdrdao kill the tocfile when --remote parameter is set
     // hope to fix it in the future
-    //    QPtrList<QNetworkOperation> op;
+    QString saveToc = m_tocFile;
     switch ( m_command ) {
-      case WRITE:
-      case COPY:
-        KIO::file_copy(m_tocFile, m_tocFile+QString(".bak"),
-                       -1,false,true,false);
-                 break;
-      case BLANK:
-      case READ: break;
-    }
+    case WRITE:
+    case COPY:
+        if ( ! link(m_tocFile.latin1(),(m_tocFile+QString(".bak")).latin1()) )
+            kdDebug() << "(cdrdaowriter) backup tocfile " <<   m_tocFile << " failed." << endl;
+        m_tocFile += QString(".bak");
+        break;
 
+    case BLANK:
+    case READ:
+        break;
+    }
     prepareArgumentList();
 
     kdDebug() << "***** cdrdao parameters:\n";
@@ -417,7 +418,7 @@ void K3bCdrdaoWriter::start() {
         emit started();
 
     }
-
+    m_tocFile = saveToc;
 }
 
 
@@ -444,19 +445,9 @@ void K3bCdrdaoWriter::cancel() {
             }
 
         }
-
- 
-        emit canceled();
-        emit finished( false );
-    }
-    switch ( m_command ) {
-      case WRITE:
-      case COPY:
-        KIO::file_move(m_tocFile+QString(".bak"),
-                       m_tocFile,-1,false,true,false);   
-        break;
-      case BLANK:
-      case READ: break;
+        if ( QFile::exists(m_tocFile+QString(".bak")) )
+            QFile::remove
+                (m_tocFile+QString(".bak"));
     }
 }
 
@@ -474,18 +465,18 @@ void K3bCdrdaoWriter::slotProcessExited( KProcess* p ) {
                 emit infoMessage( i18n("Simulation successfully finished"), K3bJob::STATUS );
             else
                 switch ( m_command ) {
-                   case READ:
-                             emit infoMessage( i18n("Reading successfully finished"), K3bJob::STATUS );  
-                             break;
-                   case WRITE:
-                             emit infoMessage( i18n("Writing successfully finished"), K3bJob::STATUS );
-                             break;
-                   case COPY:
-                             emit infoMessage( i18n("Copying successfully finished"), K3bJob::STATUS );
-                             break;
-                   case BLANK:
-                             emit infoMessage( i18n("Blanking successfully finished"), K3bJob::STATUS );
-                             break;
+                case READ:
+                    emit infoMessage( i18n("Reading successfully finished"), K3bJob::STATUS );
+                    break;
+                case WRITE:
+                    emit infoMessage( i18n("Writing successfully finished"), K3bJob::STATUS );
+                    break;
+                case COPY:
+                    emit infoMessage( i18n("Copying successfully finished"), K3bJob::STATUS );
+                    break;
+                case BLANK:
+                    emit infoMessage( i18n("Blanking successfully finished"), K3bJob::STATUS );
+                    break;
                 }
 
             emit finished( true );
@@ -504,27 +495,14 @@ void K3bCdrdaoWriter::slotProcessExited( KProcess* p ) {
         emit finished( false );
     }
 
-    // workaround, cdrdao kill the tocfile when --remote parameter is set
-    // hope to fix it in the future
-    switch ( m_command ) {
-      case WRITE:
-      case COPY:
-        KIO::file_move(m_tocFile+QString(".bak"),
-                       m_tocFile,-1,false,true,false);   
-        break;
-      case BLANK:
-      case READ: break;
-    }
 }
-
 
 void K3bCdrdaoWriter::getCdrdaoMessage() {
     m_parser->parseCdrdaoMessage(m_comSock);
 }
 
-bool K3bCdrdaoWriter::write( const char* data, int len )
-{
-  return m_process->writeStdin( data, len );
+bool K3bCdrdaoWriter::write( const char* data, int len ) {
+    return m_process->writeStdin( data, len );
 }
 
 

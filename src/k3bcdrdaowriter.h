@@ -119,7 +119,7 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
   QSocket         *m_comSock;
   K3bCdrdaoParser *m_parser;
 
-  bool m_stdin;  
+  bool m_stdin;
 };
 
 #endif
