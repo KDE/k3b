@@ -209,6 +209,39 @@ bool K3bMadDecoder::initDecoderInternal()
     return false;
   }
 
+
+  //
+  // now check if the file starts with an id3 tag and skip it if so
+  //
+  char buf[4096];
+  int bufLen = 4096;
+  if( d->inputFile.readBlock( buf, bufLen ) < bufLen ) {
+    kdDebug() << "(K3bMadDecoder) unable to read " << bufLen << " bytes from " << filename() << endl;
+    d->inputFile.close();
+    return false;
+  }
+
+  if( ( buf[0] == 'I' && buf[1] == 'D' && buf[2] == '3' ) &&
+      ( (unsigned short)buf[3] < 0xff && (unsigned short)buf[4] < 0xff ) ) {
+    kdDebug() << "(K3bMadDecoder) found id3 magic: ID3 " 
+	      << (unsigned short)buf[3] << "." << (unsigned short)buf[4] << endl;
+
+    int pos = ((buf[6]<<21)|(buf[7]<<14)|(buf[8]<<7)|buf[9]) + 10;
+
+    kdDebug() << "(K3bMadDecoder) skipping past ID3 tag to " << pos << endl;
+
+    if( !d->inputFile.at(pos) ) {
+      kdDebug() << "(K3bMadDecoder) " << filename() << ": couldn't seek to " << pos << endl;
+      d->inputFile.close();
+      return false;
+    }
+  }
+  else {
+    // reset
+    d->inputFile.at(0);
+  }
+
+
   memset( d->inputBuffer, 0, INPUT_BUFFER_SIZE );
 
   initMadStructures();
@@ -660,25 +693,6 @@ K3bPlugin* K3bMadDecoderFactory::createPluginObject( QObject* parent,
 
 bool K3bMadDecoderFactory::canDecode( const KURL& url )
 {
-//   static const QString mime_types[] = {
-//     "audio/mp3", "audio/x-mp3", "audio/mpg3", "audio/x-mpg3", "audio/mpeg3", "audio/x-mpeg3",
-//     "audio/mp2", "audio/x-mp2", "audio/mpg2", "audio/x-mpg2", "audio/mpeg2", "audio/x-mpeg2",
-//     "audio/mp1", "audio/x-mp1", "audio/mpg1", "audio/x-mpg1", "audio/mpeg1", "audio/x-mpeg1",
-//     "audio/mpeg", "audio/x-mpeg",
-//     QString::null,
-//   };
-
-//   QString mimetype = KMimeType::findByFileContent( url.path(), 0 )->name();
-//   kdDebug() << "(K3bMadDecoder) mimetype: " << mimetype << endl;
-
-//   for( int i = 0; !mime_types[i].isNull(); ++i )
-//     if( mime_types[i] == mimetype )
-//       return true;
-
-  // no success with the mimetype
-  // since sometimes the mimetype system does not work we try it on our own
-
-
   QFile f(url.path());
   if( !f.open(IO_ReadOnly) ) {
     kdDebug() << "(K3bMadDecoder) could not open file " << url.path() << endl;
@@ -692,10 +706,8 @@ bool K3bMadDecoderFactory::canDecode( const KURL& url )
   char buf[bufLen];
   if( f.readBlock( buf, bufLen ) < bufLen ) {
     kdDebug() << "(K3bMadDecoder) unable to read " << bufLen << " bytes from " << url.path() << endl;
-    f.close();
     return false;
   }
-  f.close();
 
   // skip any 0
   int i = 0;
@@ -708,13 +720,35 @@ bool K3bMadDecoderFactory::canDecode( const KURL& url )
 
 
   // now check if the file starts with an id3 tag
-  if( i < bufLen-5 && 
+  if( i < bufLen-10 && 
       ( buf[i] == 'I' && buf[i+1] == 'D' && buf[i+2] == '3' ) &&
       ( (unsigned short)buf[i+3] < 0xff && (unsigned short)buf[i+4] < 0xff ) ) {
     kdDebug() << "(K3bMadDecoder) found id3 magic: ID3 " 
 	      << (unsigned short)buf[i+3] << "." << (unsigned short)buf[i+4] << endl;
-    return true;
+
+    int pos = i + ((buf[i+6]<<21)|(buf[i+7]<<14)|(buf[i+8]<<7)|buf[i+9]) + 10;
+
+    kdDebug() << "(K3bMadDecoder) skipping past ID3 tag to " << pos << endl;
+
+    if( !f.at(pos) ) {
+      kdDebug() << "(K3bMadDecoder) " << url.path() << ": couldn't seek to " << pos << endl;
+      return false;
+    }
+
+    if( f.readBlock( buf, bufLen ) < bufLen ) {
+      kdDebug() << "(K3bMadDecoder) unable to read " << bufLen << " bytes from " << url.path() << endl;
+      return false;
+    }
+  
+    // again skip any 0
+    i = 0;
+    while( i < bufLen && buf[i] == '\0' ) i++;
+    if( i == bufLen ) {
+      kdDebug() << "(K3bMadDecoder) only zeros found after the id3 tag in " << url.path() << endl;
+      return false;
+    }
   }
+
 
   // check if we have a RIFF MPEG header
   // libmad seems to be able to decode such files but not to decode these first bytes
