@@ -23,6 +23,7 @@ class K3bDiskInfoView : public K3bCdContentsView
   void displayInfo( const K3bDiskInfo& info );
 
  private:
+ QLabel* m_labelDiskPix;
  QLabel* m_labelTocType;
  QLabel* m_labelSize;
  QLabel* m_labelRemaining;

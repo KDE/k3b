@@ -20,14 +20,15 @@
 K3bDiskInfoView::K3bDiskInfoView( QWidget* parent, const char* name )
   : K3bCdContentsView( parent, name )
 {
-  QVBoxLayout* mainLayout = new QVBoxLayout( this );
-  mainLayout->setAutoAdd( true );
+  QGridLayout* mainLayout = new QGridLayout( this );
   mainLayout->setMargin( KDialog::marginHint() );
   mainLayout->setSpacing( KDialog::spacingHint() );
 
-  m_labelTocType          = new QLabel( this );
+  m_labelDiskPix = new QLabel( this );
+  m_labelTocType = new QLabel( this );
   QFont f(m_labelTocType->font() );
   f.setBold( true );
+  f.setPointSize( f.pointSize() + 2 );
   m_labelTocType->setFont( f );
 
   QFrame* line = new QFrame( this );
@@ -47,6 +48,16 @@ K3bDiskInfoView::K3bDiskInfoView( QWidget* parent, const char* name )
   m_labelCdrw             = new QLabel( m_infoWidget );
   m_labelAppendable       = new QLabel( m_infoWidget );
   m_labelSessions         = new QLabel( m_infoWidget );
+  f = m_labelSize->font();
+  f.setBold( true );
+  m_labelSize->setFont( f );
+  m_labelRemaining->setFont( f );
+  m_labelMediumManufactor->setFont( f );
+  m_labelMediumType->setFont( f );
+  m_labelCdrw->setFont( f );
+  m_labelAppendable->setFont( f );
+  m_labelSessions->setFont( f );
+
 
   infoLayout->addWidget( new QLabel( i18n("Total Capacity of medium:"), m_infoWidget ), 0, 0 );
   infoLayout->addWidget( new QLabel( i18n("Remaining Capacity:"), m_infoWidget ), 1, 0 );
@@ -66,8 +77,6 @@ K3bDiskInfoView::K3bDiskInfoView( QWidget* parent, const char* name )
   infoLayout->addColSpacing( 2, 10 );
   infoLayout->setColStretch( 5, 1 );
 
-  mainLayout->addSpacing( 10 );
-
   m_trackView = new KListView( this );
   m_trackView->addColumn( i18n("Tracks") );
   m_trackView->addColumn( i18n("First Sector") );
@@ -77,6 +86,15 @@ K3bDiskInfoView::K3bDiskInfoView( QWidget* parent, const char* name )
   m_trackView->setRootIsDecorated( true );
   m_trackView->setSorting(-1);
   m_trackView->header()->setClickEnabled( false );
+
+
+  mainLayout->addWidget( m_labelDiskPix, 0, 0 );
+  mainLayout->addWidget( m_labelTocType, 0, 1 );
+  mainLayout->addMultiCellWidget( line, 1, 1, 0, 1 );
+  mainLayout->addMultiCellWidget( m_infoWidget, 2, 2, 0, 1 );
+  mainLayout->addRowSpacing( 3, 10 );
+  mainLayout->addMultiCellWidget( m_trackView, 4, 4, 0, 1 );
+  mainLayout->setColStretch( 1, 1 );
 }
 
 
@@ -94,15 +112,19 @@ void K3bDiskInfoView::displayInfo( const K3bDiskInfo& info )
     m_infoWidget->hide();
     (void)new QListViewItem( m_trackView, i18n("No disk") );
     m_labelTocType->setText( i18n("No disk in drive") );
+    m_labelDiskPix->setPixmap( SmallIcon( "stop" ) );
   }
 
 
   else {
     // check if we have some atip info
-    if( info.size > 0 ) {
+    if( info.sessions > 0 ) {
       m_infoWidget->show();
 
-      m_labelSize->setText( QString("%1 (%2 MB)").arg( K3b::framesToString(info.size) ).arg(info.size*2048/1024/1024) );
+      if( info.size > 0 )
+	m_labelSize->setText( QString("%1 (%2 MB)").arg( K3b::framesToString(info.size) ).arg(info.size*2048/1024/1024) );
+      else
+	m_labelSize->setText("-");
 
       if( info.remaining > 0 )
 	m_labelRemaining->setText( QString("%1 (%2 MB)").arg( K3b::framesToString(info.remaining) ).arg(info.remaining*2048/1024/1024) );
@@ -131,20 +153,25 @@ void K3bDiskInfoView::displayInfo( const K3bDiskInfo& info )
 
     if( info.empty ) {
       m_labelTocType->setText( i18n("Disk is empty") );
+      m_labelDiskPix->setPixmap( SmallIcon( "cdrom_unmount", 32 ) );
     }
     else {
       switch( info.tocType ) {
       case K3bDiskInfo::AUDIO:
 	m_labelTocType->setText( i18n("Audio CD") );
+	m_labelDiskPix->setPixmap( SmallIcon( "cdaudio_unmount", 32 ) );
 	break;
       case K3bDiskInfo::DATA:
 	m_labelTocType->setText( i18n("Data CD") );
+	m_labelDiskPix->setPixmap( SmallIcon( "cdrom_unmount", 32 ) );
 	break;
       case K3bDiskInfo::MIXED:
 	m_labelTocType->setText( i18n("Mixed mode CD") );
+	m_labelDiskPix->setPixmap( SmallIcon( "cdrom_unmount", 32 ) );
 	break;
       case K3bDiskInfo::DVD:
 	m_labelTocType->setText( i18n("DVD") );
+	m_labelDiskPix->setPixmap( SmallIcon( "dvd_unmount", 32 ) );
 	break;
       }
     }

@@ -44,6 +44,8 @@ void K3bDiskInfoDetector::detect( K3bDevice* device )
   m_info = K3bDiskInfo();
   m_info.device = m_device;
 
+  // since fetchTocInfo could already emit the diskInfoReady signal
+  // and detect needs to return before this happens use the timer
   QTimer::singleShot( 0, this, SLOT(fetchTocInfo()) );
 }
 
@@ -138,7 +140,7 @@ void K3bDiskInfoDetector::slotDiskInfoFinished()
       }
 	       
       else if( str.startsWith("Toc Type") ) {
-	// FIXME
+	// not used...
       }
 
       else if( str.startsWith("Sessions") ) {
@@ -325,6 +327,10 @@ void K3bDiskInfoDetector::slotTocInfoFinished()
     else
       m_info.tocType = K3bDiskInfo::DATA;
 
+    if( audioTracks + dataTracks > 0 ) {
+      m_info.empty = false;
+      m_info.noDisk = false;
+    }
   
     // atip is only readable on cd-writers
     if( m_device->burner() ) {
@@ -339,7 +345,7 @@ void K3bDiskInfoDetector::slotTocInfoFinished()
 
 void K3bDiskInfoDetector::testForDvd()
 {
-  if( K3bTcWrapper::supportDvd() ) {
+  if( m_info.tocType == K3bDiskInfo::DATA && K3bTcWrapper::supportDvd() ) {
     // check if it is a dvd we can display
 
     if( !m_tcWrapper ) {
