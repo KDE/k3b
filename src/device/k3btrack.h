@@ -9,8 +9,18 @@ namespace K3bCdDevice
   class Track
   {
   public:
-    enum track_type { AUDIO, DATA };
-    enum track_mode { MODE1, MODE2, UNKNOWN };
+    enum TrackType { 
+      AUDIO, 
+      DATA 
+    };
+
+    enum DataMode { 
+      MODE1, 
+      MODE2, 
+      XA_FORM1, 
+      XA_FORM2, 
+      UNKNOWN
+    };
 
     Track();
     Track( const Track& );

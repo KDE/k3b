@@ -462,12 +462,23 @@ int K3bCdDevice::CdDevice::isEmpty()
     // Byte 20-23: Last Possible Start Time for Start of Lead-Out MSF (20-MSB 23-LSB)
     // Byte 24-31: Disc Bar Code
     //
-    if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) == 0 )
-    {
-      ret = (inf[2] & 0x03);
+    if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) == 0 ) {
+      switch( (int)(inf[2] & 0x03) ) {
+      case 0:
+	ret = EMPTY;
+	break;
+      case 1:
+	ret = APPENDABLE;
+	break;
+      case 2:
+	ret = COMPLETE;
+	break;
+      default:
+	ret = NO_INFO;
+	break;
+      }
     }
-    else
-    {
+    else {
       kdDebug() << "(K3bCdDevice) could not get disk info !" << endl;
       ret = NO_INFO;
     }
@@ -502,18 +513,31 @@ K3b::Msf K3bCdDevice::CdDevice::discSize()
   cmd.data_direction = CGC_DATA_READ;
   if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) == 0 )
   {
-    if ( inf[21] != 0xFF && inf[22] != 0xFF && inf[23] != 0xFF )
+    if ( inf[21] != 0xFF && inf[22] != 0xFF && inf[23] != 0xFF ) {
       ret.setMinutes((int)inf[21]);
-    ret.setSeconds((int)inf[22]);
-    ret.setFrames((int)inf[23]);
+      ret.setSeconds((int)inf[22]);
+      ret.setFrames((int)inf[23]);
+    }
   }
   else
     kdDebug() << "(K3bCdDevice) could not get disk info !" << endl;
 
+  if( ret == 0 ) {
+    kdDebug() << "(K3bCdDevice) getting disk size via toc." << endl;
+    struct cdrom_tocentry tocentry;
+    tocentry.cdte_track = CDROM_LEADOUT;
+    tocentry.cdte_format = CDROM_LBA;
+    if( ::ioctl(d->deviceFd,CDROMREADTOCENTRY,&tocentry) )
+      kdDebug() << "(K3bCdDevice) error reading lead out " << endl;
+    else {
+      ret = tocentry.cdte_addr.lba;
+    }
+  }
+
   if( needToClose )
     close();
-  return ret;
 
+  return ret - 150;
 }
 
 K3b::Msf K3bCdDevice::CdDevice::remainingSize()
@@ -524,6 +548,9 @@ K3b::Msf K3bCdDevice::CdDevice::remainingSize()
 
   K3b::Msf ret(0);
   K3b::Msf size(0);
+  bool empty = false;
+  bool appendable = false;
+
   if (open() < 0)
     return ret;
 
@@ -552,13 +579,22 @@ K3b::Msf K3bCdDevice::CdDevice::remainingSize()
       size.setSeconds((int)inf[22]);
       size.setFrames((int)inf[23]);
     }
+
+    empty = ((int)(inf[2] & 0x03) == 0);
+    appendable = ((int)(inf[2] & 0x03) == 1);
   }
   else
     kdDebug() << "(K3bCdDevice) could not get disk info !" << endl;
 
   if( needToClose )
     close();
-  return size-ret;
+
+  if( empty )
+    return size;
+  else if( appendable )
+    return size - ret - 4650;
+  else
+    return 0;
 }
 
 int K3bCdDevice::CdDevice::numSessions()
@@ -890,3 +926,44 @@ bool K3bCdDevice::CdDevice::isOpen() const
   return ( d->deviceFd != -1 );
 }
 
+
+K3bCdDevice::DiskInfo K3bCdDevice::CdDevice::diskInfo()
+{
+  DiskInfo info;
+  info.device = this;
+
+  if( open() != -1 ) {
+    int ready = isReady();
+    if( ready == 0 ) {
+      info.tocType = diskType();
+      if( info.tocType == DiskInfo::NODISC ) {
+	kdDebug() << "(K3bCdDevice::CdDevice::diskInfo) no disk." << endl;
+	info.noDisk = true;
+	info.valid = true;
+      }
+      else if( info.tocType != DiskInfo::UNKNOWN ) {
+	kdDebug() << "(K3bCdDevice::CdDevice::diskInfo) valid disk." << endl;
+	info.noDisk = false;
+	info.toc = readToc();
+	if( burner() ) {
+	  kdDebug() << "(K3bCdDevice::CdDevice::diskInfo) burner." << endl;
+	  int empty = isEmpty();
+	  info.appendable = (empty == APPENDABLE);
+	  info.empty = (empty == EMPTY);
+	  info.cdrw = rewritable();
+	  info.remaining = remainingSize();
+	  info.sessions = numSessions();
+	  info.size = discSize();
+	}
+      }
+    }
+    else if( ready == 3 ) {  // no disk or tray open
+      kdDebug() << "(K3bCdDevice::CdDevice::diskInfo) no disk or tray open." << endl;
+      info.valid = true;
+      info.noDisk = true;
+    }
+  }
+
+  close();
+  return info;
+}

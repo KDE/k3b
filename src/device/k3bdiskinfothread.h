@@ -31,21 +31,23 @@ namespace K3bCdDevice
   {
 
   public:
-    DiskInfoThread(  QObject *, CdDevice *,DiskInfo *);
+    DiskInfoThread(  QObject *, CdDevice *);
     ~DiskInfoThread();
+
+    const DiskInfo& diskInfo() const { return m_info; }
 
   public:
     virtual void run();
 
   private:
-    void fetchInfo();
-    void fetchSizeInfo();
+/*     void fetchInfo(); */
+/*     void fetchSizeInfo(); */
     void finish(bool);
 
   private:
     QObject *m_parent;
     CdDevice *m_device;
-    DiskInfo *m_info;
+    DiskInfo m_info;
   };
 };
 

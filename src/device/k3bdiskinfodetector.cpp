@@ -32,6 +32,11 @@
 #include <sys/ioctl.h>		// ioctls
 #include <unistd.h>		// lseek, read. etc
 #include <fcntl.h>		// O_RDONLY etc.
+/* Fix 2.5 kernel definitions */
+#include <linux/version.h>
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,5,50)
+typedef unsigned long long __u64;
+#endif
 #include <linux/cdrom.h>	// ioctls for cdrom
 #include <stdlib.h>
 
@@ -65,7 +70,7 @@ void K3bCdDevice::DiskInfoDetector::detect( CdDevice* device )
       return;
     else
       delete m_thread;
-  m_thread = new DiskInfoThread(this, m_device, &m_info);
+  m_thread = new DiskInfoThread(this, m_device);
   m_thread->start();
 }
 
@@ -84,6 +89,7 @@ void K3bCdDevice::DiskInfoDetector::fetchExtraInfo()
   else
     calculateDiscId();
 
+  // TODO: there are cds around that have multible data tracks and that are no vcds
   if (m_info.tocType == DiskInfo::DATA && m_info.toc.count() > 1 && m_info.sessions == 1) {
     m_info.isVCD = true;
     finish(true);
@@ -100,8 +106,8 @@ void K3bCdDevice::DiskInfoDetector::fetchExtraInfo()
 void K3bCdDevice::DiskInfoDetector::fetchIsoInfo()
 {
   char buf[17*2048];
-  int m_cdfd;
-  if ( (m_cdfd = ::open(m_device->ioctlDevice().latin1(),O_RDONLY | O_NONBLOCK)) == -1 ) {
+  int m_cdfd = m_device->open();
+  if ( m_cdfd == -1 ) {
     kdDebug() << "(K3bDiskInfoDetector) could not open device !" << endl;
     emit diskInfoReady(m_info);
     return;
@@ -118,7 +124,8 @@ void K3bCdDevice::DiskInfoDetector::fetchIsoInfo()
     m_info.isoPreparerId = QString::fromLocal8Bit( &buf[16*2048+446], 128 ).stripWhiteSpace();
     m_info.isoApplicationId = QString::fromLocal8Bit( &buf[16*2048+574], 128 ).stripWhiteSpace();
   }
-  ::close(m_cdfd);
+
+  m_device->close();
 }
 
 
@@ -175,8 +182,10 @@ void K3bCdDevice::DiskInfoDetector::slotIsVideoDvd( bool dvd )
 
 void K3bCdDevice::DiskInfoDetector::customEvent(QCustomEvent *e) {
   K3bProgressInfoEvent* be = static_cast<K3bProgressInfoEvent*>(e);
-  if(be->type() == K3bProgressInfoEvent::Finished)
-     fetchExtraInfo();
+  if(be->type() == K3bProgressInfoEvent::Finished) {
+    m_info = m_thread->diskInfo();
+    fetchExtraInfo();
+  }
 }
 
 #include "k3bdiskinfodetector.moc"

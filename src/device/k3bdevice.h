@@ -185,24 +185,9 @@ namespace K3bCdDevice
      */
     int isReady() const;
 
-    /** not quite sure if this is nessesary! */
-    //  virtual bool rezero() const;
 
     /**
-     * Saves the cd's total number of available blocks in "length"
-     * returns false if capacity could not be retrieved.
-     * DOES NOT WORK SO FAR!
-     */
-    /*   bool cdCapacity( long* ); */
-
-
-    /**
-     *  checks if disk is empty, returns:
-     *  <li> 0: disk is empty</li>
-     *  <li> 1: disk is not empty, but appendable</li>
-     *  <li> 2: disk is complete</li>
-     *  <li>-1: not ready, no disk in drive</li>
-     * </ul>
+     *  checks if disk is empty, returns DiskStatus:
      */
     int isEmpty();
 
@@ -227,6 +212,11 @@ namespace K3bCdDevice
      * </ul>
      */
     DiskInfo::type diskType();
+
+    /**
+     * returnes the complete diskinfo. This includes the toc.
+     */
+    DiskInfo diskInfo();
 
     /**
      *  returns the number of sessions on disk
