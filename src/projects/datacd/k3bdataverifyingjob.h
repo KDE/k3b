@@ -22,6 +22,9 @@ class K3bDataDoc;
 namespace KIO {
   class Job;
 }
+namespace K3bCdDevice {
+  class DeviceHandler;
+}
 
 
 class K3bDataVerifyingJob : public K3bJob
@@ -43,8 +46,7 @@ class K3bDataVerifyingJob : public K3bJob
 
  private slots:
   void slotMediaReloaded( bool );
-  void slotMountFinished( KIO::Job* job );
-  void slotUnmountFinished( KIO::Job* job );
+  void slotTocRead( K3bCdDevice::DeviceHandler* );
   void slotMd5JobFinished( bool );
   void slotMd5JobProgress( int );
 

@@ -489,6 +489,8 @@ bool K3bDvdJob::waitForDvd()
 	  else
 	    emit infoMessage( i18n("Growing Iso9660 filesystem on DVD+RW."), INFO );
       }
+      else
+	emit infoMessage( i18n("Writing DVD+R."), INFO );
     }
     else if( m & K3bCdDevice::MEDIA_DVD_RW_OVWR ) {
       if( m_doc->multiSessionMode() == K3bDataDoc::NONE ||

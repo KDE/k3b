@@ -15,6 +15,7 @@
 
 
 #include "k3bmd5job.h"
+#include <k3biso9660.h>
 
 #include <kmdcodec.h>
 #include <klocale.h>
@@ -23,6 +24,7 @@
 
 #include <qfile.h>
 #include <qtimer.h>
+#include <qcstring.h>
 
 #include <unistd.h>
 
@@ -34,6 +36,7 @@ public:
     : fileDes(-1),
       finished(true),
       data(0),
+      isoFile(0),
       maxSize(0) {
   }
 
@@ -43,14 +46,15 @@ public:
   QString filename;
   int fileDes;
   bool finished;
-  char* data;
+  QByteArray data;
+  const K3bIso9660File* isoFile;
 
   unsigned long long maxSize;
   unsigned long long readData;
 
   KIO::filesize_t imageSize;
 
-  static const int BUFFERSIZE = 1024*20;
+  static const int BUFFERSIZE = 1024*200;
 };
 
 
@@ -58,7 +62,6 @@ K3bMd5Job::K3bMd5Job( QObject* parent, const char* name )
   : K3bJob( parent, name )
 {
   d = new K3bMd5JobPrivate;
-  d->data = new char[K3bMd5JobPrivate::BUFFERSIZE];
   connect( &d->timer, SIGNAL(timeout()), 
 	   this, SLOT(slotUpdate()) );
 }
@@ -66,7 +69,6 @@ K3bMd5Job::K3bMd5Job( QObject* parent, const char* name )
 
 K3bMd5Job::~K3bMd5Job()
 {
-  delete [] d->data;
   delete d;
 }
 
@@ -77,8 +79,12 @@ void K3bMd5Job::start()
 
   emit started();
   d->readData = 0;
+  d->data.resize(K3bMd5JobPrivate::BUFFERSIZE);
 
-  if( d->fileDes < 0 ) {
+  if( d->isoFile ) {
+    d->imageSize = d->isoFile->size();
+  }
+  else if( d->fileDes < 0 ) {
     if( !QFile::exists( d->filename ) ) {
       emit infoMessage( i18n("Could not find file %1").arg(d->filename), ERROR );
       emit finished(false);
@@ -126,12 +132,24 @@ void K3bMd5Job::cancel()
 void K3bMd5Job::setFile( const QString& filename )
 {
   d->filename = filename;
+  d->isoFile = 0;
+  d->fileDes = -1;
+}
+
+
+void K3bMd5Job::setFile( const K3bIso9660File* file )
+{
+  d->isoFile = file;
+  d->fileDes = -1;
+  d->filename.truncate(0);
 }
 
 
 void K3bMd5Job::setFd( int fd )
 {
   d->fileDes = fd;
+  d->filename.truncate(0);
+  d->isoFile = 0;
 }
 
 
@@ -152,10 +170,14 @@ void K3bMd5Job::slotUpdate()
     }
     else {
       int read = 0;
-      if( d->fileDes < 0 )
-	read = d->file.readBlock( d->data, K3bMd5JobPrivate::BUFFERSIZE );
+      if( d->isoFile ) {
+	d->data = d->isoFile->data( d->readData, K3bMd5JobPrivate::BUFFERSIZE );
+	read = d->data.size();
+      }	
+      else if( d->fileDes < 0 )
+	read = d->file.readBlock( d->data.data(), K3bMd5JobPrivate::BUFFERSIZE );
       else
-	read = ::read( d->fileDes, d->data, K3bMd5JobPrivate::BUFFERSIZE );
+	read = ::read( d->fileDes, d->data.data(), K3bMd5JobPrivate::BUFFERSIZE );
 
       if( read < 0 ) {
 	emit infoMessage( i18n("Error while reading from file %1").arg(d->filename), ERROR );
@@ -169,7 +191,7 @@ void K3bMd5Job::slotUpdate()
       }
       else {
 	d->readData += read;
-	d->md5.update( d->data, read );
+	d->md5.update( d->data.data(), read );
 	if( d->fileDes < 0 )
 	  emit percent( (int)((double)d->readData * 100.0 / (double)d->imageSize) );
 	else if( d->maxSize > 0 )

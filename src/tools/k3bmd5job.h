@@ -21,6 +21,9 @@
 #include <qcstring.h>
 
 
+class K3bIso9660File;
+
+
 class K3bMd5Job : public K3bJob
 {
   Q_OBJECT
@@ -37,6 +40,7 @@ class K3bMd5Job : public K3bJob
   void cancel();
 
   void setFile( const QString& filename );
+  void setFile( const K3bIso9660File* );
 
   /**
    * read from the opened file descriptor

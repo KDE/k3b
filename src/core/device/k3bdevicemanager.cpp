@@ -33,6 +33,7 @@
 
 #include <iostream>
 #include <fstab.h>
+#include <limits.h>
 
 #ifdef __FreeBSD__
 #include <sys/param.h>

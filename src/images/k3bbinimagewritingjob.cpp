@@ -82,21 +82,29 @@ bool K3bBinImageWritingJob::prepareWriter()
 
   int usedWritingApp = writingApp();
   const K3bExternalBin* cdrecordBin = k3bcore->externalBinManager()->binObject("cdrecord");
-  if( writingApp() == K3b::DEFAULT && cdrecordBin && cdrecordBin->hasFeature("cuefile") ) {
+  if( usedWritingApp == K3b::CDRECORD || 
+      ( usedWritingApp == K3b::DEFAULT && cdrecordBin && cdrecordBin->hasFeature("cuefile") ) ) {
     usedWritingApp = K3b::CDRECORD;
 
-    // let's see if cdrecord can handle the cue file
-    QFile f( m_tocFile );
-    if( f.open( IO_WriteOnly ) ) {
-      QTextStream fStr( &f );
-      if( fStr.read().contains( "MODE1/2352" ) ) {
-	kdDebug() << "(K3bBinImageWritingJob) cuefile contains MODE1/2352 track. using cdrdao." << endl;
-	usedWritingApp = K3b::CDRDAO;
-      }
-      f.close();
+    // IMPROVEME: check if it's a cdrdao toc-file
+    if( m_tocFile.right(4) == ".toc" ) {
+      kdDebug() << "(K3bBinImageWritingJob) imagefile has ending toc." << endl;
+      usedWritingApp = K3b::CDRDAO;
     }
-    else
-      kdDebug() << "(K3bBinImageWritingJob) could not open file " << m_tocFile << endl;
+    else {
+      // let's see if cdrecord can handle the cue file
+      QFile f( m_tocFile );
+      if( f.open( IO_WriteOnly ) ) {
+	QTextStream fStr( &f );
+	if( fStr.read().contains( "MODE1/2352" ) ) {
+	  kdDebug() << "(K3bBinImageWritingJob) cuefile contains MODE1/2352 track. using cdrdao." << endl;
+	  usedWritingApp = K3b::CDRDAO;
+	}
+	f.close();
+      }
+      else
+	kdDebug() << "(K3bBinImageWritingJob) could not open file " << m_tocFile << endl;
+    }
   }
   else
     usedWritingApp = K3b::CDRDAO;

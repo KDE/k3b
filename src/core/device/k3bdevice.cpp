@@ -1675,13 +1675,9 @@ bool K3bCdDevice::CdDevice::block( bool b ) const
   cmd[0] = 0x1E;   // ALLOW MEDIA REMOVAL
   cmd[4] = b ? 0x1 : 0x0;
   int r = cmd.transport();
-  if( r ) {
-    kdDebug() << "(K3bCdDevice::CdDevice) MMC ALLOW MEDIA REMOVAL failed. Falling back to cdrom.h." << endl;
-    r = ::ioctl(d->deviceFd,CDROM_LOCKDOOR, b ? 1 : 0 );
-  }
 
   if( r )
-    kdDebug() << "(K3bCdDevice) Cannot block/unblock device " << devicename() << endl;
+    kdDebug() << "(K3bCdDevice::CdDevice) MMC ALLOW MEDIA REMOVAL failed." << endl;
 
   return ( r == 0 );
 }
@@ -1707,13 +1703,12 @@ bool K3bCdDevice::CdDevice::eject() const
 {
   block(false);
 
-  // Since all other eject methods I saw also start the unit before ejecting
-  // we do it also although I don't know why...
-
   ScsiCommand cmd( this );
   cmd[0] = 0x1B;   // START/STOP UNIT
-  cmd[4] = 0x1;      // Start unit
 
+  // Since all other eject methods I saw also start the unit before ejecting
+  // we do it also although I don't know why...
+  cmd[4] = 0x1;      // Start unit
   cmd.transport();
 
   cmd[4] = 0x2;    // LoEj = 1, Start = 0

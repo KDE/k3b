@@ -21,8 +21,11 @@
 #include "k3bisooptions.h"
 
 #include <k3bdevice.h>
+#include <k3btoc.h>
+#include <k3btrack.h>
 #include <k3bdevicehandler.h>
 #include <k3bmd5job.h>
+#include <k3biso9660.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -43,6 +46,7 @@ public:
       md5Job(0),
       doc(0),
       device(0),
+      iso9660(0),
       currentItem(0) {
   }
 
@@ -52,10 +56,10 @@ public:
   K3bMd5Job* md5Job;
   K3bDataDoc* doc;
   K3bCdDevice::CdDevice* device;
+  K3bIso9660* iso9660;
 
   K3bDataItem* currentItem;
   bool originalCalculated;
-  QString baseDir;
   KIO::filesize_t alreadyCheckedData;
   QCString originalMd5Sum;
   bool filesDiffer;
@@ -102,7 +106,7 @@ void K3bDataVerifyingJob::start()
   // TODO: do not compare the files from old sessions
   // TODO: do not use doc->size() but calculate the sum of all filesizes in advance (mainly because of the above)
 
-  // first we need to reload and mount the device
+  // first we need to reload the device
   emit newTask( i18n("Reloading the media") );
 
   connect( K3bCdDevice::reload( d->device ), SIGNAL(finished(bool)),
@@ -116,52 +120,62 @@ void K3bDataVerifyingJob::slotMediaReloaded( bool success )
     KMessageBox::information( qApp->activeWindow(), i18n("Please reload the medium and press 'ok'"),
 			      i18n("Unable to close the tray") );
 
-  emit newTask( i18n("Mounting media") );
+  emit newTask( i18n("Reading TOC") );
 
-  connect( KIO::mount( true, 0L, d->device->mountDevice(), d->device->mountPoint(), false ), 
-	   SIGNAL(result(KIO::Job*)),
-	   this, SLOT( slotMountFinished(KIO::Job*) ) );
+  connect( K3bCdDevice::toc( d->device ), SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
+	     this, SLOT(slotTocRead(K3bCdDevice::DeviceHandler*)) );
 }
 
 
-void K3bDataVerifyingJob::slotMountFinished( KIO::Job* job )
+void K3bDataVerifyingJob::slotTocRead( K3bCdDevice::DeviceHandler* dh )
 {
   if( d->canceled ) {
     emit canceled();
-    d->running = false;
-    emit finished(false);
+    finishVerification(false);
   }
 
-  if( job->error() && !d->device->supermount() ) {
-    // do show a dialog instead of an infoMessage since the errorString spreads over multible lines. :(
-    job->showErrorDialog( qApp->activeWindow() );
-    emit infoMessage( i18n("Mounting failed."), ERROR );
-    d->running = false;
-    emit finished(false);
+  if( !dh->success() ) {
+    emit infoMessage( i18n("Reading TOC failed."), ERROR );
+    finishVerification(false);
   }
   else {
-    emit infoMessage( i18n("Successfully mounted media. Starting verification."), INFO );
     emit newTask( i18n("Verifying written data") );
 
-    // initialize some variables
-    d->baseDir = d->device->mountPoint();
-    if( d->baseDir[d->baseDir.length()-1] != '/' )
-      d->baseDir += "/";
-    d->currentItem = d->doc->root();
-    d->originalCalculated = false;
-    d->alreadyCheckedData = 0;
-    d->lastProgress = 0;
-    d->filesDiffer = false;
-
-    // initialize the job
-    if( !d->md5Job ) {
-      d->md5Job = new K3bMd5Job( this );
-      connect( d->md5Job, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
-      connect( d->md5Job, SIGNAL(percent(int)), this, SLOT(slotMd5JobProgress(int)) );
-      connect( d->md5Job, SIGNAL(finished(bool)), this, SLOT(slotMd5JobFinished(bool)) );
+    delete d->iso9660;
+    unsigned long startSec = 0;
+    if( d->doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
+	d->doc->multiSessionMode() == K3bDataDoc::FINISH ) {
+      // in this case we only compare the files from the new session
+      K3bCdDevice::Toc::const_iterator it = dh->toc().end();
+      --it; // this is valid since there is at least one data track
+      while( it != dh->toc().begin() && (*it).type() != K3bCdDevice::Track::DATA )
+	--it;
+      startSec = (*it).firstSector().lba();
     }
 
-    compareNextFile();
+    d->iso9660 = new K3bIso9660( d->device, startSec );
+    if( !d->iso9660->open( IO_ReadOnly ) ) {
+      emit infoMessage( i18n("Unable to read Iso9660 filesystem."), ERROR );
+      finishVerification(false);
+    }
+    else {
+      // initialize some variables
+      d->currentItem = d->doc->root();
+      d->originalCalculated = false;
+      d->alreadyCheckedData = 0;
+      d->lastProgress = 0;
+      d->filesDiffer = false;
+
+      // initialize the job
+      if( !d->md5Job ) {
+	d->md5Job = new K3bMd5Job( this );
+	connect( d->md5Job, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
+	connect( d->md5Job, SIGNAL(percent(int)), this, SLOT(slotMd5JobProgress(int)) );
+	connect( d->md5Job, SIGNAL(finished(bool)), this, SLOT(slotMd5JobFinished(bool)) );
+      }
+
+      compareNextFile();
+    }
   }
 }
 
@@ -257,10 +271,16 @@ void K3bDataVerifyingJob::slotMd5JobFinished( bool success )
     else {
       d->originalCalculated = true;
       d->originalMd5Sum = d->md5Job->hexDigest();
-      d->md5Job->setFile( d->baseDir + ( d->doc->isoOptions().createJoliet() ? 
-					 d->currentItem->jolietPath() : 
-					 d->currentItem->k3bPath() ) );
-      d->md5Job->start();
+      const K3bIso9660File* isoFile = 
+	dynamic_cast<const K3bIso9660File*>(d->iso9660->firstIsoDirEntry()->entry( d->currentItem->k3bPath() ) );
+      if( isoFile ) {
+	d->md5Job->setFile( isoFile );
+	d->md5Job->start();
+      }
+      else {
+	emit infoMessage( i18n("Unable to read Iso9660 filesystem."), ERROR );
+	finishVerification(false);
+      }
     }
   }
   else {
@@ -289,27 +309,9 @@ void K3bDataVerifyingJob::slotMd5JobProgress( int p )
 void K3bDataVerifyingJob::finishVerification( bool success )
 {
   d->success = success;
-
-  // we need to unmount
-  emit newTask( i18n("Unmounting device") );
-  connect( KIO::unmount( d->device->mountPoint(), false ), SIGNAL(result(KIO::Job*)),
-	   this, SLOT( slotUnmountFinished(KIO::Job*) ) );
-}
-
-
-void K3bDataVerifyingJob::slotUnmountFinished( KIO::Job* job )
-{
-  if( job->error() && !d->device->supermount() ) {
-    // do show a dialog instead of an infoMessage since the errorString spreads over multible lines. :(
-    job->showErrorDialog( qApp->activeWindow() );
-    emit infoMessage( i18n("Unmounting failed."), ERROR );
-  }
-  else {
-    emit infoMessage( i18n("Successfully unmounted."), INFO );
-  }
-
   d->running = false;
   emit finished(d->success);
 }
+
 
 #include "k3bdataverifyingjob.moc"
