@@ -15,8 +15,6 @@ K3bScsiDevice::K3bScsiDevice( cdrom_drive* drive )
 {
   m_burnproof     = false;
   m_maxReadSpeed  = 0;
-  m_maxReadSpeed  = 0;
-  m_maxWriteSpeed = 0;
   m_maxWriteSpeed = 0;
   m_burner        = false;
 }
