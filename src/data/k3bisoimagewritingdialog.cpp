@@ -129,6 +129,8 @@ void K3bIsoImageWritingDialog::setupGui()
 
   if( m_writerSelectionWidget->writerDevice()->burnproof() )
     m_checkBurnProof->setChecked( true );
+  else
+    m_checkBurnProof->setDisabled( true );
   m_checkDao->setChecked( true );
   m_checkDummy->setChecked( false );
 }

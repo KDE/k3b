@@ -797,6 +797,15 @@ void K3bMainWindow::init()
 {
   emit initializationInfo( i18n("Reading Options...") );
 
+
+  QString globalConfig = locateLocal( "appdata", "k3bsetup" );
+  if( !QFile::exists( globalConfig ) ) {
+    KMessageBox::information( this, i18n("It seems as if you have not run K3bSetup yet. So it will be started now."),
+			      i18n("K3b Setup") );
+    slotK3bSetup();
+  }
+
+
   readOptions();
 
   emit initializationInfo( i18n("Searching for external programs...") );

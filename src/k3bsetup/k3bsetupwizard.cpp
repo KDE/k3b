@@ -1,11 +1,3 @@
-/****************************************************************************
-** Form implementation generated from reading ui file '/home/trueg/dev/k3b-setup.ui'
-**
-** Created: Sat Dec 1 14:39:25 2001
-**      by:  The User Interface Compiler (uic)
-**
-** WARNING! All changes made in this file will be lost!
-****************************************************************************/
 #include "k3bsetupwizard.h"
 
 #include "k3bsetup.h"
@@ -84,11 +76,12 @@ K3bSetupWizard::PrivateDeviceViewItem::PrivateDeviceViewItem( K3bDevice* dev, KL
 K3bSetupWizard::K3bSetupWizard( QWidget* parent,  const char* name, bool modal, WFlags fl )
     : KWizard( parent, name, modal, fl )
 {
-
   // create the K3bSetup instance
   m_setup = new K3bSetup();
 
-  m_configPath = locate( "data", "k3b/" ) + "k3bsetup";
+  // this is a little not to hard hack to ensure that we get the "global" k3b appdir
+  // k3bui.rc should always be in $KDEDIR/share/apps/k3b/
+  m_configPath = KGlobal::dirs()->findResourceDir( "data", "k3b/k3bui.rc" ) + "k3b/k3bsetup";
   qDebug( m_configPath );
   m_config = new KSimpleConfig( m_configPath );
 
@@ -97,7 +90,9 @@ K3bSetupWizard::K3bSetupWizard( QWidget* parent,  const char* name, bool modal, 
 
 
 
-
+  // =================================================================================================================
+  // SETUP THE GUI
+  // =================================================================================================================
 
   QPixmap image0( locate( "data", "k3b/pics/k3bsetup.png" ) );
 
@@ -918,3 +913,6 @@ void K3bSetupWizard::accept()
 
   KWizard::accept();
 }
+
+
+#include "k3bsetupwizard.moc"
