@@ -1,4 +1,4 @@
-AM_CPPFLAGS = $(all_includes) -I../core -I..
+AM_CPPFLAGS = $(all_includes) -I$(srcdir)/../core -I$(srcdir)/..
 #AM_LDFLAGS = $(all_libraries)
 #AM_LDADD = $(LIB_KPARTS) $(LIB_KDECORE)
 
