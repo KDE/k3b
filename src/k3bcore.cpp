@@ -56,8 +56,8 @@ K3bCore::K3bCore( const KAboutData* about, QObject* parent, const char* name)
   d = new Private( about );
   s_k3bCore = this;
 
-  d->externalBinManager = new K3bExternalBinManager( this );
-  d->deviceManager = new K3bCdDevice::DeviceManager( d->externalBinManager, this );
+  d->externalBinManager = K3bExternalBinManager::self();
+  d->deviceManager = K3bCdDevice::DeviceManager::self();
   K3b::addDefaultPrograms( d->externalBinManager );
   d->songManager = new K3bSongManager( this );
 }

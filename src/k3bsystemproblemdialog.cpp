@@ -14,8 +14,10 @@
  */
 
 
+#include "k3bcore.h"
 #include "k3bsystemproblemdialog.h"
 #include "tools/k3btitlelabel.h"
+#include "tools/k3bexternalbinmanager.h"
 #include <k3bstdguiitems.h>
 #include <tools/k3bexternalbinmanager.h>
 #include <tools/k3bdefaultexternalprograms.h>
@@ -157,7 +159,7 @@ void K3bSystemProblemDialog::checkSystem()
   else {
     if( k3bcore->externalBinManager()->binObject( "cdrecord" )->version < K3bVersion( 2, 0 ) )
       problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
-					 i18n("Used %1 version %2 is outdated").arg("cdrecord").arg(externalBinManager()->binObject( "cdrecord" )->version),
+					 i18n("Used %1 version %2 is outdated").arg("cdrecord").arg(k3bcore->externalBinManager()->binObject( "cdrecord" )->version),
 					 i18n("Although K3b supports all cdrtools versions since "
 					      "1.10 it is highly recommended to at least use "
 					      "version 2.0."),
@@ -240,7 +242,7 @@ void K3bSystemProblemDialog::checkSystem()
 	    !( k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "plain-atapi" ) &&
 	       K3bCdDevice::plainAtapiSupport() ) ) {
 	  problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
-					     i18n("%1 %2 does not support ATAPI").arg("cdrecord").arg(externalBinManager()->binObject("cdrecord")->version),
+					     i18n("%1 %2 does not support ATAPI").arg("cdrecord").arg(k3bcore->externalBinManager()->binObject("cdrecord")->version),
 					     i18n("The configured version of %1 does not "
 						  "support writing to ATAPI devices without "
 						  "SCSI emulation and there is at least one writer "
@@ -261,7 +263,7 @@ void K3bSystemProblemDialog::checkSystem()
 	    !( k3bcore->externalBinManager()->binObject( "cdrdao" )->hasFeature( "plain-atapi" ) &&
 	       K3bCdDevice::plainAtapiSupport() ) ) {
 	  problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
-					     i18n("%1 %2 does not support ATAPI").arg("cdrdao").arg(externalBinManager()->binObject("cdrdao")->version),
+					     i18n("%1 %2 does not support ATAPI").arg("cdrdao").arg(k3bcore->externalBinManager()->binObject("cdrdao")->version),
 					     i18n("The configured version of %1 does not "
 						  "support writing to ATAPI devices without "
 						  "SCSI emulation and there is at least one writer "
