@@ -380,7 +380,7 @@ void K3bVcdDoc::moveTrack( const K3bVcdTrack* track, const K3bVcdTrack* after )
 }
 
 
-QString K3bVcdDoc::documentType() const
+QString K3bVcdDoc::typeString() const
 {
     return "vcd";
 }

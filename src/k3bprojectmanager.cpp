@@ -265,7 +265,7 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
 {
   KConfig* c = kapp->config();
 
-  c->setGroup( "default " + doc->documentType() + " settings" );
+  c->setGroup( "default " + doc->typeString() + " settings" );
 
   QString mode = c->readEntry( "writing_mode" );
   if ( mode == "dao" )
@@ -287,7 +287,7 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
   doc->setWritingApp( K3b::writingAppFromString( c->readEntry( "writing_app" ) ) );
 
 
-  switch( doc->docType() ) {
+  switch( doc->type() ) {
   case K3bDoc::AUDIO: {
     K3bAudioDoc* audioDoc = static_cast<K3bAudioDoc*>(doc);
 
@@ -390,11 +390,11 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
   }
   }
 
-  if( doc->docType() == K3bDoc::DATA ||
-      doc->docType() == K3bDoc::MOVIX ||
-      doc->docType() == K3bDoc::MOVIX_DVD ||
-      doc->docType() == K3bDoc::VIDEODVD ||
-      doc->docType() == K3bDoc::DVD ) {
+  if( doc->type() == K3bDoc::DATA ||
+      doc->type() == K3bDoc::MOVIX ||
+      doc->type() == K3bDoc::MOVIX_DVD ||
+      doc->type() == K3bDoc::VIDEODVD ||
+      doc->type() == K3bDoc::DVD ) {
     if( static_cast<K3bDataDoc*>(doc)->isoOptions().volumeID().isEmpty() )
       static_cast<K3bDataDoc*>(doc)->isoOptions().setVolumeID( doc->URL().path() );
   }
@@ -406,11 +406,11 @@ K3bProjectInterface* K3bProjectManager::dcopInterface( K3bDoc* doc )
   QMap<K3bDoc*, K3bProjectInterface*>::iterator it = d->projectInterfaceMap.find( doc );
   if( it == d->projectInterfaceMap.end() ) {
     K3bProjectInterface* dcopInterface = 0;
-    if( doc->docType() == K3bDoc::DATA || doc->docType() == K3bDoc::DVD )
+    if( doc->type() == K3bDoc::DATA || doc->type() == K3bDoc::DVD )
       dcopInterface = new K3bDataProjectInterface( static_cast<K3bDataDoc*>(doc) );
-    else if( doc->docType() == K3bDoc::AUDIO )
+    else if( doc->type() == K3bDoc::AUDIO )
       dcopInterface = new K3bAudioProjectInterface( static_cast<K3bAudioDoc*>(doc) );
-    else if( doc->docType() == K3bDoc::MIXED )
+    else if( doc->type() == K3bDoc::MIXED )
       dcopInterface = new K3bMixedProjectInterface( static_cast<K3bMixedDoc*>(doc) );
     else
       dcopInterface = new K3bProjectInterface( doc );
@@ -554,10 +554,10 @@ bool K3bProjectManager::saveProject( K3bDoc* doc, const KURL& url )
       store->open( "maindata.xml" );
       
       // save the data in the document
-      QDomDocument xmlDoc( "k3b_" + doc->documentType() + "_project" );
+      QDomDocument xmlDoc( "k3b_" + doc->typeString() + "_project" );
       
       xmlDoc.appendChild( xmlDoc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
-      QDomElement docElem = xmlDoc.createElement( "k3b_" + doc->documentType() + "_project" );
+      QDomElement docElem = xmlDoc.createElement( "k3b_" + doc->typeString() + "_project" );
       xmlDoc.appendChild( docElem );
       success = doc->saveDocumentData( &docElem );
       if( success ) {

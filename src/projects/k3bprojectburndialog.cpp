@@ -54,7 +54,7 @@
 K3bProjectBurnDialog::K3bProjectBurnDialog( K3bDoc* doc, QWidget *parent, const char *name, bool modal, bool dvd )
   : K3bInteractionDialog( parent, name, i18n("Project"), QString::null, 
 			  START_BUTTON|SAVE_BUTTON|CANCEL_BUTTON, START_BUTTON, 
-			  "default " + doc->documentType() + " settings", modal ),
+			  "default " + doc->typeString() + " settings", modal ),
     m_writerSelectionWidget(0),
     m_tempDirSelectionWidget(0),
     m_dvd(dvd)

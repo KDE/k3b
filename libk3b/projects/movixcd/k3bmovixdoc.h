@@ -39,7 +39,7 @@ class K3bMovixDoc : public K3bDataDoc
   K3bMovixDoc( QObject* parent = 0 );
   virtual ~K3bMovixDoc();
 
-  virtual int docType() const { return MOVIX; }
+  virtual int type() const { return MOVIX; }
 
   virtual K3bBurnJob* newBurnJob( K3bJobHandler* hdl, QObject* parent );
 
@@ -92,7 +92,7 @@ class K3bMovixDoc : public K3bDataDoc
   /** reimplemented from K3bDoc */
   bool saveDocumentData( QDomElement* );
 
-  virtual QString documentType() const { return "movix"; }
+  virtual QString typeString() const { return "movix"; }
 
  private slots:
   void slotDataItemRemoved( K3bDataItem* );

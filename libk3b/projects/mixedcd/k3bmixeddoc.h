@@ -57,7 +57,7 @@ class K3bMixedDoc : public K3bDoc
 		   DATA_SECOND_SESSION };
 
   int mixedType() const { return m_mixedType; }
-  int docType() const { return MIXED; }
+  int type() const { return MIXED; }
 
   /**
    * Represent the structure of the doc as CD Table of Contents.
@@ -76,7 +76,7 @@ class K3bMixedDoc : public K3bDoc
  protected:
   bool loadDocumentData( QDomElement* );
   bool saveDocumentData( QDomElement* );
-  QString documentType() const { return "mixed"; }
+  QString typeString() const { return "mixed"; }
   
  private:
   K3bDataDoc* m_dataDoc;

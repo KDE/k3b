@@ -45,7 +45,7 @@ K3bProjectTabWidget::~K3bProjectTabWidget()
 
 void K3bProjectTabWidget::insertTab( K3bDoc* doc )
 {
-  QTabWidget::insertTab( doc->view(), doc->URL().path(), 0 );
+  QTabWidget::insertTab( doc->view(), doc->URL().fileName(), 0 );
   connect( k3bappcore->projectManager(), SIGNAL(projectSaved(K3bDoc*)), this, SLOT(slotDocSaved(K3bDoc*)) );
   connect( doc, SIGNAL(changed(K3bDoc*)), this, SLOT(slotDocChanged(K3bDoc*)) );
   if( doc->isModified() )
@@ -72,7 +72,7 @@ void K3bProjectTabWidget::insertAction( KAction* action )
 void K3bProjectTabWidget::slotDocChanged( K3bDoc* doc )
 {
   setTabIconSet( doc->view(), SmallIconSet( "filesave" ) );
-  changeTab( doc->view(), doc->URL().path() );
+  changeTab( doc->view(), doc->URL().fileName() );
 }
 
 

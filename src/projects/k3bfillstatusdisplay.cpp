@@ -540,7 +540,7 @@ void K3bFillStatusDisplay::slotLoadUserDefaults()
 {
   // load project specific values
   KConfig* c = k3bcore->config();
-  c->setGroup( "default " + d->doc->documentType() + " settings" );
+  c->setGroup( "default " + d->doc->typeString() + " settings" );
 
   // defaults to megabytes
   d->showTime = c->readBoolEntry( "show minutes", false );
@@ -576,7 +576,7 @@ void K3bFillStatusDisplay::slotSaveUserDefaults()
 {
   // save project specific values
   KConfig* c = k3bcore->config();
-  c->setGroup( "default " + d->doc->documentType() + " settings" );
+  c->setGroup( "default " + d->doc->typeString() + " settings" );
 
   c->writeEntry( "show minutes", d->showTime );
   c->writeEntry( "default media size", d->displayWidget->cdSize().totalFrames() );

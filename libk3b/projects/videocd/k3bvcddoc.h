@@ -53,7 +53,7 @@ class K3bVcdDoc : public K3bDoc
         K3bVcdDoc( QObject* );
         ~K3bVcdDoc();
 
-	int docType() const { return VCD; }
+	int type() const { return VCD; }
 
         enum vcdTypes { VCD11, VCD20, SVCD10, HQVCD, NONE};
 
@@ -151,7 +151,7 @@ class K3bVcdDoc : public K3bDoc
         /** reimplemented from K3bDoc */
         bool saveDocumentData( QDomElement* );
 
-        QString documentType() const;
+        QString typeString() const;
 
     private:
         K3bVcdTrack* createTrack( const KURL& url );

@@ -168,7 +168,7 @@ class K3bAudioDoc : public K3bDoc
   /** reimplemented from K3bDoc */
   bool saveDocumentData( QDomElement* );
 
-  QString documentType() const;
+  QString typeString() const;
 
  private:
   // the stuff for adding files

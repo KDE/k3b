@@ -485,7 +485,7 @@ void K3bAudioDoc::moveTrack( K3bAudioTrack* track, K3bAudioTrack* after )
 }
 
 
-QString K3bAudioDoc::documentType() const
+QString K3bAudioDoc::typeString() const
 {
   return "audio";
 }

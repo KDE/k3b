@@ -410,7 +410,7 @@ K3b::Msf K3bDataDoc::length() const
 }
 
 
-QString K3bDataDoc::documentType() const
+QString K3bDataDoc::typeString() const
 {
   return QString::fromLatin1("data");
 }

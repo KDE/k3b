@@ -73,7 +73,12 @@ class K3bDoc : public QObject
     VIDEODVD 
   };
 
-  virtual int docType() const { return m_docType; }
+  virtual int type() const { return m_docType; }
+
+  /**
+   * \return A string representation of the document type.
+   */
+  virtual QString typeString() const = 0;
 
   /** 
    * returns the view widget set with setView() or null if none has been set.
@@ -158,13 +163,6 @@ class K3bDoc : public QObject
    * Used for session management. Use with care.
    */
   void setSaved( bool s ) { m_saved = s; }
-
-  /**
-   * Should return the name of the document type.
-   * This is used for saving the contents in a XML file
-   * and naming the config group to store the default settings in.
-   */
-  virtual QString documentType() const = 0;
 
  signals:
   void changed();

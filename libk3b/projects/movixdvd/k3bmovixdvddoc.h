@@ -29,12 +29,12 @@ class K3bMovixDvdDoc : public K3bMovixDoc
   K3bMovixDvdDoc( QObject* parent = 0 );
   ~K3bMovixDvdDoc();
 
-  int docType() const { return MOVIX_DVD; }
+  int type() const { return MOVIX_DVD; }
 
   K3bBurnJob* newBurnJob( K3bJobHandler* hdl, QObject* parent );
 
  protected:
-  QString documentType() const { return "movixdvd"; }
+  QString typeString() const { return "movixdvd"; }
 };
 
 #endif

@@ -26,7 +26,7 @@ class K3bVideoDvdDoc : public K3bDvdDoc
   K3bVideoDvdDoc( QObject* parent = 0 );
   virtual ~K3bVideoDvdDoc();
 
-  virtual int docType() const { return VIDEODVD; }
+  virtual int type() const { return VIDEODVD; }
 
   virtual K3bBurnJob* newBurnJob( K3bJobHandler* hdl, QObject* parent );
 
@@ -37,7 +37,7 @@ class K3bVideoDvdDoc : public K3bDvdDoc
   // TODO: implement load- and saveDocumentData since we do not need all those options
 
  protected:
-  virtual QString documentType() const { return "video_dvd"; }
+  virtual QString typeString() const { return "video_dvd"; }
 
  private:
   K3bDirItem* m_videoTsDir;

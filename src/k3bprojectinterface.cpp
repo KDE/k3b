@@ -71,3 +71,26 @@ KIO::filesize_t K3bProjectInterface::size()
 {
   return m_doc->size();
 }
+
+
+QString K3bProjectInterface::projectType() const
+{
+  switch( m_doc->type() ) {
+  case K3bDoc::AUDIO:
+    return "audiocd";
+  case K3bDoc::DATA:
+    return "datacd";
+  case K3bDoc::MIXED:
+    return "mixedcd";
+  case K3bDoc::VCD:
+    return "videocd";
+  case K3bDoc::MOVIX:
+    return "emovixcd";
+  case K3bDoc::MOVIX_DVD:
+    return "emovixdvd";
+  case K3bDoc::DVD:
+    return "datadvd";
+  case K3bDoc::VIDEODVD:
+    return "videodvd";
+  }
+}

@@ -453,7 +453,7 @@ void K3bMainWindow::createClient( K3bDoc* doc )
 {
   // create the proper K3bView (maybe we should put this into some other class like K3bProjectManager)
   K3bView* view = 0;
-  switch( doc->docType() ) {
+  switch( doc->type() ) {
   case K3bDoc::AUDIO:
     view = new K3bAudioView( static_cast<K3bAudioDoc*>(doc), m_documentTab );
     break;

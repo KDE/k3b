@@ -53,6 +53,21 @@ class K3bProjectInterface : public DCOPObject
    */
   virtual KIO::filesize_t size();
 
+  /**
+   * \return A string representation of the project type. One of:
+   * \li "datacd" - Data CD
+   * \li "audiocd" - Audio CD
+   * \li "mixedcd" - Mixed Mode CD
+   * \li "videocd" - Video
+   * \li "emovixcd" - eMovix CD
+   * \li "datadvd" - Data DVD
+   * \li "videodvd" - Video DVD
+   * \li "emovixdvd" - eMovix DVD
+   *
+   * Be aware that this is not the same as K3bDoc::documentType for historical reasons.
+   */
+  virtual QString projectType() const;
+
  private:
   K3bDoc* m_doc;
 };

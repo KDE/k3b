@@ -26,12 +26,12 @@ class K3bDvdDoc : public K3bDataDoc
   K3bDvdDoc( QObject* parent = 0 );
   virtual ~K3bDvdDoc();
 
-  virtual int docType() const { return DVD; }
+  virtual int type() const { return DVD; }
 
   virtual K3bBurnJob* newBurnJob( K3bJobHandler* hdl, QObject* parent = 0 );
 
  protected:
-  virtual QString documentType() const { return "dvd"; }
+  virtual QString typeString() const { return "dvd"; }
 };
 
 #endif

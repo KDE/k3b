@@ -64,7 +64,7 @@ class K3bDataDoc : public K3bDoc
   K3bDataDoc( QObject* parent = 0 );
   virtual ~K3bDataDoc();
 
-  virtual int docType() const { return DATA; }
+  virtual int type() const { return DATA; }
 
   enum MultiSessionMode { 
     /**
@@ -169,7 +169,7 @@ class K3bDataDoc : public K3bDoc
   bool loadDocumentDataOptions( QDomElement optionsElem );
   bool loadDocumentDataHeader( QDomElement optionsElem );
 
-  virtual QString documentType() const;
+  virtual QString typeString() const;
 
   K3bFileCompilationSizeHandler* m_sizeHandler;
   //  K3bFileCompilationSizeHandler* m_oldSessionSizeHandler;
