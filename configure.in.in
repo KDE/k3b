@@ -74,7 +74,7 @@ fi
 
 case "$with_id3lib" in
 NOTFOUND) AC_MSG_ERROR(Could not find ID3Lib. Refere to INSTALL) ;;
-FOUND)    AC_MSG_RESULT(incs=$para_incdir libs=$para_libdir) ;;
+*)        AC_MSG_RESULT(incs=$para_incdir libs=$para_libdir) ;;
 esac
 
 AC_SUBST(ID3LIB_INCS)
