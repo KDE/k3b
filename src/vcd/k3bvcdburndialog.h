@@ -44,6 +44,7 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
  K3bVcdDoc* vcdDoc() const {return m_vcdDoc;}
  
  protected:
+   void setupAdvancedTab();
    void setupVideoCdTab();
    void setupLabelTab();
    void saveSettings();
@@ -68,7 +69,7 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
    QCheckBox* m_checkCdiSupport;
    QMultiLineEdit* m_editCdiCfg;
 
-            
+
    // -----------------------------------------------------------
    // the video-label-tab
    // -----------------------------------------------------------
@@ -79,6 +80,19 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
 
    QSpinBox* m_spinVolumeCount;
    QSpinBox* m_spinVolumeNumber;
+
+   // -----------------------------------------------------------
+   // the advanced-tab
+   // -----------------------------------------------------------
+
+   QGroupBox* m_groupGeneric;
+   QCheckBox* m_checkPbc;
+   QCheckBox* m_checkSegmentFolder;
+   QCheckBox* m_checkRelaxedAps;
+   QCheckBox* m_checkUpdateScanOffsets;
+
+   QGroupBox* m_groupMisc;
+   QSpinBox* m_spinRestriction;
 
    // -----------------------------------------------------------
 

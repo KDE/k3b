@@ -61,6 +61,7 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
 
   setupVideoCdTab();
   setupLabelTab();
+  setupAdvancedTab();
 
   slotSetImagePath();
     
@@ -165,6 +166,45 @@ K3bVcdBurnDialog::~K3bVcdBurnDialog()
 {
 }
 
+void K3bVcdBurnDialog::setupAdvancedTab()
+{
+  QWidget* w = new QWidget( k3bMainWidget() );
+
+  // ---------------------------------------------------- generic group ----
+  m_groupGeneric = new QGroupBox( 4, Qt::Vertical, i18n("Generic"), w );
+
+  m_checkPbc = new QCheckBox( i18n( "Playback Control (PBC)" ), m_groupGeneric );
+  m_checkSegmentFolder = new QCheckBox( i18n( "SEGMENT Folder must always be present" ), m_groupGeneric );
+  m_checkRelaxedAps = new QCheckBox( i18n( "Relaxed Aps" ), m_groupGeneric );
+  m_checkUpdateScanOffsets = new QCheckBox( i18n( "Update Scan Offsets" ), m_groupGeneric );
+
+  // ------------------------------------------------------- misc group ----
+  m_groupMisc = new QGroupBox( i18n("Misc"), w );
+  m_groupMisc->setColumnLayout(0, Qt::Vertical );
+  m_groupMisc->layout()->setSpacing( spacingHint() );
+  m_groupMisc->layout()->setMargin( marginHint() );
+
+  QGridLayout*  groupMiscLayout = new QGridLayout( m_groupMisc->layout() );
+  groupMiscLayout->setAlignment( Qt::AlignTop );
+
+  QLabel* labelRestriction = new QLabel( i18n( "Restriction Category (0..3)" ), m_groupMisc, "labelRestriction" );
+  m_spinRestriction = new QSpinBox( m_groupMisc, "m_spinRestriction" );
+  m_spinRestriction->setMinValue(0);
+  m_spinRestriction->setMaxValue(3);
+
+  groupMiscLayout->addWidget( labelRestriction, 1, 0);
+  groupMiscLayout->addMultiCellWidget( m_spinRestriction, 1, 1, 1, 1);
+  groupMiscLayout->setRowStretch( 2, 2 );
+
+  // ----------------------------------------------------------------------
+  QGridLayout* grid = new QGridLayout( w );
+  grid->setMargin( marginHint() );
+  grid->setSpacing( spacingHint() );
+  grid->addWidget( m_groupGeneric, 0, 0 );
+  grid->addWidget( m_groupMisc, 1, 0 );
+
+  addPage( w, i18n("Advanced") );
+}
 
 void K3bVcdBurnDialog::setupVideoCdTab()
 {
@@ -181,7 +221,7 @@ void K3bVcdBurnDialog::setupVideoCdTab()
 
   m_groupOptions = new QGroupBox( 4, Qt::Vertical, i18n("Options"), w );
   m_checkAutoDetect = new QCheckBox( i18n( "Autodetect VideoCD type" ), m_groupOptions );
-  
+
   m_checkNonCompliant = new QCheckBox( i18n( "Enable Broken SVCD mode" ), m_groupOptions );
   // Only available on SVCD Type
   m_checkNonCompliant->setEnabled( false );
@@ -190,7 +230,7 @@ void K3bVcdBurnDialog::setupVideoCdTab()
   m_check2336 = new QCheckBox( i18n( "Use 2336 byte Sectors" ), m_groupOptions );
 
   m_checkCdiSupport = new QCheckBox( i18n( "Enable CD-i support" ), m_groupOptions );
-  
+
   // ------------------------------------------------- CD-i Application ---
   m_groupCdi = new QGroupBox( 4, Qt::Vertical, i18n("Video on CD-i"), w );
   m_editCdiCfg = new QMultiLineEdit( m_groupCdi, "m_editCdiCfg" );
@@ -203,7 +243,7 @@ void K3bVcdBurnDialog::setupVideoCdTab()
   grid->addMultiCellWidget( m_groupVcdFormat, 0, 1, 0, 0 );
   grid->addWidget( m_groupOptions, 0, 1 );
   grid->addWidget( m_groupCdi, 1, 1 );
-  
+
   addPage( w, i18n("Settings") );
 }
 
@@ -243,7 +283,7 @@ void K3bVcdBurnDialog::setupLabelTab()
   m_spinVolumeCount = new QSpinBox( w, "m_editVolumeCount" );
 
   m_editVolumeId->setMaxLength(31);
-  
+
   m_spinVolumeNumber->setMinValue(1);
   m_spinVolumeNumber->setMaxValue(1);
   m_spinVolumeCount->setMinValue(1);
