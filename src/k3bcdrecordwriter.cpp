@@ -122,7 +122,7 @@ void K3bCdrecordWriter::prepareArgumentList()
     if( m_cdrecordBinObject->hasFeature("overburn") )
       *m_process << "-overburn";
     else
-      emit infoMessage( i18n("Cdrecord version <= 1.10 does not support overburning!"), INFO );
+      emit infoMessage( i18n("Cdrecord %1 does not support overburning!").arg(m_cdrecordBinObject->version), INFO );
     
   // additional user parameters from config
   QStringList params = m_cdrecordBinObject->userParameters();
