@@ -356,7 +356,7 @@ void K3bDiskInfoDetector::fetchIsoInfo()
   char buf[17*2048];
 
   if( f.readBlock( buf, 17*2048 ) == 17*2048 ) {
-    m_info.isoId = QString::fromLatin1( &buf[16*2048+1], 6 ).stripWhiteSpace();
+    m_info.isoId = QString::fromLatin1( &buf[16*2048+1], 5 ).stripWhiteSpace();  // is it really 5 or 6?
     m_info.isoSystemId = QString::fromLatin1( &buf[16*2048+8], 32 ).stripWhiteSpace();
     m_info.isoVolumeId = QString::fromLatin1( &buf[16*2048+40], 32 ).stripWhiteSpace();
     m_info.isoVolumeSetId = QString::fromLatin1( &buf[16*2048+190], 128 ).stripWhiteSpace();

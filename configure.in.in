@@ -1,6 +1,6 @@
 #MIN_CONFIG
 
-AM_INIT_AUTOMAKE(k3b,0.6.0pre1)
+AM_INIT_AUTOMAKE(k3b,0.6.0pre2)
 
 #checking libid3
 AC_MSG_CHECKING(for ID3Lib)
@@ -102,8 +102,9 @@ fi
 AC_SUBST(OGG_VORBISLIBS)
 
 
-if test x$ogg_vorbis = xyes; then
+if test x$ogg_vorbis = xno; then
 	echo ""
 	echo "No Ogg Vorbis library and headers found."
 	echo "Ogg Vorbis support disabled."
+	echo ""
 fi
