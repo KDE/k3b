@@ -454,6 +454,7 @@ bool K3bMixedJob::prepareWriter()
   connect( m_writer, SIGNAL(processedSubSize(int, int)), this, SIGNAL(processedSubSize(int, int)) );
   connect( m_writer, SIGNAL(nextTrack(int, int)), this, SLOT(slotWriterNextTrack(int, int)) );
   connect( m_writer, SIGNAL(buffer(int)), this, SIGNAL(bufferStatus(int)) );
+  connect( m_writer, SIGNAL(writeSpeed(int)), this, SIGNAL(writeSpeed(int)) );
   connect( m_writer, SIGNAL(finished(bool)), this, SLOT(slotWriterFinished(bool)) );
   connect( m_writer, SIGNAL(dataWritten()), this, SLOT(slotDataWritten()) );
   //  connect( m_writer, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );

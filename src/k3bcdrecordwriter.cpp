@@ -42,7 +42,6 @@ K3bCdrecordWriter::K3bCdrecordWriter( K3bDevice* dev, QObject* parent, const cha
     m_stdin(false)
 {
   m_process = 0;
-  m_isStarted = false;
 }
 
 
@@ -291,17 +290,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
 	  emit processedSubSize( made, size );
 	  emit subPercent( 100*made/size );
 
-    if (!m_isStarted) {
-      m_startWriteTime = QTime::currentTime();
-      m_isStarted = true;
-    }
-    int elapsed = m_startWriteTime.secsTo( QTime::currentTime() );
-    if (elapsed > 0) {
-      double speed = (made * 1024) / elapsed;
-      // kdDebug() << QString("Speed: %1 Kb/s (%2x) elapsed: %3s").arg((int)speed).arg(speed / 150.0,0,'g',2).arg(elapsed) << endl;
-    }
-
-    if( m_totalSize > 0 ) {
+	  if( m_totalSize > 0 ) {
 	    emit processedSize( m_alreadyWritten+made, m_totalSize );
 	    emit percent( 100*(m_alreadyWritten+made)/m_totalSize );
 	  }
@@ -368,18 +357,9 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
 
 void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 {
-  int elapsed;
-  
   if( p->normalExit() ) {
     switch( p->exitStatus() ) {
     case 0:
-
-      elapsed = m_startWriteTime.secsTo( QTime::currentTime() );
-      if (elapsed > 0) {
-        double speed = (m_totalSize * 1024) / elapsed;
-        emit infoMessage( i18n("Estimated speed %1 Kb/s (%2x)").arg((int)speed).arg(speed/150.0,0,'g',2), K3bJob::INFO );
-      }
-
       if( simulate() )
 	emit infoMessage( i18n("Simulation successfully finished"), K3bJob::STATUS );
       else

@@ -91,6 +91,7 @@ class K3bBurnJob : public K3bJob
 
  signals:
   void bufferStatus( int );
+  void writeSpeed(int);
 
  private:
   int m_writeMethod;

@@ -379,7 +379,8 @@ bool K3bDataJob::prepareWriterJob()
     delete m_writerJob;
 
   // It seems as if cdrecord is not able to append sessions in dao mode whereas cdrdao is
-  if( writingApp() == K3b::CDRECORD || (writingApp() == K3b::DEFAULT && !m_doc->dao() )) {
+  if( writingApp() == K3b::CDRECORD || 
+      (writingApp() == K3b::DEFAULT && !(m_doc->dao() && !m_doc->multiSessionMode() == K3bDataDoc::NONE)) )  {
     K3bCdrecordWriter* writer = new K3bCdrecordWriter( m_doc->burner(), this );
 
     // cdrecord manpage says that "not all" writers are able to write
@@ -471,6 +472,7 @@ bool K3bDataJob::prepareWriterJob()
   connect( m_writerJob, SIGNAL(processedSubSize(int, int)), this, SIGNAL(processedSubSize(int, int)) );
   connect( m_writerJob, SIGNAL(nextTrack(int, int)), this, SLOT(slotWriterNextTrack(int, int)) );
   connect( m_writerJob, SIGNAL(buffer(int)), this, SIGNAL(bufferStatus(int)) );
+  connect( m_writerJob, SIGNAL(writeSpeed(int)), this, SIGNAL(writeSpeed(int)) );
   connect( m_writerJob, SIGNAL(finished(bool)), this, SLOT(slotWriterJobFinished(bool)) );
   connect( m_writerJob, SIGNAL(dataWritten()), this, SLOT(slotDataWritten()) );
   connect( m_writerJob, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );

@@ -68,6 +68,8 @@ K3bCdCopyJob::K3bCdCopyJob( QObject* parent )
 	  this,SLOT(cdrdaoFinished(bool)));
   connect(m_cdrdaowriter, SIGNAL(nextTrack(int, int)),
 	  this, SLOT(slotNextTrack(int, int)) );
+  connect( m_cdrdaowriter, SIGNAL(writeSpeed(int)), 
+	   this, SIGNAL(writeSpeed(int)) );
 
   m_diskInfoDetector = new K3bDiskInfoDetector( this );
   connect( m_diskInfoDetector, SIGNAL(diskInfoReady(const K3bDiskInfo&)),

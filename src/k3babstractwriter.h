@@ -21,6 +21,8 @@
 
 #include "k3bjob.h"
 
+#include <qdatetime.h>
+
 class K3bDevice;
 
 
@@ -48,6 +50,7 @@ class K3bAbstractWriter : public K3bJob
   void burnDeviceBuffer( int );
   void buffer( int );
   void dataWritten();
+  void writeSpeed( int );
 
   /** 
    * writer will emit subTasks for all prewriting and postwriting stuff
@@ -59,11 +62,21 @@ class K3bAbstractWriter : public K3bJob
  protected:
   K3bAbstractWriter( K3bDevice* dev, QObject* parent = 0, const char* name = 0 );
 
+ private slots:
+  /** calculates the current write speed */
+  void slotProcessedSize(int, int);
+  void slotFinished(bool);
+
  private:
   K3bDevice* m_burnDevice;
   int m_burnSpeed;
   bool m_burnproof;
   bool m_simulate;
+
+  // used for write speed calculation
+  QTime m_lastWriteSpeedCalcTime;
+  int m_lastWrittenBytes;
+  bool m_started;
 };
 
 

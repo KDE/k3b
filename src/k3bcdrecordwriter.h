@@ -20,7 +20,6 @@
 
 
 #include "k3babstractwriter.h"
-#include <qdatetime.h>
 
 class K3bExternalBin;
 class K3bProcess;
@@ -65,8 +64,6 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   const K3bExternalBin* m_cdrecordBinObject;
   K3bProcess* m_process;
 
-  QTime m_startWriteTime;
-  bool m_isStarted;
   bool m_dao;
   bool m_rawWrite;
   bool m_stdin;

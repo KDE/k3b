@@ -25,8 +25,11 @@ K3bAbstractWriter::K3bAbstractWriter( K3bDevice* dev, QObject* parent, const cha
     m_burnDevice(dev),
     m_burnSpeed(1),
     m_burnproof(false),
-    m_simulate(false)
+    m_simulate(false),
+    m_started(false)
 {
+  connect( this, SIGNAL(finished(bool)), this, SLOT(slotFinished(bool)) );
+  connect( this, SIGNAL(processedSize(int, int)), this, SLOT(slotProcessedSize(int, int)) );
 }
 
 
@@ -41,6 +44,31 @@ K3bDevice* K3bAbstractWriter::burnDevice() const
     return m_burnDevice; 
   else
     return K3bDeviceManager::self()->burningDevices().first();
+}
+
+
+void K3bAbstractWriter::slotProcessedSize( int made, int )
+{
+  if (!m_started) {
+    m_lastWriteSpeedCalcTime = QTime::currentTime();
+    m_lastWrittenBytes = made;
+    m_started = true;
+  }
+  else {
+    int elapsed = m_lastWriteSpeedCalcTime.msecsTo( QTime::currentTime() );
+    int written = made - m_lastWrittenBytes;
+    if( elapsed > 0 && written > 0 ) {
+      m_lastWriteSpeedCalcTime = QTime::currentTime();
+      m_lastWrittenBytes = made;
+      emit writeSpeed( (int)((double)written * 1024.0 * 1000.0 / (double)elapsed) );
+    }
+  }
+}
+
+
+void K3bAbstractWriter::slotFinished( bool )
+{
+  m_started = false;
 }
 
 #include "k3babstractwriter.moc"

@@ -196,7 +196,7 @@ void K3bBurnProgressDialog::setupGUI()
   m_buttonShowDebug = new QPushButton( i18n("Show Debugging Output"), this, "m_buttonShowDebug" );
 
   m_groupBuffer = new QGroupBox( this, "m_groupBuffer" );
-  m_groupBuffer->setTitle( i18n( "Buffer Status" ) );
+  m_groupBuffer->setTitle( i18n( "Writer: %1 %2" ).arg("-").arg("-" ) );
   m_groupBuffer->setColumnLayout(0, Qt::Vertical );
   m_groupBuffer->layout()->setSpacing( 0 );
   m_groupBuffer->layout()->setMargin( 0 );
@@ -205,11 +205,12 @@ void K3bBurnProgressDialog::setupGUI()
   m_groupBufferLayout->setSpacing( spacingHint() );
   m_groupBufferLayout->setMargin( marginHint() );
 
-  m_labelWriter = new QLabel( i18n("Writer"), m_groupBuffer );
+  m_labelWriteSpeed = new QLabel( "-", m_groupBuffer );
   m_progressBuffer = new KProgress( m_groupBuffer, "m_progressBuffer" );
   m_progressBuffer->setMaximumWidth( 150 );
 
-  m_groupBufferLayout->addWidget( m_labelWriter );
+  m_groupBufferLayout->addWidget( new QLabel( i18n("Estimated write speed:"), m_groupBuffer ) );
+  m_groupBufferLayout->addWidget( m_labelWriteSpeed );
   m_groupBufferLayout->addWidget( m_progressBuffer );
 
   m_groupProgress = new QGroupBox( this, "m_groupProgress" );
@@ -386,12 +387,12 @@ void K3bBurnProgressDialog::setJob( K3bJob* job )
   K3bBurnJob* burnJob = dynamic_cast<K3bBurnJob*>( job );
   if( m_showBuffer && burnJob ) {
     if( burnJob->writer() )
-      m_labelWriter->setText( i18n("Writer: %1 %2").arg(burnJob->writer()->vendor()).
-			      arg(burnJob->writer()->description()) );
+      m_groupBuffer->setTitle( i18n("Writer: %1 %2").arg(burnJob->writer()->vendor()).
+			       arg(burnJob->writer()->description()) );
 
     // connect to the "special" signals
     connect( burnJob, SIGNAL(bufferStatus(int)), m_progressBuffer, SLOT(setValue(int)) );
-
+    connect( burnJob, SIGNAL(writeSpeed(int)), this, SLOT(slotWriteSpeed(int)) );
     m_groupBuffer->show();
   }
   else {
@@ -547,5 +548,10 @@ void K3bBurnProgressDialog::slotUpdateCaption( int percent )
   k3bMain()->setPlainCaption( QString( "(%1%) %2" ).arg(percent).arg(m_plainCaption) );
 }
 
+
+void K3bBurnProgressDialog::slotWriteSpeed( int s )
+{
+  m_labelWriteSpeed->setText( QString("%1 kb/s (%2x)").arg(s).arg((double)s/150.0,0,'g',2) );
+}
   
 #include "k3bburnprogressdialog.moc"

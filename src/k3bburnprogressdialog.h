@@ -82,6 +82,7 @@ class K3bBurnProgressDialog : public KDialog  {
   void animateSystemTray( int );
 
   void slotUpdateCaption( int );
+  void slotWriteSpeed( int );
 
  protected:
   void closeEvent( QCloseEvent* );
@@ -103,7 +104,7 @@ class K3bBurnProgressDialog : public KDialog  {
   QLabel* m_labelTrackProgress;
   QLabel* m_labelCdTime;
   QLabel* m_labelCdProgress;
-  QLabel* m_labelWriter;
+  QLabel* m_labelWriteSpeed;
 		
   QGridLayout* mainLayout;
   QHBoxLayout* m_groupInfoLayout;
