@@ -31,7 +31,7 @@ K3bCdDevice::Track::Track()
 K3bCdDevice::Track::Track( const Track& track )
   : m_firstSector( track.firstSector() ),
     m_lastSector( track.lastSector() ),
-    m_index0(-1),
+    m_index0( track.index0() ),
     m_type( track.type() ),
     m_mode( track.mode() ),
     m_copyPermitted( track.copyPermitted() ),
