@@ -119,6 +119,9 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
 {
   m_processExited = true;
 
+  if( m_canceled )
+    return;
+
   if( m_data.count() <= 0 ) {
     if( p->normalExit() ) {
       if( p->exitStatus() == 0 ) {
@@ -314,12 +317,15 @@ void K3bIsoImager::start()
   else {
     m_processExited = false;
     m_processSuspended = false;
+    m_canceled = false;
   }
 }
 
 
 void K3bIsoImager::cancel()
 {
+  m_canceled = true;
+
   if( m_process )
     if( !m_processExited ) {
       disconnect(m_process);

@@ -90,6 +90,7 @@ void K3bDataJob::start()
   emit started();
 
   m_canceled = false;
+  m_imageFinished = false;
 
   if( m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
       m_doc->multiSessionMode() == K3bDataDoc::FINISH ) {

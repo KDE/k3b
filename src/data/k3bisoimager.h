@@ -85,6 +85,8 @@ class K3bIsoImager : public K3bJob
   void outputData();
 
   void cleanup();
+
+  bool m_canceled;
 };
 
 
