@@ -193,9 +193,10 @@ void K3bMainWindow::initView()
   setMainDockWidget( mainDock );
   mainDock->setEnableDocking( KDockWidget::DockNone );
 
-  QVBox* documentBox = new QVBox( mainDock );
+  QHBox* documentBox = new QHBox( mainDock );
   m_viewsToolbar = new KToolBar( this, documentBox, "viewsToolBar" );
   m_viewsToolbar->setEnableContextMenu(true); // seems not to work! :-(
+  m_viewsToolbar->setOrientation( Qt::Vertical );
   m_documentTab = new K3bProjectTabWidget( documentBox );
   mainDock->setWidget( documentBox );
   connect( m_documentTab, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotCurrentDocChanged(QWidget*)) );
