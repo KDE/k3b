@@ -27,6 +27,7 @@
 #include <qdir.h>
 #include <qvbox.h>
 #include <qlabel.h>
+#include <qtoolbutton.h>
 
 #include <kfiledetailview.h>
 #include <klistview.h>
@@ -39,6 +40,7 @@
 #include <klocale.h>
 #include <kfileitem.h>
 #include <kmessagebox.h>
+
 
 
 
@@ -65,16 +67,24 @@ KActionCollection* K3bFileView::actionCollection() const
 void K3bFileView::setupGUI()
 {
   QVBoxLayout* layout = new QVBoxLayout( this );
-  layout->setAutoAdd( true );
+  //  layout->setAutoAdd( true );
 
-  m_dirOp           = new K3bDirOperator( QDir::home().absPath(), this );
-
+  m_dirOp = new K3bDirOperator( QDir::home().absPath(), this );
   m_dirOp->readConfig( k3bMain()->config(), "file view" );
   m_dirOp->setMode( KFile::Files );
   m_dirOp->setView( KFile::Default );
 
-  KToolBar* toolBar = new KToolBar( this, "fileviewtoolbar" );
+  QFrame* toolBar = new QFrame( this );
+  QHBoxLayout* toolBarLayout = new QHBoxLayout( toolBar );
+  toolBarLayout->setMargin( 1 );
+  toolBarLayout->setSpacing( 0 );
 
+  layout->addWidget( m_dirOp );
+  layout->addWidget( toolBar );
+  layout->setStretchFactor( m_dirOp, 1 );
+
+
+  // setup actions
   KAction* actionPlay = new KAction( i18n("&Play"), "1rightarrow", 0, this, SLOT(slotAudioFilePlay()), 
 				     m_dirOp->actionCollection(), "audio_file_play");
   KAction* actionEnqueue = new KAction( i18n("&Enqueue"), "1rightarrow", 0, this, SLOT(slotAudioFileEnqueue()), 
@@ -82,11 +92,42 @@ void K3bFileView::setupGUI()
   KAction* actionAddFilesToProject = new KAction( i18n("&Add to project"), 0, this, SLOT(slotAddFilesToProject()), 
 						  m_dirOp->actionCollection(), "add_file_to_project");
 
-  // add some actions to the toolbar
-  m_dirOp->actionCollection()->action("up")->plug( toolBar );
-  actionPlay->plug( toolBar );
-  toolBar->insertSeparator();
+  KAction* actionUp = m_dirOp->actionCollection()->action("home");
+  KAction* actionHome = m_dirOp->actionCollection()->action("up");
 
+  // setup the toolBar buttons
+  QToolButton* buttonUp = new QToolButton( toolBar );
+  buttonUp->setIconSet( actionUp->iconSet() );
+  buttonUp->setTextLabel( actionUp->toolTip(), true );
+  buttonUp->setTextLabel( actionUp->text() );
+  buttonUp->setAutoRaise( true );
+  connect( buttonUp, SIGNAL(clicked()), actionUp, SLOT(activate()) );
+  connect( actionUp, SIGNAL(enabled(bool)), buttonUp, SLOT(setEnabled(bool)) );
+
+  QToolButton* buttonHome = new QToolButton( toolBar );
+  buttonHome->setIconSet( actionHome->iconSet() );
+  buttonHome->setTextLabel( actionHome->toolTip(), true );
+  buttonHome->setTextLabel( actionHome->text() );
+  buttonHome->setAutoRaise( true );
+  connect( buttonHome, SIGNAL(clicked()), actionHome, SLOT(activate()) );
+  connect( actionHome, SIGNAL(enabled(bool)), buttonHome, SLOT(setEnabled(bool)) );
+
+  QToolButton* buttonPlay = new QToolButton( toolBar );
+  buttonPlay->setIconSet( actionPlay->iconSet() );
+  buttonPlay->setTextLabel( actionPlay->toolTip(), true );
+  buttonPlay->setTextLabel( actionPlay->text() );
+  buttonPlay->setAutoRaise( true );
+  connect( buttonPlay, SIGNAL(clicked()), actionPlay, SLOT(activate()) );
+  connect( actionPlay, SIGNAL(enabled(bool)), buttonPlay, SLOT(setEnabled(bool)) );
+
+
+  toolBarLayout->addWidget( buttonHome );
+  toolBarLayout->addWidget( buttonUp );
+  toolBarLayout->addWidget( buttonPlay );
+  toolBarLayout->addSpacing( 5 );
+
+
+  // insert actions into diroperator menu
   KActionMenu* dirOpMenu = (KActionMenu*)m_dirOp->actionCollection()->action("popupMenu");
   dirOpMenu->insert( actionAddFilesToProject, 0 );
   dirOpMenu->insert( new KActionSeparator( m_dirOp->actionCollection() ), 1 );
@@ -100,6 +141,10 @@ void K3bFileView::setupGUI()
   // create filter selection combobox
   QLabel* filterLabel = new QLabel( i18n("&Filter:"), toolBar, "filterLabel" );
   m_filterWidget = new KFileFilterCombo( toolBar, "filterwidget" );
+
+  toolBarLayout->addWidget( filterLabel );
+  toolBarLayout->addWidget( m_filterWidget );
+  toolBarLayout->setStretchFactor( m_filterWidget, 1 );
 
   m_filterWidget->setEditable( true );
   QString filter = i18n("*|All files");
@@ -125,7 +170,7 @@ void K3bFileView::setUrl(const KURL& url, bool forward)
 }
 
 
-void K3bFileView::slotFileHighlighted( const KFileItem* item )
+void K3bFileView::slotFileHighlighted( const KFileItem* )
 {
   // check if there are audio files under the selected ones
   bool play = false;
@@ -227,7 +272,7 @@ void K3bFileView::reload()
 
 void K3bFileView::saveConfig( KConfig* c )
 {
-  m_dirOp->writeConfig( k3bMain()->config(), "file view" );
+  m_dirOp->writeConfig( c, "file view" );
 }
 
 

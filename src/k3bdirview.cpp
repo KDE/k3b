@@ -82,10 +82,11 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
   connect( m_diskInfoDetector, SIGNAL(diskInfoReady(const K3bDiskInfo&)),
 	   this, SLOT(slotDiskInfoReady(const K3bDiskInfo&)) );
 
-  KToolBar* toolBar = new KToolBar( this, "dirviewtoolbar" );
+  //  KToolBar* toolBar = new KToolBar( this, "dirviewtoolbar" );
 
   m_mainSplitter = new QSplitter( this );
   m_fileTreeView = new K3bFileTreeView( m_mainSplitter );
+  m_fileTreeView->header()->hide();
 
   m_viewStack    = new QWidgetStack( m_mainSplitter );
   m_fileView     = new K3bFileView(m_viewStack, "fileView");
@@ -121,15 +122,15 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
 
   // add some actions to the toolbar
   //  m_fileView->actionCollection()->action("up")->plug( toolBar );
-  KStdAction::home( this, SLOT(home()), m_actionCollection )->plug( toolBar );
-  KStdAction::redisplay( this, SLOT(reload()), m_actionCollection )->plug( toolBar );
-  toolBar->insertSeparator();
+//   KStdAction::home( this, SLOT(home()), m_actionCollection )->plug( toolBar );
+//   KStdAction::redisplay( this, SLOT(reload()), m_actionCollection )->plug( toolBar );
+//   toolBar->insertSeparator();
 
   // add a url combobox to the toolbar
-  (void)new QLabel( i18n("Location"), toolBar );
-  m_urlCombo = new KComboBox( true, toolBar );
-  m_urlCombo->setEditText( QDir::homeDirPath() );
-  m_urlCombo->setDuplicatesEnabled( false );
+//   (void)new QLabel( i18n("Location"), toolBar );
+//   m_urlCombo = new KComboBox( true, toolBar );
+//   m_urlCombo->setEditText( QDir::homeDirPath() );
+//   m_urlCombo->setDuplicatesEnabled( false );
 
 
   m_devicePopupMenu = new KActionMenu( this );
@@ -146,8 +147,8 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
   m_devicePopupMenu->insert( actionEject );
 
 
-  connect( m_urlCombo, SIGNAL(returnPressed(const QString&)), this, SLOT(slotDirActivated(const QString&)) );
-  connect( m_urlCombo, SIGNAL(activated(const QString&)), this, SLOT(slotDirActivated(const QString&)) );
+//   connect( m_urlCombo, SIGNAL(returnPressed(const QString&)), this, SLOT(slotDirActivated(const QString&)) );
+//   connect( m_urlCombo, SIGNAL(activated(const QString&)), this, SLOT(slotDirActivated(const QString&)) );
 
   connect( m_fileTreeView, SIGNAL(urlExecuted(const KURL&)), this, SLOT(slotDirActivated(const KURL&)) );
   connect( m_fileTreeView, SIGNAL(deviceExecuted(K3bDevice*)), this, SLOT(slotDetectDiskInfo(K3bDevice*)) );
@@ -283,13 +284,13 @@ void K3bDirView::slotEjectDisk()
 
 void K3bDirView::slotUpdateURLCombo( const KURL& url )
 {
-  m_urlCombo->setEditText( url.path() );
+//   m_urlCombo->setEditText( url.path() );
 }
 
 
 void K3bDirView::slotDirActivated( const QString& url )
 {
-  m_urlCombo->insertItem( url, 0 );
+//   m_urlCombo->insertItem( url, 0 );
   slotDirActivated( KURL(url) );
 }
 
@@ -300,7 +301,7 @@ void K3bDirView::slotDirActivated( const KURL& url )
   m_diskInfoDetector->cancel();
 
   m_fileView->setUrl(url, true);
-  m_urlCombo->setEditText( url.path() );
+//   m_urlCombo->setEditText( url.path() );
 
   m_viewStack->raiseWidget( m_fileView );
 }
