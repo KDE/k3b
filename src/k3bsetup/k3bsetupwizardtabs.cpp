@@ -237,7 +237,7 @@ FstabEntriesTab::FstabEntriesTab( int i, int o, K3bSetupWizard* wizard )
   layout->setSpacing( KDialog::spacingHint() );
 
   KActiveLabel* infoLabel = new KActiveLabel( i18n("K3b needs to mount the devices to perform certain steps. "
-						   "For this an entry in the fstab file is nessesary. "
+						   "For this an entry in the fstab file is necessary. "
 						   "K3bSetup allows you to create missing entries for "
 						   "your devices. You can change the values by clicking "
 						   "twice on an entry and edit it directly in the list."), 

@@ -132,7 +132,7 @@
                                     <bool>true</bool>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>Move directoy down</string>
+                                    <string>Move directory down</string>
                                 </property>
                             </widget>
                             <widget class="QToolButton" row="0" column="2">

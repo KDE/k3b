@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -56,7 +56,7 @@ void K3bDebuggerPlugin::slotDoDebuggerStuff()
 {
   //
   // We create a html page with as much info about the system as possible
-  // and show it in a dialog with the possiblity to send it as mail or save it
+  // and show it in a dialog with the possibility to send it as mail or save it
   //
 
   QString info;

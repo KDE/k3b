@@ -57,7 +57,7 @@ QCheckBox* K3bStdGuiItems::burnproofCheckbox( QWidget* parent, const char* name 
 			   "(or <em>Just Link</em>). This is "
 			   "a feature of the CD writer which avoids buffer underruns."
 			   "<p>Without <em>burnfree</em> if the writer would not get any more "
-			   "data a buffer underrun would occure since the writer needs "
+			   "data a buffer underrun would occur since the writer needs "
 			   "a constant stream of data to write the cd."
 			   "<p>With <em>burnfree</em> the writer can <em>mark</em> the current "
 			   "position of the laser and get back to it when the buffer is filled again."
@@ -65,7 +65,7 @@ QCheckBox* K3bStdGuiItems::burnproofCheckbox( QWidget* parent, const char* name 
 			   "highly recommended to always choose an appropriate writing "
 			   "speed to prevent the usage of burnfree, especially for audio cds</b> "
 			   "(in the worst case one would hear the gap)."
-			   "<p><em>Burnfree</em> was formaly known as <em>Burnproof</em> but since "
+			   "<p><em>Burnfree</em> was formally known as <em>Burnproof</em> but since "
 			   "it has become part of the MMC standard it was renamed.") );
   return c;
 }

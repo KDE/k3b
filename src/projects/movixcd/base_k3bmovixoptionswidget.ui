@@ -90,7 +90,7 @@
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>&lt;p&gt;MPlayer options that should be used in any case.
-&lt;p&gt;They have to be seperated by spaces:
+&lt;p&gt;They have to be separated by spaces:
 &lt;pre&gt;opt1 opt2 opt3&lt;/pre&gt;</string>
                     </property>
                 </widget>
@@ -103,7 +103,7 @@
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>&lt;p&gt;Here one can specify MPlayer options that should never be used.
-&lt;p&gt;They have to be seperated by spaces:
+&lt;p&gt;They have to be separated by spaces:
 &lt;pre&gt;opt1 opt2 opt3&lt;/pre&gt;</string>
                     </property>
                 </widget>

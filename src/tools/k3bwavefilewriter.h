@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -55,7 +55,7 @@ class K3bWaveFileWriter
   /**
    * write 16bit samples to the file.
    * @param e the endianess of the data
-   *          (it will be swapped to little endian byte order if nessesary)
+   *          (it will be swapped to little endian byte order if necessary)
    */
   void write( const char* data, int len, Endianess e = BigEndian );
 

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -88,7 +88,7 @@ bool K3bCddbQuery::parseEntry( QTextStream& stream, K3bCddbResultEntry& entry )
     // !all fields may be splitted into several lines!
   
     if( line.startsWith( "DISCID" ) ) {
-      // TODO: this could be several discids seperated by comma!
+      // TODO: this could be several discids separated by comma!
     }
 
     else if( line.startsWith( "DYEAR" ) ) {

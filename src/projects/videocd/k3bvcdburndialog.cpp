@@ -232,7 +232,7 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
         ( m_editCdiCfg, i18n( "<p>Configuration parameters only available for VideoCD 2.0"
                               "<p>The engine works perfectly well when used as is."
                               "<p>You have the option to configure the VCD application."
-                              "<p>You can adapt the colour and / or the shape of the cursor and lots more." ) );
+                              "<p>You can adapt the color and/or the shape of the cursor and lots more." ) );
 
 
     QWhatsThis::add

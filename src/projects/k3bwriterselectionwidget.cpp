@@ -160,12 +160,12 @@ void K3bWriterSelectionWidget::init()
   if( d->dvd ) {
     QToolTip::add( m_comboWriter, i18n("The DVD writer that will write the DVD") );
     QToolTip::add( m_comboSpeed, i18n("The speed at which to write the DVD") );
-    QToolTip::add( m_comboWritingApp, i18n("The external application to acually write the DVD") );
+    QToolTip::add( m_comboWritingApp, i18n("The external application to actually write the DVD") );
   }
   else {
     QToolTip::add( m_comboWriter, i18n("The CD writer that will write the CD") );
     QToolTip::add( m_comboSpeed, i18n("The speed at which to write the CD") );
-    QToolTip::add( m_comboWritingApp, i18n("The external application to acually write the CD") );
+    QToolTip::add( m_comboWritingApp, i18n("The external application to actually write the CD") );
   }
 
   // What's This info

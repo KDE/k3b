@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -36,7 +36,7 @@ namespace K3bCdDevice {
 
 /**
  * The K3b core takes care of the managers. 
- * This has been seperated from K3bApplication to 
+ * This has been separated from K3bApplication to 
  * make creating a K3bPart easy.
  * This is the heart of the K3b system. Every plugin may use this
  * to get the information it needs.

@@ -234,7 +234,7 @@ void K3bBurningOptionTab::setupGui()
   QToolTip::add( m_checkDropDoubles, i18n("Do not ask to rename already existing files") );
   QToolTip::add( m_checkListHiddenFiles, i18n("Add hidden files in subdirectories") );
   QToolTip::add( m_checkListSystemFiles, i18n("Add system files in subdirectories") );
-  QToolTip::add( m_checkAllowWritingAppSelection, i18n("Allow to choose betweeen cdrecord and cdrdao") );
+  QToolTip::add( m_checkAllowWritingAppSelection, i18n("Allow to choose between cdrecord and cdrdao") );
 
   QToolTip::add( m_checkAutoErasingRewritable, i18n("Automatically erase CD-RWs and DVD-RWs without asking") );
 
@@ -256,7 +256,7 @@ void K3bBurningOptionTab::setupGui()
 						"in directories added to a data project will "
 						"also be added.</p>" ) );
   QWhatsThis::add( m_checkAllowWritingAppSelection, i18n("<p>If this option is checked K3b gives "
-							 "the possiblity to choose between cdrecord "
+							 "the possibility to choose between cdrecord "
 							 "and cdrdao when writing a cd."
 							 "<p>This may be useful if one of the programs "
 							 "does not support the used writer."
