@@ -2809,9 +2809,9 @@ QValueList<int> K3bCdDevice::CdDevice::determineSupportedWriteSpeeds() const
 	    if( dvd && s > 2770 && s < 4155 )
 	      s = 3324; // 2.4x
 	    else if( dvd )
-	      s = 1385*(int)nearbyint( (double)s/1385.0 );
+	      s = 1385*(int)( (double)s/1385.0 + 0.5 );
 	    else
-	      s = 175*(int)nearbyint( (double)s/175.0 );
+	      s = 175*(int)( (double)s/175.0 + 0.5 );
 
 	    // sort the list
 	    QValueList<int>::iterator it = ret.begin();
