@@ -16,7 +16,7 @@
  ***************************************************************************/
 
 #include "k3bcdview.h"
-#include "k3bcdviewitem.h"
+//#include "k3bcdviewitem.h"
 #include "k3bcddb.h"
 #include "k3bcdda.h"
 #include "../k3b.h"
