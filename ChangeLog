@@ -19,6 +19,8 @@ proper automatic writing mode and writing app selection for non-DAO-capable writ
 overwriting of files in a new session
 default CD size is now 80 min
 generic resampling for all audio plugins
+support for mono files
+support for 8Bit wave files
 FLAC decoding plugin (thanks to John Steele Scott)
 	
 0.10

@@ -127,7 +127,16 @@ class K3bAudioDecoder : public K3bPlugin
 
   const QString& filename() const { return m_fileName; }
 
+  // some helper methods
+  static void fromFloatTo16BitBeSigned( float* src, char* dest, int samples );
+  static void from16bitBeSignedToFloat( char* src, float* dest, int samples );
+  static void from8BitTo16BitBeSigned( char* src, char* dest, int samples );
+
  protected:
+  /**
+   * This will be called once before the first call to decodeInternal.
+   * Use it to initialize decoding structures if necessary.
+   */
   virtual bool initDecoderInternal() = 0;
 
   /**
@@ -140,6 +149,8 @@ class K3bAudioDecoder : public K3bPlugin
 
   /**
    * fill the already allocated data with maximal maxLen bytes of decoded samples.
+   * The framework will take care of padding or cutting the decoded data as well
+   * as resampling to 44100 Hz and converting mono samples to stereo.
    */
   virtual int decodeInternal( char* data, int maxLen ) = 0;
 
@@ -147,9 +158,6 @@ class K3bAudioDecoder : public K3bPlugin
 
  private:
   int resample( char* data, int maxLen );
-
-  static void fromFloatTo16BitBeSigned( float* src, char* dest, int samples );
-  static void from16bitBeSignedToFloat( char* src, float* dest, int samples );
 
   QString m_fileName;
   K3b::Msf m_length;

@@ -35,7 +35,9 @@ public:
       inBufferLen(0),
       inBufferSize(0),
       outBuffer(0),
-      outBufferSize(0) {
+      outBufferSize(0),
+      monoBuffer(0),
+      monoBufferSize(0) {
   }
 
   unsigned long alreadyDecoded;
@@ -58,6 +60,10 @@ public:
 
   int samplerate;
   int channels;
+
+  // mono -> stereo conversion
+  char* monoBuffer;
+  int monoBufferSize;
 };
 
 
@@ -73,6 +79,7 @@ K3bAudioDecoder::~K3bAudioDecoder()
 {
   if( d->inBuffer ) delete [] d->inBuffer;
   if( d->outBuffer ) delete [] d->outBuffer;
+  if( d->monoBuffer ) delete [] d->monoBuffer;
   delete d->metaInfo;
   delete d->resampleData;
   if( d->resampleState )
@@ -92,7 +99,12 @@ void K3bAudioDecoder::setFilename( const QString& filename )
 bool K3bAudioDecoder::analyseFile()
 {
   cleanup();
-  return analyseFileInternal( &m_length, &d->samplerate, &d->channels );
+  bool ret = analyseFileInternal( &m_length, &d->samplerate, &d->channels );
+  if( ret ) {
+    return ( ( d->channels == 1 || d->channels == 2 ) && m_length > 0 );
+  }
+  else
+    return false;
 }
 
 
@@ -117,22 +129,57 @@ int K3bAudioDecoder::decode( char* _data, int maxLen )
   if( d->alreadyDecoded >= lengthToDecode )
     return 0;
 
-  // check if we have data left from some previous conversion
-  if( d->inBufferLen > 0 ) {
-    int len = resample( _data, maxLen );
-    d->alreadyDecoded += len;
-    return len;
+  int read = 0;
+
+  if( d->samplerate != 44100 ) {
+
+    // check if we have data left from some previous conversion
+    if( d->inBufferLen > 0 ) {
+      read = resample( _data, maxLen );
+    }
+    else {    
+      if( d->inBufferSize < maxLen/2 ) {
+	if( d->inBuffer )
+	  delete [] d->inBuffer;
+	d->inBuffer = new float[maxLen];
+	d->inBufferSize = maxLen;
+      }
+
+      read = decodeInternal( _data, maxLen );
+
+      d->inBufferLen = read/2;
+      d->inBufferPos = d->inBuffer;
+      from16bitBeSignedToFloat( _data, d->inBuffer, d->inBufferLen );
+      
+      read = resample( _data, maxLen );
+    }
+  }
+  else if( d->channels == 1 ) {
+    if( d->monoBufferSize < maxLen/2 ) {
+      if( d->monoBuffer )
+	delete [] d->monoBuffer;
+      d->monoBuffer = new char[maxLen/2];
+    }
+
+    // we simply duplicate every frame
+    read = decodeInternal( d->monoBuffer, maxLen/2 );
+    for( int i = 0; i < read; i+=2 ) {
+      _data[2*i] = _data[2*i+2] = d->monoBuffer[i];
+      _data[2*i+1] = _data[2*i+3] = d->monoBuffer[i+1];
+    }
+
+    read *= 2;
+  }
+  else {
+    read = decodeInternal( _data, maxLen );
   }
 
-  int len = decodeInternal( _data, maxLen );
-  if( len < 0 )
-    return -1;
 
-  // TODO: handle mono files
-  if( d->channels != 2 )
-    return -1;
 
-  else if( len == 0 ) {
+  if( read < 0 ) {
+    return -1;
+  }
+  else if( read == 0 ) {
     // check if we need to pad
     int bytesToPad = lengthToDecode - d->alreadyDecoded;
     if( bytesToPad > 0 ) {
@@ -140,11 +187,13 @@ int K3bAudioDecoder::decode( char* _data, int maxLen )
 		<< "; decoded module data: " << d->alreadyDecoded
 		<< "; we need to pad " << bytesToPad << " bytes." << endl;
 
-      ::memset( _data, 0, maxLen );
       if( maxLen < bytesToPad )
 	bytesToPad = maxLen;
 
+      ::memset( _data, 0, bytesToPad );
+
       d->alreadyDecoded += bytesToPad;
+
       return bytesToPad;
     }
     else {
@@ -154,31 +203,14 @@ int K3bAudioDecoder::decode( char* _data, int maxLen )
   }
   else {
 
-    // check if we need to resample
-    if( d->samplerate != 44100 ) {
-      if( d->inBufferSize < maxLen/2 ) {
-	if( d->inBuffer )
-	  delete [] d->inBuffer;
-	d->inBuffer = new float[maxLen];
-	d->inBufferSize = maxLen;
-      }
-      d->inBufferLen = len/2;
-      d->inBufferPos = d->inBuffer;
-      from16bitBeSignedToFloat( _data, d->inBuffer, d->inBufferLen );
-
-      len = resample( _data, maxLen );
-      if( len < 0 )
-	return -1;
-    }
-
     // check if we decoded too much
-    if( d->alreadyDecoded + len > lengthToDecode ) {
+    if( d->alreadyDecoded + read > lengthToDecode ) {
       kdDebug() << "(K3bAudioDecoder) we decoded too much. Cutting output." << endl;
-      len = length().audioBytes() - d->alreadyDecoded;
+      read = length().audioBytes() - d->alreadyDecoded;
     }
 
-    d->alreadyDecoded += len;
-    return len;
+    d->alreadyDecoded += read;
+    return read;
   }
 }
 
@@ -205,7 +237,7 @@ int K3bAudioDecoder::resample( char* data, int maxLen )
   d->resampleData->data_in = d->inBufferPos;
   d->resampleData->data_out = d->outBuffer;
   d->resampleData->input_frames = d->inBufferLen/d->channels;
-  d->resampleData->output_frames = maxLen/2/d->channels;
+  d->resampleData->output_frames = maxLen/2/2;  // in case of mono files we need the space anyway
   d->resampleData->src_ratio = 44100.0/(double)d->samplerate;
   d->resampleData->end_of_input = 0;  // FIXME: at the end of the input this needs to be set to 1
 
@@ -215,7 +247,14 @@ int K3bAudioDecoder::resample( char* data, int maxLen )
     return -1;
   }
 
-  fromFloatTo16BitBeSigned( d->outBuffer, data, d->resampleData->output_frames_gen*d->channels );
+  if( d->channels == 2 )
+    fromFloatTo16BitBeSigned( d->outBuffer, data, d->resampleData->output_frames_gen*d->channels );
+  else {
+    for( int i = 0; i < d->resampleData->output_frames_gen; ++i ) {
+      fromFloatTo16BitBeSigned( &d->outBuffer[i], &data[4*i], 1 );
+      fromFloatTo16BitBeSigned( &d->outBuffer[i], &data[4*i+2], 1 );
+    }
+  }
    
   d->inBufferPos += d->resampleData->input_frames_used*d->channels;
   d->inBufferLen -= d->resampleData->input_frames_used*d->channels;
@@ -225,7 +264,8 @@ int K3bAudioDecoder::resample( char* data, int maxLen )
   }
 
   // 16 bit frames, so we need to multiply by 2
-  return d->resampleData->output_frames_gen*2*d->channels;
+  // and we always have two channels
+  return d->resampleData->output_frames_gen*2*2;
 }
 
 
@@ -256,6 +296,30 @@ void K3bAudioDecoder::fromFloatTo16BitBeSigned( float* src, char* dest, int samp
       val = (Q_INT16)(src[i] * 32768.0);
     else
       val = (Q_INT16)(src[i] * 32767.0);
+
+    dest[2*i]   = val>>8;
+    dest[2*i+1] = val;
+  }
+}
+
+
+void K3bAudioDecoder::from8BitTo16BitBeSigned( char* src, char* dest, int samples )
+{
+  for( int i = 0; i < samples; ++i ) {
+    float fval = (float)(Q_UINT8(src[i])-128)/128.0;
+
+    Q_INT16 val = 0;
+      
+    // clipping
+    if( fval > 1.0 )
+      val = 32767;
+    else if( fval < -1.0 )
+      val = -32768;
+
+    else if( fval <= 0 )
+      val = (Q_INT16)(fval * 32768.0);
+    else
+      val = (Q_INT16)(fval * 32767.0);
 
     dest[2*i]   = val>>8;
     dest[2*i+1] = val;

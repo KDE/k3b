@@ -67,11 +67,8 @@ class K3bWaveDecoder : public K3bAudioDecoder
   int decodeInternal( char* data, int maxLen );
 
  private:
-  QFile* m_file;
-
-  long m_headerLength;
-  int m_sampleRate;
-  unsigned long m_size;
+  class Private;
+  Private* d;
 };
 
 
