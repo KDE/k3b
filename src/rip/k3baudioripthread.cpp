@@ -301,7 +301,7 @@ bool K3bAudioRipThread::ripTrack( int track, const QString& filename )
 	d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_ARTIST, m_cddbEntry.artists[track-1] );
 	d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_TITLE, m_cddbEntry.titles[track-1] );
 	d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_COMMENT, m_cddbEntry.extInfos[track-1] );
-	d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_NUMBER, QString::number(track) );
+	d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_NUMBER, QString::number(track).rightJustify( 2, '0' ) );
 	d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_ARTIST, m_cddbEntry.cdArtist );
 	d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_TITLE, m_cddbEntry.cdTitle );
 	d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_COMMENT, m_cddbEntry.cdExtInfo );
