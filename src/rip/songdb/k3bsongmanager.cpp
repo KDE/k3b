@@ -109,9 +109,15 @@ K3bSong* K3bSongManager::findSong( const QString& index ){
     QString file = index.right( index.length() - 1 - index.findRev("/") );
     qDebug("(K3bSongManager) Search song: " + file);
     K3bSongContainer *con = findContainer( path );
-    qDebug("Found container " + con->getPath() );
-    K3bSong *song = findSong( file, *con );
-    return song;
+    if( con != 0 ) {
+      qDebug("Found container " + con->getPath() );
+      K3bSong *song = findSong( file, *con );
+      return song;
+    }
+    else {
+      qDebug( "No container found!" );
+      return 0;
+    }
 }
 void K3bSongManager::addSong( const QString& path, K3bSong& song){
     K3bSongContainer *con = getContainer( path );
