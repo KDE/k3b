@@ -6,7 +6,8 @@ Once again improved writing speed detection. Hopefully this is the last time. ;)
 Do not warn about cdrecord not running suid root on kernel 2.6.8 and above
 K3bSetup now removes the suid root bit on kernel 2.6.8 an above systems.
 K3bSetup now also sets the proper permissions on the generic devices.
-	
+Fixed handling of boot load segment 0 for "none-emulation" boo images
+
 0.11.17
 Fixed some DVD writing speed detection issues.
 Always write pure Data CDs in TAO mode when using cdrecord since DAO fails on so many
