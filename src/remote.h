@@ -17,7 +17,6 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 /*
- * $Log$
  * Revision 1.5  2001/10/01 18:08:41  andreasm
  * Enabled remote progress messages for blanking.
  *
