@@ -403,5 +403,3 @@ test -n "$debug"    && CFLAGS="$CFLAGS $debug"
 test -n "$optimize" && CFLAGS="$CFLAGS $optimize"
 test -n "$profile"  && CFLAGS="$CFLAGS $profile" LDFLAGS="$LDFLAGS $profile"
 
-LTLIBOBJS=`echo "$LIBOBJS" | sed -e 's/\.o/.lo/g'`
-AC_SUBST(LTLIBOBJS)
