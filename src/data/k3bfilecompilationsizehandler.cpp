@@ -140,7 +140,7 @@ void K3bFileCompilationSizeHandler::removeFile( K3bDataItem* item )
     if( d->specialItems.findRef( item ) == -1 ) {
       kdError() << "(K3bFileCompilationSizeHandler) Special item "
 		<< item->k3bName()
-		<< " has been removed without beeing added!" << endl;
+		<< " has been removed without being added!" << endl;
     }
     else {
       d->specialItems.removeRef( item );
@@ -159,7 +159,7 @@ void K3bFileCompilationSizeHandler::removeFile( K3bDataItem* item )
     if( inodeInfo.items.findRef( item ) == -1 ) {
       kdError() << "(K3bFileCompilationSizeHandler) " 
 		<< item->localPath()
-		<< " has been removed without beeing added!" << endl;
+		<< " has been removed without being added!" << endl;
     }
     else {
       if( (KIO::filesize_t)s.st_size != inodeInfo.savedSize ) {

@@ -80,10 +80,10 @@
 
 /*
     For CDRDAO is a workaround in K3bCdrDaoWriter (cueSheet()) which creates symlink in the tmp directory.
-    neccessary if filename extension is not .bin CDRDAO do not use the FILE-statement (now ??)
-    For CDRECORD it is neccessary to chdir to the directory where both files (cue/bin) is available.
+    necessary if filename extension is not .bin CDRDAO do not use the FILE-statement (now ??)
+    For CDRECORD it is necessary to chdir to the directory where both files (cue/bin) is available.
     CDRECORD works with the filename which is defined by the FILE-statement in the cue file.
-    TODO: check and rewrite the cue FILE-statement if neccessary.
+    TODO: check and rewrite the cue FILE-statement if necessary.
     check if cue-file has only one FILE-statement is not available.
 */
 

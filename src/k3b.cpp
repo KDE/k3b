@@ -806,7 +806,7 @@ void K3bMainWindow::slotSettingsConfigure()
 
   d.exec();
 
-  // emit a changed signal everytime since we do not know if the user selected
+  // emit a changed signal every time since we do not know if the user selected
   // "apply" and "cancel" or "ok"
   emit configChanged( m_config );
 }
@@ -820,7 +820,7 @@ void K3bMainWindow::showOptionDialog( int index )
 
   d.exec();
 
-  // emit a changed signal everytime since we do not know if the user selected
+  // emit a changed signal every time since we do not know if the user selected
   // "apply" and "cancel" or "ok"
   emit configChanged( m_config );
 }

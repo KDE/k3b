@@ -33,7 +33,7 @@
 
 void K3b::addDefaultPrograms( K3bExternalBinManager* m )
 {
-  // dont't know if we need more vcdTools in the future (vcdxrip)
+  // don't know if we need more vcdTools in the future (vcdxrip)
   static const char* vcdTools[] =  { "vcdxbuild",
                                      "vcdxminfo",
 				            0 };

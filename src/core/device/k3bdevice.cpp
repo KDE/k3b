@@ -369,7 +369,7 @@ bool K3bCdDevice::CdDevice::isDVD()
 
   if( d->deviceType & (DVDR | DVDRAM | DVDROM) ) {
     //     try to read the physical dvd-structure
-    //     if this fails, we probably cannot take any further (usefull) dvd-action
+    //     if this fails, we probably cannot take any further (useful) dvd-action
     dvd_struct dvdinfo;
     ::memset(&dvdinfo,0,sizeof(dvd_struct));
     dvdinfo.type = DVD_STRUCT_PHYSICAL;

@@ -119,7 +119,7 @@ void K3bAudioNormalizeJob::slotStdLine( const QString& line )
   }
   
   else if( line.contains( "already normalized" ) ) {
-    // no normalization neccessary for the current track
+    // no normalization necessary for the current track
     emit infoMessage( i18n("Track %1 is already normalized.").arg(m_currentTrack), INFO );
     m_currentTrack++;
   }

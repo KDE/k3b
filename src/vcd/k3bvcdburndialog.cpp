@@ -130,7 +130,7 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
     QToolTip::add
         ( m_checkPbc, i18n( "Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 disc formats." ) );
     QToolTip::add
-        ( m_checkSegmentFolder, i18n( "Add allways an empty `/SEGMENT' directory" ) );
+        ( m_checkSegmentFolder, i18n( "Add always an empty `/SEGMENT' directory" ) );
     QToolTip::add
         ( m_checkRelaxedAps, i18n( "This controls whether APS constraints are strict or relaxed. " ) );
     QToolTip::add

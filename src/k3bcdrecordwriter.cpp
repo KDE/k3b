@@ -595,7 +595,7 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	break;
       case UNKNOWN:
 	if( m_lastFifoValue <= 3 ) {
-	  emit infoMessage( i18n("Probably a buffer underrun occured."), ERROR );
+	  emit infoMessage( i18n("Probably a buffer underrun occurred."), ERROR );
 	}
 	else {
 	  // no recording device and also other errors!! :-(

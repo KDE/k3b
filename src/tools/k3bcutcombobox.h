@@ -24,7 +24,7 @@ class QResizeEvent;
 
 /**
  * Cuts it's text.
- * Since it rebuilds the complete list of strings everytime
+ * Since it rebuilds the complete list of strings every time
  * a new string is added or one gets removed it is not a good
  * idea to use this for dynamic lists.
  *

@@ -1060,7 +1060,7 @@ void K3bMixedJob::slotNormalizeSubProgress( int p )
 
 void K3bMixedJob::prepareProgressInformation()
 {
-  // all these values are basicly useful when not writing on the fly
+  // all these values are basically useful when not writing on the fly
   // since with on-the-fly the writer gets the full percentage
 
   // calculate percentage of audio and data

@@ -384,7 +384,7 @@ bool K3bCdDevice::DeviceManager::saveConfig( KConfig* c )
 
   if( c->hasGroup( "Devices" ) )
   {
-    // remove all old device entrys
+    // remove all old device entries
     c->deleteGroup("Devices");
   }
 

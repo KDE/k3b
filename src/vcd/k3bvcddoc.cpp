@@ -303,7 +303,7 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
             newTrack->setPlayTime( vcdOptions()->PbcPlayTime() );
             newTrack->setWaitTime( vcdOptions()->PbcWaitTime() );
 
-            // for debuging
+            // for debugging
             Mpeg->PrintInfos();
             delete Mpeg;
             return newTrack;

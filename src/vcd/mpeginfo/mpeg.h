@@ -246,7 +246,7 @@ class mpeg
         // transport stream internals
         transport* Transport;
 
-        // extentions
+        // extensions
         sequence_ext* SExt;
         display_ext* DExt;
         user_data* UData;

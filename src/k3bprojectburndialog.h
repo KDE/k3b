@@ -72,7 +72,7 @@ class K3bProjectBurnDialog : public K3bInteractionDialog
    virtual void slotLoadK3bDefaults();
 
    /**
-    * The default implemantation loads the following settings from the apps KConfig.
+    * The default implementation loads the following settings from the apps KConfig.
     * It opens the correct group.
     * May be used in subclasses.
     * <ul>
@@ -89,7 +89,7 @@ class K3bProjectBurnDialog : public K3bInteractionDialog
    virtual void slotLoadUserDefaults();
 
    /**
-    * The default implemantation saves the following settings to the apps KConfig.
+    * The default implementation saves the following settings to the apps KConfig.
     * It opens the correct group.
     * May be used in subclasses.
     * <ul>
