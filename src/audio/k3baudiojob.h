@@ -68,6 +68,8 @@ private:
 	int m_iNumTracksAlreadyWritten;
 	int m_iNumFilesToDecode;
 	int m_iNumFilesAlreadyDecoded;
+	int m_iTracksAlreadyWrittenSize;
+	int m_iDocSize;
 		
 signals:
 	void writingLeadOut();

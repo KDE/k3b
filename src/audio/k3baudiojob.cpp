@@ -38,6 +38,9 @@ K3bAudioJob::K3bAudioJob( K3bAudioDoc* doc )
 {
 	m_doc = doc;
 	m_mp3Job = 0L;
+	
+	m_iDocSize = doc->size();
+	m_iTracksAlreadyWrittenSize = 0;
 }
 
 
@@ -178,8 +181,10 @@ void K3bAudioJob::slotParseCdrdaoOutput( KProcess*, char* output, int len )
 		else if( (*str).startsWith( "Writing" ) ) {
 			// a new track has been started
 			emit newTrack();
-			if(!firstTrack)
+			if(!firstTrack) {
 				m_iNumTracksAlreadyWritten++;
+				m_iTracksAlreadyWrittenSize += m_doc->at(m_iNumTracksAlreadyWritten - 1)->size();
+			}
 			else
 				firstTrack = false;
 			
@@ -217,19 +222,15 @@ void K3bAudioJob::slotParseCdrdaoOutput( KProcess*, char* output, int len )
 				qDebug( "Parsing did not work for: " + (*str).mid( pos1, pos2-pos1 ) );
 			
 			emit bufferStatus( fifo );
-			double _w = (double)m_doc->numOfTracks() / (double)(m_iNumFilesToDecode + m_doc->numOfTracks());
-			emit percent( (int)((100.0-100.0*_w) + _w * 100.0 * (double)made/(double)size) );  // HACK!!
-			emit processedSize( made, size );
 			
-			// HACK: calculating equal sizes for all tracks:
-			// -----------------------------------------------------------------------------
-			double trackSize = (double)size / (double)m_doc->numOfTracks();
-			double trackMade = fmod((double)made, trackSize);
-			if( made != size ) {
-				emit subPercent( (int)( 100.0 * trackMade/trackSize ) );
-				emit processedSubSize( (int)trackMade, (int)trackSize );
-			}
-			// ---------------------------------------------------------------- HACK ----
+			double _f = (double)size / (double)m_iDocSize;
+			// calculate track progress
+			int _trackMade = (int)( (double)made -_f*(double)m_iTracksAlreadyWrittenSize );
+			int _trackSize = (int)( _f * (double)m_doc->at(m_iNumTracksAlreadyWritten)->size() );
+			emit processedSubSize( _trackMade, _trackSize );
+			emit subPercent( 100*_trackMade / _trackSize );
+			emit processedSize( made, size );
+			emit percent( 100*made / size );
 		}
 		else if( (*str).startsWith( "Executing power" ) ) {
 			emit infoMessage( i18n( *str ) );
@@ -278,7 +279,7 @@ void K3bAudioJob::start()
 		emit infoMessage( i18n("There are %1 files to decode...").arg(m_iNumFilesToDecode) );
 		
 		// now use K3bMp3DecodingJob to decode all files
-		emit newTask( "Decoding" );
+		emit newTask( "Decoding files" );
 		decodeNextFile();
 	}
 	else
@@ -367,11 +368,10 @@ void K3bAudioJob::decodeNextFile()
 			m_mp3Job = new K3bMp3DecodingJob( m_currentProcessedTrack->absPath() );
 			
 			// connect the signals
-//			connect( m_mp3Job, SIGNAL(percent(int)), this, SIGNAL(subPercent(int)) );
-			connect( m_mp3Job, SIGNAL(processedSize(int, int)), this, SLOT(slotEmitProgress(int, int)) );
+			connect( m_mp3Job, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSubSize(int, int)) );
+			connect( m_mp3Job, SIGNAL(percent(int)), this, SIGNAL(subPercent(int)) );
 			connect( m_mp3Job, SIGNAL(infoMessage(const QString&)), this, SIGNAL(infoMessage(const QString&)) );
 			connect( m_mp3Job, SIGNAL(finished(K3bJob*)), this, SLOT(slotMp3JobFinished()) );
-			// TODO: overall progress
 		}
 		else
 			m_mp3Job->setSourceFile( m_currentProcessedTrack->absPath() );
@@ -386,6 +386,8 @@ void K3bAudioJob::startWriting()
 	emit newTask( "Writing" );
 	emit newSubTask( i18n("Preparing write process...") );
 
+	m_iDocSize = m_doc->size();
+	
 	m_process.clearArguments();
 	m_process.disconnect();
 	
