@@ -51,11 +51,11 @@ class K3bMixedBurnDialog : public K3bProjectBurnDialog
    void slotOk();
    void saveSettings();
    void readSettings();
-   void slotWriterChanged();
 
    void loadDefaults();
    void loadUserDefaults();
    void saveUserDefaults();
+   void slotToggleEverything();
 
  private:
    void setupSettingsPage();

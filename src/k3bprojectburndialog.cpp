@@ -23,6 +23,7 @@
 #include "k3btempdirselectionwidget.h"
 #include "k3bwriterselectionwidget.h"
 #include "k3bstdguiitems.h"
+#include "device/k3bdevice.h"
 
 #include <qstring.h>
 #include <qpushbutton.h>
@@ -99,6 +100,26 @@ K3bProjectBurnDialog::K3bProjectBurnDialog(K3bDoc* doc, QWidget *parent, const c
 
 
 K3bProjectBurnDialog::~K3bProjectBurnDialog(){
+}
+
+
+
+void K3bProjectBurnDialog::slotWriterChanged()
+{
+  if( K3bDevice* dev = m_writerSelectionWidget->writerDevice() ) {
+    if( dev->burnproof() )
+      m_checkBurnproof->setEnabled( true );
+    else {
+      m_checkBurnproof->setEnabled( false );
+      m_checkBurnproof->setChecked( false );
+    }
+    if( dev->dao() )
+      m_checkDao->setEnabled( true );
+    else {
+      m_checkDao->setEnabled( false );
+      m_checkDao->setChecked( false );
+    }
+  }
 }
 
 
@@ -209,6 +230,11 @@ void K3bProjectBurnDialog::prepareGui()
   grid->addWidget( m_tempDirSelectionWidget, 1, 1 );
   grid->setRowStretch( 1, 1 );
   grid->setColStretch( 1, 1 );
+
+  // some default connections that should always be useful
+  connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotWriterChanged()) );
+  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkRemoveBufferFiles, SLOT(setDisabled(bool)) );
+  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_tempDirSelectionWidget, SLOT(setDisabled(bool)) );
 }
 
 

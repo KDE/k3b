@@ -9,6 +9,7 @@
 #include <k3bwriterselectionwidget.h>
 #include <k3btempdirselectionwidget.h>
 #include <k3bisooptions.h>
+#include <tools/k3bglobals.h>
 
 
 #include <qtabwidget.h>
@@ -58,6 +59,11 @@ K3bMixedBurnDialog::K3bMixedBurnDialog( K3bMixedDoc* doc, QWidget *parent, const
   addPage( m_advancedImageSettingsWidget, i18n("Advanced") );
 
   createContextHelp();
+
+  connect( m_checkDao, SIGNAL(toggled()), this, SLOT(slotToggleEverything()) );
+  connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(slotToggleEverything()) );
+
+  slotWriterChanged();
 }
 
 
@@ -119,13 +125,6 @@ void K3bMixedBurnDialog::createContextHelp()
 						  "this is the recommended mode."
 						  "<p>Some older CD-ROMs may have problems reading "
 						  "a blue book cd since it's a multisession cd.") );
-}
-
-
-void K3bMixedBurnDialog::slotWriterChanged()
-{
-  if( K3bDevice* dev = m_writerSelectionWidget->writerDevice() )
-    m_checkBurnproof->setEnabled( dev->burnproof() );
 }
 
 
@@ -268,6 +267,19 @@ void K3bMixedBurnDialog::saveUserDefaults()
 void K3bMixedBurnDialog::slotOk()
 {
   K3bProjectBurnDialog::slotOk();
+}
+
+
+void K3bMixedBurnDialog::slotToggleEverything()
+{
+  // currently we do not support writing on the fly with cdrecord
+  if( !m_checkDao->isChecked() || m_writerSelectionWidget->writingApp() == K3b::CDRECORD ) {
+    m_checkOnTheFly->setEnabled( false );
+    m_checkOnTheFly->setChecked( false );
+  }
+  else {
+    m_checkOnTheFly->setEnabled( true );
+  }
 }
 
 

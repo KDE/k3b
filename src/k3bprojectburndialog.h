@@ -63,6 +63,8 @@ class K3bProjectBurnDialog : public KDialogBase
    virtual void loadUserDefaults() = 0;
    virtual void saveUserDefaults() = 0;
 
+   virtual void slotWriterChanged();
+
  signals:
    void writerChanged();
 
