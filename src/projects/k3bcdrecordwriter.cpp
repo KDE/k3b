@@ -68,7 +68,8 @@ K3bCdrecordWriter::K3bCdrecordWriter( K3bDevice* dev, QObject* parent, const cha
   : K3bAbstractWriter( dev, parent, name ),
     m_stdin(false),
     m_clone(false),
-    m_forceNoEject(false)
+    m_forceNoEject(false),
+    m_cue(false)
 {
   d = new Private();
   d->speedEst = new K3bThroughputEstimator( this );
