@@ -204,8 +204,9 @@ void K3bVcdBurnDialog::setupVideoCdTab( QFrame* frame )
 
   frameLayout->setRowStretch( 1, 1 );
   frameLayout->setColStretch( 1, 1 );
-
- 
+  // TODO: set enabled to false, k2b canot resample now.
+  m_groupVcdFormat->setEnabled(false);
+  m_groupOptions->setEnabled(false);
 }
 
 void K3bVcdBurnDialog::setupLabelTab( QFrame* frame )
@@ -256,6 +257,11 @@ void K3bVcdBurnDialog::setupLabelTab( QFrame* frame )
   setTabOrder( m_editAlbumId, m_spinVolumeCount );
   setTabOrder( m_spinVolumeCount, m_spinVolumeNumber );
 
+  // TODO: enable this in the future :)
+  m_checkApplicationId->setEnabled(false);
+  labelVolumeCount->setEnabled(false);
+  labelVolumeNumber->setEnabled(false);
+  
 }
 
 
@@ -356,6 +362,7 @@ void K3bVcdBurnDialog::readSettings()
     break;
   }
 
+  
   m_editVolumeId->setText( vcdDoc()->vcdOptions()->volumeId() );
   m_editAlbumId->setText( vcdDoc()->vcdOptions()->albumId() );
 
