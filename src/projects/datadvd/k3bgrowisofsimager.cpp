@@ -90,7 +90,7 @@ void K3bGrowisofsImager::start()
 
   m_process = new K3bProcess();
   m_process->setRunPrivileged(true);
-  m_process->setPriority( KProcess::PrioHighest );
+  //  m_process->setPriority( KProcess::PrioHighest );
   m_process->setSuppressEmptyLines(true);
 
   m_growisofsBin = k3bcore->externalBinManager()->binObject( "growisofs" );

@@ -120,7 +120,7 @@ bool K3bGrowisofsWriter::prepareProcess()
   delete d->process;
   d->process = new K3bProcess();
   d->process->setRunPrivileged(true);
-  d->process->setPriority( KProcess::PrioHighest );
+  //  d->process->setPriority( KProcess::PrioHighest );
   d->process->setSplitStdout(true);
   d->process->setRawStdin(true);
   connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotReceivedStderr(const QString&)) );

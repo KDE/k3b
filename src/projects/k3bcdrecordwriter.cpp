@@ -143,7 +143,7 @@ void K3bCdrecordWriter::prepareProcess()
   if( m_process ) delete m_process;  // kdelibs want this!
   m_process = new K3bProcess();
   m_process->setRunPrivileged(true);
-  m_process->setPriority( KProcess::PrioHighest );
+  //  m_process->setPriority( KProcess::PrioHighest );
   m_process->setSplitStdout(true);
   m_process->setSuppressEmptyLines(true);
   m_process->setRawStdin(true);  // we only use stdin when writing on-the-fly

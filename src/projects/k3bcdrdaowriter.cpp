@@ -460,7 +460,7 @@ void K3bCdrdaoWriter::start()
     delete m_process;  // kdelibs want this!
   m_process = new K3bProcess();
   m_process->setRunPrivileged(true);
-  m_process->setPriority( KProcess::PrioHighest );
+  //  m_process->setPriority( KProcess::PrioHighest );
   m_process->setSplitStdout(false);
   m_process->setRawStdin(true);
   connect( m_process, SIGNAL(stderrLine(const QString&)),
