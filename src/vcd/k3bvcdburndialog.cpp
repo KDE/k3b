@@ -319,23 +319,10 @@ void K3bVcdBurnDialog::setupLabelTab()
 
 void K3bVcdBurnDialog::slotOk()
 {
-  // check if enough space in tempdir
-  if( doc()->size()/1024 > m_tempDirSelectionWidget->freeTempSpace() ) {
-    KMessageBox::sorry( this, i18n("Not enough space in temporary directory. Either change the directory or select on-the-fly burning.") );
-    return;
-  }
-  else {
-    slotSetImagePath();
-    /*
-    QFileInfo fi( m_tempDirSelectionWidget->tempPath() );
-    if( fi.isDir() )
-      m_tempDirSelectionWidget->setTempPath( fi.filePath() + "/image.bin" );
-    */
-    if( QFile::exists( m_tempDirSelectionWidget->tempPath() ) ) {
-      if( KMessageBox::questionYesNo( this, i18n("Do you want to overwrite %1").arg(m_tempDirSelectionWidget->tempPath()), i18n("File exists...") )
+  if( QFile::exists( m_tempDirSelectionWidget->tempPath() ) ) {
+    if( KMessageBox::questionYesNo( this, i18n("Do you want to overwrite %1").arg(m_tempDirSelectionWidget->tempPath()), i18n("File exists...") )
         != KMessageBox::Yes )
       return;
-    }
   }
 
   K3bProjectBurnDialog::slotOk();
