@@ -346,11 +346,11 @@ void K3bVcdJob::slotVcdxBuildFinished()
     if ( m_process->normalExit() ) {
         // TODO: check the process' exitStatus()
         switch ( m_process->exitStatus() ) {
-                case 0:
+            case 0:
                 emit infoMessage( i18n( "Cue/Bin files successfully created." ), K3bJob::SUCCESS );
                 m_imageFinished = true;
                 break;
-                default:
+            default:
                 emit infoMessage( i18n( "%1 returned an unknown error (code %2)." ).arg( "vcdxbuild" ).arg( m_process->exitStatus() ),
                                   K3bJob::ERROR );
                 emit infoMessage( strerror( m_process->exitStatus() ), K3bJob::ERROR );
@@ -510,34 +510,44 @@ void K3bVcdJob::parseInformation( QString text )
     // parse warning
     if ( text.contains( "mpeg user scan data: one or more BCD fields out of range for" ) ) {
         int index = text.find( " for" );
+
         emit infoMessage( i18n( "One or more BCD fields out of range for %1" ).arg( text.mid( index + 4 ).stripWhiteSpace() ), K3bJob::WARNING );
-    }
-    else if ( text.contains( "mpeg user scan data: from now on, scan information data errors will not be reported anymore" ) ) {
+
+    } else if ( text.contains( "mpeg user scan data: from now on, scan information data errors will not be reported anymore" ) ) {
         emit infoMessage( i18n( "From now on, scan information data errors will not be reported anymore" ), K3bJob::INFO );
         emit infoMessage( i18n( "Consider enabling the 'update scan offsets' option, if it is not enabled already." ), K3bJob::INFO );
-    }
-    else if ( text.contains( "APS' pts seems out of order (actual pts" ) ) {
+
+    } else if ( text.contains( "APS' pts seems out of order (actual pts" ) ) {
         int index = text.find( "(actual pts" );
         int index2 = text.find( ", last seen pts" );
-        int endindex = index2;
-        int endindex2 = text.find( ") -- ignoring this aps" );
-        emit infoMessage( i18n( "APS' pts seems out of order (actual pts %1, last seen pts %2)" ).arg( text.mid( index + 12, endindex ).stripWhiteSpace() ).arg( text.mid( index2 + 14, endindex2 ).stripWhiteSpace() ), K3bJob::WARNING );
+        int index3 = text.find( ") -- ignoring this aps" );
+
+        emit infoMessage( i18n( "APS' pts seems out of order (actual pts %1, last seen pts %2)" ).arg( text.mid( index + 12, index2 - index - 12 ).stripWhiteSpace() ).arg( text.mid( index2 + 14, index3 - index2 - 14 ).stripWhiteSpace() ), K3bJob::WARNING );
         emit infoMessage( i18n( "Ignoring this aps" ), K3bJob::INFO );
+
+    } else if ( text.contains( "bad packet at packet" ) ) {
+        int index = text.find( "at packet #" );
+        int index2 = text.find( "(stream byte offset" );
+        int index3 = text.find( ") -- remaining " );
+        int index4 = text.find( "bytes of stream will be ignored" );
+
+        emit infoMessage( i18n( "Bad packet at packet #%1 (stream byte offset %2)" ).arg( text.mid( index + 11, index2 - index - 11 ).stripWhiteSpace() ).arg( text.mid( index2 + 19, index3 - index2 - 19 ).stripWhiteSpace() ), K3bJob::WARNING );
+        emit infoMessage( i18n( "Remaining %1 bytes of stream will be ignored." ).arg( text.mid( index3 + 15, index4 - index3 - 15 ).stripWhiteSpace() ), K3bJob::WARNING );
     }
 }
 
 QString K3bVcdJob::jobDescription() const
 {
     switch ( m_doc->vcdType() ) {
-            case K3bVcdDoc::VCD11:
+        case K3bVcdDoc::VCD11:
             return i18n( "Writing Video CD (Version 1.1)" );
-            case K3bVcdDoc::VCD20:
+        case K3bVcdDoc::VCD20:
             return i18n( "Writing Video CD (Version 2.0)" );
-            case K3bVcdDoc::SVCD10:
+        case K3bVcdDoc::SVCD10:
             return i18n( "Writing Super Video CD" );
-            case K3bVcdDoc::HQVCD:
+        case K3bVcdDoc::HQVCD:
             return i18n( "Writing High-Quality Video CD" );
-            default:
+        default:
             return i18n( "Writing Video CD" );
     }
 }
