@@ -64,7 +64,7 @@ class K3bVcdJob : public K3bBurnJob
 
   /** reimplemented from K3bBurnJob */
   void createCdrdaoProgress( int made, int size );
-  void startNewCdrdaoTrack();
+  // void startNewCdrdaoTrack();
         
  private:
   void vcdxGen();

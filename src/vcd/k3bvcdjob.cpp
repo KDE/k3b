@@ -546,6 +546,8 @@ void K3bVcdJob::cdrdaoWrite()
     // it "should" be the executable
     kdDebug() << "(K3bVcdJob) could not start cdrdao" << endl;
 
+    firstTrack = false;
+    
     emit infoMessage( i18n("Could not start cdrdao!"), K3bJob::ERROR );
     cancelAll();
     emit finished( false );
@@ -568,21 +570,22 @@ void K3bVcdJob::createCdrdaoProgress( int made, int size )
     kdDebug() << "(K3bVcdJob) got progress: " << made << ", " << size << endl;
     return;
   }
-  
+
+  if(!firstTrack) {
+    if( m_doc->dummy() ) {
+      emit newSubTask( i18n("Writing cue/bin image ... (Simulation)") );
+    }
+    else {
+      emit newSubTask( i18n("Writing cue/bin image ...") );
+    }
+  }
+  else
+    firstTrack = false;
+    
   emit processedSubSize( made, size );
   emit subPercent( 100*made / size );
   emit processedSize( made, size );
   emit percent( 66 + (34*made / size ) );
-}
-
-void K3bVcdJob::startNewCdrdaoTrack()
-{
-  if( m_doc->dummy() ) {
-    emit newSubTask( i18n("Writing cue/bin image ... (Simulation)") );
-  }
-  else {
-    emit newSubTask( i18n("Writing cue/bin image ...") );
-  }
 }
 
 void K3bVcdJob::slotCdrdaoFinished()
