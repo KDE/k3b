@@ -34,6 +34,7 @@ K3bDivxCodecData::K3bDivxCodecData(){
     m_keyframes="300";
     m_audioGain="1.0";
     m_audioBitrate=128;
+    m_anamorph = false;
 }
 
 K3bDivxCodecData::~K3bDivxCodecData(){
@@ -65,6 +66,13 @@ void K3bDivxCodecData::setLength( const QString& l){
     m_length = l;
     m_timeLength = QTime::fromString( l );
     kdDebug() << "Time " << m_timeLength.toString() << endl;
+}
+void K3bDivxCodecData::setAspectRatioAnamorph( const QString& a){
+    if( a == "anamorph" ){
+        m_anamorph = true;
+    } else {
+        m_anamorph = false;
+    }
 }
 void K3bDivxCodecData::setAspectRatio( const QString& a){
     m_aspectRatio = a;

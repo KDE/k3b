@@ -43,6 +43,7 @@ public:
     void setLength( const QString& );
     void setAudioGain( const QString& a ){ m_audioGain = a;} ;
     void setAspectRatio( const QString& );
+    void setAspectRatioAnamorph( const QString& );
     void setWidth( const QString& );
     void setHeight( const QString& );
     void setChapters( const QString& c ){ m_chapters = c;};
@@ -56,6 +57,7 @@ public:
     QString getSize();
     QString getAspectRatio(){ return m_aspectRatio;};
     float getAspectRatioValue(){ return m_fAspectRatio; }
+    bool isAnamorph() { return m_anamorph; }
     QString getLength() { return m_length; };
     QTime getTime(){ return m_timeLength; };
     int getWidthValue(){ return m_iWidth; }
@@ -117,8 +119,11 @@ private:
     QString m_length;
     QTime m_timeLength;
     QString m_audioGain;
+    // aspect ration
     QString m_aspectRatio;
     float m_fAspectRatio;
+    bool m_anamorph;
+
     QString m_width;
     int m_iWidth;
     QString m_height;
