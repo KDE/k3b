@@ -92,6 +92,8 @@ void K3bWaveModule::startDecoding()
 
 void K3bWaveModule::analyseTrack()
 {
+  audioTrack()->setStatus( K3bAudioTrack::OK );
+
   QFile f( audioTrack()->absPath() );
   if( !f.open( IO_ReadOnly ) ) {
     kdDebug() << "(K3bWaveModule) could not open file " << audioTrack()->absPath() << endl;
