@@ -141,7 +141,8 @@ public:
 
 	//  General ToolBox
 
-	void PrintInfos();
+  int MpegVersion();
+  void PrintInfos();
 	bool has_audio() {return HasAudio;}
 	bool has_video() {return HasVideo;}
 	off_t Size() {return FileSize;}

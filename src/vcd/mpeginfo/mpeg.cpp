@@ -277,11 +277,6 @@ mpeg::~mpeg() {
 
 
 // map a buffer onto file for efficiency
-#ifndef _WIN32
-#ifndef _MACOSX
-inline
-#endif
-#endif
 
 byte mpeg::GetByte(off_t offset) {
 	START_CLOCK;
@@ -319,12 +314,6 @@ byte mpeg::Byte(off_t offset){
 
 
 // same as above but improved for backward search
-#ifndef _WIN32
-#ifndef _MACOSX
-inline
-#endif
-#endif
-
 byte mpeg::bdGetByte(off_t offset){
 	size_t nread;
 	if ((offset >= buffend) || (offset < buffstart)){
@@ -351,12 +340,6 @@ byte mpeg::bdGetByte(off_t offset){
 
 
 // make sure the sequence 0x00 00 01 mark
-#ifndef _WIN32
-#ifndef _MACOSX
-inline
-#endif
-#endif
-
 bool mpeg::EnsureMPEG(off_t offset, marker mark){
 	if ((	GetByte(offset) == 0x00		) &&
 			(	GetByte(offset+1) == 0x00	) &&
@@ -371,13 +354,6 @@ bool mpeg::EnsureMPEG(off_t offset, marker mark){
 
 
 // get a two byte size
-#ifndef _WIN32
-#ifndef _MACOSX
-inline
-#endif
-#endif
-
-
 unsigned short int mpeg::GetSize(off_t offset ) {
 	return GetByte(offset)*256 + GetByte(offset+1);
 
@@ -1066,15 +1042,22 @@ bool mpeg::ParseSystem() {
 	return true;
 }
 
-
-
-
-
-
-
-
-
-
+// get mpeg infos on stdout
+int mpeg::MpegVersion()
+{
+	if (MpegType == mpeg_SYSTEM ) {
+    if (HasVideo) {
+			if (mpeg_version == 1) {
+				return 1;
+      }
+      else {
+        return 2;
+      }
+	  }
+  }
+	kdDebug() << QString("(mpeg) %1 can not be handled by this program").arg(FileName) << endl;
+	return 0;
+}
 
 
 
@@ -1374,12 +1357,6 @@ void mpeg::SecsToHMS(char* HMS, float duration){
 
 
 // find next 0x 00 00 01 xx sequence, returns offset or -1 on err
-#ifndef _WIN32
-#ifndef _MACOSX
-inline
-#endif
-#endif
-
 off_t mpeg::FindNextMarker(off_t from){
 	off_t offset;
 	for (offset = from; offset < (FileSize - 4); offset++)
@@ -1402,12 +1379,6 @@ off_t mpeg::FindNextMarker(off_t from){
 
 // find next 0x 00 00 01 xx sequence, returns offset or -1 on err and
 // change mark to xx
-#ifndef _WIN32
-#ifndef _MACOSX
-inline
-#endif
-#endif
-
 off_t mpeg::FindNextMarker(off_t from, marker* mark){
 	off_t offset = FindNextMarker(from);
 	if (offset >= 0) {
@@ -1427,13 +1398,6 @@ off_t mpeg::FindNextMarker(off_t from, marker* mark){
 
 
 // find next 0X00 00 01 mark
-#ifndef _WIN32
-#ifndef _MACOSX
-inline
-#endif
-#endif
-
-
 off_t mpeg::FindNextMarker(off_t from, marker mark){
 	off_t offset = from;
 	while(offset >= 0){
@@ -1458,12 +1422,6 @@ off_t mpeg::FindNextMarker(off_t from, marker mark){
 
 
 // same as above but optimized for backward search
-#ifndef _WIN32
-#ifndef _MACOSX
-inline
-#endif
-#endif
-
 off_t mpeg::bdFindNextMarker(off_t from, marker mark) {
 	off_t offset;
 	for( offset = from; offset >= 0; offset--)
@@ -1479,12 +1437,6 @@ off_t mpeg::bdFindNextMarker(off_t from, marker mark) {
 	}
 	return -1;
 }
-
-#ifndef _WIN32
-#ifndef _MACOSX
-inline
-#endif
-#endif
 
 off_t mpeg::bdFindNextMarker(off_t from, marker* mark) {
 	off_t offset;
@@ -1505,12 +1457,6 @@ off_t mpeg::bdFindNextMarker(off_t from, marker* mark) {
 // read Time Stamp at given offset
 // NOTE: The guys at MPEG are really mad.
 //       look at what we have to do to get a timestamp :/
-
-#ifndef _WIN32
-#ifndef _MACOSX
-inline
-#endif
-#endif
 
 double mpeg::ReadTS(off_t offset) {
 	byte highbit;
@@ -1534,12 +1480,6 @@ double mpeg::ReadTS(off_t offset) {
 
 	return TS;
 }
-
-#ifndef _WIN32
-#ifndef _MACOSX
-inline
-#endif
-#endif
 
 double mpeg::ReadTSMpeg2(off_t offset){
 	byte highbit;

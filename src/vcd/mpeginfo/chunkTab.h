@@ -28,7 +28,8 @@ public:
 	bool AddFile(char* filename);
 	bool ParseRange(char* range);
 	bool ParseBoundaries(char* boundaries);
-	void PrintTab();
+  int MpegVersion();
+  void PrintTab();
 	void PrintInfos();
 	bool Nchunks(int n);
 	chunk** GetChunks(int* n);

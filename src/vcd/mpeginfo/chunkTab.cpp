@@ -26,6 +26,10 @@ void chunkTab::PrintInfos() {
     MpegTab[i]->PrintInfos();
 }
 
+int chunkTab::MpegVersion()
+{
+  return MpegTab[0]->MpegVersion();
+}
 
 chunk** chunkTab::GetChunks(int* nchunks) {
   *nchunks = current_chunk;
