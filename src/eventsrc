@@ -55,3 +55,9 @@ Comment[sv]=Processen avslutades med fel
 Comment[xx]=xxProcess finished with errorsxx
 default_sound=k3b_error1.wav
 default_presentation=1
+
+[WaitingForMedium]
+Name=Waiting for medium
+Comment=The user needs to insert a medium
+default_sound=k3b_wait_media.wav
+default_presentation=1
