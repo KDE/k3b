@@ -142,7 +142,9 @@ void K3bIsoImager::slotReceivedStderr( const QString& line )
     //
 
     if( line.contains( "done, estimate" ) ) {
-      parseProgress( line );
+      int p = parseProgress( line );
+      if( p != -1 )
+	emit percent( p );
     }
     else if( line.contains( "extents written" ) ) {
       emit percent( 100 );
@@ -154,7 +156,7 @@ void K3bIsoImager::slotReceivedStderr( const QString& line )
 }
 
 
-void K3bIsoImager::parseProgress( const QString& line ) 
+int K3bIsoImager::parseProgress( const QString& line ) 
 {
   QString perStr = line;
   perStr.truncate( perStr.find('%') );
@@ -162,12 +164,13 @@ void K3bIsoImager::parseProgress( const QString& line )
   double p = perStr.toDouble( &ok );
   if( !ok ) {
     kdDebug() << "(K3bIsoImager) Parsing did not work for " << perStr << endl;
+    return -1;
   }
   else {
     if( m_firstProgressValue < 0 )
       m_firstProgressValue = p;
     
-    emit percent( (int)::ceil( (p - m_firstProgressValue)*100.0/(100.0 - m_firstProgressValue) ) );
+    return( (int)::ceil( (p - m_firstProgressValue)*100.0/(100.0 - m_firstProgressValue) ) );
   }
 }
 

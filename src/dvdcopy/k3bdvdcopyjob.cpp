@@ -217,7 +217,7 @@ void K3bDvdCopyJob::prepareWriter()
   connect( d->writerJob, SIGNAL(percent(int)), this, SLOT(slotWriterProgress(int)) );
   connect( d->writerJob, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSize(int, int)) );
   connect( d->writerJob, SIGNAL(buffer(int)), this, SIGNAL(bufferStatus(int)) );
-  connect( d->writerJob, SIGNAL(writeSpeed(int)), this, SIGNAL(writeSpeed(int)) );
+  connect( d->writerJob, SIGNAL(writeSpeed(int, int)), this, SIGNAL(writeSpeed(int, int)) );
   connect( d->writerJob, SIGNAL(finished(bool)), this, SLOT(slotWriterFinished(bool)) );
   //  connect( d->writerJob, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
   connect( d->writerJob, SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );

@@ -64,13 +64,13 @@ class K3bAbstractWriter : public K3bJob
   void burnDeviceBuffer( int );
   void buffer( int );
   void dataWritten();
-  void writeSpeed( int );
+  void writeSpeed( int, int );
 
  protected:
   K3bAbstractWriter( K3bCdDevice::CdDevice* dev, QObject* parent = 0, const char* name = 0 );
 
-  void createEstimatedWriteSpeed( int writtenMb, bool firstCall = false );
-  void createAverageWriteSpeedInfoMessage();
+  int createEstimatedWriteSpeed( int writtenKb, bool firstCall = false );
+  int createAverageWriteSpeedInfoMessage();
 
  protected slots:
   void slotUnblockWhileCancellationFinished( bool success );

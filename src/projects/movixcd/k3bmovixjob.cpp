@@ -41,7 +41,7 @@ K3bMovixJob::K3bMovixJob( K3bMovixDoc* doc, QObject* parent )
   connect( m_dataJob, SIGNAL(processedSubSize(int, int)), this, SIGNAL(processedSubSize(int, int)) );
   connect( m_dataJob, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSize(int, int)) );
   connect( m_dataJob, SIGNAL(bufferStatus(int)), this, SIGNAL(bufferStatus(int)) );
-  connect( m_dataJob, SIGNAL(writeSpeed(int)), this, SIGNAL(writeSpeed(int)) );
+  connect( m_dataJob, SIGNAL(writeSpeed(int, int)), this, SIGNAL(writeSpeed(int, int)) );
   connect( m_dataJob, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
   connect( m_dataJob, SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
   connect( m_dataJob, SIGNAL(debuggingOutput(const QString&, const QString&)),

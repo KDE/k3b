@@ -41,7 +41,7 @@ K3bMovixDvdJob::K3bMovixDvdJob( K3bMovixDvdDoc* doc, QObject* parent )
   connect( m_dvdJob, SIGNAL(processedSubSize(int, int)), this, SIGNAL(processedSubSize(int, int)) );
   connect( m_dvdJob, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSize(int, int)) );
   connect( m_dvdJob, SIGNAL(bufferStatus(int)), this, SIGNAL(bufferStatus(int)) );
-  connect( m_dvdJob, SIGNAL(writeSpeed(int)), this, SIGNAL(writeSpeed(int)) );
+  connect( m_dvdJob, SIGNAL(writeSpeed(int, int)), this, SIGNAL(writeSpeed(int, int)) );
   connect( m_dvdJob, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
   connect( m_dvdJob, SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
   connect( m_dvdJob, SIGNAL(debuggingOutput(const QString&, const QString&)),

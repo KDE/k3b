@@ -422,7 +422,8 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
 	    emit percent( 100*(m_alreadyWritten+made)/m_totalSize );
 	  }
 
-	  createEstimatedWriteSpeed( m_alreadyWritten+made, !m_writeSpeedInitialized );
+	  emit writeSpeed( createEstimatedWriteSpeed( m_alreadyWritten+made*1024, !m_writeSpeedInitialized ),
+			   150 );
 	  m_writeSpeedInitialized = true;
 	}
     }
@@ -543,13 +544,17 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
   if( p->normalExit() ) {
     switch( p->exitStatus() ) {
     case 0:
-      if( simulate() )
-	emit infoMessage( i18n("Simulation successfully finished"), K3bJob::STATUS );
-      else
-	emit infoMessage( i18n("Writing successfully finished"), K3bJob::STATUS );
-
-      createAverageWriteSpeedInfoMessage();
-      emit finished( true );
+      {
+	if( simulate() )
+	  emit infoMessage( i18n("Simulation successfully finished"), K3bJob::STATUS );
+	else
+	  emit infoMessage( i18n("Writing successfully finished"), K3bJob::STATUS );
+	
+	int s = createAverageWriteSpeedInfoMessage();
+	emit infoMessage( i18n("Average overall write speed: %1 kb/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/150.0), 2), INFO );
+	
+	emit finished( true );
+      }
       break;
 
     default:

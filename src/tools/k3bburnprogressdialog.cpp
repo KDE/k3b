@@ -84,7 +84,7 @@ void K3bBurnProgressDialog::setBurnJob( K3bBurnJob* burnJob )
 
   if( burnJob ) {
     connect( burnJob, SIGNAL(bufferStatus(int)), this, SLOT(slotBufferStatus(int)) );
-    connect( burnJob, SIGNAL(writeSpeed(int)), this, SLOT(slotWriteSpeed(int)) );
+    connect( burnJob, SIGNAL(writeSpeed(int, int)), this, SLOT(slotWriteSpeed(int, int)) );
     connect( burnJob, SIGNAL(burning(bool)), m_progressWritingBuffer, SLOT(setEnabled(bool)) );
     connect( burnJob, SIGNAL(burning(bool)), m_labelWritingSpeed, SLOT(setEnabled(bool)) );
 
@@ -114,9 +114,9 @@ void K3bBurnProgressDialog::slotBufferStatus( int b )
 }
 
 
-void K3bBurnProgressDialog::slotWriteSpeed( int s )
+void K3bBurnProgressDialog::slotWriteSpeed( int s, int multiplicator )
 {
-  m_labelWritingSpeed->setText( QString("%1 kb/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/150.0,2)) );
+  m_labelWritingSpeed->setText( QString("%1 kb/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/(double)multiplicator,2)) );
 }
 
 #include "k3bburnprogressdialog.moc"

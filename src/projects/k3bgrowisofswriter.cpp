@@ -26,9 +26,11 @@
 
 #include <klocale.h>
 #include <kdebug.h>
+#include <kglobal.h>
 #include <kconfig.h>
 
 #include <qvaluelist.h>
+//#include <qdatetime.h>
 
 #include <errno.h>
 #include <string.h>
@@ -49,6 +51,12 @@ public:
   QString image;
 
   bool success;
+
+  QTime lastSpeedCalculationTime;
+  int lastSpeedCalculationBytes;
+  int lastProgress;
+  int lastProgressed;
+  int lastWritingSpeed;
 };
 
 
@@ -156,6 +164,12 @@ void K3bGrowisofsWriter::start()
 {
   emit started();
 
+  d->lastWritingSpeed = 0;
+  d->lastProgressed = 0;
+  d->lastProgress = 0;
+  d->lastSpeedCalculationTime = QTime::currentTime();
+  d->lastSpeedCalculationBytes = 0;
+
   if( !prepareProcess() ) {
     emit finished( false );
   }
@@ -234,9 +248,26 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
     int pos = line.find( "/" );
     int done = line.left( pos ).toInt();
     int size = line.mid( pos+1, line.find( "(", pos ) - pos - 1 ).toInt();
-
-    emit percent( 100 * done / size );
-    emit processedSize( done/1024/1024, size/1024/1024  );
+    int p = 100 * done / size;
+    if( p > d->lastProgress ) {
+      emit percent( p );
+      d->lastProgress = p;
+    }
+    if( done/1024/1024 > d->lastProgressed ) {
+      d->lastProgressed = done/1024/1024;
+      emit processedSize( d->lastProgressed, size/1024/1024  );
+    }
+    // calculate writing speed
+    emit writeSpeed( createEstimatedWriteSpeed( done, d->lastSpeedCalculationBytes == 0 ), 1380 );
+//     int writtenBytes = done - d->lastSpeedCalculationBytes;
+//     int secs = d->lastSpeedCalculationTime.msecsTo( QTime::currentTime() )/1000;
+//     int bytesPerSec = writtenBytes/secs;
+//     d->lastSpeedCalculationTime = QTime::currentTime();
+    d->lastSpeedCalculationBytes = done;
+//     if( bytesPerSec != d->lastWritingSpeed ) {
+//       d->lastWritingSpeed = bytesPerSec;
+//       emit writeSpeed( bytesPerSec );
+//     }
   }
   else if( line.contains( "flushing cache" ) ) {
     emit newSubTask( i18n("Flushing Cache")  );
@@ -264,12 +295,15 @@ void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
 {
   if( p->normalExit() ) {
     if( p->exitStatus() == 0 ) {
+
+      int s = createAverageWriteSpeedInfoMessage();
+      emit infoMessage( i18n("Average overall write speed: %1 kb/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/1380.0), 2), INFO );
+
       if( simulate() )
 	emit infoMessage( i18n("Simulation successfully finished"), K3bJob::STATUS );
       else
 	emit infoMessage( i18n("Writing successfully finished"), K3bJob::STATUS );
 
-      createAverageWriteSpeedInfoMessage();
       d->success = true;
     }
     else {

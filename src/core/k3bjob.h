@@ -96,7 +96,11 @@ class K3bBurnJob : public K3bJob
 
  signals:
   void bufferStatus( int );
-  void writeSpeed(int);
+  /**
+   * @param speed current writing speed in Kb
+   * @param multiplicator use 150 for CDs and 1380 for DVDs
+   */
+  void writeSpeed( int speed, int multiplicator );
 
   /**
    * This signal may be used to inform when the burning starts or ends

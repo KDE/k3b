@@ -103,7 +103,7 @@ class K3bIsoImager : public K3bJob
   bool writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream );
   QString escapeGraftPoint( const QString& str );
 
-  void parseProgress( const QString& );
+  int parseProgress( const QString& );
 
   KTempFile* m_pathSpecFile;
   KTempFile* m_rrHideFile;

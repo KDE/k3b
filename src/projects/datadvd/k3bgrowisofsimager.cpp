@@ -26,6 +26,7 @@
 #include <k3bglobals.h>
 
 #include <kdebug.h>
+#include <kglobal.h>
 #include <klocale.h>
 #include <kconfig.h>
 
@@ -39,6 +40,12 @@ class K3bGrowisofsImager::Private
 {
 public:
   bool success;
+
+  // speed calculation
+  bool speedCalcStarted;
+  QTime lastWriteSpeedCalcTime;
+  QTime firstWriteSpeedCalcTime;
+  int lastWrittenSpeedCalcBytes;
 };
 
 
@@ -63,6 +70,8 @@ void K3bGrowisofsImager::start()
 
   cleanup();
   init();
+
+  d->speedCalcStarted = false;
 
   m_process = new K3bProcess();
   m_growisofsBin = k3bcore->externalBinManager()->binObject( "growisofs" );
@@ -208,7 +217,11 @@ void K3bGrowisofsImager::slotReceivedStderr( const QString& line )
   emit debuggingOutput( "growisofs", line );
 
   if( line.contains( "done, estimate" ) ) {
-    K3bIsoImager::parseProgress( line );
+    int p = K3bIsoImager::parseProgress( line );
+    if( p != -1 ) {
+      createEstimatedWriteSpeed( p*size()/100 );
+      emit percent( p );
+    }
   }
   else if( line.contains( "flushing cache" ) ) {
     emit newSubTask( i18n("Flushing Cache")  );
@@ -252,6 +265,11 @@ void K3bGrowisofsImager::slotProcessExited( KProcess* p )
   }
   else if( p->normalExit() ) {
     if( p->exitStatus() == 0 ) {
+
+      double secs = (double)d->firstWriteSpeedCalcTime.secsTo( d->lastWriteSpeedCalcTime );
+      double speed = (double)d->lastWrittenSpeedCalcBytes / ( secs > 0 ? secs : 1 );
+      emit infoMessage( i18n("Average overall write speed: %1 kb/s (%2x)").arg((int)speed).arg(KGlobal::locale()->formatNumber(speed/1380.0, 2)), INFO );
+
       if( m_doc->dummy() )
 	emit infoMessage( i18n("Simulation successfully finished"), K3bJob::STATUS );
       else
@@ -328,5 +346,28 @@ void K3bGrowisofsImager::cancel()
     }
   }
 }
+
+
+// this is basicly the same code as in K3bAbstractWriter
+void K3bGrowisofsImager::createEstimatedWriteSpeed( int madeBlocks )
+{
+  if( !d->speedCalcStarted ) {
+    d->lastWriteSpeedCalcTime = QTime::currentTime();
+    d->firstWriteSpeedCalcTime = QTime::currentTime();
+    d->lastWrittenSpeedCalcBytes = madeBlocks;
+    d->speedCalcStarted = true;
+  }
+  else {
+    int elapsed = d->lastWriteSpeedCalcTime.msecsTo( QTime::currentTime() );
+    int writtenBlocks = madeBlocks - d->lastWrittenSpeedCalcBytes;
+    if( elapsed > 0 && writtenBlocks > 0 ) {
+      d->lastWriteSpeedCalcTime = QTime::currentTime();
+      d->lastWrittenSpeedCalcBytes = madeBlocks;
+      // kb/s
+      emit writeSpeed( (int)((double)writtenBlocks * 2.0 * 1000.0 / (double)elapsed), 1380 );
+    }
+  }
+}
+
 
 #include "k3bgrowisofsimager.moc"

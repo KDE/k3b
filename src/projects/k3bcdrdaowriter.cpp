@@ -679,8 +679,10 @@ void K3bCdrdaoWriter::slotProcessExited( KProcess* p )
           break;
         }
 
-      if( m_command == WRITE || m_command == COPY )
-        createAverageWriteSpeedInfoMessage();
+      if( m_command == WRITE || m_command == COPY ) {
+	int s = createAverageWriteSpeedInfoMessage();
+	emit infoMessage( i18n("Average overall write speed: %1 kb/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/150.0), 2), INFO );
+      }
 
       emit finished( true );
       break;
@@ -844,7 +846,7 @@ void K3bCdrdaoWriter::parseCdrdaoWrote( const QString& line )
   po2 = line.find( " ", pos + 3 );
   m_size = line.mid( pos+3, po2-pos-3 ).toInt();
 
-  createEstimatedWriteSpeed( processed, !m_writeSpeedInitialized );
+  emit writeSpeed( createEstimatedWriteSpeed( processed*1024, !m_writeSpeedInitialized ), 150 );
   m_writeSpeedInitialized = true;
 
   emit processedSize( processed, m_size );

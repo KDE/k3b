@@ -40,7 +40,7 @@ class K3bBurnProgressDialog : public K3bJobProgressDialog  {
   void setBurnJob( K3bBurnJob* );
 
  protected slots:
-  void slotWriteSpeed( int );
+  void slotWriteSpeed( int, int );
   void slotBufferStatus( int );
   void slotFinished(bool);
 
