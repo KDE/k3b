@@ -346,8 +346,10 @@ void K3bDvdJob::slotWritingFinished( bool success )
 
       d->verificationJob->start();
     }
-    else
+    else {
+      cleanup();
       emit finished(true);
+    }
   }
   else {
     cleanup();
