@@ -1,3 +1,8 @@
+0.5.1
+fixed bug that caused a compile error on some systems
+fixed problems with audio cd writing
+disabled projects while writing (needed for writing in the background)
+
 0.5.0
 -fixed mkisofs 1.14 problems
 -audio on-the-fly burning (even corrupted mp3-files)

@@ -1,10 +1,11 @@
-Install K3b 0.5.0
+Install K3b 0.5
 -----------------
 
-K3b 0.5.0 requires the ID3Lib which can be downloaded from id3lib.sourceforge.net.
-First you need to install (configure/make/make install) the id3lib.
+K3b 0.5 requires the ID3Lib which can be downloaded from id3lib.sourceforge.net and the cdparanoia devel package
+which should be included in every current distribution.
 
-Then install K3b like every other KDE app:
+
+After installing ID3Lib and cdparanoia devel install K3b like every other KDE app:
 
 ./configure
 
