@@ -1,0 +1,36 @@
+Q: When writing an audio cd K3b canceles with the following message:
+   "No cdrdao driver found."
+A: K3b is not able to determine the cdrdao driver for your writer automatically. Please set it
+   manually in the Settings dialog. (for most current drives it would be 'generic-mmc'.
+
+
+Q: I cannot select my IDE CDROM as reading device in the cd copy dialog.
+A: K3b currently does only support SCSI devices for cd copy. To use your IDE CDROM for 
+   reading please enable SCSI emulation.
+
+
+Q: Compiling K3b fails with errors like this:
+   base_k3badvanceddataimagesettings.cpp:185: invalid use of undefined type 
+   `struct KComboBox'
+   base_k3badvanceddataimagesettings.h:17: forward declaration of `struct 
+   KComboBox'
+A: The QTDesigner tool 'uic' is not able to find the kde widget plugins. 
+   To solve this run 'qtconfig' and add '$KDEDIR/lib/kde3/plugins' to the plugin search path 
+   (replace $KDEDIR with your kde base dir).
+
+
+Q: K3b thinks my SCSI device is IDE.
+A: If you are using the rpm from SuSE your version of K3bSetup is not able to set the
+   permissions that K3b needs the devices to have. The SuSE guys seem to think messing with 
+   permissions is too dangerous. It is recommended to always compile from source to have all 
+   K3b features.
+
+
+Q: Everytime K3b starts it asks for K3bSetup to be run although I completed it.
+A: Most likely you installed K3b in the wrong directory. All KDE programs are installed in the 
+   KDE dirtree (which should be /opt/kde3 but is not on all distros). If you compile K3b from source it defaults 
+   to either $KDEDIR or /usr/local (which is strange since /opt/kde3 should be the default; but this is part of
+   the KDE build system). To install in the correct directory you need to specify the prefix to configure
+   like this:
+     ./configure --prefix=/opt/kde3
+   That will install K3b relative to /opt/kde3.
