@@ -35,6 +35,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kconfig.h>
+#include <kio/netaccess.h>
 
 #include <errno.h>
 #include <string.h>
@@ -362,8 +363,9 @@ void K3bCdrdaoWriter::start() {
       case WRITE:
       case COPY:
       	   if (!m_tocFile.isEmpty())
-             if ( link(m_tocFile.latin1(),(m_tocFile+QString(".bak")).latin1()) == -1 )
-               kdDebug() << "(cdrdaowriter) backup tocfile " <<   m_tocFile << " failed." << endl;
+//             if ( link(m_tocFile.latin1(),(m_tocFile+QString(".bak")).latin1()) == -1 )
+		if (!KIO::NetAccess::copy(m_tocFile.latin1(),(m_tocFile+QString(".bak")).latin1()))
+                  kdDebug() << "(cdrdaowriter) backup tocfile " <<   m_tocFile << " failed." << endl;
            break;
       case BLANK:
       case READ:
@@ -462,9 +464,13 @@ void K3bCdrdaoWriter::cancel() {
         switch ( m_command ) {
           case WRITE:
           case COPY:
-            if ( !m_tocFile.isEmpty() )
-	      if ( rename((m_tocFile+QString(".bak")).latin1(),m_tocFile.latin1()) == -1 )
-                kdDebug() << "(cdrdaowriter) restore tocfile " <<   m_tocFile << " failed." << endl;
+            if ( !m_tocFile.isEmpty() ) {
+	      //if ( rename((m_tocFile+QString(".bak")).latin1(),m_tocFile.latin1()) == -1 )
+ 		if ( !KIO::NetAccess::copy((m_tocFile+QString(".bak")).latin1(),m_tocFile.latin1()) )		    
+                   kdDebug() << "(cdrdaowriter) restore tocfile " <<   m_tocFile << " failed." << endl;
+		if ( !KIO::NetAccess::del((m_tocFile+QString(".bak")).latin1()) )
+		   kdDebug() << "(cdrdaowriter) delete bak-file failed." << endl;
+	    }
             break;
           case BLANK:
           case READ:
