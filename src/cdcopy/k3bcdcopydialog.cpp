@@ -43,8 +43,8 @@
 
 
 K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal )
-  : KDialogBase( KDialogBase::Plain, i18n("Duplicate CD"), User1|User2, User1, parent, name, modal, false, 
-		 KGuiItem( i18n("&Duplicate"), "copy", i18n("Start making duplicate") ), KStdGuiItem::close() )
+  : KDialogBase( KDialogBase::Plain, i18n("Copy CD"), User1|User2, User1, parent, name, modal, false, 
+		 KGuiItem( i18n("&Copy"), "copy", i18n("Start CD Copy") ), KStdGuiItem::close() )
 {
   setButtonBoxOrientation( Qt::Vertical );
 
@@ -114,15 +114,20 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   m_checkFastToc = new QCheckBox( i18n("Fast TOC"), advancedTab );
   m_checkRawCopy = new QCheckBox( i18n("Raw Copy"), advancedTab );
 
-  m_spinParanoiaMode = new QSpinBox( 0, 3, 1, advancedTab );
-  m_spinParanoiaMode->setValue(3); // default to max
+  m_comboParanoiaMode = new QComboBox( advancedTab );
+  m_comboParanoiaMode->insertItem( "0" );
+  m_comboParanoiaMode->insertItem( "1" );
+  m_comboParanoiaMode->insertItem( "2" );
+  m_comboParanoiaMode->insertItem( "3" );
+  m_comboParanoiaMode->setCurrentItem( 3 );
 
-  advancedTabGrid->addMultiCellWidget( m_checkFastToc, 0, 0, 0, 1 );
-  advancedTabGrid->addMultiCellWidget( m_checkRawCopy, 1, 1, 0, 1 );
+  advancedTabGrid->addMultiCellWidget( m_checkFastToc, 0, 0, 0, 2 );
+  advancedTabGrid->addMultiCellWidget( m_checkRawCopy, 1, 1, 0, 2 );
   advancedTabGrid->addWidget( new QLabel( i18n("Paranoia Mode:"), advancedTab ), 2, 0 );
-  advancedTabGrid->addWidget( m_spinParanoiaMode, 2, 1 );
+  advancedTabGrid->addWidget( m_comboParanoiaMode, 2, 1 );
 
   advancedTabGrid->setRowStretch( 3, 1 );
+  advancedTabGrid->setColStretch( 2, 1 );
 
   tabWidget->addTab( advancedTab, i18n("&Advanced") );
 
@@ -171,7 +176,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   QToolTip::add( m_comboSourceDevice, i18n("Select the drive with the CD to duplicatey") );
   QToolTip::add( m_spinCopies, i18n("Number of copies") );
   QToolTip::add( m_checkRawCopy, i18n("Write all data sectors as 2352 byte blocks") );
-  QToolTip::add( m_spinParanoiaMode, i18n("Set the paranoia level when reading audio cds") );
+  QToolTip::add( m_comboParanoiaMode, i18n("Set the paranoia level when reading audio cds") );
 
   // What's This info
   // --------------------------------------------------------------------------------
@@ -201,7 +206,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
 					"with reading data cds."
 					"<p>Has no effect on audio cds."
 					"<p>Does not work in on-the-fly mode.") );
-  QWhatsThis::add( m_spinParanoiaMode, i18n("<p>Sets the correction mode for digital audio extraction."
+  QWhatsThis::add( m_comboParanoiaMode, i18n("<p>Sets the correction mode for digital audio extraction."
 					    "<ul><li>0: No checking, data is copied directly from the drive. "
 					    "This should work with all current drives as they include their own "
 					    "hardware based correction.</li>"
@@ -258,7 +263,7 @@ void K3bCdCopyDialog::slotUser1()
   if( !m_checkSimulate->isChecked() )
     job->setCopies( m_spinCopies->value() );
   job->setReadRaw( m_checkRawCopy->isChecked() );
-  job->setParanoiaMode( m_spinParanoiaMode->value() );
+  job->setParanoiaMode( m_comboParanoiaMode->currentText().toInt() );
 
   // create a progresswidget
   K3bBurnProgressDialog d( k3bMain(), "burnProgress", 
