@@ -35,43 +35,58 @@ K3bDevice::~K3bDevice()
 
 bool K3bDevice::init()
 {
+  qDebug( "(K3bDevice) Initializing device %s...", m_devicename.latin1() );
   if( m_scsiIf->init() != 0 ) {
-    qDebug( "(K3bDevice) Could not detect speed for device " + m_devicename );
+    qDebug( "(K3bDevice) Could not open device " + m_devicename );
     return false;
   }
+
+
+
+  // taken from cdrdao's GenericMMC driver
+  // this should (hopefully) work with most cd-drives
+  // -----------------------------------------------------------------------
+  unsigned char cmd[12];
+  memset(cmd, 0, 12);
+
+  cmd[0] = 0xbb; // SET CD SPEED
+  cmd[2] = 0xff; // select maximum read speed
+  cmd[3] = 0xff;
+  cmd[4] = 0xff; // select maximum write speed
+  cmd[5] = 0xff;
+
+  qDebug( "(K3bDevice) Setting device %s to maximum speed.", m_devicename.latin1() );
+  if (m_scsiIf->sendCmd(cmd, 12, NULL, 0, NULL, 0, 0) != 0) {
+    qDebug("(K3bDevice) Cannot set device %s to maximum speed.", m_devicename.latin1() );
+  }
+  // -----------------------------------------------------------------------
+
 
   unsigned char mp[32];
 
+  qDebug ( "(K3bDevice) Get device information for device %s.", m_devicename.latin1() );
   if( getModePage( 0x2a, mp, 32, NULL, NULL, 0 ) != 0 ) {
-    qDebug( "(K3bDevice) Cannot retrieve drive capabilities mode page." );
+    qDebug( "(K3bDevice) Cannot retrieve drive capabilities mode page from device %s.", m_devicename.latin1() );
     return false;
   }
 
-  qDebug ( "(K3bDevice) Get device information for device " + m_devicename );
-
   m_burnproof = ( mp[4] & 0x80 ) ? true : false;
-  int accurateAudioStream = mp[5] & 0x02 ? 1 : 0;
+  //  int accurateAudioStream = mp[5] & 0x02 ? 1 : 0;
   // speed must be diveded by 176
-  m_maxReadSpeed = ( mp[8] << 8 ) | mp[9];
-  int currentReadSpeed = ( mp[14] << 8 ) | mp[15];
-  currentReadSpeed  /= 176;
-  m_maxWriteSpeed = ( mp[18] << 8 ) | mp[19];
-  int currentWriteSpeed = ( mp[20] << 8 ) | mp[21];
-  currentWriteSpeed /= 176;
-  m_burner = ( currentWriteSpeed > 0 ) ? true : false;
+  m_maxReadSpeed = ( mp[14] << 8 ) | mp[15];
+  m_maxReadSpeed  /= 176;
+  m_maxWriteSpeed = ( mp[20] << 8 ) | mp[21];
+  m_maxWriteSpeed /= 176;
+  m_burner = ( m_maxWriteSpeed > 0 ) ? true : false;
 
   m_description = m_scsiIf->product();
   m_vendor = m_scsiIf->vendor();
   m_version = m_scsiIf->revision();
 
 
-  // I do not really understand this, but
-  // the max values are not usable!
-  m_maxWriteSpeed = currentWriteSpeed;
-  m_maxReadSpeed = currentReadSpeed;
-
-
-  qDebug( "current write: %i, max write: %i", currentWriteSpeed, m_maxWriteSpeed );
+  qDebug( "(K3bDevice) %s max write: %i", m_devicename.latin1(), m_maxWriteSpeed );
+  qDebug( "(K3bDevice) %s max read : %i", m_devicename.latin1(), m_maxReadSpeed );
+  qDebug("");
 
   return true;
 }
