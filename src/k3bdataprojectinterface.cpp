@@ -80,3 +80,26 @@ void K3bDataProjectInterface::setVolumeID( const QString& id )
 {
   m_dataDoc->isoOptions().setVolumeID( id );
 }
+
+bool K3bDataProjectInterface::isFolder( const QString& path ) const
+{
+  K3bDataItem* p =  m_dataDoc->root()->findByPath( path );
+  if( p )
+    return p->isDir();
+  else
+    return false;
+}
+
+
+QStringList K3bDataProjectInterface::children( const QString& path ) const
+{
+  QStringList l;
+  K3bDataItem* item =  m_dataDoc->root()->findByPath( path );
+  if( item && item->isDir() ) {
+    const QPtrList<K3bDataItem>& cl = static_cast<K3bDirItem*>(item)->children();
+    for( QPtrListIterator<K3bDataItem> it( cl ); *it; ++it )
+      l.append( it.current()->k3bName() );
+  }
+
+  return l;
+}

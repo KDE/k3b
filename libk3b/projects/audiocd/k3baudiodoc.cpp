@@ -178,7 +178,7 @@ void K3bAudioDoc::addTracks( const KURL::List& urls, uint position )
     if( url.path().right(3).lower() == "cue" ) {
       // try adding a cue file
       if( K3bAudioTrack* newAfter = importCueFile( url.path(), getTrack(position-1) ) ) {
-	position = newAfter->index()+1;
+	position = newAfter->trackNumber();
 	continue;
       }
     }
@@ -322,6 +322,9 @@ void K3bAudioDoc::addSources( K3bAudioTrack* parent,
 
 K3bAudioTrack* K3bAudioDoc::importCueFile( const QString& cuefile, K3bAudioTrack* after )
 {
+  if( !after )
+    after = m_lastTrack;
+
   kdDebug() << "(K3bAudioDoc::importCueFile( " << cuefile << ", " << after << ")" << endl;
   K3bCueFileParser parser( cuefile );
   if( parser.isValid() && parser.toc().contentType() == K3bDevice::AUDIO ) {
@@ -435,16 +438,18 @@ void K3bAudioDoc::addTrack( const KURL& url, uint position )
 
 
 
-K3bAudioTrack* K3bAudioDoc::getTrack( unsigned int index )
+K3bAudioTrack* K3bAudioDoc::getTrack( unsigned int trackNum )
 {
   K3bAudioTrack* track = m_firstTrack;
+  int i = 1;
   while( track ) {
-    if( track->index() == index )
+    if( i == trackNum )
       return track;
     track = track->next();
+    ++i;
   }
 
-  return m_lastTrack;
+  return 0;
 }
 
 
@@ -802,7 +807,7 @@ bool K3bAudioDoc::saveDocumentData( QDomElement* docElem )
 
 int K3bAudioDoc::numOfTracks() const
 {
-  return ( m_lastTrack ? m_lastTrack->index()+1 : 0 );
+  return ( m_lastTrack ? m_lastTrack->trackNumber() : 0 );
 }
 
 

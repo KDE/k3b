@@ -97,9 +97,9 @@ class K3bAudioTrack
   void setIndex0( const K3b::Msf& );
 
   /**
-   * @return The index in the list 
+   * \return The track number starting at 1.
    */
-  unsigned int index() const;
+  unsigned int trackNumber() const;
 
   /**
    * Remove this track from the list and return it.

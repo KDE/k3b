@@ -122,12 +122,12 @@ KIO::filesize_t K3bAudioTrack::size() const
 }
 
 
-unsigned int K3bAudioTrack::index() const
+unsigned int K3bAudioTrack::trackNumber() const
 {
   if( m_prev )
-    return m_prev->index() + 1;
+    return m_prev->trackNumber() + 1;
   else
-    return 0;
+    return 1;
 }
 
 

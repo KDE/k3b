@@ -65,7 +65,7 @@ const QString& K3bAudioJobTempData::bufferFileName( int track )
 
 const QString& K3bAudioJobTempData::bufferFileName( K3bAudioTrack* track )
 {
-  return bufferFileName( track->index() + 1 );
+  return bufferFileName( track->trackNumber() );
 }
 
 
@@ -86,7 +86,7 @@ const QString& K3bAudioJobTempData::infFileName( int track )
 
 const QString& K3bAudioJobTempData::infFileName( K3bAudioTrack* track )
 {
-  return infFileName( track->index() + 1 );
+  return infFileName( track->trackNumber() );
 }
 
 

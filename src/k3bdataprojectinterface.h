@@ -19,6 +19,8 @@
 
 #include "k3bprojectinterface.h"
 
+#include <qstringlist.h>
+
 class K3bDataDoc;
 
 
@@ -68,6 +70,16 @@ class K3bDataProjectInterface : public K3bProjectInterface
    * when the CD is inserted.
    */
   void setVolumeID( const QString& id );
+
+  /**
+   * \return true if the specified path exists in the project and it is a folder.
+   */
+  bool isFolder( const QString& path ) const;
+
+  /**
+   * \return the names of the child elements of the item determined by path.
+   */
+  QStringList children( const QString& path ) const;
 
  private:
   K3bDataDoc* m_dataDoc;

@@ -17,6 +17,7 @@
 #include "k3bprojectinterface.h"
 #include <k3bdoc.h>
 #include <k3bview.h>
+#include <k3bmsf.h>
 
 #include <qtimer.h>
 
@@ -57,4 +58,16 @@ void K3bProjectInterface::burn()
 {
   // we want to return this method immediately
   QTimer::singleShot( 0, m_doc->view(), SLOT(slotBurn()) );
+}
+
+
+int K3bProjectInterface::length()
+{
+  return m_doc->length().lba();
+}
+
+
+Q_INT64 K3bProjectInterface::size()
+{
+  return m_doc->size();
 }

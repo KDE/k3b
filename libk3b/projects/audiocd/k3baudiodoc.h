@@ -70,8 +70,9 @@ class K3bAudioDoc : public K3bDoc
 
   /**
    * Slow.
+   * \return the K3bAudioTrack with track number trackNum starting at 1 or 0 if trackNum > numOfTracks()
    */
-  K3bAudioTrack* getTrack( unsigned int index );
+  K3bAudioTrack* getTrack( unsigned int trackNum );
 
   /**
    * Creates a new audiofile inside this doc which has no track yet.

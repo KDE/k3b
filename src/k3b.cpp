@@ -107,6 +107,8 @@
 //#include "dvdcopy/k3bvideodvdcopydialog.h"
 #include "k3bprojectinterface.h"
 #include "k3bdataprojectinterface.h"
+#include "k3baudioprojectinterface.h"
+#include "k3bmixedprojectinterface.h"
 #include "k3bprojectmanager.h"
 #include "k3bwelcomewidget.h"
 #include <k3bpluginmanager.h>
@@ -1202,6 +1204,10 @@ K3bProjectInterface* K3bMainWindow::dcopInterface( K3bDoc* doc )
     K3bProjectInterface* dcopInterface = 0;
     if( doc->docType() == K3bDoc::DATA || doc->docType() == K3bDoc::DVD )
       dcopInterface = new K3bDataProjectInterface( static_cast<K3bDataDoc*>(doc) );
+    else if( doc->docType() == K3bDoc::AUDIO )
+      dcopInterface = new K3bAudioProjectInterface( static_cast<K3bAudioDoc*>(doc) );
+    else if( doc->docType() == K3bDoc::MIXED )
+      dcopInterface = new K3bMixedProjectInterface( static_cast<K3bMixedDoc*>(doc) );
     else
       dcopInterface = new K3bProjectInterface( doc );
     d->projectInterfaceMap[doc] = dcopInterface;

@@ -42,6 +42,16 @@ class K3bProjectInterface : public DCOPObject
   virtual void addUrl( const KURL& url );
   virtual void burn();
 
+  /**
+   * \return the length of the project in blocks (frames).
+   */
+  virtual int length();
+
+  /**
+   * \return size of the project in bytes.
+   */
+  virtual Q_INT64 size();
+
  private:
   K3bDoc* m_doc;
 };

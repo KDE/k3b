@@ -576,7 +576,7 @@ bool K3bMixedJob::writeInfFiles()
   while( track ) {
 
     infFileWriter.setTrack( track->toCdTrack() );
-    infFileWriter.setTrackNumber( track->index()+1 );
+    infFileWriter.setTrackNumber( track->trackNumber() );
     if( !m_doc->onTheFly() )
       infFileWriter.setBigEndian( false );
 
