@@ -189,13 +189,6 @@ void K3bVcdListView::showPopupMenu( KListView*, QListViewItem* _item, const QPoi
      m_actionRemove->setEnabled(false);
    }
 
-  if (_item && selectedTracks().count() == 1) {
-    m_actionProperties->setEnabled(true);
-  }
-  else {
-    m_actionProperties->setEnabled(false);
-  }
-   
   m_popupMenu->popup( _point );
 }
 
