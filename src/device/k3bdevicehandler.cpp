@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -61,6 +61,16 @@ public:
       case UNBLOCK:
 	success = dev->block( false );
 	break;
+      case EJECT:
+        dev->eject();
+	success = true;
+	break;
+      case MOUNT:
+        success = ( dev->mount() >= 0 );
+	break;
+      case UNMOUNT:
+        success = ( dev->unmount() >= 0 );
+        break;
       default:
 	success = false;
       }
@@ -76,7 +86,10 @@ public:
     TOCTYPE,
     NUMSESSIONS,
     BLOCK,
-    UNBLOCK
+    UNBLOCK,
+    EJECT,
+    MOUNT,
+    UNMOUNT
   };
 
   int request;
@@ -180,6 +193,24 @@ void K3bCdDevice::DeviceHandler::getNumSessions()
 void K3bCdDevice::DeviceHandler::block( bool b )
 {
   m_thread->request = ( b ? DeviceHandlerThread::BLOCK : DeviceHandlerThread::UNBLOCK );
+  start();
+}
+
+void K3bCdDevice::DeviceHandler::eject()
+{
+  m_thread->request = DeviceHandlerThread::EJECT;
+  start();
+}
+
+void K3bCdDevice::DeviceHandler::mount()
+{
+  m_thread->request = DeviceHandlerThread::MOUNT;
+  start();
+}
+
+void K3bCdDevice::DeviceHandler::unmount()
+{
+  m_thread->request = DeviceHandlerThread::UNMOUNT;
   start();
 }
 

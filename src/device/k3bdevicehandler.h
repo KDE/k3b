@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -59,6 +59,9 @@ namespace K3bCdDevice
       void getTocType();
       void getNumSessions();
       void block( bool );
+      void eject();
+      void mount();
+      void unmount();
 
      private:
       class DeviceHandlerThread;

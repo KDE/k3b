@@ -259,8 +259,10 @@ namespace K3bCdDevice
      */
     bool block( bool ) const;
 
-    void eject() const;
-    void load() const;
+    void eject();
+    void load();
+    int  mount();
+    int  unmount();
 
     bool supportsWriteMode( WriteMode );
 

@@ -71,6 +71,9 @@ void K3bCdDevice::DiskInfoDetector::detect( CdDevice* device )
   m_info.device = m_device;
 
   m_deviceHandler->setDevice( device );
+  m_deviceHandler->disconnect();
+  connect( m_deviceHandler, SIGNAL(finished(bool)),
+           this, SLOT(slotDeviceHandlerFinished(bool)) );
   m_deviceHandler->getDiskInfo();
 }
 
@@ -168,27 +171,21 @@ void K3bCdDevice::DiskInfoDetector::slotIsVideoDvd( bool dvd )
 void K3bCdDevice::DiskInfoDetector::testForVCD()
 {
   if (m_info.tocType == DiskInfo::DATA && m_info.toc.count() > 1 && m_info.sessions == 1 ) {
-    if ( KIO::findDeviceMountPoint( m_device->mountDevice() ).isEmpty() )
-      connect( KIO::mount( true, "auto", m_device->mountDevice(), m_device->mountPoint(), true ),
-               SIGNAL(result(KIO::Job*)), this, SLOT(slotIsVCD(KIO::Job*)) );
-    else
-      slotIsVCD(0);
-  } else if (m_info.tocType == DiskInfo::DVD)
+    m_deviceHandler->disconnect();
+    connect(m_deviceHandler,SIGNAL(finished(bool)),this,SLOT(slotIsVCD(bool)));
+    m_deviceHandler->mount();
+  }
+  else if (m_info.tocType == DiskInfo::DVD)
       testForVideoDvd();
   else
     finish(true);
 }
 
-void K3bCdDevice::DiskInfoDetector::slotIsVCD(KIO::Job* job)
+void K3bCdDevice::DiskInfoDetector::slotIsVCD(bool success)
 {
   m_info.isVCD = false;
-  bool doit;
-  if  (job == 0)
-    doit = true;
-  else
-    doit = (job->error() == 0);
 
-  if ( doit ) {
+  if ( success ) {
     QStringList files;
     files << QString("/vcd/info.vcd") << QString("/svcd/info.svd");
     for ( QStringList::Iterator it = files.begin(); it != files.end(); ++it ) {
@@ -206,14 +203,16 @@ void K3bCdDevice::DiskInfoDetector::slotIsVCD(KIO::Job* job)
           m_info.isVCD = true;
       }
     }
-    connect(KIO::unmount(m_device->mountPoint()), SIGNAL(result(KIO::Job*)), this, SLOT(slotFinished(KIO::Job*)) );
+    m_deviceHandler->disconnect();
+    connect(m_deviceHandler, SIGNAL(finished(bool)), this, SLOT(slotFinished(bool)) );
+    m_deviceHandler->unmount();
   } else
     finish(true);
 }
 
-void K3bCdDevice::DiskInfoDetector::slotFinished(KIO::Job*)
+void K3bCdDevice::DiskInfoDetector::slotFinished(bool success)
 {
-   finish(true);
+   finish(success);
 }
 
 void K3bCdDevice::DiskInfoDetector::slotDeviceHandlerFinished( bool success )
