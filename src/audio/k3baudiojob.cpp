@@ -16,18 +16,20 @@
 
 #include "k3baudiojob.h"
 
-#include <audio/k3baudiodecoder.h>
+#include <audio/k3baudiostreamer.h>
 #include <audio/k3baudiodoc.h>
 #include <audio/k3baudiotrack.h>
 #include <audio/k3baudiotocfilewriter.h>
 #include <audio/k3baudionormalizejob.h>
+#include "k3baudiojobtempdata.h"
 #include <device/k3bdevicemanager.h>
 #include <device/k3bdevice.h>
 #include <device/k3bmsf.h>
 #include <tools/k3bwavefilewriter.h>
 #include <tools/k3bglobals.h>
+#include <tools/k3bexternalbinmanager.h>
 #include <k3bemptydiscwaiter.h>
-#include <k3b.h>
+#include <k3bcore.h>
 #include <k3bcdrecordwriter.h>
 #include <k3bcdrdaowriter.h>
 
@@ -45,18 +47,19 @@ K3bAudioJob::K3bAudioJob( K3bAudioDoc* doc, QObject* parent )
     m_doc( doc ),
     m_normalizeJob(0)
 {
-  m_audioDecoder = new K3bAudioDecoder( m_doc, this );
-  connect( m_audioDecoder, SIGNAL(data(const char*, int)), this, SLOT(slotReceivedAudioDecoderData(const char*, int)) );
-  connect( m_audioDecoder, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
-  connect( m_audioDecoder, SIGNAL(percent(int)), this, SLOT(slotAudioDecoderPercent(int)) );
-  connect( m_audioDecoder, SIGNAL(subPercent(int)), this, SLOT(slotAudioDecoderSubPercent(int)) );
-  connect( m_audioDecoder, SIGNAL(finished(bool)), this, SLOT(slotAudioDecoderFinished(bool)) );
-  connect( m_audioDecoder, SIGNAL(nextTrack(int, int)), this, SLOT(slotAudioDecoderNextTrack(int, int)) );
+  m_audioStreamer = new K3bAudioStreamer( m_doc, this );
+  connect( m_audioStreamer, SIGNAL(data(const char*, int)), this, SLOT(slotReceivedAudioDecoderData(const char*, int)) );
+  connect( m_audioStreamer, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
+  connect( m_audioStreamer, SIGNAL(percent(int)), this, SLOT(slotAudioDecoderPercent(int)) );
+  connect( m_audioStreamer, SIGNAL(subPercent(int)), this, SLOT(slotAudioDecoderSubPercent(int)) );
+  connect( m_audioStreamer, SIGNAL(finished(bool)), this, SLOT(slotAudioDecoderFinished(bool)) );
+  connect( m_audioStreamer, SIGNAL(nextTrack(int, int)), this, SLOT(slotAudioDecoderNextTrack(int, int)) );
 
   m_waveFileWriter = new K3bWaveFileWriter();
 
   m_writer = 0;
   m_tocFile = 0;
+  m_tempData = new K3bAudioJobTempData( m_doc, this );
 }
 
 
@@ -98,21 +101,49 @@ void K3bAudioJob::start()
   else
     m_usedWritingMode = m_doc->writingMode();
 
+  bool cdrecordOnTheFly = k3bcore->externalBinManager()->binObject("cdrecord")->version >= K3bVersion( 2, 1, -1, "a13" );
 
   // determine writing app
   if( writingApp() == K3b::DEFAULT ) {
-    if( m_usedWritingMode == K3b::DAO )
-      m_usedWritingApp = K3b::CDRDAO;
+    if( m_usedWritingMode == K3b::DAO ) {
+      if( ( !cdrecordOnTheFly && m_doc->onTheFly() ) ||
+	  ( m_doc->cdText() && 
+	    // the inf-files we use do only support artist and title in the global section
+	    ( !m_doc->arranger().isEmpty() ||
+	      !m_doc->songwriter().isEmpty() ||
+	      !m_doc->composer().isEmpty() ||
+	      !m_doc->cdTextMessage().isEmpty() )
+	    )
+	  )
+	m_usedWritingApp = K3b::CDRDAO;
+      else
+	m_usedWritingApp = K3b::CDRECORD;
+    }
     else
       m_usedWritingApp = K3b::CDRECORD;
   }
   else
     m_usedWritingApp = writingApp();
 
-  // no on-the-fly writing with cdrecord yet
-  if( m_usedWritingApp == K3b::CDRECORD )
+  // on-the-fly writing with cdrecord >= 2.01a13
+  if( m_usedWritingApp == K3b::CDRECORD && 
+      m_doc->onTheFly() && 
+      !cdrecordOnTheFly ) {
+    emit infoMessage( i18n("On-the-fly writing with cdrecord < 2.01a13 not supported."), ERROR );
     m_doc->setOnTheFly(false);
+  }
 
+  if( m_usedWritingApp == K3b::CDRECORD &&
+      m_doc->cdText() ) {
+    if( !m_doc->arranger().isEmpty() )
+      emit infoMessage( i18n("K3b does not support Album arranger CD-Text with cdrecord."), ERROR );
+    if( !m_doc->songwriter().isEmpty() )
+      emit infoMessage( i18n("K3b does not support Album songwriter CD-Text with cdrecord."), ERROR );
+    if( !m_doc->composer().isEmpty() )
+      emit infoMessage( i18n("K3b does not support Album composer CD-Text with cdrecord."), ERROR );
+    if( !m_doc->cdTextMessage().isEmpty() )
+      emit infoMessage( i18n("K3b does not support Album comment CD-Text with cdrecord."), ERROR );
+  }
 
   if( !m_doc->onlyCreateImages() && m_doc->onTheFly() ) {
     if( !prepareWriter() ) {
@@ -128,7 +159,7 @@ void K3bAudioJob::start()
       // we cannot easily change the audioDecode fd while it's working
       // which we would need to do since we write into several
       // image files.
-      m_audioDecoder->writeToFd( m_writer->fd() );
+      m_audioStreamer->writeToFd( m_writer->fd() );
     }
     else {
       // startWriting() already did the cleanup
@@ -138,9 +169,8 @@ void K3bAudioJob::start()
   else {
     emit infoMessage( i18n("Creating image files in %1").arg(m_doc->tempDir()), INFO );
     emit newTask( i18n("Creating image files") );
-    m_tempFilePrefix = K3b::findUniqueFilePrefix( m_doc->title(), m_doc->tempDir() );
   }
-  m_audioDecoder->start();
+  m_audioStreamer->start();
 }
 
 
@@ -151,7 +181,7 @@ void K3bAudioJob::cancel()
   if( m_writer )
     m_writer->cancel();
 
-  m_audioDecoder->cancel();
+  m_audioStreamer->cancel();
   emit infoMessage( i18n("Writing canceled."), K3bJob::ERROR );
   removeBufferFiles();
   emit canceled();
@@ -162,7 +192,7 @@ void K3bAudioJob::cancel()
 void K3bAudioJob::slotDataWritten()
 {
   m_written = true;
-  m_audioDecoder->resume();
+  m_audioStreamer->resume();
 }
 
 
@@ -237,7 +267,7 @@ void K3bAudioJob::slotReceivedAudioDecoderData( const char* data, int len )
   }
   else {
     m_waveFileWriter->write( data, len );
-    m_audioDecoder->resume();
+    m_audioStreamer->resume();
   }
 }
 
@@ -245,18 +275,22 @@ void K3bAudioJob::slotReceivedAudioDecoderData( const char* data, int len )
 void K3bAudioJob::slotAudioDecoderNextTrack( int t, int tt )
 {
   if( m_doc->onlyCreateImages() || !m_doc->onTheFly() ) {
-    emit newSubTask( i18n("Decoding audiotrack %1 of %2 (%3)").arg(t).arg(tt).arg(m_doc->at(t-1)->fileName()) );
+    K3bAudioTrack* track = m_doc->at(t-1);
+    emit newSubTask( i18n("Decoding audiotrack %1 of %2 (%3)").arg(t).arg(tt).arg(track->fileName()) );
 
     // create next buffer file (WaveFileWriter will close the last written file)
-    QString bf = m_tempFilePrefix + "_track" + QString::number(t) + ".wav";
-    if( !m_waveFileWriter->open( bf ) ) {
+    if( !m_waveFileWriter->open( m_tempData->bufferFileName(track) ) ) {
       emit infoMessage( i18n("Could not open file %1 for writing.").arg(m_waveFileWriter->filename()), ERROR );
       cleanupAfterError();
       emit finished( false );
       return;
     }
-
-    m_doc->at(t-1)->setBufferFile( bf );
+    else {
+      kdDebug() << "(K3bAudioJob) Successfully opened Wavefilewriter on " 
+		<< m_waveFileWriter->filename() << endl;
+//       m_audioStreamer->writeToFd( m_waveFileWriter->fd() );
+//       m_audioStreamer->setLittleEndian(true);
+    }
   }
 }
 
@@ -268,16 +302,25 @@ bool K3bAudioJob::prepareWriter()
 
   if( m_usedWritingApp == K3b::CDRECORD ) {
 
+    if( !m_tempData->writeInfFiles() ) {
+      kdDebug() << "(K3bDataJob) could not write tocfile." << endl;
+      emit infoMessage( i18n("IO Error"), ERROR );
+
+      return false;
+    }
+
     K3bCdrecordWriter* writer = new K3bCdrecordWriter( m_doc->burner(), this );
 
     writer->setWritingMode( m_usedWritingMode );
     writer->setSimulate( m_doc->dummy() );
     writer->setBurnproof( m_doc->burnproof() );
     writer->setBurnSpeed( m_doc->speed() );
-    writer->setProvideStdin( false/*m_doc->onTheFly() */);
+    writer->setProvideStdin( m_doc->onTheFly() );
 
-//     if( m_doc->onTheFly() )
-//       writer->addArgument("-waiti");
+    writer->addArgument( "-useinfo" );
+
+    if( m_doc->cdText() )
+      writer->addArgument( "-text" );
 
     // add all the audio tracks
     writer->addArgument( "-audio" );
@@ -286,32 +329,19 @@ bool K3bAudioJob::prepareWriter()
     for( ; it.current(); ++it ) {
       K3bAudioTrack* track = it.current();
 
-      if( !track->copyProtection() )
-	writer->addArgument( "-copy" );
-      else
-	writer->addArgument( "-nocopy" );
-      if( track->preEmp() )
-	writer->addArgument( "-preemp" );
-      else
-	writer->addArgument( "-nopreemp" );
-
-      writer->addArgument( QString("pregap=%1").arg(track->pregap().totalFrames()) );
-//       if( m_doc->onTheFly() ) {
-// 	//       QString fifoname = QString("/home/trueg/tmp/fifo_track%1").arg(track->index());
-// 	//       if( ::mkfifo( fifoname.latin1(), S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH ) == -1 ) {
-// 	// 	kdDebug() << "(K3bAudioJob) could not create fifo" << endl;
-// 	//       }
-// 	//       track->setBufferFile( fifoname );  // just a temp solution
-// 	//       writer->addArgument( QString("-tsize=%1f").arg(track->length()) )->addArgument(fifoname);
-//       }
-//      else
-	writer->addArgument( QFile::encodeName(track->bufferFile()) );
+      if( m_doc->onTheFly() ) {
+	// this is only supported by cdrecord versions >= 2.01a13
+	writer->addArgument( QFile::encodeName( m_tempData->infFileName( track ) ) );
+      }
+      else {
+	writer->addArgument( QFile::encodeName( m_tempData->bufferFileName( track ) ) );
+      }
     }
 
     m_writer = writer;
   }
   else {  // DEFAULT
-    if( !writeTocFile() ) {
+    if( !m_tempData->writeTocFile() ) {
       kdDebug() << "(K3bDataJob) could not write tocfile." << endl;
       emit infoMessage( i18n("IO Error"), ERROR );
 
@@ -323,8 +353,8 @@ bool K3bAudioJob::prepareWriter()
     K3bCdrdaoWriter* writer = new K3bCdrdaoWriter( m_doc->burner(), this );
     writer->setSimulate( m_doc->dummy() );
     writer->setBurnSpeed( m_doc->speed() );
-    writer->setProvideStdin(m_doc->onTheFly());
-    writer->setTocFile( m_tocFile->name() );
+    writer->setProvideStdin( m_doc->onTheFly() );
+    writer->setTocFile( m_tempData->tocFileName() );
 
     m_writer = writer;
   }
@@ -348,6 +378,7 @@ bool K3bAudioJob::prepareWriter()
 }
 
 
+// obsolet
 bool K3bAudioJob::writeTocFile()
 {
   if( m_tocFile ) delete m_tocFile;
@@ -434,7 +465,7 @@ bool K3bAudioJob::startWriting()
 void K3bAudioJob::cleanupAfterError()
 {
   m_errorOccuredAndAlreadyReported = true;
-  m_audioDecoder->cancel();
+  m_audioStreamer->cancel();
 
   if( m_writer )
     m_writer->cancel();
@@ -454,9 +485,10 @@ void K3bAudioJob::removeBufferFiles()
   QPtrListIterator<K3bAudioTrack> it( *m_doc->tracks() );
   for( ; it.current(); ++it ) {
     K3bAudioTrack* track = it.current();
-    if( QFile::exists( track->bufferFile() ) )
-      if( !QFile::remove( track->bufferFile() ) )
-	emit infoMessage( i18n("Could not delete file %1.").arg(track->bufferFile()), ERROR );
+    const QString& f = m_tempData->bufferFileName(track);
+    if( QFile::exists( f ) )
+      if( !QFile::remove( f ) )
+	emit infoMessage( i18n("Could not delete file %1.").arg(f), ERROR );
   }
 }
 
@@ -481,7 +513,7 @@ void K3bAudioJob::normalizeFiles()
   QPtrListIterator<K3bAudioTrack> it( *m_doc->tracks() );
   for( ; it.current(); ++it ) {
     K3bAudioTrack* track = it.current();
-    files.append( track->bufferFile() );
+    files.append( m_tempData->bufferFileName(track) );
   }
 
   m_normalizeJob->setFilesToNormalize( files );

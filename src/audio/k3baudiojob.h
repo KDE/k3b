@@ -21,7 +21,7 @@
 
 
 class K3bAudioDoc;
-class K3bAudioDecoder;
+class K3bAudioStreamer;
 class QFile;
 class QDataStream;
 class K3bAbstractWriter;
@@ -29,7 +29,7 @@ class K3bWaveFileWriter;
 class KTempFile;
 class K3bCdrecordWriter;
 class K3bAudioNormalizeJob;
-
+class K3bAudioJobTempData;
 
 /**
   *@author Sebastian Trueg
@@ -80,10 +80,11 @@ class K3bAudioJob : public K3bBurnJob
   void normalizeFiles();
 
   K3bAudioDoc* m_doc;
-  K3bAudioDecoder* m_audioDecoder;
+  K3bAudioStreamer* m_audioStreamer;
   K3bWaveFileWriter* m_waveFileWriter;
   K3bAbstractWriter* m_writer;
   K3bAudioNormalizeJob* m_normalizeJob;
+  K3bAudioJobTempData* m_tempData;
 
   KTempFile* m_tocFile;
 
@@ -91,8 +92,6 @@ class K3bAudioJob : public K3bBurnJob
   bool m_errorOccuredAndAlreadyReported;
 
   bool m_written;
-
-  QString m_tempFilePrefix;
 
   int m_usedWritingApp;
   int m_usedWritingMode;

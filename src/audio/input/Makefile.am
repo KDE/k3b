@@ -1,4 +1,4 @@
-INCLUDES = -I$(top_builddir)/k3b/src/audio/input/mp3 $(all_includes) -I$(srcdir)/../..
+AM_CPPFLAGS= -I$(srcdir)/../.. $(all_includes)
 
 METASOURCES = AUTO
 

@@ -181,8 +181,15 @@ void K3bAudioNormalizeJob::slotProcessExited( KProcess* p )
       emit finished(true);
       break;
     default:
-      if( !m_canceled )
+      if( !m_canceled ) {
+	emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg("normalize").arg(p->exitStatus()), 
+			  K3bJob::ERROR );
+	emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
+	emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
 	emit infoMessage( i18n("Error while normalizing tracks."), ERROR );
+      }
+      else
+	emit canceled();
       emit finished(false);
       break;
     }

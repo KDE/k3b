@@ -1,4 +1,4 @@
-INCLUDES = $(all_includes) -I$(srcdir)/libmad -I$(srcdir)/../../..
+AM_CPPFLAGS= -I$(srcdir)/libmad -I$(srcdir)/../../.. $(all_includes)
 
 SUBDIRS = libmad
 

@@ -15,7 +15,7 @@
 
 
 #include "k3baudioburndialog.h"
-#include <k3b.h>
+#include <k3bcore.h>
 #include "k3baudiodoc.h"
 #include <device/k3bdevice.h>
 #include <k3bwriterselectionwidget.h>
@@ -159,7 +159,7 @@ void K3bAudioBurnDialog::slotLoadUserDefaults()
 {
   K3bProjectBurnDialog::slotLoadUserDefaults();
 
-  KConfig* c = k3bMain()->config();
+  KConfig* c = k3bcore->config();
 
   m_cdtextWidget->setChecked( c->readBoolEntry( "cd_text", true ) );
   m_checkHideFirstTrack->setChecked( c->readBoolEntry( "hide_first_track", false ) );
@@ -173,7 +173,7 @@ void K3bAudioBurnDialog::slotSaveUserDefaults()
 {
   K3bProjectBurnDialog::slotSaveUserDefaults();
 
-  KConfig* c = k3bMain()->config();
+  KConfig* c = k3bcore->config();
 
   c->writeEntry( "cd_text", m_cdtextWidget->isChecked() );
   c->writeEntry( "hide_first_track", m_checkHideFirstTrack->isChecked() );

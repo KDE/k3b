@@ -63,8 +63,10 @@ int K3bAudioModule::decode( char* _data, int maxLen )
       m_alreadyDecoded += bytesToPad;
       return bytesToPad;
     }
-    else
+    else {
+      kdDebug() << "(K3bAudioModule) decoded " << m_alreadyDecoded << " bytes." << endl;
       return 0;
+    }
   }
   else {
     // check if we decoded too much
