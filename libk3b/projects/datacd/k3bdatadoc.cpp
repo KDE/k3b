@@ -514,6 +514,9 @@ bool K3bDataDoc::loadDocumentDataOptions( QDomElement elem )
     else if( e.nodeName() == "udf")
       isoOptions().setCreateUdf( e.attributeNode( "activated" ).value() == "yes" );
 
+    else if( e.nodeName() == "joliet_allow_103_characters")
+      isoOptions().setJolietLong( e.attributeNode( "activated" ).value() == "yes" );
+
     else if( e.nodeName() == "iso_allow_lowercase")
       isoOptions().setISOallowLowercase( e.attributeNode( "activated" ).value() == "yes" );
 
@@ -794,6 +797,10 @@ void K3bDataDoc::saveDocumentDataOptions( QDomElement& optionsElem )
 
   topElem = doc.createElement( "udf" );
   topElem.setAttribute( "activated", isoOptions().createUdf() ? "yes" : "no" );
+  optionsElem.appendChild( topElem );
+
+  topElem = doc.createElement( "joliet_allow_103_characters" );
+  topElem.setAttribute( "activated", isoOptions().jolietLong() ? "yes" : "no" );
   optionsElem.appendChild( topElem );
 
   topElem = doc.createElement( "iso_allow_lowercase" );

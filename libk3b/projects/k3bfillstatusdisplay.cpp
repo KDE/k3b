@@ -23,6 +23,7 @@
 #include <k3bdevicemanager.h>
 #include <k3bdevicehandler.h>
 #include <k3bmsf.h>
+#include <k3bradioaction.h>
 
 #include <qevent.h>
 #include <qpainter.h>
@@ -214,15 +215,15 @@ class K3bFillStatusDisplay::Private
 {
 public:
   KActionCollection* actionCollection;
-  KToggleAction* actionShowMinutes;
-  KToggleAction* actionShowMegs;
-  KToggleAction* action74Min;
-  KToggleAction* action80Min;
-  KToggleAction* action100Min;
-  KToggleAction* actionDvd4_7GB;
-  KToggleAction* actionDvdDoubleLayer;
-  KToggleAction* actionCustomSize;
-  KAction* actionDetermineSize;
+  KRadioAction* actionShowMinutes;
+  KRadioAction* actionShowMegs;
+  KRadioAction* action74Min;
+  KRadioAction* action80Min;
+  KRadioAction* action100Min;
+  KRadioAction* actionDvd4_7GB;
+  KRadioAction* actionDvdDoubleLayer;
+  K3bRadioAction* actionCustomSize;
+  K3bRadioAction* actionDetermineSize;
   KAction* actionSaveUserDefaults;
   KAction* actionLoadUserDefaults;
 
@@ -291,36 +292,39 @@ void K3bFillStatusDisplay::setupPopupMenu()
   d->popup = new KPopupMenu( this, "popup" );
   d->dvdPopup = new KPopupMenu( this, "dvdpopup" );
 
-  d->actionShowMinutes = new KToggleAction( i18n("Minutes"), "kmidi", 0, this, SLOT(showTime()),
+  d->actionShowMinutes = new KRadioAction( i18n("Minutes"), "kmidi", 0, this, SLOT(showTime()),
 					   d->actionCollection, "fillstatus_show_minutes" );
-  d->actionShowMegs = new KToggleAction( i18n("Megabytes"), "kwikdisk", 0, this, SLOT(showSize()),
+  d->actionShowMegs = new KRadioAction( i18n("Megabytes"), "kwikdisk", 0, this, SLOT(showSize()),
 					d->actionCollection, "fillstatus_show_megabytes" );
 
   d->actionShowMegs->setExclusiveGroup( "show_size_in" );
   d->actionShowMinutes->setExclusiveGroup( "show_size_in" );
 
-  d->action74Min = new KToggleAction( i18n("%1 MB").arg(650), 0, this, SLOT(slot74Minutes()),
+  d->action74Min = new KRadioAction( i18n("%1 MB").arg(650), 0, this, SLOT(slot74Minutes()),
 				     d->actionCollection, "fillstatus_74minutes" );
-  d->action80Min = new KToggleAction( i18n("%1 MB").arg(700), 0, this, SLOT(slot80Minutes()),
+  d->action80Min = new KRadioAction( i18n("%1 MB").arg(700), 0, this, SLOT(slot80Minutes()),
 				     d->actionCollection, "fillstatus_80minutes" );
-  d->action100Min = new KToggleAction( i18n("%1 MB").arg(880), 0, this, SLOT(slot100Minutes()),
+  d->action100Min = new KRadioAction( i18n("%1 MB").arg(880), 0, this, SLOT(slot100Minutes()),
 				      d->actionCollection, "fillstatus_100minutes" );
-  d->actionDvd4_7GB = new KToggleAction( i18n("4.4 GB"), 0, this, SLOT(slotDvd4_7GB()),
+  d->actionDvd4_7GB = new KRadioAction( KIO::convertSizeFromKB(4.4*1024*1024), 0, this, SLOT(slotDvd4_7GB()),
 					 d->actionCollection, "fillstatus_dvd_4_7gb" );
-  d->actionDvdDoubleLayer = new KToggleAction( i18n("8.0 GB"), 0, this, SLOT(slotDvdDoubleLayer()),
+  d->actionDvdDoubleLayer = new KRadioAction( KIO::convertSizeFromKB(8.0*1024*1024), 0, this, SLOT(slotDvdDoubleLayer()),
 					 d->actionCollection, "fillstatus_dvd_double_layer" );
-  d->actionCustomSize = new KToggleAction( i18n("Custom..."), 0, this, SLOT(slotCustomSize()),
-					  d->actionCollection, "fillstatus_custom_size" );
+  d->actionCustomSize = new K3bRadioAction( i18n("Custom..."), 0, this, SLOT(slotCustomSize()),
+					    d->actionCollection, "fillstatus_custom_size" );
+  d->actionCustomSize->setAlwaysEmitActivated(true);
+  d->actionDetermineSize = new K3bRadioAction( i18n("From Media..."), "cdrom_unmount", 0,
+					       this, SLOT(slotDetermineSize()),
+					       d->actionCollection, "fillstatus_size_from_disk" );
+  d->actionDetermineSize->setAlwaysEmitActivated(true);
 
   d->action74Min->setExclusiveGroup( "cd_size" );
   d->action80Min->setExclusiveGroup( "cd_size" );
   d->action100Min->setExclusiveGroup( "cd_size" );
   d->actionDvd4_7GB->setExclusiveGroup( "cd_size" );
+  d->actionDvdDoubleLayer->setExclusiveGroup( "cd_size" );
   d->actionCustomSize->setExclusiveGroup( "cd_size" );
-
-  d->actionDetermineSize = new KAction( i18n("From Disk"), "cdrom_unmount", 0,
-				       this, SLOT(slotDetermineSize()),
-				       d->actionCollection, "fillstatus_size_from_disk" );
+  d->actionDetermineSize->setExclusiveGroup( "cd_size" );
 
   d->actionLoadUserDefaults = new KAction( i18n("User Defaults"), "", 0,
 					   this, SLOT(slotLoadUserDefaults()),
@@ -435,13 +439,40 @@ void K3bFillStatusDisplay::slotWhy44()
 
 void K3bFillStatusDisplay::slotCustomSize()
 {
+  // allow the units to be translated
+  QString gbS = i18n("gb");
+  QString mbS = i18n("mb");
+  QString minS = i18n("min");
+
+  QRegExp rx( "(\\d+\\" + KGlobal::locale()->decimalSymbol() + "?\\d*)(" + gbS + "|" + mbS + "|" + minS + ")?" );
   bool ok;
   QString size = KInputDialog::getText( i18n("Custom Size"),
-					i18n("Please specify the size of the media in minutes:"),
-					d->showDvdSizes ? QString("74") : QString("510"), &ok, this, (const char*)0, new QIntValidator( this ) );
+					i18n("<p>Please specify the size of the media. Use suffixes <b>gb</b>,<b>mb</b>, "
+					     "and <b>min</b> for <em>gigabytes</em>, <em>megabytes</em>, and <em>minutes</em>"
+					     " respectively."),
+					d->showDvdSizes ? QString("4%14%2").arg(KGlobal::locale()->decimalSymbol()).arg(gbS) : 
+					(d->showTime ? QString("74")+minS : QString("650")+mbS),
+					&ok, this, (const char*)0, 
+					new QRegExpValidator( rx, this ) );
   if( ok ) {
-    d->displayWidget->setCdSize( size.toInt()*60*75 );
-    update();
+    // determine size
+    if( rx.exactMatch( size ) ) {
+      QString valStr = rx.cap(1);
+      if( valStr.endsWith( KGlobal::locale()->decimalSymbol() ) )
+	valStr += "0";
+      double val = KGlobal::locale()->readNumber( valStr, &ok );
+      if( ok ) {
+	QString s = rx.cap(2);
+	if( s == gbS || (s.isEmpty() && d->showDvdSizes) )
+	  val *= 1024*512;
+	else if( s == mbS || (s.isEmpty() && !d->showTime) )
+	  val *= 512;
+	else
+	  val *= 60*75;
+	d->displayWidget->setCdSize( (int)val );
+	update();
+      }
+    }
   }
 }
 
