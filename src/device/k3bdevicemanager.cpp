@@ -185,8 +185,12 @@ int K3bCdDevice::DeviceManager::scanbus()
      QString device;
      links.open(IO_ReadOnly,fd);
      while ( links.readLine(device,80) > 0) {
-       addDevice(device.stripWhiteSpace());
-       kdDebug() << "(K3bDeviceManager) Link: " << device << endl;
+       device = device.stripWhiteSpace();
+       K3bDevice *d = findDevice(resolveSymLink(device));
+       if (d) {
+         d->addDeviceNode(device);
+         kdDebug() << "(K3bDeviceManager) Link: " << device << " -> " << d->devicename() << endl;
+       }
      }
   }
   pclose(fd);
@@ -235,28 +239,35 @@ void K3bCdDevice::DeviceManager::printDevices()
 {
   kdDebug() << "\nReader:" << endl;
   for( K3bDevice * dev = m_reader.first(); dev != 0; dev = m_reader.next() ) {
-    kdDebug() << "  " << ": " 
-	      << dev->ioctlDevice() << " " 
-	      << dev->blockDeviceName() << " " 
+    kdDebug() << "  " << ": "
+	      << dev->ioctlDevice() << " "
+	      << dev->blockDeviceName() << " "
 	      << dev->vendor() << " "
-	      << dev->description() << " " 
-	      << dev->version() << endl 
+	      << dev->description() << " "
+	      << dev->version() << endl
 	      << "    "
-	      << dev->mountDevice() << " " 
+	      << dev->mountDevice() << " "
 	      << dev->mountPoint() << endl;
+    kdDebug() << "Reader aliases: " << endl;
+    for(QStringList::ConstIterator it = dev->deviceNodes().begin(); it != dev->deviceNodes().end(); ++it )
+      kdDebug() << "     " << *it << endl;
   }
   kdDebug() << "\nWriter:" << endl;
   for( K3bDevice * dev = m_writer.first(); dev != 0; dev = m_writer.next() ) {
-    kdDebug() << "  " << ": " 
-	      << dev->ioctlDevice() << " " 
-	      << dev->blockDeviceName() << " " 
+    kdDebug() << "  " << ": "
+	      << dev->ioctlDevice() << " "
+	      << dev->blockDeviceName() << " "
 	      << dev->vendor() << " "
-	      << dev->description() << " " 
-	      << dev->version() << " " 
+	      << dev->description() << " "
+	      << dev->version() << " "
 	      << dev->maxWriteSpeed() << endl
-	      << "    " 
-	      << dev->mountDevice() << " " 
+	      << "    "
+	      << dev->mountDevice() << " "
 	      << dev->mountPoint() << endl;
+    kdDebug() << "Writer aliases: " << endl;
+    for(QStringList::ConstIterator it = dev->deviceNodes().begin(); it != dev->deviceNodes().end(); ++it )
+      kdDebug() << "     " << *it << endl;
+
   }
 }
 
