@@ -153,7 +153,7 @@ void K3bDivXEncodingProcess::slotStartEncoding(){
      connect( m_process, SIGNAL(processExited(KProcess*)), this, SLOT(slotEncodingExited( KProcess* )) );
 
      if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ){
-         kdDebug() << "Error process starting" << endl;
+         kdDebug() << "(K3bDivXEncodingProcess) Error process starting" << endl;
      }
      //emit started();
      if( m_pass == 1 ){
@@ -198,7 +198,8 @@ void K3bDivXEncodingProcess::deleteIfos(){
 }
 
 void K3bDivXEncodingProcess::cancel( ){
-    m_process->kill(); // send SIGTERM
+    kdDebug() << "(K3bDivXEncodingProcess) Kill shell process." << endl;
+    m_process->kill(9); // send SIGTERM doesn't work (?), use now SIGKILL
 }
 
 void K3bDivXEncodingProcess::slotParseEncoding( KProcess *p, char *buffer, int len){
@@ -269,7 +270,7 @@ void K3bDivXEncodingProcess::slotParseAudio( KProcess *p, char *buffer, int len)
             kdDebug() << "K3bDivxEncodingProcess) Audio gain: " + m_data->getAudioGain() << endl;
             infoMessage( i18n("Gain for normalizing is: %1").arg(m_data->getAudioGain()), INFO );
         }
-        //kdDebug() <<  tmp << endl;
+        kdDebug() << "(K3bDivxEncodingProcess) Audio gain output: " << tmp << endl;
         int index = tmp.find( "%" );
         tmp = tmp.mid( index - 5, 5).stripWhiteSpace();
         float f = tmp.toFloat()+ 0.5;
