@@ -33,7 +33,7 @@
 #include <kaction.h>
 
 class QVBox;
-class QTabWidget;
+
 
 // forward declaration of the K3b classes
 class K3bMainWindow;
@@ -45,6 +45,8 @@ class K3bExternalBinManager;
 class K3bAudioTrackDialog;
 class K3bOptionDialog;
 class K3bJob;
+class K3bProjectTabWidget;
+
 
 
 /** Access to the "lonely" K3bMainWindow Object */
@@ -233,7 +235,7 @@ class K3bMainWindow : public KDockMainWindow
   KConfig *m_config;
 
   /** The MDI-Interface is managed by this tabbed view */
-  QTabWidget* m_documentTab;
+  K3bProjectTabWidget* m_documentTab;
 
   /** a counter that gets increased each time the user creates a new document with "File"->"New" */
   int untitledCount;

@@ -61,6 +61,7 @@
 #include "k3bblankingdialog.h"
 #include "data/k3bisoimagewritingdialog.h"
 #include "k3bexternalbinmanager.h"
+#include "k3bprojecttabwidget.h"
 
 
 
@@ -87,8 +88,8 @@ K3bMainWindow::K3bMainWindow()
   ///////////////////////////////////////////////////////////////////
   // call inits to invoke all other construction parts
   initStatusBar();
-  initView();
   initActions();
+  initView();
 
   ///////////////////////////////////////////////////////////////////
   // disable actions at startup
@@ -187,9 +188,15 @@ void K3bMainWindow::initView()
   setMainDockWidget( mainDock );
   mainDock->setEnableDocking( KDockWidget::DockNone );
 
-  m_documentTab = new QTabWidget( mainDock );
+  m_documentTab = new K3bProjectTabWidget( mainDock );
   mainDock->setWidget( m_documentTab );
   connect( m_documentTab, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotCurrentDocChanged(QWidget*)) );
+
+  // fill the tabs action menu
+  m_documentTab->insertAction( actionFileSave );
+  m_documentTab->insertAction( actionFileSaveAs );
+  m_documentTab->insertAction( actionFileClose );
+  m_documentTab->insertAction( actionFileBurn );
 
 
   dirDock = createDockWidget( "DirDock", SmallIcon("idea") );
@@ -810,6 +817,8 @@ void K3bMainWindow::init()
     config()->setGroup( "External Programs" );
     m_externalBinManager->readConfig( config() );
   }
+
+  m_externalBinManager->checkVersions();
 
   // ===============================================================================
 

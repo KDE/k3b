@@ -52,6 +52,8 @@ class K3bDataItem
 
   /** adds the given dataItem to the current parent (can be the item itself if it is a K3bDirItem) */
   virtual K3bDirItem* addDataItem( K3bDataItem* ) = 0;
+
+  virtual void reparent( K3bDirItem* );
 	
  protected:
   QString m_k3bName;
