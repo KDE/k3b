@@ -138,8 +138,9 @@ class K3bMainWindow : public KParts::DockMainWindow
   void slotBlankCdrw();
   void slotFormatDvd();
   void slotWriteCdImage();
-  void slotWriteDvdIsoImage();
   void slotWriteCdImage( const KURL& url );
+  void slotWriteDvdIsoImage();
+  void slotWriteDvdIsoImage( const KURL& url );
   // encoding dialog for transcode encoding utility
   void slotDivxEncoding();
   void slotCdCopy();
@@ -293,6 +294,8 @@ class K3bMainWindow : public KParts::DockMainWindow
   /** sets up the statusbar for the main window by initialzing a statuslabel.
    */
   void initStatusBar();
+
+  bool isCdDvdImageAndIfSoOpenDialog( const KURL& url );
 
   /** the configuration object of the application */
   KConfig *m_config;

@@ -105,7 +105,7 @@
 #include <k3bsystemproblemdialog.h>
 #include <k3baudiodecoder.h>
 #include <k3bthememanager.h>
-
+#include <k3biso9660.h>
 
 
 static K3bMainWindow* s_k3bMainWindow = 0;
@@ -666,11 +666,18 @@ void K3bMainWindow::slotFileOpen()
 {
   slotStatusMsg(i18n("Opening file..."));
 
-  KURL url=KFileDialog::getOpenURL(QString::null,
-				   i18n("*.k3b|K3b Projects"), this, i18n("Open File"));
-  if(!url.isEmpty()) {
-    openDocument(url);
-    actionFileOpenRecent->addURL( url );
+  KURL url = KFileDialog::getOpenURL( QString::null,
+				      i18n("*.k3b|K3b Projects"), 
+				      this, 
+				      i18n("Open File") );
+  if( !url.isEmpty() ) {
+    //
+    // First we check if this is an iso image in case someone wants to open one this way
+    //
+    if( !isCdDvdImageAndIfSoOpenDialog( url ) ) {
+      openDocument(url);
+      actionFileOpenRecent->addURL( url );
+    }
   }
 }
 
@@ -1190,6 +1197,14 @@ void K3bMainWindow::slotWriteDvdIsoImage()
 }
 
 
+void K3bMainWindow::slotWriteDvdIsoImage( const KURL& url )
+{
+  K3bIsoImageWritingDialog d( this );
+  d.setImage( url );
+  d.exec();
+}
+
+
 void K3bMainWindow::slotWriteCdImage( const KURL& url )
 {
   K3bCdImageWritingDialog d( this );
@@ -1385,6 +1400,14 @@ void K3bMainWindow::slotCheckSystem()
 
 void K3bMainWindow::addUrls( const KURL::List& urls )
 {
+  //
+  // A lot of users try to write an iso image with a data project
+  //
+  if( urls.count() == 1 ) {
+    if( isCdDvdImageAndIfSoOpenDialog( urls.first() ) )
+      return;
+  }
+
   if( activeDoc() ) {
     activeDoc()->addUrls( urls );
   }
@@ -1448,5 +1471,22 @@ void K3bMainWindow::slotThemeChanged()
   }
 }
 
+
+bool K3bMainWindow::isCdDvdImageAndIfSoOpenDialog( const KURL& url )
+{
+  K3bIso9660 iso( url.path() );
+  if( iso.open() ) {
+    iso.close();
+    // very rough dvd image size test
+    if( K3b::filesize( url ) > 1000*1024*1024 )
+      slotWriteDvdIsoImage( url );
+    else
+      slotWriteCdImage( url );
+
+    return true;
+  }
+  else
+    return false;
+}
 
 #include "k3b.moc"

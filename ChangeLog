@@ -12,6 +12,7 @@ Allow disabling of CD-Text reading in cd-copy to overcome problems with CD-Text 
 Check CD-Text crc when copying
 Fixed incorrect PBC order, PBC now should work on all "standalone" DVD Players
 Fixed waittime bug for PBC infinite timeout.
+It is now possible to open an iso image just like a project file.
 
 0.11.10
 Support Mp3 files starting with multiple ID3 tags.
