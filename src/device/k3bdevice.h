@@ -62,21 +62,6 @@ namespace K3bCdDevice
                      RAW_R96P = 64,
                      RAW_R96R = 128 };
 
-
-    class Private
-    {
-    public:
-      Private() {}
-
-      QString blockDeviceName;
-      QString genericDevice;
-      int deviceType;
-      interface interfaceType;
-      QString mountPoint;
-      QString mountDeviceName;
-      QStringList allNodes;
-    };
-
     /**
       * create a K3bDevice from a cdrom_drive struct
       * (cdparanoia-lib)
@@ -273,6 +258,13 @@ namespace K3bCdDevice
     void load() const;
 
     bool supportsWriteMode( WriteMode );
+
+    /**
+     * @return fd on success; -1 on failure
+     */
+    int open() const;
+    void close() const;
+    bool isOpen() const;
 
   protected:
     bool furtherInit();
