@@ -24,7 +24,10 @@ class K3bLameLib
   static K3bLameLib* create();
 
  private:
-  K3bLameLib( QLibrary* );
+  K3bLameLib();
+
+  static QLibrary* s_lib;
+  static int s_counter;
 
   class Private;
   Private* d;
