@@ -146,7 +146,7 @@ AM_CONDITIONAL(include_OGG, [test x$ogg_vorbis = xyes])
 
 dnl === libmad MPEG decoder check ===
 MAD_LIB=""
-AC_CHECK_HEADER(mad.h, [
+KDE_CHECK_HEADER(mad.h, [
 	AC_CHECK_LIB(mad, mad_synth_frame, [
 		MAD_LIB="-lmad"
 		AC_DEFINE(HAVE_LIBMAD,1,[defined if you have libmad headers and libraries])],
