@@ -14,7 +14,7 @@
  */
 
 #include "k3bfilecompilationsizehandler.h"
-#include "k3bdataitem.h"
+#include "k3bfileitem.h"
 
 #include <kdebug.h>
 
@@ -67,7 +67,7 @@ public:
   /**
    * This maps from inodes to the number of occurrences of the inode.
    */
-  QMap<int, InodeInfo> inodeMap;
+  QMap<K3bFileItem::Id, InodeInfo> inodeMap;
 
   KIO::filesize_t size;
 
@@ -104,7 +104,8 @@ void K3bFileCompilationSizeHandler::addFile( K3bDataItem* item )
     d->specialItems.append( item );
   }
   else if( item->isFile() ) {
-    InodeInfo& inodeInfo = d->inodeMap[item->localInode()];
+    K3bFileItem* fileItem = static_cast<K3bFileItem*>( item );
+    InodeInfo& inodeInfo = d->inodeMap[fileItem->localId()];
 
     inodeInfo.items.append( item );
 
@@ -138,7 +139,8 @@ void K3bFileCompilationSizeHandler::removeFile( K3bDataItem* item )
     }
   }
   else if( item->isFile() ) {
-    InodeInfo& inodeInfo = d->inodeMap[item->localInode()];
+    K3bFileItem* fileItem = static_cast<K3bFileItem*>( item );
+    InodeInfo& inodeInfo = d->inodeMap[fileItem->localId()];
     
     if( inodeInfo.items.findRef( item ) == -1 ) {
       kdError() << "(K3bFileCompilationSizeHandler) " 

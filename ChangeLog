@@ -1,3 +1,6 @@
+0.11.9
+Fixed data project size calculation (for good this time).
+	
 0.11.8
 K3b now searches for the Debian cdrecord wrapper script and properly selects the cdrecord version to use
 	(cdrecord.mmap or cdrecord.shm) based on the kernel version. This should fix all problems with

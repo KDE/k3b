@@ -30,6 +30,27 @@
 #include <sys/stat.h>
 
 
+bool operator==( const K3bFileItem::Id& id1, const K3bFileItem::Id& id2 )
+{
+  return ( id1.device == id2.device && id1.inode == id2.inode );
+}
+
+
+bool operator<( const K3bFileItem::Id& id1, const K3bFileItem::Id& id2 )
+{
+  if( id1.device == id2.device )
+    return ( id1.inode < id2.inode );
+  else
+    return ( id1.device < id2.device );
+}
+
+
+bool operator>( const K3bFileItem::Id& id1, const K3bFileItem::Id& id2 )
+{
+  return !( id2 < id1 || id1 == id2 );
+}
+
+
 
 K3bFileItem::K3bFileItem( const QString& filePath, K3bDataDoc* doc, K3bDirItem* dir, const QString& k3bName )
   : KFileItem( 0, 0, KURL::encode_string(filePath) ), K3bDataItem( doc, dir ),
@@ -56,7 +77,8 @@ K3bFileItem::K3bFileItem( const QString& filePath, K3bDataDoc* doc, K3bDirItem* 
     // integrate the device number into the inode since files on different
     // devices may have the same inode number!
     //
-    m_inode = (((Q_INT32)statBuf.st_ino)&0xffff) | (((Q_INT32)statBuf.st_dev)<<16)&0xffff0000;
+    m_id.inode = statBuf.st_ino;
+    m_id.device = statBuf.st_dev;
   }
 
   // add automagically like a qlistviewitem
