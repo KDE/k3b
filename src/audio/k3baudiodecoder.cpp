@@ -21,6 +21,7 @@
 
 #include <klocale.h>
 #include <kdebug.h>
+#include <qwaitcondition.h>
 
 #include <unistd.h>
 
@@ -39,10 +40,12 @@ public:
 
   void cancel() {
     m_canceled = true;
+    m_condResume.wakeAll();
   }
 
   void resume() {
     m_suspended = false;
+    m_condResume.wakeAll();
   }
 
   void run() {
@@ -97,15 +100,8 @@ public:
 		  emitData( data, length );
 
 		  // wait to be resumed or canceled
-		  //		  while( m_suspended && !m_canceled );
-		  // for some reason (perhaps gcc optimization?) the above does not work
-		  // when resuming (but when canceling) while this version always works.
-		  while(1) {
-		    if( m_canceled )
-		      break;
-		    if( !m_suspended )
-		      break;
-		  }
+		  if( !m_canceled && m_suspended )
+		    m_condResume.wait();
 		}
 		else if( ::write( m_fdToWriteTo, data, length ) == -1 ) {
 		  kdError() << "(K3bAudioDecoder::DecoderThread) could not write to " << m_fdToWriteTo << endl;
@@ -159,6 +155,8 @@ private:
   int m_fdToWriteTo;
   bool m_suspended;
   bool m_canceled;
+
+  QWaitCondition m_condResume;
 };
 
 
