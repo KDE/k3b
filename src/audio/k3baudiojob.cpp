@@ -712,7 +712,7 @@ void K3bAudioJob::cdrdaoWrite()
   k3bMain()->config()->setGroup( "General Options" );
   bool manualBufferSize = k3bMain()->config()->readBoolEntry( "Manual buffer size", false );
   if( manualBufferSize ) {
-    *m_process << "--buffer" << QString::number( k3bMain()->config()->readNumEntry( "Cdrdao buffer", 32 ) );
+    *m_process << "--buffers" << QString::number( k3bMain()->config()->readNumEntry( "Cdrdao buffer", 32 ) );
   }
     
   if( m_doc->dummy() )

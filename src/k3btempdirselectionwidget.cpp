@@ -59,8 +59,7 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const cha
 
   m_groupTempDirLayout->addWidget( TextLabel1_3, 0, 0 );
 
-  QLabel* TextLabel2 = new QLabel( m_groupTempDir, "TextLabel2" );
-  TextLabel2->setText( i18n( "Free space on device" ) );
+  QLabel* TextLabel2 = new QLabel( i18n( "Free space in temp directory" ), m_groupTempDir, "TextLabel2" );
 
   m_groupTempDirLayout->addWidget( TextLabel2, 2, 0 );
 
@@ -121,6 +120,11 @@ void K3bTempDirSelectionWidget::slotFreeTempSpace(const QString&,
   m_labelFreeSpace->setText( QString().sprintf( "%.2f MB", (float)kbAvail/1024.0 ) );
 
   m_freeTempSpace = kbAvail;
+
+  if( m_freeTempSpace * 1024 < m_requestedSize )
+    m_labelCdSize->setPaletteForegroundColor( red );
+  else
+    m_labelCdSize->setPaletteForegroundColor( m_labelFreeSpace->paletteForegroundColor() );
 }
 
 
@@ -185,6 +189,7 @@ void K3bTempDirSelectionWidget::setSelectionMode( int mode )
 
 void K3bTempDirSelectionWidget::setNeededSize( unsigned long bytes )
 {
+  m_requestedSize = bytes;
   m_labelCdSize->setText( QString().sprintf( " %.2f MB", ((float)bytes)/1024.0/1024.0 ) );
 }
 

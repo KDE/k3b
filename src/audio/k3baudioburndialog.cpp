@@ -60,15 +60,13 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
   tab->addTab( f1, i18n("Burning") );
   tab->addTab( f2, i18n("CD-Text") );
 	
-  readSettings();
-
-  m_tempDirSelectionWidget->setNeededSize( doc()->size() );
-
-
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_tempDirSelectionWidget, SLOT(setDisabled(bool)) );
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkRemoveBufferFiles, SLOT(setDisabled(bool)) );
   connect( m_checkDao, SIGNAL(toggled(bool)), m_checkHideFirstTrack, SLOT(setEnabled(bool)) );
   connect( m_checkDao, SIGNAL(toggled(bool)), m_checkCdText, SLOT(setEnabled(bool)) );
+
+  m_tempDirSelectionWidget->setNeededSize( doc()->size() );
+  readSettings();
 }
 
 K3bAudioBurnDialog::~K3bAudioBurnDialog(){

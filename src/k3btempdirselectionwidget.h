@@ -63,6 +63,8 @@ class K3bTempDirSelectionWidget : public QWidget
   QTimer* m_freeTempSpaceTimer;
   unsigned long m_freeTempSpace;
 
+  unsigned long m_requestedSize;
+
   int m_mode;
 };
 

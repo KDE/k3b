@@ -225,7 +225,7 @@ void K3bBurnProgressDialog::setupGUI()
 
   QFont f( m_groupProgress->font() );
   f.setBold( true );
-  m_groupProgress->setFont( f );
+  //  m_groupProgress->setFont( f );
 }
 
 
@@ -280,18 +280,21 @@ void K3bBurnProgressDialog::finished( bool success )
   m_job = 0;
 
   if( success ) {
-    m_labelFileName->setText( i18n("Process finished") );
+    m_labelFileName->setText( "" );
+    m_groupProgress->setTitle( i18n("Success") );
+    m_progressCd->setValue(100);
+    m_progressTrack->setValue(100);
+    m_labelTrackProgress->setText("");
+    m_progressBuffer->setValue(0);
   }
-  m_labelTrackProgress->setText("");
+  else {
+    m_groupProgress->setTitle( i18n("Error") );
+  }
 
   m_buttonCancel->hide();
   m_buttonShowDebug->show();
   m_buttonClose->show();
   m_timer->stop();
-
-  m_progressBuffer->setValue(0);
-  m_progressCd->setValue(100);
-  m_progressTrack->setValue(100);
 }
 
 

@@ -32,6 +32,7 @@
 #include <qheader.h>
 #include <qevent.h>
 #include <qdragobject.h>
+#include <qptrlist.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -130,6 +131,23 @@ bool K3bPlayListView::acceptDrag( QDropEvent* e ) const
 {
   // we accept textdrag (urls) and moved items (supported by KListView)
   return QUriDrag::canDecode(e) || KListView::acceptDrag(e);
+}
+
+
+QDragObject* K3bPlayListView::dragObject()
+{
+  QPtrList<QListViewItem> list = selectedItems();
+
+  if( list.isEmpty() )
+    return 0;
+
+  QPtrListIterator<QListViewItem> it(list);
+  KURL::List urls;
+	
+  for( ; it.current(); ++it )
+    urls.append( KURL( ((K3bPlayListViewItem*)it.current())->filename() ) );
+
+  return KURLDrag::newDrag( urls, viewport() );
 }
 
 

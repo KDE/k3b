@@ -163,7 +163,7 @@ void K3bIsoImageJob::start()
   for( QStringList::Iterator it = _params.begin(); it != _params.end(); ++it )
     *m_process << *it;
 
-  *m_process << "-data" << QString("\"%1\"").arg( m_imagePath );
+  *m_process << "-data" << m_imagePath;
 			
 
   cout << "***** cdrecord parameters:\n";
@@ -211,8 +211,8 @@ void K3bIsoImageJob::cancel()
     bool block = m_device->block( false );
     if( !block )
       emit infoMessage( i18n("Could not unlock cd drive."), K3bJob::ERROR );
-    //    else if( k3bMain()->eject() )
-    // m_doc->burner()->eject();
+    else if( k3bMain()->eject() )
+      m_device->eject();
   }
 
   emit infoMessage( i18n("Writing canceled."), K3bJob::ERROR );
@@ -349,6 +349,8 @@ void K3bIsoImageJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 
 void K3bIsoImageJob::slotCdrecordFinished()
 {
+  bool unblock = false;
+
   if( m_process->normalExit() )
     {
       // TODO: check the process' exitStatus()
@@ -369,6 +371,7 @@ void K3bIsoImageJob::slotCdrecordFinished()
 	  emit infoMessage( i18n("Sorry, no error handling yet! :-(("), K3bJob::ERROR );
 	  emit infoMessage( i18n("Please send me a mail with the last output..."), K3bJob::ERROR );
 	  emit finished( false );
+	  unblock = true;
 	  break;
 	}
     }
@@ -376,7 +379,17 @@ void K3bIsoImageJob::slotCdrecordFinished()
     {
       emit infoMessage( i18n("Cdrecord did not exit cleanly."), K3bJob::ERROR );
       emit finished( false );
+      unblock = true;
     }
+
+  if( unblock ) {
+    // we need to unlock the writer because cdrecord locked it while writing
+    bool block = m_device->block( false );
+    if( !block )
+      emit infoMessage( i18n("Could not unlock cd drive."), K3bJob::ERROR );
+    else if( k3bMain()->eject() )
+      m_device->eject();
+  }
 }
 
 

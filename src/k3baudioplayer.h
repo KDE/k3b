@@ -30,6 +30,7 @@ class QSlider;
 class QPainter;
 class QColorGroup;
 class QDropEvent;
+class QDragObject;
 class KAction;
 class KActionMenu;
 
@@ -88,6 +89,7 @@ Q_OBJECT
 
  protected:
   bool acceptDrag( QDropEvent* e ) const;
+  QDragObject* dragObject();
 };
 
 
