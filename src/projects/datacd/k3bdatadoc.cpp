@@ -1330,8 +1330,8 @@ K3bDataItem* K3bDataDoc::createBootCatalogeItem( K3bDirItem* dir )
     m_bootCataloge->setRemoveable(false);
     m_bootCataloge->setHideable(false);
     m_bootCataloge->setWriteToCd(false);
-    m_bootCataloge->setExtraInfo( i18n("El Torito boot catalogue file") );
-    b->setMimeType( i18n("Boot catalogue") );
+    m_bootCataloge->setExtraInfo( i18n("El Torito boot catalog file") );
+    b->setMimeType( i18n("Boot catalog") );
   }
 
   return m_bootCataloge;
