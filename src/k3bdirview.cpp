@@ -39,6 +39,7 @@
 #include <qlabel.h>
 #include <qwidgetstack.h>
 #include <qscrollview.h>
+#include <qpainter.h>
 
 // KDE-includes
 #include <kmimetype.h>
@@ -71,6 +72,25 @@
 #include "cdinfo/k3bdiskinfodetector.h"
 #include "cdinfo/k3bdiskinfoview.h"
 
+class K3bNoViewView : public QWidget
+{
+public:
+  K3bNoViewView( QWidget* parent )
+    : QWidget( parent ) {
+    setPaletteBackgroundColor( QColor(201, 208, 255) );
+  }
+
+protected:
+  void paintEvent( QPaintEvent* ) {
+    QPainter p( this );
+
+    QPixmap pix(locate( "data", "k3b/pics/k3b_probing_cd.png" ));
+    p.drawPixmap( 0, 0, pix );
+    p.setPen( Qt::white );
+    p.drawText( pix.width() + 10, pix.height() /3, i18n("K3b is trying to retrieve information about the inserted disk.") );
+  }
+};
+
 
 
 K3bDirView::K3bDirView(QWidget *parent, const char *name )
@@ -94,16 +114,7 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
   m_movieView    = new K3bMovieView(m_viewStack, "movieview");
   m_infoView     = new K3bDiskInfoView(m_viewStack, "infoView");
 
-  m_noViewView = new QWidget( m_viewStack );
-  QHBoxLayout* noViewLayout = new QHBoxLayout( m_noViewView );
-  noViewLayout->setAutoAdd( true );
-  m_noViewView->setPaletteBackgroundColor( QColor(201, 208, 255) );
-  QLabel* penguinLabel = new QLabel( m_noViewView );
-  penguinLabel->setPixmap( QPixmap(locate( "data", "k3b/pics/k3b_probing_cd.png" )) );
-  m_noViewLabel = new QLabel( i18n("K3b is trying to retrieve information about the inserted disk."), m_noViewView );
-  m_noViewLabel->setAlignment( Qt::AlignLeft | Qt::AlignVCenter | Qt::WordBreak );
-  m_noViewLabel->setPaletteForegroundColor( Qt::white );
-
+  m_noViewView = new K3bNoViewView( m_viewStack );
 
   m_viewStack->raiseWidget( m_fileView );
 
