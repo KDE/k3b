@@ -40,7 +40,7 @@ K3bDebuggerPlugin::K3bDebuggerPlugin( QObject* parent,
 				      const QStringList& )
   : KParts::Plugin( parent, name )
 {
-  (void) new KAction( "&Create debugging output (plugin)",
+  (void) new KAction( i18n("&Create debugging output (plugin)"),
 		      0, 0,
 		      this, SLOT(slotDoDebuggerStuff()),
 		      actionCollection(), "k3bdebuggerplugin" );

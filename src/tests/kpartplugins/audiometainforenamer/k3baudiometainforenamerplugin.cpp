@@ -388,7 +388,7 @@ K3bAudioMetainfoRenamerPlugin::K3bAudioMetainfoRenamerPlugin( QObject* parent,
 							      const QStringList& )
   : KParts::Plugin( parent, name )
 {
-  (void) new KAction( "&Rename Audio Files",
+  (void) new KAction( i18n("&Rename Audio Files"),
 		      0, 0,
 		      this, SLOT(slotDoRename()),
 		      actionCollection(), "rename_audio_files_plugin" );
