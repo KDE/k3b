@@ -1,6 +1,6 @@
-/* 
+/*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -29,7 +29,7 @@ class K3bPatternOptionTab : public base_K3bPatternOptionTab
 {
   Q_OBJECT
 
- public: 
+ public:
   K3bPatternOptionTab( QWidget *parent = 0, const char *name = 0 );
   ~K3bPatternOptionTab();
 
@@ -41,9 +41,9 @@ class K3bPatternOptionTab : public base_K3bPatternOptionTab
   void slotSeeSpecialStrings();
 
  private:
-  QString basicDirectoryPattern();
-  QString basicFilenamePattern();
-  QString patternForName( const QString& name );
+  QString basicDirectoryPattern() const;
+  QString basicFilenamePattern() const;
+  QString patternForName( const QString& name ) const;
   QString basicPatternItemFromIndex( int, bool );
 
   K3bCddbResultEntry m_exampleEntry;
