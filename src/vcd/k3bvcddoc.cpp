@@ -387,6 +387,9 @@ bool K3bVcdDoc::loadDocumentData( QDomDocument* doc )
 
   informAboutNotFoundFiles();
 
+  if ( m_notFoundFiles.isEmpty() )
+    setModified(false); 
+
   return true;
 }
 
