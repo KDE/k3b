@@ -75,6 +75,7 @@ namespace K3bCdDevice
     K3b::Msf lastSector() const;
     K3b::Msf length() const;
 
+    // FIXME: what is this??
     void setDiscId( unsigned int id ) { m_discId = id; }
     void setFirstSector( int i ) { m_firstSector = i; }
 

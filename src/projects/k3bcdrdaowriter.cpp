@@ -121,6 +121,8 @@ public:
 
   ProgressMsg2 oldMsg;
   ProgressMsg2 newMsg;
+
+  unsigned int progressMsgSize;
 };
 
 
@@ -480,6 +482,12 @@ void K3bCdrdaoWriter::start()
   if( !m_cdrdaoBinObject->copyright.isEmpty() )
     emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3").arg(m_cdrdaoBinObject->name()).arg(m_cdrdaoBinObject->version).arg(m_cdrdaoBinObject->copyright), INFO );
 
+
+  // the message size changed in cdrdao 1.1.8)
+  if( m_cdrdaoBinObject->version >= K3bVersion( 1, 1, 8 ) )
+    d->progressMsgSize = sizeof(ProgressMsg2);
+  else
+    d->progressMsgSize = sizeof(ProgressMsg);
 
   // since the --speed parameter is used several times in this code we
   // determine the speed in auto once at the beginning
@@ -901,22 +909,16 @@ void K3bCdrdaoWriter::parseCdrdaoWrote( const QString& line )
 
 void K3bCdrdaoWriter::parseCdrdaoMessage()
 {
-  unsigned int progressMsgSize = 0;
-  if( m_cdrdaoBinObject->version >= K3bVersion( 1, 1, 8 ) )
-    progressMsgSize = sizeof(ProgressMsg2);
-  else
-    progressMsgSize = sizeof(ProgressMsg);
-
   static const char msgSync[] = { 0xff, 0x00, 0xff, 0x00 };
   unsigned int avail = m_comSock->bytesAvailable();
-  unsigned int msgs = avail / ( sizeof(msgSync)+progressMsgSize );
+  unsigned int msgs = avail / ( sizeof(msgSync)+d->progressMsgSize );
   unsigned int count = 0;
 
   if ( msgs < 1 )
     return;
   else if ( msgs > 1) {
     // move the read-index forward to the beginnig of the most recent message
-    count = ( msgs-1 ) * ( sizeof(msgSync)+progressMsgSize );
+    count = ( msgs-1 ) * ( sizeof(msgSync)+d->progressMsgSize );
     m_comSock->at(count);
     kdDebug() << "(K3bCdrdaoParser) " << msgs-1 << " message(s) skipped" << endl;
   }
@@ -930,7 +932,7 @@ void K3bCdrdaoWriter::parseCdrdaoMessage()
       buf = m_comSock->getch();
       ++count;
       if( count == avail ) {
-        kdDebug() << "(K3bCdrdaoParser) remote message sync not found (" << count << ")" << endl;
+	//        kdDebug() << "(K3bCdrdaoParser) remote message sync not found (" << count << ")" << endl;
         return;
       }
 
@@ -940,14 +942,14 @@ void K3bCdrdaoWriter::parseCdrdaoMessage()
         state = 0;
     }
 
-    if( (avail - count) < progressMsgSize ) {
+    if( (avail - count) < d->progressMsgSize ) {
       kdDebug() << "(K3bCdrdaoParser) could not read complete remote message." << endl;
       return;
     }
 
     // read one message (the message size changed in cdrdao 1.1.8)
-    ::memset( &d->newMsg, 0, sizeof(ProgressMsg2) );
-    int size = m_comSock->readBlock( (char*)&d->newMsg, progressMsgSize);
+    ::memset( &d->newMsg, 0, d->progressMsgSize );
+    int size = m_comSock->readBlock( (char*)&d->newMsg, d->progressMsgSize);
     if( size == -1 ) {
       kdDebug() << "(K3bCdrdaoParser) read error" << endl;
       return;
@@ -963,7 +965,7 @@ void K3bCdrdaoWriter::parseCdrdaoMessage()
       emit subPercent( d->newMsg.trackProgress/10 );
       emit percent( d->newMsg.totalProgress/10 );
       emit buffer(d->newMsg.bufferFillRate);
-      if( progressMsgSize == sizeof(ProgressMsg2) )
+      if( d->progressMsgSize == (unsigned int)sizeof(ProgressMsg2) )
 	emit deviceBuffer( d->newMsg.writerFillRate );
 
       if( d->newMsg.track != m_currentTrack ) {
@@ -985,7 +987,7 @@ void K3bCdrdaoWriter::parseCdrdaoMessage()
         m_currentTrack = d->newMsg.track;
       }
 
-      ::memcpy( &d->oldMsg, &d->newMsg, sizeof(ProgressMsg2) );
+      ::memcpy( &d->oldMsg, &d->newMsg, d->progressMsgSize );
     }
   }
 }
@@ -993,6 +995,7 @@ void K3bCdrdaoWriter::parseCdrdaoMessage()
 
 void K3bCdrdaoWriter::slotThroughput( int t )
 {
+  // FIXME: determine sector size
   emit writeSpeed( t, 150 );
 }
 

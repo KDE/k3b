@@ -20,6 +20,8 @@
 #include "k3baudiotrack.h"
 #include "k3baudioburndialog.h"
 #include "k3baudiojob.h"
+#include "k3baudiofile.h"
+#include <k3bcuefileparser.h>
 
 #include <songdb/k3bsong.h>
 #include <songdb/k3bsongmanager.h>
@@ -41,6 +43,7 @@
 #include <qdatetime.h>
 #include <qtimer.h>
 #include <qtextstream.h>
+#include <qsemaphore.h>
 
 // KDE-includes
 #include <kprocess.h>
@@ -56,114 +59,77 @@
 #include <iostream>
 
 
+static QSemaphore s_threadCnt( 10 );
+
 // this simple thread is just used to asynchronously determine the
 // length and integrety of the tracks
-class K3bAudioDoc::AudioTrackStatusThread : public K3bThread
+class K3bAudioDoc::AudioFileAnalyzerThread : public QThread
 {
 public:
-  AudioTrackStatusThread()
-    : K3bThread(),
-      m_track(0) {
+  AudioFileAnalyzerThread( K3bAudioDecoder* dec ) 
+    : m_decoder(dec) {
   }
 
-  void analyseTrack( K3bAudioTrack* track ) {
-    m_track = track;
-    start();
-  }
-
-  K3bAudioTrack* track() const {
-    return m_track;
-  }
+  K3bAudioDecoder* m_decoder;
 
 protected:
   void run() {
-    kdDebug() << "(AudioTrackStatusThread) run" << endl;
-    if( m_track->module()->analyseFile() ) {
-      m_track->setStatus( 0 );
-
-      // 
-      // Do not overwrite loaded cd-text data
-      // FIXME: this is a bad solution :(
-      //
-      if( m_track->cdText().isEmpty() ) {
-
-	// first search the songdb
-	K3bSong *song = K3bSongManager::instance()->findSong( m_track->path() );
-	if( song != 0 ){
-	  m_track->setArtist( song->getArtist() );
-	  //      newM_Track->setAlbum( song->getAlbum() );
-	  m_track->setTitle( song->getTitle() );
-	}
-	else {
-	  // no song found, try the module
-	  m_track->setTitle( m_track->module()->metaInfo( K3bAudioDecoder::META_TITLE ) );
-	  m_track->setPerformer( m_track->module()->metaInfo( K3bAudioDecoder::META_ARTIST ) );
-	}
-	
-	m_track->setComposer( m_track->module()->metaInfo( K3bAudioDecoder::META_COMPOSER ) );
-	m_track->setSongwriter( m_track->module()->metaInfo( K3bAudioDecoder::META_SONGWRITER ) );
-	m_track->setCdTextMessage( m_track->module()->metaInfo( K3bAudioDecoder::META_COMMENT ) );
-      }
-    }
-    else
-      m_track->setStatus( -1 );
-    kdDebug() << "(AudioTrackStatusThread) finished" << endl;
-    emitFinished(true);
+    s_threadCnt++;
+    kdDebug() << "(AudioFileAnalyzerThread) running on decoder for " << m_decoder->filename() << endl;
+    m_decoder->analyseFile();
+    s_threadCnt--;
   }
-
-private:
-  K3bAudioTrack* m_track;
 };
 
 
 
 K3bAudioDoc::K3bAudioDoc( QObject* parent )
-  : K3bDoc( parent )
+  : K3bDoc( parent ),
+    m_firstTrack(0),
+    m_lastTrack(0)
 {
-  m_tracks = 0L;
   m_cdText = false;
-  m_padding = true;  // padding is enabled forever since there is no use in disabling it!
 
   m_docType = AUDIO;
-
-  m_urlAddingTimer = new QTimer( this );
-  connect( m_urlAddingTimer, SIGNAL(timeout()), this, SLOT(slotWorkUrlQueue()) );
-
-  m_trackStatusThread = new AudioTrackStatusThread();
-  m_trackMetaInfoJob = new K3bThreadJob( 0, this );
-  m_trackMetaInfoJob->setThread( m_trackStatusThread );
-  connect( m_trackMetaInfoJob, SIGNAL(finished(bool)),
-	   this, SLOT(slotDetermineTrackStatus()) );
-  connect( m_trackMetaInfoJob, SIGNAL(finished(bool)),
-	   this, SIGNAL(changed()) );
-
-  // FIXME: remove the newTracks() signal and replace it with the changed signal
-  connect( this, SIGNAL(newTracks()), this, SIGNAL(changed()) );
-  connect( this, SIGNAL(trackRemoved(K3bAudioTrack*)), this, SIGNAL(changed()) );
+  m_audioTrackStatusThreads.setAutoDelete(true);
 }
 
 K3bAudioDoc::~K3bAudioDoc()
 {
-  if( m_tracks )
-    m_tracks->setAutoDelete( true );
-
-  delete m_tracks;
-  delete m_trackStatusThread;
+  // delete all tracks
+  while( m_firstTrack )
+    delete m_firstTrack->take();
 }
 
 bool K3bAudioDoc::newDocument()
 {
-  if( m_tracks ) {
-    while( m_tracks->first() )
-      removeTrack( m_tracks->first() );
-  }
-  else
-    m_tracks = new QPtrList<K3bAudioTrack>;
-  m_tracks->setAutoDelete(false);
-
   return K3bDoc::newDocument();
 }
 
+
+K3bAudioTrack* K3bAudioDoc::firstTrack() const
+{
+  return m_firstTrack;
+}
+
+
+K3bAudioTrack* K3bAudioDoc::lastTrack() const
+{
+  return m_lastTrack;
+}
+
+
+// this one is called by K3bAudioTrack to update the list
+void K3bAudioDoc::setFirstTrack( K3bAudioTrack* track )
+{
+  m_firstTrack = track;
+}
+
+// this one is called by K3bAudioTrack to update the list
+void K3bAudioDoc::setLastTrack( K3bAudioTrack* track )
+{
+  m_lastTrack = track;
+}
 
 
 KIO::filesize_t K3bAudioDoc::size() const 
@@ -176,9 +142,11 @@ KIO::filesize_t K3bAudioDoc::size() const
 K3b::Msf K3bAudioDoc::length() const
 {
   K3b::Msf length = 0;
-  for( QPtrListIterator<K3bAudioTrack> it(*m_tracks); it.current(); ++it ) {
-    length += it.current()->length() + it.current()->pregap();
-  }	
+  K3bAudioTrack* track = m_firstTrack;
+  while( track ) {
+    length += track->length();
+    track = track->next();
+  }
 
   return length;
 }
@@ -193,74 +161,95 @@ void K3bAudioDoc::addUrls( const KURL::List& urls )
 
 void K3bAudioDoc::addTracks( const KURL::List& urls, uint position )
 {
-  for( KURL::List::ConstIterator it = urls.begin(); it != urls.end(); it++ ) {
-    urlsToAdd.enqueue( new PrivateUrlToAdd( *it, position++ ) );
-  }
+  KURL::List allUrls = extractUrlList( urls );
+  for( KURL::List::iterator it = allUrls.begin(); it != allUrls.end(); it++, position++ ) {
+    KURL& url = *it;
+    if( url.path().right(3).lower() == "cue" ) {
+      // try adding a cue file
+      if( K3bAudioTrack* newAfter = importCueFile( url.path(), getTrack(position-1) ) ) {
+	position = newAfter->index()+1;
+	continue;
+      }
+    }
+    
+    if( K3bAudioTrack* track = createTrack( url ) ) {
+      addTrack( track, position );
 
-  m_urlAddingTimer->start(0);
+      //
+      // We need some evil hacking here because the meta info in the decoder will
+      // not be ready before it did not finish the analysing. So we somehow need to
+      // determine when this happens. With the current design that's a problem.
+      // So we check here if the decoder already finished and if so set the meta info
+      // right away. If not we set it in the housekeeping slot before the analysing
+      // thread is deleted.
+      //
+
+      K3bAudioDecoder* dec = static_cast<K3bAudioFile*>( track->firstSource() )->decoder();
+      if( dec->length() == 0 && dec->isValid() )
+	m_decoderMetaInfoSetMap[dec].append( track );
+      else {
+	track->setTitle( dec->metaInfo( K3bAudioDecoder::META_TITLE ) );
+	track->setArtist( dec->metaInfo( K3bAudioDecoder::META_ARTIST ) );
+	track->setSongwriter( dec->metaInfo( K3bAudioDecoder::META_SONGWRITER ) );
+	track->setComposer( dec->metaInfo( K3bAudioDecoder::META_COMPOSER ) );
+	track->setCdTextMessage( dec->metaInfo( K3bAudioDecoder::META_COMMENT ) );
+      }
+    }
+  }
+  
+  emit changed();
+
+  informAboutNotFoundFiles();
 }
 
-void K3bAudioDoc::slotWorkUrlQueue()
+
+KURL::List K3bAudioDoc::extractUrlList( const KURL::List& urls )
 {
-  if( !urlsToAdd.isEmpty() ) {
-    PrivateUrlToAdd* item = urlsToAdd.dequeue();
-    lastAddedPosition = item->position;
+  KURL::List allUrls = urls;
+  KURL::List urlsFromPlaylist;
+  KURL::List::iterator it = allUrls.begin();
+  while( it != allUrls.end() ) {
 
-    // append at the end by default
-    if( lastAddedPosition > m_tracks->count() )
-      lastAddedPosition = m_tracks->count();
+    const KURL& url = *it;
+    QFileInfo fi( url.path() );
 
-    if( !item->url.isLocalFile() ) {
-      kdDebug() << item->url.path() << " no local file" << endl;
-      m_notFoundFiles.append( item->url.path() );
-      delete item;
-      return;
+    if( !url.isLocalFile() ) {
+      kdDebug() << url.path() << " no local file" << endl;
+      it = allUrls.remove( it );
+      m_notFoundFiles.append( url );
     }
-
-    QFileInfo fi( item->url.path() );
-    if( !fi.exists() ) {
-      m_notFoundFiles.append( item->url.path() );
-      delete item;
-      return;
+    else if( !fi.exists() ) {
+      it = allUrls.remove( it );
+      m_notFoundFiles.append( url );
     }
-
-    if( fi.isDir() ) {
+    else if( fi.isDir() ) {
+      it = allUrls.remove( it );
       // add all files in the dir
       QDir dir(fi.filePath());
       QStringList entries = dir.entryList( QDir::Files );
-      KURL::List urls;
-      for( QStringList::iterator it = entries.begin();
-	   it != entries.end(); ++it )
-	urls.append( KURL::fromPathOrURL( dir.absPath() + "/" + *it ) );
-
-      addTracks( urls, lastAddedPosition++ );
-
-      delete item;
-      return;
+      KURL::List::iterator oldIt = it;
+      // add all files into the list after the current item
+      for( QStringList::iterator dirIt = entries.begin();
+	   dirIt != entries.end(); ++dirIt )
+	it = allUrls.insert( oldIt, KURL::fromPathOrURL( dir.absPath() + "/" + *dirIt ) );
     }
-
-    if( !readM3uFile( item->url, lastAddedPosition ) )
-      if( K3bAudioTrack* newTrack = createTrack( item->url ) ) {
-        addTrack( newTrack, lastAddedPosition );
-	slotDetermineTrackStatus();
-      }
-
-    delete item;
-
-    emit newTracks();
+    else if( readM3uFile( url, urlsFromPlaylist ) ) {
+      it = allUrls.remove( it );
+      KURL::List::iterator oldIt = it;
+      // add all files into the list after the current item
+      for( KURL::List::iterator dirIt = urlsFromPlaylist.begin();
+	   dirIt != urlsFromPlaylist.end(); ++dirIt )
+	it = allUrls.insert( oldIt, *dirIt );
+    }
+    else
+      ++it;
   }
 
-  else {
-    m_urlAddingTimer->stop();
-
-    emit newTracks();
-
-    informAboutNotFoundFiles();
-  }
+  return allUrls;
 }
 
 
-bool K3bAudioDoc::readM3uFile( const KURL& url, int pos )
+bool K3bAudioDoc::readM3uFile( const KURL& url, KURL::List& playlist )
 {
   // check if the file is a m3u playlist
   // and if so add all listed files
@@ -288,108 +277,195 @@ bool K3bAudioDoc::readM3uFile( const KURL& url, int pos )
         mp3url.setPath( url.directory(false) + line );
       else
         mp3url.setPath( line );
-      urlsToAdd.enqueue( new PrivateUrlToAdd( mp3url , pos++ ) );
+
+      playlist.append( mp3url );
     }
   }
 
-  m_urlAddingTimer->start(0);
   return true;
+}
+
+
+void K3bAudioDoc::addSources( K3bAudioTrack* parent, 
+			      const KURL::List& urls, 
+			      K3bAudioDataSource* sourceAfter )
+{
+  kdDebug() << "(K3bAudioDoc::addSources( " << parent << ", "
+	    << urls.first().path() << ", " 
+	    << sourceAfter << " )" << endl;
+  KURL::List allUrls = extractUrlList( urls );
+  for( KURL::List::const_iterator it = allUrls.begin(); it != allUrls.end(); it++ ) {
+    if( K3bAudioFile* file = createAudioFile( *it ) ) {
+      if( sourceAfter )
+	file->moveAfter( sourceAfter );
+      else
+	file->moveAhead( parent->firstSource() );
+      sourceAfter = file;
+    }
+  }
+
+  informAboutNotFoundFiles();
+  kdDebug() << "(K3bAudioDoc::addSources) finished." << endl;
+}
+
+
+K3bAudioTrack* K3bAudioDoc::importCueFile( const QString& cuefile, K3bAudioTrack* after )
+{
+  kdDebug() << "(K3bAudioDoc::importCueFile( " << cuefile << ", " << after << ")" << endl;
+  K3bCueFileParser parser( cuefile );
+  if( parser.isValid() && parser.toc().contentType() == K3bCdDevice::AUDIO ) {
+
+    kdDebug() << "(K3bAudioDoc::importCueFile) parsed with image: " << parser.imageFilename() << endl;
+
+    // global cd-text
+    if( !parser.cdText().title().isEmpty() )
+      setTitle( parser.cdText().title() );
+    if( !parser.cdText().performer().isEmpty() )
+      setPerformer( parser.cdText().performer() );
+
+    K3bAudioDecoder* decoder = getDecoderForUrl( parser.imageFilename() );
+    if( decoder ) {
+      K3bAudioFile* newFile = 0;
+      unsigned int i = 0;
+      for( K3bCdDevice::Toc::const_iterator it = parser.toc().begin();
+	   it != parser.toc().end(); ++it ) {
+	const K3bCdDevice::Track& track = *it;
+
+	newFile = new K3bAudioFile( decoder, this );
+	newFile->setStartOffset( track.firstSector() );
+	newFile->setEndOffset( track.lastSector()+1 );
+
+	K3bAudioTrack* newTrack = new K3bAudioTrack( this );
+	newTrack->addSource( newFile );
+	newTrack->moveAfter( after );
+
+	// cd-text
+	newTrack->setTitle( parser.cdText()[i].title() );
+	newTrack->setPerformer( parser.cdText()[i].performer() );
+
+	// add the next track after this one
+	after = newTrack;
+	++i;
+      }
+
+      // let the last source use the data up to the end of the file
+      if( newFile )
+	newFile->setEndOffset(0);
+
+      return after;
+    }
+  }
+  return 0;
+}
+
+
+K3bAudioDecoder* K3bAudioDoc::getDecoderForUrl( const KURL& url )
+{
+  K3bAudioDecoder* decoder = 0;
+  // check if we already have a proper decoder
+  if( m_decoderPresenceMap.contains( url.path() ) )
+    decoder = m_decoderPresenceMap[url.path()];
+
+  // if not create one
+  if( !decoder ) {
+    QPtrList<K3bPluginFactory> fl = k3bpluginmanager->factories( "AudioDecoder" );
+    for( QPtrListIterator<K3bPluginFactory> it( fl ); it.current(); ++it ) {
+      K3bAudioDecoderFactory* f = static_cast<K3bAudioDecoderFactory*>( it.current() );
+      if( f->canDecode( url ) ) {
+	kdDebug() << "(K3bAudioDoc) using " << it.current()->className()
+		  << " for decoding of " << url.path() << endl;
+	
+	decoder = static_cast<K3bAudioDecoder*>(f->createPlugin());
+	decoder->setFilename( url.path() );
+
+	//
+	// start a thread to analyse the file
+	//
+	AudioFileAnalyzerThread* thread = new AudioFileAnalyzerThread( decoder );
+	thread->start();
+	m_audioTrackStatusThreads.append( thread );
+	QTimer::singleShot( 500, this, SLOT(slotHouseKeeping()) );
+      }
+    }
+  }
+
+  return decoder;
+}
+
+
+K3bAudioFile* K3bAudioDoc::createAudioFile( const KURL& url )
+{
+  kdDebug() << "(K3bAudioDoc::createAudioFile( " << url.path() << " )" << endl;
+  K3bAudioDecoder* decoder = getDecoderForUrl( url );
+  if( decoder ) {
+    return new K3bAudioFile( decoder, this );
+  }
+  else {
+    m_unknownFileFormatFiles.append( url.path() );
+    return 0;
+  }
 }
 
 
 K3bAudioTrack* K3bAudioDoc::createTrack( const KURL& url )
 {
-  QPtrList<K3bPluginFactory> fl = k3bpluginmanager->factories( "AudioDecoder" );
-  for( QPtrListIterator<K3bPluginFactory> it( fl );
-       it.current(); ++it ) {
-    K3bAudioDecoderFactory* f = static_cast<K3bAudioDecoderFactory*>( it.current() );
-    if( f->canDecode( url ) ) {
-      kdDebug() << "(K3bAudioDoc) using " << it.current()->className() << " for decoding of " << url.path() << endl;
-      K3bAudioTrack* newTrack =  new K3bAudioTrack( m_tracks, url.path() );
-      connect( newTrack, SIGNAL(changed()), this, SLOT(slotTrackChanged()) );
-      newTrack->setModule( static_cast<K3bAudioDecoder*>(f->createPlugin()) );
-      return newTrack;
-    }
+  kdDebug() << "(K3bAudioDoc::createTrack( " << url.path() << " )" << endl;
+  if( K3bAudioFile* file = createAudioFile( url ) ) {
+    K3bAudioTrack* newTrack = new K3bAudioTrack( this );
+    newTrack->setFirstSource( file );
+    return newTrack;
+  }
+  else
+    return 0;
+}
+
+
+void K3bAudioDoc::addTrack( const KURL& url, uint position )
+{
+  addTracks( KURL::List(url), position );
+}
+
+
+
+K3bAudioTrack* K3bAudioDoc::getTrack( unsigned int index )
+{
+  K3bAudioTrack* track = m_firstTrack;
+  while( track ) {
+    if( track->index() == index )
+      return track;
+    track = track->next();
   }
 
-  m_unknownFileFormatFiles.append( url.path() );
-  return 0;
+  return m_lastTrack;
 }
-
-
-void K3bAudioDoc::addTrack(const KURL& url, uint position )
-{
-  urlsToAdd.enqueue( new PrivateUrlToAdd( url, position ) );
-
-  m_urlAddingTimer->start(0);
-}
-
 
 
 void K3bAudioDoc::addTrack( K3bAudioTrack* track, uint position )
 {
-  if( m_tracks->count() >= 99 ) {
-    kdDebug() << "(K3bAudioDoc) Red Book only allows 99 tracks." << endl;
-    // TODO: show some messagebox
-    delete track;
-    return;
+  kdDebug() << "(K3bAudioDoc::addTrack( " << track << ", " << position << " )" << endl;
+  if( !m_firstTrack )
+    m_firstTrack = m_lastTrack = track;
+  else if( position == 0 )
+    track->moveAhead( m_firstTrack );
+  else {
+    K3bAudioTrack* after = getTrack( position-1 );
+    if( after )
+      track->moveAfter( after );
+    else
+      track->moveAfter( m_firstTrack );  // just to be sure it's anywhere...
   }
-
-  lastAddedPosition = position;
-
-  if( !m_tracks->insert( position, track ) ) {
-    lastAddedPosition = m_tracks->count();
-    m_tracks->insert( m_tracks->count(), track );
-  }
-
-  emit newTracks();
-  
-  setModified( true );
 }
 
 
 void K3bAudioDoc::removeTrack( K3bAudioTrack* track )
 {
-  if( !track ) {
-    return;
-  }
-	
-  // set the current item to track
-  if( m_tracks->findRef( track ) >= 0 ) {
-    // take the current item
-    track = m_tracks->take();
-
-    // if the AudioTrackStatusThread currently works this file we kill and restart it
-    if( m_trackStatusThread->track() == track && m_trackStatusThread->running() )
-      m_trackMetaInfoJob->cancel(); // this will emit a finished signal
-      
-    // emit signal before deleting the track to avoid crashes
-    // when the view tries to call some of the tracks' methods
-    emit trackRemoved( track );
-      
-    delete track;
-
-    setModified();
-  }
+  delete track;
 }
 
-void K3bAudioDoc::moveTrack( const K3bAudioTrack* track, const K3bAudioTrack* after )
+
+void K3bAudioDoc::moveTrack( K3bAudioTrack* track, K3bAudioTrack* after )
 {
-  if( track == after )
-    return;
-
-  // set the current item to track
-  m_tracks->findRef( track );
-  // take the current item
-  track = m_tracks->take();
-
-  // if after == 0 findRef returnes -1
-  int pos = m_tracks->findRef( after );
-  m_tracks->insert( pos+1, track );
-
-  setModified();
-
-  emit changed();
+  track->moveAfter( after );
 }
 
 
@@ -407,273 +483,267 @@ QString K3bAudioDoc::documentType() const
 
 bool K3bAudioDoc::loadDocumentData( QDomElement* root )
 {
-  newDocument();
+//   newDocument();
 
-  // we will parse the dom-tree and create a K3bAudioTrack for all entries immediately
-  // this should not take long and so not block the gui
+//   // we will parse the dom-tree and create a K3bAudioTrack for all entries immediately
+//   // this should not take long and so not block the gui
 
-  QDomNodeList nodes = root->childNodes();
+//   QDomNodeList nodes = root->childNodes();
 
-  for( uint i = 0; i < nodes.count(); i++ ) {
+//   for( uint i = 0; i < nodes.count(); i++ ) {
 
-    QDomElement e = nodes.item(i).toElement();
+//     QDomElement e = nodes.item(i).toElement();
 
-    if( e.isNull() )
-      return false;
+//     if( e.isNull() )
+//       return false;
     
-    if( e.nodeName() == "general" ) {
-      if( !readGeneralDocumentData( e ) )
-	return false;
-    }
+//     if( e.nodeName() == "general" ) {
+//       if( !readGeneralDocumentData( e ) )
+// 	return false;
+//     }
 
-    else if( e.nodeName() == "normalize" )
-      setNormalize( e.text() == "yes" );
+//     else if( e.nodeName() == "normalize" )
+//       setNormalize( e.text() == "yes" );
     
-    else if( e.nodeName() == "hide_first_track" )
-      setHideFirstTrack( e.text() == "yes" );
+//     else if( e.nodeName() == "hide_first_track" )
+//       setHideFirstTrack( e.text() == "yes" );
     
 
-    // parse cd-text
-    else if( e.nodeName() == "cd-text" ) {
-      if( !e.hasAttribute( "activated" ) )
-	return false;
+//     // parse cd-text
+//     else if( e.nodeName() == "cd-text" ) {
+//       if( !e.hasAttribute( "activated" ) )
+// 	return false;
 
-      writeCdText( e.attributeNode( "activated" ).value() == "yes" );
+//       writeCdText( e.attributeNode( "activated" ).value() == "yes" );
     
-      QDomNodeList cdTextNodes = e.childNodes();
-      for( uint j = 0; j < cdTextNodes.length(); j++ ) {
-	if( cdTextNodes.item(j).nodeName() == "title" )
-	  setTitle( cdTextNodes.item(j).toElement().text() );
+//       QDomNodeList cdTextNodes = e.childNodes();
+//       for( uint j = 0; j < cdTextNodes.length(); j++ ) {
+// 	if( cdTextNodes.item(j).nodeName() == "title" )
+// 	  setTitle( cdTextNodes.item(j).toElement().text() );
 
-	else if( cdTextNodes.item(j).nodeName() == "artist" )
-	  setArtist( cdTextNodes.item(j).toElement().text() );
+// 	else if( cdTextNodes.item(j).nodeName() == "artist" )
+// 	  setArtist( cdTextNodes.item(j).toElement().text() );
 
-	else if( cdTextNodes.item(j).nodeName() == "arranger" )
-	  setArranger( cdTextNodes.item(j).toElement().text() );
+// 	else if( cdTextNodes.item(j).nodeName() == "arranger" )
+// 	  setArranger( cdTextNodes.item(j).toElement().text() );
 
-	else if( cdTextNodes.item(j).nodeName() == "songwriter" )
-	  setSongwriter( cdTextNodes.item(j).toElement().text() );
+// 	else if( cdTextNodes.item(j).nodeName() == "songwriter" )
+// 	  setSongwriter( cdTextNodes.item(j).toElement().text() );
 
-	else if( cdTextNodes.item(j).nodeName() == "composer" )
-	  setComposer( cdTextNodes.item(j).toElement().text() );
+// 	else if( cdTextNodes.item(j).nodeName() == "composer" )
+// 	  setComposer( cdTextNodes.item(j).toElement().text() );
 
-	else if( cdTextNodes.item(j).nodeName() == "disc_id" )
-	  setDisc_id( cdTextNodes.item(j).toElement().text() );
+// 	else if( cdTextNodes.item(j).nodeName() == "disc_id" )
+// 	  setDisc_id( cdTextNodes.item(j).toElement().text() );
 
-	else if( cdTextNodes.item(j).nodeName() == "upc_ean" )
-	  setUpc_ean( cdTextNodes.item(j).toElement().text() );
+// 	else if( cdTextNodes.item(j).nodeName() == "upc_ean" )
+// 	  setUpc_ean( cdTextNodes.item(j).toElement().text() );
 
-	else if( cdTextNodes.item(j).nodeName() == "message" )
-	  setCdTextMessage( cdTextNodes.item(j).toElement().text() );
-      }
-    }
+// 	else if( cdTextNodes.item(j).nodeName() == "message" )
+// 	  setCdTextMessage( cdTextNodes.item(j).toElement().text() );
+//       }
+//     }
 
-    else if( e.nodeName() == "contents" ) {
+//     else if( e.nodeName() == "contents" ) {
 	
-      QDomNodeList contentNodes = e.childNodes();
+//       QDomNodeList contentNodes = e.childNodes();
 
-      for( uint j = 0; j< contentNodes.length(); j++ ) {
+//       for( uint j = 0; j< contentNodes.length(); j++ ) {
 
-	// check if url is available
-	QDomElement trackElem = contentNodes.item(j).toElement();
+// 	// check if url is available
+// 	QDomElement trackElem = contentNodes.item(j).toElement();
 
-	QString url = trackElem.attributeNode( "url" ).value();
-	if( !QFile::exists( url ) ) {
-	  m_notFoundFiles.append( url );
-	}
-	else {
-	  KURL k;
-	  k.setPath( url );
-	  if( K3bAudioTrack* track = createTrack( k ) ) {
-	    QDomNodeList trackNodes = trackElem.childNodes();
+// 	QString url = trackElem.attributeNode( "url" ).value();
+// 	if( !QFile::exists( url ) ) {
+// 	  m_notFoundFiles.append( url );
+// 	}
+// 	else {
+// 	  KURL k;
+// 	  k.setPath( url );
+// 	  if( K3bAudioTrack* track = createTrack( k ) ) {
+// 	    QDomNodeList trackNodes = trackElem.childNodes();
 	    
-	    for( uint trackJ = 0; trackJ < trackNodes.length(); trackJ++ ) {
-	      if( trackNodes.item(trackJ).nodeName() == "cd-text" ) {
+// 	    for( uint trackJ = 0; trackJ < trackNodes.length(); trackJ++ ) {
+// 	      if( trackNodes.item(trackJ).nodeName() == "cd-text" ) {
 
-		QDomNodeList cdTextNodes = e.childNodes();
-		for( uint trackCdTextJ = 0; trackCdTextJ < cdTextNodes.length(); trackCdTextJ++ ) {
-		  if( cdTextNodes.item(trackCdTextJ).nodeName() == "title" )
-		    track->setTitle( cdTextNodes.item(trackCdTextJ).toElement().text() );
+// 		QDomNodeList cdTextNodes = e.childNodes();
+// 		for( uint trackCdTextJ = 0; trackCdTextJ < cdTextNodes.length(); trackCdTextJ++ ) {
+// 		  if( cdTextNodes.item(trackCdTextJ).nodeName() == "title" )
+// 		    track->setTitle( cdTextNodes.item(trackCdTextJ).toElement().text() );
 
-		  else if( cdTextNodes.item(trackCdTextJ).nodeName() == "artist" )
-		    track->setArtist( cdTextNodes.item(trackCdTextJ).toElement().text() );
+// 		  else if( cdTextNodes.item(trackCdTextJ).nodeName() == "artist" )
+// 		    track->setArtist( cdTextNodes.item(trackCdTextJ).toElement().text() );
 
-		  else if( cdTextNodes.item(trackCdTextJ).nodeName() == "arranger" )
-		    track->setArranger( cdTextNodes.item(trackCdTextJ).toElement().text() );
+// 		  else if( cdTextNodes.item(trackCdTextJ).nodeName() == "arranger" )
+// 		    track->setArranger( cdTextNodes.item(trackCdTextJ).toElement().text() );
 
-		  else if( cdTextNodes.item(trackCdTextJ).nodeName() == "songwriter" )
-		    track->setSongwriter( cdTextNodes.item(trackCdTextJ).toElement().text() );
+// 		  else if( cdTextNodes.item(trackCdTextJ).nodeName() == "songwriter" )
+// 		    track->setSongwriter( cdTextNodes.item(trackCdTextJ).toElement().text() );
 
-		  else if( cdTextNodes.item(trackCdTextJ).nodeName() == "composer" )
-		    track->setComposer( cdTextNodes.item(trackCdTextJ).toElement().text() );
+// 		  else if( cdTextNodes.item(trackCdTextJ).nodeName() == "composer" )
+// 		    track->setComposer( cdTextNodes.item(trackCdTextJ).toElement().text() );
 
-		  else if( cdTextNodes.item(trackCdTextJ).nodeName() == "isrc" )
-		    track->setIsrc( cdTextNodes.item(trackCdTextJ).toElement().text() );
+// 		  else if( cdTextNodes.item(trackCdTextJ).nodeName() == "isrc" )
+// 		    track->setIsrc( cdTextNodes.item(trackCdTextJ).toElement().text() );
 
-		  else if( cdTextNodes.item(trackCdTextJ).nodeName() == "message" )
-		    track->setCdTextMessage( cdTextNodes.item(trackCdTextJ).toElement().text() );
-		}
-	      }
+// 		  else if( cdTextNodes.item(trackCdTextJ).nodeName() == "message" )
+// 		    track->setCdTextMessage( cdTextNodes.item(trackCdTextJ).toElement().text() );
+// 		}
+// 	      }
 
-	      else if( trackNodes.item(trackJ).nodeName() == "pregap" )
-		track->setPregap( trackNodes.item(trackJ).toElement().text().toInt() );
+// 	      else if( trackNodes.item(trackJ).nodeName() == "pregap" )
+// 		track->setPregap( trackNodes.item(trackJ).toElement().text().toInt() );
 
-	      else if( trackNodes.item(trackJ).nodeName() == "copy_protection" )
-		track->setCopyProtection( trackNodes.item(trackJ).toElement().text() == "yes" );
+// 	      else if( trackNodes.item(trackJ).nodeName() == "copy_protection" )
+// 		track->setCopyProtection( trackNodes.item(trackJ).toElement().text() == "yes" );
 
-	      else if( trackNodes.item(trackJ).nodeName() == "pre_emphasis" )
-		track->setPreEmp( trackNodes.item(trackJ).toElement().text() == "yes" );
-	    }
+// 	      else if( trackNodes.item(trackJ).nodeName() == "pre_emphasis" )
+// 		track->setPreEmp( trackNodes.item(trackJ).toElement().text() == "yes" );
+// 	    }
 	    
-	    addTrack( track, m_tracks->count() );
-	  }
-	}
-      }
-    }
-  }
+// 	    addTrack( track, m_tracks->count() );
+// 	  }
+// 	}
+//       }
+//     }
+//   }
 
-  emit newTracks();
+//   emit newTracks();
 
-  slotDetermineTrackStatus();
+//   slotDetermineTrackStatus();
 
-  informAboutNotFoundFiles();
+//   informAboutNotFoundFiles();
 
-  setModified(false);
+//   setModified(false);
 
-  return true;
+  return false;
 }
 
 bool K3bAudioDoc::saveDocumentData( QDomElement* docElem )
 {
-  QDomDocument doc = docElem->ownerDocument();
-  saveGeneralDocumentData( docElem );
+//   QDomDocument doc = docElem->ownerDocument();
+//   saveGeneralDocumentData( docElem );
 
-  // add normalize
-  QDomElement normalizeElem = doc.createElement( "normalize" );
-  normalizeElem.appendChild( doc.createTextNode( normalize() ? "yes" : "no" ) );
-  docElem->appendChild( normalizeElem );
+//   // add normalize
+//   QDomElement normalizeElem = doc.createElement( "normalize" );
+//   normalizeElem.appendChild( doc.createTextNode( normalize() ? "yes" : "no" ) );
+//   docElem->appendChild( normalizeElem );
 
-  // add hide track
-  QDomElement hideFirstTrackElem = doc.createElement( "hide_first_track" );
-  hideFirstTrackElem.appendChild( doc.createTextNode( hideFirstTrack() ? "yes" : "no" ) );
-  docElem->appendChild( hideFirstTrackElem );
+//   // add hide track
+//   QDomElement hideFirstTrackElem = doc.createElement( "hide_first_track" );
+//   hideFirstTrackElem.appendChild( doc.createTextNode( hideFirstTrack() ? "yes" : "no" ) );
+//   docElem->appendChild( hideFirstTrackElem );
 
 
-  // save disc cd-text
-  // -------------------------------------------------------------
-  QDomElement cdTextMain = doc.createElement( "cd-text" );
-  cdTextMain.setAttribute( "activated", cdText() ? "yes" : "no" );
-  QDomElement cdTextElem = doc.createElement( "title" );
-  cdTextElem.appendChild( doc.createTextNode( (title())) );
-  cdTextMain.appendChild( cdTextElem );
+//   // save disc cd-text
+//   // -------------------------------------------------------------
+//   QDomElement cdTextMain = doc.createElement( "cd-text" );
+//   cdTextMain.setAttribute( "activated", cdText() ? "yes" : "no" );
+//   QDomElement cdTextElem = doc.createElement( "title" );
+//   cdTextElem.appendChild( doc.createTextNode( (title())) );
+//   cdTextMain.appendChild( cdTextElem );
 
-  cdTextElem = doc.createElement( "artist" );
-  cdTextElem.appendChild( doc.createTextNode( (artist())) );
-  cdTextMain.appendChild( cdTextElem );
+//   cdTextElem = doc.createElement( "artist" );
+//   cdTextElem.appendChild( doc.createTextNode( (artist())) );
+//   cdTextMain.appendChild( cdTextElem );
 
-  cdTextElem = doc.createElement( "arranger" );
-  cdTextElem.appendChild( doc.createTextNode( (arranger())) );
-  cdTextMain.appendChild( cdTextElem );
+//   cdTextElem = doc.createElement( "arranger" );
+//   cdTextElem.appendChild( doc.createTextNode( (arranger())) );
+//   cdTextMain.appendChild( cdTextElem );
 
-  cdTextElem = doc.createElement( "songwriter" );
-  cdTextElem.appendChild( doc.createTextNode( (songwriter())) );
-  cdTextMain.appendChild( cdTextElem );
+//   cdTextElem = doc.createElement( "songwriter" );
+//   cdTextElem.appendChild( doc.createTextNode( (songwriter())) );
+//   cdTextMain.appendChild( cdTextElem );
 
-  cdTextElem = doc.createElement( "composer" );
-  cdTextElem.appendChild( doc.createTextNode( composer()) );
-  cdTextMain.appendChild( cdTextElem );
+//   cdTextElem = doc.createElement( "composer" );
+//   cdTextElem.appendChild( doc.createTextNode( composer()) );
+//   cdTextMain.appendChild( cdTextElem );
 
-  cdTextElem = doc.createElement( "disc_id" );
-  cdTextElem.appendChild( doc.createTextNode( (disc_id())) );
-  cdTextMain.appendChild( cdTextElem );
+//   cdTextElem = doc.createElement( "disc_id" );
+//   cdTextElem.appendChild( doc.createTextNode( (disc_id())) );
+//   cdTextMain.appendChild( cdTextElem );
 
-  cdTextElem = doc.createElement( "upc_ean" );
-  cdTextElem.appendChild( doc.createTextNode( (upc_ean())) );
-  cdTextMain.appendChild( cdTextElem );
+//   cdTextElem = doc.createElement( "upc_ean" );
+//   cdTextElem.appendChild( doc.createTextNode( (upc_ean())) );
+//   cdTextMain.appendChild( cdTextElem );
 
-  cdTextElem = doc.createElement( "message" );
-  cdTextElem.appendChild( doc.createTextNode( (cdTextMessage())) );
-  cdTextMain.appendChild( cdTextElem );
+//   cdTextElem = doc.createElement( "message" );
+//   cdTextElem.appendChild( doc.createTextNode( (cdTextMessage())) );
+//   cdTextMain.appendChild( cdTextElem );
 
-  docElem->appendChild( cdTextMain );
-  // -------------------------------------------------------------
+//   docElem->appendChild( cdTextMain );
+//   // -------------------------------------------------------------
 
-  // save the tracks
-  // -------------------------------------------------------------
-  QDomElement contentsElem = doc.createElement( "contents" );
+//   // save the tracks
+//   // -------------------------------------------------------------
+//   QDomElement contentsElem = doc.createElement( "contents" );
 
-  for( K3bAudioTrack* track = first(); track != 0; track = next() ) {
+//   for( K3bAudioTrack* track = first(); track != 0; track = next() ) {
 
-    QDomElement trackElem = doc.createElement( "track" );
-    trackElem.setAttribute( "url", KIO::decodeFileName(track->path()) );
+//     QDomElement trackElem = doc.createElement( "track" );
+//     trackElem.setAttribute( "url", KIO::decodeFileName(track->path()) );
 
-    // add cd-text
-    cdTextMain = doc.createElement( "cd-text" );
-    cdTextElem = doc.createElement( "title" );
-    cdTextElem.appendChild( doc.createTextNode( (track->title())) );
-    cdTextMain.appendChild( cdTextElem );
+//     // add cd-text
+//     cdTextMain = doc.createElement( "cd-text" );
+//     cdTextElem = doc.createElement( "title" );
+//     cdTextElem.appendChild( doc.createTextNode( (track->title())) );
+//     cdTextMain.appendChild( cdTextElem );
     
-    cdTextElem = doc.createElement( "artist" );
-    cdTextElem.appendChild( doc.createTextNode( (track->artist())) );
-    cdTextMain.appendChild( cdTextElem );
+//     cdTextElem = doc.createElement( "artist" );
+//     cdTextElem.appendChild( doc.createTextNode( (track->artist())) );
+//     cdTextMain.appendChild( cdTextElem );
     
-    cdTextElem = doc.createElement( "arranger" );
-    cdTextElem.appendChild( doc.createTextNode( (track->arranger()) ) );
-    cdTextMain.appendChild( cdTextElem );
+//     cdTextElem = doc.createElement( "arranger" );
+//     cdTextElem.appendChild( doc.createTextNode( (track->arranger()) ) );
+//     cdTextMain.appendChild( cdTextElem );
     
-    cdTextElem = doc.createElement( "songwriter" );
-    cdTextElem.appendChild( doc.createTextNode( (track->songwriter()) ) );
-    cdTextMain.appendChild( cdTextElem );
+//     cdTextElem = doc.createElement( "songwriter" );
+//     cdTextElem.appendChild( doc.createTextNode( (track->songwriter()) ) );
+//     cdTextMain.appendChild( cdTextElem );
 
-    cdTextElem = doc.createElement( "composer" );
-    cdTextElem.appendChild( doc.createTextNode( (track->composer()) ) );
-    cdTextMain.appendChild( cdTextElem );
+//     cdTextElem = doc.createElement( "composer" );
+//     cdTextElem.appendChild( doc.createTextNode( (track->composer()) ) );
+//     cdTextMain.appendChild( cdTextElem );
     
-    cdTextElem = doc.createElement( "isrc" );
-    cdTextElem.appendChild( doc.createTextNode( ( track->isrc()) ) );
-    cdTextMain.appendChild( cdTextElem );
+//     cdTextElem = doc.createElement( "isrc" );
+//     cdTextElem.appendChild( doc.createTextNode( ( track->isrc()) ) );
+//     cdTextMain.appendChild( cdTextElem );
     
-    cdTextElem = doc.createElement( "message" );
-    cdTextElem.appendChild( doc.createTextNode( (track->cdTextMessage()) ) );
-    cdTextMain.appendChild( cdTextElem );
+//     cdTextElem = doc.createElement( "message" );
+//     cdTextElem.appendChild( doc.createTextNode( (track->cdTextMessage()) ) );
+//     cdTextMain.appendChild( cdTextElem );
 
-    trackElem.appendChild( cdTextMain );
+//     trackElem.appendChild( cdTextMain );
 
 
-    // add pregap
-    QDomElement pregapElem = doc.createElement( "pregap" );    
-    pregapElem.appendChild( doc.createTextNode( QString::number(track->pregap().totalFrames()) ) );
-    trackElem.appendChild( pregapElem );
+//     // add pregap
+//     QDomElement pregapElem = doc.createElement( "pregap" );    
+//     pregapElem.appendChild( doc.createTextNode( QString::number(track->pregap().totalFrames()) ) );
+//     trackElem.appendChild( pregapElem );
 
-    // add copy protection
-    QDomElement copyElem = doc.createElement( "copy_protection" );    
-    copyElem.appendChild( doc.createTextNode( track->copyProtection() ? "yes" : "no" ) );
-    trackElem.appendChild( copyElem );
+//     // add copy protection
+//     QDomElement copyElem = doc.createElement( "copy_protection" );    
+//     copyElem.appendChild( doc.createTextNode( track->copyProtection() ? "yes" : "no" ) );
+//     trackElem.appendChild( copyElem );
 
-    // add pre emphasis
-    copyElem = doc.createElement( "pre_emphasis" );    
-    copyElem.appendChild( doc.createTextNode( track->preEmp() ? "yes" : "no" ) );
-    trackElem.appendChild( copyElem );
+//     // add pre emphasis
+//     copyElem = doc.createElement( "pre_emphasis" );    
+//     copyElem.appendChild( doc.createTextNode( track->preEmp() ? "yes" : "no" ) );
+//     trackElem.appendChild( copyElem );
 
-    contentsElem.appendChild( trackElem );
-  }
-  // -------------------------------------------------------------
+//     contentsElem.appendChild( trackElem );
+//   }
+//   // -------------------------------------------------------------
 
-  docElem->appendChild( contentsElem );
+//   docElem->appendChild( contentsElem );
 
-  return true;
+  return false;
 }
 
 
 int K3bAudioDoc::numOfTracks() const
 {
-  return m_tracks->count();
-}
-
-
-bool K3bAudioDoc::padding() const
-{
-  return m_padding;
+  return ( m_lastTrack ? m_lastTrack->index()+1 : 0 );
 }
 
 
@@ -686,14 +756,26 @@ K3bBurnJob* K3bAudioDoc::newBurnJob( K3bJobHandler* hdl, QObject* parent )
 void K3bAudioDoc::informAboutNotFoundFiles()
 {
   if( !m_notFoundFiles.isEmpty() ) {
-    KMessageBox::informationList( qApp->activeWindow(), i18n("Could not find the following files:"),
- 				  m_notFoundFiles, i18n("Not Found") );
-
+    QStringList l;
+    for( KURL::List::const_iterator it = m_notFoundFiles.begin(); 
+	 it != m_notFoundFiles.end(); ++it )
+      l.append( (*it).path() );
+    KMessageBox::informationList( qApp->activeWindow(), 
+				  i18n("Could not find the following files:"),
+ 				  l,
+				  i18n("Not Found") );
+    
     m_notFoundFiles.clear();
   }
   if( !m_unknownFileFormatFiles.isEmpty() ) {
-    KMessageBox::informationList( qApp->activeWindow(), i18n("Unable to handle the following files due to an unsupported format:"),
- 				  m_unknownFileFormatFiles, i18n("Unsupported Format") );
+    QStringList l;
+    for( KURL::List::const_iterator it = m_unknownFileFormatFiles.begin(); 
+	 it != m_unknownFileFormatFiles.end(); ++it )
+      l.append( (*it).path() );
+    KMessageBox::informationList( qApp->activeWindow(), 
+				  i18n("Unable to handle the following files due to an unsupported format:"),
+ 				  l,
+				  i18n("Unsupported Format") );
 
     m_unknownFileFormatFiles.clear();
   }
@@ -705,7 +787,6 @@ void K3bAudioDoc::loadDefaultSettings( KConfig* c )
   K3bDoc::loadDefaultSettings(c);
 
   m_cdText = c->readBoolEntry( "cd_text", false );
-  m_padding = true;  // padding is always a good idea!
   m_hideFirstTrack = c->readBoolEntry( "hide_first_track", false );
   setNormalize( c->readBoolEntry( "normalize", false ) );
 }
@@ -713,35 +794,15 @@ void K3bAudioDoc::loadDefaultSettings( KConfig* c )
 
 void K3bAudioDoc::removeCorruptTracks()
 {
-  K3bAudioTrack* track = m_tracks->first();
-  while( track ) {
-    if( track->status() != 0 ) {
-      removeTrack(track);
-      track = m_tracks->current();
-    }
-    else
-      track = m_tracks->next();
-  }
-}
-
-
-void K3bAudioDoc::slotDetermineTrackStatus()
-{
-  kdDebug() << "(K3bAudioDoc) slotDetermineTrackStatus()" << endl;
-  if( !m_trackMetaInfoJob->running() ) {
-    kdDebug() << "(K3bAudioDoc) AudioTrackStatusThread not running." << endl;
-    // find the next track
-    for( QPtrListIterator<K3bAudioTrack> it( *m_tracks ); it.current(); ++it ) {
-      if( it.current()->length() == 0 && it.current()->status() == 0 ) {
-	kdDebug() << "(K3bAudioDoc) starting AudioTrackStatusThread for " << it.current()->path() << endl;
-	m_trackStatusThread->analyseTrack( it.current() );
-	return;
-      }
-    }
-  }
-  else
-    kdDebug() << "(K3bAudioDoc) AudioTrackStatusThread running." << endl;
-  kdDebug() << "(K3bAudioDoc) slotDetermineTrackStatus() end" << endl;
+//   K3bAudioTrack* track = m_tracks->first();
+//   while( track ) {
+//     if( track->status() != 0 ) {
+//       removeTrack(track);
+//       track = m_tracks->current();
+//     }
+//     else
+//       track = m_tracks->next();
+//   }
 }
 
 
@@ -751,11 +812,116 @@ K3bProjectBurnDialog* K3bAudioDoc::newBurnDialog( QWidget* parent, const char* n
 }
 
 
-void K3bAudioDoc::slotTrackChanged()
+void K3bAudioDoc::slotTrackChanged( K3bAudioTrack* track )
 {
   setModified( true );
   emit changed();
+  // if the track is empty now we simply delete it
+  if( track->firstSource() )
+    emit trackChanged(track);
+  else {
+    kdDebug() << "(K3bAudioTrack::slotTrackChanged) track " << track << " empty. Deleting." << endl;
+    delete track; // this will emit the proper signal
+  }
 }
 
+
+void K3bAudioDoc::slotTrackDestroyed( QObject* o )
+{
+  setModified( true );
+  K3bAudioTrack* track = static_cast<K3bAudioTrack*>(o);
+  emit trackRemoved(track);
+  emit changed();
+}
+
+
+void K3bAudioDoc::increaseDecoderUsage( K3bAudioDecoder* decoder )
+{
+  kdDebug() << "(K3bAudioDoc::increaseDecoderUsage)" << endl;
+  if( !m_decoderUsageCounterMap.contains( decoder ) ) {
+    m_decoderUsageCounterMap[decoder] = 1;
+    m_decoderPresenceMap[decoder->filename()] = decoder;
+  }
+  else
+    m_decoderUsageCounterMap[decoder]++;
+  kdDebug() << "(K3bAudioDoc::increaseDecoderUsage) finished" << endl;
+}
+
+
+void K3bAudioDoc::decreaseDecoderUsage( K3bAudioDecoder* decoder )
+{
+  // FIXME: what if the thread did not finish yet?
+  m_decoderUsageCounterMap[decoder]--;
+  if( m_decoderUsageCounterMap[decoder] <= 0 ) {
+    m_decoderUsageCounterMap.erase(decoder);
+    m_decoderPresenceMap.erase(decoder->filename());
+    m_decoderMetaInfoSetMap.erase(decoder);
+    delete decoder;
+  }
+}
+
+
+void K3bAudioDoc::slotHouseKeeping()
+{
+  kdDebug() << "(K3bAudioDoc::slotHouseKeeping)" << endl;
+  for( QPtrListIterator<AudioFileAnalyzerThread> it( m_audioTrackStatusThreads );
+       it.current(); ++it ) {
+    AudioFileAnalyzerThread* thread = *it;
+    if( thread->finished() ) {
+      kdDebug() << "(K3bAudioDoc::slotHouseKeeping) removing thread for "
+		<< thread->m_decoder->filename() << endl;
+
+      const QPtrList<K3bAudioTrack>& tracks = m_decoderMetaInfoSetMap[thread->m_decoder];
+      for( QPtrListIterator<K3bAudioTrack> it( tracks ); *it; ++it ) {
+	K3bAudioTrack* track = *it;
+	track->setTitle( thread->m_decoder->metaInfo( K3bAudioDecoder::META_TITLE ) );
+	track->setArtist( thread->m_decoder->metaInfo( K3bAudioDecoder::META_ARTIST ) );
+	track->setSongwriter( thread->m_decoder->metaInfo( K3bAudioDecoder::META_SONGWRITER ) );
+	track->setComposer( thread->m_decoder->metaInfo( K3bAudioDecoder::META_COMPOSER ) );
+	track->setCdTextMessage( thread->m_decoder->metaInfo( K3bAudioDecoder::META_COMMENT ) );
+      }
+      m_decoderMetaInfoSetMap.erase( thread->m_decoder );
+      m_audioTrackStatusThreads.removeRef( thread );
+    }
+  }
+
+  if( !m_audioTrackStatusThreads.isEmpty() )
+    QTimer::singleShot( 500, this, SLOT(slotHouseKeeping()) );
+  else
+    emit changed(); // let the gui update the length values
+
+  kdDebug() << "(K3bAudioDoc::slotHouseKeeping) finished" << endl;
+}
+
+
+K3bCdDevice::CdText K3bAudioDoc::cdTextData() const
+{
+  K3bCdDevice::CdText text( m_cdTextData );
+  text.reserve( numOfTracks() );
+  K3bAudioTrack* track = firstTrack();
+  while( track ) {
+    text.append( track->cdText() );
+
+    track = track->next();
+  }
+  return text;
+}
+
+
+K3bCdDevice::Toc K3bAudioDoc::toToc() const
+{
+  K3bCdDevice::Toc toc;
+
+  // FIXME: add MCN
+
+  K3bAudioTrack* track = firstTrack();
+  K3b::Msf pos = 0;
+  while( track ) {
+    toc.append( track->toCdTrack() );
+    track = track->next();
+  }
+
+  return toc; 
+}
 
 #include "k3baudiodoc.moc"

@@ -106,6 +106,7 @@
 #include <k3baudiodecoder.h>
 #include <k3bthememanager.h>
 #include <k3biso9660.h>
+#include <k3bcuefileparser.h>
 
 
 static K3bMainWindow* s_k3bMainWindow = 0;
@@ -536,26 +537,36 @@ K3bDoc* K3bMainWindow::openDocument(const KURL& url)
   // First we check if this is an iso image in case someone wants to open one this way
   //
   if( !isCdDvdImageAndIfSoOpenDialog( url ) ) {
-    // check, if document already open. If yes, set the focus to the first view
-    K3bDoc* doc = d->projectManager->findByUrl( url );
-    if( doc ) {
-      doc->view()->setFocus();
+
+    // see if it's an audio cue file
+    K3bCueFileParser parser( url.path() );
+    if( parser.isValid() && parser.toc().contentType() == K3bCdDevice::AUDIO ) {
+      K3bDoc* doc = slotNewAudioDoc();
+      doc->addUrl( url );
       return doc;
     }
+    else {
+      // check, if document already open. If yes, set the focus to the first view
+      K3bDoc* doc = d->projectManager->findByUrl( url );
+      if( doc ) {
+	doc->view()->setFocus();
+	return doc;
+      }
+      
+      doc = K3bDoc::openDocument( url );
+      
+      if( doc == 0 ) {
+	KMessageBox::error (this,i18n("Could not open document!"), i18n("Error!"));
+	return 0;
+      }
+      
+      actionFileOpenRecent->addURL(url);
     
-    doc = K3bDoc::openDocument( url );
-    
-    if( doc == 0 ) {
-      KMessageBox::error (this,i18n("Could not open document!"), i18n("Error!"));
-      return 0;
-    }
-    
-    actionFileOpenRecent->addURL(url);
-    
-    // create the window
-    createClient(doc);
+      // create the window
+      createClient(doc);
 
-    return doc;
+      return doc;
+    }
   }
   else
     return 0;
@@ -639,9 +650,12 @@ bool K3bMainWindow::queryClose()
 
 bool K3bMainWindow::canCloseDocument( K3bDoc* doc )
 {
-  if( !doc->isModified() ) {
+  if( !doc->isModified() )
     return true;
-  }
+  
+  m_config->setGroup( "General Options" );
+  if( !m_config->readBoolEntry( "ask_for_saving_changes_on_exit", true ) )
+    return true;
 
   switch ( KMessageBox::warningYesNoCancel(this, i18n("%1 has unsaved data.").arg( doc->URL().fileName() ),
 					   i18n("Closing Project"), i18n("&Save"), i18n("&Discard") ) )
@@ -1409,7 +1423,7 @@ void K3bMainWindow::addUrls( const KURL::List& urls )
     if( isCdDvdImageAndIfSoOpenDialog( urls.first() ) )
       return;
   }
-
+  
   if( activeDoc() ) {
     activeDoc()->addUrls( urls );
   }
@@ -1435,6 +1449,14 @@ void K3bMainWindow::addUrls( const KURL::List& urls )
       if( !a ) {
 	audio = a;
 	break;
+      }
+    }
+
+    if( !audio && urls.count() == 1 ) {
+      // see if it's an audio cue file
+      K3bCueFileParser parser( urls.first().path() );
+      if( parser.isValid() && parser.toc().contentType() == K3bCdDevice::AUDIO ) {
+	audio = true;
       }
     }
 

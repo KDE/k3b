@@ -12,10 +12,18 @@ Allow disabling of CD-Text reading in cd-copy to overcome problems with CD-Text 
 Check CD-Text crc when copying
 Fixed incorrect PBC order, PBC now should work on all "standalone" DVD Players
 Fixed waittime bug for PBC infinite timeout.
-It is now possible to open an iso image just like a project file.
-Implemented multible copies in VideoCD project
-Fixed read and save setting in videoCD project
-
+Import Audio Cue files into an audio project.
+It is now possible to open an iso image or an audio cue file just like a project file.
+K3b now smartly reuses already running instances if they are idle. Example: you already started K3b and 
+	now right click an iso image to burn it with k3b. Instead of starting a new instance the running
+	one gets reused. But if that instance is already doing something like ripping a cd or whatever
+	a new instance is started.
+Create cue files for an audio CD ripped into one single file
+Show writer buffer state in addition to fifo buffer when writing CDs.
+Implemented multible copies in all projects.
+Fixed read and save setting in VideoCD project.
+Big parts of the audio project have been rewritten to have a way better design.
+	
 0.11.10
 Support Mp3 files starting with multiple ID3 tags.
 Improved ~ handling in the QuickDirSelector.

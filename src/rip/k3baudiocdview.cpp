@@ -64,11 +64,17 @@ public:
 		      QCheckListItem::CheckBox ) {
     setText( 1, QString::number(_trackNumber).rightJustify( 2, ' ' ) );
     setText( 3, i18n("Track %1").arg(_trackNumber) );
-    setText( 4, length.toString() );
-    setText( 5, KIO::convertSize( length.audioBytes() ) );
+    setText( 4, " " + length.toString() + " " );
+    setText( 5, " " + KIO::convertSize( length.audioBytes() ) + " " );
 
     trackNumber = _trackNumber;
     setOn(true);
+  }
+
+  void setup() {
+    QCheckListItem::setup();
+    
+    setHeight( height() + 4 );
   }
 
   int trackNumber;
@@ -122,6 +128,8 @@ K3bAudioCdView::K3bAudioCdView( QWidget* parent, const char *name )
   m_trackView->setRenameable(1, false);
   m_trackView->setRenameable(2, true);
   m_trackView->setRenameable(3, true);
+
+  m_trackView->setColumnAlignment( 4, Qt::AlignHCenter );
 
   connect( m_trackView, SIGNAL(itemRenamed(QListViewItem*, const QString&, int)),
 	   this, SLOT(slotItemRenamed(QListViewItem*, const QString&, int)) );
@@ -205,9 +213,9 @@ void K3bAudioCdView::reload()
   m_cddbInfo.cdExtInfo = m_cdText.message();
 
   for( unsigned int i = 0; i < m_cdText.count(); ++i ) {
-    m_cddbInfo.titles[i] = m_cdText.trackCdText(i).title();
-    m_cddbInfo.artists[i] = m_cdText.trackCdText(i).performer();
-    m_cddbInfo.extInfos[i] = m_cdText.trackCdText(i).message();
+    m_cddbInfo.titles[i] = m_cdText[i].title();
+    m_cddbInfo.artists[i] = m_cdText[i].performer();
+    m_cddbInfo.extInfos[i] = m_cdText[i].message();
   }
 
   updateDisplay();

@@ -15,63 +15,81 @@
 
 
 #include "k3baudiotrack.h"
+#include "k3baudiodoc.h"
+#include "k3baudiodatasource.h"
 
 #include <k3baudiodecoder.h>
 #include <k3bcore.h>
 
-#include <kconfig.h>
-
 #include <qstring.h>
-#include <qfileinfo.h>
 
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
 #include <kdebug.h>
 
 
 
-K3bAudioTrack::K3bAudioTrack( QPtrList<K3bAudioTrack>* parent, const QString& filename )
+K3bAudioTrack::K3bAudioTrack( K3bAudioDoc* parent )
   : QObject(),
-    m_filename(filename),
-    m_status(0)
+    m_parent(parent),
+    m_copy(false),
+    m_preEmp(false),
+    m_index0Offset(150),
+    m_prev(0),
+    m_next(0),
+    m_firstSource(0),
+    m_currentSource(0),
+    m_alreadyReadBytes(0),
+    m_currentlyDeleting(false)
 {
-  m_parent = parent;
-  m_copy = false;
-  m_preEmp = false;
-
-  k3bcore->config()->setGroup( "Audio project settings" );
-  setPregap( k3bcore->config()->readNumEntry( "default pregap", 150 ) );
-
-  m_module = 0;
+  // housekeeping stuff
+  connect( this, SIGNAL(changed(K3bAudioTrack*)), parent, SLOT(slotTrackChanged(K3bAudioTrack*)) );
+  connect( this, SIGNAL(destroyed(QObject*)), parent, SLOT(slotTrackDestroyed(QObject*)) );
 }
 
 
 K3bAudioTrack::~K3bAudioTrack()
 {
-  delete m_module;
+  kdDebug() << "(K3bAudioTrack::~K3bAudioTrack) " << this << endl;
+  //
+  // It is crucial that we do not emit the changed signal here because otherwise
+  // the doc will delete us again once we are empty!
+  //
+  m_currentlyDeleting = true;
+
+  // delete all sources
+  while( m_firstSource )
+    delete m_firstSource; // this will remove the source from the list
+
+  // fix the list
+  remove();
+
+  kdDebug() << "(K3bAudioTrack::~K3bAudioTrack) finished" << endl;
 }
 
 
-K3b::Msf K3bAudioTrack::fileLength() const
+K3bAudioDataSource* K3bAudioTrack::lastSource() const
 {
-  // make sure a track is always at least 4 seconds in length as defined in
-  // the Red Book
-  if( m_module && m_module->length() > 0 )
-    return QMAX( m_module->length(), K3b::Msf( 0, 4, 0 ) );
-  else
-    return 0;
+  K3bAudioDataSource* s = m_firstSource;
+  while( s && s->next() )
+    s = s->next();
+  return s;
+}
+
+
+bool K3bAudioTrack::inList() const
+{
+  return ( doc()->firstTrack() == this || m_prev != 0 );
 }
 
 
 K3b::Msf K3bAudioTrack::length() const
 {
-  // not valid until the module determined the length
-  if( fileLength() > 0 )
-    return trackEnd() - trackStart();
-  else
-    return 0;
+  K3b::Msf length;
+  K3bAudioDataSource* source = m_firstSource;
+  while( source ) {
+    length += source->length();
+    source = source->next();
+  }
+  return length;
 }
 
 
@@ -81,68 +99,332 @@ KIO::filesize_t K3bAudioTrack::size() const
 }
 
 
-int K3bAudioTrack::index() const
+unsigned int K3bAudioTrack::index() const
 {
-  int i = m_parent->find( this );
-  if( i < 0 )
-    kdDebug() << "(K3bAudioTrack) I'm not part of my parent!" << endl;
+  if( m_prev )
+    return m_prev->index() + 1;
+  else
+    return 0;
+}
+
+
+K3b::Msf K3bAudioTrack::index0() const
+{
+  // we save the index0Offset as length of the resulting pregap
+  // this way the length of the track does not need to be ready
+  // when creating the track.
+  return length() - m_index0Offset;
+}
+
+
+void K3bAudioTrack::setIndex0( const K3b::Msf& msf )
+{
+  m_index0Offset = length() - msf;
+}
+
+
+void K3bAudioTrack::remove()
+{
+  if( inList() ) {
+    if( !m_prev )
+      doc()->setFirstTrack( m_next );
+    if( !m_next )
+      doc()->setLastTrack( m_prev );
+    
+    if( m_prev )
+      m_prev->m_next = m_next;
+    if( m_next )
+      m_next->m_prev = m_prev;
+    
+    m_prev = m_next = 0;
+  }
+}
+
+
+K3bAudioTrack* K3bAudioTrack::take()
+{
+  if( inList() ) {
+    remove();    
+    emit changed(this);
+  }
+
+  return this;
+}
+
+
+void K3bAudioTrack::moveAfter( K3bAudioTrack* track )
+{
+  kdDebug() << "(K3bAudioTrack::moveAfter( " << track << " )" << endl;
+  if( !track ) {
+    // make sure we do not mess up the list
+    if( doc()->firstTrack() )
+      moveAhead( doc()->firstTrack() );
+    else
+      doc()->setFirstTrack( take() );
+    return;
+  }
+
+  if( track == this ) {
+    kdDebug() << "(K3bAudioTrack::moveAfter) trying to move this after this." << endl;
+    return;
+  }
+
+  if( track->doc() != doc() )
+    return;
+
+  // remove this from the list
+  remove();
+
+  K3bAudioTrack* oldNext = track->m_next;
+
+  // set track as prev
+  track->m_next = this;
+  m_prev = track;
+
+  // set oldNext as next
+  if( oldNext )
+    oldNext->m_prev = this;
+  m_next = oldNext;
+
+  if( !m_next )
+    doc()->setLastTrack( this );
+
+  emit changed(this);
+}
+
+
+void K3bAudioTrack::moveAhead( K3bAudioTrack* track )
+{
+  if( !track ) {
+    // make sure we do not mess up the list
+    if( doc()->lastTrack() )
+      moveAfter( doc()->lastTrack() );
+    else
+      doc()->setFirstTrack( take() );
+    return;
+  }
+
+  if( track->doc() != doc() )
+    return;
+
+  if( track == this ) {
+    kdDebug() << "(K3bAudioTrack::moveAhead) trying to move this ahead of this." << endl;
+    return;
+  }
+
+  // remove this from the list
+  remove();
+
+  K3bAudioTrack* oldPrev = track->m_prev;
+
+  // set track as next
+  m_next = track;
+  track->m_prev = this;
+
+  // set oldPrev as prev
+  m_prev = oldPrev;
+  if( oldPrev )
+    oldPrev->m_next = this;
+
+  if( !m_prev )
+    doc()->setFirstTrack( this );
+
+  emit changed(this);
+}
+
+
+void K3bAudioTrack::merge( K3bAudioTrack* trackToMerge, K3bAudioDataSource* sourceAfter )
+{
+  kdDebug() << "(K3bAudioTrack::merge) " << trackToMerge << " into " << this << endl;
+  if( this == trackToMerge ) {
+    kdDebug() << "(K3bAudioTrack::merge) trying to merge this with this." << endl;
+    return;
+  }
+
+  if( trackToMerge->doc() != doc() )
+    return;
+
+  // in case we prepend all of trackToMerge's sources
+  if( !sourceAfter ) {
+    if( m_firstSource ) {
+      trackToMerge->firstSource()->moveAhead( m_firstSource );
+    }
+    else {
+      addSource( trackToMerge->firstSource()->take() );
+    }
+    sourceAfter = m_firstSource;
+  }
+
+  // now merge all sources into this track
+  while( trackToMerge->firstSource() ) {
+    K3bAudioDataSource* s = trackToMerge->firstSource();
+    s->moveAfter( sourceAfter );
+    sourceAfter = s;
+  }
+  
+  // TODO: should we also merge the indices?
+
+  // since trackToMerge is empty now it will be deleted in the doc
+
+  emit changed(this);
+}
+
+
+void K3bAudioTrack::setFirstSource( K3bAudioDataSource* source )
+{
+  if( source && source->doc() != doc() )
+    return;
+
+  // reset the reading stuff since this might be a completely new source list
+  m_currentSource = 0;
+  m_alreadyReadBytes = 0;
+
+  m_firstSource = source;
+  while( source ) {
+    source->m_track = this;
+    source = source->next();
+  }
+}
+
+
+void K3bAudioTrack::addSource( K3bAudioDataSource* source )
+{
+  if( !source )
+    return;
+
+  if( source->doc() != doc() )
+    return;
+
+  K3bAudioDataSource* s = m_firstSource;
+  while( s && s->next() )
+    s = s->next();
+  if( s )
+    source->moveAfter( s );
+  else
+    setFirstSource( source->take() );
+}
+
+
+void K3bAudioTrack::sourceChanged( K3bAudioDataSource* )
+{
+  if( m_currentlyDeleting )
+    return;
+
+  // TODO: update indices
+
+  if( m_index0Offset > length() )
+    m_index0Offset = length()-1;
+
+  emit changed( this );
+}
+
+
+int K3bAudioTrack::numberSources() const
+{
+  K3bAudioDataSource* source = m_firstSource;
+  int i = 0;
+  while( source ) {
+    source = source->next();
+    ++i;
+  }
   return i;
 }
 
 
-void K3bAudioTrack::setPregap( const K3b::Msf& p )
+bool K3bAudioTrack::seek( const K3b::Msf& msf )
 {
-  m_pregap = p;
-  emit changed();
-}
+  K3bAudioDataSource* source = m_firstSource;
 
-
-void K3bAudioTrack::setModule( K3bAudioDecoder* module )
-{
-  m_module = module;
-  m_module->setFilename( path() );
-}
-
-
-const K3b::Msf& K3bAudioTrack::trackStart() const
-{
-  return m_trackStartOffset;
-}
-
-
-K3b::Msf K3bAudioTrack::trackEnd() const
-{
-  return fileLength() - m_trackEndOffset;
-}
-
-
-void K3bAudioTrack::setTrackStart( const K3b::Msf& msf )
-{
-  // make sure a track is always at least 4 seconds in length as defined in
-  // the Red Book
-  if( msf > trackEnd() - K3b::Msf( 0, 4, 0 ) || msf > fileLength() )
-    kdDebug() << "(K3bAudioTrack) invalid track start value: " << msf.toString() << endl;
-  else {
-    m_trackStartOffset = msf;
-    emit changed();
+  K3b::Msf pos;
+  while( source && pos + source->length() < msf ) {
+    pos += source->length();
+    source = source->next();
   }
-}
 
-
-void K3bAudioTrack::setTrackEnd( const K3b::Msf& msf )
-{
-  // make sure a track is always at least 4 seconds in length as defined in
-  // the Red Book
-  if( msf < trackStart() + K3b::Msf( 0, 4, 0 ) )
-    kdDebug() << "(K3bAudioTrack) invalid track end value: " << msf.toString() << endl;
-  else {
-    if( msf > fileLength() )
-      m_trackEndOffset = 0;
-    else
-      m_trackEndOffset = fileLength() - msf;
-
-    emit changed();
+  if( source ) {
+    m_currentSource = source;
+    m_alreadyReadBytes = msf.audioBytes();
+    source->seek( msf - pos );
+    return true;
   }
+  else
+    return false;
 }
+
+
+int K3bAudioTrack::read( char* data, int max )
+{
+  if( !m_currentSource ) {
+    m_currentSource = m_firstSource;
+    if( m_currentSource )
+      m_currentSource->seek(0);
+    m_alreadyReadBytes = 0;
+  }
+
+  int readData = m_currentSource->read( data, max );
+  if( readData == 0 ) {
+    m_currentSource = m_currentSource->next();
+    if( m_currentSource ) {
+      m_currentSource->seek(0);
+      return read( data, max ); // read from next source
+    }
+  }
+
+  m_alreadyReadBytes += readData;
+
+  return readData;
+}
+
+
+K3bAudioTrack* K3bAudioTrack::copy() const
+{
+  K3bAudioTrack* track = new K3bAudioTrack( doc() );
+
+  track->m_copy = m_copy;
+  track->m_preEmp = m_preEmp;
+  track->m_index0Offset = m_index0Offset;
+  track->m_cdText = m_cdText;
+  K3bAudioDataSource* source = m_firstSource;
+  while( source ) {
+    track->addSource( source->copy() );
+    source = source->next();
+  }
+
+  return track;
+}
+
+
+K3bCdDevice::Track K3bAudioTrack::toCdTrack() const
+{
+  if( !inList() )
+    return K3bCdDevice::Track();
+
+  K3b::Msf firstSector;
+  K3bAudioTrack* track = doc()->firstTrack();
+  while( track != this ) {
+    firstSector += track->length();
+    track = track->next();
+  }
+
+  K3bCdDevice::Track cdTrack( firstSector, 
+			      firstSector + length() - 1,
+			      K3bCdDevice::Track::AUDIO );
+
+    // FIXME: auch im audiotrack copy permitted
+  cdTrack.setCopyPermitted( !copyProtection() );
+  cdTrack.setPreEmphasis( preEmp() );
+  
+  // FIXME: add indices != 0
+  
+  // no index 0 for the last track. Or should we allow this???
+  if( doc()->lastTrack() != this )
+    cdTrack.setIndex0( index0() );
+  
+  // FIXME: convert to QCString
+  //    cdTrack.setIsrc( isrc() );
+  
+  return cdTrack;
+}
+
 
 #include "k3baudiotrack.moc"

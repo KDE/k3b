@@ -108,6 +108,8 @@ K3bAudioRippingDialog::K3bAudioRippingDialog(const K3bCdDevice::Toc& toc,
   setTitle( i18n("CD Ripping"), 
 	    i18n("1 track (%1)", "%n tracks (%1)", 
 		 m_trackNumbers.count()).arg(length.toString()) );
+
+  slotUpdateFreeTempSpace();
 }
 
 
@@ -139,6 +141,9 @@ void K3bAudioRippingDialog::setupGui()
   mainTab->addTab( m_optionWidget, i18n("Options") );
 
   m_optionWidget->m_buttonConfigurePlugin->setIconSet( SmallIconSet( "gear" ) );
+
+  connect( m_optionWidget->m_editBaseDir, SIGNAL(textChanged(const QString&)),
+	   this, SLOT(slotUpdateFreeTempSpace()) );
 
 
   // setup filename pattern page
@@ -305,6 +310,7 @@ void K3bAudioRippingDialog::slotStartClicked()
   thread->setMaxRetries( m_spinRetries->value() );
   thread->setNeverSkip( m_checkNeverSkip->isChecked() );
   thread->setSingleFile( m_optionWidget->m_checkSingleFile->isChecked() );
+  thread->setWriteCueFile( m_optionWidget->m_checkWriteCueFile->isChecked() );
   thread->setEncoderFactory( factory );
   thread->setWritePlaylist( m_optionWidget->m_checkCreatePlaylist->isChecked() );
   thread->setPlaylistFilename( d->playlistFilename );
@@ -462,6 +468,7 @@ void K3bAudioRippingDialog::slotLoadK3bDefaults()
   m_checkUseIndex0->setChecked( false );
   
   m_optionWidget->m_checkSingleFile->setChecked( false );
+  m_optionWidget->m_checkWriteCueFile->setChecked( false );
 
   m_optionWidget->m_comboFileType->setCurrentItem(0); // Wave
 
@@ -487,6 +494,7 @@ void K3bAudioRippingDialog::slotLoadUserDefaults()
   m_checkUseIndex0->setChecked( c->readBoolEntry( "use_index0", false ) );
 
   m_optionWidget->m_checkSingleFile->setChecked( c->readBoolEntry( "single_file", false ) );
+  m_optionWidget->m_checkWriteCueFile->setChecked( c->readBoolEntry( "write_cue_file", false ) );
 
   m_optionWidget->m_checkCreatePlaylist->setChecked( c->readBoolEntry( "create_playlist", false ) );
   m_optionWidget->m_checkPlaylistRelative->setChecked( c->readBoolEntry( "relative_path_in_playlist", false ) );
@@ -522,6 +530,7 @@ void K3bAudioRippingDialog::slotSaveUserDefaults()
   c->writeEntry( "use_index0", m_checkUseIndex0->isChecked() );
 
   c->writeEntry( "single_file", m_optionWidget->m_checkSingleFile->isChecked() );
+  c->writeEntry( "write_cue_file", m_optionWidget->m_checkWriteCueFile->isChecked() );
 
   c->writeEntry( "create_playlist", m_optionWidget->m_checkCreatePlaylist->isChecked() );
   c->writeEntry( "relative_path_in_playlist", m_optionWidget->m_checkPlaylistRelative->isChecked() );
@@ -565,5 +574,21 @@ void K3bAudioRippingDialog::slotSeeSpecialStrings()
 			     "<li>%d - current date\n"
 			     "</ul>" ) );
 }
+
+
+void K3bAudioRippingDialog::slotUpdateFreeTempSpace()
+{
+  QString path = m_optionWidget->m_editBaseDir->url();
+
+  if( !QFile::exists( path ) )
+    path.truncate( path.findRev('/') );
+
+  unsigned long size, avail;
+  if( K3b::kbFreeOnFs( path, size, avail ) )
+    m_optionWidget->m_labelFreeSpace->setText( KIO::convertSizeFromKB(avail) );
+  else
+    m_optionWidget->m_labelFreeSpace->setText("-");
+}
+
 
 #include "k3baudiorippingdialog.moc"

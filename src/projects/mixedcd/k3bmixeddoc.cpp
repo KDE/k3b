@@ -281,5 +281,40 @@ K3bProjectBurnDialog* K3bMixedDoc::newBurnDialog( QWidget* parent, const char* n
   return new K3bMixedBurnDialog( this, parent, name, true );
 }
 
+
+K3bCdDevice::Toc K3bMixedDoc::toToc( int dataMode, const K3b::Msf& dataTrackLength ) const
+{
+  // !inaccurate datatrack size!
+  K3bCdDevice::Track dataTrack( 0, dataTrackLength > 0 ? dataTrackLength-1 : m_dataDoc->length()-1, 
+				K3bCdDevice::Track::DATA, dataMode );
+  K3bCdDevice::Toc toc = audioDoc()->toToc();
+  if( mixedType() == DATA_FIRST_TRACK ) {
+    // fix the audio tracks' sectors
+    for( K3bCdDevice::Toc::iterator it = toc.begin(); it != toc.end(); ++it ) {
+      (*it).setLastSector( (*it).lastSector() + dataTrack.length() );
+      (*it).setFirstSector( (*it).firstSector() + dataTrack.length() );
+    }
+    toc.prepend( dataTrack );
+  }
+  else {
+    // fix the datatrack's sectors
+    dataTrack.setLastSector( dataTrack.lastSector() + toc.back().lastSector()+1 );
+    dataTrack.setFirstSector( toc.back().lastSector()+1 );
+    toc.append( dataTrack );
+    
+    if( mixedType() == DATA_SECOND_SESSION ) {
+      // fix the session numbers
+      for( K3bCdDevice::Toc::iterator it = toc.begin(); it != toc.end(); ++it ) {
+	if( (*it).type() == K3bCdDevice::Track::DATA )
+	  (*it).setSession( 2 );
+	else
+	  (*it).setSession( 1 );
+      }
+    }
+  }
+  
+  return toc;
+}
+
 #include "k3bmixeddoc.moc"
 

@@ -165,7 +165,7 @@ QString K3b::parentDir( const QString& path )
 
   int pos = parent.findRev( '/' );
   if( pos >= 0 )
-    parent.truncate( pos );
+    parent.truncate( pos+1 );
   else // relative path, do anything...
     parent = "/";
 

@@ -16,7 +16,7 @@
 
 #include "k3baudioview.h"
 #include "k3baudiodoc.h"
-#include "audiolistview.h"
+#include "k3baudiotrackview.h"
 #include "k3baudioburndialog.h"
 #include <k3bfillstatusdisplay.h>
 #include <k3bmsf.h>
@@ -37,7 +37,7 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
 {
   m_doc = pDoc;
 
-  m_songlist = new K3bAudioListView( this, pDoc, this );
+  m_songlist = new K3bAudioTrackView( pDoc, this );
   setMainWidget( m_songlist );
   fillStatusDisplay()->showTime();
 }

@@ -185,7 +185,7 @@ public:
       }
     }
 
-    emitFinished(failedCnt == 0);
+    emitFinished(failedCnt == 0 && !m_canceled );
   }
 
 

@@ -64,11 +64,12 @@ void K3bBurningOptionTab::setupGui()
 
   // general settings group
   // -----------------------------------------------------------------------
-  QGroupBox* groupGeneral = new QGroupBox( 1, Qt::Vertical, i18n("General"), projectTab );
+  QGroupBox* groupGeneral = new QGroupBox( 2, Qt::Vertical, i18n("General"), projectTab );
   groupGeneral->setInsideSpacing( KDialog::spacingHint() );
   groupGeneral->setInsideMargin( KDialog::marginHint() );
 
   m_checkBurnfree = K3bStdGuiItems::burnproofCheckbox( groupGeneral );
+  m_checkSaveOnExit = new QCheckBox( i18n("Ask to save projects on exit"), groupGeneral );
   // -----------------------------------------------------------------------
 
 
@@ -222,6 +223,7 @@ void K3bBurningOptionTab::setupGui()
   mainTabbed->addTab( projectTab, i18n("&Writing") );
   mainTabbed->addTab( advancedTab, i18n("&Advanced") );
 
+  QToolTip::add( m_checkSaveOnExit, i18n("Ask to save modified projects on exit") );
   QToolTip::add( m_checkListHiddenFiles, i18n("Add hidden files in subdirectories") );
   QToolTip::add( m_checkListSystemFiles, i18n("Add system files in subdirectories") );
   QToolTip::add( m_checkAllowWritingAppSelection, i18n("Allow to choose between cdrecord and cdrdao") );
@@ -263,6 +265,7 @@ void K3bBurningOptionTab::readSettings()
 
   c->setGroup("General Options");
   m_checkBurnfree->setChecked( c->readBoolEntry( "burnfree", true ) );
+  m_checkSaveOnExit->setChecked( c->readBoolEntry( "ask_for_saving_changes_on_exit", true ) );
 
   c->setGroup( "Video project settings" );
   m_checkUsePbc->setChecked( c->readBoolEntry("Use Playback Control", false) );
@@ -297,6 +300,7 @@ void K3bBurningOptionTab::saveSettings()
 
   c->setGroup("General Options");
   c->writeEntry( "burnfree", m_checkBurnfree->isChecked() );
+  c->writeEntry( "ask_for_saving_changes_on_exit", m_checkSaveOnExit->isChecked() );
 
   c->setGroup( "Video project settings" );
   c->writeEntry( "Use Playback Control", m_checkUsePbc->isChecked() );

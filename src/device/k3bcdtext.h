@@ -52,6 +52,16 @@ namespace K3bCdDevice
       TrackCdText() {
       }
 
+      void clear() {
+	m_title.truncate(0);
+	m_performer.truncate(0);
+	m_songwriter.truncate(0);
+	m_composer.truncate(0);
+	m_arranger.truncate(0);
+	m_message.truncate(0);
+	m_isrc.truncate(0);
+      }
+
       const QString& title() const { return m_title; }
       const QString& performer() const { return m_performer; }
       const QString& songwriter() const { return m_songwriter; }
@@ -103,7 +113,7 @@ namespace K3bCdDevice
       friend class CdText;
     };
 
-  class CdText
+  class CdText : public QValueVector<TrackCdText>
     {
       friend class CdDevice;
 
@@ -112,21 +122,14 @@ namespace K3bCdDevice
       CdText( const unsigned char* data, int len );
       CdText( const QByteArray& );
       CdText( int size );
+      CdText( const CdText& );
 
       void setRawPackData( const unsigned char*, int );
       void setRawPackData( const QByteArray& );
 
       QByteArray rawPackData() const;
 
-      unsigned int count() const {
-	return m_trackCdText.count();
-      }
-
-      void resize( int size ) {
-	m_trackCdText.resize( size );
-      }
-
-      bool isEmpty() const {
+      bool empty() const {
 	if( !m_title.isEmpty() )
 	  return false;
 	if( !m_performer.isEmpty() )
@@ -144,11 +147,15 @@ namespace K3bCdDevice
 	if( !m_upcEan.isEmpty() )
 	  return false;
 	
-	for( unsigned int i = 0; i < m_trackCdText.count(); ++i )
-	  if( !m_trackCdText[i].isEmpty() )
+	for( unsigned int i = 0; i < count(); ++i )
+	  if( !at(i).isEmpty() )
 	    return false;
 
 	return true;
+      }
+
+      bool isEmpty() const {
+	return empty();
       }
 
       void clear();
@@ -171,9 +178,6 @@ namespace K3bCdDevice
       void setMessage( const QString& s ) { m_message = s; fixup(m_message); }
       void setDiscId( const QString& s ) { m_discId = s; fixup(m_discId); }
       void setUpcEan( const QString& s ) { m_upcEan = s; fixup(m_upcEan); }
-
-      const TrackCdText& trackCdText( int i ) const { return m_trackCdText[i]; }
-      void addTrackCdText( const TrackCdText& t ) { m_trackCdText.append(t); }
 
       void debug() const;
 
@@ -202,8 +206,6 @@ namespace K3bCdDevice
       QString m_message;
       QString m_discId;
       QString m_upcEan;
-
-      QValueVector<TrackCdText> m_trackCdText;
     };
 
   QCString encodeCdText( const QString& s, bool* illegalChars = 0 );

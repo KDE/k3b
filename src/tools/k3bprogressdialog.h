@@ -14,8 +14,8 @@
  */
 
 
-#ifndef K3B_DISK_ERASING_INFO_DIALOG_H
-#define K3B_DISK_ERASING_INFO_DIALOG_H
+#ifndef _K3B_PROGRESS_DIALOG_H_
+#define _K3B_PROGRESS_DIALOG_H_
 
 #include <kdialogbase.h>
 
@@ -26,14 +26,19 @@ class KProgress;
 class QWidgetStack;
 
 
-class K3bErasingInfoDialog : public KDialogBase
+/**
+ * A progressdialog which displays a line of text and a progress
+ * bar or a moving dot for tasks that do not provide any progress
+ * information.
+ */
+class K3bProgressDialog : public KDialogBase
 {
   Q_OBJECT
 
  public:
-  K3bErasingInfoDialog( const QString& text = QString::null,
-			QWidget* parent = 0, const char* name = 0 );
-  ~K3bErasingInfoDialog();
+  K3bProgressDialog( const QString& text = QString::null,
+		     QWidget* parent = 0, const char* name = 0 );
+  ~K3bProgressDialog();
 
   int exec( bool showProgress );
 

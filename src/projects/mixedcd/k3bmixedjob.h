@@ -22,7 +22,7 @@
 
 class K3bMixedDoc;
 class K3bIsoImager;
-class K3bAudioStreamer;
+class K3bAudioImager;
 class QFile;
 class QDataStream;
 class K3bAbstractWriter;
@@ -69,7 +69,6 @@ class K3bMixedJob : public K3bBurnJob
   void slotAudioDecoderNextTrack( int, int );
   void slotAudioDecoderPercent(int);
   void slotAudioDecoderSubPercent( int );
-  void slotReceivedAudioDecoderData( const char*, int );
 
   // writer slots
   void slotWriterFinished( bool success );
@@ -86,6 +85,7 @@ class K3bMixedJob : public K3bBurnJob
  private:
   bool prepareWriter();
   bool writeTocFile();
+  bool writeInfFiles();
   bool startWriting();
   void addAudioTracks( K3bCdrecordWriter* writer );
   void addDataTrack( K3bCdrecordWriter* writer );
@@ -95,10 +95,11 @@ class K3bMixedJob : public K3bBurnJob
   void determineWritingMode();
   void normalizeFiles();
   void prepareProgressInformation();
+  void writeNextCopy();
 
   K3bMixedDoc* m_doc;
   K3bIsoImager* m_isoImager;
-  K3bAudioStreamer* m_audioDecoder;
+  K3bAudioImager* m_audioImager;
   K3bAudioJobTempData* m_tempData;
   K3bWaveFileWriter* m_waveFileWriter;
   K3bAbstractWriter* m_writer;
@@ -117,10 +118,6 @@ class K3bMixedJob : public K3bBurnJob
 
   int m_currentAction;
   double m_audioDocPartOfProcess;
-  double m_writingPartOfProcess;
-  double m_audioDecoderPartOfProgress;
-  double m_isoImagerPartOfProgress;
-  double m_normalizerPartOfProgress;
 
   bool m_canceled;
   bool m_errorOccuredAndAlreadyReported;
@@ -132,6 +129,9 @@ class K3bMixedJob : public K3bBurnJob
   int m_usedAudioWritingMode;
 
   QString m_tempFilePrefix;
+
+  class Private;
+  Private* d;
 };
 
 #endif

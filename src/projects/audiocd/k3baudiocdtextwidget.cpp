@@ -102,46 +102,46 @@ bool K3bAudioCdTextWidget::isChecked() const
 
 void K3bAudioCdTextWidget::slotCopyTitle()
 {
-  QPtrListIterator<K3bAudioTrack> it( *m_doc->tracks() );
-  for( ; it.current(); ++it ) {
-    K3bAudioTrack* track = it.current();
+  K3bAudioTrack* track = m_doc->firstTrack();
+  while( track ) {
     track->setTitle( m_editTitle->text() );
+    track = track->next();
   }
 }
 
 void K3bAudioCdTextWidget::slotCopyPerformer()
 {
-  QPtrListIterator<K3bAudioTrack> it( *m_doc->tracks() );
-  for( ; it.current(); ++it ) {
-    K3bAudioTrack* track = it.current();
+  K3bAudioTrack* track = m_doc->firstTrack();
+  while( track ) {
     track->setPerformer( m_editPerformer->text() );
+    track = track->next();
   }
 }
 
 void K3bAudioCdTextWidget::slotCopyArranger()
 {
-  QPtrListIterator<K3bAudioTrack> it( *m_doc->tracks() );
-  for( ; it.current(); ++it ) {
-    K3bAudioTrack* track = it.current();
+  K3bAudioTrack* track = m_doc->firstTrack();
+  while( track ) {
     track->setArranger( m_editArranger->text() );
+    track = track->next();
   }
 }
 
 void K3bAudioCdTextWidget::slotCopySongwriter()
 {
-  QPtrListIterator<K3bAudioTrack> it( *m_doc->tracks() );
-  for( ; it.current(); ++it ) {
-    K3bAudioTrack* track = it.current();
+  K3bAudioTrack* track = m_doc->firstTrack();
+  while( track ) {
     track->setSongwriter( m_editSongwriter->text() );
+    track = track->next();
   }
 }
 
 void K3bAudioCdTextWidget::slotCopyComposer()
 {
-  QPtrListIterator<K3bAudioTrack> it( *m_doc->tracks() );
-  for( ; it.current(); ++it ) {
-    K3bAudioTrack* track = it.current();
+  K3bAudioTrack* track = m_doc->firstTrack();
+  while( track ) {
     track->setComposer( m_editComposer->text() );
+    track = track->next();
   }
 }
 

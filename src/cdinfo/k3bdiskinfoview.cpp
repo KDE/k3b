@@ -323,10 +323,10 @@ void K3bDiskInfoView::displayInfo( K3bCdDevice::DiskInfoDetector* did )
       for( unsigned int i = 0; i < did->cdText().count(); ++i ) {
         item = new KListViewItem( cdTextHeaderItem, item );
 	item->setText( 0, QString::number(index).rightJustify( 2, ' ' ) + " " +
-		       did->cdText().trackCdText(i).performer() );
-	item->setText( 1, did->cdText().trackCdText(i).title() );
-	item->setText( 2, did->cdText().trackCdText(i).songwriter() );
-	item->setText( 3, did->cdText().trackCdText(i).composer() );
+		       did->cdText().at(i).performer() );
+	item->setText( 1, did->cdText().at(i).title() );
+	item->setText( 2, did->cdText().at(i).songwriter() );
+	item->setText( 3, did->cdText().at(i).composer() );
 	++index;
       }
 

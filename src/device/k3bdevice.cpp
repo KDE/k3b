@@ -208,7 +208,7 @@ bool K3bCdDevice::CdDevice::init()
     // We cannot use this as default since many firmwares fail with a too high data length.
     //
     if( len == 8 ) {
-      cmd[7] = 2084>>8;
+      cmd[7] = 2048>>8;
       cmd[8] = 2048;
       if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 )
 	len = from2Byte( header );
@@ -2411,7 +2411,7 @@ bool K3bCdDevice::CdDevice::modeSense( unsigned char** pageData, int& pageLen, i
     // We cannot use this as default since many firmwares fail with a too high data length.
     //
     if( pageLen == 8 ) {
-      cmd[7] = 2084>>8;
+      cmd[7] = 2048>>8;
       cmd[8] = 2048;
       if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 )
 	pageLen = from2Byte( header ) + 2;
@@ -2574,7 +2574,7 @@ bool K3bCdDevice::CdDevice::readTocPmaAtip( unsigned char** data, int& dataLen, 
     // We cannot use this as default since many firmwares fail with a too high data length.
     //
     if( dataLen == 2 ) {
-      cmd[7] = 2084>>8;
+      cmd[7] = 2048>>8;
       cmd[8] = 2048;
       if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 )
 	dataLen = from2Byte( header ) + 2;
@@ -2620,7 +2620,7 @@ bool K3bCdDevice::CdDevice::mechanismStatus( unsigned char** data, int& dataLen 
     // We cannot use this as default since many firmwares fail with a too high data length.
     //
     if( dataLen == 8 ) {
-      cmd[8] = 2084>>8;
+      cmd[8] = 2048>>8;
       cmd[9] = 2048;
       if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 )
 	dataLen = from2Byte( &header[6] ) + 8;
@@ -2947,7 +2947,7 @@ bool K3bCdDevice::CdDevice::readSubChannel( unsigned char** data, int& dataLen,
     // We cannot use this as default since many firmwares fail with a too high data length.
     //
     if( dataLen == 4 ) {
-      cmd[7] = 2084>>8;
+      cmd[7] = 2048>>8;
       cmd[8] = 2048;
       if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 )
 	dataLen = from2Byte( &header[2] ) + 4;
@@ -3009,7 +3009,7 @@ bool K3bCdDevice::CdDevice::readTrackInformation( unsigned char** data, int& dat
     // We cannot use this as default since many firmwares fail with a too high data length.
     //
     if( dataLen == 4 ) {
-      cmd[7] = 2084>>8;
+      cmd[7] = 2048>>8;
       cmd[8] = 2048;
       if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 )
 	dataLen = from2Byte( header ) + 2;
@@ -3213,7 +3213,11 @@ bool K3bCdDevice::CdDevice::indexScan( K3bCdDevice::Toc& toc ) const
       if( searchIndex0( track.firstSector().lba(), track.lastSector().lba(), index0 ) ) {
 	kdDebug() << "(K3bCdDevice::CdDevice) found index 0: " << index0 << endl;
       }
-      track.m_indices.append( index0 );
+      if( index0 > 0 )
+	track.m_index0 = K3b::Msf( index0 - track.firstSector().lba() );
+      else
+	track.m_index0 = 0;
+
       if( index0 > 0 )
 	searchIndexTransitions( track.firstSector().lba(), index0-1, track );
       else
@@ -3245,8 +3249,9 @@ void K3bCdDevice::CdDevice::searchIndexTransitions( long start, long end, K3bCdD
   if( startIndex != endIndex ) {
     if( start+1 == end ) {
       kdDebug() << "(K3bCdDevice::CdDevice) found index transition: " << endIndex << " " << end << endl;
-      track.m_indices.resize( endIndex+1 );
-      track.m_indices[endIndex] = end;
+      track.m_indices.resize( endIndex );
+      // we save the index relative to the first sector
+      track.m_indices[endIndex-1] = K3b::Msf( end ) - track.firstSector();
     }
     else {
       searchIndexTransitions( start, start+(end-start)/2, track );
@@ -3278,7 +3283,7 @@ bool K3bCdDevice::CdDevice::getFeature( unsigned char** data, int& dataLen, unsi
     // We cannot use this as default since many firmwares fail with a too high data length.
     //
     if( dataLen == 8 ) {
-      cmd[7] = 2084>>8;
+      cmd[7] = 2048>>8;
       cmd[8] = 2048;
       if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 )
 	dataLen = from2Byte( header ) + 4;

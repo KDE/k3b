@@ -29,7 +29,7 @@ K3bSmartInstanceReuser::K3bSmartInstanceReuser( KCmdLineArgs* args )
   : DCOPClient(),
     m_args( args )
 {
-  attach();
+  registerAs( "smart_k3b_instancer" );
 }
 
 

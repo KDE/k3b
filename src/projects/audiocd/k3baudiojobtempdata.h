@@ -41,19 +41,6 @@ class K3bAudioJobTempData : public QObject
   
   const QString& tocFileName();
 
-  bool writeInfFiles();
-  bool writeTocFile();
-
-  /**
-   * This is called internally by writeTocFile but may be used
-   * to create the audio part of a mixed toc file
-   * @param t the stream to write the data to
-   * @param start used for writing on-the-fly: where does the audio data start in stdin
-   */
-  bool writeAudioTocFilePart( QTextStream& t, const K3b::Msf& start = K3b::Msf(0) );
-
-  void writeAudioTocCdTextHeader( QTextStream& );
-
   K3bAudioDoc* doc() const;
 
   /**
@@ -69,11 +56,7 @@ class K3bAudioJobTempData : public QObject
    */
   void cleanup();
 
-  static QString encodeForTocFile( const QString& str );
-
  private:
-  void writeCdTextEntries( K3bAudioTrack* track, QTextStream& t );
-
   class Private;
   Private* d;
 };

@@ -20,6 +20,8 @@
 #include <k3bdatadoc.h>
 #include <k3baudiodoc.h>
 
+#include <k3btoc.h>
+
 class QDomDocument;
 class QDomElement;
 class K3bBurnJob;
@@ -73,6 +75,16 @@ class K3bMixedDoc : public K3bDoc
 		   DATA_SECOND_SESSION };
 
   int mixedType() const { return m_mixedType; }
+
+  /**
+   * Represent the structure of the doc as CD Table of Contents.
+   * Be aware that the length of the data track is just an estimate
+   * and needs to be corrected if not specified here.
+   *
+   * @param dataMode mode of the data track (MODE1 or XA_FORM1)
+   * @param dataTrackLength exact length of the dataTrack
+   */
+  K3bCdDevice::Toc toToc( int dataMode, const K3b::Msf& dataTrackLength = 0 ) const;
 
  public slots:
   void slotBurn();

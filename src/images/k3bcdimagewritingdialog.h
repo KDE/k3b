@@ -33,7 +33,7 @@ class K3bListView;
 class QSpinBox;
 class QComboBox;
 class K3bIso9660;
-
+class K3bCueFileParser;
 
 
 /**
@@ -71,6 +71,7 @@ class K3bCdImageWritingDialog : public K3bInteractionDialog
     IMAGE_UNKNOWN,
     IMAGE_ISO,
     IMAGE_CUE_BIN,
+    IMAGE_AUDIO_CUE,
     IMAGE_CDRDAO_TOC,
     IMAGE_CDRECORD_CLONE };
 
@@ -78,6 +79,7 @@ class K3bCdImageWritingDialog : public K3bInteractionDialog
   void createIso9660InfoItems( K3bIso9660* );
   void createCdrecordCloneItems( const QString&, const QString& );
   void createCueBinItems( const QString&, const QString& );
+  void createAudioCueItems( const K3bCueFileParser& cp );
   int currentImageType();
 
   K3bWriterSelectionWidget* m_writerSelectionWidget;

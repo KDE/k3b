@@ -141,10 +141,14 @@ void K3bInfFileWriter::setTrack( const K3bCdDevice::Track& track )
   // the first index always has to be a zero (cdrecord manpage)
   m_indices.append( 0 );
 
-  for( int i = 1; i <= track.indexCount(); ++i )
-    m_indices.append( track.index( i, false ) );
+  const QValueVector<K3b::Msf>& indexList = track.indices();
+  for( unsigned int i = 0; i < indexList.count(); ++i )
+    m_indices.append( indexList[i].lba() );
 
-  m_index0 = track.index( 0, false );
+  if( track.index0() > 0 )
+    m_index0 = track.index0().lba();
+  else
+    m_index0 = -1;
 
   setPreEmphasis( track.preEmphasis() );
   setCopyPermitted( track.copyPermitted() );

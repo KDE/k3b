@@ -94,13 +94,13 @@ void K3bVideoDvdJob::prepareIsoImager()
 QString K3bVideoDvdJob::jobDescription() const
 {
   if( m_doc->onlyCreateImages() ) {
-    return i18n("Creating VideoDvd Image File");
+    return i18n("Creating Video DVD Image File");
   }
   else {
-    if( m_doc->isoOptions().volumeID().isEmpty() )
-      return i18n("Writing VideoDVD");
-    else
-      return i18n("Writing VideoDVD (%1)").arg(m_doc->isoOptions().volumeID());
+    return i18n("Writing Video DVD")
+      + ( m_doc->isoOptions().volumeID().isEmpty()
+	  ? QString::null
+	  : QString( " (%1)" ).arg(m_doc->isoOptions().volumeID()) );
   }
 }
 

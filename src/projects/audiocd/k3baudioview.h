@@ -23,7 +23,7 @@
 
 
 class K3bAudioDoc;
-class K3bAudioListView;
+class K3bAudioTrackView;
 
 
 /**
@@ -40,7 +40,7 @@ class K3bAudioView : public K3bView
  private:
   K3bAudioDoc* m_doc;
 	
-  K3bAudioListView* m_songlist;
+  K3bAudioTrackView* m_songlist;
 };
 
 #endif

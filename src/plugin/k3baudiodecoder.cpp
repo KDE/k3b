@@ -35,6 +35,9 @@
 #define lrintf(flt)             ((int) (flt))
 #endif
 
+// use a one second buffer
+static const int DECODING_BUFFER_SIZE = 75*2352;
+
 class K3bAudioDecoder::Private
 {
 public:
@@ -44,17 +47,27 @@ public:
       resampleData(0),
       inBuffer(0),
       inBufferPos(0),
-      inBufferLen(0),
-      inBufferSize(0),
-      outBuffer(0),
-      outBufferSize(0),
+      inBufferFill(0),
       monoBuffer(0),
-      monoBufferSize(0) {
+      decodingBufferPos(0),
+      decodingBufferFill(0),
+      valid(true) {
   }
 
+  // the current position of the decoder
+  // This does NOT include the decodingBuffer
+  K3b::Msf currentPos;
+
+  // since the current position above is measured in frames
+  // there might be a little offset since the decoded data is not
+  // always a multible of 2353 bytes
+  int currentPosOffset;
+
+  // already decoded bytes from last init or last seek
+  // TODO: replace alreadyDecoded with currentPos
   unsigned long alreadyDecoded;
+
   K3b::Msf decodingStartPos;
-  K3b::Msf decodingLength;
 
   KFileMetaInfo* metaInfo;
 
@@ -67,21 +80,24 @@ public:
 
   float* inBuffer;
   float* inBufferPos;
-  int inBufferLen;
-  int inBufferSize;
+  int inBufferFill;
 
   float* outBuffer;
-  int outBufferSize;
 
   int samplerate;
   int channels;
 
   // mono -> stereo conversion
   char* monoBuffer;
-  int monoBufferSize;
+
+  char decodingBuffer[DECODING_BUFFER_SIZE];
+  char* decodingBufferPos;
+  int decodingBufferFill;
 
   QMap<QString, QString> technicalInfoMap;
   QMap<MetaDataField, QString> metaInfoMap;
+
+  bool valid;
 };
 
 
@@ -95,10 +111,13 @@ K3bAudioDecoder::K3bAudioDecoder( QObject* parent, const char* name )
 
 K3bAudioDecoder::~K3bAudioDecoder()
 {
-  delete d->metaInfo;
+  cleanup();
+
   if( d->inBuffer ) delete [] d->inBuffer;
   if( d->outBuffer ) delete [] d->outBuffer;
   if( d->monoBuffer ) delete [] d->monoBuffer;
+
+  delete d->metaInfo;
   delete d->resampleData;
   if( d->resampleState )
     src_delete( d->resampleState );
@@ -114,6 +133,12 @@ void K3bAudioDecoder::setFilename( const QString& filename )
 }
 
 
+bool K3bAudioDecoder::isValid() const
+{
+  return d->valid;
+}
+
+
 bool K3bAudioDecoder::analyseFile()
 {
   d->technicalInfoMap.clear();
@@ -124,40 +149,21 @@ bool K3bAudioDecoder::analyseFile()
   cleanup();
 
   bool ret = analyseFileInternal( m_length, d->samplerate, d->channels );
-  if( ret ) {
-    return ( ( d->channels == 1 || d->channels == 2 ) && m_length > 0 );
+  if( ret && ( d->channels == 1 || d->channels == 2 ) && m_length > 0 ) {
+    d->valid = initDecoder();
+    return d->valid;
   }
-  else
+  else {
+    d->valid = false;
     return false;
+  }
 }
 
 
-bool K3bAudioDecoder::initDecoder( const K3b::Msf& startOffset, const K3b::Msf& len )
+bool K3bAudioDecoder::initDecoder( const K3b::Msf& startOffset )
 {
-  cleanup();
-
-  if( d->resampleState )
-    src_reset( d->resampleState );
-
-  d->alreadyDecoded = 0;
-
-  if( startOffset > length() )
-    d->decodingStartPos = 0;
-  else
-    d->decodingStartPos = startOffset;
-
-  if( len + d->decodingStartPos > length() )
-    d->decodingLength = length() - d->decodingStartPos;
-  else
-    d->decodingLength = len;
-
-  d->decoderFinished = false;
-
-  if( initDecoderInternal() ) {
-    if( startOffset > 0 )
-      return seek( startOffset );
-    else
-      return true;
+  if( initDecoder() ) {
+    return seek( startOffset );
   }
   else
     return false;
@@ -166,109 +172,137 @@ bool K3bAudioDecoder::initDecoder( const K3b::Msf& startOffset, const K3b::Msf& 
 
 bool K3bAudioDecoder::initDecoder()
 {
-  return initDecoder( 0, length() );
+  cleanup();
+
+  if( d->resampleState )
+    src_reset( d->resampleState );
+
+  d->alreadyDecoded = 0;
+  d->currentPos = 0;
+  d->currentPosOffset = 0;
+  d->decodingBufferFill = 0;
+  d->decodingBufferPos = 0;
+
+  d->decoderFinished = false;
+
+  return initDecoderInternal();
 }
 
 
 int K3bAudioDecoder::decode( char* _data, int maxLen )
 {
-  unsigned long lengthToDecode = d->decodingLength.audioBytes();
+  unsigned long lengthToDecode = (m_length - d->decodingStartPos).audioBytes();
 
   if( d->alreadyDecoded >= lengthToDecode )
     return 0;
 
+  if( maxLen <= 0 )
+    return 0;
+
   int read = 0;
 
-  if( !d->decoderFinished ) {
-    if( d->samplerate != 44100 ) {
+  if( d->decodingBufferFill == 0 ) {
+    //
+    // now we decode into the decoding buffer
+    // to ensure a minimum buffer size
+    //
+    d->decodingBufferFill = 0;
+    d->decodingBufferPos = d->decodingBuffer;
 
-      // check if we have data left from some previous conversion
-      if( d->inBufferLen > 0 ) {
-	read = resample( _data, maxLen );
+    if( !d->decoderFinished ) {
+      if( d->samplerate != 44100 ) {
+
+	// check if we have data left from some previous conversion
+	if( d->inBufferFill > 0 ) {
+	  read = resample( d->decodingBuffer, DECODING_BUFFER_SIZE );
+	}
+	else {
+	  if( !d->inBuffer ) {
+	    d->inBuffer = new float[DECODING_BUFFER_SIZE/2];
+	  }
+
+	  if( (read = decodeInternal( d->decodingBuffer, DECODING_BUFFER_SIZE )) == 0 )
+	    d->decoderFinished = true;
+
+	  d->inBufferFill = read/2;
+	  d->inBufferPos = d->inBuffer;
+	  from16bitBeSignedToFloat( d->decodingBuffer, d->inBuffer, d->inBufferFill );
+      
+	  read = resample( d->decodingBuffer, DECODING_BUFFER_SIZE );
+	}
       }
-      else {
-	// FIXME: change this so the buffer is never deleted here. Use QMIN(d->inBufferSize, maxLen) instead
-	if( d->inBufferSize < maxLen/2 ) {
-	  if( d->inBuffer )
-	    delete [] d->inBuffer;
-	  d->inBuffer = new float[maxLen];
-	  d->inBufferSize = maxLen;
+      else if( d->channels == 1 ) {
+	if( !d->monoBuffer ) {
+	  d->monoBuffer = new char[DECODING_BUFFER_SIZE/2];
 	}
 
-	if( (read = decodeInternal( _data, maxLen )) == 0 )
+	// we simply duplicate every frame
+	if( (read = decodeInternal( d->monoBuffer, DECODING_BUFFER_SIZE/2 )) == 0 )
 	  d->decoderFinished = true;
 
-	d->inBufferLen = read/2;
-	d->inBufferPos = d->inBuffer;
-	from16bitBeSignedToFloat( _data, d->inBuffer, d->inBufferLen );
+	for( int i = 0; i < read; i+=2 ) {
+	  d->decodingBuffer[2*i] = d->decodingBuffer[2*i+2] = d->monoBuffer[i];
+	  d->decodingBuffer[2*i+1] = d->decodingBuffer[2*i+3] = d->monoBuffer[i+1];
+	}
+
+	read *= 2;
+      }
+      else {
+	if( (read = decodeInternal( d->decodingBuffer, DECODING_BUFFER_SIZE )) == 0 )
+	  d->decoderFinished = true;
+      }
+    }
+  
+    if( read < 0 ) {
+      return -1;
+    }
+    else if( read == 0 ) {
+      // check if we need to pad
+      int bytesToPad = lengthToDecode - d->alreadyDecoded;
+      if( bytesToPad > 0 ) {
+	kdDebug() << "(K3bAudioDecoder) track length: " << lengthToDecode
+		  << "; decoded module data: " << d->alreadyDecoded
+		  << "; we need to pad " << bytesToPad << " bytes." << endl;
+	
+	if( DECODING_BUFFER_SIZE < bytesToPad )
+	  bytesToPad = DECODING_BUFFER_SIZE;
+	
+	::memset( d->decodingBuffer, 0, bytesToPad );
+	
+	kdDebug() << "(K3bAudioDecoder) padded " << bytesToPad << " bytes." << endl;
+	
+	read = bytesToPad;
+      }
+      else {
+	kdDebug() << "(K3bAudioDecoder) decoded " << d->alreadyDecoded << " bytes." << endl;
+	return 0;
+      }
+    }
+    else {
       
-	read = resample( _data, maxLen );
+      // check if we decoded too much
+      if( d->alreadyDecoded + read > lengthToDecode ) {
+	kdDebug() << "(K3bAudioDecoder) we decoded too much. Cutting output by " 
+		  << (read + d->alreadyDecoded - lengthToDecode) << endl;
+	read = lengthToDecode - d->alreadyDecoded;
       }
     }
-    else if( d->channels == 1 ) {
-      // FIXME: change this so the buffer is never deleted here. Use QMIN(d->monoBufferSize, maxLen) instead
-      if( d->monoBufferSize < maxLen/2 ) {
-	if( d->monoBuffer )
-	  delete [] d->monoBuffer;
-	d->monoBuffer = new char[maxLen/2];
-      }
 
-      // we simply duplicate every frame
-      if( (read = decodeInternal( d->monoBuffer, maxLen/2 )) == 0 )
-	d->decoderFinished = true;
-
-      for( int i = 0; i < read; i+=2 ) {
-	_data[2*i] = _data[2*i+2] = d->monoBuffer[i];
-	_data[2*i+1] = _data[2*i+3] = d->monoBuffer[i+1];
-      }
-
-      read *= 2;
-    }
-    else {
-      if( (read = decodeInternal( _data, maxLen )) == 0 )
-	d->decoderFinished = true;
-    }
+    d->decodingBufferFill = read;
   }
 
 
+  // clear out the decoding buffer
+  read = QMIN( maxLen, d->decodingBufferFill );
+  ::memcpy( _data, d->decodingBufferPos, read );
+  d->decodingBufferPos += read;
+  d->decodingBufferFill -= read;
 
-  if( read < 0 ) {
-    return -1;
-  }
-  else if( read == 0 ) {
-    // check if we need to pad
-    int bytesToPad = lengthToDecode - d->alreadyDecoded;
-    if( bytesToPad > 0 ) {
-      kdDebug() << "(K3bAudioDecoder) track length: " << lengthToDecode
-		<< "; decoded module data: " << d->alreadyDecoded
-		<< "; we need to pad " << bytesToPad << " bytes." << endl;
+  d->alreadyDecoded += read;
+  d->currentPos += (read+d->currentPosOffset)/2352;
+  d->currentPosOffset = (read+d->currentPosOffset)%2352;
 
-      if( maxLen < bytesToPad )
-	bytesToPad = maxLen;
-
-      ::memset( _data, 0, bytesToPad );
-
-      d->alreadyDecoded += bytesToPad;
-
-      return bytesToPad;
-    }
-    else {
-      kdDebug() << "(K3bAudioDecoder) decoded " << d->alreadyDecoded << " bytes." << endl;
-      return 0;
-    }
-  }
-  else {
-
-    // check if we decoded too much
-    if( d->alreadyDecoded + read > lengthToDecode ) {
-      kdDebug() << "(K3bAudioDecoder) we decoded too much. Cutting output by " 
-		<< (read + d->alreadyDecoded - lengthToDecode) << endl;
-      read = lengthToDecode - d->alreadyDecoded;
-    }
-
-    d->alreadyDecoded += read;
-    return read;
-  }
+  return read;
 }
 
 
@@ -286,17 +320,16 @@ int K3bAudioDecoder::resample( char* data, int maxLen )
     d->resampleData = new SRC_DATA;
   }
 
-  if( d->outBufferSize == 0 ) {
-    d->outBufferSize = maxLen/2;
-    d->outBuffer = new float[maxLen/2];
+  if( !d->outBuffer ) {
+    d->outBuffer = new float[DECODING_BUFFER_SIZE/2];
   }
 
   d->resampleData->data_in = d->inBufferPos;
   d->resampleData->data_out = d->outBuffer;
-  d->resampleData->input_frames = d->inBufferLen/d->channels;
+  d->resampleData->input_frames = d->inBufferFill/d->channels;
   d->resampleData->output_frames = maxLen/2/2;  // in case of mono files we need the space anyway
   d->resampleData->src_ratio = 44100.0/(double)d->samplerate;
-  if( d->inBufferLen == 0 )
+  if( d->inBufferFill == 0 )
     d->resampleData->end_of_input = 1;  // this should force libsamplerate to output the last frames
   else
     d->resampleData->end_of_input = 0;
@@ -317,10 +350,10 @@ int K3bAudioDecoder::resample( char* data, int maxLen )
   }
    
   d->inBufferPos += d->resampleData->input_frames_used*d->channels;
-  d->inBufferLen -= d->resampleData->input_frames_used*d->channels;
-  if( d->inBufferLen <= 0 ) {
+  d->inBufferFill -= d->resampleData->input_frames_used*d->channels;
+  if( d->inBufferFill <= 0 ) {
     d->inBufferPos = d->inBuffer;
-    d->inBufferLen = 0;
+    d->inBufferFill = 0;
   }
 
   // 16 bit frames, so we need to multiply by 2
@@ -384,8 +417,62 @@ void K3bAudioDecoder::from8BitTo16BitBeSigned( char* src, char* dest, int sample
 
 bool K3bAudioDecoder::seek( const K3b::Msf& pos )
 {
+  kdDebug() << "(K3bAudioDecoder) seek from " << d->currentPos.toString() << " (+" << d->currentPosOffset
+	    << ") to " << pos.toString() << endl;
+
+  if( pos > length() )
+    return false;
+
+  d->decoderFinished = false;
+
+  if( pos == d->currentPos && d->currentPosOffset == 0 )
+    return true;
+
+  if( pos == 0 )
+    return initDecoder();
+
+  bool success = false;
+
+  //
+  // First check if we may do a "perfect seek".
+  // We cannot rely on the decoding plugins to seek perfectly. Especially
+  // the mp3 decoder does not. But in case we want to split a live recording
+  // it is absolutely nesseccary to perform a perfect seek.
+  // So if we did not already decode past the seek position and the difference
+  // between the current position and the seek position is less than some fixed
+  // value we simply decode up to the seek position.
+  //
+  if( ( pos > d->currentPos || 
+	( pos == d->currentPos && d->currentPosOffset == 0 ) )
+      &&
+      ( pos - d->currentPos < K3b::Msf(0,10,0) ) ) {  // < 10 seconds is ok
+    kdDebug() << "(K3bAudioDecoder) performing perfect seek from " << d->currentPos.toString()
+	      << " to " << pos.toString() << ". :)" << endl;
+   
+    unsigned long bytesToDecode = pos.audioBytes() - d->currentPos.audioBytes() - d->currentPosOffset;
+    kdDebug() << "(K3bAudioDecoder) seeking " << bytesToDecode << " bytes." << endl;
+    char buffi[10*2352];
+    while( bytesToDecode > 0 ) {
+      int read = decode( buffi, QMIN(10*2352, bytesToDecode) );
+      if( read <= 0 )
+	return false;
+      
+      bytesToDecode -= read;
+    }
+
+    kdDebug() << "(K3bAudioDecoder) perfect seek done." << endl;
+
+    success = true;
+  }
+  else {
+    success = seekInternal( pos );
+  }
+
   d->alreadyDecoded = 0;
-  return seekInternal( pos );
+  d->currentPos = d->decodingStartPos = pos;
+  d->currentPosOffset = 0;
+
+  return success;
 }
 
 

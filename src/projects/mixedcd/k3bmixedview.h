@@ -24,7 +24,7 @@ class K3bMixedDoc;
 class QWidgetStack;
 class K3bDataFileView;
 class K3bMixedDirTreeView;
-class K3bAudioListView;
+class K3bAudioTrackView;
 class QListViewItem;
 class K3bDirItem;
 
@@ -49,7 +49,7 @@ class K3bMixedView : public K3bView
 
   K3bMixedDirTreeView* m_mixedDirTreeView;
   K3bDataFileView* m_dataFileView;
-  K3bAudioListView* m_audioListView;
+  K3bAudioTrackView* m_audioListView;
 };
 
 #endif

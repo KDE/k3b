@@ -19,7 +19,7 @@
 #include <k3bdevicemanager.h>
 #include "k3bblankingjob.h"
 #include "k3bwriterselectionwidget.h"
-#include "k3bdiskerasinginfodialog.h"
+#include <k3bprogressdialog.h>
 #include <k3bglobals.h>
 #include <k3bcore.h>
 #include <k3bemptydiscwaiter.h>
@@ -55,7 +55,7 @@ public:
   }
 
   K3bBlankingJob* job;
-  K3bErasingInfoDialog* erasingDlg;
+  K3bProgressDialog* erasingDlg;
   QMap<int, int> comboTypeMap;
   QMap<int, int> typeComboMap;
 
@@ -155,7 +155,7 @@ void K3bBlankingDialog::slotStartClicked()
   d->job->setMode( d->comboTypeMap[m_comboEraseMode->currentItem()] );
 
   if( !d->erasingDlg )
-    d->erasingDlg = new K3bErasingInfoDialog( i18n("Erasing CD-RW"), this );
+    d->erasingDlg = new K3bProgressDialog( i18n("Erasing CD-RW"), this );
 
   connect( d->erasingDlg, SIGNAL(cancelClicked()), d->job, SLOT(cancel()) );
 

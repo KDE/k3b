@@ -35,6 +35,9 @@
 #include <k3blistview.h>
 #include <k3biso9660.h>
 #include <k3bthememanager.h>
+#include <k3btoc.h>
+#include <k3btrack.h>
+#include <k3bcdtext.h>
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -156,16 +159,19 @@ void K3bCdImageWritingDialog::setupGui()
   m_comboImageType->insertItem( i18n("Auto Detection") );
   m_comboImageType->insertItem( i18n("ISO9660 Image") );
   m_comboImageType->insertItem( i18n("Cue/Bin Image") );
+  m_comboImageType->insertItem( i18n("Audio Cue File") );
   m_comboImageType->insertItem( i18n("Cdrdao TOC File") );
   m_comboImageType->insertItem( i18n("Cdrecord Clone Image") );
   d->imageTypeSelectionMap[1] = IMAGE_ISO;
   d->imageTypeSelectionMap[2] = IMAGE_CUE_BIN;
-  d->imageTypeSelectionMap[3] = IMAGE_CDRDAO_TOC;
-  d->imageTypeSelectionMap[4] = IMAGE_CDRECORD_CLONE;
+  d->imageTypeSelectionMap[3] = IMAGE_AUDIO_CUE;
+  d->imageTypeSelectionMap[4] = IMAGE_CDRDAO_TOC;
+  d->imageTypeSelectionMap[5] = IMAGE_CDRECORD_CLONE;
   d->imageTypeSelectionMapRev[IMAGE_ISO] = 1;
   d->imageTypeSelectionMapRev[IMAGE_CUE_BIN] = 2;
-  d->imageTypeSelectionMapRev[IMAGE_CDRDAO_TOC] = 3;
-  d->imageTypeSelectionMapRev[IMAGE_CDRECORD_CLONE] = 4;
+  d->imageTypeSelectionMapRev[IMAGE_AUDIO_CUE] = 3;
+  d->imageTypeSelectionMapRev[IMAGE_CDRDAO_TOC] = 4;
+  d->imageTypeSelectionMapRev[IMAGE_CDRECORD_CLONE] = 5;
 
 
   // image info
@@ -300,6 +306,10 @@ void K3bCdImageWritingDialog::slotStartClicked()
       job = _job;
     }
     break;
+
+  case IMAGE_AUDIO_CUE:
+    KMessageBox::sorry( this, i18n("Not implemented yet. For now add the cue file to an audio project.") );
+    return;
 
   case IMAGE_CUE_BIN:
     // for now the K3bBinImageWritingJob decides if it's a toc or a cue file
@@ -438,11 +448,16 @@ void K3bCdImageWritingDialog::slotUpdateImage( const QString& path )
       }
 
       if( !d->imageFile.isEmpty() ) {
-	// we have a cdrecord clone image
-	createCueBinItems( d->tocFile, d->imageFile );
-	calculateMd5Sum( d->imageFile );
-
-	d->foundImageType = IMAGE_CUE_BIN;
+	// we have a cue file
+	if( cp.toc().contentType() == K3bCdDevice::AUDIO ) {
+	  d->foundImageType = IMAGE_AUDIO_CUE;
+	  createAudioCueItems( cp );
+	}
+	else {
+	  d->foundImageType = IMAGE_CUE_BIN;  // we cannot be sure if writing will work... :(
+	  createCueBinItems( d->tocFile, d->imageFile );
+	  calculateMd5Sum( d->imageFile );
+	}
       }
     }
 
@@ -586,6 +601,48 @@ void K3bCdImageWritingDialog::createCueBinItems( const QString& cueFile, const Q
   item->setForegroundColor( 0, Qt::gray );
 
   isoRootItem->setOpen( true );
+}
+
+
+void K3bCdImageWritingDialog::createAudioCueItems( const K3bCueFileParser& cp )
+{
+  K3bListViewItem* rootItem = new K3bListViewItem( m_infoView, m_infoView->lastItem(),
+						   i18n("Detected:"),
+						   i18n("Audio Cue Image") );
+  rootItem->setForegroundColor( 0, Qt::gray );
+  rootItem->setPixmap( 0, SmallIcon( "sound") );
+
+  K3bListViewItem* trackParent = new K3bListViewItem( rootItem,
+						      i18n("%n track", "%n tracks", cp.toc().count() ),
+						      cp.toc().length().toString() );
+  if( !cp.cdText().isEmpty() )
+    trackParent->setText( 1,
+			  QString("%1 (%2 - %3)")
+			  .arg(trackParent->text(1))
+			  .arg(cp.cdText().performer())
+			  .arg(cp.cdText().title()) );
+
+  int i = 1;
+  for( K3bCdDevice::Toc::const_iterator it = cp.toc().begin();
+       it != cp.toc().end(); ++it ) {
+
+    K3bListViewItem* trackItem = 
+      new K3bListViewItem( trackParent, m_infoView->lastItem(),
+			   i18n("Track") + " " + QString::number(i).rightJustify( 2, '0' ),
+			   "    " + (*it).length().toString() );
+
+    if( !cp.cdText().isEmpty() && !cp.cdText()[i-1].isEmpty() )
+      trackItem->setText( 1,
+			  QString("%1 (%2 - %3)")
+			  .arg(trackItem->text(1))
+			  .arg(cp.cdText()[i-1].performer())
+			  .arg(cp.cdText()[i-1].title()) );
+
+    ++i;
+  }
+
+  rootItem->setOpen( true );
+  trackParent->setOpen( true );
 }
 
 
@@ -734,6 +791,8 @@ void K3bCdImageWritingDialog::slotLoadUserDefaults()
     x = d->imageTypeSelectionMapRev[IMAGE_ISO];
   else if( imageType == "cue-bin" )
     x = d->imageTypeSelectionMapRev[IMAGE_CUE_BIN];
+  else if( imageType == "audio-cue" )
+    x = d->imageTypeSelectionMapRev[IMAGE_AUDIO_CUE];
   else if( imageType == "cdrecord-clone" )
     x = d->imageTypeSelectionMapRev[IMAGE_CDRECORD_CLONE];
   else if( imageType == "cdrdao-toc" )
@@ -771,6 +830,9 @@ void K3bCdImageWritingDialog::slotSaveUserDefaults()
       break;
     case IMAGE_CUE_BIN:
       imageType = "cue-bin";
+      break;
+    case IMAGE_AUDIO_CUE:
+      imageType = "audio-cue";
       break;
     case IMAGE_CDRECORD_CLONE:
       imageType = "cdrecord-clone";

@@ -21,11 +21,10 @@
 
 
 class K3bAudioDoc;
-class K3bAudioStreamer;
+class K3bAudioImager;
 class QFile;
 class QDataStream;
 class K3bAbstractWriter;
-class K3bWaveFileWriter;
 class KTempFile;
 class K3bCdrecordWriter;
 class K3bAudioNormalizeJob;
@@ -55,7 +54,6 @@ class K3bAudioJob : public K3bBurnJob
 
  protected slots:
   // writer slots
-  void slotDataWritten();
   void slotWriterFinished( bool success );
   void slotWriterNextTrack(int, int);
   void slotWriterJobPercent(int);
@@ -65,7 +63,6 @@ class K3bAudioJob : public K3bBurnJob
   void slotAudioDecoderNextTrack( int, int );
   void slotAudioDecoderPercent(int);
   void slotAudioDecoderSubPercent( int );
-  void slotReceivedAudioDecoderData( const char*, int );
 
   // normalizing slots
   void slotNormalizeJobFinished( bool );
@@ -78,10 +75,11 @@ class K3bAudioJob : public K3bBurnJob
   void cleanupAfterError();
   void removeBufferFiles();
   void normalizeFiles();
+  bool writeTocFile();
+  bool writeInfFiles();
 
   K3bAudioDoc* m_doc;
-  K3bAudioStreamer* m_audioStreamer;
-  K3bWaveFileWriter* m_waveFileWriter;
+  K3bAudioImager* m_audioImager;
   K3bAbstractWriter* m_writer;
   K3bAudioNormalizeJob* m_normalizeJob;
   K3bAudioJobTempData* m_tempData;
@@ -95,6 +93,9 @@ class K3bAudioJob : public K3bBurnJob
 
   int m_usedWritingApp;
   int m_usedWritingMode;
+
+  class Private;
+  Private* d;
 };
 
 #endif

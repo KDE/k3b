@@ -72,6 +72,7 @@ class K3bAudioRipThread : public QObject, public K3bThread
   void setWritePlaylist( bool b ) { m_writePlaylist = b; }
   void setPlaylistFilename( const QString& s ) { m_playlistFilename = s; }
   void setUseRelativePathInPlaylist( bool b ) { m_relativePathInPlaylist = b; }
+  void setWriteCueFile( bool b ) { m_writeCueFile = b; }
 
   void cancel();
 
@@ -85,6 +86,7 @@ class K3bAudioRipThread : public QObject, public K3bThread
   bool ripTrack( int track, const QString& filename );
   void cleanupAfterCancellation();
   bool writePlaylist();
+  bool writeCueFile();
 
   /**
    * Finds a relative path from baseDir to absPath
@@ -101,6 +103,8 @@ class K3bAudioRipThread : public QObject, public K3bThread
   bool m_writePlaylist;
   bool m_relativePathInPlaylist;
   QString m_playlistFilename;
+
+  bool m_writeCueFile;
 
   QValueVector<QPair<int, QString> > m_tracks;
 

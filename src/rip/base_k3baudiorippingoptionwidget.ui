@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>base_K3bAudioRippingOptionWidget</class>
 <author>Sebastian Trueg</author>
 <widget class="QWidget">
@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>508</width>
-            <height>150</height>
+            <width>436</width>
+            <height>180</height>
         </rect>
     </property>
     <property name="caption">
@@ -21,24 +21,6 @@
             <cstring>unnamed</cstring>
         </property>
         <widget class="QGroupBox" row="0" column="0">
-            <property name="name">
-                <cstring>groupBox1</cstring>
-            </property>
-            <property name="title">
-                <string>Destination Base Directory</string>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="KURLRequester">
-                    <property name="name">
-                        <cstring>m_editBaseDir</cstring>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-        <widget class="QGroupBox" row="1" column="0">
             <property name="name">
                 <cstring>groupBox2</cstring>
             </property>
@@ -175,10 +157,101 @@ file will contain all tracks one after the other.
 &lt;p&gt;&lt;b&gt;Caution:&lt;/b&gt; The file will have the name of the first track.</string>
                     </property>
                 </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout6_2</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer1_2_2</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Fixed</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>20</width>
+                                    <height>16</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget class="QCheckBox">
+                            <property name="name">
+                                <cstring>m_checkWriteCueFile</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                            <property name="text">
+                                <string>Write cue file</string>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Write a cuefile</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>&lt;p&gt;If this option is checked K3b will create a CDRWIN cue file which allows to easily write a copy of the audio CD on other systems.</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
             </vbox>
+        </widget>
+        <widget class="QGroupBox" row="1" column="0">
+            <property name="name">
+                <cstring>groupBox1</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>1</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="title">
+                <string>Destination Base Directory</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Free space in directory:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="1">
+                    <property name="name">
+                        <cstring>m_labelFreeSpace</cstring>
+                    </property>
+                    <property name="text">
+                        <string>0</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                </widget>
+                <widget class="KURLRequester" row="0" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>m_editBaseDir</cstring>
+                    </property>
+                </widget>
+            </grid>
         </widget>
     </grid>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>m_checkCreatePlaylist</sender>
@@ -186,12 +259,16 @@ file will contain all tracks one after the other.
         <receiver>m_checkPlaylistRelative</receiver>
         <slot>setEnabled(bool)</slot>
     </connection>
+    <connection>
+        <sender>m_checkSingleFile</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_checkWriteCueFile</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
 </connections>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kurlrequester.h</includehint>
-    <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
-    <includehint>kcombobox.h</includehint>
 </includehints>
 </UI>

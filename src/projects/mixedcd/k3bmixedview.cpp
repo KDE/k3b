@@ -23,7 +23,7 @@
 #include <k3bdataviewitem.h>
 #include <k3bdatafileview.h>
 #include <k3bdatadoc.h>
-#include <audiolistview.h>
+#include <k3baudiotrackview.h>
 #include <k3baudiodoc.h>
 #include <k3bfillstatusdisplay.h>
 
@@ -46,7 +46,7 @@ K3bMixedView::K3bMixedView( K3bMixedDoc* doc, QWidget* parent, const char* name 
   m_widgetStack = new QWidgetStack( splitter );
   m_dataFileView = new K3bDataFileView( this, m_mixedDirTreeView, doc->dataDoc(), m_widgetStack );
   m_mixedDirTreeView->setFileView( m_dataFileView );
-  m_audioListView = new K3bAudioListView( this, doc->audioDoc(), m_widgetStack );
+  m_audioListView = new K3bAudioTrackView( doc->audioDoc(), m_widgetStack );
 
   setMainWidget( splitter );
 

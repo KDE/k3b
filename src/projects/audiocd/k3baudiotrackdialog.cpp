@@ -43,6 +43,16 @@
 #include <k3bmsfedit.h>
 
 
+// TODO: three modes:
+//    1. Only one track with only one source
+//         show decoder tech info, cdtext, options and the track editor without showing anything
+//         about sources
+//    2. Only one track with multible sources
+//         like the above but with the possiblity to edit the sources
+//    3. multible tracks
+//         do only show cd-text and options (eventuelle index0)
+
+
 K3bAudioTrackDialog::K3bAudioTrackDialog( QPtrList<K3bAudioTrack>& tracks, QWidget *parent, const char *name )
   : KDialogBase( KDialogBase::Plain, i18n("Audio Track Properties"), KDialogBase::Ok|KDialogBase::Cancel|KDialogBase::Apply,
 		 KDialogBase::Ok, parent, name )
@@ -52,70 +62,70 @@ K3bAudioTrackDialog::K3bAudioTrackDialog( QPtrList<K3bAudioTrack>& tracks, QWidg
   setupGui();
   setupConnections();
 	
-  if( !m_tracks.isEmpty() ) {
+//   if( !m_tracks.isEmpty() ) {
 
-    K3bAudioTrack* track = m_tracks.first();
+//     K3bAudioTrack* track = m_tracks.first();
 
-    QString allTrackNames = track->filename();
-    K3b::Msf allTrackLength = track->length();
-    KIO::filesize_t allTrackSize = track->size();
+//     QString allTrackNames = track->filename();
+//     K3b::Msf allTrackLength = track->length();
+//     KIO::filesize_t allTrackSize = track->size();
 
-    m_editTitle->setText( track->title() );
-    m_editPerformer->setText( track->artist() );
-    m_editArranger->setText( track->arranger() );
-    m_editSongwriter->setText( track->songwriter() );
-    m_editComposer->setText( track->composer() );
-    m_editIsrc->setText( track->isrc() );
-    m_editMessage->setText( track->cdTextMessage() );
+//     m_editTitle->setText( track->title() );
+//     m_editPerformer->setText( track->artist() );
+//     m_editArranger->setText( track->arranger() );
+//     m_editSongwriter->setText( track->songwriter() );
+//     m_editComposer->setText( track->composer() );
+//     m_editIsrc->setText( track->isrc() );
+//     m_editMessage->setText( track->cdTextMessage() );
     
-    m_checkCopy->setChecked( track->copyProtection() );
-    m_checkPreEmp->setChecked( track->preEmp() );
+//     m_checkCopy->setChecked( track->copyProtection() );
+//     m_checkPreEmp->setChecked( track->preEmp() );
     
-    m_inputPregap->setMsfValue( track->pregap() );
+//     m_inputPregap->setMsfValue( track->pregap() );
     
-    for( track = m_tracks.next(); track != 0; track = m_tracks.next() ) {
+//     for( track = m_tracks.next(); track != 0; track = m_tracks.next() ) {
 
-      allTrackNames += ("\n" + track->filename());
-      allTrackLength += track->length();
-      allTrackSize += track->size();
+//       allTrackNames += ("\n" + track->filename());
+//       allTrackLength += track->length();
+//       allTrackSize += track->size();
 
 
-      if( track->title() != m_editTitle->text() )
-	m_editTitle->setText( QString::null );
+//       if( track->title() != m_editTitle->text() )
+// 	m_editTitle->setText( QString::null );
 
-      if( track->artist() != m_editPerformer->text() )
-	m_editPerformer->setText( QString::null );
+//       if( track->artist() != m_editPerformer->text() )
+// 	m_editPerformer->setText( QString::null );
 
-      if( track->arranger() != m_editArranger->text() )
-	m_editArranger->setText( QString::null );
+//       if( track->arranger() != m_editArranger->text() )
+// 	m_editArranger->setText( QString::null );
 
-      if( track->songwriter() != m_editSongwriter->text() )
-	m_editSongwriter->setText( QString::null );
+//       if( track->songwriter() != m_editSongwriter->text() )
+// 	m_editSongwriter->setText( QString::null );
 
-      if( track->composer() != m_editComposer->text() )
-	m_editComposer->setText( QString::null );
+//       if( track->composer() != m_editComposer->text() )
+// 	m_editComposer->setText( QString::null );
 
-      if( track->isrc() != m_editIsrc->text() )
-	m_editIsrc->setText( QString::null );
+//       if( track->isrc() != m_editIsrc->text() )
+// 	m_editIsrc->setText( QString::null );
 
-      if( track->cdTextMessage() != m_editMessage->text() )
-	m_editMessage->setText( QString::null );
+//       if( track->cdTextMessage() != m_editMessage->text() )
+// 	m_editMessage->setText( QString::null );
 
-      if( track->copyProtection() != m_checkCopy->isChecked() )
-	m_checkCopy->setNoChange();
+//       if( track->copyProtection() != m_checkCopy->isChecked() )
+// 	m_checkCopy->setNoChange();
 
-      if( track->preEmp() != m_checkPreEmp->isChecked() )
-	m_checkPreEmp->setNoChange();
+//       if( track->preEmp() != m_checkPreEmp->isChecked() )
+// 	m_checkPreEmp->setNoChange();
 
-      // ignore the pregap for the time being...
-    }
+//       // ignore the pregap for the time being...
+//     }
 
-    m_displayFileName->setText( allTrackNames );
-    m_displayLength->setText( allTrackLength.toString() );
-    m_displaySize->setText( KIO::convertSize(allTrackSize) );
+//     m_displayFileName->setText( allTrackNames );
+//     m_displayLength->setText( allTrackLength.toString() );
+//     m_displaySize->setText( KIO::convertSize(allTrackSize) );
 
-    m_labelMimeType->setPixmap( KMimeType::pixmapForURL( KURL(m_tracks.first()->path()), 0, KIcon::Desktop, 48 ) );
-  }
+//     m_labelMimeType->setPixmap( KMimeType::pixmapForURL( KURL(m_tracks.first()->path()), 0, KIcon::Desktop, 48 ) );
+//   }
 
   m_editTitle->setFocus();
 }
@@ -135,293 +145,293 @@ void K3bAudioTrackDialog::slotOk()
 void K3bAudioTrackDialog::slotApply()
 {
   // apply all changes to all tracks
-  for( K3bAudioTrack* track = m_tracks.first(); track != 0; track = m_tracks.next() ) {
+//   for( K3bAudioTrack* track = m_tracks.first(); track != 0; track = m_tracks.next() ) {
     
-    if( m_editTitle->edited() )
-      track->setTitle( m_editTitle->text() );
+//     if( m_editTitle->edited() )
+//       track->setTitle( m_editTitle->text() );
 
-    if( m_editPerformer->edited() )
-      track->setArtist( m_editPerformer->text() );
+//     if( m_editPerformer->edited() )
+//       track->setArtist( m_editPerformer->text() );
 
-    if( m_editArranger->edited() )
-      track->setArranger( m_editArranger->text() );
+//     if( m_editArranger->edited() )
+//       track->setArranger( m_editArranger->text() );
 
-    if( m_editSongwriter->edited() )
-      track->setSongwriter( m_editSongwriter->text() );
+//     if( m_editSongwriter->edited() )
+//       track->setSongwriter( m_editSongwriter->text() );
 
-    if( m_editComposer->edited() )
-      track->setComposer( m_editComposer->text() );
+//     if( m_editComposer->edited() )
+//       track->setComposer( m_editComposer->text() );
 
-    if( m_editIsrc->edited() )
-      track->setIsrc( m_editIsrc->text() );
+//     if( m_editIsrc->edited() )
+//       track->setIsrc( m_editIsrc->text() );
 
-    if( m_editMessage->isModified() )
-      track->setCdTextMessage( m_editMessage->text() );
+//     if( m_editMessage->isModified() )
+//       track->setCdTextMessage( m_editMessage->text() );
 
-    if( m_checkCopy->state() != QButton::NoChange )
-      track->setCopyProtection( m_checkCopy->isChecked() );
+//     if( m_checkCopy->state() != QButton::NoChange )
+//       track->setCopyProtection( m_checkCopy->isChecked() );
 
-    if( m_checkPreEmp->state() != QButton::NoChange )
-      track->setPreEmp( m_checkPreEmp->isChecked() );
+//     if( m_checkPreEmp->state() != QButton::NoChange )
+//       track->setPreEmp( m_checkPreEmp->isChecked() );
 
-    track->setPregap( m_inputPregap->msfValue() );
-  }
+//     track->setPregap( m_inputPregap->msfValue() );
+//   }
 
-  if( m_tracks.count() == 1 ) {
-    m_tracks.first()->setTrackStart( m_editTrackStart->msfValue() );
-    m_tracks.first()->setTrackEnd( m_editTrackEnd->msfValue() );
-  }
+//   if( m_tracks.count() == 1 ) {
+//     m_tracks.first()->setTrackStart( m_editTrackStart->msfValue() );
+//     m_tracks.first()->setTrackEnd( m_editTrackEnd->msfValue() );
+//   }
 }
 
 
 void K3bAudioTrackDialog::setupGui()
 {
-  QFrame* frame = plainPage();
+//   QFrame* frame = plainPage();
 
-  QGridLayout* mainLayout = new QGridLayout( frame );
-  mainLayout->setSpacing( spacingHint() );
-  mainLayout->setMargin( 0 );
+//   QGridLayout* mainLayout = new QGridLayout( frame );
+//   mainLayout->setSpacing( spacingHint() );
+//   mainLayout->setMargin( 0 );
 
-  QTabWidget* mainTabbed = new QTabWidget( frame );
-
-
-  // /////////////////////////////////////////////////
-  // OPTIONS TAB
-  // /////////////////////////////////////////////////
-  // /////////////////////////////////////////////////
-  QWidget* optionsTab = new QWidget( mainTabbed );
-  QGridLayout* optionsGrid = new QGridLayout( optionsTab );
-  optionsGrid->setSpacing( spacingHint() );
-  optionsGrid->setMargin( marginHint() );
-
-  QLabel* labelPregap = new QLabel( i18n("&Pregap:"), optionsTab );
-  m_inputPregap       = new K3bMsfEdit( optionsTab, "m_inputPregap" );
-  labelPregap->setBuddy( m_inputPregap );
-
-  m_checkPreEmp       = new QCheckBox( i18n( "Pr&eemphasis" ), optionsTab, "m_checkPreEmp" );
-  m_checkCopy         = new QCheckBox( i18n( "&Copy protected" ), optionsTab, "m_checkCopy" );
-
-  QWhatsThis::add( m_checkPreEmp, i18n( "Preemphasis is mainly used in audio processing.\n"
-					"Higher frequencies in audio signals usually have "
-					"lower amplitudes.\n"
-					"This can lead to bad signal quality on noisy "
-					"transmission because the high frequencies might become "
-					"too weak. To avoid this effect, high frequencies are "
-					"amplified before transmission (preemphasis); "
-					"the receiver will then weaken them accordingly for "
-					"playback." ) );
-
-  optionsGrid->addWidget( labelPregap, 0, 0 );
-  optionsGrid->addWidget( m_inputPregap, 0, 1 );
-  optionsGrid->addMultiCellWidget( m_checkPreEmp, 1, 1, 0, 1 );
-  optionsGrid->addMultiCellWidget( m_checkCopy, 2, 2, 0, 1 );
-
-  optionsGrid->setRowStretch( 3, 1 );
-  // /////////////////////////////////////////////////
-  // /////////////////////////////////////////////////
+//   QTabWidget* mainTabbed = new QTabWidget( frame );
 
 
+//   // /////////////////////////////////////////////////
+//   // OPTIONS TAB
+//   // /////////////////////////////////////////////////
+//   // /////////////////////////////////////////////////
+//   QWidget* optionsTab = new QWidget( mainTabbed );
+//   QGridLayout* optionsGrid = new QGridLayout( optionsTab );
+//   optionsGrid->setSpacing( spacingHint() );
+//   optionsGrid->setMargin( marginHint() );
 
-  // /////////////////////////////////////////////////
-  // CD TEXT TAB
-  // /////////////////////////////////////////////////
-  // /////////////////////////////////////////////////
-  QWidget* cdTextTab = new QWidget( mainTabbed );
-  QGridLayout* cdTextTabLayout = new QGridLayout( cdTextTab );
-  cdTextTabLayout->setAlignment( Qt::AlignTop );
-  cdTextTabLayout->setSpacing( spacingHint() );
-  cdTextTabLayout->setMargin( marginHint() );
+//   QLabel* labelPregap = new QLabel( i18n("&Pregap:"), optionsTab );
+//   m_inputPregap       = new K3bMsfEdit( optionsTab, "m_inputPregap" );
+//   labelPregap->setBuddy( m_inputPregap );
 
-  QLabel* labelMessage    = new QLabel( i18n( "&Message:" ), cdTextTab, "labelMessage" );
-  QLabel* labelPerformer  = new QLabel( i18n( "&Performer:" ), cdTextTab, "labelPerformer" );
-  QLabel* labelTitle      = new QLabel( i18n( "&Title:" ), cdTextTab, "labelTitle" );
-  QLabel* labelIsrc       = new QLabel( i18n( "&ISRC:" ), cdTextTab, "labelIsrc" );
-  QLabel* labelSongwriter = new QLabel( i18n( "&Songwriter:" ), cdTextTab, "labelSongwriter" );
-  QLabel* labelComposer   = new QLabel( i18n( "&Composer:" ), cdTextTab, "labelComposer" );
-  QLabel* labelArranger   = new QLabel( i18n( "&Arranger:" ), cdTextTab, "labelArranger" );
+//   m_checkPreEmp       = new QCheckBox( i18n( "Pr&eemphasis" ), optionsTab, "m_checkPreEmp" );
+//   m_checkCopy         = new QCheckBox( i18n( "&Copy protected" ), optionsTab, "m_checkCopy" );
 
-  labelMessage->setAlignment( Qt::AlignLeft | Qt::AlignTop );
+//   QWhatsThis::add( m_checkPreEmp, i18n( "Preemphasis is mainly used in audio processing.\n"
+// 					"Higher frequencies in audio signals usually have "
+// 					"lower amplitudes.\n"
+// 					"This can lead to bad signal quality on noisy "
+// 					"transmission because the high frequencies might become "
+// 					"too weak. To avoid this effect, high frequencies are "
+// 					"amplified before transmission (preemphasis); "
+// 					"the receiver will then weaken them accordingly for "
+// 					"playback." ) );
 
-  m_editPerformer  = new QLineEdit( cdTextTab, "m_editPerformer" );
-  m_editTitle      = new QLineEdit( cdTextTab, "m_editTitle" );
-  m_editMessage    = new QTextEdit( cdTextTab, "m_editMessage" );
-  m_editArranger   = new QLineEdit( cdTextTab, "m_editArranger" );
-  m_editSongwriter = new QLineEdit( cdTextTab, "m_editSongwriter" );
-  m_editComposer = new QLineEdit( cdTextTab, "m_editComposer" );
-  m_editIsrc       = new QLineEdit( cdTextTab, "m_editIsrc" );
-  QFrame* line1    = new QFrame( cdTextTab, "_line1" );
+//   optionsGrid->addWidget( labelPregap, 0, 0 );
+//   optionsGrid->addWidget( m_inputPregap, 0, 1 );
+//   optionsGrid->addMultiCellWidget( m_checkPreEmp, 1, 1, 0, 1 );
+//   optionsGrid->addMultiCellWidget( m_checkCopy, 2, 2, 0, 1 );
 
-  //  m_editPerformer->setMinimumWidth( 100 );
-  m_editMessage->setWordWrap( QTextEdit::WidgetWidth );
-  line1->setFrameStyle( QFrame::HLine | QFrame::Sunken );
-  m_editIsrc->setValidator( K3bValidators::isrcValidator( m_editIsrc ) );
-  QValidator* cdTextVal = new K3bCdTextValidator( this );
-  m_editPerformer->setValidator( cdTextVal );
-  m_editTitle->setValidator( cdTextVal );
-  //  m_editMessage->setValidator( cdTextVal );
-  m_editArranger->setValidator( cdTextVal );
-  m_editSongwriter->setValidator( cdTextVal );
-  m_editComposer->setValidator( cdTextVal );
+//   optionsGrid->setRowStretch( 3, 1 );
+//   // /////////////////////////////////////////////////
+//   // /////////////////////////////////////////////////
 
 
-  cdTextTabLayout->addWidget( labelPerformer, 1, 0 );
-  cdTextTabLayout->addWidget( m_editPerformer, 1, 1 );
-  cdTextTabLayout->addWidget( labelTitle, 0, 0 );
-  cdTextTabLayout->addWidget( m_editTitle, 0, 1 );
-  cdTextTabLayout->addMultiCellWidget( line1, 2, 2, 0, 1 );
-  cdTextTabLayout->addWidget( labelArranger, 3, 0 );
-  cdTextTabLayout->addWidget( m_editArranger, 3, 1 );
-  cdTextTabLayout->addWidget( labelSongwriter, 4, 0 );
-  cdTextTabLayout->addWidget( m_editSongwriter, 4, 1 );
-  cdTextTabLayout->addWidget( labelComposer, 5, 0 );
-  cdTextTabLayout->addWidget( m_editComposer, 5, 1 );
-  cdTextTabLayout->addWidget( labelIsrc, 6, 0 );
-  cdTextTabLayout->addWidget( m_editIsrc, 6, 1 );
-  cdTextTabLayout->addWidget( labelMessage, 7, 0 );
-  cdTextTabLayout->addWidget( m_editMessage, 7, 1 );
 
-  cdTextTabLayout->setRowStretch( 7, 1 );
+//   // /////////////////////////////////////////////////
+//   // CD TEXT TAB
+//   // /////////////////////////////////////////////////
+//   // /////////////////////////////////////////////////
+//   QWidget* cdTextTab = new QWidget( mainTabbed );
+//   QGridLayout* cdTextTabLayout = new QGridLayout( cdTextTab );
+//   cdTextTabLayout->setAlignment( Qt::AlignTop );
+//   cdTextTabLayout->setSpacing( spacingHint() );
+//   cdTextTabLayout->setMargin( marginHint() );
+
+//   QLabel* labelMessage    = new QLabel( i18n( "&Message:" ), cdTextTab, "labelMessage" );
+//   QLabel* labelPerformer  = new QLabel( i18n( "&Performer:" ), cdTextTab, "labelPerformer" );
+//   QLabel* labelTitle      = new QLabel( i18n( "&Title:" ), cdTextTab, "labelTitle" );
+//   QLabel* labelIsrc       = new QLabel( i18n( "&ISRC:" ), cdTextTab, "labelIsrc" );
+//   QLabel* labelSongwriter = new QLabel( i18n( "&Songwriter:" ), cdTextTab, "labelSongwriter" );
+//   QLabel* labelComposer   = new QLabel( i18n( "&Composer:" ), cdTextTab, "labelComposer" );
+//   QLabel* labelArranger   = new QLabel( i18n( "&Arranger:" ), cdTextTab, "labelArranger" );
+
+//   labelMessage->setAlignment( Qt::AlignLeft | Qt::AlignTop );
+
+//   m_editPerformer  = new QLineEdit( cdTextTab, "m_editPerformer" );
+//   m_editTitle      = new QLineEdit( cdTextTab, "m_editTitle" );
+//   m_editMessage    = new QTextEdit( cdTextTab, "m_editMessage" );
+//   m_editArranger   = new QLineEdit( cdTextTab, "m_editArranger" );
+//   m_editSongwriter = new QLineEdit( cdTextTab, "m_editSongwriter" );
+//   m_editComposer = new QLineEdit( cdTextTab, "m_editComposer" );
+//   m_editIsrc       = new QLineEdit( cdTextTab, "m_editIsrc" );
+//   QFrame* line1    = new QFrame( cdTextTab, "_line1" );
+
+//   //  m_editPerformer->setMinimumWidth( 100 );
+//   m_editMessage->setWordWrap( QTextEdit::WidgetWidth );
+//   line1->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+//   m_editIsrc->setValidator( K3bValidators::isrcValidator( m_editIsrc ) );
+//   QValidator* cdTextVal = new K3bCdTextValidator( this );
+//   m_editPerformer->setValidator( cdTextVal );
+//   m_editTitle->setValidator( cdTextVal );
+//   //  m_editMessage->setValidator( cdTextVal );
+//   m_editArranger->setValidator( cdTextVal );
+//   m_editSongwriter->setValidator( cdTextVal );
+//   m_editComposer->setValidator( cdTextVal );
 
 
-  // buddies
-  labelPerformer->setBuddy( m_editPerformer );
-  labelTitle->setBuddy( m_editTitle );
-  labelMessage->setBuddy( m_editMessage );
-  labelIsrc->setBuddy( m_editIsrc );
-  labelSongwriter->setBuddy( m_editSongwriter );
-  labelComposer->setBuddy( m_editComposer );
-  labelArranger->setBuddy( m_editArranger );
+//   cdTextTabLayout->addWidget( labelPerformer, 1, 0 );
+//   cdTextTabLayout->addWidget( m_editPerformer, 1, 1 );
+//   cdTextTabLayout->addWidget( labelTitle, 0, 0 );
+//   cdTextTabLayout->addWidget( m_editTitle, 0, 1 );
+//   cdTextTabLayout->addMultiCellWidget( line1, 2, 2, 0, 1 );
+//   cdTextTabLayout->addWidget( labelArranger, 3, 0 );
+//   cdTextTabLayout->addWidget( m_editArranger, 3, 1 );
+//   cdTextTabLayout->addWidget( labelSongwriter, 4, 0 );
+//   cdTextTabLayout->addWidget( m_editSongwriter, 4, 1 );
+//   cdTextTabLayout->addWidget( labelComposer, 5, 0 );
+//   cdTextTabLayout->addWidget( m_editComposer, 5, 1 );
+//   cdTextTabLayout->addWidget( labelIsrc, 6, 0 );
+//   cdTextTabLayout->addWidget( m_editIsrc, 6, 1 );
+//   cdTextTabLayout->addWidget( labelMessage, 7, 0 );
+//   cdTextTabLayout->addWidget( m_editMessage, 7, 1 );
 
-  // tab order
-  setTabOrder( m_editTitle, m_editPerformer );
-  setTabOrder( m_editPerformer, m_editArranger );
-  setTabOrder( m_editArranger, m_editSongwriter );
-  setTabOrder( m_editSongwriter, m_editComposer );
-  setTabOrder( m_editComposer, m_editIsrc );
-  setTabOrder( m_editIsrc, m_editMessage );
-
-  // /////////////////////////////////////////////////
-  // /////////////////////////////////////////////////
+//   cdTextTabLayout->setRowStretch( 7, 1 );
 
 
-  // /////////////////////////////////////////////////
-  // FILE-INFO BOX
-  // /////////////////////////////////////////////////
-  // /////////////////////////////////////////////////
+//   // buddies
+//   labelPerformer->setBuddy( m_editPerformer );
+//   labelTitle->setBuddy( m_editTitle );
+//   labelMessage->setBuddy( m_editMessage );
+//   labelIsrc->setBuddy( m_editIsrc );
+//   labelSongwriter->setBuddy( m_editSongwriter );
+//   labelComposer->setBuddy( m_editComposer );
+//   labelArranger->setBuddy( m_editArranger );
 
-  QGroupBox* groupFileInfo = new QGroupBox( 0, Qt::Vertical, i18n( "File Info" ), frame, "groupFileInfo" );
-  groupFileInfo->layout()->setSpacing( 0 );
-  groupFileInfo->layout()->setMargin( 0 );
-  QGridLayout* groupFileInfoLayout = new QGridLayout( groupFileInfo->layout() );
-  groupFileInfoLayout->setAlignment( Qt::AlignTop );
-  groupFileInfoLayout->setSpacing( spacingHint() );
-  groupFileInfoLayout->setMargin( marginHint() );
+//   // tab order
+//   setTabOrder( m_editTitle, m_editPerformer );
+//   setTabOrder( m_editPerformer, m_editArranger );
+//   setTabOrder( m_editArranger, m_editSongwriter );
+//   setTabOrder( m_editSongwriter, m_editComposer );
+//   setTabOrder( m_editComposer, m_editIsrc );
+//   setTabOrder( m_editIsrc, m_editMessage );
 
-  m_labelMimeType = new QLabel( groupFileInfo, "m_labelMimeType" );
-  m_displayFileName = new KCutLabel( groupFileInfo );
-  m_displayFileName->setText( i18n( "Filename" ) );
-  m_displayFileName->setAlignment( int( QLabel::AlignTop | QLabel::AlignLeft ) );
-  QLabel* labelSize = new QLabel( i18n( "Size:" ), groupFileInfo, "labelSize" );
-  QLabel* labelLength = new QLabel( i18n( "Length:"), groupFileInfo, "labelLength" );
-  m_displaySize = new QLabel( groupFileInfo, "m_displaySize" );
-  m_displaySize->setText( "0.0 MB" );
-  m_displaySize->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
-  m_displayLength = new QLabel( groupFileInfo, "m_displayLength" );
-  m_displayLength->setText( "0:0:0" );
-  m_displayLength->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
+//   // /////////////////////////////////////////////////
+//   // /////////////////////////////////////////////////
 
-  QFrame* fileInfoLine = new QFrame( groupFileInfo );
-  fileInfoLine->setFrameStyle( QFrame::HLine | QFrame::Sunken );
 
-  QGridLayout* filenameLayout = new QGridLayout;
-  filenameLayout->addWidget( m_labelMimeType, 0, 0 );
-  filenameLayout->addMultiCellWidget( m_displayFileName, 0, 1, 1, 1 );
-  filenameLayout->setRowStretch( 1, 1 );
-  filenameLayout->setColStretch( 1, 1 );
-  groupFileInfoLayout->addMultiCellLayout( filenameLayout, 0, 0, 0, 1 );
-  groupFileInfoLayout->addMultiCellWidget( fileInfoLine, 2, 2, 0, 1 );
-  groupFileInfoLayout->addWidget( labelLength, 3, 0 );
-  groupFileInfoLayout->addWidget( labelSize, 4, 0 );
-  groupFileInfoLayout->addWidget( m_displayLength, 3, 1 );
-  groupFileInfoLayout->addWidget( m_displaySize, 4, 1 );
+//   // /////////////////////////////////////////////////
+//   // FILE-INFO BOX
+//   // /////////////////////////////////////////////////
+//   // /////////////////////////////////////////////////
 
-  QFont f( m_displayLength->font() );
-  f.setBold( true );
-  m_displayLength->setFont( f );
-  m_displaySize->setFont( f );
+//   QGroupBox* groupFileInfo = new QGroupBox( 0, Qt::Vertical, i18n( "File Info" ), frame, "groupFileInfo" );
+//   groupFileInfo->layout()->setSpacing( 0 );
+//   groupFileInfo->layout()->setMargin( 0 );
+//   QGridLayout* groupFileInfoLayout = new QGridLayout( groupFileInfo->layout() );
+//   groupFileInfoLayout->setAlignment( Qt::AlignTop );
+//   groupFileInfoLayout->setSpacing( spacingHint() );
+//   groupFileInfoLayout->setMargin( marginHint() );
 
-  // technical info
-  int row = 5;
-  if( m_tracks.count() == 1 ) {
-    K3bAudioDecoder* dec = m_tracks.first()->module();
+//   m_labelMimeType = new QLabel( groupFileInfo, "m_labelMimeType" );
+//   m_displayFileName = new KCutLabel( groupFileInfo );
+//   m_displayFileName->setText( i18n( "Filename" ) );
+//   m_displayFileName->setAlignment( int( QLabel::AlignTop | QLabel::AlignLeft ) );
+//   QLabel* labelSize = new QLabel( i18n( "Size:" ), groupFileInfo, "labelSize" );
+//   QLabel* labelLength = new QLabel( i18n( "Length:"), groupFileInfo, "labelLength" );
+//   m_displaySize = new QLabel( groupFileInfo, "m_displaySize" );
+//   m_displaySize->setText( "0.0 MB" );
+//   m_displaySize->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
+//   m_displayLength = new QLabel( groupFileInfo, "m_displayLength" );
+//   m_displayLength->setText( "0:0:0" );
+//   m_displayLength->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
+
+//   QFrame* fileInfoLine = new QFrame( groupFileInfo );
+//   fileInfoLine->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+
+//   QGridLayout* filenameLayout = new QGridLayout;
+//   filenameLayout->addWidget( m_labelMimeType, 0, 0 );
+//   filenameLayout->addMultiCellWidget( m_displayFileName, 0, 1, 1, 1 );
+//   filenameLayout->setRowStretch( 1, 1 );
+//   filenameLayout->setColStretch( 1, 1 );
+//   groupFileInfoLayout->addMultiCellLayout( filenameLayout, 0, 0, 0, 1 );
+//   groupFileInfoLayout->addMultiCellWidget( fileInfoLine, 2, 2, 0, 1 );
+//   groupFileInfoLayout->addWidget( labelLength, 3, 0 );
+//   groupFileInfoLayout->addWidget( labelSize, 4, 0 );
+//   groupFileInfoLayout->addWidget( m_displayLength, 3, 1 );
+//   groupFileInfoLayout->addWidget( m_displaySize, 4, 1 );
+
+//   QFont f( m_displayLength->font() );
+//   f.setBold( true );
+//   m_displayLength->setFont( f );
+//   m_displaySize->setFont( f );
+
+//   // technical info
+//   int row = 5;
+//   if( m_tracks.count() == 1 ) {
+//     K3bAudioDecoder* dec = m_tracks.first()->module();
     
-    QStringList infos = dec->supportedTechnicalInfos();
-    if( !infos.isEmpty() ) {
-      for( QStringList::iterator it = infos.begin(); it != infos.end(); ++it ) {
-	QLabel* l1 = new QLabel( *it + ":", groupFileInfo );
-	QLabel* l2 = new QLabel( dec->technicalInfo( *it ), groupFileInfo );
-	l2->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
-	l2->setFont( f );
-	groupFileInfoLayout->addWidget( l1, row, 0 );
-	groupFileInfoLayout->addWidget( l2, row, 1 );
-	++row;
-      }
-    }
-  }
+//     QStringList infos = dec->supportedTechnicalInfos();
+//     if( !infos.isEmpty() ) {
+//       for( QStringList::iterator it = infos.begin(); it != infos.end(); ++it ) {
+// 	QLabel* l1 = new QLabel( *it + ":", groupFileInfo );
+// 	QLabel* l2 = new QLabel( dec->technicalInfo( *it ), groupFileInfo );
+// 	l2->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
+// 	l2->setFont( f );
+// 	groupFileInfoLayout->addWidget( l1, row, 0 );
+// 	groupFileInfoLayout->addWidget( l2, row, 1 );
+// 	++row;
+//       }
+//     }
+//   }
 
-  groupFileInfoLayout->setRowStretch( row, 1 );
-  groupFileInfoLayout->setColStretch( 1, 1 );
+//   groupFileInfoLayout->setRowStretch( row, 1 );
+//   groupFileInfoLayout->setColStretch( 1, 1 );
 
-  // /////////////////////////////////////////////////
-  // /////////////////////////////////////////////////
+//   // /////////////////////////////////////////////////
+//   // /////////////////////////////////////////////////
 
 
-  mainTabbed->addTab( cdTextTab, i18n("CD-Text") );
-  mainTabbed->addTab( optionsTab, i18n("Options") );
+//   mainTabbed->addTab( cdTextTab, i18n("CD-Text") );
+//   mainTabbed->addTab( optionsTab, i18n("Options") );
 
-  // track length offset stuff
-  if( m_tracks.count() == 1 ) {
-    QWidget* tab = new QWidget( mainTabbed );
-    QGridLayout* tabLayout = new QGridLayout( tab );
-    tabLayout->setAlignment( Qt::AlignTop );
-    tabLayout->setSpacing( spacingHint() );
-    tabLayout->setMargin( marginHint() );
+//   // track length offset stuff
+//   if( m_tracks.count() == 1 ) {
+//     QWidget* tab = new QWidget( mainTabbed );
+//     QGridLayout* tabLayout = new QGridLayout( tab );
+//     tabLayout->setAlignment( Qt::AlignTop );
+//     tabLayout->setSpacing( spacingHint() );
+//     tabLayout->setMargin( marginHint() );
     
-    m_editTrackStart = new K3bMsfEdit( tab );
-    m_editTrackEnd = new K3bMsfEdit( tab );
+//     m_editTrackStart = new K3bMsfEdit( tab );
+//     m_editTrackEnd = new K3bMsfEdit( tab );
 
-    QLabel* labelStart = new QLabel( i18n("Track start"), tab );
-    QLabel* labelEnd = new QLabel( i18n("Track end"), tab );
-    labelEnd->setAlignment( QLabel::AlignVCenter | QLabel::AlignRight );
+//     QLabel* labelStart = new QLabel( i18n("Track start"), tab );
+//     QLabel* labelEnd = new QLabel( i18n("Track end"), tab );
+//     labelEnd->setAlignment( QLabel::AlignVCenter | QLabel::AlignRight );
 
-    tabLayout->addWidget( labelStart, 0, 0 );
-    tabLayout->addWidget( labelEnd, 0, 1 );
-    tabLayout->addWidget( m_editTrackStart, 1, 0 );
-    tabLayout->addWidget( m_editTrackEnd, 1, 1 );
+//     tabLayout->addWidget( labelStart, 0, 0 );
+//     tabLayout->addWidget( labelEnd, 0, 1 );
+//     tabLayout->addWidget( m_editTrackStart, 1, 0 );
+//     tabLayout->addWidget( m_editTrackEnd, 1, 1 );
 
-    mainTabbed->addTab( tab, i18n("Edit track") );
+//     mainTabbed->addTab( tab, i18n("Edit track") );
 
-    m_editTrackStart->setMsfValue( m_tracks.first()->trackStart() );
-    m_editTrackEnd->setMsfValue( m_tracks.first()->trackEnd() );
+//     m_editTrackStart->setMsfValue( m_tracks.first()->trackStart() );
+//     m_editTrackEnd->setMsfValue( m_tracks.first()->trackEnd() );
 
-    connect( m_editTrackStart, SIGNAL(valueChanged(int)),
-	     this, SLOT(slotTrackStartChanged(int)) );
-    connect( m_editTrackEnd, SIGNAL(valueChanged(int)),
-	     this, SLOT(slotTrackEndChanged(int)) );
+//     connect( m_editTrackStart, SIGNAL(valueChanged(int)),
+// 	     this, SLOT(slotTrackStartChanged(int)) );
+//     connect( m_editTrackEnd, SIGNAL(valueChanged(int)),
+// 	     this, SLOT(slotTrackEndChanged(int)) );
 
-    // set the track editor ranges
-    slotTrackStartChanged( m_tracks.first()->trackStart().totalFrames() );
-    slotTrackEndChanged( m_tracks.first()->trackEnd().totalFrames() );
-  }
+//     // set the track editor ranges
+//     slotTrackStartChanged( m_tracks.first()->trackStart().totalFrames() );
+//     slotTrackEndChanged( m_tracks.first()->trackEnd().totalFrames() );
+//   }
 
 
-  mainLayout->addWidget( groupFileInfo, 0, 0 );
-  mainLayout->addWidget( mainTabbed, 0, 1 );
+//   mainLayout->addWidget( groupFileInfo, 0, 0 );
+//   mainLayout->addWidget( mainTabbed, 0, 1 );
 
-  mainLayout->setColStretch( 0, 1 );
+//   mainLayout->setColStretch( 0, 1 );
 
-  m_checkCopy->setTristate();
-  m_checkPreEmp->setTristate();
+//   m_checkCopy->setTristate();
+//   m_checkPreEmp->setTristate();
 }
 
 void K3bAudioTrackDialog::setupConnections()
@@ -433,8 +443,8 @@ void K3bAudioTrackDialog::slotTrackStartChanged( int value )
 {
   // make sure a track is always at least 4 seconds in length as defined in 
   // the Red Book
-  m_editTrackEnd->setRange( value + 300, m_tracks.first()->fileLength().totalFrames() );
-  updateTrackLengthDisplay();
+//   m_editTrackEnd->setRange( value + 300, m_tracks.first()->fileLength().totalFrames() );
+//   updateTrackLengthDisplay();
 }
 
 
@@ -442,16 +452,16 @@ void K3bAudioTrackDialog::slotTrackEndChanged( int value )
 {
   // make sure a track is always at least 4 seconds in length as defined in 
   // the Red Book
-  m_editTrackStart->setRange( 0, value - 300 );
-  updateTrackLengthDisplay();
+//   m_editTrackStart->setRange( 0, value - 300 );
+//   updateTrackLengthDisplay();
 }
 
 
 void K3bAudioTrackDialog::updateTrackLengthDisplay()
 {
-  K3b::Msf len = m_editTrackEnd->msfValue() - m_editTrackStart->msfValue();
-  m_displayLength->setText( len.toString() );
-  m_displaySize->setText( KIO::convertSize(len.audioBytes()) );
+//   K3b::Msf len = m_editTrackEnd->msfValue() - m_editTrackStart->msfValue();
+//   m_displayLength->setText( len.toString() );
+//   m_displaySize->setText( KIO::convertSize(len.audioBytes()) );
 }
 
 

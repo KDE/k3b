@@ -49,7 +49,7 @@ Q_OBJECT
   void setupGui();
 
   QCheckBox*    m_checkBurnfree;
-
+  QCheckBox*    m_checkSaveOnExit;
   QCheckBox*    m_checkListHiddenFiles;
   QCheckBox*    m_checkListSystemFiles;
 

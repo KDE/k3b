@@ -13,7 +13,7 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include "k3bdiskerasinginfodialog.h"
+#include "k3bprogressdialog.h"
 
 #include <k3bbusywidget.h>
 
@@ -27,7 +27,7 @@
 #include <kprogress.h>
 
 
-K3bErasingInfoDialog::K3bErasingInfoDialog( const QString& text, QWidget* parent, const char* name ) 
+K3bProgressDialog::K3bProgressDialog( const QString& text, QWidget* parent, const char* name ) 
   : KDialogBase( parent, name, true, i18n("Erasing"), Cancel|Ok, Ok, true )
 {
   QFrame* main = makeMainWidget();
@@ -49,11 +49,11 @@ K3bErasingInfoDialog::K3bErasingInfoDialog( const QString& text, QWidget* parent
 }
 
 
-K3bErasingInfoDialog::~K3bErasingInfoDialog()
+K3bProgressDialog::~K3bProgressDialog()
 {}
 
 
-int K3bErasingInfoDialog::exec( bool progress )
+int K3bProgressDialog::exec( bool progress )
 {
   if( progress )
     m_stack->raiseWidget( m_progressBar );
@@ -68,13 +68,13 @@ int K3bErasingInfoDialog::exec( bool progress )
 }
 
 
-void K3bErasingInfoDialog::setText( const QString& text )
+void K3bProgressDialog::setText( const QString& text )
 {
   m_label->setText( text );
 }
 
 
-void K3bErasingInfoDialog::slotFinished( bool success )
+void K3bProgressDialog::slotFinished( bool success )
 {
   m_busyWidget->showBusy( false );
 
@@ -88,7 +88,7 @@ void K3bErasingInfoDialog::slotFinished( bool success )
 }
 
 
-void K3bErasingInfoDialog::slotCancel()
+void K3bProgressDialog::slotCancel()
 {
   emit cancelClicked();
   // we simply forbid to click cancel twice
@@ -96,9 +96,9 @@ void K3bErasingInfoDialog::slotCancel()
 }
 
 
-void K3bErasingInfoDialog::setProgress( int p )
+void K3bProgressDialog::setProgress( int p )
 {
   m_progressBar->setProgress( p );
 }
 
-#include "k3bdiskerasinginfodialog.moc"
+#include "k3bprogressdialog.moc"

@@ -21,12 +21,14 @@ libk3bproject_la_SOURCES = k3babstractwriter.cpp \
                            k3bcdrecordwriter.cpp \
                            k3bfillstatusdisplay.cpp \
                            k3btempdirselectionwidget.cpp \
-			   k3bdiskerasinginfodialog.cpp \
 			   k3bprojectmanager.cpp \
 			   k3binffilewriter.cpp \
+			   k3btocfilewriter.cpp \
 			   k3bjobprogressdialog.cpp \
 			   k3bburnprogressdialog.cpp \
-			   k3bjobprogresssystemtray.cpp
+			   k3bjobprogresssystemtray.cpp \
+			   k3bimagefilereader.cpp \
+			   k3bcuefileparser.cpp
 
 include_HEADERS =          k3bview.h \
                            k3bblankingjob.h \

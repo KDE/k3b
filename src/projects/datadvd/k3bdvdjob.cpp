@@ -605,19 +605,17 @@ QString K3bDvdJob::jobDescription() const
   if( m_doc->onlyCreateImages() ) {
     return i18n("Creating Data Image File");
   }
+  else if( m_doc->multiSessionMode() == K3bDataDoc::NONE ) {
+    return i18n("Writing Data DVD")
+      + ( m_doc->isoOptions().volumeID().isEmpty()
+	  ? QString::null
+	  : QString( " (%1)" ).arg(m_doc->isoOptions().volumeID()) );
+  }
   else {
-    if( m_doc->isoOptions().volumeID().isEmpty() ) {
-      if( m_doc->multiSessionMode() == K3bDataDoc::NONE )
-	return i18n("Writing Data DVD");
-      else
-	return i18n("Writing Multisession DVD");
-    }
-    else {
-      if( m_doc->multiSessionMode() == K3bDataDoc::NONE )
-	return i18n("Writing Data DVD (%1)").arg(m_doc->isoOptions().volumeID());
-      else
-	return i18n("Writing Multisession DVD (%1)").arg(m_doc->isoOptions().volumeID());
-    }
+    return i18n("Writing Multisession DVD")
+      + ( m_doc->isoOptions().volumeID().isEmpty()
+	  ? QString::null
+	  : QString( " (%1)" ).arg(m_doc->isoOptions().volumeID()) );
   }
 }
 

@@ -25,38 +25,6 @@
 
 namespace K3bCdDevice
 {
-
-  class Index
-    {
-    public:
-      /**
-       * Invalid index
-       */
-      Index()
-	: m_num(-1) {
-      }
-
-      Index( int num, const K3b::Msf& pos )
-	: m_position(pos),
-	m_num(num) {
-      }
-
-      /**
-       * Startposition
-       */
-      const K3b::Msf& position() const { return m_position; }
-
-      /**
-       * Index number
-       */
-      int number() const { return m_num; }
-
-    private:
-      K3b::Msf m_position;
-      int m_num;
-    };
-
-
   class Track
   {
     friend class CdDevice;
@@ -95,11 +63,13 @@ namespace K3bCdDevice
      * Invalid for DVDs
      */
     bool copyPermitted() const { return m_copyPermitted; }
+    void setCopyPermitted( bool b ) { m_copyPermitted = b; }
 
     /**
      * Only valid for audio tracks
      */
     bool preEmphasis() const { return m_preEmphasis; }
+    void setPreEmphasis( bool b ) { m_preEmphasis = b; }
 
     bool recordedIncremental() const { return m_preEmphasis; }
     bool recordedUninterrupted() const { return !recordedIncremental(); }
@@ -109,6 +79,9 @@ namespace K3bCdDevice
 
     const K3b::Msf& firstSector() const { return m_firstSector; }
     const K3b::Msf& lastSector() const { return m_lastSector; }
+    void setFirstSector( const K3b::Msf& msf ) { m_firstSector = msf; }
+    void setLastSector( const K3b::Msf& msf ) { m_lastSector = msf; }
+
     K3b::Msf length() const;
 
     /**
@@ -120,6 +93,7 @@ namespace K3bCdDevice
      * 0 if unknown
      */
     int session() const { return m_session; }
+    void setSession( int s ) { m_session = s; }
 
     /**
      * @return number of indices. This does not include index 0.
@@ -127,22 +101,27 @@ namespace K3bCdDevice
     int indexCount() const;
 
     /**
-     * @return starting sector (lba) of index @p i or -1 if no index i
-     *
-     * We use long instead of Msf here to be able to return -1
+     * Returns the index relative to the track's start.
+     * If it is zero there is no index0.
      */
-    long index( int i, bool absolute = false ) const;
+    const K3b::Msf& index0() const { return m_index0; }
 
     /**
-     * Returns the lba value of the position of index 0 if it is there.
+     * Set the track's index0 value.
+     * @param msf offset relative to track start.
      */
-    long index0() const;
+    void setIndex0( const K3b::Msf& msf );
 
-    const QValueVector<long>& indices() const { return m_indices; }
+    /**
+     * All indices. Normally this list is empty as indices are rarely used.
+     * Starts with index 2 (since index 1 are all other sectors FIXME)
+     */
+    const QValueVector<K3b::Msf>& indices() const { return m_indices; }
 
   private:
     K3b::Msf m_firstSector;
     K3b::Msf m_lastSector;
+    K3b::Msf m_index0;
 
     int m_type;
     int m_mode;
@@ -151,7 +130,7 @@ namespace K3bCdDevice
 
     int m_session;
 
-    QValueVector<long> m_indices;
+    QValueVector<K3b::Msf> m_indices;
 
     QCString m_isrc;
   };

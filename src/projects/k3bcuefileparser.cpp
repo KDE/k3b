@@ -17,6 +17,8 @@
 
 #include <k3bmsf.h>
 #include <k3bglobals.h>
+#include <k3btrack.h>
+#include <k3bcdtext.h>
 
 #include <qfile.h>
 #include <qfileinfo.h>
@@ -34,8 +36,17 @@ class K3bCueFileParser::Private
 public:
   bool inFile;
   bool inTrack;
-  bool isAudioTrack;
+  int trackType;
+  int trackMode;
+  bool rawData;
+  bool haveIndex0;
   bool haveIndex1;
+  K3b::Msf currentDataPos;
+
+  K3bCdDevice::Toc toc;
+  int currentParsedTrack;
+
+  K3bCdDevice::CdText cdText;
 };
 
 
@@ -58,7 +69,11 @@ void K3bCueFileParser::readFile()
 {
   setValid(true);
 
-  d->inFile = d->inTrack = d->haveIndex1 = d->isAudioTrack = false;
+  d->inFile = d->inTrack = d->haveIndex0 = d->haveIndex1 = false;
+  d->trackMode = K3bCdDevice::Track::UNKNOWN;
+  d->toc.clear();
+  d->cdText.clear();
+  d->currentParsedTrack = 0;
 
   QFile f( filename() );
   if( f.open( IO_ReadOnly ) ) {
@@ -72,6 +87,28 @@ void K3bCueFileParser::readFile()
       }
 
       line = s.readLine();
+    }
+
+    if( isValid() ) {
+      // save last parsed track for which we do not have the proper length :(
+      if( d->currentParsedTrack > 0 ) {
+	d->toc.append( K3bCdDevice::Track( d->currentDataPos, 
+					   d->currentDataPos,
+					   d->trackType,
+					   d->trackMode ) );
+      }
+      
+      // debug the toc
+      kdDebug() << "(K3bCueFileParser) successfully parsed cue file." << endl
+		<< "------------------------------------------------" << endl;
+      for( unsigned int i = 0; i < d->toc.count(); ++i ) {
+	K3bCdDevice::Track& track = d->toc[i];
+	kdDebug() << "Track " << (i+1) 
+		  << " (" << ( track.type() == K3bCdDevice::Track::AUDIO ? "audio" : "data" ) << ") "
+		  << track.firstSector().toString() << " - " << track.lastSector().toString() << endl;
+      }
+      
+      kdDebug() << "------------------------------------------------" << endl;
     }
   }
   else {
@@ -129,25 +166,31 @@ bool K3bCueFileParser::parseLine( QString& line )
     // find data file
     //
 
-    // first try filename as a hole (absolut)
-    if( QFile::exists( dataFile ) )
-      setImageFilename( dataFile );
-    else {
-      // relative path
-      setImageFilename( K3b::parentDir(filename()) + dataFile.section( '/', -1 ) );
-    }
-
     //
     // CDRDAO does not use this image filename but replaces the extension from the cue file
     // with "bin" to get the image filename, we should take this into account
     //
-    kdDebug() << "(K3bCueFileParser) trying bin file: " << dataFile << endl;
-    if( QFileInfo( imageFilename() ).isFile() ) {
+
+    // first try filename as a hole (absolut)
+    if( QFile::exists( dataFile ) ) {
+      setImageFilename( dataFile );
+    }
+    else if( QFileInfo( K3b::parentDir(filename()) + dataFile.section( '/', -1 ) ).isFile() ) {
+      kdDebug() << "(K3bCueFileParser) found image file: " << imageFilename() << endl;
+      setImageFilename( K3b::parentDir(filename()) + dataFile.section( '/', -1 ) );
+      setValid( true );
+      m_imageFilenameInCue = true;
+    }
+    else if( QFileInfo( K3b::parentDir(filename()) + dataFile.section( '/', -1 ).lower() ).isFile() ) {
+      kdDebug() << "(K3bCueFileParser) found image file: " << imageFilename().lower() << endl;
+      setImageFilename( K3b::parentDir(filename()) + dataFile.section( '/', -1 ).lower() );
       setValid( true );
       m_imageFilenameInCue = true;
     }
     else {
-      setImageFilename( filename().mid( filename().length() - 3 ) + "bin" );
+      kdDebug() << "(K3bCueFileParser) no image file in: " << K3b::parentDir(filename()) + dataFile.section( '/', -1 ) << endl;
+      kdDebug() << "(K3bCueFileParser) no image file in: " << K3b::parentDir(filename()) + dataFile.section( '/', -1 ).lower() << endl;
+      setImageFilename( filename().left( filename().length() - 3 ) + "bin" );
       setValid( QFileInfo( imageFilename() ).isFile() );
       m_imageFilenameInCue = false;
     }
@@ -178,9 +221,43 @@ bool K3bCueFileParser::parseLine( QString& line )
       return false;
     }
 
-    d->isAudioTrack = ( trackRx.cap(2) == "AUDIO" );
+    // save last track
+    // TODO: use d->rawData in some way
+    if( d->currentParsedTrack > 0 ) {
+      d->toc.append( K3bCdDevice::Track( d->currentDataPos, 
+					 d->currentDataPos,
+					 d->trackType,
+					 d->trackMode ) );
+    }
+
+    d->currentParsedTrack++;
+
+    d->cdText.resize( d->currentParsedTrack );
+
+    // parse the tracktype
+    if( trackRx.cap(2) == "AUDIO" ) {
+      d->trackType = K3bCdDevice::Track::AUDIO;
+      d->trackMode = K3bCdDevice::Track::UNKNOWN;
+    }
+    else {
+      d->trackType = K3bCdDevice::Track::DATA;
+      if( trackRx.cap(2).startsWith("MODE1") ) {
+	d->trackMode = K3bCdDevice::Track::MODE1;
+	d->rawData = (trackRx.cap(2) == "MODE1/2352");
+      }
+      else if( trackRx.cap(2).startsWith("MODE2") ) {
+	d->trackMode = K3bCdDevice::Track::MODE2;
+	d->rawData = (trackRx.cap(2) == "MODE2/2352");
+      }
+      else {
+	kdDebug() << "(K3bCueFileParser) unsupported track type: " << trackRx.cap(2) << endl;
+	return false;
+      }
+    }
+
     d->haveIndex1 = false;
     d->inTrack = true;
+
     return true;
   }
 
@@ -213,11 +290,19 @@ bool K3bCueFileParser::parseLine( QString& line )
     K3b::Msf indexStart = K3b::Msf::fromString( indexRx.cap(2) );
 
     if( indexNumber == 0 ) {
-      // TODO: save pregap start and set last track's length
+      if( d->currentParsedTrack < 2 ) {
+	kdDebug() << "(K3bCueFileParser) first track is not allowed to have a pregap." << endl;
+	return false;
+      }
+
+      // set last track's index0 value (relative to track start)
+      d->toc[d->currentParsedTrack-2].setIndex0( indexStart-d->toc[d->currentParsedTrack-2].firstSector() );
     }
     else if( indexNumber == 1 ) {
       d->haveIndex1 = true;
-      // TODO: set length of last track or pregap length of this track
+      d->currentDataPos = indexStart;
+      if( d->currentParsedTrack > 1 )
+	d->toc[d->currentParsedTrack-2].setLastSector( indexStart-1 );
     }
     else {
       // TODO: add index
@@ -257,25 +342,25 @@ bool K3bCueFileParser::parseLine( QString& line )
   //
   else if( titleRx.exactMatch( line ) ) {
     if( d->inTrack )
-      kdDebug() << "TRACK-TITLE: '" << titleRx.cap(1) << "'" << endl;
+      d->cdText[d->currentParsedTrack-1].setTitle( titleRx.cap(1) );
     else
-      kdDebug() << "CD-TITLE: '" << titleRx.cap(1) << "'" << endl;
+      d->cdText.setTitle( titleRx.cap(1) );
     return true;
   }
 
   else if( performerRx.exactMatch( line ) ) {
     if( d->inTrack )
-      kdDebug() << "TRACK-PERFORMER: '" << performerRx.cap(1) << "'" << endl;
+      d->cdText[d->currentParsedTrack-1].setPerformer( performerRx.cap(1) );
     else
-      kdDebug() << "CD-PERFORMER: '" << performerRx.cap(1) << "'" << endl;
+      d->cdText.setPerformer( performerRx.cap(1) );
     return true;
   }
 
   else if( songwriterRx.exactMatch( line ) ) {
     if( d->inTrack )
-      kdDebug() << "TRACK-SONGWRITER: '" << songwriterRx.cap(1) << "'" << endl;
+      d->cdText[d->currentParsedTrack-1].setSongwriter( songwriterRx.cap(1) );
     else
-      kdDebug() << "CD-SONGWRITER: '" << songwriterRx.cap(1) << "'" << endl;
+      d->cdText.setSongwriter( songwriterRx.cap(1) );
     return true;
   }
 
@@ -303,4 +388,16 @@ void K3bCueFileParser::simplifyWhiteSpace( QString& s )
 
     ++i;
   }
+}
+
+
+const K3bCdDevice::Toc& K3bCueFileParser::toc() const
+{
+  return d->toc;
+}
+
+
+const K3bCdDevice::CdText& K3bCueFileParser::cdText() const
+{
+  return d->cdText;
 }

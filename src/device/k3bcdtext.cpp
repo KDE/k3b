@@ -52,23 +52,23 @@ namespace K3bCdDevice {
       s += QString( " %1 |" ).arg( pack[i].charpos, 6 );
       s += QString( " %1 |" ).arg( pack[i].blocknum, 6 );
       s += QString( " %1 |" ).arg( pack[i].dbcc, 4 );
-      char str[12];
-      sprintf( str, "%c%c%c%c%c%c%c%c%c%c%c%c",
-	       pack[i].data[0] == '\0' ? '°' : pack[i].data[0],
-	       pack[i].data[1] == '\0' ? '°' : pack[i].data[1],
-	       pack[i].data[2] == '\0' ? '°' : pack[i].data[2],
-	       pack[i].data[3] == '\0' ? '°' : pack[i].data[3],
-	       pack[i].data[4] == '\0' ? '°' : pack[i].data[4],
-	       pack[i].data[5] == '\0' ? '°' : pack[i].data[5],
-	       pack[i].data[6] == '\0' ? '°' : pack[i].data[6],
-	       pack[i].data[7] == '\0' ? '°' : pack[i].data[7],
-	       pack[i].data[8] == '\0' ? '°' : pack[i].data[8],
-	       pack[i].data[9] == '\0' ? '°' : pack[i].data[9],
-	       pack[i].data[10] == '\0' ? '°' : pack[i].data[10],
-	       pack[i].data[11] == '\0' ? '°' : pack[i].data[11] );
-      s += QString( " %1 |" ).arg( "'" + QCString(str,13) + "'", 14 );
-      Q_UINT16 crc = pack[i].crc[0]<<8|pack[i].crc[1];
-      s += QString( " %1 |" ).arg( crc );
+//       char str[12];
+//       sprintf( str, "%c%c%c%c%c%c%c%c%c%c%c%c",
+// 	       pack[i].data[0] == '\0' ? '°' : pack[i].data[0],
+// 	       pack[i].data[1] == '\0' ? '°' : pack[i].data[1],
+// 	       pack[i].data[2] == '\0' ? '°' : pack[i].data[2],
+// 	       pack[i].data[3] == '\0' ? '°' : pack[i].data[3],
+// 	       pack[i].data[4] == '\0' ? '°' : pack[i].data[4],
+// 	       pack[i].data[5] == '\0' ? '°' : pack[i].data[5],
+// 	       pack[i].data[6] == '\0' ? '°' : pack[i].data[6],
+// 	       pack[i].data[7] == '\0' ? '°' : pack[i].data[7],
+// 	       pack[i].data[8] == '\0' ? '°' : pack[i].data[8],
+// 	       pack[i].data[9] == '\0' ? '°' : pack[i].data[9],
+// 	       pack[i].data[10] == '\0' ? '°' : pack[i].data[10],
+// 	       pack[i].data[11] == '\0' ? '°' : pack[i].data[11] );
+//       s += QString( " %1 |" ).arg( "'" + QCString(str,13) + "'", 14 );
+//       Q_UINT16 crc = pack[i].crc[0]<<8|pack[i].crc[1];
+//       s += QString( " %1 |" ).arg( crc );
       kdDebug() << s << endl;
     }
   }
@@ -78,6 +78,20 @@ namespace K3bCdDevice {
 
 
 K3bCdDevice::CdText::CdText()
+{
+}
+
+
+K3bCdDevice::CdText::CdText( const K3bCdDevice::CdText& text )
+  : QValueVector<K3bCdDevice::TrackCdText>( text ),
+    m_title( text.title() ),
+    m_performer( text.performer() ),
+    m_songwriter( text.songwriter() ),
+    m_composer( text.composer() ),
+    m_arranger( text.arranger() ),
+    m_message( text.message() ),
+    m_discId( text.discId() ),
+    m_upcEan( text.upcEan() )
 {
 }
 
@@ -102,7 +116,8 @@ K3bCdDevice::CdText::CdText( int size )
 
 void K3bCdDevice::CdText::clear()
 {
-  m_trackCdText.clear();
+  QValueVector<TrackCdText>::clear();
+
   m_title.setLength(0);
   m_performer.setLength(0);
   m_songwriter.setLength(0);
@@ -162,7 +177,7 @@ void K3bCdDevice::CdText::setRawPackData( const unsigned char* data, int len )
       unsigned int trackNo = pack[i].id2;
 
       while( nullPos ) {
-	if( m_trackCdText.count() < trackNo )
+	if( count() < trackNo )
 	  resize( trackNo );
 
 	char* nextNullPos = (char*)::memchr( nullPos+1, '\0', 11 - (nullPos - (char*)pack[i].data) );
@@ -183,42 +198,42 @@ void K3bCdDevice::CdText::setRawPackData( const unsigned char* data, int len )
 	  if( trackNo == 0 )
 	    m_title.append( txtstr );
 	  else
-	    m_trackCdText[trackNo-1].m_title.append( txtstr );
+	    at(trackNo-1).m_title.append( txtstr );
 	  break;
 
 	case 0x81: // Performer
 	  if( trackNo == 0 )
 	    m_performer.append( txtstr );
 	  else
-	    m_trackCdText[trackNo-1].m_performer.append( txtstr );
+	    at(trackNo-1).m_performer.append( txtstr );
 	  break;
 
 	case 0x82: // Writer
 	  if( trackNo == 0 )
 	    m_songwriter.append( txtstr );
 	  else
-	    m_trackCdText[trackNo-1].m_songwriter.append( txtstr );
+	    at(trackNo-1).m_songwriter.append( txtstr );
 	  break;
 
 	case 0x83: // Composer
 	  if( trackNo == 0 )
 	    m_composer.append( txtstr );
 	  else
-	    m_trackCdText[trackNo-1].m_composer.append( txtstr );
+	    at(trackNo-1).m_composer.append( txtstr );
 	  break;
 
 	case 0x84: // Arranger
 	  if( trackNo == 0 )
 	    m_arranger.append( txtstr );
 	  else
-	    m_trackCdText[trackNo-1].m_arranger.append( txtstr );
+	    at(trackNo-1).m_arranger.append( txtstr );
 	  break;
 
 	case 0x85: // Message
 	  if( trackNo == 0 )
 	    m_message.append( txtstr );
 	  else
-	    m_trackCdText[trackNo-1].m_message.append( txtstr );
+	    at(trackNo-1).m_message.append( txtstr );
 	  break;
 
 	case 0x86: // Disc identification
@@ -231,7 +246,7 @@ void K3bCdDevice::CdText::setRawPackData( const unsigned char* data, int len )
 	  if( trackNo == 0 )
 	    m_upcEan.append( txtstr );
 	  else
-	    m_trackCdText[trackNo-1].m_isrc.append( txtstr );
+	    at(trackNo-1).m_isrc.append( txtstr );
 	  break;
 
 	  // TODO: support for binary data
@@ -249,8 +264,8 @@ void K3bCdDevice::CdText::setRawPackData( const unsigned char* data, int len )
     }
 
     // remove empty fields at the end
-    unsigned int i = m_trackCdText.count();
-    while( i > 0 && m_trackCdText[i-1].isEmpty() )
+    unsigned int i = count();
+    while( i > 0 && at(i-1).isEmpty() )
       --i;
     resize( i );
   }
@@ -279,7 +294,7 @@ QByteArray K3bCdDevice::CdText::rawPackData() const
   ::memset( &tsize, 0, sizeof(text_size_block) );
   tsize.charcode = 0;              // ISO 8859-1
   tsize.first_track = 1;
-  tsize.last_track = m_trackCdText.count();
+  tsize.last_track = count();
   tsize.pack_count[0xF] = 3;
   tsize.language_codes[0] = 0x09;  // English (from cdrecord)
 
@@ -407,7 +422,7 @@ QByteArray K3bCdDevice::CdText::createPackData( int packType, unsigned int& pack
       ++currentTrack;
 
       // Check if all texts have been packed
-      if( currentTrack > m_trackCdText.count() ) {
+      if( currentTrack > count() ) {
 	savePack( &pack, data, dataFill );
 	++packCount;
 
@@ -454,49 +469,49 @@ const QString& K3bCdDevice::CdText::textForPackType( int packType, unsigned int 
     if( track == 0 )
       return title();
     else
-      return m_trackCdText[track-1].title();
+      return at(track-1).title();
 
   case 0x81:
     if( track == 0 )
       return performer();
     else
-      return m_trackCdText[track-1].performer();
+      return at(track-1).performer();
 
   case 0x82:
     if( track == 0 )
       return songwriter();
     else
-      return m_trackCdText[track-1].songwriter();
+      return at(track-1).songwriter();
 
   case 0x83:
     if( track == 0 )
       return composer();
     else
-      return m_trackCdText[track-1].composer();
+      return at(track-1).composer();
 
   case 0x84:
     if( track == 0 )
       return arranger();
     else
-      return m_trackCdText[track-1].arranger();
+      return at(track-1).arranger();
 
   case 0x85:
     if( track == 0 )
       return message();
     else
-      return m_trackCdText[track-1].message();
+      return at(track-1).message();
 
 //   case 0x87:
 //     if( track == 0 )
 //       return genre();
 //     else
-//       return m_trackCdText[track-1].title();
+//       return at(track-1).title();
 
   case 0x8E:
     if( track == 0 )
       return upcEan();
     else
-      return m_trackCdText[track-1].isrc();
+      return at(track-1).isrc();
   }
 }
 
@@ -505,7 +520,7 @@ const QString& K3bCdDevice::CdText::textForPackType( int packType, unsigned int 
 unsigned int K3bCdDevice::CdText::textLengthForPackType( int packType ) const
 {
   unsigned int len = 0;
-  for( unsigned int i = 0; i <= m_trackCdText.count(); ++i )
+  for( unsigned int i = 0; i <= count(); ++i )
     len += encodeCdText( textForPackType( packType, i ) ).length();
   return len;
 }
@@ -586,14 +601,14 @@ void K3bCdDevice::CdText::debug() const
 	    << "  Message:    '" << message() << "'" << endl
 	    << "  Disc ID:    '" << discId() << "'" << endl
 	    << "  Upc Ean:    '" << upcEan() << "'" << endl;
-  for( unsigned int i = 0; i < m_trackCdText.count(); ++i ) {
+  for( unsigned int i = 0; i < count(); ++i ) {
     kdDebug() << "Track " << (i+1) << ":" << endl
-	      << "  Title:      '" << trackCdText(i).title() << "'" << endl
-	      << "  Performer:  '" << trackCdText(i).performer() << "'" << endl
-	      << "  Songwriter: '" << trackCdText(i).songwriter() << "'" << endl
-	      << "  Composer:   '" << trackCdText(i).composer() << "'" << endl
-	      << "  Arranger:   '" << trackCdText(i).arranger() << "'" << endl
-	      << "  Message:    '" << trackCdText(i).message() << "'" << endl
-	      << "  Isrc:       '" << trackCdText(i).isrc() << "'" << endl;
+	      << "  Title:      '" << at(i).title() << "'" << endl
+	      << "  Performer:  '" << at(i).performer() << "'" << endl
+	      << "  Songwriter: '" << at(i).songwriter() << "'" << endl
+	      << "  Composer:   '" << at(i).composer() << "'" << endl
+	      << "  Arranger:   '" << at(i).arranger() << "'" << endl
+	      << "  Message:    '" << at(i).message() << "'" << endl
+	      << "  Isrc:       '" << at(i).isrc() << "'" << endl;
   }
 }

@@ -51,7 +51,7 @@ QCheckBox* K3bStdGuiItems::daoCheckbox( QWidget* parent, const char* name )
 
 QCheckBox* K3bStdGuiItems::burnproofCheckbox( QWidget* parent, const char* name )
 {
-  QCheckBox* c = new QCheckBox( i18n("Burnfree"), parent, name );
+  QCheckBox* c = new QCheckBox( i18n("Use Burnfree"), parent, name );
   QToolTip::add( c, i18n("Enable Burnfree (or Just Link) to avoid buffer underruns") );
   QWhatsThis::add( c, i18n("<p>If this option is checked, K3b enables <em>Burnfree</em> "
 			   "(or <em>Just Link</em>). This is "

@@ -21,6 +21,7 @@
 #include <k3bjob.h>
 #include <k3baudioencoder.h>
 #include <k3bwavefilewriter.h>
+#include <k3bcuefilewriter.h>
 
 #include <k3bdevice.h>
 #include <k3btoc.h>
@@ -261,8 +262,15 @@ void K3bAudioRipThread::run()
   }
 
   if( !d->canceled && m_writePlaylist ) {
-    emitInfoMessage( i18n("Writing playlist."), K3bJob::INFO );
     success = success && writePlaylist();
+  }
+
+  if( !d->canceled && m_writeCueFile && m_singleFile ) {
+    if( !m_useIndex0 ) {
+      emitNewSubTask( i18n("Searching index 0 for all tracks") );
+      m_device->indexScan( d->toc );
+    }
+    success = success && writeCueFile();
   }
 
   d->paranoiaLib->close();
@@ -280,7 +288,9 @@ bool K3bAudioRipThread::ripTrack( int track, const QString& filename )
 {
   const K3bTrack& tt = d->toc[track-1];
 
-  long endSec = ( (m_useIndex0 && tt.index0() != -1) ? tt.index0() : tt.lastSector().lba() );
+  long endSec = ( (m_useIndex0 && tt.index0() > 0) 
+		  ? tt.firstSector().lba() + tt.index0().lba() - 1
+		  : tt.lastSector().lba() );
   
   if( d->paranoiaLib->initReading( tt.firstSector().lba(), endSec ) ) {
 
@@ -448,6 +458,8 @@ bool K3bAudioRipThread::writePlaylist()
     return false;
   }
 
+  emitInfoMessage( i18n("Writing playlist to %1.").arg( m_playlistFilename ), K3bJob::INFO );
+
   QFile f( m_playlistFilename );
   if( f.open( IO_WriteOnly ) ) {
     QTextStream t( &f );
@@ -504,6 +516,51 @@ bool K3bAudioRipThread::writePlaylist()
     kdDebug() << "(K3bAudioRipThread) could not open file " << m_playlistFilename << " for writing." << endl;
     return false;
   }
+}
+
+
+bool K3bAudioRipThread::writeCueFile()
+{
+  K3bCueFileWriter cueWriter;
+
+  // create a new toc and cd-text
+  K3bCdDevice::Toc toc;
+  K3bCdDevice::CdText text;
+  text.setPerformer( m_cddbEntry.cdArtist );
+  text.setTitle( m_cddbEntry.cdTitle );
+  text.reserve( m_tracks.count() );
+  K3b::Msf currentSector;
+  for( unsigned int i = 0; i < m_tracks.count(); ++i ) {
+    int trackNum = m_tracks[i].first;
+
+    const K3bCdDevice::Track& oldTrack = d->toc[trackNum-1];
+    K3bCdDevice::Track newTrack( oldTrack );
+    newTrack.setFirstSector( currentSector );
+    newTrack.setLastSector( (currentSector+=oldTrack.length()) - 1 );
+    toc.append( newTrack );
+
+    K3bCdDevice::TrackCdText trackText;
+    trackText.setPerformer( m_cddbEntry.artists[trackNum-1] );
+    trackText.setTitle( m_cddbEntry.titles[trackNum-1] );
+    text.append( trackText );
+  }
+
+  cueWriter.setData( toc );
+  cueWriter.setCdText( text );
+
+
+  // we always use a relative filename here
+  QString imageFile = m_tracks[0].second.section( '/', -1 );
+  cueWriter.setImage( imageFile, ( d->fileType.isEmpty() ? "WAVE" : d->fileType ) );
+
+  // use the same base name as the image file
+  QString cueFile = m_tracks[0].second;
+  cueFile.truncate( cueFile.findRev(".") );
+  cueFile += ".cue";
+
+  emitInfoMessage( i18n("Writing cue file to %1.").arg(cueFile), K3bJob::INFO );
+
+  return cueWriter.save( cueFile );
 }
 
 

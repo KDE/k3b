@@ -23,7 +23,7 @@
 #include <k3biso9660.h>
 #include "k3bblankingjob.h"
 #include <k3bbusywidget.h>
-#include "k3bdiskerasinginfodialog.h"
+#include <k3bprogressdialog.h>
 #include "datadvd/k3bdvdformattingjob.h"
 
 #include <qtimer.h>
@@ -68,7 +68,7 @@ public:
   QLabel* labelFoundMedia;
   QLabel* pixLabel;
 
-  K3bErasingInfoDialog* erasingInfoDialog;
+  K3bProgressDialog* erasingInfoDialog;
 };
 
 
@@ -491,6 +491,14 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
 
 	// start a k3bblankingjob
 	d->erasingInfoDialog->setText( i18n("Erasing CD-RW") );
+
+	// the user may be using cdrdao for erasing as cdrecord does not work
+	int erasingApp = K3b::DEFAULT;
+	c->setGroup( "General Options" );
+	if( c->readBoolEntry( "Manual writing app selection", false ) ) {
+	  c->setGroup( "CDRW Erasing" );
+	  erasingApp = K3b::writingAppFromString( c->readEntry( "writing_app" ) );
+	}
 	  
 	K3bBlankingJob job( this );
 	job.setDevice( d->device );
@@ -498,6 +506,7 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
 	job.setForce(true);
 	job.setForceNoEject(true);
 	job.setSpeed( 0 ); // Auto
+	job.setWritingApp( erasingApp );
 	connect( &job, SIGNAL(finished(bool)), this, SLOT(slotErasingFinished(bool)) );
 	connect( d->erasingInfoDialog, SIGNAL(cancelClicked()), &job, SLOT(cancel()) );
 	job.start();
@@ -643,7 +652,7 @@ void K3bEmptyDiscWaiter::prepareErasingDialog()
 {
   // we hide the emptydiskwaiter so the info dialog needs to have the same parent
   if( !d->erasingInfoDialog )
-    d->erasingInfoDialog = new K3bErasingInfoDialog( QString::null, parentWidget() );
+    d->erasingInfoDialog = new K3bProgressDialog( QString::null, parentWidget() );
 
   //
   // hide the dialog 

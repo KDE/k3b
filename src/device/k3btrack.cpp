@@ -30,6 +30,7 @@ K3bCdDevice::Track::Track()
 K3bCdDevice::Track::Track( const Track& track )
   : m_firstSector( track.firstSector() ),
     m_lastSector( track.lastSector() ),
+    m_index0( track.index0() ),
     m_type( track.type() ),
     m_mode( track.mode() ),
     m_copyPermitted( track.copyPermitted() ),
@@ -60,6 +61,7 @@ K3bCdDevice::Track& K3bCdDevice::Track::operator=( const K3bTrack& track )
   if( this != &track ) {
     m_firstSector = track.firstSector();
     m_lastSector = track.lastSector();
+    m_index0 = track.index0();
     m_type = track.type();
     m_mode = track.mode();
     m_indices = track.indices();
@@ -78,29 +80,17 @@ K3b::Msf K3bCdDevice::Track::length() const
 
 K3b::Msf K3bCdDevice::Track::realAudioLength() const
 {
-  if( type() == DATA || index0() < firstSector().lba() )
+  if( index0() > 0 )
+    return index0();
+  else
     return length();
-  else
-    return length() - ( lastSector() - index0() + 1 );
 }
 
 
-long K3bCdDevice::Track::index( int i, bool absolute ) const
+void K3bCdDevice::Track::setIndex0( const K3b::Msf& msf )
 {
-  if( (int)m_indices.count() > i && m_indices[i] >= 0 ) {
-    if( absolute )
-      return m_indices[i];
-    else
-      return m_indices[i] - firstSector().lba();
-  }
-  else
-    return -1;
-}
-
-
-long K3bCdDevice::Track::index0() const
-{
-  return index( 0, true );
+  if( msf <= m_lastSector-m_firstSector )
+    m_index0 = msf;
 }
 
 

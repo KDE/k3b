@@ -112,6 +112,7 @@ void K3bFileView::setupGUI()
   connect( dirOpMenu, SIGNAL(activated()), this, SLOT(slotCheckActions()) );
 
   // create filter selection combobox
+  m_toolBox->addStretch();
   m_toolBox->addLabel( i18n("Filter:") );
   m_filterWidget = new KFileFilterCombo( m_toolBox, "filterwidget" );
   m_toolBox->addWidget( m_filterWidget );

@@ -27,44 +27,40 @@
 
 #include <k3bmsf.h>
 
-#include "k3bcdtext.h"
+#include <k3bcdtext.h>
+#include <k3btrack.h>
+
 
 class K3bAudioDecoder;
+class K3bAudioDataSource;
+class K3bAudioDoc;
 
 
 /**
-  *@author Sebastian Trueg
-  */
-
+ * @author Sebastian Trueg
+ */
 class K3bAudioTrack : public QObject
 {
   Q_OBJECT
 
+  friend class K3bAudioDataSource;
+
  public:
-  K3bAudioTrack( QPtrList<K3bAudioTrack>* parent, const QString& filename );
+  K3bAudioTrack( K3bAudioDoc* parent );
   ~K3bAudioTrack();
 
-  K3bAudioDecoder* module() const { return m_module; }
+  K3bAudioDoc* doc() const { return m_parent; }
 
-  // TODO: this should only be accessable by K3bAudioDoc
-  void setModule( K3bAudioDecoder* module );
-
-  QString filename() const { return m_filename.section( '/', -1 ); }
-  const QString& path() const { return m_filename; }
-
-  K3b::Msf pregap() const { return m_pregap; }
+  K3bCdDevice::Track toCdTrack() const;
 
   /** 
    * @return length of track in frames
    */
   K3b::Msf length() const;
-
-  /**
-   * @return the complete length of the audio file
-   */
-  K3b::Msf fileLength() const;
+  KIO::filesize_t size() const;
 
   const QString& artist() const { return m_cdText.performer(); }
+  const QString& performer() const { return m_cdText.performer(); }
   const QString& title() const { return m_cdText.title(); }
   const QString& arranger() const { return m_cdText.arranger(); }
   const QString& songwriter() const { return m_cdText.songwriter(); }
@@ -76,85 +72,129 @@ class K3bAudioTrack : public QObject
   bool copyProtection() const { return m_copy; }
   bool preEmp() const { return m_preEmp; }
 	
-  void setPregap( const K3b::Msf& p );
-
   /**
    * @obsolete use setPerformer
    **/
-  void setArtist( const QString& a ) { m_cdText.setPerformer(a); emit changed(); }
-  void setPerformer( const QString& a ) { m_cdText.setPerformer(a); emit changed(); }
+  void setArtist( const QString& a ) { m_cdText.setPerformer(a); emit changed(this); }
+  void setPerformer( const QString& a ) { m_cdText.setPerformer(a); emit changed(this); }
+  void setTitle( const QString& t ) { m_cdText.setTitle(t); emit changed(this); }
+  void setArranger( const QString& t ) { m_cdText.setArranger(t); emit changed(this); }
+  void setSongwriter( const QString& t ) { m_cdText.setSongwriter(t); emit changed(this); }
+  void setComposer( const QString& t ) { m_cdText.setComposer(t); emit changed(this); }
+  void setIsrc( const QString& t ) { m_cdText.setIsrc(t); emit changed(this); }
+  void setCdTextMessage( const QString& t ) { m_cdText.setMessage(t); emit changed(this); }
 
-  /**
-   * If the file is a mp3-file, it's mp3-tag is used
-   */
-  void setTitle( const QString& t ) { m_cdText.setTitle(t); emit changed(); }
-  void setArranger( const QString& t ) { m_cdText.setArranger(t); emit changed(); }
-  void setSongwriter( const QString& t ) { m_cdText.setSongwriter(t); emit changed(); }
-  void setComposer( const QString& t ) { m_cdText.setComposer(t); emit changed(); }
-  void setIsrc( const QString& t ) { m_cdText.setIsrc(t); emit changed(); }
-  void setCdTextMessage( const QString& t ) { m_cdText.setMessage(t); emit changed(); }
+  void setCdText( const K3bCdDevice::TrackCdText& cdtext ) { m_cdText = cdtext; emit changed(this); }
 
-  void setCdText( const K3bCdDevice::TrackCdText& cdtext ) { m_cdText = cdtext; emit changed(); }
+  void setPreEmp( bool b ) { m_preEmp = b; emit changed(this); }
+  void setCopyProtection( bool b ) { m_copy = b; emit changed(this); }
 
-  void setPreEmp( bool b ) { m_preEmp = b; emit changed(); }
-  void setCopyProtection( bool b ) { m_copy = b; emit changed(); }
-	
-  /**
-   * The position the track starts in the file.
-   * This normally equals 0.
-   */
-  const K3b::Msf& trackStart() const;
-
-  /**
-   * The position the track ends in the file.
-   * This normally equals @p fileLength()
-   */
-  K3b::Msf trackEnd() const;
-
-  void setTrackStart( const K3b::Msf& );
-  void setTrackEnd( const K3b::Msf& );
-
-  /** 
-   * @return The raw size of the track in pcm samples (16bit, 44800 kHz, stereo) 
-   */
-  KIO::filesize_t size() const;
+  K3b::Msf index0() const;
+  void setIndex0( const K3b::Msf& );
 
   /**
    * @return The index in the list 
    */
-  int index() const;
+  unsigned int index() const;
 
-  int status() const { return m_status; }
-  void setStatus( int status ) { m_status = status; }
+  /**
+   * Remove this track from the list and return it.
+   */
+  K3bAudioTrack* take();
+
+  /**
+   * Move this track after @p track.
+   * If @p track is null this track will be merged into the beginning
+   * of the docs list.
+   */
+  void moveAfter( K3bAudioTrack* track );
+
+  /**
+   * Move this track ahead of @p track.
+   * If @p track is null this track will be appended to the end
+   * of the docs list.
+   */
+  void moveAhead( K3bAudioTrack* track );
+
+  /**
+   * Merge @p trackToMerge into this one.
+   */
+  void merge( K3bAudioTrack* trackToMerge, K3bAudioDataSource* sourceAfter = 0 );
+
+  K3bAudioTrack* prev() const { return m_prev; }
+  K3bAudioTrack* next() const { return m_next; }
+
+  /**
+   * Use with care.
+   */
+  void setFirstSource( K3bAudioDataSource* source );
+  K3bAudioDataSource* firstSource() const { return m_firstSource; }
+  K3bAudioDataSource* lastSource() const;
+  int numberSources() const;
+
+  /**
+   * Append source to the end of the sources list.
+   */
+  void addSource( K3bAudioDataSource* source );
+
+  bool seek( const K3b::Msf& );
+
+  /**
+   * Read data from the track.
+   *
+   * @return number of read bytes
+   */
+  int read( char* data, int max );
+
+  /**
+   * called by K3bAudioDataSource because of the lack of signals
+   */
+  void sourceChanged( K3bAudioDataSource* );
+
+  /**
+   * Create a copy of this track containing copies of all the sources
+   * but not beeing part of some list.
+   */
+  K3bAudioTrack* copy() const;
+
+  /**
+   * Is this track in a list
+   */
+  bool inList() const;
 
  signals:
   /**
    * Emitted if the track has been changed.
    */
-  void changed();
-
- protected:
-  QPtrList<K3bAudioTrack>* m_parent;
-  QString m_filename;
-
-  /** 
-   * The module that does all the work (decoding and stuff)
-   */
-  K3bAudioDecoder* m_module;
+  void changed( K3bAudioTrack* );
 
  private:	
-  K3b::Msf m_trackStartOffset;
-  K3b::Msf m_trackEndOffset;
-  K3b::Msf m_pregap;
-  
-  /** Status of the file. see file_status */
-  int m_status;
+  /**
+   * Removes the track from the list
+   */
+  void remove();
+
+  K3bAudioDoc* m_parent;
 
   /** copy protection */
   bool m_copy;
   bool m_preEmp;
 
+  K3b::Msf m_index0Offset;
+
   K3bCdDevice::TrackCdText m_cdText;
+
+  // list
+  K3bAudioTrack* m_prev;
+  K3bAudioTrack* m_next;
+
+  K3bAudioDataSource* m_firstSource;
+
+
+  K3bAudioDataSource* m_currentSource;
+  long long m_alreadyReadBytes;
+
+  bool m_currentlyDeleting;
 };
 
 

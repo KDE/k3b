@@ -304,8 +304,10 @@ bool K3bDataJob::startWriterJob()
 {
   if( d->doc->dummy() )
     emit newTask( i18n("Simulating") );
-  else
+  else if( d->copies > 1 )
     emit newTask( i18n("Writing Copy %1").arg(d->copiesDone+1) );
+  else
+    emit newTask( i18n("Writing") );
 
   // if we append a new session we asked for an appendable cd already
   if( d->doc->multiSessionMode() == K3bDataDoc::NONE ||
@@ -459,6 +461,7 @@ void K3bDataJob::slotVerificationFinished( bool success )
 
 void K3bDataJob::setWriterJob( K3bAbstractWriter* writer )
 {
+  // FIXME: progressedsize for multible copies
   m_writerJob = writer;
   connect( m_writerJob, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
   connect( m_writerJob, SIGNAL(percent(int)), this, SLOT(slotWriterJobPercent(int)) );
@@ -722,19 +725,17 @@ QString K3bDataJob::jobDescription() const
   if( d->doc->onlyCreateImages() ) {
     return i18n("Creating Data Image File");
   }
+  else if( d->doc->multiSessionMode() == K3bDataDoc::NONE ) {
+    return i18n("Writing Data CD")
+      + ( d->doc->isoOptions().volumeID().isEmpty()
+	  ? QString::null
+	  : QString( " (%1)" ).arg(d->doc->isoOptions().volumeID()) );
+  }
   else {
-    if( d->doc->isoOptions().volumeID().isEmpty() ) {
-      if( d->doc->multiSessionMode() == K3bDataDoc::NONE )
-	return i18n("Writing Data CD");
-      else
-	return i18n("Writing Multisession CD");
-    }
-    else {
-      if( d->doc->multiSessionMode() == K3bDataDoc::NONE )
-	return i18n("Writing Data CD (%1)").arg(d->doc->isoOptions().volumeID());
-      else
-	return i18n("Writing Multisession CD (%1)").arg(d->doc->isoOptions().volumeID());
-    }
+    return i18n("Writing Multisession CD")
+      + ( d->doc->isoOptions().volumeID().isEmpty()
+	  ? QString::null
+	  : QString( " (%1)" ).arg(d->doc->isoOptions().volumeID()) );
   }
 }
 

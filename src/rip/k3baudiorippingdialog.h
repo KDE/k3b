@@ -92,6 +92,8 @@ class K3bAudioRippingDialog : public K3bInteractionDialog
   void slotConfigurePlugin();
   void slotToggleAll();
   void slotSeeSpecialStrings();
+
+  void slotUpdateFreeTempSpace();
 };
 
 #endif

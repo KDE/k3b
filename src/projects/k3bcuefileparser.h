@@ -18,11 +18,13 @@
 
 #include "k3bimagefilereader.h"
 
+#include <k3btoc.h>
+#include <k3bcdtext.h>
 
 /**
- * This class should be able to parse all cuefile stuff.
- * for now it only checks the ending and searches for a file
- * statement.
+ * Parses a cue file.
+ * Datatracks have either mode1 or mode2 where the latter contains xa form1/2.
+ * The last track may not have a proper length!
  */
 class K3bCueFileParser : public K3bImageFileReader
 {
@@ -36,6 +38,9 @@ class K3bCueFileParser : public K3bImageFileReader
    * So in this case cdrecord won't be able to burn the cue file. That is why we need this hack.
    */
   bool imageFilenameInCue() const { return m_imageFilenameInCue; }
+
+  const K3bCdDevice::Toc& toc() const;
+  const K3bCdDevice::CdText& cdText() const;
 
  private:
   void readFile();
