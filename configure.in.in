@@ -181,15 +181,25 @@ AC_CHECK_HEADERS(resmgr.h, [
 ])
 AC_SUBST(RESMGR_LIB)
 
+AC_ARG_WITH(external-libsamplerate,
+	[  --with-external-libsamplerate   use the libsamplerate provided by the system (default=yes)],
+	[external_sampletrate=$withval], [external_sampletrate=yes]
+)
+
+LIBSAMPLERATE=""
+
+if test x$external_sampletrate != xno; then
 
 dnl === check for libsamplerate ==========
-LIBSAMPLERATE=""
 AC_CHECK_HEADERS(samplerate.h, [
 	AC_CHECK_LIB(samplerate, src_new, [
 		LIBSAMPLERATE="-lsamplerate"	
 		AC_DEFINE(HAVE_LIBSAMPLERATE,1,[defined if you have libsamplerate library and header])
 	])
 ])
+
+fi
+
 AC_SUBST(LIBSAMPLERATE)
 AM_CONDITIONAL(compile_libsamplerate, [test -z "$LIBSAMPLERATE"])
 

@@ -191,7 +191,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 					 false ) );
     
     if( !k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "suidroot" ) &&
-	K3b::kernelVersion() < K3bVersion( 2, 6, 8 ) )
+	K3b::simpleKernelVersion() < K3bVersion( 2, 6, 8 ) )
       problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
 					 i18n("%1 does not run with root privileges").arg("cdrecord"),
 					 i18n("It is highly recommended to configure cdrecord "
@@ -213,7 +213,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 				       false ) );
   }
   else if( !k3bcore->externalBinManager()->binObject( "cdrdao" )->hasFeature( "suidroot" ) &&
-	   K3b::kernelVersion() < K3bVersion( 2, 6, 8 ) ) {
+	   K3b::simpleKernelVersion() < K3bVersion( 2, 6, 8 ) ) {
     problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
 				       i18n("%1 does not run with root privileges").arg("cdrdao"),
 				       i18n("It is highly recommended to configure cdrdao "
