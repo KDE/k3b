@@ -18,8 +18,10 @@
 #define _K3B_WELCOME_WIDGET_H_
 
 #include <qscrollview.h>
+#include <qptrlist.h>
 
 #include <kurl.h>
+#include <kaction.h>
 
 class K3bMainWindow;
 class QDropEvent;
@@ -28,6 +30,8 @@ class QToolButton;
 class QPaintEvent;
 class QResizeEvent;
 class QSimpleRichText;
+class KConfig;
+
 
 
 class K3bWelcomeWidget : public QScrollView
@@ -37,6 +41,8 @@ class K3bWelcomeWidget : public QScrollView
  public:
   K3bWelcomeWidget( K3bMainWindow*, QWidget* parent = 0, const char* name = 0 );
   ~K3bWelcomeWidget();
+
+  void loadConfig( KConfig* c );
 
   class Display;
 
@@ -66,6 +72,8 @@ class K3bWelcomeWidget::Display : public QWidget
 
   QSize sizeHint() const { return m_size; }
 
+  void rebuildGui( const KActionPtrList& );
+
  signals:
   void dropped( const KURL::List& );
 
@@ -77,6 +85,8 @@ class K3bWelcomeWidget::Display : public QWidget
  private:
   QSimpleRichText* m_header;
   QSize m_size;
+
+  QPtrList<QToolButton> m_buttons;
 };
 
 

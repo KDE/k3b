@@ -168,6 +168,14 @@ K3bDiskInfoView::K3bDiskInfoView( QWidget* parent, const char* name )
   m_infoView->addColumn( "4" );
 
   m_infoView->header()->hide();
+
+  // load somed default pix to prevent QT paint errors
+  if( K3bTheme* theme = k3bthememanager->currentTheme() ) {
+    m_labelLeftPic->setPixmap( theme->pixmap( "diskinfo_left" ) );
+    m_labelDiskPix->setPixmap( theme->pixmap( "diskinfo_right" ) );
+    m_labelTocType->setPaletteBackgroundColor( theme->backgroundColor() );
+    m_labelTocType->setPaletteForegroundColor( theme->foregroundColor() );
+  }
 }
 
 

@@ -171,6 +171,9 @@ K3bMainWindow::K3bMainWindow()
   initActions();
   createGUI(0L);
 
+  // we need the actions for the welcomewidget
+  d->welcomeWidget->loadConfig( config() );
+
   // disable the "K3b handbook action"
   KAction* helpAction = actionCollection()->action("help_contents");
   if( helpAction )

@@ -1709,16 +1709,18 @@ bool K3bCdDevice::CdDevice::eject() const
 {
   block(false);
 
+  // Since all other eject methods I saw also start the unit before ejecting
+  // we do it also although I don't know why...
+
   ScsiCommand cmd( this );
   cmd[0] = 0x1B;   // START/STOP UNIT
+  cmd[4] = 0x1;      // Start unit
+
+  cmd.transport();
+
   cmd[4] = 0x2;    // LoEj = 1, Start = 0
-  int r = cmd.transport();
-  if( r ) {
-    kdDebug() << "(K3bCdDevice::CdDevice) MMC START/STOP UNIT failed. Falling back to cdrom.h." << endl;
-    r = ::ioctl( d->deviceFd, CDROMEJECT );
-  }
-  
-  return (r == 0);
+
+  return !cmd.transport();
 }
 
 
@@ -1727,12 +1729,7 @@ bool K3bCdDevice::CdDevice::load() const
   ScsiCommand cmd( this );
   cmd[0] = 0x1B;   // START/STOP UNIT
   cmd[4] = 0x3;    // LoEj = 1, Start = 1
-  int r = cmd.transport();
-  if( r ) {
-    kdDebug() << "(K3bCdDevice::CdDevice) MMC START/STOP UNIT failed. Falling back to cdrom.h." << endl;
-    r = ::ioctl( d->deviceFd, CDROMCLOSETRAY );
-  }
-  return (r == 0);
+  return !cmd.transport();
 }
 
 

@@ -25,6 +25,7 @@
 #include <qlabel.h>
 #include <qpainter.h>
 #include <qsimplerichtext.h>
+#include <qptrlist.h>
 
 #include <kurl.h>
 #include <kurldrag.h>
@@ -33,6 +34,7 @@
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kglobal.h>
+#include <kconfig.h>
 
 
 
@@ -49,62 +51,77 @@ K3bWelcomeWidget::Display::Display( QWidget* parent )
 
   setAcceptDrops( true );
   setBackgroundMode( PaletteBase );
+}
 
-  // now we add the buttons with fixed coordinates
-  audioDocButton = new QToolButton( this );
-  dataDocButton = new QToolButton( this );
-  dataDvdDocButton = new QToolButton( this );
-  copyCdButton = new QToolButton( this );
 
-  audioDocButton->setTextLabel( i18n("Create Audio CD Project") );
-  dataDocButton->setTextLabel( i18n("Create Data CD Project") );
-  dataDvdDocButton->setTextLabel( i18n("Create Data DVD Project") );
-  copyCdButton->setTextLabel( i18n("Copy CD") );
+void K3bWelcomeWidget::Display::rebuildGui( const KActionPtrList& actions )
+{
+  // step 1: delete all old buttons in the buttons QPtrList<QToolButton>
+  m_buttons.setAutoDelete(true);
+  m_buttons.clear();
 
-  audioDocButton->setIconSet( DesktopIcon( "sound" ) );
-  dataDocButton->setIconSet( DesktopIcon( "tar" ) );
-  dataDvdDocButton->setIconSet( DesktopIcon( "dvd_unmount" ) );
-  copyCdButton->setIconSet( DesktopIcon( "cdcopy" ) );
+  int numActions = actions.count();
+  if( numActions > 0 ) {
+    // step 2: calculate rows and columns
+    // for now we simply create 1-3 rows and as may cols as neccessary
+    int cols = 0, rows = 0;
+    if( numActions < 3 )
+      rows = 1;
+    else if( numActions > 6 )
+      rows = 3;
+    else
+      rows = 2;
 
-  audioDocButton->setUsesTextLabel( true );
-  dataDocButton->setUsesTextLabel( true );
-  dataDvdDocButton->setUsesTextLabel( true );
-  copyCdButton->setUsesTextLabel( true );
+    cols = numActions/rows;
+    if( numActions%rows )
+      cols++;
 
-  audioDocButton->setUsesBigPixmap( true );
-  dataDocButton->setUsesBigPixmap( true );
-  dataDvdDocButton->setUsesBigPixmap( true );
-  copyCdButton->setUsesBigPixmap( true );
+    // step 3: create buttons
+    for( KActionPtrList::const_iterator it = actions.begin(); it != actions.end(); ++it ) {
+      KAction* a = *it;
 
-  audioDocButton->setAutoRaise( true );
-  dataDocButton->setAutoRaise( true );
-  dataDvdDocButton->setAutoRaise( true );
-  copyCdButton->setAutoRaise( true );
+      QToolButton* b = new QToolButton( this );
+      b->setTextLabel( a->toolTip(), true );
+      b->setTextLabel( a->text() );
+      b->setIconSet( a->iconSet(KIcon::Desktop) );
+      b->setUsesTextLabel( true );
+      b->setUsesBigPixmap( true );
+      b->setAutoRaise( true );
+      b->setTextPosition( QToolButton::Under );
 
-  audioDocButton->setTextPosition( QToolButton::Under );
-  dataDocButton->setTextPosition( QToolButton::Under );
-  dataDvdDocButton->setTextPosition( QToolButton::Under );
-  copyCdButton->setTextPosition( QToolButton::Under );
+      connect( b, SIGNAL(clicked()), a, SLOT(activate()) );
 
-  // determine the needed button size (since all buttons should be equal in size
-  // we use the max of all sizes)
-  QSize buttonSize = audioDocButton->sizeHint();
-  buttonSize = buttonSize.expandedTo( dataDocButton->sizeHint() );
-  buttonSize = buttonSize.expandedTo( dataDvdDocButton->sizeHint() );
-  buttonSize = buttonSize.expandedTo( copyCdButton->sizeHint() );
+      m_buttons.append( b );
+    }
 
-  // position the buttons
-  QRect r( QPoint(80, 80), buttonSize );
-  audioDocButton->setGeometry( r );
-  r.moveBy( buttonSize.width(), 0 );
-  dataDvdDocButton->setGeometry( r );
-  r.moveBy( 0, buttonSize.height() );
-  copyCdButton->setGeometry( r );
-  r.moveBy( -1 * buttonSize.width(), 0 );
-  dataDocButton->setGeometry( r );
+    // step 4: calculate button size
+    // determine the needed button size (since all buttons should be equal in size
+    // we use the max of all sizes)
+    QSize buttonSize = m_buttons.first()->sizeHint();
+    for( QPtrListIterator<QToolButton> it( m_buttons ); it.current(); ++it ) {
+      buttonSize.expandedTo( it.current()->sizeHint() );
+    }
 
-  m_size = QSize( QMAX(20+m_header->widthUsed(), 80+(audioDocButton->width()*2)),
-		  80+(audioDocButton->height()*2) );
+    // step 5: position buttons
+    // starting rect
+    int row = 0;
+    int col = 0;
+    for( QPtrListIterator<QToolButton> it( m_buttons ); it.current(); ++it ) {
+      QToolButton* b = it.current();
+
+      b->setGeometry( QRect( QPoint( 80+(col*buttonSize.width()), 80+(row*buttonSize.height()) ), 
+			     buttonSize ) );
+      col++;
+      if( col == cols ) {
+	col = 0;
+	row++;
+      }
+    }
+
+    // step 6: calculate widget size
+    m_size = QSize( QMAX(20+m_header->widthUsed(), 80+(buttonSize.width()*cols)),
+		    80+(buttonSize.height()*rows) );
+  }
 }
 
 
@@ -139,15 +156,6 @@ K3bWelcomeWidget::K3bWelcomeWidget( K3bMainWindow* mw, QWidget* parent, const ch
   main = new Display( viewport() );
   addChild( main );
 
-//   viewport()->resize( 800, 400 );
-//   main->resize( 800, 400 );
- 
-  // connect the buttons
-  connect( main->audioDocButton, SIGNAL(clicked()), m_mainWindow, SLOT(slotNewAudioDoc()) );
-  connect( main->dataDocButton, SIGNAL(clicked()), m_mainWindow, SLOT(slotNewDataDoc()) );
-  connect( main->dataDvdDocButton, SIGNAL(clicked()), m_mainWindow, SLOT(slotNewDvdDoc()) );
-  connect( main->copyCdButton, SIGNAL(clicked()), m_mainWindow, SLOT(slotCdCopy()) );
-
   connect( main, SIGNAL(dropped(const KURL::List&)), m_mainWindow, SLOT(addUrls(const KURL::List&)) );
 
   connect( k3bthememanager, SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()) );
@@ -158,6 +166,27 @@ K3bWelcomeWidget::K3bWelcomeWidget( K3bMainWindow* mw, QWidget* parent, const ch
 
 K3bWelcomeWidget::~K3bWelcomeWidget()
 {
+}
+
+
+void K3bWelcomeWidget::loadConfig( KConfig* c )
+{
+  c->setGroup( "Welcome Widget" );
+  QStringList sl = c->readListEntry( "welcome_actions" );
+
+  if( sl.isEmpty() ) {
+    sl.append( "file_new_audio" );
+    sl.append( "file_new_data" );
+    sl.append( "file_new_dvd" );
+    sl.append( "tools_copy_cd" );
+  }
+
+  KActionPtrList actions;
+  for( QStringList::const_iterator it = sl.begin(); it != sl.end(); ++it )
+    if( KAction* a = m_mainWindow->actionCollection()->action( *it ) )
+      actions.append(a);
+
+  main->rebuildGui( actions );
 }
 
 
