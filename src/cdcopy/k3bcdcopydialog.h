@@ -64,6 +64,7 @@ class K3bCdCopyDialog : public K3bInteractionDialog
   QCheckBox* m_checkOnTheFly;
   QCheckBox* m_checkDeleteImages;
   QCheckBox* m_checkOnlyCreateImage;
+  QCheckBox* m_checkReadCdText;
   QCheckBox* m_checkPrefereCdText;
   QCheckBox* m_checkIgnoreReadErrors;
   QCheckBox* m_checkNoCorrection;

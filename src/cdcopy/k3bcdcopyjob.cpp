@@ -123,6 +123,7 @@ K3bCdCopyJob::K3bCdCopyJob( K3bJobHandler* hdl, QObject* parent )
     m_ignoreReadErrors(false),
     m_readRetries(128),
     m_preferCdText(false),
+    m_copyCdText(true),
     m_writingMode( K3b::WRITING_MODE_AUTO )
 {
   d = new Private();
@@ -333,12 +334,10 @@ void K3bCdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
       }
 
       if( audio && !m_onlyCreateImages ) {
-	emit newSubTask( i18n("Searching CD-TEXT") );
-	
-	connect( K3bCdDevice::sendCommand( K3bCdDevice::DeviceHandler::CD_TEXT_RAW, m_readerDevice ),
-		 SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
-		 this, 
-		 SLOT(slotCdTextReady(K3bCdDevice::DeviceHandler*)) );
+	if( m_copyCdText )
+	  searchCdText();
+	else
+	  queryCddb();
       }
       else
 	startCopy();
@@ -351,6 +350,17 @@ void K3bCdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
     emit infoMessage( i18n("Unable to read TOC"), ERROR );
     finishJob( false, true );
   }
+}
+
+
+void K3bCdCopyJob::searchCdText()
+{
+  emit newSubTask( i18n("Searching CD-TEXT") );
+  
+  connect( K3bCdDevice::sendCommand( K3bCdDevice::DeviceHandler::CD_TEXT_RAW, m_readerDevice ),
+	   SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
+	   this, 
+	   SLOT(slotCdTextReady(K3bCdDevice::DeviceHandler*)) );
 }
 
 

@@ -61,6 +61,7 @@ class K3bCdCopyJob : public K3bBurnJob
   void setIgnoreReadErrors( bool b ) { m_ignoreReadErrors = b; }
   void setReadRetries( int i ) { m_readRetries = i; }
   void setPreferCdText( bool b ) { m_preferCdText = b; }
+  void setCopyCdText( bool b ) { m_copyCdText = b; }
 
  private slots:
   void slotDiskInfoReady( K3bCdDevice::DeviceHandler* );
@@ -78,6 +79,7 @@ class K3bCdCopyJob : public K3bBurnJob
 
  private:
   void startCopy();
+  void searchCdText();
   void queryCddb();
   bool writeNextSession();
   void readNextSession();
@@ -97,6 +99,7 @@ class K3bCdCopyJob : public K3bBurnJob
   bool m_ignoreReadErrors;
   int m_readRetries;
   bool m_preferCdText;
+  bool m_copyCdText;
   QString m_tempPath;
   int m_writingMode;
 
