@@ -1,3 +1,6 @@
+0.11.22
+Flac 1.1.2 compile fix.
+
 0.11.21
 Little fix in capabilities detection (only affects buggy firmwares)
 Properly detect the Philips 2600
