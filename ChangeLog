@@ -2,6 +2,10 @@
 Added session import
 little reordering of menus
 fixed the "cdrecord error 255" bug
+fixed some i18n issues
+improved mp3 file detection
+added K3b project mimetype
+added konqueror servicemenu entries
 
 0.7.4
 fixed bug that caused stupid mountpoints to be assigned to the devices
