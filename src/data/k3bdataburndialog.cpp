@@ -128,7 +128,7 @@ K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const ch
     path = fi.filePath();
   if( path[path.length()-1] != '/' )
     path.append("/");
-  path.append( "image.iso" );
+  path.append( _doc->isoOptions().volumeID() + ".iso" );
   m_tempDirSelectionWidget->setTempPath( path );
 
   m_tempDirSelectionWidget->setNeededSize( doc()->size() );

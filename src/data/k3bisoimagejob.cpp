@@ -188,8 +188,13 @@ void K3bIsoImageJob::slotWrite()
     *m_cdrecordProcess << "-multi";
   if( k3bMain()->eject() )
     *m_cdrecordProcess << "-eject";
-  if( m_burnproof && m_device->burnproof() )
-    *m_cdrecordProcess << "driveropts=burnfree";  // with cdrecord 1.11a02 burnproof was renamed to burnfree
+  if( m_burnproof && m_device->burnproof() ) {
+    // with cdrecord 1.11a02 burnproof was renamed to burnfree (the new cdrecord writing class should check the version.)
+    if( k3bMain()->externalBinManager()->binObject( "cdrecord" )->version >= "1.11a02" )
+      *m_cdrecordProcess << "driveropts=burnfree";
+    else
+      *m_cdrecordProcess << "driveropts=burnproof";
+  }
 
   // add speed
   QString s = QString("-speed=%1").arg( m_speed );

@@ -360,8 +360,13 @@ void K3bDataJob::writeCD()
 
   if( k3bMain()->eject() )
     *m_process << "-eject";
-  if( m_doc->burnproof() && m_doc->burner()->burnproof() )
-    *m_process << "driveropts=burnfree";  // with cdrecord 1.11a02 burnproof was renamed to burnfree (the new cdrecord writing class should check the version.)
+  if( m_doc->burnproof() && m_doc->burner()->burnproof() ) {
+    // with cdrecord 1.11a02 burnproof was renamed to burnfree (the new cdrecord writing class should check the version.)
+    if( k3bMain()->externalBinManager()->binObject( "cdrecord" )->version >= "1.11a02" )
+      *m_process << "driveropts=burnfree";
+    else
+      *m_process << "driveropts=burnproof";
+  }
 
   // add speed
   QString s = QString("-speed=%1").arg( m_doc->speed() );
