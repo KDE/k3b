@@ -132,6 +132,8 @@ class K3bListView : public KListView
   void hideEditor();
   void editItem( K3bListViewItem*, int );
 
+  virtual void clear();
+
  private slots:
   void updateEditorSize();
   void slotClicked( QListViewItem*, const QPoint&, int );

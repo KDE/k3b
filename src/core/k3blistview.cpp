@@ -477,6 +477,13 @@ K3bListView::~K3bListView()
 }
 
 
+void K3bListView::clear()
+{
+  hideEditor();
+  KListView::clear();
+}
+
+
 void K3bListView::slotClicked( QListViewItem* item, const QPoint&, int col )
 {
   if( K3bListViewItem* k3bItem = dynamic_cast<K3bListViewItem*>(item) ) {
