@@ -22,7 +22,6 @@
 #include "k3bcddbresult.h"
 
 #include <qstring.h>
-#include <qvaluelist.h>
 
 
 class K3bCddbLocalQuery : public K3bCddbQuery
@@ -44,7 +43,6 @@ class K3bCddbLocalQuery : public K3bCddbQuery
   QString preparePath( const QString& p );
 
   QString m_cddbDir;
-  QValueList<K3bCddbResultEntry> m_matches;
 };
 
 #endif

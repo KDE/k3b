@@ -82,6 +82,7 @@ class K3bCddb : public QObject
   unsigned int m_iCurrentQueriedLocalDir;
 
   const K3bCddbQuery* m_lastUsedQuery;
+  K3bCddbResultEntry m_lastResult;
 
   // config
   QStringList m_cddbServer;

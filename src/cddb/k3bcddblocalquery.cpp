@@ -41,8 +41,6 @@ void K3bCddbLocalQuery::doQuery()
   emit infoMessage( i18n("Searching entry in %1").arg( m_cddbDir ) );
   kapp->processEvents(); //BAD!
 
-  m_matches.clear();
-
   QString path = preparePath( m_cddbDir );
 
   kdDebug() << "(K3bCddbLocalQuery) searching in dir " << path << " for " 
@@ -78,9 +76,9 @@ void K3bCddbLocalQuery::doQuery()
     }
   }
 
-  if( m_matches.count() > 0 ) {
+  if( m_inexactMatches.count() > 0 ) {
     setError( SUCCESS );
-    if( m_matches.count() == 1 ) {
+    if( m_inexactMatches.count() == 1 ) {
       queryMatch( m_inexactMatches.first() );
     }
     else {

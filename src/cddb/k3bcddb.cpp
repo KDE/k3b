@@ -131,6 +131,11 @@ void K3bCddb::slotQueryFinished( K3bCddbQuery* query )
   m_lastUsedQuery = query;
 
   if( query->error() == K3bCddbQuery::SUCCESS ) {
+    m_lastResult = m_lastUsedQuery->result();
+
+    // make sure the result has the requested discid since otherwise local saving does not make much sense
+    m_lastResult.discid = QString::number( m_toc.discId(), 16 );
+
     emit queryFinished( K3bCddbQuery::SUCCESS );
   }
   else if( query == m_localQuery ) {
@@ -244,7 +249,8 @@ QString K3bCddb::errorString() const
 
 const K3bCddbResultEntry& K3bCddb::result() const
 {
-  return m_lastUsedQuery->result();
+  //  return m_lastUsedQuery->result();
+  return m_lastResult;
 }
 
 
