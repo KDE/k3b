@@ -171,7 +171,7 @@ bool K3bMad::skipTag()
 }
 
 
-bool K3bMad::findFirstHeader()
+bool K3bMad::seekFirstHeader()
 {
   //
   // A lot of mp3 files start with a lot of junk which confuses mad.
@@ -180,7 +180,7 @@ bool K3bMad::findFirstHeader()
   // take way to long for non-mp3 files.
   //
   bool headerFound = findNextHeader();
-  while( !headerFound && m_inputFile.at() < 50*1024 ) {
+  while( !headerFound && !m_inputFile.atEnd() && m_inputFile.at() < 50*1024 ) {
     headerFound = findNextHeader();
   }
 

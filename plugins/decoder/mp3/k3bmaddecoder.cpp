@@ -166,7 +166,7 @@ bool K3bMadDecoder::initDecoderInternal()
   if( !d->handle->skipTag() )
     return false;
 
-  if( !d->handle->findFirstHeader() )
+  if( !d->handle->seekFirstHeader() )
     return false;
 
   return true;
@@ -498,7 +498,7 @@ bool K3bMadDecoderFactory::canDecode( const KURL& url )
     return false;
 
   handle.skipTag();
-  if( !handle.findFirstHeader() )
+  if( !handle.seekFirstHeader() )
     return false;
 
   if( handle.findNextHeader() ) {
@@ -506,28 +506,22 @@ bool K3bMadDecoderFactory::canDecode( const KURL& url )
     int layer = handle.madFrame->header.layer;
     unsigned int s = handle.madFrame->header.samplerate;
 
-    kdDebug() << "(K3bMadDecoderFactory) first header: " 
-	      << MAD_NCHANNELS( &handle.madFrame->header ) << " "
-	      << handle.madFrame->header.layer << " "
-	      << handle.madFrame->header.samplerate << endl;
-
     //
-    // find a second header
+    // find 4 more mp3 headers (random value since 2 was not enough)
     // This way we get most of the mp3 files while sorting out
     // for example wave files.
     //
-    if( handle.findNextHeader() ) {
-
-    kdDebug() << "(K3bMadDecoderFactory) second header: " 
-	      << MAD_NCHANNELS( &handle.madFrame->header ) << " "
-	      << handle.madFrame->header.layer << " "
-	      << handle.madFrame->header.samplerate << endl;
-
-      // compare the two found headers
+    int cnt = 1;
+    while( handle.findNextHeader() ) {
+      // compare the found headers
       if( MAD_NCHANNELS( &handle.madFrame->header ) == c &&
 	  handle.madFrame->header.layer == layer &&
-	  handle.madFrame->header.samplerate == s )
-	return true;
+	  handle.madFrame->header.samplerate == s ) {
+	if( ++cnt >= 5 )
+	  return true;
+      }
+      else
+	break;
     }
   }
 
