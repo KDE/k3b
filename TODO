@@ -1,8 +1,9 @@
 - audio ripping to mp3 (ogg)
-- video cd Mpeg Stills, photoalbum, portfolio
+* video cd Mpeg Stills, photoalbum, portfolio
 - video cd Interactive Menues (automenues)
 - video cd split long mpegs (volume set)
 * video cd Navigation
+* video cd ripping
 - make audio decoding pluggable
 * udf support
 - audio cd copy with cdda2wav & cdrecord

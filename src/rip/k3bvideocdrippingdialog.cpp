@@ -1,17 +1,17 @@
 /*
- *
- * $Id$
- * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
- *
- * This file is part of the K3b project.
- * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- * See the file "COPYING" for the exact licensing terms.
- */
+*
+* $Id$
+* Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
+*
+* This file is part of the K3b project.
+* Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or
+* (at your option) any later version.
+* See the file "COPYING" for the exact licensing terms.
+*/
 
 
 // kde include
@@ -64,60 +64,57 @@
 #include <k3btempdirselectionwidget.h>
 
 K3bVideoCdRippingDialog::K3bVideoCdRippingDialog( const QString ripsource, const long size, QWidget* parent, const char* name )
-  : K3bInteractionDialog( parent, name ), m_videocdsize(size), m_ripsource( ripsource )
+        : K3bInteractionDialog( parent, name ), m_videocdsize( size ), m_ripsource( ripsource )
 {
-  setupGui();
-  setupContextHelp();
-  
-  setTitle( i18n("VideoCd Ripping") );
+    setupGui();
+    setupContextHelp();
+
+    setTitle( i18n( "VideoCd Ripping" ) );
 }
 
 
 K3bVideoCdRippingDialog::~K3bVideoCdRippingDialog()
-{
-}
+{}
 
 
 void K3bVideoCdRippingDialog::setupGui()
 {
-    QWidget* frame = mainWidget();
+    QWidget * frame = mainWidget();
     QGridLayout* MainLayout = new QGridLayout( frame );
     MainLayout->setSpacing( KDialog::spacingHint() );
     MainLayout->setMargin( 0 );
 
     // ---------------------------------------------------- Directory group ---
     QGroupBox* groupDirectory = new QGroupBox( 0, Qt::Vertical, i18n( "Destination Directory" ), frame );
-    groupDirectory->layout()->setSpacing( KDialog::spacingHint() );
-    groupDirectory->layout()->setMargin( KDialog::marginHint() );
-    
+    groupDirectory->layout() ->setSpacing( KDialog::spacingHint() );
+    groupDirectory->layout() ->setMargin( KDialog::marginHint() );
+
     QGridLayout* groupDirectoryLayout = new QGridLayout( groupDirectory->layout() );
     groupDirectoryLayout->setAlignment( Qt::AlignTop );
 
-    QLabel* rippathLabel = new QLabel( i18n("Rip files to:"), groupDirectory );
+    QLabel* rippathLabel = new QLabel( i18n( "Rip files to:" ), groupDirectory );
     m_editDirectory = new KURLRequester( groupDirectory, "m_editDirectory" );
     m_editDirectory->setURL( QDir::homeDirPath() );
     m_editDirectory->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
-        
+
     rippathLabel->setBuddy( m_editDirectory );
 
     QHBox* freeSpaceBox = new QHBox( groupDirectory );
     freeSpaceBox->setSpacing( KDialog::spacingHint() );
-    (void)new QLabel( i18n( "Free space in directory:" ), freeSpaceBox, "FreeSpaceLabel" );
-    m_labelFreeSpace = new QLabel( "                       ",freeSpaceBox, "m_labelFreeSpace" );
+    ( void ) new QLabel( i18n( "Free space in directory:" ), freeSpaceBox, "FreeSpaceLabel" );
+    m_labelFreeSpace = new QLabel( "                       ", freeSpaceBox, "m_labelFreeSpace" );
     m_labelFreeSpace->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
 
     QHBox* necessarySizeBox = new QHBox( groupDirectory );
     necessarySizeBox->setSpacing( KDialog::spacingHint() );
-    (void)new QLabel( i18n( "Necessary storage size:" ), necessarySizeBox, "StorSize" );
+    ( void ) new QLabel( i18n( "Necessary storage size:" ), necessarySizeBox, "StorSize" );
     m_labelNecessarySize = new QLabel( "                        ", necessarySizeBox, "m_labelNecessarySize" );
     m_labelNecessarySize->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
 
 
     groupDirectoryLayout->addWidget( rippathLabel, 0, 0 );
     groupDirectoryLayout->addWidget( m_editDirectory, 0, 1 );
-//    groupDirectoryLayout->addWidget( m_labelFreeSpace, 1, 0 );
     groupDirectoryLayout->addWidget( freeSpaceBox, 1, 1 );
-//    groupDirectoryLayout->addWidget( m_labelNecessarySize, 2, 0 );
     groupDirectoryLayout->addWidget( necessarySizeBox, 2, 1 );
 
     // ---------------------------------------------------- Options group ---
@@ -133,52 +130,47 @@ void K3bVideoCdRippingDialog::setupGui()
     m_extractXML = new QCheckBox( i18n( "extract XML structure" ), groupOptions );
 
 
-    MainLayout->addWidget( groupDirectory, 0, 0);
-    MainLayout->addWidget( groupOptions, 1, 0);
+    MainLayout->addWidget( groupDirectory, 0, 0 );
+    MainLayout->addWidget( groupOptions, 1, 0 );
     MainLayout->setRowStretch( 0, 1 );
-                
-    setStartButtonText( i18n( "Start Ripping" ), i18n( "Starts copying the selected VideoCd tracks") );
+
+    setStartButtonText( i18n( "Start Ripping" ), i18n( "Starts extracting the selected VideoCd tracks" ) );
     // ----------------------------------------------------------------------------------
 
 }
 
 
 void K3bVideoCdRippingDialog::setupContextHelp()
-{
-}
+{}
 
 void K3bVideoCdRippingDialog::slotStartClicked()
 {
 
-  K3bVideoCdRip* rip = new K3bVideoCdRip();
-  rip->setRipSource( m_ripsource );
-  rip->setDestination( m_editDirectory->url() );
-  rip->setVideoCdSize(m_videocdsize);
-  
-  K3bJobProgressDialog ripDialog( kapp->mainWidget(), "Ripping" );
+    K3bVideoCdRip * rip = new K3bVideoCdRip();
+    rip->setRipSource( m_ripsource );
+    rip->setDestination( m_editDirectory->url() );
+    rip->setVideoCdSize( m_videocdsize );
 
-  hide();
-  ripDialog.startJob( rip );
+    K3bJobProgressDialog ripDialog( kapp->mainWidget(), "Ripping" );
 
-  delete rip;
+    hide();
+    ripDialog.startJob( rip );
 
-  close();
+    delete rip;
+
+    close();
 }
 
 void K3bVideoCdRippingDialog::slotLoadK3bDefaults()
-{
-}
+{}
 
 void K3bVideoCdRippingDialog::slotLoadUserDefaults()
-{
-}
+{}
 
 void K3bVideoCdRippingDialog::slotSaveUserDefaults()
-{
-}
+{}
 
 void K3bVideoCdRippingDialog::slotToggleAll()
-{
-}
+{}
 
 #include "k3bvideocdrippingdialog.moc"

@@ -1,17 +1,17 @@
 /*
- *
- * $Id$
- * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
- *
- * This file is part of the K3b project.
- * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- * See the file "COPYING" for the exact licensing terms.
- */
+*
+* $Id$
+* Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
+*
+* This file is part of the K3b project.
+* Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or
+* (at your option) any later version.
+* See the file "COPYING" for the exact licensing terms.
+*/
 
 
 #ifndef K3BVIDEOCDINFO_H
@@ -29,14 +29,12 @@ class KProcess;
 class K3bVideoCdInfoResultEntry
 {
     public:
-        K3bVideoCdInfoResultEntry() : name(0), id(0)
-        {
-        }
+        K3bVideoCdInfoResultEntry() : name( 0 ), id( 0 )
+        {}
 
-        K3bVideoCdInfoResultEntry( const QString& name, const QString& id)
-            : name(name), id(id)
-        {
-        }
+        K3bVideoCdInfoResultEntry( const QString& name, const QString& id )
+                : name( name ), id( id )
+        {}
 
         QString name;
         QString id;
@@ -46,64 +44,63 @@ class K3bVideoCdInfoResultEntry
 
 class K3bVideoCdInfoResult
 {
- public:
-  K3bVideoCdInfoResult()
-  {
-  }
+    public:
+        K3bVideoCdInfoResult()
+        {}
 
-  enum type {NONE=0, FILE, SEGMENT, SEQUENCE};
-  
-  void addEntry( const K3bVideoCdInfoResultEntry& = K3bVideoCdInfoResultEntry(), int type = K3bVideoCdInfoResult::SEQUENCE);
-  const K3bVideoCdInfoResultEntry& entry( unsigned int number = 0 , int type = K3bVideoCdInfoResult::SEQUENCE) const;
-  int foundEntries( int type  = K3bVideoCdInfoResult::SEQUENCE) const;
+        enum type {NONE = 0, FILE, SEGMENT, SEQUENCE};
 
-  QString volumeId;
-  QString type;
-  QString version;
+        void addEntry( const K3bVideoCdInfoResultEntry& = K3bVideoCdInfoResultEntry(), int type = K3bVideoCdInfoResult::SEQUENCE );
+        const K3bVideoCdInfoResultEntry& entry( unsigned int number = 0 , int type = K3bVideoCdInfoResult::SEQUENCE ) const;
+        int foundEntries( int type = K3bVideoCdInfoResult::SEQUENCE ) const;
 
-  QString rawData;
+        QString volumeId;
+        QString type;
+        QString version;
 
-  private:
-  QValueList<K3bVideoCdInfoResultEntry> m_fileEntry;
-  QValueList<K3bVideoCdInfoResultEntry> m_segmentEntry;
-  QValueList<K3bVideoCdInfoResultEntry> m_sequenceEntry;
+        QString xmlData;
 
-  K3bVideoCdInfoResultEntry m_emptyEntry;
+    private:
+        QValueList<K3bVideoCdInfoResultEntry> m_fileEntry;
+        QValueList<K3bVideoCdInfoResultEntry> m_segmentEntry;
+        QValueList<K3bVideoCdInfoResultEntry> m_sequenceEntry;
+
+        K3bVideoCdInfoResultEntry m_emptyEntry;
 };
 
 class K3bVideoCdInfo : public QObject
 {
-  Q_OBJECT
+        Q_OBJECT
 
- public:
-  K3bVideoCdInfo( QObject* parent = 0, const char* name = 0 );
-  ~K3bVideoCdInfo();
+    public:
+        K3bVideoCdInfo( QObject* parent = 0, const char* name = 0 );
+        ~K3bVideoCdInfo();
 
-  /**
-   * Do NOT call this before queryResult has
-   * been emitted
-   */
-  const K3bVideoCdInfoResult& result() const;
+        /**
+         * Do NOT call this before queryResult has
+         * been emitted
+         */
+        const K3bVideoCdInfoResult& result() const;
 
-  void info( const QString& );
+        void info( const QString& );
 
- signals:
-  void infoFinished( bool success );
+    signals:
+        void infoFinished( bool success );
 
- private slots:
-  void slotInfoFinished();
-  void slotParseOutput( KProcess*, char* output, int len );
+    private slots:
+        void slotInfoFinished();
+        void slotParseOutput( KProcess*, char* output, int len );
 
- private:
-  void cancelAll();
-  
-  K3bVideoCdInfoResult m_Result;
-  void parseXmlData();
+    private:
+        void cancelAll();
 
-  KProcess* m_process;
+        K3bVideoCdInfoResult m_Result;
+        void parseXmlData();
 
-  QString m_xmlData;
-  bool m_isXml;
+        KProcess* m_process;
+
+        QString m_xmlData;
+        bool m_isXml;
 
 };
 
