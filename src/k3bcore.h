@@ -59,6 +59,12 @@ class K3bCore : public QObject
 
   KConfig* config() const;
 
+  /**
+   * Checks the system and pops up a dialog if
+   * any things are not configured properly.
+   */
+  void checkSystem() const;
+
   static K3bCore* k3bCore() { return s_k3bCore; }
 
  signals:
