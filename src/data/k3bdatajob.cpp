@@ -84,6 +84,8 @@ void K3bDataJob::start()
 {
   emit started();
 
+  m_canceled = false;
+
   if( m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
       m_doc->multiSessionMode() == K3bDataDoc::FINISH ) {
     fetchMultiSessionInfo();
@@ -263,6 +265,9 @@ void K3bDataJob::slotIsoImagerPercent( int p )
 
 void K3bDataJob::slotIsoImagerFinished( bool success )
 {
+  if( m_canceled )
+    return;
+
   if( !m_doc->onTheFly() ) {
     m_imageFile.close();
     if( success ) {
@@ -333,6 +338,9 @@ void K3bDataJob::slotDataWritten()
 
 void K3bDataJob::slotWriterJobFinished( bool success )
 {
+  if( m_canceled )
+    return;
+
   if( !m_doc->onTheFly() && m_doc->deleteImage() ) {
     QFile::remove( m_doc->isoImage() );
     m_doc->setIsoImage("");
@@ -408,18 +416,11 @@ void K3bDataJob::slotCollectOutput( KProcess*, char* output, int len )
 
 void K3bDataJob::cancelAll()
 {
+  m_canceled = true;
+
   m_isoImager->cancel();
   if( m_writerJob )
     m_writerJob->cancel();
-
-  if( !m_doc->onlyCreateImage() ) {
-    // we need to unlock the writer because cdrdao/cdrecord locked it while writing
-    bool block = m_doc->burner()->block( false );
-    if( !block )
-      emit infoMessage( i18n("Could not unlock CD drive."), K3bJob::ERROR );
-    else if( k3bMain()->eject() )
-      m_doc->burner()->eject();
-  }
 
   // remove iso-image if it is unfinished or the user selected to remove image
   if( QFile::exists( m_doc->isoImage() ) ) {

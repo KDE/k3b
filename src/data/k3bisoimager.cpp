@@ -321,9 +321,11 @@ void K3bIsoImager::start()
 void K3bIsoImager::cancel()
 {
   if( m_process )
+    disconnect(m_process);
     if( m_process->isRunning() ) {
       m_process->kill();
       emit canceled();
+      emit finished(false);
     }
 }
 

@@ -177,7 +177,6 @@ void K3bCdrecordWriter::cancel()
 	burnDevice()->eject();
     }
     
-    emit infoMessage( i18n("Writing canceled."), K3bJob::ERROR ); 
     emit canceled();
     emit finished( false );
   }

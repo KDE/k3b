@@ -70,6 +70,7 @@ class K3bDataJob : public K3bBurnJob
   KProcess* m_process;
 
   bool m_imageFinished;
+  bool m_canceled;
 
   QString m_msInfo;
   QString m_collectedOutput;
