@@ -211,7 +211,7 @@ void K3bAudioJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 	}
       else {
 	// debugging
-	qDebug("(cdrecord) " + *str );
+	qDebug("(cdrecord) %s", (*str).latin1() );
       }
     } // for every line
 }
@@ -474,7 +474,7 @@ void K3bAudioJob::slotDecodeNextFile()
 
 	// start the K3bWaveFileWriter
 	if( !m_waveFileWriter.open( bufferFile.path() ) ) {
-	  qDebug( "(K3bAudioModule) Could not open file " + bufferFile.path() );
+	  qDebug( "(K3bAudioModule) Could not open file %s", bufferFile.path().latin1() );
 	  emit infoMessage( i18n("Could not open buffer file %1").arg(bufferFile.path()), K3bJob::ERROR );
 	  
 	  cancelAll();
@@ -553,11 +553,11 @@ void K3bAudioJob::slotModuleFinished( bool success )
     if( success ) {
       m_currentDecodedTrack->setBufferFile( bufferFilename );
 
-      qDebug( "(K3bAudioJob) Successfully buffered track " + m_currentDecodedTrack->fileName() );
+      qDebug( "(K3bAudioJob) Successfully buffered track %s", m_currentDecodedTrack->fileName().latin1() );
       emit infoMessage( i18n("Written buffer file for %1 to %2").arg(m_currentDecodedTrack->fileName()).arg(bufferFilename), STATUS );
     }
     else {
-      qDebug( "(K3bAudioJob) Could not buffer track " + m_currentDecodedTrack->fileName() );
+      qDebug( "(K3bAudioJob) Could not buffer track %s", m_currentDecodedTrack->fileName().latin1() );
       emit infoMessage( i18n("Error while buffering track %1").arg( m_currentDecodedTrack->fileName() ), ERROR );
 
       cancelAll();

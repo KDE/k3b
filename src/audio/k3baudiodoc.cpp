@@ -140,7 +140,7 @@ void K3bAudioDoc::slotWorkUrlQueue()
       lastAddedPosition = m_tracks->count();
 	
     if( !item->url.isLocalFile() ) {
-      qDebug( item->url.path() + " no local file" );
+      qDebug( "%s no local file", item->url.path().latin1() );
       return;
     }
 	
@@ -741,7 +741,7 @@ unsigned long K3bAudioDoc::identifyWaveFile( const KURL& url )
 
   QFile inputFile( filename );
   if( !inputFile.open(IO_ReadOnly) ) {
-    qDebug("Could not open file: " + filename );
+    qDebug("Could not open file: %s", filename.latin1() );
     return 0;
   }
 
@@ -751,14 +751,14 @@ unsigned long K3bAudioDoc::identifyWaveFile( const KURL& url )
 
   inputStream.readRawBytes( magic, 4 );
   if( inputStream.atEnd() || qstrncmp(magic, "RIFF", 4) ) {
-    qDebug( filename + ": not a RIFF file.");
+    qDebug( "%s: not a RIFF file.", filename.latin1());
     return 0;
   }
 
   inputFile.at( 8 );
   inputStream.readRawBytes( magic, 4 );
   if( inputStream.atEnd() || qstrncmp(magic, "WAVE", 4) ) {
-    qDebug( filename + ": not a wave file.");
+    qDebug( "%s: not a wave file.",  filename.latin1());
     return 0;
   }
 
@@ -768,7 +768,7 @@ unsigned long K3bAudioDoc::identifyWaveFile( const KURL& url )
 
     inputStream.readRawBytes( magic, 4 );
     if( inputStream.atEnd() ) {
-      qDebug( filename + ": could not find format chunk.");
+      qDebug( "%s: could not find format chunk.", filename.latin1());
       return 0;
     }
 
@@ -779,7 +779,7 @@ unsigned long K3bAudioDoc::identifyWaveFile( const KURL& url )
     // skip chunk data of unknown chunk
     if( qstrncmp(magic, "fmt ", 4) )
       if( !inputFile.at( inputFile.at() + chunkLen ) ) {
-	qDebug( filename + ": could not seek in file.");
+	qDebug( "%s: could not seek in file.", filename.latin1());
 	return 0;
       }
   }
@@ -791,21 +791,21 @@ unsigned long K3bAudioDoc::identifyWaveFile( const KURL& url )
   Q_INT16 waveFormat;
   inputStream >> waveFormat;
   if (inputStream.atEnd() || K3b::swapByteOrder(waveFormat) != 1) {
-    qDebug( filename + ": not in PCM format: %i", waveFormat);
+    qDebug( "%s: not in PCM format: %i", filename.latin1(), waveFormat);
     return 0;
   }
 
   Q_INT16 waveChannels;
   inputStream >> waveChannels;
   if (inputStream.atEnd() || K3b::swapByteOrder(waveChannels) != 2) {
-    qDebug( filename + ": found %d channel(s), require 2 channels.", waveChannels );
+    qDebug( "%s: found %d channel(s), require 2 channels.", filename.latin1(), waveChannels );
     return 0;
   }
 
   Q_INT32 waveRate;
   inputStream >> waveRate; 
   if (inputStream.atEnd() || K3b::swapByteOrder(waveRate) != 44100) {
-     qDebug( filename + ": found sampling rate %ld, require 44100.", waveRate);
+     qDebug( "%s: found sampling rate %ld, require 44100.", filename.latin1(), waveRate);
      return 0;
   }
 
@@ -817,14 +817,14 @@ unsigned long K3bAudioDoc::identifyWaveFile( const KURL& url )
   Q_INT16 waveBits;
   inputStream >> waveBits;
   if (inputStream.atEnd() || K3b::swapByteOrder(waveBits) != 16) {
-    qDebug( filename + ": found %d bits per sample, require 16.", waveBits);
+    qDebug( "%s: found %d bits per sample, require 16.", filename.latin1(), waveBits);
     return 0;
   }
 
   chunkLen -= 16;
   // skip all other (unknown) format chunk fields
   if( !inputFile.at( inputFile.at() + chunkLen ) ) {
-    qDebug( filename + ": could not seek in file.");
+    qDebug( "%s: could not seek in file.", filename.latin1());
     return 0;
   }
 
@@ -834,7 +834,7 @@ unsigned long K3bAudioDoc::identifyWaveFile( const KURL& url )
 
     inputStream.readRawBytes( magic, 4 );
     if( inputStream.atEnd()  ) {
-      qDebug( filename + ": could not find data chunk.");
+      qDebug( "%s: could not find data chunk.", filename.latin1());
       return 0;
     }
 
@@ -848,7 +848,7 @@ unsigned long K3bAudioDoc::identifyWaveFile( const KURL& url )
     // skip chunk data of unknown chunk
     if( qstrncmp(magic, "data", 4) )
       if( !inputFile.at( inputFile.at() + chunkLen ) ) {
-	qDebug( filename + ": could not seek in file.");
+	qDebug( "%s: could not seek in file.", filename.latin1());
 	return 0;
       }
   }
@@ -856,8 +856,8 @@ unsigned long K3bAudioDoc::identifyWaveFile( const KURL& url )
   // found data chunk
   int headerLen = inputFile.at();
   if( headerLen + chunkLen > inputFile.size() ) {
-    qDebug( filename + ": file length %i does not match length from WAVE header %i + %i - using actual length.",
-	    inputFile.size(), headerLen, chunkLen);
+    qDebug( "%s: file length %i does not match length from WAVE header %i + %i - using actual length.",
+	    filename.latin1(), inputFile.size(), headerLen, chunkLen);
     return (inputFile.size() - headerLen)/2352;
   }
   else {

@@ -18,10 +18,6 @@
 #include "k3baudiotrack.h"
 #include "../tools/k3bglobals.h"
 
-// ID3lib-includes
-#include <id3/tag.h>
-#include <id3/misc_support.h>
-
 #include "input/k3baudiomodule.h"
 
 #include <kapp.h>
