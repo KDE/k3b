@@ -64,7 +64,7 @@ extern "C" {
 }
 #endif
 
-
+#define ROUND(f) ((int)(f + 0.5))
 
 const char* K3bCdDevice::CdDevice::cdrdao_drivers[] =
   { "auto", "plextor", "plextor-scan", "cdd2600", "generic-mmc",
@@ -2811,9 +2811,9 @@ QValueList<int> K3bCdDevice::CdDevice::determineSupportedWriteSpeeds() const
 	    if( dvd && s > 2770 && s < 4155 )
 	      s = 3324; // 2.4x
 	    else if( dvd )
-	      s = 1385*(int)nearbyint( (double)s/1385.0 );
+	      s = 1385*(int)ROUND( (double)s/1385.0 );
 	    else
-	      s = 175*(int)nearbyint( (double)s/175.0 );
+	      s = 175*(int)ROUND( (double)s/175.0 );
 
 	    // sort the list
 	    QValueList<int>::iterator it = ret.begin();
@@ -2858,9 +2858,9 @@ QValueList<int> K3bCdDevice::CdDevice::determineSupportedWriteSpeeds() const
 	  if( dvd && s > 2770 && s < 4155 )
 	    s = 3324; // 2.4x
 	  else if( dvd )
-	    s = 1385*(int)nearbyint( (double)s/1385.0 );
+	    s = 1385*(int)ROUND( (double)s/1385.0 );
 	  else
-	    s = 175*(int)nearbyint( (double)s/175.0 );
+	    s = 175*(int)ROUND( (double)s/175.0 );
 	  
 	  QValueList<int>::iterator it = ret.begin();
 	  while( it != ret.end() && *it < s )
