@@ -20,6 +20,7 @@
 #include <kdebug.h>
 #include <kcmdlineargs.h>
 #include <kurl.h>
+#include <kwin.h>
 
 #include <qcstring.h>
 
@@ -73,8 +74,15 @@ void K3bSmartInstanceReuser::reuseInstance( DCOPRef& instance )
   //
   // We found an unblocked instance of K3b
   //
-  // TODO: raise the found instance to the foreground and switch to the desktop.
 
+  // raise the found instance to the foreground
+  DCOPReply winIDReply = DCOPRef( instance.app(), "K3b" ).call( "getWinID()" );
+  if( winIDReply.isValid() ) {
+    int winID;
+    winIDReply.get(winID);
+    KWin::setOnDesktop( winID, KWin::currentDesktop() );
+    KWin::forceActiveWindow( winID );
+  }
 
   //
   // handle the commandline args

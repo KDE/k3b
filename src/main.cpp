@@ -103,14 +103,15 @@ int main( int argc, char* argv[] )
   KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
   KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
 
+  // we need the app in both cases since KWin::forceActiveWindow will crash otherwise (although
+  // I have no idea why.... it does not use kapp)
+  K3bApplication app;
 
   //
   // In case no unblocked instance of K3b was found we create a new one.
   //
   if( !K3bSmartInstanceReuser::reuseInstance(args) ) {
 
-    K3bApplication app;
-      
     if( args->isSet("lang") )
       if( !KGlobal::locale()->setLanguage(args->getOption("lang")) )
 	kdDebug() << "Unable to set to language " << args->getOption("lang") 
