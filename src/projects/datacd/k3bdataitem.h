@@ -76,8 +76,7 @@ class K3bDataItem
 	
   /** returns the path to the file on the local filesystem */
   virtual QString localPath() const { return QString::null; }
-  virtual int localInode() const { return 0; }
-		
+
   virtual KIO::filesize_t k3bSize() const { return 0; }
 
   /** returnes the dir of the item (or the item if it's a dir) */

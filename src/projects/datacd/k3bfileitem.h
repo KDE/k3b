@@ -49,10 +49,18 @@ public:
   QString localPath() const;
 
   /**
+   * Identification of the files on the local device.
+   */
+  struct Id {
+    dev_t device;
+    ino_t inode;
+  };
+
+  /**
    * This is not the normal inode number but it also contains
    * the device number.
    */
-  int localInode() const { return m_inode; }
+  Id localId() const { return m_id; }
 
   KIO::filesize_t k3bSize() const;
 
@@ -72,7 +80,11 @@ public:
   K3bDataItem* m_replacedItemFromOldSession;
 
   KIO::filesize_t m_size;
-  int m_inode;
+  Id m_id;
 };
+
+bool operator==( const K3bFileItem::Id&, const K3bFileItem::Id& );
+bool operator<( const K3bFileItem::Id&, const K3bFileItem::Id& );
+bool operator>( const K3bFileItem::Id&, const K3bFileItem::Id& );
 
 #endif

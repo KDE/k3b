@@ -171,7 +171,7 @@
                         <string>&lt;p&gt;If this option is checked, K3b will generate the System Use Sharing Protocol records (SUSP) specified by the Rock Ridge Interchange Protocol (IEEE-P1282).
 &lt;p&gt;Rock Ridge extends the ISO-9660 filesystem by features equal to the UNIX filesystems (permissions, symbolic links, very long filenames, ...). It uses ISO-8859 or UTF-16 based characters and allows 255 octets.
 &lt;p&gt;Rock Ridge extensions are located at the end of each ISO-9660 directory record. This makes the Rock Ridge tree closely coupled to the ISO-9660 tree.
-&lt;p&gt;&lt;b&gt;It is highly recommended to use Rock Ridge extensions on every data CD.&lt;/b&gt;</string>
+&lt;p&gt;&lt;b&gt;It is highly recommended to use Rock Ridge extensions on every data CD/DVD.&lt;/b&gt;</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox">
