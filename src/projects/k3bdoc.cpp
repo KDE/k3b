@@ -426,7 +426,7 @@ void K3bDoc::loadDefaultSettings( KConfig* c )
   else
     setWritingMode( K3b::WRITING_MODE_AUTO );
 
-  setDummy( c->readBoolEntry( "dummy_mode", false ) );
+  setDummy( c->readBoolEntry( "simulate", false ) );
   setOnTheFly( c->readBoolEntry( "on_the_fly", true ) );
   setBurnproof( c->readBoolEntry( "burnproof", true ) );
   setRemoveImages( c->readBoolEntry( "remove_image", true ) );
