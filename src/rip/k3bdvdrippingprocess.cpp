@@ -21,6 +21,7 @@
 #include <k3bdevicemanager.h>
 #include <k3bdevice.h>
 #include <k3bcore.h>
+#include <kstdguiitem.h>
 #include "k3bdvdaudiogain.h"
 
 #include <qstring.h>
@@ -38,7 +39,7 @@
 #include <kio/job.h>
 #include <kmessagebox.h>
 
-K3bDvdRippingProcess::K3bDvdRippingProcess( QObject *parent ) 
+K3bDvdRippingProcess::K3bDvdRippingProcess( QObject *parent )
   : K3bJob(parent) {
     //m_processAudio = processAudio;
   //    m_parent = parent;
@@ -163,7 +164,7 @@ void K3bDvdRippingProcess::slotExited( KProcess* ) {
         kdDebug() << "(K3bDvdRippingProcess) Copy IFO files for audio gain processing." << endl;
         //postProcessingDvd();
         saveConfig();
-	emit infoMessage( i18n("Successfully ripped all video titles to %1.").arg(m_dirvob), SUCCESS );        
+	emit infoMessage( i18n("Successfully ripped all video titles to %1.").arg(m_dirvob), SUCCESS );
         emit finished( true );
         //  postProcessingFinished();
     }
@@ -266,7 +267,7 @@ void K3bDvdRippingProcess::slotPreProcessingDvd( KIO::Job *resultJob) {
     // do show a dialog instead of an infoMessage since the errorString spreads over multible lines. :(
     resultJob->showErrorDialog( qApp->activeWindow() );
     emit infoMessage( i18n("Mounting failed."), ERROR );
-    
+
     m_preProcessingFailed = true;
     emit finished( false );
   } else {
@@ -317,7 +318,7 @@ bool K3bDvdRippingProcess::copyIfoFiles( const QString& video, const QString& vt
         QStringList ifos;  // = video_ts.entryList();
         m_videoCaseSensitive = QString(video + "." +ifo); // dvd norm
         ifos << m_mountPoint + "/" + video + "/" + m_videoCaseSensitive;
-        m_vobCaseSensitive = vts + "_"+formattedTitleset()+"_0." + ifo; // titleset ifo for the current ripped title	
+        m_vobCaseSensitive = vts + "_"+formattedTitleset()+"_0." + ifo; // titleset ifo for the current ripped title
         ifos << m_mountPoint + "/" + video + "/" + m_vobCaseSensitive;
         KURL::List ifoList = KURL::List( ifos );
         KURL dest( m_dirtmp );
@@ -368,7 +369,7 @@ QString K3bDvdRippingProcess::getFilename() {
 
     QFile destFile( result );
     if( destFile.exists() ) {
-        int button = QMessageBox::critical( 0, i18n("Ripping Error"), i18n("%1 already exists." ).arg(result), i18n("Overwrite"), i18n("Cancel") );
+        int button = QMessageBox::critical( 0, i18n("Ripping Error"), i18n("%1 already exists." ).arg(result), i18n("Overwrite"), KStdGuiItem::cancel().text() );
         if( button == 0 )
             return result;
         else
@@ -449,7 +450,7 @@ float K3bDvdRippingProcess::getAudioGain() {
         }
         f.close();
     } else {
-        QMessageBox::critical( 0, i18n("Ripping Error"), i18n("Unable to get data for audio normalizing. Use default of 1.0."), i18n("&OK") );
+        QMessageBox::critical( 0, i18n("Ripping Error"), i18n("Unable to get data for audio normalizing. Use default of 1.0."), KStdGuiItem::ok().text() );
     }
     return result;
 }

@@ -37,6 +37,8 @@
 #include <kstandarddirs.h>
 #include <kfiledialog.h>
 #include <kdebug.h>
+#include <kstdguiitem.h>
+
 
 #define DEFAULT_SONGLIST_FILE "songlist.xml"
 
@@ -138,7 +140,7 @@ void K3bCddbLocalDBTab::verifyDb(){
         }
     } else {
         QMessageBox::critical( this, i18n("Database Error"),
-			       i18n("File does not exist <%1>.").arg(m_songListPath->text()), i18n("&OK") );
+			       i18n("File does not exist <%1>.").arg(m_songListPath->text()), KStdGuiItem::ok().text() );
     }
 }
 void K3bCddbLocalDBTab::findDbEntries(){

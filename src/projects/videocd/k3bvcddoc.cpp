@@ -33,6 +33,7 @@
 #include <kstandarddirs.h>
 #include <kio/global.h>
 #include <kdebug.h>
+#include <kstdguiitem.h>
 
 // K3b-includes
 #include "k3bvcddoc.h"
@@ -223,7 +224,7 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
                                                       + i18n( "Note: Forcing mpeg2 as VCD is not supported by "
                                                       "some standalone DVD players." ),
                                                       i18n( "Information" ),
-                                                      i18n( "&OK" ),
+                                                      KStdGuiItem::ok().text(),
                                                       i18n( "Forcing VCD" ) ) == KMessageBox::No );
                 if ( force ) {
                     setVcdType( vcdTypes( 1 ) );
@@ -330,7 +331,7 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
      KMessageBox::error( kapp->mainWidget(), "(" + url.path() + ")\n" +
                          i18n( "Only MPEG1 and MPEG2 video files are supported." ),
                          i18n( "Wrong File Format" ) );
-    
+
      return 0;
 }
 
@@ -884,7 +885,7 @@ bool K3bVcdDoc::saveDocumentData( QDomElement* docElem )
         trackElem.setAttribute( "playtime", track->getPlayTime() );
         trackElem.setAttribute( "waittime", track->getWaitTime() );
         trackElem.setAttribute( "reactivity", track->Reactivity() );
-                                
+
         for ( int i = 0; i < K3bVcdTrack::_maxPbcTracks; i++ ) {
             if ( track->isPbcUserDefined( i ) ) {
                 // save pbcTracks
