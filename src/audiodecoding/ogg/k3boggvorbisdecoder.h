@@ -66,7 +66,7 @@ class K3bOggVorbisDecoder : public K3bAudioDecoder
   QString technicalInfo( const QString& ) const;
 
  protected:
-  bool analyseFileInternal();
+  bool analyseFileInternal( K3b::Msf* frames, int* samplerate, int* ch );
   bool initDecoderInternal();
 
   int decodeInternal( char* _data, int maxLen );

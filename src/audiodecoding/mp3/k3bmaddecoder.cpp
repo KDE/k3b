@@ -61,7 +61,7 @@ public:
   {
   }
 
-  QValueVector<long> seekPositions;
+  //  QValueVector<long> seekPositions;
 
   k3b_mad_char* inputBuffer;
 
@@ -76,22 +76,6 @@ public:
   bool bEndOfInput;
   bool bInputError;
   bool bOutputFinished;
-
-  // needed for resampling
-  // ----------------------------------
-  bool bFrameNeedsResampling;
-  mad_fixed_t madResampledRatio;
-
-  // left channel
-  mad_fixed_t madResampledStepLeft;
-  mad_fixed_t madResampledLastLeft;
-  mad_fixed_t* madResampledLeftChannel;
-
-  // right channel
-  mad_fixed_t madResampledStepRight;
-  mad_fixed_t madResampledLastRight;
-  mad_fixed_t* madResampledRightChannel;
-  // ----------------------------------
 
   unsigned long frameCount;
 
@@ -119,14 +103,6 @@ K3bMadDecoder::K3bMadDecoder( QObject* parent, const char* name )
   d->madHeader = new mad_header;
   d->madSynth  = new mad_synth;
   d->madTimer  = new mad_timer_t;
-
-
-  // resampling
-  // a 32 kHz frame has 1152 bytes
-  // so to resample it we need about 1587 bytes for resampling
-  // all other resampling needs at most 1152 bytes
-  d->madResampledLeftChannel = new mad_fixed_t[1600];
-  d->madResampledRightChannel = new mad_fixed_t[1600];
 }
 
 
@@ -135,9 +111,6 @@ K3bMadDecoder::~K3bMadDecoder()
   cleanup();
 
   delete [] d->inputBuffer;
-
-  delete [] d->madResampledLeftChannel;
-  delete [] d->madResampledRightChannel;
 
   delete d->madStream;
   delete d->madFrame;
@@ -202,13 +175,17 @@ void K3bMadDecoder::initMadStructures()
 }
 
 
-bool K3bMadDecoder::analyseFileInternal()
+bool K3bMadDecoder::analyseFileInternal( K3b::Msf* frames, int* samplerate, int* ch )
 {
   initDecoderInternal();
-  unsigned long frames = countFrames();
-  if( frames > 0 )
-    setLength( frames );
-  return( frames > 0 );
+  *frames = countFrames( samplerate );
+  if( *frames > 0 ) {
+    // we convert mono to stereo all by ourselves. :)
+    *ch = 2;
+    return true;
+  }
+  else
+    return false;
 }
 
 
@@ -218,7 +195,6 @@ bool K3bMadDecoder::initDecoderInternal()
 
   d->bOutputFinished = false;
   d->bEndOfInput = false;
-  d->bFrameNeedsResampling = false;
   d->bInputError = false;
     
   d->inputFile.setName( filename() );
@@ -232,12 +208,6 @@ bool K3bMadDecoder::initDecoderInternal()
   initMadStructures();
 
   d->frameCount = 0;
-
-  // reset the resampling status structures
-  d->madResampledStepLeft = 0;
-  d->madResampledLastLeft = 0;
-  d->madResampledStepRight = 0;
-  d->madResampledLastRight = 0;
 
   return true;
 }
@@ -283,12 +253,13 @@ void K3bMadDecoder::madStreamBuffer()
 }
 
 
-unsigned long K3bMadDecoder::countFrames()
+unsigned long K3bMadDecoder::countFrames( int* samplerate )
 {
   unsigned long frames = 0;
   bool error = false;
+  *samplerate = 0;
 
-  d->seekPositions.clear();
+  //  d->seekPositions.clear();
 
   while( !d->bEndOfInput && !d->bInputError ) {
 
@@ -316,10 +287,13 @@ unsigned long K3bMadDecoder::countFrames()
       else {
 	// create the seek position
 	// current position in file + bytes to start of current frame in the buffer
-	long seekPos = d->inputFile.at() + (d->madStream->this_frame - d->madStream->buffer);
-	d->seekPositions.append( seekPos );
+// 	long seekPos = d->inputFile.at() + (d->madStream->this_frame - d->madStream->buffer);
+// 	d->seekPositions.append( seekPos );
 
 	d->frameCount++;
+
+	if( *samplerate == 0 )
+	  *samplerate = d->madHeader->samplerate;
 
 	static mad_timer_t s_frameLen = mad_timer_zero;
 	if( mad_timer_compare( s_frameLen, d->madHeader->duration ) ) {
@@ -365,9 +339,7 @@ int K3bMadDecoder::decodeInternal( char* _data, int maxLen )
     // one mad_frame represents a mp3-frame which is always 1152 samples
     // for us that means we need 4*1152 bytes of output buffer for every frame
     // since one sample has 16 bit
-    // special case: resampling from 32000 Hz: this results 1587 samples per channel
-    // so to always have enough free buffer we use 4*1600 (This is bad, this needs some redesign!)
-    if( d->outputBufferEnd - d->outputPointer < 4*1600 ) {
+    if( d->outputBufferEnd - d->outputPointer < 4*1152 ) {
       bOutputBufferFull = true;
     }
     else {
@@ -378,9 +350,8 @@ int K3bMadDecoder::decodeInternal( char* _data, int maxLen )
 	// are reported by mad_synth_frame();
 	//
 	mad_synth_frame( d->madSynth, d->madFrame );
-	
-	// this does the resampling if needed
-	// and fills the output buffer
+
+	// this fills the output buffer
 	if( !createPcmSamples( d->madSynth ) ) {
 	  return -1;
 	}
@@ -395,7 +366,7 @@ int K3bMadDecoder::decodeInternal( char* _data, int maxLen )
 
   // flush the output buffer
   size_t buffersize = d->outputPointer - d->outputBuffer;
-	    
+
   return buffersize;
 }
 
@@ -459,73 +430,9 @@ unsigned short K3bMadDecoder::linearRound( mad_fixed_t fixed )
 
 bool K3bMadDecoder::createPcmSamples( mad_synth* synth )
 {
-  static mad_fixed_t const resample_table[9] =
-    {
-      MAD_F(0x116a3b36) /* 1.088435374 */,
-      MAD_F(0x10000000) /* 1.000000000 */,
-      MAD_F(0x0b9c2779) /* 0.725623583 */,
-      MAD_F(0x08b51d9b) /* 0.544217687 */,
-      MAD_F(0x08000000) /* 0.500000000 */,
-      MAD_F(0x05ce13bd) /* 0.362811791 */,
-      MAD_F(0x045a8ecd) /* 0.272108844 */,
-      MAD_F(0x04000000) /* 0.250000000 */,
-      MAD_F(0x02e709de) /* 0.181405896 */, 
-    };
-
-
-
   mad_fixed_t* leftChannel = synth->pcm.samples[0];
   mad_fixed_t* rightChannel = synth->pcm.samples[1];
   unsigned short nsamples = synth->pcm.length;
-
-  // check if we need to resample
-  if( synth->pcm.samplerate != 44100 ) {
-
-    switch ( synth->pcm.samplerate ) {
-    case 48000:
-      d->madResampledRatio = resample_table[0];
-      break;
-    case 44100:
-      d->madResampledRatio = resample_table[1];
-      break;
-    case 32000:
-      d->madResampledRatio = resample_table[2];
-      break;
-    case 24000:
-      d->madResampledRatio = resample_table[3];
-      break;
-    case 22050:
-      d->madResampledRatio = resample_table[4];
-      break;
-    case 16000:
-      d->madResampledRatio = resample_table[5];
-      break;
-    case 12000:
-      d->madResampledRatio = resample_table[6];
-      break;
-    case 11025:
-      d->madResampledRatio = resample_table[7];
-      break;
-    case  8000:
-      d->madResampledRatio = resample_table[8];
-      break;
-    default:
-      kdDebug() << "(K3bMadDecoder) Error: not a supported samplerate: " << synth->pcm.samplerate << endl;
- 
-      return false;
-    }
-
-
-    resampleBlock( leftChannel, synth->pcm.length, d->madResampledLeftChannel, d->madResampledLastLeft, 
-		   d->madResampledStepLeft );
-    nsamples = resampleBlock( rightChannel, synth->pcm.length, d->madResampledRightChannel, 
-			      d->madResampledLastRight, d->madResampledStepRight );
-
-    leftChannel = d->madResampledLeftChannel;
-    rightChannel = d->madResampledRightChannel;
-  }
-
-
 
   // now create the output
   for( int i = 0; i < nsamples; i++ )
@@ -555,68 +462,6 @@ bool K3bMadDecoder::createPcmSamples( mad_synth* synth )
     } // pcm conversion
 
   return true;
-}
-
-
-unsigned int K3bMadDecoder::resampleBlock( mad_fixed_t const *source, 
-					  unsigned int nsamples,
-					  mad_fixed_t* target,
-					  mad_fixed_t& last,
-					  mad_fixed_t& step )
-{
-  /*
-   * This resampling algorithm is based on a linear interpolation, which is
-   * not at all the best sounding but is relatively fast and efficient.
-   *
-   * A better algorithm would be one that implements a bandlimited
-   * interpolation.
-   *
-   * taken from madplay
-   */
-
-
-  mad_fixed_t const *end, *begin;
-  end   = source + nsamples;
-  begin = target;
-
-  if (step < 0) {
-    step = mad_f_fracpart(-step);
-
-    while (step < MAD_F_ONE) {
-       *target++ = step ?
- 	last + __extension__ mad_f_mul(*source - last, step) 
- 	: last;
-
-       step += d->madResampledRatio;
-      if (((step + 0x00000080L) & 0x0fffff00L) == 0)
-	step = (step + 0x00000080L) & ~0x0fffffffL;
-    }
-
-    step -= MAD_F_ONE;
-  }
-
-
-  while (end - source > 1 + mad_f_intpart(step)) {
-    source += mad_f_intpart(step);
-    step = mad_f_fracpart(step);
-
-    *target++ = step ?
-      *source + __extension__ mad_f_mul(source[1] - source[0], step) 
-      : *source;
-
-    step += d->madResampledRatio;
-    if (((step + 0x00000080L) & 0x0fffff00L) == 0)
-      step = (step + 0x00000080L) & ~0x0fffffffL;
-  }
-
-  if (end - source == 1 + mad_f_intpart(step)) {
-    last = end[-1];
-    step = -step;
-  }
-  else
-    step -= mad_f_fromint(end - source);
-  
-  return target - begin;
 }
 
 
@@ -652,21 +497,21 @@ bool K3bMadDecoder::seekInternal( const K3b::Msf& pos )
   // So we need to fine tune after using d->seekPostions
   // every block (1/75 seconds) has 588 samples
   
-  long mp3Frame = (long)((double)pos.totalFrames() / 75.0 * 44100.0 / 1152.0);
-  long samples = mp3Frame * 1152;
-  long neededSamples = pos.totalFrames() * 588;
-  long diff = neededSamples - samples;
-  // diff is what we need to skip when creating pcm samples?
+//   long mp3Frame = (long)((double)pos.totalFrames() / 75.0 * 44100.0 / 1152.0);
+//   long samples = mp3Frame * 1152;
+//   long neededSamples = pos.totalFrames() * 588;
+//   long diff = neededSamples - samples;
+//   // diff is what we need to skip when creating pcm samples?
 
-  // now prepare the stream for the new data
-  d->madStream->error = MAD_ERROR_NONE;
-  madStreamBuffer();
-  // and skip the samples we do not need
+//   // now prepare the stream for the new data
+//   d->madStream->error = MAD_ERROR_NONE;
+//   madStreamBuffer();
+//   // and skip the samples we do not need
 
 
-  d->inputFile.at( d->seekPositions[ mp3Frame ] );
+//   d->inputFile.at( d->seekPositions[ mp3Frame ] );
 
-  return true;
+//   return true;
 }
 
 

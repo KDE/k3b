@@ -62,7 +62,7 @@ class K3bWaveDecoder : public K3bAudioDecoder
   QString fileType() const;
 
  protected:
-  bool analyseFileInternal();
+  bool analyseFileInternal( K3b::Msf* frames, int* samplerate, int* channels );
   bool initDecoderInternal();
   int decodeInternal( char* data, int maxLen );
 
@@ -70,6 +70,8 @@ class K3bWaveDecoder : public K3bAudioDecoder
   QFile* m_file;
 
   long m_headerLength;
+  int m_sampleRate;
+  unsigned long m_size;
 };
 
 

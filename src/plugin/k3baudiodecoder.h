@@ -131,21 +131,26 @@ class K3bAudioDecoder : public K3bPlugin
   virtual bool initDecoderInternal() = 0;
 
   /**
-   * This method should calculate the length of the file.
+   * This method should analyse the file to determine the exact length,
+   * the samplerate in Hz, and the number of channels. The framework takes care of
+   * resampling and converting mono to stereo data.
+   * This method may be time consuming.
    */
-  virtual bool analyseFileInternal() = 0;
+  virtual bool analyseFileInternal( K3b::Msf* length, int* samplerate, int* channels ) = 0;
 
   /**
    * fill the already allocated data with maximal maxLen bytes of decoded samples.
-   * This should calculate the length. May be time consuming.
    */
   virtual int decodeInternal( char* data, int maxLen ) = 0;
 
   virtual bool seekInternal( const K3b::Msf& ) { return false; }
 
-  void setLength( const K3b::Msf& len ) { m_length = len; }
-
  private:
+  int resample( char* data, int maxLen );
+
+  static void fromFloatTo16BitBeSigned( float* src, char* dest, int samples );
+  static void from16bitBeSignedToFloat( char* src, float* dest, int samples );
+
   QString m_fileName;
   K3b::Msf m_length;
 

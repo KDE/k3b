@@ -35,13 +35,12 @@ class K3bOggVorbisDecoder::Private
 {
 public:
   Private()
-    : oggVorbisFile(0),
-      vInfo(0),
+    : vInfo(0),
       vComment(0),
       isOpen(false) {
   }
 
-  OggVorbis_File* oggVorbisFile;
+  OggVorbis_File oggVorbisFile;
   vorbis_info* vInfo;
   vorbis_comment* vComment;
   bool isOpen;
@@ -52,13 +51,11 @@ K3bOggVorbisDecoder::K3bOggVorbisDecoder( QObject* parent, const char* name )
   : K3bAudioDecoder( parent, name )
 {
   d = new Private();
-  d->oggVorbisFile = new OggVorbis_File;
 }
 
 
 K3bOggVorbisDecoder::~K3bOggVorbisDecoder()
 {
-  delete d->oggVorbisFile;
   delete d;
 }
 
@@ -71,7 +68,7 @@ bool K3bOggVorbisDecoder::openOggVorbisFile()
       kdDebug() << "(K3bOggVorbisDecoder) Could not open file " << filename() << endl;
       return false;
     }
-    else if( ov_open( file, d->oggVorbisFile, 0, 0 ) ) {
+    else if( ov_open( file, &d->oggVorbisFile, 0, 0 ) ) {
       kdDebug() << "(K3bOggVorbisDecoder) " << filename() 
 		<< " seems not to to be an ogg vorbis file." << endl;
       fclose( file );
@@ -84,20 +81,30 @@ bool K3bOggVorbisDecoder::openOggVorbisFile()
 }
 
 
-bool K3bOggVorbisDecoder::analyseFileInternal()
+bool K3bOggVorbisDecoder::analyseFileInternal( K3b::Msf* frames, int* samplerate, int* ch )
 {
   cleanup();
 
   if( openOggVorbisFile() ) {
     // check length of track
-    double seconds = ov_time_total( d->oggVorbisFile, -1 );
+    double seconds = ov_time_total( &d->oggVorbisFile, -1 );
     if( seconds == OV_EINVAL ) {
       kdDebug() << "(K3bOggVorbisDecoder) Could not determine length of file " << filename() << endl;
       cleanup();
       return false;
     }
     else {
-      setLength( (unsigned long)ceil(seconds * 75.0) );
+
+      QStringList ti = supportedTechnicalInfos();
+      for( QStringList::iterator it = ti.begin(); it != ti.end(); ++it )
+	kdDebug() << "OGG: " << *it << ": " << technicalInfo( *it ) << endl;
+
+      if( !d->vInfo )
+	d->vInfo = ov_info( &d->oggVorbisFile, -1 /* current bitstream */ );
+
+      *frames = (unsigned long)ceil(seconds * 75.0);
+      *samplerate = d->vInfo->rate;
+      *ch = d->vInfo->channels;
       return true;
     }
   }
@@ -109,70 +116,40 @@ bool K3bOggVorbisDecoder::analyseFileInternal()
 bool K3bOggVorbisDecoder::initDecoderInternal()
 {
   cleanup();
-
   return openOggVorbisFile();
 }
 
 
-int K3bOggVorbisDecoder::decodeInternal( char* _data, int maxLen )
+int K3bOggVorbisDecoder::decodeInternal( char* data, int maxLen )
 {
-  int bitStream;
-  long bytesRead = ov_read( d->oggVorbisFile, 
-			    _data,
+  int bitStream = 0;
+  long bytesRead = ov_read( &d->oggVorbisFile, 
+			    data,
 			    maxLen,  // max length to be read
 			    1,                   // big endian
 			    2,                   // word size: 16-bit samples
 			    1,                   // signed
 			    &bitStream );        // current bitstream
 
-  if( bytesRead == OV_HOLE ) {
-    // I think we can go on here?
-
-    kdDebug() << "(K3bOggVorbisDecoder) OV_HOLE" << endl;
-
-    // recursive new try
-    return decodeInternal( _data, maxLen );
-  }
-
-  else if( bytesRead == OV_EBADLINK ) {
-    kdDebug() << "(K3bOggVorbisDecoder) OV_EBADLINK" << endl;
-
+  if( bitStream != 0 ) {
+    kdDebug() << "(K3bOggVorbisDecoder) bitstream != 0. Multible bitstreams not supported." << endl;
     return -1;
+  }
+  
+  else if( bytesRead == OV_HOLE ) {
+    kdDebug() << "(K3bOggVorbisDecoder) OV_HOLE" << endl;
+    // recursive new try
+    return decodeInternal( data, maxLen );
   }
 
   else if( bytesRead < 0 ) {
-
-    // TODO: add a method in the upcoming vorbisLib class that returnes
-    // an error string
-    // #define OV_FALSE      -1
-    // #define OV_EOF        -2
-    // #define OV_HOLE       -3
-
-    // #define OV_EREAD      -128
-    // #define OV_EFAULT     -129
-    // #define OV_EIMPL      -130
-    // #define OV_EINVAL     -131
-    // #define OV_ENOTVORBIS -132
-    // #define OV_EBADHEADER -133
-    // #define OV_EVERSION   -134
-    // #define OV_ENOTAUDIO  -135
-    // #define OV_EBADPACKET -136
-    // #define OV_EBADLINK   -137
-    // #define OV_ENOSEEK    -138
-
     kdDebug() << "(K3bOggVorbisDecoder) Error: " << bytesRead << endl;
-
     return -1;
   }
 
   else if( bytesRead == 0 ) {
     kdDebug() << "(K3bOggVorbisDecoder) successfully finished decoding." << endl;
     return 0;
-  }
-
-  else if( bitStream != 0 ) {
-    kdDebug() << "(K3bOggVorbisDecoder) bitstream != 0. Multible bitstreams not supported." << endl;
-    return -1;
   }
 
   else {
@@ -187,7 +164,7 @@ QString K3bOggVorbisDecoder::metaInfo( const QString& tag )
 
     // search for artist,title information
     if( !d->vComment )
-      d->vComment = ov_comment( d->oggVorbisFile, -1 );
+      d->vComment = ov_comment( &d->oggVorbisFile, -1 );
 
     if( !d->vComment ) {
       kdDebug() << "(K3bOggVorbisDecoder) Could not open OggVorbis comment of file "
@@ -211,7 +188,7 @@ QString K3bOggVorbisDecoder::metaInfo( const QString& tag )
 void K3bOggVorbisDecoder::cleanup()
 {
   if( d->isOpen )
-    ov_clear( d->oggVorbisFile );
+    ov_clear( &d->oggVorbisFile );
   d->isOpen = false;
   d->vComment = 0;
   d->vInfo = 0;
@@ -221,7 +198,7 @@ void K3bOggVorbisDecoder::cleanup()
 bool K3bOggVorbisDecoder::seekInternal( const K3b::Msf& pos )
 {
   openOggVorbisFile();
-  return ( ov_pcm_seek( d->oggVorbisFile, pos.totalFrames() ) == 0 );
+  return ( ov_pcm_seek( &d->oggVorbisFile, pos.totalFrames() ) == 0 );
 }
 
 
@@ -245,23 +222,22 @@ QStringList K3bOggVorbisDecoder::supportedTechnicalInfos() const
 
 QString K3bOggVorbisDecoder::technicalInfo( const QString& info ) const
 {
-  if( !d->vInfo ) {
-    d->vInfo = ov_info( d->oggVorbisFile, -1 /* current bitstream */ );
+  if( !d->vInfo )
+    d->vInfo = ov_info( &d->oggVorbisFile, -1 /* current bitstream */ );
     
-    if( d->vInfo ) {
-      if( info == i18n("Version") )
-	return QString::number(d->vInfo->version);
-      else if( info == i18n("Channels") )
-	return QString::number(d->vInfo->channels);
-      else if( info == i18n("Sampling Rate") )
-	return QString::number(d->vInfo->rate);
-      else if( info == i18n("Bitrate Upper") )
-	  return QString::number(d->vInfo->bitrate_upper);
-      else if( info == i18n("Bitrate Nominal") )
-	return QString::number(d->vInfo->bitrate_nominal);
-      else if( info == i18n("Bitrate Lower") )
-	return QString::number(d->vInfo->bitrate_lower);
-    }
+  if( d->vInfo ) {
+    if( info == i18n("Version") )
+      return QString::number(d->vInfo->version);
+    else if( info == i18n("Channels") )
+      return QString::number(d->vInfo->channels);
+    else if( info == i18n("Sampling Rate") )
+      return QString::number(d->vInfo->rate);
+    else if( info == i18n("Bitrate Upper") )
+      return QString::number(d->vInfo->bitrate_upper);
+    else if( info == i18n("Bitrate Nominal") )
+      return QString::number(d->vInfo->bitrate_nominal);
+    else if( info == i18n("Bitrate Lower") )
+      return QString::number(d->vInfo->bitrate_lower);
   }
 
   return QString::null;

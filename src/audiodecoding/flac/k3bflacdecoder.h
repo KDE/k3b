@@ -1,10 +1,8 @@
 /* 
- *
- * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
- *
- * This file is part of the K3b project.
+ * FLAC decoder module for K3b.
+ * Based on the Ogg Vorbis module for same.
  * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003 John Steele Scott <toojays@toojays.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,24 +11,23 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#ifndef K3BMP3MODULE_H
-#define K3BMP3MODULE_H
+
+#ifndef _K3B_FLAC_DECODER_H_
+#define _K3B_FLAC_DECODER_H_
 
 
 #include <k3baudiodecoder.h>
 
-extern "C" {
-#include <mad.h>
-}
+class KURL;
 
 
-class K3bMadDecoderFactory : public K3bAudioDecoderFactory
+class K3bFLACDecoderFactory : public K3bAudioDecoderFactory
 {
   Q_OBJECT
 
  public:
-  K3bMadDecoderFactory( QObject* parent = 0, const char* name = 0 );
-  ~K3bMadDecoderFactory();
+  K3bFLACDecoderFactory( QObject* parent = 0, const char* name = 0 );
+  ~K3bFLACDecoderFactory();
 
   bool canDecode( const KURL& filename );
 
@@ -45,13 +42,13 @@ class K3bMadDecoderFactory : public K3bAudioDecoderFactory
 };
 
 
-class K3bMadDecoder : public K3bAudioDecoder
+class K3bFLACDecoder : public K3bAudioDecoder
 {
   Q_OBJECT
 
- public:
-  K3bMadDecoder( QObject* parent = 0, const char* name = 0 );
-  ~K3bMadDecoder();
+ public: 
+  K3bFLACDecoder( QObject* parent = 0, const char* name = 0 );
+  ~K3bFLACDecoder();
 
   QString metaInfo( const QString& );
 
@@ -59,29 +56,21 @@ class K3bMadDecoder : public K3bAudioDecoder
 
   bool seekInternal( const K3b::Msf& );
 
+  QString fileType() const;
+  QStringList supportedTechnicalInfos() const;
+  QString technicalInfo( const QString& ) const;
+
  protected:
   bool analyseFileInternal( K3b::Msf* frames, int* samplerate, int* ch );
   bool initDecoderInternal();
 
   int decodeInternal( char* _data, int maxLen );
- 
+
  private:
-  void initMadStructures();
-  unsigned long countFrames( int* samplerate );
-  inline unsigned short linearRound( mad_fixed_t fixed );
-  void madStreamBuffer();
-  bool madDecodeNextFrame();
-  bool createPcmSamples( mad_synth* );
-
-  static const int INPUT_BUFFER_SIZE = 5*8192;
-
-  static int MaxAllowedRecoverableErrors;
-
   class Private;
   Private* d;
 };
 
-
-K_EXPORT_COMPONENT_FACTORY( libk3bmaddecoder, K3bMadDecoderFactory )
+K_EXPORT_COMPONENT_FACTORY( libk3bflacdecoder, K3bFLACDecoderFactory )
 
 #endif

@@ -4,5 +4,5 @@ Group=AudioDecoder
 Name=K3b MAD Decoder
 Author=Sebastian Trueg
 Email=trueg@k3b.org
-Version=1.0
+Version=2.0
 Comment=Decoding module to decode MPEG 1 Layer III files

@@ -41,11 +41,11 @@ static unsigned long le_a_to_u_long( unsigned char* a ) {
 
 /**
  * Returns the length of the wave file in frames (1/75 second) if
- * it is a 16bit stereo 44100 kHz wave file
+ * it is a 16bit stereo wave file
  * Otherwise 0 is returned.
  * leave file seek pointer past WAV header.
  */
-static unsigned long identifyWaveFile( QFile* f )
+static unsigned long identifyWaveFile( QFile* f, int* samplerate = 0 )
 {
   typedef struct {
     unsigned char	ckid[4];
@@ -111,7 +111,7 @@ static unsigned long identifyWaveFile( QFile* f )
   }
   if( le_a_to_u_short(fmt.fmt_tag) != 1 ||
       le_a_to_u_short(fmt.channels) != 2 ||
-      le_a_to_u_long(fmt.sample_rate) != 44100 ||
+      /*      le_a_to_u_long(fmt.sample_rate) != 44100 ||*/
       le_a_to_u_short(fmt.bits_per_sample) != 16) {
     kdDebug() << "(K3bWaveDecoder) " << f->name() << ": wrong format:" << endl
 	      << "                format:      " << le_a_to_u_short(fmt.fmt_tag) << endl
@@ -120,6 +120,10 @@ static unsigned long identifyWaveFile( QFile* f )
 	      << "                bits/sample: " << le_a_to_u_short(fmt.bits_per_sample) << endl;
     return 0;
   }
+
+  int sampleRate = le_a_to_u_long(fmt.sample_rate);
+  if( samplerate )
+    *samplerate = sampleRate;
 
   // skip all other (unknown) format chunk fields
   if( !f->at( f->at() + le_a_to_u_long(chunk.cksize) - sizeof(fmt) ) ) {
@@ -156,6 +160,9 @@ static unsigned long identifyWaveFile( QFile* f )
     << " - using actual length." << endl;
     size = (f->size() - f->at());
   }
+
+  if( sampleRate != 44100 )
+    size = size * 44100 / sampleRate;
 
   // we pad to a multible of 2352 bytes
   if( (size%2352) > 0 )
@@ -207,10 +214,17 @@ int K3bWaveDecoder::decodeInternal( char* _data, int maxLen )
 }
 
 
-bool K3bWaveDecoder::analyseFileInternal()
+bool K3bWaveDecoder::analyseFileInternal( K3b::Msf* frames, int* samplerate, int* channels )
 {
   // handling wave files is very easy...
-  return initDecoderInternal();
+  if( initDecoderInternal() ) {
+    *frames = m_size;
+    *samplerate = m_sampleRate;
+    *channels = 2; // FIXME: support mono files
+    return true;
+  }
+  else
+    return false;
 }
 
 
@@ -225,15 +239,14 @@ bool K3bWaveDecoder::initDecoderInternal()
   }
 
   // skip the header
-  unsigned long size = identifyWaveFile( m_file );
-  if( size <= 0 ) {
+  m_size = identifyWaveFile( m_file, &m_sampleRate );
+  if( m_size <= 0 ) {
     kdDebug() << "(K3bWaveDecoder) no supported wave file." << endl;
     cleanup();
     return false;
   }
 
   m_headerLength = m_file->at();
-  setLength( size );
 
   return true;
 }
@@ -254,7 +267,7 @@ void K3bWaveDecoder::cleanup()
 
 QString K3bWaveDecoder::fileType() const
 {
-  return i18n("16 bit 44.1 KHz stereo WAVE");
+  return i18n("16 bit %1 Hz stereo WAVE").arg(m_sampleRate);
 }
 
 

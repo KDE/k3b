@@ -2,9 +2,11 @@ AM_CPPFLAGS = -I$(srcdir)/.. -I$(srcdir)/../core/ -I$(srcdir)/../core/device $(a
 
 METASOURCES = AUTO
 
+SUBDIRS = libsamplerate
+
 lib_LTLIBRARIES = libk3bplugin.la
 
-libk3bplugin_la_LIBADD = ../core/libk3bcore.la
+libk3bplugin_la_LIBADD = ../core/libk3bcore.la ./libsamplerate/libsamplerate.la
 
 # FIXME: improve that versioning stuff (info libtool -> versioning)
 libk3bplugin_la_LDFLAGS = $(all_libraries) -version-info 1:0:0 -no-undefined

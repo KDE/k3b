@@ -1,0 +1,8 @@
+[K3b Plugin]
+Lib=libk3bflacdecoder
+Group=AudioDecoder
+Name=K3b FLAC Decoder
+Author=John Steele Scott
+Email=toojays@toojays.net
+Version=1.0
+Comment=Decoding module to decode FLAC files
