@@ -293,8 +293,9 @@ void K3bSetup::doApplyDevicePermissions( uint groupId )
 void K3bSetup::doApplyExternalProgramPermissions( uint groupId )
 {
   static const char* programs[] = { "cdrecord",
-				    "cdrdao" };
-  static const int NUM_PROGRAMS = 2;
+				    "cdrdao",
+				    "mkisofs" };  // mkisofs needs to read multisession info
+  static const int NUM_PROGRAMS = 3;
 
   for( int i = 0; i < NUM_PROGRAMS; ++i ) {
     const K3bExternalProgram* p = m_externalBinManager->program( programs[i] );
