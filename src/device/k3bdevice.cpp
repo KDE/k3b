@@ -710,9 +710,13 @@ void K3bCdDevice::CdDevice::checkForAncientWriters()
     if( description() == "R50S" || description() == "R55S" ) {
       kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
 		<< " found ancient drive: " << vendor() << " " << description() << endl;
-   
-      m_writeModes |= TAO;
-      d->deviceType |= CDR;
+
+      m_writeModes = TAO|DAO;
+      d->deviceType = CDROM|CDR;
+      m_maxWriteSpeed = 4;
+      m_maxReadSpeed = 12;
+      m_bufferSize = 1024;
+      d->burnfree = false;
     }
   }
 }
