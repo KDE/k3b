@@ -63,7 +63,7 @@ K3bMixedJob::K3bMixedJob( K3bMixedDoc* doc, QObject* parent )
   connect( m_isoImager, SIGNAL(data(const char*, int)), this, SLOT(slotReceivedIsoImagerData(const char*, int)) );
   connect( m_isoImager, SIGNAL(percent(int)), this, SLOT(slotIsoImagerPercent(int)) );
   connect( m_isoImager, SIGNAL(finished(bool)), this, SLOT(slotIsoImagerFinished(bool)) );
-  connect( m_isoImager, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+  connect( m_isoImager, SIGNAL(debuggingOutput(const QString&, const QString&)),
 	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
 
   m_audioDecoder = new K3bAudioStreamer( doc->audioDoc(), this );
@@ -83,15 +83,17 @@ K3bMixedJob::K3bMixedJob( K3bMixedDoc* doc, QObject* parent )
   m_writer = 0;
   m_tocFile = 0;
   m_isoImageFile = 0;
-
+  m_isoImageFileStream= 0;
   m_tempData = new K3bAudioJobTempData( m_doc->audioDoc(), this );
 }
 
 
 K3bMixedJob::~K3bMixedJob()
 {
+  delete m_isoImageFile;
+  delete m_isoImageFileStream;
   delete m_waveFileWriter;
-  if( m_tocFile ) delete m_tocFile;
+  delete m_tocFile;
 }
 
 
@@ -878,20 +880,20 @@ void K3bMixedJob::determineWritingMode()
 
 
   // we try to use cdrecord if possible
-  bool cdrecordOnTheFly = 
-    k3bcore->externalBinManager()->binObject("cdrecord")->version 
+  bool cdrecordOnTheFly =
+    k3bcore->externalBinManager()->binObject("cdrecord")->version
     >= K3bVersion( 2, 1, -1, "a13" );
-  bool cdrecordCdText = 
+  bool cdrecordCdText =
     k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "cdtext" );
-  bool cdrecordUsable = 
+  bool cdrecordUsable =
     !( !cdrecordOnTheFly && m_doc->onTheFly() ) &&
-    !( m_doc->audioDoc()->cdText() && 
+    !( m_doc->audioDoc()->cdText() &&
        // the inf-files we use do only support artist and title in the global section
        ( !m_doc->audioDoc()->arranger().isEmpty() ||
 	 !m_doc->audioDoc()->songwriter().isEmpty() ||
 	 !m_doc->audioDoc()->composer().isEmpty() ||
 	 !m_doc->audioDoc()->cdTextMessage().isEmpty() ||
-	 !cdrecordCdText ) 
+	 !cdrecordCdText )
        );
 
 
@@ -950,7 +952,7 @@ void K3bMixedJob::determineWritingMode()
     m_usedDataWritingMode = m_doc->writingMode();
   }
 
- 
+
   if( m_usedDataWritingApp == K3b::CDRECORD ) {
     if( !cdrecordOnTheFly && m_doc->onTheFly() ) {
       m_doc->setOnTheFly( false );
