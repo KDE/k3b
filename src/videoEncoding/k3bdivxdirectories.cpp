@@ -155,7 +155,6 @@ void K3bDivxDirectories::slotAviClicked(){
 }
 void K3bDivxDirectories::slotCompletion( const QString& st ){
     QString s = st;
-    qDebug("Compl: " + s);
     QStringList list;
     QDir testDir(s);
     if( testDir.exists() ){
