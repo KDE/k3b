@@ -283,6 +283,7 @@ void K3bDvdRipperWidget::checkSize(  ){
 
 void K3bDvdRipperWidget::slotParseError( KProcess *p, char *text, int len ){
     QString tmp = QString::fromLatin1( text, len );
+    kdDebug() << "(K3bDvdRipperWidget) Parse output for size: " << tmp << endl;
     // must be the first line, ignore other. NO, not for encrypted DVDs
     if( !m_detectTitleSizeDone ){
         if( tmp.contains("blocks") ){
