@@ -256,7 +256,7 @@ void K3bVcdTrackDialog::setupGui()
   audioGrid->addWidget( labelCopyright_Audio, 8, 0 );
   audioGrid->addWidget( m_copyright_audio, 8, 1 );  
 
-  audioGrid->setRowStretch( 8, 1 );
+  audioGrid->setRowStretch( 9, 1 );
 
   // /////////////////////////////////////////////////
   // VIDEO TAB
