@@ -9,8 +9,6 @@ class QLabel;
 class QGroupBox;
 class QComboBox;
 class QString;
-class QLineEdit;
-class QToolButton;
 class KIntNumInput;
 
 
@@ -27,14 +25,14 @@ Q_OBJECT
 
  private slots:
   void slotChangePregapFormat( const QString& );
-  void slotGetTempDir();
+  void slotSetDefaultBufferSizes( bool );
 
  private:
   void setupGui();
 
   QGroupBox*    m_groupData;
   QGroupBox*    m_groupAudio;
-  QGroupBox*    m_groupMisc;
+  QGroupBox*    m_groupAdvanced;
 
   QCheckBox*    m_checkUseID3Tag;
 
@@ -42,9 +40,11 @@ Q_OBJECT
   KIntNumInput* m_editDefaultPregap;
   bool          m_bPregapSeconds;
 
-  QLineEdit*    m_editTempDir;
-  QToolButton*  m_buttonTempDir;
   QCheckBox*    m_checkEject;
+  QCheckBox*    m_checkManualWritingBufferSize;
+  KIntNumInput* m_editWritingBufferSizeCdrecord;
+  KIntNumInput* m_editWritingBufferSizeCdrdao;
+  QCheckBox*    m_checkAllowWritingAppSelection;
 };
 
 

@@ -6,15 +6,12 @@
 #include <qcheckbox.h>
 #include <qlayout.h>
 #include <qgroupbox.h>
-#include <qlineedit.h>
-#include <qtoolbutton.h>
 
 #include <knuminput.h>
 #include <kconfig.h>
 #include <kdialog.h>
 #include <klocale.h>
-#include <kfiledialog.h>
-#include <kstddirs.h>
+
 
 
 K3bBurningOptionTab::K3bBurningOptionTab( QWidget* parent, const char* name )
@@ -24,6 +21,9 @@ K3bBurningOptionTab::K3bBurningOptionTab( QWidget* parent, const char* name )
 
   m_bPregapSeconds = false;
   m_comboPregapFormat->setCurrentItem( 1 );
+
+
+  //  m_checkAllowWritingAppSelection->setDisabled( true );  // not implemented yet!
 }
 
 
@@ -82,31 +82,51 @@ void K3bBurningOptionTab::setupGui()
   // -----------------------------------------------------------------------
 
 
-  // misc settings group
+  // advanced settings group
   // -----------------------------------------------------------------------
-  m_groupMisc = new QGroupBox( this, "m_groupMisc" );
-  m_groupMisc->setTitle( i18n( "Misc" ) );
-  m_groupMisc->setColumnLayout(0, Qt::Vertical );
-  m_groupMisc->layout()->setSpacing( 0 );
-  m_groupMisc->layout()->setMargin( KDialog::marginHint() );
-  QGridLayout* groupMiscLayout = new QGridLayout( m_groupMisc->layout() );
-  groupMiscLayout->setAlignment( Qt::AlignTop );
-  groupMiscLayout->setSpacing( KDialog::spacingHint() );
-  groupMiscLayout->setMargin( KDialog::marginHint() );
+  m_groupAdvanced = new QGroupBox( this, "m_groupAdvanced" );
+  m_groupAdvanced->setTitle( i18n( "Advanced" ) );
+  m_groupAdvanced->setColumnLayout(0, Qt::Vertical );
+  m_groupAdvanced->layout()->setSpacing( 0 );
+  m_groupAdvanced->layout()->setMargin( KDialog::marginHint() );
+  QGridLayout* groupAdvancedLayout = new QGridLayout( m_groupAdvanced->layout() );
+  groupAdvancedLayout->setAlignment( Qt::AlignTop );
+  groupAdvancedLayout->setSpacing( KDialog::spacingHint() );
+  groupAdvancedLayout->setMargin( KDialog::marginHint() );
 
-  QLabel* labelTempDir = new QLabel( i18n("Default temp directory:"), m_groupMisc );
-  m_editTempDir = new QLineEdit( m_groupMisc );
-  m_buttonTempDir = new QToolButton( m_groupMisc );
-  m_buttonTempDir->setText( "..." );
+  m_checkEject = new QCheckBox( i18n("Do not eject CD after write process"), m_groupAdvanced );
+  m_checkManualWritingBufferSize = new QCheckBox( i18n("Manual writing buffer size"), m_groupAdvanced );
+  m_editWritingBufferSizeCdrecord = new KIntNumInput( 4, m_groupAdvanced );
+  m_editWritingBufferSizeCdrdao = new KIntNumInput( 32, m_groupAdvanced );
 
-  m_checkEject = new QCheckBox( i18n("Do not eject CD after write process"), m_groupMisc );
+  QGridLayout* bufferLayout = new QGridLayout;
+  bufferLayout->setMargin( 0 );
+  bufferLayout->setSpacing( KDialog::spacingHint() );
+  bufferLayout->addWidget( new QLabel( "Cdrecord", m_groupAdvanced ), 0, 1 );
+  bufferLayout->addWidget( new QLabel( "Cdrdao", m_groupAdvanced ), 1, 1 );
+  bufferLayout->addWidget( m_editWritingBufferSizeCdrecord, 0, 2 );
+  bufferLayout->addWidget( m_editWritingBufferSizeCdrdao, 1, 2 );
+  bufferLayout->addWidget( new QLabel( i18n("MB"), m_groupAdvanced ), 0, 3 );
+  bufferLayout->addWidget( new QLabel( i18n("blocks"), m_groupAdvanced ), 1, 3 );
+  bufferLayout->addColSpacing( 0, 30 );
+  bufferLayout->setColStretch( 4, 1 );
 
-  groupMiscLayout->addWidget( labelTempDir, 0, 0 );
-  groupMiscLayout->addWidget( m_editTempDir, 1, 0 );
-  groupMiscLayout->addWidget( m_buttonTempDir, 1, 1 );
-  groupMiscLayout->addMultiCellWidget( m_checkEject, 2, 2, 0, 1 );
+  m_checkAllowWritingAppSelection = new QCheckBox( i18n("Manual writing app selection"), m_groupAdvanced );
 
-  connect( m_buttonTempDir, SIGNAL(clicked()), this, SLOT(slotGetTempDir()) );
+  groupAdvancedLayout->addWidget( m_checkEject, 0, 0 );
+  groupAdvancedLayout->addWidget( m_checkManualWritingBufferSize, 1, 0 );
+  groupAdvancedLayout->addLayout( bufferLayout, 2, 0 );
+  groupAdvancedLayout->addWidget( m_checkAllowWritingAppSelection, 3, 0 );
+
+  connect( m_checkManualWritingBufferSize, SIGNAL(toggled(bool)), 
+	   m_editWritingBufferSizeCdrecord, SLOT(setEnabled(bool)) );
+  connect( m_checkManualWritingBufferSize, SIGNAL(toggled(bool)), 
+	   m_editWritingBufferSizeCdrdao, SLOT(setEnabled(bool)) );
+  connect( m_checkManualWritingBufferSize, SIGNAL(toggled(bool)), 
+	   this, SLOT(slotSetDefaultBufferSizes(bool)) );
+
+  m_editWritingBufferSizeCdrecord->setDisabled( true );
+  m_editWritingBufferSizeCdrdao->setDisabled( true );
   // -----------------------------------------------------------------------
 
 
@@ -119,7 +139,7 @@ void K3bBurningOptionTab::setupGui()
 
   grid->addWidget( m_groupAudio, 0, 0 );
   grid->addWidget( m_groupData, 0, 1 );
-  grid->addMultiCellWidget( m_groupMisc, 1, 1, 0, 1 );
+  grid->addMultiCellWidget( m_groupAdvanced, 1, 1, 0, 1 );
 
   // we do not want the groups to take more space than they require
   grid->setRowStretch( 2, 1 );
@@ -139,10 +159,14 @@ void K3bBurningOptionTab::readSettings()
   m_comboPregapFormat->setCurrentItem( 1 );
 
   c->setGroup( "General Options" );
-  QString tempdir = c->readEntry( "Temp Dir", locateLocal( "appdata", "temp/" ) );
-  m_editTempDir->setText( tempdir );
-
-  m_checkEject->setChecked( !c->readBoolEntry( "Eject when finished", true ) );
+  m_checkEject->setChecked( c->readBoolEntry( "No cd eject", false ) );
+  bool manualBufferSize = c->readBoolEntry( "Manual buffer size", false );
+  m_checkManualWritingBufferSize->setChecked( manualBufferSize );
+  if( manualBufferSize ) {
+    m_editWritingBufferSizeCdrecord->setValue( c->readNumEntry( "Cdrecord buffer", 4 ) );
+    m_editWritingBufferSizeCdrdao->setValue( c->readNumEntry( "Cdrdao buffer", 32 ) );
+  }
+  m_checkAllowWritingAppSelection->setChecked( c->readBoolEntry( "Manual writing app selection", false ) );
 }
 
 
@@ -159,8 +183,11 @@ void K3bBurningOptionTab::saveSettings()
   c->writeEntry( "default pregap", m_bPregapSeconds ? m_editDefaultPregap->value() * 75 : m_editDefaultPregap->value() );
 
   c->setGroup( "General Options" );
-  c->writeEntry( "Temp Dir", m_editTempDir->text() );
-  c->writeEntry( "Eject when finished", !m_checkEject->isChecked() );
+  c->writeEntry( "No cd eject", m_checkEject->isChecked() );
+  c->writeEntry( "Manual buffer size", m_checkManualWritingBufferSize->isChecked() );
+  c->writeEntry( "Cdrecord buffer", m_editWritingBufferSizeCdrecord->value() );
+  c->writeEntry( "Cdrdao buffer", m_editWritingBufferSizeCdrdao->value() );
+  c->writeEntry( "Manual writing app selection", m_checkAllowWritingAppSelection->isChecked() );
 }
 
 
@@ -181,11 +208,11 @@ void K3bBurningOptionTab::slotChangePregapFormat( const QString& format )
 }
 
 
-void K3bBurningOptionTab::slotGetTempDir()
+void K3bBurningOptionTab::slotSetDefaultBufferSizes( bool b )
 {
-  QString dir = KFileDialog::getExistingDirectory( m_editTempDir->text(), k3bMain(), "Select Temp Directory" );
-  if( !dir.isEmpty() ) {
-    m_editTempDir->setText( dir );
+  if( !b ) {
+    m_editWritingBufferSizeCdrecord->setValue( 4 );
+    m_editWritingBufferSizeCdrdao->setValue( 32 );
   }
 }
 

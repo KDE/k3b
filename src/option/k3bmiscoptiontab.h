@@ -21,7 +21,8 @@
 #include <qwidget.h>
 
 class QCheckBox;
-
+class QToolButton;
+class QLineEdit;
 
 /**
   *@author Sebastian Trueg
@@ -31,14 +32,21 @@ class K3bMiscOptionTab : public QWidget
    Q_OBJECT
 
  public: 
-   K3bMiscOptionTab(QWidget *parent=0, const char *name=0);
-   ~K3bMiscOptionTab();
+  K3bMiscOptionTab(QWidget *parent=0, const char *name=0);
+  ~K3bMiscOptionTab();
 
-   void readSettings();
-   void saveSettings();
+  void readSettings();
+  void saveSettings();
+
+ private slots:
+  void slotGetTempDir();
 
  private:
-   QCheckBox* m_checkShowSplash;
+  QCheckBox* m_checkShowSplash;
+
+  QLineEdit*    m_editTempDir;
+  QToolButton*  m_buttonTempDir;
+
 };
 
 #endif
