@@ -68,7 +68,7 @@ class K3bAudioTrackDialog : public KDialogBase
   QComboBox* m_comboPregapFormat;
   QCheckBox* m_checkPreEmp;
   QCheckBox* m_checkCopy;
-	
+
   bool m_bPregapSeconds;
 	
   void setupGui();

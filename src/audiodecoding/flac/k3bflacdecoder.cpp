@@ -277,11 +277,9 @@ QString K3bFLACDecoder::fileType() const
 QStringList K3bFLACDecoder::supportedTechnicalInfos() const
 {
   return QStringList::split( ";", 
-			     i18n("Vendor") + ";" +
 			     i18n("Channels") + ";" +
 			     i18n("Sampling Rate") + ";" +
-			     i18n("Samples") + ";" +
-			     i18n("Bits per Sample") );
+			     i18n("Sample Size") );
 }
 
 
@@ -293,11 +291,11 @@ QString K3bFLACDecoder::technicalInfo( const QString& info ) const
     else if( info == i18n("Channels") )
       return QString::number(d->channels);
     else if( info == i18n("Sampling Rate") )
-      return QString::number(d->rate);
+      return i18n("%1 Hz").arg(d->rate);
     else if( info == i18n("Samples") )
       return QString::number(d->samples);
-    else if( info == i18n("Bits per Sample") )
-      return QString::number(d->bitsPerSample);
+    else if( info == i18n("Sample Size") )
+      return i18n("%1 bits").arg(d->bitsPerSample);
   }
 
   return QString::null;

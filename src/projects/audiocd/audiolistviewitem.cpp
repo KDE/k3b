@@ -17,6 +17,7 @@
 
 #include "audiolistviewitem.h"
 #include "k3baudiotrack.h"
+#include <k3baudiodecoder.h>
 
 
 K3bAudioListViewItem::K3bAudioListViewItem( K3bAudioTrack* track, K3bListView* parent )
@@ -62,6 +63,8 @@ QString K3bAudioListViewItem::text(int i) const
       // track pregap
       return m_track->pregap().toString();
     case 5:
+      return m_track->module()->fileType();
+    case 6:
       return m_track->fileName();
     default:
       return KListViewItem::text(i);

@@ -312,9 +312,30 @@ void K3bWaveDecoder::cleanup()
 
 QString K3bWaveDecoder::fileType() const
 {
-  return i18n("16 bit %1 Hz stereo WAVE").arg(d->sampleRate);
+  return i18n("WAVE");
 }
 
+
+QStringList K3bWaveDecoder::supportedTechnicalInfos() const
+{
+  return QStringList::split( ";", 
+			     i18n("Channels") + ";" +
+			     i18n("Sampling Rate") + ";" +
+			     i18n("Sample Size") );
+}
+
+
+QString K3bWaveDecoder::technicalInfo( const QString& name ) const
+{
+  if( name == i18n("Channels") )
+    return QString::number(d->channels);
+  else if( name == i18n("Sampling Rate") )
+    return i18n("%1 Hz").arg(d->sampleRate);
+  else if( name == i18n("Sample Size") )
+    return i18n("%1 bits").arg(d->sampleSize);
+  else
+    return QString::null;
+}
 
 
 K3bWaveDecoderFactory::K3bWaveDecoderFactory( QObject* parent, const char* name )

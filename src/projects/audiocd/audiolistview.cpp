@@ -91,6 +91,7 @@ void K3bAudioListView::setupColumns(){
   addColumn( i18n("Title (CD-Text)") );
   addColumn( i18n("Length") );
   addColumn( i18n("Pregap") );
+  addColumn( i18n("Type") );
   addColumn( i18n("Filename") );
 }
 

@@ -43,6 +43,14 @@ class K3bAudioDecoderFactory : public K3bPluginFactory
 
   QString group() const { return "AudioDecoder"; }
 
+  /**
+   * This is the most important method of the AudioDecoderFactory.
+   * It is used to determine if a certain file can be decoded by the
+   * decoder this factory creates.
+   * It is important that this method does not work lazy since it will
+   * be called with urls to every kind of files and if it returns true
+   * a decoder of this type is used for the file.
+   */
   virtual bool canDecode( const KURL& filename ) = 0;
 };
 
@@ -86,14 +94,22 @@ class K3bAudioDecoder : public K3bPlugin
   virtual QString metaInfo( const QString& );
 
   /**
-   * returnes the filetype of the decoded file
+   * The filetype is only used for informational purposes.
+   * It is not necessary but highly recommended to implement this method
+   * as it enhances usability.
+   * @returne The filetype of the decoded file.
    */
   virtual QString fileType() const { return QString::null; }
+
+  /**
+   * This method may be reimplemented to provide technical information about
+   * the file. It should return localized strings.
+   */
   virtual QStringList supportedTechnicalInfos() const { return QStringList(); }
 
   /**
-   * Technical info about the file. Be aware that one cannot rely 
-   * on the technical infos until analyseFile() has been called.
+   * The framework will call this method with all strings returned by the
+   * supportedTechnicalInfos() method. It should return localized strings.
    */
   virtual QString technicalInfo( const QString& ) const { return QString::null; }
 

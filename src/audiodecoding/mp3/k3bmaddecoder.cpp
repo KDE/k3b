@@ -29,6 +29,7 @@
 #include <kurl.h>
 #include <kdebug.h>
 #include <kinstance.h>
+#include <klocale.h>
 
 #include <qstring.h>
 #include <qfile.h>
@@ -88,6 +89,10 @@ public:
 #ifdef HAVE_LIBID3
   ID3_Tag* id3Tag;
 #endif
+
+  // the first frame header for technical info
+  mad_header firstHeader;
+  bool vbr;
 };
 
 
@@ -178,10 +183,11 @@ void K3bMadDecoder::initMadStructures()
 bool K3bMadDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate, int& ch )
 {
   initDecoderInternal();
-  frames = countFrames( &samplerate );
+  frames = countFrames();
   if( frames > 0 ) {
     // we convert mono to stereo all by ourselves. :)
     ch = 2;
+    samplerate = d->firstHeader.samplerate;
     return true;
   }
   else
@@ -253,11 +259,12 @@ void K3bMadDecoder::madStreamBuffer()
 }
 
 
-unsigned long K3bMadDecoder::countFrames( int* samplerate )
+unsigned long K3bMadDecoder::countFrames()
 {
   unsigned long frames = 0;
   bool error = false;
-  *samplerate = 0;
+  d->vbr = false;
+  bool bFirstHeaderSaved = false;
 
   //  d->seekPositions.clear();
 
@@ -292,8 +299,13 @@ unsigned long K3bMadDecoder::countFrames( int* samplerate )
 
 	d->frameCount++;
 
-	if( *samplerate == 0 )
-	  *samplerate = d->madHeader->samplerate;
+
+	if( !bFirstHeaderSaved ) {
+	  bFirstHeaderSaved = true;
+	  d->firstHeader = *d->madHeader;
+	}
+	else if( d->madHeader->bitrate != d->firstHeader.bitrate )
+	  d->vbr = true;
 
 	static mad_timer_t s_frameLen = mad_timer_zero;
 	if( mad_timer_compare( s_frameLen, d->madHeader->duration ) ) {
@@ -512,6 +524,93 @@ bool K3bMadDecoder::seekInternal( const K3b::Msf& pos )
 //   d->inputFile.at( d->seekPositions[ mp3Frame ] );
 
 //   return true;
+}
+
+
+QString K3bMadDecoder::fileType() const
+{
+    switch( d->firstHeader.layer ) {
+    case MAD_LAYER_I:
+      return "MPEG1 Layer I";
+    case MAD_LAYER_II:
+      return "MPEG1 Layer II";
+    case MAD_LAYER_III:
+      return "MPEG1 Layer III";
+    default:
+      return "Mp3";
+    }
+}
+
+QStringList K3bMadDecoder::supportedTechnicalInfos() const
+{
+  return QStringList::split( ";", 
+			     i18n("Channels") + ";" +
+			     i18n("Sampling Rate") + ";" +
+			     i18n("Bitrate") + ";" +
+			     i18n("Layer") + ";" +
+			     i18n("Emphasis") + ";" +
+			     i18n("Copyright") + ";" +
+			     i18n("Original") + ";" +
+			     i18n("CRC") );
+}
+
+
+QString K3bMadDecoder::technicalInfo( const QString& name ) const
+{
+  if( name == i18n("Channels") ) {
+    switch( d->firstHeader.mode ) {
+    case MAD_MODE_SINGLE_CHANNEL:
+      return i18n("Mono");
+    case MAD_MODE_DUAL_CHANNEL:
+      return i18n("Dual");
+    case MAD_MODE_JOINT_STEREO:
+      return i18n("Joint Stereo");
+    case MAD_MODE_STEREO:
+      return i18n("Stereo");
+    default:
+      return "?";
+    }
+  }
+  else if( name == i18n("Sampling Rate") )
+    return i18n("%1 Hz").arg(d->firstHeader.samplerate);
+  else if( name == i18n("Bitrate") ) {
+    if( d->vbr )
+      return i18n("VBR");
+    else
+      return i18n("%1 bps").arg(d->firstHeader.bitrate);
+  }
+  else if(  name == i18n("Layer") ){
+    switch( d->firstHeader.layer ) {
+    case MAD_LAYER_I:
+      return "I";
+    case MAD_LAYER_II:
+      return "II";
+    case MAD_LAYER_III:
+      return "III";
+    default:
+      return "?";
+    }
+  }
+  else if( name == i18n("Emphasis") ) {
+    switch( d->firstHeader.emphasis ) {
+    case MAD_EMPHASIS_NONE:
+      return i18n("None");
+    case MAD_EMPHASIS_50_15_US:
+      return i18n("50/15 ms");
+    case MAD_EMPHASIS_CCITT_J_17:
+      return i18n("CCITT J.17");
+    default:
+      return i18n("Unknown");
+    }
+  }
+  else if( name == i18n("Copyright") )
+    return ( d->firstHeader.flags & MAD_FLAG_COPYRIGHT ? i18n("Yes") : i18n("No") );
+  else if( name == i18n("Original") )
+    return ( d->firstHeader.flags & MAD_FLAG_ORIGINAL ? i18n("Yes") : i18n("No") );
+  else if( name == i18n("CRC") )
+    return ( d->firstHeader.flags & MAD_FLAG_PROTECTION ? i18n("Yes") : i18n("No") );
+  else
+    return QString::null;
 }
 
 

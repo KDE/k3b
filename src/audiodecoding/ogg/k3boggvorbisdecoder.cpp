@@ -211,12 +211,12 @@ QString K3bOggVorbisDecoder::fileType() const
 QStringList K3bOggVorbisDecoder::supportedTechnicalInfos() const
 {
   return QStringList::split( ";", 
-			     i18n("Version") + ";" +
 			     i18n("Channels") + ";" +
 			     i18n("Sampling Rate") + ";" +
 			     i18n("Bitrate Upper") + ";" +
 			     i18n("Bitrate Nominal") + ";" +
-			     i18n("Bitrate Lower") );
+			     i18n("Bitrate Lower") + ";" +
+			     i18n("Version") );
 }
 
 
@@ -231,7 +231,7 @@ QString K3bOggVorbisDecoder::technicalInfo( const QString& info ) const
     else if( info == i18n("Channels") )
       return QString::number(d->vInfo->channels);
     else if( info == i18n("Sampling Rate") )
-      return QString::number(d->vInfo->rate);
+      return i18n("%1 Hz").arg(d->vInfo->rate);
     else if( info == i18n("Bitrate Upper") )
       return QString::number(d->vInfo->bitrate_upper);
     else if( info == i18n("Bitrate Nominal") )

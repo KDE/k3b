@@ -38,17 +38,18 @@
 #include <kcutlabel.h>
 #include <device/k3bmsf.h>
 #include <k3bvalidators.h>
+#include <k3baudiodecoder.h>
 
 
 K3bAudioTrackDialog::K3bAudioTrackDialog( QPtrList<K3bAudioTrack>& tracks, QWidget *parent, const char *name )
   : KDialogBase( KDialogBase::Plain, i18n("Audio Track Properties"), KDialogBase::Ok|KDialogBase::Cancel|KDialogBase::Apply,
 		 KDialogBase::Ok, parent, name )
 {
+  m_tracks = tracks;
+
   setupGui();
   setupConnections();
 	
-  m_tracks = tracks;
-
   m_bPregapSeconds = true;
 
 
@@ -337,14 +338,33 @@ void K3bAudioTrackDialog::setupGui()
   groupFileInfoLayout->addWidget( m_displayLength, 3, 1 );
   groupFileInfoLayout->addWidget( m_displaySize, 4, 1 );
 
-
-  groupFileInfoLayout->setRowStretch( 5, 1 );
-  groupFileInfoLayout->setColStretch( 1, 1 );
-
   QFont f( m_displayLength->font() );
   f.setBold( true );
   m_displayLength->setFont( f );
   m_displaySize->setFont( f );
+
+  // technical info
+  int row = 5;
+  if( m_tracks.count() == 1 ) {
+    K3bAudioDecoder* dec = m_tracks.first()->module();
+    
+    QStringList infos = dec->supportedTechnicalInfos();
+    if( !infos.isEmpty() ) {
+      for( QStringList::iterator it = infos.begin(); it != infos.end(); ++it ) {
+	QLabel* l1 = new QLabel( *it + ":", groupFileInfo );
+	QLabel* l2 = new QLabel( dec->technicalInfo( *it ), groupFileInfo );
+	l2->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
+	l2->setFont( f );
+	groupFileInfoLayout->addWidget( l1, row, 0 );
+	groupFileInfoLayout->addWidget( l2, row, 1 );
+	++row;
+      }
+    }
+  }
+
+  groupFileInfoLayout->setRowStretch( row, 1 );
+  groupFileInfoLayout->setColStretch( 1, 1 );
+
   // /////////////////////////////////////////////////
   // /////////////////////////////////////////////////
 

@@ -59,6 +59,10 @@ class K3bMadDecoder : public K3bAudioDecoder
 
   bool seekInternal( const K3b::Msf& );
 
+  QString fileType() const;
+  QStringList supportedTechnicalInfos() const;
+  QString technicalInfo( const QString& ) const;
+
  protected:
   bool analyseFileInternal( K3b::Msf& frames, int& samplerate, int& ch );
   bool initDecoderInternal();
@@ -67,7 +71,7 @@ class K3bMadDecoder : public K3bAudioDecoder
  
  private:
   void initMadStructures();
-  unsigned long countFrames( int* samplerate );
+  unsigned long countFrames();
   inline unsigned short linearRound( mad_fixed_t fixed );
   void madStreamBuffer();
   bool madDecodeNextFrame();
