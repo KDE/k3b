@@ -8,7 +8,7 @@
 #include <klocale.h>
 #include <kfilemetainfo.h>
 #include <kdebug.h>
-#include <kmimemagic.h>
+#include <kmimetype.h>
 
 #include <qstring.h>
 #include <qfileinfo.h>
@@ -21,6 +21,8 @@
 
 
 typedef unsigned char k3b_mad_char;
+
+int K3bMp3Module::MaxAllowedRecoverableErrors = 10;
 
 
 K3bMp3Module::K3bMp3Module( QObject* parent, const char* name )
@@ -200,6 +202,23 @@ void K3bMp3Module::slotCountFrames()
 	if( MAD_RECOVERABLE( m_madStream->error ) ) {
 	  kdDebug() << "(K3bMp3Module) recoverable frame level error ("
 		    << mad_stream_errorstr(m_madStream) << ")" << endl;
+
+	  m_recoverableErrorCount++;
+	  if( m_recoverableErrorCount > MaxAllowedRecoverableErrors ) {
+	    kdDebug() << "(K3bMp3Module) found " << MaxAllowedRecoverableErrors 
+		      << " recoverable errors in a row. Stopping decoding." << endl;
+	    audioTrack()->setStatus( K3bAudioTrack::CORRUPT );
+
+	    m_bCountingFramesInProgress = false;
+	    m_analysingTimer->stop();
+	    mad_header_finish( m_madHeader );
+
+	    clearingUp();
+
+	    emit trackAnalysed( audioTrack() );
+	    break;
+	  }
+
 	  audioTrack()->setStatus( K3bAudioTrack::RECOVERABLE );
 	}
 	else {
@@ -221,6 +240,8 @@ void K3bMp3Module::slotCountFrames()
       } // if( header not decoded )
 
       else {
+	m_recoverableErrorCount = 0;
+
 	m_frameCount++;
 
 	mad_timer_add( m_madTimer, m_madHeader->duration );
@@ -608,83 +629,102 @@ void K3bMp3Module::clearingUp()
 
 bool K3bMp3Module::canDecode( const KURL& url )
 {
-  // first try the (hopefully) faster thing
-  // plus: there are still mp3 files where the latter method does not work
-  // although mad is able to decode them! (I know of a file where we get a
-  // recoverable error after the last found header. I think that's just bad luck!)
+//   static const QString mime_types[] = {
+//     "audio/mp3", "audio/x-mp3", "audio/mpg3", "audio/x-mpg3", "audio/mpeg3", "audio/x-mpeg3",
+//     "audio/mp2", "audio/x-mp2", "audio/mpg2", "audio/x-mpg2", "audio/mpeg2", "audio/x-mpeg2",
+//     "audio/mp1", "audio/x-mp1", "audio/mpg1", "audio/x-mpg1", "audio/mpeg1", "audio/x-mpeg1",
+//     "audio/mpeg", "audio/x-mpeg",
+//     QString::null,
+//   };
 
-  if( KMimeMagic::self()->findFileType( url.path() )->mimeType() == "audio/x-mp3" )
-    return true;
-  else {
-    QFile f( url.path() );
-    if( !f.open( IO_ReadOnly ) ) {
-      kdDebug() << "(K3bMp3Module) could not open file " << url.path() << endl;
-      return false;
-    }
+//   QString mimetype = KMimeType::findByFileContent( url.path(), 0 )->name();
+//   kdDebug() << "(K3bMp3Module) mimetype: " << mimetype << endl;
 
-    mad_stream stream;;
-    mad_header header;
+//   for( int i = 0; !mime_types[i].isNull(); ++i )
+//     if( mime_types[i] == mimetype )
+//       return true;
 
-    // id3v1.0 tag is 128 bytes long. We assume that v1.1 and v1.2 tags are
-    // not found at the beginning of a file. So searching the first 4096 bytes for a header
-    // should do it
-    // It does not! There seem to be some files beginning with a lot of nulls
-    // 20*4096 is a lot but worked for all my mp3 files.
-    const int BUFLEN = 20*4096;
-    unsigned char buffer[BUFLEN];
-    long readSize = BUFLEN;
-    unsigned char* readStart = buffer;
+  // no success with the mimetype
+  // since sometimes the mimetype system does not work we try it on our own
 
-    // initialize stuff
-    memset( buffer, 0, BUFLEN );
-    mad_stream_init( &stream );
-    mad_header_init( &header );
 
-    bool success = false;
-    int headerCount = 0;
-
-    // fill input buffer
-    Q_LONG result = f.readBlock( (char*)readStart, readSize );
-    if( result > 0 ) {
-      mad_stream_buffer( &stream, buffer, result );
-      stream.error = MAD_ERROR_NONE;
-
-      // try decoding buffer
-      while(1) {
-	if( mad_header_decode( &header, &stream ) ) {
-	  if( MAD_RECOVERABLE( stream.error ) ) {
-	    kdDebug() << "(K3bMp3Module) recoverable frame level error at frame " << headerCount << " ("
-		      << mad_stream_errorstr(&stream) << ")" << endl;
-	    success = false;
-	  }
-	  else if( stream.error == MAD_ERROR_BUFLEN ) {
-	    // buffer empty. stop decoding
-	    break;
-	  }
-	  else {
-	    kdDebug() << "(K3bMp3Module) error while decoding file " << url.path() << endl;
-	    success = false;
-	    break;
-	  }
-	}
-	else {
-	  // header found
-	  headerCount++;
-	  success = true;
-	}
-      }
-    }
-    else {
-      kdDebug() << "(K3bMp3Module) could not read from file " << url.path() << endl;
-    }
-
-    kdDebug() << "(K3bMp3Module) Header count: " << headerCount << endl;
-
-    mad_header_finish( &header );
-    mad_stream_finish( &stream );
-
-    return success;
+  QFile f(url.path());
+  if( !f.open(IO_ReadOnly) ) {
+    kdDebug() << "(K3bMp3Module) could not open file " << url.path() << endl;
+    return false;
   }
+
+  // there seem to be mp3 files starting with a lot of zeros
+  // we try to skip these.
+  // there might still be files with more than bufLen zeros...
+  const int bufLen = 4096;
+  char buf[bufLen];
+  if( f.readBlock( buf, bufLen ) < bufLen ) {
+    kdDebug() << "(K3bMp3Module) unable to read " << bufLen << " bytes from " << url.path() << endl;
+    f.close();
+    return false;
+  }
+  f.close();
+
+  // skip any 0
+  int i = 0;
+  while( i < bufLen && buf[i] == '\0' ) i++;
+  if( i == bufLen ) {
+    kdDebug() << "(K3bMp3Module) only zeros found in the beginning of " << url.path() << endl;
+    return false;
+  }
+
+
+
+  // now check if the file starts with an id3 tag
+  if( i < bufLen-5 && 
+      ( buf[i] == 'I' && buf[i+1] == 'D' && buf[i+2] == '3' ) &&
+      ( (unsigned short)buf[i+3] < 0xff && (unsigned short)buf[i+4] < 0xff ) ) {
+    kdDebug() << "(K3bMp3Module) found id3 magic: ID3 " 
+	      << (unsigned short)buf[i+3] << "." << (unsigned short)buf[i+4] << endl;
+    return true;
+  }
+
+  // check if we have a RIFF MPEG header
+  // libmad seems to be able to decode such files but not to decode these first bytes
+  if( ( buf[i] == 'R' && buf[i+1] == 'I' && buf[i+2] == 'F' && buf[i+3] == 'F' &&
+	buf[i+8] == 'W' && buf[i+9] == 'A' && buf[i+10] == 'V' && buf[i+11] == 'E' &&
+	buf[i+12] == 'f' && buf[i+13] == 'm' &&	buf[i+14] == 't' ) ) {
+    kdDebug() << "(K3bMp3Module) found RIFF, WAVE, and fmt." << endl;
+    short m = (short)( buf[i+20] | (buf[i+21]<<8) );
+    if( m == 80 ) {
+      kdDebug() << "(K3bMp3Module) found RIFF MPEG magic." << endl;
+      return true;
+    }
+    else if( m == 85 ) {
+      kdDebug() << "(K3bMp3Module) found RIFF MPEG III magic." << endl;
+      return true;
+    }
+    else
+      return false;
+  }
+      
+
+
+  // here no id3 tag could be found
+  // so let libmad try to decode one frame header
+  mad_stream stream;;
+  mad_header header;
+  mad_stream_init( &stream );
+  mad_header_init( &header );
+
+  mad_stream_buffer( &stream, (unsigned char*)&buf[i], bufLen-i );
+  stream.error = MAD_ERROR_NONE;
+  bool success = true;
+  if( mad_header_decode( &header, &stream ) ) {
+    kdDebug() << "(K3bMp3Module) could not find mpeg header." << endl;
+    success = false;
+  }
+
+  mad_header_finish( &header );
+  mad_stream_finish( &stream );
+  
+  return success;
 }
 
 
@@ -711,6 +751,7 @@ void K3bMp3Module::analyseTrack()
   mad_header_init( m_madHeader );
   m_bCountingFramesInProgress = true;
   m_bDecodingInProgress = false;
+  m_recoverableErrorCount = 0;
 
   m_analysingTimer->start(0);
 }
