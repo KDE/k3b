@@ -165,9 +165,6 @@ void K3bDiskInfoDetector::fetchTocInfo()
 	  lastTrack = K3bTrack( startSec, startSec, trackType, trackMode );
 
   }
-  if (m_info.tocType != K3bDiskInfo::AUDIO)
-    fetchIsoInfo();
-
   if (m_info.device->burner())
     fetchDiskInfo();
 
@@ -177,7 +174,6 @@ void K3bDiskInfoDetector::fetchTocInfo()
     calculateDiscId();
 
   testForDvd();
-//  finish(true);
 }
 
 void K3bDiskInfoDetector::fetchIsoInfo()
@@ -211,6 +207,8 @@ void K3bDiskInfoDetector::testForDvd()
 
     m_tcWrapper->isDvdInsert( m_device );
 
+  } else {
+    finish(true);
   }
 }
 
