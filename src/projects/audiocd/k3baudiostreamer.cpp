@@ -16,7 +16,8 @@
 #include "k3baudiostreamer.h"
 #include "k3baudiodoc.h"
 #include "k3baudiotrack.h"
-#include "input/k3baudiomodule.h"
+//#include "input/k3baudiomodule.h"
+#include <k3baudiodecoder.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -43,7 +44,7 @@ public:
 
   int currentTrackNumber;
   K3bAudioTrack* currentTrack;
-  K3bAudioModule* currentModule;
+  K3bAudioDecoder* currentModule;
 
   QByteArray buffer;
   long bufferDataLen;
@@ -88,6 +89,7 @@ void K3bAudioStreamer::start()
   d->finished = false;
 
   d->currentTrackNumber = 1;
+  d->writtenOverallData = 0;
 
   // calculate overall data
   d->overallDataToWrite = 0;
@@ -167,7 +169,7 @@ void K3bAudioStreamer::startModule()
     if( d->currentTrack->index() != 0 )
       d->trackDataToWrite += d->currentTrack->pregap().audioBytes();
     
-    if( !d->currentModule->initDecoding( d->currentTrack->absPath(), d->currentTrack->size() ) ) {
+    if( !d->currentModule->initDecoder() ) {
       kdDebug() << "(K3bAudioStreamer) unable to initialize module for track " 
 		<< d->currentTrackNumber << ": " << d->currentTrack->absPath() << endl;
       cancelAll();

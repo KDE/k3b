@@ -101,13 +101,23 @@ AC_TRY_COMPILE([
 	[linux_scsi=yes])
 AC_MSG_RESULT($linux_scsi)
 
+if test "x$linux_scsi" = "xno" ; then
+	DO_NOT_COMPILE="$DO_NOT_COMPILE k3b"
+fi
+
+
 
 dnl - check the byte order -
 dnl this will define WORDS_BIGENDIAN or do nothing
 AC_C_BIGENDIAN()
 
 
-OGG_VORBISLIBS=""
+dnl ----- this will contain the subdirs to compile in the audiodecoder dir
+AUDIO_DECODER_TO_COMPILE=""
+dnl ----- this will contain the subdirs to compile in the audioencoder dir
+AUDIO_ENCODER_TO_COMPILE=""
+
+
 AC_MSG_CHECKING(for ogg/vorbis headers)
 ogg_vorbis=no
 AC_TRY_COMPILE([
@@ -124,39 +134,45 @@ if test x$ogg_vorbis = xyes; then
                 ogg_vorbis=no,[-lvorbisfile -lvorbis -logg])
 fi
 if test x$ogg_vorbis = xyes; then
-   AC_DEFINE(OGG_VORBIS,1,[Define if you have ogg/vorbis installed])
-   OGG_VORBISLIBS="-lvorbisfile -lvorbis -logg"
+	AC_DEFINE(OGG_VORBIS,1,[Define if you have ogg/vorbis installed])
+	AUDIO_DECODER_TO_COMPILE="$AUDIO_DECODER_TO_COMPILE ogg"
+	AUDIO_ENCODER_TO_COMPILE="$AUDIO_ENCODER_TO_COMPILE ogg"
 fi
-
-AC_SUBST(OGG_VORBISLIBS)
-
 
 
 dnl === libmad MPEG decoder check ===
-mad_detect=0
-AC_CHECK_LIB(mad, mad_synth_frame,
-             [AC_CHECK_HEADER(mad.h, mad_detect=1)],
-              mad_detect=0)
-
-if test $mad_detect = 0 ; then
-	DO_NOT_COMPILE="$DO_NOT_COMPILE k3b"
-fi
-
-
-if test "x$linux_scsi" = "xno" -o "x$cdda_paranoia" = "xno" ; then
-	DO_NOT_COMPILE="$DO_NOT_COMPILE k3b"
-fi
+MAD_LIB=""
+AC_CHECK_HEADER(mad.h, [
+	AC_CHECK_LIB(mad, mad_synth_frame, [
+		MAD_LIB="-lmad"
+		AC_DEFINE(HAVE_LIBMAD,1,[defined if you have libmad headers and libraries])
+		AUDIO_DECODER_TO_COMPILE="$AUDIO_DECODER_TO_COMPILE mp3"
+	])
+])
+AC_SUBST(MAD_LIB)
 
 
+AC_SUBST(AUDIO_DECODER_TO_COMPILE)
+AC_SUBST(AUDIO_ENCODER_TO_COMPILE)
+
+
+dnl === check for id3lib ============
+ID3_LIB=""
+AC_CHECK_HEADER(id3/tag.h, [
+	ID3_LIB="-lid3"
+	AC_DEFINE(HAVE_LIBID3,1,[defined if you have libid3 headers and libraries])
+])
+AC_SUBST(ID3_LIB)
+
+
+dnl === check for resmgr ============
 RESMGR_LIB=""
-
 AC_CHECK_HEADERS(resmgr.h, [
        AC_CHECK_LIB(resmgr,rsm_open_device,[
                RESMGR_LIB="-lresmgr"
                AC_DEFINE(HAVE_RESMGR,1,[defined if you have resmgr libraries and headers])
        ])
 ])
-
 AC_SUBST(RESMGR_LIB)
 
 

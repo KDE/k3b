@@ -25,7 +25,7 @@ QValidator* K3bValidators::isrcValidator( QObject* parent, const char* name )
 
 QValidator* K3bValidators::cdTextValidator( QObject* parent, const char* name )
 {
-  return new QRegExpValidator( QRegExp("^[^\"]$"), parent, name );
+  return new QRegExpValidator( QRegExp("^[^\"]*$"), parent, name );
 }
 
 

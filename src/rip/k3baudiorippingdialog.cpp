@@ -15,7 +15,7 @@
 
 
 #include "k3baudiorippingdialog.h"
-#include "k3bcddacopy.h"
+#include "k3baudioripthread.h"
 #include "k3bpatternparser.h"
 #include "k3bcddbpatternwidget.h"
 #include <k3bjobprogressdialog.h>
@@ -26,6 +26,10 @@
 #include <k3bglobals.h>
 #include <device/k3btrack.h>
 #include <k3bstdguiitems.h>
+#include <k3bthreadjob.h>
+
+#include <k3bpluginmanager.h>
+#include <k3baudioencoder.h>
 
 #include <kcombobox.h>
 #include <klocale.h>
@@ -38,6 +42,7 @@
 #include <kiconloader.h>
 #include <kstdguiitem.h>
 #include <kdebug.h>
+#include <kmessagebox.h>
 
 #include <qgroupbox.h>
 #include <qheader.h>
@@ -52,14 +57,25 @@
 #include <qstringlist.h>
 #include <qmessagebox.h>
 #include <qfont.h>
-#include <qradiobutton.h>
-#include <qbuttongroup.h>
 #include <qhbox.h>
 #include <qtoolbutton.h>
 #include <qtabwidget.h>
 #include <qspinbox.h>
+#include <qptrlist.h>
+#include <qintdict.h>
+#include <qpair.h>
 
 
+
+class K3bAudioRippingDialog::Private
+{
+public:
+  Private() {
+  }
+
+  QIntDict<K3bAudioEncoderFactory> factoryMap;
+  QValueVector<QString> filenames;
+};
 
 
 K3bAudioRippingDialog::K3bAudioRippingDialog(const K3bDiskInfo& diskInfo, 
@@ -71,13 +87,12 @@ K3bAudioRippingDialog::K3bAudioRippingDialog(const K3bDiskInfo& diskInfo,
     m_cddbEntry( entry ), 
     m_trackNumbers( tracks )
 {
+  d = new Private();
+
   setupGui();
   setupContextHelp();
 
   init();
-
-  m_radioMp3->hide(); // not implemented yet
-  m_radioOgg->hide(); // not implemented yet
 
   K3b::Msf length;
   for( QValueList<int>::const_iterator it = m_trackNumbers.begin();
@@ -87,8 +102,12 @@ K3bAudioRippingDialog::K3bAudioRippingDialog(const K3bDiskInfo& diskInfo,
   setTitle( i18n("CD Ripping"), 
 	    i18n("1 track (%1)", "%n tracks (%1)", 
 		 m_trackNumbers.count()).arg(length.toString()) );
+}
 
-  m_radioWav->setChecked(true);
+
+K3bAudioRippingDialog::~K3bAudioRippingDialog()
+{
+  delete d;
 }
 
 
@@ -137,13 +156,11 @@ void K3bAudioRippingDialog::setupGui()
   groupOptionsLayout->setRowStretch( 4, 1 );
 
 
-  m_groupFileType = new QButtonGroup( 4, Qt::Vertical, i18n("File Type"), optionPage );
-  m_radioWav = new QRadioButton( i18n("Wave"), m_groupFileType );
-  m_radioMp3 = new QRadioButton( i18n("MP3"), m_groupFileType );
-  m_radioOgg = new QRadioButton( i18n("Ogg Vorbis"), m_groupFileType ); // TODO: test if ogg available
+  QGroupBox* groupFileType = new QGroupBox( 1, Qt::Vertical, i18n("File Type"), optionPage );
+  m_comboFileType = new QComboBox( groupFileType );
 
   optionPageLayout->addWidget( groupOptions );
-  optionPageLayout->addWidget( m_groupFileType );
+  optionPageLayout->addWidget( groupFileType );
   optionPageLayout->setStretchFactor( groupOptions, 1 );
 
 
@@ -194,9 +211,8 @@ void K3bAudioRippingDialog::setupGui()
   setStartButtonText( i18n( "Start Ripping" ), i18n( "Starts copying the selected tracks") );
 
   connect( m_checkUsePattern, SIGNAL(toggled(bool)), this, SLOT(refresh()) );
-  connect( m_radioWav, SIGNAL(toggled(bool)), this, SLOT(refresh()) );
-  connect( m_radioOgg, SIGNAL(toggled(bool)), this, SLOT(refresh()) );
-  connect( m_radioMp3, SIGNAL(toggled(bool)), this, SLOT(refresh()) );
+  connect( m_checkSingleFile, SIGNAL(toggled(bool)), this, SLOT(refresh()) );
+  connect( m_comboFileType, SIGNAL(activated(int)), this, SLOT(refresh()) );
 }
 
 
@@ -221,60 +237,101 @@ void K3bAudioRippingDialog::setupContextHelp()
 }
 
 
-K3bAudioRippingDialog::~K3bAudioRippingDialog()
-{
-}
-
-
 void K3bAudioRippingDialog::init()
 {
+  d->factoryMap.clear();
+  m_comboFileType->clear();
+  m_comboFileType->insertItem( i18n("Wave") );
+
+  // check the available encoding plugins
+  QPtrList<K3bPluginFactory> fl = k3bpluginmanager->factories( "AudioEncoder" );
+  for( QPtrListIterator<K3bPluginFactory> it( fl ); it.current(); ++it ) {
+    d->factoryMap.insert( m_comboFileType->count(), (K3bAudioEncoderFactory*)it.current() );
+    m_comboFileType->insertItem( ((K3bAudioEncoderFactory*)it.current())->fileTypeComment() );
+  }
+
   slotLoadUserDefaults();
   refresh();
 
   m_patternWidget->setEnabled( m_checkUsePattern->isChecked() );
 }
 
+
 void K3bAudioRippingDialog::slotStartClicked()
 {
-  KConfig* c = kapp->config();
-  c->setGroup( "Ripping" );
+  // check if all filenames differ
+  if( d->filenames.count() > 1 ) {
+    bool differ = true;
+    // the most stupid version to compare but most cds have about 12 tracks
+    // that's a size where algorithms do not need any optimization! ;)
+    for( unsigned int i = 0; i < d->filenames.count(); ++i ) {
+      for( unsigned int j = i+1; j < d->filenames.count(); ++j )
+	if( d->filenames[i] == d->filenames[j] ) {
+	  differ = false;
+	  break;
+	}
+    }
 
-  c->writePathEntry( "last ripping directory", m_editStaticRipPath->url() );
-  QString filetype;
-  if( m_radioOgg->isChecked() )
-    filetype = "ogg";
-  else if( m_radioMp3->isChecked() )
-    filetype = "mp3";
-  else
-    filetype = "wav";
+    if( !differ ) {
+      KMessageBox::sorry( this, i18n("Please check the naming pattern. All filenames need to be unique.") );
+      return;
+    }
+  }
 
-  c->writeEntry( "last used filetype", filetype );
+  // check if we need to overwrite some files...
+  QListViewItemIterator it( m_viewTracks );
+  QStringList filesToOverwrite;
+  for( unsigned int i = 0; i < d->filenames.count(); ++i ) {
+    if( QFile::exists( d->filenames[i] ) )
+      filesToOverwrite.append( d->filenames[i] );
+  }
+
+  if( !filesToOverwrite.isEmpty() )
+    if( KMessageBox::questionYesNoList( this, 
+					i18n("Do you want to overwrite these files?"),
+					filesToOverwrite,
+					i18n("Files exist") ) == KMessageBox::No )
+      return;
 
 
-  K3bCddaCopy* job = new K3bCddaCopy( this );
-  job->setDevice( m_diskInfo.device );
+  // prepare list of tracks to rip
+  QValueVector<QPair<int, QString> > tracksToRip;
+  unsigned int i = 0;
+  for( QValueList<int>::const_iterator trackIt = m_trackNumbers.begin();
+       trackIt != m_trackNumbers.end(); ++trackIt ) {
+    tracksToRip.append( qMakePair( *trackIt, d->filenames[i] ) );
+    ++i;
+  }
 
-  job->setCddbEntry( m_cddbEntry );
-  job->setUsePattern( m_checkUsePattern->isChecked() );
-  job->setBaseDirectory( m_editStaticRipPath->url() );
-  job->setDirectoryPattern( m_patternWidget->directoryPattern() );
-  job->setFilenamePattern( m_patternWidget->filenamePattern() );
-  job->setDirectoryReplaceString( m_patternWidget->directoryReplaceString() );
-  job->setFilenameReplaceString( m_patternWidget->filenameReplaceString() );
-  job->setReplaceBlanksInDir( m_patternWidget->replaceBlanksInDirectory() );
-  job->setReplaceBlanksInFilename( m_patternWidget->replaceBlanksInFilename() );
-  job->setCopyTracks( m_trackNumbers );
-  job->setParanoiaMode( m_comboParanoiaMode->currentText().toInt() );
-  job->setMaxRetries( m_spinRetries->value() );
-  job->setNeverSkip( m_checkNeverSkip->isChecked() );
-  job->setSingleFile( m_checkSingleFile->isChecked() );
+
+  K3bAudioEncoderFactory* factory = d->factoryMap[m_comboFileType->currentItem()];  // 0 for wave
+
+  K3bAudioRipThread* thread = new K3bAudioRipThread();
+  thread->setDevice( m_diskInfo.device );
+  thread->setCddbEntry( m_cddbEntry );
+  thread->setUsePattern( m_checkUsePattern->isChecked() );
+  thread->setBaseDirectory( m_editStaticRipPath->url() );
+  thread->setDirectoryPattern( m_patternWidget->directoryPattern() );
+  thread->setFilenamePattern( m_patternWidget->filenamePattern() );
+  thread->setDirectoryReplaceString( m_patternWidget->directoryReplaceString() );
+  thread->setFilenameReplaceString( m_patternWidget->filenameReplaceString() );
+  thread->setReplaceBlanksInDir( m_patternWidget->replaceBlanksInDirectory() );
+  thread->setReplaceBlanksInFilename( m_patternWidget->replaceBlanksInFilename() );
+  thread->setTracksToRip( tracksToRip );
+  thread->setParanoiaMode( m_comboParanoiaMode->currentText().toInt() );
+  thread->setMaxRetries( m_spinRetries->value() );
+  thread->setNeverSkip( m_checkNeverSkip->isChecked() );
+  thread->setSingleFile( m_checkSingleFile->isChecked() );
+  thread->setEncoderFactory( factory );
+
+  K3bThreadJob job( thread, this );
 
   K3bJobProgressDialog ripDialog( this, "Ripping" );
 
   hide();
-  ripDialog.startJob(job);
+  ripDialog.startJob(&job);
 
-  delete job;
+  delete thread;
 
   close();
 }
@@ -294,62 +351,114 @@ void K3bAudioRippingDialog::refresh()
   c->setGroup( "Audio Ripping" );
 
   m_viewTracks->clear();
+  d->filenames.clear();
 
+  QString baseDir = m_editStaticRipPath->url();
+  if( baseDir[baseDir.length()-1] != '/' )
+    baseDir += "/";
 
-  for( QValueList<int>::const_iterator it = m_trackNumbers.begin();
-       it != m_trackNumbers.end(); ++it ) {
-    int index = *it - 1;
-
-    QString extension;
-    if( m_radioOgg->isChecked() )
-      extension = ".ogg";
-    else if( m_radioMp3->isChecked() )
-      extension = ".mp3";
-    else
-      extension = ".wav";
-
-    long fileSize = m_diskInfo.toc[index].length() * 2352;
-
-    if( m_diskInfo.toc[index].type() == K3bTrack::DATA ) {
-      extension = ".iso";
-      continue;  // TODO: find out how to rip the iso data
+  if( m_checkSingleFile->isChecked() ) {
+    long length = 0;
+    for( QValueList<int>::const_iterator it = m_trackNumbers.begin();
+	 it != m_trackNumbers.end(); ++it ) {
+      length += m_diskInfo.toc[*it-1].length();
     }
-    else {
-      // FIXME: mp3,ogg file size recalculation
-    }
-
 
     QString filename, directory;
+    QString extension;
+    long long fileSize = 0;
+    if( m_comboFileType->currentItem() == 0 ) {
+      extension = "wav";
+      fileSize = length * 2352 + 44;
+    }
+    else {
+      extension = d->factoryMap[m_comboFileType->currentItem()]->extension();
+      fileSize = d->factoryMap[m_comboFileType->currentItem()]->fileSize( length );
+    }
 
-    if( m_checkUsePattern->isChecked() && (int)m_cddbEntry.titles.count() >= *it ) {
-      filename = K3bPatternParser::parsePattern( m_cddbEntry, *it,
+    if( m_checkUsePattern->isChecked() && (int)m_cddbEntry.titles.count() >= 1 ) {
+      filename = K3bPatternParser::parsePattern( m_cddbEntry, 1,
 						 m_patternWidget->filenamePattern(),
 						 m_patternWidget->replaceBlanksInFilename(),
-						 m_patternWidget->filenameReplaceString() ) + extension;
+						 m_patternWidget->filenameReplaceString() ) + "." + extension;
 
-      directory = K3bPatternParser::parsePattern( m_cddbEntry, *it,
+      directory = K3bPatternParser::parsePattern( m_cddbEntry, 1,
 						  m_patternWidget->directoryPattern(),
 						  m_patternWidget->replaceBlanksInDirectory(),
 						  m_patternWidget->directoryReplaceString() );
     }
     else {
-      filename = i18n("Track%1").arg( QString::number( *it ).rightJustify( 2, '0' ) ) + extension;
+      filename = i18n("Album") + "." + extension;
       directory = "";
     }
+
 
     (void)new KListViewItem( m_viewTracks,
 			     m_viewTracks->lastItem(),
 			     filename,
-			     K3b::Msf(m_diskInfo.toc[index].length()).toString(),
-			     KIO::convertSize( fileSize ),
-			     (m_diskInfo.toc[index].type() == K3bTrack::AUDIO ? i18n("Audio") : i18n("Data") ),
+			     K3b::Msf(length).toString(),
+			     fileSize < 0 ? i18n("unknown") : KIO::convertSize( fileSize ),
+			     i18n("Audio"),
 			     directory );
+
+    d->filenames.append( baseDir + directory + "/" + filename );
+  }
+  else {
+    for( QValueList<int>::const_iterator it = m_trackNumbers.begin();
+	 it != m_trackNumbers.end(); ++it ) {
+      int index = *it - 1;
+
+      QString extension;
+      long long fileSize = 0;
+      if( m_comboFileType->currentItem() == 0 ) {
+	extension = "wav";
+	fileSize = m_diskInfo.toc[index].length() * 2352 + 44;
+      }
+      else {
+	extension = d->factoryMap[m_comboFileType->currentItem()]->extension();
+	fileSize = d->factoryMap[m_comboFileType->currentItem()]->fileSize( m_diskInfo.toc[index].length() );
+      }
+
+      if( m_diskInfo.toc[index].type() == K3bTrack::DATA ) {
+	extension = ".iso";
+	continue;  // TODO: find out how to rip the iso data
+      }
+
+
+      QString filename, directory;
+
+      if( m_checkUsePattern->isChecked() && (int)m_cddbEntry.titles.count() >= *it ) {
+	filename = K3bPatternParser::parsePattern( m_cddbEntry, *it,
+						   m_patternWidget->filenamePattern(),
+						   m_patternWidget->replaceBlanksInFilename(),
+						   m_patternWidget->filenameReplaceString() ) + "." + extension;
+
+	directory = K3bPatternParser::parsePattern( m_cddbEntry, *it,
+						    m_patternWidget->directoryPattern(),
+						    m_patternWidget->replaceBlanksInDirectory(),
+						    m_patternWidget->directoryReplaceString() );
+      }
+      else {
+	filename = i18n("Track%1").arg( QString::number( *it ).rightJustify( 2, '0' ) ) + "." + extension;
+	directory = "";
+      }
+
+      (void)new KListViewItem( m_viewTracks,
+			       m_viewTracks->lastItem(),
+			       filename,
+			       K3b::Msf(m_diskInfo.toc[index].length()).toString(),
+			       fileSize < 0 ? i18n("unknown") : KIO::convertSize( fileSize ),
+			       (m_diskInfo.toc[index].type() == K3bTrack::AUDIO ? i18n("Audio") : i18n("Data") ),
+			       directory );
+
+      d->filenames.append( baseDir + directory + "/" + filename );
+    }
   }
 }
 
 
 void K3bAudioRippingDialog::setStaticDir( const QString& path ){
-    m_editStaticRipPath->setURL( path );
+  m_editStaticRipPath->setURL( path );
 }
 
 
@@ -363,6 +472,8 @@ void K3bAudioRippingDialog::slotLoadK3bDefaults()
   m_spinRetries->setValue(20);
   m_checkNeverSkip->setChecked( false );
   m_checkSingleFile->setChecked( false );
+
+  m_comboFileType->setCurrentItem(0); // Wave
 
   m_patternWidget->loadDefaults();
 }
@@ -380,6 +491,22 @@ void K3bAudioRippingDialog::slotLoadUserDefaults()
   m_checkNeverSkip->setChecked( c->readBoolEntry( "never_skip", false ) );
   m_checkSingleFile->setChecked( c->readBoolEntry( "single_file", false ) );
 
+  QString filetype = c->readEntry( "filetype", "wav" );
+  if( filetype == "wav" )
+    m_comboFileType->setCurrentItem(0);
+  else {
+    int c = 0;
+    for( QIntDictIterator<K3bAudioEncoderFactory> it( d->factoryMap );
+	 it.current(); ++it ) {
+      if( it.current()->extension() == filetype ) {
+	c = it.currentKey();
+	break;
+      }
+    }
+
+    m_comboFileType->setCurrentItem(c);
+  }
+
   m_patternWidget->loadConfig( c );
 }
 
@@ -395,6 +522,12 @@ void K3bAudioRippingDialog::slotSaveUserDefaults()
   c->writeEntry( "read_retries", m_spinRetries->value() );
   c->writeEntry( "never_skip", m_checkNeverSkip->isChecked() );
   c->writeEntry( "single_file", m_checkSingleFile->isChecked() );
+
+  K3bAudioEncoderFactory* factory = d->factoryMap[m_comboFileType->currentItem()];  // 0 for wave
+  if( factory )
+    c->writeEntry( "filetype", factory->extension() );
+  else
+    c->writeEntry( "filetype", "wav" );
 
   m_patternWidget->saveConfig( c );
 }

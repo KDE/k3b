@@ -44,6 +44,7 @@ class K3bInterface : public DCOPObject
   DCOPRef createVideoCDProject();
   DCOPRef createMovixCDProject();
   DCOPRef createDataDVDProject();
+  DCOPRef createMovixDVDProject();
 
   DCOPRef openDocument( const KURL& url );
 

@@ -19,7 +19,6 @@
 
 #include <k3binteractiondialog.h>
 
-#include <qvbox.h>
 #include <qstringlist.h>
 
 #include <cddb/k3bcddbquery.h>
@@ -28,8 +27,6 @@
 
 class KListView;
 class KURLRequester;
-class QButtonGroup;
-class QRadioButton;
 class QCheckBox;
 class QSpinBox;
 class QComboBox;
@@ -63,10 +60,7 @@ class K3bAudioRippingDialog : public K3bInteractionDialog
   KURLRequester* m_editStaticRipPath;
   QCheckBox*    m_checkUsePattern;
 
-  QButtonGroup* m_groupFileType;
-  QRadioButton* m_radioWav;
-  QRadioButton* m_radioMp3;
-  QRadioButton* m_radioOgg;
+  QComboBox* m_comboFileType;
 
   QComboBox* m_comboParanoiaMode;
   QSpinBox* m_spinRetries;
@@ -77,6 +71,9 @@ class K3bAudioRippingDialog : public K3bInteractionDialog
 
   void setupGui();
   void setupContextHelp();
+
+  class Private;
+  Private* d;
   
  private slots:
   void slotStartClicked();

@@ -16,7 +16,7 @@
 
 #include "k3baudiotrack.h"
 
-#include "input/k3baudiomodule.h"
+#include <k3baudiodecoder.h>
 #include <k3bcore.h>
 
 #include <kconfig.h>
@@ -50,6 +50,13 @@ K3bAudioTrack::K3bAudioTrack( QPtrList<K3bAudioTrack>* parent, const QString& fi
 
 K3bAudioTrack::~K3bAudioTrack()
 {
+  delete m_module;
+}
+
+
+K3b::Msf K3bAudioTrack::length() const
+{
+  return( m_module ? m_module->length() : 0 );
 }
 
 
@@ -80,4 +87,11 @@ void K3bAudioTrack::setPregap( const K3b::Msf& p )
     m_pregap = 150;
   else
     m_pregap = p; 
+}
+
+
+void K3bAudioTrack::setModule( K3bAudioDecoder* module )
+{
+  m_module = module;
+  m_module->setFilename( absPath() );
 }

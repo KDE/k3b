@@ -15,6 +15,10 @@
 
 #include "k3bcdparanoialib.h"
 
+#include <k3bdevice.h>
+#include <k3btoc.h>
+#include <k3bmsf.h>
+
 #include <kdebug.h>
 
 #include <dlfcn.h>
@@ -23,6 +27,72 @@
 void* K3bCdparanoiaLib::s_libInterface = 0;
 void* K3bCdparanoiaLib::s_libParanoia = 0;
 int K3bCdparanoiaLib::s_counter = 0;
+
+// from cdda_paranoia.h
+#define PARANOIA_CB_READ           0
+#define PARANOIA_CB_VERIFY         1
+#define PARANOIA_CB_FIXUP_EDGE     2
+#define PARANOIA_CB_FIXUP_ATOM     3
+#define PARANOIA_CB_SCRATCH        4
+#define PARANOIA_CB_REPAIR         5
+#define PARANOIA_CB_SKIP           6
+#define PARANOIA_CB_DRIFT          7
+#define PARANOIA_CB_BACKOFF        8
+#define PARANOIA_CB_OVERLAP        9
+#define PARANOIA_CB_FIXUP_DROPPED 10
+#define PARANOIA_CB_FIXUP_DUPED   11
+#define PARANOIA_CB_READERR       12
+
+
+
+static void paranoiaCallback( long sector, int status )
+{
+  // do nothing so far....
+  return;
+
+  switch( status ) {
+  case -1:
+    break;
+  case -2:
+    break;
+  case PARANOIA_CB_READ:
+    // no problem
+    // does only this mean that the sector has been read?
+//     m_lastReadSector = sector;  // this seems to be rather useless
+//     m_readSectors++;
+    break;
+  case PARANOIA_CB_VERIFY:
+    break;
+  case PARANOIA_CB_FIXUP_EDGE:
+    break;
+  case PARANOIA_CB_FIXUP_ATOM:
+    break;
+  case PARANOIA_CB_SCRATCH:
+    // scratch detected
+    break;
+  case PARANOIA_CB_REPAIR:
+    break;
+  case PARANOIA_CB_SKIP:
+    // skipped sector
+    break;
+  case PARANOIA_CB_DRIFT:
+    break;
+  case PARANOIA_CB_BACKOFF:
+    break;
+  case PARANOIA_CB_OVERLAP:
+    // sector does not seem to contain the current
+    // sector but the amount of overlapped data
+    //    m_overlap = sector;
+    break;
+  case PARANOIA_CB_FIXUP_DROPPED:
+    break;
+  case PARANOIA_CB_FIXUP_DUPED:
+    break;
+  case PARANOIA_CB_READERR:
+    break;
+  } 
+}
+
 
 
 extern "C" {
@@ -68,21 +138,35 @@ extern "C" {
 class K3bCdparanoiaLib::Private
 {
 public:
-  Private() {
-    drive = 0;
-    paranoia = 0;
-    paranoiaMode = 3;
-    neverSkip = false;
-    maxRetries = 20;
+  Private() 
+    : drive(0),
+      paranoia(0),
+      paranoiaMode(3),
+      neverSkip(false),
+      maxRetries(20),
+      device(0),
+      currentSector(0),
+      startSector(0),
+      lastSector(0),
+      status(S_OK) {
   }
+
   ~Private() {
-}
+  }
 
   cdrom_drive* drive;
   cdrom_paranoia* paranoia;
   int paranoiaMode;
   bool neverSkip;
   int maxRetries;
+
+  // high-level api
+  K3bCdDevice::CdDevice* device;
+  K3bCdDevice::Toc toc;
+  long currentSector;
+  long startSector;
+  long lastSector;
+  int status;
 };
 
 
@@ -325,4 +409,121 @@ K3bCdparanoiaLib* K3bCdparanoiaLib::create()
     return 0;
   }
   return lib;
+}
+
+
+bool K3bCdparanoiaLib::initParanoia( K3bCdDevice::CdDevice* dev )
+{
+  paranoiaFree();
+
+  d->device = dev;
+  d->toc = dev->readToc();
+  if( d->toc.isEmpty() ) {
+    kdDebug() << "(K3bCdparanoiaLib) empty toc." << endl;
+    cleanup();
+    return false;
+  }
+
+  if( d->toc.contentType() == K3bCdDevice::DATA ) {
+    kdDebug() << "(K3bCdparanoiaLib) No audio tracks found." << endl;
+    cleanup();
+    return false;
+  }
+
+  if( paranoiaInit( dev->blockDeviceName() ) ) {
+    // set some default
+    return initReading( 1 );
+  }
+  else {
+    cleanup();
+    return false;
+  }
+}
+
+
+void K3bCdparanoiaLib::cleanup()
+{
+  d->device = 0;
+  d->currentSector = 0;
+}
+
+
+bool K3bCdparanoiaLib::initReading( unsigned int track )
+{
+  if( d->device ) {
+    if( track < d->toc.count() ) {
+      const K3bCdDevice::Track& k3bTrack = d->toc[track-1];
+      if( k3bTrack.type() == K3bCdDevice::Track::AUDIO ) {
+	return initReading( k3bTrack.firstSector(), k3bTrack.lastSector() );
+      }
+      else {
+	kdDebug() << "(K3bCdparanoiaLib) Track " << track << " no audio track." << endl;
+	return false;
+      }
+    }
+    else {
+      kdDebug() << "(K3bCdparanoiaLib) Track " << track << " too high." << endl;
+      return false;
+    }
+  }
+  else {
+    kdDebug() << "(K3bCdparanoiaLib) initReading without initParanoia." << endl;
+    return false;
+  }
+}
+
+
+bool K3bCdparanoiaLib::initReading( long start, long end )
+{
+  if( d->device ) {
+    if( d->toc.firstSector() <= start &&
+	d->toc.lastSector() >= end ) {
+      d->startSector = d->currentSector = start;
+      d->lastSector = end;
+
+      // let the paranoia stuff point to the startSector
+      paranoiaSeek( start, SEEK_SET );
+      return true;
+    }
+    else {
+      kdDebug() << "(K3bCdparanoiaLib) " << start << " and " << end << " out of range." << endl;
+      return false;
+    }
+  }
+  else {
+    kdDebug() << "(K3bCdparanoiaLib) initReading without initParanoia." << endl;
+    return false;
+  }
+}
+
+
+Q_INT16* K3bCdparanoiaLib::read( int* statusCode )
+{
+  if( d->currentSector > d->lastSector ) {
+    kdDebug() << "(K3bCdparanoiaLib) finished ripping." << endl;
+    d->status = S_OK;
+    if( statusCode )
+      *statusCode = d->status;
+    return 0;
+  }
+
+  Q_INT16* data = paranoiaRead( paranoiaCallback );
+
+  if( data )
+    d->status = S_OK;
+  else
+    d->status = S_ERROR; // We may skip this sector if we'd like...
+
+  if( statusCode )
+    *statusCode = d->status;
+
+  d->currentSector++;
+
+  return data;
+}
+
+
+int K3bCdparanoiaLib::status() const
+{
+  return d->status;
 }

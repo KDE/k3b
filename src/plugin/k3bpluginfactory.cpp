@@ -17,20 +17,46 @@
 #include "k3bplugin.h"
 #include "k3bpluginconfigwidget.h"
 
+#include <k3bcore.h>
+
 #include <qwidget.h>
 #include <qcstring.h>
-#include <kdebug.h>
+#include <qptrlist.h>
 
+#include <kdebug.h>
+#include <kconfig.h>
+
+
+
+class K3bPluginFactory::Private
+{
+public:
+  Private()
+    : fakeObject(0) {
+  }
+
+  QPtrList<K3bPlugin> pluginObjects;
+
+  QObject* fakeObject;
+};
 
 
 K3bPluginFactory::K3bPluginFactory( QObject* parent, const char* name )
   : KLibFactory( parent, name )
 {
+  d = new Private();
+
+  connect( this, SIGNAL(objectCreated(QObject*)),
+	   this, SLOT(slotObjectCreated(QObject*)) );
+
+  kdDebug() << "(K3bPluginFactory) creating K3bPluginFactory." << endl;
 }
 
 
 K3bPluginFactory::~K3bPluginFactory()
 {
+  kdDebug() << "(K3bPluginFactory) deleting K3bPluginFactory." << endl;
+  delete d;
 }
 
 
@@ -38,9 +64,17 @@ K3bPlugin* K3bPluginFactory::createPlugin( QObject* parent,
 					   const char* name,
 					   const QStringList &args )
 {
+  // HACK: We don't want the LibLoader to unload the factory when no object
+  // has been created so we just create a fake object
+  if( !d->fakeObject ) {
+    d->fakeObject = new QObject( this );
+    emit objectCreated( d->fakeObject );
+  }
+
   K3bPlugin* plugin = createPluginObject( parent, name, args );
   if( plugin )
     emit objectCreated( plugin );
+  
   return plugin;
 }
 
@@ -49,9 +83,17 @@ K3bPluginConfigWidget* K3bPluginFactory::createConfigWidget( QWidget* parent,
 							     const char* name,
 							     const QStringList &args )
 {
+  // HACK: We don't want the LibLoader to unload the factory when no object
+  // has been created so we just create a fake object
+  if( !d->fakeObject ) {
+    d->fakeObject = new QObject( this );
+    emit objectCreated( d->fakeObject );
+  }
+
   K3bPluginConfigWidget* w = createConfigWidgetObject( parent, name, args );
   if( w )
     emit objectCreated( w );
+
   return w;
 }
 
@@ -83,21 +125,39 @@ QObject* K3bPluginFactory::createObject( QObject* parent,
 }
 
 
-QString K3bPluginFactory::author() const
+QString K3bPluginFactory::name() const
 {
-  return QString::null;
+  if( m_name.isEmpty() )
+    return className();
+  else
+    return m_name;
 }
 
 
-QString K3bPluginFactory::version() const
+void K3bPluginFactory::slotObjectCreated( QObject* obj )
 {
-  return QString::null;
+  K3bPlugin* plugin = dynamic_cast<K3bPlugin*>(obj);
+  if( !plugin )
+    return;
+
+  if( d->pluginObjects.findRef( plugin ) )
+    return;
+
+  connect( plugin, SIGNAL(destroyed()),
+	   this, SLOT(slotObjectDestroyed()) );
+
+  d->pluginObjects.append( plugin );
 }
 
 
-QString K3bPluginFactory::comment() const
+void K3bPluginFactory::slotObjectDestroyed()
 {
-  return QString::null;
+  const K3bPlugin* plugin = dynamic_cast<const K3bPlugin*>(sender());
+  if( !plugin )
+    return;
+
+  d->pluginObjects.removeRef( plugin );
 }
+
 
 #include "k3bpluginfactory.moc"

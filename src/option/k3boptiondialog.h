@@ -26,6 +26,7 @@ class K3bBurningOptionTab;
 class K3bExternalBinOptionTab;
 class K3bMiscOptionTab;
 class K3bNotifyOptionTab;
+class K3bPluginOptionTab;
 // class  K3bPatternOptionTab;
 
 /**
@@ -41,6 +42,11 @@ class K3bOptionDialog : public KDialogBase
 	
   enum m_configPageIndex { Burning = 0, Devices = 1, Programs = 2, Cddb = 3 };
 		
+/*   void addOptionPage( QWidget* widget, */
+/* 		      const QString& name, */
+/* 		      const QString& header, */
+/* 		      const QPixmap& icon ); */
+		      
  protected slots:
   void slotOk();
   void slotApply();
@@ -77,6 +83,10 @@ class K3bOptionDialog : public KDialogBase
   // notify options
   K3bNotifyOptionTab* m_notifyOptionTab;
   void setupNotifyPage();
+
+  // plugin options
+  K3bPluginOptionTab* m_pluginOptionTab;
+  void setupPluginPage();
 };
 
 #endif

@@ -132,7 +132,7 @@ K3bCdDevice::CdDevice::CdDevice( const QString& devname )
   m_cdTextCapable = 0;
   m_maxWriteSpeed = 0;
   m_maxReadSpeed = 0;
-  m_burnproof = false;
+  d->burnfree = false;
   m_burner = false;
   m_bWritesCdrw = false;
   m_bus = m_target = m_lun = -1;
@@ -769,7 +769,7 @@ const QString& K3bCdDevice::CdDevice::mountPoint() const
 
 void K3bCdDevice::CdDevice::setBurnproof( bool b )
 {
-  m_burnproof = b;
+  d->burnfree = b;
 }
 
 
@@ -1296,6 +1296,33 @@ K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc()
         lastTrack = Track( startSec, startSec, trackType, trackMode );
       }
     }
+
+    //
+    // we probaly need to fixup the toc for multisession mixed-mode cds 
+    // since the last audio track's last sector is reported to be in the second
+    // session. This code is based on the FixupTOC stuff from the audiocd kioslave
+    // Hopefully it works. TODO: we need something better here!
+    //
+    if( numSessions() > 1 && toc.contentType() == MIXED ) {
+      kdDebug() << "(K3bCdDevice::CdDevice) fixup multisession toc..." << endl;
+
+      // we need to update the last secotor of every last track in every session
+      // for now we only update the track before the last session...
+
+      struct cdrom_multisession ms;
+      ms.addr_format = CDROM_LBA;
+      if( ::ioctl( d->deviceFd, CDROMMULTISESSION, &ms ) == 0 ) {
+	if( ms.xa_flag ) {
+	  toc[toc.count()-2].setLastSector( ms.addr.lba - 11400 -1 ); // -1 because we are settings the last secotor, not the first of the next track as in the kioslave
+	  kdDebug() << "(K3bCdDevice::CdDevice) success." << endl;
+	}
+	else
+	  kdDebug() << "(K3bCdDevice::CdDevice) no xa." << endl;
+      }
+      else
+	kdDebug() << "(K3bCdDevice::CdDevice) CDROMMULTISESSION failed." << endl;
+    }
+
 
     if( needToClose )
       close();

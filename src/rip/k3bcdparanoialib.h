@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -26,13 +26,15 @@
 #include <sys/types.h>
 
 
+namespace K3bCdDevice {
+  class CdDevice;
+}
+
+
 class K3bCdparanoiaLib
 {
  public:
   ~K3bCdparanoiaLib();
-
-  bool paranoiaInit( const QString& devicename );
-  void paranoiaFree();
 
   /** default: 3 */
   void setParanoiaMode( int );
@@ -41,11 +43,55 @@ class K3bCdparanoiaLib
   /** default: 20 */
   void setMaxRetries( int );
 
+  // high level API
+  // ------------------------------------
+  /**
+   * This will read the Toc and initialize some stuff.
+   * It will also call paranoiaInit( const QString& )
+   */
+  bool initParanoia( K3bCdDevice::CdDevice* dev );
+
+  /**
+   * Call this after initParanoia to set the data to rip.
+   */
+  bool initReading( unsigned int track );
+
+  /**
+   * Call this after initParanoia to set the data to rip.
+   */
+  bool initReading( long startSector, long endSector );
+
+  /**
+   * Read data.
+   * if errorCode is set it will be filled.
+   */
+  Q_INT16* read( int* statusCode );
+
+  /**
+   * This onyy is valid after a call to read()
+   */
+  int status() const;
+
+  enum Status {
+    S_OK,
+    S_ERROR
+    // to be extended with Jitter and stuff...
+  };
+  // ------------------------------------
+
+
+  // low level API
+  // ------------------------------------
+  bool paranoiaInit( const QString& devicename );
+  void paranoiaFree();
+
   int16_t* paranoiaRead(void(*callback)(long,int));
   long paranoiaSeek( long, int );
 
   long firstSector( int );
   long lastSector( int );
+  // ------------------------------------
+
 
   /**
    * returns 0 if the cdparanoialib could not
@@ -56,6 +102,8 @@ class K3bCdparanoiaLib
   static K3bCdparanoiaLib* create();
 
  private:
+  void cleanup();
+
   K3bCdparanoiaLib();
   bool load();
 

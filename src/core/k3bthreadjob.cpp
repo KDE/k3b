@@ -41,6 +41,24 @@ K3bThreadJob::~K3bThreadJob()
 }
 
 
+QString K3bThreadJob::jobDescription() const
+{
+  if( m_thread )
+    return m_thread->jobDescription();
+  else
+    return QString::null;
+}
+
+
+QString K3bThreadJob::jobDetails() const
+{
+  if( m_thread )
+    return m_thread->jobDetails();
+  else
+    return QString::null;
+}
+
+
 void K3bThreadJob::setThread( K3bThread* t )
 {
   m_thread = t;

@@ -4,7 +4,7 @@ k3b_SOURCES = k3bwelcomewidget.ui k3bapplication.cpp k3bdiroperator.cpp kdndfile
 
 k3b_LDADD   = ./cdinfo/libcdinfo.la ./option/liboption.la ./rip/librip.la ./cdcopy/libcdcopy.la ./cdclone/libcdclone.la ./videoEncoding/libvideoEncoding.la ./plugin/libk3bplugin.la -lartskde -lkio -lkparts ./core/libk3bcore.la ./tools/libk3btools.la ./projects/libk3bproject.la
 
-SUBDIRS = core tools projects cddb cdinfo option rip cdcopy cdclone videoEncoding pics icons konqi mimetypes plugin k3bsetup tests
+SUBDIRS = core tools plugin projects cddb cdinfo option rip cdcopy cdclone videoEncoding pics icons konqi mimetypes k3bsetup tests audiodecoding audioencoding
 
 apps_DATA = k3b.desktop
 appsdir = $(kde_appsdir)/Multimedia

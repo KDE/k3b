@@ -82,7 +82,11 @@ K3bDirItem* K3bDirItem::addDataItem( K3bDataItem* item )
     }
   }
 
-  revalidate();
+  // Speed improvement: revalidateJolietNames only updates the Joliet names
+  if( item->k3bName().length() > 64 )
+    revalidateJolietNames();
+  else
+    item->setJolietName( item->k3bName() );
 	
   return this;
 }
@@ -109,7 +113,9 @@ K3bDataItem* K3bDirItem::takeDataItem( int index )
     updateFiles( -1, 0 );
   }
 
-  revalidate();
+  // Speed improvement: revalidateJolietNames only updates the Joliet names
+  if( item->k3bName().length() > 64 )
+    revalidateJolietNames();
 
   return item;
 }
@@ -269,13 +275,11 @@ void K3bDirItem::updateFiles( long files, long dirs )
 //
 // mkisofs is not able to cut the joliet names so we do it ourselves.
 //
-void K3bDirItem::revalidate()
+void K3bDirItem::revalidateJolietNames()
 {
   // create new joliet names and use jolietPath for graftpoints
   // sort dirItem->children entries and rename all to fit joliet
   // which is about x characters
-
-  kdDebug() << "(K3bIsoImager) creating joliet names for directory: " << k3bName() << endl;
 
   // insertion sort
   QPtrList<K3bDataItem> sortedChildren;
@@ -322,8 +326,6 @@ void K3bDirItem::revalidate()
   //  unsigned int jolietLongMaxLength = 103;
   while( begin < sortedChildren.count() ) {
     if( sortedChildren.at(begin)->k3bName().length() > jolietMaxLength ) {
-      kdDebug() << "(K3bIsoImager) filename to long for joliet: "
-		<< sortedChildren.at(begin)->k3bName() << endl;
       sameNameCount = 1;
 
       while( begin + sameNameCount < sortedChildren.count() &&
@@ -331,10 +333,10 @@ void K3bDirItem::revalidate()
 	     == sortedChildren.at(begin)->k3bName().left(jolietMaxLength) )
 	sameNameCount++;
 
-      kdDebug() << "(K3bIsoImager) found " << sameNameCount << " files with same joliet name" << endl;
+      kdDebug() << "(K3bDirItem) found " << sameNameCount << " files with same joliet name" << endl;
 
       if( sameNameCount > 1 ) {
-	kdDebug() << "(K3bIsoImager) cutting filenames." << endl;
+	kdDebug() << "(K3bDirItem) cutting filenames." << endl;
 
 	unsigned int charsForNumber = QString::number(sameNameCount).length();
 	for( unsigned int i = begin; i < begin + sameNameCount; i++ ) {
@@ -349,14 +351,9 @@ void K3bDirItem::revalidate()
 	  jolietName.append( QString::number( i-begin ).rightJustify( charsForNumber, '0') );
 	  jolietName.append( extension );
 	  sortedChildren.at(i)->setJolietName( jolietName );
-
-	  kdDebug() << "(K3bIsoImager) set joliet name for "
-		    << sortedChildren.at(i)->k3bName() << " to "
-		    << jolietName << endl;
 	}
       }
       else {
-	kdDebug() << "(K3bIsoImager) single file -> just cutting." << endl;
 	QString extension = sortedChildren.at(begin)->k3bName().mid( sortedChildren.at(begin)->k3bName().findRev(".") );
 	if( extension.length() > 5 )
 	  extension = QString::null;

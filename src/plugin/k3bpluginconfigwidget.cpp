@@ -14,6 +14,12 @@
  */
 
 #include "k3bpluginconfigwidget.h"
+#include "k3bpluginfactory.h"
+
+#include <k3bcore.h>
+
+#include <kinstance.h>
+#include <kdebug.h>
 
 
 K3bPluginConfigWidget::K3bPluginConfigWidget( QWidget* parent, const char* name )
@@ -27,13 +33,15 @@ K3bPluginConfigWidget::~K3bPluginConfigWidget()
 }
 
 
-void K3bPluginConfigWidget::loadConfig( KConfig* )
+void K3bPluginConfigWidget::loadConfig()
 {
+  // do nothing
 }
 
 
-void K3bPluginConfigWidget::saveConfig( KConfig* )
+void K3bPluginConfigWidget::saveConfig()
 {
+  // do nothing
 }
 
 

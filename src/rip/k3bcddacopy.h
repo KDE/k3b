@@ -39,6 +39,9 @@ namespace K3bCdDevice {
   class DiskInfoDetector;
 }
 class QCustomEvent;
+class K3bAudioEncoderFactory;
+class K3bAudioEncoder;
+
 
 
 /**
@@ -77,6 +80,8 @@ class K3bCddaCopy : public K3bJob
   void setFilenameReplaceString( const QString& s ) { m_filenameReplaceString = s; }
   void setReplaceBlanksInDir( bool b ) { m_replaceBlanksInDir = b; }
   void setReplaceBlanksInFilename( bool b ) { m_replaceBlanksInFilename = b; }
+
+  void setEncoderFactory( K3bAudioEncoderFactory* f ) { m_encoderFactory = f; }
 
   void start();
   void cancel();
@@ -129,6 +134,9 @@ class K3bCddaCopy : public K3bJob
   QValueList<int> m_tracksToCopy;
   long m_bytesToCopy;
   long m_bytesAll;
+
+  K3bAudioEncoderFactory* m_encoderFactory;
+  K3bAudioEncoder* m_encoder;
 };
 
 #endif

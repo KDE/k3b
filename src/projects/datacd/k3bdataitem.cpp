@@ -63,7 +63,7 @@ void K3bDataItem::setK3bName( const QString& name ) {
 
   m_k3bName = name;
   if( parent() )
-    parent()->revalidate();
+    parent()->revalidateJolietNames();
 }
 
 

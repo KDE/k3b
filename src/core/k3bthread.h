@@ -44,6 +44,9 @@ class K3bThread : public QThread
    */
   virtual void cancel();
 
+  virtual QString jobDescription() const;
+  virtual QString jobDetails() const;
+
  protected:
   virtual void run() = 0;
 

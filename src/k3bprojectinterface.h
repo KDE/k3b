@@ -40,6 +40,7 @@ class K3bProjectInterface : public DCOPObject
  k_dcop:
   virtual void addUrls( const KURL::List& urls );
   virtual void addUrl( const KURL& url );
+  virtual void burn();
 
  private:
   K3bDoc* m_doc;

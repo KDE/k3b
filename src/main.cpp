@@ -40,17 +40,19 @@ static const char *description =
 static KCmdLineOptions options[] =
     {
         { "+[File]", I18N_NOOP("file to open"), 0 },
-        { "data", I18N_NOOP("Create a new data CD project and add all given files"), 0 },
-        { "audio", I18N_NOOP("Create a new audio CD project and add all given files"), 0 },
-        { "vcd", I18N_NOOP("Create a new video CD project and add all given files"), 0 },
-        { "mixed", I18N_NOOP("Create a new mixed mode CD project and add all given files"), 0 },
-        { "emovix", I18N_NOOP("Create a new eMovix CD project and add all given files"), 0 },
+        { "datacd", I18N_NOOP("Create a new data CD project and add all given files"), 0 },
+        { "audiocd", I18N_NOOP("Create a new audio CD project and add all given files"), 0 },
+        { "videocd", I18N_NOOP("Create a new video CD project and add all given files"), 0 },
+        { "mixedcd", I18N_NOOP("Create a new mixed mode CD project and add all given files"), 0 },
+        { "emovixcd", I18N_NOOP("Create a new eMovix CD project and add all given files"), 0 },
         { "datadvd", I18N_NOOP("Create a new data DVD project and add all given files"), 0 },
-        { "copy", I18N_NOOP("Open the CD copy dialog"), 0 },
-        { "clone", I18N_NOOP("Open the CD cloning dialog"), 0 },
+        { "emovixdvd", I18N_NOOP("Create a new eMovix DVD project and add all given files"), 0 },
+        { "copycd", I18N_NOOP("Open the CD copy dialog"), 0 },
+        { "clonecd", I18N_NOOP("Open the CD cloning dialog"), 0 },
         { "isoimage", I18N_NOOP("Write an ISO image to cd"), 0 },
         { "binimage", I18N_NOOP("Write an Bin/Cue image to cd"), 0 },
-	{ "erase", I18N_NOOP("Erase a CDRW"), 0 },
+	{ "erasecd", I18N_NOOP("Erase a CDRW"), 0 },
+	{ "formatdvd", I18N_NOOP("Format a DVD-RW or DVD+RW"), 0 },
         { 0, 0, 0 }
         // INSERT YOUR COMMANDLINE OPTIONS HERE
     };

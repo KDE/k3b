@@ -9,6 +9,14 @@ class QString;
 
 namespace K3bCdDevice
 {
+
+  enum ContentsType {
+    DATA,
+    AUDIO,
+    MIXED,
+    NONE // no tracks
+  };
+
   /**
    * A list of K3bTracks that represents the contents
    * of a cd.
@@ -31,6 +39,13 @@ namespace K3bCdDevice
      */
     unsigned int discId() const;
     unsigned int calculateDiscId();
+
+
+    /**
+     * determine the contents type based on the tracks' types.
+     * Audio, Data, or Mixed
+     */
+    int contentType() const;
 
     /**
      * The first track's first sector could differ from the disc's

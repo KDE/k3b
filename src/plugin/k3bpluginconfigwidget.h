@@ -19,8 +19,6 @@
 
 #include <qwidget.h>
 
-class KConfig;
-
 
 class K3bPluginConfigWidget : public QWidget
 {
@@ -31,8 +29,11 @@ class K3bPluginConfigWidget : public QWidget
   virtual ~K3bPluginConfigWidget();
 
  public slots:
-  virtual void loadConfig( KConfig* );
-  virtual void saveConfig( KConfig* );
+  /**
+   * Use k3bconfig->config() to store the settings
+   */
+  virtual void loadConfig();
+  virtual void saveConfig();
 };
 
 #endif

@@ -314,7 +314,6 @@ namespace K3bCdDevice
     QString m_version;
     bool m_burner;
     bool m_bWritesCdrw;
-    bool m_burnproof;
     QString m_cdrdaoDriver;
     int m_cdTextCapable;
     int m_maxReadSpeed;

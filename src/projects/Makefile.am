@@ -2,7 +2,7 @@ AM_CPPFLAGS= -I$(srcdir)/../core -I$(srcdir)/../core/device -I$(srcdir)/../tools
 
 lib_LTLIBRARIES = libk3bproject.la
 
-libk3bproject_la_LIBADD = ../core/libk3bcore.la ../tools/libk3btools.la ./datacd/libdata.la ./datadvd/libdvd.la ./mixedcd/libmixed.la ./videocd/libvcd.la ./movixcd/libmovix.la ./movixdvd/libmovixdvd.la ./audiocd/libaudio.la ./songdb/libsongdb.la ./kostore/libkostore.la
+libk3bproject_la_LIBADD = ../core/libk3bcore.la ../tools/libk3btools.la ./datacd/libdata.la ./datadvd/libdvd.la ./mixedcd/libmixed.la ./videocd/libvcd.la ./movixcd/libmovix.la ./movixdvd/libmovixdvd.la ./audiocd/libaudio.la ./songdb/libsongdb.la ./kostore/libkostore.la ../plugin/libk3bplugin.la
 
 # FIXME: improve that versioning stuff (info libtool -> versioning)
 libk3bproject_la_LDFLAGS = $(all_libraries) -version-info 1:0:0 -no-undefined

@@ -49,6 +49,7 @@ namespace K3b
       int frames() const { return m_frames; }
 
       int totalFrames() const { return ( m_minutes*60 + m_seconds )*75 + m_frames; }
+      int lba() const { return totalFrames(); }
 
       void addMinutes( int m );
       void addSeconds( int s );

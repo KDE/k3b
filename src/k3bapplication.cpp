@@ -109,35 +109,35 @@ void K3bApplication::init()
 
   KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
-  if( args->isSet( "data" ) ) {
+  if( args->isSet( "datacd" ) ) {
     // create new data project and add all arguments
     K3bDoc* doc = m_mainWindow->slotNewDataDoc();
     for( int i = 0; i < args->count(); i++ ) {
       doc->addUrl( args->url(i) );
     }
   }
-  else if( args->isSet( "audio" ) ) {
+  else if( args->isSet( "audiocd" ) ) {
     // create new audio project and add all arguments
     K3bDoc* doc = m_mainWindow->slotNewAudioDoc();
     for( int i = 0; i < args->count(); i++ ) {
       doc->addUrl( args->url(i) );
     }
   }
-  else if( args->isSet( "mixed" ) ) {
+  else if( args->isSet( "mixedcd" ) ) {
     // create new audio project and add all arguments
     K3bDoc* doc = m_mainWindow->slotNewMixedDoc();
     for( int i = 0; i < args->count(); i++ ) {
       doc->addUrl( args->url(i) );
     }
   }
-  else if( args->isSet( "vcd" ) ) {
+  else if( args->isSet( "videocd" ) ) {
     // create new audio project and add all arguments
     K3bDoc* doc = m_mainWindow->slotNewVcdDoc();
     for( int i = 0; i < args->count(); i++ ) {
       doc->addUrl( args->url(i) );
     }
   }
-  else if( args->isSet( "emovix" ) ) {
+  else if( args->isSet( "emovixcd" ) ) {
     // create new audio project and add all arguments
     K3bDoc* doc = m_mainWindow->slotNewMovixDoc();
     for( int i = 0; i < args->count(); i++ ) {
@@ -147,6 +147,13 @@ void K3bApplication::init()
   else if( args->isSet( "datadvd" ) ) {
     // create new audio project and add all arguments
     K3bDoc* doc = m_mainWindow->slotNewDvdDoc();
+    for( int i = 0; i < args->count(); i++ ) {
+      doc->addUrl( args->url(i) );
+    }
+  }
+  else if( args->isSet( "emovixdvd" ) ) {
+    // create new audio project and add all arguments
+    K3bDoc* doc = m_mainWindow->slotNewMovixDvdDoc();
     for( int i = 0; i < args->count(); i++ ) {
       doc->addUrl( args->url(i) );
     }
@@ -169,12 +176,14 @@ void K3bApplication::init()
     }
   }
 
-  if( args->isSet("copy") )
+  if( args->isSet("copycd") )
     m_mainWindow->slotCdCopy();
-  else if( args->isSet("clone") )
+  else if( args->isSet("clonecd") )
     m_mainWindow->slotCdClone();
-  else if( args->isSet("erase") )
+  else if( args->isSet("erasecd") )
     m_mainWindow->slotBlankCdrw();
+  else if( args->isSet("formatdvd") )
+    m_mainWindow->slotFormatDvd();
 
   args->clear();
 

@@ -85,3 +85,23 @@ unsigned int K3bCdDevice::Toc::calculateDiscId()
 
   return discId();
 }
+
+
+int K3bCdDevice::Toc::contentType() const
+{
+  int audioCnt = 0, dataCnt = 0;
+  for( K3bToc::const_iterator it = begin(); it != end(); ++it ) {
+    if( (*it).type() == K3bCdDevice::Track::AUDIO )
+      audioCnt++;
+    else
+      dataCnt++;
+  }
+
+  if( audioCnt + dataCnt == 0 )
+    return K3bCdDevice::NONE;
+  if( audioCnt == 0 )
+    return K3bCdDevice::DATA;
+  if( dataCnt == 0 )
+    return K3bCdDevice::AUDIO;
+  return K3bCdDevice::MIXED;
+}

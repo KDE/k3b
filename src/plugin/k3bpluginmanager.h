@@ -18,12 +18,22 @@
 
 #include <qobject.h>
 #include <qptrlist.h>
+#include <qstringlist.h>
 
+
+#define k3bpluginmanager K3bPluginManager::k3bPluginManager()
 
 
 class K3bPluginFactory;
 
 
+
+/**
+ * Use this class to access all K3b plugins (this does not include the
+ * KParts Plugins!).
+ * Like the K3bCore the single instance (which has to be created manually)
+ * can be obtained with the k3bpluginmanager macro.
+ */
 class K3bPluginManager : public QObject
 {
   Q_OBJECT
@@ -36,6 +46,15 @@ class K3bPluginManager : public QObject
    * if group is empty all plugins are returned
    */
   QPtrList<K3bPluginFactory> factories( const QString& group = QString::null ) const;
+
+  /**
+   * Returnes a list of the available groups.
+   */
+  QStringList groups() const;
+
+  int pluginSystemVersion() const;
+
+  static K3bPluginManager* k3bPluginManager() { return s_k3bPluginManager; }
 
  public slots:
   /**
@@ -53,6 +72,8 @@ class K3bPluginManager : public QObject
  private:
   class Private;
   Private* d;
+
+  static K3bPluginManager* s_k3bPluginManager;
 };
 
 #endif

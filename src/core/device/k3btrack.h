@@ -34,6 +34,9 @@ namespace K3bCdDevice
     int lastSector() const { return m_lastSector; }
     int length() const;
 
+    void setFirstSector( int s ) { m_firstSector = s; }
+    void setLastSector( int s ) { m_lastSector = s; }
+
     void setTitle( const QString& );
 
     bool isEmpty() const;

@@ -18,64 +18,91 @@
 #define K3B_AUDIO_RIP_THREAD_H
 
 #include <k3bthread.h>
-#include <qcstring.h>
+#include <qobject.h>
+#include <qvaluevector.h>
+#include <qpair.h>
 
-class QTimer;
+#include <cddb/k3bcddbquery.h>
+
+
+class K3bAudioEncoderFactory;
 class K3bCdparanoiaLib;
 namespace K3bCdDevice {
   class CdDevice;
 }
 
 
-class K3bAudioRipThread : public K3bThread
+class K3bAudioRipThread : public QObject, public K3bThread
 {
+  Q_OBJECT
+
  public:
   K3bAudioRipThread();
   ~K3bAudioRipThread();
 
+  QString jobDescription() const;
+  QString jobDetails() const;
+
   // paranoia settings
-  void setParanoiaMode( int mode ) { m_paranoiaMode = mode; }
-  void setMaxRetries( int r ) { m_paranoiaRetries = r; }
-  void setNeverSkip( bool b ) { m_neverSkip = b; }
+  void setParanoiaMode( int mode );
+  void setMaxRetries( int r );
+  void setNeverSkip( bool b );
+
+  void setSingleFile( bool b ) { m_singleFile = b; }
 
   void setDevice( K3bCdDevice::CdDevice* dev ) { m_device = dev; }
-  void setTrackToRip( unsigned int track ) { m_track = track; }
+
+  void setCddbEntry( const K3bCddbResultEntry& e ) { m_cddbEntry = e; }
+
+  // file naming
+  void setUsePattern( bool b ) { m_bUsePattern = b; }
+  void setBaseDirectory( const QString& path ) { m_baseDirectory = path; }
+  void setDirectoryPattern( const QString& s ) { m_dirPattern = s; }
+  void setFilenamePattern( const QString& s ) { m_filenamePattern = s; }
+  void setDirectoryReplaceString( const QString& s ) { m_dirReplaceString = s; }
+  void setFilenameReplaceString( const QString& s ) { m_filenameReplaceString = s; }
+  void setReplaceBlanksInDir( bool b ) { m_replaceBlanksInDir = b; }
+  void setReplaceBlanksInFilename( bool b ) { m_replaceBlanksInFilename = b; }
+
+  // if 0 (default) wave files are created
+  void setEncoderFactory( K3bAudioEncoderFactory* f );
+
+  /**
+   * 1 is the first track
+   */
+  void setTracksToRip( const QValueVector<QPair<int, QString> >& t ) { m_tracks = t; }
 
   void cancel();
 
-  void resume();
+ private slots:
+  void slotCheckIfThreadStillRunning();
 
  private:
   /** reimplemented from QThread. Does the work */
   void run();
 
-  K3bCdparanoiaLib* m_paranoiaLib;
+  bool ripTrack( int track, const QString& filename );
+  void cleanupAfterCancellation();
+  //  QString createFileName( int track );
+
+  K3bCddbResultEntry m_cddbEntry;
   K3bCdDevice::CdDevice* m_device;
 
-  long m_currentSector;
-  long m_lastSector;
-  unsigned long m_sectorsRead;
-  unsigned long m_sectorsAll;
+  bool m_bUsePattern;
+  bool m_singleFile;
 
-  int m_paranoiaMode;
-  int m_paranoiaRetries;
-  bool m_neverSkip;
+  QString m_baseDirectory;
+  QString m_dirPattern;
+  QString m_filenamePattern;
+  QString m_dirReplaceString;
+  QString m_filenameReplaceString;
+  bool m_replaceBlanksInDir;
+  bool m_replaceBlanksInFilename;
 
-  unsigned int m_track;
+  QValueVector<QPair<int, QString> > m_tracks;
 
-  bool m_bInterrupt;
-  bool m_bError;
-  bool m_bSuspended;
-
-  void createStatus(long, int);
-
-  // status variables
-  long m_lastReadSector;
-  long m_overlap;
-  long m_readSectors;
-
-  // this friend function will call createStatus(long,int)
-  friend void paranoiaCallback(long, int);
+  class Private;
+  Private* d;
 };
 
 #endif

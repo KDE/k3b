@@ -28,7 +28,7 @@
 
 #include "k3bcdtext.h"
 
-class K3bAudioModule;
+class K3bAudioDecoder;
 
 
 /**
@@ -47,10 +47,10 @@ class K3bAudioTrack
    **/
   //  bool isValid();
 
-  K3bAudioModule* module() const { return m_module; }
+  K3bAudioDecoder* module() const { return m_module; }
 
   // TODO: this should only be accessable by K3bAudioDoc
-  void setModule( K3bAudioModule* module ) { m_module = module; }
+  void setModule( K3bAudioDecoder* module );
 
   QString fileName() const { return QFileInfo(m_file).fileName(); }
   QString absPath() const { return QFileInfo(m_file).absFilePath(); }
@@ -60,7 +60,7 @@ class K3bAudioTrack
   K3b::Msf pregap() const { return m_pregap; }
 
   /** returns length of track in frames **/
-  K3b::Msf length() const { return m_length; }
+  K3b::Msf length() const;
 	
   const QString& artist() const { return m_cdText.performer(); }
   const QString& title() const { return m_cdText.title(); }
@@ -111,15 +111,13 @@ class K3bAudioTrack
   int status() const { return m_status; }
   void setStatus( int status ) { m_status = status; }
 
-  bool isWave() const { return (m_module == 0); }
-
  protected:
   QPtrList<K3bAudioTrack>* m_parent;
   int m_filetype;
   QFile m_file;
 
   /** the module that does all the work (decoding and shit!) */
-  K3bAudioModule* m_module;
+  K3bAudioDecoder* m_module;
 
  private:	
   //  QString m_bufferFile;

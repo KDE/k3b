@@ -13,18 +13,31 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#ifndef _K3B_PLUGIN_OPTION_TAB_H_
+#define _K3B_PLUGIN_OPTION_TAB_H_
 
-#include "k3bplugin.h"
+#include "base_k3bpluginoptiontab.h"
 
 
-K3bPlugin::K3bPlugin( QObject* parent, const char* name )
-  : QObject( parent, name )
+
+class K3bPluginOptionTab : public base_K3bPluginOptionTab
 {
-}
+  Q_OBJECT
 
+ public:
+  K3bPluginOptionTab( QWidget* parent = 0, const char* name = 0 );
+  ~K3bPluginOptionTab();
 
-K3bPlugin::~K3bPlugin()
-{
-}
+ public slots:
+  void readSettings();
+  bool saveSettings();
 
-#include "k3bplugin.moc"
+ private slots:
+  void slotConfigureButtonClicked();
+  void slotSelectionChanged();
+
+ private:
+  class PluginViewItem;
+};
+
+#endif

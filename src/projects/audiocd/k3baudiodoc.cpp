@@ -21,13 +21,14 @@
 #include "k3baudioburndialog.h"
 #include "k3baudiojob.h"
 #include "k3baudiotitlemetainfo.h"
-#include "input/k3baudiomodulefactory.h"
-#include "input/k3baudiomodule.h"
 #include <songdb/k3bsong.h>
 #include <songdb/k3bsongmanager.h>
 #include <k3bthread.h>
 #include <k3bthreadjob.h>
 #include <k3bcore.h>
+#include <k3bpluginmanager.h>
+#include <k3baudiodecoder.h>
+
 
 // QT-includes
 #include <qstring.h>
@@ -74,12 +75,10 @@ public:
 
 protected:
   void run() {
-    unsigned long size = 0;
-    int status = m_track->module()->analyseTrack( m_track->absPath(), size );
-    m_track->setStatus( status );
-    if( status != K3bAudioTitleMetaInfo::CORRUPT ) {
-      m_track->setLength( size );
-    }
+    if( m_track->module()->analyseFile() )
+      m_track->setStatus( K3bAudioTitleMetaInfo::OK );
+    else
+      m_track->setStatus( K3bAudioTitleMetaInfo::CORRUPT );
     emitFinished(true);
   }
 
@@ -137,12 +136,8 @@ bool K3bAudioDoc::newDocument()
 
 KIO::filesize_t K3bAudioDoc::size() const 
 {
-  KIO::filesize_t size = 0;
-  for( QPtrListIterator<K3bAudioTrack> it(*m_tracks); it.current(); ++it ) {
-    size += it.current()->size();
-  }	
-
-  return size;
+  // This is not really correct but what the user expects ;)
+  return length().mode1Bytes();
 }
 
 
@@ -253,16 +248,18 @@ bool K3bAudioDoc::readM3uFile( const KURL& url, int pos )
 
 K3bAudioTrack* K3bAudioDoc::createTrack( const KURL& url )
 {
-  if( K3bAudioModule* module = K3bAudioModuleFactory::self()->createModule( url ) ) {
-    K3bAudioTrack* newTrack =  new K3bAudioTrack( m_tracks, url.path() );
-    newTrack->setModule( module );
-    
-    return newTrack;
+  QPtrList<K3bPluginFactory> fl = k3bpluginmanager->factories( "AudioDecoder" );
+  for( QPtrListIterator<K3bPluginFactory> it( fl );
+       it.current(); ++it ) {
+    if( ((K3bAudioDecoderFactory*)it.current())->canDecode( url ) ) {
+      K3bAudioTrack* newTrack =  new K3bAudioTrack( m_tracks, url.path() );
+      newTrack->setModule( (K3bAudioDecoder*)((K3bAudioDecoderFactory*)it.current())->createPlugin() );
+      return newTrack;
+    }
   }
-  else {
-    m_unknownFileFormatFiles.append( url.path() );
-    return 0;
-  }
+
+  m_unknownFileFormatFiles.append( url.path() );
+  return 0;
 }
 
 
@@ -321,6 +318,8 @@ void K3bAudioDoc::removeTrack( K3bAudioTrack* track )
     // now make sure the first track has a pregap of at least 150 frames
     if( m_tracks->first() )
       m_tracks->first()->setPregap( m_tracks->first()->pregap() );
+
+    setModified();
   }
 }
 
@@ -340,6 +339,8 @@ void K3bAudioDoc::moveTrack( const K3bAudioTrack* track, const K3bAudioTrack* af
 
   // now make sure the first track has a pregap of at least 150 frames
   m_tracks->first()->setPregap( m_tracks->first()->pregap() );
+
+  setModified();
 }
 
 
@@ -662,10 +663,11 @@ void K3bAudioDoc::determineAudioMetaInfo( K3bAudioTrack* track )
   }
   else {
     // no song found, try the module
-    K3bAudioTitleMetaInfo info;
-    if( track->module()->metaInfo( track->absPath(), info ) ) {
-      track->setCdText( info );
-    }
+    track->setTitle( track->module()->metaInfo( "Title" ) );
+    track->setPerformer( track->module()->metaInfo( "Artist" ) );
+    track->setComposer( track->module()->metaInfo( "Composer" ) );
+    track->setSongwriter( track->module()->metaInfo( "Songwriter" ) );
+    track->setCdTextMessage( track->module()->metaInfo( "Comment" ) );
   }
 }
 

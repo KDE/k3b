@@ -119,7 +119,11 @@ void K3bDataDoc::slotAddUrlsToDir( const KURL::List& urls, K3bDirItem* dirItem )
       const KURL& url = *it;
       if( url.isLocalFile() && QFile::exists(url.path()) ) {
 
-	m_queuedToAddItems.append( new PrivateItemToAdd(url.path(), dirItem ) );
+	// check if we have read access
+	if( QFileInfo( url.path() ).isReadable() )
+	  m_queuedToAddItems.append( new PrivateItemToAdd(url.path(), dirItem ) );
+	else
+	  m_noPermissionFiles.append( url.path() );
       }
       else
 	m_notFoundFiles.append( url.path() );
@@ -578,6 +582,9 @@ bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
 
     if( !QFile::exists( urlElem.text() ) )
       m_notFoundFiles.append( urlElem.text() );
+
+    else if( !QFileInfo( urlElem.text() ).isReadable() )
+      m_noPermissionFiles.append( urlElem.text() );
 
     else if( !elem.attribute( "bootimage" ).isEmpty() ) {
       K3bBootItem* bootItem = new K3bBootItem( urlElem.text(), 
@@ -1088,6 +1095,13 @@ void K3bDataDoc::informAboutNotFoundFiles()
     KMessageBox::informationList( qApp->activeWindow(), i18n("Could not find the following files:"),
  				  m_notFoundFiles, i18n("Not found") );
     m_notFoundFiles.clear();
+  }
+
+  if( !m_noPermissionFiles.isEmpty() ) {
+    KMessageBox::informationList( qApp->activeWindow(), i18n("No permission to read the following files:"),
+				  m_noPermissionFiles, i18n("No Read Permission") );
+
+    m_noPermissionFiles.clear();
   }
 }
 

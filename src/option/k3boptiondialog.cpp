@@ -23,6 +23,7 @@
 //#include "k3bpatternoptiontab.h"
 #include "k3bexternalbinoptiontab.h"
 #include "k3bmiscoptiontab.h"
+#include "k3bpluginoptiontab.h"
 #include <k3bsystemproblemdialog.h>
 
 #include <qlayout.h>
@@ -48,6 +49,13 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
   setupCddbPage();
   //  setupPatternPage();
   setupNotifyPage();
+
+//   addOptionPage( new K3bPluginOptionTab(),
+// 		 i18n("Plugins"), 
+// 		 i18n("K3b Plugin Configuration"),
+// 		 KGlobal::instance()->iconLoader()->loadIcon( "gear", KIcon::NoGroup, KIcon::SizeMedium ) );
+
+  setupPluginPage();
   setupMiscPage();
 
   m_externalBinOptionTab->readSettings();
@@ -58,6 +66,7 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
   //  m_patternOptionTab->readSettings();
   m_miscOptionTab->readSettings();
   m_notifyOptionTab->readSettings();
+  m_pluginOptionTab->readSettings();
 
   // if we don't do this the dialog start really huge
   // because of the label in the device-tab
@@ -223,6 +232,36 @@ void K3bOptionDialog::setupNotifyPage()
   m_notifyOptionTab = new K3bNotifyOptionTab( frame );
   box->addWidget( m_notifyOptionTab );
 }
+
+
+void K3bOptionDialog::setupPluginPage()
+{
+  QFrame* frame = addPage( i18n("Plugins"), i18n("K3b Plugin Configuration"),
+			   KGlobal::instance()->iconLoader()->loadIcon( "gear", 
+									KIcon::NoGroup, KIcon::SizeMedium ) );
+  QVBoxLayout* box = new QVBoxLayout( frame );
+  box->setSpacing( 0 );
+  box->setMargin( 0 );
+
+  m_pluginOptionTab = new K3bPluginOptionTab( frame );
+  box->addWidget( m_pluginOptionTab );
+}
+
+
+// void K3bOptionDialog::addOptionPage( QWidget* widget,
+// 				     const QString& name,
+// 				     const QString& header,
+// 				     const QPixmap& icon )
+// {
+//   QFrame* frame = addPage( name, header, icon );
+
+//   QVBoxLayout* box = new QVBoxLayout( frame );
+//   box->setSpacing( 0 );
+//   box->setMargin( 0 );
+
+//   widget->reparent( frame );
+//   box->addWidget( widget );
+// }
 
 
 #include "k3boptiondialog.moc"

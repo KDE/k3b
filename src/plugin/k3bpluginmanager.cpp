@@ -35,10 +35,19 @@ public:
 };
 
 
+K3bPluginManager* K3bPluginManager::s_k3bPluginManager = 0;
+
+
 K3bPluginManager::K3bPluginManager( QObject* parent, const char* name )
   : QObject( parent, name )
 {
   d = new Private();
+
+  if( s_k3bPluginManager ) {
+    qFatal("ONLY ONE INSTANCE OF K3BPLUGINMANAGER ALLOWED!");
+  }
+
+  s_k3bPluginManager = this;
 }
 
 
@@ -47,6 +56,21 @@ K3bPluginManager::~K3bPluginManager()
   delete d;
 }
 
+
+
+QStringList K3bPluginManager::groups() const
+{
+  QStringList grps;
+
+  QPtrList<K3bPluginFactory> fl;
+  for( QMapConstIterator<K3bPluginFactory*, QString> it = d->factories.begin();
+       it != d->factories.end(); ++it ) {
+    if( !grps.contains( it.key()->group() ) )
+	grps.append( it.key()->group() );
+  }
+
+  return grps;
+}
 
 
 QPtrList<K3bPluginFactory> K3bPluginManager::factories( const QString& group ) const
@@ -66,33 +90,44 @@ void K3bPluginManager::loadPlugin( const QString& fileName )
   KSimpleConfig c( fileName, true );
   c.setGroup( "K3b Plugin" );
 
+  QString libName = c.readEntry( "Lib" );
+  if( libName.isEmpty() ) {
+    kdDebug() << "(K3bPluginManager) no Lib specified in " << fileName << endl;
+    return;
+  }
+
   // read the lib
-  KLibFactory* factory = KLibLoader::self()->factory( c.readEntry( "lib" ).latin1() );
+  KLibFactory* factory = KLibLoader::self()->factory( libName.latin1() );
   if( factory ) {
     K3bPluginFactory* k3bFactory = dynamic_cast<K3bPluginFactory*>( factory );
     if( k3bFactory ) {
-      // TODO: check if it provides info and if not try to load it from the config
-      d->factories.insert( k3bFactory, c.readEntry( "lib" ) );
+      k3bFactory->setName( c.readEntry( "Name" ) );
+      k3bFactory->setAuthor( c.readEntry( "Author" ) );
+      k3bFactory->setEmail( c.readEntry( "Email" ) );
+      k3bFactory->setVersion( c.readEntry( "Version" ) );
+      k3bFactory->setComment( c.readEntry( "Comment" ) );
+
+      d->factories.insert( k3bFactory, libName );
     }
     else
-      kdDebug() << "(K3bPluginManager) lib " << c.readEntry( "lib" ) << " not a K3b plugin" << endl;
+      kdDebug() << "(K3bPluginManager) lib " << libName << " not a K3b plugin" << endl;
   }
   else
-    kdDebug() << "(K3bPluginManager) lib " << c.readEntry( "lib" ) << " no found" << endl;
+    kdDebug() << "(K3bPluginManager) lib " << libName << " not found" << endl;
 }
 
 
 void K3bPluginManager::loadAll()
 {
   // we simply search the K3b plugin dir for now
-  QStringList dirs = KGlobal::instance()->dirs()->findDirs( "data", "k3b/plugins" );
+  QStringList dirs = KGlobal::instance()->dirs()->findDirs( "data", "k3b/plugins/" );
 
   for( QStringList::const_iterator it = dirs.begin();
        it != dirs.end(); ++it ) {
     QStringList entries = QDir(*it).entryList( "*.plugin", QDir::Files );
     for( QStringList::const_iterator it2 = entries.begin();
 	 it2 != entries.end(); ++it2 ) {
-      loadPlugin( *it2 );
+      loadPlugin( *it + *it2 );
     }
   }
 }
@@ -106,6 +141,12 @@ void K3bPluginManager::unloadPlugin( K3bPluginFactory* factory )
   d->factories.erase( factory );
 
   KLibLoader::self()->unloadLibrary( lib.latin1() );
+}
+
+
+int K3bPluginManager::pluginSystemVersion() const
+{
+  return 1;
 }
 
 #include "k3bpluginmanager.moc"

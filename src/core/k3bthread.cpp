@@ -42,6 +42,18 @@ K3bThread::~K3bThread()
 }
 
 
+QString K3bThread::jobDescription() const
+{
+  return QString::null;
+}
+
+
+QString K3bThread::jobDetails() const
+{
+  return QString::null;
+}
+
+
 void K3bThread::cancel()
 {
   if( running() ) {

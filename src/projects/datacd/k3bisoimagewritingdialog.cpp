@@ -119,7 +119,9 @@ void K3bIsoImageWritingDialog::setupGui()
 
   m_editImagePath = new KURLRequester( groupImage );
   m_editImagePath->setCaption( i18n("Choose ISO Image File or cue/bin Combination") );
-
+  QString filter = i18n("*.iso|ISO9660 Image Files");
+  filter += "\n" + i18n("*|All Files");
+  m_editImagePath->setFilter(filter);
   m_labelImageSize = new QLabel( groupImage );
 
   QFont f( m_labelImageSize->font() );

@@ -73,10 +73,9 @@ class K3bDirItem : public K3bDataItem
   virtual bool isRemoveable() const;
 
   /**
-   * Makes sure that all subitems have different names.
-   * This also involves renaming and updating the jolietnames.
+   * Makes sure that all subitems have different jolietnames.
    */
-  virtual void revalidate();
+  virtual void revalidateJolietNames();
 	
  private:
   /**

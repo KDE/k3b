@@ -24,6 +24,8 @@
 #include <k3bapplication.h>
 #include <k3bglobals.h>
 
+#include <k3baudioencoder.h>
+
 #include <songdb/k3bsong.h>
 #include <songdb/k3bsongmanager.h>
 
@@ -44,7 +46,9 @@
 K3bCddaCopy::K3bCddaCopy( QObject* parent ) 
   : K3bJob( parent ),
     m_bUsePattern( true ),
-    m_singleFile(false)
+    m_singleFile(false),
+    m_encoderFactory(0),
+    m_encoder(0)
 {
   m_device = 0;
   
@@ -63,6 +67,7 @@ K3bCddaCopy::K3bCddaCopy( QObject* parent )
 
 K3bCddaCopy::~K3bCddaCopy()
 {
+  delete m_encoder;
   delete m_audioRip;
 }
 
@@ -141,8 +146,17 @@ bool K3bCddaCopy::startRip( unsigned int i )
 
   bool isOpen = true;
   // if we write a single file we only need to open the writer once
-  if( !m_singleFile || i == 0 )
-    isOpen = m_waveFileWriter.open( m_list[i] );
+  if( !m_singleFile || i == 0 ) {
+    if( m_encoderFactory )
+      if( !m_encoder )
+	m_encoder = (K3bAudioEncoder*)m_encoderFactory->createPlugin( this );
+
+    if( m_encoder ) {
+      isOpen = m_encoder->openFile( m_list[i] );
+    }
+    else // WAVE
+      isOpen = m_waveFileWriter.open( m_list[i] );
+  }
   
   if( !isOpen ){
     infoMessage( i18n("Unable to rip to: %1").arg(m_list[i]), ERROR );
@@ -171,7 +185,13 @@ bool K3bCddaCopy::startRip( unsigned int i )
 
 void K3bCddaCopy::slotTrackOutput( const char* data, int len )
 {
-  m_waveFileWriter.write( data, len, K3bWaveFileWriter::LittleEndian );
+  if( m_interrupt )
+    return;
+
+  if( m_encoder )
+    m_encoder->encode( data, len );
+  else
+    m_waveFileWriter.write( data, len, K3bWaveFileWriter::LittleEndian );
   m_bytesAll += len;
 
   m_audioRip->resume();
@@ -193,8 +213,12 @@ void K3bCddaCopy::cancel( ){
 
 void K3bCddaCopy::slotTrackFinished( bool success )
 {
-  if( !m_singleFile || !success )
-    m_waveFileWriter.close();
+  if( !m_singleFile || !success ) {
+    if( m_encoder )
+      m_encoder->closeFile();
+    else
+      m_waveFileWriter.close();
+  }
 
   if( success ) {
   
@@ -216,8 +240,12 @@ void K3bCddaCopy::slotTrackFinished( bool success )
     } else {
       emit infoMessage( i18n("Successfully read all tracks"), STATUS );
       // close the single file
-      if( m_singleFile )
-	m_waveFileWriter.close();
+      if( m_singleFile ) {
+	if( m_encoder )
+	  m_encoder->closeFile();
+	else
+	  m_waveFileWriter.close();
+      }
 
       emit finished( true );
     }
@@ -254,6 +282,9 @@ void K3bCddaCopy::createFilenames()
     int index = *it - 1;
    
     QString extension = ".wav";
+
+    if( m_encoderFactory )
+      extension = "." + m_encoderFactory->extension();
 
     if( m_diskInfo.toc[index].type() == K3bTrack::DATA ) {
       extension = ".iso";

@@ -34,3 +34,6 @@ A: Most likely you installed K3b in the wrong directory. All KDE programs are in
    like this:
      ./configure --prefix=/opt/kde3
    That will install K3b relative to /opt/kde3.
+
+Q: The linking always breaks with the missing -laudio.
+A: You need to install NAS.

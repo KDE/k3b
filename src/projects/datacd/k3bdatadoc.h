@@ -183,6 +183,7 @@ class K3bDataDoc : public K3bDoc
   int m_numberAddedItems;
 
   QStringList m_notFoundFiles;
+  QStringList m_noPermissionFiles;
 
   K3bRootItem* m_root;
   QString m_name;

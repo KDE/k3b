@@ -94,6 +94,8 @@
 #include "k3bprojectinterface.h"
 #include <k3bprojectmanager.h>
 #include "k3bwelcomewidget.h"
+#include "plugin/k3bpluginmanager.h"
+#include "plugin/k3bpluginfactory.h"
 
 
 static K3bMainWindow* s_k3bMainWindow = 0;
@@ -115,6 +117,7 @@ public:
   QMap<K3bDoc*, K3bProjectInterface*> projectInterfaceMap;
 
   K3bProjectManager* projectManager;
+  K3bPluginManager* pluginManager;
   K3bDoc* lastDoc;
 
   QWidgetStack* documentStack;
@@ -129,7 +132,11 @@ K3bMainWindow::K3bMainWindow()
 {
   d = new Private;
   d->projectManager = new K3bProjectManager( this );
+  d->pluginManager = new K3bPluginManager( this );
   d->lastDoc = 0;
+
+  // load all plugins
+  d->pluginManager->loadAll();
 
   s_k3bMainWindow = this;
 
@@ -583,10 +590,10 @@ bool K3bMainWindow::queryClose()
   // the user is asked for every modified doc to save the changes
   // ---------------------------------
 
-  while( K3bView* view = activeView() )
-  {
-    if( !view->close(true) )
+  while( K3bView* view = activeView() ) {
+    if( !canCloseDocument(view->doc()) )
       return false;
+    closeProject(view->doc());
   }
 
   return true;
@@ -730,34 +737,39 @@ void K3bMainWindow::slotFileClose()
       K3bDoc* pDoc = pView->doc();
 
       if( canCloseDocument(pDoc) ) {
-	
-	// unplug the actions
-	if( factory() ) {
-	  if( d->lastDoc == pDoc ) {
-	    factory()->removeClient( d->lastDoc->view() );
-	    d->lastDoc = 0;
-	  }
-	}
-
-	// remove the view from the project tab
-	m_documentTab->removePage( pView );
-	
-	// remove the DCOP interface
-	QMap<K3bDoc*, K3bProjectInterface*>::iterator it = d->projectInterfaceMap.find( pDoc );
-	if( it != d->projectInterfaceMap.end() ) {
-	  // delete the interface
-	  delete it.data();
-	  d->projectInterfaceMap.remove( it );
-	}
-	
-	// delete view and doc
-	delete pView;
-	delete pDoc;
+	closeProject(pDoc);	
       }
     }
   }
   
   slotCurrentDocChanged();
+}
+
+
+void K3bMainWindow::closeProject( K3bDoc* doc )
+{
+  // unplug the actions
+  if( factory() ) {
+    if( d->lastDoc == doc ) {
+      factory()->removeClient( d->lastDoc->view() );
+      d->lastDoc = 0;
+    }
+  }
+
+  // remove the view from the project tab
+  m_documentTab->removePage( doc->view() );
+	
+  // remove the DCOP interface
+  QMap<K3bDoc*, K3bProjectInterface*>::iterator it = d->projectInterfaceMap.find( doc );
+  if( it != d->projectInterfaceMap.end() ) {
+    // delete the interface
+    delete it.data();
+    d->projectInterfaceMap.remove( it );
+  }
+	
+  // delete view and doc
+  delete doc->view();
+  delete doc;
 }
 
 
@@ -1138,7 +1150,7 @@ void K3bMainWindow::slotProjectAddFiles()
   K3bDoc* doc = activeDoc();
 
   if( doc ) {
-    QStringList urls = KFileDialog::getOpenFileNames( ".", "*", this, i18n("Select Files to Add to Project") );
+    QStringList urls = KFileDialog::getOpenFileNames( ".", "*|All Files", this, i18n("Select Files to Add to Project") );
     if( !urls.isEmpty() )
       doc->addUrls( urls );
   }

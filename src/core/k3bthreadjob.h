@@ -49,6 +49,9 @@ class K3bThreadJob : public K3bJob
   void setThread( K3bThread* t );
   K3bThread* thread() const { return m_thread; }
 
+  virtual QString jobDescription() const;
+  virtual QString jobDetails() const;
+
  public slots:
   void start();
   void cancel();

@@ -23,6 +23,8 @@ class QWidget;
 class K3bPlugin;
 class K3bPluginConfigWidget;
 
+
+
 /**
  * The base class for all k3b pluginfactories
  * Instead of reimplementing the createObject method
@@ -31,7 +33,12 @@ class K3bPluginConfigWidget;
  * You should return a pointer to your factory. The K_EXPORT_COMPONENT_FACTORY
  * macro is provided for this purpose:
  * <pre>
- *   K_EXPORT_COMPONENT_FACTORY( libkspread, KSpreadFactory )
+ *   K_EXPORT_COMPONENT_FACTORY( libk3bwavedecoder, K3bWaveDecoderFactory )
+ * </pre>
+ *
+ * In the constructor of your factory you should create an instance of KInstance like this: 
+ * <pre>
+ *   s_global = new KInstance( "k3bwavedecoder" );
  * </pre>
  *
  * Every plugin needs to install a XXX.plugin file in the k3b/plugins directory.
@@ -59,9 +66,11 @@ class K3bPluginFactory : public KLibFactory
 					     const char* name = 0,
 					     const QStringList &args = QStringList() );
 
-  virtual QString author() const;
-  virtual QString version() const;
-  virtual QString comment() const;
+  virtual QString name() const;
+  virtual QString author() const { return m_author; }  
+  virtual QString email() const { return m_email; }
+  virtual QString version() const { return m_version; }
+  virtual QString comment() const { return m_comment; }
 
   /**
    * Version of the plugin system this plugin was written for.
@@ -69,9 +78,16 @@ class K3bPluginFactory : public KLibFactory
   virtual int pluginSystemVersion() const = 0;
 
   /**
-   * The plugin group. Needs to be the same as in the desktop entry.
+   * The plugin group.
    */
   virtual QString group() const = 0;
+
+ public slots:
+  void setName( const QString& s ) { m_name = s; }
+  void setAuthor( const QString& s ) { m_author = s; }
+  void setEmail( const QString& s ) { m_email = s; }
+  void setVersion( const QString& s ) { m_version = s; }
+  void setComment( const QString& s ) { m_comment = s; }
 
  protected:
   virtual K3bPlugin* createPluginObject( QObject* parent = 0, 
@@ -91,6 +107,20 @@ class K3bPluginFactory : public KLibFactory
 				 const char* name = 0, 
 				 const char* classname = "Plugin", 
 				 const QStringList &args = QStringList() );
+
+ private slots:
+  void slotObjectCreated( QObject* );
+  void slotObjectDestroyed();
+
+ private:
+  QString m_name;
+  QString m_author;
+  QString m_email;
+  QString m_comment;
+  QString m_version;
+
+  class Private;
+  Private* d;
 };
 
 #endif

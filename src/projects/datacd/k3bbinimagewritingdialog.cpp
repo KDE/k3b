@@ -142,6 +142,10 @@ void K3bBinImageWritingDialog::setupGui()
 
   m_editTocPath = new KURLRequester( groupImage );
   m_editTocPath->setCaption( i18n("Choose TOC/CUE file") );
+  QString filter = i18n("*.cue|Cue Files");
+  filter += "\n" + i18n("*.toc|Toc Files");
+  filter += "\n" + i18n("*|All Files");
+  m_editTocPath->setFilter(filter);
 
   groupImageLayout->addWidget( m_editTocPath, 0, 0 );
 

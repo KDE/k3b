@@ -50,3 +50,8 @@ void K3bProjectInterface::addUrl( const KURL& url )
 {
   m_doc->addUrl( url );
 }
+
+void K3bProjectInterface::burn()
+{
+  m_doc->slotBurn();
+}

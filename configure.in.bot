@@ -1,13 +1,35 @@
-if test x$ogg_vorbis = xno; then
-	echo "----------------------------------------"
-	echo "No Ogg Vorbis library and headers found."
-	echo "Ogg Vorbis support disabled."
-	echo "----------------------------------------"
+echo ""
+echo ""
+echo "Configure results:"
+echo "-----------------------------------------"
+if test x$ogg_vorbis = xyes; then
+	echo "Ogg Vorbis support:                   yes"
+else
+	echo "Ogg Vorbis support:                   no"
+	echo "    The Ogg Vorbis decoding plugin won't be compiled."
 fi
 
-if test $mad_detect = 0 ; then
-	echo "----------------------------------------"
-	echo "No mad library and headers found."
-	echo "K3b will not compile without them!"
-	echo "----------------------------------------"
+echo ""
+
+if test HAVE_LIBMAD; then
+	echo "Mp3 decoding support (libmad):        yes"
+	if test HAVE_LIBID3; then
+		echo "    ID3 Tag handling with libid3:     yes"
+	else
+		echo "    ID3 Tag handling with libid3:     no"
+		echo "    Using KFileMetaInfo instead."
+	fi
+else
+	echo "Mp3 decoding support (libmad):        no"
+	echo "    The Mp3 decoding plugin won't be compiled."
 fi
+
+echo ""
+
+if test HAVE_RESMGR; then
+	echo "SuSE Resmgr support:                  yes"
+else
+	echo "SuSE Resmgr support:                  no"
+fi
+echo "-----------------------------------------"
+echo ""
