@@ -172,3 +172,6 @@ bool K3bBlankingJob::active() const
 {
   return m_process->isRunning();
 }
+
+
+#include "k3bblankingjob.moc"

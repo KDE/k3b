@@ -630,3 +630,6 @@ K3bBurnJob* K3bAudioDoc::newBurnJob()
   else
     return new K3bAudioJob( this );
 }
+
+
+#include "k3baudiodoc.moc"

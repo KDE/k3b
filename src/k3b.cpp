@@ -38,6 +38,8 @@
 #include <klineeditdlg.h>
 #include <kstddirs.h>
 
+#include <stdlib.h>
+
 // application specific includes
 #include "k3b.h"
 #include "k3bglobals.h"
@@ -911,3 +913,6 @@ void K3bMainWindow::slotWriteIsoImage()
   K3bIsoImageWritingDialog* d = new K3bIsoImageWritingDialog( this, "isodialog" );
   d->show();
 }
+
+
+#include "k3b.moc"

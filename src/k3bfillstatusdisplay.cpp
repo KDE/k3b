@@ -186,3 +186,6 @@ void K3bFillStatusDisplay::showTime()
   m_showTime = true;
   update();
 }
+
+
+#include "k3bfillstatusdisplay.moc"

@@ -56,3 +56,6 @@ void K3bView::closeEvent(QCloseEvent*){
 // or ignoring the close event
 		
 }
+
+
+#include "k3bview.moc"

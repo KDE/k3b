@@ -211,3 +211,6 @@ void K3bIsoImageWritingDialog::slotWriterChanged()
     m_checkBurnProof->setEnabled( true );
   }
 }
+
+
+#include "k3bisoimagewritingdialog.moc"

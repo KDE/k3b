@@ -847,3 +847,6 @@ void K3bDataJob::splitDoc()
   }
 }
 */
+
+
+#include "k3bdatajob.moc"

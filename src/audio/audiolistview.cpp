@@ -55,3 +55,6 @@ void AudioListView::setupColumns(){
 bool AudioListView::acceptDrag(QDropEvent* e) const{
 	return ( e->source() == viewport() || QTextDrag::canDecode(e) );
 }
+
+
+#include "audiolistview.moc"

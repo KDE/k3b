@@ -279,3 +279,6 @@ void K3bExternalBinModule::cancel()
 
   emit finished( false );
 }
+
+
+#include "k3bexternalbinmodule.moc"

@@ -376,3 +376,6 @@ void K3bIsoImageJob::slotCdrecordFinished()
 		
   emit finished( this );
 }
+
+
+#include "k3bisoimagejob.moc"

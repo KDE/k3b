@@ -466,3 +466,6 @@ double K3bMp3Module::compute_tpf( unsigned int header )
   tpf /= mp3SampleRate(header);// << (fr->lsf);
   return tpf;
 }
+
+
+#include "k3bmp3module.moc"

@@ -97,3 +97,6 @@ void K3bEmptyDiscWaiter::slotUser1()
 
   emit discReady();
 }
+
+
+#include "k3bemptydiscwaiter.moc"

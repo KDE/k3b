@@ -38,3 +38,6 @@ void K3bStickyButton::setOn( bool on )
 	setDown( on );
 	QToolButton::setOn( on );
 }
+
+
+#include "k3bstickybutton.moc"

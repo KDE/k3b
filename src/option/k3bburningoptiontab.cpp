@@ -188,3 +188,6 @@ void K3bBurningOptionTab::slotGetTempDir()
     m_editTempDir->setText( dir );
   }
 }
+
+
+#include "k3bburningoptiontab.moc"

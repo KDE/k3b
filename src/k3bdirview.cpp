@@ -181,3 +181,5 @@ void K3bDirView::slotDirActivated( const KURL& url )
     }
 }
 
+
+#include "k3bdirview.moc"

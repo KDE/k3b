@@ -93,3 +93,5 @@ KCharValidator::ValidationMode KCharValidator::validationMode() const
   return m_mode;
 }
 
+
+#include "kcharvalidator.moc"

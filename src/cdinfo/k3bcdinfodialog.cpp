@@ -109,3 +109,6 @@ void K3bCdInfoDialog::slotClose()
 {
   close();
 }
+
+
+#include "k3bcdinfodialog.moc"

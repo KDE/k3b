@@ -292,3 +292,6 @@ void K3bAudioBurnDialog::slotUser1()
   else
     K3bProjectBurnDialog::slotUser1();
 }
+
+
+#include "k3baudioburndialog.moc"

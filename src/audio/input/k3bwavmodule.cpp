@@ -290,3 +290,6 @@ int K3bWavModule::waveLength(const char *filename, long offset,
 
   return 0;
 }
+
+
+#include "k3bwavmodule.moc"

@@ -24,3 +24,6 @@ K3bJob::K3bJob()
 K3bJob::~K3bJob()
 {
 }
+
+
+#include "k3bjob.moc"

@@ -412,3 +412,6 @@ void K3bAudioTrackDialog::slotChangePregapFormat( const QString& str )
     }
   }
 }
+
+
+#include "k3baudiotrackdialog.moc"

@@ -679,3 +679,6 @@ QString K3bDataDoc::treatWhitespace( const QString& path )
   else
     return path;
 }
+
+
+#include "k3bdatadoc.moc"

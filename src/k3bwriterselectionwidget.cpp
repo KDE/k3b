@@ -120,3 +120,6 @@ int K3bWriterSelectionWidget::writerSpeed() const
 	
   return _strSpeed.toInt();
 }
+
+
+#include "k3bwriterselectionwidget.moc"

@@ -248,3 +248,6 @@ void K3bAudioView::slotUpdateItems()
 
    m_fillStatusDisplay->update();
 }
+
+
+#include "k3baudioview.moc"

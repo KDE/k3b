@@ -545,3 +545,6 @@ void K3bAudioOnTheFlyJob::slotCdrdaoFinished()
 
   m_process.disconnect();
 }
+
+
+#include "k3baudioontheflyjob.moc"

@@ -306,3 +306,5 @@ void K3bOptionDialog::setupRippingPatternPage()
   m_rippingPatternOptionTab->init( album );
 }
 
+
+#include "k3boptiondialog.moc"

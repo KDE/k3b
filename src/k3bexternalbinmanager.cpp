@@ -211,3 +211,6 @@ K3bExternalBin* K3bExternalBinManager::binObject( const QString& name )
   else
     return 0;
 }
+
+
+#include "k3bexternalbinmanager.moc"

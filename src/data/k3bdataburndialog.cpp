@@ -656,3 +656,6 @@ void K3bDataBurnDialog::slotConvertAllToUpperCase()
   m_editPublisher->setText( m_editPublisher->text().upper() );
   m_editPreparer->setText( m_editPreparer->text().upper() );
 }
+
+
+#include "k3bdataburndialog.moc"

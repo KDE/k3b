@@ -750,3 +750,6 @@ void K3bAudioJob::clearBufferFiles()
     info->track->setBufferFile( QString::null );
   }
 }
+
+
+#include "k3baudiojob.moc"

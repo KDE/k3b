@@ -273,3 +273,6 @@ bool K3bDoc::readGeneralDocumentData( const QDomElement& elem )
 
   return true;
 }
+
+
+#include "k3bdoc.moc"

@@ -217,3 +217,6 @@ void K3bBlankingDialog::closeEvent( QCloseEvent* e )
     e->accept();
   }
 }
+
+
+#include "k3bblankingdialog.moc"

@@ -120,3 +120,6 @@ void K3bDataFileView::slotDataItemRemoved( K3bDataItem* item )
 	} // for it
     }
 }
+
+
+#include "k3bdatafileview.moc"

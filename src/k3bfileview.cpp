@@ -113,3 +113,5 @@ void K3bFileView::setUrl(const KURL& url, bool forward){
 	m_fileView->setURL( url, forward );
 }
 
+
+#include "k3bfileview.moc"

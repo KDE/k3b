@@ -537,3 +537,6 @@ void K3bDeviceOptionTab::showWriterSpecificProps( bool b )
     m_checkBurnProof->hide();
   }
 }
+
+
+#include "k3bdeviceoptiontab.moc"

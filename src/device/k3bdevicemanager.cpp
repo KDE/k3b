@@ -328,3 +328,6 @@ void K3bDeviceManager::scanFstab()
     dev = m_allDevices.next();
   }
 }
+
+
+#include "k3bdevicemanager.moc"

@@ -90,3 +90,6 @@ void KCutLabel::cutTextToLabel() {
 
   };
 }
+
+
+#include "kcutlabel.moc"

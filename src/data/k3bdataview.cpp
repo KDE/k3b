@@ -414,3 +414,6 @@ void K3bDataView::slotRemoveItem()
   else
     qDebug("(K3bDataView) slotRemoveItem() without selected item!");
 }
+
+
+#include "k3bdataview.moc"

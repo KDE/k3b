@@ -105,7 +105,7 @@ K3bBurnProgressDialog::PrivateStatusBarProgress::PrivateStatusBarProgress( QWidg
 {
   progress = new KProgress( 0, 100, 0, Qt::Horizontal, this, "m_statusBarProgress" );
 
-  label = new QLabel( this );
+  label = new KCutLabel( this );
   label->setText( i18n("Progress") );
 
   QHBoxLayout* layout = new QHBoxLayout( this );
@@ -117,7 +117,9 @@ K3bBurnProgressDialog::PrivateStatusBarProgress::PrivateStatusBarProgress( QWidg
   QToolTip::add( progress, i18n("Click to show progress window") );
 
   setMaximumHeight( k3bMain()->statusBar()->height() );
-  setFixedWidth( 150 + label->fontMetrics().width("some sample text") );
+  progress->setFixedWidth( 150 );
+  label->setFixedWidth( 150 );
+  setFixedWidth( 305 );
 }
 
 
@@ -500,3 +502,6 @@ void K3bBurnProgressDialog::slotToBackground()
 
   hide();
 }
+
+
+#include "k3bburnprogressdialog.moc"

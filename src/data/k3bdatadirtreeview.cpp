@@ -125,3 +125,6 @@ void K3bDataDirTreeView::slotDataItemRemoved( K3bDataItem* item )
 	delete viewItem;
       }
 }
+
+
+#include "k3bdatadirtreeview.moc"

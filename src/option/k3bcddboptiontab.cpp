@@ -160,3 +160,6 @@ void K3bCddbOptionTab::fillInputFields(QString hostString){
    m_cddbServerInput->setText(hostString.left(index) );
    m_cddbPortInput->setText(hostString.right(hostString.length()-index-1) );
 }
+
+
+#include "k3bcddboptiontab.moc"

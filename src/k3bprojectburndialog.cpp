@@ -262,3 +262,6 @@ QString K3bProjectBurnDialog::tempDir() const
   else
     return "";
 }
+
+
+#include "k3bprojectburndialog.moc"

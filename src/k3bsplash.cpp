@@ -81,3 +81,6 @@ void K3bSplash::paintEvent( QPaintEvent* e )
 
   p.drawText( startX, startY, textW, textH, 0, QString("%1\n%2\n%3").arg(line1).arg(line2).arg(line3) );
 }
+
+
+#include "k3bsplash.moc"

@@ -69,3 +69,5 @@ void K3bRippingPatternOptionTab::readSettings(){
     m_usePattern->setChecked( c->readBoolEntry("usePattern", true) );
 }
 
+
+#include "k3brippingpatternoptiontab.moc"
