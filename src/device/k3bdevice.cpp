@@ -246,7 +246,7 @@ bool K3bCdDevice::CdDevice::init()
       cmd[7] = 2048>>8;
       cmd[8] = 2048;
       if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 )
-	len = from2Byte( header );
+	len = from4Byte( header );
     }
 
     // again with full length
