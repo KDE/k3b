@@ -101,7 +101,7 @@ class K3bAudioDoc : public K3bDoc
   /**
    * Represent the structure of the doc as CD Table of Contents.
    */
-  K3bDevice::Toc K3bAudioDoc::toToc() const;
+  K3bDevice::Toc toToc() const;
 
   K3bBurnJob* newBurnJob( K3bJobHandler*, QObject* parent = 0 );
 

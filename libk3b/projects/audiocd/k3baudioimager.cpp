@@ -55,8 +55,7 @@ public:
     int trackNumber = 1;
     unsigned long long totalSize = m_doc->length().audioBytes();
     unsigned long long totalRead = 0;
-    int bufferSize = 2352*10;
-    char buffer[bufferSize];
+    char buffer[2352 * 10];
 
     while( track ) {
 
@@ -91,7 +90,7 @@ public:
       //
       // Read data from the track
       //
-      while( (read = track->read( buffer, bufferSize )) > 0 ) {
+      while( (read = track->read( buffer, sizeof(buffer) )) > 0 ) {
 	if( m_fd == -1 ) {
 	  waveFileWriter.write( buffer, read, K3bWaveFileWriter::BigEndian );
 	}

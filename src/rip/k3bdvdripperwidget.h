@@ -41,7 +41,7 @@ class K3bDvdExtraRipStatus;
   */
 class K3bDvdRipperWidget : public K3bInteractionDialog
 {
-  Q_OBJECT;
+  Q_OBJECT
 
  public: 
   K3bDvdRipperWidget(const QString& device, QWidget *parent=0, const char *name=0);
