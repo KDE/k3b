@@ -378,12 +378,6 @@ void K3bListViewItem::paintProgressBar( QPainter* p, const QColorGroup& cgh, int
   // the QPainter is translated so 0, m_vMargin is the upper left of our paint rect
   QRect r( 0, m_vMargin, width, height()-2*m_vMargin );
 
-  // we want a little additional margin
-  r.setLeft( r.left()+1 );
-  r.setWidth( r.width()-2 );
-  r.setTop( r.top()+1 );
-  r.setHeight( r.height()-2 );
-
   // create the double buffer pixmap
   static QPixmap *doubleBuffer = 0;
   if( !doubleBuffer )
@@ -398,6 +392,12 @@ void K3bListViewItem::paintProgressBar( QPainter* p, const QColorGroup& cgh, int
   else
     dbPainter.fillRect( 0, 0, width, height(), 
 			cgh.brush( QPalette::backgroundRoleFromMode(listView()->viewport()->backgroundMode()) ) );
+
+  // we want a little additional margin
+  r.setLeft( r.left()+1 );
+  r.setWidth( r.width()-2 );
+  r.setTop( r.top()+1 );
+  r.setHeight( r.height()-2 );
 
   // this might be a stupid hack but most styles do not reimplement drawPrimitive PE_ProgressBarChunk
   // so this way the user is happy....
