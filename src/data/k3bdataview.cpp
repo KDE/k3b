@@ -142,9 +142,23 @@ void K3bDataView::importSession()
 
     k3bMain()->showBusyInfo( i18n("Mounting disk...") );
 
-    // mount the cd
-    connect( KIO::mount( true, 0L, m_device->mountDevice(), m_device->mountPoint(), false ), SIGNAL(result(KIO::Job*)),
-	     this, SLOT(slotMountFinished(KIO::Job*)) );
+    QString mp = KIO::findDeviceMountPoint( m_device->mountDevice() );
+    if( mp.isEmpty() ) {
+      // mount the cd
+      connect( KIO::mount( true, 0L, 
+			   m_device->mountDevice(), 
+			   m_device->mountPoint(), false ), 
+	       SIGNAL(result(KIO::Job*)),
+	       this, 
+	       SLOT(slotMountFinished(KIO::Job*)) );
+    }
+    else {
+      // cd is already mounted
+      k3bMain()->showBusyInfo( i18n("Importing old session...") );
+      m_doc->setBurner( m_device );
+      m_doc->importSession( mp );
+      k3bMain()->endBusy();
+    }
   }
 }
 
@@ -152,7 +166,8 @@ void K3bDataView::importSession()
 void K3bDataView::slotMountFinished( KIO::Job* job )
 {
   if( job->error() ) {
-    KMessageBox::error( this, KIO::buildErrorString( job->error(), m_device->vendor() + " " + m_device->description() ) );
+    KMessageBox::error( this, KIO::buildErrorString( job->error(), 
+						     m_device->vendor() + " " + m_device->description() ) );
   }
   else {
     k3bMain()->showBusyInfo( i18n("Importing old session...") );
@@ -176,7 +191,8 @@ void K3bDataView::clearImportedSession()
 
 void K3bDataView::editBootImages()
 {
-  KDialogBase* d = new KDialogBase( this, "", true, i18n("Edit boot images"), KDialogBase::Ok, KDialogBase::Ok, true );
+  KDialogBase* d = new KDialogBase( this, "", true, i18n("Edit boot images"), 
+				    KDialogBase::Ok, KDialogBase::Ok, true );
   d->setMainWidget( new K3bBootImageView( m_doc, d ) );
   d->exec();
 }
