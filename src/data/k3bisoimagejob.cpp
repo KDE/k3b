@@ -218,6 +218,8 @@ void K3bIsoImageJob::slotWrite()
 
   K3bEmptyDiscWaiter waiter( m_device, k3bMain() );
   if( waiter.waitForEmptyDisc() == K3bEmptyDiscWaiter::CANCELED ) {
+    emit infoMessage( i18n("Writing canceled."), K3bJob::ERROR );
+    emit canceled();
     emit finished( false );
     return;
   }
@@ -301,6 +303,8 @@ void K3bIsoImageJob::slotWriteCueBin()
 
   K3bEmptyDiscWaiter waiter( m_device, k3bMain() );
   if( waiter.waitForEmptyDisc() == K3bEmptyDiscWaiter::CANCELED ) {
+    emit infoMessage( i18n("Writing canceled."), K3bJob::ERROR );
+    emit canceled();
     emit finished( false );
     return;
   }
@@ -341,6 +345,7 @@ void K3bIsoImageJob::cancel()
   }
 
   emit infoMessage( i18n("Writing canceled."), K3bJob::ERROR );
+  emit canceled();
   emit finished( false );
 }
 

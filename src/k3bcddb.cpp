@@ -36,6 +36,7 @@
 #include <kio/global.h>
 #include <kprotocolmanager.h>
 #include <kdebug.h>
+#include <kaboutdata.h>
 
 #include <stdlib.h>
 
@@ -888,7 +889,7 @@ QString K3bCddb::handshakeString() const
   if( host.isEmpty() )
     host = "kde-host";
   
-  return QString("%1 %2 k3b %3").arg(user).arg(host).arg(VERSION);
+  return QString("%1 %2 K3b %3").arg(user).arg(host).arg(kapp->aboutData()->version());
 }
 
 

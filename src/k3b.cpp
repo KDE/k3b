@@ -47,6 +47,7 @@
 #include <kdialog.h>
 #include <kedittoolbar.h>
 #include <ksystemtray.h>
+#include <kaboutdata.h>
 
 #include <stdlib.h>
 
@@ -217,7 +218,7 @@ void K3bMainWindow::initStatusBar()
 
   statusBar()->insertItem( "               ", 100, 1 ); // for showing some info
   statusBar()->addWidget( m_busyWidget, 0, true );
-  statusBar()->insertFixedItem( QString("K3b %1").arg(VERSION), 0, true );
+  statusBar()->insertFixedItem( QString("K3b %1").arg(kapp->aboutData()->version()), 0, true );
 
   statusBar()->setItemAlignment( 100, Qt::AlignVCenter|AlignLeft );
 }

@@ -103,6 +103,8 @@ void K3bDataJob::fetchMultiSessionInfo()
 {
   K3bEmptyDiscWaiter waiter( m_doc->burner(), k3bMain() );
   if( waiter.waitForEmptyDisc( true ) == K3bEmptyDiscWaiter::CANCELED ) {
+    emit infoMessage( i18n("Writing canceled."), K3bJob::ERROR );
+    emit canceled();
     cancelAll();
     return;
   }
@@ -265,6 +267,8 @@ void K3bDataJob::writeCD()
 
     K3bEmptyDiscWaiter waiter( m_doc->burner(), k3bMain() );
     if( waiter.waitForEmptyDisc() == K3bEmptyDiscWaiter::CANCELED ) {
+      emit infoMessage( i18n("Writing canceled."), K3bJob::ERROR );
+      emit canceled();
       cancelAll();
       return;
     }

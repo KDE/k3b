@@ -94,6 +94,7 @@ void K3bFileView::setupGUI()
 
   KAction* actionUp = m_dirOp->actionCollection()->action("home");
   KAction* actionHome = m_dirOp->actionCollection()->action("up");
+  KAction* actionReload = m_dirOp->actionCollection()->action("reload");
 
   // setup the toolBar buttons
   QToolButton* buttonUp = new QToolButton( toolBar );
@@ -112,6 +113,14 @@ void K3bFileView::setupGUI()
   connect( buttonHome, SIGNAL(clicked()), actionHome, SLOT(activate()) );
   connect( actionHome, SIGNAL(enabled(bool)), buttonHome, SLOT(setEnabled(bool)) );
 
+  QToolButton* buttonReload = new QToolButton( toolBar );
+  buttonReload->setIconSet( actionReload->iconSet() );
+  buttonReload->setTextLabel( actionReload->toolTip(), true );
+  buttonReload->setTextLabel( actionReload->text() );
+  buttonReload->setAutoRaise( true );
+  connect( buttonReload, SIGNAL(clicked()), actionReload, SLOT(activate()) );
+  connect( actionReload, SIGNAL(enabled(bool)), buttonReload, SLOT(setEnabled(bool)) );
+
   QToolButton* buttonPlay = new QToolButton( toolBar );
   buttonPlay->setIconSet( actionPlay->iconSet() );
   buttonPlay->setTextLabel( i18n("Play audio file"), true );
@@ -121,8 +130,10 @@ void K3bFileView::setupGUI()
   connect( actionPlay, SIGNAL(enabled(bool)), buttonPlay, SLOT(setEnabled(bool)) );
 
 
-  toolBarLayout->addWidget( buttonHome );
   toolBarLayout->addWidget( buttonUp );
+  toolBarLayout->addWidget( buttonHome );
+  toolBarLayout->addWidget( buttonReload );
+  toolBarLayout->addSpacing( 5 );
   toolBarLayout->addWidget( buttonPlay );
   toolBarLayout->addSpacing( 5 );
 

@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
 {
 
   KAboutData aboutData( "k3b", I18N_NOOP("K3b"),
-			VERSION, description, KAboutData::License_GPL,
+			"0.7", description, KAboutData::License_GPL,
 			"(c) 2001, Sebastian Trueg", 0, 0, "trueg@informatik.uni-freiburg.de");
   aboutData.addAuthor("Sebastian Trueg",I18N_NOOP("Maintainer"), "trueg@informatik.uni-freiburg.de");
   aboutData.addAuthor("Thomas Froescher",I18N_NOOP("Developer"), "tfroescher@gmx.de");

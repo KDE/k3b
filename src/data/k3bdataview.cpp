@@ -469,12 +469,20 @@ void K3bDataFileViewItem::setText(int col, const QString& text )
 
 QString K3bDataFileViewItem::key( int col, bool a ) const
 {
-  if( a ) {
+  if( col == 2 ) {
+    // to have correct sorting we need to justify the size in bytes
+    // 100 TB should be enough for the next year... ;-)
+
+    if( a )
+      return "1" + QString::number( (unsigned long)m_fileItem->size() ).rightJustify( 16, '0' );
+    else
+      return "0" + QString::number( (unsigned long)m_fileItem->size() ).rightJustify( 16, '0' );
+  }
+
+  if( a )
     return "1" + text(col);
-  }
-  else {
+  else
     return "0" + text(col);
-  }
 }
 
 
