@@ -732,7 +732,6 @@ void K3bMainWindow::slotFileClose()
         actionDataClearImportedSession->setEnabled(false);
         actionDataImportSession->setEnabled(false);
         actionDataEditBootImages->setEnabled(false);
-        unplugActionList( "data_project_actions" );
       }
       view->close(true);
     }
@@ -924,6 +923,8 @@ void K3bMainWindow::slotCurrentDocChanged( QWidget* )
   // check the doctype
   K3bView* view = activeView();
   if( view ) {
+    unplugActionList( "data_project_actions" );
+
     switch( view->getDocument()->docType() ) {
     case K3bDoc::DATA:
       actionDataClearImportedSession->setEnabled(true);
@@ -935,7 +936,6 @@ void K3bMainWindow::slotCurrentDocChanged( QWidget* )
       actionDataClearImportedSession->setEnabled(false);
       actionDataImportSession->setEnabled(false);
       actionDataEditBootImages->setEnabled(false);
-      unplugActionList( "data_project_actions" );
     }
   }
 }
