@@ -67,6 +67,7 @@ class K3bWelcomeWidget::Display : public QWidget
 
  public:
   Display( QWidget* parent );
+  ~Display();
 
   void setHeaderBackgroundColor( const QColor& );
   void setHeaderForegroundColor( const QColor& );
@@ -95,6 +96,7 @@ class K3bWelcomeWidget::Display : public QWidget
   QSize m_size;
   QSize m_buttonSize;
   int m_cols;
+  int m_rows;
 
   QPtrList<KAction> m_actions;
   QPtrList<K3bFlatButton> m_buttons;

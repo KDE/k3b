@@ -100,7 +100,8 @@ class K3bDirView : public QVBox
   K3bDiskInfoView* m_infoView;
 
   // these are used to display a message while retrieving disk information
-  QWidget* m_noViewView;
+  class NoViewView;
+  NoViewView* m_noViewView;
   QLabel* m_noViewLabel;
 
   KComboBox* m_urlCombo;

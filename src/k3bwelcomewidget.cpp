@@ -58,6 +58,12 @@ K3bWelcomeWidget::Display::Display( QWidget* parent )
 }
 
 
+K3bWelcomeWidget::Display::~Display()
+{
+  delete m_header;
+}
+
+
 void K3bWelcomeWidget::Display::setHeaderBackgroundColor( const QColor& c )
 {
   m_headerBgColor = c;
@@ -115,16 +121,16 @@ void K3bWelcomeWidget::Display::rebuildGui()
     // step 2: calculate rows and columns
     // for now we simply create 1-3 rows and as may cols as neccessary
     m_cols = 0;
-    int rows = 0;
+    m_rows = 0;
     if( numActions < 3 )
-      rows = 1;
+      m_rows = 1;
     else if( numActions > 6 )
-      rows = 3;
+      m_rows = 3;
     else
-      rows = 2;
+      m_rows = 2;
 
-    m_cols = numActions/rows;
-    if( numActions%rows )
+    m_cols = numActions/m_rows;
+    if( numActions%m_rows )
       m_cols++;
 
     // step 3: create buttons
@@ -151,21 +157,24 @@ void K3bWelcomeWidget::Display::rebuildGui()
 
     // step 6: calculate widget size
     m_size = QSize( QMAX(40+m_header->widthUsed(), 160+(m_buttonSize.width()*m_cols)+5*(m_cols-1)),
-		    160+(m_buttonSize.height()*rows)+5*(rows-1) );
+		    160+(m_buttonSize.height()*m_rows)+5*(m_rows-1) );
   }
 }
 
 
 void K3bWelcomeWidget::Display::repositionButtons()
 {
-  int leftMargin = QMAX( 80, (width() - (m_buttonSize.width()*m_cols))/2 );
+  int leftMargin = QMAX( 80, (width() - (m_buttonSize.width()*m_cols + (m_cols-1)*5))/2 );
+  int topOffset = m_header->height() + 40 + 10;//(height() - m_header->height() - 60 - (m_buttonSize.height()*m_rows))/2;
 
   int row = 0;
   int col = 0;
+
   for( QPtrListIterator<K3bFlatButton> it( m_buttons ); it.current(); ++it ) {
     K3bFlatButton* b = it.current();
     
-    b->setGeometry( QRect( QPoint( leftMargin+(col*m_buttonSize.width())+(col*5), 80+(row*m_buttonSize.height())+(row*5) ), 
+    b->setGeometry( QRect( QPoint( leftMargin+(col*m_buttonSize.width())+(col*5), 
+				   topOffset+(row*m_buttonSize.height())+(row*5) ),
 			   m_buttonSize ) );
     b->show();
     

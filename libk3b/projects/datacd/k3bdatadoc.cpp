@@ -1311,8 +1311,10 @@ void K3bDataDoc::importSession( K3bDevice::Device* device )
 // 		     i18n("Importing old session from %1").arg(device->blockDeviceName()) );
 //   d.show();
 
-  connect( K3bDevice::toc( device ), SIGNAL(finished(K3bDevice::DeviceHandler*)),
-	   this, SLOT(slotTocRead(K3bDevice::DeviceHandler*)) );
+  connect( K3bDevice::sendCommand( K3bDevice::DeviceHandler::TOC|K3bDevice::DeviceHandler::NG_DISKINFO, device ),
+	   SIGNAL(finished(K3bDevice::DeviceHandler*)),
+	   this,
+	   SLOT(slotTocRead(K3bDevice::DeviceHandler*)) );
 }
 
 
@@ -1340,6 +1342,12 @@ void K3bDataDoc::slotTocRead( K3bDevice::DeviceHandler* dh )
 
       K3bIso9660 iso( burner(), startSec );
       iso.open();
+
+      // the track size for DVD+RW media and DVD-RW Overwrite media has nothing to do with the filesystem size
+      // in that case we need to use the filesystem's size (which is ok since it's one track anyway, no real multisession)
+      if( dh->diskInfo().mediaType() & (K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR) ) {
+	m_oldSessionSize = iso.primaryDescriptor().volumeSpaceSize * iso.primaryDescriptor().logicalBlockSize;
+      }
 
       // import some former settings
       isoOptions().setCreateJoliet( iso.firstJolietDirEntry() != 0 );
