@@ -1,9 +1,16 @@
 /***************************************************************************
+                             k3b -  description
+                             -------------------
+    copyright            : (C) 2002 by Sebastian Trueg
+    email                : trueg@informatik.uni-freiburg.de
+ ***************************************************************************/
+
+/***************************************************************************
                           k3bvcdjob.cpp  -  description
                              -------------------
     begin                : Mon Nov 4 2002
-    copyright            : (C) 2002 by Sebastian Trueg
-    email                : trueg@informatik.uni-freiburg.de
+    copyright            : (C) 2002 by Christian Kvasny
+    email                : chris@ckvsoft.at
  ***************************************************************************/
 
 /***************************************************************************
@@ -15,6 +22,7 @@
  *                                                                         *
  ***************************************************************************/
 
+ 
 #include "k3bvcdjob.h"
 
 #include "k3bvcddoc.h"
@@ -97,6 +105,15 @@ void K3bVcdJob::start()
 {
   kdDebug() << "(K3bVcdJob) starting job" << endl;
 
+  int pos = QString(m_doc->vcdImage()).find(".bin");
+  if (pos > 0) {
+    m_cueFile = m_doc->vcdImage().left(pos) + ".cue";
+  }
+  else {
+    m_cueFile = m_doc->vcdImage() + ".cue";
+    m_doc->setVcdImage(m_doc->vcdImage() + ".bin");    
+  }
+
   vcdxGen();
 }
 
@@ -150,10 +167,10 @@ void K3bVcdJob::vcdxGen()
   
   emit infoMessage( i18n("Writing XML-file"), K3bJob::STATUS );
   *m_process << k3bMain()->externalBinManager()->binPath( "vcdxgen" );
-  // TODO: Label
-  *m_process << "-l" << "VIDEOCD";
-  // TODO: AlbumID
-  // *m_process << "--info-album-id=" << "";
+  // Label
+  *m_process << "-l" << QString("%1").arg(m_doc->vcdOptions()->volumeId());
+  // AlbumID
+  *m_process << QString("--info-album-id=%1").arg(m_doc->vcdOptions()->albumId());
 
   // set vcdType
   switch( ((K3bVcdDoc*)doc())->vcdType() ) {
@@ -177,13 +194,9 @@ void K3bVcdJob::vcdxGen()
   kdDebug() << QString("(K3bVcdJob) xmlfile = \"%1\"").arg(QFile::encodeName(m_xmlFile)) << endl;
   *m_process << "-o" << QString("%1").arg(QFile::encodeName(m_xmlFile));
 
-  // Add Tracks to XML, skip Tracks with len 0
+  // Add Tracks to XML
   QListIterator<K3bVcdTrack> it( *m_doc->tracks() );
   for( ; it.current(); ++it ) {
-    if( it.current()->size() == 0 ) {
-      kdDebug() << "(K3bVcdJob) skip track with len 0." << endl;
-      continue;
-    }
     kdDebug() << QString("%1").arg(QFile::encodeName(it.current()->absPath())) << endl;
     *m_process << QString("%1").arg(QFile::encodeName(it.current()->absPath()));
   }
@@ -270,20 +283,12 @@ void K3bVcdJob::vcdxBuild()
     return;
   }
 
-  // get image file path for binfile
-  if( m_doc->vcdImage().isEmpty() )
-    m_doc->setVcdImage( k3bMain()->findTempFile( "vcd" ) );
-      
-  kdDebug() << QString("(K3bVcdJob) vcdImage = %1").arg(m_doc->vcdImage() ) << endl;
-
-    
   *m_process << k3bMain()->externalBinManager()->binPath( "vcdxbuild" );
 
   *m_process << "--progress" << "--gui";
 
-  // *m_process << QString("--cdrdao-file=%1").arg( m_doc->vcdImage() );
+  *m_process << QString("--cue-file=%1").arg( m_cueFile );
 
-  *m_process << QString("--cue-file=%1.cue").arg( m_doc->vcdImage() );
   *m_process << QString("--bin-file=%1").arg( m_doc->vcdImage() );
   
   *m_process << QString("%1").arg(QFile::encodeName(m_xmlFile));;
@@ -365,12 +370,6 @@ void K3bVcdJob::slotParseVcdxBuildOutput( KProcess*, char* output, int len )
 
         }
         else if (oper == "write") {
-          /*
-          if (m_stage == stageScan) {
-            emit subPercent( (int) (100.0 * (double)pos / (double)size) );
-            emit processedSubSize( (pos*2324)/1024/1024, (size*2324)/1024/1024 );
-          }
-          */
           emit subPercent( (int) (100.0 * (double)pos / (double)size) );
           emit processedSubSize( (pos*2352)/1024/1024, (size*2352)/1024/1024 );
           emit percent( 33 + (int) (33.0 * (double)pos / (double)size) );
@@ -380,8 +379,6 @@ void K3bVcdJob::slotParseVcdxBuildOutput( KProcess*, char* output, int len )
         else {
           return;
         }
-
-        // emit processedSubSize( pos, size );
       }
       else if (tagName == "log") {
         QDomText tel = el.firstChild().toText();
@@ -507,7 +504,8 @@ void K3bVcdJob::cdrdaoWrite()
   *m_process << "-n";
 
   // cue-file
-  *m_process << QString("\"%1.cue\"").arg(QFile::encodeName( m_doc->vcdImage() ));
+  kdDebug() << QString("(K3bVcdJob) cdrdaoWrite cuefile = %1").arg(m_cueFile) << endl;
+  *m_process << QString("\"%1\"").arg(QFile::encodeName( m_cueFile ));
   
   // connect to the cdrdao slots
   connect( m_process, SIGNAL(processExited(KProcess*)),
@@ -591,14 +589,8 @@ void K3bVcdJob::slotCdrdaoFinished()
     return;
   }
 
-  // remove toc-file
-  if( QFile::exists( m_tocFile ) ) {
-     kdDebug() << "(K3bVcdJob) Removing TOC-file" << endl;
-     QFile::remove( m_tocFile );
-  }
-  m_tocFile = QString::null;
-
   m_process->disconnect(this);
+
 }
 
 #include "k3bvcdjob.moc"
