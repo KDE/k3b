@@ -22,11 +22,14 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qlistview.h>
+#include <qregexp.h>
 
 #include <kapp.h>
 #include <kconfig.h>
 #include <kio/global.h>
 #include <klistview.h>
+#include <kglobal.h>
+#include <klocale.h>
 #include <klocale.h>
 
 #define COLUMN_ARTIST         1
@@ -195,4 +198,70 @@ QString K3bPatternParser::prepareParsedName( const QString& title, const QString
     //kdDebug() << "Title:" << refTitle << endl;
     //kdDebug() << "Artist:" << newArtist << endl;
     return refTitle;
+}
+
+
+QString K3bPatternParser::parsePattern( const K3bCddbEntry& entry, 
+					unsigned int trackNumber,
+					const QString& pattern, 
+					bool replace, 
+					const QString& replaceString )
+{
+  if( entry.titles.count() < trackNumber )
+    return "";
+
+  QString dir;
+  for( unsigned int i = 0; i < pattern.length(); ++i ) {
+
+    if( pattern[i] == '%' ) {
+      ++i;
+
+      if( i < pattern.length() ) {
+	switch( pattern[i] ) {
+	case 'a':
+	  dir.append( entry.artists[trackNumber-1] );
+	  break;
+	case 't':
+	  dir.append( entry.titles[trackNumber-1] );
+	  break;
+	case 'n':
+	  dir.append( QString::number(trackNumber).rightJustify( 2, '0' ) );
+	  break;
+	case 'e':
+	  dir.append( entry.extInfos[trackNumber-1] );
+	  break;
+	case 'g':
+	  dir.append( entry.genre.isEmpty() ? entry.category : entry.genre );
+	  break;
+	case 'r':
+	  dir.append( entry.cdArtist );
+	  break;
+	case 'm':
+	  dir.append( entry.cdTitle );
+	  break;
+	case 'x':
+	  dir.append( entry.cdExtInfo );
+	  break;
+	case 'd':
+	  dir.append( KGlobal::locale()->formatDate( QDate::currentDate() ) );
+	  break;
+	default:
+	  dir.append( "%" );
+	  dir.append( pattern[i] );
+	  break;
+	}
+      }
+      else {  // end of pattern
+	dir.append( "%" );
+      }
+    }
+    else {
+      dir.append( pattern[i] );
+    }
+  }
+
+  if( replace )
+    dir.replace( QRegExp( "\\s" ), replaceString );
+
+  return dir;
 }

@@ -1,0 +1,304 @@
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<class>base_K3bPatternOptionTab</class>
+<author>Sebastian Trueg</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>base_K3bPatternOptionTab</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>600</width>
+            <height>524</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Ripping Pattern</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>11</number>
+        </property>
+        <property name="spacing">
+            <number>6</number>
+        </property>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>m_infoLabel</cstring>
+            </property>
+            <property name="text">
+                <string>&lt;p&gt;Here you can setup the audio cd ripping pattern which will state how your ripped tracks will be saved. You can use one of the predefined or define your own. You are free to add any text you want along with some special strings that will be replaced by the values gained from cddb. These special strings are:
+&lt;ul&gt;
+&lt;li&gt;%a - Will be replaced by the artist of the track&lt;/li&gt;
+&lt;li&gt;%t - Will be replaced by the title of the track&lt;/li&gt;
+&lt;li&gt;%n - Will be replaced by the track number&lt;/li&gt;
+&lt;li&gt;%e - Will be replaced by extended info about the track&lt;/li&gt;
+&lt;li&gt;%g - Will be replaced by the genre of the cd&lt;/li&gt;
+&lt;li&gt;%r - Will be replaced by the album artist (differs from %a only on soundtracks or compilations)&lt;/li&gt;
+&lt;li&gt;%m - Will be replaced by the album title&lt;/li&gt;
+&lt;li&gt;%x - Will be replaced by extended info about the cd&lt;/li&gt;
+&lt;li&gt;%d - Will be replaced by the current date&lt;/li&gt;
+&lt;/ul&gt;
+The directory pattern always describes a relative path which will be appended to the directory you choose in the cd ripping dialog. If you do not want any directory pattern just leave it blank.
+&lt;/p&gt;</string>
+            </property>
+            <property name="alignment">
+                <set>WordBreak|AlignTop|AlignLeft</set>
+            </property>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>m_groupDirectoryPattern</cstring>
+            </property>
+            <property name="title">
+                <string>Direcory Pattern</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>11</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="KLineEdit" row="1" column="1">
+                    <property name="name">
+                        <cstring>m_editDirectoryReplace</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                    <property name="text">
+                        <string>_</string>
+                    </property>
+                </widget>
+                <widget class="KComboBox" row="0" column="0" rowspan="1" colspan="3">
+                    <item>
+                        <property name="text">
+                            <string>%r/%m</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>%g/%r - %m</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>music/ripped-tracks</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>m_comboDirectoryPattern</cstring>
+                    </property>
+                    <property name="editable">
+                        <bool>true</bool>
+                    </property>
+                    <property name="contextMenuEnabled">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="1" column="0">
+                    <property name="name">
+                        <cstring>m_checkDirectoryReplace</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Replace all blanks with:</string>
+                    </property>
+                </widget>
+                <spacer row="1" column="2">
+                    <property name="name" stdset="0">
+                        <cstring>Spacer1</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+            </grid>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>m_groupFilenamePattern</cstring>
+            </property>
+            <property name="title">
+                <string>Filename Pattern</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>11</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="KComboBox" row="0" column="0" rowspan="1" colspan="3">
+                    <item>
+                        <property name="text">
+                            <string>%a - %t</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Track %n - %t (%a)</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>m_comboFilenamePattern</cstring>
+                    </property>
+                    <property name="editable">
+                        <bool>true</bool>
+                    </property>
+                    <property name="contextMenuEnabled">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="1" column="0">
+                    <property name="name">
+                        <cstring>m_checkFilenameReplace</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Replace all blanks with:</string>
+                    </property>
+                </widget>
+                <widget class="KLineEdit" row="1" column="1">
+                    <property name="name">
+                        <cstring>m_editFilenameReplace</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                    <property name="text">
+                        <string>_</string>
+                    </property>
+                </widget>
+                <spacer row="1" column="2">
+                    <property name="name" stdset="0">
+                        <cstring>Spacer2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+            </grid>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>m_groupExample</cstring>
+            </property>
+            <property name="title">
+                <string>Example</string>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>11</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="KSqueezedTextLabel">
+                    <property name="name">
+                        <cstring>m_labelExample</cstring>
+                    </property>
+                    <property name="font">
+                        <font>
+                            <bold>1</bold>
+                        </font>
+                    </property>
+                    <property name="frameShape">
+                        <enum>StyledPanel</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Sunken</enum>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+    </vbox>
+</widget>
+<connections>
+    <connection>
+        <sender>m_comboDirectoryPattern</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>base_K3bPatternOptionTab</receiver>
+        <slot>slotUpdateExample()</slot>
+    </connection>
+    <connection>
+        <sender>m_checkDirectoryReplace</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>base_K3bPatternOptionTab</receiver>
+        <slot>slotUpdateExample()</slot>
+    </connection>
+    <connection>
+        <sender>m_editDirectoryReplace</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>base_K3bPatternOptionTab</receiver>
+        <slot>slotUpdateExample()</slot>
+    </connection>
+    <connection>
+        <sender>m_comboFilenamePattern</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>base_K3bPatternOptionTab</receiver>
+        <slot>slotUpdateExample()</slot>
+    </connection>
+    <connection>
+        <sender>m_checkFilenameReplace</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>base_K3bPatternOptionTab</receiver>
+        <slot>slotUpdateExample()</slot>
+    </connection>
+    <connection>
+        <sender>m_editFilenameReplace</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>base_K3bPatternOptionTab</receiver>
+        <slot>slotUpdateExample()</slot>
+    </connection>
+    <connection>
+        <sender>m_checkDirectoryReplace</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_editDirectoryReplace</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_checkFilenameReplace</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_editFilenameReplace</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+</connections>
+<slots>
+    <slot access="protected">slotUpdateExample()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

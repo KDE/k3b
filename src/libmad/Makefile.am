@@ -99,7 +99,7 @@ version_info =		$(version_current):$(version_revision):$(version_age)
 #libmad_a_LDFLAGS =		-version-info $(version_info)
 ##				-release $(VERSION)
 
-mad.h: ../../../config.status ../../../config.h Makefile.am  \
+mad.h: $(top_srcdir)/config.status $(top_srcdir)/config.h Makefile.am  \
 		$(srcdir)/COPYRIGHT $(srcdir)/mad.h.sed $(exported_headers)
 	(sed -e '1s|.*|/*|' -e '1b' -e '$$s|.*| */|' -e '$$b'  \
 		-e 's/^.*/ *&/' $(srcdir)/COPYRIGHT; echo;  \
@@ -110,11 +110,11 @@ mad.h: ../../../config.status ../../../config.h Makefile.am  \
 		echo ".$(FPM)" | sed -e 's|^\.-D|# define |'; echo;  \
 	fi;  \
 	sed -ne 's/^# *define  *\(HAVE_.*_ASM\).*/# define \1/p'  \
-		../../../config.h; echo;  \
+		$(top_srcdir)/config.h; echo;  \
 	sed -ne 's/^# *define  *OPT_\(SPEED\|ACCURACY\).*/# define OPT_\1/p'  \
-		../../../config.h; echo;  \
+		$(top_srcdir)/config.h; echo;  \
 	sed -ne 's/^# *define  *\(SIZEOF_.*\)/# define \1/p'  \
-		../../../config.h; echo;  \
+		$(top_srcdir)/config.h; echo;  \
 	for header in $(exported_headers); do  \
 		echo;  \
 		sed -n -f $(srcdir)/mad.h.sed $(srcdir)/$$header; echo;  \
@@ -124,7 +124,7 @@ mad.h: ../../../config.status ../../../config.h Makefile.am  \
 	echo "# endif") | cat -s >$@
 
 libtool: $(LIBTOOL_DEPS)
-	$(SHELL) ../../../config.status --recheck
+	$(SHELL) $(top_srcdir)/config.status --recheck
 
 .c.s:
 	$(COMPILE) -S $<

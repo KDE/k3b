@@ -22,6 +22,7 @@
 #include "k3bdeviceoptiontab.h"
 #include "k3bburningoptiontab.h"
 #include "k3brippingpatternoptiontab.h"
+#include "k3bpatternoptiontab.h"
 #include "k3bexternalbinoptiontab.h"
 #include "k3bmiscoptiontab.h"
 
@@ -44,7 +45,7 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
   setupDevicePage();	
   setupProgramsPage();
   setupCddbPage();
-  setupRippingPatternPage();
+  setupPatternPage();
   setupMiscPage();
 
   m_externalBinOptionTab->readSettings();
@@ -52,7 +53,7 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
   //  m_cddbLocalTab->readSettings();
   m_deviceOptionTab->readDevices();
   m_burningOptionTab->readSettings();
-  m_rippingPatternOptionTab->readSettings();
+  m_patternOptionTab->readSettings();
   m_miscOptionTab->readSettings();
 
 
@@ -86,7 +87,7 @@ bool K3bOptionDialog::saveSettings()
   //  m_cddbLocalTab->apply();
   m_deviceOptionTab->saveDevices();
   m_burningOptionTab->saveSettings();
-  m_rippingPatternOptionTab->apply();
+  m_patternOptionTab->apply();
   m_externalBinOptionTab->saveSettings();
 
   if( !m_miscOptionTab->saveSettings() )
@@ -172,19 +173,17 @@ void K3bOptionDialog::setupDevicePage()
 }
 
 
-void K3bOptionDialog::setupRippingPatternPage()
+void K3bOptionDialog::setupPatternPage()
 {
-  QFrame* frame = addPage( i18n("Ripping"), i18n("Setup Ripping Patterns"),
+  QFrame* frame = addPage( i18n("Audio CD Ripping"), i18n("Setup Audio CD Ripping Patterns"),
 			   KGlobal::instance()->iconLoader()->loadIcon( "misc", KIcon::NoGroup, KIcon::SizeMedium ) );
 
   QVBoxLayout* box = new QVBoxLayout( frame );
   box->setSpacing( 0 );
   box->setMargin( 0 );
 
-  m_rippingPatternOptionTab = new K3bRippingPatternOptionTab( frame, "rippingPatternOptionTab" );
-  box->addWidget( m_rippingPatternOptionTab );
-  QString album("album");
-  m_rippingPatternOptionTab->init( album );
+  m_patternOptionTab = new K3bPatternOptionTab( frame, "patternOptionTab" );
+  box->addWidget( m_patternOptionTab );
 }
 
 

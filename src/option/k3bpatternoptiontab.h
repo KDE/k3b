@@ -1,7 +1,7 @@
 /***************************************************************************
-                          k3bcddbemptydbtab.cpp  -  description
+                          k3bpatternoptiontab.h  -  description
                              -------------------
-    begin                : Tue Feb 19 2002
+    begin                : Sat May 4 2002
     copyright            : (C) 2002 by Sebastian Trueg
     email                : trueg@informatik.uni-freiburg.de
  ***************************************************************************/
@@ -15,30 +15,32 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "k3bcddbemptydbtab.h"
+#ifndef K3BPATTERNOPTIONTAB_H
+#define K3BPATTERNOPTIONTAB_H
 
-#include <qframe.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
+#include "base_k3bpatternoptiontab.h"
+#include "../k3bcddb.h"
 
-#include <klocale.h>
-#include <kapp.h>
-#include <kdialog.h>
 
-K3bCddbEmptyDbTab::K3bCddbEmptyDbTab(QWidget *parent, const char *name ) : QWidget(parent,name) {
-    setup();
-}
-K3bCddbEmptyDbTab::~K3bCddbEmptyDbTab(){
-}
+/**
+  *@author Sebastian Trueg
+  */
+class K3bPatternOptionTab : public base_K3bPatternOptionTab
+{
+  Q_OBJECT
 
-void K3bCddbEmptyDbTab::setup(){
-    QGridLayout* frameLayout = new QGridLayout( this );
-    frameLayout->setSpacing( KDialog::spacingHint() );
-    frameLayout->setMargin( KDialog::marginHint() );
+ public: 
+  K3bPatternOptionTab( QWidget *parent = 0, const char *name = 0 );
+  ~K3bPatternOptionTab();
 
-    QFrame *line = new QFrame( this );
-    QPushButton *selectAll = new QPushButton( i18n("all"), this );
-    QPushButton *selectNone = new QPushButton( i18n("none"), this );
-}
+  void readSettings();
+  void apply();
 
-#include "k3bcddbemptydbtab.moc"
+ protected slots:
+  void slotUpdateExample();
+
+ private:
+  K3bCddbEntry m_exampleEntry;
+};
+
+#endif

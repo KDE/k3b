@@ -24,7 +24,7 @@ class K3bCddbOptionTab;
 class K3bCddbLocalDBTab;
 class K3bDeviceOptionTab;
 class K3bBurningOptionTab;
-class K3bRippingPatternOptionTab;
+class K3bPatternOptionTab;
 class K3bExternalBinOptionTab;
 class K3bMiscOptionTab;
 
@@ -67,9 +67,9 @@ class K3bOptionDialog : public KDialogBase
   K3bCddbLocalDBTab *m_cddbLocalTab;
   void setupCddbPage();		
 
-  // ripping pattern tab
-  K3bRippingPatternOptionTab *m_rippingPatternOptionTab;
-  void setupRippingPatternPage();
+  // pattern tab
+  K3bPatternOptionTab *m_patternOptionTab;
+  void setupPatternPage();
 
   // misc options
   K3bMiscOptionTab* m_miscOptionTab;

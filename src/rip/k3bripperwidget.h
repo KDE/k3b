@@ -27,12 +27,12 @@
 #include "../cdinfo/k3bdiskinfo.h"
 
 class KListView;
-class QRadioButton;
 class KLineEdit;
-class K3bPatternParser;
 class QToolButton;
-class QRadioButton;
 class QButtonGroup;
+class QRadioButton;
+class QCheckBox;
+
 
 
 /**
@@ -56,15 +56,11 @@ class K3bRipperWidget : public KDialogBase
   K3bCddbEntry m_cddbEntry;
   QValueList<int> m_trackNumbers;
 
-  K3bPatternParser *m_parser;
-
   KListView*    m_viewTracks;
   QToolButton*  m_buttonStaticDir;
   QToolButton*  m_buttonPattern;
   KLineEdit*    m_editStaticRipPath;
-  QRadioButton* m_useStatic;
-  QRadioButton* m_usePattern;
-  QLabel*       m_labelSummaryName;
+  QCheckBox*    m_checkUsePattern;
 
   QButtonGroup* m_groupFileType;
   QRadioButton* m_radioWav;
@@ -72,13 +68,10 @@ class K3bRipperWidget : public KDialogBase
   QRadioButton* m_radioOgg;
 
   void setupGui();
-  void setSongList();
   
  private slots:
   void slotUser1();
   void slotOk();
-  void useStatic();
-  void usePattern();
   void showPatternDialog();
   void slotFindStaticDir();
 };

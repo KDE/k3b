@@ -47,6 +47,13 @@ class K3bPatternParser
   static QString prepareReplaceName( QString title, QString newChar, bool enabled );
   static QString prepareReplaceFilename( const QString& title );
   QString prepareReplaceDirectory( const QString& name );
+
+  static QString parsePattern( const K3bCddbEntry& entry, 
+			       unsigned int trackNumber,
+			       const QString& pattern, 
+			       bool replace = false, 
+			       const QString& replaceString = "_" );
+
  private:
   QStringList m_filePattern;
   QStringList m_dirPattern;

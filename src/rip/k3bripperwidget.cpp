@@ -43,6 +43,7 @@
 
 #include <qgroupbox.h>
 #include <qheader.h>
+#include <qcheckbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
@@ -52,8 +53,7 @@
 #include <qdir.h>
 #include <qstringlist.h>
 #include <qmessagebox.h>
-#include <qvgroupbox.h>
-#include <qhgroupbox.h>
+#include <qgroupbox.h>
 #include <qfont.h>
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
@@ -68,8 +68,6 @@ K3bRipperWidget::K3bRipperWidget(const K3bDiskInfo& diskInfo, const K3bCddbEntry
     m_diskInfo( diskInfo ), m_cddbEntry( entry ), m_trackNumbers( tracks )
 {
   setButtonBoxOrientation( Vertical );
-
-  m_parser = new K3bPatternParser();
 
   setupGui();
 
@@ -90,38 +88,32 @@ void K3bRipperWidget::setupGui()
   m_viewTracks->addColumn(i18n( "Length") );
   m_viewTracks->addColumn(i18n( "Filesize") );
   m_viewTracks->addColumn(i18n( "Type") );
+  m_viewTracks->addColumn(i18n( "Path") );
 
-  QButtonGroup *groupPattern = new QButtonGroup( 5, Qt::Vertical, i18n( "Destination Directory" ), frame, "pattern" );
-  groupPattern->layout()->setSpacing( spacingHint() );
-  groupPattern->layout()->setMargin( marginHint() );
 
-  m_usePattern = new QRadioButton(i18n("Use pattern for destination directory and filename."), groupPattern, "pattern_box");
-  QHBox* patternPathBox = new QHBox( groupPattern );
-  patternPathBox->setSpacing( spacingHint() );
-  m_labelSummaryName = new QLabel( patternPathBox );
-  m_labelSummaryName->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-  m_labelSummaryName->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, m_labelSummaryName->sizePolicy().verData() ) );
-  QFont font = m_labelSummaryName->font();
-  font.setBold(true);
-  m_labelSummaryName->setFont( font );
-  m_buttonPattern = new QToolButton( patternPathBox, "m_buttonPattern" );
+  QGroupBox* groupOptions = new QGroupBox( 0, Qt::Vertical, i18n("Options"), frame );
+  groupOptions->layout()->setMargin( 0 );
+  QGridLayout* groupOptionsLayout = new QGridLayout( groupOptions->layout() );
+  groupOptionsLayout->setMargin( marginHint() );
+  groupOptionsLayout->setSpacing( spacingHint() );
+
+  QLabel* destLabel = new QLabel( i18n("Destination Base Directory"), groupOptions );
+  m_editStaticRipPath = new KLineEdit( groupOptions, "staticeditpattern");
+  m_buttonStaticDir = new QToolButton( groupOptions, "m_buttonStaticDir" );
+  m_buttonStaticDir->setIconSet( SmallIconSet( "fileopen" ) );
+  QFrame* line1 = new QFrame( groupOptions, "line1" );
+  line1->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+  m_checkUsePattern = new QCheckBox( i18n("Use directory and filename pattern"), groupOptions );
+  m_buttonPattern = new QToolButton( groupOptions, "m_buttonPattern" );
   m_buttonPattern->setIconSet( SmallIconSet( "gear" ) );
 
-  QFrame* line1 = new QFrame( groupPattern, "line1" );
-  line1->setFrameStyle( QFrame::HLine | QFrame::Sunken );
-
-  m_useStatic = new QRadioButton(i18n("Use this directory and default filenames."), groupPattern, "dir_box");
-
-  QHBox* normalPathBox = new QHBox( groupPattern );
-  normalPathBox->setSpacing( spacingHint() );
-  m_editStaticRipPath = new KLineEdit( normalPathBox, "staticeditpattern");
-
-  // FIXME: zuletzt benutzes verzeichnis abspeichern
-
-  m_editStaticRipPath->setText( QDir::homeDirPath() );
-  m_buttonStaticDir = new QToolButton( normalPathBox, "m_buttonStaticDir" );
-  m_buttonStaticDir->setIconSet( SmallIconSet( "fileopen" ) );
-  m_buttonStaticDir->setDisabled( true );
+  groupOptionsLayout->addMultiCellWidget( destLabel, 0, 0, 0, 1 );
+  groupOptionsLayout->addWidget( m_editStaticRipPath, 1, 0 );
+  groupOptionsLayout->addWidget( m_buttonStaticDir, 1, 1 );
+  groupOptionsLayout->addMultiCellWidget( line1, 2, 2, 0, 1 );
+  groupOptionsLayout->addWidget( m_checkUsePattern, 3, 0 );
+  groupOptionsLayout->addWidget( m_buttonPattern, 3, 1 );
+  groupOptionsLayout->setColStretch( 0, 1 );
 
 
   m_groupFileType = new QButtonGroup( 4, Qt::Vertical, i18n("Filetype"), frame );
@@ -131,16 +123,18 @@ void K3bRipperWidget::setupGui()
 
 
   Form1Layout->addMultiCellWidget( m_viewTracks, 0, 0, 0, 1 );
-  Form1Layout->addMultiCellWidget( groupPattern, 1, 1, 0, 0 );
+  Form1Layout->addMultiCellWidget( groupOptions, 1, 1, 0, 0 );
   Form1Layout->addWidget( m_groupFileType, 1, 1 );
   Form1Layout->setColStretch( 0, 20 );
 
   setButtonOKText( i18n( "Start Ripping" ), i18n( "Starts copying the selected tracks") );
 
-  connect(m_useStatic, SIGNAL( clicked() ), this, SLOT( useStatic() ) );
-  connect(m_usePattern, SIGNAL( clicked() ), this, SLOT( usePattern() ) );
-  connect(m_buttonPattern, SIGNAL(clicked() ), this, SLOT( showPatternDialog() ) );
-  connect(m_buttonStaticDir, SIGNAL(clicked()), this, SLOT(slotFindStaticDir()) );
+  connect( m_buttonPattern, SIGNAL(clicked() ), this, SLOT(showPatternDialog()) );
+  connect( m_buttonStaticDir, SIGNAL(clicked()), this, SLOT(slotFindStaticDir()) );
+  connect( m_checkUsePattern, SIGNAL(toggled(bool)), this, SLOT(refresh()) );
+  connect( m_radioWav, SIGNAL(toggled(bool)), this, SLOT(refresh()) );
+  connect( m_radioOgg, SIGNAL(toggled(bool)), this, SLOT(refresh()) );
+  connect( m_radioMp3, SIGNAL(toggled(bool)), this, SLOT(refresh()) );
 }
 
 K3bRipperWidget::~K3bRipperWidget()
@@ -157,18 +151,23 @@ void K3bRipperWidget::init()
 {
   KConfig* c = k3bMain()->config();
   c->setGroup( "Ripping" );
-  if( c->readBoolEntry("usePattern", false) ) {
-    usePattern();
-  } else {
-    useStatic();
-  }
 
   // TODO: load default file type
 
+  m_editStaticRipPath->setText( c->readEntry( "last ripping directory", QDir::homeDirPath() ) );
+  m_checkUsePattern->setChecked( !m_cddbEntry.cdArtist.isEmpty() && 
+				 m_cddbEntry.titles.count() >= m_diskInfo.toc.count() );
+    
   refresh();
 }
 
-void K3bRipperWidget::slotOk(){
+void K3bRipperWidget::slotOk()
+{
+  KConfig* c = k3bMain()->config();
+  c->setGroup( "Ripping" );
+
+  c->writeEntry( "last ripping directory", m_editStaticRipPath->text() );
+
 //   QStringList::Iterator it;
 //   int index = 0;
 //   for( it = m_list.begin(); it != m_list.end(); ++it ){
@@ -231,30 +230,10 @@ void K3bRipperWidget::slotOk(){
 //    slotClose();
 }
 
-void K3bRipperWidget::useStatic(){
-  m_useStatic->setChecked( true );
-  m_usePattern->setChecked( false );
-  m_buttonPattern->setDisabled( true );
-  m_editStaticRipPath->setEnabled( true );
-  m_buttonStaticDir->setEnabled( true );
-}
-void K3bRipperWidget::usePattern(){
-  m_usePattern->setChecked( true );
-  m_useStatic->setChecked( false );
-  m_buttonPattern->setEnabled( true );
-  m_editStaticRipPath->setDisabled( true );
-  m_buttonStaticDir->setDisabled( true );
 
-  QString dir = m_parser->prepareDirectory( m_cddbEntry );
-  dir = m_parser->prepareReplaceDirectory( dir );
-  m_labelSummaryName->setText( dir );
-}
-
-void K3bRipperWidget::showPatternDialog(){
-  K3bFilenamePatternDialog dialog(this);
-  
-  dialog.init( m_cddbEntry.cdTitle, m_cddbEntry.cdArtist, m_cddbEntry.titles[0], "01" );
-  dialog.exec();
+void K3bRipperWidget::showPatternDialog()
+{
+  k3bMain()->showOptionDialog( 4 );
   refresh();
 }
 
@@ -268,7 +247,11 @@ void K3bRipperWidget::refresh()
   //       data tracks have always the same size
   //       show resulting filename, time, size, and type and not tracknumber, title, artist, and so on
 
+  KConfig* c = kapp->config();
+  c->setGroup( "Ripping" );
+
   m_viewTracks->clear();
+
 
   for( QValueList<int>::const_iterator it = m_trackNumbers.begin();
        it != m_trackNumbers.end(); ++it ) {
@@ -277,34 +260,33 @@ void K3bRipperWidget::refresh()
     QString extension = ".wav"; // FIXME: mp3,ogg,iso
     long fileSize = m_diskInfo.toc[index].length() * 2352;  // FIXME: mp3,ogg,iso
 
+    QString filename, directory;
+
+    if( m_checkUsePattern->isChecked() && m_cddbEntry.titles.count() >= *it ) {
+      filename = K3bPatternParser::parsePattern( m_cddbEntry, *it, 
+						 c->readEntry( "filename pattern", "%a - %t" ),
+						 c->readBoolEntry( "replace blank in filename", false ),
+						 c->readEntry( "filename replace string", "_" ) ) + extension;
+      
+      directory = K3bPatternParser::parsePattern( m_cddbEntry, *it, 
+						  c->readEntry( "directory pattern", "%r/%m" ),
+						  c->readBoolEntry( "replace blank in directory", false ),
+						  c->readEntry( "directory replace string", "_" ) );
+    }
+    else {
+      filename = i18n("Track%1").arg( QString::number( *it ).rightJustify( 2, '0' ) ) + extension;
+      directory = "";
+    }
+
     (void)new KListViewItem( m_viewTracks,
-			     m_parser->prepareFilename( m_cddbEntry, *it ) + extension,
+			     filename,
 			     K3b::framesToString( m_diskInfo.toc[index].length(), false ),
 			     KIO::convertSize( fileSize ),
-			     (m_diskInfo.toc[index].type() == K3bTrack::AUDIO ? i18n("Audio") : i18n("Data") ) );
+			     (m_diskInfo.toc[index].type() == K3bTrack::AUDIO ? i18n("Audio") : i18n("Data") ),
+			     directory );
   }
 }
 
-
-
-
-void K3bRipperWidget::setSongList(){
-//   K3bSongManager *sm = k3bMain()->songManager();
-//   //("/home/ft0001/songlist.xml");
-//   QStringList::Iterator it;
-//   int index = 0;
-//   for( it = m_list.begin(); it != m_list.end(); ++it ){
-//     int col = (*it).findRev("/");
-//     QString path = (*it).left( col );
-//     QListViewItem *item = m_viewTracks->itemAtIndex( index );
-//     K3bSong song( item->text(5), m_cddbEntry.cdTitle, item->text(1), item->text(2), m_cddbEntry.discid, item->text(0).toInt() );
-//     sm->addSong( path, song );
-//     index++;
-//     //QString tmpSong = sm.getSong( (*it) ).getFilename();
-//     //kdDebug() << "Song" << tmpSong << endl;
-//   }
-//   sm->save();
-}
 
 void K3bRipperWidget::slotFindStaticDir() {
   QString path = KFileDialog::getExistingDirectory( m_editStaticRipPath->text(), this, i18n("Select Ripping Directory") );

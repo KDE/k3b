@@ -44,6 +44,7 @@ class K3bCddbEntry
   QString cdArtist;
   QString cdExtInfo;
 
+  QString genre;
   QString category;
   QString discid;
 };
