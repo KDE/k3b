@@ -179,6 +179,7 @@ class K3bProcess : public KProcess
   class Data;
   Data* d;
   class StderrThread;
+  friend class StderrThread;
   StderrThread* m_stderrThread;
 
   bool m_bSplitStdout;
