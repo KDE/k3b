@@ -241,7 +241,11 @@ void K3bDvdCopyJob::prepareWriter()
   // these do only make sense with DVD-R(W)
   d->writerJob->setSimulate( m_simulate );
   d->writerJob->setBurnSpeed( m_speed );
-  d->writerJob->setWritingMode( m_writingMode );
+  // The growisofsWriter only uses DAO which is ignored for all but DVD-R(W) seq
+  d->writerJob->setWritingMode( m_writingMode == K3b::WRITING_MODE_AUTO ||
+				m_writingMode == K3b::DAO 
+				? K3b::DAO
+				: m_writingMode );
   
   if( m_onTheFly )
     d->writerJob->setImageToWrite( QString::null ); // write to stdin
@@ -422,17 +426,17 @@ bool K3bDvdCopyJob::waitForDvd()
     }
     else if( m & (K3bCdDevice::MEDIA_DVD_RW_SEQ|
 		  K3bCdDevice::MEDIA_DVD_RW) ) {
-      if( m_writingMode == K3b::DAO )
-	emit infoMessage( i18n("Writing DVD-RW in DAO mode."), INFO );
-      else
+      if( m_writingMode == K3b::WRITING_MODE_INCR_SEQ )
 	emit infoMessage( i18n("Writing DVD-RW in sequential mode."), INFO );
+      else
+	emit infoMessage( i18n("Writing DVD-RW in DAO mode."), INFO );
     }
     else if( m & (K3bCdDevice::MEDIA_DVD_R_SEQ|
 		  K3bCdDevice::MEDIA_DVD_R) ) {
-      if( m_writingMode == K3b::DAO )
-	emit infoMessage( i18n("Writing DVD-R in DAO mode."), INFO );
-      else
+      if( m_writingMode == K3b::WRITING_MODE_INCR_SEQ )
 	emit infoMessage( i18n("Writing DVD-R in sequential mode."), INFO );
+      else
+	emit infoMessage( i18n("Writing DVD-R in DAO mode."), INFO );
     }
   }
 
