@@ -136,6 +136,8 @@ void K3bBurningOptionTab::setupGui()
   m_checkUseNumKey->setHidden( true );
   /*************************************************/
   
+  m_labelPlayTime->setDisabled( true );
+  m_spinPlayTime->setDisabled( true );
   m_labelWaitTime->setDisabled( true );
   m_spinWaitTime->setDisabled( true );
   m_checkUseNumKey->setDisabled( true );
