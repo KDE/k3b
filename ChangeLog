@@ -1,3 +1,8 @@
+0.11.8
+K3b now searches for the Debian cdrecord wrapper script and properly selects the cdrecord version to use
+	(cdrecord.mmap or cdrecord.shm) based on the kernel version. This should fix all problems with
+	K3bSetup on Debian.
+
 0.11.7
 Check size of returned CD-TEXT data to be a multiple of the pack length. This should fix problems
 	with CD copy.

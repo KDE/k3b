@@ -16,11 +16,13 @@
 
 #include "k3bdefaultexternalprograms.h"
 #include "k3bexternalbinmanager.h"
+#include <k3bglobals.h>
 
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qobject.h>
 #include <qregexp.h>
+#include <qtextstream.h>
 
 #include <k3bprocess.h>
 #include <kdebug.h>
@@ -81,6 +83,38 @@ bool K3bCdrecordProgram::scan( const QString& p )
     if( path[path.length()-1] != '/' )
       path.append("/");
     path.append("cdrecord");
+
+    //
+    // This is a hack for Debian based systems which use
+    // a wrapper cdrecord script to call cdrecord.mmap or cdrecord.shm
+    // depending on the kernel version.
+    // For 2.0.x and 2.2.x kernels the shm version is used. In all
+    // other cases it's the mmap version.
+    //
+    // But since it may be that someone manually installed cdrecord 
+    // replacing the wrapper we check if cdrecord is a script.
+    //
+    if( QFile::exists( path + ".mmap" ) ) {
+      kdDebug() << "(K3bCdrecordProgram) checking for Debian cdrecord wrapper script." << endl;
+      if( QFileInfo( path ).size() < 1024 ) {
+	kdDebug() << "(K3bCdrecordProgram) Debian Wrapper script size fits. Checking file." << endl;
+	QFile f( path );
+	f.open( IO_ReadOnly );
+	QString s = QTextStream( &f ).read();
+	if( s.contains( "cdrecord.mmap" ) && s.contains( "cdrecord.shm" ) ) {
+	  kdDebug() << "(K3bCdrecordProgram) Found Debian Wrapper script." << endl;
+	  QString ext;
+	  if( K3b::kernelVersion().versionString().left(3) > "2.2" )
+	    ext = ".mmap";
+	  else
+	    ext = ".shm";
+
+	  kdDebug() << "(K3bCdrecordProgram) Using cdrecord" << ext << endl;
+
+	  path += ext;
+	}
+      }
+    }
   }
 
   if( !QFile::exists( path ) )
@@ -138,10 +172,10 @@ bool K3bCdrecordProgram::scan( const QString& p )
       bin->addFeature( "overburn" );
     if( out.output().contains( "-text" ) )
       bin->addFeature( "cdtext" );
-    if( out.output().contains( "-tao" ) )
-      bin->addFeature( "tao" );
     if( out.output().contains( "-clone" ) )
       bin->addFeature( "clone" );
+    if( out.output().contains( "-tao" ) )
+      bin->addFeature( "tao" );
     if( out.output().contains( "cuefile=" ) && 
 	bin->version > K3bVersion( 2, 1, -1, "a14") ) // cuefile handling was still buggy in a14
       bin->addFeature( "cuefile" );
