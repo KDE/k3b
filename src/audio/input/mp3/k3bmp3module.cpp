@@ -615,59 +615,82 @@ void K3bMp3Module::clearingUp()
 
 bool K3bMp3Module::canDecode( const KURL& url )
 {
+  // first try the (hopefully) faster thing
+  // plus: there are still mp3 files where the latter method does not work
+  // although mad is able to decode them! (I know of a file where we get a
+  // recoverable error after the last found header. I think that's just bad luck!)
+
   if( KMimeMagic::self()->findFileType( url.path() )->mimeType() == "audio/x-mp3" )
     return true;
   else {
-    return false;
-//     QFile f( url.path() );
-//     if( !f.open( IO_ReadOnly ) ) {
-//       kdDebug() << "(K3bMp3Module) could not open file " << url.path() << endl;
-//       return false;
-//     }
+    QFile f( url.path() );
+    if( !f.open( IO_ReadOnly ) ) {
+      kdDebug() << "(K3bMp3Module) could not open file " << url.path() << endl;
+      return false;
+    }
 
-//     mad_stream stream;;
-//     mad_frame frame;
-//     unsigned char buffer[INPUT_BUFFER_SIZE];
-//     long readSize = 0;
-//     unsigned char* readStart = 0;
+    mad_stream stream;;
+    mad_header header;
 
-//     // initialize stuff
-//     memset( buffer, 0, INPUT_BUFFER_SIZE );
-//     mad_stream_init( &stream );
-//     mad_frame_init( &frame );
+    // id3v1.0 tag is 128 bytes long. We assume that v1.1 and v1.2 tags are
+    // not found at the beginning of a file. So searching the first 4096 bytes for a header
+    // should do it
+    // It does not! There seem to be some files beginning with a lot of nulls
+    // 20*4096 is a lot but worked for all my mp3 files.
+    const int BUFLEN = 20*4096;
+    unsigned char buffer[BUFLEN];
+    long readSize = BUFLEN;
+    unsigned char* readStart = buffer;
 
-//     bool success = true;
+    // initialize stuff
+    memset( buffer, 0, BUFLEN );
+    mad_stream_init( &stream );
+    mad_header_init( &header );
 
-//     // fill input buffer
-//     Q_LONG result = f.readBlock( (char*)readStart, readSize );
-//     if( result > 0 ) {
-//       mad_stream_buffer( &stream, buffer, result );
-//       stream.error = MAD_ERROR_NONE;
+    bool success = false;
+    int headerCount = 0;
 
-//       // try decoding buffer
-//       while(1) {
-// 	if( mad_frame_decode( &frame, &stream ) ) {
-// 	  if( MAD_RECOVERABLE( stream.error ) ) {
-// 	    kdDebug() << "(K3bMp3Module) recoverable frame level error ("
-// 		      << mad_stream_errorstr(&stream) << ")" << endl;
-// 	  }
-// 	  else if( stream.error == MAD_ERROR_BUFLEN ) {
-// 	    // buffer empty
-// 	    break;
-// 	  }
-// 	  else {
-// 	    kdDebug() << "(K3bMp3Module) error while decoding file " << url.path() << endl;
-// 	    success = false;
-// 	    break;
-// 	  }
-// 	}
-//       }
-//     }
+    // fill input buffer
+    Q_LONG result = f.readBlock( (char*)readStart, readSize );
+    if( result > 0 ) {
+      mad_stream_buffer( &stream, buffer, result );
+      stream.error = MAD_ERROR_NONE;
 
-//     mad_frame_finish( &frame );
-//     mad_stream_finish( &stream );
+      // try decoding buffer
+      while(1) {
+	if( mad_header_decode( &header, &stream ) ) {
+	  if( MAD_RECOVERABLE( stream.error ) ) {
+	    kdDebug() << "(K3bMp3Module) recoverable frame level error at frame " << headerCount << " ("
+		      << mad_stream_errorstr(&stream) << ")" << endl;
+	    success = false;
+	  }
+	  else if( stream.error == MAD_ERROR_BUFLEN ) {
+	    // buffer empty. stop decoding
+	    break;
+	  }
+	  else {
+	    kdDebug() << "(K3bMp3Module) error while decoding file " << url.path() << endl;
+	    success = false;
+	    break;
+	  }
+	}
+	else {
+	  // header found
+	  headerCount++;
+	  success = true;
+	}
+      }
+    }
+    else {
+      kdDebug() << "(K3bMp3Module) could not read from file " << url.path() << endl;
+    }
 
-//     return success;
+    kdDebug() << "(K3bMp3Module) Header count: " << headerCount << endl;
+
+    mad_header_finish( &header );
+    mad_stream_finish( &stream );
+
+    return success;
   }
 }
 
