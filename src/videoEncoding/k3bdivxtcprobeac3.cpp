@@ -33,7 +33,7 @@ void K3bDivXTcprobeAc3::parseAc3Bitrate( K3bDivxCodecData* data){
      m_data = data;
      m_buffer = "";
      m_process = new KShellProcess;
-     K3bExternalBin *tcprobeBin = k3bMain()->externalBinManager()->binObject("tcprobe");
+     const K3bExternalBin *tcprobeBin = k3bMain()->externalBinManager()->binObject("tcprobe");
       // parse audio for gain to normalize
      *m_process << tcprobeBin->path << " -i" << m_data->getProjectDir() + "/vob";
      kdDebug() << "(K3bDivXTcprobeAc3)" +  tcprobeBin->path + " -i " + m_data->getProjectDir() + "/vob" << endl;

@@ -59,7 +59,7 @@ void K3bTcWrapper::runTcprobe()
   m_outputBuffer = QString::null;
   m_errorBuffer = QString::null;
 
-  K3bExternalBin *bin = k3bMain()->externalBinManager()->binObject("tcprobe");
+  const K3bExternalBin *bin = k3bMain()->externalBinManager()->binObject("tcprobe");
   KShellProcess *p = new KShellProcess();
   emit tcprobeTitleParsed( m_currentTitle );
 

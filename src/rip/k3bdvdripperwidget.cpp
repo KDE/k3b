@@ -244,7 +244,7 @@ void K3bDvdRipperWidget::checkSize(  ){
     DvdTitle::Iterator dvd;
     int max = m_ripTitles.count();
     //kdDebug() << " ripTitles checksite " << max << endl;
-    K3bExternalBin *bin = k3bMain()->externalBinManager()->binObject("tccat");
+    const K3bExternalBin *bin = k3bMain()->externalBinManager()->binObject("tccat");
     for( int i = 0; i < max; i++ ){
         dvd = m_ripTitles.at( i );
         if( (*dvd).isAllAngle() ){

@@ -298,7 +298,7 @@ void K3bSetup::doApplyExternalProgramPermissions( uint groupId )
   static const int NUM_PROGRAMS = 3;
 
   for( int i = 0; i < NUM_PROGRAMS; ++i ) {
-    K3bExternalBin* binObject = m_externalBinManager->binObject( programs[i] );
+    const K3bExternalBin* binObject = m_externalBinManager->binObject( programs[i] );
 
     emit writingSetting( i18n("Changing permissions for %1.").arg( programs[i] ) );
 

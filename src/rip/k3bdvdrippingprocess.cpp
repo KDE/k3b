@@ -112,7 +112,7 @@ void K3bDvdRippingProcess::startRippingProcess( ){
     connect( m_audioProcess, SIGNAL( finished() ), this, SLOT( slotAudioProcessFinished() ) );
     m_delAudioProcess = true;
     */
-   K3bExternalBin *m_tccatBin = k3bMain()->externalBinManager()->binObject("tccat");
+   const K3bExternalBin *m_tccatBin = k3bMain()->externalBinManager()->binObject("tccat");
 
     m_ripProcess = new KShellProcess();
     kdDebug() << "(K3bDvdRippingProcess)" <<m_tccatBin->path << " -i " << m_device <<" "<< m_ripMode <<" "<< m_title <<",-1," << m_angle << endl;
