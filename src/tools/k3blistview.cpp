@@ -146,6 +146,10 @@ K3bListViewItem::K3bListViewItem(QListViewItem *parent, QListViewItem *after,
 
 K3bListViewItem::~K3bListViewItem()
 {
+  if( K3bListView* lv = dynamic_cast<K3bListView*>(listView()) )
+    if( lv->currentlyEditedItem() == this )
+      lv->hideEditor();
+
   if( m_columns )
     delete m_columns;
 }
@@ -256,6 +260,7 @@ void K3bListViewItem::paintCell( QPainter* p, const QColorGroup& cg, int col, in
 }
 
 
+
 // ///////////////////////////////////////////////
 //
 // K3BLISTVIEW
@@ -295,6 +300,7 @@ K3bListView::~K3bListView()
   delete m_editorMsfEdit;
 }
 
+
 void K3bListView::slotClicked( QListViewItem* item, const QPoint&, int col )
 {
   if( K3bListViewItem* k3bItem = dynamic_cast<K3bListViewItem*>(item) ) {
@@ -310,9 +316,21 @@ void K3bListView::slotClicked( QListViewItem* item, const QPoint&, int col )
 }
 
 
+void K3bListView::editItem( K3bListViewItem* item, int col )
+{
+  if( item == 0 )
+    hideEditor();
+  else {
+    showEditor( item, col );
+  }
+}
+
+
 void K3bListView::hideEditor()
 {
   m_lastClickedItem = 0;
+  m_currentEditItem = 0;
+  m_currentEditColumn = 0;
 
   if( m_editorSpinBox )
     m_editorSpinBox->hide();

@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -107,6 +107,8 @@ class K3bListView : public KListView
 
   virtual void setCurrentItem( QListViewItem* );
 
+  K3bListViewItem* currentlyEditedItem() const { return m_currentEditItem; }
+
  signals:
   void editorButtonClicked( K3bListViewItem*, int );
 
@@ -117,6 +119,8 @@ class K3bListView : public KListView
   void setNoItemHorizontalMargin( int i ) { m_noItemHMargin = i; }
   void setDoubleClickForEdit( bool b ) { m_doubleClickForEdit = b; }
   void setValidator( QValidator* v );
+  void hideEditor();
+  void editItem( K3bListViewItem*, int );
 
  private slots:
   void updateEditorSize();
@@ -130,7 +134,6 @@ class K3bListView : public KListView
  protected slots:
   void showEditor( K3bListViewItem*, int col );
   void placeEditor( K3bListViewItem*, int col );
-  void hideEditor();
 
   /**
    * This is called whenever one of the editor's contents changes
