@@ -115,7 +115,7 @@ class K3bDataDoc : public K3bDoc
   K3bDataItem* bootCataloge() { return m_bootCataloge; }
 
   K3bDirItem* bootImageDir();
-  K3bFileItem* createBootItem( const QString& filename );
+  K3bBootItem* createBootItem( const QString& filename, K3bDirItem* bootDir = 0 );
   /** this will just remove it from the list of boot items, not remove it from the doc */
   void removeBootItem( K3bBootItem* );
 
@@ -149,7 +149,7 @@ class K3bDataDoc : public K3bDoc
 
  private:
   void createSessionImportItems( const QString& path, K3bDirItem* parent, KProgressDialog* );
-  K3bDataItem* createBootCatalogeItem();
+  K3bDataItem* createBootCatalogeItem( K3bDirItem* bootDir );
 
   /**
    * load recursivly

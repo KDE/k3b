@@ -594,7 +594,8 @@ bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
 
 	m_bootImages.append(bootItem);
 
-	createBootCatalogeItem();
+	// TODO: save location of the cataloge file
+	createBootCatalogeItem(parent);
       }
       else {
 	(void)new K3bFileItem( urlElem.text(), this, parent, elem.attributeNode( "name" ).value() );
@@ -1227,15 +1228,18 @@ K3bDirItem* K3bDataDoc::bootImageDir()
 }
 
 
-K3bFileItem* K3bDataDoc::createBootItem( const QString& filename )
+K3bBootItem* K3bDataDoc::createBootItem( const QString& filename, K3bDirItem* dir )
 {
+  if( !dir )
+    dir = bootImageDir();
+
   // TODO: check if a file with the same name already exists
   K3bBootItem* boot = new K3bBootItem( filename, 
-				       this, bootImageDir() );
+				       this, dir );
 
   m_bootImages.append(boot);
 
-  createBootCatalogeItem();
+  createBootCatalogeItem(dir);
 
   emit newFileItems();
 
@@ -1243,10 +1247,10 @@ K3bFileItem* K3bDataDoc::createBootItem( const QString& filename )
 }
 
 
-K3bDataItem* K3bDataDoc::createBootCatalogeItem()
+K3bDataItem* K3bDataDoc::createBootCatalogeItem( K3bDirItem* dir )
 {
   if( !m_bootCataloge ) {
-    K3bSpecialDataItem* b = new K3bSpecialDataItem( this, 0, bootImageDir(), "boot.cataloge" );
+    K3bSpecialDataItem* b = new K3bSpecialDataItem( this, 0, dir, "boot.cataloge" );
     m_bootCataloge = b;
     m_bootCataloge->setRemoveable(false);
     m_bootCataloge->setHideable(false);

@@ -19,7 +19,7 @@
 #include "../k3bjob.h"
 
 #include <qptrqueue.h>
-#include <qmap.h>
+#include <qstringlist.h>
 
 class K3bDataDoc;
 class K3bDirItem;
@@ -101,18 +101,18 @@ class K3bIsoImager : public K3bJob
   bool writePathSpec();
   bool writeRRHideFile();
   bool writeJolietHideFile();
-  void writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream );
+  bool writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream );
   QString escapeGraftPoint( const QString& str );
   bool addMkisofsParameters();
   bool prepareMkisofsFiles();
-  bool backupBootImages();
+  void createJolietFilenames( K3bDirItem* );
   void outputData();
 
   void cleanup();
 
   bool m_canceled;
 
-  QMap<K3bDataItem*,KTempFile*> m_bootImageBackupMap;
+  QStringList m_tempFiles;
 };
 
 

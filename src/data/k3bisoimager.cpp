@@ -20,6 +20,8 @@
 #include <klocale.h>
 #include <ktempfile.h>
 #include <kio/netaccess.h>
+#include <kio/global.h>
+#include <kio/job.h>
 
 #include <qfile.h>
 #include <qregexp.h>
@@ -172,10 +174,11 @@ void K3bIsoImager::cleanup()
   if( m_rrHideFile ) delete m_rrHideFile;
   if( m_jolietHideFile ) delete m_jolietHideFile;
 
-  for( QMap<K3bDataItem*, KTempFile*>::iterator it = m_bootImageBackupMap.begin();
-       it != m_bootImageBackupMap.end(); ++it )
-    delete it.data();
-  m_bootImageBackupMap.clear();
+  // remove boot-images-temp files
+  for( QStringList::iterator it = m_tempFiles.begin();
+       it != m_tempFiles.end(); ++it )
+    QFile::remove( *it );
+  m_tempFiles.clear();
 
   m_pathSpecFile = m_jolietHideFile = m_rrHideFile = 0;
 
@@ -186,20 +189,14 @@ void K3bIsoImager::cleanup()
 
 void K3bIsoImager::calculateSize()
 {
-  if( !prepareMkisofsFiles() ) {
-    cleanup();
-    emit sizeCalculated( ERROR, 0 );
-    return;
-  }
-
-
   // determine iso-size
-  delete m_process;
+  cleanup();
+
   m_process = new K3bProcess();
 
-  if( !addMkisofsParameters() ) {
+  if( !prepareMkisofsFiles() || 
+      !addMkisofsParameters() ) {
     cleanup();
-
     emit sizeCalculated( ERROR, 0 );
     return;
   }
@@ -302,12 +299,12 @@ void K3bIsoImager::start()
 {
   emit started();
 
-  delete m_process;
+  cleanup();
+
   m_process = new K3bProcess();
 
   if( !prepareMkisofsFiles() || 
-      !addMkisofsParameters() ||
-      !backupBootImages() ) {
+      !addMkisofsParameters() ) {
     cleanup();
     emit finished( false );
     return;
@@ -315,9 +312,6 @@ void K3bIsoImager::start()
 
   connect( m_process, SIGNAL(processExited(KProcess*)),
 	   this, SLOT(slotProcessExited(KProcess*)) );
-
-//   connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
-// 	   this, SLOT(slotReceivedStderr(KProcess*, char*, int)) );
 
   connect( m_process, SIGNAL(stderrLine( const QString& )),
 	   this, SLOT(slotReceivedStderr( const QString& )) );
@@ -528,17 +522,17 @@ bool K3bIsoImager::writePathSpec()
 
   if( QTextStream* t = m_pathSpecFile->textStream() ) {
     // recursive path spec writing
-    writePathSpecForDir( m_doc->root(), *t );
+    bool success = writePathSpecForDir( m_doc->root(), *t );
     
     m_pathSpecFile->close();
-    return true;
+    return success;
   }
   else
     return false;
 }
 
 
-void K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream )
+bool K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream )
 {
   if( dirItem->depth() > 7 ) {
     kdDebug() << "(K3bIsoImager) found directory depth > 7. Enabling no deep directory relocation." << endl;
@@ -546,126 +540,60 @@ void K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream
   }
 
   // if joliet is enabled we need to cut long names since mkisofs is not able to do it
-
   if( m_doc->isoOptions().createJoliet() ) {
-    // create new joliet names and use jolietPath for graftpoints
-    // sort dirItem->children entries and rename all to fit joliet
-    // which is about x characters
+    createJolietFilenames( dirItem );
+  }
 
-    kdDebug() << "(K3bIsoImager) creating joliet names for directory: " << dirItem->k3bName() << endl;
-
-    QPtrList<K3bDataItem> sortedChildren;
-
-    // insertion sort
-    for( QPtrListIterator<K3bDataItem> it( *dirItem->children() ); it.current(); ++it ) {
-      K3bDataItem* item = it.current();
-
-      unsigned int i = 0;
-      while( i < sortedChildren.count() && item->k3bName() > sortedChildren.at(i)->k3bName() )
-	++i;
-
-      sortedChildren.insert( i, item );
-    }
-
-    unsigned int begin = 0;
-    unsigned int sameNameCount = 0;
-    unsigned int jolietMaxLength = 64;
-    while( begin < sortedChildren.count() ) {
-      if( sortedChildren.at(begin)->k3bName().length() > jolietMaxLength ) {
-	kdDebug() << "(K3bIsoImager) filename to long for joliet: "
-		  << sortedChildren.at(begin)->k3bName() << endl;
-	sameNameCount = 1;
-
-	while( begin + sameNameCount < sortedChildren.count() &&
-	       sortedChildren.at( begin + sameNameCount )->k3bName().left(jolietMaxLength)
-	       == sortedChildren.at(begin)->k3bName().left(jolietMaxLength) )
-	  sameNameCount++;
-
-	kdDebug() << "(K3bIsoImager) found " << sameNameCount << " files with same joliet name" << endl;
-
-	if( sameNameCount > 1 ) {
-	  kdDebug() << "(K3bIsoImager) cutting filenames." << endl;
-
-	  unsigned int charsForNumber = QString::number(sameNameCount).length();
-	  for( unsigned int i = begin; i < begin + sameNameCount; i++ ) {
-	    // we always reserve 5 chars for the extension
-	    QString extension = sortedChildren.at(i)->k3bName().right(5);
-	    if( !extension.contains(".") )
-	      extension = "";
-	    else
-	      extension = extension.mid( extension.find(".") );
-	    QString jolietName = sortedChildren.at(i)->k3bName().left(jolietMaxLength-charsForNumber-extension.length()-1);
-	    jolietName.append( " " );
-	    jolietName.append( QString::number( i-begin ).rightJustify( charsForNumber, '0') );
-	    jolietName.append( extension );
-	    sortedChildren.at(i)->setJolietName( jolietName );
-	    
-	    kdDebug() << "(K3bIsoImager) set joliet name for "
-		      << sortedChildren.at(i)->k3bName() << " to "
-		      << jolietName << endl;
-	  }
-	}
-	else {
-	  kdDebug() << "(K3bIsoImager) single file -> no change." << endl;
-	  sortedChildren.at(begin)->setJolietName( sortedChildren.at(begin)->k3bName() );
-	}
-
-	begin += sameNameCount;
-      }
-      else {
-	sortedChildren.at(begin)->setJolietName( sortedChildren.at(begin)->k3bName() );
-	begin++;
-      }
-    }
-
-    // now create the graft points
-    for( QPtrListIterator<K3bDataItem> it( *dirItem->children() ); it.current(); ++it ) {
-      K3bDataItem* item = it.current();
-      if( item->writeToCd() ) {
-	if( item->isSymLink() ) {
-	  if( m_doc->isoOptions().discardSymlinks() )
-	    continue;
-	  else if( m_doc->isoOptions().discardBrokenSymlinks() && !item->isValid() )
-	    continue;
-	}
+  // now create the graft points
+  for( QPtrListIterator<K3bDataItem> it( *dirItem->children() ); it.current(); ++it ) {
+    K3bDataItem* item = it.current();
+    if( 
+       item->writeToCd()
+       &&
+       !( item->isSymLink()
+	  && 
+	  ( m_doc->isoOptions().discardSymlinks() 
+	    ||
+	    ( m_doc->isoOptions().discardBrokenSymlinks() 
+	      && !item->isValid() )
+	    )
+	  )
+       ) {
 	
-	stream << escapeGraftPoint( m_doc->treatWhitespace(item->jolietPath()) ) << "=";
-	if( m_bootImageBackupMap.find( item ) == m_bootImageBackupMap.end() )  // boot-image-backup-hack
-	  stream << escapeGraftPoint( item->localPath() ) << "\n";
-	else
-	  stream << escapeGraftPoint( m_bootImageBackupMap[item]->name() ) << "\n";
+      if( m_doc->isoOptions().createJoliet() )
+	stream << escapeGraftPoint( m_doc->treatWhitespace(item->jolietPath()) );
+      else
+	stream << escapeGraftPoint( m_doc->treatWhitespace(item->k3bPath()) ); 
+      stream << "=";
+      if( m_doc->bootImages().containsRef( dynamic_cast<K3bBootItem*>(item) ) ) { // boot-image-backup-hack
+
+	// create temp file
+	KTempFile temp;
+	QString tempPath = temp.name();
+	temp.unlink();
+
+	if( !KIO::NetAccess::copy( it.current()->localPath(), tempPath ) ) {
+	  emit infoMessage( i18n("Could not write to temporary file %1").arg(tempPath), ERROR );
+	  return false;
+	}
+
+	m_tempFiles.append(tempPath);
+	stream << escapeGraftPoint( tempPath ) << "\n";
       }
+      else
+	stream << escapeGraftPoint( item->localPath() ) << "\n";
     }
   }
-  else {
-    // use k3bPath as normal for graftpoints
-    // if rr is enabled all will be cool
-    // if neither rr nor joliet are enabled we get very awful names but mkisofs
-    // takes care of it
-    for( QPtrListIterator<K3bDataItem> it( *dirItem->children() ); it.current(); ++it ) {
-      K3bDataItem* item = it.current();
-      if( item->writeToCd() ) {
-	if( item->isSymLink() ) {
-	  if( m_doc->isoOptions().discardSymlinks() )
-	    continue;
-	  else if( m_doc->isoOptions().discardBrokenSymlinks() && !item->isValid() )
-	    continue;
-	}
-	
-	stream << escapeGraftPoint( m_doc->treatWhitespace(item->k3bPath()) ) << "=";
-	if( m_bootImageBackupMap.find( item ) == m_bootImageBackupMap.end() )  // boot-image-backup-hack
-	  stream << escapeGraftPoint( item->localPath() ) << "\n";
-	else
-	  stream << escapeGraftPoint( m_bootImageBackupMap[item]->name() ) << "\n";
-      }
-    }
-  }
+
+  bool success = true;
 
   // recursively write graft points for all subdirs
   for( QPtrListIterator<K3bDataItem> it( *dirItem->children() ); it.current(); ++it ) {
     if( K3bDirItem* item = dynamic_cast<K3bDirItem*>(it.current()) )
-      writePathSpecForDir( item, stream );
+      success = success && writePathSpecForDir( item, stream );
   }
+
+  return success;
 }
 
 
@@ -770,21 +698,77 @@ bool K3bIsoImager::prepareMkisofsFiles()
 }
 
 
-bool K3bIsoImager::backupBootImages()
+void K3bIsoImager::createJolietFilenames( K3bDirItem* dirItem )
 {
-  const QPtrList<K3bBootItem>& bootImages = m_doc->bootImages();
-  for( QPtrListIterator<K3bBootItem> it( bootImages ); *it; ++it ) {
-    KTempFile* temp = new KTempFile();
-    temp->setAutoDelete(true);
+  // create new joliet names and use jolietPath for graftpoints
+  // sort dirItem->children entries and rename all to fit joliet
+  // which is about x characters
 
-    if( !KIO::NetAccess::copy( it.current()->localPath(), temp->name() ) ) {
-      emit infoMessage( i18n("Could not write to temporary file %1").arg(temp->name()), ERROR );
-      return false;
-    }
-    m_bootImageBackupMap[*it] = temp;
+  kdDebug() << "(K3bIsoImager) creating joliet names for directory: " << dirItem->k3bName() << endl;
+
+  QPtrList<K3bDataItem> sortedChildren;
+
+  // insertion sort
+  for( QPtrListIterator<K3bDataItem> it( *dirItem->children() ); it.current(); ++it ) {
+    K3bDataItem* item = it.current();
+
+    unsigned int i = 0;
+    while( i < sortedChildren.count() && item->k3bName() > sortedChildren.at(i)->k3bName() )
+      ++i;
+
+    sortedChildren.insert( i, item );
   }
 
-  return true;
+  unsigned int begin = 0;
+  unsigned int sameNameCount = 0;
+  unsigned int jolietMaxLength = 64;
+  while( begin < sortedChildren.count() ) {
+    if( sortedChildren.at(begin)->k3bName().length() > jolietMaxLength ) {
+      kdDebug() << "(K3bIsoImager) filename to long for joliet: "
+		<< sortedChildren.at(begin)->k3bName() << endl;
+      sameNameCount = 1;
+
+      while( begin + sameNameCount < sortedChildren.count() &&
+	     sortedChildren.at( begin + sameNameCount )->k3bName().left(jolietMaxLength)
+	     == sortedChildren.at(begin)->k3bName().left(jolietMaxLength) )
+	sameNameCount++;
+
+      kdDebug() << "(K3bIsoImager) found " << sameNameCount << " files with same joliet name" << endl;
+
+      if( sameNameCount > 1 ) {
+	kdDebug() << "(K3bIsoImager) cutting filenames." << endl;
+
+	unsigned int charsForNumber = QString::number(sameNameCount).length();
+	for( unsigned int i = begin; i < begin + sameNameCount; i++ ) {
+	  // we always reserve 5 chars for the extension
+	  QString extension = sortedChildren.at(i)->k3bName().right(5);
+	  if( !extension.contains(".") )
+	    extension = "";
+	  else
+	    extension = extension.mid( extension.find(".") );
+	  QString jolietName = sortedChildren.at(i)->k3bName().left(jolietMaxLength-charsForNumber-extension.length()-1);
+	  jolietName.append( " " );
+	  jolietName.append( QString::number( i-begin ).rightJustify( charsForNumber, '0') );
+	  jolietName.append( extension );
+	  sortedChildren.at(i)->setJolietName( jolietName );
+	    
+	  kdDebug() << "(K3bIsoImager) set joliet name for "
+		    << sortedChildren.at(i)->k3bName() << " to "
+		    << jolietName << endl;
+	}
+      }
+      else {
+	kdDebug() << "(K3bIsoImager) single file -> no change." << endl;
+	sortedChildren.at(begin)->setJolietName( sortedChildren.at(begin)->k3bName() );
+      }
+
+      begin += sameNameCount;
+    }
+    else {
+      sortedChildren.at(begin)->setJolietName( sortedChildren.at(begin)->k3bName() );
+      begin++;
+    }
+  }
 }
 
 
