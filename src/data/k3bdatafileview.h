@@ -32,7 +32,7 @@ class KActionMenu;
 class KAction;
 class K3bDataDirTreeView;
 class K3bView;
-
+class QPainter;
 
 /**
   *@author Sebastian Trueg
@@ -71,6 +71,11 @@ class K3bDataFileView : public KListView
 
  protected:
   bool acceptDrag(QDropEvent* e) const;
+  /**
+   * calls KListView::drawContentsOffset
+   * and paints a helper text if no item is in the list
+   */
+  virtual void drawContentsOffset ( QPainter * p, int ox, int oy, int cx, int cy, int cw, int ch );
 
  private:
   void setupActions();

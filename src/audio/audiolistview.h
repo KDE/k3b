@@ -34,6 +34,8 @@ class K3bView;
 class K3bAudioTrack;
 class KActionCollection;
 class K3bAudioListViewItem;
+class QPainter;
+
 
 /**
   *@author Sebastian Trueg
@@ -89,6 +91,12 @@ class K3bAudioListView : public KListView
   void slotPlayAll();
 
  protected:
+  /**
+   * calls KListView::drawContentsOffset
+   * and paints a helper text if no item is in the list
+   */
+  virtual void drawContentsOffset ( QPainter * p, int ox, int oy, int cx, int cy, int cw, int ch );
+
   bool acceptDrag(QDropEvent* e) const;
   QDragObject* dragObject();
 };

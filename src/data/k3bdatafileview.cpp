@@ -32,6 +32,8 @@
 
 
 #include <qdragobject.h>
+#include <qpainter.h>
+#include <qfontmetrics.h>
 
 #include <klocale.h>
 #include <kaction.h>
@@ -338,5 +340,21 @@ void K3bDataFileView::slotProperties()
     m_view->burnDialog( false );
 }
 
+
+void K3bDataFileView::drawContentsOffset ( QPainter * p, int ox, int oy, int cx, int cy, int cw, int ch )
+{
+  KListView::drawContentsOffset( p, ox, oy, cx, cy, cw, ch );
+
+  if( childCount() == 0 ) {
+    // draw some info text
+    p->setPen( Qt::darkGray );
+    p->drawText( ox+20, oy+30, 
+		 i18n("Use drag'n'drop to add files and directories to the project.") );
+    p->drawText( ox+20, oy+30+ p->fontMetrics().lineSpacing(), 
+		 i18n("To remove or rename files use the context menu.") );
+    p->drawText( ox+20, oy+30+ 2*p->fontMetrics().lineSpacing(), 
+		 i18n("After that press the burn button to write the cd.") );
+  }
+}
 
 #include "k3bdatafileview.moc"

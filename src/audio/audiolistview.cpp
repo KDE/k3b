@@ -33,6 +33,8 @@
 #include <qptrlist.h>
 #include <qstringlist.h>
 #include <qevent.h>
+#include <qpainter.h>
+#include <qfontmetrics.h>
 
 #include <kiconloader.h>
 #include <kurl.h>
@@ -385,6 +387,21 @@ void K3bAudioListView::slotPlayAll()
     for( ++it; it.current(); ++it ) {
       k3bMain()->audioPlayer()->enqueueFile( it.current()->absPath() );
     }
+  }
+}
+
+
+void K3bAudioListView::drawContentsOffset ( QPainter * p, int ox, int oy, int cx, int cy, int cw, int ch )
+{
+  KListView::drawContentsOffset( p, ox, oy, cx, cy, cw, ch );
+
+  if( childCount() == 0 ) {
+    // draw some info text
+    p->setPen( Qt::darkGray );
+    p->drawText( ox+20, oy+30, 
+		 i18n("Use drag'n'drop to add audio files to the project.") );
+    p->drawText( ox+20, oy+30+ p->fontMetrics().lineSpacing(), 
+		 i18n("After that press the burn button to write the cd.") );
   }
 }
 
