@@ -31,7 +31,7 @@ silentdir = $(kde_appsdir)/.hidden/
 # kde_wallpaperdir  Where general wallpapers should go to.
 
 # set the include path for X, qt and KDE
-AM_CPPFLAGS= -I$(srcdir)/tools -I$(srcdir)/core -I$(srcdir)/core/device -I$(srcdir)/projects -I$(srcdir)/projects/datacd -I$(srcdir)/projects/datadvd -I$(srcdir)/projects/audiocd -I$(srcdir)/projects/videocd -I$(srcdir)/projects/mixedcd -I$(srcdir)/projects/movixcd -I$(srcdir)/device $(all_includes)
+AM_CPPFLAGS= -I$(srcdir)/tools -I$(srcdir)/core -I$(srcdir)/core/device -I$(srcdir)/projects -I$(srcdir)/projects/datacd -I$(srcdir)/projects/datadvd -I$(srcdir)/projects/audiocd -I$(srcdir)/projects/videocd -I$(srcdir)/projects/mixedcd -I$(srcdir)/projects/movixcd -I$(srcdir)/device -I$(srcdir)/plugin $(all_includes)
 
 METASOURCES = AUTO
 

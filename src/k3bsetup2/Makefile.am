@@ -10,7 +10,8 @@ libkcm_k3bsetup2_la_LDFLAGS = $(all_libraries) -module -avoid-version -no-undefi
 
 
 messages:
-        $(XGETTEXT) $(libkcm_k3bsetup2_la_SOURCES) -o $(podir)/k3bsetup2.pot
+	$(XGETTEXT) $(libkcm_k3bsetup2_la_SOURCES) -o $(podir)/k3bsetup2.pot
 
-data_DATA = k3bsetup2.desktop
-datadir = $(kde_appsdir)/Settings/Sound
+settingssound_DATA = k3bsetup2.desktop
+settingssounddir = $(kde_appsdir)/Settings/Sound
+
