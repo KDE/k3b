@@ -43,6 +43,8 @@
 #include "k3bdoc.h"
 #include "k3bglobals.h"
 #include "device/k3bdevice.h"
+#include "audio/k3baudiodoc.h"
+#include "data/k3bdatadoc.h"
 
 
 K3bDoc::K3bDoc( QObject* parent )
@@ -174,7 +176,7 @@ bool K3bDoc::newDocument()
   return true;
 }
 
-bool K3bDoc::openDocument(const KURL& url )
+K3bDoc* K3bDoc::openDocument(const KURL& url )
 {
   QString tmpfile;
   KIO::NetAccess::download( url, tmpfile );
@@ -182,26 +184,39 @@ bool K3bDoc::openDocument(const KURL& url )
   /////////////////////////////////////////////////
   QFile f( tmpfile );
   if ( !f.open( IO_ReadOnly ) )
-    return false;
+    return 0;
 
   QDomDocument xmlDoc;
   if( !xmlDoc.setContent( &f ) ) {
     f.close();
-    return false;
+    return 0;
   }
 
   f.close();
 
   /////////////////////////////////////////////////
   KIO::NetAccess::removeTempFile( tmpfile );
-  doc_url = url;
-	
-  // load the data into the document	
-  bool success = loadDocumentData( &xmlDoc );
-	
-  modified = false;
 
-  return success;
+
+  // check the documents DOCTYPE
+  K3bDoc* newDoc = 0;
+  if( xmlDoc.doctype().name() == "k3b_audio_project" )
+    newDoc = new K3bAudioDoc( k3bMain() );
+  else if( xmlDoc.doctype().name() == "k3b_data_project" )
+    newDoc = new K3bDataDoc( k3bMain() );
+      
+  // ---------
+  // load the data into the document	
+  if( newDoc != 0 ) {
+    if( newDoc->loadDocumentData( &xmlDoc ) ) {
+      newDoc->setURL( url );
+      return newDoc;
+    }
+    else {
+      delete newDoc;
+      return 0;
+    }
+  }
 }
 
 bool K3bDoc::saveDocument(const KURL& url )
@@ -210,8 +225,9 @@ bool K3bDoc::saveDocument(const KURL& url )
   if ( !f.open( IO_WriteOnly ) )
     return false;
   
-  QDomDocument xmlDoc;
-  bool success = saveDocumentData( &xmlDoc );
+  QDomDocument xmlDoc( "k3b_doc" );
+  //  bool success = saveDocumentData( &xmlDoc );
+  bool success = saveGeneralDocumentData( &xmlDoc );
   
   if( success ) {
     QTextStream xmlStream( &f );
@@ -284,4 +300,29 @@ bool K3bDoc::canCloseFrame(K3bView* pFrame)
     ret=true;
 		
   return ret;
+}
+
+
+bool K3bDoc::saveGeneralDocumentData( QDomDocument* doc )
+{
+  QDomElement mainElem = doc->createElement( "general" );
+
+  QDomElement propElem = doc->createElement( "dao" );
+  QDomText textElem = doc->createTextNode( dao() ? "yes" : "no" );
+  propElem.appendChild( textElem );
+  mainElem.appendChild( propElem );
+
+  propElem = doc->createElement( "dummy" );
+  textElem = doc->createTextNode( dummy() ? "yes" : "no" );
+  propElem.appendChild( textElem );
+  mainElem.appendChild( propElem );
+
+  propElem = doc->createElement( "on_the_fly" );
+  textElem = doc->createTextNode( onTheFly() ? "yes" : "no" );
+  propElem.appendChild( textElem );
+  mainElem.appendChild( propElem );
+
+  doc->appendChild( mainElem );
+
+  return true;
 }

@@ -98,11 +98,7 @@ class K3bDoc : public QObject
   /** closes the acutal document */
   void closeDocument();
 
-  /** 
-   * loads the document by filename and format and emits the updateViews() signal 
-   */
-  bool openDocument(const KURL &url);
-
+  static K3bDoc* openDocument(const KURL &url);
 
   /**
    * saves the document under filename and format.
@@ -169,6 +165,8 @@ class K3bDoc : public QObject
    * saveDocument only opens the file and calls this method. 
    */
   virtual bool saveDocumentData( QDomDocument* ) = 0;
+
+  bool saveGeneralDocumentData( QDomDocument* );
 
   KProcess* m_process;
 	

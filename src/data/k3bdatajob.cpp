@@ -63,7 +63,10 @@ void K3bDataJob::start()
   }
   if( m_doc->onTheFly() ) {
     m_pathSpecFile = locateLocal( "appdata", "temp/" ) + "k3b_" + QTime::currentTime().toString() + ".mkisofs";
-    m_doc->writePathSpec( m_pathSpecFile );
+    if( m_doc->writePathSpec( m_pathSpecFile ) == QString::null ) {
+      emit infoMessage( i18n("Could not write to temporary file %1").arg( m_pathSpecFile ) );
+      emit finished( this );
+    }
 		
     // determine iso-size
     m_process = new KProcess();
@@ -74,11 +77,14 @@ void K3bDataJob::start()
 	
     connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
 	     this, SLOT(slotParseMkisofsSize(KProcess*, char*, int)) );
+    connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
+	     this, SLOT(slotParseMkisofsSize(KProcess*, char*, int)) );
 				
     if( !m_process->start( KProcess::Block, KProcess::AllOutput ) ) {
       qDebug( "(K3bDataJob) could not start mkisofs: %s", kapp->config()->readEntry( "mkisofs path" ).latin1() );
-      emit infoMessage( "Could not start mkisofs!" );
+      emit infoMessage( i18n("Could not start mkisofs!") );
       m_error = K3b::MKISOFS_ERROR;
+      delete m_process;
       emit finished(this);
       return;
     }
@@ -467,7 +473,7 @@ void K3bDataJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 	emit newSubTask( i18n("Fixating") );
       }
       else if( (*str).contains("seconds.") ) {
-	emit infoMessage( *str + " to start of writing..." );
+	emit infoMessage( (*str).stripWhiteSpace() + " to start of writing..." );
       }
       else if( (*str).startsWith( "Writing pregap" ) ) {
 	emit newSubTask( i18n("Writing pregap") );
@@ -653,8 +659,20 @@ void K3bDataJob::addMkisofsParameters()
 
 void K3bDataJob::slotParseMkisofsSize(KProcess*, char* output, int len)
 {
-  QString buffer = QString::fromLatin1( output, len );
+  QString buffer = QString::fromLatin1( output, len ).stripWhiteSpace();
   qDebug("*** parsing line: " + buffer );
-  m_isoSize = buffer.mid( buffer.find('=') + 1 ).stripWhiteSpace() + "s";
+
+  // this seems to be the format for mkisofs verion < 1.14
+  if( buffer.contains( "=" ) )
+    m_isoSize = buffer.mid( buffer.find('=') + 1 ).stripWhiteSpace() + "s";
+
+  // and mkisofs >= 1.14 prints only the number
+  else {
+    bool ok;
+    buffer.toInt( &ok );
+    if( ok )
+      m_isoSize = buffer + "s";
+  }
+
   qDebug("ISO-Size should be: " + m_isoSize );
 }

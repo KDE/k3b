@@ -205,6 +205,8 @@ void K3bApp::createClient(K3bDoc* doc)
 
   fileBurn->setEnabled( true );
   fileExport->setEnabled( true );
+  fileSave->setEnabled( true );
+  fileSaveAs->setEnabled( true );
 }
 
 void K3bApp::openDocumentFile(const KURL& url)
@@ -222,29 +224,16 @@ void K3bApp::openDocumentFile(const KURL& url)
 	}
     }
 
-  doc = new K3bAudioDoc( this );
-  pDocList->append(doc);
-  doc->newDocument();
-  // Creates an untitled window if file is 0	
-  if(url.isEmpty())
+  doc = K3bDoc::openDocument( url );
+
+  if( doc == 0 )
     {
-      untitledCount+=1;
-      QString fileName=QString(i18n("Untitled%1")).arg(untitledCount);
-      KURL url;
-      url.setFileName(fileName);
-      doc->setURL(url);
+      KMessageBox::error (this,i18n("Could not open document !"), i18n("Error !"));
+      return;	
     }
-  // Open the file
-  else
-    {
-      if(!doc->openDocument(url))
-	{
-	  KMessageBox::error (this,i18n("Could not open document !"), i18n("Error !"));
-	  delete doc;
-	  return;	
-	}
-      fileOpenRecent->addURL(url);
-    }
+
+  fileOpenRecent->addURL(url);
+
   // create the window
   createClient(doc);
 
@@ -802,8 +791,8 @@ void K3bApp::slotCurrentDocChanged( QWidget* w )
   if( w->inherits( "K3bView" ) ) {
     // activate actions for file-handling
     fileClose->setEnabled( true );
-    //		fileSave->setEnabled( true );
-    //		fileSaveAs->setEnabled( true );
+    fileSave->setEnabled( true );
+    fileSaveAs->setEnabled( true );
     fileExport->setEnabled( true );
   }
   else {
