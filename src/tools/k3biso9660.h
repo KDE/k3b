@@ -314,6 +314,7 @@ class K3bIso9660
   const QString& fileName() { return m_filename; }
 
   const K3bIso9660Directory* firstJolietDirEntry() const;
+  const K3bIso9660Directory* firstRRDirEntry() const;
   const K3bIso9660Directory* firstIsoDirEntry() const;
   const K3bIso9660Directory* firstElToritoEntry() const;
 
@@ -330,6 +331,9 @@ class K3bIso9660
   int level;
   K3bIso9660Directory *dirent;
 
+  // temp thing
+  bool m_rr;
+
  private:
   /**
    * @internal
@@ -340,8 +344,9 @@ class K3bIso9660
   void debugEntry( const K3bIso9660Entry*, int depth ) const;
 
   QString m_filename;
+
   int m_joliet;
- 
+
  private:
   class Private;
   Private * d;
