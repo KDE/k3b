@@ -16,14 +16,17 @@ If you set up your system as follows you can be sure to never have K3b permissio
    This way both will run suid root which allows them to increase their scheduling priority resulting in a more
    stable burning process.
 
-4. Change the permissions of all your cdrom device to 660 root.cdrom (substitute cdrom with the group from 2)
+4. Change the permissions of all your cdrom device to 660 root.cdrom (substitute cdrom with the group from 2).
    With devfs you may do this with lines like this (the first changes all ide cd devices while the second takes
    care of the scsi cd devices):
      REGISTER        ^ide/host.*/bus.*/target.*/lun.*/cd          PERMISSIONS root.cdrom 660
      REGISTER        ^scsi/host.*/bus.*/target.*/lun.*/cd         PERMISSIONS root.cdrom 660
+   In case you are not using devfs you may determine the devices by running K3b once as root and looking in the
+   device settings. The corresponding devices are listed there.
 
-5. Change the permissions of the generic SCSI devices to 660 root.cdrom (substitute cdrom with the group from 2)
-   both cdrecord and cdrdao use the generic devices to access the scsi drives. So you don't need to perform this step
+5. Change the permissions of the generic SCSI devices to 660 root.cdrom (substitute cdrom with the group from 2).
+   Both cdrecord and cdrdao use the generic devices to access the scsi drives. So you don't need to perform this step
    if you only have IDE devices.
-   Again use a line like the following for devfs:
+   Use a line like the following for devfs:
      REGISTER        ^scsi/host.*/bus.*/target.*/lun.*/generic    PERMISSIONS root.cdrom 660
+  In case you are not using devfs the devices are /dev/sg*.
