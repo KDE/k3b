@@ -16,6 +16,7 @@
 #include <qfile.h>
 #include <qtimer.h>
 
+#include <sys/vfs.h>
 
 K3bStatusBarManager::K3bStatusBarManager( K3bMainWindow* parent )
   : QObject(parent),
@@ -60,13 +61,12 @@ void K3bStatusBarManager::update()
   kapp->config()->setGroup( "General Options" );
   QString tempdir = kapp->config()->readEntry( "Temp Dir", locateLocal( "appdata", "temp/" ) );
 
-  QString mountPoint = KIO::findPathMountPoint( tempdir );
-  if( QFile::exists( mountPoint ) )
-    connect( KDiskFreeSp::findUsageInfo( mountPoint ), 
-	     SIGNAL(foundMountPoint(const QString&, unsigned long, unsigned long, unsigned long)),
-	     this, SLOT(slotFreeTempSpace(const QString&, unsigned long, unsigned long, unsigned long)) );
+  struct statfs fs;
+  if ( ::statfs(tempdir.latin1(),&fs) == 0 ) {
+     slotFreeTempSpace(tempdir,fs.f_blocks*fs.f_bsize,0L,fs.f_bavail*fs.f_bsize);
+  }   
   else {
-    m_labelFreeTemp->setText("No info");
+     m_labelFreeTemp->setText("No info");
   }
 }
 
@@ -76,7 +76,8 @@ void K3bStatusBarManager::slotFreeTempSpace(const QString&,
 					    unsigned long, 
 					    unsigned long kbAvail)
 {
-  m_labelFreeTemp->setText( KIO::convertSizeFromKB(kbAvail) + "/" + KIO::convertSizeFromKB(kbSize)  );
+  m_labelFreeTemp->setText(KIO::convertSize(kbAvail)  + "/" + 
+	                   KIO::convertSize(kbSize)  );
 
   // if we have less than 640 MB that is not good
   if( kbAvail < 655360 )
