@@ -31,6 +31,9 @@ static const char* binPrograms[] =  { "cdrecord",
 				      "mkisofs",
 				      0 };
 
+static const char* systemTools[] =  { "shutdown",
+				      "halt",
+				      0 };
 
 
 K3bExternalBin::K3bExternalBin( const QString& name )
@@ -333,6 +336,15 @@ K3bExternalBin* K3bExternalBinManager::probeTranscode( const QString& path )
   return bin;
 }
 
+K3bExternalBin* K3bExternalBinManager::probeShutdown( const QString& path, int index ){
+  if( !QFile::exists( path ) ){
+    return 0;
+  } else {
+    K3bExternalBin* bin = new K3bExternalBin( systemTools[index] );
+    bin->path = path;
+    return bin;
+  }
+}
 
 K3bExternalBin* K3bExternalBinManager::probeMovix( const QString& path )
 {
@@ -393,8 +405,6 @@ K3bExternalBin* K3bExternalBinManager::probeVcd( const QString& path )
 
   return bin;
 }
-
-
 
 void K3bExternalBinManager::gatherOutput( KProcess*, char* data, int len )
 {
@@ -481,6 +491,10 @@ void K3bExternalBinManager::createProgramContainer()
   for( int i = 0; transcodeTools[i]; ++i ) {
     if( m_programs.find( transcodeTools[i] ) == m_programs.end() )
       m_programs.insert( transcodeTools[i], new K3bExternalProgram( transcodeTools[i] ) );
+  }  
+  for( int i = 0; systemTools[i]; ++i ) {
+    if( m_programs.find( systemTools[i] ) == m_programs.end() )
+      m_programs.insert( systemTools[i], new K3bExternalProgram( systemTools[i] ) );
   }
   for( int i = 0; vcdTools[i]; ++i ) {
     if( m_programs.find( vcdTools[i] ) == m_programs.end() )
@@ -524,20 +538,24 @@ void K3bExternalBinManager::search()
        cdrdaoBin = probeCdrdao( path + "/cdrdao" );
 
        for( int i = 0; transcodeTools[i]; ++i ) {
-         K3bExternalBin* bin = probeTranscode( path + "/" + QString::fromLatin1(transcodeTools[i]) );
-         if( bin )
-          m_programs[ transcodeTools[i] ]->addBin( bin );
+           K3bExternalBin* bin = probeTranscode( path + "/" + QString::fromLatin1(transcodeTools[i]) );
+           if( bin )
+           m_programs[ transcodeTools[i] ]->addBin( bin );
        }
-
+       for( int i = 0; systemTools[i]; ++i ) {
+           K3bExternalBin* shutdownBin = probeShutdown ( path + "/" + QString::fromLatin1( systemTools[i] ),i );
+           if( shutdownBin ){
+               m_programs[ systemTools[i] ]->addBin( shutdownBin );
+           }
+       }
        for( int i = 0; vcdTools[i]; ++i ) {
          K3bExternalBin* bin = probeVcd( path + "/" + QString::fromLatin1(vcdTools[i]) );
          if( bin )
           m_programs[ vcdTools[i] ]->addBin( bin );
        }
-
        K3bExternalBin* movixBin = probeMovix( path + "/movix" );
        if( movixBin )
-	 m_programs[ "movix" ]->addBin( movixBin );
+         m_programs[ "movix" ]->addBin( movixBin );
     }
     else {
        cdrecordBin = probeCdrecord( path );
@@ -592,6 +610,7 @@ void K3bExternalBinManager::loadDefaultSearchPath()
 					      "/usr/sbin/",
 					      "/usr/local/sbin/",
 					      "/opt/schily/bin/",
+                          "/sbin",
 					      0 };
 
   m_searchPath.clear();
