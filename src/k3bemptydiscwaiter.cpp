@@ -148,33 +148,47 @@ int K3bEmptyDiscWaiter::waitForDisc( int mediaState, int mediaType, const QStrin
     // We do not cover every case here but just the once that really make sense
     //
     if( (d->wantedMediaState & K3bDevice::STATE_COMPLETE) && (d->wantedMediaState & K3bDevice::STATE_INCOMPLETE) )
-      d->labelRequest->setText( i18n("Please insert a complete or appendable medium (%4) "
+      d->labelRequest->setText( i18n("Please insert a complete or appendable %4 medium "
 				     "into drive<p><b>%1 %2 (%3)</b>.")
 				.arg(d->device->vendor())
 				.arg(d->device->description())
 				.arg(d->device->devicename())
 				.arg( d->wantedMediaTypeString ) );
     else if( d->wantedMediaState & K3bDevice::STATE_COMPLETE )
-      d->labelRequest->setText( i18n("Please insert a complete medium (%4) "
+      d->labelRequest->setText( i18n("Please insert a complete %4 medium "
+				     "into drive<p><b>%1 %2 (%3)</b>.")
+				.arg(d->device->vendor())
+				.arg(d->device->description())
+				.arg(d->device->devicename())
+				.arg( d->wantedMediaTypeString ) );
+    else if( (d->wantedMediaState & K3bDevice::STATE_INCOMPLETE) && (d->wantedMediaState & K3bDevice::STATE_EMPTY) )
+      d->labelRequest->setText( i18n("Please insert an empty or appendable %4 medium "
 				     "into drive<p><b>%1 %2 (%3)</b>.")
 				.arg(d->device->vendor())
 				.arg(d->device->description())
 				.arg(d->device->devicename())
 				.arg( d->wantedMediaTypeString ) );
     else if( d->wantedMediaState & K3bDevice::STATE_INCOMPLETE )
-      d->labelRequest->setText( i18n("Please insert an appendable medium (%4) "
+      d->labelRequest->setText( i18n("Please insert an appendable %4 medium "
 				     "into drive<p><b>%1 %2 (%3)</b>.")
 				.arg(d->device->vendor())
 				.arg(d->device->description())
 				.arg(d->device->devicename())
 				.arg( d->wantedMediaTypeString ) );
-    else
-      d->labelRequest->setText( i18n("Please insert an empty medium (%4) "
+    else if( d->wantedMediaState & K3bDevice::STATE_EMPTY )
+      d->labelRequest->setText( i18n("Please insert an empty %4 medium "
 				     "into drive<p><b>%1 %2 (%3)</b>.")
 				.arg(d->device->vendor())
 				.arg(d->device->description())
 				.arg(d->device->devicename())
 				.arg( d->wantedMediaTypeString ) );
+    else // fallback case (this should not happen in K3b)
+      d->labelRequest->setText( i18n("Please insert a suitable medium "
+				     "into drive<p><b>%1 %2 (%3)</b>.")
+				.arg(d->device->vendor())
+				.arg(d->device->description())
+				.arg(d->device->devicename()) );
+
   }
   else
     d->labelRequest->setText( message );

@@ -1299,22 +1299,21 @@ void K3bDataDoc::importSession( K3bDevice::Device* device )
 void K3bDataDoc::slotTocRead( K3bDevice::DeviceHandler* dh )
 {
   if( dh->success() ) {
-    if( dh->toc().isEmpty() ) {
-      KMessageBox::error( qApp->activeWindow(), i18n("Could not find a session to import."),
+    // FIXME: not only check for empty and audio but search for 
+    if( dh->toc().isEmpty() || 
+	dh->toc().last().type() != K3bDevice::Track::DATA ||
+	!dh->diskInfo().appendable() ) {
+      KMessageBox::error( view(), i18n("Could not find a session to import."),
 			  i18n("Unable to Import Session") );
     }
     else {
-      K3bDevice::Toc::const_iterator it = dh->toc().end();
-      --it; // this is valid since there is at least one data track
-      while( it != dh->toc().begin() && (*it).type() != K3bDevice::Track::DATA )
-	--it;
-      long startSec = (*it).firstSector().lba();
+      long startSec = dh->toc().last().firstSector().lba();
 
       // since in iso9660 it is possible that two files share it's data
       // simply summing the file sizes could result in wrong values
       // that's why we use the size from the toc. This is more accurate
       // anyway since there might be files overwritten or removed
-      m_oldSessionSize = (*it).lastSector().mode1Bytes();
+      m_oldSessionSize = dh->toc().last().lastSector().mode1Bytes();
 
       kdDebug() << "(K3bDataDoc) imported session size: " << KIO::convertSize(m_oldSessionSize) << endl;
 
