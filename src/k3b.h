@@ -231,10 +231,6 @@ class K3bMainWindow : public KDockMainWindow
 
   void slotFileQuit();
 
-  /** toggles the statusbar
-   */
-  void slotViewStatusBar();
-
   void slotViewDocumentHeader();
 
   void slotAudioPlayerHidden();
@@ -321,7 +317,6 @@ class K3bMainWindow : public KDockMainWindow
   KAction* actionToolsWriteBinImage;
   KAction* actionCdCopy;
   KAction* actionProjectAddFiles;
-  KToggleAction* actionViewStatusBar;
   KToggleAction* actionViewDirTreeView;
   KToggleAction* actionViewContentsView;
   KToggleAction* actionViewProjectView;
