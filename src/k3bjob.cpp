@@ -156,10 +156,10 @@ void K3bBurnJob::parseCdrdaoLine( const QString& str )
     if( !ok )
       kdDebug() << "(K3bBurnJob) Parsing did not work for: " << (str).mid( pos1, pos2-pos1 ) << endl;
 
-//    emit bufferStatus( fifo );
+    emit bufferStatus( fifo );
 
     // let the derived classes do whatever they want...
-//    createCdrdaoProgress( made, size );
+    createCdrdaoProgress( made, size );
   }
 
   else {
@@ -182,7 +182,7 @@ void K3bBurnJob::parseCdrdaoError( const QString& line )
 
 void K3bBurnJob::createCdrdaoProgress( int made, int size )
 {
-  // emit percent( 100*made/size );
+  emit percent( 100*made/size );
 }
 
 void K3bBurnJob::startNewCdrdaoTrack()

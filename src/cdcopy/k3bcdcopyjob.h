@@ -79,6 +79,8 @@ class K3bCdCopyJob : public K3bBurnJob
   void parseCdrdaoSpecialLine( const QString& line );
   void getCdrdaoMessage();
 
+  void createCdrdaoProgress( int made, int size );
+
  private:
   void startNewCdrdaoTrack();
 

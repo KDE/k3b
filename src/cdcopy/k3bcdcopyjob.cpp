@@ -629,4 +629,9 @@ void K3bCdCopyJob::setReadRaw( bool b )
 }
 
 
+void K3bCdCopyJob::createCdrdaoProgress( int made, int size )
+{
+  // do nothing
+}
+
 #include "k3bcdcopyjob.moc"
