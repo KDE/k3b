@@ -18,7 +18,7 @@
 #include <tools/k3bexternalbinmanager.h>
 #include <device/k3bdevicemanager.h>
 #include <device/k3bdevice.h>
-#include <k3b.h>
+#include <k3bcore.h>
 
 #include <klocale.h>
 #include <kprocess.h>
@@ -48,7 +48,7 @@ void K3bMsInfoFetcher::start()
   delete m_process;
   m_process = new KProcess();
 
-  if( !k3bMain()->externalBinManager()->foundBin( "cdrecord" ) ) {
+  if( !k3bcore->externalBinManager()->foundBin( "cdrecord" ) ) {
     kdDebug() << "(K3bMsInfoFetcher) could not find cdrecord executable" << endl;
     emit infoMessage( i18n("cdrecord executable not found."), K3bJob::ERROR );
     emit finished(false);
@@ -61,7 +61,7 @@ void K3bMsInfoFetcher::start()
     return;
   }
 
-  *m_process << k3bMain()->externalBinManager()->binPath( "cdrecord" );
+  *m_process << k3bcore->externalBinManager()->binPath( "cdrecord" );
   *m_process << "-msinfo";
 
   // add the device (e.g. /dev/sg1)

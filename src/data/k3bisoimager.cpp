@@ -175,14 +175,15 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
 	  // TODO: find out the version that fixed the bug
 	  if( m_containsFilesWithMultibleBackslashes &&
 	      k3bcore->externalBinManager()->binObject( "mkisofs" )->version < K3bVersion( 1, 15, -1, "a40" ) ) {
-	    emit infoMessage( i18n("Due to a bug in mkisofs, K3b is unable to handle "
+	    emit infoMessage( i18n("Due to a bug in mkisofs <= 1.15a40, K3b is unable to handle "
 				   "filenames that contain more than one backslash:"), ERROR );
 
 	    break;
 	  }
 	  // otherwise just fall through
 	default:
-	  emit infoMessage( i18n("mkisofs returned error: %1").arg(p->exitStatus()), ERROR );
+	  emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg("mkisofs").arg(p->exitStatus()), 
+			    K3bJob::ERROR );
 	  emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
 	  emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
 	}
@@ -226,6 +227,7 @@ void K3bIsoImager::calculateSize()
   cleanup();
 
   m_process = new K3bProcess();
+  m_process->setRunPrivileged(true);
 
   if( !prepareMkisofsFiles() || 
       !addMkisofsParameters() ) {
