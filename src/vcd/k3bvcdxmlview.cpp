@@ -17,6 +17,10 @@
 #include "k3bvcdxmlview.h"
 #include "k3bvcdtrack.h"
 
+#include <k3bcore.h>
+#include <tools/k3bversion.h>
+
+
 #include <qfile.h>
 
 #include <kstandarddirs.h>
@@ -84,7 +88,7 @@ bool K3bVcdXmlView::write(const QString& fname)
 
   // create info element
   QDomElement elemInfo = addSubElement(xmlDoc, root, "info");
-  addSubElement(xmlDoc, elemInfo, "album-id", QString(m_doc->vcdOptions()->albumId()).upper());
+  addSubElement(xmlDoc, elemInfo, "album-id", m_doc->vcdOptions()->albumId().upper());
   addSubElement(xmlDoc, elemInfo, "volume-count", m_doc->vcdOptions()->volumeCount());
   addSubElement(xmlDoc, elemInfo, "volume-number", m_doc->vcdOptions()->volumeNumber());
   addSubElement(xmlDoc, elemInfo, "restriction", "0");
@@ -92,11 +96,11 @@ bool K3bVcdXmlView::write(const QString& fname)
 
   // create pvd element
   QDomElement elemPvd = addSubElement(xmlDoc, root, "pvd");
-  addSubElement(xmlDoc, elemPvd, "volume-id", QString(m_doc->vcdOptions()->volumeId()).upper());
+  addSubElement(xmlDoc, elemPvd, "volume-id", m_doc->vcdOptions()->volumeId().upper());
   addSubElement(xmlDoc, elemPvd, "system-id", m_doc->vcdOptions()->systemId());
   addSubElement(xmlDoc, elemPvd, "application-id", m_doc->vcdOptions()->applicationId());
-  addSubElement(xmlDoc, elemPvd, "preparer-id", "K3b - The CD Kreator");
-  addSubElement(xmlDoc, elemPvd, "publisher-id", m_doc->vcdOptions()->publisher());
+  addSubElement(xmlDoc, elemPvd, "preparer-id", QString("K3b - Version %1").arg(k3bcore->version()).upper());
+  addSubElement(xmlDoc, elemPvd, "publisher-id", m_doc->vcdOptions()->publisher().upper());
 
 
   // create filesystem element
