@@ -325,6 +325,7 @@ void K3bCdCopyDialog::slotToggleAll()
   m_spinCopies->setDisabled( m_checkSimulate->isChecked() || m_checkOnlyCreateImage->isChecked() );
   m_tempDirSelectionWidget->setDisabled( m_checkOnTheFly->isChecked() );
   m_checkOnlyCreateImage->setEnabled( !m_checkOnTheFly->isChecked() );
+  m_writerSelectionWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
 
   if ( m_checkOnlyCreateImage->isChecked() )
     m_checkDeleteImages->setChecked( false );

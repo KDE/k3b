@@ -201,11 +201,11 @@ class K3bAudioDoc : public K3bDoc
   QString m_cdTextMessage;
   // --------------------------------------------------
 
-  friend class K3bMixedDoc;
-
   class AudioTrackStatusThread;
   AudioTrackStatusThread* m_trackStatusThread;
   K3bThreadJob* m_trackMetaInfoJob;
+
+  friend class K3bMixedDoc;
 };
 
 
