@@ -93,15 +93,15 @@ test "x$AS" = xas && test -n "$save_AS" && AS=$save_AS
 
 linux_scsi=no
 AC_MSG_CHECKING(for linux scsi headers)
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
 AC_TRY_COMPILE([
 	#include <linux/version.h>
 	#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,5,50)
 	typedef unsigned char u8;
 	#endif
 	#include <sys/types.h>
-	#undef __STRICT_ANSI__
 	#include <linux/../scsi/scsi.h> /* cope with silly includes */
-	#define __STRICT_ANSI__
 	],
 	[],
 	[linux_scsi=yes])
@@ -110,7 +110,7 @@ AC_MSG_RESULT($linux_scsi)
 if test "x$linux_scsi" = "xno" ; then
 	DO_NOT_COMPILE="$DO_NOT_COMPILE k3b"
 fi
-
+AC_LANG_RESTORE
 
 
 dnl - check the byte order -
