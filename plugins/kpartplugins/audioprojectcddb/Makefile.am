@@ -1,0 +1,20 @@
+AM_CPPFLAGS = 	-I$(top_srcdir)/libk3b/core \
+		-I$(top_srcdir)/libk3b/tools \
+		-I$(top_srcdir)/libk3b/projects/audiocd \
+		-I$(top_srcdir)/libk3b/projects \
+		-I$(top_srcdir)/libk3bdevice \
+		-I$(top_srcdir)/libk3b/cddb \
+		$(all_includes)
+
+lib_LTLIBRARIES = libk3baudioprojectcddbplugin.la
+
+libk3baudioprojectcddbplugin_la_SOURCES = k3baudioprojectcddbplugin.cpp
+
+libk3baudioprojectcddbplugin_la_LIBADD = $(top_builddir)/libk3b/libk3b.la $(LIB_KDECORE) $(LIB_KDEUI) $(LIB_KPARTS)
+
+libk3baudioprojectcddbplugin_la_LDFLAGS = -avoid-version -module -no-undefined $(all_libraries)
+
+pluginsdir = $(kde_datadir)/k3b/kpartplugins
+plugins_DATA = k3baudioprojectcddbplugin.rc
+
+METASOURCES = AUTO

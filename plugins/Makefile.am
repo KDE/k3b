@@ -1,0 +1,1 @@
+SUBDIRS = decoder encoder kpartplugins

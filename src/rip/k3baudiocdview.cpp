@@ -20,10 +20,10 @@
 #include <k3bdiskinfo.h>
 #include <k3bdevicehandler.h>
 #include <k3blistview.h>
-#include <cddb/k3bcddbresult.h>
+#include <k3bcddbresult.h>
 #include <k3bmsf.h>
-#include <cddb/k3bcddb.h>
-#include <cddb/k3bcddbquery.h>
+#include <k3bcddb.h>
+#include <k3bcddbquery.h>
 #include <k3btoolbox.h>
 #include <kcutlabel.h>
 #include <k3bstdguiitems.h>

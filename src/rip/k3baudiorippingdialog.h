@@ -21,7 +21,7 @@
 
 #include <qstringlist.h>
 
-#include <cddb/k3bcddbquery.h>
+#include <k3bcddbquery.h>
 
 namespace K3bCdDevice {
   class CdDevice;

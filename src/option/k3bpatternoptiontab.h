@@ -19,7 +19,7 @@
 
 #include "base_k3bpatternoptiontab.h"
 
-#include <cddb/k3bcddbquery.h>
+#include <k3bcddbquery.h>
 
 
 /**

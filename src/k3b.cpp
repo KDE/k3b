@@ -68,7 +68,7 @@
 #include "k3bdirview.h"
 #include "audiocd/k3baudiodoc.h"
 #include "audiocd/k3baudioview.h"
-#include "device/k3bdevicemanager.h"
+#include <k3bdevicemanager.h>
 #include "audiocd/k3baudiotrackdialog.h"
 #include "option/k3boptiondialog.h"
 #include "k3bprojectburndialog.h"
@@ -100,8 +100,8 @@
 #include "k3bprojectinterface.h"
 #include <k3bprojectmanager.h>
 #include "k3bwelcomewidget.h"
-#include "plugin/k3bpluginmanager.h"
-#include "plugin/k3bpluginfactory.h"
+#include <k3bpluginmanager.h>
+#include <k3bpluginfactory.h>
 #include <k3bsystemproblemdialog.h>
 #include <k3baudiodecoder.h>
 #include <k3bthememanager.h>

@@ -22,7 +22,7 @@
 #include <qvaluevector.h>
 #include <qpair.h>
 
-#include <cddb/k3bcddbquery.h>
+#include <k3bcddbquery.h>
 
 
 class K3bAudioEncoderFactory;

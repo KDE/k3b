@@ -1,4 +1,0 @@
-This is a sample KParts plugin to show what can be done with K3b.
-Be aware that K3b also provides another plugin system which is not
-KParts based and is used for audio decoding and encoding as well as
-audio filtering in the future.

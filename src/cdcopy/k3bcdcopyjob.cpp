@@ -27,9 +27,9 @@
 #include <k3bdatatrackreader.h>
 #include <k3bcdrecordwriter.h>
 #include <k3bcdtext.h>
-#include <cddb/k3bcddb.h>
-#include <cddb/k3bcddbresult.h>
-#include <cddb/k3bcddbquery.h>
+#include <k3bcddb.h>
+#include <k3bcddbresult.h>
+#include <k3bcddbquery.h>
 #include <k3bcore.h>
 #include <k3binffilewriter.h>
 #include <k3bexceptions.h>

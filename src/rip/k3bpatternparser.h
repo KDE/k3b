@@ -19,7 +19,7 @@
 
 #include <qstring.h>
 
-#include <cddb/k3bcddbquery.h>
+#include <k3bcddbquery.h>
 
 
 /**

@@ -20,7 +20,7 @@
 #include <k3bcdcontentsview.h>
 
 #include <k3btoc.h>
-#include <cddb/k3bcddbresult.h>
+#include <k3bcddbresult.h>
 #include <k3bcdtext.h>
 
 class K3bListView;

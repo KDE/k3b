@@ -1,20 +1,12 @@
-if with_k3bsetup1
-K3BSETUP1_BUILD = k3bsetup
-endif
-
 bin_PROGRAMS = k3b
 
 k3b_SOURCES = k3bwelcomewidget.cpp k3bapplication.cpp k3bdiroperator.cpp kdndfileview.cpp k3bfiletreeview.cpp k3baudioplayer.cpp k3bprojecttabbar.cpp k3bprojecttabwidget.cpp k3bsplash.cpp k3bblankingdialog.cpp k3bfileview.cpp k3bdirview.cpp k3btoolbox.cpp k3b.cpp main.cpp k3bstatusbarmanager.cpp k3bfiletreecombobox.cpp k3breadcdreader.cpp k3binterface.cpp k3binterface.skel k3bprojectinterface.cpp k3bprojectinterface.skel k3bsystemproblemdialog.cpp k3bcdcontentsview.cpp k3bwriterspeedverificationdialog.cpp k3bdatatrackreader.cpp k3bsmartinstancereuser.cpp
 
-k3b_LDADD   = ./cdinfo/libcdinfo.la ./option/liboption.la ./rip/librip.la ./cdcopy/libcdcopy.la ./dvdcopy/libdvdcopy.la ./videoEncoding/libvideoEncoding.la ./plugin/libk3bplugin.la $(ARTS_LIBS) -lkio -lkparts ./device/libk3bdevice.la ./core/libk3bcore.la ./tools/libk3btools.la ./projects/libk3bproject.la ./images/libimagewriting.la
+k3b_LDADD   = ./cdinfo/libcdinfo.la ./option/liboption.la ./rip/librip.la ./cdcopy/libcdcopy.la ./dvdcopy/libdvdcopy.la ./videoEncoding/libvideoEncoding.la ./images/libimagewriting.la $(top_builddir)/libk3bdevice/libk3bdevice.la $(top_builddir)/libk3b/libk3b.la $(ARTS_LIBS) -lkio -lkparts
 
-SUBDIRS = device core tools plugin projects cddb cdinfo option rip cdcopy images dvdcopy videoEncoding pics icons konqi mimetypes tests audiodecoding audioencoding sounds $(K3BSETUP1_BUILD)
+SUBDIRS = cdinfo option rip cdcopy images dvdcopy videoEncoding pics icons konqi mimetypes sounds
 
-# TODO: enable when we go KDE 3.2
-#xdg_apps_DATA = k3b.desktop
-# remove the following then
-appsdir = $(kde_appsdir)/Multimedia
-apps_DATA = k3b.desktop
+xdg_apps_DATA = k3b.desktop
 
 silent_DATA = k3b-iso.desktop k3b-cue.desktop
 silentdir = $(kde_appsdir)/.hidden/
@@ -34,7 +26,19 @@ silentdir = $(kde_appsdir)/.hidden/
 # kde_wallpaperdir  Where general wallpapers should go to.
 
 # set the include path for X, qt and KDE
-AM_CPPFLAGS= -I$(srcdir)/tools -I$(srcdir)/core -I$(srcdir)/device -I$(srcdir)/projects -I$(srcdir)/projects/datacd -I$(srcdir)/projects/datadvd -I$(srcdir)/projects/audiocd -I$(srcdir)/projects/videocd -I$(srcdir)/projects/mixedcd -I$(srcdir)/projects/movixcd -I$(srcdir)/device -I$(srcdir)/plugin $(all_includes)
+AM_CPPFLAGS = 	-I$(top_srcdir)/libk3b/tools \
+		-I$(top_srcdir)/libk3b/core \
+		-I$(top_srcdir)/libk3b/cddb \
+		-I$(top_srcdir)/libk3bdevice \
+		-I$(top_srcdir)/libk3b/projects \
+		-I$(top_srcdir)/libk3b/projects/datacd \
+		-I$(top_srcdir)/libk3b/projects/datadvd \
+		-I$(top_srcdir)/libk3b/projects/audiocd \
+		-I$(top_srcdir)/libk3b/projects/videocd \
+		-I$(top_srcdir)/libk3b/projects/mixedcd \
+		-I$(top_srcdir)/libk3b/projects/movixcd \
+		-I$(top_srcdir)/libk3b/plugin \
+		$(all_includes)
 
 METASOURCES = AUTO
 
@@ -47,10 +51,5 @@ rc_DATA = k3bui.rc eventsrc tips
 messages: rc.cpp
 	$(EXTRACTRC) `find . -name "*.rc" -o -name "*.ui"` > rc.cpp
 	$(PREPARETIPS) tips > tips.cpp
-	LIST=`find . -name \*.h -o -name \*.hh -o -name \*.H -o -name \*.hxx -o -name \*.hpp -o -name \*.cpp -o -name \*.cc -o -name \*.cxx -o -name \*.ecpp -o -name \*.C`; \
-	if test -n "$$LIST"; then \
-		 $(XGETTEXT) $$LIST -o $(podir)/k3b.pot; \
-	fi
+	$(XGETTEXT) --from-code=UTF-8 `find -name "*.cpp" -or -name "*.h"` -o $(podir)/k3b.pot
 	rm -f tips.cpp 
-	rm -f rc.cpp
-
