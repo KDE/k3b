@@ -380,19 +380,19 @@ K3bCdparanoiaLib* K3bCdparanoiaLib::create()
 {
   // check if libcdda_interface is avalilable
   if( s_libInterface == 0 ) {
-    s_libInterface = dlopen( "libcdda_interface.so", RTLD_NOW|RTLD_GLOBAL );
+    s_libInterface = dlopen( "libcdda_interface.so.0", RTLD_NOW|RTLD_GLOBAL );
       // try the redhat & Co. location
     if( s_libInterface == 0 )
-      s_libInterface = dlopen( "cdda/libcdda_interface.so", RTLD_NOW|RTLD_GLOBAL );
+      s_libInterface = dlopen( "cdda/libcdda_interface.so.0", RTLD_NOW|RTLD_GLOBAL );
 
     if( s_libInterface == 0 ) {
       kdDebug() << "(K3bCdparanoiaLib) Error while loading libcdda_interface. " << endl;
       return 0;
     }
 
-    s_libParanoia = dlopen( "libcdda_paranoia.so", RTLD_NOW );
+    s_libParanoia = dlopen( "libcdda_paranoia.so.0", RTLD_NOW );
     if( s_libParanoia == 0 )
-      s_libParanoia = dlopen( "cdda/libcdda_paranoia.so", RTLD_NOW );
+      s_libParanoia = dlopen( "cdda/libcdda_paranoia.so.0", RTLD_NOW );
 
     if( s_libParanoia == 0 ) {
       kdDebug() << "(K3bCdparanoiaLib) Error while loading libcdda_paranoia. " << endl;
