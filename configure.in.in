@@ -126,14 +126,6 @@ fi
 AC_SUBST(OGG_VORBISLIBS)
 
 
-if test x$ogg_vorbis = xno; then
-	echo ""
-	echo "No Ogg Vorbis library and headers found."
-	echo "Ogg Vorbis support disabled."
-	echo ""
-fi
-
-
 
 #the libmad stuff
 dnl Compiler options.

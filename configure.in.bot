@@ -1,0 +1,6 @@
+if test x$ogg_vorbis = xno; then
+	echo "----------------------------------------"
+	echo "No Ogg Vorbis library and headers found."
+	echo "Ogg Vorbis support disabled."
+	echo "----------------------------------------"
+fi
