@@ -46,7 +46,7 @@ QString K3bAudioProjectInterface::artist() const
 
 QString K3bAudioProjectInterface::trackTitle( int trackNum ) const
 {
-  K3bAudioTrack* track = m_audioDoc->getTrack( trackNum-1 );
+  K3bAudioTrack* track = m_audioDoc->getTrack( trackNum );
   if( track )
     return track->title();
   else
@@ -56,7 +56,7 @@ QString K3bAudioProjectInterface::trackTitle( int trackNum ) const
 
 QString K3bAudioProjectInterface::trackArtist( int trackNum ) const
 {
-  K3bAudioTrack* track = m_audioDoc->getTrack( trackNum-1 );
+  K3bAudioTrack* track = m_audioDoc->getTrack( trackNum );
   if( track )
     return track->artist();
   else
@@ -78,7 +78,7 @@ void K3bAudioProjectInterface::setArtist( const QString& artist )
 
 void K3bAudioProjectInterface::setTrackTitle( int trackNum, const QString& title )
 {
-  K3bAudioTrack* track = m_audioDoc->getTrack( trackNum-1 );
+  K3bAudioTrack* track = m_audioDoc->getTrack( trackNum );
   if( track )
     track->setTitle( title );
 }
@@ -86,7 +86,7 @@ void K3bAudioProjectInterface::setTrackTitle( int trackNum, const QString& title
 
 void K3bAudioProjectInterface::setTrackArtist( int trackNum, const QString& artist )
 {
-  K3bAudioTrack* track = m_audioDoc->getTrack( trackNum-1 );
+  K3bAudioTrack* track = m_audioDoc->getTrack( trackNum );
   if( track )
     track->setArtist( artist );
 }
