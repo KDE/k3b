@@ -18,7 +18,7 @@
 #define K3BPROJECTTABWIDGET_H
 
 #include <qtabwidget.h>
-
+#include <kurl.h>
 
 class K3bProjectTabBar;
 class KAction;
@@ -39,6 +39,9 @@ class K3bProjectTabWidget : public QTabWidget
    * inserts the given action into the popup menu for the tabs
    */
   void insertAction( KAction* );
+
+ private slots:
+  void slotUrlsDropped( int id, const KURL::List& ulrs );
 
  private:
   K3bProjectTabBar* m_tabBar;

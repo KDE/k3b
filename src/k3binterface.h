@@ -51,6 +51,15 @@ class K3bInterface : public DCOPObject
 
   QValueList<DCOPRef> projects();
 
+  /**
+   * Add URLs to the current active project.
+   * If no project is open a new Audio or Data CD
+   * project will be created depending on the type
+   * of the first file.
+   */
+  void addUrls( const KURL::List& urls );
+  void addUrl( const KURL& url );
+
  private:
   K3bMainWindow* m_main;
 };

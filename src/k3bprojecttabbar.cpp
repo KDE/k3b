@@ -19,12 +19,15 @@
 #include <kaction.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kurldrag.h>
+
 #include <qevent.h>
 
 
 K3bProjectTabBar::K3bProjectTabBar( QWidget* parent, const char* name )
   : QTabBar( parent, name )
 {
+  setAcceptDrops(true);
   m_projectActionMenu = new KActionMenu( i18n("Project"), this );
 }
 
@@ -47,6 +50,24 @@ void K3bProjectTabBar::mousePressEvent( QMouseEvent* e )
   }
 
   QTabBar::mousePressEvent(e);
+}
+
+
+void K3bProjectTabBar::dragEnterEvent( QDragEnterEvent* e )
+{
+  e->accept( KURLDrag::canDecode(e) );
+}
+
+
+void K3bProjectTabBar::dropEvent( QDropEvent* e )
+{
+  KURL::List l;
+  if( KURLDrag::decode( e, l ) ) {
+    QTab* clickedTab = selectTab( e->pos() );
+    if( clickedTab ) {
+      emit urlsDropped( clickedTab->identifier(), l );
+    }
+  }
 }
 
 
