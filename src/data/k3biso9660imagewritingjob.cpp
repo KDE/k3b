@@ -55,6 +55,8 @@ K3bIso9660ImageWritingJob::~K3bIso9660ImageWritingJob()
 
 void K3bIso9660ImageWritingJob::start()
 {
+  m_canceled = false;
+
   emit started();
 
   if( !QFile::exists( m_imagePath ) ) {
@@ -65,10 +67,10 @@ void K3bIso9660ImageWritingJob::start()
 
   if( prepareWriter() ) {
     if( K3bEmptyDiscWaiter::wait( m_device ) == K3bEmptyDiscWaiter::CANCELED ) {
-      emit canceled();
-      emit finished(false);
+      cancel();
     }
-    else {
+    // just to be sure we did not get canceled during the async discWaiting
+    else if( !m_canceled ) {
       m_writer->start();
     }
   }
@@ -95,6 +97,8 @@ void K3bIso9660ImageWritingJob::slotWriterJobFinished( bool success )
 
 void K3bIso9660ImageWritingJob::cancel()
 {
+  m_canceled = true;
+
   if( m_writer ) {
     emit infoMessage( i18n("Writing canceled."), K3bJob::ERROR );
     emit canceled();

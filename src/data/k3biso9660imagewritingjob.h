@@ -72,6 +72,8 @@ class K3bIso9660ImageWritingJob : public K3bBurnJob
 
   K3bAbstractWriter* m_writer;
   KTempFile* m_tocFile;
+
+  bool m_canceled;
 };
 
 #endif

@@ -79,6 +79,7 @@ void K3bVcdJob::cancel()
     cancelAll();
 
     emit infoMessage( i18n( "Job canceled by user." ), K3bJob::ERROR );
+    emit canceled();
     emit finished( false );
 }
 
@@ -358,6 +359,10 @@ void K3bVcdJob::slotVcdxBuildFinished()
 	    cancel();
 	    return ;
 	  }
+	  // just to be sure we did not get canceled during the async discWaiting
+	  if( m_canceled )
+	    return;
+
 	  m_writerJob->start();
         }
     } else {

@@ -20,10 +20,7 @@
 #include <k3bjob.h>
 #include <k3bcdrdaowriter.h>
 
-class K3bProcess;
 class K3bCdDevice::CdDevice;
-class K3bCdDevice::DiskInfo;
-class QUrlOperator;
 
 
 /**
@@ -51,19 +48,12 @@ class K3bBinImageWritingJob : public K3bBurnJob
   void setSimulate( bool b ) { m_cdrdaowriter->setSimulate(b); }
   void setForce(bool b) { m_cdrdaowriter->setForce(b); };
   void setMulti(bool b) { m_cdrdaowriter->setMulti(b); };
-  void setTocFile(const QString& s) { 
-    m_cdrdaowriter->setTocFile(s); 
-    m_tocFile = s; 
-  }
-  void setCopies(int c) { m_copies=c; };
+  void setTocFile(const QString& s);
+  void setCopies(int c) { m_copies = c; };
 
  private slots:
   void cdrdaoWrite();  
-
   void cdrdaoFinished(bool);
-  void finishAll();
-  void cancelAll();
-
   void copyPercent(int p);
   void copySubPercent(int p);
   void slotNextTrack( int, int );
@@ -75,6 +65,8 @@ class K3bBinImageWritingJob : public K3bBurnJob
   K3bCdrdaoWriter *m_cdrdaowriter;
 
   QString m_tocFile;
+
+  bool m_canceled;
 };
 
 #endif

@@ -256,10 +256,8 @@ void K3bVcdListView::slotUpdateItems()
 
     if ( m_doc->numOfTracks() > 0 ) {
         m_actionRemove->setEnabled( true );
-        m_actionProperties->setEnabled( true );
     } else {
         m_actionRemove->setEnabled( false );
-        m_actionProperties->setEnabled( false );
     }
 }
 

@@ -764,6 +764,10 @@ bool K3bMixedJob::startWriting()
       cancel();
       return false;
     }
+
+    // just to be sure we did not get canceled during the async discWaiting
+    if( m_canceled )
+      return;
   }
 	
   m_writer->start();

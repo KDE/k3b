@@ -15,26 +15,12 @@
 
 
 #include "k3bbinimagewritingjob.h"
-#include <k3b.h>
-#include <tools/k3bexternalbinmanager.h>
+
 #include <k3bemptydiscwaiter.h>
 #include <device/k3bdevice.h>
-#include <device/k3bdiskinfo.h>
-#include <device/k3bdiskinfodetector.h>
 
-#include <k3bprocess.h>
-#include <kconfig.h>
-#include <kstandarddirs.h>
 #include <klocale.h>
 #include <kdebug.h>
-
-#include <qtimer.h>
-#include <qstringlist.h>
-#include <qfile.h>
-#include <qregexp.h>
-
-#include <sys/types.h>
-#include <sys/socket.h>
 
 
 
@@ -64,80 +50,79 @@ K3bBinImageWritingJob::K3bBinImageWritingJob( QObject* parent )
 }
 
 
-K3bBinImageWritingJob::~K3bBinImageWritingJob() {
-    delete m_cdrdaowriter;
-}
-
-void K3bBinImageWritingJob::start() {
-    if( m_copies < 1 )
-        m_copies = 1;
-    m_finishedCopies = 0;
-
-    emit newTask( i18n("Write Binary Image") );
-
-    cdrdaoWrite();
-
-    emit started();
-}
-
-void K3bBinImageWritingJob::cancel() {
-    m_cdrdaowriter->cancel();
-    emit canceled();
+K3bBinImageWritingJob::~K3bBinImageWritingJob()
+{
 }
 
 
-void K3bBinImageWritingJob::cdrdaoWrite() {
-    m_cdrdaowriter->setCommand(K3bCdrdaoWriter::WRITE);
-    if( K3bEmptyDiscWaiter::wait( m_cdrdaowriter->burnDevice() ) == K3bEmptyDiscWaiter::CANCELED ) {
-      cancelAll();
-      return;
-    }
+void K3bBinImageWritingJob::start() 
+{
+  m_canceled =  false;
+
+  if( m_copies < 1 )
+    m_copies = 1;
+  m_finishedCopies = 0;
+
+  emit started();
+  emit newTask( i18n("Write Binary Image") );
+  
+  cdrdaoWrite();
+}
+
+void K3bBinImageWritingJob::cancel() 
+{
+  m_canceled = true;
+  m_cdrdaowriter->cancel();
+  emit canceled();
+  emit finished( false );
+}
+
+
+void K3bBinImageWritingJob::cdrdaoWrite() 
+{
+  m_cdrdaowriter->setCommand(K3bCdrdaoWriter::WRITE);
+  if( K3bEmptyDiscWaiter::wait( m_cdrdaowriter->burnDevice() ) == K3bEmptyDiscWaiter::CANCELED ) {
+    cancel();
+  }
+  // just to be sure we did not get canceled during the async discWaiting
+  else if( !m_canceled ) {
     m_cdrdaowriter->start();
+  }
 }
 
-void K3bBinImageWritingJob::copyPercent(int p) {
-    int x,y;
-
-    x = m_copies;
-    y = m_finishedCopies;
-
-    emit percent((100*y + p)/x);
+void K3bBinImageWritingJob::copyPercent(int p)
+{
+  emit percent( (100*m_finishedCopies + p)/m_copies );
 }
 
-void K3bBinImageWritingJob::copySubPercent(int p) {
-    emit subPercent(p);
+void K3bBinImageWritingJob::copySubPercent(int p)
+{
+  emit subPercent(p);
 }
 
-void K3bBinImageWritingJob::cdrdaoFinished(bool ok) {
-    if (ok) {
-        m_finishedCopies++;
-        if ( m_finishedCopies == m_copies ) {
-            emit infoMessage(
-                i18n("%1 copies succsessfully created").arg(m_copies),K3bJob::INFO );
-            finishAll(); 
-        } else 
-            cdrdaoWrite();
-    } else
-        cancelAll();
-}
+void K3bBinImageWritingJob::cdrdaoFinished(bool ok) 
+{
+  if( m_canceled )
+    return;
 
-
-void K3bBinImageWritingJob::finishAll() {
-    if( k3bMain()->eject() )
-        m_cdrdaowriter->burnDevice()->eject();
-
-    emit finished( true );
+  if (ok) {
+    m_finishedCopies++;
+    if ( m_finishedCopies == m_copies ) {
+      emit infoMessage( i18n("%1 copies succsessfully created").arg(m_copies),K3bJob::INFO );
+      emit finished( true );
+    } 
+    else 
+      cdrdaoWrite();
+  }
+  else {
+    emit finished(false);
+  }
 }
 
 
-void K3bBinImageWritingJob::cancelAll() {
-    emit infoMessage( i18n("Canceled"), K3bJob::STATUS );
-    emit finished( false );
-}
-
-
-void K3bBinImageWritingJob::slotNextTrack( int t, int tt ) {
-    emit newSubTask( i18n("Writing track %1 of %2").arg(t).arg(tt) );
+void K3bBinImageWritingJob::slotNextTrack( int t, int tt )
+{
+  emit newSubTask( i18n("Writing track %1 of %2").arg(t).arg(tt) );
 }
 
 
@@ -150,6 +135,13 @@ QString K3bBinImageWritingJob::jobDescription() const
 QString K3bBinImageWritingJob::jobDetails() const
 {
   return m_tocFile.section("/", -1);
+}
+
+
+void K3bBinImageWritingJob::setTocFile(const QString& s)
+{ 
+  m_cdrdaowriter->setTocFile(s); 
+  m_tocFile = s; 
 }
 		
 #include "k3bbinimagewritingjob.moc"
