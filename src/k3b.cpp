@@ -101,6 +101,8 @@ K3bApp::K3bApp()
 
 K3bApp::~K3bApp()
 {
+  qDebug( "-- K3bApp destructor" );
+  delete pDocList;
 }
 
 void K3bApp::initActions()
@@ -115,17 +117,22 @@ void K3bApp::initActions()
   viewStatusBar = KStdAction::showStatusbar(this, SLOT(slotViewStatusBar()), actionCollection());
   settingsConfigure = KStdAction::preferences(this, SLOT(slotSettingsConfigure()), actionCollection() );
 
-  fileBurn = new KAction( i18n("&Burn..."), "cdwriter_unmount", 0, this, SLOT(slotFileBurn()), actionCollection(), "file_burn");
-  fileExport = new KAction( i18n("E&xport..."), "revert", 0, this, SLOT(slotFileExport()), actionCollection(), "file_export" );
+  fileBurn = new KAction( i18n("&Burn..."), "cdwriter_unmount", 0, this, SLOT(slotFileBurn()), 
+			  actionCollection(), "file_burn");
+  fileExport = new KAction( i18n("E&xport..."), "revert", 0, this, SLOT(slotFileExport()), 
+			    actionCollection(), "file_export" );
 
   fileNewMenu = new KActionMenu( i18n("&New Project"), "filenew", actionCollection(), "file_new" );
-  fileNewAudio = new KAction(i18n("New &Audio project"), "sound", 0, this, SLOT(slotNewAudioDoc()), actionCollection(), "file_new_audio");
-  fileNewData = new KAction(i18n("New &Data project"),"tar", 0, this, SLOT(slotNewDataDoc()), actionCollection(), "file_new_data");
+  fileNewAudio = new KAction(i18n("New &Audio project"), "sound", 0, this, SLOT(slotNewAudioDoc()), 
+			     actionCollection(), "file_new_audio");
+  fileNewData = new KAction(i18n("New &Data project"),"tar", 0, this, SLOT(slotNewDataDoc()), 
+			    actionCollection(), "file_new_data");
   fileNewMenu->insert( fileNewAudio );
   fileNewMenu->insert( fileNewData );
   fileNewMenu->setDelayed( false );
 
-  viewDirView = new KToggleAction(i18n("Show Directories"), "view_sidetree", 0, this, SLOT(slotShowDirView()), actionCollection(), "view_dir");
+  viewDirView = new KToggleAction(i18n("Show Directories"), "view_sidetree", 0, this, SLOT(slotShowDirView()), 
+				  actionCollection(), "view_dir");
 
   fileNewMenu->setStatusText(i18n("Creates a new project"));
   fileOpen->setStatusText(i18n("Opens an existing project"));

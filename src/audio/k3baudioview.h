@@ -35,6 +35,7 @@ class K3bAudioTrackDialog;
 class K3bFillStatusDisplay;
 class K3bAudioBurnDialog;
 class K3bProjectBurnDialog;
+class QTimer;
 
 
 /**
@@ -61,6 +62,8 @@ private:
 	K3bAudioTrackDialog* m_propertiesDialog;
 	K3bFillStatusDisplay* m_fillStatusDisplay;
 	K3bAudioBurnDialog* m_burnDialog;
+
+	QTimer* m_displayRefreshTimer;
 		
 signals:
  	void dropped(const QStringList&, uint position);

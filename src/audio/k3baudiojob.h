@@ -24,7 +24,7 @@ class K3bAudioDoc;
 class K3bAudioTrack;
 class K3bMp3DecodingJob;
 class QString;
-
+class QTimer;
 
 #include <kprocess.h>
 
@@ -54,6 +54,7 @@ protected slots:
 	void slotCdrdaoFinished();
 	void slotMp3JobFinished();
 	void slotEmitProgress( int trackMade, int TrackSize );
+	void slotTryToStartOnTheFlyBurning();
 	
 private:
 	void decodeNextFile();
@@ -71,6 +72,8 @@ private:
 	int m_iTracksAlreadyWrittenSize;
 	int m_iDocSize;
 		
+	QTimer* m_onTheFlyStartTimer;
+
 signals:
 	void writingLeadOut();
 };

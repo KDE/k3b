@@ -43,7 +43,7 @@ K3bMp3Track::K3bMp3Track( QList<K3bAudioTrack>* parent, const QString& filename 
 {
   m_filetype = K3b::MP3;
 
-  readTrackInfo( filename );
+  //  readTrackInfo( filename );
 }
 
 

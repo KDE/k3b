@@ -24,14 +24,14 @@ ldadd=-lid3 $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT)
 ldflags=
 
 [General]
-AMChanged=false
+AMChanged=true
 author=Sebastian Trueg
 configure_args=
 email=trueg@informatik.uni-freiburg.de
 kdevprj_version=1.3
 lfv_open_groups=GNU
 make_options=\s-j1
-makefiles=Makefile.am,src/Makefile.am,doc/Makefile.am,doc/en/Makefile.am,po/Makefile.am,src/data/Makefile.am,src/cdinfo/Makefile.am,src/audio/Makefile.am,src/device/Makefile.am,src/kiotree/Makefile.am
+makefiles=Makefile.am,src/Makefile.am,doc/Makefile.am,doc/en/Makefile.am,po/Makefile.am,src/data/Makefile.am,src/cdinfo/Makefile.am,src/audio/Makefile.am,src/device/Makefile.am,src/kiotree/Makefile.am,src/audio/input/Makefile.am
 modifyMakefiles=true
 project_name=K3b
 project_type=mdi_kde2
@@ -115,7 +115,7 @@ type=prog_main
 
 [src/audio/Makefile.am]
 files=src/audio/audiolistview.cpp,src/audio/audiolistview.h,src/audio/audiolistviewitem.cpp,src/audio/audiolistviewitem.h,src/audio/k3baudiodoc.cpp,src/audio/k3baudiodoc.h,src/audio/k3baudiotrack.cpp,src/audio/k3baudiotrack.h,src/audio/k3baudioview.cpp,src/audio/k3baudioview.h,src/audio/k3baudioburndialog.cpp,src/audio/k3baudioburndialog.h,src/audio/k3baudiotrackdialog.cpp,src/audio/k3baudiotrackdialog.h,src/audio/k3baudiojob.cpp,src/audio/k3baudiojob.h,src/audio/k3bmp3decodingjob.cpp,src/audio/k3bmp3decodingjob.h,src/audio/k3bmp3track.cpp,src/audio/k3bmp3track.h,src/audio/k3bwavetrack.cpp,src/audio/k3bwavetrack.h
-sub_dirs=
+sub_dirs=input
 type=static_library
 
 [src/audio/audiolistview.cpp]
@@ -137,6 +137,53 @@ install_location=
 type=SOURCE
 
 [src/audio/audiolistviewitem.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/audio/input/Makefile.am]
+files=src/audio/input/k3baudiomodule.h,src/audio/input/k3baudiomodulefactory.cpp,src/audio/input/k3baudiomodulefactory.h,src/audio/input/k3bmp3module.cpp,src/audio/input/k3bmp3module.h,src/audio/input/k3bwavmodule.cpp,src/audio/input/k3bwavmodule.h
+sub_dirs=
+type=static_library
+
+[src/audio/input/k3baudiomodule.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/audio/input/k3baudiomodulefactory.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/audio/input/k3baudiomodulefactory.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/audio/input/k3bmp3module.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/audio/input/k3bmp3module.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/audio/input/k3bwavmodule.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/audio/input/k3bwavmodule.h]
 dist=true
 install=false
 install_location=

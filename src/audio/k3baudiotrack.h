@@ -23,6 +23,10 @@
 #include <qfile.h>
 #include <qlist.h>
 
+
+class K3bAudioModule;
+
+
 /**
   *@author Sebastian Trueg
   */
@@ -47,8 +51,9 @@ class K3bAudioTrack
   int filetype() const { return m_filetype; }
   int pregap() const { return m_pregap; }
 
-  /** returns length of track in 1/100sec **/
+  /** returns length of track in frames **/
   int length() const { return m_length; }
+  bool isAccurateLength() const { return m_isAccurateLength; }
 	
   const QString& artist() const { return m_artist; }
   const QString& title() const { return m_title; }
@@ -81,7 +86,7 @@ class K3bAudioTrack
 	
   void setAlbum( const QString& t ) { m_album = t; }
 	
-  void setLength( int time ) { m_length = time; }
+  void setLength( int time, bool accurate = false ) { m_length = time; m_isAccurateLength = accurate; }
 	
   virtual void setBufferFile( const QString& file );
   /** returns the filesize of the track */
@@ -94,9 +99,13 @@ class K3bAudioTrack
   int m_filetype;
   QFile m_file;
 
+  /** the module that does all the work (decoding and shit!) */
+  K3bAudioModule* m_module;
+
  private:	
   /** length of track in frames (1/75sec) **/
   int m_length;
+  bool m_isAccurateLength;
 
   /** frames: 75 frames are one second **/
   int m_pregap;

@@ -84,13 +84,10 @@ bool K3bAudioDoc::newDocument()
 
 
 int K3bAudioDoc::size() const {
-  // TODO: convert minutes to megs (according to number of used sectors!)
-  int size = 0;
-  for( K3bAudioTrack* _t = m_tracks->first(); _t; _t = m_tracks->next() ) {
-    size += _t->size();
-  }	
+  // 1 audio frame is 1 block on the cd
+  // that is 2048 bytes of iso-data
 
-  return size;
+  return length() * 2048;
 }
 
 

@@ -45,6 +45,9 @@ K3bAudioJob::K3bAudioJob( K3bAudioDoc* doc )
 	
   m_iDocSize = doc->size();
   m_iTracksAlreadyWrittenSize = 0;
+
+  m_onTheFlyStartTimer = new QTimer( this );
+  connect( m_onTheFlyStartTimer, SIGNAL(timeout()), this, SLOT(slotTryToStartOnTheFlyBurning()) );
 }
 
 
@@ -333,8 +336,11 @@ void K3bAudioJob::start()
       decodeNextFile();
     }
   }
-  else
-    startWriting();
+  else {
+    emit infoMessage( "Waiting for all tracks' length to calculated accurately..." );
+    emit infoMessage( "...this could take some time..." );
+    m_onTheFlyStartTimer->start(100);
+  }
 }
 
 
@@ -703,4 +709,22 @@ void K3bAudioJob::slotEmitProgress( int trackMade, int trackSize )
   emit processedSubSize( trackMade, trackSize );
   emit subPercent( (int)_trackPercent  );
   emit percent( (int)_overallPercent );
+}
+
+
+void K3bAudioJob::slotTryToStartOnTheFlyBurning()
+{
+  bool ableToStart = true;
+  for( K3bAudioTrack* track = m_doc->at(0); 
+       track != 0 && ableToStart;
+       track = m_doc->next() ) {
+    if( !track->isAccurateLength() )
+      ableToStart = false;
+  }
+  
+  if( ableToStart ) {
+    emit infoMessage( "All tracks' length are calculated." );
+    m_onTheFlyStartTimer->stop();
+    startWriting();
+  }
 }
