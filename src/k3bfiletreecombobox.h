@@ -20,6 +20,10 @@
 
 class K3bFileTreeView;
 class K3bDevice;
+class QEvent;
+class QKeyEvent;
+class QMouseEvent;
+class QPaintEvent;
 
 
 class K3bFileTreeComboBox : public KComboBox
@@ -47,9 +51,17 @@ class K3bFileTreeComboBox : public KComboBox
   void slotDeviceExecuted( K3bDevice* );
   void slotUrlExecuted( const KURL& url );
 
+ protected:
+  bool eventFilter( QObject*, QEvent* );
+  void keyPressEvent( QKeyEvent* );
+  void mousePressEvent( QMouseEvent* );
+  void paintEvent( QPaintEvent* );
+
  private:
   void setEditText( const QPixmap& pix, const QString& t );
 
+  class Private;
+  Private* d;
   K3bFileTreeView* m_fileTreeView;
 };
 
