@@ -1,0 +1,327 @@
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<class>base_K3bDataImageSettings</class>
+<author>Sebastian Trueg</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>base_K3bDataImageSetings</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>507</width>
+            <height>330</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Data Image Settings</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <property name="spacing">
+            <number>6</number>
+        </property>
+        <widget class="QButtonGroup" row="2" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>m_groupWhitespace</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>1</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="title">
+                <string>Whitespace Treatment</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>11</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QRadioButton" row="0" column="0">
+                    <property name="name">
+                        <cstring>m_radioNoChange</cstring>
+                    </property>
+                    <property name="text">
+                        <string>No change</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Do not touch spaces in filenames</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;If this option is checked K3b will leave all spaces in filename like you know it.</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="1" column="0">
+                    <property name="name">
+                        <cstring>m_radioStrip</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Strip</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Just remove all spaces</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;If this option is checked K3b will remove all spaces from all filenames.
+&lt;p&gt;Example: 'my good file.ext' becomes 'mygoodfile.ext'</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="1" column="1">
+                    <property name="name">
+                        <cstring>m_radioReplace</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Replace with:</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Replace all spaces</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;If this option is checked K3b will replace all spaces in all filenames with an the specified characters.
+&lt;p&gt;For example with an underscore: 'my good file.ext' becomes 'my_good_file.ext'</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="1" column="2">
+                    <property name="name">
+                        <cstring>m_editReplace</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>_</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>The string to replace spaces with</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="0" column="1" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>m_radioExtendedStrip</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Extended strip</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Remove all spaces and continue with an upper letter</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;If this option is checked K3b will remove all spaces in all filenames and convert all letters following a space to an upper one.
+&lt;p&gt;Example: 'my good file.ext' becomes 'myGoodFile.ext'</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QGroupBox" row="0" column="0">
+            <property name="name">
+                <cstring>m_groupFilesystems</cstring>
+            </property>
+            <property name="title">
+                <string>Filesystems</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>11</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>m_checkRockRidge</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Generate Rock Ridge extensions</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Add Rock Ridge extensions to the cd</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;If this option is checked K3b will generate the System Use Sharing Protocol records (SUSP) specified by the Rock Ridge Interchange Protocol (IEEE-P1282).
+&lt;p&gt;Rock Ridge extends the ISO-9660 filesystem by features equal to the UNIX filesystems (permissions, symbolic links, very long filenames,...). It uses ISO-8859 or UTF-16 based chars and allows 255 octets.
+&lt;p&gt;Rock Ridge extensions are located at the end of each ISO-9660 directory record. This makes the Rock Ridge tree closely coupled to the ISO-9660 tree.
+&lt;p&gt;&lt;b&gt;It is highly recommended to use Rock Ridge extensions on every data cd.&lt;/b&gt;</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>m_checkJoliet</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Generate Joliet extensions</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Add Joliet extensions to the cd</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;If this option is checked K3b will add additional Joliet extensions to the cd.
+&lt;p&gt;Joliet is not an accepted independant international standard like ISO-9660 or Rock Ridge mainly used on Windows systems.
+&lt;p&gt;Joliet does not allow all characters, so the Joliet filenames are not identical to the filenames on disk (as compared to Rock Ridge). Joliet has a filename length limitation of 64 chars (independent from the character coding and type e.g. European vs. Japanese). This is annoying as modern filesystems all allow 255 chars per path name component.
+&lt;p&gt;Joliet uses UTF-16 coding.
+&lt;p&gt;&lt;b&gt;Caution:&lt;/b&gt; Except Linux and FreeBSD, there is no POSIX-like like OS that supports Joliet. So &lt;b&gt;never create Joliet only CD's&lt;/b&gt; for that reason.</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+        <widget class="QGroupBox" row="0" column="1">
+            <property name="name">
+                <cstring>m_groupLinks</cstring>
+            </property>
+            <property name="title">
+                <string>Symbolic Links</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>11</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>m_checkDiscardAllLinks</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Discard all symlinks</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Do not create symbolic links on cd</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;If this option is checked K3b will ignore all symbolic links that have been added to the project meaning that the resulting cd will have no links at all.
+&lt;p&gt;&lt;b&gt;Caution:&lt;/b&gt; Symolic links require Rock Ridge extensions!</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>m_checkDiscardBrokenLinks</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>Discard broken symlinks</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Ignore all links pointing outside the project</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;If this option is checked K3b will discard all symbolic links that do not point to a file inside the project. That includes all links to absolute paths like '/home/myhome/testfile'.
+&lt;p&gt;&lt;b&gt;Caution:&lt;/b&gt; Symolic links require Rock Ridge extensions!</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+        <widget class="QGroupBox" row="1" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>m_groupPermissions</cstring>
+            </property>
+            <property name="title">
+                <string>Permissions</string>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>11</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>m_checkPreservePermissions</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Preserve file permissions (Backup)</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;If this option is checked all files on the resulting cd will have exact the same permissions as the source files. (Otherwise all files will have equal permissions and be owned by root.)
+&lt;p&gt;This is mainly useful for backups.
+&lt;p&gt;&lt;b&gt;Caution:&lt;/b&gt; The permissions may not make much sense on other filesystems. For example if a user that ownes a file on the cd does not exist.</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>m_radioReplace</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_editReplace</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_checkDiscardAllLinks</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_checkDiscardBrokenLinks</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_checkRockRidge</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_groupLinks</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_checkRockRidge</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_checkPreservePermissions</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>m_checkRockRidge</tabstop>
+    <tabstop>m_checkJoliet</tabstop>
+    <tabstop>m_checkDiscardAllLinks</tabstop>
+    <tabstop>m_checkDiscardBrokenLinks</tabstop>
+    <tabstop>m_checkPreservePermissions</tabstop>
+    <tabstop>m_radioNoChange</tabstop>
+    <tabstop>m_radioStrip</tabstop>
+    <tabstop>m_radioExtendedStrip</tabstop>
+    <tabstop>m_radioReplace</tabstop>
+    <tabstop>m_editReplace</tabstop>
+</tabstops>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

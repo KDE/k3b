@@ -31,7 +31,8 @@ class K3bWriterSelectionWidget;
 class K3bTempDirSelectionWidget;
 class K3bDataDoc;
 class KLineEdit;
-
+class K3bDataImageSettingsWidget;
+class K3bDataAdvancedImageSettingsWidget;
 
 /**
   *@author Sebastian Trueg
@@ -72,41 +73,12 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    KLineEdit* m_editPublisher;
    KLineEdit* m_editPreparer;
    KLineEdit* m_editApplicationID;
-   QButtonGroup* m_groupWhiteSpace;
-   QRadioButton* m_radioSpaceLeave;
-   QRadioButton* m_radioSpaceReplace;
-   QRadioButton* m_radioSpaceStrip;
-   QRadioButton* m_radioSpaceExtended;
-   QCheckBox* m_checkCreateRockRidge;
-   QCheckBox* m_checkCreateJoliet;
-   QCheckBox* m_checkDiscardSymLinks;
+
+   K3bDataImageSettingsWidget* m_imageSettingsWidget;
    // ----------------------------------------------
 	
    // --- advanced tab -------------------------
-   QLabel* m_labelAdvancedInfo;
-   QButtonGroup* m_groupIsoLevel;
-   QRadioButton* m_radioIsoLevel1;
-   QRadioButton* m_radioIsoLevel2;
-   QRadioButton* m_radioIsoLevel3;
-   QCheckBox* m_checkNoDeepDirRel;
-   //   QCheckBox* m_checkPadding;
-   QCheckBox* m_checkHideRR_MOVED;
-   QCheckBox* m_checkCreateTRANS_TBL;
-   QCheckBox* m_checkHideTRANS_TBL;
-   QCheckBox* m_checkUntranslatedNames;
-   QCheckBox* m_checkAllow31;
-   QCheckBox* m_checkMaxNames;
-   QCheckBox* m_checkBeginPeriod;
-   QCheckBox* m_checkRelaxedNames;
-   QCheckBox* m_checkOmitVersion;
-   QCheckBox* m_checkNoISOTrans;
-   QCheckBox* m_checkMultiDot;
-   QCheckBox* m_checkLowercase;
-   QCheckBox* m_checkOmitTrailingPeriod;
-   QCheckBox* m_checkFollowSymbolicLinks;
-
-   QCheckBox* m_checkForceInputCharset;
-   KComboBox* m_comboInputCharset;
+   K3bDataAdvancedImageSettingsWidget* m_advancedImageSettingsWidget;
    // ---------------------------------------------
 	
    // --- multisession tab -------------------------

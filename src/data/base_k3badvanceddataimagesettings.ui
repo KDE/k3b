@@ -1,0 +1,397 @@
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<class>base_K3bAdvancedDataImageSettings</class>
+<author>Sebastian Trueg</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>base_K3bAdvancedDataImageSettings</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>586</width>
+            <height>440</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Advanced Data Images Settings</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <property name="spacing">
+            <number>6</number>
+        </property>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>GroupBox1</cstring>
+            </property>
+            <property name="title">
+                <string>ISO-9660 Filesystem</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>11</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>m_checkAllowUntranslatedFilenames</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Allow untranslated filenames</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Force all options below</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="2" column="0">
+                    <property name="name">
+                        <cstring>m_checkAllowMaxLengthFilenames</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Allow max length filenames (37 characters)</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="4" column="0">
+                    <property name="name">
+                        <cstring>m_checkAllowFullAscii</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Allow full ASCII charset</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="5" column="0">
+                    <property name="name">
+                        <cstring>m_checkAllowOther</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Allow ~ and #</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="6" column="0">
+                    <property name="name">
+                        <cstring>m_checkAllowLowercaseCharacters</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Allow lowercase characters</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="2" column="1">
+                    <property name="name">
+                        <cstring>m_checkAllowMultiDot</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Allow multible dots</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="3" column="1">
+                    <property name="name">
+                        <cstring>m_checkOmitVersionNumbers</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Omit version numbers</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="4" column="1">
+                    <property name="name">
+                        <cstring>m_checkOmitTrailingPeriod</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Omit trailing period</string>
+                    </property>
+                </widget>
+                <widget class="Line" row="7" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>Line2</cstring>
+                    </property>
+                    <property name="frameShape" stdset="0">
+                        <enum>HLine</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Sunken</enum>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="8" column="0">
+                    <property name="name">
+                        <cstring>m_checkCreateTransTbl</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Create TRANS.TBL files</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="9" column="0">
+                    <property name="name">
+                        <cstring>m_checkHideTransTbl</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Hide TRANS.TBL files in Joliet</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="8" column="1">
+                    <property name="name">
+                        <cstring>m_checkFollowSymbolicLinks</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Follow symbolic links</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="6" column="1">
+                    <property name="name">
+                        <cstring>m_checkAllow31CharFilenames</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Allow 31 character filenames</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="Line" row="1" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>Line1</cstring>
+                    </property>
+                    <property name="frameShape" stdset="0">
+                        <enum>HLine</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Sunken</enum>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="3" column="0">
+                    <property name="name">
+                        <cstring>m_checkAllowBeginningPeriod</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Allow beginning period</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>m_groupIsoLevel</cstring>
+            </property>
+            <property name="title">
+                <string>ISO Level</string>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>11</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>m_radioIsoLevel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Level 1</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>ISO-9660 conformance level</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;Set the ISO-9660 conformance level.
+&lt;ul&gt;
+&lt;li&gt;Level 1: Files may only consist of one section and filenames are restricted to 8.3 characters.&lt;/li&gt;
+&lt;li&gt;Level 2: Files may only consist of one section.&lt;/li&gt;
+&lt;li&gt;Level 3: No restrictions.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;With all ISO-9660 levels all filenames are restricted to upper case letters, numbers and the underscore (_). The maximum filename length is 31 characters, the directory nesting level is restricted to 8 and the maximum path length is limited to 255 characters. (These restrictions may be violated with the additional ISO-9660 K3b offers.)</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>m_radioIsoLevel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Level 2</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>ISO-9660 conformance level</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;Set the ISO-9660 conformance level.
+&lt;ul&gt;
+&lt;li&gt;Level 1: Files may only consist of one section and filenames are restricted to 8.3 characters.&lt;/li&gt;
+&lt;li&gt;Level 2: Files may only consist of one section.&lt;/li&gt;
+&lt;li&gt;Level 3: No restrictions.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;With all ISO-9660 levels all filenames are restricted to upper case letters, numbers and the underscore (_). The maximum filename length is 31 characters, the directory nesting level is restricted to 8 and the maximum path length is limited to 255 characters. (These restrictions may be violated with the additional ISO-9660 K3b offers.)</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>m_radioIsoLevel3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Level 3</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>ISO-9660 conformance level</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;Set the ISO-9660 conformance level.
+&lt;ul&gt;
+&lt;li&gt;Level 1: Files may only consist of one section and filenames are restricted to 8.3 characters.&lt;/li&gt;
+&lt;li&gt;Level 2: Files may only consist of one section.&lt;/li&gt;
+&lt;li&gt;Level 3: No restrictions.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;With all ISO-9660 levels all filenames are restricted to upper case letters, numbers and the underscore (_). The maximum filename length is 31 characters, the directory nesting level is restricted to 8 and the maximum path length is limited to 255 characters. (These restrictions may be violated with the additional ISO-9660 K3b offers.)</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>m_groupInputCharset</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>1</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="title">
+                <string>Input Charset</string>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>11</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>m_checkForceInputCharset</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Force input charset:</string>
+                    </property>
+                </widget>
+                <widget class="KComboBox">
+                    <property name="name">
+                        <cstring>m_comboInputCharset</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                    <property name="editable">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+    </vbox>
+</widget>
+<connections>
+    <connection>
+        <sender>m_checkAllowUntranslatedFilenames</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_checkAllowMaxLengthFilenames</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_checkAllowUntranslatedFilenames</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_checkAllowBeginningPeriod</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_checkAllowUntranslatedFilenames</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_checkAllowFullAscii</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_checkAllowUntranslatedFilenames</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_checkAllowOther</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_checkAllowUntranslatedFilenames</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_checkAllowLowercaseCharacters</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_checkAllowUntranslatedFilenames</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_checkAllowMultiDot</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_checkAllowUntranslatedFilenames</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_checkOmitVersionNumbers</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_checkAllowUntranslatedFilenames</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_checkOmitTrailingPeriod</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_checkAllowUntranslatedFilenames</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_checkAllow31CharFilenames</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_checkForceInputCharset</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_comboInputCharset</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>m_checkAllowUntranslatedFilenames</tabstop>
+    <tabstop>m_checkAllowMaxLengthFilenames</tabstop>
+    <tabstop>m_checkAllowBeginningPeriod</tabstop>
+    <tabstop>m_checkAllowFullAscii</tabstop>
+    <tabstop>m_checkAllowOther</tabstop>
+    <tabstop>m_checkAllowLowercaseCharacters</tabstop>
+    <tabstop>m_checkAllowMultiDot</tabstop>
+    <tabstop>m_checkOmitVersionNumbers</tabstop>
+    <tabstop>m_checkOmitTrailingPeriod</tabstop>
+    <tabstop>m_checkAllow31CharFilenames</tabstop>
+    <tabstop>m_checkCreateTransTbl</tabstop>
+    <tabstop>m_checkHideTransTbl</tabstop>
+    <tabstop>m_checkFollowSymbolicLinks</tabstop>
+    <tabstop>m_radioIsoLevel3</tabstop>
+    <tabstop>m_checkForceInputCharset</tabstop>
+    <tabstop>m_comboInputCharset</tabstop>
+</tabstops>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

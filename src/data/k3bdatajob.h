@@ -72,6 +72,8 @@ class K3bDataJob : public K3bBurnJob
 
   bool m_imageFinished;
 
+  bool m_noDeepDirectoryRelocation;
+
   QString m_isoSize;
   QString m_msInfo;
   QString m_collectedOutput;

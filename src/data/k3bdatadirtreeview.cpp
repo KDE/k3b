@@ -86,14 +86,16 @@ K3bDataDirTreeView::~K3bDataDirTreeView()
 
 void K3bDataDirTreeView::rename( QListViewItem* item, int c )
 {
-  m_editor->load( item, c );
+  // we only allow renaming of data items
+  if( dynamic_cast<K3bDataDirViewItem*>(item) )
+    m_editor->load( item, c );
 }
 
 
 void K3bDataDirTreeView::slotExecuted( QListViewItem* item )
 {
-  if( item )
-    emit dirSelected( ((K3bDataDirViewItem*)item)->dirItem() );
+  if( K3bDataDirViewItem* viewItem = dynamic_cast<K3bDataDirViewItem*>(item) )
+    emit dirSelected( viewItem->dirItem() );
 }
 
 
@@ -144,6 +146,12 @@ void K3bDataDirTreeView::slotDropped( QDropEvent* e, QListViewItem*, QListViewIt
       if( KURLDrag::decode( e, urls ) )
 	m_doc->slotAddUrlsToDir( urls, parent );
     }
+  }
+
+  else if( QUriDrag::canDecode(e) ) {
+    KURL::List urls;
+    if( KURLDrag::decode( e, urls ) )
+      emit urlsDropped( urls, parentViewItem );
   }
 }
 
@@ -211,12 +219,13 @@ void K3bDataDirTreeView::updateContents()
 
 
   // check the directory depth
-  QListViewItemIterator it(this);
+  QListViewItemIterator it(root());
   while( it.current() != 0 ) {
-    if( it.current() != m_root ) {
-      K3bDirItem* dirItem = ((K3bDataDirViewItem*)it.current())->dirItem();
-      it.current()->setPixmap( 0, dirItem->depth() > 7 ? SmallIcon( "folder_red" ) : SmallIcon( "folder" ) );
-    }
+    if( K3bDataDirViewItem* dirViewItem = dynamic_cast<K3bDataDirViewItem*>(it.current()) )
+      if( it.current() != m_root ) {
+	K3bDirItem* dirItem = dirViewItem->dirItem();
+	dirViewItem->setPixmap( 0, dirItem->depth() > 7 ? SmallIcon( "folder_red" ) : SmallIcon( "folder" ) );
+      }
     
     ++it;
   }

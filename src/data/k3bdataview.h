@@ -29,9 +29,7 @@ class K3bDataItem;
 class K3bFileItem;
 class K3bDirItem;
 class K3bFillStatusDisplay;
-class KListView;
-class K3bProjectBurnDialog;
-class K3bDataBurnDialog;
+
 
 /**
   *@author Sebastian Trueg
@@ -55,7 +53,6 @@ class K3bDataView : public K3bView
    K3bFillStatusDisplay* m_fillStatusDisplay;
 		
    K3bDataDoc* m_doc;
-   K3bDataBurnDialog* m_burnDialog;
 };
 
 

@@ -54,7 +54,6 @@ class K3bDataDoc : public K3bDoc
   K3bDataDoc( QObject* parent );
   ~K3bDataDoc();
 
-  enum whiteSpaceTreatments { normal = 0, convertToUnderScore = 1, strip = 2, extendedStrip = 3 };
   enum mutiSessionModes { NONE, START, CONTINUE, FINISH };
 
   K3bRootItem* root() const { return m_root; }
@@ -92,19 +91,15 @@ class K3bDataDoc : public K3bDoc
 	
   K3bBurnJob* newBurnJob();
 	
-  int whiteSpaceTreatment() const { return m_whiteSpaceTreatment; }
   bool deleteImage() const { return m_deleteImage; }
   bool onlyCreateImage() const { return m_onlyCreateImage; }
-	
-  void setWhiteSpaceTreatment( int i ) { m_whiteSpaceTreatment = i; }
+
+
   void setDeleteImage( bool b ) { m_deleteImage = b; }
   void setOnlyCreateImage( bool b ) { m_onlyCreateImage = b; }
 
   int multiSessionMode() const { return m_multisessionMode; }
   void setMultiSessionMode( int mode ) { m_multisessionMode = mode; }
-
-  bool discardSymlinks() const { return m_discardSymlinks; }
-  void setDiscardSymlinks( bool b ) { m_discardSymlinks = b; }
 
   static bool nameAlreadyInDir( const QString&, K3bDirItem* );
 
@@ -184,13 +179,9 @@ class K3bDataDoc : public K3bDoc
 
   unsigned long m_size;
 		
-  int m_whiteSpaceTreatment;
-
   K3bIsoOptions m_isoOptions;
 
   int m_multisessionMode;
-
-  bool m_discardSymlinks;
 };
 
 #endif

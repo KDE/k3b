@@ -50,6 +50,7 @@ K3bDataJob::K3bDataJob( K3bDataDoc* doc )
 {
   m_doc = doc;
   m_process = 0;
+  m_noDeepDirectoryRelocation = false;
 
   m_imageFinished = true;
 }
@@ -826,7 +827,10 @@ bool K3bDataJob::addMkisofsParameters()
     *m_process << "-sysid" << "\"" + m_doc->isoOptions().systemId() + "\"";
 		
   if( m_doc->isoOptions().createRockRidge() ) {
-    *m_process << "-r";
+    if( m_doc->isoOptions().preserveFilePermissions() )
+      *m_process << "-R";
+    else
+      *m_process << "-r";
     *m_process << "-hide-list" << m_rrHideFile;
   }
 
@@ -859,23 +863,17 @@ bool K3bDataJob::addMkisofsParameters()
 		
   if( m_doc->isoOptions().ISOmaxFilenameLength()  )
     *m_process << "-max-iso9660-filenames";	
-  if( m_doc->isoOptions().noDeepDirectoryRelocation()  )
+  if( m_noDeepDirectoryRelocation  )
     *m_process << "-D";	
 
 
   if( m_doc->isoOptions().followSymbolicLinks() )
     *m_process << "-f";
 
-//   if( m_doc->isoOptions().hideRR_MOVED()  )
-//     *m_process << "-hide-rr-moved";	
   if( m_doc->isoOptions().createTRANS_TBL()  )
     *m_process << "-T";	
   if( m_doc->isoOptions().hideTRANS_TBL()  )
     *m_process << "-hide-joliet-trans-tbl";	
-
-  // This is enabled by default and so should it stay
-//   if( m_doc->isoOptions().padding()  )
-//     *m_process << "-pad";	
 
   *m_process << "-iso-level" << QString::number(m_doc->isoOptions().ISOLevel());
 
@@ -935,7 +933,7 @@ void K3bDataJob::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream )
 {
   if( dirItem->depth() > 7 ) {
     kdDebug() << "(K3bDataJob) found directory depth > 7. Enabling no deep directory relocation." << endl;
-    m_doc->isoOptions().setNoDeepDirectoryRelocation( true );
+    m_noDeepDirectoryRelocation = true;
   }
 
   // if joliet is enabled we need to cut long names since mkisofs is not able to do it
@@ -1006,7 +1004,7 @@ void K3bDataJob::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream )
     // now create the graft points
     for( QPtrListIterator<K3bDataItem> it( *dirItem->children() ); it.current(); ++it ) {
       K3bDataItem* item = it.current();
-      if( m_doc->discardSymlinks() && item->isSymLink() )
+      if( m_doc->isoOptions().discardSymlinks() && item->isSymLink() )
 	continue;
 
       stream << escapeGraftPoint( m_doc->treatWhitespace(item->jolietPath()) ) 
@@ -1020,7 +1018,7 @@ void K3bDataJob::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream )
     // takes care of it
     for( QPtrListIterator<K3bDataItem> it( *dirItem->children() ); it.current(); ++it ) {
       K3bDataItem* item = it.current();
-      if( m_doc->discardSymlinks() && item->isSymLink() )
+      if( m_doc->isoOptions().discardSymlinks() && item->isSymLink() )
 	continue;
 
       stream << escapeGraftPoint( m_doc->treatWhitespace(item->k3bPath()) ) 

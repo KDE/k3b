@@ -43,7 +43,6 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
   : K3bView(doc, parent,name)
 {
   m_doc = doc;
-  m_burnDialog = 0;
 	
   // --- setup GUI ---------------------------------------------------
   QSplitter* mainSplitter = new QSplitter( this );	

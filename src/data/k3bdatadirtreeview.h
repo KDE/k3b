@@ -20,7 +20,7 @@
 
 
 #include <klistview.h>
-
+#include <kurl.h>
 
 #include <qmap.h>
 
@@ -54,6 +54,9 @@ class K3bDataDirTreeView : public KListView
   void setFileView( K3bDataFileView* view ) { m_fileView = view; }
 
   KActionCollection* actionCollection() const { return m_actionCollection; }
+
+ signals:
+  void urlsDropped( const KURL::List&, QListViewItem* parent );
 
  protected:
   bool acceptDrag(QDropEvent* e) const;

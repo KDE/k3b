@@ -76,11 +76,8 @@ bool K3bDataDoc::newDocument()
   m_isoImage = QString::null;
 
   m_multisessionMode = NONE;
-  m_discardSymlinks = false;
 
   m_isoOptions = K3bIsoOptions();
-  m_isoOptions.setApplicationID( "K3B" );
-  isoOptions().setVolumeID( i18n("Dataproject") );
 
   return K3bDoc::newDocument();
 }
@@ -439,14 +436,8 @@ bool K3bDataDoc::loadDocumentData( QDomDocument* doc )
     else if( e.nodeName() == "iso_untranslated_filenames")
       isoOptions().setISOuntranslatedFilenames( e.attributeNode( "activated" ).value() == "yes" );
 
-//     else if( e.nodeName() == "no_deep_dir_relocation")
-//       isoOptions().setNoDeepDirectoryRelocation( e.attributeNode( "activated" ).value() == "yes" );
-
     else if( e.nodeName() == "follow_symbolic_links")
       isoOptions().setFollowSymbolicLinks( e.attributeNode( "activated" ).value() == "yes" );
-
-//     else if( e.nodeName() == "hide_rr_moved")
-//       isoOptions().setHideRR_MOVED( e.attributeNode( "activated" ).value() == "yes" );
 
     else if( e.nodeName() == "create_trans_tbl")
       isoOptions().setCreateTRANS_TBL( e.attributeNode( "activated" ).value() == "yes" );
@@ -456,6 +447,35 @@ bool K3bDataDoc::loadDocumentData( QDomDocument* doc )
 
     else if( e.nodeName() == "iso_level")
       isoOptions().setISOLevel( e.text().toInt() );
+
+    else if( e.nodeName() == "discard_symlinks")
+      isoOptions().setDiscardSymlinks( e.attributeNode( "activated" ).value() == "yes" );
+
+    else if( e.nodeName() == "discard_broken_symlinks")
+      isoOptions().setDiscardBrokenSymlinks( e.attributeNode( "activated" ).value() == "yes" );
+
+    else if( e.nodeName() == "preserve_file_permissions")
+      isoOptions().setPreserveFilePermissions( e.attributeNode( "activated" ).value() == "yes" );
+
+    else if( e.nodeName() == "force_input_charset")
+      isoOptions().setForceInputCharset( e.attributeNode( "activated" ).value() == "yes" );
+
+    else if( e.nodeName() == "input_charset")
+      isoOptions().setInputCharset( e.text() );
+
+    else if( e.nodeName() == "whitespace_treatment" ) {
+      if( e.text() == "strip" )
+	isoOptions().setWhiteSpaceTreatment( K3bIsoOptions::strip );
+      else if( e.text() == "extended" )
+	isoOptions().setWhiteSpaceTreatment( K3bIsoOptions::extended );
+      else if( e.text() == "extended" )
+	isoOptions().setWhiteSpaceTreatment( K3bIsoOptions::replace );
+      else
+	isoOptions().setWhiteSpaceTreatment( K3bIsoOptions::noChange );
+    }
+
+    else if( e.nodeName() == "whitespace_replace_string")
+      isoOptions().setWhiteSpaceTreatmentReplaceString( e.text() );
 
     else
       kdDebug() << "(K3bDataDoc) unknown option entry: " << e.nodeName() << endl;
@@ -641,17 +661,9 @@ bool K3bDataDoc::saveDocumentData( QDomDocument* doc )
   topElem.setAttribute( "activated", isoOptions().ISOuntranslatedFilenames() ? "yes" : "no" );
   optionsElem.appendChild( topElem );
 
-//   topElem = doc->createElement( "no_deep_dir_relocation" );
-//   topElem.setAttribute( "activated", isoOptions().noDeepDirectoryRelocation() ? "yes" : "no" );
-//   optionsElem.appendChild( topElem );
-
   topElem = doc->createElement( "follow_symbolic_links" );
   topElem.setAttribute( "activated", isoOptions().followSymbolicLinks() ? "yes" : "no" );
   optionsElem.appendChild( topElem );
-
-//   topElem = doc->createElement( "hide_rr_moved" );
-//   topElem.setAttribute( "activated", isoOptions().hideRR_MOVED() ? "yes" : "no" );
-//   optionsElem.appendChild( topElem );
 
   topElem = doc->createElement( "create_trans_tbl" );
   topElem.setAttribute( "activated", isoOptions().createTRANS_TBL() ? "yes" : "no" );
@@ -664,6 +676,49 @@ bool K3bDataDoc::saveDocumentData( QDomDocument* doc )
   topElem = doc->createElement( "iso_level" );
   topElem.appendChild( doc->createTextNode( QString::number(isoOptions().ISOLevel()) ) );
   optionsElem.appendChild( topElem );
+
+  topElem = doc->createElement( "discard_symlinks" );
+  topElem.setAttribute( "activated", isoOptions().discardSymlinks() ? "yes" : "no" );
+  optionsElem.appendChild( topElem );
+
+  topElem = doc->createElement( "discard_broken_symlinks" );
+  topElem.setAttribute( "activated", isoOptions().discardBrokenSymlinks() ? "yes" : "no" );
+  optionsElem.appendChild( topElem );
+
+  topElem = doc->createElement( "preserve_file_permissions" );
+  topElem.setAttribute( "activated", isoOptions().preserveFilePermissions() ? "yes" : "no" );
+  optionsElem.appendChild( topElem );
+
+  topElem = doc->createElement( "force_input_charset" );
+  topElem.setAttribute( "activated", isoOptions().forceInputCharset() ? "yes" : "no" );
+  optionsElem.appendChild( topElem );
+
+  topElem = doc->createElement( "input_charset" );
+  topElem.appendChild( doc->createTextNode( isoOptions().inputCharset() ) );
+  optionsElem.appendChild( topElem );
+
+
+  topElem = doc->createElement( "whitespace_treatment" );
+  switch( isoOptions().whiteSpaceTreatment() ) {
+  case K3bIsoOptions::strip:
+    topElem.appendChild( doc->createTextNode( "strip" ) );
+    break;
+  case K3bIsoOptions::extended:
+    topElem.appendChild( doc->createTextNode( "extended" ) );
+    break;
+  case K3bIsoOptions::replace:
+    topElem.appendChild( doc->createTextNode( "replace" ) );
+    break;
+  default:
+    topElem.appendChild( doc->createTextNode( "noChange" ) );
+    break;
+  }
+  optionsElem.appendChild( topElem );
+
+  topElem = doc->createElement( "whitespace_replace_string" );
+  topElem.appendChild( doc->createTextNode( isoOptions().whiteSpaceTreatmentReplaceString() ) );
+  optionsElem.appendChild( topElem );
+
 
   docElem.appendChild( optionsElem );
   // ----------------------------------------------------------------------
@@ -863,31 +918,29 @@ QString K3bDataDoc::treatWhitespace( const QString& path )
   // similar (s.a.)
 
 
-  if( whiteSpaceTreatment() != K3bDataDoc::normal ) {
+  if( isoOptions().whiteSpaceTreatment() != K3bIsoOptions::noChange ) {
     QString _result;
     int _startPos = path.findRev('/');
     if( _startPos == -1 ) _startPos = 0;
     else _startPos += 1;
     _result = path.left( _startPos );
   	
-    if( whiteSpaceTreatment() == K3bDataDoc::convertToUnderScore ) {
-      // if QString is saved as an array this code is OK
+    if( isoOptions().whiteSpaceTreatment() == K3bIsoOptions::replace ) {
+      const QString& rs = isoOptions().whiteSpaceTreatmentReplaceString();
       for( uint i = _startPos; i < path.length(); i++ ) {
 	if( path[i] == ' ' )
-	  _result.append('_');
+	  _result.append(rs);
 	else
 	  _result.append( path[i] );
       }
     }
-    else if( whiteSpaceTreatment() == K3bDataDoc::strip ) {
-      // if QString is saved as an array this code is OK
+    else if( isoOptions().whiteSpaceTreatment() == K3bIsoOptions::strip ) {
       for( uint i = _startPos; i < path.length(); i++ ) {
 	if( path[i] != ' ' )
 	  _result.append( path[i] );
       }
     }
-    else if( whiteSpaceTreatment() == K3bDataDoc::extendedStrip ) {
-      // if QString is saved as an array this code is OK
+    else if( isoOptions().whiteSpaceTreatment() == K3bIsoOptions::extended ) {
       for( uint i = _startPos; i < path.length(); i++ ) {
 	if( path[i] == ' ' ) {
 	  if( path[i+1] != ' ' )
@@ -938,48 +991,15 @@ void K3bDataDoc::loadDefaultSettings()
 
   c->setGroup( "default data settings" );
 
+  m_isoOptions = K3bIsoOptions::load( c );
+
   setDummy( c->readBoolEntry( "dummy_mode", false ) );
   setDao( c->readBoolEntry( "dao", true ) );
   setOnTheFly( c->readBoolEntry( "on_the_fly", true ) );
   setBurnproof( c->readBoolEntry( "burnproof", true ) );
-  isoOptions().setForceInputCharset( c->readBoolEntry( "force input charset", false ) );
-  if( isoOptions().forceInputCharset() )
-    isoOptions().setInputCharset( c->readEntry( "input charset", "iso8859-1" ) );
 
-  isoOptions().setCreateRockRidge( c->readBoolEntry( "rock_ridge", true ) );
-  isoOptions().setCreateJoliet( c->readBoolEntry( "joliet", false ) );
   m_deleteImage = c->readBoolEntry( "remove_image", true );
   m_onlyCreateImage = c->readBoolEntry( "only_create_image", false );
-  isoOptions().setISOLevel( c->readNumEntry( "iso_level", 3 ) );
-
-  QString w = c->readEntry( "white_space_treatment", "normal" );
-  if( w == "convert" )
-    m_whiteSpaceTreatment = K3bDataDoc::convertToUnderScore;
-  else if( w == "strip" )
-    m_whiteSpaceTreatment = K3bDataDoc::strip;
-  else if( w == "extended" )
-    m_whiteSpaceTreatment = K3bDataDoc::extendedStrip;
-  else
-    m_whiteSpaceTreatment = K3bDataDoc::normal;
-
-  setDiscardSymlinks( c->readBoolEntry("discard symlinks", false ) );
-
-  c->setGroup( "Default ISO Settings" );
-  //  m_noDeepDirectoryRelocation = c->readBoolEntry( "no deep dir relocation", false );
-  //  m_hideRR_MOVED = c->readBoolEntry( "hide RR_MOVED", false );
-  isoOptions().setCreateTRANS_TBL( c->readBoolEntry( "create TRANS_TBL", false ) );
-  isoOptions().setHideTRANS_TBL( c->readBoolEntry( "hide TRANS_TBL", false ) );
-  isoOptions().setISOuntranslatedFilenames( c->readBoolEntry( "untranslated filenames", false ) );
-  isoOptions().setISOallow31charFilenames( c->readBoolEntry( "allow 31 character filenames", true ) );
-  isoOptions().setISOmaxFilenameLength( c->readBoolEntry( "max ISO filenames", false ) );
-  isoOptions().setISOallowPeriodAtBegin( c->readBoolEntry( "allow beginning period", false ) );
-  isoOptions().setISOrelaxedFilenames( c->readBoolEntry( "relaxed filenames", false ) );
-  isoOptions().setISOomitVersionNumbers( c->readBoolEntry( "omit version numbers", false ) );
-  isoOptions().setISOnoIsoTranslate( c->readBoolEntry( "no iSO translation", false ) );
-  isoOptions().setISOallowMultiDot( c->readBoolEntry( "allow multible dots", false ) );
-  isoOptions().setISOallowLowercase( c->readBoolEntry( "allow lowercase filenames", false ) );
-  isoOptions().setISOomitTrailingPeriod( c->readBoolEntry( "omit trailing period", false ) );
-  isoOptions().setFollowSymbolicLinks( c->readBoolEntry( "follow symbolic links", false ) );
 }
 
 
