@@ -102,7 +102,7 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
 {
   m_diskInfoDetector = new K3bDiskInfoDetector( this );
   connect( m_diskInfoDetector, SIGNAL(diskInfoReady(const K3bCdDevice::DiskInfo&)),
-	   k3bapp->k3bMainWindow(), SLOT(endBusy()) );
+	   k3bMain(), SLOT(endBusy()) );
   connect( m_diskInfoDetector, SIGNAL(diskInfoReady(const K3bCdDevice::DiskInfo&)),
 	   this, SLOT(slotDiskInfoReady(const K3bCdDevice::DiskInfo&)) );
 
