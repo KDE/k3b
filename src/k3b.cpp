@@ -463,6 +463,12 @@ void K3bMainWindow::initView()
 
 void K3bMainWindow::createClient( K3bDoc* doc )
 {
+  // register the project with the manager
+  d->projectManager->addProject( doc );
+
+  // create the dcop interface
+  dcopInterface( doc );
+
   // create the proper K3bView (maybe we should put this into some other class like K3bProjectManager)
   K3bView* view = 0;
   switch( doc->docType() ) {
@@ -1186,14 +1192,8 @@ K3bDoc* K3bMainWindow::slotNewMovixDvdDoc()
 
 void K3bMainWindow::initializeNewDoc( K3bDoc* doc )
 {
-  // register the project with the manager
-  d->projectManager->addProject( doc );
-
   doc->newDocument();
   doc->loadDefaultSettings( config() );
-
-  // create the dcop interface
-  dcopInterface( doc );
 }
 
 
