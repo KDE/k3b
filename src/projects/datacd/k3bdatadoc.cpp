@@ -1308,7 +1308,7 @@ void K3bDataDoc::importSession( K3bCdDevice::CdDevice* device )
 // 		     i18n("Importing old session from %1").arg(device->blockDeviceName()) );
 //   d.show();
 
-  connect( K3bCdDevice::toc( device ), SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
+  connect( K3bCdDevice::diskInfo( device ), SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
 	   this, SLOT(slotTocRead(K3bCdDevice::DeviceHandler*)) );
 }
 
