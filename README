@@ -1,4 +1,4 @@
-K3b Version 0.8
+K3b Version 0.9
 
 Thanx for downloading K3b - The CD Kreator
 
@@ -10,9 +10,11 @@ These are the features so far:
    - cd-text support
    - ID3-tag support
    - little gimmick: hide the first track (so that you have to search back from the beginning of the cd to find it)
+   - volume level normalization (only when writing with an image)
 
  - writing ISO-cds
    - Joliet/Rockridge support
+   - Udf filestructures (no pure Udf so far)
    - create image/write image
    - writing on-the-fly
    - creating of file-tree via drag'n'drop (as easy as it could be)
@@ -51,7 +53,9 @@ These are the features so far:
 
  - Retrieving cd info and toc
 
- - Support for ATAPI drives without SCSI-emulation for reading (only audio and dvd ripping so far)
+ - Support for ATAPI drives without SCSI-emulation
+   writing in in alpha-state when supported by the kernel and cdrecord
+   full support for audio-ripping and dvd-ripping
 
  - integrated full featured audio player
 
@@ -72,4 +76,5 @@ Please report bugs (with k3b output!) and tell me what you like/dislike
 about the user-interface!
 
 Have fun
-Sebastian Trueg (trueg@informatik.uni-freiburg.de)
+Sebastian Trueg (trueg@k3b.org)
+

@@ -1,7 +1,7 @@
 Q: When writing an audio cd K3b canceles with the following message:
    "No cdrdao driver found."
 A: K3b is not able to determine the cdrdao driver for your writer automatically. Please set it
-   manually in the Settings dialog. (for most current drives it would be 'generic-mmc'.
+   manually in K3b's device settings (not K3bSetup) (for most current drives it would be 'generic-mmc').
 
 
 Q: I cannot select my IDE CDROM as reading device in the cd copy dialog.

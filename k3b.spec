@@ -1,15 +1,15 @@
 %define name    k3b
-%define version 0.8
+%define version 0.9
 %define release 1asp
 %define distversion %( perl -e '$_=\<\>;/(\\d+)\\.(\\d)\\.?(\\d)?/; print "$1$2".($3||0)' /etc/*-release)
 
 Summary:   CD-Burner for KDE3
 Name:      k3b
-Version:   0.8
+Version:   %{version}
 Release:   %{_vendor}_%{distversion}
 Copyright: GPL
 Vendor:    Sebastian Trueg <trueg@k3b.org>
-Url:       http://k3b.sourceforge.net
+Url:       http://www.k3b.org
 Icon:      k3b.png
 Packager:  Sebastian Trueg <trueg@k3b.org>
 Group:     Archiving/Cd burning
