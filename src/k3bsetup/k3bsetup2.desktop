@@ -45,3 +45,4 @@ X-KDE-FactoryName=k3bsetup2
 X-KDE-Library=k3bsetup2
 X-KDE-ModuleType=Library
 X-KDE-RootOnly=true
+Categories=Application;System;X-KDE-System;
