@@ -419,18 +419,18 @@ void K3bMainWindow::initView()
   connect( m_documentTab, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotCurrentDocChanged()) );
 
 
-  d->welcomeWidget = new K3bWelcomeWidget( d->documentStack );
-  d->welcomeWidget->m_topPixLabel->setPixmap( QPixmap(locate( "data", "k3b/pics/k3bprojectview_left.png" )) );
-  d->welcomeWidget->m_bottomPixLabel->setPixmap( QPixmap(locate( "data", "k3b/pics/k3bprojectview_right.png" )) );
+  d->welcomeWidget = new K3bWelcomeWidget( this, d->documentStack );
+//   d->welcomeWidget->m_topPixLabel->setPixmap( QPixmap(locate( "data", "k3b/pics/k3bprojectview_left.png" )) );
+//   d->welcomeWidget->m_bottomPixLabel->setPixmap( QPixmap(locate( "data", "k3b/pics/k3bprojectview_right.png" )) );
 
-  connect( d->welcomeWidget->m_buttonDataCD, SIGNAL(leftClickedURL()),
-	   this, SLOT(slotNewDataDoc()) );
-  connect( d->welcomeWidget->m_buttonDataDVD, SIGNAL(leftClickedURL()),
-	   this, SLOT(slotNewDvdDoc()) );
-  connect( d->welcomeWidget->m_buttonAudioCD, SIGNAL(leftClickedURL()),
-	   this, SLOT(slotNewAudioDoc()) );
-  connect( d->welcomeWidget->m_buttonCopyCD, SIGNAL(leftClickedURL()),
-	   this, SLOT(slotCdCopy()) );
+//   connect( d->welcomeWidget->m_buttonDataCD, SIGNAL(leftClickedURL()),
+// 	   this, SLOT(slotNewDataDoc()) );
+//   connect( d->welcomeWidget->m_buttonDataDVD, SIGNAL(leftClickedURL()),
+// 	   this, SLOT(slotNewDvdDoc()) );
+//   connect( d->welcomeWidget->m_buttonAudioCD, SIGNAL(leftClickedURL()),
+// 	   this, SLOT(slotNewAudioDoc()) );
+//   connect( d->welcomeWidget->m_buttonCopyCD, SIGNAL(leftClickedURL()),
+// 	   this, SLOT(slotCdCopy()) );
 
   d->documentStack->addWidget( d->welcomeWidget );
   d->documentStack->raiseWidget( d->welcomeWidget );
@@ -532,9 +532,10 @@ K3bDoc* K3bMainWindow::openDocument(const KURL& url)
 
 void K3bMainWindow::saveOptions()
 {
-  m_config->setGroup("General Options");
-  m_config->writeEntry("Show Document Header", m_documentHeader->isVisible());
-  actionFileOpenRecent->saveEntries(m_config,"Recent Files");
+  m_config->setGroup( "General Options" );
+
+  m_config->writeEntry( "Show Document Header", actionViewDocumentHeader->isChecked() );
+  actionFileOpenRecent->saveEntries( m_config, "Recent Files" );
 
   // save dock positions!
   manager()->writeConfig( m_config, "Docking Config" );
