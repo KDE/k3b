@@ -27,7 +27,8 @@ AudioListView::AudioListView(QWidget *parent, const char *name )
  	setAcceptDrops( true );
 	setDropVisualizer( true );
 	setAllColumnsShowFocus( true );
-	
+	setDragEnabled( true );
+		
 	setupColumns();
 }
 
@@ -44,5 +45,5 @@ void AudioListView::setupColumns(){
 }
 
 bool AudioListView::acceptDrag(QDropEvent* e) const{
-	return QTextDrag::canDecode(e);
+	return ( e->source() == viewport() || QTextDrag::canDecode(e) );
 }

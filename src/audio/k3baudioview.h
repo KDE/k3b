@@ -25,6 +25,10 @@ class AudioListView;
 class QWidget;
 class K3bAudioDoc;
 class K3bAudioTrack;
+class QDropEvent;
+class QListViewItem;
+class KListView;
+
 
 /**
   *@author Sebastian Trueg
@@ -42,11 +46,19 @@ private:
 	AudioListView* m_songlist;
 
 signals:
- 	void dropped(QDropEvent*);
+ 	void dropped(const QString&, uint position);
+	 /** the item at position oldPos should be removed and reinserted at newPos */
+	void itemMoved( uint oldPos, uint newPos );
 
 public slots:
   /** adds a new item for _track */
   void addItem( K3bAudioTrack* _track );
+
+protected slots:
+  /** generates a dropped signal */
+  void slotDropped( KListView*, QDropEvent* e, QListViewItem* after );
+  /** emits a signal to move an item */
+  void slotItemMoved( QListViewItem*, QListViewItem*, QListViewItem* );
 };
 
 #endif

@@ -243,7 +243,8 @@ K3bDirView::PrivateFileView::PrivateFileView( QWidget* parent, const char* name 
  : KFileDetailView( parent, name )
 {
 	setDragEnabled( true );
-	KListView::setSelectionMode( QListView::Extended );
+	setSelectionMode( KFile::Extended );
+	setSelectionModeExt( Extended );
 }
 
 	

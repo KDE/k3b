@@ -22,7 +22,7 @@
 #include "k3b.h"
 
 static const char *description =
-	I18N_NOOP("K3b");
+	I18N_NOOP("K3b is a cd burning program that has two aims: usability and as much features as possible.");
 // INSERT A DESCRIPTION FOR YOUR APPLICATION HERE
 	
 	

@@ -18,7 +18,6 @@
 // QT-includes
 
 #include "audiolistviewitem.h"
-#include "k3baudioproject.h"
 #include "k3baudiotrack.h"
 
 

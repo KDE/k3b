@@ -19,6 +19,10 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qwidget.h>
+#include <qstring.h>
+#include <qdatetime.h>
+#include <qfile.h>
+#include <qtimer.h>
 
 // include files for KDE
 #include <klocale.h>
@@ -26,26 +30,137 @@
 #include <kfiledialog.h>
 #include <kio/job.h>
 #include <kio/netaccess.h>
+#include <kprocess.h>
+#include <kapp.h>
+#include <kstddirs.h>
 
 // application specific includes
 #include "k3b.h"
 #include "k3bview.h"
 #include "k3bdoc.h"
+#include "k3bglobals.h"
 
-K3bDoc::K3bDoc()
+K3bDoc::K3bDoc( const QString& cdrecord )
+	: m_cdrecord(cdrecord)
 {
-  pViewList = new QList<K3bView>;
-  pViewList->setAutoDelete(false);
+	pViewList = new QList<K3bView>;
+	pViewList->setAutoDelete(false);
+
+	m_process = new KProcess();
+	m_timer = new QTimer( this );
+	m_burner = 0;
+	m_dao = true;
+	m_error = K3b::NOT_STARTED;
+	m_speed = 1;
+
+	if( !QFile::exists( m_cdrecord ) )
+		qDebug( "(K3bDoc) could not find cdrecord!" );
 }
+
 
 K3bDoc::~K3bDoc()
 {
-  delete pViewList;
+	delete m_process;
+	delete pViewList;
 }
+
+void K3bDoc::write( const QString& imageFile, bool deleteImage )
+{
+	// use KProcess to start cdrecord
+	// write image to cd
+}
+
+void K3bDoc::setDao( bool b )
+{
+	m_dao = b;
+}
+
+void K3bDoc::setDummy( bool b )
+{
+	m_dummy = b;
+}
+
+void K3bDoc::setEject( bool e )
+{
+	m_eject = e;
+}
+
+void K3bDoc::setSpeed( int speed )
+{
+	m_speed = speed;
+}
+
+void K3bDoc::setBurner( K3bDevice* dev )
+{
+	m_burner = dev;
+}
+
+
+bool K3bDoc::workInProgress() const
+{
+	return m_process->isRunning();
+}
+
+
+int K3bDoc::error() const
+{
+	return m_error;
+}
+
+QString K3bDoc::findTempFile( const QString& ending )
+{
+	QString dir = kapp->dirs()->resourceDirs( "tmp" ).first();
+	// TODO: check if the returned dirs end with "/"
+	if( dir.isEmpty() )
+		dir = "/tmp/";
+
+	// find a free filename
+	int num = 1;
+	while( QFile::exists( dir + "k3b-" + QString::number( num ) + ending ) )
+		num++;
+
+	return dir + "k3b-" + QString::number( num ) + ending;
+}
+
+void K3bDoc::cancel()
+{
+	if( workInProgress() )
+		m_process->kill();
+		
+	m_error = K3b::CANCELED;
+	m_process->disconnect();
+	emitMessage("Process canceled.");
+	emitResult();
+}
+
+
+void K3bDoc::emitResult()
+{
+	emit result();
+}
+
+void K3bDoc::emitCanceled()
+{
+	emit canceled();
+}
+
+void K3bDoc::emitProgress( unsigned long size, unsigned long processed, int speed )
+{
+	// TODO: do anything with speed or remove it
+	int _percent = (int)( 100.0 * (double)processed / (double)size );
+	emit percent( _percent );
+	emit processedSize( size );
+}
+
+void K3bDoc::emitMessage( const QString& msg )
+{
+	emit infoMessage( msg );
+}
+
 
 void K3bDoc::addView(K3bView *view)
 {
-  pViewList->append(view);
+	pViewList->append(view);
 	changedViewList();
 }
 
@@ -224,3 +339,4 @@ bool K3bDoc::canCloseFrame(K3bView* pFrame)
 		
 	return ret;
 }
+

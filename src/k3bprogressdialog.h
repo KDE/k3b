@@ -1,5 +1,5 @@
 /***************************************************************************
-                          audiotracktestdialog.h  -  description
+                          k3bprogressdialog.h  -  description
                              -------------------
     begin                : Thu Mar 29 2001
     copyright            : (C) 2001 by Sebastian Trueg
@@ -15,8 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef AUDIOTRACKTESTDIALOG_H
-#define AUDIOTRACKTESTDIALOG_H
+#ifndef K3BPROGRESSDIALOG_H
+#define K3BPROGRESSDIALOG_H
 
 #include <kdialog.h>
 
@@ -27,13 +27,13 @@ class KPushButton;
   *@author Sebastian Trueg
   */
 
-class AudioTrackTestDialog : public KDialog  {
+class K3bProgressDialog : public KDialog  {
 
    Q_OBJECT
 
-public: 
-	AudioTrackTestDialog( const QString& fileName, QWidget *parent=0, const char *name=0);
-	~AudioTrackTestDialog();
+public:
+	K3bProgressDialog( const QString& fileName, QWidget *parent=0, const char *name=0);
+	~K3bProgressDialog();
 
   /** reimplemented from QDialog */
   void show();
@@ -46,7 +46,7 @@ signals:
   void canceled();
 
 public slots:
-  /** set the progress, if >= 100, the dialog will close and 
+  /** set the progress, if >= 100, the dialog will close and
 	   destroy itself! */
   void setPercent( int value );
 };

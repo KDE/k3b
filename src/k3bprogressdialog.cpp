@@ -1,5 +1,5 @@
 /***************************************************************************
-                          audiotracktestdialog.cpp  -  description
+                          k3bprogressdialog.cpp  -  description
                              -------------------
     begin                : Thu Mar 29 2001
     copyright            : (C) 2001 by Sebastian Trueg
@@ -21,9 +21,9 @@
 #include <kprogress.h>
 #include <kpushbutton.h>
 
-#include "audiotracktestdialog.h"
+#include "k3bprogressdialog.h"
 
-AudioTrackTestDialog::AudioTrackTestDialog( const QString& fileName, QWidget *parent, const char *name )
+K3bProgressDialog::K3bProgressDialog( const QString& fileName, QWidget *parent, const char *name )
  : KDialog(parent, name, true, Qt::WDestructiveClose)
 {
 	m_progress = new KProgress(0, 100, 0, Qt::Horizontal, this );
@@ -47,10 +47,10 @@ AudioTrackTestDialog::AudioTrackTestDialog( const QString& fileName, QWidget *pa
 	connect( m_cancelButton, SIGNAL(pressed()), this, SLOT(close()) );
 }
 
-AudioTrackTestDialog::~AudioTrackTestDialog(){
+K3bProgressDialog::~K3bProgressDialog(){
 }
 
-void AudioTrackTestDialog::setPercent( int value )
+void K3bProgressDialog::setPercent( int value )
 {
 	if( value < 0 )
 		value = 0;
@@ -63,7 +63,7 @@ void AudioTrackTestDialog::setPercent( int value )
 		close();
 }
 
-void AudioTrackTestDialog::show(){
+void K3bProgressDialog::show(){
 	// i hope that this will return imediately
 	QWidget::show();
 }
