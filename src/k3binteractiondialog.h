@@ -22,6 +22,7 @@
 class QGridLayout;
 class QLabel;
 class QPushButton;
+class K3bTitleLabel;
 
 
 /**
@@ -111,7 +112,7 @@ class K3bInteractionDialog : public KDialog
   QPushButton* m_buttonK3bDefaults;
   QPushButton* m_buttonUserDefaults;
   QPushButton* m_buttonSaveUserDefaults;
-  QLabel* m_labelTitle;
+  K3bTitleLabel* m_labelTitle;
   QPushButton* m_buttonStart;
   QPushButton* m_buttonSave;
   QPushButton* m_buttonCancel;

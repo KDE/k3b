@@ -291,7 +291,7 @@ bool K3bCdrdaoProgram::scan( const QString& p )
       bin->addFeature( "multisession" );
 
     if( out.output().contains( "--buffer-under-run-protection" ) )
-      bin->addFeature( "disable_burnproof" );
+      bin->addFeature( "disable-burnproof" );
 
     // check if we run cdrdao as root
     if( !getuid() )

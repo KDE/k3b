@@ -18,6 +18,7 @@
 
 #include <kcutlabel.h>
 #include <k3bstdguiitems.h>
+#include <tools/k3btitlelabel.h>
 
 #include <qlabel.h>
 #include <qpushbutton.h>
@@ -46,7 +47,7 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
     m_mainWidget(0),
     m_defaultButton(defaultButton)
 {
-  mainGrid = new QGridLayout( this, 1, 1, 11, 6, "mainGrid"); 
+  mainGrid = new QGridLayout( this ); 
   mainGrid->setSpacing( spacingHint() );
   mainGrid->setMargin( marginHint() );
 
@@ -61,14 +62,7 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
   pixmapLabelLeft->setPixmap( QPixmap(locate( "appdata", "pics/diskinfo_left.png" )) );
   pixmapLabelLeft->setScaledContents( FALSE );
   layout4->addWidget( pixmapLabelLeft );
-  m_labelTitle = new QLabel( headerFrame, "m_labelTitle" );
-  m_labelTitle->setPaletteBackgroundColor( QColor( 205, 210, 255 ) );
-  QFont m_labelTitle_font(  m_labelTitle->font() );
-  m_labelTitle_font.setPointSize( 12 );
-  m_labelTitle_font.setBold( false );
-  m_labelTitle->setFont( m_labelTitle_font ); 
-  m_labelTitle->setMargin( 5 );
-  m_labelTitle->setAlignment( int( QLabel::AlignVCenter ) );
+  m_labelTitle = new K3bTitleLabel( headerFrame, "m_labelTitle" );
   layout4->addWidget( m_labelTitle );
   layout4->setStretchFactor( m_labelTitle, 1 );
   QLabel* pixmapLabelRight = new QLabel( headerFrame, "pixmapLabelRight" );
@@ -82,7 +76,7 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
 
   // action buttons
   // ---------------------------------------------------------------------------------------------------
-  QVBoxLayout* layout5 = new QVBoxLayout( 0, 0, 6, "layout5"); 
+  QVBoxLayout* layout5 = new QVBoxLayout( 0, 0, spacingHint(), "layout5"); 
 
   if( buttonMask & START_BUTTON ) {
     m_buttonStart = new QPushButton( i18n("Start"), this, "m_buttonStart" );
@@ -110,7 +104,7 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
 
   // settings buttons
   // ---------------------------------------------------------------------------------------------------
-  QHBoxLayout* layout2 = new QHBoxLayout( 0, 0, 6, "layout2"); 
+  QHBoxLayout* layout2 = new QHBoxLayout( 0, 0, spacingHint(), "layout2"); 
   m_buttonK3bDefaults = new QPushButton( i18n("K3b Defaults"), this, "m_buttonK3bDefaults" );
   layout2->addWidget( m_buttonK3bDefaults );
   QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
@@ -178,8 +172,10 @@ void K3bInteractionDialog::initToolTipsAndWhatsThis()
 
 void K3bInteractionDialog::setTitle( const QString& title, const QString& subTitle )
 {
-  m_labelTitle->setText( QString("<qt><nobr><font size=\"+1\"><b>%1</b></font> "
-				 "<font size=\"-1\">%2</font></nobr>").arg(title).arg(subTitle) );
+//   m_labelTitle->setText( QString("<qt><nobr><font size=\"+1\"><b>%1</b></font> "
+//  				 "<font size=\"-1\">%2</font></nobr></qt>").arg(title).arg(subTitle) );
+  m_labelTitle->setTitle( title, subTitle );
+
   setCaption( title );
 }
 
@@ -188,6 +184,7 @@ void K3bInteractionDialog::setMainWidget( QWidget* w )
 {
   w->reparent( this, QPoint(0,0) );
   mainGrid->addWidget( w, 1, 0 );
+  m_mainWidget = w;
 }
 
 QWidget* K3bInteractionDialog::mainWidget()
