@@ -35,9 +35,6 @@
 #include <kiconloader.h>
 #include <kurlrequester.h>
 
-#include <sys/vfs.h>
-#include <qfile.h>
-
 
 K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const char *name )
   : QGroupBox( 4, Qt::Vertical, i18n( "Temp Directory" ), parent, name )
@@ -113,15 +110,11 @@ void K3bTempDirSelectionWidget::slotUpdateFreeTempSpace()
   if( !QFile::exists( path ) )
     path.truncate( path.findRev('/') );
 
-  struct statfs fs;
-
-  if ( ::statfs(QFile::encodeName(path),&fs) == 0 ) {
-     unsigned int kBfak = fs.f_bsize/1024;
-     slotFreeTempSpace(path,fs.f_blocks*kBfak,0L,fs.f_bavail*kBfak);
-  }
-  else {
-     m_labelFreeSpace->setText("-");
-  }
+  unsigned long size, avail;
+  if( K3b::kbFreeOnFs( path, size, avail ) )
+    slotFreeTempSpace( path, size, 0, avail );
+  else
+    m_labelFreeSpace->setText("-");
 }
 
 

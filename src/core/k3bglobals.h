@@ -72,6 +72,13 @@ namespace K3b
   QString globalConfig();
 
 
+  /**
+   * This checks the free space on the filesystem path is in.
+   * We use this since we encountered problems with the KDE version.
+   * @returns true on success.
+   */
+  bool kbFreeOnFs( const QString& path, unsigned long& size, unsigned long& avail );
+
   QString findUniqueFilePrefix( const QString& _prefix = QString::null, const QString& path = QString::null );
 
   /**

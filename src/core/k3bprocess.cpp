@@ -249,12 +249,12 @@ int K3bProcess::commSetupDoneC()
 
 
 
-int K3bProcess::stdin() const
+int K3bProcess::stdinFd() const
 {
   return in[1];
 }
 
-int K3bProcess::stdout() const
+int K3bProcess::stdoutFd() const
 {
   return out[0];
 }

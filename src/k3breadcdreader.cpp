@@ -31,40 +31,66 @@
 #include <qstringlist.h>
 
 
+
+class K3bReadcdReader::Private
+{
+public:
+  Private() 
+    : process(0),
+      fdToWriteTo(-1),
+      canceled(false) {
+  }
+
+  K3bProcess* process;
+  const K3bExternalBin* readcdBinObject;
+
+  int fdToWriteTo;
+  bool canceled;
+
+  long blocksToRead;
+  int unreadableBlocks;
+
+  int lastProgress;
+  int lastProcessedSize;
+};
+
+
+
 K3bReadcdReader::K3bReadcdReader( QObject* parent, const char* name )
   : K3bJob( parent, name ),
-    m_process(0),
     m_noCorr(false),
     m_clone(false),
     m_noError(false),
     m_c2Scan(false),
-    m_speed(0),
-    m_fdToWriteTo(-1)
+    m_speed(0)
 {
+  d = new Private();
 }
 
 
 K3bReadcdReader::~K3bReadcdReader()
 {
-  if( m_process )
-    delete m_process;
+  delete d->process;
+  delete d;
 }
 
 
 void K3bReadcdReader::writeToFd( int fd )
 {
-  m_fdToWriteTo = fd;
+  d->fdToWriteTo = fd;
 }
 
 
 void K3bReadcdReader::start()
 {
-  m_blocksToRead = 1;
-  m_unreadableBlocks = 0;
+  d->blocksToRead = 1;
+  d->unreadableBlocks = 0;
+  d->lastProgress = 0;
+  d->lastProcessedSize = 0;
 
   // the first thing to do is to check for readcd
-  m_readcdBinObject = k3bcore->externalBinManager()->binObject( "readcd" );
-  if( !m_readcdBinObject ) {
+  d->readcdBinObject = k3bcore->externalBinManager()->binObject( "readcd" );
+  if( !d->readcdBinObject ) {
     emit infoMessage( i18n("Could not find %1 executable.").arg("readcd"), ERROR );
     emit finished(false);
     return;
@@ -74,14 +100,14 @@ void K3bReadcdReader::start()
   if( m_clone ) {
     bool foundCloneSupport = false;
 
-    if( !m_readcdBinObject->hasFeature( "clone" ) ) {
+    if( !d->readcdBinObject->hasFeature( "clone" ) ) {
       // search all readcd installations
       K3bExternalProgram* readcdProgram = k3bcore->externalBinManager()->program( "readcd" );
       const QPtrList<K3bExternalBin>& readcdBins = readcdProgram->bins();
       for( QPtrListIterator<K3bExternalBin> it( readcdBins ); it.current(); ++it ) {
 	if( it.current()->hasFeature( "clone" ) ) {
-	  m_readcdBinObject = it.current();
-	  emit infoMessage( i18n("Using readcd %1 instead of default version for clone support.").arg(m_readcdBinObject->version), INFO );
+	  d->readcdBinObject = it.current();
+	  emit infoMessage( i18n("Using readcd %1 instead of default version for clone support.").arg(d->readcdBinObject->version), INFO );
 	  foundCloneSupport = true;
 	  break;
 	}
@@ -97,57 +123,56 @@ void K3bReadcdReader::start()
 
 
   // create the commandline
-  if( m_process )
-    delete m_process;
-  m_process = new K3bProcess();
-  connect( m_process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotStdLine(const QString&)) );
-  connect( m_process, SIGNAL(processExited(KProcess*)), this, SLOT(slotProcessExited(KProcess*)) );
+  delete d->process;
+  d->process = new K3bProcess();
+  connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotStdLine(const QString&)) );
+  connect( d->process, SIGNAL(processExited(KProcess*)), this, SLOT(slotProcessExited(KProcess*)) );
 
 
-  *m_process << m_readcdBinObject->path;
+  *d->process << d->readcdBinObject->path;
 
   // display progress
-  *m_process << "-v";
+  *d->process << "-v";
 
   // Again we assume the device to be set!
-  *m_process << QString("dev=%1").arg(K3bCdDevice::externalBinDeviceParameter(m_readDevice, 
-									      m_readcdBinObject));
+  *d->process << QString("dev=%1").arg(K3bCdDevice::externalBinDeviceParameter(m_readDevice, 
+									      d->readcdBinObject));
   if( m_speed > 0 )
-    *m_process << QString("speed=%1").arg(m_speed);
+    *d->process << QString("speed=%1").arg(m_speed);
 
 
   // output
-  if( m_fdToWriteTo != -1 ) {
-    *m_process << "f=-";
-    m_process->dupStdout( m_fdToWriteTo );
+  if( d->fdToWriteTo != -1 ) {
+    *d->process << "f=-";
+    d->process->dupStdout( d->fdToWriteTo );
   }
   else {
     emit newTask( i18n("Writing image to %1.").arg(m_imagePath) );
     emit infoMessage( i18n("Writing image to %1.").arg(m_imagePath), INFO );
-    *m_process << "f=" + m_imagePath;
+    *d->process << "f=" + m_imagePath;
   }
 
 
   if( m_noError )
-    *m_process << "-noerror";
+    *d->process << "-noerror";
   if( m_clone ) {
-    *m_process << "-clone";
+    *d->process << "-clone";
     // noCorr can only be used with cloning
     if( m_noCorr )
-      *m_process << "-nocorr";
+      *d->process << "-nocorr";
   }
   if( m_c2Scan )
-    *m_process << "-c2scan";
+    *d->process << "-c2scan";
 
 
   // additional user parameters from config
-  const QStringList& params = m_readcdBinObject->userParameters();
+  const QStringList& params = d->readcdBinObject->userParameters();
   for( QStringList::const_iterator it = params.begin(); it != params.end(); ++it )
-    *m_process << *it;
+    *d->process << *it;
 
 
   kdDebug() << "***** readcd parameters:\n";
-  const QValueList<QCString>& args = m_process->args();
+  const QValueList<QCString>& args = d->process->args();
   QString s;
   for( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
     s += *it + " ";
@@ -156,9 +181,9 @@ void K3bReadcdReader::start()
 
   emit debuggingOutput("readcd comand:", s);
 
-  m_canceled = false;
+  d->canceled = false;
 
-  if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput) ) {
+  if( !d->process->start( KProcess::NotifyOnExit, KProcess::AllOutput) ) {
     // something went wrong when starting the program
     // it "should" be the executable
     kdError() << "(K3bReadcdReader) could not start readcd" << endl;
@@ -170,10 +195,10 @@ void K3bReadcdReader::start()
 
 void K3bReadcdReader::cancel()
 {
-  if( m_process ) {
-    if( m_process->isRunning() ) {  
-      m_canceled = true;
-      m_process->kill();
+  if( d->process ) {
+    if( d->process->isRunning() ) {  
+      d->canceled = true;
+      d->process->kill();
     }
   }
 }
@@ -187,7 +212,7 @@ void K3bReadcdReader::slotStdLine( const QString& line )
 
   if( line.startsWith( "end:" ) ) {
     bool ok;
-    m_blocksToRead = line.mid(4).toInt(&ok);
+    d->blocksToRead = line.mid(4).toInt(&ok);
     if( !ok )
       kdError() << "(K3bReadcdReader) blocksToRead parsing error in line: " 
 		<< line.mid(4) << endl;
@@ -197,8 +222,16 @@ void K3bReadcdReader::slotStdLine( const QString& line )
     bool ok;
     long currentReadBlock = line.mid( 6, line.find("cnt")-7 ).toInt(&ok);
     if( ok ) {
-      emit percent( (int)(100.0 * (double)currentReadBlock / (double)m_blocksToRead) );
-      emit processedSize( currentReadBlock*2/1024, m_blocksToRead*2/1024 );
+      int p = (int)(100.0 * (double)currentReadBlock / (double)d->blocksToRead);
+      if( p > d->lastProgress ) {
+	emit percent( p );
+	d->lastProgress = p;
+      }
+      int ps = currentReadBlock*2/1024;
+      if( ps > d->lastProcessedSize ) {
+	emit processedSize( ps, d->blocksToRead*2/1024 );
+	d->lastProcessedSize = ps;
+      }
     }
     else
       kdError() << "(K3bReadcdReader) currentReadBlock parsing error in line: " 
@@ -222,7 +255,7 @@ void K3bReadcdReader::slotStdLine( const QString& line )
   }
 
   else if( (pos = line.find("Error on sector")) >= 0 ) {
-    m_unreadableBlocks++;
+    d->unreadableBlocks++;
 
     pos += 16;
     bool ok;
@@ -247,7 +280,7 @@ void K3bReadcdReader::slotStdLine( const QString& line )
 
 void K3bReadcdReader::slotProcessExited( KProcess* p )
 {
-  if( m_canceled ) {
+  if( d->canceled ) {
     emit canceled();
     emit finished(false);
   }

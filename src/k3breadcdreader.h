@@ -64,9 +64,6 @@ class K3bReadcdReader : public K3bJob
   void slotProcessExited(KProcess*);
 
  private:
-  K3bProcess* m_process;
-  const K3bExternalBin* m_readcdBinObject;
-
   bool m_noCorr;
   bool m_clone;
   bool m_noError;
@@ -77,11 +74,8 @@ class K3bReadcdReader : public K3bJob
 
   QString m_imagePath;
 
-  int m_fdToWriteTo;
-  bool m_canceled;
-
-  long m_blocksToRead;
-  int m_unreadableBlocks;
+  class Private;
+  Private* d;
 };
 
 #endif

@@ -59,7 +59,7 @@ K3bCdrecordWriter::~K3bCdrecordWriter()
 int K3bCdrecordWriter::fd() const
 {
   if( m_process )
-    return m_process->stdin();
+    return m_process->stdinFd();
   else
     return -1;
 }

@@ -46,13 +46,13 @@ class K3bProcess : public KProcess
    * get stdin file descriptor
    * Only makes sense while process is running.
    */
-  int stdin() const;
+  int stdinFd() const;
 
   /** 
    * get stdout file descriptor
    * Only makes sense while process is running.
    */
-  int stdout() const;
+  int stdoutFd() const;
 
   /**
    * makes the stdout fd of this process a copy of @p fd

@@ -30,6 +30,9 @@
 
 #include <cmath>
 #include <sys/utsname.h>
+#include <sys/vfs.h>
+
+
 
 struct Sample {
   unsigned char msbLeft;
@@ -178,3 +181,21 @@ QString K3b::systemName()
     kdError() << "could not determine system name." << endl;
   return v;
 }
+
+
+bool K3b::kbFreeOnFs( const QString& path, unsigned long& size, unsigned long& avail )
+{
+  struct statfs fs;
+
+  if( ::statfs( QFile::encodeName(path), &fs ) == 0 ) {
+    unsigned long kBfak = fs.f_bsize/1024;
+
+    size = fs.f_blocks*kBfak;
+    avail = fs.f_bavail*kBfak;
+
+    return true;
+  }
+  else
+    return false;
+}
+

@@ -33,7 +33,7 @@
 #include <qfile.h>
 #include <qtimer.h>
 
-#include <sys/vfs.h>
+
 
 K3bStatusBarManager::K3bStatusBarManager( K3bMainWindow* parent )
   : QObject(parent),
@@ -75,16 +75,16 @@ K3bStatusBarManager::~K3bStatusBarManager()
 
 void K3bStatusBarManager::update()
 {
-  QString tempdir = K3b::defaultTempPath();
+  QString path = K3b::defaultTempPath();
 
-  struct statfs fs;
-  if ( ::statfs(QFile::encodeName(tempdir),&fs) == 0 ) {
-     unsigned int kBfak = fs.f_bsize/1024;
-     slotFreeTempSpace(tempdir,fs.f_blocks*kBfak,0L,fs.f_bavail*kBfak);
-  }
-  else {
-     m_labelFreeTemp->setText("No info");
-  }
+  if( !QFile::exists( path ) )
+    path.truncate( path.findRev('/') );
+
+  unsigned long size, avail;
+  if( K3b::kbFreeOnFs( path, size, avail ) )
+    slotFreeTempSpace( path, size, 0, avail );
+  else
+    m_labelFreeTemp->setText("No info");
 }
 
 

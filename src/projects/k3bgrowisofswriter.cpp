@@ -78,7 +78,7 @@ bool K3bGrowisofsWriter::write( const char* data, int len )
 int K3bGrowisofsWriter::fd() const
 {
   if( d->process )
-    return d->process->stdin();
+    return d->process->stdinFd();
   else
     return -1;
 }
