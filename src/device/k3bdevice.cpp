@@ -1180,6 +1180,13 @@ K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc() const
 
   if( isDVD() ) {
     int mediaType = dvdMediaType();
+    //
+    // Use the profile if available because DVD-ROM units need to treat DVD+-R(W) media as DVD-ROM
+    // if supported at all
+    //
+    if( currentProfile() == MEDIA_DVD_ROM )
+      mediaType = MEDIA_DVD_ROM;
+
     switch( mediaType ) {
 
     case MEDIA_DVD_ROM:
@@ -2081,6 +2088,13 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
       // for complete disks we may use the READ_CAPACITY command or the start sector from the leadout
       //
       int media = inf.mediaType();
+      //
+      // Use the profile if available because DVD-ROM units need to treat DVD+-R(W) media as DVD-ROM
+      // if supported at all
+      //
+      if( inf.currentProfile() == MEDIA_DVD_ROM )
+	media = MEDIA_DVD_ROM;
+
       switch( media ) {
       case MEDIA_CD_R:
       case MEDIA_CD_RW:
