@@ -23,7 +23,6 @@
 #include "k3bpatternoptiontab.h"
 #include "k3bexternalbinoptiontab.h"
 #include "k3bmiscoptiontab.h"
-#include "k3bdivxoptiontab.h"
 #include "../k3bcore.h"
 
 #include <qlayout.h>
@@ -50,7 +49,6 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
   setupPatternPage();
   setupNotifyPage();
   setupMiscPage();
-  setupDivxPage();
 
   m_externalBinOptionTab->readSettings();
   m_cddbOptionTab->readSettings();
@@ -60,7 +58,6 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
   m_patternOptionTab->readSettings();
   m_miscOptionTab->readSettings();
   m_notifyOptionTab->readSettings();
-  m_divxOptionTab->readSettings();
 
   // if we don't do this the dialog start really huge
   // because of the label in the device-tab
@@ -102,7 +99,7 @@ bool K3bOptionDialog::saveSettings()
   m_patternOptionTab->apply();
   m_externalBinOptionTab->saveSettings();
   m_notifyOptionTab->saveSettings();
-  m_divxOptionTab->saveSettings();
+
   if( !m_miscOptionTab->saveSettings() )
     return false;
 
@@ -213,18 +210,6 @@ void K3bOptionDialog::setupMiscPage()
   box->addWidget( m_miscOptionTab );
 }
 
-void K3bOptionDialog::setupDivxPage()
-{
-  QFrame* frame = addPage( i18n("Divx"), i18n("MPEG-4 Encoding Settings"),
-			   KGlobal::instance()->iconLoader()->loadIcon( "misc", KIcon::NoGroup, KIcon::SizeMedium ) );
-
-  QVBoxLayout* box = new QVBoxLayout( frame );
-  box->setSpacing( 0 );
-  box->setMargin( 0 );
-
-  m_divxOptionTab = new K3bDivxOptionTab( frame, "divxOptiontab" );
-  box->addWidget( m_divxOptionTab );
-}
 
 void K3bOptionDialog::setupNotifyPage()
 {

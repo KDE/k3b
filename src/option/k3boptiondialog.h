@@ -26,7 +26,6 @@ class K3bBurningOptionTab;
 class K3bPatternOptionTab;
 class K3bExternalBinOptionTab;
 class K3bMiscOptionTab;
-class K3bDivxOptionTab;
 class K3bNotifyOptionTab;
 
 
@@ -79,10 +78,6 @@ class K3bOptionDialog : public KDialogBase
   // notify options
   K3bNotifyOptionTab* m_notifyOptionTab;
   void setupNotifyPage();
-  
-  // divx options
-  K3bDivxOptionTab* m_divxOptionTab;
-  void setupDivxPage();
 };
 
 #endif
