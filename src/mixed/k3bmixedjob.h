@@ -70,6 +70,8 @@ class K3bMixedJob : public K3bBurnJob
   void startWriting();
   void addAudioTracks( K3bCdrecordWriter* writer );
   void addDataTrack( K3bCdrecordWriter* writer );
+  void cleanupAfterError();
+  void removeBufferFiles();
 
   K3bMixedDoc* m_doc;
   K3bIsoImager* m_isoImager;
@@ -88,6 +90,12 @@ class K3bMixedJob : public K3bBurnJob
 
   int m_currentAction;
   double m_audioDocPartOfProcess;
+
+  bool m_canceled;
+  bool m_errorOccuredAndAlreadyReported;
+
+  int m_fifo;
+  bool m_usingFifo;
 };
 
 #endif

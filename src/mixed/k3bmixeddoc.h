@@ -39,10 +39,15 @@ class K3bMixedDoc : public K3bDoc
 
   int mixedType() const { return m_mixedType; }
 
+  const QString& imagePath() const { return m_imagePath; }
+  bool removeBufferFiles() const { return m_removeBufferFiles; }
+
  public slots:
   void setMixedType( MixedType t ) { m_mixedType = t; }
   void addUrl( const KURL& url );
   void addUrls( const KURL::List& urls );
+  void setImagePath( const QString& );
+  void setRemoveBufferFiles( bool b ) { m_removeBufferFiles = b; }
 
  protected:
   bool loadDocumentData( QDomDocument* );
@@ -54,6 +59,9 @@ class K3bMixedDoc : public K3bDoc
  private:
   K3bDataDoc* m_dataDoc;
   K3bAudioDoc* m_audioDoc;
+
+  QString m_imagePath;
+  bool m_removeBufferFiles;
 
   int m_mixedType;
 };

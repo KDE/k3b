@@ -1,14 +1,14 @@
 #include "k3bmixedburndialog.h"
 #include "k3bmixeddoc.h"
 
-#include "../data/k3bdataimagesettingswidget.h"
-#include "../data/k3bdataadvancedimagesettingswidget.h"
-#include "../data/k3bdatavolumedescwidget.h"
-#include "../data/k3bdatadoc.h"
-#include "../device/k3bdevice.h"
-#include "../k3bwriterselectionwidget.h"
-#include "../k3btempdirselectionwidget.h"
-#include "../k3bisooptions.h"
+#include <data/k3bdataimagesettingswidget.h>
+#include <data/k3bdataadvancedimagesettingswidget.h>
+#include <data/k3bdatavolumedescwidget.h>
+#include <data/k3bdatadoc.h>
+#include <device/k3bdevice.h>
+#include <k3bwriterselectionwidget.h>
+#include <k3btempdirselectionwidget.h>
+#include <k3bisooptions.h>
 
 
 #include <qtabwidget.h>
@@ -40,6 +40,8 @@ K3bMixedBurnDialog::K3bMixedBurnDialog( K3bMixedDoc* doc, QWidget *parent, const
 
   setupSettingsPage();
 
+  // TODO: create a cd-text page
+
   // create volume descriptor tab
   m_volumeDescWidget = new K3bDataVolumeDescWidget( this );
   m_volumeDescWidget->layout()->setMargin( marginHint() );
@@ -67,8 +69,6 @@ void K3bMixedBurnDialog::setupSettingsPage()
   m_radioMixedTypeFirstTrack = new QRadioButton( i18n("Data in first track"), m_groupMixedType );
   // is this a standard?
   m_radioMixedTypeLastTrack = new QRadioButton( i18n("Data in last track"), m_groupMixedType );
-  //   QRadioButton* m_radioMixedTypePregap = new QRadioButton( i18n("Data in first track's pregap"), 
-  // 							   m_groupMixedType );
 
   // Enhanced music CD/CD Extra/CD Plus format (Blue Book) 
   // to fulfill the standard we also need the special file structure
@@ -135,8 +135,7 @@ void K3bMixedBurnDialog::saveSettings()
   m_doc->setDummy( m_checkSimulate->isChecked() );
   m_doc->setOnTheFly( m_checkOnTheFly->isChecked() );
   m_doc->setBurnproof( m_checkBurnproof->isChecked() );
-//   m_doc->setOnlyCreateImage( m_checkOnlyCreateImage->isChecked() );
-//   m_doc->setDeleteImage( m_checkDeleteImage->isChecked() );
+  m_doc->setRemoveBufferFiles( m_checkRemoveBufferFiles->isChecked() );
 			
   // -- saving current speed --------------------------------------
   m_doc->setSpeed( m_writerSelectionWidget->writerSpeed() );
@@ -159,7 +158,7 @@ void K3bMixedBurnDialog::saveSettings()
 	
 
   // save image file path
-  //  ((K3bDataDoc*)doc())->setIsoImage( m_tempDirSelectionWidget->tempPath() );  
+  m_doc->setImagePath( m_tempDirSelectionWidget->tempPath() );  
 }
 
 
@@ -169,12 +168,11 @@ void K3bMixedBurnDialog::readSettings()
   m_checkSimulate->setChecked( doc()->dummy() );
   m_checkOnTheFly->setChecked( doc()->onTheFly() );
   m_checkBurnproof->setChecked( doc()->burnproof() );
-//   m_checkOnlyCreateImage->setChecked( m_doc->onlyCreateImage() );
-//   m_checkDeleteImage->setChecked( m_doc->deleteImage() );
+  m_checkRemoveBufferFiles->setChecked( m_doc->removeBufferFiles() );
 	
 
-//   if( !((K3bDataDoc*)doc())->isoImage().isEmpty() )
-//     m_tempDirSelectionWidget->setTempPath( ((K3bDataDoc*)doc())->isoImage() );
+  if( !m_doc->imagePath().isEmpty() )
+    m_tempDirSelectionWidget->setTempPath( m_doc->imagePath() );
 
   switch( m_doc->mixedType() ) {
   case K3bMixedDoc::DATA_FIRST_TRACK:
@@ -196,25 +194,19 @@ void K3bMixedBurnDialog::readSettings()
 }
 
 
-void K3bMixedBurnDialog::slotOnlyCreateImageToggled( bool on )
-{
-  //  m_checkDeleteImage->setChecked( !on );
-}
-
-
 void K3bMixedBurnDialog::loadDefaults()
 {
    m_checkSimulate->setChecked( false );
    m_checkDao->setChecked( true );
    m_checkOnTheFly->setChecked( true );
    m_checkBurnproof->setChecked( true );
+   m_checkRemoveBufferFiles->setChecked( true );
 
-//   m_checkDeleteImage->setChecked( true );
-//   m_checkOnlyCreateImage->setChecked( false );
+   m_radioMixedTypeFirstTrack->setChecked(true);
 
-  m_imageSettingsWidget->load( K3bIsoOptions::defaults() );
-  m_advancedImageSettingsWidget->load( K3bIsoOptions::defaults() );
-  m_volumeDescWidget->load( K3bIsoOptions::defaults() );
+   m_imageSettingsWidget->load( K3bIsoOptions::defaults() );
+   m_advancedImageSettingsWidget->load( K3bIsoOptions::defaults() );
+   m_volumeDescWidget->load( K3bIsoOptions::defaults() );
 }
 
 
@@ -227,9 +219,9 @@ void K3bMixedBurnDialog::loadUserDefaults()
   m_checkDao->setChecked( c->readBoolEntry( "dao", true ) );
   m_checkOnTheFly->setChecked( c->readBoolEntry( "on_the_fly", true ) );
   m_checkBurnproof->setChecked( c->readBoolEntry( "burnproof", true ) );
-//   m_checkDeleteImage->setChecked( c->readBoolEntry( "remove_image", true ) );
-//   m_checkOnlyCreateImage->setChecked( c->readBoolEntry( "only_create_image", false ) );
+  m_checkRemoveBufferFiles->setChecked( c->readBoolEntry( "remove_buffer_files", true ) );
 
+  // TODO: load mixed type
 
   K3bIsoOptions o = K3bIsoOptions::load( c );
   m_imageSettingsWidget->load( o );
@@ -248,9 +240,9 @@ void K3bMixedBurnDialog::saveUserDefaults()
   c->writeEntry( "dao", m_checkDao->isChecked() );
   c->writeEntry( "on_the_fly", m_checkOnTheFly->isChecked() );
   c->writeEntry( "burnproof", m_checkBurnproof->isChecked() );
-//   c->writeEntry( "remove_image", m_checkDeleteImage->isChecked() );
-//   c->writeEntry( "only_create_image", m_checkOnlyCreateImage->isChecked() );
+  c->writeEntry( "remove_buffer_files", m_checkRemoveBufferFiles->isChecked() );
 
+  // TODO: save mixed type
 
   K3bIsoOptions o;
   m_imageSettingsWidget->save( o );

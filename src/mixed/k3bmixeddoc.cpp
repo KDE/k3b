@@ -5,7 +5,11 @@
 #include "../data/k3bdatadoc.h"
 #include "../audio/k3baudiodoc.h"
 
+#include <qfileinfo.h>
+
 #include <klocale.h>
+#include <kconfig.h>
+#include <kapplication.h>
 
 
 K3bMixedDoc::K3bMixedDoc( QObject* parent )
@@ -26,10 +30,6 @@ bool K3bMixedDoc::newDocument()
   m_dataDoc->newDocument();
   m_dataDoc->isoOptions().setVolumeID( i18n("Project name", "Mixed") );
   m_audioDoc->newDocument();
-
-  m_mixedType = DATA_FIRST_TRACK;
-
-  // TODO: overwrite default settings with mixed defaults
 
   return K3bDoc::newDocument();
 }
@@ -88,8 +88,27 @@ bool K3bMixedDoc::saveDocumentData( QDomDocument* )
   
 void K3bMixedDoc::loadDefaultSettings()
 {
-  // TODO: load user defaults
-  setDummy(false);
+  KConfig* c = kapp->config();
+  c->setGroup( "default mixed settings" );
+
+  setDummy( c->readBoolEntry( "dummy_mode", false ) );
+  setDao( c->readBoolEntry( "dao", true ) );
+  setOnTheFly( c->readBoolEntry( "on_the_fly", true ) );
+  setBurnproof( c->readBoolEntry( "burnproof", true ) );
+  setRemoveBufferFiles( c->readBoolEntry( "remove_buffer_files", true ) );
+
+  // TODO: load mixed type
+
+  K3bIsoOptions o = K3bIsoOptions::load( c );
+  dataDoc()->isoOptions() = o;
+}
+
+
+void K3bMixedDoc::setImagePath( const QString& path )
+{
+  // check if it's a file and if so just take the dir
+  QFileInfo info( path );
+  m_imagePath = info.dirPath(true);
 }
 
 

@@ -192,11 +192,13 @@ void K3bProjectBurnDialog::prepareGui()
   m_checkOnTheFly = K3bStdGuiItems::onTheFlyCheckbox( m_optionGroup );
   m_checkBurnproof = K3bStdGuiItems::burnproofCheckbox( m_optionGroup );
   m_checkSimulate = K3bStdGuiItems::simulateCheckbox( m_optionGroup );
+  m_checkRemoveBufferFiles = K3bStdGuiItems::removeImagesCheckbox( m_optionGroup );
 
   m_optionGroupLayout->addWidget(m_checkSimulate);
   m_optionGroupLayout->addWidget(m_checkOnTheFly);
   m_optionGroupLayout->addWidget(m_checkDao);
   m_optionGroupLayout->addWidget(m_checkBurnproof);
+  m_optionGroupLayout->addWidget(m_checkRemoveBufferFiles);
 
   // arrange it
   QGridLayout* grid = new QGridLayout( w );

@@ -43,6 +43,13 @@
 #include <kio/netaccess.h>
 
 
+// for the fifo
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <errno.h>
+
 
 K3bMixedJob::K3bMixedJob( K3bMixedDoc* doc, QObject* parent )
   : K3bBurnJob( parent ),
@@ -67,6 +74,7 @@ K3bMixedJob::K3bMixedJob( K3bMixedDoc* doc, QObject* parent )
 
   m_writer = 0;
   m_tocFile = 0;
+  m_isoImageFile = 0;
 }
 
 
@@ -93,6 +101,9 @@ void K3bMixedJob::start()
 {
   emit started();
 
+  m_canceled = false;
+  m_errorOccuredAndAlreadyReported = false;
+
   // calculate percentage of audio and data
   double ds = (double)m_doc->dataDoc()->length();
   double as = (double)m_doc->audioDoc()->length();
@@ -114,7 +125,7 @@ void K3bMixedJob::start()
   }
   else {
     // prepare iso image file
-    m_isoImageFile = new QFile( "/home/trueg/tmp/image.iso" );
+    m_isoImageFile = new QFile( k3bMain()->findTempFile( "iso", m_doc->imagePath() ) );
     m_isoImageFile->open( IO_WriteOnly );
     m_isoImageFileStream = new QDataStream( m_isoImageFile );
 
@@ -129,13 +140,14 @@ void K3bMixedJob::start()
 
 void K3bMixedJob::cancel()
 {
-  // FIXME
+  m_canceled = true;
 
   if( m_writer )
     m_writer->cancel();
   m_isoImager->cancel();
   m_audioDecoder->cancel();
   emit infoMessage( i18n("Writing canceled."), K3bJob::ERROR );
+  removeBufferFiles();
   emit finished(false);
 }
 
@@ -167,7 +179,7 @@ void K3bMixedJob::slotSizeCalculationFinished( int status, int size )
     }
 
     if( !prepareWriter() ) {
-      // TODO: cleanup
+      // no cleanup necessary since nothing has been started yet
       emit finished(false);
       return;
     }
@@ -182,7 +194,7 @@ void K3bMixedJob::slotSizeCalculationFinished( int status, int size )
     }
   }
   else {
-    // TODO: cleanup
+    // no cleanup necessary since nothing has been started yet
     emit finished(false);
   }
 }
@@ -212,8 +224,18 @@ void K3bMixedJob::slotDataWritten()
 
 void K3bMixedJob::slotIsoImagerFinished( bool success )
 {
+  if( m_canceled || m_errorOccuredAndAlreadyReported )
+    return;
+
+  if( !success ) {
+    emit infoMessage( i18n("Error while creating iso image."), ERROR );
+    cleanupAfterError();
+
+    emit finished( false );
+    return;
+  }
+
   if( m_doc->onTheFly() ) {
-    // TODO: if !success cancel
     if( m_doc->mixedType() == K3bMixedDoc::DATA_FIRST_TRACK ) {
       m_currentAction = WRITING_AUDIO_IMAGE;
       m_audioDecoder->start();
@@ -221,24 +243,20 @@ void K3bMixedJob::slotIsoImagerFinished( bool success )
   }
   else {
     m_isoImageFile->close();
-    if( success ) {
-      emit infoMessage( i18n("Iso image successfully created."), INFO );
-      m_currentAction = CREATING_AUDIO_IMAGE;
-      m_audioDecoder->start();
-    }
-    else {
-      // TODO: cleanup
-      emit infoMessage( i18n("Error while creating iso image."), ERROR );
-      emit finished( false );
-    }
+    emit infoMessage( i18n("Iso image successfully created."), INFO );
+    m_currentAction = CREATING_AUDIO_IMAGE;
+    m_audioDecoder->start();
   }
 }
 
 
 void K3bMixedJob::slotWriterFinished( bool success )
 {
+  if( m_canceled || m_errorOccuredAndAlreadyReported )
+    return;
+
   if( !success ) {
-    // TODO: cleanup
+    cleanupAfterError();
     emit finished(false);
     return;
   }
@@ -251,7 +269,7 @@ void K3bMixedJob::slotWriterFinished( bool success )
 
     m_currentAction = WRITING_ISO_IMAGE;
     if( !prepareWriter() ) {
-      // TODO: cleanup
+      cleanupAfterError();
       emit finished(false);
       return;
     }
@@ -261,6 +279,9 @@ void K3bMixedJob::slotWriterFinished( bool success )
       m_isoImager->start();
   }
   else {
+    if( !m_doc->onTheFly() && m_doc->removeBufferFiles() )
+      removeBufferFiles();
+
     emit finished(true);
   }
 }
@@ -268,8 +289,17 @@ void K3bMixedJob::slotWriterFinished( bool success )
 
 void K3bMixedJob::slotAudioDecoderFinished( bool success )
 {
+  if( m_canceled || m_errorOccuredAndAlreadyReported )
+    return;
+
+  if( !success ) {
+    emit infoMessage( i18n("Error while decoding audio tracks."), ERROR );
+    cleanupAfterError();
+    emit finished(false);
+    return;
+  }
+
   if( m_doc->onTheFly() ) {
-    // TODO: if !success cancel
     if( m_doc->mixedType() == K3bMixedDoc::DATA_LAST_TRACK ) {
       m_currentAction = WRITING_ISO_IMAGE;
       m_isoImager->start();
@@ -277,25 +307,18 @@ void K3bMixedJob::slotAudioDecoderFinished( bool success )
   }
   else {
     m_waveFileWriter->close();
-    if( success ) {
-      if( m_doc->mixedType() == K3bMixedDoc::DATA_FIRST_TRACK )
-	m_currentAction = WRITING_ISO_IMAGE;
-      else
-	m_currentAction = WRITING_AUDIO_IMAGE;
-
-      if( !prepareWriter() ) {
-	// TODO: cleanup
-	emit finished(false);
-	return;
-      }
-
-      startWriting();
+    if( m_doc->mixedType() == K3bMixedDoc::DATA_FIRST_TRACK )
+      m_currentAction = WRITING_ISO_IMAGE;
+    else
+      m_currentAction = WRITING_AUDIO_IMAGE;
+    
+    if( !prepareWriter() ) {
+      cleanupAfterError();
+      emit finished(false);
+      return;
     }
-    else {
-      // TODO: cleanup
-      emit infoMessage( i18n("Error while decoding audio tracks."), ERROR );
-      emit finished( false );
-    }
+    
+    startWriting();
   }
 }
 
@@ -303,8 +326,15 @@ void K3bMixedJob::slotAudioDecoderFinished( bool success )
 void K3bMixedJob::slotReceivedAudioDecoderData( const char* data, int len )
 {
   if( m_doc->onTheFly() ) {
-    if( !m_writer->write( (char*)data, len ) )
+    if( m_usingFifo )
+      ::write( m_fifo, data, len );
+    else if( !m_writer->write( (char*)data, len ) ) {
       kdDebug() << "(K3bMixedJob) Error while writing data to Writer" << endl;
+      emit infoMessage( i18n("IO error"), ERROR );
+      cleanupAfterError();
+      emit finished(false);
+      return;
+    }
   }
   else {
     m_waveFileWriter->write( data, len );
@@ -318,8 +348,18 @@ void K3bMixedJob::slotAudioDecoderNextTrack( int t )
   if( !m_doc->onTheFly() ) {
     emit newSubTask( i18n("Decoding audiotrack %1 (%2)").arg(t).arg(m_doc->audioDoc()->at(t-1)->fileName()) );
     //emit infoMessage( i18n("Decoding audiotrack %1 (%2)").arg(t).arg(m_doc->audioDoc()->at(t-1)->fileName()), INFO );
-    m_waveFileWriter->open( QString("/home/trueg/tmp/mixedtest_track%1.wav").arg(t) );
-    m_doc->audioDoc()->at(t-1)->setBufferFile( QString("/home/trueg/tmp/mixedtest_track%1.wav").arg(t) );
+    QString bf = k3bMain()->findTempFile( "wav", m_doc->imagePath() );
+    m_waveFileWriter->open( bf );
+    m_doc->audioDoc()->at(t-1)->setBufferFile( bf );
+  }
+  else if( m_usingFifo ) {
+    if( t > 1 )
+      ::close( m_fifo );
+
+    m_fifo = ::open( m_doc->audioDoc()->at(t-1)->bufferFile().latin1(), O_WRONLY | O_NONBLOCK );
+    if( m_fifo < 0 ) {
+      kdDebug() << "(K3bMixedJob) Could not open fifo " << strerror(errno) << endl;
+    }
   }
 }
 
@@ -331,9 +371,6 @@ bool K3bMixedJob::prepareWriter()
   if( writingApp() == K3b::CDRECORD ||
       ( writingApp() == K3b::DEFAULT && !m_doc->dao() ) ) {
 
-    emit infoMessage( i18n("Due to problems with cdrecord the copy protection"), INFO );
-    emit infoMessage( i18n("and preemphasis flags are not supported."), INFO );
-
     K3bCdrecordWriter* writer = new K3bCdrecordWriter( m_doc->burner(), this );
 
     writer->setDao( m_doc->dao() );
@@ -343,6 +380,7 @@ bool K3bMixedJob::prepareWriter()
     writer->setProvideStdin( m_doc->onTheFly() );
     writer->prepareArgumentList();
 
+    m_usingFifo = m_doc->onTheFly();
 
     if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
       if( m_currentAction == WRITING_ISO_IMAGE ) {
@@ -367,11 +405,12 @@ bool K3bMixedJob::prepareWriter()
     m_writer = writer;
   }
   else {  // DEFAULT
+    m_usingFifo = false;
+
     if( !writeTocFile() ) {
       kdDebug() << "(K3bDataJob) could not write tocfile." << endl;
       emit infoMessage( i18n("IO Error"), ERROR );
     
-      // TODO: cleanup
       return false;
     }
 
@@ -460,9 +499,6 @@ bool K3bMixedJob::writeTocFile()
     }
     m_tocFile->close();
 
-    // REMOVE ME!
-    KIO::NetAccess::copy( m_tocFile->name(), "/home/trueg/tmp/mixedtext.toc" );
-
     return true;
   }
   else 
@@ -489,8 +525,14 @@ void K3bMixedJob::addAudioTracks( K3bCdrecordWriter* writer )
      writer->addArgument( "-nopreemp" );
 
     writer->addArgument( QString("-pregap=%1").arg(track->pregap()) );
-    if( m_doc->onTheFly() )
-      writer->addArgument( QString("-tsize=%1f").arg(track->length()) )->addArgument("-");
+    if( m_doc->onTheFly() ) {
+      QString fifoname = QString("/home/trueg/tmp/fifo_track%1").arg(track->index());
+      if( ::mkfifo( fifoname.latin1(), S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH ) == -1 ) {
+	kdDebug() << "(K3bMixedJob) could not create fifo" << endl;
+      }
+      track->setBufferFile( fifoname );  // just a temp solution
+      writer->addArgument( QString("-tsize=%1f").arg(track->length()) )->addArgument(fifoname);
+    }
     else
       writer->addArgument( QFile::encodeName(track->bufferFile()) );
   }
@@ -624,5 +666,41 @@ void K3bMixedJob::startWriting()
 	
   m_writer->start();
 }
+
+
+void K3bMixedJob::cleanupAfterError()
+{
+  m_errorOccuredAndAlreadyReported = true;
+  m_audioDecoder->cancel();
+  m_isoImager->cancel();
+  if( m_writer )
+    m_writer->cancel();
+
+  if( m_tocFile ) delete m_tocFile;
+  m_tocFile = 0;
+
+  // remove the temp files
+  removeBufferFiles();
+}
+
+
+void K3bMixedJob::removeBufferFiles()
+{
+  emit infoMessage( i18n("Removing buffer files."), INFO );
+
+  if( m_isoImageFile )
+    if( m_isoImageFile->exists() )
+      if( !m_isoImageFile->remove() )
+	emit infoMessage( i18n("Could not delete file %1.").arg(m_isoImageFile->name()), ERROR );
+
+  QListIterator<K3bAudioTrack> it( *m_doc->audioDoc()->tracks() );
+  for( ; it.current(); ++it ) {
+    K3bAudioTrack* track = it.current();
+    if( QFile::exists( track->bufferFile() ) )
+      if( !QFile::remove( track->bufferFile() ) )
+	emit infoMessage( i18n("Could not delete file %1.").arg(track->bufferFile()), ERROR );
+  }
+}
+
 
 #include "k3bmixedjob.moc"

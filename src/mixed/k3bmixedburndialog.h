@@ -57,8 +57,6 @@ class K3bMixedBurnDialog : public K3bProjectBurnDialog
    void loadUserDefaults();
    void saveUserDefaults();
 
-   void slotOnlyCreateImageToggled( bool on );
-
  private:
    void setupSettingsPage();
    void createContextHelp();
