@@ -135,9 +135,7 @@ void K3bDataView::importSession()
   // get the writer
   m_device = K3bDeviceSelectionDialog::selectWriter( this, i18n("Please select the appendable disk") );
 
-  // TODO: check if it's a data cd and appendable and show some dialog
-
-  m_doc->disable();
+  // TODO: check if it's a data cd and appendable
 
   k3bMain()->showBusyInfo( i18n("Mounting disk...") );
 
@@ -162,7 +160,6 @@ void K3bDataView::slotMountFinished( KIO::Job* job )
   }
 
   k3bMain()->endBusy();
-  m_doc->enable();
 }
 
 

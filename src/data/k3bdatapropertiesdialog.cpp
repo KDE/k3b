@@ -117,7 +117,8 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( K3bDataItem* dataItem, QWidget
     location = "/";
   m_labelLocation->setText( location );
   extraInfoLabel->setText( QString( "(%1)" ).arg(dataItem->extraInfo()) );
-  extraInfoLabel->setShown( !dataItem->extraInfo().isEmpty() );
+  if( dataItem->extraInfo().isEmpty() )
+    extraInfoLabel->hide();
 
   // OPTIONS
   // /////////////////////////////////////////////////
@@ -141,9 +142,11 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( K3bDataItem* dataItem, QWidget
     m_checkHideOnJoliet->setDisabled( dataItem->parent()->hideOnJoliet() );
   }
 
-  m_checkHideOnJoliet->setShown( dataItem->isHideable() );
-  m_checkHideOnRockRidge->setShown( dataItem->isHideable() );
-  line->setShown( dataItem->isHideable() );
+  if( !dataItem->isHideable() ) {
+    m_checkHideOnJoliet->hide();
+    m_checkHideOnRockRidge->hide();
+    line->hide();
+  }
 
   QToolTip::add( m_checkHideOnRockRidge, i18n("") );
   QToolTip::add( m_checkHideOnJoliet, i18n("") );

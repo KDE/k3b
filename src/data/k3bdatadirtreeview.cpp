@@ -276,9 +276,8 @@ void K3bDataDirTreeView::setupActions()
 void K3bDataDirTreeView::showPopupMenu( KListView*, QListViewItem* item, const QPoint& point )
 {
   if( item ) {
-    K3bDataViewItem* di = (K3bDataViewItem*)item;
-    if( di ) {
-      m_actionRemove->setEnabled( di->dataItem()-> isRemoveable() );
+    if( K3bDataViewItem* di = dynamic_cast<K3bDataViewItem*>(item) ) {
+      m_actionRemove->setEnabled( di->dataItem()->isRemoveable() );
       m_actionRename->setEnabled( di->dataItem()->isRenameable() );
     }
     else {
