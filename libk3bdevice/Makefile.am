@@ -1,5 +1,7 @@
 AM_CPPFLAGS= -I$(srcdir) $(all_includes)
 
+KDE_CXXFLAGS = $(ENABLE_PERMISSIVE_FLAG)
+
 METASOURCES = AUTO
 
 lib_LTLIBRARIES = libk3bdevice.la
