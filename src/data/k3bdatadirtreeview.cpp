@@ -39,6 +39,8 @@ K3bDataDirTreeView::K3bDataDirTreeView( K3bDataDoc* doc, QWidget* parent )
 	
   setItemsRenameable( true );
 
+  setInvalidChars( "\\/;:*$" );
+
   m_doc = doc;	
   m_root = new K3bDataRootViewItem( doc, this );
   m_itemMap.insert( doc->root(), m_root );

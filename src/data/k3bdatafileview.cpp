@@ -39,6 +39,8 @@ K3bDataFileView::K3bDataFileView( K3bDataDoc* doc, QWidget* parent )
 
   setItemsRenameable( true );
   setSelectionModeExt( KListView::Konqueror );
+
+  setInvalidChars( "\\/;:*$" );
   
   m_doc = doc;
   m_currentDir = doc->root();
@@ -65,7 +67,7 @@ void K3bDataFileView::updateContents()
 
   // perhaps we should check if the K3bDirItem m_currentDir still exists
 	
-  qDebug( "(K3bDataFileView) reloading current dir: " + m_currentDir->k3bName() );
+  //  qDebug( "(K3bDataFileView) reloading current dir: " + m_currentDir->k3bName() );
 	
   for( QListIterator<K3bDataItem> _it( *m_currentDir->children() ); _it.current(); ++_it ) {
     if( K3bDirItem* _item = dynamic_cast<K3bDirItem*>( _it.current() ) ) {
@@ -76,7 +78,7 @@ void K3bDataFileView::updateContents()
     }
   }
 	
-  qDebug( "(K3bDataFileView) reloading finished" );
+  //  qDebug( "(K3bDataFileView) reloading finished" );
 }
 
 

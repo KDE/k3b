@@ -37,7 +37,8 @@
 #include <qbuttongroup.h>
 
 #include <kmessagebox.h>
-#include <krestrictedline.h>
+//#include <krestrictedline.h>
+#include "../kdelibs_patched/krestrictedline.h"    // patched version with the ability to set invalid chars!
 #include <klocale.h>
 #include <kconfig.h>
 #include <kstddirs.h>
@@ -425,28 +426,28 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
 
   m_editVolumeID = new KRestrictedLine( _groupVolumeInfo, "m_editVolumeID" );
   // are this really the allowed characters?
-  m_editVolumeID->setValidChars( "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-. " );
+  m_editVolumeID->setInvalidChars( "\\/;:*$" );
   m_editVolumeID->setMaxLength( 32 );
 
   _groupVolumeInfoLayout->addWidget( m_editVolumeID, 0, 1 );
 
   m_editApplicationID = new KRestrictedLine( _groupVolumeInfo, "m_editApplicationID" );
   // are this really the allowed characters?
-  m_editApplicationID->setValidChars( "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-. " );
+  m_editApplicationID->setInvalidChars( "\\/;:*$" );
   m_editApplicationID->setMaxLength( 128 );
 
   _groupVolumeInfoLayout->addWidget( m_editApplicationID, 1, 1 );
 
   m_editPublisher = new KRestrictedLine( _groupVolumeInfo, "m_editPublisher" );
   // are this really the allowed characters?
-  m_editPublisher->setValidChars( "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-. " );
+  m_editPublisher->setInvalidChars( "\\/;:*$" );
   m_editPublisher->setMaxLength( 128 );
 
   _groupVolumeInfoLayout->addWidget( m_editPublisher, 2, 1 );
 
   m_editPreparer = new KRestrictedLine( _groupVolumeInfo, "m_editPreparer" );
   // are this really the allowed characters?
-  m_editPreparer->setValidChars( "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-. " );
+  m_editPreparer->setInvalidChars( "\\/;:*$" );
   m_editPreparer->setMaxLength( 128 );
 
   _groupVolumeInfoLayout->addWidget( m_editPreparer, 3, 1 );
