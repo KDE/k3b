@@ -451,7 +451,8 @@ void K3bDvdCopyJob::slotReaderFinished( bool success )
 	d->writerJob->start();
       }
       else {
-	removeImageFiles();
+	if( m_removeImageFiles )
+	  removeImageFiles();
 	emit finished(false);
 	d->running = false;
       }
@@ -474,7 +475,8 @@ void K3bDvdCopyJob::slotWriterFinished( bool success )
     return;
 
   if( d->canceled ) {
-    removeImageFiles();
+    if( m_removeImageFiles )
+      removeImageFiles();
     emit canceled();
     emit finished(false);
     d->running = false;
@@ -513,7 +515,8 @@ void K3bDvdCopyJob::slotWriterFinished( bool success )
     }
   }
   else {
-    removeImageFiles();
+    if( m_removeImageFiles )
+      removeImageFiles();
     d->running = false;
     emit finished(false);
   }
