@@ -18,9 +18,9 @@
 #define _K3B_DISKINFO_H_
 
 
-#include "k3btoc.h"
-#include "k3bmsf.h"
-#include "k3bmmc.h"
+#include <k3btoc.h>
+#include <k3bmsf.h>
+
 
 #include <qstring.h>
 

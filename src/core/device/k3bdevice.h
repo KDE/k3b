@@ -18,10 +18,9 @@
 #define K3BDEVICE_H
 
 #include <qstringlist.h>
-#include "k3bdiskinfo.h"
-#include "k3bmmc.h"
-#include "k3bcdtext.h"
-#include "k3bmsf.h"
+#include <k3bdiskinfo.h>
+#include <k3bcdtext.h>
+#include <k3bmsf.h>
 
 
 namespace K3bCdDevice
