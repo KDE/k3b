@@ -54,6 +54,7 @@ public:
 
   unsigned long alreadyDecoded;
   K3b::Msf decodingStartPos;
+  K3b::Msf decodingLength;
 
   KFileMetaInfo* metaInfo;
 
@@ -125,7 +126,7 @@ bool K3bAudioDecoder::analyseFile()
 }
 
 
-bool K3bAudioDecoder::initDecoder()
+bool K3bAudioDecoder::initDecoder( const K3b::Msf& startOffset, const K3b::Msf& len )
 {
   cleanup();
 
@@ -133,16 +134,39 @@ bool K3bAudioDecoder::initDecoder()
     src_reset( d->resampleState );
 
   d->alreadyDecoded = 0;
-  d->decodingStartPos = 0;
+
+  if( startOffset > length() )
+    d->decodingStartPos = 0;
+  else
+    d->decodingStartPos = startOffset;
+
+  if( len + d->decodingStartPos > length() )
+    d->decodingLength = length() - d->decodingStartPos;
+  else
+    d->decodingLength = len;
+
   d->decoderFinished = false;
 
-  return initDecoderInternal();
+  if( initDecoderInternal() ) {
+    if( startOffset > 0 )
+      return seek( startOffset );
+    else
+      return true;
+  }
+  else
+    return false;
+}
+
+
+bool K3bAudioDecoder::initDecoder()
+{
+  return initDecoder( 0, length() );
 }
 
 
 int K3bAudioDecoder::decode( char* _data, int maxLen )
 {
-  unsigned long lengthToDecode = (length() - d->decodingStartPos).audioBytes();
+  unsigned long lengthToDecode = d->decodingLength.audioBytes();
 
   if( d->alreadyDecoded >= lengthToDecode )
     return 0;
@@ -232,7 +256,7 @@ int K3bAudioDecoder::decode( char* _data, int maxLen )
     // check if we decoded too much
     if( d->alreadyDecoded + read > lengthToDecode ) {
       kdDebug() << "(K3bAudioDecoder) we decoded too much. Cutting output." << endl;
-      read = length().audioBytes() - d->alreadyDecoded;
+      read = lengthToDecode - d->alreadyDecoded;
     }
 
     d->alreadyDecoded += read;
@@ -353,7 +377,6 @@ void K3bAudioDecoder::from8BitTo16BitBeSigned( char* src, char* dest, int sample
 
 bool K3bAudioDecoder::seek( const K3b::Msf& pos )
 {
-  d->decodingStartPos = pos;
   d->alreadyDecoded = 0;
   return seekInternal( pos );
 }

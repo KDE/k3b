@@ -83,9 +83,17 @@ class K3bAudioDecoder : public K3bPlugin
   bool analyseFile();
 
   /**
-   * initialze the decoding.
+   * initialize the decoding.
    */
   bool initDecoder();
+
+  /**
+   * initialize the decoding.
+   * @param startOffset the number of frames to skip at the beginning of the file.
+   * @param length the number of frames to decode, needs to smaller than or equal to
+   *               the length of the file - startOffset
+   */
+  bool initDecoder( const K3b::Msf& startOffset, const K3b::Msf& length );
 
   /**
    * This should at least support "Title" and "Artist"

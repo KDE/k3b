@@ -253,12 +253,6 @@ K3bRootItem::~K3bRootItem()
 {
 }
 
-QString K3bRootItem::k3bPath()
-{
-  // graft-points have to start with the name of the directory or the file, not with a slash or anything!
-  return "";
-}
-
 
 const QString& K3bRootItem:: k3bName()
 {

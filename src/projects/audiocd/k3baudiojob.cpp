@@ -298,7 +298,7 @@ void K3bAudioJob::slotAudioDecoderNextTrack( int t, int tt )
 {
   if( m_doc->onlyCreateImages() || !m_doc->onTheFly() ) {
     K3bAudioTrack* track = m_doc->at(t-1);
-    emit newSubTask( i18n("Decoding audio track %1 of %2 (%3)").arg(t).arg(tt).arg(track->fileName()) );
+    emit newSubTask( i18n("Decoding audio track %1 of %2 (%3)").arg(t).arg(tt).arg(track->filename()) );
 
     // create next buffer file (WaveFileWriter will close the last written file)
     if( !m_waveFileWriter->open( m_tempData->bufferFileName(track) ) ) {
@@ -413,7 +413,7 @@ void K3bAudioJob::slotWriterNextTrack( int t, int tt )
 		   .arg(t)
 		   .arg(tt)
 		   .arg( track->title().isEmpty() || track->artist().isEmpty() 
-			 ? track->fileName()
+			 ? track->filename()
 			 : track->artist() + " - " + track->title() ) );
 }
 

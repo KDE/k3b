@@ -186,7 +186,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
 	emit infoMessage( i18n("This might result in a corrupt copy if the source was mastered with buggy software."), WARNING );
 
 	K3bIso9660 isoF( m_readerDevice, 0 );
-	if( isoF.open( IO_ReadOnly ) ) {
+	if( isoF.open() ) {
 	  d->lastSector = ((long long)isoF.primaryDescriptor().logicalBlockSize*isoF.primaryDescriptor().volumeSpaceSize)/2048LL;
 	}
 	else {
@@ -483,11 +483,6 @@ bool K3bDvdCopyJob::waitForDvd()
 	m_simulate = false;
       }
       
-      if( m_speed > 0 ) {
-	emit infoMessage( i18n("DVD+R(W) writers take care of the writing speed themselves."), INFO );
-	emit infoMessage( i18n("The K3b writing speed setting is ignored for DVD+R(W) media."), INFO );
-      }
-
       if( m_writingMode != K3b::WRITING_MODE_AUTO && m_writingMode != K3b::WRITING_MODE_RES_OVWR )
 	emit infoMessage( i18n("Writing mode ignored when writing DVD+R(W) media."), INFO );
 

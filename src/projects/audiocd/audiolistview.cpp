@@ -141,7 +141,7 @@ QDragObject* K3bAudioListView::dragObject()
   KURL::List urls;
 
   for( ; it.current(); ++it )
-    urls.append( KURL( ((K3bAudioListViewItem*)it.current())->audioTrack()->absPath() ) );
+    urls.append( KURL( ((K3bAudioListViewItem*)it.current())->audioTrack()->path() ) );
 
   return KURLDrag::newDrag( urls, viewport() );
 }

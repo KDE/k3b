@@ -44,11 +44,14 @@ class K3bIsoImager : public K3bJob
   int size() const { return m_mkisofsPrintSizeResult; }
 
   /**
-   * returns an empty dummy dir for use with K3bDirItems.
-   * Creates one if nessessary.
-   * The dummy dir is used to create empty dirs on the iso-filesystem! 
+   * The dummy dir is used to create dirs on the iso-filesystem.
+   *
+   * @return an empty dummy dir for use with K3bDirItems.
+   * @param weight Since the weight of files is determined by their local
+   *               path in mkisofs we need several dummy dirs for every 
+   *               weight.
    */
-  static QString dummyDir();
+  static QString dummyDir( int weight = 0 );
 
  public slots:
   virtual void start();

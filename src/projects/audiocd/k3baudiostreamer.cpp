@@ -172,14 +172,14 @@ void K3bAudioStreamer::startModule()
     if( d->currentTrack->index() != 0 )
       d->trackDataToWrite += d->currentTrack->pregap().audioBytes();
     
-    if( !d->currentModule->initDecoder() ) {
+    if( !d->currentModule->initDecoder( d->currentTrack->trackStart(), d->currentTrack->length() ) ) {
       kdDebug() << "(K3bAudioStreamer) unable to initialize module for track " 
-		<< d->currentTrackNumber << ": " << d->currentTrack->absPath() << endl;
+		<< d->currentTrackNumber << ": " << d->currentTrack->path() << endl;
       cancelAll();
     }
     else {
       kdDebug() << "(K3bAudioStreamer) successfully initialized module for track "
-		<< d->currentTrackNumber << ": " << d->currentTrack->absPath() << endl;
+		<< d->currentTrackNumber << ": " << d->currentTrack->path() << endl;
       resume();
     }
   }

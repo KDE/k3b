@@ -20,8 +20,17 @@
 
 #include <qspinbox.h>
 #include <qstring.h>
+#include <qvalidator.h>
 
 #include <k3bmsf.h>
+
+
+class K3bMsfValidator : public QRegExpValidator
+{
+ public:
+  K3bMsfValidator( QObject* parent = 0, const char* name = 0 );
+};
+
 
 class K3bMsfEdit : public QSpinBox
 {

@@ -44,7 +44,7 @@ class QStringList;
 class QWidget;
 class QDomDocument;
 class QDomElement;
-class KArchiveDirectory;
+class K3bIso9660Directory;
 
 namespace K3bCdDevice {
   class CdDevice;
@@ -174,7 +174,7 @@ class K3bDataDoc : public K3bDoc
 
  private:
   void prepareFilenamesInDir( K3bDirItem* dir );
-  void createSessionImportItems( const KArchiveDirectory*, K3bDirItem* parent );
+  void createSessionImportItems( const K3bIso9660Directory*, K3bDirItem* parent );
   K3bDataItem* createBootCatalogeItem( K3bDirItem* bootDir );
 
   /**

@@ -31,6 +31,7 @@ class QComboBox;
 class KToggleAction;
 class KIntNumInput;
 class KCutLabel;
+class K3bMsfEdit;
 
 
 /**
@@ -49,7 +50,10 @@ class K3bAudioTrackDialog : public KDialogBase
   void slotChangePregapFormat( const QString& );
   void slotOk();
   void slotApply();
-			
+
+  void slotTrackStartChanged( int value );
+  void slotTrackEndChanged( int value );
+
  private:
   QPtrList<K3bAudioTrack> m_tracks;
 
@@ -68,6 +72,9 @@ class K3bAudioTrackDialog : public KDialogBase
   QComboBox* m_comboPregapFormat;
   QCheckBox* m_checkPreEmp;
   QCheckBox* m_checkCopy;
+
+  K3bMsfEdit* m_editTrackStart;
+  K3bMsfEdit* m_editTrackEnd;
 
   bool m_bPregapSeconds;
 	

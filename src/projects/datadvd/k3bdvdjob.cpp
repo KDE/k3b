@@ -258,6 +258,8 @@ void K3bDvdJob::cancel()
     m_isoImager->cancel();
   if( m_growisofsImager )
     m_growisofsImager->cancel();
+  if( d->verificationJob )
+    d->verificationJob->cancel();
 
   cleanup();
 }
@@ -438,11 +440,6 @@ bool K3bDvdJob::waitForDvd()
 	m_doc->setDummy( false );
       }
       
-      if( m_doc->speed() > 0 ) {
-	emit infoMessage( i18n("DVD+R(W) writers do take care of the writing speed themselves."), INFO );
-	emit infoMessage( i18n("The K3b writing speed setting is ignored for DVD+R(W) media."), INFO );
-      }
-
       if( m_doc->writingMode() != K3b::WRITING_MODE_AUTO && m_doc->writingMode() != K3b::WRITING_MODE_RES_OVWR )
 	emit infoMessage( i18n("Writing mode ignored when writing DVD+R(W) media."), INFO );
 

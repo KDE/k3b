@@ -279,6 +279,7 @@ K3bAudioTrack* K3bAudioDoc::createTrack( const KURL& url )
     if( ((K3bAudioDecoderFactory*)it.current())->canDecode( url ) ) {
       kdDebug() << "(K3bAudioDoc) using " << it.current()->className() << " for decoding of " << url.path() << endl;
       K3bAudioTrack* newTrack =  new K3bAudioTrack( m_tracks, url.path() );
+      connect( newTrack, SIGNAL(changed()), this, SLOT(slotTrackChanged()) );
       newTrack->setModule( (K3bAudioDecoder*)((K3bAudioDecoderFactory*)it.current())->createPlugin() );
       return newTrack;
     }
@@ -537,7 +538,7 @@ bool K3bAudioDoc::saveDocumentData( QDomElement* docElem )
   for( K3bAudioTrack* track = first(); track != 0; track = next() ) {
 
     QDomElement trackElem = doc.createElement( "track" );
-    trackElem.setAttribute( "url", KIO::decodeFileName(track->absPath()) );
+    trackElem.setAttribute( "url", KIO::decodeFileName(track->path()) );
 
     // add cd-text
     cdTextMain = doc.createElement( "cd-text" );
@@ -661,7 +662,7 @@ void K3bAudioDoc::slotDetermineTrackStatus()
     // find the next track to meta-info
     for( QPtrListIterator<K3bAudioTrack> it( *m_tracks ); it.current(); ++it ) {
       if( it.current()->length() == 0 && it.current()->status() == 0 ) {
-	kdDebug() << "(K3bAudioDoc) starting AudioTrackStatusThread for " << it.current()->absPath() << endl;
+	kdDebug() << "(K3bAudioDoc) starting AudioTrackStatusThread for " << it.current()->path() << endl;
 	m_trackStatusThread->analyseTrack( it.current() );
 	return;
       }
@@ -676,7 +677,7 @@ void K3bAudioDoc::slotDetermineTrackStatus()
 void K3bAudioDoc::determineAudioMetaInfo( K3bAudioTrack* track )
 {
   // first search the songdb
-  K3bSong *song = K3bSongManager::instance()->findSong( track->absPath() );
+  K3bSong *song = K3bSongManager::instance()->findSong( track->path() );
   if( song != 0 ){
     track->setArtist( song->getArtist() );
     //      newTrack->setAlbum( song->getAlbum() );
@@ -697,5 +698,13 @@ K3bProjectBurnDialog* K3bAudioDoc::newBurnDialog( QWidget* parent, const char* n
 {
   return new K3bAudioBurnDialog( this, parent, name, true );
 }
+
+
+void K3bAudioDoc::slotTrackChanged()
+{
+  setModified( true );
+  emit changed();
+}
+
 
 #include "k3baudiodoc.moc"

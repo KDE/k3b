@@ -378,7 +378,7 @@ void K3bCdImageWritingDialog::slotUpdateImage( const QString& path )
     // Test for iso9660 image
     // ------------------------------------------------
     K3bIso9660 isoF( path );
-    if( isoF.open( IO_ReadOnly ) ) {
+    if( isoF.open() ) {
       createIso9660InfoItems( &isoF );
       isoF.close();
       calculateMd5Sum( path );

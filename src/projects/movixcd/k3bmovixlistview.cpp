@@ -77,7 +77,7 @@ QString K3bMovixFileViewItem::text( int col ) const
     // allowing 999 files to be added. 
     return QString::number( doc()->indexOf( fileItem() ) ).rightJustify( 3, ' ' );
   case 1:
-    return fileItem()->k3bName() + "  ";
+    return fileItem()->k3bName();
   case 2:
     {
       if( fileItem()->isSymLink() )

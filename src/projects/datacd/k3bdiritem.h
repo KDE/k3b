@@ -94,9 +94,6 @@ class K3bRootItem : public K3bDirItem
   K3bRootItem( K3bDataDoc* );
   ~K3bRootItem();
 
-  /** reimplemented from K3bDataItem */
-  QString k3bPath();
-
   const QString& k3bName();
   void setK3bName( const QString& );
 

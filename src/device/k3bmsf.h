@@ -18,6 +18,8 @@
 #define _K3B_MSF_H_
 
 #include <qstring.h>
+#include <qregexp.h>
+
 #include <kdebug.h>
 #include <kio/global.h>
 
@@ -58,10 +60,12 @@ namespace K3b
       void addFrames( int f );
 
       QString toString( bool showFrames = true ) const;
+
       KIO::filesize_t mode1Bytes() const;
       KIO::filesize_t mode2Form1Bytes() const;
       KIO::filesize_t mode2Form2Bytes() const;
       KIO::filesize_t audioBytes() const;
+      unsigned long long pcmSamples() const { return lba()*588; }
 
       /**
        * Convert a string representation into an Msf object.
@@ -72,7 +76,9 @@ namespace K3b
        * \li 100:23:57 - treated as 100 minutes, 23 seconds, and 57 frames
        * \li 100:23.57 - treated as 100 minutes, 23 seconds, and 57 frames
        */
-      static Msf fromString( const QString& );
+      static Msf fromString( const QString&, bool* ok = 0 );
+
+      static QRegExp regExp();
 
     private:
       void makeValid();

@@ -71,47 +71,37 @@ const QString& K3bDataItem::k3bName() const
 
 QString K3bDataItem::k3bPath() const
 {
-  QString s;
-
-  if( !m_parentDir )
-    s = k3bName();
+  if( !parent() )
+    return "";  // the root item is the only one not having a parent
+  else if( isDir() )
+    return parent()->k3bPath() + k3bName() + "/";
   else
-    s = m_parentDir->k3bPath() + k3bName();
-
-  if( isDir() )
-    s += "/";
-
-  return s;
+    return parent()->k3bPath() + k3bName();
 }
 
 
 QString K3bDataItem::writtenPath() const
 {
-  QString s;
-
-  if( !m_parentDir )
-    s = writtenName();
+  if( !parent() )
+    return "";  // the root item is the only one not having a parent
+  else if( isDir() )
+    return parent()->writtenPath() + writtenName() + "/";
   else
-    s = m_parentDir->writtenPath() + writtenName();
-
-  if( isDir() )
-    s += "/";
-
-  return s;
+    return parent()->writtenPath() + writtenName();
 }
 
 
 K3bDataItem* K3bDataItem::nextSibling()
 {
-  K3bDataItem* _item = this;
-  K3bDirItem* _parentItem = parent();
+  K3bDataItem* item = this;
+  K3bDirItem* parentItem = parent();
 	
-  while( _parentItem ) {
-    if( K3bDataItem* i = _parentItem->nextChild( _item ) )
+  while( parentItem ) {
+    if( K3bDataItem* i = parentItem->nextChild( item ) )
       return i;
 		
-    _item = _parentItem;
-    _parentItem = _item->parent();
+    item = parentItem;
+    parentItem = item->parent();
   }
 
   return 0;

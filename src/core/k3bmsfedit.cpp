@@ -22,9 +22,18 @@
 #include <qlineedit.h>
 
 
+
+K3bMsfValidator::K3bMsfValidator( QObject* parent, const char* name )
+  : QRegExpValidator( K3b::Msf::regExp(), parent, name )
+{
+}
+
+
+
 K3bMsfEdit::K3bMsfEdit( QWidget* parent, const char* name )
   : QSpinBox( parent, name )
 {
+  setValidator( new K3bMsfValidator( this ) );
   setMinValue( 0 );
   setMaxValue( (60*60*75) + (60*75) + 75 );
 }
@@ -54,29 +63,7 @@ void K3bMsfEdit::setMsfValue( const K3b::Msf& msf )
 
 int K3bMsfEdit::mapTextToValue( bool* ok )
 {
-  int m = 0, s = 0, f = 0;
-
-  QStringList tokens = QStringList::split( ":", text() );
-  int i = tokens.size()-1;
-  if( i >= 0 )
-    f = tokens[i].toInt(ok);
-  if( !(*ok) )
-    return 0;
-  --i;
-  if( i >= 0 )
-    s = tokens[i].toInt(ok);
-  if( !(*ok) )
-    return 0;
-  --i;
-  if( i >= 0 )
-    m = tokens[i].toInt(ok);
-  if( !(*ok) )
-    return 0;
-
-  if( f < 0 || s < 0 || m < 0 )
-    return 0;
-
-  return f + (s*75) + (m*60*75);
+  return K3b::Msf::fromString( text(), ok ).lba();
 }
 
 

@@ -148,6 +148,7 @@ void K3bCloneJob::prepareReader()
   m_readcdReader->setDisableCorrection( m_noCorrection );
   m_readcdReader->setImagePath( m_imagePath );
   m_readcdReader->setClone( true );
+  m_readcdReader->setRetries( m_readRetries );
 }
 
 

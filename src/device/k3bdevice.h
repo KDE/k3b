@@ -539,7 +539,7 @@ namespace K3bCdDevice
      * the value in the tracks.
      * In the future this should scan for all indices.
      */
-    void indexScan( K3bCdDevice::Toc& toc ) const;
+    bool indexScan( K3bCdDevice::Toc& toc ) const;
 
     /**
      * Seek to the specified sector.

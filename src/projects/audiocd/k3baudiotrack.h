@@ -17,6 +17,7 @@
 #ifndef K3BAUDIOTRACK_H
 #define K3BAUDIOTRACK_H
 
+#include <qobject.h>
 #include <qstring.h>
 #include <qfileinfo.h>
 #include <qfile.h>
@@ -35,33 +36,34 @@ class K3bAudioDecoder;
   *@author Sebastian Trueg
   */
 
-class K3bAudioTrack
+class K3bAudioTrack : public QObject
 {
+  Q_OBJECT
+
  public:
   K3bAudioTrack( QPtrList<K3bAudioTrack>* parent, const QString& filename );
   ~K3bAudioTrack();
-
-  /** returns true if K3b is able to handle the file
-   *  which means that it can calculate the length of the track
-   *  and the file can be written to a cd.
-   **/
-  //  bool isValid();
 
   K3bAudioDecoder* module() const { return m_module; }
 
   // TODO: this should only be accessable by K3bAudioDoc
   void setModule( K3bAudioDecoder* module );
 
-  QString fileName() const { return QFileInfo(m_file).fileName(); }
-  QString absPath() const { return QFileInfo(m_file).absFilePath(); }
-
-  //  QString bufferFile() const { return m_bufferFile; }
+  QString filename() const { return m_filename.section( '/', -1 ); }
+  const QString& path() const { return m_filename; }
 
   K3b::Msf pregap() const { return m_pregap; }
 
-  /** returns length of track in frames **/
+  /** 
+   * @return length of track in frames
+   */
   K3b::Msf length() const;
-	
+
+  /**
+   * @return the complete length of the audio file
+   */
+  K3b::Msf fileLength() const;
+
   const QString& artist() const { return m_cdText.performer(); }
   const QString& title() const { return m_cdText.title(); }
   const QString& arranger() const { return m_cdText.arranger(); }
@@ -79,70 +81,78 @@ class K3bAudioTrack
   /**
    * @obsolete use setPerformer
    **/
-  void setArtist( const QString& a ) { m_cdText.setPerformer(a); }
-  void setPerformer( const QString& a ) { m_cdText.setPerformer(a); }
+  void setArtist( const QString& a ) { m_cdText.setPerformer(a); emit changed(); }
+  void setPerformer( const QString& a ) { m_cdText.setPerformer(a); emit changed(); }
 
   /**
    * If the file is a mp3-file, it's mp3-tag is used
-   **/
-  void setTitle( const QString& t ) { m_cdText.setTitle(t); }
-  void setArranger( const QString& t ) { m_cdText.setArranger(t); }
-  void setSongwriter( const QString& t ) { m_cdText.setSongwriter(t); }
-  void setComposer( const QString& t ) { m_cdText.setComposer(t); }
-  void setIsrc( const QString& t ) { m_cdText.setIsrc(t); }
-  void setCdTextMessage( const QString& t ) { m_cdText.setMessage(t); }
+   */
+  void setTitle( const QString& t ) { m_cdText.setTitle(t); emit changed(); }
+  void setArranger( const QString& t ) { m_cdText.setArranger(t); emit changed(); }
+  void setSongwriter( const QString& t ) { m_cdText.setSongwriter(t); emit changed(); }
+  void setComposer( const QString& t ) { m_cdText.setComposer(t); emit changed(); }
+  void setIsrc( const QString& t ) { m_cdText.setIsrc(t); emit changed(); }
+  void setCdTextMessage( const QString& t ) { m_cdText.setMessage(t); emit changed(); }
 
-  void setCdText( const K3bCdDevice::TrackCdText& cdtext ) { m_cdText = cdtext; }
+  void setCdText( const K3bCdDevice::TrackCdText& cdtext ) { m_cdText = cdtext; emit changed(); }
 
-  void setPreEmp( bool b ) { m_preEmp = b; }
-  void setCopyProtection( bool b ) { m_copy = b; }
+  void setPreEmp( bool b ) { m_preEmp = b; emit changed(); }
+  void setCopyProtection( bool b ) { m_copy = b; emit changed(); }
 	
-	
-  void setLength( unsigned long time ) { m_length = time; }
-	
-  //  void setBufferFile( const QString& file );
+  /**
+   * The position the track starts in the file.
+   * This normally equals 0.
+   */
+  const K3b::Msf& trackStart() const;
 
-  /** returns the raw size of the track (16bit, 44800 kHz, stereo) */
+  /**
+   * The position the track ends in the file.
+   * This normally equals @p fileLength()
+   */
+  K3b::Msf trackEnd() const;
+
+  void setTrackStart( const K3b::Msf& );
+  void setTrackEnd( const K3b::Msf& );
+
+  /** 
+   * @return The raw size of the track in pcm samples (16bit, 44800 kHz, stereo) 
+   */
   KIO::filesize_t size() const;
 
-  /** returns the index in the list */
+  /**
+   * @return The index in the list 
+   */
   int index() const;
 
   int status() const { return m_status; }
   void setStatus( int status ) { m_status = status; }
 
+ signals:
+  /**
+   * Emitted if the track has been changed.
+   */
+  void changed();
+
  protected:
   QPtrList<K3bAudioTrack>* m_parent;
-  int m_filetype;
-  QFile m_file;
+  QString m_filename;
 
-  /** the module that does all the work (decoding and shit!) */
+  /** 
+   * The module that does all the work (decoding and stuff)
+   */
   K3bAudioDecoder* m_module;
 
  private:	
-  //  QString m_bufferFile;
-
-  K3b::Msf m_length;
-
+  K3b::Msf m_trackStartOffset;
+  K3b::Msf m_trackEndOffset;
   K3b::Msf m_pregap;
   
   /** Status of the file. see file_status */
   int m_status;
 
-  /** CD-Text: copy protection */
+  /** copy protection */
   bool m_copy;
   bool m_preEmp;
-  /** CD-Text: PERFORMER */
-  QString m_artist;
-  /** CD-Text: TITLE (track) */
-  QString m_title;
-  /** CD-Text: TITLE (cd) */
-  QString m_album;
-  QString m_arranger;
-  QString m_songwriter;
-  QString m_composer;
-  QString m_cdTextMessage;
-  QString m_isrc;
 
   K3bCdDevice::TrackCdText m_cdText;
 };

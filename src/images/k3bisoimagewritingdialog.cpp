@@ -259,7 +259,7 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
     // Test for iso9660 image
     // ------------------------------------------------
     K3bIso9660 isoF( path );
-    if( isoF.open( IO_ReadOnly ) ) {
+    if( isoF.open() ) {
 
       d->isIsoImage = true;
 

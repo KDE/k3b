@@ -1310,14 +1310,14 @@ void K3bDataDoc::slotTocRead( K3bCdDevice::DeviceHandler* dh )
     kdDebug() << "(K3bDataDoc) imported session size: " << KIO::convertSize(m_oldSessionSize) << endl;
 
     K3bIso9660 iso( burner(), startSec );
-    iso.open( IO_ReadOnly );
+    iso.open();
 
     // import some former settings
     isoOptions().setCreateJoliet( iso.firstJolietDirEntry() != 0 );
     isoOptions().setVolumeID( iso.primaryDescriptor().volumeId );
     // TODO: also import some other pd fields
 
-    const KArchiveDirectory* rootDir = iso.directory();
+    const K3bIso9660Directory* rootDir = iso.firstIsoDirEntry();
     createSessionImportItems( rootDir, root() );
   }
   else {
@@ -1331,7 +1331,7 @@ void K3bDataDoc::slotTocRead( K3bCdDevice::DeviceHandler* dh )
 }
 
 
-void K3bDataDoc::createSessionImportItems( const KArchiveDirectory* importDir, K3bDirItem* parent )
+void K3bDataDoc::createSessionImportItems( const K3bIso9660Directory* importDir, K3bDirItem* parent )
 {
   kapp->processEvents();
 
@@ -1344,7 +1344,7 @@ void K3bDataDoc::createSessionImportItems( const KArchiveDirectory* importDir, K
   entries.remove( ".." );
   for( QStringList::const_iterator it = entries.begin();
        it != entries.end(); ++it ) {
-    const KArchiveEntry* entry = importDir->entry( *it );
+    const K3bIso9660Entry* entry = importDir->entry( *it );
     K3bDataItem* oldItem = parent->find( entry->name() );
     if( entry->isDirectory() ) {
       K3bDirItem* dir = 0;
@@ -1366,10 +1366,10 @@ void K3bDataDoc::createSessionImportItems( const KArchiveDirectory* importDir, K
       dir->setExtraInfo( i18n("From previous session") );
       m_oldSession.append( dir );
 
-      createSessionImportItems( (KArchiveDirectory*)entry, dir );
+      createSessionImportItems( static_cast<const K3bIso9660Directory*>(entry), dir );
     }
     else {
-      const K3bIso9660File* file = (const K3bIso9660File*)entry;
+      const K3bIso9660File* file = static_cast<const K3bIso9660File*>(entry);
 
       // we overwrite without warning!
       if( oldItem )

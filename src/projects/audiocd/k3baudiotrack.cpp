@@ -33,8 +33,8 @@
 
 
 K3bAudioTrack::K3bAudioTrack( QPtrList<K3bAudioTrack>* parent, const QString& filename )
-  : m_file(filename),
-    m_length(0),
+  : QObject(),
+    m_filename(filename),
     m_status(0)
 {
   m_parent = parent;
@@ -44,7 +44,6 @@ K3bAudioTrack::K3bAudioTrack( QPtrList<K3bAudioTrack>* parent, const QString& fi
   k3bcore->config()->setGroup( "Audio project settings" );
   setPregap( k3bcore->config()->readNumEntry( "default pregap", 150 ) );
   
-
   m_module = 0;
 }
 
@@ -55,9 +54,24 @@ K3bAudioTrack::~K3bAudioTrack()
 }
 
 
+K3b::Msf K3bAudioTrack::fileLength() const
+{
+  // make sure a track is always at least 4 seconds in length as defined in 
+  // the Red Book
+  if( m_module && m_module->length() > 0 )
+    return QMAX( m_module->length(), K3b::Msf( 0, 4, 0 ) );
+  else
+    return 0;
+}
+
+
 K3b::Msf K3bAudioTrack::length() const
 {
-  return( m_module ? m_module->length() : 0 );
+  // not valid until the module determined the length
+  if( fileLength() > 0 )
+    return trackEnd() - trackStart();
+  else
+    return 0;
 }
 
 
@@ -75,20 +89,58 @@ int K3bAudioTrack::index() const
   return i;
 }
 
-// void K3bAudioTrack::setBufferFile( const QString& path )
-// {
-//   m_bufferFile = path;
-// }
-
 
 void K3bAudioTrack::setPregap( const K3b::Msf& p )
 {
-  m_pregap = p; 
+  m_pregap = p;
+  emit changed();
 }
 
 
 void K3bAudioTrack::setModule( K3bAudioDecoder* module )
 {
   m_module = module;
-  m_module->setFilename( absPath() );
+  m_module->setFilename( path() );
+}
+
+
+const K3b::Msf& K3bAudioTrack::trackStart() const
+{
+  return m_trackStartOffset;
+}
+
+
+K3b::Msf K3bAudioTrack::trackEnd() const
+{
+  return fileLength() - m_trackEndOffset;
+}
+
+
+void K3bAudioTrack::setTrackStart( const K3b::Msf& msf )
+{
+  // make sure a track is always at least 4 seconds in length as defined in 
+  // the Red Book
+  if( msf > trackEnd() - K3b::Msf( 0, 4, 0 ) || msf > fileLength() )
+    kdDebug() << "(K3bAudioTrack) invalid track start value: " << msf.toString() << endl;
+  else {
+    m_trackStartOffset = msf;
+    emit changed();
+  }
+}
+
+
+void K3bAudioTrack::setTrackEnd( const K3b::Msf& msf )
+{
+  // make sure a track is always at least 4 seconds in length as defined in 
+  // the Red Book
+  if( msf < trackStart() + K3b::Msf( 0, 4, 0 ) )
+    kdDebug() << "(K3bAudioTrack) invalid track end value: " << msf.toString() << endl;
+  else {
+    if( msf > fileLength() )
+      m_trackEndOffset = 0;
+    else
+      m_trackEndOffset = fileLength() - msf;
+    
+    emit changed();
+  }
 }

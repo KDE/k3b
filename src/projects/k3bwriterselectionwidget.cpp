@@ -475,24 +475,38 @@ void K3bWriterSelectionWidget::slotDetermineSupportedWriteSpeeds()
     // change the cursor since we block the gui here :(
     QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
 
-    QValueList<int> speeds = writerDevice()->determineSupportedWriteSpeeds();
-    if( speeds.isEmpty() ) {
-      KMessageBox::error( this, i18n("Unable to determine the supported writing speeds.") );
+    int media = writerDevice()->dvdMediaType();
+    bool isDvd = ( media & K3bCdDevice::MEDIA_WRITABLE_DVD ) && ( media > 0 );
+
+    if( !isDvd && d->dvd ) {
+      QApplication::restoreOverrideCursor();
+      KMessageBox::error( this, i18n("No writable DVD media found.") );
+    }
+    else if( isDvd && !d->dvd ) {
+      QApplication::restoreOverrideCursor();
+      KMessageBox::error( this, i18n("No writable CD media found.") );
     }
     else {
-      int lastSpeed = writerSpeed();
+      QValueList<int> speeds = writerDevice()->determineSupportedWriteSpeeds();
+      if( speeds.isEmpty() ) {
+	QApplication::restoreOverrideCursor();
+	KMessageBox::error( this, i18n("Unable to determine the supported writing speeds.") );
+      }
+      else {
+	int lastSpeed = writerSpeed();
+	
+	clearSpeedCombo();
+	m_comboSpeed->insertItem( i18n("Auto") );
+	
+	for( QValueList<int>::iterator it = speeds.begin(); it != speeds.end(); ++it )
+	  insertSpeedItem( *it );
+	
+	// try to reload last set speed
+	setSpeed( lastSpeed );
 
-      clearSpeedCombo();
-      m_comboSpeed->insertItem( i18n("Auto") );
-
-      for( QValueList<int>::iterator it = speeds.begin(); it != speeds.end(); ++it )
-	insertSpeedItem( *it );
-
-      // try to reload last set speed
-      setSpeed( lastSpeed );
+	QApplication::restoreOverrideCursor();
+      }
     }
-
-    QApplication::restoreOverrideCursor();
   }
 }
 

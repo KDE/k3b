@@ -55,6 +55,7 @@ class K3bReadcdReader : public K3bJob
   void setAbortOnError( bool b ) { m_noError = !b; }
   void setC2Scan( bool b ) { m_c2Scan = b; }
   void setClone( bool b ) { m_clone = b; }
+  void setRetries( int i ) { m_retries = i; }
 
   void setSectorRange( const K3b::Msf&, const K3b::Msf& );
 
@@ -77,6 +78,7 @@ class K3bReadcdReader : public K3bJob
   bool m_noError;
   bool m_c2Scan;
   int m_speed;
+  int m_retries;
 
   K3bCdDevice::CdDevice* m_readDevice;
 

@@ -46,7 +46,7 @@ class K3bDataItem
    * (since this is used for graft-points!) 
    * directories have a trailing "/"
    */
-  QString k3bPath() const;
+  virtual QString k3bPath() const;
 
   /**
    * Returns the name of the item as used on the CD or DVD image.
@@ -65,7 +65,7 @@ class K3bDataItem
    *
    * This is only valid after a call to @p K3bDataDoc::prepareFilenames()
    */
-  QString writtenPath() const;
+  virtual QString writtenPath() const;
 
   /**
    * Used to set the written name by @p K3bDataDoc::prepareFilenames()

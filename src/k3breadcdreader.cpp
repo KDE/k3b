@@ -174,6 +174,8 @@ void K3bReadcdReader::start()
   if( m_c2Scan )
     *d->process << "-c2scan";
 
+  *d->process << QString("retries=%1").arg(m_retries);
+
   if( d->firstSector < d->lastSector )
     *d->process << QString("sectors=%1-%2").arg(d->firstSector.lba()).arg(d->lastSector.lba());
 

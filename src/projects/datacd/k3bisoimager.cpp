@@ -201,6 +201,13 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
       }
       else  {
 	switch( p->exitStatus() ) {
+	case 104:
+	  // connection reset by peer
+	  // This only happens if cdrecord does not finish successfully
+	  // so we may leave the error handling to it meaning we handle this
+	  // as a known error
+	  break;
+
 	case 2:
 	  // mkisofs seems to have a bug that prevents to use filenames
 	  // that contain one or more backslashes
@@ -214,6 +221,7 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
 	    break;
 	  }
 	  // otherwise just fall through
+
 	default:
 	  emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg("mkisofs").arg(p->exitStatus()),
 			    K3bJob::ERROR );
@@ -658,7 +666,7 @@ bool K3bIsoImager::addMkisofsParameters()
       first = false;
     }
 
-    *m_process << "-c" << m_doc->bootCataloge()->k3bPath();
+    *m_process << "-c" << m_doc->bootCataloge()->writtenPath();
   }
 
 
@@ -736,11 +744,13 @@ int K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream 
 	    return -1;
 	  }
 	  
+	  static_cast<K3bBootItem*>(item)->setTempPath( tempPath );
+
 	  m_tempFiles.append(tempPath);
 	  stream << escapeGraftPoint( tempPath ) << endl;
 	}
 	else if( item->isDir() )
-	  stream << dummyDir() << endl;
+	  stream << dummyDir( item->sortWeight() ) << endl;
 	else
 	  stream << escapeGraftPoint( item->localPath() ) << endl;
       }
@@ -827,10 +837,23 @@ bool K3bIsoImager::writeSortWeightFile()
     //
     K3bDataItem* item = m_doc->root();
     while( (item = item->nextSibling()) ) {  // we skip the root here
-      if( item->sortWeight() != 0 )
-	*t << escapeGraftPoint( item->localPath() ) << " " << item->sortWeight() << endl;
+      if( item->sortWeight() != 0 ) {
+	if( m_doc->bootImages().containsRef( dynamic_cast<K3bBootItem*>(item) ) ) { // boot-image-backup-hack
+	  *t << escapeGraftPoint( static_cast<K3bBootItem*>(item)->tempPath() ) << " " << item->sortWeight() << endl;
+	}
+	else if( item->isDir() ) {
+	  // 
+	  // Since we use dummy dirs for all directories in the filesystem and mkisofs uses the local path 
+	  // for sorting we need to create a different dummy dir for every sort weight value.
+	  //
+	  *t << escapeGraftPoint( dummyDir( item->sortWeight() ) ) << " " << item->sortWeight() << endl;
+	}
+	else
+	  *t << escapeGraftPoint( item->localPath() ) << " " << item->sortWeight() << endl;
+      }
     }
 
+    m_sortWeightFile->close();
     return true;
   }
   else
@@ -886,12 +909,12 @@ bool K3bIsoImager::prepareMkisofsFiles()
 }
 
 
-QString K3bIsoImager::dummyDir()
+QString K3bIsoImager::dummyDir( int weight )
 {
   QDir _appDir( locateLocal( "appdata", "temp/" ) );
-  if( !_appDir.cd( "dummydir" ) ) {
-    _appDir.mkdir( "dummydir" );
-    _appDir.cd( "dummydir" );
+  if( !_appDir.cd( QString("dummydir%1").arg(weight) ) ) {
+    _appDir.mkdir( QString("dummydir%1").arg(weight) );
+    _appDir.cd( QString("dummydir%1").arg(weight) );
   }
 
   return _appDir.absPath() + "/";

@@ -520,7 +520,7 @@ QString K3bAudioRipThread::jobDescription() const
   if( m_cddbEntry.cdTitle.isEmpty() )
     return i18n("Ripping audio tracks");
   else
-    return i18n("Ripping audio tracks from %1").arg(m_cddbEntry.cdTitle);
+    return i18n("Ripping audio tracks from '%1'").arg(m_cddbEntry.cdTitle);
 }
 
 QString K3bAudioRipThread::jobDetails() const 

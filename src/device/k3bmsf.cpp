@@ -174,7 +174,7 @@ void K3b::Msf::makeValid()
 
 
 
-K3b::Msf K3b::Msf::fromString( const QString& s )
+QRegExp K3b::Msf::regExp()
 {
   //
   // An MSF can have the following formats:
@@ -184,6 +184,13 @@ K3b::Msf K3b::Msf::fromString( const QString& s )
   // 100:23.72  (minutes:seconds.frames)
   //
   static QRegExp rx( "(\\d+)(?::([0-5]?\\d)(?:[:\\.]((?:[0-6]?\\d)|(?:7[0-4])))?)?" );
+  return rx;
+}
+
+
+K3b::Msf K3b::Msf::fromString( const QString& s, bool* ok )
+{
+  QRegExp rx = regExp();
 
   K3b::Msf msf;
 
@@ -201,7 +208,12 @@ K3b::Msf K3b::Msf::fromString( const QString& s )
       msf.m_seconds = rx.cap(2).toInt();
       msf.m_frames = rx.cap(3).toInt();
     }
+
+    if( ok )
+      *ok = true;
   }
+  else if( ok )
+    *ok = false;
 
   msf.makeValid();
 

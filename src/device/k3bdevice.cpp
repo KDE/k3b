@@ -2833,15 +2833,34 @@ bool K3bCdDevice::CdDevice::searchIndex0( unsigned long startSec,
 }
 
 // FIXME: do a binary search for all indices.
-void K3bCdDevice::CdDevice::indexScan( K3bCdDevice::Toc& toc ) const
+bool K3bCdDevice::CdDevice::indexScan( K3bCdDevice::Toc& toc ) const
 {
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
+  if( open() < 0 )
+    return false;
+
+  bool ret = true;
+
   for( Toc::iterator it = toc.begin(); it != toc.end(); ++it ) {
     long sec = -1;
     if( searchIndex0( (*it).firstSector().lba(),
 		      (*it).lastSector().lba(),
-		      sec ) )
+		      sec ) ) {
       (*it).m_indices.append( K3bCdDevice::Index( 0,sec ) );
+    }
+    else {
+      ret = false;
+      break;
+    }
   }
+
+  if( needToClose )
+    close();
+
+  return ret;
 }
 
 

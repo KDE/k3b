@@ -64,11 +64,11 @@ QString K3bAudioListViewItem::text(int i) const
     case 3:
       return m_track->length().toString() + "  ";
     case 4:
-      return m_track->pregap().toString() + "  ";
+      return m_track->pregap().toString();
     case 5:
       return m_track->module()->fileType() + "  ";
     case 6:
-      return m_track->fileName();
+      return m_track->filename();
     default:
       return KListViewItem::text(i);
     }

@@ -266,7 +266,7 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
 	  d->wantedMediaState == K3bCdDevice::STATE_EMPTY ) {
 	// check if the media contains a filesystem
 	K3bIso9660 isoF( d->device->open() );
-	bool hasIso = isoF.open( IO_ReadOnly );
+	bool hasIso = isoF.open();
 	d->device->close();
 
 	if( !hasIso || KMessageBox::questionYesNo( qApp->activeWindow(),
@@ -349,7 +349,7 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
 
 	// check if the media contains a filesystem
 	K3bIso9660 isoF( d->device->open() );
-	bool hasIso = isoF.open( IO_ReadOnly );
+	bool hasIso = isoF.open();
 	d->device->close();
 
 	if( !hasIso || KMessageBox::questionYesNo( qApp->activeWindow(),

@@ -297,12 +297,13 @@ void K3bDataJob::slotIsoImagerFinished( bool success )
 	  startWriting();
       }
     }
+    else {
+      emit infoMessage( i18n("Error while creating iso image"), ERROR );
+      cancelAll();
+    }
   }
 
-  if( !success ) {
-    emit infoMessage( i18n("Error while creating iso image"), ERROR );
-    cancelAll();
-  }
+  // in case we are writing on the fly we leave the error handling to slotWriterJobFinished
 }
 
 

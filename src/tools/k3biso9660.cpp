@@ -14,7 +14,6 @@
  */
 
 #include "k3biso9660.h"
-#include "k3bdevicewrapperqiodevice.h"
 
 #include <k3bdevice.h>
 #include <k3btoc.h>
@@ -31,6 +30,7 @@
 #include <sys/stat.h>
 #include <string.h>
 #include <errno.h>
+#include <fcntl.h>
 
 #include <qcstring.h>
 #include <qdir.h>
@@ -42,51 +42,58 @@
 
 
 
-class K3bFdFile : public QFile
+
+K3bIso9660Entry::K3bIso9660Entry( K3bIso9660* archive,
+				  const QString& name,
+				  int access,
+				  int date,
+				  int adate,
+				  int cdate, 
+				  const QString& user,
+				  const QString& group,
+				  const QString& symlink )
+  : m_adate( adate ),
+    m_cdate( cdate ),
+    m_name( name ),
+    m_date( date ),
+    m_access( access ),
+    m_user( user ),
+    m_group( group ),
+    m_symlink( symlink ),
+    m_archive( archive )
 {
-public:
-  K3bFdFile( int fd )
-    : QFile(),
-      m_fd(fd) {
-    off_t pos = ::lseek( fd, 0, SEEK_CUR );
-    if( pos < 0 )
-      m_ourPosNull = 0;
-    else
-      m_ourPosNull = pos;
-  }
-
-  bool open( int m ) {
-    return QFile::open( m, m_fd );
-  }
-
-  /**
-   * reimplemented since we want the starting position
-   * to be 0.
-   */
-  bool at( Offset pos ) {
-    // QT seems to be unable to seek blcok devices.... :(
-    return (::lseek( m_fd, m_ourPosNull + pos, SEEK_SET ) != -1);
-    //    return QFile::at( m_ourPosNull + pos );
-  }
-
-private:
-  int m_fd;
-  Offset m_ourPosNull;
-};
+}
 
 
-
-
-
-
-K3bIso9660File::K3bIso9660File( KArchive* archive, const QString& name, int access,
-				int date, int adate,int cdate, const QString& user, const QString& group,
-				const QString& symlink,int pos, int size)
-  : KArchiveFile(archive, name, access, date, user, group, symlink, pos, size)
+K3bIso9660Entry::~K3bIso9660Entry()
 {
-  m_adate=adate;
-  m_cdate=cdate;
-  m_algo[0]=0;m_algo[1]=0;m_parms[0]=0;m_parms[1]=0;m_realsize=0;
+}
+
+
+
+
+
+
+K3bIso9660File::K3bIso9660File( K3bIso9660* archive, 
+				const QString& name, 
+				int access,
+				int date, 
+				int adate,
+				int cdate, 
+				const QString& user, 
+				const QString& group,
+				const QString& symlink, 
+				unsigned int pos, 
+				unsigned int size )
+  : K3bIso9660Entry( archive, name, access, date, adate, cdate, user, group, symlink ),
+    m_startSector(pos),
+    m_size(size)
+{
+  m_algo[0] = 0;
+  m_algo[1] = 0;
+  m_parms[0] = 0;
+  m_parms[1] = 0;
+  m_realsize = 0;
 }
 
 K3bIso9660File::~K3bIso9660File()
@@ -100,53 +107,131 @@ void K3bIso9660File::setZF(char algo[2],char parms[2],int realsize)
   m_realsize=realsize;
 }
 
-QByteArray K3bIso9660File::data(long long pos, int count) const
-{
-  QByteArray r;
 
-  if( !archive()->device()->at( position() + pos ) ) {
-    kdDebug() << "(K3bIso9660File) seek failed: " << strerror(errno) << " (" << errno << ")" << endl;
+int K3bIso9660File::read( unsigned int pos, char* data, int maxlen ) const
+{
+  if( pos >= size() )
+    return 0;
+
+  unsigned long startSec = m_startSector + pos/2048;
+  int startSecOffset = pos%2048;
+  char* buffer = data;
+  bool buffered = false;
+  unsigned long bufferLen = maxlen+startSecOffset;
+
+  // cut to size
+  if( pos + maxlen > size() )
+    bufferLen = size() - pos + startSecOffset;
+
+  // pad to 2048
+  bufferLen += (2048-(bufferLen%2048));
+
+  // we need to buffer if we changed the startSec or need a bigger buffer
+  if( startSecOffset || bufferLen > (unsigned int)maxlen ) {
+    buffered = true;
+    buffer = new char[bufferLen];
   }
-  else if( r.resize( ((pos+count) < size()) ? count : size()-pos) ) {
-    int rlen = archive()->device()->readBlock( r.data(), r.size() );
-    if( rlen == -1 )
-      r.resize(0);
-    else if( rlen != (int)r.size() )
-      r.resize(rlen);
+
+  int read = archive()->read( startSec, buffer, bufferLen/2048 )*2048;
+
+  if( buffered ) {
+    if( read > 0 ) {
+      // cut to requested data
+      read -= startSecOffset;
+      if( read + pos > size() )
+	read = size() - pos;
+      if( read > maxlen )
+	read = maxlen;
+
+      ::memcpy( data, buffer+startSecOffset, read );
+    }
+    delete [] buffer;
+
+    return read;
   }
-  
-  return r;
+  else {
+    // cut read data
+    if( read + pos > size() )
+      read = size() - pos;
+
+    return read;
+  }
 }
 
 
-int K3bIso9660File::read( long long pos, char* data, int len ) const
+K3bIso9660Directory::K3bIso9660Directory( K3bIso9660* archive, 
+					  const QString& name, 
+					  int access,
+					  int date, 
+					  int adate, 
+					  int cdate, 
+					  const QString& user, 
+					  const QString& group,
+					  const QString& symlink )
+  : K3bIso9660Entry( archive, name, access, date, adate, cdate, user, group, symlink )
 {
-  if( !archive()->device()->at( position() + pos ) ) {
-    kdDebug() << "(K3bIso9660File) seek failed: " << strerror(errno) << " (" << errno << ")" << endl;
-    return -1;
-  }
-  else
-    return archive()->device()->readBlock( data, QMIN( len, size()-pos )/*((pos+len) < size()) ? len : size()-pos */);
-}
-
-
-QByteArray K3bIso9660File::data() const
-{
-  return data( 0, size() );
-}
-
-
-K3bIso9660Directory::K3bIso9660Directory( KArchive* archive, const QString& name, int access,
-					  int date, int adate, int cdate, const QString& user, const QString& group,
-					  const QString& symlink)
-  : KArchiveDirectory(archive, name, access, date, user, group, symlink)
-{
-  m_adate=adate;
-  m_cdate=cdate;
+  m_entries.setAutoDelete( true );
 }
 
 K3bIso9660Directory::~K3bIso9660Directory()
 {
+}
+
+
+QStringList K3bIso9660Directory::entries() const
+{
+  QStringList l;
+  
+  QDictIterator<K3bIso9660Entry> it( m_entries );
+  for( ; it.current(); ++it )
+    l.append( it.currentKey() );
+  
+  return l;
+}
+
+
+K3bIso9660Entry* K3bIso9660Directory::entry( const QString& n )
+{
+  QString name(n);
+  int pos = name.find( '/' );
+  if( pos == 0 ) {
+    if( name.length() > 1 ) {
+      name = name.mid( 1 ); // remove leading slash
+      pos = name.find( '/' ); // look again
+    }
+    else // "/"
+      return this;
+  }
+
+  // trailing slash ? -> remove
+  if( pos != -1 && pos == (int)name.length()-1 ) {
+    name = name.left( pos );
+    pos = name.find( '/' ); // look again
+  }
+
+  if ( pos != -1 ) {
+    QString left = name.left( pos );
+    QString right = name.mid( pos + 1 );
+
+    K3bIso9660Entry* e = m_entries[ left ];
+    if ( !e || !e->isDirectory() )
+      return 0;
+    return static_cast<K3bIso9660Directory*>(e)->entry( right );
+  }
+
+  return m_entries[ name ];
+}
+
+
+const K3bIso9660Entry* K3bIso9660Directory::entry( const QString& name ) const
+{
+  return const_cast<K3bIso9660Directory*>(this)->entry( name );
+}
+
+
+void K3bIso9660Directory::addEntry( K3bIso9660Entry* entry )
+{
+  m_entries.insert( entry->name(), entry );
 }
 
 
@@ -159,6 +244,8 @@ public:
   Private() 
     : rootDir(0),
       cdDevice(0),
+      fd(-1),
+      closeFd(false),
       startSector(0) {
   }
 
@@ -172,42 +259,32 @@ public:
   K3bIso9660SimplePrimaryDescriptor primaryDesc;
 
   K3bCdDevice::CdDevice* cdDevice;
+  int fd;
+  bool closeFd;
 
   // only used for direkt K3bDevice access
-  unsigned long startSector;
+  unsigned int startSector;
 };
 
 
 K3bIso9660::K3bIso9660( const QString& filename )
-  : KArchive( new QFile( filename ) ),
-    m_filename( filename )
+  :  m_filename( filename )
 {
   d = new Private();
-  d->deleteDev = true;
 }
 
 
 K3bIso9660::K3bIso9660( int fd )
-  : KArchive( new K3bFdFile( fd ) )
 {
   d = new Private();
-  d->deleteDev = true;
+  d->fd = fd;
 }
 
 
-K3bIso9660::K3bIso9660( QIODevice * dev )
-  : KArchive( dev )
+
+K3bIso9660::K3bIso9660( K3bCdDevice::CdDevice* dev, unsigned int startSector )
 {
   d = new Private();
-  d->deleteDev = false;
-}
-
-
-K3bIso9660::K3bIso9660( K3bCdDevice::CdDevice* dev, unsigned long startSector )
-  : KArchive( new K3bDeviceWrapperQIODevice(dev) )
-{
-  d = new Private();
-  d->deleteDev = true;
   d->cdDevice = dev;
   d->startSector = startSector;
 }
@@ -215,32 +292,63 @@ K3bIso9660::K3bIso9660( K3bCdDevice::CdDevice* dev, unsigned long startSector )
 
 K3bIso9660::~K3bIso9660()
 {
-  // KArchive takes care of deleting the entries
-
-  // mjarrett: Closes to prevent ~KArchive from aborting w/o device
-  if( isOpened() )
-    close();
-  if ( d->deleteDev )
-    delete device(); // we created it ourselves
+  close();
   delete d;
 }
 
-/* callback function for libisofs */
-static int readf(char *buf, sector_t start, int len,void *udata) 
-{
-  QIODevice* dev = ( static_cast<K3bIso9660*> (udata) )->device();
-  
-  if( dev->at(start<<11) ) {
-    if( dev->readBlock(buf, len<<11) != -1 )
-      return len;
-    else
-      kdDebug() << "(K3bIso9660::ReadRequest) read with size " << (len<<11) << " failed." << endl;
-  }
-  else
-    kdDebug() << "(K3bIso9660::ReadRequest) seek to " << (start<<11) << " failed." << endl;
-  kdDebug() << "(K3bIso9660::ReadRequest) failed start: " << start << " len: " << len << endl;
 
-  return -1;
+int K3bIso9660::read( unsigned int sector, char* data, int count )
+{
+  if( count == 0 )
+    return 0;
+
+  int read = -1;
+
+  if( d->cdDevice != 0 ) {
+
+    int retries = 10;  // TODO: no fixed value
+    while( retries && !d->cdDevice->read10( (unsigned char*)data,
+					    count*2048,
+					    sector,
+					    count ) )
+      retries--;
+
+    if( retries > 0 )
+      read = count;
+
+  
+    // fallback
+    if( read < 0 ) {
+      kdDebug() << "(K3bIso9660) falling back to stdlib read" << endl;
+      if( ::lseek( d->cdDevice->open(), static_cast<unsigned long long>(sector)*2048, SEEK_SET ) == -1 )
+	kdDebug() << "(K3bIso9660) seek failed." << endl;
+      else {
+	read = ::read( d->cdDevice->open(), data, count*2048 );
+	if( read < 0 )
+	  kdDebug() << "(K3bIso9660) stdlib read failed." << endl;
+	else
+	  read /= 2048;
+      }
+    }
+
+    return read;
+  }
+  else {
+    if( ::lseek( d->fd, static_cast<unsigned long long>(sector)*2048, SEEK_SET ) != -1 )
+      if( (read = ::read( d->fd, data, count*2048 )) != -1 )
+	return read / 2048;
+
+    return -1;
+  }
+}
+
+
+/* callback function for libisofs */
+static int readf( char* buf, sector_t start, int len, void* udata ) 
+{
+  K3bIso9660* isoF = static_cast<K3bIso9660*>(udata);
+  
+  return isoF->read( start, buf, len );
 }
 
 /* callback function for libisofs */
@@ -253,7 +361,7 @@ static int mycallb(struct iso_directory_record *idr,void *udata)
   int time,cdate,adate;
   rr_entry rr;
   bool special=false;
-  KArchiveEntry *entry=0,*oldentry=0;
+  K3bIso9660Entry *entry=0,*oldentry=0;
   char z_algo[2],z_params[2];
   int z_size=0;
 
@@ -309,8 +417,10 @@ static int mycallb(struct iso_directory_record *idr,void *udata)
       entry = new K3bIso9660Directory( iso, path, access | S_IFDIR, time, adate, cdate,
 				       user, group, symlink );
     } else {
+      kdDebug() << "(K3bIso9660) creating file: " << path << " start: " << isonum_733(idr->extent)
+		<< " size: " << isonum_733(idr->size) << endl;
       entry = new K3bIso9660File( iso, path, access, time, adate, cdate,
-				  user, group, symlink, isonum_733(idr->extent)<<11,isonum_733(idr->size) );
+				  user, group, symlink, isonum_733(idr->extent), isonum_733(idr->size) );
       if (z_size)
 	(static_cast<K3bIso9660File*>(entry))->setZF( z_algo, z_params, z_size );
     }
@@ -343,7 +453,7 @@ void K3bIso9660::addBoot(struct el_torito_boot_descriptor* bootdesc)
   entry=new K3bIso9660File( this, "Catalog", dirent->permissions() & ~S_IFDIR,
 			    dirent->date(), dirent->adate(), dirent->cdate(),
 			    dirent->user(), dirent->group(), QString::null,
-			    isonum_731(bootdesc->boot_catalog)<<11, 2048 );
+			    isonum_731(bootdesc->boot_catalog), 2048 );
   dirent->addEntry(entry);
   if (!ReadBootTable(&readf,isonum_731(bootdesc->boot_catalog),&boot,this)) {
     i=1;
@@ -359,7 +469,7 @@ void K3bIso9660::addBoot(struct el_torito_boot_descriptor* bootdesc)
       entry=new K3bIso9660File( this, path, dirent->permissions() & ~S_IFDIR,
 				dirent->date(), dirent->adate(), dirent->cdate(),
 				dirent->user(), dirent->group(), QString::null,
-				isonum_731(((struct default_entry*) be->data)->start)<<11, size<<9 );
+				isonum_731(((struct default_entry*) be->data)->start), size<<9 );
       dirent->addEntry(entry);
       be=be->next;
       i++;
@@ -370,16 +480,27 @@ void K3bIso9660::addBoot(struct el_torito_boot_descriptor* bootdesc)
 }
 
 
-bool K3bIso9660::openArchive( int mode )
+bool K3bIso9660::open()
 {
+  // open the file
+  if( !m_filename.isEmpty() ) {
+    d->fd = ::open( QFile::encodeName( m_filename ), O_RDONLY|O_LARGEFILE );
+    if( d->fd < 0 )
+      return false;
+    d->closeFd = true;
+  }
+  else if( d->cdDevice ) {
+    if( d->cdDevice->open() < 0 )
+      return false;
+  }
+  else if( d->fd < 0 )
+    return false;
+
   iso_vol_desc *desc;
   QString path,tmp,uid,gid;
   struct stat buf;
   int access,c_i,c_j;
   struct el_torito_boot_descriptor* bootdesc;
-
-  if ( mode == IO_WriteOnly )
-    return false;
 
 
   /* We'll use the permission and user/group of the 'host' file except
@@ -456,7 +577,6 @@ bool K3bIso9660::openArchive( int mode )
 	  // if the user needs anything else there are the firstXXXEntry() methods
 	  if( !d->rootDir ) {
 	    d->rootDir = dirent;
-	    setRootDir( dirent );
 	  }
 	}
 
@@ -493,42 +613,28 @@ void K3bIso9660::createSimplePrimaryDesc( struct iso_primary_descriptor* desc )
 }
 
 
-bool K3bIso9660::closeArchive()
+void K3bIso9660::close()
 {
-  // KArchive's destructor calls this
-  // so this is where we clean up
+  if( d->closeFd ) {
+    ::close( d->fd );
+    d->closeFd = false;
+    d->fd = -1;
+  }
+  else if( d->cdDevice )
+    d->cdDevice->close();
+
   // Since the first isoDir is the KArchive
   // root we must not delete it but all the
   // others.
 
   d->elToritoDirs.setAutoDelete(true);
   d->jolietDirs.setAutoDelete(true);
+  d->isoDirs.setAutoDelete(true);
   d->elToritoDirs.clear();
   d->jolietDirs.clear();
-
-  d->isoDirs.setAutoDelete(false);
-  d->isoDirs.removeRef( d->rootDir );
-  d->isoDirs.setAutoDelete(true);
   d->isoDirs.clear();
 
   d->rootDir = 0;
-
-  return true;
-}
-
-bool K3bIso9660::writeDir( const QString&, const QString&, const QString& )
-{
-  return false;
-}
-
-bool K3bIso9660::prepareWriting( const QString&, const QString&, const QString&, uint )
-{
-  return false;
-}
-
-bool K3bIso9660::doneWriting( uint )
-{
-  return false;
 }
 
 
@@ -556,12 +662,6 @@ const K3bIso9660SimplePrimaryDescriptor& K3bIso9660::primaryDescriptor() const
 }
 
 
-void K3bIso9660::virtual_hook( int id, void* data )
-{
-  KArchive::virtual_hook( id, data );
-}
-
-
 void K3bIso9660::debug() const
 {
   kdDebug() << "System Id:         " << primaryDescriptor().systemId << endl;
@@ -573,18 +673,18 @@ void K3bIso9660::debug() const
   kdDebug() << "Volume Set Size:   " << primaryDescriptor().volumeSetSize << endl;
   kdDebug() << "Volume Set Number: " << primaryDescriptor().volumeSetNumber << endl;
 
-  debugEntry( directory(), 0 );
+  debugEntry( firstIsoDirEntry(), 0 );
 }
 
 
-void K3bIso9660::debugEntry( const KArchiveEntry* entry, int depth ) const
+void K3bIso9660::debugEntry( const K3bIso9660Entry* entry, int depth ) const
 {
   QString spacer;
   spacer.fill( ' ', depth*3 );
 
   kdDebug() << spacer << "- " << entry->name() << endl;
   if( entry->isDirectory() ) {
-    const KArchiveDirectory* dir = dynamic_cast<const KArchiveDirectory*>(entry);
+    const K3bIso9660Directory* dir = dynamic_cast<const K3bIso9660Directory*>(entry);
     QStringList entries = dir->entries();
     for( QStringList::const_iterator it = entries.begin(); it != entries.end(); ++it )
       debugEntry( dir->entry( *it ), depth+1 );

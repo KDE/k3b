@@ -39,6 +39,7 @@
 #include <k3bmsf.h>
 #include <k3bvalidators.h>
 #include <k3baudiodecoder.h>
+#include <k3bmsfedit.h>
 
 
 K3bAudioTrackDialog::K3bAudioTrackDialog( QPtrList<K3bAudioTrack>& tracks, QWidget *parent, const char *name )
@@ -57,7 +58,7 @@ K3bAudioTrackDialog::K3bAudioTrackDialog( QPtrList<K3bAudioTrack>& tracks, QWidg
 
     K3bAudioTrack* track = m_tracks.first();
 
-    QString allTrackNames = track->fileName();
+    QString allTrackNames = track->filename();
     K3b::Msf allTrackLength = track->length();
     KIO::filesize_t allTrackSize = track->size();
 
@@ -79,7 +80,7 @@ K3bAudioTrackDialog::K3bAudioTrackDialog( QPtrList<K3bAudioTrack>& tracks, QWidg
     
     for( track = m_tracks.next(); track != 0; track = m_tracks.next() ) {
 
-      allTrackNames += ("\n" + track->fileName());
+      allTrackNames += ("\n" + track->filename());
       allTrackLength += track->length();
       allTrackSize += track->size();
 
@@ -118,7 +119,7 @@ K3bAudioTrackDialog::K3bAudioTrackDialog( QPtrList<K3bAudioTrack>& tracks, QWidg
     m_displayLength->setText( allTrackLength.toString() );
     m_displaySize->setText( KIO::convertSize(allTrackSize) );
 
-    m_labelMimeType->setPixmap( KMimeType::pixmapForURL( KURL(m_tracks.first()->absPath()), 0, KIcon::Desktop, 48 ) );
+    m_labelMimeType->setPixmap( KMimeType::pixmapForURL( KURL(m_tracks.first()->path()), 0, KIcon::Desktop, 48 ) );
   }
 
   m_editTitle->setFocus();
@@ -172,6 +173,11 @@ void K3bAudioTrackDialog::slotApply()
       track->setPregap( m_inputPregap->value()*75 );
     else
       track->setPregap( m_inputPregap->value() );
+  }
+
+  if( m_tracks.count() == 1 ) {
+    m_tracks.first()->setTrackStart( m_editTrackStart->msfValue() );
+    m_tracks.first()->setTrackEnd( m_editTrackEnd->msfValue() );
   }
 }
 
@@ -376,6 +382,35 @@ void K3bAudioTrackDialog::setupGui()
   mainTabbed->addTab( cdTextTab, i18n("CD-Text") );
   mainTabbed->addTab( optionsTab, i18n("Options") );
 
+  // track length offset stuff
+  if( m_tracks.count() == 1 ) {
+    QWidget* tab = new QWidget( mainTabbed );
+    QGridLayout* tabLayout = new QGridLayout( tab );
+    tabLayout->setAlignment( Qt::AlignTop );
+    tabLayout->setSpacing( spacingHint() );
+    tabLayout->setMargin( marginHint() );
+    
+    m_editTrackStart = new K3bMsfEdit( tab );
+    m_editTrackEnd = new K3bMsfEdit( tab );
+
+    tabLayout->addWidget( m_editTrackStart, 0, 0 );
+    tabLayout->addWidget( m_editTrackEnd, 0, 1 );
+
+    mainTabbed->addTab( tab, i18n("Edit track") );
+
+    m_editTrackStart->setMsfValue( m_tracks.first()->trackStart() );
+    m_editTrackEnd->setMsfValue( m_tracks.first()->trackEnd() );
+
+    connect( m_editTrackStart, SIGNAL(valueChanged(int)),
+	     this, SLOT(slotTrackStartChanged(int)) );
+    connect( m_editTrackEnd, SIGNAL(valueChanged(int)),
+	     this, SLOT(slotTrackEndChanged(int)) );
+
+    // set the track editor ranges
+    slotTrackStartChanged( m_tracks.first()->trackStart().totalFrames() );
+    slotTrackEndChanged( m_tracks.first()->trackEnd().totalFrames() );
+  }
+
 
   mainLayout->addWidget( groupFileInfo, 0, 0 );
   mainLayout->addWidget( mainTabbed, 0, 1 );
@@ -406,6 +441,22 @@ void K3bAudioTrackDialog::slotChangePregapFormat( const QString& str )
       m_inputPregap->setValue( m_inputPregap->value() * 75 );
     }
   }
+}
+
+
+void K3bAudioTrackDialog::slotTrackStartChanged( int value )
+{
+  // make sure a track is always at least 4 seconds in length as defined in 
+  // the Red Book
+  m_editTrackEnd->setRange( value + 300, m_tracks.first()->fileLength().totalFrames() );
+}
+
+
+void K3bAudioTrackDialog::slotTrackEndChanged( int value )
+{
+  // make sure a track is always at least 4 seconds in length as defined in 
+  // the Red Book
+  m_editTrackStart->setRange( 0, value - 300 );
 }
 
 
