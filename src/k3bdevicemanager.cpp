@@ -92,10 +92,12 @@ void K3bDeviceManager::parseCdrecordOutput( KProcess*, char* output, int len )
 		if( line.startsWith("0,") && line.at(line.length()-1) != '*' ) {
 			qDebug("parsing line: [[" + line + "]]" );
 			// should be usable
-			QString dev = line.mid(0,5).simplifyWhiteSpace();
-			QString vendor = line.mid(12,8).simplifyWhiteSpace();
-			QString descr = line.mid(23,16).simplifyWhiteSpace();
-			QString version = line.mid(42,4).simplifyWhiteSpace();
+
+			QString dev = line.mid(0,5).simplifyWhiteSpace(); // this should be OK
+			uint _pos = line.find(')') + 3;
+			QString vendor = line.mid(_pos,8).simplifyWhiteSpace();
+			QString descr = line.mid(_pos+11,16).simplifyWhiteSpace();
+			QString version = line.mid(_pos+30,4).simplifyWhiteSpace();
 			
 			// calculate id
 			bool ok, ok2 = true;
