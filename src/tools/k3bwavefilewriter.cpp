@@ -113,7 +113,7 @@ void K3bWaveFileWriter::write( const char* data, int len, Endianess e )
 
 void K3bWaveFileWriter::writeEmptyHeader()
 {
-  static char riffHeader[] =
+  static const char riffHeader[] =
   {
     0x52, 0x49, 0x46, 0x46, // 0  "RIFF"
     0x00, 0x00, 0x00, 0x00, // 4  wavSize

@@ -261,6 +261,8 @@ void K3bListView::slotClicked( QListViewItem* item, const QPoint&, int col )
 
 void K3bListView::hideEditor()
 {
+  m_lastClickedItem = 0;
+
   if( m_editorSpinBox )
     m_editorSpinBox->hide();
   if( m_editorLineEdit )
