@@ -63,309 +63,310 @@ extern "C" {
 #define ID_PLAYSONG              1
 
 K3bCdView::K3bCdView(QWidget *parent, const char *name=0)
-        : QVBox(parent, name){
-    m_initialized=false;
-    readSettings();
+  : QVBox(parent, name){
+  m_initialized=false;
+  readSettings();
 }
 
 K3bCdView::~K3bCdView(){
-    if( m_initialized ){
-        delete m_cddb;
-        delete m_cdda;
-    }
+  if( m_initialized ){
+    delete m_cddb;
+    delete m_cdda;
+  }
 }
 
 void K3bCdView::setupGUI(){
-    KToolBar *toolBar = new KToolBar( k3bMain(), this, "cdviewtoolbar" );
-    m_listView = new KListView(this, "cdviewcontent");
-    m_listView->addColumn(i18n( "No") );
-    m_listView->addColumn(i18n( "Artist") );
-    m_listView->addColumn(i18n( "Title") );
-    m_listView->addColumn(i18n( "Time") );
-    m_listView->addColumn(i18n( "Size") );
-    m_listView->addColumn(i18n( "Filename") );
-    m_listView->setItemsRenameable( false );
-    m_listView->setSelectionMode(QListView::Multi);
-    m_listView->setShowSortIndicator(true);
-    m_listView->setAllColumnsShowFocus(true);
+  KToolBar *toolBar = new KToolBar( k3bMain(), this, "cdviewtoolbar" );
+  m_listView = new KListView(this, "cdviewcontent");
+  m_listView->addColumn(i18n( "No") );
+  m_listView->addColumn(i18n( "Artist") );
+  m_listView->addColumn(i18n( "Title") );
+  m_listView->addColumn(i18n( "Time") );
+  m_listView->addColumn(i18n( "Size") );
+  m_listView->addColumn(i18n( "Filename") );
+  m_listView->setItemsRenameable( false );
+  m_listView->setSelectionMode(QListView::Multi);
+  m_listView->setShowSortIndicator(true);
+  m_listView->setAllColumnsShowFocus(true);
 
-    KIconLoader *_il = new KIconLoader("k3b");
-    toolBar->insertButton( _il->iconPath("reload", KIcon::Toolbar), 	RELOAD_BUTTON_INDEX);
-    toolBar->insertButton( _il->iconPath("editcopy", KIcon::Toolbar), 	GRAB_BUTTON_INDEX);
-    toolBar->insertButton( _il->iconPath("view_choose", KIcon::Toolbar), 	SELECTION_BUTTON_INDEX);
-    toolBar->insertButton( _il->iconPath("1rightarrow", KIcon::Toolbar), 	PLAY_BUTTON_INDEX);
-    toolBar->insertButton( _il->iconPath("player_stop", KIcon::Toolbar), 	STOP_BUTTON_INDEX);
-    KToolBarButton *_buttonGrab = toolBar->getButton(GRAB_BUTTON_INDEX);
-    KToolBarButton *_buttonReload = toolBar->getButton(RELOAD_BUTTON_INDEX);
-    KToolBarButton *_buttonSelectionMode = toolBar->getButton(SELECTION_BUTTON_INDEX);
-    _buttonSelectionMode->setText(i18n("Selection Mode") );
-    KToolBarButton *_buttonPlay = toolBar->getButton( PLAY_BUTTON_INDEX);
-    KToolBarButton *_buttonStop = toolBar->getButton( STOP_BUTTON_INDEX);
+  KIconLoader *_il = new KIconLoader("k3b");
+  toolBar->insertButton( _il->iconPath("reload", KIcon::Toolbar), 	RELOAD_BUTTON_INDEX);
+  toolBar->insertButton( _il->iconPath("editcopy", KIcon::Toolbar), 	GRAB_BUTTON_INDEX);
+  toolBar->insertButton( _il->iconPath("view_choose", KIcon::Toolbar), 	SELECTION_BUTTON_INDEX);
+  toolBar->insertButton( _il->iconPath("1rightarrow", KIcon::Toolbar), 	PLAY_BUTTON_INDEX);
+  toolBar->insertButton( _il->iconPath("player_stop", KIcon::Toolbar), 	STOP_BUTTON_INDEX);
+  KToolBarButton *_buttonGrab = toolBar->getButton(GRAB_BUTTON_INDEX);
+  KToolBarButton *_buttonReload = toolBar->getButton(RELOAD_BUTTON_INDEX);
+  KToolBarButton *_buttonSelectionMode = toolBar->getButton(SELECTION_BUTTON_INDEX);
+  _buttonSelectionMode->setText(i18n("Selection Mode") );
+  KToolBarButton *_buttonPlay = toolBar->getButton( PLAY_BUTTON_INDEX);
+  KToolBarButton *_buttonStop = toolBar->getButton( STOP_BUTTON_INDEX);
 
-    m_cddb = new K3bCddb(  );
-    m_cdda = new K3bCdda();
-    m_parser = new K3bPatternParser( &m_dirPatternList, &m_filePatternList, m_listView, m_cddb );
-    // connect to the actions
-    connect( _buttonReload, SIGNAL(clicked()), this, SLOT(reload()) );
-    connect( _buttonGrab, SIGNAL(clicked()), this, SLOT(prepareRipping()) );
-    connect( _buttonSelectionMode, SIGNAL(clicked()), this, SLOT(changeSelectionMode()) );
-    connect( _buttonPlay, SIGNAL(clicked()), this, SLOT( play() ) );
-    connect( _buttonStop, SIGNAL(clicked()), this, SLOT( stop() ) );
-    connect( m_listView, SIGNAL(rightButtonClicked ( QListViewItem *, const QPoint &, int )), this, SLOT(slotMenuActivated(QListViewItem*, const QPoint &, int) ) );
+  m_cddb = new K3bCddb(  );
+  m_cdda = new K3bCdda();
+  m_parser = new K3bPatternParser( &m_dirPatternList, &m_filePatternList, m_listView, m_cddb );
+  // connect to the actions
+  connect( _buttonReload, SIGNAL(clicked()), this, SLOT(reload()) );
+  connect( _buttonGrab, SIGNAL(clicked()), this, SLOT(prepareRipping()) );
+  connect( _buttonSelectionMode, SIGNAL(clicked()), this, SLOT(changeSelectionMode()) );
+  connect( _buttonPlay, SIGNAL(clicked()), this, SLOT( play() ) );
+  connect( _buttonStop, SIGNAL(clicked()), this, SLOT( stop() ) );
+  connect( m_listView, SIGNAL(rightButtonClicked ( QListViewItem *, const QPoint &, int )), this, SLOT(slotMenuActivated(QListViewItem*, const QPoint &, int) ) );
 }
 
 void K3bCdView::show(){
-    if( !m_initialized){
-        m_initialized=true;
-        setupGUI();
-    }
-    QWidget::show();
+  if( !m_initialized){
+    m_initialized=true;
+    setupGUI();
+  }
+  QWidget::show();
 }
 
 void K3bCdView::checkView( ){
-    // read cddb settings each time to get changes in optiondialog
-    applyOptions();
-    m_cddb->updateCD( m_drive );
-    m_titles = m_cddb->getTitles();
-    int type = checkCDType( m_titles );
-    switch( type ){
-        case 0:
-            showCdContent();
-            break;
-        case 1:
-            emit showDirView(m_device);
-            break;
-        case 2:
-            askForView();
-            break;
-        default:
-            break;
-    }
+  // read cddb settings each time to get changes in optiondialog
+  applyOptions();
+  m_cddb->updateCD( m_drive );
+  m_titles = m_cddb->getTitles();
+  int type = checkCDType( m_titles );
+  switch( type ){
+  case 0:
+    showCdContent();
+    break;
+  case 1:
+    emit showDirView(m_device);
+    break;
+  case 2:
+    askForView();
+    break;
+  default:
+    break;
+  }
 }
 
 void K3bCdView::askForView(){
-    switch( QMessageBox::information( this, i18n("Select View",
-                            "The cd you have insert is a mixed CD.\nDo you want to show the audio or data tracks?"), i18n("Audio"), i18n("Data") ) ) {
-    case 0:
-        showCdContent();
-        break;
-    case 1:
-        emit showDirView( m_device );
-        break;
-    default:
-        break;
-    }
+  switch( QMessageBox::information( this, i18n("Select View",
+					       "The cd you have insert is a mixed CD.\nDo you want to show the audio or data tracks?"), i18n("Audio"), i18n("Data") ) ) {
+  case 0:
+    showCdContent();
+    break;
+  case 1:
+    emit showDirView( m_device );
+    break;
+  default:
+    break;
+  }
 }
 void K3bCdView::showCdContent( ){
-    m_listView->clear();
-    m_album = m_cddb->getAlbum();
-    // print it out
-    int no = 1;
-    // raw file length (wav has +44 byte header data)
-    long totalByteCount = 0;
-    QString filename;
-    int arraySize = m_titles.count();
-    m_size = new QArray<long>( arraySize );
-    for ( QStringList::Iterator it = m_titles.begin(); it != m_titles.end(); ++it ) {
-        m_size->at(no-1) = m_cdda->getRawTrackSize(no, m_drive);
-        if( m_usePattern ){
-            filename = m_parser->prepareFilename( *it, no );
-            filename = K3bPatternParser::prepareReplaceFilename( filename );
-        } else
-            filename =  KIO::decodeFileName(*it) + ".wav";
-        // add item to cdViewItem
-        long length = m_size->at(no-1);
-        addItem(no, m_cddb->getArtist(), KIO::decodeFileName(*it), K3b::sizeToTime( length ), length, filename);
-        no++;
-    }
+  m_listView->clear();
+  m_album = m_cddb->getAlbum();
+  // print it out
+  int no = 1;
+  // raw file length (wav has +44 byte header data)
+  long totalByteCount = 0;
+  QString filename;
+  int arraySize = m_titles.count();
+  m_size = new QArray<long>( arraySize );
+  for ( QStringList::Iterator it = m_titles.begin(); it != m_titles.end(); ++it ) {
+    m_size->at(no-1) = m_cdda->getRawTrackSize(no, m_drive);
+    if( m_usePattern ){
+      filename = m_parser->prepareFilename( *it, no );
+      filename = K3bPatternParser::prepareReplaceFilename( filename );
+    } else
+      filename =  KIO::decodeFileName(*it) + ".wav";
+    // add item to cdViewItem
+    long length = m_size->at(no-1);
+    addItem(no, m_cddb->getArtist(), KIO::decodeFileName(*it), K3b::sizeToTime( length ), length, filename);
+    no++;
+  }
 }
 
-void K3bCdView::showCdView(QString device){
-    if( this->isEnabled() ){
-        m_device = device;
-        reload();
-    }
+void K3bCdView::showCdView(const QString& device)
+{
+  if( isEnabled() ) {
+    m_device = device;
+    reload();
+  }
 }
 
 void K3bCdView::readSettings( ){
-    KConfig* c = kapp->config();
-    c->setGroup("Ripping");
-    m_usePattern = c->readBoolEntry("usePattern", false);
-    m_filePatternList = c->readListEntry("filePattern");
-    m_dirPatternList = c->readEntry("dirBasePath");
-    m_dirPatternList += c->readEntry("dirGroup1");
-    m_dirPatternList += c->readEntry("dirGroup2");
+  KConfig* c = kapp->config();
+  c->setGroup("Ripping");
+  m_usePattern = c->readBoolEntry("usePattern", false);
+  m_filePatternList = c->readListEntry("filePattern");
+  m_dirPatternList = c->readEntry("dirBasePath");
+  m_dirPatternList += c->readEntry("dirGroup1");
+  m_dirPatternList += c->readEntry("dirGroup2");
 }
 
 // ===========  slots ==============
 void K3bCdView::reload(){
-    readSettings();
-    // clear old entries
-    m_listView->clear();
-    m_drive = m_cdda->pickDrive(m_device);
-    qDebug("(K3bCdView) Reload");
-    checkView();
-    m_cdda->closeDrive(m_drive);
+  readSettings();
+  // clear old entries
+  m_listView->clear();
+  m_drive = m_cdda->pickDrive(m_device);
+  qDebug("(K3bCdView) Reload");
+  checkView();
+  m_cdda->closeDrive(m_drive);
 }
 
 void K3bCdView::slotMenuItemActivated(int itemId){
-    switch( itemId ){
-        case ID_PATTERN: {
-            /*K3bFilenamePatternDialog *_dialog = new K3bFilenamePatternDialog(this);
-            _dialog->init(m_testItemPattern, m_album);
-            _dialog->show();*/
-            }
-            break;
-        case ID_PLAYSONG:
-            break;
-        default:
-            break;
-    }
+  switch( itemId ){
+  case ID_PATTERN: {
+    /*K3bFilenamePatternDialog *_dialog = new K3bFilenamePatternDialog(this);
+      _dialog->init(m_testItemPattern, m_album);
+      _dialog->show();*/
+  }
+    break;
+  case ID_PLAYSONG:
+    break;
+  default:
+    break;
+  }
 }
 
 void K3bCdView::play(){
-    qDebug("(K3bCdView) play");
-    // the sgx devices dont work, must use the real device i.e sr0, scd0
-    //    cd_device = (char *)qstrdup(QFile::encodeName("/dev/cdrom"));
-    K3bDevice* dev = k3bMain()->deviceManager()->deviceByName( m_device );
-    if( dev ) {
-      cd_device = (char*)(dev->ioctlDevice().latin1());    // Aaaaaarghhhh!!!!!
-      qDebug( "(K3bCdView) playing cd in device %s", cd_device );
-    }
-    else {
-      qDebug("(K3bCdView) Could not open cd device " + m_device );
-      return;
-    }
-    wm_drive *drive = find_drive_struct();
-    if( drive == 0 ) {
-      qDebug("(K3bCdView) could not wmfind device %s", cd_device );
-      return;
-    }
-    if( wmcd_open(drive) != 0 ) {
-      qDebug("(K3bCdView) could not wmopen device %s", cd_device );
-      return;
-    }
+  qDebug("(K3bCdView) play");
+  // the sgx devices dont work, must use the real device i.e sr0, scd0
+  //    cd_device = (char *)qstrdup(QFile::encodeName("/dev/cdrom"));
+  K3bDevice* dev = k3bMain()->deviceManager()->deviceByName( m_device );
+  if( dev ) {
+    cd_device = (char*)(dev->ioctlDevice().latin1());    // Aaaaaarghhhh!!!!!
+    qDebug( "(K3bCdView) playing cd in device %s", cd_device );
+  }
+  else {
+    qDebug("(K3bCdView) Could not open cd device " + m_device );
+    return;
+  }
+  wm_drive *drive = find_drive_struct();
+  if( drive == 0 ) {
+    qDebug("(K3bCdView) could not wmfind device %s", cd_device );
+    return;
+  }
+  if( wmcd_open(drive) != 0 ) {
+    qDebug("(K3bCdView) could not wmopen device %s", cd_device );
+    return;
+  }
 
-    // this call also initializes the cd drive and all the stuff
-    int i = wm_cd_status();
-    qDebug("(K3bCdView) Status of cd: %i", i );
-    if( i == 0 ){
-        QMessageBox::critical( this, i18n("Player Error"), i18n("Sorry, this is only a demonstration which may not work."), i18n("Ok") );
-        return;
-    }
-    QList<QListViewItem> items = m_listView->selectedItems();
-    int itemIndex = 1;
-    if( !items.isEmpty() ){
-        itemIndex = m_listView->itemIndex( items.first() ) + 1;
-        qDebug("(K3bCdView) Play first song in selected list.");
-    } else {
-        qDebug("(K3bCdView) Play first song of audio cd.");
-    }
-    wm_cd_play( itemIndex, 0, itemIndex+1);
-    qDebug("(K3bCdView) Have started playing song.");
-    //i= wm_cd_eject();
-    //qDebug("cd eject: %i" ,i );
+  // this call also initializes the cd drive and all the stuff
+  int i = wm_cd_status();
+  qDebug("(K3bCdView) Status of cd: %i", i );
+  if( i == 0 ){
+    QMessageBox::critical( this, i18n("Player Error"), i18n("Sorry, this is only a demonstration which may not work."), i18n("Ok") );
+    return;
+  }
+  QList<QListViewItem> items = m_listView->selectedItems();
+  int itemIndex = 1;
+  if( !items.isEmpty() ){
+    itemIndex = m_listView->itemIndex( items.first() ) + 1;
+    qDebug("(K3bCdView) Play first song in selected list.");
+  } else {
+    qDebug("(K3bCdView) Play first song of audio cd.");
+  }
+  wm_cd_play( itemIndex, 0, itemIndex+1);
+  qDebug("(K3bCdView) Have started playing song.");
+  //i= wm_cd_eject();
+  //qDebug("cd eject: %i" ,i );
 }
 
 void K3bCdView::stop(){
-    wm_cd_stop();
+  wm_cd_stop();
 }
 
 void K3bCdView::slotMenuActivated( QListViewItem *_item, const QPoint &point, int id){
-    /*KPopupMenu *_popup = new KPopupMenu(this, "editmenu");
+  /*KPopupMenu *_popup = new KPopupMenu(this, "editmenu");
     _popup->setTitle(i18n("Helpers") );
     _popup->insertItem(i18n("Filename Pattern"), ID_PATTERN, 1 );
     _popup->insertItem(i18n("Play Song"), ID_PLAYSONG, 2 );
     _popup->popup(point);
     if( _item->isSelected() )
-        _item->setSelected(false);
+    _item->setSelected(false);
     else
-        _item->setSelected(true);
+    _item->setSelected(true);
     m_testItemPattern = _item;
     connect( _popup, SIGNAL( activated(int)), this, SLOT(slotMenuItemActivated(int) ));
-    */
+  */
 }
 
 void K3bCdView::changeSelectionMode(){
-    if (m_listView->selectionMode() == QListView::Multi ){
-            m_listView->setSelectionMode(QListView::Extended);
-    } else {
-            m_listView->setSelectionMode(QListView::Multi);
-    }
+  if (m_listView->selectionMode() == QListView::Multi ){
+    m_listView->setSelectionMode(QListView::Extended);
+  } else {
+    m_listView->setSelectionMode(QListView::Multi);
+  }
 }
 
 void K3bCdView::prepareRipping(){
-    QList<QListViewItem> selectedList = m_listView->selectedItems();
-    if( selectedList.isEmpty() ){
-        QMessageBox::critical( this, i18n("Ripping Error"), i18n("Please select the title to rip."), i18n("Ok") );
-        return;
-    }
-    K3bRipperWidget *rip = new K3bRipperWidget(m_device, m_cddb, this);
-    rip->show();
-    qDebug("(K3bCdView) show ripperwidget.");
-    QListViewItem *item;
-    int arraySize = selectedList.count();
-    QStringList filelist;
-    QArray<int> tracklist(arraySize);
-    QArray<long> sizelist(arraySize);
-    int index=0;
+  QList<QListViewItem> selectedList = m_listView->selectedItems();
+  if( selectedList.isEmpty() ){
+    QMessageBox::critical( this, i18n("Ripping Error"), i18n("Please select the title to rip."), i18n("Ok") );
+    return;
+  }
+  K3bRipperWidget *rip = new K3bRipperWidget(m_device, m_cddb, this);
+  rip->show();
+  qDebug("(K3bCdView) show ripperwidget.");
+  QListViewItem *item;
+  int arraySize = selectedList.count();
+  QStringList filelist;
+  QArray<int> tracklist(arraySize);
+  QArray<long> sizelist(arraySize);
+  int index=0;
 
-    for ( item=selectedList.first(); item != 0; item=selectedList.next() ){
-        filelist.append( item->text(COLUMN_FILENAME) );
-        tracklist[index] = item->text(COLUMN_NUMBER).toInt();
-        sizelist[index] = m_size->at(item->text(COLUMN_NUMBER).toInt()-1 );
-        index++;
-        qDebug("(K3bCdView) add song.");
-        rip->addTrack( item );
-    }
-    rip->setData( filelist, tracklist, sizelist);
-    rip->init();
-    this->setDisabled(true);
+  for ( item=selectedList.first(); item != 0; item=selectedList.next() ){
+    filelist.append( item->text(COLUMN_FILENAME) );
+    tracklist[index] = item->text(COLUMN_NUMBER).toInt();
+    sizelist[index] = m_size->at(item->text(COLUMN_NUMBER).toInt()-1 );
+    index++;
+    qDebug("(K3bCdView) add song.");
+    rip->addTrack( item );
+  }
+  rip->setData( filelist, tracklist, sizelist);
+  rip->init();
+  this->setDisabled(true);
 }
 
 int  K3bCdView::checkCDType( QStringList titles ){
-    unsigned int dataIndex=0;
-    unsigned int audioIndex=0;
+  unsigned int dataIndex=0;
+  unsigned int audioIndex=0;
 
-    for ( QStringList::Iterator it = titles.begin(); it != titles.end(); ++it ) {
-        if( (*it).find("data") >=0 )
-            ++dataIndex;
-        else
-            ++audioIndex;
-    }
-    qDebug("(K3bCdView) Audio: %i, Data %i index.", audioIndex, dataIndex);
-    if( dataIndex > 0 && audioIndex > 0){
-        return 2; // mixed cd
-    } else if( dataIndex > 0 ){
-        return 1; // dataCD
-    } else {
-        return 0; // audioCD
-    }
+  for ( QStringList::Iterator it = titles.begin(); it != titles.end(); ++it ) {
+    if( (*it).find("data") >=0 )
+      ++dataIndex;
+    else
+      ++audioIndex;
+  }
+  qDebug("(K3bCdView) Audio: %i, Data %i index.", audioIndex, dataIndex);
+  if( dataIndex > 0 && audioIndex > 0){
+    return 2; // mixed cd
+  } else if( dataIndex > 0 ){
+    return 1; // dataCD
+  } else {
+    return 0; // audioCD
+  }
 }
 
 //  helpers
 // -----------------------------------------
 void K3bCdView::addItem(int no, QString artist, QString title, QString time, long length, QString filename){
-    QString number;
-    QString size;
-    if (no < 10)
-        number = "0" + QString::number(no);
-    else
-        number = QString::number(no);
-    size = QString::number( (double) length / 1000000, 'g', 3) + " MB";
-    KListViewItem *song = new KListViewItem(m_listView, number, artist, title, time, size, filename);
+  QString number;
+  QString size;
+  if (no < 10)
+    number = "0" + QString::number(no);
+  else
+    number = QString::number(no);
+  size = QString::number( (double) length / 1000000, 'g', 3) + " MB";
+  KListViewItem *song = new KListViewItem(m_listView, number, artist, title, time, size, filename);
 }
 
 void K3bCdView::applyOptions(){
-    KConfig *c = kapp->config();
-    c->setGroup("Cddb");
-    bool useCddb = c->readBoolEntry("useCddb", false);
-    QString hostString = c->readEntry("cddbServer", DEFAULT_CDDB_HOST);
-    int index = hostString.find(":");
-    QString server = hostString.left(index);
-    unsigned int port = hostString.right(hostString.length()-index-1).toUInt();
-    qDebug("(K3bCdView) CddbServer: " + server + ":" + QString::number(port) );
-    m_cddb->setServer(server);
-    m_cddb->setPort(port);
-    m_cddb->setUseCddb(useCddb);
+  KConfig *c = kapp->config();
+  c->setGroup("Cddb");
+  bool useCddb = c->readBoolEntry("useCddb", false);
+  QString hostString = c->readEntry("cddbServer", DEFAULT_CDDB_HOST);
+  int index = hostString.find(":");
+  QString server = hostString.left(index);
+  unsigned int port = hostString.right(hostString.length()-index-1).toUInt();
+  qDebug("(K3bCdView) CddbServer: " + server + ":" + QString::number(port) );
+  m_cddb->setServer(server);
+  m_cddb->setPort(port);
+  m_cddb->setUseCddb(useCddb);
 }

@@ -184,7 +184,7 @@ void K3bCddaCopy::slotReadData(){
             m_stream->writeRawBytes(cbuf, CD_FRAMESIZE_RAW);
         }
 
-        int debugValue=0;
+	//        int debugValue=0;
         if( m_progress !=0 ){
             m_bytesAll += CD_FRAMESIZE_RAW;
             m_progressBarValue = (int) ((((double) m_bytesAll / (double) m_bytes ) * 100)+0.5);
@@ -224,6 +224,7 @@ void K3bCddaCopy::writeWavHeader(QDataStream *s, long byteCount) {
     0x64, 0x61, 0x74, 0x61, // 36 "data"
     0x00, 0x00, 0x00, 0x00  // 40 byteCount
   };
+
   Q_INT32 wavSize(byteCount + 44 - 8);
 
   riffHeader[4]   = (wavSize   >> 0 ) & 0xff;

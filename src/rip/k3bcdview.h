@@ -36,53 +36,58 @@ class QPoint;
   *@author Sebastian Trueg
   */
 
-class K3bCdView : public QVBox  {
-	Q_OBJECT
-public:
-	K3bCdView(QWidget *, const char *);
-	~K3bCdView();
-    void show();
-    void showCdContent();
-    void refresh();
-    void setFilePatternList(QStringList p){ m_filePatternList = p; };
-    void setDirPatternList(QStringList p){ m_dirPatternList = p; };
+class K3bCdView : public QVBox  
+{
+  Q_OBJECT
 
-public slots:
-	/** */
-    void showCdView(QString device);
-    void reload();
-signals:
-    void showDirView( QString );
+ public:
+  K3bCdView(QWidget *, const char *);
+  ~K3bCdView();
+  void show();
+  void showCdContent();
+  void refresh();
+  void setFilePatternList(QStringList p){ m_filePatternList = p; };
+  void setDirPatternList(QStringList p){ m_dirPatternList = p; };
 
-private:
-    struct cdrom_drive *m_drive;
-    K3bCddb *m_cddb;
-    K3bCdda *m_cdda;
-    KListView *m_listView;
-    QListViewItem *m_testItemPattern;
-    QString m_device;
-    QString m_album;
-    QStringList m_titles;
-    QArray<long> *m_size;
-    K3bPatternParser *m_parser;
-    bool m_initialized;
-    //bool m_useFilePattern;
-    //bool m_useDirectoryPattern;
-    bool m_usePattern;
-    QStringList m_filePatternList;
-    QStringList m_dirPatternList;
-    void addItem(int, QString, QString, QString, long, QString);
-    //QString prepareFilename(QString);
-    void setupGUI();
-    void applyOptions();
-    void checkView();
-    void askForView();
-    int checkCDType(QStringList titles);
-    void readSettings();
-    //QString prepareDirectory( QListViewItem *item );
-    //QString getRealDirectory(int, QListViewItem* );
+ public slots:
+   /** */
+  void showCdView(const QString& device);
+  void reload();
 
-private slots: // Private slots
+ signals:
+  void showDirView( const QString& );
+
+ private:
+  struct cdrom_drive *m_drive;
+  K3bCddb *m_cddb;
+  K3bCdda *m_cdda;
+  KListView *m_listView;
+  QListViewItem *m_testItemPattern;
+  QString m_device;
+  QString m_album;
+  QStringList m_titles;
+  QArray<long> *m_size;
+  K3bPatternParser *m_parser;
+  bool m_initialized;
+  //bool m_useFilePattern;
+  //bool m_useDirectoryPattern;
+  bool m_usePattern;
+  QStringList m_filePatternList;
+  QStringList m_dirPatternList;
+
+
+  void addItem(int, QString, QString, QString, long, QString);
+  //QString prepareFilename(QString);
+  void setupGUI();
+  void applyOptions();
+  void checkView();
+  void askForView();
+  int checkCDType(QStringList titles);
+  void readSettings();
+  //QString prepareDirectory( QListViewItem *item );
+  //QString getRealDirectory(int, QListViewItem* );
+
+ private slots:
   /** No descriptions */
   // Toolbar Button actions
   void prepareRipping();
@@ -94,4 +99,6 @@ private slots: // Private slots
   void slotMenuItemActivated(int itemId);
 
 };
+
+
 #endif
