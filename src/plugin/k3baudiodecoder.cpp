@@ -190,7 +190,7 @@ int K3bAudioDecoder::decode( char* _data, int maxLen )
       read *= 2;
     }
     else {
-      if( (read = decodeInternal( d->monoBuffer, maxLen/2 )) == 0 )
+      if( (read = decodeInternal( _data, maxLen )) == 0 )
 	d->decoderFinished = true;
     }
   }
