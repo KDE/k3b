@@ -35,6 +35,7 @@
 #include <qpoint.h>
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
+#include <qfileinfo.h>
 
 #include <kmessagebox.h>
 #include <klineedit.h>
@@ -59,7 +60,11 @@ K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const ch
   if( K3bDevice* dev = writerDevice() )
     m_checkBurnProof->setEnabled( dev->burnproof() );
 
-  setTempDir( tempDir() + "image.iso" );
+  QFileInfo fi( tempPath() );
+  if( fi.isFile() )
+    setTempPath( fi.dirPath() + "/image.iso" );
+  else
+    setTempPath( fi.filePath() + "/image.iso" );
 }
 
 K3bDataBurnDialog::~K3bDataBurnDialog(){
@@ -510,9 +515,9 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
 
 void K3bDataBurnDialog::slotTempDirButtonPressed()
 {
-  QString dir = KFileDialog::getSaveFileName( tempDir() + "image.iso", QString::null, k3bMain(), "Select Iso Image" );
+  QString dir = KFileDialog::getSaveFileName( tempPath(), QString::null, k3bMain(), "Select Iso Image" );
   if( !dir.isEmpty() ) {
-    setTempDir( dir );
+    setTempPath( dir );
   }
 }
 
@@ -644,10 +649,17 @@ void K3bDataBurnDialog::slotUser1()
     KMessageBox::sorry( this, "Not enough space in temp directory. Either change the directory or select on-the-fly burning." );
     return;
   }
-  else if( !m_checkOnTheFly->isChecked() && QFile::exists( tempPath() ) )
-    if( KMessageBox::questionYesNo( this, i18n("Do you want to overwrite %1").arg(tempPath()), i18n("File exists...") ) 
-	!= KMessageBox::Yes )
-      return;
+  else if( !m_checkOnTheFly->isChecked() ) {
+    QFileInfo fi(tempPath());
+    if( fi.isDir() )
+      setTempPath( fi.filePath() + "/image.iso" );
+
+    if( QFile::exists( tempPath() ) ) {
+      if( KMessageBox::questionYesNo( this, i18n("Do you want to overwrite %1").arg(tempPath()), i18n("File exists...") ) 
+	  != KMessageBox::Yes )
+	return;
+    }
+  }
     
   K3bProjectBurnDialog::slotUser1();
 }

@@ -790,7 +790,7 @@ bool K3bDataJob::addMkisofsParameters()
 
   // this should be handled internally by K3b.
   // the config dialog should give the option to choose between using symlinks and not
-  if( m_doc->followSymbolicLinks()  )
+  //  if( m_doc->followSymbolicLinks()  )
     *m_process << "-f";	
 
 

@@ -21,6 +21,7 @@
 #include "k3bdataview.h"
 #include "k3bdatajob.h"
 #include "../k3b.h"
+#include "../kstringlistdialog.h"
 
 #include <qdir.h>
 #include <qstring.h>
@@ -95,19 +96,21 @@ void K3bDataDoc::addView(K3bView* view)
 }
 
 
-void K3bDataDoc::addUrl( const QString& url )
+void K3bDataDoc::addUrl( const KURL& url )
 {
-  slotAddUrlsToDir( QStringList(url) );
+  KURL::List urls;
+  urls.append(url);
+  slotAddUrlsToDir( urls );
 }
 
 
-void K3bDataDoc::addUrls( const QStringList& urls )
+void K3bDataDoc::addUrls( const KURL::List& urls )
 {
   slotAddUrlsToDir( urls );
 }
 
 
-void K3bDataDoc::slotAddUrlsToDir( const QStringList& urls, K3bDirItem* dirItem )
+void K3bDataDoc::slotAddUrlsToDir( const KURL::List& urls, K3bDirItem* dirItem )
 {
   if( !dirItem ) {
     // get current dir from first view (it should better be the current active view)
@@ -115,9 +118,13 @@ void K3bDataDoc::slotAddUrlsToDir( const QStringList& urls, K3bDirItem* dirItem 
     dirItem = view->currentDir();
   }
 
-  for( QStringList::ConstIterator it = urls.begin(); it != urls.end(); ++it ) 
+  for( KURL::List::ConstIterator it = urls.begin(); it != urls.end(); ++it ) 
     {
-      m_queuedToAddItems.enqueue( new PrivateItemToAdd(KURL(*it).path(), dirItem ) );
+      const KURL& url = *it;
+      if( url.isLocalFile() && QFile::exists(url.path()) )
+	m_queuedToAddItems.enqueue( new PrivateItemToAdd(url.path(), dirItem ) );
+      else
+	m_notFoundFiles.append( url.path() );
     }
 
   m_queuedToAddItemsTimer->start(0);
@@ -132,6 +139,9 @@ void K3bDataDoc::slotAddQueuedItems()
     m_queuedToAddItemsTimer->stop();
 
     setModified( true );
+
+    if( !item->fileInfo.exists() )
+      return;
 	
     if( item->fileInfo.isDir() ) {
       createDirItem( item->fileInfo, item->parent );
@@ -147,13 +157,19 @@ void K3bDataDoc::slotAddQueuedItems()
     m_queuedToAddItemsTimer->stop();
     emit newFileItems();
     k3bMain()->statusBar()->clear();
+    informAboutNotFoundFiles();
   }
 }
 
 
-void K3bDataDoc::createDirItem( const QFileInfo& f, K3bDirItem* parent )
+void K3bDataDoc::createDirItem( QFileInfo& f, K3bDirItem* parent )
 {
   QString newName = f.fileName();
+
+  if( newName.isEmpty() ) {
+    qDebug("(K3bDataDoc) tried to create dir without name.");
+    return;
+  }
 
   if( nameAlreadyInDir( newName, parent ) ) {
     k3bMain()->config()->setGroup("Data project settings");
@@ -186,27 +202,24 @@ void K3bDataDoc::createDirItem( const QFileInfo& f, K3bDirItem* parent )
 }
 
 
-void K3bDataDoc::createFileItem( const QFileInfo& f, K3bDirItem* parent )
+void K3bDataDoc::createFileItem( QFileInfo& f, K3bDirItem* parent )
 {
-  if( f.isSymLink() ) {
-    if( !f.exists() ) {
-      // we have a broken link that should be dropped
-      qDebug( "(K3bDataDoc) found broken symlink!");
-    }
-    else {
-      qDebug("(K3bDataDoc) found symlink...");
-      // TODO:
-      // two choices (to be configured):
-      // 1. replace symlinks: create an item for linkDest and rename it to the links name
-      // 2. use symlinks:     create an item for linkDest (with original path) and the symlink
-      //                      !Rockridge must be enabled otherwise mkisofs will drop all symlinks!
-    }
-    qDebug("(K3bDataDoc) dropping symlink. FIXME");
-    return;
-  }
-
-
   QString newName = f.fileName();
+
+
+  // filter symlinks and follow them
+  while( f.isSymLink() ) {
+    if( f.readLink().startsWith("/") )
+      f.setFile( f.readLink() );
+    else
+      f.setFile( f.dirPath() + "/" + f.readLink() );
+    
+    // check if it was a corrupted symlink
+    if( !f.exists() ) {
+      qDebug("(K3bDataDoc) corrupted symlink: " + f.absFilePath() );
+      return;
+    }
+  }
 
   QString mimetype = KMimeMagic::self()->findFileType(f.absFilePath())->mimeType();
   if( k3bMain()->useID3TagForMp3Renaming() && mimetype == "audio/mpeg" ) {
@@ -444,9 +457,9 @@ bool K3bDataDoc::loadDocumentData( QDomDocument* doc )
 
   // -----------------------------------------------------------------
 
-
-
   emit newFileItems();
+
+  informAboutNotFoundFiles();
 
   return true;
 }
@@ -462,7 +475,7 @@ bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
     }
 
     if( !QFile::exists( urlElem.text() ) )
-      qDebug( "(K3bDataDoc) Could not find file: " + urlElem.text() );
+      m_notFoundFiles.append( urlElem.text() );
     else {
       K3bFileItem* newK3bItem = new K3bFileItem( urlElem.text(), this, parent, elem.attributeNode( "name" ).value() );
       m_size += newK3bItem->k3bSize();
@@ -665,7 +678,7 @@ void K3bDataDoc::removeItem( K3bDataItem* item )
       exit(0);
     }
 
-    // the item takes care about it's parent!
+    // the item takes care of it's parent!
     delete item;
   }
 }
@@ -809,6 +822,18 @@ QString K3bDataDoc::treatWhitespace( const QString& path )
   }
   else
     return path;
+}
+
+
+void K3bDataDoc::informAboutNotFoundFiles()
+{
+  if( !m_notFoundFiles.isEmpty() ) {
+    KStringListDialog d( m_notFoundFiles, i18n("Not found"), i18n("Could not find the following files:"), 
+			 true, k3bMain(), "notFoundFilesInfoDialog" );
+    d.exec();
+
+    m_notFoundFiles.clear();
+  }
 }
 
 

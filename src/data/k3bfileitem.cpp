@@ -26,15 +26,15 @@
 
 
 K3bFileItem::K3bFileItem( const QString& filePath, K3bDataDoc* doc, K3bDirItem* dir, const QString& k3bName )
-  : KFileItem( -1, -1, filePath ), K3bDataItem( doc, dir )
+  : KFileItem( -1, -1, KURL::encode_string(filePath) ), K3bDataItem( doc, dir )
 {
   if( k3bName.isEmpty() )
     m_k3bName = QFileInfo(filePath).fileName();
   else
     m_k3bName = k3bName;
 
-//	m_isoName = doc()->isoName( this );
-//	m_joiletName = m_rockRidgeName = m_file.name();
+  //	m_isoName = doc()->isoName( this );
+  //	m_joiletName = m_rockRidgeName = m_file.name();
 }
 
 
@@ -45,19 +45,19 @@ K3bFileItem::~K3bFileItem()
 
 long K3bFileItem::k3bSize() const
 {
-	return size();
+  return size();
 }
 
 
 bool K3bFileItem::exists() const
 {
-	return isLocalFile();
+  return isLocalFile();
 }
 
 QString K3bFileItem::absIsoPath()
 {
-//	return m_dir->absIsoPath() + m_isoName;
-	return QString::null;
+  //	return m_dir->absIsoPath() + m_isoName;
+  return QString::null;
 }
 
 
@@ -96,10 +96,10 @@ QString K3bFileItem::absIsoPath()
 
 QString K3bFileItem::localPath()
 {
-	return url().path();
+  return url().path();
 }
 
 K3bDirItem* K3bFileItem::addDataItem( K3bDataItem* item )
 {
-	return parent()->addDataItem( item );
+  return parent()->addDataItem( item );
 }

@@ -36,7 +36,6 @@ K3bDataDirTreeView::K3bDataDirTreeView( K3bDataView* view, K3bDataDoc* doc, QWid
   setDropVisualizer( false );
   setDropHighlighter( true );
   setRootIsDecorated( true );
-  setAlternateBackground( QColor() );  // disable alternate bg
   setFullWidth();
   setDragEnabled( true );
   setItemsMovable( false );
@@ -66,7 +65,7 @@ void K3bDataDirTreeView::slotExecuted( QListViewItem* item )
 
 
 bool K3bDataDirTreeView::acceptDrag(QDropEvent* e) const{
-  return ( e->source() == viewport() || QTextDrag::canDecode(e) || m_view->acceptDrag(e) );
+  return ( e->source() == viewport() || QUriDrag::canDecode(e) || m_view->acceptDrag(e) );
 }
 
 

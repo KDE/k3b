@@ -34,6 +34,7 @@
 #include <kaction.h>
 #include <klineeditdlg.h>
 #include <kio/global.h>
+#include <kurldrag.h>
 
 #include <qpixmap.h>
 #include <qsplitter.h>
@@ -157,13 +158,9 @@ void K3bDataView::slotDropped( KListView* listView, QDropEvent* e, QListViewItem
     }
 
     // seems that new items have been dropped
-    else if( QTextDrag::canDecode( e ) ) {
-      QString droppedText;
-      QTextDrag::decode( e, droppedText );
-      QStringList urls = QStringList::split("\r\n", droppedText );
-    
+    KURL::List urls;
+    if( KURLDrag::decode( e, urls ) )
       m_doc->slotAddUrlsToDir( urls, parent );
-    }
   }
 }
 
@@ -188,10 +185,6 @@ void K3bDataView::setupActions()
   //      we need to check if tree or fileview are active
   //      for example: connect to the selected signals of both and check if it is a root item
   //                   and check if items are left after removal
-
-  // TODO: add properties-action
-  //       for dir and files: local file/dir info, project filename change and info
-  //       for root item: doc properties without write-button
 }
 
 

@@ -75,13 +75,18 @@ void K3bDataFileView::updateContents()
 	
   //  qDebug( "(K3bDataFileView) reloading current dir: " + m_currentDir->k3bName() );
 	
-  for( QListIterator<K3bDataItem> _it( *m_currentDir->children() ); _it.current(); ++_it ) {
-    if( K3bDirItem* _item = dynamic_cast<K3bDirItem*>( _it.current() ) ) {
-      (void)new K3bDataDirViewItem( _item, this );
-    }
-    else if( K3bFileItem* _item = dynamic_cast<K3bFileItem*>( _it.current() ) ) {
-      (void)new K3bDataFileViewItem( _item, this );
-    }
+  for( QListIterator<K3bDataItem> it( *m_currentDir->children() ); it.current(); ++it ) {
+    if( it.current()->isDir() )
+      (void)new K3bDataDirViewItem( (K3bDirItem*)it.current(), this );
+    else
+      (void)new K3bDataFileViewItem( (K3bFileItem*)it.current(), this );
+
+//     if( K3bDirItem* _item = dynamic_cast<K3bDirItem*>( _it.current() ) ) {
+//       (void)new K3bDataDirViewItem( _item, this );
+//     }
+//     else if( K3bFileItem* _item = dynamic_cast<K3bFileItem*>( _it.current() ) ) {
+//       (void)new K3bDataFileViewItem( _item, this );
+//     }
   }
 	
   //  qDebug( "(K3bDataFileView) reloading finished" );
@@ -89,7 +94,7 @@ void K3bDataFileView::updateContents()
 
 
 bool K3bDataFileView::acceptDrag(QDropEvent* e) const{
-  return ( e->source() == viewport() || QTextDrag::canDecode(e) || m_view->acceptDrag(e) );
+  return ( e->source() == viewport() || QUriDrag::canDecode(e) || m_view->acceptDrag(e) );
 }
 
 

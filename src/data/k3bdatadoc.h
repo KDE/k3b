@@ -23,6 +23,8 @@
 #include <qqueue.h>
 #include <qfileinfo.h>
 
+#include <kurl.h>
+
 class K3bDataItem;
 class K3bRootItem;
 class K3bDirItem;
@@ -150,9 +152,9 @@ class K3bDataDoc : public K3bDoc
   /** add urls to the compilation.
    * @param dir the directory where to add the urls, by default this is the root directory.
    **/
-  void slotAddUrlsToDir( const QStringList&, K3bDirItem* dir = 0 );
-  void addUrl( const QString& url );
-  void addUrls( const QStringList& urls );
+  void slotAddUrlsToDir( const KURL::List&, K3bDirItem* dir = 0 );
+  void addUrl( const KURL& url );
+  void addUrls( const KURL::List& urls );
 
  signals:
   void itemRemoved( K3bDataItem* );
@@ -179,8 +181,10 @@ class K3bDataDoc : public K3bDoc
    */
   void saveDataItem( K3bDataItem* item, QDomDocument* doc, QDomElement* parent );
 
-  void createDirItem( const QFileInfo& f, K3bDirItem* parent );
-  void createFileItem( const QFileInfo& f, K3bDirItem* parent );
+  void createDirItem( QFileInfo& f, K3bDirItem* parent );
+  void createFileItem( QFileInfo& f, K3bDirItem* parent );
+
+  void informAboutNotFoundFiles();
 
   class PrivateItemToAdd {
   public:
@@ -194,6 +198,8 @@ class K3bDataDoc : public K3bDoc
 
   QQueue<PrivateItemToAdd> m_queuedToAddItems;
   QTimer* m_queuedToAddItemsTimer;
+
+  QStringList m_notFoundFiles;
 
   K3bRootItem* m_root;
   QString m_name;
