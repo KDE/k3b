@@ -22,6 +22,7 @@
 #include <kmessagebox.h>
 
 #include <unistd.h>
+#include <stdlib.h>
 
 #include "k3bsetup.h"
 #include "k3bsetupwizard.h"
