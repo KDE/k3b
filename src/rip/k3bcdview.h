@@ -76,7 +76,7 @@ class K3bCdView : public K3bCdContentsView
   K3bCdda *m_cdda;
   KListView *m_listView;
   QListViewItem *m_testItemPattern;
-  QString m_device;
+  K3bDevice* m_device;
   QString m_album;
   QStringList m_titles;
   QMemArray<long> m_size;

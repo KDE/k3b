@@ -144,14 +144,14 @@ void K3bCdView::slotCheckView()
     showCdContent();
     break;
   case 1:
-    emit notSupportedDisc(m_device);
+    emit notSupportedDisc(m_device->devicename());
     break;
   case 2: {
       int result = QMessageBox::information( this, i18n("Select View"), i18n("The cd you have insert is a mixed CD. Do you want to show the audio or data tracks?"), i18n("Audio"), i18n("Data") );
       if( result == 0 )
           showCdContent();
       else
-          emit notSupportedDisc( m_device );
+          emit notSupportedDisc( m_device->devicename() );
   }
   default:
     break;
@@ -195,7 +195,7 @@ void K3bCdView::showCdContent( )
 void K3bCdView::showCdView( K3bDevice* device )
 {
   if( isEnabled() ) {
-    m_device = device->devicename();
+    m_device = device;
     reload();
   }
 }
@@ -218,7 +218,7 @@ void K3bCdView::reload()
   readSettings();
   // clear old entries
   m_listView->clear();
-  m_drive = m_cdda->pickDrive( m_device );
+  m_drive = m_device->open();
   int result = K3bCdda::driveType( m_drive );
   qDebug("(K3bCdView) CD type: (Audio=0, Data/DVD=1, Audio/Data=2) %i", result );
   if( result == 0 || result == 2 ){
@@ -226,8 +226,8 @@ void K3bCdView::reload()
         checkTitlesOnCd();
         m_cdda->closeDrive( m_drive);
   } else {
-    m_cdda->closeDrive( m_drive);
-    emit notSupportedDisc( m_device );
+    m_device->close();
+    emit notSupportedDisc( m_device->devicename() );
   }
 }
 
@@ -254,13 +254,12 @@ void K3bCdView::play()
   qDebug("(K3bCdView) play");
   // the sgx devices dont work, must use the real device i.e sr0, scd0
   //    cd_device = (char *)qstrdup(QFile::encodeName("/dev/cdrom"));
-  K3bDevice* dev = k3bMain()->deviceManager()->deviceByName( m_device );
-  if( dev ) {
-    cd_device = (char*)(dev->ioctlDevice().latin1());    // Aaaaaarghhhh!!!!!
+  if( m_device ) {
+    cd_device = (char*)(m_device->ioctlDevice().latin1());    // Aaaaaarghhhh!!!!!
     qDebug( "(K3bCdView) playing cd in device %s", cd_device );
   }
   else {
-    qDebug("(K3bCdView) Could not open cd device " + m_device );
+    qDebug("(K3bCdView) Could not open cd device " + m_device->ioctlDevice() );
     return;
   }
   wm_drive *drive = find_drive_struct();
@@ -365,8 +364,8 @@ void K3bCdView::prepareRipping()
     QMessageBox::critical( this, i18n("Ripping Error"), i18n("Please select the title to rip."), i18n("Ok") );
     return;
   }
-  K3bRipperWidget *rip = new K3bRipperWidget(m_device, m_cddb, this );
-  //K3bRipperWidget *rip = new K3bRipperWidget(m_device, m_cddb, this);
+  K3bRipperWidget *rip = new K3bRipperWidget(m_device->devicename(), m_cddb, this );
+
   qDebug("(K3bCdView) show ripperwidget.");
   QListViewItem *item;
   int arraySize = selectedList.count();

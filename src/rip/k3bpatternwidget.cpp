@@ -69,7 +69,7 @@ K3bPatternWidget::~K3bPatternWidget(){
 void K3bPatternWidget::setup(){
 
     QGridLayout *frameLayout = new QGridLayout( this );
-    frameLayout->setSpacing( 0 ); //KDialog::spacingHint() );
+    frameLayout->setSpacing( KDialog::spacingHint() );
     frameLayout->setMargin( 0 ); //KDialog::marginHint() );
 
     // directory

@@ -32,7 +32,7 @@ class QHBoxLayout;
 class QGridLayout;
 class KComboBox;
 class KListView;
-//class KProgress;
+class QRadioButton;
 class QGroupBox;
 class QLabel;
 class QLineEdit;
@@ -44,90 +44,86 @@ class QListViewItem;
 class KLineEdit;
 class K3bCddb;
 class K3bPatternParser;
-class K3bBurnProgressDialog;
+class QToolButton;
 
 
 /**
   *@author Sebastian Trueg
   */
-class K3bRipperWidget : public KDialogBase {
-   Q_OBJECT
+class K3bRipperWidget : public KDialogBase
+{
+  Q_OBJECT
 
-public: 
-    K3bRipperWidget(const QString& device, K3bCddb *cddb, QWidget *parent, const char *name=0);
-    ~K3bRipperWidget();
+ public: 
+  K3bRipperWidget(const QString& device, K3bCddb *cddb, QWidget *parent, const char *name=0);
+  ~K3bRipperWidget();
+  
+  //QGroupBox* GroupBox3;
+  //KComboBox* m_comboSource;
+  //QPushButton* m_buttonRefresh;
+  KListView* m_viewTracks;
+  //QLabel* TextLabel2;
+  //QPushButton* m_buttonStart;
+  QToolButton* m_buttonStaticDir;
+  QToolButton* m_buttonPattern;
+  KLineEdit *m_editStaticRipPath;
+  //KProgress *m_progress;
+  //K3bCdView *m_cdview;
+  QRadioButton *m_useStatic;
+  QRadioButton *m_usePattern;
 
-    //QGroupBox* GroupBox3;
-    //KComboBox* m_comboSource;
-    //QPushButton* m_buttonRefresh;
-    KListView* m_viewTracks;
-    //QLabel* TextLabel2;
-    //QPushButton* m_buttonStart;
-    QPushButton* m_buttonStaticDir;
-    QPushButton* m_buttonPattern;
-    KLineEdit *m_editStaticRipPath;
-    //KProgress *m_progress;
-    //K3bCdView *m_cdview;
-    QCheckBox *m_useStatic;
-    QCheckBox *m_usePattern;
-    QCheckBox *m_closeAfterRipping;
-    long m_bytes;
-    void addTrack(QListViewItem *item );
-    void setTrackNumbers(QArray<int> tracks);
-    void setFileList(QStringList files);
-    void setFilePatternList(QStringList );
-    void setDirPatternList( QStringList  );
-    void refresh();
-    void init();
-    void setData( QStringList files, QArray<int> tracks, QArray<long> size);
-    void setReplacements(bool dir, QString sdir, bool file, QString sfile, bool mixed );
-protected:
-    QGridLayout* Form1Layout;
-    QGridLayout* GroupBox3Layout;
+  long m_bytes;
+  void addTrack(QListViewItem *item );
+  void setTrackNumbers(QArray<int> tracks);
+  void setFileList(QStringList files);
+  void setFilePatternList(QStringList );
+  void setDirPatternList( QStringList  );
+  void refresh();
+  void init();
+  void setData( QStringList files, QArray<int> tracks, QArray<long> size);
+  void setReplacements(bool dir, QString sdir, bool file, QString sfile, bool mixed );
 
-    void closeEvent( QCloseEvent *e);
-
-private:
-    QString m_device;
-    QArray<int> m_tracks;
-    QArray<long> m_size;
-    QStringList m_list;
-    QStringList m_titles;
-    QStringList m_directories;
-    QString m_album;
-    QString m_testItemPattern;
-    QLabel *m_labelSummaryName;
-    QString m_editFile;
-    QString m_editDir;
-    bool m_finalClose;
-    // default read from settings
-    bool m_useCustomDir;
-    bool m_useFilePattern;
-    bool m_useConfigDirectoryPattern;
-    // locally set by filenamepatterndialog
-    bool m_spaceDir;
-    bool m_spaceFile;
-    bool m_parseMixed;
-
-    QStringList m_filePatternList;
-    QStringList m_dirPatternList;
-    K3bCddaCopy *m_copy;
-    K3bCddb *m_cddb;
-    K3bPatternParser *m_parser;
-    void setupGui();
-    QString prepareDirectory( QListViewItem *item);
-    QString getRealDirectory( int index, QListViewItem *item);
-    void setSongList();
-    K3bBurnProgressDialog *m_ripDialog;
-
-private slots:
-    void rip();
-    void useStatic();
-    void usePattern();
-    void showPatternDialog();
-    void slotFindStaticDir();
-    void slotCloseAfterRipping();
-
+ protected:
+  void closeEvent( QCloseEvent *e );
+  
+ private:
+  QString m_device;
+  QArray<int> m_tracks;
+  QArray<long> m_size;
+  QStringList m_list;
+  QStringList m_titles;
+  QStringList m_directories;
+  QString m_album;
+  QString m_testItemPattern;
+  QLabel *m_labelSummaryName;
+  QString m_editFile;
+  QString m_editDir;
+  bool m_finalClose;
+  // default read from settings
+  bool m_useCustomDir;
+  bool m_useFilePattern;
+  bool m_useConfigDirectoryPattern;
+  // locally set by filenamepatterndialog
+  bool m_spaceDir;
+  bool m_spaceFile;
+  bool m_parseMixed;
+  
+  QStringList m_filePatternList;
+  QStringList m_dirPatternList;
+  K3bCddaCopy *m_copy;
+  K3bCddb *m_cddb;
+  K3bPatternParser *m_parser;
+  void setupGui();
+  QString prepareDirectory( QListViewItem *item);
+  QString getRealDirectory( int index, QListViewItem *item);
+  void setSongList();
+  
+ private slots:
+  void rip();
+  void useStatic();
+  void usePattern();
+  void showPatternDialog();
+  void slotFindStaticDir();
 };
 
 #endif
