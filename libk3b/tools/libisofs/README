@@ -1,0 +1,24 @@
+This is the 0.2 release of libisofs. For changes, see the ChangeLog.
+
+Libisofs implements the reading of the famous ISO-9660 (ECMA-167) file system, 
+found on CD-ROM media. It also supports the Rock Ridge Interchange Protocol and
+Microsoft Joliet extensions. It allows user-mode programs to query the
+filesystem volume descriptors and traverse through the directory structure.
+Preliminary support for El-Torito boot CDs are added in version 0.2.
+
+To use it in your project, I recommend to copy bswap.h, isofs.h, iso_fs.h, 
+el_torito.h rock.h and isofs.c to your sources, and include isofs.h in the 
+appropriate places.
+
+Currently only the directory tables are parsed, the path tables are not.
+(The path tables contain redundant information.)
+
+Also a sample program can be compiled with the supplied Makefile. Simply
+execute 'make', it should create the executable file isofs.
+
+On big-endian systems, you need to define WORDS_BIGENDIAN (either in the
+compiler command-line, or if you defined HAVE_CONFIG_H, in config.h)
+
+
+György Szombathelyi <gyurco@users.sourceforge.net>
+http://libcdrom.sourceforge.net/libisofs.html

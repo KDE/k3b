@@ -1,0 +1,253 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>base_K3bDataVolumeDescWidget</class>
+<author>Sebastian Trueg</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>base_K3bDataVolumeDescWidget</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>439</width>
+            <height>233</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Volume Descriptor</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <property name="spacing">
+            <number>6</number>
+        </property>
+        <widget class="QLineEdit" row="0" column="1">
+            <property name="name">
+                <cstring>m_editVolumeName</cstring>
+            </property>
+            <property name="maxLength">
+                <number>32</number>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="1" column="1">
+            <property name="name">
+                <cstring>m_editVolumeSetName</cstring>
+            </property>
+            <property name="maxLength">
+                <number>128</number>
+            </property>
+        </widget>
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>TextLabel2</cstring>
+            </property>
+            <property name="text">
+                <string>Volume &amp;set name:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>m_editVolumeSetName</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>TextLabel1</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Volume name:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>m_editVolumeName</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="3" column="1">
+            <property name="name">
+                <cstring>m_editPublisher</cstring>
+            </property>
+            <property name="maxLength">
+                <number>128</number>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="4" column="1">
+            <property name="name">
+                <cstring>m_editPreparer</cstring>
+            </property>
+            <property name="maxLength">
+                <number>128</number>
+            </property>
+        </widget>
+        <widget class="QLabel" row="4" column="0">
+            <property name="name">
+                <cstring>TextLabel4</cstring>
+            </property>
+            <property name="text">
+                <string>P&amp;reparer:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>m_editPreparer</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="3" column="0">
+            <property name="name">
+                <cstring>TextLabel3</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Publisher:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>m_editPublisher</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="2" column="0">
+            <property name="name">
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="text">
+                <string>Volume set s&amp;ize:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>m_spinVolumeSetSize</cstring>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget" row="2" column="1">
+            <property name="name">
+                <cstring>layout1</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QSpinBox">
+                    <property name="name">
+                        <cstring>m_spinVolumeSetSize</cstring>
+                    </property>
+                    <property name="specialValueText">
+                        <string></string>
+                    </property>
+                    <property name="minValue">
+                        <number>1</number>
+                    </property>
+                    <property name="value">
+                        <number>1</number>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Volume set &amp;number:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>m_spinVolumeSetNumber</cstring>
+                    </property>
+                </widget>
+                <widget class="QSpinBox">
+                    <property name="name">
+                        <cstring>m_spinVolumeSetNumber</cstring>
+                    </property>
+                    <property name="specialValueText">
+                        <string></string>
+                    </property>
+                    <property name="maxValue">
+                        <number>2</number>
+                    </property>
+                    <property name="minValue">
+                        <number>1</number>
+                    </property>
+                    <property name="value">
+                        <number>1</number>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <spacer row="8" column="1">
+            <property name="name">
+                <cstring>Spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>40</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLabel" row="6" column="0">
+            <property name="name">
+                <cstring>TextLabel5</cstring>
+            </property>
+            <property name="text">
+                <string>S&amp;ystem:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>m_editSystem</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="6" column="1">
+            <property name="name">
+                <cstring>m_editSystem</cstring>
+            </property>
+            <property name="maxLength">
+                <number>32</number>
+            </property>
+        </widget>
+        <widget class="QLabel" row="7" column="0">
+            <property name="name">
+                <cstring>TextLabel6</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Application:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>m_editApplication</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="7" column="1">
+            <property name="name">
+                <cstring>m_editApplication</cstring>
+            </property>
+            <property name="maxLength">
+                <number>128</number>
+            </property>
+        </widget>
+        <widget class="Line" row="5" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>line1</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>HLine</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<tabstops>
+    <tabstop>m_editVolumeName</tabstop>
+    <tabstop>m_editVolumeSetName</tabstop>
+    <tabstop>m_spinVolumeSetSize</tabstop>
+    <tabstop>m_spinVolumeSetNumber</tabstop>
+    <tabstop>m_editPublisher</tabstop>
+    <tabstop>m_editPreparer</tabstop>
+    <tabstop>m_editSystem</tabstop>
+    <tabstop>m_editApplication</tabstop>
+</tabstops>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

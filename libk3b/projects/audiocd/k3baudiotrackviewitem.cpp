@@ -1,0 +1,181 @@
+/* 
+ *
+ * $Id$
+ * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This file is part of the K3b project.
+ * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * See the file "COPYING" for the exact licensing terms.
+ */
+
+#include "k3baudiotrackviewitem.h"
+#include "k3baudiodatasourceviewitem.h"
+#include "k3baudiodatasource.h"
+#include "k3baudiotrackview.h"
+#include "k3baudiotrack.h"
+
+#include <kiconloader.h>
+
+K3bAudioTrackViewItem::K3bAudioTrackViewItem( K3bAudioTrackView* parent, 
+					      K3bAudioTrackViewItem* after, 
+					      K3bAudioTrack* track )
+  : K3bListViewItem( parent, after ),
+    m_track( track ),
+    m_alreadyRemoved(false),
+    m_showingSources(false),
+    m_animationCounter(1)
+{
+  // columns
+  // 0 - No.
+  // 1 - Artist (CD-Text)
+  // 2 - Title (CD-Text)
+  // 3 - Type
+  // 4 - Pregap
+  // 5 - Length
+  // 6 - Filename
+
+  //  animationIconNumber = 1;
+  setEditor( 1, LINE );
+  setEditor( 2, LINE );
+
+  setMarginVertical( 3 );
+
+  // italic type
+  QFont f(listView()->font());
+  f.setItalic( true );
+  setFont( 3, f );
+
+  // greyed out filename
+  setForegroundColor( 5, listView()->palette().disabled().foreground() );
+
+  updateSourceItems();
+}
+
+
+QString K3bAudioTrackViewItem::text(int i) const
+{
+  // to avoid crashes when the track has been deleted and this viewitem is still around
+  if( m_alreadyRemoved )
+    return QString::null;
+
+  //
+  // We add two spaces after all strings (except the once renamable)
+  // to increase readability
+  //
+
+  switch( i )
+    {
+    case 0:
+      return QString::number( m_track->index() +1 ).rightJustify( 2, ' ' );
+    case 1:
+      return m_track->artist();
+    case 2:
+      return m_track->title();
+    case 3:
+      if( m_showingSources )
+	return QString::null;
+      else
+	return " " + m_track->firstSource()->type() + " ";
+    case 4:
+      return " " + m_track->length().toString() + " ";
+    case 5:
+      if( m_showingSources )
+	return QString::null;
+      else
+	return " " + m_track->firstSource()->sourceComment() + " ";
+    default:
+      return KListViewItem::text(i);
+    }
+}
+
+void K3bAudioTrackViewItem::setText( int col, const QString& text )
+{
+  if( col == 1 ) {
+    // this is the cd-text artist field
+    m_track->setArtist( text );
+  }
+  else if( col == 2 ) {
+    // this is the cd-text title field
+    m_track->setTitle( text );
+  }
+
+  KListViewItem::setText( col, text );
+}
+
+
+void K3bAudioTrackViewItem::showSources( bool show )
+{
+  setOpen(show);
+  m_showingSources = show;
+}
+
+
+void K3bAudioTrackViewItem::updateSourceItems()
+{
+  while( firstChild() )
+    delete firstChild();
+
+  K3bAudioDataSource* source = track()->firstSource();
+  K3bAudioDataSourceViewItem* sourceItem = 0;
+  while( source ) {
+    sourceItem = new K3bAudioDataSourceViewItem( this, sourceItem, source );
+    sourceItem->animate();
+    source = source->next();
+  }
+}
+
+
+bool K3bAudioTrackViewItem::animate()
+{
+  //
+  // We animate if one of the sources have length == 0
+  // otherwise we set the led
+  //
+  bool animate = false;
+  bool valid = true;
+  QListViewItem* item = firstChild();
+  while( item ) {
+    K3bAudioDataSourceViewItem* sourceItem = dynamic_cast<K3bAudioDataSourceViewItem*>( item );
+    animate = animate || sourceItem->animate();
+    valid = valid && sourceItem->source()->isValid();
+    item = item->nextSibling();
+  }
+  if( animate ) {
+    QString icon = QString( "kde%1" ).arg( m_animationCounter );
+    setPixmap( 4, SmallIcon( icon ) );
+    m_animationCounter++;
+    if ( m_animationCounter > 6 )
+      m_animationCounter = 1;
+  }
+  else {
+    // set status icon
+    setPixmap( 4, ( valid ? SmallIcon( "greenled" ) : SmallIcon( "redled" ) ) );
+  }
+  return animate;
+}
+
+
+void K3bAudioTrackViewItem::setSelected( bool s )
+{
+  K3bListViewItem::setSelected(s);
+
+  // we also select or unselect all source items
+  QListViewItem* item = firstChild();
+  while( item ) {
+    item->setSelected(s);
+    item = item->nextSibling();
+  }
+}
+
+
+void K3bAudioTrackViewItem::insertItem( QListViewItem* item )
+{
+  K3bListViewItem::insertItem( item );
+  if( isSelected() )
+    item->setSelected(true);
+}
