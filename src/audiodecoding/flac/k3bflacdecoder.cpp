@@ -34,16 +34,12 @@ class K3bFLACDecoder::Private
   : public FLAC::Decoder::SeekableStream
 {
 public:
-  Private(QFile* f)
-    : FLAC::Decoder::SeekableStream(),
-      file(f),
-      comments(0) {
-
+  void open(QFile* f) {
+    file = f;	
     file->open(IO_ReadOnly);
-
-    internalBuffer = new QBuffer();
-    internalBuffer->open(IO_ReadWrite);
-
+    
+    internalBuffer->flush();
+    
     set_metadata_respond(FLAC__METADATA_TYPE_STREAMINFO);
     set_metadata_respond(FLAC__METADATA_TYPE_VORBIS_COMMENT);
 
@@ -51,14 +47,28 @@ public:
     process_until_end_of_metadata();
   }
 
-  ~Private() {
+  void cleanup() {
     file->close();
     finish();
-    if(comments != 0)
-      delete comments;
-    delete internalBuffer;
+    delete comments;
+    comments = 0;
   }
 
+  Private(QFile* f)
+    : FLAC::Decoder::SeekableStream(),
+      comments(0) {
+    internalBuffer = new QBuffer();
+    internalBuffer->open(IO_ReadWrite);
+
+    open(f);
+  }
+  
+
+  ~Private() {
+    cleanup();
+    delete internalBuffer;
+  }
+  
   bool seekToFrame(int frame);
 
   QFile* file;
@@ -147,14 +157,15 @@ void K3bFLACDecoder::Private::metadata_callback(const FLAC__StreamMetadata *meta
 
 FLAC__StreamDecoderWriteStatus K3bFLACDecoder::Private::write_callback(const FLAC__Frame *frame, const FLAC__int32 * const buffer[]) {
   unsigned i, j;
-  // Note that in canDecode we made sure that the input is only 16 bit stereo or mono.
+  // Note that in canDecode we made sure that the input is 1-16 bit stereo or mono.
   unsigned samples = frame->header.blocksize;
 
   for(i=0; i < samples; i++) {
+   // in FLAC channel 0 is left, 1 is right
    for(j=0; j < this->channels; j++) {
-    // in FLAC channel 0 is left, 1 is right
-    internalBuffer->putch(buffer[j][i] >> 8); // msb
-    internalBuffer->putch(buffer[j][i] & 0xFF); // lsb
+    FLAC__int32 value = (buffer[j][i])<<(16 - frame->header.bitspersample);
+    internalBuffer->putch(value >> 8); // msb
+    internalBuffer->putch(value & 0xFF); // lsb
    }
   }
 
@@ -173,20 +184,21 @@ K3bFLACDecoder::K3bFLACDecoder( QObject* parent, const char* name )
 K3bFLACDecoder::~K3bFLACDecoder()
 {
   delete d;
-  cleanup();
 }
 
 void K3bFLACDecoder::cleanup()
 {
-  // FIXME: this is a bad solution but I don't know the code well enough to fix it better.
-  delete d;
-  d = new Private(new QFile(filename()));
+  if (d) {
+    d->cleanup();
+    d->open(new QFile(filename()));
+  }
+  else
+    d = new Private(new QFile(filename()));
 }
 
 bool K3bFLACDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate, int& ch )
 {
-  delete d;
-  d = new Private(new QFile(filename()));
+  cleanup();
 
   frames = (unsigned long)ceil((d->samples * 75.0))/d->rate;
   samplerate = d->rate;
@@ -198,7 +210,6 @@ bool K3bFLACDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate, int
 
 bool K3bFLACDecoder::initDecoderInternal()
 {
-  // FIXME: this is a bad solution but I don't know the code well enough to fix it better.
   cleanup();
 
   return true;
@@ -345,7 +356,7 @@ bool K3bFLACDecoderFactory::canDecode( const KURL& url )
   FLAC::Metadata::get_streaminfo(url.path().ascii(), info);
 
   if((info.get_channels() <= 2) &&
-     (info.get_bits_per_sample() == 16)) {
+     (info.get_bits_per_sample() <= 16)) {
     return true;
   } else {
     kdDebug() << "(K3bFLACDecoder) " << url.path() << ": wrong format:" << endl
