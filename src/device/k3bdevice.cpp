@@ -708,8 +708,8 @@ void K3bCdDevice::CdDevice::checkForAncientWriters()
 {
   // TODO: add a boolean which determines if this device is non-MMC so we may warn the user at K3b startup about it
 
-  if( vendor().left(4) == "TEAC" ) {
-    if( description().left(7) == "CD-R50S" || description().left(7) == "CD-R55S" ) {
+  if( vendor().startsWith("TEAC") ) {
+    if( description().startsWith("CD-R50S") || description().startsWith("CD-R55S") ) {
       m_writeModes = TAO;
       d->deviceType = CDROM|CDR;
       m_maxWriteSpeed = 4;
@@ -718,8 +718,8 @@ void K3bCdDevice::CdDevice::checkForAncientWriters()
       d->burnfree = false;
     }
   }
-  else if( vendor().left(8) == "MATSHITA" ) {
-    if( description().left(14) == "CD-R   CW-7501" ) {
+  else if( vendor().startsWith("MATSHITA") ) {
+    if( description().startsWith("CD-R   CW-7501") ) {
       m_writeModes = TAO|SAO;
       d->deviceType = CDROM|CDR;
       m_maxWriteSpeed = 2;
@@ -727,7 +727,7 @@ void K3bCdDevice::CdDevice::checkForAncientWriters()
       m_bufferSize = 1024;
       d->burnfree = false;
     }
-    if( description().left(14) == "CD-R   CW-7502" ) {
+    if( description().startsWith("CD-R   CW-7502") ) {
       m_writeModes = TAO|SAO;
       d->deviceType = CDROM|CDR;
       m_maxWriteSpeed = 4;
