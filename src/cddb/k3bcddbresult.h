@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -25,6 +25,12 @@
 class K3bCddbResultEntry
 {
  public:
+  // just to set a default
+  K3bCddbResultEntry()
+    : category("misc"),
+    year(0) {
+  }
+
   QStringList titles;
   QStringList artists;
   QStringList extInfos;
@@ -35,6 +41,7 @@ class K3bCddbResultEntry
 
   QString genre;
   QString category;
+  int year;
   QString discid;
 
   QString rawData;

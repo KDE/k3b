@@ -19,7 +19,7 @@
 #include "k3b.h"
 #include "k3bcore.h"
 
-#include "rip/k3bcdview.h"
+#include "rip/k3baudiocdview.h"
 #include "k3bfileview.h"
 #include "device/k3bdevicemanager.h"
 #include "device/k3bdevice.h"
@@ -124,7 +124,7 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
   m_fileTreeView->addCdDeviceBranches( k3bcore->deviceManager() );
 
   m_fileView     = new K3bFileView(m_viewStack, "fileView");
-  m_cdView       = new K3bCdView(m_viewStack, "cdview");
+  m_cdView       = new K3bAudioCdView(m_viewStack, "cdview");
   m_movieView    = new K3bMovieView(m_viewStack, "movieview");
   m_infoView     = new K3bDiskInfoView(m_viewStack, "infoView");
 
@@ -248,7 +248,7 @@ void K3bDirView::slotDiskInfoReady( const K3bDiskInfo& info )
       slotMountDevice( info.device );
     else {
       m_viewStack->raiseWidget( m_cdView );
-      m_cdView->showCdView( info );
+      m_cdView->setDisk( info );
     }
   }
 }

@@ -122,23 +122,23 @@ void K3bFileTreeView::slotDropped() {
 }
 */
 void K3bFileTreeView::contentsDropEvent(QDropEvent* event) {
-    kdDebug() << "(K3bFileTreeView:contentsDropEvent)" << endl;
-    QString text;
-    if ( QTextDrag::decode(event, text) ) {
-        if ( text == CD_DRAG) {
-            event->accept();
-            kdDebug() << "(K3bFileTreeView) Drop text index: " << text << endl;
-            // correct entry  if scrollbar are visible and scrolled
-            KFileTreeViewItem *item = dynamic_cast<KFileTreeViewItem*>( itemAt( contentsToViewport( event->pos() ) ));
-            if( item ){
-                kdDebug() << "(K3bFileTreeView) Path: " << item->path() << endl;
-                QApplication::setOverrideCursor( Qt::ArrowCursor );
-                kdDebug() << "(K3bFileTreeView) Start rip dialog" << endl;
-                k3bMain()->mainWindow()->getCdView()->slotPrepareRipping( item->path() );
-                QApplication::restoreOverrideCursor();
-            }
-        }
-    }
+//     kdDebug() << "(K3bFileTreeView:contentsDropEvent)" << endl;
+//     QString text;
+//     if ( QTextDrag::decode(event, text) ) {
+//         if ( text == CD_DRAG) {
+//             event->accept();
+//             kdDebug() << "(K3bFileTreeView) Drop text index: " << text << endl;
+//             // correct entry  if scrollbar are visible and scrolled
+//             KFileTreeViewItem *item = dynamic_cast<KFileTreeViewItem*>( itemAt( contentsToViewport( event->pos() ) ));
+//             if( item ){
+//                 kdDebug() << "(K3bFileTreeView) Path: " << item->path() << endl;
+//                 QApplication::setOverrideCursor( Qt::ArrowCursor );
+//                 kdDebug() << "(K3bFileTreeView) Start rip dialog" << endl;
+//                 k3bMain()->mainWindow()->getCdView()->slotPrepareRipping( item->path() );
+//                 QApplication::restoreOverrideCursor();
+//             }
+//         }
+//     }
 }
 
 void K3bFileTreeView::contentsDragMoveEvent ( QDragMoveEvent *e ){

@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -50,6 +50,10 @@ void K3bCddbQuery::query( const K3bToc& toc )
   m_bQueryFinishedEmited = false;
   m_toc = toc;
   m_queryResult.clear();
+
+  // make sure we have a valid discId
+  m_toc.calculateDiscId();
+
   QTimer::singleShot( 0, this, SLOT(doQuery()) );
 }
 
@@ -71,13 +75,22 @@ bool K3bCddbQuery::parseEntry( QTextStream& stream, K3bCddbResultEntry& entry )
   while( !(line = stream.readLine()).isNull() ) {
     entry.rawData.append(line + "\n");
 
-    // !all fields my be splitted into several lines!
-    // TODO: parse DGENRE, DYEAR
+    // !all fields may be splitted into several lines!
   
     if( line.startsWith( "DISCID" ) ) {
       // TODO: this could be several discids seperated by comma!
     }
+
+    else if( line.startsWith( "DYEAR" ) ) {
+      QString year = line.mid( 6 );
+      if( year.length() == 4 )
+	entry.year = year.toInt();
+    }
     
+    else if( line.startsWith( "DGENRE" ) ) {
+      entry.genre = line.mid( 7 );
+    }
+
     else if( line.startsWith( "DTITLE" ) ) {
       entry.cdTitle += line.mid( 7 );
     }
@@ -176,6 +189,7 @@ bool K3bCddbQuery::parseEntry( QTextStream& stream, K3bCddbResultEntry& entry )
   entry.cdTitle.replace( QRegExp("\\\\\\\\n"), "\\n" );
   entry.cdArtist.replace( QRegExp("\\\\\\\\n"), "\\n" );
   entry.cdExtInfo.replace( QRegExp("\\\\\\\\n"), "\\n" );
+  entry.genre.replace( QRegExp("\\\\\\\\n"), "\\n" );
 
   return true;
 }

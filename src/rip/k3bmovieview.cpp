@@ -21,7 +21,8 @@
 #include "k3bdvdripperwidget.h"
 #include "../device/k3bdevice.h"
 #include "k3bdvdriplistviewitem.h"
-#include "../kcutlabel.h"
+#include <kcutlabel.h>
+#include <k3btoolbox.h>
 
 #include <qstring.h>
 #include <qlayout.h>
@@ -34,6 +35,7 @@
 //#include <qlistview.h>
 //#include <qmessagebox.h>
 //#include <qpushbutton.h>
+#include <qfont.h>
 
 #include <kiconloader.h>
 //#include <ktoolbar.h>
@@ -48,48 +50,84 @@
 #include <kio/global.h>
 #include <kaction.h>
 #include <kstdaction.h>
+#include <kstandarddirs.h>
 #include <kdebug.h>
 
-K3bMovieView::K3bMovieView(QWidget *parent, const char *name ) : K3bCdContentsView(parent,name) {
-    m_tcWrapper = new K3bTcWrapper( this );
-    connect( m_tcWrapper, SIGNAL( successfulDvdCheck( bool ) ), this, SLOT( slotDvdChecked( bool )) );
-    setupActions();
-    setupGUI();
+K3bMovieView::K3bMovieView(QWidget *parent, const char *name )
+  : K3bCdContentsView( parent, name ) 
+{
+  m_tcWrapper = new K3bTcWrapper( this );
+  connect( m_tcWrapper, SIGNAL( successfulDvdCheck( bool ) ), 
+	   this, SLOT( slotDvdChecked( bool )) );
+  setupGUI();
+  setupActions();
 }
 
 K3bMovieView::~K3bMovieView(){
     delete m_tcWrapper;
 }
 
-void K3bMovieView::setupGUI(){
-    QVBoxLayout* layout = new QVBoxLayout( this );
-    layout->setAutoAdd( true );
+void K3bMovieView::setupGUI()
+{
+  QVBoxLayout* layout = new QVBoxLayout( this );
+  layout->setSpacing(0);
+  layout->setMargin(2);
 
 
-    m_actionCollection = new KActionCollection( this );
+  // header
+  // ----------------------------------------------------------------------------------
+  QHBoxLayout* headerLayout = new QHBoxLayout( 0, 0, 0, "headerLayout"); 
 
-    QHBox* dvdInfoBox = new QHBox( this );
-    dvdInfoBox->setMargin( KDialog::marginHint() );
-    dvdInfoBox->setSpacing( KDialog::spacingHint() );
-    m_labelDvdInfo = new KCutLabel( dvdInfoBox );
+  QLabel* pixmapLabel1 = new QLabel( this, "pixmapLabel1" );
+  pixmapLabel1->setPixmap( QPixmap(locate( "appdata", "pics/diskinfo_left.png" )) );
+  pixmapLabel1->setScaledContents( FALSE );
+  headerLayout->addWidget( pixmapLabel1 );
 
-    m_listView = new KListView(this, "cdviewcontent");
-    m_listView->addColumn( i18n("Titles" ) );
-    m_listView->addColumn( i18n("Time" ) );
-    m_listView->addColumn( i18n("Language(s)" ) );
-    m_listView->addColumn( i18n("Chapter(s)" ) );
-    m_listView->addColumn( i18n("Angle(s)" ) );
-    //m_listView->setColumnWidthMode( 0, QListView::Manual );
-    m_listView->setItemsRenameable( false );
-    m_listView->setRootIsDecorated( true );
-    m_listView->setAllColumnsShowFocus( true );
-    //m_listView->setSorting( -1 );
-   connect( m_listView, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
+  m_labelTitle = new QLabel( i18n("Video DVD"), this, "m_labelTitle" );
+  m_labelTitle->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 1, 0, m_labelTitle->sizePolicy().hasHeightForWidth() ) );
+  m_labelTitle->setPaletteBackgroundColor( QColor( 205, 210, 255 ) );
+  QFont m_labelTitle_font( m_labelTitle->font() );
+  m_labelTitle_font.setPointSize( 12 );
+  m_labelTitle_font.setBold( TRUE );
+  m_labelTitle->setFont( m_labelTitle_font ); 
+  headerLayout->addWidget( m_labelTitle );
+
+  QLabel* pixmapLabel2 = new QLabel( this, "pixmapLabel2" );
+  pixmapLabel2->setPixmap( QPixmap(locate( "appdata", "pics/diskinfo_dvd.png" )) );
+  pixmapLabel2->setScaledContents( FALSE );
+  headerLayout->addWidget( pixmapLabel2 );
+
+
+  // toolbox
+  // ----------------------------------------------------------------------------------
+  QHBoxLayout* toolBoxLayout = new QHBoxLayout( 0, 0, 0, "toolBoxLayout" );
+  m_toolBox = new K3bToolBox( this );
+  toolBoxLayout->addWidget( m_toolBox );
+  m_labelDvdInfo = new KCutLabel( this );
+  toolBoxLayout->addWidget( m_labelDvdInfo );
+
+
+  m_listView = new KListView(this, "cdviewcontent");
+  m_listView->addColumn( i18n("Titles" ) );
+  m_listView->addColumn( i18n("Time" ) );
+  m_listView->addColumn( i18n("Language(s)" ) );
+  m_listView->addColumn( i18n("Chapter(s)" ) );
+  m_listView->addColumn( i18n("Angle(s)" ) );
+  //m_listView->setColumnWidthMode( 0, QListView::Manual );
+  m_listView->setItemsRenameable( false );
+  m_listView->setRootIsDecorated( true );
+  m_listView->setAllColumnsShowFocus( true );
+  //m_listView->setSorting( -1 );
+  connect( m_listView, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
 	   this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
-    connect( m_listView, SIGNAL(selectionChanged( QListViewItem* )),
+  connect( m_listView, SIGNAL(selectionChanged( QListViewItem* )),
 	   this, SLOT(slotTitleSelected( QListViewItem* )) );
 
+  layout->addLayout( headerLayout );
+  layout->addLayout( toolBoxLayout );
+  layout->addWidget( m_listView );  
 }
+
 void K3bMovieView::setupActions(){
     m_actionCollection = new KActionCollection( this );
     KAction *m_copyAction = KStdAction::copy( this, SLOT(slotRip()), m_actionCollection );
@@ -117,7 +155,7 @@ void K3bMovieView::reload()
   infoLayout->setAutoAdd( true );
   QLabel* picLabel = new QLabel( infoDialog );
   picLabel->setPixmap( DesktopIcon( "cdwriter_unmount" ) );
-  QLabel* infoLabel = new QLabel( i18n("K3b is fetching information about title "), infoDialog );
+  (void)new QLabel( i18n("K3b is fetching information about title "), infoDialog );
   m_fetchingInfoLabel = new QLabel( "<1>", infoDialog );
   connect( m_tcWrapper, SIGNAL(tcprobeTitleParsed( int )), this, SLOT( slotUpdateInfoDialog( int )) );
   connect( m_tcWrapper, SIGNAL( successfulDvdCheck( bool )), infoDialog, SLOT( close() ));

@@ -34,6 +34,7 @@ class KPopupMenu;
 class K3bTcWrapper;
 class K3bDvdContent;
 class K3bDvdRipListViewItem;
+class K3bToolBox;
 //class K3bDvdRipperWidget;
 
 /**
@@ -64,6 +65,8 @@ private:
     KPopupMenu *m_popupMenu;
     K3bDvdRipListViewItem *m_ripTitle;
     KCutLabel *m_labelDvdInfo;
+    QLabel* m_labelTitle;
+    K3bToolBox* m_toolBox;
     void setupGUI();
     void setupActions();
     QString filterAudioList( QStringList* );

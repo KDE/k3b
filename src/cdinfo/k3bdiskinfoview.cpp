@@ -121,7 +121,7 @@ K3bDiskInfoView::K3bDiskInfoView( QWidget* parent, const char* name )
     : K3bCdContentsView( parent, name )
 {
   QVBoxLayout* mainLayout = new QVBoxLayout( this );
-  mainLayout->setMargin( 0 );
+  mainLayout->setMargin( 2 );
   mainLayout->setSpacing( 0 );
 
   QLabel* labelLeftPic = new QLabel( this );

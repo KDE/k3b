@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -43,11 +43,14 @@ void K3bCddbLocalQuery::doQuery()
 
   QString path = m_cddbDir;
   if( path.startsWith( "~" ) )
-    path.replace( 0, 1, QDir::homeDirPath() + "/" );
+    path.replace( 0, 1, QDir::homeDirPath() );
   else if( !path.startsWith( "/" ) )
-    path.prepend( QDir::homeDirPath() + "/" );
+    path.prepend( QDir::homeDirPath() );
   if( path[path.length()-1] != '/' )
     path.append( "/" );
+
+  kdDebug() << "(K3bCddbLocalQuery) searching in dir " << path << " for " 
+	    << QString::number( toc().discId(), 16 ) << endl;
 
   for( QStringList::const_iterator it = categories().begin();
        it != categories().end(); ++it ) {

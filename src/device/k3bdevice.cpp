@@ -379,7 +379,11 @@ bool K3bCdDevice::CdDevice::isDVD()
     dvdinfo.type = DVD_STRUCT_PHYSICAL;
     if ( ::ioctl(d->deviceFd,DVD_READ_STRUCT,&dvdinfo) == 0 )
       ret = true;
+    else
+      kdDebug() << "(K3bCdDevice::CdDevice) no DVD" << endl;
   }
+  else
+    kdDebug() << "(K3bCdDevice::CdDevice) no DVD drive" << endl;
 
   if( needToClose )
     close();

@@ -30,7 +30,7 @@
 
 class QSplitter;
 class KURL;
-class K3bCdView;
+class K3bAudioCdView;
 class K3bFileView;
 class K3bMovieView;
 class KComboBox;
@@ -55,7 +55,7 @@ class K3bDirView : public QVBox
   K3bDirView(K3bFileTreeView* tree, QWidget *parent=0, const char *name=0);
   ~K3bDirView();
 
-  K3bCdView* getCdView() { return m_cdView; }
+  //  K3bCdView* getCdView() { return m_cdView; }
 
  public slots:
   void saveConfig( KConfig* c );
@@ -83,7 +83,7 @@ class K3bDirView : public QVBox
   QWidgetStack* m_viewStack;
   QScrollView* m_scroll;
 
-  K3bCdView*   m_cdView;
+  K3bAudioCdView*   m_cdView;
   K3bMovieView* m_movieView;
   K3bFileView* m_fileView;
   K3bDiskInfoView* m_infoView;
