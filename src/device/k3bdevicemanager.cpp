@@ -241,8 +241,11 @@ K3bDevice* K3bDeviceManager::initializeScsiDevice( cdrom_drive* drive )
       int lun;
     };
     ScsiIdLun idLun;
+    int bus;
 
-    if ( ioctl( devFile, SCSI_IOCTL_GET_IDLUN, &idLun ) < 0) {
+    // in kernel 2.2 SCSI_IOCTL_GET_IDLUN does not contain the bus id
+    if ( (ioctl( devFile, SCSI_IOCTL_GET_IDLUN, &idLun ) < 0) ||
+	 (ioctl( devFile, SCSI_IOCTL_GET_BUS_NUMBER, &bus ) < 0) ) {
       qDebug( "(K3bDeviceManager) %s: Need a filename that resolves to a SCSI device (2).", drive->cdda_device_name );
       ::close( devFile );
       return 0;
@@ -251,7 +254,7 @@ K3bDevice* K3bDeviceManager::initializeScsiDevice( cdrom_drive* drive )
       dev = new K3bScsiDevice( drive );
       dev->m_target = idLun.id & 0xff;
       dev->m_lun    = (idLun.id >> 8) & 0xff;
-      dev->m_bus    = (idLun.id >> 16) & 0xff;
+      dev->m_bus    = bus;
       qDebug( "(K3bDeviceManager) bus: %i, id: %i, lun: %i", dev->m_bus, dev->m_target, dev->m_lun );
     }
     ::close( devFile );
