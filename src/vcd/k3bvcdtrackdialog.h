@@ -52,12 +52,30 @@ class K3bVcdTrackDialog : public KDialogBase
  private:
   QList<K3bVcdTrack> m_tracks;
 
-  QLabel* m_labelMimeType;
   KCutLabel* m_displayFileName;
+  QLabel* m_labelMimeType;  
   QLabel* m_displaySize;
   QLabel* m_displayLength;
 
+  QLabel* m_mpegver_audio;
+  QLabel* m_duration_audio;
+  QLabel* m_rate_audio;
+  QLabel* m_framesize_audio;
+  QLabel* m_mode_audio;
+  QLabel* m_extmode_audio;
+  QLabel* m_emphasis_audio;
+  QLabel* m_copyright_audio;
+
+  QLabel* m_mpegver_video;
+  QLabel* m_duration_video;
+  QLabel* m_rate_video;
+  QLabel* m_chromaformat_video;
+  QLabel* m_format_video;
+  QLabel* m_size_video;
+  QLabel* m_displaysize_video;
+
   void setupGui();
+  void fillGui();
 };
 
 #endif

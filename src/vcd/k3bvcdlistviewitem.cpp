@@ -56,7 +56,7 @@ QString K3bVcdListViewItem::text(int i) const
       return m_track->fileName();
     case 2:
       // track mpegtype
-      return m_track->mpegType();
+      return m_track->mpegVersion();
     case 3:
       // track mpegsize
       return m_track->mpegSize();

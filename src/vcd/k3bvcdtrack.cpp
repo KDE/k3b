@@ -50,9 +50,29 @@ unsigned long K3bVcdTrack::size() const
   return long(( m_file.size()+2351 ) / 2352) * 2048;
 }
 
-void K3bVcdTrack::setMpegType(const QString& mt)
+void K3bVcdTrack::setMpegType(const int& mt)
 {
   m_mpegtype = mt;
+}
+
+void K3bVcdTrack::setMpegVideoVersion(const int& version)
+{
+m_mpegvideoversion = version;
+}
+
+void K3bVcdTrack::setMpegVersion(const QString& version)
+{
+  m_mpegversion = version;
+}
+
+void K3bVcdTrack::setMpegMuxRate(const int& mux)
+{
+  m_mpegmuxrate = mux;
+}
+
+void K3bVcdTrack::setMpegFormat(const int& format)
+{
+  m_mpegformat = format;  
 }
 
 void K3bVcdTrack::setMpegDuration(const QString& time)
@@ -80,9 +100,19 @@ void K3bVcdTrack::setMpegMbps(const QString& mbps)
   m_mpegmbps = mbps;
 }
 
-void K3bVcdTrack::setMpegAspectRatio(const QString& ratio)
+void K3bVcdTrack::setMpegAspectRatio(const int& ratio)
 {
   m_mpegaspect_ratio = ratio;
+}
+
+void K3bVcdTrack::setMpegSExt(const bool& sext)
+{
+  m_mpegsext = sext;  
+}
+
+void K3bVcdTrack::setMpegDExt(const bool& dext)
+{
+  m_mpegdext = dext;    
 }
 
 void K3bVcdTrack::setMpegProgressive(const bool& progressive)
@@ -90,12 +120,17 @@ void K3bVcdTrack::setMpegProgressive(const bool& progressive)
   m_mpegprogressive = progressive;
 }
 
-void K3bVcdTrack::setMpegChromaFormat(const QString& chromaformat)
+void K3bVcdTrack::setMpegChromaFormat(const int& chromaformat)
 {
   m_mpegchroma_format = chromaformat;
 }
 
 // audio
+void K3bVcdTrack::setHasAudio(const bool& audio)
+{
+  m_hasaudio = audio;
+}
+
 void K3bVcdTrack::setMpegAudioType(const int& type)
 {
   m_mpegaudiotype = type;
@@ -136,6 +171,10 @@ void K3bVcdTrack::setMpegAudioModeExt(const int& modeext)
   m_mpegaudiomodeext = modeext;
 }
 
+void K3bVcdTrack::setMpegAudioEmphasis(const int& e)
+{
+  m_mpegaudioemphasis = e;
+}
 
 int K3bVcdTrack::index() const
 {

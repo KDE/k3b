@@ -207,10 +207,15 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
       char HMS[30];
       QString mt;
       Mpeg->SecsToHMS(HMS, Mpeg->Video->duration);
+      newTrack->setMpegType(Mpeg->MpegType);
+      newTrack->setMpegVideoVersion(Mpeg->mpeg_version);
+
       mt.append(i18n(" MPEG%1").arg(mpegVersion));
 
       newTrack->setMpegDisplaySize(QString(" %1 x %2").arg(Mpeg->Video->hsize).arg(Mpeg->Video->vsize));
       if (Mpeg->DExt){
+        newTrack->setMpegDExt(true);
+        newTrack->setMpegFormat(Mpeg->DExt->video_format);
         switch (Mpeg->DExt->video_format) {
           case 0 : mt.append(i18n("  Component")); break;
           case 1 : mt.append("  PAL"); break;
@@ -228,17 +233,20 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
       newTrack->setMpegMbps(QString(" %1").arg(Mpeg->Video->bitrate/2500.0));
 
       newTrack->setMpegDuration(HMS);
-      newTrack->setMpegType(mt);
+      newTrack->setMpegVersion(mt);
 
-      newTrack->setMpegAspectRatio(QString("%1").arg(Mpeg->Video->aspect_ratio));
+      newTrack->setMpegAspectRatio(Mpeg->Video->aspect_ratio);
 
       if (Mpeg->SExt){
+        newTrack->setMpegSExt(true);
         newTrack->setMpegProgressive(Mpeg->SExt->progressive);
-        newTrack->setMpegChromaFormat(QString("%1").arg(Mpeg->SExt->chroma_format));
+        newTrack->setMpegChromaFormat(Mpeg->SExt->chroma_format);
       }
       // audio
       if (Mpeg->has_audio()) {
         Mpeg->SecsToHMS(HMS, Mpeg->Audio->duration);
+        newTrack->setHasAudio(true);
+        newTrack->setMpegAudioEmphasis(Mpeg->Audio->emphasis_index);
         newTrack->setMpegAudioType(Mpeg->Audio->mpeg_ver);
         newTrack->setMpegAudioLayer(Mpeg->Audio->layer);
         newTrack->setMpegAudioDuration(HMS);
@@ -249,6 +257,8 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
         newTrack->setMpegAudioModeExt(Mpeg->Audio->modext);
       }
 
+      // for debuging
+      Mpeg->PrintInfos();
       delete Mpeg;
       return newTrack;
     }
