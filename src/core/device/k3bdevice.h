@@ -179,16 +179,10 @@ namespace K3bCdDevice
     void setMountPoint( const QString& );
     void setMountDevice( const QString& d );
 
-    /** checks if unit is ready, returns:
-     * <ul>
-     *  <li>0: OK</li>
-     *  <li>1: scsi command failed</li>
-     *  <li>2: not ready</li>
-     *  <li>3: not ready, no disk in drive</li>
-     *  <li>4: not ready, tray out</li>
-     * </ul>
+    /** 
+     * checks if unit is ready (medium inserted and ready for command)
      */
-    int isReady() const;
+    bool isReady() const;
 
 
     /**
@@ -395,6 +389,11 @@ namespace K3bCdDevice
 			 unsigned int subchannelParam,
 			 unsigned int trackNumber ) const;
 
+    /**
+     * @returns the index number on success
+     *          -1 on general error
+     *          and -2 if there is no index info in that frame
+     */
     int getIndex( unsigned long lba ) const;
 
     bool searchIndex0( unsigned long startSec, unsigned long endSec, long& pregapStart ) const;

@@ -167,7 +167,7 @@ void K3bDiskInfoView::displayInfo( K3bCdDevice::DiskInfoDetector* did )
   else if( info.noDisk ) {
     (void)new QListViewItem( m_infoView, i18n("No Disk") );
     setTitle( i18n("No disk in drive") );
-    setRightPixmap( "diskinfo_nodisk" );
+    setRightPixmap( "diskinfo_right" );
   }
   else {
 

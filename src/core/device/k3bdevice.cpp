@@ -832,67 +832,11 @@ bool K3bCdDevice::CdDevice::isDVD() const
 }
 
 
-int K3bCdDevice::CdDevice::isReady() const
+bool K3bCdDevice::CdDevice::isReady() const
 {
-  // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
-  bool needToClose = !isOpen();
-
-  if( open() != -1 ) {
-    int ret = 2;
-
-    // THIS DOES NOT WORK. AS MMC4 SAYS: THE DISC_PRESENT FIELD IS OPTIONAL
-
-//     unsigned char* data = 0;
-//     int dataLen = 0;
-//     if( mechanismStatus( &data, dataLen ) ) {
-//       mechanism_status_header* header = (mechanism_status_header*)data;
-//       if( header->door_open ) {
-// 	kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
-// 		  << ": MECHANISM STATUS: door open." << endl;
-// 	ret = 4;
-//       }
-//       else if( dataLen >= 12 ) {
-// 	// we ignore changer...
-// 	mechanism_status_slot* slot = (mechanism_status_slot*)&data[8];
-// 	if( slot->disc_present ) {
-// 	  kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
-// 		    << ": MECHANISM STATUS: disc present." << endl;
-// 	  ret = 0;
-// 	}
-// 	else {
-// 	  kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
-// 		    << ": MECHANISM STATUS: no disc present." << endl;
-// 	  ret = 3;
-// 	}
-//       }
-
-//       delete [] data;
-//     }
-//     else {
-//       kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
-// 		<< ": MECHANISM STATUS failed. falling back to cdrom.h" << endl;
-
-      int drive_status = 0;
-      if( (drive_status = ::ioctl(d->deviceFd,CDROM_DRIVE_STATUS)) < 0 ) {
-	kdDebug() << "(K3bCdDevice) Error: could not get drive status" << endl;
-	ret = 1;
-      } 
-      else if( drive_status == CDS_DISC_OK )
-	ret = 0;
-      else if( drive_status == CDS_NO_DISC )
-	ret = 3;
-      else if( drive_status == CDS_TRAY_OPEN )
-	ret = 4;
-      //    }
-
-    if( needToClose )
-      close();
-
-    return ret;
-  }
-  else
-    return 2;
+  ScsiCommand cmd( this );
+  cmd[0] = 0x00; // TEST UNIT READY
+  return( cmd.transport() == 0 );
 }
 
 
@@ -1772,8 +1716,8 @@ K3bCdDevice::DiskInfo K3bCdDevice::CdDevice::diskInfo()
 
   if( open() != -1 ) {
     info.mediaType = 0;  // removed the mediaType method. use ngDiskInfo
-    int ready = isReady();
-    if( ready == 0 ) {
+    bool ready = isReady();
+    if( ready ) {
       info.toc = readToc();
       switch( info.toc.contentType() ) {
       case AUDIO:
@@ -1823,7 +1767,7 @@ K3bCdDevice::DiskInfo K3bCdDevice::CdDevice::diskInfo()
         }
       }
     }
-    else if( ready >= 3 ) {  // no disk or tray open
+    else {  // no disk or tray open
       kdDebug() << "(K3bCdDevice::CdDevice::diskInfo) no disk or tray open." << endl;
       info.valid = true;
       info.noDisk = true;
@@ -1894,12 +1838,19 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
     // We do this with requesting the current profile. If it is 0 no media
     // should be loaded. On an error we just go on.
     //
-    int profile = currentProfile();
-    if( profile == MEDIA_NONE ) {
+    if( !isReady() ) {
+      // no disk or tray open
       inf.m_diskState = STATE_NO_MEDIA;
       inf.m_mediaType = MEDIA_NONE;
     }
-    inf.m_currentProfile = profile;
+    else {
+      int profile = currentProfile();
+      if( profile == MEDIA_NONE ) {
+	inf.m_diskState = STATE_NO_MEDIA;
+	inf.m_mediaType = MEDIA_NONE;
+      }
+      inf.m_currentProfile = profile;
+    }
 
     ScsiCommand cmd( this );
 
@@ -2599,6 +2550,11 @@ int K3bCdDevice::CdDevice::getIndex( unsigned long lba ) const
   unsigned char readData[16];
   ::memset( readData, 0, 16 );
 
+  //
+  // The index is found in the Mode-1 Q which occupies at least 9 out of 10 successive CD frames
+  // It can be indentified by ADR == 1
+  //
+  
   if( readCd( readData, 
 	      16,
 	      1, // CD-DA
@@ -2613,7 +2569,11 @@ int K3bCdDevice::CdDevice::getIndex( unsigned long lba ) const
 	      0,
 	      2 // Q-Subchannel
 	      ) ) {
-    ret = readData[2];
+    // byte 0: 4 bits CONTROL + 4 bits ADR 
+    if( (readData[0]<<4 & 0x0F) == 1 )
+      ret = readData[2];
+    else
+      ret = -2;
   }
   else {
     kdDebug() << "(K3bCdDevice::CdDevice::getIndex) readCd failed. Trying seek." << endl;
@@ -2621,8 +2581,11 @@ int K3bCdDevice::CdDevice::getIndex( unsigned long lba ) const
     unsigned char* data = 0;
     int dataLen = 0;
     if( seek( lba ) && readSubChannel( &data, dataLen, 1, 0 ) ) {
-      if( dataLen > 7 )
+      // byte 5: 4 bits ADR + 4 bits CONTROL
+      if( dataLen > 7 && (data[5]>>4 & 0x0F) == 1 )
 	ret = data[7];
+      else
+	ret = -2;
       
       delete [] data;
     }
@@ -2674,6 +2637,12 @@ bool K3bCdDevice::CdDevice::searchIndex0( unsigned long startSec,
       if( sector < startSec )
 	sector = startSec;
       lastIndex = getIndex(sector);
+
+      // there may be a frame without index info
+      if( lastIndex == -2 ) {
+	sector--;
+	lastIndex = getIndex(sector);
+      }
     }
 
     if( lastIndex == 0 ) {

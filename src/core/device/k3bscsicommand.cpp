@@ -84,8 +84,52 @@ int K3bCdDevice::ScsiCommand::transport( TransportDirection dir,
     m_cmd.data_direction = CGC_DATA_NONE;
 
   if( ::ioctl( m_fd, CDROM_SEND_PACKET, &m_cmd ) ) {
-    kdDebug() << "(K3bCdDevice::ScsiCommand) failed: fd: " << m_fd 
-	      << " errorcode: " << m_sense.error_code << endl;
+    kdDebug() << "(K3bCdDevice::ScsiCommand) failed: fd: " << m_fd << endl
+	      << "                           command:    " << QString::number(m_cmd.cmd[0], 16) << endl
+	      << "                           errorcode:  " << QString::number((int)m_sense.error_code, 16) << endl
+	      << "                           asc:        " << QString::number((int)m_sense.asc, 16) << endl
+	      << "                           ascq:       " << QString::number((int)m_sense.ascq, 16) << endl;
+    switch( m_sense.sense_key ) {
+    case 0x0:
+      kdDebug() << "                           sense key:  NO SENSE (2)" << endl;
+      break;
+    case 0x1:
+      kdDebug() << "                           sense key:  RECOVERED ERROR (1)" << endl;
+      break;
+    case 0x2:
+      kdDebug() << "                           sense key:  NOT READY (2)" << endl;
+      break;
+    case 0x3:
+      kdDebug() << "                           sense key:  MEDIUM ERROR (3)" << endl;
+      break;
+    case 0x4:
+      kdDebug() << "                           sense key:  HARDWARE ERROR (4)" << endl;
+      break;
+    case 0x5:
+      kdDebug() << "                           sense key:  ILLEGAL REQUEST (5)" << endl;
+      break;
+    case 0x6:
+      kdDebug() << "                           sense key:  UNIT ATTENTION (6)" << endl;
+      break;
+    case 0x7:
+      kdDebug() << "                           sense key:  DATA PROTECT (7)" << endl;
+      break;
+    case 0x8:
+      kdDebug() << "                           sense key:  BLANK CHECK (8)" << endl;
+      break;
+    case 0x9:
+      kdDebug() << "                           sense key:  VENDOR SPECIFIC (9)" << endl;
+      break;
+    case 0xA:
+      kdDebug() << "                           sense key:  COPY ABORTED (A)" << endl;
+      break;
+    case 0xB:
+      kdDebug() << "                           sense key:  ABORTED COMMAND (B)" << endl;
+      break;
+    case 0xC:
+      kdDebug() << "                           sense key:  0xC is obsolete... ??" << endl;
+      break;
+    }
     return( m_sense.error_code != 0 ? m_sense.error_code : -1 );
   }
   else
