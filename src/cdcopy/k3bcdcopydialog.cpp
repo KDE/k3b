@@ -206,7 +206,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   // ToolTips
   // --------------------------------------------------------------------------------
   QToolTip::add( m_checkFastToc, i18n("Do not extract pre-gaps and index marks") );
-  QToolTip::add( m_comboSourceDevice, i18n("Select the drive with the CD to duplicatey") );
+  QToolTip::add( m_comboSourceDevice, i18n("Select the drive with the CD to duplicate") );
   QToolTip::add( m_spinCopies, i18n("Number of copies") );
   QToolTip::add( m_checkRawCopy, i18n("Write all data sectors as 2352 byte blocks") );
   QToolTip::add( m_comboSubchanMode, i18n("Set the sub-channel data to be extracted") );

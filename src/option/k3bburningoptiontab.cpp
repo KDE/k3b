@@ -196,7 +196,7 @@ void K3bBurningOptionTab::setupGui()
   QWhatsThis::add( m_checkUseID3Tag, i18n("<p>If this option is checked K3b will rename audio files "
 					  "that contain meta information (for example id3 tags in mp3 "
 					  "files) to the following format:"
-					  "<p><em>Artist - Title.extention</em>") );
+					  "<p><em>Artist - Title.extension</em>") );
   QWhatsThis::add( m_checkDropDoubles, i18n("<p>If this option is checked K3b will not ask how to "
 					    "handle a file that already exists in the project "
 					    "but just ignore it."
