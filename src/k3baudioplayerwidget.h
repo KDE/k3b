@@ -73,6 +73,8 @@ class K3bAudioPlayerWidget : public QWidget
 
    QTimer* m_displayTimer;
    bool m_bLengthReady;
+
+   QString m_filename;
 };
 
 #endif

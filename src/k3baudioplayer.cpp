@@ -147,7 +147,10 @@ long K3bAudioPlayer::position()
 // FIXME: let my do some useful stuff!
 bool K3bAudioPlayer::supportsMimetype( const QString& mimetype )
 {
-  return ( mimetype.contains("audio") );
+  if( mimetype.contains("audio") || mimetype.contains("ogg") )
+    return true;
+  else
+    return false;
 }
 
 
