@@ -32,6 +32,8 @@ class K3bDataVerifyingJob : public K3bJob
   K3bDataVerifyingJob( QObject* parent = 0, const char* name = 0 );
   ~K3bDataVerifyingJob();
 
+  bool active() const;
+
  public slots:
   void start();
   void cancel();

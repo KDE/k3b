@@ -103,10 +103,6 @@ class K3bDoc : public QObject
   /**
    * Subclasses should call this when reimplementing.
    * Sets some defaults.
-   * TODO: Basicly this is not needed at all in the
-   * K3b project structures as it may all be done in the constructor
-   * since one K3bDoc will never be reused (except we introduce a 
-   * method to clear a project which has been requested by a user.)
    */
   virtual bool newDocument();
 

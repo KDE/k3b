@@ -17,14 +17,20 @@
 #ifndef _K3B_WELCOME_WIDGET_H_
 #define _K3B_WELCOME_WIDGET_H_
 
-#include <qwidget.h>
+#include <qscrollview.h>
+
+#include <kurl.h>
 
 class K3bMainWindow;
 class QDropEvent;
 class QDragEnterEvent;
+class QToolButton;
+class QPaintEvent;
+class QResizeEvent;
+class QSimpleRichText;
 
 
-class K3bWelcomeWidget : public QWidget
+class K3bWelcomeWidget : public QScrollView
 {
   Q_OBJECT
 
@@ -32,16 +38,43 @@ class K3bWelcomeWidget : public QWidget
   K3bWelcomeWidget( K3bMainWindow*, QWidget* parent = 0, const char* name = 0 );
   ~K3bWelcomeWidget();
 
- private slots:
-  void slotUrlClick( const QString& );
-  void slotMailClick( const QString& adress, const QString& );
+  class Display;
 
  protected:
+  void resizeEvent( QResizeEvent* );
+
+ private:
+  K3bMainWindow* m_mainWindow;
+  Display* main;
+};
+
+
+class K3bWelcomeWidget::Display : public QWidget
+{
+  Q_OBJECT
+
+ public:
+  Display( QWidget* parent );
+
+  QToolButton* audioDocButton;
+  QToolButton* dataDocButton;
+  QToolButton* dataDvdDocButton;
+  QToolButton* copyCdButton;
+
+  QSize sizeHint() const { return m_size; }
+
+ signals:
+  void dropped( const KURL::List& );
+
+ protected:
+  void paintEvent( QPaintEvent* );
   void dropEvent( QDropEvent* event );
   void dragEnterEvent( QDragEnterEvent* event );
 
  private:
-  K3bMainWindow* m_mainWindow;
+  QSimpleRichText* m_header;
+  QSize m_size;
 };
+
 
 #endif

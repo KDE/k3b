@@ -3,6 +3,7 @@
 <MenuBar>
   <Menu name="project"><text>&amp;Project</text>
   	<Action name="project_add_files" />
+	<Action name="project_clear_project" />
   </Menu>
 
   <Menu name="tools"><text>&amp;Tools</text>
@@ -62,6 +63,7 @@
 		<Action name="file_save_as" />
 		<Action name="file_close" />
 	  	<Action name="project_add_files" />		
+		<Action name="project_clear_project" />
 	</enable>
 </State>
 </kpartgui>

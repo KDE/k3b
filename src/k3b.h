@@ -132,6 +132,8 @@ class K3bMainWindow : public KParts::DockMainWindow
   K3bDoc* slotNewMovixDvdDoc();
   K3bDoc* slotNewDvdDoc();
 
+  void slotClearProject();
+
   void slotBlankCdrw();
   void slotFormatDvd();
   void slotWriteCdIsoImage();

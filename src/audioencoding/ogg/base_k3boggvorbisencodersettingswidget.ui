@@ -93,9 +93,7 @@
                         <string>Controls the quality of the encoded files</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;Vorbis' audio quality is not best measured in kilobits per second, but on a scale from 0 to 10 called "quality".
-&lt;p&gt;For now, quality 0 is roughly equivalent to 64kbps average, 5 is roughly 160kbps, and 10 gives about 400kbps. Most people seeking very-near-CD-quality audio encode at a quality of 5 or, for lossless stereo coupling, 6. The default setting is quality 3, which at approximately 110kbps gives a smaller filesize and significantly better fidelity than .mp3 compression at 128kbps.
-&lt;p&gt;&lt;em&gt;This explanation was copied from the www.vorbis.com FAQ.&lt;/em&gt;</string>
+                        <string>&lt;p&gt;Vorbis' audio quality is not best measured in kilobits per second, but on a scale from 0 to 10 called "quality". &lt;p&gt;For now, quality 0 is roughly equivalent to 64kbps average, 5 is roughly 160kbps, and 10 gives about 400kbps. Most people seeking very-near-CD-quality audio encode at a quality of 5 or, for lossless stereo coupling, 6. The default setting is quality 3, which at approximately 110kbps gives a smaller filesize and significantly better fidelity than .mp3 compression at 128kbps. &lt;p&gt;&lt;em&gt;This explanation was copied from the www.vorbis.com FAQ.&lt;/em&gt;</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton" row="1" column="0" rowspan="1" colspan="2">

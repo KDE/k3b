@@ -19,90 +19,126 @@
 #include <k3bcore.h>
 #include <k3bversion.h>
 
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qfile.h>
-#include <qtextstream.h>
 #include <qpixmap.h>
+#include <qtoolbutton.h>
+#include <qlabel.h>
+#include <qpainter.h>
+#include <qsimplerichtext.h>
 
 #include <kurl.h>
 #include <kurldrag.h>
 #include <klocale.h>
-#include <ktextbrowser.h>
 #include <kstandarddirs.h>
 #include <kapplication.h>
+#include <kiconloader.h>
+#include <kglobal.h>
+
+
+
+K3bWelcomeWidget::Display::Display( QWidget* parent )
+  : QWidget( parent )
+{
+  m_header = new QSimpleRichText( "<qt><h1>" + i18n("Welcome to K3b %1 - The CD/DVD Burning Facility")
+				  .arg( k3bcore->version() ), font() );
+  // set a large width just to be sure no linebreak occurs
+  m_header->setWidth( 800 );
+
+  setAcceptDrops( true );
+  setBackgroundMode( PaletteBase );
+  setPaletteBackgroundPixmap( locate( "appdata", "pics/k3b_3d_logo.png" ) );
+
+  // now we add the buttons with fixed coordinates
+  audioDocButton = new QToolButton( this );
+  dataDocButton = new QToolButton( this );
+  dataDvdDocButton = new QToolButton( this );
+  copyCdButton = new QToolButton( this );
+
+  audioDocButton->setTextLabel( i18n("Create Audio CD Project") );
+  dataDocButton->setTextLabel( i18n("Create Data CD Project") );
+  dataDvdDocButton->setTextLabel( i18n("Create Data DVD Project") );
+  copyCdButton->setTextLabel( i18n("Copy CD") );
+
+  audioDocButton->setIconSet( DesktopIcon( "sound" ) );
+  dataDocButton->setIconSet( DesktopIcon( "tar" ) );
+  dataDvdDocButton->setIconSet( DesktopIcon( "dvd_unmount" ) );
+  copyCdButton->setIconSet( DesktopIcon( "cdcopy" ) );
+
+  audioDocButton->setUsesTextLabel( true );
+  dataDocButton->setUsesTextLabel( true );
+  dataDvdDocButton->setUsesTextLabel( true );
+  copyCdButton->setUsesTextLabel( true );
+
+  audioDocButton->setUsesBigPixmap( true );
+  dataDocButton->setUsesBigPixmap( true );
+  dataDvdDocButton->setUsesBigPixmap( true );
+  copyCdButton->setUsesBigPixmap( true );
+
+  audioDocButton->setAutoRaise( true );
+  dataDocButton->setAutoRaise( true );
+  dataDvdDocButton->setAutoRaise( true );
+  copyCdButton->setAutoRaise( true );
+
+  audioDocButton->setTextPosition( QToolButton::Under );
+  dataDocButton->setTextPosition( QToolButton::Under );
+  dataDvdDocButton->setTextPosition( QToolButton::Under );
+  copyCdButton->setTextPosition( QToolButton::Under );
+
+  // position the buttons
+  QRect r( QPoint(80, 80), audioDocButton->sizeHint() );
+  audioDocButton->setGeometry( r );
+  r.moveBy( audioDocButton->sizeHint().width(), 0 );
+  dataDvdDocButton->setGeometry( r );
+  r.moveBy( 0, audioDocButton->sizeHint().height() );
+  copyCdButton->setGeometry( r );
+  r.moveBy( -1 * audioDocButton->sizeHint().width(), 0 );
+  dataDocButton->setGeometry( r );
+
+  m_size = QSize( QMAX(20+m_header->widthUsed(), 80+(audioDocButton->width()*2)),
+		  80+(audioDocButton->height()*2) );
+}
+
+
+void K3bWelcomeWidget::Display::paintEvent( QPaintEvent* e )
+{
+  QWidget::paintEvent( e );
+
+  QPainter p( this );
+  m_header->draw( &p, 20, 20, QRect(), colorGroup() );
+}
+
+
+void K3bWelcomeWidget::Display::dragEnterEvent( QDragEnterEvent* event )
+{
+  event->accept( KURLDrag::canDecode(event) );
+}
+
+
+void K3bWelcomeWidget::Display::dropEvent( QDropEvent* e )
+{
+  KURL::List urls;
+  KURLDrag::decode( e, urls );
+  emit dropped( urls );
+}
 
 
 
 K3bWelcomeWidget::K3bWelcomeWidget( K3bMainWindow* mw, QWidget* parent, const char* name )
-  : QWidget( parent, name ),
+  : QScrollView( parent, name ),
     m_mainWindow( mw )
 {
-  setAcceptDrops( true );
+  main = new Display( viewport() );
+  addChild( main );
 
-  // header
-  QFrame* headerFrame = K3bStdGuiItems::purpleFrame( this );
-  QLabel* topPixLabel = new QLabel( headerFrame );
-  QLabel* topLeftPixLabel = new QLabel( headerFrame );
-  QLabel* headerLabel = new QLabel( i18n("Welcome to K3b %1 - The CD/DVD burning facility").arg(k3bcore->version()),
-				    headerFrame );
-  QFont fnt(headerLabel->font());
-  fnt.setBold(true);
-  fnt.setPointSize( 14 );
-  headerLabel->setFont( fnt );
-  headerLabel->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
-  headerLabel->setIndent( 5 );
-  QGridLayout* headerGrid = new QGridLayout( headerFrame );
-  headerGrid->setMargin( 2 );
-  headerGrid->setSpacing( 0 );
-  headerGrid->addWidget( topLeftPixLabel, 0, 0 );
-  headerGrid->addWidget( headerLabel, 0, 1 );
-  headerGrid->addWidget( topPixLabel, 0, 2 );
-  headerGrid->setColStretch( 1, 1 );
+//   viewport()->resize( 800, 400 );
+//   main->resize( 800, 400 );
+ 
+  // connect the buttons
+  connect( main->audioDocButton, SIGNAL(clicked()), m_mainWindow, SLOT(slotNewAudioDoc()) );
+  connect( main->dataDocButton, SIGNAL(clicked()), m_mainWindow, SLOT(slotNewDataDoc()) );
+  connect( main->dataDvdDocButton, SIGNAL(clicked()), m_mainWindow, SLOT(slotNewDvdDoc()) );
+  connect( main->copyCdButton, SIGNAL(clicked()), m_mainWindow, SLOT(slotCdCopy()) );
 
-  // text browser
-  KTextBrowser* browser = new KTextBrowser( this );
-  browser->setNotifyClick( true );
-
-  // layout
-  QGridLayout* mainGrid = new QGridLayout( this );
-  mainGrid->setMargin( 2 );
-  mainGrid->setSpacing( 0 );
-  mainGrid->addWidget( headerFrame, 0, 0 );
-  mainGrid->addWidget( browser, 1, 0 );
-  mainGrid->setRowStretch( 1, 1 );
-
-
-  topPixLabel->setPixmap( QPixmap(locate( "appdata", "pics/k3bprojectview_right.png" )) );
-  topLeftPixLabel->setPixmap( QPixmap(locate( "appdata", "pics/k3bprojectview_left_short.png" )) );
-
-  QFile f( locate( "appdata", "k3bwelcomemessage.html" ) );
-  if( f.open( IO_ReadOnly ) ) {
-    QTextStream s( &f );
-    browser->setText( s.read()
-		      .arg( i18n("Use the following links to access the most often used actions:") )
-		      .arg( i18n("Create Audio CD") )
-    		      .arg( i18n("Create Data CD") )
-  		      .arg( i18n("Create Data DVD") )
-     		      .arg( i18n("Copy CD") )
-		      .arg( i18n("K3b basicly consits of three parts:") )
-		      .arg( i18n("The projects:") )
-		      .arg( i18n("Projects are created from the <em>file</em> menu and then filled with data to burn.") )
-		      .arg( i18n("The tools:") )
-		      .arg( i18n("The <em>tools</em> menu offers different tools like CD copy or DVD formatting.") )
-		      .arg( i18n("Context sensitive media actions:") )
-		      .arg( i18n("When clicking on the Icon representing a CD/DVD drive K3b will present "
-				 "it's contents and allow some further action. This is for example the way "
-				 "to rip audio CDs.") )
-		      );
-  }
-  else
-    browser->setText( i18n("File %1 not found").arg("k3bwelcomemessage.html") );
-
-  connect( browser, SIGNAL(mailClick(const QString&, const QString&)),
-	   this, SLOT(slotMailClick(const QString&, const QString&)) );
-  connect( browser, SIGNAL(urlClick(const QString&)),
-	   this, SLOT(slotUrlClick(const QString&)) );
+  connect( main, SIGNAL(dropped(const KURL::List&)), m_mainWindow, SLOT(addUrls(const KURL::List&)) );
 }
 
 
@@ -111,35 +147,26 @@ K3bWelcomeWidget::~K3bWelcomeWidget()
 }
 
 
-void K3bWelcomeWidget::slotUrlClick( const QString& url )
+void K3bWelcomeWidget::resizeEvent( QResizeEvent* e )
 {
-  if( url == "audiocd" )
-    m_mainWindow->slotNewAudioDoc();
-  else if( url == "datacd" )
-    m_mainWindow->slotNewDataDoc();
-  else if( url == "datadvd" )
-    m_mainWindow->slotNewDvdDoc();
-  else if( url == "copycd" )
-    m_mainWindow->slotCdCopy();
+  QScrollView::resizeEvent( e );
+
+  QRect r( contentsRect() );
+  QSize s = r.size();
+  if( s.width() < main->sizeHint().width() )
+    s.setWidth( main->sizeHint().width() );
+  if( s.height() < main->sizeHint().height() )
+    s.setHeight( main->sizeHint().height() );
+
+  main->resize( s );
+  viewport()->resize( s );
 }
 
 
-void K3bWelcomeWidget::slotMailClick( const QString& adress, const QString& )
-{
-  kapp->invokeMailer( adress, "K3b: " );
-}
+// void K3bWelcomeWidget::slotMailClick( const QString& adress, const QString& )
+// {
+//   kapp->invokeMailer( adress, "K3b: " );
+// }
 
-void K3bWelcomeWidget::dragEnterEvent( QDragEnterEvent* event )
-{
-  event->accept( KURLDrag::canDecode(event) );
-}
-
-
-void K3bWelcomeWidget::dropEvent( QDropEvent* e )
-{
-  KURL::List urls;
-  KURLDrag::decode( e, urls );
-  m_mainWindow->addUrls( urls );
-}
 
 #include "k3bwelcomewidget.moc"

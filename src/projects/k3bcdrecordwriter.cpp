@@ -44,10 +44,12 @@
 class K3bCdrecordWriter::Private
 {
 public:
-  Private() {
+  Private() 
+    : running(false){
   }
 
   K3bThroughputEstimator* speedEst;
+  bool running;
 };
 
 
@@ -71,6 +73,12 @@ K3bCdrecordWriter::~K3bCdrecordWriter()
 {
   delete d;
   delete m_process;
+}
+
+
+bool K3bCdrecordWriter::active() const
+{
+  return d->running;
 }
 
 
@@ -219,6 +227,7 @@ void K3bCdrecordWriter::start()
 {
   emit started();
 
+  d->running = true;
   d->speedEst->reset();
 
   prepareProcess();
@@ -226,6 +235,7 @@ void K3bCdrecordWriter::start()
   if( !m_cdrecordBinObject ) {
     emit infoMessage( i18n("Could not find %1 executable.").arg("cdrecord"), ERROR );
     emit finished(false);
+    d->running = false;
     return;
   }
 
@@ -256,6 +266,7 @@ void K3bCdrecordWriter::start()
     // it "should" be the executable
     kdDebug() << "(K3bCdrecordWriter) could not start " << m_cdrecordBinObject->name() << endl;
     emit infoMessage( i18n("Could not start %1.").arg(m_cdrecordBinObject->name()), K3bJob::ERROR );
+    d->running = false;
     emit finished(false);
   }
   else {
@@ -287,13 +298,15 @@ void K3bCdrecordWriter::start()
 
 void K3bCdrecordWriter::cancel()
 {
-  if( m_process ) {
-    if( m_process->isRunning() ) {
-      m_process->disconnect();
-      m_process->kill();
-
-      // this will unblock and eject the drive and emit the finished/canceled signals
-      K3bAbstractWriter::cancel();
+  if( active() ) {
+    if( m_process ) {
+      if( m_process->isRunning() ) {
+	m_process->disconnect();
+	m_process->kill();
+	
+	// this will unblock and eject the drive and emit the finished/canceled signals
+	K3bAbstractWriter::cancel();
+      }
     }
   }
 }
@@ -570,6 +583,7 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	int s = d->speedEst->average();
 	emit infoMessage( i18n("Average overall write speed: %1 kb/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/150.0), 2), INFO );
 	
+	d->running = false;
 	emit finished( true );
       }
       break;
@@ -620,12 +634,14 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	}
 	break;
       }
+      d->running = false;
       emit finished( false );
     }
   }
   else {
     emit infoMessage( i18n("%1 did not exit cleanly.").arg(m_cdrecordBinObject->name()), 
 		      ERROR );
+    d->running = false;
     emit finished( false );
   }
 }

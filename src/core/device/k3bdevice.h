@@ -291,6 +291,22 @@ namespace K3bCdDevice
     NextGenerationDiskInfo ngDiskInfo();
 
     /**
+     * Refers to MMC command READ CAPACITY
+     */
+    bool readCapacity( K3b::Msf& );
+
+    /**
+     * Refers to MMC command READ FORMAT CAPACITY
+     */
+    bool readFormatCapacity( K3b::Msf& );
+
+    /**
+     * Does only make sense for dvd media.
+     * @returns -1 on error K3bCdDevice::MediaType otherwise
+     */
+    int dvdMediaType();
+
+    /**
      * @return fd on success; -1 on failure
      */
     int open() const;

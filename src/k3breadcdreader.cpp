@@ -75,6 +75,12 @@ K3bReadcdReader::~K3bReadcdReader()
 }
 
 
+bool K3bReadcdReader::active() const
+{
+  return (d->process ? d->process->isRunning() : false);
+}
+
+
 void K3bReadcdReader::writeToFd( int fd )
 {
   d->fdToWriteTo = fd;

@@ -56,6 +56,7 @@
 #include <kaboutdata.h>
 #include <ktip.h>
 #include <kxmlguifactory.h>
+#include <kstdguiitem.h>
 
 #include <stdlib.h>
 
@@ -163,7 +164,7 @@ K3bMainWindow::K3bMainWindow()
   manager()->setSplitterOpaqueResize(true);
   manager()->setSplitterKeepSize(true);
 
-  resize(787,478);  // default optimized for 800x600
+  resize(780,520);  // default optimized for 800x600
 
   ///////////////////////////////////////////////////////////////////
   // call inits to invoke all other construction parts
@@ -256,6 +257,9 @@ void K3bMainWindow::initActions()
 
   actionProjectAddFiles = new KAction( i18n("&Add Files..."), "filenew", 0, this, SLOT(slotProjectAddFiles()),
 				       actionCollection(), "project_add_files");
+
+  (void)new KAction( i18n("&Clear Project"), "clear_left", 0, this, SLOT(slotClearProject()),
+		     actionCollection(), "project_clear_project" );
 
   actionViewDirTreeView = new KToggleAction(i18n("Show Directories"), 0, this, SLOT(slotShowDirTreeView()),
 					    actionCollection(), "view_dir_tree");
@@ -1392,5 +1396,21 @@ void K3bMainWindow::addUrls( const KURL::List& urls )
   }
 }
 
+
+void K3bMainWindow::slotClearProject()
+{
+  K3bDoc* doc = k3bprojectmanager->activeDoc();
+  if( doc ) {
+    if( KMessageBox::questionYesNo( this, 
+				    i18n("Do you really want to clear the current project?"),
+				    i18n("Clear Project"),
+				    KStdGuiItem::yes(),
+				    KStdGuiItem::no(),
+				    "clear_current_project_dontAskAgain" ) == KMessageBox::Yes ) {
+      doc->newDocument();
+      doc->loadDefaultSettings( config() );
+    }
+  }
+}
 
 #include "k3b.moc"

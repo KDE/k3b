@@ -197,6 +197,12 @@ int K3bCdrdaoWriter::fd() const
 }
 
 
+bool K3bCdrdaoWriter::active() const
+{
+  return (m_process ? m_process->isRunning() : false);
+}
+
+
 void K3bCdrdaoWriter::prepareArgumentList()
 {
 
@@ -725,7 +731,7 @@ void K3bCdrdaoWriter::slotProcessExited( KProcess* p )
   }
   else
   {
-    emit infoMessage( i18n("Cdrdao did not exit cleanly."), K3bJob::ERROR );
+    emit infoMessage( i18n("%1 did not exit cleanly.").arg("cdrdao"), K3bJob::ERROR );
     emit finished( false );
   }
 }

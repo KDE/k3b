@@ -320,10 +320,10 @@ void K3bAudioTrackDialog::setupGui()
   QLabel* labelSize = new QLabel( i18n( "Size" ), groupFileInfo, "labelSize" );
   QLabel* labelLength = new QLabel( i18n( "Length"), groupFileInfo, "labelLength" );
   m_displaySize = new QLabel( groupFileInfo, "m_displaySize" );
-  m_displaySize->setText( i18n( "0.0 MB" ) );
+  m_displaySize->setText( "0.0 MB" );
   m_displaySize->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
   m_displayLength = new QLabel( groupFileInfo, "m_displayLength" );
-  m_displayLength->setText( i18n( "0:0:0" ) );
+  m_displayLength->setText( "0:0:0" );
   m_displayLength->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
 
   QFrame* fileInfoLine = new QFrame( groupFileInfo );

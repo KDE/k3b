@@ -46,6 +46,9 @@ public:
   K3bThroughputEstimator* speedEst;
 
   bool writingStarted;
+
+  int lastPercent;
+  int lastProcessedSize;
 };
 
 
@@ -76,6 +79,7 @@ void K3bGrowisofsImager::start()
 
   d->speedEst->reset();
   d->writingStarted = false;
+  d->lastProcessedSize = d->lastPercent = 0;
 
   m_process = new K3bProcess();
   m_growisofsBin = k3bcore->externalBinManager()->binObject( "growisofs" );
@@ -236,7 +240,15 @@ void K3bGrowisofsImager::slotReceivedStderr( const QString& line )
     int p = K3bIsoImager::parseProgress( line );
     if( p != -1 ) {
       d->speedEst->dataWritten( p*m_doc->size()/1024/100 );
-      emit percent( p );
+      if( p > d->lastPercent ) {
+	emit percent( p );
+	d->lastPercent = p;
+      }
+      int ps = p*m_doc->size()/1024/1024/100;
+      if( ps > d->lastProcessedSize ) {
+	emit processedSize( ps, m_doc->size()/1024/1024 );
+	d->lastProcessedSize = ps;
+      }
     }
   }
   else if( line.contains( "flushing cache" ) ) {
@@ -290,6 +302,8 @@ void K3bGrowisofsImager::slotReceivedStderr( const QString& line )
 
 void K3bGrowisofsImager::slotProcessExited( KProcess* p )
 {
+  m_processExited = true;
+
   //
   // This is more or less the same as in K3bGrowisofsWriter. :(
   //

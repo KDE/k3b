@@ -198,7 +198,7 @@ void K3bAudioNormalizeJob::slotProcessExited( KProcess* p )
     }
   }
   else {
-    emit infoMessage( i18n("Normalize did not exit cleanly."), K3bJob::ERROR );
+    emit infoMessage( i18n("%1 did not exit cleanly.").arg("Normalize"), K3bJob::ERROR );
     emit finished( false );
   }
 }

@@ -95,13 +95,16 @@ void K3bDvdJob::start()
 
   if( !m_doc->onTheFly() || m_doc->onlyCreateImages() ) {
     emit newTask( i18n("Writing data") );
+    emit burning(false);
     writeImage();
   }
   else {
     prepareGrowisofsImager();
     
-    if( waitForDvd() )
+    if( waitForDvd() ) {
+      emit burning(true);
       m_growisofsImager->start();
+    }
     else
       emit finished(false);
   }
@@ -160,6 +163,7 @@ void K3bDvdJob::prepareGrowisofsImager()
     connect( m_growisofsImager, SIGNAL(infoMessage(const QString&, int)), 
 	     this, SIGNAL(infoMessage(const QString&, int)) );
     connect( m_growisofsImager, SIGNAL(percent(int)), this, SLOT(slotGrowisofsImagerPercent(int)) );
+    connect( m_growisofsImager, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSize(int, int)) );
     connect( m_growisofsImager, SIGNAL(writeSpeed(int, int)), this, SIGNAL(writeSpeed(int, int)) );
     connect( m_growisofsImager, SIGNAL(finished(bool)), this, SLOT(slotWritingFinished(bool)) );
     connect( m_growisofsImager, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
@@ -223,8 +227,10 @@ void K3bDvdJob::slotIsoImagerFinished( bool success )
     }
     else {
       if( prepareWriterJob() ) {
-	if( waitForDvd() )
+	if( waitForDvd() ) {
+	  emit burning(true);
 	  m_writerJob->start();
+	}
 	else
 	  emit finished(false);
       }
@@ -432,6 +438,8 @@ void K3bDvdJob::cleanup()
 
 bool K3bDvdJob::waitForDvd()
 {
+  emit infoMessage( i18n("Waiting for media") + "...", INFO );
+
   int mt = 0;
   if( m_doc->writingMode() == K3b::WRITING_MODE_INCR_SEQ || m_doc->writingMode() == K3b::DAO )
     mt = K3bCdDevice::MEDIA_DVD_RW_SEQ|K3bCdDevice::MEDIA_DVD_R_SEQ;

@@ -51,6 +51,8 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
 
   int fd() const;
 
+  bool active() const;
+
  private:
   void reinitParser();
   void parseCdrdaoLine( const QString& line );

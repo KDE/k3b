@@ -81,7 +81,6 @@ void K3bVcdJob::cancel()
 {
     cancelAll();
 
-    emit infoMessage( i18n( "Job canceled by user." ), K3bJob::ERROR );
     emit canceled();
     emit finished( false );
 }
@@ -181,7 +180,7 @@ void K3bVcdJob::vcdxBuild()
     const K3bExternalBin* bin = k3bcore ->externalBinManager() ->binObject( "vcdxbuild" );
     if ( !bin ) {
         kdDebug() << "(K3bVcdJob) could not find vcdxbuild executable" << endl;
-        emit infoMessage( i18n( "vcdxbuild executable not found." ), K3bJob::ERROR );
+        emit infoMessage( i18n("Could not find %1 executable.").arg("vcdxbuild"), K3bJob::ERROR );
         emit infoMessage(i18n( "To create VideoCD's you must install VcdImager >= 0.7.12." ), K3bJob::INFO );
         emit infoMessage(i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ),K3bJob::INFO );
         cancelAll();
@@ -233,7 +232,7 @@ void K3bVcdJob::vcdxBuild()
 
     if ( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
         kdDebug() << "(K3bVcdJob) could not start vcdxbuild" << endl;
-        emit infoMessage( i18n( "Could not start vcdxbuild!" ), K3bJob::ERROR );
+        emit infoMessage( i18n( "Could not start %1." ).arg("vcdxbuild"), K3bJob::ERROR );
         cancelAll();
         emit finished( false );
     }
@@ -350,7 +349,7 @@ void K3bVcdJob::slotVcdxBuildFinished()
 	      return ;
         }
     } else {
-        emit infoMessage( i18n( "vcdxbuild did not exit cleanly." ), K3bJob::ERROR );
+        emit infoMessage( i18n( "%1 did not exit cleanly." ).arg("Vcdxbuild"), K3bJob::ERROR );
         cancelAll();
         emit finished( false );
         return ;

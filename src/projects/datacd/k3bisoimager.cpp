@@ -65,6 +65,12 @@ K3bIsoImager::~K3bIsoImager()
 }
 
 
+bool K3bIsoImager::active() const
+{
+  return !m_processExited;
+}
+
+
 void K3bIsoImager::writeToFd( int fd )
 {
   m_fdToWriteTo = fd;

@@ -80,17 +80,16 @@ K3bVcdDoc::~K3bVcdDoc()
 
 bool K3bVcdDoc::newDocument()
 {
-    if ( m_tracks )
-        m_tracks->setAutoDelete( true );
-
-    delete m_tracks;
-
+  if( m_tracks )
+    while( m_tracks->first() )
+      removeTrack( m_tracks->first() );
+  else
     m_tracks = new QPtrList<K3bVcdTrack>;
-    m_tracks->setAutoDelete( false );
+  m_tracks->setAutoDelete( false );
 
-    m_vcdOptions = new K3bVcdOptions();
+  m_vcdOptions = new K3bVcdOptions();
 
-    return K3bDoc::newDocument();
+  return K3bDoc::newDocument();
 }
 
 KIO::filesize_t K3bVcdDoc::calcTotalSize() const
@@ -202,7 +201,9 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
                 setVcdType( vcdTypes( mpegVersion ) );
                 vcdOptions() ->setMpegVersion( mpegVersion );
                 KMessageBox::information( kapp->mainWidget(),
-                                          i18n( "K3b will create a VCD image from the given MPEG files, but these files must already be in VCD format. K3b performs no resample on MPEG files." ),
+                                          i18n( "K3b will create a %1 image from the given MPEG "
+						"files, but these files must already be in %1 "
+						"format. K3b performs no resample on MPEG files." ).arg(i18n("VCD")),
                                           i18n( "Information" ) );
                 m_urlAddingTimer->start( 0 );
             } else if ( vcdType() == NONE ) {
@@ -210,8 +211,13 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
                 vcdOptions() ->setMpegVersion( mpegVersion );
                 bool force = false;
                 force = ( KMessageBox::questionYesNo( kapp->mainWidget(),
-                                                      i18n( "K3b will create a SVCD image from the given MPEG files, but these files must already be in SVCD format. K3b performs no resample on MPEG files yet." )
-                                                      + i18n( "\n\nNote: Forcing mpeg2 as VCD is not supported by some standalone DVD players." ),
+                                                      i18n( "K3b will create a %1 image from the given MPEG "
+							    "files, but these files must already be in %1 "
+							    "format. K3b performs no resample on MPEG files yet." )
+						      .arg(i18n("SVCD"))
+						      + "\n\n"
+                                                      + i18n( "Note: Forcing mpeg2 as VCD is not supported by "
+							      "some standalone DVD players." ),
                                                       i18n( "Information" ),
                                                       i18n( "&OK" ),
                                                       i18n( "Forcing VCD" ) ) == KMessageBox::No );
@@ -240,7 +246,7 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
             newTrack->setMpegType( Mpeg->MpegType );
             newTrack->setMpegVideoVersion( Mpeg->mpeg_version );
 
-            mt.append( i18n( " MPEG%1" ).arg( mpegVersion ) );
+            mt.append( " " + i18n( "MPEG%1" ).arg( mpegVersion ) );
 
             newTrack->setMpegDisplaySize( QString( " %1 x %2" ).arg( Mpeg->Video->hsize ).arg( Mpeg->Video->vsize ) );
             if ( Mpeg->DExt ) {
@@ -248,22 +254,22 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
                 newTrack->setMpegFormat( Mpeg->DExt->video_format );
                 switch ( Mpeg->DExt->video_format ) {
                     case 0 :
-                        mt.append( i18n( "  Component" ) );
+                        mt.append( "  " + i18n( "Component" ) );
                         break;
                     case 1 :
-                        mt.append( "  PAL" );
+                        mt.append( "  " + i18n("PAL") );
                         break;
                     case 2 :
-                        mt.append( "  NTSC" );
+                        mt.append( "  " + i18n("NTSC") );
                         break;
                     case 3 :
-                        mt.append( "  SECAM" );
+                        mt.append( "  " + i18n("SECAM") );
                         break;
                     case 4 :
-                        mt.append( "  MAC" );
+                        mt.append( "  " + i18n("MAC") );
                         break;
                     case 5 :
-                        mt.append( i18n( "  Unspecified" ) );
+                        mt.append( "  " + i18n( "Unspecified" ) );
                         break;
                 }
                 if ( ( Mpeg->DExt->h_display_size != Mpeg->Video->hsize ) || ( Mpeg->DExt->v_display_size != Mpeg->Video->vsize ) )

@@ -32,7 +32,7 @@ K3bVcdOptions::K3bVcdOptions()
         : m_restriction( 0 ),
         m_pbcenabled( PbcEnabled() ),
         m_pbcnumkeys( PbcNumKeys() ),
-        m_volumeID( i18n( "Project name", "VIDEOCD" ) ),
+        m_volumeID( i18n( "VIDEOCD" ) ),
         m_albumID( "" ),
         m_volumeSetId( "" ),
         m_publisher( QString( "K3b - Version %1" ).arg( k3bcore->version() ) ),

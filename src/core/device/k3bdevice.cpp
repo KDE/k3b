@@ -831,15 +831,19 @@ bool K3bCdDevice::CdDevice::isDVD() const
     return ret;
 
   if( d->deviceType & (DVDR | DVDRAM | DVD) ) {
-    //     try to read the physical dvd-structure
-    //     if this fails, we probably cannot take any further (useful) dvd-action
-    dvd_struct dvdinfo;
-    ::memset(&dvdinfo,0,sizeof(dvd_struct));
-    dvdinfo.type = DVD_STRUCT_PHYSICAL;
-    if ( ::ioctl(d->deviceFd,DVD_READ_STRUCT,&dvdinfo) == 0 )
-      ret = true;
+    // try to read the physical dvd-structure
+    // if this fails, we probably cannot take any further (useful) dvd-action
+
+    unsigned char dvdheader[20];
+    ::memset( dvdheader, 0, 20 );
+    ScsiCommand cmd( open() );
+    cmd[0] = 0xad;  // GPCMD_READ_DVD_STRUCTURE;
+    cmd[9] = 20;
+    if( cmd.transport( TR_DIR_READ, dvdheader, 20 ) ) {
+      kdDebug() << "(K3bCdDevice::CdDevice) Unable to read DVD structure." << endl;
+    }
     else
-      kdDebug() << "(K3bCdDevice::CdDevice) no DVD" << endl;
+      ret = true;
   }
   else
     kdDebug() << "(K3bCdDevice::CdDevice) no DVD drive" << endl;
@@ -856,22 +860,27 @@ int K3bCdDevice::CdDevice::isReady() const
   // to allow fast multible method calls in a row
   bool needToClose = !isOpen();
 
-  int drive_status,ret;
-  ret = 1;
-  if(open() < 0)
-    return ret;
-
-  if( (drive_status = ::ioctl(d->deviceFd,CDROM_DRIVE_STATUS)) < 0 ) {
-    kdDebug() << "(K3bCdDevice) Error: could not get drive status" << endl;
+  if( open() != -1 ) {
+    int drive_status,ret;
     ret = 1;
-  } else if ( drive_status == CDS_DISC_OK )
-    ret = 0;
-  else if ( drive_status == CDS_NO_DISC || drive_status == CDS_TRAY_OPEN )
-    ret = 3;
 
-  if( needToClose )
-    close();
-  return ret;
+    if( (drive_status = ::ioctl(d->deviceFd,CDROM_DRIVE_STATUS)) < 0 ) {
+      kdDebug() << "(K3bCdDevice) Error: could not get drive status" << endl;
+      ret = 1;
+    } 
+    else if( drive_status == CDS_DISC_OK )
+      ret = 0;
+    else if( drive_status == CDS_NO_DISC )
+      ret = 3;
+    else if( drive_status == CDS_TRAY_OPEN )
+      ret = 4;
+  
+    if( needToClose )
+      close();
+    return ret;
+  }
+  else
+    return false;
 }
 
 
@@ -1034,36 +1043,29 @@ int K3bCdDevice::CdDevice::numSessions() const
   // 
   // Althought disk_info should get the real value without ide-scsi
   // I keep getting wrong values (the value is too high. I think the leadout
-  // gets counted as session)
+  // gets counted as session sometimes :()
   //
 
-//   disc_info_t inf;
-//   if( getDiscInfo( &inf ) ) {
-//     ret = inf.n_sessions_l | (inf.n_sessions_m << 8);
-//   }
-//   else {
-
-    unsigned char dat[4];
-    ::memset(dat,0,4);
-
-    ScsiCommand cmd( open() );
-    cmd[0] = 0x43;  // GPCMD_READ_TOC_PMA_ATIP;
-    // Format Field: 0-TOC, 1-Session Info, 2-Full TOC, 3-PMA, 4-ATIP, 5-CD-TEXT
-    cmd[2] = 1;
-    cmd[8] = 4;
-    //
-    // Session Info
-    // ============
-    // Byte 0-1: Data Length
-    // Byte   2: First Complete Session Number (Hex) - always 1
-    // Byte   3: Last Complete Session Number (Hex)
-    //
-    if( cmd.transport( TR_DIR_READ, dat, 4 ) == 0 )
-      ret = dat[3];
-    else
-      kdDebug() << "(K3bCdDevice) could not get session info !" << endl;
-    //  }
-
+  unsigned char dat[4];
+  ::memset(dat,0,4);
+  
+  ScsiCommand cmd( open() );
+  cmd[0] = 0x43;  // GPCMD_READ_TOC_PMA_ATIP;
+  // Format Field: 0-TOC, 1-Session Info, 2-Full TOC, 3-PMA, 4-ATIP, 5-CD-TEXT
+  cmd[2] = 1;
+  cmd[8] = 4;
+  //
+  // Session Info
+  // ============
+  // Byte 0-1: Data Length
+  // Byte   2: First Complete Session Number (Hex) - always 1
+  // Byte   3: Last Complete Session Number (Hex)
+  //
+  if( cmd.transport( TR_DIR_READ, dat, 4 ) == 0 )
+    ret = dat[3];
+  else
+    kdDebug() << "(K3bCdDevice) could not get session info !" << endl;
+  
   if( needToClose )
     close();
   return ret;
@@ -1322,17 +1324,24 @@ K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc()
 
 bool K3bCdDevice::CdDevice::block( bool b) const
 {
-  bool ret = false;
-  if (open() < 0)
-    return ret;
+  if( open() != -1 ) {
+    ScsiCommand cmd( open() );
+    cmd[0] = 0x1E;   // ALLOW MEDIA REMOVAL
+    cmd[4] = b ? 0x0 : 0x1;
+    int r = cmd.transport();
+    if( r ) {
+      kdDebug() << "(K3bCdDevice::CdDevice) MMC ALLOW MEDIA REMOVAL failed. Falling back to cdrom.h." << endl;
+      r = ::ioctl(d->deviceFd,CDROM_LOCKDOOR, b ? 1 : 0 );
+    }
 
-  if( ::ioctl(d->deviceFd,CDROM_LOCKDOOR, b ? 1 : 0 ) < 0 )
-    kdDebug() << "(K3bCdDevice) Cannot block/unblock device " << devicename() << endl;
+    if( r )
+      kdDebug() << "(K3bCdDevice) Cannot block/unblock device " << devicename() << endl;
+
+    close();
+    return ( r == 0 );
+  }
   else
-    ret = true;
-
-  close();
-  return ret;
+    return false;
 }
 
 bool K3bCdDevice::CdDevice::rewritable() const
@@ -1353,8 +1362,18 @@ bool K3bCdDevice::CdDevice::rewritable() const
 
 bool K3bCdDevice::CdDevice::eject()
 {
-  if(open() != -1 ) {
-    int r = ::ioctl( d->deviceFd, CDROMEJECT );
+  block(false);
+
+  if( open() != -1 ) {
+    ScsiCommand cmd( open() );
+    cmd[0] = 0x1B;   // START/STOP UNIT
+    cmd[4] = 0x2;    // LoEj = 1, Start = 0
+    int r = cmd.transport();
+    if( r ) {
+      kdDebug() << "(K3bCdDevice::CdDevice) MMC START/STOP UNIT failed. Falling back to cdrom.h." << endl;
+      r = ::ioctl( d->deviceFd, CDROMEJECT );
+    }
+    
     close();
     return (r == 0);
   }
@@ -1366,7 +1385,14 @@ bool K3bCdDevice::CdDevice::eject()
 bool K3bCdDevice::CdDevice::load()
 {
   if( open() != -1 ) {
-    int r = ::ioctl( d->deviceFd, CDROMCLOSETRAY );
+    ScsiCommand cmd( open() );
+    cmd[0] = 0x1B;   // START/STOP UNIT
+    cmd[4] = 0x3;    // LoEj = 1, Start = 1
+    int r = cmd.transport();
+    if( r ) {
+      kdDebug() << "(K3bCdDevice::CdDevice) MMC START/STOP UNIT failed. Falling back to cdrom.h." << endl;
+      r = ::ioctl( d->deviceFd, CDROMCLOSETRAY );
+    }
     close();
     return (r == 0);
   }
@@ -1465,7 +1491,7 @@ K3bCdDevice::DiskInfo K3bCdDevice::CdDevice::diskInfo()
           }
         }
       }
-    } else if( ready == 3 ) {  // no disk or tray open
+    } else if( ready >= 3 ) {  // no disk or tray open
       kdDebug() << "(K3bCdDevice::CdDevice::diskInfo) no disk or tray open." << endl;
       info.valid = true;
       info.noDisk = true;
@@ -1607,53 +1633,28 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo()
 
       if( inf.diskState() == STATE_EMPTY ||
 	  inf.diskState() == STATE_INCOMPLETE ) {
-
-	// try the READ FORMAT CAPACITIES command
-	unsigned char buffer[254]; // for reading the size of the returned data
-	::memset( buffer, 0, 12 );
-	cmd[0] = 0x23;  // GPCMD_READ_FORMAT_CAPACITIES;
-	cmd[8] = 12;
-	cmd[9] = 0;
-	if( cmd.transport( TR_DIR_READ, buffer, 12 ) ) {
-	  kdDebug() << "(K3bCdDevice) READ_FORMAT_CAPACITIES failed." << endl;
-	}
-	else {
-	  int realLength = buffer[3];
-	  if( realLength + 4 > 256 ) {
-	    kdDebug() << "(K3bCdDevice) ERROR: READ_FORMAT_CAPACITIES data length > 256!" << endl;
-	    realLength = 251;
-	  }
-	  ::memset( buffer, 0, realLength+4 );
-	  cmd[7] = (realLength+4) >> 8;
-	  cmd[8] = (realLength+4) & 0xFF;
-	  if( cmd.transport( TR_DIR_READ, buffer, realLength+4 ) ) {
-	    kdDebug() << "(K3bCdDevice) READ_FORMAT_CAPACITIES failed." << endl;
-	  }
-	  else {
-
-	    //
-	    // now find the 00h format type since that contains the number of adressable blocks
-	    // and the block size used for formatting the whole media.
-	    // There may be multible occurences of this descriptor (MMC4 says so) but I think it's
-	    // sufficient to read the first one
-	    //
-	    for( int i = 12; i < realLength; ++i ) {
-	      if( (buffer[i+4]>>2) == 0 /*00h*/ ) {
-		// found the descriptor
-		inf.m_capacity = buffer[i]<<24 | buffer[i+1]<<16 | buffer[i+2]<<8 | buffer[i+3];
-		break;
-	      }
-	    }
-	  }
+	K3b::Msf readFrmtCap;
+	if( readFormatCapacity( readFrmtCap ) ) {
+	  kdDebug() << "(K3bCdDevice::CdDevice) READ FORMAT CAPACITY: " << readFrmtCap
+		    << " other capacity: " << inf.m_capacity << endl;
+	  inf.m_capacity = readFrmtCap;
 	}
       }
       else {
+	K3b::Msf readCap;
+	if( readCapacity( readCap ) ) {
+	  kdDebug() << "(K3bCdDevice::CdDevice) READ CAPACITY: " << readCap.toString()
+		    << " other capacity: " << inf.m_capacity.toString() << endl;
+	  inf.m_capacity = readCap;
+	}
+	else {
+	  kdDebug() << "(K3bCdDevice) READ_FORMAT_CAPACITIES failed. Falling back to READ TRACK INFO." << endl;
 
-	//
-	// We first try READ TRACK INFO MMC command since the cdrom.h toc stuff seems not to work
-	// properly on DVD media.
-	//
-	//	if( inf.numTracks() == 1 ) {
+	  //
+	  // We first try READ TRACK INFO MMC command since the cdrom.h toc stuff seems not to work
+	  // properly on DVD media.
+	  //
+	  //	if( inf.numTracks() == 1 ) {
 	  // read the last track's last sector
 	  unsigned char trackHeader[32];
 	  cmd.clear();
@@ -1668,8 +1669,8 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo()
 	  cmd[9] = 0;
 	  if( cmd.transport( TR_DIR_READ, trackHeader, 32 ) ) {
 	    kdDebug() << "(K3bCdDevice) READ_TRACK_INFORMATION failed." << endl;
-
 	    kdDebug() << "(K3bCdDevice) getting disk size via toc." << endl;
+	    
 	    struct cdrom_tocentry tocentry;
 	    tocentry.cdte_track = CDROM_LEADOUT;
 	    tocentry.cdte_format = CDROM_LBA;
@@ -1684,53 +1685,18 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo()
 	    // not sure about this....
 	    inf.m_capacity = trackHeader[8]<<24|trackHeader[9]<<16|trackHeader[10]<<8|trackHeader[11];
 	  }
-	  //	}
+	}
       }
-
 
       // 
       // The mediatype needs to be set
       //
 
       // no need to test for dvd if the device does not support it
-      inf.m_mediaType = -1;
-      if( readsDvd() ) {
-	unsigned char dvdheader[20];
-	::memset( dvdheader, 0, 20 );
-	cmd.clear();
-	cmd[0] = 0xad;  // GPCMD_READ_DVD_STRUCTURE;
-	cmd[9] = 20;
-	if( cmd.transport( TR_DIR_READ, dvdheader, 20 ) ) {
-	  kdDebug() << "(K3bCdDevice::CdDevice) Unable to read DVD structure." << endl;
-	}
-	else {
-	  switch( dvdheader[4]&0xF0 ) {
-	  case 0x00: inf.m_mediaType = MEDIA_DVD_ROM; break;
-	  case 0x10: inf.m_mediaType = MEDIA_DVD_RAM; break;
-	  case 0x20: inf.m_mediaType = MEDIA_DVD_R; break;
-	  case 0x30: inf.m_mediaType = MEDIA_DVD_RW; break;
-	  case 0x90: inf.m_mediaType = MEDIA_DVD_PLUS_RW; break;
-	  case 0xA0: inf.m_mediaType = MEDIA_DVD_PLUS_R; break;
-	  default: inf.m_mediaType = -1; break; // unknown
-	  }
-
-	  //
-	  // There is some other information which we can gain here:
-	  // remaining blocks for appendable DVD disks or the size of the user data
-	  //
-
-	  long userDataStartingSector = dvdheader[4+5]<<16 | dvdheader[4+6]<<8 | dvdheader[4+7];
-	  long userDataEndSector = dvdheader[4+9]<<16 | dvdheader[4+10]<<8 | dvdheader[4+11];
-	  if( inf.appendable() ) {
-	    inf.m_remaining = inf.capacity() - userDataEndSector + userDataStartingSector;
-	  }
-	  else if( !inf.empty() ) {
-	    // in case the disk is complete (or if we have no info which may happen with some DVD-ROMs,
-	    // that's why we do not use diskState() == COMPLETE here)
-	    inf.m_capacity = userDataEndSector - userDataStartingSector;
-	  }
-	}
-      }
+      if( readsDvd() )
+	inf.m_mediaType = dvdMediaType();
+      else
+	inf.m_mediaType = -1;
 
       if( inf.m_mediaType == -1 ) {
 	// probably it is a CD
@@ -1760,10 +1726,143 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo()
 
     close();
   }
-
+  
   return inf;
 }
 
+
+int K3bCdDevice::CdDevice::dvdMediaType()
+{
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
+  if( open() != -1 ) {
+
+    int m = -1;
+
+    unsigned char dvdheader[20];
+    ::memset( dvdheader, 0, 20 );
+    ScsiCommand cmd( open() );
+    cmd[0] = 0xad;  // GPCMD_READ_DVD_STRUCTURE;
+    cmd[9] = 20;
+    if( cmd.transport( TR_DIR_READ, dvdheader, 20 ) ) {
+      kdDebug() << "(K3bCdDevice::CdDevice) Unable to read DVD structure." << endl;
+    }
+    else {
+      switch( dvdheader[4]&0xF0 ) {
+      case 0x00: m = MEDIA_DVD_ROM; break;
+      case 0x10: m = MEDIA_DVD_RAM; break;
+      case 0x20: m = MEDIA_DVD_R; break;
+      case 0x30: m = MEDIA_DVD_RW; break;
+      case 0x90: m = MEDIA_DVD_PLUS_RW; break;
+      case 0xA0: m = MEDIA_DVD_PLUS_R; break;
+      default: m = -1; break; // unknown
+      }
+    }
+    
+    if( needToClose )
+      close();
+
+    return m;
+  }
+  else
+    return -1;
+}
+
+
+// does only make sense for complete media
+bool K3bCdDevice::CdDevice::readCapacity( K3b::Msf& r )
+{
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
+  if( open() != -1 ) {
+
+    bool success = true;
+
+    ScsiCommand cmd( open() );
+    cmd[0] = 0x25;  // READ CAPACITY
+    unsigned char buf[8];
+    ::memset( buf, 0, 8 );
+    if( cmd.transport( TR_DIR_READ, buf, 8 ) == 0 ) {
+      r = 
+	( (buf[0]<<24) & 0xFF000000 ) |
+	( (buf[1]<<16) & 0xFF0000 ) |
+	( (buf[2]<<8) & 0xFF00 ) |
+	( buf[3] & 0xFF );
+    }
+    else
+      success = false;
+
+    if( needToClose )
+      close();
+
+    return success;
+  }
+  else
+    return false;
+}
+
+
+bool K3bCdDevice::CdDevice::readFormatCapacity( K3b::Msf& r )
+{
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
+  if( open() != -1 ) {
+
+    bool success = true;
+
+    unsigned char buffer[254]; // for reading the size of the returned data
+    ::memset( buffer, 0, 12 );
+
+    ScsiCommand cmd( open() );
+    cmd[0] = 0x23;  // GPCMD_READ_FORMAT_CAPACITIES;
+    cmd[8] = 12;
+    cmd[9] = 0;
+    if( cmd.transport( TR_DIR_READ, buffer, 12 ) ) {
+      success = false;
+    }
+    else {
+      int realLength = buffer[3];
+      if( realLength + 4 > 256 ) {
+	kdDebug() << "(K3bCdDevice) ERROR: READ_FORMAT_CAPACITIES data length > 256!" << endl;
+	realLength = 251;
+      }
+      ::memset( buffer, 0, realLength+4 );
+      cmd[7] = (realLength+4) >> 8;
+      cmd[8] = (realLength+4) & 0xFF;
+      if( cmd.transport( TR_DIR_READ, buffer, realLength+4 ) ) {
+	success = false;
+      }
+      else {
+	//
+	// now find the 00h format type since that contains the number of adressable blocks
+	// and the block size used for formatting the whole media.
+	// There may be multible occurences of this descriptor (MMC4 says so) but I think it's
+	// sufficient to read the first one
+	//
+	for( int i = 12; i < realLength; ++i ) {
+	  if( (buffer[i+4]>>2) == 0 /*00h*/ ) {
+	    // found the descriptor
+	    r = buffer[i]<<24 | buffer[i+1]<<16 | buffer[i+2]<<8 | buffer[i+3];
+	    break;
+	  }
+	}
+      }
+    }
+
+    if( needToClose )
+      close();
+
+    return success;
+  }
+  else
+    return false;
+}
 
 
 // this is stolen from cdrdao's GenericMMC driver

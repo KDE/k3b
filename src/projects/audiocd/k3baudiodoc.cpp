@@ -122,12 +122,11 @@ K3bAudioDoc::~K3bAudioDoc()
 bool K3bAudioDoc::newDocument()
 {
   if( m_tracks )
-    m_tracks->setAutoDelete( true );
-
-  delete m_tracks;
-
-  m_tracks = new QPtrList<K3bAudioTrack>;
-  m_tracks->setAutoDelete( false );
+    while( m_tracks->first() )
+      removeTrack( m_tracks->first() );
+  else
+    m_tracks = new QPtrList<K3bAudioTrack>;
+  m_tracks->setAutoDelete(false);
 
   return K3bDoc::newDocument();
 }

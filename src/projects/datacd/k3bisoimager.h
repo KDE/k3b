@@ -39,6 +39,8 @@ class K3bIsoImager : public K3bJob
   K3bIsoImager( K3bDataDoc*, QObject* parent = 0, const char* name = 0 );
   virtual ~K3bIsoImager();
 
+  virtual bool active() const;
+
   int size() const { return m_mkisofsPrintSizeResult; }
 
  public slots:

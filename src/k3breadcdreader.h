@@ -35,6 +35,8 @@ class K3bReadcdReader : public K3bJob
   K3bReadcdReader( QObject* parent = 0, const char* name = 0 );
   ~K3bReadcdReader();
 
+  bool active() const;
+
  public slots:
   void start();
   void cancel();

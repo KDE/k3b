@@ -21,6 +21,7 @@
 #include <kstandarddirs.h>
 #include <kconfig.h>
 #include <kstdguiitem.h>
+#include <kdebug.h>
 
 #include <qfile.h>
 #include <qtimer.h>
@@ -55,8 +56,8 @@ static KCmdLineOptions options[] =
         { "binimage", I18N_NOOP("Write an Bin/Cue image to cd"), 0 },
 	{ "erasecd", I18N_NOOP("Erase a CDRW"), 0 },
 	{ "formatdvd", I18N_NOOP("Format a DVD-RW or DVD+RW"), 0 },
-        { 0, 0, 0 }
-        // INSERT YOUR COMMANDLINE OPTIONS HERE
+	{ "lang <language>", I18N_NOOP("Set the GUI language"), 0 },
+        KCmdLineLastOption
     };
 
 int main(int argc, char *argv[]) {
@@ -87,6 +88,12 @@ int main(int argc, char *argv[]) {
     KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
 
     K3bApplication app;
+
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    if( args->isSet("lang") )
+      if( !KGlobal::locale()->setLanguage(args->getOption("lang")) )
+	kdDebug() << "Unable to set to language " << args->getOption("lang") 
+		  << " current is: " << KGlobal::locale()->language() << endl;
 
 
     //   if (app.isRestored())

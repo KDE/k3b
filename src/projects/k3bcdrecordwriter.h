@@ -37,6 +37,8 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   K3bCdrecordWriter( K3bCdDevice::CdDevice*, QObject* parent = 0, const char* name = 0 );
   ~K3bCdrecordWriter();
 
+  bool active() const;
+
   /**
    * to be used in chain: addArgument(x)->addArgument(y)
    */

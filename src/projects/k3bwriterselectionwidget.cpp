@@ -198,7 +198,7 @@ void K3bWriterSelectionWidget::init()
 					 "<p>In most cases there will only be one writer available which "
 					 "does not leave much choice.") );
     QWhatsThis::add( m_comboSpeed, i18n("<p>Select the speed with which you want the writer to burn."
-					"<p>1x speed means 150 KB/s for CD-Writers and 1385 KB/s for DVD-Writers."
+					"<p>1x refers to 150 KB/s."
 					"<p><b>Caution:</b> Make sure your system is able to send the data "
 					"fast enough to prevent buffer underruns.") );
   }

@@ -99,7 +99,7 @@ void K3bDvdCopyJob::start()
 
   // TODO: check the cd size and warn the user if not enough space
 
-  emit infoMessage( i18n("Checking source media..."), PROCESS );
+  emit infoMessage( i18n("Checking source media") + "...", PROCESS );
   emit newSubTask( i18n("Checking source media") );
 
   connect( K3bCdDevice::sendCommand( K3bCdDevice::DeviceHandler::NG_DISKINFO, m_readerDevice ),

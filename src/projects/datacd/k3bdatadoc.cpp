@@ -78,7 +78,7 @@ bool K3bDataDoc::newDocument()
   m_bootCataloge = 0;
 
   if( m_root )
-    delete m_root;
+    removeItem( m_root );
 
   m_root = new K3bRootItem( this );
   m_sizeHandler->clear();
