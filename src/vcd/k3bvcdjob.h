@@ -32,7 +32,7 @@ class K3bVcdTrack;
 class QString;
 class KProcess;
 class QDataStream;
-
+class K3bAbstractWriter;
 
 class K3bVcdJob : public K3bBurnJob
 {
@@ -45,14 +45,11 @@ class K3bVcdJob : public K3bBurnJob
   K3bDoc* doc() const;
   K3bDevice* writer() const;
 
-  
  public slots:
   void start();
   void cancel();
 
  private slots:
-  void cdrdaoWrite();
-
   void cancelAll();
 
  protected slots:
@@ -60,13 +57,15 @@ class K3bVcdJob : public K3bBurnJob
   void slotVcdxGenFinished();
   void slotVcdxBuildFinished();
   void slotParseVcdxBuildOutput( KProcess*, char* output, int len );
-  void slotCdrdaoFinished();
 
-  /** reimplemented from K3bBurnJob */
-  void createCdrdaoProgress( int made, int size );
-  // void startNewCdrdaoTrack();
-        
+  void slotWriterJobPercent( int p );
+  void slotWriterNextTrack( int t, int tt);
+  void slotWriterJobFinished( bool success );
+
+       
  private:
+  bool prepareWriterJob();
+  
   void vcdxGen();
   void vcdxBuild();
   
@@ -102,12 +101,14 @@ class K3bVcdJob : public K3bBurnJob
   bool m_fastToc;
   bool m_readRaw;
   bool m_imageFinished;
-
+  bool m_canceled;
+  
   QString m_tempPath;
   QString m_cueFile;
   QString m_xmlFile;
   QString m_collectedOutput;
-    
+
+  K3bAbstractWriter* m_writerJob;        
   KProcess* m_process;
 
 };

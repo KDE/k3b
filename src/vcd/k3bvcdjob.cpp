@@ -34,6 +34,8 @@
 #include "../device/k3bdevice.h"
 #include "../tools/k3bexternalbinmanager.h"
 #include "../tools/k3bglobals.h"
+#include "../k3bcdrecordwriter.h"
+#include "../k3bcdrdaowriter.h"
 
 #include <klocale.h>
 #include <kconfig.h>
@@ -56,6 +58,7 @@ K3bVcdJob::K3bVcdJob( K3bVcdDoc* doc )
   m_process = 0;
   m_currentWrittenTrackNumber = 0;
   m_bytesFinishedTracks = 0;
+  m_writerJob = 0;
   m_imageFinished = false;
 }
 
@@ -88,16 +91,14 @@ void K3bVcdJob::cancel()
 
 void K3bVcdJob::cancelAll()
 {
+  m_canceled = true;
+  
+  if( m_writerJob )
+    m_writerJob->cancel();
+
   if( m_process->isRunning() ) {
     m_process->disconnect(this);
     m_process->kill();
-
-    // we need to unlock the writer because cdrdao/cdrecord locked it while writing
-    bool block = m_doc->burner()->block( false );
-    if( !block )
-      emit infoMessage( i18n("Could not unlock CD drive."), K3bJob::ERROR );
-    else if ( k3bMain()->eject() )
-      m_doc->burner()->eject();
   }
 
   // remove bin-file if it is unfinished or the user selected to remove image
@@ -117,7 +118,6 @@ void K3bVcdJob::cancelAll()
       m_cueFile = "";
     }
   }
-  
 }
 
 
@@ -126,7 +126,8 @@ void K3bVcdJob::start()
   kdDebug() << "(K3bVcdJob) starting job" << endl;
 
   emit started();
-
+  m_canceled = false;
+  
   int pos = QString(m_doc->vcdImage()).find(".bin");
   if (pos > 0) {
     m_cueFile = m_doc->vcdImage().left(pos) + ".cue";
@@ -457,7 +458,15 @@ void K3bVcdJob::slotVcdxBuildFinished()
   if( QFile::exists( m_xmlFile ) )
     QFile::remove( m_xmlFile );
 
-  this->cdrdaoWrite();
+  kdDebug() << "(K3bVcdJob) call prepareWriterJob()" << endl;      
+  if( prepareWriterJob() ) {
+    K3bEmptyDiscWaiter waiter( m_doc->burner(), k3bMain() );
+    if( waiter.waitForEmptyDisc() == K3bEmptyDiscWaiter::CANCELED ) {
+      cancel();
+      return;
+    }
+    m_writerJob->start();
+  }
 }
 
 
@@ -468,180 +477,89 @@ void K3bVcdJob::slotCollectOutput( KProcess*, char* output, int len )
   m_collectedOutput += QString::fromLocal8Bit( output, len );
 }
 
-// cdrdao stuff
-void K3bVcdJob::cdrdaoWrite()
+
+bool K3bVcdJob::prepareWriterJob()
 {
-  if( !k3bMain()->externalBinManager()->foundBin( "cdrdao" ) ) {
-    kdDebug() << "(K3bVcdJob) could not find cdrdao executable" << endl;
-    emit infoMessage( i18n("cdrdao executable not found."), K3bJob::ERROR );
-    cancelAll();
-    emit finished( false );
-    return;
-  }
+  if( m_writerJob )
+    delete m_writerJob;
 
-  K3bEmptyDiscWaiter waiter( m_doc->burner(), k3bMain() );
+  if( writingApp() == K3b::CDRDAO || writingApp() == K3b::DEFAULT ) {
+    K3bCdrdaoWriter* writer = new K3bCdrdaoWriter( m_doc->burner(), this );
+    // create cdrdao job
 
-  if( waiter.waitForEmptyDisc() == K3bEmptyDiscWaiter::CANCELED ) {
-    cancel();
-    return;
-  }
+    writer->setSimulate( m_doc->dummy() );
+    writer->setBurnSpeed( m_doc->speed() );
 
-  delete m_process;
-  m_process = new KShellProcess();
-  *m_process << k3bMain()->externalBinManager()->binPath( "cdrdao" );
-  *m_process << "write";
+    if( m_doc->onTheFly() ) {
+      writer->setProvideStdin(true);
+    }
 
-  // device
-  // TODO: check if device is in use and throw exception if so
+    writer->setTocFile( m_cueFile );
 
-  *m_process << "--device" << m_doc->burner()->busTargetLun();
-  if( m_doc->burner()->cdrdaoDriver() != "auto" ) {
-    *m_process << "--driver";
-    if( m_doc->burner()->cdTextCapable() == 1 )
-      *m_process << QString("%1:0x00000010").arg( m_doc->burner()->cdrdaoDriver() );
-    else
-      *m_process << m_doc->burner()->cdrdaoDriver();
-  }
+    m_writerJob = writer;
 
-  // additional parameters from config
-  QStringList _params = kapp->config()->readListEntry( "cdrdao parameters" );
-  for( QStringList::Iterator it = _params.begin(); it != _params.end(); ++it )
-    *m_process << *it;
-
-  k3bMain()->config()->setGroup( "General Options" );
-  bool manualBufferSize = k3bMain()->config()->readBoolEntry( "Manual buffer size", false );
-  if( manualBufferSize ) {
-    *m_process << "--buffers" << QString::number( k3bMain()->config()->readNumEntry( "Cdrdao buffer", 32 ) );
-  }
-  bool overburn = k3bMain()->config()->readBoolEntry( "Allow overburning", false );
-
-  if( overburn )
-    *m_process << "--overburn";
-
-  if( m_doc->dummy() )
-    *m_process << "--simulate";
-  if( k3bMain()->eject() )
-    *m_process << "--eject";
-
-  // writing speed
-  *m_process << "--speed" << QString::number(  m_doc->speed() );
-
-  // supress the 10 seconds gap to the writing
-  *m_process << "-n";
-
-  // cue-file
-  kdDebug() << QString("(K3bVcdJob) cdrdaoWrite cuefile = %1").arg(m_cueFile) << endl;
-  *m_process << QString("\"%1\"").arg(QFile::encodeName( m_cueFile ));
-
-  // connect to the cdrdao slots
-  connect( m_process, SIGNAL(processExited(KProcess*)),
-    this, SLOT(slotCdrdaoFinished()) );
-  connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
-    this, SLOT(parseCdrdaoOutput(KProcess*, char*, int)) );
-  connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
-    this, SLOT(parseCdrdaoOutput(KProcess*, char*, int)) );
-
-  if( !m_process->start( KProcess::NotifyOnExit, KProcess::All ) ) {
-    // something went wrong when starting the program
-    // it "should" be the executable
-    kdDebug() << "(K3bVcdJob) could not start cdrdao" << endl;
-
-    firstTrack = false;
-    
-    emit infoMessage( i18n("Could not start cdrdao!"), K3bJob::ERROR );
-    cancelAll();
-    emit finished( false );
-    return;
-  }
-
-  kdDebug() << "(K3bVcdJob) write process started!" << endl;
-
-  if( m_doc->dummy() ) {
-    emit infoMessage( i18n("Starting simulation at %1x speed...").arg(m_doc->speed()), K3bJob::STATUS );
   }
   else {
-    emit infoMessage( i18n("Starting recording at %1x speed...").arg(m_doc->speed()), K3bJob::STATUS );
-  }
-}
-
-void K3bVcdJob::createCdrdaoProgress( int made, int size )
-{
-  if( size == 0 ) {
-    kdDebug() << "(K3bVcdJob) got progress: " << made << ", " << size << endl;
-    return;
-  }
-
-  if(!firstTrack) {
-    if( m_doc->dummy() ) {
-      emit newSubTask( i18n("Writing cue/bin image ... (Simulation)") );
-    }
-    else {
-      emit newSubTask( i18n("Writing cue/bin image ...") );
-    }
-  }
-  else
-    firstTrack = false;
-    
-  emit processedSubSize( made, size );
-  emit subPercent( 100*made / size );
-  // emit processedSize( made, size );
-  emit percent( 66 + (34*made / size ) );
-}
-
-void K3bVcdJob::slotCdrdaoFinished()
-{
-  if( m_process->normalExit() ) {
-      // TODO: check the process' exitStatus()
-      switch( m_process->exitStatus() ) {
-        case 0:
-          if( doc()->dummy() )
-            emit infoMessage( i18n("Simulation successfully completed"), K3bJob::STATUS );
-          else
-            emit infoMessage( i18n("Writing successfully completed"), K3bJob::STATUS );
-
-          emit finished( true );
-          break;
-
-        default:
-          // no recording device and also other errors!! :-(
-          emit infoMessage( i18n("cdrdao returned an error!"), K3bJob::ERROR );
-          emit infoMessage( i18n("Error handling not implemented yet!"), K3bJob::ERROR );
-          emit infoMessage( i18n("Please send an email to the author with the last output..."), K3bJob::ERROR );
-
-          cancelAll();
-          emit finished( false );
-          return;
-      }
-  }
-  else {
-    emit infoMessage( i18n("cdrdao did not exit cleanly!"), K3bJob::ERROR );
-
     cancelAll();
-    emit finished( false );
-    return;
+    return false;
   }
 
-  m_process->disconnect(this);
+  connect( m_writerJob, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
+  connect( m_writerJob, SIGNAL(percent(int)), this, SLOT(slotWriterJobPercent(int)) );
+  connect( m_writerJob, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSize(int, int)) );
+  connect( m_writerJob, SIGNAL(subPercent(int)), this, SIGNAL(subPercent(int)) );
+  connect( m_writerJob, SIGNAL(processedSubSize(int, int)), this, SIGNAL(processedSubSize(int, int)) );
+  connect( m_writerJob, SIGNAL(nextTrack(int, int)), this, SLOT(slotWriterNextTrack(int, int)) );
+  connect( m_writerJob, SIGNAL(buffer(int)), this, SIGNAL(bufferStatus(int)) );
+  connect( m_writerJob, SIGNAL(finished(bool)), this, SLOT(slotWriterJobFinished(bool)) );
+  connect( m_writerJob, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
+  connect( m_writerJob, SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
+  connect( m_writerJob, SIGNAL(debuggingOutput(const QString&, const QString&)), this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
 
-  // remove bin-file if the user selected to remove image
+  return true;
+}
+
+void K3bVcdJob::slotWriterJobPercent( int p )
+{
+  emit percent( 67 + p/3 );
+}
+
+void K3bVcdJob::slotWriterNextTrack( int t, int tt )
+{
+  emit newSubTask( i18n("Writing Track %1 of %2").arg(t).arg(tt) );
+}
+
+void K3bVcdJob::slotWriterJobFinished( bool success )
+{
+  if( m_canceled )
+    return;
+
+  // remove bin-file if it is unfinished or the user selected to remove image
   if( QFile::exists( m_doc->vcdImage() ) ) {
-    if( !m_doc->onTheFly() && m_doc->deleteImage()) {
+    if( !m_doc->onTheFly() && m_doc->deleteImage() || !m_imageFinished ) {
       emit infoMessage( i18n("Removing Binary file %1").arg(m_doc->vcdImage()), K3bJob::STATUS );
       QFile::remove( m_doc->vcdImage() );
       m_doc->setVcdImage("");
     }
   }
 
-  // remove cue-file if the user selected to remove image
+  // remove cue-file if it is unfinished or the user selected to remove image
   if( QFile::exists( m_cueFile ) ) {
-    if( !m_doc->onTheFly() && m_doc->deleteImage()) {
+    if( !m_doc->onTheFly() && m_doc->deleteImage() || !m_imageFinished ) {
       emit infoMessage( i18n("Removing Cue file %1").arg(m_cueFile), K3bJob::STATUS );
       QFile::remove( m_cueFile );
       m_cueFile = "";
     }
   }
-  
 
+  if( success ) {
+    // allright
+    // the writerJob should have emited the "simulation/writing successful" signal
+    emit finished(true);
+  }
+  else {
+    cancelAll();
+  }
 }
 
 #include "k3bvcdjob.moc"
