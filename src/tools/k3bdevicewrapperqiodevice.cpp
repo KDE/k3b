@@ -108,40 +108,48 @@ Q_LONG K3bDeviceWrapperQIODevice::readBlock( char* data, Q_ULONG maxlen )
   kdDebug() << "(K3bDeviceWrapperQIODevice) readBlock( " << (void*)data << ", " << maxlen << " ) at position " << d->pos << endl;
   kdDebug() << "(K3bDeviceWrapperQIODevice) readCd from " << (d->start+d->pos)/2048 << endl;
 
-  if( (d->start+d->pos)%2048 || maxlen%2048 )
-    kdDebug() << "(K3bDeviceWrapperQIODevice) WARNING: need to modify data." << endl;
+  unsigned long startSec = d->start+d->pos;
+  int startSecOffset = 0;
+  unsigned char* buffer = (unsigned char*)data;
+  bool buffered = false;
+  if( startSec%2048 ) {
+    kdDebug() << "(K3bDeviceWrapperQIODevice) WARNING: need to modify start sec." << endl;
+    startSecOffset = startSec%2048;
+    buffered = true;
+  }
 
-//   unsigned char* buffer = (unsigned char*)data;
-//   bool buffered = false;
-//   unsigned long bufferLen = maxlen;
-//   if( maxlen%2048 > 0 ) {
-//     buffered = true;
-//     bufferLen = maxlen+(2048-(maxlen%2048));
-//     buffer = new unsigned char[bufferLen];
-//     kdDebug() << "(K3bDeviceWrapperQIODevice) using buffer of size: " << bufferLen << endl;
-//   }
+  unsigned long bufferLen = maxlen+startSecOffset;
+  if( bufferLen%2048 > 0 ) {
+    buffered = true;
+    bufferLen = bufferLen+(2048-(bufferLen%2048));
+    buffer = new unsigned char[bufferLen];
+    kdDebug() << "(K3bDeviceWrapperQIODevice) using buffer of size: " << bufferLen << endl;
+  }
   long read = -1;
 
   // FIXME: some drives may not support read12 but read10 which would be a better fallback
-
-  if( m_device->read12( (unsigned char*)data,
-			maxlen,
-			(d->start + d->pos)/2048,
- 			maxlen/2048 ) )
+  //        but the strange thing is that the readCd command has been in the MMC since the first
+  //        version while read12 came in MMC 3 and read10 in MMC 4
+  if( m_device->read12( buffer,
+			bufferLen,
+			startSec/2048,
+ 			bufferLen/2048 ) )
     read = maxlen;
 
   // fallback
   if( read < 0 ) {
     kdDebug() << "(K3bDeviceWrapperQIODevice) falling back to stdlib read" << endl;
-    read = ::read( m_device->open(), data, maxlen );
+    read = ::read( m_device->open(), buffer, bufferLen );
   }
 
-//   if( buffered ) {
-//     if( read > 0 )
-//       ::memcpy( data, buffer, maxlen );
-//     delete [] buffer;
-//     kdDebug() << "(K3bDeviceWrapperQIODevice) deleted buffer." << endl;
-//   }
+  if( buffered ) {
+    if( read > 0 ) {
+      ::memcpy( data, buffer+startSecOffset, maxlen );
+      read -= startSecOffset;
+    }
+    delete [] buffer;
+    kdDebug() << "(K3bDeviceWrapperQIODevice) deleted buffer." << endl;
+  }
 
   return read;
 }
