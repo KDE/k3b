@@ -70,6 +70,7 @@ class K3bOggVorbisEncoder : public K3bAudioEncoder
 
   bool writeOggHeaders();
   void cleanup();
+  long flushVorbis();
 
   class Private;
   Private* d;

@@ -243,6 +243,12 @@ long K3bOggVorbisEncoder::encodeInternal( const char* data, Q_ULONG len )
   // tell the library how much we actually submitted
   vorbis_analysis_wrote( d->vorbisDspState, i );
 
+  return flushVorbis();
+}
+
+
+long K3bOggVorbisEncoder::flushVorbis()
+{
   // vorbis does some data preanalysis, then divvies up blocks for
   // more involved (potentially parallel) processing.  Get a single
   // block for encoding now
@@ -274,8 +280,10 @@ long K3bOggVorbisEncoder::encodeInternal( const char* data, Q_ULONG len )
 
 void K3bOggVorbisEncoder::finishEncoderInternal()
 {
-  if( d->vorbisDspState )
+  if( d->vorbisDspState ) {
     vorbis_analysis_wrote( d->vorbisDspState, 0 );
+    flushVorbis();
+  }
   else
     kdDebug() << "(K3bOggVorbisEncoder) call to finishEncoderInternal without init." << endl;
 }
