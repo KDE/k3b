@@ -241,7 +241,7 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
                             "<p>PBC allows control of the playback of play items and the possibility of interaction with the user through the remote control or some other input device available." ) );
 
     QWhatsThis::add
-        ( m_checkSegmentFolder, i18n( "<p>Here you can specify that the folder <b>SEGMENT</b> should always always present."
+        ( m_checkSegmentFolder, i18n( "<p>Here you can specify that the folder <b>SEGMENT</b> should always be present."
                                       "<p>Some DVD players need the folder to give a faultless rendition." ) );
 
     QWhatsThis::add
