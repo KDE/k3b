@@ -43,6 +43,8 @@
 #include <kiconloader.h>
 #include <kio/global.h>
 #include <kmessagebox.h>
+#include <kglobal.h>
+
 
 
 K3bFillStatusDisplayWidget::K3bFillStatusDisplayWidget( K3bDoc* doc, QWidget* parent )
@@ -127,6 +129,7 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
 	
   p.fillRect( crect, Qt::green );
 
+  // FIXME: localize the "min" string
   if( m_showTime )
     p.drawText( rect(), Qt::AlignLeft | Qt::AlignVCenter, 
 		 " " + K3b::Msf( m_doc->length() ).toString(false) + " min" );
@@ -168,7 +171,8 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
 // ----------------------------------------------------------------------------------------------------
 
 K3bFillStatusDisplay::K3bFillStatusDisplay(K3bDoc* doc, QWidget *parent, const char *name )
-  : QFrame(parent,name)
+  : QFrame(parent,name),
+    m_doc(doc)
 {
   setFrameStyle( Panel | Sunken );
 
@@ -206,6 +210,8 @@ K3bFillStatusDisplay::K3bFillStatusDisplay(K3bDoc* doc, QWidget *parent, const c
     m_actionCustomSize->setChecked( true );
     break;
   }
+
+  connect( m_doc, SIGNAL(changed()), this, SLOT(slotDocSizeChanged()) );
 }
 
 K3bFillStatusDisplay::~K3bFillStatusDisplay()
@@ -357,5 +363,15 @@ void K3bFillStatusDisplay::slotRemainingSize( K3bCdDevice::DeviceHandler* dh )
   }
 }
 
+
+void K3bFillStatusDisplay::slotDocSizeChanged()
+{
+  // FIXME: properly localize this
+  QToolTip::remove( this );
+  QToolTip::add( this, 
+		 KIO::convertSize( m_doc->size() ) + 
+		 " (" + KGlobal::locale()->formatNumber( m_doc->size(), 0 ) + "), " +
+		 K3b::Msf( m_doc->length() ).toString(false) + " min" );
+}
 
 #include "k3bfillstatusdisplay.moc"

@@ -163,6 +163,9 @@ void K3bDataJob::writeImage()
     if( m_doc->tempDir().isEmpty() )
       m_doc->setTempDir( K3b::findUniqueFilePrefix( m_doc->isoOptions().volumeID() ) + ".iso" );
     
+    // TODO: check if the image file is part of the project and if so warn the user
+    //       and append some number to make the path unique.
+
     // open the file for writing
     m_imageFile.setName( m_doc->tempDir() );
     if( !m_imageFile.open( IO_WriteOnly ) ) {

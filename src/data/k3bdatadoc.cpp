@@ -21,6 +21,7 @@
 #include "k3bdatajob.h"
 #include "k3bbootitem.h"
 #include "k3bspecialdataitem.h"
+#include "k3bfilecompilationsizehandler.h"
 #include <k3b.h>
 #include <k3bcore.h>
 #include <k3bglobals.h>
@@ -57,11 +58,17 @@ K3bDataDoc::K3bDataDoc( QObject* parent )
 
   m_queuedToAddItemsTimer = new QTimer( this );
   connect( m_queuedToAddItemsTimer, SIGNAL(timeout()), this, SLOT(slotAddQueuedItems()) );
+
+  m_sizeHandler = new K3bFileCompilationSizeHandler();
+
+  // FIXME: remove the newFileItems() signal and replace it with the changed signal
+  connect( this, SIGNAL(newFileItems()), this, SIGNAL(changed()) );
 }
 
 K3bDataDoc::~K3bDataDoc()
 {
   delete m_root;
+  delete m_sizeHandler;
 }
 
 
@@ -74,7 +81,7 @@ bool K3bDataDoc::newDocument()
     delete m_root;
 
   m_root = new K3bRootItem( this );
-  //  m_size = 0;
+  m_sizeHandler->clear();
 
 
   m_name = "Dummyname";
@@ -303,7 +310,7 @@ K3bFileItem* K3bDataDoc::createFileItem( QFileInfo& f, K3bDirItem* parent )
 
 
   K3bFileItem* newK3bItem = new K3bFileItem( f.absFilePath(), this, parent, newName );
-  //  m_size += newK3bItem->k3bSize();
+  //  m_sizeHandler->addFile( f.absFilePath() );
 
   return newK3bItem;
 }
@@ -342,7 +349,8 @@ K3bDirItem* K3bDataDoc::addEmptyDir( const QString& name, K3bDirItem* parent )
 KIO::filesize_t K3bDataDoc::size() const
 {
   //return m_size;
-  return root()->k3bSize();
+  //  return root()->k3bSize();
+  return m_sizeHandler->size();
 }
 
 
@@ -621,6 +629,7 @@ bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
       }
       else {
 	(void)new K3bFileItem( urlElem.text(), this, parent, elem.attributeNode( "name" ).value() );
+	//	m_sizeHandler->addFile( urlElem.text() );
       }
     }
   }
@@ -918,7 +927,7 @@ void K3bDataDoc::removeItem( K3bDataItem* item )
 
   if( item->isRemoveable() ) {
     // the item takes care of it's parent!
-    //    m_size -= item->k3bSize();
+    //    m_sizeHandler->removeFile( item->localPath() );
     emit itemRemoved( item );
 
     // check if any items are pending to be added to this dir (if it's a dir)
@@ -936,6 +945,8 @@ void K3bDataDoc::removeItem( K3bDataItem* item )
     }
 
     delete item;
+
+    emit changed();
   }
   else
     kdDebug() << "(K3bDataDoc) tried to remove non-removable entry!" << endl;
@@ -1171,6 +1182,7 @@ void K3bDataDoc::createSessionImportItems( const QString& path, K3bDirItem* pare
     // capable of overwriting files
     if( (oldItem->isDir() && !newF.isDir()) ||
 	!oldItem->isDir() ) {
+      //      m_sizeHandler->removeFile( oldItem->localPath() );
 	delete oldItem;
 	oldItem = 0;
     }
@@ -1209,7 +1221,7 @@ void K3bDataDoc::createSessionImportItems( const QString& path, K3bDirItem* pare
     item->setWriteToCd(false);
     item->setExtraInfo( i18n("From previous session") );
     m_oldSession.append( item );
-    //    m_size += item->k3bSize();
+    //    m_sizeHandler->addFile( newF.absFilePath() );
   }
 }
 
@@ -1249,13 +1261,15 @@ void K3bDataDoc::clearImportedSession()
     }
     else {
       m_oldSession.remove();
-      //      m_size -= item->k3bSize();
+      //      m_sizeHandler->removeFile( item->localPath() );
       emit itemRemoved( item );
       delete item;
     }
 
     item = m_oldSession.next();
   }
+
+  emit changed();
 }
 
 
@@ -1318,6 +1332,8 @@ void K3bDataDoc::removeBootItem( K3bBootItem* item )
     emit itemRemoved( m_bootCataloge );
     delete m_bootCataloge;
     m_bootCataloge = 0;
+
+    emit changed();
   }
 }
 

@@ -35,6 +35,7 @@ class K3bDirItem;
 class K3bFileItem;
 class K3bJob;
 class K3bBootItem;
+class K3bFileCompilationSizeHandler;
 
 class KProgressDialog;
 class K3bView;
@@ -113,6 +114,9 @@ class K3bDataDoc : public K3bDoc
   /** this will just remove it from the list of boot items, not remove it from the doc */
   void removeBootItem( K3bBootItem* );
 
+  // This is just a temp solution and will be removed
+  K3bFileCompilationSizeHandler* sizeHandler() const { return m_sizeHandler; }
+
  public slots:
   /** add urls to the compilation.
    * @param dir the directory where to add the urls, by default this is the root directory.
@@ -144,6 +148,8 @@ class K3bDataDoc : public K3bDoc
   virtual QString documentType() const;
 
   void loadDefaultSettings( KConfig* );
+
+  K3bFileCompilationSizeHandler* m_sizeHandler;
 
  private:
   void createSessionImportItems( const QString& path, K3bDirItem* parent, KProgressDialog* );

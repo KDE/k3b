@@ -95,6 +95,7 @@ class K3bFillStatusDisplay : public QFrame  {
   void slotPopupMenu(const QPoint&);
   void slotDetermineSize();
   void slotRemainingSize( K3bCdDevice::DeviceHandler* );
+  void slotDocSizeChanged();
 
  private:
   KActionCollection* m_actionCollection;
@@ -111,6 +112,7 @@ class K3bFillStatusDisplay : public QFrame  {
   QToolButton* m_buttonMenu;
 
   K3bFillStatusDisplayWidget* m_displayWidget;
+  K3bDoc* m_doc;
 };
 
 #endif
