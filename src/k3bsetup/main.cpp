@@ -40,6 +40,8 @@ static KCmdLineOptions options[] =
 
 int main(int argc, char *argv[])
 {
+  KLocale::setMainCatalogue( "k3b" );
+
   KAboutData aboutData( "k3bsetup", I18N_NOOP("K3bSetup"),
     "0.1", description, KAboutData::License_GPL,
     "(c) 2001, Sebastian Trueg", 0, 0, "trueg@informatik.uni-freiburg.de");
