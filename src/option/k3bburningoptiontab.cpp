@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -25,6 +25,7 @@
 #include <qradiobutton.h>
 #include <qvalidator.h>
 #include <qbuttongroup.h>
+#include <qspinbox.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
 
@@ -90,7 +91,7 @@ void K3bBurningOptionTab::setupGui()
   m_comboPregapFormat->insertItem( i18n( "Seconds" ) );
   m_comboPregapFormat->insertItem( i18n( "Frames" ) );
 
-  connect( m_comboPregapFormat, SIGNAL(activated(const QString&)), 
+  connect( m_comboPregapFormat, SIGNAL(activated(const QString&)),
 	   this, SLOT(slotChangePregapFormat(const QString&)) );
   // -----------------------------------------------------------------------
 
@@ -105,8 +106,42 @@ void K3bBurningOptionTab::setupGui()
   m_checkDropDoubles = new QCheckBox( i18n("&Discard identical names"), m_groupData );
   m_checkListHiddenFiles = new QCheckBox( i18n("List &hidden files"), m_groupData );
   m_checkListSystemFiles = new QCheckBox( i18n("List &system files"), m_groupData );
-  // -----------------------------------------------------------------------
 
+  // -----------------------------------------------------------------------
+  // vcd settings group
+  // -----------------------------------------------------------------------
+  QGroupBox* groupVideo = new QGroupBox( projectTab, "groupVideo" );
+  groupVideo->setTitle( i18n( "Video Project" ) );
+  groupVideo->setColumnLayout(0, Qt::Vertical );
+  groupVideo->layout()->setSpacing( 0 );
+  groupVideo->layout()->setMargin( 0 );
+  QGridLayout* groupVideoLayout = new QGridLayout( groupVideo->layout() );
+  groupVideoLayout->setAlignment( Qt::AlignTop );
+  groupVideoLayout->setSpacing( KDialog::spacingHint() );
+  groupVideoLayout->setMargin( KDialog::marginHint() );
+
+  m_checkUsePbc = new QCheckBox( i18n("Use Playback Control (PBC) by default"), groupVideo );
+  m_labelWaitTime = new QLabel( i18n("Time to wait after each Sequence/Segment by default"), groupVideo );
+  m_spinWaitTime = new QSpinBox( groupVideo, "m_spinWaitTime" );
+  m_spinWaitTime->setValue( 2 );
+  m_spinWaitTime->setSuffix( i18n( " second(s)" ) );
+  m_checkUseNumKey = new QCheckBox( i18n("Use numeric keys by default"), groupVideo );
+
+  m_labelWaitTime->setDisabled( true );
+  m_spinWaitTime->setDisabled( true );
+  m_checkUseNumKey->setDisabled( true );
+
+  groupVideoLayout->addMultiCellWidget( m_checkUsePbc, 0, 0, 0, 1 );
+  groupVideoLayout->addMultiCellWidget( m_checkUseNumKey, 1, 1, 0, 1 );
+  groupVideoLayout->addWidget( m_labelWaitTime, 2, 0 );
+  groupVideoLayout->addWidget( m_spinWaitTime, 2, 1 );
+
+
+  connect( m_checkUsePbc, SIGNAL(toggled(bool)), m_labelWaitTime, SLOT(setEnabled(bool)) );
+  connect( m_checkUsePbc, SIGNAL(toggled(bool)), m_spinWaitTime, SLOT(setEnabled(bool)) );
+  connect( m_checkUsePbc, SIGNAL(toggled(bool)), m_checkUseNumKey, SLOT(setEnabled(bool)) );
+
+  // -----------------------------------------------------------------------
   // default cd size group
   // -----------------------------------------------------------------------
   QButtonGroup* groupCdSize = new QButtonGroup( 0, Qt::Vertical, i18n("Default CD Size"), projectTab );
@@ -144,8 +179,9 @@ void K3bBurningOptionTab::setupGui()
 
   projectGrid->addWidget( m_groupAudio, 0, 0 );
   projectGrid->addWidget( m_groupData, 1, 0 );
-  projectGrid->addWidget( groupCdSize, 2, 0 );
-  projectGrid->setRowStretch( 3, 1 );
+  projectGrid->addWidget( groupVideo, 2, 0 );
+  projectGrid->addWidget( groupCdSize, 3, 0 );
+  projectGrid->setRowStretch( 4, 1 );
 
   // ///////////////////////////////////////////////////////////////////////
 
@@ -185,11 +221,11 @@ void K3bBurningOptionTab::setupGui()
   groupAdvancedLayout->addLayout( bufferLayout, 3, 0 );
   groupAdvancedLayout->addWidget( m_checkAllowWritingAppSelection, 4, 0 );
 
-  connect( m_checkManualWritingBufferSize, SIGNAL(toggled(bool)), 
+  connect( m_checkManualWritingBufferSize, SIGNAL(toggled(bool)),
 	   m_editWritingBufferSizeCdrecord, SLOT(setEnabled(bool)) );
-  connect( m_checkManualWritingBufferSize, SIGNAL(toggled(bool)), 
+  connect( m_checkManualWritingBufferSize, SIGNAL(toggled(bool)),
 	   m_editWritingBufferSizeCdrdao, SLOT(setEnabled(bool)) );
-  connect( m_checkManualWritingBufferSize, SIGNAL(toggled(bool)), 
+  connect( m_checkManualWritingBufferSize, SIGNAL(toggled(bool)),
 	   this, SLOT(slotSetDefaultBufferSizes(bool)) );
 
   m_editWritingBufferSizeCdrecord->setDisabled( true );
@@ -208,6 +244,9 @@ void K3bBurningOptionTab::setupGui()
   QToolTip::add( m_checkListHiddenFiles, i18n("Add hidden files in subdirectories") );
   QToolTip::add( m_checkListSystemFiles, i18n("Add system files in subdirectories") );
   QToolTip::add( m_checkAllowWritingAppSelection, i18n("Allow to choose betweeen cdrecord and cdrdao") );
+  QToolTip::add( m_checkUsePbc, i18n("Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 disc formats.") );
+  QToolTip::add( m_checkUseNumKey, i18n("Use numeric keys to navigate chapters by default (In addition to 'Previous' and 'Next')") );
+  QToolTip::add( m_labelWaitTime, i18n("Time to wait after each Sequence/Segment by default.") );
 
   QWhatsThis::add( m_checkUseID3Tag, i18n("<p>If this option is checked K3b will rename audio files "
 					  "that contain meta information (for example id3 tags in mp3 "
@@ -232,12 +271,19 @@ void K3bBurningOptionTab::setupGui()
 							 "does not support the used writer."
 							 "<p><b>Be aware that K3b does not support both "
 							 "programs in all project types.</b>") );
+  QWhatsThis::add( m_checkUsePbc, i18n( "<p>Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 disc formats."
+                             "<p>PBC allows control of the playback of play items and the possibility of interaction with the user through the remote control or some other input device available." ) );
 }
 
 
 void K3bBurningOptionTab::readSettings()
 {
   KConfig* c = kapp->config();
+
+  c->setGroup( "Video project settings" );
+  m_checkUsePbc->setChecked( c->readBoolEntry("Use Playback Control", false) );
+  m_checkUseNumKey->setChecked( c->readBoolEntry("Use numeric keys to navigate chapters", false) );
+  m_spinWaitTime->setValue( c->readNumEntry( "Time to wait after each Sequence/Segment", 2 ) );
 
   c->setGroup( "Data project settings" );
   m_checkUseID3Tag->setChecked( c->readBoolEntry("Use ID3 Tag for mp3 renaming", false) );
@@ -283,6 +329,11 @@ void K3bBurningOptionTab::readSettings()
 void K3bBurningOptionTab::saveSettings()
 {
   KConfig* c = kapp->config();
+
+  c->setGroup( "Video project settings" );
+  c->writeEntry( "Use Playback Control", m_checkUsePbc->isChecked() );
+  c->writeEntry( "Time to wait after each Sequence/Segment", m_spinWaitTime->value() );
+  c->writeEntry( "Use numeric keys to navigate chapters", m_checkUseNumKey->isChecked() );
 
   c->setGroup( "Data project settings" );
   c->writeEntry( "Use ID3 Tag for mp3 renaming", m_checkUseID3Tag->isChecked() );

@@ -104,6 +104,7 @@ class K3bVcdOptions
         int m_restriction;
 
         // pbc
+        bool loadDefaultPBC();
         bool m_pbcenabled;
 
         // volume descriptor

@@ -1,6 +1,6 @@
-/* 
+/*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -24,6 +24,7 @@ class QLabel;
 class QGroupBox;
 class QComboBox;
 class QString;
+class QSpinBox;
 class KIntNumInput;
 class QRadioButton;
 class KLineEdit;
@@ -68,6 +69,11 @@ Q_OBJECT
   KIntNumInput* m_editWritingBufferSizeCdrecord;
   KIntNumInput* m_editWritingBufferSizeCdrdao;
   QCheckBox*    m_checkAllowWritingAppSelection;
+
+  QCheckBox* m_checkUsePbc;
+  QLabel* m_labelWaitTime;
+  QSpinBox* m_spinWaitTime;
+  QCheckBox* m_checkUseNumKey;
 };
 
 

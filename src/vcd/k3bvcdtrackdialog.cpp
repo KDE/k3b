@@ -464,6 +464,7 @@ void K3bVcdTrackDialog::setupPbcTab()
     grid->setSpacing( spacingHint() );
     grid->setMargin( marginHint() );
 
+
     //////////////////////////////////////////////////////////////////////////////////////////
     QGroupBox* groupPlay = new QGroupBox( 0, Qt::Vertical, i18n( "Options" ), w );
     groupPlay->layout() ->setSpacing( spacingHint() );

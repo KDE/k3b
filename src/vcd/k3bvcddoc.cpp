@@ -1,6 +1,6 @@
 /*
 *
-* $Id: $
+* $Id$
 * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
 *
 * This file is part of the K3b project.
@@ -456,9 +456,9 @@ void K3bVcdDoc::setVcdType( int type )
 void K3bVcdDoc::setPbcTracks()
 {
     // reorder pbc tracks
-    /*    if ( !vcdOptions()->PbcEnabled() )
-            return;
-    */
+    if ( !vcdOptions()->PbcEnabled() )
+        return;
+
     if ( m_tracks ) {
         int count = m_tracks->count();
         kdDebug() << QString( "K3bVcdDoc::setPbcTracks() - we have %1 tracks in list." ).arg( count ) << endl;

@@ -13,11 +13,14 @@
 * See the file "COPYING" for the exact licensing terms.
 */
 
+// Kde Includes
+#include <kapplication.h>
 #include <kconfig.h>
 #include <k3bcore.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 
+// Qt Includes
 #include <qstring.h>
 #include <qfile.h>
 
@@ -27,7 +30,7 @@
 
 K3bVcdOptions::K3bVcdOptions()
         : m_restriction( 0 ),
-        m_pbcenabled( false ),
+        m_pbcenabled( loadDefaultPBC() ),
         m_volumeID( i18n( "Project name", "VIDEOCD" ) ),
         m_albumID( "" ),
         m_volumeSetId( "" ),
@@ -53,7 +56,9 @@ K3bVcdOptions::K3bVcdOptions()
         m_relaxedaps( false ),
         m_segmentfolder( true ),
         m_usegaps( false )
-{}
+{
+    setPbcEnabled( loadDefaultPBC() );
+}
 
 bool K3bVcdOptions::checkCdiFiles()
 {
@@ -130,6 +135,12 @@ K3bVcdOptions K3bVcdOptions::load( KConfig* c )
     return options;
 }
 
+bool K3bVcdOptions::loadDefaultPBC()
+{
+    KConfig* c = kapp->config();
+    c->setGroup( "Video project settings" );
+    return c->readBoolEntry("Use Playback Control", false);
+}
 
 K3bVcdOptions K3bVcdOptions::defaults()
 {
