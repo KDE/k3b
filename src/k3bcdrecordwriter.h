@@ -61,12 +61,12 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   void setClone( bool b );
   void setUseProDVD( bool b );
 
- private slots:
+ protected slots:
   void slotStdLine( const QString& line );
   void slotProcessExited(KProcess*);
 
- private:
-  void prepareProcess();
+ protected:
+  virtual void prepareProcess();
 
   const K3bExternalBin* m_cdrecordBinObject;
   K3bProcess* m_process;
@@ -80,13 +80,6 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   bool m_cue;
 
   QString m_cueFile;
-  
-  int m_currentTrack;
-  int m_totalTracks;
-  int m_totalSize;
-  int m_alreadyWritten;
-
-  int m_lastFifoValue;
 
   enum CdrecordError { UNKNOWN, 
 		       OVERSIZE, 
@@ -96,12 +89,22 @@ class K3bCdrecordWriter : public K3bAbstractWriter
 		       CANNOT_SET_SPEED,
 		       CANNOT_SEND_CUE_SHEET,
 		       CANNOT_OPEN_NEW_SESSION };
+
+  QStringList m_arguments;
+
+ private:  
+  int m_currentTrack;
+  int m_totalTracks;
+  int m_totalSize;
+  int m_alreadyWritten;
+
+  int m_lastFifoValue;
+
   int m_cdrecordError;
 
   bool m_writeSpeedInitialized;
 
   QValueList<int> m_trackSizes;
-  QStringList m_arguments;
 };
 
 #endif

@@ -28,6 +28,7 @@
 #include <k3bdoc.h>
 #include <k3bsystemproblemdialog.h>
 
+#include <ktip.h>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kaboutdata.h>
@@ -160,6 +161,8 @@ void K3bApplication::init()
     m_mainWindow->slotBlankCdrw();
 
   args->clear();
+
+  KTipDialog::showTip( m_mainWindow );
 }
 
 

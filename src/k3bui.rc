@@ -22,6 +22,9 @@
   	<Action name="view_audio_player" append="show_merge" />
   	<Action name="view_document_header" append="show_merge" />
   </Menu>
+  <Menu name="help" append="about_merge"><text>&amp;Help</text>
+	<Action name="show_tips"/>
+  </Menu>
 </MenuBar>
 <ToolBar name="mainToolBar">
 	<Action name="file_burn" />
