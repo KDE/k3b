@@ -61,7 +61,8 @@ class K3bDataItem
   virtual void reparent( K3bDirItem* );
 
   virtual bool isDir() const { return false; }
-	
+  virtual bool isSymLink() const { return false; }	
+
   bool hideOnRockRidge() const;
   bool hideOnJoliet() const;
 

@@ -47,8 +47,8 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
 	
   // --- setup GUI ---------------------------------------------------
   QSplitter* mainSplitter = new QSplitter( this );	
-  m_dataDirTree = new K3bDataDirTreeView( doc, mainSplitter );
-  m_dataFileView = new K3bDataFileView( m_dataDirTree, doc, mainSplitter );
+  m_dataDirTree = new K3bDataDirTreeView( this, doc, mainSplitter );
+  m_dataFileView = new K3bDataFileView( this, m_dataDirTree, doc, mainSplitter );
   m_fillStatusDisplay = new K3bFillStatusDisplay( doc, this );
 	
   QVBoxLayout* box = new QVBoxLayout( this );
@@ -73,9 +73,10 @@ K3bDataView::~K3bDataView(){
 }
 
 
-K3bProjectBurnDialog* K3bDataView::burnDialog()
+void K3bDataView::burnDialog( bool withWriting )
 {
-  return new K3bDataBurnDialog( m_doc, this, "databurndialog", true );
+  K3bDataBurnDialog d( m_doc, this, "databurndialog", true );
+  d.exec( withWriting );
 }
 
 

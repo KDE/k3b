@@ -1,3 +1,5 @@
+#MIN_CONFIG
+
 dnl ============
 dnl Machine type
 dnl ============
@@ -86,32 +88,20 @@ test -z "$AS" && AS=$save_AS
 #it's likely it contains a better guess (or it's also as)
 test "x$AS" = xas && test -n "$save_AS" && AS=$save_AS
 
+
 linux_scsi=no
 AC_MSG_CHECKING(for linux scsi headers)
 AC_TRY_COMPILE([
 	#include <sys/types.h>
 	#include <linux/../scsi/scsi.h> /* cope with silly includes */
-	],[],[linux_scsi=yes
-	])
+	],
+	[],
+	[linux_scsi=yes])
 AC_MSG_RESULT($linux_scsi)
 
 
 AC_MSG_CHECKING(for cdparanoia libraries and headers)
-AC_ARG_WITH(cdparanoia,
-  [  --with-cdparanoia=DIR   Specify cdda libs dir (default=check)],
-  [
-    case "$withval" in
-    yes)
-      with_cdparanoia=CHECK
-      ;;
-    esac
-  ],
-  [
-    with_cdparanoia=CHECK
-  ]
-)dnl
 
-if test "x$with_cdparanoia" = "xCHECK" ; then
   with_cdparanoia=NOTFOUND
   search_incs="$kde_includes /usr/include /usr/local/include /usr/include/cdda /usr/local/include/cdda"
   AC_FIND_FILE(cdda_interface.h, $search_incs, para_incdir)
@@ -149,7 +139,7 @@ if test "x$with_cdparanoia" = "xCHECK" ; then
       # beware, that we don't reset CDPARANOIA_*
     fi
   fi
-fi
+
 
 case "$with_cdparanoia" in
 no) AC_MSG_RESULT(no) ;;

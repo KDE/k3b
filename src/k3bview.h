@@ -64,7 +64,7 @@ class K3bView : public QWidget
   /** returns a pointer to the document connected to the view*/
   K3bDoc *getDocument() const;
 	
-  virtual K3bProjectBurnDialog* burnDialog() = 0;
+  virtual void burnDialog( bool withWritingButton = true ) = 0;
 
   virtual KActionCollection* actionCollection() const;
 

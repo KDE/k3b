@@ -37,10 +37,9 @@ class K3bFileItem : public KFileItem, public K3bDataItem
 public:
   /**
    * Creates a new K3bFileItem
-   * @param fileName if fileName end with a slash the item will become a directory.
    */
   K3bFileItem( const QString& fileName, K3bDataDoc* doc, K3bDirItem* dir, const QString& k3bName = 0 );
-  ~K3bFileItem();
+  virtual ~K3bFileItem();
 	
   bool exists() const;
 	
@@ -58,6 +57,8 @@ public:
   /** adds the item to this' parent **/
   K3bDirItem* addDataItem( K3bDataItem* item );
 	
+  bool isSymLink() const { return isLink(); }
+
  private:
 /*   QString m_isoName; */
 /*   QString m_joiletName; */

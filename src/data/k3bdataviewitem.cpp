@@ -162,11 +162,18 @@ QString K3bDataFileViewItem::text( int index ) const
   case 0:
     return m_fileItem->k3bName();
   case 1:
-    return m_fileItem->mimeComment();
+    {
+      if( m_fileItem->isSymLink() )
+	return i18n("Link to %1").arg(m_fileItem->mimeComment());
+      else
+	return m_fileItem->mimeComment();
+    }
   case 2:
     return KIO::convertSize( m_fileItem->size() );
   case 3:
     return m_fileItem->localPath();
+  case 4:
+    return m_fileItem->linkDest();
   default:
     return "";
   }
@@ -213,7 +220,7 @@ QString K3bDataRootViewItem::text( int index ) const
 {
   switch( index ) {
   case 0:
-    return m_doc->volumeID();
+    return m_doc->isoOptions().volumeID();
   default:
     return "";
   }
@@ -223,7 +230,7 @@ QString K3bDataRootViewItem::text( int index ) const
 void K3bDataRootViewItem::setText( int col, const QString& text )
 {
   if( col == 0 )
-    m_doc->setVolumeID( text );
+    m_doc->isoOptions().setVolumeID( text );
 
   KListViewItem::setText( col, text );
 }

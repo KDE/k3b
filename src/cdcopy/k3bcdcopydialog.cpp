@@ -82,7 +82,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
 
   m_checkSimulate = new QCheckBox( i18n("Simulate writing"), groupOptions );
   m_checkOnTheFly = new QCheckBox( i18n("Writing on the fly"), groupOptions );
-  m_checkOnlyCreateImage = new QCheckBox( i18n("Only create images"),groupOptions );
+  //  m_checkOnlyCreateImage = new QCheckBox( i18n("Only create images"),groupOptions );
   m_checkDeleteImages = new QCheckBox( i18n("Delete images"), groupOptions );
 
   QLabel* pixLabel = new QLabel( groupCopies );
@@ -141,12 +141,12 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
 
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_tempDirSelectionWidget, SLOT(setDisabled(bool)) );
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkDeleteImages, SLOT(setDisabled(bool)) );
-  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkOnlyCreateImage, SLOT(setDisabled(bool)) );
+  //  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkOnlyCreateImage, SLOT(setDisabled(bool)) );
 
-  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotOnlyCreateImageChecked(bool)) );
-  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_writerSelectionWidget, SLOT(setDisabled(bool)) );
-  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_spinCopies, SLOT(setDisabled(bool)) );
-  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkSimulate, SLOT(setDisabled(bool)) );
+//   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotOnlyCreateImageChecked(bool)) );
+//   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_writerSelectionWidget, SLOT(setDisabled(bool)) );
+//   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_spinCopies, SLOT(setDisabled(bool)) );
+//   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkSimulate, SLOT(setDisabled(bool)) );
 
   slotSourceSelected();
 
@@ -159,7 +159,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   QToolTip::add( m_checkSimulate, i18n("Only simulate the writing process") );
   QToolTip::add( m_checkOnTheFly, i18n("Copy directly without creating an image") );
   QToolTip::add( m_checkDeleteImages, i18n("Remove images from harddisk when finished") );
-  QToolTip::add( m_checkOnlyCreateImage, i18n("Only create an image of the disk, no writing") );
+  //  QToolTip::add( m_checkOnlyCreateImage, i18n("Only create an image of the disk, no writing") );
   QToolTip::add( m_comboSourceDevice, i18n("Select the drive with the cd to copy") );
   QToolTip::add( m_spinCopies, i18n("Number of copies") );
 
@@ -183,8 +183,8 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   QWhatsThis::add( m_checkDeleteImages, i18n("<p>If this option is checked K3b will remove any created images after the "
 					     "writing has finished."
 					     "<p>Uncheck this if you want to keep the images.") );
-  QWhatsThis::add( m_checkOnlyCreateImage, i18n("<p>If this option is checked K3b will only create an image of the disk "
-						"without writing an actual copy.") );
+//   QWhatsThis::add( m_checkOnlyCreateImage, i18n("<p>If this option is checked K3b will only create an image of the disk "
+// 						"without writing an actual copy.") );
   QWhatsThis::add( m_comboSourceDevice, i18n("<p>Here you should select the drive which contains the cd to copy.") );
   QWhatsThis::add( m_spinCopies, i18n("<p>Select how many copies you want K3b to create from the cd.") );
 }
@@ -200,9 +200,9 @@ void K3bCdCopyDialog::slotSourceSelected()
   K3bDevice* writer = m_writerSelectionWidget->writerDevice();
   K3bDevice* reader = readingDevice();
 
-  if( writer == reader || m_checkOnlyCreateImage->isChecked() )
+  if( writer == reader )//|| m_checkOnlyCreateImage->isChecked() )
     m_checkOnTheFly->setChecked( false );
-  m_checkOnTheFly->setDisabled( writer == reader || m_checkOnlyCreateImage->isChecked() );
+  m_checkOnTheFly->setDisabled( writer == reader );// || m_checkOnlyCreateImage->isChecked() );
 }
 
 
@@ -230,7 +230,7 @@ void K3bCdCopyDialog::slotUser1()
   job->setDummy( m_checkSimulate->isChecked() );
   job->setOnTheFly( m_checkOnTheFly->isChecked() );
   job->setKeepImage( !m_checkDeleteImages->isChecked() );
-  job->setOnlyCreateImage( m_checkOnlyCreateImage->isChecked() );
+  //  job->setOnlyCreateImage( m_checkOnlyCreateImage->isChecked() );
   job->setFastToc( m_checkFastToc->isChecked() );
   job->setTempPath( m_tempDirSelectionWidget->tempPath() );
   if( !m_checkSimulate->isChecked() )
@@ -239,7 +239,7 @@ void K3bCdCopyDialog::slotUser1()
 
   // create a progresswidget
   K3bBurnProgressDialog d( k3bMain(), "burnProgress", 
-			   !m_checkOnTheFly->isChecked() && !m_checkOnlyCreateImage->isChecked(),
+			   !m_checkOnTheFly->isChecked()/* && !m_checkOnlyCreateImage->isChecked()*/,
 			   false );
 
   d.setJob( job );

@@ -124,13 +124,13 @@ QString K3bRootItem::jolietPath()
 
 const QString& K3bRootItem:: k3bName()
 {
-  return doc()->volumeID();
+  return doc()->isoOptions().volumeID();
 }
 
 
 void K3bRootItem::setK3bName( const QString& text )
 {
-  doc()->setVolumeID( text );
+  doc()->isoOptions().setVolumeID( text );
 }
 
 

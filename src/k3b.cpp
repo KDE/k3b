@@ -804,7 +804,6 @@ void K3bMainWindow::slotNewDataDoc()
   KURL url;
   url.setFileName(fileName);
   doc->setURL(url);
-  doc->setVolumeID( QString("Data_%1").arg(untitledCount) );
 
   // create the window
   createClient(doc);
@@ -829,9 +828,7 @@ void K3bMainWindow::slotFileBurn()
 	KMessageBox::information( kapp->mainWidget(), "There is nothing to burn!", "So what?", QString::null, false );
       }
       else {
-	K3bProjectBurnDialog* d = view->burnDialog();
-	d->exec(true);
-	delete d;
+	view->burnDialog();
       }
     }
   }

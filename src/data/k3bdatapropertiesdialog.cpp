@@ -82,7 +82,10 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( K3bDataItem* dataItem, QWidget
 
   if( K3bFileItem* fileItem = dynamic_cast<K3bFileItem*>(dataItem) ) {
     labelMimeType->setPixmap( fileItem->pixmap(KIcon::SizeLarge) );
-    m_labelType->setText( fileItem->mimeComment() );
+    if( fileItem->isSymLink() )
+      m_labelType->setText( i18n("Link to %1").arg(fileItem->mimeComment()) );
+    else
+      m_labelType->setText( fileItem->mimeComment() );
     m_labelLocalName->setText( fileItem->name() );
     QString localLocation = fileItem->url().path(-1);
     localLocation.truncate( localLocation.findRev('/') );

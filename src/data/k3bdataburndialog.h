@@ -77,12 +77,13 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    QRadioButton* m_radioSpaceReplace;
    QRadioButton* m_radioSpaceStrip;
    QRadioButton* m_radioSpaceExtended;
+   QCheckBox* m_checkCreateRockRidge;
+   QCheckBox* m_checkCreateJoliet;
+   QCheckBox* m_checkDiscardSymLinks;
    // ----------------------------------------------
 	
    // --- advanced tab -------------------------
    QLabel* m_labelAdvancedInfo;
-   QCheckBox* m_checkCreateRockRidge;
-   QCheckBox* m_checkCreateJoliet;
    QButtonGroup* m_groupIsoLevel;
    QRadioButton* m_radioIsoLevel1;
    QRadioButton* m_radioIsoLevel2;
@@ -102,6 +103,7 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    QCheckBox* m_checkMultiDot;
    QCheckBox* m_checkLowercase;
    QCheckBox* m_checkOmitTrailingPeriod;
+   QCheckBox* m_checkFollowSymbolicLinks;
 
    QCheckBox* m_checkForceInputCharset;
    KComboBox* m_comboInputCharset;

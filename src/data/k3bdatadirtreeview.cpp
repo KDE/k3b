@@ -24,6 +24,7 @@
 #include "k3bdatapropertiesdialog.h"
 #include "k3bdataviewitem.h"
 #include "../k3b.h"
+#include "../k3bview.h"
 
 #include <qdragobject.h>
 #include <qheader.h>
@@ -38,8 +39,8 @@
 #include <kdebug.h>
 
 
-K3bDataDirTreeView::K3bDataDirTreeView( K3bDataDoc* doc, QWidget* parent )
-  : KListView( parent )
+K3bDataDirTreeView::K3bDataDirTreeView( K3bView* view, K3bDataDoc* doc, QWidget* parent )
+  : KListView( parent ), m_view(view)
 {
   m_fileView = 0;
 
@@ -212,8 +213,10 @@ void K3bDataDirTreeView::updateContents()
   // check the directory depth
   QListViewItemIterator it(this);
   while( it.current() != 0 ) {
-    K3bDirItem* dirItem = ((K3bDataDirViewItem*)it.current())->dirItem();
-    it.current()->setPixmap( 0, dirItem->depth() > 7 ? SmallIcon( "folder_red" ) : SmallIcon( "folder" ) );
+    if( it.current() != m_root ) {
+      K3bDirItem* dirItem = ((K3bDataDirViewItem*)it.current())->dirItem();
+      it.current()->setPixmap( 0, dirItem->depth() > 7 ? SmallIcon( "folder_red" ) : SmallIcon( "folder" ) );
+    }
     
     ++it;
   }
@@ -333,11 +336,17 @@ void K3bDataDirTreeView::slotRemoveItem()
 
 void K3bDataDirTreeView::slotProperties()
 {
-  if( K3bDataViewItem* viewItem = dynamic_cast<K3bDataViewItem*>( currentItem() ) ) {
+  K3bDataViewItem* viewItem = dynamic_cast<K3bDataViewItem*>( currentItem() );
+  if(  viewItem && currentItem() != root() ) {
     K3bDataPropertiesDialog d( viewItem->dataItem(), this );
-    if( d.exec() )
-      viewItem->widthChanged();
+    if( d.exec() ) {
+      repaint();
+      if( m_fileView )
+	m_fileView->repaint();
+    }
   }
+  else
+    m_view->burnDialog( false );
 }
 
 #include "k3bdatadirtreeview.moc"

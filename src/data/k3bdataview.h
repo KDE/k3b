@@ -45,7 +45,7 @@ class K3bDataView : public K3bView
    K3bDataView(K3bDataDoc* doc, QWidget *parent=0, const char *name=0);
    ~K3bDataView();
 	
-   K3bProjectBurnDialog* burnDialog();
+   void burnDialog( bool );
 
    K3bDirItem* currentDir() const;
 

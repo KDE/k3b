@@ -31,6 +31,8 @@ class KActionCollection;
 class KActionMenu;
 class KAction;
 class K3bDataDirTreeView;
+class K3bView;
+
 
 /**
   *@author Sebastian Trueg
@@ -41,7 +43,7 @@ class K3bDataFileView : public KListView
   Q_OBJECT
 
  public:
-  K3bDataFileView( K3bDataDirTreeView*, K3bDataDoc*, QWidget* parent );
+  K3bDataFileView( K3bView*, K3bDataDirTreeView*, K3bDataDoc*, QWidget* parent );
   ~K3bDataFileView();
 	
   K3bDirItem* currentDir() const { return m_currentDir; }
@@ -81,6 +83,7 @@ class K3bDataFileView : public KListView
   KAction* m_actionNewDir;
   KAction* m_actionProperties;
 
+  K3bView* m_view;
 
   K3bDataDoc* m_doc;
   K3bDirItem* m_currentDir;

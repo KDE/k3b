@@ -83,7 +83,7 @@ void K3bDataJob::start()
     return;
   }
 
-  if( m_doc->createRockRidge() ) {
+  if( m_doc->isoOptions().createRockRidge() ) {
     m_rrHideFile = locateLocal( "appdata", "temp/k3b_rr_hide.mkisofs" );
     if( !writeRRHideFile( m_rrHideFile ) ) {
       emit infoMessage( i18n("Could not write to temporary file %1").arg( m_rrHideFile ), K3bJob::ERROR );
@@ -92,7 +92,7 @@ void K3bDataJob::start()
     }
   }
 
-  if( m_doc->createJoliet() ) {
+  if( m_doc->isoOptions().createJoliet() ) {
     m_jolietHideFile = locateLocal( "appdata", "temp/k3b_joliet_hide.mkisofs" );
     if( !writeJolietHideFile( m_jolietHideFile ) ) {
       emit infoMessage( i18n("Could not write to temporary file %1").arg( m_rrHideFile ), K3bJob::ERROR );
@@ -812,78 +812,75 @@ bool K3bDataJob::addMkisofsParameters()
   *m_process << "-gui";
   *m_process << "-graft-points";
 
-  if( !m_doc->volumeID().isEmpty() )
-    *m_process << "-V" << "\"" + m_doc->volumeID() + "\"";
-  if( !m_doc->volumeSetId().isEmpty() )
-    *m_process << "-volset" << "\"" + m_doc->volumeSetId() + "\"";
-  if( !m_doc->applicationID().isEmpty() )
-    *m_process << "-A" << "\"" + m_doc->applicationID() + "\"";
-  if( !m_doc->publisher().isEmpty() )
-    *m_process << "-P" << "\"" + m_doc->publisher() + "\"";
-  if( !m_doc->preparer().isEmpty() )
-    *m_process << "-p" << "\"" + m_doc->preparer() + "\"";
-  if( !m_doc->systemId().isEmpty() )
-    *m_process << "-sysid" << "\"" + m_doc->systemId() + "\"";
+  if( !m_doc->isoOptions().volumeID().isEmpty() )
+    *m_process << "-V" << "\"" + m_doc->isoOptions().volumeID() + "\"";
+  if( !m_doc->isoOptions().volumeSetId().isEmpty() )
+    *m_process << "-volset" << "\"" + m_doc->isoOptions().volumeSetId() + "\"";
+  if( !m_doc->isoOptions().applicationID().isEmpty() )
+    *m_process << "-A" << "\"" + m_doc->isoOptions().applicationID() + "\"";
+  if( !m_doc->isoOptions().publisher().isEmpty() )
+    *m_process << "-P" << "\"" + m_doc->isoOptions().publisher() + "\"";
+  if( !m_doc->isoOptions().preparer().isEmpty() )
+    *m_process << "-p" << "\"" + m_doc->isoOptions().preparer() + "\"";
+  if( !m_doc->isoOptions().systemId().isEmpty() )
+    *m_process << "-sysid" << "\"" + m_doc->isoOptions().systemId() + "\"";
 		
-  if( m_doc->createRockRidge() ) {
+  if( m_doc->isoOptions().createRockRidge() ) {
     *m_process << "-r";
     *m_process << "-hide-list" << m_rrHideFile;
   }
 
-  if( m_doc->createJoliet() ) {
+  if( m_doc->isoOptions().createJoliet() ) {
     *m_process << "-J";
     *m_process << "-hide-joliet-list" << m_jolietHideFile;
   }
 
-  if( m_doc->ISOuntranslatedFilenames()  ) {
+  if( m_doc->isoOptions().ISOuntranslatedFilenames()  ) {
     *m_process << "-U";
   }
   else {
-    if( m_doc->ISOallowPeriodAtBegin()  )
+    if( m_doc->isoOptions().ISOallowPeriodAtBegin()  )
       *m_process << "-L";
-    if( m_doc->ISOallow31charFilenames()  )
+    if( m_doc->isoOptions().ISOallow31charFilenames()  )
       *m_process << "-l";	
-    if( m_doc->ISOomitVersionNumbers() && !m_doc->ISOmaxFilenameLength() )	
+    if( m_doc->isoOptions().ISOomitVersionNumbers() && !m_doc->isoOptions().ISOmaxFilenameLength() )	
       *m_process << "-N";		
-    if( m_doc->ISOrelaxedFilenames()  )
+    if( m_doc->isoOptions().ISOrelaxedFilenames()  )
       *m_process << "-relaxed-filenames";		
-    if( m_doc->ISOallowLowercase()  )
+    if( m_doc->isoOptions().ISOallowLowercase()  )
       *m_process << "-allow-lowercase";		
-    if( m_doc->ISOnoIsoTranslate()  )
+    if( m_doc->isoOptions().ISOnoIsoTranslate()  )
       *m_process << "-no-iso-translate";
-    if( m_doc->ISOallowMultiDot()  )
+    if( m_doc->isoOptions().ISOallowMultiDot()  )
       *m_process << "-allow-multidot";
-    if( m_doc->ISOomitTrailingPeriod() )
+    if( m_doc->isoOptions().ISOomitTrailingPeriod() )
       *m_process << "-d";
   }
 		
-  if( m_doc->ISOmaxFilenameLength()  )
+  if( m_doc->isoOptions().ISOmaxFilenameLength()  )
     *m_process << "-max-iso9660-filenames";	
-  if( m_doc->noDeepDirectoryRelocation()  )
+  if( m_doc->isoOptions().noDeepDirectoryRelocation()  )
     *m_process << "-D";	
 
 
-  // this should be handled internally by K3b.
-  // the config dialog should give the option to choose between using symlinks and not
-  //  if( m_doc->followSymbolicLinks()  )
-  *m_process << "-f";	
+  if( m_doc->isoOptions().followSymbolicLinks() )
+    *m_process << "-f";
 
-
-//   if( m_doc->hideRR_MOVED()  )
+//   if( m_doc->isoOptions().hideRR_MOVED()  )
 //     *m_process << "-hide-rr-moved";	
-  if( m_doc->createTRANS_TBL()  )
+  if( m_doc->isoOptions().createTRANS_TBL()  )
     *m_process << "-T";	
-  if( m_doc->hideTRANS_TBL()  )
+  if( m_doc->isoOptions().hideTRANS_TBL()  )
     *m_process << "-hide-joliet-trans-tbl";	
 
   // This is enabled by default and so should it stay
-//   if( m_doc->padding()  )
+//   if( m_doc->isoOptions().padding()  )
 //     *m_process << "-pad";	
 
-  *m_process << "-iso-level" << QString::number(m_doc->ISOLevel());
+  *m_process << "-iso-level" << QString::number(m_doc->isoOptions().ISOLevel());
 
-  if( m_doc->forceInputCharset() )
-    *m_process << "-input-charset" << m_doc->inputCharset();
+  if( m_doc->isoOptions().forceInputCharset() )
+    *m_process << "-input-charset" << m_doc->isoOptions().inputCharset();
 
   *m_process << "-path-list" << QFile::encodeName(m_pathSpecFile);
 
@@ -938,12 +935,12 @@ void K3bDataJob::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream )
 {
   if( dirItem->depth() > 7 ) {
     kdDebug() << "(K3bDataJob) found directory depth > 7. Enabling no deep directory relocation." << endl;
-    m_doc->setNoDeepDirectoryRelocation( true );
+    m_doc->isoOptions().setNoDeepDirectoryRelocation( true );
   }
 
   // if joliet is enabled we need to cut long names since mkisofs is not able to do it
 
-  if( m_doc->createJoliet() ) {
+  if( m_doc->isoOptions().createJoliet() ) {
     // create new joliet names and use jolietPath for graftpoints
     // sort dirItem->children entries and rename all to fit joliet
     // which is about x characters
@@ -1009,6 +1006,9 @@ void K3bDataJob::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream )
     // now create the graft points
     for( QPtrListIterator<K3bDataItem> it( *dirItem->children() ); it.current(); ++it ) {
       K3bDataItem* item = it.current();
+      if( m_doc->discardSymlinks() && item->isSymLink() )
+	continue;
+
       stream << escapeGraftPoint( m_doc->treatWhitespace(item->jolietPath()) ) 
 	     << "=" << escapeGraftPoint( item->localPath() ) << "\n";
     }
@@ -1020,6 +1020,9 @@ void K3bDataJob::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream )
     // takes care of it
     for( QPtrListIterator<K3bDataItem> it( *dirItem->children() ); it.current(); ++it ) {
       K3bDataItem* item = it.current();
+      if( m_doc->discardSymlinks() && item->isSymLink() )
+	continue;
+
       stream << escapeGraftPoint( m_doc->treatWhitespace(item->k3bPath()) ) 
 	     << "=" << escapeGraftPoint( item->localPath() ) << "\n";
     }

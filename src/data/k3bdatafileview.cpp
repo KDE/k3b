@@ -26,6 +26,7 @@
 #include "k3bdatadirtreeview.h"
 #include "k3bdataviewitem.h"
 #include "../k3b.h"
+#include "../k3bview.h"
 
 #include "../klistviewlineedit.h"
 
@@ -39,10 +40,10 @@
 #include <kdebug.h>
 
 
-K3bDataFileView::K3bDataFileView( K3bDataDirTreeView* view, K3bDataDoc* doc, QWidget* parent )
-  : KListView( parent )
+K3bDataFileView::K3bDataFileView( K3bView* view, K3bDataDirTreeView* dirTreeView, K3bDataDoc* doc, QWidget* parent )
+  : KListView( parent ), m_view(view)
 {
-  m_treeView = view;
+  m_treeView = dirTreeView;
 
   setAcceptDrops( true );
   setDropVisualizer( false );
@@ -55,6 +56,7 @@ K3bDataFileView::K3bDataFileView( K3bDataDirTreeView* view, K3bDataDoc* doc, QWi
   addColumn( i18n("Type") );
   addColumn( i18n("Size") );
   addColumn( i18n("Local Path") );
+  addColumn( i18n("Link") );
 
   setItemsRenameable( true );
   setSelectionModeExt( KListView::Extended );
@@ -332,6 +334,8 @@ void K3bDataFileView::slotProperties()
     K3bDataPropertiesDialog d( dataItem, this );
     d.exec();
   }
+  else
+    m_view->burnDialog( false );
 }
 
 

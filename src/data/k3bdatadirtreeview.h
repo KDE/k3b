@@ -34,6 +34,8 @@ class K3bDataFileView;
 class KActionCollection;
 class KActionMenu;
 class KAction;
+class K3bView;
+
 
 /**
   *@author Sebastian Trueg
@@ -44,7 +46,7 @@ class K3bDataDirTreeView : public KListView
   Q_OBJECT
 
  public:
-  K3bDataDirTreeView( K3bDataDoc*, QWidget* parent );
+  K3bDataDirTreeView( K3bView*, K3bDataDoc*, QWidget* parent );
   ~K3bDataDirTreeView();
 
   K3bDataDirViewItem* root() { return m_root; }
@@ -65,6 +67,8 @@ class K3bDataDirTreeView : public KListView
   KAction* m_actionRename;
   KAction* m_actionNewDir;
   KAction* m_actionProperties;
+
+  K3bView* m_view;
 
   K3bDataDoc* m_doc;
   K3bDataDirViewItem* m_root;
