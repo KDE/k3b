@@ -91,7 +91,8 @@ class K3bMainWindow : public KDockMainWindow
   K3bSongManager*        songManager()        { return m_songManager; }
   K3bAudioPlayer*        audioPlayer()        { return m_audioPlayer; }
   KConfig*               config()             { return m_config; }
-
+  // return main window with browser/cd/dvd view, used for DND
+  K3bDirView*            mainWindow()         { return m_dirView; }
   /**
    * @returns a pointer to the currently visible view or 0 if no project was created
    */
@@ -134,6 +135,14 @@ class K3bMainWindow : public KDockMainWindow
   void slotDivxEncoding();
   void slotCdCopy();
   void slotK3bSetup();
+  /** No descriptions */
+  void slotErrorMessage(const QString&);
+  /** No descriptions */
+  void slotWarningMessage(const QString&);
+
+  void showBusyInfo( const QString& str );
+  void endBusy();
+  void slotViewAudioPlayer();
 
  signals:
   void initializationInfo( const QString& );
@@ -144,16 +153,6 @@ class K3bMainWindow : public KDockMainWindow
    */
   void saveConfig( KConfig* c );
 
- public slots:
-  /** No descriptions */
-  void slotErrorMessage(const QString&);
-  /** No descriptions */
-  void slotWarningMessage(const QString&);
-
-  void showBusyInfo( const QString& str );
-  void endBusy();
-
-  void slotViewAudioPlayer();
 
  protected:
   /** queryClose is called by KTMainWindow on each closeEvent of a window. Against the
