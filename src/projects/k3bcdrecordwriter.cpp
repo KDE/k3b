@@ -450,7 +450,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
     int po2 = line.find( QRegExp("\\D"), pos + 9 );
     int speed = line.mid( pos+9, po2-pos-9 ).toInt();
     if( speed < burnSpeed() ) {
-      emit infoMessage( i18n("Medium does not support writing at %1x speed").arg(burnSpeed()), K3bJob::INFO );
+      emit infoMessage( i18n("Medium or burner do not support writing at %1x speed").arg(burnSpeed()), K3bJob::INFO );
       emit infoMessage( i18n("Switching down burn speed to %1x").arg(speed), K3bJob::PROCESS );
     }
   }

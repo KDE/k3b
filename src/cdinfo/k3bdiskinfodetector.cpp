@@ -23,6 +23,8 @@
 #include <device/k3bdevicehandler.h>
 
 #include <kdebug.h>
+#include <kio/global.h>
+#include <kio/job.h>
 
 #include <qtimer.h>
 #include <qfile.h>
@@ -79,6 +81,7 @@ void K3bCdDevice::DiskInfoDetector::fetchExtraInfo()
 
   testForVCD();
 }
+
 
 void K3bCdDevice::DiskInfoDetector::fetchIsoInfo()
 {
@@ -141,10 +144,10 @@ void K3bCdDevice::DiskInfoDetector::testForVCD()
   kdDebug() << "(K3bCdDevice::DiskInfoDetector) testForVCD()" << endl;
 
   if (m_info.tocType == DiskInfo::DATA && m_info.toc.count() > 1 && m_info.sessions == 1 ) {
-    connect(K3bCdDevice::mount(m_device),
-            SIGNAL(finished(K3bCdDevice::DeviceHandler *)),
-            this,
-            SLOT(slotIsVCD(K3bCdDevice::DeviceHandler *)));
+    connect( KIO::mount( true, 0, m_device->mountDevice(), m_device->mountPoint(), false ), 
+	     SIGNAL(result(KIO::Job*)),
+	     this,
+	     SLOT(slotIsVCD(KIO::Job*)));
   }
   else if (m_info.tocType == DiskInfo::DVD) {
     testForVideoDvd();
@@ -153,13 +156,13 @@ void K3bCdDevice::DiskInfoDetector::testForVCD()
     finish(true);
 }
 
-void K3bCdDevice::DiskInfoDetector::slotIsVCD(K3bCdDevice::DeviceHandler *handler)
+void K3bCdDevice::DiskInfoDetector::slotIsVCD( KIO::Job* job )
 {
   kdDebug() << "(K3bCdDevice::DiskInfoDetector) isVCD" << endl;
 
   m_info.isVCD = false;
 
-  if ( handler->success() ) {
+  if ( !job->error() ) {
     QStringList files;
     files << QString("/vcd/info.vcd") << QString("/svcd/info.svd");
     for ( QStringList::Iterator it = files.begin(); it != files.end(); ++it ) {
@@ -177,15 +180,13 @@ void K3bCdDevice::DiskInfoDetector::slotIsVCD(K3bCdDevice::DeviceHandler *handle
           m_info.isVCD = true;
       }
     }
-    connect(K3bCdDevice::unmount(m_device),
-            SIGNAL(finished(K3bCdDevice::DeviceHandler *)),
-	    this,
-	    SLOT(slotFinished(K3bCdDevice::DeviceHandler *)) );
+    connect( KIO::unmount( m_device->mountPoint(), false ), SIGNAL(result(KIO::Job*)),
+	     this, SLOT(slotFinished()) );
   } else
     finish(true);
 }
 
-void K3bCdDevice::DiskInfoDetector::slotFinished(K3bCdDevice::DeviceHandler*)
+void K3bCdDevice::DiskInfoDetector::slotFinished()
 {
 //  finish(handler->success());
 //  umount may fail, if the CD was already mounted and is busy

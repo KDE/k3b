@@ -63,10 +63,9 @@ void K3bBlankingJob::start()
     return;
 
   if( !KIO::findDeviceMountPoint( m_device->mountDevice() ).isEmpty() ) {
-    // TODO: enable me after message freeze
     emit infoMessage( i18n("Unmounting disk"), INFO );
     // unmount the cd
-    connect( K3bCdDevice::unmount(m_device),SIGNAL(finished(K3bCdDevice::DeviceHandler *)),
+    connect( KIO::unmount( m_device->mountPoint(), false ), SIGNAL(result(KIO::Job*)),
 	     this, SLOT(slotStartErasing()) );
   }
   else {
