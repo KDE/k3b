@@ -11,7 +11,7 @@
             <x>0</x>
             <y>0</y>
             <width>541</width>
-            <height>458</height>
+            <height>324</height>
         </rect>
     </property>
     <property name="caption">
@@ -169,6 +169,14 @@
         <widget class="KTextEdit" row="10" column="1" rowspan="2" colspan="2">
             <property name="name">
                 <cstring>m_editMessage</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>7</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
             </property>
         </widget>
         <widget class="QToolButton" row="6" column="2">

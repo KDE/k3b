@@ -19,10 +19,10 @@
 
 #include <k3bcore.h>
 #include <k3bexternalbinmanager.h>
-#include "device/k3bdevicemanager.h"
-#include "k3bprocess.h"
-#include "device/k3bdevice.h"
-#include "device/k3bdevicehandler.h"
+#include <device/k3bdevicemanager.h>
+#include <k3bprocess.h>
+#include <device/k3bdevice.h>
+#include <device/k3bdevicehandler.h>
 
 #include <qstring.h>
 #include <qstringlist.h>
@@ -32,6 +32,8 @@
 #include <qfileinfo.h>
 #include <qdir.h>
 #include <qurl.h>
+#include <qsocket.h>
+#include <qsocketdevice.h>
 
 #include <klocale.h>
 #include <kdebug.h>

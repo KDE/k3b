@@ -15,7 +15,7 @@
 
 #include "k3bdatavolumedescwidget.h"
 
-#include "../k3bisooptions.h"
+#include "k3bisooptions.h"
 #include "k3bisovalidator.h"
 
 #include <qlineedit.h>

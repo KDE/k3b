@@ -16,7 +16,7 @@
 #ifndef K3B_BLANKING_JOB_H
 #define K3B_BLANKING_JOB_H
 
-#include "k3bjob.h"
+#include <k3bjob.h>
 
 class KProcess;
 class QString;
@@ -38,7 +38,7 @@ class K3bBlankingJob : public K3bJob
   void start();
   void cancel();
   void setForce( bool f ) { m_force = f; }
-  void setDevice( K3bDevice* d );
+  void setDevice( K3bCdDevice::CdDevice* d );
   void setSpeed( int s ) { m_speed = s; }
   void setMode( int m ) { m_mode = m; }
   void setWritingApp (int app) { m_writingApp = app; }
@@ -50,7 +50,7 @@ class K3bBlankingJob : public K3bJob
  private:
   K3bAbstractWriter* m_writerJob;
   bool m_force;
-  K3bDevice* m_device;
+  K3bCdDevice::CdDevice* m_device;
   int m_speed;
   int m_mode;
   int m_writingApp;

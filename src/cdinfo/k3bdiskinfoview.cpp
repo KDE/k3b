@@ -16,10 +16,10 @@
 
 #include "k3bdiskinfoview.h"
 
-#include "../device/k3bdiskinfo.h"
-#include "../device/k3bdiskinfodetector.h"
-#include "../tools/k3bglobals.h"
-#include "../k3bstdguiitems.h"
+#include <device/k3bdiskinfo.h>
+#include <device/k3bdiskinfodetector.h>
+#include <k3bglobals.h>
+#include <k3bstdguiitems.h>
 
 #include <qlabel.h>
 #include <qlayout.h>

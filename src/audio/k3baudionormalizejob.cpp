@@ -15,7 +15,7 @@
 
 
 #include "k3baudionormalizejob.h"
-#include <tools/k3bexternalbinmanager.h>
+#include <k3bexternalbinmanager.h>
 #include <k3bprocess.h>
 #include <k3bcore.h>
 

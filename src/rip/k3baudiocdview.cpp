@@ -19,7 +19,7 @@
 #include <k3b.h>
 #include <device/k3btoc.h>
 #include <device/k3bdiskinfo.h>
-#include <tools/k3blistview.h>
+#include <k3blistview.h>
 #include <cddb/k3bcddbresult.h>
 #include <device/k3bmsf.h>
 #include <cddb/k3bcddb.h>

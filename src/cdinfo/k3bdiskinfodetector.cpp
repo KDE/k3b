@@ -15,20 +15,18 @@
 
 #include "k3bdiskinfodetector.h"
 
-#include "k3bdevice.h"
-#include "k3btoc.h"
+#include <device/k3bdevice.h>
+#include <device/k3btoc.h>
 #include "../rip/k3btcwrapper.h"
-#include "../k3b.h"
-#include "../tools/k3bexternalbinmanager.h"
-#include "../tools/k3bglobals.h"
-#include "k3bdevicehandler.h"
+#include <k3bexternalbinmanager.h>
+#include <k3bglobals.h>
+#include <device/k3bdevicehandler.h>
 
 #include <kdebug.h>
 
 #include <qtimer.h>
 #include <qfile.h>
 
-#include "k3bprogressinfoevent.h"
 
 #include <sys/ioctl.h>		// ioctls
 #include <unistd.h>		// lseek, read. etc

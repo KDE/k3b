@@ -22,14 +22,15 @@
 #include <data/k3bdataimagesettingswidget.h>
 #include <data/k3bdataadvancedimagesettingswidget.h>
 #include <data/k3bdatavolumedescwidget.h>
-#include <tools/k3bexternalbinmanager.h>
+#include <k3bexternalbinmanager.h>
 #include <k3bwriterselectionwidget.h>
 #include <k3btempdirselectionwidget.h>
 #include <k3bstdguiitems.h>
-#include <tools/k3bglobals.h>
+#include <k3bglobals.h>
 #include <tools/k3bdatamodewidget.h>
 #include <k3bisooptions.h>
 #include <tools/k3bwritingmodewidget.h>
+#include <k3bcore.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -211,7 +212,7 @@ void K3bMovixBurnDialog::readSettings()
   m_dataModeWidget->setDataMode( m_doc->dataMode() );
 
   // first of all we need a movix installation object
-  QString path = K3bExternalBinManager::self()->binPath("eMovix");
+  QString path = k3bcore->externalBinManager()->binPath("eMovix");
   m_installation = K3bMovixInstallation::probeInstallation( path );
   if( m_installation ) {
     m_movixOptionsWidget->init( m_installation );

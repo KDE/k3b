@@ -18,11 +18,13 @@
 #define K3BJOB_H
 
 #include <qobject.h>
-#include "device/k3bdevice.h"
 
-class QString;
+
 class K3bDoc;
-class KProcess;
+namespace K3bCdDevice {
+  class CdDevice;
+}
+
 
 /**This is the baseclass for all the jobs in K3b which actually do the work like burning a cd!
   *@author Sebastian Trueg
@@ -74,7 +76,7 @@ class K3bBurnJob : public K3bJob
   K3bBurnJob( QObject* parent = 0, const char* name = 0 );
 	
   virtual K3bDoc* doc() const { return 0; }
-  virtual K3bDevice* writer() const { return 0; }
+  virtual K3bCdDevice::CdDevice* writer() const { return 0; }
 
   /**
    * use K3b::WritingApp

@@ -19,11 +19,11 @@
 #include <device/k3bdevice.h>
 #include <k3bcdrecordwriter.h>
 #include <k3bcdrdaowriter.h>
-#include <tools/k3bglobals.h>
+#include <k3bglobals.h>
 #include <k3bemptydiscwaiter.h>
 #include <k3bcore.h>
-#include <tools/k3bversion.h>
-#include <tools/k3bexternalbinmanager.h>
+#include <k3bversion.h>
+#include <k3bexternalbinmanager.h>
 
 #include <kdebug.h>
 #include <kconfig.h>

@@ -16,12 +16,12 @@
 #include "k3bsetupwizardtabs.h"
 #include "k3bsetup.h"
 
-#include "../device/k3bdevicemanager.h"
-#include "../device/k3bdevice.h"
-#include "../device/k3bdevicewidget.h"
-#include "../tools/k3bexternalbinmanager.h"
-#include "../tools/k3bexternalbinwidget.h"
-#include "../tools/k3blistview.h"
+#include <device/k3bdevicemanager.h>
+#include <device/k3bdevice.h>
+#include <device/k3bdevicewidget.h>
+#include <k3bexternalbinmanager.h>
+#include <k3bexternalbinwidget.h>
+#include <k3blistview.h>
 
 #include <qlabel.h>
 #include <qcheckbox.h>
@@ -103,7 +103,10 @@ DeviceTab::DeviceTab( int i, int o, K3bSetupWizard* wizard )
 			    "<p>You can add additional devices (like /dev/cdrom) if your drive has not "
 			    "been detected.</p>"
 			    "<p>K3b will only detect the capabilities of generic-mmc drives correctly. "
-			    "For all other drives you need to set them manually." ) );
+			    "For all other drives you need to set them manually."
+			    "<p><b>Be aware that K3bSetup only creates a configuration template. Once "
+			    "K3b has been started it saves it's own configuration which locally overwrites "
+			    "the modifications made here.</b>" ) );
   infoLabel->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
   m_deviceWidget = new K3bDeviceWidget( setup()->deviceManager(), main );
   setMainWidget( main );

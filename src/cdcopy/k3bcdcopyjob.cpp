@@ -18,12 +18,12 @@
 #include "k3bcdcopyjob.h"
 
 #include <k3b.h>
-#include <tools/k3bexternalbinmanager.h>
+#include <k3bexternalbinmanager.h>
 #include <k3bemptydiscwaiter.h>
 #include <device/k3bdevice.h>
 #include <device/k3bdiskinfo.h>
 #include <device/k3bdiskinfodetector.h>
-#include <tools/k3bglobals.h>
+#include <k3bglobals.h>
 
 #include <remote.h>
 

@@ -24,7 +24,7 @@
 
 #include <cddb/k3bcddbquery.h>
 
-#include "../device/k3bdiskinfo.h"
+#include <device/k3bdiskinfo.h>
 
 class KListView;
 class KURLRequester;

@@ -19,13 +19,13 @@
 #include "k3bisoimager.h"
 #include "k3bmsinfofetcher.h"
 #include <k3bcore.h>
-#include <tools/k3bglobals.h>
-#include <tools/k3bversion.h>
+#include <k3bglobals.h>
+#include <k3bversion.h>
 #include <device/k3bdevice.h>
 #include <device/k3btoc.h>
 #include <device/k3btrack.h>
 #include <k3bemptydiscwaiter.h>
-#include <tools/k3bexternalbinmanager.h>
+#include <k3bexternalbinmanager.h>
 #include <k3bcdrecordwriter.h>
 #include <k3bcdrdaowriter.h>
 

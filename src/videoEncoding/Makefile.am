@@ -1,6 +1,6 @@
 noinst_LTLIBRARIES = libvideoEncoding.la
 
-AM_CPPFLAGS= -I$(srcdir)/.. $(all_includes)
+AM_CPPFLAGS= -I$(srcdir)/../core -I$(srcdir)/.. $(all_includes)
 
 METASOURCES = AUTO
 

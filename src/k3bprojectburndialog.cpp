@@ -23,7 +23,7 @@
 #include "k3bstdguiitems.h"
 #include <device/k3bdevice.h>
 #include <device/k3bdevicemanager.h>
-#include "tools/k3bglobals.h"
+#include <k3bglobals.h>
 #include <tools/k3bwritingmodewidget.h>
 #include <k3bcore.h>
 

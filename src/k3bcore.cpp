@@ -18,10 +18,10 @@
 #include "k3bsystemproblemdialog.h"
 
 #include <device/k3bdevicemanager.h>
-#include <tools/k3bexternalbinmanager.h>
-#include <tools/k3bdefaultexternalprograms.h>
-#include <tools/k3bglobals.h>
-#include <tools/k3bversion.h>
+#include <k3bexternalbinmanager.h>
+#include <k3bdefaultexternalprograms.h>
+#include <k3bglobals.h>
+#include <k3bversion.h>
 #include <rip/songdb/k3bsongmanager.h>
 
 #include <kapplication.h>

@@ -25,8 +25,8 @@
 #include <device/k3bdevice.h>
 #include <device/k3bmsf.h>
 #include <tools/k3bwavefilewriter.h>
-#include <tools/k3bglobals.h>
-#include <tools/k3bexternalbinmanager.h>
+#include <k3bglobals.h>
+#include <k3bexternalbinmanager.h>
 #include <k3bemptydiscwaiter.h>
 #include <k3bcore.h>
 #include <k3bcdrecordwriter.h>

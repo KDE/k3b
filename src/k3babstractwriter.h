@@ -32,7 +32,7 @@ class K3bAbstractWriter : public K3bJob
  public:
   virtual ~K3bAbstractWriter();
 
-  K3bDevice* burnDevice() const;
+  K3bCdDevice::CdDevice* burnDevice() const;
   int burnSpeed() const { return m_burnSpeed; }
   bool burnproof() const { return m_burnproof; }
   bool simulate() const { return m_simulate; }
@@ -55,7 +55,7 @@ class K3bAbstractWriter : public K3bJob
    */
   void cancel();
 
-  void setBurnDevice( K3bDevice* dev ) { m_burnDevice = dev; }
+  void setBurnDevice( K3bCdDevice::CdDevice* dev ) { m_burnDevice = dev; }
   void setBurnSpeed( int s ) { m_burnSpeed = s; }
   void setBurnproof( bool b ) { m_burnproof = b; }
   void setSimulate( bool b ) { m_simulate = b; }
@@ -67,7 +67,7 @@ class K3bAbstractWriter : public K3bJob
   void writeSpeed( int );
 
  protected:
-  K3bAbstractWriter( K3bDevice* dev, QObject* parent = 0, const char* name = 0 );
+  K3bAbstractWriter( K3bCdDevice::CdDevice* dev, QObject* parent = 0, const char* name = 0 );
 
   void createEstimatedWriteSpeed( int writtenMb, bool firstCall = false );
   void createAverageWriteSpeedInfoMessage();
@@ -77,7 +77,7 @@ class K3bAbstractWriter : public K3bJob
   void slotEjectWhileCancellationFinished( bool success );
 
  private:
-  K3bDevice* m_burnDevice;
+  K3bCdDevice::CdDevice* m_burnDevice;
   int m_burnSpeed;
   bool m_burnproof;
   bool m_simulate;

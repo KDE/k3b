@@ -19,8 +19,8 @@
 
 
 #include <kfiletreeview.h>
-#include "device/k3bdevice.h"
-#include "device/k3bdevicemanager.h"
+#include <device/k3bdevice.h>
+#include <device/k3bdevicemanager.h>
 
 #include <qmap.h>
 

@@ -30,6 +30,7 @@ class KTempFile;
 class K3bCdrecordWriter;
 class K3bAudioNormalizeJob;
 class K3bAudioJobTempData;
+class K3bCdDevice::CdDevice;
 
 /**
   *@author Sebastian Trueg
@@ -43,7 +44,7 @@ class K3bAudioJob : public K3bBurnJob
   ~K3bAudioJob();
 	
   K3bDoc* doc() const;
-  K3bDevice* writer() const;
+  K3bCdDevice::CdDevice* writer() const;
 
   QString jobDescription() const;
   QString jobDetails() const;

@@ -19,7 +19,7 @@
 
 #include <k3bdoc.h>
 
-#include "../k3bisooptions.h"
+#include "k3bisooptions.h"
 
 #include <qptrlist.h>
 #include <qfileinfo.h>

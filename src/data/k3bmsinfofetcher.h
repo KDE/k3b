@@ -38,7 +38,7 @@ class K3bMsInfoFetcher : public K3bJob
   void start();
   void cancel();
 
-  void setDevice( K3bDevice* dev ) { m_device = dev; }
+  void setDevice( K3bCdDevice::CdDevice* dev ) { m_device = dev; }
 
  private slots:
   void slotProcessExited();
@@ -51,7 +51,7 @@ class K3bMsInfoFetcher : public K3bJob
   QString m_collectedOutput;
 
   KProcess* m_process;
-  K3bDevice* m_device;
+  K3bCdDevice::CdDevice* m_device;
 
   bool m_canceled;
 };

@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -17,7 +17,7 @@
 #ifndef AUDIOLISTVIEWITEM_H
 #define AUDIOLISTVIEWITEM_H
 
-#include "../tools/k3blistview.h"
+#include <k3blistview.h>
 
 class K3bAudioTrack;
 

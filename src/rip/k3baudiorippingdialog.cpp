@@ -20,11 +20,11 @@
 #include <k3bjobprogressdialog.h>
 #include "songdb/k3bsong.h"
 #include "songdb/k3bsongmanager.h"
-#include "../k3bcore.h"
-#include "../k3b.h"
-#include "../tools/k3bglobals.h"
-#include "../device/k3btrack.h"
-#include "../k3bstdguiitems.h"
+#include <k3bcore.h>
+#include <k3b.h>
+#include <k3bglobals.h>
+#include <device/k3btrack.h>
+#include <k3bstdguiitems.h>
 
 #include <kcombobox.h>
 #include <klocale.h>

@@ -14,11 +14,11 @@
  */
 
 #include "k3bstatusbarmanager.h"
-#include "k3bcore.h"
+#include <k3bcore.h>
 #include "k3bbusywidget.h"
 #include "k3b.h"
-#include <tools/k3bversion.h>
-#include <tools/k3bglobals.h>
+#include <k3bversion.h>
+#include <k3bglobals.h>
 
 #include <kiconloader.h>
 #include <klocale.h>

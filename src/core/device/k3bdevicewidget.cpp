@@ -17,6 +17,7 @@
 #include "k3bdevicewidget.h"
 #include "k3bdevicemanager.h"
 #include "k3bdevice.h"
+#include <k3blistview.h>
 
 #include <klineeditdlg.h>
 #include <kmessagebox.h>
@@ -27,7 +28,6 @@
 #include <ksimpleconfig.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
-#include <tools/k3blistview.h>
 
 #include <qgroupbox.h>
 #include <qpushbutton.h>

@@ -15,12 +15,12 @@
 
 #include "k3bblankingdialog.h"
 
-#include "device/k3bdevice.h"
-#include "device/k3bdevicemanager.h"
+#include <device/k3bdevice.h>
+#include <device/k3bdevicemanager.h>
 #include "k3bblankingjob.h"
 #include "k3bwriterselectionwidget.h"
 #include "k3bdiskerasinginfodialog.h"
-#include "tools/k3bglobals.h"
+#include <k3bglobals.h>
 #include <k3bcore.h>
 
 #include <klocale.h>

@@ -16,11 +16,11 @@
 
 #include "k3bsetup.h"
 
-#include "../device/k3bdevicemanager.h"
-#include "../device/k3bdevice.h"
-#include "../tools/k3bexternalbinmanager.h"
-#include "../tools/k3bdefaultexternalprograms.h"
-#include "../tools/k3bglobals.h"
+#include <device/k3bdevicemanager.h>
+#include <device/k3bdevice.h>
+#include <k3bexternalbinmanager.h>
+#include <k3bdefaultexternalprograms.h>
+#include <k3bglobals.h>
 
 #include <kconfig.h>
 #include <ksimpleconfig.h>
@@ -45,8 +45,8 @@ K3bSetup::K3bSetup( QObject* parent )
   : QObject( parent )
 {
   // create a K3bDeviceManager
-  m_externalBinManager = K3bExternalBinManager::self();
-  m_deviceManager = K3bDeviceManager::self();
+  m_externalBinManager = new K3bExternalBinManager( this );
+  m_deviceManager = new K3bCdDevice::DeviceManager( m_externalBinManager, this );
 
 
   m_config = new KSimpleConfig( K3b::globalConfig() );

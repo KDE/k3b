@@ -19,7 +19,7 @@
 
 #include <data/k3bdatadoc.h>
 #include <audio/k3baudiodoc.h>
-#include <tools/k3bglobals.h>
+#include <k3bglobals.h>
 
 #include <qfileinfo.h>
 #include <qdom.h>

@@ -41,10 +41,10 @@
 // K3b Includes
 #include "k3bvcdtrackdialog.h"
 #include "k3bvcdtrack.h"
-#include "../kcutlabel.h"
-#include "../device/k3bmsf.h"
-#include "../tools/k3bglobals.h"
-#include "../tools/k3blistview.h"
+#include <kcutlabel.h>
+#include <device/k3bmsf.h>
+#include <k3bglobals.h>
+#include <k3blistview.h>
 #include <tools/k3bcutcombobox.h>
 
 K3bVcdTrackDialog::K3bVcdTrackDialog( K3bVcdDoc* _doc, QPtrList<K3bVcdTrack>& tracks, QPtrList<K3bVcdTrack>& selectedTracks, QWidget* parent, const char* name )

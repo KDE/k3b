@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -15,8 +15,8 @@
 
 
 #include "k3bexternalbinoptiontab.h"
-#include "../tools/k3bexternalbinmanager.h"
-#include "../tools/k3bexternalbinwidget.h"
+#include <k3bexternalbinmanager.h>
+#include <k3bexternalbinwidget.h>
 
 #include <kmessagebox.h>
 #include <kdialog.h>

@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -14,9 +14,10 @@
  */
 
 #include "k3bdeviceoptiontab.h"
-#include "../device/k3bdevicemanager.h"
-#include "../device/k3bdevicewidget.h"
-#include "../tools/k3bglobals.h"
+#include <device/k3bdevicemanager.h>
+#include <device/k3bdevicewidget.h>
+#include <k3bglobals.h>
+#include <k3bcore.h>
 
 #include <qlabel.h>
 #include <qstring.h>
@@ -47,7 +48,7 @@ K3bDeviceOptionTab::K3bDeviceOptionTab( QWidget* parent, const char* name )
 				     "to detect your drive, run K3bSetup to set the correct permissions." ) );
   // ------------------------------------------------
 
-  m_deviceWidget = new K3bDeviceWidget( K3bDeviceManager::self(), this );
+  m_deviceWidget = new K3bDeviceWidget( k3bcore->deviceManager(), this );
 
   frameLayout->addWidget( m_labelDevicesInfo, 0, 0 );
   frameLayout->addWidget( m_deviceWidget, 1, 0 );
@@ -74,19 +75,19 @@ void K3bDeviceOptionTab::saveDevices()
   m_deviceWidget->apply();
 
   // save the config
-  K3bDeviceManager::self()->saveConfig( kapp->config() );
+  k3bcore->deviceManager()->saveConfig( kapp->config() );
 }
 
 
 void K3bDeviceOptionTab::slotRefreshButtonClicked()
 {
-  K3bDeviceManager::self()->clear();
-  K3bDeviceManager::self()->scanbus();
+  k3bcore->deviceManager()->clear();
+  k3bcore->deviceManager()->scanbus();
   
   KConfig globalConfig( K3b::globalConfig() );
   
   globalConfig.setGroup( "Devices" );
-  K3bDeviceManager::self()->readConfig( &globalConfig );
+  k3bcore->deviceManager()->readConfig( &globalConfig );
 
   m_deviceWidget->init();
 }

@@ -21,7 +21,7 @@
 #include <device/k3bdevice.h>
 #include <k3bstdguiitems.h>
 #include <k3bcore.h>
-#include <tools/k3bversion.h>
+#include <k3bversion.h>
 
 #include <qgroupbox.h>
 #include <qlabel.h>

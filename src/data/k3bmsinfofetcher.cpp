@@ -15,7 +15,7 @@
 
 #include "k3bmsinfofetcher.h"
 
-#include <tools/k3bexternalbinmanager.h>
+#include <k3bexternalbinmanager.h>
 #include <device/k3bdevicemanager.h>
 #include <device/k3bdevice.h>
 #include <k3bcore.h>

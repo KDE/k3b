@@ -22,8 +22,9 @@
 #include <klistview.h>
 #include <qmap.h>
 
-#include "../device/k3bdevice.h"
-
+namespace K3bCdDevice {
+  class CdDevice;
+}
 class QPushButton;
 class QLabel;
 class QCheckBox;
@@ -39,11 +40,11 @@ class K3bListView;
 class K3bDeviceViewItem : public KListViewItem
 {
  public:
-  K3bDeviceViewItem( K3bDevice*, KListView*, const QString& = QString::null );
-  K3bDeviceViewItem( K3bDevice*, KListViewItem*, const QString& = QString::null );
-  K3bDeviceViewItem( K3bDevice*, KListViewItem*, KListViewItem* prev, const QString& = QString::null );
+  K3bDeviceViewItem( K3bCdDevice::CdDevice*, KListView*, const QString& = QString::null );
+  K3bDeviceViewItem( K3bCdDevice::CdDevice*, KListViewItem*, const QString& = QString::null );
+  K3bDeviceViewItem( K3bCdDevice::CdDevice*, KListViewItem*, KListViewItem* prev, const QString& = QString::null );
 
-  K3bDevice* device;
+  K3bCdDevice::CdDevice* device;
 };
 
 

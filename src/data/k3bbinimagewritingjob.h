@@ -33,7 +33,7 @@ class K3bBinImageWritingJob : public K3bBurnJob
   K3bBinImageWritingJob( QObject* parent = 0 );
   ~K3bBinImageWritingJob();
 
-  K3bDevice* writer() const { return m_device; };
+  K3bCdDevice::CdDevice* writer() const { return m_device; };
 
   QString jobDescription() const;
   QString jobDetails() const;
@@ -42,7 +42,7 @@ class K3bBinImageWritingJob : public K3bBurnJob
   void start();
   void cancel();
 
-  void setWriter( K3bDevice* dev ) { m_device = dev; }
+  void setWriter( K3bCdDevice::CdDevice* dev ) { m_device = dev; }
   void setSimulate( bool b ) { m_simulate = b; }
   void setBurnproof( bool b ) { m_burnproof = b; }
   void setForce(bool b) { m_force = b; }
@@ -61,7 +61,7 @@ class K3bBinImageWritingJob : public K3bBurnJob
   void writerStart();
   bool prepareWriter();
 
-  K3bDevice* m_device;
+  K3bCdDevice::CdDevice* m_device;
   bool m_simulate;
   bool m_burnproof;
   bool m_force;
@@ -74,7 +74,6 @@ class K3bBinImageWritingJob : public K3bBurnJob
   bool m_canceled;
 
   K3bAbstractWriter* m_writer;
-
 };
 
 #endif

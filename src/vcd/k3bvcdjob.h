@@ -24,6 +24,8 @@ class QString;
 class KProcess;
 class QDataStream;
 class K3bAbstractWriter;
+class K3bCdDevice::CdDevice;
+
 
 class K3bVcdJob : public K3bBurnJob
 {
@@ -35,7 +37,7 @@ class K3bVcdJob : public K3bBurnJob
 
         K3bDoc* doc() const;
         K3bVcdDoc* vcdDoc() const { return m_doc; }
-        K3bDevice* writer() const;
+        K3bCdDevice::CdDevice* writer() const;
 
         QString jobDescription() const;
         QString jobDetails() const;
@@ -72,8 +74,8 @@ class K3bVcdJob : public K3bBurnJob
         enum { stageUnknown, stageScan, stageWrite, _stage_max };
 
         K3bVcdDoc* m_doc;
-        K3bDevice* m_writer;
-        K3bDevice* m_reader;
+        K3bCdDevice::CdDevice* m_writer;
+        K3bCdDevice::CdDevice* m_reader;
         K3bVcdTrack* m_currentWrittenTrack;
 
         int m_speed;

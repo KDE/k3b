@@ -25,7 +25,7 @@
 #include <k3bstdguiitems.h>
 #include <tools/k3bmd5job.h>
 #include <tools/k3bdatamodewidget.h>
-#include <tools/k3bglobals.h>
+#include <k3bglobals.h>
 #include <tools/k3bwritingmodewidget.h>
 #include <k3bcore.h>
 

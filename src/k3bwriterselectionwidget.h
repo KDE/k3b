@@ -18,13 +18,14 @@
 #define K3BWRITERSELECTIONWIDGET_H
 
 #include <qwidget.h>
-#include "device/k3bdevice.h"
 
 class KComboBox;
 class KConfig;
 class QLabel;
 class K3bDeviceComboBox;
-
+namespace K3bCdDevice {
+  class CdDevice;
+}
 
 /**
   *@author Sebastian Trueg
@@ -38,7 +39,7 @@ class K3bWriterSelectionWidget : public QWidget
   ~K3bWriterSelectionWidget();
 
   int writerSpeed() const;
-  K3bDevice* writerDevice() const;
+  K3bCdDevice::CdDevice* writerDevice() const;
 
   /**
    * returns K3b::WritingApp
@@ -50,7 +51,7 @@ class K3bWriterSelectionWidget : public QWidget
   void saveConfig( KConfig* );
 
  public slots:
-  void setWriterDevice( K3bDevice* );
+  void setWriterDevice( K3bCdDevice::CdDevice* );
   void setSpeed( int );
 
   /**

@@ -42,9 +42,9 @@
 #include <k3bwriterselectionwidget.h>
 #include <k3btempdirselectionwidget.h>
 #include <k3bstdguiitems.h>
-#include <tools/k3bglobals.h>
+#include <k3bglobals.h>
 #include <tools/k3bwritingmodewidget.h>
-#include <tools/k3bexternalbinmanager.h>
+#include <k3bexternalbinmanager.h>
 #include "tools/k3biso646validator.h"
 
 K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char *name, bool modal )

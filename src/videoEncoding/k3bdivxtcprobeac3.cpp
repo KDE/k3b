@@ -17,8 +17,8 @@
 #include "k3bdivxtcprobeac3.h"
 #include "k3bdivxcodecdata.h"
 #include "k3bdivxhelper.h"
-#include "../tools/k3bexternalbinmanager.h"
-#include "../k3bcore.h"
+#include <k3bexternalbinmanager.h>
+#include <k3bcore.h>
 
 #include <kprocess.h>
 #include <kdebug.h>

@@ -16,7 +16,7 @@
 
 #include "k3bdivxencodingprocess.h"
 #include "k3bdivxcodecdata.h"
-#include <tools/k3bexternalbinmanager.h>
+#include <k3bexternalbinmanager.h>
 #include <k3bcore.h>
 
 #include <qdir.h>

@@ -24,9 +24,9 @@
 #include <klistview.h>
 #include <kdiroperator.h>
 #include <kfiledetailview.h>
-#include "device/k3bdevice.h"
-#include "device/k3bdevicemanager.h"
-#include "device/k3bdiskinfodetector.h"
+#include <device/k3bdevice.h>
+#include <device/k3bdevicemanager.h>
+#include <cdinfo/k3bdiskinfodetector.h>
 
 class QSplitter;
 class KURL;

@@ -37,7 +37,7 @@ class K3bCdCopyJob : public K3bBurnJob
   K3bCdCopyJob( QObject* parent = 0 );
   ~K3bCdCopyJob();
 
-  K3bDevice* writer() const { return m_cdrdaowriter->burnDevice(); };
+  K3bCdDevice::CdDevice* writer() const { return m_cdrdaowriter->burnDevice(); };
 	
   QString jobDescription() const;
   QString jobDetails() const;
@@ -47,8 +47,8 @@ class K3bCdCopyJob : public K3bBurnJob
   void cancel();
 
  public:
-  void setWriter( K3bDevice* dev ) { m_cdrdaowriter->setBurnDevice(dev); }
-  void setReader( K3bDevice* dev ) { m_cdrdaowriter->setSourceDevice(dev); }
+  void setWriter( K3bCdDevice::CdDevice* dev ) { m_cdrdaowriter->setBurnDevice(dev); }
+  void setReader( K3bCdDevice::CdDevice* dev ) { m_cdrdaowriter->setSourceDevice(dev); }
   void setSpeed( int s ) { m_cdrdaowriter->setBurnSpeed(s); }
   void setOnTheFly( bool b ) { m_onTheFly = b; }
   void setKeepImage( bool b ) { m_keepImage = b; }
@@ -74,7 +74,7 @@ class K3bCdCopyJob : public K3bBurnJob
   void slotNextTrack( int, int );
 
  private:
-  void getSourceDiskInfo(K3bDevice *dev);
+  void getSourceDiskInfo(K3bCdDevice::CdDevice *dev);
   void cdrdaoDirectCopy();
   void cdrdaoRead();
   void cdrdaoWrite();

@@ -303,7 +303,7 @@ bool K3bCddbHttpQuery::connectToServer()
 }
 
 
-void K3bCddbHttpQuery::setTimeout( int t )
+void K3bCddbHttpQuery::setTimeout( int )
 {
   //m_socket->setTimeout(t);
 }

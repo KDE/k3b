@@ -16,7 +16,7 @@
 #ifndef K3BDATAVIEWITEM_H
 #define K3BDATAVIEWITEM_H
 
-#include "../tools/k3blistview.h"
+#include <k3blistview.h>
 
 class K3bDataItem;
 class K3bFileItem;

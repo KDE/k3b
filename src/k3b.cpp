@@ -53,7 +53,7 @@
 // application specific includes
 #include "k3b.h"
 #include "k3bcore.h"
-#include "tools/k3bglobals.h"
+#include <k3bglobals.h>
 #include "k3bview.h"
 #include "k3bdirview.h"
 #include "audio/k3baudiodoc.h"
@@ -70,8 +70,8 @@
 #include "k3bblankingdialog.h"
 #include "data/k3bisoimagewritingdialog.h"
 #include "data/k3bbinimagewritingdialog.h"
-#include "tools/k3bexternalbinmanager.h"
-#include "tools/k3bdefaultexternalprograms.h"
+#include <k3bexternalbinmanager.h>
+//#include "tools/k3bdefaultexternalprograms.h"
 #include "k3bprojecttabwidget.h"
 #include "k3baudioplayer.h"
 #include "cdcopy/k3bcdcopydialog.h"

@@ -18,7 +18,7 @@
 #include "k3bdvdcontent.h"
 #include "k3btcwrapper.h"
 #include "k3bdvdripperwidget.h"
-#include "../device/k3bdevice.h"
+#include <device/k3bdevice.h>
 #include "k3bdvdriplistviewitem.h"
 #include <kcutlabel.h>
 #include <k3btoolbox.h>
@@ -196,7 +196,7 @@ void K3bMovieView::slotDvdChecked( bool successful )
   m_dvdTitles.clear();
 
   if( successful ){
-    K3bDvdRipListViewItem *longestTitle;
+    K3bDvdRipListViewItem *longestTitle = 0;
     long maxFrames = 0;
     m_dvdTitles = m_tcWrapper->getDvdTitles();
     m_listView->clear();

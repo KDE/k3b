@@ -1,24 +1,22 @@
-/***************************************************************************
-                          k3bdvdcopy.cpp  -  description
-                             -------------------
-    begin                : Sun Mar 3 2002
-    copyright            : (C) 2002 by Sebastian Trueg
-    email                : trueg@informatik.uni-freiburg.de
- ***************************************************************************/
+/* 
+ *
+ * $Id$
+ * Copyright (C) 2003 Thomas Froescher <tfroescher@k3b.org>
+ *
+ * This file is part of the K3b project.
+ * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * See the file "COPYING" for the exact licensing terms.
+ */
 
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
 
 #include "k3bdvdcopy.h"
 #include "k3bdvdcontent.h"
-#include <tools/k3bexternalbinmanager.h>
-#include <k3b.h>
+#include <k3bexternalbinmanager.h>
 #include "k3bdvdrippingprocess.h"
 #include <device/k3bdevicemanager.h>
 #include <device/k3bdevice.h>
@@ -26,11 +24,12 @@
 #include <qstring.h>
 #include <qdatastream.h>
 #include <qdatetime.h>
-
+#include <qwidget.h>
 #include <kprocess.h>
 #include <klocale.h>
 
-K3bDvdCopy::K3bDvdCopy(const QString& device, const QString& directory, const QString& vob, const QString& tmp, const QValueList<K3bDvdContent> &titles, QWidget *parent ) : K3bJob( ) {
+K3bDvdCopy::K3bDvdCopy(const QString& device, const QString& directory, const QString& vob, const QString& tmp, const QValueList<K3bDvdContent> &titles, QWidget *parent )
+  : K3bJob() {
     m_device = device;
     m_directory = directory;
     m_dirvob = vob;

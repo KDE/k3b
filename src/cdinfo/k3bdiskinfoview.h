@@ -19,7 +19,7 @@
 #define K3BDISKINFOVIEW_H
 
 #include "../k3bcdcontentsview.h"
-#include "../device/k3bdiskinfo.h"
+#include <device/k3bdiskinfo.h>
 
 class QLabel;
 class KListView;

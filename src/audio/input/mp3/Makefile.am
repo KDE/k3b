@@ -1,4 +1,4 @@
-AM_CPPFLAGS= -I$(srcdir)/libmad -I$(srcdir)/../../.. $(all_includes)
+AM_CPPFLAGS= -I$(srcdir)/../../../core -I$(srcdir)/libmad -I$(srcdir)/../../.. $(all_includes)
 
 SUBDIRS = libmad
 

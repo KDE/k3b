@@ -17,9 +17,9 @@
 #include "k3bcdrecordwriter.h"
 #include "k3bcdrdaowriter.h"
 
-#include "tools/k3bglobals.h"
-#include "device/k3bdevice.h"
-#include "device/k3bdevicehandler.h"
+#include <k3bglobals.h>
+#include <device/k3bdevice.h>
+#include <device/k3bdevicehandler.h>
 
 #include <kconfig.h>
 #include <klocale.h>

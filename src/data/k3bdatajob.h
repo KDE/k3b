@@ -29,6 +29,7 @@ class K3bIsoImager;
 class KTempFile;
 class K3bMsInfoFetcher;
 
+
 /**
   *@author Sebastian Trueg
   */
@@ -42,7 +43,7 @@ class K3bDataJob : public K3bBurnJob
   ~K3bDataJob();
 	
   K3bDoc* doc() const;
-  K3bDevice* writer() const;
+  K3bCdDevice::CdDevice* writer() const;
 
   QString jobDescription() const;
   QString jobDetails() const;

@@ -16,13 +16,14 @@
 
 #include "k3bbinimagewritingdialog.h"
 #include "k3bbinimagewritingjob.h"
-#include <tools/k3bglobals.h>
+#include <k3bglobals.h>
 #include <device/k3bdevicemanager.h>
 #include <device/k3bdevice.h>
 #include <k3bwriterselectionwidget.h>
 #include <k3bburnprogressdialog.h>
 #include <k3bstdguiitems.h>
 #include <k3bcore.h>
+#include <k3bexternalbinmanager.h>
 #include <tools/k3bmd5job.h>
 
 #include <kconfig.h>

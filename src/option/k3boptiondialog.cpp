@@ -23,7 +23,6 @@
 #include "k3bpatternoptiontab.h"
 #include "k3bexternalbinoptiontab.h"
 #include "k3bmiscoptiontab.h"
-#include "../k3bcore.h"
 #include <k3bsystemproblemdialog.h>
 
 #include <qlayout.h>

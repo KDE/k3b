@@ -26,7 +26,7 @@
 
 // K3b Includes
 #include "k3bvcdoptions.h"
-#include <tools/k3bversion.h>
+#include <k3bversion.h>
 
 K3bVcdOptions::K3bVcdOptions()
         : m_restriction( 0 ),

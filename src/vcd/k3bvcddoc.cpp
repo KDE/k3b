@@ -40,8 +40,7 @@
 #include "k3bvcdtrack.h"
 #include "k3bvcdburndialog.h"
 #include "k3bvcdjob.h"
-#include <k3b.h>
-#include <tools/k3bglobals.h>
+#include <k3bglobals.h>
 
 bool desperate_mode = false;
 bool preserve_header = false;

@@ -13,7 +13,7 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include <tools/k3bglobals.h>
+#include <k3bglobals.h>
 #include "k3bcddacopy.h"
 #include "k3bpatternparser.h"
 #include <device/k3bdevice.h>

@@ -129,9 +129,8 @@ class K3bExternalBinManager : public QObject
   Q_OBJECT
 
  public:
+  K3bExternalBinManager( QObject* parent = 0, const char* name = 0 );
   ~K3bExternalBinManager();
-
-  static K3bExternalBinManager* self();
 
   void search();
 
@@ -160,8 +159,6 @@ class K3bExternalBinManager : public QObject
   void clear();
 
  private:
-  K3bExternalBinManager();
-
   QMap<QString, K3bExternalProgram*> m_programs;
   QStringList m_searchPath;
 

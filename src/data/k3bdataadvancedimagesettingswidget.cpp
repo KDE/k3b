@@ -15,7 +15,7 @@
 
 #include "k3bdataadvancedimagesettingswidget.h"
 
-#include "../k3bisooptions.h"
+#include "k3bisooptions.h"
 
 #include <qcheckbox.h>
 #include <qradiobutton.h>

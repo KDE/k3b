@@ -17,11 +17,11 @@
 #include "k3bdiritem.h"
 #include "k3bbootitem.h"
 #include "k3bdatadoc.h"
-#include <tools/k3bexternalbinmanager.h>
+#include <k3bexternalbinmanager.h>
 #include <device/k3bdevice.h>
 #include <k3bprocess.h>
 #include <k3bcore.h>
-#include <tools/k3bversion.h>
+#include <k3bversion.h>
 
 #include <kdebug.h>
 #include <kstandarddirs.h>

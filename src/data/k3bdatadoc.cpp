@@ -23,7 +23,7 @@
 #include "k3bspecialdataitem.h"
 #include <k3b.h>
 #include <k3bcore.h>
-#include <tools/k3bglobals.h>
+#include <k3bglobals.h>
 
 #include <stdlib.h>
 

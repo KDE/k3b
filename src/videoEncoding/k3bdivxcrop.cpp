@@ -17,8 +17,8 @@
 #include "k3bdivxcrop.h"
 #include "k3bdivxpreview.h"
 #include "k3bdivxcodecdata.h"
-#include "../k3bcore.h"
-#include "../tools/k3bexternalbinmanager.h"
+#include <k3bcore.h>
+#include <k3bexternalbinmanager.h>
 
 #include <stdlib.h>
 

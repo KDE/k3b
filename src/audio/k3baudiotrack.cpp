@@ -15,11 +15,10 @@
 
 
 #include "k3baudiotrack.h"
-#include "../tools/k3bglobals.h"
 
 #include "input/k3baudiomodule.h"
+#include <k3bcore.h>
 
-#include <kapplication.h>
 #include <kconfig.h>
 
 #include <qstring.h>
@@ -41,8 +40,8 @@ K3bAudioTrack::K3bAudioTrack( QPtrList<K3bAudioTrack>* parent, const QString& fi
   m_copy = false;
   m_preEmp = false;
   
-  kapp->config()->setGroup( "Audio project settings" );
-  setPregap( kapp->config()->readNumEntry( "default pregap", 150 ) );
+  k3bcore->config()->setGroup( "Audio project settings" );
+  setPregap( k3bcore->config()->readNumEntry( "default pregap", 150 ) );
   
 
   m_module = 0;
@@ -68,10 +67,10 @@ int K3bAudioTrack::index() const
   return i;
 }
 
-void K3bAudioTrack::setBufferFile( const QString& path )
-{
-  m_bufferFile = path;
-}
+// void K3bAudioTrack::setBufferFile( const QString& path )
+// {
+//   m_bufferFile = path;
+// }
 
 
 void K3bAudioTrack::setPregap( const K3b::Msf& p )

@@ -20,7 +20,6 @@
 #include <k3binteractiondialog.h>
 #include <kurl.h>
 
-#include <tools/k3bexternalbinmanager.h>
 
 class K3bMd5Job;
 class KActiveLabel;
@@ -30,6 +29,7 @@ class QSpinBox;
 class KURLRequester;
 class K3bWriterSelectionWidget;
 class K3bBinImageWritingJob;
+class K3bExternalBin;
 
 
 /**

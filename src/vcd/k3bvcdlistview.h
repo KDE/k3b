@@ -17,7 +17,7 @@
 #define K3BVCDLISTVIEW_H
 
 
-#include <tools/k3blistview.h>
+#include <k3blistview.h>
 
 #include <qmap.h>
 

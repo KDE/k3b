@@ -16,8 +16,8 @@
 
 #include "k3bdevicemanager.h"
 #include "k3bdevice.h"
-#include "../tools/k3bexternalbinmanager.h"
-#include "../tools/k3bglobals.h"
+#include <k3bexternalbinmanager.h>
+#include <k3bglobals.h>
 
 #include <qstring.h>
 #include <qstringlist.h>
@@ -68,10 +68,11 @@ typedef Q_INT32 size32;
 #endif /* #ifndef IDE_DISK_MAJOR */
 
 
-K3bCdDevice::DeviceManager::DeviceManager( )
-    : QObject()
+K3bCdDevice::DeviceManager::DeviceManager( K3bExternalBinManager* externalBinManager,
+					   QObject* parent, const char* name )
+  : QObject( parent, name ),
+    m_externalBinManager( externalBinManager )
 {
-  m_externalBinManager = K3bExternalBinManager::self();
   m_reader.setAutoDelete( true );
   m_writer.setAutoDelete( true );
   m_allDevices.setAutoDelete( false );
@@ -782,16 +783,6 @@ QString K3bCdDevice::DeviceManager::resolveSymLink( const QString& path )
   }
 
   return QString::fromLatin1( resolved );
-}
-
-
-K3bCdDevice::DeviceManager* K3bCdDevice::DeviceManager::self()
-{
-  static K3bDeviceManager* instance = 0;
-  if( !instance )
-    instance = new K3bDeviceManager();
-
-  return instance;
 }
 
 

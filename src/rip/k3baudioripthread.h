@@ -20,10 +20,11 @@
 #include <k3bthread.h>
 #include <qcstring.h>
 
-#include "../device/k3bdevice.h"
-
 class QTimer;
 class K3bCdparanoiaLib;
+namespace K3bCdDevice {
+  class CdDevice;
+}
 
 
 class K3bAudioRipThread : public K3bThread
@@ -37,7 +38,7 @@ class K3bAudioRipThread : public K3bThread
   void setMaxRetries( int r ) { m_paranoiaRetries = r; }
   void setNeverSkip( bool b ) { m_neverSkip = b; }
 
-  void setDevice( K3bDevice* dev ) { m_device = dev; }
+  void setDevice( K3bCdDevice::CdDevice* dev ) { m_device = dev; }
   void setTrackToRip( unsigned int track ) { m_track = track; }
 
   void cancel();
@@ -49,7 +50,7 @@ class K3bAudioRipThread : public K3bThread
   void run();
 
   K3bCdparanoiaLib* m_paranoiaLib;
-  K3bDevice* m_device;
+  K3bCdDevice::CdDevice* m_device;
 
   long m_currentSector;
   long m_lastSector;

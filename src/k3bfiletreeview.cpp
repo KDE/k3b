@@ -18,9 +18,9 @@
 #include "k3b.h"
 #include "k3bdirview.h"
 
-#include "device/k3bdevicemanager.h"
-#include "device/k3bdevice.h"
-#include "device/k3bdiskinfo.h"
+#include <device/k3bdevicemanager.h>
+#include <device/k3bdevice.h>
+#include <device/k3bdiskinfo.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -120,7 +120,7 @@ void K3bFileTreeView::slotDropped() {
     kdDebug() << "(K3bFileTreeView:slotDropped)" << endl;
 }
 */
-void K3bFileTreeView::contentsDropEvent(QDropEvent* event) {
+void K3bFileTreeView::contentsDropEvent(QDropEvent* ) {
 //     kdDebug() << "(K3bFileTreeView:contentsDropEvent)" << endl;
 //     QString text;
 //     if ( QTextDrag::decode(event, text) ) {
@@ -140,7 +140,7 @@ void K3bFileTreeView::contentsDropEvent(QDropEvent* event) {
 //     }
 }
 
-void K3bFileTreeView::contentsDragMoveEvent ( QDragMoveEvent *e ){
+void K3bFileTreeView::contentsDragMoveEvent ( QDragMoveEvent* ){
 //    QString text;
 //    QTextDrag::decode( e, text );
 //    if ( text == CD_DRAG ) {
@@ -152,7 +152,7 @@ void K3bFileTreeView::contentsDragMoveEvent ( QDragMoveEvent *e ){
 /*
 * overwrite original to support K3b DND Objects. That will enable autoOpenFolder in the tree.
 */
-bool K3bFileTreeView::acceptDrag(QDropEvent* e ) const {
+bool K3bFileTreeView::acceptDrag(QDropEvent*  ) const {
 //    bool result = false;
 //    QString text;
 //    QTextDrag::decode( e, text );
@@ -167,6 +167,7 @@ bool K3bFileTreeView::acceptDrag(QDropEvent* e ) const {
 //            || e->action() == QDropEvent::Link );
 //    }
 //    return result;
+  return false;
 }
 
 void K3bFileTreeView::addDefaultBranches()

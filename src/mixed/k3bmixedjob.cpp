@@ -32,9 +32,9 @@
 #include <device/k3bdevicehandler.h>
 #include <device/k3bmsf.h>
 #include <tools/k3bwavefilewriter.h>
-#include <tools/k3bglobals.h>
-#include <tools/k3bexternalbinmanager.h>
-#include <tools/k3bversion.h>
+#include <k3bglobals.h>
+#include <k3bexternalbinmanager.h>
+#include <k3bversion.h>
 #include <k3bemptydiscwaiter.h>
 #include <k3bcore.h>
 #include <k3bcdrecordwriter.h>
@@ -997,7 +997,7 @@ void K3bMixedJob::normalizeFiles()
   QPtrListIterator<K3bAudioTrack> it( *m_doc->audioDoc()->tracks() );
   for( ; it.current(); ++it ) {
     K3bAudioTrack* track = it.current();
-    files.append( track->bufferFile() );
+    files.append( m_tempData->bufferFileName(track) );
   }
 
   m_normalizeJob->setFilesToNormalize( files );

@@ -15,8 +15,8 @@
 
 #include "k3bisooptions.h"
 #include <k3bcore.h>
-#include <tools/k3bversion.h>
-#include <tools/k3bglobals.h>
+#include <k3bversion.h>
+#include <k3bglobals.h>
 
 #include <kconfig.h>
 #include <klocale.h>

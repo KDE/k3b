@@ -27,7 +27,7 @@
 
 // K3b Includes
 #include "k3bvcdtrack.h"
-#include "../tools/k3bglobals.h"
+#include <k3bglobals.h>
 
 K3bVcdTrack::K3bVcdTrack( QPtrList<K3bVcdTrack>* parent, const QString& filename )
         : m_file( filename )

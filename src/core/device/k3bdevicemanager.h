@@ -39,9 +39,8 @@ namespace K3bCdDevice {
       Q_OBJECT
 
     public:
+      DeviceManager( K3bExternalBinManager*, QObject* parent = 0, const char* name = 0 );
       ~DeviceManager();
-
-      static DeviceManager* self();
 
       K3bDevice* deviceByName( const QString& );
 
@@ -98,14 +97,6 @@ namespace K3bCdDevice {
       void slotCollectStdout( KProcess*, char* data, int len );
 
     private:
-      /**
-       * Constructs a device-manager and scans the scsi-bus
-       * for devices. Every instance of K3bDeviceManager on
-       * a machine is equal, so having multible instances
-       * does not make sense.
-       **/
-      DeviceManager();
-
       bool testForCdrom( const QString& );
       bool determineBusIdLun( const QString &dev, int& bus, int& id, int& lun );
       void determineCapabilities(K3bDevice *dev);

@@ -18,7 +18,7 @@
 // K3b Includes
 #include "k3bvcdlistviewitem.h"
 #include "k3bvcdtrack.h"
-#include "../tools/k3bglobals.h"
+#include <k3bglobals.h>
 
 K3bVcdListViewItem::K3bVcdListViewItem( K3bVcdTrack* track, K3bListView* parent )
         : K3bListViewItem( parent ), m_track( track )

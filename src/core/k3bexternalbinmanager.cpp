@@ -186,8 +186,8 @@ void K3bExternalProgram::OutputCollector::slotGatherOutput( KProcess*, char* dat
 // ///////////////////////////////////////////////////////////
 
 
-K3bExternalBinManager::K3bExternalBinManager()
-  : QObject()
+K3bExternalBinManager::K3bExternalBinManager( QObject* parent, const char* name )
+  : QObject( parent, name )
 {
 }
 
@@ -385,15 +385,6 @@ void K3bExternalBinManager::addSearchPath( const QString& path )
     m_searchPath.append( path );
 }
 
-
-
-K3bExternalBinManager* K3bExternalBinManager::self()
-{
-  static K3bExternalBinManager* instance = 0;
-  if( !instance )
-    instance = new K3bExternalBinManager();
-  return instance;
-}
 
 
 const K3bExternalBin* K3bExternalBinManager::mostRecentBinObject( const QString& name )

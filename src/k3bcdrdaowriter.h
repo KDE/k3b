@@ -22,12 +22,12 @@
 #include "k3babstractwriter.h"
 #include "remote.h"
 
-#include <qsocket.h>
-#include <qsocketdevice.h>
-
 class K3bExternalBin;
 class K3bProcess;
+class KProcess;
 class K3bCdDevice::CdDevice;
+class QSocket;
+
 
 
 class K3bCdrdaoWriter : public K3bAbstractWriter
@@ -40,14 +40,14 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
   enum BlankMode { FULL, MINIMAL };
   enum SubMode { None, RW, RW_RAW };
 
-  K3bCdrdaoWriter( K3bDevice* dev, QObject* parent = 0, const char* name = 0 );
+  K3bCdrdaoWriter( K3bCdDevice::CdDevice* dev, QObject* parent = 0, const char* name = 0 );
   ~K3bCdrdaoWriter();
 
   /**
    * to be used in chain: addArgument(x)->addArgument(y)
    */
   K3bCdrdaoWriter* addArgument( const QString& );
-  K3bDevice* sourceDevice() { return m_sourceDevice; };
+  K3bCdDevice::CdDevice* sourceDevice() { return m_sourceDevice; };
 
   int fd() const;
 
@@ -73,7 +73,7 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
   void setDataFile( const QString& s ) { m_dataFile = s; }
   void setTocFile( const QString& s ) { m_tocFile = s; }
 
-  void setSourceDevice( K3bDevice* dev ) { m_sourceDevice = dev; }
+  void setSourceDevice( K3bCdDevice::CdDevice* dev ) { m_sourceDevice = dev; }
   void setFastToc( bool b ) { m_fastToc = b; }
   void setReadRaw( bool b ) { m_readRaw = b; }
   void setReadSubchan(SubMode m) { m_readSubchan=m; };
@@ -106,7 +106,7 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
   // ---------------------
   int        m_command;
   int        m_blankMode;
-  K3bDevice* m_sourceDevice;
+  K3bCdDevice::CdDevice* m_sourceDevice;
   QString    m_dataFile;
   QString    m_tocFile;
   QString    m_cueFileLnk;

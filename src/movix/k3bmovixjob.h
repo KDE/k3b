@@ -36,7 +36,7 @@ class K3bMovixJob : public K3bBurnJob
   ~K3bMovixJob();
 
   K3bDoc* doc() const;
-  K3bDevice* writer() const;
+  K3bCdDevice::CdDevice* writer() const;
 
   QString jobDescription() const;
   QString jobDetails() const;

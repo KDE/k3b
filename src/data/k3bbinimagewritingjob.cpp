@@ -20,8 +20,8 @@
 #include <k3bcore.h>
 #include <k3bemptydiscwaiter.h>
 #include <device/k3bdevice.h>
-#include <tools/k3bglobals.h>
-#include <tools/k3bexternalbinmanager.h>
+#include <k3bglobals.h>
+#include <k3bexternalbinmanager.h>
 
 #include <klocale.h>
 #include <kdebug.h>

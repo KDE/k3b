@@ -1,19 +1,18 @@
-/***************************************************************************
-                          k3btcwrapper.h  -  description
-                             -------------------
-    begin                : Sat Feb 23 2002
-    copyright            : (C) 2002 by Sebastian Trueg
-    email                : trueg@informatik.uni-freiburg.de
- ***************************************************************************/
+/* 
+ *
+ * $Id$
+ * Copyright (C) 2003 Thomas Froscher <tfroescher@k3b.org>
+ *
+ * This file is part of the K3b project.
+ * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * See the file "COPYING" for the exact licensing terms.
+ */
 
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
 
 #ifndef K3BTCWRAPPER_H
 #define K3BTCWRAPPER_H
@@ -22,11 +21,12 @@
 #include <qstring.h>
 #include <qstringlist.h>
 
-#include "../device/k3bdevice.h"
 
 class KProcess;
 class K3bDvdContent;
-
+namespace K3bCdDevice {
+  class CdDevice;
+}
 
 /**
   *@author Sebastian Trueg
@@ -42,8 +42,8 @@ class K3bTcWrapper : public QObject
   /* Returns true if transcode tools installed
    */
   static bool supportDvd();
-  void checkDvdContent( K3bDevice* );
-  void isDvdInsert( K3bDevice* device );
+  void checkDvdContent( K3bCdDevice::CdDevice* );
+  void isDvdInsert( K3bCdDevice::CdDevice* device );
   const QValueList<K3bDvdContent>& getDvdTitles() const;
 
 private slots:
@@ -68,7 +68,7 @@ signals:
   int m_currentTitle;
   int m_allTitle;
   int m_allAngle;
-  K3bDevice*  m_device;
+  K3bCdDevice::CdDevice*  m_device;
   K3bDvdContent parseTcprobe();
   void runTcprobe();
 };

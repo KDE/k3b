@@ -26,8 +26,8 @@
 #include <device/k3bdevice.h>
 #include <device/k3bdevicemanager.h>
 #include <k3bburnprogressdialog.h>
-#include <tools/k3bglobals.h>
-#include <tools/k3bexternalbinmanager.h>
+#include <k3bglobals.h>
+#include <k3bexternalbinmanager.h>
 
 #include <kguiitem.h>
 #include <klocale.h>

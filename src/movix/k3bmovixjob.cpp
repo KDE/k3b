@@ -25,7 +25,7 @@
 #include <data/k3bdiritem.h>
 #include <data/k3bfileitem.h>
 #include <data/k3bisoimager.h>
-#include <tools/k3bexternalbinmanager.h>
+#include <k3bexternalbinmanager.h>
 
 #include <klocale.h>
 #include <kdebug.h>

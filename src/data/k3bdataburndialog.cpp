@@ -19,15 +19,15 @@
 #include "k3bdataimagesettingswidget.h"
 #include "k3bdataadvancedimagesettingswidget.h"
 #include "k3bdatavolumedescwidget.h"
-#include "../k3bisooptions.h"
-#include <k3b.h>
+#include "k3bisooptions.h"
 #include <device/k3bdevice.h>
 #include <k3bwriterselectionwidget.h>
 #include <k3btempdirselectionwidget.h>
 #include <k3bjob.h>
+#include <k3bcore.h>
 #include <k3bstdguiitems.h>
 #include <tools/k3bdatamodewidget.h>
-#include <tools/k3bglobals.h>
+#include <k3bglobals.h>
 #include <tools/k3bwritingmodewidget.h>
 
 #include <qcheckbox.h>
@@ -264,7 +264,7 @@ void K3bDataBurnDialog::slotLoadUserDefaults()
 {
   K3bProjectBurnDialog::slotLoadUserDefaults();
 
-  KConfig* c = kapp->config();
+  KConfig* c = k3bcore->config();
 
   m_dataModeWidget->loadConfig(c);
 
@@ -281,7 +281,7 @@ void K3bDataBurnDialog::slotSaveUserDefaults()
 {
   K3bProjectBurnDialog::slotSaveUserDefaults();
 
-  KConfig* c = kapp->config();
+  KConfig* c = k3bcore->config();
 
   m_dataModeWidget->saveConfig(c);
 

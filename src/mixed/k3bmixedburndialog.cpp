@@ -25,14 +25,14 @@
 #include <k3bwriterselectionwidget.h>
 #include <k3btempdirselectionwidget.h>
 #include <k3bisooptions.h>
-#include <tools/k3bglobals.h>
+#include <k3bglobals.h>
 #include <audio/k3baudiocdtextwidget.h>
 #include <tools/k3bdatamodewidget.h>
 #include <device/k3bmsf.h>
 #include <k3bstdguiitems.h>
 #include <tools/k3bwritingmodewidget.h>
-#include <tools/k3bexternalbinmanager.h>
-#include <tools/k3bversion.h>
+#include <k3bexternalbinmanager.h>
+#include <k3bversion.h>
 #include <k3bcore.h>
 
 #include <qtabwidget.h>

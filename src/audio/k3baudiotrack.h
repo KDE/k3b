@@ -25,7 +25,7 @@
 #include <kio/global.h>
 
 #include <device/k3bmsf.h>
-#include <device/k3bcdtext.h>
+#include <tools/k3bcdtext.h>
 
 class K3bAudioModule;
 
@@ -54,7 +54,7 @@ class K3bAudioTrack
   QString fileName() const { return QFileInfo(m_file).fileName(); }
   QString absPath() const { return QFileInfo(m_file).absFilePath(); }
 
-  QString bufferFile() const { return m_bufferFile; }
+  //  QString bufferFile() const { return m_bufferFile; }
 
   K3b::Msf pregap() const { return m_pregap; }
 
@@ -99,7 +99,7 @@ class K3bAudioTrack
 	
   void setLength( unsigned long time ) { m_length = time; }
 	
-  void setBufferFile( const QString& file );
+  //  void setBufferFile( const QString& file );
 
   /** returns the raw size of the track (16bit, 44800 kHz, stereo) */
   KIO::filesize_t size() const;
@@ -121,7 +121,7 @@ class K3bAudioTrack
   K3bAudioModule* m_module;
 
  private:	
-  QString m_bufferFile;
+  //  QString m_bufferFile;
 
   K3b::Msf m_length;
 

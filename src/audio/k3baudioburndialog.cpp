@@ -21,10 +21,10 @@
 #include <k3bwriterselectionwidget.h>
 #include <k3btempdirselectionwidget.h>
 #include "k3baudiocdtextwidget.h"
-#include <tools/k3bglobals.h>
+#include <k3bglobals.h>
 #include <k3bstdguiitems.h>
 #include <tools/k3bwritingmodewidget.h>
-#include <tools/k3bexternalbinmanager.h>
+#include <k3bexternalbinmanager.h>
 
 #include <qcheckbox.h>
 #include <qcombobox.h>

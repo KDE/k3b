@@ -15,12 +15,11 @@
 
 
 #include "k3bemptydiscwaiter.h"
-#include "k3bdevice.h"
-#include "k3bdevicehandler.h"
+#include <device/k3bdevice.h>
+#include <device/k3bdevicehandler.h>
 #include "k3bblankingjob.h"
 #include "tools/k3bbusywidget.h"
 #include "k3bdiskerasinginfodialog.h"
-#include "k3b.h"
 
 #include <qtimer.h>
 #include <qlabel.h>
