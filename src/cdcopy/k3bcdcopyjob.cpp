@@ -40,9 +40,9 @@ K3bCdCopyJob::K3bCdCopyJob( QObject* parent )
   m_process = new KProcess();
 
   connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
-	   this, SLOT(parseCdrdaoStdout(KProcess*, char*, int)) );
+	   this, SLOT(parseCdrdaoOutput(KProcess*, char*, int)) );
   connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
-	   this, SLOT(parseCdrdaoStdout(KProcess*, char*, int)) );
+	   this, SLOT(parseCdrdaoOutput(KProcess*, char*, int)) );
 
   m_diskInfoDetector = new K3bDiskInfoDetector( this );
   connect( m_diskInfoDetector, SIGNAL(diskInfoReady(const K3bDiskInfo&)), 
@@ -448,6 +448,10 @@ void K3bCdCopyJob::addCdrdaoWriteArguments()
   if( manualBufferSize ) {
     *m_process << "--buffers" << QString::number( k3bMain()->config()->readNumEntry( "Cdrdao buffer", 32 ) );
   }
+  bool overburn = k3bMain()->config()->readBoolEntry( "Allow overburning", false );
+
+  if( overburn )
+    *m_process << "--overburn";
 
   // add toc-file
   m_tocFile = locateLocal( "appdata", "temp/k3btemptoc.toc");
@@ -456,55 +460,43 @@ void K3bCdCopyJob::addCdrdaoWriteArguments()
 
 
 
-void K3bCdCopyJob::parseCdrdaoStdout( KProcess*, char* data, int len )
+void K3bCdCopyJob::parseCdrdaoSpecialLine( const QString& str )
 {
-  QStringList bufferList = QStringList::split( "\n", QString::fromLatin1( data, len ) );
+  emit debuggingOutput( "cdrdao", str );
 
-  for( QStringList::const_iterator it = bufferList.begin(); 
-       it != bufferList.end(); ++it ) {
-    const QString& str = *it;
-
-    emit debuggingOutput( "cdrdao", str );
-
-    if( str.startsWith( "Copying" ) ) {
-      // information about what will be read
-      emit infoMessage( str, K3bJob::PROCESS );
+  if( str.startsWith( "Copying" ) ) {
+    // information about what will be read
+    emit infoMessage( str, K3bJob::PROCESS );
+  }
+  else if( str.startsWith( "Track" ) ) {
+    int end = str.find("...");
+    bool ok;
+    int trNum = str.mid( 6, end-6 ).toInt( &ok );
+    if( ok ) {
+      emit infoMessage( i18n("Reading track %1").arg(trNum), K3bJob::PROCESS );
     }
-    else if( str.startsWith( "Track" ) ) {
-      int end = str.find("...");
-      bool ok;
-      int trNum = str.mid( 6, end-6 ).toInt( &ok );
+    //      emit infoMessage( str, K3bJob::PROCESS );
+  }
+  else if( str.startsWith( "Found ISRC" ) ) {
+    emit infoMessage( i18n("Found ISRC code"), K3bJob::PROCESS );
+  }
+  else if( str.startsWith( "Found pre-gap" ) ) {
+    emit infoMessage( i18n("Found pregap: %1").arg( str.mid(str.find(":")+1) ), K3bJob::PROCESS );
+  }
+  else {
+    // check if progress
+    bool ok;
+    int min = str.left(2).toInt(&ok);
+    if( ok ) {
+      int sec = str.mid(3,2).toInt(&ok);
       if( ok ) {
-	emit infoMessage( i18n("Reading track %1").arg(trNum), K3bJob::PROCESS );
-      }
-      //      emit infoMessage( str, K3bJob::PROCESS );
-    }
-    else if( str.startsWith( "Found ISRC" ) ) {
-      emit infoMessage( i18n("Found ISRC code"), K3bJob::PROCESS );
-    }
-    else if( str.startsWith( "Found pre-gap" ) ) {
-      emit infoMessage( i18n("Found pregap: %1").arg( str.mid(str.find(":")+1) ), K3bJob::PROCESS );
-    }
-    else {
-      // check if progress
-      bool ok;
-      int min = str.left(2).toInt(&ok);
-      if( ok ) {
-	int sec = str.mid(3,2).toInt(&ok);
-	if( ok ) {
-	  // create progress info
-	  sec += min*60;
-
-	  emit subPercent( 100*sec*75 / m_blocksToCopy );
-	  emit percent( 100*sec*75 / m_blocksToCopy / (m_copies+1) );
-	}
-      }
-
-      if( !ok ) {
-	parseCdrdaoStdoutLine( str );
+	// create progress info
+	sec += min*60;
+	
+	emit subPercent( 100*sec*75 / m_blocksToCopy );
+	emit percent( 100*sec*75 / m_blocksToCopy / (m_copies+1) );
       }
     }
-
   }
 }
 
@@ -527,12 +519,6 @@ void K3bCdCopyJob::createCdrdaoProgress( int made, int size )
 void K3bCdCopyJob::startNewCdrdaoTrack()
 {
   emit newSubTask( i18n("Writing") );
-}
-
-
-void K3bCdCopyJob::parseCdrdaoStderr( KProcess*, char* data, int len )
-{
-  emit debuggingOutput( "cdrdao", QString::fromLatin1(data, len) );
 }
 
 

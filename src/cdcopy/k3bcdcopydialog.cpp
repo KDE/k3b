@@ -38,37 +38,50 @@
 #include <qptrlist.h>
 #include <qlabel.h>
 #include <qtooltip.h>
+#include <qtabwidget.h>
 
 
 K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal )
-  : KDialogBase( parent, name, modal, i18n("K3b Cd Copy"), User1|User2, User1, false, 
+  : KDialogBase( KDialogBase::Plain, i18n("K3b Cd Copy"), User1|User2, User1, parent, name, modal, false, 
 		 KGuiItem( i18n("Copy"), "copy", i18n("Start cd copy") ), KStdGuiItem::close() )
 {
   setButtonBoxOrientation( Qt::Vertical );
 
-  QWidget* main = new QWidget( this );
-  setMainWidget( main );
+  QFrame* main = plainPage();
 
   QGridLayout* mainGrid = new QGridLayout( main );
   mainGrid->setSpacing( spacingHint() );
-  mainGrid->setMargin( marginHint() );
+  mainGrid->setMargin( 0 );
 
   m_writerSelectionWidget = new K3bWriterSelectionWidget( main );
+
   QGroupBox* groupSource = new QGroupBox( 1, Qt::Vertical, i18n("Reading Device"), main );
   groupSource->setInsideSpacing( spacingHint() );
   groupSource->setInsideMargin( marginHint() );
-  QGroupBox* groupOptions = new QGroupBox( 4, Qt::Vertical, i18n("Options"), main );
+
+  m_comboSourceDevice = new QComboBox( groupSource );
+
+
+  // tab widget --------------------
+  QTabWidget* tabWidget = new QTabWidget( main );
+
+  // option tab --------------------
+  QWidget* optionTab = new QWidget( tabWidget );
+  QGridLayout* optionTabGrid = new QGridLayout( optionTab );
+  optionTabGrid->setSpacing( spacingHint() );
+  optionTabGrid->setMargin( marginHint() );
+
+  QGroupBox* groupOptions = new QGroupBox( 4, Qt::Vertical, i18n("Options"), optionTab );
   groupOptions->setInsideSpacing( spacingHint() );
   groupOptions->setInsideMargin( marginHint() );
-  QGroupBox* groupCopies = new QGroupBox( 2, Qt::Horizontal, i18n("Copies"), main );
+
+  QGroupBox* groupCopies = new QGroupBox( 2, Qt::Horizontal, i18n("Copies"), optionTab );
   groupCopies->setInsideSpacing( spacingHint() );
   groupCopies->setInsideMargin( marginHint() );
 
-  m_comboSourceDevice = new QComboBox( groupSource );
   m_checkSimulate = new QCheckBox( i18n("Simulate writing"), groupOptions );
   m_checkOnTheFly = new QCheckBox( i18n("Writing on the fly"), groupOptions );
   m_checkDeleteImages = new QCheckBox( i18n("Delete images"), groupOptions );
-  m_checkFastToc = new QCheckBox( i18n("Fast toc"), groupOptions );
 
   QLabel* pixLabel = new QLabel( groupCopies );
   pixLabel->setPixmap( locate( "appdata", "pics/k3b_cd_copy.png" ) );
@@ -77,15 +90,38 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   m_spinCopies->setMinValue( 1 );
   m_spinCopies->setMaxValue( 99 );
 
-  m_tempDirSelectionWidget = new K3bTempDirSelectionWidget( main );
+  m_tempDirSelectionWidget = new K3bTempDirSelectionWidget( optionTab );
 
-  mainGrid->addMultiCellWidget( groupSource, 0, 0, 0, 1  );
-  mainGrid->addMultiCellWidget( m_writerSelectionWidget, 1, 1, 0, 1  );
-  mainGrid->addWidget( groupOptions, 2, 0 );
-  mainGrid->addWidget( groupCopies, 3, 0 );
-  mainGrid->addMultiCellWidget( m_tempDirSelectionWidget, 2, 3, 1, 1 );
-  mainGrid->setRowStretch( 3, 1 );
-  mainGrid->setColStretch( 1, 1 );
+
+  optionTabGrid->addWidget( groupOptions, 0, 0 );
+  optionTabGrid->addWidget( groupCopies, 1, 0 );
+  optionTabGrid->addMultiCellWidget( m_tempDirSelectionWidget, 0, 1, 1, 1 );
+  optionTabGrid->setRowStretch( 1, 1 );
+  optionTabGrid->setColStretch( 1, 1 );
+
+
+  tabWidget->addTab( optionTab, i18n("Options") );
+
+
+  // advanced tab ------------------
+  QWidget* advancedTab = new QWidget( tabWidget );
+  QGridLayout* advancedTabGrid = new QGridLayout( advancedTab );
+  advancedTabGrid->setSpacing( spacingHint() );
+  advancedTabGrid->setMargin( marginHint() );
+
+  m_checkFastToc = new QCheckBox( i18n("Fast toc"), advancedTab );
+
+  advancedTabGrid->addWidget( m_checkFastToc, 0, 0 );
+  advancedTabGrid->setRowStretch( 1, 1 );
+
+  tabWidget->addTab( advancedTab, i18n("Advanced") );
+
+
+
+  mainGrid->addWidget( groupSource, 0, 0  );
+  mainGrid->addWidget( m_writerSelectionWidget, 1, 0  );
+  mainGrid->addWidget( tabWidget, 2, 0 );
+  mainGrid->setRowStretch( 2, 1 );
 
 
   // -- read cd-devices ----------------------------------------------
@@ -146,7 +182,6 @@ K3bDevice* K3bCdCopyDialog::readingDevice() const
 
 void K3bCdCopyDialog::slotUser1()
 {
-  // if dummy true set copies to 1
   K3bCdCopyJob* job = new K3bCdCopyJob( this );
 
   job->setWriter( m_writerSelectionWidget->writerDevice() );

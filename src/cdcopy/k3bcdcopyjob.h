@@ -71,8 +71,8 @@ class K3bCdCopyJob : public K3bBurnJob
 
   void addCdrdaoWriteArguments();
 
-  void parseCdrdaoStdout( KProcess*, char* data, int len );
-  void parseCdrdaoStderr( KProcess*, char* data, int len );
+  /** reimplemented from K3bBurnJob */
+  void parseCdrdaoSpecialLine( const QString& line );
 
  private:
   void createCdrdaoProgress( int made, int size );

@@ -1,9 +1,10 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
-noinst_LIBRARIES = libcdcopy.a
 
 INCLUDES = $(all_includes)
 
 libcdcopy_a_METASOURCES = AUTO
+
+noinst_LIBRARIES = libcdcopy.a
 
 libcdcopy_a_SOURCES = k3bcdcopydialog.cpp k3bcdcopyjob.cpp 
 
