@@ -83,7 +83,7 @@ void K3bAudioNormalizeJob::start()
     // something went wrong when starting the program
     // it "should" be the executable
     kdDebug() << "(K3bAudioNormalizeJob) could not start normalize" << endl;
-    emit infoMessage( i18n("Could not start normalize!"), K3bJob::ERROR );
+    emit infoMessage( i18n("Could not start normalize."), K3bJob::ERROR );
     emit finished(false);
   }
 }

@@ -58,10 +58,10 @@ QCheckBox* K3bStdGuiItems::burnproofCheckbox( QWidget* parent, const char* name 
 			   "a feature of the CD writer which avoids buffer underruns."
 			   "<p>Without <em>burnfree</em>, if the writer cannot get any more "
 			   "data a buffer underrun would occurs, since the writer needs "
-			   "a constant stream of data to write the cd."
+			   "a constant stream of data to write the CD."
 			   "<p>With <em>burnfree</em> the writer can <em>mark</em> the current "
 			   "position of the laser and get back to it when the buffer is filled again;"
-			   "but, since this means having little data gaps on the cd, <b>it is "
+			   "but, since this means having little data gaps on the CD, <b>it is "
 			   "highly recommended to always choose an appropriate writing "
 			   "speed to prevent the usage of burnfree, especially for audio CDs</b> "
 			   "(in the worst case one would hear the gap)."
@@ -141,7 +141,7 @@ QCheckBox* K3bStdGuiItems::startMultisessionCheckBox( QWidget* parent, const cha
 {
   QCheckBox* c = new QCheckBox( i18n("Start multisession CD"), parent, name );
   QToolTip::add( c, i18n("Do not close the disk to allow additional sessions to be added later") );
-  QWhatsThis::add( c, i18n("<p>If this option is checked K3b will not close the cd, and will write "
+  QWhatsThis::add( c, i18n("<p>If this option is checked K3b will not close the CD, and will write "
 			   "a temporary table of contents.</p>"
 			   "<p>This allows further sessions to be appended to the CD later.</p>") );
   return c;

@@ -223,7 +223,7 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
                              "<p><b>You may want use this option for images longer than 80 minutes</b>" ) );
 
     QWhatsThis::add
-        ( m_checkCdiSupport, i18n( "<p>To allow the play of Video-CD's on a CD-i player, the Video-CD standard requires that a CD-i application program must be present."
+        ( m_checkCdiSupport, i18n( "<p>To allow the play of Video-CDs on a CD-i player, the Video-CD standard requires that a CD-i application program must be present."
                                    "<p>This program is designed to:"
                                    "<ul><li>provide full play back control as defined in the PSD of the standard</l>"
                                    "<li>be extremely simple to use and easy-to-learn for the end-user</li></ul>"

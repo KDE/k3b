@@ -31,7 +31,7 @@
                 <cstring>groupIsoSettings</cstring>
             </property>
             <property name="title">
-                <string>Iso9660 Filesystem</string>
+                <string>ISO9660 Filesystem</string>
             </property>
             <vbox>
                 <property name="name">
@@ -40,7 +40,7 @@
                 <widget class="KListView">
                     <column>
                         <property name="text">
-                            <string>Iso9660 Filesystem</string>
+                            <string>ISO9660 Filesystem</string>
                         </property>
                         <property name="clickable">
                             <bool>false</bool>

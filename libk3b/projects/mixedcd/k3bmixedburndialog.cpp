@@ -162,7 +162,7 @@ void K3bMixedBurnDialog::createContextHelp()
 						   "hifi audio CD players that try to play the data track.") );
 
   QToolTip::add( m_radioMixedTypeSessions, i18n("The data will be written in a second session") );
-  QWhatsThis::add( m_radioMixedTypeSessions, i18n("<p><b>Blue book cd</b>"
+  QWhatsThis::add( m_radioMixedTypeSessions, i18n("<p><b>Blue book CD</b>"
 						  "<p>K3b will create a multisession CD with "
 						  "2 sessions. The first session will contain all "
 						  "audio tracks and the second session will contain "
@@ -173,7 +173,7 @@ void K3bMixedBurnDialog::createContextHelp()
 						  "and has the advantage that a hifi audio "
 						  "CD player will only recognize the first session "
 						  "and ignore the second session with the data track."
-						  "<p>If the CD is intended to be used in a hifi audio cd player "
+						  "<p>If the CD is intended to be used in a hifi audio CD player "
 						  "this is the recommended mode."
 						  "<p>Some older CD-ROMs may have problems reading "
 						  "a blue book CD since it is a multisession CD.") );

@@ -122,7 +122,7 @@ void K3bDvdBurnDialog::setupSettingsTab()
 					 "to read the first session and most likely even on "
 					 "DVD writers only the first session will be mounted.</p>"
 					 "<p>For DVD+RW and DVD-RW in restricted overwrite mode "
-					 "K3b will utilize growisofs to <em>grow</em> the Iso9660 "
+					 "K3b will utilize growisofs to <em>grow</em> the ISO9660 "
 					 "filesystem in the first session.</p>"
 					 "<p><b>Be aware that K3b needs to write multisession "
 					 "DVDs on-the-fly.</b>"), m_groupMultiSession );
