@@ -54,6 +54,8 @@ class K3bAudioJob::Private
 
   int copies;
   int copiesDone;
+
+  bool useCdText;
 };
 
 
@@ -108,6 +110,7 @@ void K3bAudioJob::start()
   m_errorOccuredAndAlreadyReported = false;
   d->copies = m_doc->copies();
   d->copiesDone = 0;
+  d->useCdText = m_doc->cdText();
 
   if( m_doc->dummy() )
     d->copies = 1;
@@ -150,7 +153,7 @@ void K3bAudioJob::start()
 	// there are none-DAO writers that are supported by cdrdao
 	if( !writer()->dao() ||
 	    ( !cdrecordOnTheFly && m_doc->onTheFly() ) ||
-	    ( m_doc->cdText() && !cdrecordCdText ) ||
+	    ( d->useCdText && !cdrecordCdText ) ||
 	    m_doc->hideFirstTrack() )
 	  m_usedWritingApp = K3b::CDRDAO;
 	else
@@ -171,13 +174,15 @@ void K3bAudioJob::start()
     }
 
     if( m_usedWritingApp == K3b::CDRECORD &&
-	m_doc->cdText() ) {
+	d->useCdText ) {
       if( !cdrecordCdText ) {
-	emit infoMessage( i18n("Cdrecord %1 does not support CD-Text writing.").arg(k3bcore->externalBinManager()->binObject("cdrecord")->version), ERROR );
-	m_doc->writeCdText(false);
+	emit infoMessage( i18n("Cdrecord %1 does not support CD-Text writing.")
+			  .arg(k3bcore->externalBinManager()->binObject("cdrecord")->version), ERROR );
+	d->useCdText = false;
       }
       else if( m_usedWritingMode == K3b::TAO ) {
-	emit infoMessage( i18n("It is not possible to write CD-Text in TAO mode. Try DAO or RAW."), WARNING );
+	emit infoMessage( i18n("It is not possible to write CD-Text in TAO mode."), WARNING );
+	d->useCdText = false;
       }
     }
   }
@@ -341,7 +346,7 @@ bool K3bAudioJob::prepareWriter()
 
     writer->addArgument( "-useinfo" );
 
-    if( m_doc->cdText() ) {
+    if( d->useCdText ) {
       writer->setRawCdText( m_doc->cdTextData().rawPackData() );
     }
 
@@ -591,7 +596,7 @@ bool K3bAudioJob::writeTocFile()
   K3bTocFileWriter tocWriter;
   tocWriter.setData( m_doc->toToc() );
   tocWriter.setHideFirstTrack( m_doc->hideFirstTrack() );
-  if( m_doc->cdText() )
+  if( d->useCdText )
     tocWriter.setCdText( m_doc->cdTextData() );
   if( !m_doc->onTheFly() ) {
     QStringList filenames;
