@@ -26,6 +26,7 @@
 #include <ksqueezedtextlabel.h>
 #include <kcombobox.h>
 #include <klineedit.h>
+#include <kurllabel.h>
 
 #include <qdatetime.h>
 #include <qregexp.h>
@@ -35,6 +36,7 @@
 #include <qcheckbox.h>
 #include <qgroupbox.h>
 #include <qtabwidget.h>
+#include <qwhatsthis.h>
 
 static const int PATTERN_COMBO_INDEX_TITLE = 0;
 static const int PATTERN_COMBO_INDEX_ARTIST = 1;
@@ -137,6 +139,8 @@ K3bPatternOptionTab::K3bPatternOptionTab( QWidget* parent, const char* name )
   m_exampleEntry.extInfos.append( "This track has been recorded" );
 
   slotUpdateExample();
+
+  connect( m_specialStringsLabel, SIGNAL(leftClickedURL()), this, SLOT(slotSeeSpecialStrings()) );
 }
 
 
@@ -354,6 +358,23 @@ QString K3bPatternOptionTab::basicPatternItemFromIndex( int i, bool dir )
       return "";
     }
   }
+}
+
+
+void K3bPatternOptionTab::slotSeeSpecialStrings()
+{
+  QWhatsThis::display( i18n( "<p><b>Pattern special strings:</b>"
+			     "<ul>\n"
+			     "<li>%a - artist of the track\n"
+			     "<li>%t - title of the track\n"
+			     "<li>%n - track number\n"
+			     "<li>%e - extended information about the track\n"
+			     "<li>%g - genre of the CD\n"
+			     "<li>%r - album artist (differs from %a only on soundtracks or compilations)\n"
+			     "<li>%m - album title\n"
+			     "<li>%x - extended information about the CD\n"
+			     "<li>%d - current date\n"
+			     "</ul>" ) );
 }
 
 #include "k3bpatternoptiontab.moc"

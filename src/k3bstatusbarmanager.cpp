@@ -22,6 +22,7 @@ K3bStatusBarManager::K3bStatusBarManager( K3bMainWindow* parent )
 {
   // setup free temp space box
   QHBox* boxFreeTemp = new QHBox( m_mainWindow->statusBar() );
+  boxFreeTemp->setSpacing(2);
   m_pixFreeTemp = new QLabel( boxFreeTemp );
   (void)new QLabel( i18n("Temp:"), boxFreeTemp );
   m_pixFreeTemp->setPixmap( SmallIcon("folder_green") );
@@ -33,12 +34,14 @@ K3bStatusBarManager::K3bStatusBarManager( K3bMainWindow* parent )
   // setup info area
   m_labelInfoMessage = new QLabel( " ", m_mainWindow->statusBar() );
 
+  // setup version info
+  QLabel* versionBox = new QLabel( QString("K3b %1").arg(kapp->aboutData()->version()), m_mainWindow->statusBar() );
 
   // setup the statusbar
-  m_mainWindow->statusBar()->addWidget( m_labelInfoMessage, 1, true ); // for showing some info
+  m_mainWindow->statusBar()->addWidget( m_labelInfoMessage, 1 ); // for showing some info
   m_mainWindow->statusBar()->addWidget( boxFreeTemp, 0, true );
   m_mainWindow->statusBar()->addWidget( m_busyWidget, 0, true );
-  m_mainWindow->statusBar()->insertFixedItem( QString("K3b %1").arg(kapp->aboutData()->version()), 0, true );
+  m_mainWindow->statusBar()->addWidget( versionBox, 0, true );
 
   connect( m_mainWindow, SIGNAL(configChanged(KConfig*)), this, SLOT(update()) );
 

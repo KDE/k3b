@@ -39,13 +39,13 @@ K3bCddbOptionTab::K3bCddbOptionTab( QWidget* parent,  const char* name )
   m_mainTabbed->page(1)->layout()->setMargin( KDialog::marginHint() );
   m_mainTabbed->page(1)->layout()->setSpacing( KDialog::spacingHint() );
 
-  m_groupLocalDir->layout()->setMargin( 0 );
-  m_groupLocalDirLayout->setMargin( KDialog::marginHint() );
-  m_groupLocalDirLayout->setSpacing( KDialog::spacingHint() );
+//   m_groupLocalDir->layout()->setMargin( 0 );
+//   m_groupLocalDirLayout->setMargin( KDialog::marginHint() );
+//   m_groupLocalDirLayout->setSpacing( KDialog::spacingHint() );
 
-  m_groupCddbServer->layout()->setMargin( 0 );
-  m_groupCddbServerLayout->setMargin( KDialog::marginHint() );
-  m_groupCddbServerLayout->setSpacing( KDialog::spacingHint() );
+//   m_groupCddbServer->layout()->setMargin( 0 );
+//   m_groupCddbServerLayout->setMargin( KDialog::marginHint() );
+//   m_groupCddbServerLayout->setSpacing( KDialog::spacingHint() );
 
   m_groupProxy->layout()->setMargin( 0 );
   m_groupProxyLayout->setMargin( KDialog::marginHint() );

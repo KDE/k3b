@@ -26,7 +26,7 @@ class QLabel;
 class QGroupBox;
 class QPushButton;
 class QCheckBox;
-class KListView;
+class K3bListView;
 class QString;
 class KIntNumInput;
 class QFrame;
@@ -56,60 +56,26 @@ class K3bDeviceWidget : public QWidget
   void refreshButtonClicked();
 
  private slots:
-  void slotDeviceSelected(QListViewItem*);
- //  void slotRefreshDevices();
   void slotNewDevice();
-  void slotCdrdaoDriverChanged(const QString&);
-  void slotCdTextCapabilityChanged( const QString& );
-  void slotWriteSpeedChanged( int );
-  void slotReadSpeedChanged( int );
-  void slotCdrwChanged(bool);
-  void slotBurnproofChanged(bool);
-  void slotDaoChanged(bool);
 
  private:
-  /** list to save changes to the devices before applying */
   class PrivateTempDevice;
-  class PrivateDeviceViewItem;
+  class PrivateDeviceViewItem1;
+  class PrivateDeviceViewItem2;
 
+  /** list to save changes to the devices before applying */
   QList<PrivateTempDevice> m_tempDevices;
-  PrivateTempDevice* m_currentTempDevice;
 
   void updateDeviceListViews();
-  void updateDeviceInfoBox( PrivateTempDevice* dev = 0 );
-  void showWriterSpecificProps( bool );
 
   QListViewItem* m_writerParentViewItem;
   QListViewItem* m_readerParentViewItem;
 
   K3bDeviceManager* m_deviceManager;
 
-  QGroupBox*    m_groupDeviceInfo;
-  QLabel*       m_labelDevicesInfo;
-  KListView*    m_viewDevices;
-  QPushButton*  m_buttonRefreshDevices;
-  QPushButton*  m_buttonAddDevice;
-  QLabel*       m_labelDevicename;
-  QLabel*       m_labelDeviceInterface;
-  QLabel*       m_labelVendor;
-  QLabel*       m_labelDescription;
-  QLabel*       m_labelVersion;
-  QLabel*       m_labelDriver;
-  QLabel*       m_labelCdText;
-  QLabel*       m_labelBurnProof;
-  QLabel*       m_labelCdrw;
-  QLabel*       m_labelDao;
-  QLabel*       m_labelWriteSpeed;
-  QLineEdit*       m_labelWriteModes;
-  QLabel* m_labelWriteModesLabel;
-  QFrame*       m_line3;
-  KIntNumInput* m_spinReadSpeed;
-  KIntNumInput* m_spinWriteSpeed;
-  QComboBox*    m_comboDriver;
-  QComboBox*    m_comboCdText;
-  QCheckBox*    m_checkBurnProof;
-  QCheckBox*    m_checkCdrw;
-  QCheckBox*    m_checkDao;
+  K3bListView*    m_viewDevices;
+  QPushButton* m_buttonRefreshDevices;
+  QPushButton* m_buttonAddDevice;
 };
 
 #endif

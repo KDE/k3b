@@ -39,6 +39,7 @@ class K3bPatternOptionTab : public base_K3bPatternOptionTab
 
  protected slots:
   void slotUpdateExample();
+  void slotSeeSpecialStrings();
 
  private:
   QString basicDirectoryPattern();

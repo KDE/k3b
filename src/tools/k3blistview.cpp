@@ -321,15 +321,23 @@ void K3bListView::placeEditor( K3bListViewItem* item, int col )
 
   r.setX( header()->sectionPos( col ) );
   r.setWidth( header()->sectionSize( col ) - 1 );
+
+  // check if the column is fully visible
+  if( visibleWidth() < r.right() )
+    r.setRight(visibleWidth());
+
   r = QRect( viewportToContents( r.topLeft() ), r.size() );
 
   if( item->pixmap( col ) ) {
     r.setX( r.x() + item->pixmap(col)->width() );
   }
 
-  r.setX( r.x() + item->depth() * treeStepSize() );
-  if( rootIsDecorated() )
-    r.setX( r.x() + treeStepSize() );
+  // the tree-stuff is painted in the first column
+  if( col == 0 ) {
+    r.setX( r.x() + item->depth() * treeStepSize() );
+    if( rootIsDecorated() )
+      r.setX( r.x() + treeStepSize() );
+  }
 
   if( item->needButton(col) ) {
     prepareButton( item, col );

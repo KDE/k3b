@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>674</width>
-            <height>651</height>
+            <height>662</height>
         </rect>
     </property>
     <property name="caption">
@@ -51,12 +51,6 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <property name="margin">
-                        <number>11</number>
-                    </property>
-                    <property name="spacing">
-                        <number>6</number>
-                    </property>
                     <widget class="QLabel">
                         <property name="name">
                             <cstring>m_basicInfoLabel</cstring>
@@ -76,7 +70,7 @@
                             <enum>Plain</enum>
                         </property>
                         <property name="text">
-                            <string>&lt;p&gt;You are free to add any text in the fields of the filename pattern. This text will be added between the selected entries.</string>
+                            <string>You are free to add any text in the fields of the filename pattern. This text will be added between the selected entries.</string>
                         </property>
                         <property name="alignment">
                             <set>WordBreak|AlignTop</set>
@@ -131,6 +125,14 @@
                         <property name="name">
                             <cstring>m_groupBasicFilenamePattern</cstring>
                         </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>5</hsizetype>
+                                <vsizetype>5</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>1</verstretch>
+                            </sizepolicy>
+                        </property>
                         <property name="title">
                             <string>Filename Pattern</string>
                         </property>
@@ -173,7 +175,7 @@
                     </widget>
                     <spacer>
                         <property name="name">
-                            <cstring>Spacer7</cstring>
+                            <cstring>spacer16</cstring>
                         </property>
                         <property name="orientation">
                             <enum>Vertical</enum>
@@ -184,7 +186,7 @@
                         <property name="sizeHint">
                             <size>
                                 <width>20</width>
-                                <height>20</height>
+                                <height>1</height>
                             </size>
                         </property>
                     </spacer>
@@ -197,60 +199,30 @@
                 <attribute name="title">
                     <string>Advanced Custom Pattern System</string>
                 </attribute>
-                <grid>
+                <vbox>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <property name="margin">
-                        <number>11</number>
-                    </property>
-                    <property name="spacing">
-                        <number>6</number>
-                    </property>
-                    <widget class="QGroupBox" row="3" column="0" rowspan="1" colspan="2">
+                    <widget class="QLabel">
                         <property name="name">
-                            <cstring>m_groupAdvancedFilenamePattern</cstring>
+                            <cstring>m_advancedInfoLabel</cstring>
                         </property>
-                        <property name="title">
-                            <string>Filename Pattern</string>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>1</hsizetype>
+                                <vsizetype>1</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
                         </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <property name="margin">
-                                <number>11</number>
-                            </property>
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
-                            <widget class="KComboBox" row="0" column="0" rowspan="1" colspan="3">
-                                <item>
-                                    <property name="text">
-                                        <string>%a - %t</string>
-                                    </property>
-                                </item>
-                                <item>
-                                    <property name="text">
-                                        <string>Track %n - %t (%a)</string>
-                                    </property>
-                                </item>
-                                <property name="name">
-                                    <cstring>m_comboAdvancedFilenamePattern</cstring>
-                                </property>
-                                <property name="editable">
-                                    <bool>true</bool>
-                                </property>
-                                <property name="contextMenuEnabled">
-                                    <bool>false</bool>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Insert your custom pattern here</string>
-                                </property>
-                            </widget>
-                        </grid>
+                        <property name="text">
+                            <string>You can use one of the predefined ones, or define your own. You are free to add any text you want along with some special strings that will be replaced by the values gained from CDDB.</string>
+                        </property>
+                        <property name="alignment">
+                            <set>WordBreak|AlignTop|AlignLeft</set>
+                        </property>
                     </widget>
-                    <widget class="QGroupBox" row="2" column="0" rowspan="1" colspan="2">
+                    <widget class="QGroupBox">
                         <property name="name">
                             <cstring>m_groupAdvancedDirectoryPattern</cstring>
                         </property>
@@ -298,75 +270,86 @@
                             </widget>
                         </vbox>
                     </widget>
-                    <widget class="QLabel" row="1" column="0">
+                    <widget class="QGroupBox">
                         <property name="name">
-                            <cstring>TextLabel1_2</cstring>
+                            <cstring>m_groupAdvancedFilenamePattern</cstring>
                         </property>
                         <property name="sizePolicy">
                             <sizepolicy>
-                                <hsizetype>1</hsizetype>
-                                <vsizetype>1</vsizetype>
+                                <hsizetype>5</hsizetype>
+                                <vsizetype>5</vsizetype>
                                 <horstretch>0</horstretch>
                                 <verstretch>1</verstretch>
                             </sizepolicy>
                         </property>
-                        <property name="text">
-                            <string>&lt;p&gt;&lt;ul&gt;
-&lt;li&gt;%a - artist of the track
-&lt;li&gt;%t - title of the track
-&lt;li&gt;%n - track number
-&lt;li&gt;%e - extended information about the track
-&lt;li&gt;%g - genre of the CD
-&lt;/ul&gt;</string>
+                        <property name="title">
+                            <string>Filename Pattern</string>
                         </property>
-                        <property name="alignment">
-                            <set>WordBreak|AlignTop</set>
-                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>11</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="KComboBox" row="0" column="0" rowspan="1" colspan="3">
+                                <item>
+                                    <property name="text">
+                                        <string>%a - %t</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>Track %n - %t (%a)</string>
+                                    </property>
+                                </item>
+                                <property name="name">
+                                    <cstring>m_comboAdvancedFilenamePattern</cstring>
+                                </property>
+                                <property name="editable">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="contextMenuEnabled">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Insert your custom pattern here</string>
+                                </property>
+                            </widget>
+                        </grid>
                     </widget>
-                    <widget class="QLabel" row="1" column="1">
+                    <spacer>
                         <property name="name">
-                            <cstring>TextLabel2_2</cstring>
+                            <cstring>spacer15</cstring>
                         </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>1</hsizetype>
-                                <vsizetype>1</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>1</verstretch>
-                            </sizepolicy>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
                         </property>
-                        <property name="text">
-                            <string>&lt;p&gt;&lt;ul&gt;
-&lt;li&gt;%r - album artist (differs from %a only on soundtracks or compilations)
-&lt;li&gt;%m - album title
-&lt;li&gt;%x - extended information about the CD
-&lt;li&gt;%d - current date
-&lt;/ul&gt;</string>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
                         </property>
-                        <property name="alignment">
-                            <set>WordBreak|AlignTop</set>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>1</height>
+                            </size>
                         </property>
-                    </widget>
-                    <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
+                    </spacer>
+                    <widget class="KURLLabel">
                         <property name="name">
-                            <cstring>m_advancedInfoLabel</cstring>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>1</hsizetype>
-                                <vsizetype>1</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
+                            <cstring>m_specialStringsLabel</cstring>
                         </property>
                         <property name="text">
-                            <string>&lt;p&gt;You can use one of the predefined ones, or define your own. You are free to add any text you want along with some special strings that will be replaced by the values gained from CDDB. These special strings are:</string>
+                            <string>See special strings</string>
                         </property>
                         <property name="alignment">
-                            <set>WordBreak|AlignTop|AlignLeft</set>
+                            <set>AlignVCenter|AlignRight</set>
                         </property>
                     </widget>
-                </grid>
+                </vbox>
             </widget>
         </widget>
         <widget class="QFrame">
@@ -679,7 +662,10 @@
     <includehint>klineedit.h</includehint>
     <includehint>kcombobox.h</includehint>
     <includehint>kcombobox.h</includehint>
+    <includehint>klineedit.h</includehint>
     <includehint>kcombobox.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kurllabel.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>ksqueezedtextlabel.h</includehint>

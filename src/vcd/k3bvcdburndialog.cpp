@@ -406,11 +406,13 @@ void K3bVcdBurnDialog::saveUserDefaults()
 
 void K3bVcdBurnDialog::slotNonCompliantToggled()
 {
+  // trueg: shouldn't this be done when the user clicks "save" or "burn"?
   vcdDoc()->vcdOptions()->setBrokenSVcdMode(m_checkNonCompliant->isChecked());  
 }
 
 void K3bVcdBurnDialog::slot2336Toggled()
 {
+  // trueg: shouldn't this be done when the user clicks "save" or "burn"?
   vcdDoc()->vcdOptions()->setSector2336(m_check2336->isChecked());
 }
 

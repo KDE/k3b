@@ -137,12 +137,14 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   groupTao->setInsideMargin( marginHint() );
   m_checkTaoSource = new QCheckBox( i18n("TAO Source"), groupTao );
   QHBox *t = new QHBox( groupTao );
-  t->setStretchFactor(new QLabel( i18n("Tao Source Adjust:"), t ), 1 );
+  QLabel* taoSourceAdjustLabel = new QLabel( i18n("Tao Source Adjust:"), t);
+  t->setStretchFactor( taoSourceAdjustLabel, 1 );
   m_spinTaoSourceAdjust = new QSpinBox( t );
   m_spinTaoSourceAdjust->setMinValue( 1 );
   m_spinTaoSourceAdjust->setMaxValue( 99 );
   m_spinTaoSourceAdjust->setValue( 2 );
   m_spinTaoSourceAdjust->setDisabled( true );
+  taoSourceAdjustLabel->setDisabled( true );
 
   QGroupBox* groupOther = new QGroupBox( 2, Qt::Vertical, i18n("Other"), advancedTab ); 
   groupOther->setInsideSpacing( spacingHint() );
@@ -195,6 +197,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkDeleteImages, SLOT(setDisabled(bool)) );
 
   connect( m_checkTaoSource, SIGNAL(toggled(bool)), m_spinTaoSourceAdjust, SLOT(setEnabled(bool)) );
+  connect( m_checkTaoSource, SIGNAL(toggled(bool)), taoSourceAdjustLabel, SLOT(setEnabled(bool)) );
   slotSourceSelected();
 
   m_checkDeleteImages->setChecked( true );

@@ -122,7 +122,10 @@ void K3bProjectBurnDialog::slotWriterChanged()
       m_checkDao->setEnabled( false );
       m_checkDao->setChecked( false );
     }
+    actionButton(Ok)->setDisabled(false);
   }
+  else
+    actionButton(Ok)->setDisabled(true);
 }
 
 
