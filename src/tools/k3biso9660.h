@@ -82,6 +82,7 @@ class K3bIso9660File : public KArchiveFile
   long long realsize() const { return m_realsize; }
 
   virtual QByteArray data(long long pos, int count) const;
+  int read( long long pos, char* data, int len ) const;
 
  private:
   /**

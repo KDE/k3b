@@ -118,9 +118,21 @@ QByteArray K3bIso9660File::data(long long pos, int count) const
   return r;
 }
 
+
+int K3bIso9660File::read( long long pos, char* data, int len ) const
+{
+  if( !archive()->device()->at( position() + pos ) ) {
+    kdDebug() << "(K3bIso9660File) seek failed: " << strerror(errno) << " (" << errno << ")" << endl;
+    return -1;
+  }
+  else
+    return archive()->device()->readBlock( data, ((pos+len) < size()) ? len : size()-pos );
+}
+
+
 QByteArray K3bIso9660File::data() const
 {
-  return QByteArray();
+  return data( 0, size() );
 }
 
 

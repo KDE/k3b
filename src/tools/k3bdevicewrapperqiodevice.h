@@ -51,6 +51,8 @@ class K3bDeviceWrapperQIODevice : public QIODevice
   Offset size() const;
 
  private:
+  bool readSector( unsigned long sector, unsigned char* buf );
+
   K3bCdDevice::CdDevice* m_device;
 
   class Private;

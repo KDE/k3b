@@ -266,8 +266,22 @@ bool K3bAudioRipThread::ripTrack( int track, const QString& filename )
 {
   const K3bTrack& tt = d->toc[track-1];
 
-  if( d->paranoiaLib->initReading( tt.firstSector().lba(), 
-				   ( m_useIndex0 && tt.index0() > 0 ? tt.index0()-1 : tt.lastSector().lba() ) ) ) {
+  long endSec= tt.lastSector().lba();
+  
+  if( m_useIndex0 ) {
+    emitNewSubTask( i18n("Searching index 0 for track %1").arg(track) );
+
+    long sec = 0;
+    if( m_device->searchIndex0( tt.firstSector().lba(), tt.lastSector().lba(), sec ) ) {
+      kdDebug() << "(K3bAudioRipThread) Pregap for track " << track << ": " 
+		<< sec << " offset: " << (sec != -1 ? sec-tt.firstSector().lba() : -1 ) << endl;
+      endSec = sec;
+    }
+    else
+      emitInfoMessage( i18n("Unable to determine index 0 for Track %1.").arg(track), K3bJob::ERROR );
+  }
+
+  if( d->paranoiaLib->initReading( tt.firstSector().lba(), endSec ) ) {
 
     long trackSectorsRead = 0;
 

@@ -485,7 +485,7 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
 	job.setDevice( d->device );
 	job.setMode( K3bBlankingJob::Fast );
 	job.setForceNoEject(true);
-	job.setSpeed( 0 ); // this should use the max.
+	job.setSpeed( d->device->maxWriteSpeed() ); // FIXME: use the max from the cdrw
 	connect( &job, SIGNAL(finished(bool)), this, SLOT(slotErasingFinished(bool)) );
 	connect( d->erasingInfoDialog, SIGNAL(cancelClicked()), &job, SLOT(cancel()) );
 	job.start();

@@ -156,7 +156,7 @@ void K3bCdDevice::DiskInfoDetector::fetchExtraInfo()
       d->iso9660 = new K3bIso9660( d->device, startSec );
 
       if( d->iso9660->open( IO_ReadOnly ) ) {
-	d->iso9660->debug();
+	//	d->iso9660->debug();
 
 	d->info.isoId = "CD001";
 	d->info.isoSystemId = d->iso9660->primaryDescriptor().systemId;

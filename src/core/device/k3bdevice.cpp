@@ -1243,21 +1243,6 @@ K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc() const
     fixupToc( toc );
   }
 
-  int i = 1;
-  for( Toc::iterator it = toc.begin(); it != toc.end(); ++it ) {
-    Track& track = *it;
-    if( track.type() == Track::AUDIO ) {
-      long sec = 0;
-      if( searchIndex0( track.firstSector().lba(), track.lastSector().lba(), sec ) ) {
-	kdDebug() << "Pregap for track " << i << ": " << sec << " offset: " << (sec != -1 ? sec-track.firstSector().lba() : -1 ) << endl;
-	track.m_index0 = sec;
-      }
-      else
-	kdDebug() << "Unable to determine index0 for Track " << i << endl;
-    }
-    ++i;
-  }
-  
   if( needToClose )
     close();
 
