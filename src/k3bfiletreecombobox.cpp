@@ -64,8 +64,8 @@ K3bFileTreeComboBox::K3bFileTreeComboBox( QWidget* parent, const char* name )
   m_fileTreeView->header()->hide();
   m_fileTreeView->installEventFilter(this);
 
-  m_fileTreeView->addCdDeviceBranches( K3bDeviceManager::self() );
   m_fileTreeView->addDefaultBranches();
+  m_fileTreeView->addCdDeviceBranches( k3bcore->deviceManager() );
 
   // HACK! Why the hell is QComboBox that closed???
   listBox()->insertItem( "HACK" );
