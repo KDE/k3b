@@ -66,7 +66,7 @@ int main(int argc, char *argv[]) {
     aboutData.addCredit("Ayo", 
 			I18N_NOOP("For his bombastic artwork."), 
 			"73lab@free.fr" );
-    aboutData.addCredit("Crissi", 
+    aboutData.addCredit("Christoph Thielecke", 
 			I18N_NOOP("For extensive testing and the first German translation."), 
 			"crissi99@gmx.de");
     aboutData.addCredit("Joerg Schilling", 

@@ -121,7 +121,6 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
   }
 
   m_fileTreeView->header()->hide();
-  m_fileTreeView->addCdDeviceBranches( k3bcore->deviceManager() );
 
   m_fileView     = new K3bFileView(m_viewStack, "fileView");
   m_cdView       = new K3bAudioCdView(m_viewStack, "cdview");
@@ -133,6 +132,7 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
   m_viewStack->raiseWidget( m_fileView );
 
   m_fileTreeView->addDefaultBranches();
+  m_fileTreeView->addCdDeviceBranches( k3bcore->deviceManager() );
 
   if( m_mainSplitter ) {
     // split

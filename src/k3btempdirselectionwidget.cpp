@@ -172,14 +172,12 @@ void K3bTempDirSelectionWidget::setNeededSize( unsigned long bytes )
 void K3bTempDirSelectionWidget::saveConfig()
 {
   kapp->config()->setGroup( "General Options" );
-  QFileInfo fi( tempPath() );
-  QString path;
-  if( fi.isFile() )
-    path = fi.dirPath();
-  else
-    path = fi.filePath();
+
+  QString path = tempPath();
+  if( m_mode == FILE )
+    path.truncate( path.findRev("/") );
   
-  kapp->config()->writeEntry( "Temp Dir", path );
+  kapp->config()->writeEntry( "Temp Dir", K3b::prepareDir(path) );
 
   //  k3bMain()->configChanged(kapp->config());
 }
