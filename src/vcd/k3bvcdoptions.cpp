@@ -24,7 +24,9 @@
 
 K3bVcdOptions::K3bVcdOptions()
   : m_volumeID( i18n("Project name", "VIDEOCD") ),
-    m_applicationID( "K3B" )
+    m_applicationID( "K3B" ),
+    m_volumeCount(1 ),
+    m_volumeNumber(1 )
 {
 
 }
@@ -38,6 +40,8 @@ void K3bVcdOptions::save( KConfig* c )
   c->writeEntry( "publisher", m_publisher );
   c->writeEntry( "system id", m_systemId );
   c->writeEntry( "volume set id", m_volumeSetId );
+  // c->writeEntry( "volume count", m_volumeCount );  
+  // c->writeEntry( "volume number", m_volumeNumber );  
 }
 
 
@@ -51,7 +55,9 @@ K3bVcdOptions K3bVcdOptions::load( KConfig* c )
   options.setPublisher( c->readEntry( "publisher", options.publisher() ) );
   options.setSystemId( c->readEntry( "system id", options.systemId() ) );
   options.setVolumeSetId( c->readEntry( "volume set id", options.volumeSetId() ) );
-
+  // options.setVolumeCount( c->readEntry( "volume count", options.volumeCount() ) );
+  // options.setVolumeNumber( c->readEntry( "volume number", options.volumeNumber() ) );
+  
   return options;
 }
 

@@ -194,7 +194,11 @@ void K3bVcdJob::vcdxGen()
   *m_process << "-l" << QString("%1").arg(m_doc->vcdOptions()->volumeId());
   // AlbumID
   *m_process << QString("--info-album-id=%1").arg(m_doc->vcdOptions()->albumId());
-
+  // VolumeCount
+  *m_process << QString("--volume-count=%1").arg(m_doc->vcdOptions()->volumeCount());
+  // VolumeNumber
+  *m_process << QString("--volume-number=%1").arg(m_doc->vcdOptions()->volumeNumber());
+  
   if ( vcdDoc()->vcdOptions()->BrokenSVcdMode() ) {
     kdDebug() << "(K3bVcdJop) Broken Svcd Mode = on" << endl;
     *m_process << "--broken-svcd-mode";

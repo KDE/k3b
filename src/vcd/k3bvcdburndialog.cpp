@@ -83,12 +83,14 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
 
   connect( m_checkNonCompliant, SIGNAL(toggled(bool)), this, SLOT(slotNonCompliantToggled()) );
   connect( m_check2336, SIGNAL(toggled(bool)), this, SLOT(slot2336Toggled()) );
-
+  connect( m_spinVolumeCount, SIGNAL(valueChanged(int)), this, SLOT(slotSpinVolumeCount()) );
+  connect( m_spinVolumeNumber, SIGNAL(valueChanged(int)), this, SLOT(slotSpinVolumeNumber()) );
+    
   // ToolTips
   // -------------------------------------------------------------------------
-  QToolTip::add( m_radioVcd11, i18n("Select Video CD Typ (VCD 1.1)") );
-  QToolTip::add( m_radioVcd20, i18n("Select Video CD Typ (VCD 2.0)") );
-  QToolTip::add( m_radioSvcd10, i18n("Select Video CD Typ (SVCD 1.0)") );
+  QToolTip::add( m_radioVcd11, i18n("Select Video CD Typ %1").arg("(VCD 1.1)") );
+  QToolTip::add( m_radioVcd20, i18n("Select Video CD Typ %1").arg("(VCD 2.0)") );
+  QToolTip::add( m_radioSvcd10, i18n("Select Video CD Typ %1").arg("(SVCD 1.0)") );
   QToolTip::add( m_checkNonCompliant, i18n("Non-compliant compatibility mode for broken devices") );
   QToolTip::add( m_check2336, i18n("Use 2336 byte sectors for output") );
 
@@ -208,6 +210,8 @@ void K3bVcdBurnDialog::setupLabelTab()
   m_spinVolumeNumber = new QSpinBox( w, "m_editVolumeNumber" );
   m_spinVolumeCount = new QSpinBox( w, "m_editVolumeCount" );
 
+  m_editVolumeId->setMaxLength(31);
+  
   m_spinVolumeNumber->setMinValue(1);
   m_spinVolumeCount->setMinValue(1);
   m_spinVolumeNumber->setMaxValue(m_spinVolumeCount->value());
@@ -248,10 +252,13 @@ void K3bVcdBurnDialog::setupLabelTab()
 
   // TODO: enable this in the future :)
   m_checkApplicationId->setEnabled(false);
+
+  /*
   labelVolumeCount->setEnabled(false);
   labelVolumeNumber->setEnabled(false);
   m_spinVolumeCount->setEnabled(false);
   m_spinVolumeNumber->setEnabled(false);
+  */
 
   addPage( w, i18n("Label") );
 }
@@ -372,7 +379,7 @@ void K3bVcdBurnDialog::saveUserDefaults()
   c->setGroup( "default vcd settings" );
 
   c->writeEntry( "dummy_mode", m_checkSimulate->isChecked() );
-
+  c->writeEntry( "burnproof", m_checkBurnproof->isChecked() );
   c->writeEntry( "remove_image", m_checkRemoveBufferFiles->isChecked() );
 
   m_tempDirSelectionWidget->saveConfig();
@@ -388,6 +395,18 @@ void K3bVcdBurnDialog::slot2336Toggled()
 {
   // trueg: shouldn't this be done when the user clicks "save" or "burn"?
   vcdDoc()->vcdOptions()->setSector2336(m_check2336->isChecked());
+}
+
+void K3bVcdBurnDialog::slotSpinVolumeCount()
+{
+  int c = m_spinVolumeCount->value();
+  m_spinVolumeNumber->setMaxValue(c);
+  vcdDoc()->vcdOptions()->setVolumeCount(c);
+}
+
+void K3bVcdBurnDialog::slotSpinVolumeNumber()
+{
+  vcdDoc()->vcdOptions()->setVolumeNumber(m_spinVolumeNumber->value());  
 }
 
 #include "k3bvcdburndialog.moc"

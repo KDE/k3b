@@ -87,7 +87,8 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
 
    void slotNonCompliantToggled();
    void slot2336Toggled();
-   
+   void slotSpinVolumeCount();
+   void slotSpinVolumeNumber();
 };
 
 #endif
