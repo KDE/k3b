@@ -30,6 +30,7 @@
 
 K3bVcdOptions::K3bVcdOptions()
         : m_restriction( 0 ),
+        m_segment( 0 ),
         m_pbcenabled( PbcEnabled() ),
         m_pbcnumkeys( PbcNumKeys() ),
         m_volumeID( i18n( "VIDEOCD" ) ),

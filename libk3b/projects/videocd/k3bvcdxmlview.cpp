@@ -140,7 +140,7 @@ bool K3bVcdXmlView::write( const QString& fname )
     QDomElement elemFileSystem = addSubElement( xmlDoc, root, "filesystem" );
     
     // SEGMENT folder, some standalone DVD-Player need this
-    if ( m_doc->vcdOptions() ->SegmentFolder() )
+    if ( !m_doc->vcdOptions() ->haveSegments() && m_doc->vcdOptions() ->SegmentFolder() )
         addFolderElement( xmlDoc, elemFileSystem, "SEGMENT" );
 
     // create cdi element

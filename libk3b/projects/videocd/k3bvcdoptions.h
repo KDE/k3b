@@ -297,9 +297,22 @@ class K3bVcdOptions
         {
             return m_restriction;
         };
+        void increaseSegments( )
+        {
+            m_segment += 1;
+        }
+        void decreaseSegments( )
+        {
+            m_segment -= 1;
+        }
+        bool haveSegments() const
+        {
+            return m_segment > 0;
+        };
 
     private:
         int m_restriction;
+        int m_segment;
 
         // pbc
         bool m_pbcenabled;

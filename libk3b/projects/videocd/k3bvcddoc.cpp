@@ -300,6 +300,9 @@ void K3bVcdDoc::addTrack( K3bVcdTrack* track, uint position )
         m_tracks->insert( m_tracks->count(), track );
     }
 
+    if ( track->isSegment() )
+        vcdOptions() ->increaseSegments( );
+
     emit newTracks();
 
     setModified( true );
@@ -327,6 +330,9 @@ void K3bVcdDoc::removeTrack( K3bVcdTrack* track )
         // emit signal before deleting the track to avoid crashes
         // when the view tries to call some of the tracks' methods
         emit trackRemoved( track );
+
+        if ( track->isSegment() )
+            vcdOptions() ->decreaseSegments( );
 
         delete track;
 
