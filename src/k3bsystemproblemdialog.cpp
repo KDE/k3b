@@ -166,16 +166,16 @@ void K3bSystemProblemDialog::checkSystem()
 					 i18n("Install a more recent version of the cdrtools."),
 					 false ) );
     
-    if( !k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "suidroot" ) )
-      problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
-					 i18n("%1 does not run with root privileges").arg("cdrecord"),
-					 i18n("cdrecord needs to run with root privileges "
-					      "to be able to access the cd devices, "
-					      "use real time scheduling, and "
-					      "set a non-standard fifo buffer. This is also "
-					      "true when using SuSE's resmgr."),
-					 i18n("Use K3bSetup to solve this problem."),
-					 true ) );
+//     if( !k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "suidroot" ) )
+//       problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+// 					 i18n("%1 does not run with root privileges").arg("cdrecord"),
+// 					 i18n("cdrecord needs to run with root privileges "
+// 					      "to be able to access the cd devices, "
+// 					      "use real time scheduling, and "
+// 					      "set a non-standard fifo buffer. This is also "
+// 					      "true when using SuSE's resmgr."),
+// 					 i18n("Use K3bSetup to solve this problem."),
+// 					 true ) );
   }
   
   if( !k3bcore->externalBinManager()->foundBin( "cdrdao" ) ) {
@@ -188,27 +188,27 @@ void K3bSystemProblemDialog::checkSystem()
 				       i18n("Install the cdrdao package."),
 				       false ) );
   }
-  else if( !k3bcore->externalBinManager()->binObject( "cdrdao" )->hasFeature( "suidroot" ) ) {
-    problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
-				       i18n("%1 does not run with root privileges").arg("cdrdao"),
-				       i18n("cdrdao needs to run with root privileges "
-					    "to be able to access the cd devices and "
-					    "use real time scheduling."
-					    "This is also true when using SuSE's resmgr."),
-				       i18n("Use K3bSetup to solve this problem."),
-				       true ) );
-  }
+//   else if( !k3bcore->externalBinManager()->binObject( "cdrdao" )->hasFeature( "suidroot" ) ) {
+//     problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+// 				       i18n("%1 does not run with root privileges").arg("cdrdao"),
+// 				       i18n("cdrdao needs to run with root privileges "
+// 					    "to be able to access the cd devices and "
+// 					    "use real time scheduling."
+// 					    "This is also true when using SuSE's resmgr."),
+// 				       i18n("Use K3bSetup to solve this problem."),
+// 				       true ) );
+//   }
 
 
-  if( const K3bExternalBin* readcdBin = k3bcore->externalBinManager()->binObject( "readcd" ) )
-    if( !readcdBin->hasFeature( "suidroot" ) )
-      problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
-					 i18n("%1 does not run with root privileges").arg("readcd"),
-					 i18n("Readcd needs to run with root privileges "
-					      "to be able to access the cd devices unless "
-					      "using SuSE's resmgr with a patched readcd."),
-					 i18n("Use K3bSetup to solve this problem."),
-					 true ) );
+//   if( const K3bExternalBin* readcdBin = k3bcore->externalBinManager()->binObject( "readcd" ) )
+//     if( !readcdBin->hasFeature( "suidroot" ) )
+//       problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+// 					 i18n("%1 does not run with root privileges").arg("readcd"),
+// 					 i18n("Readcd needs to run with root privileges "
+// 					      "to be able to access the cd devices unless "
+// 					      "using SuSE's resmgr with a patched readcd."),
+// 					 i18n("Use K3bSetup to solve this problem."),
+// 					 true ) );
 
 
   if( !k3bcore->deviceManager()->dvdWriter().isEmpty() ) {
@@ -227,6 +227,14 @@ void K3bSystemProblemDialog::checkSystem()
 					   i18n("Used %1 version %2 is outdated").arg("growisofs").arg(k3bcore->externalBinManager()->binObject( "growisofs" )->version),
 					   i18n("K3b needs at least growisofs version 5.10 to write dvds. "
 						"All older versions will not work and K3b will refuse to use them."),
+					   i18n("Install a more recent version of growisofs."),
+					   false ) );
+      }
+      else if( k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3bVersion( 5, 12 ) ) {
+	problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
+					   i18n("Used %1 version %2 is outdated").arg("growisofs").arg(k3bcore->externalBinManager()->binObject( "growisofs" )->version),
+					   i18n("K3b won't be able to copy DVDs on-the-fly using a growisofs "
+						"version older than 5.12."),
 					   i18n("Install a more recent version of growisofs."),
 					   false ) );
       }
@@ -369,7 +377,7 @@ void K3bSystemProblemDialog::checkSystem()
 						"configured to use SCSI emulation and your system does "
 						"not support ATAPI with cdrdao."),
 					   i18n("The best and recommended solution is to enable "
-						"ide-scsi (SCSI emulation) for all writer devices. "
+						"ide-scsi (SCSI emulation) for all devices. "
 						"This way you won't have any problems."),
 					   false ) );
       }

@@ -274,7 +274,7 @@ void K3bMovixBurnDialog::toggleAllOptions()
 {
   K3bProjectBurnDialog::toggleAllOptions();
 
-  if( m_checkOnlyCreateImage->isChecked() ) {
+  if( m_checkSimulate->isChecked() || m_checkOnlyCreateImage->isChecked() ) {
     m_checkVerify->setChecked(false);
     m_checkVerify->setEnabled(false);
   }

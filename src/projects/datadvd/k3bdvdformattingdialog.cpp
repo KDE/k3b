@@ -98,6 +98,7 @@ K3bDvdFormattingDialog::K3bDvdFormattingDialog( QWidget* parent, const char* nam
 					    "quick format is enabled." ) );
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotWriterChanged()) );
 
+  slotLoadUserDefaults();
   slotWriterChanged();
 } 
 

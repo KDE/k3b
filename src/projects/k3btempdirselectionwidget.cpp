@@ -168,7 +168,7 @@ QString K3bTempDirSelectionWidget::tempDirectory() const
   QString td( m_editDirectory->url() );
 
   // remove a trailing slash
-  if( td[td.length()-1] == '/' )
+  while( !td.isEmpty() && td[td.length()-1] == '/' )
     td.truncate( td.length()-1 );
 
   QFileInfo fi( td );
@@ -202,8 +202,10 @@ void K3bTempDirSelectionWidget::setNeededSize( unsigned long bytes )
 
 void K3bTempDirSelectionWidget::saveConfig()
 {
+  QString oldGroup = k3bcore->config()->group();
   k3bcore->config()->setGroup( "General Options" );
   k3bcore->config()->writePathEntry( "Temp Dir", tempDirectory() );
+  k3bcore->config()->setGroup( oldGroup );
 }
 
 #include "k3btempdirselectionwidget.moc"

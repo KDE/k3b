@@ -38,6 +38,7 @@ class K3bGrowisofsWriter : public K3bAbstractWriter
   bool write( const char* data, int len );
 
   int fd() const;
+  bool closeFd();
 
  public slots:
   void start();
@@ -58,6 +59,7 @@ class K3bGrowisofsWriter : public K3bAbstractWriter
   void slotReceivedStderr( const QString& );
   void slotProcessExited( KProcess* );
   void slotEjectingFinished( K3bCdDevice::DeviceHandler* dh );
+  void slotThroughput( int t );
 
  private:
   class Private;

@@ -264,6 +264,7 @@ void K3bProjectBurnDialog::prepareGui()
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotWriterChanged()) );
   connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(slotWritingAppChanged(int)) );
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), this, SLOT(toggleAllOptions()) );
+  connect( m_checkSimulate, SIGNAL(toggled(bool)), this, SLOT(toggleAllOptions()) );
   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(toggleAllOptions()) );
   connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)), this, SLOT(toggleAllOptions()) );
 
@@ -310,9 +311,6 @@ void K3bProjectBurnDialog::slotSaveUserDefaults()
 {
   KConfig* c = k3bcore->config();
 
-  c->setGroup( "General Options" );
-  c->writePathEntry( "Temp Dir", m_tempDirSelectionWidget->tempPath() );
-
   c->setGroup( "default " + doc()->documentType() + " settings" );
 
   m_writingModeWidget->saveConfig( c );
@@ -323,6 +321,10 @@ void K3bProjectBurnDialog::slotSaveUserDefaults()
   c->writeEntry( "only_create_image", m_checkOnlyCreateImage->isChecked() );
 
   m_writerSelectionWidget->saveConfig( c );
+
+  if( m_tempDirSelectionWidget->isEnabled() ) {
+    m_tempDirSelectionWidget->saveConfig();
+  }
 }
 
 

@@ -25,6 +25,7 @@
 #include <k3bemptydiscwaiter.h>
 #include <k3bgrowisofswriter.h>
 #include <k3breadcdreader.h>
+#include <k3bversion.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -86,6 +87,14 @@ void K3bDvdCopyJob::start()
   d->canceled = false;
   d->running = true;
 
+
+  if( m_onTheFly && 
+      k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3bVersion( 5, 12 ) ) {
+    m_onTheFly = false;
+    emit infoMessage( i18n("K3b does not support writing on-the-fly with growisofs %1.")
+		      .arg(k3bcore->externalBinManager()->binObject( "growisofs" )->version), ERROR );
+    emit infoMessage( i18n("Disabling on-the-fly writing."), INFO );
+  }
 
   // TODO: check the cd size and warn the user if not enough space
 
@@ -187,7 +196,6 @@ void K3bDvdCopyJob::prepareReader()
   if( !d->readcdReader ) {
     d->readcdReader = new K3bReadcdReader( this );
     connect( d->readcdReader, SIGNAL(percent(int)), this, SLOT(slotReaderProgress(int)) );
-    connect( d->readcdReader, SIGNAL(percent(int)), this, SIGNAL(subPercent(int)) );
     connect( d->readcdReader, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSubSize(int, int)) );
     connect( d->readcdReader, SIGNAL(finished(bool)), this, SLOT(slotReaderFinished(bool)) );
     connect( d->readcdReader, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
@@ -228,6 +236,7 @@ void K3bDvdCopyJob::prepareWriter()
   // these do only make sense with DVD-R(W)
   d->writerJob->setSimulate( m_simulate );
   d->writerJob->setBurnSpeed( m_speed );
+  d->writerJob->setWritingMode( m_writingMode );
   
   if( m_onTheFly )
     d->writerJob->setImageToWrite( QString::null ); // write to stdin
@@ -238,7 +247,8 @@ void K3bDvdCopyJob::prepareWriter()
 
 void K3bDvdCopyJob::slotReaderProgress( int p )
 {
-  emit subPercent( p );
+  if( !m_onTheFly || m_onlyCreateImage )
+    emit subPercent( p );
 
   if( m_onlyCreateImage )
     emit percent( p );
@@ -260,6 +270,10 @@ void K3bDvdCopyJob::slotWriterProgress( int p )
 
 void K3bDvdCopyJob::slotReaderFinished( bool success )
 {
+  // close the socket
+  if( d->writerJob )
+    d->writerJob->closeFd();
+
   if( d->canceled ) {
     emit canceled();
     emit finished(false);

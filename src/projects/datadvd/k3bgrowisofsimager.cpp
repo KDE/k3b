@@ -24,6 +24,7 @@
 #include <device/k3bdevicehandler.h>
 #include <k3bprocess.h>
 #include <k3bglobals.h>
+#include <k3bthroughputestimator.h>
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -42,10 +43,7 @@ public:
   bool success;
 
   // speed calculation
-  bool speedCalcStarted;
-  QTime lastWriteSpeedCalcTime;
-  QTime firstWriteSpeedCalcTime;
-  int lastWrittenSpeedCalcBytes;
+  K3bThroughputEstimator* speedEst;
 
   bool writingStarted;
 };
@@ -57,6 +55,9 @@ K3bGrowisofsImager::K3bGrowisofsImager( K3bDataDoc* doc, QObject* parent, const 
     m_doc(doc)
 {
   d = new Private;
+  d->speedEst = new K3bThroughputEstimator( this );
+  connect( d->speedEst, SIGNAL(throughput(int)),
+	   this, SLOT(slotThroughput(int)) );
 }
 
 
@@ -73,7 +74,7 @@ void K3bGrowisofsImager::start()
   cleanup();
   init();
 
-  d->speedCalcStarted = false;
+  d->speedEst->reset();
   d->writingStarted = false;
 
   m_process = new K3bProcess();
@@ -220,6 +221,7 @@ void K3bGrowisofsImager::slotReceivedStderr( const QString& line )
   // all we need to do is parsing any status messges from growisofs
   // progress parsing can be done by the K3bIsoImager
 
+
   emit debuggingOutput( "growisofs", line );
 
   int pos = 0;
@@ -233,7 +235,7 @@ void K3bGrowisofsImager::slotReceivedStderr( const QString& line )
 
     int p = K3bIsoImager::parseProgress( line );
     if( p != -1 ) {
-      createEstimatedWriteSpeed( p*size()/100 );
+      d->speedEst->dataWritten( p*m_doc->size()/1024/100 );
       emit percent( p );
     }
   }
@@ -272,6 +274,12 @@ void K3bGrowisofsImager::slotReceivedStderr( const QString& line )
     else
       kdDebug() << "(K3bGrowisofsWriter) parsing error: '" << line.mid( pos, endPos-pos ) << "'" << endl;
   }
+  else if( line.contains( ":-[" ) ) {
+    // Error
+    // :-[ attempt -blank=full or re-run with -dvd-compat -dvd-compat to engage DAO ]
+    if( line.contains( "engage DAO" ) ) 
+      emit infoMessage( i18n("Please try again with writing mode DAO."), ERROR );
+  }
   else {
     kdDebug() << "(growisofs) " << line << endl;
   }
@@ -293,9 +301,9 @@ void K3bGrowisofsImager::slotProcessExited( KProcess* p )
   else if( p->normalExit() ) {
     if( p->exitStatus() == 0 ) {
 
-      double secs = (double)d->firstWriteSpeedCalcTime.secsTo( d->lastWriteSpeedCalcTime );
-      double speed = (double)d->lastWrittenSpeedCalcBytes / ( secs > 0 ? secs : 1 );
-      emit infoMessage( i18n("Average overall write speed: %1 kb/s (%2x)").arg((int)speed).arg(KGlobal::locale()->formatNumber(speed/1385.0, 2)), INFO );
+      int av = d->speedEst->average();
+      emit infoMessage( i18n("Average overall write speed: %1 kb/s (%2x)")
+			.arg(av).arg(KGlobal::locale()->formatNumber((double)av/1385.0, 2)), INFO );
 
       if( m_doc->dummy() )
 	emit infoMessage( i18n("Simulation successfully finished"), K3bJob::STATUS );
@@ -375,26 +383,9 @@ void K3bGrowisofsImager::cancel()
 }
 
 
-// this is basicly the same code as in K3bAbstractWriter
-void K3bGrowisofsImager::createEstimatedWriteSpeed( int madeBlocks )
+void K3bGrowisofsImager::slotThroughput( int t )
 {
-  if( !d->speedCalcStarted ) {
-    d->lastWriteSpeedCalcTime = QTime::currentTime();
-    d->firstWriteSpeedCalcTime = QTime::currentTime();
-    d->lastWrittenSpeedCalcBytes = madeBlocks;
-    d->speedCalcStarted = true;
-  }
-  else {
-    int elapsed = d->lastWriteSpeedCalcTime.msecsTo( QTime::currentTime() );
-    int writtenBlocks = madeBlocks - d->lastWrittenSpeedCalcBytes;
-    if( elapsed > 0 && writtenBlocks > 0 ) {
-      d->lastWriteSpeedCalcTime = QTime::currentTime();
-      d->lastWrittenSpeedCalcBytes = madeBlocks;
-      // kb/s
-      emit writeSpeed( (int)((double)writtenBlocks * 2.0 * 1000.0 / (double)elapsed), 1385 );
-    }
-  }
+  emit writeSpeed( t, 1385 );
 }
-
 
 #include "k3bgrowisofsimager.moc"

@@ -124,6 +124,7 @@ void K3bIso9660ImageWritingJob::start()
   }
 
   if( prepareWriter( media ) ) {
+    emit newSubTask( i18n("Writing image") );
     m_writer->start();
   }
   else {
@@ -284,6 +285,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
     else {
       // create cdrdao job
       K3bCdrdaoWriter* writer = new K3bCdrdaoWriter( m_device, this );
+      writer->setCommand( K3bCdrdaoWriter::WRITE );
       writer->setSimulate( m_simulate );
       writer->setBurnSpeed( m_speed );
       // multisession

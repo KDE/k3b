@@ -134,13 +134,6 @@ void K3bIsoImager::slotReceivedStderr( const QString& line )
   if( !line.isEmpty() ) {
     emit debuggingOutput( "mkisofs", line );
 
-    //
-    // in multisession mode mkisofs' progress does not start at 0 but at (X+Y)/X
-    // where X is the data already on the cd and Y the data to create
-    // This is not very dramatic but kind or ugly.
-    // We just save the first emitted progress value and to some math ;)
-    //
-
     if( line.contains( "done, estimate" ) ) {
       int p = parseProgress( line );
       if( p != -1 )
@@ -158,6 +151,13 @@ void K3bIsoImager::slotReceivedStderr( const QString& line )
 
 int K3bIsoImager::parseProgress( const QString& line ) 
 {
+  //
+  // in multisession mode mkisofs' progress does not start at 0 but at (X+Y)/X
+  // where X is the data already on the cd and Y the data to create
+  // This is not very dramatic but kind or ugly.
+  // We just save the first emitted progress value and to some math ;)
+  //
+
   QString perStr = line;
   perStr.truncate( perStr.find('%') );
   bool ok;
@@ -488,7 +488,14 @@ bool K3bIsoImager::addMkisofsParameters()
 	emit infoMessage( i18n("Unable to open device %1.").arg(m_device->blockDeviceName()), ERROR );
 	return false;
       }
-      *m_process << "-M" << QString("/dev/fd/%1").arg(fd); //m_device->busTargetLun();
+      //
+      // we want mkisofs to read from fd
+      // we could do that by just passing /dev/fd/$(fd)
+      // but Andy told me that on FreeBSD we only have /dev/fd/0, 1, and 2
+      // so if K3b will ever run well on FreeBSD we are ready...
+      //
+      m_process->dupStdin( fd ); // make mkisofs's stdin a copy of fd
+      *m_process << "-M" << QString("/dev/fd/0");//.arg(fd); //m_device->busTargetLun();
     }
   }
 

@@ -427,8 +427,8 @@ void K3bDoc::loadDefaultSettings( KConfig* c )
   setRemoveImages( c->readBoolEntry( "remove_image", true ) );
   setOnlyCreateImages( c->readBoolEntry( "only_create_image", false ) );
 
-  setSpeed( c->readNumEntry( "writing_speed", 1 ) );
   setBurner( k3bcore->deviceManager()->findDevice( c->readEntry( "writer_device" ) ) );
+  setSpeed( c->readNumEntry( "writing_speed", burner() ? burner()->currentWriteSpeed() : 1 ) );
 }
 
 

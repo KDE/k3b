@@ -144,6 +144,17 @@ void K3bDvdFormattingJob::start()
 }
 
 
+void K3bDvdFormattingJob::start( K3bCdDevice::DeviceHandler* dh )
+{
+  d->canceled = false;
+  d->running = true;
+
+  emit started();
+
+  slotDeviceHandlerFinished( dh );
+}
+
+
 void K3bDvdFormattingJob::cancel()
 {
   if( d->running ) {
@@ -379,14 +390,17 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler*
 	  else
 	    format = false;
 	}
-// 	else if( dh->ngDiskInfo().currentProfile() == K3bCdDevice::MEDIA_DVD_RW_OVWR ) {
-// 	  emit infoMessage( i18n("No need to format %1 media more than once."). arg(K3bCdDevice::mediaTypeString(dh->ngDiskInfo().currentProfile())), INFO );
-// emit infoMessage( i18n("It may simply be overwritten."), INFO );
-// 	  if( d->force )
-// 	    emit infoMessage( i18n("Forcing formatting anyway."), INFO );
-// 	  else
-// 	    format = false;
-// 	}
+	else if( dh->ngDiskInfo().currentProfile() == K3bCdDevice::MEDIA_DVD_RW_OVWR &&
+		 d->mode != K3b::WRITING_MODE_INCR_SEQ ) {
+	  emit infoMessage( i18n("No need to format %1 media more than once.")
+			    .arg(K3bCdDevice::mediaTypeString(dh->ngDiskInfo().currentProfile())), INFO );
+	  emit infoMessage( i18n("It may simply be overwritten."), INFO );
+
+	  if( d->force )
+	    emit infoMessage( i18n("Forcing formatting anyway."), INFO );
+	  else
+	    format = false;
+	}
 	
 
 	if( format ) {

@@ -56,10 +56,9 @@ class K3bGrowisofsImager : public K3bIsoImager
   virtual void slotReceivedStderr( const QString& );
   virtual void slotProcessExited( KProcess* );
   void slotEjectingFinished( K3bCdDevice::DeviceHandler* );
+  void slotThroughput( int );
 
  private:
-  void createEstimatedWriteSpeed( int madeBlocks );
-
   const K3bExternalBin* m_growisofsBin;
   const K3bExternalBin* m_mkisofsBin;
 

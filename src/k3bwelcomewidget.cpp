@@ -82,8 +82,8 @@ K3bWelcomeWidget::K3bWelcomeWidget( K3bMainWindow* mw, QWidget* parent, const ch
     browser->setText( s.read()
 		      .arg( i18n("Use the following links to access the most often used actions:") )
 		      .arg( i18n("Create Audio CD") )
-  		      .arg( i18n("Create Data DVD") )
     		      .arg( i18n("Create Data CD") )
+  		      .arg( i18n("Create Data DVD") )
      		      .arg( i18n("Copy CD") )
 		      .arg( i18n("K3b basicly consits of three parts:") )
 		      .arg( i18n("The projects:") )
@@ -97,7 +97,7 @@ K3bWelcomeWidget::K3bWelcomeWidget( K3bMainWindow* mw, QWidget* parent, const ch
 		      );
   }
   else
-    browser->setText( i18n("File %1 not found").arg("k3bwelcomemessage.h") );
+    browser->setText( i18n("File %1 not found").arg("k3bwelcomemessage.html") );
 
   connect( browser, SIGNAL(mailClick(const QString&, const QString&)),
 	   this, SLOT(slotMailClick(const QString&, const QString&)) );

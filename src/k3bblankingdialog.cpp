@@ -42,7 +42,6 @@
 #include <qmap.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
-#include <qapplication.h>
 
 
 
@@ -50,10 +49,12 @@ class K3bBlankingDialog::Private
 {
 public:
   Private()
-    : job(0) {
+    : job(0),
+      erasingDlg(0) {
   }
 
   K3bBlankingJob* job;
+  K3bErasingInfoDialog* erasingDlg;
   QMap<int, int> comboTypeMap;
   QMap<int, int> typeComboMap;
 };
@@ -62,7 +63,7 @@ public:
 K3bBlankingDialog::K3bBlankingDialog( QWidget* parent, const char* name )
   : K3bInteractionDialog( parent, name, i18n("Erase CD-RW") )
 {
-  d = new Private;
+  d = new Private();
 
   setCancelButtonText( i18n("Close") );
   setupGui();
@@ -76,7 +77,6 @@ K3bBlankingDialog::K3bBlankingDialog( QWidget* parent, const char* name )
 
 K3bBlankingDialog::~K3bBlankingDialog()
 {
-  delete d->job;
   delete d;
 }
 
@@ -137,7 +137,7 @@ void K3bBlankingDialog::slotStartClicked()
   m_viewOutput->clear();
 
   if( d->job == 0 ) {
-    d->job = new K3bBlankingJob();
+    d->job = new K3bBlankingJob( this );
     connect( d->job, SIGNAL(infoMessage(const QString&,int)), 
 	     this, SLOT(slotInfoMessage(const QString&,int)) );
   }
@@ -148,14 +148,14 @@ void K3bBlankingDialog::slotStartClicked()
   d->job->setWritingApp(m_writerSelectionWidget->writingApp());
   d->job->setMode( d->comboTypeMap[m_comboEraseMode->currentItem()] );
 
-  K3bErasingInfoDialog dlg( i18n("Erasing CD-RW"), this );
+  if( !d->erasingDlg )
+    d->erasingDlg = new K3bErasingInfoDialog( i18n("Erasing CD-RW"), this );
 
-  connect( d->job, SIGNAL(finished(bool)), &dlg, SLOT(close()) );
   connect( d->job, SIGNAL(finished(bool)), this, SLOT(slotJobFinished(bool)) );
-  connect( &dlg, SIGNAL(cancelClicked()), d->job, SLOT(cancel()) );
+  connect( d->erasingDlg, SIGNAL(cancelClicked()), d->job, SLOT(cancel()) );
 
   d->job->start();
-  dlg.exec(false);
+  d->erasingDlg->exec(false);
 }
 
 
@@ -180,11 +180,13 @@ void K3bBlankingDialog::slotInfoMessage( const QString& str, int type )
 
 void K3bBlankingDialog::slotJobFinished( bool success )
 {
+  d->erasingDlg->hide();
+
   if( success )
-    KMessageBox::error( qApp->activeWindow(), i18n("Erasing failed.") );
-  else
-    KMessageBox::information( qApp->activeWindow(), i18n("Successfully erased CD-RW."),
+    KMessageBox::information( this, i18n("Successfully erased CD-RW."),
 			      i18n("Success") );
+  else
+    KMessageBox::error( this, i18n("Erasing failed.") );
 }
 
 

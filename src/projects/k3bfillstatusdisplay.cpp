@@ -165,11 +165,13 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
 	
 
   p.drawLine( rect().left() + (int)(one*cdSize), rect().bottom(), 
-	       rect().left() + (int)(one*cdSize), rect().top() );
+	       rect().left() + (int)(one*cdSize), rect().top() + ((rect().bottom()-rect().top())/2) );
 	
   // draw the text marks
   crect = rect();
-  QString text = QString::number((long)cdSize);
+  QString text = d->showTime 
+    ? K3b::Msf( cdSize*60*75 ).toString(false) + " min"
+    : KIO::convertSizeFromKB( cdSize * 1024 );
   int textLength = fontMetrics().width(text);
   if( textLength+4 > crect.width() - (int)(one*cdSize) ) {
     // we don't have enough space on the right, so we paint to the left of the line

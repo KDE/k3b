@@ -23,6 +23,7 @@
 #include <k3bversion.h>
 #include <device/k3bdiskinfo.h>
 #include <k3bglobals.h>
+#include <k3bthroughputestimator.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -59,6 +60,8 @@ public:
   double lastWritingSpeed;
 
   bool writingStarted;
+
+  K3bThroughputEstimator* speedEst;
 };
 
 
@@ -66,6 +69,9 @@ K3bGrowisofsWriter::K3bGrowisofsWriter( K3bCdDevice::CdDevice* dev, QObject* par
   : K3bAbstractWriter( dev, parent, name )
 {
   d = new Private;
+  d->speedEst = new K3bThroughputEstimator( this );
+  connect( d->speedEst, SIGNAL(throughput(int)),
+	   this, SLOT(slotThroughput(int)) );
 }
 
 
@@ -91,6 +97,15 @@ int K3bGrowisofsWriter::fd() const
     return d->process->stdinFd();
   else
     return -1;
+}
+
+
+bool K3bGrowisofsWriter::closeFd()
+{
+  if( d->process )
+    return d->process->closeStdin();
+  else
+    return false;
 }
 
 
@@ -178,6 +193,7 @@ void K3bGrowisofsWriter::start()
   d->lastSpeedCalculationTime = QTime::currentTime();
   d->lastSpeedCalculationBytes = 0;
   d->writingStarted = false;
+  d->speedEst->reset();
 
   if( !prepareProcess() ) {
     emit finished( false );
@@ -295,17 +311,7 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
 		    << line.mid( pos, line.find( 'x', pos ) - pos ) << "'" << endl;
       }
       else {
-	// calculate writing speed
-	emit writeSpeed( createEstimatedWriteSpeed( done, d->lastSpeedCalculationBytes == 0 ), 1385 );
-	//     int writtenBytes = done - d->lastSpeedCalculationBytes;
-	//     int secs = d->lastSpeedCalculationTime.msecsTo( QTime::currentTime() )/1000;
-	//     int bytesPerSec = writtenBytes/secs;
-	//     d->lastSpeedCalculationTime = QTime::currentTime();
-	d->lastSpeedCalculationBytes = done;
-	//     if( bytesPerSec != d->lastWritingSpeed ) {
-	//       d->lastWritingSpeed = bytesPerSec;
-	//       emit writeSpeed( bytesPerSec );
-	//     }
+	d->speedEst->dataWritten( done );
       }
     }
     else
@@ -341,6 +347,12 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
     else
       kdDebug() << "(K3bGrowisofsWriter) parsing error: '" << line.mid( pos, endPos-pos ) << "'" << endl;
   }
+  else if( line.contains( ":-[" ) ) {
+    // Error
+    // :-[ attempt -blank=full or re-run with -dvd-compat -dvd-compat to engage DAO ]
+    if( line.contains( "engage DAO" ) ) 
+      emit infoMessage( i18n("Please try again with writing mode DAO."), ERROR );
+  }
   else {
     kdDebug() << "(growisofs) " << line << endl;
   }
@@ -352,8 +364,9 @@ void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
   if( p->normalExit() ) {
     if( p->exitStatus() == 0 ) {
 
-//       int s = createAverageWriteSpeedInfoMessage();
-//       emit infoMessage( i18n("Average overall write speed: %1 kb/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/1385.0), 2), INFO );
+      int s = d->speedEst->average();
+      if( s > 0 )
+	emit infoMessage( i18n("Average overall write speed: %1 kb/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/1385.0), 2), INFO );
 
       if( simulate() )
 	emit infoMessage( i18n("Simulation successfully finished"), K3bJob::STATUS );
@@ -420,5 +433,10 @@ void K3bGrowisofsWriter::slotEjectingFinished( K3bCdDevice::DeviceHandler* dh )
   emit finished(d->success);
 }
 
+
+void K3bGrowisofsWriter::slotThroughput( int t )
+{
+  emit writeSpeed( t, 1385 );
+}
 
 #include "k3bgrowisofswriter.moc"

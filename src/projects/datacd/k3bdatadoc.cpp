@@ -118,12 +118,7 @@ void K3bDataDoc::slotAddUrlsToDir( const KURL::List& urls, K3bDirItem* dirItem )
     {
       const KURL& url = *it;
       if( url.isLocalFile() && QFile::exists(url.path()) ) {
-
-	// check if we have read access
-	if( QFileInfo( url.path() ).isReadable() )
-	  m_queuedToAddItems.append( new PrivateItemToAdd(url.path(), dirItem ) );
-	else
-	  m_noPermissionFiles.append( url.path() );
+	m_queuedToAddItems.append( new PrivateItemToAdd(url.path(), dirItem ) );
       }
       else
 	m_notFoundFiles.append( url.path() );
@@ -265,27 +260,32 @@ K3bFileItem* K3bDataDoc::createFileItem( QFileInfo& f, K3bDirItem* parent )
 //     }
 //   }
 
-  if( nameAlreadyInDir( newName, parent ) ) {
-    k3bcore->config()->setGroup("Data project settings");
-    bool dropDoubles = k3bcore->config()->readBoolEntry( "Drop doubles", false );
-    if( dropDoubles )
-      return 0;
+  // check if we have read access
+  if( f.isReadable() ) {
+    if( nameAlreadyInDir( newName, parent ) ) {
+      k3bcore->config()->setGroup("Data project settings");
+      bool dropDoubles = k3bcore->config()->readBoolEntry( "Drop doubles", false );
+      if( dropDoubles )
+	return 0;
 
-    bool ok = true;
-    do {
-      newName = KLineEditDlg::getText( i18n("A file with that name already exists. Please enter a new name."),
-				       newName, &ok, qApp->activeWindow() );
-    } while( ok && nameAlreadyInDir( newName, parent ) );
+      bool ok = true;
+      do {
+	newName = KLineEditDlg::getText( i18n("A file with that name already exists. Please enter a new name."),
+					 newName, &ok, qApp->activeWindow() );
+      } while( ok && nameAlreadyInDir( newName, parent ) );
 
-    if( !ok )
-      return 0;
+      if( !ok )
+	return 0;
+    }
+
+    K3bFileItem* newK3bItem = new K3bFileItem( f.absFilePath(), this, parent, newName );
+    //  m_sizeHandler->addFile( f.absFilePath() );
+    return newK3bItem;
   }
-
-
-  K3bFileItem* newK3bItem = new K3bFileItem( f.absFilePath(), this, parent, newName );
-  //  m_sizeHandler->addFile( f.absFilePath() );
-
-  return newK3bItem;
+  else {
+    m_noPermissionFiles.append( f.absFilePath() );
+    return 0;
+  }
 }
 
 
@@ -1149,7 +1149,10 @@ void K3bDataDoc::importSession( const QString& path )
     m_multisessionMode = CONTINUE;
 
   // add all files from cd as readonly fileitems
-  KProgressDialog d( 0, 0, i18n("Importing session"), i18n("Importing old session from %1").arg(path) );
+  KProgressDialog d( qApp->activeWindow(), 
+		     0, 
+		     i18n("Importing session"), 
+		     i18n("Importing old session from %1").arg(path) );
   d.show();
 
   int dirFilter = QDir::All | QDir::Hidden | QDir::System;

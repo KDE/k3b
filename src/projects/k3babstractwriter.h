@@ -45,6 +45,7 @@ class K3bAbstractWriter : public K3bJob
    * connected to the stdout fd of mkisofs in the isoimager
    */
   virtual int fd() const { return -1; }
+  virtual bool closeFd() { return false; }
 
  public slots:
   /**
@@ -69,9 +70,6 @@ class K3bAbstractWriter : public K3bJob
  protected:
   K3bAbstractWriter( K3bCdDevice::CdDevice* dev, QObject* parent = 0, const char* name = 0 );
 
-  int createEstimatedWriteSpeed( int writtenKb, bool firstCall = false );
-  int createAverageWriteSpeedInfoMessage();
-
  protected slots:
   void slotUnblockWhileCancellationFinished( bool success );
   void slotEjectWhileCancellationFinished( bool success );
@@ -81,11 +79,6 @@ class K3bAbstractWriter : public K3bJob
   int m_burnSpeed;
   bool m_burnproof;
   bool m_simulate;
-
-  // used for write speed calculation
-  QTime m_lastWriteSpeedCalcTime;
-  QTime m_firstWriteSpeedCalcTime;
-  int m_lastWrittenBytes;
 };
 
 

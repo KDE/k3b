@@ -238,7 +238,7 @@ void K3bDvdBurnDialog::toggleAllOptions()
     }
   }
 
-  if( m_checkOnlyCreateImage->isChecked() ) {
+  if( m_checkSimulate->isChecked() || m_checkOnlyCreateImage->isChecked() ) {
     m_checkVerify->setChecked(false);
     m_checkVerify->setEnabled(false);
   }
@@ -291,10 +291,6 @@ void K3bDvdBurnDialog::slotSaveUserDefaults()
   o.save( c );
 
   c->writeEntry( "verify data", m_checkVerify->isChecked() );
-
-  if( m_tempDirSelectionWidget->isEnabled() ) {
-    m_tempDirSelectionWidget->saveConfig();
-  }
 }
 
 #include "k3bdvdburndialog.moc"

@@ -179,10 +179,6 @@ void K3bAudioBurnDialog::slotSaveUserDefaults()
   c->writeEntry( "cd_text", m_cdtextWidget->isChecked() );
   c->writeEntry( "hide_first_track", m_checkHideFirstTrack->isChecked() );
   c->writeEntry( "normalize", m_checkNormalize->isChecked() );
-
-  if( m_tempDirSelectionWidget->isEnabled() ) {
-    m_tempDirSelectionWidget->saveConfig();
-  }
 }
 
 void K3bAudioBurnDialog::toggleAllOptions()

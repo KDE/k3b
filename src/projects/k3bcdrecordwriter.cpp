@@ -23,6 +23,7 @@
 #include <device/k3bdevicemanager.h>
 #include <device/k3bdevicehandler.h>
 #include <k3bglobals.h>
+#include <k3bthroughputestimator.h>
 
 #include <qstring.h>
 #include <qstringlist.h>
@@ -39,12 +40,28 @@
 #include <string.h>
 
 
+
+class K3bCdrecordWriter::Private
+{
+public:
+  Private() {
+  }
+
+  K3bThroughputEstimator* speedEst;
+};
+
+
 K3bCdrecordWriter::K3bCdrecordWriter( K3bDevice* dev, QObject* parent, const char* name )
   : K3bAbstractWriter( dev, parent, name ),
     m_stdin(false),
     m_clone(false),
     m_forceNoEject(false)
 {
+  d = new Private();
+  d->speedEst = new K3bThroughputEstimator( this );
+  connect( d->speedEst, SIGNAL(throughput(int)),
+	   this, SLOT(slotThroughput(int)) );
+
   m_process = 0;
   m_writingMode = K3b::TAO;
 }
@@ -52,6 +69,7 @@ K3bCdrecordWriter::K3bCdrecordWriter( K3bDevice* dev, QObject* parent, const cha
 
 K3bCdrecordWriter::~K3bCdrecordWriter()
 {
+  delete d;
   delete m_process;
 }
 
@@ -99,6 +117,7 @@ void K3bCdrecordWriter::prepareProcess()
   m_process = new K3bProcess();
   m_process->setRunPrivileged(true);
   m_process->setSplitStdout(true);
+  m_process->setSuppressEmptyLines(true);
   connect( m_process, SIGNAL(stdoutLine(const QString&)), this, SLOT(slotStdLine(const QString&)) );
   connect( m_process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotStdLine(const QString&)) );
   connect( m_process, SIGNAL(processExited(KProcess*)), this, SLOT(slotProcessExited(KProcess*)) );
@@ -200,6 +219,8 @@ void K3bCdrecordWriter::start()
 {
   emit started();
 
+  d->speedEst->reset();
+
   prepareProcess();
 
   if( !m_cdrecordBinObject ) {
@@ -260,8 +281,6 @@ void K3bCdrecordWriter::start()
       else
 	emit infoMessage( i18n("Starting tao writing at %1x speed...").arg(burnSpeed()), K3bJob::PROCESS );
     }
-
-    m_writeSpeedInitialized = false;
   }
 }
 
@@ -422,9 +441,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
 	    emit percent( 100*(m_alreadyWritten+made)/m_totalSize );
 	  }
 
-	  emit writeSpeed( createEstimatedWriteSpeed( m_alreadyWritten+made*1024, !m_writeSpeedInitialized ),
-			   150 );
-	  m_writeSpeedInitialized = true;
+	  d->speedEst->dataWritten( (m_alreadyWritten+made)*1024 );
 	}
     }
   else if( line.contains( "at speed" ) ) {
@@ -550,7 +567,7 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	else
 	  emit infoMessage( i18n("Writing successfully finished"), K3bJob::STATUS );
 	
-	int s = createAverageWriteSpeedInfoMessage();
+	int s = d->speedEst->average();
 	emit infoMessage( i18n("Average overall write speed: %1 kb/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/150.0), 2), INFO );
 	
 	emit finished( true );
@@ -613,5 +630,10 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
   }
 }
 
+
+void K3bCdrecordWriter::slotThroughput( int t )
+{
+  emit writeSpeed( t, 150 );
+}
 
 #include "k3bcdrecordwriter.moc"

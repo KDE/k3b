@@ -40,6 +40,12 @@ class K3bDvdFormattingJob : public K3bJob
 
  public slots:
   void start();
+
+  /**
+   * The devicehandler needs to have a valid NgDiskInfo
+   */
+  void start( K3bCdDevice::DeviceHandler* );
+
   void cancel();
 
   void setDevice( K3bCdDevice::CdDevice* );

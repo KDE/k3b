@@ -304,6 +304,7 @@ bool K3bDvdJob::prepareWriterJob()
     writer->setSimulate( m_doc->dummy() );
     //    writer->setBurnproof( m_doc->burnproof() );
     writer->setBurnSpeed( m_doc->speed() );
+    writer->setWritingMode( m_doc->writingMode() );
 
     //
     // for now we only use the K3bGrowisofsWriter for writing images

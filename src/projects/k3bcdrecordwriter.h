@@ -66,6 +66,7 @@ class K3bCdrecordWriter : public K3bAbstractWriter
  protected slots:
   void slotStdLine( const QString& line );
   void slotProcessExited(KProcess*);
+  void slotThroughput( int t );
 
  protected:
   virtual void prepareProcess();
@@ -102,11 +103,12 @@ class K3bCdrecordWriter : public K3bAbstractWriter
 
   int m_cdrecordError;
 
-  bool m_writeSpeedInitialized;
-
   QValueList<int> m_trackSizes;
 
   bool m_forceNoEject;
+
+  class Private;
+  Private* d;
 };
 
 #endif

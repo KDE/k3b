@@ -96,32 +96,4 @@ void K3bAbstractWriter::slotEjectWhileCancellationFinished( bool success )
 }
 
 
-int K3bAbstractWriter::createEstimatedWriteSpeed( int made, bool firstCall )
-{
-  if (firstCall) {
-    m_lastWriteSpeedCalcTime = QTime::currentTime();
-    m_firstWriteSpeedCalcTime = QTime::currentTime();
-    m_lastWrittenBytes = made;
-    return 0;
-  }
-  else {
-    int elapsed = m_lastWriteSpeedCalcTime.msecsTo( QTime::currentTime() );
-    int written = made - m_lastWrittenBytes;
-    if( elapsed > 0 && written > 0 ) {
-      m_lastWriteSpeedCalcTime = QTime::currentTime();
-      m_lastWrittenBytes = made;
-      return( (int)((double)written * 1000.0 / (double)elapsed) );
-    }
-  }
-}
-
-
-int K3bAbstractWriter::createAverageWriteSpeedInfoMessage()
-{
-  double secs = (double)m_firstWriteSpeedCalcTime.secsTo( m_lastWriteSpeedCalcTime );
-  double speed = (double)m_lastWrittenBytes / ( secs > 0 ? secs : 1 );
-  return (int)speed;
-  //  emit infoMessage( i18n("Average overall write speed: %1 kb/s (%2x)").arg((int)speed).arg(KGlobal::locale()->formatNumber(speed/(dvd ? 1385.0 : 150.0), 2)), INFO );
-}
-
 #include "k3babstractwriter.moc"

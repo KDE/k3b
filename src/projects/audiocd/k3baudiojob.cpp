@@ -363,6 +363,7 @@ bool K3bAudioJob::prepareWriter()
     // create the writer
     // create cdrdao job
     K3bCdrdaoWriter* writer = new K3bCdrdaoWriter( m_doc->burner(), this );
+    writer->setCommand( K3bCdrdaoWriter::WRITE );
     writer->setSimulate( m_doc->dummy() );
     writer->setBurnSpeed( m_doc->speed() );
     writer->setProvideStdin( m_doc->onTheFly() );

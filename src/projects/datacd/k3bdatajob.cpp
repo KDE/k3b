@@ -526,6 +526,7 @@ bool K3bDataJob::prepareWriterJob()
   else {
     // create cdrdao job
     K3bCdrdaoWriter* writer = new K3bCdrdaoWriter( d->doc->burner(), this );
+    writer->setCommand( K3bCdrdaoWriter::WRITE );
     writer->setSimulate( d->doc->dummy() );
     writer->setBurnSpeed( d->doc->speed() );
     // multisession

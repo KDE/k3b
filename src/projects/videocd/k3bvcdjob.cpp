@@ -392,7 +392,7 @@ bool K3bVcdJob::prepareWriterJob()
     if ( writingApp() == K3b::CDRDAO || writingApp() == K3b::DEFAULT ) {
         K3bCdrdaoWriter * writer = new K3bCdrdaoWriter( m_doc->burner(), this );
         // create cdrdao job
-
+	writer->setCommand( K3bCdrdaoWriter::WRITE );
         writer->setSimulate( m_doc->dummy() );
         writer->setBurnSpeed( m_doc->speed() );
 

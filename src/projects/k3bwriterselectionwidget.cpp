@@ -93,7 +93,6 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( bool dvd, QWidget *parent, c
   mainLayout->addWidget( groupWriter, 0, 0 );
 
 
-  connect( m_comboWriter, SIGNAL(activated(int)), this, SLOT(slotRefreshWriterSpeeds()) );
   connect( m_comboWriter, SIGNAL(activated(int)), this, SIGNAL(writerChanged()) );
   connect( m_comboWritingApp, SIGNAL(activated(int)), this, SLOT(slotWritingAppSelected(int)) );
   connect( this, SIGNAL(writerChanged()), SLOT(slotWriterChanged()) );
@@ -101,6 +100,8 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( bool dvd, QWidget *parent, c
   connect( m_comboSpeed, SIGNAL(activated(int)), this, SLOT(slotSpeedChanged(int)) );
 
   init();
+
+  slotWriterChanged();
 }
 
 
@@ -271,6 +272,8 @@ void K3bWriterSelectionWidget::setSpeed( int s )
 {
   if( d->dvd && s == 0 )
     m_comboSpeed->setCurrentItem( 0 ); // Auto
+  else if( d->dvd )
+    m_comboSpeed->setCurrentItem( 1 ); // 1x
   else
     m_comboSpeed->setCurrentItem( QString("%1x").arg(s), false );
 }
@@ -364,12 +367,15 @@ void K3bWriterSelectionWidget::slotSpeedChanged( int )
 
 void K3bWriterSelectionWidget::slotWriterChanged()
 {
+  slotRefreshWriterSpeeds();
+
   // save last selected writer
-  if( writerDevice() ) {
+  if( K3bDevice* dev = writerDevice() ) {
     QString oldGroup = k3bcore->config()->group();
     k3bcore->config()->setGroup( "General Options" );
-    k3bcore->config()->writeEntry( "current_writer", writerDevice()->devicename() );
+    k3bcore->config()->writeEntry( "current_writer", dev->devicename() );
     k3bcore->config()->setGroup( oldGroup );
+    setSpeed( dev->currentWriteSpeed() );
   }
 }
 

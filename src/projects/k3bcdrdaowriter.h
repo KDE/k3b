@@ -96,6 +96,7 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
   void slotStdLine( const QString& line );
   void slotProcessExited(KProcess*);
   void getCdrdaoMessage();
+  void slotThroughput( int t );
 
  private:
   void unknownCdrdaoLine( const QString& );
@@ -139,7 +140,6 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
   QSocket         *m_comSock;
 
   bool m_stdin;
-  bool m_writeSpeedInitialized;
 
   bool m_canceled;
 
@@ -153,6 +153,9 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
   struct ProgressMsg* m_newMsg;
 
   bool m_forceNoEject;
+
+  class Private;
+  Private* d;
 };
 
 #endif

@@ -65,6 +65,8 @@ class K3bProcess : public KProcess
    */
   void dupStdout( int fd );
 
+  void dupStdin( int fd );
+
   /** 
    * If set to true one needs to create a socketnotifier on one's own.
    * There will be no wroteStdin() signal
@@ -113,14 +115,13 @@ class K3bProcess : public KProcess
  private:
   void splitOutput( char*, int, bool );
 
-  QString m_unfinishedStdoutLine;
-  QString m_unfinishedStderrLine;
+  class Private;
+  Private* d;
+
   bool m_bSplitStdout;
 
   bool m_rawStdin;
   bool m_rawStdout;
-
-  int m_dupStdoutFd;
 
   bool m_suppressEmptyLines;
 };

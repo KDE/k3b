@@ -583,11 +583,6 @@ K3bDevice* K3bCdDevice::DeviceManager::addDevice( const QString& devicename )
   if( device ) {
     determineCapabilities(device);
 
-    // FIXME: we need to fill the dvd lists
-    //        it does make more sense to add the writer also
-    //        to the reader lists
-    //        that means we have to change some list filling...
-
     d->allDevices.append( device );
 
     // every drive should be able to read CDs
@@ -599,6 +594,14 @@ K3bDevice* K3bCdDevice::DeviceManager::addDevice( const QString& devicename )
       d->cdWriter.append( device );
     if( device->writesDvd() )
       d->dvdWriter.append( device );
+
+    if( device->burner() ) {
+      // default to max write speed
+      kdDebug() << "(K3bDeviceManager) setting current write speed of device " 
+		<< device->blockDeviceName() 
+		<< " to " << device->maxWriteSpeed() << endl;
+      device->setCurrentWriteSpeed( device->maxWriteSpeed() );
+    }
   }
 
   return device;

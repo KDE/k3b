@@ -29,18 +29,32 @@
 #include <fcntl.h>
 
 
+
+class K3bProcess::Private
+{
+public:
+  QString unfinishedStdoutLine;
+  QString unfinishedStderrLine;
+
+  int dupStdoutFd;
+  int dupStdinFd;
+};
+
+
 K3bProcess::K3bProcess()
   : KProcess(),
+    m_bSplitStdout(false),
     m_rawStdin(false),
     m_rawStdout(false),
-    m_dupStdoutFd(-1),
     m_suppressEmptyLines(true)
 {
-  m_bSplitStdout = false;
+  d = new Private();
+  d->dupStdinFd = d->dupStdoutFd = -1;
 }
 
 K3bProcess::~K3bProcess()
 {
+  delete d;
 }
 
 
@@ -82,7 +96,6 @@ void K3bProcess::splitOutput( char* data, int len, bool stdout )
   QString buffer;
   for( int i = 0; i < len; i++ ) {
     if( data[i] == '\b' ) {
-      kdDebug() << "(K3bProcess) !!!!!!!!!!! BACKSPACE !!!!!!!!!!" << endl;
       while( data[i] == '\b' )  // we replace multible backspaces with a single line feed
 	i++;
       buffer += '\n';
@@ -102,7 +115,7 @@ void K3bProcess::splitOutput( char* data, int len, bool stdout )
   if( m_suppressEmptyLines && buffer[0] == '\n' )
     lines.prepend( QString::null );
 
-  QString* unfinishedLine = ( stdout ? &m_unfinishedStdoutLine : &m_unfinishedStderrLine );
+  QString* unfinishedLine = ( stdout ? &d->unfinishedStdoutLine : &d->unfinishedStderrLine );
 
   if( !unfinishedLine->isEmpty() ) {
     lines.first().prepend( *unfinishedLine );
@@ -148,108 +161,147 @@ void K3bProcess::splitOutput( char* data, int len, bool stdout )
  */
 int K3bProcess::commSetupDoneP()
 {
-  int ok = 1;
+//   int ok = 1;
 
-  if (communication != NoCommunication) {
-        if (communication & Stdin)
-          close(in[0]);
-        if (communication & Stdout)
-          close(out[1]);
-        if (communication & Stderr)
-          close(err[1]);
+//   if (communication != NoCommunication) {
+//         if (communication & Stdin)
+//           close(in[0]);
+//         if (communication & Stdout)
+//           close(out[1]);
+//         if (communication & Stderr)
+//           close(err[1]);
 
-        // Don't create socket notifiers and set the sockets non-blocking if
-        // blocking is requested.
-        if (run_mode == Block) return ok;
+//         // Don't create socket notifiers and set the sockets non-blocking if
+//         // blocking is requested.
+//         if (run_mode == Block) return ok;
 
-        if ((communication & Stdin) && !m_rawStdin) {
-//        ok &= (-1 != fcntl(in[1], F_SETFL, O_NONBLOCK));
-          innot =  new QSocketNotifier(in[1], QSocketNotifier::Write, this);
-          Q_CHECK_PTR(innot);
-          innot->setEnabled(false); // will be enabled when data has to be sent
-          QObject::connect(innot, SIGNAL(activated(int)),
-                                           this, SLOT(slotSendData(int)));
-        }
+//         if ((communication & Stdin) && !m_rawStdin) {
+// //        ok &= (-1 != fcntl(in[1], F_SETFL, O_NONBLOCK));
+//           innot =  new QSocketNotifier(in[1], QSocketNotifier::Write, this);
+//           Q_CHECK_PTR(innot);
+//           innot->setEnabled(false); // will be enabled when data has to be sent
+//           QObject::connect(innot, SIGNAL(activated(int)),
+//                                            this, SLOT(slotSendData(int)));
+//         }
 
-        if (communication & Stdout) {
-//        ok &= (-1 != fcntl(out[0], F_SETFL, O_NONBLOCK));
-          outnot = new QSocketNotifier(out[0], QSocketNotifier::Read, this);
-          Q_CHECK_PTR(outnot);
-	  if( m_rawStdout ) {
-	    connect( outnot, SIGNAL(activated(int)),
-		     this, SIGNAL(stdoutReady(int)) );
-	  }
-	  else {
-	    QObject::connect(outnot, SIGNAL(activated(int)),
-			     this, SLOT(slotChildOutput(int)));
-	    if (communication & NoRead)
-              suspend();
-	  }
-        }
+//         if (communication & Stdout) {
+// //        ok &= (-1 != fcntl(out[0], F_SETFL, O_NONBLOCK));
+//           outnot = new QSocketNotifier(out[0], QSocketNotifier::Read, this);
+//           Q_CHECK_PTR(outnot);
+// 	  if( m_rawStdout ) {
+// 	    connect( outnot, SIGNAL(activated(int)),
+// 		     this, SIGNAL(stdoutReady(int)) );
+// 	  }
+// 	  else {
+// 	    QObject::connect(outnot, SIGNAL(activated(int)),
+// 			     this, SLOT(slotChildOutput(int)));
+// 	    if (communication & NoRead)
+//               suspend();
+// 	  }
+//         }
 
-        if (communication & Stderr) {
-//        ok &= (-1 != fcntl(err[0], F_SETFL, O_NONBLOCK));
-          errnot = new QSocketNotifier(err[0], QSocketNotifier::Read, this );
-          Q_CHECK_PTR(errnot);
-          QObject::connect(errnot, SIGNAL(activated(int)),
-                                           this, SLOT(slotChildError(int)));
-        }
+//         if (communication & Stderr) {
+// //        ok &= (-1 != fcntl(err[0], F_SETFL, O_NONBLOCK));
+//           errnot = new QSocketNotifier(err[0], QSocketNotifier::Read, this );
+//           Q_CHECK_PTR(errnot);
+//           QObject::connect(errnot, SIGNAL(activated(int)),
+//                                            this, SLOT(slotChildError(int)));
+//         }
+//   }
+
+  int ok = KProcess::commSetupDoneP();
+
+  if( m_rawStdout ) {
+    disconnect( outnot, SIGNAL(activated(int)),
+		this, SLOT(slotChildOutput(int)));
+    connect( outnot, SIGNAL(activated(int)),
+	     this, SIGNAL(stdoutReady(int)) );
   }
+  if( m_rawStdin ) {
+    delete innot;
+    innot = 0;
+  }
+
   return ok;
 }
 
 
 // this is just the same as in KProcess except the additional
-// m_dupStdoutFd stuff
+// d->dupStdoutFd stuff
 int K3bProcess::commSetupDoneC()
 {
-  int ok = 1;
-  struct linger so;
-  memset(&so, 0, sizeof(so));
+//   int ok = 1;
+//   struct linger so;
+//   memset(&so, 0, sizeof(so));
 
-  if (communication & Stdin)
-    close(in[1]);
-  if (communication & Stdout)
-    close(out[0]);
-  if (communication & Stderr)
-    close(err[0]);
+// //   if (communication & Stdin)
+// //     close(in[1]);
+// //   if (communication & Stdout)
+// //     close(out[0]);
+// //   if (communication & Stderr)
+// //     close(err[0]);
 
-  if (communication & Stdin) {
-    ok &= (dup2( in[0], STDIN_FILENO ) != -1);
-  }
-  else {
-    int null_fd = open( "/dev/null", O_RDONLY );
-    ok &= dup2( null_fd, STDIN_FILENO ) != -1;
-    close( null_fd );
-  }
+//   if (communication & Stdin) {
+//     ok &= (dup2( in[0], STDIN_FILENO ) != -1);
+//   }
+//   else {
+//     int null_fd = open( "/dev/null", O_RDONLY );
+//     ok &= dup2( null_fd, STDIN_FILENO ) != -1;
+//     close( null_fd );
+//   }
 
-  if( m_dupStdoutFd != -1 ) {
-    if( ::dup2( m_dupStdoutFd, STDOUT_FILENO ) != -1 ) {
-      kdDebug() << "(K3bProcess) Successfully duplicated " << m_dupStdoutFd << " to " << STDOUT_FILENO << endl;
+
+//   if( d->dupStdoutFd != -1 ) {
+//     if( ::dup2( d->dupStdoutFd, STDOUT_FILENO ) != -1 ) {
+//       kdDebug() << "(K3bProcess) Successfully duplicated " << d->dupStdoutFd << " to " << STDOUT_FILENO << endl;
+//     }
+//     else {
+//       kdDebug() << "(K3bProcess) Error while dup( " << d->dupStdoutFd << ", " << STDOUT_FILENO << endl;
+//       ok = 0;
+//       communication = (Communication) (communication & ~Stdout);
+//     }
+//   }
+//   else if (communication & Stdout) {
+//     ok &= dup2(out[1], STDOUT_FILENO) != -1;
+//     ok &= !setsockopt(out[1], SOL_SOCKET, SO_LINGER, (char*)&so, sizeof(so));
+//   }
+//   else {
+//     int null_fd = open( "/dev/null", O_WRONLY );
+//     ok &= dup2( null_fd, STDOUT_FILENO ) != -1;
+//     close( null_fd );
+//   }
+//   if (communication & Stderr) {
+//     ok &= dup2(err[1], STDERR_FILENO) != -1;
+//     ok &= !setsockopt(err[1], SOL_SOCKET, SO_LINGER, reinterpret_cast<char *>(&so), sizeof(so));
+//   }
+//   else {
+//     int null_fd = open( "/dev/null", O_WRONLY );
+//     ok &= dup2( null_fd, STDERR_FILENO ) != -1;
+//     close( null_fd );
+//   }
+//   return ok;
+
+  int ok = KProcess::commSetupDoneC();
+
+  if( d->dupStdoutFd != -1 ) {
+    if( ::dup2( d->dupStdoutFd, STDOUT_FILENO ) != -1 ) {
+      kdDebug() << "(K3bProcess) Successfully duplicated " << d->dupStdoutFd << " to " << STDOUT_FILENO << endl;
     }
     else {
-      kdDebug() << "(K3bProcess) Error while dup( " << m_dupStdoutFd << ", " << STDOUT_FILENO << endl;
+      kdDebug() << "(K3bProcess) Error while dup( " << d->dupStdoutFd << ", " << STDOUT_FILENO << endl;
       ok = 0;
       communication = (Communication) (communication & ~Stdout);
     }
   }
-  else if (communication & Stdout) {
-    ok &= dup2(out[1], STDOUT_FILENO) != -1;
-    ok &= !setsockopt(out[1], SOL_SOCKET, SO_LINGER, (char*)&so, sizeof(so));
-  }
-  else {
-    int null_fd = open( "/dev/null", O_WRONLY );
-    ok &= dup2( null_fd, STDOUT_FILENO ) != -1;
-    close( null_fd );
-  }
-  if (communication & Stderr) {
-    ok &= dup2(err[1], STDERR_FILENO) != -1;
-    ok &= !setsockopt(err[1], SOL_SOCKET, SO_LINGER, reinterpret_cast<char *>(&so), sizeof(so));
-  }
-  else {
-    int null_fd = open( "/dev/null", O_WRONLY );
-    ok &= dup2( null_fd, STDERR_FILENO ) != -1;
-    close( null_fd );
+  if( d->dupStdinFd != -1 ) {
+    if( ::dup2( d->dupStdinFd, STDIN_FILENO ) != -1 ) {
+      kdDebug() << "(K3bProcess) Successfully duplicated " << d->dupStdinFd << " to " << STDIN_FILENO << endl;
+    }
+    else {
+      kdDebug() << "(K3bProcess) Error while dup( " << d->dupStdinFd << ", " << STDIN_FILENO << endl;
+      ok = 0;
+      communication = (Communication) (communication & ~Stdin);
+    }
   }
   return ok;
 }
@@ -269,7 +321,12 @@ int K3bProcess::stdoutFd() const
 
 void K3bProcess::dupStdout( int fd )
 {
-  m_dupStdoutFd = fd;
+  d->dupStdoutFd = fd;
+}
+
+void K3bProcess::dupStdin( int fd )
+{
+  d->dupStdinFd = fd;
 }
 
 #include "k3bprocess.moc"

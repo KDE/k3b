@@ -835,8 +835,6 @@ void K3bVcdBurnDialog::slotSaveUserDefaults()
 
     o.save( c );
 
-    m_tempDirSelectionWidget->saveConfig();
-
     saveCdiConfig();
 }
 

@@ -85,6 +85,7 @@ bool K3bBinImageWritingJob::prepareWriter()
   if( writingApp() == K3b::CDRDAO || writingApp() == K3b::DEFAULT ) {
     // create cdrdao job
     K3bCdrdaoWriter* writer = new K3bCdrdaoWriter( m_device, this );
+    writer->setCommand( K3bCdrdaoWriter::WRITE );
     writer->setSimulate( m_simulate );
     writer->setBurnSpeed( m_speed );
     writer->setForce( m_force );

@@ -23,6 +23,7 @@
 #include <k3bprocess.h>
 #include <device/k3bdevice.h>
 #include <device/k3bdevicehandler.h>
+#include <k3bthroughputestimator.h>
 
 #include <qstring.h>
 #include <qstringlist.h>
@@ -47,6 +48,8 @@
 
 #include <sys/types.h>
 #include <sys/socket.h>
+
+
 
 inline bool operator<( const ProgressMsg& m1, const ProgressMsg& m2 )
 {
@@ -73,8 +76,19 @@ inline bool operator!=( const ProgressMsg& m1, const ProgressMsg& m2 )
 }
 
 
+
+class K3bCdrdaoWriter::Private
+{
+public:
+  Private() {
+  }
+
+  K3bThroughputEstimator* speedEst;
+};
+
+
 K3bCdrdaoWriter::K3bCdrdaoWriter( K3bDevice* dev, QObject* parent, const char* name )
-    : K3bAbstractWriter( dev, parent, name ),
+  : K3bAbstractWriter( dev, parent, name ),
     m_command(WRITE),
     m_blankMode(MINIMAL),
     m_sourceDevice(0),
@@ -91,8 +105,14 @@ K3bCdrdaoWriter::K3bCdrdaoWriter( K3bDevice* dev, QObject* parent, const char* n
     m_session(-1),
     m_process(0),
     m_comSock(0),
-    m_currentTrack(0)
+    m_currentTrack(0),
+    m_forceNoEject(false)
 {
+  d = new Private();
+  d->speedEst = new K3bThroughputEstimator( this );
+  connect( d->speedEst, SIGNAL(throughput(int)),
+	   this, SLOT(slotThroughput(int)) );
+
   k3bcore->config()->setGroup("General Options");
   m_eject = !k3bcore->config()->readBoolEntry( "No cd eject", false );
 
@@ -153,6 +173,8 @@ K3bCdrdaoWriter::K3bCdrdaoWriter( K3bDevice* dev, QObject* parent, const char* n
 
 K3bCdrdaoWriter::~K3bCdrdaoWriter()
 {
+  delete d;
+
   // close the socket
   if( m_comSock )
   {
@@ -403,6 +425,8 @@ K3bCdrdaoWriter* K3bCdrdaoWriter::addArgument( const QString& arg )
 void K3bCdrdaoWriter::start()
 {
   emit started();
+
+  d->speedEst->reset();
 
   if( m_process )
     delete m_process;  // kdelibs want this!
@@ -680,7 +704,7 @@ void K3bCdrdaoWriter::slotProcessExited( KProcess* p )
         }
 
       if( m_command == WRITE || m_command == COPY ) {
-	int s = createAverageWriteSpeedInfoMessage();
+	int s = d->speedEst->average();
 	emit infoMessage( i18n("Average overall write speed: %1 kb/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/150.0), 2), INFO );
       }
 
@@ -846,8 +870,7 @@ void K3bCdrdaoWriter::parseCdrdaoWrote( const QString& line )
   po2 = line.find( " ", pos + 3 );
   m_size = line.mid( pos+3, po2-pos-3 ).toInt();
 
-  emit writeSpeed( createEstimatedWriteSpeed( processed*1024, !m_writeSpeedInitialized ), 150 );
-  m_writeSpeedInitialized = true;
+  d->speedEst->dataWritten( processed*1024 );
 
   emit processedSize( processed, m_size );
 }
@@ -952,6 +975,12 @@ void K3bCdrdaoWriter::parseCdrdaoMessage(QSocket *comSock)
       m_oldMsg = m;
     }
   }
+}
+
+
+void K3bCdrdaoWriter::slotThroughput( int t )
+{
+  emit writeSpeed( t, 150 );
 }
 
 #include "k3bcdrdaowriter.moc"

@@ -16,8 +16,12 @@
 
 // include files for Qt
 #include <qlayout.h>
+#include <qtoolbutton.h>
+#include <qtooltip.h>
 
 #include <kaction.h>
+#include <kiconloader.h>
+#include <klocale.h>
 
 // application specific includes
 #include "k3bview.h"
@@ -35,11 +39,24 @@ K3bView::K3bView( K3bDoc* pDoc, QWidget *parent, const char* name )
   QGridLayout* grid = new QGridLayout( this );
 
   m_fillStatusDisplay = new K3bFillStatusDisplay( m_doc, this );
+  QToolButton* m_buttonBurn = new QToolButton( this );
+  m_buttonBurn->setIconSet( SmallIcon("cdwriter_unmount") );
+  m_buttonBurn->setTextLabel( i18n("Burn") + "..." );
+  m_buttonBurn->setAutoRaise(true);
+  m_buttonBurn->setTextPosition( QToolButton::BesideIcon );
+  m_buttonBurn->setUsesTextLabel( true );
+  connect( m_buttonBurn, SIGNAL(clicked()),
+	   m_doc, SLOT(slotBurn()) );
 
   grid->addWidget( m_fillStatusDisplay, 1, 0 );
+  grid->addWidget( m_buttonBurn, 1, 1 );
   grid->setRowStretch( 0, 1 );
+  grid->setColStretch( 0, 1 );
   grid->setSpacing( 5 );
   grid->setMargin( 2 );
+
+  QToolTip::add( m_buttonBurn, i18n("Open the burning dialog") );
+
 
   // merge doc actions
   actionCollection()->addDocCollection( pDoc->actionCollection() );
@@ -68,7 +85,7 @@ K3bView::~K3bView()
 
 void K3bView::setMainWidget( QWidget* w )
 {
-  ((QGridLayout*)layout())->addWidget( w, 0, 0 );
+  ((QGridLayout*)layout())->addMultiCellWidget( w, 0, 0, 0, 1 );
 }
 
 
