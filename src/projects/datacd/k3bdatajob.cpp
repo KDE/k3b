@@ -595,11 +595,15 @@ void K3bDataJob::determineWritingMode()
 
 
   // cdrecord seems to have problems writing xa 1 disks in dao mode? At least on my system!
+  // and many writers fail to write DAO with cdrecord. With this release we try cdrdao ;)
   if( writingApp() == K3b::DEFAULT ) {
     if( d->usedWritingMode == K3b::DAO ) {
-      if( d->doc->multiSessionMode() != K3bDataDoc::NONE )
+      if( k3bcore->externalBinManager()->binObject( "cdrdao" ) && d->doc->multiSessionMode() != K3bDataDoc::NONE )
 	d->usedWritingApp = K3b::CDRDAO;
-      else if( d->usedDataMode == K3b::MODE2 )
+      else if( k3bcore->externalBinManager()->binObject( "cdrdao" ) && d->usedDataMode == K3b::MODE2 )
+	d->usedWritingApp = K3b::CDRDAO;
+      else if( k3bcore->externalBinManager()->binObject( "cdrdao" ) && 
+	       k3bcore->externalBinManager()->binObject( "cdrdao" )->version >= K3bVersion( 1, 1, 8 ) )
 	d->usedWritingApp = K3b::CDRDAO;
       else
 	d->usedWritingApp = K3b::CDRECORD;

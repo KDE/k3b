@@ -278,10 +278,12 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
 	usedWriteMode = K3b::DAO;
     }
 
+    // and many writers fail to write DAO with cdrecord. With this release we try cdrdao ;)
     int usedApp = writingApp();
     if( usedApp == K3b::DEFAULT ) {
-      if( usedWriteMode == K3b::DAO &&
-	  ( m_dataMode == K3b::MODE2 || m_noFix ) )
+      if( k3bcore->externalBinManager()->binObject( "cdrdao" ) && 
+	  ( k3bcore->externalBinManager()->binObject( "cdrdao" )->version >= K3bVersion( 1, 1, 8 ) ||
+	   ( usedWriteMode == K3b::DAO && ( m_dataMode == K3b::MODE2 || m_noFix ) ) ) )
 	usedApp = K3b::CDRDAO;
       else
 	usedApp = K3b::CDRECORD;

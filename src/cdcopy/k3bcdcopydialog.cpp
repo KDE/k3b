@@ -40,6 +40,7 @@
 #include <kmessagebox.h> 
 #include <kconfig.h>
 #include <kapplication.h>
+#include <kiconloader.h>
 
 #include <qcheckbox.h>
 #include <qspinbox.h>
@@ -116,8 +117,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   groupCopies->setInsideSpacing( spacingHint() );
   groupCopies->setInsideMargin( marginHint() );
   QLabel* pixLabel = new QLabel( groupCopies );
-  if( K3bTheme* theme = k3bthememanager->currentTheme() )
-    pixLabel->setPixmap( theme->pixmap( "k3b_cd_copy" ) );
+  pixLabel->setPixmap( SmallIcon( "cdcopy", KIcon::SizeMedium ) );
   pixLabel->setScaledContents( false );
   m_spinCopies = new QSpinBox( 1, 99, 1, groupCopies );
 
