@@ -4,3 +4,10 @@ if test x$ogg_vorbis = xno; then
 	echo "Ogg Vorbis support disabled."
 	echo "----------------------------------------"
 fi
+
+if test $mad_detect = 0 ; then
+	echo "----------------------------------------"
+	echo "No mad library and headers found."
+	echo "K3b will not compile without them!"
+	echo "----------------------------------------"
+fi

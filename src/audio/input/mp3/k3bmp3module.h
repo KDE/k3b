@@ -20,7 +20,7 @@
 #include "../k3baudiomodule.h"
 
 extern "C" {
-#include "libmad/mad.h"
+#include <mad.h>
 }
 
 #include <qfile.h>
