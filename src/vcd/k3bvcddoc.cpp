@@ -21,7 +21,6 @@
 #include "k3bvcdview.h"
 #include "k3bvcdtrack.h"
 #include "k3bvcdburndialog.h"
-#include "k3bvcdmpegfactory.h"
 #include "k3bvcdjob.h"
 #include "../tools/kstringlistdialog.h"
 
@@ -45,13 +44,13 @@
 #include <kstandarddirs.h>
 #include <kio/global.h>
 #include <kdebug.h>
-#include <kmimemagic.h>
 
 
 K3bVcdDoc::K3bVcdDoc( QObject* parent )
   : K3bDoc( parent )
 {
   m_tracks = 0L;
+  m_mpegFactory = 0L;
   m_vcdOptions = 0L;
   
   m_docType = VCD;
@@ -70,6 +69,9 @@ K3bVcdDoc::~K3bVcdDoc()
 
   if ( m_vcdOptions )
     delete m_vcdOptions;
+
+  if ( m_mpegFactory )
+    delete m_mpegFactory;    
 }
 
 bool K3bVcdDoc::newDocument()
@@ -83,6 +85,7 @@ bool K3bVcdDoc::newDocument()
   m_tracks->setAutoDelete( false );
 
   m_vcdOptions = new K3bVcdOptions();
+  m_mpegFactory = new K3bVcdMpegFactory();
 
   return K3bDoc::newDocument();
 }
@@ -166,19 +169,20 @@ void K3bVcdDoc::slotWorkUrlQueue()
 
 K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
 {
-  // QString mimetype = KMimeMagic::self()->findFileType(url.path())->mimeType();
-  // if ( mimetype.contains( "video" ) ) {
   kdDebug() << QString("(K3bVcdDoc) createTrack url.path = ").arg(url.path()) << endl;
-  if (int mpeg = identifyMpegFile( url ) > 0) {
+  uint mpeg = m_mpegFactory->getMpegFileType( url );
+  if (mpeg > 0) {
     if (vcdType() == NONE) {
-      setVcdType(vcdTypes(mpeg+1));
+      setVcdType(vcdTypes(mpeg));
+      KMessageBox::information(kapp->mainWidget(),"(" + url.path() + ")\n" +
+        i18n("K3b will create a (S)VCD image from the given MPEG files, but these files must already be in (S)VCD format.K3b performs no resample on MPEG files yet.This looks like an MPEG%1 file and K3b set the type to %2.").arg(mpeg).arg((mpeg==1)?"VCD 2.0": "SVCD"),
+        i18n("Set Type to %1 (MPEG%2)").arg((mpeg==1)?"VCD 2.0":"SVCD").arg(mpeg) );
     }
 
-    if (vcdType() != vcdTypes(mpeg+1)) {
-      KMessageBox::information( kapp->mainWidget(), "(" + url.path() + ")\n" +
-        i18n("You can't mix MPEG1 and MPEG2 video files."),
-        i18n("Please start a new project for this filetype"),
-        i18n("Resample not implemented yet :(") );
+    if (vcdType() != vcdTypes(mpeg)) {
+      KMessageBox::error( kapp->mainWidget(), "(" + url.path() + ")\n" +
+        i18n("You can't mix MPEG1 and MPEG2 video files.\nPlease start a new Project for this filetype.\nResample not implemented in K3b yet :("),
+        i18n("Wrong File Type for this Project") );
       return 0;
     }
     
@@ -287,7 +291,8 @@ K3bBurnJob* K3bVcdDoc::newBurnJob()
 unsigned int K3bVcdDoc::identifyMpegFile( const KURL& url )
 {
   // return 0 = Unknown file type, 1 = Mpeg 1, 2 = Mpeg 2
-  return K3bVcdMpegFactory::self()->getMpegFileType( url );
+  // return m_mpegFactory.getMpegFileType( url );
+  return 0;
 }
 
 void K3bVcdDoc::informAboutNotFoundFiles()
