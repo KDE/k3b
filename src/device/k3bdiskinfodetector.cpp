@@ -207,7 +207,9 @@ void K3bCdDevice::DiskInfoDetector::slotIsVCD(K3bCdDevice::DeviceHandler *handle
 
 void K3bCdDevice::DiskInfoDetector::slotFinished(K3bCdDevice::DeviceHandler *handler)
 {
-   finish(handler->success());
+//  finish(handler->success());
+//  umount may fail, if the CD was already mounted and is busy
+    finish(true);
 }
 
 void K3bCdDevice::DiskInfoDetector::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler *handler)

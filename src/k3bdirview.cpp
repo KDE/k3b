@@ -205,10 +205,10 @@ void K3bDirView::slotDetectDiskInfo( K3bDevice* dev )
 {
   m_viewStack->raiseWidget( m_noViewView );
   k3bMain()->showBusyInfo( i18n("Trying to fetch information about the inserted disk.") );
-  if ( m_fileView->Url().path().startsWith( dev->mountPoint()) ) {
-    home();
-    dev->unmount();
-  }
+//  if ( m_fileView->Url().path().startsWith( dev->mountPoint()) ) {
+//    home();
+//    dev->unmount();
+//  }
   m_diskInfoDetector->detect( dev );
 }
 
