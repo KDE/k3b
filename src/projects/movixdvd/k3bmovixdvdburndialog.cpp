@@ -172,7 +172,7 @@ void K3bMovixDvdBurnDialog::saveSettings()
   m_doc->setTempDir( m_tempDirSelectionWidget->tempPath() );
 }
 
-
+#include <kdebug.h>
 void K3bMovixDvdBurnDialog::readSettings()
 {
   K3bProjectBurnDialog::readSettings();
@@ -182,16 +182,21 @@ void K3bMovixDvdBurnDialog::readSettings()
   m_volumeDescWidget->load( m_doc->isoOptions() );
 
   m_checkVerify->setChecked( m_doc->verifyData() );
-
   // first of all we need a movix installation object
-  m_installation = K3bMovixInstallation::probeInstallation( k3bcore->externalBinManager()->binObject("eMovix") );
-  if( m_installation ) {
-    m_movixOptionsWidget->init( m_installation );
-    m_movixOptionsWidget->readSettings( m_doc );
+  bool installCorrect = false;
+  if ( k3bcore->externalBinManager()->binObject("eMovix") )
+  {
+      m_installation = K3bMovixInstallation::probeInstallation( k3bcore->externalBinManager()->binObject("eMovix") );
+      if( m_installation ) {
+          m_movixOptionsWidget->init( m_installation );
+          m_movixOptionsWidget->readSettings( m_doc );
+          installCorrect = true;
+      }
   }
-  else {
-    KMessageBox::error( this, i18n("Could not find a valid eMovix installation.") );
-    slotCancelClicked();
+  if ( !installCorrect )
+  {
+      KMessageBox::error( this, i18n("Could not find a valid eMovix installation.") );
+      slotCancelClicked();
   }
 }
 
