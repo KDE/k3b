@@ -724,15 +724,33 @@ void K3bCdDevice::CdDevice::checkForAncientWriters()
 {
   // TODO: add a boolean which determines if this device is non-MMC so we may warn the user at K3b startup about it
 
-  if( vendor().startsWith("TEAC") ) {
-    if( description().startsWith("CD-R50S") || description().startsWith("CD-R55S") ) {
-      m_writeModes = TAO;
-      d->deviceType = CDROM|CDR;
-      m_maxWriteSpeed = 4;
-      m_maxReadSpeed = 12;
-      m_bufferSize = 1024;
-      d->burnfree = false;
-    }
+
+  //
+  // There are a lot writers out there which behave like the TEAC R5XS
+  //
+  if( ( vendor().startsWith("TEAC") && ( description().startsWith("CD-R50S") || 
+					 description().startsWith("CD-R55S") ) )
+      || 
+      ( vendor().startsWith("SAF") && ( description().startsWith("CD-R2006PLUS") || 
+					description().startsWith("CD-RW226") || 
+					description().startsWith("CD-R4012") ) )
+      ||
+      ( vendor().startsWith("JVC") && ( description().startsWith("XR-W2001") || 
+					description().startsWith("XR-W2010") || 
+					description().startsWith("R2626") ) )
+      ||
+      ( vendor().startsWith("PINNACLE") && ( description().startsWith("RCD-1000") || 
+					description().startsWith("RCD5020") || 
+					description().startsWith("RCD5040") || 
+					description().startsWith("RCD 4X4") ) )
+      ||
+      ( vendor().startsWith("Traxdata") && description().startsWith("CDR4120") ) ) {
+    m_writeModes = TAO;
+    d->deviceType = CDROM|CDR;
+    m_maxWriteSpeed = 4;
+    m_maxReadSpeed = 12;
+    m_bufferSize = 1024;
+    d->burnfree = false;
   }
   else if( vendor().startsWith("MATSHITA") ) {
     if( description().startsWith("CD-R   CW-7501") ) {
