@@ -707,7 +707,7 @@ bool K3bCdDevice::CdDevice::furtherInit()
 void K3bCdDevice::CdDevice::checkForAncientWriters()
 {
   if( vendor() == "TEAC" ) {
-    if( description() == "R50S" || description() == "R55S" ) {
+    if( description() == "CD-R50S" || description() == "CD-R55S" ) {
       kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
 		<< " found ancient drive: " << vendor() << " " << description() << endl;
 
