@@ -23,6 +23,7 @@
 #include "k3bpatternoptiontab.h"
 #include "k3bexternalbinoptiontab.h"
 #include "k3bmiscoptiontab.h"
+#include "../k3bcore.h"
 
 #include <qlayout.h>
 #include <qtooltip.h>
@@ -73,8 +74,10 @@ K3bOptionDialog::~K3bOptionDialog()
 
 void K3bOptionDialog::slotOk()
 {
-  if( saveSettings() )
+  if( saveSettings() ) {
     accept();
+    k3bcore->checkSystem();
+  }
 }
 
 void K3bOptionDialog::slotApply()

@@ -800,6 +800,10 @@ void K3bMainWindow::showOptionDialog( int index )
   d.showPage( index );
 
   d.exec();
+
+  // emit a changed signal everytime since we do not know if the user selected
+  // "apply" and "cancel" or "ok"
+  emit configChanged( m_config );
 }
 
 

@@ -1,6 +1,6 @@
 /*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
  *
  * This file is part of the K3b project.
@@ -14,6 +14,7 @@
  */
 
 #include "k3biso646validator.h"
+
 #include <qregexp.h>
 
 K3bIso646Validator::K3bIso646Validator(QObject *parent, const char *name )
@@ -60,3 +61,5 @@ QRegExp K3bIso646Validator::setIsoType( int type, bool AllowLowerCase )
 
     return rx;
 }
+
+#include "k3biso646validator.moc"

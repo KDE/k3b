@@ -22,6 +22,9 @@
 
 #include <kdialog.h>
 
+class QPushButton;
+class QCheckBox;
+
 
 class K3bSystemProblem
 {
@@ -46,7 +49,7 @@ class K3bSystemProblem
 };
 
 
-class K3bSystemProblemDialog : KDialog
+class K3bSystemProblemDialog : public KDialog
 {
   Q_OBJECT
 
@@ -56,6 +59,8 @@ class K3bSystemProblemDialog : KDialog
 			  const char* name = 0 );
 
  private:
+  QPushButton* m_closeButton;
+  QCheckBox* m_checkDontShowAgain;
 };
 
 #endif
