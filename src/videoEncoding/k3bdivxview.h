@@ -44,10 +44,10 @@ class K3bDivxView : public K3bInteractionDialog
 
  public slots:
   void slotUpdateView();
+  void slotEnableSizeTab();
 
  private slots:
   void slotStartClicked();
-  void slotEnableSizeTab();
 
  private:
   K3bDivxCodecData *m_codingData;

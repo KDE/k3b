@@ -53,12 +53,16 @@ K3bDivxView::K3bDivxView(K3bDivxCodecData *data, QWidget* parent, const char *na
 {
   m_codingData = data; 
   setupGui();
+  m_baseTab->slotInitView();
+  slotEnableSizeTab();
 }
 
-K3bDivxView::~K3bDivxView()
-{
-  delete m_codingData;
-  delete m_divxJob;
+K3bDivxView::~K3bDivxView(){
+    delete m_codingData;
+    delete m_baseTab;
+    delete m_sizeTab;
+    delete m_advancedTab;
+    delete m_divxJob;
 }
 
 void K3bDivxView::setupGui()
@@ -73,7 +77,19 @@ void K3bDivxView::setupGui()
 
   QTabWidget* mainTab = new QTabWidget( this );
   setMainWidget( mainTab );
+  /*
+  QGrid *gridBasic = addGridPage(0, Horizontal, i18n("Basic Audio/Video settings") );
+  gridBasic->layout()->setSpacing( KDialog::spacingHint() );
+  gridBasic->layout()->setMargin( 0 );//KDialog::marginHint() );
 
+  QGrid *gridSize = addGridPage(1, Horizontal, i18n("Advanced Audio/Video settings") );
+  gridSize->layout()->setSpacing( KDialog::spacingHint() );
+  gridSize->layout()->setMargin( 0 );//  KDialog::marginHint() );
+
+  QGrid *gridAdvanced = addGridPage(1, Horizontal, i18n("Expert settings") );
+  gridAdvanced->layout()->setSpacing( KDialog::spacingHint() );
+  gridAdvanced->layout()->setMargin( 0 );//  KDialog::marginHint() );
+  */
   QGrid *gridBasic = new QGrid( 0, mainTab );
   mainTab->addTab( gridBasic, i18n("Basic Audio/Video settings") );
   gridBasic->layout()->setSpacing( spacingHint() );
@@ -88,7 +104,7 @@ void K3bDivxView::setupGui()
   mainTab->addTab( gridAdvanced, i18n("Expert settings") );
   gridAdvanced->layout()->setSpacing( spacingHint() );
   gridAdvanced->layout()->setMargin( marginHint() );
-
+  
   m_baseTab = new K3bDivxBaseTab( m_codingData, gridBasic, "basetab" );
   m_sizeTab = new K3bDivxSizeTab( m_codingData, gridSize, "sizetab");
   m_advancedTab = new K3bDivxAdvancedTab( m_codingData, gridAdvanced, "advancedtab");
