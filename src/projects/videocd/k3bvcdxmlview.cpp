@@ -169,10 +169,17 @@ bool K3bVcdXmlView::write( const QString& fname )
             if ( elemsequenceItems.isNull() )
                 elemsequenceItems = addSubElement( xmlDoc, root, "sequence-items" );
 
+            QString seqId = QString::number( it.current() ->index() ).rightJustify( 3, '0' );
+            
             elemsequenceItem = addSubElement( xmlDoc, elemsequenceItems, "sequence-item" );
             elemsequenceItem.setAttribute( "src", QString( "%1" ).arg( QFile::encodeName( it.current() ->absPath() ) ) );
-            elemsequenceItem.setAttribute( "id", QString( "sequence-%1" ).arg( QString::number( it.current() ->index() ).rightJustify( 3, '0' ) ) );
+            elemsequenceItem.setAttribute( "id", QString( "sequence-%1" ).arg( seqId ) );
 
+            // default entry
+            QDomElement elemdefaultEntry;
+            elemdefaultEntry = addSubElement( xmlDoc, elemsequenceItem, "default-entry" );
+            elemdefaultEntry.setAttribute( "id", QString( "entry-%1" ).arg( seqId ) );
+            
             if ( m_doc->vcdOptions() ->PbcEnabled() ) {
                  if ( elemPbc.isNull() ) {
                     elemPbc = addSubElement( xmlDoc, root, "pbc" );
@@ -326,6 +333,8 @@ void K3bVcdXmlView::doPbc(QDomDocument& doc, QDomElement& parent, K3bVcdTrack* t
     QDomElement loop = addSubElement( doc, elemSelection, "loop", track->getPlayTime() );
     if ( track->Reactivity() )
         loop.setAttribute( "jump-timing", "delayed");
+    else
+        loop.setAttribute( "jump-timing", "immediate");
 
     addSubElement( doc, elemSelection, "play-item" ).setAttribute( "ref", QString( "%1-%2" ).arg( ref ).arg( QString::number( track->index() ).rightJustify( 3, '0' ) ) );
 
