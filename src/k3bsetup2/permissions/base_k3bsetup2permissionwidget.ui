@@ -70,7 +70,7 @@
                         <cstring>m_radioEverybody</cstring>
                     </property>
                     <property name="text">
-                        <string>Let everybody write cds</string>
+                        <string>Let everybody write CDs</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -109,7 +109,7 @@
                 <widget class="KListView" row="1" column="0" rowspan="3" colspan="1">
                     <column>
                         <property name="text">
-                            <string>CD-Writing users</string>
+                            <string>CD-Writing Users</string>
                         </property>
                         <property name="clickable">
                             <bool>true</bool>
@@ -169,7 +169,7 @@
                 <widget class="KListView" row="1" column="2" rowspan="3" colspan="1">
                     <column>
                         <property name="text">
-                            <string>Non-CD-Writing users</string>
+                            <string>Non-CD-Writing Users</string>
                         </property>
                         <property name="clickable">
                             <bool>true</bool>
@@ -204,7 +204,7 @@
                                 <cstring>labelWritingGroup</cstring>
                             </property>
                             <property name="text">
-                                <string>CD-Writing &amp;group:</string>
+                                <string>CD-writing &amp;group:</string>
                             </property>
                             <property name="buddy" stdset="0">
                                 <cstring>m_comboWritingGroup</cstring>
