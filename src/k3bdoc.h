@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -68,7 +68,7 @@ class K3bDoc : public QObject
   /** Destructor for the fileclass of the application */
   virtual ~K3bDoc();
 
-  enum DocType { AUDIO = 1, DATA, BACKUP, MIXED, VCD };
+  enum DocType { AUDIO = 1, DATA, BACKUP, MIXED, VCD, MOVIX };
 
 
   virtual void disable();
