@@ -140,7 +140,6 @@ public:
       burnfree(false) {
   }
 
-  QString blockDeviceName;
   int deviceType;
   int supportedProfiles;
   QString mountPoint;
@@ -162,7 +161,7 @@ K3bDevice::Device::Device( const QString& devname )
 {
   d = new Private;
 
-  d->blockDeviceName = devname;
+  m_blockDevice = devname;
   d->allNodes.append(devname);
 
   m_cdrdaoDriver = "auto";
@@ -910,12 +909,6 @@ const QString& K3bDevice::Device::devicename() const
 }
 
 
-const QString& K3bDevice::Device::blockDeviceName() const
-{
-  return d->blockDeviceName;
-}
-
-
 QString K3bDevice::Device::busTargetLun() const
 {
   return QString("%1,%2,%3").arg(m_bus).arg(m_target).arg(m_lun);
@@ -1280,6 +1273,7 @@ K3bDevice::Toc K3bDevice::Device::readToc() const
       break;
 
     case MEDIA_DVD_PLUS_R:
+    case MEDIA_DVD_PLUS_R_DL:
       //
       // a DVD+R disk may have multible sessions
       // every session may contain up to 16 fragments

@@ -81,6 +81,10 @@ typedef unsigned char u8;
    || (M) == SCSI_CDROM_MAJOR)
 #endif
 
+#ifndef SCSI_GENERIC_MAJOR
+#define SCSI_GENERIC_MAJOR 21
+#endif
+
 #endif // Q_OS_LINUX
 
 
@@ -273,40 +277,25 @@ void K3bDevice::DeviceManager::LinuxDeviceScan()
   }
   pclose(fd);
 
-  // we also check all these nodes to make sure to get all links and stuff
 
-//   static const char* devicenames[] = {
-//     "/dev/hda",
-//     "/dev/hdb",
-//     "/dev/hdc",
-//     "/dev/hdd",
-//     "/dev/hde",
-//     "/dev/hdf",
-//     "/dev/hdg",
-//     "/dev/hdh",
-//     "/dev/hdi",
-//     "/dev/hdj",
-//     "/dev/hdk",
-//     "/dev/hdl",
-//     "/dev/dvd",
-//     "/dev/cdrom",
-//     "/dev/cdrecorder",
-//     0
-//   };
-//   int i = 0;
-//   while( devicenames[i] ) {
-//     if( addDevice( devicenames[i] ) )
-//       m_foundDevices++;
-//     ++i;
-//   }
-//   for( int i = 0; i < 16; i++ ) {
-//     if( addDevice( QString("/dev/scd%1").arg(i).ascii() ) )
-//       m_foundDevices++;
-//   }
-//   for( int i = 0; i < 16; i++ ) {
-//     if( addDevice( QString("/dev/sr%1").arg(i).ascii() ) )
-//       m_foundDevices++;
-//   }
+#ifdef Q_OS_LINUX
+  //
+  // Scan the generic devices if we have scsi devices
+  //
+  kdDebug() << "(K3bDevice::DeviceManager) SCANNING FOR GENERIC DEVICES." << endl;
+  for( int i = 0; i < 16; i++ ) {
+    QString sgDev = QString("/dev/sg%1").arg(i);
+    int bus, id, lun;
+    if( determineBusIdLun( sgDev, bus, id, lun ) ) {
+      kdDebug() << "(K3bDevice::DeviceManager) found generic device: " << sgDev << endl;
+      if( Device* dev = findDevice( bus, id, lun ) ) {
+	kdDebug() << "(K3bDevice::DeviceManager) found corresponding block device: " << dev->blockDeviceName() << endl;
+	dev->m_genericDevice = sgDev;
+      }
+    }
+  }
+  // FIXME: also scan /dev/scsi/hostX.... for devfs without symlinks
+#endif
 }
 
 
@@ -453,6 +442,7 @@ void K3bDevice::DeviceManager::printDevices()
   for( ; *it; ++it ) {
     Device* dev = *it;
     kdDebug() << "Blockdevice:    " << dev->blockDeviceName() << endl
+	      << "Generic device: " << dev->genericDevice() << endl
 	      << "Vendor:         " << dev->vendor() << endl
 	      << "Description:    " << dev->description() << endl
 	      << "Version:        " << dev->version() << endl
@@ -831,7 +821,8 @@ bool K3bDevice::DeviceManager::determineBusIdLun( const QString& dev, int& bus, 
   struct stat cdromStat;
   ::fstat( cdromfd, &cdromStat );
 
-  if( SCSI_BLK_MAJOR( cdromStat.st_rdev>>8 ) ) {
+  if( SCSI_BLK_MAJOR( cdromStat.st_rdev>>8 ) ||
+      SCSI_GENERIC_MAJOR == (cdromStat.st_rdev>>8) ) {
     struct ScsiIdLun
     {
       int id;

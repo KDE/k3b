@@ -188,7 +188,16 @@ namespace K3bDevice
      * for SCSI devices this should be something like /dev/scd0 or /dev/sr0
      * for IDE device this should be something like /dev/hdb1
      */
-    const QString& blockDeviceName() const;
+    const QString& blockDeviceName() const { return m_blockDevice; }
+
+    /**
+     * This is only valid for SCSI devices. Without devfs it's something
+     * like /dev/sg0. Otherwise something like /dev/scsi/host0/bus0/target0/lun0/generic.
+     *
+     * This is not needed in K3b at all. But cdrecord and cdrdao use the sg devices and
+     * we need it to fixup it's permissions in K3bSetup.
+     */
+    const QString& genericDevice() const { return m_genericDevice; }
 
     /**
      * @return All device nodes for this drive.
@@ -693,6 +702,8 @@ namespace K3bDevice
 
     // only needed on FreeBSD
     QString m_passDevice;
+    QString m_blockDevice;
+    QString m_genericDevice;
 
     class Private;
     Private* d;
