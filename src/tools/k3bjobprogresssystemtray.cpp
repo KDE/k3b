@@ -193,7 +193,7 @@ void K3bJobProgressSystemTray::paintEvent( QPaintEvent* )
 void K3bJobProgressSystemTray::mousePressEvent( QMouseEvent* e )
 {
   if( rect().contains( e->pos() ) ) {
-    KWin::activateWindow( parentWidget()->winId() );
+    KWin::setActiveWindow( parentWidget()->winId() );
   }
 }
 
