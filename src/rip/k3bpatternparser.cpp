@@ -214,7 +214,7 @@ QString K3bPatternParser::parsePattern( const K3bCddbResultEntry& entry,
       continue;
     }
 
-    if( dir[i] == '}' and !offsetStack.isEmpty() ) {
+    if( dir[i] == '}' && !offsetStack.isEmpty() ) {
 
       int offset = offsetStack.pop();
       int length = i - offset + 1;
