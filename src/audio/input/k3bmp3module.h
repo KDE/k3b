@@ -4,7 +4,10 @@
 
 #include "k3baudiomodule.h"
 
-#include <mad.h>
+extern "C" {
+#include "../../libmad/mad.h"
+}
+
 #include <qfile.h>
 
 class QTimer;

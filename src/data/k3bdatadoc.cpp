@@ -39,9 +39,7 @@
 #include <klineeditdlg.h>
 #include <kmimemagic.h>
 #include <kmessagebox.h>
-
-#include <id3/tag.h>
-#include <id3/misc_support.h>
+#include <kfilemetainfo.h>
 
 
 K3bDataDoc::K3bDataDoc( QObject* parent )
@@ -275,17 +273,23 @@ void K3bDataDoc::createFileItem( QFileInfo& f, K3bDirItem* parent )
   }
 
   QString mimetype = KMimeMagic::self()->findFileType(f.absFilePath())->mimeType();
-  if( k3bMain()->useID3TagForMp3Renaming() && mimetype == "audio/mpeg" ) {
-    ID3_Tag tag( f.absFilePath().latin1() );
+  KConfig* c = kapp->config();
+  c->setGroup( "Data project settings" );
+
+
+  // sometimes ogg-vorbis files go as "application/x-ogg"
+  if( c->readBoolEntry( "Use ID3 Tag for mp3 renaming", false ) && 
+      ( mimetype.contains( "audio" ) || mimetype.contains("ogg") ) ) {
+
+    KFileMetaInfo metaInfo( f.absFilePath() );
+    if( !metaInfo.isEmpty() && metaInfo.isValid() ) {
 		
-    ID3_Frame* frame = tag.Find( ID3FID_TITLE );
-    QString title(ID3_GetString(frame, ID3FN_TEXT ));
-		
-    frame = tag.Find( ID3FID_LEADARTIST );
-    QString artist(ID3_GetString(frame, ID3FN_TEXT ));
-		
-    if( !title.isEmpty() && !artist.isEmpty() ) {
-      newName = artist + " - " + title + ".mp3";
+      KFileMetaInfoItem artistItem = metaInfo.item( "Artist" );
+      KFileMetaInfoItem titleItem = metaInfo.item( "Title" );
+
+      if( artistItem.isValid() && titleItem.isValid() ) {
+	newName = artistItem.string() + " - " + titleItem.string() + "." + f.extension(false);
+      }
     }
   }
 

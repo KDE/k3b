@@ -1,4 +1,4 @@
-Installing K3b 0.6
+Installing K3b 0.7
 ------------------
 
 
@@ -6,7 +6,6 @@ Before installing K3b please make sure you have at least the following installed
  - the QT3 library (at least version 3.0.2)
  - the KDE3 libraries
  - cdparanoia library (should come with every common distribution)
- - ID3Lib (get it from http://id3lib.sourceforge.net)
  
 
 
@@ -30,7 +29,7 @@ make install (as root)
 
 
 K3b needs some special permission settings to work properly.
-With version 0.6 comes the K3bSetup Wizard that will perform all the necessary steps.
+With version 0.7 comes the K3bSetup Wizard that will perform all the necessary steps.
 Just start it.
 
 

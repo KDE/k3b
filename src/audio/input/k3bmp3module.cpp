@@ -6,11 +6,7 @@
 #include <kconfig.h>
 #include <kprocess.h>
 #include <klocale.h>
-
-
-// ID3lib-includes
-#include <id3/tag.h>
-#include <id3/misc_support.h>
+#include <kfilemetainfo.h>
 
 #include <qstring.h>
 #include <qfileinfo.h>
@@ -50,16 +46,19 @@ K3bMp3Module::K3bMp3Module( K3bAudioTrack* track )
   m_madTimer  = new mad_timer_t;
 
 
-  // read id3 tag
-  // -----------------------------------------------
-  ID3_Tag tag( audioTrack()->absPath().latin1() );
-  ID3_Frame* frame = tag.Find( ID3FID_TITLE );
-  if( frame )
-    audioTrack()->setTitle( QString(ID3_GetString(frame, ID3FN_TEXT )) );
-		
-  frame = tag.Find( ID3FID_LEADARTIST );
-  if( frame )
-    audioTrack()->setArtist( QString(ID3_GetString(frame, ID3FN_TEXT )) );
+  KFileMetaInfo metaInfo( audioTrack()->absPath() );
+  if( !metaInfo.isEmpty() && metaInfo.isValid() ) {
+    
+    KFileMetaInfoItem artistItem = metaInfo.item( "Artist" );
+    KFileMetaInfoItem titleItem = metaInfo.item( "Title" );
+    
+    if( artistItem.isValid() )
+      audioTrack()->setArtist( artistItem.string() );
+
+    if( titleItem.isValid() )
+      audioTrack()->setTitle( titleItem.string() );
+  }
+
 
   audioTrack()->setStatus( K3bAudioTrack::OK );
 
@@ -106,7 +105,7 @@ void K3bMp3Module::startDecoding()
     m_inputFile.at(0);
 
     mad_frame_init( m_madFrame );
-    mad_synth_init( m_madSynth );    
+    mad_synth_init( m_madSynth );
     
     m_decodingTimer->start(0);
 

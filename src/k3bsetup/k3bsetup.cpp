@@ -259,22 +259,25 @@ void K3bSetup::doApplyDevicePermissions( uint groupId )
   K3bDevice* dev = m_deviceManager->allDevices().first();
   while( dev != 0 ) {
 
-    if( QFile::exists( dev->genericDevice() ) ) {
-      chown( QFile::encodeName(dev->genericDevice()), 0, groupId );
-      chmod( QFile::encodeName(dev->genericDevice()), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP );
+    if( dev->interfaceType() == K3bDevice::SCSI ) {
+      if( QFile::exists( dev->genericDevice() ) ) {
+	chown( QFile::encodeName(dev->genericDevice()), 0, groupId );
+	chmod( QFile::encodeName(dev->genericDevice()), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP );
+      }
+      else {
+	qDebug("(K3bSetup) Could not find generic device: " + dev->genericDevice() );
+	emit error( i18n("Could not find generic device (%1)").arg(dev->genericDevice()) );
+      }
     }
     else {
-      qDebug("(K3bSetup) Could not find generic device: " + dev->genericDevice() );
-      emit error( i18n("Could not find generic device (%1)").arg(dev->genericDevice()) );
-    }
-
-    if( QFile::exists( dev->ioctlDevice() ) ) {
-      chown( QFile::encodeName(dev->ioctlDevice()), 0, groupId );
-      chmod( QFile::encodeName(dev->ioctlDevice()), S_IRUSR|S_IWUSR|S_IRGRP );
-    }
-    else {
-      qDebug("(K3bSetup) Could not find ioctl device: " + dev->ioctlDevice() );
-      emit error( i18n("Could not find ioctl device (%1)").arg(dev->ioctlDevice()) );
+      if( QFile::exists( dev->ioctlDevice() ) ) {
+	chown( QFile::encodeName(dev->ioctlDevice()), 0, groupId );
+	chmod( QFile::encodeName(dev->ioctlDevice()), S_IRUSR|S_IWUSR|S_IRGRP );
+      }
+      else {
+	qDebug("(K3bSetup) Could not find ioctl device: " + dev->ioctlDevice() );
+	emit error( i18n("Could not find ioctl device (%1)").arg(dev->ioctlDevice()) );
+      }
     }
 
 

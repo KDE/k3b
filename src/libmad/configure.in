@@ -1,73 +1,47 @@
-#MIN_CONFIG
+dnl -*- m4 -*-
+dnl
+dnl libmad - MPEG audio decoder library
+dnl Copyright (C) 2000-2001 Robert Leslie
+dnl
+dnl This program is free software; you can redistribute it and/or modify
+dnl it under the terms of the GNU General Public License as published by
+dnl the Free Software Foundation; either version 2 of the License, or
+dnl (at your option) any later version.
+dnl
+dnl This program is distributed in the hope that it will be useful,
+dnl but WITHOUT ANY WARRANTY; without even the implied warranty of
+dnl MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+dnl GNU General Public License for more details.
+dnl
+dnl You should have received a copy of the GNU General Public License
+dnl along with this program; if not, write to the Free Software
+dnl Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+dnl
+AC_REVISION([$Id$])dnl
 
-AM_INIT_AUTOMAKE(k3b,0.6.0pre2)
+dnl Process this file with autoconf to produce a configure script.
 
+AC_INIT(decoder.h)
+AM_INIT_AUTOMAKE(libmad, 0.14.2b)
 
+AM_CONFIG_HEADER(config.h)
 
-CDPARANOIA_LIBS==""
-AC_MSG_CHECKING(for cdparanoia headers)
-cdda_paranoia=no
-AC_TRY_COMPILE([
-		#include <sys/types.h> 
-		typedef int16_t size16;
-		typedef int32_t size32;
-                #include <cdda_interface.h>
-                #include <cdda_paranoia.h>
-                ],[
-                ],[
-                cdda_paranoia=yes
-                ])
-dnl currently disabled
-dnl cdda_paranoia=no
-AC_MSG_RESULT($cdda_paranoia)
-if test x$cdda_paranoia = xyes; then
-   dnl we need the cdda_paranoia_lib because otherwise we override LIBS !
-   AC_CHECK_LIB(cdda_paranoia,paranoia_init,cdda_paranoia_lib=yes,
-                cdda_paranoia=no,[-lcdda_paranoia -lcdda_interface])
-fi
-if test x$cdda_paranoia = xyes; then
-   AC_DEFINE(CDDA_PARANOIA,1,[Define if you have cdparanoia installed])
-   CDPARANOIA_LIBS="-lcdda_paranoia -lcdda_interface"
-fi
+dnl System type.
 
+AC_CANONICAL_HOST
 
-AC_SUBST(CDPARANOIA_LIBS)
+dnl Checks for programs.
 
+AC_PROG_CC
 
-OGG_VORBISLIBS=""
-AC_MSG_CHECKING(for ogg/vorbis headers)
-ogg_vorbis=no
-AC_TRY_COMPILE([
-		#include <vorbis/codec.h>
-		#include <vorbis/vorbisfile.h>
-                ],[
-                ],[
-                ogg_vorbis=yes
-                ])
-AC_MSG_RESULT($ogg_vorbis)
-if test x$ogg_vorbis = xyes; then
-   dnl we need the ogg_vorbis_lib because otherwise we override LIBS !
-   AC_CHECK_LIB(vorbisfile,ov_open,ogg_vorbis_lib=yes,
-                ogg_vorbis=no,[-lvorbisfile -lvorbis -logg])
-fi
-if test x$ogg_vorbis = xyes; then
-   AC_DEFINE(OGG_VORBIS,1,[Define if you have ogg/vorbis installed])
-   OGG_VORBISLIBS="-lvorbisfile -lvorbis -logg"
-fi
+dnl Support for libtool.
 
-AC_SUBST(OGG_VORBISLIBS)
+AC_DISABLE_SHARED
+dnl AC_LIBTOOL_WIN32_DLL
+AM_PROG_LIBTOOL
 
+AC_SUBST(LIBTOOL_DEPS)
 
-if test x$ogg_vorbis = xno; then
-	echo ""
-	echo "No Ogg Vorbis library and headers found."
-	echo "Ogg Vorbis support disabled."
-	echo ""
-fi
-
-
-
-#the libmad stuff
 dnl Compiler options.
 
 arch=""
@@ -191,8 +165,8 @@ then
 fi
 
 case "$host" in
-    mips*-agenda-*)   AC_DEFINE(HAVE_MADD16_ASM,1,[test]) ;;
-    mips*-luxsonor-*) AC_DEFINE(HAVE_MADD_ASM,1,[test])   ;;
+    mips*-agenda-*)   AC_DEFINE(HAVE_MADD16_ASM) ;;
+    mips*-luxsonor-*) AC_DEFINE(HAVE_MADD_ASM)   ;;
 esac
 
 dnl Checks for header files.
@@ -232,7 +206,7 @@ AC_ARG_ENABLE(speed,
     case "$enableval" in
 	yes)
 	    optimize_for="speed"
-	    AC_DEFINE(OPT_SPEED,1,[test])
+	    AC_DEFINE(OPT_SPEED)
 	    ;;
     esac
 ])
@@ -247,7 +221,7 @@ AC_ARG_ENABLE(accuracy,
 	    else
 		optimize_for="accuracy"
 	    fi
-	    AC_DEFINE(OPT_ACCURACY,1,[test])
+	    AC_DEFINE(OPT_ACCURACY)
 	    ;;
     esac
 ])
@@ -305,7 +279,7 @@ FPM="-DFPM_$FPM"
 AC_ARG_ENABLE(sso,
     [  --enable-sso            use subband synthesis optimization], [
     case "$enableval" in
-	yes) AC_DEFINE(OPT_SSO,1,[test]) ;;
+	yes) AC_DEFINE(OPT_SSO) ;;
     esac
 ])
 
@@ -339,7 +313,7 @@ AC_ARG_ENABLE(strict-iso,
     [  --enable-strict-iso     use strict ISO/IEC interpretations], [
     case "$enableval" in
 	yes)
-	    AC_DEFINE(OPT_STRICT,1,[test])
+	    AC_DEFINE(OPT_STRICT)
 	    interpretation="strict"
 	    ;;
     esac
@@ -361,7 +335,7 @@ AC_ARG_ENABLE(debugging,
   --disable-debugging     do not enable debugging and use more optimization], [
     case "$enableval" in
 	yes)
-	    AC_DEFINE(DEBUG,1,[test])
+	    AC_DEFINE(DEBUG)
 	    optimize=""
 	    ;;
 	no)
@@ -370,7 +344,7 @@ AC_ARG_ENABLE(debugging,
     AC_MSG_ERROR(--enable-profiling and --disable-debugging are incompatible)
 	    fi
 
-	    AC_DEFINE(NDEBUG,1,[test])
+	    AC_DEFINE(NDEBUG)
 	    debug=""
 	    if test "$GCC" = yes
 	    then
@@ -385,7 +359,7 @@ AC_MSG_CHECKING(whether to enable experimental code)
 AC_ARG_ENABLE(experimental,
     [  --enable-experimental   enable experimental code], [
     case "$enableval" in
-	yes) AC_DEFINE(EXPERIMENTAL,1,[test]) ;;
+	yes) AC_DEFINE(EXPERIMENTAL) ;;
     esac
 ])
 AC_MSG_RESULT(${enable_experimental-no})
@@ -399,3 +373,5 @@ test -n "$profile"  && CFLAGS="$CFLAGS $profile" LDFLAGS="$LDFLAGS $profile"
 
 LTLIBOBJS=`echo "$LIBOBJS" | sed -e 's/\.o/.lo/g'`
 AC_SUBST(LTLIBOBJS)
+
+AC_OUTPUT(Makefile)

@@ -76,6 +76,9 @@
 #include "k3btempdirselectionwidget.h"
 #include "k3bbusywidget.h"
 
+#include "libmad/mad.h"
+
+
 K3bMainWindow* k3bMain()
 {
   K3bMainWindow* _app = dynamic_cast<K3bMainWindow*>( kapp->mainWidget() );
@@ -342,6 +345,15 @@ void K3bMainWindow::initView()
   // HACK needed because otherwise I get undefined references ???? :-((
   // //////////////////////////
   delete (new K3bDeviceWidget( deviceManager(), 0 ));
+
+  mad_header* m_madHeader = new mad_header;
+  mad_header_init( m_madHeader );
+  mad_header_finish( m_madHeader );
+  delete m_madHeader;
+  mad_synth* m_madSynth  = new mad_synth;
+  mad_synth_init( m_madSynth );
+  mad_synth_finish( m_madSynth );
+  delete m_madSynth;
 }
 
 

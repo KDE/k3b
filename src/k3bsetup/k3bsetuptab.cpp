@@ -53,7 +53,10 @@ K3bSetupTab::K3bSetupTab( int index, int overall, const QString& info, K3bSetupW
 
   m_labelSetupLogo = new PrivatePicLabel( info, this );
   m_labelSetupLogo->setPixmap( setupLogo );
-
+  QFont f( m_labelSetupLogo->font() );
+  f.setBold(true);
+  m_labelSetupLogo->setFont(f);
+  
   m_mainLayout = new QGridLayout( this );
   m_mainLayout->addWidget( m_labelSetupLogo, 0, 0 );
 

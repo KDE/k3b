@@ -1,4 +1,4 @@
-K3b Version 0.6
+K3b Version 0.7
 
 Thanx for downloading K3b - The CD Kreator
 
@@ -50,8 +50,6 @@ What you need to run K3b:
  - the cdparanoia library for cd ripping from Monty
  - the cdrtools (cdrecord, mkisofs) from Joerg Schilling
  - cdrdao, the other linux cd writing program from Andreas Mueller
- - libID3, a library for reading ID3 tags from MP3 files
- - libmad, great MP3 decoding library from Robert Leslie
  - optional the transcode tools for DVD ripping from Thomas Oestreich
 
 See INSTALL for further information
