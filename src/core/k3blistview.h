@@ -86,6 +86,11 @@ class K3bListViewItem : public KListViewItem
 
   void setDisplayProgressBar( int col, bool );
   void setProgress( int, int );
+  void setTotalSteps( int col, int steps );
+  /**
+   * For now only used for the progressbar
+   */
+  void setMargin( int col, int margin );
 
   virtual void paintCell( QPainter* p, const QColorGroup& cg, int col, int width, int align );
 
