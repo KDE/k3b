@@ -1038,33 +1038,6 @@ int K3bCdDevice::CdDevice::numSessions() const
 }
 
 
-int K3bCdDevice::CdDevice::tocType() const
-{
-  unsigned char* data = 0;
-  int dataLen = 0;
-  if( readTocPmaAtip( &data, dataLen, 2, true, 1 ) ) {
-
-    //
-    // We are interested in POINT A0 (always first) PSEC field
-    // 0x00 - CD_DA or CD_ROM
-    // 0x10 - CD-I
-    // 0x20 - CD_XA
-    //
-
-    int ret = -1;
-    toc_raw_track_descriptor* td = (toc_raw_track_descriptor*)&data[4];
-    if( td->point == 0xA0 )
-      ret = td->p_sec;
-
-    delete [] data;
-
-    return ret;
-  }
-  else
-    return -1;
-}
-
-
 int K3bCdDevice::CdDevice::getTrackDataMode(int lba) const
 {
 //   bool needToClose = !isOpen();

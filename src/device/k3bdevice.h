@@ -38,6 +38,18 @@ namespace K3bCdDevice
     static const char* cdrdao_drivers[];
 
     enum interface { SCSI, IDE, OTHER };
+
+    /**
+     * @li CDR: Device can write CDR media.
+     * @li CDRW: Device can write CDRW media.
+     * @li CDROM: Device can read CD media.
+     * @li DVD: Device can read DVD media.
+     * @li DVDRAM: Device can write DVDRAM media.
+     * @li DVDR: Device can write DVD-R media.
+     * @li DVDRW: Device can write DVD-RW media.
+     * @li DVDPR: Device can write DVD+R media.
+     * @li DVDPRW: Device can write DVD+RW media.
+     */
     enum DeviceType    { CDR = 1,
                          CDRW = 2,
                          CDROM = 4,
@@ -47,11 +59,16 @@ namespace K3bCdDevice
                          DVDRW = 64,
                          DVDPR = 128,
                          DVDPRW = 256 };
+
     enum DiskStatus { EMPTY = 0,
                       APPENDABLE = 1,
                       COMPLETE = 2,
                       NO_DISK = -1,
                       NO_INFO = -2 };
+
+    /**
+     * The different writing modes.
+     */
     enum WriteMode { SAO = 1,
                      TAO = 2,
 		     RAW = 4,
@@ -62,13 +79,28 @@ namespace K3bCdDevice
                      RAW_R96P = 128,
                      RAW_R96R = 256 };
 
-
+    /**
+     * A CdDevice should only be constructed the the DeviceManager.
+     */
     CdDevice( const QString& devname );
     ~CdDevice();
 
+    /**
+     * Determines the device's capabilities. This needs to be called once before
+     * using the device.
+     *
+     * Should only be used by the DeviceManager.
+     */
     bool init();
 
+    /**
+     * @return The interfact type: SCSI or IDE.
+     */
     interface interfaceType();
+
+    /**
+     * @return A bitwise OR of the @p DeviceType enumeration.
+     */
     int type() const;
 
     const QString& vendor() const { return m_vendor; }
@@ -79,23 +111,56 @@ namespace K3bCdDevice
      * @return Equal to writesCd() || writesDvd()
      */
     bool burner() const;
+
+    /**
+     * Shortcut for (type() & CDR)
+     */
     bool writesCd() const;
+
+    /**
+     * Shortcut for (type() & CDRW)
+     */
     bool writesCdrw() const;
 
     /**
      * @return Equal to writesDvdMinus() || writesDvdPlus()
      */
     bool writesDvd() const;
+
+
+    /**
+     * Shortcut for (type() & DVDPR|DVDPRW)
+     */
     bool writesDvdPlus() const;
+
+    /**
+     * Shortcut for (type() & DVDR|DVDRW)
+     */
     bool writesDvdMinus() const;
+
+    /**
+     * Shortcut for (type() & DVD)
+     */
     bool readsDvd() const;
 
     /**
      * @deprecated Use burnfree()
      */
     bool burnproof() const;
+
+    /**
+     * @return true is the device is a writer and supports buffer underrun free recording (BURNFREE)
+     */
     bool burnfree() const;
+
+    /**
+     * Shortcut for (writingModes() & DAO)
+     */
     bool dao() const;
+
+    /**
+     * @return true if the device is a DVD-R(W) writer which supports test writing.
+     */
     bool dvdMinusTestwrite() const { return m_dvdMinusTestwrite; }
 
     int maxReadSpeed() const { return m_maxReadSpeed; }
@@ -104,39 +169,54 @@ namespace K3bCdDevice
     int bufferSize() const { return m_bufferSize; }
 
     /**
-     * ioctlDevice is returned
+     * @return the corresponding device name.
      */
     const QString& devicename() const;
 
     /**
      * for SCSI devices this should be something like /dev/scd0 or /dev/sr0
-     * for ide device this should be something like /dev/hdb1
+     * for IDE device this should be something like /dev/hdb1
      */
     const QString& blockDeviceName() const;
 
     /**
-     * returnes all device nodes for this drive
-     * this mainly makes sense with scsi devices which
+     * @return All device nodes for this drive.
+     * This mainly makes sense with scsi devices which
      * can be accessed through /dev/scdX or /dev/srX
-     * and is useful for fstab scanning
+     * and is useful for fstab scanning.
      */
     const QStringList& deviceNodes() const;
 
+    /**
+     * @see K3bCdDevice::CdDevice::deviceNodes()
+     */
     void addDeviceNode( const QString& );
 
+    /**
+     * @return The device name used for mounting.
+     * @see K3bCdDevice::CdDevice::deviceNodes()
+     */
     const QString& mountDevice() const;
 
-    /** makes only sense to use with scsi devices */
+    /** 
+     * Makes only sense to use with scsi devices 
+     * @return a string for use with the cdrtools
+     * @deprecated
+     */
     QString busTargetLun() const;
+
     int scsiBus() const { return m_bus; }
     int scsiId() const { return m_target; }
     int scsiLun() const { return m_lun; }
 
-    int            maxWriteSpeed() const { return m_maxWriteSpeed; }
+    int maxWriteSpeed() const { return m_maxWriteSpeed; }
     const QString& cdrdaoDriver() const { return m_cdrdaoDriver; }
 
     const QString& mountPoint() const;
 
+    /**
+     * @return true if the device is mounted via supermount
+     */
     bool supermount() const { return m_supermount; }
 
     /**
@@ -147,7 +227,9 @@ namespace K3bCdDevice
     int cdTextCapable() const;
 
 
-    /** internally K3b value. */
+    /** 
+     * internally K3b value.
+     */
     void setCurrentWriteSpeed( int s ) { m_currentWriteSpeed = s; }
 
     /**
@@ -175,84 +257,94 @@ namespace K3bCdDevice
     void setMountPoint( const QString& );
     void setMountDevice( const QString& d );
 
+
     /** 
      * checks if unit is ready (medium inserted and ready for command)
+     *
+     * Refers to the MMC command: TEST UNIT READY
      */
     bool isReady() const;
 
-
     /**
-     *  checks if disk is empty, returns DiskStatus:
+     * checks if disk is empty, returns @p DiskStatus
      */
     int isEmpty() const;
 
     /**
-     *  checks if disk is rewritable
+     * @return true if inserted media is rewritable.
      */
     bool rewritable() const;
 
     /**
-     *  try to read physical DVD structure
+     * @return true if the inserted media is a DVD.
      */
     bool isDVD() const;
 
     /**
      * returnes the complete diskinfo. This includes the toc.
+     * @deprecated use @p ngDiskInfo()
      */
     DiskInfo diskInfo();
 
     /**
-    *  returnes the discType from the Full-TOC mmc-command.
-    */
-    int tocType() const;
-
-    /**
-     *  returns the number of sessions on disk
+     * @return The number of sessions on the media.
      */
     int numSessions() const;
 
     /**
-     *  returns the disc size
+     * @return The media size.
      */
     K3b::Msf discSize() const;
 
     /**
-     *  returns the remaining disc size
+     * @return The remaining size on an appendable media
      */
     K3b::Msf remainingSize() const;
 
     /**
-     *  returns the toc of the disc
+     * @return The toc of the media
      */
     Toc readToc() const;
 
     /**
-     * read the CD-TEXT. 
+     * Read the CD-TEXT of an audio or mixed-mode CD.
      * @param trackCount if specified this method doed not need to determine them which saves time.
      */
     AlbumCdText readCdText( unsigned int trackCount = 0 ) const;
-
-     /**
-     *  returns the DataMode of the track
+    
+    /**
+     * @return The DataMode of the track
+     * @see K3bCdDevice::Track
      */
-    int getTrackDataMode(int track) const;
-
-     /**
-     *  returns the DataMode of the track
-     */
-    //    int getTrackHeader(int lba);
+    int getTrackDataMode( int track ) const;
 
     /**
      * block or unblock the drive's tray
-     * returns true on success and false on scsi-error
+     * @return true on success and false on error.
      */
     bool block( bool ) const;
 
+    /**
+     * Eject the media.
+     * @return true on success and false on error.
+     */
     bool eject() const;
+
+    /**
+     * Load the media.
+     * @return true on success and false on error.
+     */
     bool load() const;
 
+    /**
+     * @return The supported writing modes (bitwise OR of @p WriteMode) if the device is a writer.
+     */
     int writingModes() const { return m_writeModes; }
-    bool supportsWriteMode( WriteMode );
+
+    /**
+     * Shortcut for (writingModes() & mode)
+     */
+    bool supportsWriteMode( WriteMode mode );
 
     bool readSectorsRaw(unsigned char *buf, int start, int count) const;
 
@@ -306,10 +398,21 @@ namespace K3bCdDevice
     int determineMaximalWriteSpeed() const;
 
     /**
-     * @return fd on success; -1 on failure
+     * Open the device for acces via a file descriptor.
+     * @return an open file descriptor on success or -1 on failure
+     * @see close()
      */
     int open() const;
+
+    /**
+     * Close the files descriptor.
+     * @see open()
+     */
     void close() const;
+
+    /**
+     * @return true if the device was successfully opened via @p open()
+     */
     bool isOpen() const;
 
 
@@ -489,6 +592,8 @@ namespace K3bCdDevice
   /**
    * This should always be used to open a device since it
    * uses the resmgr
+   *
+   * @internal
    */
   int openDevice( const char* name );
 }
