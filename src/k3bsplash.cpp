@@ -37,6 +37,11 @@ K3bSplash::K3bSplash( QWidget* parent, const char* name )
   if( pixmap.load( locate( "appdata", "pics/k3b_splash.png" ) ) )
     picLabel->setPixmap( pixmap );
 
+  // Set geometry, with support for Xinerama systems
+  setGeometry(QApplication::desktop()->width()/2-pixmap.width()/2,
+              QApplication::desktop()->height()/2-pixmap.height()/2,
+              pixmap.width(),pixmap.height());
+  
   m_infoBox = new QLabel( this );
   m_infoBox->setMargin( 2 );
   m_infoBox->setPaletteBackgroundColor( black );
