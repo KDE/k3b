@@ -163,7 +163,7 @@ FLAC__StreamDecoderWriteStatus K3bFLACDecoder::Private::write_callback(const FLA
   for(i=0; i < samples; i++) {
    // in FLAC channel 0 is left, 1 is right
    for(j=0; j < this->channels; j++) {
-    FLAC__int32 value = (buffer[j][i])<<(16 - frame->header.bitspersample);
+    FLAC__int32 value = (buffer[j][i])<<(16 - frame->header.bits_per_sample);
     internalBuffer->putch(value >> 8); // msb
     internalBuffer->putch(value & 0xFF); // lsb
    }
