@@ -216,7 +216,7 @@ bool K3bDevice::Device::setSpeed( unsigned int readingSpeed,
   cmd[3] = readingSpeed;
   cmd[4] = writingSpeed >> 8;
   cmd[5] = writingSpeed;
-  return ( cmd.transport() == 0 );
+  return ( cmd.transport( TR_DIR_WRITE ) == 0 );
 }
 
 
