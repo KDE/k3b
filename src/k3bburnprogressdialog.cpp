@@ -128,13 +128,11 @@ K3bBurnProgressDialog::PrivateStatusBarProgress::PrivateStatusBarProgress( QWidg
 K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name, bool modal, WFlags wf )
   : KDialog(parent,name, modal, wf)
 {
-  setCaption( i18n("Writing process") );
+  setCaption( i18n("K3b - Progress") );
 
   setupGUI();
   setupConnections();
   	
-  m_groupBuffer->setEnabled( false );
-
   m_job = 0;
   m_timer = new QTimer( this );
 
