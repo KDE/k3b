@@ -29,14 +29,14 @@
 class QSplitter;
 class KFileView;
 class KURL;
-class KioTree;
 class K3bCdView;
 class K3bFileView;
 class K3bFilmView;
 class K3bDeviceManager;
 class KProcess;
 class KComboBox;
-
+class K3bFileTreeView;
+class K3bDevice;
 
 /**
   *@author Sebastian Trueg
@@ -53,10 +53,11 @@ class K3bDirView : public QVBox
  protected slots:
   void slotDirActivated( const KURL& );
   void slotDirActivated( const QString& );
-  void slotDriveActivated( const QString&  );
+  void slotDeviceActivated( K3bDevice*  );
   void slotCheckDvd( const QString& );
  // void slotCDDirActivated( const QString&  );
   void slotUpdateURLCombo( const KURL& url );
+  void slotMountDevice( const QString& );
 
  private:
   K3bCdView* m_cdView;
@@ -64,7 +65,7 @@ class K3bDirView : public QVBox
   K3bFileView* m_fileView;
   KComboBox* m_urlCombo;
   QSplitter* m_mainSplitter;
-  KioTree* m_kiotree;
+  K3bFileTreeView* m_fileTreeView;
   bool m_initialized;
 };
 

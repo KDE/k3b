@@ -37,6 +37,7 @@
 #include <qiconset.h>
 #include <qvaluelist.h>
 #include <qlabel.h>
+#include <qwidgetstack.h>
 
 // KDE-includes
 #include <kmimetype.h>
@@ -54,18 +55,15 @@
 #include <kprocess.h>
 #include <kio/job.h>
 #include <kcombobox.h>
+#include <kfiletreeview.h>
 
-#include "kiotree/kiotree.h"
-#include "kiotree/kiotreemodule.h"
-#include "kiotree/kiotreeitem.h"
-#include "kiotree/kiotreetoplevelitem.h"
 #include "rip/k3bcdview.h"
 #include "k3bfileview.h"
 #include "device/k3bdevicemanager.h"
 #include "device/k3bdevice.h"
 #include "k3b.h"
 #include "rip/k3bfilmview.h"
-
+#include "k3bfiletreeview.h"
 
 
 
@@ -79,12 +77,9 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
   QVBox* box  = new QVBox( m_mainSplitter );
   QVBox* box2 = new QVBox( m_mainSplitter );
 
-  m_kiotree = new KioTree( box );
-  m_kiotree->addTopLevelDir( KURL( QDir::homeDirPath() ), i18n("Home") );
-  m_kiotree->addTopLevelDir( KURL( "/" ), i18n("Root") );
-  //KURL url = KURL();
-  //url.setProtocol("k3b_cdview");
-  //m_kiotree->addTopLevelDir( url, "Audio CD Init");
+
+  m_fileTreeView = new K3bFileTreeView( box );
+  m_fileTreeView->addDefaultBranches();
 
   m_fileView = new K3bFileView(box2, "fileview");
 
@@ -117,12 +112,17 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
 
   connect( m_urlCombo, SIGNAL(returnPressed(const QString&)), this, SLOT(slotDirActivated(const QString&)) );
   connect( m_urlCombo, SIGNAL(activated(const QString&)), this, SLOT(slotDirActivated(const QString&)) );
+
   //connect( m_cdView, SIGNAL(showDirView(const QString&)), this, SLOT(slotCDDirActivated(const QString&)) );
-  connect( m_kiotree, SIGNAL(urlActivated(const KURL&)), this, SLOT(slotDirActivated(const KURL&)) );
-  connect( m_fileView, SIGNAL(urlEntered(const KURL&)), m_kiotree, SLOT(followURL(const KURL&)) );
+
+  connect( m_fileTreeView, SIGNAL(urlExecuted(const KURL&)), this, SLOT(slotDirActivated(const KURL&)) );
+  connect( m_fileTreeView, SIGNAL(deviceExecuted(K3bDevice*)), this, SLOT(slotDeviceActivated(K3bDevice*)) );
+
+  connect( m_fileView, SIGNAL(urlEntered(const KURL&)), m_fileTreeView, SLOT(followUrl(const KURL&)) );
   connect( m_fileView, SIGNAL(urlEntered(const KURL&)), this, SLOT(slotUpdateURLCombo(const KURL&)) );
+
   connect( m_cdView, SIGNAL(notSupportedDisc( const QString& ) ), this, SLOT( slotCheckDvd( const QString& )) );
-  connect( m_filmView, SIGNAL(notSupportedDisc( const QString& ) ), this, SLOT(slotDriveActivated( const QString& )) );
+  connect( m_filmView, SIGNAL(notSupportedDisc( const QString& ) ), this, SLOT(slotMountDevice( const QString& )) );
 
 }
 
@@ -132,46 +132,22 @@ K3bDirView::~K3bDirView()
 
 void K3bDirView::setupFinalize( K3bDeviceManager *dm )
 {
-  // perhaps this should go into a slot and be called everytime the devices change
-  // for that we need a signal (or better an event) in K3bDeviceManager that informs about changes
-
-  m_fileView->show();
-  K3bDevice *dev;
-  KURL result;
-  QPtrList<K3bDevice> devices = dm->readingDevices();
-  for ( dev = devices.first(); dev != 0; dev=devices.next() ) {
-    KURL url = KURL( dev->devicename() );
-    url.setProtocol("k3b_cdview");
-    result = url;
-    m_kiotree->addTopLevelDir( url, i18n("Drive: ") + dev->vendor() );
-    for( int i=0; i<m_kiotree->childCount(); i++){
-      KioTreeItem *item = dynamic_cast<KioTreeItem*> (m_kiotree->itemAtIndex(i) );
-      KURL url = item->externalURL();
-      if( url.path().find( dev->devicename() ) == 0){
-	item->setPixmap(0, KGlobal::iconLoader()->loadIcon( "cdrom_unmount", KIcon::NoGroup, KIcon::SizeSmall ) );
-      }
-    }
-  }
-  devices = dm->burningDevices();
-  for ( dev=devices.first(); dev != 0; dev=devices.next() ){
-    KURL url = KURL(dev->devicename() );
-    url.setProtocol("k3b_cdview");
-    m_kiotree->addTopLevelDir( url, i18n("Drive: ") + dev->vendor() );
-    for( int i=0; i<m_kiotree->childCount(); i++){
-      KioTreeItem *item = dynamic_cast<KioTreeItem*> (m_kiotree->itemAtIndex(i) );
-      KURL url = item->externalURL();
-      if( url.path().find(dev->devicename() ) == 0){
-	item->setPixmap(0, KGlobal::iconLoader()->loadIcon( "cdwriter_unmount", KIcon::NoGroup, KIcon::SizeSmall ) );
-      }
-    }
-  }
-  //return result;
+  m_fileTreeView->addCdDeviceBranches( dm );
 }
 
 
-void K3bDirView::slotDriveActivated(const QString& device)
+void K3bDirView::slotDeviceActivated( K3bDevice* dev )
 {
-  K3bDevice *dev = k3bMain()->deviceManager()->deviceByName( device );
+   m_fileView->hide();
+   m_filmView->hide();
+   m_cdView->show();
+   m_cdView->showCdView( dev->devicename() );
+}
+
+
+void K3bDirView::slotMountDevice( const QString& device )
+{
+  K3bDevice* dev = k3bMain()->deviceManager()->deviceByName( device );
   QString mountPoint = dev->mountPoint();
   if( !mountPoint.isEmpty() ){
     KIO::mount( true, "autofs", dev->ioctlDevice(), mountPoint, true );
@@ -180,13 +156,15 @@ void K3bDirView::slotDriveActivated(const QString& device)
   slotDirActivated( url );
 }
 
-void K3bDirView::slotCheckDvd( const QString& device ) {
-    // cdview calls this so hide cd
-    m_cdView->hide();
-    K3bDevice *dev = k3bMain()->deviceManager()->deviceByName( device );
-    // if insert disc can't be read a notSupportDisc(string device) signal is emitted -> mount cd and show data
-    m_filmView->setDevice( device );
-    m_filmView->show();
+
+void K3bDirView::slotCheckDvd( const QString& device ) 
+{
+  // cdview calls this so hide cd
+  m_cdView->hide();
+  K3bDevice *dev = k3bMain()->deviceManager()->deviceByName( device );
+  // if insert disc can't be read a notSupportDisc(string device) signal is emitted -> mount cd and show data
+  m_filmView->setDevice( device );
+  m_filmView->show();
 }
 
 void K3bDirView::slotUpdateURLCombo( const KURL& url )
@@ -204,18 +182,13 @@ void K3bDirView::slotDirActivated( const QString& url )
 
 void K3bDirView::slotDirActivated( const KURL& url )
 {
-  if( url.protocol().compare("k3b_cdview") !=0 ){
-    m_fileView->setUrl(url, true);
-    m_urlCombo->setEditText( url.path() );
-    m_fileView->show();
-    m_cdView->hide();
-    m_filmView->hide();
-  } else {
-    m_fileView->hide();
-    m_filmView->hide();
-    m_cdView->show();
-    m_cdView->showCdView( url.path() );
-  }
+  m_fileView->setUrl(url, true);
+  m_urlCombo->setEditText( url.path() );
+
+  m_fileView->show();
+
+  m_cdView->hide();
+  m_filmView->hide();
 }
 
 
