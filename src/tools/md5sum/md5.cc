@@ -41,6 +41,7 @@ documentation and/or software.
  */
 
 
+// Modified to compile with gcc 3.2 by Sebastian Trueg
 
 
 
@@ -49,8 +50,10 @@ documentation and/or software.
 
 #include <assert.h>
 #include <strings.h>
-#include <iostream.h>
+#include <iostream>
 
+
+using namespace std;
 
 
 
@@ -122,7 +125,7 @@ void MD5::update(FILE *file){
   unsigned char buffer[1024];
   int len;
 
-  while (len=fread(buffer, 1, 1024, file))
+  while( (len=fread(buffer, 1, 1024, file)) )
     update(buffer, len);
 
   fclose (file);
@@ -143,7 +146,7 @@ void MD5::update(istream& stream){
   int len;
 
   while (stream.good()){
-    stream.read(buffer, 1024); // note that return value of read is unusable.
+    stream.read((char*)buffer, 1024); // note that return value of read is unusable.
     len=stream.gcount();
     update(buffer, len);
   }
@@ -164,7 +167,7 @@ void MD5::update(ifstream& stream){
   int len;
 
   while (stream.good()){
-    stream.read(buffer, 1024); // note that return value of read is unusable.
+    stream.read((char*)buffer, 1024); // note that return value of read is unusable.
     len=stream.gcount();
     update(buffer, len);
   }
@@ -271,7 +274,7 @@ char *MD5::hex_digest(){
   if (!finalized){
     cerr << "MD5::hex_digest:  Can't get digest if you haven't "<<
       "finalized the digest!" <<endl;
-    return "";
+    return 0;
   }
 
   for (i=0; i<16; i++)

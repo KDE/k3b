@@ -39,9 +39,14 @@ documentation and/or software.
 
 */
 
+// Modified to compile with gcc 3.2 by Sebastian Trueg
+
 #include <stdio.h>
-#include <fstream.h>
-#include <iostream.h>
+#include <fstream>
+#include <iostream>
+
+
+using namespace std;
 
 class MD5 {
 
