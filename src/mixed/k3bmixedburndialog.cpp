@@ -195,7 +195,7 @@ void K3bMixedBurnDialog::saveUserDefaults()
 
 void K3bMixedBurnDialog::slotOk()
 {
-  kdDebug() << "Write a mixed mode project" << endl;
+  K3bProjectBurnDialog::slotOk();
 }
 
 

@@ -24,8 +24,8 @@
 #include <kdebug.h>
 
 
-K3bJob::K3bJob( QObject* parent )
-  : QObject( parent )
+K3bJob::K3bJob( QObject* parent, const char* name )
+  : QObject( parent, name )
 {
 }
 

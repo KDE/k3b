@@ -96,6 +96,14 @@ void K3bExternalBin::addFeature( const QString& f )
 }
 
 
+void K3bExternalBin::addUserParameter( const QString& p )
+{
+  m_userParameters.append( p );
+}
+
+
+
+
 K3bExternalBinManager::K3bExternalBinManager( QObject* parent )
   : QObject( parent )
 {

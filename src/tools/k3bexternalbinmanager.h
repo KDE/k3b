@@ -24,13 +24,17 @@ class K3bExternalBin
 
   const QString& name() const;
   bool isEmpty() const;
+  const QStringList& userParameters() const { return m_userParameters; }
 
   bool hasFeature( const QString& ) const;
   void addFeature( const QString& );
+  void addUserParameter( const QString& );
+  void clearUserParameters() { m_userParameters.clear(); }
 
  private:
   QString m_name;
   QStringList m_features;
+  QStringList m_userParameters;
 };
 
 

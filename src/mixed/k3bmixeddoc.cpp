@@ -1,4 +1,5 @@
 #include "k3bmixeddoc.h"
+#include "k3bmixedjob.h"
 
 #include "k3bmixedview.h"
 #include "../data/k3bdatadoc.h"
@@ -57,7 +58,7 @@ int K3bMixedDoc::numOfTracks() const
 
 K3bBurnJob* K3bMixedDoc::newBurnJob()
 {
-  return 0;
+  return new K3bMixedJob( this );
 }
 
 

@@ -42,7 +42,7 @@ class K3bJob : public QObject
   enum MessageType { STATUS, PROCESS, ERROR, INFO };
 
  protected:
-  K3bJob( QObject* parent = 0 );
+  K3bJob( QObject* parent = 0, const char* name = 0 );
 
  public slots:
   virtual void start() = 0;
