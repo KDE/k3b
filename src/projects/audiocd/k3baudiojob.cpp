@@ -110,7 +110,7 @@ void K3bAudioJob::start()
 	    break;
 	  }
 	}
-	if( zeroPregap && writer->supportsRawWriting() )
+	if( zeroPregap && writer()->supportsRawWriting() )
 	  m_usedWritingMode = K3b::RAW;
 	else
 	  m_usedWritingMode = K3b::DAO;
