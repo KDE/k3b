@@ -84,6 +84,9 @@ class K3bListViewItem : public KListViewItem
   void setBackgroundColor( int col, const QColor& );
   void setForegroundColor( int col, const QColor& );
 
+  void setDisplayProgressBar( int col, bool );
+  void setProgress( int, int );
+
   virtual void paintCell( QPainter* p, const QColorGroup& cg, int col, int width, int align );
 
  private:
@@ -99,6 +102,8 @@ class K3bListViewItem : public KListViewItem
 
 class K3bListView : public KListView
 {
+  friend class K3bListViewItem;
+
   Q_OBJECT
 
  public:
