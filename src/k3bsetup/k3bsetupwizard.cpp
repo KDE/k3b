@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  *
@@ -40,13 +40,17 @@ K3bSetupWizard::K3bSetupWizard( K3bSetup* setup, QWidget* parent,  const char* n
   connect( cancelButton(), SIGNAL(clicked()), this, SLOT(close()) );
 
 
-  (void)new WelcomeTab( 1, 6, this );
-  (void)new ExternalBinTab( 2, 6, this );
-  (void)new DeviceTab( 3, 6, this );
-  (void)new NoWriterTab( 3, 6, this );
+  setHelpEnabled(new WelcomeTab( 1, 6, this ), false);
+  setHelpEnabled(new ExternalBinTab( 2, 6, this ), false);
+  setHelpEnabled(new DeviceTab( 3, 6, this ), false);
+  setHelpEnabled(new NoWriterTab( 3, 6, this ), false);
   m_fstabTab = new FstabEntriesTab( 4, 6, this );
-  (void)new PermissionTab( 5, 6, this );
-  setFinishEnabled( new FinishTab( 6, 6, this ), true );
+  setHelpEnabled( m_fstabTab, false);
+  setHelpEnabled(new PermissionTab( 5, 6, this ), false);
+
+  FinishTab * tmpTab = new FinishTab( 6, 6, this );
+  setHelpEnabled(tmpTab, false);
+  setFinishEnabled( tmpTab, true );
 
   setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
 }
@@ -63,12 +67,12 @@ void K3bSetupWizard::showPage( QWidget* page )
   KWizard::showPage( page );
 }
 
-							    
+
 void K3bSetupWizard::closeEvent( QCloseEvent* e )
 {
   if( !m_accepted ) {
-    if( KMessageBox::questionYesNo( this, 
-				    i18n("Do you really want to discard all changes?"), 
+    if( KMessageBox::questionYesNo( this,
+				    i18n("Do you really want to discard all changes?"),
 				  i18n("Close") )
 	== KMessageBox::Yes )
       e->accept();
