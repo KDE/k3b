@@ -47,13 +47,13 @@ K3bCloneJob::K3bCloneJob( QObject* parent, const char* name )
     m_readerDevice(0),
     m_writerJob(0),
     m_readcdReader(0),
+    m_removeImageFiles(false),
     m_canceled(false),
     m_running(false),
     m_simulate(false),
     m_burnfree(true),
     m_speed(1),
     m_copies(1),
-    m_removeImageFiles(false),
     m_onlyCreateImage(false)
 {
   d = new Private;
@@ -108,8 +108,8 @@ void K3bCloneJob::start()
   prepareReader();
 
   if (  K3bEmptyDiscWaiter::wait( readingDevice(),
-				K3bCdDevice::STATE_COMPLETE,
-				K3bCdDevice::MEDIA_WRITABLE_CD|MEDIA_CD_ROM ) == -1 ) {
+				  K3bCdDevice::STATE_COMPLETE,
+				  K3bCdDevice::MEDIA_WRITABLE_CD|K3bCdDevice::MEDIA_CD_ROM ) == -1 ) {
     m_running = false;
     emit canceled();
     emit finished(false);

@@ -73,11 +73,12 @@ class K3bCloneJob : public K3bBurnJob
   K3bCdDevice::CdDevice* m_writerDevice;
   K3bCdDevice::CdDevice* m_readerDevice;
   QString m_imagePath;
-  bool m_noCorrection;
-  bool m_removeImageFiles;
 
   K3bCdrecordWriter* m_writerJob;
   K3bReadcdReader* m_readcdReader;
+
+  bool m_noCorrection;
+  bool m_removeImageFiles;
 
   bool m_canceled;
   bool m_running;
