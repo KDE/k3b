@@ -163,7 +163,7 @@ void K3bCdCopyJob::cdrdaoCopy()
 
   if( !k3bMain()->externalBinManager()->foundBin( "cdrdao" ) ) {
     kdDebug() << "(K3bAudioJob) could not find cdrdao executable" << endl;
-    emit infoMessage( i18n("Cdrdao executable not found."), K3bJob::ERROR );
+    emit infoMessage( i18n("cdrdao executable not found."), K3bJob::ERROR );
     cancelAll();
     return;
   }
@@ -235,15 +235,15 @@ void K3bCdCopyJob::cdrdaoCopyFinished()
 	
       default:
 	// no recording device and also other errors!! :-(
-	emit infoMessage( i18n("Cdrdao returned some error!"), K3bJob::ERROR );
-	emit infoMessage( i18n("Sorry, no error handling yet!") + " :-((", K3bJob::ERROR );
-	emit infoMessage( i18n("Please send me an email with the last output..."), K3bJob::ERROR );
+	emit infoMessage( i18n("cdrdao returned an error!"), K3bJob::ERROR );
+	emit infoMessage( i18n("Error handling not implemented yet!"), K3bJob::ERROR );
+	emit infoMessage( i18n("Please send an email to the author with the last output..."), K3bJob::ERROR );
 	
 	cancelAll();
       }
   }
   else {
-    emit infoMessage( i18n("Cdrdao did not exit cleanly!"), K3bJob::ERROR );
+    emit infoMessage( i18n("cdrdao did not exit cleanly!"), K3bJob::ERROR );
     cancelAll();
   }
 }
@@ -263,7 +263,7 @@ void K3bCdCopyJob::cdrdaoRead()
 
   if( !k3bMain()->externalBinManager()->foundBin( "cdrdao" ) ) {
     kdDebug() << "(K3bAudioJob) could not find cdrdao executable" << endl;
-    emit infoMessage( i18n("Cdrdao executable not found."), K3bJob::ERROR );
+    emit infoMessage( i18n("cdrdao executable not found."), K3bJob::ERROR );
     cancelAll();
     return;
   }
@@ -318,15 +318,15 @@ void K3bCdCopyJob::cdrdaoReadFinished()
 	
       default:
 	// no recording device and also other errors!! :-(
-	emit infoMessage( i18n("Cdrdao returned some error!"), K3bJob::ERROR );
-	emit infoMessage( i18n("Sorry, no error handling yet!") + " :-((", K3bJob::ERROR );
-	emit infoMessage( i18n("Please send me an email with the last output..."), K3bJob::ERROR );
+	emit infoMessage( i18n("cdrdao returned an error!"), K3bJob::ERROR );
+	emit infoMessage( i18n("Error handling not implemented yet!"), K3bJob::ERROR );
+	emit infoMessage( i18n("Please send an email to the author with the last output..."), K3bJob::ERROR );
 	
 	cancelAll();
       }
   }
   else {
-    emit infoMessage( i18n("Cdrdao did not exit cleanly!"), K3bJob::ERROR );
+    emit infoMessage( i18n("cdrdao did not exit cleanly!"), K3bJob::ERROR );
     cancelAll();
   }
 }
@@ -343,7 +343,7 @@ void K3bCdCopyJob::cdrdaoWrite()
 
   if( !k3bMain()->externalBinManager()->foundBin( "cdrdao" ) ) {
     kdDebug() << "(K3bAudioJob) could not find cdrdao executable" << endl;
-    emit infoMessage( i18n("Cdrdao executable not found."), K3bJob::ERROR );
+    emit infoMessage( i18n("cdrdao executable not found."), K3bJob::ERROR );
     cancelAll();
     return;
   }
@@ -404,15 +404,15 @@ void K3bCdCopyJob::cdrdaoWriteFinished()
 	
       default:
 	// no recording device and also other errors!! :-(
-	emit infoMessage( i18n("Cdrdao returned some error!"), K3bJob::ERROR );
-	emit infoMessage( i18n("Sorry, no error handling yet!") + " :-((", K3bJob::ERROR );
-	emit infoMessage( i18n("Please send me an email with the last output..."), K3bJob::ERROR );
+	emit infoMessage( i18n("cdrdao returned an error!"), K3bJob::ERROR );
+	emit infoMessage( i18n("Error handling not implemented yet!"), K3bJob::ERROR );
+	emit infoMessage( i18n("Please send an email to the author with the last output..."), K3bJob::ERROR );
 	
 	cancelAll();
       }
   }
   else {
-    emit infoMessage( i18n("Cdrdao did not exit cleanly!"), K3bJob::ERROR );
+    emit infoMessage( i18n("cdrdao did not exit cleanly!"), K3bJob::ERROR );
     cancelAll();
   }
 }

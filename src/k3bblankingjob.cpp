@@ -56,7 +56,7 @@ void K3bBlankingJob::start()
 
   if( !k3bMain()->externalBinManager()->foundBin( "cdrecord" ) ) {
     kdDebug() << "(K3bBlankingJob) could not find cdrecord executable" << endl;
-    emit infoMessage( i18n("Cdrecord executable not found."), K3bJob::ERROR );
+    emit infoMessage( i18n("cdrecord executable not found."), K3bJob::ERROR );
 
     emit finished( false );
     return;
@@ -156,7 +156,7 @@ void K3bBlankingJob::slotCdrecordFinished()
 				
 	default:
 	  // no recording device and also other errors!! :-(
-	  emit infoMessage( i18n("Cdrecord returned some error!"), K3bJob::ERROR );
+	  emit infoMessage( i18n("cdrecord returned an error!"), K3bJob::ERROR );
 	  emit infoMessage( i18n("Sorry, no error handling yet! :-(("), K3bJob::ERROR );
 	  emit finished( false );
 	  break;

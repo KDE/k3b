@@ -157,7 +157,7 @@ void K3bIsoImageJob::slotWrite()
   // use cdrecord to burn the cd
   if( !k3bMain()->externalBinManager()->foundBin( "cdrecord" ) ) {
     kdDebug() << "(K3bAudioJob) could not find cdrecord executable" << endl;
-    emit infoMessage( i18n("Cdrecord executable not found."), K3bJob::ERROR );
+    emit infoMessage( i18n("cdrecord executable not found."), K3bJob::ERROR );
     emit finished( false );
     return;
   }
@@ -252,7 +252,7 @@ void K3bIsoImageJob::slotWriteCueBin()
 
   if( !k3bMain()->externalBinManager()->foundBin( "cdrdao" ) ) {
     kdDebug() << "(K3bAudioJob) could not find cdrdao executable" << endl;
-    emit infoMessage( i18n("Cdrdao executable not found."), K3bJob::ERROR );
+    emit infoMessage( i18n("cdrdao executable not found."), K3bJob::ERROR );
     emit finished( false );
     return;
   }
@@ -543,9 +543,9 @@ void K3bIsoImageJob::slotCdrdaoFinished()
 				
 	default:
 	  // no recording device and also other errors!! :-(
-	  emit infoMessage( i18n("Cdrdao returned some error! (code %1)").arg(m_cdrdaoProcess->exitStatus()), K3bJob::ERROR );
-	  emit infoMessage( i18n("Sorry, no error handling yet!") + " :-((", K3bJob::ERROR );
-	  emit infoMessage( i18n("Please send me a mail with the last output..."), K3bJob::ERROR );
+	  emit infoMessage( i18n("cdrdao returned an error! (code %1)").arg(m_cdrdaoProcess->exitStatus()), K3bJob::ERROR );
+	  emit infoMessage( i18n("Error handling not implemented yet!"), K3bJob::ERROR );
+	  emit infoMessage( i18n("Please send an email to the author with the last output..."), K3bJob::ERROR );
 	  unblock = true;
 
 	  emit finished( false );
@@ -554,7 +554,7 @@ void K3bIsoImageJob::slotCdrdaoFinished()
     }
   else
     {
-      emit infoMessage( i18n("Cdrdao did not exit cleanly!"), K3bJob::ERROR );
+      emit infoMessage( i18n("cdrdao did not exit cleanly!"), K3bJob::ERROR );
       unblock = true;
       emit finished( false );
       return;

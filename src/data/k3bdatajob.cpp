@@ -115,7 +115,7 @@ void K3bDataJob::fetchMultiSessionInfo()
 
   if( !k3bMain()->externalBinManager()->foundBin( "cdrecord" ) ) {
     kdDebug() << "(K3bAudioJob) could not find cdrecord executable" << endl;
-    emit infoMessage( i18n("Cdrecord executable not found."), K3bJob::ERROR );
+    emit infoMessage( i18n("cdrecord executable not found."), K3bJob::ERROR );
     cancelAll();
     return;
   }
@@ -303,7 +303,7 @@ void K3bDataJob::writeCD()
   // use cdrecord to burn the cd
   if( !k3bMain()->externalBinManager()->foundBin( "cdrecord" ) ) {
     kdDebug() << "(K3bAudioJob) could not find cdrecord executable" << endl;
-    emit infoMessage( i18n("Cdrecord executable not found."), K3bJob::ERROR );
+    emit infoMessage( i18n("cdrecord executable not found."), K3bJob::ERROR );
     cancelAll();
     return;
   }
