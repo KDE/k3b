@@ -404,7 +404,7 @@ bool K3bDataJob::prepareWriterJob()
     if( m_doc->multiSessionMode() == K3bDataDoc::NONE )
       writer->addArgument( "-data" );  // default to mode1
     else
-      writer->addArgument( "-xa2" );
+      writer->addArgument( "-xa1" );
 
     if( m_doc->onTheFly() ) {
       writer->addArgument( QString("-tsize=%1s").arg(m_isoImager->size()) )->addArgument("-");
@@ -443,7 +443,7 @@ bool K3bDataJob::prepareWriterJob()
       else {
 	*s << "CD_ROM_XA" << "\n";
 	*s << "\n";
-	*s << "TRACK MODE2" << "\n";
+	*s << "TRACK MODE2_FORM1" << "\n";
       }
       if( m_doc->onTheFly() )
 	*s << "DATAFILE \"-\" " << m_isoImager->size()*2048 << "\n";
