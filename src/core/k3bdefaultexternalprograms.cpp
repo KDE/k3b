@@ -58,6 +58,7 @@ void K3b::addDefaultPrograms( K3bExternalBinManager* m )
   m->addProgram( new K3bEMovixProgram() );
   m->addProgram( new K3bNormalizeProgram() );
   m->addProgram( new K3bGrowisofsProgram() );
+  m->addProgram( new K3bDvdformatProgram() );
 }
 
 
@@ -816,10 +817,69 @@ bool K3bGrowisofsProgram::scan( const QString& p )
     bin->version = out.output().mid( pos, endPos-pos );
   }
   else {
-    kdDebug() << "(K3bCdrecordProgram) could not start " << path << endl;
+    kdDebug() << "(K3bGrowisofsProgram) could not start " << path << endl;
     return false;
   }
 
   addBin( bin );
   return true;
 }
+
+
+K3bDvdformatProgram::K3bDvdformatProgram()
+  : K3bExternalProgram( "dvd+rw-format" )
+{
+}
+
+bool K3bDvdformatProgram::scan( const QString& p )
+{
+  if( p.isEmpty() )
+    return false;
+
+  QString path = p;
+  QFileInfo fi( path );
+  if( fi.isDir() ) {
+    if( path[path.length()-1] != '/' )
+      path.append("/");
+    path.append("dvd+rw-format");
+  }
+
+  if( !QFile::exists( path ) )
+    return false;
+
+  K3bExternalBin* bin = 0;
+
+  // probe version
+  KProcess vp;
+  OutputCollector out( &vp );
+
+  vp << path;
+  if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
+    int pos = out.output().find( "DVD±RW format utility" );
+    if( pos < 0 )
+      return false;
+
+    pos = out.output().find( "version", pos );
+    if( pos < 0 )
+      return false;
+
+    pos += 8;
+
+    // the version ends in a dot.
+    int endPos = out.output().find( QRegExp("\\.\\D"), pos );
+    if( endPos < 0 )
+      return false;
+
+    bin = new K3bExternalBin( this );
+    bin->path = path;
+    bin->version = out.output().mid( pos, endPos-pos );
+  }
+  else {
+    kdDebug() << "(K3bDvdformatProgram) could not start " << path << endl;
+    return false;
+  }
+
+  addBin( bin );
+  return true;
+}
+
