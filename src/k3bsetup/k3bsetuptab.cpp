@@ -76,3 +76,6 @@ bool K3bSetupTab::appropriate()
 {
   return true;
 }
+
+
+#include "k3bsetuptab.moc"

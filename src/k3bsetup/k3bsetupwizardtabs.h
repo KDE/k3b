@@ -153,13 +153,14 @@ class FinishTab : public K3bSetupTab
  public:
   FinishTab( int, int, K3bSetupWizard* );
 
-  /* used to update info ;-) */
-  bool appropriate();
+ private slots:
+  void slotWritingSetting( const QString& s );
+  void slotSettingWritten( bool success, const QString& comment );
+  void slotError( const QString& error );
 
  private:
-  void updateChangesView();
-
   KListView* m_viewChanges;
+  KListViewItem* m_currentInfoViewItem;
 };
 
 #endif

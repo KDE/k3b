@@ -810,7 +810,7 @@ FinishTab::FinishTab( int i, int o, K3bSetupWizard* wizard )
 			       "and then enjoy the new ease of cd writing with Linux/KDE.</p>") );
   finishedLabel->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
 
-  QGroupBox* groupChanges = new QGroupBox( i18n("Changes"), main );
+  QGroupBox* groupChanges = new QGroupBox( i18n("Progress"), main );
   groupChanges->setColumnLayout( 1, Qt::Vertical );
   groupChanges->layout()->setSpacing( KDialog::spacingHint() );
   groupChanges->layout()->setMargin( KDialog::marginHint() );
@@ -827,36 +827,48 @@ FinishTab::FinishTab( int i, int o, K3bSetupWizard* wizard )
   mainGrid->setRowStretch( 1, 1 );
 
   setMainWidget( main );
+
+  connect( setup(), SIGNAL(writingSettings()), m_viewChanges, SLOT(clear()) );
+  connect( setup(), SIGNAL(writingSetting(const QString&)), this, SLOT(slotWritingSetting(const QString&)) );
+  connect( setup(), SIGNAL(error(const QString&)), this, SLOT(slotError(const QString&)) );
+  connect( setup(), SIGNAL(settingWritten(bool, const QString&)), this, SLOT(slotSettingWritten(bool, const QString&)) );
+
+  m_currentInfoViewItem = 0;
 }
 
 
-bool FinishTab::appropriate()
+void FinishTab::slotWritingSetting( const QString& s )
 {
-  // OK, this is really a hack, but it's kind of a beautiful one ;-)
-  updateChangesView();
-
-  return true;
+  // KListView adds on the top per default and that's not what we want
+  if( m_currentInfoViewItem )
+    m_currentInfoViewItem = new KListViewItem( m_viewChanges, m_currentInfoViewItem, s );
+  else
+    m_currentInfoViewItem = new KListViewItem( m_viewChanges, s );
 }
 
 
-void FinishTab::updateChangesView()
+void FinishTab::slotSettingWritten( bool success, const QString& comment )
 {
-  m_viewChanges->clear();
+  if( m_currentInfoViewItem ) {
+    m_currentInfoViewItem->setPixmap( 1, (success ? SmallIcon("apply") : SmallIcon("cancel")) );
+    m_currentInfoViewItem->setText( 2, comment );
+  }
+}
 
-  KListViewItem* settingsRootItem = new KListViewItem( m_viewChanges, i18n("Settings") );
-  KListViewItem* settingsItem;
 
-  settingsItem = new KListViewItem( settingsRootItem, i18n("Create fstab entries for all cd devices") );
-  settingsItem->setPixmap( 1, (setup()->createFstabEntries() ? SmallIcon("apply") : SmallIcon("cancel")) );
+void FinishTab::slotError( const QString& comment )
+{
+  KListViewItem* item = 0;
 
-  settingsItem = new KListViewItem( settingsRootItem, i18n("Change permissions for all cd devices") );
-  settingsItem->setPixmap( 1, (setup()->applyDevicePermissions() ? SmallIcon("apply") : SmallIcon("cancel")) );
+  if( m_currentInfoViewItem ) {
+    item = new KListViewItem( m_currentInfoViewItem, i18n("Error") + ": ", comment );
+    m_currentInfoViewItem->setOpen( true );
+  }
+  else {
+    item = new KListViewItem( m_viewChanges, i18n("Error") + ": ", comment );
+  }
 
-  settingsItem = new KListViewItem( settingsRootItem, i18n("Change permissions for external programs") );
-  settingsItem->setPixmap( 1, (setup()->applyExternalProgramPermissions() ? SmallIcon("apply") : SmallIcon("cancel")) );
-  
-  settingsRootItem->setOpen( true );
-
+  item->setPixmap( 0, SmallIcon("cancel") );
 }
 
 // ========================================================================================================== FINISH-TAB ==
@@ -884,3 +896,6 @@ K3bDeviceViewItem::K3bDeviceViewItem( K3bDevice* dev, KListViewItem* parent, KLi
 {
   device = dev;
 }
+
+
+#include "k3bsetupwizardtabs.moc"

@@ -87,21 +87,34 @@ K3bSetup::~K3bSetup()
 
 bool K3bSetup::saveConfig()
 {
+  emit writingSettings();
+
   // save devices
   // -----------------------------------------------------------------------
+  emit writingSetting( i18n("Saving cd devices to global configuration.") );
+
   if( m_config->hasGroup( "Devices" ) )
     m_config->deleteGroup( "Devices" );
   m_config->setGroup( "Devices" );
   m_deviceManager->saveConfig( m_config );
+
+  emit settingWritten( true, i18n("Success") );
   // -----------------------------------------------------------------------
 
   // save external programs
   // -----------------------------------------------------------------------
+  emit writingSetting( i18n("Writing external program paths to global configuration.") );
+
   if( m_config->hasGroup( "External Programs" ) )
     m_config->deleteGroup( "External Programs" );
   m_config->setGroup( "External Programs" );
   m_externalBinManager->saveConfig( m_config );
+
+  emit settingWritten( true, i18n("Success") );
   // -----------------------------------------------------------------------
+
+
+  emit writingSetting( i18n("Writing permission settings to global configuration.") );
 
   if( m_config->hasGroup( "Permissions" ) )
     m_config->deleteGroup( "Permissions" );
@@ -109,11 +122,16 @@ bool K3bSetup::saveConfig()
   m_config->writeEntry( "cdwriting_group", m_cdwritingGroup );
   m_config->writeEntry( "users", m_userList );
 
+  emit settingWritten( true, i18n("Success") );
+
+  uint groupid;
+  if( m_applyDevicePermissions || m_applyExternalBinPermission )
+    groupid = createCdWritingGroup();
 
   if( m_applyDevicePermissions )
-    doApplyDevicePermissions();
+    doApplyDevicePermissions(groupid);
   if( m_applyExternalBinPermission )
-    doApplyExternalProgramPermissions();
+    doApplyExternalProgramPermissions(groupid);
   if( m_createFstabEntries )
     doCreateFstabEntries();
 
@@ -229,9 +247,9 @@ uint K3bSetup::createCdWritingGroup()
 }
 
 
-void K3bSetup::doApplyDevicePermissions()
+void K3bSetup::doApplyDevicePermissions( uint groupId )
 {
-  uint groupId = createCdWritingGroup();
+  emit writingSetting( i18n("Changing cd device permissions.") );
 
   // change owner for all devices and
   // change permissions for all devices
@@ -245,6 +263,7 @@ void K3bSetup::doApplyDevicePermissions()
     }
     else {
       qDebug("(K3bSetup) Could not find generic device: " + dev->genericDevice() );
+      emit error( i18n("Could not find generic device (%1)").arg(dev->genericDevice()) );
     }
 
     if( QFile::exists( dev->ioctlDevice() ) ) {
@@ -253,18 +272,19 @@ void K3bSetup::doApplyDevicePermissions()
     }
     else {
       qDebug("(K3bSetup) Could not find ioctl device: " + dev->ioctlDevice() );
+      emit error( i18n("Could not find ioctl device (%1)").arg(dev->ioctlDevice()) );
     }
 
 
     dev = m_deviceManager->allDevices().next();
   }
+
+  emit settingWritten( true, i18n("Success") );
 }
 
 
-void K3bSetup::doApplyExternalProgramPermissions()
+void K3bSetup::doApplyExternalProgramPermissions( uint groupId )
 {
-  uint groupId = createCdWritingGroup();
-
   static const char* programs[] = { "cdrecord",
 				    "mkisofs",
 				    "cdrdao" };
@@ -272,28 +292,40 @@ void K3bSetup::doApplyExternalProgramPermissions()
 
   for( int i = 0; i < NUM_PROGRAMS; ++i ) {
     K3bExternalBin* binObject = m_externalBinManager->binObject( programs[i] );
+
+    emit writingSetting( i18n("Changing permissions for %1.").arg( programs[i] ) );
+
     if( QFile::exists(binObject->path) ) {
       if( !binObject->version.isEmpty() ) {
 	qDebug("(K3bSetup) setting permissions for %s.", programs[i] );
 	chown( QFile::encodeName(binObject->path), 0, groupId );
 	chmod( QFile::encodeName(binObject->path), S_ISUID|S_IRUSR|S_IWUSR|S_IXUSR|S_IXGRP );
+	emit settingWritten( true, i18n("Success") );
       }
-      else
-	qDebug("(K3bSetup) %s is no not %s.", binObject->path.latin1(), programs[i] );
+      else {
+	emit settingWritten( false, i18n("%1 is no %2 executable.").arg(binObject->path).arg(programs[i]) );
+	qDebug("(K3bSetup) %s is not %s.", binObject->path.latin1(), programs[i] );
+      }
     }
-    else
+    else {
+      emit settingWritten( false, i18n("Could not find %1.").arg(programs[i]) );
       qDebug("(K3bSetup) could not find %s.", programs[i] );
+    }
   }
 }
 
 
 void K3bSetup::doCreateFstabEntries()
 {
+  emit writingSetting( i18n("Saving old %1 to %2").arg("/etc/fstab").arg("/etc/fstab.k3bsetup") );
+
   qDebug("(K3bSetup) creating new /etc/fstab");
   qDebug("(K3bSetup) saving backup to /etc/fstab.k3bsetup");
   
   // move /etc/fstab to /etc/fstab.k3bsetup
   rename( "/etc/fstab", "/etc/fstab.k3bsetup" );
+
+  emit settingWritten( true, i18n("Success") );
 
 
   // create fstab entries or update fstab entries
@@ -327,6 +359,8 @@ void K3bSetup::doCreateFstabEntries()
   K3bDevice* dev = m_deviceManager->allDevices().first();
   while( dev != 0 ) {
 
+    emit writingSetting( i18n("Creating fstab entry for %1").arg(dev->ioctlDevice()) );
+
     bool createMountPoint = true;
 
     // TODO: check if mountpoint is empty
@@ -335,7 +369,7 @@ void K3bSetup::doCreateFstabEntries()
     // create mountpoint if it does not exist
     if( !QFile::exists( dev->mountPoint() ) ) {
       if( mkdir( dev->mountPoint().latin1(), S_IRUSR|S_IWUSR|S_IXUSR|S_IRGRP|S_IXGRP|S_IROTH|S_IXOTH ) != 0 ) {
-	KMessageBox::error( 0, i18n("Could not create mount point '%1'\nNo fstab entry will be created for device %2").arg(dev->mountPoint()).arg(dev->ioctlDevice()) );
+	emit error( i18n("Could not create mount point '%1'").arg(dev->mountPoint()) );
 	createMountPoint = false;
       }
     }
@@ -349,7 +383,11 @@ void K3bSetup::doCreateFstabEntries()
 		     << "auto" << "\t"
 		     << "ro,noauto,user,exec" << "\t"
 		     << "0 0" << "\n";
+
+      emit settingWritten( true, i18n("Success") );
     }
+    else
+      emit settingWritten( false, QString::null );
 
     dev = m_deviceManager->allDevices().next();
   }
@@ -391,3 +429,6 @@ void K3bSetup::clearUsers()
 {
   m_userList.clear();
 }
+
+
+#include "k3bsetup.moc"

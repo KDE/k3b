@@ -36,6 +36,8 @@ class KSimpleConfig;
  */
 class K3bSetup : public QObject
 {
+Q_OBJECT
+
  public:
   K3bSetup( QObject* = 0 );
   ~K3bSetup();
@@ -60,10 +62,16 @@ class K3bSetup : public QObject
   K3bDeviceManager* deviceManager() const { return m_deviceManager; }
   K3bExternalBinManager* externalBinManager() const { return m_externalBinManager; }
 
+ signals:
+  void writingSettings();
+  void writingSetting( const QString& s );
+  void settingWritten( bool success, const QString& comment );
+  void error( const QString& error );
+
  private:
   uint createCdWritingGroup();
-  void doApplyExternalProgramPermissions();
-  void doApplyDevicePermissions();
+  void doApplyExternalProgramPermissions( uint );
+  void doApplyDevicePermissions( uint );
   void doCreateFstabEntries();
 
   QString m_cdwritingGroup;
