@@ -19,6 +19,7 @@ K3bDevice::K3bDevice( cdrom_drive* drive )
   m_devicename = drive->cdda_device_name;
   m_cdrdaoDriver = "auto";
   m_cdTextCapable = 0;
+  m_cdromStruct = 0;
 }
 
 
@@ -27,9 +28,27 @@ K3bDevice::~K3bDevice()
 }
 
 
-cdrom_drive* K3bDevice::openDriveStruct()
+cdrom_drive* K3bDevice::open()
 {
-  return cdda_identify( devicename().latin1(), CDDA_MESSAGE_FORGETIT, 0 );
+  if( m_cdromStruct == 0 ) {
+    m_cdromStruct = cdda_identify( devicename().latin1(), CDDA_MESSAGE_FORGETIT, 0 );
+    cdda_open( m_cdromStruct );
+    return m_cdromStruct;
+  }
+  else
+    return m_cdromStruct;
+}
+
+
+bool K3bDevice::close()
+{
+  if( m_cdromStruct == 0 )
+    return false;
+  else {
+    cdda_close( m_cdromStruct );
+    m_cdromStruct = 0;
+    return true;
+  }
 }
 
 

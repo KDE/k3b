@@ -28,10 +28,15 @@ class K3bDevice
    * opens a cdrom_drive which then can be used
    * for cdparanoia-methods like if it was opened
    * with cdda_open().
-   * It must be closed with cdda_close after
+   * It must be closed with K3bDevice::close() after
    * using it!
+   * This is somewhat buggy since it does not work anymore
+   * if someone calls cdda_close after opening the drive
+   * with this method! So please do NOT use cdda_open and
+   * cdda_close!!!
    */
-  virtual cdrom_drive* openDriveStruct();
+  virtual cdrom_drive* open();
+  virtual bool close();
 
   virtual int interfaceType() const = 0;
 
@@ -130,6 +135,8 @@ class K3bDevice
   int m_cdTextCapable;
   int m_maxReadSpeed;
   int m_maxWriteSpeed;
+
+  cdrom_drive* m_cdromStruct;
 
  private:
   QString m_devicename;
