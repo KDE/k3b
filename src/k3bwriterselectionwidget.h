@@ -49,6 +49,10 @@ class K3bWriterSelectionWidget : public QWidget
 
  public slots:
   void setWriterDevice( K3bDevice* );
+  /**
+   * K3b::CDRDAO and K3b::CDRECORD or'ed together
+   */
+  void setSupportedWritingApps( int );
 
  signals:
   void writerChanged();

@@ -51,6 +51,8 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
 
   prepareGui();
 
+  m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRDAO );
+
   m_checkDao->hide();
   m_checkOnTheFly->hide();
 

@@ -277,4 +277,11 @@ void K3bWriterSelectionWidget::slotWriterChanged()
   }
 }
 
+
+void K3bWriterSelectionWidget::setSupportedWritingApps( int i )
+{
+  m_selectCdrdao->setEnabled( i & K3b::CDRDAO );
+  m_selectCdrecord->setEnabled( i & K3b::CDRECORD );
+}
+
 #include "k3bwriterselectionwidget.moc"

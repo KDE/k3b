@@ -22,7 +22,7 @@
 
 namespace K3b
 {
-  enum WritingApp { DEFAULT = 1, CDRECORD = 2, CDRDAO = 3 };
+  enum WritingApp { DEFAULT = 1, CDRECORD = 2, CDRDAO = 4 };
 
   /**
    * AUTO - let K3b determine the best mode

@@ -17,6 +17,7 @@
 #include "k3bbinimagewritingdialog.h"
 #include "k3bbinimagewritingjob.h"
 #include <k3b.h>
+#include <tools/k3bglobals.h>
 #include <device/k3bdevicemanager.h>
 #include <device/k3bdevice.h>
 #include <k3bwriterselectionwidget.h>
@@ -78,6 +79,8 @@ K3bBinImageWritingDialog::K3bBinImageWritingDialog( QWidget* parent, const char*
    k3bMain()->config()->setGroup( "General Options" );
 
    setupGui();
+   m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRDAO );
+  
    setButtonBoxOrientation( Qt::Vertical );
 }
 
