@@ -18,7 +18,11 @@
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
 #include <klocale.h>
+#include <krun.h>
+#include <kmessagebox.h>
+#include <kstddirs.h>
 
+#include <qfile.h>
 #include <qtimer.h>
 
 #include "k3b.h"
@@ -49,7 +53,20 @@ int main(int argc, char *argv[])
   KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
 
   KApplication app;
- 
+
+
+  // this is a little not to hard hack to ensure that we get the "global" k3b appdir
+  // k3bui.rc should always be in $KDEDIR/share/apps/k3b/
+  QString globalConfig = KGlobal::dirs()->findResourceDir( "data", "k3b/k3bui.rc" ) + "k3b/k3bsetup";
+  
+  if( !QFile::exists( globalConfig ) ) {
+    KMessageBox::information( 0, i18n("It seems as if you have not run K3bSetup yet. So it will be started now."),
+			      i18n("K3b Setup") );
+    KRun::runCommand( "kdesu k3bsetup" );
+  }
+  
+
+
   if (app.isRestored())
     {
       RESTORE(K3bMainWindow);
