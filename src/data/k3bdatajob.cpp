@@ -110,8 +110,8 @@ void K3bDataJob::start()
     QString s = QString("-speed=%1").arg( m_doc->speed() );
     *m_process << s;
 
-    // add the device
-    s = QString("-dev=%1").arg( m_doc->burner()->device() );
+    // add the device (e.g. /dev/sg1)
+    s = QString("-dev=%1").arg( m_doc->burner()->devicename );
     *m_process << s;
 
     // additional parameters from config
@@ -247,8 +247,8 @@ void K3bDataJob::writeCD()
   QString s = QString("-speed=%1").arg( m_doc->speed() );
   *m_process << s;
 
-  // add the device
-  s = QString("-dev=%1").arg( m_doc->burner()->device() );
+  // add the device (e.g. /dev/sg1)
+  s = QString("-dev=%1").arg( m_doc->burner()->devicename );
   *m_process << s;
 
   // additional parameters from config

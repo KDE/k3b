@@ -8,22 +8,22 @@
 #include <qlist.h>
 
 class KProcess;
+class ScsiIf;
+
 
 class K3bDevice 
 {
  public:
-  K3bDevice() { bus = target = lun = maxReadSpeed = maxWriteSpeed = 0; burner = 0; burnproof = 0;}
+  K3bDevice() { maxReadSpeed = maxWriteSpeed = 0; burner = 0; burnproof = 0;}
   K3bDevice( K3bDevice * );
-  K3bDevice( const K3bDevice& );
-  K3bDevice( int _bus, int _target, int _lun,
-	     const QString & _vendor,
+  K3bDevice( const QString & _vendor,
 	     const QString & _description,
 	     const QString & _version,
 	     bool _burner,
 	     bool _burnproof,
 	     int _maxReadSpeed,
 	     const QString & _devicename, int _maxBurnSpeed = 0 )
-    : bus( _bus ), target( _target ), lun( _lun ), vendor( _vendor ),
+    : vendor( _vendor ),
     description( _description ), version( _version ), burner( _burner ),
     burnproof( _burnproof ), maxReadSpeed( _maxReadSpeed ),
     devicename( _devicename ), maxWriteSpeed( _maxBurnSpeed ) 
@@ -31,11 +31,6 @@ class K3bDevice
 
   //      ~K3bDevice();
 
-  QString device();
-
-  int bus;
-  int target;
-  int lun;
   QString vendor;
   QString description;
   QString version;
@@ -61,7 +56,7 @@ class K3bDeviceManager : public QObject
   K3bDeviceManager( QObject * parent );
   ~K3bDeviceManager();
 
-  K3bDevice* deviceByBus( int, int, int );
+  K3bDevice* deviceByName( const QString& );
 
   /**
    * Before getting the devices do a @ref scanbus().
@@ -103,6 +98,23 @@ class K3bDeviceManager : public QObject
 
   static const int DEV_ARRAY_SIZE = 16;
 
+  ScsiIf *m_scsiIf;
+
+  /**
+   * Simply copied from the cdrdao code.
+   */
+  int getModePage( int pageCode, unsigned char *buf, long bufLen,
+		   unsigned char *modePageHeader,
+		   unsigned char *blockDesc, int showErrorMsgvoid );
+
+  /**
+   * Simply copied from the cdrdao code.
+   */
+  int sendCmd( const unsigned char *cmd, int cmdLen,
+	       const unsigned char *dataOut, int dataOutLen,
+	       unsigned char *dataIn, int dataInLen, int showErrorMsg );
+
+  K3bDevice* scanDevice( const char *dev, int showErrorMsg = 1 );
 };
 
 #endif

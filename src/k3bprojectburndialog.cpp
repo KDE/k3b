@@ -217,18 +217,15 @@ void K3bProjectBurnDialog::slotRefreshWriterSpeeds()
 
 K3bDevice* K3bProjectBurnDialog::writerDevice() const
 {
-  QString _s = m_comboWriter->currentText();
-  _s.truncate(_s.find('-') );
-  QStringList list = QStringList::split(  ',', _s );
-  int bus = list[0].toInt();
-  int target = list[1].toInt();
-  int lun = list[2].toInt();
-	
-  K3bDevice* _dev =  k3bMain()->deviceManager()->deviceByBus( bus, target, lun );
-  if( !_dev )
-    qDebug( "(K3bProjectBurnDialog) could not find device" );
+  const QString s = m_comboWriter->currentText();
+
+  QString strDev = s.mid( s.find('(') + 1, s.find(')') - s.find('(') - 1 );
+ 
+  K3bDevice* dev =  k3bMain()->deviceManager()->deviceByName( strDev );
+  if( !dev )
+    qDebug( "(K3bProjectBurnDialog) could not find device " + s );
 		
-  return _dev;
+  return dev;
 }
 
 int K3bProjectBurnDialog::writerSpeed() const
@@ -246,7 +243,7 @@ void K3bProjectBurnDialog::readSettings()
     QList<K3bDevice> _devices = k3bMain()->deviceManager()->burningDevices();
     K3bDevice* _dev = _devices.first();
     while( _dev ) {
-      m_comboWriter->insertItem( _dev->device() + " - " + _dev->vendor + " " + _dev->description );
+      m_comboWriter->insertItem( _dev->vendor + " " + _dev->description + " (" + _dev->devicename + ")" );
       _dev = _devices.next();
     }
 	

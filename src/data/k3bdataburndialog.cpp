@@ -52,6 +52,9 @@ K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const ch
 	
   readSettings();
   slotLoadPreSettings( i18n("K3b Default" ) );
+
+  if( K3bDevice* dev = writerDevice() )
+    m_checkBurnProof->setEnabled( dev->burnproof );
 }
 
 K3bDataBurnDialog::~K3bDataBurnDialog(){
@@ -194,8 +197,6 @@ void K3bDataBurnDialog::setupBurnTab( QFrame* frame )
 
 
   connect( this, SIGNAL(writerChanged()), this, SLOT(slotWriterChanged()) );
-
-  m_checkBurnProof->setEnabled( writerDevice()->burnproof );
 }
 
 
@@ -587,7 +588,8 @@ void K3bDataBurnDialog::slotSelectCustom()
 
 void K3bDataBurnDialog::slotWriterChanged()
 {
-  m_checkBurnProof->setEnabled( writerDevice()->burnproof );
+  if( K3bDevice* dev = writerDevice() )
+    m_checkBurnProof->setEnabled( dev->burnproof );
 }
 
 

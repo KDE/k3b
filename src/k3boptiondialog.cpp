@@ -422,16 +422,6 @@ void K3bOptionDialog::updateDeviceInfoBox( K3bDevice* dev )
     item = new PrivateDeviceViewItem( dev, m_viewDeviceInfo );
     item->setText( 0, "Linux device" );
     item->setText( 1, dev->devicename );
-    PrivateDeviceViewItem* item2 = new PrivateDeviceViewItem( dev, item );
-    item2->setText( 0, "bus" );
-    item2->setText( 1, QString::number( dev->bus ) );
-    item2 = new PrivateDeviceViewItem( dev, item );
-    item2->setText( 0, "target" );
-    item2->setText( 1, QString::number( dev->target ) );
-    item2 = new PrivateDeviceViewItem( dev, item );
-    item2->setText( 0, "lun" );
-    item2->setText( 1, QString::number( dev->lun ) );
-    item->setOpen( true );
 
     if( dev->burner ) {
       item = new PrivateDeviceViewItem( dev, m_viewDeviceInfo );
@@ -478,12 +468,6 @@ void K3bOptionDialog::slotDeviceInfoRenamed( QListViewItem* item )
       dev->maxWriteSpeed = item->text(1).toInt();
     else if( item->text(0) == "BURN-PROOF" )
       dev->burnproof = ( item->text(1) == "yes" ? true : false );
-    else if( item->text(0) == "bus" )
-      dev->bus = item->text(1).toInt();
-    else if( item->text(0) == "target" )
-      dev->target = item->text(1).toInt();
-    else if( item->text(0) == "lun" )
-      dev->lun = item->text(1).toInt();
     else if( item->text(0) == "Linux device" )
       dev->devicename = item->text(1);
 
@@ -574,9 +558,6 @@ void K3bOptionDialog::saveDevices()
     K3bDevice* dev = m_tempReader.first();
     while( dev ) {
       QStringList list;
-      list.append( QString::number( dev->bus ) ); // device
-      list.append( QString::number( dev->target ) );
-      list.append( QString::number( dev->lun ) );
       list.append( dev->vendor ); // vendor
       list.append( dev->description ); // description
       list.append( dev->version ); // version
@@ -594,9 +575,6 @@ void K3bOptionDialog::saveDevices()
     dev = m_tempWriter.first();
     while( dev ) {
       QStringList list;
-      list.append( QString::number( dev->bus ) ); // device
-      list.append( QString::number( dev->target ) );
-      list.append( QString::number( dev->lun ) );
       list.append( dev->vendor ); // vendor
       list.append( dev->description ); // description
       list.append( dev->version ); // version

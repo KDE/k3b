@@ -520,8 +520,8 @@ void K3bAudioJob::startWriting()
       m_process << kapp->config()->readEntry( "cdrdao path" );
       m_process << "write";
 
-      // device
-      m_process << "--device" << m_doc->burner()->device();
+      // device (e.g. /dev/sg1)
+      m_process << "--device" << m_doc->burner()->devicename;
 			
       // additional parameters from config
       QStringList _params = kapp->config()->readListEntry( "cdrdao parameters" );
@@ -603,8 +603,8 @@ void K3bAudioJob::startWriting()
     QString s = QString("-speed=%1").arg( m_doc->speed() );
     m_process << s;
 
-    // add the device
-    s = QString("-dev=%1").arg( m_doc->burner()->device() );
+    // add the device (e.g. /dev/sg1)
+    s = QString("-dev=%1").arg( m_doc->burner()->devicename );
     m_process << s;
 	
     // test if padding is nessessary

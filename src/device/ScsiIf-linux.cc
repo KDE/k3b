@@ -18,6 +18,9 @@
  */
 /*
  * $Log$
+ * Revision 1.1  2001/10/15 21:38:15  trueg
+ * new added
+ *
  * Revision 1.2  2000/12/17 10:51:23  andreasm
  * Default verbose level is now 2. Adaopted message levels to have finer
  * grained control about the amount of messages printed by cdrdao.
@@ -200,7 +203,6 @@ ScsiIf::~ScsiIf()
 {
   if (impl_->fd_ >= 0)
     close(impl_->fd_);
-
   delete[] impl_->filename_;
   delete[] impl_->dev_;
   delete[] impl_->buf_;

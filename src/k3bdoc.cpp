@@ -80,7 +80,7 @@ void K3bDoc::setBurner( K3bDevice* dev )
 {
   m_burner = dev;
   if( dev ) {
-    qDebug( QString("(K3bDoc) Setting writer to %1 %2").arg( dev->device()).arg(dev->description) );
+    qDebug( QString("(K3bDoc) Setting writer to %1 %2").arg( dev->devicename).arg(dev->description) );
     if( !dev->burnproof )
       setBurnProof( false );
   }
