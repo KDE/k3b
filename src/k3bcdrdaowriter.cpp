@@ -29,6 +29,7 @@
 #include <qstringlist.h>
 #include <qvaluelist.h>
 #include <qregexp.h>
+#include <qurloperator.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -340,6 +341,11 @@ void K3bCdrdaoWriter::start() {
     connect( m_process, SIGNAL(wroteStdin(KProcess*)),
              this, SIGNAL(dataWritten()) );
 
+    // workaround, cdrdao kill the tocfile when --remote parameter is set
+    // hope to fix it in the future
+    QUrlOperator *cp = new QUrlOperator();
+    cp->copy(m_tocFile,m_tocFile+QString(".bak"),false,false);
+
     prepareArgumentList();
 
     kdDebug() << "***** cdrdao parameters:\n";
@@ -434,6 +440,11 @@ void K3bCdrdaoWriter::cancel() {
         emit canceled();
         emit finished( false );
     }
+
+    // workaround, cdrdao kill the tocfile when --remote parameter is set
+    // hope to fix it in the future
+    QUrlOperator *cp = new QUrlOperator();
+    cp->copy(m_tocFile+QString(".bak"),m_tocFile,true,false);    
 }
 
 
@@ -467,7 +478,10 @@ void K3bCdrdaoWriter::slotProcessExited( KProcess* p ) {
         emit finished( false );
     }
 
- 
+    // workaround, cdrdao kill the tocfile when --remote parameter is set
+    // hope to fix it in the future
+    QUrlOperator *cp = new QUrlOperator();
+    cp->copy(m_tocFile+QString(".bak"),m_tocFile,true,false);
 }
 
 
