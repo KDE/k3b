@@ -133,6 +133,8 @@ bool K3bCdrecordProgram::scan( const QString& p )
       bin->addFeature( "cdtext" );
     if( out.output().contains( "-clone" ) )  // cdrecord ProDVD
       bin->addFeature( "clone" );
+    if( out.output().contains( "cuefile=" ) )
+      bin->addFeature( "cuefile" );
     
     // check if we run cdrecord as root
     if( !getuid() )
