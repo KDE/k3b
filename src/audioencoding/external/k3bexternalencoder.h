@@ -68,6 +68,7 @@ class K3bExternalEncoder : public K3bAudioEncoder
    * TODO: allow writing to stdout.
    */
   bool openFile( const QString& ext, const QString& filename );
+  void closeFile();
 
   class Command;
 

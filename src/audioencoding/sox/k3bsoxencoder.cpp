@@ -23,9 +23,7 @@
 #include <kdebug.h>
 #include <kconfig.h>
 #include <klocale.h>
-#include <kapplication.h>
 
-#include <qeventloop.h>
 #include <qfileinfo.h>
 #include <qfile.h>
 #include <qvalidator.h>
@@ -33,6 +31,7 @@
 #include <qcombobox.h>
 #include <qcheckbox.h>
 #include <qlayout.h>
+#include <qwaitcondition.h>
 
 
 
@@ -92,14 +91,13 @@ class K3bSoxEncoder::Private
 {
 public:
   Private()
-    : process(0),
-      inLoop(false) {
+    : process(0) {
   }
 
   K3bProcess* process;
   QString fileName;
 
-  bool inLoop;
+  QWaitCondition exitWaiter;
 };
 
 
@@ -125,8 +123,7 @@ void K3bSoxEncoder::finishEncoderInternal()
 
       // this is kind of evil... 
       // but we need to be sure the process exited when this method returnes
-      d->inLoop = true;
-      QApplication::eventLoop()->enterLoop();
+      d->exitWaiter.wait();
     }
   }
 }
@@ -136,8 +133,7 @@ void K3bSoxEncoder::slotSoxFinished( KProcess* p )
 {
   if( !p->normalExit() || p->exitStatus() != 0 )
     kdDebug() << "(K3bSoxEncoder) sox exited with error." << endl;
-  if( d->inLoop )
-    QApplication::eventLoop()->exitLoop();
+  d->exitWaiter.wakeAll();
 }
 
 
@@ -145,6 +141,12 @@ bool K3bSoxEncoder::openFile( const QString& ext, const QString& filename )
 {
   d->fileName = filename;
   return initEncoderInternal( ext );
+}
+
+
+void K3bSoxEncoder::closeFile()
+{
+  finishEncoderInternal();
 }
 
 

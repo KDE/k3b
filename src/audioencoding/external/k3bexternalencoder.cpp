@@ -22,16 +22,15 @@
 #include <kdebug.h>
 #include <kconfig.h>
 #include <klocale.h>
-#include <kapplication.h>
 #include <klistbox.h>
 #include <kiconloader.h>
 #include <klineedit.h>
 #include <kmessagebox.h>
 
-#include <qeventloop.h>
 #include <qlayout.h>
 #include <qregexp.h>
 #include <qtoolbutton.h>
+#include <qwaitcondition.h>
 
 
 
@@ -64,6 +63,32 @@ static QValueList<K3bExternalEncoder::Command> readCommands()
     cl.append(cmd);
   }
 
+  // some defaults
+  if( cmds.isEmpty() ) {
+    K3bExternalEncoder::Command lameCmd, flacCmd;
+    lameCmd.name = "Lame";
+    lameCmd.extension = "mp3";
+    lameCmd.command = "lame -h --tt %t --ta %a --ty %y --tc %c - %f"; 
+
+    flacCmd.name = "Flac";
+    flacCmd.extension = "flac";
+    flacCmd.command = "flac "
+      "-V "
+      "-o %f "
+      "--force-raw-format "
+      "--endian=big "
+      "--channels=2 "
+      "--sample-rate=44100 "
+      "--sign=signed "
+      "--bps=16 "
+      "-T ARTIST=%a "
+      "-T TITLE=%t "
+      "-";
+
+    cl.append( lameCmd );
+    cl.append( flacCmd );
+  }
+
   return cl;
 }
 
@@ -85,15 +110,12 @@ class K3bExternalEncoder::Private
 {
 public:
   Private()
-    : process(0),
-      inLoop(false) {
+    : process(0) {
   }
 
   K3bProcess* process;
   QString fileName;
   QString extension;
-
-  bool inLoop;
 
   Command cmd;
 
@@ -104,6 +126,8 @@ public:
   QString title;
   QString comment;
   QString year;
+
+  QWaitCondition exitWaiter;
 };
 
 
@@ -142,8 +166,7 @@ void K3bExternalEncoder::finishEncoderInternal()
 
       // this is kind of evil... 
       // but we need to be sure the process exited when this method returnes
-      d->inLoop = true;
-      QApplication::eventLoop()->enterLoop();
+      d->exitWaiter.wait();
     }
   }
 }
@@ -153,8 +176,7 @@ void K3bExternalEncoder::slotExternalProgramFinished( KProcess* p )
 {
   if( !p->normalExit() || p->exitStatus() != 0 )
     kdDebug() << "(K3bExternalEncoder) program exited with error." << endl;
-  if( d->inLoop )
-    QApplication::eventLoop()->exitLoop();
+  d->exitWaiter.wakeAll();
 }
 
 
@@ -164,6 +186,12 @@ bool K3bExternalEncoder::openFile( const QString& ext, const QString& filename )
   d->extension = ext;
   d->initialized = false;
   return true;
+}
+
+
+void K3bExternalEncoder::closeFile()
+{
+  finishEncoderInternal();
 }
 
 
@@ -195,18 +223,13 @@ bool K3bExternalEncoder::initEncoderInternal( const QString& extension )
   // create the commandline
   QStringList params = QStringList::split( ' ', d->cmd.command, false );
   for( QStringList::iterator it = params.begin(); it != params.end(); ++it ) {
-    if( *it == "%f" )
-      *d->process << d->fileName;
-    else if( *it == "%a" )
-      *d->process << d->artist;
-    else if( *it == "%t" )
-      *d->process << d->title;
-    else if( *it == "%c" )
-      *d->process << d->comment;
-    else if( *it == "%y" )
-      *d->process << d->year;
-    else
-      *d->process << *it;
+    (*it).replace( "%f", d->fileName );
+    (*it).replace( "%a", d->artist );
+    (*it).replace( "%t", d->title );
+    (*it).replace( "%c", d->comment );
+    (*it).replace( "%y", d->year );
+
+    *d->process << *it;
   }
 
 
@@ -233,7 +256,7 @@ long K3bExternalEncoder::encodeInternal( const char* data, Q_ULONG len )
 
       // we swap the bytes to reduce user irritation ;)
       char* buffer = new char[len];
-      for( int i = 0; i < len-1; i+=2 ) {
+      for( unsigned int i = 0; i < len-1; i+=2 ) {
 	buffer[i] = data[i+1];
 	buffer[i+1] = data[i];
       }
@@ -361,6 +384,7 @@ void K3bExternalEncoderSettingsWidget::slotDeleteCommand()
     // remove the command and update all indices
     unsigned int i = w->m_programList->currentItem();
     w->m_programList->removeItem( i );
+    d->indexMap.remove( i );
     while( i < w->m_programList->count() ) {
       K3bExternalEncoder::Command cmd = d->indexMap[i+1];
       cmd.index--;
