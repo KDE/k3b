@@ -25,8 +25,6 @@
 #include <qlist.h>
 #include <qstringlist.h>
 #include <qstring.h>
-#include <qfile.h>
-#include <qdatastream.h>
 #include <qtimer.h>
 
 #include <klocale.h>
@@ -124,18 +122,21 @@ bool K3bCddaCopy::paranoiaRead(struct cdrom_drive *drive, int track, QString des
     m_currentSector = firstSector;
 
     qDebug("(K3bCddaCopy) open files");
-    m_f = new QFile(dest);
-    bool isOpen = m_f->open(IO_WriteOnly);
+
+    // create wave file
+    m_currentWrittenFile = dest;
+    bool isOpen = m_waveFileWriter.open( dest );
+
     if( !isOpen ){
         infoMessage( i18n("Couldn't rip to: ") + dest, ERROR );
+	m_currentWrittenFile = QString::null;
         paranoia_free(m_paranoia);
         m_paranoia = 0;
         finishedRip();
         m_interrupt = true;
         return false;
     }
-    m_stream = new QDataStream( m_f );
-    K3b::writeWavHeader( m_stream, m_byteCount );
+
     emit newSubTask( i18n("Copy ") + dest  );
 
     t = new QTimer( this );
@@ -145,15 +146,17 @@ bool K3bCddaCopy::paranoiaRead(struct cdrom_drive *drive, int track, QString des
 }
 
 void K3bCddaCopy::readDataFinished(){
-    m_f->close();
+    m_waveFileWriter.close();
     if( m_interrupt ) {
         infoMessage( i18n("Interrupted by user"), STATUS);
         qDebug("(K3bCddaCopy) Interrupted by user!");
-        if( !m_f->remove() ){
+        if( !QFile::remove( m_currentWrittenFile ) ){
             infoMessage( i18n("Can't delete part of copied file."), ERROR);
             qDebug("(K3bCddaCopy) Can't delete copied file <>.");
         }
     }
+    m_currentWrittenFile = QString::null;
+
     paranoia_free(m_paranoia);
     m_paranoia = 0;
     ++m_currentTrackIndex;
@@ -179,9 +182,7 @@ void K3bCddaCopy::slotReadData(){
             qDebug("(K3bCddaCopy) Unrecoverable error in paranoia_read");
         } else {
             ++m_currentSector;
-            QByteArray output;
-            char * cbuf = reinterpret_cast<char *>(buf);
-            m_stream->writeRawBytes(cbuf, CD_FRAMESIZE_RAW);
+	    m_waveFileWriter.write( (char*)buf, CD_FRAMESIZE_RAW, K3bWaveFileWriter::LittleEndian );
         }
 
       m_bytesAll += CD_FRAMESIZE_RAW;
