@@ -562,7 +562,7 @@ void K3bListView::placeEditor( K3bListViewItem* item, int col )
     r = itemRect( item );
   }
 
-  r.setX( header()->sectionPos( col ) );
+  r.setX( contentsToViewport( QPoint(header()->sectionPos( col ), 0) ).x() );
   r.setWidth( header()->sectionSize( col ) - 1 );
 
   // check if the column is fully visible
