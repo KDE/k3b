@@ -87,13 +87,19 @@ void K3bDiskInfoDetector::fetchTocInfo()
 
   if ( (m_cdfd = ::open(m_device->ioctlDevice().latin1(),O_RDONLY | O_NONBLOCK)) == -1 ) {
     kdDebug() << "(K3bDiskInfoDetector) could not open device !" << endl;
-    m_info.valid=false;
     emit diskInfoReady(m_info);
     return;
   }
-  
+
+  int ready = m_device->isReady();
+  if (ready == 3) {  // no disk or tray open
+    m_info.valid=true;
+    emit diskInfoReady(m_info);
+    return;
+  }    
   m_info.tocType = m_device->diskType();
   if ( m_info.tocType == K3bDiskInfo::NODISC ) {
+     m_info.valid=true;
      finish(true);
      return;
   } else if (m_info.tocType == K3bDiskInfo::UNKNOWN ) {
