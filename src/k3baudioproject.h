@@ -66,6 +66,7 @@ public slots:
 //	void addTracks( QList<K3bAudioTrack>& tracks );
 	void removeTrack( uint position );
 	void clear();
+	void moveTrack( uint oldPos, uint newPos );
 
 protected slots:
 	void startRecording();
@@ -98,6 +99,10 @@ private:
  	QString lastTempFile;
  	QString lastTestedFile;
  	int lastAddedPosition;
+
+ 	// settings
+ 	/** if true the adding of files will take longer */
+ 	bool testFiles;
 };
 
 

@@ -286,7 +286,7 @@ void K3bAudioProject::addTrack( const QString& fileName, uint position )
 	m_error = WORKING;
 	
 	// append at the end by default
-	if( position == 0 )
+	if( position > m_tracks.count() )
 		position = m_tracks.count();
 	
 	if( !QFile::exists( fileName ) ) {
@@ -296,7 +296,7 @@ void K3bAudioProject::addTrack( const QString& fileName, uint position )
 		return;
 	}
 	
-	QString ending = fileName.right( fileName.length() -3 );
+	QString ending = fileName.right( 7 );
 	if( ending.contains("wav") ) {
 		addWavFile( fileName, position );
 	}
@@ -431,4 +431,11 @@ void K3bAudioProject::clear()
 	m_tracks.setAutoDelete( true );
 	m_tracks.clear();
 	m_tracks.setAutoDelete( false );
+}
+
+void K3bAudioProject::moveTrack( uint oldPos, uint newPos )
+{
+	K3bAudioTrack* _track = m_tracks.take( oldPos );
+	if(_track)
+		m_tracks.insert( newPos, _track );
 }
