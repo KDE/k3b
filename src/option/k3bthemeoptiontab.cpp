@@ -132,9 +132,9 @@ void K3bThemeOptionTab::slotInstallTheme()
   if( !KIO::NetAccess::download( themeURL, themeTmpFile, this ) ) {
     QString sorryText;
     if (themeURL.isLocalFile())
-       sorryText = i18n("Unable to find the icon theme archive %1!");
+       sorryText = i18n("Unable to find the icon theme archive %1.");
     else
-       sorryText = i18n("Unable to download the icon theme archive!\n"
+       sorryText = i18n("Unable to download the icon theme archive.\n"
                         "Please check that address %1 is correct.");
     KMessageBox::sorry( this, sorryText.arg(themeURL.prettyURL()) );
     return;
@@ -155,7 +155,7 @@ void K3bThemeOptionTab::slotInstallTheme()
   }
 
   if( !validThemeArchive ) {
-    KMessageBox::error( this, i18n("The file is not a valid K3b theme archive!") );
+    KMessageBox::error( this, i18n("The file is not a valid K3b theme archive.") );
   }
   else {
     // install the theme
