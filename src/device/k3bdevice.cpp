@@ -208,7 +208,7 @@ bool K3bCdDevice::CdDevice::init()
     // We cannot use this as default since many firmwares fail with a too high data length.
     //
     if( len == 8 ) {
-      cmd[7] = 2084>>8;
+      cmd[7] = 2048>>8;
       cmd[8] = 2048;
       if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 )
 	len = from2Byte( header );
@@ -2489,7 +2489,7 @@ bool K3bCdDevice::CdDevice::modeSense( unsigned char** pageData, int& pageLen, i
     // We cannot use this as default since many firmwares fail with a too high data length.
     //
     if( pageLen == 8 ) {
-      cmd[7] = 2084>>8;
+      cmd[7] = 2048>>8;
       cmd[8] = 2048;
       if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 )
 	pageLen = from2Byte( header ) + 2;
@@ -2652,7 +2652,7 @@ bool K3bCdDevice::CdDevice::readTocPmaAtip( unsigned char** data, int& dataLen, 
     // We cannot use this as default since many firmwares fail with a too high data length.
     //
     if( dataLen == 2 ) {
-      cmd[7] = 2084>>8;
+      cmd[7] = 2048>>8;
       cmd[8] = 2048;
       if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 )
 	dataLen = from2Byte( header ) + 2;
@@ -2698,7 +2698,7 @@ bool K3bCdDevice::CdDevice::mechanismStatus( unsigned char** data, int& dataLen 
     // We cannot use this as default since many firmwares fail with a too high data length.
     //
     if( dataLen == 8 ) {
-      cmd[8] = 2084>>8;
+      cmd[8] = 2048>>8;
       cmd[9] = 2048;
       if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 )
 	dataLen = from2Byte( &header[6] ) + 8;
@@ -3021,7 +3021,7 @@ bool K3bCdDevice::CdDevice::readSubChannel( unsigned char** data, int& dataLen,
     // We cannot use this as default since many firmwares fail with a too high data length.
     //
     if( dataLen == 4 ) {
-      cmd[7] = 2084>>8;
+      cmd[7] = 2048>>8;
       cmd[8] = 2048;
       if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 )
 	dataLen = from2Byte( &header[2] ) + 4;
@@ -3083,7 +3083,7 @@ bool K3bCdDevice::CdDevice::readTrackInformation( unsigned char** data, int& dat
     // We cannot use this as default since many firmwares fail with a too high data length.
     //
     if( dataLen == 4 ) {
-      cmd[7] = 2084>>8;
+      cmd[7] = 2048>>8;
       cmd[8] = 2048;
       if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 )
 	dataLen = from2Byte( header ) + 2;
@@ -3352,7 +3352,7 @@ bool K3bCdDevice::CdDevice::getFeature( unsigned char** data, int& dataLen, unsi
     // We cannot use this as default since many firmwares fail with a too high data length.
     //
     if( dataLen == 8 ) {
-      cmd[7] = 2084>>8;
+      cmd[7] = 2048>>8;
       cmd[8] = 2048;
       if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 )
 	dataLen = from2Byte( header ) + 4;
