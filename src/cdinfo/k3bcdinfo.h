@@ -64,7 +64,7 @@ class K3bCdInfo : public QWidget
   K3bDevice* m_device;
   KProcess* m_process;
   QTimer* m_infoTimer;
-  KListView* m_viewAtip;
+  KListView* m_viewDiskInfo;
   KListView* m_viewToc;
 
   class PrivateCDInfo;

@@ -75,6 +75,12 @@ bool K3bScsiDevice::init()
   qDebug( "(K3bScsiDevice) %s max write: %i", devicename().latin1(), m_maxWriteSpeed );
   qDebug( "(K3bScsiDevice) %s max read : %i", devicename().latin1(), m_maxReadSpeed );
 
+
+  // testing
+  // ---------------
+  diskInfo();
+
+
   return true;
 }
 
@@ -89,6 +95,11 @@ bool K3bScsiDevice::init()
 int K3bScsiDevice::isReady() const
 {
   ScsiIf scsiIf( devicename().latin1() );
+  if( scsiIf.init() != 0 ) {
+    qDebug( "(K3bScsiDevice) Could not open device " + devicename() );
+    return 1;
+  }
+
   unsigned char cmd[6];
   const unsigned char *sense;
   int senseLen;
@@ -231,6 +242,11 @@ int K3bScsiDevice::getModePage( ScsiIf *_scsiIf, int pageCode, unsigned char *bu
 int K3bScsiDevice::isEmpty() const
 {
   ScsiIf scsiIf( devicename().latin1() );
+  if( scsiIf.init() != 0 ) {
+    qDebug( "(K3bScsiDevice) Could not open device " + devicename() );
+    return -1;
+  }
+
   unsigned char cmd[10];
   unsigned long dataLen = 34;
   unsigned char data[34];
@@ -265,10 +281,140 @@ bool K3bScsiDevice::block( bool block ) const
   }
 
   ScsiIf scsiIf( devicename().latin1() );
+  if( scsiIf.init() != 0 ) {
+    qDebug( "(K3bScsiDevice) Could not open device " + devicename() );
+    return false;
+  }
+
   if (scsiIf.sendCmd(cmd, 6, NULL, 0, NULL, 0) != 0) {
     qDebug( "(K3bScsiDevice) Cannot block/unblock device %s", devicename().latin1() );
     return false;
   }
 
   return true;
+}
+
+
+void K3bScsiDevice::diskInfo()
+{
+  ScsiIf  scsiIf( devicename().latin1() );
+  if( scsiIf.init() != 0 ) {
+    qDebug( "(K3bScsiDevice) Could not open device " + devicename() );
+    return;
+  }
+
+  unsigned char cmd[10];
+  unsigned long dataLen = 34;
+  unsigned char data[34];
+  char spd;
+
+  // perform READ DISK INFORMATION
+  memset(cmd, 0, 10);
+  memset(data, 0, dataLen);
+
+  cmd[0] = 0x51; // READ DISK INFORMATION
+  cmd[7] = dataLen >> 8;
+  cmd[8] = dataLen;
+
+  if (scsiIf.sendCmd(cmd, 10, NULL, 0, data, dataLen, 0) == 0) {
+    qDebug( (data[2] & 0x10) ? "cdrw" : "cdr" );
+    qDebug("capacity: %i %i %i", data[17], data[18], data[19]);
+
+    switch (data[2] & 0x03) {
+    case 0:
+      // disc is empty
+      qDebug("disc is empty");
+
+      qDebug("capacity: %i %i %i", data[17], data[18], data[19]);
+      break;
+
+    case 1:
+      // disc is not empty but appendable
+      qDebug("number of sessions: %i", data[4]);
+      qDebug("last track: %i", data[6]);
+
+      qDebug("disk toc type: %i", data[8]);
+
+      switch ((data[2] >> 2) & 0x03) {
+      case 0:
+	// last session is empty
+	qDebug("is appendable");
+
+	// don't count the empty session and invisible track
+	qDebug("empty session");
+	qDebug("some invisible track");
+
+	break;
+
+      case 1:
+	// last session is incomplete (not fixated)
+	// we cannot append in DAO mode, just update the statistic data
+	
+	qDebug("disk toc type: %i", data[8]);
+
+
+	// don't count the invisible track
+	qDebug("some invisible track");
+	break;
+      }
+      break;
+
+    case 2:
+      // disk is complete
+      qDebug("number of sessions: %i", data[4]);
+      qDebug("last track: %i", data[6]);
+      qDebug("disk toc type: %i", data[8]);
+      break;
+    }
+
+    if (data[21] != 0xff || data[22] != 0xff || data[23] != 0xff) {
+      qDebug("size: %i %i %i", data[21], data[22], data[23]);
+    }
+  }
+  
+  // perform READ TOC to get session info
+  memset(cmd, 0, 10);
+  dataLen = 12;
+  memset(data, 0, dataLen);
+
+  cmd[0] = 0x43; // READ TOC
+  cmd[2] = 1; // get session info
+  cmd[8] = dataLen; // allocation length
+
+  if (scsiIf.sendCmd(cmd, 10, NULL, 0, data, dataLen, 0) == 0) {
+    int lastSessionLba = (data[8] << 24) | (data[9] << 16) | (data[10] << 8) | data[11];
+
+    qDebug("last session lba??: %i", lastSessionLba );
+
+    qDebug("another is empty: %s", ( (data[3] == 0) ? "yes" : "no" ));
+
+    qDebug("another session number: %i", data[3]);
+  }
+
+
+  // read ATIP data
+  dataLen = 28;
+  memset(cmd, 0, 10);
+  memset(data, 0, dataLen);
+
+  cmd[0] = 0x43; // READ TOC/PMA/ATIP
+  cmd[1] = 0x00;
+  cmd[2] = 4; // get ATIP
+  cmd[7] = 0;
+  cmd[8] = dataLen; // data length
+  
+  if (scsiIf.sendCmd(cmd, 10, NULL, 0, data, dataLen, 0) == 0) {
+    if (data[6] & 0x04) {
+
+      spd = (data[16] >> 4) & 0x07;
+      qDebug("low speed: %i", (spd == 1 ? 2 : 0) );
+      
+      spd = (data[16] & 0x0f);
+      qDebug("high speed: %i", ( spd >= 1 && spd <= 4 ? spd * 2 : 0) );
+    }
+
+    if (data[8] >= 80 && data[8] <= 99) {
+      qDebug("anothar capacity: %i %i %i", data[8], data[9], data[10]);
+    }
+  }
 }

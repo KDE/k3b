@@ -23,6 +23,7 @@
 class QComboBox;
 class K3bCdInfo;
 class QPushButton;
+class QCloseEvent;
 
 
 /**
@@ -38,6 +39,10 @@ class K3bCdInfoDialog : public KDialogBase
 
  private slots:
   void slotDeviceChanged();
+  void slotClose();
+
+ protected:
+  void closeEvent( QCloseEvent* );
 
  private:
   QComboBox* m_comboDevice;

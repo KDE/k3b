@@ -24,7 +24,7 @@
 #include "k3baudiodoc.h"
 #include "k3baudiotrack.h"
 #include "input/k3baudiomodule.h"
-
+#include "../device/k3bemptydiscwaiter.h"
 
 #include <kprocess.h>
 #include <klocale.h>
@@ -238,8 +238,8 @@ void K3bAudioOnTheFlyJob::start()
 	
   m_error = K3b::WORKING;
 
-  emit infoMessage( i18n("Wainting for all tracks' length to be calculated.") );
-  emit infoMessage( i18n("This might take a while on slow systems.") );
+  emit infoMessage( i18n("Waiting for all tracks' length to be calculated.") );
+  emit infoMessage( i18n("This might take a while on slower systems.") );
   emit newSubTask( i18n("Preparing write process...") );
 
   m_waitingForLengthTimer->start(100);
@@ -256,12 +256,19 @@ void K3bAudioOnTheFlyJob::slotTryStart()
     }
   }
 
-  if( !ready )
-    return;
+  if( ready ) {
+    m_waitingForLengthTimer->stop();
 
-  m_waitingForLengthTimer->stop();
+    K3bEmptyDiscWaiter* waiter = new K3bEmptyDiscWaiter( m_doc->burner(), k3bMain() );
+    connect( waiter, SIGNAL(discReady()), this, SLOT(slotStartWriting()) );
+    connect( waiter, SIGNAL(canceled()), this, SLOT(cancel()) );
+    waiter->waitForEmptyDisc();
+  }
+}
 
 
+void K3bAudioOnTheFlyJob::slotStartWriting()
+{
   emit newTask( i18n("Writing on the fly") );
 
   m_iDocSize = m_doc->size();
@@ -282,7 +289,7 @@ void K3bAudioOnTheFlyJob::slotTryStart()
 		
   // use cdrdao to burn the cd
   emit infoMessage( i18n("Writing TOC-file") );
-  m_tocFile = m_doc->writeTOC( locateLocal( "appdata", "temp/" ) + "k3b_" + QTime::currentTime().toString() + ".toc" );
+  m_tocFile = m_doc->writeTOC( locateLocal( "appdata", "temp/" ) + "k3btemptoc.toc" );
 
   if( m_tocFile.isEmpty() ) {
     emit infoMessage( i18n("Could not write TOC-file %1").arg( m_tocFile ) );
@@ -341,16 +348,16 @@ void K3bAudioOnTheFlyJob::slotTryStart()
     m_process << "-n";
     
     // toc-file
-    m_process << m_tocFile;
+    m_process << QString( "\"%1\"" ).arg(m_tocFile);
     
     // debugging output
-//     QStrList* _args = m_process.args();
-//     QStrListIterator _it(*_args);
-//     while( _it ) {
-//       cout << *_it << " ";
-//       ++_it;
-//     }
-//     cout << endl << flush;
+    QStrList* _args = m_process.args();
+    QStrListIterator _it(*_args);
+    while( _it ) {
+      cout << *_it << " ";
+      ++_it;
+    }
+    cout << endl << flush;
     
     // connect to the cdrdao slots
     connect( &m_process, SIGNAL(processExited(KProcess*)),

@@ -97,10 +97,6 @@ class K3bApp : public KDockMainWindow
   void showOptionDialog( int = 0 );
   bool useID3TagForMp3Renaming() const { return m_useID3TagForMp3Renaming; }
   void setUseID3TagForMp3Renaming( bool b ) { m_useID3TagForMp3Renaming = b; }
-  /**
-   * Reimplemented of QWidget. Does some initializing which needs an instance of K3bApp and cannot done in the constructor.
-   */
-  void show();
 
  public slots:
   /** No descriptions */

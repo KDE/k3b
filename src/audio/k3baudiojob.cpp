@@ -501,7 +501,7 @@ void K3bAudioJob::startWriting()
 		
     // use cdrdao to burn the cd
     emit infoMessage( i18n("Writing TOC-file") );
-    m_tocFile = locateLocal( "appdata", "temp/" ) + "k3b_" + QTime::currentTime().toString() + ".toc";
+    m_tocFile = locateLocal( "appdata", "temp/" ) + "k3btemptoc.toc";
     if( !m_doc->writeTOC( m_tocFile ) ) {
 
       qDebug( "(K3bAudioJob) Could not write TOC-file." );
@@ -544,7 +544,7 @@ void K3bAudioJob::startWriting()
       m_process << "-n";
 			
       // toc-file
-      m_process << m_tocFile;
+      m_process << QString("\"%1\"").arg(m_tocFile);
 			
       // debugging output
       QStrList* _args = m_process.args();

@@ -18,6 +18,8 @@ Q_OBJECT
 
   enum blank_mode { Fast, Complete, Track, Unclose, Session };
 
+  bool active() const;
+
  public slots:
   void start();
   void cancel();

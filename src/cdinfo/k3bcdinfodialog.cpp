@@ -95,3 +95,17 @@ void K3bCdInfoDialog::slotDeviceChanged()
   else
     m_cdInfo->setDevice( dev );
 }
+
+
+void K3bCdInfoDialog::closeEvent( QCloseEvent* e )
+{
+  delayedDestruct();
+
+  e->accept();
+}
+
+
+void K3bCdInfoDialog::slotClose()
+{
+  close();
+}

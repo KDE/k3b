@@ -84,8 +84,6 @@ K3bApp::K3bApp()
   initStatusBar();
   initView();
   initActions();
-	
-  readOptions();
 
   ///////////////////////////////////////////////////////////////////
   // disable actions at startup
@@ -97,24 +95,13 @@ K3bApp::K3bApp()
   m_audioTrackDialog = 0;
   m_optionDialog = 0;
   m_burnProgressDialog = 0;
-
-  // setup audio cd drives here because we need access to the device manager
-  init();
-  m_initialized=false;
 }
 
 K3bApp::~K3bApp()
 {
   delete pDocList;
 }
-// here we do the final initialize which can't be done in a constructor because it needs an instance of kapp, k3bapp or similar
-void K3bApp::show(){
-    if( !m_initialized ){
-        m_initialized = true;
-        m_dirView->setupFinalize(m_deviceManager);
-    }
-    QWidget::show();
-}
+
 
 void K3bApp::initActions()
 {
@@ -768,16 +755,14 @@ void K3bApp::slotFileBurn()
 	    }
 	  }
       }
-
-      else if( w->inherits( "K3bCopyWidget" ) ) {
-	// TODO: do whatever to copy a cd
-      }
     }
 }
 
 
 void K3bApp::init()
 {
+  readOptions();
+
   searchExternalProgs();
 
   m_deviceManager = new K3bDeviceManager( this );
@@ -791,6 +776,8 @@ void K3bApp::init()
   }
 			
   m_deviceManager->printDevices();
+
+  m_dirView->setupFinalize( m_deviceManager );
 }
 
 
@@ -867,9 +854,8 @@ void K3bApp::slotWarningMessage(const QString& message)
 
 void K3bApp::slotCdInfo()
 {
-  K3bCdInfoDialog* d = new K3bCdInfoDialog( this, "cdinfod", true );
-  d->exec();
-  delete d;
+  K3bCdInfoDialog* d = new K3bCdInfoDialog( this, "cdinfod" );
+  d->show();  // will delete itself (modeless)
 }
 
 

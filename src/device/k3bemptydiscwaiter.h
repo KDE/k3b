@@ -18,11 +18,12 @@
 #ifndef K3BEMPTYDISCWAITER_H
 #define K3BEMPTYDISCWAITER_H
 
-#include <qobject.h>
+#include <kdialogbase.h>
 
 class QTimer;
 class K3bDevice;
-
+class QPushButton;
+class QCloseEvent;
 
 /**
  * Tests for an empty cd in a given device.
@@ -34,12 +35,12 @@ class K3bDevice;
  * @author Sebastian Trueg
  */
 
-class K3bEmptyDiscWaiter : public QObject  
+class K3bEmptyDiscWaiter : public KDialogBase
 {
  Q_OBJECT
 
  public: 
-  K3bEmptyDiscWaiter( K3bDevice* device );
+  K3bEmptyDiscWaiter( K3bDevice* device, QWidget* parent = 0, const char* name = 0 );
   ~K3bEmptyDiscWaiter();
 
  signals:
@@ -48,15 +49,20 @@ class K3bEmptyDiscWaiter : public QObject
 
  public slots:
   void waitForEmptyDisc();
-  void cancel();
 
- private slots:
+ protected slots:
+  void slotCancel();
+  void slotUser1();
   void slotTestForEmptyCd();
-  void slotDelayedDestruction();
+
+ protected:
+  void closeEvent( QCloseEvent* ) {}
 
  private:
   QTimer* m_timer;
   K3bDevice* m_device;
+  QPushButton* m_buttonCancel;
+  QPushButton* m_buttonForce;
 };
 
 #endif

@@ -158,3 +158,9 @@ void K3bBlankingJob::slotCdrecordFinished()
 		
   emit finished( this );
 }
+
+
+bool K3bBlankingJob::active() const
+{
+  return m_process->isRunning();
+}

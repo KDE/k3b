@@ -19,12 +19,27 @@
 #include "k3bdevice.h"
 
 #include <qtimer.h>
+#include <qlabel.h>
+#include <qlayout.h>
+
+#include <klocale.h>
 
 
-K3bEmptyDiscWaiter::K3bEmptyDiscWaiter( K3bDevice* device )
+K3bEmptyDiscWaiter::K3bEmptyDiscWaiter( K3bDevice* device, QWidget* parent, const char* name )
+  : KDialogBase( KDialogBase::Plain, i18n("insert empty disk"), KDialogBase::Cancel | KDialogBase::User1, 
+		 KDialogBase::Cancel, parent, name, true, true, i18n("Force") )
 {
   m_timer = new QTimer( this );
   m_device = device;
+
+  QLabel* label = new QLabel( plainPage() );
+  label->setText( i18n("Please insert an empty cdr medium into drive\n%1 %2 (%3)\nOr press the 'Force' button if you think K3b is not able to detect your cdr.").arg(m_device->vendor()).arg(m_device->description()).arg(m_device->devicename()) );
+  label->setAlignment( Qt::AlignCenter | Qt::AlignVCenter | Qt::WordBreak );
+
+  QVBoxLayout* box = new QVBoxLayout( plainPage() );
+  box->addWidget( label );
+
+  setWFlags( WStyle_Customize | WStyle_NoBorder | WStyle_Dialog );
 }
 
 
@@ -35,39 +50,37 @@ K3bEmptyDiscWaiter::~K3bEmptyDiscWaiter()
 void K3bEmptyDiscWaiter::waitForEmptyDisc()
 {
   connect( m_timer, SIGNAL(timeout()), this, SLOT(slotTestForEmptyCd()) );
-  m_timer->start(100);
-}
+  m_timer->start(1000);
 
-
-void K3bEmptyDiscWaiter::cancel()
-{
-  m_timer->stop();
-  m_timer->disconnect();
-  connect( m_timer, SIGNAL(timeout()), this, SLOT(slotDelayedDestruction()) );
-  m_timer->start(0);
-
-  emit canceled();
+  show();
 }
 
 
 void K3bEmptyDiscWaiter::slotTestForEmptyCd()
 {
-  if( m_device->isReady() == 0 ) // OK
-    {
-      long length;
-      if( m_device->isEmpty() == 0 ) {
-	m_timer->stop();
-	m_timer->disconnect();
-	connect( m_timer, SIGNAL(timeout()), this, SLOT(slotDelayedDestruction()) );
-	m_timer->start(0);
-	
-	emit discReady();
-      }
-    }
+  if( m_device->isEmpty() == 0 ) {
+    m_timer->stop();
+    m_timer->disconnect();
+    delayedDestruct();
+    
+    emit discReady();
+  }
 }
 
 
-void K3bEmptyDiscWaiter::slotDelayedDestruction()
+void K3bEmptyDiscWaiter::slotCancel()
 {
-  delete this;
+  m_timer->stop();
+  m_timer->disconnect();
+  delayedDestruct();
+
+  emit canceled();
+}
+
+
+void K3bEmptyDiscWaiter::slotUser1()
+{
+  delayedDestruct();
+
+  emit discReady();
 }

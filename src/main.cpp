@@ -20,6 +20,8 @@
 #include <klocale.h>
 
 #include "k3b.h"
+//#include "k3bsplash.h"
+
 
 static const char *description = 
 I18N_NOOP("K3b is a cd burning program that has two aims:\nusability and as much features as possible.");
@@ -52,10 +54,14 @@ int main(int argc, char *argv[])
     }
   else 
     {
-      K3bApp *testmdi = new K3bApp();
-      app.setMainWidget(testmdi);
-      testmdi->show();
-      testmdi->init();
+      K3bApp *k3bMainWidget = new K3bApp();
+      app.setMainWidget( k3bMainWidget );
+
+      k3bMainWidget->init();
+      k3bMainWidget->show();
+
+//       K3bSplash* splash = new K3bSplash( k3bMainWidget );
+//       splash->show();
 
       KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 		
@@ -63,7 +69,7 @@ int main(int argc, char *argv[])
 	{
 	  for(int i=0;i<args->count();i++)
 	    {
-	      testmdi->openDocumentFile(args->arg(i));
+	      k3bMainWidget->openDocumentFile(args->arg(i));
 	    }
 	}
 		

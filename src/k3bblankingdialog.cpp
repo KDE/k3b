@@ -6,6 +6,7 @@
 #include "k3bblankingjob.h"
 
 #include <klocale.h>
+#include <kmessagebox.h>
 
 #include <qgroupbox.h>
 #include <qbuttongroup.h>
@@ -22,15 +23,12 @@
 
 K3bBlankingDialog::K3bBlankingDialog( QWidget* parent, const char* name )
   : KDialogBase( parent, name, false, i18n("Blanking CD-RW"), 
-		 KDialogBase::Help|KDialogBase::Cancel|KDialogBase::User2|KDialogBase::User1, 
-		 KDialogBase::User1, true, i18n("Blank"), i18n("Close") )  // the Close button for some reason does not work
+		 KDialogBase::Help|KDialogBase::User2|KDialogBase::User1, 
+		 KDialogBase::User1, true, i18n("Blank"), i18n("Close") )
 {
   setupGui();
   setButtonBoxOrientation( Qt::Vertical );
   m_groupBlankType->setButton( 0 );
-
-  // disable cancel button by default
-  actionButton( KDialogBase::Cancel )->setDisabled( true );
 
 
   // -- read cd-writers ----------------------------------------------
@@ -49,7 +47,8 @@ K3bBlankingDialog::K3bBlankingDialog( QWidget* parent, const char* name )
 
 K3bBlankingDialog::~K3bBlankingDialog()
 {
-  qDebug("(K3bBlankingDialog) destruction" );
+  if( m_job )
+    delete m_job;
 }
 
 
@@ -199,7 +198,7 @@ void K3bBlankingDialog::slotUser1()
   // start the blankingjob and connect to the info-signal
   // disable the user1 button and enable the cancel button
   actionButton( KDialogBase::User1 )->setDisabled( true );
-  actionButton( KDialogBase::Cancel )->setEnabled( true );
+  actionButton( KDialogBase::User2 )->setText( i18n("Cancel") );
   m_viewOutput->setText("");
 
   if( m_job == 0 ) {
@@ -236,14 +235,12 @@ void K3bBlankingDialog::slotUser1()
 
 void K3bBlankingDialog::slotUser2()
 {
-  close();
-}
-
-
-void K3bBlankingDialog::slotCancel()
-{
-  if( m_job )
-    m_job->cancel();
+  if( m_job && m_job->active() ) {
+    if( KMessageBox::questionYesNo( this, "Do you really want to cancel?", "Cancel" ) == KMessageBox::Yes )
+      m_job->cancel();
+    }
+  else
+    close();
 }
 
 
@@ -256,17 +253,26 @@ void K3bBlankingDialog::slotInfoMessage( const QString& str )
 void K3bBlankingDialog::slotJobFinished()
 {
   actionButton( KDialogBase::User1 )->setEnabled( true );
-  actionButton( KDialogBase::Cancel )->setDisabled( true );
+  actionButton( KDialogBase::User2 )->setText( i18n("Close") );
 }
 
 
 void K3bBlankingDialog::closeEvent( QCloseEvent* e )
 {
-  if( m_job )
-    m_job->cancel();
-
-  // do a delayed destruct
-  delayedDestruct();
-
-  KDialogBase::closeEvent( e );
+  if( m_job && m_job->active() ) {
+    if( KMessageBox::questionYesNo( this, "Do you really want to cancel?", "Cancel" ) == KMessageBox::Yes ) {
+      m_job->cancel();
+      
+      // do a delayed destruct
+      delayedDestruct();
+      
+      e->accept();
+    }
+    else
+      e->ignore();
+  }
+  else {
+    delayedDestruct();
+    e->accept();
+  }
 }

@@ -50,20 +50,20 @@ K3bCdInfo::K3bCdInfo( QWidget* parent, const char* name )
   m_process = new KProcess();
   m_actionRefresh = new KAction( i18n("Refresh"), "reload", 0, this, SLOT(slotRefresh()), this, "m_actionRefresh" );
 
-  m_viewAtip = new KListView( this );
+  m_viewDiskInfo = new KListView( this );
   m_viewToc = new KListView( this );
   QVBoxLayout* box = new QVBoxLayout( this );
   box->setSpacing( KDialog::spacingHint() );
   box->setMargin( KDialog::marginHint() );
 
-  box->addWidget( m_viewAtip );
+  box->addWidget( m_viewDiskInfo );
   box->addWidget( m_viewToc );
 
-  m_viewAtip->addColumn( "name" );
-  m_viewAtip->addColumn( "info" );
-  m_viewAtip->header()->hide();
-  m_viewAtip->setRootIsDecorated( true );
-  m_viewAtip->setSorting( -1 );
+  m_viewDiskInfo->addColumn( "name" );
+  m_viewDiskInfo->addColumn( "info" );
+  m_viewDiskInfo->header()->hide();
+  m_viewDiskInfo->setRootIsDecorated( true );
+  m_viewDiskInfo->setSorting( -1 );
 
   m_viewToc->addColumn( i18n("title") );
   m_viewToc->addColumn( i18n("type") );
@@ -85,9 +85,9 @@ K3bCdInfo::~K3bCdInfo()
 
 void K3bCdInfo::clear()
 {
-  m_viewAtip->clear();
+  m_viewDiskInfo->clear();
   m_viewToc->clear();
-  m_viewAtip->hide();
+  m_viewDiskInfo->hide();
   (void)new QListViewItem( m_viewToc, i18n("No medium inserted") );
 }
 
@@ -302,7 +302,7 @@ void K3bCdInfo::slotCdrecordFinished()
 void K3bCdInfo::updateView()
 {
   m_viewToc->clear();
-  m_viewAtip->clear();
+  m_viewDiskInfo->clear();
 
   QListViewItem *root1, *root2;
   QListViewItem *item1, *item2;
@@ -310,7 +310,7 @@ void K3bCdInfo::updateView()
   // create ATIP-info items
   // ----------------------------------------------------
   if( m_cdinfo->show_atip ) {
-    root1 = new QListViewItem( m_viewAtip, "Atip" );
+    root1 = new QListViewItem( m_viewDiskInfo, "Disk info" );
     root1->setPixmap( 0, KGlobal::instance()->iconLoader()->loadIcon( "cdrom_unmount", KIcon::NoGroup, KIcon::SizeSmall ) );
 
     if( m_cdinfo->cdrw_valid ) {
@@ -354,7 +354,7 @@ void K3bCdInfo::updateView()
  
     root1->setOpen( true );
 
-    m_viewAtip->show();
+    m_viewDiskInfo->show();
   }
   // ------------------------------------------------------
   // -------------------------------------- ATIP-info items

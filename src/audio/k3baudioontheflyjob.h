@@ -48,7 +48,8 @@ class K3bAudioOnTheFlyJob : public K3bBurnJob  {
   void cancel();
 	
  protected slots:
-   void slotTryStart();
+  void slotTryStart();
+  void slotStartWriting();
 
   void slotParseCdrdaoOutput( KProcess*, char* output, int len );
   void slotCdrdaoFinished();

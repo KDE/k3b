@@ -30,7 +30,6 @@ Q_OBJECT
   void slotRefreshWriterSpeeds();
   void slotUser1();
   void slotUser2();
-  void slotCancel();
   void slotInfoMessage( const QString& );
   void slotJobFinished();
 

@@ -20,6 +20,8 @@ class K3bScsiDevice : public K3bDevice
 
   int interfaceType() const { return K3bDevice::SCSI; }
 
+  void diskInfo();
+
  private:
   int getModePage( ScsiIf *_scsiIf, int pageCode, unsigned char *buf,
 		   long bufLen, unsigned char *modePageHeader,

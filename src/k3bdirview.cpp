@@ -81,43 +81,43 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
   connect( m_kiotree, SIGNAL(urlActivated(const KURL&)), this, SLOT(slotDirActivated(const KURL&)) );
 }
 
-K3bDirView::~K3bDirView(){
-        delete m_fileView;
-        delete m_cdView;
+K3bDirView::~K3bDirView()
+{
 }
 
-void K3bDirView::setupFinalize(K3bDeviceManager *dm){
-    m_fileView->show();
-    K3bDevice *dev;
-    KURL result;
-    QList<K3bDevice> devices = dm->readingDevices();
-    for ( dev=devices.first(); dev != 0; dev=devices.next() ){
-        KURL url = KURL( dev->devicename() );
-        url.setProtocol("k3b_cdview");
-        result = url;
-        m_kiotree->addTopLevelDir( url, i18n("Drive: ") + dev->vendor() );
-        for( int i=0; i<m_kiotree->childCount(); i++){
-            KioTreeItem *item = dynamic_cast<KioTreeItem*> (m_kiotree->itemAtIndex(i) );
-            KURL url = item->externalURL();	
-            if( url.path().find( dev->devicename() ) == 0){
-                item->setPixmap(0, KGlobal::iconLoader()->loadIcon( "cdrom_unmount", KIcon::NoGroup, KIcon::SizeSmall ) );
-            }
-        }
+void K3bDirView::setupFinalize( K3bDeviceManager *dm )
+{
+  m_fileView->show();
+  K3bDevice *dev;
+  KURL result;
+  QList<K3bDevice> devices = dm->readingDevices();
+  for ( dev = devices.first(); dev != 0; dev=devices.next() ) {
+    KURL url = KURL( dev->devicename() );
+    url.setProtocol("k3b_cdview");
+    result = url;
+    m_kiotree->addTopLevelDir( url, i18n("Drive: ") + dev->vendor() );
+    for( int i=0; i<m_kiotree->childCount(); i++){
+      KioTreeItem *item = dynamic_cast<KioTreeItem*> (m_kiotree->itemAtIndex(i) );
+      KURL url = item->externalURL();	
+      if( url.path().find( dev->devicename() ) == 0){
+	item->setPixmap(0, KGlobal::iconLoader()->loadIcon( "cdrom_unmount", KIcon::NoGroup, KIcon::SizeSmall ) );
+      }
     }
-    devices = dm->burningDevices();
-    for ( dev=devices.first(); dev != 0; dev=devices.next() ){
-        KURL url = KURL(dev->devicename() );
-        url.setProtocol("k3b_cdview");
-        m_kiotree->addTopLevelDir( url, i18n("Drive: ") + dev->vendor() );
-        for( int i=0; i<m_kiotree->childCount(); i++){
-            KioTreeItem *item = dynamic_cast<KioTreeItem*> (m_kiotree->itemAtIndex(i) );
-            KURL url = item->externalURL();	
-            if( url.path().find(dev->devicename() ) == 0){
-                item->setPixmap(0, KGlobal::iconLoader()->loadIcon( "cdwriter_unmount", KIcon::NoGroup, KIcon::SizeSmall ) );
-            }
-        }
+  }
+  devices = dm->burningDevices();
+  for ( dev=devices.first(); dev != 0; dev=devices.next() ){
+    KURL url = KURL(dev->devicename() );
+    url.setProtocol("k3b_cdview");
+    m_kiotree->addTopLevelDir( url, i18n("Drive: ") + dev->vendor() );
+    for( int i=0; i<m_kiotree->childCount(); i++){
+      KioTreeItem *item = dynamic_cast<KioTreeItem*> (m_kiotree->itemAtIndex(i) );
+      KURL url = item->externalURL();	
+      if( url.path().find(dev->devicename() ) == 0){
+	item->setPixmap(0, KGlobal::iconLoader()->loadIcon( "cdwriter_unmount", KIcon::NoGroup, KIcon::SizeSmall ) );
+      }
     }
-    //return result;
+  }
+  //return result;
 }
 
 void K3bDirView::slotViewChanged( KFileView* newView )

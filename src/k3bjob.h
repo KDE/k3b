@@ -35,6 +35,8 @@ class K3bJob : public QObject
   int error() { return m_error; }
   virtual ~K3bJob();
 
+  virtual bool active() const { return false; }
+
  protected:
   K3bJob();
   int m_error;
