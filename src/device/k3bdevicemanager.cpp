@@ -412,6 +412,8 @@ bool K3bCdDevice::DeviceManager::saveConfig( KConfig* c )
     c->writeEntry( configEntryName, list );
   }
 
+  c->writeEntry( "device_search_path", deviceSearchPath );
+
   c->sync();
 
   return true;

@@ -396,6 +396,9 @@ void K3bIsoImager::start()
     return;
   }
 
+  // add empty dummy dir since one path-spec is needed
+  *m_process << dummyDir();
+
   connect( m_process, SIGNAL(processExited(KProcess*)),
 	   this, SLOT(slotProcessExited(KProcess*)) );
 
