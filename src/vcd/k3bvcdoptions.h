@@ -2,8 +2,9 @@
                           k3bvcdoptions.h  -  description
                              -------------------
     begin                : Sam Nov 23 2002
-    copyright            : (C) 2002 by Sebastian Trueg
+    copyright            : (C) 2002 by Sebastian Trueg & Christian Kvasny
     email                : trueg@informatik.uni-freiburg.de
+                           chris@ckvsoft.at
  ***************************************************************************/
 
 /***************************************************************************
@@ -43,6 +44,7 @@ class K3bVcdOptions
   const bool CdiSupport() const { return m_cdisupport; }
   const bool BrokenSVcdMode() const { return m_brokensvcdmode; }
   const bool Sector2336() const { return m_sector2336; }
+  const unsigned long long CDIsize() const {return m_cdisize;}
 
   void setAlbumId( const QString& s ) { m_albumID = s; }
   void setVolumeId( const QString& s ) { m_volumeID = s; }
@@ -82,6 +84,7 @@ class K3bVcdOptions
   bool m_brokensvcdmode;
   bool m_sector2336;
 
+  unsigned long long m_cdisize;
 };
 
 #endif

@@ -2,8 +2,9 @@
                           k3bvcddoc.h  -  description
                              -------------------
     begin                : Mon Nov 4 2002
-    copyright            : (C) 2002 by Sebastian Trueg
+    copyright            : (C) 2002 by Sebastian Trueg & Christian Kvasny
     email                : trueg@informatik.uni-freiburg.de
+                           chris@ckvsoft.at
  ***************************************************************************/
 
 /***************************************************************************
@@ -145,6 +146,8 @@ class K3bVcdDoc : public K3bDoc
 
   QList<K3bVcdTrack>* m_tracks;
   unsigned long long calcTotalSize() const;
+  unsigned long long ISOsize() const;
+
   K3bVcdTrack* m_lastAddedTrack;
   K3bVcdOptions* m_vcdOptions;
 

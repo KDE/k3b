@@ -1,16 +1,10 @@
 /***************************************************************************
-                             k3b -  description
-                             -------------------
-    copyright            : (C) 2002 by Sebastian Trueg
-    email                : trueg@informatik.uni-freiburg.de
- ***************************************************************************/
-
-/***************************************************************************
                           k3bvcddoc.cpp  -  description
                              -------------------
     begin                : Mon Nov 4 2002
-    copyright            : (C) 2002 by Christian Kvasny
-    email                : chris@ckvsoft.at
+    copyright            : (C) 2002 by Sebastian Trueg & Christian Kvasny
+    email                : trueg@informatik.uni-freiburg.de
+                           chris@ckvsoft.at
  ***************************************************************************/
 
 /***************************************************************************
@@ -114,11 +108,19 @@ unsigned long long K3bVcdDoc::size() const
 {
   // mode2 -> mode1 int(( n+2047 ) / 2048) * 2352
   // mode1 -> mode2 int(( n+2351 ) / 2352) * 2048
-  // 135 116b for vcd iso
-  // 1 269 384b for cd-isupport
-
   long tracksize = long(( calcTotalSize()+2351 ) / 2352) * 2048;
-  return tracksize + 1404500;
+  return tracksize + ISOsize();
+}
+
+unsigned long long K3bVcdDoc::ISOsize() const
+{
+  // 136000b for vcd iso reseved
+  long long iso_size = 136000;
+  if ( vcdOptions()->CdiSupport() ) {
+    iso_size += vcdOptions()->CDIsize();
+  }
+  
+  return iso_size;
 }
 
 unsigned long long K3bVcdDoc::length() const

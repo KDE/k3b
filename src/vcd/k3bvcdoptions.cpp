@@ -2,8 +2,9 @@
                           k3bvcdoptions.cpp  -  description
                              -------------------
     begin                : Sam Nov 23 2002
-    copyright            : (C) 2002 by Sebastian Trueg
+    copyright            : (C) 2002 by Sebastian Trueg & Christian Kvasny
     email                : trueg@informatik.uni-freiburg.de
+                           chris@ckvsoft.at
  ***************************************************************************/
 
 /***************************************************************************
@@ -41,10 +42,17 @@ K3bVcdOptions::K3bVcdOptions()
 
 bool K3bVcdOptions::checkCdiFiles()
 {
+  m_cdisize = 0;
   if( !QFile::exists( locate("data","k3b/cdi/cdi_imag.rtf") )) return false;
   if( !QFile::exists( locate("data","k3b/cdi/cdi_text.fnt") )) return false;
   if( !QFile::exists( locate("data","k3b/cdi/cdi_vcd.app") )) return false;  
   if( !QFile::exists( locate("data","k3b/cdi/cdi_vcd.cfg") )) return false;
+
+  m_cdisize += QFile( locate("data","k3b/cdi/cdi_imag.rtf") ).size();
+  m_cdisize += QFile( locate("data","k3b/cdi/cdi_text.fnt") ).size();
+  m_cdisize += QFile( locate("data","k3b/cdi/cdi_vcd.app") ).size();
+  m_cdisize += QFile( locate("data","k3b/cdi/cdi_vcd.cfg") ).size();
+
   return true;
 }
 
