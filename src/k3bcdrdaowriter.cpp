@@ -44,49 +44,49 @@
 #include <sys/socket.h>
 
 inline bool operator<( const ProgressMsg& m1, const ProgressMsg& m2 ) {
-  return m1.track < m2.track
-    || ( m1.track == m2.track
-	 && m1.trackProgress < m2.trackProgress )
-    || m1.totalProgress < m2.totalProgress;
+    return m1.track < m2.track
+           || ( m1.track == m2.track
+                && m1.trackProgress < m2.trackProgress )
+           || m1.totalProgress < m2.totalProgress;
 }
 
 
 inline bool operator==( const ProgressMsg& m1, const ProgressMsg& m2 ) {
-  return m1.status == m2.status
-    && m1.track == m2.track
-    && m1.totalTracks == m2.totalTracks
-    && m1.trackProgress == m2.trackProgress
-    && m1.totalProgress == m2.totalProgress
-    && m1.bufferFillRate == m2.bufferFillRate;
+    return m1.status == m2.status
+           && m1.track == m2.track
+           && m1.totalTracks == m2.totalTracks
+           && m1.trackProgress == m2.trackProgress
+           && m1.totalProgress == m2.totalProgress
+           && m1.bufferFillRate == m2.bufferFillRate;
 }
 
 inline bool operator!=( const ProgressMsg& m1, const ProgressMsg& m2 ) {
-  return !( m1 == m2 );
+    return !( m1 == m2 );
 }
 
 
 K3bCdrdaoWriter::K3bCdrdaoWriter( K3bDevice* dev, QObject* parent, const char* name )
-  : K3bAbstractWriter( dev, parent, name ),
-    m_command(WRITE),
-    m_blankMode(MINIMAL),
-    m_sourceDevice(0),
-    m_dataFile(QString("")),
-    m_tocFile(QString("")),
-    m_readRaw(false),
-    m_multi(false),
-    m_force(false),
-    m_onTheFly(false),
-    m_fastToc(false),
-    m_readSubchan(None),
-    m_taoSource(false),
-    m_taoSourceAdjust(-1),
-    m_paranoiaMode(-1),
-    m_session(-1),
-    m_eject(k3bMain()->eject()),
-    m_cdrdaoBinObject( K3bExternalBinManager::self()->binObject("cdrdao") ),
-    m_process(0),
-    m_comSock(0),
-    m_currentTrack(0)
+        : K3bAbstractWriter( dev, parent, name ),
+        m_command(WRITE),
+        m_blankMode(MINIMAL),
+        m_sourceDevice(0),
+        m_dataFile(QString("")),
+        m_tocFile(QString("")),
+        m_readRaw(false),
+        m_multi(false),
+        m_force(false),
+        m_onTheFly(false),
+        m_fastToc(false),
+        m_readSubchan(None),
+        m_taoSource(false),
+        m_taoSourceAdjust(-1),
+        m_paranoiaMode(-1),
+        m_session(-1),
+        m_eject(k3bMain()->eject()),
+        m_cdrdaoBinObject( K3bExternalBinManager::self()->binObject("cdrdao") ),
+        m_process(0),
+        m_comSock(0),
+        m_currentTrack(0) 
 {
     QPtrList<K3bDevice> devices;
     K3bDevice *d;
@@ -119,7 +119,7 @@ K3bCdrdaoWriter::K3bCdrdaoWriter( K3bDevice* dev, QObject* parent, const char* n
     m_oldMsg->track = 0;
     m_oldMsg->trackProgress = 0;
     m_oldMsg->totalProgress = 0;
-           
+
     if( socketpair(AF_UNIX,SOCK_STREAM,0,m_cdrdaoComm) ) {
         kdDebug() << "(K3bCdrdaoWriter) could not open socketpair for cdrdao remote messages" << endl;
     } else {
@@ -316,16 +316,16 @@ void K3bCdrdaoWriter::setBlankArguments() {
 void K3bCdrdaoWriter::setCommonArguments() {
 
     // additional user parameters from config
-  QStringList params = m_cdrdaoBinObject->userParameters();
-  for( QStringList::Iterator it=params.begin(); it != params.end(); ++it )
-    *m_process << *it;
+    QStringList params = m_cdrdaoBinObject->userParameters();
+    for( QStringList::Iterator it=params.begin(); it != params.end(); ++it )
+        *m_process << *it;
 
 
     // display debug info
     *m_process << "-n" << "-v" << "2";
     // eject
     if( m_eject )
-       *m_process << "--eject";
+        *m_process << "--eject";
 
     // remote
     *m_process << "--remote" <<  QString("%1").arg(m_cdrdaoComm[0]);
@@ -360,21 +360,20 @@ void K3bCdrdaoWriter::start() {
     // workaround, cdrdao kill the tocfile when --remote parameter is set
     // hope to fix it in the future
     switch ( m_command ) {
-      case WRITE:
-      case COPY:
-      	   if (!m_tocFile.isEmpty())
-//             if ( link(m_tocFile.latin1(),(m_tocFile+QString(".bak")).latin1()) == -1 )
-		if (!KIO::NetAccess::copy(m_tocFile.latin1(),(m_tocFile+QString(".bak")).latin1()))
-                  kdDebug() << "(cdrdaowriter) backup tocfile " <<   m_tocFile << " failed." << endl;
-           break;
-      case BLANK:
-      case READ:
+    case WRITE:
+    case COPY:
+        if (!m_tocFile.isEmpty())
+            if ( !KIO::NetAccess::copy(m_tocFile,m_tocFile+QString(".bak")) )
+                kdDebug() << "(cdrdaowriter) backup tocfile " <<   m_tocFile << " failed." << endl;
+        break;
+    case BLANK:
+    case READ:
         break;
     }
     prepareArgumentList();
-// set working dir to dir part of toc file (to allow rel names in toc-file)
+    // set working dir to dir part of toc file (to allow rel names in toc-file)
     m_process->setWorkingDirectory(QUrl(m_tocFile).dirPath());
-    
+
     kdDebug() << "***** cdrdao parameters:\n";
     const QValueList<QCString>& args = m_process->args();
     QString s;
@@ -462,18 +461,17 @@ void K3bCdrdaoWriter::cancel() {
 
         }
         switch ( m_command ) {
-          case WRITE:
-          case COPY:
+        case WRITE:
+        case COPY:
             if ( !m_tocFile.isEmpty() ) {
-	      //if ( rename((m_tocFile+QString(".bak")).latin1(),m_tocFile.latin1()) == -1 )
- 		if ( !KIO::NetAccess::copy((m_tocFile+QString(".bak")).latin1(),m_tocFile.latin1()) )		    
-                   kdDebug() << "(cdrdaowriter) restore tocfile " <<   m_tocFile << " failed." << endl;
-		if ( !KIO::NetAccess::del((m_tocFile+QString(".bak")).latin1()) )
-		   kdDebug() << "(cdrdaowriter) delete bak-file failed." << endl;
-	    }
+                if ( !KIO::NetAccess::copy(m_tocFile+QString(".bak"),m_tocFile) )
+                    kdDebug() << "(cdrdaowriter) restore tocfile " <<   m_tocFile << " failed." << endl;
+                if ( !KIO::NetAccess::del(m_tocFile+QString(".bak")) )
+                    kdDebug() << "(cdrdaowriter) delete bak-file failed." << endl;
+            }
             break;
-          case BLANK:
-          case READ:
+        case BLANK:
+        case READ:
             break;
         }
     }
@@ -491,14 +489,16 @@ void K3bCdrdaoWriter::slotProcessExited( KProcess* p ) {
 
     // rename toc-file before emit finished( ... );
     switch ( m_command ) {
-      case WRITE:
-      case COPY:
+    case WRITE:
+    case COPY:
         if (!m_tocFile.isEmpty() )
-          if ( rename((m_tocFile+QString(".bak")).latin1(),m_tocFile.latin1()) == -1 )
-            kdDebug() << "(cdrdaowriter) restore tocfile " <<   m_tocFile << " failed." << endl;
+            if ( !KIO::NetAccess::copy(m_tocFile+QString(".bak"),m_tocFile) )
+                kdDebug() << "(cdrdaowriter) restore tocfile " <<   m_tocFile << " failed." << endl;
+        if ( !KIO::NetAccess::del(m_tocFile+QString(".bak")) )
+            kdDebug() << "(cdrdaowriter) delete bak-file failed." << endl;
         break;
-      case BLANK:
-      case READ:
+    case BLANK:
+    case READ:
         break;
     }
 
@@ -523,8 +523,8 @@ void K3bCdrdaoWriter::slotProcessExited( KProcess* p ) {
                     break;
                 }
 
-	    if( m_command == WRITE || m_command == COPY )
-	      createAverageWriteSpeedInfoMessage();
+            if( m_command == WRITE || m_command == COPY )
+                createAverageWriteSpeedInfoMessage();
 
             emit finished( true );
             break;
@@ -541,7 +541,7 @@ void K3bCdrdaoWriter::slotProcessExited( KProcess* p ) {
         emit infoMessage( i18n("Cdrdao did not exit cleanly."), K3bJob::ERROR );
         emit finished( false );
     }
- }
+}
 
 void K3bCdrdaoWriter::getCdrdaoMessage() {
     parseCdrdaoMessage(m_comSock);
@@ -568,171 +568,170 @@ void K3bCdrdaoWriter::unknownCdrdaoLine( const QString& line ) {
 
 
 void K3bCdrdaoWriter::reinitParser() {
-  delete m_oldMsg;
-  delete m_newMsg;
-  m_oldMsg = new ProgressMsg;
-  m_newMsg = new ProgressMsg;
+    delete m_oldMsg;
+    delete m_newMsg;
+    m_oldMsg = new ProgressMsg;
+    m_newMsg = new ProgressMsg;
 
-  m_oldMsg->track = 0;
-  m_oldMsg->trackProgress = 0;
-  m_oldMsg->totalProgress = 0;
-  m_currentTrack=0;
+    m_oldMsg->track = 0;
+    m_oldMsg->trackProgress = 0;
+    m_oldMsg->totalProgress = 0;
+    m_currentTrack=0;
 }
 
 void K3bCdrdaoWriter::parseCdrdaoLine( const QString& str ) {
-  emit debuggingOutput( "cdrdao", str );
-  //  kdDebug() << "(cdrdaoparse)" << str << endl;
-  // find some messages from cdrdao
-  // -----------------------------------------------------------------------------------------
-  if( (str).startsWith( "Warning" ) || (str).startsWith( "WARNING" ) || (str).startsWith( "ERROR" ) ) {
-    parseCdrdaoError( str );
-  } else if( (str).startsWith( "Wrote" ) && !str.contains("blocks") ) {
-    parseCdrdaoWrote( str );
-  } else if( (str).startsWith( "Executing power" ) ) {
-    emit newSubTask( i18n("Executing Power calibration") );
-  } else if( (str).startsWith( "Power calibration successful" ) ) {
-    emit infoMessage( i18n("Power calibration successful"), K3bJob::PROCESS );
-    emit newSubTask( i18n("Preparing burn process...") );
-  } else if( (str).startsWith( "Flushing cache" ) ) {
-    emit newSubTask( i18n("Flushing cache") );
-  } else if( (str).startsWith( "Writing CD-TEXT lead" ) ) {
-    emit newSubTask( i18n("Writing CD-Text lead-in...") );
-  } else if( (str).startsWith( "Turning BURN-Proof on" ) ) {
-    emit infoMessage( i18n("Turning BURN-Proof on"), K3bJob::PROCESS );
-  } else if( str.startsWith( "Copying" ) ) {
-    emit infoMessage( str, K3bJob::PROCESS );
-  } else if( str.startsWith( "Found ISRC" ) ) {
-    emit infoMessage( i18n("Found ISRC code"), K3bJob::PROCESS );
-  } else if( str.startsWith( "Found pre-gap" ) ) {
-    emit infoMessage( i18n("Found pregap: %1").arg( str.mid(str.find(":")+1) ), K3bJob::PROCESS );
-  } else
-    unknownCdrdaoLine(str);
+    emit debuggingOutput( "cdrdao", str );
+    //  kdDebug() << "(cdrdaoparse)" << str << endl;
+    // find some messages from cdrdao
+    // -----------------------------------------------------------------------------------------
+    if( (str).startsWith( "Warning" ) || (str).startsWith( "WARNING" ) || (str).startsWith( "ERROR" ) ) {
+        parseCdrdaoError( str );
+    } else if( (str).startsWith( "Wrote" ) && !str.contains("blocks") ) {
+        parseCdrdaoWrote( str );
+    } else if( (str).startsWith( "Executing power" ) ) {
+        emit newSubTask( i18n("Executing Power calibration") );
+    } else if( (str).startsWith( "Power calibration successful" ) ) {
+        emit infoMessage( i18n("Power calibration successful"), K3bJob::PROCESS );
+        emit newSubTask( i18n("Preparing burn process...") );
+    } else if( (str).startsWith( "Flushing cache" ) ) {
+        emit newSubTask( i18n("Flushing cache") );
+    } else if( (str).startsWith( "Writing CD-TEXT lead" ) ) {
+        emit newSubTask( i18n("Writing CD-Text lead-in...") );
+    } else if( (str).startsWith( "Turning BURN-Proof on" ) ) {
+        emit infoMessage( i18n("Turning BURN-Proof on"), K3bJob::PROCESS );
+    } else if( str.startsWith( "Copying" ) ) {
+        emit infoMessage( str, K3bJob::PROCESS );
+    } else if( str.startsWith( "Found ISRC" ) ) {
+        emit infoMessage( i18n("Found ISRC code"), K3bJob::PROCESS );
+    } else if( str.startsWith( "Found pre-gap" ) ) {
+        emit infoMessage( i18n("Found pregap: %1").arg( str.mid(str.find(":")+1) ), K3bJob::PROCESS );
+    } else
+        unknownCdrdaoLine(str);
 }
 
 void K3bCdrdaoWriter::parseCdrdaoError( const QString& line ) {
-  if( line.contains( "No driver found" ) ) {
-    emit infoMessage( i18n("No cdrdao driver found."), K3bJob::ERROR );
-    emit infoMessage( i18n("Please select one manually in the device settings."), K3bJob::ERROR );
-    emit infoMessage( i18n("For most current drives this would be 'generic-mmc'."), K3bJob::ERROR );
-  } else if( line.contains( "Cannot setup device" ) ) {
-    // no nothing...
-  } else if( line.contains( "not ready") ) {
-    emit infoMessage( i18n("Device not ready, waiting."),K3bJob::PROCESS );
-  } else if( line.contains("Drive does not accept any cue sheet") ) {
-    emit infoMessage( i18n("Cue sheet not accepted."), K3bJob::ERROR );
-    emit infoMessage( i18n("Try setting the first pregap to 0."), K3bJob::ERROR );
-  } else if( !line.contains( "remote progress message" ) )
-    emit infoMessage( line, K3bJob::ERROR );
+    if( line.contains( "No driver found" ) ) {
+        emit infoMessage( i18n("No cdrdao driver found."), K3bJob::ERROR );
+        emit infoMessage( i18n("Please select one manually in the device settings."), K3bJob::ERROR );
+        emit infoMessage( i18n("For most current drives this would be 'generic-mmc'."), K3bJob::ERROR );
+    } else if( line.contains( "Cannot setup device" ) ) {
+        // no nothing...
+    } else if( line.contains( "not ready") ) {
+        emit infoMessage( i18n("Device not ready, waiting."),K3bJob::PROCESS );
+    } else if( line.contains("Drive does not accept any cue sheet") ) {
+        emit infoMessage( i18n("Cue sheet not accepted."), K3bJob::ERROR );
+        emit infoMessage( i18n("Try setting the first pregap to 0."), K3bJob::ERROR );
+    } else if( !line.contains( "remote progress message" ) )
+        emit infoMessage( line, K3bJob::ERROR );
 }
 
-void K3bCdrdaoWriter::parseCdrdaoWrote( const QString& line )
-{
-  int pos, po2;
-  pos = line.find( "Wrote" );
-  po2 = line.find( " ", pos + 6 );
-  int processed = line.mid( pos+6, po2-pos-6 ).toInt();
+void K3bCdrdaoWriter::parseCdrdaoWrote( const QString& line ) {
+    int pos, po2;
+    pos = line.find( "Wrote" );
+    po2 = line.find( " ", pos + 6 );
+    int processed = line.mid( pos+6, po2-pos-6 ).toInt();
 
-  pos = line.find( "of" );
-  po2 = line.find( " ", pos + 3 );
-  m_size = line.mid( pos+3, po2-pos-3 ).toInt();
+    pos = line.find( "of" );
+    po2 = line.find( " ", pos + 3 );
+    m_size = line.mid( pos+3, po2-pos-3 ).toInt();
 
-  createEstimatedWriteSpeed( processed, !m_writeSpeedInitialized );
-  m_writeSpeedInitialized = true;
-  
-  emit processedSize( processed, m_size );
+    createEstimatedWriteSpeed( processed, !m_writeSpeedInitialized );
+    m_writeSpeedInitialized = true;
+
+    emit processedSize( processed, m_size );
 }
 
 void K3bCdrdaoWriter::parseCdrdaoMessage(QSocket *comSock) {
-  char msgSync[] = { 0xff, 0x00, 0xff, 0x00 };
-  char buf;
-  int  state;
-  unsigned int  avail,count;
-  QString task;
-  int msgs;
+    char msgSync[] = { 0xff, 0x00, 0xff, 0x00 };
+    char buf;
+    int  state;
+    unsigned int  avail,count;
+    QString task;
+    int msgs;
 
-  avail = comSock->bytesAvailable();
-  count = 0;
+    avail = comSock->bytesAvailable();
+    count = 0;
 
-  msgs = avail / ( sizeof(msgSync)+sizeof(struct ProgressMsg) );
-  if ( msgs < 1 )
-    return;
-  else if ( msgs > 1) {
-    // move the read-index forward to the beginnig of the most recent message
-    count = ( msgs-1 ) * ( sizeof(msgSync)+sizeof(struct ProgressMsg) );
-    comSock->at(count);
-    kdDebug() << "(K3bCdrdaoParser) " << msgs-1 << " message(s) skipped" << endl;
-  }
-  while (count < avail) {
-    state = 0;
-    while (state < 4) {
-      buf=comSock->getch();
-      count++;
-      if (count == avail) {
-	kdDebug() << "(K3bCdrdaoParser) remote message sync not found (" << count << ")" << endl;
-	return;
-      }
-
-      if (buf == msgSync[state])
-	state++;
-      else
-	state = 0;
+    msgs = avail / ( sizeof(msgSync)+sizeof(struct ProgressMsg) );
+    if ( msgs < 1 )
+        return;
+    else if ( msgs > 1) {
+        // move the read-index forward to the beginnig of the most recent message
+        count = ( msgs-1 ) * ( sizeof(msgSync)+sizeof(struct ProgressMsg) );
+        comSock->at(count);
+        kdDebug() << "(K3bCdrdaoParser) " << msgs-1 << " message(s) skipped" << endl;
     }
+    while (count < avail) {
+        state = 0;
+        while (state < 4) {
+            buf=comSock->getch();
+            count++;
+            if (count == avail) {
+                kdDebug() << "(K3bCdrdaoParser) remote message sync not found (" << count << ")" << endl;
+                return;
+            }
 
-    if( (avail - count) < (int)sizeof(struct ProgressMsg) ) {
-      kdDebug() << "(K3bCdrdaoParser) could not read complete remote message." << endl;
-      return;
+            if (buf == msgSync[state])
+                state++;
+            else
+                state = 0;
+        }
+
+        if( (avail - count) < (int)sizeof(struct ProgressMsg) ) {
+            kdDebug() << "(K3bCdrdaoParser) could not read complete remote message." << endl;
+            return;
+        }
+
+        // read one message
+        int size = comSock->readBlock((char *)m_newMsg,sizeof(struct ProgressMsg));
+        if( size == -1 )
+            kdDebug() << "(K3bCdrdaoParser) read error" << endl;
+        count += size;
+
+        //   kdDebug() << "Status: " << msg.status
+        // 	    << " Total:  " << msg.totalTracks
+        // 	    << " Track:  " << msg.track
+        // 	    << " TrackProgress: " << msg.trackProgress/10
+        // 	    << " TotalProgress: " << msg.totalProgress/10
+        // 	    << endl;
+
+        // sometimes the progress takes one step back (on my system when using paranoia-level 3)
+        // so we just use messages that are greater than the previous or first messages
+        if( *m_oldMsg < *m_newMsg
+                || ( m_newMsg->track == 1 &&
+                     m_newMsg->trackProgress <= 10 )) {
+            emit subPercent( m_newMsg->trackProgress/10 );
+            emit percent( m_newMsg->totalProgress/10 );
+            emit buffer(m_newMsg->bufferFillRate);
+
+            if ( m_newMsg->track != m_currentTrack) {
+                switch (m_newMsg->status) {
+                case PGSMSG_RCD_EXTRACTING:
+                    //	task = i18n("Reading (Track %1 of %2)").arg(m_newMsg->track).arg(m_newMsg->totalTracks);
+                    emit nextTrack( m_newMsg->track, m_newMsg->totalTracks );
+                    break;
+                case PGSMSG_WCD_LEADIN:
+                    task = i18n("Writing leadin ");
+                    emit newSubTask( task );
+                    break;
+                case PGSMSG_WCD_DATA:
+                    //	task = i18n("Writing (Track %1 of %2)").arg(m_newMsg->track).arg(m_newMsg->totalTracks);
+                    emit nextTrack( m_newMsg->track, m_newMsg->totalTracks );
+                    break;
+                case PGSMSG_WCD_LEADOUT:
+                    task = i18n("Writing leadout ");
+                    emit newSubTask( task );
+                    break;
+                }
+
+                m_currentTrack = m_newMsg->track;
+            }
+
+            struct ProgressMsg* m = m_newMsg;
+            m_newMsg = m_oldMsg;
+            m_oldMsg = m;
+        }
     }
-
-    // read one message
-    int size = comSock->readBlock((char *)m_newMsg,sizeof(struct ProgressMsg));
-    if( size == -1 )
-      kdDebug() << "(K3bCdrdaoParser) read error" << endl;
-    count += size;
-
-    //   kdDebug() << "Status: " << msg.status
-    // 	    << " Total:  " << msg.totalTracks
-    // 	    << " Track:  " << msg.track
-    // 	    << " TrackProgress: " << msg.trackProgress/10
-    // 	    << " TotalProgress: " << msg.totalProgress/10
-    // 	    << endl;
-
-    // sometimes the progress takes one step back (on my system when using paranoia-level 3)
-    // so we just use messages that are greater than the previous or first messages
-    if( *m_oldMsg < *m_newMsg
-	|| ( m_newMsg->track == 1 &&
-	     m_newMsg->trackProgress <= 10 )) {
-      emit subPercent( m_newMsg->trackProgress/10 );
-      emit percent( m_newMsg->totalProgress/10 );
-      emit buffer(m_newMsg->bufferFillRate);
-
-      if ( m_newMsg->track != m_currentTrack) {
-	switch (m_newMsg->status) {
-	case PGSMSG_RCD_EXTRACTING:
-	  //	task = i18n("Reading (Track %1 of %2)").arg(m_newMsg->track).arg(m_newMsg->totalTracks);
-	  emit nextTrack( m_newMsg->track, m_newMsg->totalTracks );
-	  break;
-	case PGSMSG_WCD_LEADIN:
-	  task = i18n("Writing leadin ");
-	  emit newSubTask( task );
-	  break;
-	case PGSMSG_WCD_DATA:
-	  //	task = i18n("Writing (Track %1 of %2)").arg(m_newMsg->track).arg(m_newMsg->totalTracks);
-	  emit nextTrack( m_newMsg->track, m_newMsg->totalTracks );
-	  break;
-	case PGSMSG_WCD_LEADOUT:
-	  task = i18n("Writing leadout ");
-	  emit newSubTask( task );
-	  break;
-	}
-
-	m_currentTrack = m_newMsg->track;
-      }
-
-      struct ProgressMsg* m = m_newMsg;
-      m_newMsg = m_oldMsg;
-      m_oldMsg = m;
-    }
-  }
 }
 
 #include "k3bcdrdaowriter.moc"
