@@ -3,6 +3,8 @@
 
 #include "../k3bjob.h"
 
+#include <qptrqueue.h>
+
 class K3bDataDoc;
 class K3bDirItem;
 class QTextStream;
@@ -64,6 +66,10 @@ class K3bIsoImager : public K3bJob
   QString m_multiSessionInfo;
 
   K3bProcess* m_process;
+  bool m_processSuspended;
+  bool m_processExited;
+  QPtrQueue<QByteArray> m_data;
+  QByteArray* m_lastOutput;
 
   // used for mkisofs -print-size parsing
   QString m_collectedMkisofsPrintSizeStdout;
@@ -77,6 +83,7 @@ class K3bIsoImager : public K3bJob
   QString escapeGraftPoint( const QString& str );
   bool addMkisofsParameters();
   bool prepareMkisofsFiles();
+  void outputData();
 
   void cleanup();
 };

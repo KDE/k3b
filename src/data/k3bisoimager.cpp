@@ -23,6 +23,9 @@ K3bIsoImager::K3bIsoImager( K3bExternalBinManager* exbm, K3bDataDoc* doc, QObjec
     m_noDeepDirectoryRelocation( false ),
     m_importSession( false ),
     m_process( 0 ),
+    m_processSuspended(false),
+    m_processExited(false),
+    m_lastOutput(0),
     m_mkisofsPrintSizeResult( 0 )
 {
 }
@@ -36,16 +39,53 @@ K3bIsoImager::~K3bIsoImager()
 
 void K3bIsoImager::slotReceivedStdout( KProcess*, char* d, int len )
 {
-  m_process->suspend();
-  emit data( d, len );
+  // We need to deep copy the data since we cannot trust on KProcess to not emit any
+  // output after being suspended
+  // it seems to me that KProcess is not perfect here but who am I to blame ;)
+
+  QByteArray* buf = new QByteArray;
+  buf->duplicate( d, len );
+  m_data.enqueue( buf );
+
+  if( !m_processSuspended ) {
+    m_process->suspend();
+    m_processSuspended = true;
+
+    outputData();
+  }
+}
+
+
+void K3bIsoImager::outputData()
+{
+  // we do not need the old data any longer since it has been written
+  if( m_lastOutput ) {
+    delete m_lastOutput;
+    m_lastOutput = 0;
+  }
+  
+  // we need to keep the data until we are resumed since the data will mostly be written to 
+  // a KProcess (see KProcess::writeStdin)
+  m_lastOutput = m_data.dequeue();
+  emit data( m_lastOutput->data(), m_lastOutput->size() );
 }
 
 
 void K3bIsoImager::resume()
 {
-  if( m_process )
-    if( m_process->isRunning() )
+  // check if there is data left
+  if( m_data.count() > 0 ) {
+    outputData();
+  }
+  else {
+    if( m_processExited ) {
+      slotProcessExited( m_process );
+    }
+    else {
+      m_processSuspended = false;
       m_process->resume();
+    }
+  }
 }
 
 
@@ -76,22 +116,26 @@ void K3bIsoImager::slotReceivedStderr( const QString& line )
 
 void K3bIsoImager::slotProcessExited( KProcess* p )
 {
-  if( p->normalExit() ) {
-    if( p->exitStatus() == 0 ) {
-      emit infoMessage( i18n("mkisofs finished successfully."), STATUS );
-      emit finished( true );
+  m_processExited = true;
+
+  if( m_data.count() <= 0 ) {
+    if( p->normalExit() ) {
+      if( p->exitStatus() == 0 ) {
+	emit infoMessage( i18n("mkisofs finished successfully."), STATUS );
+	emit finished( true );
+      }
+      else {
+	emit infoMessage( i18n("mkisofs returned error: %1").arg(p->exitStatus()), ERROR );
+	emit finished( false );
+      }
     }
     else {
-      emit infoMessage( i18n("mkisofs returned error: %1").arg(p->exitStatus()), ERROR );
+      emit infoMessage( i18n("mkisofs exited abnormally."), ERROR );
       emit finished( false );
     }
-  }
-  else {
-    emit infoMessage( i18n("mkisofs exited abnormally."), ERROR );
-    emit finished( false );
-  }
 
-  cleanup();
+    cleanup();
+  }
 }
 
 
@@ -192,6 +236,8 @@ void K3bIsoImager::slotMkisofsPrintSizeFinished()
 {
   bool success = true;
 
+  kdDebug() << "(K3bIsoImager) iso size: " << m_collectedMkisofsPrintSizeStdout << endl;
+
   // if m_collectedMkisofsPrintSizeStdout is not empty we have a recent version of
   // mkisofs and parsing is very easy (s.o.)
   if( !m_collectedMkisofsPrintSizeStdout.isEmpty() ) {
@@ -264,12 +310,20 @@ void K3bIsoImager::start()
       emit finished( false );
       cleanup();
     }
+  else {
+    m_processExited = false;
+    m_processSuspended = false;
+  }
 }
 
 
 void K3bIsoImager::cancel()
 {
-  m_process->kill();
+  if( m_process )
+    if( m_process->isRunning() ) {
+      m_process->kill();
+      emit canceled();
+    }
 }
 
 
