@@ -490,7 +490,16 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
 	// start a k3bblankingjob
 	d->erasingInfoDialog->setText( i18n("Erasing CD-RW") );
 	  
+	// the user may be using cdrdao for erasing as cdrecord does not work
+	int erasingApp = K3b::DEFAULT;
+	c->setGroup( "General Options" );
+	if( c->readBoolEntry( "Manual writing app selection", false ) ) {
+	  c->setGroup( "CDRW Erasing" );
+	  erasingApp = K3b::writingAppFromString( c->readEntry( "writing_app" ) );
+	}
+
 	K3bBlankingJob job;
+	job.setWritingApp( erasingApp );
 	job.setDevice( d->device );
 	job.setMode( K3bBlankingJob::Fast );
 	job.setForceNoEject(true);
