@@ -711,7 +711,7 @@ void K3bCdDevice::CdDevice::checkForAncientWriters()
       kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
 		<< " found ancient drive: " << vendor() << " " << description() << endl;
 
-      m_writeModes = TAO|DAO;
+      m_writeModes = TAO|SAO;
       d->deviceType = CDROM|CDR;
       m_maxWriteSpeed = 4;
       m_maxReadSpeed = 12;
