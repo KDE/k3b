@@ -45,6 +45,8 @@
 #include <qeventloop.h>
 #include <qfile.h>
 #include <qtextstream.h>
+#include <qclipboard.h>
+#include <qapplication.h>
 
 #include <kprogress.h>
 #include <klocale.h>
@@ -72,20 +74,20 @@ public:
 
 private:
   void slotUser1();
+  void slotUser2();
 
   QTextView* debugView;
 };
 
 
 K3bJobProgressDialog::PrivateDebugWidget::PrivateDebugWidget( QMap<QString, QStringList>& map, QWidget* parent )
-  : KDialogBase( Plain, i18n("Debuggin Output"), Close|User1, Close, parent, "debugViewDialog", true,
-		 false, KGuiItem( i18n("Save to file"), "filesaveas" ) )
+  : KDialogBase( parent, "debugViewDialog", true, i18n("Debuggin Output"), Close|User1|User2, Close, 
+		 false, 
+		 KGuiItem( i18n("Save"), "filesaveas", i18n("Save to file") ), 
+		 KGuiItem( i18n("Copy"), "editcopy", i18n("Copy to clipboard") ) )
 {
-  debugView = new QTextView( plainPage() );
-  QGridLayout* grid = new QGridLayout( plainPage() );
-  grid->addWidget( debugView, 0, 0 );
-  grid->setSpacing( spacingHint() );
-  grid->setMargin( marginHint() );
+  debugView = new QTextView( this );
+  setMainWidget( debugView );
 
   debugView->append( "System\n" );
   debugView->append( "-----------------------\n" );
@@ -131,6 +133,12 @@ void K3bJobProgressDialog::PrivateDebugWidget::slotUser1()
       }
     }
   }
+}
+
+
+void K3bJobProgressDialog::PrivateDebugWidget::slotUser2()
+{
+  QApplication::clipboard()->setText( debugView->text(), QClipboard::Clipboard );
 }
 
 
