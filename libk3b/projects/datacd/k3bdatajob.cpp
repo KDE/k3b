@@ -106,7 +106,7 @@ K3bDoc* K3bDataJob::doc() const
 }
 
 
-K3bCdDevice::CdDevice* K3bDataJob::writer() const
+K3bDevice::Device* K3bDataJob::writer() const
 {
   return doc()->burner();
 }
@@ -386,7 +386,7 @@ void K3bDataJob::slotWriterJobFinished( bool success )
       d->copiesDone++;
 
       if( d->copiesDone < d->copies ) {
-	K3bCdDevice::eject( d->doc->burner() );
+	K3bDevice::eject( d->doc->burner() );
 
 	bool failed = false;
 	if( d->doc->onTheFly() )
@@ -443,7 +443,7 @@ void K3bDataJob::slotVerificationFinished( bool success )
 
   k3bcore->config()->setGroup("General Options");
   if( !k3bcore->config()->readBoolEntry( "No cd eject", false ) || d->copiesDone < d->copies )
-    K3bCdDevice::eject( d->doc->burner() );
+    K3bDevice::eject( d->doc->burner() );
   
   if( d->copiesDone < d->copies ) {
     bool failed = false;
@@ -621,14 +621,14 @@ void K3bDataJob::determineWritingMode()
       kdDebug() << "(K3bDataJob) determining last track's datamode..." << endl;
 
       // FIXME: use a devicethread
-      K3bCdDevice::Toc toc = d->doc->burner()->readToc();
+      K3bDevice::Toc toc = d->doc->burner()->readToc();
       if( toc.isEmpty() ) {
 	kdDebug() << "(K3bDataJob) could not retrieve toc." << endl;
 	emit infoMessage( i18n("Unable to determine the last track's datamode. Using default."), ERROR );
 	d->usedDataMode = K3b::MODE2;
       }
       else {
-	if( toc[toc.count()-1].mode() == K3bCdDevice::Track::MODE1 )
+	if( toc[toc.count()-1].mode() == K3bDevice::Track::MODE1 )
 	  d->usedDataMode = K3b::MODE1;
 	else
 	  d->usedDataMode = K3b::MODE2;
@@ -713,9 +713,9 @@ void K3bDataJob::waitForDisk()
   if( waitForMedia( d->doc->burner(), 
 		    d->doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
 		    d->doc->multiSessionMode() == K3bDataDoc::FINISH ?
-		    K3bCdDevice::STATE_INCOMPLETE :
-		    K3bCdDevice::STATE_EMPTY,
-		    K3bCdDevice::MEDIA_WRITABLE_CD ) < 0 ) {
+		    K3bDevice::STATE_INCOMPLETE :
+		    K3bDevice::STATE_EMPTY,
+		    K3bDevice::MEDIA_WRITABLE_CD ) < 0 ) {
     cancel();
   }
 }

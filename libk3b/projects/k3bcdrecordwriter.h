@@ -25,7 +25,7 @@
 class K3bExternalBin;
 class K3bProcess;
 class KProcess;
-class K3bCdDevice::CdDevice;
+class K3bDevice::Device;
 
 
 class K3bCdrecordWriter : public K3bAbstractWriter
@@ -33,7 +33,7 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   Q_OBJECT
 
  public:
-  K3bCdrecordWriter( K3bCdDevice::CdDevice*, K3bJobHandler* hdl, 
+  K3bCdrecordWriter( K3bDevice::Device*, K3bJobHandler* hdl, 
 		     QObject* parent = 0, const char* name = 0 );
   ~K3bCdrecordWriter();
 

@@ -59,10 +59,10 @@ bool K3bCueFileWriter::save( QTextStream& t )
 
   // the tracks
   unsigned int i = 0;
-  for( K3bCdDevice::Toc::const_iterator it = m_toc.begin();
+  for( K3bDevice::Toc::const_iterator it = m_toc.begin();
        it != m_toc.end(); ++it ) {
 
-    const K3bCdDevice::Track& track = *it;
+    const K3bDevice::Track& track = *it;
 
     t << "  TRACK " << QString::number(i+1).rightJustify( 2, '0' ) << " AUDIO" << endl;
 

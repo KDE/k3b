@@ -24,7 +24,7 @@ class QLabel;
 class KListView;
 class K3bIso9660;
 
-namespace K3bCdDevice {
+namespace K3bDevice {
   class DiskInfoDetector;
   class DiskInfo;
   class DiskInfo;
@@ -41,11 +41,11 @@ class K3bDiskInfoView : public K3bCdContentsView
   void reload();
 
  public slots:
-  void displayInfo( const K3bCdDevice::DiskInfo& info );
-  void displayInfo( K3bCdDevice::DiskInfoDetector* );
+  void displayInfo( const K3bDevice::DiskInfo& info );
+  void displayInfo( K3bDevice::DiskInfoDetector* );
 
  private:
-  void createMediaInfoItems( const K3bCdDevice::DiskInfo& info );
+  void createMediaInfoItems( const K3bDevice::DiskInfo& info );
   void createIso9660InfoItems( const K3bIso9660* iso );
 
   KListView* m_infoView;

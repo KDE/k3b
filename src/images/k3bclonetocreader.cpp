@@ -77,7 +77,7 @@ void K3bCloneTocReader::readFile()
     };
 
     struct tocheader* th = (struct tocheader*)buffer;
-    int dataLen = K3bCdDevice::from2Byte( th->len ) + 2;  // the len field does not include it's own length
+    int dataLen = K3bDevice::from2Byte( th->len ) + 2;  // the len field does not include it's own length
 
     if( th->first != 1 ) {
       kdDebug() << "(K3bCloneTocReader) first session != 1" << endl;

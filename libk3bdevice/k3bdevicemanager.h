@@ -30,9 +30,9 @@ class KConfig;
 class K3bExternalBin;
 
 
-namespace K3bCdDevice {
+namespace K3bDevice {
 
-  class CdDevice;
+  class Device;
 
   class DeviceManager : public QObject
     {
@@ -42,17 +42,17 @@ namespace K3bCdDevice {
       DeviceManager( QObject* parent = 0, const char* name = 0 );
       ~DeviceManager();
 
-      CdDevice* deviceByName( const QString& );
+      Device* deviceByName( const QString& );
 
-      CdDevice* findDevice( int bus, int id, int lun );
-      CdDevice* findDevice( const QString& devicename );
+      Device* findDevice( int bus, int id, int lun );
+      Device* findDevice( const QString& devicename );
 
       /**
        * Before getting the devices do a @ref scanbus().
        * @return List of all cd writer devices.
        * @deprecated use cdWriter
        */
-      QPtrList<CdDevice>& burningDevices();
+      QPtrList<Device>& burningDevices();
 
       /**
        * Note that all burning devices can also be used as
@@ -61,14 +61,14 @@ namespace K3bCdDevice {
        * @return List of all reader devices without writer devices.
        * @deprecated use cdReader
        **/
-      QPtrList<CdDevice>& readingDevices();
+      QPtrList<Device>& readingDevices();
 
-      QPtrList<CdDevice>& allDevices();
+      QPtrList<Device>& allDevices();
 
-      QPtrList<CdDevice>& cdWriter();
-      QPtrList<CdDevice>& cdReader();
-      QPtrList<CdDevice>& dvdWriter();
-      QPtrList<CdDevice>& dvdReader();
+      QPtrList<Device>& cdWriter();
+      QPtrList<Device>& cdReader();
+      QPtrList<Device>& dvdWriter();
+      QPtrList<Device>& dvdReader();
 
       /** writes to stderr **/
       void printDevices();
@@ -96,13 +96,13 @@ namespace K3bCdDevice {
        * add a new device like "/dev/mebecdrom" to be sensed
        * by the deviceManager.
        */
-      CdDevice* addDevice( const QString& );
+      Device* addDevice( const QString& );
 
     signals:
       /**
        * Emitted if the device configuration changed, i.e. a device was added or removed.
        */
-      void changed( K3bCdDevice::DeviceManager* );
+      void changed( K3bDevice::DeviceManager* );
       void changed();
 
     private slots:
@@ -120,7 +120,7 @@ namespace K3bCdDevice {
       class Private;
       Private* d;
 
-      CdDevice *addDevice( CdDevice* );
+      Device *addDevice( Device* );
       void BSDDeviceScan();
       void LinuxDeviceScan();
     };

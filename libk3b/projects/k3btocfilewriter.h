@@ -22,7 +22,7 @@
 #include <k3btoc.h>
 #include <k3bcdtext.h>
 
-namespace K3bCdDevice {
+namespace K3bDevice {
   class TrackCdText;
 }
 
@@ -34,8 +34,8 @@ class K3bTocFileWriter
   bool save( QTextStream& );
   bool save( const QString& filename );
 
-  void setData( const K3bCdDevice::Toc& toc ) { m_toc = toc; }
-  void setCdText( const K3bCdDevice::CdText& text ) { m_cdText = text; }
+  void setData( const K3bDevice::Toc& toc ) { m_toc = toc; }
+  void setCdText( const K3bDevice::CdText& text ) { m_cdText = text; }
   void setFilenames( const QStringList& names ) { m_filenames = names; }
   void setHideFirstTrack( bool b ) { m_hideFirstTrack = b; }
 
@@ -47,13 +47,13 @@ class K3bTocFileWriter
  private:
   void writeHeader( QTextStream& t );
   void writeGlobalCdText( QTextStream& t );
-  void writeTrackCdText( const K3bCdDevice::TrackCdText& track, QTextStream& t );
+  void writeTrackCdText( const K3bDevice::TrackCdText& track, QTextStream& t );
   void writeTrack( unsigned int index, const K3b::Msf& offset, QTextStream& t );
   void writeDataSource( unsigned int trackNumber, QTextStream& t );
   bool readFromStdin() const;
 
-  K3bCdDevice::Toc m_toc;
-  K3bCdDevice::CdText m_cdText;
+  K3bDevice::Toc m_toc;
+  K3bDevice::CdText m_cdText;
   QStringList m_filenames;
   bool m_hideFirstTrack;
   int m_sessionToWrite;

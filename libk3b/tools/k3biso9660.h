@@ -26,8 +26,8 @@
 #include <qdict.h>
 
 
-namespace K3bCdDevice {
-  class CdDevice;
+namespace K3bDevice {
+  class Device;
 }
 
 class K3bIso9660;
@@ -273,7 +273,7 @@ class K3bIso9660
    * Special case which always reads the TOC from the specified sector
    * thus supporting multisession CDs.
    */
-  K3bIso9660( K3bCdDevice::CdDevice* dev, unsigned int startSector = 0 );
+  K3bIso9660( K3bDevice::Device* dev, unsigned int startSector = 0 );
 
   /**
    * @param fd open file descriptor

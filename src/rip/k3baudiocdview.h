@@ -32,10 +32,12 @@ class KActionMenu;
 class K3bCddb;
 class QLabel;
 class K3bToolBox;
+class QDragObject;
 
-namespace K3bCdDevice {
+
+namespace K3bDevice {
   class DiskInfoDetector;
-  class CdDevice;
+  class Device;
 }
 
 
@@ -47,11 +49,16 @@ class K3bAudioCdView : public K3bCdContentsView
   K3bAudioCdView( QWidget* parent = 0, const char * name = 0 );
   ~K3bAudioCdView();
 
-  void setDisk( K3bCdDevice::DiskInfoDetector* );
+  void setDisk( K3bDevice::DiskInfoDetector* );
 
-  //  const K3bCdDevice::DiskInfo& displayedDisk() const { return m_diskInfo; }
+  //  const K3bDevice::DiskInfo& displayedDisk() const { return m_diskInfo; }
 
   KActionCollection* actionCollection() const { return m_actionCollection; }
+
+  /**
+   * internal
+   */
+  QDragObject* dragObject();
 
  public slots:
   void reload();
@@ -77,8 +84,8 @@ class K3bAudioCdView : public K3bCdContentsView
   void updateDisplay();
   void enableInteraction( bool );
 
-  K3bCdDevice::Toc m_toc;
-  K3bCdDevice::CdDevice* m_device;
+  K3bDevice::Toc m_toc;
+  K3bDevice::Device* m_device;
 
   K3bCddbResultEntry m_cddbInfo;
 
@@ -93,7 +100,7 @@ class K3bAudioCdView : public K3bCdContentsView
 
   K3bCddb* m_cddb;
 
-  K3bCdDevice::CdText m_cdText;
+  K3bDevice::CdText m_cdText;
 };
 
 

@@ -23,8 +23,8 @@
 
 #include <k3bcddbquery.h>
 
-namespace K3bCdDevice {
-  class CdDevice;
+namespace K3bDevice {
+  class Device;
   class Toc;
 }
 
@@ -46,8 +46,8 @@ class K3bAudioRippingDialog : public K3bInteractionDialog
   Q_OBJECT
 
  public: 
-  K3bAudioRippingDialog( const K3bCdDevice::Toc&, 
-			 K3bCdDevice::CdDevice*,
+  K3bAudioRippingDialog( const K3bDevice::Toc&, 
+			 K3bDevice::Device*,
 			 const K3bCddbResultEntry&, 
 			 const QValueList<int>&, 
 			 QWidget *parent = 0, const char *name = 0 );
@@ -60,8 +60,8 @@ class K3bAudioRippingDialog : public K3bInteractionDialog
   void init();
 
  private:
-  K3bCdDevice::Toc m_toc;
-  K3bCdDevice::CdDevice* m_device;
+  K3bDevice::Toc m_toc;
+  K3bDevice::Device* m_device;
   K3bCddbResultEntry m_cddbEntry;
   QValueList<int> m_trackNumbers;
 

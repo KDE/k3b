@@ -28,7 +28,7 @@
 #include <sys/types.h>
 
 
-class K3bCdDevice::ScsiCommand::Private
+class K3bDevice::ScsiCommand::Private
 {
 public:
   struct cdrom_generic_command cmd;
@@ -36,7 +36,7 @@ public:
 };
 
 
-void K3bCdDevice::ScsiCommand::clear()
+void K3bDevice::ScsiCommand::clear()
 {
   ::memset( &d->cmd, 0, sizeof(struct cdrom_generic_command) );
   ::memset( &d->sense, 0, sizeof(struct request_sense) );
@@ -46,13 +46,13 @@ void K3bCdDevice::ScsiCommand::clear()
 }
 
 
-unsigned char& K3bCdDevice::ScsiCommand::operator[]( size_t i )
+unsigned char& K3bDevice::ScsiCommand::operator[]( size_t i )
 {
   return d->cmd.cmd[i];
 }
 
 
-int K3bCdDevice::ScsiCommand::transport( TransportDirection dir,
+int K3bDevice::ScsiCommand::transport( TransportDirection dir,
 					 void* data,
 					 size_t len )
 {

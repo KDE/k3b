@@ -45,8 +45,8 @@ class KActionCollection;
 class K3bJobHandler;
 
 
-namespace K3bCdDevice {
-  class CdDevice;
+namespace K3bDevice {
+  class Device;
 }
 namespace K3b {
   class Msf;
@@ -134,7 +134,7 @@ class K3bDoc : public QObject
   bool onlyCreateImages() const { return m_onlyCreateImages; }
   int copies() const { return m_copies; }
   int speed() const { return m_speed; }
-  K3bCdDevice::CdDevice* burner() const { return m_burner; }
+  K3bDevice::Device* burner() const { return m_burner; }
   virtual KIO::filesize_t size() const = 0;
   virtual K3b::Msf length() const = 0;
 
@@ -181,7 +181,7 @@ class K3bDoc : public QObject
   void setOnTheFly( bool b ) { m_onTheFly = b; }
   void setOverburn( bool b ) { m_overburn = b; }
   void setSpeed( int speed );
-  void setBurner( K3bCdDevice::CdDevice* dev );
+  void setBurner( K3bDevice::Device* dev );
   void setBurnproof( bool b ) { m_burnproof = b; }
   void setTempDir( const QString& dir ) { m_tempDir = dir; }
   void setRemoveImages( bool b ) { m_removeImages = b; }
@@ -249,7 +249,7 @@ class K3bDoc : public QObject
 
   K3bView* m_view;
   QString m_tempDir;
-  K3bCdDevice::CdDevice* m_burner;
+  K3bDevice::Device* m_burner;
   bool m_dummy;
   bool m_onTheFly;
   bool m_burnproof;

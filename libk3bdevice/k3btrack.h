@@ -23,11 +23,11 @@
 
 #include <k3bmsf.h>
 
-namespace K3bCdDevice
+namespace K3bDevice
 {
   class Track
   {
-    friend class CdDevice;
+    friend class Device;
 
   public:
     enum TrackType { 
@@ -136,6 +136,6 @@ namespace K3bCdDevice
   };
 }
 
-typedef K3bCdDevice::Track K3bTrack;
+typedef K3bDevice::Track K3bTrack;
 
 #endif

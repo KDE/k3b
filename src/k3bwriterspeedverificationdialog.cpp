@@ -26,7 +26,7 @@
 #include <klocale.h>
 
 
-K3bWriterSpeedVerificationDialog::K3bWriterSpeedVerificationDialog( QPtrList<K3bCdDevice::CdDevice>& wlist,
+K3bWriterSpeedVerificationDialog::K3bWriterSpeedVerificationDialog( QPtrList<K3bDevice::Device>& wlist,
 								    QWidget* parent, const char* name )
   : KDialogBase( KDialogBase::Plain, i18n("Writer Speed Verification"), KDialogBase::Ok, KDialogBase::Ok, parent, name, true )
 {
@@ -42,8 +42,8 @@ K3bWriterSpeedVerificationDialog::K3bWriterSpeedVerificationDialog( QPtrList<K3b
   grid->addMultiCellWidget( infoLabel, 0, 0, 0, 1 );
 
   int row = 1;
-  for( QPtrListIterator<K3bCdDevice::CdDevice> it( wlist ); it.current(); ++it ) {
-    K3bCdDevice::CdDevice* dev = *it;
+  for( QPtrListIterator<K3bDevice::Device> it( wlist ); it.current(); ++it ) {
+    K3bDevice::Device* dev = *it;
 
     QSpinBox* spin = new QSpinBox( plainPage() );
     spin->setSuffix( "x" );
@@ -73,7 +73,7 @@ void K3bWriterSpeedVerificationDialog::slotSpeedChanged( int speed )
 }
 
 
-void K3bWriterSpeedVerificationDialog::verify( QPtrList<K3bCdDevice::CdDevice>& wlist, QWidget* parent, const char* name )
+void K3bWriterSpeedVerificationDialog::verify( QPtrList<K3bDevice::Device>& wlist, QWidget* parent, const char* name )
 {
   K3bWriterSpeedVerificationDialog d( wlist, parent, name );
   d.exec();

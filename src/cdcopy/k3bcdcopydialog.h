@@ -21,8 +21,8 @@
 
 #include <k3binteractiondialog.h>
 
-namespace K3bCdDevice {
-  class CdDevice;
+namespace K3bDevice {
+  class Device;
 }
 
 class K3bWriterSelectionWidget;
@@ -46,7 +46,7 @@ class K3bCdCopyDialog : public K3bInteractionDialog
   K3bCdCopyDialog(QWidget *parent = 0, const char *name = 0, bool modal = true );
   ~K3bCdCopyDialog();
 
-  K3bCdDevice::CdDevice* readingDevice() const;
+  K3bDevice::Device* readingDevice() const;
 
  private slots:
   void slotStartClicked();

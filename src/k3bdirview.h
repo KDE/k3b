@@ -38,8 +38,8 @@ class QLabel;
 class KConfig;
 class K3bDeviceBranch;
 
-namespace K3bCdDevice {
-  class CdDevice;
+namespace K3bDevice {
+  class Device;
   class DiskInfo;
   class DiskInfoDetector;
 }
@@ -65,17 +65,17 @@ class K3bDirView : public QVBox
  public slots:
   void saveConfig( KConfig* c );
   void showUrl( const KURL& );
-  void showDevice( K3bCdDevice::CdDevice* );
-  void showDiskInfo( K3bCdDevice::CdDevice* dev );
+  void showDevice( K3bDevice::Device* );
+  void showDiskInfo( K3bDevice::Device* dev );
   
  protected slots:
   void slotDirActivated( const KURL& );
   void slotDirActivated( const QString& );
   void slotUpdateURLCombo( const KURL& url );
-  void slotMountDevice( K3bCdDevice::CdDevice* dev );
+  void slotMountDevice( K3bDevice::Device* dev );
   void slotMountFinished( K3bDeviceBranch*, const QString& );
-  void slotDiskInfoReady( K3bCdDevice::DiskInfoDetector* );
-  void slotDetectDiskInfo( K3bCdDevice::CdDevice* dev );
+  void slotDiskInfoReady( K3bDevice::DiskInfoDetector* );
+  void slotDetectDiskInfo( K3bDevice::Device* dev );
   void reload();
   void home();
   void slotShowDiskInfo();
@@ -87,7 +87,7 @@ class K3bDirView : public QVBox
   void slotLoadDisk();
   void slotSetReadSpeed();
   //  void slotEjectFinished();
-  void slotFileTreeContextMenu( K3bCdDevice::CdDevice* dev, const QPoint& p );
+  void slotFileTreeContextMenu( K3bDevice::Device* dev, const QPoint& p );
 
  private:
   QWidgetStack* m_viewStack;
@@ -109,10 +109,10 @@ class K3bDirView : public QVBox
 
   KActionCollection* m_actionCollection;
 
-  K3bCdDevice::DiskInfoDetector* m_diskInfoDetector;
+  K3bDevice::DiskInfoDetector* m_diskInfoDetector;
   bool m_bViewDiskInfo;
   KActionMenu* m_devicePopupMenu;
-  K3bCdDevice::CdDevice* m_lastDevice;
+  K3bDevice::Device* m_lastDevice;
 
   class Private;
   Private* d;

@@ -67,32 +67,32 @@ K3bDeviceSelectionDialog::~K3bDeviceSelectionDialog()
 }
 
 
-void K3bDeviceSelectionDialog::addDevice( K3bCdDevice::CdDevice* dev )
+void K3bDeviceSelectionDialog::addDevice( K3bDevice::Device* dev )
 {
   d->comboDevices->addDevice( dev );
 }
 
 
-void K3bDeviceSelectionDialog::addDevices( const QPtrList<K3bCdDevice::CdDevice>& list )
+void K3bDeviceSelectionDialog::addDevices( const QPtrList<K3bDevice::Device>& list )
 {
   d->comboDevices->addDevices( list );
 }
 
 
-K3bCdDevice::CdDevice* K3bDeviceSelectionDialog::selectedDevice() const
+K3bDevice::Device* K3bDeviceSelectionDialog::selectedDevice() const
 {
   return d->comboDevices->selectedDevice();
 }
 
 
-void K3bDeviceSelectionDialog::setSelectedDevice( K3bCdDevice::CdDevice* dev )
+void K3bDeviceSelectionDialog::setSelectedDevice( K3bDevice::Device* dev )
 {
   d->comboDevices->setSelectedDevice( dev );
 }
 
 
-K3bCdDevice::CdDevice* K3bDeviceSelectionDialog::selectDevice( QWidget* parent, 
-							       const QPtrList<K3bCdDevice::CdDevice>& devices,
+K3bDevice::Device* K3bDeviceSelectionDialog::selectDevice( QWidget* parent, 
+							       const QPtrList<K3bDevice::Device>& devices,
 							       const QString& text )
 {
   if( devices.isEmpty() )
@@ -109,7 +109,7 @@ K3bCdDevice::CdDevice* K3bDeviceSelectionDialog::selectDevice( QWidget* parent,
     return 0;
 }
 
-K3bCdDevice::CdDevice* K3bDeviceSelectionDialog::selectDevice( QWidget* parent, 
+K3bDevice::Device* K3bDeviceSelectionDialog::selectDevice( QWidget* parent, 
 							       const QString& text )
 {
   return selectDevice( parent, k3bcore->deviceManager()->allDevices(), text );
@@ -118,7 +118,7 @@ K3bCdDevice::CdDevice* K3bDeviceSelectionDialog::selectDevice( QWidget* parent,
 }
 
 
-K3bCdDevice::CdDevice* K3bDeviceSelectionDialog::selectWriter( QWidget* parent, const QString& text )
+K3bDevice::Device* K3bDeviceSelectionDialog::selectWriter( QWidget* parent, const QString& text )
 {
   return selectDevice( parent, k3bcore->deviceManager()->burningDevices(), text );
 }

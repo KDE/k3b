@@ -273,16 +273,16 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
   // 2. ATAPI devices
   bool atapiReader = false;
   bool atapiWriter = false;
-  for( QPtrListIterator<K3bCdDevice::CdDevice> it( k3bcore->deviceManager()->readingDevices() );
+  for( QPtrListIterator<K3bDevice::Device> it( k3bcore->deviceManager()->readingDevices() );
        it.current(); ++it ) {
-    if( it.current()->interfaceType() == K3bCdDevice::CdDevice::IDE ) {
+    if( it.current()->interfaceType() == K3bDevice::Device::IDE ) {
       atapiReader = true;
       break;
     }
   }
-  for( QPtrListIterator<K3bCdDevice::CdDevice> it( k3bcore->deviceManager()->burningDevices() );
+  for( QPtrListIterator<K3bDevice::Device> it( k3bcore->deviceManager()->burningDevices() );
        it.current(); ++it ) {
-    if( it.current()->interfaceType() == K3bCdDevice::CdDevice::IDE ) {
+    if( it.current()->interfaceType() == K3bDevice::Device::IDE ) {
       atapiWriter = true;
       break;
     }

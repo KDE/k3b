@@ -20,7 +20,7 @@
 #include <qstring.h>
 
 
-namespace K3bCdDevice 
+namespace K3bDevice 
 {
   QString deviceTypeString( int );
   QString writingModeString( int );

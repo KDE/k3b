@@ -62,7 +62,7 @@ K3bMovixDvdJob::~K3bMovixDvdJob()
 }
 
 
-K3bCdDevice::CdDevice* K3bMovixDvdJob::writer() const
+K3bDevice::Device* K3bMovixDvdJob::writer() const
 {
   return m_dvdJob->writer();
 }

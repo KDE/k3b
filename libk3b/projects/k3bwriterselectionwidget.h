@@ -24,8 +24,8 @@ class KConfig;
 class QLabel;
 class K3bDeviceComboBox;
 class QToolButton;
-namespace K3bCdDevice {
-  class CdDevice;
+namespace K3bDevice {
+  class Device;
 }
 
 /**
@@ -44,7 +44,7 @@ class K3bWriterSelectionWidget : public QWidget
   ~K3bWriterSelectionWidget();
 
   int writerSpeed() const;
-  K3bCdDevice::CdDevice* writerDevice() const;
+  K3bDevice::Device* writerDevice() const;
 
   /**
    * returns K3b::WritingApp
@@ -56,7 +56,7 @@ class K3bWriterSelectionWidget : public QWidget
   void saveConfig( KConfig* );
 
  public slots:
-  void setWriterDevice( K3bCdDevice::CdDevice* );
+  void setWriterDevice( K3bDevice::Device* );
   void setSpeed( int );
   void setWritingApp( int );
 

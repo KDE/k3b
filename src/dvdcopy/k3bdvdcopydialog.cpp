@@ -181,7 +181,7 @@ K3bDvdCopyDialog::K3bDvdCopyDialog( QWidget* parent, const char* name, bool moda
   // setup connections
   // //////////////////////////////////////////////////////////////////////////
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotToggleAll()) );
-  connect( m_comboSourceDevice, SIGNAL(selectionChanged(K3bCdDevice::CdDevice*)), this, SLOT(slotToggleAll()) );
+  connect( m_comboSourceDevice, SIGNAL(selectionChanged(K3bDevice::Device*)), this, SLOT(slotToggleAll()) );
   connect( m_checkSimulate, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
@@ -324,11 +324,11 @@ void K3bDvdCopyDialog::slotToggleAll()
   m_checkSimulate->setDisabled( m_checkOnlyCreateImage->isChecked() );
   m_checkOnTheFly->setDisabled( m_checkOnlyCreateImage->isChecked() );
 
-  K3bCdDevice::CdDevice* dev = m_writerSelectionWidget->writerDevice();
+  K3bDevice::Device* dev = m_writerSelectionWidget->writerDevice();
   if( dev ) {
 
-    if( (dev->type() & (K3bCdDevice::CdDevice::DVDPR|K3bCdDevice::CdDevice::DVDPRW)) &&
-	!(dev->type() & (K3bCdDevice::CdDevice::DVDR|K3bCdDevice::CdDevice::DVDRW)) ) {
+    if( (dev->type() & (K3bDevice::Device::DVDPR|K3bDevice::Device::DVDPRW)) &&
+	!(dev->type() & (K3bDevice::Device::DVDR|K3bDevice::Device::DVDRW)) ) {
       // no simulation support for DVD+R(W) only drives
       m_checkSimulate->setChecked(false);
       m_checkSimulate->setEnabled(false);

@@ -134,7 +134,7 @@ bool K3bInfFileWriter::save( QTextStream& s )
 }
 
 
-void K3bInfFileWriter::setTrack( const K3bCdDevice::Track& track )
+void K3bInfFileWriter::setTrack( const K3bDevice::Track& track )
 {
   m_indices.clear();
 
@@ -168,7 +168,7 @@ void K3bInfFileWriter::addIndex( long i )
 }
 
 
-void K3bInfFileWriter::setTrackCdText( const K3bCdDevice::TrackCdText& cdtext )
+void K3bInfFileWriter::setTrackCdText( const K3bDevice::TrackCdText& cdtext )
 {
   setTrackTitle( cdtext.title() );
   setTrackPerformer( cdtext.performer() );
@@ -179,7 +179,7 @@ void K3bInfFileWriter::setTrackCdText( const K3bCdDevice::TrackCdText& cdtext )
 }
 
 
-void K3bInfFileWriter::setCdText( const K3bCdDevice::CdText& cdtext )
+void K3bInfFileWriter::setCdText( const K3bDevice::CdText& cdtext )
 {
   setAlbumTitle( cdtext.title() );
   setAlbumPerformer( cdtext.performer() );

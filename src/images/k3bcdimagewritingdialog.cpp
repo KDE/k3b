@@ -453,7 +453,7 @@ void K3bCdImageWritingDialog::slotUpdateImage( const QString& )
 
       if( !d->imageFile.isEmpty() ) {
 	// we have a cue file
-	if( cp.toc().contentType() == K3bCdDevice::AUDIO ) {
+	if( cp.toc().contentType() == K3bDevice::AUDIO ) {
 	  d->foundImageType = IMAGE_AUDIO_CUE;
 	  createAudioCueItems( cp );
 	}
@@ -627,7 +627,7 @@ void K3bCdImageWritingDialog::createAudioCueItems( const K3bCueFileParser& cp )
 			  .arg(cp.cdText().title()) );
 
   int i = 1;
-  for( K3bCdDevice::Toc::const_iterator it = cp.toc().begin();
+  for( K3bDevice::Toc::const_iterator it = cp.toc().begin();
        it != cp.toc().end(); ++it ) {
 
     K3bListViewItem* trackItem = 

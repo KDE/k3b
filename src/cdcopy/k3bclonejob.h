@@ -21,8 +21,8 @@
 #include <qstring.h>
 
 
-namespace K3bCdDevice {
-  class CdDevice;
+namespace K3bDevice {
+  class Device;
 }
 class K3bCdrecordWriter;
 class K3bReadcdReader;
@@ -36,8 +36,8 @@ class K3bCloneJob : public K3bBurnJob
   K3bCloneJob( K3bJobHandler*, QObject* parent = 0, const char* name = 0 );
   ~K3bCloneJob();
 
-  K3bCdDevice::CdDevice* writer() const { return m_writerDevice; }
-  K3bCdDevice::CdDevice* readingDevice() const { return m_readerDevice; }
+  K3bDevice::Device* writer() const { return m_writerDevice; }
+  K3bDevice::Device* readingDevice() const { return m_readerDevice; }
 
   QString jobDescription() const;
   QString jobDetails() const;
@@ -46,8 +46,8 @@ class K3bCloneJob : public K3bBurnJob
   void start();
   void cancel();
 
-  void setWriterDevice( K3bCdDevice::CdDevice* w ) { m_writerDevice = w; }
-  void setReaderDevice( K3bCdDevice::CdDevice* w ) { m_readerDevice = w; }
+  void setWriterDevice( K3bDevice::Device* w ) { m_writerDevice = w; }
+  void setReaderDevice( K3bDevice::Device* w ) { m_readerDevice = w; }
   void setImagePath( const QString& p ) { m_imagePath = p; }
   void setNoCorrection( bool b ) { m_noCorrection = b; }
   void setRemoveImageFiles( bool b ) { m_removeImageFiles = b; }
@@ -71,8 +71,8 @@ class K3bCloneJob : public K3bBurnJob
   void prepareWriter();
   void startWriting();
 
-  K3bCdDevice::CdDevice* m_writerDevice;
-  K3bCdDevice::CdDevice* m_readerDevice;
+  K3bDevice::Device* m_writerDevice;
+  K3bDevice::Device* m_readerDevice;
   QString m_imagePath;
 
   K3bCdrecordWriter* m_writerJob;

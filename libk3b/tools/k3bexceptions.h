@@ -16,8 +16,8 @@
 #ifndef _K3B_EXCEPTIONS_H_
 #define _K3B_EXCEPTIONS_H_
 
-namespace K3bCdDevice {
-  class CdDevice;
+namespace K3bDevice {
+  class Device;
 }
 
 class K3bExceptions
@@ -29,7 +29,7 @@ class K3bExceptions
    *
    * It simply uses a compiled in table.
    */
-  static bool brokenDaoAudio( K3bCdDevice::CdDevice* );
+  static bool brokenDaoAudio( K3bDevice::Device* );
 };
 
 #endif

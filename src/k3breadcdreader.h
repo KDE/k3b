@@ -23,8 +23,8 @@
 class K3bProcess;
 class KProcess;
 class K3bExternalBin;
-namespace K3bCdDevice {
-  class CdDevice;
+namespace K3bDevice {
+  class Device;
 }
 namespace K3b {
   class Msf;
@@ -45,7 +45,7 @@ class K3bReadcdReader : public K3bJob
   void start();
   void cancel();
 
-  void setReadDevice( K3bCdDevice::CdDevice* dev ) { m_readDevice = dev; }
+  void setReadDevice( K3bDevice::Device* dev ) { m_readDevice = dev; }
 
   /** 0 means MAX */
   void setReadSpeed( int s ) { m_speed = s; }
@@ -80,7 +80,7 @@ class K3bReadcdReader : public K3bJob
   int m_speed;
   int m_retries;
 
-  K3bCdDevice::CdDevice* m_readDevice;
+  K3bDevice::Device* m_readDevice;
 
   QString m_imagePath;
 

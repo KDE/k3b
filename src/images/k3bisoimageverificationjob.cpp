@@ -41,7 +41,7 @@ public:
   bool canceled;
   bool imageMd5SumCalculated;
   K3bMd5Job* md5Job;
-  K3bCdDevice::CdDevice* device;
+  K3bDevice::Device* device;
   QString imageFileName;
 
   KIO::filesize_t imageSize;
@@ -76,7 +76,7 @@ void K3bIsoImageVerificationJob::cancel()
 }
 
 
-void K3bIsoImageVerificationJob::setDevice( K3bCdDevice::CdDevice* dev )
+void K3bIsoImageVerificationJob::setDevice( K3bDevice::Device* dev )
 {
   d->device = dev;
 }
@@ -98,7 +98,7 @@ void K3bIsoImageVerificationJob::start()
   // first we need to reload and mount the device
   emit newTask( i18n("Reloading the media") );
 
-  connect( K3bCdDevice::reload( d->device ), SIGNAL(finished(bool)),
+  connect( K3bDevice::reload( d->device ), SIGNAL(finished(bool)),
 	     this, SLOT(slotMediaReloaded(bool)) );
 }
 

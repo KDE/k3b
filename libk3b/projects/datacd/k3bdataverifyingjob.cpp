@@ -55,7 +55,7 @@ public:
   bool success;
   K3bMd5Job* md5Job;
   K3bDataDoc* doc;
-  K3bCdDevice::CdDevice* device;
+  K3bDevice::Device* device;
   K3bIso9660* iso9660;
 
   K3bDataItem* currentItem;
@@ -109,7 +109,7 @@ void K3bDataVerifyingJob::start()
   // first we need to reload the device
   emit newTask( i18n("Reloading the media") );
 
-  connect( K3bCdDevice::reload( d->device ), SIGNAL(finished(bool)),
+  connect( K3bDevice::reload( d->device ), SIGNAL(finished(bool)),
 	     this, SLOT(slotMediaReloaded(bool)) );
 }
 
@@ -122,12 +122,12 @@ void K3bDataVerifyingJob::slotMediaReloaded( bool success )
 
   emit newTask( i18n("Reading TOC") );
 
-  connect( K3bCdDevice::toc( d->device ), SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
-	     this, SLOT(slotTocRead(K3bCdDevice::DeviceHandler*)) );
+  connect( K3bDevice::toc( d->device ), SIGNAL(finished(K3bDevice::DeviceHandler*)),
+	     this, SLOT(slotTocRead(K3bDevice::DeviceHandler*)) );
 }
 
 
-void K3bDataVerifyingJob::slotTocRead( K3bCdDevice::DeviceHandler* dh )
+void K3bDataVerifyingJob::slotTocRead( K3bDevice::DeviceHandler* dh )
 {
   if( d->canceled ) {
     emit canceled();
@@ -146,9 +146,9 @@ void K3bDataVerifyingJob::slotTocRead( K3bCdDevice::DeviceHandler* dh )
     if( d->doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
 	d->doc->multiSessionMode() == K3bDataDoc::FINISH ) {
       // in this case we only compare the files from the new session
-      K3bCdDevice::Toc::const_iterator it = dh->toc().end();
+      K3bDevice::Toc::const_iterator it = dh->toc().end();
       --it; // this is valid since there is at least one data track
-      while( it != dh->toc().begin() && (*it).type() != K3bCdDevice::Track::DATA )
+      while( it != dh->toc().begin() && (*it).type() != K3bDevice::Track::DATA )
 	--it;
       startSec = (*it).firstSector().lba();
     }
@@ -227,7 +227,7 @@ void K3bDataVerifyingJob::setDoc( K3bDataDoc* doc )
 }
 
 
-void K3bDataVerifyingJob::setDevice( K3bCdDevice::CdDevice* dev )
+void K3bDataVerifyingJob::setDevice( K3bDevice::Device* dev )
 {
   d->device = dev;
 }

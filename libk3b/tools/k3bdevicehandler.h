@@ -28,14 +28,14 @@
 class QCustomEvent;
 
 
-namespace K3bCdDevice
+namespace K3bDevice
 {
-  class CdDevice;
+  class Device;
 
 
   /**
-   * The K3bCdDevice::CdDevicehandler is a threaded wrapper around K3bCdDevice::CdDevice.
-   * It allows async access to the time comsuming blocking K3bCdDevice::CdDevice methods.
+   * The K3bDevice::Devicehandler is a threaded wrapper around K3bDevice::Device.
+   * It allows async access to the time comsuming blocking K3bDevice::Device methods.
    * Since it's a K3bJob it is very easy to handle. Just use one of the methods and
    * connect to the finished signal.
    * Be aware that all methods only return valid values if the corresponding info has
@@ -46,14 +46,14 @@ namespace K3bCdDevice
       Q_OBJECT
 
      public:
-      DeviceHandler( CdDevice*, QObject* parent = 0, const char* name = 0 );
+      DeviceHandler( Device*, QObject* parent = 0, const char* name = 0 );
       DeviceHandler( QObject* parent = 0, const char* name = 0 );
 
       /**
        * This constructor is used by the global "quick" methods and should not be used
        * otherwise except for the same usage.
        */
-      DeviceHandler( int command, CdDevice*, const char* name = 0 );
+      DeviceHandler( int command, Device*, const char* name = 0 );
 
       ~DeviceHandler();
 
@@ -136,10 +136,10 @@ namespace K3bCdDevice
       };
 
     signals:
-      void finished( K3bCdDevice::DeviceHandler* );
+      void finished( K3bDevice::DeviceHandler* );
 
      public slots:
-      void setDevice( CdDevice* );
+      void setDevice( Device* );
       void sendCommand( int command );
 
       void getToc();
@@ -167,7 +167,7 @@ namespace K3bCdDevice
   /**
    * Usage: 
    * <pre> 
-   *  connect( K3bCdDevice::sendCommand( K3bCdDevice::DeviceHandler::MOUNT, dev ), SIGNAL(finished(DeviceHandler*)),
+   *  connect( K3bDevice::sendCommand( K3bDevice::DeviceHandler::MOUNT, dev ), SIGNAL(finished(DeviceHandler*)),
    *           this, SLOT(someSlot(DeviceHandler*)) );
    *
    *  void someSlot( DeviceHandler* dh ) {
@@ -176,49 +176,49 @@ namespace K3bCdDevice
    * Be aware that the DeviceHandler will get destroyed once the signal has been 
    * emited.
    */
-  DeviceHandler* sendCommand( int command, CdDevice* );
+  DeviceHandler* sendCommand( int command, Device* );
 
-  inline DeviceHandler* diskInfo(CdDevice* dev) {
+  inline DeviceHandler* diskInfo(Device* dev) {
     return sendCommand(DeviceHandler::DISKINFO,dev);
   }
 
-  inline DeviceHandler* toc(CdDevice* dev) {
+  inline DeviceHandler* toc(Device* dev) {
     return sendCommand(DeviceHandler::TOC,dev);
   }
 
-  inline DeviceHandler* diskSize(CdDevice* dev) {
+  inline DeviceHandler* diskSize(Device* dev) {
     return sendCommand(DeviceHandler::DISKSIZE,dev);
   }
 
-  inline DeviceHandler* remainingSize(CdDevice* dev) {
+  inline DeviceHandler* remainingSize(Device* dev) {
     return sendCommand(DeviceHandler::REMAININGSIZE,dev);
   }
 
-  inline DeviceHandler* tocType(CdDevice* dev) {
+  inline DeviceHandler* tocType(Device* dev) {
     return sendCommand(DeviceHandler::TOCTYPE,dev);
   }
 
-  inline DeviceHandler* numSessions(CdDevice* dev) {
+  inline DeviceHandler* numSessions(Device* dev) {
     return sendCommand(DeviceHandler::NUMSESSIONS,dev);
   }
 
-  inline DeviceHandler* block(CdDevice* dev) {
+  inline DeviceHandler* block(Device* dev) {
     return sendCommand(DeviceHandler::BLOCK,dev);
   }
 
-  inline DeviceHandler* unblock(CdDevice* dev) {
+  inline DeviceHandler* unblock(Device* dev) {
     return sendCommand(DeviceHandler::UNBLOCK,dev);
   }
 
-  inline DeviceHandler* eject(CdDevice* dev) {
+  inline DeviceHandler* eject(Device* dev) {
     return sendCommand(DeviceHandler::EJECT,dev);
   }
 
-  inline DeviceHandler* reload(CdDevice* dev) {
+  inline DeviceHandler* reload(Device* dev) {
     return sendCommand(DeviceHandler::RELOAD,dev);
   }
 
-  inline DeviceHandler* load(CdDevice* dev) {
+  inline DeviceHandler* load(Device* dev) {
     return sendCommand(DeviceHandler::LOAD,dev);
   }
 }

@@ -163,8 +163,8 @@ public:
   int maxRetries;
 
   // high-level api
-  K3bCdDevice::CdDevice* device;
-  K3bCdDevice::Toc toc;
+  K3bDevice::Device* device;
+  K3bDevice::Toc toc;
   long currentSector;
   long startSector;
   long lastSector;
@@ -415,7 +415,7 @@ K3bCdparanoiaLib* K3bCdparanoiaLib::create()
 }
 
 
-bool K3bCdparanoiaLib::initParanoia( K3bCdDevice::CdDevice* dev, const K3bCdDevice::Toc& toc )
+bool K3bCdparanoiaLib::initParanoia( K3bDevice::Device* dev, const K3bDevice::Toc& toc )
 {
   paranoiaFree();
 
@@ -431,7 +431,7 @@ bool K3bCdparanoiaLib::initParanoia( K3bCdDevice::CdDevice* dev, const K3bCdDevi
     return false;
   }
 
-  if( d->toc.contentType() == K3bCdDevice::DATA ) {
+  if( d->toc.contentType() == K3bDevice::DATA ) {
     kdDebug() << "(K3bCdparanoiaLib) No audio tracks found." << endl;
     cleanup();
     return false;
@@ -449,7 +449,7 @@ bool K3bCdparanoiaLib::initParanoia( K3bCdDevice::CdDevice* dev, const K3bCdDevi
 }
 
 
-bool K3bCdparanoiaLib::initParanoia( K3bCdDevice::CdDevice* dev )
+bool K3bCdparanoiaLib::initParanoia( K3bDevice::Device* dev )
 {
   return initParanoia( dev, dev->readToc() );
 }
@@ -473,15 +473,15 @@ bool K3bCdparanoiaLib::initReading()
 {
   if( d->device ) {
     // find first audio track
-    K3bCdDevice::Toc::const_iterator trackIt = d->toc.begin();
-    while( (*trackIt).type() != K3bCdDevice::Track::AUDIO ) {
+    K3bDevice::Toc::const_iterator trackIt = d->toc.begin();
+    while( (*trackIt).type() != K3bDevice::Track::AUDIO ) {
       ++trackIt;
     }
 
     long start = (*trackIt).firstSector().lba();
 
     // find last audio track
-    while( trackIt != d->toc.end() && (*trackIt).type() == K3bCdDevice::Track::AUDIO )
+    while( trackIt != d->toc.end() && (*trackIt).type() == K3bDevice::Track::AUDIO )
       ++trackIt;
     --trackIt;
 
@@ -500,8 +500,8 @@ bool K3bCdparanoiaLib::initReading( unsigned int track )
 {
   if( d->device ) {
     if( track <= d->toc.count() ) {
-      const K3bCdDevice::Track& k3bTrack = d->toc[track-1];
-      if( k3bTrack.type() == K3bCdDevice::Track::AUDIO ) {
+      const K3bDevice::Track& k3bTrack = d->toc[track-1];
+      if( k3bTrack.type() == K3bDevice::Track::AUDIO ) {
 	return initReading( k3bTrack.firstSector().lba(), k3bTrack.lastSector().lba() );
       }
       else {
@@ -607,7 +607,7 @@ int K3bCdparanoiaLib::status() const
 }
 
 
-const K3bCdDevice::Toc& K3bCdparanoiaLib::toc() const
+const K3bDevice::Toc& K3bCdparanoiaLib::toc() const
 {
   return d->toc;
 }

@@ -42,7 +42,7 @@
 
 
 
-K3bDeviceBranch::K3bDeviceBranch( KFileTreeView* view, K3bCdDevice::CdDevice* dev, KFileTreeViewItem* item )
+K3bDeviceBranch::K3bDeviceBranch( KFileTreeView* view, K3bDevice::Device* dev, KFileTreeViewItem* item )
   : KFileTreeBranch( view, 
 		     KURL(dev->mountPoint()), 
 		     QString("%1 - %2").arg(dev->vendor()).arg(dev->description()),
@@ -188,9 +188,9 @@ public:
   }
 
   QPtrDict<K3bDeviceBranch> deviceBranchDict;
-  QMap<KFileTreeBranch*, K3bCdDevice::CdDevice*> branchDeviceMap;
+  QMap<KFileTreeBranch*, K3bDevice::Device*> branchDeviceMap;
 
-  K3bCdDevice::DeviceManager* deviceManager;
+  K3bDevice::DeviceManager* deviceManager;
 };
 
 K3bFileTreeView::K3bFileTreeView( QWidget *parent, const char *name )
@@ -200,8 +200,6 @@ K3bFileTreeView::K3bFileTreeView( QWidget *parent, const char *name )
 
   addColumn( i18n("Directories") );
   setDragEnabled( true );
-  setAcceptDrops( true );
-  setDropVisualizer( true );
   setAlternateBackground( QColor() );
   setFullWidth();
   setRootIsDecorated(true);
@@ -260,61 +258,6 @@ void K3bFileTreeView::initActions()
 }
 
 
-/*
-void K3bFileTreeView::slotDropped() {
-    kdDebug() << "(K3bFileTreeView:slotDropped)" << endl;
-}
-*/
-void K3bFileTreeView::contentsDropEvent(QDropEvent* ) {
-//     kdDebug() << "(K3bFileTreeView:contentsDropEvent)" << endl;
-//     QString text;
-//     if ( QTextDrag::decode(event, text) ) {
-//         if ( text == CD_DRAG) {
-//             event->accept();
-//             kdDebug() << "(K3bFileTreeView) Drop text index: " << text << endl;
-//             // correct entry  if scrollbar are visible and scrolled
-//             KFileTreeViewItem *item = dynamic_cast<KFileTreeViewItem*>( itemAt( contentsToViewport( event->pos() ) ));
-//             if( item ){
-//                 kdDebug() << "(K3bFileTreeView) Path: " << item->path() << endl;
-//                 QApplication::setOverrideCursor( Qt::ArrowCursor );
-//                 kdDebug() << "(K3bFileTreeView) Start rip dialog" << endl;
-//                 k3bMain()->mainWindow()->getCdView()->slotPrepareRipping( item->path() );
-//                 QApplication::restoreOverrideCursor();
-//             }
-//         }
-//     }
-}
-
-void K3bFileTreeView::contentsDragMoveEvent ( QDragMoveEvent* ){
-//    QString text;
-//    QTextDrag::decode( e, text );
-//    if ( text == CD_DRAG ) {
-//        KFileTreeView::contentsDragMoveEvent( e );
-//    } else {
-//        e->ignore();
-//    }
-}
-/*
-* overwrite original to support K3b DND Objects. That will enable autoOpenFolder in the tree.
-*/
-bool K3bFileTreeView::acceptDrag(QDropEvent*  ) const {
-//    bool result = false;
-//    QString text;
-//    QTextDrag::decode( e, text );
-//    if ( text == CD_DRAG) {
-//        result = true;
-//    }
-//    if( !result ){
-//        // the original from KFileTreeView to support copy/link/move
-//        result = QUriDrag::canDecode( e ) &&
-//            ( e->action() == QDropEvent::Copy
-//            || e->action() == QDropEvent::Move
-//            || e->action() == QDropEvent::Link );
-//    }
-//    return result;
-  return false;
-}
-
 void K3bFileTreeView::addDefaultBranches()
 {
   KURL home = KURL( QDir::homeDirPath() );
@@ -326,12 +269,12 @@ void K3bFileTreeView::addDefaultBranches()
 }
 
 
-void K3bFileTreeView::addCdDeviceBranches( K3bCdDevice::DeviceManager* dm )
+void K3bFileTreeView::addCdDeviceBranches( K3bDevice::DeviceManager* dm )
 {
   kdDebug() << "(K3bFileTreeView::addCdDeviceBranches)" << endl;
 
   // remove all previous added device branches
-  for( QMap<KFileTreeBranch*, K3bCdDevice::CdDevice*>::Iterator it = d->branchDeviceMap.begin();
+  for( QMap<KFileTreeBranch*, K3bDevice::Device*>::Iterator it = d->branchDeviceMap.begin();
        it != d->branchDeviceMap.end(); ++it ) {
     removeBranch( it.key() );
   }
@@ -340,8 +283,8 @@ void K3bFileTreeView::addCdDeviceBranches( K3bCdDevice::DeviceManager* dm )
   d->branchDeviceMap.clear();
   d->deviceBranchDict.clear();
 
-  QPtrList<K3bCdDevice::CdDevice>& devices = dm->allDevices();
-  for ( K3bCdDevice::CdDevice* dev = devices.first(); dev != 0; dev = devices.next() ) {
+  QPtrList<K3bDevice::Device>& devices = dm->allDevices();
+  for ( K3bDevice::Device* dev = devices.first(); dev != 0; dev = devices.next() ) {
 
     K3bDeviceBranch* newBranch = new K3bDeviceBranch( this, dev );
     addBranch( newBranch );
@@ -362,8 +305,8 @@ void K3bFileTreeView::addCdDeviceBranches( K3bCdDevice::DeviceManager* dm )
     d->deviceManager = dm;
 
     // make sure we get changes to the config
-    connect( dm, SIGNAL(changed(K3bCdDevice::DeviceManager*)),
-	     this, SLOT(addCdDeviceBranches(K3bCdDevice::DeviceManager*)) );
+    connect( dm, SIGNAL(changed(K3bDevice::DeviceManager*)),
+	     this, SLOT(addCdDeviceBranches(K3bDevice::DeviceManager*)) );
   }
 
   kdDebug() << "(K3bFileTreeView::addCdDeviceBranches) done" << endl;
@@ -447,7 +390,7 @@ void K3bFileTreeView::slotContextMenu( KListView*, QListViewItem* item, const QP
 }
 
 
-K3bCdDevice::CdDevice* K3bFileTreeView::selectedDevice() const
+K3bDevice::Device* K3bFileTreeView::selectedDevice() const
 {
   KFileTreeViewItem* treeItem = dynamic_cast<KFileTreeViewItem*>(selectedItem());
   if( treeItem ) {
@@ -468,9 +411,9 @@ KURL K3bFileTreeView::selectedUrl() const
   return KURL();
 }
 
-void K3bFileTreeView::setSelectedDevice(K3bCdDevice::CdDevice* dev)
+void K3bFileTreeView::setSelectedDevice(K3bDevice::Device* dev)
 {
-  for(QMap<KFileTreeBranch*, K3bCdDevice::CdDevice*>::iterator it = d->branchDeviceMap.begin();
+  for(QMap<KFileTreeBranch*, K3bDevice::Device*>::iterator it = d->branchDeviceMap.begin();
       it != d->branchDeviceMap.end(); ++it)
   {
     kdDebug() << "Select " << dev->devicename() << endl;
@@ -483,7 +426,7 @@ void K3bFileTreeView::setSelectedDevice(K3bCdDevice::CdDevice* dev)
 }
 
 
-K3bDeviceBranch* K3bFileTreeView::branch( K3bCdDevice::CdDevice* dev )
+K3bDeviceBranch* K3bFileTreeView::branch( K3bDevice::Device* dev )
 {
   return d->deviceBranchDict.find( (void*)dev );
 }

@@ -27,7 +27,7 @@ to make the code more readable.
 
 
 
-bool K3bCdDevice::CdDevice::getFeature( unsigned char** data, int& dataLen, unsigned int feature ) const
+bool K3bDevice::Device::getFeature( unsigned char** data, int& dataLen, unsigned int feature ) const
 {
   unsigned char header[2048];
   ::memset( header, 0, 2048 );
@@ -64,19 +64,19 @@ bool K3bCdDevice::CdDevice::getFeature( unsigned char** data, int& dataLen, unsi
       return true;
     }
     else {
-      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": GET CONFIGURATION with real length "
+      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": GET CONFIGURATION with real length "
 		<< dataLen << " failed." << endl;
       delete [] *data;
     }
   }
   else
-    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": GET CONFIGURATION length det failed." << endl;
+    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": GET CONFIGURATION length det failed." << endl;
 
   return false;
 }
 
 
-bool K3bCdDevice::CdDevice::supportsFeature( unsigned int feature ) const
+bool K3bDevice::Device::supportsFeature( unsigned int feature ) const
 {
   unsigned char* data = 0;
   int dataLen = 0;
@@ -94,7 +94,7 @@ bool K3bCdDevice::CdDevice::supportsFeature( unsigned int feature ) const
 }
 
 
-bool K3bCdDevice::CdDevice::readIsrc( unsigned int track, QCString& isrc ) const
+bool K3bDevice::Device::readIsrc( unsigned int track, QCString& isrc ) const
 {
   unsigned char* data = 0;
   int dataLen = 0;
@@ -122,7 +122,7 @@ bool K3bCdDevice::CdDevice::readIsrc( unsigned int track, QCString& isrc ) const
 }
 
 
-bool K3bCdDevice::CdDevice::readMcn( QCString& mcn ) const
+bool K3bDevice::Device::readMcn( QCString& mcn ) const
 {
   unsigned char* data = 0;
   int dataLen = 0;
@@ -146,7 +146,7 @@ bool K3bCdDevice::CdDevice::readMcn( QCString& mcn ) const
 }
 
 
-bool K3bCdDevice::CdDevice::getPerformance( unsigned char** data, int& dataLen,
+bool K3bDevice::Device::getPerformance( unsigned char** data, int& dataLen,
 					    unsigned int type,
 					    unsigned int dataType,
 					    unsigned int lba ) const
@@ -178,21 +178,21 @@ bool K3bCdDevice::CdDevice::getPerformance( unsigned char** data, int& dataLen,
       return true;
     }
     else {
-      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName()
+      kdDebug() << "(K3bDevice::Device) " << blockDeviceName()
 		<< ": GET PERFORMANCE with real length "
 		<< dataLen << " failed." << endl;
       delete [] *data;
     }
   }
   else
-    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName()
+    kdDebug() << "(K3bDevice::Device) " << blockDeviceName()
 	      << ": GET PERFORMANCE length det failed." << endl;
 
   return false;
 }
 
 
-bool K3bCdDevice::CdDevice::setSpeed( unsigned int readingSpeed,
+bool K3bDevice::Device::setSpeed( unsigned int readingSpeed,
 				      unsigned int writingSpeed,
 				      bool cav ) const
 {
@@ -207,7 +207,7 @@ bool K3bCdDevice::CdDevice::setSpeed( unsigned int readingSpeed,
 }
 
 
-bool K3bCdDevice::CdDevice::seek( unsigned long lba ) const
+bool K3bDevice::Device::seek( unsigned long lba ) const
 {
   ScsiCommand cmd( this );
   cmd[0] = MMC_SEEK_10;
@@ -220,7 +220,7 @@ bool K3bCdDevice::CdDevice::seek( unsigned long lba ) const
 }
 
 
-bool K3bCdDevice::CdDevice::readTrackInformation( unsigned char** data, int& dataLen, int type, unsigned long value ) const
+bool K3bDevice::Device::readTrackInformation( unsigned char** data, int& dataLen, int type, unsigned long value ) const
 {
   unsigned char header[2048];
   ::memset( header, 0, 2048 );
@@ -239,7 +239,7 @@ bool K3bCdDevice::CdDevice::readTrackInformation( unsigned char** data, int& dat
     cmd[5] = value;
     break;
   default:
-    kdDebug() << "(K3bCdDevice::readTrackInformation) wrong type parameter: " << type << endl;
+    kdDebug() << "(K3bDevice::readTrackInformation) wrong type parameter: " << type << endl;
     return false;
   }
 
@@ -270,20 +270,20 @@ bool K3bCdDevice::CdDevice::readTrackInformation( unsigned char** data, int& dat
       return true;
     }
     else {
-      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ TRACK INFORMATION with real length "
+      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ TRACK INFORMATION with real length "
 		<< dataLen << " failed." << endl;
       delete [] *data;
     }
   }
   else
-    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ TRACK INFORMATION length det failed." << endl;
+    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ TRACK INFORMATION length det failed." << endl;
 
   return false;
 }
 
 
 
-bool K3bCdDevice::CdDevice::read10( unsigned char* data,
+bool K3bDevice::Device::read10( unsigned char* data,
 				    int dataLen,
 				    unsigned long startAdress,
 				    unsigned int length,
@@ -302,7 +302,7 @@ bool K3bCdDevice::CdDevice::read10( unsigned char* data,
   cmd[8] = length;
 
   if( cmd.transport( TR_DIR_READ, data, dataLen ) ) {
-    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ 10 failed!" << endl;
+    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ 10 failed!" << endl;
     return false;
   }
   else
@@ -310,7 +310,7 @@ bool K3bCdDevice::CdDevice::read10( unsigned char* data,
 }
 
 
-bool K3bCdDevice::CdDevice::read12( unsigned char* data,
+bool K3bDevice::Device::read12( unsigned char* data,
 				    int dataLen,
 				    unsigned long startAdress,
 				    unsigned long length,
@@ -333,7 +333,7 @@ bool K3bCdDevice::CdDevice::read12( unsigned char* data,
   cmd[10] = (streaming ? 0x80 : 0 );
 
   if( cmd.transport( TR_DIR_READ, data, dataLen ) ) {
-    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ 12 failed!" << endl;
+    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ 12 failed!" << endl;
     return false;
   }
   else
@@ -341,7 +341,7 @@ bool K3bCdDevice::CdDevice::read12( unsigned char* data,
 }
 
 
-bool K3bCdDevice::CdDevice::readCd( unsigned char* data,
+bool K3bDevice::Device::readCd( unsigned char* data,
 				    int dataLen,
 				    int sectorType,
 				    bool dap,
@@ -376,7 +376,7 @@ bool K3bCdDevice::CdDevice::readCd( unsigned char* data,
   cmd[10] = subChannel & 0x7;
 
   if( cmd.transport( TR_DIR_READ, data, dataLen ) ) {
-    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ CD failed!" << endl;
+    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ CD failed!" << endl;
     return false;
   }
   else
@@ -384,7 +384,7 @@ bool K3bCdDevice::CdDevice::readCd( unsigned char* data,
 }
 
 
-bool K3bCdDevice::CdDevice::readCdMsf( unsigned char* data,
+bool K3bDevice::Device::readCdMsf( unsigned char* data,
 				       int dataLen,
 				       int sectorType,
 				       bool dap,
@@ -418,7 +418,7 @@ bool K3bCdDevice::CdDevice::readCdMsf( unsigned char* data,
   cmd[10] = subChannel & 0x7;
 
   if( cmd.transport( TR_DIR_READ, data, dataLen ) ) {
-    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ CD MSF failed!" << endl;
+    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ CD MSF failed!" << endl;
     return false;
   }
   else
@@ -426,7 +426,7 @@ bool K3bCdDevice::CdDevice::readCdMsf( unsigned char* data,
 }
 
 
-bool K3bCdDevice::CdDevice::readSubChannel( unsigned char** data, int& dataLen,
+bool K3bDevice::Device::readSubChannel( unsigned char** data, int& dataLen,
 					    unsigned int subchannelParam,
 					    unsigned int trackNumber ) const
 {
@@ -465,19 +465,19 @@ bool K3bCdDevice::CdDevice::readSubChannel( unsigned char** data, int& dataLen,
       return true;
     }
     else {
-      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ SUB-CHANNEL with real length "
+      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ SUB-CHANNEL with real length "
 		<< dataLen << " failed." << endl;
       delete [] *data;
     }
   }
   else
-    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ SUB-CHANNEL length det failed." << endl;
+    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ SUB-CHANNEL length det failed." << endl;
 
   return false;
 }
 
 
-bool K3bCdDevice::CdDevice::readTocPmaAtip( unsigned char** data, int& dataLen, int format, bool time, int track ) const
+bool K3bDevice::Device::readTocPmaAtip( unsigned char** data, int& dataLen, int format, bool time, int track ) const
 {
   unsigned char header[2048];
   ::memset( header, 0, 2048 );
@@ -514,20 +514,20 @@ bool K3bCdDevice::CdDevice::readTocPmaAtip( unsigned char** data, int& dataLen, 
     if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 )
       return true;
     else {
-      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ TOC/PMA/ATIP format "
+      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ TOC/PMA/ATIP format "
 		<< format << " with real length "
 		<< dataLen << " failed." << endl;
       delete [] *data;
     }
   }
   else
-    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ TOC/PMA/ATIP length det failed." << endl;
+    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ TOC/PMA/ATIP length det failed." << endl;
 
   return false;
 }
 
 
-bool K3bCdDevice::CdDevice::mechanismStatus( unsigned char** data, int& dataLen ) const
+bool K3bDevice::Device::mechanismStatus( unsigned char** data, int& dataLen ) const
 {
   unsigned char header[2048];
   ::memset( header, 0, 2048 );
@@ -552,7 +552,7 @@ bool K3bCdDevice::CdDevice::mechanismStatus( unsigned char** data, int& dataLen 
 	dataLen = from2Byte( &header[6] ) + 8;
     }
 
-    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": MECHANISM STATUS "
+    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": MECHANISM STATUS "
 	      << (int)header[5] << " slots." << endl;
 
     *data = new unsigned char[dataLen];
@@ -564,20 +564,20 @@ bool K3bCdDevice::CdDevice::mechanismStatus( unsigned char** data, int& dataLen 
       return true;
     }
     else {
-      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": MECHANISM STATUS with real length "
+      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": MECHANISM STATUS with real length "
 		<< dataLen << " failed." << endl;
       delete [] *data;
     }
   }
   else
-    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": MECHANISM STATUS length det failed." << endl;
+    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": MECHANISM STATUS length det failed." << endl;
 
   return false;
 }
 
 
 
-bool K3bCdDevice::CdDevice::modeSense( unsigned char** pageData, int& pageLen, int page ) const
+bool K3bDevice::Device::modeSense( unsigned char** pageData, int& pageLen, int page ) const
 {
   unsigned char header[2048];
   ::memset( header, 0, 2048 );
@@ -613,18 +613,18 @@ bool K3bCdDevice::CdDevice::modeSense( unsigned char** pageData, int& pageLen, i
       return true;
     else {
       delete [] *pageData;
-      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": MODE SENSE with real length "
+      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": MODE SENSE with real length "
 		<< pageLen << " failed." << endl;
     }
   }
   else
-    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": MODE SENSE length det failed." << endl;
+    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": MODE SENSE length det failed." << endl;
 
   return false;
 }
 
 
-bool K3bCdDevice::CdDevice::modeSelect( unsigned char* page, int pageLen, bool pf, bool sp ) const
+bool K3bDevice::Device::modeSelect( unsigned char* page, int pageLen, bool pf, bool sp ) const
 {
   page[0] = 0;
   page[1] = 0;
@@ -646,7 +646,7 @@ bool K3bCdDevice::CdDevice::modeSelect( unsigned char* page, int pageLen, bool p
 
 
 // does only make sense for complete media
-bool K3bCdDevice::CdDevice::readCapacity( K3b::Msf& r ) const
+bool K3bDevice::Device::readCapacity( K3b::Msf& r ) const
 {
   ScsiCommand cmd( this );
   cmd[0] = MMC_READ_CAPACITY;
@@ -661,7 +661,7 @@ bool K3bCdDevice::CdDevice::readCapacity( K3b::Msf& r ) const
 }
 
 
-bool K3bCdDevice::CdDevice::readFormatCapacity( int wantedFormat, K3b::Msf& r,
+bool K3bDevice::Device::readFormatCapacity( int wantedFormat, K3b::Msf& r,
 						K3b::Msf* currentMax, int* currentMaxFormat ) const
 {
   bool success = false;
@@ -680,7 +680,7 @@ bool K3bCdDevice::CdDevice::readFormatCapacity( int wantedFormat, K3b::Msf& r,
 
     int realLength = buffer[3] + 4;
 
-    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << " READ FORMAT CAPACITY: Current/Max "
+    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " READ FORMAT CAPACITY: Current/Max "
 	      << (int)(buffer[8]&0x3) << " " << from4Byte( &buffer[4] ) << endl;
 
     if( currentMax )
@@ -697,7 +697,7 @@ bool K3bCdDevice::CdDevice::readFormatCapacity( int wantedFormat, K3b::Msf& r,
     //
     for( int i = 12; i < realLength-4; i+=8 ) {
       int format = (int)((buffer[i+4]>>2)&0x3f);
-      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << " READ FORMAT CAPACITY: "
+      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " READ FORMAT CAPACITY: "
 		<< format << " " << from4Byte( &buffer[i] )
 		<< " " << (int)( buffer[i+5] << 16 & 0xFF0000 |
 				 buffer[i+6] << 8  & 0xFF00 |
@@ -715,7 +715,7 @@ bool K3bCdDevice::CdDevice::readFormatCapacity( int wantedFormat, K3b::Msf& r,
 }
 
 
-bool K3bCdDevice::CdDevice::readDiscInfo( unsigned char** data, int& dataLen ) const
+bool K3bDevice::Device::readDiscInfo( unsigned char** data, int& dataLen ) const
 {
   unsigned char header[2];
   ::memset( header, 0, 2 );
@@ -736,13 +736,13 @@ bool K3bCdDevice::CdDevice::readDiscInfo( unsigned char** data, int& dataLen ) c
     if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 )
       return true;
     else {
-      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ DISC INFORMATION with real length "
+      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ DISC INFORMATION with real length "
 		<< dataLen << " failed." << endl;
       delete [] *data;
     }
   }
   else {
-    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ DISC INFORMATION length det failed" << endl;
+    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ DISC INFORMATION length det failed" << endl;
   }
 
   return false;

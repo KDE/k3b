@@ -44,7 +44,7 @@ public:
 
   KConfig* config;
   K3bVersion version;
-  K3bCdDevice::DeviceManager* deviceManager;
+  K3bDevice::DeviceManager* deviceManager;
   K3bExternalBinManager* externalBinManager;
   K3bAudioServer* audioServer;
 
@@ -72,7 +72,7 @@ K3bCore::K3bCore( const K3bVersion& version, KConfig* c, QObject* parent, const 
   s_k3bCore = this;
 
   d->externalBinManager = new K3bExternalBinManager( this );
-  d->deviceManager = new K3bCdDevice::DeviceManager( this );
+  d->deviceManager = new K3bDevice::DeviceManager( this );
   K3b::addDefaultPrograms( d->externalBinManager );
 }
 
@@ -84,7 +84,7 @@ K3bCore::~K3bCore()
 }
 
 
-K3bCdDevice::DeviceManager* K3bCore::deviceManager() const
+K3bDevice::DeviceManager* K3bCore::deviceManager() const
 {
   return d->deviceManager;
 }

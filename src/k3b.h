@@ -55,7 +55,7 @@ class K3bStatusBarManager;
 class K3bProjectInterface;
 
 
-namespace K3bCdDevice {
+namespace K3bDevice {
   class DeviceManager;
 }
 
@@ -93,7 +93,7 @@ class K3bMainWindow : public KParts::DockMainWindow
   /** opens a file specified by commandline option */
   K3bDoc* openDocument( const KURL& url = KURL() );
 
-  K3bCdDevice::DeviceManager*      deviceManager() const;
+  K3bDevice::DeviceManager*      deviceManager() const;
   K3bExternalBinManager* externalBinManager() const;
   K3bAudioPlayer*        audioPlayer() const       { return m_audioPlayer; }
   KConfig*               config() const            { return m_config; }

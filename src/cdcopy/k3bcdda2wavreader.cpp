@@ -115,9 +115,9 @@ void K3bCdda2wavReader::start( bool onlyInfo )
   *d->process << d->cdda2wavBin->path;
   *d->process << "-vall" << ( d->cdda2wavBin->hasFeature( "gui" ) ? "-gui" : "-g" );
   if( d->cdda2wavBin->hasFeature( "dev" ) )
-    *d->process << QString("dev=%1").arg(K3bCdDevice::externalBinDeviceParameter(m_device, d->cdda2wavBin));
+    *d->process << QString("dev=%1").arg(K3bDevice::externalBinDeviceParameter(m_device, d->cdda2wavBin));
   else
-    *d->process << "-D" << K3bCdDevice::externalBinDeviceParameter(m_device, d->cdda2wavBin);
+    *d->process << "-D" << K3bDevice::externalBinDeviceParameter(m_device, d->cdda2wavBin);
   *d->process << ( d->cdda2wavBin->hasFeature( "bulk" ) ? "-bulk" : "-B" );
   if( onlyInfo )
     *d->process << ( d->cdda2wavBin->hasFeature( "info-only" ) ? "-info-only" : "-J" );

@@ -23,8 +23,8 @@
 
 
 class K3bDoc;
-namespace K3bCdDevice {
-  class CdDevice;
+namespace K3bDevice {
+  class Device;
 }
 
 
@@ -85,9 +85,9 @@ class K3bJob : public QObject, public K3bJobHandler
   /**
    * reimplemented from K3bJobHandler
    */
-  int waitForMedia( K3bCdDevice::CdDevice*,
-		    int mediaState = K3bCdDevice::STATE_EMPTY,
-		    int mediaType = K3bCdDevice::MEDIA_WRITABLE_CD,
+  int waitForMedia( K3bDevice::Device*,
+		    int mediaState = K3bDevice::STATE_EMPTY,
+		    int mediaType = K3bDevice::MEDIA_WRITABLE_CD,
 		    const QString& message = QString::null );
   
   /**
@@ -154,7 +154,7 @@ class K3bBurnJob : public K3bJob
   K3bBurnJob( K3bJobHandler* hdl, QObject* parent = 0, const char* name = 0 );
 	
   virtual K3bDoc* doc() const { return 0; }
-  virtual K3bCdDevice::CdDevice* writer() const { return 0; }
+  virtual K3bDevice::Device* writer() const { return 0; }
 
   /**
    * use K3b::WritingApp

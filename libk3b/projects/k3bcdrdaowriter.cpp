@@ -126,7 +126,7 @@ public:
 };
 
 
-K3bCdrdaoWriter::K3bCdrdaoWriter( K3bCdDevice::CdDevice* dev, K3bJobHandler* hdl,
+K3bCdrdaoWriter::K3bCdrdaoWriter( K3bDevice::Device* dev, K3bJobHandler* hdl,
 				  QObject* parent, const char* name )
   : K3bAbstractWriter( dev, hdl, parent, name ),
     m_command(WRITE),
@@ -1024,7 +1024,7 @@ QString K3bCdrdaoWriter::findDriverFile( const K3bExternalBin* bin )
 
 // returns true if the driver file could be opened and no driver could be found
 // TODO: cache the drivers
-bool K3bCdrdaoWriter::defaultToGenericMMC( K3bCdDevice::CdDevice* dev, bool writer )
+bool K3bCdrdaoWriter::defaultToGenericMMC( K3bDevice::Device* dev, bool writer )
 {
   QString driverTable = findDriverFile( m_cdrdaoBinObject );
   if( !driverTable.isEmpty() ) {

@@ -47,7 +47,7 @@ public:
       forceNoEject(false) {
   }
 
-  K3bCdDevice::CdDevice* device;
+  K3bDevice::Device* device;
   K3bProcess* process;
   const K3bExternalBin* dvdBooktypeBin;
 
@@ -115,8 +115,8 @@ void K3bDvdBooktypeJob::start()
       m_action == SET_MEDIA_DVD_R_W ) {
     emit newSubTask( i18n("Waiting for media") );
     if( waitForMedia( d->device,  
-		      K3bCdDevice::STATE_COMPLETE|K3bCdDevice::STATE_INCOMPLETE|K3bCdDevice::STATE_EMPTY,
-		      K3bCdDevice::MEDIA_DVD_PLUS_RW|K3bCdDevice::MEDIA_DVD_PLUS_R,
+		      K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE|K3bDevice::STATE_EMPTY,
+		      K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_PLUS_R,
 		      i18n("Please insert an empty DVD+R or a DVD+RW medium into drive<p><b>%1 %2 (%3)</b>.")
 		      .arg(d->device->vendor()).arg(d->device->description()).arg(d->device->devicename()) ) == -1 ) {
       emit canceled();
@@ -128,10 +128,10 @@ void K3bDvdBooktypeJob::start()
     emit infoMessage( i18n("Checking media..."), INFO );
     emit newTask( i18n("Checking media") );
 
-    connect( K3bCdDevice::sendCommand( K3bCdDevice::DeviceHandler::NG_DISKINFO, d->device ), 
-	     SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
+    connect( K3bDevice::sendCommand( K3bDevice::DeviceHandler::NG_DISKINFO, d->device ), 
+	     SIGNAL(finished(K3bDevice::DeviceHandler*)),
 	     this, 
-	     SLOT(slotDeviceHandlerFinished(K3bCdDevice::DeviceHandler*)) );
+	     SLOT(slotDeviceHandlerFinished(K3bDevice::DeviceHandler*)) );
   }
   else {
     // change writer defaults
@@ -140,7 +140,7 @@ void K3bDvdBooktypeJob::start()
 }
 
 
-void K3bDvdBooktypeJob::start( K3bCdDevice::DeviceHandler* dh )
+void K3bDvdBooktypeJob::start( K3bDevice::DeviceHandler* dh )
 {
   d->canceled = false;
   d->running = true;
@@ -164,7 +164,7 @@ void K3bDvdBooktypeJob::cancel()
 }
 
 
-void K3bDvdBooktypeJob::setDevice( K3bCdDevice::CdDevice* dev )
+void K3bDvdBooktypeJob::setDevice( K3bDevice::Device* dev )
 {
   d->device = dev;
 }
@@ -217,10 +217,10 @@ void K3bDvdBooktypeJob::slotProcessFinished( KProcess* p )
     }
     else {
       emit infoMessage( i18n("Ejecting DVD..."), INFO );
-      connect( K3bCdDevice::eject( d->device ), 
-	       SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
+      connect( K3bDevice::eject( d->device ), 
+	       SIGNAL(finished(K3bDevice::DeviceHandler*)),
 	       this, 
-	       SLOT(slotEjectingFinished(K3bCdDevice::DeviceHandler*)) );
+	       SLOT(slotEjectingFinished(K3bDevice::DeviceHandler*)) );
     }
   }
   else {
@@ -230,7 +230,7 @@ void K3bDvdBooktypeJob::slotProcessFinished( KProcess* p )
 }
 
 
-void K3bDvdBooktypeJob::slotEjectingFinished( K3bCdDevice::DeviceHandler* dh )
+void K3bDvdBooktypeJob::slotEjectingFinished( K3bDevice::DeviceHandler* dh )
 {
   if( !dh->success() )
     emit infoMessage( i18n("Unable to eject media."), ERROR );
@@ -240,7 +240,7 @@ void K3bDvdBooktypeJob::slotEjectingFinished( K3bCdDevice::DeviceHandler* dh )
 }
 
 
-void K3bDvdBooktypeJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* dh )
+void K3bDvdBooktypeJob::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* dh )
 {
   if( d->canceled ) {
     emit canceled();
@@ -251,7 +251,7 @@ void K3bDvdBooktypeJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* d
   if( dh->success() ) {
 
     d->foundMediaType = dh->diskInfo().mediaType();
-    if( d->foundMediaType == K3bCdDevice::MEDIA_DVD_PLUS_R ) {
+    if( d->foundMediaType == K3bDevice::MEDIA_DVD_PLUS_R ) {
       // the media needs to be empty
       if( dh->diskInfo().empty() )
 	startBooktypeChange();
@@ -260,7 +260,7 @@ void K3bDvdBooktypeJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* d
 	emit finished(false);
       }
     }
-    else if( d->foundMediaType == K3bCdDevice::MEDIA_DVD_PLUS_RW ) {
+    else if( d->foundMediaType == K3bDevice::MEDIA_DVD_PLUS_RW ) {
       startBooktypeChange();
     }
     else {
@@ -301,7 +301,7 @@ void K3bDvdBooktypeJob::startBooktypeChange()
 		<< "-media";
     break;
   case SET_MEDIA_DVD_R_W:
-    if( d->foundMediaType == K3bCdDevice::MEDIA_DVD_PLUS_RW )
+    if( d->foundMediaType == K3bDevice::MEDIA_DVD_PLUS_RW )
       *d->process << "-dvd+rw-spec";
     else
       *d->process << "-dvd+r-spec";

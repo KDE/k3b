@@ -41,14 +41,14 @@
 
 
 
-class K3bCdDevice::ScsiCommand::Private
+class K3bDevice::ScsiCommand::Private
 {
 public:
   union ccb ccb;
 };
 
 
-void K3bCdDevice::ScsiCommand::clear()
+void K3bDevice::ScsiCommand::clear()
 {
   memset (&d->ccb,0,sizeof(ccb));
   if (!m_device || !m_device->cam()) return;
@@ -58,20 +58,20 @@ void K3bCdDevice::ScsiCommand::clear()
 }
 
 
-unsigned char& K3bCdDevice::ScsiCommand::operator[]( size_t i )
+unsigned char& K3bDevice::ScsiCommand::operator[]( size_t i )
 {
   d->ccb.csio.cdb_len = i+1;
   return d->ccb.csio.cdb_io.cdb_bytes[i];
 }
 
-int K3bCdDevice::ScsiCommand::transport( TransportDirection dir,
+int K3bDevice::ScsiCommand::transport( TransportDirection dir,
 					 void* data,
 					 size_t len )
 {
   if( !m_device || !m_device->cam() )
     return -1;
 
-  kdDebug() << "(K3bCdDevice::ScsiCommand) transport command " << QString::number((int)d->ccb.csio.cdb_io.cdb_bytes[0], 16) << ", length: " << (int)d->ccb.csio.cdb_len << endl;
+  kdDebug() << "(K3bDevice::ScsiCommand) transport command " << QString::number((int)d->ccb.csio.cdb_io.cdb_bytes[0], 16) << ", length: " << (int)d->ccb.csio.cdb_len << endl;
   int ret=0;
   int direction = CAM_DEV_QFRZDIS;
   if (!len)
@@ -82,7 +82,7 @@ int K3bCdDevice::ScsiCommand::transport( TransportDirection dir,
   unsigned char * sense = (unsigned char *)&d->ccb.csio.sense_data;
   if ((ret = cam_send_ccb(m_device->cam(), &d->ccb)) < 0)
     {
-      kdDebug() << "(K3bCdDevice::ScsiCommand) transport failed: " << ret << endl;
+      kdDebug() << "(K3bDevice::ScsiCommand) transport failed: " << ret << endl;
       struct scsi_sense_data* senset = (struct scsi_sense_data*)sense;
       debugError( d->ccb.csio.cdb_io.cdb_bytes[0],
 		  senset->error_code & SSD_ERRCODE,
@@ -118,7 +118,7 @@ int K3bCdDevice::ScsiCommand::transport( TransportDirection dir,
       d->ccb.csio.resid = resid;
       if (ret<0)
 	{
-	  kdDebug() << "(K3bCdDevice::ScsiCommand) transport failed (2): " << ret << endl;
+	  kdDebug() << "(K3bDevice::ScsiCommand) transport failed (2): " << ret << endl;
 	  ret = -1;
 	  struct scsi_sense_data* senset = (struct scsi_sense_data*)sense;
 	  debugError( d->ccb.csio.cdb_io.cdb_bytes[0],
@@ -130,7 +130,7 @@ int K3bCdDevice::ScsiCommand::transport( TransportDirection dir,
 	}
       if ((d->ccb.ccb_h.status&CAM_STATUS_MASK) != CAM_REQ_CMP)
 	{
-	  kdDebug() << "(K3bCdDevice::ScsiCommand) transport failed (3): " << ret << endl;
+	  kdDebug() << "(K3bDevice::ScsiCommand) transport failed (3): " << ret << endl;
 	  errno=EIO,-1;
 	  ret = -1;
 	  struct scsi_sense_data* senset = (struct scsi_sense_data*)sense;
@@ -146,7 +146,7 @@ int K3bCdDevice::ScsiCommand::transport( TransportDirection dir,
     }
 
   ret = ERRCODE(sense);
-  kdDebug() << "(K3bCdDevice::ScsiCommand) transport failed (4): " << ret << endl;
+  kdDebug() << "(K3bDevice::ScsiCommand) transport failed (4): " << ret << endl;
   if (ret == 0)
     ret = -1;
   else

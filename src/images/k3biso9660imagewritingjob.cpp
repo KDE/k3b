@@ -142,14 +142,14 @@ void K3bIso9660ImageWritingJob::slotVerificationFinished( bool success )
 
   if( success && m_currentCopy < m_copies ) {
     m_currentCopy++;
-    connect( K3bCdDevice::eject( m_device ), SIGNAL(finished(bool)),
+    connect( K3bDevice::eject( m_device ), SIGNAL(finished(bool)),
 	     this, SLOT(startWriting()) );
     return;
   }
 
   k3bcore->config()->setGroup("General Options");
   if( !k3bcore->config()->readBoolEntry( "No cd eject", false ) )
-    K3bCdDevice::eject( m_device );
+    K3bDevice::eject( m_device );
 
   m_finished = true;
   emit finished( success );
@@ -211,30 +211,30 @@ void K3bIso9660ImageWritingJob::startWriting()
   int mt = 0;
   if( m_writingMode == K3b::WRITING_MODE_AUTO ) {
     if( writingApp() == K3b::DEFAULT )
-      mt = K3bCdDevice::MEDIA_WRITABLE_DVD|K3bCdDevice::MEDIA_WRITABLE_CD;
+      mt = K3bDevice::MEDIA_WRITABLE_DVD|K3bDevice::MEDIA_WRITABLE_CD;
     else if( writingApp() != K3b::GROWISOFS )
-      mt = K3bCdDevice::MEDIA_WRITABLE_CD;
+      mt = K3bDevice::MEDIA_WRITABLE_CD;
     else
-      mt = K3bCdDevice::MEDIA_WRITABLE_DVD;
+      mt = K3bDevice::MEDIA_WRITABLE_DVD;
   }
   else if( m_writingMode == K3b::TAO || m_writingMode == K3b::RAW )
-    mt = K3bCdDevice::MEDIA_WRITABLE_CD;
+    mt = K3bDevice::MEDIA_WRITABLE_CD;
   else if( m_writingMode == K3b::DAO ) {
     if( writingApp() == K3b::DEFAULT )
-      mt = K3bCdDevice::MEDIA_WRITABLE_CD|K3bCdDevice::MEDIA_DVD_RW_SEQ|K3bCdDevice::MEDIA_DVD_R_SEQ;
+      mt = K3bDevice::MEDIA_WRITABLE_CD|K3bDevice::MEDIA_DVD_RW_SEQ|K3bDevice::MEDIA_DVD_R_SEQ;
     else if( writingApp() == K3b::GROWISOFS )
-      mt = K3bCdDevice::MEDIA_DVD_RW_SEQ|K3bCdDevice::MEDIA_DVD_R_SEQ;
+      mt = K3bDevice::MEDIA_DVD_RW_SEQ|K3bDevice::MEDIA_DVD_R_SEQ;
     else
-      mt = K3bCdDevice::MEDIA_WRITABLE_CD;
+      mt = K3bDevice::MEDIA_WRITABLE_CD;
   }
   else if( m_writingMode == K3b::WRITING_MODE_INCR_SEQ )
-    mt = K3bCdDevice::MEDIA_DVD_RW_SEQ|K3bCdDevice::MEDIA_DVD_R_SEQ;
+    mt = K3bDevice::MEDIA_DVD_RW_SEQ|K3bDevice::MEDIA_DVD_R_SEQ;
   else
-    mt = K3bCdDevice::MEDIA_DVD_PLUS_R|K3bCdDevice::MEDIA_DVD_PLUS_RW|K3bCdDevice::MEDIA_DVD_RW_OVWR;
+    mt = K3bDevice::MEDIA_DVD_PLUS_R|K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR;
 
 
   // wait for the media
-  int media = waitForMedia( m_device, K3bCdDevice::STATE_EMPTY, mt );
+  int media = waitForMedia( m_device, K3bDevice::STATE_EMPTY, mt );
   if( media < 0 ) {
     m_finished = true;
     emit canceled();
@@ -258,14 +258,14 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
   if( mediaType == 0 ) { // media forced
     // just to get it going...
     if( writingApp() != K3b::GROWISOFS )
-      mediaType = K3bCdDevice::MEDIA_CD_R;
+      mediaType = K3bDevice::MEDIA_CD_R;
     else
-      mediaType = K3bCdDevice::MEDIA_DVD_R;
+      mediaType = K3bDevice::MEDIA_DVD_R;
   }
 
   delete m_writer;
 
-  if( mediaType == K3bCdDevice::MEDIA_CD_R || mediaType == K3bCdDevice::MEDIA_CD_RW ) {
+  if( mediaType == K3bDevice::MEDIA_CD_R || mediaType == K3bDevice::MEDIA_CD_RW ) {
     int usedWriteMode = m_writingMode;
     if( usedWriteMode == K3b::WRITING_MODE_AUTO ) {
       // cdrecord seems to have problems when writing in mode2 in dao mode
@@ -354,7 +354,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
     }
   }
   else {  // DVD
-    if( mediaType & (K3bCdDevice::MEDIA_DVD_PLUS_RW|K3bCdDevice::MEDIA_DVD_PLUS_R) ) {
+    if( mediaType & (K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_PLUS_R) ) {
       if( m_simulate ) {
 	if( KMessageBox::warningYesNo( qApp->activeWindow(),
 				       i18n("K3b does not support simulation with DVD+R(W) media. "

@@ -22,7 +22,7 @@
 #include <k3btoc.h>
 #include <k3bcdtext.h>
 
-namespace K3bCdDevice {
+namespace K3bDevice {
   class TrackCdText;
 }
 
@@ -40,13 +40,13 @@ class K3bCueFileWriter
   bool save( QTextStream& );
   bool save( const QString& filename );
 
-  void setData( const K3bCdDevice::Toc& toc ) { m_toc = toc; }
-  void setCdText( const K3bCdDevice::CdText& text ) { m_cdText = text; }
+  void setData( const K3bDevice::Toc& toc ) { m_toc = toc; }
+  void setCdText( const K3bDevice::CdText& text ) { m_cdText = text; }
   void setImage( const QString& name, const QString& type ) { m_image = name; m_dataType = type; }
 
  private:
-  K3bCdDevice::Toc m_toc;
-  K3bCdDevice::CdText m_cdText;
+  K3bDevice::Toc m_toc;
+  K3bDevice::CdText m_cdText;
   QString m_image;
   QString m_dataType;
 };

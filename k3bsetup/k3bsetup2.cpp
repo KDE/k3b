@@ -54,13 +54,13 @@
 class K3bSetup2::Private
 {
 public:
-  K3bCdDevice::DeviceManager* deviceManager;
+  K3bDevice::DeviceManager* deviceManager;
   K3bExternalBinManager* externalBinManager;
 
   bool changesNeeded;
 
-  QMap<QCheckListItem*, K3bCdDevice::CdDevice*> listDeviceMap;
-  QMap<K3bCdDevice::CdDevice*, QCheckListItem*> deviceListMap;
+  QMap<QCheckListItem*, K3bDevice::Device*> listDeviceMap;
+  QMap<K3bDevice::Device*, QCheckListItem*> deviceListMap;
 
   QMap<QCheckListItem*, K3bExternalBin*> listBinMap;
   QMap<K3bExternalBin*, QCheckListItem*> binListMap;
@@ -125,7 +125,7 @@ K3bSetup2::K3bSetup2( QWidget *parent, const char *name, const QStringList& )
 
 
   d->externalBinManager = new K3bExternalBinManager( this );
-  d->deviceManager = new K3bCdDevice::DeviceManager( this );
+  d->deviceManager = new K3bDevice::DeviceManager( this );
 
   // these are the only programs that need special permissions
   //  d->externalBinManager->addProgram( new K3bReadcdProgram() );
@@ -240,7 +240,7 @@ void K3bSetup2::updatePrograms()
 void K3bSetup2::updateDevices()
 {
   // first save which were checked
-  QMap<K3bCdDevice::CdDevice*, bool> checkMap;
+  QMap<K3bDevice::Device*, bool> checkMap;
   QListViewItemIterator listIt( w->m_viewDevices );
   for( ; listIt.current(); ++listIt )
     checkMap.insert( d->listDeviceMap[(QCheckListItem*)*listIt], ((QCheckListItem*)*listIt)->isOn() );
@@ -249,9 +249,9 @@ void K3bSetup2::updateDevices()
   d->listDeviceMap.clear();
   d->deviceListMap.clear();
 
-  QPtrListIterator<K3bCdDevice::CdDevice> it( d->deviceManager->allDevices() );
+  QPtrListIterator<K3bDevice::Device> it( d->deviceManager->allDevices() );
   for( ; it.current(); ++it ) {
-    K3bCdDevice::CdDevice* device = *it;
+    K3bDevice::Device* device = *it;
 
     QFileInfo fi( device->blockDeviceName() );
     struct stat s;
@@ -369,7 +369,7 @@ void K3bSetup2::save()
     QCheckListItem* checkItem = (QCheckListItem*)listIt.current();
 
     if( checkItem->isOn() ) {
-      K3bCdDevice::CdDevice* dev = d->listDeviceMap[checkItem];
+      K3bDevice::Device* dev = d->listDeviceMap[checkItem];
 
       if( w->m_checkUseBurningGroup->isChecked() ) {
 	if( ::chmod( QFile::encodeName(dev->blockDeviceName()), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP ) )

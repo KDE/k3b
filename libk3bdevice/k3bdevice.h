@@ -29,12 +29,12 @@
 struct cam_device;
 #endif
 
-namespace K3bCdDevice
+namespace K3bDevice
 {
   class Toc;
 
 
-  class CdDevice
+  class Device
   {
 
   public:
@@ -86,10 +86,10 @@ namespace K3bCdDevice
                      RAW_R96R = 256 };
 
     /**
-     * A CdDevice should only be constructed the the DeviceManager.
+     * A Device should only be constructed the the DeviceManager.
      */
-    CdDevice( const QString& devname );
-    ~CdDevice();
+    Device( const QString& devname );
+    ~Device();
 
     /**
      * Determines the device's capabilities. This needs to be called once before
@@ -199,13 +199,13 @@ namespace K3bCdDevice
     const QStringList& deviceNodes() const;
 
     /**
-     * @see K3bCdDevice::CdDevice::deviceNodes()
+     * @see K3bDevice::Device::deviceNodes()
      */
     void addDeviceNode( const QString& );
 
     /**
      * @return The device name used for mounting.
-     * @see K3bCdDevice::CdDevice::deviceNodes()
+     * @see K3bDevice::Device::deviceNodes()
      */
     const QString& mountDevice() const;
 
@@ -325,7 +325,7 @@ namespace K3bCdDevice
 
     /**
      * @return The DataMode of the track
-     * @see K3bCdDevice::Track
+     * @see K3bDevice::Track
      */
     int getTrackDataMode( const Track& track ) const;
 
@@ -404,13 +404,13 @@ namespace K3bCdDevice
 
     /**
      * Does only make sense for cd media.
-     * @returns -1 on error K3bCdDevice::MediaType otherwise
+     * @returns -1 on error K3bDevice::MediaType otherwise
      */
     int cdMediaType() const;
 
     /**
      * Does only make sense for dvd media.
-     * @returns -1 on error K3bCdDevice::MediaType otherwise
+     * @returns -1 on error K3bDevice::MediaType otherwise
      */
     int dvdMediaType() const;
 
@@ -624,7 +624,7 @@ namespace K3bCdDevice
      * the value in the tracks.
      * In the future this should scan for all indices.
      */
-    bool indexScan( K3bCdDevice::Toc& toc ) const;
+    bool indexScan( K3bDevice::Toc& toc ) const;
 
     /**
      * Seek to the specified sector.
@@ -664,7 +664,7 @@ namespace K3bCdDevice
     bool fixupToc( Toc& ) const;
 
   private:
-    void searchIndexTransitions( long start, long end, K3bCdDevice::Track& track ) const;
+    void searchIndexTransitions( long start, long end, K3bDevice::Track& track ) const;
     void checkWriteModes();
     void checkForAncientWriters();
     bool rawTocDataWithBcdValues( unsigned char* data, int dataLen ) const;

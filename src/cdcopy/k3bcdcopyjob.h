@@ -19,8 +19,8 @@
 
 #include <k3bjob.h>
 
-namespace K3bCdDevice {
-  class CdDevice;
+namespace K3bDevice {
+  class Device;
   class DeviceHandler;
 }
 
@@ -36,8 +36,8 @@ class K3bCdCopyJob : public K3bBurnJob
   K3bCdCopyJob( K3bJobHandler* hdl, QObject* parent = 0 );
   ~K3bCdCopyJob();
 
-  K3bCdDevice::CdDevice* writer() const { return m_writerDevice; }
-  K3bCdDevice::CdDevice* reader() const { return m_readerDevice; }
+  K3bDevice::Device* writer() const { return m_writerDevice; }
+  K3bDevice::Device* reader() const { return m_readerDevice; }
 	
   QString jobDescription() const;
   QString jobDetails() const;
@@ -47,8 +47,8 @@ class K3bCdCopyJob : public K3bBurnJob
   void cancel();
 
  public:
-  void setWriterDevice( K3bCdDevice::CdDevice* dev ) { m_writerDevice = dev; }
-  void setReaderDevice( K3bCdDevice::CdDevice* dev ) { m_readerDevice = dev; }
+  void setWriterDevice( K3bDevice::Device* dev ) { m_writerDevice = dev; }
+  void setReaderDevice( K3bDevice::Device* dev ) { m_readerDevice = dev; }
   void setWritingMode( int m ) { m_writingMode = m; }
   void setSpeed( int s ) { m_speed = s; }
   void setOnTheFly( bool b ) { m_onTheFly = b; }
@@ -64,9 +64,9 @@ class K3bCdCopyJob : public K3bBurnJob
   void setCopyCdText( bool b ) { m_copyCdText = b; }
 
  private slots:
-  void slotDiskInfoReady( K3bCdDevice::DeviceHandler* );
-  void slotCdTextReady( K3bCdDevice::DeviceHandler* );
-  void slotMediaReloadedForNextSession( K3bCdDevice::DeviceHandler* dh );
+  void slotDiskInfoReady( K3bDevice::DeviceHandler* );
+  void slotCdTextReady( K3bDevice::DeviceHandler* );
+  void slotMediaReloadedForNextSession( K3bDevice::DeviceHandler* dh );
   void slotCddbQueryFinished(int);
   void slotWritingNextTrack( int t, int tt );
   void slotReadingNextTrack( int t, int tt );
@@ -87,8 +87,8 @@ class K3bCdCopyJob : public K3bBurnJob
   void cleanup();
   void finishJob( bool canceled, bool error );
 
-  K3bCdDevice::CdDevice* m_writerDevice;
-  K3bCdDevice::CdDevice* m_readerDevice;
+  K3bDevice::Device* m_writerDevice;
+  K3bDevice::Device* m_readerDevice;
   bool m_simulate;
   int m_speed;
   int m_paranoiaMode;

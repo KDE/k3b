@@ -69,7 +69,7 @@ public:
 
   bool canceled;
 
-  K3bCdDevice::Toc toc;
+  K3bDevice::Toc toc;
 
   QString fileType;
 };
@@ -524,8 +524,8 @@ bool K3bAudioRipThread::writeCueFile()
   K3bCueFileWriter cueWriter;
 
   // create a new toc and cd-text
-  K3bCdDevice::Toc toc;
-  K3bCdDevice::CdText text;
+  K3bDevice::Toc toc;
+  K3bDevice::CdText text;
   text.setPerformer( m_cddbEntry.cdArtist );
   text.setTitle( m_cddbEntry.cdTitle );
   text.reserve( m_tracks.count() );
@@ -533,13 +533,13 @@ bool K3bAudioRipThread::writeCueFile()
   for( unsigned int i = 0; i < m_tracks.count(); ++i ) {
     int trackNum = m_tracks[i].first;
 
-    const K3bCdDevice::Track& oldTrack = d->toc[trackNum-1];
-    K3bCdDevice::Track newTrack( oldTrack );
+    const K3bDevice::Track& oldTrack = d->toc[trackNum-1];
+    K3bDevice::Track newTrack( oldTrack );
     newTrack.setFirstSector( currentSector );
     newTrack.setLastSector( (currentSector+=oldTrack.length()) - 1 );
     toc.append( newTrack );
 
-    K3bCdDevice::TrackCdText trackText;
+    K3bDevice::TrackCdText trackText;
     trackText.setPerformer( m_cddbEntry.artists[trackNum-1] );
     trackText.setTitle( m_cddbEntry.titles[trackNum-1] );
     text.append( trackText );

@@ -259,11 +259,11 @@ public:
 
   K3bIso9660SimplePrimaryDescriptor primaryDesc;
 
-  K3bCdDevice::CdDevice* cdDevice;
+  K3bDevice::Device* cdDevice;
   int fd;
   bool closeFd;
 
-  // only used for direkt K3bCdDevice::CdDevice access
+  // only used for direkt K3bDevice::Device access
   unsigned int startSector;
 };
 
@@ -283,7 +283,7 @@ K3bIso9660::K3bIso9660( int fd )
 
 
 
-K3bIso9660::K3bIso9660( K3bCdDevice::CdDevice* dev, unsigned int startSector )
+K3bIso9660::K3bIso9660( K3bDevice::Device* dev, unsigned int startSector )
 {
   d = new Private();
   d->cdDevice = dev;

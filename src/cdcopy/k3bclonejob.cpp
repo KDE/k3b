@@ -104,8 +104,8 @@ void K3bCloneJob::start()
     return;
   }
 
-  if( !writer()->supportsWriteMode( K3bCdDevice::CdDevice::RAW_R96R ) &&
-      !writer()->supportsWriteMode( K3bCdDevice::CdDevice::RAW_R16 ) ) {
+  if( !writer()->supportsWriteMode( K3bDevice::Device::RAW_R96R ) &&
+      !writer()->supportsWriteMode( K3bDevice::Device::RAW_R16 ) ) {
     emit infoMessage( i18n("CD writer %1 does not support cloning.")
 		      .arg(writer()->vendor())
 		      .arg(writer()->description()), ERROR );
@@ -130,8 +130,8 @@ void K3bCloneJob::start()
     prepareReader();
 
     if( waitForMedia( readingDevice(),
-		      K3bCdDevice::STATE_COMPLETE,
-		      K3bCdDevice::MEDIA_WRITABLE_CD|K3bCdDevice::MEDIA_CD_ROM ) < 0 ) {
+		      K3bDevice::STATE_COMPLETE,
+		      K3bDevice::MEDIA_WRITABLE_CD|K3bDevice::MEDIA_CD_ROM ) < 0 ) {
       m_running = false;
       emit canceled();
       emit finished(false);
@@ -239,7 +239,7 @@ void K3bCloneJob::slotWriterFinished( bool success )
     emit infoMessage( i18n("Successfully written clone copy %1.").arg(d->doneCopies), INFO );
 
     if( d->doneCopies < m_copies ) {
-      K3bCdDevice::eject( writer() );
+      K3bDevice::eject( writer() );
       startWriting();
     }
     else {
@@ -279,7 +279,7 @@ void K3bCloneJob::slotReadingFinished( bool success )
       emit finished(true);
     else {
       if( writer() == readingDevice() )
-	K3bCdDevice::eject( writer() );
+	K3bDevice::eject( writer() );
       startWriting();
     }
   }
@@ -300,8 +300,8 @@ void K3bCloneJob::startWriting()
   prepareWriter();
     
   if( waitForMedia( writer(), 
-		    K3bCdDevice::STATE_EMPTY,
-		    K3bCdDevice::MEDIA_WRITABLE_CD ) < 0 ) {
+		    K3bDevice::STATE_EMPTY,
+		    K3bDevice::MEDIA_WRITABLE_CD ) < 0 ) {
     removeImageFiles();
     m_running = false;
     emit canceled();

@@ -51,7 +51,7 @@ K3bBlankingJob::~K3bBlankingJob()
 }
 
 
-void K3bBlankingJob::setDevice( K3bCdDevice::CdDevice* dev )
+void K3bBlankingJob::setDevice( K3bDevice::Device* dev )
 {
   m_device = dev;
 }
@@ -126,8 +126,8 @@ void K3bBlankingJob::slotStartErasing()
           this,SIGNAL(infoMessage( const QString&, int)));
 
   if( waitForMedia( m_device,  
-		    K3bCdDevice::STATE_COMPLETE|K3bCdDevice::STATE_INCOMPLETE,
-		    K3bCdDevice::MEDIA_CD_RW,
+		    K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE,
+		    K3bDevice::MEDIA_CD_RW,
 		    i18n("Please insert a rewritable CD medium into drive<p><b>%1 %2 (%3)</b>.")
 		    .arg(m_device->vendor())
 		    .arg(m_device->description())

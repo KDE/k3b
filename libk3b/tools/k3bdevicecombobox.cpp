@@ -26,7 +26,7 @@ class K3bDeviceComboBox::Private
 {
 public:
   QMap<QString, int> deviceIndexMap;
-  QPtrVector<K3bCdDevice::CdDevice> devices;
+  QPtrVector<K3bDevice::Device> devices;
 };
 
 
@@ -44,7 +44,7 @@ K3bDeviceComboBox::~K3bDeviceComboBox()
   delete d;
 }
 
-K3bCdDevice::CdDevice* K3bDeviceComboBox::selectedDevice() const
+K3bDevice::Device* K3bDeviceComboBox::selectedDevice() const
 {
   if ( count() > 0 )
     return d->devices[currentItem()];
@@ -53,7 +53,7 @@ K3bCdDevice::CdDevice* K3bDeviceComboBox::selectedDevice() const
 }
 
 
-void K3bDeviceComboBox::addDevice( K3bCdDevice::CdDevice* dev )
+void K3bDeviceComboBox::addDevice( K3bDevice::Device* dev )
 {
   insertItem( dev->vendor() + " " + dev->description() /*+ " (" + dev->blockDeviceName() + ")"*/ );
   d->deviceIndexMap[dev->devicename()] = count()-1;
@@ -62,15 +62,15 @@ void K3bDeviceComboBox::addDevice( K3bCdDevice::CdDevice* dev )
 }
 
 
-void K3bDeviceComboBox::addDevices( const QPtrList<K3bCdDevice::CdDevice>& list )
+void K3bDeviceComboBox::addDevices( const QPtrList<K3bDevice::Device>& list )
 {
-  for( QPtrListIterator<K3bCdDevice::CdDevice> it( list );
+  for( QPtrListIterator<K3bDevice::Device> it( list );
        it.current(); ++it )
     addDevice( it.current() );
 }
 
 
-void K3bDeviceComboBox::setSelectedDevice( K3bCdDevice::CdDevice* dev )
+void K3bDeviceComboBox::setSelectedDevice( K3bDevice::Device* dev )
 {
   if( dev ) {
     if( d->deviceIndexMap.contains(dev->devicename()) ) {

@@ -42,7 +42,7 @@ class K3bDataJob : public K3bBurnJob
   virtual ~K3bDataJob();
 	
   K3bDoc* doc() const;
-  K3bCdDevice::CdDevice* writer() const;
+  K3bDevice::Device* writer() const;
 
   virtual QString jobDescription() const;
   virtual QString jobDetails() const;

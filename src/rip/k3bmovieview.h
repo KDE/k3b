@@ -33,8 +33,8 @@ class K3bTcWrapper;
 class K3bDvdContent;
 class K3bDvdRipListViewItem;
 class K3bToolBox;
-namespace K3bCdDevice {
-  class CdDevice;
+namespace K3bDevice {
+  class Device;
 }
 
 /**
@@ -46,13 +46,13 @@ class K3bMovieView : public K3bCdContentsView  {
 public: 
     K3bMovieView(QWidget *parent=0, const char *name=0);
     ~K3bMovieView();
-    void setDevice( K3bCdDevice::CdDevice* device );
+    void setDevice( K3bDevice::Device* device );
     void reload();
 signals:
     void notSupportedDisc( const QString& device );
 
 private:
-    K3bCdDevice::CdDevice* m_device;
+    K3bDevice::Device* m_device;
     bool m_initialized;
     K3bTcWrapper *m_tcWrapper;
     KListView *m_listView;

@@ -454,7 +454,7 @@ void K3bIsoImager::cancel()
 }
 
 
-void K3bIsoImager::setMultiSessionInfo( const QString& info, K3bCdDevice::CdDevice* dev )
+void K3bIsoImager::setMultiSessionInfo( const QString& info, K3bDevice::Device* dev )
 {
   m_multiSessionInfo = info;
   m_device = dev;

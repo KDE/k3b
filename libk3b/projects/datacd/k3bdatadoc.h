@@ -46,8 +46,8 @@ class QDomDocument;
 class QDomElement;
 class K3bIso9660Directory;
 
-namespace K3bCdDevice {
-  class CdDevice;
+namespace K3bDevice {
+  class Device;
   class DeviceHandler;
 }
 
@@ -137,7 +137,7 @@ class K3bDataDoc : public K3bDoc
   void slotAddUrlsToDir( const KURL::List&, K3bDirItem* dir = 0 );
   virtual void addUrls( const KURL::List& urls );
 
-  void importSession( K3bCdDevice::CdDevice* );
+  void importSession( K3bDevice::Device* );
   void clearImportedSession();
 
   virtual void loadDefaultSettings( KConfig* );
@@ -148,7 +148,7 @@ class K3bDataDoc : public K3bDoc
 	
  private slots:
   void slotAddQueuedItems();
-  void slotTocRead( K3bCdDevice::DeviceHandler* dh );
+  void slotTocRead( K3bDevice::DeviceHandler* dh );
 
  protected:
   /** reimplemented from K3bDoc */

@@ -21,8 +21,8 @@
 
 
 class KProcess;
-namespace K3bCdDevice {
-  class CdDevice;
+namespace K3bDevice {
+  class Device;
   class DeviceHandler;
 }
 
@@ -44,11 +44,11 @@ class K3bDvdFormattingJob : public K3bJob
   /**
    * The devicehandler needs to have a valid NgDiskInfo
    */
-  void start( K3bCdDevice::DeviceHandler* );
+  void start( K3bDevice::DeviceHandler* );
 
   void cancel();
 
-  void setDevice( K3bCdDevice::CdDevice* );
+  void setDevice( K3bDevice::Device* );
 
   /**
    * One of: WRITING_MODE_INCR_SEQ, WRITING_MODE_RES_OVWR
@@ -75,8 +75,8 @@ class K3bDvdFormattingJob : public K3bJob
  private slots:
   void slotStderrLine( const QString& );
   void slotProcessFinished( KProcess* );
-  void slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* );
-  void slotEjectingFinished( K3bCdDevice::DeviceHandler* );
+  void slotDeviceHandlerFinished( K3bDevice::DeviceHandler* );
+  void slotEjectingFinished( K3bDevice::DeviceHandler* );
 
  private:
   class Private;

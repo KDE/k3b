@@ -96,12 +96,12 @@ class K3bAudioDoc : public K3bDoc
   /**
    * Create complete CD-Text including the tracks' data.
    */
-  K3bCdDevice::CdText cdTextData() const;
+  K3bDevice::CdText cdTextData() const;
 
   /**
    * Represent the structure of the doc as CD Table of Contents.
    */
-  K3bCdDevice::Toc K3bAudioDoc::toToc() const;
+  K3bDevice::Toc K3bAudioDoc::toToc() const;
 
   K3bBurnJob* newBurnJob( K3bJobHandler*, QObject* parent = 0 );
 
@@ -210,7 +210,7 @@ class K3bAudioDoc : public K3bDoc
  	
   // CD-Text
   // --------------------------------------------------
-  K3bCdDevice::CdText m_cdTextData;
+  K3bDevice::CdText m_cdTextData;
   bool m_cdText;
   QString m_cdTextTitle;
   QString m_cdTextArtist;

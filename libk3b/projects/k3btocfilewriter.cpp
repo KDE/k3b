@@ -58,7 +58,7 @@ bool K3bTocFileWriter::save( QTextStream& t )
   // see if we have multible sessions
   //
   int sessions = 1;
-  for( K3bCdDevice::Toc::iterator it = m_toc.begin(); it != m_toc.end(); ++it ) {
+  for( K3bDevice::Toc::iterator it = m_toc.begin(); it != m_toc.end(); ++it ) {
     if( (*it).session() > 1 )
       sessions = (*it).session();
   }
@@ -73,8 +73,8 @@ bool K3bTocFileWriter::save( QTextStream& t )
   //
   bool hideFirstTrack = m_hideFirstTrack;
   if( m_toc.count() < 2 || 
-      m_toc[0].type() != K3bCdDevice::Track::AUDIO ||
-      m_toc[1].type() != K3bCdDevice::Track::AUDIO ||
+      m_toc[0].type() != K3bDevice::Track::AUDIO ||
+      m_toc[1].type() != K3bDevice::Track::AUDIO ||
       (sessions > 1 && m_sessionToWrite != 1 ) )
     hideFirstTrack = false;
 
@@ -84,8 +84,8 @@ bool K3bTocFileWriter::save( QTextStream& t )
 
   unsigned int trackIndex = 0;
   if( hideFirstTrack ) {
-    const K3bCdDevice::Track& hiddenTrack = m_toc[0];
-    const K3bCdDevice::Track& track = m_toc[1];
+    const K3bDevice::Track& hiddenTrack = m_toc[0];
+    const K3bDevice::Track& track = m_toc[1];
 
     t << "// Track number 1 (hidden) and track number 2 (as track 1)" << endl;
     t << "TRACK AUDIO" << endl;
@@ -167,17 +167,17 @@ void K3bTocFileWriter::writeHeader( QTextStream& t )
   t << endl;
 
   // check the cd type
-  if( m_toc.contentType() == K3bCdDevice::AUDIO ) {
+  if( m_toc.contentType() == K3bDevice::AUDIO ) {
     t << "CD_DA";
   }
   else {
     bool hasMode2Tracks = false;
-    for( K3bCdDevice::Toc::iterator it = m_toc.begin(); it != m_toc.end(); ++it ) {
-      const K3bCdDevice::Track& track = *it;
-      if( track.type() == K3bCdDevice::Track::DATA &&
-	  (track.mode() == K3bCdDevice::Track::MODE2 ||
-	   track.mode() == K3bCdDevice::Track::XA_FORM1 ||
-	   track.mode() == K3bCdDevice::Track::XA_FORM2 ) ) {
+    for( K3bDevice::Toc::iterator it = m_toc.begin(); it != m_toc.end(); ++it ) {
+      const K3bDevice::Track& track = *it;
+      if( track.type() == K3bDevice::Track::DATA &&
+	  (track.mode() == K3bDevice::Track::MODE2 ||
+	   track.mode() == K3bDevice::Track::XA_FORM1 ||
+	   track.mode() == K3bDevice::Track::XA_FORM2 ) ) {
 	hasMode2Tracks = true;
 	break;
       }
@@ -195,11 +195,11 @@ void K3bTocFileWriter::writeHeader( QTextStream& t )
 
 void K3bTocFileWriter::writeTrack( unsigned int index, const K3b::Msf& offset, QTextStream& t )
 {
-  const K3bCdDevice::Track& track = m_toc[index];
+  const K3bDevice::Track& track = m_toc[index];
 
   t << "// Track number " << (index+1) << endl;
 
-  if( track.type() == K3bCdDevice::Track::AUDIO ) {
+  if( track.type() == K3bDevice::Track::AUDIO ) {
     t << "TRACK AUDIO" << endl;
 
     if( track.copyPermitted() )
@@ -233,7 +233,7 @@ void K3bTocFileWriter::writeTrack( unsigned int index, const K3b::Msf& offset, Q
       }
     }
     else {
-      const K3bCdDevice::Track& lastTrack = m_toc[index-1];
+      const K3bDevice::Track& lastTrack = m_toc[index-1];
       
       //
       // the pregap data
@@ -269,14 +269,14 @@ void K3bTocFileWriter::writeTrack( unsigned int index, const K3b::Msf& offset, Q
     t << endl;
   }
   else {
-    if( track.mode() == K3bCdDevice::Track::XA_FORM1 )
+    if( track.mode() == K3bDevice::Track::XA_FORM1 )
       t << "TRACK MODE2_FORM1" << endl;
-    else if( track.mode() == K3bCdDevice::Track::XA_FORM2 )
+    else if( track.mode() == K3bDevice::Track::XA_FORM2 )
       t << "TRACK MODE2_FORM2" << endl;
     else
       t << "TRACK MODE1" << endl;
     
-    if( !m_cdText.isEmpty() && !m_toc.contentType() != K3bCdDevice::DATA ) {
+    if( !m_cdText.isEmpty() && !m_toc.contentType() != K3bDevice::DATA ) {
       //
       // insert fake cdtext
       // cdrdao does not work without it and it seems not to do any harm.
@@ -325,7 +325,7 @@ void K3bTocFileWriter::writeGlobalCdText( QTextStream& t )
 }
 
 
-void K3bTocFileWriter::writeTrackCdText( const K3bCdDevice::TrackCdText& track, QTextStream& t )
+void K3bTocFileWriter::writeTrackCdText( const K3bDevice::TrackCdText& track, QTextStream& t )
 {
   t << "CD_TEXT {" << endl;
   t << "  LANGUAGE 0 {" << endl;

@@ -37,7 +37,7 @@ public:
       runningHandler(0) {
   }
 
-  CdDevice* device;
+  Device* device;
   DiskInfo diskInfo;
   Toc toc;
   CdText cdText;
@@ -46,62 +46,62 @@ public:
   bool isVideoDvd;
   bool isVideoCd;
 
-  K3bCdDevice::DeviceHandler* runningHandler;
+  K3bDevice::DeviceHandler* runningHandler;
 };
 
 
 
-K3bCdDevice::DiskInfoDetector::DiskInfoDetector( QObject* parent )
+K3bDevice::DiskInfoDetector::DiskInfoDetector( QObject* parent )
   : QObject( parent )
 {
   d = new Private();
 }
 
 
-K3bCdDevice::DiskInfoDetector::~DiskInfoDetector()
+K3bDevice::DiskInfoDetector::~DiskInfoDetector()
 {
   delete d->iso9660;
   delete d;
 }
 
 
-K3bCdDevice::CdDevice* K3bCdDevice::DiskInfoDetector::device() const
+K3bDevice::Device* K3bDevice::DiskInfoDetector::device() const
 {
   return d->device;
 }
 
 
-// const K3bCdDevice::DiskInfo& K3bCdDevice::DiskInfoDetector::diskInfo() const
+// const K3bDevice::DiskInfo& K3bDevice::DiskInfoDetector::diskInfo() const
 // {
 //   return d->info;
 // }
 
 
-const K3bCdDevice::DiskInfo& K3bCdDevice::DiskInfoDetector::diskInfo() const
+const K3bDevice::DiskInfo& K3bDevice::DiskInfoDetector::diskInfo() const
 {
   return d->diskInfo;
 }
 
 
-const K3bCdDevice::CdText& K3bCdDevice::DiskInfoDetector::cdText() const
+const K3bDevice::CdText& K3bDevice::DiskInfoDetector::cdText() const
 {
   return d->cdText;
 }
 
 
-const K3bCdDevice::Toc& K3bCdDevice::DiskInfoDetector::toc() const
+const K3bDevice::Toc& K3bDevice::DiskInfoDetector::toc() const
 {
   return d->toc;
 }
 
 
-const K3bIso9660* K3bCdDevice::DiskInfoDetector::iso9660() const
+const K3bIso9660* K3bDevice::DiskInfoDetector::iso9660() const
 {
   return d->iso9660;
 }
 
 
-void K3bCdDevice::DiskInfoDetector::detect( CdDevice* device )
+void K3bDevice::DiskInfoDetector::detect( Device* device )
 {
   if( !device ) {
     kdDebug() << "(K3bDiskInfoDetector) detect should really not be called with NULL!" << endl;
@@ -120,23 +120,23 @@ void K3bCdDevice::DiskInfoDetector::detect( CdDevice* device )
   if( d->runningHandler )
     d->runningHandler->disconnect( this );
 
-  connect( (d->runningHandler = K3bCdDevice::diskInfo(d->device)),
-           SIGNAL(finished(K3bCdDevice::DeviceHandler *)),
+  connect( (d->runningHandler = K3bDevice::diskInfo(d->device)),
+           SIGNAL(finished(K3bDevice::DeviceHandler *)),
            this,
-	   SLOT(slotDeviceHandlerFinished(K3bCdDevice::DeviceHandler *)) );
+	   SLOT(slotDeviceHandlerFinished(K3bDevice::DeviceHandler *)) );
 }
 
 
-void K3bCdDevice::DiskInfoDetector::finish(bool success)
+void K3bDevice::DiskInfoDetector::finish(bool success)
 {
   //  d->info.valid=success;
   emit diskInfoReady(this);
 }
 
 
-void K3bCdDevice::DiskInfoDetector::fetchExtraInfo()
+void K3bDevice::DiskInfoDetector::fetchExtraInfo()
 {
-  kdDebug() << "(K3bCdDevice::DiskInfoDetector) fetchExtraInfo()" << endl;
+  kdDebug() << "(K3bDevice::DiskInfoDetector) fetchExtraInfo()" << endl;
 
   d->toc.calculateDiscId();
   //  d->device->indexScan( d->toc );
@@ -147,8 +147,8 @@ void K3bCdDevice::DiskInfoDetector::fetchExtraInfo()
   // FIXME: blank DVD+RW media already has a track so this method tries to open ido9660...
   //
 
-  if( d->toc.contentType() == K3bCdDevice::DATA ||
-      d->toc.contentType() == K3bCdDevice::MIXED ) {
+  if( d->toc.contentType() == K3bDevice::DATA ||
+      d->toc.contentType() == K3bDevice::MIXED ) {
     if( d->device->open() != -1 ) {
 
       unsigned long startSec = 0;
@@ -186,7 +186,7 @@ void K3bCdDevice::DiskInfoDetector::fetchExtraInfo()
 // 	d->info.isoApplicationId = d->iso9660->primaryDescriptor().applicationId;
 	
 
-	if( K3bCdDevice::isDvdMedia( d->diskInfo.mediaType() ) ) {
+	if( K3bDevice::isDvdMedia( d->diskInfo.mediaType() ) ) {
 	  d->isVideoDvd = false;
 
 	  // We check for the VIDEO_TS directory and at least one .IFO file
@@ -253,11 +253,11 @@ void K3bCdDevice::DiskInfoDetector::fetchExtraInfo()
 }
 
 
-void K3bCdDevice::DiskInfoDetector::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler *handler)
+void K3bDevice::DiskInfoDetector::slotDeviceHandlerFinished( K3bDevice::DeviceHandler *handler)
 {
   d->runningHandler = 0;
 
-  kdDebug() << "(K3bCdDevice::DiskInfoDetector) slotDeviceHandlerFinished()" << endl;
+  kdDebug() << "(K3bDevice::DiskInfoDetector) slotDeviceHandlerFinished()" << endl;
 
   bool success = handler->success();
   if( success ) {

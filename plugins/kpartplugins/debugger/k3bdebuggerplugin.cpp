@@ -67,9 +67,9 @@ void K3bDebuggerPlugin::slotDoDebuggerStuff()
     << "<h1>K3b Debugging Information</h1>" << endl
     << "<h2>Detected Devices</h2>" << endl;
 
-  for( QPtrListIterator<K3bCdDevice::CdDevice> it( k3bcore->deviceManager()->allDevices() );
+  for( QPtrListIterator<K3bDevice::Device> it( k3bcore->deviceManager()->allDevices() );
        it.current(); ++it ) {
-    K3bCdDevice::CdDevice* dev = it.current();
+    K3bDevice::Device* dev = it.current();
 
     s << "<table>" << endl
       << "<tr><td span=2>" 

@@ -25,8 +25,8 @@ class KConfig;
 class K3bVersion;
 class K3bExternalBin;
 
-namespace K3bCdDevice {
-  class CdDevice;
+namespace K3bDevice {
+  class Device;
 }
 
 namespace K3b
@@ -153,7 +153,7 @@ namespace K3b
    * Used to create a parameter for cdrecord, cdrdao or readcd.
    * Takes care of SCSI and ATAPI.
    */
-  QString externalBinDeviceParameter( K3bCdDevice::CdDevice* dev, const K3bExternalBin* );
+  QString externalBinDeviceParameter( K3bDevice::Device* dev, const K3bExternalBin* );
 }
 
 #endif

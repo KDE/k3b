@@ -43,7 +43,7 @@ class K3bDvdJob : public K3bBurnJob
   virtual ~K3bDvdJob();
 
   K3bDoc* doc() const;
-  K3bCdDevice::CdDevice* writer() const;
+  K3bDevice::Device* writer() const;
 
   virtual QString jobDescription() const;
   virtual QString jobDetails() const;

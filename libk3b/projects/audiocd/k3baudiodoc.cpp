@@ -328,7 +328,7 @@ K3bAudioTrack* K3bAudioDoc::importCueFile( const QString& cuefile, K3bAudioTrack
 {
   kdDebug() << "(K3bAudioDoc::importCueFile( " << cuefile << ", " << after << ")" << endl;
   K3bCueFileParser parser( cuefile );
-  if( parser.isValid() && parser.toc().contentType() == K3bCdDevice::AUDIO ) {
+  if( parser.isValid() && parser.toc().contentType() == K3bDevice::AUDIO ) {
 
     kdDebug() << "(K3bAudioDoc::importCueFile) parsed with image: " << parser.imageFilename() << endl;
 
@@ -342,9 +342,9 @@ K3bAudioTrack* K3bAudioDoc::importCueFile( const QString& cuefile, K3bAudioTrack
     if( decoder ) {
       K3bAudioFile* newFile = 0;
       unsigned int i = 0;
-      for( K3bCdDevice::Toc::const_iterator it = parser.toc().begin();
+      for( K3bDevice::Toc::const_iterator it = parser.toc().begin();
 	   it != parser.toc().end(); ++it ) {
-	const K3bCdDevice::Track& track = *it;
+	const K3bDevice::Track& track = *it;
 
 	newFile = new K3bAudioFile( decoder, this );
 	newFile->setStartOffset( track.firstSector() );
@@ -947,9 +947,9 @@ void K3bAudioDoc::slotHouseKeeping()
 }
 
 
-K3bCdDevice::CdText K3bAudioDoc::cdTextData() const
+K3bDevice::CdText K3bAudioDoc::cdTextData() const
 {
-  K3bCdDevice::CdText text( m_cdTextData );
+  K3bDevice::CdText text( m_cdTextData );
   text.reserve( numOfTracks() );
   K3bAudioTrack* track = firstTrack();
   while( track ) {
@@ -961,9 +961,9 @@ K3bCdDevice::CdText K3bAudioDoc::cdTextData() const
 }
 
 
-K3bCdDevice::Toc K3bAudioDoc::toToc() const
+K3bDevice::Toc K3bAudioDoc::toToc() const
 {
-  K3bCdDevice::Toc toc;
+  K3bDevice::Toc toc;
 
   // FIXME: add MCN
 

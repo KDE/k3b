@@ -103,7 +103,7 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( bool dvd, QWidget *parent, c
   mainLayout->addWidget( groupWriter, 0, 0 );
 
 
-  connect( m_comboWriter, SIGNAL(selectionChanged(K3bCdDevice::CdDevice*)), this, SIGNAL(writerChanged()) );
+  connect( m_comboWriter, SIGNAL(selectionChanged(K3bDevice::Device*)), this, SIGNAL(writerChanged()) );
   connect( m_comboWritingApp, SIGNAL(activated(int)), this, SLOT(slotWritingAppSelected(int)) );
   connect( this, SIGNAL(writerChanged()), SLOT(slotWriterChanged()) );
   connect( m_buttonDetermineSpeed, SIGNAL(clicked()), this, SLOT(slotDetermineSupportedWriteSpeeds()) );
@@ -142,18 +142,18 @@ void K3bWriterSelectionWidget::init()
   m_comboWriter->clear();
 
   // -- read cd-writers ----------------------------------------------
-  QPtrList<K3bCdDevice::CdDevice>& devices = ( d->dvd 
+  QPtrList<K3bDevice::Device>& devices = ( d->dvd 
 				   ? k3bcore->deviceManager()->dvdWriter() 
 				   : k3bcore->deviceManager()->cdWriter() );
 
-  K3bCdDevice::CdDevice* dev = devices.first();
+  K3bDevice::Device* dev = devices.first();
   while( dev ) {
     m_comboWriter->addDevice( dev );
     dev = devices.next();
   }
 
   k3bcore->config()->setGroup( "General Options" );
-  K3bCdDevice::CdDevice *current = k3bcore->deviceManager()->deviceByName( k3bcore->config()->readEntry( "current_writer" ) );
+  K3bDevice::Device *current = k3bcore->deviceManager()->deviceByName( k3bcore->config()->readEntry( "current_writer" ) );
 
   if ( current == 0 )
     current = devices.first();
@@ -254,7 +254,7 @@ void K3bWriterSelectionWidget::slotRefreshWriterSpeeds()
   if( d->dvd )
     m_comboSpeed->insertItem( i18n("Ignore") );
   if( !d->forceAutoSpeed ) {
-    if( K3bCdDevice::CdDevice* dev = writerDevice() ) {
+    if( K3bDevice::Device* dev = writerDevice() ) {
       // add speeds to combobox
       int i = 1;
       int speed = ( d->dvd ? 1385 : 175 );
@@ -298,13 +298,13 @@ void K3bWriterSelectionWidget::slotWritingAppSelected( int )
 }
 
 
-K3bCdDevice::CdDevice* K3bWriterSelectionWidget::writerDevice() const
+K3bDevice::Device* K3bWriterSelectionWidget::writerDevice() const
 {
   return m_comboWriter->selectedDevice();
 }
 
 
-void K3bWriterSelectionWidget::setWriterDevice( K3bCdDevice::CdDevice* dev )
+void K3bWriterSelectionWidget::setWriterDevice( K3bDevice::Device* dev )
 {
   m_comboWriter->setSelectedDevice( dev );
 }
@@ -380,7 +380,7 @@ int K3bWriterSelectionWidget::selectedWritingApp() const
 
 void K3bWriterSelectionWidget::slotSpeedChanged( int )
 {
-  if( K3bCdDevice::CdDevice* dev = writerDevice() )
+  if( K3bDevice::Device* dev = writerDevice() )
     dev->setCurrentWriteSpeed( writerSpeed() );
 }
 
@@ -390,7 +390,7 @@ void K3bWriterSelectionWidget::slotWriterChanged()
   slotRefreshWriterSpeeds();
 
   // save last selected writer
-  if( K3bCdDevice::CdDevice* dev = writerDevice() ) {
+  if( K3bDevice::Device* dev = writerDevice() ) {
     QString oldGroup = k3bcore->config()->group();
     k3bcore->config()->setGroup( "General Options" );
     k3bcore->config()->writeEntry( "current_writer", dev->devicename() );
@@ -460,7 +460,7 @@ void K3bWriterSelectionWidget::slotDetermineSupportedWriteSpeeds()
     QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
 
     int media = writerDevice()->dvdMediaType();
-    bool isDvd = ( media & K3bCdDevice::MEDIA_WRITABLE_DVD ) && ( media > 0 );
+    bool isDvd = ( media & K3bDevice::MEDIA_WRITABLE_DVD ) && ( media > 0 );
 
     if( !isDvd && d->dvd ) {
       QApplication::restoreOverrideCursor();

@@ -19,52 +19,52 @@
 #include <qstring.h>
 
 
-K3bCdDevice::Toc::Toc()
-  : QValueList<K3bCdDevice::Track>(),
+K3bDevice::Toc::Toc()
+  : QValueList<K3bDevice::Track>(),
     m_discId(0)
 {
 }
 
 
-K3bCdDevice::Toc::Toc( const Toc& toc )
-  : QValueList<K3bCdDevice::Track>( toc )
+K3bDevice::Toc::Toc( const Toc& toc )
+  : QValueList<K3bDevice::Track>( toc )
 {
   m_firstSector = toc.firstSector();
   m_discId = toc.discId();
 }
 
 
-K3bCdDevice::Toc::~Toc()
+K3bDevice::Toc::~Toc()
 {
 }
 
 
-K3bCdDevice::Toc& K3bCdDevice::Toc::operator=( const Toc& toc )
+K3bDevice::Toc& K3bDevice::Toc::operator=( const Toc& toc )
 {
   if( &toc == this ) return *this;
 
   m_firstSector = toc.firstSector();
   m_discId = toc.discId();
 
-  QValueList<K3bCdDevice::Track>::operator=( toc );
+  QValueList<K3bDevice::Track>::operator=( toc );
 
   return *this;
 }
 
 
-unsigned int K3bCdDevice::Toc::discId() const
+unsigned int K3bDevice::Toc::discId() const
 {
   return m_discId;
 }
 
 
-const K3b::Msf& K3bCdDevice::Toc::firstSector() const
+const K3b::Msf& K3bDevice::Toc::firstSector() const
 {
   return m_firstSector;
 }
 
 
-K3b::Msf K3bCdDevice::Toc::lastSector() const
+K3b::Msf K3bDevice::Toc::lastSector() const
 {
   if( isEmpty() )
     return 0;
@@ -73,14 +73,14 @@ K3b::Msf K3bCdDevice::Toc::lastSector() const
 }
 
 
-K3b::Msf K3bCdDevice::Toc::length() const
+K3b::Msf K3bDevice::Toc::length() const
 {
   // +1 since the last sector is included
   return lastSector() - firstSector() + 1;
 }
 
 
-unsigned int K3bCdDevice::Toc::calculateDiscId()
+unsigned int K3bDevice::Toc::calculateDiscId()
 {
   // calculate cddb-id
   unsigned int id = 0;
@@ -102,21 +102,21 @@ unsigned int K3bCdDevice::Toc::calculateDiscId()
 }
 
 
-int K3bCdDevice::Toc::contentType() const
+int K3bDevice::Toc::contentType() const
 {
   int audioCnt = 0, dataCnt = 0;
   for( K3bToc::const_iterator it = begin(); it != end(); ++it ) {
-    if( (*it).type() == K3bCdDevice::Track::AUDIO )
+    if( (*it).type() == K3bDevice::Track::AUDIO )
       audioCnt++;
     else
       dataCnt++;
   }
 
   if( audioCnt + dataCnt == 0 )
-    return K3bCdDevice::NONE;
+    return K3bDevice::NONE;
   if( audioCnt == 0 )
-    return K3bCdDevice::DATA;
+    return K3bDevice::DATA;
   if( dataCnt == 0 )
-    return K3bCdDevice::AUDIO;
-  return K3bCdDevice::MIXED;
+    return K3bDevice::AUDIO;
+  return K3bDevice::MIXED;
 }

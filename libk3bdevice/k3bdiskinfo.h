@@ -28,7 +28,7 @@
 class kdbgstream;
 
 
-namespace K3bCdDevice
+namespace K3bDevice
 {
   enum State { 
     STATE_UNKNOWN = 256,
@@ -47,7 +47,7 @@ namespace K3bCdDevice
 
   /**
    * Defines the different media types as retured by 
-   * K3bCdDevice::CdDevice::mediaType()
+   * K3bDevice::Device::mediaType()
    */
   enum MediaType { MEDIA_NONE = 0,
 		   MEDIA_DVD_ROM = 1,
@@ -102,7 +102,7 @@ namespace K3bCdDevice
    * This class is directly accociated to a strcuture from 
    * the MMC draft READ_DISK_INFO.
    * It also holds some additional data.
-   * This class' data will be retrieved by K3bCdDevice::CdDevice.
+   * This class' data will be retrieved by K3bDevice::Device.
    *
    * Before using any values one should check diskState != STATE_UNKNOWN or
    * diskState == STATE_NO_MEDIA.
@@ -233,7 +233,7 @@ namespace K3bCdDevice
       K3b::Msf m_usedCapacity;
       K3b::Msf m_firstLayerSize;
 
-      friend class CdDevice;
+      friend class Device;
     };
 
   //  kdbgstream& operator<<( kdbgstream& s, const DiskInfo& ngInf );

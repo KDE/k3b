@@ -20,7 +20,7 @@
 #include <k3bjob.h>
 
 class K3bMovixDvdDoc;
-class K3bCdDevice::CdDevice;
+class K3bDevice::Device;
 class K3bDvdJob;
 class KTempFile;
 class K3bMovixInstallation;
@@ -37,7 +37,7 @@ class K3bMovixDvdJob : public K3bBurnJob
   ~K3bMovixDvdJob();
 
   K3bDoc* doc() const;
-  K3bCdDevice::CdDevice* writer() const;
+  K3bDevice::Device* writer() const;
 
   QString jobDescription() const;
   QString jobDetails() const;

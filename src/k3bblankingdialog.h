@@ -25,8 +25,8 @@ class QComboBox;
 class QCloseEvent;
 class KListView;
 class K3bWriterSelectionWidget;
-namespace K3bCdDevice {
-  class CdDevice;
+namespace K3bDevice {
+  class Device;
 }
 
 
@@ -41,9 +41,9 @@ Q_OBJECT
   /**
    * @reimplemented from K3bJobHandler
    */
-  int waitForMedia( K3bCdDevice::CdDevice*,
-		    int mediaState = K3bCdDevice::STATE_EMPTY,
-		    int mediaType = K3bCdDevice::MEDIA_WRITABLE_CD,
+  int waitForMedia( K3bDevice::Device*,
+		    int mediaState = K3bDevice::STATE_EMPTY,
+		    int mediaType = K3bDevice::MEDIA_WRITABLE_CD,
 		    const QString& message = QString::null );
   
   /**

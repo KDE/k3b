@@ -20,8 +20,8 @@
 #include <k3bjob.h>
 
 class K3bAbstractWriter;
-namespace K3bCdDevice {
-  class CdDevice;
+namespace K3bDevice {
+  class Device;
 }
 
 /**
@@ -35,7 +35,7 @@ class K3bBinImageWritingJob : public K3bBurnJob
   K3bBinImageWritingJob( K3bJobHandler*, QObject* parent = 0 );
   ~K3bBinImageWritingJob();
 
-  K3bCdDevice::CdDevice* writer() const { return m_device; };
+  K3bDevice::Device* writer() const { return m_device; };
 
   QString jobDescription() const;
   QString jobDetails() const;
@@ -44,7 +44,7 @@ class K3bBinImageWritingJob : public K3bBurnJob
   void start();
   void cancel();
 
-  void setWriter( K3bCdDevice::CdDevice* dev ) { m_device = dev; }
+  void setWriter( K3bDevice::Device* dev ) { m_device = dev; }
   void setSimulate( bool b ) { m_simulate = b; }
   void setForce(bool b) { m_force = b; }
   void setMulti( bool b ) { m_noFix = b; }
@@ -62,7 +62,7 @@ class K3bBinImageWritingJob : public K3bBurnJob
   void writerStart();
   bool prepareWriter();
 
-  K3bCdDevice::CdDevice* m_device;
+  K3bDevice::Device* m_device;
   bool m_simulate;
   bool m_force;
   bool m_noFix;

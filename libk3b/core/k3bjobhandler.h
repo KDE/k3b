@@ -32,13 +32,13 @@ class K3bJobHandler
   virtual ~K3bJobHandler() {}
 
   /**
-   * @return K3bCdDevice::MediaType on success,
+   * @return K3bDevice::MediaType on success,
    *         0 if forced (no media info available),
    *         and -1 on error (canceled)
    */
-  virtual int waitForMedia( K3bCdDevice::CdDevice*,
-			    int mediaState = K3bCdDevice::STATE_EMPTY,
-			    int mediaType = K3bCdDevice::MEDIA_WRITABLE_CD,
+  virtual int waitForMedia( K3bDevice::Device*,
+			    int mediaState = K3bDevice::STATE_EMPTY,
+			    int mediaType = K3bDevice::MEDIA_WRITABLE_CD,
 			    const QString& message = QString::null ) = 0;
   
   virtual bool questionYesNo( const QString& text,

@@ -21,7 +21,7 @@
 #include <config.h>
 
 
-namespace K3bCdDevice 
+namespace K3bDevice 
 {
   /* 
    * struct disc_info taken from cdrwtool.h

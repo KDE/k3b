@@ -87,7 +87,7 @@ K3bAudioJob::~K3bAudioJob()
 }
 
 
-K3bCdDevice::CdDevice* K3bAudioJob::writer() const
+K3bDevice::Device* K3bAudioJob::writer() const
 {
   return m_doc->burner();
 }
@@ -254,7 +254,7 @@ void K3bAudioJob::slotWriterFinished( bool success )
       emit finished(true);
     }
     else {
-      K3bCdDevice::eject( m_doc->burner() );
+      K3bDevice::eject( m_doc->burner() );
 
       if( startWriting() ) {
 	if( m_doc->onTheFly() ) {

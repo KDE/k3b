@@ -24,8 +24,8 @@ class QKeyEvent;
 class QMouseEvent;
 class QPaintEvent;
 
-namespace K3bCdDevice {
-  class CdDevice;
+namespace K3bDevice {
+  class Device;
 }
 
 class K3bFileTreeComboBox : public KComboBox
@@ -47,10 +47,10 @@ class K3bFileTreeComboBox : public KComboBox
 
  signals:
   void urlExecuted( const KURL& url );
-  void deviceExecuted( K3bCdDevice::CdDevice* dev );
+  void deviceExecuted( K3bDevice::Device* dev );
 
  private slots:
-  void slotDeviceExecuted( K3bCdDevice::CdDevice* );
+  void slotDeviceExecuted( K3bDevice::Device* );
   void slotUrlExecuted( const KURL& url );
 
  protected:

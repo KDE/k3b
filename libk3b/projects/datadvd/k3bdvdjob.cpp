@@ -75,7 +75,7 @@ K3bDoc* K3bDvdJob::doc() const
 }
 
 
-K3bCdDevice::CdDevice* K3bDvdJob::writer() const
+K3bDevice::Device* K3bDvdJob::writer() const
 {
   return m_doc->burner();
 }
@@ -342,8 +342,8 @@ bool K3bDvdJob::prepareWriterJob()
   // DAO is the only writing mode for which a growisofs parameter exists  
   if( m_doc->writingMode() == K3b::DAO ||
       ( m_doc->writingMode() == K3b::WRITING_MODE_AUTO &&
-	d->foundMedia & (K3bCdDevice::MEDIA_DVD_R|K3bCdDevice::MEDIA_DVD_RW|
-			 K3bCdDevice::MEDIA_DVD_R_SEQ|K3bCdDevice::MEDIA_DVD_RW_SEQ) ) )
+	d->foundMedia & (K3bDevice::MEDIA_DVD_R|K3bDevice::MEDIA_DVD_RW|
+			 K3bDevice::MEDIA_DVD_R_SEQ|K3bDevice::MEDIA_DVD_RW_SEQ) ) )
     writer->setWritingMode( K3b::DAO );
 
   if( m_doc->onTheFly() ) {
@@ -430,7 +430,7 @@ void K3bDvdJob::slotWritingFinished( bool success )
       d->copiesDone++;
 
       if( d->copiesDone < d->copies ) {
-	K3bCdDevice::eject( m_doc->burner() );
+	K3bDevice::eject( m_doc->burner() );
 
 	if( !startWriting() ) {
 	  cleanup();
@@ -478,7 +478,7 @@ void K3bDvdJob::slotVerificationFinished( bool success )
   d->copiesDone++;
   
   if( success && d->copiesDone < d->copies ) {
-    K3bCdDevice::eject( m_doc->burner() );
+    K3bDevice::eject( m_doc->burner() );
     
     if( !startWriting() ) {
       cleanup();
@@ -490,7 +490,7 @@ void K3bDvdJob::slotVerificationFinished( bool success )
     
     k3bcore->config()->setGroup("General Options");
     if( !k3bcore->config()->readBoolEntry( "No cd eject", false ) )
-      K3bCdDevice::eject( m_doc->burner() );
+      K3bDevice::eject( m_doc->burner() );
   
     emit finished( success );
   }
@@ -514,21 +514,21 @@ bool K3bDvdJob::waitForDvd()
 
   int mt = 0;
   if( m_doc->writingMode() == K3b::WRITING_MODE_INCR_SEQ || m_doc->writingMode() == K3b::DAO )
-    mt = K3bCdDevice::MEDIA_DVD_RW_SEQ|K3bCdDevice::MEDIA_DVD_R_SEQ;
+    mt = K3bDevice::MEDIA_DVD_RW_SEQ|K3bDevice::MEDIA_DVD_R_SEQ;
   else if( m_doc->writingMode() == K3b::WRITING_MODE_RES_OVWR ) // we treat DVD+R(W) as restricted overwrite media
-    mt = K3bCdDevice::MEDIA_DVD_RW_OVWR|K3bCdDevice::MEDIA_DVD_PLUS_RW|K3bCdDevice::MEDIA_DVD_PLUS_R;
+    mt = K3bDevice::MEDIA_DVD_RW_OVWR|K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_PLUS_R|K3bDevice::MEDIA_DVD_PLUS_R_DL;
   else
-    mt = K3bCdDevice::MEDIA_WRITABLE_DVD;
+    mt = K3bDevice::MEDIA_WRITABLE_DVD;
 
   // double layer media
   if( m_doc->size() > 4700372992LL )
-    mt = K3bCdDevice::MEDIA_DVD_PLUS_R_DL;
+    mt = K3bDevice::MEDIA_DVD_PLUS_R_DL;
 
   d->foundMedia = waitForMedia( m_doc->burner(), 
 				m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
 				m_doc->multiSessionMode() == K3bDataDoc::FINISH ?
-				K3bCdDevice::STATE_INCOMPLETE :
-				K3bCdDevice::STATE_EMPTY,
+				K3bDevice::STATE_INCOMPLETE :
+				K3bDevice::STATE_EMPTY,
 				mt );
   if( d->foundMedia < 0 ) {
     cancel();
@@ -540,7 +540,7 @@ bool K3bDvdJob::waitForDvd()
   }
 
   else {
-    if( d->foundMedia & (K3bCdDevice::MEDIA_DVD_PLUS_RW|K3bCdDevice::MEDIA_DVD_PLUS_R) ) {
+    if( d->foundMedia & (K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_PLUS_R|K3bDevice::MEDIA_DVD_PLUS_R_DL) ) {
       if( m_doc->dummy() ) {
 	if( KMessageBox::warningYesNo( qApp->activeWindow(),
 				       i18n("K3b does not support simulation with DVD+R(W) media. "
@@ -557,13 +557,15 @@ bool K3bDvdJob::waitForDvd()
       if( m_doc->writingMode() != K3b::WRITING_MODE_AUTO && m_doc->writingMode() != K3b::WRITING_MODE_RES_OVWR )
 	emit infoMessage( i18n("Writing mode ignored when writing DVD+R(W) media."), INFO );
 
-      if( d->foundMedia & K3bCdDevice::MEDIA_DVD_PLUS_RW ) {
+      if( d->foundMedia & K3bDevice::MEDIA_DVD_PLUS_RW ) {
 	  if( m_doc->multiSessionMode() == K3bDataDoc::NONE ||
 	      m_doc->multiSessionMode() == K3bDataDoc::START )
 	    emit infoMessage( i18n("Writing DVD+RW."), INFO );
 	  else
 	    emit infoMessage( i18n("Growing Iso9660 filesystem on DVD+RW."), INFO );
       }
+      else if( d->foundMedia & K3bDevice::MEDIA_DVD_PLUS_R_DL )
+	emit infoMessage( i18n("Writing DVD+R Double Layer."), INFO );
       else
 	emit infoMessage( i18n("Writing DVD+R."), INFO );
     }
@@ -584,15 +586,15 @@ bool K3bDvdJob::waitForDvd()
       }
 
 
-      if( d->foundMedia & K3bCdDevice::MEDIA_DVD_RW_OVWR ) {
+      if( d->foundMedia & K3bDevice::MEDIA_DVD_RW_OVWR ) {
 	if( m_doc->multiSessionMode() == K3bDataDoc::NONE ||
 	    m_doc->multiSessionMode() == K3bDataDoc::START )
 	  emit infoMessage( i18n("Writing DVD-RW in restricted overwrite mode."), INFO );
 	else
 	  emit infoMessage( i18n("Growing Iso9660 filesystem on DVD-RW in restricted overwrite mode."), INFO );
       }
-      else if( d->foundMedia & (K3bCdDevice::MEDIA_DVD_RW_SEQ|
-		    K3bCdDevice::MEDIA_DVD_RW) ) {
+      else if( d->foundMedia & (K3bDevice::MEDIA_DVD_RW_SEQ|
+		    K3bDevice::MEDIA_DVD_RW) ) {
 	if( m_doc->writingMode() == K3b::DAO ||
 	    ( m_doc->writingMode() == K3b::WRITING_MODE_AUTO &&
 	      m_doc->multiSessionMode() == K3bDataDoc::NONE ) )
@@ -615,8 +617,8 @@ bool K3bDvdJob::waitForDvd()
 	  emit infoMessage( i18n("Writing DVD-RW in sequential mode."), INFO );	
 	}
       }
-      else if( d->foundMedia & (K3bCdDevice::MEDIA_DVD_R_SEQ|
-				K3bCdDevice::MEDIA_DVD_R) ) {
+      else if( d->foundMedia & (K3bDevice::MEDIA_DVD_R_SEQ|
+				K3bDevice::MEDIA_DVD_R) ) {
 	if( m_doc->writingMode() == K3b::DAO ||
 	    ( m_doc->writingMode() == K3b::WRITING_MODE_AUTO &&
 	      m_doc->multiSessionMode() == K3bDataDoc::NONE ) )

@@ -20,7 +20,7 @@
 
 class KProcess;
 class QString;
-class K3bCdDevice::CdDevice;
+class K3bDevice::Device;
 class K3bAbstractWriter;
 
 
@@ -38,7 +38,7 @@ class K3bBlankingJob : public K3bJob
   void start();
   void cancel();
   void setForce( bool f ) { m_force = f; }
-  void setDevice( K3bCdDevice::CdDevice* d );
+  void setDevice( K3bDevice::Device* d );
   void setSpeed( int s ) { m_speed = s; }
   void setMode( int m ) { m_mode = m; }
   void setWritingApp (int app) { m_writingApp = app; }
@@ -56,7 +56,7 @@ class K3bBlankingJob : public K3bJob
  private:
   K3bAbstractWriter* m_writerJob;
   bool m_force;
-  K3bCdDevice::CdDevice* m_device;
+  K3bDevice::Device* m_device;
   int m_speed;
   int m_mode;
   int m_writingApp;

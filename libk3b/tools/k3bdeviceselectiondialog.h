@@ -23,8 +23,8 @@
 
 #include <qptrlist.h>
 
-namespace K3bCdDevice {
-  class CdDevice;
+namespace K3bDevice {
+  class Device;
 }
 
 
@@ -39,19 +39,19 @@ class K3bDeviceSelectionDialog : public KDialogBase
 			    bool modal = false );
   ~K3bDeviceSelectionDialog();
 
-  void addDevice( K3bCdDevice::CdDevice* );
-  void addDevices( const QPtrList<K3bCdDevice::CdDevice>& );
+  void addDevice( K3bDevice::Device* );
+  void addDevices( const QPtrList<K3bDevice::Device>& );
 
-  void setSelectedDevice( K3bCdDevice::CdDevice* );
+  void setSelectedDevice( K3bDevice::Device* );
 
-  K3bCdDevice::CdDevice* selectedDevice() const;
+  K3bDevice::Device* selectedDevice() const;
 
-  static K3bCdDevice::CdDevice* selectWriter( QWidget* parent, 
+  static K3bDevice::Device* selectWriter( QWidget* parent, 
 					      const QString& text = QString::null );
-  static K3bCdDevice::CdDevice* selectDevice( QWidget* parent, 
+  static K3bDevice::Device* selectDevice( QWidget* parent, 
 					      const QString& text = QString::null );
-  static K3bCdDevice::CdDevice* selectDevice( QWidget* parent, 
-					      const QPtrList<K3bCdDevice::CdDevice>& devices,
+  static K3bDevice::Device* selectDevice( QWidget* parent, 
+					      const QPtrList<K3bDevice::Device>& devices,
 					      const QString& text = QString::null );
 
  private:

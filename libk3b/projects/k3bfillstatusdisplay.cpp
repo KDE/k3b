@@ -449,7 +449,7 @@ void K3bFillStatusDisplay::slotPopupMenu( const QPoint& p )
 
 void K3bFillStatusDisplay::slotDetermineSize()
 {
-  K3bCdDevice::CdDevice* dev = K3bDeviceSelectionDialog::selectDevice( parentWidget(), 
+  K3bDevice::Device* dev = K3bDeviceSelectionDialog::selectDevice( parentWidget(), 
 							   d->showDvdSizes 
 							   ? k3bcore->deviceManager()->dvdWriter() 
 							   : k3bcore->deviceManager()->cdWriter() );
@@ -457,19 +457,19 @@ void K3bFillStatusDisplay::slotDetermineSize()
   if( dev ) {
     k3bcore->requestBusyInfo( i18n("Determine size of media in %1").arg(dev->vendor() + " " + dev->description() ) );
 
-    connect( K3bCdDevice::sendCommand( K3bCdDevice::DeviceHandler::NG_DISKINFO, dev ),
-	     SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
+    connect( K3bDevice::sendCommand( K3bDevice::DeviceHandler::NG_DISKINFO, dev ),
+	     SIGNAL(finished(K3bDevice::DeviceHandler*)),
 	     this,
-	     SLOT(slotRemainingSize(K3bCdDevice::DeviceHandler*)) );
+	     SLOT(slotRemainingSize(K3bDevice::DeviceHandler*)) );
   }
 }
 
-void K3bFillStatusDisplay::slotRemainingSize( K3bCdDevice::DeviceHandler* dh )
+void K3bFillStatusDisplay::slotRemainingSize( K3bDevice::DeviceHandler* dh )
 {
   k3bcore->requestBusyFinish();
 
   if( dh->success() ) {
-    if( dh->diskInfo().diskState() == K3bCdDevice::STATE_NO_MEDIA ) {
+    if( dh->diskInfo().diskState() == K3bDevice::STATE_NO_MEDIA ) {
       KMessageBox::error( parentWidget(), i18n("No media found.") );
     }
     else {

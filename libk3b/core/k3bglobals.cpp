@@ -375,9 +375,9 @@ bool K3b::hackedAtapiSupport()
 }
 
 
-QString K3b::externalBinDeviceParameter( K3bCdDevice::CdDevice* dev, const K3bExternalBin* bin )
+QString K3b::externalBinDeviceParameter( K3bDevice::Device* dev, const K3bExternalBin* bin )
 {
-  if( dev->interfaceType() == K3bCdDevice::CdDevice::SCSI )
+  if( dev->interfaceType() == K3bDevice::Device::SCSI )
     return dev->busTargetLun();
   else if( (plainAtapiSupport() && bin->hasFeature("plain-atapi") ) )
     return dev->blockDeviceName();

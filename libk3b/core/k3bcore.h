@@ -31,7 +31,7 @@ class K3bJob;
 class K3bAudioServer;
 
 
-namespace K3bCdDevice {
+namespace K3bDevice {
   class DeviceManager;
 }
 
@@ -56,7 +56,7 @@ class K3bCore : public QObject
   void init();
   void saveConfig();
 
-  K3bCdDevice::DeviceManager* deviceManager() const;
+  K3bDevice::DeviceManager* deviceManager() const;
   K3bExternalBinManager* externalBinManager() const;
   K3bAudioServer* audioServer() const;
 

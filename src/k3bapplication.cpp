@@ -160,14 +160,14 @@ void K3bApplication::init()
   // speed multiplicator to KB/s)
   //
   K3bVersion configVersion( config()->readEntry( "config version", "0.1" ) );
-  QPtrList<K3bCdDevice::CdDevice> wlist( k3bcore->deviceManager()->cdWriter() );
+  QPtrList<K3bDevice::Device> wlist( k3bcore->deviceManager()->cdWriter() );
   bool needToVerify = ( configVersion < K3bVersion( 0, 10, 99 ) );
   if( !needToVerify ) {
     // search the config
     config()->setGroup( "Devices" );
 
-    for( QPtrListIterator<K3bCdDevice::CdDevice> it( k3bcore->deviceManager()->cdWriter() ); *it; ++it ) {
-      K3bCdDevice::CdDevice* dev = *it;
+    for( QPtrListIterator<K3bDevice::Device> it( k3bcore->deviceManager()->cdWriter() ); *it; ++it ) {
+      K3bDevice::Device* dev = *it;
       QString configEntryName = dev->vendor() + " " + dev->description();
       QStringList list = config()->readListEntry( configEntryName );
       if( list.count() > 1 && list[1].toInt() > 175 )

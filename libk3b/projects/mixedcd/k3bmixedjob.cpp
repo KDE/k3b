@@ -103,7 +103,7 @@ K3bMixedJob::~K3bMixedJob()
 }
 
 
-K3bCdDevice::CdDevice* K3bMixedJob::writer() const
+K3bDevice::Device* K3bMixedJob::writer() const
 {
   return m_doc->burner();
 }
@@ -374,13 +374,13 @@ void K3bMixedJob::slotWriterFinished( bool success )
     // reload the media (as a subtask so the user does not see the "Flushing cache" or "Fixating" messages while
     // doing so
     emit newSubTask( i18n("Reloading the media") );
-    connect( K3bCdDevice::reload( m_doc->burner() ), SIGNAL(finished(bool)),
+    connect( K3bDevice::reload( m_doc->burner() ), SIGNAL(finished(bool)),
 	     this, SLOT(slotMediaReloadedForSecondSession(bool)) );
   }
   else {
     d->copiesDone++;
     if( d->copiesDone < d->copies ) {
-      K3bCdDevice::eject( m_doc->burner() );
+      K3bDevice::eject( m_doc->burner() );
       writeNextCopy();
     }
     else {
@@ -607,8 +607,8 @@ bool K3bMixedJob::writeTocFile()
     // TOC
     //
     tocFileWriter.setData( m_doc->toToc( m_usedDataMode == K3b::MODE2
-					 ? K3bCdDevice::Track::XA_FORM1
-					 : K3bCdDevice::Track::MODE1,
+					 ? K3bDevice::Track::XA_FORM1
+					 : K3bDevice::Track::MODE1,
 					 m_doc->onTheFly() 
 					 ? m_isoImager->size()
 					 : m_doc->dataDoc()->length() ) );
@@ -617,10 +617,10 @@ bool K3bMixedJob::writeTocFile()
     // CD-Text
     //
     if( m_doc->audioDoc()->cdText() ) {
-      K3bCdDevice::CdText text = m_doc->audioDoc()->cdTextData();
+      K3bDevice::CdText text = m_doc->audioDoc()->cdTextData();
       // if data in first track we need to add a dummy cdtext
       if( m_doc->mixedType() == K3bMixedDoc::DATA_FIRST_TRACK )
-	text.insert( text.begin(), K3bCdDevice::TrackCdText() );
+	text.insert( text.begin(), K3bDevice::TrackCdText() );
     
       tocFileWriter.setCdText( text );
     }

@@ -21,8 +21,8 @@
 
 
 class KProcess;
-namespace K3bCdDevice {
-  class CdDevice;
+namespace K3bDevice {
+  class Device;
   class DeviceHandler;
 }
 
@@ -66,11 +66,11 @@ class K3bDvdBooktypeJob : public K3bJob
    * The devicehandler needs to have a valid NgDiskInfo
    * Use this to prevent the job from searching a media.
    */
-  void start( K3bCdDevice::DeviceHandler* );
+  void start( K3bDevice::DeviceHandler* );
 
   void cancel();
 
-  void setDevice( K3bCdDevice::CdDevice* );
+  void setDevice( K3bDevice::Device* );
 
   void setAction( int a ) { m_action = a; }
 
@@ -83,8 +83,8 @@ class K3bDvdBooktypeJob : public K3bJob
  private slots:
   void slotStderrLine( const QString& );
   void slotProcessFinished( KProcess* );
-  void slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* );
-  void slotEjectingFinished( K3bCdDevice::DeviceHandler* );
+  void slotDeviceHandlerFinished( K3bDevice::DeviceHandler* );
+  void slotEjectingFinished( K3bDevice::DeviceHandler* );
 
  private:
   void startBooktypeChange();

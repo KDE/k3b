@@ -67,17 +67,17 @@ public:
     }
     else {
       switch( m_device->getDataMode( m_firstSector ) ) {
-      case K3bCdDevice::Track::MODE1:
-      case K3bCdDevice::Track::DVD:
+      case K3bDevice::Track::MODE1:
+      case K3bDevice::Track::DVD:
 	m_sectorSize = 2048;
 	break;
-      case K3bCdDevice::Track::XA_FORM1:
+      case K3bDevice::Track::XA_FORM1:
 	m_sectorSize = 2056;
 	break;
-      case K3bCdDevice::Track::XA_FORM2:
+      case K3bDevice::Track::XA_FORM2:
 	m_sectorSize = 2332;
 	break;
-      case K3bCdDevice::Track::MODE2:
+      case K3bDevice::Track::MODE2:
 	emitInfoMessage( i18n("No support for reading formless Mode2 sectors."), K3bJob::ERROR );
       default:
 	emitInfoMessage( i18n("Unsupported sector type."), K3bJob::ERROR );
@@ -250,7 +250,7 @@ public:
   bool m_canceled;
   bool m_ignoreReadErrors;
   int m_retries;
-  K3bCdDevice::CdDevice* m_device;
+  K3bDevice::Device* m_device;
   K3b::Msf m_firstSector;
   K3b::Msf m_lastSector;
   int m_fd;
@@ -273,7 +273,7 @@ K3bDataTrackReader::~K3bDataTrackReader()
 }
 
 
-void K3bDataTrackReader::setDevice( K3bCdDevice::CdDevice* dev )
+void K3bDataTrackReader::setDevice( K3bDevice::Device* dev )
 {
   m_thread->m_device = dev;
 }

@@ -28,7 +28,7 @@
 class K3bIso9660;
 
 
-namespace K3bCdDevice
+namespace K3bDevice
 {
   class DeviceHandler;
 
@@ -63,16 +63,16 @@ namespace K3bCdDevice
      */
     bool isVideoCd() const;
 
-    CdDevice* device() const;
+    Device* device() const;
 
   public slots:
-    void detect( CdDevice* dev );
+    void detect( Device* dev );
 
   signals:
-    void diskInfoReady( K3bCdDevice::DiskInfoDetector* );
+    void diskInfoReady( K3bDevice::DiskInfoDetector* );
 
   private slots:
-    void slotDeviceHandlerFinished(K3bCdDevice::DeviceHandler *);
+    void slotDeviceHandlerFinished(K3bDevice::DeviceHandler *);
     void finish(bool success);
     void fetchExtraInfo();
 
@@ -82,6 +82,6 @@ namespace K3bCdDevice
   };
 }
 
-typedef K3bCdDevice::DiskInfoDetector K3bDiskInfoDetector;
+typedef K3bDevice::DiskInfoDetector K3bDiskInfoDetector;
 
 #endif

@@ -26,7 +26,7 @@
 
 class QString;
 
-namespace K3bCdDevice
+namespace K3bDevice
 {
 
   enum ContentsType {
@@ -90,6 +90,6 @@ namespace K3bCdDevice
   };
 }
 
-typedef K3bCdDevice::Toc K3bToc;
+typedef K3bDevice::Toc K3bToc;
 
 #endif

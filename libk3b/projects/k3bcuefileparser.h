@@ -39,8 +39,8 @@ class K3bCueFileParser : public K3bImageFileReader
    */
   bool imageFilenameInCue() const { return m_imageFilenameInCue; }
 
-  const K3bCdDevice::Toc& toc() const;
-  const K3bCdDevice::CdText& cdText() const;
+  const K3bDevice::Toc& toc() const;
+  const K3bDevice::CdText& cdText() const;
 
  private:
   void readFile();

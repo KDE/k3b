@@ -75,7 +75,7 @@ K3bDoc* K3bVcdJob::doc() const
 }
 
 
-K3bCdDevice::CdDevice* K3bVcdJob::writer() const
+K3bDevice::Device* K3bVcdJob::writer() const
 {
     return doc() ->burner();
 }

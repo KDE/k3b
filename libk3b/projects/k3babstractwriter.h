@@ -22,7 +22,7 @@
 
 #include <qdatetime.h>
 
-class K3bCdDevice::CdDevice;
+class K3bDevice::Device;
 class K3bJobHandler;
 
 
@@ -33,7 +33,7 @@ class K3bAbstractWriter : public K3bJob
  public:
   virtual ~K3bAbstractWriter();
 
-  K3bCdDevice::CdDevice* burnDevice() const;
+  K3bDevice::Device* burnDevice() const;
   int burnSpeed() const { return m_burnSpeed; }
   bool simulate() const { return m_simulate; }
 
@@ -54,7 +54,7 @@ class K3bAbstractWriter : public K3bJob
    */
   void cancel();
 
-  void setBurnDevice( K3bCdDevice::CdDevice* dev ) { m_burnDevice = dev; }
+  void setBurnDevice( K3bDevice::Device* dev ) { m_burnDevice = dev; }
   void setBurnSpeed( int s ) { m_burnSpeed = s; }
   void setSimulate( bool b ) { m_simulate = b; }
 
@@ -72,7 +72,7 @@ class K3bAbstractWriter : public K3bJob
   void writeSpeed( int, int );
 
  protected:
-  K3bAbstractWriter( K3bCdDevice::CdDevice* dev, K3bJobHandler* hdl, 
+  K3bAbstractWriter( K3bDevice::Device* dev, K3bJobHandler* hdl, 
 		     QObject* parent = 0, const char* name = 0 );
 
   bool wasSourceUnreadable() const { return m_sourceUnreadable; }
@@ -82,7 +82,7 @@ class K3bAbstractWriter : public K3bJob
   void slotEjectWhileCancellationFinished( bool success );
 
  private:
-  K3bCdDevice::CdDevice* m_burnDevice;
+  K3bDevice::Device* m_burnDevice;
   int m_burnSpeed;
   bool m_simulate;
   bool m_sourceUnreadable;

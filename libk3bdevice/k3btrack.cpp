@@ -17,7 +17,7 @@
 #include "k3btrack.h"
 
 
-K3bCdDevice::Track::Track()
+K3bDevice::Track::Track()
   : m_type(-1),
     m_mode(-1),
     m_copyPermitted(true),
@@ -27,7 +27,7 @@ K3bCdDevice::Track::Track()
 }
 
 
-K3bCdDevice::Track::Track( const Track& track )
+K3bDevice::Track::Track( const Track& track )
   : m_firstSector( track.firstSector() ),
     m_lastSector( track.lastSector() ),
     m_index0( track.index0() ),
@@ -41,7 +41,7 @@ K3bCdDevice::Track::Track( const Track& track )
 }
 
 
-K3bCdDevice::Track::Track( const K3b::Msf& firstSector, 
+K3bDevice::Track::Track( const K3b::Msf& firstSector, 
 			   const K3b::Msf& lastSector, 
 			   int type, 
 			   int mode )
@@ -56,7 +56,7 @@ K3bCdDevice::Track::Track( const K3b::Msf& firstSector,
 }
 
 
-K3bCdDevice::Track& K3bCdDevice::Track::operator=( const K3bTrack& track )
+K3bDevice::Track& K3bDevice::Track::operator=( const K3bTrack& track )
 {
   if( this != &track ) {
     m_firstSector = track.firstSector();
@@ -71,14 +71,14 @@ K3bCdDevice::Track& K3bCdDevice::Track::operator=( const K3bTrack& track )
 }
 
 
-K3b::Msf K3bCdDevice::Track::length() const
+K3b::Msf K3bDevice::Track::length() const
 {
   // +1 since the last sector is included
   return m_lastSector - m_firstSector + 1;
 }
 
 
-K3b::Msf K3bCdDevice::Track::realAudioLength() const
+K3b::Msf K3bDevice::Track::realAudioLength() const
 {
   if( index0() > 0 )
     return index0();
@@ -87,14 +87,14 @@ K3b::Msf K3bCdDevice::Track::realAudioLength() const
 }
 
 
-void K3bCdDevice::Track::setIndex0( const K3b::Msf& msf )
+void K3bDevice::Track::setIndex0( const K3b::Msf& msf )
 {
   if( msf <= m_lastSector-m_firstSector )
     m_index0 = msf;
 }
 
 
-int K3bCdDevice::Track::indexCount() const
+int K3bDevice::Track::indexCount() const
 {
   return m_indices.count()-1;
 }

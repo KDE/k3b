@@ -171,8 +171,8 @@ public:
 
   int fd;
   K3bCdparanoiaLib* paranoia;
-  K3bCdDevice::CdDevice* device;
-  K3bCdDevice::Toc toc;
+  K3bDevice::Device* device;
+  K3bDevice::Toc toc;
   K3bWaveFileWriter* waveFileWriter;
   QStringList filenames;
   int paranoiaMode;
@@ -195,14 +195,14 @@ K3bAudioSessionReadingJob::~K3bAudioSessionReadingJob()
 }
 
 
-void K3bAudioSessionReadingJob::setDevice( K3bCdDevice::CdDevice* dev )
+void K3bAudioSessionReadingJob::setDevice( K3bDevice::Device* dev )
 {
   m_thread->device = dev;
-  m_thread->toc = K3bCdDevice::Toc();
+  m_thread->toc = K3bDevice::Toc();
 }
 
 
-void K3bAudioSessionReadingJob::setToc( const K3bCdDevice::Toc& toc )
+void K3bAudioSessionReadingJob::setToc( const K3bDevice::Toc& toc )
 {
   m_thread->toc = toc;
 }

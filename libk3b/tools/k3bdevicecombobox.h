@@ -19,8 +19,8 @@
 
 #include <kcombobox.h>
 
-namespace K3bCdDevice {
-  class CdDevice;
+namespace K3bDevice {
+  class Device;
 }
 
 
@@ -32,15 +32,15 @@ class K3bDeviceComboBox : public KComboBox
   K3bDeviceComboBox( QWidget* parent = 0, const char* name = 0 );
   ~K3bDeviceComboBox();
 
-  K3bCdDevice::CdDevice* selectedDevice() const;
+  K3bDevice::Device* selectedDevice() const;
 
  signals:
-  void selectionChanged( K3bCdDevice::CdDevice* );
+  void selectionChanged( K3bDevice::Device* );
 
  public slots:
-  void addDevice( K3bCdDevice::CdDevice* );
-  void addDevices( const QPtrList<K3bCdDevice::CdDevice>& );
-  void setSelectedDevice( K3bCdDevice::CdDevice* );
+  void addDevice( K3bDevice::Device* );
+  void addDevices( const QPtrList<K3bDevice::Device>& );
+  void setSelectedDevice( K3bDevice::Device* );
   void clear();
 
  private slots:

@@ -478,8 +478,8 @@ void K3bMainWindow::initView()
   // --- filetreecombobox-toolbar -------------------------------------------------------------------
   K3bFileTreeComboBox* m_fileTreeComboBox = new K3bFileTreeComboBox( 0 );
   connect( m_fileTreeComboBox, SIGNAL(urlExecuted(const KURL&)), m_dirView, SLOT(showUrl(const KURL& )) );
-  connect( m_fileTreeComboBox, SIGNAL(deviceExecuted(K3bCdDevice::CdDevice*)), m_dirView,
-	   SLOT(showDevice(K3bCdDevice::CdDevice* )) );
+  connect( m_fileTreeComboBox, SIGNAL(deviceExecuted(K3bDevice::Device*)), m_dirView,
+	   SLOT(showDevice(K3bDevice::Device* )) );
 
   KWidgetAction* fileTreeComboAction = new KWidgetAction( m_fileTreeComboBox,
 							  i18n("&Quick Dir Selector"),
@@ -533,7 +533,7 @@ K3bDoc* K3bMainWindow::openDocument(const KURL& url)
 
     // see if it's an audio cue file
     K3bCueFileParser parser( url.path() );
-    if( parser.isValid() && parser.toc().contentType() == K3bCdDevice::AUDIO ) {
+    if( parser.isValid() && parser.toc().contentType() == K3bDevice::AUDIO ) {
       K3bDoc* doc = slotNewAudioDoc();
       doc->addUrl( url );
       return doc;
@@ -1351,7 +1351,7 @@ K3bExternalBinManager* K3bMainWindow::externalBinManager() const
 }
 
 
-K3bCdDevice::DeviceManager* K3bMainWindow::deviceManager() const
+K3bDevice::DeviceManager* K3bMainWindow::deviceManager() const
 {
   return k3bcore->deviceManager();
 }
@@ -1448,7 +1448,7 @@ void K3bMainWindow::addUrls( const KURL::List& urls )
     if( !audio && urls.count() == 1 ) {
       // see if it's an audio cue file
       K3bCueFileParser parser( urls.first().path() );
-      if( parser.isValid() && parser.toc().contentType() == K3bCdDevice::AUDIO ) {
+      if( parser.isValid() && parser.toc().contentType() == K3bDevice::AUDIO ) {
 	audio = true;
       }
     }
@@ -1509,7 +1509,7 @@ bool K3bMainWindow::isCdDvdImageAndIfSoOpenDialog( const KURL& url )
 
 void K3bMainWindow::slotToolsDiskInfo()
 {
-  K3bCdDevice::CdDevice* dev = K3bDeviceSelectionDialog::selectDevice( this, i18n("Please select a CD/DVD device") );
+  K3bDevice::Device* dev = K3bDeviceSelectionDialog::selectDevice( this, i18n("Please select a CD/DVD device") );
   if( dev ) {
     m_dirView->showDiskInfo( dev );
   }			  

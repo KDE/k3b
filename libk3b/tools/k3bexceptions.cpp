@@ -16,7 +16,7 @@
 #include "k3bexceptions.h"
 #include <k3bdevice.h>
 
-bool K3bExceptions::brokenDaoAudio( K3bCdDevice::CdDevice* dev )
+bool K3bExceptions::brokenDaoAudio( K3bDevice::Device* dev )
 {
   if( dev->vendor().upper().startsWith("PIONEER") )
     if( dev->description().upper().startsWith("DVR-106D") ||

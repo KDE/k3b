@@ -21,8 +21,8 @@
 #include <qstring.h>
 
 
-namespace K3bCdDevice {
-  class CdDevice;
+namespace K3bDevice {
+  class Device;
   class DeviceHandler;
 }
 
@@ -35,8 +35,8 @@ class K3bDvdCopyJob : public K3bBurnJob
   K3bDvdCopyJob( K3bJobHandler* hdl, QObject* parent = 0, const char* name = 0 );
   ~K3bDvdCopyJob();
 
-  K3bCdDevice::CdDevice* writer() const { return m_writerDevice; }
-  K3bCdDevice::CdDevice* readingDevice() const { return m_readerDevice; }
+  K3bDevice::Device* writer() const { return m_writerDevice; }
+  K3bDevice::Device* readingDevice() const { return m_readerDevice; }
 
   QString jobDescription() const;
   QString jobDetails() const;
@@ -45,8 +45,8 @@ class K3bDvdCopyJob : public K3bBurnJob
   void start();
   void cancel();
 
-  void setWriterDevice( K3bCdDevice::CdDevice* w ) { m_writerDevice = w; }
-  void setReaderDevice( K3bCdDevice::CdDevice* w ) { m_readerDevice = w; }
+  void setWriterDevice( K3bDevice::Device* w ) { m_writerDevice = w; }
+  void setReaderDevice( K3bDevice::Device* w ) { m_readerDevice = w; }
   void setImagePath( const QString& p ) { m_imagePath = p; }
   void setRemoveImageFiles( bool b ) { m_removeImageFiles = b; }
   void setOnlyCreateImage( bool b ) { m_onlyCreateImage = b; }
@@ -59,7 +59,7 @@ class K3bDvdCopyJob : public K3bBurnJob
   void setReadRetries( int i ) { m_readRetries = i; }
 
  private slots:
-  void slotDiskInfoReady( K3bCdDevice::DeviceHandler* );
+  void slotDiskInfoReady( K3bDevice::DeviceHandler* );
   void slotReaderProgress( int );
   void slotReaderProcessedSize( int, int ); 
   void slotWriterProgress( int );
@@ -72,8 +72,8 @@ class K3bDvdCopyJob : public K3bBurnJob
   void prepareWriter();
   void removeImageFiles();
 
-  K3bCdDevice::CdDevice* m_writerDevice;
-  K3bCdDevice::CdDevice* m_readerDevice;
+  K3bDevice::Device* m_writerDevice;
+  K3bDevice::Device* m_readerDevice;
   QString m_imagePath;
 
   bool m_onTheFly;

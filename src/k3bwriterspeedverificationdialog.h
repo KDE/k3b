@@ -34,15 +34,15 @@ class K3bWriterSpeedVerificationDialog : public KDialogBase
  public:
   ~K3bWriterSpeedVerificationDialog();
 
-  static void verify( QPtrList<K3bCdDevice::CdDevice>& wlist, QWidget* parent = 0, const char* name = 0 );
+  static void verify( QPtrList<K3bDevice::Device>& wlist, QWidget* parent = 0, const char* name = 0 );
 
  private slots:
   void slotSpeedChanged( int );
 
  private:
-  K3bWriterSpeedVerificationDialog( QPtrList<K3bCdDevice::CdDevice>& wlist, QWidget* parent = 0, const char* name = 0 );
+  K3bWriterSpeedVerificationDialog( QPtrList<K3bDevice::Device>& wlist, QWidget* parent = 0, const char* name = 0 );
 
-  QMap<const QSpinBox*, K3bCdDevice::CdDevice*> m_spinMap;
+  QMap<const QSpinBox*, K3bDevice::Device*> m_spinMap;
 };
 
 #endif

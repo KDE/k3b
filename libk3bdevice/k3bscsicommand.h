@@ -21,9 +21,9 @@
 
 
 
-namespace K3bCdDevice
+namespace K3bDevice
 {
-  class CdDevice;
+  class Device;
 
   const unsigned char MMC_BLANK = 0xA1;
   const unsigned char MMC_CLOSE_TRACK_SESSION = 0x5B;
@@ -91,7 +91,7 @@ namespace K3bCdDevice
     {
     public:
       ScsiCommand( int fd );
-      ScsiCommand( const CdDevice* );
+      ScsiCommand( const Device* );
       ~ScsiCommand();
 
       void clear();
@@ -113,7 +113,7 @@ namespace K3bCdDevice
       class Private;
       Private *d;
       int m_fd;
-      const CdDevice* m_device;
+      const Device* m_device;
       bool m_needToCloseDevice;
     };
 }

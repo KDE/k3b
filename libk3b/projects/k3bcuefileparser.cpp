@@ -43,10 +43,10 @@ public:
   bool haveIndex1;
   K3b::Msf currentDataPos;
 
-  K3bCdDevice::Toc toc;
+  K3bDevice::Toc toc;
   int currentParsedTrack;
 
-  K3bCdDevice::CdText cdText;
+  K3bDevice::CdText cdText;
 };
 
 
@@ -70,7 +70,7 @@ void K3bCueFileParser::readFile()
   setValid(true);
 
   d->inFile = d->inTrack = d->haveIndex0 = d->haveIndex1 = false;
-  d->trackMode = K3bCdDevice::Track::UNKNOWN;
+  d->trackMode = K3bDevice::Track::UNKNOWN;
   d->toc.clear();
   d->cdText.clear();
   d->currentParsedTrack = 0;
@@ -92,7 +92,7 @@ void K3bCueFileParser::readFile()
     if( isValid() ) {
       // save last parsed track for which we do not have the proper length :(
       if( d->currentParsedTrack > 0 ) {
-	d->toc.append( K3bCdDevice::Track( d->currentDataPos, 
+	d->toc.append( K3bDevice::Track( d->currentDataPos, 
 					   d->currentDataPos,
 					   d->trackType,
 					   d->trackMode ) );
@@ -102,9 +102,9 @@ void K3bCueFileParser::readFile()
       kdDebug() << "(K3bCueFileParser) successfully parsed cue file." << endl
 		<< "------------------------------------------------" << endl;
       for( unsigned int i = 0; i < d->toc.count(); ++i ) {
-	K3bCdDevice::Track& track = d->toc[i];
+	K3bDevice::Track& track = d->toc[i];
 	kdDebug() << "Track " << (i+1) 
-		  << " (" << ( track.type() == K3bCdDevice::Track::AUDIO ? "audio" : "data" ) << ") "
+		  << " (" << ( track.type() == K3bDevice::Track::AUDIO ? "audio" : "data" ) << ") "
 		  << track.firstSector().toString() << " - " << track.lastSector().toString() << endl;
       }
       
@@ -224,7 +224,7 @@ bool K3bCueFileParser::parseLine( QString& line )
     // save last track
     // TODO: use d->rawData in some way
     if( d->currentParsedTrack > 0 ) {
-      d->toc.append( K3bCdDevice::Track( d->currentDataPos, 
+      d->toc.append( K3bDevice::Track( d->currentDataPos, 
 					 d->currentDataPos,
 					 d->trackType,
 					 d->trackMode ) );
@@ -236,17 +236,17 @@ bool K3bCueFileParser::parseLine( QString& line )
 
     // parse the tracktype
     if( trackRx.cap(2) == "AUDIO" ) {
-      d->trackType = K3bCdDevice::Track::AUDIO;
-      d->trackMode = K3bCdDevice::Track::UNKNOWN;
+      d->trackType = K3bDevice::Track::AUDIO;
+      d->trackMode = K3bDevice::Track::UNKNOWN;
     }
     else {
-      d->trackType = K3bCdDevice::Track::DATA;
+      d->trackType = K3bDevice::Track::DATA;
       if( trackRx.cap(2).startsWith("MODE1") ) {
-	d->trackMode = K3bCdDevice::Track::MODE1;
+	d->trackMode = K3bDevice::Track::MODE1;
 	d->rawData = (trackRx.cap(2) == "MODE1/2352");
       }
       else if( trackRx.cap(2).startsWith("MODE2") ) {
-	d->trackMode = K3bCdDevice::Track::MODE2;
+	d->trackMode = K3bDevice::Track::MODE2;
 	d->rawData = (trackRx.cap(2) == "MODE2/2352");
       }
       else {
@@ -338,7 +338,7 @@ bool K3bCueFileParser::parseLine( QString& line )
 
   //
   // CD-TEXT
-  // TODO: create K3bCdDevice::TrackCdText entries
+  // TODO: create K3bDevice::TrackCdText entries
   //
   else if( titleRx.exactMatch( line ) ) {
     if( d->inTrack )
@@ -391,13 +391,13 @@ void K3bCueFileParser::simplifyWhiteSpace( QString& s )
 }
 
 
-const K3bCdDevice::Toc& K3bCueFileParser::toc() const
+const K3bDevice::Toc& K3bCueFileParser::toc() const
 {
   return d->toc;
 }
 
 
-const K3bCdDevice::CdText& K3bCueFileParser::cdText() const
+const K3bDevice::CdText& K3bCueFileParser::cdText() const
 {
   return d->cdText;
 }

@@ -55,7 +55,7 @@ public:
   bool force;
   int mode;
 
-  K3bCdDevice::CdDevice* device;
+  K3bDevice::Device* device;
   K3bProcess* process;
   const K3bExternalBin* dvdFormatBin;
 
@@ -124,8 +124,8 @@ void K3bDvdFormattingJob::start()
   // so we also wait for empty dvds
   //
   if( waitForMedia( d->device,  
-		    K3bCdDevice::STATE_COMPLETE|K3bCdDevice::STATE_INCOMPLETE|K3bCdDevice::STATE_EMPTY,
-		    K3bCdDevice::MEDIA_WRITABLE_DVD,
+		    K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE|K3bDevice::STATE_EMPTY,
+		    K3bDevice::MEDIA_WRITABLE_DVD,
 		    i18n("Please insert a rewritable DVD medium into drive<p><b>%1 %2 (%3)</b>.").arg(d->device->vendor()).arg(d->device->description()).arg(d->device->devicename()) ) == -1 ) {
     emit canceled();
     d->running = false;
@@ -136,14 +136,14 @@ void K3bDvdFormattingJob::start()
   emit infoMessage( i18n("Checking media..."), INFO );
   emit newTask( i18n("Checking media") );
 
-  connect( K3bCdDevice::sendCommand( K3bCdDevice::DeviceHandler::NG_DISKINFO, d->device ), 
-	   SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
+  connect( K3bDevice::sendCommand( K3bDevice::DeviceHandler::NG_DISKINFO, d->device ), 
+	   SIGNAL(finished(K3bDevice::DeviceHandler*)),
 	   this, 
-	   SLOT(slotDeviceHandlerFinished(K3bCdDevice::DeviceHandler*)) );
+	   SLOT(slotDeviceHandlerFinished(K3bDevice::DeviceHandler*)) );
 }
 
 
-void K3bDvdFormattingJob::start( K3bCdDevice::DeviceHandler* dh )
+void K3bDvdFormattingJob::start( K3bDevice::DeviceHandler* dh )
 {
   d->canceled = false;
   d->running = true;
@@ -167,7 +167,7 @@ void K3bDvdFormattingJob::cancel()
 }
 
 
-void K3bDvdFormattingJob::setDevice( K3bCdDevice::CdDevice* dev )
+void K3bDvdFormattingJob::setDevice( K3bDevice::Device* dev )
 {
   d->device = dev;
 }
@@ -268,15 +268,15 @@ void K3bDvdFormattingJob::slotProcessFinished( KProcess* p )
   }
   else {
     emit infoMessage( i18n("Ejecting DVD..."), INFO );
-    connect( K3bCdDevice::eject( d->device ), 
-	     SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
+    connect( K3bDevice::eject( d->device ), 
+	     SIGNAL(finished(K3bDevice::DeviceHandler*)),
 	     this, 
-	     SLOT(slotEjectingFinished(K3bCdDevice::DeviceHandler*)) );
+	     SLOT(slotEjectingFinished(K3bDevice::DeviceHandler*)) );
   }
 }
 
 
-void K3bDvdFormattingJob::slotEjectingFinished( K3bCdDevice::DeviceHandler* dh )
+void K3bDvdFormattingJob::slotEjectingFinished( K3bDevice::DeviceHandler* dh )
 {
   if( !dh->success() )
     emit infoMessage( i18n("Unable to eject media."), ERROR );
@@ -286,7 +286,7 @@ void K3bDvdFormattingJob::slotEjectingFinished( K3bCdDevice::DeviceHandler* dh )
 }
 
 
-void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* dh )
+void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* dh )
 {
   if( d->canceled ) {
     emit canceled();
@@ -308,10 +308,10 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler*
 
     // emit info about what kind of media has been found
 
-    if( !(dh->diskInfo().mediaType() & (K3bCdDevice::MEDIA_DVD_RW|
-					  K3bCdDevice::MEDIA_DVD_RW_SEQ|
-					  K3bCdDevice::MEDIA_DVD_RW_OVWR|
-					  K3bCdDevice::MEDIA_DVD_PLUS_RW)) ) {
+    if( !(dh->diskInfo().mediaType() & (K3bDevice::MEDIA_DVD_RW|
+					  K3bDevice::MEDIA_DVD_RW_SEQ|
+					  K3bDevice::MEDIA_DVD_RW_OVWR|
+					  K3bDevice::MEDIA_DVD_PLUS_RW)) ) {
       emit infoMessage( i18n("No rewritable DVD media found. Unable to format."), ERROR );
       d->running = false;
       emit finished(false);
@@ -332,8 +332,8 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler*
     //
 
 
-    if( dh->diskInfo().mediaType() == K3bCdDevice::MEDIA_DVD_PLUS_RW ) {
-      emit infoMessage( i18n("Found %1 media.").arg(K3bCdDevice::mediaTypeString(K3bCdDevice::MEDIA_DVD_PLUS_RW)),
+    if( dh->diskInfo().mediaType() == K3bDevice::MEDIA_DVD_PLUS_RW ) {
+      emit infoMessage( i18n("Found %1 media.").arg(K3bDevice::mediaTypeString(K3bDevice::MEDIA_DVD_PLUS_RW)),
 						    INFO );
 
       // mode is ignored
@@ -345,7 +345,7 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler*
 	blank = false;
       }
       else {
-	emit infoMessage( i18n("No need to format %1 media more than once."). arg(K3bCdDevice::mediaTypeString(K3bCdDevice::MEDIA_DVD_PLUS_RW)), INFO );
+	emit infoMessage( i18n("No need to format %1 media more than once."). arg(K3bDevice::mediaTypeString(K3bDevice::MEDIA_DVD_PLUS_RW)), INFO );
 	emit infoMessage( i18n("It may simply be overwritten."), INFO );
 
 	if( d->force ) {
@@ -371,11 +371,11 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler*
     //
     
     else {  // MEDIA_DVD_RW
-      emit infoMessage( i18n("Found %1 media.").arg(K3bCdDevice::mediaTypeString(K3bCdDevice::MEDIA_DVD_RW)),
+      emit infoMessage( i18n("Found %1 media.").arg(K3bDevice::mediaTypeString(K3bDevice::MEDIA_DVD_RW)),
 			INFO );
 
-      if( dh->diskInfo().currentProfile() != K3bCdDevice::MEDIA_UNKNOWN ) {
-	emit infoMessage( i18n("Formatted in %1 mode.").arg(K3bCdDevice::mediaTypeString(dh->diskInfo().currentProfile())), INFO );	
+      if( dh->diskInfo().currentProfile() != K3bDevice::MEDIA_UNKNOWN ) {
+	emit infoMessage( i18n("Formatted in %1 mode.").arg(K3bDevice::mediaTypeString(dh->diskInfo().currentProfile())), INFO );	
 	
 
 	//
@@ -385,9 +385,9 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler*
 	if( dh->diskInfo().empty() &&
 	    (d->mode == K3b::WRITING_MODE_AUTO ||
 	     (d->mode == K3b::WRITING_MODE_INCR_SEQ && 
-	      dh->diskInfo().currentProfile() == K3bCdDevice::MEDIA_DVD_RW_SEQ) ||
+	      dh->diskInfo().currentProfile() == K3bDevice::MEDIA_DVD_RW_SEQ) ||
 	     (d->mode == K3b::WRITING_MODE_RES_OVWR && 
-	      dh->diskInfo().currentProfile() == K3bCdDevice::MEDIA_DVD_RW_OVWR) )
+	      dh->diskInfo().currentProfile() == K3bDevice::MEDIA_DVD_RW_OVWR) )
 	    ) {
 	  emit infoMessage( i18n("Media is already empty."), INFO );
 	  if( d->force )
@@ -395,10 +395,10 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler*
 	  else
 	    format = false;
 	}
-	else if( dh->diskInfo().currentProfile() == K3bCdDevice::MEDIA_DVD_RW_OVWR &&
+	else if( dh->diskInfo().currentProfile() == K3bDevice::MEDIA_DVD_RW_OVWR &&
 		 d->mode != K3b::WRITING_MODE_INCR_SEQ ) {
 	  emit infoMessage( i18n("No need to format %1 media more than once.")
-			    .arg(K3bCdDevice::mediaTypeString(dh->diskInfo().currentProfile())), INFO );
+			    .arg(K3bDevice::mediaTypeString(dh->diskInfo().currentProfile())), INFO );
 	  emit infoMessage( i18n("It may simply be overwritten."), INFO );
 
 	  if( d->force )
@@ -411,16 +411,16 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler*
 	if( format ) {
 	  if( d->mode == K3b::WRITING_MODE_AUTO ) {
 	    // just format in the same mode as the media is currently formatted
-	    blank = (dh->diskInfo().currentProfile() == K3bCdDevice::MEDIA_DVD_RW_SEQ);
+	    blank = (dh->diskInfo().currentProfile() == K3bDevice::MEDIA_DVD_RW_SEQ);
 	  }
 	  else {
 	    blank = (d->mode == K3b::WRITING_MODE_INCR_SEQ);
 	  }
 	  
 	  emit newSubTask( i18n("Formatting"
-				" DVD-RW in %1 mode.").arg(K3bCdDevice::mediaTypeString( blank ? 
-											 K3bCdDevice::MEDIA_DVD_RW_SEQ :
-											 K3bCdDevice::MEDIA_DVD_RW_OVWR )) );
+				" DVD-RW in %1 mode.").arg(K3bDevice::mediaTypeString( blank ? 
+											 K3bDevice::MEDIA_DVD_RW_SEQ :
+											 K3bDevice::MEDIA_DVD_RW_OVWR )) );
 	}
       }
       else {

@@ -25,7 +25,7 @@
 #include <qstringlist.h>
 
 
-K3bCdDevice::DiskInfo::DiskInfo()
+K3bDevice::DiskInfo::DiskInfo()
   : m_mediaType(MEDIA_UNKNOWN),
     m_currentProfile(MEDIA_UNKNOWN),
     m_diskState(STATE_UNKNOWN),
@@ -38,60 +38,60 @@ K3bCdDevice::DiskInfo::DiskInfo()
 }
 
 
-K3bCdDevice::DiskInfo::~DiskInfo()
+K3bDevice::DiskInfo::~DiskInfo()
 {
 }
 
 
-int K3bCdDevice::DiskInfo::diskState() const
+int K3bDevice::DiskInfo::diskState() const
 {
   return m_diskState;
 }
 
 
-int K3bCdDevice::DiskInfo::lastSessionState() const
+int K3bDevice::DiskInfo::lastSessionState() const
 {
   return m_lastSessionState;
 }
 
 
-int K3bCdDevice::DiskInfo::bgFormatState() const
+int K3bDevice::DiskInfo::bgFormatState() const
 {
   return m_bgFormatState;
 }
 
 
-bool K3bCdDevice::DiskInfo::empty() const
+bool K3bDevice::DiskInfo::empty() const
 {
   return diskState() == STATE_EMPTY;
 }
 
 
-bool K3bCdDevice::DiskInfo::rewritable() const
+bool K3bDevice::DiskInfo::rewritable() const
 {
   return m_rewritable;
 }
 
 
-bool K3bCdDevice::DiskInfo::appendable() const
+bool K3bDevice::DiskInfo::appendable() const
 {
   return diskState() == STATE_INCOMPLETE;
 }
 
 
-int K3bCdDevice::DiskInfo::mediaType() const
+int K3bDevice::DiskInfo::mediaType() const
 {
   return m_mediaType;
 }
 
 
-bool K3bCdDevice::DiskInfo::isDvdMedia() const
+bool K3bDevice::DiskInfo::isDvdMedia() const
 {
-  return K3bCdDevice::isDvdMedia( mediaType() );
+  return K3bDevice::isDvdMedia( mediaType() );
 }
 
 
-int K3bCdDevice::DiskInfo::numSessions() const
+int K3bDevice::DiskInfo::numSessions() const
 {
   if( empty() )
     return 0;
@@ -100,7 +100,7 @@ int K3bCdDevice::DiskInfo::numSessions() const
 }
 
 
-int K3bCdDevice::DiskInfo::numTracks() const
+int K3bDevice::DiskInfo::numTracks() const
 {
   if( empty() )
     return 0;
@@ -109,7 +109,7 @@ int K3bCdDevice::DiskInfo::numTracks() const
 }
 
 
-int K3bCdDevice::DiskInfo::numLayers() const
+int K3bDevice::DiskInfo::numLayers() const
 {
   if( isDvdMedia() )
     return m_numLayers;
@@ -118,7 +118,7 @@ int K3bCdDevice::DiskInfo::numLayers() const
 }
 
 
-K3bMsf K3bCdDevice::DiskInfo::remainingSize() const
+K3bMsf K3bDevice::DiskInfo::remainingSize() const
 {
   if( empty() )
     return capacity();
@@ -136,13 +136,13 @@ K3bMsf K3bCdDevice::DiskInfo::remainingSize() const
 }
 
 
-K3bMsf K3bCdDevice::DiskInfo::capacity() const
+K3bMsf K3bDevice::DiskInfo::capacity() const
 {
   return (m_capacity == 0 ? size() : m_capacity);
 }
 
 
-K3bMsf K3bCdDevice::DiskInfo::size() const
+K3bMsf K3bDevice::DiskInfo::size() const
 {
   if( empty() )
     return 0;
@@ -151,7 +151,7 @@ K3bMsf K3bCdDevice::DiskInfo::size() const
 }
 
 
-K3b::Msf K3bCdDevice::DiskInfo::firstLayerSize() const
+K3b::Msf K3bDevice::DiskInfo::firstLayerSize() const
 {
   if( numLayers() > 1 )
     return m_firstLayerSize;
@@ -160,18 +160,18 @@ K3b::Msf K3bCdDevice::DiskInfo::firstLayerSize() const
 }
 
 
-void K3bCdDevice::DiskInfo::debug() const
+void K3bDevice::DiskInfo::debug() const
 {
   kdDebug() << "DiskInfo:" << endl
-	    << "Mediatype:       " << K3bCdDevice::mediaTypeString( mediaType() ) << endl
-	    << "Current Profile: " << K3bCdDevice::mediaTypeString( currentProfile() ) << endl
-	    << "Disk state:      " << ( diskState() == K3bCdDevice::STATE_EMPTY ? 
+	    << "Mediatype:       " << K3bDevice::mediaTypeString( mediaType() ) << endl
+	    << "Current Profile: " << K3bDevice::mediaTypeString( currentProfile() ) << endl
+	    << "Disk state:      " << ( diskState() == K3bDevice::STATE_EMPTY ? 
 					"empty" :
-					( diskState() == K3bCdDevice::STATE_INCOMPLETE ?
+					( diskState() == K3bDevice::STATE_INCOMPLETE ?
 					  "incomplete" :
-					  ( diskState() == K3bCdDevice::STATE_COMPLETE ?
+					  ( diskState() == K3bDevice::STATE_COMPLETE ?
 					    "complete" : 
-					    ( diskState() == K3bCdDevice::STATE_NO_MEDIA ?
+					    ( diskState() == K3bDevice::STATE_NO_MEDIA ?
 					      "no media" : 
 					      "unknown" ) ) ) ) << endl
 	    << "Empty:           " << empty() << endl
@@ -195,7 +195,7 @@ void K3bCdDevice::DiskInfo::debug() const
 	    << ") (" << QString::number(size().mode1Bytes()) << " Bytes) (" 
 	    << KIO::convertSize(size().mode1Bytes()) << ")" << endl;
 
-  if( mediaType() == K3bCdDevice::MEDIA_DVD_PLUS_RW )
+  if( mediaType() == K3bDevice::MEDIA_DVD_PLUS_RW )
     kdDebug() << "Bg Format:       " << ( bgFormatState() == BG_FORMAT_NONE ? 
 					  "none" :
 					  ( bgFormatState() == BG_FORMAT_INCOMPLETE ?
@@ -206,18 +206,18 @@ void K3bCdDevice::DiskInfo::debug() const
 }
 
 
-// kdbgstream& K3bCdDevice::operator<<( kdbgstream& s, const K3bCdDevice::DiskInfo& ngInf )
+// kdbgstream& K3bDevice::operator<<( kdbgstream& s, const K3bDevice::DiskInfo& ngInf )
 // {
 //    s << "DiskInfo:" << endl
-//      << "Mediatype:       " << K3bCdDevice::mediaTypeString( ngInf.mediaType() ) << endl
-//      << "Current Profile: " << K3bCdDevice::mediaTypeString( ngInf.currentProfile() ) << endl
-//      << "Disk state:      " << ( ngInf.diskState() == K3bCdDevice::STATE_EMPTY ? 
+//      << "Mediatype:       " << K3bDevice::mediaTypeString( ngInf.mediaType() ) << endl
+//      << "Current Profile: " << K3bDevice::mediaTypeString( ngInf.currentProfile() ) << endl
+//      << "Disk state:      " << ( ngInf.diskState() == K3bDevice::STATE_EMPTY ? 
 // 				 "empty" :
-// 				 ( ngInf.diskState() == K3bCdDevice::STATE_INCOMPLETE ?
+// 				 ( ngInf.diskState() == K3bDevice::STATE_INCOMPLETE ?
 // 				   "incomplete" :
-// 				   ( ngInf.diskState() == K3bCdDevice::STATE_COMPLETE ?
+// 				   ( ngInf.diskState() == K3bDevice::STATE_COMPLETE ?
 // 				     "complete" : 
-// 				     ( ngInf.diskState() == K3bCdDevice::STATE_NO_MEDIA ?
+// 				     ( ngInf.diskState() == K3bDevice::STATE_NO_MEDIA ?
 // 				       "no media" : 
 // 				       "unknown" ) ) ) ) << endl
 //      << "Empty:           " << ngInf.empty() << endl

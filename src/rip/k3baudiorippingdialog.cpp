@@ -78,8 +78,8 @@ public:
 };
 
 
-K3bAudioRippingDialog::K3bAudioRippingDialog(const K3bCdDevice::Toc& toc, 
-					     K3bCdDevice::CdDevice* device,
+K3bAudioRippingDialog::K3bAudioRippingDialog(const K3bDevice::Toc& toc, 
+					     K3bDevice::Device* device,
 					     const K3bCddbResultEntry& entry, 
 					     const QValueList<int>& tracks,
 					     QWidget *parent, const char *name )

@@ -148,21 +148,21 @@ K3bDiskInfoView::~K3bDiskInfoView()
 {}
 
 
-void K3bDiskInfoView::displayInfo( const K3bCdDevice::DiskInfo& )
+void K3bDiskInfoView::displayInfo( const K3bDevice::DiskInfo& )
 {
   // TODO: drop this method
 }
 
 
-void K3bDiskInfoView::displayInfo( K3bCdDevice::DiskInfoDetector* did )
+void K3bDiskInfoView::displayInfo( K3bDevice::DiskInfoDetector* did )
 {
-  const K3bCdDevice::DiskInfo& ngInfo = did->diskInfo();
-  const K3bCdDevice::Toc& toc = did->toc();
+  const K3bDevice::DiskInfo& ngInfo = did->diskInfo();
+  const K3bDevice::Toc& toc = did->toc();
 
   m_infoView->clear();
   //  m_infoView->header()->resizeSection( 0, 20 );
 
-  if( ngInfo.diskState() == K3bCdDevice::STATE_NO_MEDIA ) {
+  if( ngInfo.diskState() == K3bDevice::STATE_NO_MEDIA ) {
     (void)new QListViewItem( m_infoView, i18n("No Disk") );
     setTitle( i18n("No disk in drive") );
     setRightPixmap( "diskinfo_right" );
@@ -170,17 +170,17 @@ void K3bDiskInfoView::displayInfo( K3bCdDevice::DiskInfoDetector* did )
   else {
 
     if( ngInfo.empty() ) {
-      setTitle( i18n("Empty %1 media").arg(K3bCdDevice::mediaTypeString( ngInfo.mediaType(), true )) );
+      setTitle( i18n("Empty %1 media").arg(K3bDevice::mediaTypeString( ngInfo.mediaType(), true )) );
       setRightPixmap( "diskinfo_empty" );
     } 
     else {
       switch( toc.contentType() ) {
-      case K3bCdDevice::AUDIO:
+      case K3bDevice::AUDIO:
         setTitle( i18n("Audio CD") );
 	setRightPixmap( "diskinfo_audio" );
         break;
-      case K3bCdDevice::DATA:
-	if( K3bCdDevice::isDvdMedia( ngInfo.mediaType() ) ) {
+      case K3bDevice::DATA:
+	if( K3bDevice::isDvdMedia( ngInfo.mediaType() ) ) {
 	  setTitle( did->isVideoDvd() ? i18n("Video DVD") : i18n("DVD") );
 	  setRightPixmap( "diskinfo_dvd" );
 	}
@@ -189,7 +189,7 @@ void K3bDiskInfoView::displayInfo( K3bCdDevice::DiskInfoDetector* did )
 	  setRightPixmap( "diskinfo_data" );
 	}
         break;
-      case K3bCdDevice::MIXED:
+      case K3bDevice::MIXED:
         setTitle( did->isVideoCd() ? i18n("Video CD") : i18n("Mixed mode CD") );
 	setRightPixmap( "diskinfo_mixed" );
         break;
@@ -344,14 +344,14 @@ void K3bDiskInfoView::reload()
 }
 
 
-void K3bDiskInfoView::createMediaInfoItems( const K3bCdDevice::DiskInfo& info )
+void K3bDiskInfoView::createMediaInfoItems( const K3bDevice::DiskInfo& info )
 {
   KListViewItem* atipItem = new HeaderViewItem( m_infoView, m_infoView->lastItem(), i18n("Media") );
   QString typeStr;
-  if( info.currentProfile() != K3bCdDevice::MEDIA_UNKNOWN )
-    typeStr = K3bCdDevice::mediaTypeString( info.currentProfile() );
-  else if( info.mediaType() != K3bCdDevice::MEDIA_UNKNOWN )
-    typeStr = K3bCdDevice::mediaTypeString( info.mediaType() );
+  if( info.currentProfile() != K3bDevice::MEDIA_UNKNOWN )
+    typeStr = K3bDevice::mediaTypeString( info.currentProfile() );
+  else if( info.mediaType() != K3bDevice::MEDIA_UNKNOWN )
+    typeStr = K3bDevice::mediaTypeString( info.mediaType() );
   else
     typeStr = i18n("Unknown (probably CD-ROM)");
 
@@ -385,20 +385,20 @@ void K3bDiskInfoView::createMediaInfoItems( const K3bCdDevice::DiskInfo& info )
 				   i18n("Layers:"),
 				   QString::number( info.numLayers() ) );
     
-  if( info.mediaType() == K3bCdDevice::MEDIA_DVD_PLUS_RW ) {
+  if( info.mediaType() == K3bDevice::MEDIA_DVD_PLUS_RW ) {
     atipChild = new KListViewItem( atipItem, atipChild,
 				   i18n("Background Format:") );
     switch( info.bgFormatState() ) {
-    case K3bCdDevice::BG_FORMAT_NONE:
+    case K3bDevice::BG_FORMAT_NONE:
       atipChild->setText( 1, i18n("not formatted") );
       break;
-    case K3bCdDevice::BG_FORMAT_INCOMPLETE:
+    case K3bDevice::BG_FORMAT_INCOMPLETE:
       atipChild->setText( 1, i18n("incomplete") );
       break;
-    case K3bCdDevice::BG_FORMAT_IN_PROGRESS:
+    case K3bDevice::BG_FORMAT_IN_PROGRESS:
       atipChild->setText( 1, i18n("in progress") );
       break;
-    case K3bCdDevice::BG_FORMAT_COMPLETE:
+    case K3bDevice::BG_FORMAT_COMPLETE:
       atipChild->setText( 1, i18n("complete") );
       break;
     }

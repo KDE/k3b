@@ -27,8 +27,8 @@ class QPoint;
 class QDropEvent;
 class QDragEnterEvent;
 
-namespace K3bCdDevice {
-  class CdDevice;
+namespace K3bDevice {
+  class Device;
   class DeviceManager;
 }
 
@@ -42,9 +42,9 @@ class K3bDeviceBranch : public KFileTreeBranch
   Q_OBJECT
 
  public:
-  K3bDeviceBranch( KFileTreeView*, K3bCdDevice::CdDevice* dev, KFileTreeViewItem* item = 0 );
+  K3bDeviceBranch( KFileTreeView*, K3bDevice::Device* dev, KFileTreeViewItem* item = 0 );
 
-  K3bCdDevice::CdDevice* device() const { return m_device; }
+  K3bDevice::Device* device() const { return m_device; }
 
  signals:
   /**
@@ -64,7 +64,7 @@ class K3bDeviceBranch : public KFileTreeBranch
   void slotUnmountFinished( KIO::Job* );
 
  private:
-  K3bCdDevice::CdDevice* m_device;
+  K3bDevice::Device* m_device;
 };
 
 
@@ -117,25 +117,25 @@ class K3bFileTreeView : public KFileTreeView
   virtual KFileTreeBranch* addBranch( KFileTreeBranch* );
   virtual KFileTreeBranch* addBranch( const KURL& url, const QString& name, const QPixmap& , bool showHidden = false );
 
-  K3bDeviceBranch* branch( K3bCdDevice::CdDevice* dev );
+  K3bDeviceBranch* branch( K3bDevice::Device* dev );
 
   /**
    * returns 0 if no device is selected 
    */
-  K3bCdDevice::CdDevice* selectedDevice() const;
+  K3bDevice::Device* selectedDevice() const;
 
   /** 
    * returnes an empty url if no url is selected
    */
   KURL selectedUrl() const;
-  void setSelectedDevice(K3bCdDevice::CdDevice* dev);
+  void setSelectedDevice(K3bDevice::Device* dev);
 
  public slots:
   /**
    * adds home and root dir branch
    */
   void addDefaultBranches();
-  void addCdDeviceBranches( K3bCdDevice::DeviceManager* );
+  void addCdDeviceBranches( K3bDevice::DeviceManager* );
 
   void followUrl( const KURL& url );
   void setTreeDirOnlyMode( bool b );
@@ -146,17 +146,12 @@ class K3bFileTreeView : public KFileTreeView
    */
   virtual void clear();
 
- protected:
-  virtual void contentsDropEvent(QDropEvent* event);
-  void contentsDragMoveEvent ( QDragMoveEvent *e );
-  virtual bool acceptDrag(QDropEvent* event) const;
-
  signals:
   void urlExecuted( const KURL& url );
-  void deviceExecuted( K3bCdDevice::CdDevice* dev );
+  void deviceExecuted( K3bDevice::Device* dev );
 
   /** only gets emitted if the menu is disabled */
-  void contextMenu( K3bCdDevice::CdDevice*, const QPoint& );
+  void contextMenu( K3bDevice::Device*, const QPoint& );
   /** only gets emitted if the menu is disabled */
   void contextMenu( const KURL& url, const QPoint& );
 

@@ -22,7 +22,7 @@
 #include <k3bmsf.h>
 
 
-namespace K3bCdDevice {
+namespace K3bDevice {
   class Track;
   class TrackCdText;
   class CdText;
@@ -51,7 +51,7 @@ class K3bInfFileWriter
    *
    * Tracknumber needs to be set manually.
    */
-  void setTrack( const K3bCdDevice::Track& );
+  void setTrack( const K3bDevice::Track& );
 
   void clearIndices() { m_indices.clear(); }
 
@@ -75,7 +75,7 @@ class K3bInfFileWriter
    */
   void setBigEndian( bool b ) { m_bigEndian = b; }
 
-  void setTrackCdText( const K3bCdDevice::TrackCdText& );
+  void setTrackCdText( const K3bDevice::TrackCdText& );
   void setTrackTitle( const QString& s ) { m_trackTitle = s; }
   void setTrackPerformer( const QString& s ) { m_trackPerformer = s; }
   void setTrackSongwriter( const QString& s ) { m_trackSongwriter = s; }
@@ -83,7 +83,7 @@ class K3bInfFileWriter
   void setTrackArranger( const QString& s ) { m_trackArranger = s; }
   void setTrackMessage( const QString& s ) { m_trackMessage = s; }
 
-  void setCdText( const K3bCdDevice::CdText& );
+  void setCdText( const K3bDevice::CdText& );
   void setAlbumTitle( const QString& s ) { m_albumTitle = s; }
   void setAlbumPerformer( const QString& s ) { m_albumPerformer = s; }
 

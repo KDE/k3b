@@ -27,8 +27,8 @@
 
 class K3bAudioEncoderFactory;
 class K3bCdparanoiaLib;
-namespace K3bCdDevice {
-  class CdDevice;
+namespace K3bDevice {
+  class Device;
 }
 
 
@@ -52,7 +52,7 @@ class K3bAudioRipThread : public QObject, public K3bThread
 
   void setUseIndex0( bool b ) { m_useIndex0 = b; }
 
-  void setDevice( K3bCdDevice::CdDevice* dev ) { m_device = dev; }
+  void setDevice( K3bDevice::Device* dev ) { m_device = dev; }
 
   void setCddbEntry( const K3bCddbResultEntry& e ) { m_cddbEntry = e; }
 
@@ -94,7 +94,7 @@ class K3bAudioRipThread : public QObject, public K3bThread
   QString findRelativePath( const QString& absPath, const QString& baseDir );
 
   K3bCddbResultEntry m_cddbEntry;
-  K3bCdDevice::CdDevice* m_device;
+  K3bDevice::Device* m_device;
 
   bool m_bUsePattern;
   bool m_singleFile;

@@ -25,7 +25,7 @@
 #include <kconfig.h>
 
 
-K3bAbstractWriter::K3bAbstractWriter( K3bCdDevice::CdDevice* dev, K3bJobHandler* jh, QObject* parent, const char* name )
+K3bAbstractWriter::K3bAbstractWriter( K3bDevice::Device* dev, K3bJobHandler* jh, QObject* parent, const char* name )
   : K3bJob( jh, parent, name ),
     m_burnDevice(dev),
     m_burnSpeed(1),
@@ -40,7 +40,7 @@ K3bAbstractWriter::~K3bAbstractWriter()
 }
 
 
-K3bCdDevice::CdDevice* K3bAbstractWriter::burnDevice() const
+K3bDevice::Device* K3bAbstractWriter::burnDevice() const
 {
   if( m_burnDevice )
     return m_burnDevice; 
@@ -54,7 +54,7 @@ void K3bAbstractWriter::cancel()
   if( burnDevice() ) {
     // we need to unlock the writer because cdrecord locked it while writing
     emit infoMessage( i18n("Unlocking drive..."), INFO );
-    connect( K3bCdDevice::unblock( burnDevice() ), SIGNAL(finished(bool)),
+    connect( K3bDevice::unblock( burnDevice() ), SIGNAL(finished(bool)),
 	     this, SLOT(slotUnblockWhileCancellationFinished(bool)) );
   }
   else {
@@ -71,7 +71,7 @@ void K3bAbstractWriter::slotUnblockWhileCancellationFinished( bool success )
   if( success ) {
     if( !k3bcore->config()->readBoolEntry( "No cd eject", false ) ) {
       emit newSubTask( i18n("Ejecting CD") );  // FIXME: "media" instead of "CD"
-      connect( K3bCdDevice::eject( burnDevice() ), SIGNAL(finished(bool)),
+      connect( K3bDevice::eject( burnDevice() ), SIGNAL(finished(bool)),
 	       this, SLOT(slotEjectWhileCancellationFinished(bool)) );
       return;
     }

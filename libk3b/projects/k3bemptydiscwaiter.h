@@ -22,8 +22,8 @@
 
 #include <k3bdiskinfo.h>
 
-namespace K3bCdDevice {
-  class CdDevice;
+namespace K3bDevice {
+  class Device;
   class DeviceHandler;
 }
 
@@ -51,12 +51,12 @@ class K3bEmptyDiscWaiter : public KDialogBase, public K3bJobHandler
 
   /**
    * starts the emptydiskwaiter.
-   * @param mediaState a bitwise combination of the K3bCdDevice::State enum
+   * @param mediaState a bitwise combination of the K3bDevice::State enum
    * @param mediaType a bitwise combination of the MediaType enum
    * @returns the found MediaType on success, 0 if forced and -1 if canceled
    */
-  int waitForDisc( int mediaState = K3bCdDevice::STATE_EMPTY,
-		   int mediaType = K3bCdDevice::MEDIA_WRITABLE_CD,
+  int waitForDisc( int mediaState = K3bDevice::STATE_EMPTY,
+		   int mediaType = K3bDevice::MEDIA_WRITABLE_CD,
 		   const QString& message = QString::null );
 
   /**
@@ -67,9 +67,9 @@ class K3bEmptyDiscWaiter : public KDialogBase, public K3bJobHandler
   /**
    * @reimplemented from K3bJobHandler
    */
-  int waitForMedia( K3bCdDevice::CdDevice*,
-		    int mediaState = K3bCdDevice::STATE_EMPTY,
-		    int mediaType = K3bCdDevice::MEDIA_WRITABLE_CD,
+  int waitForMedia( K3bDevice::Device*,
+		    int mediaState = K3bDevice::STATE_EMPTY,
+		    int mediaType = K3bDevice::MEDIA_WRITABLE_CD,
 		    const QString& message = QString::null );
   
   /**
@@ -82,14 +82,14 @@ class K3bEmptyDiscWaiter : public KDialogBase, public K3bJobHandler
   /**
    * This only openes a dialog if the first check failed.
    */
-  static int wait( K3bCdDevice::CdDevice* device, 
+  static int wait( K3bDevice::Device* device, 
 		   bool appendable = false, 
-		   int mediaType = K3bCdDevice::MEDIA_WRITABLE_CD,
+		   int mediaType = K3bDevice::MEDIA_WRITABLE_CD,
 		   QWidget* parent = 0 );
 
-  static int wait( K3bCdDevice::CdDevice*,
+  static int wait( K3bDevice::Device*,
 		   int mediaState,
-		   int mediaType = K3bCdDevice::MEDIA_WRITABLE_CD,
+		   int mediaType = K3bDevice::MEDIA_WRITABLE_CD,
 		   const QString& message = QString::null,
 		   QWidget* parent = 0 );
 
@@ -99,16 +99,16 @@ class K3bEmptyDiscWaiter : public KDialogBase, public K3bJobHandler
   void slotUser2();
   void slotUser3();
   void startDeviceHandler();
-  void slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* );
+  void slotDeviceHandlerFinished( K3bDevice::DeviceHandler* );
   void showDialog();
   void slotErasingFinished( bool );
-  void slotReloadingAfterErasingFinished( K3bCdDevice::DeviceHandler* );
+  void slotReloadingAfterErasingFinished( K3bDevice::DeviceHandler* );
 
  protected:
   /**
    * Use the static wait methods.
    */
-  explicit K3bEmptyDiscWaiter( K3bCdDevice::CdDevice* device, QWidget* parent = 0, const char* name = 0 );
+  explicit K3bEmptyDiscWaiter( K3bDevice::Device* device, QWidget* parent = 0, const char* name = 0 );
 
   /**
    * Nobody closes this dialog but itself!

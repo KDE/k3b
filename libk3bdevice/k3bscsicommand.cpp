@@ -19,7 +19,7 @@
 #include <kdebug.h>
 
 
-QString K3bCdDevice::commandString( const unsigned char& command )
+QString K3bDevice::commandString( const unsigned char& command )
 {
   if( command == MMC_BLANK )
     return "BLANK";
@@ -130,7 +130,7 @@ QString K3bCdDevice::commandString( const unsigned char& command )
 }
 
 
-QString K3bCdDevice::ScsiCommand::senseKeyToString( int key )
+QString K3bDevice::ScsiCommand::senseKeyToString( int key )
 {
   switch( key ) {
   case 0x0:
@@ -165,10 +165,10 @@ QString K3bCdDevice::ScsiCommand::senseKeyToString( int key )
 }
 
 
-void K3bCdDevice::ScsiCommand::debugError( int command, int errorCode, int senseKey, int asc, int ascq ) {
-  kdDebug() << "(K3bCdDevice::ScsiCommand) failed: " << endl
+void K3bDevice::ScsiCommand::debugError( int command, int errorCode, int senseKey, int asc, int ascq ) {
+  kdDebug() << "(K3bDevice::ScsiCommand) failed: " << endl
 	    << "                           command:    " << QString("%1 (%2)")
-    .arg( K3bCdDevice::commandString( command ) )
+    .arg( K3bDevice::commandString( command ) )
     .arg( QString::number(command, 16) ) << endl
 	    << "                           errorcode:  " << QString::number(errorCode, 16) << endl
 	    << "                           sense key:  " << senseKeyToString(senseKey) << endl
@@ -187,7 +187,7 @@ void K3bCdDevice::ScsiCommand::debugError( int command, int errorCode, int sense
 
 
 
-K3bCdDevice::ScsiCommand::ScsiCommand( int fd )
+K3bDevice::ScsiCommand::ScsiCommand( int fd )
   : d(new Private),
     m_fd(fd),
     m_device(0)
@@ -196,7 +196,7 @@ K3bCdDevice::ScsiCommand::ScsiCommand( int fd )
 }
 
 
-K3bCdDevice::ScsiCommand::ScsiCommand( const K3bCdDevice::CdDevice* dev )
+K3bDevice::ScsiCommand::ScsiCommand( const K3bDevice::Device* dev )
   : d(new Private),
     m_fd(-1),
     m_device(dev)
@@ -211,7 +211,7 @@ K3bCdDevice::ScsiCommand::ScsiCommand( const K3bCdDevice::CdDevice* dev )
 }
 
 
-K3bCdDevice::ScsiCommand::~ScsiCommand()
+K3bDevice::ScsiCommand::~ScsiCommand()
 {
   delete d;
   if( m_device && m_needToCloseDevice )

@@ -198,7 +198,7 @@ K3bVideoCdView::~K3bVideoCdView()
 }
 
 
-void K3bVideoCdView::setDisk( K3bCdDevice::DiskInfoDetector* did )
+void K3bVideoCdView::setDisk( K3bDevice::DiskInfoDetector* did )
 {
   m_toc = did->toc();
     m_device = did->device();

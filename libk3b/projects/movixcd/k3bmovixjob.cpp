@@ -63,7 +63,7 @@ K3bMovixJob::~K3bMovixJob()
 }
 
 
-K3bCdDevice::CdDevice* K3bMovixJob::writer() const
+K3bDevice::Device* K3bMovixJob::writer() const
 {
   return m_dataJob->writer();
 }

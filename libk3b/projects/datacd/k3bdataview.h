@@ -30,8 +30,8 @@ class K3bDataFileView;
 namespace KIO {
   class Job;
 }
-namespace K3bCdDevice {
-  class CdDevice;
+namespace K3bDevice {
+  class Device;
 }
 
 
@@ -62,7 +62,7 @@ class K3bDataView : public K3bView
    K3bDataDoc* m_doc;
 
    // used for mounting when importing old session
-   K3bCdDevice::CdDevice* m_device;
+   K3bDevice::Device* m_device;
 };
 
 

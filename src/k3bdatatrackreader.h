@@ -20,8 +20,8 @@
 #include <k3bthreadjob.h>
 #include <k3bmsf.h>
 
-namespace K3bCdDevice {
-  class CdDevice;
+namespace K3bDevice {
+  class Device;
 }
 
 
@@ -43,7 +43,7 @@ class K3bDataTrackReader : public K3bThreadJob
   K3bDataTrackReader( K3bJobHandler*, QObject* parent = 0, const char* name = 0 );
   ~K3bDataTrackReader();
 
-  void setDevice( K3bCdDevice::CdDevice* );
+  void setDevice( K3bDevice::Device* );
 
   /**
    * @param start the first sector to be read

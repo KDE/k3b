@@ -700,7 +700,7 @@ void K3bJobProgressDialog::hide()
 }
 
 
-int K3bJobProgressDialog::waitForMedia( K3bCdDevice::CdDevice* device,
+int K3bJobProgressDialog::waitForMedia( K3bDevice::Device* device,
 					int mediaState,
 					int mediaType,
 					const QString& message )

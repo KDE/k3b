@@ -26,8 +26,8 @@
 #include <sys/types.h>
 
 
-namespace K3bCdDevice {
-  class CdDevice;
+namespace K3bDevice {
+  class Device;
   class Toc;
 }
 
@@ -50,12 +50,12 @@ class K3bCdparanoiaLib
    * This will read the Toc and initialize some stuff.
    * It will also call paranoiaInit( const QString& )
    */
-  bool initParanoia( K3bCdDevice::CdDevice* dev );
+  bool initParanoia( K3bDevice::Device* dev );
 
   /**
    * Use for faster initialization without reading the toc
    */
-  bool initParanoia( K3bCdDevice::CdDevice* dev, const K3bCdDevice::Toc& );
+  bool initParanoia( K3bDevice::Device* dev, const K3bDevice::Toc& );
 
   void close();
 
@@ -100,7 +100,7 @@ class K3bCdparanoiaLib
   /**
    * Only valid after a call to initParanoia()
    */
-  const K3bCdDevice::Toc& toc() const;
+  const K3bDevice::Toc& toc() const;
 
   long rippedDataLength() const;
   // ------------------------------------

@@ -19,14 +19,14 @@
 #include <k3bjob.h>
 
 class KProcess;
-namespace K3bCdDevice {
-  class CdDevice;
+namespace K3bDevice {
+  class Device;
 };
 
 
 /**
  * An Audio CD reader completely based on cdda2wav.
- * It does not use K3bCdDevice but parses the track offsets
+ * It does not use K3bDevice::Device but parses the track offsets
  * from the cdda2wav output.
  */
 class K3bCdda2wavReader : public K3bJob
@@ -44,7 +44,7 @@ class K3bCdda2wavReader : public K3bJob
   void start( bool onlyReadInfo );
   void cancel();
 
-  void setReadDevice( K3bCdDevice::CdDevice* dev ) { m_device = dev; }
+  void setReadDevice( K3bDevice::Device* dev ) { m_device = dev; }
   void setImagePath( const QString& p ) { m_imagePath = p; }
 
   /**
@@ -59,7 +59,7 @@ class K3bCdda2wavReader : public K3bJob
   void slotProcessExited( KProcess* );
 
  private:
-  K3bCdDevice::CdDevice* m_device;
+  K3bDevice::Device* m_device;
 
   QString m_imagePath;
 

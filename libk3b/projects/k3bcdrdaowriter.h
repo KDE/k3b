@@ -24,7 +24,7 @@
 class K3bExternalBin;
 class K3bProcess;
 class KProcess;
-class K3bCdDevice::CdDevice;
+class K3bDevice::Device;
 class QSocket;
 
 
@@ -39,7 +39,7 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
   enum BlankMode { FULL, MINIMAL };
   enum SubMode { None, RW, RW_RAW };
 
-  K3bCdrdaoWriter( K3bCdDevice::CdDevice* dev, K3bJobHandler*, 
+  K3bCdrdaoWriter( K3bDevice::Device* dev, K3bJobHandler*, 
 		   QObject* parent = 0, const char* name = 0 );
   ~K3bCdrdaoWriter();
 
@@ -47,7 +47,7 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
    * to be used in chain: addArgument(x)->addArgument(y)
    */
   K3bCdrdaoWriter* addArgument( const QString& );
-  K3bCdDevice::CdDevice* sourceDevice() { return m_sourceDevice; };
+  K3bDevice::Device* sourceDevice() { return m_sourceDevice; };
 
   int fd() const;
 
@@ -73,7 +73,7 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
   void setDataFile( const QString& s ) { m_dataFile = s; }
   void setTocFile( const QString& s ) { m_tocFile = s; }
 
-  void setSourceDevice( K3bCdDevice::CdDevice* dev ) { m_sourceDevice = dev; }
+  void setSourceDevice( K3bDevice::Device* dev ) { m_sourceDevice = dev; }
   void setFastToc( bool b ) { m_fastToc = b; }
   void setReadRaw( bool b ) { m_readRaw = b; }
   void setReadSubchan(SubMode m) { m_readSubchan=m; };
@@ -108,13 +108,13 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
   bool cueSheet();
 
   QString findDriverFile( const K3bExternalBin* bin );
-  bool defaultToGenericMMC( K3bCdDevice::CdDevice* dev, bool writer );
+  bool defaultToGenericMMC( K3bDevice::Device* dev, bool writer );
 
   // options
   // ---------------------
   int        m_command;
   int        m_blankMode;
-  K3bCdDevice::CdDevice* m_sourceDevice;
+  K3bDevice::Device* m_sourceDevice;
   QString    m_dataFile;
   QString    m_tocFile;
   QString    m_cueFileLnk;

@@ -22,8 +22,8 @@
 class QString;
 class K3bAbstractWriter;
 class KTempFile;
-namespace K3bCdDevice {
-  class CdDevice;
+namespace K3bDevice {
+  class Device;
 }
 class K3bIsoImageVerificationJob;
 
@@ -39,7 +39,7 @@ class K3bIso9660ImageWritingJob : public K3bBurnJob
   K3bIso9660ImageWritingJob( K3bJobHandler* );
   ~K3bIso9660ImageWritingJob();
 
-  K3bCdDevice::CdDevice* writer() const { return m_device; };
+  K3bDevice::Device* writer() const { return m_device; };
 	
   QString jobDescription() const;
   QString jobDetails() const;
@@ -50,7 +50,7 @@ class K3bIso9660ImageWritingJob : public K3bBurnJob
 
   void setImagePath( const QString& path ) { m_imagePath = path; }
   void setSpeed( int s ) { m_speed = s; }
-  void setBurnDevice( K3bCdDevice::CdDevice* dev ) { m_device = dev; }
+  void setBurnDevice( K3bDevice::Device* dev ) { m_device = dev; }
   void setWritingMode( int mode ) { m_writingMode = mode; }
   void setSimulate( bool b ) { m_simulate = b; }
   void setNoFix( bool b ) { m_noFix = b; }
@@ -71,7 +71,7 @@ class K3bIso9660ImageWritingJob : public K3bBurnJob
 
   int m_writingMode;
   bool m_simulate;
-  K3bCdDevice::CdDevice* m_device;
+  K3bDevice::Device* m_device;
   bool m_noFix;
   int m_speed;
   int m_dataMode;

@@ -201,7 +201,7 @@ void K3bBlankingDialog::slotJobFinished( bool success )
 void K3bBlankingDialog::slotWriterChanged()
 {
   // check if it is a cdrw writer
-  K3bCdDevice::CdDevice* dev = m_writerSelectionWidget->writerDevice();
+  K3bDevice::Device* dev = m_writerSelectionWidget->writerDevice();
 
   if( !dev )
     return;
@@ -334,7 +334,7 @@ void K3bBlankingDialog::slotSaveUserDefaults()
 }
 
 
-int K3bBlankingDialog::waitForMedia( K3bCdDevice::CdDevice* device,
+int K3bBlankingDialog::waitForMedia( K3bDevice::Device* device,
 				     int mediaState,
 				     int mediaType,
 				     const QString& message )

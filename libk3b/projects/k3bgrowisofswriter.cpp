@@ -84,7 +84,7 @@ public:
 };
 
 
-K3bGrowisofsWriter::K3bGrowisofsWriter( K3bCdDevice::CdDevice* dev, K3bJobHandler* hdl,
+K3bGrowisofsWriter::K3bGrowisofsWriter( K3bDevice::Device* dev, K3bJobHandler* hdl,
 					QObject* parent, const char* name )
   : K3bAbstractWriter( dev, hdl, parent, name )
 {
@@ -476,10 +476,10 @@ void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
     emit finished(d->success);
   else {
     emit newSubTask( i18n("Ejecting DVD") );
-    connect( K3bCdDevice::eject( burnDevice() ), 
-	     SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
+    connect( K3bDevice::eject( burnDevice() ), 
+	     SIGNAL(finished(K3bDevice::DeviceHandler*)),
 	     this, 
-	     SLOT(slotEjectingFinished(K3bCdDevice::DeviceHandler*)) );
+	     SLOT(slotEjectingFinished(K3bDevice::DeviceHandler*)) );
   }
 }
 
@@ -493,7 +493,7 @@ void K3bGrowisofsWriter::slotRingBufferFinished( bool )
 }
 
 
-void K3bGrowisofsWriter::slotEjectingFinished( K3bCdDevice::DeviceHandler* dh )
+void K3bGrowisofsWriter::slotEjectingFinished( K3bDevice::DeviceHandler* dh )
 {
   if( !dh->success() )
     emit infoMessage( i18n("Unable to eject media."), ERROR );

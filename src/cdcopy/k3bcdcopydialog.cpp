@@ -194,7 +194,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   mainGrid->setRowStretch( 2, 1 );
 
 
-  connect( m_comboSourceDevice, SIGNAL(selectionChanged(K3bCdDevice::CdDevice*)), this, SLOT(slotToggleAll()) );
+  connect( m_comboSourceDevice, SIGNAL(selectionChanged(K3bDevice::Device*)), this, SLOT(slotToggleAll()) );
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotToggleAll()) );
   connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)), this, SLOT(slotToggleAll()) );
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
@@ -245,7 +245,7 @@ K3bCdCopyDialog::~K3bCdCopyDialog()
 }
 
 
-K3bCdDevice::CdDevice* K3bCdCopyDialog::readingDevice() const
+K3bDevice::Device* K3bCdCopyDialog::readingDevice() const
 {
   return m_comboSourceDevice->selectedDevice();
 }
@@ -332,7 +332,7 @@ void K3bCdCopyDialog::slotStartClicked()
 
 void K3bCdCopyDialog::slotToggleAll()
 {
-  K3bCdDevice::CdDevice* dev = m_writerSelectionWidget->writerDevice();
+  K3bDevice::Device* dev = m_writerSelectionWidget->writerDevice();
 
   m_checkSimulate->setEnabled( !m_checkOnlyCreateImage->isChecked() );
   m_checkDeleteImages->setEnabled( !m_checkOnlyCreateImage->isChecked() && !m_checkOnTheFly->isChecked() );

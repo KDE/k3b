@@ -51,7 +51,7 @@ class K3bAudioTrack : public QObject
 
   K3bAudioDoc* doc() const { return m_parent; }
 
-  K3bCdDevice::Track toCdTrack() const;
+  K3bDevice::Track toCdTrack() const;
 
   /** 
    * @return length of track in frames
@@ -67,7 +67,7 @@ class K3bAudioTrack : public QObject
   const QString& composer() const { return m_cdText.composer(); }
   const QString& isrc() const { return m_cdText.isrc(); }
   const QString& cdTextMessage() const { return m_cdText.message(); }
-  const K3bCdDevice::TrackCdText& cdText() const { return m_cdText; }
+  const K3bDevice::TrackCdText& cdText() const { return m_cdText; }
 	
   bool copyProtection() const { return m_copy; }
   bool preEmp() const { return m_preEmp; }
@@ -84,7 +84,7 @@ class K3bAudioTrack : public QObject
   void setIsrc( const QString& t ) { m_cdText.setIsrc(t); emit changed(this); }
   void setCdTextMessage( const QString& t ) { m_cdText.setMessage(t); emit changed(this); }
 
-  void setCdText( const K3bCdDevice::TrackCdText& cdtext ) { m_cdText = cdtext; emit changed(this); }
+  void setCdText( const K3bDevice::TrackCdText& cdtext ) { m_cdText = cdtext; emit changed(this); }
 
   void setPreEmp( bool b ) { m_preEmp = b; emit changed(this); }
   void setCopyProtection( bool b ) { m_copy = b; emit changed(this); }
@@ -194,7 +194,7 @@ class K3bAudioTrack : public QObject
 
   K3b::Msf m_index0Offset;
 
-  K3bCdDevice::TrackCdText m_cdText;
+  K3bDevice::TrackCdText m_cdText;
 
   // list
   K3bAudioTrack* m_prev;

@@ -23,26 +23,26 @@
 #include <qstringlist.h>
 
 
-QString K3bCdDevice::deviceTypeString( int t )
+QString K3bDevice::deviceTypeString( int t )
 {
   QStringList s;
-  if( t & K3bCdDevice::CdDevice::CDR )
+  if( t & K3bDevice::Device::CDR )
     s += i18n("CD-R");
-  if( t & K3bCdDevice::CdDevice::CDRW )
+  if( t & K3bDevice::Device::CDRW )
     s += i18n("CD-RW");
-  if( t & K3bCdDevice::CdDevice::CDROM )
+  if( t & K3bDevice::Device::CDROM )
     s += i18n("CD-ROM");
-  if( t & K3bCdDevice::CdDevice::DVD )
+  if( t & K3bDevice::Device::DVD )
     s += i18n("DVD-ROM");
-  if( t & K3bCdDevice::CdDevice::DVDRAM )
+  if( t & K3bDevice::Device::DVDRAM )
     s += i18n("DVD-RAM");
-  if( t & K3bCdDevice::CdDevice::DVDR )
+  if( t & K3bDevice::Device::DVDR )
     s += i18n("DVD-R");
-  if( t & K3bCdDevice::CdDevice::DVDRW )
+  if( t & K3bDevice::Device::DVDRW )
     s += i18n("DVD-RW");
-  if( t & K3bCdDevice::CdDevice::DVDPR )
+  if( t & K3bDevice::Device::DVDPR )
     s += i18n("DVD+R");
-  if( t & K3bCdDevice::CdDevice::DVDPRW )
+  if( t & K3bDevice::Device::DVDPRW )
     s += i18n("DVD+RW");
 
   if( s.isEmpty() )
@@ -52,26 +52,26 @@ QString K3bCdDevice::deviceTypeString( int t )
 }
 
 
-QString K3bCdDevice::writingModeString( int m )
+QString K3bDevice::writingModeString( int m )
 {
   QStringList s;
-  if( m & K3bCdDevice::CdDevice::SAO )
+  if( m & K3bDevice::Device::SAO )
     s += i18n("SAO");
-  if( m & K3bCdDevice::CdDevice::TAO )
+  if( m & K3bDevice::Device::TAO )
     s += i18n("TAO");
-  if( m & K3bCdDevice::CdDevice::RAW )
+  if( m & K3bDevice::Device::RAW )
     s += i18n("RAW");
-  if( m & K3bCdDevice::CdDevice::PACKET )
+  if( m & K3bDevice::Device::PACKET )
     s += i18n("PACKET");
-  if( m & K3bCdDevice::CdDevice::SAO_R96P )
+  if( m & K3bDevice::Device::SAO_R96P )
     s += i18n("SAO/R96P");
-  if( m & K3bCdDevice::CdDevice::SAO_R96R )
+  if( m & K3bDevice::Device::SAO_R96R )
     s += i18n("SAO/R96R");
-  if( m & K3bCdDevice::CdDevice::RAW_R16 )
+  if( m & K3bDevice::Device::RAW_R16 )
     s += i18n("SAO/R16");
-  if( m & K3bCdDevice::CdDevice::RAW_R96P )
+  if( m & K3bDevice::Device::RAW_R96P )
     s += i18n("RAW/R96P");
-  if( m & K3bCdDevice::CdDevice::RAW_R96R )
+  if( m & K3bDevice::Device::RAW_R96R )
     s += i18n("RAW/R96R");
 
   if( s.isEmpty() )
@@ -81,9 +81,9 @@ QString K3bCdDevice::writingModeString( int m )
 }
 
 
-QString K3bCdDevice::mediaTypeString( int m, bool simple )
+QString K3bDevice::mediaTypeString( int m, bool simple )
 {
-  if( m == K3bCdDevice::MEDIA_UNKNOWN )
+  if( m == K3bDevice::MEDIA_UNKNOWN )
     return i18n("Unknown");
 
   QStringList s;
@@ -125,7 +125,7 @@ QString K3bCdDevice::mediaTypeString( int m, bool simple )
 }
 
 
-void K3bCdDevice::debugBitfield( unsigned char* data, long len )
+void K3bDevice::debugBitfield( unsigned char* data, long len )
 {
   for( int i = 0; i < len; ++i ) {
     QString index, bitString;
@@ -137,14 +137,14 @@ void K3bCdDevice::debugBitfield( unsigned char* data, long len )
 }
 
 
-unsigned short K3bCdDevice::from2Byte( unsigned char* d )
+unsigned short K3bDevice::from2Byte( unsigned char* d )
 {
   return ( d[0] << 8 & 0xFF00 |
 	   d[1]      & 0xFF );
 }
 
 
-unsigned long K3bCdDevice::from4Byte( unsigned char* d )
+unsigned long K3bDevice::from4Byte( unsigned char* d )
 {
   return ( d[0] << 24 & 0xFF000000 |
 	   d[1] << 16 & 0xFF0000 |
@@ -153,19 +153,19 @@ unsigned long K3bCdDevice::from4Byte( unsigned char* d )
 }
 
 
-char K3bCdDevice::fromBcd( const char& i )
+char K3bDevice::fromBcd( const char& i )
 {
   return (i & 0x0f) + 10 * ( (i >> 4) & 0x0f );
 }
 
 
-char K3bCdDevice::toBcd( const char& i )
+char K3bDevice::toBcd( const char& i )
 {
   return ( i % 10 ) | ( ( (( i / 10 ) % 10) << 4 ) & 0xf0 );
 }
 
 
-bool K3bCdDevice::isValidBcd( const char& i )
+bool K3bDevice::isValidBcd( const char& i )
 {
   return ( i & 0x0f ) <= 0x09 && ( i & 0xf0 ) <= 0x90;
 }

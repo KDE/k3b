@@ -92,19 +92,19 @@ typedef unsigned char u8;
 
 
 
-class K3bCdDevice::DeviceManager::Private
+class K3bDevice::DeviceManager::Private
 {
 public:
-  QPtrList<K3bCdDevice::CdDevice> allDevices;
-  QPtrList<K3bCdDevice::CdDevice> cdReader;
-  QPtrList<K3bCdDevice::CdDevice> cdWriter;
-  QPtrList<K3bCdDevice::CdDevice> dvdReader;
-  QPtrList<K3bCdDevice::CdDevice> dvdWriter;
+  QPtrList<K3bDevice::Device> allDevices;
+  QPtrList<K3bDevice::Device> cdReader;
+  QPtrList<K3bDevice::Device> cdWriter;
+  QPtrList<K3bDevice::Device> dvdReader;
+  QPtrList<K3bDevice::Device> dvdWriter;
 };
 
 
 
-K3bCdDevice::DeviceManager::DeviceManager( QObject* parent, const char* name )
+K3bDevice::DeviceManager::DeviceManager( QObject* parent, const char* name )
   : QObject( parent, name )
 {
   d = new Private;
@@ -113,21 +113,21 @@ K3bCdDevice::DeviceManager::DeviceManager( QObject* parent, const char* name )
 }
 
 
-K3bCdDevice::DeviceManager::~DeviceManager()
+K3bDevice::DeviceManager::~DeviceManager()
 {
   delete d;
 }
 
 
-K3bCdDevice::CdDevice* K3bCdDevice::DeviceManager::deviceByName( const QString& name )
+K3bDevice::Device* K3bDevice::DeviceManager::deviceByName( const QString& name )
 {
   return findDevice( name );
 }
 
 
-K3bCdDevice::CdDevice* K3bCdDevice::DeviceManager::findDevice( int bus, int id, int lun )
+K3bDevice::Device* K3bDevice::DeviceManager::findDevice( int bus, int id, int lun )
 {
-  QPtrListIterator<K3bCdDevice::CdDevice> it( d->allDevices );
+  QPtrListIterator<K3bDevice::Device> it( d->allDevices );
   while( it.current() )
   {
     if( it.current()->scsiBus() == bus &&
@@ -142,13 +142,13 @@ K3bCdDevice::CdDevice* K3bCdDevice::DeviceManager::findDevice( int bus, int id, 
 }
 
 
-K3bCdDevice::CdDevice* K3bCdDevice::DeviceManager::findDevice( const QString& devicename )
+K3bDevice::Device* K3bDevice::DeviceManager::findDevice( const QString& devicename )
 {
   if( devicename.isEmpty() ) {
-    kdDebug() << "(K3bCdDevice::DeviceManager) request for empty device!" << endl;
+    kdDebug() << "(K3bDevice::DeviceManager) request for empty device!" << endl;
     return 0;
   }
-  QPtrListIterator<K3bCdDevice::CdDevice> it( d->allDevices );
+  QPtrListIterator<K3bDevice::Device> it( d->allDevices );
   while( it.current() )
   {
     if( it.current()->deviceNodes().contains(devicename) )
@@ -161,46 +161,46 @@ K3bCdDevice::CdDevice* K3bCdDevice::DeviceManager::findDevice( const QString& de
 }
 
 
-QPtrList<K3bCdDevice::CdDevice>& K3bCdDevice::DeviceManager::cdWriter()
+QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::cdWriter()
 {
   return d->cdWriter;
 }
 
-QPtrList<K3bCdDevice::CdDevice>& K3bCdDevice::DeviceManager::cdReader()
+QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::cdReader()
 {
   return d->cdReader;
 }
 
-QPtrList<K3bCdDevice::CdDevice>& K3bCdDevice::DeviceManager::dvdWriter()
+QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::dvdWriter()
 {
   return d->dvdWriter;
 }
 
-QPtrList<K3bCdDevice::CdDevice>& K3bCdDevice::DeviceManager::dvdReader()
+QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::dvdReader()
 {
   return d->dvdReader;
 }
 
 
-QPtrList<K3bCdDevice::CdDevice>& K3bCdDevice::DeviceManager::burningDevices()
+QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::burningDevices()
 {
   return cdWriter();
 }
 
 
-QPtrList<K3bCdDevice::CdDevice>& K3bCdDevice::DeviceManager::readingDevices()
+QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::readingDevices()
 {
   return cdReader();
 }
 
 
-QPtrList<K3bCdDevice::CdDevice>& K3bCdDevice::DeviceManager::allDevices()
+QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::allDevices()
 {
   return d->allDevices;
 }
 
 
-int K3bCdDevice::DeviceManager::scanbus()
+int K3bDevice::DeviceManager::scanbus()
 {
   m_foundDevices = 0;
 
@@ -216,7 +216,7 @@ int K3bCdDevice::DeviceManager::scanbus()
 }
 
 
-void K3bCdDevice::DeviceManager::LinuxDeviceScan()
+void K3bDevice::DeviceManager::LinuxDeviceScan()
 {
   QFile info("/proc/sys/dev/cdrom/info");
   QString line,devstring;
@@ -264,10 +264,10 @@ void K3bCdDevice::DeviceManager::LinuxDeviceScan()
      links.open(IO_ReadOnly,fd);
      while ( links.readLine(device,80) > 0) {
        device = device.stripWhiteSpace();
-       K3bCdDevice::CdDevice *d = findDevice(resolveSymLink(device));
+       K3bDevice::Device *d = findDevice(resolveSymLink(device));
        if (d) {
          d->addDeviceNode(device);
-         kdDebug() << "(K3bCdDevice::DeviceManager) Link: " << device << " -> " << d->devicename() << endl;
+         kdDebug() << "(K3bDevice::DeviceManager) Link: " << device << " -> " << d->devicename() << endl;
        }
      }
   }
@@ -310,7 +310,7 @@ void K3bCdDevice::DeviceManager::LinuxDeviceScan()
 }
 
 
-void K3bCdDevice::DeviceManager::BSDDeviceScan()
+void K3bDevice::DeviceManager::BSDDeviceScan()
 {
   // Unfortunately uses lots of FBSD-specific data structures
 #ifndef Q_OS_FREEBSD
@@ -378,7 +378,7 @@ void K3bCdDevice::DeviceManager::BSDDeviceScan()
 	    dev += "c";
 #endif
 
-	    CdDevice* device = new CdDevice(dev.latin1());
+	    Device* device = new Device(dev.latin1());
 	    device->m_bus = bus;
 	    device->m_target = target;
 	    device->m_lun = lun;
@@ -432,7 +432,7 @@ void K3bCdDevice::DeviceManager::BSDDeviceScan()
 #if __FreeBSD_version < 500100
       dev += "c";
 #endif
-      CdDevice* device = new CdDevice(dev.latin1());
+      Device* device = new Device(dev.latin1());
       device->m_bus = bus;
       device->m_target = target;
       device->m_lun = lun;
@@ -445,13 +445,13 @@ void K3bCdDevice::DeviceManager::BSDDeviceScan()
 }
 
 
-void K3bCdDevice::DeviceManager::printDevices()
+void K3bDevice::DeviceManager::printDevices()
 {
   kdDebug() << "Devices:" << endl
 	    << "------------------------------" << endl;
-  QPtrListIterator<CdDevice> it( allDevices() );
+  QPtrListIterator<Device> it( allDevices() );
   for( ; *it; ++it ) {
-    CdDevice* dev = *it;
+    Device* dev = *it;
     kdDebug() << "Blockdevice:    " << dev->blockDeviceName() << endl
 	      << "Vendor:         " << dev->vendor() << endl
 	      << "Description:    " << dev->description() << endl
@@ -468,7 +468,7 @@ void K3bCdDevice::DeviceManager::printDevices()
 }
 
 
-void K3bCdDevice::DeviceManager::clear()
+void K3bDevice::DeviceManager::clear()
 {
   // clear current devices
   d->cdReader.clear();
@@ -482,7 +482,7 @@ void K3bCdDevice::DeviceManager::clear()
 }
 
 
-bool K3bCdDevice::DeviceManager::readConfig( KConfig* c )
+bool K3bDevice::DeviceManager::readConfig( KConfig* c )
 {
   //
   // New configuration format since K3b 0.11.94
@@ -504,13 +504,13 @@ bool K3bCdDevice::DeviceManager::readConfig( KConfig* c )
   //
   // Iterate over all devices and check if we have a config entry
   //
-  for( QPtrListIterator<K3bCdDevice::CdDevice> it( d->allDevices ); *it; ++it ) {
-    K3bCdDevice::CdDevice* dev = *it;
+  for( QPtrListIterator<K3bDevice::Device> it( d->allDevices ); *it; ++it ) {
+    K3bDevice::Device* dev = *it;
 
     QString configEntryName = dev->vendor() + " " + dev->description();
     QStringList list = c->readListEntry( configEntryName );
     if( !list.isEmpty() ) {
-      kdDebug() << "(K3bCdDevice::DeviceManager) found config entry for devicetype: " << configEntryName << endl;
+      kdDebug() << "(K3bDevice::DeviceManager) found config entry for devicetype: " << configEntryName << endl;
 
       dev->setMaxReadSpeed( list[0].toInt() );
       if( list.count() > 1 )
@@ -528,7 +528,7 @@ bool K3bCdDevice::DeviceManager::readConfig( KConfig* c )
 }
 
 
-bool K3bCdDevice::DeviceManager::saveConfig( KConfig* c )
+bool K3bDevice::DeviceManager::saveConfig( KConfig* c )
 {
   //
   // New configuration format since K3b 0.11.94
@@ -545,8 +545,8 @@ bool K3bCdDevice::DeviceManager::saveConfig( KConfig* c )
   c->setGroup( "Devices" );
   QStringList deviceSearchPath = c->readListEntry( "device_search_path" );
 
-  for( QPtrListIterator<K3bCdDevice::CdDevice> it( d->allDevices ); *it; ++it ) {
-    K3bCdDevice::CdDevice* dev = *it;
+  for( QPtrListIterator<K3bDevice::Device> it( d->allDevices ); *it; ++it ) {
+    K3bDevice::Device* dev = *it;
 
     // update device search path
     deviceSearchPath.append( dev->blockDeviceName() );
@@ -574,7 +574,7 @@ bool K3bCdDevice::DeviceManager::saveConfig( KConfig* c )
 }
 
 
-bool K3bCdDevice::DeviceManager::testForCdrom(const QString& devicename)
+bool K3bDevice::DeviceManager::testForCdrom(const QString& devicename)
 {
 #ifdef Q_OS_FREEBSD
   Q_UNUSED(devicename);
@@ -582,7 +582,7 @@ bool K3bCdDevice::DeviceManager::testForCdrom(const QString& devicename)
 #endif
 #ifdef Q_OS_LINUX
   bool ret = false;
-  int cdromfd = K3bCdDevice::openDevice( devicename.ascii() );
+  int cdromfd = K3bDevice::openDevice( devicename.ascii() );
   if (cdromfd < 0) {
     kdDebug() << "could not open device " << devicename << " (" << strerror(errno) << ")" << endl;
     return ret;
@@ -610,7 +610,7 @@ bool K3bCdDevice::DeviceManager::testForCdrom(const QString& devicename)
     cmd[5] = 0;
 
     if( cmd.transport( TR_DIR_READ, buf, sizeof(buf) ) ) {
-      kdError() << "(K3bCdDevice) Unable to do inquiry." << endl;
+      kdError() << "(K3bDevice::Device) Unable to do inquiry." << endl;
     }
     else if( (inq->p_device_type&0x1f) != 0x5 ) {
       kdDebug() << devicename << " seems not to be a cdrom device: " << strerror(errno) << endl;
@@ -626,13 +626,13 @@ bool K3bCdDevice::DeviceManager::testForCdrom(const QString& devicename)
 #endif
 }
 
-K3bCdDevice::CdDevice* K3bCdDevice::DeviceManager::addDevice( const QString& devicename )
+K3bDevice::Device* K3bDevice::DeviceManager::addDevice( const QString& devicename )
 {
 #ifdef Q_OS_FREEBSD
   return 0;
 #endif
 
-  K3bCdDevice::CdDevice* device = 0;
+  K3bDevice::Device* device = 0;
 
   // resolve all symlinks
   QString resolved = resolveSymLink( devicename );
@@ -641,8 +641,8 @@ K3bCdDevice::CdDevice* K3bCdDevice::DeviceManager::addDevice( const QString& dev
   if( !testForCdrom(resolved) )
     return 0;
 
-  if ( K3bCdDevice::CdDevice* oldDev = findDevice(resolved) ) {
-    kdDebug() << "(K3bCdDevice::DeviceManager) dev " << resolved  << " already found" << endl;
+  if ( K3bDevice::Device* oldDev = findDevice(resolved) ) {
+    kdDebug() << "(K3bDevice::DeviceManager) dev " << resolved  << " already found" << endl;
     oldDev->addDeviceNode( devicename );
     return 0;
   }
@@ -650,14 +650,14 @@ K3bCdDevice::CdDevice* K3bCdDevice::DeviceManager::addDevice( const QString& dev
   int bus = -1, target = -1, lun = -1;
   bool scsi = determineBusIdLun( resolved, bus, target, lun );
   if(scsi) {
-    if ( K3bCdDevice::CdDevice* oldDev = findDevice(bus, target, lun) ) {
-      kdDebug() << "(K3bCdDevice::DeviceManager) dev " << resolved  << " already found" << endl;
+    if ( K3bDevice::Device* oldDev = findDevice(bus, target, lun) ) {
+      kdDebug() << "(K3bDevice::DeviceManager) dev " << resolved  << " already found" << endl;
       oldDev->addDeviceNode( devicename );
       return 0;
     }
   }
 
-  device = new K3bCdDevice::CdDevice(resolved);
+  device = new K3bDevice::Device(resolved);
   if( scsi ) {
     device->m_bus = bus;
     device->m_target = target;
@@ -668,7 +668,7 @@ K3bCdDevice::CdDevice* K3bCdDevice::DeviceManager::addDevice( const QString& dev
 }
 
 
-K3bCdDevice::CdDevice* K3bCdDevice::DeviceManager::addDevice( K3bCdDevice::CdDevice *device)
+K3bDevice::Device* K3bDevice::DeviceManager::addDevice( K3bDevice::Device *device)
 {
   const QString devicename = device->devicename();
 
@@ -683,7 +683,7 @@ K3bCdDevice::CdDevice* K3bCdDevice::DeviceManager::addDevice( K3bCdDevice::CdDev
 
     // not every drive is able to read CDs
     // there are some 1st generation DVD writer that cannot
-    if( device->type() & CdDevice::CDROM )
+    if( device->type() & Device::CDROM )
       d->cdReader.append( device );
     if( device->readsDvd() )
       d->dvdReader.append( device );
@@ -694,7 +694,7 @@ K3bCdDevice::CdDevice* K3bCdDevice::DeviceManager::addDevice( K3bCdDevice::CdDev
 
     if( device->writesCd() ) {
       // default to max write speed
-      kdDebug() << "(K3bCdDevice::DeviceManager) setting current write speed of device "
+      kdDebug() << "(K3bDevice::DeviceManager) setting current write speed of device "
 		<< device->blockDeviceName()
 		<< " to " << device->maxWriteSpeed() << endl;
       device->setCurrentWriteSpeed( device->maxWriteSpeed() );
@@ -708,12 +708,12 @@ K3bCdDevice::CdDevice* K3bCdDevice::DeviceManager::addDevice( K3bCdDevice::CdDev
 }
 
 
-void K3bCdDevice::DeviceManager::scanFstab()
+void K3bDevice::DeviceManager::scanFstab()
 {
   ::setfsent();
 
   // clear all mount-Infos
-  for( QPtrListIterator<K3bCdDevice::CdDevice> it( d->allDevices ); it.current(); ++it ) {
+  for( QPtrListIterator<K3bDevice::Device> it( d->allDevices ); it.current(); ++it ) {
     it.current()->setMountPoint( QString::null );
     it.current()->setMountDevice( QString::null );
   }
@@ -743,7 +743,7 @@ void K3bCdDevice::DeviceManager::scanFstab()
     if( md == "none" )
       continue;
 
-    kdDebug() << "(K3bCdDevice::DeviceManager) scanning fstab: " << md << endl;
+    kdDebug() << "(K3bDevice::DeviceManager) scanning fstab: " << md << endl;
 
 
     //
@@ -753,7 +753,7 @@ void K3bCdDevice::DeviceManager::scanFstab()
     // determined as /dev/srX or /dev/scdX
     //
     int bus = -1, id = -1, lun = -1;
-    K3bCdDevice::CdDevice* dev = findDevice( resolveSymLink(md) );
+    K3bDevice::Device* dev = findDevice( resolveSymLink(md) );
     if( !dev && determineBusIdLun( mountInfo->fs_spec, bus, id, lun ) )
       dev = findDevice( bus, id, lun );
 
@@ -774,7 +774,7 @@ void K3bCdDevice::DeviceManager::scanFstab()
     //
     if( dev ) {
       bool isPreferredMountPoint = false;
-      kdDebug() << "(K3bCdDevice::DeviceManager) found device for " << md << ": " << resolveSymLink(md) << endl;
+      kdDebug() << "(K3bDevice::DeviceManager) found device for " << md << ": " << resolveSymLink(md) << endl;
 
 #ifdef Q_OS_FREEBSD
       // Several mount points for one device might exist. If more than one are found, the one with
@@ -803,13 +803,13 @@ void K3bCdDevice::DeviceManager::scanFstab()
 }
 
 
-void K3bCdDevice::DeviceManager::slotCollectStdout( KProcess*, char* data, int len )
+void K3bDevice::DeviceManager::slotCollectStdout( KProcess*, char* data, int len )
 {
   m_processOutput += QString::fromLocal8Bit( data, len );
 }
 
 
-bool K3bCdDevice::DeviceManager::determineBusIdLun( const QString& dev, int& bus, int& id, int& lun )
+bool K3bDevice::DeviceManager::determineBusIdLun( const QString& dev, int& bus, int& id, int& lun )
 {
 #ifdef Q_OS_FREEBSD
   Q_UNUSED(dev);
@@ -822,7 +822,7 @@ bool K3bCdDevice::DeviceManager::determineBusIdLun( const QString& dev, int& bus
 
 #ifdef Q_OS_LINUX
   int ret = false;
-  int cdromfd = K3bCdDevice::openDevice( dev.ascii() );
+  int cdromfd = K3bDevice::openDevice( dev.ascii() );
   if (cdromfd < 0) {
     kdDebug() << "could not open device " << dev << " (" << strerror(errno) << ")" << endl;
     return false;
@@ -859,7 +859,7 @@ bool K3bCdDevice::DeviceManager::determineBusIdLun( const QString& dev, int& bus
 }
 
 
-QString K3bCdDevice::DeviceManager::resolveSymLink( const QString& path )
+QString K3bDevice::DeviceManager::resolveSymLink( const QString& path )
 {
   char resolved[PATH_MAX];
   if( !realpath( QFile::encodeName(path), resolved ) )

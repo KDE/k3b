@@ -18,8 +18,8 @@
 
 #include <k3bjob.h>
 
-namespace K3bCdDevice {
-  class CdDevice;
+namespace K3bDevice {
+  class Device;
 }
 
 
@@ -34,7 +34,7 @@ class K3bIsoImageVerificationJob : public K3bJob
  public slots:
   void start();
   void cancel();
-  void setDevice( K3bCdDevice::CdDevice* dev );
+  void setDevice( K3bDevice::Device* dev );
   void setImageFileName( const QString& f );
 
  private slots:

@@ -1287,7 +1287,7 @@ void K3bDataDoc::setMultiSessionMode( int mode )
 }
 
 
-void K3bDataDoc::importSession( K3bCdDevice::CdDevice* device )
+void K3bDataDoc::importSession( K3bDevice::Device* device )
 {
   k3bcore->requestBusyInfo( i18n( "Importing old session..." ) );
 
@@ -1304,12 +1304,12 @@ void K3bDataDoc::importSession( K3bCdDevice::CdDevice* device )
 // 		     i18n("Importing old session from %1").arg(device->blockDeviceName()) );
 //   d.show();
 
-  connect( K3bCdDevice::toc( device ), SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
-	   this, SLOT(slotTocRead(K3bCdDevice::DeviceHandler*)) );
+  connect( K3bDevice::toc( device ), SIGNAL(finished(K3bDevice::DeviceHandler*)),
+	   this, SLOT(slotTocRead(K3bDevice::DeviceHandler*)) );
 }
 
 
-void K3bDataDoc::slotTocRead( K3bCdDevice::DeviceHandler* dh )
+void K3bDataDoc::slotTocRead( K3bDevice::DeviceHandler* dh )
 {
   if( dh->success() ) {
     if( dh->toc().isEmpty() ) {
@@ -1317,9 +1317,9 @@ void K3bDataDoc::slotTocRead( K3bCdDevice::DeviceHandler* dh )
 			  i18n("Unable to import session") );
     }
     else {
-      K3bCdDevice::Toc::const_iterator it = dh->toc().end();
+      K3bDevice::Toc::const_iterator it = dh->toc().end();
       --it; // this is valid since there is at least one data track
-      while( it != dh->toc().begin() && (*it).type() != K3bCdDevice::Track::DATA )
+      while( it != dh->toc().begin() && (*it).type() != K3bDevice::Track::DATA )
 	--it;
       long startSec = (*it).firstSector().lba();
     

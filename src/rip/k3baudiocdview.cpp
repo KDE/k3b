@@ -15,6 +15,7 @@
 
 #include "k3baudiocdview.h"
 #include "k3baudiorippingdialog.h"
+#include "k3baudiocdlistview.h"
 
 #include <k3btoc.h>
 #include <k3bdiskinfo.h>
@@ -49,6 +50,7 @@
 #include <qframe.h>
 #include <qspinbox.h>
 #include <qfont.h>
+#include <qdragobject.h>
 
 
 class K3bAudioCdView::AudioTrackViewItem : public QCheckListItem
@@ -105,31 +107,7 @@ K3bAudioCdView::K3bAudioCdView( QWidget* parent, const char *name )
 
   // the track view
   // ----------------------------------------------------------------------------------
-  m_trackView = new K3bListView( mainWidget() );
-  m_trackView->setFullWidth(true);
-  m_trackView->setSorting(-1);
-  m_trackView->setAllColumnsShowFocus( true );
-  m_trackView->setSelectionMode( QListView::Single );
-  m_trackView->setDragEnabled( true );
-  m_trackView->addColumn( "" );
-  m_trackView->addColumn( "" );
-  m_trackView->addColumn( i18n("Artist") );
-  m_trackView->addColumn( i18n("Title") );
-  m_trackView->addColumn( i18n("Length") );
-  m_trackView->addColumn( i18n("Size") );
-
-  m_trackView->header()->setClickEnabled(false);
-  m_trackView->setColumnWidthMode( 0, QListView::Manual );
-  m_trackView->setColumnWidth( 0, 20 );
-  m_trackView->header()->setResizeEnabled( false,0 );
-
-  m_trackView->setItemsRenameable(true);
-  m_trackView->setRenameable(0, false);
-  m_trackView->setRenameable(1, false);
-  m_trackView->setRenameable(2, true);
-  m_trackView->setRenameable(3, true);
-
-  m_trackView->setColumnAlignment( 4, Qt::AlignHCenter );
+  m_trackView = new K3bAudioCdListView( this, mainWidget() );
 
   connect( m_trackView, SIGNAL(itemRenamed(QListViewItem*, const QString&, int)),
 	   this, SLOT(slotItemRenamed(QListViewItem*, const QString&, int)) );
@@ -164,7 +142,7 @@ K3bAudioCdView::~K3bAudioCdView()
 }
 
 
-void K3bAudioCdView::setDisk( K3bCdDevice::DiskInfoDetector* did )
+void K3bAudioCdView::setDisk( K3bDevice::DiskInfoDetector* did )
 {
   m_toc = did->toc();
   m_device = did->device();
@@ -606,5 +584,18 @@ void K3bAudioCdView::enableInteraction( bool b )
   m_toolBox->setEnabled(b);
 }
 
+
+QDragObject* K3bAudioCdView::dragObject()
+{
+  QPtrList<QListViewItem> items = m_trackView->selectedItems();
+  if( !items.isEmpty() ) {
+    QStoredDrag* drag = new QStoredDrag( "k3b/audiorip", m_trackView );
+    QByteArray data;
+    // FIXME
+    return drag;
+  }
+  else
+    return 0;
+}
 
 #include "k3baudiocdview.moc"

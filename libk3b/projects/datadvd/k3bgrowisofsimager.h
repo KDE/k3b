@@ -23,9 +23,9 @@
 
 class K3bDataDoc;
 
-namespace K3bCdDevice {
+namespace K3bDevice {
   class DeviceHandler;
-  class CdDevice;
+  class Device;
 }
 class K3bExternalBin;
 
@@ -56,7 +56,7 @@ class K3bGrowisofsImager : public K3bIsoImager
  protected slots:
   virtual void slotReceivedStderr( const QString& );
   virtual void slotProcessExited( KProcess* );
-  void slotEjectingFinished( K3bCdDevice::DeviceHandler* );
+  void slotEjectingFinished( K3bDevice::DeviceHandler* );
   void slotThroughput( int );
 
  private:

@@ -68,7 +68,7 @@ public:
 };
 
 
-K3bCdrecordWriter::K3bCdrecordWriter( K3bCdDevice::CdDevice* dev, K3bJobHandler* hdl, 
+K3bCdrecordWriter::K3bCdrecordWriter( K3bDevice::Device* dev, K3bJobHandler* hdl, 
 				      QObject* parent, const char* name )
   : K3bAbstractWriter( dev, hdl, parent, name ),
     m_clone(false),
@@ -191,11 +191,11 @@ void K3bCdrecordWriter::prepareProcess()
     }
   }
   else if( m_writingMode == K3b::RAW ) {
-    if( burnDevice()->supportsWriteMode( K3bCdDevice::CdDevice::RAW_R96R ) )
+    if( burnDevice()->supportsWriteMode( K3bDevice::Device::RAW_R96R ) )
       *m_process << "-raw96r";
-    else if( burnDevice()->supportsWriteMode( K3bCdDevice::CdDevice::RAW_R16 ) )
+    else if( burnDevice()->supportsWriteMode( K3bDevice::Device::RAW_R16 ) )
       *m_process << "-raw16";
-    else if( burnDevice()->supportsWriteMode( K3bCdDevice::CdDevice::RAW_R96P ) )
+    else if( burnDevice()->supportsWriteMode( K3bDevice::Device::RAW_R96P ) )
       *m_process << "-raw96p";
     else {
       emit infoMessage( i18n("Writer does not support raw writing."), WARNING );

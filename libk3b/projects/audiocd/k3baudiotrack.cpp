@@ -444,10 +444,10 @@ K3bAudioTrack* K3bAudioTrack::split( const K3b::Msf& pos )
 }
 
 
-K3bCdDevice::Track K3bAudioTrack::toCdTrack() const
+K3bDevice::Track K3bAudioTrack::toCdTrack() const
 {
   if( !inList() )
-    return K3bCdDevice::Track();
+    return K3bDevice::Track();
 
   K3b::Msf firstSector;
   K3bAudioTrack* track = doc()->firstTrack();
@@ -456,9 +456,9 @@ K3bCdDevice::Track K3bAudioTrack::toCdTrack() const
     track = track->next();
   }
 
-  K3bCdDevice::Track cdTrack( firstSector, 
+  K3bDevice::Track cdTrack( firstSector, 
 			      firstSector + length() - 1,
-			      K3bCdDevice::Track::AUDIO );
+			      K3bDevice::Track::AUDIO );
 
     // FIXME: auch im audiotrack copy permitted
   cdTrack.setCopyPermitted( !copyProtection() );

@@ -21,8 +21,8 @@
 #include <qstringlist.h>
 
 
-namespace K3bCdDevice {
-  class CdDevice;
+namespace K3bDevice {
+  class Device;
   class Toc;
 }
 
@@ -37,12 +37,12 @@ class K3bAudioSessionReadingJob : public K3bThreadJob
    * For now this simply reads all the audio tracks at the beginning
    * since we only support CD-Extra mixed mode cds.
    */
-  void setDevice( K3bCdDevice::CdDevice* );
+  void setDevice( K3bDevice::Device* );
 
   /**
    * Use for faster initialization
    */
-  void setToc( const K3bCdDevice::Toc& toc );
+  void setToc( const K3bDevice::Toc& toc );
 
   /**
    * the data gets written directly into fd instead of imagefiles.

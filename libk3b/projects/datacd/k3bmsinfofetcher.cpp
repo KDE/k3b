@@ -66,10 +66,10 @@ void K3bMsInfoFetcher::start()
   // read the info on our own
   //
 
-  connect( K3bCdDevice::sendCommand( K3bCdDevice::DeviceHandler::NG_DISKINFO, m_device ),
-	   SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
+  connect( K3bDevice::sendCommand( K3bDevice::DeviceHandler::NG_DISKINFO, m_device ),
+	   SIGNAL(finished(K3bDevice::DeviceHandler*)),
 	   this,
-	   SLOT(slotMediaDetectionFinished(K3bCdDevice::DeviceHandler*)) );
+	   SLOT(slotMediaDetectionFinished(K3bDevice::DeviceHandler*)) );
 }
 
 
@@ -125,7 +125,7 @@ void K3bMsInfoFetcher::getMsInfo()
 }
 
 
-void K3bMsInfoFetcher::slotMediaDetectionFinished( K3bCdDevice::DeviceHandler* h )
+void K3bMsInfoFetcher::slotMediaDetectionFinished( K3bDevice::DeviceHandler* h )
 {
   if( h->success() ) {
     m_dvd = h->diskInfo().isDvdMedia();

@@ -63,7 +63,7 @@ void K3bJob::slotFinished( bool )
 }
 
 
-int K3bJob::waitForMedia( K3bCdDevice::CdDevice* device,
+int K3bJob::waitForMedia( K3bDevice::Device* device,
 			  int mediaState,
 			  int mediaType,
 			  const QString& message )

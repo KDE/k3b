@@ -161,13 +161,12 @@ void K3bGrowisofsImager::start()
   // this only makes sense for DVD-R(W) media
   if( m_doc->dummy() )
     *m_process << "-use-the-force-luke=dummy";
-  if( ( m_doc->writingMode() == K3b::DAO || m_doc->writingMode() == K3b::WRITING_MODE_AUTO )
-      && m_doc->multiSessionMode() == K3bDataDoc::NONE ) {
-    *m_process << "-use-the-force-luke=dao";  // does DAO apply to DVD+R? no.
-    d->gh->reset( true );
-  }
-  else
-    d->gh->reset( false );
+
+  //
+  // The imager is only used in multisession mode, so we never use DAO and do not need to care about the
+  // size of the track or anything.
+  //
+  d->gh->reset( false );
 
   //
   // Some DVD writers do not allow changing the writing speed so we allow
@@ -353,15 +352,15 @@ void K3bGrowisofsImager::slotProcessExited( KProcess* p )
     emit finished(d->success);
   else {
     emit newSubTask( i18n("Ejecting DVD") );
-    connect( K3bCdDevice::eject( m_doc->burner() ), 
-	     SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
+    connect( K3bDevice::eject( m_doc->burner() ), 
+	     SIGNAL(finished(K3bDevice::DeviceHandler*)),
 	     this, 
-	     SLOT(slotEjectingFinished(K3bCdDevice::DeviceHandler*)) );
+	     SLOT(slotEjectingFinished(K3bDevice::DeviceHandler*)) );
   }
 }
 
 
-void K3bGrowisofsImager::slotEjectingFinished( K3bCdDevice::DeviceHandler* dh )
+void K3bGrowisofsImager::slotEjectingFinished( K3bDevice::DeviceHandler* dh )
 {
   if( !dh->success() )
     emit infoMessage( "Unable to eject media.", ERROR );

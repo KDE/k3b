@@ -19,7 +19,7 @@
 #include "k3bcdrecordwriter.h"
 
 
-class K3bCdDevice::CdDevice;
+class K3bDevice::Device;
 
 /**
  * Basically this is just a wrapper around K3bCdrecordWriter
@@ -30,7 +30,7 @@ class K3bDvdrecordWriter : public K3bCdrecordWriter
   Q_OBJECT
 
  public:
-  K3bDvdrecordWriter( K3bCdDevice::CdDevice*, QObject* parent = 0, const char* name = 0 );
+  K3bDvdrecordWriter( K3bDevice::Device*, QObject* parent = 0, const char* name = 0 );
   ~K3bDvdrecordWriter();
 
  protected:

@@ -19,8 +19,8 @@
 #include "k3babstractwriter.h"
 
 
-namespace K3bCdDevice {
-  class CdDevice;
+namespace K3bDevice {
+  class Device;
   class DeviceHandler;
 }
 class KProcess;
@@ -32,7 +32,7 @@ class K3bGrowisofsWriter : public K3bAbstractWriter
   Q_OBJECT
 
  public:
-  K3bGrowisofsWriter( K3bCdDevice::CdDevice*, K3bJobHandler*,
+  K3bGrowisofsWriter( K3bDevice::Device*, K3bJobHandler*,
 		      QObject* parent = 0, const char* name = 0 );
   ~K3bGrowisofsWriter();
 
@@ -74,7 +74,7 @@ class K3bGrowisofsWriter : public K3bAbstractWriter
  protected slots:
   void slotReceivedStderr( const QString& );
   void slotProcessExited( KProcess* );
-  void slotEjectingFinished( K3bCdDevice::DeviceHandler* dh );
+  void slotEjectingFinished( K3bDevice::DeviceHandler* dh );
   void slotThroughput( int t );
   void slotFlushingCache();
   void slotRingBufferFinished( bool );

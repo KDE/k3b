@@ -24,8 +24,8 @@
 
 class KProcess;
 class K3bDvdContent;
-namespace K3bCdDevice {
-  class CdDevice;
+namespace K3bDevice {
+  class Device;
 }
 
 /**
@@ -42,8 +42,8 @@ class K3bTcWrapper : public QObject
   /* Returns true if transcode tools installed
    */
   static bool supportDvd();
-  void checkDvdContent( K3bCdDevice::CdDevice* );
-  void isDvdInsert( K3bCdDevice::CdDevice* device );
+  void checkDvdContent( K3bDevice::Device* );
+  void isDvdInsert( K3bDevice::Device* device );
   const QValueList<K3bDvdContent>& getDvdTitles() const;
 
 private slots:
@@ -68,7 +68,7 @@ signals:
   int m_currentTitle;
   int m_allTitle;
   int m_allAngle;
-  K3bCdDevice::CdDevice*  m_device;
+  K3bDevice::Device*  m_device;
   K3bDvdContent parseTcprobe();
   void runTcprobe();
 };

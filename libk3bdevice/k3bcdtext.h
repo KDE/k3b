@@ -21,7 +21,7 @@
 #include <qvaluevector.h>
 
 
-namespace K3bCdDevice
+namespace K3bDevice
 {
 
   struct cdtext_pack {
@@ -46,7 +46,7 @@ namespace K3bCdDevice
 
   class TrackCdText
     {
-      friend class CdDevice;
+      friend class Device;
       
     public:
       TrackCdText() {
@@ -115,7 +115,7 @@ namespace K3bCdDevice
 
   class CdText : public QValueVector<TrackCdText>
     {
-      friend class CdDevice;
+      friend class Device;
 
     public:
       CdText();
