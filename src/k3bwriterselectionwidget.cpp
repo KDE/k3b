@@ -29,8 +29,8 @@
 #include <qcombobox.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qradiobutton.h>
-#include <qhbuttongroup.h>
+// #include <qradiobutton.h>
+#include <qgroupbox.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
 #include <qmap.h>
@@ -40,7 +40,7 @@
 class K3bWriterSelectionWidget::Private
 {
 public:
-  QMap<QString, int> indexMap;
+  QMap<QString, int> writerIndexMap;
   QPtrVector<K3bDevice> devices;
 };
 
@@ -73,18 +73,23 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget(QWidget *parent, const char *
   QLabel* labelDevice = new QLabel( groupWriter, "TextLabel1_2" );
   labelDevice->setText( i18n( "Device:" ) );
 
+  m_writingAppLabel = new QLabel( i18n("Writing app:"), groupWriter );
+  m_comboWritingApp = new QComboBox( groupWriter );
+
   groupWriterLayout->addWidget( labelDevice, 0, 0 );
   groupWriterLayout->addWidget( labelSpeed, 0, 1 );
+  groupWriterLayout->addWidget( m_writingAppLabel, 0, 2 );
   groupWriterLayout->addWidget( m_comboWriter, 1, 0 );
   groupWriterLayout->addWidget( m_comboSpeed, 1, 1 );
+  groupWriterLayout->addWidget( m_comboWritingApp, 1, 2 );
   groupWriterLayout->setColStretch( 0, 1 );
 
 
-  m_groupCdWritingApp = new QHButtonGroup( i18n("Writing Application"), this );
-  m_groupCdWritingApp->setExclusive( true );
-  m_selectDefault  = new QRadioButton( i18n("Default"), m_groupCdWritingApp );
-  m_selectCdrecord = new QRadioButton( "cdrecord", m_groupCdWritingApp );
-  m_selectCdrdao   = new QRadioButton( "cdrdao", m_groupCdWritingApp );
+//   m_groupCdWritingApp = new QHButtonGroup( i18n("Writing Application"), this );
+//   m_groupCdWritingApp->setExclusive( true );
+//   m_selectDefault  = new QRadioButton( i18n("Default"), m_groupCdWritingApp );
+//   m_selectCdrecord = new QRadioButton( "cdrecord", m_groupCdWritingApp );
+//   m_selectCdrdao   = new QRadioButton( "cdrdao", m_groupCdWritingApp );
 
 
   QGridLayout* mainLayout = new QGridLayout( this );
@@ -93,15 +98,15 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget(QWidget *parent, const char *
   mainLayout->setMargin( 0 );
 
   mainLayout->addWidget( groupWriter, 0, 0 );
-  mainLayout->addWidget( m_groupCdWritingApp, 1, 0 );
+  //  mainLayout->addWidget( m_groupCdWritingApp, 1, 0 );
 
 
   connect( m_comboWriter, SIGNAL(activated(int)), this, SLOT(slotRefreshWriterSpeeds()) );
   connect( m_comboWriter, SIGNAL(activated(int)), this, SIGNAL(writerChanged()) );
-  connect( m_groupCdWritingApp, SIGNAL(clicked(int)), this, SLOT(slotWritingAppSelected(int)) );
+  connect( m_comboWritingApp, SIGNAL(activated(int)), this, SLOT(slotWritingAppSelected(int)) );
   connect( this, SIGNAL(writerChanged()), SLOT(slotWriterChanged()) );
 
-  m_groupCdWritingApp->setButton( 0 );
+//   m_groupCdWritingApp->setButton( 0 );
 
   // TODO: probably use KApplication::settingsChanged
   connect( k3bMain(), SIGNAL(configChanged(KConfig*)), this, SLOT(slotConfigChanged(KConfig*)) );
@@ -135,7 +140,7 @@ K3bWriterSelectionWidget::~K3bWriterSelectionWidget()
 
 void K3bWriterSelectionWidget::init()
 {
-  d->indexMap.clear();
+  d->writerIndexMap.clear();
   d->devices.clear();
   m_comboWriter->clear();
 
@@ -146,7 +151,7 @@ void K3bWriterSelectionWidget::init()
   int i = 0;
   while( dev ) {
     m_comboWriter->insertItem( dev->vendor() + " " + dev->description() + " (" + dev->blockDeviceName() + ")", i );
-    d->indexMap[dev->devicename()] = i;
+    d->writerIndexMap[dev->devicename()] = i;
     d->devices.insert(i, dev);
     ++i;
     dev = devices.next();
@@ -160,6 +165,7 @@ void K3bWriterSelectionWidget::init()
   
   slotRefreshWriterSpeeds();
   slotConfigChanged(kapp->config());
+  setSupportedWritingApps( 0xFF );
 }
 
 
@@ -168,11 +174,12 @@ void K3bWriterSelectionWidget::slotConfigChanged( KConfig* c )
   c->setGroup("General Options");
   bool manualAppSelect = c->readBoolEntry( "Manual writing app selection", false );
   if( manualAppSelect ) {
-    m_groupCdWritingApp->show();
+    m_comboWritingApp->show();
+    m_writingAppLabel->show();
   }
   else {
-    m_groupCdWritingApp->setButton( 0 );
-    m_groupCdWritingApp->hide();
+    m_comboWritingApp->hide();
+    m_writingAppLabel->hide();
   }
 }
 
@@ -198,20 +205,9 @@ void K3bWriterSelectionWidget::slotRefreshWriterSpeeds()
 }
 
 
-void K3bWriterSelectionWidget::slotWritingAppSelected( int id )
+void K3bWriterSelectionWidget::slotWritingAppSelected( int )
 {
-  switch( id ) {
-  case 1:
-    emit writingAppChanged( K3b::CDRECORD );
-    break;
-  case 2:
-    emit writingAppChanged( K3b::CDRDAO );
-    break;
-  case 0:
-  default:
-    emit writingAppChanged( K3b::DEFAULT );
-    break;
-  }
+  emit writingAppChanged( selectedWritingApp() );
 }
 
 
@@ -227,8 +223,8 @@ K3bDevice* K3bWriterSelectionWidget::writerDevice() const
 void K3bWriterSelectionWidget::setWriterDevice( K3bDevice* dev )
 {
   if( dev ) {
-    if( d->indexMap.contains(dev->devicename()) )
-      m_comboWriter->setCurrentItem( d->indexMap[dev->devicename()] );
+    if( d->writerIndexMap.contains(dev->devicename()) )
+      m_comboWriter->setCurrentItem( d->writerIndexMap[dev->devicename()] );
   }
 }
 
@@ -247,16 +243,20 @@ int K3bWriterSelectionWidget::writingApp() const
   KConfig* c = kapp->config();
   c->setGroup("General Options");
   if( c->readBoolEntry( "Manual writing app selection", false ) ) {
-    switch( m_groupCdWritingApp->id( m_groupCdWritingApp->selected() ) ) {
-    case 1:
-      return K3b::CDRECORD;
-    case 2:
-      return K3b::CDRDAO;
-    case 0:
-    default:
-      return K3b::DEFAULT;
-    }
+    return selectedWritingApp();
   }
+  else
+    return K3b::DEFAULT;
+}
+
+
+int K3bWriterSelectionWidget::selectedWritingApp() const
+{
+  QString s = m_comboWritingApp->currentText();
+  if( s == "cdrdao" )
+    return K3b::CDRDAO;
+  else if( s == "cdrecord" )
+    return K3b::CDRECORD;
   else
     return K3b::DEFAULT;
 }
@@ -280,8 +280,14 @@ void K3bWriterSelectionWidget::slotWriterChanged()
 
 void K3bWriterSelectionWidget::setSupportedWritingApps( int i )
 {
-  m_selectCdrdao->setEnabled( i & K3b::CDRDAO );
-  m_selectCdrecord->setEnabled( i & K3b::CDRECORD );
+  m_comboWritingApp->clear();
+
+  m_comboWritingApp->insertItem( i18n("default") );
+
+  if( i & K3b::CDRDAO )
+    m_comboWritingApp->insertItem( "cdrdao" );
+  if( i & K3b::CDRECORD )
+    m_comboWritingApp->insertItem( "cdrecord" );
 }
 
 #include "k3bwriterselectionwidget.moc"
