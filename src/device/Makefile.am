@@ -1,4 +1,4 @@
-INCLUDES = $(CDPARANOIA_INCS) $(all_includes)
+INCLUDES = $(all_includes)
 
 METASOURCES = AUTO
 
