@@ -79,7 +79,7 @@ public:
       return;
     }
 
-    emitInfoMessage( i18n("Reading with sectorsize %1.").arg(m_sectorSize), K3bJob::INFO );
+    emitInfoMessage( i18n("Reading with sector size %1.").arg(m_sectorSize), K3bJob::INFO );
     kdDebug() << "(K3bDataTrackReader::WorkThread) reading " << (m_lastSector.lba() - m_firstSector.lba() + 1)
 	      << " sectors with sector size: " << m_sectorSize << endl;
 

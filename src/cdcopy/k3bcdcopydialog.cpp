@@ -203,7 +203,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
 					     "protection based on corrupted sectors.") );
   QWhatsThis::add( m_radioNormalCopy, i18n("<p>This is the normal copy mode recommended for most CD types. "
 					   "It allows copying Audio CDs, multi and single session Data CDs, and "
-					   "Enhanced Audio CDs (an Audio CD containing an additional data session."
+					   "Enhanced Audio CDs (an Audio CD containing an additional data session)."
 					   "<p>For VideoCDs please use the CD Cloning mode.") );
   QWhatsThis::add( m_radioCloneCopy, i18n("<p>In CD Cloning mode K3b performs a raw copy of the CD. That means it does "
 					  "not care about the content but simply copies the CD bit by bit. It may be used "
