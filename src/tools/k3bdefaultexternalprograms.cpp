@@ -283,12 +283,15 @@ bool K3bCdrdaoProgram::scan( const QString& p )
   // probe features
   KProcess fp;
   fp << path << "write" << "-h";
-  out.setProcess( &vp );
+  out.setProcess( &fp );
   if( fp.start( KProcess::Block, KProcess::AllOutput ) ) {
     if( out.output().contains( "--overburn" ) )
       bin->addFeature( "overburn" );
     if( out.output().contains( "--multi" ) )
       bin->addFeature( "multisession" );
+
+    if( out.output().contains( "--buffer-under-run-protection" ) )
+      bin->addFeature( "disable_burnproof" );
 
     // check if we run cdrdao as root
     if( !getuid() )
