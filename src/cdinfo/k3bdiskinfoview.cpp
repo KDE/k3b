@@ -212,7 +212,7 @@ void K3bDiskInfoView::displayInfo( K3bCdDevice::DiskInfoDetector* did )
 
     KListViewItem* trackHeaderItem = new HeaderViewItem( m_infoView, m_infoView->lastChild(), i18n("Tracks") );
     if( toc.isEmpty() )
-      (void)new KListViewItem( trackHeaderItem, i18n("Disk is Empty") );
+      (void)new KListViewItem( trackHeaderItem, i18n("Disk is empty") );
     else {
       // create header item
       KListViewItem* item = new KListViewItem( trackHeaderItem,
