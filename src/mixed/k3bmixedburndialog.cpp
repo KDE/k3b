@@ -30,6 +30,7 @@
 #include <tools/k3bdatamodewidget.h>
 #include <device/k3bmsf.h>
 #include <k3bstdguiitems.h>
+#include <tools/k3bwritingmodewidget.h>
 
 #include <qtabwidget.h>
 #include <qcheckbox.h>
@@ -174,17 +175,7 @@ void K3bMixedBurnDialog::createContextHelp()
 
 void K3bMixedBurnDialog::saveSettings()
 {
-  m_doc->setDao( m_checkDao->isChecked() );
-  m_doc->setDummy( m_checkSimulate->isChecked() );
-  m_doc->setOnTheFly( m_checkOnTheFly->isChecked() );
-  m_doc->setBurnproof( m_checkBurnproof->isChecked() );
-  m_doc->setRemoveBufferFiles( m_checkRemoveBufferFiles->isChecked() );
-			
-  // -- saving current speed --------------------------------------
-  m_doc->setSpeed( m_writerSelectionWidget->writerSpeed() );
-	
-  // -- saving current device --------------------------------------
-  m_doc->setBurner( m_writerSelectionWidget->writerDevice() );
+  K3bProjectBurnDialog::saveSettings();
 
   if( m_groupMixedType->selected() == m_radioMixedTypeLastTrack )
     m_doc->setMixedType( K3bMixedDoc::DATA_LAST_TRACK );
@@ -211,11 +202,8 @@ void K3bMixedBurnDialog::saveSettings()
 
 void K3bMixedBurnDialog::readSettings()
 {
-  m_checkDao->setChecked( doc()->dao() );
-  m_checkSimulate->setChecked( doc()->dummy() );
-  m_checkOnTheFly->setChecked( doc()->onTheFly() );
-  m_checkBurnproof->setChecked( doc()->burnproof() );
-  m_checkRemoveBufferFiles->setChecked( m_doc->removeBufferFiles() );
+  K3bProjectBurnDialog::readSettings();
+
   m_checkNormalize->setChecked( m_doc->audioDoc()->normalize() );	
 
   if( !m_doc->imagePath().isEmpty() )
@@ -247,36 +235,28 @@ void K3bMixedBurnDialog::readSettings()
 
 void K3bMixedBurnDialog::slotLoadK3bDefaults()
 {
-   m_checkSimulate->setChecked( false );
-   m_checkDao->setChecked( true );
-   m_checkOnTheFly->setChecked( true );
-   m_checkBurnproof->setChecked( true );
-   m_checkRemoveBufferFiles->setChecked( true );
-   m_cdtextWidget->setChecked( false );
-   m_checkNormalize->setChecked(false);
+  K3bProjectBurnDialog::slotLoadK3bDefaults();
 
-   m_radioMixedTypeFirstTrack->setChecked(true);
-   
-   m_dataModeWidget->setDataMode( K3b::AUTO );
-
-   m_imageSettingsWidget->load( K3bIsoOptions::defaults() );
-   m_advancedImageSettingsWidget->load( K3bIsoOptions::defaults() );
-   m_volumeDescWidget->load( K3bIsoOptions::defaults() );
-
-   toggleAllOptions();
+  m_cdtextWidget->setChecked( false );
+  m_checkNormalize->setChecked(false);
+  
+  m_radioMixedTypeFirstTrack->setChecked(true);
+  
+  m_dataModeWidget->setDataMode( K3b::AUTO );
+  
+  m_imageSettingsWidget->load( K3bIsoOptions::defaults() );
+  m_advancedImageSettingsWidget->load( K3bIsoOptions::defaults() );
+  m_volumeDescWidget->load( K3bIsoOptions::defaults() );
+  
+  toggleAllOptions();
 }
 
 
 void K3bMixedBurnDialog::slotLoadUserDefaults()
 {
-  KConfig* c = kapp->config();
-  c->setGroup( "default mixed settings" );
+  K3bProjectBurnDialog::slotLoadUserDefaults();
 
-  m_checkSimulate->setChecked( c->readBoolEntry( "dummy_mode", false ) );
-  m_checkDao->setChecked( c->readBoolEntry( "dao", true ) );
-  m_checkOnTheFly->setChecked( c->readBoolEntry( "on_the_fly", true ) );
-  m_checkBurnproof->setChecked( c->readBoolEntry( "burnproof", true ) );
-  m_checkRemoveBufferFiles->setChecked( c->readBoolEntry( "remove_buffer_files", true ) );
+  KConfig* c = kapp->config();
 
   m_cdtextWidget->setChecked( c->readBoolEntry( "cd_text", false ) );
   m_checkNormalize->setChecked( c->readBoolEntry( "normalize", false ) );
@@ -289,14 +269,7 @@ void K3bMixedBurnDialog::slotLoadUserDefaults()
   else
     m_radioMixedTypeFirstTrack->setChecked(true);
 
-
-  QString datamode = c->readEntry( "data_track_mode" );
-  if( datamode == "mode1" )
-    m_dataModeWidget->setDataMode( K3b::MODE1 );
-  else if( datamode == "mode2" )
-    m_dataModeWidget->setDataMode( K3b::MODE2 );
-  else
-    m_dataModeWidget->setDataMode( K3b::AUTO );
+  m_dataModeWidget->loadConfig(c);
 
   K3bIsoOptions o = K3bIsoOptions::load( c );
   m_imageSettingsWidget->load( o );
@@ -309,15 +282,9 @@ void K3bMixedBurnDialog::slotLoadUserDefaults()
 
 void K3bMixedBurnDialog::slotSaveUserDefaults()
 {
-  KConfig* c = kapp->config();
+  K3bProjectBurnDialog::slotSaveUserDefaults();
 
-  c->setGroup( "default mixed settings" );
-  
-  c->writeEntry( "dummy_mode", m_checkSimulate->isChecked() );
-  c->writeEntry( "dao", m_checkDao->isChecked() );
-  c->writeEntry( "on_the_fly", m_checkOnTheFly->isChecked() );
-  c->writeEntry( "burnproof", m_checkBurnproof->isChecked() );
-  c->writeEntry( "remove_buffer_files", m_checkRemoveBufferFiles->isChecked() );
+  KConfig* c = kapp->config();
 
   c->writeEntry( "cd_text", m_cdtextWidget->isChecked() );
   c->writeEntry( "normalize", m_checkNormalize->isChecked() );
@@ -330,14 +297,7 @@ void K3bMixedBurnDialog::slotSaveUserDefaults()
   else
     c->writeEntry( "mixed_type", "first_track" );
 
-  QString datamode;
-  if( m_dataModeWidget->dataMode() == K3b::MODE1 )
-    datamode = "mode1";
-  else if( m_dataModeWidget->dataMode() == K3b::MODE2 )
-    datamode = "mode2";
-  else
-    datamode = "auto";
-  c->writeEntry( "data_track_mode", datamode );
+  m_dataModeWidget->saveConfig(c);
 
   K3bIsoOptions o;
   m_imageSettingsWidget->save( o );
@@ -356,7 +316,9 @@ void K3bMixedBurnDialog::toggleAllOptions()
   K3bProjectBurnDialog::toggleAllOptions();
 
   // currently we do not support writing on the fly with cdrecord
-  if( !m_checkDao->isChecked() || m_writerSelectionWidget->writingApp() == K3b::CDRECORD ) {
+  if( m_writingModeWidget->writingMode() == K3b::TAO ||
+      m_writingModeWidget->writingMode() == K3b::RAW ||
+      m_writerSelectionWidget->writingApp() == K3b::CDRECORD ) {
     m_checkOnTheFly->setChecked( false );
     m_checkOnTheFly->setEnabled( false );
     m_cdtextWidget->setChecked( false );

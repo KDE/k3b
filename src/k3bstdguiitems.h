@@ -36,6 +36,8 @@ namespace K3bStdGuiItems
   QComboBox* dataModeComboboxBox( QWidget* parent = 0, const char* name = 0 );
   QCheckBox* startMultisessionCheckBox( QWidget* parent = 0, const char* name = 0 );
   QCheckBox* normalizeCheckBox( QWidget* parent = 0, const char* name = 0 );
+  QFrame* horizontalLine( QWidget* parent = 0, const char* name = 0 );
+  QFrame* verticalLine( QWidget* parent = 0, const char* name = 0 );
 
   /**
    * Creates a sunken purple frame that can be used to display Ayo's artwork.

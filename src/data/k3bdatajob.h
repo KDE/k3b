@@ -67,8 +67,7 @@ class K3bDataJob : public K3bBurnJob
  private:
   bool prepareWriterJob();
   bool startWriting();
-  void determineUsedWritingApp();
-  void determineDataMode();
+  void determineWritingMode();
 
   K3bDataDoc* m_doc;
 
@@ -85,6 +84,7 @@ class K3bDataJob : public K3bBurnJob
 
   int m_usedDataMode;
   int m_usedWritingApp;
+  int m_usedWritingMode;
 };
 
 #endif

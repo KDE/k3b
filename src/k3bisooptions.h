@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -36,6 +36,7 @@ class K3bIsoOptions
   // -- mkisofs-options ----------------------------------------------------------------------
   bool createRockRidge() const { return m_createRockRidge; }
   bool createJoliet() const { return m_createJoliet; }
+  bool createUdf() const { return m_createUdf; }
   bool ISOallowLowercase() const { return m_ISOallowLowercase; }
   bool ISOallowPeriodAtBegin() const { return m_ISOallowPeriodAtBegin; }
   bool ISOallow31charFilenames() const { return m_ISOallow31charFilenames; }
@@ -62,6 +63,7 @@ class K3bIsoOptions
 	
   void setCreateRockRidge( bool b ) { m_createRockRidge = b; }
   void setCreateJoliet( bool b ) {  m_createJoliet = b; }
+  void setCreateUdf( bool b ) { m_createUdf = b; }
   void setISOallowLowercase( bool b ) {  m_ISOallowLowercase = b; }
   void setISOallowPeriodAtBegin( bool b ) {  m_ISOallowPeriodAtBegin = b; }
   void setISOallow31charFilenames( bool b ) {  m_ISOallow31charFilenames = b; }
@@ -122,6 +124,7 @@ class K3bIsoOptions
   // mkisofs options -------------------------------------
   bool m_createRockRidge;    // -r or -R
   bool m_createJoliet;             // -J
+  bool m_createUdf;                // -udf
   bool m_ISOallowLowercase;   // -allow-lowercase
   bool m_ISOallowPeriodAtBegin;   // -L
   bool m_ISOallow31charFilenames;  // -I

@@ -81,45 +81,52 @@ void K3bApplication::init()
     for( int i = 0; i < args->count(); i++ ) {
       doc->addUrl( args->url(i) );
     }
-  } else if( args->isSet( "audio" ) ) {
+  }
+  else if( args->isSet( "audio" ) ) {
     // create new audio project and add all arguments
     k3bMainWidget->slotNewAudioDoc();
     K3bDoc* doc = k3bMainWidget->activeDoc();
     for( int i = 0; i < args->count(); i++ ) {
       doc->addUrl( args->url(i) );
     }
-  } else if( args->isSet( "mixed" ) ) {
+  }
+  else if( args->isSet( "mixed" ) ) {
     // create new audio project and add all arguments
     k3bMainWidget->slotNewMixedDoc();
     K3bDoc* doc = k3bMainWidget->activeDoc();
     for( int i = 0; i < args->count(); i++ ) {
       doc->addUrl( args->url(i) );
     }
-  } else if( args->isSet( "vcd" ) ) {
+  }
+  else if( args->isSet( "vcd" ) ) {
     // create new audio project and add all arguments
     k3bMainWidget->slotNewVcdDoc();
     K3bDoc* doc = k3bMainWidget->activeDoc();
     for( int i = 0; i < args->count(); i++ ) {
       doc->addUrl( args->url(i) );
     }
-  } else if( args->isSet( "emovix" ) ) {
+  }
+  else if( args->isSet( "emovix" ) ) {
     // create new audio project and add all arguments
     k3bMainWidget->slotNewMovixDoc();
     K3bDoc* doc = k3bMainWidget->activeDoc();
     for( int i = 0; i < args->count(); i++ ) {
       doc->addUrl( args->url(i) );
     }
-  } else if( args->isSet( "isoimage" ) ) {
+  }
+  else if( args->isSet( "isoimage" ) ) {
     if ( args->count() == 1 )
       k3bMainWidget->slotWriteIsoImage( args->url(0) );
     else
       k3bMainWidget->slotWriteIsoImage();
-  } else if( args->isSet( "binimage" ) ) {
+  }
+  else if( args->isSet( "binimage" ) ) {
     if ( args->count() == 1 )
       k3bMainWidget->slotWriteBinImage( args->url(0) );
     else
       k3bMainWidget->slotWriteBinImage();
-  } else if(args->count()) {
+  }
+  else if(args->count()) {
     for( int i = 0; i < args->count(); i++ ) {
       k3bMainWidget->openDocumentFile( args->url(i) );
     }
@@ -127,6 +134,8 @@ void K3bApplication::init()
 
   if( args->isSet("copy") )
     k3bMainWidget->slotCdCopy();
+  else if( args->isSet("erase") )
+    k3bMainWidget->slotBlankCdrw();
 
   args->clear();
 }

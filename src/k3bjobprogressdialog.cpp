@@ -15,6 +15,7 @@
 
 
 #include "k3bjobprogressdialog.h"
+#include "k3bjobprogresssystemtray.h"
 #include <k3bjob.h>
 #include <kcutlabel.h>
 #include <device/k3bdevice.h>
@@ -39,9 +40,6 @@
 #include <qfontmetrics.h>
 #include <qtimer.h>
 #include <qfont.h>
-#include <qpainter.h>
-#include <qregion.h>
-#include <qpointarray.h>
 #include <qeventloop.h>
 
 #include <kprogress.h>
@@ -52,11 +50,10 @@
 #include <kconfig.h>
 #include <ksystemtray.h>
 #include <kdebug.h>
-#include <kpixmap.h>
-#include <kpixmapeffect.h>
 #include <kglobal.h>
 #include <knotifyclient.h>
 #include <kstandarddirs.h>
+
 
 
 class K3bJobProgressDialog::PrivateDebugWidget : public KDialog
@@ -102,16 +99,17 @@ K3bJobProgressDialog::PrivateDebugWidget::PrivateDebugWidget( QMap<QString, QStr
 
 
 
+
+
 K3bJobProgressDialog::K3bJobProgressDialog( QWidget* parent, 
 					    const char* name, 
 					    bool showSubProgress,
 					    bool modal, WFlags fl )
   : KDialog( parent, name, modal, fl ),
-    in_loop(false)
+    in_loop(false),
+    m_systemTray(0)
 {
   setCaption( i18n("Progress") );
-
-  m_systemTray = new KSystemTray( parent );
 
   setupGUI();
   setupConnections();
@@ -284,6 +282,9 @@ void K3bJobProgressDialog::show()
 
   m_bShowSystemTrayProgress = c->readBoolEntry( "Show progress in system tray", true );
   if( m_bShowSystemTrayProgress ) {
+    if( !m_systemTray )
+      m_systemTray = new K3bJobProgressSystemTray(this);
+    m_systemTray->setJob( m_job );
     m_systemTray->show();
   }
 
@@ -304,9 +305,9 @@ void K3bJobProgressDialog::closeEvent( QCloseEvent* e )
     KDialog::closeEvent( e );
     k3bMain()->show();
 
-    QToolTip::remove( m_systemTray );
-    QToolTip::add( m_systemTray, i18n("Ready") );
-    m_systemTray->hide();
+    if( m_systemTray ) {
+      m_systemTray->hide();
+    }
 
     if( !m_plainCaption.isEmpty() )
       k3bMain()->setPlainCaption( m_plainCaption );
@@ -433,7 +434,6 @@ void K3bJobProgressDialog::setJob( K3bJob* job )
     connect( job, SIGNAL(infoMessage(const QString&,int)), this, SLOT(slotInfoMessage(const QString&,int)) );
     
     connect( job, SIGNAL(percent(int)), m_progressPercent, SLOT(setValue(int)) );
-    connect( job, SIGNAL(percent(int)), this, SLOT(animateSystemTray(int)) );
     connect( job, SIGNAL(percent(int)), this, SLOT(slotUpdateCaption(int)) );
     connect( job, SIGNAL(subPercent(int)), m_progressSubPercent, SLOT(setValue(int)) );
     
@@ -475,11 +475,6 @@ void K3bJobProgressDialog::slotNewSubTask(const QString& name)
 void K3bJobProgressDialog::slotNewTask(const QString& name)
 {
   m_labelTask->setText( name );
-
-  if( m_bShowSystemTrayProgress ) {
-    QToolTip::remove( m_systemTray );
-    QToolTip::add( m_systemTray, name );
-  }
 }
 
 
@@ -487,9 +482,7 @@ void K3bJobProgressDialog::slotStarted()
 {
   m_timer->start( 1000 );
   m_startTime = QTime::currentTime();
-  m_lastAnimatedProgress = -1;
   m_plainCaption = k3bMain()->caption();
-  animateSystemTray( 0 );
 }
 
 
@@ -511,89 +504,6 @@ void K3bJobProgressDialog::slotShowDebuggingOutput()
 {
   PrivateDebugWidget debugWidget( m_debugOutputMap, this );
   debugWidget.exec();
-}
-
-
-void K3bJobProgressDialog::animateSystemTray( int percent )
-{
-  if( m_bShowSystemTrayProgress ) {
-    if( m_lastAnimatedProgress < percent ) {
-      m_lastAnimatedProgress = percent;
-
-      static KPixmap logo = kapp->iconLoader()->loadIcon( "k3b", KIcon::Panel, 24 );
-      if( logo.height() != 25 )
-	logo.resize( 25, 25 ); // much better to handle since 4*25=100 ;)
-
-      if( percent == 100 )
-	m_systemTray->setPixmap( logo );
-
-      KPixmap darkLogo( logo );
-      //      KPixmapEffect::intensity( darkLogo, -0.8 );
-      KPixmapEffect::toGray( darkLogo );
-
-      QPointArray pa(7);
-      int size = 7;
-      pa.setPoint( 0, 13, 0 );  // always the first point
-      // calculate the second point
-      // if percent > 13 it is the upper right edge
-      if( percent > 13 ) {
-
-	// upper right edge
-	pa.setPoint( 1, 25, 0 );
-	if( percent > 38 ) {
-
-	  // lower right edge
-	  pa.setPoint( 2, 25, 25 );
-	  if( percent > 38+25 ) {
-
-	    // lower left edge
-	    pa.setPoint( 3, 0, 25 );
-	    if( percent > 38+25+25 ) {
-
-	      // upper left edge
-	      pa.setPoint( 4, 0, 0 );
-	      pa.setPoint( 5, percent - (38+25+25), 0 );
-	      size = 7;
-	    }
-	    else {
-	      pa.setPoint( 4, 0, 25 - (percent - (38+25)) );
-	      size = 6;
-	    }
-	  }
-	  else {
-	    pa.setPoint( 3, 25 - (percent-38), 25 );
-	    size = 5;
-	  }
-	}
-	else {
-	  pa.setPoint( 2, 25, percent-13 );
-	  size = 4;
-	}
-      }
-      else {
-	pa.setPoint( 1, percent == 0 ? 13 : 12+percent, 0 );
-	size = 3;
-      }
-
-      pa.setPoint( size-1, 13, 13 );
-      pa.resize( size );
-
-
-      //       for( int i = 0; i < pa.size(); ++i ) {
-      // 	printf("(%i, %i) ", pa.point(i).x(), pa.point(i).y() );
-      //       }
-      //       printf("\n");
-
-      QPainter p( &darkLogo );
-
-      p.setClipRegion( QRegion( pa ) );
-
-      p.drawPixmap( 0, 0, logo );
-      p.end();
-
-      m_systemTray->setPixmap( darkLogo );
-    }
-  }
 }
 
 
@@ -696,5 +606,6 @@ void K3bJobProgressDialog::hide()
     QApplication::eventLoop()->exitLoop();
   }
 }
+
 
 #include "k3bjobprogressdialog.moc"

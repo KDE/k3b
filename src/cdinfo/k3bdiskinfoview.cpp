@@ -264,9 +264,9 @@ void K3bDiskInfoView::displayInfo( const K3bDiskInfo& info )
       KListViewItem* iso9660Item = new HeaderViewItem( m_infoView, m_infoView->lastChild(), i18n("ISO9660 info") );
       KListViewItem* iso9660Child = 0;
 
-      iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
-                                        i18n("Id:"),
-                                        info.isoId.isEmpty() ? QString("-") : info.isoId );
+//       iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
+//                                         i18n("Id:"),
+//                                         info.isoId.isEmpty() ? QString("-") : info.isoId );
       iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
                                         i18n("System Id:"),
                                         info.isoSystemId.isEmpty() ? QString("-") : info.isoSystemId );

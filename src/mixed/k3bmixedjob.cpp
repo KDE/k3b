@@ -121,8 +121,7 @@ void K3bMixedJob::start()
   m_doc->dataDoc()->setBurner( m_doc->burner() );  // so the isoImager can read ms data
 
 
-  determineDataMode();
-  determineUsedWritingApp();
+  determineWritingMode();
 
 
   // depending on the mixed type and if it's onthefly or not we
@@ -192,7 +191,7 @@ void K3bMixedJob::slotMsInfoFetched( bool success )
     return;
 
   if( success ) {
-    if( m_usedWritingApp == K3b::CDRECORD )
+    if( m_usedDataWritingApp == K3b::CDRECORD )
       m_isoImager->setMultiSessionInfo( m_msInfoFetcher->msInfo() );
     else  // cdrdao seems to write a 150 blocks pregap that is not used by cdrecord
       m_isoImager->setMultiSessionInfo( QString("%1,%2").arg(m_msInfoFetcher->lastSessionStart()).arg(m_msInfoFetcher->nextSessionStart()+150) );
@@ -359,7 +358,7 @@ void K3bMixedJob::slotWriterFinished( bool success )
     }
   }
   else {
-    if( !m_doc->onTheFly() && m_doc->removeBufferFiles() )
+    if( !m_doc->onTheFly() && m_doc->removeImages() )
       removeBufferFiles();
 
     emit finished(true);
@@ -462,13 +461,17 @@ bool K3bMixedJob::prepareWriter()
 {
   if( m_writer ) delete m_writer;
 
-  if( m_usedWritingApp == K3b::CDRECORD ) {
+  if( ( m_currentAction == WRITING_ISO_IMAGE && m_usedDataWritingApp == K3b::CDRECORD ) ||
+      ( m_currentAction == WRITING_AUDIO_IMAGE && m_usedAudioWritingApp == K3b::CDRECORD ) )  {
 
     K3bCdrecordWriter* writer = new K3bCdrecordWriter( m_doc->burner(), this );
 
     // only write the audio tracks in DAO mode
-    writer->setDao( m_doc->dao() && (m_doc->mixedType() != K3bMixedDoc::DATA_SECOND_SESSION 
-				     || m_currentAction == WRITING_AUDIO_IMAGE) );
+    if( m_currentAction == WRITING_ISO_IMAGE )
+      writer->setWritingMode( m_usedDataWritingMode );
+    else
+      writer->setWritingMode( m_usedAudioWritingMode );
+
     writer->setSimulate( m_doc->dummy() );
     writer->setBurnproof( m_doc->burnproof() );
     writer->setBurnSpeed( m_doc->speed() );
@@ -839,29 +842,9 @@ void K3bMixedJob::removeBufferFiles()
 }
 
 
-void K3bMixedJob::determineUsedWritingApp()
+void K3bMixedJob::determineWritingMode()
 {
-  // cdrecord seems to have problems writing xa 1 disks in dao mode? At least on my system!
-
-  if( writingApp() == K3b::DEFAULT ) {
-    if( m_doc->dao() ) {
-      if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION )
-	m_usedWritingApp = K3b::CDRDAO;
-      else if( m_usedDataMode == K3b::MODE2 )
-	m_usedWritingApp = K3b::CDRDAO;
-      else
-	m_usedWritingApp = K3b::CDRECORD;
-    }
-    else
-      m_usedWritingApp = K3b::CDRECORD;
-  }
-  else 
-    m_usedWritingApp = writingApp();
-}
-
-
-void K3bMixedJob::determineDataMode()
-{
+  // at first we determine the data mode
   if( m_doc->dataDoc()->dataMode() == K3b::AUTO ) {
     if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION )
       m_usedDataMode = K3b::MODE2;
@@ -870,6 +853,55 @@ void K3bMixedJob::determineDataMode()
   }
   else
     m_usedDataMode = m_doc->dataDoc()->dataMode();
+
+
+  // determine the writing mode
+  if( m_doc->writingMode() == K3b::WRITING_MODE_AUTO ) {
+    if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
+      if( writingApp() == K3b::CDRECORD )
+	m_usedAudioWritingMode = K3b::TAO;
+      else
+	m_usedAudioWritingMode = K3b::DAO;
+      m_usedDataWritingMode = K3b::TAO;
+    }
+    else {
+      m_usedDataWritingMode = K3b::DAO;
+      m_usedAudioWritingMode = K3b::DAO;
+    }
+  }
+  else {
+    m_usedAudioWritingMode = m_doc->writingMode();
+    m_usedDataWritingMode = m_doc->writingMode();
+  }
+
+
+  // cdrecord seems to have problems writing xa 1 disks in dao mode? At least on my system!
+  if( writingApp() == K3b::DEFAULT ) {
+    if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
+      if( m_usedAudioWritingMode == K3b::DAO )
+	m_usedAudioWritingApp = K3b::CDRDAO;
+
+      // cdrecord seems to have problems to write multisession in DAO mode
+      if( m_usedDataWritingMode == K3b::DAO )
+	m_usedDataWritingApp = K3b::CDRDAO;
+      else
+	m_usedDataWritingApp = K3b::CDRECORD;
+    }
+    else {
+      if( m_usedAudioWritingMode != K3b::DAO ) {
+	m_usedAudioWritingApp = K3b::CDRECORD;
+	m_usedDataWritingApp = K3b::CDRECORD;
+      }
+      else {
+	m_usedAudioWritingApp = K3b::CDRDAO;
+	m_usedDataWritingApp = K3b::CDRDAO;
+      }
+    }
+  }
+  else {
+    m_usedAudioWritingApp = writingApp();
+    m_usedDataWritingApp = writingApp();
+  }
 }
 
 

@@ -20,7 +20,7 @@
 #include <qwidget.h>
 #include "device/k3bdevice.h"
 
-class QComboBox;
+class KComboBox;
 /* class QRadioButton; */
 /* class QButtonGroup; */
 class KConfig;
@@ -49,6 +49,8 @@ class K3bWriterSelectionWidget : public QWidget
 
  public slots:
   void setWriterDevice( K3bDevice* );
+  void setSpeed( int );
+
   /**
    * K3b::CDRDAO and K3b::CDRECORD or'ed together
    */
@@ -70,9 +72,9 @@ class K3bWriterSelectionWidget : public QWidget
 
   int selectedWritingApp() const;
 
-  QComboBox* m_comboSpeed;
-  QComboBox* m_comboWriter;
-  QComboBox* m_comboWritingApp;
+  KComboBox* m_comboSpeed;
+  KComboBox* m_comboWriter;
+  KComboBox* m_comboWritingApp;
   QLabel* m_writingAppLabel;
 
 /*   QButtonGroup* m_groupCdWritingApp; */

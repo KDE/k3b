@@ -386,7 +386,7 @@ K3bView* K3bAudioDoc::newView( QWidget* parent )
 
 QString K3bAudioDoc::documentType() const
 {
-  return "k3b_audio_project";
+  return "audio";
 }
 
 
@@ -644,21 +644,13 @@ void K3bAudioDoc::informAboutNotFoundFiles()
 
 void K3bAudioDoc::loadDefaultSettings()
 {
+  K3bDoc::loadDefaultSettings();
+
   KConfig* c = k3bMain()->config();
 
-  c->setGroup( "default audio settings" );
-
-  setDummy( c->readBoolEntry( "dummy_mode", false ) );
-  setDao( c->readBoolEntry( "dao", true ) );
-  setOnTheFly( c->readBoolEntry( "on_the_fly", true ) );
-  //  setBurnproof( c->readBoolEntry( "burnproof", true ) );
-
   m_cdText = c->readBoolEntry( "cd_text", false );
-  //  m_padding = c->readBoolEntry( "padding", true );
   m_padding = true;  // padding is always a good idea!
   m_hideFirstTrack = c->readBoolEntry( "hide_first_track", false );
-  m_removeBufferFiles = c->readBoolEntry( "remove_buffer_files", true );
-  setOnlyCreateImages( c->readBoolEntry( "only_create_images", false ) );
   setNormalize( c->readBoolEntry( "normalize", false ) );
 }
 

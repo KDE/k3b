@@ -91,8 +91,7 @@ class K3bMixedJob : public K3bBurnJob
   void cleanupAfterError();
   void removeBufferFiles();
   void createIsoImage();
-  void determineUsedWritingApp();
-  void determineDataMode();
+  void determineWritingMode();
   void normalizeFiles();
   void prepareProgressInformation();
 
@@ -128,7 +127,10 @@ class K3bMixedJob : public K3bBurnJob
   bool m_usingFifo;
 
   int m_usedDataMode;
-  int m_usedWritingApp;
+  int m_usedDataWritingApp;
+  int m_usedAudioWritingApp;
+  int m_usedDataWritingMode;
+  int m_usedAudioWritingMode;
 
   QString m_tempFilePrefix;
 };

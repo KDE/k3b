@@ -18,6 +18,7 @@
 #include <tools/k3bglobals.h>
 
 #include <klocale.h>
+#include <kconfig.h>
 
 #include <qwhatsthis.h>
 #include <qtooltip.h>
@@ -76,5 +77,29 @@ void K3bDataModeWidget::setDataMode( int mode )
     setCurrentItem( s_autoIndex );
 }
 
+
+void K3bDataModeWidget::saveConfig( KConfig* c )
+{
+  QString datamode;
+  if( dataMode() == K3b::MODE1 )
+    datamode = "mode1";
+  else if( dataMode() == K3b::MODE2 )
+    datamode = "mode2";
+  else
+    datamode = "auto";
+  c->writeEntry( "data_track_mode", datamode );
+}
+
+
+void K3bDataModeWidget::loadConfig( KConfig* c )
+{
+  QString datamode = c->readEntry( "data_track_mode" );
+  if( datamode == "mode1" )
+    setDataMode( K3b::MODE1 );
+  else if( datamode == "mode2" )
+    setDataMode( K3b::MODE2 );
+  else
+    setDataMode( K3b::AUTO );
+}
 
 #include "k3bdatamodewidget.moc"

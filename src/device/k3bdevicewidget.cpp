@@ -74,23 +74,17 @@ class K3bDeviceWidget::PrivateDeviceViewItem2 : public QCheckListItem
 {
 public:
   PrivateDeviceViewItem2( int type, PrivateTempDevice* dev, QListView* view, QListViewItem* after )
-    : QCheckListItem( view, QString::null, CheckBox ),
+    : QCheckListItem( view, after, QString::null, CheckBox ),
       m_type(type) { 
     this->dev = dev;
     init();
-
-    // QT 3.0.x does not have a QCheckListItem constructor that takes the after item
-    moveItem(after);
   }
 
   PrivateDeviceViewItem2( int type, PrivateTempDevice* dev, QListViewItem* item, QListViewItem* after )
-    : QCheckListItem( item, QString::null, CheckBox ),
+    : QCheckListItem( item, after, QString::null, CheckBox ),
       m_type(type) { 
     this->dev = dev;
     init();
-
-    // QT 3.0.x does not have a QCheckListItem constructor that takes the after item
-    moveItem(after);
   }
 
   QString text( int col ) const {

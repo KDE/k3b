@@ -150,7 +150,7 @@ void K3bAudioJob::slotWriterFinished( bool success )
     return;
   }
   else {
-    if( !m_doc->onTheFly() && m_doc->removeBufferFiles() )
+    if( !m_doc->onTheFly() && m_doc->removeImages() )
       removeBufferFiles();
 
     emit finished(true);
@@ -238,12 +238,37 @@ bool K3bAudioJob::prepareWriter()
 {
   if( m_writer ) delete m_writer;
 
-  if( writingApp() == K3b::CDRECORD ||
-      ( writingApp() == K3b::DEFAULT && !m_doc->dao() ) ) {
+  int usedWritingApp, usedWritingMode;
+
+
+  // determine writing mode
+  if( m_doc->writingMode() == K3b::WRITING_MODE_AUTO ) {
+    // DAO is always the first choice
+    // should we consider choosing TAO if the writer does not support DAO?
+    // the problem is that there are none-DAO writers that are supported by cdrdao
+    usedWritingMode = K3b::DAO;
+  }
+  else
+    usedWritingMode = m_doc->writingMode();
+
+
+  // determine writing app
+  if( writingApp() == K3b::DEFAULT ) {
+    if( usedWritingMode == K3b::DAO )
+      usedWritingApp = K3b::CDRDAO;
+    else
+      usedWritingApp = K3b::CDRECORD;
+  }
+  else
+    usedWritingApp = writingApp();
+
+
+
+  if( usedWritingApp == K3b::CDRECORD ) {
 
     K3bCdrecordWriter* writer = new K3bCdrecordWriter( m_doc->burner(), this );
 
-    writer->setDao( m_doc->dao() );
+    writer->setWritingMode( usedWritingMode );
     writer->setSimulate( m_doc->dummy() );
     writer->setBurnproof( m_doc->burnproof() );
     writer->setBurnSpeed( m_doc->speed() );

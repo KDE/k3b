@@ -48,18 +48,23 @@ void K3b::addDefaultPrograms( K3bExternalBinManager* m )
     m->addProgram( new K3bVcdbuilderProgram( vcdTools[i] ) );
   for( int i = 0; transcodeTools[i]; ++i )
     m->addProgram( new K3bTranscodeProgram( transcodeTools[i] ) );
-  m->addProgram( new K3bCdrecordProgram() );
+  m->addProgram( new K3bCdrecordProgram(false) );
+  m->addProgram( new K3bCdrecordProgram(true) );
+  m->addProgram( new K3bDvdrecordProgram() );
   m->addProgram( new K3bMkisofsProgram() );
+  m->addProgram( new K3bReadcdProgram() );
   m->addProgram( new K3bCdrdaoProgram() );
   m->addProgram( new K3bEMovixProgram() );
   m->addProgram( new K3bNormalizeProgram() );
 }
 
 
-K3bCdrecordProgram::K3bCdrecordProgram()
-  : K3bExternalProgram( "cdrecord" )
+K3bCdrecordProgram::K3bCdrecordProgram( bool dvdPro )
+  : K3bExternalProgram( dvdPro ? "cdrecord-prodvd" : "cdrecord" ),
+    m_dvdPro(dvdPro)
 {
 }
+
 
 bool K3bCdrecordProgram::scan( const QString& p )
 {
@@ -85,7 +90,14 @@ bool K3bCdrecordProgram::scan( const QString& p )
 
   vp << path << "-version";
   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
-    int pos = out.output().find( "Cdrecord" );
+    int pos = -1;
+    if( m_dvdPro ) {
+      pos = out.output().find( "Cdrecord-ProDVD" );
+    }
+    else {
+      // the space after "Cdrecord" is so K3b does not find Cdrecord-ProDVD
+      pos = out.output().find( "Cdrecord " );
+    }
     if( pos < 0 )
       return false;
 
@@ -135,6 +147,91 @@ bool K3bCdrecordProgram::scan( const QString& p )
   }
   else {
     kdDebug() << "(K3bCdrecordProgram) could not start " << bin->path << endl;
+    delete bin;
+    return false;
+  }
+
+  addBin( bin );
+  return true;
+}
+
+
+K3bDvdrecordProgram::K3bDvdrecordProgram()
+  : K3bExternalProgram( "dvdrecord" )
+{
+}
+
+
+bool K3bDvdrecordProgram::scan( const QString& p )
+{
+  if( p.isEmpty() )
+    return false;
+
+  QString path = p;
+  QFileInfo fi( path );
+  if( fi.isDir() ) {
+    if( path[path.length()-1] != '/' )
+      path.append("/");
+    path.append("dvdrecord");
+  }
+
+  if( !QFile::exists( path ) )
+    return false;
+
+  K3bExternalBin* bin = 0;
+
+  // probe version
+  KProcess vp;
+  OutputCollector out( &vp );
+
+  vp << path << "-version";
+  if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
+    int pos = out.output().find( "dvdrtools" );
+    if( pos < 0 )
+      return false;
+
+    pos = out.output().find( QRegExp("[0-9]"), pos );
+    if( pos < 0 )
+      return false;
+
+    int endPos = out.output().find( "\n", pos );
+    if( endPos < 0 )
+      return false;
+
+    bin = new K3bExternalBin( this );
+    bin->path = path;
+    bin->version = out.output().mid( pos, endPos-pos );
+  }
+  else {
+    kdDebug() << "(K3bDvdrecordProgram) could not start " << path << endl;
+    return false;
+  }
+
+
+
+  // probe features
+  KProcess fp;
+  out.setProcess( &fp );
+  fp << path << "-help";
+  if( fp.start( KProcess::Block, KProcess::AllOutput ) ) {
+    if( out.output().contains( "-delay" ) )
+      bin->addFeature( "delay" );
+    if( out.output().contains( "-overburn" ) )
+      bin->addFeature( "overburn" );
+    
+    // check if we run cdrecord as root
+    if( !getuid() )
+      bin->addFeature( "suidroot" );
+    else {
+      struct stat s;
+      if( !::stat( QFile::encodeName(path), &s ) ) {
+	if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
+	  bin->addFeature( "suidroot" );
+      }
+    }
+  }
+  else {
+    kdDebug() << "(K3bDvdrecordProgram) could not start " << bin->path << endl;
     delete bin;
     return false;
   }
@@ -221,6 +318,87 @@ bool K3bMkisofsProgram::scan( const QString& p )
   }
   else {
     kdDebug() << "(K3bMkisofsProgram) could not start " << bin->path << endl;
+    delete bin;
+    return false;
+  }
+
+  addBin(bin);
+  return true;
+}
+
+
+K3bReadcdProgram::K3bReadcdProgram()
+  : K3bExternalProgram( "readcd" )
+{
+}
+
+bool K3bReadcdProgram::scan( const QString& p )
+{
+  if( p.isEmpty() )
+    return false;
+
+  QString path = p;
+  QFileInfo fi( path );
+  if( fi.isDir() ) {
+    if( path[path.length()-1] != '/' )
+      path.append("/");
+    path.append("readcd");
+  }
+
+  if( !QFile::exists( path ) )
+    return false;
+
+  K3bExternalBin* bin = 0;
+
+  // probe version
+  KProcess vp;
+  vp << path << "-version";
+  OutputCollector out( &vp );
+  if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
+    int pos = out.output().find( "readcd" );
+    if( pos < 0 )
+      return false;
+
+    pos = out.output().find( QRegExp("[0-9]"), pos );
+    if( pos < 0 )
+      return false;
+
+    int endPos = out.output().find( ' ', pos+1 );
+    if( endPos < 0 )
+      return false;
+
+    bin = new K3bExternalBin( this );
+    bin->path = path;
+    bin->version = out.output().mid( pos, endPos-pos );
+  }
+  else {
+    kdDebug() << "(K3bMkisofsProgram) could not start " << path << endl;
+    return false;
+  }
+
+
+
+  // probe features
+  KProcess fp;
+  fp << path << "-help";
+  out.setProcess( &fp );
+  if( fp.start( KProcess::Block, KProcess::AllOutput ) ) {
+    if( out.output().contains( "-clone" ) )
+      bin->addFeature( "clone" );
+
+    // check if we run mkisofs as root
+    if( !getuid() )
+      bin->addFeature( "suidroot" );
+    else {
+      struct stat s;
+      if( !::stat( QFile::encodeName(path), &s ) ) {
+	if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
+	  bin->addFeature( "suidroot" );
+      }
+    }
+  }
+  else {
+    kdDebug() << "(K3bReadcdProgram) could not start " << bin->path << endl;
     delete bin;
     return false;
   }

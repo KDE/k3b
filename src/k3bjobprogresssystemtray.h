@@ -13,34 +13,36 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#ifndef _K3B_JOB_PROGRESS_SYSTEMTRAY_H_
+#define _K3B_JOB_PROGRESS_SYSTEMTRAY_H_
 
-#ifndef _K3B_DATAMODE_WIDGET_H_
-#define _K3B_DATAMODE_WIDGET_H_
+#include <qwidget.h>
 
-#include <qcombobox.h>
-
-
-class KConfig;
+class QPaintEvent;
+class K3bJob;
 
 
-class K3bDataModeWidget : public QComboBox
+class K3bJobProgressSystemTray : public QWidget
 {
   Q_OBJECT
 
  public:
-  K3bDataModeWidget( QWidget* parent = 0, const char* name = 0 );
-  ~K3bDataModeWidget();
-
-  /**
-   * returnes K3b::DataMode
-   */
-  int dataMode() const;
-
-  void saveConfig( KConfig* );
-  void loadConfig( KConfig* );
+  K3bJobProgressSystemTray( QWidget* parent, const char* name = 0 );
+  ~K3bJobProgressSystemTray();
 
  public slots:
-  void setDataMode( int );
+  void setJob( K3bJob* );
+
+ private slots:
+  void slotProgress( int );
+  void slotFinished( bool );
+
+ protected:
+  void paintEvent( QPaintEvent* );
+
+ private:
+  class Private;
+  Private* d;
 };
 
 #endif

@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -38,6 +38,7 @@ void K3bDataImageSettingsWidget::load( const K3bIsoOptions& o )
 {
   m_checkRockRidge->setChecked( o.createRockRidge() );
   m_checkJoliet->setChecked( o.createJoliet() );
+  m_checkUdf->setChecked( o.createUdf() );
 
   m_checkDiscardAllLinks->setChecked( o.discardSymlinks() );
   m_checkDiscardBrokenLinks->setChecked( o.discardBrokenSymlinks() );
@@ -66,6 +67,7 @@ void K3bDataImageSettingsWidget::save( K3bIsoOptions& o )
 {
   o.setCreateRockRidge( m_checkRockRidge->isChecked() );
   o.setCreateJoliet( m_checkJoliet->isChecked() );
+  o.setCreateUdf( m_checkUdf->isChecked() );
 
   o.setDiscardSymlinks( m_checkDiscardAllLinks->isChecked() );
   o.setDiscardBrokenSymlinks( m_checkDiscardBrokenLinks->isChecked() );

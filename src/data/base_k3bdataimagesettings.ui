@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>base_K3bDataImageSettings</class>
 <author>Sebastian Trueg</author>
 <widget class="QWidget">
@@ -190,6 +190,21 @@
 &lt;p&gt;Joliet does not allow all characters, so the Joliet filenames are not identical to the filenames on disk (as compared to Rock Ridge). Joliet has a filename length limitation of 64 chars (independent from the character coding and type e.g. European vs. Japanese). This is annoying, as modern file systems all allow 255 characters per path name component.
 &lt;p&gt;Joliet uses UTF-16 coding.
 &lt;p&gt;&lt;b&gt;Caution:&lt;/b&gt; With the exception of Linux and FreeBSD, there is no POSIX-like OS that supports Joliet. So &lt;b&gt;never create Joliet only CDs&lt;/b&gt; for that reason.</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>m_checkUdf</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Generate Udf structures</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Add Udf structures to the CD</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;If this option is checked K3b will create Udf filesystem structures in addition to the Iso9660 filesystem.
+&lt;p&gt;The Udf (&lt;em&gt;&lt;b&gt;U&lt;/b&gt;niversal &lt;b&gt;D&lt;/b&gt;isk &lt;b&gt;F&lt;/b&gt;ormat&lt;/em&gt;) is mainly used for DVDs.</string>
                     </property>
                 </widget>
             </vbox>

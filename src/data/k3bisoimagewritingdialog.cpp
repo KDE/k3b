@@ -26,6 +26,7 @@
 #include <tools/k3bmd5job.h>
 #include <tools/k3bdatamodewidget.h>
 #include <tools/k3bglobals.h>
+#include <tools/k3bwritingmodewidget.h>
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -83,6 +84,13 @@ K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( QWidget* parent, const char*
   kapp->config()->setGroup("General Options");
   m_editImagePath->setText( kapp->config()->readEntry( "last written image", "" ) );
   updateImageSize( m_editImagePath->text() );
+
+  connect( m_writerSelectionWidget, SIGNAL(writerChanged()),
+	   this, SLOT(slotWriterChanged()) );
+  connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)),
+	   this, SLOT(slotWriterChanged()) );
+  connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)),
+	   this, SLOT(slotWriterChanged()) );
 }
 
 
@@ -151,10 +159,7 @@ void K3bIsoImageWritingDialog::setupGui()
   isoInfoLayout->addWidget( new QLabel( i18n("Application Id:"), m_isoInfoWidget ), 2, 3 );
   isoInfoLayout->addWidget( m_labelIsoApplicationId, 2, 4 );
 
-  QFrame* isoInfoSpacerLine = new QFrame( m_isoInfoWidget );
-  isoInfoSpacerLine->setFrameStyle( QFrame::HLine | QFrame::Sunken );
-
-  isoInfoLayout->addMultiCellWidget( isoInfoSpacerLine, 5, 5, 0, 4 );
+  isoInfoLayout->addMultiCellWidget( K3bStdGuiItems::horizontalLine( m_isoInfoWidget ), 5, 5, 0, 4 );
 
   isoInfoLayout->addColSpacing( 2, 10 );
 
@@ -172,14 +177,11 @@ void K3bIsoImageWritingDialog::setupGui()
   m_generalInfoLabel = new KCutLabel( groupImage );
   m_generalInfoLabel->setFont( f );
 
-  QFrame* imageSpacerLine = new QFrame( groupImage );
-  imageSpacerLine->setFrameStyle( QFrame::HLine | QFrame::Sunken );
-
   groupImageLayout->addWidget( m_editImagePath, 0, 0 );
   groupImageLayout->addWidget( m_buttonFindImageFile, 0, 1 );
   groupImageLayout->addWidget( new QLabel( i18n("Size:"), groupImage ), 0, 2 );
   groupImageLayout->addWidget( m_labelImageSize, 0, 3 );
-  groupImageLayout->addMultiCellWidget( imageSpacerLine, 1, 1, 0, 3 );
+  groupImageLayout->addMultiCellWidget( K3bStdGuiItems::horizontalLine(groupImage), 1, 1, 0, 3 );
   groupImageLayout->addMultiCellWidget( m_isoInfoWidget, 2, 2, 0, 3 );
   groupImageLayout->addMultiCellWidget( m_generalInfoLabel, 3, 3, 0, 3 );
 
@@ -210,27 +212,34 @@ void K3bIsoImageWritingDialog::setupGui()
   groupOptionsLayout->setSpacing( spacingHint() );
   groupOptionsLayout->setMargin( marginHint() );
 
-  m_checkBurnProof = K3bStdGuiItems::burnproofCheckbox( optionTab );
-  m_checkDummy = K3bStdGuiItems::simulateCheckbox( optionTab );
-  m_checkDao = K3bStdGuiItems::daoCheckbox( optionTab );
+  m_writingModeWidget = new K3bWritingModeWidget( optionTab );
 
-  groupOptionsLayout->addWidget( m_checkDummy, 0, 0 );
-  groupOptionsLayout->addWidget( m_checkDao, 1, 0 );
-  groupOptionsLayout->addWidget( m_checkBurnProof, 2, 0 );
+  QGroupBox* groupWriting = new QGroupBox( 2, Qt::Vertical, i18n("Options"), optionTab );
+  m_checkDummy = K3bStdGuiItems::simulateCheckbox( groupWriting );
+  m_checkBurnProof = K3bStdGuiItems::burnproofCheckbox( groupWriting );
 
+  groupOptionsLayout->addWidget( new QLabel( i18n("Writing mode:"), optionTab ), 0, 0 );
+  groupOptionsLayout->addWidget( m_writingModeWidget, 1, 0 );
+  groupOptionsLayout->addMultiCellWidget( groupWriting, 0, 2, 1, 1 );
+  groupOptionsLayout->setRowStretch( 2, 1 );
+  groupOptionsLayout->setColStretch( 1, 1 );
+
+
+  // advanced ---------------------------------
   QWidget* advancedTab = new QWidget( optionTabbed );
   QGridLayout* advancedTabLayout = new QGridLayout( advancedTab );
   advancedTabLayout->setAlignment( Qt::AlignTop );
   advancedTabLayout->setSpacing( spacingHint() );
   advancedTabLayout->setMargin( marginHint() );
 
-  m_checkNoFix = K3bStdGuiItems::startMultisessionCheckBox( advancedTab );
   m_dataModeWidget = new K3bDataModeWidget( advancedTab );
+  m_checkNoFix = K3bStdGuiItems::startMultisessionCheckBox( advancedTab );
 
-  advancedTabLayout->addWidget( new QLabel( i18n("Datatrack Mode"), advancedTab ), 0, 0 );
+  advancedTabLayout->addWidget( new QLabel( i18n("Data mode:"), advancedTab ), 0, 0 );
   advancedTabLayout->addWidget( m_dataModeWidget, 0, 1 );
-  advancedTabLayout->addMultiCellWidget( m_checkNoFix, 1, 1, 0, 1 );
-
+  advancedTabLayout->addMultiCellWidget( m_checkNoFix, 1, 1, 0, 2 );
+  advancedTabLayout->setRowStretch( 2, 1 );
+  advancedTabLayout->setColStretch( 2, 1 );
 
   optionTabbed->addTab( optionTab, i18n("Options") );
   optionTabbed->addTab( advancedTab, i18n("Advanced") );
@@ -277,7 +286,7 @@ void K3bIsoImageWritingDialog::slotStartClicked()
   m_job->setSpeed( m_writerSelectionWidget->writerSpeed() );
   m_job->setBurnproof( m_checkBurnProof->isChecked() );
   m_job->setSimulate( m_checkDummy->isChecked() );
-  m_job->setDao( m_checkDao->isChecked() );
+  m_job->setWritingMode( m_writingModeWidget->writingMode() );
   m_job->setNoFix( m_checkNoFix->isChecked() );
   m_job->setDataMode( m_dataModeWidget->dataMode() );
 
@@ -405,7 +414,14 @@ void K3bIsoImageWritingDialog::slotFindImageFile()
 
 void K3bIsoImageWritingDialog::slotWriterChanged()
 {
-  if (m_writerSelectionWidget->writerDevice())
+  if (m_writerSelectionWidget->writerDevice()) {
+    m_buttonStart->setEnabled( true );
+
+    if( m_writerSelectionWidget->writingApp() == K3b::CDRDAO )
+      m_writingModeWidget->setSupportedModes( K3b::DAO );
+    else
+      m_writingModeWidget->setSupportedModes( 0xFF );  // default is cdrecord and cdrecord supports all modes
+
     if( !m_writerSelectionWidget->writerDevice()->burnproof() ) {
       m_checkBurnProof->setChecked( false );
       m_checkBurnProof->setDisabled( true );
@@ -413,6 +429,10 @@ void K3bIsoImageWritingDialog::slotWriterChanged()
     else {
       m_checkBurnProof->setEnabled( true );
     }
+  }
+  else {
+    m_buttonStart->setEnabled( false );
+  }
 }
 
 
@@ -442,18 +462,12 @@ void K3bIsoImageWritingDialog::slotLoadUserDefaults()
   KConfig* c = kapp->config();
   c->setGroup( "Iso9660 image writing" );
 
-  m_checkDao->setChecked( c->readBoolEntry("dao", true ) );
+  m_writingModeWidget->loadConfig( c );
   m_checkDummy->setChecked( c->readBoolEntry("simulate", false ) );
   m_checkBurnProof->setChecked( c->readBoolEntry("burnproof", true ) );
   m_checkNoFix->setChecked( c->readBoolEntry("multisession", false ) );
 
-  QString datamode = c->readEntry( "data_track_mode" );
-  if( datamode == "mode1" )
-    m_dataModeWidget->setDataMode( K3b::MODE1 );
-  else if( datamode == "mode2" )
-    m_dataModeWidget->setDataMode( K3b::MODE2 );
-  else
-    m_dataModeWidget->setDataMode( K3b::AUTO );
+  m_dataModeWidget->loadConfig(c);
 }
 
 void K3bIsoImageWritingDialog::slotSaveUserDefaults()
@@ -461,24 +475,17 @@ void K3bIsoImageWritingDialog::slotSaveUserDefaults()
   KConfig* c = kapp->config();
   c->setGroup( "Iso9660 image writing" );
 
-  c->writeEntry( "dao", m_checkDao->isChecked() );
+  m_writingModeWidget->saveConfig( c ),
   c->writeEntry( "simulate", m_checkDummy->isChecked() );
   c->writeEntry( "burnproof", m_checkBurnProof->isChecked() );
   c->writeEntry( "multisession", m_checkNoFix->isChecked() );
 
-  QString datamode;
-  if( m_dataModeWidget->dataMode() == K3b::MODE1 )
-    datamode = "mode1";
-  else if( m_dataModeWidget->dataMode() == K3b::MODE2 )
-    datamode = "mode2";
-  else
-    datamode = "auto";
-  c->writeEntry( "data_track_mode", datamode );
+  m_dataModeWidget->saveConfig(c);
 }
 
 void K3bIsoImageWritingDialog::slotLoadK3bDefaults()
 {
-  m_checkDao->setChecked( true );
+  m_writingModeWidget->setWritingMode( K3b::WRITING_MODE_AUTO );
   m_checkDummy->setChecked( false );
   m_checkBurnProof->setChecked( true );
   m_checkNoFix->setChecked( false );

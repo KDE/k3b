@@ -62,7 +62,7 @@ class K3bMovixDoc : public K3bDataDoc
   int loopPlaylist() const { return m_loopPlaylist; }
 
   void setShutdown( bool v ) { m_shutdown = v; }
-  void setSeboot( bool v ) { m_reboot = v; }
+  void setReboot( bool v ) { m_reboot = v; }
   void setEjectDisk( bool v ) { m_ejectDisk = v; }
   void setRandomPlay( bool v ) { m_randomPlay = v; }
   void setSubtitleFontset( const QString& v ) { m_subtitleFontset = v; }
@@ -91,7 +91,9 @@ class K3bMovixDoc : public K3bDataDoc
   /** reimplemented from K3bDoc */
   bool saveDocumentData( QDomElement* );
 
-  QString documentType() const { return "k3b_movix_project"; }
+  QString documentType() const { return "movix"; }
+
+  void loadDefaultSettings();
 
  private slots:
   void slotDataItemRemoved( K3bDataItem* );

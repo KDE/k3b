@@ -31,6 +31,8 @@ class K3bMd5Job;
 class KActiveLabel;
 class KProgress;
 class K3bDataModeWidget;
+class K3bWritingModeWidget;
+
 
 
 /**
@@ -65,10 +67,10 @@ class K3bIsoImageWritingDialog : public K3bInteractionDialog
 
   K3bWriterSelectionWidget* m_writerSelectionWidget;
   QCheckBox* m_checkDummy;
-  QCheckBox* m_checkDao;
   QCheckBox* m_checkBurnProof;
   QCheckBox* m_checkNoFix;
   K3bDataModeWidget* m_dataModeWidget;
+  K3bWritingModeWidget* m_writingModeWidget;
 
   QLabel*    m_labelImageSize;
   KLineEdit* m_editImagePath;

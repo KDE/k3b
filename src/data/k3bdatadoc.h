@@ -97,13 +97,6 @@ class K3bDataDoc : public K3bDoc
 	
   virtual K3bBurnJob* newBurnJob();
 	
-  bool deleteImage() const { return m_deleteImage; }
-  bool onlyCreateImage() const { return m_onlyCreateImage; }
-
-
-  void setDeleteImage( bool b ) { m_deleteImage = b; }
-  void setOnlyCreateImage( bool b ) { m_onlyCreateImage = b; }
-
   int multiSessionMode() const { return m_multisessionMode; }
   void setMultiSessionMode( int mode );
 
@@ -196,9 +189,6 @@ class K3bDataDoc : public K3bDoc
   QString m_name;
   QString m_dummyDir;
   QString m_isoImage;
-
-  bool m_deleteImage;
-  bool m_onlyCreateImage;
 
   int m_dataMode;
 

@@ -20,6 +20,7 @@
 #include <k3bexternalbinmanager.h>
 #include <k3bprocess.h>
 #include <device/k3bdevice.h>
+#include <tools/k3bglobals.h>
 
 #include <qstring.h>
 #include <qstringlist.h>
@@ -36,11 +37,13 @@
 
 K3bCdrecordWriter::K3bCdrecordWriter( K3bDevice* dev, QObject* parent, const char* name )
   : K3bAbstractWriter( dev, parent, name ),
-    m_dao(false),
     m_rawWrite(false),
-    m_stdin(false)
+    m_stdin(false),
+    m_clone(false),
+    m_useCdrecordProDVD(false)
 {
   m_process = 0;
+  m_writingMode = K3b::TAO;
 }
 
 
@@ -59,6 +62,39 @@ int K3bCdrecordWriter::fd() const
 }
 
 
+void K3bCdrecordWriter::setDao( bool b )
+{
+  m_writingMode = ( b ? K3b::DAO : K3b::TAO );
+}
+
+
+void K3bCdrecordWriter::setClone( bool b )
+{
+  m_clone = b;
+  if( b )
+    m_useCdrecordProDVD = true;
+}
+
+
+void K3bCdrecordWriter::setUseProDVD( bool b )
+{
+  m_useCdrecordProDVD = b;
+  if(b)
+    m_clone = false;
+}
+
+
+void K3bCdrecordWriter::setWritingMode( int mode )
+{
+  if( mode == K3b::DAO ||
+      mode == K3b::TAO ||
+      mode == K3b::RAW )
+    m_writingMode = mode;
+  else 
+    kdError() << "(K3bCdrecordWriter) wrong writing mode: " << mode << endl;
+}
+
+
 void K3bCdrecordWriter::prepareArgumentList()
 {
   if( m_process ) delete m_process;  // kdelibs want this!
@@ -69,9 +105,21 @@ void K3bCdrecordWriter::prepareArgumentList()
   connect( m_process, SIGNAL(processExited(KProcess*)), this, SLOT(slotProcessExited(KProcess*)) );
   connect( m_process, SIGNAL(wroteStdin(KProcess*)), this, SIGNAL(dataWritten()) );
 
-  m_cdrecordBinObject = K3bExternalBinManager::self()->binObject("cdrecord");
+  if( m_useCdrecordProDVD )
+    m_cdrecordBinObject = K3bExternalBinManager::self()->binObject("cdrecord-prodvd");
+  else
+    m_cdrecordBinObject = K3bExternalBinManager::self()->binObject("cdrecord");
+
   if( !m_cdrecordBinObject )
     return;
+
+  kapp->config()->setGroup("General Options");
+
+  if( m_useCdrecordProDVD ) {
+    QString proDvdKey = kapp->config()->readEntry( "cdrecord-prodvd_key" );
+    if( !proDvdKey.isEmpty() )
+      m_process->setEnvironment( "CDR_SECURITY", proDvdKey );
+  }
 
   *m_process << m_cdrecordBinObject->path;
 
@@ -85,11 +133,14 @@ void K3bCdrecordWriter::prepareArgumentList()
   *m_process << QString("dev=%1").arg(burnDevice()->busTargetLun());
   *m_process << QString("speed=%1").arg(burnSpeed());
     
-  if( m_dao ) {
+  if( m_writingMode == K3b::DAO ) {
     if( burnDevice()->dao() )
       *m_process << "-dao";
     else
       emit infoMessage( i18n("Writer does not support disk at once (DAO) recording"), INFO );
+  }
+  else if( m_writingMode == K3b::RAW ) {
+      *m_process << "-raw";
   }
     
   if( simulate() )
@@ -106,12 +157,13 @@ void K3bCdrecordWriter::prepareArgumentList()
     else
       emit infoMessage( i18n("Writer does not support buffer underrun free recording (BURNPROOF)"), INFO );
   }
-    
+  
+  if( m_clone )
+    *m_process << "-clone";
+  
   if( k3bMain()->eject() )
     *m_process << "-eject";
 
-  kapp->config()->setGroup("General Options");
-    
   bool manualBufferSize = k3bMain()->config()->readBoolEntry( "Manual buffer size", false );
   if( manualBufferSize ) {
     *m_process << QString("fs=%1m").arg( k3bMain()->config()->readNumEntry( "Cdrecord buffer", 4 ) );
@@ -141,7 +193,7 @@ K3bCdrecordWriter* K3bCdrecordWriter::addArgument( const QString& arg )
 void K3bCdrecordWriter::start()
 {
   if( !m_cdrecordBinObject ) {
-    emit infoMessage( i18n("Could not find cdrecord executable."), ERROR );
+    emit infoMessage( i18n("Could not find %1 executable.").arg(m_cdrecordBinObject->name()), ERROR );
     emit finished(false);
     return;
   }
@@ -168,7 +220,7 @@ void K3bCdrecordWriter::start()
     // something went wrong when starting the program
     // it "should" be the executable
     kdDebug() << "(K3bCdrecordWriter) could not start cdrecord" << endl;
-    emit infoMessage( i18n("Could not start cdrecord!"), K3bJob::ERROR );
+    emit infoMessage( i18n("Could not start %1.").arg(m_cdrecordBinObject->name()), K3bJob::ERROR );
     emit finished(false);
   }
   else {
@@ -216,7 +268,7 @@ bool K3bCdrecordWriter::write( const char* data, int len )
 
 void K3bCdrecordWriter::slotStdLine( const QString& line )
 {
-  emit debuggingOutput( "cdrecord", line );
+  emit debuggingOutput( m_cdrecordBinObject->name(), line );
 
   if( line.startsWith( "Track" ) )
     {
@@ -365,8 +417,8 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
     emit infoMessage( i18n("Reloading of media required"), K3bJob::PROCESS );
   }
   else if( line.contains( "Drive does not support SAO" ) ) {
-    emit infoMessage( i18n("SAO, DAO recording not supported with this writer"), K3bJob::ERROR );
-    emit infoMessage( i18n("Please turn off DAO (disk at once) and try again"), K3bJob::ERROR );
+    emit infoMessage( i18n("DAO (Disk At Once) recording not supported with this writer"), K3bJob::ERROR );
+    emit infoMessage( i18n("Please choose TAO (Track At Once) and try again"), K3bJob::ERROR );
   }
   else if( line.contains("Data may not fit") ) {
     bool overburn = k3bMain()->config()->readBoolEntry( "Allow overburning", false );
@@ -390,6 +442,9 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   else if( line.contains("Cannot set speed/dummy") ) {
     m_cdrecordError = CANNOT_SET_SPEED;
   }
+  else if( line.contains("Cannot open new session") ) {
+    m_cdrecordError = CANNOT_OPEN_NEW_SESSION;
+  }
   else if( line.contains("Cannot send CUE sheet") ) {
     m_cdrecordError = CANNOT_SEND_CUE_SHEET;
   }
@@ -398,7 +453,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   }
   else {
     // debugging
-    kdDebug() << "(cdrecord) " << line << endl;
+    kdDebug() << "(" << m_cdrecordBinObject->name() << ") " << line << endl;
   }
 }
 
@@ -436,7 +491,7 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	emit infoMessage( i18n("Probably you chose a too large buffer size."), ERROR );
 	break;
       case OPC_FAILED:
-	emit infoMessage( i18n("OPC failed. Probably the writer does not like the disk."), ERROR );
+	emit infoMessage( i18n("OPC failed. Probably the writer does not like the medium."), ERROR );
 	break;
       case CANNOT_SET_SPEED:
 	emit infoMessage( i18n("Unable to set write speed to %1.").arg(burnSpeed()), ERROR );
@@ -444,7 +499,11 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	break;
       case CANNOT_SEND_CUE_SHEET:
 	emit infoMessage( i18n("Unable to send CUE sheet."), ERROR );
-	emit infoMessage( i18n("This may be caused by a wrong data mode."), ERROR );
+	emit infoMessage( i18n("This may be caused by wrong settings."), ERROR );
+	break;
+      case CANNOT_OPEN_NEW_SESSION:
+	emit infoMessage( i18n("Unable to open new session."), ERROR );
+	emit infoMessage( i18n("Probably a problem with the medium."), ERROR );
 	break;
       case UNKNOWN:
 	// no recording device and also other errors!! :-(

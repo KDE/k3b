@@ -49,7 +49,7 @@ class K3bIso9660ImageWritingJob : public K3bBurnJob
   void setSpeed( int s ) { m_speed = s; }
   void setBurnDevice( K3bDevice* dev ) { m_device = dev; }
   void setBurnproof( bool b ) { m_burnproof = b; }
-  void setDao( bool b ) { m_dao = b; }
+  void setWritingMode( int mode ) { m_writingMode = mode; }
   void setSimulate( bool b ) { m_simulate = b; }
   void setNoFix( bool b ) { m_noFix = b; }
   void setDataMode( int m ) { m_dataMode = m; }
@@ -60,7 +60,7 @@ class K3bIso9660ImageWritingJob : public K3bBurnJob
  private:
   bool prepareWriter();
 
-  bool m_dao;
+  int m_writingMode;
   bool m_simulate;
   bool m_burnproof;
   K3bDevice* m_device;

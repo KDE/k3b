@@ -28,6 +28,7 @@
 #include <k3bstdguiitems.h>
 #include <tools/k3bdatamodewidget.h>
 #include <tools/k3bglobals.h>
+#include <tools/k3bwritingmodewidget.h>
 
 #include <qcheckbox.h>
 #include <qframe.h>
@@ -107,19 +108,7 @@ K3bDataBurnDialog::~K3bDataBurnDialog(){
 
 void K3bDataBurnDialog::saveSettings()
 {
-  doc()->setDao( m_checkDao->isChecked() );
-  doc()->setDummy( m_checkSimulate->isChecked() );
-  doc()->setOnTheFly( m_checkOnTheFly->isChecked() );
-  doc()->setBurnproof( m_checkBurnproof->isChecked() );
-  ((K3bDataDoc*)doc())->setOnlyCreateImage( m_checkOnlyCreateImage->isChecked() );
-  ((K3bDataDoc*)doc())->setDeleteImage( m_checkRemoveBufferFiles->isChecked() );
-			
-  // -- saving current speed --------------------------------------
-  doc()->setSpeed( m_writerSelectionWidget->writerSpeed() );
-	
-  // -- saving current device --------------------------------------
-  doc()->setBurner( m_writerSelectionWidget->writerDevice() );
-
+  K3bProjectBurnDialog::saveSettings();
 
   // save iso image settings
   m_imageSettingsWidget->save( ((K3bDataDoc*)doc())->isoOptions() );
@@ -146,13 +135,8 @@ void K3bDataBurnDialog::saveSettings()
 
 void K3bDataBurnDialog::readSettings()
 {
-  m_checkDao->setChecked( doc()->dao() );
-  m_checkSimulate->setChecked( doc()->dummy() );
-  m_checkOnTheFly->setChecked( doc()->onTheFly() );
-  m_checkBurnproof->setChecked( doc()->burnproof() );
-  m_checkOnlyCreateImage->setChecked( ((K3bDataDoc*)doc())->onlyCreateImage() );
-  m_checkRemoveBufferFiles->setChecked( ((K3bDataDoc*)doc())->deleteImage() );
-	
+  K3bProjectBurnDialog::readSettings();
+
   // read multisession 
   switch( ((K3bDataDoc*)doc())->multiSessionMode() ) {
   case K3bDataDoc::START:
@@ -248,7 +232,7 @@ void K3bDataBurnDialog::slotStartClicked()
     }
   }
 
-  if( m_checkDao->isChecked() &&
+  if( m_writingModeWidget->writingMode() == K3b::DAO &&
       !m_radioMultiSessionNone->isChecked() &&
       m_writerSelectionWidget->writingApp() == K3b::CDRECORD )
     if( KMessageBox::warningContinueCancel( this,
@@ -264,13 +248,8 @@ void K3bDataBurnDialog::slotStartClicked()
 
 void K3bDataBurnDialog::slotLoadK3bDefaults()
 {
-  m_checkSimulate->setChecked( false );
-  m_checkDao->setChecked( true );
-  m_checkOnTheFly->setChecked( true );
-  m_checkBurnproof->setChecked( true );
+  K3bProjectBurnDialog::slotLoadK3bDefaults();
 
-  m_checkRemoveBufferFiles->setChecked( true );
-  m_checkOnlyCreateImage->setChecked( false );
   m_dataModeWidget->setDataMode( K3b::AUTO );
 
   m_imageSettingsWidget->load( K3bIsoOptions::defaults() );
@@ -283,23 +262,11 @@ void K3bDataBurnDialog::slotLoadK3bDefaults()
 
 void K3bDataBurnDialog::slotLoadUserDefaults()
 {
+  K3bProjectBurnDialog::slotLoadUserDefaults();
+
   KConfig* c = kapp->config();
-  c->setGroup( "default data settings" );
 
-  m_checkSimulate->setChecked( c->readBoolEntry( "dummy_mode", false ) );
-  m_checkDao->setChecked( c->readBoolEntry( "dao", true ) );
-  m_checkOnTheFly->setChecked( c->readBoolEntry( "on_the_fly", true ) );
-  m_checkBurnproof->setChecked( c->readBoolEntry( "burnproof", true ) );
-  m_checkRemoveBufferFiles->setChecked( c->readBoolEntry( "remove_image", true ) );
-  m_checkOnlyCreateImage->setChecked( c->readBoolEntry( "only_create_image", false ) );
-
-  QString datamode = c->readEntry( "data_track_mode" );
-  if( datamode == "mode1" )
-    m_dataModeWidget->setDataMode( K3b::MODE1 );
-  else if( datamode == "mode2" )
-    m_dataModeWidget->setDataMode( K3b::MODE2 );
-  else
-    m_dataModeWidget->setDataMode( K3b::AUTO );
+  m_dataModeWidget->loadConfig(c);
 
   K3bIsoOptions o = K3bIsoOptions::load( c );
   m_imageSettingsWidget->load( o );
@@ -312,26 +279,11 @@ void K3bDataBurnDialog::slotLoadUserDefaults()
 
 void K3bDataBurnDialog::slotSaveUserDefaults()
 {
+  K3bProjectBurnDialog::slotSaveUserDefaults();
+
   KConfig* c = kapp->config();
 
-  c->setGroup( "default data settings" );
-
-  c->writeEntry( "dummy_mode", m_checkSimulate->isChecked() );
-  c->writeEntry( "dao", m_checkDao->isChecked() );
-  c->writeEntry( "on_the_fly", m_checkOnTheFly->isChecked() );
-  c->writeEntry( "burnproof", m_checkBurnproof->isChecked() );
-  c->writeEntry( "remove_image", m_checkRemoveBufferFiles->isChecked() );
-  c->writeEntry( "only_create_image", m_checkOnlyCreateImage->isChecked() );
-
-  QString datamode;
-  if( m_dataModeWidget->dataMode() == K3b::MODE1 )
-    datamode = "mode1";
-  else if( m_dataModeWidget->dataMode() == K3b::MODE2 )
-    datamode = "mode2";
-  else
-    datamode = "auto";
-  c->writeEntry( "data_track_mode", datamode );
-
+  m_dataModeWidget->saveConfig(c);
 
   K3bIsoOptions o;
   m_imageSettingsWidget->save( o );

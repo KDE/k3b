@@ -22,8 +22,11 @@
 #include "k3btempdirselectionwidget.h"
 #include "k3bwriterselectionwidget.h"
 #include "k3bstdguiitems.h"
-#include "device/k3bdevice.h"
+#include <device/k3bdevice.h>
+#include <device/k3bdevicemanager.h>
 #include "tools/k3bglobals.h"
+#include <tools/k3bwritingmodewidget.h>
+#include <k3bcore.h>
 
 #include <qstring.h>
 #include <qpushbutton.h>
@@ -94,27 +97,13 @@ void K3bProjectBurnDialog::toggleAllOptions()
       m_checkBurnproof->setChecked( false );
       m_checkBurnproof->setEnabled( false );
     }
- 
-    if( dev->dao() ) {
-      if( m_writerSelectionWidget->writingApp() == K3b::CDRDAO ) {
-	// cdrdao only writes in DAO mode
-	m_checkDao->setChecked(true);
-	m_checkDao->setEnabled(false);
-      }
-      else {
-	m_checkDao->setEnabled(!m_checkOnlyCreateImage->isChecked());
-      }
-    }
-    else {
-      m_checkDao->setChecked( false );
-      m_checkDao->setEnabled( false );
-    }
 
     m_buttonStart->setDisabled(false);
   }
   else
     m_buttonStart->setDisabled(true);
 
+  m_writingModeWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
   m_checkSimulate->setDisabled( m_checkOnlyCreateImage->isChecked() );
   m_checkOnTheFly->setDisabled( m_checkOnlyCreateImage->isChecked() );
   m_checkRemoveBufferFiles->setDisabled( m_checkOnlyCreateImage->isChecked() || m_checkOnTheFly->isChecked() );
@@ -124,6 +113,11 @@ void K3bProjectBurnDialog::toggleAllOptions()
   }
   m_tempDirSelectionWidget->setDisabled( m_checkOnTheFly->isChecked() && !m_checkOnlyCreateImage->isChecked() );
   m_writerSelectionWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
+
+  if( m_writerSelectionWidget->writingApp() == K3b::CDRDAO )
+    m_writingModeWidget->setSupportedModes( K3b::DAO );
+  else
+    m_writingModeWidget->setSupportedModes( 0xFF );  // default is cdrecord and cdrecord supports all modes
 }
 
 
@@ -206,6 +200,10 @@ void K3bProjectBurnDialog::prepareGui()
   m_writerSelectionWidget = new K3bWriterSelectionWidget( w );
   m_tempDirSelectionWidget = new K3bTempDirSelectionWidget( w );
 
+  QGroupBox* groupWritingMode = new QGroupBox( 1, Qt::Vertical, i18n("Writing Mode:"), w );
+  groupWritingMode->setInsideMargin( marginHint() );
+  m_writingModeWidget = new K3bWritingModeWidget( groupWritingMode );
+
   m_optionGroup = new QGroupBox( 0, Qt::Vertical, i18n("Options"), w );
   m_optionGroup->layout()->setMargin(0);
   m_optionGroup->layout()->setSpacing(0);
@@ -214,7 +212,6 @@ void K3bProjectBurnDialog::prepareGui()
   m_optionGroupLayout->setSpacing( KDialog::spacingHint() );
 
   // add the options
-  m_checkDao = K3bStdGuiItems::daoCheckbox( m_optionGroup );
   m_checkOnTheFly = K3bStdGuiItems::onTheFlyCheckbox( m_optionGroup );
   m_checkBurnproof = K3bStdGuiItems::burnproofCheckbox( m_optionGroup );
   m_checkSimulate = K3bStdGuiItems::simulateCheckbox( m_optionGroup );
@@ -223,7 +220,6 @@ void K3bProjectBurnDialog::prepareGui()
 
   m_optionGroupLayout->addWidget(m_checkSimulate);
   m_optionGroupLayout->addWidget(m_checkOnTheFly);
-  m_optionGroupLayout->addWidget(m_checkDao);
   m_optionGroupLayout->addWidget(m_checkBurnproof);
   m_optionGroupLayout->addWidget(m_checkOnlyCreateImage);
   m_optionGroupLayout->addWidget(m_checkRemoveBufferFiles);
@@ -232,10 +228,12 @@ void K3bProjectBurnDialog::prepareGui()
   QGridLayout* grid = new QGridLayout( w );
   grid->setMargin( KDialog::marginHint() );
   grid->setSpacing( KDialog::spacingHint() );
+
   grid->addMultiCellWidget( m_writerSelectionWidget, 0, 0, 0, 1 );
-  grid->addWidget( m_optionGroup, 1, 0 );
-  grid->addWidget( m_tempDirSelectionWidget, 1, 1 );
-  grid->setRowStretch( 1, 1 );
+  grid->addWidget( groupWritingMode, 1, 0 );
+  grid->addWidget( m_optionGroup, 2, 0 );
+  grid->addMultiCellWidget( m_tempDirSelectionWidget, 1, 2, 1, 1 );
+  grid->setRowStretch( 2, 1 );
   grid->setColStretch( 1, 1 );
 
   // some default connections that should always be useful
@@ -254,31 +252,74 @@ void K3bProjectBurnDialog::addPage( QWidget* page, const QString& title )
 }
 
 
-
-// void K3bProjectBurnDialog::loadDefaults()
-// {
-//   K3bDocSettings s = m_doc->settings();
-//   s.defaults();
-//   loadSettings( s );
-// }
-
-
-// void K3bProjectBurnDialog::loadUserDefaults()
-// {
-//   KConfig* c = k3bMain()->config();
-//   c->setGroup( "default " + m_doc->documentType() + " settings" );
-//   K3bDocSettings s = m_doc->settings();
-//   s.loadUserDefaults( c );
-//   loadSettings( s );
-// }
+void K3bProjectBurnDialog::saveSettings()
+{
+  m_doc->setDummy( m_checkSimulate->isChecked() );
+  m_doc->setOnTheFly( m_checkOnTheFly->isChecked() );
+  m_doc->setBurnproof( m_checkBurnproof->isChecked() );
+  m_doc->setOnlyCreateImages( m_checkOnlyCreateImage->isChecked() );
+  m_doc->setRemoveImages( m_checkRemoveBufferFiles->isChecked() );
+  m_doc->setSpeed( m_writerSelectionWidget->writerSpeed() );
+  m_doc->setBurner( m_writerSelectionWidget->writerDevice() );
+  m_doc->setWritingMode( m_writingModeWidget->writingMode() );
+}
 
 
-// void K3bProjectBurnDialog::saveUserDefaults()
-// {
-//   KConfig* c = k3bMain()->config();
-//   c->setGroup( "default " + m_doc->documentType() + " settings" );
-//   settings().saveUserDefaults( c );
-// }
+void K3bProjectBurnDialog::readSettings()
+{
+  m_checkSimulate->setChecked( doc()->dummy() );
+  m_checkOnTheFly->setChecked( doc()->onTheFly() );
+  m_checkBurnproof->setChecked( doc()->burnproof() );
+  m_checkOnlyCreateImage->setChecked( m_doc->onlyCreateImages() );
+  m_checkRemoveBufferFiles->setChecked( m_doc->removeImages() );
+  m_writingModeWidget->setWritingMode( doc()->writingMode() );
+  m_writerSelectionWidget->setWriterDevice( doc()->burner() );
+  m_writerSelectionWidget->setSpeed( doc()->speed() );
+}
 
+
+void K3bProjectBurnDialog::slotSaveUserDefaults()
+{
+  KConfig* c = kapp->config();
+  c->setGroup( "default " + doc()->documentType() + " settings" );
+
+  m_writingModeWidget->saveConfig( c );
+  c->writeEntry( "simulate", m_checkSimulate->isChecked() );
+  c->writeEntry( "on_the_fly", m_checkOnTheFly->isChecked() );
+  c->writeEntry( "burnproof", m_checkBurnproof->isChecked() );
+  c->writeEntry( "remove_image", m_checkRemoveBufferFiles->isChecked() );
+  c->writeEntry( "only_create_image", m_checkOnlyCreateImage->isChecked() );
+
+  c->writeEntry( "writing_speed", m_writerSelectionWidget->writerSpeed() );
+  c->writeEntry( "writer_device", m_writerSelectionWidget->writerDevice()->devicename() );
+}
+
+
+void K3bProjectBurnDialog::slotLoadUserDefaults()
+{
+  KConfig* c = kapp->config();
+  c->setGroup( "default " + doc()->documentType() + " settings" );
+
+  m_writingModeWidget->loadConfig( c );
+  m_checkSimulate->setChecked( c->readBoolEntry( "simulate", false ) );
+  m_checkOnTheFly->setChecked( c->readBoolEntry( "on_the_fly", true ) );
+  m_checkBurnproof->setChecked( c->readBoolEntry( "burnproof", true ) );
+  m_checkRemoveBufferFiles->setChecked( c->readBoolEntry( "remove_image", true ) );
+  m_checkOnlyCreateImage->setChecked( c->readBoolEntry( "only_create_image", false ) );
+
+  m_writerSelectionWidget->setSpeed( c->readNumEntry( "writing_speed", 1 ) );
+  m_writerSelectionWidget->setWriterDevice( k3bcore->deviceManager()->findDevice( c->readEntry( "writer_device" ) ) );
+}
+
+
+void K3bProjectBurnDialog::slotLoadK3bDefaults()
+{
+  m_writingModeWidget->setWritingMode( K3b::WRITING_MODE_AUTO );
+  m_checkSimulate->setChecked( false );
+  m_checkOnTheFly->setChecked( true );
+  m_checkBurnproof->setChecked( true );
+  m_checkRemoveBufferFiles->setChecked( true );
+  m_checkOnlyCreateImage->setChecked( false );
+}
 
 #include "k3bprojectburndialog.moc"

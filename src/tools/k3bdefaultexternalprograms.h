@@ -31,7 +31,19 @@ namespace K3b
 class K3bCdrecordProgram : public K3bExternalProgram
 {
  public:
-  K3bCdrecordProgram();
+  K3bCdrecordProgram( bool dvdPro );
+
+  bool scan( const QString& );
+
+ private:
+  bool m_dvdPro;
+};
+
+
+class K3bDvdrecordProgram : public K3bExternalProgram
+{
+ public:
+  K3bDvdrecordProgram();
 
   bool scan( const QString& );
 };
@@ -41,6 +53,15 @@ class K3bMkisofsProgram : public K3bExternalProgram
 {
  public:
   K3bMkisofsProgram();
+
+  bool scan( const QString& );
+};
+
+
+class K3bReadcdProgram : public K3bExternalProgram
+{
+ public:
+  K3bReadcdProgram();
 
   bool scan( const QString& );
 };
@@ -62,6 +83,9 @@ class K3bTranscodeProgram : public K3bExternalProgram
 
   bool scan( const QString& );
 
+  // no user parameters (yet)
+  bool supportsUserParameters() const { return false; }
+
  private:
   QString m_transcodeProgram;
 };
@@ -73,6 +97,8 @@ class K3bEMovixProgram : public K3bExternalProgram
   K3bEMovixProgram();
 
   bool scan( const QString& );
+
+  bool supportsUserParameters() const { return false; }
 };
 
 

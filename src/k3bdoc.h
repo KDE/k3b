@@ -112,11 +112,14 @@ class K3bDoc : public QObject
   virtual K3bView* newView( QWidget* parent ) = 0;
 
   virtual const QString& projectName() const { return m_projectName; }
-  bool dao() const { return m_dao; }
+  int writingMode() const { return m_writingMode; }
   bool dummy() const { return m_dummy; }
   bool onTheFly() const { return m_onTheFly; }
   bool burnproof() const { return m_burnproof; }
   bool overburn() const { return m_overburn; }
+  bool removeImages() const { return m_removeImages; }
+  bool onlyCreateImages() const { return m_onlyCreateImages; }
+
   int speed() const { return m_speed; }
   K3bDevice* burner() const { return m_burner; }
   virtual KIO::filesize_t size() const = 0;
@@ -143,13 +146,15 @@ class K3bDoc : public QObject
  public slots:
   void updateAllViews();
   void setDummy( bool d );
-  void setDao( bool d );
+  void setWritingMode( int m ) { m_writingMode = m; }
   void setOnTheFly( bool b ) { m_onTheFly = b; }
   void setOverburn( bool b ) { m_overburn = b; }
   void setSpeed( int speed );
   void setBurner( K3bDevice* dev );
   void setBurnproof( bool b ) { m_burnproof = b; }
   void setTempDir( const QString& dir ) { m_tempDir = dir; }
+  void setRemoveImages( bool b ) { m_removeImages = b; }
+  void setOnlyCreateImages( bool b ) { m_onlyCreateImages = b; }
 
   virtual void addUrl( const KURL& url ) = 0;
   virtual void addUrls( const KURL::List& urls ) = 0;
@@ -181,8 +186,20 @@ class K3bDoc : public QObject
 
   /**
    * load the default project settings from the app configuration
+   * the default implementation opens the correct group and loads
+   * the following settings:
+   * <ul>
+   *   <li>Writing mode</li>
+   *   <li>Simulate</li>
+   *   <li>on the fly</li>
+   *   <li>burnfree</li>
+   *   <li>remove images</li>
+   *   <li>only create images</li>
+   *   <li>writer</li>
+   *   <li>writing speed</li>
+   * </ul>
    */
-  virtual void loadDefaultSettings() = 0;
+  virtual void loadDefaultSettings();
 
   int m_docType;
 
@@ -195,15 +212,18 @@ class K3bDoc : public QObject
   QString m_projectName;
   QString m_tempDir;
   K3bDevice* m_burner;
-  bool m_dao;
   bool m_dummy;
   bool m_onTheFly;
   bool m_burnproof;
   bool m_overburn;
+  bool m_removeImages;
+  bool m_onlyCreateImages;
   int  m_speed;
 
   /** see k3bglobals.h */
   int m_writingApp;
+
+  int m_writingMode;
 
   bool m_saved;
 };

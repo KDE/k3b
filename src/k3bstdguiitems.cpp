@@ -255,3 +255,18 @@ QFrame* K3bStdGuiItems::purpleFrame( QWidget* parent, const char* name )
 
   return frame;
 }
+
+
+QFrame* K3bStdGuiItems::horizontalLine( QWidget* parent, const char* name )
+{
+  QFrame* line = new QFrame( parent, name );
+  line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+  return line;
+}
+
+QFrame* K3bStdGuiItems::verticalLine( QWidget* parent, const char* name )
+{
+  QFrame* line = new QFrame( parent, name );
+  line->setFrameStyle( QFrame::VLine | QFrame::Sunken );
+  return line;
+}

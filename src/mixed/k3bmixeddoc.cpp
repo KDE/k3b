@@ -136,7 +136,7 @@ bool K3bMixedDoc::loadDocumentData( QDomElement* rootElem )
       return false;
 
     if( e.nodeName() == "remove_buffer_files" )
-      setRemoveBufferFiles( e.toElement().text() == "yes" );
+      setRemoveImages( e.toElement().text() == "yes" );
     else if( e.nodeName() == "image_path" )
       setImagePath( e.toElement().text() );
     else if( e.nodeName() == "mixed_type" ) {
@@ -171,7 +171,7 @@ bool K3bMixedDoc::saveDocumentData( QDomElement* docElem )
   docElem->appendChild( mixedElem );
 
   QDomElement bufferFilesElem = doc.createElement( "remove_buffer_files" );
-  bufferFilesElem.appendChild( doc.createTextNode( removeBufferFiles() ? "yes" : "no" ) );
+  bufferFilesElem.appendChild( doc.createTextNode( removeImages() ? "yes" : "no" ) );
   mixedElem.appendChild( bufferFilesElem );
 
   QDomElement imagePathElem = doc.createElement( "image_path" );
@@ -200,14 +200,9 @@ bool K3bMixedDoc::saveDocumentData( QDomElement* docElem )
   
 void K3bMixedDoc::loadDefaultSettings()
 {
-  KConfig* c = kapp->config();
-  c->setGroup( "default mixed settings" );
+  K3bDoc::loadDefaultSettings();
 
-  setDummy( c->readBoolEntry( "dummy_mode", false ) );
-  setDao( c->readBoolEntry( "dao", true ) );
-  setOnTheFly( c->readBoolEntry( "on_the_fly", true ) );
-  setBurnproof( c->readBoolEntry( "burnproof", true ) );
-  setRemoveBufferFiles( c->readBoolEntry( "remove_buffer_files", true ) );
+  KConfig* c = kapp->config();
 
   m_audioDoc->writeCdText( c->readBoolEntry( "cd_text", false ) );
   m_audioDoc->setNormalize( c->readBoolEntry( "normalize", false ) );

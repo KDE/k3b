@@ -58,8 +58,6 @@ class K3bAudioDoc : public K3bDoc
 
   bool padding() const;
   bool hideFirstTrack() const { return m_hideFirstTrack; }
-  bool removeBufferFiles() const { return m_removeBufferFiles; }
-  bool onlyCreateImages() const { return m_onlyCreateImages; }
   int numberOfTracks() const { return m_tracks->count(); }
 
   bool normalize() const { return m_normalize; }
@@ -114,10 +112,6 @@ class K3bAudioDoc : public K3bDoc
   //	void cancel();
 
   void setHideFirstTrack( bool b ) { m_hideFirstTrack = b; }
-
-  void setRemoveBufferFiles( bool b ) { m_removeBufferFiles = b; }
-
-  void setOnlyCreateImages( bool b ) { m_onlyCreateImages = b; }
 
   void setNormalize( bool b ) { m_normalize = b; }
 
@@ -185,8 +179,6 @@ class K3bAudioDoc : public K3bDoc
   bool testFiles;
   bool m_padding;
   bool m_hideFirstTrack;
-  bool m_removeBufferFiles;
-  bool m_onlyCreateImages;
 
   bool m_normalize;
  	

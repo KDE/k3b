@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -405,7 +405,7 @@ void K3bListView::placeEditor( K3bListViewItem* item, int col )
 }
 
 
-void K3bListView::prepareButton( K3bListViewItem* item, int )
+void K3bListView::prepareButton( K3bListViewItem*, int )
 {
   if( !m_editorButton ) {
     m_editorButton = new QPushButton( viewport() );
@@ -572,6 +572,7 @@ void K3bListView::slotEditorLineEditReturnPressed()
   if( renameItem( m_currentEditItem, m_currentEditColumn, m_editorLineEdit->text() ) ) {
     m_currentEditItem->setText( m_currentEditColumn, m_editorLineEdit->text() );
     hideEditor();
+    emit itemRenamed( m_currentEditItem, m_editorLineEdit->text(), m_currentEditColumn );
   }
   else
     m_editorLineEdit->setText( m_currentEditItem->text( m_currentEditColumn ) );
@@ -580,8 +581,10 @@ void K3bListView::slotEditorLineEditReturnPressed()
 
 void K3bListView::slotEditorComboBoxActivated( const QString& str )
 {
-  if( renameItem( m_currentEditItem, m_currentEditColumn, str ) )
+  if( renameItem( m_currentEditItem, m_currentEditColumn, str ) ) {
     m_currentEditItem->setText( m_currentEditColumn, str );
+    emit itemRenamed( m_currentEditItem, str, m_currentEditColumn );
+  }
   else {
     for( int i = 0; i < m_editorComboBox->count(); ++i ) {
       if( m_editorComboBox->text(i) == m_currentEditItem->text(m_currentEditColumn) ) {
@@ -595,8 +598,10 @@ void K3bListView::slotEditorComboBoxActivated( const QString& str )
 
 void K3bListView::slotEditorSpinBoxValueChanged( int value )
 {
-  if( renameItem( m_currentEditItem, m_currentEditColumn, QString::number(value) ) )
+  if( renameItem( m_currentEditItem, m_currentEditColumn, QString::number(value) ) ) {
     m_currentEditItem->setText( m_currentEditColumn, QString::number(value) );
+    emit itemRenamed( m_currentEditItem, QString::number(value), m_currentEditColumn );
+  }
   else
     m_editorSpinBox->setValue( m_currentEditItem->text( m_currentEditColumn ).toInt() );
 }
@@ -604,8 +609,10 @@ void K3bListView::slotEditorSpinBoxValueChanged( int value )
 
 void K3bListView::slotEditorMsfEditValueChanged( int value )
 {
-  if( renameItem( m_currentEditItem, m_currentEditColumn, QString::number(value) ) )
+  if( renameItem( m_currentEditItem, m_currentEditColumn, QString::number(value) ) ) {
     m_currentEditItem->setText( m_currentEditColumn, QString::number(value) );
+    emit itemRenamed( m_currentEditItem, QString::number(value), m_currentEditColumn );
+  }
   else
     m_editorMsfEdit->setText( m_currentEditItem->text( m_currentEditColumn ) );
 }

@@ -89,6 +89,12 @@ class K3bExternalProgram
    */
   virtual bool scan( const QString& ) {return false;}//= 0;
 
+  /**
+   * reimplement this if it does not make sense to have the user be able
+   * to specify additional parameters
+   */
+  virtual bool supportsUserParameters() const { return true; }
+
   class OutputCollector;
 
  private:

@@ -407,7 +407,7 @@ K3bView* K3bVcdDoc::newView( QWidget* parent )
 
 QString K3bVcdDoc::documentType() const
 {
-    return "k3b_vcd_project";
+    return "vcd";
 }
 
 void K3bVcdDoc::addView( K3bView* view )
@@ -567,18 +567,12 @@ void K3bVcdDoc::setPbcTracks()
 
 void K3bVcdDoc::loadDefaultSettings()
 {
-    KConfig* c = k3bMain() ->config();
+  K3bDoc::loadDefaultSettings();
 
-    c->setGroup( "Videocd settings" );
+  // the group is set in K3bDoc
+  KConfig* c = k3bMain() ->config();
 
-    setDummy( c->readBoolEntry( "dummy_mode", false ) );
-    // setDao( c->readBoolEntry( "dao", true ) );
-    setDao( true );
-    setOnTheFly( c->readBoolEntry( "on_the_fly", false ) );
-    setBurnproof( c->readBoolEntry( "burnproof", true ) );
-    setOnlyCreateImage( c->readBoolEntry( "only_create_image", false ) );
-    setDeleteImage( c->readBoolEntry( "remove_image", true ) );
-
+  // TODO: load additional video settings  
 }
 
 

@@ -42,6 +42,7 @@
 #include <k3btempdirselectionwidget.h>
 #include <k3bstdguiitems.h>
 #include <tools/k3bglobals.h>
+#include <tools/k3bwritingmodewidget.h>
 
 K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char *name, bool modal )
         : K3bProjectBurnDialog( _doc, parent, name, modal )
@@ -69,7 +70,6 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
 
     m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRDAO );
 
-    m_checkDao->hide();
     m_checkOnTheFly->hide();
 
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
@@ -529,7 +529,7 @@ void K3bVcdBurnDialog::slotLoadK3bDefaults()
 {
     K3bVcdOptions o = K3bVcdOptions::defaults();
 
-    m_checkDao->setChecked( true );
+    m_writingModeWidget->setWritingMode( K3b::WRITING_MODE_AUTO );
     m_checkSimulate->setChecked( false );
     m_checkBurnproof->setChecked( true );
     m_checkRemoveBufferFiles->setChecked( true );
@@ -584,7 +584,6 @@ void K3bVcdBurnDialog::saveSettings()
     slotSetImagePath();
 
     doc() ->setTempDir( m_tempDirSelectionWidget->tempPath() );
-    doc() ->setDao( true );
     doc() ->setDummy( m_checkSimulate->isChecked() );
     doc() ->setOnTheFly( false );
     doc() ->setBurnproof( m_checkBurnproof->isChecked() );
@@ -595,7 +594,7 @@ void K3bVcdBurnDialog::saveSettings()
     // -- saving current device --------------------------------------
     doc() ->setBurner( m_writerSelectionWidget->writerDevice() );
 
-    vcdDoc() ->setDeleteImage( m_checkRemoveBufferFiles->isChecked() );
+    vcdDoc() ->setRemoveImages( m_checkRemoveBufferFiles->isChecked() );
     // save image file & path (.bin)
     vcdDoc() ->setVcdImage( m_tempDirSelectionWidget->tempPath() + m_editVolumeId->text() + ".bin" );
 
@@ -610,7 +609,7 @@ void K3bVcdBurnDialog::saveSettings()
     vcdDoc() ->vcdOptions() ->setSector2336( m_check2336->isChecked() );
 
     vcdDoc() ->vcdOptions() ->setCdiSupport( m_checkCdiSupport->isChecked() );
-    vcdDoc() ->setOnlyCreateImage( m_checkOnlyCreateImage->isChecked() );
+    vcdDoc() ->setOnlyCreateImages( m_checkOnlyCreateImage->isChecked() );
 
     vcdDoc() ->vcdOptions() ->setVolumeNumber( m_spinVolumeNumber->value() );
     vcdDoc() ->vcdOptions() ->setVolumeCount( m_spinVolumeCount->value() );
@@ -636,11 +635,10 @@ void K3bVcdBurnDialog::saveSettings()
 
 void K3bVcdBurnDialog::readSettings()
 {
-    m_checkDao->setChecked( true );
     m_checkSimulate->setChecked( doc() ->dummy() );
-    m_checkRemoveBufferFiles->setChecked( vcdDoc() ->deleteImage() );
+    m_checkRemoveBufferFiles->setChecked( vcdDoc() ->removeImages() );
     m_checkBurnproof->setChecked( doc() ->burnproof() );
-    m_checkOnlyCreateImage->setChecked( vcdDoc() ->onlyCreateImage() );
+    m_checkOnlyCreateImage->setChecked( vcdDoc() ->onlyCreateImages() );
 
     m_checkNonCompliant->setEnabled( false );
 
@@ -720,9 +718,10 @@ void K3bVcdBurnDialog::readSettings()
 
 void K3bVcdBurnDialog::slotLoadUserDefaults()
 {
-    KConfig * c = k3bMain() ->config();
+  K3bProjectBurnDialog::slotLoadUserDefaults();
 
-    c->setGroup( "Videocd settings" );
+  // the group is set in K3bProjectBurnDialog
+    KConfig * c = k3bMain() ->config();
 
     K3bVcdOptions o = K3bVcdOptions::load( c );
 
@@ -764,26 +763,17 @@ void K3bVcdBurnDialog::slotLoadUserDefaults()
     m_spinFrontMarginTrackSVCD->setValue( o.FrontMarginTrackSVCD() );
     m_spinRearMarginTrackSVCD->setValue( o.RearMarginTrackSVCD() );
 
-    m_checkSimulate->setChecked( c->readBoolEntry( "dummy_mode", false ) );
-    m_checkBurnproof->setChecked( c->readBoolEntry( "burnproof", true ) );
-    m_checkRemoveBufferFiles->setChecked( c->readBoolEntry( "remove_image", true ) );
-    m_checkOnlyCreateImage->setChecked( c->readBoolEntry( "only_create_image", false ) );
-
     loadCdiConfig();
 }
 
 
 void K3bVcdBurnDialog::slotSaveUserDefaults()
 {
-    KConfig * c = k3bMain() ->config();
-    K3bVcdOptions o;
+  K3bProjectBurnDialog::slotSaveUserDefaults();
 
-    c->setGroup( "Videocd settings" );
-
-    c->writeEntry( "dummy_mode", m_checkSimulate->isChecked() );
-    c->writeEntry( "burnproof", m_checkBurnproof->isChecked() );
-    c->writeEntry( "remove_image", m_checkRemoveBufferFiles->isChecked() );
-    c->writeEntry( "only_create_image", m_checkOnlyCreateImage->isChecked() );
+  // the group is set in K3bProjectBurnDialog
+  KConfig * c = k3bMain() ->config();
+  K3bVcdOptions o;
 
     o.setVolumeId( m_editVolumeId->text() );
     o.setPublisher( m_editPublisher->text() );
@@ -1017,4 +1007,14 @@ void K3bVcdBurnDialog::slotAutoDetect( bool b )
     m_groupVcdFormat->setDisabled( b );
 
 }
+
+void K3bVcdBurnDialog::toggleAllOptions()
+{
+  K3bProjectBurnDialog::toggleAllOptions();
+
+  m_writingModeWidget->setSupportedModes( K3b::DAO );
+  m_checkRemoveBufferFiles->setDisabled( m_checkOnlyCreateImage->isChecked() );
+}
+
+
 #include "k3bvcdburndialog.moc"

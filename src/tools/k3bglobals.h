@@ -19,17 +19,44 @@
 
 #include <qstring.h>
 
+class KConfig;
+
 
 namespace K3b
 {
-  enum WritingApp { DEFAULT = 1, CDRECORD = 2, CDRDAO = 4 };
+  enum WritingApp { 
+    DEFAULT = 1, 
+    CDRECORD = 2, 
+    CDRDAO = 4,
+    CDRECORD_PRODVD = 8,
+    DVDRECORD = 16
+  };
 
   /**
    * AUTO - let K3b determine the best mode
    * MODE1 - refers to the default Yellow book mode1
    * MODE2 - refers to CDROM XA mode2 form1
    */
-  enum DataMode { AUTO, MODE1, MODE2 };
+  enum DataMode { 
+    AUTO, 
+    MODE1, 
+    MODE2
+  };
+
+  /**
+   * AUTO  - let K3b determine the best mode
+   * TAO   - Track at once
+   * DAO   - Disk at once (or session at once)
+   * RAW   - Raw mode
+   *
+   * may be or'ed together.
+   */
+  enum WritingMode { 
+    WRITING_MODE_AUTO = 1, 
+    TAO = 2, 
+    DAO = 4, 
+    RAW = 8
+  };
 
   QString framesToString( int h, bool showFrames = true );
   QString sizeToTime( long size );

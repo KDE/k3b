@@ -33,7 +33,7 @@
 
 K3bIso9660ImageWritingJob::K3bIso9660ImageWritingJob()
   : K3bBurnJob(),
-    m_dao(true),
+    m_writingMode(K3b::WRITING_MODE_AUTO),
     m_simulate(false),
     m_burnproof(false),
     m_device(0),
@@ -101,19 +101,30 @@ bool K3bIso9660ImageWritingJob::prepareWriter()
   if( m_writer )
     delete m_writer;
 
-  int usedApp = writingApp();
-  if( usedApp == K3b::DEFAULT ) {
-    if( m_dataMode == K3b::MODE2 && m_dao )
-      usedApp = K3b::CDRDAO;
-    if(	m_noFix && m_dao )
-      usedApp = K3b::CDRDAO;
+  int usedWriteMode = m_writingMode;
+  if( usedWriteMode == K3b::WRITING_MODE_AUTO ) {
+    // cdrecord seems to have problems when writing in mode2 in dao mode
+    // so with cdrecord we use TAO
+    if( m_noFix || m_dataMode == K3b::MODE2 )
+      usedWriteMode = K3b::TAO;
+    else
+      usedWriteMode = K3b::DAO;
   }
 
-  // cdrecord seems to have problems with mode2 in DAO
+  int usedApp = writingApp();
+  if( usedApp == K3b::DEFAULT ) {
+    if( usedWriteMode == K3b::DAO && 
+	( m_dataMode == K3b::MODE2 || m_noFix ) )
+      usedApp = K3b::CDRDAO;
+    else
+      usedApp == K3b::CDRECORD;
+  }
+
+
   if( usedApp == K3b::CDRECORD ) {
     K3bCdrecordWriter* writer = new K3bCdrecordWriter( m_device, this );
 
-    writer->setDao( m_dao );
+    writer->setDao( false );
     writer->setSimulate( m_simulate );
     writer->setBurnproof( m_burnproof );
     writer->setBurnSpeed( m_speed );
@@ -122,6 +133,11 @@ bool K3bIso9660ImageWritingJob::prepareWriter()
     if( m_noFix ) {
       writer->addArgument("-multi");
     }
+
+    if( usedWriteMode == K3b::DAO )
+      writer->addArgument( "-dao" );
+    else if( usedWriteMode == K3b::RAW )
+      writer->addArgument( "-raw" );
 
     if( (m_dataMode == K3b::AUTO && m_noFix) ||
 	m_dataMode == K3b::MODE2 )

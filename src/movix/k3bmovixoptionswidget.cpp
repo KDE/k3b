@@ -65,7 +65,7 @@ void K3bMovixOptionsWidget::readSettings( K3bMovixDoc* doc )
 void K3bMovixOptionsWidget::saveSettings( K3bMovixDoc* doc )
 {
   doc->setShutdown( m_checkShutdown->isChecked() );
-  doc->setSeboot( m_checkReboot->isChecked() );
+  doc->setReboot( m_checkReboot->isChecked() );
   doc->setEjectDisk( m_checkEject->isChecked() );
   doc->setSubtitleFontset( m_comboSubtitleFontset->currentText() );
   doc->setBootMessageLanguage( m_comboBootMessageLanguage->currentText() );

@@ -30,6 +30,7 @@ K3bIsoOptions::K3bIsoOptions()
 
   m_createRockRidge = true;
   m_createJoliet = false;
+  m_createUdf = false;
   m_ISOallowLowercase = false;
   m_ISOallowPeriodAtBegin = false;
   m_ISOallow31charFilenames = true;
@@ -65,6 +66,7 @@ void K3bIsoOptions::save( KConfig* c )
 
   c->writeEntry( "rock_ridge", m_createRockRidge );
   c->writeEntry( "joliet", m_createJoliet );
+  c->writeEntry( "udf", m_createUdf );
 
   // save iso-level
   c->writeEntry( "iso_level", m_isoLevel );
@@ -127,6 +129,8 @@ K3bIsoOptions K3bIsoOptions::load( KConfig* c )
 
   options.setCreateRockRidge( c->readBoolEntry( "rock_ridge", options.createRockRidge() ) );
   options.setCreateJoliet( c->readBoolEntry( "joliet", options.createJoliet() ) );
+  options.setCreateUdf( c->readBoolEntry( "udf", options.createUdf() ) );
+
   options.setISOLevel( c->readNumEntry( "iso_level", options.ISOLevel() ) );
 
   options.setCreateTRANS_TBL( c->readBoolEntry( "create TRANS_TBL", options.createTRANS_TBL() ) );

@@ -53,9 +53,14 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   void start();
   void cancel();
 
-  void setDao( bool b ) { m_dao = b; }
+  void setDao( bool b );
   void setRawWrite( bool b ) { m_rawWrite = b; }
   void setProvideStdin( bool b ) { m_stdin = b; }
+  void setWritingMode( int );
+
+  /** this will enable ProDVD */
+  void setClone( bool b );
+  void setUseProDVD( bool b );
 
  private slots:
   void slotStdLine( const QString& line );
@@ -65,10 +70,12 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   const K3bExternalBin* m_cdrecordBinObject;
   K3bProcess* m_process;
 
-  bool m_dao;
+  int m_writingMode;
   bool m_rawWrite;
   bool m_stdin;
   bool m_totalTracksParsed;
+  bool m_clone;
+  bool m_useCdrecordProDVD;
 
   int m_currentTrack;
   int m_totalTracks;
@@ -82,7 +89,8 @@ class K3bCdrecordWriter : public K3bAbstractWriter
 		       SHMGET_FAILED, 
 		       OPC_FAILED,
 		       CANNOT_SET_SPEED,
-		       CANNOT_SEND_CUE_SHEET };
+		       CANNOT_SEND_CUE_SHEET,
+		       CANNOT_OPEN_NEW_SESSION };
   int m_cdrecordError;
 
   bool m_writeSpeedInitialized;

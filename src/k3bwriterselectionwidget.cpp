@@ -25,11 +25,10 @@
 #include <klocale.h>
 #include <kdialog.h>
 #include <kconfig.h>
+#include <kcombobox.h>
 
-#include <qcombobox.h>
 #include <qlabel.h>
 #include <qlayout.h>
-// #include <qradiobutton.h>
 #include <qgroupbox.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
@@ -42,6 +41,7 @@ class K3bWriterSelectionWidget::Private
 public:
   QMap<QString, int> writerIndexMap;
   QPtrVector<K3bDevice> devices;
+  int maxSpeed;
 };
 
 
@@ -64,17 +64,17 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget(QWidget *parent, const char *
   QLabel* labelSpeed = new QLabel( groupWriter, "TextLabel1" );
   labelSpeed->setText( i18n( "Speed:" ) );
 
-  m_comboSpeed = new QComboBox( FALSE, groupWriter, "m_comboSpeed" );
+  m_comboSpeed = new KComboBox( FALSE, groupWriter, "m_comboSpeed" );
   m_comboSpeed->setAutoMask( FALSE );
   m_comboSpeed->setDuplicatesEnabled( FALSE );
 
-  m_comboWriter = new QComboBox( FALSE, groupWriter, "m_comboWriter" );
+  m_comboWriter = new KComboBox( FALSE, groupWriter, "m_comboWriter" );
 
   QLabel* labelDevice = new QLabel( groupWriter, "TextLabel1_2" );
   labelDevice->setText( i18n( "Device:" ) );
 
   m_writingAppLabel = new QLabel( i18n("Writing app:"), groupWriter );
-  m_comboWritingApp = new QComboBox( groupWriter );
+  m_comboWritingApp = new KComboBox( groupWriter );
 
   groupWriterLayout->addWidget( labelDevice, 0, 0 );
   groupWriterLayout->addWidget( labelSpeed, 0, 1 );
@@ -85,28 +85,18 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget(QWidget *parent, const char *
   groupWriterLayout->setColStretch( 0, 1 );
 
 
-//   m_groupCdWritingApp = new QHButtonGroup( i18n("Writing Application"), this );
-//   m_groupCdWritingApp->setExclusive( true );
-//   m_selectDefault  = new QRadioButton( i18n("Default"), m_groupCdWritingApp );
-//   m_selectCdrecord = new QRadioButton( "cdrecord", m_groupCdWritingApp );
-//   m_selectCdrdao   = new QRadioButton( "cdrdao", m_groupCdWritingApp );
-
-
   QGridLayout* mainLayout = new QGridLayout( this );
   mainLayout->setAlignment( Qt::AlignTop );
   mainLayout->setSpacing( KDialog::spacingHint() );
   mainLayout->setMargin( 0 );
 
   mainLayout->addWidget( groupWriter, 0, 0 );
-  //  mainLayout->addWidget( m_groupCdWritingApp, 1, 0 );
 
 
   connect( m_comboWriter, SIGNAL(activated(int)), this, SLOT(slotRefreshWriterSpeeds()) );
   connect( m_comboWriter, SIGNAL(activated(int)), this, SIGNAL(writerChanged()) );
   connect( m_comboWritingApp, SIGNAL(activated(int)), this, SLOT(slotWritingAppSelected(int)) );
   connect( this, SIGNAL(writerChanged()), SLOT(slotWriterChanged()) );
-
-//   m_groupCdWritingApp->setButton( 0 );
 
   // TODO: probably use KApplication::settingsChanged
   connect( k3bMain(), SIGNAL(configChanged(KConfig*)), this, SLOT(slotConfigChanged(KConfig*)) );
@@ -118,6 +108,7 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget(QWidget *parent, const char *
   // --------------------------------------------------------------------------------
   QToolTip::add( m_comboWriter, i18n("The CD writer that will write the CD") );
   QToolTip::add( m_comboSpeed, i18n("The speed at which to write the CD") );
+  QToolTip::add( m_comboWritingApp, i18n("The external application to acually write the CD") );
 
   // What's This info
   // --------------------------------------------------------------------------------
@@ -128,6 +119,13 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget(QWidget *parent, const char *
 				      "<p>1x speed means 150 KB/s."
 				      "<p><b>Caution:</b> Make sure your system is able to send the data "
 				      "fast enough to prevent buffer underruns.") );
+  QWhatsThis::add( m_comboWritingApp, i18n("<p>K3b uses the command line tools cdrecord and cdrdao "
+					   "to actually write the CDs. Normally K3b chooses the best "
+					   "suited application for every task but in some cases it "
+					   "may be possible that one of the applications does not "
+					   "support a writer. In this case one may select the "
+					   "application manually.") );
+
   init();
 }
 
@@ -165,7 +163,7 @@ void K3bWriterSelectionWidget::init()
   
   slotRefreshWriterSpeeds();
   slotConfigChanged(kapp->config());
-  setSupportedWritingApps( 0xFF );
+  setSupportedWritingApps( K3b::CDRDAO|K3b::CDRECORD );
 }
 
 
@@ -186,7 +184,7 @@ void K3bWriterSelectionWidget::slotConfigChanged( KConfig* c )
 
 void K3bWriterSelectionWidget::slotRefreshWriterSpeeds()
 {
-    if( K3bDevice* dev = writerDevice() ) {
+  if( K3bDevice* dev = writerDevice() ) {
     // add speeds to combobox
     m_comboSpeed->clear();
     m_comboSpeed->insertItem( "1x" );
@@ -198,6 +196,8 @@ void K3bWriterSelectionWidget::slotRefreshWriterSpeeds()
 	currentSpeedIndex = m_comboSpeed->count() - 1;
       speed += 2;
     }
+
+    d->maxSpeed = speed;
 
     // set to saved speed
     m_comboSpeed->setCurrentItem( currentSpeedIndex );
@@ -229,6 +229,12 @@ void K3bWriterSelectionWidget::setWriterDevice( K3bDevice* dev )
 }
 
 
+void K3bWriterSelectionWidget::setSpeed( int s )
+{
+  m_comboSpeed->setCurrentItem( QString("%1x").arg(s), false );
+}
+
+
 int K3bWriterSelectionWidget::writerSpeed() const
 {
   QString strSpeed = m_comboSpeed->currentText();
@@ -257,6 +263,10 @@ int K3bWriterSelectionWidget::selectedWritingApp() const
     return K3b::CDRDAO;
   else if( s == "cdrecord" )
     return K3b::CDRECORD;
+  else if( s == "cdrecord-prodvd" )
+    return K3b::CDRECORD_PRODVD;
+  else if( s == "dvdrecord" )
+    return K3b::DVDRECORD;
   else
     return K3b::DEFAULT;
 }
@@ -282,12 +292,16 @@ void K3bWriterSelectionWidget::setSupportedWritingApps( int i )
 {
   m_comboWritingApp->clear();
 
-  m_comboWritingApp->insertItem( i18n("default") );
+  m_comboWritingApp->insertItem( i18n("Auto") );
 
   if( i & K3b::CDRDAO )
     m_comboWritingApp->insertItem( "cdrdao" );
   if( i & K3b::CDRECORD )
     m_comboWritingApp->insertItem( "cdrecord" );
+  if( i & K3b::CDRECORD_PRODVD )
+    m_comboWritingApp->insertItem( "cdrecord-prodvd" );
+  if( i & K3b::DVDRECORD )
+    m_comboWritingApp->insertItem( "dvdrecord" );
 }
 
 #include "k3bwriterselectionwidget.moc"

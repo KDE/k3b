@@ -48,6 +48,7 @@ static KCmdLineOptions options[] =
         { "copy", I18N_NOOP("Open the cd copy dialog"), 0 },
         { "isoimage", I18N_NOOP("Write an ISO image to cd"), 0 },
         { "binimage", I18N_NOOP("Write an Bin/Cue image to cd"), 0 },
+	{ "erase", I18N_NOOP("Erase a CDRW"), 0 },
         { 0, 0, 0 }
         // INSERT YOUR COMMANDLINE OPTIONS HERE
     };

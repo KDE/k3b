@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -61,6 +61,8 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
   // if we don't do this the dialog start really huge
   // because of the label in the device-tab
   resize( 700, 500 );
+
+  showPage( 0 );
 }
 
 

@@ -23,6 +23,7 @@
 #include "k3baudiocdtextwidget.h"
 #include <tools/k3bglobals.h>
 #include <k3bstdguiitems.h>
+#include <tools/k3bwritingmodewidget.h>
 
 #include <qcheckbox.h>
 #include <qcombobox.h>
@@ -111,21 +112,11 @@ K3bAudioBurnDialog::~K3bAudioBurnDialog(){
 
 void K3bAudioBurnDialog::saveSettings()
 {
+  K3bProjectBurnDialog::saveSettings();
+
   m_doc->setTempDir( m_tempDirSelectionWidget->tempPath() );
-  m_doc->setDao( m_checkDao->isChecked() );
-  m_doc->setDummy( m_checkSimulate->isChecked() );
-  m_doc->setOnTheFly( m_checkOnTheFly->isChecked() );
-  m_doc->setBurnproof( m_checkBurnproof->isChecked() );
   m_doc->setHideFirstTrack( m_checkHideFirstTrack->isChecked() );
-  m_doc->setRemoveBufferFiles( m_checkRemoveBufferFiles->isChecked() );
-  m_doc->setOnlyCreateImages( m_checkOnlyCreateImage->isChecked() );
   m_doc->setNormalize( m_checkNormalize->isChecked() );
-
-  // -- saving current speed --------------------------------------
-  m_doc->setSpeed( m_writerSelectionWidget->writerSpeed() );
-
-  // -- saving current device --------------------------------------
-  m_doc->setBurner( m_writerSelectionWidget->writerDevice() );
 
   // -- save Cd-Text ------------------------------------------------
   m_cdtextWidget->save( m_doc );
@@ -134,13 +125,9 @@ void K3bAudioBurnDialog::saveSettings()
 
 void K3bAudioBurnDialog::readSettings()
 {
-  m_checkDao->setChecked( m_doc->dao() );
-  m_checkOnTheFly->setChecked( m_doc->onTheFly() );
-  m_checkSimulate->setChecked( m_doc->dummy() );
+  K3bProjectBurnDialog::readSettings();
+
   m_checkHideFirstTrack->setChecked( m_doc->hideFirstTrack() );
-  m_checkRemoveBufferFiles->setChecked( m_doc->removeBufferFiles() );
-  m_checkBurnproof->setChecked( doc()->burnproof() );
-  m_checkOnlyCreateImage->setChecked( m_doc->onlyCreateImages() );
   m_checkNormalize->setChecked( m_doc->normalize() );
 
   // read CD-Text ------------------------------------------------------------
@@ -152,15 +139,10 @@ void K3bAudioBurnDialog::readSettings()
 
 void K3bAudioBurnDialog::slotLoadK3bDefaults()
 {
-  m_checkSimulate->setChecked( false );
-  m_checkDao->setChecked( true );
-  m_checkOnTheFly->setChecked( true );
-  m_checkBurnproof->setChecked( true );
+  K3bProjectBurnDialog::slotLoadK3bDefaults();
 
   m_cdtextWidget->setChecked( true );
   m_checkHideFirstTrack->setChecked( false );
-  m_checkRemoveBufferFiles->setChecked( true );
-
   m_checkNormalize->setChecked(false);
 
   toggleAllOptions();
@@ -169,19 +151,12 @@ void K3bAudioBurnDialog::slotLoadK3bDefaults()
 
 void K3bAudioBurnDialog::slotLoadUserDefaults()
 {
+  K3bProjectBurnDialog::slotLoadUserDefaults();
+
   KConfig* c = k3bMain()->config();
-
-  c->setGroup( "default audio settings" );
-
-  m_checkSimulate->setChecked( c->readBoolEntry( "dummy_mode", false ) );
-  m_checkDao->setChecked( c->readBoolEntry( "dao", true ) );
-  m_checkOnTheFly->setChecked( c->readBoolEntry( "on_the_fly", true ) );
-  m_checkBurnproof->setChecked( c->readBoolEntry( "burnproof", true ) );
 
   m_cdtextWidget->setChecked( c->readBoolEntry( "cd_text", true ) );
   m_checkHideFirstTrack->setChecked( c->readBoolEntry( "hide_first_track", false ) );
-  m_checkRemoveBufferFiles->setChecked( c->readBoolEntry( "remove_buffer_files", true ) );
-  m_checkOnlyCreateImage->setChecked( c->readBoolEntry( "only_create_images", false ) );
   m_checkNormalize->setChecked( c->readBoolEntry( "normalize", false ) );
 
   toggleAllOptions();
@@ -190,18 +165,12 @@ void K3bAudioBurnDialog::slotLoadUserDefaults()
 
 void K3bAudioBurnDialog::slotSaveUserDefaults()
 {
+  K3bProjectBurnDialog::slotSaveUserDefaults();
+
   KConfig* c = k3bMain()->config();
 
-  c->setGroup( "default audio settings" );
-
-  c->writeEntry( "dummy_mode", m_checkSimulate->isChecked() );
-  c->writeEntry( "dao", m_checkDao->isChecked() );
-  c->writeEntry( "on_the_fly", m_checkOnTheFly->isChecked() );
-  c->writeEntry( "burnproof", m_checkBurnproof->isChecked() );
   c->writeEntry( "cd_text", m_cdtextWidget->isChecked() );
   c->writeEntry( "hide_first_track", m_checkHideFirstTrack->isChecked() );
-  c->writeEntry( "remove_buffer_files", m_checkRemoveBufferFiles->isChecked() );
-  c->writeEntry( "only_create_images", m_checkOnlyCreateImage->isChecked() );
   c->writeEntry( "normalize", m_checkNormalize->isChecked() );
 
   if( m_tempDirSelectionWidget->isEnabled() ) {
@@ -215,7 +184,9 @@ void K3bAudioBurnDialog::toggleAllOptions()
   K3bProjectBurnDialog::toggleAllOptions();
 
   // currently we do not support writing on the fly with cdrecord
-  if( !m_checkDao->isChecked() || m_writerSelectionWidget->writingApp() == K3b::CDRECORD ) {
+  if( m_writingModeWidget->writingMode() == K3b::TAO ||
+      m_writingModeWidget->writingMode() == K3b::RAW ||
+      m_writerSelectionWidget->writingApp() == K3b::CDRECORD ) {
     m_checkOnTheFly->setChecked( false );
     m_checkOnTheFly->setEnabled( false );
     m_checkHideFirstTrack->setChecked(false);

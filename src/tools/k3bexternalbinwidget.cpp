@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -249,9 +249,11 @@ void K3bExternalBinWidget::load()
       pV->setText( 0, p->name() + i18n(" (not found)") );
 
     // load user parameters
-    K3bExternalProgramViewItem* paraV = new K3bExternalProgramViewItem( p, m_parameterView );
-    paraV->setText( 1, p->userParameters().join( ", " ) );
-    paraV->setRenameEnabled( 1, true );
+    if( p->supportsUserParameters() ) {
+      K3bExternalProgramViewItem* paraV = new K3bExternalProgramViewItem( p, m_parameterView );
+      paraV->setText( 1, p->userParameters().join( ", " ) );
+      paraV->setRenameEnabled( 1, true );
+    }
   }
 
 

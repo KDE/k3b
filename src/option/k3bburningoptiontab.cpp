@@ -43,9 +43,6 @@ K3bBurningOptionTab::K3bBurningOptionTab( QWidget* parent, const char* name )
 
   m_bPregapSeconds = false;
   m_comboPregapFormat->setCurrentItem( 1 );
-
-
-  //  m_checkAllowWritingAppSelection->setDisabled( true );  // not implemented yet!
 }
 
 
@@ -211,31 +208,47 @@ void K3bBurningOptionTab::setupGui()
   groupAdvancedLayout->setSpacing( KDialog::spacingHint() );
   groupAdvancedLayout->setMargin( KDialog::marginHint() );
 
-  m_checkEject = new QCheckBox( i18n("Do not &eject CD after write process"), advancedTab );
-  m_checkOverburn = new QCheckBox( i18n("Allow &overburning (not supported by cdrecord <= 1.10)"), advancedTab );
-  m_checkManualWritingBufferSize = new QCheckBox( i18n("&Manual writing buffer size"), advancedTab );
-  m_editWritingBufferSizeCdrecord = new KIntNumInput( 4, advancedTab );
-  m_editWritingBufferSizeCdrdao = new KIntNumInput( 32, advancedTab );
 
-  QGridLayout* bufferLayout = new QGridLayout;
-  bufferLayout->setMargin( 0 );
+
+  QGroupBox* groupWritingApp = new QGroupBox( 0, Qt::Vertical, i18n("Writing applications"), advancedTab );
+  groupWritingApp->layout()->setMargin( 0 );
+  QGridLayout* bufferLayout = new QGridLayout( groupWritingApp->layout() );
+  bufferLayout->setMargin( KDialog::marginHint() );
   bufferLayout->setSpacing( KDialog::spacingHint() );
-  bufferLayout->addWidget( new QLabel( "Cdrecord:", advancedTab ), 0, 1 );
-  bufferLayout->addWidget( new QLabel( "Cdrdao:", advancedTab ), 1, 1 );
-  bufferLayout->addWidget( m_editWritingBufferSizeCdrecord, 0, 2 );
-  bufferLayout->addWidget( m_editWritingBufferSizeCdrdao, 1, 2 );
-  bufferLayout->addWidget( new QLabel( i18n("MB"), advancedTab ), 0, 3 );
-  bufferLayout->addWidget( new QLabel( i18n("blocks"), advancedTab ), 1, 3 );
-  bufferLayout->addColSpacing( 0, 30 );
-  bufferLayout->setColStretch( 4, 1 );
 
-  m_checkAllowWritingAppSelection = new QCheckBox( i18n("Manual writing application &selection"), advancedTab );
+  m_checkOverburn = new QCheckBox( i18n("Allow &overburning (not supported by cdrecord <= 1.10)"), groupWritingApp );
+  m_checkAllowWritingAppSelection = new QCheckBox( i18n("Manual writing application &selection"), groupWritingApp );
+  m_checkManualWritingBufferSize = new QCheckBox( i18n("&Manual writing buffer size"), groupWritingApp );
+  m_editWritingBufferSizeCdrecord = new KIntNumInput( 4, groupWritingApp );
+  m_editWritingBufferSizeCdrdao = new KIntNumInput( 32, groupWritingApp );
 
-  groupAdvancedLayout->addWidget( m_checkOverburn, 0, 0 );
-  groupAdvancedLayout->addWidget( m_checkEject, 1, 0 );
-  groupAdvancedLayout->addWidget( m_checkManualWritingBufferSize, 2, 0 );
-  groupAdvancedLayout->addLayout( bufferLayout, 3, 0 );
-  groupAdvancedLayout->addWidget( m_checkAllowWritingAppSelection, 4, 0 );
+  QLabel* labelProDVDKey = new QLabel( i18n("Cdrecord-ProDVD key:"), groupWritingApp );
+  m_editCdrecordProDVDKey = new KLineEdit( groupWritingApp );
+  QHBoxLayout* proDvdKeyLayout = new QHBoxLayout;
+  proDvdKeyLayout->setSpacing( KDialog::spacingHint() );
+  proDvdKeyLayout->addWidget( labelProDVDKey );
+  proDvdKeyLayout->addWidget( m_editCdrecordProDVDKey );
+
+  bufferLayout->addMultiCellWidget( m_checkOverburn, 0, 0, 0, 3 );
+  bufferLayout->addMultiCellWidget( m_checkManualWritingBufferSize, 1, 1, 0, 3 );
+  bufferLayout->addWidget( new QLabel( "Cdrecord:", groupWritingApp ), 2, 1 );
+  bufferLayout->addWidget( new QLabel( "Cdrdao:", groupWritingApp ), 3, 1 );
+  bufferLayout->addWidget( m_editWritingBufferSizeCdrecord, 2, 2 );
+  bufferLayout->addWidget( m_editWritingBufferSizeCdrdao, 3, 2 );
+  bufferLayout->addWidget( new QLabel( i18n("MB"), groupWritingApp ), 2, 3 );
+  bufferLayout->addWidget( new QLabel( i18n("blocks"), groupWritingApp ), 3, 3 );
+  bufferLayout->addMultiCellWidget( m_checkAllowWritingAppSelection, 4, 4, 0, 3 );
+  bufferLayout->addMultiCellLayout( proDvdKeyLayout, 5, 5, 0, 3 );
+  bufferLayout->addMultiCell( new QSpacerItem( 30, 10, QSizePolicy::Fixed, QSizePolicy::Minimum ), 1, 2, 0, 0 );
+  bufferLayout->setColStretch( 3, 1 );
+
+  QGroupBox* groupMisc = new QGroupBox( 1, Qt::Vertical, i18n("Miscellaneous"), advancedTab );
+  m_checkEject = new QCheckBox( i18n("Do not &eject CD after write process"), groupMisc );
+
+  groupAdvancedLayout->addWidget( groupWritingApp, 0, 0 );
+  groupAdvancedLayout->addWidget( groupMisc, 1, 0 );
+  groupAdvancedLayout->setRowStretch( 2, 1 );
+
 
   connect( m_checkManualWritingBufferSize, SIGNAL(toggled(bool)),
 	   m_editWritingBufferSizeCdrecord, SLOT(setEnabled(bool)) );
@@ -243,6 +256,7 @@ void K3bBurningOptionTab::setupGui()
 	   m_editWritingBufferSizeCdrdao, SLOT(setEnabled(bool)) );
   connect( m_checkManualWritingBufferSize, SIGNAL(toggled(bool)),
 	   this, SLOT(slotSetDefaultBufferSizes(bool)) );
+
 
   m_editWritingBufferSizeCdrecord->setDisabled( true );
   m_editWritingBufferSizeCdrdao->setDisabled( true );
@@ -341,6 +355,8 @@ void K3bBurningOptionTab::readSettings()
     m_editCustomCdSize->setText( QString::number(defaultCdSize) );
     break;
   }
+
+  m_editCdrecordProDVDKey->setText( c->readEntry( "cdrecord-prodvd_key" ) );
 }
 
 
@@ -381,6 +397,8 @@ void K3bBurningOptionTab::saveSettings()
     c->writeEntry( "Default cd size", 100 );
   if( m_radioCustomCdSize->isChecked() )
     c->writeEntry( "Default cd size", m_editCustomCdSize->text().toInt() );
+
+  c->writeEntry( "cdrecord-prodvd_key", m_editCdrecordProDVDKey->text() );
 }
 
 

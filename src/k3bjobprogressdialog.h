@@ -38,11 +38,13 @@ class QCloseEvent;
 class KSystemTray;
 class QGridLayout;
 class QKeyEvent;
+class K3bJobProgressSystemTray;
+
 
 
 class K3bJobProgressDialog : public KDialog
 {
-  Q_OBJECT;
+  Q_OBJECT
 
  public:
   K3bJobProgressDialog( QWidget* parent = 0, 
@@ -55,7 +57,9 @@ class K3bJobProgressDialog : public KDialog
   virtual void setJob( K3bJob* job );
   void setExtraInfo( QWidget *extra );
 
-  /** just reimplemented to show the systemtray */
+  /**
+   * reimplemented for internal reasons
+   */
   void show();
 
   /**
@@ -66,6 +70,7 @@ class K3bJobProgressDialog : public KDialog
   /**
    * This will show the dialog and then start the given job or
    * if job == 0 the job set with setJob
+   * Use instead of exec()
    */
   int startJob( K3bJob* job = 0 );
 
@@ -86,7 +91,6 @@ class K3bJobProgressDialog : public KDialog
   void slotCancelButtonPressed();
   void slotUpdateTime();
   void slotShowDebuggingOutput();
-  void animateSystemTray( int );
 
   void slotUpdateCaption( int );
 
@@ -118,8 +122,6 @@ class K3bJobProgressDialog : public KDialog
   // debugging output display
   class PrivateDebugWidget;
 
-  KSystemTray* m_systemTray;
-
  private:
   K3bJob* m_job;
   QTimer* m_timer;
@@ -129,11 +131,13 @@ class K3bJobProgressDialog : public KDialog
 
   bool m_bCanceled;
   bool m_bShowSystemTrayProgress;
-  int m_lastAnimatedProgress;
 
   QString m_plainCaption;
 
   bool in_loop;
+
+  K3bJobProgressSystemTray* m_systemTray;
 };
+
 
 #endif

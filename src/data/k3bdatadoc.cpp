@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -376,7 +376,7 @@ K3b::Msf K3bDataDoc::length() const
 
 QString K3bDataDoc::documentType() const
 {
-  return QString::fromLatin1("k3b_data_project");
+  return QString::fromLatin1("data");
 }
 
 
@@ -413,6 +413,9 @@ bool K3bDataDoc::loadDocumentData( QDomElement* rootElem )
 
     else if( e.nodeName() == "joliet")
       isoOptions().setCreateJoliet( e.attributeNode( "activated" ).value() == "yes" );
+
+    else if( e.nodeName() == "udf")
+      isoOptions().setCreateUdf( e.attributeNode( "activated" ).value() == "yes" );
 
     else if( e.nodeName() == "iso_allow_lowercase")
       isoOptions().setISOallowLowercase( e.attributeNode( "activated" ).value() == "yes" );
@@ -493,6 +496,19 @@ bool K3bDataDoc::loadDocumentData( QDomElement* rootElem )
       else
 	m_dataMode = K3b::AUTO;
     }
+
+    else if( e.nodeName() == "multisession" ) {
+      QString mode = e.text();
+      if( mode == "start" )
+	setMultiSessionMode( START );
+      else if( mode == "continue" )
+	setMultiSessionMode( CONTINUE );
+      else if( mode == "finish" )
+	setMultiSessionMode( FINISH );
+      else
+	setMultiSessionMode( NONE );
+    }
+
     else
       kdDebug() << "(K3bDataDoc) unknown option entry: " << e.nodeName() << endl;
   }
@@ -652,6 +668,10 @@ bool K3bDataDoc::saveDocumentData( QDomElement* docElem )
   topElem.setAttribute( "activated", isoOptions().createJoliet() ? "yes" : "no" );
   optionsElem.appendChild( topElem );
 
+  topElem = doc.createElement( "udf" );
+  topElem.setAttribute( "activated", isoOptions().createUdf() ? "yes" : "no" );
+  optionsElem.appendChild( topElem );
+
   topElem = doc.createElement( "iso_allow_lowercase" );
   topElem.setAttribute( "activated", isoOptions().ISOallowLowercase() ? "yes" : "no" );
   optionsElem.appendChild( topElem );
@@ -760,6 +780,24 @@ bool K3bDataDoc::saveDocumentData( QDomElement* docElem )
   optionsElem.appendChild( topElem );
 
 
+  // save multisession
+  topElem = doc.createElement( "multisession" );
+  switch( m_multisessionMode ) {
+  case START:
+    topElem.appendChild( doc.createTextNode( "start" ) );
+    break;
+  case CONTINUE:
+    topElem.appendChild( doc.createTextNode( "continue" ) );
+    break;
+  case FINISH:
+    topElem.appendChild( doc.createTextNode( "finish" ) );
+    break;
+  default:
+    topElem.appendChild( doc.createTextNode( "none" ) );
+    break;
+  }
+  optionsElem.appendChild( topElem );
+
   docElem->appendChild( optionsElem );
   // ----------------------------------------------------------------------
 
@@ -817,27 +855,32 @@ bool K3bDataDoc::saveDocumentData( QDomElement* docElem )
 void K3bDataDoc::saveDataItem( K3bDataItem* item, QDomDocument* doc, QDomElement* parent )
 {
   if( K3bFileItem* fileItem = dynamic_cast<K3bFileItem*>( item ) ) {
-    QDomElement topElem = doc->createElement( "file" );
-    topElem.setAttribute( "name", fileItem->k3bName() );
-    QDomElement subElem = doc->createElement( "url" );
-    subElem.appendChild( doc->createTextNode( fileItem->localPath() ) );
-    topElem.appendChild( subElem );
-
-    parent->appendChild( topElem );
-
-    // add boot options as attributes to preserve compatibility to older K3b versions
-    if( K3bBootItem* bootItem = dynamic_cast<K3bBootItem*>( fileItem ) ) {
-      if( bootItem->imageType() == K3bBootItem::FLOPPY )
-	topElem.setAttribute( "bootimage", "floppy" );
-      else if( bootItem->imageType() == K3bBootItem::HARDDISK )
-	topElem.setAttribute( "bootimage", "harddisk" );
-      else
-	topElem.setAttribute( "bootimage", "none" );
-
-      topElem.setAttribute( "no_boot", bootItem->noBoot() ? "yes" : "no" );
-      topElem.setAttribute( "boot_info_table", bootItem->bootInfoTable() ? "yes" : "no" );
-      topElem.setAttribute( "load_segment", QString::number( bootItem->loadSegment() ) );
-      topElem.setAttribute( "load_size", QString::number( bootItem->loadSize() ) );
+    if( m_oldSession.contains( fileItem ) ) {
+      kdDebug() << "(K3bDataDoc) ignoring fileitem " << fileItem->k3bName() << " from old session while saving..." << endl;
+    }
+    else {
+      QDomElement topElem = doc->createElement( "file" );
+      topElem.setAttribute( "name", fileItem->k3bName() );
+      QDomElement subElem = doc->createElement( "url" );
+      subElem.appendChild( doc->createTextNode( fileItem->localPath() ) );
+      topElem.appendChild( subElem );
+      
+      parent->appendChild( topElem );
+      
+      // add boot options as attributes to preserve compatibility to older K3b versions
+      if( K3bBootItem* bootItem = dynamic_cast<K3bBootItem*>( fileItem ) ) {
+	if( bootItem->imageType() == K3bBootItem::FLOPPY )
+	  topElem.setAttribute( "bootimage", "floppy" );
+	else if( bootItem->imageType() == K3bBootItem::HARDDISK )
+	  topElem.setAttribute( "bootimage", "harddisk" );
+	else
+	  topElem.setAttribute( "bootimage", "none" );
+	
+	topElem.setAttribute( "no_boot", bootItem->noBoot() ? "yes" : "no" );
+	topElem.setAttribute( "boot_info_table", bootItem->bootInfoTable() ? "yes" : "no" );
+	topElem.setAttribute( "load_segment", QString::number( bootItem->loadSegment() ) );
+	topElem.setAttribute( "load_size", QString::number( bootItem->loadSize() ) );
+      }
     }
   }
   else if( K3bDirItem* dirItem = dynamic_cast<K3bDirItem*>( item ) ) {
@@ -1052,19 +1095,11 @@ void K3bDataDoc::informAboutNotFoundFiles()
 
 void K3bDataDoc::loadDefaultSettings()
 {
+  K3bDoc::loadDefaultSettings();
+
   KConfig* c = k3bcore->config();
 
-  c->setGroup( "default data settings" );
-
   m_isoOptions = K3bIsoOptions::load( c );
-
-  setDummy( c->readBoolEntry( "dummy_mode", false ) );
-  setDao( c->readBoolEntry( "dao", true ) );
-  setOnTheFly( c->readBoolEntry( "on_the_fly", true ) );
-  setBurnproof( c->readBoolEntry( "burnproof", true ) );
-
-  m_deleteImage = c->readBoolEntry( "remove_image", true );
-  m_onlyCreateImage = c->readBoolEntry( "only_create_image", false );
 
   QString datamode = c->readEntry( "data_track_mode" );
   if( datamode == "mode1" )
@@ -1078,7 +1113,7 @@ void K3bDataDoc::loadDefaultSettings()
 
 void K3bDataDoc::setMultiSessionMode( int mode )
 {
-  m_multisessionMode = mode; 
+  m_multisessionMode = mode;
 
   if( m_multisessionMode != CONTINUE && m_multisessionMode != FINISH )
     clearImportedSession();

@@ -454,6 +454,9 @@ bool K3bIsoImager::addMkisofsParameters()
       *m_process << "-hide-joliet-list" << m_jolietHideFile->name();
   }
 
+  if( m_doc->isoOptions().createUdf() )
+    *m_process << "-udf";
+
   if( m_doc->isoOptions().ISOuntranslatedFilenames()  ) {
     *m_process << "-U";
   }

@@ -42,11 +42,13 @@
 #include "k3bdoc.h"
 #include "k3b.h"
 #include <k3bglobals.h>
-#include "device/k3bdevice.h"
-#include "audio/k3baudiodoc.h"
-#include "data/k3bdatadoc.h"
-#include "vcd/k3bvcddoc.h"
-#include "mixed/k3bmixeddoc.h"
+#include <device/k3bdevice.h>
+#include <audio/k3baudiodoc.h>
+#include <data/k3bdatadoc.h>
+#include <vcd/k3bvcddoc.h>
+#include <mixed/k3bmixeddoc.h>
+#include <k3bcore.h>
+#include <device/k3bdevicemanager.h>
 
 
 #include <kostore/koStore.h>
@@ -60,14 +62,13 @@ K3bDoc::K3bDoc( QObject* parent )
   pViewList->setAutoDelete(false);
 
   m_burner = 0;
-  m_dao = true;
   m_onTheFly = true;
   m_overburn = false;
   m_burnproof = true;
   m_speed = 1;
 
   m_writingApp = K3b::DEFAULT;
-
+  m_writingMode = K3b::WRITING_MODE_AUTO;
   m_saved = false;
 }
 
@@ -77,10 +78,6 @@ K3bDoc::~K3bDoc()
   delete pViewList;
 }
 
-void K3bDoc::setDao( bool b )
-{
-  m_dao = b;
-}
 
 void K3bDoc::setDummy( bool b )
 {
@@ -257,10 +254,10 @@ bool K3bDoc::saveDocument(const KURL& url )
   store->open( "maindata.xml" );
 
   // save the data in the document
-  QDomDocument xmlDoc( documentType() );
+  QDomDocument xmlDoc( "k3b_" + documentType() + "_project" );
 
   xmlDoc.appendChild( xmlDoc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
-  QDomElement docElem = xmlDoc.createElement( documentType() );
+  QDomElement docElem = xmlDoc.createElement( "k3b_" + documentType() + "_project" );
   xmlDoc.appendChild( docElem );
   bool success = saveDocumentData( &docElem );
   if( success ) {
@@ -288,8 +285,21 @@ bool K3bDoc::saveGeneralDocumentData( QDomElement* part )
   QDomDocument doc = part->ownerDocument();
   QDomElement mainElem = doc.createElement( "general" );
 
-  QDomElement propElem = doc.createElement( "dao" );
-  propElem.setAttribute( "activated", dao() ? "yes" : "no" );
+  QDomElement propElem = doc.createElement( "writing_mode" );
+  switch( writingMode() ) {
+  case K3b::DAO:
+    propElem.appendChild( doc.createTextNode( "dao" ) );
+    break;
+  case K3b::TAO:
+    propElem.appendChild( doc.createTextNode( "tao" ) );
+    break;
+  case K3b::RAW:
+    propElem.appendChild( doc.createTextNode( "raw" ) );
+    break;
+  default:
+    propElem.appendChild( doc.createTextNode( "auto" ) );
+    break;
+  }
   mainElem.appendChild( propElem );
 
   propElem = doc.createElement( "dummy" );
@@ -318,8 +328,17 @@ bool K3bDoc::readGeneralDocumentData( const QDomElement& elem )
     if( e.isNull() )
       return false;
 
-    if( e.nodeName() == "dao")
-      setDao( e.attributeNode( "activated" ).value() == "yes" );
+    if( e.nodeName() == "writing_mode") {
+      QString mode = e.text();
+      if( mode == "dao" )
+	setWritingMode( K3b::DAO );
+      else if( mode == "tao" )
+	setWritingMode( K3b::TAO );
+      else if( mode == "raw" )
+	setWritingMode( K3b::RAW );
+      else
+	setWritingMode( K3b::WRITING_MODE_AUTO );
+    }
 
     if( e.nodeName() == "dummy")
       setDummy( e.attributeNode( "activated" ).value() == "yes" );
@@ -352,5 +371,30 @@ void K3bDoc::enable()
   }
 }
 
+
+void K3bDoc::loadDefaultSettings()
+{
+  KConfig* c = kapp->config();
+  c->setGroup( "default " + documentType() + " settings" );
+
+  QString mode = c->readEntry( "writing_mode" );
+  if ( mode == "dao" )
+    setWritingMode( K3b::DAO );
+  else if( mode == "tao" )
+    setWritingMode( K3b::TAO );
+  else if( mode == "raw" )
+    setWritingMode( K3b::RAW );
+  else
+    setWritingMode( K3b::WRITING_MODE_AUTO );
+
+  setDummy( c->readBoolEntry( "dummy_mode", false ) );
+  setOnTheFly( c->readBoolEntry( "on_the_fly", true ) );
+  setBurnproof( c->readBoolEntry( "burnproof", true ) );
+  setRemoveImages( c->readBoolEntry( "remove_image", true ) );
+  setOnlyCreateImages( c->readBoolEntry( "only_create_image", false ) );
+
+  setSpeed( c->readNumEntry( "writing_speed", 1 ) );
+  setBurner( k3bcore->deviceManager()->findDevice( c->readEntry( "writer_device" ) ) );
+}
 
 #include "k3bdoc.moc"

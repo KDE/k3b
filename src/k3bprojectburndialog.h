@@ -28,6 +28,8 @@ class QGroupBox;
 class QCheckBox;
 class QTabWidget;
 class QVBoxLayout;
+class K3bWritingModeWidget;
+class KConfig;
 
 
 /**
@@ -57,6 +59,53 @@ class K3bProjectBurnDialog : public K3bInteractionDialog
    virtual void slotCancelClicked();
 
    /**
+    * The default implementation loads the following defaults:
+    * <ul>
+    *   <li>Writing mode</li>
+    *   <li>Simulate</li>
+    *   <li>on the fly</li>
+    *   <li>burnfree</li>
+    *   <li>remove images</li>
+    *   <li>only create images</li>
+    * </ul>
+    */
+   virtual void slotLoadK3bDefaults();
+
+   /**
+    * The default implemantation loads the following settings from the apps KConfig.
+    * It opens the correct group.
+    * May be used in subclasses.
+    * <ul>
+    *   <li>Writing mode</li>
+    *   <li>Simulate</li>
+    *   <li>on the fly</li>
+    *   <li>burnfree</li>
+    *   <li>remove images</li>
+    *   <li>only create images</li>
+    *   <li>writer</li>
+    *   <li>writing speed</li>
+    * </ul>
+    */
+   virtual void slotLoadUserDefaults();
+
+   /**
+    * The default implemantation saves the following settings to the apps KConfig.
+    * It opens the correct group.
+    * May be used in subclasses.
+    * <ul>
+    *   <li>Writing mode</li>
+    *   <li>Simulate</li>
+    *   <li>on the fly</li>
+    *   <li>burnfree</li>
+    *   <li>remove images</li>
+    *   <li>only create images</li>
+    *   <li>writer</li>
+    *   <li>writing speed</li>
+    * </ul>
+    */
+   virtual void slotSaveUserDefaults();
+
+   /**
     * gets called if the user changed the writer
     * default implementation just calls 
     * toggleAllOptions()
@@ -76,8 +125,37 @@ class K3bProjectBurnDialog : public K3bInteractionDialog
    void writerChanged();
 
  protected:
-   virtual void saveSettings() {};
-   virtual void readSettings() {};
+   /**
+    * The default implementation saves the following settings to the doc and may be called 
+    * in subclasses:
+    * <ul>
+    *   <li>Writing mode</li>
+    *   <li>Simulate</li>
+    *   <li>on the fly</li>
+    *   <li>burnfree</li>
+    *   <li>remove images</li>
+    *   <li>only create images</li>
+    *   <li>writer</li>
+    *   <li>writing speed</li>
+    * </ul>
+    */
+   virtual void saveSettings();
+
+   /**
+    * The default implementation reads the following settings from the doc and may be called 
+    * in subclasses:
+    * <ul>
+    *   <li>Writing mode</li>
+    *   <li>Simulate</li>
+    *   <li>on the fly</li>
+    *   <li>burnfree</li>
+    *   <li>remove images</li>
+    *   <li>only create images</li>
+    *   <li>writer</li>
+    *   <li>writing speed</li>
+    * </ul>
+    */
+   virtual void readSettings();
 
    /**
     * use this to set additionell stuff in the job
@@ -89,9 +167,9 @@ class K3bProjectBurnDialog : public K3bInteractionDialog
 
    K3bWriterSelectionWidget* m_writerSelectionWidget;
    K3bTempDirSelectionWidget* m_tempDirSelectionWidget;
+   K3bWritingModeWidget* m_writingModeWidget;
    QGroupBox* m_optionGroup;
    QVBoxLayout* m_optionGroupLayout;
-   QCheckBox* m_checkDao;
    QCheckBox* m_checkOnTheFly;
    QCheckBox* m_checkBurnproof;
    QCheckBox* m_checkSimulate;

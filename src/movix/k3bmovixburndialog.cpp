@@ -29,6 +29,7 @@
 #include <tools/k3bglobals.h>
 #include <tools/k3bdatamodewidget.h>
 #include <k3bisooptions.h>
+#include <tools/k3bwritingmodewidget.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -108,13 +109,9 @@ void K3bMovixBurnDialog::setupSettingsPage()
 
 void K3bMovixBurnDialog::slotLoadK3bDefaults()
 {
-  m_checkSimulate->setChecked( false );
-  m_checkDao->setChecked( true );
-  m_checkOnTheFly->setChecked( true );
-  m_checkBurnproof->setChecked( true );
+  K3bProjectBurnDialog::slotLoadK3bDefaults();
+
   m_checkStartMultiSesssion->setChecked( false );
-  m_checkRemoveBufferFiles->setChecked( true );
-  m_checkOnlyCreateImage->setChecked( false );
   m_dataModeWidget->setDataMode( K3b::AUTO );
 
   m_imageSettingsWidget->load( K3bIsoOptions::defaults() );
@@ -129,24 +126,13 @@ void K3bMovixBurnDialog::slotLoadK3bDefaults()
 
 void K3bMovixBurnDialog::slotLoadUserDefaults()
 {
-  KConfig* c = kapp->config();
-  c->setGroup( "default movix settings" );
+  K3bProjectBurnDialog::slotLoadUserDefaults();
 
-  m_checkSimulate->setChecked( c->readBoolEntry( "simulate", false ) );
-  m_checkDao->setChecked( c->readBoolEntry( "dao", true ) );
-  m_checkOnTheFly->setChecked( c->readBoolEntry( "on_the_fly", true ) );
-  m_checkBurnproof->setChecked( c->readBoolEntry( "burnproof", true ) );
-  m_checkRemoveBufferFiles->setChecked( c->readBoolEntry( "remove_image", true ) );
-  m_checkOnlyCreateImage->setChecked( c->readBoolEntry( "only_create_image", false ) );
+  KConfig* c = kapp->config();
+
   m_checkStartMultiSesssion->setChecked( c->readBoolEntry( "start_multisession", false ) );
 
-  QString datamode = c->readEntry( "data_track_mode" );
-  if( datamode == "mode1" )
-    m_dataModeWidget->setDataMode( K3b::MODE1 );
-  else if( datamode == "mode2" )
-    m_dataModeWidget->setDataMode( K3b::MODE2 );
-  else
-    m_dataModeWidget->setDataMode( K3b::AUTO );
+  m_dataModeWidget->loadConfig(c);
 
   K3bIsoOptions o = K3bIsoOptions::load( c );
   m_imageSettingsWidget->load( o );
@@ -161,27 +147,13 @@ void K3bMovixBurnDialog::slotLoadUserDefaults()
 
 void K3bMovixBurnDialog::slotSaveUserDefaults()
 {
+  K3bProjectBurnDialog::slotSaveUserDefaults();
+
   KConfig* c = kapp->config();
 
-  c->setGroup( "default movix settings" );
-
-  c->writeEntry( "simulate", m_checkSimulate->isChecked() );
-  c->writeEntry( "dao", m_checkDao->isChecked() );
-  c->writeEntry( "on_the_fly", m_checkOnTheFly->isChecked() );
-  c->writeEntry( "burnproof", m_checkBurnproof->isChecked() );
-  c->writeEntry( "remove_image", m_checkRemoveBufferFiles->isChecked() );
-  c->writeEntry( "only_create_image", m_checkOnlyCreateImage->isChecked() );
   c->writeEntry( "start_multisession", m_checkStartMultiSesssion->isChecked() );
 
-  QString datamode;
-  if( m_dataModeWidget->dataMode() == K3b::MODE1 )
-    datamode = "mode1";
-  else if( m_dataModeWidget->dataMode() == K3b::MODE2 )
-    datamode = "mode2";
-  else
-    datamode = "auto";
-  c->writeEntry( "data_track_mode", datamode );
-
+  m_dataModeWidget->saveConfig(c);
 
   K3bIsoOptions o;
   m_imageSettingsWidget->save( o );
@@ -195,21 +167,11 @@ void K3bMovixBurnDialog::slotSaveUserDefaults()
 
 void K3bMovixBurnDialog::saveSettings()
 {
+  K3bProjectBurnDialog::saveSettings();
+
   m_movixOptionsWidget->saveSettings( m_doc );
 
-  m_doc->setDao( m_checkDao->isChecked() );
-  m_doc->setDummy( m_checkSimulate->isChecked() );
-  m_doc->setOnTheFly( m_checkOnTheFly->isChecked() );
-  m_doc->setBurnproof( m_checkBurnproof->isChecked() );
-  m_doc->setOnlyCreateImage( m_checkOnlyCreateImage->isChecked() );
-  m_doc->setDeleteImage( m_checkRemoveBufferFiles->isChecked() );
   m_doc->setMultiSessionMode( m_checkStartMultiSesssion->isChecked() ? K3bDataDoc::START : K3bDataDoc::NONE );
-			
-  // -- saving current speed --------------------------------------
-  m_doc->setSpeed( m_writerSelectionWidget->writerSpeed() );
-	
-  // -- saving current device --------------------------------------
-  m_doc->setBurner( m_writerSelectionWidget->writerDevice() );
 
   // save iso image settings
   m_imageSettingsWidget->save( m_doc->isoOptions() );
@@ -225,12 +187,8 @@ void K3bMovixBurnDialog::saveSettings()
 
 void K3bMovixBurnDialog::readSettings()
 {
-  m_checkDao->setChecked( doc()->dao() );
-  m_checkSimulate->setChecked( doc()->dummy() );
-  m_checkOnTheFly->setChecked( doc()->onTheFly() );
-  m_checkBurnproof->setChecked( doc()->burnproof() );
-  m_checkOnlyCreateImage->setChecked( m_doc->onlyCreateImage() );
-  m_checkRemoveBufferFiles->setChecked( m_doc->deleteImage() );
+  K3bProjectBurnDialog::readSettings();
+
   m_checkStartMultiSesssion->setChecked( m_doc->multiSessionMode() == K3bDataDoc::START );
 
   m_imageSettingsWidget->load( m_doc->isoOptions() );
@@ -270,7 +228,7 @@ void K3bMovixBurnDialog::slotStartClicked()
     }
   }
 
-  if( m_checkDao->isChecked() &&
+  if( m_writingModeWidget->writingMode() == K3b::DAO &&
       m_checkStartMultiSesssion->isChecked() &&
       m_writerSelectionWidget->writingApp() == K3b::CDRECORD )
     if( KMessageBox::warningContinueCancel( this,
