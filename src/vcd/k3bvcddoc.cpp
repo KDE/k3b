@@ -13,13 +13,13 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include "../k3b.h"
-#include "../tools/k3bglobals.h"
 #include "k3bvcddoc.h"
 #include "k3bvcdview.h"
 #include "k3bvcdtrack.h"
 #include "k3bvcdburndialog.h"
 #include "k3bvcdjob.h"
+#include <k3b.h>
+#include <tools/k3bglobals.h>
 
 // QT-includes
 #include <qstring.h>

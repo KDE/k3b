@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *                    Klaus-Dieter Krannich <kd@k3b.org>
  *
@@ -18,13 +18,13 @@
 #include "k3bcdcopydialog.h"
 
 #include "k3bcdcopyjob.h"
-#include "../k3bwriterselectionwidget.h"
-#include "../k3btempdirselectionwidget.h"
-#include "../k3b.h"
-#include "../k3bstdguiitems.h"
-#include "../device/k3bdevice.h"
-#include "../device/k3bdevicemanager.h"
-#include "../k3bburnprogressdialog.h"
+#include <k3bwriterselectionwidget.h>
+#include <k3btempdirselectionwidget.h>
+#include <k3b.h>
+#include <k3bstdguiitems.h>
+#include <device/k3bdevice.h>
+#include <device/k3bdevicemanager.h>
+#include <k3bburnprogressdialog.h>
 
 #include <kguiitem.h>
 #include <klocale.h>

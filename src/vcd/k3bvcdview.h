@@ -1,6 +1,6 @@
 /*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
  *
  * This file is part of the K3b project.
@@ -16,7 +16,7 @@
 #ifndef K3BVCDVIEW_H
 #define K3BVCDVIEW_H
 
-#include "../k3bview.h"
+#include <k3bview.h>
 
 #include <qstringlist.h>
 #include <qptrlist.h>

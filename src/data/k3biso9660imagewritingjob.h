@@ -17,7 +17,7 @@
 #ifndef K3BISO9660_IMAGE_WRITING_JOB_H
 #define K3BISO9660_IMAGE_WRITING_JOB_H
 
-#include "../k3bjob.h"
+#include <k3bjob.h>
 
 class QString;
 class K3bAbstractWriter;

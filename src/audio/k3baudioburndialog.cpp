@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -15,11 +15,11 @@
 
 
 #include "k3baudioburndialog.h"
-#include "../k3b.h"
+#include <k3b.h>
 #include "k3baudiodoc.h"
-#include "../device/k3bdevice.h"
-#include "../k3bwriterselectionwidget.h"
-#include "../k3btempdirselectionwidget.h"
+#include <device/k3bdevice.h>
+#include <k3bwriterselectionwidget.h>
+#include <k3btempdirselectionwidget.h>
 #include "k3baudiocdtextwidget.h"
 #include <tools/k3bglobals.h>
 

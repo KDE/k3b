@@ -1,6 +1,6 @@
 /*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
  *
  * This file is part of the K3b project.
@@ -17,7 +17,7 @@
 #include "k3bvcddoc.h"
 #include "k3bvcdlistview.h"
 #include "k3bvcdburndialog.h"
-#include "../k3bfillstatusdisplay.h"
+#include <k3bfillstatusdisplay.h>
 
 
 // QT-includes

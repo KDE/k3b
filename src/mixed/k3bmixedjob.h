@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -17,7 +17,7 @@
 #ifndef K3BMIXEDJOB_H
 #define K3BMIXEDJOB_H
 
-#include "../k3bjob.h"
+#include <k3bjob.h>
 
 
 class K3bMixedDoc;

@@ -15,12 +15,12 @@
 
 
 #include "k3bbinimagewritingjob.h"
-#include "../k3b.h"
-#include "../tools/k3bexternalbinmanager.h"
-#include "../k3bemptydiscwaiter.h"
-#include "../device/k3bdevice.h"
-#include "../device/k3bdiskinfo.h"
-#include "../device/k3bdiskinfodetector.h"
+#include <k3b.h>
+#include <tools/k3bexternalbinmanager.h>
+#include <k3bemptydiscwaiter.h>
+#include <device/k3bdevice.h>
+#include <device/k3bdiskinfo.h>
+#include <device/k3bdiskinfodetector.h>
 
 #include <k3bprocess.h>
 #include <kconfig.h>

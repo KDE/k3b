@@ -16,15 +16,15 @@
 
 #include "k3bdataburndialog.h"
 #include "k3bdatadoc.h"
-#include "../k3b.h"
-#include "../device/k3bdevice.h"
-#include "../k3bwriterselectionwidget.h"
-#include "../k3btempdirselectionwidget.h"
-#include "../k3bisooptions.h"
-#include "../k3bjob.h"
 #include "k3bdataimagesettingswidget.h"
 #include "k3bdataadvancedimagesettingswidget.h"
 #include "k3bdatavolumedescwidget.h"
+#include "../k3bisooptions.h"
+#include <k3b.h>
+#include <device/k3bdevice.h>
+#include <k3bwriterselectionwidget.h>
+#include <k3btempdirselectionwidget.h>
+#include <k3bjob.h>
 #include <k3bstdguiitems.h>
 
 #include <qcheckbox.h>

@@ -14,14 +14,14 @@
  */
 
 #include "k3bvcdburndialog.h"
-#include "../k3b.h"
 #include "k3bvcddoc.h"
 #include "k3bvcdoptions.h"
-#include "../device/k3bdevice.h"
-#include "../k3bwriterselectionwidget.h"
-#include "../k3btempdirselectionwidget.h"
-#include "../k3bstdguiitems.h"
-#include "../tools/k3bglobals.h"
+#include <k3b.h>
+#include <device/k3bdevice.h>
+#include <k3bwriterselectionwidget.h>
+#include <k3btempdirselectionwidget.h>
+#include <k3bstdguiitems.h>
+#include <tools/k3bglobals.h>
 
 #include <qcheckbox.h>
 #include <qgroupbox.h>

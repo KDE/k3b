@@ -17,11 +17,11 @@
 
 #include "k3bdvdcopy.h"
 #include "k3bdvdcontent.h"
-#include "../tools/k3bexternalbinmanager.h"
-#include "../k3b.h"
+#include <tools/k3bexternalbinmanager.h>
+#include <k3b.h>
 #include "k3bdvdrippingprocess.h"
-#include "../device/k3bdevicemanager.h"
-#include "../device/k3bdevice.h"
+#include <device/k3bdevicemanager.h>
+#include <device/k3bdevice.h>
 
 #include <qstring.h>
 #include <qdatastream.h>

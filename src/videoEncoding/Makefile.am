@@ -1,6 +1,6 @@
 noinst_LTLIBRARIES = libvideoEncoding.la
 
-INCLUDES = $(all_includes)
+INCLUDES = $(all_includes) -I$(srcdir)/.. -I$(srcdir)/../core
 
 METASOURCES = AUTO
 

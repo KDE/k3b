@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -17,7 +17,7 @@
 #ifndef K3BMIXEDBURNDIALOG_H
 #define K3BMIXEDBURNDIALOG_H
 
-#include "../k3bprojectburndialog.h"
+#include <k3bprojectburndialog.h>
 
 class QCheckBox;
 class K3bWriterSelectionWidget;

@@ -18,7 +18,7 @@
 #define K3BJOB_H
 
 #include <qobject.h>
-#include "device/k3bdevice.h"
+#include <device/k3bdevice.h>
 
 class QString;
 class K3bDoc;

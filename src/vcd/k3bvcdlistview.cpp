@@ -17,9 +17,9 @@
 #include "k3bvcdlistviewitem.h"
 #include "k3bvcdtrack.h"
 #include "k3bvcdtrackdialog.h"
-#include "../k3b.h"
 #include "k3bvcddoc.h"
-#include "../k3bview.h"
+#include <k3b.h>
+#include <k3bview.h>
 
 #include <qheader.h>
 #include <qtimer.h>

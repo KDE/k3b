@@ -17,8 +17,8 @@
 #ifndef K3BBINIMAGEWRITINGJOB_H
 #define K3BBINIMAGEWRITINGJOB_H
 
-#include "../k3bjob.h"
-#include "../k3bcdrdaowriter.h"
+#include <k3bjob.h>
+#include <k3bcdrdaowriter.h>
 
 class K3bProcess;
 class K3bCdDevice::CdDevice;

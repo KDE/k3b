@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -16,7 +16,7 @@
 
 #include "k3babstractwriter.h"
 
-#include <k3bdevicemanager.h>
+#include <device/k3bdevicemanager.h>
 
 #include <klocale.h>
 #include <kglobal.h>

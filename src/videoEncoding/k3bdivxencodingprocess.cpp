@@ -13,27 +13,11 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-/***************************************************************************
-       k3bdivxencodingprocess.cpp  -  description
-          -------------------
-begin                : Sun Apr 28 2002
-copyright            : (C) 2002 by Sebastian Trueg
-email                : trueg@informatik.uni-freiburg.de
-***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
 
 #include "k3bdivxencodingprocess.h"
 #include "k3bdivxcodecdata.h"
-#include "../tools/k3bexternalbinmanager.h"
-#include "../k3b.h"
+#include <tools/k3bexternalbinmanager.h>
+#include <k3b.h>
 
 #include <qdir.h>
 

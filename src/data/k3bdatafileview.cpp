@@ -25,8 +25,8 @@
 #include "k3bdatapropertiesdialog.h"
 #include "k3bdatadirtreeview.h"
 #include "k3bdataviewitem.h"
-#include "../k3b.h"
-#include "../k3bview.h"
+#include <k3b.h>
+#include <k3bview.h>
 
 
 #include <qdragobject.h>

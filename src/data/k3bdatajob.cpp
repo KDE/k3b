@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -15,17 +15,16 @@
 
 
 #include "k3bdatajob.h"
-
 #include "k3bdatadoc.h"
-#include "../k3b.h"
-#include "../tools/k3bglobals.h"
-#include "../device/k3bdevice.h"
-#include "../k3bemptydiscwaiter.h"
-#include "../tools/k3bexternalbinmanager.h"
-#include "../k3bcdrecordwriter.h"
-#include "../k3bcdrdaowriter.h"
 #include "k3bisoimager.h"
 #include "k3bmsinfofetcher.h"
+#include <k3b.h>
+#include <tools/k3bglobals.h>
+#include <device/k3bdevice.h>
+#include <k3bemptydiscwaiter.h>
+#include <tools/k3bexternalbinmanager.h>
+#include <k3bcdrecordwriter.h>
+#include <k3bcdrdaowriter.h>
 
 
 #include <kprocess.h>

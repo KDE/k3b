@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *                    Klaus-Dieter Krannich <kd@k3b.org>
  *
@@ -18,8 +18,8 @@
 #ifndef K3BCDCOPYJOB_H
 #define K3BCDCOPYJOB_H
 
-#include "../k3bjob.h"
-#include "../k3bcdrdaowriter.h"
+#include <k3bjob.h>
+#include <k3bcdrdaowriter.h>
 
 class K3bProcess;
 class K3bCdDevice::CdDevice;

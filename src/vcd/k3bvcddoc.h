@@ -18,7 +18,7 @@
 
 #include "k3bvcdoptions.h"
 #include "mpeginfo/mpeg.h"
-#include "../k3bdoc.h"
+#include <k3bdoc.h>
 
 #include <qptrqueue.h>
 #include <qfile.h>

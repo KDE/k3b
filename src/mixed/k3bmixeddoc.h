@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -16,7 +16,7 @@
 #ifndef K3B_MIXED_DOC_H
 #define K3B_MIXED_DOC_H
 
-#include "../k3bdoc.h"
+#include <k3bdoc.h>
 
 class K3bAudioDoc;
 class K3bDataDoc;

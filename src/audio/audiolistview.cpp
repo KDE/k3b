@@ -17,11 +17,11 @@
 #include "audiolistview.h"
 #include "audiolistviewitem.h"
 #include "k3baudiotrack.h"
-#include "../k3b.h"
-#include "../k3baudioplayer.h"
 #include "k3baudiotrackdialog.h"
 #include "k3baudiodoc.h"
-#include "../k3bview.h"
+#include <k3b.h>
+#include <k3baudioplayer.h>
+#include <k3bview.h>
 
 #include <qheader.h>
 #include <qtimer.h>

@@ -30,8 +30,10 @@
 // include files for KDE
 #include <kurl.h>
 #include <kio/global.h>
-#include "device/k3bmsf.h"
-#include "device/k3bdevice.h"
+#include <device/k3bmsf.h>
+#include <device/k3bdevice.h>
+
+
 // forward declaration of the K3b classes
 class K3bView;
 class QTimer;

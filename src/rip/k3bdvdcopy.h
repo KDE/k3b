@@ -18,7 +18,7 @@
 #ifndef K3BDVDCOPY_H
 #define K3BDVDCOPY_H
 
-#include "../k3bjob.h"
+#include <k3bjob.h>
 #include <qfile.h>
 #include <qvaluelist.h>
 #include <qstring.h>

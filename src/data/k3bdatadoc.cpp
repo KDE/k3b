@@ -19,9 +19,9 @@
 #include "k3bdiritem.h"
 #include "k3bdataview.h"
 #include "k3bdatajob.h"
-#include "../k3b.h"
 #include "k3bbootitem.h"
 #include "k3bspecialdataitem.h"
+#include <k3b.h>
 
 
 #include <stdlib.h>

@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -16,7 +16,7 @@
 #ifndef K3B_MIXED_VIEW_H
 #define K3B_MIXED_VIEW_H
 
-#include "../k3bview.h"
+#include <k3bview.h>
 
 #include <kurl.h>
 

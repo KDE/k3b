@@ -15,11 +15,11 @@
 
 
 #include "k3bburnprogressdialog.h"
-#include "kcutlabel.h"
-#include "device/k3bdevice.h"
-#include "k3bjob.h"
-#include "k3bdoc.h"
-#include "k3b.h"
+#include <k3bjob.h>
+#include <k3bdoc.h>
+#include <kcutlabel.h>
+#include <device/k3bdevice.h>
+#include <k3b.h>
 
 #include <qgroupbox.h>
 #include <qlabel.h>

@@ -17,7 +17,7 @@
 #ifndef K3BAUDIODOC_H
 #define K3BAUDIODOC_H
 
-#include "../k3bdoc.h"
+#include <k3bdoc.h>
 
 #include <qptrqueue.h>
 #include <qfile.h>

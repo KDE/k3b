@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -18,7 +18,7 @@
 #include "k3baudiodoc.h"
 #include "audiolistview.h"
 #include "k3baudioburndialog.h"
-#include "../k3bfillstatusdisplay.h"
+#include <k3bfillstatusdisplay.h>
 
 
 // QT-includes

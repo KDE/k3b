@@ -15,12 +15,13 @@
 
 
 #include "k3bisoimagewritingdialog.h"
-#include "../device/k3bdevicemanager.h"
-#include "../device/k3bdevice.h"
-#include "../k3bwriterselectionwidget.h"
-#include "../k3bburnprogressdialog.h"
 #include "k3biso9660imagewritingjob.h"
-#include "../kcutlabel.h"
+
+#include <device/k3bdevicemanager.h>
+#include <device/k3bdevice.h>
+#include <k3bwriterselectionwidget.h>
+#include <k3bburnprogressdialog.h>
+#include <kcutlabel.h>
 #include <k3bstdguiitems.h>
 #include <tools/k3bmd5job.h>
 

@@ -1,6 +1,6 @@
 /*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
  *
  * This file is part of the K3b project.
@@ -16,7 +16,7 @@
 #ifndef K3BVCDBURNDIALOG_H
 #define K3BVCDBURNDIALOG_H
 
-#include "../k3bprojectburndialog.h"
+#include <k3bprojectburndialog.h>
 #include <qmultilineedit.h>
 
 class QCheckBox;

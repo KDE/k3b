@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -23,7 +23,7 @@
 #include <kaction.h>
 
 // application specific includes
-#include "k3b.h"
+#include <k3b.h>
 #include "k3bview.h"
 #include "k3bdoc.h"
 

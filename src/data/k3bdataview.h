@@ -17,10 +17,10 @@
 #ifndef K3BDATAVIEW_H
 #define K3BDATAVIEW_H
 
-#include "../k3bview.h"
+#include <k3bview.h>
 #include "k3bdatadirtreeview.h"
 #include "k3bdatafileview.h"
-#include "../device/k3bdevice.h"
+#include <device/k3bdevice.h>
 
 class K3bDataDoc;
 class K3bDataItem;

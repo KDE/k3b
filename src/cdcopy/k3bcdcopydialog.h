@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *                    Klaus-Dieter Krannich <kd@k3b.org>
  *
@@ -20,7 +20,7 @@
 
 
 #include <kdialogbase.h>
-#include "../device/k3bdevice.h"
+#include <device/k3bdevice.h>
 
 class K3bWriterSelectionWidget;
 class K3bTempDirSelectionWidget;

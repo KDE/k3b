@@ -20,15 +20,15 @@
 #include "k3bvcdtrack.h"
 #include "k3bvcdxmlview.h"
 
-#include "../k3b.h"
-#include "../k3bdoc.h"
-#include "../k3bprocess.h"
-#include "../k3bemptydiscwaiter.h"
-#include "../device/k3bdevice.h"
-#include "../tools/k3bexternalbinmanager.h"
-#include "../tools/k3bglobals.h"
-#include "../k3bcdrecordwriter.h"
-#include "../k3bcdrdaowriter.h"
+#include <k3b.h>
+#include <k3bdoc.h>
+#include <k3bprocess.h>
+#include <k3bemptydiscwaiter.h>
+#include <device/k3bdevice.h>
+#include <tools/k3bexternalbinmanager.h>
+#include <tools/k3bglobals.h>
+#include <k3bcdrecordwriter.h>
+#include <k3bcdrdaowriter.h>
 
 #include <klocale.h>
 #include <kconfig.h>
