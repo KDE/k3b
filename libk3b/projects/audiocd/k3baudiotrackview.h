@@ -47,8 +47,9 @@ class K3bAudioTrackView : public K3bListView
 
   KActionCollection* actionCollection() const { return m_actionCollection; }
 
+ public slots:
   void showPlayerIndicator( K3bAudioTrack* );
-  void togglePauseIndicator();
+  void togglePauseIndicator( bool b );
   void removePlayerIndicator();
 
  private:

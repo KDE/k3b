@@ -773,15 +773,22 @@ void K3bAudioTrackView::showPlayerIndicator( K3bAudioTrack* track )
 }
 
 
-void K3bAudioTrackView::togglePauseIndicator()
+void K3bAudioTrackView::togglePauseIndicator( bool b )
 {
-  if( m_currentlyPlayingTrack )
-    getTrackViewItem( m_currentlyPlayingTrack )->setPixmap( 1, SmallIcon( "player_play" ) );  
+  if( m_currentlyPlayingTrack ) {
+    if( b )
+      getTrackViewItem( m_currentlyPlayingTrack )->setPixmap( 1, SmallIcon( "player_pause" ) );  
+    else
+      getTrackViewItem( m_currentlyPlayingTrack )->setPixmap( 1, SmallIcon( "player_play" ) );  
+  }
 }
 
 
 void K3bAudioTrackView::removePlayerIndicator()
 {
+  if( m_currentlyPlayingTrack )
+    getTrackViewItem( m_currentlyPlayingTrack )->setPixmap( 1, QPixmap() );  
+  m_currentlyPlayingTrack = 0;
 }
 
 #include "k3baudiotrackview.moc"

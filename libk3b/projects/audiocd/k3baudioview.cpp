@@ -58,23 +58,14 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
   toolBox->addWidget( ((KWidgetAction*)m_player->action( K3bAudioTrackPlayer::ACTION_SEEK ))->widget() );
   toolBox->addStretch();
 
-  connect( m_player, SIGNAL(playingTrack(K3bAudioTrack*)), this, SLOT(slotPlayerPlayingTrack(K3bAudioTrack*)) );
-  connect( m_player, SIGNAL(stopped()), this, SLOT(slotPlayerStopped()) );
+  // FIXME: this is not the right place for this!
+  connect( m_player, SIGNAL(playingTrack(K3bAudioTrack*)), m_songlist, SLOT(showPlayerIndicator(K3bAudioTrack*)) );
+  connect( m_player, SIGNAL(paused(bool)), m_songlist, SLOT(togglePauseIndicator(bool)) );
+  connect( m_player, SIGNAL(stopped()), m_songlist, SLOT(removePlayerIndicator()) );
 }
 
 K3bAudioView::~K3bAudioView(){
 }
 
-
-void K3bAudioView::slotPlayerPlayingTrack( K3bAudioTrack* track )
-{
-  // TODO: display icon in the list
-}
-
-
-void K3bAudioView::slotPlayerStopped()
-{
-  // FIXME
-}
 
 #include "k3baudioview.moc"
