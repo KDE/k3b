@@ -24,7 +24,6 @@
 
 
 class K3bExternalBinManager;
-class K3bSongManager;
 class K3bVersion;
 class KConfig;
 class KAboutData;
@@ -39,6 +38,8 @@ namespace K3bCdDevice {
  * The K3b core takes care of the managers. 
  * This has been seperated from K3bApplication to 
  * make creating a K3bPart easy.
+ * This is the heart of the K3b system. Every plugin may use this
+ * to get the information it needs.
  */
 class K3bCore : public QObject
 {
@@ -53,7 +54,6 @@ class K3bCore : public QObject
 
   K3bCdDevice::DeviceManager* deviceManager() const;
   K3bExternalBinManager* externalBinManager() const;
-  K3bSongManager* songManager() const;
 
   const K3bVersion& version() const;
 

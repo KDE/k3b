@@ -24,6 +24,7 @@
 class K3bMainWindow;
 class K3bCore;
 class K3bInterface;
+class K3bSongManager;
 
 
 class K3bApplication : public KApplication
@@ -37,6 +38,7 @@ class K3bApplication : public KApplication
   void init();
 
   K3bMainWindow* k3bMainWindow() const;
+  K3bSongManager* songManager() const { return m_songManager; }
 
   static K3bApplication* k3bApplication() { return s_k3bApp; }
 
@@ -50,6 +52,7 @@ class K3bApplication : public KApplication
   K3bCore* m_core;
   K3bInterface* m_interface;
   K3bMainWindow* m_mainWindow;
+  K3bSongManager* m_songManager;
   static K3bApplication* s_k3bApp;
 };
 

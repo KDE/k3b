@@ -15,14 +15,12 @@
 
 
 #include "k3bcore.h"
-#include "k3bsystemproblemdialog.h"
 
 #include <device/k3bdevicemanager.h>
 #include <k3bexternalbinmanager.h>
 #include <k3bdefaultexternalprograms.h>
 #include <k3bglobals.h>
 #include <k3bversion.h>
-#include <rip/songdb/k3bsongmanager.h>
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -36,11 +34,9 @@ class K3bCore::Private {
 public:
   Private( const KAboutData* about )
     : version( about->version() ) {
-    songManager = 0;
   }
 
   K3bVersion version;
-  K3bSongManager* songManager;
   K3bDeviceManager* deviceManager;
   K3bExternalBinManager* externalBinManager;
 };
@@ -60,7 +56,6 @@ K3bCore::K3bCore( const KAboutData* about, QObject* parent, const char* name)
   d->externalBinManager = new K3bExternalBinManager( this );
   d->deviceManager = new K3bCdDevice::DeviceManager( d->externalBinManager, this );
   K3b::addDefaultPrograms( d->externalBinManager );
-  d->songManager = new K3bSongManager( this );
 }
 
 
@@ -79,12 +74,6 @@ K3bCdDevice::DeviceManager* K3bCore::deviceManager() const
 K3bExternalBinManager* K3bCore::externalBinManager() const
 {
   return d->externalBinManager;
-}
-
-
-K3bSongManager* K3bCore::songManager() const
-{
-  return d->songManager;
 }
 
 
@@ -130,7 +119,6 @@ void K3bCore::init()
 
   // device manager
   // ===============================================================================
-  // The device configuration layout changed in 0.10
   //
 
   emit initializationInfo( i18n("Scanning for CD devices...") );
@@ -155,13 +143,6 @@ void K3bCore::init()
   //  emit initializationInfo( i18n("Initializing CD view...") );
 
   // ===============================================================================
-  emit initializationInfo( i18n("Reading local Song database...") );
-  config()->setGroup( "General Options" );
-
-  QString filename = config()->readPathEntry( "songlistPath", locateLocal("data", "k3b") + "/songlist.xml" );
-  d->songManager->load( filename );
-
-  emit initializationInfo( i18n("Ready.") );
 }
 
 
@@ -175,7 +156,6 @@ void K3bCore::saveConfig()
   deviceManager()->saveConfig( config() );
   config()->setGroup( "External Programs" );
   externalBinManager()->saveConfig( config() );
-  songManager()->save();
 }
 
 

@@ -14,7 +14,7 @@
  */
 
 
-#include "../k3b.h"
+#include "../k3bapplication.h"
 #include <k3bglobals.h>
 #include "k3baudiodoc.h"
 #include "k3baudioview.h"
@@ -679,7 +679,7 @@ void K3bAudioDoc::slotDetermineTrackStatus()
 void K3bAudioDoc::determineAudioMetaInfo( K3bAudioTrack* track )
 {
   // first search the songdb
-  K3bSong *song = k3bcore->songManager()->findSong( track->absPath() );
+  K3bSong *song = k3bapp->songManager()->findSong( track->absPath() );
   if( song != 0 ){
     track->setArtist( song->getArtist() );
     //      newTrack->setAlbum( song->getAlbum() );

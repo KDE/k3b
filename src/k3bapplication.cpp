@@ -16,9 +16,9 @@
 
 #include "k3bapplication.h"
 #include "k3b.h"
-#include "k3bcore.h"
 #include "k3binterface.h"
 
+#include <k3bcore.h>
 #include <device/k3bdevicemanager.h>
 #include <k3bexternalbinmanager.h>
 #include <k3bdefaultexternalprograms.h>
@@ -27,6 +27,7 @@
 #include <rip/songdb/k3bsongmanager.h>
 #include <k3bdoc.h>
 #include <k3bsystemproblemdialog.h>
+#include <rip/songdb/k3bsongmanager.h>
 
 #include <ktip.h>
 #include <klocale.h>
@@ -34,6 +35,7 @@
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <dcopclient.h>
+#include <kstandarddirs.h>
 
 
 K3bApplication* K3bApplication::s_k3bApp = 0;
@@ -46,6 +48,9 @@ K3bApplication::K3bApplication()
     m_mainWindow(0)
 {
   m_core = new K3bCore( aboutData(), this );
+
+  m_songManager = new K3bSongManager( this );
+
   connect( m_core, SIGNAL(initializationInfo(const QString&)),
 	   SIGNAL(initializationInfo(const QString&)) );
   s_k3bApp = this;
@@ -70,6 +75,12 @@ K3bMainWindow* K3bApplication::k3bMainWindow() const
 void K3bApplication::init()
 {
   m_core->init();
+
+  emit initializationInfo( i18n("Reading local Song database...") );
+  config()->setGroup( "General Options" );
+
+  QString filename = config()->readPathEntry( "songlistPath", locateLocal("data", "k3b") + "/songlist.xml" );
+  m_songManager->load( filename );
 
   emit initializationInfo( i18n("Creating GUI...") );
 
@@ -174,6 +185,7 @@ void K3bApplication::init()
 void K3bApplication::slotShutDown()
 {
   m_core->saveConfig();
+  songManager()->save();
 }
 
 #include "k3bapplication.moc"
