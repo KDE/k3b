@@ -488,6 +488,44 @@ namespace K3bCdDevice
      *                    100b - Mode 2 form 1
      *                    101b - Mode 2 form 2
      *
+     * @param startAdress K3b does map lba 0 to msf 00:00:00 so this method uses
+     *                    startAdress+150 as the starting msf.
+     *
+     * @param endAdress This is the ending adress which is NOT included in the read operation.
+     *                  K3b does map lba 0 to msf 00:00:00 so this method uses
+     *                  endAdress+150 as the ending msf.
+     *
+     * @param c2:         00b  - No error info
+     *                    01b  - 294 bytes, one bit for every byte of the 2352 bytes
+     *                    10b  - 296 bytes, xor of all c2 bits, zero pad bit, 294 c2 bits
+     *
+     * @param subChannel: 000b - No Sub-channel data
+     *                    001b - RAW P-W Sub-channel (96 bytes)
+     *                    010b - Formatted Q Sub-channel (16 bytes)
+     *                    100b - Corrected and de-interleaved R-W Sub-channel (96 bytes)
+     */
+    bool readCdMsf( unsigned char* data, 
+		    int dataLen,
+		    int sectorType,
+		    bool dap,
+		    const K3b::Msf& startAdress,
+		    const K3b::Msf& endAdress,
+		    bool sync,
+		    bool header,
+		    bool subHeader,
+		    bool userData,			    
+		    bool edcEcc,
+		    int c2,
+		    int subChannel ) const;
+
+    /**
+     * @param sectorType: 000b - all types
+     *                    001b - CD-DA
+     *                    010b - Mode 1
+     *                    011b - Mode 2 formless
+     *                    100b - Mode 2 form 1
+     *                    101b - Mode 2 form 2
+     *
      * @param c2:         00b  - No error info
      *                    01b  - 294 bytes, one bit for every byte of the 2352 bytes
      *                    10b  - 296 bytes, xor of all c2 bits, zero pad bit, 294 c2 bits

@@ -1085,24 +1085,21 @@ int K3bCdDevice::CdDevice::getDataMode( const K3b::Msf& sector ) const
   if (open() < 0)
     return ret;
 
+  // we use readCdMsf here since it's defined mandatory in MMC1 and
+  // we only use this method for CDs anyway
   unsigned char data[2352];
-  bool readSuccess = readSectorsRaw( data, sector.lba(), 1 );
-
-#ifdef Q_OS_LINUX
-  if( !readSuccess ) {
-    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName()
-	      << ": MMC RAW READ failed. falling back to cdrom.h." << endl;
-
-    data[0] = sector.minutes();
-    data[1] = sector.seconds();
-    data[2] = sector.frames();
-    if( ::ioctl(d->deviceFd,CDROMREADRAW,data) == -1 ) {
-      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName()
-		<< ": could not get track header, (lba " << sector.lba() << ") ! "  << strerror(errno) << endl;
-      readSuccess = false;
-    }
-  }
-#endif // Q_OS_LINUX
+  bool readSuccess = readCdMsf( data, 2352,
+				0,      // all sector types
+				false,  // no dap
+				sector, 
+				sector+1,
+				true, // SYNC
+				true, // HEADER
+				true, // SUBHEADER
+				true, // USER DATA
+				true, // EDC/ECC
+				0,    // no c2 info
+				0 );
 
   if( readSuccess ) {
     if ( data[15] == 0x1 )
@@ -1241,12 +1238,14 @@ K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc() const
 
       for( unsigned int i = 1; i <= toc.count(); ++i ) {
 	QCString isrc;
-	if( readIsrc( i, isrc ) ) {
-	  kdDebug() << "(K3bCdDevice::CdDevice) found ISRC for track " << i << ": " << isrc << endl;
-	  toc[i-1].setIsrc( isrc );
+	if( toc[i-1].type() == Track::AUDIO ) {
+	  if( readIsrc( i, isrc ) ) {
+	    kdDebug() << "(K3bCdDevice::CdDevice) found ISRC for track " << i << ": " << isrc << endl;
+	    toc[i-1].setIsrc( isrc );
+	  }
+	  else
+	    kdDebug() << "(K3bCdDevice::CdDevice) no ISRC found for track " << i << endl;
 	}
-	else
-	  kdDebug() << "(K3bCdDevice::CdDevice) no ISRC found for track " << i << endl;
       }
     }
   }
@@ -1271,56 +1270,66 @@ bool K3bCdDevice::CdDevice::readFormattedToc( K3bCdDevice::Toc& toc, bool dvd ) 
   unsigned char* data = 0;
   int dataLen = 0;
   if( readTocPmaAtip( &data, dataLen, 0, 0, 1 ) ) {
-    int lastTrack = data[3];
-    toc_track_descriptor* td = (toc_track_descriptor*)&data[4];
-    for( int i = 0; i < lastTrack; ++i ) {
 
-      Track track;
-      unsigned int control = 0;
+    if( dataLen < 4 ) {
+      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": formatted toc data too small." << endl;
+    }
+    else if( dataLen != ( (int)sizeof(toc_track_descriptor) * ((int)data[3]+1) ) + 4 ) {
+      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": invalid formatted toc data length: "
+		<< (dataLen-2) << endl;
+    }
+    else {
+      int lastTrack = data[3];
+      toc_track_descriptor* td = (toc_track_descriptor*)&data[4];
+      for( int i = 0; i < lastTrack; ++i ) {
 
-      unsigned char* trackData = 0;
-      int trackDataLen = 0;
-      if( readTrackInformation( &trackData, trackDataLen, 1, i+1 ) ) {
-	track_info_t* trackInfo = (track_info_t*)trackData;
+	Track track;
+	unsigned int control = 0;
 
-	track.m_firstSector = from4Byte( trackInfo->track_start );
-	track.m_lastSector = track.m_firstSector + from4Byte( trackInfo->track_size ) - 1;
-	track.m_session = (int)(trackInfo->session_number_m<<8 & 0xf0 |
-				trackInfo->session_number_l & 0x0f);  //FIXME: is this BCD??
+	unsigned char* trackData = 0;
+	int trackDataLen = 0;
+	if( readTrackInformation( &trackData, trackDataLen, 1, i+1 ) ) {
+	  track_info_t* trackInfo = (track_info_t*)trackData;
 
-	control = trackInfo->track_mode;
+	  track.m_firstSector = from4Byte( trackInfo->track_start );
+	  track.m_lastSector = track.m_firstSector + from4Byte( trackInfo->track_size ) - 1;
+	  track.m_session = (int)(trackInfo->session_number_m<<8 & 0xf0 |
+				  trackInfo->session_number_l & 0x0f);  //FIXME: is this BCD??
 
-	delete [] trackData;
+	  control = trackInfo->track_mode;
+
+	  delete [] trackData;
+	}
+	else {
+	  //
+	  // READ TRACK INFORMATION failed
+	  // no session number info
+	  // no track length and thus possibly incorrect last sector for
+	  // multisession disks
+	  //
+	  track.m_firstSector = from4Byte( td[i].start_adr );
+	  track.m_lastSector = from4Byte( td[i+1].start_adr ) - 1;
+	  control = td[i].control;
+	}
+
+	if( dvd ) {
+	  track.m_type = Track::DATA;
+	  track.m_mode = Track::DVD;
+	}
+	else {
+	  track.m_type = (control & 0x4) ? Track::DATA : Track::AUDIO;
+	  track.m_mode = getTrackDataMode( track );
+	}
+	track.m_copyPermitted = ( control & 0x2 );
+	track.m_preEmphasis = ( control & 0x1 );
+
+	toc.append( track );
       }
-      else {
-	//
-	// READ TRACK INFORMATION failed
-	// no session number info
-	// no track length and thus possibly incorrect last sector for
-	// multisession disks
-	//
-	track.m_firstSector = from4Byte( td[i].start_adr );
-	track.m_lastSector = from4Byte( td[i+1].start_adr ) - 1;
-	control = td[i].control;
-      }
 
-      if( dvd ) {
-	track.m_type = Track::DATA;
-	track.m_mode = Track::DVD;
-      }
-      else {
-	track.m_type = (control & 0x4) ? Track::DATA : Track::AUDIO;
-	track.m_mode = getTrackDataMode( track );
-      }
-      track.m_copyPermitted = ( control & 0x2 );
-      track.m_preEmphasis = ( control & 0x1 );
-
-      toc.append( track );
+      success = true;
     }
     
     delete [] data;
-
-    success = true;
   }
 
 
@@ -1362,7 +1371,7 @@ bool K3bCdDevice::CdDevice::readRawToc( K3bCdDevice::Toc& toc ) const
 	K3b::Msf sessionLeadOut;
 	
 	kdDebug() << "Session |  ADR   | CONTROL|  TNO   | POINT  |  Min   |  Sec   | Frame  |  Zero  |  PMIN  |  PSEC  | PFRAME |" << endl;
-	for( int i = 0; i < (dataLen-4)/11; ++i ) {
+	for( int i = 0; i < (dataLen-4)/(int)sizeof(toc_raw_track_descriptor); ++i ) {
 	  QString s;
 	  s += QString( " %1 |" ).arg( (int)tr[i].session_number, 6 );
 	  s += QString( " %1 |" ).arg( (int)tr[i].adr, 6 );
@@ -2515,6 +2524,48 @@ bool K3bCdDevice::CdDevice::readCd( unsigned char* data,
 
   if( cmd.transport( TR_DIR_READ, data, dataLen ) ) {
     kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ CD failed!" << endl;
+    return false;
+  }
+  else
+    return true;
+}
+
+
+bool K3bCdDevice::CdDevice::readCdMsf( unsigned char* data, 
+				       int dataLen,
+				       int sectorType,
+				       bool dap,
+				       const K3b::Msf& startAdress,
+				       const K3b::Msf& endAdress,
+				       bool sync,
+				       bool header,
+				       bool subHeader,
+				       bool userData,				    
+				       bool edcEcc,
+				       int c2,
+				       int subChannel ) const
+{
+  ::memset( data, 0, dataLen );
+
+  ScsiCommand cmd( this );
+  cmd[0] = MMC::READ_CD_MSF;
+  cmd[1] = (sectorType<<2 & 0x1c) | ( dap ? 0x2 : 0x0 );
+  cmd[3] = (startAdress+150).minutes();
+  cmd[4] = (startAdress+150).seconds();
+  cmd[5] = (startAdress+150).frames();
+  cmd[6] = (endAdress+150).minutes();
+  cmd[7] = (endAdress+150).seconds();
+  cmd[8] = (endAdress+150).frames();
+  cmd[9] = ( ( sync      ? 0x80 : 0x0 ) | 
+	     ( subHeader ? 0x40 : 0x0 ) | 
+	     ( header    ? 0x20 : 0x0 ) |
+	     ( userData  ? 0x10 : 0x0 ) |
+	     ( edcEcc    ? 0x8  : 0x0 ) |
+	     ( c2<<1 & 0x6 ) );
+  cmd[10] = subChannel & 0x7;
+
+  if( cmd.transport( TR_DIR_READ, data, dataLen ) ) {
+    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ CD MSF failed!" << endl;
     return false;
   }
   else
