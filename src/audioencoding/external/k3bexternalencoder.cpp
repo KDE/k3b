@@ -229,8 +229,21 @@ long K3bExternalEncoder::encodeInternal( const char* data, Q_ULONG len )
       return -1;
 
   if( d->process ) {
-    if( d->process->isRunning() )
-      return ::write( d->process->stdinFd(), (const void*)data, len );
+    if( d->process->isRunning() ) {
+
+      // we swap the bytes to reduce user irritation ;)
+      char* buffer = new char[len];
+      for( int i = 0; i < len-1; i+=2 ) {
+	buffer[i] = data[i+1];
+	buffer[i+1] = data[i];
+      }
+
+      long written = ::write( d->process->stdinFd(), (const void*)buffer, len );
+
+      delete [] buffer;
+
+      return written;
+    }
     else
       return -1;
   }
