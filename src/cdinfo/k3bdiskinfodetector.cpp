@@ -52,7 +52,10 @@ void K3bDiskInfoDetector::detect( K3bDevice* device )
 
   // since fetchTocInfo could already emit the diskInfoReady signal
   // and detect needs to return before this happens use the timer
-  QTimer::singleShot( 0, this, SLOT(fetchTocInfo()) );
+  if( device->interfaceType() == K3bDevice::SCSI )
+    QTimer::singleShot( 0, this, SLOT(fetchTocInfo()) );
+  else
+    QTimer::singleShot( 0, this, SLOT(fetchIdeInformation()) );
 }
 
 
@@ -309,28 +312,31 @@ void K3bDiskInfoDetector::slotTocInfoFinished()
 		m_info.toc.append( K3bTrack( lastTrack.firstSector(), startSec-1, lastTrack.type(), lastTrack.mode() ) );
 	      }
 
-	      switch( control ) {
-	      case 0:
-		control = K3bTrack::AUDIO;
-		break;
-	      default:
-		control = K3bTrack::DATA;
-		break;
-	      }
 
-	      switch( mode ) {
-	      case 1:
-		mode = K3bTrack::MODE1;
-		break;
-	      case 2:
-		mode = K3bTrack::MODE2;
-		break;
-	      default:
-		mode = K3bTrack::UNKNOWN;
-		break;
-	      }
+	      // now this is the meaning of control and mode:
+	      // control (combination of the following)
+	      // 0x01 - Audio with preemp
+	      // 0x02 - Audio copy permitted
+	      // 0x04 - Data track
+	      // 0x08 - 4 channel audio
 
-	      lastTrack = K3bTrack( startSec, startSec, control, mode );
+	      // mode (only for data tracks)
+	      // 1 - Mode 1
+	      // 2 - Mode 2 
+
+	      int trackType = 0;
+	      int trackMode = K3bTrack::UNKNOWN;
+	      if( control & 0x04 ) {
+		trackType = K3bTrack::DATA;
+		if( mode == 1 )
+		  trackMode = K3bTrack::MODE1;
+		else if( mode == 2 )
+		  trackMode = K3bTrack::MODE2;
+	      }
+	      else
+		trackType = K3bTrack::AUDIO;
+
+	      lastTrack = K3bTrack( startSec, startSec, trackType, trackMode );
 	    }
 	    else {
 	      kdDebug() << "(K3bDiskInfoDetector) Could not parse mode of track: " << str.mid( start ) << endl;
