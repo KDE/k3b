@@ -33,11 +33,11 @@ class K3bOggVorbisEncoderFactory : public K3bAudioEncoderFactory
   K3bOggVorbisEncoderFactory( QObject* parent = 0, const char* name = 0 );
   ~K3bOggVorbisEncoderFactory();
 
-  QString extension() const { return "ogg"; }
+  QStringList extensions() const { return QStringList("ogg"); }
   
-  QString fileTypeComment() const;
+  QString fileTypeComment( const QString& ) const;
 
-  long long fileSize( const K3b::Msf& msf ) const;
+  long long fileSize( const QString&, const K3b::Msf& msf ) const;
 
   int pluginSystemVersion() const { return 1; }
 
@@ -64,7 +64,7 @@ class K3bOggVorbisEncoder : public K3bAudioEncoder
  private:
   void loadConfig();
   void finishEncoderInternal();
-  bool initEncoderInternal();
+  bool initEncoderInternal( const QString& extension );
   long encodeInternal( const char* data, Q_ULONG len );
   void setMetaDataInternal( const QString&, const QString& );
 

@@ -103,7 +103,7 @@
 #include "plugin/k3bpluginfactory.h"
 #include <k3bsystemproblemdialog.h>
 #include <k3baudiodecoder.h>
-#include <k3bpluginmanager.h>
+
 
 
 static K3bMainWindow* s_k3bMainWindow = 0;
@@ -125,7 +125,6 @@ public:
   QMap<K3bDoc*, K3bProjectInterface*> projectInterfaceMap;
 
   K3bProjectManager* projectManager;
-  K3bPluginManager* pluginManager;
   K3bDoc* lastDoc;
 
   QWidgetStack* documentStack;
@@ -140,11 +139,7 @@ K3bMainWindow::K3bMainWindow()
 {
   d = new Private;
   d->projectManager = new K3bProjectManager( this );
-  d->pluginManager = new K3bPluginManager( this );
   d->lastDoc = 0;
-
-  // load all plugins
-  d->pluginManager->loadAll();
 
   s_k3bMainWindow = this;
 

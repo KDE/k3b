@@ -68,6 +68,11 @@ class K3bAudioRipThread : public QObject, public K3bThread
   void setEncoderFactory( K3bAudioEncoderFactory* f );
 
   /**
+   * Used for encoders that support multiple formats
+   */
+  void setFileType( const QString& );
+
+  /**
    * 1 is the first track
    */
   void setTracksToRip( const QValueVector<QPair<int, QString> >& t ) { m_tracks = t; }

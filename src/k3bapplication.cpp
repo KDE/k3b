@@ -28,6 +28,7 @@
 #include <k3bdoc.h>
 #include <k3bsystemproblemdialog.h>
 #include <k3bthread.h>
+#include <k3bpluginmanager.h>
 
 #include <ktip.h>
 #include <klocale.h>
@@ -75,6 +76,11 @@ K3bMainWindow* K3bApplication::k3bMainWindow() const
 
 void K3bApplication::init()
 {
+  // load the plugins before doing anything else
+  // they might add external bins
+  K3bPluginManager* pluginManager = new K3bPluginManager( this );
+  pluginManager->loadAll();
+
   m_core->init();
 
   emit initializationInfo( i18n("Reading local Song database...") );

@@ -99,7 +99,7 @@ K3bOggVorbisEncoder::~K3bOggVorbisEncoder()
 }
 
 
-bool K3bOggVorbisEncoder::initEncoderInternal()
+bool K3bOggVorbisEncoder::initEncoderInternal( const QString& )
 {
   cleanup();
 
@@ -421,13 +421,13 @@ K3bOggVorbisEncoderFactory::~K3bOggVorbisEncoderFactory()
 }
 
 
-QString K3bOggVorbisEncoderFactory::fileTypeComment() const
+QString K3bOggVorbisEncoderFactory::fileTypeComment( const QString& ) const
 {
   return i18n("Ogg-Vorbis");
 }
 
 
-long long K3bOggVorbisEncoderFactory::fileSize( const K3b::Msf& msf ) const
+long long K3bOggVorbisEncoderFactory::fileSize( const QString&, const K3b::Msf& msf ) const
 {
   KConfig* c = k3bcore->config();
   c->setGroup( "K3bOggVorbisEncoderPlugin" );

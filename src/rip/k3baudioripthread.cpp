@@ -68,6 +68,8 @@ public:
   bool canceled;
 
   K3bCdDevice::Toc toc;
+
+  QString fileType;
 };
 
 
@@ -86,6 +88,12 @@ K3bAudioRipThread::~K3bAudioRipThread()
   delete d->waveFileWriter;
   delete d->paranoiaLib;
   delete d;
+}
+
+
+void K3bAudioRipThread::setFileType( const QString& t )
+{
+  d->fileType = t;
 }
 
 
@@ -177,7 +185,7 @@ void K3bAudioRipThread::run()
     // initialize
     bool isOpen = true;
     if( d->encoder ) {
-      isOpen = d->encoder->openFile( filename );
+      isOpen = d->encoder->openFile( d->fileType, filename );
       
       // here we use cd Title and Artist
       d->encoder->setMetaData( "Artist", m_cddbEntry.cdArtist );
@@ -259,7 +267,7 @@ bool K3bAudioRipThread::ripTrack( int track, const QString& filename )
     bool isOpen = true;
     if( !m_singleFile ) {
       if( d->encoder ) {
-	isOpen = d->encoder->openFile( filename );
+	isOpen = d->encoder->openFile( d->fileType, filename );
 	
 	d->encoder->setMetaData( "Artist", m_cddbEntry.artists[track-1] );
 	d->encoder->setMetaData( "Title", m_cddbEntry.titles[track-1] );
@@ -439,7 +447,7 @@ QString K3bAudioRipThread::jobDetails() const
   if( d->encoderFactory )
     return i18n("1 track (encoding to %1)", 
 		"%n tracks (encoding to %1)", 
-		m_tracks.count() ).arg(d->encoderFactory->fileTypeComment());
+		m_tracks.count() ).arg(d->encoderFactory->fileTypeComment(d->fileType));
   else
     return i18n("1 track", "%n tracks", m_tracks.count() );
 }

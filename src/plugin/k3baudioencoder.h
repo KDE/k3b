@@ -41,21 +41,23 @@ class K3bAudioEncoderFactory : public K3bPluginFactory
   QString group() const { return "AudioEncoder"; }
 
   /**
-   * This should return the fileextension used by the filetype written in the
+   * This should return the fileextensions supported by the filetype written in the
    * encoder.
+   * May return an empty list.
    */
-  virtual QString extension() const = 0;
+  virtual QStringList extensions() const = 0;
 
   /**
    * The filetype as presented to the user.
    */
-  virtual QString fileTypeComment() const = 0;
+  virtual QString fileTypeComment( const QString& extension ) const = 0;
 
   /**
    * Determine the filesize of the encoded file (~)
    * default implementation returnes -1 (unknown)
+   * First parameter is the extension to be used
    */
-  virtual long long fileSize( const K3b::Msf& ) const { return -1; }
+  virtual long long fileSize( const QString&, const K3b::Msf& ) const { return -1; }
 };
 
 
@@ -71,8 +73,9 @@ class K3bAudioEncoder : public K3bPlugin
   /**
    * The default implementation openes the file for writing with 
    * writeData. Normally this does not need to be reimplemented.
+   * @param extension the filetype to be used. 
    */
-  virtual bool openFile( const QString& filename );
+  virtual bool openFile( const QString& extension, const QString& filename );
 
   /**
    * The default implementation returnes true if openFile (default implementation) has been
@@ -114,7 +117,7 @@ class K3bAudioEncoder : public K3bPlugin
    * Called by the default implementation of openFile
    * This calls initEncoderInternal.
    */
-  bool initEncoder();
+  bool initEncoder( const QString& extension );
 
   /**
    * Called by the deafult implementation of openFile
@@ -134,7 +137,7 @@ class K3bAudioEncoder : public K3bPlugin
    * default implementation does nothing
    * this may already write data.
    */
-  virtual bool initEncoderInternal();
+  virtual bool initEncoderInternal( const QString& extension );
 
   /**
    * reimplement this if the encoder needs to do some
