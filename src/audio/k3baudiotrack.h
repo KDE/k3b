@@ -70,7 +70,7 @@ class K3bAudioTrack
   bool copyProtection() const { return m_copy; }
   bool preEmp() const { return m_preEmp; }
 	
-  void setPregap( int p ) { m_pregap = p; }
+  void setPregap( int p );
 
   /**
    * If the file is a mp3-file, it's mp3-tag is used

@@ -26,6 +26,7 @@
 #include "../device/k3bdevice.h"
 #include "../k3bemptydiscwaiter.h"
 #include "../tools/k3bexternalbinmanager.h"
+#include "k3baudiotocfilewriter.h"
 #include <k3bcdrecordwriter.h>
 #include <k3bcdrdaowriter.h>
 
@@ -597,7 +598,7 @@ void K3bAudioJob::cdrdaoWrite()
   emit infoMessage( i18n("Writing TOC-file"), K3bJob::STATUS );
   m_tocFile = locateLocal( "appdata", "temp/k3btemptoc.toc");
 
-  if( !m_doc->writeTOC( m_tocFile ) ) {
+  if( !K3bAudioTocfileWriter::writeAudioTocFile( m_doc, m_tocFile ) ) {
     kdDebug() << "(K3bAudioJob) Could not write TOC-file." << endl;
     emit infoMessage( i18n("Could not write correct TOC-file."), K3bJob::ERROR );
     cancelAll();
