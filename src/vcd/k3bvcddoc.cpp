@@ -687,8 +687,6 @@ bool K3bVcdDoc::loadDocumentData( QDomElement* root )
 
     emit newTracks();
 
-    informAboutNotFoundFiles();
-
     // do not add saved pbcTrack links when one ore more files missing.
     // TODO: add info message to informAboutNotFoundFiles();
     if ( m_notFoundFiles.isEmpty() ) {
@@ -729,6 +727,8 @@ bool K3bVcdDoc::loadDocumentData( QDomElement* root )
         setPbcTracks();
         setModified( false );
     }
+
+    informAboutNotFoundFiles();
 
     return true;
 }
