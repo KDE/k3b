@@ -301,7 +301,7 @@ void K3bIsoImageWritingDialog::slotUser1()
   }
 
   // create a progresswidget
-  K3bBurnProgressDialog d( this, "burnProgress", false );
+  K3bBurnProgressDialog d( kapp->mainWidget(), "burnProgress", false );
 
   d.setJob( m_job );
   hide();
