@@ -1,26 +1,25 @@
-# This spec file was generated using Kpp
-# If you find any problems with this spec file please report
-# the error to ian geiser <geiseri@msoe.edu>
-Summary:   
+%define distversion %( perl -e '$_=\<\>;/(\\d+)\\.(\\d)\\.?(\\d)?/; print "$1$2".($3||0)' /etc/*-release)
+Summary:   An awesome CD burining utility
 Name:      k3b
 Version:   0.7.4
-Release:   0.1
+Release:   %{_vendor}_%{distversion}
 Copyright: GPL
 Vendor:    Sebastian Trueg <trueg@informatik.uni-freiburg.de>
 Url:       http://k3b.sourceforge.net
-Icon:     k3b.xpm
 Packager:  Sebastian Trueg <trueg@informatik.uni-freiburg.de>
 Group:     Archiving/Cd burning
 Source:    k3b-0.7.4.tar.gz
-BuildRoot: 
+BuildRoot:  /tmp/%{name}-%{version}
+Prefix: `kde-config --prefix`
 
 %description
 K3b - The CD Creator - Writing cds under linux made easy.
 
 %prep
 %setup
+make -f admin/Makefile.common
 CFLAGS="$RPM_OPT_FLAGS" CXXFLAGS="$RPM_OPT_FLAGS" ./configure \
-                 \
+                 --prefix=%{prefix} \
                 $LOCALFLAGS
 %build
 # Setup for parallel builds
