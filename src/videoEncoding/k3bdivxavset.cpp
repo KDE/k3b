@@ -75,23 +75,11 @@ void K3bDivxAVSet::setupGui() {
     QLabel *cds = new QLabel( i18n( "CDs:" ), this );
     QString wt_cd( i18n( "Select how many CDs the final encoded video should have. You can select CDRs with a size of 650MB and 700MB." ) );
     QWhatsThis::add( cds, wt_cd );
-    QLabel *mp3bitrate = new QLabel( i18n( "MP3 bitrate:" ), this );
+    m_mp3bitrate = new QLabel( i18n( "MP3 Bitrate:" ), this );
     QString wt_mp3( i18n( "Select bitrate of the audio track. MP3 can be encoded with constant or variable bitrate and joint stereo. AC3 passthrough must be disabled to use MP3." ) );
-    QWhatsThis::add( mp3bitrate, wt_mp3 );
+    QWhatsThis::add( m_mp3bitrate, wt_mp3 );
     QLabel *codec = new QLabel( i18n( "Video codec:" ), this );
-    // PROOF READER COMMENT: I've taken out some of the subjective text and made it a bit more general
-    //                       I hope you're okay with that - my goal is to make it more professional :¬)
-    // Thomas: Sounds good to me. Thanks.
-    QString wt_codec( i18n( "Select the video codec to encode to the final movie. XviD (www.xvid.org) is an Open Source codec and \
-has similar features to DivX5. DivX4 is the predecessor to DivX5. All three codecs support 1-pass and 2-pass encoding. \
-XviD (CVS) is support for the latest nightly snapshots of XviD. \
-Regarding quality, try all the different codecs to find out which you prefer. Secondly, read the various forums about MPEG-4 Encoding \
-(www.doom9.org, www.xvid.org, www.divx.net, ... ). The difference between a DivX4 and XviD 2-pass encoded movie \
-is quite small. Sometimes DivX4 (smoother) is better and other times XviD (sharper). \
-If the encoding process crashes then you probably haven't used the codec you have installed. Due to the codec libraries having the same name, you \
-can only use DivX4 or DivX5 and XviD or XviD (CVS). This will be fixed in a future version, so the codecs will auto-detect and \
-can be used with different install locations." ) );
-    QWhatsThis::add( codec, wt_codec );
+    
     QLabel *codecmode = new QLabel( i18n( "Codec mode:" ), this );
     QString wt_codecmode( i18n( "Select the mode for video encoding. 1-pass encoding has lower quality than 2-pass, but requires half the time to encode a video. \
 In 2-pass mode the video will be encoded twice. The first time, the video will only be analyzed to get the best quality in the second encoding pass." ) );
@@ -125,13 +113,9 @@ In 2-pass mode the video will be encoded twice. The first time, the video will o
     m_comboMp3->insertItem( i18n( "160 kbits" ) );
     m_comboMp3->insertItem( i18n( "192 kbits" ) );
     QWhatsThis::add( m_comboMp3, wt_mp3 );
+    
     m_comboCodec = new KComboBox( false, this );
-    m_comboCodec->insertItem( "XviD" );
-    m_comboCodec->insertItem( "DivX4" );
-    m_comboCodec->insertItem( "DivX5" );
-    m_comboCodec->insertItem( "XviD (CVS)" );
-    QWhatsThis::add( m_comboCodec, wt_codec );
-
+    initGuiFactoryCodec( *m_comboCodec );
     QHButtonGroup *modeGroup = new QHButtonGroup( this );
     modeGroup->layout() ->setSpacing( KDialog::spacingHint() );
     modeGroup->layout() ->setMargin( KDialog::marginHint() );
@@ -162,7 +146,7 @@ You should try it first with some test encodings." ) );
     mainLayout->addMultiCellWidget( m_vBitrateCustom, 1, 1, 2, 2 );
     mainLayout->addMultiCellWidget( m_checkAc3Passthrough, 2, 2, 0, 1 );
     mainLayout->addMultiCellWidget( m_aAC3Bitrate, 2, 2, 2, 2 );
-    mainLayout->addMultiCellWidget( mp3bitrate, 3, 3, 0, 0 );
+    mainLayout->addMultiCellWidget( m_mp3bitrate, 3, 3, 0, 0 );
     mainLayout->addMultiCellWidget( m_comboMp3, 3, 3, 1, 1 );
     mainLayout->addMultiCellWidget( m_mp3modeGroup, 3, 3, 2, 2 );
     mainLayout->addMultiCellWidget( m_comboCodec, 4, 4, 1, 1 );
@@ -258,7 +242,11 @@ void K3bDivxAVSet::slotAc3Passthrough( int mode ) {
     if ( mode == 0 ) {
         m_mp3modeGroup->setEnabled( true );
         m_comboMp3->setEnabled( true );
+        m_mp3bitrate->setEnabled( true );
+        m_data->setNormalize( true );  // use mp3 audio, check for maximum gain
     } else {
+        m_data->setNormalize( false );  
+        m_mp3bitrate->setEnabled( false );
         m_mp3modeGroup->setEnabled( false );
         m_comboMp3->setEnabled( false );
         if ( !m_data->isAc3Set() ) {
@@ -301,4 +289,23 @@ void K3bDivxAVSet::slotCustomBitrate( int size ) {
     slotCalcBitrate( );
 }
 
+void K3bDivxAVSet::initGuiFactoryCodec( KComboBox &box ){
+    // PROOF READER COMMENT: I've taken out some of the subjective text and made it a bit more general
+    //                       I hope you're okay with that - my goal is to make it more professional :¬)
+    // Thomas: Sounds good to me. Thanks.
+    QString wt_codec( i18n( "Select the video codec to encode to the final movie. XviD (www.xvid.org) is an Open Source codec and \
+has similar features to DivX5. DivX4 is the predecessor to DivX5. All three codecs support 1-pass and 2-pass encoding. \
+XviD (CVS) is support for the latest nightly snapshots of XviD. \
+Regarding quality, try all the different codecs to find out which you prefer. Secondly, read the various forums about MPEG-4 Encoding \
+(www.doom9.org, www.xvid.org, www.divx.net, ... ). The difference between a DivX4 and XviD 2-pass encoded movie \
+is quite small. Sometimes DivX4 (smoother) is better and other times XviD (sharper). \
+If the encoding process crashes then you probably haven't used the codec you have installed. Due to the codec libraries having the same name, you \
+can only use DivX4 or DivX5 and XviD or XviD (CVS). This will be fixed in a future version, so the codecs will auto-detect and \
+can be used with different install locations." ) );
+    box.insertItem( "XviD" );
+    box.insertItem( "DivX4" );
+    box.insertItem( "DivX5" );
+    box.insertItem( "XviD (CVS)" );
+    QWhatsThis::add( &box, wt_codec );
+}
 #include "k3bdivxavset.moc"
