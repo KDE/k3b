@@ -2182,13 +2182,15 @@ void K3bCdDevice::CdDevice::checkWriteModes()
   int dataLen = 0;
 
   if( !modeSense( &buffer, dataLen, 0x05 ) ) {
-    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": modeSense 0x05 failed!" << endl;
+    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": modeSense 0x05 failed!" << endl
+	      << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": Cannot check write modes." << endl;
+  }
+  else if( dataLen < 18 ) { // 8 bytes header + 10 bytes used modepage
+    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": Missing modepage 0x05 data." << endl
+	      << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": Cannot check write modes." << endl;
   }
   else {
     kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": dataLen: " << dataLen << endl;
-
-    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": modesense data: " << endl;
-    //    debugBitfield( buffer, dataLen );
 
     wr_param_page_05* mp = (struct wr_param_page_05*)(buffer+8);
 
