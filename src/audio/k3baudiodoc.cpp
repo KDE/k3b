@@ -87,9 +87,9 @@ bool K3bAudioDoc::newDocument()
 
 
 
-unsigned long long K3bAudioDoc::size() const 
+KIO::filesize_t K3bAudioDoc::size() const 
 {
-  unsigned long long size = 0;
+  KIO::filesize_t size = 0;
   for( QPtrListIterator<K3bAudioTrack> it(*m_tracks); it.current(); ++it ) {
     size += it.current()->size();
   }	
@@ -98,9 +98,9 @@ unsigned long long K3bAudioDoc::size() const
 }
 
 
-unsigned long long K3bAudioDoc::length() const
+K3b::Msf K3bAudioDoc::length() const
 {
-  unsigned long long length = 0;
+  K3b::Msf length = 0;
   for( QPtrListIterator<K3bAudioTrack> it(*m_tracks); it.current(); ++it ) {
     length += it.current()->length() + it.current()->pregap();
   }	
@@ -230,12 +230,12 @@ K3bAudioTrack* K3bAudioDoc::createTrack( const KURL& url )
     K3bAudioModule* module = K3bAudioModuleFactory::self()->createModule( newTrack );
     newTrack->setModule( module );
     
-    K3bSong *song = k3bMain()->songManager()->findSong( url.path() );
-    if( song != 0 ){
-      newTrack->setArtist( song->getArtist() );
-      newTrack->setAlbum( song->getAlbum() );
-      newTrack->setTitle( song->getTitle() );
-    }
+    // K3bSong *song = k3bMain()->songManager()->findSong( url.path() );
+//     if( song != 0 ){
+//       newTrack->setArtist( song->getArtist() );
+//       newTrack->setAlbum( song->getAlbum() );
+//       newTrack->setTitle( song->getTitle() );
+//     }
 
     return newTrack;
   }
@@ -529,7 +529,7 @@ bool K3bAudioDoc::saveDocumentData( QDomElement* docElem )
 
     // add pregap
     QDomElement pregapElem = doc.createElement( "pregap" );    
-    pregapElem.appendChild( doc.createTextNode( QString::number(track->pregap()) ) );
+    pregapElem.appendChild( doc.createTextNode( QString::number(track->pregap().totalFrames()) ) );
     trackElem.appendChild( pregapElem );
 
     // add copy protection

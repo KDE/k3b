@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -74,7 +74,7 @@ void K3bOggVorbisModule::startDecoding()
     else {
       kdDebug() << "(K3bOggVorbisModule) start decoding of file " << audioTrack()->absPath() << endl;
 
-      m_rawDataLengthToStream = audioTrack()->length()*2352;
+      m_rawDataLengthToStream = audioTrack()->length().audioBytes();
       m_rawDataAlreadyStreamed = 0;
 
       m_bDecodingInProgress = true;
@@ -159,7 +159,7 @@ void K3bOggVorbisModule::decode()
       // eof
       // pad if necessary
       if( m_rawDataAlreadyStreamed < m_rawDataLengthToStream ) {
-	unsigned long bytesToPad = m_rawDataLengthToStream - m_rawDataAlreadyStreamed;
+	long bytesToPad = m_rawDataLengthToStream - m_rawDataAlreadyStreamed;
 	kdDebug() << "(K3bOggVorbisModule) we have to pad by " << bytesToPad << "i bytes" << endl;
 
 	memset( m_outputBuffer, 0, OUTPUT_BUFFER_SIZE );

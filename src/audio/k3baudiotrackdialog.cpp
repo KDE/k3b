@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -30,11 +30,12 @@
 #include <knuminput.h>
 #include <kmimetype.h>
 #include <kurl.h>
+#include <kio/global.h>
 
 #include "k3baudiotrackdialog.h"
 #include "k3baudiotrack.h"
-#include "../kcutlabel.h"
-#include "../tools/k3bglobals.h"
+#include <kcutlabel.h>
+#include <device/k3bmsf.h>
 
 
 K3bAudioTrackDialog::K3bAudioTrackDialog( QPtrList<K3bAudioTrack>& tracks, QWidget *parent, const char *name )
@@ -54,8 +55,8 @@ K3bAudioTrackDialog::K3bAudioTrackDialog( QPtrList<K3bAudioTrack>& tracks, QWidg
     K3bAudioTrack* track = m_tracks.first();
 
     QString allTrackNames = track->fileName();
-    long allTrackLength = track->length();
-    long allTrackSize = track->size();
+    K3b::Msf allTrackLength = track->length();
+    KIO::filesize_t allTrackSize = track->size();
 
     m_editTitle->setText( track->title() );
     m_editPerformer->setText( track->artist() );
@@ -69,9 +70,9 @@ K3bAudioTrackDialog::K3bAudioTrackDialog( QPtrList<K3bAudioTrack>& tracks, QWidg
     m_checkPreEmp->setChecked( track->preEmp() );
     
     if( m_bPregapSeconds )
-      m_inputPregap->setValue( track->pregap() / 75 );
+      m_inputPregap->setValue( track->pregap().totalFrames() / 75 );
     else
-      m_inputPregap->setValue( track->pregap() );
+      m_inputPregap->setValue( track->pregap().totalFrames() );
     
     for( track = m_tracks.next(); track != 0; track = m_tracks.next() ) {
 
@@ -111,8 +112,8 @@ K3bAudioTrackDialog::K3bAudioTrackDialog( QPtrList<K3bAudioTrack>& tracks, QWidg
     }
 
     m_displayFileName->setText( allTrackNames );
-    m_displayLength->setText( K3b::framesToString(allTrackLength) );
-    m_displaySize->setText( i18n("%1 kb").arg(allTrackSize / 1024) );
+    m_displayLength->setText( allTrackLength.toString() );
+    m_displaySize->setText( KIO::convertSize(allTrackSize) );
 
     m_labelMimeType->setPixmap( KMimeType::pixmapForURL( KURL(m_tracks.first()->absPath()), 0, KIcon::Desktop, 48 ) );
   }

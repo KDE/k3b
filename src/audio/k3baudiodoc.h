@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -69,8 +69,8 @@ class K3bAudioDoc : public K3bDoc
   const QList<K3bAudioTrack>* tracks() const { return m_tracks; }
 
   /** get the current size of the project */
-  unsigned long long size() const;
-  unsigned long long length() const;
+  KIO::filesize_t size() const;
+  K3b::Msf length() const;
 	
   // CD-Text
   bool cdText() const { return m_cdText; }

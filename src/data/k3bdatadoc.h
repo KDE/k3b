@@ -70,8 +70,8 @@ class K3bDataDoc : public K3bDoc
   void addView(K3bView* view);
 
   virtual bool newDocument();
-  virtual unsigned long long size() const;
-  virtual unsigned long long length() const;
+  virtual KIO::filesize_t size() const;
+  virtual K3b::Msf length() const;
 
   const QString& name() const { return m_name; }
 

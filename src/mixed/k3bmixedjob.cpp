@@ -1,20 +1,19 @@
+/* 
+ *
+ * $Id: $
+ * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This file is part of the K3b project.
+ * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * See the file "COPYING" for the exact licensing terms.
+ */
 
-/***************************************************************************
-                          k3bmixedjob.cpp  -  Job that creates a mixed mode cd
-                             -------------------
-    begin                : Fri Aug 23 2002
-    copyright            : (C) 2002 by Sebastian Trueg
-    email                : trueg@informatik.uni-freiburg.de
- ***************************************************************************/
 
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
 
 
 #include "k3bmixedjob.h"
@@ -29,6 +28,7 @@
 #include <audio/k3baudiotocfilewriter.h>
 #include <device/k3bdevicemanager.h>
 #include <device/k3bdevice.h>
+#include <device/k3bmsf.h>
 #include <tools/k3bwavefilewriter.h>
 #include <tools/k3bglobals.h>
 #include <tools/k3bexternalbinmanager.h>
@@ -112,8 +112,8 @@ void K3bMixedJob::start()
   m_errorOccuredAndAlreadyReported = false;
 
   // calculate percentage of audio and data
-  double ds = (double)m_doc->dataDoc()->length();
-  double as = (double)m_doc->audioDoc()->length();
+  double ds = (double)m_doc->dataDoc()->length().totalFrames();
+  double as = (double)m_doc->audioDoc()->length().totalFrames();
   m_audioDocPartOfProcess = as/(ds+as);
 
 
@@ -617,14 +617,14 @@ void K3bMixedJob::addAudioTracks( K3bCdrecordWriter* writer )
     else
      writer->addArgument( "-nopreemp" );
 
-    writer->addArgument( QString("-pregap=%1").arg(track->pregap()) );
+    writer->addArgument( QString("-pregap=%1").arg(track->pregap().totalFrames()) );
     if( m_doc->onTheFly() ) {
       QString fifoname = QString("/home/trueg/tmp/fifo_track%1").arg(track->index());
       if( ::mkfifo( fifoname.latin1(), S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH ) == -1 ) {
 	kdDebug() << "(K3bMixedJob) could not create fifo" << endl;
       }
       track->setBufferFile( fifoname );  // just a temp solution
-      writer->addArgument( QString("-tsize=%1f").arg(track->length()) )->addArgument(fifoname);
+      writer->addArgument( QString("-tsize=%1f").arg(track->length().totalFrames()) )->addArgument(fifoname);
     }
     else
       writer->addArgument( QFile::encodeName(track->bufferFile()) );

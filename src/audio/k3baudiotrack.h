@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -22,6 +22,9 @@
 #include <qfile.h>
 #include <qptrlist.h>
 
+#include <kio/global.h>
+
+#include <device/k3bmsf.h>
 
 class K3bAudioModule;
 
@@ -52,10 +55,10 @@ class K3bAudioTrack
 
   QString bufferFile() const { return m_bufferFile; }
 
-  int pregap() const { return m_pregap; }
+  K3b::Msf pregap() const { return m_pregap; }
 
   /** returns length of track in frames **/
-  unsigned long length() const { return m_length; }
+  K3b::Msf length() const { return m_length; }
 	
   const QString& artist() const { return m_artist; }
   const QString& title() const { return m_title; }
@@ -69,7 +72,7 @@ class K3bAudioTrack
   bool copyProtection() const { return m_copy; }
   bool preEmp() const { return m_preEmp; }
 	
-  void setPregap( int p );
+  void setPregap( const K3b::Msf& p );
 
   /**
    * If the file is a mp3-file, it's mp3-tag is used
@@ -95,7 +98,7 @@ class K3bAudioTrack
   void setBufferFile( const QString& file );
 
   /** returns the raw size of the track (16bit, 44800 kHz, stereo) */
-  unsigned long size() const;
+  KIO::filesize_t size() const;
 
   /** returns the index in the list */
   int index() const;
@@ -123,11 +126,9 @@ class K3bAudioTrack
  private:	
   QString m_bufferFile;
 
-  /** length of track in frames (1/75sec) **/
-  unsigned long m_length;
+  K3b::Msf m_length;
 
-  /** frames: 75 frames are one second **/
-  int m_pregap;
+  K3b::Msf m_pregap;
   
   /** Status of the file. see file_status */
   int m_status;

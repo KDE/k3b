@@ -1,6 +1,6 @@
 /*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
  *
  * This file is part of the K3b project.
@@ -41,7 +41,7 @@ K3bVcdTrack::~K3bVcdTrack()
 }
 
 
-unsigned long K3bVcdTrack::size() const
+KIO::filesize_t K3bVcdTrack::size() const
 {
   return m_file.size();
 }

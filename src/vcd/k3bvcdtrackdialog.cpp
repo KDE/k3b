@@ -1,6 +1,6 @@
 /*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
  *
  * This file is part of the K3b project.
@@ -30,11 +30,13 @@
 #include <knuminput.h>
 #include <kmimetype.h>
 #include <kurl.h>
+#include <kio/global.h>
 
 #include "k3bvcdtrackdialog.h"
 #include "k3bvcdtrack.h"
 #include "../kcutlabel.h"
 #include "../tools/k3bglobals.h"
+#include "../device/k3bmsf.h"
 
 
 K3bVcdTrackDialog::K3bVcdTrackDialog( QPtrList<K3bVcdTrack>& tracks, QWidget *parent, const char *name )
@@ -51,7 +53,7 @@ K3bVcdTrackDialog::K3bVcdTrackDialog( QPtrList<K3bVcdTrack>& tracks, QWidget *pa
 
     m_displayFileName->setText( track->fileName() );
     m_displayLength->setText( track->mpegDuration() );
-    m_displaySize->setText( i18n("%1 kb").arg(track->size() / 1024) );
+    m_displaySize->setText( KIO::convertSize(track->size()) );
 
     m_labelMimeType->setPixmap( KMimeType::pixmapForURL( KURL(m_tracks.first()->absPath()), 0, KIcon::Desktop, 48 ) );
 

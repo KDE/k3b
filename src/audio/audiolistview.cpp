@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -90,11 +90,6 @@ void K3bAudioListView::setupColumns(){
   addColumn( i18n("Length") );
   addColumn( i18n("Pregap") );
   addColumn( i18n("Filename") );
-
-//   setItemsRenameable( true );
-//   setRenameable( 0, false );
-//   setRenameable( 1 );
-//   setRenameable( 2 );
 }
 
 
@@ -103,14 +98,18 @@ void K3bAudioListView::setupActions()
   m_actionCollection = new KActionCollection( this );
 
   m_actionProperties = new KAction( i18n("Properties..."), "misc",
-				  0, this, SLOT(showPropertiesDialog()), actionCollection() );
+				  0, this, SLOT(showPropertiesDialog()), 
+				    actionCollection(), "audio_properties" );
   m_actionRemove = new KAction( i18n( "Remove" ), "editdelete",
-			      Key_Delete, this, SLOT(slotRemoveTracks()), actionCollection() );
+			      Key_Delete, this, SLOT(slotRemoveTracks()), 
+				actionCollection(), "audio_remove" );
   m_actionPlay = new KAction( i18n( "Play" ), "1rightarrow",
-			      0, this, SLOT(slotPlaySelected()), actionCollection() );
+			      0, this, SLOT(slotPlaySelected()), 
+			      actionCollection(), "audio_play" );
 
   m_actionPlayAll = new KAction( i18n( "Play all" ), "1rightarrow",
-				 0, this, SLOT(slotPlayAll()), actionCollection() );
+				 0, this, SLOT(slotPlayAll()), 
+				 actionCollection(), "audio_play_all" );
 
   // disabled by default
   m_actionRemove->setEnabled(false);

@@ -1,6 +1,6 @@
 /*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
  *
  * This file is part of the K3b project.
@@ -21,6 +21,9 @@
 #include <qfile.h>
 #include <qptrlist.h>
 
+#include <kio/global.h>
+
+
 class K3bVcdTrack
 {
  public:
@@ -29,19 +32,19 @@ class K3bVcdTrack
 
   QString fileName() const { return QFileInfo(m_file).fileName(); }
   QString absPath() const { return QFileInfo(m_file).absFilePath(); }
-  unsigned long size() const;
+  KIO::filesize_t size() const;
   int index() const;
   // video
   int mpegType() const {return m_mpegtype;}
   int mpegVideoVersion() const {return m_mpegvideoversion;}
   int mpegMuxRate() const {return m_mpegmuxrate;}
   int MpegFormat() const {return m_mpegformat;}
-  QString mpegVersion() const {return m_mpegversion;}
-  QString mpegDuration() const {return m_mpegduration;}
-  QString mpegSize() const {return m_mpegsize;}
-  QString mpegDisplaySize() const {return m_mpegdisplaysize;}
-  QString mpegFps() const {return m_mpegfps;}
-  QString mpegMbps() const {return m_mpegmbps;}
+  const QString& mpegVersion() const {return m_mpegversion;}
+  const QString& mpegDuration() const {return m_mpegduration;}
+  const QString& mpegSize() const {return m_mpegsize;}
+  const QString& mpegDisplaySize() const {return m_mpegdisplaysize;}
+  const QString& mpegFps() const {return m_mpegfps;}
+  const QString& mpegMbps() const {return m_mpegmbps;}
   int MpegAspectRatio() const {return m_mpegaspect_ratio;}
   bool MpegSExt() const {return m_mpegprogressive;}
   bool MpegDExt() const {return m_mpegsext;}
@@ -54,10 +57,10 @@ class K3bVcdTrack
   bool MpegAudioOriginal() const {return m_mpegaudiooriginal;}
   int MpegAudioType() const {return m_mpegaudiotype;}
   int MpegAudioLayer() const {return m_mpegaudiolayer;}
-  QString MpegAudioDuration() const {return m_mpegaudioduration;}
-  QString MpegAudioKbps() const {return m_mpegaudiokbps;}
-  QString MpegAudioHz() const {return m_mpegaudiohz;}
-  QString MpegAudioFrame() const {return m_mpegaudioframe;}
+  const QString& MpegAudioDuration() const {return m_mpegaudioduration;}
+  const QString& MpegAudioKbps() const {return m_mpegaudiokbps;}
+  const QString& MpegAudioHz() const {return m_mpegaudiohz;}
+  const QString& MpegAudioFrame() const {return m_mpegaudioframe;}
   int MpegAudioMode() const {return m_mpegaudiomode;}
   int MpegAudioModeExt() const {return m_mpegaudiomodeext;}
   int MpegAudioEmphasis() const {return m_mpegaudioemphasis;}

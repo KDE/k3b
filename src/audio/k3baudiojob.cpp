@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -22,6 +22,7 @@
 #include <audio/k3baudiotocfilewriter.h>
 #include <device/k3bdevicemanager.h>
 #include <device/k3bdevice.h>
+#include <device/k3bmsf.h>
 #include <tools/k3bwavefilewriter.h>
 #include <tools/k3bglobals.h>
 #include <k3bemptydiscwaiter.h>
@@ -242,7 +243,7 @@ bool K3bAudioJob::prepareWriter()
       else
 	writer->addArgument( "-nopreemp" );
 
-      writer->addArgument( QString("-pregap=%1").arg(track->pregap()) );
+      writer->addArgument( QString("-pregap=%1").arg(track->pregap().totalFrames()) );
 //       if( m_doc->onTheFly() ) {
 // 	//       QString fifoname = QString("/home/trueg/tmp/fifo_track%1").arg(track->index());
 // 	//       if( ::mkfifo( fifoname.latin1(), S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH ) == -1 ) {

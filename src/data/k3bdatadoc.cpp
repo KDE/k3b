@@ -355,20 +355,20 @@ K3bDirItem* K3bDataDoc::addEmptyDir( const QString& name, K3bDirItem* parent )
 }
 
 
-unsigned long long K3bDataDoc::size() const
+KIO::filesize_t K3bDataDoc::size() const
 {
   //return m_size;	
   return root()->k3bSize();
 }
 
 
-unsigned long long K3bDataDoc::length() const
+K3b::Msf K3bDataDoc::length() const
 {
   // 1 block consists of 2048 bytes real data
   // and 1 block equals to 1 audio frame
   // so this is the way to calculate:
 
-  return size() / 2048;
+  return K3b::Msf(size() / 2048);
 }
 
 

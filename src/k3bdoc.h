@@ -29,7 +29,9 @@
 
 // include files for KDE
 #include <kurl.h>
+#include <kio/global.h>
 
+#include <device/k3bmsf.h>
 
 
 // forward declaration of the K3b classes
@@ -119,8 +121,8 @@ class K3bDoc : public QObject
   bool overburn() const { return m_overburn; }
   int speed() const { return m_speed; }
   K3bDevice* burner() const { return m_burner; }
-  virtual unsigned long long size() const = 0;
-  virtual unsigned long long length() const = 0;
+  virtual KIO::filesize_t size() const = 0;
+  virtual K3b::Msf length() const = 0;
 
   const QString& tempDir() const { return m_tempDir; }
 

@@ -14,8 +14,8 @@
  */
 
 #include "k3bwavemodule.h"
-#include <k3baudiotrack.h>
-#include <k3bglobals.h>
+#include <audio/k3baudiotrack.h>
+#include <tools/k3bglobals.h>
 
 #include <qfile.h>
 #include <qcstring.h>

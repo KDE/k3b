@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -246,7 +246,7 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
 
   // Multisession
   // ////////////////////////////////////////////////////////////////////////
-  m_groupMultiSession = new QButtonGroup( 0, Qt::Vertical, i18n("Multi-Session"), frame );
+  m_groupMultiSession = new QButtonGroup( 0, Qt::Vertical, i18n("Multisession"), frame );
   m_groupMultiSession->layout()->setSpacing( 0 );
   m_groupMultiSession->layout()->setMargin( 0 );
   QGridLayout* m_groupMultiSessionLayout = new QGridLayout( m_groupMultiSession->layout() );
@@ -254,10 +254,10 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
   m_groupMultiSessionLayout->setSpacing( spacingHint() );
   m_groupMultiSessionLayout->setMargin( marginHint() );
 
-  m_radioMultiSessionNone = new QRadioButton( i18n("&No multi-session"), m_groupMultiSession );
-  m_radioMultiSessionStart = new QRadioButton( i18n("&Start multi-session"), m_groupMultiSession );
-  m_radioMultiSessionContinue = new QRadioButton( i18n("&Continue multi-session"), m_groupMultiSession );
-  m_radioMultiSessionFinish = new QRadioButton( i18n("&Finish multi-session"), m_groupMultiSession );
+  m_radioMultiSessionNone = new QRadioButton( i18n("&No multisession"), m_groupMultiSession );
+  m_radioMultiSessionStart = new QRadioButton( i18n("&Start multisession"), m_groupMultiSession );
+  m_radioMultiSessionContinue = new QRadioButton( i18n("&Continue multisession"), m_groupMultiSession );
+  m_radioMultiSessionFinish = new QRadioButton( i18n("&Finish multisession"), m_groupMultiSession );
 
   m_groupMultiSessionLayout->addWidget( m_radioMultiSessionNone, 0, 0 );
   m_groupMultiSessionLayout->addWidget( m_radioMultiSessionStart, 1, 0 );

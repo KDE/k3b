@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -17,8 +17,7 @@
 #include "k3baudiodoc.h"
 #include "k3baudiotrack.h"
 
-#include <tools/k3bglobals.h>
-
+#include <device/k3bmsf.h>
 
 #include <qstring.h>
 #include <qtextstream.h>
@@ -40,7 +39,7 @@ bool K3bAudioTocfileWriter::writeAudioToc( K3bAudioDoc* doc, QTextStream& t )
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
-  long stdinDataLength = 0;
+  K3b::Msf stdinDataLength(0);
 
   // create the album CD-TEXT entries if needed
   // ---------------------------------------------------------------------------
@@ -104,8 +103,8 @@ bool K3bAudioTocfileWriter::writeAudioToc( K3bAudioDoc* doc, QTextStream& t )
       t << "FILE ";
       if( doc->onTheFly() ) {
 	t << "\"-\" ";   // read from stdin
-	t << K3b::framesToString( stdinDataLength );        // where does the track start in stdin
-	t << " " << K3b::framesToString( hiddenTrack->length() );   // here we need the perfect length !!!!!
+	t << stdinDataLength.toString();        // where does the track start in stdin
+	t << " " << hiddenTrack->length().toString();   // here we need the perfect length !!!!!
 	t << "\n";
 	
 	stdinDataLength += hiddenTrack->length();
@@ -120,8 +119,8 @@ bool K3bAudioTocfileWriter::writeAudioToc( K3bAudioDoc* doc, QTextStream& t )
       t << "FILE ";
       if( doc->onTheFly() ) {
 	t << "\"-\" ";   // read from stdin
-	t << K3b::framesToString( stdinDataLength );        // where does the track start in stdin
-	t << " " << K3b::framesToString( track->length() );   // here we need the perfect length !!!!!
+	t << stdinDataLength.toString();        // where does the track start in stdin
+	t << " " << track->length().toString();   // here we need the perfect length !!!!!
 	t << "\n";
 	
 	stdinDataLength += track->length();
@@ -155,7 +154,7 @@ bool K3bAudioTocfileWriter::writeAudioToc( K3bAudioDoc* doc, QTextStream& t )
       writeCdTextEntries( track, t );
     }
 
-    int p = track->pregap();
+    K3b::Msf p = track->pregap();
     if( track->index() == 0 ) {
       // cdrdao seems to always create a pregap of 150 frames for the first track
       // so specifying a pregap of x for the first track results in an overall pregap
@@ -165,13 +164,13 @@ bool K3bAudioTocfileWriter::writeAudioToc( K3bAudioDoc* doc, QTextStream& t )
       p -= 150;
     }
     if( p > 0 )
-      t << "PREGAP " << K3b::framesToString( p ) << "\n";
+      t << "PREGAP " << p.toString() << "\n";
 
     t << "FILE ";
     if( doc->onTheFly() ) {
       t << "\"-\" ";   // read from stdin
-      t << K3b::framesToString( stdinDataLength );        // where does the track start in stdin
-      t << " " << K3b::framesToString( track->length() );   // here we need the perfect length !!!!!
+      t << stdinDataLength.toString();        // where does the track start in stdin
+      t << " " << track->length().toString();   // here we need the perfect length !!!!!
       t << "\n";
       
       stdinDataLength += track->length();

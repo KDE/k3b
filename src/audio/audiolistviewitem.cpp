@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -14,11 +14,9 @@
  */
 
 
-// QT-includes
 
 #include "audiolistviewitem.h"
 #include "k3baudiotrack.h"
-#include "../tools/k3bglobals.h"
 
 
 K3bAudioListViewItem::K3bAudioListViewItem( K3bAudioTrack* track, K3bListView* parent )
@@ -59,10 +57,10 @@ QString K3bAudioListViewItem::text(int i) const
       return m_track->title();
     case 3:
       // track length
-      return K3b::framesToString( m_track->length() );
+      return m_track->length().toString();
     case 4:
       // track pregap
-      return K3b::framesToString( m_track->pregap() );
+      return m_track->pregap().toString();
     case 5:
       return m_track->fileName();
     default:

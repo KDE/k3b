@@ -1,4 +1,4 @@
-INCLUDES = $(all_includes) -I$(srcdir)/../.. -I$(srcdir)/../../../tools
+INCLUDES = $(all_includes) -I$(srcdir)/../../..
 
 METASOURCES = AUTO
 

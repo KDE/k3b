@@ -89,7 +89,7 @@ bool K3bVcdDoc::newDocument()
   return K3bDoc::newDocument();
 }
 
-unsigned long long K3bVcdDoc::calcTotalSize() const
+KIO::filesize_t K3bVcdDoc::calcTotalSize() const
 {
   unsigned long long sum = 0;
   if ( m_tracks ) {
@@ -100,7 +100,7 @@ unsigned long long K3bVcdDoc::calcTotalSize() const
   return sum;
 }
 
-unsigned long long K3bVcdDoc::size() const
+KIO::filesize_t K3bVcdDoc::size() const
 {
   // mode2 -> mode1 int(( n+2047 ) / 2048) * 2352
   // mode1 -> mode2 int(( n+2351 ) / 2352) * 2048
@@ -108,7 +108,7 @@ unsigned long long K3bVcdDoc::size() const
   return tracksize + ISOsize();
 }
 
-unsigned long long K3bVcdDoc::ISOsize() const
+KIO::filesize_t K3bVcdDoc::ISOsize() const
 {
   // 136000b for vcd iso reseved
   long long iso_size = 136000;
@@ -119,9 +119,9 @@ unsigned long long K3bVcdDoc::ISOsize() const
   return iso_size;
 }
 
-unsigned long long K3bVcdDoc::length() const
+K3b::Msf K3bVcdDoc::length() const
 {
-  return size() / 2048;
+  return K3b::Msf(size() / 2048);
 }
 
 void K3bVcdDoc::addUrl( const KURL& url )

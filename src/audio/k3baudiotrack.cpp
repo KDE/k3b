@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -34,12 +34,12 @@
 
 
 K3bAudioTrack::K3bAudioTrack( QPtrList<K3bAudioTrack>* parent, const QString& filename )
-  : m_file(filename)
+  : m_file(filename),
+    m_length(0)
 {
   m_parent = parent;
   m_copy = false;
   m_preEmp = false;
-  m_length = 0;
   
   kapp->config()->setGroup( "Audio project settings" );
   setPregap( kapp->config()->readNumEntry( "default pregap", 150 ) );
@@ -56,9 +56,9 @@ K3bAudioTrack::~K3bAudioTrack()
 }
 
 
-unsigned long K3bAudioTrack::size() const
+KIO::filesize_t K3bAudioTrack::size() const
 {
-  return length() * 2352;
+  return length().audioBytes();
 }
 
 
@@ -76,7 +76,7 @@ void K3bAudioTrack::setBufferFile( const QString& path )
 }
 
 
-void K3bAudioTrack::setPregap( int p )
+void K3bAudioTrack::setPregap( const K3b::Msf& p )
 {
   // red book needs a pregap for the first track of at last 150 frames
   if( (index() == 0) && (p < 150) )

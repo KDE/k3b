@@ -1,6 +1,6 @@
 /*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
  *
  * This file is part of the K3b project.
@@ -70,8 +70,8 @@ class K3bVcdDoc : public K3bDoc
   const QList<K3bVcdTrack>* tracks() const { return m_tracks; }
 
   /** get the current size of the project */
-  unsigned long long size() const;
-  unsigned long long length() const;
+  KIO::filesize_t size() const;
+  K3b::Msf length() const;
     
   K3bBurnJob* newBurnJob();
   K3bVcdOptions* vcdOptions() const { return m_vcdOptions; }
@@ -142,8 +142,8 @@ class K3bVcdDoc : public K3bDoc
   QTimer* m_urlAddingTimer;
 
   QList<K3bVcdTrack>* m_tracks;
-  unsigned long long calcTotalSize() const;
-  unsigned long long ISOsize() const;
+  KIO::filesize_t calcTotalSize() const;
+  KIO::filesize_t ISOsize() const;
 
   K3bVcdTrack* m_lastAddedTrack;
   K3bVcdOptions* m_vcdOptions;
