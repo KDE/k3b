@@ -55,6 +55,7 @@ class K3bToolBox : public QFrame
   void addWidget( QWidget* );
   void addLabel( const QString& );
   void addSpacing();
+  void addStretch();
 
  protected:
   QGridLayout* m_mainLayout;

@@ -107,6 +107,14 @@ void K3bToolBox::addSpacing()
 }
 
 
+void K3bToolBox::addStretch()
+{
+  // add an empty widget
+  addWidget( new QWidget( this ) );
+  m_mainLayout->setColStretch( m_mainLayout->numCols(), 1 );
+}
+
+
 void K3bToolBox::addLabel( const QString& text )
 {
   QLabel* label = new QLabel( text, this );
