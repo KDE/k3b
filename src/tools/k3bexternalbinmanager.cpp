@@ -15,8 +15,8 @@
 
 
 static const char* vcdTools[] =  { "vcdxgen",
-					 "vcdxbuild",
-					 0 };
+				   "vcdxbuild",
+				   0 };
 
 static const char* transcodeTools[] =  { "transcode",
 					 "tcprobe",
@@ -333,6 +333,31 @@ K3bExternalBin* K3bExternalBinManager::probeTranscode( const QString& path )
   return bin;
 }
 
+
+K3bExternalBin* K3bExternalBinManager::probeMovix( const QString& path )
+{
+  // we need the following files:
+  // isolinux/initrd.gz
+  // isolinux/iso.sort
+  // isolinux/isolinux.bin
+  // isolinux/isolinux.cfg
+  // isolinux/movix.lss
+  // isolinux/mphelp.txt
+  // isolinux/mxhelp.txt
+  // isolinux/trblst.txt
+  // isolinux/credits.txt
+  // isolinux/kernel/vmlinuz
+
+  return 0;
+}
+
+
+K3bExternalBin* K3bExternalBinManager::probeMovix2( const QString& )
+{
+  return 0;
+}
+
+
 K3bExternalBin* K3bExternalBinManager::probeVcd( const QString& path )
 {
   if( !QFile::exists( path ) )
@@ -359,7 +384,7 @@ K3bExternalBin* K3bExternalBinManager::probeVcd( const QString& path )
 
     bin = new K3bExternalBin( "vcdxgen" );
     bin->path = path;
-    bin->version = m_gatheredOutput.mid( pos, endPos-pos );
+    bin->version = m_gatheredOutput.mid( pos, endPos-pos ).stripWhiteSpace();
   }
   else {
     kdDebug() << "(K3bExternalBinManager) could not start " << path << endl;
@@ -462,6 +487,10 @@ void K3bExternalBinManager::createProgramContainer()
       m_programs.insert( vcdTools[i], new K3bExternalProgram( vcdTools[i] ) );
   }
 
+  if( m_programs.find( "movix" ) == m_programs.end() )
+    m_programs.insert( "movix", new K3bExternalProgram( "movix" ) );
+  if( m_programs.find( "movix2" ) == m_programs.end() )
+    m_programs.insert( "movix2", new K3bExternalProgram( "movix2" ) );
 }
 
 
@@ -506,11 +535,16 @@ void K3bExternalBinManager::search()
           m_programs[ vcdTools[i] ]->addBin( bin );
        }
 
+       K3bExternalBin* movixBin = probeMovix( path + "/movix" );
+       if( movixBin )
+	 m_programs[ "movix" ]->addBin( movixBin );
     }
     else {
        cdrecordBin = probeCdrecord( path );
        mkisofsBin = probeMkisofs( path );
        cdrdaoBin = probeCdrdao( path );
+
+       // TODO: is there any way to test the other tools?
     }
     if( cdrecordBin )
       m_programs["cdrecord"]->addBin( cdrecordBin );
