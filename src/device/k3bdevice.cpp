@@ -2478,37 +2478,39 @@ QValueList<int> K3bCdDevice::CdDevice::determineSupportedWriteSpeeds() const
 {
   QValueList<int> ret;
 
-  unsigned char* data = 0;
-  int dataLen = 0;
-  if( modeSense( &data, dataLen, 0x2A ) ) {
-    mm_cap_page_2A* mm = (mm_cap_page_2A*)&data[8];
+  if( burner() ) {
+    unsigned char* data = 0;
+    int dataLen = 0;
+    if( modeSense( &data, dataLen, 0x2A ) ) {
+      mm_cap_page_2A* mm = (mm_cap_page_2A*)&data[8];
 
-    if( dataLen > 32 ) {
-      // we have descriptors
-      int numDes = from2Byte( mm->num_wr_speed_des );
-      cd_wr_speed_performance* wr = (cd_wr_speed_performance*)mm->wr_speed_des;      
+      if( dataLen > 32 ) {
+	// we have descriptors
+	int numDes = from2Byte( mm->num_wr_speed_des );
+	cd_wr_speed_performance* wr = (cd_wr_speed_performance*)mm->wr_speed_des;      
 
-      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ":  Number of supported write speeds: "
-		<< numDes << endl;
+	kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ":  Number of supported write speeds: "
+		  << numDes << endl;
 		
 
-      for( int i = 0; i < numDes; ++i ) {
-	// sort the list
-	int s = from2Byte( wr[i].wr_speed_supp );
-	QValueList<int>::iterator it = ret.begin();
-	while( it != ret.end() && *it < s )
-	  ++it;
-	ret.insert( it, s );
+	for( int i = 0; i < numDes; ++i ) {
+	  // sort the list
+	  int s = from2Byte( wr[i].wr_speed_supp );
+	  QValueList<int>::iterator it = ret.begin();
+	  while( it != ret.end() && *it < s )
+	    ++it;
+	  ret.insert( it, s );
+	}
       }
-    }
-    else if( dataLen > 19 ) {
-      // MMC1 used byte 18 and 19 for the max write speed
-      ret.append( from2Byte( mm->max_write_speed ) );
-    }
-    else
-      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": no writing speed info. No MMC drive?" << endl;
+      else if( dataLen > 19 ) {
+	// MMC1 used byte 18 and 19 for the max write speed
+	ret.append( from2Byte( mm->max_write_speed ) );
+      }
+      else
+	kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": no writing speed info. No MMC drive?" << endl;
 
-    delete [] data;
+      delete [] data;
+    }
   }
 
   return ret;
