@@ -124,6 +124,7 @@ void K3bFileView::setupGUI()
   QString filter = i18n("*|All files");
   filter += "\n" + i18n("audio/x-mp3 application/x-ogg audio/wav |Sound files");
   filter += "\n" + i18n("audio/x-mp3 |MP3 sound files");
+  filter += "\n" + i18n("video/mpeg |MPEG video files");
   filter += "\n" + i18n("application/x-ogg |Ogg Vorbis sound files");
   m_filterWidget->setFilter(filter);
 
