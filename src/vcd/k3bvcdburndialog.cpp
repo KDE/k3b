@@ -1,9 +1,16 @@
 /***************************************************************************
+                             k3b -  description
+                             -------------------
+    copyright            : (C) 2002 by Sebastian Trueg
+    email                : trueg@informatik.uni-freiburg.de
+ ***************************************************************************/
+
+/***************************************************************************
                           k3bvcdburndialog.cpp  -  description
                              -------------------
     begin                : Son Nov 10 2002
-    copyright            : (C) 2002 by Sebastian Trueg
-    email                : trueg@informatik.uni-freiburg.de
+    copyright            : (C) 2002 by Christian Kvasny
+    email                : chris@ckvsoft.at
  ***************************************************************************/
 
 /***************************************************************************
@@ -261,6 +268,8 @@ void K3bVcdBurnDialog::setupLabelTab( QFrame* frame )
   m_checkApplicationId->setEnabled(false);
   labelVolumeCount->setEnabled(false);
   labelVolumeNumber->setEnabled(false);
+  m_spinVolumeCount->setEnabled(false);
+  m_spinVolumeNumber->setEnabled(false);
   
 }
 

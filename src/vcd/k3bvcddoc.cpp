@@ -1,9 +1,16 @@
 /***************************************************************************
+                             k3b -  description
+                             -------------------
+    copyright            : (C) 2002 by Sebastian Trueg
+    email                : trueg@informatik.uni-freiburg.de
+ ***************************************************************************/
+
+/***************************************************************************
                           k3bvcddoc.cpp  -  description
                              -------------------
     begin                : Mon Nov 4 2002
-    copyright            : (C) 2002 by Sebastian Trueg
-    email                : trueg@informatik.uni-freiburg.de
+    copyright            : (C) 2002 by Christian Kvasny
+    email                : chris@ckvsoft.at
  ***************************************************************************/
 
 /***************************************************************************
