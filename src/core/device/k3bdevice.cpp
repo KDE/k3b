@@ -27,8 +27,6 @@
 #include <qglobal.h>
 
 #include <kdebug.h>
-#include <kprocess.h>
-#include <klocale.h>
 
 #include <sys/types.h>
 #include <sys/ioctl.h>
@@ -940,7 +938,7 @@ int K3bCdDevice::CdDevice::isEmpty() const
 }
 
 
-K3b::Msf K3bCdDevice::CdDevice::discSize()
+K3b::Msf K3bCdDevice::CdDevice::discSize() const
 {
   // if the device is already opened we do not close it
   // to allow fast multible method calls in a row
@@ -1023,7 +1021,7 @@ bool K3bCdDevice::CdDevice::readDiscInfo( unsigned char** data, int& dataLen ) c
 }
 
 
-K3b::Msf K3bCdDevice::CdDevice::remainingSize()
+K3b::Msf K3bCdDevice::CdDevice::remainingSize() const
 {
   K3b::Msf ret, size;
   bool empty = false;
@@ -1122,7 +1120,7 @@ int K3bCdDevice::CdDevice::tocType() const
 }
 
 
-int K3bCdDevice::CdDevice::getTrackDataMode(int lba)
+int K3bCdDevice::CdDevice::getTrackDataMode(int lba) const
 {
 //   bool needToClose = !isOpen();
 //
@@ -1217,7 +1215,7 @@ int K3bCdDevice::CdDevice::getTrackDataMode(int lba)
 
 
 
-K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc()
+K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc() const
 {
   // if the device is already opened we do not close it
   // to allow fast multible method calls in a row
@@ -1263,7 +1261,7 @@ K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc()
 }
 
 
-bool K3bCdDevice::CdDevice::readRawToc( K3bCdDevice::Toc& toc )
+bool K3bCdDevice::CdDevice::readRawToc( K3bCdDevice::Toc& toc ) const
 {
   // if the device is already opened we do not close it
   // to allow fast multible method calls in a row
@@ -1359,7 +1357,7 @@ bool K3bCdDevice::CdDevice::readRawToc( K3bCdDevice::Toc& toc )
 }
 
 
-K3bCdDevice::AlbumCdText K3bCdDevice::CdDevice::readCdText( unsigned int trackCount )
+K3bCdDevice::AlbumCdText K3bCdDevice::CdDevice::readCdText( unsigned int trackCount ) const
 {
   // if the device is already opened we do not close it
   // to allow fast multible method calls in a row
@@ -1520,7 +1518,7 @@ K3bCdDevice::AlbumCdText K3bCdDevice::CdDevice::readCdText( unsigned int trackCo
 
 
 // fallback
-bool K3bCdDevice::CdDevice::readTocLinux( K3bCdDevice::Toc& toc )
+bool K3bCdDevice::CdDevice::readTocLinux( K3bCdDevice::Toc& toc ) const
 {
   // if the device is already opened we do not close it
   // to allow fast multible method calls in a row
@@ -1619,7 +1617,7 @@ bool K3bCdDevice::CdDevice::readTocLinux( K3bCdDevice::Toc& toc )
 }
 
 
-bool K3bCdDevice::CdDevice::fixupToc( K3bCdDevice::Toc& toc )
+bool K3bCdDevice::CdDevice::fixupToc( K3bCdDevice::Toc& toc ) const
 {
   // if the device is already opened we do not close it
   // to allow fast multible method calls in a row
@@ -1704,7 +1702,7 @@ bool K3bCdDevice::CdDevice::rewritable() const
     return false;
 }
 
-bool K3bCdDevice::CdDevice::eject()
+bool K3bCdDevice::CdDevice::eject() const
 {
   block(false);
 
@@ -1726,7 +1724,7 @@ bool K3bCdDevice::CdDevice::eject()
 }
 
 
-bool K3bCdDevice::CdDevice::load()
+bool K3bCdDevice::CdDevice::load() const
 {
   if( open() != -1 ) {
     ScsiCommand cmd( open() );
@@ -1859,8 +1857,12 @@ K3bCdDevice::DiskInfo K3bCdDevice::CdDevice::diskInfo()
     }
   }
 
-
+  // THIS IS JUST FOR TESTING AND DEBUGGING
+  // --------------------------------------
   ngDiskInfo().debug();
+  determineOptimalWriteSpeed();
+  // --------------------------------------
+
 
   close();
   return info;
@@ -1873,7 +1875,7 @@ int K3bCdDevice::CdDevice::supportedProfiles() const
 }
 
 
-int K3bCdDevice::CdDevice::currentProfile()
+int K3bCdDevice::CdDevice::currentProfile() const
 {
   unsigned char profileBuf[8];
   ::memset( profileBuf, 0, 8 );
@@ -1907,7 +1909,7 @@ int K3bCdDevice::CdDevice::currentProfile()
 }
 
 
-K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo()
+K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
 {
   NextGenerationDiskInfo inf;
   inf.m_diskState = STATE_UNKNOWN;
@@ -2100,7 +2102,7 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo()
 }
 
 
-int K3bCdDevice::CdDevice::dvdMediaType()
+int K3bCdDevice::CdDevice::dvdMediaType() const
 {
   // if the device is already opened we do not close it
   // to allow fast multible method calls in a row
@@ -2141,7 +2143,7 @@ int K3bCdDevice::CdDevice::dvdMediaType()
 
 
 // does only make sense for complete media
-bool K3bCdDevice::CdDevice::readCapacity( K3b::Msf& r )
+bool K3bCdDevice::CdDevice::readCapacity( K3b::Msf& r ) const
 {
   // if the device is already opened we do not close it
   // to allow fast multible method calls in a row
@@ -2175,7 +2177,7 @@ bool K3bCdDevice::CdDevice::readCapacity( K3b::Msf& r )
 }
 
 
-bool K3bCdDevice::CdDevice::readFormatCapacity( K3b::Msf& r )
+bool K3bCdDevice::CdDevice::readFormatCapacity( K3b::Msf& r ) const
 {
   // if the device is already opened we do not close it
   // to allow fast multible method calls in a row
@@ -2245,7 +2247,7 @@ bool K3bCdDevice::CdDevice::readFormatCapacity( K3b::Msf& r )
 }
 
 
-bool K3bCdDevice::CdDevice::readSectorsRaw(unsigned char *buf, int start, int count)
+bool K3bCdDevice::CdDevice::readSectorsRaw(unsigned char *buf, int start, int count) const
 {
   // if the device is already opened we do not close it
   // to allow fast multible method calls in a row
@@ -2534,6 +2536,51 @@ bool K3bCdDevice::CdDevice::mechanismStatus( unsigned char** data, int& dataLen 
   }
   else
     kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": MECHANISM STATUS length det failed." << endl;
+
+  if( needToClose )
+    close();
+
+  return ret;
+}
+
+
+int K3bCdDevice::CdDevice::determineOptimalWriteSpeed() const
+{
+  // we simply try and return 0 if it fails
+
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
+  if( open() < 0 )
+    return 0;
+
+  int ret = 0;
+
+  unsigned char* data = 0;
+  int dataLen = 0;
+  if( modeSense( &data, dataLen, 0x2A ) ) {
+    if( dataLen > 32 ) {
+      // we have descriptors
+      int numDes = from2Byte( &data[30] );
+      mm_cap_page_2A* mm = (mm_cap_page_2A*)&data[8];
+      cd_wr_speed_performance* wr = (cd_wr_speed_performance*)mm->wr_speed_des;      
+
+      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ":  Current write Speed: "
+		<< from2Byte( mm->v3_cur_write_speed ) << endl;
+
+      for( int i = 0; i < numDes; ++i ) {
+	int s = from2Byte( wr[i].wr_speed_supp );
+	kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ":  Supported speed:     " << s << endl;
+
+	ret = QMAX( ret, s );
+      }
+    }
+    else
+      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": no writing speed info. No MMC3 drive?" << endl;
+
+    delete [] data;
+  }
 
   if( needToClose )
     close();

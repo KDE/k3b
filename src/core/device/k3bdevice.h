@@ -220,28 +220,28 @@ namespace K3bCdDevice
     /**
      *  returns the disc size
      */
-    K3b::Msf discSize();
+    K3b::Msf discSize() const;
 
     /**
      *  returns the remaining disc size
      */
-    K3b::Msf remainingSize();
+    K3b::Msf remainingSize() const;
 
     /**
      *  returns the toc of the disc
      */
-    Toc readToc();
+    Toc readToc() const;
 
     /**
      * read the CD-TEXT. 
      * @param trackCount if specified this method doed not need to determine them which saves time.
      */
-    AlbumCdText readCdText( unsigned int trackCount = 0 );
+    AlbumCdText readCdText( unsigned int trackCount = 0 ) const;
 
      /**
      *  returns the DataMode of the track
      */
-    int getTrackDataMode(int track);
+    int getTrackDataMode(int track) const;
 
      /**
      *  returns the DataMode of the track
@@ -254,13 +254,13 @@ namespace K3bCdDevice
      */
     bool block( bool ) const;
 
-    bool eject();
-    bool load();
+    bool eject() const;
+    bool load() const;
 
     int writingModes() const { return m_writeModes; }
     bool supportsWriteMode( WriteMode );
 
-    bool readSectorsRaw(unsigned char *buf, int start, int count);
+    bool readSectorsRaw(unsigned char *buf, int start, int count) const;
 
     /**
      * Get a list of supported profiles. See enumeration MediaType.
@@ -272,28 +272,33 @@ namespace K3bCdDevice
      * @returns -1 on error (command failed or unknown profile)
      *          MediaType otherwise (MEDIA_NONE means: no current profile)
      */
-    int currentProfile();
+    int currentProfile() const;
 
     /**
      * This is the method to use!
      */
-    NextGenerationDiskInfo ngDiskInfo();
+    NextGenerationDiskInfo ngDiskInfo() const;
 
     /**
      * Refers to MMC command READ CAPACITY
      */
-    bool readCapacity( K3b::Msf& );
+    bool readCapacity( K3b::Msf& ) const;
 
     /**
      * Refers to MMC command READ FORMAT CAPACITY
      */
-    bool readFormatCapacity( K3b::Msf& );
+    bool readFormatCapacity( K3b::Msf& ) const;
 
     /**
      * Does only make sense for dvd media.
      * @returns -1 on error K3bCdDevice::MediaType otherwise
      */
-    int dvdMediaType();
+    int dvdMediaType() const;
+
+    /**
+     * @returnes the speed in kb/s or 0 on failure.
+     */
+    int determineOptimalWriteSpeed() const;
 
     /**
      * @return fd on success; -1 on failure
@@ -334,13 +339,13 @@ namespace K3bCdDevice
     /**
      * Fallback method that uses the evil cdrom.h stuff
      */
-    bool readTocLinux( Toc& );
+    bool readTocLinux( Toc& ) const;
 
     /**
      * The preferred toc reading method for all CDs. Also reads session info.
      * undefined for DVDs.
      */
-    bool readRawToc( Toc& );
+    bool readRawToc( Toc& ) const;
 
     /**
      * Fixes the last block on CD-Extra disks. This is needed if the readRawToc failed since
@@ -348,7 +353,7 @@ namespace K3bCdDevice
      * session's last track's last sector which is wrong. There is a 11400 block session lead-in
      * between them. This method fixes this only for the last session and only on linux.
      */
-    bool fixupToc( Toc& );
+    bool fixupToc( Toc& ) const;
 
     void checkWriteModes();
 

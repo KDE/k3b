@@ -42,7 +42,7 @@ static const char *description =
 
 static KCmdLineOptions options[] =
     {
-        { "+[File]", I18N_NOOP("file to open"), 0 },
+        { "+[File(s)]", I18N_NOOP("file(s) to open"), 0 },
         { "datacd", I18N_NOOP("Create a new data CD project and add all given files"), 0 },
         { "audiocd", I18N_NOOP("Create a new audio CD project and add all given files"), 0 },
         { "videocd", I18N_NOOP("Create a new video CD project and add all given files"), 0 },

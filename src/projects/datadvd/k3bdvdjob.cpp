@@ -498,7 +498,9 @@ bool K3bDvdJob::waitForDvd()
 		  K3bCdDevice::MEDIA_DVD_R_SEQ|
 		  K3bCdDevice::MEDIA_DVD_R|
 		  K3bCdDevice::MEDIA_DVD_RW) ) {
-      if( m_doc->writingMode() == K3b::DAO )
+      if( m_doc->writingMode() == K3b::DAO ||
+	  ( m_doc->writingMode() == K3b::WRITING_MODE_AUTO &&
+	    m_doc->multiSessionMode() == K3bDataDoc::NONE ) )
    	emit infoMessage( i18n("Writing DVD-R(W) in DAO mode."), INFO );
       else
 	emit infoMessage( i18n("Writing DVD-R(W) in sequential mode."), INFO );	

@@ -196,16 +196,16 @@ namespace K3bCdDevice
 #ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
   struct cd_wr_speed_performance {
     unsigned char res0;                   /* Reserved                          */
-    unsigned char rot_ctl_sel     : 2;    /* Rotational control selected       */
     unsigned char res_1_27        : 6;    /* Reserved                          */
-    Q_UINT16 wr_speed_supp;               /* Supported write speed             */
+    unsigned char rot_ctl_sel     : 2;    /* Rotational control selected       */
+    unsigned char wr_speed_supp[2];       /* Supported write speed             */
   };
 #else
   struct cd_wr_speed_performance {
     unsigned char res0;                   /* Reserved                          */
-    unsigned char res_1_27        : 6;    /* Reserved                          */
     unsigned char rot_ctl_sel     : 2;    /* Rotational control selected       */
-    Q_UINT16 wr_speed_supp;               /* Supported write speed             */
+    unsigned char res_1_27        : 6;    /* Reserved                          */
+    unsigned char wr_speed_supp[2];       /* Supported write speed             */
   };
 #endif
 

@@ -172,8 +172,18 @@ bool K3bGrowisofsWriter::prepareProcess()
     *d->process << "-use-the-force-luke=dummy";
   if( d->writingMode == K3b::DAO )
     *d->process << "-use-the-force-luke=dao";
-  if( burnSpeed() == 1 )
-    *d->process << QString("-speed=%1").arg(burnSpeed());
+
+  int speed = burnSpeed();
+  if( speed == 0 ) {
+    // try to determine the writeSpeed
+    // if it fails determineOptimalWriteSpeed() will return 0 and
+    // the choice is left to growisofs which means that the choice is
+    // really left to the drive since growisofs does not change the speed
+    // if no option is given
+    speed = burnDevice()->determineOptimalWriteSpeed();
+  }
+  if( speed != 0 )
+    *d->process << QString("-speed=%1").arg( (double)speed/1385.0, 0, 'g', 1 );
   // -------------------------------- DVD-R(W)
 
   if( k3bcore->config()->readBoolEntry( "Allow overburning", false ) )

@@ -146,10 +146,21 @@ void K3bGrowisofsImager::start()
   // ----------------------------------------
   if( m_doc->dummy() )
     *m_process << "-use-the-force-luke=dummy";
-  if( m_doc->writingMode() == K3b::DAO && m_doc->multiSessionMode() == K3bDataDoc::NONE )
+  if( ( m_doc->writingMode() == K3b::DAO || m_doc->writingMode() == K3b::WRITING_MODE_AUTO )
+      && m_doc->multiSessionMode() == K3bDataDoc::NONE )
     *m_process << "-use-the-force-luke=dao";  // does DAO apply to DVD+R?
-  if( m_doc->speed() == 1 )
-    *m_process << QString("-speed=%1").arg(m_doc->speed());
+
+  int speed = m_doc->speed();
+  if( speed == 0 ) {
+    // try to determine the writeSpeed
+    // if it fails determineOptimalWriteSpeed() will return 0 and
+    // the choice is left to growisofs which means that the choice is
+    // really left to the drive since growisofs does not change the speed
+    // if no option is given
+    speed = m_doc->burner()->determineOptimalWriteSpeed();
+  }
+  if( speed != 0 )
+    *m_process << QString("-speed=%1").arg( (double)speed/1385.0, 0, 'g', 1 );
   // -------------------------------- DVD-R(W)
 
   if( k3bcore->config()->readBoolEntry( "Allow overburning", false ) )
