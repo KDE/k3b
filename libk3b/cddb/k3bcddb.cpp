@@ -108,7 +108,7 @@ void K3bCddb::query( const K3bToc& toc )
     QTimer::singleShot( 0, this, SLOT(remoteQuery()) );
   }
   else {
-    QTimer::singleShot( 0, this, SLOT(slotNoEntry() );
+    QTimer::singleShot( 0, this, SLOT(slotNoEntry()) );
   }
 }
 
