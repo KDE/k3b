@@ -46,6 +46,14 @@ typedef Q_INT32 size32;
 #include <linux/major.h>
 #include <linux/limits.h>
 
+#include <config.h>
+
+#ifdef HAVE_RESMGR
+extern "C" {
+#include <resmgr.h>
+};
+#endif
+
 #ifndef IDE_DISK_MAJOR
 #define IDE_DISK_MAJOR(M)       ((M) == IDE0_MAJOR || (M) == IDE1_MAJOR || \
                                 (M) == IDE2_MAJOR || (M) == IDE3_MAJOR || \
@@ -63,6 +71,25 @@ const char* K3bCdDevice::CdDevice::cdrdao_drivers[] =
     "yamaha-cdr10x", 0
   };
 
+
+
+int K3bCdDevice::openDevice( const char* name )
+{
+  int fd = -1;
+#ifdef HAVE_RESMGR
+  // first try resmgr
+  fd = ::rsm_open_device( name, O_RDONLY | O_NONBLOCK );
+  kdDebug() << "(K3bCdDevice) resmgr open: " << fd << endl;
+#endif
+
+  if( fd < 0 )
+    fd = ::open( name, O_RDONLY | O_NONBLOCK );
+
+  if( fd < 0 )
+    fd = -1;
+
+  return fd;
+}
 
 
 
@@ -973,7 +1000,7 @@ bool K3bCdDevice::CdDevice::supportsWriteMode( WriteMode w )
 int K3bCdDevice::CdDevice::open() const
 {
   if( d->deviceFd == -1 )
-    d->deviceFd = ::open( devicename().ascii(), O_RDONLY | O_NONBLOCK );
+    d->deviceFd = openDevice( devicename().ascii() );
   if (d->deviceFd < 0)
   {
     kdDebug() << "(K3bCdDevice) Error: could not open device." << endl;

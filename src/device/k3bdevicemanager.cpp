@@ -158,7 +158,8 @@ int K3bCdDevice::DeviceManager::scanbus()
     {
       int i = 1;
       QString dev;
-      while ( !(dev=line.section(QRegExp("[\t\n:]+"),i,i)).isEmpty() )
+      QRegExp re("[\t\n:]+");
+      while ( !(dev = line.section(re, i, i)).isEmpty() )
       {
         if( addDevice(QString("/dev/%1").arg(dev)) )
           m_foundDevices++;
@@ -518,9 +519,8 @@ void K3bCdDevice::DeviceManager::determineCapabilities(K3bDevice *dev)
 bool K3bCdDevice::DeviceManager::testForCdrom(const QString& devicename)
 {
   bool ret = false;
-  int cdromfd = ::open( devicename.ascii(), O_RDONLY | O_NONBLOCK );
-  if (cdromfd < 0)
-  {
+  int cdromfd = K3bCdDevice::openDevice( devicename.ascii() );
+  if (cdromfd < 0) {
     kdDebug() << "could not open device " << devicename << " (" << strerror(errno) << ")" << endl;
     return ret;
   }
@@ -559,55 +559,40 @@ K3bDevice* K3bCdDevice::DeviceManager::addDevice( const QString& devicename )
   kdDebug() << devicename << " resolved to " << resolved << endl;
 
   if  ( !testForCdrom(resolved) )
-    return device;
+    return 0;
 
-  if ( (device = new K3bDevice(resolved)) )
-  {
-    if( !device->init() )
-    {
-      kdDebug() << "Could not initialize device " << devicename << endl;
-      delete device;
-      return 0;
-    }
+  if ( K3bDevice* oldDev = findDevice(resolved) ) {
+    kdDebug() << "(K3bDeviceManager) dev " << resolved  << " already found" << endl;
+    oldDev->addDeviceNode( devicename );
+    return 0;
   }
 
-  K3bDevice::interface iface = device->interfaceType();
-
-  if( iface == K3bDevice::IDE )
-  {
-    kdDebug() << resolved << " is ATAPI device" << endl;
-    if ( K3bDevice* oldDev = findDevice(resolved) )
-    {
+  int bus = -1, target = -1, lun = -1;
+  bool scsi = determineBusIdLun( resolved, bus, target, lun );
+  if(scsi) {
+    if ( K3bDevice* oldDev = findDevice(bus, target, lun) ) {
       kdDebug() << "(K3bDeviceManager) dev " << resolved  << " already found" << endl;
       oldDev->addDeviceNode( devicename );
       return 0;
     }
   }
-  else if( iface == K3bDevice::SCSI )
-  {
-    kdDebug() << resolved << " is SCSI device" << endl;
-    int bus = -1, target = -1, lun = -1;
-    bool bil = determineBusIdLun( resolved, bus, target, lun );
-    if (bil)
-    {
-      device->m_target = target;
-      device->m_lun    = lun;
-      device->m_bus    = bus;
-      if ( K3bDevice* oldDev = findDevice(bus, target, lun) )
-      {
-        kdDebug() << "(K3bDeviceManager) dev " << resolved  << " already found" << endl;
-        oldDev->addDeviceNode( devicename );
-        return 0;
-      }
-    }
+
+  device = new K3bDevice(resolved);
+  if( scsi ) {
+    device->m_bus = bus;
+    device->m_target = target;
+    device->m_lun = lun;
   }
-  else
-    kdDebug() << "(K3bDeviceManager) could not determine interfacetype of " << resolved << endl;
 
-  determineCapabilities(device);
+  if( !device->init() ) {
+    kdDebug() << "Could not initialize device " << devicename << endl;
+    delete device;
+    return 0;
+  }
 
-  if( device )
-  {
+  if( device ) {
+    determineCapabilities(device);
+
     if( device->burner() )
       m_writer.append( device );
     else
@@ -691,9 +676,8 @@ void K3bCdDevice::DeviceManager::slotCollectStdout( KProcess*, char* data, int l
 bool K3bCdDevice::DeviceManager::determineBusIdLun( const QString& dev, int& bus, int& id, int& lun )
 {
   int ret = false;
-  int cdromfd = ::open( dev.ascii(), O_RDONLY | O_NONBLOCK );
-  if (cdromfd < 0)
-  {
+  int cdromfd = K3bCdDevice::openDevice( dev.ascii() );
+  if (cdromfd < 0) {
     kdDebug() << "could not open device " << dev << " (" << strerror(errno) << ")" << endl;
     return false;
   }

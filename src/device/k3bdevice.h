@@ -303,6 +303,11 @@ namespace K3bCdDevice
     friend class DeviceManager;
   };
 
+  /**
+   * This should always be used to open a device since it
+   * uses the resmgr
+   */
+  int openDevice( const char* name );
 };
 
 typedef K3bCdDevice::CdDevice K3bDevice;

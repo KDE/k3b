@@ -90,6 +90,10 @@ test "x$AS" = xas && test -n "$save_AS" && AS=$save_AS
 linux_scsi=no
 AC_MSG_CHECKING(for linux scsi headers)
 AC_TRY_COMPILE([
+	#include <linux/version.h>
+	#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,5,50)
+	typedef unsigned char u8;
+	#endif
 	#include <sys/types.h>
 	#include <linux/../scsi/scsi.h> /* cope with silly includes */
 	],
@@ -464,3 +468,15 @@ test -n "$profile"  && CFLAGS="$CFLAGS $profile" LDFLAGS="$LDFLAGS $profile"
 if test "x$linux_scsi" = "xno" -o "x$cdda_paranoia" = "xno" ; then
 	DO_NOT_COMPILE="$DO_NOT_COMPILE k3b"
 fi
+
+
+RESMGR_LIB=""
+
+AC_CHECK_HEADERS(resmgr.h, [
+       AC_CHECK_LIB(resmgr,rsm_open_device,[
+               RESMGR_LIB="-lresmgr"
+               AC_DEFINE(HAVE_RESMGR,1,[defined if you have resmgr libraries and headers])
+       ])
+])
+
+AC_SUBST(RESMGR_LIB)

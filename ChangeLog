@@ -10,6 +10,12 @@ internals:
   cdinfo rewrite, use generic packet ioctl's 
   merged cdrdaoparser and cdrdaowriter
 added multisession cd copy
+fixed onlyCreateImage (this time for real!)
+added option to hide main window while writing
+fixed temp-dir problems with nfs-mounted home directories
+   K3b now uses the default kde tempdir
+Resmgr support
+added user datamode selection (mode1, mode2(form1))
 
 0.8.1
 fixed compiling problems with kernel < 2.4.3
