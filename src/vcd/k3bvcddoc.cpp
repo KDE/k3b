@@ -53,6 +53,12 @@
 #include <kdebug.h>
 
 
+bool desperate_mode = false;
+bool preserve_header = false;
+bool print_progress = true;
+bool aspect_correction  = false;
+byte forced_sequence_header = 0;
+
 K3bVcdDoc::K3bVcdDoc( QObject* parent )
   : K3bDoc( parent )
 {
@@ -177,6 +183,7 @@ void K3bVcdDoc::slotWorkUrlQueue()
 K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
 {
   kdDebug() << QString("(K3bVcdDoc) createTrack url.path = ").arg(url.path()) << endl;
+  int i = identifyMpegFile( url );
   uint mpeg = m_mpegFactory->getMpegFileType( url );
   if (mpeg > 0) {
     if (vcdType() == NONE) {
@@ -297,6 +304,12 @@ K3bBurnJob* K3bVcdDoc::newBurnJob()
 
 unsigned int K3bVcdDoc::identifyMpegFile( const KURL& url )
 {
+  chunkTab Tab(20);
+  char filename[255];
+  strcpy(filename,QFile::encodeName(url.path()));
+  Tab.AddFile(filename);
+  Tab.PrintInfos();
+  Tab.PrintTab();
   // return 0 = Unknown file type, 1 = Mpeg 1, 2 = Mpeg 2
   // return m_mpegFactory.getMpegFileType( url );
   return 0;

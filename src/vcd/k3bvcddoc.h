@@ -20,6 +20,8 @@
 
 #include "k3bvcdoptions.h"
 #include "k3bvcdmpegfactory.h"
+#include "mpeginfo/mpeg.h"
+#include "mpeginfo/chunkTab.h"
 #include "../k3bdoc.h"
 
 #include <qptrqueue.h>
@@ -153,7 +155,7 @@ class K3bVcdDoc : public K3bDoc
   bool m_deleteImage;
   int m_vcdType;
   uint lastAddedPosition;
-  
+ 
 };
 
 
