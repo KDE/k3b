@@ -428,7 +428,7 @@ void K3bCdrdaoWriter::start()
   {
     s += *it + " ";
   }
-  kdDebug() << s << endl << flush;
+  kdDebug() << s << flush << endl;
 
   m_currentTrack = 0;
   reinitParser();

@@ -143,7 +143,7 @@ void K3bCdrecordWriter::start()
   for( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
     s += *it + " ";
   }
-  kdDebug() << s << endl << flush;
+  kdDebug() << s << flush << endl;
 
   m_currentTrack = 0;
   m_cdrecordError = UNKNOWN;
