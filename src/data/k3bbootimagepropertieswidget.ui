@@ -1,0 +1,205 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>K3bBootImagePropertiesWidget</class>
+<author>Sebastian Trueg</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>Form1</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>470</width>
+            <height>308</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QComboBox">
+            <property name="name">
+                <cstring>comboImageType</cstring>
+            </property>
+        </widget>
+        <widget class="QTabWidget">
+            <property name="name">
+                <cstring>mainTab</cstring>
+            </property>
+            <property name="enabled">
+                <bool>true</bool>
+            </property>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Settings</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QLabel" row="0" column="0">
+                        <property name="name">
+                            <cstring>textLabel1</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Image file:</string>
+                        </property>
+                    </widget>
+                    <widget class="KURLRequester" row="0" column="1">
+                        <property name="name">
+                            <cstring>editUrl</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="2">
+                        <property name="name">
+                            <cstring>checkNoBoot</cstring>
+                        </property>
+                        <property name="text">
+                            <string>No boot image</string>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox" row="1" column="0" rowspan="1" colspan="2">
+                        <property name="name">
+                            <cstring>checkNoEmulate</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Do not emulate Floppy</string>
+                        </property>
+                    </widget>
+                    <spacer row="3" column="1">
+                        <property name="name">
+                            <cstring>spacer1</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>31</width>
+                                <height>111</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Advanced</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QLabel" row="0" column="0">
+                        <property name="name">
+                            <cstring>textLabel2</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Boot load segment:</string>
+                        </property>
+                    </widget>
+                    <widget class="QLineEdit" row="0" column="1" rowspan="1" colspan="2">
+                        <property name="name">
+                            <cstring>editLoadSegment</cstring>
+                        </property>
+                        <property name="enabled">
+                            <bool>false</bool>
+                        </property>
+                        <property name="text">
+                            <string></string>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="1" column="0">
+                        <property name="name">
+                            <cstring>textLabel3</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Boot load size:</string>
+                        </property>
+                    </widget>
+                    <widget class="QLineEdit" row="1" column="1" rowspan="1" colspan="2">
+                        <property name="name">
+                            <cstring>editLoadSize</cstring>
+                        </property>
+                        <property name="enabled">
+                            <bool>false</bool>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="2">
+                        <property name="name">
+                            <cstring>checkInfoTable</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Boot-info-table</string>
+                        </property>
+                    </widget>
+                    <spacer row="4" column="2">
+                        <property name="name">
+                            <cstring>spacer2</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>21</width>
+                                <height>61</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </grid>
+            </widget>
+        </widget>
+    </vbox>
+</widget>
+<connections>
+    <connection>
+        <sender>checkNoEmulate</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>editLoadSegment</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>checkNoEmulate</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>editLoadSize</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>checkNoEmulate</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>checkNoBoot</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>checkNoBoot</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>checkNoEmulate</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+</connections>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+</includehints>
+</UI>
