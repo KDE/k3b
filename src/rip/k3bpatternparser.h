@@ -22,10 +22,6 @@
 
 #include "../k3bcddb.h"
 
-class QStringList;
-class QListViewItem;
-
-class KListView;
 
 /**
   *@author Sebastian Trueg
@@ -33,38 +29,11 @@ class KListView;
 class K3bPatternParser 
 {
  public: 
-  K3bPatternParser();
-  ~K3bPatternParser();
-
-  /**
-   * returns filename according to configured pattern without extension
-   */
-  QString prepareFilename( const K3bCddbEntry& entry, int no );
-
-  static QString prepareParsedName( const QString& title, const QString& artist, QString& newArtist, bool enabled = true);
-
-  QString prepareDirectory( const K3bCddbEntry& );
-  static QString prepareReplaceName( QString title, QString newChar, bool enabled );
-  static QString prepareReplaceFilename( const QString& title );
-  QString prepareReplaceDirectory( const QString& name );
-
   static QString parsePattern( const K3bCddbEntry& entry, 
 			       unsigned int trackNumber,
 			       const QString& pattern, 
 			       bool replace = false, 
 			       const QString& replaceString = "_" );
-
- private:
-  QStringList m_filePattern;
-  QStringList m_dirPattern;
-  QStringList *m_titles;
-  QString m_title;
-  QString m_artist;
-  K3bCddbEntry m_cddb;
-  QString getRealDirectory( int i, const K3bCddbEntry& );
-  static QString replaceSpaces( QString title, bool replaceSpaces, bool isDirectory, QString *newChar=0 );
-  //static void parseTitle( const QString& title, const QString& artist, QString& refTitle, QString &refArtist );
-    
 };
 
 #endif

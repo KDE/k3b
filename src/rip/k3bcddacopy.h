@@ -21,6 +21,7 @@
 
 #include <qobject.h>
 #include <qstringlist.h>
+#include <qtimer.h>
 
 #include "../k3bjob.h"
 #include "../tools/k3bwavefilewriter.h"
@@ -41,9 +42,9 @@ struct cdrom_drive;
 class QStringList;
 class QFile;
 class QDataStream;
-class QTimer;
 class KProgress;
 class K3bDevice;
+class K3bDiskInfoDetector;
 
 
 /**
@@ -66,21 +67,33 @@ class K3bCddaCopy : public K3bJob
 /*   void setBytes( long); */
   //bool isFinished() { return m_finished; };
 
+ public slots:
   void setDevice( K3bDevice* dev ) { m_device = dev; }
   void setCddbEntry( const K3bCddbEntry& e ) { m_cddbEntry = e; }
   void setCopyTracks( const QValueList<int>& t ) { m_tracksToCopy = t; }
+  void setUsePattern( bool b ) { m_bUsePattern = b; }
+  void setBaseDirectory( const QString& path ) { m_baseDirectory = path; }
 
-
- public slots:
   void start();
   void cancel();
 
  private slots:
   void slotReadData();
+  void slotDiskInfoReady( const K3bDiskInfo& );
 
  private:
- K3bCddbEntry m_cddbEntry;
- K3bDevice* m_device;
+  void createFilenames();
+  bool createDirectory( const QString& dir );
+
+  K3bCddbEntry m_cddbEntry;
+  K3bDiskInfo m_diskInfo;
+  K3bDevice* m_device;
+
+  bool m_bUsePattern;
+
+  K3bDiskInfoDetector* m_diskInfoDetector;
+
+  QString m_baseDirectory;
 
   QStringList m_list;
   //QStringList m_directories;
@@ -88,27 +101,27 @@ class K3bCddaCopy : public K3bJob
   K3bWaveFileWriter m_waveFileWriter;
   QString m_currentWrittenFile;
 
-  int m_count;
-  int m_progressBarValue;
-  int m_currentTrackIndex;
-  long m_byteCount;
-  long m_trackBytesAll;
+  QTimer* m_rippingTimer;
 
-  long m_currentSector;
-  long m_lastSector;
+  unsigned int m_currentTrackIndex;
+  unsigned long m_byteCount;
+  unsigned long m_trackBytesAll;
+  int m_lastOverallPercent;
+  int m_lastTrackPercent;
+
+  unsigned long m_currentSector;
+  unsigned long m_lastSector;
   bool m_interrupt;
   QValueList<int> m_tracksToCopy;
   struct cdrom_drive *m_drive;
-  K3bCdda *m_cdda;
   long m_bytes;
   long m_bytesAll;
   bool m_finished;
   //KProgress *m_progress;
-  QTimer *t;
   cdrom_paranoia *m_paranoia;
   bool paranoiaRead(struct cdrom_drive *drive, int track, QString dest);
   void readDataFinished();
-  bool startRip(int i);
+  bool startRip( unsigned int i );
   void finishedRip();
 };
 

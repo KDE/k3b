@@ -152,7 +152,10 @@ void K3bRipperWidget::init()
   KConfig* c = k3bMain()->config();
   c->setGroup( "Ripping" );
 
-  // TODO: load default file type
+  QString filetype = c->readEntry( "last used filetype", "wav" );
+  m_radioWav->setChecked( filetype == "wav" );
+  m_radioOgg->setChecked( filetype == "ogg" );
+  m_radioMp3->setChecked( filetype == "mp3" );
 
   m_editStaticRipPath->setText( c->readEntry( "last ripping directory", QDir::homeDirPath() ) );
   m_checkUsePattern->setChecked( !m_cddbEntry.cdArtist.isEmpty() && 
@@ -167,67 +170,37 @@ void K3bRipperWidget::slotOk()
   c->setGroup( "Ripping" );
 
   c->writeEntry( "last ripping directory", m_editStaticRipPath->text() );
+  QString filetype;
+  if( m_radioOgg->isChecked() )
+    filetype = "ogg";
+  else if( m_radioMp3->isChecked() )
+    filetype = "mp3";
+  else
+    filetype = "wav";
 
-//   QStringList::Iterator it;
-//   int index = 0;
-//   for( it = m_list.begin(); it != m_list.end(); ++it ){
-//     QString tmp = *it;
-//     if( m_useCustomDir ){
-//       // check if directory exists else create it
-//       //QString dest = m_labelSummaryName->text(); //
-//       QString dest = m_directories[ index ];
-//       QDir destDir( dest );
-//       if( !destDir.exists() ){
-// 	QStringList dirs = QStringList::split("/", dest);
-// 	QStringList::Iterator d = dirs.begin();
-// 	destDir = "/" + *d;
-// 	for( ++d ; d != dirs.end(); ++d ){
-// 	  destDir = destDir.absPath() +"/" + *d;
-// 	  if( destDir.exists( ) )
-// 	    continue;
-// 	  bool successful = destDir.mkdir( destDir.absPath() );
-// 	  if( !successful ){
-// 	    QMessageBox::critical( this, i18n("Ripping Error"), i18n("Couldn't create directory: ") + dest, i18n("Ok") );
-// 	    return;
-// 	  }
-// 	}
-//       } // end directory
-//       (*it) = dest + "/" + KIO::encodeFileName(tmp);
-//       kdDebug() << "(K3bRipperWidget) Final destination" << (*it) << endl;
-//     } else {
-//       (*it) = m_editStaticRipPath->text() + "/" + tmp;
-//     }
-//     m_bytes += m_size[ index ]; //cdda->getRawTrackSize( m_tracks[ index ], drive);
-//     kdDebug() << "(K3bRipperWidget) KBytes: " << (m_bytes/1024) << endl;
-//     index++;
-//   }
-//   if( index == 0 ){
-//     QMessageBox::critical( this, i18n("Ripping Error"), i18n("There is nothing to rip."), i18n("Ok") );
-//     return;
-//   }
-
+  c->writeEntry( "last used filetype", filetype );
 
 //   // save all entries with artist title, path filename and so on
 //   setSongList();
 
-//    K3bCddaCopy* job = new K3bCddaCopy( this );
-//    job->setDiskInfo( m_diskInfo );
+  K3bCddaCopy* job = new K3bCddaCopy( this );
+  job->setDevice( m_diskInfo.device );
 
-//    // FIXME: set only if cdddb used
-//    job->setCddbEntry( m_cddbEntry );
+  job->setCddbEntry( m_cddbEntry );
+  job->setUsePattern( m_checkUsePattern->isChecked() );
+  job->setBaseDirectory( m_editStaticRipPath->text() );
+  job->setCopyTracks( m_trackNumbers );
 
-//    job->setCopyTracks( m_trackNumbers );
+  K3bBurnProgressDialog ripDialog( this, "Ripping" );
+  ripDialog.setJob( job );
 
-//    K3bBurnProgressDialog ripDialog( this, "Ripping" );
-//    ripDialog.setJob( job );
+  job->start();
+  hide();
+  ripDialog.exec();
 
-//    job->start();
-//    hide();
-//    ripDialog.exec();
+  delete job;
 
-//    delete job;
-
-//    slotClose();
+  slotClose();
 }
 
 
@@ -241,12 +214,6 @@ void K3bRipperWidget::showPatternDialog()
 
 void K3bRipperWidget::refresh()
 {
-  // TODO: put here the filesize of the ripped files (that is for mp3 and ogg app. 1/10 
-  //       of the full size)
-  //       show the track type
-  //       data tracks have always the same size
-  //       show resulting filename, time, size, and type and not tracknumber, title, artist, and so on
-
   KConfig* c = kapp->config();
   c->setGroup( "Ripping" );
 
@@ -257,8 +224,24 @@ void K3bRipperWidget::refresh()
        it != m_trackNumbers.end(); ++it ) {
     int index = *it - 1;
 
-    QString extension = ".wav"; // FIXME: mp3,ogg,iso
-    long fileSize = m_diskInfo.toc[index].length() * 2352;  // FIXME: mp3,ogg,iso
+    QString extension;
+    if( m_radioOgg->isChecked() )
+      extension = ".ogg";
+    else if( m_radioMp3->isChecked() )
+      extension = ".mp3";
+    else
+      extension = ".wav";
+
+    long fileSize = m_diskInfo.toc[index].length() * 2352;
+
+    if( m_diskInfo.toc[index].type() == K3bTrack::DATA ) {
+      extension = ".iso";
+      continue;  // TODO: find out how to rip the iso data
+    }
+    else {
+      // FIXME: mp3,ogg file size recalculation
+    }
+
 
     QString filename, directory;
 
