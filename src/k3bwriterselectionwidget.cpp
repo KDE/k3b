@@ -133,7 +133,7 @@ void K3bWriterSelectionWidget::init()
     dev = devices.next();
   }
 
-  k3bcore->config()->setGroup( "General Settings" );
+  k3bcore->config()->setGroup( "General Options" );
   K3bDevice *current = k3bcore->deviceManager()->deviceByName( k3bcore->config()->readEntry( "current_writer" ) );
 
   if ( current == 0 )
@@ -212,8 +212,10 @@ void K3bWriterSelectionWidget::init()
 
 void K3bWriterSelectionWidget::slotConfigChanged( KConfig* c )
 {
+  QString oldGroup = c->group();
   c->setGroup("General Options");
   bool manualAppSelect = c->readBoolEntry( "Manual writing app selection", false );
+  c->setGroup( oldGroup );
   if( manualAppSelect ) {
     m_comboWritingApp->show();
     m_writingAppLabel->show();
@@ -321,8 +323,11 @@ int K3bWriterSelectionWidget::writerSpeed() const
 int K3bWriterSelectionWidget::writingApp() const
 {
   KConfig* c = k3bcore->config();
+  QString oldGroup = c->group();
   c->setGroup("General Options");
-  if( c->readBoolEntry( "Manual writing app selection", false ) ) {
+  bool b = c->readBoolEntry( "Manual writing app selection", false );
+  c->setGroup( oldGroup );
+  if( b ) {
     return selectedWritingApp();
   }
   else
@@ -366,8 +371,10 @@ void K3bWriterSelectionWidget::slotWriterChanged()
 {
   // save last selected writer
   if( writerDevice() ) {
-    k3bcore->config()->setGroup( "General Settings" );
+    QString oldGroup = k3bcore->config()->group();
+    k3bcore->config()->setGroup( "General Options" );
     k3bcore->config()->writeEntry( "current_writer", writerDevice()->devicename() );
+    k3bcore->config()->setGroup( oldGroup );
   }
 }
 
@@ -407,5 +414,14 @@ void K3bWriterSelectionWidget::saveConfig( KConfig* c )
   c->writeEntry( "writer_device", writerDevice() ? writerDevice()->devicename() : QString::null );
   c->writeEntry( "writing_app", m_comboWritingApp->currentText() );
 }
+
+void K3bWriterSelectionWidget::loadDefaults()
+{
+  // ignore the writer and the writer speed in CD mode
+  if( d->dvd )
+    m_comboSpeed->setCurrentItem( 0 ); // Auto
+  setWritingApp( K3b::DEFAULT );
+}
+
 
 #include "k3bwriterselectionwidget.moc"

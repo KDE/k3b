@@ -20,17 +20,11 @@
 #include "k3binteractiondialog.h"
 #include "device/k3bdevice.h"
 
-class QString;
 class QGroupBox;
 class QComboBox;
-class QButtonGroup;
-class QRadioButton;
 class QCheckBox;
-class QComboBox;
 class QCloseEvent;
 class KListView;
-class K3bBlankingJob;
-class KProgress;
 class K3bWriterSelectionWidget;
 
 
@@ -57,20 +51,13 @@ Q_OBJECT
 
   K3bWriterSelectionWidget* m_writerSelectionWidget;
 
-  QButtonGroup* m_groupBlankType;
-  QRadioButton* m_radioCompleteBlank;
-  QRadioButton* m_radioFastBlank;
-  QRadioButton* m_radioBlankTrack;
-  QRadioButton* m_radioUncloseSession;
-  QRadioButton* m_radioBlankSession;
-
-  QGroupBox* m_groupOptions;
+  QComboBox* m_comboEraseMode;
   QCheckBox* m_checkForce;
-
   QGroupBox* m_groupOutput;
   KListView* m_viewOutput;
 
-  K3bBlankingJob* m_job;
+  class Private;
+  Private* d;
 };
 
 #endif

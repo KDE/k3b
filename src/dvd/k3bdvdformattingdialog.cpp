@@ -161,6 +161,7 @@ void K3bDvdFormattingDialog::slotSaveUserDefaults()
 
 void K3bDvdFormattingDialog::slotLoadK3bDefaults()
 {
+  m_writerSelectionWidget->loadDefaults();
   m_checkForce->setChecked( false );
   m_checkQuickFormat->setChecked( true );
   m_writingModeWidget->setWritingMode( K3b::WRITING_MODE_AUTO );

@@ -347,6 +347,7 @@ void K3bProjectBurnDialog::slotLoadUserDefaults()
 
 void K3bProjectBurnDialog::slotLoadK3bDefaults()
 {
+  m_writerSelectionWidget->loadDefaults();
   m_writingModeWidget->setWritingMode( K3b::WRITING_MODE_AUTO );
   m_checkSimulate->setChecked( false );
   m_checkOnTheFly->setChecked( true );

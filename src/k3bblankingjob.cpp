@@ -25,9 +25,9 @@
 #include <klocale.h>
 #include <kio/global.h>
 #include <kio/job.h>
+#include <kdebug.h>
 
 #include <qstring.h>
-#include <kdebug.h>
 
 
 

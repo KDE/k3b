@@ -206,17 +206,17 @@ void K3bMainWindow::initActions()
 			  actionCollection(), "file_burn");
 
   actionFileNewMenu = new KActionMenu( i18n("&New Project"), "filenew", actionCollection(), "file_new" );
-  actionFileNewAudio = new KAction(i18n("New &Audio Project"), "sound", 0, this, SLOT(slotNewAudioDoc()),
+  actionFileNewAudio = new KAction(i18n("New &Audio CD Project"), "sound", 0, this, SLOT(slotNewAudioDoc()),
 			     actionCollection(), "file_new_audio");
-  actionFileNewData = new KAction(i18n("New &Data Project"),"tar", 0, this, SLOT(slotNewDataDoc()),
+  actionFileNewData = new KAction(i18n("New Data &CD Project"),"tar", 0, this, SLOT(slotNewDataDoc()),
 			    actionCollection(), "file_new_data");
-  actionFileNewMixed = new KAction(i18n("New &Mixed Mode Project"),"tar", 0, this, SLOT(slotNewMixedDoc()),
+  actionFileNewMixed = new KAction(i18n("New &Mixed Mode CD Project"),"tar", 0, this, SLOT(slotNewMixedDoc()),
 				   actionCollection(), "file_new_mixed");
-  actionFileNewVcd = new KAction(i18n("New &Video Project"),"video", 0, this, SLOT(slotNewVcdDoc()),
+  actionFileNewVcd = new KAction(i18n("New &Video CD Project"),"video", 0, this, SLOT(slotNewVcdDoc()),
 				   actionCollection(), "file_new_vcd");
-  actionFileNewMovix = new KAction(i18n("New &eMovix Project"),"video", 0, this, SLOT(slotNewMovixDoc()),
+  actionFileNewMovix = new KAction(i18n("New &eMovix CD Project"),"video", 0, this, SLOT(slotNewMovixDoc()),
 				   actionCollection(), "file_new_movix");
-  actionFileNewDvd = new KAction(i18n("New Dvd Project"), "dvd_unmount", 0, this, SLOT(slotNewDvdDoc()),
+  actionFileNewDvd = new KAction(i18n("New Data &DVD Project"), "dvd_unmount", 0, this, SLOT(slotNewDvdDoc()),
 				 actionCollection(), "file_new_dvd");
 
 
@@ -299,8 +299,8 @@ void K3bMainWindow::initActions()
 
 
   actionFileNewMenu->setStatusText(i18n("Creates a new project"));
-  actionFileNewData->setStatusText( i18n("Creates a new data project") );
-  actionFileNewAudio->setStatusText( i18n("Creates a new audio project") );
+  actionFileNewData->setStatusText( i18n("Creates a new data CD project") );
+  actionFileNewAudio->setStatusText( i18n("Creates a new audio CD project") );
   actionToolsBlankCdrw->setStatusText( i18n("Opens CD-blanking dialog") );
   actionFileOpen->setStatusText(i18n("Opens an existing project"));
   actionFileOpenRecent->setStatusText(i18n("Opens a recently used file"));
@@ -513,8 +513,6 @@ void K3bMainWindow::saveOptions()
 
   // save dock positions!
   manager()->writeConfig( m_config, "Docking Config" );
-
-  m_config->setGroup( "External Programs" );
 
   m_dirView->saveConfig( config() );
 
@@ -841,13 +839,13 @@ void K3bMainWindow::showOptionDialog( int index )
 
 void K3bMainWindow::slotNewAudioDoc()
 {
-  slotStatusMsg(i18n("Creating new Audio Project."));
+  slotStatusMsg(i18n("Creating new Audio CD Project."));
 
   K3bAudioDoc* doc = new K3bAudioDoc( this );
   initializeNewDoc( doc );
 
   m_audioUntitledCount++;
-  QString fileName = i18n("Audio%1").arg(m_audioUntitledCount);
+  QString fileName = i18n("AudioCD%1").arg(m_audioUntitledCount);
   KURL url;
   url.setFileName(fileName);
   doc->setURL(url);
@@ -858,15 +856,15 @@ void K3bMainWindow::slotNewAudioDoc()
 
 void K3bMainWindow::slotNewDataDoc()
 {
-  slotStatusMsg(i18n("Creating new Data Project."));
+  slotStatusMsg(i18n("Creating new Data CD Project."));
 
   K3bDataDoc* doc = new K3bDataDoc( this );
   initializeNewDoc( doc );
 
   m_dataUntitledCount++;
-  QString fileName = i18n("Data%1").arg(m_dataUntitledCount);
+  QString fileName = i18n("DataCD%1").arg(m_dataUntitledCount);
   if( doc->isoOptions().volumeID().isEmpty() )
-    doc->isoOptions().setVolumeID( i18n("Data%1").arg(m_dataUntitledCount) );
+    doc->isoOptions().setVolumeID( i18n("DataCD%1").arg(m_dataUntitledCount) );
   KURL url;
   url.setFileName(fileName);
   doc->setURL(url);
@@ -878,15 +876,15 @@ void K3bMainWindow::slotNewDataDoc()
 
 void K3bMainWindow::slotNewDvdDoc()
 {
-  slotStatusMsg(i18n("Creating new Dvd Project."));
+  slotStatusMsg(i18n("Creating new Data DVD Project."));
 
   K3bDvdDoc* doc = new K3bDvdDoc( this );
   initializeNewDoc( doc );
 
   m_dvdUntitledCount++;
-  QString fileName = i18n("Dvd%1").arg(m_dvdUntitledCount);
+  QString fileName = i18n("DataDVD%1").arg(m_dvdUntitledCount);
   if( doc->isoOptions().volumeID().isEmpty() )
-    doc->isoOptions().setVolumeID( i18n("Dvd%1").arg(m_dvdUntitledCount) );
+    doc->isoOptions().setVolumeID( i18n("DataDVD%1").arg(m_dvdUntitledCount) );
   KURL url;
   url.setFileName(fileName);
   doc->setURL(url);
@@ -898,15 +896,15 @@ void K3bMainWindow::slotNewDvdDoc()
 
 void K3bMainWindow::slotNewMixedDoc()
 {
-  slotStatusMsg(i18n("Creating new Mixed Mode Project."));
+  slotStatusMsg(i18n("Creating new Mixed Mode CD Project."));
 
   K3bMixedDoc* doc = new K3bMixedDoc( this );
   initializeNewDoc( doc );
 
   m_mixedUntitledCount++;
-  QString fileName=i18n("Mixed%1").arg(m_mixedUntitledCount);
+  QString fileName=i18n("MixedCD%1").arg(m_mixedUntitledCount);
   if( doc->dataDoc()->isoOptions().volumeID().isEmpty() )
-    doc->dataDoc()->isoOptions().setVolumeID( i18n("Mixed%1").arg(m_mixedUntitledCount) );
+    doc->dataDoc()->isoOptions().setVolumeID( i18n("MixedCD%1").arg(m_mixedUntitledCount) );
   KURL url;
   url.setFileName(fileName);
   doc->setURL(url);
@@ -927,15 +925,15 @@ void K3bMainWindow::slotNewVcdDoc()
 			      i18n( "Information" ) );
   }
 
-  slotStatusMsg(i18n("Creating new Video Project."));
+  slotStatusMsg(i18n("Creating new Video CD Project."));
 
   K3bVcdDoc* doc = new K3bVcdDoc( this );
   initializeNewDoc( doc );
 
   m_vcdUntitledCount++;
-  QString fileName=i18n("Videocd%1").arg(m_vcdUntitledCount);
+  QString fileName=i18n("VideoCD%1").arg(m_vcdUntitledCount);
   if( doc->vcdOptions()->volumeId().isEmpty() )
-    doc->vcdOptions()->setVolumeId( i18n("Videocd%1").arg(m_vcdUntitledCount) );
+    doc->vcdOptions()->setVolumeId( i18n("VideoCD%1").arg(m_vcdUntitledCount) );
   KURL url;
   url.setFileName(fileName);
   doc->setURL(url);
@@ -947,15 +945,15 @@ void K3bMainWindow::slotNewVcdDoc()
 
 void K3bMainWindow::slotNewMovixDoc()
 {
-  slotStatusMsg(i18n("Creating new eMovix Project."));
+  slotStatusMsg(i18n("Creating new eMovix CD Project."));
 
   K3bMovixDoc* doc = new K3bMovixDoc( this );
   initializeNewDoc( doc );
 
   m_movixUntitledCount++;
-  QString fileName=i18n("eMovix%1").arg(m_movixUntitledCount);
+  QString fileName=i18n("eMovixCD%1").arg(m_movixUntitledCount);
   if( doc->isoOptions().volumeID().isEmpty() )
-    doc->isoOptions().setVolumeID( i18n("eMovix%1").arg(m_movixUntitledCount) );
+    doc->isoOptions().setVolumeID( i18n("eMovixCD%1").arg(m_movixUntitledCount) );
   KURL url;
   url.setFileName(fileName);
   doc->setURL(url);
@@ -1048,8 +1046,11 @@ void K3bMainWindow::slotNewToolBarConfig()
 
 bool K3bMainWindow::eject()
 {
+  QString oldGroup = config()->group();
   config()->setGroup( "General Options" );
-  return !config()->readBoolEntry( "No cd eject", false );
+  bool eject = !config()->readBoolEntry( "No cd eject", false );
+  config()->setGroup( oldGroup );
+  return eject;
 }
 
 

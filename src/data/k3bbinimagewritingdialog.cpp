@@ -301,6 +301,7 @@ void K3bBinImageWritingDialog::slotSaveUserDefaults()
 
 void K3bBinImageWritingDialog::slotLoadK3bDefaults()
 {
+  m_writerSelectionWidget->loadDefaults();
   m_checkSimulate->setChecked( false );
   m_checkMulti->setChecked( false );
   m_checkBurnproof->setChecked( true );

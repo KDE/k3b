@@ -50,6 +50,7 @@ class K3bWriterSelectionWidget : public QWidget
    */
   int writingApp() const;
 
+  void loadDefaults();
   void loadConfig( KConfig* );
   void saveConfig( KConfig* );
 

@@ -32,28 +32,39 @@
 #include <kconfig.h>
 
 #include <qgroupbox.h>
-#include <qbuttongroup.h>
-#include <qradiobutton.h>
 #include <qpushbutton.h>
 #include <qcheckbox.h>
 #include <qlayout.h>
-#include <qptrlist.h>
-#include <qframe.h>
 #include <qtextview.h>
 #include <qcombobox.h>
 #include <qlabel.h>
 #include <qheader.h>
+#include <qmap.h>
+#include <qtooltip.h>
+#include <qwhatsthis.h>
+
+
+
+class K3bBlankingDialog::Private
+{
+public:
+  Private()
+    : job(0) {
+  }
+
+  K3bBlankingJob* job;
+  QMap<int, int> comboTypeMap;
+  QMap<int, int> typeComboMap;
+};
 
 
 K3bBlankingDialog::K3bBlankingDialog( QWidget* parent, const char* name )
   : K3bInteractionDialog( parent, name, i18n("Erase CD-RW") )
 {
+  d = new Private;
+
   setCancelButtonText( i18n("Close") );
   setupGui();
-
-  m_groupBlankType->setButton( 0 );
-
-  m_job = 0;
 
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotWriterChanged()) );
   connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(slotWritingAppChanged(int)) );
@@ -64,8 +75,8 @@ K3bBlankingDialog::K3bBlankingDialog( QWidget* parent, const char* name )
 
 K3bBlankingDialog::~K3bBlankingDialog()
 {
-  if( m_job )
-    delete m_job;
+  delete d->job;
+  delete d;
 }
 
 
@@ -77,62 +88,33 @@ void K3bBlankingDialog::setupGui()
 
 
   // --- setup the blanking type button group -----------------------------
-  m_groupBlankType = new QButtonGroup( i18n("&Erase Type"), frame );
-  m_groupBlankType->setExclusive( true );
-  m_groupBlankType->setColumnLayout(0, Qt::Vertical );
-  m_groupBlankType->layout()->setSpacing( 0 );
-  m_groupBlankType->layout()->setMargin( 0 );
-  QVBoxLayout* groupBlankTypeLayout = new QVBoxLayout( m_groupBlankType->layout() );
-  groupBlankTypeLayout->setAlignment( Qt::AlignTop );
-  groupBlankTypeLayout->setSpacing( spacingHint() );
-  groupBlankTypeLayout->setMargin( marginHint() );
+  QGroupBox* groupBlankType = new QGroupBox( 1, Qt::Vertical, i18n("&Erase Type"), frame );
+  groupBlankType->layout()->setSpacing( spacingHint() );
+  groupBlankType->layout()->setMargin( marginHint() );
 
-  m_radioFastBlank = new QRadioButton( i18n("&Fast"), m_groupBlankType );
-  m_radioCompleteBlank = new QRadioButton( i18n("Co&mplete"), m_groupBlankType );
-  m_radioBlankTrack = new QRadioButton( i18n("Erase last &track"), m_groupBlankType );
-  m_radioUncloseSession = new QRadioButton( i18n("&Unclose last session"), m_groupBlankType );
-  m_radioBlankSession = new QRadioButton( i18n("Erase last &session"), m_groupBlankType );
-
-  groupBlankTypeLayout->addWidget( m_radioFastBlank );
-  groupBlankTypeLayout->addWidget( m_radioCompleteBlank );
-  groupBlankTypeLayout->addWidget( m_radioBlankTrack);
-  groupBlankTypeLayout->addWidget( m_radioUncloseSession );
-  groupBlankTypeLayout->addWidget( m_radioBlankSession );
+  m_comboEraseMode = new QComboBox( groupBlankType );
   // ----------------------------------------------------------------------
 
 
   // ----- setup the putput group ------------------------------------------
-  m_groupOutput = new QGroupBox( i18n("Output"), frame );
-  m_groupOutput->setColumnLayout(0, Qt::Vertical );
-  m_groupOutput->layout()->setSpacing( 0 );
-  m_groupOutput->layout()->setMargin( 0 );
-  QGridLayout* groupOutputLayout = new QGridLayout( m_groupOutput->layout() );
-  groupOutputLayout->setAlignment( Qt::AlignTop );
-  groupOutputLayout->setSpacing( spacingHint() );
-  groupOutputLayout->setMargin( marginHint() );
+  m_groupOutput = new QGroupBox( 1, Qt::Vertical, i18n("Output"), frame );
+  m_groupOutput->layout()->setSpacing( spacingHint() );
+  m_groupOutput->layout()->setMargin( marginHint() );
 
   m_viewOutput = new KListView( m_groupOutput );
   m_viewOutput->setSorting(-1);
   m_viewOutput->addColumn( i18n("Type") );
   m_viewOutput->addColumn( i18n("Message") );
   m_viewOutput->header()->hide();
-  groupOutputLayout->addWidget( m_viewOutput, 0, 0 );
   // ------------------------------------------------------------------------
 
   // -- setup option group --------------------------------------------------
-  m_groupOptions = new QGroupBox( i18n("Options"), frame );
-  m_groupOptions->setColumnLayout(0, Qt::Vertical );
-  m_groupOptions->layout()->setSpacing( 0 );
-  m_groupOptions->layout()->setMargin( 0 );
-  QVBoxLayout* groupOptionsLayout = new QVBoxLayout( m_groupOptions->layout() );
-  groupOptionsLayout->setAlignment( Qt::AlignTop );
-  groupOptionsLayout->setSpacing( spacingHint() );
-  groupOptionsLayout->setMargin( marginHint() );
+  QGroupBox* groupOptions = new QGroupBox( 1, Qt::Vertical, i18n("Options"), frame );
+  groupOptions->layout()->setSpacing( spacingHint() );
+  groupOptions->layout()->setMargin( marginHint() );
 
-  m_checkForce = new QCheckBox( m_groupOptions );
-  m_checkForce->setText( i18n("F&orce\n(Try this if K3b\nis not able to\nblank a CD-RW in\nnormal mode)") );
-
-  groupOptionsLayout->addWidget( m_checkForce );
+  m_checkForce = new QCheckBox( i18n("&Force"), groupOptions );
+  QToolTip::add( m_checkForce, i18n("Try this if K3b is not able to blank a CD-RW in normal mode") );
   // ------------------------------------------------------------------------
 
 
@@ -141,8 +123,8 @@ void K3bBlankingDialog::setupGui()
   grid->setMargin( 0 );
 
   grid->addMultiCellWidget( m_writerSelectionWidget, 0, 0, 0, 1 );
-  grid->addWidget( m_groupBlankType, 1, 0 );
-  grid->addWidget( m_groupOptions, 1, 1 );
+  grid->addWidget( groupBlankType, 1, 0 );
+  grid->addWidget( groupOptions, 1, 1 );
   grid->addMultiCellWidget( m_groupOutput, 2, 2, 0, 1 );
 }
 
@@ -153,36 +135,25 @@ void K3bBlankingDialog::slotStartClicked()
   // disable the user1 button and enable the cancel button
   m_viewOutput->clear();
 
-  if( m_job == 0 ) {
-    m_job = new K3bBlankingJob();
-    connect( m_job, SIGNAL(infoMessage(const QString&,int)), 
+  if( d->job == 0 ) {
+    d->job = new K3bBlankingJob();
+    connect( d->job, SIGNAL(infoMessage(const QString&,int)), 
 	     this, SLOT(slotInfoMessage(const QString&,int)) );
   }
 
-  m_job->setDevice( m_writerSelectionWidget->writerDevice() );
-  m_job->setSpeed( m_writerSelectionWidget->writerSpeed() );
-  m_job->setForce( m_checkForce->isChecked() );
-  m_job->setWritingApp(m_writerSelectionWidget->writingApp());
+  d->job->setDevice( m_writerSelectionWidget->writerDevice() );
+  d->job->setSpeed( m_writerSelectionWidget->writerSpeed() );
+  d->job->setForce( m_checkForce->isChecked() );
+  d->job->setWritingApp(m_writerSelectionWidget->writingApp());
+  d->job->setMode( d->comboTypeMap[m_comboEraseMode->currentItem()] );
 
-  if( m_radioCompleteBlank->isChecked() )
-    m_job->setMode( K3bBlankingJob::Complete );
-  else if( m_radioFastBlank->isChecked() )
-    m_job->setMode( K3bBlankingJob::Fast );
-  else if( m_radioBlankTrack->isChecked() )
-    m_job->setMode( K3bBlankingJob::Track );
-  else if( m_radioUncloseSession->isChecked() )
-    m_job->setMode( K3bBlankingJob::Unclose );
-  else // m_radioBlankSession->isChecked()
-    m_job->setMode( K3bBlankingJob::Session );
+  K3bErasingInfoDialog dlg;
 
+  connect( d->job, SIGNAL(finished(bool)), &dlg, SLOT(slotFinished(bool)) );
+  connect( &dlg, SIGNAL(cancelClicked()), d->job, SLOT(cancel()) );
 
-  K3bErasingInfoDialog d;
-
-  connect( m_job, SIGNAL(finished(bool)), &d, SLOT(slotFinished(bool)) );
-  connect( &d, SIGNAL(cancelClicked()), m_job, SLOT(cancel()) );
-
-  m_job->start();
-  d.exec();
+  d->job->start();
+  dlg.exec();
 }
 
 
@@ -225,21 +196,63 @@ void K3bBlankingDialog::slotWriterChanged()
 
 void K3bBlankingDialog::slotWritingAppChanged(int app)
 {
-  if ( app == K3b::CDRDAO ) {
-    m_radioBlankTrack->setEnabled(false);
-    m_radioUncloseSession->setEnabled(false);
-    m_radioBlankSession->setEnabled(false);
-  } else {
-    m_radioBlankTrack->setEnabled(true);
-    m_radioUncloseSession->setEnabled(true);
-    m_radioBlankSession->setEnabled(true);
+  QWhatsThis::remove( m_comboEraseMode );
+  QString whatsThisInfo;
+
+  static QString wsComplete = i18n("Erases the complete disk. This takes as long "
+				   "as writing the complete CD.");
+  static QString wsFast = i18n("Erases just the TOC, the PMA, and the pregap.");
+  static QString wsTrack = i18n("Erases just the last track.");
+  static QString wsUnclose = i18n("Uncloses the last session to make it possible to append "
+				  "further data.");
+  static QString wsSession = i18n("Erases the last session of a multisession CD.");
+
+  int lastMode = d->comboTypeMap[m_comboEraseMode->currentItem()];
+
+  m_comboEraseMode->clear();
+  d->comboTypeMap.clear();
+  d->typeComboMap.clear();
+
+  m_comboEraseMode->insertItem( i18n("Fast") );
+  d->comboTypeMap[0] = K3bBlankingJob::Fast;
+  d->typeComboMap[K3bBlankingJob::Fast] = 0;
+  m_comboEraseMode->insertItem( i18n("Complete") );
+  d->comboTypeMap[1] = K3bBlankingJob::Complete;
+  d->typeComboMap[K3bBlankingJob::Complete] = 1;
+
+  whatsThisInfo = "<p>" + i18n("Blanking Mode:") +
+    "<p><b>" + i18n("Fast") + "</b><br>" + wsFast;
+  whatsThisInfo += "<p><b>" + i18n("Complete") + "</b><br>" + wsComplete;
+
+  if ( app != K3b::CDRDAO ) {
+    m_comboEraseMode->insertItem( i18n("Erase last track") );
+    d->comboTypeMap[2] = K3bBlankingJob::Track;
+    d->typeComboMap[K3bBlankingJob::Track] = 2;
+    whatsThisInfo += "<p><b>" + i18n("Erase last track") + "</b><br>" + wsTrack;
+    m_comboEraseMode->insertItem( i18n("Unclose last session") );
+    d->comboTypeMap[3] = K3bBlankingJob::Unclose;
+    d->typeComboMap[K3bBlankingJob::Unclose] = 3;
+    whatsThisInfo += "<p><b>" + i18n("Unclose last session") + "</b><br>" + wsUnclose;
+    m_comboEraseMode->insertItem( i18n("Erase last session") );
+    d->comboTypeMap[4] = K3bBlankingJob::Session;
+    d->typeComboMap[K3bBlankingJob::Session] = 4;
+    whatsThisInfo += "<p><b>" + i18n("Erase last session") + "</b><br>" + wsSession;
   }
+
+  QWhatsThis::add( m_comboEraseMode, whatsThisInfo );
+
+  // try to reset last mode
+  if( d->typeComboMap.contains( lastMode ) )
+    m_comboEraseMode->setCurrentItem( d->typeComboMap[lastMode] );
+  else
+    m_comboEraseMode->setCurrentItem( d->typeComboMap[K3bBlankingJob::Fast] );
 }
 
 
 void K3bBlankingDialog::slotLoadK3bDefaults()
 {
-  m_radioFastBlank->setChecked(true);
+  m_writerSelectionWidget->loadDefaults();
+  m_comboEraseMode->setCurrentItem( d->typeComboMap[K3bBlankingJob::Fast] );
   m_checkForce->setChecked(false);
 }
 
@@ -248,21 +261,24 @@ void K3bBlankingDialog::slotLoadUserDefaults()
   KConfig* c = k3bcore->config();
   c->setGroup( "CDRW Erasing" );
 
+  m_writerSelectionWidget->loadConfig( c );
+  slotWritingAppChanged( m_writerSelectionWidget->writingApp() );
+
   QString mode = c->readEntry( "erase_mode" );
+  kdDebug() << "(K3bBlankingDialog) slotWritingAppChanged mode: " << mode << endl;
+  m_comboEraseMode->setCurrentItem( d->typeComboMap[K3bBlankingJob::Fast] );
   if( mode == "complete" )
-    m_radioCompleteBlank->setChecked(true);
-  else if( mode == "session" )
-    m_radioBlankSession->setChecked(true);
-  else if( mode == "track" )
-    m_radioBlankTrack->setChecked(true);
-  else if( mode == "unclose_session" )
-    m_radioUncloseSession->setChecked(true);
-  else
-    m_radioFastBlank->setChecked(true);
+    m_comboEraseMode->setCurrentItem( d->typeComboMap[K3bBlankingJob::Complete] );
+  else if( d->typeComboMap.size() > 2 ) {
+    if( mode == "session" )
+      m_comboEraseMode->setCurrentItem( d->typeComboMap[K3bBlankingJob::Session] );
+    else if( mode == "track" )
+      m_comboEraseMode->setCurrentItem( d->typeComboMap[K3bBlankingJob::Track] );
+    else if( mode == "unclose_session" )
+      m_comboEraseMode->setCurrentItem( d->typeComboMap[K3bBlankingJob::Unclose] );
+  }
 
   m_checkForce->setChecked( c->readBoolEntry( "force", false ) );
-
-  m_writerSelectionWidget->loadConfig( c );
 }
 
 void K3bBlankingDialog::slotSaveUserDefaults()
@@ -271,16 +287,23 @@ void K3bBlankingDialog::slotSaveUserDefaults()
   c->setGroup( "CDRW Erasing" );
 
   QString mode;
-  if( m_radioCompleteBlank->isChecked() )
+  switch( d->comboTypeMap[m_comboEraseMode->currentItem()] ) {
+  case K3bBlankingJob::Complete:
     mode = "complete";
-  else if( m_radioBlankSession->isChecked() )
+    break;
+  case K3bBlankingJob::Session:
     mode = "session";
-  else if( m_radioBlankTrack->isChecked() )
+    break;
+  case K3bBlankingJob::Track:
     mode = "track";
-  else if( m_radioUncloseSession->isChecked() )
+    break;
+  case K3bBlankingJob::Unclose:
     mode = "unclose_session";
-  else
+    break;
+  default:
     mode = "fast";
+    break;
+  }
   c->writeEntry( "erase_mode", mode );
 
   c->writeEntry( "force", m_checkForce->isChecked() );

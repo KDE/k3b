@@ -477,6 +477,7 @@ void K3bIsoImageWritingDialog::slotSaveUserDefaults()
 
 void K3bIsoImageWritingDialog::slotLoadK3bDefaults()
 {
+  m_writerSelectionWidget->loadDefaults();
   m_writingModeWidget->setWritingMode( K3b::WRITING_MODE_AUTO );
   m_checkDummy->setChecked( false );
   m_checkBurnProof->setChecked( true );

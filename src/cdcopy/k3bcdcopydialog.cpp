@@ -398,6 +398,7 @@ void K3bCdCopyDialog::slotSaveUserDefaults()
 
 void K3bCdCopyDialog::slotLoadK3bDefaults()
 {
+  m_writerSelectionWidget->loadDefaults();
   m_checkSimulate->setChecked( false );
   m_checkOnTheFly->setChecked( false );
   m_checkDeleteImages->setChecked( true );
