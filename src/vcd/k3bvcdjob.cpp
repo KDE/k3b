@@ -333,16 +333,17 @@ void K3bVcdJob::slotVcdxBuildFinished()
         // TODO: check the process' exitStatus()
         switch ( m_process->exitStatus() ) {
             case 0:
-                emit infoMessage( i18n( "Cue/Bin files successfully created." ), K3bJob::STATUS );
-                m_imageFinished = true;
-                break;
+	      emit infoMessage( i18n( "Cue/Bin files successfully created." ), K3bJob::STATUS );
+	      m_imageFinished = true;
+	      break;
             default:
-                emit infoMessage( i18n( "vcdxbuild returned an error! (code %1)" ).arg( m_process->exitStatus() ), K3bJob::ERROR );
-                emit infoMessage( i18n( "No error handling yet!" ), K3bJob::ERROR );
-                emit infoMessage( i18n( "Please send me an email with the last output..." ), K3bJob::ERROR );
-                cancelAll();
-                emit finished( false );
-                return ;
+	      emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg("vcdxbuild").arg(m_process->exitStatus()), 
+				K3bJob::ERROR );
+	      emit infoMessage( strerror(m_process->exitStatus()), K3bJob::ERROR );
+	      emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
+	      cancelAll();
+	      emit finished( false );
+	      return ;
         }
     } else {
         emit infoMessage( i18n( "vcdxbuild did not exit cleanly." ), K3bJob::ERROR );
