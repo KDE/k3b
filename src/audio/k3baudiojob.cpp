@@ -416,8 +416,12 @@ void K3bAudioJob::slotAudioDecoderPercent( int p )
     else
       emit percent( p );
   }
-  else if( !m_doc->onTheFly() )
-    emit percent( p/2 );
+  else if( !m_doc->onTheFly() ) {
+    if( m_doc->normalize() )
+      emit percent( p/3 );
+    else
+      emit percent( p/2 );
+  }
 }
 
 
