@@ -1,6 +1,27 @@
 0.11.90
 Add missed VCD 3.0 track interpretation option for SVCD's
 
+0.11.6
+Fixed length calculation for long FLAC files.
+Allow Audio CDs that violate the Red Book standard (Tracks shorter than 4 seconds).
+Some improvements in disk-info retrieval (hopefully fixing some issues ;).
+
+0.11.5
+Again fixed some disk detection problems which were introduced with the previous fixes.
+Fixed a crash which occured if the last boot image was displayed in the fileview while removing it.
+Added support for ID3 Tags in FLAC files (thanks to John Steele Scott).
+Do not ask to overwrite directories in cloning dialog.
+
+0.11.4
+Fixed adding of hidden files.
+Use a default imagefile name for cloning if none was specified.
+Use the Joliet names if no Rockridge is available in session import.
+
+0.11.3
+Fixed multisession writing problems on some systems.
+Fixed capabilites detection on some systems.
+Readded the documentation which I missed the last time.
+
 0.11.2
 K3bProcess now has a clean API and a non-stupid implementation which fixes the kde 3.2 issue
 way better than the hotfix from 0.11.1.
