@@ -208,7 +208,7 @@ void K3bMainWindow::initActions()
 			    actionCollection(), "tools_encode_video");
   actionToolsWriteIsoImage = new KAction(i18n("&Write ISO Image..."), "gear", 0, this, SLOT(slotWriteIsoImage()),
 					 actionCollection(), "tools_write_iso" );
-  
+
   actionToolsWriteBinImage = new KAction(i18n("&Write Bin/Cue Image..."), "gear", 0, this, SLOT(slotWriteBinImage()),
 					 actionCollection(), "tools_write_bin" );
 
@@ -827,7 +827,7 @@ void K3bMainWindow::slotNewVcdDoc()
   doc->newDocument();
 
   m_vcdUntitledCount++;
-  QString fileName=QString(i18n("Video%1")).arg(m_vcdUntitledCount);
+  QString fileName=i18n("Video%1").arg(m_vcdUntitledCount);
   KURL url;
   url.setFileName(fileName);
   doc->setURL(url);
@@ -846,7 +846,7 @@ void K3bMainWindow::slotNewMovixDoc()
   doc->newDocument();
 
   m_movixUntitledCount++;
-  QString fileName=QString(i18n("eMovix%1")).arg(m_movixUntitledCount);
+  QString fileName=i18n("eMovix%1").arg(m_movixUntitledCount);
   KURL url;
   url.setFileName(fileName);
   doc->setURL(url);
