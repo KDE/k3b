@@ -77,6 +77,14 @@
 //       }
 //     }
 
+/*
+    For CDRDAO is a workaround in K3bCdrDaoWriter (cueSheet()) which creates symlink in the tmp directory.
+    neccessary if filename extension is not .bin CDRDAO do not use the FILE-statement (now ??)
+    For CDRECORD it is neccessary to chdir to the directory where both files (cue/bin) is available.
+    CDRECORD works with the filename which is defined by the FILE-statement in the cue file.
+    TODO: check and rewrite the cue FILE-statement if neccessary.
+    check if cue-file has only one FILE-statement is not available.
+*/
 
 K3bBinImageWritingDialog::K3bBinImageWritingDialog( QWidget* parent, const char* name, bool modal )
   : K3bInteractionDialog( parent, name, i18n("Write Bin/Cue Image to CD"), QString::null,
@@ -85,14 +93,25 @@ K3bBinImageWritingDialog::K3bBinImageWritingDialog( QWidget* parent, const char*
 			  modal )
 {
    m_job = 0;
-
+   cdrdao = k3bcore->externalBinManager()->binObject("cdrdao");
+   cdrecordBin = k3bcore->externalBinManager()->binObject("cdrecord");
+   
    setupGui();
-   m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRDAO );
 
+   if ( cdrecordBin->hasFeature("cuefile") )
+       m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRDAO|K3b::CDRECORD );
+   else {
+       m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRDAO );
+       m_checkBurnproof->hide();
+   }
+   
    slotLoadUserDefaults();
 
    kapp->config()->setGroup("General Options");
    m_editTocPath->setURL( kapp->config()->readEntry( "last written bin/cue image", "" ) );
+
+   connect( m_writerSelectionWidget, SIGNAL(writingAppChanged( int )), this, SLOT(slotWritingAppChanged( int )) );
+
 }
 
 
@@ -140,7 +159,8 @@ void K3bBinImageWritingDialog::setupGui()
 
   m_checkSimulate = K3bStdGuiItems::simulateCheckbox( groupOptions );
   m_checkMulti    = K3bStdGuiItems::startMultisessionCheckBox( groupOptions );
-
+  m_checkBurnproof = K3bStdGuiItems::burnproofCheckbox( groupOptions );
+  
   QGroupBox* groupCopies = new QGroupBox( 2, Qt::Horizontal, i18n("Copies"), optionTab );
   groupCopies->setInsideSpacing( spacingHint() );
   groupCopies->setInsideMargin( marginHint() );
@@ -203,9 +223,14 @@ void K3bBinImageWritingDialog::slotStartClicked()
   m_job->setTocFile(m_editTocPath->url());
   m_job->setSimulate(m_checkSimulate->isChecked());
   m_job->setMulti(m_checkMulti->isChecked());
+  if ( m_checkBurnproof->isEnabled() )
+      m_job->setBurnproof(m_checkBurnproof->isChecked());
+  else
+      m_job->setBurnproof( true );
   m_job->setForce(m_checkForce->isChecked());
   m_job->setCopies(m_spinCopies->value());
-
+  m_job->setWritingApp( m_writerSelectionWidget->writingApp() );
+  
   if (!m_editTocPath->url().isEmpty()) {
 
     // save the path
@@ -233,6 +258,17 @@ void K3bBinImageWritingDialog::slotWriterChanged()
 {
 }
 
+void K3bBinImageWritingDialog::slotWritingAppChanged( int app )
+{
+    if ( app == K3b::CDRDAO ) {
+       // if ( !cdrdao->hasFeature("disable-burnproof") )
+            m_checkBurnproof->setEnabled( false );
+    }
+    else {
+        m_checkBurnproof->setEnabled( true );
+    }
+}
+
 void K3bBinImageWritingDialog::slotLoadUserDefaults()
 {
   KConfig* c = kapp->config();
@@ -240,6 +276,7 @@ void K3bBinImageWritingDialog::slotLoadUserDefaults()
 
   m_checkSimulate->setChecked( c->readBoolEntry( "simulate", false ) );
   m_checkMulti->setChecked( c->readBoolEntry( "multisession", false ) );
+  m_checkBurnproof->setChecked( c->readBoolEntry( "burnproof", true ) );
   m_checkForce->setChecked( c->readBoolEntry( "force", false ) );
   m_spinCopies->setValue( c->readNumEntry( "copies", 1 ) );
 
@@ -254,6 +291,7 @@ void K3bBinImageWritingDialog::slotSaveUserDefaults()
 
   c->writeEntry( "simulate", m_checkSimulate->isChecked() );
   c->writeEntry( "multisession", m_checkMulti->isChecked() );
+  c->writeEntry( "burnproof", m_checkBurnproof->isChecked() );
   c->writeEntry( "force", m_checkForce->isChecked() );
   c->writeEntry( "copies", m_spinCopies->value() );
 
@@ -264,6 +302,7 @@ void K3bBinImageWritingDialog::slotLoadK3bDefaults()
 {
   m_checkSimulate->setChecked( false );
   m_checkMulti->setChecked( false );
+  m_checkBurnproof->setChecked( true );
   m_checkForce->setChecked( false );
   m_spinCopies->setValue(1);
 }

@@ -68,6 +68,7 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
   void setBlankMode( int b ) { m_blankMode = b; }
   void setMulti( bool b ) { m_multi = b; }
   void setForce( bool b ) { m_force = b; }
+  void setBurnproof( bool b ) { m_burnproof = b; }
   void setOnTheFly( bool b ) { m_onTheFly = b; }
   void setDataFile( const QString& s ) { m_dataFile = s; }
   void setTocFile( const QString& s ) { m_tocFile = s; }
@@ -115,6 +116,7 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
   bool       m_readRaw;
   bool       m_multi;
   bool       m_force;
+  bool       m_burnproof;
   bool       m_onTheFly;
   bool       m_fastToc;
   SubMode    m_readSubchan;

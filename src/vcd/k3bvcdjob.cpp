@@ -405,9 +405,8 @@ bool K3bVcdJob::prepareWriterJob()
         writer->setBurnproof( m_doc->burnproof() );
         writer->setProvideStdin( false );
         writer->setDao( true );
-
+        writer->setCueFile( m_cueFile );
         writer->prepareArgumentList();
-        writer->addArgument( QString("cuefile=%1").arg( m_cueFile ) );
 
         m_writerJob = writer;
 

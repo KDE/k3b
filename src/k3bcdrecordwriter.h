@@ -59,7 +59,8 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   void setRawWrite( bool b ) { m_rawWrite = b; }
   void setProvideStdin( bool b ) { m_stdin = b; }
   void setWritingMode( int );
-
+  void setCueFile( const QString& s);
+  
   /** this will enable ProDVD */
   void setClone( bool b );
   void setUseProDVD( bool b );
@@ -79,7 +80,10 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   bool m_totalTracksParsed;
   bool m_clone;
   bool m_useCdrecordProDVD;
+  bool m_cue;
 
+  QString m_cueFile;
+  
   int m_currentTrack;
   int m_totalTracks;
   int m_totalSize;

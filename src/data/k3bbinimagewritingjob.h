@@ -18,10 +18,9 @@
 #define K3BBINIMAGEWRITINGJOB_H
 
 #include <k3bjob.h>
-#include <k3bcdrdaowriter.h>
 
+class K3bAbstractWriter;
 class K3bCdDevice::CdDevice;
-
 
 /**
   *@author Klaus-Dieter Krannich
@@ -34,39 +33,48 @@ class K3bBinImageWritingJob : public K3bBurnJob
   K3bBinImageWritingJob( QObject* parent = 0 );
   ~K3bBinImageWritingJob();
 
-  K3bDevice* writer() const { return m_cdrdaowriter->burnDevice(); };
+  K3bDevice* writer() const { return m_device; };
 
   QString jobDescription() const;
   QString jobDetails() const;
-		
+
  public slots:
   void start();
   void cancel();
 
-  void setWriter( K3bDevice* dev ) { m_cdrdaowriter->setBurnDevice(dev); }
-  void setSpeed( int s ) { m_cdrdaowriter->setBurnSpeed(s); }
-  void setSimulate( bool b ) { m_cdrdaowriter->setSimulate(b); }
-  void setForce(bool b) { m_cdrdaowriter->setForce(b); };
-  void setMulti(bool b) { m_cdrdaowriter->setMulti(b); };
-  void setTocFile(const QString& s);
-  void setCopies(int c) { m_copies = c; };
+  void setWriter( K3bDevice* dev ) { m_device = dev; }
+  void setSimulate( bool b ) { m_simulate = b; }
+  void setBurnproof( bool b ) { m_burnproof = b; }
+  void setForce(bool b) { m_force = b; }
+  void setMulti( bool b ) { m_noFix = b; }
+  void setTocFile( const QString& s);
+  void setCopies(int c) { m_copies = c; }
+  void setSpeed( int s ) { m_speed = s; }
 
  private slots:
-  void cdrdaoWrite();  
-  void cdrdaoFinished(bool);
+  void writerFinished(bool);
   void copyPercent(int p);
   void copySubPercent(int p);
   void slotNextTrack( int, int );
 
  private:
+  void writerStart();
+  bool prepareWriter();
+
+  K3bDevice* m_device;
+  bool m_simulate;
+  bool m_burnproof;
+  bool m_force;
+  bool m_noFix;
+  QString m_tocFile;
+  int m_speed;
   int m_copies;
   int m_finishedCopies;
 
-  K3bCdrdaoWriter *m_cdrdaowriter;
-
-  QString m_tocFile;
-
   bool m_canceled;
+
+  K3bAbstractWriter* m_writer;
+
 };
 
 #endif

@@ -83,6 +83,7 @@ K3bCdrdaoWriter::K3bCdrdaoWriter( K3bDevice* dev, QObject* parent, const char* n
     m_readRaw(false),
     m_multi(false),
     m_force(false),
+    m_burnproof(true),
     m_onTheFly(false),
     m_fastToc(false),
     m_readSubchan(None),
@@ -242,6 +243,13 @@ void K3bCdrdaoWriter::setWriteArguments()
   if( m_force )
     *m_process << "--force";
 
+  /*
+  FIX: Do not work now :(
+  // burnproof
+  if ( !m_burnproof )
+    *m_process << "--buffer-under-run-protection 0";
+  */
+  
   kapp->config()->setGroup("General Options");
 
   bool manualBufferSize =

@@ -15,9 +15,13 @@
 
 
 #include "k3bbinimagewritingjob.h"
-
+#include <k3bcdrecordwriter.h>
+#include <k3bcdrdaowriter.h>
+#include <k3bcore.h>
 #include <k3bemptydiscwaiter.h>
 #include <device/k3bdevice.h>
+#include <tools/k3bglobals.h>
+#include <tools/k3bexternalbinmanager.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -26,34 +30,21 @@
 
 K3bBinImageWritingJob::K3bBinImageWritingJob( QObject* parent )
         : K3bBurnJob( parent ),
-        m_copies(1)
+        m_device(0),
+        m_simulate(false),
+        m_burnproof(false),
+        m_force(false),
+        m_noFix(false),
+        m_tocFile(0),
+        m_speed(2),
+        m_copies(1),
+        m_writer(0)
 {
-    m_cdrdaowriter = new K3bCdrdaoWriter(0, this);
-    connect(m_cdrdaowriter,SIGNAL(percent(int)),
-            this,SLOT(copyPercent(int)));
-    connect(m_cdrdaowriter,SIGNAL(subPercent(int)),
-            this,SLOT(copySubPercent(int)));
-    connect(m_cdrdaowriter,SIGNAL(buffer(int)),
-            this,SIGNAL(bufferStatus(int)));
-    connect(m_cdrdaowriter,SIGNAL(newSubTask(const QString&)),
-            this, SIGNAL(newSubTask(const QString&)) );
-    connect(m_cdrdaowriter,SIGNAL(infoMessage(const QString&, int)),
-            this, SIGNAL(infoMessage(const QString&, int)) );
-    connect(m_cdrdaowriter,SIGNAL(debuggingOutput(const QString&, const QString&)),
-            this,SIGNAL(debuggingOutput(const QString&, const QString&)));
-    connect(m_cdrdaowriter,SIGNAL(finished(bool)),
-            this,SLOT(cdrdaoFinished(bool)));
-    connect(m_cdrdaowriter, SIGNAL(nextTrack(int, int)),
-            this, SLOT(slotNextTrack(int, int)) );
-    connect( m_cdrdaowriter, SIGNAL(writeSpeed(int)), 
-	     this, SIGNAL(writeSpeed(int)) );
 }
-
 
 K3bBinImageWritingJob::~K3bBinImageWritingJob()
 {
 }
-
 
 void K3bBinImageWritingJob::start() 
 {
@@ -66,27 +57,96 @@ void K3bBinImageWritingJob::start()
   emit started();
   emit newTask( i18n("Write Binary Image") );
   
-  cdrdaoWrite();
+  if( prepareWriter() )
+    writerStart();
+  else
+    cancel();
+
 }
 
 void K3bBinImageWritingJob::cancel() 
 {
   m_canceled = true;
-  m_cdrdaowriter->cancel();
+  m_writer->cancel();
   emit canceled();
   emit finished( false );
 }
 
-
-void K3bBinImageWritingJob::cdrdaoWrite() 
+bool K3bBinImageWritingJob::prepareWriter()
 {
-  m_cdrdaowriter->setCommand(K3bCdrdaoWriter::WRITE);
-  if( K3bEmptyDiscWaiter::wait( m_cdrdaowriter->burnDevice() ) == K3bEmptyDiscWaiter::CANCELED ) {
+  if( m_writer )
+    delete m_writer;
+
+
+  const K3bExternalBin* cdrecordBin = k3bcore->externalBinManager()->binObject("cdrecord");
+  if ( writingApp() == K3b::DEFAULT && cdrecordBin->hasFeature("cuefile") )
+        setWritingApp( K3b::CDRECORD );
+
+  if ( writingApp() == K3b::CDRDAO || writingApp() == K3b::DEFAULT ) {
+    // create cdrdao job
+    K3bCdrdaoWriter* writer = new K3bCdrdaoWriter( m_device, this );
+    writer->setSimulate( m_simulate );
+    writer->setBurnSpeed( m_speed );
+    writer->setForce( m_force );
+
+    // multisession
+    writer->setMulti( m_noFix );
+
+    // burnproof
+    writer->setBurnproof( m_burnproof );
+
+    writer->setTocFile( m_tocFile );
+
+    m_writer = writer;
+  }
+  else {
+    // create cdrecord job
+    K3bCdrecordWriter* writer = new K3bCdrecordWriter( m_device, this );
+
+    writer->setDao( true );
+    writer->setSimulate( m_simulate );
+    writer->setBurnproof( m_burnproof );
+    writer->setBurnSpeed( m_speed );
+    writer->setProvideStdin( false );    
+    writer->setCueFile ( m_tocFile );
+    writer->prepareArgumentList();
+
+    if( m_noFix ) {
+      writer->addArgument("-multi");
+    }
+
+    if( m_force ) {
+      writer->addArgument("-force");
+    }
+
+    m_writer = writer;
+  }
+
+  connect( m_writer, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
+  connect( m_writer, SIGNAL(percent(int)), this, SLOT(copyPercent(int)) );
+  connect( m_writer, SIGNAL(subPercent(int)), this, SLOT(copySubPercent(int)) );
+  connect( m_writer, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSize(int, int)) );
+  connect( m_writer, SIGNAL(buffer(int)), this, SIGNAL(bufferStatus(int)) );
+  connect( m_writer, SIGNAL(writeSpeed(int)), this, SIGNAL(writeSpeed(int)) );
+  connect( m_writer, SIGNAL(finished(bool)), this, SLOT(writerFinished(bool)) );
+  connect( m_writer, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
+  connect( m_writer, SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
+  connect( m_writer, SIGNAL(nextTrack(int, int)), this, SLOT(slotNextTrack(int, int)) );
+  connect( m_writer, SIGNAL(debuggingOutput(const QString&, const QString&)), this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
+
+  return true;
+}
+
+
+void K3bBinImageWritingJob::writerStart() 
+{
+
+  if( K3bEmptyDiscWaiter::wait( m_device ) == K3bEmptyDiscWaiter::CANCELED ) {
     cancel();
   }
   // just to be sure we did not get canceled during the async discWaiting
   else if( !m_canceled ) {
-    m_cdrdaowriter->start();
+    m_writer->start();
   }
 }
 
@@ -100,7 +160,7 @@ void K3bBinImageWritingJob::copySubPercent(int p)
   emit subPercent(p);
 }
 
-void K3bBinImageWritingJob::cdrdaoFinished(bool ok) 
+void K3bBinImageWritingJob::writerFinished(bool ok) 
 {
   if( m_canceled )
     return;
@@ -111,8 +171,9 @@ void K3bBinImageWritingJob::cdrdaoFinished(bool ok)
       emit infoMessage( i18n("%1 copies succsessfully created").arg(m_copies),K3bJob::INFO );
       emit finished( true );
     } 
-    else 
-      cdrdaoWrite();
+    else {
+      writerStart();
+    }
   }
   else {
     emit finished(false);
@@ -140,8 +201,7 @@ QString K3bBinImageWritingJob::jobDetails() const
 
 void K3bBinImageWritingJob::setTocFile(const QString& s)
 { 
-  m_cdrdaowriter->setTocFile(s); 
   m_tocFile = s; 
 }
-		
+
 #include "k3bbinimagewritingjob.moc"

@@ -20,6 +20,8 @@
 #include <k3binteractiondialog.h>
 #include <kurl.h>
 
+#include <tools/k3bexternalbinmanager.h>
+
 class K3bMd5Job;
 class KActiveLabel;
 class KProgress;
@@ -47,6 +49,7 @@ Q_OBJECT
   void slotStartClicked();
 
   void slotWriterChanged();
+  void slotWritingAppChanged( int );
 
   void slotLoadUserDefaults();
   void slotSaveUserDefaults();
@@ -61,6 +64,7 @@ Q_OBJECT
   K3bWriterSelectionWidget* m_writerSelectionWidget;
   QCheckBox* m_checkSimulate;
   QCheckBox* m_checkMulti;
+  QCheckBox* m_checkBurnproof;
   QCheckBox* m_checkForce;
   QSpinBox*  m_spinCopies;
   KURLRequester* m_editTocPath;
@@ -68,6 +72,9 @@ Q_OBJECT
 
   KProgress* m_md5ProgressWidget;
   KActiveLabel* m_md5Label;
+
+  const K3bExternalBin* cdrdao;
+  const K3bExternalBin* cdrecordBin;  
 };
 
 #endif

@@ -27,6 +27,7 @@
 
 #include <qstring.h>
 #include <qstringlist.h>
+#include <qurl.h>
 #include <qvaluelist.h>
 #include <qregexp.h>
 
@@ -70,7 +71,12 @@ void K3bCdrecordWriter::setDao( bool b )
   m_writingMode = ( b ? K3b::DAO : K3b::TAO );
 }
 
-
+void K3bCdrecordWriter::setCueFile( const QString& s)
+{
+    m_cue = true;
+    m_cueFile = s;
+}
+  
 void K3bCdrecordWriter::setClone( bool b )
 {
   m_clone = b;
@@ -159,6 +165,11 @@ void K3bCdrecordWriter::prepareArgumentList()
     }
     else
       emit infoMessage( i18n("Writer does not support buffer underrun free recording (BURNPROOF)"), INFO );
+  }
+  
+  if ( m_cue && !m_cueFile.isEmpty() ) {
+      m_process->setWorkingDirectory(QUrl(m_cueFile).dirPath());
+    *m_process << QString("cuefile=%1").arg( m_cueFile );
   }
   
   if( m_clone )
