@@ -695,6 +695,7 @@ bool K3bCdCopyJob::writeNextSession()
 
 	d->infFileWriter->setTrack( track );
 	d->infFileWriter->setTrackNumber( trackNumber );
+	d->infFileWriter->setBigEndian( false );
 
 	if( d->haveCddb ) {
 	  d->infFileWriter->setTrackTitle( d->cddbInfo.titles[trackNumber-1] );
@@ -706,8 +707,6 @@ bool K3bCdCopyJob::writeNextSession()
 	}
 
 	if( m_onTheFly ) {
-
-	  d->infFileWriter->setBigEndian( true );
 
 	  // we let KTempFile choose a temp file but delete it on our own
 	  // the same way we delete them when writing with images
@@ -722,8 +721,6 @@ bool K3bCdCopyJob::writeNextSession()
 	    return false;
 	}
 	else {
-	  d->infFileWriter->setBigEndian( false );
-
 	  if( !d->infFileWriter->save( d->infNames[trackNumber-1] ) )
 	    return false;
 	}
@@ -765,10 +762,8 @@ bool K3bCdCopyJob::writeNextSession()
 	d->cdTextFile->file()->writeBlock( d->cdTextRaw );
 	d->cdTextFile->close();
 
-	kdDebug() << "(K3bCdCopyJob) cdtext file size: " << (long)K3b::filesize( d->cdTextFile->name() ) << endl;
-
 	// use the raw CDTEXT data
-	d->cdrecordWriter->addArgument( "textfile=" + d->cdTextFile->name() );
+	d->cdrecordWriter->addArgument( "textfile=" );
       }
       // else cdrecord will use the cdtext data in the inf files	
     }
@@ -905,11 +900,7 @@ void K3bCdCopyJob::slotSessionReaderFinished( bool success )
     if( !d->canceled )
       emit infoMessage( i18n("Error while reading session %1.").arg(d->currentReadSession), ERROR );
 
-    //
-    // when writing on the fly error handling will be done in slotWriterFinished
-    //
-    if( !m_onTheFly )
-      finishJob( d->canceled, !d->canceled );
+    finishJob( d->canceled, !d->canceled );
   }
 }
 
@@ -1110,18 +1101,20 @@ QString K3bCdCopyJob::jobDetails() const
 
 void K3bCdCopyJob::finishJob( bool c, bool e )
 {
-  if( c ) {
-    d->canceled = true;
-    emit canceled();
-  }
-  if( e )
-    d->error = true;
-
-  cleanup();
-  
-  d->running = false;
+  if( d->running ) {
+    if( c ) {
+      d->canceled = true;
+      emit canceled();
+    }
+    if( e )
+      d->error = true;
     
-  emit finished( !(c||e) );
+    cleanup();
+    
+    d->running = false;
+    
+    emit finished( !(c||e) );
+  }
 }
 
 #include "k3bcdcopyjob.moc"
