@@ -573,7 +573,7 @@ QString K3bAudioJob::jobDescription() const
 
 QString K3bAudioJob::jobDetails() const
 {
-  return i18n("1 track (%1 minutes)", "%n track (%1 minutes)", m_doc->numOfTracks()).arg(m_doc->length().toString());
+  return i18n("1 track (%1 minutes)", "%n tracks (%1 minutes)", m_doc->numOfTracks()).arg(m_doc->length().toString());
 }
 
 #include "k3baudiojob.moc"

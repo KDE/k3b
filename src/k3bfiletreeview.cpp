@@ -39,7 +39,7 @@
 
 
 K3bDeviceBranch::K3bDeviceBranch( KFileTreeView* view, K3bDevice* dev, KFileTreeViewItem* item )
-  : KFileTreeBranch( view, KURL(dev->mountPoint()), QString("%1 - %2").arg(dev->vendor()).arg(dev->description()),
+  : KFileTreeBranch( view, KURL(dev->mountPoint()), QString(" %1 - %2").arg(dev->vendor()).arg(dev->description()),
 		     ( dev->burner()
 		       ? SmallIcon("cdwriter_unmount")
 		       : SmallIcon("cdrom_unmount") ),
@@ -74,7 +74,7 @@ K3bFileTreeView::K3bFileTreeView( QWidget *parent, const char *name )
   setAlternateBackground( QColor() );
   setFullWidth();
   setRootIsDecorated(true);
-  setSorting(-1);
+  setSorting(0);
 
   m_dirOnlyMode = true;
   m_menuEnabled = false;

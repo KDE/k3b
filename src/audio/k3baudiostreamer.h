@@ -61,6 +61,7 @@ class K3bAudioStreamer : public K3bJob
   void startModule();
   void decode();
   void writePregap();
+  void slotFdActivated( int );
  
  private:
   void cancelAll();

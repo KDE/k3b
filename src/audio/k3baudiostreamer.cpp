@@ -24,6 +24,7 @@
 
 #include <qcstring.h>
 #include <qtimer.h>
+#include <qsocketnotifier.h>
 
 #include <unistd.h>
 
@@ -38,11 +39,14 @@ public:
   }
 
   int fdToWriteTo;
+  QSocketNotifier* notifier;
+
   int currentTrackNumber;
   K3bAudioTrack* currentTrack;
   K3bAudioModule* currentModule;
 
   QByteArray buffer;
+  long bufferDataLen;
 
   unsigned long writtenTrackData;
   unsigned long writtenOverallData;
@@ -69,6 +73,7 @@ K3bAudioStreamer::K3bAudioStreamer( K3bAudioDoc* doc, QObject* parent, const cha
   d->doc = doc;
   d->buffer.resize( 2352*10 );
   d->littleEndian = false;
+  d->notifier = 0;
 }
 
 K3bAudioStreamer::~K3bAudioStreamer()
@@ -133,6 +138,11 @@ void K3bAudioStreamer::resume()
 void K3bAudioStreamer::writeToFd( int fd )
 {
   d->fdToWriteTo = fd;
+
+  delete d->notifier;
+  d->notifier = new QSocketNotifier( fd, QSocketNotifier::Write, this );
+  d->notifier->setEnabled(false);
+  connect( d->notifier, SIGNAL(activated(int)), this, SLOT(slotFdActivated(int)) );
 }
 
 
@@ -224,6 +234,7 @@ bool K3bAudioStreamer::writeData( long len )
   // we do them before emiting any data
   d->writtenOverallData += len;
   d->writtenTrackData += len;
+  d->bufferDataLen = len;
 
   // this includes the pregap data
   emit percent( (int)( (double)d->writtenOverallData 
@@ -246,16 +257,7 @@ bool K3bAudioStreamer::writeData( long len )
   }
 
   if( d->fdToWriteTo != -1 ) {
-    if( ::write( d->fdToWriteTo, d->buffer.data(), len ) == -1 ) {
-      kdError() << "(K3bAudioStreamer) could not write to " << d->fdToWriteTo << endl;
-      d->finished = true;
-      return false;
-    }
-    else {
-      // if we write to a fd the data is written immediately
-      // so we resume ourselves
-      resume();
-    }
+    d->notifier->setEnabled( true );
   }
   else {
     emit data( d->buffer.data(), len );
@@ -263,6 +265,24 @@ bool K3bAudioStreamer::writeData( long len )
 
   return true;
 }
+
+
+void K3bAudioStreamer::slotFdActivated( int )
+{
+  d->notifier->setEnabled( false );
+
+  if( ::write( d->fdToWriteTo, d->buffer.data(), d->bufferDataLen ) != d->bufferDataLen ) {
+    kdError() << "(K3bAudioStreamer) could not write to " << d->fdToWriteTo << endl;
+    d->finished = true;
+    cancelAll();
+  }
+  else {
+    // if we write to a fd the data is written immediately
+    // so we resume ourselves
+    resume();
+  }
+}
+
 
 void K3bAudioStreamer::setLittleEndian( bool b )
 {

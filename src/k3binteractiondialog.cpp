@@ -32,6 +32,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
+#include <kstdguiitem.h>
+#include <kpushbutton.h>
 
 
 
@@ -80,19 +82,21 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
   QVBoxLayout* layout5 = new QVBoxLayout( 0, 0, spacingHint(), "layout5"); 
 
   if( buttonMask & START_BUTTON ) {
-    m_buttonStart = new QPushButton( i18n("Start"), this, "m_buttonStart" );
+    KGuiItem startItem = KStdGuiItem::ok();
+    startItem.setText( i18n("Start") );
+    m_buttonStart = new KPushButton( startItem, this, "m_buttonStart" );
     layout5->addWidget( m_buttonStart );
   }
   else
     m_buttonStart = 0;
   if( buttonMask & SAVE_BUTTON ) {
-    m_buttonSave = new QPushButton( i18n("Save"), this, "m_buttonSave" );
+    m_buttonSave = new KPushButton( KStdGuiItem::save(), this, "m_buttonSave" );
     layout5->addWidget( m_buttonSave );
   }
   else
     m_buttonSave = 0;
   if( buttonMask & CANCEL_BUTTON ) {
-    m_buttonCancel = new QPushButton( i18n("Cancel"), this, "m_buttonCancel" );
+    m_buttonCancel = new KPushButton( KStdGuiItem::cancel(), this, "m_buttonCancel" );
     layout5->addWidget( m_buttonCancel );
   }
   else

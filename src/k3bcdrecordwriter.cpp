@@ -33,6 +33,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kconfig.h>
+#include <kmessagebox.h>
 
 #include <errno.h>
 #include <string.h>
@@ -107,6 +108,7 @@ void K3bCdrecordWriter::prepareProcess()
 {
   if( m_process ) delete m_process;  // kdelibs want this!
   m_process = new K3bProcess();
+  m_process->setRunPrivileged(true);
   m_process->setSplitStdout(true);
   connect( m_process, SIGNAL(stdoutLine(const QString&)), this, SLOT(slotStdLine(const QString&)) );
   connect( m_process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotStdLine(const QString&)) );
@@ -241,7 +243,7 @@ void K3bCdrecordWriter::start()
 
   emit newSubTask( i18n("Preparing write process...") );
 
-  if( !m_process->start( KProcess::NotifyOnExit, m_stdin ? KProcess::All : KProcess::AllOutput ) ) {
+  if( !m_process->start( KProcess::NotifyOnExit, KProcess::All ) ) {
     // something went wrong when starting the program
     // it "should" be the executable
     kdDebug() << "(K3bCdrecordWriter) could not start cdrecord" << endl;
@@ -301,23 +303,32 @@ bool K3bCdrecordWriter::write( const char* data, int len )
 void K3bCdrecordWriter::slotStdLine( const QString& line )
 {
   emit debuggingOutput( m_cdrecordBinObject->name(), line );
-
-  if( line.startsWith( "Track" ) )
+  
+  if( line.startsWith( "Track " ) )
     {
       if( !m_totalTracksParsed ) {
 	// this is not the progress display but the list of tracks that will get written
 	// we always extract the tracknumber to get the highest at last
 	bool ok;
 	int tt = line.mid( 6, 2 ).toInt(&ok);
-	if( ok )
+	if( ok ) {
 	  m_totalTracks = tt;
 
-	int sizeStart = line.find( QRegExp("\\d"), 10 );
-	int sizeEnd = line.find( "MB", sizeStart );
-	int ts = line.mid( sizeStart, sizeEnd-sizeStart ).toInt();
-
-	m_trackSizes.append(ts);
-	m_totalSize += ts;
+	  int sizeStart = line.find( QRegExp("\\d"), 10 );
+	  int sizeEnd = line.find( "MB", sizeStart );
+	  int ts = line.mid( sizeStart, sizeEnd-sizeStart ).toInt(&ok);
+	  
+	  if( ok ) {
+	    m_trackSizes.append(ts);
+	    m_totalSize += ts;
+	  }
+	  else
+	    kdDebug() << "(K3bCdrecordWriter) track number parse error: " 
+		      << line.mid( sizeStart, sizeEnd-sizeStart ) << endl;
+	}
+	else
+	  kdDebug() << "(K3bCdrecordWriter) track number parse error: " 
+		    << line.mid( 6, 2 ) << endl;
       }
 
       else if( line.contains( "fifo", false ) > 0 )
@@ -402,12 +413,20 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
 	  // so we just use the track sizes and do a bit of math...
 	  //
 
-	  double convV = (double)m_trackSizes[m_currentTrack-1]/(double)size;
-	  made = (int)((double)made * convV);
-	  size = m_trackSizes[m_currentTrack-1];
+	  if( (int)m_trackSizes.count() > m_currentTrack-1 &&
+	      size > 0 ) {
+	    double convV = (double)m_trackSizes[m_currentTrack-1]/(double)size;
+	    made = (int)((double)made * convV);
+	    size = m_trackSizes[m_currentTrack-1];
+	  }
+	  else {
+	    kdError() << "(K3bCdrecordWriter) Did not parse all tracks sizes!" << endl;
+	  }
 
-	  emit processedSubSize( made, size );
-	  emit subPercent( 100*made/size );
+	  if( size > 0 ) {
+	    emit processedSubSize( made, size );
+	    emit subPercent( 100*made/size );
+	  }
 
 	  if( m_totalSize > 0 ) {
 	    emit processedSize( m_alreadyWritten+made, m_totalSize );
@@ -430,8 +449,12 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   }
   else if( line.startsWith( "Starting new" ) ) {
     m_totalTracksParsed = true;
-    if( m_currentTrack > 0 ) // nothing has been written at the start of track 1
-      m_alreadyWritten += m_trackSizes[m_currentTrack-1];
+    if( m_currentTrack > 0 ) {// nothing has been written at the start of track 1
+      if( (int)m_trackSizes.count() > m_currentTrack-1 )
+	m_alreadyWritten += m_trackSizes[m_currentTrack-1];
+      else
+	kdError() << "(K3bCdrecordWriter) Did not parse all tracks sizes!" << endl;
+    }
     m_currentTrack++;
     kdDebug() << "(K3bCdrecordWriter) writing track " << m_currentTrack << " of " << m_totalTracks << " tracks." << endl;
     emit nextTrack( m_currentTrack, m_totalTracks );
@@ -447,6 +470,10 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
       emit infoMessage( i18n("Starting in 1 second", 
 			     "Starting in %n seconds", 
 			     secs), K3bJob::PROCESS );
+  }
+  else if( line.startsWith( "Writing lead-in" ) ) {
+    m_totalTracksParsed = true;
+    emit newSubTask( i18n("Writing lead-in") );
   }
   else if( line.startsWith( "Writing pregap" ) ) {
     emit newSubTask( i18n("Writing pregap") );
@@ -501,6 +528,16 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   else if( line.startsWith( "Cdrecord " ) ) {
     // display some credit for Joerg ;)
     emit infoMessage( line, INFO );
+  }
+  else if( line.startsWith( "Re-load disk and hit" ) ) {
+    // this happens on some notebooks where cdrecord is not able to close the
+    // tray itself, so we need to ask the user to do so
+    KMessageBox::information( 0, i18n("Please reload the medium and press 'ok'"),
+			      i18n("Unable to close the tray") );
+
+    // now send a <CR> to cdrecord
+    // hopefully this will do it since I have no possibility to test it!
+    m_process->writeStdin( "\n", 1 );
   }
   else {
     // debugging
@@ -562,7 +599,7 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	}
 	else {
 	  // no recording device and also other errors!! :-(
-	  emit infoMessage( i18n("Cdrecord returned an unknown error! (code %1)").arg(p->exitStatus()), 
+	  emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg(m_cdrecordBinObject->name()).arg(p->exitStatus()), 
 			    K3bJob::ERROR );
 	  emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
 	  emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );

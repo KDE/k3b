@@ -15,7 +15,6 @@
 
 
 #include "k3bprojectburndialog.h"
-#include "k3b.h"
 #include "k3bdoc.h"
 #include "k3bburnprogressdialog.h"
 #include "k3bjob.h"
@@ -46,6 +45,7 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
+#include <kapplication.h>
 
 
 
@@ -156,11 +156,6 @@ void K3bProjectBurnDialog::slotCancelClicked()
 
 void K3bProjectBurnDialog::slotStartClicked()
 {
-  if( m_job ) {
-    KMessageBox::sorry( k3bMain(), i18n("K3b is already working on this project!"), i18n("Error") );
-    return;
-  }
-
   saveSettings();
 
   // check if enough space in tempdir if not on-the-fly
@@ -179,9 +174,9 @@ void K3bProjectBurnDialog::slotStartClicked()
 
   K3bJobProgressDialog* d = 0;
   if( m_checkOnlyCreateImage && m_checkOnlyCreateImage->isChecked() )
-    d = new K3bJobProgressDialog( k3bMain() );
+    d = new K3bJobProgressDialog( kapp->mainWidget() );
   else
-    d = new K3bBurnProgressDialog( k3bMain() );
+    d = new K3bBurnProgressDialog( kapp->mainWidget() );
 
   hide();
   d->startJob(m_job);

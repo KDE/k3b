@@ -403,6 +403,7 @@ void K3bCdrdaoWriter::start()
   if( m_process )
     delete m_process;  // kdelibs want this!
   m_process = new K3bProcess();
+  m_process->setRunPrivileged(true);
   m_process->setSplitStdout(false);
   connect( m_process, SIGNAL(stderrLine(const QString&)),
            this, SLOT(slotStdLine(const QString&)) );
@@ -681,9 +682,10 @@ void K3bCdrdaoWriter::slotProcessExited( KProcess* p )
 
     default:
       if( !m_knownError ) {
-        emit infoMessage( i18n("Cdrdao returned an error! (code %1)").arg(p->exitStatus()), K3bJob::ERROR );
-        emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
-        emit infoMessage( i18n("Please send me an email with the last output..."), K3bJob::ERROR );
+        emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg(m_cdrdaoBinObject->name()).arg(p->exitStatus()), 
+			  K3bJob::ERROR );
+	emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
+	emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
       }
 
       emit finished( false );

@@ -19,7 +19,6 @@
 #include <k3bjob.h>
 #include <kcutlabel.h>
 #include <device/k3bdevice.h>
-#include <k3b.h>
 #include <k3bstdguiitems.h>
 #include <k3bcore.h>
 #include <tools/k3bversion.h>
@@ -55,7 +54,10 @@
 #include <kglobal.h>
 #include <knotifyclient.h>
 #include <kstandarddirs.h>
-
+#include <kapplication.h>
+#include <kmainwindow.h>
+#include <kstdguiitem.h>
+#include <kpushbutton.h>
 
 
 class K3bJobProgressDialog::PrivateDebugWidget : public KDialog
@@ -70,7 +72,7 @@ K3bJobProgressDialog::PrivateDebugWidget::PrivateDebugWidget( QMap<QString, QStr
 {
   setCaption( i18n("Debugging Output") );
 
-  QPushButton* okButton = new QPushButton( i18n("&OK"), this );
+  KPushButton* okButton = new KPushButton( KStdGuiItem::ok(), this );
   QTextView* debugView = new QTextView( this );
   QGridLayout* grid = new QGridLayout( this );
   grid->addMultiCellWidget( debugView, 0, 0, 0, 1 );
@@ -263,9 +265,9 @@ void K3bJobProgressDialog::setupGUI()
   QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
   layout5->addItem( spacer );
 
-  m_buttonCancel = new QPushButton( i18n("Cancel"), this, "m_buttonCancel" );
+  m_buttonCancel = new KPushButton( KStdGuiItem::cancel(), this, "m_buttonCancel" );
   layout5->addWidget( m_buttonCancel );
-  m_buttonClose = new QPushButton( i18n("Close"), this );
+  m_buttonClose = new KPushButton( KStdGuiItem::close(), this );
   layout5->addWidget( m_buttonClose );
   m_buttonShowDebug = new QPushButton( i18n("Show Debugging Output"), this );
   layout5->addWidget( m_buttonShowDebug );
@@ -284,7 +286,7 @@ K3bJobProgressDialog::~K3bJobProgressDialog()
 
 void K3bJobProgressDialog::show()
 {
-  KConfig* c = kapp->config();
+  KConfig* c = k3bcore->config();
   c->setGroup( "General Options");
 
   m_bShowSystemTrayProgress = c->readBoolEntry( "Show progress in system tray", true );
@@ -296,7 +298,8 @@ void K3bJobProgressDialog::show()
   }
 
   if( c->readBoolEntry( "hide main window while writing", false ) )
-    k3bMain()->hide();
+    if( QWidget* w = kapp->mainWidget() )
+      w->hide();
 
   KDialog::show();
 }
@@ -310,14 +313,16 @@ void K3bJobProgressDialog::closeEvent( QCloseEvent* e )
 {
   if( m_buttonClose->isVisible() ) {
     KDialog::closeEvent( e );
-    k3bMain()->show();
+    if( QWidget* w = kapp->mainWidget() )
+      w->show();
 
     if( m_systemTray ) {
       m_systemTray->hide();
     }
 
     if( !m_plainCaption.isEmpty() )
-      k3bMain()->setPlainCaption( m_plainCaption );
+      if( KMainWindow* w = dynamic_cast<KMainWindow*>(kapp->mainWidget()) )
+	w->setPlainCaption( m_plainCaption );
   }
 }
 
@@ -494,7 +499,8 @@ void K3bJobProgressDialog::slotStarted()
 {
   m_timer->start( 1000 );
   m_startTime = QTime::currentTime();
-  m_plainCaption = k3bMain()->caption();
+  if( KMainWindow* w = dynamic_cast<KMainWindow*>(kapp->mainWidget()) )
+    m_plainCaption = w->caption();
 }
 
 
@@ -521,7 +527,8 @@ void K3bJobProgressDialog::slotShowDebuggingOutput()
 
 void K3bJobProgressDialog::slotUpdateCaption( int percent )
 {
-  k3bMain()->setPlainCaption( QString( "(%1%) %2" ).arg(percent).arg(m_plainCaption) );
+  if( KMainWindow* w = dynamic_cast<KMainWindow*>(kapp->mainWidget()) )
+    w->setPlainCaption( QString( "(%1%) %2" ).arg(percent).arg(m_plainCaption) );
 }
 
 
