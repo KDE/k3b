@@ -46,14 +46,15 @@
 #include <kdebug.h>
 #include <kmimemagic.h>
 
-// #include <iostream>
-
 
 K3bVcdDoc::K3bVcdDoc( QObject* parent )
   : K3bDoc( parent )
 {
   m_tracks = 0L;
+  m_vcdOptions = 0L;
+  
   m_docType = VCD;
+  m_vcdType = VCD20;
 
   m_urlAddingTimer = new QTimer( this );
   connect( m_urlAddingTimer, SIGNAL(timeout()), this, SLOT(slotWorkUrlQueue()) );
@@ -61,10 +62,13 @@ K3bVcdDoc::K3bVcdDoc( QObject* parent )
 
 K3bVcdDoc::~K3bVcdDoc()
 {
-  if( m_tracks )
+  if( m_tracks ) {
     m_tracks->setAutoDelete( true );
+    delete m_tracks;
+  }
 
-  delete m_tracks;
+  if ( m_vcdOptions )
+    delete m_vcdOptions;
 }
 
 bool K3bVcdDoc::newDocument()
@@ -76,6 +80,8 @@ bool K3bVcdDoc::newDocument()
 
   m_tracks = new QPtrList<K3bVcdTrack>;
   m_tracks->setAutoDelete( false );
+
+  m_vcdOptions = new K3bVcdOptions();
 
   return K3bDoc::newDocument();
 }
@@ -159,7 +165,7 @@ void K3bVcdDoc::slotWorkUrlQueue()
 
 K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
 {
-
+  long test = identifyMpegFile( url );
   QString mimetype = KMimeMagic::self()->findFileType(url.path())->mimeType();
   if ( mimetype.contains( "video" ) ) {
     K3bVcdTrack* newTrack =  new K3bVcdTrack( m_tracks, url.path() );
@@ -263,10 +269,11 @@ K3bBurnJob* K3bVcdDoc::newBurnJob()
 
 unsigned long K3bVcdDoc::identifyMpegFile( const KURL& url )
 {
-  // for future identify of MPEG Stream
+  k3bMain()->showBusyInfo( i18n( "Identify Mpeg file ..." ) );
+  // TODO: Get Mpeginfos
+  k3bMain()->endBusy();
   return 0;
 }
-
 
 void K3bVcdDoc::informAboutNotFoundFiles()
 {
@@ -279,6 +286,10 @@ void K3bVcdDoc::informAboutNotFoundFiles()
   }
 }
 
+void K3bVcdDoc::setVcdType( int type )
+{
+  m_vcdType = type;
+}
 
 void K3bVcdDoc::loadDefaultSettings()
 {

@@ -18,6 +18,7 @@
 #ifndef K3BVCDDOC_H
 #define K3BVCDDOC_H
 
+#include "k3bvcdoptions.h"
 #include "../k3bdoc.h"
 
 #include <qqueue.h>
@@ -51,12 +52,14 @@ class K3bVcdDoc : public K3bDoc
   /** reimplemented from K3bDoc */
   void addView(K3bView* view);
 
+  enum vcdTypes { VCD11, VCD20, SVCD10, HQVCD};
+  
   bool newDocument();
   int numOfTracks() const { return m_tracks->count(); }
 
   const QString& vcdImage() const { return m_vcdImage; }
   void setVcdImage( const QString& s ) { m_vcdImage = s; }
-  
+
   K3bVcdTrack* first() { return m_tracks->first(); }
   K3bVcdTrack* current() const { return m_tracks->current(); }
   K3bVcdTrack* next() { return m_tracks->next(); }
@@ -71,7 +74,11 @@ class K3bVcdDoc : public K3bDoc
   unsigned long long length() const;
     
   K3bBurnJob* newBurnJob();
+  K3bVcdOptions* vcdOptions() const { return m_vcdOptions; }
 
+  int vcdType() const { return m_vcdType; }
+  void setVcdType( int type );
+    
   static unsigned long identifyMpegFile( const KURL& url );
 
  public slots:
@@ -135,7 +142,9 @@ class K3bVcdDoc : public K3bDoc
   QList<K3bVcdTrack>* m_tracks;
   unsigned long long calcTotalSize() const;
   K3bVcdTrack* m_lastAddedTrack;
+  K3bVcdOptions* m_vcdOptions;
 
+  int m_vcdType;
   uint lastAddedPosition;
   
 };
