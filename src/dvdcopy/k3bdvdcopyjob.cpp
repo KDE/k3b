@@ -154,8 +154,8 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
     // to use the ISO9660 header.
     //
     // On the other hand: in on-the-fly mode growisofs determines the size of the data to be written
-    //                    by looking at the ISO9660 header. So in this case it would be best for us 
-    //                    to do the same....
+    //                    by looking at the ISO9660 header when writing in DAO mode. So in this case
+    //                    it would be best for us to do the same....
     //
 
     switch( dh->ngDiskInfo().mediaType() ) {
@@ -173,13 +173,17 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
 	return;
       }
 
-//       d->lastSector = dh->toc()[0].lastSector();
-//       break;
+      // growisofs only uses the size from the PVD for reserving
+      // writable space in DAO mode
+      if( m_writingMode != K3b::DAO || !m_onTheFly ) {
+	d->lastSector = dh->toc()[0].lastSector();
+	break;
+      }
     case K3bCdDevice::MEDIA_DVD_PLUS_RW:
     case K3bCdDevice::MEDIA_DVD_RW_OVWR:
       {
 	emit infoMessage( i18n("K3b needs to rely on the size saved in the ISO9660 header."), WARNING );
-	emit infoMessage( i18n("This will result in a corrupt copy if the source was mastered with a buggy software."), WARNING );
+	emit infoMessage( i18n("This might result in a corrupt copy if the source was mastered with a buggy software."), WARNING );
 
 	K3bIso9660 isoF( m_readerDevice, 0 );
 	if( isoF.open( IO_ReadOnly ) ) {
@@ -295,8 +299,11 @@ void K3bDvdCopyJob::prepareWriter()
   // these do only make sense with DVD-R(W)
   d->writerJob->setSimulate( m_simulate );
   d->writerJob->setBurnSpeed( m_speed );
-  // The growisofsWriter only uses DAO which is ignored for all but DVD-R(W) seq
-  d->writerJob->setWritingMode( m_writingMode == K3b::WRITING_MODE_AUTO ||
+  // we do not default to DAO in onthefly mode since otherwise growisofs would
+  // use the size from the PVD to reserve space on the DVD and that can be bad
+  // if this size is wrong
+  // TODO: it would be better to save the writing mode in the waitForDvd() method and use it here
+  d->writerJob->setWritingMode( (m_writingMode ==  K3b::WRITING_MODE_AUTO && !m_onTheFly ) ||
 				m_writingMode == K3b::DAO 
 				? K3b::DAO
 				: m_writingMode );
