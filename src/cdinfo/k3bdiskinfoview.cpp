@@ -196,7 +196,7 @@ void K3bDiskInfoView::displayInfo( const K3bDiskInfo& info )
 
 
     // check if we have some atip info
-    if( info.size > 0 || !info.mediumManufactor.isEmpty() || info.sessions > 0 ) {
+    if( info.size > 0 || !info.mediumManufactor.isEmpty() ) {
 
       KListViewItem* atipItem = new HeaderViewItem( m_infoView, i18n("Disk") );
       KListViewItem* atipChild = 0;
