@@ -57,6 +57,8 @@ public:
   K3bErasingInfoDialog* erasingDlg;
   QMap<int, int> comboTypeMap;
   QMap<int, int> typeComboMap;
+
+  bool jobRunning;
 };
 
 
@@ -156,8 +158,10 @@ void K3bBlankingDialog::slotStartClicked()
 
   connect( d->erasingDlg, SIGNAL(cancelClicked()), d->job, SLOT(cancel()) );
 
+  d->jobRunning = true;
   d->job->start();
-  d->erasingDlg->exec(false);
+  if( d->jobRunning ) // in case the job already finished in the start slot
+    d->erasingDlg->exec(false);
 }
 
 
@@ -182,6 +186,7 @@ void K3bBlankingDialog::slotInfoMessage( const QString& str, int type )
 
 void K3bBlankingDialog::slotJobFinished( bool success )
 {
+  d->jobRunning = false;
   d->erasingDlg->hide();
 
   if( success )
