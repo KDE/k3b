@@ -464,7 +464,7 @@ void K3bIsoImageJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
       }
       else {
 	// debugging
-	qDebug("(cdrecord) " + *str );
+	qDebug("(cdrecord) %s", (*str).latin1() );
       }
     } // for every line
 

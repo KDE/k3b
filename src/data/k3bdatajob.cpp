@@ -163,7 +163,7 @@ void K3bDataJob::slotMsInfoFetched()
     m_msInfo = QString::null;
   }
 
-  qDebug("(K3bDataJob) msinfo parsed: " + m_msInfo );
+  qDebug("(K3bDataJob) msinfo parsed: %s", m_msInfo.latin1() );
 		
   if( m_msInfo.isEmpty() ) {
     emit infoMessage( i18n("Could not retrieve multisession information from disk."), K3bJob::ERROR );
@@ -226,8 +226,7 @@ void K3bDataJob::fetchIsoSize()
 
 void K3bDataJob::slotIsoSizeFetched()
 {
-  qDebug("(K3bDataJob) iso size fetched:");
-  qDebug( m_collectedOutput );
+  qDebug("(K3bDataJob) iso size fetched: %s", m_collectedOutput.latin1() );
 
   // now parse the output
   // this seems to be the format for mkisofs version < 1.14 (to stdout)
@@ -244,7 +243,7 @@ void K3bDataJob::slotIsoSizeFetched()
     }
   }
     
-  qDebug("(K3bDataJob) iso size parsed: " + m_isoSize );
+  qDebug("(K3bDataJob) iso size parsed: %s", m_isoSize.latin1() );
 
   if( m_isoSize.isEmpty() ) {
     emit infoMessage( i18n("Could not retrieve size of data. On-the-fly writing did not work."), K3bJob::ERROR );
@@ -481,7 +480,7 @@ void K3bDataJob::slotParseMkisofsOutput( KProcess*, char* output, int len )
 	bool ok;
 	double _percent = _perStr.toDouble( &ok );
 	if( !ok ) {
-	  qDebug( "Parsing did not work for " + _perStr );
+	  qDebug( "Parsing did not work for %s", _perStr.latin1() );
 	}
 	else {
 	  emit subPercent( (int)_percent );
@@ -501,7 +500,7 @@ void K3bDataJob::slotParseMkisofsOutput( KProcess*, char* output, int len )
       }
 
       else {
-	qDebug("(mkisofs) " + *str );
+	qDebug("(mkisofs) %s", (*str).latin1() );
       }
     }
 }
@@ -647,7 +646,7 @@ void K3bDataJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 	bool ok;
 	int _percent = (int)_perStr.toDouble( &ok );
 	if( !ok ) {
-	  qDebug( "Parsing did not work for " + _perStr );
+	  qDebug( "Parsing did not work for %s", _perStr.latin1() );
 	}
 	else
 	  emit subPercent( _percent );
@@ -660,7 +659,7 @@ void K3bDataJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
       }
       else {
 	// debugging
-	qDebug("(cdrecord) " + *str);
+	qDebug("(cdrecord) %s", (*str).latin1());
       }
     } // for every line
 
@@ -893,7 +892,7 @@ bool K3bDataJob::writePathSpec( const QString& filename )
 
   file.close();
   
-  return filename;
+  return true;
 }
 
 /*

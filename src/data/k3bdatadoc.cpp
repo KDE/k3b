@@ -23,6 +23,8 @@
 #include "../k3b.h"
 #include "../kstringlistdialog.h"
 
+#include <stdlib.h>
+
 #include <qdir.h>
 #include <qstring.h>
 #include <qfileinfo.h>
@@ -266,7 +268,7 @@ void K3bDataDoc::createFileItem( QFileInfo& f, K3bDirItem* parent )
     
     // check if it was a corrupted symlink
     if( !f.exists() ) {
-      qDebug("(K3bDataDoc) corrupted symlink: " + f.absFilePath() );
+      qDebug("(K3bDataDoc) corrupted symlink: %s", f.absFilePath().latin1() );
       m_notFoundFiles.append( f.absFilePath() );
       return;
     }
@@ -325,7 +327,7 @@ bool K3bDataDoc::nameAlreadyInDir( const QString& name, K3bDirItem* dir )
   QListIterator<K3bDataItem> it( *dir->children() );
   for( ; it.current(); ++it ) {
     if( it.current()->k3bName() == name ) {
-      qDebug( "(K3bDataDoc) already a file with that name in directory: " + name );
+      qDebug( "(K3bDataDoc) already a file with that name in directory: %s", name.latin1() );
       return true;
     }
   }
@@ -365,7 +367,7 @@ unsigned long K3bDataDoc::length() const
 
 QString K3bDataDoc::documentType() const
 {
-  return "k3b_data_project";
+  return QString::fromLatin1("k3b_data_project");
 }
 
 
@@ -455,7 +457,7 @@ bool K3bDataDoc::loadDocumentData( QDomDocument* doc )
       setISOLevel( e.text().toInt() );
 
     else
-      qDebug( "(K3bDataDoc) unknown option entry: " + e.nodeName() );
+      qDebug( "(K3bDataDoc) unknown option entry: %s", e.nodeName().latin1() );
   }
   // -----------------------------------------------------------------
 
@@ -493,7 +495,7 @@ bool K3bDataDoc::loadDocumentData( QDomDocument* doc )
       setSystemId( e.text() );
 
     else
-      qDebug( "(K3bDataDoc) unknown header entry: " + e.nodeName() );
+      qDebug( "(K3bDataDoc) unknown header entry: %s", e.nodeName().latin1() );
     
   }
   // -----------------------------------------------------------------
@@ -567,7 +569,7 @@ bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
 
   }
   else {
-    qDebug( "(K3bDataDoc) wrong tag in files-section: " + elem.nodeName() );
+    qDebug( "(K3bDataDoc) wrong tag in files-section: %s", elem.nodeName().latin1() );
     return false;
   }
 
@@ -899,7 +901,7 @@ QString K3bDataDoc::treatWhitespace( const QString& path )
       }
     }
 		
-    qDebug( "(K3bDataDoc) converted " + path + " to " + _result );
+    qDebug( "(K3bDataDoc) converted %s to %s", path.latin1(), _result.latin1() );
     return _result;
   }
   else
