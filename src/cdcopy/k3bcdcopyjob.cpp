@@ -24,7 +24,9 @@
 #include "../cdinfo/k3bdiskinfo.h"
 #include "../cdinfo/k3bdiskinfodetector.h"
 
-#include <kprocess.h>
+#include "../remote.h"
+
+#include <k3bprocess.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
 #include <klocale.h>
@@ -34,18 +36,31 @@
 #include <qfile.h>
 #include <kdebug.h>
 
+#include <sys/types.h>
+#include <sys/socket.h>
+
+
 
 K3bCdCopyJob::K3bCdCopyJob( QObject* parent )
   : K3bBurnJob( parent ),
     m_paranoiaMode( 3 )
 {
-  m_process = new KProcess();
+  m_onlyCreateImage = false;
+  m_copies = 1;
+  m_finishedCopies = 0;
+  m_blocksToCopy = 0;
+  m_process = new K3bProcess();
+  m_process->setSplitStdout(true);
 
-  connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
-	   this, SLOT(parseCdrdaoOutput(KProcess*, char*, int)) );
-  connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
-	   this, SLOT(parseCdrdaoOutput(KProcess*, char*, int)) );
+  socketpair(AF_UNIX,SOCK_STREAM,0,cdrdaoComm);
+  qsn = new QSocketNotifier(cdrdaoComm[1],QSocketNotifier::Read,this);
+  connect( qsn, SIGNAL(activated(int)), this, SLOT(getCdrdaoMessage()));
 
+  connect( m_process, SIGNAL(stderrLine(const QString&)),
+	   this, SLOT(parseCdrdaoLine(const QString&)) );
+  connect( m_process, SIGNAL(stdoutLine(const QString&)),
+	   this, SLOT(parseCdrdaoLine(const QString&)) );
+  
   m_diskInfoDetector = new K3bDiskInfoDetector( this );
   connect( m_diskInfoDetector, SIGNAL(diskInfoReady(const K3bDiskInfo&)), 
 	   this, SLOT(diskInfoReady(const K3bDiskInfo&)) );
@@ -55,6 +70,12 @@ K3bCdCopyJob::K3bCdCopyJob( QObject* parent )
 K3bCdCopyJob::~K3bCdCopyJob()
 {
   delete m_process;
+}
+
+
+K3bDevice* K3bCdCopyJob::writer() const
+{
+  return m_writer; 
 }
 
 
@@ -73,9 +94,11 @@ void K3bCdCopyJob::start()
   if( m_copies < 1 )
     m_copies = 1;
   m_finishedCopies = 0;
+  m_currentTrack = 0;
 
   emit infoMessage( i18n("Retrieving information about source disk"), K3bJob::PROCESS );
   m_diskInfoDetector->detect( m_reader );
+  
 }
 
 
@@ -218,15 +241,14 @@ void K3bCdCopyJob::cdrdaoCopyFinished()
       // TODO: check the process' exitStatus()
       switch( m_process->exitStatus() ) {
       case 0:
-	m_finishedCopies++;
 
 	if( m_dummy ) {
 	  emit infoMessage( i18n("CD Copy simulation successfully completed"), K3bJob::STATUS );
 	  finishAll();
 	}
 	else {
+	  m_finishedCopies++;
 	  emit infoMessage( i18n("CD Copy %1 successfully completed").arg(m_finishedCopies), K3bJob::STATUS );
-
 	  if( m_finishedCopies < m_copies )
 	    cdrdaoCopy();
 	  else
@@ -284,7 +306,9 @@ void K3bCdCopyJob::cdrdaoRead()
   
   if( m_reader->cdrdaoDriver() != "auto" )
     *m_process << "--driver" << m_reader->cdrdaoDriver();
-  
+
+  *m_process << "--remote" <<  QString(" %1").arg(cdrdaoComm[0]);
+
   // add toc-file
   m_tocFile = locateLocal( "appdata", "temp/k3btemptoc.toc");
   *m_process << QFile::encodeName(m_tocFile);
@@ -468,6 +492,7 @@ void K3bCdCopyJob::addCdrdaoWriteArguments()
   if( overburn )
     *m_process << "--overburn";
 
+  *m_process << "--remote" <<  QString(" %1").arg(cdrdaoComm[0]);
   // add toc-file
   m_tocFile = locateLocal( "appdata", "temp/k3btemptoc.toc");
   *m_process << QFile::encodeName(m_tocFile);
@@ -483,55 +508,69 @@ void K3bCdCopyJob::parseCdrdaoSpecialLine( const QString& str )
     // information about what will be read
     emit infoMessage( str, K3bJob::PROCESS );
   }
-  else if( str.startsWith( "Track" ) ) {
-    int end = str.find("...");
-    bool ok;
-    int trNum = str.mid( 6, end-6 ).toInt( &ok );
-    if( ok ) {
-      emit infoMessage( i18n("Reading track %1").arg(trNum), K3bJob::PROCESS );
-    }
-    //      emit infoMessage( str, K3bJob::PROCESS );
-  }
+//   else if( str.startsWith( "Track" ) ) {
+//     int end = str.find("...");
+//     bool ok;
+//     int trNum = str.mid( 6, end-6 ).toInt( &ok );
+//     if( ok ) {
+//       emit infoMessage( i18n("Reading track %1").arg(trNum), K3bJob::PROCESS );
+//     }
+//     //      emit infoMessage( str, K3bJob::PROCESS );
+//   }
   else if( str.startsWith( "Found ISRC" ) ) {
     emit infoMessage( i18n("Found ISRC code"), K3bJob::PROCESS );
   }
   else if( str.startsWith( "Found pre-gap" ) ) {
     emit infoMessage( i18n("Found pregap: %1").arg( str.mid(str.find(":")+1) ), K3bJob::PROCESS );
   }
-  else {
-    // check if progress
-    bool ok;
-    int min = str.left(2).toInt(&ok);
-    if( ok ) {
-      int sec = str.mid(3,2).toInt(&ok);
-      if( ok ) {
-	// create progress info
-	sec += min*60;
-	
-	emit subPercent( 100*sec*75 / m_blocksToCopy );
 
-	if( !m_onTheFly && m_onlyCreateImage )
-	  emit percent( 100*sec*75 / m_blocksToCopy );
-	else
-	  emit percent( 100*sec*75 / m_blocksToCopy / (m_copies+1) );
-      }
-    }
-  }
 }
 
-
-void K3bCdCopyJob::createCdrdaoProgress( int made, int size )
+void K3bCdCopyJob::getCdrdaoMessage()
 {
+  struct ProgressMsg msg;
+  char msgSync[] = { 0xff, 0x00, 0xff, 0x00 };
+  char buf[4];
+  int  state;
+  QString task;
+
+  state = 0;
+  while (state < 4) {
+    if (::read(cdrdaoComm[1], buf, 1) != 1) 
+        continue;
+
+    if (buf[0] == msgSync[state]) 
+      state++;
+    else 
+      state = 0;
+
+  }
+
+  read(cdrdaoComm[1],(void *)&msg,sizeof(msg));
+//   kdDebug() << "Status: " << msg.status 
+//        << " Total:  " << msg.totalTracks
+//        << " Track:  " << msg.track
+//        << " TrackProgress: " << msg.trackProgress/10
+//        << " TotalProgress: " << msg.totalProgress/10
+//        << endl;
   int x = m_copies;
   if( !m_onTheFly )
     x++;
 
   int y = m_finishedCopies;
-  if( !m_onTheFly )
-    y++;
-
-  emit percent( 100 * ( (double)y + ((double)made/(double)size) ) / x );
-  emit subPercent( 100 * made / size );
+  emit subPercent(msg.trackProgress/10);
+  emit percent( (int) ((100*y+msg.totalProgress/10.0) / x) );
+  emit bufferStatus(msg.bufferFillRate);
+  switch (msg.status) {
+    case PGSMSG_RCD_EXTRACTING: task=i18n("Reading (Track %1 of %2)").arg(msg.track).arg(msg.totalTracks);break;
+    case PGSMSG_WCD_LEADIN:     task=i18n("Writing leadin ");break;
+    case PGSMSG_WCD_DATA:       task=i18n("Writing (Track %1 of %2)").arg(msg.track).arg(msg.totalTracks);break;
+    case PGSMSG_WCD_LEADOUT:    task=i18n("Writing leadout ");break;
+  }
+  if ( msg.track != m_currentTrack) {
+     emit newSubTask( task );  
+     m_currentTrack = msg.track;
+  }
 }
 
 

@@ -56,7 +56,8 @@ void K3bBurnJob::parseCdrdaoOutput( KProcess*, char* data, int len )
 
   // check if line ends with a newline
   // if not save the last line because it is not finished
-  bool notFinishedLine = ( buffer.right(1) != "\n" && buffer.right(1) != "\r" );
+  QChar c = buffer.right(1).at(0);
+  bool notFinishedLine = ( c != '\n' && c != '\r' && c != QChar(46) );  // What is unicode 46?? It is printed as a point
   if( notFinishedLine ) {
     kdDebug() << "(K3bBurnJob) found unfinished line: " << lines.last() << endl;
     m_notFinishedLine = lines.last();
@@ -155,10 +156,10 @@ void K3bBurnJob::parseCdrdaoLine( const QString& str )
     if( !ok )
       kdDebug() << "(K3bBurnJob) Parsing did not work for: " << (str).mid( pos1, pos2-pos1 ) << endl;
 
-    emit bufferStatus( fifo );
+//    emit bufferStatus( fifo );
 
     // let the derived classes do whatever they want...
-    createCdrdaoProgress( made, size );
+//    createCdrdaoProgress( made, size );
   }
 
   else {
@@ -181,7 +182,7 @@ void K3bBurnJob::parseCdrdaoError( const QString& line )
 
 void K3bBurnJob::createCdrdaoProgress( int made, int size )
 {
-  emit percent( 100*made/size );
+  // emit percent( 100*made/size );
 }
 
 void K3bBurnJob::startNewCdrdaoTrack()

@@ -19,8 +19,9 @@
 #define K3BCDCOPYJOB_H
 
 #include "../k3bjob.h"
+#include <qsocketnotifier.h>
 
-class KProcess;
+class K3bProcess;
 class K3bDevice;
 class K3bDiskInfo;
 class K3bDiskInfoDetector;
@@ -36,7 +37,7 @@ class K3bCdCopyJob : public K3bBurnJob
   K3bCdCopyJob( QObject* parent = 0 );
   ~K3bCdCopyJob();
 
-  K3bDevice* writer() const { return m_writer; }
+  K3bDevice* writer() const;
 
  public slots:
   void start();
@@ -76,9 +77,9 @@ class K3bCdCopyJob : public K3bBurnJob
 
   /** reimplemented from K3bBurnJob */
   void parseCdrdaoSpecialLine( const QString& line );
+  void getCdrdaoMessage();
 
  private:
-  void createCdrdaoProgress( int made, int size );
   void startNewCdrdaoTrack();
 
   int m_copies;
@@ -102,9 +103,13 @@ class K3bCdCopyJob : public K3bBurnJob
   QString m_tempPath;
   QString m_tocFile;
 
-  KProcess* m_process;
+  K3bProcess* m_process;
 
   K3bDiskInfoDetector* m_diskInfoDetector;
+  // cdrdao communication
+  int cdrdaoComm[2];
+  QSocketNotifier *qsn;
+  int m_currentTrack;
 };
 
 #endif
