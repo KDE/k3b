@@ -401,6 +401,8 @@ bool K3bDataJob::prepareWriterJob()
       writer->addArgument("-waiti");
 
 
+    writer->addArgument( "-data" );
+
     if( m_doc->onTheFly() ) {
       writer->addArgument( QString("-tsize=%1s").arg(m_isoImager->size()) )->addArgument("-");
       writer->setProvideStdin(true);
