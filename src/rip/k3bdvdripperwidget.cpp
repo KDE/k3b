@@ -25,7 +25,6 @@
 #include "../k3b.h"
 #include "../device/k3bdevicemanager.h"
 #include "../device/k3bdevice.h"
-#include "../kdiskfreesp.h"
 #include "../tools/k3bexternalbinmanager.h"
 #include "../videoEncoding/k3bdivxcodecdata.h"
 #include "../videoEncoding/k3bdivxview.h"
@@ -52,7 +51,7 @@
 #include <kprocess.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
-
+#include <kdiskfreesp.h>
 
 K3bDvdRipperWidget::K3bDvdRipperWidget(const QString& device, QWidget *parent, const char *name )
     : KDialogBase( parent, name, true, i18n("Ripping DVD"), KDialogBase::Close|KDialogBase::Apply ) {

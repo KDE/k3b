@@ -33,8 +33,7 @@
 #include <kdialog.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
-
-#include "kdiskfreesp.h"
+#include <kdiskfreesp.h>
 
 
 K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const char *name ) 
