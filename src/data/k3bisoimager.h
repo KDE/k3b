@@ -57,6 +57,16 @@ class K3bIsoImager : public K3bJob
    */
   void resume();
 
+  /**
+   * This will set jolietName of all dataItems that are direct
+   * children of dirItem. 
+   * The only thing this method does is cutting filenames whose
+   * first 64 characters occure more that once since mkisofs seems to
+   * have problems with that.
+   * If Joliet is not used there is no need to cut the filenames.
+   */
+  static void createJolietFilenames( K3bDirItem* dirItem );
+
  signals:
   void sizeCalculated( int exitCode, int size );
 
@@ -105,7 +115,6 @@ class K3bIsoImager : public K3bJob
   QString escapeGraftPoint( const QString& str );
   bool addMkisofsParameters();
   bool prepareMkisofsFiles();
-  void createJolietFilenames( K3bDirItem* );
   void outputData();
 
   void cleanup();
