@@ -25,6 +25,7 @@
 
 #include <qstring.h>
 #include <qdatastream.h>
+#include <qdatetime.h>
 
 #include <kprocess.h>
 #include <klocale.h>
@@ -44,6 +45,8 @@ K3bDvdCopy::~K3bDvdCopy(){
 }
 
 void K3bDvdCopy::start(){
+    m_timeEstimated = QTime::currentTime();
+    m_timeDataRate = QTime::currentTime();
     m_ripProcess->setDvdTitle( m_ripTitles );
     m_ripProcess->setDevice( m_device );
     m_ripProcess->setDirectories( m_directory, m_dirvob, m_dirtmp );
@@ -52,6 +55,8 @@ void K3bDvdCopy::start(){
     connect( m_ripProcess, SIGNAL( interrupted() ), m_parent, SLOT( slotRipJobDeleted() ) );
     connect( m_ripProcess, SIGNAL( finished( bool ) ), this, SLOT( ripFinished( bool ) ) );
     connect( m_ripProcess, SIGNAL( progressPercent( unsigned int ) ), this, SLOT( slotPercent( unsigned int ) ) );
+    connect( m_ripProcess, SIGNAL( rippedBytesPerPercent( unsigned long ) ), this, SLOT( slotDataRate( unsigned long ) ) );
+
     m_ripProcess->start();
     emit started();
     emit newTask( i18n("Copy DVD.")  );
@@ -68,7 +73,20 @@ void K3bDvdCopy::cancel( ){
 }
 
 void K3bDvdCopy::slotPercent( unsigned int i ){
+    QTime current = QTime::currentTime();
+    int s = m_timeEstimated.msecsTo( current );
+    m_timeEstimated = current;
+    unsigned int diff = (unsigned int) (( 100 - i ) * s/1000);
+    emit estimatedTime( diff );
     emit percent( (int) i );
+}
+
+void K3bDvdCopy::slotDataRate( unsigned long l){
+    QTime current = QTime::currentTime();
+    int s = m_timeDataRate.msecsTo( current );
+    m_timeDataRate = current;
+    float diff = (float) ( (float) l / s *1000 )/1024/1024;
+    emit dataRate( diff );
 }
 
 void K3bDvdCopy::setDvdTitle( const QValueList<K3bDvdContent> &titles ){

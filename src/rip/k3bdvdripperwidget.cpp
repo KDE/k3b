@@ -26,6 +26,7 @@
 #include "../kdiskfreesp.h"
 #include "../tools/k3bexternalbinmanager.h"
 #include "k3bdvdfilldisplay.h"
+#include "k3bdvdextraripstatus.h"
 
 #include <qlayout.h>
 #include <qvgroupbox.h>
@@ -126,44 +127,6 @@ void K3bDvdRipperWidget::setupGui(){
     connect(m_editStaticRipPath, SIGNAL( textChanged( const QString& )), this, SLOT( slotSetDependDirs( const QString& )) );
 
 
-//  double one = (double)contentsRect().width() / 90.0;
-/*	
-  p->drawText( contentsRect(), Qt::AlignLeft | Qt::AlignVCenter,
-	       QString().sprintf( " %.2f MB", ((float)doc->size())/1024.0/1024.0 ) );
-	
-  // draw yellow if value > 650
-  if( value > 65 ) {
-    rect.setLeft( rect.left() + (int)(one*65.0) );
-  }
-	
-  // draw red if value > 80
-  if( value > 70 ) {
-    rect.setLeft( rect.left() + (int)(one*5.0) );
-    p->fillRect( rect, Qt::red );
-  }
-	
-  // now draw the 650, 700, and 800 marks
-  p->drawLine( contentsRect().left() + (int)(one*65.0), contentsRect().bottom(),
-	       contentsRect().left() + (int)(one*65.0), contentsRect().top() );
-  p->drawLine( contentsRect().left() + (int)(one*70.0), contentsRect().bottom(),
-	       contentsRect().left() + (int)(one*70.0), contentsRect().top() );
-  p->drawLine( contentsRect().left() + (int)(one*80.0), contentsRect().bottom(),
-	       contentsRect().left() + (int)(one*80.0), contentsRect().top() );
-	
-  // draw the text marks
-  rect = contentsRect();
-  rect.setRight( (int)(one*65) );
-  p->drawText( rect, Qt::AlignRight | Qt::AlignVCenter, "650" );
-
-  rect = contentsRect();
-  rect.setRight( (int)(one*70) );
-  p->drawText( rect, Qt::AlignRight | Qt::AlignVCenter, "700" );
-
-  rect = contentsRect();
-  rect.setRight( (int)(one*80) );
-  p->drawText( rect, Qt::AlignRight | Qt::AlignVCenter, "800" );
-	
-  */
 }
 
 void K3bDvdRipperWidget::init( const QValueList<K3bDvdContent>& list ){
@@ -184,6 +147,10 @@ void K3bDvdRipperWidget::rip(){
     m_ripDialog = new K3bBurnProgressDialog( this, "Ripping", false );
     m_ripDialog->setCaption( i18n("Ripping process") );
     m_ripDialog->setJob( m_ripJob );
+    K3bDvdExtraRipStatus *ripStatus = new K3bDvdExtraRipStatus( m_ripDialog );
+    connect( m_ripJob, SIGNAL( dataRate( float )), ripStatus, SLOT( slotDataRate( float )) );
+    connect( m_ripJob, SIGNAL( estimatedTime( unsigned int )), ripStatus, SLOT( slotEstimatedTime( unsigned int )) );
+    m_ripDialog->setExtraInfo( ripStatus );
 
     m_ripJob->start();
     m_ripDialog->exec();

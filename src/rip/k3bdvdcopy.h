@@ -22,6 +22,7 @@
 #include <qfile.h>
 #include <qvaluelist.h>
 #include <qstring.h>
+#include <qdatetime.h>
 
 class KProcess;
 class K3bDvdContent;
@@ -49,7 +50,11 @@ public slots:
     void cancel();
     void slotPercent( unsigned int );
     void ripFinished( bool );
+    void slotDataRate( unsigned long );
 
+signals:
+    void estimatedTime( unsigned int );
+    void dataRate( float );
 //    void slotParseError( KProcess *p, char *text, int len);
 //    void slotParseOutput( KProcess *p, char *text, int len);
 //    void slotExited( KProcess* );
@@ -68,6 +73,8 @@ private:
     QWidget *m_parent;
     K3bDvdRippingProcess *m_ripProcess;
     double m_ripSize;
+    QTime m_timeEstimated;
+    QTime m_timeDataRate;
 
 };
 	

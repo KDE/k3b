@@ -67,7 +67,7 @@ class K3bDoc : public QObject
   /** Destructor for the fileclass of the application */
   ~K3bDoc();
 
-  enum DocType { AUDIO = 1, DATA = 2 };
+  enum DocType { AUDIO = 1, DATA = 2, DVD = 3 };
 
 
   virtual void disable();

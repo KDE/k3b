@@ -49,10 +49,11 @@ class K3bBurnProgressDialog : public KDialog  {
 
  public:
   K3bBurnProgressDialog( QWidget* parent = 0, const char* name = 0, bool showSubProgress = true, 
-			 QWidget* extraInfo = 0, bool modal = true, WFlags = 0 );
+			 bool modal = true, WFlags = 0 );
   ~K3bBurnProgressDialog();
 
   void setJob( K3bJob* job );
+  void setExtraInfo( QWidget *extra );
 
  protected slots:
   void updateCdSizeProgress( int processed, int size );

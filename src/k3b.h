@@ -232,6 +232,7 @@ class K3bMainWindow : public KDockMainWindow
 
   void slotNewAudioDoc();
   void slotNewDataDoc();
+  void slotNewDvdDoc();
 
   void slotProjectAddFiles();
 
@@ -277,6 +278,7 @@ class K3bMainWindow : public KDockMainWindow
   KActionMenu* actionFileNewMenu;
   KAction* actionFileNewAudio;
   KAction* actionFileNewData;
+  KAction* actionFileNewDvd;
   KAction* actionFileOpen;
   KRecentFilesAction* actionFileOpenRecent;
   KAction* actionFileSave;
@@ -291,7 +293,6 @@ class K3bMainWindow : public KDockMainWindow
   KAction* actionToolsWriteIsoImage;
   KAction* actionCdCopy;
   KAction* actionProjectAddFiles;
-	
   KToggleAction* actionViewToolBar;
   KToggleAction* actionViewStatusBar;
   KToggleAction* actionViewDirView;

@@ -94,7 +94,7 @@ K3bBurnProgressDialog::PrivateDebugWidget::PrivateDebugWidget( QMap<QString, QSt
 
 
 K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name, bool showSubProgress, 
-					      QWidget* extraInfo, bool modal, WFlags wf )
+					      bool modal, WFlags wf )
   : KDialog(parent,name, modal, wf)
 {
   setCaption( i18n("K3b - Progress") );
@@ -109,10 +109,6 @@ K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name,
     m_labelTrackProgress->hide();
     m_progressTrack->hide();
   }
-  	
-  if( extraInfo ) {
-    ((QGridLayout*)layout())->addMultiCellWidget( extraInfo, 1, 1, 0, 3 );
-  }
   // -----
 
   m_job = 0;
@@ -125,6 +121,10 @@ K3bBurnProgressDialog::~K3bBurnProgressDialog()
 {
 }
 
+void K3bBurnProgressDialog::setExtraInfo( QWidget *extra ){
+    mainLayout->addMultiCellWidget( extra, 1, 1, 0, 3 );
+    extra->show();
+}
 
 void K3bBurnProgressDialog::closeEvent( QCloseEvent* e )
 {

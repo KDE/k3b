@@ -133,8 +133,8 @@ void K3bFilmView::setupGui(){
     QLabel *res = new QLabel( i18n("Resolution"), _groupInfo );
     QLabel *aspect = new QLabel( i18n("Aspect ratio"), _groupInfo );
     QLabel *time = new QLabel( i18n("Time"), _groupInfo );
-    QLabel *video = new QLabel( i18n("Video"), _groupInfo );
-    QLabel *audio = new QLabel( i18n("Audio"), _groupInfo );
+    //QLabel *video = new QLabel( i18n("Video"), _groupInfo );
+    //QLabel *audio = new QLabel( i18n("Audio"), _groupInfo );
     QLabel *frames = new QLabel( i18n("Frames"), _groupInfo );
     QLabel *framerate = new QLabel( i18n("Framerate"), _groupInfo );
     m_input = new QLabel( "", _groupInfo );
@@ -142,28 +142,28 @@ void K3bFilmView::setupGui(){
     m_res = new QLabel( "", _groupInfo );
     m_aspect = new QLabel( "", _groupInfo );
     m_time = new QLabel( "", _groupInfo );
-    m_video = new QLabel( "", _groupInfo );
-    m_audio = new QLabel( "", _groupInfo );
+    //m_video = new QLabel( "", _groupInfo );
+    //m_audio = new QLabel( "", _groupInfo );
     m_frames = new QLabel( "", _groupInfo );
     m_framerate = new QLabel( "", _groupInfo );
     infoLayout->addMultiCellWidget( input, 0, 0, 0, 0 );
     infoLayout->addMultiCellWidget( mode, 1, 1, 0, 0 );
     infoLayout->addMultiCellWidget( res, 2, 2, 0, 0 );
     infoLayout->addMultiCellWidget( aspect, 3, 3, 0, 0 );
-    infoLayout->addMultiCellWidget( time, 4, 4, 0, 0 );
-    infoLayout->addMultiCellWidget( video, 0, 0, 2, 2 );
-    infoLayout->addMultiCellWidget( audio, 1, 1, 2, 2 );
-    infoLayout->addMultiCellWidget( frames, 2, 2, 2, 2 );
-    infoLayout->addMultiCellWidget( framerate, 3, 3, 2, 2 );
+    //infoLayout->addMultiCellWidget( video, 0, 0, 2, 2 );
+    //infoLayout->addMultiCellWidget( audio, 1, 1, 2, 2 );
     infoLayout->addMultiCellWidget( m_input, 0, 0, 1, 1 );
     infoLayout->addMultiCellWidget( m_mode, 1, 1, 1, 1 );
     infoLayout->addMultiCellWidget( m_res, 2, 2, 1, 1 );
     infoLayout->addMultiCellWidget( m_aspect, 3, 3, 1, 1 );
-    infoLayout->addMultiCellWidget( m_time, 4, 4, 1, 1 );
-    infoLayout->addMultiCellWidget( m_video, 0, 0, 3, 3 );
-    infoLayout->addMultiCellWidget( m_audio, 1, 1, 3, 3 );
-    infoLayout->addMultiCellWidget( m_frames, 2, 2, 3, 3 );
-    infoLayout->addMultiCellWidget( m_framerate, 3, 3, 3, 3 );
+    //infoLayout->addMultiCellWidget( m_video, 0, 0, 3, 3 );
+    //infoLayout->addMultiCellWidget( m_audio, 1, 1, 3, 3 );
+    infoLayout->addMultiCellWidget( time, 0, 0, 2, 2 );
+    infoLayout->addMultiCellWidget( frames, 1, 1, 2, 2 );
+    infoLayout->addMultiCellWidget( framerate, 2, 2, 2, 2 );
+    infoLayout->addMultiCellWidget( m_time, 0, 0, 3, 3 );
+    infoLayout->addMultiCellWidget( m_frames, 1, 1, 3, 3 );
+    infoLayout->addMultiCellWidget( m_framerate, 2, 2, 3, 3 );
 
     // TODO
 
@@ -255,8 +255,8 @@ void K3bFilmView::slotTitleSelected(QListViewItem*item){
         m_res->setText( title->getStrRes() );
         m_aspect->setText( title->getStrAspect() );
         m_time->setText( title->getStrTime() );
-        m_video->setText( title->getVideo() );
-        m_audio->setText( title->getAudio() );
+        //m_video->setText( title->getVideo() );
+        //m_audio->setText( title->getAudio() );
         m_frames->setText( title->getStrFrames() );
         m_framerate->setText( title->getStrFramerate() );
 	

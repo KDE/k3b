@@ -52,6 +52,7 @@ void K3bDvdRippingProcess::start( ){
     m_currentRipAngle = 0;
     m_currentVobIndex = 1;
     m_summaryBytes = 0;
+    m_dataRateBytes = 0;
     m_rippedBytes = 0;
     m_percent = 0;
     m_interrupted = false;
@@ -92,7 +93,7 @@ void K3bDvdRippingProcess::startRippingProcess( ){
     m_outputFile.open( IO_WriteOnly );                     // open file for writing
     m_stream = new QDataStream( &m_outputFile );                        // serialize using f
 
-/*
+    /*
     m_audioProcess = new K3bDvdAudioGain( m_dirtmp );
     if( !m_audioProcess->start() ){
         emit interrupted();
@@ -100,7 +101,7 @@ void K3bDvdRippingProcess::startRippingProcess( ){
     }
     connect( m_audioProcess, SIGNAL( finished() ), this, SLOT( slotAudioProcessFinished() ) );
     m_delAudioProcess = true;
-*/
+    */
    K3bExternalBin *m_tccatBin = k3bMain()->externalBinManager()->binObject("tccat");
 
     m_ripProcess = new KShellProcess();
@@ -149,7 +150,7 @@ void K3bDvdRippingProcess::slotExited( KProcess* ){
 
 void K3bDvdRippingProcess::slotAudioProcessFinished(){
     qDebug("(K3bDvdRippingProcess) Save audio/config data.");
-    //delete m_audioProcess;
+    delete m_audioProcess;
     saveConfig();
 }
 
@@ -161,7 +162,7 @@ void K3bDvdRippingProcess::slotParseOutput( KProcess *p, char *text, int len){
         return;
     }
     m_stream->writeRawBytes( text, len );
-    //m_audioProcess->writeStdin( audiotext.latin1(), len );
+    //m_audioProcess->writeStdin( text, len );
     m_rippedBytes += len;
     m_summaryBytes += len;
     if( m_titleBytes > 0 ){
@@ -169,6 +170,9 @@ void K3bDvdRippingProcess::slotParseOutput( KProcess *p, char *text, int len){
         if ( pc > m_percent ){
             emit progressPercent( pc );
             m_percent = pc;
+            unsigned long b = (unsigned long) ( m_summaryBytes - m_dataRateBytes );
+            m_dataRateBytes = m_summaryBytes;
+            emit rippedBytesPerPercent( b );
         }
     }
     if( m_rippedBytes >= 1073741824 ) {  // 24
@@ -186,7 +190,7 @@ void K3bDvdRippingProcess::slotParseOutput( KProcess *p, char *text, int len){
             emit interrupted();
             return;
         }
-        p->resume(); // stop process
+        p->resume(); // restart process
         m_outputFile.open( IO_WriteOnly );                     // open file for writing
         m_stream = new QDataStream( &m_outputFile );                        // serialize using f
     }
@@ -198,6 +202,7 @@ void K3bDvdRippingProcess::slotParseError( KProcess *p, char *text, int len){
     m_ripProcess->disconnect( SIGNAL(receivedStderr(KProcess*, char*, int)), this );
 }
 */
+
 float K3bDvdRippingProcess::tccatParsedBytes( char *text, int len){
     QString tmp = QString::fromLatin1( text, len );
     float blocks = 0;

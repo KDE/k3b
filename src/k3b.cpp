@@ -71,7 +71,7 @@
 #include "rip/songdb/k3bsongmanager.h"
 #include "k3baudioplayer.h"
 #include "cdcopy/k3bcdcopydialog.h"
-
+#include "dvd/k3bdvddoc.h"
 
 
 K3bMainWindow* k3bMain()
@@ -152,9 +152,12 @@ void K3bMainWindow::initActions()
 			     actionCollection(), "file_new_audio");
   actionFileNewData = new KAction(i18n("New &Data project"),"tar", 0, this, SLOT(slotNewDataDoc()), 
 			    actionCollection(), "file_new_data");
+  actionFileNewDvd = new KAction(i18n("New D&VD project"),"tar", 0, this, SLOT(slotNewDvdDoc()),
+			    actionCollection(), "file_new_data");
 
   actionFileNewMenu->insert( actionFileNewAudio );
   actionFileNewMenu->insert( actionFileNewData );
+  actionFileNewMenu->insert( actionFileNewDvd );
   actionFileNewMenu->setDelayed( false );
 
   actionProjectAddFiles = new KAction( i18n("&Add Files..."), "filenew", 0, this, SLOT(slotProjectAddFiles()), 
@@ -772,6 +775,23 @@ void K3bMainWindow::slotNewDataDoc()
   createClient(doc);
 }
 
+void K3bMainWindow::slotNewDvdDoc()
+{
+  slotStatusMsg(i18n("Creating new DVD Project."));
+
+  K3bDvdDoc* doc = new K3bDvdDoc( this );
+  pDocList->append(doc);
+  doc->newDocument();
+
+  untitledCount+=1;
+  QString fileName=QString(i18n("Untitled%1")).arg(untitledCount);
+  KURL url;
+  url.setFileName(fileName);
+  doc->setURL(url);
+
+  // create the window
+  createClient(doc);
+}
 
 void K3bMainWindow::slotFileBurn()
 {

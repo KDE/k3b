@@ -52,6 +52,7 @@ signals:
     void interrupted();
     void finished( bool );
     void progressPercent( unsigned int );
+    void rippedBytesPerPercent( unsigned long );
 
 private slots:
     //void slotParseError( KProcess *p, char *text, int len);
@@ -76,10 +77,11 @@ private:
     int m_currentRipAngle;
     int m_currentVobIndex;
     int m_maxTitle;
-    int m_percent;
+    unsigned int m_percent;
     double m_rippedBytes;
     double m_titleBytes;
     double m_summaryBytes;
+    double m_dataRateBytes;
     QString m_ripMode;
     bool m_processAudio;
     bool m_delAudioProcess;
