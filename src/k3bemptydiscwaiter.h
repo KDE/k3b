@@ -20,22 +20,16 @@
 #include <kdialogbase.h>
 #include "device/k3bdevice.h"
 
-class QTimer;
-class QPushButton;
-class QCloseEvent;
-class QLabel;
-class K3bBusyWidget;
+
 
 /**
  * Tests for an empty cd in a given device.
  * emits signal discReady if an empty disc was found.
  * K3bEmptyDiscWaiter will go on testing until the
  * slot canceled was called or an empty disc was found.
- * After emitting one of the two signals K3bEmptyDiscWaiter
- * will delete itself. There is no need to delete it.
+ *
  * @author Sebastian Trueg
  */
-
 class K3bEmptyDiscWaiter : public KDialogBase
 {
  Q_OBJECT
@@ -55,6 +49,11 @@ class K3bEmptyDiscWaiter : public KDialogBase
   int waitForEmptyDisc( bool appendable = false );
 
   /**
+   * the same as waitForEmptyDisc( false );
+   */
+  int exec();
+
+  /**
    * This only openes a dialog if the first check failed.
    */
   static int wait( K3bDevice* device, bool appendable = false );
@@ -66,19 +65,17 @@ class K3bEmptyDiscWaiter : public KDialogBase
  protected slots:
   void slotCancel();
   void slotUser1();
-  void slotTestForEmptyCd();
+  void startDeviceHandler();
+  void slotDeviceHandlerFinished( bool );
 
  protected:
   void closeEvent( QCloseEvent* ) {}
 
  private:
-  QTimer* m_timer;
-  K3bDevice* m_device;
-  QPushButton* m_buttonCancel;
-  QPushButton* m_buttonForce;
-  bool m_appendable;
+  void finishWaiting( int );
 
-  QLabel* m_label;
+  class Private;
+  Private* d;
 };
 
 
