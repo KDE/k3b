@@ -1,0 +1,17 @@
+# KDE Config File  
+[Desktop Entry]
+Type=Application
+Exec=kdesu k3bsetup  
+Icon=k3b.png
+MiniIcon=k3b.png
+DocPath=k3b/index.html
+CommentVersion 2 of the K3b setup tool to prepare the system for CD writing=
+Comment[el]=Προετοιμάζει το σύστημα για εγγραφή CD
+Comment[es]=Prepara el sistema para la escritura de CDs
+Comment[sv]=Förbereder systemet för att skriva en cd
+Terminal=0
+Name=K3b Setup
+Name[el]=Ρύθμιση K3b
+Name[es]=Configuración de K3b
+Name[he]=התקנת K3b
+Name[sv]=K3b-inställning

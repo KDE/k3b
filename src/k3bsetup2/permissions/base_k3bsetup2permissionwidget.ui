@@ -1,0 +1,261 @@
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<class>base_K3bSetup2PermissionWidget</class>
+<author>Sebastian Trueg</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>Form1</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>818</width>
+            <height>684</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>11</number>
+        </property>
+        <property name="spacing">
+            <number>6</number>
+        </property>
+        <widget class="KActiveLabel">
+            <property name="name">
+                <cstring>m_infoLabel</cstring>
+            </property>
+            <property name="text">
+                <string>&lt;p&gt;&lt;b&gt;Hallo&lt;/b&gt; Ein bischen text</string>
+            </property>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>ButtonGroup1</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Plain</enum>
+            </property>
+            <property name="title">
+                <string></string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>11</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>m_radioNoChanges</cstring>
+                    </property>
+                    <property name="text">
+                        <string>No permission changes</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>m_radioEverybody</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Let everybody write cds</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>m_radioSelectUsers</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Select users</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>groupPermissions</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
+            </property>
+            <property name="title">
+                <string>Permission Settings</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>11</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="KListView" row="1" column="0" rowspan="3" colspan="1">
+                    <column>
+                        <property name="text">
+                            <string>CD-Writing users</string>
+                        </property>
+                        <property name="clickable">
+                            <bool>true</bool>
+                        </property>
+                        <property name="resizeable">
+                            <bool>true</bool>
+                        </property>
+                    </column>
+                <item>
+                    <property name="text">
+                        <string>trueg</string>
+                    </property>
+                    <property name="pixmap">
+                        <pixmap></pixmap>
+                    </property>
+                </item>
+                    <property name="name">
+                        <cstring>m_viewWritingUsers</cstring>
+                    </property>
+                    <property name="fullWidth">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QToolButton" row="2" column="1">
+                    <property name="name">
+                        <cstring>m_buttonAdd</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&lt;-</string>
+                    </property>
+                </widget>
+                <widget class="QToolButton" row="1" column="1">
+                    <property name="name">
+                        <cstring>m_buttonRemove</cstring>
+                    </property>
+                    <property name="text">
+                        <string>-&gt;</string>
+                    </property>
+                </widget>
+                <spacer row="3" column="1">
+                    <property name="name" stdset="0">
+                        <cstring>Spacer1</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="KListView" row="1" column="2" rowspan="3" colspan="1">
+                    <column>
+                        <property name="text">
+                            <string>Non-CD-Writing users</string>
+                        </property>
+                        <property name="clickable">
+                            <bool>true</bool>
+                        </property>
+                        <property name="resizeable">
+                            <bool>true</bool>
+                        </property>
+                    </column>
+                    <property name="name">
+                        <cstring>m_groupNonWritingUsers</cstring>
+                    </property>
+                    <property name="fullWidth">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="3">
+                    <property name="name">
+                        <cstring>Layout1</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <property name="spacing">
+                            <number>6</number>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>labelWritingGroup</cstring>
+                            </property>
+                            <property name="text">
+                                <string>CD-Writing &amp;group:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>m_comboWritingGroup</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox">
+                            <item>
+                                <property name="text">
+                                    <string>cdrw</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>cdr</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>k3b</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>cdwrite</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>cdrec</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>m_comboWritingGroup</cstring>
+                            </property>
+                            <property name="editable">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+            </grid>
+        </widget>
+    </vbox>
+</widget>
+<connections>
+    <connection>
+        <sender>m_radioSelectUsers</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>groupPermissions</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+</connections>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
