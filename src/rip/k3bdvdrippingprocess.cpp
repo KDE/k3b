@@ -254,7 +254,7 @@ void K3bDvdRippingProcess::preProcessingDvd( ) {
 
 void K3bDvdRippingProcess::slotPreProcessingDvd( KIO::Job *resultJob) {
     if( resultJob->error() > 0 ) {
-            KMessageBox::error(m_parent, i18n("K3b could not mount the DVD-devcie. Ensure that you have the rights to mount the DVD-drive."),
+            KMessageBox::error(m_parent, i18n("K3b could not mount the DVD-device. Ensure that you have the rights to mount the DVD-drive."),
                                i18n("I/O error") );
             kdDebug() << "(K3bDvdRippingProcess) Mount DVD-device failed." << endl;
             m_preProcessingFailed = true;
@@ -274,7 +274,7 @@ void K3bDvdRippingProcess::slotPreProcessingDvd() {
     video_ts.setPath( m_mountPoint + "/video_ts");
     if( !video_ts.exists() && !m_udfMount){
         m_preProcessingFailed = true;
-        KMessageBox::error(m_parent, i18n("K3b could not mount the DVD-devcie. Ensure that you have the rights to mount the DVD-drive and that it supports either iso9660 or udf filesystem."),
+        KMessageBox::error(m_parent, i18n("K3b could not mount the DVD-device. Ensure that you have the rights to mount the DVD-drive and that it supports either iso9660 or udf filesystem."),
                            i18n("I/O error") );
         kdDebug() << "(K3bDvdRippingProcess::slotPreProcessingDvD) Mount DVD-device failed." << endl;
         emit finished( false );
