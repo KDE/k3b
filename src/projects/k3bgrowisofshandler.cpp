@@ -150,7 +150,7 @@ void K3bGrowisofsHandler::handleExit( int exitCode )
 
   case ERROR_SPEED_SET_FAILED:
     emit infoMessage( i18n("Unable to set writing speed."), K3bJob::ERROR );
-    emit infoMessage( i18n("Please try again ignoring the speed setting.."), K3bJob::ERROR );
+    emit infoMessage( i18n("Please try again, ignoring the speed setting."), K3bJob::ERROR );
     break;
 
   default:
