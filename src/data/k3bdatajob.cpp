@@ -282,7 +282,7 @@ bool K3bDataJob::startWriting()
     }
     // just to be sure we did not get canceled during the async discWaiting
     if( m_canceled )
-      return;
+      return false;
   }
 	
   m_writerJob->start();
