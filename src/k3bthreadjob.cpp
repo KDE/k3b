@@ -64,6 +64,8 @@ void K3bThreadJob::start()
 void K3bThreadJob::cancel()
 {
   m_thread->cancel();
+  // wait for the thread to finish
+  m_thread->wait();
 }
 
 
@@ -102,9 +104,7 @@ void K3bThreadJob::customEvent( QCustomEvent* e )
       // emits the finished signal although it has not finished yet
       // but makes a lot stuff easier.
       kdDebug() << "(K3bThreadJob) waiting for the thread to finish." << endl;
-      while( 1 )
-	if( !m_thread->running() )
-	  break;
+      m_thread->wait();
       kdDebug() << "(K3bThreadJob) thread finished." << endl;
       emit finished( be->firstValue() );
       break;
