@@ -175,7 +175,7 @@ void K3bMainWindow::initActions()
 			    actionCollection(), "file_new_data");
   actionFileNewMixed = new KAction(i18n("New &Mixed Mode Project"),"tar", 0, this, SLOT(slotNewMixedDoc()),
 				   actionCollection(), "file_new_mixed");
-  actionFileNewVcd = new KAction(i18n("New &Vcd Project"),"video", 0, this, SLOT(slotNewVcdDoc()),
+  actionFileNewVcd = new KAction(i18n("New &Video Project"),"video", 0, this, SLOT(slotNewVcdDoc()),
 				   actionCollection(), "file_new_vcd");
 
 
@@ -815,7 +815,7 @@ void K3bMainWindow::slotNewMixedDoc()
 
 void K3bMainWindow::slotNewVcdDoc()
 {
-  slotStatusMsg(i18n("Creating new Vcd Project."));
+  slotStatusMsg(i18n("Creating new Video Project."));
 
   K3bVcdDoc* doc = new K3bVcdDoc( this );
   pDocList->append(doc);
