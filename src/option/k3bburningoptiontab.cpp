@@ -121,22 +121,38 @@ void K3bBurningOptionTab::setupGui()
   groupVideoLayout->setMargin( KDialog::marginHint() );
 
   m_checkUsePbc = new QCheckBox( i18n("Use Playback Control (PBC) by default"), groupVideo );
+  m_labelPlayTime = new QLabel( i18n("Play each Sequence/Segment by default"), groupVideo );
+  m_spinPlayTime = new QSpinBox( groupVideo, "m_spinPlayTime" );
+  m_spinPlayTime->setValue( 1 );
+  m_spinPlayTime->setSuffix( i18n( " time(s)" ) );
+  m_spinPlayTime->setSpecialValueText( i18n( "forever" ) );  
+
   m_labelWaitTime = new QLabel( i18n("Time to wait after each Sequence/Segment by default"), groupVideo );
   m_spinWaitTime = new QSpinBox( groupVideo, "m_spinWaitTime" );
+  m_spinWaitTime->setMinValue( -1 );
   m_spinWaitTime->setValue( 2 );
   m_spinWaitTime->setSuffix( i18n( " second(s)" ) );
-  m_checkUseNumKey = new QCheckBox( i18n("Use numeric keys by default"), groupVideo );
+  m_spinWaitTime->setSpecialValueText( i18n( "infinite" ) );  
 
+  /* not implemented yet ********************************/
+  m_checkUseNumKey = new QCheckBox( i18n("Use numeric keys by default"), groupVideo );
+  m_checkUseNumKey->setHidden( true );
+  /*************************************************/
+  
   m_labelWaitTime->setDisabled( true );
   m_spinWaitTime->setDisabled( true );
   m_checkUseNumKey->setDisabled( true );
 
   groupVideoLayout->addMultiCellWidget( m_checkUsePbc, 0, 0, 0, 1 );
   groupVideoLayout->addMultiCellWidget( m_checkUseNumKey, 1, 1, 0, 1 );
-  groupVideoLayout->addWidget( m_labelWaitTime, 2, 0 );
-  groupVideoLayout->addWidget( m_spinWaitTime, 2, 1 );
+  groupVideoLayout->addWidget( m_labelPlayTime, 2, 0 );
+  groupVideoLayout->addWidget( m_spinPlayTime, 2, 1 );
+  groupVideoLayout->addWidget( m_labelWaitTime, 3, 0 );
+  groupVideoLayout->addWidget( m_spinWaitTime, 3, 1 );
 
 
+  connect( m_checkUsePbc, SIGNAL(toggled(bool)), m_labelPlayTime, SLOT(setEnabled(bool)) );
+  connect( m_checkUsePbc, SIGNAL(toggled(bool)), m_spinPlayTime, SLOT(setEnabled(bool)) );
   connect( m_checkUsePbc, SIGNAL(toggled(bool)), m_labelWaitTime, SLOT(setEnabled(bool)) );
   connect( m_checkUsePbc, SIGNAL(toggled(bool)), m_spinWaitTime, SLOT(setEnabled(bool)) );
   connect( m_checkUsePbc, SIGNAL(toggled(bool)), m_checkUseNumKey, SLOT(setEnabled(bool)) );
@@ -247,7 +263,8 @@ void K3bBurningOptionTab::setupGui()
   QToolTip::add( m_checkUsePbc, i18n("Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 disc formats.") );
   QToolTip::add( m_checkUseNumKey, i18n("Use numeric keys to navigate chapters by default (In addition to 'Previous' and 'Next')") );
   QToolTip::add( m_labelWaitTime, i18n("Time to wait after each Sequence/Segment by default.") );
-
+  QToolTip::add( m_labelPlayTime, i18n("Play each Sequence/Segment by default.") );
+  
   QWhatsThis::add( m_checkUseID3Tag, i18n("<p>If this option is checked K3b will rename audio files "
 					  "that contain meta information (for example id3 tags in mp3 "
 					  "files) to the following format:"
@@ -282,9 +299,10 @@ void K3bBurningOptionTab::readSettings()
 
   c->setGroup( "Video project settings" );
   m_checkUsePbc->setChecked( c->readBoolEntry("Use Playback Control", false) );
-  m_checkUseNumKey->setChecked( c->readBoolEntry("Use numeric keys to navigate chapters", false) );
   m_spinWaitTime->setValue( c->readNumEntry( "Time to wait after each Sequence/Segment", 2 ) );
-
+  m_spinPlayTime->setValue( c->readNumEntry( "Play each Sequence/Segment", 1 ) );
+  m_checkUseNumKey->setChecked( c->readBoolEntry("Use numeric keys to navigate chapters", false) );
+  
   c->setGroup( "Data project settings" );
   m_checkUseID3Tag->setChecked( c->readBoolEntry("Use ID3 Tag for mp3 renaming", false) );
   m_checkDropDoubles->setChecked( c->readBoolEntry("Drop doubles", false) );
@@ -333,8 +351,9 @@ void K3bBurningOptionTab::saveSettings()
   c->setGroup( "Video project settings" );
   c->writeEntry( "Use Playback Control", m_checkUsePbc->isChecked() );
   c->writeEntry( "Time to wait after each Sequence/Segment", m_spinWaitTime->value() );
+  c->writeEntry( "Play each Sequence/Segment", m_spinPlayTime->value() );
   c->writeEntry( "Use numeric keys to navigate chapters", m_checkUseNumKey->isChecked() );
-
+  
   c->setGroup( "Data project settings" );
   c->writeEntry( "Use ID3 Tag for mp3 renaming", m_checkUseID3Tag->isChecked() );
   c->writeEntry( "Drop doubles", m_checkDropDoubles->isChecked() );

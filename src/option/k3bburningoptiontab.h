@@ -71,6 +71,8 @@ Q_OBJECT
   QCheckBox*    m_checkAllowWritingAppSelection;
 
   QCheckBox* m_checkUsePbc;
+  QLabel* m_labelPlayTime;
+  QSpinBox* m_spinPlayTime;
   QLabel* m_labelWaitTime;
   QSpinBox* m_spinWaitTime;
   QCheckBox* m_checkUseNumKey;
