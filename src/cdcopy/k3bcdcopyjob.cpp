@@ -214,22 +214,24 @@ void K3bCdCopyJob::cdrdaoFinished(bool ok) {
     m_finishedCopies++;
     if ( m_onlyCreateImage ) {
       emit infoMessage(
-		       i18n("Image '%1' and toc-file '%2' succsessfully created").arg(m_tempPath).arg(m_tocFile),
-		       K3bJob::INFO );
+        i18n("Image '%1' and toc-file '%2' succsessfully created").arg(m_tempPath).arg(m_tocFile),
+        K3bJob::INFO );
       finishAll();
     } else if ( m_finishedCopies > m_copies || m_onTheFly && m_finishedCopies == m_copies ) {
       emit infoMessage(
-		       i18n("%1 copies succsessfully created").arg(m_copies),K3bJob::INFO );
+        i18n("%1 copies succsessfully created").arg(m_copies),K3bJob::INFO );
       finishAll(); 
-    } else {
-      if( m_cdrdaowriter->burnDevice() == m_cdrdaowriter->sourceDevice() )
-	m_cdrdaowriter->sourceDevice()->eject();
-      else if ( !m_onTheFly ) 
-	cdrdaoWrite();
-      else
-	cdrdaoDirectCopy();
     }
-  } else
+    else {
+      if( m_cdrdaowriter->burnDevice() == m_cdrdaowriter->sourceDevice() )
+        m_cdrdaowriter->sourceDevice()->eject();
+      if ( !m_onTheFly )
+        cdrdaoWrite();
+      else
+        cdrdaoDirectCopy();
+    }
+  }
+  else
     cancelAll();
 }
 
