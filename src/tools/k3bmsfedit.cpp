@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -37,6 +37,18 @@ K3bMsfEdit::~K3bMsfEdit()
 QString K3bMsfEdit::mapValueToText( int value )
 {
   return K3b::framesToString( value, true );
+}
+
+
+K3b::Msf K3bMsfEdit::msfValue() const
+{
+  return K3b::Msf(value());
+}
+
+
+void K3bMsfEdit::setMsfValue( const K3b::Msf& msf )
+{
+  setValue( msf.totalFrames() );
 }
 
 

@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -21,6 +21,7 @@
 #include <qspinbox.h>
 #include <qstring.h>
 
+#include <device/k3bmsf.h>
 
 class K3bMsfEdit : public QSpinBox
 {
@@ -33,8 +34,11 @@ class K3bMsfEdit : public QSpinBox
   void setFrameStyle( int style );
   void setLineWidth(int);
 
+  K3b::Msf msfValue() const;
+
  public slots:
   void setText( const QString& );
+ void setMsfValue( const K3b::Msf& );
 
  protected:
   QString mapValueToText( int );
