@@ -17,7 +17,7 @@ install_location=
 type=DATA
 
 [Config for BinMakefileAm]
-addcxxflags=
+addcxxflags=-DQT_THREAD_SUPPORT
 bin_program=k3b
 cxxflags=\s-O1 -g3 -Wall
 ldadd=-lid3 -lcdda_interface -lcdda_paranoia $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT)
@@ -26,7 +26,7 @@ ldflags=
 [General]
 AMChanged=false
 author=Sebastian Trueg
-configure_args=
+configure_args=--enable-mt
 email=trueg@informatik.uni-freiburg.de
 kdevprj_version=1.3
 lfv_open_groups=GNU
@@ -114,7 +114,7 @@ sub_dirs=data,cdinfo,audio,device,kiotree,option
 type=prog_main
 
 [src/audio/Makefile.am]
-files=src/audio/audiolistview.cpp,src/audio/audiolistview.h,src/audio/audiolistviewitem.cpp,src/audio/audiolistviewitem.h,src/audio/k3baudiodoc.cpp,src/audio/k3baudiodoc.h,src/audio/k3baudiotrack.cpp,src/audio/k3baudiotrack.h,src/audio/k3baudioview.cpp,src/audio/k3baudioview.h,src/audio/k3baudioburndialog.cpp,src/audio/k3baudioburndialog.h,src/audio/k3baudiotrackdialog.cpp,src/audio/k3baudiotrackdialog.h,src/audio/k3baudiojob.cpp,src/audio/k3baudiojob.h,src/audio/k3bcddb.cpp,src/audio/k3bcddb.h,src/audio/cddb.cpp,src/audio/cddb.h,src/audio/k3bcdview.cpp,src/audio/k3bcdview.h,src/audio/k3bcdda.cpp,src/audio/k3bcdda.h,src/audio/k3baudioontheflyjob.cpp,src/audio/k3baudioontheflyjob.h
+files=src/audio/audiolistview.cpp,src/audio/audiolistview.h,src/audio/audiolistviewitem.cpp,src/audio/audiolistviewitem.h,src/audio/k3baudiodoc.cpp,src/audio/k3baudiodoc.h,src/audio/k3baudiotrack.cpp,src/audio/k3baudiotrack.h,src/audio/k3baudioview.cpp,src/audio/k3baudioview.h,src/audio/k3baudioburndialog.cpp,src/audio/k3baudioburndialog.h,src/audio/k3baudiotrackdialog.cpp,src/audio/k3baudiotrackdialog.h,src/audio/k3baudiojob.cpp,src/audio/k3baudiojob.h,src/audio/k3bcddb.cpp,src/audio/k3bcddb.h,src/audio/cddb.cpp,src/audio/cddb.h,src/audio/k3bcdview.cpp,src/audio/k3bcdview.h,src/audio/k3bcdda.cpp,src/audio/k3bcdda.h,src/audio/k3bcddacopy.cpp,src/audio/k3bcddacopy.h,src/audio/k3baudioontheflyjob.cpp,src/audio/k3baudioontheflyjob.h
 sub_dirs=input
 type=static_library
 
@@ -304,6 +304,18 @@ install_location=
 type=SOURCE
 
 [src/audio/k3bcdda.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/audio/k3bcddacopy.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/audio/k3bcddacopy.h]
 dist=true
 install=false
 install_location=
@@ -1001,7 +1013,7 @@ type=DATA
 
 [src/option/Makefile.am]
 files=src/option/k3boptioncddb.cpp,src/option/k3boptioncddb.h
-sharedlib_LDFLAGS=-version-info 0:0:1
+sharedlib_LDFLAGS=-version-info 0:5:0
 sharedlib_rootname=option
 sub_dirs=
 type=static_library

@@ -704,6 +704,6 @@ void K3bOptionDialog::setupCddbPage()
 {
   QFrame* frame = addPage( i18n("CDDB"), i18n("Setup the cddb server"),
 			   KGlobal::instance()->iconLoader()->loadIcon( "gear", KIcon::NoGroup, KIcon::SizeMedium ) );
-  m_cddbPage = new K3bOptionCddb(frame, "cddbpage");
+  m_cddbPage = new K3bOptionCddb(this, frame, "cddbpage");
 }
 
