@@ -1,3 +1,8 @@
+0.11.1
+fixed an issue introduced with KDE 3.2rc1 which caused on-the-fly data writing to fail all the time.
+  (If you need to know: For some reason KProcess makes the Stdin fd O_NONBLOCK. This way mkisofs is
+   not  able to write properly to cdrecord's stdin anymore.)
+
 0.11
 fixed libcdparanoia-loading on Debian (and maybe some other systems)
 fixed crash at end of image creation in DVD project
