@@ -27,7 +27,7 @@
 #include <klocale.h>
 
 #include <qfile.h>
-
+#include <qfileinfo.h>
 
 
 class K3bCloneJob::Private
@@ -106,6 +106,9 @@ void K3bCloneJob::start()
 
   if( m_imagePath.isEmpty() ) {
     m_imagePath = K3b::findTempFile( "img" );
+  }
+  else if( QFileInfo(m_imagePath).isDir() ) {
+    m_imagePath = K3b::findTempFile( "img", m_imagePath );
   }
 
   if( m_onlyBurnExistingImage ) {
