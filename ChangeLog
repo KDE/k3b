@@ -9,6 +9,7 @@ added read retries and "ignore read error" options to the dvd copy dialog
 fixed handling of empty raw toc data
 fixed the bug that made K3b try to use cdrdao for DVD iso image writing.
 add files to a project by dropping them on the corresponding tab
+removed the "query cddb" option from the copy dialog since this is configured globally anyway.
 	
 0.11.1
 fixed an issue introduced with KDE 3.2rc1 which caused on-the-fly data writing to fail all the time.

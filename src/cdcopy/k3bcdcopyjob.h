@@ -60,7 +60,6 @@ class K3bCdCopyJob : public K3bBurnJob
   void setParanoiaMode( int i ) { m_paranoiaMode = i; }
   void setIgnoreReadErrors( bool b ) { m_ignoreReadErrors = b; }
   void setReadRetries( int i ) { m_readRetries = i; }
-  void setQueryCddb( bool b ) { m_queryCddb =b; }
   void setPreferCdText( bool b ) { m_preferCdText = b; }
   void setBurnfree( bool b ) { m_burnfree = b; }
 
@@ -98,7 +97,6 @@ class K3bCdCopyJob : public K3bBurnJob
   bool m_onTheFly;
   bool m_ignoreReadErrors;
   int m_readRetries;
-  bool m_queryCddb;
   bool m_preferCdText;
   QString m_tempPath;
   int m_writingMode;

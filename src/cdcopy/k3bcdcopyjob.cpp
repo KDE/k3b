@@ -125,7 +125,6 @@ K3bCdCopyJob::K3bCdCopyJob( QObject* parent )
     m_onTheFly(true),
     m_ignoreReadErrors(false),
     m_readRetries(128),
-    m_queryCddb(false),
     m_preferCdText(false),
     m_writingMode( K3b::WRITING_MODE_AUTO )
 {
@@ -359,10 +358,7 @@ void K3bCdCopyJob::slotCdTextReady( K3bCdDevice::DeviceHandler* dh )
 
     d->haveCdText = false;
 
-    if( m_queryCddb )
-      queryCddb();
-    else
-      startCopy();
+    queryCddb();
   }
 }
 
