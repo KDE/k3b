@@ -331,13 +331,9 @@ K3bSetupWizard::K3bSetupWizard( QWidget* parent,  const char* name, bool modal, 
 					  " want other versions to be used or K3b Setup did not find your installation." ) );
   m_labelExternalPrograms->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
 
-  pageLayout_5->addWidget( m_labelExternalPrograms, 0, 1 );
-
   QLabel* pixmapLabel5 = new QLabel( m_page5, "pixmapLabel5" );
   pixmapLabel5->setPixmap( image0 );
   pixmapLabel5->setScaledContents( TRUE );
-
-  pageLayout_5->addMultiCellWidget( pixmapLabel5, 0, 1, 0, 0 );
 
   m_viewExternalPrograms = new KListView( m_page5, "m_viewExternalPrograms" );
   m_viewExternalPrograms->addColumn( i18n( "found" ) );
@@ -349,8 +345,15 @@ K3bSetupWizard::K3bSetupWizard( QWidget* parent,  const char* name, bool modal, 
   m_viewExternalPrograms->setRenameable( 0, false );
   m_viewExternalPrograms->setRenameable( 3, true );
 
+  m_buttonSelectExternalBin = new QPushButton( i18n("Find program"), m_page5 );
 
-  pageLayout_5->addWidget( m_viewExternalPrograms, 1, 1 );
+  pageLayout_5->addMultiCellWidget( pixmapLabel5, 0, 2, 0, 0 );
+  pageLayout_5->addMultiCellWidget( m_labelExternalPrograms, 0, 0, 1, 2 );
+  pageLayout_5->addMultiCellWidget( m_viewExternalPrograms, 1, 1, 1, 2 );
+  pageLayout_5->addWidget( m_buttonSelectExternalBin, 2, 2 );
+
+  pageLayout_5->setColStretch( 1, 1 );
+
   addPage( m_page5, i18n( "Setup external programs" ) );
   // -----------------------------------------------------------------------------------------------------------
 
@@ -481,6 +484,7 @@ K3bSetupWizard::K3bSetupWizard( QWidget* parent,  const char* name, bool modal, 
   connect( m_buttonAddUser, SIGNAL(clicked()), this, SLOT(slotAddUser()) );
   connect( m_buttonRemoveUser, SIGNAL(clicked()), this, SLOT(slotRemoveUser()) );
   connect( m_buttonSelectMountPoint, SIGNAL(clicked()), this, SLOT(slotSelectMountPoint()) );
+  connect( m_buttonSelectExternalBin, SIGNAL(clicked()), this, SLOT(slotSelectExternalBin()) );
 
   connect( m_viewSetupWriter, SIGNAL(itemRenamed(QListViewItem*, const QString&, int)), 
 	   this, SLOT(slotDeviceItemRenamed(QListViewItem*, const QString&, int)) );
@@ -820,8 +824,25 @@ void K3bSetupWizard::slotExternalProgramItemRenamed( QListViewItem* item, const 
     updateExternalPrograms();
   }
   else {
-    qDebug( "(K3bSetupWizard) Could not fins bin " + bin );
+    qDebug( "(K3bSetupWizard) Could not find bin " + bin );
   }
+}
+
+
+void K3bSetupWizard::slotSelectExternalBin()
+{
+  QListViewItem* item = m_viewExternalPrograms->selectedItem();
+
+  if( item == 0 )
+    return;
+
+  QString newPath;
+  bool ok = true;
+  newPath = KFileDialog::getOpenFileName( QString::null, QString::null, this, 
+					  i18n("Please select %1 executable").arg(item->text(1)) );
+
+  if(ok)
+    slotExternalProgramItemRenamed( item, newPath, 2 );
 }
 
 

@@ -322,8 +322,7 @@ void K3bBurnProgressDialog::displayInfo( const QString& infoString, int type )
     item->setPixmap( 0, SmallIcon( "ok" ) );
   }
 
-  // scroll down (does not work :-(
-  m_viewInfo->verticalScrollBar()->setValue( m_viewInfo->verticalScrollBar()->maxValue() );
+  m_viewInfo->ensureVisible( 0, m_viewInfo->itemPos(item) + item->height() );
 }
 
 

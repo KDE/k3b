@@ -54,6 +54,7 @@ class K3bSetupWizard : public KWizard
   void slotDeviceItemRenamed( QListViewItem*, const QString&, int );
   void slotExternalProgramItemRenamed( QListViewItem*, const QString&, int );
   void slotSelectMountPoint();
+  void slotSelectExternalBin();
 
  private:
   void updateDevices();
@@ -90,7 +91,8 @@ class K3bSetupWizard : public KWizard
   QWidget* m_page5;
   QLabel* m_labelExternalPrograms;
   KListView* m_viewExternalPrograms;
-  
+  QPushButton* m_buttonSelectExternalBin;
+
   QWidget* m_page6;
   QLabel* m_labelPermissions1;
   QGroupBox* m_groupUsers;

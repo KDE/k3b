@@ -141,8 +141,8 @@ class K3bDoc : public QObject
   void setBurnproof( bool b ) { m_burnproof = b; }
   void setTempDir( const QString& dir ) { m_tempDir = dir; }
 
-  virtual void addUrl( const QString& url ) = 0;
-  virtual void addUrls( const QStringList& urls ) = 0;
+  virtual void addUrl( const KURL& url ) = 0;
+  virtual void addUrls( const KURL::List& urls ) = 0;
 	
  signals:
   void errorMessage( const QString& );

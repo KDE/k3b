@@ -76,12 +76,18 @@ void K3bMiscOptionTab::readSettings()
 }
 
 
-void K3bMiscOptionTab::saveSettings()
+bool K3bMiscOptionTab::saveSettings()
 {
   KConfig* c = k3bMain()->config();
   c->setGroup( "General Options" );
   c->writeEntry( "Show splash", m_checkShowSplash->isChecked() );
+
+  // TODO: check if the temp dir exists and create it if not
+  //       check if the temp dir is absolute
+  //       check if it is a valid directoryname
   c->writeEntry( "Temp Dir", m_editTempDir->text() );
+
+  return true;
 }
 
 

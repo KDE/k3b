@@ -44,6 +44,8 @@
 #include <kurl.h>
 #include <ktoolbar.h>
 #include <kstatusbar.h>
+#include <kglobalsettings.h>
+#include <kdialog.h>
 
 #include <stdlib.h>
 
@@ -218,21 +220,21 @@ void K3bMainWindow::initView()
   // --- Document Dock ----------------------------------------------------------------------------
   // create styled document box
   QFrame* documentBox = new QFrame( mainDock );
-  documentBox->setFrameStyle( QFrame::Sunken | QFrame::StyledPanel );
+  documentBox->setFrameStyle( QFrame::NoFrame | QFrame::Plain );
   QVBoxLayout* documentLayout = new QVBoxLayout( documentBox );
   documentLayout->setAutoAdd( true );
-  documentLayout->setMargin( 6 );
-  documentLayout->setSpacing( 6 );
+  documentLayout->setMargin( KDialog::marginHint() );
+  documentLayout->setSpacing( KDialog::spacingHint() );
 
   QLabel* projectHeader = new QLabel( documentBox );
   projectHeader->setText( i18n("Current Projects") );
-  projectHeader->setAlignment( AlignHCenter | AlignVCenter );
-  QFont f(projectHeader->font());
-  f.setBold(true);
-  projectHeader->setFont( f );
+  //  projectHeader->setAlignment( AlignHCenter | AlignVCenter );
+  projectHeader->setFont( KGlobalSettings::windowTitleFont() );
+  projectHeader->setMargin( 2 );
 
   QPalette p( documentBox->palette() );
-  p.setColor( QColorGroup::Background, QColor(Qt::white) );
+  p.setColor( QColorGroup::Background, KGlobalSettings::activeTitleColor() );
+  p.setColor( QColorGroup::Foreground, KGlobalSettings::activeTextColor() );
   projectHeader->setPalette( p );
 
   // add the document tab to the styled document box

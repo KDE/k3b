@@ -34,6 +34,7 @@
 #include <ktoolbar.h>
 #include <ktoolbarbutton.h>
 #include <kurl.h>
+#include <kurldrag.h>
 #include <kfilefilter.h>
 #include <klocale.h>
 #include <kfileviewitem.h>
@@ -55,12 +56,12 @@ QDragObject* K3bFileView::PrivateFileView::dragObject() const
 	
   const KFileViewItemList* list = KFileView::selectedItems();
   QListIterator<KFileViewItem> it(*list);
-  QStrList dragstr;
+  KURL::List urls;
 	
   for( ; it.current(); ++it )
-    dragstr.append( it.current()->url().path(-1) );
+    urls.append( it.current()->url() );
 		
-  return new QUriDrag( dragstr, viewport() );
+  return KURLDrag::newDrag( urls, viewport() );
 }
 
 

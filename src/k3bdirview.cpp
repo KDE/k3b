@@ -54,6 +54,7 @@
 #include <kprocess.h>
 #include <kio/job.h>
 #include <kcombobox.h>
+#include <kdialog.h>
 
 #include "kiotree/kiotree.h"
 #include "kiotree/kiotreemodule.h"
@@ -73,7 +74,10 @@
 K3bDirView::K3bDirView(QWidget *parent, const char *name )
   : QVBox(parent, name)
 {
+  setMargin( KDialog::marginHint() );
+
   KToolBar* toolBar = new KToolBar( k3bMain(), this, "dirviewtoolbar" );
+
   m_mainSplitter    = new QSplitter( this );
   QVBox* box  = new QVBox( m_mainSplitter );
   QVBox* box2 = new QVBox( m_mainSplitter );
@@ -94,11 +98,11 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
   m_filmView->hide();
   m_initialized = false;
 
-  // split in the middle
+  // split
   QValueList<int> sizes = m_mainSplitter->sizes();
   int all = sizes[0] + sizes[1];
-  sizes[0] = all/2 + (all%2);
-  sizes[1] = all/2;
+  sizes[1] = all*2/3;
+  sizes[0] = all - sizes[1];
   m_mainSplitter->setSizes( sizes );
 
 

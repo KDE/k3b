@@ -288,12 +288,12 @@ void K3bProjectBurnDialog::slotTempDirButtonPressed()
 {
   QString dir = KFileDialog::getExistingDirectory( m_editDirectory->text(), k3bMain(), i18n("Select Temp Directory") );
   if( !dir.isEmpty() ) {
-    setTempDir( dir );
+    setTempPath( dir );
   }
 }
 
 
-void K3bProjectBurnDialog::setTempDir( const QString& dir )
+void K3bProjectBurnDialog::setTempPath( const QString& dir )
 {
   m_editDirectory->setText( dir );
 }
@@ -303,27 +303,6 @@ QString K3bProjectBurnDialog::tempPath() const
 {
   if( m_groupTempDir ) {
     return m_editDirectory->text();
-  }
-  else
-    return "";
-}
-
-
-QString K3bProjectBurnDialog::tempDir() const
-{
-  if( m_groupTempDir ) {
-    QString dir( m_editDirectory->text() );
-
-    QFileInfo info(dir);
-    if( info.exists() && info.isDir() ) {
-      if( dir.at(dir.length()-1) != '/' )
-	dir.append("/");
-      return dir;
-    }
-    else {
-      dir.truncate( dir.findRev('/')+1 );
-      return dir;
-    }
   }
   else
     return "";

@@ -19,6 +19,7 @@
 
 #include "../device/k3bdevicemanager.h"
 #include "../device/k3bdevice.h"
+#include "../tools/k3bexternalbinmanager.h"
 
 #include <kconfig.h>
 
@@ -190,10 +191,25 @@ void K3bSetup::applyExternalProgramPermissions( K3bExternalBinManager* manager )
 {
   uint groupId = createCdWritingGroup();
 
-  // change permission, owner, and group for:
-  // cdrecord, mkisofs, cdrdao
+  static const char* programs[] = { "cdrecord",
+				    "mkisofs",
+				    "cdrdao" };
+  static const int NUM_PROGRAMS = 3;
 
-
+  for( int i = 0; i < NUM_PROGRAMS; ++i ) {
+    K3bExternalBin* binObject = manager->binObject( programs[i] );
+    if( QFile::exists(binObject->path) ) {
+      if( !binObject->version.isEmpty() ) {
+	qDebug("(K3bSetup) setting permissions for %s.", programs[i] );
+	chown( QFile::encodeName(binObject->path), 0, groupId );
+	chmod( QFile::encodeName(binObject->path), S_ISUID|S_IRUSR|S_IWUSR|S_IXUSR|S_IXGRP );
+      }
+      else
+	qDebug("(K3bSetup) %s is no not %s.", binObject->path.latin1(), programs[i] );
+    }
+    else
+      qDebug("(K3bSetup) could not find %s.", programs[i] );
+  }
 }
 
 

@@ -36,7 +36,7 @@ class K3bMiscOptionTab : public QWidget
   ~K3bMiscOptionTab();
 
   void readSettings();
-  void saveSettings();
+  bool saveSettings();
 
  private slots:
   void slotGetTempDir();

@@ -36,6 +36,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kurl.h>
+#include <kurldrag.h>
 #include <kaction.h>
 
 #include <string.h>
@@ -129,7 +130,7 @@ K3bPlayListView::~K3bPlayListView()
 bool K3bPlayListView::acceptDrag( QDropEvent* e ) const
 {
   // we accept textdrag (urls) and moved items (supported by KListView)
-  return QTextDrag::canDecode(e) || KListView::acceptDrag(e);
+  return QUriDrag::canDecode(e) || KListView::acceptDrag(e);
 }
 
 
@@ -173,7 +174,7 @@ K3bAudioPlayer::K3bAudioPlayer( QWidget* parent, const char* name )
   // ------------------------------------------------------------------------
   QGridLayout* grid = new QGridLayout( this );
   grid->setSpacing( 2 );
-  grid->setMargin( 2 );
+  grid->setMargin( 5 );
 
   grid->addWidget( m_buttonPlay, 1, 0 );
   grid->addWidget( m_buttonPause, 1, 1 );
@@ -576,13 +577,12 @@ void K3bAudioPlayer::slotDropped( QDropEvent* e, QListViewItem* after )
   if( !after )
     after = m_viewPlayList->lastChild();
 
-  QString droppedText;
-  QTextDrag::decode( e, droppedText );
-  QStringList urls = QStringList::split("\r\n", droppedText );
+  KURL::List urls;
+  KURLDrag::decode( e, urls );
 
-  for( QStringList::ConstIterator it = urls.begin(); it != urls.end(); ++it ) {
-    if( QFile::exists( KURL(*it).path() ) ) {
-      QListViewItem* newItem = new K3bPlayListViewItem( KURL(*it).path(), m_viewPlayList, after );
+  for( KURL::List::ConstIterator it = urls.begin(); it != urls.end(); ++it ) {
+    if( QFile::exists( (*it).path() ) ) {
+      QListViewItem* newItem = new K3bPlayListViewItem( (*it).path(), m_viewPlayList, after );
       after = newItem;
     }
   }

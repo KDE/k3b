@@ -48,6 +48,8 @@ class K3bOptionDialog : public KDialogBase
   void slotDefault();
 	
  private:
+  bool saveSettings();
+
   // programs tab
   K3bExternalBinOptionTab* m_externalBinOptionTab;
   void setupProgramsPage();

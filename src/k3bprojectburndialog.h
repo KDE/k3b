@@ -51,7 +51,6 @@ class K3bProjectBurnDialog : public KDialogBase
 
    K3bDoc* doc() const { return m_doc; }
 
-   QString tempDir() const;
    QString tempPath() const;
 	
  protected slots:
@@ -59,7 +58,7 @@ class K3bProjectBurnDialog : public KDialogBase
    virtual void slotUser2();
    virtual void slotCancel();
    virtual void slotTempDirButtonPressed();
-   void setTempDir( const QString& );
+   void setTempPath( const QString& );
 
  private slots:
    void slotUpdateFreeTempSpace();

@@ -69,12 +69,17 @@ K3bOptionDialog::~K3bOptionDialog()
 
 void K3bOptionDialog::slotOk()
 {
-  slotApply();
-	
-  accept();
+  if( saveSettings() )
+    accept();
 }
 
 void K3bOptionDialog::slotApply()
+{
+  saveSettings();
+}
+
+
+bool K3bOptionDialog::saveSettings()
 {
   // save all the shit!
   m_cddbOptionTab->apply();
@@ -83,9 +88,13 @@ void K3bOptionDialog::slotApply()
   m_burningOptionTab->saveSettings();
   m_rippingPatternOptionTab->apply();
   m_externalBinOptionTab->saveSettings();
-  m_miscOptionTab->saveSettings();
+
+  if( !m_miscOptionTab->saveSettings() )
+    return false;
 
   kapp->config()->sync();
+
+  return true;
 }
 
 
