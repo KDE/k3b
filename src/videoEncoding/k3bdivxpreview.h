@@ -39,13 +39,14 @@ public:
     K3bDivxPreview(QCanvas* c, QWidget *parent=0, const char *name=0);
     ~K3bDivxPreview();
     void setPreviewPicture( const QString& image );
-    void updatePreviewPicture( const QString &image );
+    //void updatePreviewPicture( const QString &image );
     void setCroppingLines();
     void setTopLine( int offset );
     void setLeftLine( int offset );
     void setBottomLine( int offset );
     void setRightLine( int offset );
     void resetView();
+    void updateLines();
 
 protected:
    void drawContents( QPainter* p );
@@ -70,7 +71,6 @@ private:
 
     bool m_initialized;
 
-    void updateLines();
     void updateLineOffsets(bool upScale);
 };
 

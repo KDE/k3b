@@ -51,8 +51,10 @@ K3bDivxPreview::~K3bDivxPreview(){
 }
 
 void K3bDivxPreview::drawContents( QPainter* p ){
+    kdDebug(  ) << "(K3bDivxPreview::drawContents)" << endl;
     if( !m_initialized )
          return;
+    kdDebug( ) << "(K3bDivxPreview::drawContents) Resize image" << endl;
     can->resize( width(), height() );
     bool imageChange=false;
     if( visibleWidth() > 540 && visibleHeight() > 432 ){
@@ -69,7 +71,7 @@ void K3bDivxPreview::drawContents( QPainter* p ){
         m_imageScale = 2.0;
     }
     if( imageChange ){
-        updatePreviewPicture( m_imageSource );
+        setPreviewPicture( m_imageSource );
         updateLines();
     }
     m_sprite->move( (double) (visibleWidth()/2 - 360/m_imageScale), (double)(visibleHeight()/2 -288/m_imageScale ));
@@ -79,6 +81,7 @@ void K3bDivxPreview::drawContents( QPainter* p ){
 }
 
 void K3bDivxPreview::updateLines(){
+     kdDebug(  ) << "(K3bDivxPreview::updateLines)" << endl;
      m_lineTop->setPoints( 1, 1, width(), 1 );
      m_lineBottom->setPoints( 1, 1, width(), 1 );
      m_lineLeft->setPoints( 1, 1, 1, height() );
@@ -87,6 +90,7 @@ void K3bDivxPreview::updateLines(){
      m_lineLeft->setX( m_sprite->leftEdge() + m_offsetLeft );
      m_lineBottom->setY( m_sprite->bottomEdge() - m_offsetBottom );
      m_lineRight->setX( m_sprite->rightEdge() - m_offsetRight );
+     repaintContents( 0,0, visibleWidth(), visibleHeight() );
 }
 void K3bDivxPreview::updateLineOffsets(bool upScale){
     float scale;
@@ -101,10 +105,13 @@ void K3bDivxPreview::updateLineOffsets(bool upScale){
     m_offsetRight = m_offsetRight * scale;
 }
 void K3bDivxPreview::setPreviewPicture( const QString &image ){
+    kdDebug(  ) << "(K3bDivxPreview::setPreviewPicture)" << endl;
     m_imageSource = image;
     if( m_initialized ){
         delete m_sprite;
     }
+    QValueList<QCanvasItem*> cl = can->allItems();
+    kdDebug() << "(K3bDivxPreview) CanvasItems: " << QString::number( cl.count() ) << endl;
     QImage i( image );
     QImage preview = i.scale( 720/m_imageScale, 576/m_imageScale );
     m_previewPixmap = new QCanvasPixmap( preview );
@@ -116,23 +123,26 @@ void K3bDivxPreview::setPreviewPicture( const QString &image ){
     m_sprite->show();
     if( !m_initialized ) {
         setCroppingLines();
-    } else {
-        updateLines();
     }
-    repaintContents( 0,0, visibleWidth(), visibleHeight() );
+    
+    //repaintContents( 0,0, visibleWidth(), visibleHeight() );
+    updateLines();
     m_initialized = true;
 }
 
 void K3bDivxPreview::resetView(){
+    kdDebug() << "(K3bDivxPreview::resetView)" << endl;
     if( m_initialized ){
+        kdDebug() << "(K3bDivxPreview::resetView) Set lines to zero." << endl;
         setTopLine(0);
         setLeftLine(0);
         setBottomLine(0);
         setRightLine(0);
     }
 }
-
+/*
 void K3bDivxPreview::updatePreviewPicture( const QString &image ){
+    kdDebug() << "(K3bDivxPreview::updatePreviewPicture)" << endl;
     delete m_sprite;
     QValueList<QCanvasItem*> cl = can->allItems();
     kdDebug() << "(K3bDivxPreview) CanvasItems: " << QString::number( cl.count() ) << endl;
@@ -148,30 +158,32 @@ void K3bDivxPreview::updatePreviewPicture( const QString &image ){
     repaintContents( 0,0, visibleWidth(), visibleHeight() );
     updateLines();
 }
+*/
 void K3bDivxPreview::setCroppingLines(){
+     kdDebug() << "(K3bDivxPreview::setCroppingLines)" << endl;
      QPen pen( Qt::red, 1 );
      m_lineTop = new QCanvasLine( can );
      m_lineTop->setPoints( 1, 1, width(), 1 );
      m_lineTop->setPen( pen );
      m_lineTop->setX( 1 );
-     m_lineTop->setY( m_sprite->topEdge() );
      m_lineTop->setZ( 2 );
+     setTopLine(0); //m_lineTop->setY( m_sprite->topEdge() );
      m_lineLeft = new QCanvasLine( can );
      m_lineLeft->setPoints( 1, 1, 1, height() );
      m_lineLeft->setPen( pen );
-     m_lineLeft->setX( m_sprite->leftEdge() );
+     setLeftLine(0); //m_lineLeft->setX( m_sprite->leftEdge() );
      m_lineLeft->setY( 1 );
      m_lineLeft->setZ( 2 );
      m_lineBottom = new QCanvasLine( can );
      m_lineBottom->setPoints( 1, 1, width(), 1 );
      m_lineBottom->setPen( pen );
      m_lineBottom->setX( 1 );
-     m_lineBottom->setY( m_sprite->bottomEdge() );
+     setBottomLine(0); //m_lineBottom->setY( m_sprite->bottomEdge() );
      m_lineBottom->setZ( 2 );
      m_lineRight = new QCanvasLine( can );
      m_lineRight->setPoints( 1, 1, 1, height() );
      m_lineRight->setPen( pen );
-     m_lineRight->setX( m_sprite->rightEdge() );
+     setRightLine(0); //m_lineRight->setX( m_sprite->rightEdge() );
      m_lineRight->setY( 1 );
      m_lineRight->setZ( 2 );
 
@@ -183,6 +195,7 @@ void K3bDivxPreview::setCroppingLines(){
 }
 
 void K3bDivxPreview::setTopLine( int offset ){
+    kdDebug() << "(K3bDivxPreview::setTopLine)" << endl;
     offset = offset/m_imageScale;
     int old = (int) m_lineTop->y();
     m_lineTop->setY( m_sprite->topEdge() + offset );
@@ -192,6 +205,7 @@ void K3bDivxPreview::setTopLine( int offset ){
 }
 
 void K3bDivxPreview::setLeftLine( int offset ){
+    kdDebug() << "(K3bDivxPreview::setLeftLine)" << endl;
     offset = offset/m_imageScale;
     int old = (int) m_lineLeft->x();
     m_lineLeft->setX( m_sprite->leftEdge() + offset );
@@ -201,6 +215,7 @@ void K3bDivxPreview::setLeftLine( int offset ){
 }
 
 void K3bDivxPreview::setBottomLine( int offset ){
+    kdDebug() << "(K3bDivxPreview::setBottomLine)" << endl;
     offset = offset/m_imageScale;
     int old = (int) m_lineBottom->y();
     m_lineBottom->setY( m_sprite->bottomEdge() - offset );
@@ -210,6 +225,7 @@ void K3bDivxPreview::setBottomLine( int offset ){
 }
 
 void K3bDivxPreview::setRightLine( int offset ){
+    kdDebug() << "(K3bDivxPreview::setRightLine)" << endl;
     offset = offset/m_imageScale;
     int old = m_lineRight->x();
     m_lineRight->setX( m_sprite->rightEdge() - offset );
