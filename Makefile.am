@@ -1,6 +1,6 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 
-SUBDIRS = k3b po doc 
+SUBDIRS = src po doc 
 
 EXTRA_DIST = k3b.kdevprj AUTHORS COPYING ChangeLog INSTALL README TODO k3b.lsm 
 
