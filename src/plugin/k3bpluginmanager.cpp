@@ -113,9 +113,9 @@ void K3bPluginManager::loadPlugin( const QString& fileName )
       k3bFactory->setLicense( c.readEntry( "License" ) );
 
       // FIXME: improve this versioning stuff
-      if( k3bFactory->pluginSystemVersion() > K3B_PLUGIN_SYSTEM_VERSION ) {
+      if( k3bFactory->pluginSystemVersion() != K3B_PLUGIN_SYSTEM_VERSION ) {
 	delete k3bFactory;
-	kdDebug() << "(K3bPluginFactory) plugin system too old for lib " << libName << endl;
+	kdDebug() << "(K3bPluginFactory) plugin system does not fit lib " << libName << endl;
       }
       else
 	d->factories.insert( k3bFactory, libName );
