@@ -76,18 +76,18 @@ void K3bDivxView::setupGui()
 
   QGrid *gridBasic = new QGrid( 0, mainTab );
   mainTab->addTab( gridBasic, i18n("Basic Audio/Video settings") );
-  gridBasic->layout()->setSpacing( KDialog::spacingHint() );
-  gridBasic->layout()->setMargin( 0 );//KDialog::marginHint() );
+  gridBasic->layout()->setSpacing( spacingHint() );
+  gridBasic->layout()->setMargin( marginHint() );
 
   QGrid *gridSize = new QGrid( 0, mainTab );
   mainTab->addTab( gridSize, i18n("Advanced Audio/Video settings") );
-  gridSize->layout()->setSpacing( KDialog::spacingHint() );
-  gridSize->layout()->setMargin( 0 );//  KDialog::marginHint() );
+  gridSize->layout()->setSpacing( spacingHint() );
+  gridSize->layout()->setMargin( marginHint() );
 
   QGrid *gridAdvanced = new QGrid( 0, mainTab );
   mainTab->addTab( gridAdvanced, i18n("Expert settings") );
-  gridAdvanced->layout()->setSpacing( KDialog::spacingHint() );
-  gridAdvanced->layout()->setMargin( 0 );//  KDialog::marginHint() );
+  gridAdvanced->layout()->setSpacing( spacingHint() );
+  gridAdvanced->layout()->setMargin( marginHint() );
 
   m_baseTab = new K3bDivxBaseTab( m_codingData, gridBasic, "basetab" );
   m_sizeTab = new K3bDivxSizeTab( m_codingData, gridSize, "sizetab");
