@@ -53,6 +53,7 @@ public:
   QString image;
 
   bool success;
+  bool canceled;
 
   QTime lastSpeedCalculationTime;
   int lastSpeedCalculationBytes;
@@ -165,6 +166,9 @@ bool K3bGrowisofsWriter::prepareProcess()
   // we check for existing filesystems ourselves, so we always force the overwrite...
   *d->process << "-use-the-force-luke=tty";
 
+  if( d->growisofsBin->version > K3bVersion( 5, 17, -1 ) && d->trackSize > 0 )
+    *d->process << "-use-the-force-luke=tracksize:" + QString::number(d->trackSize);
+
   // this only makes sense for DVD-R(W) media
   if( simulate() )
     *d->process << "-use-the-force-luke=dummy";
@@ -220,6 +224,7 @@ void K3bGrowisofsWriter::start()
   d->lastSpeedCalculationTime = QTime::currentTime();
   d->lastSpeedCalculationBytes = 0;
   d->writingStarted = false;
+  d->canceled = false;
   d->speedEst->reset();
 
   if( !prepareProcess() ) {
@@ -264,15 +269,9 @@ void K3bGrowisofsWriter::start()
 void K3bGrowisofsWriter::cancel()
 {
   if( active() ) {
-    if( d->process ) {
-      if( d->process->isRunning() ) {
-	d->process->disconnect();
-	d->process->kill();
-	
-	// this will unblock and eject the drive and emit the finished/canceled signals
-	K3bAbstractWriter::cancel();
-      }
-    }
+    d->canceled = true;
+    closeFd();
+    d->process->kill();
   }
 }
 
@@ -352,6 +351,12 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
 
 void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
 {
+  if( d->canceled ) {
+    // this will unblock and eject the drive and emit the finished/canceled signals
+    K3bAbstractWriter::cancel();
+    return;
+  }
+
   if( p->normalExit() ) {
     if( p->exitStatus() == 0 ) {
 

@@ -73,6 +73,9 @@ void K3bGrowisofsHandler::handleLine( const QString& line )
   }
   else if( line.contains( "FEATURE 21h is not on" ) ) {
     if( !m_dao ) {
+      // FIXME: it's not only the writer. It may be the media: something like does not support it with this media
+      //        da war was mit: wenn einmal formattiert, dann geht nur noch dao oder wenn einmal als overwrite
+      //        formattiert, dann nur noch dao oder sowas
       emit infoMessage( i18n("Writer does not support Incremental Streaming"), K3bJob::WARNING );
       emit infoMessage( i18n("Engaging DAO"), K3bJob::WARNING );
     }
