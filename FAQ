@@ -1,8 +1,3 @@
-Q: I cannot select my IDE CDROM as reading device in the cd copy dialog.
-A: K3b currently does only support SCSI devices for cd copy. To use your IDE CDROM for 
-   reading please enable SCSI emulation or use the cvs version of cdrdao.
-
-
 Q: Compiling K3b fails with errors like this:
    base_k3badvanceddataimagesettings.cpp:185: invalid use of undefined type 
    `struct KComboBox'
