@@ -593,7 +593,6 @@ bool K3bCdDevice::CdDevice::init()
 
   //
   // This is the backup if the drive does not support the GET CONFIGURATION command
-  // In this case we do not as much information
   //
   int drivetype = ::ioctl(d->deviceFd, CDROM_GET_CAPABILITY, CDSL_CURRENT);
   if( drivetype < 0 ) {
@@ -602,8 +601,6 @@ bool K3bCdDevice::CdDevice::init()
     return false;
   }
     
-  // FIXME: not all drives are able to read cdroms
-  // (some 1st generation DVD writers)
   d->deviceType |= CDROM;
 
   if (drivetype & CDC_CD_R)
@@ -623,21 +620,23 @@ bool K3bCdDevice::CdDevice::init()
 
 
   // inquiry
-  unsigned char inq[36];
+  // use a 36 bytes buffer since not all devices return the full inquiry struct
+  unsigned char buf[36];
   cmd.clear();
-  ::memset( inq, 0, sizeof(inq) );
+  ::memset( buf, 0, sizeof(buf) );
+  struct inquiry* inq = (struct inquiry*)buf;
   cmd[0] = 0x12;  // GPCMD_INQUIRY
-  cmd[4] = sizeof(inq);
+  cmd[4] = sizeof(buf);
   cmd[5] = 0;
-  if( cmd.transport( TR_DIR_READ, inq, sizeof(inq) ) ) {
+  if( cmd.transport( TR_DIR_READ, buf, sizeof(buf) ) ) {
     kdError() << "(K3bCdDevice) Unable to do inquiry." << endl;
     close();
     return false;
   }
   else {
-    m_vendor = QString::fromLocal8Bit( (char*)(inq+8), 8 ).stripWhiteSpace();
-    m_description = QString::fromLocal8Bit( (char*)(inq+16), 16 ).stripWhiteSpace();
-    m_version = QString::fromLocal8Bit( (char*)(inq+32), 4 ).stripWhiteSpace();
+    m_vendor = QString::fromLocal8Bit( (char*)(inq->vendor), 8 ).stripWhiteSpace();
+    m_description = QString::fromLocal8Bit( (char*)(inq->product), 16 ).stripWhiteSpace();
+    m_version = QString::fromLocal8Bit( (char*)(inq->revision), 4 ).stripWhiteSpace();
   }
 
   close();
@@ -850,6 +849,9 @@ int K3bCdDevice::CdDevice::isEmpty() const
   if (open() < 0)
     return NO_INFO;
 
+  if( !isReady() )
+    return NO_DISC;
+
   unsigned char* data = 0;
   int dataLen = 0;
 
@@ -871,20 +873,6 @@ int K3bCdDevice::CdDevice::isEmpty() const
     }
 
     delete [] data;
-  }
-  else {
-    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
-	      << ": READ DISC INFORMATION failed. falling back to cdrom.h" << endl;
-    int drive_status = ::ioctl(d->deviceFd,CDROM_DRIVE_STATUS);
-    if( drive_status < 0 ) {
-      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": could not get drive status" << endl;
-      ret = NO_INFO;
-    } 
-    else if( drive_status == CDS_NO_DISC || drive_status == CDS_TRAY_OPEN ) {
-      // kernel bug ?? never seen CDS_NO_DISC
-      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": No disk in drive" << endl;
-      ret = NO_DISK;
-    } 
   }
 
   if( needToClose )
@@ -2667,4 +2655,16 @@ bool K3bCdDevice::CdDevice::searchIndex0( unsigned long startSec,
     close();
 
   return ret;
+}
+
+
+void K3bCdDevice::CdDevice::indexScan( K3bCdDevice::Toc& toc ) const
+{
+  for( Toc::iterator it = toc.begin(); it != toc.end(); ++it ) {
+    long sec = -1;
+    if( searchIndex0( (*it).firstSector().lba(),
+		      (*it).lastSector().lba(),
+		      sec ) )
+      (*it).m_index0 = sec;
+  }
 }

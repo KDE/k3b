@@ -263,7 +263,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
     if( usedApp == K3b::CDRECORD ) {
       K3bCdrecordWriter* writer = new K3bCdrecordWriter( m_device, this );
 
-      writer->setDao( false );
+      writer->setWritingMode( usedWriteMode );
       writer->setSimulate( m_simulate );
       writer->setBurnproof( m_burnproof );
       writer->setBurnSpeed( m_speed );
@@ -271,11 +271,6 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
       if( m_noFix ) {
 	writer->addArgument("-multi");
       }
-
-      if( usedWriteMode == K3b::DAO )
-	writer->addArgument( "-dao" );
-      else if( usedWriteMode == K3b::RAW )
-	writer->addArgument( "-raw" );
 
       if( (m_dataMode == K3b::DATA_MODE_AUTO && m_noFix) ||
 	  m_dataMode == K3b::MODE2 ) {

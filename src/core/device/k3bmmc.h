@@ -587,6 +587,82 @@ namespace K3bCdDevice
     unsigned char data[12];
     unsigned char crc[2];
   };
+
+
+  struct inquiry {
+#ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
+    unsigned char p_qualifier   : 3;
+    unsigned char p_device_type : 5;
+    unsigned char rmb           : 1;
+    unsigned char reserved1     : 7;
+#else
+    unsigned char p_device_type : 5;
+    unsigned char p_qualifier   : 3;
+    unsigned char reserved1     : 7;
+    unsigned char rmb           : 1;
+#endif
+    unsigned char version;
+#ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
+    unsigned char interface_dep : 4;
+    unsigned char data_format   : 4;
+#else
+    unsigned char data_format   : 4;
+    unsigned char interface_dep : 4;
+#endif
+    unsigned char add_length;
+    unsigned char reserved2;
+#ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
+    unsigned char bque          : 1;
+    unsigned char enc_serv      : 1;
+    unsigned char vs1           : 1;
+    unsigned char multi_p       : 1;
+    unsigned char m_chngr       : 1;
+    unsigned char reserved3     : 1;
+    unsigned char reserved4     : 1;
+    unsigned char addr_16       : 1;
+    unsigned char rel_adr       : 1;
+    unsigned char reserved5     : 1;
+    unsigned char w_bus_16      : 1;
+    unsigned char sync          : 1;
+    unsigned char linked        : 1;
+    unsigned char reserved6     : 1;
+    unsigned char cmd_que       : 1;
+    unsigned char vs2           : 1;
+#else
+    unsigned char addr_16       : 1;
+    unsigned char reserved4     : 1;
+    unsigned char reserved3     : 1;
+    unsigned char m_chngr       : 1;
+    unsigned char multi_p       : 1;
+    unsigned char vs1           : 1;
+    unsigned char enc_serv      : 1;
+    unsigned char bque          : 1;
+    unsigned char vs2           : 1;
+    unsigned char cmd_que       : 1;
+    unsigned char reserved6     : 1;
+    unsigned char linked        : 1;
+    unsigned char sync          : 1;
+    unsigned char w_bus_16      : 1;
+    unsigned char reserved5     : 1;
+    unsigned char rel_adr       : 1;
+#endif
+    unsigned char vendor[8];
+    unsigned char product[16];
+    unsigned char revision[4];
+    unsigned char vendor_specific[20];
+    unsigned char reserved7[2];
+    unsigned char version1[2];
+    unsigned char version2[2];
+    unsigned char version3[2];
+    unsigned char version4[2];
+    unsigned char version5[2];
+    unsigned char version6[2];
+    unsigned char version7[2];
+    unsigned char version8[2];
+
+    // bytes 74-95: reserved
+    // bytes 96-n: vendor specific
+  };
 }
 
 

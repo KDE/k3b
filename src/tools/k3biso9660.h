@@ -48,6 +48,8 @@ class K3bIso9660SimplePrimaryDescriptor
   QString applicationId;
   int volumeSetSize;
   int volumeSetNumber;
+  long logicalBlockSize;
+  long long volumeSpaceSize;
 };
 
 

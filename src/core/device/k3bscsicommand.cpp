@@ -86,9 +86,8 @@ int K3bCdDevice::ScsiCommand::transport( TransportDirection dir,
   if( ::ioctl( m_fd, CDROM_SEND_PACKET, &m_cmd ) ) {
     kdDebug() << "(K3bCdDevice::ScsiCommand) failed: fd: " << m_fd << endl
 	      << "                           command:    " << QString::number(m_cmd.cmd[0], 16) << endl
-	      << "                           errorcode:  " << QString::number((int)m_sense.error_code, 16) << endl
-	      << "                           asc:        " << QString::number((int)m_sense.asc, 16) << endl
-	      << "                           ascq:       " << QString::number((int)m_sense.ascq, 16) << endl;
+	      << "                           errorcode:  " << QString::number((int)m_sense.error_code, 16) << endl;
+
     switch( m_sense.sense_key ) {
     case 0x0:
       kdDebug() << "                           sense key:  NO SENSE (2)" << endl;
@@ -130,6 +129,10 @@ int K3bCdDevice::ScsiCommand::transport( TransportDirection dir,
       kdDebug() << "                           sense key:  0xC is obsolete... ??" << endl;
       break;
     }
+
+    kdDebug() << "                           asc:        " << QString::number((int)m_sense.asc, 16) << endl
+	      << "                           ascq:       " << QString::number((int)m_sense.ascq, 16) << endl;
+
     return( m_sense.error_code != 0 ? m_sense.error_code : -1 );
   }
   else

@@ -399,10 +399,16 @@ namespace K3bCdDevice
     bool searchIndex0( unsigned long startSec, unsigned long endSec, long& pregapStart ) const;
 
     /**
+     * For now this just searches index 0 for all tracks and sets
+     * the value in the tracks.
+     * In the future this should scan for all indices.
+     */
+    void indexScan( K3bCdDevice::Toc& toc ) const;
+
+    /**
      * Seek to the specified sector.
      */
     bool seek( unsigned long lba ) const;
-
 
   protected:
     bool furtherInit();

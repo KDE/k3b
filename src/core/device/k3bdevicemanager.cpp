@@ -17,6 +17,8 @@
 #include "k3bdevicemanager.h"
 #include "k3bdevice.h"
 #include "k3bdeviceglobals.h"
+#include "k3bmmc.h"
+#include "k3bscsicommand.h"
 #include <k3bexternalbinmanager.h>
 #include <k3bglobals.h>
 
@@ -59,21 +61,10 @@ typedef unsigned char u8;
 #define __STRICT_ANSI__
 
 #include <linux/../scsi/scsi.h> /* cope with silly includes */
-#include <linux/cdrom.h>
 #include <linux/major.h>
 
 
 
-#ifndef IDE_DISK_MAJOR
-/*
- * Tests for IDE devices
- */
-#define IDE_DISK_MAJOR(M)       ((M) == IDE0_MAJOR || (M) == IDE1_MAJOR || \
-                                (M) == IDE2_MAJOR || (M) == IDE3_MAJOR || \
-                                (M) == IDE4_MAJOR || (M) == IDE5_MAJOR || \
-                                (M) == IDE6_MAJOR || (M) == IDE7_MAJOR || \
-                                (M) == IDE8_MAJOR || (M) == IDE9_MAJOR)
-#endif /* #ifndef IDE_DISK_MAJOR */
 
 #ifndef SCSI_DISK_MAJOR
 #define SCSI_DISK_MAJOR(M) ((M) == SCSI_DISK0_MAJOR || \
@@ -537,23 +528,35 @@ bool K3bCdDevice::DeviceManager::testForCdrom(const QString& devicename)
   struct stat cdromStat;
   ::fstat( cdromfd, &cdromStat );
 
-  if( /*!S_ISCHR( cdromStat.st_mode) && */!S_ISBLK( cdromStat.st_mode) )
-  {
-    kdDebug() << devicename << " is no "/* << "character or " */ << "block device" << endl;
+  if( !S_ISBLK( cdromStat.st_mode) ) {
+    kdDebug() << devicename << " is no block device" << endl;
   }
-  else
-  {
+  else {
     kdDebug() << devicename << " is block device (" << (int)(cdromStat.st_rdev & 0xFF) << ")" << endl;
-    if( ::ioctl(cdromfd, CDROM_CLEAR_OPTIONS, CDO_AUTO_CLOSE) < 0 )
-    {
+
+    // inquiry
+    // use a 36 bytes buffer since not all devices return the full inquiry struct
+    unsigned char buf[36];
+    struct inquiry* inq = (struct inquiry*)buf;
+    ::memset( buf, 0, sizeof(buf) );
+
+    ScsiCommand cmd( cdromfd );
+    cmd[0] = 0x12;  // GPCMD_INQUIRY
+    cmd[4] = sizeof(buf);
+    cmd[5] = 0;
+
+    if( cmd.transport( TR_DIR_READ, buf, sizeof(buf) ) ) {
+      kdError() << "(K3bCdDevice) Unable to do inquiry." << endl;
+    }
+    else if( (inq->p_device_type&0x1f) != 0x5 ) {
       kdDebug() << devicename << " seems not to be a cdrom device: " << strerror(errno) << endl;
     }
-    else
-    {
+    else {
       ret = true;
       kdDebug() << devicename << " seems to be cdrom" << endl;
     }
   }
+
   ::close( cdromfd );
   return ret;
 }

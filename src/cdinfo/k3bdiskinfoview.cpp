@@ -407,6 +407,15 @@ void K3bDiskInfoView::createIso9660InfoItems( const K3bIso9660* iso )
 				    iso->primaryDescriptor().applicationId.isEmpty()
 				    ? QString("-") 
 				    : iso->primaryDescriptor().applicationId );
+  iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
+				    i18n("Volume Size:"),
+				    QString( "%1 (%2*%3)" )
+				    .arg(iso->primaryDescriptor().logicalBlockSize
+					 *iso->primaryDescriptor().volumeSpaceSize)
+				    .arg(iso->primaryDescriptor().logicalBlockSize)
+				    .arg(iso->primaryDescriptor().volumeSpaceSize),
+				    KIO::convertSize(iso->primaryDescriptor().logicalBlockSize
+						     *iso->primaryDescriptor().volumeSpaceSize)  );
 
   iso9660Item->setOpen( true );
 }

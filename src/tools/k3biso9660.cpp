@@ -488,6 +488,8 @@ void K3bIso9660::createSimplePrimaryDesc( struct iso_primary_descriptor* desc )
   d->primaryDesc.applicationId = QString::fromLocal8Bit( desc->application_id, 128 ).stripWhiteSpace();
   d->primaryDesc.volumeSetSize = isonum_723(desc->volume_set_size);
   d->primaryDesc.volumeSetNumber = isonum_723(desc->volume_set_size);
+  d->primaryDesc.logicalBlockSize = isonum_723(desc->logical_block_size);
+  d->primaryDesc.volumeSpaceSize = isonum_733(desc->volume_space_size);
 }
 
 
