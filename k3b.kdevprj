@@ -38,7 +38,7 @@ project_type=mdi_kde2
 sgml_file=/home/trueg/dev/kde/k3b/doc/en/index.docbook
 short_info=K3b - The CD Creator - The best software to write cds under linux.
 sub_dir=src/
-version=0.5.1
+version=0.5.2
 version_control=CVS
 workspace=1
 
@@ -339,7 +339,7 @@ install_location=
 type=HEADER
 
 [src/data/Makefile.am]
-files=src/data/k3bfileitem.cpp,src/data/k3bfileitem.h,src/data/k3bdiritem.cpp,src/data/k3bdiritem.h,src/data/k3bdatadoc.h,src/data/k3bdataitem.cpp,src/data/k3bdataitem.h,src/data/k3bdatadoc.cpp,src/data/k3bdataview.cpp,src/data/k3bdataview.h,src/data/k3bdatajob.cpp,src/data/k3bdatajob.h,src/data/k3bdataburndialog.cpp,src/data/k3bdataburndialog.h,src/data/k3bdatafileview.cpp,src/data/k3bdatafileview.h,src/data/k3bdatadirtreeview.cpp,src/data/k3bdatadirtreeview.h,src/data/k3bisoimagejob.h,src/data/k3bisoimagejob.cpp,src/data/k3bisoimagewritingdialog.cpp,src/data/k3bisoimagewritingdialog.h
+files=src/data/k3bfileitem.cpp,src/data/k3bfileitem.h,src/data/k3bdiritem.cpp,src/data/k3bdiritem.h,src/data/k3bdatadoc.h,src/data/k3bdataitem.cpp,src/data/k3bdataitem.h,src/data/k3bdatadoc.cpp,src/data/k3bdataview.cpp,src/data/k3bdataview.h,src/data/k3bdatajob.cpp,src/data/k3bdatajob.h,src/data/k3bdataburndialog.cpp,src/data/k3bdataburndialog.h,src/data/k3bdatafileview.cpp,src/data/k3bdatafileview.h,src/data/k3bdatadirtreeview.cpp,src/data/k3bdatadirtreeview.h,src/data/k3bisoimagejob.h,src/data/k3bisoimagejob.cpp,src/data/k3bisoimagewritingdialog.cpp,src/data/k3bisoimagewritingdialog.h,src/data/k3bdatapropertiesdialog.cpp,src/data/k3bdatapropertiesdialog.h
 sub_dirs=
 type=static_library
 
@@ -410,6 +410,18 @@ install_location=
 type=SOURCE
 
 [src/data/k3bdatajob.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/data/k3bdatapropertiesdialog.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/data/k3bdatapropertiesdialog.h]
 dist=true
 install=false
 install_location=
@@ -1393,7 +1405,7 @@ install_location=
 type=SOURCE
 
 [src/option/Makefile.am]
-files=src/option/k3bdeviceoptiontab.h,src/option/k3bdeviceoptiontab.cpp,src/option/k3boptiondialog.cpp,src/option/k3boptiondialog.h,src/option/k3bburningoptiontab.h,src/option/k3bburningoptiontab.cpp,src/option/k3bcddboptiontab.cpp,src/option/k3bcddboptiontab.h,src/option/k3brippingpatternoptiontab.cpp,src/option/k3brippingpatternoptiontab.h,src/option/k3bexternalbinoptiontab.cpp,src/option/k3bexternalbinoptiontab.h
+files=src/option/k3bdeviceoptiontab.h,src/option/k3bdeviceoptiontab.cpp,src/option/k3boptiondialog.cpp,src/option/k3boptiondialog.h,src/option/k3bburningoptiontab.h,src/option/k3bburningoptiontab.cpp,src/option/k3bcddboptiontab.cpp,src/option/k3bcddboptiontab.h,src/option/k3brippingpatternoptiontab.cpp,src/option/k3brippingpatternoptiontab.h,src/option/k3bexternalbinoptiontab.cpp,src/option/k3bexternalbinoptiontab.h,src/option/k3bmiscoptiontab.cpp,src/option/k3bmiscoptiontab.h
 sharedlib_LDFLAGS=-version-info 0:5:0
 sharedlib_rootname=option
 sub_dirs=
@@ -1442,6 +1454,18 @@ install_location=
 type=SOURCE
 
 [src/option/k3bexternalbinoptiontab.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/option/k3bmiscoptiontab.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/option/k3bmiscoptiontab.h]
 dist=true
 install=false
 install_location=
