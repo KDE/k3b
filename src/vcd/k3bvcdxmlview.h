@@ -1,8 +1,8 @@
 /*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
- *                    Manfred Odenstein <odix@chello.at>
+ *             THX to Manfred Odenstein <odix@chello.at>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
@@ -13,7 +13,7 @@
  * (at your option) any later version.
  * See the file "COPYING" for the exact licensing terms.
  */
-
+ 
 #ifndef K3B_VCD_XMLVIEW_H
 #define K3B_VCD_XMLVIEW_H
 

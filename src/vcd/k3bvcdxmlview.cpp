@@ -1,8 +1,8 @@
 /*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
- *                    Manfred Odenstein <odix@chello.at>
+ *             THX to Manfred Odenstein <odix@chello.at>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
@@ -13,7 +13,7 @@
  * (at your option) any later version.
  * See the file "COPYING" for the exact licensing terms.
  */
-
+ 
 #include "k3bvcdxmlview.h"
 #include "k3bvcdtrack.h"
 
@@ -47,10 +47,10 @@ bool K3bVcdXmlView::write(const QString& fname)
   xmlDoc.appendChild( root );
   
   // create option elements
-  QDomElement elemOption;
   
   // Broken SVCD mode
   if (m_doc->vcdOptions()->BrokenSVcdMode()) {
+    QDomElement elemOption;
     elemOption = addSubElement(xmlDoc, root, "option");
     elemOption.setAttribute("name", "svcd vcd30 mpegav");
     elemOption.setAttribute("value", "true");
@@ -63,16 +63,22 @@ bool K3bVcdXmlView::write(const QString& fname)
 
   // Relaxed aps
   /*
-  elemoption = addSubElement(xmlDoc, root, "option");
-  elemOption.setAttribute("name", "relaxed aps");
-  elemOption.setAttribute("value", "false");
+  if (m_doc->vcdOptions()->RelaxesAps()) {
+      QDomElement elemOption;
+      elemOption = addSubElement(xmlDoc, root, "option");
+      elemOption.setAttribute("name", "relaxed aps");
+      elemOption.setAttribute("value", "false");
+  }    
   */
 
   // Update scan offsets
   /*
-  elemoption = addSubElement(xmlDoc, root, "option");
-  elemOption.setAttribute("name", "update scan offsets");
-  elemOption.setAttribute("value", "false");
+  if (m_doc->vcdOptions()->UpdateScanOffsets()) {
+      QDomElement elemOption;
+      elemOption = addSubElement(xmlDoc, root, "option");
+      elemOption.setAttribute("name", "update scan offsets");
+      elemOption.setAttribute("value", "false");
+  }
   */
 
 
@@ -122,13 +128,17 @@ bool K3bVcdXmlView::write(const QString& fname)
     elemsequenceItem.setAttribute("id", QString("sequence-%1").arg(it.current()->index()));
   }
 
-  
-  QString test = xmlDoc.toString();
-  kdDebug() << test << endl;
+  QString xmlString = xmlDoc.toString();
+  kdDebug() << QString("(K3bVcdXmlView) Write Data to %1:\n").arg(fname) << xmlString << endl;
       
-  if (true)
-    return true;
-
+  QFile xmlFile( fname );
+  if ( xmlFile.open( IO_WriteOnly )) {
+      QTextStream ts( & xmlFile );
+      ts << xmlString;
+      xmlFile.close();
+      return true;
+  }
+  
   return false;
 }
 

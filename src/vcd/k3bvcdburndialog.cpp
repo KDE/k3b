@@ -356,8 +356,25 @@ void K3bVcdBurnDialog::saveSettings()
   // save image file & path (.bin)
   vcdDoc()->setVcdImage( m_tempDirSelectionWidget->tempPath() + m_editVolumeId->text() + ".bin");
 
-  vcdDoc()->setVcdType(m_groupVcdFormat->id(m_groupVcdFormat->selected()));
-
+  int id = m_groupVcdFormat->id(m_groupVcdFormat->selected());
+  vcdDoc()->setVcdType(id);
+  switch(id) {
+    case 0:
+      vcdDoc()->vcdOptions()->setVcdClass("vcd");
+      vcdDoc()->vcdOptions()->setVcdVersion("1.1");
+      break;
+    case 1:
+      //vcd 2.0
+      vcdDoc()->vcdOptions()->setVcdClass("vcd");
+      vcdDoc()->vcdOptions()->setVcdVersion("2.0");
+      break;
+    case 2:
+      //svcd 1.0
+      vcdDoc()->vcdOptions()->setVcdClass("svcd");
+      vcdDoc()->vcdOptions()->setVcdVersion("1.0");
+      break;
+  }
+  
   vcdDoc()->vcdOptions()->setVolumeId( m_editVolumeId->text() );
   vcdDoc()->vcdOptions()->setAlbumId( m_editAlbumId->text() );
 

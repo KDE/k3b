@@ -1,6 +1,6 @@
 /*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
  *
  * This file is part of the K3b project.
@@ -35,6 +35,9 @@ class K3bVcdOptions
   const QString& applicationId() const { return m_applicationId; }
   const QString& systemId() const { return m_systemId; }
 
+  const QString& vcdClass() const { return m_vcdclass; }
+  const QString& vcdVersion() const { return m_vcdversion; }
+
   const int volumeCount() const { return m_volumeCount; }
   const int volumeNumber()const { return m_volumeNumber; }
 
@@ -49,6 +52,9 @@ class K3bVcdOptions
   void setVolumeSetId( const QString& s ) { m_volumeSetId = s; }
   void setPreparer( const QString& s ) { m_preparer = s; }
   void setPublisher( const QString& s ) { m_publisher = s; }
+
+  void setVcdClass( const QString& s ) { m_vcdclass = s; }
+  void setVcdVersion( const QString& s ) { m_vcdversion = s; }
 
   void setVolumeCount( const int c ) { m_volumeCount = c; }
   void setVolumeNumber( const int n ) { m_volumeNumber = n; }
@@ -75,7 +81,10 @@ class K3bVcdOptions
 
   QString m_applicationId;
   QString m_systemId;
-  
+
+  QString m_vcdclass;
+  QString m_vcdversion;
+    
   int m_volumeCount;
   int m_volumeNumber;
     

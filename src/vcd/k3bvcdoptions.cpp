@@ -1,6 +1,6 @@
 /*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
  *
  * This file is part of the K3b project.
@@ -28,6 +28,8 @@ K3bVcdOptions::K3bVcdOptions()
     m_volumeSetId( "" ),
     m_applicationId( "CDI/CDI_VCD.APP;1" ),
     m_systemId( "CD-RTOS CD-BRIDGE" ),
+    m_vcdclass( "vcd" ),
+    m_vcdversion( "2.0" ),
     m_volumeCount( 1 ),
     m_volumeNumber( 1 ),
     m_autodetect( true ),
