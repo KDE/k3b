@@ -23,11 +23,13 @@
 typedef Q_INT32 size32;
 
 #include "k3bdiskinfo.h"
+#include "k3bdiskinfothread.h"
 #include "../rip/k3btcwrapper.h"
 
 
 namespace K3bCdDevice
 {
+  class DiskInfoThread;
 
   class DiskInfoDetector : public QObject
   {
@@ -47,19 +49,21 @@ namespace K3bCdDevice
   signals:
     void diskInfoReady( const K3bCdDevice::DiskInfo& info );
 
-  private slots:
-    void fetchDiskInfo();
-    void fetchTocInfo();
+  private:
+    void fetchExtraInfo();
     void fetchIsoInfo();
     void calculateDiscId();
     void testForVideoDvd();
+    void customEvent(QCustomEvent *e);
+  private slots:
     void slotIsVideoDvd( bool dvd );
 
-  private:
+  protected:
     CdDevice* m_device;
     DiskInfo m_info;
     K3bTcWrapper* m_tcWrapper;
     int m_cdfd;
+    DiskInfoThread* m_thread;
   };
 };
 

@@ -27,6 +27,8 @@
 #include <qtimer.h>
 #include <qfile.h>
 
+#include "k3bprogressinfoevent.h"
+
 #include <sys/ioctl.h>		// ioctls
 #include <unistd.h>		// lseek, read. etc
 #include <fcntl.h>		// O_RDONLY etc.
@@ -36,7 +38,7 @@
 
 K3bCdDevice::DiskInfoDetector::DiskInfoDetector( QObject* parent )
   : QObject( parent ),
-  m_tcWrapper(0)
+  m_tcWrapper(0),m_thread(0)
 {
 }
 
@@ -58,140 +60,25 @@ void K3bCdDevice::DiskInfoDetector::detect( CdDevice* device )
   // reset
   m_info = DiskInfo();
   m_info.device = m_device;
-
-  QTimer::singleShot(0,this,SLOT(fetchTocInfo()));
+  if (m_thread)
+    if (m_thread->running())
+      return;
+    else
+      delete m_thread;
+  m_thread = new DiskInfoThread(this, m_device, &m_info);
+  m_thread->start();
 }
 
 
 void K3bCdDevice::DiskInfoDetector::finish(bool success)
 {
   m_info.valid=success;
-  ::close(m_cdfd);
   emit diskInfoReady(m_info);
-
 }
 
 
-void K3bCdDevice::DiskInfoDetector::fetchDiskInfo()
+void K3bCdDevice::DiskInfoDetector::fetchExtraInfo()
 {
-  int empty = m_device->isEmpty();
-  m_info.appendable = (empty < 2);
-  m_info.empty = (empty == 0);
-  m_info.cdrw = (m_device->rewritable() == 1);
-  K3b::Msf size = m_device->discSize();
-  if ( size != K3b::Msf(0) ) {
-    m_info.size = size - 150;
-  }
-  if ( m_info.empty ) {
-    m_info.remaining = m_info.size;
-  } else {
-    size = m_device->remainingSize();
-    if ( size != K3b::Msf(0) ) {
-      m_info.remaining = size - 4650;
-    }
-  }
-
-}
-
-void K3bCdDevice::DiskInfoDetector::fetchTocInfo()
-{
-  struct cdrom_tochdr tochdr;
-  struct cdrom_tocentry tocentry;
-
-  if ( (m_cdfd = ::open(m_device->ioctlDevice().latin1(),O_RDONLY | O_NONBLOCK)) == -1 ) {
-    kdDebug() << "(K3bDiskInfoDetector) could not open device !" << endl;
-    emit diskInfoReady(m_info);
-    return;
-  }
-
-  int ready = m_device->isReady();
-  if (ready == 3) {  // no disk or tray open
-    m_info.valid=true;
-    emit diskInfoReady(m_info);
-    return;
-  }
-  m_info.tocType = m_device->diskType();
-  if ( m_info.tocType == DiskInfo::NODISC ) {
-     m_info.valid=true;
-     finish(true);
-     return;
-  } else if (m_info.tocType == DiskInfo::UNKNOWN ) {
-     m_info.noDisk = false;
-     if (m_info.device->burner())
-        fetchDiskInfo();
-     finish(true);
-     return;
-  }
-  m_info.noDisk = false;
-
-  m_info.sessions = m_device->numSessions();
-
-//
-// CDROMREADTOCHDR ioctl returns:
-// cdth_trk0: First Track Number
-// cdth_trk1: Last Track Number
-//
-  if ( ::ioctl(m_cdfd,CDROMREADTOCHDR,&tochdr) != 0 )
-  {
-     kdDebug() << "(K3bDiskInfoDetector) could not get toc header !" << endl;
-     finish(false);
-     return;
-  }
-  Track lastTrack;
-  for (int i = tochdr.cdth_trk0; i <= tochdr.cdth_trk1 + 1; i++) {
-    ::memset(&tocentry,0,sizeof (struct cdrom_tocentry));
-// get Lead-Out Information too
-    tocentry.cdte_track = (i<=tochdr.cdth_trk1) ? i : CDROM_LEADOUT;
-    tocentry.cdte_format = CDROM_LBA;
-//
-// CDROMREADTOCENTRY ioctl returns:
-// cdte_addr.lba: Start Sector Number (LBA Format requested)
-// cdte_ctrl:     4 ctrl bits
-//                   00x0b: 2 audio Channels(no pre-emphasis)
-//                   00x1b: 2 audio Channels(pre-emphasis)
-//                   10x0b: audio Channels(no pre-emphasis),reserved in cd-rw
-//                   10x1b: audio Channels(pre-emphasis),reserved in cd-rw
-//                   01x0b: data track, recorded uninterrupted
-//                   01x1b: data track, recorded incremental
-//                   11xxb: reserved
-//                   xx0xb: digital copy prohibited
-//                   xx1xb: digital copy permitted
-// cdte_addr:     4 addr bits (type of Q-Subchannel data)
-//                   0000b: no Information
-//                   0001b: current position data
-//                   0010b: MCN
-//                   0011b: ISRC
-//                   0100b-1111b:  reserved
-// cdte_datamode:  0: Data Mode1
-//                 1: CD-I
-//                 2: CD-XA Mode2
-//
-
-    if ( ::ioctl(m_cdfd,CDROMREADTOCENTRY,&tocentry) != 0)
-      kdDebug() << "(K3bDiskInfoDetector) error reading tocentry " << i << endl;
-    int startSec = tocentry.cdte_addr.lba;
-    int control  = tocentry.cdte_ctrl & 0x0f;
-    int mode     = tocentry.cdte_datamode;
-    if( !lastTrack.isEmpty() ) {
-		   m_info.toc.append( Track( lastTrack.firstSector(), startSec-1, lastTrack.type(), lastTrack.mode() ) );
-	  }
-    int trackType = 0;
-    int trackMode = Track::UNKNOWN;
-	  if( control & 0x04 ) {
-	  	trackType = Track::DATA;
-		  if( mode == 1 )
-		    trackMode = Track::MODE1;
-		  else if( mode == 2 )
-		    trackMode = Track::MODE2;
-	  } else
-		  trackType = Track::AUDIO;
-
-	  lastTrack = Track( startSec, startSec, trackType, trackMode );
-
-  }
-  if (m_info.device->burner())
-    fetchDiskInfo();
-
   if (m_info.tocType != DiskInfo::AUDIO)
     fetchIsoInfo();
   else
@@ -213,6 +100,13 @@ void K3bCdDevice::DiskInfoDetector::fetchTocInfo()
 void K3bCdDevice::DiskInfoDetector::fetchIsoInfo()
 {
   char buf[17*2048];
+
+  if ( (m_cdfd = ::open(m_device->ioctlDevice().latin1(),O_RDONLY | O_NONBLOCK)) == -1 ) {
+    kdDebug() << "(K3bDiskInfoDetector) could not open device !" << endl;
+    emit diskInfoReady(m_info);
+    return;
+  }
+
   ::lseek( m_cdfd, 0, SEEK_SET );
 
   if( ::read( m_cdfd, buf, 17*2048 ) == 17*2048 ) {
@@ -224,7 +118,9 @@ void K3bCdDevice::DiskInfoDetector::fetchIsoInfo()
     m_info.isoPreparerId = QString::fromLocal8Bit( &buf[16*2048+446], 128 ).stripWhiteSpace();
     m_info.isoApplicationId = QString::fromLocal8Bit( &buf[16*2048+574], 128 ).stripWhiteSpace();
   }
+  ::close(m_cdfd);
 }
+
 
 
 void K3bCdDevice::DiskInfoDetector::calculateDiscId()
@@ -276,6 +172,10 @@ void K3bCdDevice::DiskInfoDetector::slotIsVideoDvd( bool dvd )
 
   finish(true);
 }
-
+void K3bCdDevice::DiskInfoDetector::customEvent(QCustomEvent *e) {
+kdDebug() << "(K3bDiskInfoDetector) customEvent" << endl;
+  if(e->type() == (QEvent::Type)K3bProgressInfoEvent::Finished)
+     fetchExtraInfo();
+}
 
 #include "k3bdiskinfodetector.moc"
