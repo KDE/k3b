@@ -239,6 +239,7 @@ void K3bVcdBurnDialog::setupLabelTab()
   m_editVolumeId->setMaxLength(31);
   
   m_spinVolumeNumber->setMinValue(1);
+  m_spinVolumeNumber->setMaxValue(1);
   m_spinVolumeCount->setMinValue(1);
 
   QFrame* line = new QFrame( w );
