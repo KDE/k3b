@@ -38,23 +38,25 @@ public:
 public slots:
     void start();
     void cancel();
+private slots:
     void slotEncodingExited( KProcess *p );
     void slotParseEncoding( KProcess *p, char *buffer, int lenght);
     void slotAudioExited( KProcess *p );
     void slotParseAudio( KProcess *p, char *buffer, int lenght);
     void slotStartAudioProcessing( KIO::Job *job );
-
+    void slotStartEncoding();
+    void slotShutdown( bool );
     //void slotPercent( unsigned int );
 private:
     K3bDivxCodecData *m_data;
     KShellProcess *m_process;
+    QString m_debugBuffer;
     int m_speedFlag;
     int m_speedTrigger;
     int m_pass;
     int m_speedInitialFlag;
-    void startEncoding();
     void copyIfos();
-
+    void deleteIfos();
 };
 
 #endif
