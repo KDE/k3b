@@ -11,7 +11,7 @@
 #include <kdialog.h>
 #include <klocale.h>
 #include <kconfig.h>
-
+#include <kstandarddirs.h>
 
 
 K3bDeviceOptionTab::K3bDeviceOptionTab( QWidget* parent, const char* name )
@@ -33,6 +33,8 @@ K3bDeviceOptionTab::K3bDeviceOptionTab( QWidget* parent, const char* name )
 
   frameLayout->addWidget( m_labelDevicesInfo, 0, 0 );
   frameLayout->addWidget( m_deviceWidget, 1, 0 );
+
+  connect( m_deviceWidget, SIGNAL(refreshButtonClicked()), this, SLOT(slotRefreshButtonClicked()) );
 }
 
 
@@ -55,6 +57,24 @@ void K3bDeviceOptionTab::saveDevices()
 
   // save the config
   k3bMain()->deviceManager()->saveConfig( k3bMain()->config() );
+}
+
+
+void K3bDeviceOptionTab::slotRefreshButtonClicked()
+{
+  k3bMain()->deviceManager()->clear();
+  k3bMain()->deviceManager()->scanbus();
+  
+  // this is a little not to hard hack to ensure that we get the "global" k3b appdir
+  // k3bui.rc should always be in $KDEDIR/share/apps/k3b/
+  QString globalConfigDir = KGlobal::dirs()->findResourceDir( "data", "k3b/k3bui.rc" ) + "k3b";
+  QString globalConfigFile =  globalConfigDir + "/k3bsetup";
+  KConfig globalConfig( globalConfigFile );
+  
+  globalConfig.setGroup( "Devices" );
+  k3bMain()->deviceManager()->readConfig( &globalConfig );
+
+  m_deviceWidget->init();
 }
 
 #include "k3bdeviceoptiontab.moc"

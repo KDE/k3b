@@ -238,7 +238,7 @@ bool K3bDeviceManager::saveConfig( KConfig* c )
 	 << dev->cdrdaoDriver();
 
     if( dev->cdrdaoDriver() != "auto" )
-      list << ( dev->cdTextCapable() ? "yes" : "no" );
+      list << ( dev->cdTextCapable() == 1 ? "yes" : "no" );
     else
       list << "auto";
 

@@ -65,6 +65,8 @@ K3bSetupTab::K3bSetupTab( int index, int overall, const QString& info, K3bSetupW
   m_mainLayout->addColSpacing( 1, KDialog::marginHint() );
   m_mainLayout->setRowStretch( 1, 1 );
   m_mainLayout->setColStretch( 2, 1 );
+
+  m_initialized = false;
 }
 
 
@@ -98,7 +100,10 @@ bool K3bSetupTab::appropriate()
 
 void K3bSetupTab::aboutToShow()
 {
-  readSettings();
+  if( !m_initialized ) {
+    readSettings();
+    m_initialized = true;
+  }
 }
 
 

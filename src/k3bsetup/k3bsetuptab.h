@@ -47,6 +47,8 @@ class K3bSetupTab : public QWidget
   QGridLayout* m_mainLayout;
 
   K3bSetup* m_setup;
+
+  bool m_initialized;
 };
 
 #endif

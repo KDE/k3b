@@ -236,7 +236,8 @@ K3bDeviceWidget::K3bDeviceWidget( K3bDeviceManager* manager, QWidget *parent, co
 
   // connections
   // ------------------------------------------------		
-  connect( m_buttonRefreshDevices, SIGNAL(clicked()), this, SLOT(slotRefreshDevices()) );
+  //  connect( m_buttonRefreshDevices, SIGNAL(clicked()), this, SLOT(slotRefreshDevices()) );
+  connect( m_buttonRefreshDevices, SIGNAL(clicked()), this, SIGNAL(refreshButtonClicked()) );
   connect( m_buttonAddDevice, SIGNAL(clicked()), this, SLOT(slotNewDevice()) );
 	
   connect( m_viewDevices, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(slotDeviceSelected(QListViewItem*)) );
@@ -389,17 +390,6 @@ void K3bDeviceWidget::updateDeviceInfoBox( PrivateTempDevice* tempDev )
     m_spinReadSpeed->setValue( 0 );
     m_comboDriver->setDisabled( true );
   }    
-}
-
-
-void K3bDeviceWidget::slotRefreshDevices()
-{
-  // reread devices
-  m_deviceManager->clear();
-  m_deviceManager->scanbus();
-  init();
-
-  updateDeviceListViews();
 }
 
 

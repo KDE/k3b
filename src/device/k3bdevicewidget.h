@@ -51,9 +51,12 @@ class K3bDeviceWidget : public QWidget
   void init();
   void apply();
 
+ signals:
+  void refreshButtonClicked();
+
  private slots:
   void slotDeviceSelected(QListViewItem*);
-  void slotRefreshDevices();
+ //  void slotRefreshDevices();
   void slotNewDevice();
   void slotCdrdaoDriverChanged(const QString&);
   void slotCdTextCapabilityChanged( const QString& );

@@ -67,10 +67,10 @@ K3bSetup::K3bSetup( QObject* parent )
   // ================================================
   m_deviceManager->scanbus();
 
-//   if( m_config->hasGroup("Devices") ) {
-//     m_config->setGroup( "Devices" );
-//     m_deviceManager->readConfig( m_config );
-//   }
+  if( m_config->hasGroup("Devices") ) {
+    m_config->setGroup( "Devices" );
+    m_deviceManager->readConfig( m_config );
+  }
   // ================================================
 
 

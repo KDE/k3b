@@ -15,7 +15,7 @@ class QGroupBox;
 class QLineEdit;
 class QListViewItem;
 class K3bDevice;
-
+class K3bDeviceWidget;
 
 
 
@@ -52,14 +52,10 @@ class DeviceTab : public K3bSetupTab
   bool saveSettings();
 
  private slots:
-  void slotAddDevice();
-  void slotDeviceItemRenamed( QListViewItem*, const QString&, int );
+  void slotRefreshButtonClicked();
 
  private:
-  QPushButton* m_buttonAddDevice;
-  QLabel*      m_labelSetupDrives;
-  KListView*   m_viewSetupReader;
-  KListView*   m_viewSetupWriter;
+  K3bDeviceWidget* m_deviceWidget;
 };
 
 

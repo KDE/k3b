@@ -99,6 +99,7 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
   m_noViewView->setPaletteBackgroundColor( QColor(139, 24, 57) );
   QLabel* penguinLabel = new QLabel( m_noViewView );
   penguinLabel->setPixmap( QPixmap("/home/trueg/k3b/artwork/penguin_separated.png") );
+  penguinLabel->setScaledContents( true );
   m_noViewLabel = new QLabel( i18n("K3b is trying to retrieve information about the inserted disk."), m_noViewView );
   m_noViewLabel->setAlignment( Qt::AlignLeft | Qt::AlignVCenter | Qt::WordBreak );
   m_noViewLabel->setPaletteForegroundColor( Qt::white );

@@ -19,6 +19,9 @@ Q_OBJECT
   void readDevices();
   void saveDevices();
 
+ private slots:
+  void slotRefreshButtonClicked();
+
  private:
   QLabel*          m_labelDevicesInfo;
   K3bDeviceWidget* m_deviceWidget;

@@ -4,6 +4,7 @@
 
 #include "../device/k3bdevicemanager.h"
 #include "../device/k3bdevice.h"
+#include "../device/k3bdevicewidget.h"
 #include "../tools/k3bexternalbinmanager.h"
 
 #include <qlabel.h>
@@ -70,149 +71,34 @@ DeviceTab::DeviceTab( int i, int o, K3bSetupWizard* wizard )
   : K3bSetupTab( i, o, i18n("Setup CD Devices"), wizard )
 {
   QWidget* main = new QWidget( this );
-  QGridLayout* mainGrid = new QGridLayout( main );
-  mainGrid->setSpacing( KDialog::spacingHint() );
-  mainGrid->setMargin( 0 );
+  QVBoxLayout* mainLayout = new QVBoxLayout( main );
+  mainLayout->setMargin( 0 );
+  mainLayout->setSpacing( KDialog::spacingHint() );
+  mainLayout->setAutoAdd( true );
 
-  m_buttonAddDevice = new QPushButton( i18n( "Add Device" ), main, "m_buttonAddDevice" );
-
-  m_labelSetupDrives = new QLabel( main, "m_labelSetupDrives" );
-  m_labelSetupDrives->setText( i18n( "<p>K3b Setup has detected the following CD drives.</p>"
-				     "<p>You can add additional devices (like /dev/cdrom) if your drive has not "
-				     "been detected.</p>" ) );
-  m_labelSetupDrives->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
-
-
-  QGroupBox* groupReader = new QGroupBox( i18n("Reading Devices"), main );
-  groupReader->setColumnLayout(1, Qt::Vertical );
-  groupReader->layout()->setSpacing( KDialog::spacingHint() );
-  groupReader->layout()->setMargin( KDialog::marginHint() );
-
-  m_viewSetupReader = new KListView( groupReader, "m_viewSetupReader" );
-  m_viewSetupReader->addColumn( i18n( "System Device" ) );
-  m_viewSetupReader->addColumn( i18n( "Value" ) );
-  m_viewSetupReader->header()->hide();
-  m_viewSetupReader->setSorting( -1 );
-  m_viewSetupReader->setAllColumnsShowFocus( true );
-//   m_viewSetupReader->setItemsRenameable( true );
-//   m_viewSetupReader->setRenameable( 0, false );
-//   m_viewSetupReader->setRenameable( 1, true );
-
-
-
-  QGroupBox* groupWriter = new QGroupBox( i18n("Writing Devices"), main );
-  groupWriter->setColumnLayout(1, Qt::Vertical );
-  groupWriter->layout()->setSpacing( KDialog::spacingHint() );
-  groupWriter->layout()->setMargin( KDialog::marginHint() );
-
-  m_viewSetupWriter = new KListView( groupWriter, "m_viewSetupWriter" );
-  m_viewSetupWriter->addColumn( i18n( "System Device" ) );
-  m_viewSetupWriter->addColumn( i18n( "Value" ) );
-  m_viewSetupWriter->header()->hide();
-  m_viewSetupWriter->setSorting( -1 );
-  m_viewSetupWriter->setAllColumnsShowFocus( true );
-//   m_viewSetupWriter->setItemsRenameable( true );
-//   m_viewSetupWriter->setRenameable( 0, false );
-//   m_viewSetupWriter->setRenameable( 1, true );
-
-
-  QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
-  QHBoxLayout* buttonLayout = new QHBoxLayout;
-  buttonLayout->setMargin( 0 );
-  buttonLayout->setSpacing( 0 );
-  buttonLayout->addItem( spacer );
-  buttonLayout->addWidget( m_buttonAddDevice, 2, 3 );
-
-  mainGrid->addMultiCellWidget( m_labelSetupDrives, 0, 0, 0, 1 );
-  mainGrid->addMultiCellLayout( buttonLayout, 2, 2, 0, 1 );
-  mainGrid->addWidget( groupReader, 1, 0 );
-  mainGrid->addWidget( groupWriter, 1, 1 );
-
-//   QToolTip::add( m_viewSetupWriter, i18n("Click twice to change a value") );
-//   QToolTip::add( m_viewSetupReader, i18n("Click twice to change a value") );
-
+  QLabel* infoLabel = new QLabel( main );
+  infoLabel->setText( i18n( "<p>K3b Setup has detected the following CD drives.</p>"
+			    "<p>You can add additional devices (like /dev/cdrom) if your drive has not "
+			    "been detected.</p>"
+			    "<p>K3b will only detect the capabilities of generic-mmc drives correct. "
+			    "For all other drives you need to set them manually." ) );
+  infoLabel->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
+  m_deviceWidget = new K3bDeviceWidget( setup()->deviceManager(), main );
   setMainWidget( main );
 
-  connect( m_buttonAddDevice, SIGNAL(clicked()), this, SLOT(slotAddDevice()) );
-  connect( m_viewSetupWriter, SIGNAL(itemRenamed(QListViewItem*, const QString&, int)), 
-	   this, SLOT(slotDeviceItemRenamed(QListViewItem*, const QString&, int)) );
-  connect( m_viewSetupReader, SIGNAL(itemRenamed(QListViewItem*, const QString&, int)), 
-	   this, SLOT(slotDeviceItemRenamed(QListViewItem*, const QString&, int)) );
+  connect( m_deviceWidget, SIGNAL(refreshButtonClicked()), this, SLOT(slotRefreshButtonClicked()) );
 }
 
 
 void DeviceTab::readSettings()
 {
-  m_viewSetupWriter->clear();
-  m_viewSetupReader->clear();
-
-  K3bDevice* dev = setup()->deviceManager()->readingDevices().first();
-  while( dev != 0 ) {
-    // add device to device list
-    K3bDeviceViewItem* item_2 = new K3bDeviceViewItem( dev, m_viewSetupReader, dev->devicename() );
-    item_2->setPixmap( 0, SmallIcon( "cdrom_unmount") );
-
-    K3bDeviceViewItem* item = new K3bDeviceViewItem( dev, item_2 );
-    item->setText( 0, i18n( "Vendor" ) );
-    item->setText( 1, dev->vendor() );
-
-    item = new K3bDeviceViewItem( dev, item_2, item );
-    item->setText( 0, i18n( "Model" ) );
-    item->setText( 1, dev->description() );
-
-    item = new K3bDeviceViewItem( dev, item_2, item );
-    item->setText( 0, i18n( "Firmware" ) );
-    item->setText( 1, dev->version() );
-
-    item = new K3bDeviceViewItem( dev, item_2, item );
-    item->setText( 0, i18n( "Max Read Speed" ) );
-    item->setText( 1, QString::number( dev->maxReadSpeed() ) );
-
-    item_2->setOpen( TRUE );
-
-    dev = setup()->deviceManager()->readingDevices().next();
-  }
-
-
-  dev = setup()->deviceManager()->burningDevices().first();
-  while( dev != 0 ) {
-    // add device to device list
-    K3bDeviceViewItem* item_2 = new K3bDeviceViewItem( dev, m_viewSetupWriter, dev->devicename() );
-    item_2->setPixmap( 0, SmallIcon( "cdwriter_unmount" ) );
-
-    K3bDeviceViewItem* item = new K3bDeviceViewItem( dev, item_2 );
-    item->setText( 0, i18n( "Vendor" ) );
-    item->setText( 1, dev->vendor() );
-
-    item = new K3bDeviceViewItem( dev, item_2, item );
-    item->setText( 0, i18n( "Model" ) );
-    item->setText( 1, dev->description() );
-
-    item = new K3bDeviceViewItem( dev, item_2, item );
-    item->setText( 0, i18n( "Firmware" ) );
-    item->setText( 1, dev->version() );
-
-    item = new K3bDeviceViewItem( dev, item_2, item );
-    item->setText( 0, i18n( "Max Read Speed" ) );
-    item->setText( 1, QString::number( dev->maxReadSpeed() ) );
-
-    item = new K3bDeviceViewItem( dev, item_2, item );
-    item->setText( 0, i18n( "Max Write Speed" ) );
-    item->setText( 1, QString::number( dev->maxWriteSpeed() ) );
-    
-    item = new K3bDeviceViewItem( dev, item_2, item );
-    item->setText( 0, i18n( "Burnproof" ) );
-    item->setText( 1, dev->burnproof() ? i18n("yes") : i18n("no") );
-    
-    item_2->setOpen( TRUE );
-
-    dev = setup()->deviceManager()->burningDevices().next();
-  }
+  m_deviceWidget->init();
 }
 
 
 bool DeviceTab::saveSettings()
 {
+  m_deviceWidget->apply();
   if( setup()->deviceManager()->allDevices().isEmpty() )
     if( KMessageBox::warningYesNo( this, i18n("K3b Setup did not find any cd devices on your system. "
 					      "K3b is not of much use without any. Do you really want to continue?"),
@@ -223,57 +109,14 @@ bool DeviceTab::saveSettings()
 }
 
 
-void DeviceTab::slotAddDevice()
+void DeviceTab::slotRefreshButtonClicked()
 {
-  bool ok;
-  QString newDevicename = KLineEditDlg::getText( "Please enter the devicename where\n K3b shall search for a new drive\n(example: /dev/mebecdrom)", "/dev/", &ok, this );
-
-  if( ok ) {
-    if( setup()->deviceManager()->addDevice( newDevicename ) ) {
-      readSettings();
-    }
-    else
-      KMessageBox::error( this, "Sorry, could not find an additional device at\n" + newDevicename, i18n("Error"), false );
-  }
+  // reread devices
+  setup()->deviceManager()->clear();
+  setup()->deviceManager()->scanbus();
+  
+  m_deviceWidget->init();
 }
-
-
-void DeviceTab::slotDeviceItemRenamed( QListViewItem* item, const QString& newText, int col )
-{
-  if( col != 1 )
-    return;
-
-  K3bDeviceViewItem* deviceItem = dynamic_cast<K3bDeviceViewItem*>( item );
-  if( deviceItem != 0 ) {
-    if( item->text(0) == i18n("Max Read Speed") ) {
-      bool ok;
-      int newSpeed = newText.toInt( &ok );
-      if( ok )
-	deviceItem->device->setMaxReadSpeed( newSpeed );
-      else
-	item->setText( 1, QString::number( deviceItem->device->maxReadSpeed() ) );
-    }
-    else if( item->text(0) == i18n("Max Write Speed") ) {
-      bool ok;
-      int newSpeed = newText.toInt( &ok );
-      if( ok )
-	deviceItem->device->setMaxWriteSpeed( newSpeed );
-      else
-	item->setText( 1, QString::number( deviceItem->device->maxWriteSpeed() ) );
-    }
-    else if( item->text(0) == i18n("Burnproof") ) {
-      if( newText == i18n("yes") )
-	deviceItem->device->setBurnproof( true );
-      else if( newText == i18n("no") )
-	deviceItem->device->setBurnproof( false );
-      else
-	item->setText( 1, deviceItem->device->burnproof() ? i18n("yes") : i18n("no") );
-    }
-    else
-      qDebug("(K3bSetupWizard) invalid item renamed");
-  }
-}
-
 
 // ========================================================================================================== DEVICES-TAB ==
 
@@ -707,6 +550,8 @@ void PermissionTab::readSettings()
     m_editPermissionsGroup->setText( setup()->cdWritingGroup() );
   else
     m_editPermissionsGroup->setText( "cdrecording" );
+
+  m_boxUsers->clear();
   for ( QStringList::ConstIterator it = setup()->users().begin(); it != setup()->users().end(); ++it ) {
     m_boxUsers->insertItem( *it );
   }
