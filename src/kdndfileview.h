@@ -20,10 +20,8 @@
 #include <kfiledetailview.h>
 #include <kfileiconview.h>
 
-class QMouseEvent;
 class QListViewItem;
 class QIconViewItem;
-class QKeyEvent;
 
 
 /**
@@ -42,12 +40,7 @@ class KDndFileDetailView : public KFileDetailView
    void slotSelected( QListViewItem* item );
 
  protected:
-  void keyPressEvent( QKeyEvent* e );
-  void keyReleaseEvent( QKeyEvent* );
   QDragObject* dragObject();
-
- private:
-  bool m_notEnterDir;
 };
 
 
@@ -63,12 +56,7 @@ class KDndFileIconView : public KFileIconView
    void slotSelected( QIconViewItem* item );
 
  protected:
-  void keyPressEvent( QKeyEvent* e );
-  void keyReleaseEvent( QKeyEvent* );
   QDragObject* dragObject();
-
- private:
-  bool m_notEnterDir;
 };
 
 #endif

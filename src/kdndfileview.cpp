@@ -20,12 +20,13 @@
 #include <kglobalsettings.h>
 #include <kapplication.h>
 
-#include <qevent.h>
+#define XK_MISCELLANY
+#include <X11/keysymdef.h>
+#undef XK_MISCELLANY
 
 
 KDndFileDetailView::KDndFileDetailView( QWidget* parent, const char* name )
-  : KFileDetailView( parent, name ),
-    m_notEnterDir(false)
+  : KFileDetailView( parent, name )
 {
   setDragEnabled( true );
 
@@ -46,36 +47,19 @@ void KDndFileDetailView::slotSelected( QListViewItem* item )
   if( !item )
     return;
 
-  // this at least works for the shift key
-  // But better use it since otherwise none of the keys
-  // works if we do not have the focus :(
   uint kb = KApplication::keyboardModifiers();
-  bool notEnterDir = ( (kb & Qt::Key_Shift) || 
-		       (kb & Qt::Key_Control) );
-
-  m_notEnterDir = notEnterDir || m_notEnterDir;
+  bool notEnterDir = ( kb & XK_Control_L ||
+		       kb & XK_Control_R ||
+		       kb & XK_Alt_L ||
+		       kb & XK_Alt_R );
 
   if ( KGlobalSettings::singleClick() ) {
     const KFileItem *fi = ( (KFileListViewItem*)item )->fileInfo();
-    if ( fi && ( (fi->isDir() && !m_notEnterDir) || 
+    if ( fi && ( (fi->isDir() && !notEnterDir) || 
 		 (!fi->isDir() && !onlyDoubleClickSelectsFiles()) ) ) {
       sig->activate( fi );
     }
   }
-}
-
-
-void KDndFileDetailView::keyPressEvent( QKeyEvent* e )
-{
-  m_notEnterDir = e->key() == Key_Shift || e->key() == Key_Control;
-  KFileDetailView::keyPressEvent(e);
-}
-
-
-void KDndFileDetailView::keyReleaseEvent( QKeyEvent* e )
-{
-  m_notEnterDir = false;
-  KFileDetailView::keyReleaseEvent(e);
 }
 
 
@@ -119,36 +103,19 @@ void KDndFileIconView::slotSelected( QIconViewItem* item )
   if( !item )
     return;
 
-  // this at least works for the shift key
-  // But better use it since otherwise none of the keys
-  // works if we do not have the focus :(
   uint kb = KApplication::keyboardModifiers();
-  bool notEnterDir = ( (kb & Qt::Key_Shift) || 
-		       (kb & Qt::Key_Control) );
-
-  m_notEnterDir = notEnterDir || m_notEnterDir;
+  bool notEnterDir = ( kb & XK_Control_L ||
+		       kb & XK_Control_R ||
+		       kb & XK_Alt_L ||
+		       kb & XK_Alt_R );
 
   if ( KGlobalSettings::singleClick() ) {
     const KFileItem *fi = ( (KFileIconViewItem*)item )->fileInfo();
-    if ( fi && ( (fi->isDir() && !m_notEnterDir) || 
+    if ( fi && ( (fi->isDir() && !notEnterDir) || 
 		 (!fi->isDir() && !onlyDoubleClickSelectsFiles()) ) ) {
       sig->activate( fi );
     }
   }
-}
-
-
-void KDndFileIconView::keyPressEvent( QKeyEvent* e )
-{
-  m_notEnterDir = e->key() == Key_Shift || e->key() == Key_Control;
-  KFileIconView::keyPressEvent(e);
-}
-
-
-void KDndFileIconView::keyReleaseEvent( QKeyEvent* e )
-{
-  m_notEnterDir = false;
-  KFileIconView::keyReleaseEvent(e);
 }
 
 
