@@ -21,7 +21,7 @@
 #include <qvaluevector.h>
 
 // more or less a hack... this hole cdtect thing is not perfect
-#include <k3bvalidators.h>
+#include "k3bvalidators.h"
 
 #include <kdebug.h>
 
