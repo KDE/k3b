@@ -27,6 +27,7 @@ class QCheckBox;
 class QComboBox;
 class QListView;
 class QRadioButton;
+class QButtonGroup;
 class KCutLabel;
 
 
@@ -41,6 +42,12 @@ class K3bVcdTrackDialog : public KDialogBase
  protected slots:
   void slotOk();
 
+ private slots:
+  void slotPlayForever(bool);
+  void slotWaitInfinite(bool);
+  void slotPlayTimeChanged(int);
+  void slotWaitTimeChanged(int);
+  
  private:
   K3bVcdDoc* m_doc;
   QList<K3bVcdTrack> m_tracks;
@@ -85,6 +92,9 @@ class K3bVcdTrackDialog : public KDialogBase
 
   QSpinBox* m_spin_times;
   QSpinBox* m_spin_waittime;
+
+  QButtonGroup* m_groupPlay;
+  QButtonGroup* m_groupWait;
   
   void prepareGui();
   void setupNavigationTab();
