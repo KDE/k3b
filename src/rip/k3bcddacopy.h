@@ -24,7 +24,8 @@
 
 #include "../k3bjob.h"
 #include "../tools/k3bwavefilewriter.h"
-#include "../cdinfo/k3bdiskinfo.h"
+#include "../device/k3bdiskinfo.h"
+#include "../device/k3bdiskinfodetector.h"
 
 #ifdef QT_THREAD_SUPPORT
 #include "k3baudioripthread.h"
@@ -32,7 +33,7 @@
 #include "k3baudiorip.h"
 #endif
 
-#include <cddb/k3bcddbquery.h>
+#include "cddb/k3bcddbquery.h"
 
 typedef Q_INT16 size16;
 typedef Q_INT32 size32;
@@ -41,7 +42,6 @@ typedef Q_INT32 size32;
 class QStringList;
 class QFile;
 class K3bCdDevice::CdDevice;
-class K3bDiskInfoDetector;
 class QCustomEvent;
 
 /**
