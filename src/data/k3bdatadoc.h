@@ -43,7 +43,7 @@ public:
 	K3bDataDoc( QObject* parent );
 	~K3bDataDoc();
 
-	enum whiteSpaceTreatments { normal = 1, convertToUnderScore = 2, strip = 3, extendedStrip = 4 };
+	enum whiteSpaceTreatments { normal = 0, convertToUnderScore = 1, strip = 2, extendedStrip = 3 };
 		
 	K3bRootItem* root() const { return m_root; }
 
@@ -149,7 +149,8 @@ protected:
  	bool saveDocumentData( QFile& f );
 
  	void addNewFile( const QString&, K3bDirItem* );
- 		
+	QString treatWhitespace( const QString& );
+ 	 		
 private:
 	K3bRootItem* m_root;
 	QString m_name;

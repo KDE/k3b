@@ -165,7 +165,7 @@ bool K3bDoc::newDocument()
 	return true;
 }
 
-bool K3bDoc::openDocument(const KURL &url, const char *format )
+bool K3bDoc::openDocument(const KURL& url, const char* )
 {
   QString tmpfile;
   KIO::NetAccess::download( url, tmpfile );
@@ -188,7 +188,7 @@ bool K3bDoc::openDocument(const KURL &url, const char *format )
   return success;
 }
 
-bool K3bDoc::saveDocument(const KURL &url, const char *format )
+bool K3bDoc::saveDocument(const KURL&, const char* )
 {
 //  KTempFile( locateLocal( "tmp", "k3b"
 //	QFile f( filename );

@@ -42,9 +42,7 @@ K3bDataDoc::K3bDataDoc( QObject* parent )
 	m_docType = DATA;
 	m_root = 0;
 	
-	m_isoLevel = 1;
-	m_followSymbolicLinks = false;
-		
+			
 //	connect( this, SIGNAL(signalAddDirectory(const QString&, K3bDirItem*)),
 //					this, SLOT(slotAddDirectory( const QString&, K3bDirItem*)) );
 }
@@ -69,6 +67,9 @@ bool K3bDataDoc::newDocument()
 	m_createJoliet = false;
 	m_deleteImage = true;
 	m_onlyCreateImage = false;
+	m_followSymbolicLinks = false;
+	m_isoLevel = 1;
+	m_whiteSpaceTreatment = K3bDataDoc::normal;;
 	
 	return K3bDoc::newDocument();
 }
@@ -238,7 +239,7 @@ QString K3bDataDoc::writePathSpec( const QString& filename )
 	K3bDataItem* item = root()->nextSibling();
 	
 	while( item ) {
-		t << item->k3bPath() << "=" << item->localPath() << "\n";
+		t << treatWhitespace(item->k3bPath()) << "=" << item->localPath() << "\n";
 		
 		item = item->nextSibling();
 	}
@@ -264,4 +265,49 @@ const QString& K3bDataDoc::dummyDir()
 K3bBurnJob* K3bDataDoc::newBurnJob()
 {
 	return new K3bDataJob( this );
+}
+
+
+QString K3bDataDoc::treatWhitespace( const QString& path )
+{
+	if( whiteSpaceTreatment() != K3bDataDoc::normal ) {
+		QString _result;
+		int _startPos = path.findRev('/');
+		if( _startPos == -1 ) _startPos = 0;
+		else _startPos += 1;
+	  	_result = path.left( _startPos );
+  	
+	    if( whiteSpaceTreatment() == K3bDataDoc::convertToUnderScore ) {
+			// if QString is saved as an array this code is OK
+			for( uint i = _startPos; i < path.length(); i++ ) {
+				if( path[i] == ' ' )
+					_result.append('_');
+				else
+					_result.append( path[i] );
+			}
+	    }
+    	else if( whiteSpaceTreatment() == K3bDataDoc::strip ) {
+			// if QString is saved as an array this code is OK
+			for( uint i = _startPos; i < path.length(); i++ ) {
+				if( path[i] != ' ' )
+					_result.append( path[i] );
+			}
+		}
+		else if( whiteSpaceTreatment() == K3bDataDoc::extendedStrip ) {
+			// if QString is saved as an array this code is OK
+			for( uint i = _startPos; i < path.length(); i++ ) {
+				if( path[i] == ' ' ) {
+					if( path[i+1] != ' ' )
+						_result.append( path[++i].upper() );
+				}
+				else
+					_result.append( path[i] );
+			}
+		}
+		
+		qDebug( "(K3bDataDoc) converted " + path + " to " + _result );
+		return _result;
+	}
+	else
+		return path;
 }

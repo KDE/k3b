@@ -564,7 +564,7 @@ void K3bOptionDialog::slotStartPS()
 	_process.start( KProcess::DontCare );
 	
 	// embed the process
-	WId _id;
+//	WId _id;
 	m_embedPermission->setAutoDelete( true );
 	QCString reply_type;
 	QByteArray reply_data;

@@ -1,8 +1,14 @@
+0.4.1
+added whitespace-treatment
+dock-positions are saved
+
 0.4.0
 Added ISO-cd support
 file-tree creation via drag'n'drop
 renaming of files
 support of most of the mkisofs-features
+improved audiotrack dialog
+use of ID3Lib
 
-... i really cannot remember... ;-)
+... and other things i really cannot remember... ;-)
 

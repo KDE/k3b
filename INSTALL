@@ -1,7 +1,8 @@
-Install K3b 0.4.0
+Install K3b 0.4.1
+-----------------
 
-K3b 0.4.0 requires the ID3Lib which can be downloaded from id3lib.sourceforge.net.
-So first you need to install (configure/make/make install) the id3lib.
+K3b 0.4.1 requires the ID3Lib which can be downloaded from id3lib.sourceforge.net.
+First you need to install (configure/make/make install) the id3lib.
 
 Then install K3b like every other KDE app:
 
@@ -11,6 +12,22 @@ make
 
 make install (as root)
 
+
+
+To work properly cdrecord, cdrdao and mkisofs need root privileges.
+To do this you could either run k3b as root or do some additionel work:
+
+This is how I configured my system:
+	cdrecord, cdrdao, mkisofs are all part of the group "cdrecording" and owned by root:
+	This can be done by (as root for cdrecord): 
+		"chgrp cdrecording cdrecord"
+		"chown root cdrecord"
+
+	Then they are set suid root which means that they will be executed with
+	root privileges. This is done as follows: 
+		"chmod 4710 cdrecord"
+
+This configuration is based on the cdrecord-man-page.
 
 Have fun
 Sebastian Trueg

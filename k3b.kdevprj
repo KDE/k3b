@@ -19,14 +19,14 @@ type=DATA
 [Config for BinMakefileAm]
 addcxxflags=
 bin_program=k3b
-cxxflags=\s-O0 -g3 -Wall
-ldadd=-lid3 -lkfile -lkdeui -lkdecore $(LIB_QT)
+cxxflags=\s-O1 -g3 -Wall
+ldadd=-lid3 $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT)
 ldflags=
 
 [General]
 AMChanged=false
 author=Sebastian Trueg
-configure_args=--with-qt-dir=/usr/lib/qt --prefix=/opt/kde2
+configure_args=
 email=trueg@informatik.uni-freiburg.de
 kdevprj_version=1.3
 lfv_open_groups=
@@ -38,7 +38,7 @@ project_type=mdi_kde2
 sgml_file=/home/trueg/dev/kde/k3b/doc/en/index.docbook
 short_info=K3b is intended to fulfill all your burning needs under KDE.
 sub_dir=src/
-version=0.4.0
+version=0.4.1
 version_control=CVS
 workspace=1
 

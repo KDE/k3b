@@ -87,7 +87,7 @@ void AudioListViewItem::setText(int col, const QString& text )
 }
 
 	
-QString AudioListViewItem::key( int column, bool ascending ) const
+QString AudioListViewItem::key( int, bool ) const
 {
 	// The tracks should be sorted according to their track-number :-)
 	return text(0);

@@ -92,6 +92,26 @@ void K3bDataBurnDialog::saveSettings()
 	((K3bDataDoc*)doc())->setPublisher( m_editPublisher->text() );
 	((K3bDataDoc*)doc())->setPreparer( m_editPreparer->text() );
 	// ------------------------------------- saving mkisofs-options --
+
+	// save iso-level
+	qDebug("(K3bDataBurnDialog) saving iso-level");
+	if( m_groupIsoLevel->selected() == m_radioIsoLevel3 )
+	  ((K3bDataDoc*)doc())->setISOLevel( 3 );
+	else if( m_groupIsoLevel->selected() == m_radioIsoLevel2 )
+	  ((K3bDataDoc*)doc())->setISOLevel( 2 );
+	else
+	  ((K3bDataDoc*)doc())->setISOLevel( 1 );
+	
+	// save whitespace-treatment
+	qDebug("(K3bDataBurnDialog) saving whitespace-treatment");
+	if( m_groupWhiteSpace->selected() == m_radioSpaceStrip )
+		((K3bDataDoc*)doc())->setWhiteSpaceTreatment( K3bDataDoc::strip );
+	else if( m_groupWhiteSpace->selected() == m_radioSpaceExtended )
+		((K3bDataDoc*)doc())->setWhiteSpaceTreatment( K3bDataDoc::extendedStrip );
+	else if( m_groupWhiteSpace->selected() == m_radioSpaceReplace )
+		((K3bDataDoc*)doc())->setWhiteSpaceTreatment( K3bDataDoc::convertToUnderScore );
+	else
+		((K3bDataDoc*)doc())->setWhiteSpaceTreatment( K3bDataDoc::normal );
 }
 
 
@@ -459,7 +479,7 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
 
     frameLayout->addWidget( m_checkCreateJoliet, 0, 0 );
 
-    QButtonGroup* m_groupWhiteSpace = new QButtonGroup( frame, "m_groupWhiteSpace" );
+    m_groupWhiteSpace = new QButtonGroup( frame, "m_groupWhiteSpace" );
     m_groupWhiteSpace->setTitle( i18n( "Whitespace treatment" ) );
     m_groupWhiteSpace->setColumnLayout(0, Qt::Vertical );
     m_groupWhiteSpace->layout()->setSpacing( 0 );

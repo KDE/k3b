@@ -169,7 +169,7 @@ void K3bApp::initView()
 
   // add the cd-copy-widget to the tab
   m_documentTab->addTab( new K3bCopyWidget( m_documentTab ), "&Copy CD" );
-  m_documentTab->addTab( new K3bRipperWidget( m_documentTab ), "&Ripping" );
+//  m_documentTab->addTab( new K3bRipperWidget( m_documentTab ), "&Ripping" );
 
   dirDock = createDockWidget( "DirDock", SmallIcon("idea") );
   m_dirView = new K3bDirView( dirDock );
@@ -253,7 +253,8 @@ void K3bApp::saveOptions()
 	m_config->setGroup("ISO Options");
 	m_config->writeEntry( "Use ID3 Tag for mp3 renaming", m_useID3TagForMp3Renaming );
 
-  // TODO: save dock positions!
+  // save dock positions!
+	manager()->writeConfig( m_config, "Docking Config" );
 }
 
 
@@ -283,6 +284,9 @@ void K3bApp::readOptions()
   {
     resize(size);
   }
+
+	// read dock-positions
+	manager()->readConfig( m_config, "Docking Config" );
 
 	m_config->setGroup("ISO Options");
 	m_useID3TagForMp3Renaming = m_config->readBoolEntry("Use ID3 Tag for mp3 renaming", false);

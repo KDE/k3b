@@ -1,9 +1,21 @@
-K3b Version 0.4.0 alpha
+K3b Version 0.4.1
 
 Thanx for downloading my very first KDE-project.
 
 Since this is an alpha version some things might not work correct!
+This is what should work so far:
+	- burning audio-cds from mp3 and wav files. Sorry, still no track-length. :-(
+	- cd-text (with ID3-tag support)
+	- burning ISO-cds (with Joliet/Rockridge) (create image/write image or writing on-the-fly)
+	- creating of file-tree via drag'n'drop
+	- renaming of files (manually or automatically for mp3-files)
+	- support for most of the mkisofs-options (I don't think anyone will ever use them! ;-))
+
+Hint: Since there is no option to create folders in an iso-project yet drag an empty dir to your project and rename
+	it to create a new folder. I will add this option in the next release.
+
+Please, please report bugs (with k3b output!) and tell me what you like/dislike 
+about the user-interface!
 
 Have fun
-
 Sebastian Trueg ( trueg@informatik.uni-freiburg.de)
