@@ -282,6 +282,7 @@ void K3bVcdBurnDialog::slotOk()
 
 void K3bVcdBurnDialog::loadDefaults()
 {
+  m_checkDao->setChecked( true );
   m_checkSimulate->setChecked( false );
   m_checkBurnproof->setChecked( true );
   m_checkRemoveBufferFiles->setChecked( true );
@@ -334,6 +335,7 @@ void K3bVcdBurnDialog::saveSettings()
 
 void K3bVcdBurnDialog::readSettings()
 {
+  m_checkDao->setChecked( true );
   m_checkSimulate->setChecked( doc()->dummy() );
   m_checkRemoveBufferFiles->setChecked( vcdDoc()->deleteImage() );
   m_checkBurnproof->setChecked( doc()->burnproof() );

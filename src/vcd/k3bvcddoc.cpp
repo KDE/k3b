@@ -386,12 +386,12 @@ void K3bVcdDoc::loadDefaultSettings()
   c->setGroup( "Videocd settings" );
 
   setDummy( c->readBoolEntry( "dummy_mode", false ) );
-  setDao( c->readBoolEntry( "dao", true ) );
+  // setDao( c->readBoolEntry( "dao", true ) );
+  setDao( true );
   setOnTheFly( c->readBoolEntry( "on_the_fly", false ) );
   setBurnproof( c->readBoolEntry( "burnproof", true ) );
-  setDeleteImage( c->readBoolEntry( "only_create_image", false ) );
-
-  m_deleteImage = c->readBoolEntry( "remove_image", true );  
+  setOnlyCreateImage( c->readBoolEntry( "only_create_image", false ) );
+  setDeleteImage( c->readBoolEntry( "remove_image", true ) );  
 
 }
 

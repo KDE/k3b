@@ -20,7 +20,6 @@
 
 #include "k3bvcdoptions.h"
 #include "mpeginfo/mpeg.h"
-// #include "mpeginfo/chunkTab.h"
 #include "../k3bdoc.h"
 
 #include <qptrqueue.h>

@@ -478,7 +478,9 @@ void K3bVcdJob::slotVcdxBuildFinished()
   if( QFile::exists( m_xmlFile ) )
     QFile::remove( m_xmlFile );
 
+  kdDebug() << QString("(K3bVcdJob) create only image: %1").arg(vcdDoc()->onlyCreateImage()) << endl;
   if ( !vcdDoc()->onlyCreateImage() ) {
+    kdDebug() << "(K3bVcdJob) start writing" << endl;
     if( prepareWriterJob() ) {
       K3bEmptyDiscWaiter waiter( m_doc->burner(), k3bMain() );
       if( waiter.waitForEmptyDisc() == K3bEmptyDiscWaiter::CANCELED ) {
