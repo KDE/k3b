@@ -14,6 +14,7 @@
  */
 
 #include "k3bdiskinfo.h"
+#include "k3bdeviceglobals.h"
 
 #include <k3bmsf.h>
 
@@ -40,47 +41,6 @@ K3bCdDevice::DiskInfo::DiskInfo()
     device(0)
 {
 }
-
-
-QString K3bCdDevice::mediaTypeString( int m )
-{
-  if( m == -1 )
-    return i18n("Error");
-
-  QStringList s;
-  if( m & MEDIA_NONE )
-    s += i18n("No media");
-  if( m & MEDIA_DVD_ROM )
-    s += i18n("DVD-ROM");
-  if( m & MEDIA_DVD_R )
-    s += i18n("DVD-R");
-  if( m & MEDIA_DVD_R_SEQ )
-    s += i18n("DVD-R Sequential");
-  if( m & MEDIA_DVD_RAM )
-    s += i18n("DVD-RAM");
-  if( m & MEDIA_DVD_RW )
-    s += i18n("DVD-RW");
-  if( m & MEDIA_DVD_RW_OVWR )
-    s += i18n("DVD-RW Restricted Overwrite");
-  if( m & MEDIA_DVD_RW_SEQ )
-    s += i18n("DVD-RW Sequential");
-  if( m & MEDIA_DVD_PLUS_RW )
-    s += i18n("DVD+RW");
-  if( m & MEDIA_DVD_PLUS_R )
-    s += i18n("DVD+R");
-  if( m & MEDIA_CD_ROM )
-    s += i18n("CD-ROM");
-  if( m & MEDIA_CD_R )
-    s += i18n("CD-R");
-  if( m & MEDIA_CD_RW )
-    s += i18n("CD-RW");
-
-  if( s.isEmpty() )
-    return i18n("Error");
-  else
-    return s.join( "; " );
-}
-
 
 
 K3bCdDevice::NextGenerationDiskInfo::NextGenerationDiskInfo()

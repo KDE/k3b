@@ -180,7 +180,7 @@ void K3bGrowisofsWriter::start()
     else {
       if( simulate() ) {
 	emit newTask( i18n("Simulating") );
-	emit infoMessage( i18n("Starting simulation at %1x speed...").arg(burnSpeed()), 
+	emit infoMessage( i18n("Starting simulation..."), 
 			  K3bJob::PROCESS );
 	//
 	// TODO: info message that DVD+R(W) has no dummy mode and the speed setting is not used
@@ -189,7 +189,7 @@ void K3bGrowisofsWriter::start()
       }
       else {
 	emit newTask( i18n("Writing") );
-	emit infoMessage( i18n("Starting writing at %1x speed...").arg(burnSpeed()), K3bJob::PROCESS );
+	emit infoMessage( i18n("Starting writing..."), K3bJob::PROCESS );
       }
     }
   }
@@ -237,12 +237,19 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
   }
   else if( line.contains( "flushing cache" ) ) {
     emit newSubTask( i18n("Flushing Cache")  );
+    emit infoMessage( i18n("Flushing Cache") + "...", PROCESS );
   }
   else if( line.contains( "updating RMA" ) ) {
     emit newSubTask( i18n("Updating RMA") );
+    emit infoMessage( i18n("Updating RMA") + "...", PROCESS );
   }
   else if( line.contains( "closing session" ) ) {
     emit newSubTask( i18n("Closing Session") );
+    emit infoMessage( i18n("Closing Session") + "...", PROCESS );
+  }
+  else if( line.contains( "writing lead-out" ) ) {
+    emit newSubTask( i18n("Writing Lead-out") );
+    emit infoMessage( i18n("Writing the lead-out may take a while."), INFO );
   }
   else {
     kdDebug() << "(growisofs) " << line << endl;

@@ -18,6 +18,7 @@
 #include <k3bglobals.h>
 #include <k3bprocess.h>
 #include <device/k3bdevice.h>
+#include <device/k3bdeviceglobals.h>
 #include <device/k3bdevicehandler.h>
 #include <device/k3bdiskinfo.h>
 #include <k3bemptydiscwaiter.h>
@@ -285,6 +286,7 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler*
     //
     // DVD+RW is quite easy to handle. There is only one possible mode and it is always recommended to not
     // format it more than once but to overwrite it once it is formatted
+    // Once the initial formatting has been done it's always "appendable" (or "complete"???)
     //
 
 
@@ -294,18 +296,24 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler*
 
       // mode is ignored
 
-      // FIXME: WHAT IF THE MEDIA IS NOT FORMATTED YET? DO WE SEE IT AS EMPTY OR COMPLETE?
-      
-      emit infoMessage( i18n("No need to format %1 media."). arg(K3bCdDevice::mediaTypeString(K3bCdDevice::MEDIA_DVD_PLUS_RW)), INFO );
-
-      if( d->force ) {
-	emit infoMessage( i18n("Forcing formatting anyway."), INFO );
-	emit infoMessage( i18n("It is not recommended to force formatting of DVD+RW media."), INFO );
-	emit infoMessage( i18n("Already after 10-20 reformats the media might be unusable."), INFO );
+      if( dh->ngDiskInfo().empty() ) {
+	// 
+	// The DVD+RW is blank and needs to be initially formatted
+	//
 	blank = false;
       }
       else {
-	format = false;
+	emit infoMessage( i18n("No need to format %1 media."). arg(K3bCdDevice::mediaTypeString(K3bCdDevice::MEDIA_DVD_PLUS_RW)), INFO );
+
+	if( d->force ) {
+	  emit infoMessage( i18n("Forcing formatting anyway."), INFO );
+	  emit infoMessage( i18n("It is not recommended to force formatting of DVD+RW media."), INFO );
+	  emit infoMessage( i18n("Already after 10-20 reformats the media might be unusable."), INFO );
+	  blank = false;
+	}
+	else {
+	  format = false;
+	}
       }
     }
 
@@ -323,6 +331,10 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler*
       if( dh->ngDiskInfo().currentProfile() != -1 ) {
 	emit infoMessage( i18n("Formatted in %1 mode.").arg(K3bCdDevice::mediaTypeString(dh->ngDiskInfo().currentProfile())), INFO );	
 	
+
+	//
+	// Is it possible to have an empty DVD-RW in restricted overwrite mode????
+	//
 	
 	if( dh->ngDiskInfo().empty() &&
 	    (d->mode == K3b::WRITING_MODE_AUTO ||

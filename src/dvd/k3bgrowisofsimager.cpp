@@ -182,7 +182,7 @@ void K3bGrowisofsImager::start()
   else {
     if( m_doc->dummy() ) {
       emit newTask( i18n("Simulating") );
-      emit infoMessage( i18n("Starting simulation at %1x speed...").arg(m_doc->speed()), 
+      emit infoMessage( i18n("Starting simulation..."), 
 			K3bJob::PROCESS );
       //
       // TODO: info message that DVD+R(W) has no dummy mode and the speed setting is not used
@@ -191,7 +191,7 @@ void K3bGrowisofsImager::start()
     }
     else {
       emit newTask( i18n("Writing") );
-      emit infoMessage( i18n("Starting writing at %1x speed...").arg(m_doc->speed()), K3bJob::PROCESS );
+      emit infoMessage( i18n("Starting writing..."), K3bJob::PROCESS );
     }
   }
 }
@@ -208,13 +208,26 @@ void K3bGrowisofsImager::slotReceivedStderr( const QString& line )
     K3bIsoImager::parseProgress( line );
   }
   else if( line.contains( "flushing cache" ) ) {
-    emit newSubTask( i18n("Flushing Cache") );
+    emit newSubTask( i18n("Flushing Cache")  );
+    emit infoMessage( i18n("Flushing Cache") + "...", PROCESS );
   }
   else if( line.contains( "updating RMA" ) ) {
     emit newSubTask( i18n("Updating RMA") );
+    emit infoMessage( i18n("Updating RMA") + "...", PROCESS );
   }
   else if( line.contains( "closing session" ) ) {
     emit newSubTask( i18n("Closing Session") );
+    emit infoMessage( i18n("Closing Session") + "...", PROCESS );
+  }
+  else if( line.contains( "writing lead-out" ) ) {
+    emit newSubTask( i18n("Writing Lead-out") );
+    emit infoMessage( i18n("Writing the lead-out may take a while."), INFO );
+  }
+  else if( line.contains( "Quick Grow" ) ) {
+    emit infoMessage( i18n("Removing reference to lead-out."), PROCESS );
+  }
+  else if( line.contains( "copying volume descriptor" ) ) {
+    emit infoMessage( i18n("Modifying Iso9660 volume descriptor"), PROCESS );
   }
   else {
     kdDebug() << "(growisofs) " << line << endl;

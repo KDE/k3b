@@ -270,6 +270,7 @@ namespace K3bCdDevice
     int  mount();
     int  unmount();
 
+    int writingModes() const { return m_writeModes; }
     bool supportsWriteMode( WriteMode );
 
     /**
@@ -301,6 +302,10 @@ namespace K3bCdDevice
 
     bool getDiscInfo( K3bCdDevice::disc_info_t* info ) const;
     bool readModePage2A( struct K3bCdDevice::mm_cap_page_2A* p ) const;
+    bool modeSelect( unsigned char* page, int pageLen, bool pf, bool sp ) const;
+    bool modeSense( int page, unsigned char* pageData, int pageLen ) const;
+
+    void checkWriteModes();
 
     QString m_vendor;
     QString m_description;

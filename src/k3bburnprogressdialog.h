@@ -41,6 +41,7 @@ class K3bBurnProgressDialog : public K3bJobProgressDialog  {
 
  protected slots:
   void slotWriteSpeed( int );
+  void slotBufferStatus( int );
 
  protected:
   QLabel* m_labelWriter;

@@ -16,6 +16,7 @@
 
 #include "k3bdevicemanager.h"
 #include "k3bdevice.h"
+#include "k3bdeviceglobals.h"
 #include <k3bexternalbinmanager.h>
 #include <k3bglobals.h>
 
@@ -299,6 +300,8 @@ void K3bCdDevice::DeviceManager::printDevices()
 	      << "Mountpoint:     " << dev->mountPoint() << endl
 	      << "Write speed:    " << dev->maxWriteSpeed() << endl
 	      << "Profiles:       " << mediaTypeString( dev->supportedProfiles() ) << endl
+	      << "Devicetype:     " << deviceTypeString( dev->type() ) << endl
+	      << "Writing modes:  " << writingModeString( dev->writingModes() ) << endl
 	      << "Reader aliases: " << dev->deviceNodes().join(", ") << endl
 	      << "------------------------------" << endl;
   }
@@ -418,6 +421,11 @@ bool K3bCdDevice::DeviceManager::saveConfig( KConfig* c )
 
 void K3bCdDevice::DeviceManager::determineCapabilities(K3bDevice *dev)
 {
+  // we just need to do this for writers since we use it to determine the writing modes
+  if( !dev->burner() )
+    return;
+
+
   // we do not use the user configured cdrecord here since we want to make sure
   // to get all the capabilities of the system
 

@@ -139,6 +139,7 @@ void K3bDvdJob::prepareGrowisofsImager()
     connect( m_growisofsImager, SIGNAL(percent(int)), this, SLOT(slotGrowisofsImagerPercent(int)) );
     connect( m_growisofsImager, SIGNAL(finished(bool)), this, SLOT(slotWritingFinished(bool)) );
     connect( m_growisofsImager, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
+    connect( m_growisofsImager, SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
     connect( m_growisofsImager, SIGNAL(debuggingOutput(const QString&, const QString&)), 
 	     this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
   }

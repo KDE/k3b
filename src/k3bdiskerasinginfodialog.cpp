@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -23,10 +23,12 @@
 #include <qframe.h>
 
 #include <klocale.h>
+#include <kprogress.h>
 
 
-K3bErasingInfoDialog::K3bErasingInfoDialog( QWidget* parent, const char* name ) 
-  : KDialogBase( parent, name, true, i18n("Erasing"), Cancel|Ok, Ok, true )
+K3bErasingInfoDialog::K3bErasingInfoDialog( bool progress, QWidget* parent, const char* name ) 
+  : KDialogBase( parent, name, true, i18n("Erasing"), Cancel|Ok, Ok, true ),
+    m_progress(progress)
 {
   QFrame* main = makeMainWidget();
   QGridLayout* mainLayout = new QGridLayout( main );
@@ -34,13 +36,20 @@ K3bErasingInfoDialog::K3bErasingInfoDialog( QWidget* parent, const char* name )
   mainLayout->setSpacing( spacingHint() );
 
   m_label = new QLabel( i18n("Erasing CD-RW"), main );
-  m_busyWidget = new K3bBusyWidget( main );
+  if( m_progress )
+    m_progressBar = new KProgress( main );
+  else
+    m_busyWidget = new K3bBusyWidget( main );
 
   mainLayout->addWidget( m_label, 0, 0 );
-  mainLayout->addWidget( m_busyWidget, 1, 0 );
+  if( m_progress )
+    mainLayout->addWidget( m_progressBar, 1, 0 );
+  else
+    mainLayout->addWidget( m_busyWidget, 1, 0 );
 
   showButtonOK( false );
-  m_busyWidget->showBusy( true );
+  if( !m_progress )
+    m_busyWidget->showBusy( true );
 }
 
 
@@ -50,16 +59,23 @@ K3bErasingInfoDialog::~K3bErasingInfoDialog()
 
 void K3bErasingInfoDialog::slotFinished( bool success )
 {
-  m_busyWidget->showBusy( false );
+  if( m_progress )
+    m_busyWidget->showBusy( false );
 
   showButtonOK( true );
   showButtonCancel( false );
-  
+
   if( success )
     m_label->setText( i18n("Disk successfully erased. Please reload the disk.") );
   else
     m_label->setText( i18n("K3b was unable to erase the disk.") );
 }
 
+
+void K3bErasingInfoDialog::setProgress( int p )
+{
+  if( m_progress )
+    m_progressBar->setProgress( p );
+}
 
 #include "k3bdiskerasinginfodialog.moc"

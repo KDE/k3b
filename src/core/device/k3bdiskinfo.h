@@ -66,8 +66,6 @@ namespace K3bCdDevice
 		                        MEDIA_DVD_PLUS_R 
   };
 
-  QString mediaTypeString( int );
-
   inline bool isDvdMedia( int mediaType ) {
     return ( mediaType == MEDIA_DVD_ROM || 
 	     mediaType == MEDIA_DVD_R || 

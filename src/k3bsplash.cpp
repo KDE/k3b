@@ -24,6 +24,8 @@
 #include <qpainter.h>
 
 #include <kstandarddirs.h>
+#include <kapplication.h>
+#include <kaboutdata.h>
 
 
 K3bSplash::K3bSplash( QWidget* parent, const char* name )
@@ -31,6 +33,12 @@ K3bSplash::K3bSplash( QWidget* parent, const char* name )
 {
   setMargin( 0 );
   setSpacing( 0 );
+
+  QLabel* copyrightLabel = new QLabel( kapp->aboutData()->copyrightStatement(), this );
+  copyrightLabel->setMargin( 2 );
+  copyrightLabel->setPaletteBackgroundColor( black );
+  copyrightLabel->setPaletteForegroundColor( white );
+  copyrightLabel->setAlignment( AlignRight );
 
   QLabel* picLabel = new QLabel( this );
   QPixmap pixmap;

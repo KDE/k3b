@@ -17,6 +17,7 @@
 #include "k3bdevicewidget.h"
 #include "k3bdevicemanager.h"
 #include "k3bdevice.h"
+#include "k3bdeviceglobals.h"
 #include <k3blistview.h>
 
 #include <klineeditdlg.h>
@@ -442,27 +443,10 @@ void K3bDeviceWidget::updateDeviceListViews()
 // 								    cdrwItem );
 
       // and at last the write modes
-      QString wm;
-      if( dev->device->supportsWriteMode( K3bDevice::SAO ) )
-	wm += "SAO ";
-      if( dev->device->supportsWriteMode( K3bDevice::SAO_R96R ) )
-	wm += "SAO/R96R ";
-      if( dev->device->supportsWriteMode( K3bDevice::SAO_R96P ) )
-	wm += "SAO/R96P ";
-      if( dev->device->supportsWriteMode( K3bDevice::PACKET ) )
-	wm += "PACKET ";
-      if( dev->device->supportsWriteMode( K3bDevice::TAO ) )
-	wm += "TAO ";
-      if( dev->device->supportsWriteMode( K3bDevice::RAW ) )
-	wm += "RAW ";
-      if( dev->device->supportsWriteMode( K3bDevice::RAW_R16 ) )
-	wm += "RAW/R16 ";
-      if( dev->device->supportsWriteMode( K3bDevice::RAW_R96R ) )
-	wm += "RAW/R96R ";
-      if( dev->device->supportsWriteMode( K3bDevice::RAW_R96P ) )
-	wm += "RAW/R96P ";
-      
-      (new K3bListViewItem( devRoot, burnfreeItem, i18n("Write modes:"), wm ))->setForegroundColor( 1, gray );
+      (new K3bListViewItem( devRoot, 
+			    burnfreeItem, 
+			    i18n("Write modes:"), 
+			    K3bCdDevice::writingModeString(dev->device->writingModes()) ))->setForegroundColor( 1, gray );
     }
 
     devRoot->setOpen(true);

@@ -234,17 +234,29 @@ namespace K3bCdDevice
   } toc_pma_atip_t;
 
 
+#if __BYTE_ORDER == __BIG_ENDIAN
   struct cd_wr_speed_performance {
     unsigned char res0;                   /* Reserved                          */
     unsigned char rot_ctl_sel     : 2;    /* Rotational control selected       */
     unsigned char res_1_27        : 6;    /* Reserved                          */
     unsigned char wr_speed_supp[2];       /* Supported write speed             */
   };
-  
+#else
+  struct cd_wr_speed_performance {
+    unsigned char res0;                   /* Reserved                          */
+    unsigned char res_1_27        : 6;    /* Reserved                          */
+    unsigned char rot_ctl_sel     : 2;    /* Rotational control selected       */
+    unsigned char wr_speed_supp[2];       /* Supported write speed             */
+  };
+#endif
+
+
   /**
    * Based on the cdrecord struct cd_mode_page_2A
    * MM Capabilities and Mechanical Status Page
    */
+#if __BYTE_ORDER == __BIG_ENDIAN
+
   struct mm_cap_page_2A {
     unsigned char PS               : 1;
     unsigned char res_1            : 1;
@@ -328,6 +340,160 @@ namespace K3bCdDevice
     wr_speed_des[1];                    /* wr speed performance descriptor   */
                                         /* Actually more (num_wr_speed_des)  */
   };
+
+#else  // LITTLE_ENDIAN
+
+  struct mm_cap_page_2A {
+    unsigned char page_code        : 6;
+    unsigned char res_1            : 1;
+    unsigned char PS               : 1;
+    unsigned char page_len;             /* 0x14 = 20 Bytes (MMC) */
+                                        /* 0x18 = 24 Bytes (MMC-2) */
+                                        /* 0x1C >= 28 Bytes (MMC-3) */
+    unsigned char cd_r_read        : 1; /* Reads CD-R  media       */
+    unsigned char cd_rw_read       : 1; /* Reads CD-RW media       */
+    unsigned char method2          : 1; /* Reads fixed packet method2 media  */
+    unsigned char dvd_rom_read     : 1; /* Reads DVD ROM media       */
+    unsigned char dvd_r_read       : 1; /* Reads DVD-R media       */
+    unsigned char dvd_ram_read     : 1; /* Reads DVD-RAM media       */
+    unsigned char res_2_67         : 2; /* Reserved        */
+    unsigned char cd_r_write       : 1; /* Supports writing CD-R  media      */
+    unsigned char cd_rw_write      : 1; /* Supports writing CD-RW media      */
+    unsigned char test_write       : 1; /* Supports emulation write      */
+    unsigned char res_3_3          : 1; /* Reserved        */
+    unsigned char dvd_r_write      : 1; /* Supports writing DVD-R media      */
+    unsigned char dvd_ram_write    : 1; /* Supports writing DVD-RAM media    */
+    unsigned char res_3_67         : 2; /* Reserved        */
+    unsigned char audio_play       : 1; /* Supports Audio play operation     */
+    unsigned char composite        : 1; /* Deliveres composite A/V stream    */
+    unsigned char digital_port_2   : 1; /* Supports digital output on port 2 */
+    unsigned char digital_port_1   : 1; /* Supports digital output on port 1 */
+    unsigned char mode_2_form_1    : 1; /* Reads Mode-2 form 1 media (XA)    */
+    unsigned char mode_2_form_2    : 1; /* Reads Mode-2 form 2 media      */
+    unsigned char multi_session    : 1; /* Reads multi-session media      */
+    unsigned char BUF              : 1; /* Supports Buffer under. free rec.  */
+    unsigned char cd_da_supported  : 1; /* Reads audio data with READ CD cmd */
+    unsigned char cd_da_accurate   : 1; /* READ CD data stream is accurate   */
+    unsigned char rw_supported     : 1; /* Reads R-W sub channel information */
+    unsigned char rw_deint_corr    : 1; /* Reads de-interleved R-W sub chan  */
+    unsigned char c2_pointers      : 1; /* Supports C2 error pointers      */
+    unsigned char ISRC             : 1; /* Reads ISRC information      */
+    unsigned char UPC              : 1; /* Reads media catalog number (UPC)  */
+    unsigned char read_bar_code    : 1; /* Supports reading bar codes      */
+    unsigned char lock             : 1; /* PREVENT/ALLOW may lock media      */
+    unsigned char lock_state       : 1; /* Lock state 0=unlocked 1=locked    */
+    unsigned char prevent_jumper   : 1; /* State of prev/allow jumper 0=pres */
+    unsigned char eject            : 1; /* Ejects disc/cartr with STOP LoEj  */
+    unsigned char res_6_4          : 1; /* Reserved        */
+    unsigned char loading_type     : 3; /* Loading mechanism type      */
+    unsigned char sep_chan_vol     : 1; /* Vol controls each channel separat */
+    unsigned char sep_chan_mute    : 1; /* Mute controls each channel separat*/
+    unsigned char disk_present_rep : 1; /* Changer supports disk present rep */
+    unsigned char sw_slot_sel      : 1; /* Load empty slot in changer      */
+    unsigned char side_change      : 1; /* Side change capable       */
+    unsigned char rw_in_lead_in    : 1; /* Reads raw R-W subcode from lead in */
+    unsigned char res_7            : 2; /* Reserved        */
+    unsigned char max_read_speed[2];    /* Max. read speed in KB/s      */
+                                        /* obsolete in MMC-4 */
+    unsigned char num_vol_levels[2];    /* # of supported volume levels      */
+    unsigned char buffer_size[2];       /* Buffer size for the data in KB    */
+    unsigned char cur_read_speed[2];    /* Current read speed in KB/s      */
+                                        /* obsolete in MMC-4 */
+    unsigned char res_16;               /* Reserved        */
+    unsigned char res_17_0         : 1; /* Reserved        */
+    unsigned char BCK              : 1; /* Data valid on falling edge of BCK */
+    unsigned char RCK              : 1; /* Set: HIGH high LRCK=left channel  */
+    unsigned char LSBF             : 1; /* Set: LSB first Clear: MSB first   */
+    unsigned char length           : 2; /* 0=32BCKs 1=16BCKs 2=24BCKs 3=24I2c*/
+    unsigned char res_17           : 2; /* Reserved        */
+    unsigned char max_write_speed[2];   /* Max. write speed supported in KB/s*/
+                                        /* obsolete in MMC-4 */
+    unsigned char cur_write_speed[2];   /* Current write speed in KB/s      */
+                                        /* obsolete in MMC-4 */
+
+    /* Byte 22 ... Only in MMC-2      */
+    unsigned char copy_man_rev[2];      /* Copy management revision supported*/
+    unsigned char res_24;               /* Reserved        */
+    unsigned char res_25;               /* Reserved        */
+
+    /* Byte 26 ... Only in MMC-3      */
+    unsigned char res_26;               /* Reserved        */
+    unsigned char rot_ctl_sel      : 2; /* Rotational control selected      */
+    unsigned char res_27_27        : 6; /* Reserved        */
+    unsigned char v3_cur_write_speed[2]; /* Current write speed in KB/s      */
+    unsigned char num_wr_speed_des[2];  /* # of wr speed perf descr. tables  */
+    struct cd_wr_speed_performance
+    wr_speed_des[1];                    /* wr speed performance descriptor   */
+                                        /* Actually more (num_wr_speed_des)  */
+  };
+#endif
+
+  /**
+   * Based on the cdrecord struct cd_mode_page_05
+   * Write Parameters Mode Page
+   */
+#if __BYTE_ORDER == __BIG_ENDIAN
+  struct wr_param_page_05 {                /* write parameters */
+    unsigned char PS               : 1;
+    unsigned char res_1            : 1;
+    unsigned char page_code        : 6;
+    unsigned char page_len;                /* 0x32 = 50 Bytes */
+    unsigned char res_2_7          : 1;
+    unsigned char BUFE             : 1;    /* Enable Bufunderrun free rec.      */
+    unsigned char LS_V             : 1;    /* Link size valid                   */
+    unsigned char test_write       : 1;    /* Do not actually write data        */
+    unsigned char write_type       : 4;    /* Session write type (PACKET/TAO...)*/
+    unsigned char multi_session    : 2;    /* Multi session write type          */
+    unsigned char fp               : 1;    /* Fixed packed (if in packet mode)  */
+    unsigned char copy             : 1;    /* 1st higher gen of copy prot track */
+    unsigned char track_mode       : 4;    /* Track mode (Q-sub control nibble) */
+    unsigned char res_4            : 4;    /* Reserved                          */
+    unsigned char dbtype           : 4;    /* Data block type                   */
+    unsigned char link_size;               /* Link Size (default is 7)          */
+    unsigned char res_6;                   /* Reserved                          */
+    unsigned char res_7            : 2;    /* Reserved                          */
+    unsigned char host_appl_code   : 6;    /* Host application code of disk     */
+    unsigned char session_format;          /* Session format (DA/CDI/XA)        */
+    unsigned char res_9;                   /* Reserved                          */
+    unsigned char packet_size[4];          /* # of user datablocks/fixed packet */
+    unsigned char audio_pause_len[2];      /* # of blocks where index is zero   */
+    unsigned char media_cat_number[16];    /* Media catalog Number (MCN)        */
+    unsigned char ISRC[14];                /* ISRC for this track               */
+    unsigned char sub_header[4];
+    unsigned char vendor_uniq[4];
+  };
+
+#else // __LITTLE_ENDIAN
+  struct wr_param_page_05 {		/* write parameters */
+    unsigned char page_code        : 6;
+    unsigned char res_1            : 1;
+    unsigned char PS               : 1;
+    unsigned char p_len;		/* 0x32 = 50 Bytes */
+    unsigned char write_type	   : 4;	/* Session write type (PACKET/TAO...)*/
+    unsigned char test_write	   : 1;	/* Do not actually write data	     */
+    unsigned char LS_V		   : 1;	/* Link size valid		     */
+    unsigned char BUFE		   : 1;	/* Enable Bufunderrun free rec.	     */
+    unsigned char res_2_7	   : 1;
+    unsigned char track_mode	   : 4;	/* Track mode (Q-sub control nibble) */
+    unsigned char copy		   : 1;	/* 1st higher gen of copy prot track ~*/
+    unsigned char fp		   : 1;	/* Fixed packed (if in packet mode)  */
+    unsigned char multi_session	   : 2;	/* Multi session write type	     */
+    unsigned char dbtype	   : 4;	/* Data block type		     */
+    unsigned char res_4		   : 4;	/* Reserved			     */
+    unsigned char link_size;		/* Link Size (default is 7)	     */
+    unsigned char res_6;	       	/* Reserved			     */
+    unsigned char host_appl_code   : 6;	/* Host application code of disk     */
+    unsigned char res_7		   : 2;	/* Reserved			     */
+    unsigned char session_format;	/* Session format (DA/CDI/XA)	     */
+    unsigned char res_9;		/* Reserved			     */
+    unsigned char packet_size[4];	/* # of user datablocks/fixed packet */
+    unsigned char audio_pause_len[2];	/* # of blocks where index is zero   */
+    unsigned char media_cat_number[16];	/* Media catalog Number (MCN)	     */
+    unsigned char ISRC[14];		/* ISRC for this track		     */
+    unsigned char sub_header[4];
+    unsigned char vendor_uniq[4];
+  };
+#endif
 }
 
 

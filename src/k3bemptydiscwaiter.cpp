@@ -16,10 +16,13 @@
 
 #include "k3bemptydiscwaiter.h"
 #include <device/k3bdevice.h>
+#include <device/k3bdeviceglobals.h>
 #include <device/k3bdevicehandler.h>
+#include <k3bglobals.h>
 #include "k3bblankingjob.h"
 #include "tools/k3bbusywidget.h"
 #include "k3bdiskerasinginfodialog.h"
+#include "dvd/k3bdvdformattingjob.h"
 
 #include <qtimer.h>
 #include <qlabel.h>
@@ -131,9 +134,9 @@ int K3bEmptyDiscWaiter::waitForDisc( int mediaState, int mediaType, const QStrin
   QString m;
   if( (d->wantedMediaType & K3bCdDevice::MEDIA_WRITABLE_DVD) &&
       (d->wantedMediaType & K3bCdDevice::MEDIA_WRITABLE_CD) )
-    m = i18n("CD-R or DVD±R");
+    m = i18n("CD-R or DVD+-R");
   else if( d->wantedMediaType & K3bCdDevice::MEDIA_WRITABLE_DVD )
-    m = i18n("DVD±R(W)");
+    m = i18n("DVD+-R(W)");
   else
     m = i18n("CD-R(W)");
 
@@ -215,40 +218,58 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
     if( (d->wantedMediaType & dh->ngDiskInfo().mediaType()) &&
 	(d->wantedMediaState & dh->ngDiskInfo().diskState()) )
 	finishWaiting( dh->ngDiskInfo().mediaType() );
-    else {
-      if( dh->ngDiskInfo().rewritable() ) {
-	
-	// this should not block for long since the device has been opened recently
-	if( d->device->rewritable() ) {
-	  if( KMessageBox::questionYesNo( qApp->activeWindow(),
-					  i18n("K3b found rewritable disk in %1 - %2. "
-					       "Should it be erased?").arg(d->device->vendor()).arg(d->device->description()),
-					  i18n("Found rewritable disk") ) == KMessageBox::Yes ) {
-	    // start a k3bblankingjob
-	    K3bErasingInfoDialog infoDialog( qApp->activeWindow() );
-	    
-	    //
-	    // TODO: check for DVD and use a DVDErasingJob if so
-	    //
 
+    // a DVD+RW or a DVD-RW in restrcited overwrite mode may simply be overwritten
+    else if( (d->wantedMediaType & (K3bCdDevice::MEDIA_DVD_RW|K3bCdDevice::MEDIA_DVD_PLUS_RW)) &&
+	     (dh->ngDiskInfo().currentProfile() & (K3bCdDevice::MEDIA_DVD_PLUS_RW|K3bCdDevice::MEDIA_DVD_RW_OVWR)) )
+	finishWaiting( dh->ngDiskInfo().mediaType() );
+    else {
+      if( (d->wantedMediaType & dh->ngDiskInfo().mediaType()) &&
+	  (d->wantedMediaState & K3bCdDevice::STATE_EMPTY) &&
+	  dh->ngDiskInfo().rewritable() ) {
+	
+	if( KMessageBox::questionYesNo( qApp->activeWindow(),
+					i18n("K3b found rewritable disk in %1 - %2. "
+					     "Should it be erased?").arg(d->device->vendor()).arg(d->device->description()),
+					i18n("Found rewritable disk") ) == KMessageBox::Yes ) {
+
+	  if( dh->ngDiskInfo().mediaType() == K3bCdDevice::MEDIA_CD_RW ) {
+	    // start a k3bblankingjob
+	    K3bErasingInfoDialog infoDialog( false, qApp->activeWindow() );
+	    
 	    K3bBlankingJob job;
 	    job.setDevice( d->device );
 	    job.setMode( K3bBlankingJob::Fast );
 	    connect( &job, SIGNAL(finished(bool)), &infoDialog, SLOT(slotFinished(bool)) );
 	    connect( &infoDialog, SIGNAL(cancelClicked()), &job, SLOT(cancel()) );
 	    job.start();
-	    // if the Job did not eject we do it...
-	    K3bCdDevice::reload( d->device );
 	    infoDialog.exec();
 	  }
-	  else
-	    K3bCdDevice::eject( d->device );
+	  else {
+	    //
+	    // format a DVD-RW in sequential mode
+	    //
+	    K3bDvdFormattingJob job;
+	    job.setDevice( d->device );
+	    job.setMode( K3b::WRITING_MODE_INCR_SEQ );
+	    job.setQuickFormat( true );
+	    job.setForce( false );
+
+	    K3bErasingInfoDialog infoDialog( true, qApp->activeWindow() );
+	    connect( &job, SIGNAL(finished(bool)), &infoDialog, SLOT(slotFinished(bool)) );
+	    connect( &job, SIGNAL(percent(int)), &infoDialog, SLOT(setProgress(int)) );
+	    connect( &infoDialog, SIGNAL(cancelClicked()), &job, SLOT(cancel()) );
+	    job.start();
+	    infoDialog.exec();
+	  }
 	}
+	else
+	  K3bCdDevice::eject( d->device );
       }
       else {
 	showDialog();
       }
-      
+    
       QTimer::singleShot( 1000, this, SLOT(startDeviceHandler()) );
     }
   }

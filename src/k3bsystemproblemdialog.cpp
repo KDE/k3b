@@ -205,7 +205,7 @@ void K3bSystemProblemDialog::checkSystem()
 					 i18n("K3b uses growisofs to actually write dvds. "
 					      "Without growisofs you won't be able to write dvds. "
 					      "Make sure to install at least version 5.10."),
-					 i18n("Install the growisofs package."),
+					 i18n("Install the dvd+rw-tools package."),
 					 false ) );
     }
     else {
@@ -221,13 +221,31 @@ void K3bSystemProblemDialog::checkSystem()
       if( !k3bcore->externalBinManager()->binObject( "growisofs" )->hasFeature( "suidroot" ) ) {
 	problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
 					   i18n("%1 does not run with root privileges").arg("growisofs"),
-					   i18n("It is recommended to run growisofs with "
+					   i18n("It is recommended to run %1 with "
 						"root privileges so it is able to access "
 						"all devices. Another solution would be to give "
-						"the user write access to the devices."),
+						"the user write access to the devices.").arg("growisofs"),
 					   i18n("Use K3bSetup to solve this problem."),
 					   true ) );
       }
+    }
+
+    if( !k3bcore->externalBinManager()->foundBin( "dvd+rw-format" ) ) {
+      problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+					 i18n("Unable to find %1 executable").arg("dvd+rw-format"),
+					 i18n("K3b uses dvd+rw-format to format DVD-RWs and DVD+RWs."),
+					 i18n("Install the dvd+rw-tools package."),
+					 false ) );
+    }
+    else if( !k3bcore->externalBinManager()->binObject( "dvd+rw-format" )->hasFeature( "suidroot" ) ) {
+	problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+					   i18n("%1 does not run with root privileges").arg("dvd+rw-format"),
+					   i18n("It is recommended to run %1 with "
+						"root privileges so it is able to access "
+						"all devices. Another solution would be to give "
+						"the user write access to the devices.").arg("dvd+rw-format"),
+					   i18n("Use K3bSetup to solve this problem."),
+					   true ) );
     }
   }
 

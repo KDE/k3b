@@ -15,16 +15,18 @@
 
 
 #include "k3bdevice.h"
+#include "k3bdeviceglobals.h"
 #include "k3btrack.h"
 #include "k3btoc.h"
 #include "k3bdiskinfo.h"
 #include "k3bmmc.h"
 
-#include <qstring.h>
+#include <qstringlist.h>
 #include <qfile.h>
 
 #include <kdebug.h>
 #include <kprocess.h>
+#include <klocale.h>
 
 typedef Q_INT16 size16;
 typedef Q_INT32 size32;
@@ -299,6 +301,7 @@ bool K3bCdDevice::CdDevice::init()
 	case 0x02A: // DVD+RW
 	  {
 	    kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "DVD+RW" << endl;
+#if __BYTE_ORDER == __BIG_ENDIAN
 	    struct dvd_plus_rw_feature {
 	      unsigned char reserved1   : 7;
 	      unsigned char write       : 1;
@@ -307,6 +310,16 @@ bool K3bCdDevice::CdDevice::init()
 	      unsigned char close_only  : 1;
 	      // and some stuff we do not use here...
 	    };
+#else
+	    struct dvd_plus_rw_feature {
+	      unsigned char write       : 1;
+	      unsigned char reserved1   : 7;
+	      unsigned char close_only  : 1;
+	      unsigned char quick_start : 1;
+	      unsigned char reserved2   : 6;
+	      // and some stuff we do not use here...
+	    };
+#endif
 	    
 	    struct dvd_plus_rw_feature* p = (struct dvd_plus_rw_feature*)&profiles[i];
 	    if( p->write ) d->deviceType |= DVDPRW;
@@ -316,13 +329,21 @@ bool K3bCdDevice::CdDevice::init()
 	case 0x02B: // DVD+R
 	  {
 	    kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "DVD+R" << endl;
+#if __BYTE_ORDER == __BIG_ENDIAN
 	    struct dvd_plus_r_feature {
 	      unsigned char reserved1 : 7;
 	      unsigned char write     : 1;
 	      unsigned char reserved2[3];
 	      // and some stuff we do not use here...
 	    };
-
+#else
+	    struct dvd_plus_r_feature {
+	      unsigned char write     : 1;
+	      unsigned char reserved1 : 7;
+	      unsigned char reserved2[3];
+	      // and some stuff we do not use here...
+	    };
+#endif
 	    struct dvd_plus_r_feature* p = (struct dvd_plus_r_feature*)&profiles[i];
 	    if( p->write ) d->deviceType |= DVDPR;
 	    break;
@@ -335,6 +356,7 @@ bool K3bCdDevice::CdDevice::init()
 	case 0x02D: // CD Track At Once
 	  {
 	    kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "CD Track At Once" << endl;
+#if __BYTE_ORDER == __BIG_ENDIAN
 	    struct cd_track_at_once_feature {
 	      unsigned char reserved1 : 1;
 	      unsigned char BUF       : 1;  // Burnfree
@@ -347,7 +369,21 @@ bool K3bCdDevice::CdDevice::init()
 	      unsigned char reserved3;
 	      unsigned char data_type[2];
 	    };
-	    
+#else
+	    struct cd_track_at_once_feature {
+	      unsigned char rw_sub    : 1;  // Write R-W sub channels with user data
+	      unsigned char cd_rw     : 1;  // CD-RW support
+	      unsigned char testwrite : 1;  // Simulation write support
+	      unsigned char rw_pack   : 1;  // Writing R-W subcode in Packet mode
+	      unsigned char rw_raw    : 1;  // Writing R-W subcode in Raw mode
+	      unsigned char reserved2 : 1;
+	      unsigned char BUF       : 1;  // Burnfree
+	      unsigned char reserved1 : 1;
+	      unsigned char reserved3;
+	      unsigned char data_type[2];
+	    };
+#endif
+
 	    struct cd_track_at_once_feature* p = (struct cd_track_at_once_feature*)&profiles[i];
 	    m_writeModes |= TAO;
 	    if( p->BUF ) d->burnfree = true;
@@ -359,6 +395,7 @@ bool K3bCdDevice::CdDevice::init()
 	case 0x02E: // CD Mastering
 	  {
 	    kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "CD Mastering" << endl;
+#if __BYTE_ORDER == __BIG_ENDIAN
 	    struct cd_mastering_feature {
 	      unsigned char reserved1 : 1;
 	      unsigned char BUF       : 1;  // Burnfree
@@ -370,7 +407,20 @@ bool K3bCdDevice::CdDevice::init()
 	      unsigned char rw_sub    : 1;  // Write R-W sub channels with user data
 	      unsigned char max_cue_length[3];
 	    };
-	    
+#else
+	    struct cd_mastering_feature {
+	      unsigned char rw_sub    : 1;  // Write R-W sub channels with user data
+	      unsigned char cd_rw     : 1;  // CD-RW support
+	      unsigned char testwrite : 1;  // Simulation write support
+	      unsigned char raw       : 1;  // Writing in RAW mode
+	      unsigned char raw_ms    : 1;  // Writing Multisession in Raw Writing Mode
+	      unsigned char SAO       : 1;  // Session At Once writing
+	      unsigned char BUF       : 1;  // Burnfree
+	      unsigned char reserved1 : 1;
+	      unsigned char max_cue_length[3];
+	    };
+#endif
+
 	    struct cd_mastering_feature* p = (struct cd_mastering_feature*)&profiles[i];
 	    if( p->BUF ) d->burnfree = true;
 	    d->deviceType |= CDR;
@@ -383,6 +433,7 @@ bool K3bCdDevice::CdDevice::init()
 	case 0x02F: // DVD-R/-RW Write
 	  {
 	    kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "DVD-R/-RW Write" << endl;
+#if __BYTE_ORDER == __BIG_ENDIAN
 	    struct dvd_r_rw_write_feature {
 	      unsigned char reserved1 : 1;
 	      unsigned char BUF       : 1;  // Burnfree
@@ -392,11 +443,24 @@ bool K3bCdDevice::CdDevice::init()
 	      unsigned char reserved3 : 1;
 	      unsigned char reserved4[3];
 	    };
+#else
+	    struct dvd_r_rw_write_feature {
+	      unsigned char reserved3 : 1;
+	      unsigned char dvd_rw    : 1;  // DVD-RW Writing
+	      unsigned char testwrite : 1;  // Simulation write support
+	      unsigned char reserved2 : 3;
+	      unsigned char BUF       : 1;  // Burnfree
+	      unsigned char reserved1 : 1;
+	      unsigned char reserved4[3];
+	    };
+#endif
 
 	    struct dvd_r_rw_write_feature* p = (struct dvd_r_rw_write_feature*)&profiles[i];
 	    if( p->BUF ) d->burnfree = true;
 	    d->deviceType |= DVDR;
 	    if( p->dvd_rw ) d->deviceType |= DVDRW;
+
+	    // TODO: p->testwrite tells us if the writer supports DVD-R(W) dummy writes!!!
 	    break;
 	  }
 
@@ -490,11 +554,6 @@ bool K3bCdDevice::CdDevice::init()
   }
 
 
-  //
-  // TODO: We try getting the write modes as cdrecord does: just by trying to set them
-  //
-
-
 
   //
   // Most current drives support the 2A mode page
@@ -524,7 +583,7 @@ bool K3bCdDevice::CdDevice::init()
     return false;
   }
     
-  d->deviceType = CDROM;  // all drives should be able to read cdroms
+  d->deviceType |= CDROM;  // all drives should be able to read cdroms
   
   if (drivetype & CDC_CD_R) {
     d->deviceType |= CDR;
@@ -542,6 +601,9 @@ bool K3bCdDevice::CdDevice::init()
     d->deviceType |= DVD;
   }
   
+
+  if( burner() )
+    checkWriteModes();
 
 
   // inquiry
@@ -1831,28 +1893,15 @@ bool K3bCdDevice::CdDevice::getTrackIndex( long lba,
 
 bool K3bCdDevice::CdDevice::readModePage2A( struct mm_cap_page_2A* p ) const
 {
-  // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
-  bool needToClose = !isOpen();
+  unsigned char data[22+8]; // MMC-1: 22 byte, header: 8 byte
+  ::memset( data, 0, sizeof(struct mm_cap_page_2A) );
 
   // to be as compatible as posiible we just use the MMC-1 part of the
   // mode page. Since we do not use the new stuff yet this is not a problem at all.
   // the MMC-1 part is 22 bytesin size.
 
-  bool ret = false;
-
-  struct cdrom_generic_command cmd;
-  unsigned char data[22+8]; // MMC-1: 22 byte, header: 8 byte
-  ::memset( &cmd, 0, sizeof(struct cdrom_generic_command) );
-  ::memset( data, 0, sizeof(struct mm_cap_page_2A) );
-  cmd.cmd[0] = 0x5A;	// MODE SENSE
-  cmd.cmd[2] = 0x2A;    // MM Capabilities and Mechanical Status Page
-  cmd.cmd[7] = (22+8)<<8;
-  cmd.cmd[8] = 22+8;
-  cmd.buffer = data;
-  cmd.buflen = 22+8;
-  cmd.data_direction = CGC_DATA_READ;
-  if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) == 0 ) {
+  // MM Capabilities and Mechanical Status Page: 0x2A
+  if( modeSense( 0x2A, data, 22+8 ) ) {
     //
     // this might be not perfect regarding performance but this
     // way we do not need to keep the MODE SENSE header in the
@@ -1860,6 +1909,31 @@ bool K3bCdDevice::CdDevice::readModePage2A( struct mm_cap_page_2A* p ) const
     //
     ::memcpy( p, data+8, 22 );
 
+    return true;
+  }
+  else
+    return false;
+}
+
+
+bool K3bCdDevice::CdDevice::modeSense( int page, unsigned char* pageData, int pageLen ) const
+{
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
+  bool ret = false;
+
+  struct cdrom_generic_command cmd;
+  ::memset( &cmd, 0, sizeof(struct cdrom_generic_command) );
+  cmd.cmd[0] = 0x5A;	// MODE SENSE
+  cmd.cmd[2] = page;
+  cmd.cmd[7] = pageLen>>8;
+  cmd.cmd[8] = pageLen;
+  cmd.buffer = pageData;
+  cmd.buflen = pageLen;
+  cmd.data_direction = CGC_DATA_READ;
+  if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) == 0 ) {
     ret = true;
   }
 
@@ -1869,3 +1943,115 @@ bool K3bCdDevice::CdDevice::readModePage2A( struct mm_cap_page_2A* p ) const
   return ret;
 }
 
+
+bool K3bCdDevice::CdDevice::modeSelect( unsigned char* page, int pageLen, bool pf, bool sp ) const
+{
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
+  bool ret = false;
+
+  struct cdrom_generic_command cmd;
+  ::memset( &cmd, 0, sizeof(struct cdrom_generic_command) );
+  cmd.cmd[0] = 0x55;	// MODE SELECT
+  cmd.cmd[1] = ( sp ? 1 : 0 ) | ( pf ? 0x10 : 0 );
+  cmd.cmd[7] = pageLen>>8;
+  cmd.cmd[8] = pageLen;
+  cmd.buffer = page;
+  cmd.buflen = pageLen;
+  cmd.data_direction = CGC_DATA_READ;
+  if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) == 0 ) {
+    ret = true;
+  }
+
+  if( needToClose )
+    close();
+
+  return ret;
+}
+
+
+void K3bCdDevice::CdDevice::checkWriteModes()
+{
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
+  // header size is 8
+  unsigned char buffer[100];
+  ::memset( buffer, 0, 100 );
+
+  if( !modeSense( 0x05, buffer, 100 ) ) {
+    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": modeSense 0x05 failed!" << endl;
+  }
+  else {
+    int blockDescrLen = (buffer[6]<<8)&0xF0 | buffer[7];
+    int dataLen = (buffer[0]<<8)&0xF0 | buffer[1];
+
+    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": blockDescLen: " << blockDescrLen << endl
+	      << "                        dataLen: " << dataLen << endl;
+
+    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": modesense data: " << endl;
+    debugBitfield( buffer, dataLen+8 );
+
+    wr_param_page_05* mp = (struct wr_param_page_05*)(buffer+8+blockDescrLen);
+
+    // reset some stuff to be on the safe side
+    mp->multi_session = 0;
+    mp->test_write = 0;
+    mp->LS_V = 0;
+    mp->copy = 0;
+    mp->fp = 0;
+    mp->host_appl_code= 0;
+    mp->session_format = 0;
+
+    m_writeModes = 0;
+
+    // TAO
+    mp->write_type = 0x01;  // Track-at-once
+    mp->track_mode = 4;     // MMC-4 says: 5, cdrecord uses 4 ???
+    mp->dbtype = 8;         // Mode 1
+
+    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": modeselect TAO data: " << endl;
+    debugBitfield( buffer, dataLen+8 );
+
+
+    if( modeSelect( buffer, dataLen+8, 1, 0 ) )
+      m_writeModes |= TAO;
+    else
+      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": modeSelect with TAO failed." << endl;
+
+
+    // SAO
+    mp->write_type = 0x02; // Session-at-once
+
+    if( modeSelect( buffer, dataLen+8, 1, 0 ) )
+      m_writeModes |= SAO;
+    else
+      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": modeSelect with SAO failed." << endl;
+
+    // RAW
+    mp->write_type = 0x03; // RAW
+    mp->dbtype = 1;        // Raw data with P and Q Sub-channel (2368 bytes)
+    if( modeSelect( buffer, dataLen+8, 1, 0 ) ) {
+      m_writeModes |= RAW;
+      m_writeModes |= RAW_R16;
+    }
+
+    mp->dbtype = 2;        // Raw data with P-W Sub-channel (2448 bytes)
+    if( modeSelect( buffer, dataLen+8, 1, 0 ) ) {
+      m_writeModes |= RAW;
+      m_writeModes |= RAW_R96P;
+    }
+
+    mp->dbtype = 3;        // Raw data with P-W raw Sub-channel (2368 bytes)
+    if( modeSelect( buffer, dataLen+8, 1, 0 ) ) {
+      m_writeModes |= RAW;
+      m_writeModes |= RAW_R96R;
+    }
+  }
+    
+  if( needToClose )
+    close();
+}

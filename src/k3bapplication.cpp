@@ -169,8 +169,7 @@ void K3bApplication::init()
 
 void K3bApplication::slotShutDown()
 {
-  m_core->externalBinManager()->saveConfig( config() );
-  m_core->deviceManager()->saveConfig( config() );
+  m_core->saveConfig();
 }
 
 #include "k3bapplication.moc"
