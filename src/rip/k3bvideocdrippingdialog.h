@@ -37,15 +37,13 @@ class K3bVideoCdRippingDialog : public K3bInteractionDialog
   Q_OBJECT
 
  public: 
-  K3bVideoCdRippingDialog( const long size, QWidget* parent = 0, const char* name = 0 );
+  K3bVideoCdRippingDialog( const QString ripsource, const long size, QWidget* parent = 0, const char* name = 0 );
   ~K3bVideoCdRippingDialog();
-
 
  private:
   void setupGui();
   void setupContextHelp();
-  void setVideoCdSize( long s) { m_videocdsize = s; };
-
+  
   K3bTempDirSelectionWidget* m_tempDirSelectionWidget;
 
   KURLRequester* m_editDirectory;
@@ -57,7 +55,8 @@ class K3bVideoCdRippingDialog : public K3bInteractionDialog
   QCheckBox* m_extractXML;
 
   long m_videocdsize;
-  
+  QString m_ripsource;
+    
  private slots:
   void slotStartClicked();
 

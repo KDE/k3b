@@ -297,7 +297,7 @@ void K3bVideoCdView::slotTrackSelectionChanged( QListViewItem* item )
 
 void K3bVideoCdView::startRip()
 {
-    K3bVideoCdRippingDialog rip( m_videocdsize, this );
+    K3bVideoCdRippingDialog rip( m_diskInfo.device->devicename(), m_videocdsize, this );
     rip.exec();
 }
 

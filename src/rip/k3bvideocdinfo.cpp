@@ -65,7 +65,7 @@ void K3bVideoCdInfo::info( const QString& device )
     
     *m_process << k3bcore ->externalBinManager() ->binPath( "vcdxrip" );
 
-    *m_process << "-q" << "--norip" << "-C" << device << "-o" << "-";
+    *m_process << "-q" << "--norip" << "-i" << device << "-o" << "-";
 
     connect( m_process, SIGNAL( receivedStderr( KProcess*, char*, int ) ),
              this, SLOT( slotParseOutput( KProcess*, char*, int ) ) );
@@ -178,6 +178,12 @@ void K3bVideoCdInfo::parseXmlData()
                                     );
                     }
         }
+        else if ( tagName == "filesystem" ) {
+                    for ( QDomNode snode = node.firstChild(); !snode.isNull(); snode = snode.nextSibling() ) {
+                        kdDebug() << "(K3bVideoCd::parseXmlData) filesystem: " << snode.nodeName() << endl;
+                    }
+        }
+
         else {
                 kdDebug() << QString("(K3bVideoCd::parseXmlData) tagName '%1' not used").arg( tagName ) << endl;
         }

@@ -63,13 +63,12 @@
 #include <k3bstdguiitems.h>
 #include <k3btempdirselectionwidget.h>
 
-K3bVideoCdRippingDialog::K3bVideoCdRippingDialog( const long size, QWidget *parent, const char *name )
-  : K3bInteractionDialog( parent, name )
+K3bVideoCdRippingDialog::K3bVideoCdRippingDialog( const QString ripsource, const long size, QWidget* parent, const char* name )
+  : K3bInteractionDialog( parent, name ), m_videocdsize(size), m_ripsource( ripsource )
 {
   setupGui();
   setupContextHelp();
   
-  setVideoCdSize( size );
   setTitle( i18n("VideoCd Ripping") );
 }
 
@@ -152,6 +151,7 @@ void K3bVideoCdRippingDialog::slotStartClicked()
 {
 
   K3bVideoCdRip* rip = new K3bVideoCdRip();
+  rip->setRipSource( m_ripsource );
   rip->setDestination( m_editDirectory->url() );
   rip->setVideoCdSize(m_videocdsize);
   

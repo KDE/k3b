@@ -38,8 +38,9 @@
 
 K3bVideoCdRip::K3bVideoCdRip( QObject* parent, const char* name )
   : K3bJob( parent, name ),
-  m_process(0),
-  m_canceled( false )
+  m_ripsourceType( 0 ),
+  m_canceled( false ),
+  m_process( 0 )
 {
 }
 
@@ -79,10 +80,10 @@ void K3bVideoCdRip::start()
     emit started();
     m_canceled = false;
 
-    vcdxRip( "/dev/cdrecorder" );
+    vcdxRip();
 }
 
-void K3bVideoCdRip::vcdxRip( QString device )
+void K3bVideoCdRip::vcdxRip()
 {
     emit newTask( i18n("Check files") );
 
@@ -113,10 +114,7 @@ void K3bVideoCdRip::vcdxRip( QString device )
     for( QStringList::const_iterator it = params.begin(); it != params.end(); ++it )
       *m_process << *it;
 
-/*
-*/
-
-    *m_process << "--gui" << "--progress" <<  "-C" << device << "-o" << "/dev/null";
+    *m_process << "--gui" << "--progress" <<  "-i" << m_ripsource << "-o" << "/dev/null";
 
     connect( m_process, SIGNAL( receivedStderr( KProcess*, char*, int ) ),
              this, SLOT( slotParseVcdXRipOutput( KProcess*, char*, int ) ) );

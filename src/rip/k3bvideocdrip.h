@@ -31,9 +31,12 @@ class K3bVideoCdRip : public K3bJob
         K3bVideoCdRip( QObject* parent = 0, const char* name = 0 );
         ~K3bVideoCdRip();
 
+        void setRipSource( QString ripsource ) { m_ripsource = ripsource; };
         void setDestination( QString dest) { m_destPath = dest; };
         void setVideoCdSize( long s ) {m_videocdsize = s; };
-
+        
+        enum { CDROM, BIN_IMAGE, NRG_IMAGE };
+        
     public slots:
         void start();
         void cancel();
@@ -46,21 +49,27 @@ class K3bVideoCdRip : public K3bJob
         void slotParseVcdXRipOutput( KProcess*, char* output, int len );
 
     private:
-        void vcdxRip( QString );
+        void vcdxRip();
         void parseInformation( QString );
     
         enum { stageUnknown, stageScan, stageFinished, _stage_max };
 
         int m_stage;
         int m_bytesFinished;
+        int m_ripsourceType;
+        
         long m_subPosition;
         long m_videocdsize;
         
         QString m_collectedOutput;
+        QString m_ripsource;
         QString m_destPath;
 
-        KProcess* m_process;
+
         bool m_canceled;
+        
+        KProcess* m_process;
+
 };
 
 #endif
