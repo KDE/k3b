@@ -133,8 +133,10 @@ QString K3bMovieView::filterAudioList( QStringList *al ){
         if( lang[1].contains("bit") || lang[1].contains("drc") ){
             lang[1] = "??";
         }
-        result += lang[1] + " (" + lang[0] + "/" + lang.last() +"), ";
-        kdDebug() << result << endl;
+        if( !result.contains( lang[1] ) ){
+        result += lang[1] +", "; // too much space for all info + " (" + lang[0] + "/" + lang.last() +"), ";
+        }
+        kdDebug() << "(K3bMovieView) Parse audio tracks for language: " << result << endl;
     }
     return result.left( result.length()-2);
 }
