@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -25,6 +25,7 @@ K3bBusyWidget::K3bBusyWidget( QWidget* parent, const char* name )
   : QFrame( parent, name )
 {
   m_busyTimer = new QTimer( this );
+  m_iBusyPosition = 0;
 
   connect( m_busyTimer, SIGNAL(timeout()), this, SLOT(animateBusy()) );
 
