@@ -36,6 +36,9 @@ K3bDataDoc::K3bDataDoc( QObject* parent )
 {
 	m_docType = DATA;
 	m_root = 0;
+	
+	m_isoLevel = 1;
+	m_followSymbolicLinks = false;
 		
 //	connect( this, SIGNAL(signalAddDirectory(const QString&, K3bDirItem*)),
 //					this, SLOT(slotAddDirectory( const QString&, K3bDirItem*)) );
@@ -135,7 +138,17 @@ void K3bDataDoc::slotAddDirectory( const QString& url, K3bDirItem* parent )
 
 int K3bDataDoc::size()
 {
-	return 650;
+	K3bDataItem* item = root();
+	long _size = 0;
+	
+	while( item ) {
+		_size+=item->k3bSize();
+		
+		item = item->nextSibling();
+	}
+	
+	// return size in Megs
+	return (int)(_size/1024/1024);
 }
 
 

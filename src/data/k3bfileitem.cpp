@@ -38,6 +38,13 @@ K3bFileItem::~K3bFileItem()
 {
 }
 
+
+long K3bFileItem::k3bSize() const
+{
+	return size();
+}
+
+
 bool K3bFileItem::exists() const
 {
 	return isLocalFile();

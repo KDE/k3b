@@ -87,7 +87,10 @@ K3bRipperWidget::K3bRipperWidget(QWidget *parent, const char *name )
 
     Form1Layout->addWidget( m_buttonStart, 3, 2 );
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
-    Form1Layout->addMultiCell( spacer, 3, 3, 0, 1 );
+	Form1Layout->addMultiCell( spacer, 3, 3, 0, 1 );
+	
+	// not enabled yet
+	setDisabled( true );
 }
 
 

@@ -27,11 +27,11 @@ K3bDeviceManager::K3bDeviceManager( QObject* parent )
 
 K3bDevice* K3bDeviceManager::deviceByBus( int _bus, int _target, int _lun )
 {
-	for( K3bDevice* _dev = m_reader.first(); _dev; _dev = m_reader.next() )
+	for( K3bDevice* _dev = m_writer.first(); _dev; _dev = m_writer.next() )
 		if( _dev->bus == _bus && _dev->target == _target && _dev->lun == _lun )
 			return _dev;
-
-	for( K3bDevice* _dev = m_writer.first(); _dev; _dev = m_writer.next() )
+	
+	for( K3bDevice* _dev = m_reader.first(); _dev; _dev = m_reader.next() )
 		if( _dev->bus == _bus && _dev->target == _target && _dev->lun == _lun )
 			return _dev;
 	
@@ -130,7 +130,7 @@ void K3bDeviceManager::printDevices()
 	}
 	cout << "\nWriter:" << endl;
 	for( K3bDevice* dev = m_writer.first(); dev != 0; dev = m_writer.next() ) {
-		cout << "  " <<  ": " << dev->device() << " " << dev->vendor << " " << dev->description << " " << dev->version << endl;
+		cout << "  " <<  ": " << dev->device() << " " << dev->vendor << " " << dev->description << " " << dev->version << " " << dev->maxWriteSpeed << endl;
 	}
 	cout << flush;
 }

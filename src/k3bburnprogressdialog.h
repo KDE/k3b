@@ -32,8 +32,10 @@ class QPushButton;
 class QTextView;
 class K3bDoc;
 class QTime;
+class QTimer;
 class K3bJob;
 class K3bBurnJob;
+class KCutLabel;
 
 /**
   *@author Sebastian Trueg
@@ -64,7 +66,7 @@ class K3bBurnProgressDialog : public KDialog  {
   QGroupBox* m_groupProgress;
   KProgress* m_progressTrack;
   KProgress* m_progressCd;
-  QLabel* m_labelFileName;
+  KCutLabel* m_labelFileName;
   QLabel* m_labelTrackProgress;
   QLabel* m_labelCdTime;
   QLabel* m_labelCdProgress;
@@ -77,6 +79,8 @@ class K3bBurnProgressDialog : public KDialog  {
 
  private:
   K3bBurnJob* m_job;
+  QTimer* m_timer;
+  int m_time;
 
  protected slots:
 //  void updateCdTimeProgress( const QTime& processedTime );
@@ -89,6 +93,8 @@ class K3bBurnProgressDialog : public KDialog  {
   void slotCancelPressed();
   void slotNewSubTask(const QString& name);
   void slotNewTask(const QString& name);
+  void started();
+  void slotUpdateTime();
 };
 
 #endif

@@ -48,6 +48,8 @@ public:
 	/** returns the path to the file on the local filesystem */
 	virtual QString localPath() = 0;
 		
+	virtual long k3bSize() const { return 0; }
+	
 private:
 	K3bDirItem* m_parentDir;
 	K3bDataDoc* m_doc;

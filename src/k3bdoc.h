@@ -111,6 +111,7 @@ public:
 	const QString& projectName() const { return m_projectName; }
 	bool dao() const { return m_dao; }
 	bool dummy() const { return m_dummy; }
+	bool onTheFly() const { return m_onTheFly; }
 	int speed() const { return m_speed; }
 	K3bDevice* burner() const { return m_burner; }
 	virtual int size() = 0;
@@ -132,6 +133,7 @@ public slots:
     void updateAllViews(K3bView *sender);
 	void setDummy( bool d );
 	void setDao( bool d );
+	void setOnTheFly( bool b ) { m_onTheFly = b; }
 	void setSpeed( int speed );
 	void setBurner( K3bDevice* dev );
 	
@@ -163,6 +165,7 @@ private:
 	K3bDevice* m_burner;
 	bool m_dao;
 	bool m_dummy;
+	bool m_onTheFly;
 	int  m_speed;
 };
 

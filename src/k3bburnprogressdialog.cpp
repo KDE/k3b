@@ -19,6 +19,7 @@
 #include "audio/k3baudiodoc.h"
 #include "audio/k3baudiotrack.h"
 #include "audio/k3baudiojob.h"
+#include "kcutlabel.h"
 
 #include <qgroupbox.h>
 #include <qlabel.h>
@@ -45,6 +46,9 @@ K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name 
   m_groupBuffer->setEnabled( false );
 
   m_job = 0;
+  m_timer = new QTimer( this );
+
+  connect( m_timer, SIGNAL(timeout()), this, SLOT(slotUpdateTime()) );
 }
 
 K3bBurnProgressDialog::~K3bBurnProgressDialog()
@@ -126,7 +130,7 @@ void K3bBurnProgressDialog::setupGUI()
 
   m_groupProgressLayout->addMultiCellWidget( m_progressCd, 4, 4, 0, 1 );
 
-  m_labelFileName = new QLabel( m_groupProgress, "m_labelFileName" );
+  m_labelFileName = new KCutLabel( m_groupProgress );
 
   m_groupProgressLayout->addWidget( m_labelFileName, 0, 0 );
 
@@ -191,10 +195,10 @@ void K3bBurnProgressDialog::finished()
 
   m_labelFileName->setText("Writing finished");
   m_labelTrackProgress->setText("");
-//  m_groupBuffer->setEnabled( false );
 
   m_buttonCancel->hide();
   m_buttonClose->show();
+  m_timer->stop();
 }
 
 
@@ -213,7 +217,9 @@ void K3bBurnProgressDialog::setJob( K3bBurnJob* job )
 	m_labelTrackProgress->setText("");
 	m_groupProgress->setTitle( i18n( "Progress" ) );
 
-	m_progressTrack->setEnabled( false );
+//	m_progressTrack->hide();
+//	m_labelFileName->hide();
+//	m_labelTrackProgress->hide();
 
 	// disconnect from the former job
 	if( m_job )
@@ -231,6 +237,7 @@ void K3bBurnProgressDialog::setJob( K3bBurnJob* job )
 
 	connect( job, SIGNAL(newTask(const QString&)), this, SLOT(slotNewTask(const QString&)) );
 	connect( job, SIGNAL(newSubTask(const QString&)), this, SLOT(slotNewSubTask(const QString&)) );
+	connect( job, SIGNAL(started()), this, SLOT(started()) );
 	connect( job, SIGNAL(finished(K3bJob*)), this, SLOT(finished()) );
 	
 
@@ -265,7 +272,9 @@ void K3bBurnProgressDialog::show()
 
 void K3bBurnProgressDialog::slotNewSubTask(const QString& name)
 {
-	m_progressTrack->setEnabled( true );
+//	m_progressTrack->show();
+//	m_labelFileName->show();
+//	m_labelTrackProgress->show();
 	m_labelFileName->setText(name);
 	m_labelTrackProgress->setText("");
 	m_progressTrack->setValue(0);
@@ -274,4 +283,28 @@ void K3bBurnProgressDialog::slotNewSubTask(const QString& name)
 void K3bBurnProgressDialog::slotNewTask(const QString& name)
 {
 	m_groupProgress->setTitle( name );
+}
+
+
+void K3bBurnProgressDialog::started()
+{
+	m_timer->start( 1000 );
+	m_time = 0;
+}
+
+
+void K3bBurnProgressDialog::slotUpdateTime()
+{
+	m_time++;
+	int min = m_time / 60;
+	int sec = m_time % 60;
+	
+	QString timeStr = QString::number(sec);
+	if( sec < 10 )
+		timeStr = "0" + timeStr;
+	timeStr = QString::number(min) + ":" + timeStr;
+	if( min < 10 )
+		timeStr = "0" + timeStr;	
+		
+	m_labelCdTime->setText( timeStr );	
 }

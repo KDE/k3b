@@ -27,6 +27,8 @@ class QLabel;
 class QListViewItem;
 class QPushButton;
 class QGroupBox;
+class QXEmbed;
+class QWidgetStack;
 
 
 /**
@@ -41,10 +43,13 @@ public:
 	K3bOptionDialog(QWidget *parent=0, const char *name=0, bool modal = true);
 	~K3bOptionDialog();
 	
+	enum m_configPageIndex { Devices = 0, Programs = 1 };
+		
 protected slots:
 	void slotOk();
 	void slotApply();
 	void slotDefault();
+	void slotStartPS();
 	
 private:
 	// programs Tab
@@ -63,6 +68,12 @@ private:
 	KAction* m_actionNewDevice;
 	KAction* m_actionRemoveDevice;
 
+	// permission tab
+	QWidgetStack* m_stackPermission;
+	QXEmbed* m_embedPermission;
+	QPushButton* m_buttonStartPS;
+	QWidget* m_containerInfo;
+	
     void setupProgramsPage();
     void readPrograms();
     bool savePrograms();
@@ -71,6 +82,8 @@ private:
 	void readDevices();
 	void saveDevices();
 
+	void setupPermissionPage();
+	
 	bool devicesChanged;
 			
 private slots:

@@ -42,7 +42,9 @@ class K3bDataDoc : public K3bDoc
 public:
 	K3bDataDoc( QObject* parent );
 	~K3bDataDoc();
-	
+
+	enum whiteSpaceTreatments { normal = 1, convertToUnderScore = 2, strip = 3, extendedStrip = 4 };
+		
 	K3bRootItem* root() const { return m_root; }
 
 	/** reimplemented from K3bDoc */
@@ -67,13 +69,53 @@ public:
 	const QString& isoImage() const { return m_isoImage; }
 	void setIsoImage( const QString& s ) { m_isoImage = s; }
 	
+	K3bBurnJob* newBurnJob();
+	
+	int whiteSpaceTreatment() const { return m_whiteSpaceTreatment; }
+	
+	void setWhiteSpaceTreatment( int i ) { m_whiteSpaceTreatment = i; }
+	
+	// -- mkisofs-options ----------------------------------------------------------------------
 	bool createRockRidge() const { return m_createRockRidge; }
 	bool createJoliet() const { return m_createJoliet; }
+	bool ISOallowLowercase() const { return m_ISOallowLowercase; }
+	bool ISOallowPeriodAtBegin() const { return m_ISOallowPeriodAtBegin; }
+	bool ISOallow31charFilenames() const { return m_ISOallow31charFilenames; }
+	bool ISOomitVersionNumbers() const { return m_ISOomitVersionNumbers; }
+	bool ISOmaxFilenameLength() const { return m_ISOmaxFilenameLength; }
+	bool ISOrelaxedFilenames() const { return m_ISOrelaxedFilenames; }
+	bool ISOnoIsoTranslate() const { return m_ISOnoIsoTranslate; }
+	bool ISOallowMultiDot() const { return m_ISOallowMultiDot; }
+	bool ISOuntranslatedFilenames() const { return m_ISOuntranslatedFilenames; }
+	bool noDeepDirectoryRelocation() const { return m_noDeepDirectoryRelocation; }
+	bool followSymbolicLinks() const { return m_followSymbolicLinks; }
+	bool hideRR_MOVED() const { return m_hideRR_MOVED; }
+	bool createTRANS_TBL() const { return m_createTRANS_TBL; }
+	bool hideTRANS_TBL() const { return m_hideTRANS_TBL; }
+	bool padding() const { return m_padding; }
 
+	int ISOLevel() const { return m_isoLevel; }
+	
 	void setCreateRockRidge( bool b ) { m_createRockRidge = b; }
-	void setCreateJoliet( bool b ) { m_createJoliet = b; }
-		
-	K3bBurnJob* newBurnJob();
+	void setCreateJoliet( bool b ) {  m_createJoliet = b; }
+	void setISOallowLowercase( bool b ) {  m_ISOallowLowercase = b; }
+	void setISOallowPeriodAtBegin( bool b ) {  m_ISOallowPeriodAtBegin = b; }
+	void setISOallow31charFilenames( bool b ) {  m_ISOallow31charFilenames = b; }
+	void setISOomitVersionNumbers( bool b ) {  m_ISOomitVersionNumbers = b; }
+	void setISOmaxFilenameLength( bool b ) {  m_ISOmaxFilenameLength = b; }
+	void setISOrelaxedFilenames( bool b ) {  m_ISOrelaxedFilenames = b; }
+	void setISOnoIsoTranslate( bool b ) {  m_ISOnoIsoTranslate = b; }
+	void setISOallowMultiDot( bool b ) {  m_ISOallowMultiDot = b; }
+	void setISOuntranslatedFilenames( bool b ) {  m_ISOuntranslatedFilenames = b; }
+	void setNoDeepDirectoryRelocation( bool b ) {  m_noDeepDirectoryRelocation = b; }
+	void setFollowSymbolicLinks( bool b ) {  m_followSymbolicLinks = b; }
+	void setHideRR_MOVED( bool b ) {  m_hideRR_MOVED = b; }
+	void setCreateTRANS_TBL( bool b ) {  m_createTRANS_TBL = b; }
+	void setHideTRANS_TBL( bool b ) {  m_hideTRANS_TBL = b; }
+	void setPadding( bool b ) {  m_padding = b; }
+	
+	void setISOLevel( int i ) { m_isoLevel = i; }
+	// ----------------------------------------------------------------- mkisofs-options -----------
 	
 public slots:
 	/** add urls to the compilation.
@@ -100,7 +142,10 @@ private:
 	QString m_name;
 	QString m_dummyDir;
 	QString m_isoImage;
-			
+	
+	int m_whiteSpaceTreatment;
+	
+	// mkisofs options -------------------------------------
 	bool m_createRockRidge;    // -r or -R
 	bool m_createJoliet;             // -J
 	bool m_ISOallowLowercase;   // -allow-lowercase
@@ -118,6 +163,8 @@ private:
 	bool m_createTRANS_TBL;    // -T
 	bool m_hideTRANS_TBL;    // -hide-joliet-trans-tbl
 	bool m_padding;           // -pad
+	
+	int m_isoLevel;
 };
 
 #endif

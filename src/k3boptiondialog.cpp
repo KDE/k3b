@@ -32,6 +32,8 @@
 #include <qgroupbox.h>
 #include <qstringlist.h>
 #include <qpoint.h>
+#include <qxembed.h>
+#include <qwidgetstack.h>
 
 #include <klistview.h>
 #include <klocale.h>
@@ -42,6 +44,8 @@
 #include <kmessagebox.h>
 #include <kstddirs.h>
 #include <kaction.h>
+#include <dcopclient.h>
+#include <kprocess.h>
 
 
 K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
@@ -51,6 +55,7 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
 
 	setupDevicePage();	
 	setupProgramsPage();
+//	setupPermissionPage();
 	
 	readPrograms();
 	readDevices();
@@ -155,17 +160,14 @@ void K3bOptionDialog::readPrograms()
     item->setText( 2,  config->readListEntry( "mpg123 parameters" ).join(" ") );
 
     item = new QListViewItem( m_viewPrograms );
-    item->setText( 0, "cdda2wav"  );
-    item->setText( 1,  config->readEntry( "cdda2wav path", "/usr/bin/cdda2wav" ) );
-    item->setText( 2,  config->readListEntry( "cdda2wav parameters" ).join(" ") );
+    item->setText( 0, "cdparanoia"  );
+    item->setText( 1,  config->readEntry( "cdparanoia path", "/usr/bin/cdparanoia" ) );
+    item->setText( 2,  config->readListEntry( "cdparanoia parameters" ).join(" ") );
 
     item = new QListViewItem( m_viewPrograms );
     item->setText( 0, "cdrdao"  );
     item->setText( 1,  config->readEntry( "cdrdao path", "/usr/bin/cdrdao" ) );
-    QString _entry = config->readListEntry( "cdrdao parameters" ).join(" ");
-    if( _entry.isEmpty() )
-    	_entry = "--driver generic-mmc";
-    item->setText( 2,  _entry );
+    item->setText( 2,  config->readListEntry( "cdrdao parameters" ).join(" ") );
 }
 
 bool K3bOptionDialog::savePrograms()
@@ -506,4 +508,66 @@ void K3bOptionDialog::slotDefault()
 			}
 			break;
 	}
+}
+
+
+void K3bOptionDialog::setupPermissionPage()
+{
+	QFrame* frame = addPage( i18n("Permissions"), i18n("Setup Permissions"),
+		KGlobal::instance()->iconLoader()->loadIcon( "lock", KIcon::NoGroup, KIcon::SizeMedium ) );
+	
+	QVBoxLayout* _frameLayout = new QVBoxLayout( frame );
+	m_stackPermission = new QWidgetStack( frame, "permWidgetStack" );
+	_frameLayout->addWidget( m_stackPermission );
+
+	m_embedPermission = new QXEmbed( m_stackPermission, "permEmbedWidget" );
+	m_containerInfo = new QWidget( m_stackPermission );
+
+    QGridLayout* _containerLayout = new QGridLayout( m_containerInfo );
+    _containerLayout->setSpacing( spacingHint() );
+    _containerLayout->setMargin( marginHint() );
+
+	QLabel* _labelPermissionInfo = new QLabel( m_containerInfo, "permLabel" );
+	_labelPermissionInfo->setText( i18n("In order to work correct the external programs like cdrecord need special permissions. Start K3bPS to configure these." ) );
+	_labelPermissionInfo->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter | QLabel::AlignLeft ) );
+
+	m_buttonStartPS = new QPushButton( i18n("Start K3bPS"), m_containerInfo );
+
+	_containerLayout->addMultiCellWidget( _labelPermissionInfo, 0,0,0,1 );
+	_containerLayout->addWidget( m_buttonStartPS, 1, 1 );
+
+	m_stackPermission->addWidget( m_containerInfo, 1 );
+	m_stackPermission->addWidget( m_embedPermission, 2 );
+	m_stackPermission->raiseWidget( m_containerInfo );
+
+	connect( m_buttonStartPS, SIGNAL(clicked()), this, SLOT(slotStartPS()) );
+}
+
+
+void K3bOptionDialog::slotStartPS()
+{
+	// register at DCOP server
+	DCOPClient* _dcop = kapp->dcopClient();
+	_dcop->attach();
+	_dcop->registerAs( kapp->name() );
+	
+	m_stackPermission->raiseWidget( m_embedPermission );
+	
+	// start the process
+	KProcess _process;
+	_process << "kdesu";
+	_process << "k3bps";
+	_process.start( KProcess::DontCare );
+	
+	// embed the process
+	WId _id;
+	m_embedPermission->setAutoDelete( true );
+	QCString reply_type;
+	QByteArray reply_data;
+	
+//	if( _dcop->call( "k3bps", "kapp/k3bpsapp", "winId()", QByteArray(), reply_type, reply_data ) ) {
+//		QDataStream answer(reply_data, IO_ReadOnly);
+//		answer >> _id;
+//		m_embedPermission->embed( _id );
+//	}
 }

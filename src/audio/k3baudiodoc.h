@@ -69,8 +69,11 @@ public:
 	bool cdText() const { return m_cdText; }
 	const QString& title() const { return m_cdTextTitle; }
 	const QString& artist() const { return m_cdTextArtist; }
-	const QString& isrc() const { return m_cdTextISRC; }
+	const QString& disc_id() const { return m_cdTextDisc_id; }
 	const QString& arranger() const { return m_cdTextArranger; }
+	const QString& songwriter() const { return m_cdTextSongwriter; }
+	const QString& upc_ean() const { return m_cdTextUpc_Ean; }
+	const QString& cdTextMessage() const { return m_cdTextMessage; }
 
 	QString writeTOC( const QString& filename );
 	int numOfTracks() const;
@@ -101,8 +104,11 @@ public slots:
 	void writeCdText( bool b ) { m_cdText = b; }
 	void setTitle( const QString& v ) { m_cdTextTitle = v; }
 	void setArtist( const QString& v ) { m_cdTextArtist = v; }
-	void setISRC( const QString& v ) { m_cdTextISRC = v; }
+	void setDisc_id( const QString& v ) { m_cdTextDisc_id = v; }
 	void setArranger( const QString& v ) { m_cdTextArranger = v; }
+	void setSongwriter( const QString& v ) { m_cdTextSongwriter = v; }
+	void setUpc_ean( const QString& v ) { m_cdTextUpc_Ean = v; }
+	void setCdTextMessage( const QString& v ) { m_cdTextMessage = v; }
 
 protected slots:
  	/** processes queue "urlsToAdd" **/
@@ -155,8 +161,11 @@ private:
  	bool m_cdText;
  	QString m_cdTextTitle;
  	QString m_cdTextArtist;
- 	QString m_cdTextISRC;
+ 	QString m_cdTextDisc_id;
  	QString m_cdTextArranger;
+ 	QString m_cdTextUpc_Ean;
+ 	QString m_cdTextSongwriter;
+ 	QString m_cdTextMessage;
  	// --------------------------------------------------
 };
 

@@ -74,7 +74,7 @@ public:
 	
 protected slots:
 	void parseCdrecordOutput( KProcess* p, char* output, int len );
-	
+
 private:
 	QList<K3bDevice> m_reader;
 	QList<K3bDevice> m_writer;

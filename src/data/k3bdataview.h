@@ -186,6 +186,9 @@ public:
 	~K3bPrivateDataRootViewItem() {}
 	
 	QString text( int ) const;
+	
+	/** reimplemented from QListViewItem */
+	void setText(int col, const QString& text );
 		
 private:
 	K3bDataDoc* m_doc;

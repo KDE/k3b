@@ -560,8 +560,21 @@ void K3bApp::slotSettingsConfigure()
 		m_optionDialog = new K3bOptionDialog( this, "SettingsDialog", true );
 		
 	if( !m_optionDialog->isVisible() )
-		m_optionDialog->exec();
+		m_optionDialog->show();
 }
+
+
+void K3bApp::showOptionDialog( int index )
+{
+	if( !m_optionDialog )
+		m_optionDialog = new K3bOptionDialog( this, "SettingsDialog", true );
+
+	m_optionDialog->showPage( index );
+	
+	if( !m_optionDialog->isVisible() )
+		m_optionDialog->show();
+}
+
 
 void K3bApp::searchExternalProgs()
 {
@@ -741,6 +754,9 @@ QString K3bApp::findTempFile( const QString& ending, const QString& d )
 		config()->setGroup( "General Options" );
 		dir = config()->readEntry( "Temp Dir", locateLocal( "appdata", "temp/" ) );
 	}
+	if( dir.at(dir.length() - 1) != '/' )
+		dir += "/";
+	
 	// find a free filename
 	int num = 1;
 	while( QFile::exists( dir + "k3b-" + QString::number( num ) + "." + ending ) )

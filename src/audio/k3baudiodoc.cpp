@@ -393,6 +393,12 @@ QString K3bAudioDoc::writeTOC( const QString& filename )
 		t << "  LANGUAGE 0 {\n";
 		t << "    TITLE " << "\"" << title() << "\"" << "\n";
 		t << "    PERFORMER " << "\"" << artist() << "\"" << "\n";
+		t << "    DISC_ID " << "\"" <<	disc_id() << "\"" << "\n";
+		t << "    UPC_EAN " << "\"" << "\"" << "\n";
+		t << "\n";
+		t << "    ARRANGER " << "\"" << arranger() << "\"" << "\n";
+		t << "    SONGWRITER " << "\"" << songwriter() << "\"" << "\n";
+		t << "    MESSAGE " << "\"" << cdTextMessage() << "\"" << "\n";
 		t << "  }" << "\n";
 		t << "}" << "\n\n";
 	}
@@ -405,6 +411,10 @@ QString K3bAudioDoc::writeTOC( const QString& filename )
 			t << "  LANGUAGE 0 {" << "\n";
 			t << "    TITLE " << "\"" << _track->title() << "\"" << "\n";
 			t << "    PERFORMER " << "\"" << _track->artist() << "\"" << "\n";
+			t << "    ISRC " << "\"" << _track->isrc() << "\"" << "\n";
+			t << "    ARRANGER " << "\"" << _track->arranger() << "\"" << "\n";
+			t << "    SONGWRITER " << "\"" << _track->songwriter() << "\"" << "\n";
+			t << "    MESSAGE " << "\"" << _track->cdTextMessage() << "\"" << "\n";
 			t << "  }" << "\n";
 			t << "}" << "\n";
 		}

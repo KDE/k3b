@@ -17,8 +17,17 @@
 
 #include "k3bcopywidget.h"
 
+#include <qlabel.h>
+#include <qlayout.h>
+
+
 K3bCopyWidget::K3bCopyWidget(QWidget *parent, const char *name )
- : QWidget(parent,name) {
+	: QWidget(parent,name)
+{
+	QLabel* mainLabel = new QLabel( "Not implemented yet!", this );
+	QVBoxLayout* mainLay = new QVBoxLayout( this );
+	mainLay->addWidget( mainLabel );
+	mainLabel->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignCenter ) );
 }
 
 K3bCopyWidget::~K3bCopyWidget(){

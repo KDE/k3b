@@ -18,6 +18,9 @@
 #include "k3baudiotrack.h"
 #include "../k3bglobals.h"
 
+#include <kapp.h>
+#include <kconfig.h>
+
 #include <qstring.h>
 #include <qfileinfo.h>
 
@@ -26,7 +29,11 @@ K3bAudioTrack::K3bAudioTrack( QList<K3bAudioTrack>* parent, const QString& filen
 : m_file(filename), m_bufferFile(), m_length()
 {
 	m_parent = parent;
-	m_pregap = 2;
+	m_copy = false;
+	m_preEmp = false;
+
+	kapp->config()->setGroup( "Audio Defaults" );
+	m_pregap =	kapp->config()->readNumEntry( "Pregap", 2 );
 	
 	if( QFileInfo(m_file).extension(false).contains("mp3", false) )
 		m_filetype = K3b::MP3;
@@ -37,6 +44,7 @@ K3bAudioTrack::K3bAudioTrack( QList<K3bAudioTrack>* parent, const QString& filen
 K3bAudioTrack::K3bAudioTrack( const K3bAudioTrack& track )
 : m_file( track.absPath() ),	m_bufferFile(), m_length( track.length() ), m_artist( track.artist() ), m_title( track.title() )
 {
+	// TODO: copy the rest (but I think this will never be used!!!!)
 	m_parent = track.m_parent;
 	m_pregap  = track.pregap();
 	m_filetype = track.filetype();

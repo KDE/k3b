@@ -67,11 +67,13 @@ protected:
 	
 	// the cd-text-tab
 	// -----------------------------------------------------------
-    QLineEdit* m_editArranger;
-    QLineEdit* m_editISRC;
-    QLineEdit* m_editArtist;
-    QLineEdit* m_editTitle;
+    QLineEdit* m_editDisc_id;
+    QLineEdit* m_editUpc_ean;
     QMultiLineEdit* m_editMessage;
+    QLineEdit* m_editPerformer;
+    QLineEdit* m_editArranger;
+    QLineEdit* m_editTitle;
+    QLineEdit* m_editSongwriter;
 	// -----------------------------------------------------------
 
 protected slots:

@@ -40,11 +40,19 @@ public:
 	const QString& bufferFile() const { return m_bufferFile; }
 	int  filetype() const { return m_filetype; }
 	int  pregap() const { return m_pregap; }
+	const QTime& length() const { return m_length; }
+	
 	const QString& artist() const { return m_artist; }
 	const QString& title() const { return m_title; }
+	const QString& arranger() const { return m_arranger; }
+	const QString& songwriter() const { return m_songwriter; }
+	const QString& isrc() const { return m_isrc; }
+	const QString& cdTextMessage() const { return m_cdTextMessage; }
 	const QString& album() const { return m_album; }
-	const QTime& length() const { return m_length; }
-
+	
+	bool copyProtection() const { return m_copy; }
+	bool preEmp() const { return m_preEmp; }
+	
 	/** Default vaule is 2 **/
 	void setPregap( int p ) { m_pregap = p; }
 
@@ -57,7 +65,13 @@ public:
  	 * If the file is a mp3-file, it's mp3-tag is used
  	 **/
 	void setTitle( const QString& t ) { m_title = t; }
-
+	void setArranger( const QString& t ) { m_arranger = t; }
+	void setSongwriter( const QString& t ) { m_songwriter = t; }
+	void setIsrc( const QString& t ) { m_isrc = t; }
+	void setCdTextMessage( const QString& t ) { m_cdTextMessage = t; }
+	void setPreEmp( bool b ) { m_preEmp = b; }
+	void setCopyProtection( bool b ) { m_copy = b; }
+	
 	void setAlbum( const QString& t ) { m_album = t; }
 	
 	void setLength( const QTime& time ) { m_length = time; }
@@ -80,12 +94,17 @@ private:
 	
 	/** CD-Text: copy protection */
 	bool m_copy;
+	bool m_preEmp;
 	/** CD-Text: PERFORMER */
 	QString m_artist;
 	/** CD-Text: TITLE (track) */
 	QString m_title;
 	/** CD-Text: TITLE (cd) */
 	QString m_album;
+	QString m_arranger;
+	QString m_songwriter;
+	QString m_cdTextMessage;
+	QString m_isrc;
 };
 
 

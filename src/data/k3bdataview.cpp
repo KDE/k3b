@@ -89,6 +89,8 @@ void K3bDataView::slotAddFile( K3bFileItem* file )
 {
 	if( m_dataFileView->currentDir() == file->parent() )
 		m_dataFileView->reload();
+	
+	m_fillStatusDisplay->repaint();
 }
 
 
@@ -121,6 +123,8 @@ void K3bDataView::slotAddDir( K3bDirItem* dirItem )
 
 	if( m_dataFileView->currentDir() == parentDir )
 		m_dataFileView->reload();
+		
+	m_fillStatusDisplay->repaint();
 }
 	
 	
@@ -326,14 +330,22 @@ QString K3bDataView::K3bPrivateDataRootViewItem::text( int index ) const
 {
 	switch( index ) {
 		case 0:
-			return "ISO: " + m_doc->name();
+			return m_doc->name();
 		case 1:
-			return i18n("Directory");
+			return i18n("ISO-CD");
 		default:
 			return "";
 	}
 }
 
+
+void K3bDataView::K3bPrivateDataRootViewItem::setText( int col, const QString& text )
+{
+	if( col == 0 )
+		m_doc->setName( text );
+
+	QListViewItem::setText( col, text );
+}
 
 
 void K3bDataView::setupPopupMenu()
@@ -414,7 +426,8 @@ void K3bDataView::slotItemRemoved( K3bDataItem* item )
 			
 		} // for _it2
 	}
-	
+
+	m_fillStatusDisplay->repaint();	
 }
 
 

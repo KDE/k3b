@@ -75,9 +75,11 @@ void K3bAudioBurnDialog::saveSettings()
 	
 	// -- save Cd-Text ------------------------------------------------
 	((K3bAudioDoc*)doc())->setTitle( m_editTitle->text() );
-	((K3bAudioDoc*)doc())->setArtist( m_editArtist->text() );
-	((K3bAudioDoc*)doc())->setISRC( m_editISRC->text() );
+	((K3bAudioDoc*)doc())->setArtist( m_editPerformer->text() );
+	((K3bAudioDoc*)doc())->setDisc_id( m_editDisc_id->text() );
+	((K3bAudioDoc*)doc())->setUpc_ean( m_editUpc_ean->text() );
 	((K3bAudioDoc*)doc())->setArranger( m_editArranger->text() );
+	((K3bAudioDoc*)doc())->setSongwriter( m_editSongwriter->text() );
 }
 
 
@@ -94,9 +96,11 @@ void K3bAudioBurnDialog::readSettings()
 
 	// read CD-Text ------------------------------------------------------------
 	m_editTitle->setText( ((K3bAudioDoc*)doc())->title() );
-	m_editArtist->setText( ((K3bAudioDoc*)doc())->artist() );
-	m_editISRC->setText( ((K3bAudioDoc*)doc())->isrc() );
+	m_editPerformer->setText( ((K3bAudioDoc*)doc())->artist() );
+	m_editDisc_id->setText( ((K3bAudioDoc*)doc())->disc_id() );
+	m_editUpc_ean->setText( ((K3bAudioDoc*)doc())->upc_ean() );
 	m_editArranger->setText( ((K3bAudioDoc*)doc())->arranger() );
+	m_editSongwriter->setText( ((K3bAudioDoc*)doc())->songwriter() );
 	
 	K3bProjectBurnDialog::readSettings();
 }
@@ -203,78 +207,123 @@ void K3bAudioBurnDialog::setupBurnTab( QFrame* frame )
     // tab order
 
     connect( m_buttonFindDir, SIGNAL(clicked()), this, SLOT(slotFindDir()) );
+
+//    m_checkOnTheFly->setEnabled( false );
 }
 
 
 void K3bAudioBurnDialog::setupCdTextTab( QFrame* frame )
 {
-    QGridLayout* frameLayout = new QGridLayout( frame );
+    QHBoxLayout* frameLayout = new QHBoxLayout( frame );
     frameLayout->setSpacing( spacingHint() );
     frameLayout->setMargin( marginHint() );
 
-    QGridLayout* layout1 = new QGridLayout;
-    layout1->setSpacing( spacingHint() );
-    layout1->setMargin( 0 );
+    QFrame* _mainGroup = new QFrame( frame, "_mainGroup" );
+    _mainGroup->setFrameShape( QFrame::Box );
+    _mainGroup->setFrameShadow( QFrame::Sunken );
+    QGridLayout* _mainGroupLayout = new QGridLayout( _mainGroup );
+    _mainGroupLayout->setSpacing( spacingHint() );
+    _mainGroupLayout->setMargin( marginHint() );
 
-    m_editArranger = new QLineEdit( frame, "m_editArranger" );
+    QGridLayout* _layout3 = new QGridLayout;
+    _layout3->setSpacing( spacingHint() );
+    _layout3->setMargin( 0 );
 
-    layout1->addWidget( m_editArranger, 2, 1 );
+    m_editDisc_id = new QLineEdit( _mainGroup, "m_editDisc_id" );
+    QToolTip::add(  m_editDisc_id, i18n( "International Standard Recording Code" ) );
 
-    m_editISRC = new QLineEdit( frame, "m_editISRC" );
-    QToolTip::add(  m_editISRC, i18n( "International Standard Recording Code" ) );
+    _layout3->addWidget( m_editDisc_id, 2, 1 );
 
-    layout1->addWidget( m_editISRC, 3, 1 );
+    QLabel* _labelDisc_id = new QLabel( _mainGroup, "_labelDisc_id" );
+    _labelDisc_id->setText( i18n( "&Disc ID" ) );
+    QToolTip::add(  _labelDisc_id, i18n( "" ) );
 
-    m_editArtist = new QLineEdit( frame, "m_editArtist" );
+    _layout3->addWidget( _labelDisc_id, 2, 0 );
 
-    layout1->addWidget( m_editArtist, 1, 1 );
+    m_editUpc_ean = new QLineEdit( _mainGroup, "m_editUpc_ean" );
 
-    m_editTitle = new QLineEdit( frame, "m_editTitle" );
+    _layout3->addWidget( m_editUpc_ean, 1, 1 );
 
-    layout1->addWidget( m_editTitle, 0, 1 );
-
-    QLabel* TextLabel5 = new QLabel( frame, "TextLabel5" );
-    TextLabel5->setText( i18n( "Arranger" ) );
-
-    layout1->addWidget( TextLabel5, 2, 0 );
-
-    QLabel* TextLabel2 = new QLabel( frame, "TextLabel2" );
-    TextLabel2->setText( i18n( "Artist" ) );
-
-    layout1->addWidget( TextLabel2, 1, 0 );
-
-    QLabel* TextLabel7 = new QLabel( frame, "TextLabel7" );
-    TextLabel7->setText( i18n( "ISRC" ) );
-
-    layout1->addWidget( TextLabel7, 3, 0 );
-
-    QLabel* TextLabel1 = new QLabel( frame, "TextLabel1" );
-    TextLabel1->setText( i18n( "Title" ) );
-
-    layout1->addWidget( TextLabel1, 0, 0 );
-
-    frameLayout->addMultiCellLayout( layout1, 0, 1, 0, 0 );
-    QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
-    frameLayout->addItem( spacer, 2, 0 );
-
-    QLabel* TextLabel6 = new QLabel( frame, "TextLabel6" );
-    TextLabel6->setText( i18n( "Message" ) );
-    TextLabel6->setAlignment( int( QLabel::AlignTop | QLabel::AlignLeft ) );
-
-    frameLayout->addWidget( TextLabel6, 0, 2 );
-
-    m_editMessage = new QMultiLineEdit( frame, "m_editMessage" );
+    m_editMessage = new QMultiLineEdit( _mainGroup, "m_editMessage" );
     m_editMessage->setWordWrap( QMultiLineEdit::WidgetWidth );
 
-    frameLayout->addMultiCellWidget( m_editMessage, 0, 2, 3, 3 );
+    _layout3->addWidget( m_editMessage, 0, 1 );
+
+    QLabel* _labelMessage = new QLabel( _mainGroup, "_labelMessage" );
+    _labelMessage->setText( i18n( "&Message" ) );
+    _labelMessage->setAlignment( int( QLabel::AlignTop | QLabel::AlignLeft ) );
+
+    _layout3->addWidget( _labelMessage, 0, 0 );
+
+    QLabel* _labelUpc_ean = new QLabel( _mainGroup, "_labelUpc_ean" );
+    _labelUpc_ean->setText( i18n( "&UPC EAN" ) );
+
+    _layout3->addWidget( _labelUpc_ean, 1, 0 );
+
+    _mainGroupLayout->addMultiCellLayout( _layout3, 0, 1, 2, 2 );
+    QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
+    _mainGroupLayout->addMultiCell( spacer, 1, 2, 0, 0 );
+
+    QFrame* _line1 = new QFrame( _mainGroup, "_line1" );
+    _line1->setMargin( 0 );
+    _line1->setFrameStyle( QFrame::VLine | QFrame::Sunken );
+
+    _mainGroupLayout->addMultiCellWidget( _line1, 0, 2, 1, 1 );
+
+    QGridLayout* _layout2 = new QGridLayout;
+    _layout2->setSpacing( spacingHint() );
+    _layout2->setMargin( 0 );
+
+    m_editPerformer = new QLineEdit( _mainGroup, "m_editPerformer" );
+
+    _layout2->addWidget( m_editPerformer, 1, 1 );
+
+    QLabel* _labelArranger = new QLabel( _mainGroup, "_labelArranger" );
+    _labelArranger->setText( i18n( "&Arranger" ) );
+
+    _layout2->addWidget( _labelArranger, 2, 0 );
+
+    m_editArranger = new QLineEdit( _mainGroup, "m_editArranger" );
+
+    _layout2->addWidget( m_editArranger, 2, 1 );
+
+    QLabel* _labelSongwriter = new QLabel( _mainGroup, "_labelSongwriter" );
+    _labelSongwriter->setText( i18n( "&Songwriter" ) );
+
+    _layout2->addWidget( _labelSongwriter, 3, 0 );
+
+    QLabel* _labelPerformer = new QLabel( _mainGroup, "_labelPerformer" );
+    _labelPerformer->setText( i18n( "&Performer" ) );
+
+    _layout2->addWidget( _labelPerformer, 1, 0 );
+
+    m_editTitle = new QLineEdit( _mainGroup, "m_editTitle" );
+    QToolTip::add(  m_editTitle, i18n( "" ) );
+
+    _layout2->addWidget( m_editTitle, 0, 1 );
+
+    QLabel* _labelTitle = new QLabel( _mainGroup, "_labelTitle" );
+    _labelTitle->setText( i18n( "&Title" ) );
+
+    _layout2->addWidget( _labelTitle, 0, 0 );
+
+    m_editSongwriter = new QLineEdit( _mainGroup, "m_editSongwriter" );
+
+    _layout2->addWidget( m_editSongwriter, 3, 1 );
+
+    _mainGroupLayout->addLayout( _layout2, 0, 0 );
     QSpacerItem* spacer_2 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
-    frameLayout->addMultiCell( spacer_2, 1, 2, 2, 2 );
+    _mainGroupLayout->addItem( spacer_2, 2, 2 );
+    frameLayout->addWidget( _mainGroup );
 
-    QFrame* Line1 = new QFrame( frame, "Line1" );
-    Line1->setMargin( 0 );
-    Line1->setFrameStyle( QFrame::VLine | QFrame::Sunken );
-
-    frameLayout->addMultiCellWidget( Line1, 0, 2, 1, 1 );
+    // buddies
+    _labelDisc_id->setBuddy( m_editDisc_id );
+    _labelMessage->setBuddy( m_editMessage );
+    _labelUpc_ean->setBuddy( m_editUpc_ean );
+    _labelArranger->setBuddy( m_editArranger );
+    _labelSongwriter->setBuddy( m_editSongwriter );
+    _labelPerformer->setBuddy( m_editPerformer );
+    _labelTitle->setBuddy( m_editTitle );
 }
 
 

@@ -23,11 +23,13 @@
 
 class K3bAudioTrack;
 class QLineEdit;
+class QMultiLineEdit;
 class QLabel;
+class QCheckBox;
 class KToggleAction;
 class KIntNumInput;
 class K3bStickyButton;
-class QGroupBox;
+class KCutLabel;
 
 
 /**
@@ -46,27 +48,42 @@ public:
 	
 public slots:
 	void setTrack( K3bAudioTrack* _track );
-	void setSticky( bool s ) { m_sticky = s; }
+	void setSticky( bool s );
 	void updateView();
 	
 protected slots:
 	void updateTitle( const QString& );
-	void updateArtist( const QString& );
+	void updatePerformer( const QString& );
+	void updateArranger( const QString& );
+	void updateSongwriter( const QString& );
+	void updateIsrc( const QString& );
+	void updateMessage();
 	void updatePregap( int );
+	void updatePreEmp( int );
+	void updateCopyProtection( int );
 			
 private:
-	QGroupBox* setupTagBox();
-	QGroupBox* setupInfoBox();
-	
 	K3bAudioTrack* m_track;
-	QLineEdit* inputTitle;
-	QLineEdit* inputArtist;
-	QLabel* labelFileName;
-	QLabel* labelTrackLength;
-	K3bStickyButton* buttonSticky;
-	KIntNumInput* inputPregap;
+
+    QLineEdit* m_editPerformer;
+    QLineEdit* m_editTitle;
+    QMultiLineEdit* m_editMessage;
+    QLineEdit* m_editArranger;
+    QLineEdit* m_editSongwriter;
+    QLineEdit* m_editIsrc;
+    K3bStickyButton* m_stickyButton;
+    QLabel* m_labelMimeType;
+    KCutLabel* m_displayFileName;
+    QLabel* m_displaySize;
+    QLabel* m_displayLength;
+    KIntNumInput* m_inputPregap;
+    QCheckBox* m_checkPreEmp;
+    QCheckBox* m_checkCopy;
 	
 	bool m_sticky;
+	
+	void setupGui();
+	void setupConnections();
 };
 
 #endif

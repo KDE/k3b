@@ -63,13 +63,13 @@ void K3bFillStatusDisplay::drawSize(QPainter* p)
 	p->drawText( contentsRect(), Qt::AlignLeft | Qt::AlignVCenter, "MB" );
 	
 	// draw yellow if value > 650
-	if( value > 650 ) {
+	if( value > 65 ) {
 		rect.setLeft( rect.left() + (int)(one*65.0) );
 		p->fillRect( rect, Qt::yellow );
 	}
 	
 	// draw red if value > 80
-	if( value > 700 ) {
+	if( value > 70 ) {
 		rect.setLeft( rect.left() + (int)(one*5.0) );
 		p->fillRect( rect, Qt::red );
 	}

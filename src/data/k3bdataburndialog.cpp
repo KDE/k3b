@@ -58,17 +58,42 @@ void K3bDataBurnDialog::saveSettings()
 {
 	doc()->setDao( m_checkDao->isChecked() );
 	doc()->setDummy( m_checkDummy->isChecked() );
-	
+	doc()->setOnTheFly( m_checkOnTheFly->isChecked() );
+		
 	// -- saving current speed --------------------------------------
 	doc()->setSpeed( writerSpeed() );
 	
 	// -- saving current device --------------------------------------
 	doc()->setBurner( writerDevice() );
+	
+	// -- saving mkisofs-options -------------------------------------
+	((K3bDataDoc*)doc())->setCreateRockRidge( m_checkCreateRR->isChecked() );
+	((K3bDataDoc*)doc())->setCreateJoliet( m_checkCreateJoliet->isChecked() );
+	((K3bDataDoc*)doc())->setISOallowLowercase( m_checkLowercase->isChecked() );
+	((K3bDataDoc*)doc())->setISOallowPeriodAtBegin( m_checkBeginPeriod->isChecked() );
+	((K3bDataDoc*)doc())->setISOallow31charFilenames( m_checkAllow31->isChecked() );
+	((K3bDataDoc*)doc())->setISOomitVersionNumbers( m_checkOmitVersion->isChecked() );
+	((K3bDataDoc*)doc())->setISOmaxFilenameLength( m_checkMaxNames->isChecked() );
+	((K3bDataDoc*)doc())->setISOrelaxedFilenames( m_checkRelaxedNames->isChecked() );
+	((K3bDataDoc*)doc())->setISOnoIsoTranslate( m_checkNoISOTrans->isChecked() );
+	((K3bDataDoc*)doc())->setISOallowMultiDot( m_checkMultiDot->isChecked() );
+	((K3bDataDoc*)doc())->setISOuntranslatedFilenames( m_checkUntranslatedNames->isChecked() );
+	((K3bDataDoc*)doc())->setNoDeepDirectoryRelocation( m_checkNoDeepDirRel->isChecked() );
+//	((K3bDataDoc*)doc())->setFollowSymbolicLinks( m_check->isChecked() );
+	((K3bDataDoc*)doc())->setHideRR_MOVED( m_checkHideRR_MOVED->isChecked() );
+	((K3bDataDoc*)doc())->setCreateTRANS_TBL( m_checkCreateTRANS_TBL->isChecked() );
+	((K3bDataDoc*)doc())->setHideTRANS_TBL( m_checkHideTRANS_TBL->isChecked() );
+	((K3bDataDoc*)doc())->setPadding( m_checkPadding->isChecked() );
+	// ------------------------------------- saving mkisofs-options --
 }
 
 
 void K3bDataBurnDialog::readSettings()
 {
+	// we do not read the mkisofs-options!!!
+
+	m_labelCdSize->setText( QString("%1 MB").arg(doc()->size()) );
+	
 	// read temp dir
 	k3bMain()->config()->setGroup( "General Options" );
 	m_editDirectory->setText( k3bMain()->config()->readEntry( "Temp Dir", locateLocal( "appdata", "temp/" ) ) + "image.iso" );
@@ -362,6 +387,7 @@ void K3bDataBurnDialog::setupAdvancedTab( QFrame* frame )
 	connect(	m_checkNoISOTrans, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
 	connect(	m_checkMultiDot, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
 	connect(	m_checkLowercase, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
+	connect( m_groupIsoLevel, SIGNAL(clicked(int)), this, SLOT(slotSelectCustom()) );
 
     connect( m_comboPreSettings, SIGNAL(activated(const QString&)), this, SLOT(slotLoadPreSettings(const QString&)) );
     connect( m_buttonSaveAsDefault, SIGNAL(clicked()), this, SLOT(slotSaveDefaults()) );

@@ -53,6 +53,8 @@ public:
 	/** reimplemented from K3bDataItem */
 	QString localPath();
 	
+	long k3bSize() const;
+	
 private:
 	QString m_isoName;
 	QString m_joiletName;

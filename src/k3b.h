@@ -93,6 +93,7 @@ class K3bApp : public KDockMainWindow
 	QString findTempFile( const QString& ending, const QString& dir = QString::null );
 
 	bool eject();
+	void showOptionDialog( int = 0 );
 	
   protected:
     /** queryClose is called by KTMainWindow on each closeEvent of a window. Against the

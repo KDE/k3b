@@ -309,6 +309,7 @@ void K3bAudioJob::slotCdrecordFinished()
 			default:
 				// no recording device and also other errors!! :-(
 				emit infoMessage( "Cdrecord returned some error!" );
+				emit infoMessage( "Sorry, no error handling yet! :-((" );
 				m_error = K3b::CDRECORD_ERROR;
 				break;
 		}
@@ -340,6 +341,7 @@ void K3bAudioJob::slotCdrdaoFinished()
 			default:
 				// no recording device and also other errors!! :-(
 				emit infoMessage( "Cdrdao returned some error!" );
+				emit infoMessage( "Sorry, no error handling yet! :-((" );
 				m_error = K3b::CDRDAO_ERROR;
 				break;
 		}
@@ -429,8 +431,6 @@ void K3bAudioJob::startWriting()
 			QStringList _params = kapp->config()->readListEntry( "cdrdao parameters" );
 			for( QStringList::Iterator it = _params.begin(); it != _params.end(); ++it )
 				m_process << *it;
-			if( _params.isEmpty() ) // default
-				m_process << "--driver" << "generic-mmc";    // !! use generic-mmc as default, TODO: give the option to choose
 			
 			// supress the 10 seconds gap to the writing
 			m_process << "-n";
