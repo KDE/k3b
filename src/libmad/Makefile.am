@@ -109,11 +109,11 @@ mad.h: $(top_builddir)/config.status $(top_builddir)/config.h Makefile.am  \
 		echo ".$(FPM)" | sed -e 's|^\.-D|# define |'; echo;  \
 	fi;  \
 	sed -ne 's/^# *define  *\(HAVE_.*_ASM\).*/# define \1/p'  \
-		$(top_srcdir)/config.h; echo;  \
+		$(top_builddir)/config.h; echo;  \
 	sed -ne 's/^# *define  *OPT_\(SPEED\|ACCURACY\).*/# define OPT_\1/p'  \
-		$(top_srcdir)/config.h; echo;  \
+		$(top_builddir)/config.h; echo;  \
 	sed -ne 's/^# *define  *\(SIZEOF_.*\)/# define \1/p'  \
-		$(top_srcdir)/config.h; echo;  \
+		$(top_builddir)/config.h; echo;  \
 	for header in $(exported_headers); do  \
 		echo;  \
 		sed -n -f $(srcdir)/mad.h.sed $(srcdir)/$$header; echo;  \
