@@ -144,7 +144,6 @@ void K3bDvdRipperWidget::setupGui(){
     mainLayout->addMultiCellWidget( ripOptions, 2, 2, 0, 1 );
 
     setStartButtonText( i18n( "Start Ripping" ), i18n( "This starts the DVD copy.") );
-    connect( this, SIGNAL( closeClicked() ), this, SLOT( close() ) );
     connect( this, SIGNAL( startClicked() ), this, SLOT( rip() ) );
     //connect(m_buttonStaticDir, SIGNAL(clicked()), this, SLOT(slotFindStaticDir()) );
     connect(m_checkOpenEncoding, SIGNAL( stateChanged( int ) ), this, SLOT( slotCheckOpenEncoding( int ) ));

@@ -79,12 +79,9 @@ void K3bMovieView::setupGUI()
 
   // toolbox
   // ----------------------------------------------------------------------------------
-  QHBoxLayout* toolBoxLayout = new QHBoxLayout;
   m_toolBox = new K3bToolBox( mainWidget() );
-  toolBoxLayout->addWidget( m_toolBox );
   m_labelDvdInfo = new KCutLabel( mainWidget() );
-  toolBoxLayout->addWidget( m_labelDvdInfo );
-
+  m_labelDvdInfo->setMargin( 2 );
 
   m_listView = new KListView(mainWidget(), "cdviewcontent");
   m_listView->addColumn( i18n("Titles" ) );
@@ -102,18 +99,20 @@ void K3bMovieView::setupGUI()
   connect( m_listView, SIGNAL(selectionChanged( QListViewItem* )),
 	   this, SLOT(slotTitleSelected( QListViewItem* )) );
 
-  layout->addLayout( toolBoxLayout );
+  layout->addWidget( m_toolBox );
   layout->addWidget( m_listView );  
+  layout->addWidget( m_labelDvdInfo );
 }
 
 
 void K3bMovieView::setupActions()
 {
   m_actionCollection = new KActionCollection( this );
-  KAction *m_copyAction = KStdAction::copy( this, SLOT(slotRip()), m_actionCollection );
+  KAction* copyAction = KStdAction::copy( this, SLOT(slotRip()), m_actionCollection );
 
   m_popupMenu = new KPopupMenu( this );
-  m_copyAction->plug( m_popupMenu );
+  copyAction->plug( m_popupMenu );
+  m_toolBox->addButton( copyAction );
 }
 
 
