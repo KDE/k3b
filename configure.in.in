@@ -240,3 +240,15 @@ if test x$compile_k3bsetup = xyes; then
 fi
 
 AM_CONDITIONAL(with_k3bsetup1, [test x$compile_k3bsetup = xyes])
+
+
+# Extra SCSI support libs can go in CAM_LIB, and are linked into
+# libk3bdevice. For Linux, nothing is needed. FreeBSD requires -lcam
+# (which is in base, so no test is needed).
+CAM_LIB=""
+if test "FreeBSD" = `uname -s` ; then
+	CAM_LIB="-lcam"
+fi
+AC_SUBST(CAM_LIB)
+
+
