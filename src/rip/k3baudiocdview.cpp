@@ -521,8 +521,8 @@ void K3bAudioCdView::updateDisplay()
   else
     m_labelTitle->setText( i18n("Audio CD") );
 
-  m_labelLength->setText( i18n("1 track (CD Size: %1)", 
-			       "%n tracks (CD Size: %1)", 
+  m_labelLength->setText( i18n("1 track (%1)", 
+			       "%n tracks (%1)", 
 			       m_diskInfo.toc.count()).arg(K3b::Msf(m_diskInfo.toc.length()).toString()) );
 }
 
