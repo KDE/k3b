@@ -24,6 +24,7 @@
 #include "k3bexternalbinoptiontab.h"
 #include "k3bmiscoptiontab.h"
 #include "../k3bcore.h"
+#include <k3bsystemproblemdialog.h>
 
 #include <qlayout.h>
 #include <qtooltip.h>
@@ -79,7 +80,7 @@ void K3bOptionDialog::slotOk()
 
     k3bcore->config()->setGroup( "General Options" );
     if( k3bcore->config()->readBoolEntry( "check system config", true ) )
-      k3bcore->checkSystem();
+      K3bSystemProblemDialog::checkSystem();
   }
 }
 

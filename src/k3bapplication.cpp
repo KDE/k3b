@@ -26,6 +26,7 @@
 #include <tools/k3bversion.h>
 #include <rip/songdb/k3bsongmanager.h>
 #include <k3bdoc.h>
+#include <k3bsystemproblemdialog.h>
 
 #include <klocale.h>
 #include <kconfig.h>
@@ -86,6 +87,12 @@ void K3bApplication::init()
   m_mainWindow->show();
 
   emit initializationInfo( i18n("Ready.") );
+
+
+  if( config()->readBoolEntry( "check system config", true ) ) {
+    emit initializationInfo( i18n("Checking System") );
+    K3bSystemProblemDialog::checkSystem();
+  }
 
   KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
