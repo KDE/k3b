@@ -191,7 +191,7 @@ bool K3bCdDevice::CdDevice::init()
     // correct buffer size
     //
 
-    int len = header[0]<<24 | header[1]<<16 | header[2]<<8 | header[3];
+    int len = from4Byte( header );
     unsigned char* profiles = new unsigned char[len];
     ::memset( profiles, 0, len );
     cmd[6] = len>>16;
@@ -1885,7 +1885,7 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
 	inf.m_rewritable = dInf->erasable;
 
 	// we set it here so we have the info even if the call to GPCMD_READ_TOC_PMA_ATIP failes
-	inf.m_numSessions = dInf->n_sessions_l | (dInf->n_sessions_m << 8);
+	inf.m_numSessions = (dInf->n_sessions_l & 0x00FF) | ((dInf->n_sessions_m << 8) & 0xFF00);
 
 	//	inf.m_numTracks = ( (dInf->last_track_m<<8) | dInf->last_track_l);
 
@@ -1966,7 +1966,7 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
 	  }
 	  else {
 	    // not sure about this....
-	    inf.m_capacity = trackHeader[8]<<24|trackHeader[9]<<16|trackHeader[10]<<8|trackHeader[11];
+	    inf.m_capacity = from4Byte( &trackHeader[8] );
 	  }
 	}
       }
@@ -2392,7 +2392,7 @@ bool K3bCdDevice::CdDevice::read10( unsigned char* data,
 
   ScsiCommand cmd( this );
   cmd[0] = 0x28;  // READ 10
-  cmd[1] = ( fua ? 1<<3 : 0 );
+  cmd[1] = ( fua ? 0x8 : 0x0 );
   cmd[2] = startAdress>>24;
   cmd[3] = startAdress>>16;
   cmd[4] = startAdress>>8;
@@ -2420,7 +2420,7 @@ bool K3bCdDevice::CdDevice::read12( unsigned char* data,
 
   ScsiCommand cmd( this );
   cmd[0] = 0xa8;  // READ 12
-  cmd[1] = ( fua ? 1<<3 : 0 );
+  cmd[1] = ( fua ? 0x8 : 0x0 );
   cmd[2] = startAdress>>24;
   cmd[3] = startAdress>>16;
   cmd[4] = startAdress>>8;
@@ -2429,7 +2429,7 @@ bool K3bCdDevice::CdDevice::read12( unsigned char* data,
   cmd[7] = length>>16;
   cmd[8] = length>>8;
   cmd[9] = length;
-  cmd[10] = (streaming ? 1<<7 : 0 );
+  cmd[10] = (streaming ? 0x80 : 0 );
 
   if( cmd.transport( TR_DIR_READ, data, dataLen ) ) {
     kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ 12 failed!" << endl;
@@ -2492,7 +2492,7 @@ bool K3bCdDevice::CdDevice::readSubChannel( unsigned char** data, int& dataLen,
 
   ScsiCommand cmd( this );
   cmd[0] = 0x42;    // READ SUB-CHANNEL
-  cmd[2] = (1<<6);  // SUBQ
+  cmd[2] = 0x40;    // SUBQ
   cmd[3] = subchannelParam;
   cmd[6] = trackNumber;   // only used when subchannelParam == 03h (ISRC)
   cmd[8] = 4;      // first we read the header
