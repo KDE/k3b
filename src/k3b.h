@@ -93,10 +93,10 @@ class K3bMainWindow : public KParts::DockMainWindow
 
   K3bCdDevice::DeviceManager*      deviceManager() const;
   K3bExternalBinManager* externalBinManager() const;
-  K3bAudioPlayer*        audioPlayer()        { return m_audioPlayer; }
-  KConfig*               config()             { return m_config; }
+  K3bAudioPlayer*        audioPlayer() const       { return m_audioPlayer; }
+  KConfig*               config() const            { return m_config; }
   // return main window with browser/cd/dvd view, used for DND
-  K3bDirView*            mainWindow()         { return m_dirView; }
+  K3bDirView*            mainWindow() const        { return m_dirView; }
   /**
    * @returns a pointer to the currently visible view or 0 if no project was created
    */
