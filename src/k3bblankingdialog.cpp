@@ -251,14 +251,14 @@ void K3bBlankingDialog::slotWritingAppChanged(int app)
     d->comboTypeMap[2] = K3bBlankingJob::Track;
     d->typeComboMap[K3bBlankingJob::Track] = 2;
     whatsThisInfo += "<p><b>" + i18n("Erase Last Track") + "</b><br>" + wsTrack;
-    m_comboEraseMode->insertItem( i18n("Reopen last session") );
+    m_comboEraseMode->insertItem( i18n("Reopen Last Session") );
     d->comboTypeMap[3] = K3bBlankingJob::Unclose;
     d->typeComboMap[K3bBlankingJob::Unclose] = 3;
-    whatsThisInfo += "<p><b>" + i18n("Reopen last session") + "</b><br>" + wsUnclose;
-    m_comboEraseMode->insertItem( i18n("Erase last session") );
+    whatsThisInfo += "<p><b>" + i18n("Reopen Last Session") + "</b><br>" + wsUnclose;
+    m_comboEraseMode->insertItem( i18n("Erase Last Session") );
     d->comboTypeMap[4] = K3bBlankingJob::Session;
     d->typeComboMap[K3bBlankingJob::Session] = 4;
-    whatsThisInfo += "<p><b>" + i18n("Erase last session") + "</b><br>" + wsSession;
+    whatsThisInfo += "<p><b>" + i18n("Erase Last Session") + "</b><br>" + wsSession;
   }
 
   QWhatsThis::add( m_comboEraseMode, whatsThisInfo );
