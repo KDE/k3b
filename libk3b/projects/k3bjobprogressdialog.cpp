@@ -154,6 +154,14 @@ void K3bJobProgressDialog::PrivateDebugWidget::slotUser2()
 
 
 
+class K3bJobProgressDialog::Private
+{
+public:
+  int lastProgress;
+};
+
+
+
 K3bJobProgressDialog::K3bJobProgressDialog( QWidget* parent, 
 					    const char* name, 
 					    bool showSubProgress,
@@ -162,6 +170,8 @@ K3bJobProgressDialog::K3bJobProgressDialog( QWidget* parent,
     in_loop(false),
     m_systemTray(0)
 {
+  d = new Private;
+
   setupGUI();
   setupConnections();
 
@@ -174,6 +184,16 @@ K3bJobProgressDialog::K3bJobProgressDialog( QWidget* parent,
 
   connect( m_timer, SIGNAL(timeout()), this, SLOT(slotUpdateTime()) );
 }
+
+
+/*
+ *  Destroys the object and frees any allocated resources
+ */
+K3bJobProgressDialog::~K3bJobProgressDialog()
+{
+  delete d;
+}
+
 
 void K3bJobProgressDialog::setupGUI()
 {
@@ -327,14 +347,6 @@ void K3bJobProgressDialog::setupGUI()
   layout5->addWidget( m_buttonShowDebug );
 
   mainLayout->addLayout( layout5 );
-}
-
-/*
- *  Destroys the object and frees any allocated resources
- */
-K3bJobProgressDialog::~K3bJobProgressDialog()
-{
-  // no need to delete child widgets, Qt does it all for us
 }
 
 
@@ -556,6 +568,7 @@ void K3bJobProgressDialog::slotNewTask(const QString& name)
 
 void K3bJobProgressDialog::slotStarted()
 {
+  d->lastProgress = 0;
   m_timer->start( 1000 );
   m_startTime = QTime::currentTime();
   if( KMainWindow* w = dynamic_cast<KMainWindow*>(kapp->mainWidget()) )
@@ -600,8 +613,11 @@ void K3bJobProgressDialog::slotShowDebuggingOutput()
 
 void K3bJobProgressDialog::slotUpdateCaption( int percent )
 {
-  if( KMainWindow* w = dynamic_cast<KMainWindow*>(kapp->mainWidget()) )
-    w->setPlainCaption( QString( "(%1%) %2" ).arg(percent).arg(m_plainCaption) );
+  if( percent > d->lastProgress ) {
+    d->lastProgress = percent;
+    if( KMainWindow* w = dynamic_cast<KMainWindow*>(kapp->mainWidget()) )
+      w->setPlainCaption( QString( "(%1%) %2" ).arg(percent).arg(m_plainCaption) );
+  }
 }
 
 

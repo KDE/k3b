@@ -276,9 +276,9 @@ namespace K3bDevice
     const QString& mountPoint() const;
 
     /**
-     * @return true if the device is mounted via supermount
+     * @return true if the device is mounted automatically (supermount or subfs)
      */
-    bool supermount() const { return m_supermount; }
+    bool automount() const { return m_automount; }
 
     /**
      * returns: 0 auto (no cdrdao-driver selected)
@@ -752,7 +752,7 @@ namespace K3bDevice
 
     int m_writeModes;
 
-    bool m_supermount;
+    bool m_automount;
 
     // only needed on FreeBSD
     QString m_passDevice;

@@ -157,7 +157,7 @@ public:
 
 K3bDevice::Device::Device( const QString& devname )
   : m_writeModes(0),
-    m_supermount(false)
+    m_automount(false)
 {
   d = new Private;
 

@@ -339,11 +339,9 @@ bool K3bDvdJob::prepareWriterJob()
   writer->setSimulate( m_doc->dummy() );
   writer->setBurnSpeed( m_doc->speed() );
 
-  // DAO is the only writing mode for which a growisofs parameter exists  
   if( m_doc->writingMode() == K3b::DAO ||
       ( m_doc->writingMode() == K3b::WRITING_MODE_AUTO &&
-	d->foundMedia & (K3bDevice::MEDIA_DVD_R|K3bDevice::MEDIA_DVD_RW|
-			 K3bDevice::MEDIA_DVD_R_SEQ|K3bDevice::MEDIA_DVD_RW_SEQ) ) )
+	m_doc->multiSessionMode() == K3bDataDoc::NONE ) )
     writer->setWritingMode( K3b::DAO );
 
   if( m_doc->onTheFly() ) {
@@ -602,7 +600,7 @@ bool K3bDvdJob::waitForDvd()
 	else if( m_doc->multiSessionMode() == K3bDataDoc::START ||
 		 m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ) {
 	  // check if the writer supports writing sequential and thus multisession
-	  if( !m_doc->burner()->supportsFeature( 0x21 ) ) {
+	  if( !m_doc->burner()->featureCurrent( K3bDevice::FEATURE_INCREMENTAL_STREAMING_WRITABLE ) ) {
 	    if( KMessageBox::warningYesNo( qApp->activeWindow(),
 					   i18n("Your writer (%1 %2) does not support Incremental Streaming with %3 "
 						"media. Multisession will not be possible. Continue anyway?")

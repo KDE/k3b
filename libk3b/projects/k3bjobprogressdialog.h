@@ -140,6 +140,9 @@ class K3bJobProgressDialog : public KDialog, public K3bJobHandler
   class PrivateDebugWidget;
 
  private:
+  class Private;
+  Private* d;
+
   K3bJob* m_job;
   QTimer* m_timer;
   QTime m_startTime;

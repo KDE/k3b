@@ -60,6 +60,7 @@ static KCmdLineOptions options[] =
 	{ "erasecd", I18N_NOOP("Erase a CDRW"), 0 },
 	{ "formatdvd", I18N_NOOP("Format a DVD-RW or DVD+RW"), 0 },
 	{ "lang <language>", I18N_NOOP("Set the GUI language"), 0 },
+	{ "forcenew", I18N_NOOP("Force a new instance even if an idle one is running"), 0 },
 	{ "nosplash", I18N_NOOP("Disable the splash screen"), 0 },
         KCmdLineLastOption
     };
@@ -114,7 +115,7 @@ int main( int argc, char* argv[] )
   //
   // In case no unblocked instance of K3b was found we create a new one.
   //
-  if( alwaysNew || !K3bSmartInstanceReuser::reuseInstance(args) ) {
+  if( alwaysNew || args->isSet( "forcenew" ) || !K3bSmartInstanceReuser::reuseInstance(args) ) {
 
     K3bApplication app;
 

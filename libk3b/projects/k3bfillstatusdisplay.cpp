@@ -306,7 +306,7 @@ void K3bFillStatusDisplay::setupPopupMenu()
 				      d->actionCollection, "fillstatus_100minutes" );
   d->actionDvd4_7GB = new KToggleAction( i18n("4.4 GB"), 0, this, SLOT(slotDvd4_7GB()), 
 					 d->actionCollection, "fillstatus_dvd_4_7gb" );
-  d->actionDvdDoubleLayer = new KToggleAction( i18n("8.5 GB"), 0, this, SLOT(slotDvdDoubleLayer()), 
+  d->actionDvdDoubleLayer = new KToggleAction( i18n("8.0 GB"), 0, this, SLOT(slotDvdDoubleLayer()), 
 					 d->actionCollection, "fillstatus_dvd_double_layer" );
   d->actionCustomSize = new KToggleAction( i18n("Custom..."), 0, this, SLOT(slotCustomSize()),
 					  d->actionCollection, "fillstatus_custom_size" );
@@ -412,8 +412,7 @@ void K3bFillStatusDisplay::slotDvd4_7GB()
 
 void K3bFillStatusDisplay::slotDvdDoubleLayer()
 {
-  // FIXME
-  d->displayWidget->setCdSize( 2295104*2 );
+  d->displayWidget->setCdSize( 4173824 );
 }
 
 
@@ -450,9 +449,9 @@ void K3bFillStatusDisplay::slotPopupMenu( const QPoint& p )
 void K3bFillStatusDisplay::slotDetermineSize()
 {
   K3bDevice::Device* dev = K3bDeviceSelectionDialog::selectDevice( parentWidget(), 
-							   d->showDvdSizes 
-							   ? k3bcore->deviceManager()->dvdWriter() 
-							   : k3bcore->deviceManager()->cdWriter() );
+								   d->showDvdSizes 
+								   ? k3bcore->deviceManager()->dvdWriter() 
+								   : k3bcore->deviceManager()->cdWriter() );
 
   if( dev ) {
     k3bcore->requestBusyInfo( i18n("Determine size of media in %1").arg(dev->vendor() + " " + dev->description() ) );
@@ -473,7 +472,7 @@ void K3bFillStatusDisplay::slotRemainingSize( K3bDevice::DeviceHandler* dh )
       KMessageBox::error( parentWidget(), i18n("No media found.") );
     }
     else {
-      K3b::Msf size = dh->diskInfo().remainingSize();
+      K3b::Msf size = dh->diskInfo().capacity();
       if( size > 0 ) {    
 	d->displayWidget->setCdSize( size );
 	d->actionCustomSize->setChecked(true);

@@ -713,10 +713,10 @@ void K3bDevice::DeviceManager::scanFstab()
     QString md = QFile::decodeName( mountInfo->fs_spec );
     QString type = QFile::decodeName( mountInfo->fs_vfstype );
 
-    bool supermount = false;
+    bool automount = false;
 
-    if( type == "supermount" ) {
-      supermount = true;
+    if( type == "supermount" || type == "subfs" ) {
+      automount = true;
 
       // parse the device
       QStringList opts = QStringList::split( ",", QString::fromLocal8Bit(mountInfo->fs_mntops) );
@@ -782,7 +782,7 @@ void K3bDevice::DeviceManager::scanFstab()
       if( isPreferredMountPoint || dev->mountDevice().isEmpty() ) {
         dev->setMountPoint( mountInfo->fs_file );
         dev->setMountDevice( md );
-	dev->m_supermount = supermount;
+	dev->m_automount = automount;
       }
     }
   } // while mountInfo

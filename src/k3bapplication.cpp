@@ -98,7 +98,7 @@ void K3bApplication::init()
 
   config()->setGroup( "General Options" );
   QGuardedPtr<K3bSplash> splash;
-  if( config()->readBoolEntry("Show splash", true) && !args->isSet( "nosplash" ) ) {
+  if( config()->readBoolEntry("Show splash", true) && args->isSet( "splash" ) ) {
     splash = new K3bSplash( 0 );
     splash->connect( this, SIGNAL(initializationInfo(const QString&)), SLOT(addInfo(const QString&)) );
     
