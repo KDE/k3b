@@ -248,7 +248,12 @@ namespace K3bCdDevice
      */
     Toc readToc();
 
-    /**
+     /**
+     *  returns the DataMode of the track
+     */
+    int getTrackDataMode(int track);
+
+   /**
      * block or unblock the drive's tray
      * returns true on success and false on scsi-error
      */
