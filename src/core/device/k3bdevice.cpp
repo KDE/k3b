@@ -61,6 +61,17 @@ extern "C" {
                                 (M) == IDE8_MAJOR || (M) == IDE9_MAJOR)
 #endif /* #ifndef IDE_DISK_MAJOR */
 
+#ifndef SCSI_DISK_MAJOR
+#define SCSI_DISK_MAJOR(M) ((M) == SCSI_DISK0_MAJOR || \
+  ((M) >= SCSI_DISK1_MAJOR && (M) <= SCSI_DISK7_MAJOR) || \
+  ((M) >= SCSI_DISK8_MAJOR && (M) <= SCSI_DISK15_MAJOR))
+#endif /* #ifndef SCSI_DISK_MAJOR */
+
+#ifndef SCSI_BLK_MAJOR
+#define SCSI_BLK_MAJOR(M) \
+  (SCSI_DISK_MAJOR(M)   \
+   || (M) == SCSI_CDROM_MAJOR)
+#endif /* #ifndef SCSI_BLK_MAJOR */
 
 
 const char* K3bCdDevice::CdDevice::cdrdao_drivers[] =
