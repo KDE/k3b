@@ -208,7 +208,7 @@ void K3bCdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
     case K3bCdDevice::MIXED:
       audio = true;
       if( dh->ngDiskInfo().numSessions() != 2 ) {
-	emit infoMessage( i18n("K3b does only copy CD-Extra mixed mode CDs."), ERROR );
+	emit infoMessage( i18n("K3b can only copy CD-Extra mixed mode CDs."), ERROR );
 	canCopy = false;
       }
       else
@@ -278,13 +278,13 @@ void K3bCdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
       unsigned long avail, size;
       QString pathToTest = m_tempPath.left( m_tempPath.findRev( '/' ) );
       if( !K3b::kbFreeOnFs( pathToTest, size, avail ) ) {
-	emit infoMessage( i18n("Unable to determine free space in temp directory '%1'.").arg(pathToTest), ERROR );
+	emit infoMessage( i18n("Unable to determine free space in temporary directory '%1'.").arg(pathToTest), ERROR );
 	d->error = true;
 	canCopy = false;
       }
       else {
 	if( avail < imageSpaceNeeded/1024 ) {
-	  emit infoMessage( i18n("Not enough space left in temp directory."), ERROR );
+	  emit infoMessage( i18n("Not enough space left in temporary directory."), ERROR );
 	  d->error = true;
 	  canCopy = false;
 	}
@@ -453,7 +453,7 @@ bool K3bCdCopyJob::prepareImageFiles()
       if( QFileInfo( m_tempPath.section( '/', 0, -1 ) ).isDir() )
 	m_tempPath = m_tempPath.section( '/', 0, -1 );
       else {
-	emit infoMessage( i18n("Specified an unusable temp path. Using default."), WARNING );
+	emit infoMessage( i18n("Specified an unusable temporary path. Using default."), WARNING );
 	m_tempPath = K3b::defaultTempPath();
       }
     }
@@ -463,7 +463,7 @@ bool K3bCdCopyJob::prepareImageFiles()
     m_tempPath = K3b::findUniqueFilePrefix( "k3bCdCopy", m_tempPath );
     kdDebug() << "(K3bCdCopyJob) creating temp dir: " << m_tempPath << endl;
     if( !dir.mkdir( m_tempPath, true ) ) {
-      emit infoMessage( i18n("Unable to create temp directory '%1'.").arg(m_tempPath), ERROR );
+      emit infoMessage( i18n("Unable to create temporary directory '%1'.").arg(m_tempPath), ERROR );
       return false;
     }
     d->deleteTempDir = true;
@@ -497,7 +497,7 @@ bool K3bCdCopyJob::prepareImageFiles()
       if( fi.isDir() )
 	m_tempPath = K3b::findTempFile( "iso", m_tempPath );
       else if( !QFileInfo( m_tempPath.section( '/', 0, -1 ) ).isDir() ) {
-	emit infoMessage( i18n("Specified an unusable temp path. Using default."), WARNING );
+	emit infoMessage( i18n("Specified an unusable temporary path. Using default."), WARNING );
 	m_tempPath = K3b::findTempFile( "iso" );
       }
       // else the user specified a file in an existing dir
@@ -983,7 +983,7 @@ void K3bCdCopyJob::cleanup()
   d->cdTextFile = 0;
 
   if( m_onTheFly || d->canceled || !m_keepImage || d->error ) {
-    emit infoMessage( i18n("Removing temp files."), INFO );
+    emit infoMessage( i18n("Removing temporary files."), INFO );
     for( QStringList::iterator it = d->infNames.begin(); it != d->infNames.end(); ++it )
       QFile::remove( *it );
   }
