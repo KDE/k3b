@@ -276,6 +276,9 @@ void K3bCdCopyJob::cdrdaoRead()
   if( m_fastToc )
     *m_process << "--fast-toc";
 
+  if( m_readRaw )
+    *m_process << "--read-raw";
+
   *m_process << "--device" << m_reader->busTargetLun();
   
   if( m_reader->cdrdaoDriver() != "auto" )
@@ -572,6 +575,14 @@ void K3bCdCopyJob::cancelAll()
   }
 
   emit finished( false );
+}
+
+
+void K3bCdCopyJob::setReadRaw( bool b )
+{
+  m_readRaw = b;
+  if( b )
+    setOnTheFly( false );
 }
 
 

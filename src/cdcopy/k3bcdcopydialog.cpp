@@ -112,9 +112,11 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   advancedTabGrid->setMargin( marginHint() );
 
   m_checkFastToc = new QCheckBox( i18n("Fast TOC"), advancedTab );
+  m_checkRawCopy = new QCheckBox( i18n("Raw Copy"), advancedTab );
 
   advancedTabGrid->addWidget( m_checkFastToc, 0, 0 );
-  advancedTabGrid->setRowStretch( 1, 1 );
+  advancedTabGrid->addWidget( m_checkRawCopy, 1, 0 );
+  advancedTabGrid->setRowStretch( 2, 1 );
 
   tabWidget->addTab( advancedTab, i18n("Advanced") );
 
@@ -141,7 +143,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
 
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_tempDirSelectionWidget, SLOT(setDisabled(bool)) );
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkDeleteImages, SLOT(setDisabled(bool)) );
-  //  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkOnlyCreateImage, SLOT(setDisabled(bool)) );
+  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkRawCopy, SLOT(setDisabled(bool)) );
 
 //   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotOnlyCreateImageChecked(bool)) );
 //   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_writerSelectionWidget, SLOT(setDisabled(bool)) );
@@ -162,6 +164,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   //  QToolTip::add( m_checkOnlyCreateImage, i18n("Only create an image of the disk, no writing") );
   QToolTip::add( m_comboSourceDevice, i18n("Select the drive with the CD to copy") );
   QToolTip::add( m_spinCopies, i18n("Number of copies") );
+  QToolTip::add( m_checkRawCopy, i18n("Write all data sectors as 2352 byte blocks") );
 
 
   // What's This info
@@ -187,6 +190,11 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
 // 						"without writing an actual copy.") );
   QWhatsThis::add( m_comboSourceDevice, i18n("<p>Here you should select the drive which contains the CD to copy.") );
   QWhatsThis::add( m_spinCopies, i18n("<p>Select how many copies you want K3b to create from the CD.") );
+  QWhatsThis::add( m_checkRawCopy, i18n("<p>If this option is checked, K3b will write all data sectors as 2352 byte "
+					"blocks. No error correction will be applied. Use this if you have problems "
+					"with reading data cds."
+					"<p>Has no effect on audio cds."
+					"<p>Does not work in on-the-fly mode.") );
 }
 
 
@@ -235,7 +243,7 @@ void K3bCdCopyDialog::slotUser1()
   job->setTempPath( m_tempDirSelectionWidget->tempPath() );
   if( !m_checkSimulate->isChecked() )
     job->setCopies( m_spinCopies->value() );
-
+  job->setReadRaw( m_checkRawCopy->isChecked() );
 
   // create a progresswidget
   K3bBurnProgressDialog d( k3bMain(), "burnProgress", 
