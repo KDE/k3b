@@ -40,7 +40,7 @@
 #include <kconfig.h>
 #include <kstddirs.h>
 #include <kfiledialog.h>
-#include "kdiskfreesp.h"   // misses in the kde2 suse package so I add it to the sources
+
 
 
 K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const char *name, bool modal )
