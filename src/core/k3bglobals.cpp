@@ -199,3 +199,65 @@ bool K3b::kbFreeOnFs( const QString& path, unsigned long& size, unsigned long& a
     return false;
 }
 
+
+
+// from the QT 3.2 version of qstring.h
+
+static bool ok_in_base( QChar c, int base )
+{
+  if ( base <= 10 )
+    return c.isDigit() && c.digitValue() < base;
+  else
+    return c.isDigit() || (c >= 'a' && c < char('a'+base-10))
+      || (c >= 'A' && c < char('A'+base-10));
+}
+
+#ifndef ULLONG_MAX
+static const unsigned long long ULLONG_MAX(18446744073709551615);
+#endif
+
+unsigned long long K3b::toULongLong( const QString& s, bool* ok, int base )
+{
+  const QChar *p = s.unicode();
+  unsigned long long val = 0;
+  int l = s.length();
+  const unsigned long long max_mult = ULLONG_MAX / base;
+  bool is_ok = FALSE;
+  if ( !p )
+    goto bye;
+  while ( l && p->isSpace() )                 // skip leading space
+    l--,p++;
+  if ( !l )
+    goto bye;
+  if ( *p == '+' )
+    l--,p++;
+
+  // NOTE: toLongLong() code is similar
+  if ( !l || !ok_in_base(*p,base) )
+    goto bye;
+  while ( l && ok_in_base(*p,base) ) {
+    l--;
+    uint dv;
+    if ( p->isDigit() ) {
+      dv = p->digitValue();
+    } else {
+      if ( *p >= 'a' && *p <= 'z' )
+	dv = *p - 'a' + 10;
+      else
+	dv = *p - 'A' + 10;
+    }
+    if ( val > max_mult || (val == max_mult && dv > ULLONG_MAX % base) )
+      goto bye;
+    val = base * val + dv;
+    p++;
+  }
+
+  while ( l && p->isSpace() )                 // skip trailing space
+    l--,p++;
+  if ( !l )
+    is_ok = TRUE;
+ bye:
+  if ( ok )
+    *ok = is_ok;
+  return is_ok ? val : 0;
+}

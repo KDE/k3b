@@ -290,18 +290,18 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
     
     // parse progress
     int pos = line.find( "/" );
-    double done = line.left( pos ).toDouble();  // TODO: for QT 3.2: toULongLong
+    unsigned long long done = K3b::toULongLong( line.left( pos ) );  // TODO: for QT 3.2: toULongLong
     bool ok = true;
-    double size = line.mid( pos+1, line.find( "(", pos ) - pos - 1 ).toDouble(&ok); // TODO: for QT 3.2: toULongLong
+    unsigned long long size = K3b::toULongLong( line.mid( pos+1, line.find( "(", pos ) - pos - 1 ), &ok ); // TODO: for QT 3.2: toULongLong
     if( ok ) {
-      int p = (int)(100.0 * done / size);
+      int p = (int)(100 * done / size);
       if( p > d->lastProgress ) {
 	emit percent( p );
 	d->lastProgress = p;
       }
-      if( (unsigned int)(done/1024.0/1024.0) > d->lastProgressed ) {
-	d->lastProgressed = (unsigned int)(done/1024.0/1024.0);
-	emit processedSize( d->lastProgressed, (int)(size/1024.0/1024.0)  );
+      if( (unsigned int)(done/1024/1024) > d->lastProgressed ) {
+	d->lastProgressed = (unsigned int)(done/1024/1024);
+	emit processedSize( d->lastProgressed, (int)(size/1024/1024)  );
       }
 
       // try parsing write speed (since growisofs 5.11)
@@ -319,7 +319,7 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
 		    << line.mid( pos, line.find( 'x', pos ) - pos ) << "'" << endl;
       }
       else {
-	d->speedEst->dataWritten( done );
+	d->speedEst->dataWritten( done/1024 );
       }
     }
     else

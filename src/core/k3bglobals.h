@@ -98,6 +98,11 @@ namespace K3b
 
   K3bVersion kernelVersion();
   QString systemName();
+
+  /**
+   * This gets introduced in QT 3.2 but we already need it now
+   */
+  unsigned long long toULongLong( const QString&, bool* ok = 0, int base = 10 );
 }
 
 #endif

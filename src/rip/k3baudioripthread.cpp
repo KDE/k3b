@@ -330,9 +330,14 @@ bool K3bAudioRipThread::ripTrack( int track, const QString& filename )
 	  return true;
 	}
 	else {
-	  if( d->encoder )
-	    d->encoder->encode( reinterpret_cast<char*>(buf), 
-				CD_FRAMESIZE_RAW );
+	  if( d->encoder ) {
+	    if( d->encoder->encode( reinterpret_cast<char*>(buf), 
+				    CD_FRAMESIZE_RAW ) < 0 ) {
+	      kdDebug() << "(K3bAudioRipThread) error while encoding." << endl;
+	      emitInfoMessage( i18n("Error while encoding track %1.").arg(track), K3bJob::ERROR );
+	      return false;
+	    }
+	  }
 	  else
 	    d->waveFileWriter->write( reinterpret_cast<char*>(buf), 
 				      CD_FRAMESIZE_RAW, 
