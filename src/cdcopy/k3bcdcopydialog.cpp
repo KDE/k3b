@@ -262,7 +262,7 @@ void K3bCdCopyDialog::initReadingDevices()
       dev = devices.next();
     }
       
-    if ( !devices.first() )
+    if ( m_comboSourceDevice->count() == 0 )
       m_buttonStart->setEnabled(false);
   }
   else {
