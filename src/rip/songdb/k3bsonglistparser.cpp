@@ -35,12 +35,12 @@ bool K3bSongListParser::startDocument(){
 bool K3bSongListParser::startElement( const QString&, const QString&, const QString& qName, const QXmlAttributes& attr){
     switch( m_level ) {
         case 0:
-            qDebug("Version: " + attr.value("version") ); // printout version
+            qDebug("Version: %s", attr.value("version").latin1() ); // printout version
             break;
         case 1: {
             m_container = m_manager->getContainer( attr.value("basepath") ); // container
             if( m_container == 0 )
-                qDebug("(K3bSongListParser) ERROR: Found no entry for song container " + attr.value("basepath") );
+                qDebug("(K3bSongListParser) ERROR: Found no entry for song container %s", attr.value("basepath").latin1());
             break;
         }
         case 2: {
@@ -52,7 +52,7 @@ bool K3bSongListParser::startElement( const QString&, const QString&, const QStr
                 newSong.setDiscId( attr.value("discid").toInt() );
                 m_song = m_container->addSong( newSong );
             } else {
-                qDebug("(K3bSongListParser) ERROR: Found no song for file " + attr.value("filename") );
+                qDebug("(K3bSongListParser) ERROR: Found no song for file %s", attr.value("filename").latin1() );
             }
             break;
         }
