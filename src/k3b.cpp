@@ -39,7 +39,7 @@
 #include <kstdaction.h>
 #include <klineeditdlg.h>
 #include <kstandarddirs.h>
-#include <krun.h>
+#include <kprocess.h>
 #include <kurl.h>
 #include <ktoolbar.h>
 #include <kstatusbar.h>
@@ -48,6 +48,7 @@
 #include <kedittoolbar.h>
 #include <ksystemtray.h>
 #include <kaboutdata.h>
+#include <kmessagebox.h>
 
 #include <stdlib.h>
 
@@ -1048,7 +1049,10 @@ void K3bMainWindow::slotProjectAddFiles()
 
 void K3bMainWindow::slotK3bSetup()
 {
-  KRun::runCommand( "kdesu --n \"k3bsetup --lang " + KGlobal::locale()->language() + "\"" );
+  KProcess p;
+  p << "kdesu" << "k3bsetup --lang " + KGlobal::locale()->language();
+  if( !p.start( KProcess::DontCare ) )
+    KMessageBox::error( 0, i18n("Could not find kdesu to run K3bSetup with root privileges. Please run it manually as root.") );
 }
 
 
