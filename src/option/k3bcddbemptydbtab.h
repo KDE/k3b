@@ -1,8 +1,8 @@
 /***************************************************************************
-                          k3bsongcontainer.h  -  description
+                          k3bcddbemptydbtab.h  -  description
                              -------------------
-    begin                : Sat Dec 29 2001
-    copyright            : (C) 2001 by Sebastian Trueg
+    begin                : Tue Feb 19 2002
+    copyright            : (C) 2002 by Sebastian Trueg
     email                : trueg@informatik.uni-freiburg.de
  ***************************************************************************/
 
@@ -15,32 +15,22 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef K3BSONGCONTAINER_H
-#define K3BSONGCONTAINER_H
+#ifndef K3BCDDBEMPTYDBTAB_H
+#define K3BCDDBEMPTYDBTAB_H
 
-#include <qstring.h>
-#include <qvaluelist.h>
-
-class K3bSong;
+#include <qwidget.h>
 
 /**
   *@author Sebastian Trueg
   */
 
-class K3bSongContainer {
+class K3bCddbEmptyDbTab : public QWidget  {
+   Q_OBJECT
 public: 
-    K3bSongContainer( const QString& path );
-    K3bSongContainer();
-    ~K3bSongContainer();
-    K3bSong* addSong( const K3bSong& song);
-    QValueList<K3bSong> getSongs() const;
-    const QString& getPath() const;
-    bool isEmpty();
-    void deleteSong( const QString& filename );
+	K3bCddbEmptyDbTab(QWidget *parent=0, const char *name=0);
+	~K3bCddbEmptyDbTab();
 private:
-    QString m_path;
-    typedef QValueList<K3bSong> SongList;
-    SongList m_songs;
+    void setup();
 };
 
 #endif

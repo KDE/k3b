@@ -27,6 +27,13 @@
 #include <qarray.h>
 #include <qstringlist.h>
 
+//extern "C" {
+//#include <cdda_interface.h>
+//}
+
+class QString;
+//struct cdrom_drive;
+
 
 struct cdrom_drive;
 class K3bCddb;
@@ -60,7 +67,7 @@ class K3bCdView : public QVBox
   void reload();
 
  signals:
-  void showDirView( const QString& );
+  void notSupportedDisc( const QString& );
 
  private:
   struct cdrom_drive *m_drive;

@@ -55,7 +55,7 @@ bool K3bCdda::openDrive( struct cdrom_drive *drive ){
     return true;
 }
 
-struct cdrom_drive *K3bCdda::pickDrive( QString newPath )
+struct cdrom_drive* K3bCdda::pickDrive( QString newPath )
 {
     qDebug("(K3bCdda) new drive: " + newPath);
     QCString path( QFile::encodeName( newPath ) );
@@ -72,9 +72,34 @@ struct cdrom_drive *K3bCdda::pickDrive( QString newPath )
         }
     }
     qDebug("(K3bCdda) open cdrom");
-    if ( cdda_open( drive ) )
+    if ( cdda_open( drive ) ) {
         qDebug("(K3bCdda) opening cdrom failed.");
+    }
     return drive;
+}
+
+int K3bCdda::driveType( struct cdrom_drive *drive ){
+    int result = -1;
+    int count = drive->tracks;
+    bool audio = false;
+    bool data = false;
+    for( int i=0; i < count; i++ ){
+        unsigned char flag = drive->disc_toc[ i ].bFlags;
+        if(  (flag | 0x10) == 0x10 ){
+            audio = true;
+        } else if( (flag | 0x14) == 0x14){
+            data= true;
+        }
+    }
+    if( data && audio)
+        result = 2;
+    else if ( data )
+        result = 1;
+    else if ( audio )
+        result = 0;
+    else
+        result = -1;
+    return result;
 }
 
 long K3bCdda::getRawTrackSize(int track, struct cdrom_drive *drive){

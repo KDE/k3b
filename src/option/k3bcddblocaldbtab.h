@@ -1,8 +1,8 @@
 /***************************************************************************
-                          k3bsongcontainer.h  -  description
+                          k3bcddblocaldbtab.h  -  description
                              -------------------
-    begin                : Sat Dec 29 2001
-    copyright            : (C) 2001 by Sebastian Trueg
+    begin                : Mon Feb 11 2002
+    copyright            : (C) 2002 by Sebastian Trueg
     email                : trueg@informatik.uni-freiburg.de
  ***************************************************************************/
 
@@ -15,32 +15,39 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef K3BSONGCONTAINER_H
-#define K3BSONGCONTAINER_H
+#ifndef K3BCDDBLOCALDBTAB_H
+#define K3BCDDBLOCALDBTAB_H
 
-#include <qstring.h>
-#include <qvaluelist.h>
+#include <qwidget.h>
+#include <qstringlist.h>
 
-class K3bSong;
-
+class QFrame;
+class QTabWidget;
+class KLineEdit;
+class QMultiLineEdit;
 /**
   *@author Sebastian Trueg
   */
 
-class K3bSongContainer {
+class K3bCddbLocalDBTab : public QWidget  {
+    Q_OBJECT
 public: 
-    K3bSongContainer( const QString& path );
-    K3bSongContainer();
-    ~K3bSongContainer();
-    K3bSong* addSong( const K3bSong& song);
-    QValueList<K3bSong> getSongs() const;
-    const QString& getPath() const;
-    bool isEmpty();
-    void deleteSong( const QString& filename );
+	K3bCddbLocalDBTab(QFrame *parent, const char *name);
+	~K3bCddbLocalDBTab();
+	void apply();
+	void readSettings();
 private:
-    QString m_path;
-    typedef QValueList<K3bSong> SongList;
-    SongList m_songs;
+    KLineEdit *m_songListPath;
+    QMultiLineEdit *m_logOutput;
+    QTabWidget *m_dbHandlingTab;
+    QStringList m_missingSongList;
+    void setup();
+private slots:
+    void browseDb();
+    void clearDb();
+    void verifyDb();
+    void addDbEntry();
+    void findDbEntries();
 };
 
 #endif

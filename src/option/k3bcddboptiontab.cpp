@@ -39,7 +39,6 @@
 #include <kstddirs.h>
 
 #define DEFAULT_CDDB_HOST  "localhost:888"
-#define DEFAULT_SONGLIST_FILE "songlist.xml"
 
 K3bCddbOptionTab::K3bCddbOptionTab(QFrame *parent, const char *name)
 : QWidget(parent, name) {
@@ -66,7 +65,7 @@ void K3bCddbOptionTab::setup(){
 
   // edit settings
   m_groupCddbServer = new QGroupBox( this, "cddb_settings_server" );
-  m_groupCddbServer->setTitle( i18n( "Database Access" ) );
+  m_groupCddbServer->setTitle( i18n( "Remote CDDB Access" ) );
   m_groupCddbServer->setColumnLayout(0, Qt::Vertical );
   m_groupCddbServer->layout()->setSpacing( KDialog::spacingHint() );
   m_groupCddbServer->layout()->setMargin( KDialog::marginHint() );
@@ -89,6 +88,7 @@ void K3bCddbOptionTab::setup(){
   m_delButton = new QPushButton(i18n("Delete"), m_groupCddbServer);
   m_delButton->setDisabled(true);
 
+  /*
   QVGroupBox *localServerSettings = new QVGroupBox(m_groupCddbServer);
   localServerSettings->layout()->setSpacing(0);
   localServerSettings->layout()->setMargin(0);
@@ -100,8 +100,8 @@ void K3bCddbOptionTab::setup(){
   QFrame* line = new QFrame( localServerSettings, "line" );
   line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
   localServerSettings->addSpace( 10 );
-
-  serverLayout->addMultiCellWidget( localServerSettings, 0, 0, 0, 3 );
+  */
+  //serverLayout->addMultiCellWidget( localServerSettings, 0, 0, 0, 3 );
   serverLayout->addMultiCellWidget( serverSettings, 1, 1, 0, 2 );
   serverLayout->addMultiCellWidget( m_addButton, 1, 1, 3, 3 );
   serverLayout->addMultiCellWidget( m_delButton, 2, 2, 3, 3 );
@@ -147,7 +147,7 @@ void K3bCddbOptionTab::serverSelected(QListBoxItem *item){
 void K3bCddbOptionTab::apply(){
     KConfig* c = kapp->config();
     c->setGroup("Cddb");
-    c->writeEntry( "songlistPath", m_songListPath->text() );
+    //c->writeEntry( "songlistPath", m_songListPath->text() );
     c->writeEntry( "useCddb", m_cddbLockup->isChecked() );
     QStringList list;
     for( unsigned int i = 0; i < m_cddbServerList->count(); i++){
@@ -162,10 +162,12 @@ void K3bCddbOptionTab::readSettings(){
   KConfig *c = kapp->config();
   c->setGroup("Cddb");
   m_cddbLockup->setChecked( c->readBoolEntry("useCddb", false) );
+  /*
   QString path = c->readEntry("songlistPath");
   if( path == 0 )
     path = locateLocal("appdata", "k3b") + "/" + DEFAULT_SONGLIST_FILE;
   m_songListPath->setText( path );
+  */
   QStringList list = c->readListEntry("cddbServers");
   if( !list.isEmpty() ){
      for( QStringList::Iterator it = list.begin(); it != list.end(); ++it ) {

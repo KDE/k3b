@@ -20,6 +20,7 @@
 
 #include <qstring.h>
 #include <qstringlist.h>
+#include <qobject.h>
 
 struct cdrom_drive;
 
@@ -28,7 +29,8 @@ class K3bToc;
 
 
 
-class K3bCddb {
+class K3bCddb : public QObject {
+    Q_OBJECT
   public:
     K3bCddb( );
     K3bCddb( bool, QString, unsigned int );
@@ -48,7 +50,7 @@ class K3bCddb {
     /**
     * Gets disc id, cd in the drive must be successful accessed one time.
     */
-    unsigned int get_discid( ) { return discid; };
+    unsigned int get_discid( ) { return m_discid; };
     /**
     *
     */
@@ -66,13 +68,13 @@ class K3bCddb {
     void setUseCddb(bool useCddb);
     bool useCddb() { return m_useCddb; };
 
-    QStringList getTitles() { return titles; };
-    QString getAlbum() { return cd_album; };
-    QString getArtist() { return cd_artist; };
+    QStringList getTitles() { return m_titles; };
+    QString getAlbum() { return m_cd_album; };
+    QString getArtist() { return m_cd_artist; };
 
-    void setTitles( const QStringList& list) { titles = list; };
-    void setAlbum( const QString& album ) {cd_album = album; };
-    void setArtist( const QString& artist ) { cd_artist = artist; };
+    void setTitles( const QStringList& list) { m_titles = list; };
+    void setAlbum( const QString& album ) {m_cd_album = album; };
+    void setArtist( const QString& artist ) { m_cd_artist = artist; };
 
     static bool appendCddbInfo( K3bToc& );
 
@@ -81,16 +83,24 @@ class K3bCddb {
     CDDB *m_cddb;
     QString m_cddbServer;
     unsigned int m_cddbPort;
+    struct cdrom_drive *m_drive;
 
-    int trackIndex;
-    unsigned int discid;
-    int tracks;
-    QString cd_album;
-    QString cd_artist;
-    QStringList titles;
-    bool is_audio[100];
-    bool based_on_cddb;
-    QString s_track;
+    int m_trackIndex;
+    unsigned int m_discid;
+    int m_tracks;
+    QString m_cd_album;
+    QString m_cd_artist;
+    QStringList m_titles;
+    bool m_is_audio[100];
+    bool m_based_on_cddb;
+    QString m_s_track;
+
+    QValueList<int>* getTrackList( );
+    void readQuery();
+
+private slots:
+    void prepareQuery( unsigned int );
+    void queryTracks( );
 };
 
 #endif

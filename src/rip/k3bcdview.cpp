@@ -133,7 +133,7 @@ void K3bCdView::checkView( ){
     showCdContent();
     break;
   case 1:
-    emit showDirView(m_device);
+    emit notSupportedDisc(m_device);
     break;
   case 2:
     askForView();
@@ -144,13 +144,12 @@ void K3bCdView::checkView( ){
 }
 
 void K3bCdView::askForView(){
-  switch( QMessageBox::information( this, i18n("Select View",
-					       "The cd you have insert is a mixed CD.\nDo you want to show the audio or data tracks?"), i18n("Audio"), i18n("Data") ) ) {
+  switch( QMessageBox::information( this, i18n("Select View"), i18n("The cd you have insert is a mixed CD. Do you want to show the audio or data tracks?"), i18n("Audio"), i18n("Data") ) ) {
   case 0:
     showCdContent();
     break;
   case 1:
-    emit showDirView( m_device );
+    emit notSupportedDisc( m_device );
     break;
   default:
     break;
@@ -203,10 +202,17 @@ void K3bCdView::reload(){
   readSettings();
   // clear old entries
   m_listView->clear();
-  m_drive = m_cdda->pickDrive(m_device);
-  qDebug("(K3bCdView) Reload");
-  checkView();
-  m_cdda->closeDrive(m_drive);
+  m_drive = m_cdda->pickDrive(m_device );
+  int result = K3bCdda::driveType( m_drive );
+  qDebug("(K3bCdView) CD type: (Audio=0, Data/DVD=1, Audio/Data=2) %i", result );
+  if( result == 0 || result == 2 ){
+        qDebug("(K3bCdView) Reload");
+        checkView();
+        m_cdda->closeDrive( m_drive);
+  } else {
+    m_cdda->closeDrive( m_drive);
+    emit notSupportedDisc( m_device );
+  }
 }
 
 void K3bCdView::slotMenuItemActivated(int itemId){

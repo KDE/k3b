@@ -28,6 +28,16 @@ K3bSongContainer::K3bSongContainer(){
 K3bSongContainer::~K3bSongContainer(){
 }
 
+void K3bSongContainer::deleteSong( const QString& filename ){
+    SongList::Iterator it;
+    for( it = m_songs.begin(); it != m_songs.end(); ++it ){
+        if( filename == (*it).getFilename() ){
+            m_songs.remove( it );
+            break;
+        }
+    }
+}
+
 K3bSong* K3bSongContainer::addSong( const K3bSong& song){
     QString filename = song.getFilename();
     SongList::Iterator it;
@@ -39,6 +49,7 @@ K3bSong* K3bSongContainer::addSong( const K3bSong& song){
     }
     return &(*m_songs.append( song ));
 }
+
 QValueList<K3bSong> K3bSongContainer::getSongs() const{
     return m_songs;
 }

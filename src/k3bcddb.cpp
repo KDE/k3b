@@ -18,6 +18,7 @@
 #include <qstring.h>
 #include <qvaluelist.h>
 #include <qstringlist.h>
+#include <qmessagebox.h>
 
 #include <klocale.h>
 #include <kconfig.h>
@@ -28,6 +29,7 @@
 
 #include "device/k3btoc.h"
 #include "device/k3btrack.h"
+#include "k3bcddbmultientriesdialog.h"
 
 
 
@@ -124,7 +126,7 @@ long my_last_sector( cdrom_drive * drive )
 }
 
 
-K3bCddb::K3bCddb( ){
+K3bCddb::K3bCddb( ) : QObject(0, "cddb") {
     m_useCddb = false;
 }
 
@@ -173,75 +175,31 @@ unsigned int K3bCddb::get_discid( struct cdrom_drive *drive )
 
 void K3bCddb::updateCD( struct cdrom_drive *drive )
 {
-    discid = get_discid( drive );
-    tracks = cdda_tracks( drive );
-    cd_album = i18n( "No Title" );
-    titles.clear(  );
-    QValueList < int >qvl;
-
-    for( int i = 0; i < tracks; i++ ) {
-        is_audio[i] = cdda_track_audiop( drive, i + 1 );
-        if( i + 1 != hack_track )
-            qvl.append( cdda_track_firstsector( drive, i + 1 ) + 150 );
-        else
-            qvl.append( start_of_first_data_as_in_toc + 150 );
-    }
-    qvl.append( cdda_disc_firstsector( drive ) );
-    qvl.append( my_last_sector( drive ) );
+    m_discid = get_discid( drive );
+    m_tracks = cdda_tracks( drive );
+    m_cd_album = i18n( "No Title" );
+    m_titles.clear(  );
+    m_drive = drive;
 
     if( m_useCddb ) {
         m_cddb->set_server( m_cddbServer.latin1(  ), m_cddbPort );
         QStringList errorEntries;
-        if( m_cddb->queryCD( qvl, errorEntries ) ) {
-            based_on_cddb = true;
-            cd_album = m_cddb->title(  );
-            cd_artist = m_cddb->artist(  );
-            for( int i = 0; i < tracks; i++ ) {
-                titles.append( m_cddb->track( i ) );
-            }
+        if( m_cddb->queryCD( (*getTrackList( )), errorEntries ) ) {
+            readQuery();
             return;
         } else {
-            qDebug("Cddb error");
             QStringList::Iterator it;
             for( it = errorEntries.begin(); it != errorEntries.end(); ++it ){
                 qDebug("(K3bCddb) multiple (wrong) CDDB entry: " + (*it) );
             }
-            QStringList line = QStringList::split( " ", *(errorEntries.begin()));
-            qDebug( "Entry line: " + *line.at(1) );
-            bool ok;
-            unsigned int id = (*line.at( 1 )).toUInt( &ok, 16);
-            qDebug("Try id: " + QString::number(id) );
-            if( m_cddb->queryCD( qvl, id )){
-                based_on_cddb = true;
-                cd_album = m_cddb->title(  );
-                cd_artist = m_cddb->artist(  );
-                for( int i = 0; i < tracks; i++ ) {
-                    titles.append( m_cddb->track( i ) );
-                }
-                return;
-            }
+            K3bCddbMultiEntriesDialog *dialog = new K3bCddbMultiEntriesDialog( errorEntries );
+            connect( dialog, SIGNAL( chosenId( unsigned int )), this, SLOT( prepareQuery( unsigned int ) ) );
+            connect( dialog, SIGNAL( cancelClicked( )), this, SLOT( queryTracks(  ) ) );
+            dialog->show();
+            return;
         }
-
-    }
-
-    based_on_cddb = false;
-    cd_album = "";
-    cd_artist = "";
-    s_track = "";
-    for( int i = 0; i < tracks; i++ ) {
-        QString num;
-        int ti = i + 1;
-        QString s;
-        num.sprintf( "Track %02d", ti );
-        if( cdda_track_audiop( drive, ti ) )
-            s = num.stripWhiteSpace(); //s_track.arg( num );
-        else
-            s.sprintf( "data%02d", ti );
-        qDebug("Track:" + s + "end");
-        titles.append( s );
     }
 }
-
 
 bool K3bCddb::appendCddbInfo( K3bToc& toc )
 {
@@ -308,3 +266,58 @@ bool K3bCddb::appendCddbInfo( K3bToc& toc )
 
   return success;
 }
+
+QValueList<int>* K3bCddb::getTrackList( ) {
+    QValueList < int > *qvl = new QValueList<int>();
+    for( int i = 0; i < m_tracks; i++ ) {
+        m_is_audio[i] = cdda_track_audiop( m_drive, i + 1 );
+        if( i + 1 != hack_track )
+            qvl->append( cdda_track_firstsector( m_drive, i + 1 ) + 150 );
+        else
+            qvl->append( start_of_first_data_as_in_toc + 150 );
+    }
+    qvl->append( cdda_disc_firstsector( m_drive ) );
+    qvl->append( my_last_sector( m_drive ) );
+    return qvl;
+}
+
+void K3bCddb::readQuery(){
+    m_titles.clear(  );
+    m_based_on_cddb = true;
+    m_cd_album = m_cddb->title(  );
+    m_cd_artist = m_cddb->artist(  );
+    for( int i = 0; i < m_tracks; i++ ) {
+        m_titles.append( m_cddb->track( i ) );
+    }
+}
+// ------------------------  Slots  -------------------------
+void K3bCddb::prepareQuery( int unsigned cddbId ){
+    if( m_cddb->queryCD( *getTrackList(), cddbId )){
+        readQuery();
+    } else {
+        QMessageBox::critical( 0, i18n("CDDB Error"), i18n("Can't read CDDB data."), i18n("Ok") );
+        queryTracks();
+    }
+}
+void K3bCddb::queryTracks(){
+    m_titles.clear(  );
+    m_based_on_cddb = false;
+    m_cd_album = "";
+    m_cd_artist = "";
+    m_s_track = "";
+    for( int i = 0; i < m_tracks; i++ ) {
+        QString num;
+        int ti = i + 1;
+        QString s;
+        num.sprintf( "Track %02d", ti );
+        if( cdda_track_audiop( m_drive, ti ) )
+            s = num.stripWhiteSpace(); //s_track.arg( num );
+        else
+            s.sprintf( "data%02d", ti );
+        qDebug("Track:" + s + "end");
+        m_titles.append( s );
+    }
+}
+
+#include "k3bcddb.moc"
+

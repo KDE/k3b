@@ -49,7 +49,7 @@ QString K3bPatternParser::prepareFilename( QString title, int no, bool parseMixe
     int titleIndex=-1;
     int index=0;
     for( QStringList::Iterator it = m_filePattern->begin(); it != m_filePattern->end(); ++it ) {
-        qDebug("(K3bPatternParser) Filepattern: " + (*it) );
+        //qDebug("(K3bPatternParser) Filepattern: " + (*it) );
         if( (*it).find(i18n("Artist")) >= 0){
             //fn[index] = m_cddb->getArtist(); //prepareReplaceFilename( m_cddb->getParsedArtist() );
             QString tmpArtist;

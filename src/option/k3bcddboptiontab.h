@@ -18,7 +18,7 @@
 #ifndef K3B_CDDB_OPTION_TAB_H
 #define K3B_CDDB_OPTION_TAB_H
 
-#include <qwidget.h>
+#include <qtabwidget.h>
 
 class QFrame;
 class QCheckBox;

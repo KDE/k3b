@@ -32,6 +32,12 @@ public:
     ~K3bCdda();
     bool openDrive( struct cdrom_drive *drive );
     bool closeDrive( struct cdrom_drive *drive );
+    /* Returns the type of the cd/dvd insert in this drive
+    * @return 0 = audio cd
+    * 1 = dvd (video)
+    */
+    static int driveType( struct cdrom_drive *drive );
+    //int pickDrive( QString newPath, struct cdrom_drive &drive );
     struct cdrom_drive* pickDrive( QString newPath );
     long getRawTrackSize(int track, struct cdrom_drive *drive);
     /**

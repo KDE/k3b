@@ -30,6 +30,7 @@ K3bSongListParser::~K3bSongListParser(){
 
 bool K3bSongListParser::startDocument(){
     m_level = 0;
+    return TRUE;
 }
 bool K3bSongListParser::startElement( const QString&, const QString&, const QString& qName, const QXmlAttributes& attr){
     switch( m_level ) {

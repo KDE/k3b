@@ -52,7 +52,7 @@ void K3bCddaCopy::start(){
     m_bytesAll = 0;
     m_interrupt = false;
     qDebug("(K3bCddaCopy) Start copying " + QString::number( m_bytes) );
-    m_drive = m_cdda->pickDrive(m_device);
+    m_drive = m_cdda->pickDrive( m_device );
     emit started();
     emit newTask( i18n("Copy cdrom ")  );
     infoMessage( i18n("Copying started."), STATUS);
@@ -70,7 +70,7 @@ bool K3bCddaCopy::startRip(int i){
 void K3bCddaCopy::finishedRip(){
     qDebug("(K3bCddaCopy) Finished copying." );
     infoMessage( "Copying finished.", STATUS);
-    m_cdda->closeDrive(m_drive);
+    m_cdda->closeDrive( m_drive);
     qDebug("(K3bCddaCopy) Exit." );
    emit finished( true );
 }

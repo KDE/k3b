@@ -21,6 +21,7 @@
 #include <kdialogbase.h>
 
 class K3bCddbOptionTab;
+class K3bCddbLocalDBTab;
 class K3bDeviceOptionTab;
 class K3bBurningOptionTab;
 class K3bRippingPatternOptionTab;
@@ -59,8 +60,9 @@ class K3bOptionDialog : public KDialogBase
   void setupBurningPage();
   K3bBurningOptionTab* m_burningOptionTab;
 
-  // cddb tab
+  // cddb tabs
   K3bCddbOptionTab *m_cddbOptionTab;
+  K3bCddbLocalDBTab *m_cddbLocalTab;
   void setupCddbPage();		
 
   // ripping pattern tab

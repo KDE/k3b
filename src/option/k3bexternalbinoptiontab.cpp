@@ -37,7 +37,7 @@ K3bExternalBinOptionTab::K3bExternalBinOptionTab( K3bExternalBinManager* manager
   m_viewPrograms->addColumn( i18n( "version" ) );
   m_viewPrograms->addColumn( i18n( "path" ) );
   m_viewPrograms->addColumn( i18n( "additional parameters" ) );
-	
+
   // set the second column renameable
   m_viewPrograms->setItemsRenameable( true );
   m_viewPrograms->setRenameable( 0, false );
@@ -66,7 +66,7 @@ K3bExternalBinOptionTab::K3bExternalBinOptionTab( K3bExternalBinManager* manager
   m_buttonSearch->setDisabled( true );
 
 
-  connect( m_viewPrograms, SIGNAL(itemRenamed(QListViewItem*, const QString&, int)), 
+  connect( m_viewPrograms, SIGNAL(itemRenamed(QListViewItem*, const QString&, int)),
 	   this, SLOT(slotItemRenamed(QListViewItem*, const QString&, int)) );
 }
 
@@ -80,7 +80,20 @@ void K3bExternalBinOptionTab::readSettings()
 {
   // clear the view before adding anything!
   m_viewPrograms->clear();
-	
+  KListViewItem *item;
+  for( int i=0; i < NUM_BIN_PROGRAMS; i++ ) {
+    item =  new KListViewItem( m_viewPrograms );
+    item->setPixmap( 0, m_manager->foundBin( binPrograms[ i ] ) ? SmallIcon("ok") : SmallIcon("stop") );
+    item->setText( 1, binPrograms[ i ] );
+    item->setText( 3, m_manager->binPath( binPrograms[ i ] ) );
+    K3bExternalBin* cdrecordBin = m_manager->binObject( binPrograms[ i ] );
+    if( cdrecordBin ) {
+        item->setText( 2, cdrecordBin->version );
+        item->setText( 4, cdrecordBin->parameters );
+    }
+  }
+  /*
+
   KListViewItem* item = new KListViewItem( m_viewPrograms );
   item->setPixmap( 0, m_manager->foundBin( "cdrecord" ) ? SmallIcon("ok") : SmallIcon("stop") );
   item->setText( 1, "cdrecord" );
@@ -114,6 +127,28 @@ void K3bExternalBinOptionTab::readSettings()
   }
 
 
+<<<<<<< k3bexternalbinoptiontab.cpp
+  item = new KListViewItem( m_viewPrograms, item );
+  item->setPixmap( 0, m_manager->foundBin( "mpg123" ) ? SmallIcon("ok") : SmallIcon("stop") );
+  item->setText( 1, "mpg123" );
+  item->setText( 3, m_manager->binPath( "mpg123" ) );
+  K3bExternalBin* mpg123Bin = m_manager->binObject( "mpg123" );
+  if( mpg123Bin ) {
+    item->setText( 2, mpg123Bin->version );
+    item->setText( 4, mpg123Bin->parameters );
+  }
+
+
+  item = new KListViewItem( m_viewPrograms, item );
+  item->setPixmap( 0, m_manager->foundBin( "sox" ) ? SmallIcon("ok") : SmallIcon("stop") );
+  item->setText( 1, "sox" );
+  item->setText( 3, m_manager->binPath( "sox" ) );
+  K3bExternalBin* soxBin = m_manager->binObject( "sox" );
+  if( soxBin ) {
+    item->setText( 2, soxBin->version );
+    item->setText( 4, soxBin->parameters );
+  }
+    */
 //   item = new KListViewItem( m_viewPrograms, item );
 //   item->setPixmap( 0, m_manager->foundBin( "mpg123" ) ? SmallIcon("ok") : SmallIcon("stop") );
 //   item->setText( 1, "mpg123" );

@@ -31,7 +31,7 @@ email=trueg@informatik.uni-freiburg.de
 kdevprj_version=1.3
 lfv_open_groups=GNU,Translations
 make_options=\s-j1
-makefiles=Makefile.am,src/Makefile.am,doc/Makefile.am,doc/en/Makefile.am,po/Makefile.am,src/data/Makefile.am,src/cdinfo/Makefile.am,src/audio/Makefile.am,src/device/Makefile.am,src/kiotree/Makefile.am,src/audio/input/Makefile.am,src/option/Makefile.am,src/rip/Makefile.am,src/kdelibs_patched/Makefile.am,src/libwm/Makefile.am,src/libwm/include/Makefile.am,src/rip/songdb/Makefile.am
+makefiles=Makefile.am,src/Makefile.am,doc/Makefile.am,doc/en/Makefile.am,po/Makefile.am,src/data/Makefile.am,src/cdinfo/Makefile.am,src/audio/Makefile.am,src/device/Makefile.am,src/kiotree/Makefile.am,src/audio/input/Makefile.am,src/option/Makefile.am,src/rip/Makefile.am,src/kdelibs_patched/Makefile.am,src/libwm/Makefile.am,src/libwm/include/Makefile.am,src/rip/songdb/Makefile.am,src/tools/Makefile.am
 modifyMakefiles=true
 project_name=K3b
 project_type=mdi_kde2
@@ -116,8 +116,8 @@ install_location=
 type=PO
 
 [src/Makefile.am]
-files=src/main.cpp,src/k3b.cpp,src/k3b.h,src/k3bdoc.cpp,src/k3bdoc.h,src/k3bview.cpp,src/k3bview.h,src/k3bui.rc,src/k3b.desktop,src/lo32-app-k3b.png,src/lo16-app-k3b.png,src/k3bdirview.cpp,src/k3bdirview.h,src/k3bcopywidget.cpp,src/k3bcopywidget.h,src/k3bglobals.h,src/k3bfillstatusdisplay.cpp,src/k3bfillstatusdisplay.h,src/k3bburnprogressdialog.cpp,src/k3bburnprogressdialog.h,src/k3bjob.cpp,src/k3bjob.h,src/k3bprojectburndialog.cpp,src/k3bprojectburndialog.h,src/kcutlabel.cpp,src/kcutlabel.h,src/k3bglobals.cpp,src/hi16-app-k3b.png,src/hi32-app-k3b.png,src/hi48-app-k3b.png,src/kdiskfreesp.h,src/k3bfileview.cpp,src/k3bfileview.h,src/cddb.h,src/cddb.cpp,src/k3bcddb.cpp,src/k3bcddb.h,src/k3bblankingdialog.cpp,src/k3bblankingdialog.h,src/k3bblankingjob.cpp,src/k3bblankingjob.h,src/k3bexternalbinmanager.cpp,src/k3bexternalbinmanager.h,src/k3bsplash.h,src/k3bsplash.cpp,src/k3b-splash-naive.png,src/hi16-tools-cdinfo.png,src/hi22-tools-cdinfo.png,src/hi16-tools-cdrwblank.png,src/hi22-tools-cdrwblank.png,src/k3bwriterselectionwidget.cpp,src/k3bwriterselectionwidget.h,src/k3bprojecttabwidget.cpp,src/k3bprojecttabwidget.h,src/k3bprojecttabbar.cpp,src/k3bprojecttabbar.h,src/k3baudioplayer.cpp,src/k3baudioplayer.h,src/k3baudioplayerwidget.cpp,src/k3baudioplayerwidget.h
-sub_dirs=data,cdinfo,audio,device,kiotree,option,rip,kdelibs_patched,libwm
+files=src/main.cpp,src/k3b.cpp,src/k3b.h,src/k3bdoc.cpp,src/k3bdoc.h,src/k3bview.cpp,src/k3bview.h,src/k3bui.rc,src/k3b.desktop,src/lo32-app-k3b.png,src/lo16-app-k3b.png,src/k3bdirview.cpp,src/k3bdirview.h,src/k3bcopywidget.cpp,src/k3bcopywidget.h,src/k3bglobals.h,src/k3bfillstatusdisplay.cpp,src/k3bfillstatusdisplay.h,src/k3bburnprogressdialog.cpp,src/k3bburnprogressdialog.h,src/k3bjob.cpp,src/k3bjob.h,src/k3bprojectburndialog.cpp,src/k3bprojectburndialog.h,src/kcutlabel.cpp,src/kcutlabel.h,src/k3bglobals.cpp,src/hi16-app-k3b.png,src/hi32-app-k3b.png,src/hi48-app-k3b.png,src/kdiskfreesp.h,src/k3bfileview.cpp,src/k3bfileview.h,src/cddb.h,src/cddb.cpp,src/k3bcddb.cpp,src/k3bcddb.h,src/k3bblankingdialog.cpp,src/k3bblankingdialog.h,src/k3bblankingjob.cpp,src/k3bblankingjob.h,src/k3bsplash.h,src/k3bsplash.cpp,src/k3b-splash-naive.png,src/hi16-tools-cdinfo.png,src/hi22-tools-cdinfo.png,src/hi16-tools-cdrwblank.png,src/hi22-tools-cdrwblank.png,src/k3bwriterselectionwidget.cpp,src/k3bwriterselectionwidget.h,src/k3bprojecttabwidget.cpp,src/k3bprojecttabwidget.h,src/k3bprojecttabbar.cpp,src/k3bprojecttabbar.h,src/k3baudioplayer.cpp,src/k3baudioplayer.h,src/k3baudioplayerwidget.cpp,src/k3baudioplayerwidget.h,src/k3bcddbmultientriesdialog.cpp,src/k3bcddbmultientriesdialog.h
+sub_dirs=data,cdinfo,audio,device,kiotree,option,rip,kdelibs_patched,libwm,tools
 type=prog_main
 
 [src/audio/Makefile.am]
@@ -783,6 +783,18 @@ install=false
 install_location=
 type=HEADER
 
+[src/k3bcddbmultientriesdialog.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/k3bcddbmultientriesdialog.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
 [src/k3bcopywidget.cpp]
 dist=true
 install=false
@@ -814,18 +826,6 @@ install_location=
 type=SOURCE
 
 [src/k3bdoc.h]
-dist=true
-install=false
-install_location=
-type=HEADER
-
-[src/k3bexternalbinmanager.cpp]
-dist=true
-install=false
-install_location=
-type=SOURCE
-
-[src/k3bexternalbinmanager.h]
 dist=true
 install=false
 install_location=
@@ -1400,7 +1400,7 @@ install_location=
 type=SOURCE
 
 [src/option/Makefile.am]
-files=src/option/k3bdeviceoptiontab.h,src/option/k3bdeviceoptiontab.cpp,src/option/k3boptiondialog.cpp,src/option/k3boptiondialog.h,src/option/k3bburningoptiontab.h,src/option/k3bburningoptiontab.cpp,src/option/k3bcddboptiontab.cpp,src/option/k3bcddboptiontab.h,src/option/k3brippingpatternoptiontab.cpp,src/option/k3brippingpatternoptiontab.h,src/option/k3bexternalbinoptiontab.cpp,src/option/k3bexternalbinoptiontab.h,src/option/k3bmiscoptiontab.cpp,src/option/k3bmiscoptiontab.h
+files=src/option/k3bdeviceoptiontab.h,src/option/k3bdeviceoptiontab.cpp,src/option/k3boptiondialog.cpp,src/option/k3boptiondialog.h,src/option/k3bburningoptiontab.h,src/option/k3bburningoptiontab.cpp,src/option/k3bcddboptiontab.cpp,src/option/k3bcddboptiontab.h,src/option/k3brippingpatternoptiontab.cpp,src/option/k3brippingpatternoptiontab.h,src/option/k3bexternalbinoptiontab.cpp,src/option/k3bexternalbinoptiontab.h,src/option/k3bmiscoptiontab.cpp,src/option/k3bmiscoptiontab.h,src/option/k3bcddblocaldbtab.cpp,src/option/k3bcddblocaldbtab.h,src/option/k3bcddbemptydbtab.cpp,src/option/k3bcddbemptydbtab.h
 sharedlib_LDFLAGS=-version-info 0:5:0
 sharedlib_rootname=option
 sub_dirs=
@@ -1413,6 +1413,30 @@ install_location=
 type=SOURCE
 
 [src/option/k3bburningoptiontab.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/option/k3bcddbemptydbtab.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/option/k3bcddbemptydbtab.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/option/k3bcddblocaldbtab.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/option/k3bcddblocaldbtab.h]
 dist=true
 install=false
 install_location=
@@ -1491,7 +1515,7 @@ install_location=
 type=HEADER
 
 [src/rip/Makefile.am]
-files=src/rip/k3bcdda.cpp,src/rip/k3bcdda.h,src/rip/k3bcdview.cpp,src/rip/k3bcdview.h,src/rip/k3bfilenamepatterndialog.cpp,src/rip/k3bfilenamepatterndialog.h,src/rip/k3bripperwidget.cpp,src/rip/k3bcddacopy.cpp,src/rip/k3bcddacopy.h,src/rip/k3bripperwidget.h,src/rip/k3bpatternparser.cpp,src/rip/k3bpatternparser.h,src/rip/k3bpatternwidget.cpp,src/rip/k3bpatternwidget.h
+files=src/rip/k3bcdda.cpp,src/rip/k3bcdda.h,src/rip/k3bcdview.cpp,src/rip/k3bcdview.h,src/rip/k3bfilenamepatterndialog.cpp,src/rip/k3bfilenamepatterndialog.h,src/rip/k3bripperwidget.cpp,src/rip/k3bcddacopy.cpp,src/rip/k3bcddacopy.h,src/rip/k3bripperwidget.h,src/rip/k3bpatternparser.cpp,src/rip/k3bpatternparser.h,src/rip/k3bpatternwidget.cpp,src/rip/k3bpatternwidget.h,src/rip/k3bfilmview.cpp,src/rip/k3bfilmview.h,src/rip/k3btcwrapper.cpp,src/rip/k3btcwrapper.h,src/rip/k3bdvdcontent.cpp,src/rip/k3bdvdcontent.h
 sharedlib_LDFLAGS=
 sharedlib_rootname=
 sub_dirs=songdb
@@ -1533,6 +1557,18 @@ install=false
 install_location=
 type=HEADER
 
+[src/rip/k3bdvdcontent.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/rip/k3bdvdcontent.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
 [src/rip/k3bfilenamepatterndialog.cpp]
 dist=true
 install=false
@@ -1540,6 +1576,18 @@ install_location=
 type=SOURCE
 
 [src/rip/k3bfilenamepatterndialog.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/rip/k3bfilmview.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/rip/k3bfilmview.h]
 dist=true
 install=false
 install_location=
@@ -1576,6 +1624,18 @@ install_location=
 type=SOURCE
 
 [src/rip/k3bripperwidget.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/rip/k3btcwrapper.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/rip/k3btcwrapper.h]
 dist=true
 install=false
 install_location=
@@ -1631,6 +1691,25 @@ install_location=
 type=SOURCE
 
 [src/rip/songdb/k3bsongmanager.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/tools/Makefile.am]
+files=src/tools/k3bexternalbinmanager.cpp,src/tools/k3bexternalbinmanager.h
+sharedlib_LDFLAGS=-version-info 0:0:1
+sharedlib_rootname=tools
+sub_dirs=
+type=static_library
+
+[src/tools/k3bexternalbinmanager.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/tools/k3bexternalbinmanager.h]
 dist=true
 install=false
 install_location=

@@ -21,33 +21,41 @@
 #define CONTENT_TITLE     "title"
 #define CONTENT_ALBUM  "album"
 #define CONTENT_ARTIST  "artist"
+
 #include <qstring.h>
 #include <qvaluelist.h>
+#include <qstringlist.h>
 
 class K3bSong;
 class K3bSongContainer;
+//class QStringList;
 /**
   *@author Sebastian Trueg
   */
 
 class K3bSongManager {
 public: 
-    K3bSongManager( const QString& filename);
+    K3bSongManager( );
     ~K3bSongManager();
     QValueList<K3bSongContainer> getContainers();
     void save();
-    void load();
+    void load( const QString& filename );
     K3bSong* findSong( const QString& index );
     K3bSong* findSong( const QString& filename, const K3bSongContainer& con );
     void addSong( const QString&path, K3bSong& song);
+    void deleteSong( const QString& );
     // creates an container if no one is found
     K3bSongContainer* getContainer( const QString& path);
+    const QStringList& verify();
+
 private:
     QString m_filename;
     typedef QValueList<K3bSongContainer> ContainerList;
     ContainerList m_containers;
+    QStringList m_missingSongList;
 
     K3bSongContainer* findContainer( const QString& path);
+    void debug();
 };
 
 #endif

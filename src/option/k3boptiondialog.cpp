@@ -18,6 +18,7 @@
 #include "k3boptiondialog.h"
 #include "../k3b.h"
 #include "k3bcddboptiontab.h"
+#include "k3bcddblocaldbtab.h"
 #include "k3bdeviceoptiontab.h"
 #include "k3bburningoptiontab.h"
 #include "k3brippingpatternoptiontab.h"
@@ -27,6 +28,7 @@
 #include <qlayout.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
+#include <qtabwidget.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -47,6 +49,7 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
 
   m_externalBinOptionTab->readSettings();
   m_cddbOptionTab->readSettings();
+  m_cddbLocalTab->readSettings();
   m_deviceOptionTab->readDevices();
   m_burningOptionTab->readSettings();
   m_rippingPatternOptionTab->readSettings();
@@ -75,6 +78,7 @@ void K3bOptionDialog::slotApply()
 {
   // save all the shit!
   m_cddbOptionTab->apply();
+  m_cddbLocalTab->apply();
   m_deviceOptionTab->saveDevices();
   m_burningOptionTab->saveSettings();
   m_rippingPatternOptionTab->apply();
@@ -136,8 +140,13 @@ void K3bOptionDialog::setupCddbPage()
   QGridLayout* mainGrid = new QGridLayout( frame );
   mainGrid->setSpacing(0);
   mainGrid->setMargin(0);
-  m_cddbOptionTab = new K3bCddbOptionTab(frame, "cddbpage");
-  mainGrid->addWidget( m_cddbOptionTab, 0, 0 );
+  QTabWidget *_tab = new QTabWidget( frame );
+  m_cddbOptionTab = new K3bCddbOptionTab( frame, "cddbremotepage");
+  m_cddbLocalTab = new K3bCddbLocalDBTab( frame, "cddblocalpage");
+  _tab->addTab( m_cddbOptionTab, i18n("Remote") );
+  _tab->addTab( m_cddbLocalTab, i18n("Local") );
+  //mainGrid->addWidget( m_cddbOptionTab, 0, 0 );
+  mainGrid->addWidget( _tab, 0, 0 );
 }
 
 

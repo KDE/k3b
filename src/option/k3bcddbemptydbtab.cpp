@@ -1,8 +1,8 @@
 /***************************************************************************
-                          k3bsongcontainer.h  -  description
+                          k3bcddbemptydbtab.cpp  -  description
                              -------------------
-    begin                : Sat Dec 29 2001
-    copyright            : (C) 2001 by Sebastian Trueg
+    begin                : Tue Feb 19 2002
+    copyright            : (C) 2002 by Sebastian Trueg
     email                : trueg@informatik.uni-freiburg.de
  ***************************************************************************/
 
@@ -15,32 +15,28 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef K3BSONGCONTAINER_H
-#define K3BSONGCONTAINER_H
+#include "k3bcddbemptydbtab.h"
 
-#include <qstring.h>
-#include <qvaluelist.h>
+#include <qframe.h>
+#include <qpushbutton.h>
+#include <qlayout.h>
 
-class K3bSong;
+#include <klocale.h>
+#include <kapp.h>
+#include <kdialog.h>
 
-/**
-  *@author Sebastian Trueg
-  */
+K3bCddbEmptyDbTab::K3bCddbEmptyDbTab(QWidget *parent, const char *name ) : QWidget(parent,name) {
+    setup();
+}
+K3bCddbEmptyDbTab::~K3bCddbEmptyDbTab(){
+}
 
-class K3bSongContainer {
-public: 
-    K3bSongContainer( const QString& path );
-    K3bSongContainer();
-    ~K3bSongContainer();
-    K3bSong* addSong( const K3bSong& song);
-    QValueList<K3bSong> getSongs() const;
-    const QString& getPath() const;
-    bool isEmpty();
-    void deleteSong( const QString& filename );
-private:
-    QString m_path;
-    typedef QValueList<K3bSong> SongList;
-    SongList m_songs;
-};
+void K3bCddbEmptyDbTab::setup(){
+    QGridLayout* frameLayout = new QGridLayout( this );
+    frameLayout->setSpacing( KDialog::spacingHint() );
+    frameLayout->setMargin( KDialog::marginHint() );
 
-#endif
+    QFrame *line = new QFrame( this );
+    QPushButton *selectAll = new QPushButton( i18n("all"), this );
+    QPushButton *selectNone = new QPushButton( i18n("none"), this );
+}
