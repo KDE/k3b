@@ -1,0 +1,83 @@
+/* 
+ *
+ * $Id$
+ * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This file is part of the K3b project.
+ * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * See the file "COPYING" for the exact licensing terms.
+ */
+
+
+#ifndef _K3B_OGGVORBIS_DECODER_H_
+#define _K3B_OGGVORBIS_DECODER_H_
+
+
+#include <k3baudiodecoder.h>
+
+class KURL;
+
+
+class K3bOggVorbisDecoderFactory : public K3bAudioDecoderFactory
+{
+  Q_OBJECT
+
+ public:
+  K3bOggVorbisDecoderFactory( QObject* parent = 0, const char* name = 0 );
+  ~K3bOggVorbisDecoderFactory();
+
+  bool canDecode( const KURL& filename );
+
+  int pluginSystemVersion() const { return 1; }
+
+  K3bPlugin* createPluginObject( QObject* parent = 0, 
+				 const char* name = 0,
+				 const QStringList& = QStringList() );
+
+ private:
+  KInstance* s_instance;
+};
+
+
+/**
+  *@author Sebastian Trueg
+  */
+class K3bOggVorbisDecoder : public K3bAudioDecoder
+{
+  Q_OBJECT
+
+ public: 
+  K3bOggVorbisDecoder( QObject* parent = 0, const char* name = 0 );
+  ~K3bOggVorbisDecoder();
+
+  QString metaInfo( const QString& );
+
+  void cleanup();
+
+  bool seekInternal( const K3b::Msf& );
+
+  QString fileType() const;
+  QStringList supportedTechnicalInfos() const;
+  QString technicalInfo( const QString& ) const;
+
+ protected:
+  bool analyseFileInternal();
+  bool initDecoderInternal();
+
+  int decodeInternal( char* _data, int maxLen );
+
+ private:
+  bool openOggVorbisFile();
+
+  class Private;
+  Private* d;
+};
+
+K_EXPORT_COMPONENT_FACTORY( libk3boggvorbisdecoder, K3bOggVorbisDecoderFactory )
+
+#endif
