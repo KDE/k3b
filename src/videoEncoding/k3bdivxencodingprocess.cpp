@@ -1,0 +1,212 @@
+/***************************************************************************
+                          k3bdivxencodingprocess.cpp  -  description
+                             -------------------
+    begin                : Sun Apr 28 2002
+    copyright            : (C) 2002 by Sebastian Trueg
+    email                : trueg@informatik.uni-freiburg.de
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+#include "k3bdivxencodingprocess.h"
+#include "k3bdivxcodecdata.h"
+#include "../tools/k3bexternalbinmanager.h"
+#include "../k3b.h"
+
+#include <kprocess.h>
+#include <klocale.h>
+#include <kdebug.h>
+
+K3bDivXEncodingProcess::K3bDivXEncodingProcess(K3bDivxCodecData *data, QWidget *parent, const char *name ) : K3bJob( ) {
+     m_data = data;
+}
+
+K3bDivXEncodingProcess::~K3bDivXEncodingProcess(){
+}
+
+void K3bDivXEncodingProcess::start(){
+     m_pass = 0;
+     m_speedFlag = 0;
+     m_speedTrigger = 30;
+     kdDebug() << "(K3bDivXEncodingProcess) Run transcode." << endl;
+     m_process = new KShellProcess;
+     K3bExternalBin *tccatBin = k3bMain()->externalBinManager()->binObject("tccat");
+     K3bExternalBin *tcextractBin = k3bMain()->externalBinManager()->binObject("tcextract");
+     K3bExternalBin *tcdecodeBin = k3bMain()->externalBinManager()->binObject("tcdecode");
+     K3bExternalBin *tcscanBin = k3bMain()->externalBinManager()->binObject("tcscan");
+
+     *m_process << tccatBin->path + " -i " + m_data->getProjectDir() + "/tmp -t vob -P " + m_data->getTitle();
+     *m_process << " | " + tcextractBin->path + m_data->getParaAudioLanguage() + " -x ac3  -t vob ";
+     *m_process << " | " + tcdecodeBin->path + " -x ac3 ";
+     *m_process << " | " + tcscanBin->path + " -x pcm";
+
+     kdDebug() << "(K3bDivXEncodingProcess)" +  tccatBin->path + " -i " + m_data->getProjectDir() + "/tmp -t vob -P " + m_data->getTitle()
+     + " | " + tcextractBin->path + m_data->getParaAudioLanguage() + " -x ac3  -t vob "
+     + " | " + tcdecodeBin->path + " -x ac3 " + " | " + tcscanBin->path + " -x pcm";
+
+     connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
+         this, SLOT(slotParseAudio(KProcess*, char*, int)) );
+     connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
+         this, SLOT(slotParseAudio(KProcess*, char*, int)) );
+
+     connect( m_process, SIGNAL(processExited(KProcess*)), this, SLOT(slotAudioExited( KProcess* )) );
+
+     if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ){
+         kdDebug() << "Error audio process starting" << endl;
+     }
+     //emit started();
+     emit newTask( i18n("Generating video")  );
+     emit newSubTask( i18n("Preprocessing audio")  );
+     infoMessage( i18n("Start audio parsing "), INFO );
+     kdDebug() <<"(K3bDivXEncodingProcess) Starting get audio gain." << endl;
+}
+
+void K3bDivXEncodingProcess::startEncoding(){
+     m_speedFlag = 301;
+     kdDebug() << "(K3bDivXEncodingProcess) Run transcode." << endl;
+     K3bExternalBin *transcodeBin = k3bMain()->externalBinManager()->binObject("transcode");
+     m_process = new KShellProcess;
+
+     *m_process << transcodeBin->path; //"/usr/local/bin/transcode -i ";
+     *m_process << " -i " + m_data->getProjectDir() + "/vob ";
+
+     *m_process << " -x vob" + m_data->getParaCodec() + m_data->getParaVideoBitrate() + "," + m_data->getKeyframes() + ","+ m_data->getCrispness();
+     kdDebug() << "(K3bDivXEncodingProcess) Video: " + m_data->getParaCodec() + m_data->getParaVideoBitrate() + "," + m_data->getKeyframes() + ","+ m_data->getCrispness()<< endl;
+     *m_process << m_data->getParaYuv() + m_data->getParaAudioLanguage();
+     kdDebug() << "(K3bDivXEncodingProcess) Video: " + m_data->getParaYuv() + m_data->getParaAudioLanguage()<< endl;
+     *m_process << m_data->getParaAudioResample()  + m_data->getParaAudioBitrate() + m_data->getParaAudioGain();
+     kdDebug() << "(K3bDivXEncodingProcess)  Audio: " + m_data->getParaAudioResample()  + m_data->getParaAudioBitrate() + m_data->getParaAudioGain()<< endl;
+     *m_process << m_data->getParaDeinterlace();
+     *m_process << " -o " + m_data->getAviFile();
+     kdDebug() << "(K3bDivXEncodingProcess)  Out: " + m_data->getParaDeinterlace() + " -o " + m_data->getAviFile()<< endl;
+     
+     int top = m_data->getCropTop();
+     int left = m_data->getCropLeft();
+     int bottom = m_data->getCropBottom();
+     int right = m_data->getCropRight();
+     kdDebug() << "(K3bDivXEncodingProcess) Crop values t=" << top << ",l=" << left << ",b=" << bottom << ",r=" << right << endl;
+     kdDebug() << "(K3bDivXEncodingProcess) Resize factor height=" << m_data->getResizeHeight() << ", width=" << m_data->getResizeWidth() << endl;
+     *m_process << "-j " + QString::number(top) +","+ QString::number(left) +","+ QString::number(bottom)+","+QString::number( right );
+     *m_process << "-B " + QString::number(m_data->getResizeHeight()) + "," + QString::number(m_data->getResizeWidth()) + ",8";
+     QString debugPass("");
+     if( m_data->getCodecMode() == 2 ){
+         if( m_pass == 0 ){
+             m_pass = 1;
+             *m_process << " -R 1";
+             debugPass = " -R 1";
+         } else {
+             m_pass = 2;
+             *m_process << " -R 2";
+             debugPass = " -R 2";
+         }
+     }
+     kdDebug() << "(K3bDivXEncodingProcess)" + transcodeBin->path + " -i " + m_data->getProjectDir() + "/vob -x vob" +
+     m_data->getParaCodec() + m_data->getParaVideoBitrate() + "," + m_data->getKeyframes() + ","+ m_data->getCrispness() +
+     m_data->getParaYuv() + m_data->getParaAudioLanguage() +
+     m_data->getParaAudioResample()  + m_data->getParaAudioBitrate() + m_data->getParaAudioGain()  +
+     m_data->getParaDeinterlace() + " -o " + m_data->getAviFile() +
+     " -j " + QString::number(top) + "," + QString::number( left) +","+ QString::number( bottom ) + "," + QString::number( right ) +
+     " -B " + QString::number(m_data->getResizeHeight()) + "," + QString::number(m_data->getResizeWidth()) + ",8" + debugPass << endl;
+     connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
+         this, SLOT(slotParseEncoding(KProcess*, char*, int)) );
+     connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
+         this, SLOT(slotParseEncoding(KProcess*, char*, int)) );
+
+     connect( m_process, SIGNAL(processExited(KProcess*)), this, SLOT(slotEncodingExited( KProcess* )) );
+
+     if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ){
+         kdDebug() << "Error process starting" << endl;
+     }
+     //emit started();
+     if( m_pass == 1 ){
+         emit newSubTask( i18n("Encoding video (Pass 1)")  );
+     } else if( m_pass == 2 ) {
+         emit newSubTask( i18n("Encoding video (Pass 2)")  );
+     } else {
+         emit newSubTask( i18n("Encoding video")  );
+     }
+     kdDebug() << "(K3bDivXEncodingProcess) Starting encoding." << endl;
+}
+
+void K3bDivXEncodingProcess::cancel( ){
+    m_process->kill(); // send SIGTERM
+}
+
+void K3bDivXEncodingProcess::slotParseEncoding( KProcess *p, char *buffer, int len){
+    if( m_speedFlag > 300 ){
+        m_speedFlag = 0;
+        QString tmp = QString::fromLatin1( buffer, len );
+        kdDebug() << tmp << endl;
+        int index = tmp.find( "]" );
+        tmp = tmp.mid( index - 6, 6).stripWhiteSpace();
+        long f = tmp.toLong();
+        int p = f *100 / m_data->getFramesValue();
+        emit subPercent( p );
+        if( m_pass == 1 ){
+            emit percent( (p*47.5/100) + 5 );
+        } else if (m_pass == 2 ){
+            emit percent( (p*47.5/100) + 52.5 );
+        } else {
+            emit percent( (p*95/100) + 5 );
+        }
+    }
+    m_speedFlag++;
+}
+
+void K3bDivXEncodingProcess::slotEncodingExited( KProcess *p ){
+    kdDebug() << "(K3bDivxEncodingProcess) Encoding finished" << endl;
+    if( !p->normalExit() ){
+        kdDebug() << "(K3bDivxEncodingProcess) Aborted encoding" << endl;
+        delete m_process;
+        emit finished( true );
+    } else {
+        delete m_process;
+        if( m_pass == 1 ){
+            kdDebug() << "(K3bDivxEncodingProcess) Start second pass." << endl;
+            startEncoding();
+        } else {
+            emit finished( true );
+        }
+    }
+}
+void K3bDivXEncodingProcess::slotParseAudio( KProcess *p, char *buffer, int len){
+    if( m_speedFlag > m_speedTrigger ){
+        m_speedFlag = 0;
+        QString tmp = QString::fromLatin1( buffer, len );
+        if( tmp.contains("rescale") ){
+            int scale = tmp.find( "rescale" );
+            tmp = tmp.mid( scale + 8).stripWhiteSpace();
+            float f = tmp.toFloat();
+            m_data->setAudioGain( QString::number( f, 'f', 3 ) );
+            kdDebug() << "K3bDivxEncodingProcess) Audio gain: " + m_data->getAudioGain() << endl;
+        }
+        kdDebug() <<  tmp << endl;
+        int index = tmp.find( "%" );
+        tmp = tmp.mid( index - 5, 5).stripWhiteSpace();
+        float f = tmp.toFloat()+ 0.5;
+        if( f > 95 )
+            m_speedTrigger = 0;
+        int p = (int) f;
+        emit subPercent( p );
+        emit percent( p / 20 );
+    }
+    m_speedFlag++;
+}
+void K3bDivXEncodingProcess::slotAudioExited( KProcess *p ){
+    kdDebug() << "(K3bDivxEncodingProcess) Audio gain detection finsihed" << endl;
+    if( p->normalExit() ){
+        delete m_process;
+        startEncoding( );
+    } else {
+        slotEncodingExited( p );
+    }
+}
+
+#include "k3bdivxencodingprocess.moc"
