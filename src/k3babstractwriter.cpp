@@ -53,7 +53,7 @@ void K3bAbstractWriter::cancel()
 {
   if( burnDevice() ) {
     // we need to unlock the writer because cdrecord locked it while writing
-    emit infoMessage( i18n("Unblocking drive..."), INFO );
+    emit infoMessage( i18n("Unlocking drive..."), INFO );
     connect( K3bCdDevice::unblock( burnDevice() ), SIGNAL(finished(bool)),
 	     this, SLOT(slotUnblockWhileCancellationFinished(bool)) );
   }
