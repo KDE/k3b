@@ -2,8 +2,9 @@
                           k3bvcdburndialog.h  -  description
                              -------------------
     begin                : Son Nov 10 2002
-    copyright            : (C) 2002 by Sebastian Trueg
+    copyright            : (C) 2002 by Sebastian Trueg & Christian Kvasny
     email                : trueg@informatik.uni-freiburg.de
+                         : chris@ckvsoft.at
  ***************************************************************************/
 
 /***************************************************************************
@@ -18,15 +19,11 @@
 #ifndef K3BVCDBURNDIALOG_H
 #define K3BVCDBURNDIALOG_H
 
-
 #include "../k3bprojectburndialog.h"
 
-#include <qvariant.h>
-#include <qwidget.h>
-
 class QCheckBox;
-class QComboBox;
 class QGroupBox;
+class QButtonGroup;
 class QSpinBox;
 class QRadioButton;
 class QLabel;
@@ -48,30 +45,21 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
  K3bVcdDoc* vcdDoc() const {return m_vcdDoc;};
  
  protected:
-   void setupBurnTab( QFrame* frame );
-   void setupVideoCdTab( QFrame* frame );
-   void setupLabelTab( QFrame* frame );
+   void setupVideoCdTab();
+   void setupLabelTab();
    void saveSettings();
    void readSettings();
-
-   // the burn tab
-   // ---------------------------------------------------------
-   // QCheckBox* m_checkDao;
-   QCheckBox* m_checkOnTheFly;
-   QCheckBox* m_checkSimulate;
-   QCheckBox* m_checkDeleteImage;
-   QCheckBox* m_checkApplicationId;
-   K3bWriterSelectionWidget* m_writerSelectionWidget;
-   K3bTempDirSelectionWidget* m_tempDirSelectionWidget;
 
    // -----------------------------------------------------------
    // the video-cd-tab
    // -----------------------------------------------------------
 
+   QButtonGroup* m_groupVcdFormat;
    QRadioButton* m_radioVcd11;
    QRadioButton* m_radioVcd20;
    QRadioButton* m_radioSvcd10;
 
+   QGroupBox* m_groupOptions;
    QCheckBox* m_checkNonCompliant;
    QCheckBox* m_check2336;
       
@@ -79,6 +67,7 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
    // the video-label-tab
    // -----------------------------------------------------------
 
+   QCheckBox* m_checkApplicationId;
    QLineEdit* m_editVolumeId;
    QLineEdit* m_editAlbumId;
 

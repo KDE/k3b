@@ -29,31 +29,23 @@
 #include "../device/k3bdevice.h"
 #include "../k3bwriterselectionwidget.h"
 #include "../k3btempdirselectionwidget.h"
+#include "../tools/k3bglobals.h"
 
 #include <qcheckbox.h>
-#include <qcombobox.h>
 #include <qgroupbox.h>
 #include <qspinbox.h>
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
 #include <qlabel.h>
 #include <qlineedit.h>
-#include <qmultilineedit.h>
-#include <qpushbutton.h>
-#include <qtabwidget.h>
 #include <qlayout.h>
-#include <qvariant.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
 #include <qgrid.h>
 #include <qtoolbutton.h>
-#include <qptrlist.h>
-#include <qstringlist.h>
-#include <qpoint.h>
 #include <qfileinfo.h>
 
 #include <klocale.h>
-#include <kstandarddirs.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
 
@@ -64,21 +56,13 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
 
   m_vcdDoc = _doc;
 
-  QTabWidget* tab = new QTabWidget( k3bMainWidget() );
-  QFrame* f1 = new QFrame( tab );
-  QFrame* f2 = new QFrame( tab );
-  QFrame* f3 = new QFrame( tab );
+  prepareGui();
 
-  tab->addTab( f1, i18n("Burning") );
-  tab->addTab( f2, i18n("VideoCD") );
-  tab->addTab( f3, i18n("Label") );
+  m_checkDao->hide();
+  m_checkOnTheFly->hide();
 
-  setupBurnTab( f1 );
-  setupVideoCdTab( f2 );
-  setupLabelTab( f3 );
-
-  // connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_tempDirSelectionWidget, SLOT(setDisabled(bool)) );
-  // connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkDeleteImage, SLOT(setDisabled(bool)) );
+  setupVideoCdTab();
+  setupLabelTab();
 
   QFileInfo fi( m_tempDirSelectionWidget->tempPath() );
   QString path;
@@ -105,151 +89,79 @@ K3bVcdBurnDialog::~K3bVcdBurnDialog()
 }
 
 
-void K3bVcdBurnDialog::setupBurnTab( QFrame* frame )
+void K3bVcdBurnDialog::setupVideoCdTab()
 {
-  QGridLayout* frameLayout = new QGridLayout( frame );
-  frameLayout->setSpacing( spacingHint() );
-  frameLayout->setMargin( marginHint() );
+  QWidget* w = new QWidget( k3bMainWidget() );
 
+  // ---------------------------------------------------- Format group ----
+  m_groupVcdFormat = new QButtonGroup( 4, Qt::Vertical, i18n("Format"), w );
+  m_radioVcd11 = new QRadioButton( i18n( "VideoCD 1.1" ), m_groupVcdFormat );
+  m_radioVcd20 = new QRadioButton( i18n( "VideoCD 2.0" ), m_groupVcdFormat );
+  m_radioSvcd10 = new QRadioButton( i18n( "Super-VideoCD" ), m_groupVcdFormat );
+  m_groupVcdFormat->setExclusive(true);
 
-  // ---- options group ------------------------------------------------
-  QGroupBox* m_groupOptions = new QGroupBox( frame, "m_groupOptions" );
-  m_groupOptions->setTitle( i18n( "Options" ) );
-  m_groupOptions->setColumnLayout(0, Qt::Vertical );
-  m_groupOptions->layout()->setSpacing( 0 );
-  m_groupOptions->layout()->setMargin( 0 );
-  QVBoxLayout* m_groupOptionsLayout = new QVBoxLayout( m_groupOptions->layout() );
-  m_groupOptionsLayout->setAlignment( Qt::AlignTop );
-  m_groupOptionsLayout->setSpacing( spacingHint() );
-  m_groupOptionsLayout->setMargin( marginHint() );
+  // ---------------------------------------------------- Options group ---
+  m_groupOptions = new QGroupBox( 4, Qt::Vertical, i18n("Options"), w );
+  m_checkNonCompliant = new QCheckBox( i18n( "Non-compliant compatibility mode for broken devices" ), m_groupOptions );
+  m_check2336 = new QCheckBox( i18n( "Use 2336 byte sectors for output" ), m_groupOptions );
 
-  // m_checkDao = new QCheckBox( m_groupOptions, "m_checkDao" );
-  // m_checkDao->setText( i18n( "Disk at once" ) );
+  // ----------------------------------------------------------------------
+  QGridLayout* grid = new QGridLayout( w );
+  grid->setMargin( marginHint() );
+  grid->setSpacing( spacingHint() );
+  grid->addWidget( m_groupVcdFormat, 0, 0 );
+  grid->addWidget( m_groupOptions, 0, 1 );
 
-  m_checkSimulate = new QCheckBox( m_groupOptions, "m_checkSimulate" );
-  m_checkSimulate->setText( i18n( "Simulate Writing" ) );
-
-  // m_checkOnTheFly = new QCheckBox( m_groupOptions, "m_checkOnTheFly" );
-  // m_checkOnTheFly->setText( i18n( "Writing on the fly" ) );
-
-  m_checkDeleteImage = new QCheckBox( m_groupOptions, "m_checkDeleteImage" );
-  m_checkDeleteImage->setText( i18n( "Delete image" ) );
-
-  m_groupOptionsLayout->addWidget( m_checkSimulate );
-  // m_groupOptionsLayout->addWidget( m_checkOnTheFly );
-  m_groupOptionsLayout->addWidget( m_checkDeleteImage );
-  // m_groupOptionsLayout->addWidget( m_checkDao );
-  // --------------------------------------------------- options group ---
-
-  m_tempDirSelectionWidget = new K3bTempDirSelectionWidget( frame );
-  m_writerSelectionWidget = new K3bWriterSelectionWidget( frame );
-
-  frameLayout->addWidget( m_tempDirSelectionWidget, 1, 1 );
-  frameLayout->addWidget( m_groupOptions, 1, 0 );
-  frameLayout->addMultiCellWidget( m_writerSelectionWidget, 0, 0, 0, 1 );
-
-  frameLayout->setRowStretch( 1, 1 );
-  frameLayout->setColStretch( 1, 1 );
-}
-
-void K3bVcdBurnDialog::setupVideoCdTab( QFrame* frame )
-{
-
-  QGridLayout* frameLayout = new QGridLayout( frame );
-  frameLayout->setSpacing( spacingHint() );
-  frameLayout->setMargin( marginHint() );
-
-  // ---- VcdFormat group ------------------------------------------------
-  QGroupBox* m_groupVcdFormat = new QButtonGroup( frame, "m_groupVcdFormat" );
-  m_groupVcdFormat->setTitle( i18n( "Format" ) );
-  m_groupVcdFormat->setColumnLayout(0, Qt::Vertical );
-  m_groupVcdFormat->layout()->setSpacing( 0 );
-  m_groupVcdFormat->layout()->setMargin( 0 );
-  QVBoxLayout* m_groupVcdFormatLayout = new QVBoxLayout( m_groupVcdFormat->layout() );
-  m_groupVcdFormatLayout->setAlignment( Qt::AlignTop );
-  m_groupVcdFormatLayout->setSpacing( spacingHint() );
-  m_groupVcdFormatLayout->setMargin( marginHint() );
-
-  m_radioVcd11 = new QRadioButton( m_groupVcdFormat, "m_radioVcd11" );
-  m_radioVcd11->setText( i18n( "VideoCD 1.1" ) );
-  m_radioVcd20 = new QRadioButton( m_groupVcdFormat, "m_radioVcd20" );
-  m_radioVcd20->setText( i18n( "VideoCD 2.0" ) );
-  m_radioSvcd10 = new QRadioButton( m_groupVcdFormat, "m_radioSvcd10" );
-  m_radioSvcd10->setText( i18n( "Super-VideoCD" ) );
-
-  m_groupVcdFormatLayout->addWidget( m_radioVcd11 );
-  m_groupVcdFormatLayout->addWidget( m_radioVcd20 );
-  m_groupVcdFormatLayout->addWidget( m_radioSvcd10 );
-  // --------------------------------------------------- VcdFormat group ---
-
-  // ---- option group ------------------------------------------------
-  QGroupBox* m_groupOptions = new QGroupBox( frame, "m_groupOptions" );
-  m_groupOptions->setTitle( i18n( "Options" ) );
-  m_groupOptions->setColumnLayout(0, Qt::Vertical );
-  m_groupOptions->layout()->setSpacing( 0 );
-  m_groupOptions->layout()->setMargin( 0 );
-  QVBoxLayout* m_groupOptionsLayout = new QVBoxLayout( m_groupOptions->layout() );
-  m_groupOptionsLayout->setAlignment( Qt::AlignTop );
-  m_groupOptionsLayout->setSpacing( spacingHint() );
-  m_groupOptionsLayout->setMargin( marginHint() );
-
-  m_checkNonCompliant = new QCheckBox( m_groupOptions, "m_checkNonCompliant" );
-  m_checkNonCompliant->setText( i18n( "Non-compliant compatibility mode for broken devices" ) );
-  m_check2336 = new QCheckBox( m_groupOptions, "m_check2336" );
-  m_check2336->setText( i18n( "Use 2336 byte sectors for output" ) );
-
-  m_groupOptionsLayout->addWidget( m_checkNonCompliant );
-  m_groupOptionsLayout->addWidget( m_check2336 );
-  // --------------------------------------------------- Options group ---
-
-  // ---------------------------------------------------------------------
-
-  frameLayout->addWidget( m_groupVcdFormat, 0, 0 );
-  frameLayout->addWidget( m_groupOptions, 0, 1 );
-
-  frameLayout->setRowStretch( 1, 1 );
-  frameLayout->setColStretch( 1, 1 );
   // TODO: set enabled to false, k2b canot resample now.
   m_groupVcdFormat->setEnabled(false);
   m_groupOptions->setEnabled(false);
+
+  addPage( w, i18n("Settings") );
 }
 
-void K3bVcdBurnDialog::setupLabelTab( QFrame* frame )
+void K3bVcdBurnDialog::setupLabelTab()
 {
+  QWidget* w = new QWidget( k3bMainWidget() );
 
-  QGridLayout* mainGrid = new QGridLayout( frame );
-  mainGrid->setSpacing( spacingHint() );
-  mainGrid->setMargin( marginHint() );
+  m_checkApplicationId = new QCheckBox( i18n( "Write Application Id" ), w, "m_checkApplicationId" );
 
-  m_checkApplicationId = new QCheckBox( i18n( "Write Application Id" ), frame, "m_checkApplicationId" );
+  // ----------------------------------------------------------------------
+  QLabel* labelVolumeId = new QLabel( i18n( "&Volume Label:" ), w, "labelVolumeId" );
+  QLabel* labelAlbumId = new QLabel( i18n( "&Album Id:" ), w, "labelAlbumId" );
+  QLabel* labelVolumeCount = new QLabel( i18n( "Number of CDs in &Album:" ), w, "labelVolumeCount" );
+  QLabel* labelVolumeNumber = new QLabel( i18n( "CD is &Number:" ), w, "labelVolumeNumber" );
 
-  QLabel* labelVolumeId = new QLabel( i18n( "&Volume Label:" ), frame, "labelVolumeId" );
-  QLabel* labelAlbumId = new QLabel( i18n( "&Album Id:" ), frame, "labelAlbumId" );
-  QLabel* labelVolumeCount = new QLabel( i18n( "Number of CDs in &Album:" ), frame, "labelVolumeCount" );
-  QLabel* labelVolumeNumber = new QLabel( i18n( "CD is &Number:" ), frame, "labelVolumeNumber" );
+  m_editVolumeId = new QLineEdit( w, "m_editDisc_id" );
+  m_editAlbumId = new QLineEdit( w, "m_editAlbumId" );
+  m_spinVolumeNumber = new QSpinBox( w, "m_editVolumeNumber" );
+  m_spinVolumeCount = new QSpinBox( w, "m_editVolumeCount" );
 
-  m_editVolumeId = new QLineEdit( frame, "m_editDisc_id" );
-  m_editAlbumId = new QLineEdit( frame, "m_editAlbumId" );
-  m_spinVolumeCount = new QSpinBox( frame, "m_editVolumeCount" );
-  m_spinVolumeNumber = new QSpinBox( frame, "m_editVolumeNumber" );
+  m_spinVolumeNumber->setMinValue(1);
+  m_spinVolumeCount->setMinValue(1);
+  m_spinVolumeNumber->setMaxValue(m_spinVolumeCount->value());
 
-  QFrame* line = new QFrame( frame );
+  QFrame* line = new QFrame( w );
   line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
 
-  mainGrid->addMultiCellWidget( m_checkApplicationId, 0, 0, 0, 1 );
-  mainGrid->addMultiCellWidget( line, 1, 1, 0, 1 );
+  // ----------------------------------------------------------------------
+  QGridLayout* grid = new QGridLayout( w );
+  grid->setMargin( marginHint() );
+  grid->setSpacing( spacingHint() );
 
-  mainGrid->addWidget( labelVolumeId, 2, 0 );
-  mainGrid->addWidget( m_editVolumeId, 2, 1 );
-  mainGrid->addWidget( labelAlbumId, 3, 0 );
-  mainGrid->addWidget( m_editAlbumId, 3, 1 );
-  mainGrid->addWidget( labelVolumeCount, 4, 0 );
-  mainGrid->addWidget( m_spinVolumeCount, 4, 1 );
-  mainGrid->addWidget( labelVolumeNumber, 5, 0 );
-  mainGrid->addWidget( m_spinVolumeNumber, 5, 1 );
+  grid->addMultiCellWidget( m_checkApplicationId, 0, 0, 0, 1 );
+  grid->addMultiCellWidget( line, 1, 1, 0, 1 );
 
-  mainGrid->addRowSpacing( 5, 15 );
-  mainGrid->setRowStretch( 5, 1 );
+  grid->addWidget( labelVolumeId, 2, 0 );
+  grid->addWidget( m_editVolumeId, 2, 1 );
+  grid->addWidget( labelAlbumId, 3, 0 );
+  grid->addWidget( m_editAlbumId, 3, 1 );
+  grid->addWidget( labelVolumeCount, 4, 0 );
+  grid->addWidget( m_spinVolumeCount, 4, 1 );
+  grid->addWidget( labelVolumeNumber, 5, 0 );
+  grid->addWidget( m_spinVolumeNumber, 5, 1 );
+
+  grid->addRowSpacing( 5, 15 );
+  grid->setRowStretch( 5, 1 );
 
   // buddies
   labelVolumeId->setBuddy( m_editVolumeId );
@@ -269,6 +181,7 @@ void K3bVcdBurnDialog::setupLabelTab( QFrame* frame )
   m_spinVolumeCount->setEnabled(false);
   m_spinVolumeNumber->setEnabled(false);
 
+  addPage( w, i18n("Label") );
 }
 
 
@@ -298,10 +211,9 @@ void K3bVcdBurnDialog::slotOk()
 void K3bVcdBurnDialog::loadDefaults()
 {
   m_checkSimulate->setChecked( false );
-  // m_checkDao->setChecked( true );
-  // m_checkOnTheFly->setChecked( false );
-  // m_checkBurnProof->setChecked( true );
-  m_checkDeleteImage->setChecked( true );
+  m_checkBurnproof->setChecked( true );
+
+  m_checkRemoveBufferFiles->setChecked( true );
 
   m_checkApplicationId->setChecked( true );
 
@@ -312,18 +224,15 @@ void K3bVcdBurnDialog::loadDefaults()
   // m_editPublisher->setText( o->publisher() );
   // m_editPreparer->setText( o->preparer() );
   // m_editSystem->setText( o->systemId() );
-
 }
 
 void K3bVcdBurnDialog::saveSettings()
 {
   doc()->setTempDir( m_tempDirSelectionWidget->tempPath() );
-  // doc()->setDao( m_checkDao->isChecked() );
   doc()->setDao( true );
   doc()->setDummy( m_checkSimulate->isChecked() );
-  // doc()->setOnTheFly( m_checkOnTheFly->isChecked() );
   doc()->setOnTheFly( false );
-  ((K3bVcdDoc*)doc())->setDeleteImage( m_checkDeleteImage->isChecked() );
+  ((K3bVcdDoc*)doc())->setDeleteImage( m_checkRemoveBufferFiles->isChecked() );
 
   // -- saving current speed --------------------------------------
   doc()->setSpeed( m_writerSelectionWidget->writerSpeed() );
@@ -337,16 +246,13 @@ void K3bVcdBurnDialog::saveSettings()
   // TODO: save vcdType
   vcdDoc()->vcdOptions()->setVolumeId( m_editVolumeId->text() );
   vcdDoc()->vcdOptions()->setAlbumId( m_editAlbumId->text() );
-
 }
 
 
 void K3bVcdBurnDialog::readSettings()
 {
-  // m_checkDao->setChecked( doc()->dao() );
-  // m_checkOnTheFly->setChecked( doc()->onTheFly() );
   m_checkSimulate->setChecked( doc()->dummy() );
-  m_checkDeleteImage->setChecked( ((K3bVcdDoc*)doc())->deleteImage() );
+  m_checkRemoveBufferFiles->setChecked( ((K3bVcdDoc*)doc())->deleteImage() );
 
   // read vcdType
   switch( ((K3bVcdDoc*)doc())->vcdType() ) {
@@ -371,7 +277,6 @@ void K3bVcdBurnDialog::readSettings()
   m_editVolumeId->setText( vcdDoc()->vcdOptions()->volumeId() );
   m_editAlbumId->setText( vcdDoc()->vcdOptions()->albumId() );
 
-
   K3bProjectBurnDialog::readSettings();
 }
 
@@ -382,10 +287,8 @@ void K3bVcdBurnDialog::loadUserDefaults()
   c->setGroup( "default vcd settings" );
 
   m_checkSimulate->setChecked( c->readBoolEntry( "dummy_mode", false ) );
-  // m_checkOnTheFly->setChecked( c->readBoolEntry( "on_the_fly", true ) );
-  // m_checkBurnProof->setChecked( c->readBoolEntry( "burnproof", true ) );
-  m_checkDeleteImage->setChecked( c->readBoolEntry( "remove_image", true ) );
-
+  m_checkBurnproof->setChecked( c->readBoolEntry( "burnproof", true ) );
+  m_checkRemoveBufferFiles->setChecked( c->readBoolEntry( "remove_image", true ) );
 }
 
 
@@ -396,10 +299,8 @@ void K3bVcdBurnDialog::saveUserDefaults()
   c->setGroup( "default vcd settings" );
 
   c->writeEntry( "dummy_mode", m_checkSimulate->isChecked() );
-  // c->writeEntry( "on_the_fly", m_checkOnTheFly->isChecked() );
 
-  c->writeEntry( "remove_image", m_checkDeleteImage->isChecked() );
-
+  c->writeEntry( "remove_image", m_checkRemoveBufferFiles->isChecked() );
 }
 
 #include "k3bvcdburndialog.moc"
