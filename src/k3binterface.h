@@ -56,7 +56,7 @@ class K3bInterface : public DCOPObject
    */
   DCOPRef currentProject();
 
-  DCOPRef openDocument( const KURL& url );
+  DCOPRef openProject( const KURL& url );
 
   QValueList<DCOPRef> projects();
 

@@ -91,7 +91,7 @@ DCOPRef K3bInterface::currentProject()
     return DCOPRef();
 }
 
-DCOPRef K3bInterface::openDocument( const KURL& url )
+DCOPRef K3bInterface::openProject( const KURL& url )
 {
   K3bDoc* doc = m_main->openDocument( url );
   if( doc )
