@@ -120,6 +120,13 @@ void K3bDvdRippingProcess::startRippingProcess( ) {
     m_delAudioProcess = true;
     */
     const K3bExternalBin *m_tccatBin = k3bcore->externalBinManager()->binObject("tccat");
+    if( m_tccatBin->version >= K3bVersion( 0, 6, 12 ) ) {
+      emit infoMessage( i18n("Sorry, K3b does not support ripping Video DVDs with transcode >= 0.1.12 yet."),
+			ERROR );
+      emit finished( false );
+      return;
+    }
+
     m_ripProcess = new KShellProcess();
     kdDebug() << "(K3bDvdRippingProcess)" << m_tccatBin->path << " -i " << m_device <<" "<< m_ripMode << endl;
     *m_ripProcess << m_tccatBin->path << "-i" <<  m_device << m_ripMode;

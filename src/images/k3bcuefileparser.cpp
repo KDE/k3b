@@ -143,7 +143,7 @@ bool K3bCueFileParser::parseLine( QString& line )
       m_imageFilenameInCue = true;
     }
     else {
-      setImageFilename( filename().mid( filename().length() - 3 ) + "bin" );
+      setImageFilename( filename().left( filename().length() - 3 ) + "bin" );
       setValid( QFileInfo( imageFilename() ).isFile() );
       m_imageFilenameInCue = false;
     }

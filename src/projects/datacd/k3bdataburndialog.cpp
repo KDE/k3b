@@ -46,6 +46,7 @@
 #include <qbuttongroup.h>
 #include <qfileinfo.h>
 #include <qtabwidget.h>
+#include <qspinbox.h>
 
 #include <kmessagebox.h>
 #include <klineedit.h>
@@ -91,6 +92,8 @@ K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const ch
   m_advancedImageSettingsWidget->layout()->setMargin( marginHint() );
   addPage( m_advancedImageSettingsWidget, i18n("Advanced") );
 
+  connect( m_groupMultiSession, SIGNAL(clicked(int)),
+	   this, SLOT(toggleAllOptions()) );
 
   readSettings();
 
@@ -316,6 +319,15 @@ void K3bDataBurnDialog::toggleAllOptions()
   }
   else
     m_checkVerify->setEnabled(true);
+
+  // for some reason I don't know yet when writing multisession volume set size needs to be 1
+  if( m_groupMultiSession->selected() != m_radioMultiSessionNone ) {
+    m_volumeDescWidget->m_spinVolumeSetSize->setValue( 1 );
+    m_volumeDescWidget->m_spinVolumeSetSize->setEnabled( false );
+  }
+  else {
+    m_volumeDescWidget->m_spinVolumeSetSize->setEnabled( true );
+  }
 }
 
 

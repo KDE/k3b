@@ -43,6 +43,7 @@
 #include <qwhatsthis.h>
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
+#include <qspinbox.h>
 
 
 K3bDvdBurnDialog::K3bDvdBurnDialog( K3bDvdDoc* doc, QWidget *parent, const char *name, bool modal )
@@ -144,6 +145,9 @@ void K3bDvdBurnDialog::setupSettingsTab()
 
   addPage( frame, i18n("Settings") );
 
+  connect( m_groupMultiSession, SIGNAL(clicked(int)),
+	   this, SLOT(toggleAllOptions()) );
+
   // ToolTips
   // -------------------------------------------------------------------------
 
@@ -229,6 +233,15 @@ void K3bDvdBurnDialog::toggleAllOptions()
     m_groupMultiSession->setEnabled(false);
   }
   else {
+    // for some reason I don't know yet when writing multisession volume set size needs to be 1
+    if( m_groupMultiSession->selected() != m_radioMultiSessionNone ) {
+      m_volumeDescWidget->m_spinVolumeSetSize->setValue( 1 );
+      m_volumeDescWidget->m_spinVolumeSetSize->setEnabled( false );
+    }
+    else {
+      m_volumeDescWidget->m_spinVolumeSetSize->setEnabled( true );
+    }
+
     m_groupMultiSession->setEnabled(true);
     if( !m_checkOnTheFly->isChecked() ) {
       // no continue and finish multisession in non-the-fly mode since
