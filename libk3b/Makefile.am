@@ -1,6 +1,6 @@
 lib_LTLIBRARIES = libk3b.la
 
-libk3b_la_SOURCES = dummy.c
+libk3b_la_SOURCES = dummy.cpp
 
 libk3b_la_LIBADD = 	core/libk3bcore.la \
 			cddb/libcddb.la \
