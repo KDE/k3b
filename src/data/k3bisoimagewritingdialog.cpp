@@ -201,7 +201,11 @@ void K3bIsoImageWritingDialog::setupGui()
   groupImageLayout->addWidget( m_labelImageSize, 0, 3 );
   groupImageLayout->addMultiCellWidget( imageSpacerLine, 1, 1, 0, 3 );
   groupImageLayout->addMultiCellWidget( m_isoInfoWidget, 2, 2, 0, 3 );
-  groupImageLayout->addMultiCellWidget( m_generalInfoLabel, 3, 3, 0, 3 );
+  groupImageLayout->addMultiCellWidget( m_generalInfoLabel, 3, 3, 0, 2 );
+  QPushButton* b = new QPushButton( i18n("MD5 Sum..."), groupImage );
+  groupImageLayout->addWidget( b, 3, 3 );
+  connect( b, SIGNAL(clicked()), this, SLOT(slotCheckMd5Sum()) );
+  QToolTip::add( b, i18n("Calculate the MD5 Sum. Be aware: this blocks K3b!") );
   // -----------------------------------------------------------------------
 
 
@@ -422,18 +426,7 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
 
       m_isoInfoWidget->show();
 
-      ifstream md5sumFile;
-      md5sumFile.open( path.latin1(), ios::binary|ios::in );
-      QString md5sumString;
-      if( md5sumFile ) {
-	MD5 md5sumTester( md5sumFile );
-	md5sumFile.close();
-	md5sumString = QString::fromLatin1( md5sumTester.hex_digest(), 33 );
-      }
-      else
-	md5sumString = "-";
-
-      m_generalInfoLabel->setText( i18n("Seems to be an ISO9660 image (MD5 Sum: %1 )").arg(md5sumString) );
+      m_generalInfoLabel->setText( i18n("Seems to be an ISO9660 image") );
       m_checkUseCueFile->setChecked( false );
       //      m_checkRawWrite->setChecked( false );
     }
@@ -506,6 +499,26 @@ void K3bIsoImageWritingDialog::slotCueBinChecked( bool c )
 void K3bIsoImageWritingDialog::setImage( const KURL& url )
 {
   m_editImagePath->setText( url.path() );
+}
+
+
+void K3bIsoImageWritingDialog::slotCheckMd5Sum()
+{
+  // TODO: make this async
+
+  if( QFile::exists( m_editImagePath->text() ) ) {
+    ifstream md5sumFile;
+    md5sumFile.open( m_editImagePath->text().latin1(), ios::binary|ios::in );
+    QString md5sumString;
+    if( md5sumFile ) {
+      MD5 md5sumTester( md5sumFile );
+      md5sumFile.close();
+      md5sumString = QString::fromLatin1( md5sumTester.hex_digest(), 33 );
+    }
+
+    KMessageBox::information( this, i18n("MD5 sum of %1: %2").arg(m_editImagePath->text()).arg(md5sumString),
+			      i18n("MD5 Sum") );
+  }
 }
 
 #include "k3bisoimagewritingdialog.moc"

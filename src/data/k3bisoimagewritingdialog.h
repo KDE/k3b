@@ -49,6 +49,7 @@ Q_OBJECT
   void slotFindImageFile();
   void slotWriterChanged();
   void slotCueBinChecked( bool c );
+  void slotCheckMd5Sum();
 
  private:
   void setupGui();
