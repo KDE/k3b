@@ -162,11 +162,11 @@ int K3bDeviceManager::scanbus() {
             ++i;
         }
         for( int i = 0; i < 16; i++ ) {
-            if( addDevice( QString("/dev/scd%1").arg(i).latin1() ) )
+            if( addDevice( QString("/dev/scd%1").arg(i).ascii() ) )
                 m_foundDevices++;
         }
         for( int i = 0; i < 16; i++ ) {
-            if( addDevice( QString("/dev/sr%1").arg(i).latin1() ) )
+            if( addDevice( QString("/dev/sr%1").arg(i).ascii() ) )
                 m_foundDevices++;
         }
     }
@@ -481,22 +481,33 @@ K3bDevice* K3bDeviceManager::initializeIdeDevice( const QString& drive ) {
     return newDevice;
 }
 
-K3bDevice::interface K3bDeviceManager::determineInterfaceType(struct stat cdromStat) {
-    K3bDevice::interface ret=K3bDevice::OTHER;
-
-    if( IDE_DISK_MAJOR( cdromStat.st_rdev>>8 ) ) {
-      return K3bDevice::IDE;
-    } else if ( SCSI_BLK_MAJOR( cdromStat.st_rdev>>8 ) ) {
-      return K3bDevice::SCSI;
+K3bDevice::interface K3bDeviceManager::determineInterfaceType(const QString &devicename) {
+    K3bDevice::interface ret = K3bDevice::OTHER;
+    int cdromfd = ::open( devicename.ascii(), O_RDONLY | O_NONBLOCK );
+    if (cdromfd < 0) {
+        kdDebug() << "could not open device " << devicename << " (" << strerror(errno) << ")" << endl;
+        return ret;
     }
+
+    // stat the device
+    struct stat cdromStat;
+    ::fstat( cdromfd, &cdromStat );
+    
+    if( IDE_DISK_MAJOR( cdromStat.st_rdev>>8 ) ) {
+      ret = K3bDevice::IDE;
+    } else if ( SCSI_BLK_MAJOR( cdromStat.st_rdev>>8 ) ) {
+      ret = K3bDevice::SCSI;
+    }
+    ::close(cdromfd);
     return ret;
 }
 
-K3bDevice* K3bDeviceManager::addDevice( const QString& devicename ) {
-    int cdromfd = ::open( devicename.latin1(), O_RDONLY | O_NONBLOCK );
+bool K3bDeviceManager::testForCdrom(const QString& devicename) {
+    bool ret = false;
+    int cdromfd = ::open( devicename.ascii(), O_RDONLY | O_NONBLOCK );
     if (cdromfd < 0) {
         kdDebug() << "could not open device " << devicename << " (" << strerror(errno) << ")" << endl;
-        return 0;
+        return ret;
     }
 
     // stat the device
@@ -505,34 +516,30 @@ K3bDevice* K3bDeviceManager::addDevice( const QString& devicename ) {
 
     if( /*!S_ISCHR( cdromStat.st_mode) && */!S_ISBLK( cdromStat.st_mode) ) {
         kdDebug() << devicename << " is no "/* << "character or " */ << "block device" << endl;
-        ::close( cdromfd );
-        return 0;
-    } else
+    } else {
         kdDebug() << devicename << " is block device (" << (int)(cdromStat.st_rdev & 0xFF) << ")" << endl;
+        if( ::ioctl(cdromfd, CDROM_CLEAR_OPTIONS, CDO_AUTO_CLOSE) < 0 ) {
+          kdDebug() << devicename << " seems not to be a cdrom device: " << strerror(errno) << endl;
+        } else {
+	  ret = true;
+          kdDebug() << devicename << " seems to be cdrom" << endl;
+	}
+    }
+    ::close( cdromfd );
+    return ret;
+}
 
+K3bDevice* K3bDeviceManager::addDevice( const QString& devicename ) {
+    K3bDevice* device = 0;	
+    
     // resolve all symlinks
     QString resolved = resolveSymLink( devicename );
     kdDebug() << devicename << " resolved to " << resolved << endl;
-
-
-    if( ::ioctl(cdromfd, CDROM_CLEAR_OPTIONS, CDO_AUTO_CLOSE) < 0 ) {
-        kdDebug() << devicename << " seems not to be a cdrom device: " << strerror(errno) << endl;
-        ::close( cdromfd );
-        return 0;
-    }
-    kdDebug() << devicename << " seems to be cdrom" << endl;
-
     
-    K3bDevice* device = 0;
-
-    if ( K3bDevice* oldDev = findDevice(resolved) ) {
-       kdDebug() << "(K3bDeviceManager) dev " << resolved  << " already found" << endl;
-       oldDev->addDeviceNode( resolved );
-        ::close( cdromfd );
-       return 0;
-    }
-   
-    K3bDevice::interface iface = determineInterfaceType(cdromStat);
+    if  ( !testForCdrom(devicename) )
+      return device;
+    
+    K3bDevice::interface iface = determineInterfaceType(devicename);
     
     if( iface == K3bDevice::IDE ) {
        kdDebug() << resolved << " is ATAPI device" << endl;
@@ -542,8 +549,12 @@ K3bDevice* K3bDeviceManager::addDevice( const QString& devicename ) {
        device = initializeScsiDevice( resolved );
     } else
         kdDebug() << "(K3bDeviceManager) could not determine interfacetype of " << resolved << endl;
-    
-
+     
+    if ( K3bDevice* oldDev = findDevice(resolved) ) {
+       kdDebug() << "(K3bDeviceManager) dev " << resolved  << " already found" << endl;
+       oldDev->addDeviceNode( resolved );
+       return 0;
+    }
 
     if( device ) {
         if( !device->init() ) {
@@ -551,7 +562,6 @@ K3bDevice* K3bDeviceManager::addDevice( const QString& devicename ) {
             delete device;
             return 0;
         }
-
 
         if( device->burner() )
             m_writer.append( device );
@@ -622,11 +632,13 @@ void K3bDeviceManager::slotCollectStdout( KProcess*, char* data, int len ) {
 
 
 bool K3bDeviceManager::determineBusIdLun( const QString& dev, int& bus, int& id, int& lun ) {
+    int ret = false;
     int cdromfd = ::open( dev.ascii(), O_RDONLY | O_NONBLOCK );
     if (cdromfd < 0) {
         kdDebug() << "could not open device " << dev << " (" << strerror(errno) << ")" << endl;
         return false;
     }
+    
     struct stat cdromStat;
     ::fstat( cdromfd, &cdromStat );
 
@@ -641,15 +653,13 @@ bool K3bDeviceManager::determineBusIdLun( const QString& dev, int& bus, int& id,
         if ( (::ioctl( cdromfd, SCSI_IOCTL_GET_IDLUN, &idLun ) < 0) ||
                 (::ioctl( cdromfd, SCSI_IOCTL_GET_BUS_NUMBER, &bus ) < 0) ) {
             kdDebug() << "Need a filename that resolves to a SCSI device" << endl;
-            ::close(cdromfd);
-            return false;
+            ret = false;
+        } else {
+            id  = idLun.id & 0xff;
+            lun = (idLun.id >> 8) & 0xff;
+            kdDebug() << "bus: " << bus << ", id: " << id << ", lun: " << lun << endl;
+            ret = true;
         }
-
-        id  = idLun.id & 0xff;
-        lun = (idLun.id >> 8) & 0xff;
-        kdDebug() << "bus: " << bus << ", id: " << id << ", lun: " << lun << endl;
-        ::close(cdromfd);
-        return true;
     } else
 #ifdef SUPPORT_IDE 
       if( IDE_DISK_MAJOR( cdromStat.st_rdev>>8 ) ) {
@@ -657,12 +667,12 @@ bool K3bDeviceManager::determineBusIdLun( const QString& dev, int& bus, int& id,
         lun = 0;
         id = (cdromStat.st_rdev & 0xFF) ? 1 : 0;
         kdDebug() << "bus: " << bus << ", id: " << id << ", lun: " << lun << endl;
-        ::close(cdromfd);
-        return true;
+        ret = true;
       }
 #endif
+   
     ::close(cdromfd);
-    return false;
+    return ret;
 }
 
 

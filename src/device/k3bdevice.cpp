@@ -200,7 +200,7 @@ K3bDiskInfo::type  K3bDevice::diskType() {
 
   int status;
   K3bDiskInfo::type ret = K3bDiskInfo::UNKNOWN;
-  int cdromfd = ::open( devicename().latin1(), O_RDONLY | O_NONBLOCK );
+  int cdromfd = ::open( devicename().ascii(), O_RDONLY | O_NONBLOCK );
   if (cdromfd < 0) {
     kdDebug() << "(K3bDevice) Error: could not open device." << endl;
     return K3bDiskInfo::UNKNOWN;
@@ -232,7 +232,7 @@ K3bDiskInfo::type  K3bDevice::diskType() {
 
 bool K3bDevice::isDVD() {
   bool ret = false;
-  int cdromfd = ::open( devicename().latin1(), O_RDONLY | O_NONBLOCK );
+  int cdromfd = ::open( devicename().ascii(), O_RDONLY | O_NONBLOCK );
   if (cdromfd < 0) {
     kdDebug() << "(K3bDevice) Error: could not open device." << endl;
     return ret;
@@ -254,7 +254,7 @@ int K3bDevice::isReady() const
 {
   int drive_status,ret;
   ret = 1;
-  int cdromfd = ::open( devicename().latin1(), O_RDONLY | O_NONBLOCK );
+  int cdromfd = ::open( devicename().ascii(), O_RDONLY | O_NONBLOCK );
   if (cdromfd < 0) {
     kdDebug() << "(K3bDevice) Error: could not open device." << endl;
     return ret;
@@ -277,7 +277,7 @@ int K3bDevice::isReady() const
 int K3bDevice::isEmpty()
 {
   int ret = NO_INFO;
-  int cdromfd = ::open( devicename().latin1(), O_RDONLY | O_NONBLOCK );
+  int cdromfd = ::open( devicename().ascii(), O_RDONLY | O_NONBLOCK );
   if (cdromfd < 0) {
     kdDebug() << "(K3bDevice) Error: could not open device." << endl;
     return NO_INFO;
@@ -344,7 +344,7 @@ int K3bDevice::isEmpty()
 
 int K3bDevice::discSize() {
   int ret = -1;
-  int cdromfd = ::open( devicename().latin1(), O_RDONLY | O_NONBLOCK );
+  int cdromfd = ::open( devicename().ascii(), O_RDONLY | O_NONBLOCK );
   if (cdromfd < 0) {
     kdDebug() << "(K3bDevice) Error: could not open device." << endl;
     return ret;
@@ -374,7 +374,7 @@ int K3bDevice::discSize() {
 
 int K3bDevice::remainingSize() {
   int ret = -1;
-  int cdromfd = ::open( devicename().latin1(), O_RDONLY | O_NONBLOCK );
+  int cdromfd = ::open( devicename().ascii(), O_RDONLY | O_NONBLOCK );
   if (cdromfd < 0) {
     kdDebug() << "(K3bDevice) Error: could not open device." << endl;
     return ret;
@@ -405,7 +405,7 @@ int K3bDevice::remainingSize() {
 int K3bDevice::numSessions() {
 
   int ret=-1;
-  int cdromfd = ::open( devicename().latin1(), O_RDONLY | O_NONBLOCK );
+  int cdromfd = ::open( devicename().ascii(), O_RDONLY | O_NONBLOCK );
   if (cdromfd < 0) {
     kdDebug() << "(K3bDevice) Error: could not open device." << endl;
     return ret;
@@ -443,7 +443,7 @@ int K3bDevice::numSessions() {
 bool K3bDevice::block( bool b) const
 {
   bool ret = false;
-  int cdromfd = ::open( devicename().latin1(), O_RDONLY | O_NONBLOCK );
+  int cdromfd = ::open( devicename().ascii(), O_RDONLY | O_NONBLOCK );
   if (cdromfd < 0) {
     kdDebug() << "(K3bDevice) Error: could not open device." << endl;
     return ret;
@@ -464,7 +464,7 @@ bool K3bDevice::rewritable() {
   if ( isReady() != 0 )
     return false;
 
-  int cdromfd = ::open( devicename().latin1(), O_RDONLY | O_NONBLOCK );
+  int cdromfd = ::open( devicename().ascii(), O_RDONLY | O_NONBLOCK );
   if (cdromfd < 0) {
     kdDebug() << "(K3bDevice) Error: could not open device." << endl;
     return false;
@@ -492,7 +492,7 @@ bool K3bDevice::rewritable() {
 
 void K3bDevice::eject() const
 {
-  int cdromfd = ::open( devicename().latin1(), O_RDONLY | O_NONBLOCK );
+  int cdromfd = ::open( devicename().ascii(), O_RDONLY | O_NONBLOCK );
   if (cdromfd < 0) {
     kdDebug() << "(K3bDevice) Error: could not open device." << endl;
   }
@@ -505,7 +505,7 @@ void K3bDevice::eject() const
 
 void K3bDevice::load() const
 {
-  int cdromfd = ::open( devicename().latin1(), O_RDONLY | O_NONBLOCK );
+  int cdromfd = ::open( devicename().ascii(), O_RDONLY | O_NONBLOCK );
   if (cdromfd < 0) {
     kdDebug() << "(K3bDevice) Error: could not open device." << endl;
   }
