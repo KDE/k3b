@@ -33,6 +33,8 @@ extern "C" {
 
   dvdcss_t (*dvdcss_open)(char*);
   int (*dvdcss_close)( dvdcss_t );
+  int (*dvdcss_seek)( dvdcss_t, int, int );
+  int (*dvdcss_read)( dvdcss_t, void*, int, int );
 }
 
 
@@ -81,6 +83,18 @@ void K3bLibDvdCss::close()
 }
 
 
+int K3bLibDvdCss::seek( int sector, int flags )
+{
+  return dvdcss_seek( d->dvd, sector, flags );
+}
+
+
+int K3bLibDvdCss::read( void* buffer, int sectors, int flags )
+{
+  return dvdcss_read( d->dvd, buffer, sectors, flags );
+}
+
+
 K3bLibDvdCss* K3bLibDvdCss::create()
 {
   if( s_libDvdCss == 0 ) {
@@ -88,8 +102,10 @@ K3bLibDvdCss* K3bLibDvdCss::create()
     if( s_libDvdCss ) {
       dvdcss_open = (dvdcss_t (*)(char*))dlsym( s_libDvdCss, "dvdcss_open" );
       dvdcss_close = (int (*)( dvdcss_t ))dlsym( s_libDvdCss, "dvdcss_close" );
+      dvdcss_seek = (int (*)( dvdcss_t, int, int ))dlsym( s_libDvdCss, "dvdcss_seek" );
+      dvdcss_read = (int (*)( dvdcss_t, void*, int, int ))dlsym( s_libDvdCss, "dvdcss_read" );
 
-      if( !dvdcss_open || !dvdcss_close ) {
+      if( !dvdcss_open || !dvdcss_close || !dvdcss_seek || !dvdcss_read ) {
 	kdDebug() << "(K3bLibDvdCss) unable to resolve libdvdcss." << endl;
 	dlclose( s_libDvdCss );
 	s_libDvdCss = 0;

@@ -376,7 +376,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
     writer->setBurnSpeed( m_speed );
     writer->setWritingMode( m_writingMode == K3b::DAO ? K3b::DAO : 0 );
     writer->setImageToWrite( m_imagePath );
-
+    writer->setCloseDvd( true );
     m_writer = writer;
   }
 

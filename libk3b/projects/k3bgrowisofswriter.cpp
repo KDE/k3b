@@ -203,11 +203,11 @@ bool K3bGrowisofsWriter::prepareProcess()
 
   if( !d->image.isEmpty() ) {
     d->inputFile.setName( d->image );
+    d->trackSize = (K3b::filesize( d->image ) + 1024) / 2048;
     if( !d->inputFile.open( IO_ReadOnly ) ) {
       emit infoMessage( i18n("Could not open file %1.").arg(d->image), ERROR );
       return false;
     }
-    d->trackSize = (d->inputFile.size()+1024) / 2048;
   }
 
   // now we use the force (luke ;) do not reload the dvd, K3b does that.

@@ -14,8 +14,10 @@
  */
 
 #include "k3bdatatrackreader.h"
+#include "dvdcopy/k3blibdvdcss.h"
 
 #include <k3bdevice.h>
+#include <k3bdeviceglobals.h>
 #include <k3btrack.h>
 #include <k3bthread.h>
 
@@ -41,7 +43,12 @@ public:
       m_ignoreReadErrors(false),
       m_retries(10),
       m_device(0),
-      m_fd(-1) {
+      m_fd(-1),
+      m_libcss(0) {
+  }
+
+  ~WorkThread() {
+    delete m_libcss;
   }
 
   void run() {
@@ -64,6 +71,34 @@ public:
     m_sectorSize = 0;
     if( m_device->isDVD() ) {
       m_sectorSize = 2048;
+
+      //
+      // In case of an encrypted VideoDVD we read with libdvdcss which takes care of decrypting the vobs
+      //
+      m_useLibdvdcss = false;
+      if( m_device->copyrightProtectionSystemType() > 0 ) {
+	
+	// close the device for libdvdcss
+	m_device->close();
+	
+	kdDebug() << "(K3bDataTrackReader::WorkThread) found encrypted dvd. using libdvdcss." << endl;
+	
+	// open the libdvdcss stuff
+	m_libcss = K3bLibDvdCss::create();
+	if( !m_libcss ) {
+	  emitInfoMessage( i18n("Unable to open libdvdcss."), K3bJob::ERROR );
+	  emitFinished(false);
+	  return;
+	}
+	
+	if( !m_libcss->open(m_device) ) {
+	  emitInfoMessage( i18n("Could not open device %1").arg(m_device->blockDeviceName()), K3bJob::ERROR );
+	  emitFinished(false);
+	  return;
+	}
+
+	m_useLibdvdcss = true;
+      }
     }
     else {
       switch( m_device->getDataMode( m_firstSector ) ) {
@@ -86,7 +121,7 @@ public:
 	return;
       }
     }
-    
+
     emitInfoMessage( i18n("Reading with sector size %1.").arg(m_sectorSize), K3bJob::INFO );
     kdDebug() << "(K3bDataTrackReader::WorkThread) reading " << (m_lastSector.lba() - m_firstSector.lba() + 1)
 	      << " sectors with sector size: " << m_sectorSize << endl;
@@ -107,19 +142,14 @@ public:
     //
     m_device->setSpeed( 0xffff, 0xffff );
 
-    //
-    // As long as we do not know how to determine th emax read buffer properly we simply determine it
-    // by trying. :)
-    //
-    s_bufferSizeSectors = 128;
-    unsigned char* buffer = new unsigned char[m_sectorSize*128];
-    while( !read( buffer, m_firstSector.lba(), s_bufferSizeSectors ) ) {
-      kdDebug() << "(K3bDataTrackReader) determine max read sectors: "
-		<< s_bufferSizeSectors << " too high." << endl;
-      s_bufferSizeSectors--;
+    s_bufferSizeSectors = K3bDevice::determineMaxReadingBufferSize( m_device, m_firstSector );
+    if( s_bufferSizeSectors <= 0 ) {
+      emitInfoMessage( i18n("Error while reading sector %1.").arg(m_firstSector.lba()), K3bJob::ERROR );
+      emitFinished(false);
+      return;
     }
-    kdDebug() << "(K3bDataTrackReader) determine max read sectors: " 
-	      << s_bufferSizeSectors << " is max." << endl;
+
+    unsigned char* buffer = new unsigned char[m_sectorSize*s_bufferSizeSectors];
 
     // 2. get it on
     K3b::Msf currentSector = m_firstSector;
@@ -190,7 +220,30 @@ public:
 
 
   bool read( unsigned char* buffer, unsigned long sector, unsigned int len ) {
-    if( m_sectorSize == 2048 )
+    if( m_useLibdvdcss ) {
+
+      // FIXME: only seek when necessary to avoid useless key calculation (or at least test it since
+      //        maybe it doe not work without the seeking...)
+
+      if( m_libcss->seek( sector, K3bLibDvdCss::DVDCSS_SEEK_MPEG ) >= 0 ) {
+	int ret = m_libcss->read( (void*)buffer, len, K3bLibDvdCss::DVDCSS_READ_DECRYPT );
+	if( ret == (int)len )
+	  return true;
+	else if( ret <= 0 ) {
+	  kdDebug() << "(K3bDataTrackReader::WorkThread) libdvdcss::read failed." << endl;
+	  return false;
+	}
+	else {
+	  kdDebug() << "(K3bDataTrackReader::WorkThread) libdvdcss::read only read " << ret << " sectors." << endl;
+	  return false;
+	}
+      }
+      else {
+  	kdDebug() << "(K3bDataTrackReader::WorkThread) libdvdcss::seek failed" << endl;
+	return false;
+      }
+    }
+    else if( m_sectorSize == 2048 )
       return m_device->read10( buffer, len*2048, sector, len );
     else
       return m_device->readCd( buffer, 
@@ -226,14 +279,15 @@ public:
 	return false;
 
       if( !success ) {
-	emitInfoMessage( i18n("Error while reading sector %1.").arg(sector), K3bJob::ERROR );
 	if( m_ignoreReadErrors ) {
-	  kdDebug() << "(K3bDataTrackReader::WorkThread) ignoring read error in sector " << sector << endl;
+	  emitInfoMessage( i18n("Ignoring read error in sector %1.").arg(sector), K3bJob::WARNING );
 	  ::memset( &buffer[i], 0, 1 );
 	  success = true;
 	}
-	else
+	else {
+	  emitInfoMessage( i18n("Error while reading sector %1.").arg(sector), K3bJob::ERROR );
 	  break;
+	}
       }
 
       ++i;
@@ -256,6 +310,8 @@ public:
   int m_fd;
   QString m_imagePath;
   int m_sectorSize;
+  bool m_useLibdvdcss;
+  K3bLibDvdCss* m_libcss;
 };
 
 

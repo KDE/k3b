@@ -30,12 +30,21 @@ class K3bLibDvdCss
  public:
   ~K3bLibDvdCss();
 
+  static const int DVDCSS_BLOCK_SIZE = 2048;
+  static const int DVDCSS_NOFLAGS = 0;
+  static const int DVDCSS_READ_DECRYPT = (1 << 0);
+  static const int DVDCSS_SEEK_MPEG = (1 << 0);
+  static const int DVDCSS_SEEK_KEY = (1 << 1);
+
   /**
    * Try to open a Video DVD and authenticate it.
    * @return true if the Video DVD could be authenticated succesfully, false otherwise.
    */
   bool open( K3bDevice::Device* dev );
   void close();
+
+  int seek( int sector, int flags );
+  int read( void* buffer, int sectors, int flags );
 
   /**
    * returns 0 if the libdvdcss could not

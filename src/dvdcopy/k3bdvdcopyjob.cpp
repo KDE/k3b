@@ -138,23 +138,29 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
     d->running = false;
   }
   else {
-    if( m_readerDevice->featureCurrent( K3bDevice::FEATURE_DVD_CSS ) ) {
-      emit infoMessage( i18n("Found encrypted DVD."), ERROR );
-      emit infoMessage( i18n("Cannot copy encrypted DVDs."), ERROR );
-      d->running = false;
-      emit finished( false );
-      return;
+    if( m_readerDevice->copyrightProtectionSystemType() > 0 ) {
+      emit infoMessage( i18n("Found encrypted DVD."), WARNING );
+      // check for libdvdcss
+      bool haveLibdvdcss = false;
+      kdDebug() << "(K3bDvdCopyJob) trying to open libdvdcss." << endl;
+      if( K3bLibDvdCss* libcss = K3bLibDvdCss::create() ) {
+	kdDebug() << "(K3bLibDvdCss) succeeded." << endl;
+	kdDebug() << "(K3bLibDvdCss) dvdcss_open(" << m_readerDevice->blockDeviceName() << ") = "
+		  << libcss->open(m_readerDevice) << endl;
+	haveLibdvdcss = true;
+	delete libcss;
+      }
+      else
+	kdDebug() << "(K3bLibDvdCss) failed." << endl;
+
+      if( !haveLibdvdcss ) {
+	emit infoMessage( i18n("Cannot copy encrypted DVDs."), ERROR );
+	d->running = false;
+	emit finished( false );
+	return;
+      }
     }
 
-//     kdDebug() << "(K3bDvdCopyJob) trying to open libdvdcss." << endl;
-//     if( K3bLibDvdCss* libcss = K3bLibDvdCss::create() ) {
-//       kdDebug() << "(K3bLibDvdCss) succeeded." << endl;
-//       kdDebug() << "(K3bLibDvdCss) dvdcss_open(" << m_readerDevice->blockDeviceName() << ") = "
-// 		<< libcss->open(m_readerDevice) << endl;
-//       delete libcss;
-//     }
-//     else
-//       kdDebug() << "(K3bLibDvdCss) failed." << endl;
 
     //
     // We cannot rely on the kernel to determine the size of the DVD for some reason
@@ -269,8 +275,6 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
 	  m_imagePath = K3b::findTempFile( "iso" );
 	}
 	// else the user specified a file in an existing dir
-	if( m_imagePath.right( 4 ) != ".iso" )
-	  m_imagePath += ".iso";
 
 	emit infoMessage( i18n("Writing image file to %1.").arg(m_imagePath), INFO );
 	emit newSubTask( i18n("Reading source media.") );

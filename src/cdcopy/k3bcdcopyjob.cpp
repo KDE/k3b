@@ -557,8 +557,6 @@ bool K3bCdCopyJob::prepareImageFiles()
 	m_tempPath = K3b::findTempFile( "iso" );
       }
       // else the user specified a file in an existing dir
-      if( m_tempPath.right( 4 ) != ".iso" )
-	m_tempPath += ".iso";
 
       emit infoMessage( i18n("Writing image file to %1.").arg(m_tempPath), INFO );
     }

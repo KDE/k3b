@@ -33,7 +33,7 @@ Big parts of the audio project have been rewritten to have a way better design:
 K3b now always writes a logfile in $(KDEHOME)/share/apps/k3b/lastlog.log
 New device configuration format which solves all issues with removable devices like USB.
 Using a ringbuffer for growisofs (based on pipebuf2)
-K3b can now dlopen libdvdcss if installed to authenticate encrypted DVDs before copying.
+Copy CSS encrypted DVDs if libdvdcss is installed.
 	
 0.11.10
 Support Mp3 files starting with multiple ID3 tags.
