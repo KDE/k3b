@@ -17,7 +17,7 @@ K3b - The CD Creator - Writing cds under linux made easy.
 
 %prep
 %setup
-make -f admin/Makefile.common
+WANT_AUTOCONF_2_5=1 make -f admin/Makefile.common
 CFLAGS="$RPM_OPT_FLAGS" CXXFLAGS="$RPM_OPT_FLAGS" ./configure \
                  --prefix=%{prefix} \
                 $LOCALFLAGS
