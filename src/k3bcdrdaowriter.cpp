@@ -696,13 +696,13 @@ void K3bCdrdaoWriter::slotProcessExited( KProcess* p )
       break;
 
     default:
-      if( !m_knownError )
-      {
+      if( !m_knownError ) {
         emit infoMessage( i18n("Cdrdao returned an error! (code %1)").arg(p->exitStatus()), K3bJob::ERROR );
         emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
         emit infoMessage( i18n("Please send me an email with the last output..."), K3bJob::ERROR );
-        emit finished( false );
       }
+
+      emit finished( false );
       break;
     }
   }
@@ -808,7 +808,8 @@ void K3bCdrdaoWriter::parseCdrdaoLine( const QString& str )
 
 void K3bCdrdaoWriter::parseCdrdaoError( const QString& line )
 {
-  if( line.contains( "No driver found" ) )
+  if( line.contains( "No driver found" ) ||
+      line.contains( "use option --driver" ) )
   {
     emit infoMessage( i18n("No cdrdao driver found."), K3bJob::ERROR );
     emit infoMessage( i18n("Please select one manually in the device settings."), K3bJob::ERROR );
@@ -829,8 +830,8 @@ void K3bCdrdaoWriter::parseCdrdaoError( const QString& line )
     emit infoMessage( i18n("Try setting the first pregap to 0."), K3bJob::ERROR );
     m_knownError = true;
   }
-  else if( !line.contains( "remote progress message" ) )
-    emit infoMessage( line, K3bJob::ERROR );
+ //  else if( !line.contains( "remote progress message" ) )
+//     emit infoMessage( line, K3bJob::ERROR );
 }
 
 void K3bCdrdaoWriter::parseCdrdaoWrote( const QString& line )
