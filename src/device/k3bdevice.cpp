@@ -6,7 +6,7 @@
 #include <qfile.h>
 
 #include <kdebug.h>
-#include <krun.h>
+#include <kprocess.h>
 
 typedef Q_INT16 size16;
 typedef Q_INT32 size32;
@@ -176,6 +176,9 @@ bool K3bDevice::block( bool block ) const
 
 void K3bDevice::eject() const
 {
-  KRun::runCommand( "eject " + ioctlDevice() );
+  KProcess p;
+  p << "eject";
+  p << ioctlDevice();
+  p.start(KProcess::Block);
 }
 
