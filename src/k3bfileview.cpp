@@ -119,7 +119,11 @@ void K3bFileView::setupGUI()
 
   // this has to be disabled since the user must NEVER change the fileview because
   // that would disable the dragging support! (hopefully obsolete in KDE3)
-  m_dirOp->actionCollection()->action("view menu")->setEnabled( false );
+  m_dirOp->actionCollection()->action("short view")->setEnabled( false );
+  m_dirOp->actionCollection()->action("detailed view")->setEnabled( false );
+  m_dirOp->actionCollection()->action("separate dirs")->setEnabled( false );
+  m_dirOp->actionCollection()->action("preview")->setEnabled( false );
+  m_dirOp->actionCollection()->action("single")->setEnabled( false );
 
   // check if some actions should be enabled
   connect( dirOpMenu, SIGNAL(activated()), this, SLOT(slotCheckActions()) );
