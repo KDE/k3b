@@ -144,7 +144,7 @@ void K3bDiskInfoDetector::slotDiskInfoFinished()
 	if( ok )
 	  m_info.size = size;
 	else
-	  qDebug("(K3bDiskInfoDetector) could not parse # of blocks from: " + m_info.sizeString.mid( start, end-start ) );
+	  qDebug("(K3bDiskInfoDetector) could not parse # of blocks from: %s", m_info.sizeString.mid( start, end-start ).latin1() );
       }
 
       else if( str.startsWith("CD-R medium") ) {
@@ -174,7 +174,7 @@ void K3bDiskInfoDetector::slotDiskInfoFinished()
 	if( ok )
 	  m_info.sessions = value;
 	else
-	  qDebug("(K3bDiskInfoDetector) Could not parse # of sessions: " + str.mid( str.find(":")+1 ).stripWhiteSpace() );
+	  qDebug("(K3bDiskInfoDetector) Could not parse # of sessions: %s", str.mid( str.find(":")+1 ).stripWhiteSpace().latin1() );
       }
 
       else if( str.startsWith("Appendable") ) {
@@ -192,11 +192,11 @@ void K3bDiskInfoDetector::slotDiskInfoFinished()
 	if( ok )
 	  m_info.remaining = size;
 	else
-	  qDebug("(K3bDiskInfoDetector) could not parse # of blocks from: " + m_info.remainingString.mid( start, end-start ) );
+	  qDebug("(K3bDiskInfoDetector) could not parse # of blocks from: %s", m_info.remainingString.mid( start, end-start ).latin1() );
       }
 
       else {
-	qDebug("(K3bDiskInfoDetector) unusable cdrdao output: " + str );
+	qDebug("(K3bDiskInfoDetector) unusable cdrdao output: %s", str.latin1() );
       }
     }
 
@@ -337,20 +337,20 @@ void K3bDiskInfoDetector::slotTocInfoFinished()
 	      lastTrack = K3bTrack( startSec, startSec, control, mode );
 	    }
 	    else {
-	      qDebug("(K3bDiskInfoDetector) Could not parse mode of track: " + str.mid( start ) );
+	      qDebug("(K3bDiskInfoDetector) Could not parse mode of track: %s", str.mid( start ).latin1() );
 	    }
 	  }
 	  else {
-	    qDebug("(K3bDiskInfoDetector) Could not parse control of track: " + str.mid( start, end-start ) );
+	    qDebug("(K3bDiskInfoDetector) Could not parse control of track: %s", str.mid( start, end-start ).latin1() );
 	  }
 	}
 	else {
-	  qDebug("(K3bDiskInfoDetector) Could not parse start secstor of track: " + str.mid( start, end-start ) );
+	  qDebug("(K3bDiskInfoDetector) Could not parse start secstor of track: %s", str.mid( start, end-start ).latin1() );
 	}
       }
 
       else {
-	qDebug("(K3bDiskInfoDetector) unusable cdrecord output: " + str );
+	qDebug("(K3bDiskInfoDetector) unusable cdrecord output: %s", str.latin1() );
       }
     }
 

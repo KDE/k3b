@@ -21,6 +21,7 @@ class K3bDiskInfo
     remaining(0),
     speed(0), 
     sessions(0),
+    tocType(AUDIO),
     valid(true),
     device(0)
     { }
@@ -32,14 +33,17 @@ class K3bDiskInfo
   QString mediumType;
   QString sizeString;
   QString remainingString;
+
+  bool empty;
+  bool cdrw;
+  bool appendable;
+  bool noDisk;
+
   unsigned long size;
   unsigned long remaining;
-  bool cdrw;
+
   int speed;
-  bool appendable;
   int sessions;
-  bool noDisk;
-  bool empty;
   int tocType;
 
   // iso stuff
