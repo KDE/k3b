@@ -19,7 +19,7 @@
 
 #include "../k3b.h"
 #include "../tools/k3bexternalbinmanager.h"
-#include "../device/k3bemptydiscwaiter.h"
+#include "../k3bemptydiscwaiter.h"
 #include "../device/k3bdevice.h"
 #include "../cdinfo/k3bdiskinfo.h"
 #include "../cdinfo/k3bdiskinfodetector.h"

@@ -23,7 +23,7 @@
 #include "../k3b.h"
 #include "../tools/k3bglobals.h"
 #include "../device/k3bdevice.h"
-#include "../device/k3bemptydiscwaiter.h"
+#include "../k3bemptydiscwaiter.h"
 #include "k3bdiritem.h"
 #include "../tools/k3bexternalbinmanager.h"
 

@@ -24,7 +24,7 @@
 #include "k3baudiotrack.h"
 #include "input/k3baudiomodule.h"
 #include "../device/k3bdevice.h"
-#include "../device/k3bemptydiscwaiter.h"
+#include "../k3bemptydiscwaiter.h"
 #include "../tools/k3bexternalbinmanager.h"
 
 #include <kprocess.h>
