@@ -2,7 +2,7 @@
  * FLAC decoder module for K3b.
  * Based on the Ogg Vorbis module for same.
  * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
- * Copyright (C) 2003 John Steele Scott <toojays@toojays.net>
+ * Copyright (C) 2003-2004 John Steele Scott <toojays@toojays.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,14 +28,18 @@
 #include <FLAC++/metadata.h>
 #include <FLAC++/decoder.h>
 
+#include <config.h>
 
+#ifdef HAVE_LIBID3
+#include <id3/misc_support.h>
+#endif
 
 class K3bFLACDecoder::Private
   : public FLAC::Decoder::SeekableStream
 {
 public:
   void open(QFile* f) {
-    file = f;	
+    file = f;
     file->open(IO_ReadOnly);
     
     internalBuffer->flush();
@@ -103,7 +107,7 @@ bool K3bFLACDecoder::Private::eof_callback() {
   return file->atEnd();
 }
 
-FLAC__SeekableStreamDecoderReadStatus K3bFLACDecoder::Private::read_callback(FLAC__byte buffer[],       								    unsigned *bytes) {
+FLAC__SeekableStreamDecoderReadStatus K3bFLACDecoder::Private::read_callback(FLAC__byte buffer[],                                                                             unsigned *bytes) {
   long retval =  file->readBlock((char *)buffer, (*bytes));
   if(-1 == retval) {
     return FLAC__SEEKABLE_STREAM_DECODER_READ_STATUS_ERROR;
@@ -205,20 +209,32 @@ bool K3bFLACDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate, int
 
   // add meta info
   if( d->comments != 0 ) {
+    kdDebug() << "(K3bFLACDecoder) unpacking Vorbis tags" << endl;
     for( unsigned int i = 0; i < d->comments->get_num_comments(); ++i ) {
       QString key = QString::fromUtf8( d->comments->get_comment(i).get_field_name(),
-				       d->comments->get_comment(i).get_field_name_length() );
+                                       d->comments->get_comment(i).get_field_name_length() );
       QString value = QString::fromUtf8( d->comments->get_comment(i).get_field_value(),
-					 d->comments->get_comment(i).get_field_value_length() );
+                                         d->comments->get_comment(i).get_field_value_length() );
 
       if( key.upper() == "TITLE" )
-	addMetaInfo( META_TITLE, value );
+        addMetaInfo( META_TITLE, value );
       else if( key.upper() == "ARTIST" )
-	addMetaInfo( META_ARTIST, value );
+        addMetaInfo( META_ARTIST, value );
       else if( key.upper() == "DESCRIPTION" )
-	addMetaInfo( META_COMMENT, value );
+        addMetaInfo( META_COMMENT, value );
     }
   }
+#ifdef HAVE_LIBID3
+  if ((d->comments == 0) || (d->comments->get_num_comments() == 0)) {
+    // no Vorbis comments, check for ID3 tags
+    kdDebug() << "(K3bFLACDecoder) using id3lib to read tag" << endl;
+    ID3_Tag id3Tag( QFile::encodeName(filename()) );
+
+    addMetaInfo( META_TITLE, ID3_GetTitle( &id3Tag ) );
+    addMetaInfo( META_ARTIST,  ID3_GetArtist( &id3Tag ) );
+    addMetaInfo( META_COMMENT, ID3_GetComment( &id3Tag ) );
+  }
+#endif
 
   return true;
 }
@@ -246,7 +262,7 @@ int K3bFLACDecoder::decodeInternal( char* _data, int maxLen )
       break;
     case FLAC__SEEKABLE_STREAM_DECODER_OK:
       if(! d->process_single())
-	return -1;
+        return -1;
       break;
     default:
       return -1;
@@ -282,9 +298,9 @@ QString K3bFLACDecoder::fileType() const
 QStringList K3bFLACDecoder::supportedTechnicalInfos() const
 {
   return QStringList::split( ";", 
-			     i18n("Channels") + ";" +
-			     i18n("Sampling Rate") + ";" +
-			     i18n("Sample Size") );
+                             i18n("Channels") + ";" +
+                             i18n("Sampling Rate") + ";" +
+                             i18n("Sample Size") );
 }
 
 
@@ -319,8 +335,8 @@ K3bFLACDecoderFactory::~K3bFLACDecoderFactory()
 
 
 K3bPlugin* K3bFLACDecoderFactory::createPluginObject( QObject* parent, 
-						      const char* name,
-						      const QStringList& )
+                                                      const char* name,
+                                                      const QStringList& )
 {
   return new K3bFLACDecoder( parent, name );
 }
@@ -328,19 +344,51 @@ K3bPlugin* K3bFLACDecoderFactory::createPluginObject( QObject* parent,
 
 bool K3bFLACDecoderFactory::canDecode( const KURL& url )
 {
-  char buf[4];
+  // buffer large enough to read an ID3 tag header
+  char buf[10];
 
+  // Note: since file is created on the stack it will be closed automatically
+  // by its destructor when this method (i.e. canDecode) returns.
   QFile file(url.path());
+
   if(!file.open(IO_ReadOnly)) {
     kdDebug() << "(K3bFLACDecoder) Could not open file " << url.path() << endl;
     return false;
   }
 
-  file.readBlock(buf, 4);
-  file.close();
+  // look for a fLaC magic number or ID3 tag header
+  if(10 != file.readBlock(buf, 10)) {
+    kdDebug() << "(K3bFLACDecorder) File " << url.path()
+              << " is too small to be a FLAC file" << endl;
+    return false;
+  }
+
+  if(0 == memcmp(buf, "ID3", 3)) {
+    // Found ID3 tag, try and seek past it.
+    kdDebug() << "(K3bFLACDecorder) File " << url.path() << ": found ID3 tag" << endl;
+
+    // See www.id3.org for details of the header, note that the size field
+    // unpacks to 7-bit bytes, then the +10 is for the header itself.
+    int pos;
+    pos = ((buf[6]<<21)|(buf[7]<<14)|(buf[8]<<7)|buf[9]) + 10;
+
+    kdDebug() << "(K3bFLACDecoder) " << url.path() << ": seeking to " 
+              << pos << endl;
+    if(file.at(pos) != TRUE) {
+      kdDebug() << "(K3bFLACDecoder) " << url.path() << ": couldn't seek to " 
+                << pos << endl;
+      return false;
+    }else{
+      // seek was okay, try and read magic number into buf
+      if(4 != file.readBlock(buf, 4)) {
+        kdDebug() << "(K3bFLACDecorder) File " << url.path()
+                  << " has ID3 tag but naught else!" << endl;
+        return false;
+      }
+    }
+  }
 
   if(memcmp(buf, "fLaC", 4) != 0) {
-
     kdDebug() << "(K3bFLACDecoder) " << url.path() << ": not a FLAC file" << endl;
     return false;
   }
@@ -353,12 +401,12 @@ bool K3bFLACDecoderFactory::canDecode( const KURL& url )
     return true;
   } else {
     kdDebug() << "(K3bFLACDecoder) " << url.path() << ": wrong format:" << endl
-	      << "                channels:    " 
-	      << QString::number(info.get_channels()) << endl
-	      << "                samplerate:  "
-	      << QString::number(info.get_sample_rate()) << endl
-	      << "                bits/sample: "
-	      << QString::number(info.get_bits_per_sample()) << endl;
+              << "                channels:    " 
+              << QString::number(info.get_channels()) << endl
+              << "                samplerate:  "
+              << QString::number(info.get_sample_rate()) << endl
+              << "                bits/sample: "
+              << QString::number(info.get_bits_per_sample()) << endl;
     return false;
   }
 }
