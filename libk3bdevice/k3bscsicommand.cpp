@@ -166,14 +166,16 @@ QString K3bDevice::ScsiCommand::senseKeyToString( int key )
 
 
 void K3bDevice::ScsiCommand::debugError( int command, int errorCode, int senseKey, int asc, int ascq ) {
-  kdDebug() << "(K3bDevice::ScsiCommand) failed: " << endl
-	    << "                           command:    " << QString("%1 (%2)")
-    .arg( K3bDevice::commandString( command ) )
-    .arg( QString::number(command, 16) ) << endl
-	    << "                           errorcode:  " << QString::number(errorCode, 16) << endl
-	    << "                           sense key:  " << senseKeyToString(senseKey) << endl
-	    << "                           asc:        " << QString::number(asc, 16) << endl
-	    << "                           ascq:       " << QString::number(ascq, 16) << endl;
+  if( m_printErrors ) {
+    kdDebug() << "(K3bDevice::ScsiCommand) failed: " << endl
+	      << "                           command:    " << QString("%1 (%2)")
+      .arg( K3bDevice::commandString( command ) )
+      .arg( QString::number(command, 16) ) << endl
+	      << "                           errorcode:  " << QString::number(errorCode, 16) << endl
+	      << "                           sense key:  " << senseKeyToString(senseKey) << endl
+	      << "                           asc:        " << QString::number(asc, 16) << endl
+	      << "                           ascq:       " << QString::number(ascq, 16) << endl;
+  }
 }
 
 
@@ -190,7 +192,8 @@ void K3bDevice::ScsiCommand::debugError( int command, int errorCode, int senseKe
 K3bDevice::ScsiCommand::ScsiCommand( int fd )
   : d(new Private),
     m_fd(fd),
-    m_device(0)
+    m_device(0),
+    m_printErrors(false)
 {
   clear();
 }
@@ -199,7 +202,8 @@ K3bDevice::ScsiCommand::ScsiCommand( int fd )
 K3bDevice::ScsiCommand::ScsiCommand( const K3bDevice::Device* dev )
   : d(new Private),
     m_fd(-1),
-    m_device(dev)
+    m_device(dev),
+    m_printErrors(false)
 {
   // if the device is already opened we do not close it
   // to allow fast multible method calls in a row
@@ -217,3 +221,4 @@ K3bDevice::ScsiCommand::~ScsiCommand()
   if( m_device && m_needToCloseDevice )
     m_device->close();
 }
+

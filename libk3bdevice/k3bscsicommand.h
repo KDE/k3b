@@ -94,6 +94,8 @@ namespace K3bDevice
       ScsiCommand( const Device* );
       ~ScsiCommand();
 
+      void enableErrorMessages( bool b ) { m_printErrors = b; }
+
       void clear();
 
       unsigned char& operator[]( size_t );
@@ -104,7 +106,7 @@ namespace K3bDevice
 
     private:
       static QString senseKeyToString( int key );
-      static void debugError( int command, int errorCode, int senseKey, int asc, int ascq );
+      void debugError( int command, int errorCode, int senseKey, int asc, int ascq );
 
       // The private class holds OS-specific things that would
       // otherwise be member variables. There are parts of ScsiCommand
@@ -115,6 +117,7 @@ namespace K3bDevice
       int m_fd;
       const Device* m_device;
       bool m_needToCloseDevice;
+      bool m_printErrors;
     };
 }
 

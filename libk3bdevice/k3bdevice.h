@@ -498,6 +498,10 @@ namespace K3bDevice
      */
     bool isOpen() const;
 
+    /**
+     * @return -1 on error (no DVD), 1 (CSS/CPPM) or 2 (CPRM) if scrambled, 0 otherwise
+     */
+    int copyrightProtectionSystemType() const;
 
     // MMC commands
 

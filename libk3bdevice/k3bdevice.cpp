@@ -2997,6 +2997,22 @@ void K3bDevice::Device::searchIndexTransitions( long start, long end, K3bDevice:
 }
 
 
+int K3bDevice::Device::copyrightProtectionSystemType() const
+{
+  unsigned char* dvdheader = 0;
+  int dataLen = 0;
+  if( readDvdStructure( &dvdheader, dataLen, 0x1 ) ) {
+    int ret = -1;
+    if( dataLen >= 6 )
+      ret = dvdheader[4];
+    delete [] dvdheader;
+    return ret;
+  }
+  else
+    return -1;
+}
+
+
 #ifdef Q_OS_FREEBSD
 struct cam_device *K3bDevice::Device::cam() const
 {

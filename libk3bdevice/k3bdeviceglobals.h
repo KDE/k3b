@@ -18,10 +18,13 @@
 #define _K3B_DEVICE_GLOBALS_H_
 
 #include <qstring.h>
+#include <k3bmsf.h>
 
 
 namespace K3bDevice 
 {
+  class Device;
+
   QString deviceTypeString( int );
   QString writingModeString( int );
   /**
@@ -36,6 +39,12 @@ namespace K3bDevice
   char fromBcd( const char& );
   char toBcd( const char& );
   bool isValidBcd( const char& );
+
+  /**
+   * @return the maximum nuber of sectors that can be read from device @p dev starting
+   * at sector @p firstSector.
+   */
+  int determineMaxReadingBufferSize( Device* dev, const K3b::Msf& firstSector );
 }
 
 #endif

@@ -169,3 +169,24 @@ bool K3bDevice::isValidBcd( const char& i )
 {
   return ( i & 0x0f ) <= 0x09 && ( i & 0xf0 ) <= 0x90;
 }
+
+
+int K3bDevice::determineMaxReadingBufferSize( K3bDevice::Device* dev, const K3b::Msf& firstSector )
+{
+  //
+  // As long as we do not know how to determine the max read buffer properly we simply determine it
+  // by trying. :)
+  //
+
+  int bufferSizeSectors = 128;
+  unsigned char buffer[2048*128];
+  while( !dev->read10( buffer, 2048*bufferSizeSectors, firstSector.lba(), bufferSizeSectors ) ) {
+    kdDebug() << "(K3bDataTrackReader) determine max read sectors: "
+	      << bufferSizeSectors << " too high." << endl;
+    bufferSizeSectors--;
+  }
+  kdDebug() << "(K3bDataTrackReader) determine max read sectors: " 
+	    << bufferSizeSectors << " is max." << endl;
+
+  return bufferSizeSectors;
+}
