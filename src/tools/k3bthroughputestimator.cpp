@@ -80,9 +80,9 @@ void K3bThroughputEstimator::dataWritten( unsigned long data )
     unsigned long diff = data - d->lastData;
     int msecs = d->lastDataTime.elapsed();
 
-//    if( msecs > 0 ) {
+    //if( msecs > 0 ) {
     // down the update sequence a little bit
-    if( msecs > 5000 ) {
+    if( msecs > 500 ) {
       d->lastData = data;
       d->lastDataTime.start();
       int t = (int)(1000.0*(double)diff/(double)msecs);

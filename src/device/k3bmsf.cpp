@@ -117,6 +117,36 @@ K3b::Msf& K3b::Msf::operator-=( int i )
 }
 
 
+const K3b::Msf K3b::Msf::operator++( int )
+{
+  Msf old = *this;
+  ++(*this);
+  return old;
+}
+
+
+K3b::Msf& K3b::Msf::operator++()
+{
+  (*this) += 1;
+  return *this;
+}
+
+
+const K3b::Msf K3b::Msf::operator--( int )
+{
+  Msf old = *this;
+  --(*this);
+  return old;
+}
+
+
+K3b::Msf& K3b::Msf::operator--()
+{
+  (*this) -= 1;
+  return *this;
+}
+
+
 QString K3b::Msf::toString( bool showFrames ) const
 {
   QString str;

@@ -45,6 +45,10 @@ namespace K3b
       Msf& operator+=( int );
       Msf& operator-=( const Msf& );
       Msf& operator-=( int );
+      const Msf operator++( int );
+      Msf& operator++();
+      const Msf operator--( int );
+      Msf& operator--();
 
       int minutes() const { return m_minutes; }
       int seconds() const { return m_seconds; }

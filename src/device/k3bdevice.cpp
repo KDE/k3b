@@ -1036,50 +1036,8 @@ int K3bCdDevice::CdDevice::numSessions() const
 }
 
 
-int K3bCdDevice::CdDevice::getTrackDataMode(int lba) const
+int K3bCdDevice::CdDevice::getDataMode( const K3b::Msf& sector ) const
 {
-//   bool needToClose = !isOpen();
-//
-//   int ret = Track::UNKNOWN;
-//   if (open() < 0)
-//     return ret;
-//
-//   struct cdrom_generic_command cmd;
-//   unsigned char dat[8];
-//
-//   ::memset(&cmd,0,sizeof (struct cdrom_generic_command));
-//   ::memset(dat,0,8);
-//   cmd.cmd[0] = READ HEADER;
-//   cmd.cmd[1] = 0; // lba
-//   cmd.cmd[3] = (lba & 0xFF0000 ) >> 16;
-//   cmd.cmd[4] = (lba & 0x00FF00 ) >> 8;
-//   cmd.cmd[5] = (lba & 0x0000FF );
-//
-//   cmd.cmd[8] = 8;
-//   cmd.quiet = 1;
-//   cmd.buffer = dat;
-//   cmd.buflen = 8;
-//   cmd.timeout = 4*60*1000;
-//   cmd.data_direction = CGC_DATA_READ;
-//
-//   //
-//   if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) == 0 ) {
-//     switch( (int)dat[0] ) {
-//     case 1:
-//       ret = Track::MODE1;
-//       break;
-//     case 2:
-//       ret = Track::MODE2;
-//       break;
-//     default:
-//       ret = Track::UNKNOWN;
-//     }
-//   } else
-//     kdDebug() << "(K3bCdDevice) could not get track header, (lba " << lba << ") ! "  << strerror(errno) << endl;
-//   if( needToClose )
-//     close();
-//
-//   return ret;
   bool needToClose = !isOpen();
 
   int ret = Track::UNKNOWN;
@@ -1087,30 +1045,29 @@ int K3bCdDevice::CdDevice::getTrackDataMode(int lba) const
   if (open() < 0)
     return ret;
 
-  unsigned char data[CD_FRAMESIZE_RAW];
-  bool readSuccess = readSectorsRaw( data, lba, 1 );
+  unsigned char data[2352];
+  bool readSuccess = readSectorsRaw( data, sector.lba(), 1 );
 
 #ifdef Q_OS_LINUX
   if( !readSuccess ) {
     kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName()
 	      << ": MMC RAW READ failed. falling back to cdrom.h." << endl;
 
-    K3b::Msf msf(lba + CD_MSF_OFFSET);
-    data[0] = msf.minutes();
-    data[1] = msf.seconds();
-    data[2] = msf.frames();
+    data[0] = sector.minutes();
+    data[1] = sector.seconds();
+    data[2] = sector.frames();
     if( ::ioctl(d->deviceFd,CDROMREADRAW,data) == -1 ) {
       kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName()
-		<< ": could not get track header, (lba " << lba << ") ! "  << strerror(errno) << endl;
+		<< ": could not get track header, (lba " << sector.lba() << ") ! "  << strerror(errno) << endl;
       readSuccess = false;
     }
   }
 #endif // Q_OS_LINUX
 
   if( readSuccess ) {
-    if ( data[15] == 1 )
+    if ( data[15] == 0x1 )
       ret = Track::MODE1;
-    else if ( data[15] == 2 )
+    else if ( data[15] == 0x2 )
       ret = Track::MODE2;
     if ( ret == Track::MODE2 ) {
       if ( data[16] == data[20] &&
@@ -1131,6 +1088,12 @@ int K3bCdDevice::CdDevice::getTrackDataMode(int lba) const
   return ret;
 }
 
+
+
+int K3bCdDevice::CdDevice::getTrackDataMode( const K3bCdDevice::Track& track ) const
+{
+  return getDataMode( track.firstSector() );
+}
 
 
 K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc() const
@@ -1307,7 +1270,7 @@ bool K3bCdDevice::CdDevice::readFormattedToc( K3bCdDevice::Toc& toc, bool dvd ) 
       }
       else {
 	track.m_type = (control & 0x4) ? Track::DATA : Track::AUDIO;
-	track.m_mode = getTrackDataMode( track.firstSector().lba() );
+	track.m_mode = getTrackDataMode( track );
       }
       track.m_copyPermitted = ( control & 0x2 );
       track.m_preEmphasis = ( control & 0x1 );
@@ -1380,7 +1343,7 @@ bool K3bCdDevice::CdDevice::readRawToc( K3bCdDevice::Toc& toc ) const
 	  track.m_session = tr[i].session_number;
 	  track.m_firstSector = K3b::Msf( tr[i].p_min, tr[i].p_sec, tr[i].p_frame ) - 150; // :( We use 00:00:00 == 0 lba)
 	  track.m_type = ( tr[i].control & 0x4 ? Track::DATA : Track::AUDIO );
-	  track.m_mode = ( track.type() == Track::DATA ? getTrackDataMode(track.firstSector().lba()) : Track::UNKNOWN );
+	  track.m_mode = ( track.type() == Track::DATA ? getTrackDataMode(track) : Track::UNKNOWN );
 	  track.m_copyPermitted = ( tr[i].control & 0x2 );
 	  track.m_preEmphasis = ( tr[i].control & 0x1 );
 
@@ -1672,7 +1635,7 @@ bool K3bCdDevice::CdDevice::readTocLinux( K3bCdDevice::Toc& toc ) const
           else if( mode == 2 )
             trackMode = Track::MODE2;
 
-          mode = getTrackDataMode(startSec);
+          mode = getDataMode(startSec);
           if( mode != Track::UNKNOWN )
             trackMode = mode;
         } 

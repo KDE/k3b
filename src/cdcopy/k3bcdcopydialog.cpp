@@ -55,9 +55,9 @@
 #include <qpushbutton.h>
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
-
-#include <k3biso9660.h>
+#include <qsizepolicy.h>
 #include <qfile.h>
+
 
 K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal )
   : K3bInteractionDialog( parent, name, i18n("CD Copy"), i18n("and CD Cloning"),
@@ -118,9 +118,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   if( K3bTheme* theme = k3bthememanager->currentTheme() )
     pixLabel->setPixmap( theme->pixmap( "k3b_cd_copy" ) );
   pixLabel->setScaledContents( false );
-  m_spinCopies = new QSpinBox( groupCopies );
-  m_spinCopies->setMinValue( 1 );
-  m_spinCopies->setMaxValue( 99 );
+  m_spinCopies = new QSpinBox( 1, 99, 1, groupCopies );
 
   m_tempDirSelectionWidget = new K3bTempDirSelectionWidget( optionTab );
 
@@ -147,8 +145,9 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   groupGeneral->setInsideMargin( marginHint() );
   QHBox* box = new QHBox( groupGeneral );
   box->setSpacing( spacingHint() );
-  box->setStretchFactor(new QLabel( i18n("Read Retries:"), box ), 1 );
+  box->setStretchFactor( new QLabel( i18n("Read Retries:"), box ), 1 );
   m_spinRetries = new QSpinBox( 1, 128, 1, box );
+
   m_checkIgnoreReadErrors = new QCheckBox( i18n("Ignore read errors"), groupGeneral );
 
   QGroupBox* groupAudio = new QGroupBox( 3, Qt::Vertical, i18n("Audio"), advancedTab ); 
@@ -166,11 +165,10 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   groupData->setInsideMargin( marginHint() );
   m_checkNoCorrection = new QCheckBox( i18n("No error correction"), groupData );
 
-  advancedTabGrid->addMultiCellWidget( groupGeneral, 0, 0, 0, 1 );  
-  advancedTabGrid->addWidget( groupAudio, 1, 0 );
-  advancedTabGrid->addWidget( groupData,   1, 1 );
+  advancedTabGrid->addWidget( groupGeneral, 0, 0 );
+  advancedTabGrid->addWidget( groupData, 1, 0 );
+  advancedTabGrid->addMultiCellWidget( groupAudio, 0, 1, 1, 1 );  
   advancedTabGrid->setRowStretch( 1, 1 );
-  advancedTabGrid->setColStretch( 1, 1 );
 
   tabWidget->addTab( advancedTab, i18n("&Advanced") );
 
@@ -204,7 +202,14 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
 					     "that are unreadable by intention can be read."
 					     "<p>This may be useful for cloning CDs with copy "
 					     "protection based on corrupted sectors.") );
-  
+  QWhatsThis::add( m_radioNormalCopy, i18n("<p>This is the normal copy mode recommended for most CD types. "
+					   "It allows copying Audio CDs, multi and single session Data CDs, and "
+					   "Enhanced Audio CDs (an Audio CD containing an additional data session."
+					   "<p>For VideoCDs please use the CD Cloning mode.") );
+  QWhatsThis::add( m_radioCloneCopy, i18n("<p>In CD Cloning mode K3b performs a raw copy of the CD. That means it does "
+					  "not care about the content but simply copies the CD bit by bit. It may be used "
+					  "to copy VideoCDs or CDs which contain erroneous sectors."
+					  "<p><b>Caution:</b> Only single session CDs can be cloned.") );
 
   slotLoadUserDefaults();
 }

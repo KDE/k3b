@@ -26,6 +26,7 @@
 #include <k3bglobals.h>
 #include <k3bdevicehandler.h>
 #include <k3breadcdreader.h>
+#include <k3bdatatrackreader.h>
 #include <k3bcdrecordwriter.h>
 #include <k3bcdtext.h>
 #include <cddb/k3bcddb.h>
@@ -60,6 +61,7 @@ public:
     : canceled(false),
       running(false),
       readcdReader(0),
+      dataTrackReader(0),
       audioSessionReader(0),
       cdrecordWriter(0),
       infFileWriter(0),
@@ -82,6 +84,7 @@ public:
   QByteArray cdTextRaw;
 
   K3bReadcdReader* readcdReader;
+  K3bDataTrackReader* dataTrackReader;
   K3bAudioSessionReadingJob* audioSessionReader;
   K3bCdrecordWriter* cdrecordWriter;
   K3bInfFileWriter* infFileWriter;
@@ -300,7 +303,7 @@ void K3bCdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
 	  d->sessionSizes[0] += (*it).length().lba();
       }
 
-      if( audio ) {
+      if( audio && !m_onlyCreateImages ) {
 	emit newSubTask( i18n("Searching CD-TEXT") );
 	
 	connect( K3bCdDevice::sendCommand( K3bCdDevice::DeviceHandler::CD_TEXT_RAW, m_readerDevice ),
@@ -427,7 +430,8 @@ void K3bCdCopyJob::cancel()
   else if( d->audioReaderRunning )
     d->audioSessionReader->cancel();
   else if( d->dataReaderRunning )
-    d->readcdReader->cancel();
+    //    d->readcdReader->cancel();
+    d->dataTrackReader->cancel();
 }
 
 
@@ -547,23 +551,37 @@ void K3bCdCopyJob::readNextSession()
     d->audioSessionReader->start();
   }
   else {
-    if( !d->readcdReader ) {
-      d->readcdReader = new K3bReadcdReader( this );
-      connect( d->readcdReader, SIGNAL(percent(int)), this, SLOT(slotReaderProgress(int)) );
-      connect( d->readcdReader, SIGNAL(processedSize(int, int)), this, SLOT(slotReaderProcessedSize(int, int)) );
-      connect( d->readcdReader, SIGNAL(finished(bool)), this, SLOT(slotSessionReaderFinished(bool)) );
-      connect( d->readcdReader, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
-      connect( d->readcdReader, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+//     if( !d->readcdReader ) {
+//       d->readcdReader = new K3bReadcdReader( this );
+//       connect( d->readcdReader, SIGNAL(percent(int)), this, SLOT(slotReaderProgress(int)) );
+//       connect( d->readcdReader, SIGNAL(processedSize(int, int)), this, SLOT(slotReaderProcessedSize(int, int)) );
+//       connect( d->readcdReader, SIGNAL(finished(bool)), this, SLOT(slotSessionReaderFinished(bool)) );
+//       connect( d->readcdReader, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
+//       connect( d->readcdReader, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+// 	       this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
+//     }
+
+//     d->readcdReader->setReadDevice( m_readerDevice );
+//     d->readcdReader->setAbortOnError( !m_ignoreReadErrors );
+//     d->readcdReader->setClone( false );
+//     d->readcdReader->setRetries( m_readRetries );
+
+    if( !d->dataTrackReader ) {
+      d->dataTrackReader = new K3bDataTrackReader( this );
+      connect( d->dataTrackReader, SIGNAL(percent(int)), this, SLOT(slotReaderProgress(int)) );
+      connect( d->dataTrackReader, SIGNAL(processedSize(int, int)), this, SLOT(slotReaderProcessedSize(int, int)) );
+      connect( d->dataTrackReader, SIGNAL(finished(bool)), this, SLOT(slotSessionReaderFinished(bool)) );
+      connect( d->dataTrackReader, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
+      connect( d->dataTrackReader, SIGNAL(debuggingOutput(const QString&, const QString&)), 
 	       this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
     }
 
-    d->readcdReader->setReadDevice( m_readerDevice );
-    d->readcdReader->setAbortOnError( !m_ignoreReadErrors );
-    d->readcdReader->setClone( false );
-    d->readcdReader->setRetries( m_readRetries );
+    d->dataTrackReader->setDevice( m_readerDevice );
+    d->dataTrackReader->setIgnoreErrors( m_ignoreReadErrors );
+    d->dataTrackReader->setRetries( m_readRetries );
     
     K3bTrack* track = 0;
-    int dataTrackIndex = -1;
+    unsigned int dataTrackIndex = 0;
     if( d->toc.contentType() == K3bCdDevice::MIXED ) {
       track = &d->toc[d->toc.count()-1];
       dataTrackIndex = 0;
@@ -576,28 +594,51 @@ void K3bCdCopyJob::readNextSession()
     // HACK: if the track is TAO recorded cut the two run-out sectors
     if( d->dataSessionProbablyTAORecorded.count() > dataTrackIndex &&
 	d->dataSessionProbablyTAORecorded[dataTrackIndex] )
-      d->readcdReader->setSectorRange( track->firstSector(), track->lastSector() - 2 );
+      //      d->readcdReader->setSectorRange( track->firstSector(), track->lastSector() - 2 );
+      d->dataTrackReader->setSectorRange( track->firstSector(), track->lastSector() - 2 );
     else
-      d->readcdReader->setSectorRange( track->firstSector(), track->lastSector() );
+      //      d->readcdReader->setSectorRange( track->firstSector(), track->lastSector() );
+      d->dataTrackReader->setSectorRange( track->firstSector(), track->lastSector() );
+
+    int trackNum = d->currentReadSession;
+    if( d->toc.contentType() == K3bCdDevice::MIXED )
+      trackNum = d->toc.count();
 
     if( m_onTheFly )
-      d->readcdReader->writeToFd( d->cdrecordWriter->fd() );
+      //      d->readcdReader->writeToFd( d->cdrecordWriter->fd() );
+      d->dataTrackReader->writeToFd( d->cdrecordWriter->fd() );
     else {
-      int trackNum = d->currentReadSession;
-      if( d->toc.contentType() == K3bCdDevice::MIXED )
-	trackNum = d->toc.count();
-      d->readcdReader->setImagePath( d->imageNames[trackNum-1] );
+      //      d->readcdReader->setImagePath( d->imageNames[trackNum-1] );
+      d->dataTrackReader->setImagePath( d->imageNames[trackNum-1] );
     }
 
     d->dataReaderRunning = true;
-    slotReadingNextTrack( 1, 1 );
-    d->readcdReader->start();
+    if( !m_onTheFly || m_onlyCreateImages )
+      slotReadingNextTrack( 1, 1 );
+    //    d->readcdReader->start();
+    d->dataTrackReader->start();
   }
 }
 
 
 bool K3bCdCopyJob::writeNextSession()
 {
+  // we emit our own task since the cdrecord task is way too simple
+  if( d->numSessions > 1 ) {
+    if( m_simulate )
+      emit newTask( i18n("Simulating Session %1").arg(d->currentWrittenSession) );
+    else
+      emit newTask( i18n("Writing Copy %1 (Session %2)").arg(d->doneCopies+1).arg(d->currentWrittenSession) );
+  }
+  else {
+    if( m_simulate )
+      emit newTask( i18n("Simulating") );
+    else
+      emit newTask( i18n("Writing Copy %1").arg(d->doneCopies+1) );
+  }
+
+  emit newSubTask( i18n("Waiting for disk") );
+
   // if session > 1 we wait for an appendable CD
   if( K3bEmptyDiscWaiter::wait( m_writerDevice, d->currentWrittenSession > 1 ) == K3bEmptyDiscWaiter::CANCELED ) {
     d->canceled = true;
@@ -654,6 +695,7 @@ bool K3bCdCopyJob::writeNextSession()
 
 	d->infFileWriter->setTrack( track );
 	d->infFileWriter->setTrackNumber( trackNumber );
+	d->infFileWriter->setBigEndian( false );
 
 	if( d->haveCddb ) {
 	  d->infFileWriter->setTrackTitle( d->cddbInfo.titles[trackNumber-1] );
@@ -665,7 +707,6 @@ bool K3bCdCopyJob::writeNextSession()
 	}
 
 	if( m_onTheFly ) {
-	  d->infFileWriter->setBigEndian( false );
 
 	  // we let KTempFile choose a temp file but delete it on our own
 	  // the same way we delete them when writing with images
@@ -680,8 +721,6 @@ bool K3bCdCopyJob::writeNextSession()
 	    return false;
 	}
 	else {
-	  d->infFileWriter->setBigEndian( false );
-	  
 	  if( !d->infFileWriter->save( d->infNames[trackNumber-1] ) )
 	    return false;
 	}
@@ -763,8 +802,12 @@ bool K3bCdCopyJob::writeNextSession()
     if( multi )
       d->cdrecordWriter->addArgument( "-multi" );
 
+    // just to let the reader init
+    if( m_onTheFly )
+      d->cdrecordWriter->addArgument( "-waiti" );
+
     K3bTrack* track = 0;
-    int dataTrackIndex = -1;
+    unsigned int dataTrackIndex = 0;
     if( d->toc.contentType() == K3bCdDevice::MIXED ) {
       track = &d->toc[d->toc.count()-1];
       dataTrackIndex = 0;
@@ -775,13 +818,17 @@ bool K3bCdCopyJob::writeNextSession()
     }
 
     if( track->mode() == K3bCdDevice::Track::MODE1 )
-      d->cdrecordWriter->addArgument( "-data" ); // unlikely
+      d->cdrecordWriter->addArgument( "-data" );
+    else if( track->mode() == K3bCdDevice::Track::XA_FORM1 )
+      d->cdrecordWriter->addArgument( "-xa1" );
     else {
-      if( k3bcore->externalBinManager()->binObject("cdrecord") && 
-	  k3bcore->externalBinManager()->binObject("cdrecord")->version >= K3bVersion( 2, 1, -1, "a12" ) )
-	d->cdrecordWriter->addArgument( "-xa" );
-      else
-	d->cdrecordWriter->addArgument( "-xa1" );
+//       if( k3bcore->externalBinManager()->binObject("cdrecord") && 
+// 	  k3bcore->externalBinManager()->binObject("cdrecord")->version >= K3bVersion( 2, 1, -1, "a12" ) )
+// 	d->cdrecordWriter->addArgument( "-xa" );
+//       else
+// 	d->cdrecordWriter->addArgument( "-xa1" );
+// FIXME: we need cdrecord >= 2.01a12 for this
+      d->cdrecordWriter->addArgument( "-xamix" );
     }
 
     if( m_onTheFly ) {
@@ -790,7 +837,14 @@ bool K3bCdCopyJob::writeNextSession()
       if( d->dataSessionProbablyTAORecorded.count() > dataTrackIndex &&
 	  d->dataSessionProbablyTAORecorded[dataTrackIndex] )
 	trackLen -= 2;
-      d->cdrecordWriter->addArgument( QString("-tsize=%1s").arg(trackLen) )->addArgument("-");
+
+      if( track->mode() == K3bCdDevice::Track::MODE1 )
+	trackLen = trackLen * 2024;
+      else if( track->mode() == K3bCdDevice::Track::XA_FORM1 )
+	trackLen = trackLen * 2056; // see k3bdatatrackreader.h
+      else
+	trackLen = trackLen * 2332; // see k3bdatatrackreader.h
+      d->cdrecordWriter->addArgument( QString("-tsize=%1").arg(trackLen) )->addArgument("-");
     }
     else if( d->toc.contentType() == K3bCdDevice::MIXED )
       d->cdrecordWriter->addArgument( d->imageNames[d->toc.count()-1] );
@@ -798,20 +852,6 @@ bool K3bCdCopyJob::writeNextSession()
       d->cdrecordWriter->addArgument( d->imageNames[d->currentWrittenSession-1] );
   }
 
-
-  // we emit our own task since the cdrecord task is way too simple
-  if( d->numSessions > 1 ) {
-    if( m_simulate )
-      emit newTask( i18n("Simulating Session %1").arg(d->currentWrittenSession) );
-    else
-      emit newTask( i18n("Writing Copy %1 (Session %2)").arg(d->doneCopies+1).arg(d->currentWrittenSession) );
-  }
-  else {
-    if( m_simulate )
-      emit newTask( i18n("Simulating") );
-    else
-      emit newTask( i18n("Writing Copy %1").arg(d->doneCopies+1) );
-  }
 
   //
   // Finally start the writer
@@ -1028,7 +1068,7 @@ void K3bCdCopyJob::slotReadingNextTrack( int t, int )
     if( d->audioReaderRunning )
       track = t;
     else if( d->toc.contentType() == K3bCdDevice::MIXED )
-      track = d->toc.count()-1;
+      track = d->toc.count();
     else
       track = d->currentReadSession;
 

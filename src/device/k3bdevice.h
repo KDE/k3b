@@ -324,7 +324,12 @@ namespace K3bCdDevice
      * @return The DataMode of the track
      * @see K3bCdDevice::Track
      */
-    int getTrackDataMode( int track ) const;
+    int getTrackDataMode( const Track& track ) const;
+
+    /**
+     * @return the mode of a data track. mode1, mode2 form/1/2 or formless
+     */
+    int getDataMode( const K3b::Msf& sector ) const;
 
     /**
      * block or unblock the drive's tray
