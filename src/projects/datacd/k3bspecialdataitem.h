@@ -40,22 +40,20 @@ class K3bSpecialDataItem : public K3bDataItem
 	parent->addDataItem( this );
     }
 
-  virtual ~K3bSpecialDataItem() {
+  ~K3bSpecialDataItem() {
     // remove this from parentdir
     if( parent() )
       parent()->takeDataItem( this );
   }
 
-  virtual QString localPath() { return ""; }
+  KIO::filesize_t k3bSize() const { return m_k3bSize; }
 
-  virtual KIO::filesize_t k3bSize() const { return m_k3bSize; }
-
-  virtual K3bDirItem* getDirItem() { return parent(); }
+  K3bDirItem* getDirItem() { return parent(); }
 
   void setMimeType( const QString& s ) { m_mimeType = s; }
   const QString& mimeType() const { return m_mimeType; }
 
-  virtual bool isSpecialFile() const { return true; }
+  bool isSpecialFile() const { return true; }
 
  private:
   QString m_mimeType;

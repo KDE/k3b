@@ -23,6 +23,7 @@ class K3bFileItem;
 class K3bDirItem;
 class K3bDataDoc;
 class K3bSpecialDataItem;
+class K3bSessionImportItem;
 
 class QPainter;
 class QColorGroup;
@@ -32,16 +33,25 @@ class QColorGroup;
 class K3bDataViewItem : public K3bListViewItem
 {
  public:
-  K3bDataViewItem( QListView* parent );
-  K3bDataViewItem( QListViewItem* parent );
+  K3bDataViewItem( K3bDataItem*, QListView* parent );
+  K3bDataViewItem( K3bDataItem*, QListViewItem* parent );
   virtual ~K3bDataViewItem();
 	
-  virtual K3bDataItem* dataItem() const { return 0; }
+  virtual K3bDataItem* dataItem() const { return m_dataItem; }
+
+  void setText( int col, const QString& text );
+
+  /**
+   * reimplemented to have directories always sorted before files
+   */
+  QString key( int, bool ) const;
 
   virtual void paintCell( QPainter* p, const QColorGroup& cg, int column, int width, int align );
 
  private:
   void init();
+
+  K3bDataItem* m_dataItem;
 };
 
 
@@ -54,16 +64,7 @@ class K3bDataDirViewItem : public K3bDataViewItem
 	
   virtual QString text( int ) const;
 	
-  /** reimplemented from QListViewItem */
-  void setText(int col, const QString& text );
-
   K3bDirItem* dirItem() const { return m_dirItem; }
-  K3bDataItem* dataItem() const;
-
-  /**
-   * reimplemented to have directories always sorted before files
-   */
-  QString key( int, bool ) const;
 
  protected:
   virtual void dragEntered();
@@ -82,17 +83,8 @@ class K3bDataFileViewItem : public K3bDataViewItem
 	
   QString text( int ) const;
 
-  /** reimplemented from QListViewItem */
-  void setText(int col, const QString& text );
-
   K3bFileItem* fileItem() const { return m_fileItem; }
-  K3bDataItem* dataItem() const;
 
-  /**
-   * reimplemented to have directories always sorted before files
-   */
-  QString key( int, bool ) const;
-	
  private:
   K3bFileItem* m_fileItem;
 };
@@ -120,19 +112,15 @@ class K3bSpecialDataViewItem : public K3bDataViewItem
   K3bSpecialDataViewItem( K3bSpecialDataItem*, QListView* );
 
   QString text( int ) const;
+};
 
-  /** reimplemented from QListViewItem */
-  void setText(int col, const QString& text );
 
-  K3bDataItem* dataItem() const;
+class K3bSessionImportViewItem : public K3bDataViewItem
+{
+ public:
+  K3bSessionImportViewItem( K3bSessionImportItem*, QListView* );
 
-  /**
-   * reimplemented to have directories always sorted before files
-   */
-  QString key( int, bool ) const;
-
- private:
-  K3bSpecialDataItem* m_dataItem;
+  QString text( int ) const;
 };
 
 #endif

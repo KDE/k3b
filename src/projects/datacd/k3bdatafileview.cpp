@@ -107,25 +107,18 @@ void K3bDataFileView::updateContents()
 
   // perhaps we should check if the K3bDirItem m_currentDir still exists
 
-  //  kdDebug() << "(K3bDataFileView) reloading current dir: " << m_currentDir->k3bName() << endl;
-
   for( QPtrListIterator<K3bDataItem> it( *m_currentDir->children() ); it.current(); ++it ) {
     if( it.current()->isDir() )
       (void)new K3bDataDirViewItem( (K3bDirItem*)it.current(), this );
     else if( it.current()->isFile() )
       (void)new K3bDataFileViewItem( (K3bFileItem*)it.current(), this );
-    else
+    else if( it.current()->isSpecialFile() )
       (void)new K3bSpecialDataViewItem( (K3bSpecialDataItem*)it.current(), this );
-
-//     if( K3bDirItem* _item = dynamic_cast<K3bDirItem*>( _it.current() ) ) {
-//       (void)new K3bDataDirViewItem( _item, this );
-//     }
-//     else if( K3bFileItem* _item = dynamic_cast<K3bFileItem*>( _it.current() ) ) {
-//       (void)new K3bDataFileViewItem( _item, this );
-//     }
+    else if( it.current()->isFromOldSession() )
+      (void)new K3bSessionImportViewItem( (K3bSessionImportItem*)it.current(), this );
+    else
+      kdDebug() << "(K3bDataFileView) ERROR: unknown data item type" << endl;
   }
-
-  //  kdDebug() << "(K3bDataFileView) reloading finished" << endl;
 }
 
 

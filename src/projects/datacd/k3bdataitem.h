@@ -53,7 +53,7 @@ class K3bDataItem
   virtual K3bDataItem* nextSibling();
 	
   /** returns the path to the file on the local filesystem */
-  virtual QString localPath() = 0;
+  virtual QString localPath() { return QString::null; }
   virtual int localInode() const { return 0; }
 		
   virtual KIO::filesize_t k3bSize() const { return 0; }

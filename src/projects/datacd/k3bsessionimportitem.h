@@ -17,7 +17,7 @@
 #define _K3B_SESSION_IMPORT_ITEM_H_
 
 
-#include "k3bspecialdataitem.h"
+#include "k3bdataitem.h"
 
 
 class K3bDataDoc;
@@ -26,7 +26,7 @@ class K3bDirItem;
 class K3bIso9660File;
 
 
-class K3bSessionImportItem : public K3bSpecialDataItem
+class K3bSessionImportItem : public K3bDataItem
 {
  public:
   K3bSessionImportItem( const K3bIso9660File*, K3bDataDoc* doc, K3bDirItem* );
@@ -34,6 +34,9 @@ class K3bSessionImportItem : public K3bSpecialDataItem
 
   K3bFileItem* replaceItem() const { return m_replaceItem; }
   void setReplaceItem( K3bFileItem* item ) { m_replaceItem = item; }
+
+  K3bDirItem* getDirItem() { return parent(); }
+  KIO::filesize_t k3bSize() const { return m_size; }
 
   bool isFile() const { return false; }
   bool isFromOldSession() const { return true; }

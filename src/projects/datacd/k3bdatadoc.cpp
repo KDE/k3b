@@ -83,7 +83,7 @@ bool K3bDataDoc::newDocument()
 {
   m_bootImages.clear();
   m_bootCataloge = 0;
-  m_oldSessionHackSize = m_oldSessionSize = 0;
+  m_oldSessionSize = 0;
   m_bExistingItemsReplaceAll = m_bExistingItemsIgnoreAll = false;
 
   if( m_root ) {
@@ -381,7 +381,7 @@ KIO::filesize_t K3bDataDoc::size() const
 {
   //return m_size;
   //  return root()->k3bSize();
-  return m_sizeHandler->size() - m_oldSessionHackSize + m_oldSessionSize;
+  return m_sizeHandler->size() + m_oldSessionSize;
 }
 
 
@@ -1011,12 +1011,12 @@ void K3bDataDoc::removeItem( K3bDataItem* item )
 	  pi = m_queuedToAddItems.next();
       }
     }
-    else if( item->isFile() ) {
-      // restore the item imported from an old session
-      if( K3bDataItem* oldSessionItem = ((K3bFileItem*)item)->replaceItemFromOldSession() ) {
-	item->parent()->addDataItem( oldSessionItem );
-      }
-    }
+//     else if( item->isFile() ) {
+//       // restore the item imported from an old session
+//       if( K3bDataItem* oldSessionItem = ((K3bFileItem*)item)->replaceItemFromOldSession() ) {
+// 	item->parent()->addDataItem( oldSessionItem );
+//       }
+//     }
 
     delete item;
 
@@ -1248,6 +1248,7 @@ void K3bDataDoc::slotTocRead( K3bCdDevice::DeviceHandler* dh )
     // anyway since there might be files overwritten or removed
     m_oldSessionSize = (*it).lastSector().mode1Bytes();
 
+    kdDebug() << "(K3bDataDoc) imported session size: " << KIO::convertSize(m_oldSessionSize) << endl;
 
     K3bIso9660 iso( burner(), startSec );
     iso.open( IO_ReadOnly );
@@ -1312,10 +1313,6 @@ void K3bDataDoc::createSessionImportItems( const KArchiveDirectory* importDir, K
       K3bSessionImportItem* item = new K3bSessionImportItem( file, this, parent );
       item->setExtraInfo( i18n("From previous session") );
       m_oldSession.append( item );
-
-      // this is a bad hack. We need to implement some mechanism
-      // so the sizehandler knows which files to count and which to ignore
-      m_oldSessionHackSize += file->size();
     }
   }
 }
@@ -1324,7 +1321,7 @@ void K3bDataDoc::createSessionImportItems( const KArchiveDirectory* importDir, K
 void K3bDataDoc::clearImportedSession()
 {
   //  m_oldSessionSizeHandler->clear();
-  m_oldSessionSize = m_oldSessionHackSize = 0;
+  m_oldSessionSize = 0;
   m_oldSession.setAutoDelete(false);
   K3bDataItem* item = m_oldSession.first();
   while( !m_oldSession.isEmpty() ) {

@@ -258,9 +258,7 @@ void K3bDataVerifyingJob::slotMd5JobFinished( bool success )
 
 	if( fileDiffers ) {
 	  d->filesDiffer = true;
-	  emit infoMessage( i18n("%1 differs.").arg( d->doc->isoOptions().createJoliet() ? 
-						     d->currentItem->jolietPath() : 
-						     d->currentItem->k3bPath() ), ERROR );
+	  emit infoMessage( i18n("%1 differs.").arg( d->currentItem->k3bPath() ), ERROR );
 	}
       }
 
@@ -273,7 +271,9 @@ void K3bDataVerifyingJob::slotMd5JobFinished( bool success )
       d->originalCalculated = true;
       d->originalMd5Sum = d->md5Job->hexDigest();
       const K3bIso9660File* isoFile = 
-	dynamic_cast<const K3bIso9660File*>(d->iso9660->firstIsoDirEntry()->entry( d->currentItem->k3bPath() ) );
+	dynamic_cast<const K3bIso9660File*>(d->iso9660->firstIsoDirEntry()->entry( d->doc->isoOptions().createJoliet()
+										   ? d->currentItem->jolietPath()
+										   : d->currentItem->k3bPath() ) );
       if( isoFile ) {
 	d->md5Job->setFile( isoFile );
 	d->md5Job->start();

@@ -163,7 +163,6 @@ class K3bDataDoc : public K3bDoc
   K3bFileCompilationSizeHandler* m_sizeHandler;
   //  K3bFileCompilationSizeHandler* m_oldSessionSizeHandler;
   KIO::filesize_t m_oldSessionSize;
-  KIO::filesize_t m_oldSessionHackSize; // :((
 
   virtual K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
 

@@ -18,6 +18,7 @@
 #include "k3bfileitem.h"
 #include "k3bdiritem.h"
 #include "k3bspecialdataitem.h"
+#include "k3bsessionimportitem.h"
 #include "k3bdatadoc.h"
 
 #include <kio/global.h>
@@ -31,14 +32,16 @@
 #include <qpixmap.h>
 
 
-K3bDataViewItem::K3bDataViewItem( QListView* parent )
-  : K3bListViewItem( parent )
+K3bDataViewItem::K3bDataViewItem( K3bDataItem* item, QListView* parent )
+  : K3bListViewItem( parent ),
+    m_dataItem(item)
 {
   init();
 }
 
-K3bDataViewItem::K3bDataViewItem( QListViewItem* parent )
-  : K3bListViewItem( parent )
+K3bDataViewItem::K3bDataViewItem( K3bDataItem* item, QListViewItem* parent )
+  : K3bListViewItem( parent ),
+    m_dataItem(item)
 {
   init();
 }
@@ -103,9 +106,40 @@ void K3bDataViewItem::paintCell( QPainter* p, const QColorGroup& cg, int column,
 }
 
 
+void K3bDataViewItem::setText( int col, const QString& text )
+{
+  if( col == 0 && dataItem()->isRenameable() ) {
+    dataItem()->setK3bName( text );
+  }
+  K3bListViewItem::setText( col, text );
+}
+
+
+QString K3bDataViewItem::key( int col, bool a ) const
+{
+  if( col == 2 ) {
+    // to have correct sorting we need to justify the size in bytes
+    // 100 TB should be enough for the next year... ;-)
+    // but unsigned long is way to small for 100TB in bytes!! :(
+    // TODO: Qt 3.2 allows number(long long)
+
+    if( a )
+      return ( dataItem()->isDir() ? QString("0") : QString("1") )
+	+ QString::number( (unsigned long)dataItem()->k3bSize() ).rightJustify( 16, '0' );
+    else
+      return ( dataItem()->isDir() ? QString("1") : QString("0") )
+	+ QString::number( (unsigned long)dataItem()->k3bSize() ).rightJustify( 16, '0' );
+  }
+
+  if( a )
+    return ( dataItem()->isDir() ? QString("0") : QString("1") ) + text(col);
+  else
+    return ( dataItem()->isDir() ? QString("1") : QString("0") ) + text(col);
+}
+
 
 K3bDataDirViewItem::K3bDataDirViewItem( K3bDirItem* dir, QListView* parent )
-  : K3bDataViewItem( parent )
+  : K3bDataViewItem( dir, parent )
 {
   m_dirItem = dir;
   setPixmap( 0, dir->depth() > 7 ? SmallIcon( "folder_red" ) : SmallIcon( "folder" ) );
@@ -113,16 +147,10 @@ K3bDataDirViewItem::K3bDataDirViewItem( K3bDirItem* dir, QListView* parent )
 
 
 K3bDataDirViewItem::K3bDataDirViewItem( K3bDirItem* dir, QListViewItem* parent )
-  : K3bDataViewItem( parent )
+  : K3bDataViewItem( dir, parent )
 {
   m_dirItem = dir;
   setPixmap( 0, dir->depth() > 7 ? SmallIcon( "folder_red" ) : SmallIcon( "folder" ) );
-}
-
-
-K3bDataItem* K3bDataDirViewItem::dataItem() const
-{
-  return m_dirItem; 
 }
 
 
@@ -150,28 +178,9 @@ QString K3bDataDirViewItem::text( int index ) const
 }
 
 
-void K3bDataDirViewItem::setText(int col, const QString& text )
-{
-  if( col == 0 )
-    dirItem()->setK3bName( text );
 
-  KListViewItem::setText( col, text );
-}
-
-
-QString K3bDataDirViewItem::key( int col, bool a ) const
-{
-  if( a ) {
-    return "0" + text(col);
-  }
-  else {
-    return "1" + text(col);
-  }
-}
-
-	
 K3bDataFileViewItem::K3bDataFileViewItem( K3bFileItem* file, QListView* parent )
-  : K3bDataViewItem( parent )
+  : K3bDataViewItem( file, parent )
 {
   m_fileItem = file;
   setPixmap( 0, file->pixmap(16) );
@@ -179,16 +188,10 @@ K3bDataFileViewItem::K3bDataFileViewItem( K3bFileItem* file, QListView* parent )
 
 
 K3bDataFileViewItem::K3bDataFileViewItem( K3bFileItem* file, QListViewItem* parent )
-  : K3bDataViewItem( parent )
+  : K3bDataViewItem( file, parent )
 {
   m_fileItem = file;
   setPixmap( 0, file->pixmap(16) );
-}
-
-
-K3bDataItem* K3bDataFileViewItem::dataItem() const
-{
-  return m_fileItem; 
 }
 
 	
@@ -215,34 +218,6 @@ QString K3bDataFileViewItem::text( int index ) const
   }
 }
 
-
-void K3bDataFileViewItem::setText(int col, const QString& text )
-{
-  if( col == 0 )
-    fileItem()->setK3bName( text );
-		
-  KListViewItem::setText( col, text );
-}
-
-
-QString K3bDataFileViewItem::key( int col, bool a ) const
-{
-  if( col == 2 ) {
-    // to have correct sorting we need to justify the size in bytes
-    // 100 TB should be enough for the next year... ;-)
-    // but unsigned long is way to small for 100TB in bytes!! :(
-
-    if( a )
-      return "1" + QString::number( (unsigned long)m_fileItem->size() ).rightJustify( 16, '0' );
-    else
-      return "0" + QString::number( (unsigned long)m_fileItem->size() ).rightJustify( 16, '0' );
-  }
-
-  if( a )
-    return "1" + text(col);
-  else
-    return "0" + text(col);
-}
 
 
 K3bDataRootViewItem::K3bDataRootViewItem( K3bDataDoc* doc, QListView* parent )
@@ -274,8 +249,7 @@ void K3bDataRootViewItem::setText( int col, const QString& text )
 
 
 K3bSpecialDataViewItem::K3bSpecialDataViewItem( K3bSpecialDataItem* item, QListView* parent )
-  : K3bDataViewItem( parent ),
-    m_dataItem(item)
+  : K3bDataViewItem( item, parent )
 {
   setPixmap( 0, SmallIcon("unknown") );
 }
@@ -284,47 +258,34 @@ QString K3bSpecialDataViewItem::text( int col ) const
 {
   switch( col ) {
   case 0:
-    return m_dataItem->k3bName();
+    return dataItem()->k3bName();
   case 1:
-    return m_dataItem->mimeType();
+    return ((K3bSpecialDataItem*)dataItem())->mimeType();
   case 2:
-    return KIO::convertSize( m_dataItem->k3bSize() );
+    return KIO::convertSize( dataItem()->k3bSize() );
   default:
     return "";
   }
 }
 
 
-void K3bSpecialDataViewItem::setText(int col, const QString& text )
-{
-  if( col == 0 )
-    m_dataItem->setK3bName( text );
 
-  K3bDataViewItem::setText( col, text );
+K3bSessionImportViewItem::K3bSessionImportViewItem( K3bSessionImportItem* item, QListView* parent )
+  : K3bDataViewItem( item, parent )
+{
+  setPixmap( 0, SmallIcon("unknown") );
 }
 
-
-QString K3bSpecialDataViewItem::key( int col, bool a ) const
+QString K3bSessionImportViewItem::text( int col ) const
 {
-  if( col == 2 ) {
-    // to have correct sorting we need to justify the size in bytes
-    // 100 TB should be enough for the next year... ;-)
-    // but unsigned long is way to small for 100TB in bytes!! :(
-
-    if( a )
-      return "1" + QString::number( (unsigned long)m_dataItem->k3bSize() ).rightJustify( 16, '0' );
-    else
-      return "0" + QString::number( (unsigned long)m_dataItem->k3bSize() ).rightJustify( 16, '0' );
+  switch( col ) {
+  case 0:
+    return dataItem()->k3bName();
+  case 1:
+    return i18n("From previous session");
+  case 2:
+    return KIO::convertSize( dataItem()->k3bSize() );
+  default:
+    return "";
   }
-
-  if( a )
-    return "1" + text(col);
-  else
-    return "0" + text(col);
-}
-
-
-K3bDataItem* K3bSpecialDataViewItem::dataItem() const
-{
-  return m_dataItem;
 }

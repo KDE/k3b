@@ -65,6 +65,10 @@ K3bFileItem::~K3bFileItem()
   // remove this from parentdir
   if( parent() )
     parent()->takeDataItem( this );
+
+  // restore the item imported from an old session
+  if( replaceItemFromOldSession() )
+    parent()->addDataItem( replaceItemFromOldSession() );
 }
 
 

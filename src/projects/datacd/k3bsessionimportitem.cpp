@@ -15,14 +15,22 @@
 
 #include "k3bsessionimportitem.h"
 #include "k3bfileitem.h"
+#include "k3bdiritem.h"
 
 #include <k3biso9660.h>
 
 
 K3bSessionImportItem::K3bSessionImportItem( const K3bIso9660File* isoF, K3bDataDoc* doc, K3bDirItem* dir )
-  : K3bSpecialDataItem( doc, isoF->size(), dir, isoF->name() ),
-    m_replaceItem(0)
+  : K3bDataItem( doc, dir ),
+    m_replaceItem(0),
+    m_size( isoF->size() )
+
 {
+  setK3bName( isoF->name() );
+
+  // add automagically like a qlistviewitem
+  if( parent() )
+    parent()->addDataItem( this );
 }
 
 
@@ -30,4 +38,8 @@ K3bSessionImportItem::~K3bSessionImportItem()
 {
   if( m_replaceItem )
     m_replaceItem->setReplacedItemFromOldSession(0);
+
+  // remove this from parentdir
+  if( parent() )
+    parent()->takeDataItem( this );
 }

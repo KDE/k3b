@@ -77,7 +77,8 @@ K3bDirItem* K3bDirItem::addDataItem( K3bDataItem* item )
       updateFiles( ((K3bDirItem*)item)->numFiles(), ((K3bDirItem*)item)->numDirs()+1 );
     else {
       // update the project size
-      doc()->sizeHandler()->addFile( item );
+      if( !item->isFromOldSession() )
+	doc()->sizeHandler()->addFile( item );
       updateFiles( 1, 0 );
     }
   }
@@ -109,7 +110,8 @@ K3bDataItem* K3bDirItem::takeDataItem( int index )
     updateFiles( -1*((K3bDirItem*)item)->numFiles(), -1*((K3bDirItem*)item)->numDirs()-1 );
   else {
     // update the project size
-    doc()->sizeHandler()->removeFile( item );
+    if( !item->isFromOldSession() )
+      doc()->sizeHandler()->removeFile( item );
     updateFiles( -1, 0 );
   }
 
