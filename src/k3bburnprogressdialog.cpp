@@ -208,6 +208,7 @@ void K3bBurnProgressDialog::setJob( K3bJob* job )
 	m_progressTrack->setValue(0);
 	m_progressCd->setValue(0);
 	m_labelFileName->setText("");
+	m_groupProgress->setTitle( i18n( "Progress" ) );
 
 	// disconnect from the former job
 	if( m_job )
@@ -223,7 +224,8 @@ void K3bBurnProgressDialog::setJob( K3bJob* job )
 	connect( job, SIGNAL(processedSubSize(int, int)), this, SLOT(updateTrackSizeProgress(int, int)) );
 	connect( job, SIGNAL(processedSize(int, int)), this, SLOT(updateCdSizeProgress(int, int)) );
 
-	connect( job, SIGNAL(newSubJob(const QString&)), this, SLOT(slotNewSubJob(const QString&)) );
+	connect( job, SIGNAL(newTask(const QString&)), m_groupProgress, SLOT(setTitle(const QString&)) );
+	connect( job, SIGNAL(newSubTask(const QString&)), this, SLOT(slotNewSubJob(const QString&)) );
 	connect( job, SIGNAL(finished(K3bJob*)), this, SLOT(finished()) );
 	
 

@@ -55,7 +55,8 @@ class K3bJob : public QObject
   void processedSize( int processed, int size );
   void processedSubSize( int processed, int size );
   void newTrack();
-  void newSubJob( const QString& job );
+  void newTask( const QString& job );
+  void newSubTask( const QString& job );
 
 // public:
 //  static K3bCdrecordJob* createCdrecordJob( K3bDoc* doc );

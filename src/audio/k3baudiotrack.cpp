@@ -28,7 +28,7 @@ K3bAudioTrack::K3bAudioTrack( QList<K3bAudioTrack>* parent, const QString& filen
 	m_parent = parent;
 	m_pregap = 2;
 	
-	if( QFileInfo( m_file ).extension(false).contains("mp3", false) )
+	if( QFileInfo(m_file).extension(false).contains("mp3", false) )
 		m_filetype = K3b::MP3;
 	else
 		m_filetype = K3b::WAV;
@@ -52,7 +52,10 @@ K3bAudioTrack::~K3bAudioTrack()
 }
 
 uint K3bAudioTrack::size() const{
-	return m_file.size();
+	if( !m_bufferFile.isEmpty() ) {
+		return QFileInfo(m_bufferFile).size();
+	}
+	return m_file.size()*10; // HACKING: learn to determine the size of a wav and a mp3-file!!!
 }
 
 int K3bAudioTrack::index() const

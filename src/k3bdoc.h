@@ -120,7 +120,8 @@ public:
 	 **/
 	int error() const;
 	QString errorString() const;
-
+	virtual int numOfTracks() const { return 1; }
+	
 public slots:
     /** calls repaint() on all views connected to the document object and is called by the view by which the document has been changed.
      * As this view normally repaints itself, it is excluded from the paintEvent.
@@ -131,8 +132,6 @@ public slots:
 	void setSpeed( int speed );
 	void setBurner( K3bDevice* dev );
 	
-	virtual int numOfTracks() = 0;
-
 signals:
 	void result();
 	void percent( int percent );

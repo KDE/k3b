@@ -149,7 +149,7 @@ void K3bAudioJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 			else
 				firstTrack = false;
 				
-			emit newSubJob( i18n("Writing track %1: '%2'").arg(m_iNumTracksAlreadyWritten + 1).arg(m_doc->at(m_iNumTracksAlreadyWritten)->fileName()) );
+			emit newSubTask( i18n("Writing track %1: '%2'").arg(m_iNumTracksAlreadyWritten + 1).arg(m_doc->at(m_iNumTracksAlreadyWritten)->fileName()) );
 			emit infoMessage( *str );
 		}
 		else {
@@ -175,7 +175,7 @@ void K3bAudioJob::slotParseCdrdaoOutput( KProcess*, char* output, int len )
 			// TODO: parse the error messages!!
 			emit infoMessage( *str );
 		}
-		else if( (*str).startsWith( "Writing track" ) ) {
+		else if( (*str).startsWith( "Writing" ) ) {
 			// a new track has been started
 			emit newTrack();
 			if(!firstTrack)
@@ -183,10 +183,10 @@ void K3bAudioJob::slotParseCdrdaoOutput( KProcess*, char* output, int len )
 			else
 				firstTrack = false;
 			
-			emit newSubJob( i18n("Writing track %1: '%2'").arg(m_iNumTracksAlreadyWritten + 1).arg(m_doc->at(m_iNumTracksAlreadyWritten)->fileName()) );
+			emit newSubTask( i18n("Writing track %1: '%2'").arg(m_iNumTracksAlreadyWritten + 1).arg(m_doc->at(m_iNumTracksAlreadyWritten)->fileName()) );
 			emit infoMessage( *str );
 		}
-		else if( (*str).startsWith( "Wrote " ) ) {
+		else if( (*str).contains( "Wrote " ) ) {   // here "contains" has to be used since cdrdao sometimes "forgets" to do a newline!!
 			// percentage
 			int made, size, fifo;
 			bool ok;
@@ -233,7 +233,7 @@ void K3bAudioJob::slotParseCdrdaoOutput( KProcess*, char* output, int len )
 		}
 		else if( (*str).startsWith( "Executing power" ) ) {
 			emit infoMessage( i18n( *str ) );
-			emit newSubJob( i18n(*str) );
+			emit newSubTask( i18n(*str) );
 		}
 		else {
 			// debugging
@@ -278,6 +278,7 @@ void K3bAudioJob::start()
 		emit infoMessage( i18n("There are %1 files to decode...").arg(m_iNumFilesToDecode) );
 		
 		// now use K3bMp3DecodingJob to decode all files
+		emit newTask( "Decoding" );
 		decodeNextFile();
 	}
 	else
@@ -375,14 +376,15 @@ void K3bAudioJob::decodeNextFile()
 		else
 			m_mp3Job->setSourceFile( m_currentProcessedTrack->absPath() );
 
-		emit newSubJob( i18n("Decoding file '%1'").arg( m_currentProcessedTrack->fileName() ) );
+		emit newSubTask( i18n("Decoding file '%1'").arg( m_currentProcessedTrack->fileName() ) );
 		m_mp3Job->start();
 	}
 }
 
 void K3bAudioJob::startWriting()
 {
-	emit newSubJob( i18n("Preparing write process...") );
+	emit newTask( "Writing" );
+	emit newSubTask( i18n("Preparing write process...") );
 
 	m_process.clearArguments();
 	m_process.disconnect();

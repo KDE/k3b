@@ -134,8 +134,11 @@ void K3bAudioDoc::parseMpgTestingOutput( KProcess*, char* output, int len )
 
 int K3bAudioDoc::size(){
 	// TODO: sum the sizes of all tracks, the pregaps, and leadin/leadout stuff
-	
-	return 700;
+	int size = 0;
+	for( K3bAudioTrack* _t = m_tracks->first(); _t; _t = m_tracks->next() ) {
+		size += _t->size();
+	}	
+	return size;
 }
 
 
@@ -435,13 +438,13 @@ QString K3bAudioDoc::writeTOC( const QString& filename )
 }
 
 
-int K3bAudioDoc::numOfTracks()
+int K3bAudioDoc::numOfTracks() const
 {
 	return m_tracks->count();
 }
 
 
-int K3bAudioDoc::allMp3Decoded()
+int K3bAudioDoc::allMp3Decoded() const
 {
 	// check if all the files are converted to wav...
 	 int iNumFilesToBuffer = 0;
@@ -465,7 +468,7 @@ bool K3bAudioDoc::padding() const
 }
 
 
-K3bAudioTrack* K3bAudioDoc::nextTrackToDecode()
+K3bAudioTrack* K3bAudioDoc::nextTrackToDecode() const
 {
 	for( QListIterator<K3bAudioTrack> i(*m_tracks); i.current(); ++i )
 	{

@@ -50,7 +50,7 @@ void K3bFillStatusDisplay::drawContents( QPainter* p )
 
 void K3bFillStatusDisplay::drawSize(QPainter* p)
 {
-	int value = doc->size();
+	int value = doc->size()/10;
 
 	// the maximum is 800
 	// so split width() in 80 pieces!

@@ -76,9 +76,9 @@ public:
 	const QString& arranger() const { return m_cdTextArranger; }
 
 	QString writeTOC( const QString& filename );
-	int numOfTracks();
-	int allMp3Decoded();
-	K3bAudioTrack* nextTrackToDecode();
+	int numOfTracks() const;
+	int allMp3Decoded() const;
+	K3bAudioTrack* nextTrackToDecode() const;
 	
 public slots:
 	/**

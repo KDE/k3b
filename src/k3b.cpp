@@ -53,6 +53,8 @@
 #include "k3bburnprogressdialog.h"
 #include "audio/k3baudioburndialog.h"
 #include "audio/k3baudiojob.h"
+#include "data/k3bdatadoc.h"
+#include "data/k3bdataview.h"
 
 
 K3bApp* k3bMain()
@@ -624,6 +626,22 @@ void K3bApp::slotNewAudioDoc()
 
 void K3bApp::slotNewDataDoc()
 {
+  slotStatusMsg(i18n("Creating new Data Project."));
+
+  K3bDataDoc* doc = new K3bDataDoc( this );
+  pDocList->append(doc);
+  doc->newDocument();
+
+  untitledCount+=1;
+  QString fileName=QString(i18n("Untitled%1")).arg(untitledCount);
+  KURL url;
+  url.setFileName(fileName);
+  doc->setURL(url);
+
+  // create the window
+  createClient(doc);
+
+  slotStatusMsg(i18n("Ready."));
 }
 
 K3bAudioTrackDialog* K3bApp::audioTrackDialog()

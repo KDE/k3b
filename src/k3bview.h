@@ -53,7 +53,7 @@ class K3bView : public QWidget
     /** Constructor for the view
     	* @param pDoc  your document instance that the view represents. Create a document before calling the constructor
     	* or connect an already existing document to a new MDI child widget.*/
-    K3bView(K3bDoc* pDoc, QWidget* parent, const char *name, int wflags);
+    K3bView(K3bDoc* pDoc, QWidget* parent, const char *name = 0, int wflags = 0);
     /** Destructor for the main view */
     ~K3bView();
 		/** returns a pointer to the document connected to the view*/
