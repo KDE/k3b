@@ -220,9 +220,9 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
 	finishWaiting( dh->ngDiskInfo().mediaType() );
 
     // this is for CD drives that are not able to determine the state of a disk
-    else if( dh->ngDiskInfo().diskState() == K3bCdDevice::UNKNOWN && 
-	     dh->ngDiskInfo().mediaType() == K3bCdDevice::CD_ROM &&
-	     d->wantedMediaType & K3bCdDevice::CD_ROM )
+    else if( dh->ngDiskInfo().diskState() == K3bCdDevice::STATE_UNKNOWN && 
+	     dh->ngDiskInfo().mediaType() == K3bCdDevice::MEDIA_CD_ROM &&
+	     d->wantedMediaType & K3bCdDevice::MEDIA_CD_ROM )
       finishWaiting( dh->ngDiskInfo().mediaType() );
 
     // a DVD+RW or a DVD-RW in restrcited overwrite mode may simply be overwritten
