@@ -198,16 +198,30 @@ void K3bFileView::slotAudioFileEnqueue()
 
 void K3bFileView::slotAddFilesToProject()
 {
-  if( !k3bMain()->activeDoc() )
-    KMessageBox::error( this, i18n("Please create a project before adding files"), i18n("No Active Project"));
-  else {
+  if( !k3bMain()->activeDoc() ) {
+    //KMessageBox::error( this, i18n("Please create a project before adding files"), i18n("No Active Project"));
+    int project = KMessageBox::questionYesNoCancel( this, i18n("There is no active project. Do you want to create one?"),
+       i18n("No Active Project"), i18n("Audio Project"), i18n("Data Project") );
+    switch(project) {
+    case 3:
+      k3bMain()->slotNewAudioDoc();
+      break;
+    case 4:
+      k3bMain()->slotNewDataDoc();
+      break;
+    default:
+      break;
+    }
+  }
+  if( k3bMain()->activeDoc() ){
     KURL::List files;
     for( QListIterator<KFileItem> it( *(m_dirOp->selectedItems()) ); it.current(); ++it ) {
       files.append( it.current()->url() );
-    }
-    
+    }    
     if( !files.isEmpty() )
       k3bMain()->activeDoc()->addUrls( files );
+  } else {
+      kdDebug() << "(K3bFileView) Adding files to project canceled." << endl;
   }
 }
 
