@@ -22,6 +22,8 @@
 #include <qstring.h>
 #include <qptrlist.h>
 
+#include <kio/global.h>
+
 #include "k3bdataitem.h"
 
 class K3bDataDoc;
@@ -36,6 +38,8 @@ class K3bDirItem : public K3bDataItem
   K3bDirItem( const QString& name, K3bDataDoc*, K3bDirItem* parentDir = 0 );
   ~K3bDirItem();
 	
+  K3bDirItem* getDirItem() const;
+
   QPtrList<K3bDataItem>* children() const { return m_children; }
   K3bDirItem* addDataItem( K3bDataItem* item );
   K3bDataItem* takeDataItem( K3bDataItem* item );
@@ -52,7 +56,7 @@ class K3bDirItem : public K3bDataItem
   bool alreadyInDirectory( const QString& fileName ) const;
   K3bDataItem* find( const QString& filename ) const;
 
-  long k3bSize() const;
+  KIO::filesize_t k3bSize() const;
 
   int numFiles() const;
   int numDirs() const;
@@ -69,7 +73,11 @@ class K3bDirItem : public K3bDataItem
   virtual bool isRemoveable() const;
 	
  private:
+  void updateSize( KIO::filesize_t s );
+
   QPtrList<K3bDataItem>* m_children;
+
+  KIO::filesize_t m_size;
 };
 
 

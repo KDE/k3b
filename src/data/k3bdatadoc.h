@@ -28,6 +28,7 @@
 #include <qptrlist.h>
 
 #include <kurl.h>
+#include <kio/global.h>
 
 class K3bDataItem;
 class K3bRootItem;
@@ -128,8 +129,6 @@ class K3bDataDoc : public K3bDoc
   void importSession( const QString& path );
   void clearImportedSession();
 
-  void itemDeleted( K3bDataItem* item );
-
  signals:
   void itemRemoved( K3bDataItem* );
   void newFileItems();
@@ -196,7 +195,7 @@ class K3bDataDoc : public K3bDoc
   bool m_deleteImage;
   bool m_onlyCreateImage;
 
-  unsigned long long m_size;
+  KIO::filesize_t m_size;
 		
   K3bIsoOptions m_isoOptions;
 

@@ -22,13 +22,12 @@
 class K3bSpecialDataItem : public K3bDataItem
 {
  public:
-  K3bSpecialDataItem( K3bDataDoc* doc, K3bDataItem* parent = 0 );
+  K3bSpecialDataItem( K3bDataDoc* doc, long size, K3bDataItem* parent = 0 );
   virtual ~K3bSpecialDataItem();
 
   virtual QString localPath() { return ""; }
 
   virtual long k3bSize() const { return m_k3bSize; }
-  void setK3bSize( long size ) { m_k3bSize = size; }
 
  private:
   long m_k3bSize;

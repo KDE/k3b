@@ -32,19 +32,15 @@ K3bDataItem::K3bDataItem( K3bDataDoc* doc, K3bDataItem* parent )
 {
   m_doc = doc;
   m_bHideOnRockRidge = m_bHideOnJoliet = false;
-	
-  // add automagically like a qlistviewitem
+
   if( parent )
-    m_parentDir = parent->addDataItem( this );
+    m_parentDir = parent->getDirItem();
   else
     m_parentDir = 0;
 }
 
 K3bDataItem::~K3bDataItem()
 {
-  // remove this from parentdir
-  if( m_parentDir )
-    m_parentDir->takeDataItem( this );
 }
 
 

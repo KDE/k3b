@@ -22,6 +22,7 @@
 #include "k3bdataitem.h"
 
 #include <kfileitem.h>
+#include <kio/global.h>
 #include <qstring.h>
 
 class K3bDataDoc;
@@ -43,19 +44,14 @@ public:
 	
   bool exists() const;
 	
-/*   const QString& isoName() const { return m_isoName; } */
-/*   const QString& joiletName() const { return m_joiletName; } */
-/*   const QString& rockRidgeName() const { return m_rockRidgeName; } */
-	
   QString absIsoPath();
-  //	K3bDataItem* nextSibling();
+
   /** reimplemented from K3bDataItem */
   QString localPath();
 	
-  long k3bSize() const;
+  KIO::filesize_t k3bSize() const;
 
-  /** adds the item to this' parent **/
-  K3bDirItem* addDataItem( K3bDataItem* item );
+  K3bDirItem* getDirItem() const;
 	
   bool isSymLink() const { return isLink(); }
 
@@ -64,10 +60,7 @@ public:
   bool isValid() const;
 
  private:
-/*   QString m_isoName; */
-/*   QString m_joiletName; */
-/*   QString m_rockRidgeName; */
-  unsigned long m_size;
+  KIO::filesize_t m_size;
 };
 
 #endif

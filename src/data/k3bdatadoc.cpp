@@ -806,18 +806,12 @@ void K3bDataDoc::removeItem( K3bDataItem* item )
 
   if( item->isRemoveable() ) {
     // the item takes care of it's parent!
+    m_size -= item->k3bSize();
+    emit itemRemoved( item );
     delete item;
   }
   else
     kdDebug() << "(K3bDataDoc) tried to remove non-movable entry!" << endl;
-}
-
-
-// called by the K3bDataItem's destructor
-void K3bDataDoc::itemDeleted( K3bDataItem* item )
-{
-  emit itemRemoved( item );
-  m_size -= item->k3bSize();
 }
 
 
@@ -1135,6 +1129,7 @@ void K3bDataDoc::clearImportedSession()
 	// this imported dir is not needed anymore 
 	// since it is empty
 	m_oldSession.remove();
+	emit itemRemoved( item );
 	delete dir;
       }
       else {
@@ -1155,6 +1150,8 @@ void K3bDataDoc::clearImportedSession()
     }
     else {
       m_oldSession.remove();
+      m_size -= item->k3bSize();
+      emit itemRemoved( item );
       delete item;
     }
 

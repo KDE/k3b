@@ -22,11 +22,16 @@
 #include <qptrlist.h>
 
 K3bDirItem::K3bDirItem(const QString& name, K3bDataDoc* doc, K3bDirItem* parentDir)
-  : K3bDataItem( doc, parentDir )
+  : K3bDataItem( doc, parentDir ),
+    m_size(0)
 {
   m_k3bName = name;
   m_jolietName = name;
   m_children = new QPtrList<K3bDataItem>();
+  
+  // add automagically like a qlistviewitem
+  if( parent() )
+    parent()->addDataItem( this );
 }
 
 K3bDirItem::~K3bDirItem()
@@ -35,14 +40,24 @@ K3bDirItem::~K3bDirItem()
   m_children->setAutoDelete( true );
   delete m_children;
 
-  // inform the doc, so it can decrease the size and inform the views
-  doc()->itemDeleted( this );
+  // this has to be done after deleting the children
+  // because the directory itself has a size of 0 in K3b
+  // and all it's files' sizes have already been substracted
+  if( parent() )
+    parent()->takeDataItem(this);
+}
+
+K3bDirItem* K3bDirItem::getDirItem() const
+{
+  return this;
 }
 
 K3bDirItem* K3bDirItem::addDataItem( K3bDataItem* item )
 {
-  if( m_children->find( item ) == -1 )
+  if( m_children->find( item ) == -1 ) {
     m_children->append( item );
+    updateSize( item->k3bSize() );
+  }
 	
   return this;
 }
@@ -50,15 +65,19 @@ K3bDirItem* K3bDirItem::addDataItem( K3bDataItem* item )
 K3bDataItem* K3bDirItem::takeDataItem( K3bDataItem* item )
 {
   int x = m_children->find( item );
-  if( x > -1 )
-    return m_children->take( x );
+  if( x > -1 ) {
+    return takeDataItem(x);
+  }
   else
     return 0;
 }
 
 K3bDataItem* K3bDirItem::takeDataItem( int index )
 {
-  return m_children->take( index );
+  K3bDataItem* item = m_children->take( index );
+  updateSize( -1*item->k3bSize() );
+
+  return item;
 }
 
 
@@ -154,15 +173,9 @@ K3bDataItem* K3bDirItem::find( const QString& filename ) const
 }
 
 
-long K3bDirItem::k3bSize() const
+KIO::filesize_t K3bDirItem::k3bSize() const
 {
-  return 0;
-  QListIterator<K3bDataItem> it( *m_children );
-  long size = 0;
-  for( ; it.current(); ++it )
-    size += it.current()->k3bSize();
-
-  return size;
+  return m_size;
 }
 
 
@@ -212,4 +225,12 @@ bool K3bDirItem::isRemoveable() const
   for( ; it.current(); ++it )
     rem = rem && it.current()->isRemoveable();
   return rem;
+}
+
+
+void K3bDirItem::updateSize( KIO::filesize_t s )
+{
+  m_size += s;
+  if( parent() )
+    parent()->updateSize( s );
 }

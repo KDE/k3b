@@ -24,6 +24,8 @@ class K3bDataDoc;
 
 #include <qstring.h>
 
+#include <kio/global.h>
+
 /**
   *@author Sebastian Trueg
   */
@@ -32,9 +34,6 @@ class K3bDataItem
 {
  public: 
   K3bDataItem( K3bDataDoc* doc, K3bDataItem* parent = 0 );
-  /**
-   * ALWAYS CALL K3bDataDoc::itemDeleted(this) in the destructor of derived classes
-   */
   virtual ~K3bDataItem();
 	
   K3bDirItem* parent() const { return m_parentDir; }
@@ -57,10 +56,10 @@ class K3bDataItem
   /** returns the path to the file on the local filesystem */
   virtual QString localPath() = 0;
 		
-  virtual long k3bSize() const { return 0; }
+  virtual KIO::filesize_t k3bSize() const { return 0; }
 
-  /** adds the given dataItem to the current parent (can be the item itself if it is a K3bDirItem) */
-  virtual K3bDirItem* addDataItem( K3bDataItem* ) = 0;
+  /** returnes the dir of the item (or the item if it's a dir) */
+  virtual K3bDirItem* getDirItem() const = 0;
 
   virtual void reparent( K3bDirItem* );
 
@@ -101,8 +100,8 @@ class K3bDataItem
   QString m_jolietName;
 
  private:
-  K3bDirItem* m_parentDir;
   K3bDataDoc* m_doc;
+  K3bDirItem* m_parentDir;
 
   bool m_bHideOnRockRidge;
   bool m_bHideOnJoliet;

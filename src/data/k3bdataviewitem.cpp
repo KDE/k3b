@@ -214,6 +214,7 @@ QString K3bDataFileViewItem::key( int col, bool a ) const
   if( col == 2 ) {
     // to have correct sorting we need to justify the size in bytes
     // 100 TB should be enough for the next year... ;-)
+    // but unsigned long is way to small for 100TB in bytes!! :(
 
     if( a )
       return "1" + QString::number( (unsigned long)m_fileItem->size() ).rightJustify( 16, '0' );
