@@ -51,7 +51,6 @@
 #include <linux/../scsi/scsi.h> /* cope with silly includes */
 #include <linux/cdrom.h>
 #include <linux/major.h>
-#include <linux/limits.h>
 
 
 
@@ -641,7 +640,20 @@ void K3bCdDevice::DeviceManager::scanFstab()
   {
     // check if the entry corresponds to a device
     QString md = QFile::decodeName( mountInfo->mnt_fsname );
-    if ( md == "none" )
+    QString type = QFile::decodeName( mountInfo->mnt_type );
+
+    if( type == "supermount" ) {
+      // parse the device
+      QStringList opts = QStringList::split( ",", QString::fromLocal8Bit(mountInfo->mnt_opts) );
+      for( QStringList::const_iterator it = opts.begin(); it != opts.end(); ++it ) {
+	if( (*it).startsWith("dev=") ) {
+	  md = (*it).mid( 4 );
+	  break;
+	}
+      }
+    }
+
+    if( md == "none" )
       continue;
 
     kdDebug() << "(K3bDeviceManager) scanning fstab: " << md << endl;
