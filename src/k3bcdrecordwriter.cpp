@@ -16,7 +16,6 @@
 
 #include "k3bcdrecordwriter.h"
 
-#include <k3b.h>
 #include <k3bcore.h>
 #include <k3bexternalbinmanager.h>
 #include <k3bprocess.h>
@@ -104,12 +103,6 @@ void K3bCdrecordWriter::setWritingMode( int mode )
 }
 
 
-void K3bCdrecordWriter::prepareArgumentList()
-{
-  kdDebug() << "(K3bCdrecordWriter) FIXME: REMOVE THIS METHOD AS IT DOES NOTHING!!!!" << endl;
-}
-
-
 void K3bCdrecordWriter::prepareProcess()
 {
   if( m_process ) delete m_process;  // kdelibs want this!
@@ -121,17 +114,17 @@ void K3bCdrecordWriter::prepareProcess()
   connect( m_process, SIGNAL(wroteStdin(KProcess*)), this, SIGNAL(dataWritten()) );
 
   if( m_useCdrecordProDVD )
-    m_cdrecordBinObject = K3bExternalBinManager::self()->binObject("cdrecord-prodvd");
+    m_cdrecordBinObject = k3bcore->externalBinManager()->binObject("cdrecord-prodvd");
   else
-    m_cdrecordBinObject = K3bExternalBinManager::self()->binObject("cdrecord");
+    m_cdrecordBinObject = k3bcore->externalBinManager()->binObject("cdrecord");
 
   if( !m_cdrecordBinObject )
     return;
 
-  kapp->config()->setGroup("General Options");
+  k3bcore->config()->setGroup("General Options");
 
   if( m_useCdrecordProDVD ) {
-    QString proDvdKey = kapp->config()->readEntry( "cdrecord-prodvd_key" );
+    QString proDvdKey = k3bcore->config()->readEntry( "cdrecord-prodvd_key" );
     if( !proDvdKey.isEmpty() )
       m_process->setEnvironment( "CDR_SECURITY", proDvdKey );
   }
@@ -181,7 +174,7 @@ void K3bCdrecordWriter::prepareProcess()
   if( m_clone )
     *m_process << "-clone";
   
-  if( k3bMain()->eject() )
+  if( !k3bcore->config()->readBoolEntry( "No cd eject", false ) )
     *m_process << "-eject";
 
   bool manualBufferSize = k3bcore->config()->readBoolEntry( "Manual buffer size", false );
@@ -292,23 +285,10 @@ void K3bCdrecordWriter::cancel()
       m_process->disconnect();
       m_process->kill();
 
-      // we need to unlock the writer because cdrecord locked it while writing
-      connect( K3bCdDevice::unblock( burnDevice() ), SIGNAL(finished(bool)),
-	       this, SLOT(slotUnblockWhileCancellationFinished(bool)) );
+      // this will unblock and eject the drive and emit the finished/canceled signals
+      K3bAbstractWriter::cancel();
     }
   }
-}
-
-
-void K3bCdrecordWriter::slotUnblockWhileCancellationFinished( bool success )
-{
-  if( !success )
-    emit infoMessage( i18n("Could not unlock CD drive."), K3bJob::ERROR );
-  else if( k3bMain()->eject() )
-    K3bCdDevice::eject( burnDevice() );
-
-  emit canceled();
-  emit finished( false );
 }
 
 

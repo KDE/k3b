@@ -37,11 +37,6 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   ~K3bCdrecordWriter();
 
   /**
-   * deprecated. Does nothing.
-   */
-  void prepareArgumentList();
-
-  /**
    * to be used in chain: addArgument(x)->addArgument(y)
    */
   K3bCdrecordWriter* addArgument( const QString& );
@@ -68,7 +63,6 @@ class K3bCdrecordWriter : public K3bAbstractWriter
  private slots:
   void slotStdLine( const QString& line );
   void slotProcessExited(KProcess*);
-  void slotUnblockWhileCancellationFinished( bool success );
 
  private:
   void prepareProcess();

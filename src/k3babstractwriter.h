@@ -47,6 +47,14 @@ class K3bAbstractWriter : public K3bJob
   virtual int fd() const { return -1; }
 
  public slots:
+  /**
+   * If the burnDevice is set this will try to unlock the drive and
+   * eject the disk if K3b is configured to do so.
+   * Will also emit canceled and finished signals.
+   * may be called by subclasses.
+   */
+  void cancel();
+
   void setBurnDevice( K3bDevice* dev ) { m_burnDevice = dev; }
   void setBurnSpeed( int s ) { m_burnSpeed = s; }
   void setBurnproof( bool b ) { m_burnproof = b; }
@@ -63,6 +71,10 @@ class K3bAbstractWriter : public K3bJob
 
   void createEstimatedWriteSpeed( int writtenMb, bool firstCall = false );
   void createAverageWriteSpeedInfoMessage();
+
+ protected slots:
+  void slotUnblockWhileCancellationFinished( bool success );
+  void slotEjectWhileCancellationFinished( bool success );
 
  private:
   K3bDevice* m_burnDevice;

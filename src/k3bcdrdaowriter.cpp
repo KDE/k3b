@@ -17,7 +17,6 @@
 
 #include "k3bcdrdaowriter.h"
 
-#include "k3b.h"
 #include <k3bcore.h>
 #include <k3bexternalbinmanager.h>
 #include "device/k3bdevicemanager.h"
@@ -33,6 +32,7 @@
 #include <qfileinfo.h>
 #include <qdir.h>
 #include <qurl.h>
+
 #include <klocale.h>
 #include <kdebug.h>
 #include <kconfig.h>
@@ -76,10 +76,6 @@ K3bCdrdaoWriter::K3bCdrdaoWriter( K3bDevice* dev, QObject* parent, const char* n
     m_command(WRITE),
     m_blankMode(MINIMAL),
     m_sourceDevice(0),
-    m_dataFile(QString("")),
-    m_tocFile(QString("")),
-    m_cueFileLnk(QString("")),
-    m_binFileLnk(QString("")),    
     m_readRaw(false),
     m_multi(false),
     m_force(false),
@@ -91,11 +87,13 @@ K3bCdrdaoWriter::K3bCdrdaoWriter( K3bDevice* dev, QObject* parent, const char* n
     m_taoSourceAdjust(-1),
     m_paranoiaMode(-1),
     m_session(-1),
-    m_eject(k3bMain()->eject()),
     m_process(0),
     m_comSock(0),
     m_currentTrack(0)
 {
+  k3bcore->config()->setGroup("General Options");
+  m_eject = !k3bcore->config()->readBoolEntry( "No cd eject", false );
+
   QPtrList<K3bDevice> devices;
   K3bDevice *d;
   if ( !dev )
@@ -250,7 +248,7 @@ void K3bCdrdaoWriter::setWriteArguments()
     *m_process << "--buffer-under-run-protection 0";
   */
   
-  kapp->config()->setGroup("General Options");
+  k3bcore->config()->setGroup("General Options");
 
   bool manualBufferSize =
     k3bcore->config()->readBoolEntry( "Manual buffer size", false );
@@ -416,7 +414,7 @@ void K3bCdrdaoWriter::start()
   m_canceled = false;
   m_knownError = false;
 
-  m_cdrdaoBinObject = K3bExternalBinManager::self()->binObject("cdrdao");
+  m_cdrdaoBinObject = k3bcore->externalBinManager()->binObject("cdrdao");
 
   if( !m_cdrdaoBinObject )
     {
@@ -542,6 +540,7 @@ void K3bCdrdaoWriter::cancel()
 
   if( m_process ) {
     if( m_process->isRunning() ) {
+      m_process->disconnect();
       m_process->kill();
       
       // we need to unlock the device because cdrdao locked it while writing
@@ -549,30 +548,15 @@ void K3bCdrdaoWriter::cancel()
       // FIXME: try to determine wheater we are writing or reading and choose
       // the device to unblock based on that result.
       //
-      if( m_command == READ )
-	connect( K3bCdDevice::unblock( m_sourceDevice ), SIGNAL(finished(bool)),
-		 this, SLOT(slotUnblockWhileCancellationFinished(bool)) );
-      else
-	connect( K3bCdDevice::unblock( burnDevice() ), SIGNAL(finished(bool)),
-		 this, SLOT(slotUnblockWhileCancellationFinished(bool)) );
+      if( m_command == READ ) {
+	// FIXME: this is a hack
+	setBurnDevice( m_sourceDevice );
+      }
+
+      // this will unblock and eject the drive and emit the finished/canceled signals
+      K3bAbstractWriter::cancel();
     }
   }
-
-
-  emit canceled();
-  emit finished( false );
-}
-
-
-void K3bCdrdaoWriter::slotUnblockWhileCancellationFinished( bool success )
-{
-  if( !success )
-    emit infoMessage( i18n("Could not unlock CD drive."), K3bJob::ERROR );
-  else if( m_eject )
-    K3bCdDevice::eject( burnDevice() );
-
-  emit canceled();
-  emit finished( false );
 }
 
 

@@ -275,7 +275,6 @@ bool K3bAudioJob::prepareWriter()
     writer->setBurnproof( m_doc->burnproof() );
     writer->setBurnSpeed( m_doc->speed() );
     writer->setProvideStdin( false/*m_doc->onTheFly() */);
-    writer->prepareArgumentList();
 
 //     if( m_doc->onTheFly() )
 //       writer->addArgument("-waiti");

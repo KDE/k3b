@@ -148,7 +148,6 @@ void K3bIsoImager::slotReceivedStderr( const QString& line )
     else if( line.contains( "extents written" ) ) {
       emit percent( 100 );
     }
-
     else {
       kdDebug() << "(mkisofs) " << line << endl;
     }
@@ -412,13 +411,13 @@ void K3bIsoImager::setMultiSessionInfo( const QString& info, K3bDevice* dev )
 
 bool K3bIsoImager::addMkisofsParameters()
 {
-  if( !K3bExternalBinManager::self()->foundBin( "mkisofs" ) ) {
+  if( !k3bcore->externalBinManager()->foundBin( "mkisofs" ) ) {
     kdDebug() << "(K3bIsoImager) could not find mkisofs executable" << endl;
     emit infoMessage( i18n("Mkisofs executable not found."), K3bJob::ERROR );
     return false;
   }
 
-  *m_process << K3bExternalBinManager::self()->binPath( "mkisofs" );
+  *m_process << k3bcore->externalBinManager()->binPath( "mkisofs" );
 
   // add multisession info
   if( !m_multiSessionInfo.isEmpty() ) {
@@ -566,7 +565,7 @@ bool K3bIsoImager::addMkisofsParameters()
 
 
   // additional parameters from config
-  const QStringList& params = K3bExternalBinManager::self()->binObject( "mkisofs" )->userParameters();
+  const QStringList& params = k3bcore->externalBinManager()->binObject( "mkisofs" )->userParameters();
   for( QStringList::const_iterator it = params.begin(); it != params.end(); ++it )
     *m_process << *it;
 

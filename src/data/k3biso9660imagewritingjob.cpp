@@ -143,7 +143,6 @@ bool K3bIso9660ImageWritingJob::prepareWriter()
     writer->setSimulate( m_simulate );
     writer->setBurnproof( m_burnproof );
     writer->setBurnSpeed( m_speed );
-    writer->prepareArgumentList();
 
     if( m_noFix ) {
       writer->addArgument("-multi");

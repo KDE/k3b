@@ -18,6 +18,7 @@
 #include "k3bdeviceselectiondialog.h"
 #include <device/k3bdevice.h>
 #include <device/k3bdevicemanager.h>
+#include <k3bcore.h>
 
 #include <qcombobox.h>
 #include <qlayout.h>
@@ -56,7 +57,7 @@ K3bDeviceSelectionDialog::K3bDeviceSelectionDialog( bool reader,
 
   if( writer ) {
     // -- read cd-writers ----------------------------------------------
-    QPtrList<K3bDevice> devices = K3bDeviceManager::self()->burningDevices();
+    QPtrList<K3bDevice> devices = k3bcore->deviceManager()->burningDevices();
     K3bDevice* dev = devices.first();
     while( dev ) {
       m_comboDevices->insertItem( dev->vendor() + " " + dev->description() + " (" + dev->ioctlDevice() + ")" );
@@ -65,7 +66,7 @@ K3bDeviceSelectionDialog::K3bDeviceSelectionDialog( bool reader,
   }
   if( reader ) {
     // -- read cd-writers ----------------------------------------------
-    QPtrList<K3bDevice> devices = K3bDeviceManager::self()->readingDevices();
+    QPtrList<K3bDevice> devices = k3bcore->deviceManager()->readingDevices();
     K3bDevice* dev = devices.first();
     while( dev ) {
       m_comboDevices->insertItem( dev->vendor() + " " + dev->description() + " (" + dev->ioctlDevice() + ")" );
@@ -86,7 +87,7 @@ K3bDevice* K3bDeviceSelectionDialog::selectedDevice() const
 
   QString strDev = s.mid( s.find('(') + 1, s.find(')') - s.find('(') - 1 );
  
-  K3bDevice* dev =  K3bDeviceManager::self()->deviceByName( strDev );
+  K3bDevice* dev =  k3bcore->deviceManager()->deviceByName( strDev );
   if( !dev )
     kdDebug() << "(K3bDeviceSelectionDialog) could not find device " << s << endl;
 		

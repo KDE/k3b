@@ -90,7 +90,6 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
   void slotStdLine( const QString& line );
   void slotProcessExited(KProcess*);
   void getCdrdaoMessage();
-  void slotUnblockWhileCancellationFinished( bool );
 
  private:
   void unknownCdrdaoLine( const QString& );

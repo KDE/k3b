@@ -481,7 +481,6 @@ bool K3bMixedJob::prepareWriter()
     writer->setBurnproof( m_doc->burnproof() );
     writer->setBurnSpeed( m_doc->speed() );
     writer->setProvideStdin( m_doc->onTheFly() );
-    writer->prepareArgumentList();
 
     m_usingFifo = m_doc->onTheFly();
 

@@ -19,6 +19,7 @@
 #include "k3bmovixinstallation.h"
 #include "k3bmovixfileitem.h"
 
+#include <k3bcore.h>
 #include <data/k3bdatajob.h>
 #include <data/k3bbootitem.h>
 #include <data/k3bdiritem.h>
@@ -229,7 +230,7 @@ bool K3bMovixJob::addMovixFiles()
   if( m_installation )
     delete m_installation;
 
-  QString path = K3bExternalBinManager::self()->binPath("eMovix");
+  QString path = k3bcore->externalBinManager()->binPath("eMovix");
   m_installation = K3bMovixInstallation::probeInstallation( path );
   if( m_installation ) {
 

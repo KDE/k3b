@@ -362,7 +362,6 @@ bool K3bDataJob::prepareWriterJob()
     writer->setSimulate( m_doc->dummy() );
     writer->setBurnproof( m_doc->burnproof() );
     writer->setBurnSpeed( m_doc->speed() );
-    writer->prepareArgumentList();
 
     // multisession
     if( m_doc->multiSessionMode() == K3bDataDoc::START ||

@@ -16,10 +16,13 @@
 
 #include "k3babstractwriter.h"
 
+#include <k3bcore.h>
 #include <device/k3bdevicemanager.h>
+#include <device/k3bdevicehandler.h>
 
 #include <klocale.h>
 #include <kglobal.h>
+#include <kconfig.h>
 
 
 K3bAbstractWriter::K3bAbstractWriter( K3bDevice* dev, QObject* parent, const char* name )
@@ -42,7 +45,54 @@ K3bDevice* K3bAbstractWriter::burnDevice() const
   if( m_burnDevice )
     return m_burnDevice; 
   else
-    return K3bDeviceManager::self()->burningDevices().first();
+    return k3bcore->deviceManager()->burningDevices().first();
+}
+
+
+void K3bAbstractWriter::cancel()
+{
+  if( burnDevice() ) {
+    // we need to unlock the writer because cdrecord locked it while writing
+    emit infoMessage( i18n("Unblocking drive..."), INFO );
+    connect( K3bCdDevice::unblock( burnDevice() ), SIGNAL(finished(bool)),
+	     this, SLOT(slotUnblockWhileCancellationFinished(bool)) );
+  }
+  else {
+    emit canceled();
+    emit finished(false);
+  }
+}
+
+
+void K3bAbstractWriter::slotUnblockWhileCancellationFinished( bool success )
+{
+  k3bcore->config()->setGroup("General Options");
+
+  if( success ) {
+    if( !k3bcore->config()->readBoolEntry( "No cd eject", false ) ) {
+      emit infoMessage( i18n("Ejecting CD..."), INFO );
+      connect( K3bCdDevice::eject( burnDevice() ), SIGNAL(finished(bool)),
+	       this, SLOT(slotEjectWhileCancellationFinished(bool)) );
+      return;
+    }
+  }
+  else {
+    emit infoMessage( i18n("Could not unlock CD drive."), K3bJob::ERROR );
+  }
+
+  emit canceled();
+  emit finished( false );
+}
+
+
+void K3bAbstractWriter::slotEjectWhileCancellationFinished( bool success )
+{
+  if( !success ) {
+    emit infoMessage( i18n("Could not eject CD."), K3bJob::ERROR );
+  }
+
+  emit canceled();
+  emit finished( false );
 }
 
 
