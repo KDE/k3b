@@ -254,14 +254,6 @@ class K3bVcdOptions
         {
             return m_pbcenabled;
         };
-        void setPbcNumKeys( const bool& b )
-        {
-            m_pbcnumkeys = b;
-        }
-        bool PbcNumKeys() const
-        {
-            return m_pbcnumkeys;
-        };
         void setPbcPlayTime( const int i )
         {
             m_def_pbcplaytime = i;
@@ -316,7 +308,6 @@ class K3bVcdOptions
 
         // pbc
         bool m_pbcenabled;
-        bool m_pbcnumkeys;
 
         // volume descriptor
         QString m_volumeID;

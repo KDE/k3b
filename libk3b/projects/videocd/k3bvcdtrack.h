@@ -85,6 +85,22 @@ class K3bVcdTrack
         {
             m_reactivity = b;
         }
+        void setPbcNumKeys( const bool& b )
+        {
+            m_pbcnumkeys = b;
+        }
+        bool PbcNumKeys() const
+        {
+            return m_pbcnumkeys;
+        };
+        void setPbcNumKeysUserdefined( const bool& b )
+        {
+            m_pbcnumkeysuserdefined = b;
+        };
+        bool PbcNumKeysUserdefined() const
+        {
+            return m_pbcnumkeysuserdefined;
+        };
 
         K3bVcdTrack* getPbcTrack( const int& );
         int getNonPbcTrack( const int& );
@@ -138,20 +154,20 @@ class K3bVcdTrack
         const QString audio_type2str( unsigned int , unsigned int, unsigned int );
         QString SecsToHMS( double );
 
-        enum mpeg_version { MPEG_VERS_INVALID = 0, MPEG_VERS_MPEG1 = 1, MPEG_VERS_MPEG2 = 2 };
-        enum mode { MPEG_STEREO = 1, MPEG_JOINT_STEREO, MPEG_DUAL_CHANNEL, MPEG_SINGLE_CHANNEL };
-
         QPtrList<K3bVcdTrack>* m_parent;
 
         // PBC
         QPtrList<K3bVcdTrack>* m_revreflist;          // List of Tracks which points to us
-        QMap<int, K3bVcdTrack*> m_pbctrackmap;  // Pbc Tracks (Previous, Next, ...)
-        QMap<int, int> m_pbcnontrackmap;             // Pbc NON Track types (Previous, Next, ...)
-        QMap<int, bool> m_pbcusrdefmap;              // Pbc is userdefined or defaults (Previous, Next, ...)
+        QMap<int, K3bVcdTrack*> m_pbctrackmap;        // Pbc Tracks (Previous, Next, ...)
+        QMap<int, int> m_pbcnontrackmap;              // Pbc NON Track types (Previous, Next, ...)
+        QMap<int, bool> m_pbcusrdefmap;               // Pbc is userdefined or defaults (Previous, Next, ...)
+
+        bool m_pbcnumkeys;
+        bool m_pbcnumkeysuserdefined;
 
         int m_pbcplaytime;
         int m_pbcwaittime;
-        /*********************************************************************************************/
+        /********************************************************************************/
 
         bool m_reactivity;
         int m_filetype;

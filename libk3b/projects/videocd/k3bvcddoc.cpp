@@ -537,7 +537,6 @@ void K3bVcdDoc::loadDefaultSettings( KConfig* c )
 
     c->setGroup( "Video project settings" );
     vcdOptions() ->setPbcEnabled( c->readBoolEntry( "Use Playback Control", false ) );
-    vcdOptions() ->setPbcNumKeys( c->readBoolEntry( "Use numeric keys to navigate chapters", false ) );
     vcdOptions() ->setPbcPlayTime( c->readNumEntry( "Play each Sequence/Segment", 1 ) );
     vcdOptions() ->setPbcWaitTime( c->readNumEntry( "Time to wait after each Sequence/Segment", 2 ) );
 }
@@ -619,8 +618,6 @@ bool K3bVcdDoc::loadDocumentData( QDomElement* root )
             vcdOptions() ->setUseGaps( item.toElement().text().toInt() );
         else if ( name == "PbcEnabled" )
             vcdOptions() ->setPbcEnabled( item.toElement().text().toInt() );
-        else if ( name == "PbcNumKeys" )
-            vcdOptions() ->setPbcNumKeys( item.toElement().text().toInt() );
         else if ( name == "SegmentFolder" )
             vcdOptions() ->setSegmentFolder( item.toElement().text().toInt() );
         else if ( name == "Restriction" )
@@ -800,10 +797,6 @@ bool K3bVcdDoc::saveDocumentData( QDomElement* docElem )
 
     vcdElem = doc.createElement( "PbcEnabled" );
     vcdElem.appendChild( doc.createTextNode( QString::number( vcdOptions() ->PbcEnabled() ) ) );
-    vcdMain.appendChild( vcdElem );
-
-    vcdElem = doc.createElement( "PbcNumKeys" );
-    vcdElem.appendChild( doc.createTextNode( QString::number( vcdOptions() ->PbcNumKeys() ) ) );
     vcdMain.appendChild( vcdElem );
 
     vcdElem = doc.createElement( "SegmentFolder" );

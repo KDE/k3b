@@ -31,7 +31,9 @@
 #include <k3bglobals.h>
 
 K3bVcdTrack::K3bVcdTrack( QPtrList<K3bVcdTrack>* parent, const QString& filename )
-        : m_file( filename )
+        : m_pbcnumkeys( true ),
+        m_pbcnumkeysuserdefined( false ),
+        m_file( filename )
 {
     m_parent = parent;
     m_title = QFileInfo( m_file ).baseName( true );
@@ -238,7 +240,7 @@ const QString K3bVcdTrack::video_chroma()
 {
     if ( mpeg_info->has_video ) {
         // MPEG1 only supports 4:2:0 Format
-        if ( version() == MPEG_VERS_MPEG1 )
+        if ( version() == K3bMpegInfo::MPEG_VERS_MPEG1 )
             return QString( "4:2:0" );
 
         for ( int i = 0; i < 2; i++ ) {
@@ -398,11 +400,11 @@ const QString K3bVcdTrack::audio_type2str( unsigned int version, unsigned int au
                                               }
                                           };
     switch ( version ) {
-        case MPEG_VERS_MPEG1:
+        case K3bMpegInfo::MPEG_VERS_MPEG1:
             return audio_types[ 1 ][ audio_mode ];
             break;
 
-        case MPEG_VERS_MPEG2:
+        case K3bMpegInfo::MPEG_VERS_MPEG2:
             if ( audio_type > 0 ) {
                 return audio_types[ 2 ][ audio_type ];
             }

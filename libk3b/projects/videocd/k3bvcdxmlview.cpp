@@ -138,7 +138,7 @@ bool K3bVcdXmlView::write( const QString& fname )
 
     // create filesystem element
     QDomElement elemFileSystem = addSubElement( xmlDoc, root, "filesystem" );
-    
+
     // SEGMENT folder, some standalone DVD-Player need this
     if ( !m_doc->vcdOptions() ->haveSegments() && m_doc->vcdOptions() ->SegmentFolder() )
         addFolderElement( xmlDoc, elemFileSystem, "SEGMENT" );
@@ -188,12 +188,6 @@ bool K3bVcdXmlView::write( const QString& fname )
             elemdefaultEntry = addSubElement( xmlDoc, elemsequenceItem, "default-entry" );
             elemdefaultEntry.setAttribute( "id", QString( "entry-%1" ).arg( seqId ) );
 
-            if ( m_doc->vcdOptions() ->PbcEnabled() ) {
-                if ( elemPbc.isNull() ) {
-                    elemPbc = addSubElement( xmlDoc, root, "pbc" );
-                }
-                doPbc( xmlDoc, elemPbc, it.current() );
-            }
         } else {
             // sequence-items element needs at least one segment to fit the XML
             if ( elemsegmentItems.isNull() )
@@ -203,12 +197,15 @@ bool K3bVcdXmlView::write( const QString& fname )
             elemsegmentItem.setAttribute( "src", QString( "%1" ).arg( QFile::encodeName( it.current() ->absPath() ) ) );
             elemsegmentItem.setAttribute( "id", QString( "segment-%1" ).arg( QString::number( it.current() ->index() ).rightJustify( 3, '0' ) ) );
 
-            if ( m_doc->vcdOptions() ->PbcEnabled() ) {
-                if ( elemPbc.isNull() ) {
-                    elemPbc = addSubElement( xmlDoc, root, "pbc" );
-                }
-                doPbc( xmlDoc, elemPbc, it.current() );
-            }
+        }
+    }
+    for ( it.toFirst(); it.current(); ++it ) {
+
+        if ( m_doc->vcdOptions() ->PbcEnabled() ) {
+            if ( elemPbc.isNull() )
+                elemPbc = addSubElement( xmlDoc, root, "pbc" );
+
+            doPbc( xmlDoc, elemPbc, it.current() );
         }
     }
 
@@ -276,15 +273,18 @@ void K3bVcdXmlView::addFileElement( QDomDocument& doc, QDomElement& parent, cons
 void K3bVcdXmlView::doPbc( QDomDocument& doc, QDomElement& parent, K3bVcdTrack* track )
 {
     QString ref = ( track->isSegment() ) ? "segment" : "sequence";
+
     QDomElement elemSelection = addSubElement( doc, parent, "selection" );
     elemSelection.setAttribute( "id", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( track->index() ).rightJustify( 3, '0' ) ) );
+
+    setNumkeyBSN( doc, elemSelection, track );
 
     for ( int i = 0; i < K3bVcdTrack::_maxPbcTracks; i++ ) {
         QDomElement elemPbcSelectionPNRDT;
 
         if ( track->getPbcTrack( i ) ) {
             int index = track->getPbcTrack( i ) ->index();
-            ref = ( track->getPbcTrack( i ) ->isSegment() ) ? "segment" : "sequence";
+            QString ref = ( track->getPbcTrack( i ) ->isSegment() ) ? "segment" : "sequence";
 
             switch ( i ) {
                 case K3bVcdTrack::PREVIOUS:
@@ -350,4 +350,33 @@ void K3bVcdXmlView::doPbc( QDomDocument& doc, QDomElement& parent, K3bVcdTrack* 
 
     addSubElement( doc, elemSelection, "play-item" ).setAttribute( "ref", QString( "%1-%2" ).arg( ref ).arg( QString::number( track->index() ).rightJustify( 3, '0' ) ) );
 
+    setNumkeySEL( doc, elemSelection, track );
 }
+
+void K3bVcdXmlView::setNumkeyBSN( QDomDocument& doc, QDomElement& parent, K3bVcdTrack* track )
+{
+    if ( track->PbcNumKeys() ) {
+        if ( track->PbcNumKeysUserdefined() ) {
+            // TODO: get userdefined key startnumber
+        } else {
+            // default start with key #1
+            addSubElement( doc, parent, "bsn", 1 );
+        }
+    }
+}
+
+void K3bVcdXmlView::setNumkeySEL( QDomDocument& doc, QDomElement& parent, K3bVcdTrack* track )
+{
+    if ( track->PbcNumKeys() ) {
+        QDomElement elemPbcSelectionNumKeySEL;
+        QString ref = ( track->isSegment() ) ? "segment" : "sequence";
+        if ( track->PbcNumKeysUserdefined() ) {
+            // TODO: get userdefined keys
+        } else {
+            // default reference to itSelf
+            elemPbcSelectionNumKeySEL = addSubElement( doc, parent, "select" );
+            elemPbcSelectionNumKeySEL.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( track->index() ).rightJustify( 3, '0' ) ) );
+        }
+    }
+}
+

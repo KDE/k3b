@@ -51,12 +51,15 @@ class K3bVcdTrackDialog : public KDialogBase
         void slotPlayTimeChanged( int );
         void slotWaitTimeChanged( int );
         void slotPbcToggled( bool );
+        void slotNumkeyToggled( bool );
+        void slotGroupkeyToggled( bool );
 
 
     private:
         K3bVcdDoc* m_vcdDoc;
         QPtrList<K3bVcdTrack> m_tracks;
         QPtrList<K3bVcdTrack> m_selectedTracks;
+        QMap<QString, K3bVcdTrack*> m_numkeysmap;
         QTabWidget* m_mainTabbed;
 
         KCutLabel* m_displayFileName;
@@ -82,6 +85,7 @@ class K3bVcdTrackDialog : public KDialogBase
 
         QGroupBox* m_groupPlay;
         QGroupBox* m_groupPbc;
+        QGroupBox* m_groupKey;
         QWidget* m_widgetnumkeys;
 
         K3bCutComboBox* m_pbc_previous;

@@ -128,7 +128,7 @@ void K3bVcdTrackDialog::slotApply()
     selectedTrack->setPlayTime( m_spin_times->value() );
     selectedTrack->setWaitTime( m_spin_waittime->value() );
     selectedTrack->setReactivity( m_check_reactivity->isChecked() );
-    // TODO: selectedTrack->setPbcNumKeys( m_check_pbc->isChecked() );
+    selectedTrack->setPbcNumKeys( m_check_usekeys->isChecked() );
 
     VcdOptions() ->setPbcEnabled( m_check_pbc->isChecked() );
 
@@ -215,10 +215,9 @@ void K3bVcdTrackDialog::fillPbcGui()
 
     K3bVcdTrack* track;
     K3bListViewItem* item;
-    QStringList numkeys_list;
 
-    numkeys_list << "";
-    numkeys_list << i18n( "ItSelf" );
+    m_numkeysmap.insert( "", 0L );
+    m_numkeysmap.insert( "ItSelf", m_selectedTracks.first() );
 
     for ( track = m_tracks.first(); track; track = m_tracks.next() ) {
         QPixmap pm = KMimeType::pixmapForURL( KURL( track->absPath() ), 0, KIcon::Desktop, 16 );
@@ -227,10 +226,10 @@ void K3bVcdTrackDialog::fillPbcGui()
             s = i18n( "ItSelf" );
         } else if ( track->isSegment() ) {
             s = i18n( "Segment-%1 - %2" ).arg( QString::number( track->index() + 1 ).rightJustify( 3, '0' ) ).arg( track->title() );
-            numkeys_list << s;
+            m_numkeysmap.insert( s, track );
         } else {
             s = i18n( "Sequence-%1 - %2" ).arg( QString::number( track->index() + 1 ).rightJustify( 3, '0' ) ).arg( track->title() );
-            numkeys_list << s;
+            m_numkeysmap.insert( s, track );
         }
 
         m_pbc_previous->insertItem( pm, s );
@@ -263,7 +262,7 @@ void K3bVcdTrackDialog::fillPbcGui()
     m_pbc_return->insertItem( pmDisabled, txtDisabled );
     m_pbc_default->insertItem( pmDisabled, txtDisabled );
     m_comboAfterTimeout->insertItem( pmDisabled, txtDisabled );
-    numkeys_list << txtDisabled;
+    m_numkeysmap.insert( txtDisabled, 0L );
 
     // add VideoCD End
     QPixmap pmEnd = SmallIcon( "cdrom_unmount" );
@@ -273,15 +272,15 @@ void K3bVcdTrackDialog::fillPbcGui()
     m_pbc_return->insertItem( pmEnd, txtEnd );
     m_pbc_default->insertItem( pmEnd, txtEnd );
     m_comboAfterTimeout->insertItem( pmEnd, txtEnd );
-    numkeys_list << txtEnd;
+    m_numkeysmap.insert( txtEnd, 0L );
 
     for ( int i = 99; i > 1; i-- ) {
         item = new K3bListViewItem( m_list_keys, QString::number( i ) + " ", "" );
-        item->setEditor( 1, K3bListViewItem::COMBO , numkeys_list );
+        item->setEditor( 1, K3bListViewItem::COMBO , m_numkeysmap.keys() );
     }
 
     item = new K3bListViewItem( m_list_keys, "1 ", i18n( "ItSelf" ) );
-    item->setEditor( 1, K3bListViewItem::COMBO , numkeys_list );
+    item->setEditor( 1, K3bListViewItem::COMBO , m_numkeysmap.keys() );
 
     int count = m_tracks.count();
 
@@ -317,10 +316,8 @@ void K3bVcdTrackDialog::fillPbcGui()
     m_check_reactivity->setChecked( selectedTrack->Reactivity() );
     m_check_pbc->setChecked( VcdOptions() ->PbcEnabled() );
 
-    // not implemented yet
-    m_check_usekeys->setChecked( VcdOptions() ->PbcNumKeys() );
-    // m_mainTabbed->setTabEnabled( m_widgetnumkeys, m_check_usekeys->isChecked() );
-    m_mainTabbed->setTabEnabled( m_widgetnumkeys, true );
+    m_check_usekeys->setChecked( selectedTrack->PbcNumKeys() );
+    m_mainTabbed->setTabEnabled( m_widgetnumkeys, m_check_usekeys->isChecked() );
 }
 
 void K3bVcdTrackDialog::prepareGui()
@@ -496,6 +493,7 @@ void K3bVcdTrackDialog::setupPbcTab()
     connect( m_check_pbc, SIGNAL( toggled( bool ) ), this, SLOT( slotPbcToggled( bool ) ) );
     connect( m_spin_times, SIGNAL( valueChanged( int ) ), this, SLOT( slotPlayTimeChanged( int ) ) );
     connect( m_spin_waittime, SIGNAL( valueChanged( int ) ), this, SLOT( slotWaitTimeChanged( int ) ) );
+    connect( m_check_usekeys, SIGNAL( toggled( bool ) ), this, SLOT( slotNumkeyToggled( bool ) ) );
 }
 
 void K3bVcdTrackDialog::setupPbcKeyTab()
@@ -510,12 +508,12 @@ void K3bVcdTrackDialog::setupPbcKeyTab()
     grid->setSpacing( spacingHint() );
     grid->setMargin( marginHint() );
 
-    QGroupBox* groupKey = new QGroupBox( 3, Qt::Vertical, i18n( "Numeric Keys" ), m_widgetnumkeys );
-    groupKey->setEnabled( true );
-    groupKey->layout() ->setSpacing( spacingHint() );
-    groupKey->layout() ->setMargin( marginHint() );
+    m_groupKey = new QGroupBox( 3, Qt::Vertical, i18n( "Numeric Keys" ), m_widgetnumkeys );
+    m_groupKey->setEnabled( false );
+    m_groupKey->layout() ->setSpacing( spacingHint() );
+    m_groupKey->layout() ->setMargin( marginHint() );
 
-    m_list_keys = new K3bListView( groupKey, "m_list_keys" );
+    m_list_keys = new K3bListView( m_groupKey, "m_list_keys" );
     m_list_keys->setAllColumnsShowFocus( true );
     m_list_keys->setDoubleClickForEdit( false );
     m_list_keys->setColumnAlignment( 0, Qt::AlignRight );
@@ -524,13 +522,17 @@ void K3bVcdTrackDialog::setupPbcKeyTab()
     m_list_keys->addColumn( i18n( "Key" ) );
     m_list_keys->addColumn( i18n( "Playing" ) );
     m_list_keys->setResizeMode( QListView::LastColumn );
-    m_check_overwritekeys = new QCheckBox( i18n( "Overwrite default assignment" ), groupKey, "m_check_overwritekeys" );
+    m_check_overwritekeys = new QCheckBox( i18n( "Overwrite default assignment" ), m_widgetnumkeys, "m_check_overwritekeys" );
+    // TODO: Overwrite default assignment
+    m_check_overwritekeys->setEnabled( false );
 
-    grid->addWidget( groupKey, 1, 0 );
+    grid->addWidget( m_groupKey, 1, 0 );
+    grid->addWidget( m_check_overwritekeys, 2, 0 );
 
     m_mainTabbed->addTab( m_widgetnumkeys, i18n( "Numeric Keys" ) );
 
     connect( m_list_keys, SIGNAL( itemRenamed( QListViewItem*, const QString&, int ) ), this, SLOT( slotItemRenamed( QListViewItem*, const QString&, int ) ) );
+    connect( m_check_overwritekeys, SIGNAL( toggled( bool ) ), this, SLOT( slotGroupkeyToggled( bool ) ) );
 
 }
 
@@ -686,6 +688,7 @@ void K3bVcdTrackDialog::slotPbcToggled( bool b )
 {
     m_groupPlay->setEnabled( b );
     m_groupPbc->setEnabled( b );
+    m_check_usekeys->setEnabled( b );
     m_check_reactivity->setEnabled( b );
     if ( b )
         slotWaitTimeChanged( m_spin_waittime->value() );
@@ -694,6 +697,16 @@ void K3bVcdTrackDialog::slotPbcToggled( bool b )
 void K3bVcdTrackDialog::slotItemRenamed( QListViewItem* item, const QString &text, int col )
 {
     kdDebug() << "K3bvcdTrackDialog::slotItemRenamed Text:" << text << endl;
+}
+
+void K3bVcdTrackDialog::slotNumkeyToggled( bool b )
+{
+    m_mainTabbed->setTabEnabled( m_widgetnumkeys, b );
+}
+
+void K3bVcdTrackDialog::slotGroupkeyToggled( bool b )
+{
+    m_groupKey->setEnabled( b );
 }
 
 #include "k3bvcdtrackdialog.moc"

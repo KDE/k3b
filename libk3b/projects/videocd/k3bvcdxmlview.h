@@ -49,7 +49,8 @@ class K3bVcdXmlView
         QDomElement addFolderElement( QDomDocument&, QDomElement&, const QString& name );
         void addFileElement( QDomDocument&, QDomElement&, const QString& src, const QString& name, bool mixed = false );
         void doPbc( QDomDocument&, QDomElement&, K3bVcdTrack* );
-
+        void setNumkeyBSN( QDomDocument& , QDomElement&, K3bVcdTrack* );
+        void setNumkeySEL( QDomDocument& , QDomElement&, K3bVcdTrack* );
         K3bVcdDoc* m_doc;
 };
 
