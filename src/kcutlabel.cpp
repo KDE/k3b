@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -15,6 +15,8 @@
 
 
 #include "kcutlabel.h"
+
+#include <tools/k3bstringutils.h>
 
 #include <qtooltip.h>
 #include <qstringlist.h>
@@ -61,7 +63,7 @@ void KCutLabel::cutTextToLabel()
     QString newText;
     QStringList lines = QStringList::split( "\n", m_fullText );
     for( QStringList::Iterator it = lines.begin(); it != lines.end(); ++it ) {
-      QString squeezedText = cutToWidth( *it, size().width() );
+      QString squeezedText = K3b::cutToWidth( fontMetrics(), *it, size().width() );
       newText += squeezedText;
       newText += "\n";
       if( squeezedText != *it )
@@ -72,57 +74,11 @@ void KCutLabel::cutTextToLabel()
     QLabel::setText( newText );
   }
   else {
-    QString squeezedText = cutToWidth( m_fullText, size().width() );
+    QString squeezedText = K3b::cutToWidth( fontMetrics(), m_fullText, size().width() );
     QLabel::setText( squeezedText );
     if( squeezedText != m_fullText )
       QToolTip::add( this, m_fullText );      
   }
 }
-
-
-QString KCutLabel::cutToWidth( const QString& fullText, int cutWidth )
-{
-  QFontMetrics fm(fontMetrics());
-  QString squeezedText = "...";
-  int squeezedWidth = fm.width(squeezedText);
-  int textWidth = fm.width(fullText);
-
-  if( textWidth <= cutWidth ) {
-    return fullText;
-  }
-
-  if( fm.width(fullText.right(1) + "..." ) > cutWidth ) {
-    kdDebug() << "(KCutLabel) not able to cut text to " << cutWidth << "!" << endl;
-    return fullText.right(1) + "...";
-  }
-
-  // estimate how many letters we can add to the dots
-  int letters = fullText.length() * (cutWidth - squeezedWidth) / textWidth;
-  squeezedText = fullText.left(letters) + "...";
-  squeezedWidth = fm.width(squeezedText);
-
-  if (squeezedWidth < cutWidth) {
-    // we estimated too short
-    // add letters while text < label
-    do {
-      letters++;
-      squeezedText = fullText.left(letters) + "...";
-      squeezedWidth = fm.width(squeezedText);
-    } while (squeezedWidth < cutWidth);
-    letters--;
-    squeezedText = fullText.left(letters) + "...";
-  } else if (squeezedWidth > cutWidth) {
-    // we estimated too long
-    // remove letters while text > label
-    do {
-      letters--;
-      squeezedText = fullText.left(letters) + "...";
-      squeezedWidth = fm.width(squeezedText);
-    } while (squeezedWidth > cutWidth);
-  }
-
-  return squeezedText;
-}
-
 
 #include "kcutlabel.moc"

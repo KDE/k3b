@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -49,7 +49,6 @@ class KCutLabel : public QLabel
    * does the dirty work
    */
   void cutTextToLabel();
-  QString cutToWidth( const QString&, int );
   QString m_fullText;
 };
 

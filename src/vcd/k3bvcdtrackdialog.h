@@ -29,6 +29,7 @@ class QComboBox;
 class QRadioButton;
 class QButtonGroup;
 class KCutLabel;
+class K3bCutComboBox;
 
 
 class K3bVcdTrackDialog : public KDialogBase
@@ -77,11 +78,11 @@ class K3bVcdTrackDialog : public KDialogBase
   QLabel* m_labelAfterTimeout;
   QLabel* m_labelWait;
   
-  QComboBox* m_pbc_previous;
-  QComboBox* m_pbc_next;
-  QComboBox* m_pbc_return;
-  QComboBox* m_pbc_default;
-  QComboBox* m_comboAfterTimeout;
+  K3bCutComboBox* m_pbc_previous;
+  K3bCutComboBox* m_pbc_next;
+  K3bCutComboBox* m_pbc_return;
+  K3bCutComboBox* m_pbc_default;
+  K3bCutComboBox* m_comboAfterTimeout;
   
   QCheckBox* m_check_usekeys;
   QCheckBox* m_check_overwritekeys;
