@@ -22,6 +22,7 @@
 #include "k3bburningoptiontab.h"
 #include "k3brippingpatternoptiontab.h"
 #include "k3bexternalbinoptiontab.h"
+#include "k3bmiscoptiontab.h"
 
 #include <qlayout.h>
 #include <qtooltip.h>
@@ -42,12 +43,14 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
   setupProgramsPage();
   setupCddbPage();
   setupRippingPatternPage();
-	
+  setupMiscPage();
+
   m_externalBinOptionTab->readSettings();
   m_cddbOptionTab->readSettings();
   m_deviceOptionTab->readDevices();
   m_burningOptionTab->readSettings();
   m_rippingPatternOptionTab->readSettings();
+  m_miscOptionTab->readSettings();
 
 
   // if we don't do this the dialog start really huge
@@ -76,22 +79,9 @@ void K3bOptionDialog::slotApply()
   m_burningOptionTab->saveSettings();
   m_rippingPatternOptionTab->apply();
   m_externalBinOptionTab->saveSettings();
+  m_miscOptionTab->saveSettings();
 
   kapp->config()->sync();
-}
-
-
-void K3bOptionDialog::setupProgramsPage()
-{
-  QFrame* frame = addPage( i18n("Programs"), i18n("Setup external programs"),
-			   KGlobal::instance()->iconLoader()->loadIcon( "gear", KIcon::NoGroup, KIcon::SizeMedium ) );
-
-  QGridLayout* _frameLayout = new QGridLayout( frame );
-  _frameLayout->setSpacing( 0 );
-  _frameLayout->setMargin( 0 );
-
-  m_externalBinOptionTab = new K3bExternalBinOptionTab( k3bMain()->externalBinManager(), frame );
-  _frameLayout->addWidget( m_externalBinOptionTab, 0, 0 );
 }
 
 
@@ -112,7 +102,7 @@ void K3bOptionDialog::slotDefault()
 
 void K3bOptionDialog::setupBurningPage()
 {
-  QFrame* frame = addPage( i18n("Burning"), i18n("Burning Settings"),
+  QFrame* frame = addPage( i18n("Writing"), i18n("Writing Settings"),
 			   KGlobal::instance()->iconLoader()->loadIcon( "cdwriter_unmount", KIcon::NoGroup, KIcon::SizeMedium ) );
 		
   QGridLayout* _frameLayout = new QGridLayout( frame );
@@ -124,10 +114,24 @@ void K3bOptionDialog::setupBurningPage()
 }
 
 
+void K3bOptionDialog::setupProgramsPage()
+{
+  QFrame* frame = addPage( i18n("Programs"), i18n("Setup external programs"),
+			   KGlobal::instance()->iconLoader()->loadIcon( "exec", KIcon::NoGroup, KIcon::SizeMedium ) );
+
+  QGridLayout* _frameLayout = new QGridLayout( frame );
+  _frameLayout->setSpacing( 0 );
+  _frameLayout->setMargin( 0 );
+
+  m_externalBinOptionTab = new K3bExternalBinOptionTab( k3bMain()->externalBinManager(), frame );
+  _frameLayout->addWidget( m_externalBinOptionTab, 0, 0 );
+}
+
+
 void K3bOptionDialog::setupCddbPage()
 {
   QFrame* frame = addPage( i18n("CDDB"), i18n("Setup the cddb server"),
-			   KGlobal::instance()->iconLoader()->loadIcon( "gear", KIcon::NoGroup, KIcon::SizeMedium ) );
+			   KGlobal::instance()->iconLoader()->loadIcon( "connect_established", KIcon::NoGroup, KIcon::SizeMedium ) );
 
   QGridLayout* mainGrid = new QGridLayout( frame );
   mainGrid->setSpacing(0);
@@ -153,7 +157,7 @@ void K3bOptionDialog::setupDevicePage()
 void K3bOptionDialog::setupRippingPatternPage()
 {
   QFrame* frame = addPage( i18n("Ripping"), i18n("Setup Ripping Patterns"),
-			   KGlobal::instance()->iconLoader()->loadIcon( "blockdevice", KIcon::NoGroup, KIcon::SizeMedium ) );
+			   KGlobal::instance()->iconLoader()->loadIcon( "misc", KIcon::NoGroup, KIcon::SizeMedium ) );
 
   QVBoxLayout* box = new QVBoxLayout( frame );
   box->setSpacing( 0 );
@@ -163,6 +167,20 @@ void K3bOptionDialog::setupRippingPatternPage()
   box->addWidget( m_rippingPatternOptionTab );
   QString album("album");
   m_rippingPatternOptionTab->init( album );
+}
+
+
+void K3bOptionDialog::setupMiscPage()
+{
+  QFrame* frame = addPage( i18n("Misc"), i18n("Miscellaneous Settings"),
+			   KGlobal::instance()->iconLoader()->loadIcon( "misc", KIcon::NoGroup, KIcon::SizeMedium ) );
+
+  QVBoxLayout* box = new QVBoxLayout( frame );
+  box->setSpacing( 0 );
+  box->setMargin( 0 );
+
+  m_miscOptionTab = new K3bMiscOptionTab( frame );
+  box->addWidget( m_miscOptionTab );
 }
 
 

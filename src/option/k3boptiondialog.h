@@ -25,6 +25,7 @@ class K3bDeviceOptionTab;
 class K3bBurningOptionTab;
 class K3bRippingPatternOptionTab;
 class K3bExternalBinOptionTab;
+class K3bMiscOptionTab;
 
 
 /**
@@ -65,6 +66,10 @@ class K3bOptionDialog : public KDialogBase
   // ripping pattern tab
   K3bRippingPatternOptionTab *m_rippingPatternOptionTab;
   void setupRippingPatternPage();
+
+  // misc options
+  K3bMiscOptionTab* m_miscOptionTab;
+  void setupMiscPage();
 };
 
 #endif
