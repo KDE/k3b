@@ -70,6 +70,7 @@ public:
 
   bool canceled;
   bool error;
+  bool readingSuccessful;
   bool running;
 
   unsigned int numSessions;
@@ -145,6 +146,7 @@ void K3bCdCopyJob::start()
   d->running = true;
   d->canceled = false;
   d->error = false;
+  d->readingSuccessful = false;
   d->audioReaderRunning = d->dataReaderRunning = d->writerRunning = false;
   d->sessionSizes.clear();
   d->dataSessionProbablyTAORecorded.clear();
@@ -892,19 +894,22 @@ void K3bCdCopyJob::slotSessionReaderFinished( bool success )
 	d->currentReadSession++;
 	readNextSession();
       }
-      else if( !m_onlyCreateImages ) {
-	if( m_readerDevice == m_writerDevice ) {
-	  // eject the media
-	  m_readerDevice->eject();
-	}
-	  
-	if( !writeNextSession() ) {
-	  // nothing is running here...
-	  finishJob( d->canceled, d->error );
-	}
-      }
       else {
-	finishJob( false, false );
+	d->readingSuccessful = true;
+	if( !m_onlyCreateImages ) {
+	  if( m_readerDevice == m_writerDevice ) {
+	    // eject the media
+	    m_readerDevice->eject();
+	  }
+	  
+	  if( !writeNextSession() ) {
+	    // nothing is running here...
+	    finishJob( d->canceled, d->error );
+	  }
+	}
+	else {
+	  finishJob( false, false );
+	}
       }
     }
   }
@@ -992,13 +997,13 @@ void K3bCdCopyJob::cleanup()
   delete d->cdTextFile;
   d->cdTextFile = 0;
 
-  if( m_onTheFly || d->canceled || !m_keepImage || d->error ) {
+  if( m_onTheFly || !m_keepImage || ((d->canceled || d->error) && !d->readingSuccessful) ) {
     emit infoMessage( i18n("Removing temporary files."), INFO );
     for( QStringList::iterator it = d->infNames.begin(); it != d->infNames.end(); ++it )
       QFile::remove( *it );
   }
 
-  if( !m_onTheFly && (d->canceled || d->error || !m_keepImage) ) {
+  if( !m_onTheFly && (!m_keepImage || ((d->canceled || d->error) && !d->readingSuccessful)) ) {
     emit infoMessage( i18n("Removing image files."), INFO );
     for( QStringList::iterator it = d->imageNames.begin(); it != d->imageNames.end(); ++it )
       QFile::remove( *it );
