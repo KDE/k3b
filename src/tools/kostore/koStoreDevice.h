@@ -20,7 +20,7 @@
 #ifndef koStoreDevice_h
 #define koStoreDevice_h
 
-#include <koStore.h>
+#include "koStore.h"
 
 /**
  * This class implements a QIODevice around KoStore, so that
