@@ -189,6 +189,7 @@ bool K3bAudioDecoder::initDecoder()
   d->currentPosOffset = 0;
   d->decodingBufferFill = 0;
   d->decodingBufferPos = 0;
+  d->decodingStartPos = 0;
 
   d->decoderFinished = false;
 
