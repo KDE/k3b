@@ -144,3 +144,5 @@ void K3bAudioTrack::setTrackEnd( const K3b::Msf& msf )
     emit changed();
   }
 }
+
+#include "k3baudiotrack.moc"
