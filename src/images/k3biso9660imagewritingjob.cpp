@@ -282,7 +282,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
     int usedApp = writingApp();
     if( usedApp == K3b::DEFAULT ) {
       if( k3bcore->externalBinManager()->binObject( "cdrdao" ) && 
-	  ( k3bcore->externalBinManager()->binObject( "cdrdao" )->version >= K3bVersion( 1, 1, 8 ) ||
+	  ( k3bcore->externalBinManager()->binObject( "cdrdao" )->version >= K3bVersion( 1, 1, 7 ) ||
 	   ( usedWriteMode == K3b::DAO && ( m_dataMode == K3b::MODE2 || m_noFix ) ) ) )
 	usedApp = K3b::CDRDAO;
       else
