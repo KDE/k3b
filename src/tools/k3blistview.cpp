@@ -29,6 +29,7 @@
 #include <qcombobox.h>
 #include <qspinbox.h>
 #include <qlineedit.h>
+#include <qlistbox.h>
 #include <qevent.h>
 #include <qvalidator.h>
 #include <qfont.h>
@@ -868,14 +869,20 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
 	hideEditor();
     }
   }
-  else if( e->type() == QEvent::FocusOut &&
-	   ( o == m_editorSpinBox ||
-	     o == m_editorMsfEdit ||
-	     o == m_editorLineEdit ||
-	     o == m_editorComboBox ) )
-    hideEditor();
+  else if( e->type() == QEvent::FocusOut ) {
+    if( o == m_editorSpinBox ||
+	o == m_editorMsfEdit ||
+	o == m_editorLineEdit )
+      hideEditor();
+    else if( o == m_editorComboBox ) {
+      // make sure we did not lose the focus to one of the combobox children
+      if( ( !m_editorComboBox->listBox() || !m_editorComboBox->listBox()->hasFocus() ) &&
+	  ( !m_editorComboBox->lineEdit() || !m_editorComboBox->lineEdit()->hasFocus() ) )
+	hideEditor();
+    }
+  }
 
-  return KListView::eventFilter( o, e );
+    return KListView::eventFilter( o, e );
 }
 
 
