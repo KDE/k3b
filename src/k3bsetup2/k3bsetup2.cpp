@@ -18,6 +18,7 @@
 
 #include "k3bsetup2.h"
 #include "k3bsetup2finishpage.h"
+#include "k3bsetup2task.h"
 #include "fstab/k3bsetup2fstabwidget.h"
 
 #include <tools/k3bglobals.h>
@@ -55,6 +56,9 @@ K3bSetup2::K3bSetup2( QWidget* parent, const char* name, bool modal, WFlags flag
   connect( m_backButton, SIGNAL(clicked()), this, SLOT(back()) );
   connect( m_finishButton, SIGNAL(clicked()), this, SLOT(accept()) );
   connect( m_closeButton, SIGNAL(clicked()), this, SLOT(close()) );
+
+  connect( m_taskView, SIGNAL(editorButtonClicked( K3bListViewItem*, int )),
+	   this, SLOT(slotTaskViewButtonClicked(K3bListViewItem*, int )) );
 
   showPage( 1 );
 }
@@ -213,6 +217,13 @@ void K3bSetup2::showPage( int id )
   }
 
   m_backButton->setDisabled(m_visiblePageIndex == 1);
+}
+
+
+void K3bSetup2::slotTaskViewButtonClicked( K3bListViewItem* item, int )
+{
+  K3bSetup2Task* task = (K3bSetup2Task*)item;
+  KMessageBox::information( this, task->help(), task->text(0) + QString(" (%1)").arg(i18n("Help")) );
 }
 
 #include "k3bsetup2.moc"

@@ -15,7 +15,7 @@ apps_DATA = k3bsetup.desktop
 appsdir = $(kde_appsdir)/Applications
 
 # set the include path for X, qt and KDE
-INCLUDES= $(all_includes) -I$(srcdir)/..
+INCLUDES= $(all_includes) -I$(srcdir)/.. -I$(srcdir)/../tools
 
 METASOURCES = AUTO
 

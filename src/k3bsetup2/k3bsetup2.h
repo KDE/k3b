@@ -27,6 +27,7 @@ class QWidgetStack;
 class KPushButton;
 class QLabel;
 class K3bListView;
+class K3bListViewItem;
 
 class K3bSetup2Page;
 
@@ -54,6 +55,7 @@ class K3bSetup2 : public KDialog
   void next();
   void back();
   void showPage( int );
+  void slotTaskViewButtonClicked(K3bListViewItem*, int );
 
  private:
   void setupGui();
