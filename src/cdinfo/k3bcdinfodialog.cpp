@@ -46,8 +46,9 @@ K3bCdInfoDialog::K3bCdInfoDialog( QWidget* parent, const char* name, bool modal 
 
   mainGrid->addWidget( new QLabel( i18n( "Device" ), mainWidget, "TextLabel1_2" ), 0, 0 );
   mainGrid->addWidget( m_comboDevice, 0, 1 );
-  mainGrid->addWidget( m_buttonRefresh, 0, 2 );
-  mainGrid->addMultiCellWidget( m_cdInfo, 1, 1, 0, 2 );
+  mainGrid->addWidget( m_buttonRefresh, 0, 3 );
+  mainGrid->addMultiCellWidget( m_cdInfo, 1, 1, 0, 3 );
+  mainGrid->setColStretch( 2, 1 );
 
   connect( m_comboDevice, SIGNAL(activated(int)), this, SLOT(slotDeviceChanged()) );
   connect( m_buttonRefresh, SIGNAL(clicked()), m_cdInfo->refreshAction(), SLOT(activate()) );

@@ -18,6 +18,9 @@
 #include "k3bcdinfo.h"
 
 #include "../device/k3bdevice.h"
+#include "k3btoc.h"
+#include "k3btrack.h"
+#include "../k3bcddb.h"
 
 #include <qlayout.h>
 #include <qheader.h>
@@ -30,14 +33,15 @@
 #include <kapp.h>
 #include <kconfig.h>
 #include <kiconloader.h>
+#include <klistview.h>
+
 
 
 K3bCdInfo::K3bCdInfo( QWidget* parent, const char* name )
-  : KListView( parent, name )
+  : QWidget( parent, name )
 {
   m_device = 0;
   m_cdinfo = new PrivateCDInfo;
-  m_cdinfo->tracks.setAutoDelete( true );
 
   m_infoTimer = new QTimer( this );
   connect( m_infoTimer, SIGNAL(timeout()), this, SLOT(slotTestDevice()) );
@@ -45,22 +49,46 @@ K3bCdInfo::K3bCdInfo( QWidget* parent, const char* name )
   m_process = new KProcess();
   m_actionRefresh = new KAction( i18n("Refresh"), "reload", 0, this, SLOT(slotRefresh()), this, "m_actionRefresh" );
 
-  addColumn( "name" );
-  addColumn( "info" );
-  header()->hide();
-  setRootIsDecorated( true );
-  setSorting( -1 );
+  m_viewAtip = new KListView( this );
+  m_viewToc = new KListView( this );
+  QVBoxLayout* box = new QVBoxLayout( this );
+  box->setSpacing( KDialog::spacingHint() );
+  box->setMargin( KDialog::marginHint() );
 
-  (void)new QListViewItem( this, i18n("No medium inserted") );
+  box->addWidget( m_viewAtip );
+  box->addWidget( m_viewToc );
+
+  m_viewAtip->addColumn( "name" );
+  m_viewAtip->addColumn( "info" );
+  m_viewAtip->header()->hide();
+  m_viewAtip->setRootIsDecorated( true );
+  m_viewAtip->setSorting( -1 );
+
+  m_viewToc->addColumn( i18n("title") );
+  m_viewToc->addColumn( i18n("type") );
+  m_viewToc->addColumn( i18n("first sector") );
+  m_viewToc->addColumn( i18n("length") );
+  m_viewToc->addColumn( i18n("last sector") );
+  m_viewToc->setRootIsDecorated( true );
+  m_viewToc->setSorting( -1 );
+
+  clear();
 }
 
 
 K3bCdInfo::~K3bCdInfo()
 {
   delete m_process;
-  delete m_cdinfo;
 }
 
+
+void K3bCdInfo::clear()
+{
+  m_viewAtip->clear();
+  m_viewToc->clear();
+  m_viewAtip->hide();
+  (void)new QListViewItem( m_viewToc, i18n("No medium inserted") );
+}
 
 void K3bCdInfo::setDevice( K3bDevice* dev )
 {
@@ -73,37 +101,58 @@ void K3bCdInfo::slotTestDevice()
 {
   tries++;
 
-  if( m_device->isReady() == 0 )
+  if( cdrom_drive* drive = m_device->open() )
     {
       m_infoTimer->stop();
-      // start cdrdao process
-      m_process->clearArguments();
-      m_process->disconnect();
 
-      kapp->config()->setGroup("External Programs");
-      *m_process << kapp->config()->readEntry( "cdrdao path" );
-      *m_process << "disk-info";
-      *m_process << "--device" << m_device->devicename();
+      qDebug( "(K3bCdInfo) Retrieving toc info..." );
 
-      connect( m_process, SIGNAL(processExited(KProcess*)),
-	       this, SLOT(slotCdrdaoFinished()) );
-      connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
-	       this, SLOT(slotParseCdrdaoOutput(KProcess*, char*, int)) );
-      connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
-	       this, SLOT(slotParseCdrdaoOutput(KProcess*, char*, int)) );
+      m_cdinfo->toc = m_device->readToc();
+      if( !m_cdinfo->toc.isEmpty() ) {
+	m_cdinfo->tocInfo_valid = true;
 
-      if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) )
-	{
-	  qDebug( "(K3bCdInfo) Could not start cdrdao!" );
-	  m_process->disconnect();
-	  clear();
-	  (void)new QListViewItem( this, i18n("Some error occured") );
+	if( K3bCddb::appendCddbInfo( m_cdinfo->toc ) ) {
+	  m_cdinfo->cddbInfo_valid = true;
 	}
+      }
+
+      qDebug( "(K3bCdInfo) Finished." );
+
+      // only cd-writers are able to retrieve atip-info
+      if( m_device->burner() ) {
+	// start cdrdao process
+	m_process->clearArguments();
+	m_process->disconnect();
+	
+	kapp->config()->setGroup("External Programs");
+	*m_process << kapp->config()->readEntry( "cdrdao path" );
+	*m_process << "disk-info";
+	*m_process << "--device" << m_device->devicename();
+	
+	connect( m_process, SIGNAL(processExited(KProcess*)),
+		 this, SLOT(slotCdrdaoFinished()) );
+	connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
+		 this, SLOT(slotParseCdrdaoOutput(KProcess*, char*, int)) );
+	connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
+		 this, SLOT(slotParseCdrdaoOutput(KProcess*, char*, int)) );
+	
+	if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) )
+	  {
+	    qDebug( "(K3bCdInfo) Could not start cdrdao!" );
+	    m_process->disconnect();
+	    
+	    updateView();
+	  }
+	else
+	  m_cdinfo->show_atip = true;
+      }
+      else
+	updateView();
     }
+  
   else if( tries > 10 ) {
     m_infoTimer->stop();
     clear();
-    (void)new QListViewItem( this, i18n("No medium inserted") );
   } 
 }
 
@@ -113,11 +162,12 @@ void K3bCdInfo::slotRefresh()
   if( m_device == 0 )
     return;
 
+  clear();
   m_cdinfo->reset();
   tries = 0;
 
-  clear();
-  (void)new QListViewItem( this, i18n("Retrieving info...") );
+  m_viewToc->clear();
+  (void)new QListViewItem( m_viewToc, i18n("Retrieving info...") );
 
   // try to get information every second for 10 seconds
   m_infoTimer->start(1000);
@@ -188,77 +238,50 @@ void K3bCdInfo::slotParseCdrdaoOutput( KProcess*, char* data, int len )
 
 void K3bCdInfo::slotParseCdrecordOutput( KProcess*, char* data, int len )
 {
-  QString buffer = QString::fromLatin1( data, len );
+//   QString buffer = QString::fromLatin1( data, len );
 	
-  // split to lines
-  QStringList lines = QStringList::split( "\n", buffer );
+//   // split to lines
+//   QStringList lines = QStringList::split( "\n", buffer );
 	
-  // do every line
-  for( QStringList::Iterator str = lines.begin(); str != lines.end(); str++ )
-    {
-      *str = (*str).stripWhiteSpace();
-      QString& line = *str;
-      if( line.contains("Cannot read TOC") )
-	{
-	  // since there should be a cd in the drive it must be empty
-	  m_cdinfo->tocInfo_valid = false;
-	}
-      else if( line.startsWith("track:") )
-	{
-	  // we found a track-info and append it to the list
-	  m_cdinfo->tocInfo_valid = true;
-	  PrivateTrackInfo* newTrack = new PrivateTrackInfo;
-	  QStringList tokens = QStringList::split( ":", line );
-	  bool ok;
-	  tokens[1].truncate( tokens[1].find('l') );
-	  newTrack->number = tokens[1].toInt(&ok);
-	  if( !ok )
-	    newTrack->leadout = true;
-	  else
-	    newTrack->leadout = false;
+//   // do every line
+//   for( QStringList::Iterator str = lines.begin(); str != lines.end(); str++ )
+//     {
+//       *str = (*str).stripWhiteSpace();
+//       QString& line = *str;
+//       if( line.contains("Cannot read TOC") )
+// 	{
+// 	  // since there should be a cd in the drive it must be empty
+// 	  m_cdinfo->tocInfo_valid = false;
+// 	}
+//       else if( line.startsWith("track:") )
+// 	{
+// 	  // we found a track-info and append it to the list
+// 	  m_cdinfo->tocInfo_valid = true;
+// 	  PrivateTrackInfo* newTrack = new PrivateTrackInfo;
+// 	  QStringList tokens = QStringList::split( ":", line );
+// 	  bool ok;
+// 	  tokens[1].truncate( tokens[1].find('l') );
+// 	  newTrack->number = tokens[1].toInt(&ok);
+// 	  if( !ok )
+// 	    newTrack->leadout = true;
+// 	  else
+// 	    newTrack->leadout = false;
 
-	  tokens[2].truncate( tokens[2].find('(') );
-	  newTrack->startBlock = tokens[2].toInt();
-	  tokens[6].truncate( tokens[6].find('m') );
-	  newTrack->control = tokens[6].toInt();
-	  newTrack->mode = tokens[7].toInt();
+// 	  tokens[2].truncate( tokens[2].find('(') );
+// 	  newTrack->startBlock = tokens[2].toInt();
+// 	  tokens[6].truncate( tokens[6].find('m') );
+// 	  newTrack->control = tokens[6].toInt();
+// 	  newTrack->mode = tokens[7].toInt();
 
-	  m_cdinfo->tracks.prepend(newTrack);
-	}
-    }
+// 	  m_cdinfo->tracks.prepend(newTrack);
+// 	}
+//     }
 }
 
 
 void K3bCdInfo::slotCdrdaoFinished()
 {
-  if( !m_cdinfo->empty )
-    {
-      // start cdrecord process
-      m_process->clearArguments();
-      m_process->disconnect();
-
-      kapp->config()->setGroup("External Programs");
-      *m_process << kapp->config()->readEntry( "cdrecord path" );
-      *m_process << "-toc";
-      *m_process << QString("dev=%1").arg( m_device->devicename() );
-
-      connect( m_process, SIGNAL(processExited(KProcess*)),
-	       this, SLOT(slotCdrecordFinished()) );
-      connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
-	       this, SLOT(slotParseCdrecordOutput(KProcess*, char*, int)) );
-      connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
-	       this, SLOT(slotParseCdrecordOutput(KProcess*, char*, int)) );
-
-      if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) )
-	{
-	  qDebug( "(K3bCdInfo) Could not start cdrecord!" );
-	  m_process->disconnect();
-	  clear();
-	  (void)new QListViewItem( this, i18n("Some error occured") );
-	}
-    }
-  else
-    updateView();
+  updateView();
 }
 
 
@@ -270,56 +293,61 @@ void K3bCdInfo::slotCdrecordFinished()
 
 void K3bCdInfo::updateView()
 {
-  clear();
+  m_viewToc->clear();
+  m_viewAtip->clear();
 
   QListViewItem *root1, *root2;
   QListViewItem *item1, *item2;
 
   // create ATIP-info items
   // ----------------------------------------------------
-  root1 = new QListViewItem( this, "Atip" );
-  root1->setPixmap( 0, KGlobal::instance()->iconLoader()->loadIcon( "cdrom_unmount", KIcon::NoGroup, KIcon::SizeSmall ) );
+  if( m_cdinfo->show_atip ) {
+    root1 = new QListViewItem( m_viewAtip, "Atip" );
+    root1->setPixmap( 0, KGlobal::instance()->iconLoader()->loadIcon( "cdrom_unmount", KIcon::NoGroup, KIcon::SizeSmall ) );
 
-  if( m_cdinfo->cdrw_valid ) {
-    item1 = new QListViewItem( root1, i18n("CD-RW") );
-    if( m_cdinfo->cdrw )
-      item1->setText( 1, i18n("yes") );
-    else
-      item1->setText( 1, i18n("no") );
-  }
+    if( m_cdinfo->cdrw_valid ) {
+      item1 = new QListViewItem( root1, i18n("CD-RW") );
+      if( m_cdinfo->cdrw )
+	item1->setText( 1, i18n("yes") );
+      else
+	item1->setText( 1, i18n("no") );
+    }
 
-  if( m_cdinfo->size_valid )
-    item2 = new QListViewItem( root1, item1, i18n("Total Capacity"), m_cdinfo->size );
+    if( m_cdinfo->size_valid )
+      item2 = new QListViewItem( root1, item1, i18n("Total Capacity"), m_cdinfo->size );
+    
+    if( m_cdinfo->medium_valid )
+      item1 = new QListViewItem( root1, item2, i18n("CD-R medium"), m_cdinfo->medium );
+    
+    if( m_cdinfo->empty_valid ) {
+      item2 = new QListViewItem( root1, item1, i18n("CD-R empty") );
+      if( m_cdinfo->empty )
+	item2->setText( 1, i18n("yes") );
+      else
+	item2->setText( 1, i18n("no") );
+    }
+    
+    if( m_cdinfo->tocType_valid )
+      item1 = new QListViewItem( root1, item2, i18n("Toc Type"), m_cdinfo->tocType );
+    
+    if( m_cdinfo->sessions_valid )
+      item2 = new QListViewItem( root1, item1, i18n("Sessions"), QString::number(m_cdinfo->sessions) );
+    
+    if( m_cdinfo->appendable_valid ) {
+      item1 = new QListViewItem( root1, item2, i18n("Appendable") );
+      if( m_cdinfo->appendable )
+	item1->setText( 1, i18n("yes") );
+      else
+	item1->setText( 1, i18n("no") );
+    }
 
-  if( m_cdinfo->medium_valid )
-    item1 = new QListViewItem( root1, item2, i18n("CD-R medium"), m_cdinfo->medium );
-
-  if( m_cdinfo->empty_valid ) {
-    item2 = new QListViewItem( root1, item1, i18n("CD-R empty") );
-    if( m_cdinfo->empty )
-      item2->setText( 1, i18n("yes") );
-    else
-      item2->setText( 1, i18n("no") );
-  }
-
-  if( m_cdinfo->tocType_valid )
-    item1 = new QListViewItem( root1, item2, i18n("Toc Type"), m_cdinfo->tocType );
-
-  if( m_cdinfo->sessions_valid )
-    item2 = new QListViewItem( root1, item1, i18n("Sessions"), QString::number(m_cdinfo->sessions) );
-
-  if( m_cdinfo->appendable_valid ) {
-    item1 = new QListViewItem( root1, item2, i18n("Appendable") );
-    if( m_cdinfo->appendable )
-      item1->setText( 1, i18n("yes") );
-    else
-      item1->setText( 1, i18n("no") );
-  }
-
-  if( m_cdinfo->remaining_valid )
-    item2 = new QListViewItem( root1, item1, i18n("Remaining Capacity"), m_cdinfo->remaining );
+    if( m_cdinfo->remaining_valid )
+      item2 = new QListViewItem( root1, item1, i18n("Remaining Capacity"), m_cdinfo->remaining );
  
-  root1->setOpen( true );
+    root1->setOpen( true );
+
+    m_viewAtip->show();
+  }
   // ------------------------------------------------------
   // -------------------------------------- ATIP-info items
 
@@ -327,20 +355,29 @@ void K3bCdInfo::updateView()
   // create TOC-info items
   // ----------------------------------------------------
   if( m_cdinfo->tocInfo_valid ) {
-    root2 = new QListViewItem( this, root1, i18n("Table of contents") );
-    root2->setPixmap( 0, KGlobal::instance()->iconLoader()->loadIcon( "cdrom_unmount", KIcon::NoGroup, KIcon::SizeSmall ) );
+    root1 = new QListViewItem( m_viewToc, i18n("Table of contents") );
+    root1->setPixmap( 0, KGlobal::instance()->iconLoader()->loadIcon( "cdrom_unmount", KIcon::NoGroup, KIcon::SizeSmall ) );
 
-    PrivateTrackInfo* info = m_cdinfo->tracks.first();
-    while( info != 0 ) {
-      if( !info->leadout )
-	(void)new QListViewItem( root2, QString("%1 - startblock: %2, control: %3, mode: %4").arg(info->number).arg(info->startBlock).arg(info->control).arg(info->mode) );
+    if( m_cdinfo->cddbInfo_valid )
+      root2 = new QListViewItem( root1, m_cdinfo->toc.artist() + " - " + m_cdinfo->toc.album() );
+    else
+      root2 = root1;
 
-      info = m_cdinfo->tracks.next();
+    for( K3bTrack* track = m_cdinfo->toc.last(); track != 0; track = m_cdinfo->toc.prev() ) {
+      (void)new QListViewItem( root2, 
+			       track->title(),
+			       ( track->type() == K3bTrack::AUDIO ? "Audio" : "Data" ),
+			       QString::number( track->firstSector() ), 
+			       QString::number( track->length() ),
+			       QString::number( track->lastSector() ) );
+			       
     }
 
-
+    root1->setOpen( true );
     root2->setOpen( true );
   }
+  else
+    (void)new QListViewItem( m_viewToc, i18n("disc is empty") );
   // ------------------------------------------------------
   // --------------------------------------- TOC-info items
 }

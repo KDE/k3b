@@ -18,12 +18,15 @@
 #ifndef K3BCDINFO_H
 #define K3BCDINFO_H
 
-#include <klistview.h>
+#include <qwidget.h>
 #include <qlist.h>
+
+#include "k3btoc.h"
 
 class KAction;
 class K3bDevice;
 class KProcess;
+class KListView;
 class QTimer;
 
 
@@ -31,7 +34,7 @@ class QTimer;
 /**
   *@author Sebastian Trueg
   */
-class K3bCdInfo : public KListView
+class K3bCdInfo : public QWidget
 {
  Q_OBJECT
 
@@ -40,6 +43,8 @@ class K3bCdInfo : public KListView
   ~K3bCdInfo();
 
   KAction* refreshAction() const { return m_actionRefresh; }
+
+  void clear();
 
  public slots:
   void setDevice( K3bDevice* );
@@ -58,24 +63,14 @@ class K3bCdInfo : public KListView
   K3bDevice* m_device;
   KProcess* m_process;
   QTimer* m_infoTimer;
+  KListView* m_viewAtip;
+  KListView* m_viewToc;
 
   class PrivateCDInfo;
-  class PrivateTrackInfo;
   PrivateCDInfo* m_cdinfo;
 
   void updateView();
 };
-
-class K3bCdInfo::PrivateTrackInfo
-{
- public:
-  int number;
-  int startBlock;
-  int mode;
-  int control;
-  bool leadout;
-};
-
 
 class K3bCdInfo::PrivateCDInfo
 {
@@ -88,8 +83,9 @@ class K3bCdInfo::PrivateCDInfo
   bool appendable;
   int sessions;
   QString tocType;
-  QList<K3bCdInfo::PrivateTrackInfo> tracks;
+  K3bToc toc;
 
+  bool show_atip;
   bool cdrw_valid;
   bool medium_valid;
   bool empty_valid;
@@ -100,10 +96,12 @@ class K3bCdInfo::PrivateCDInfo
   bool tocType_valid;
 
   bool tocInfo_valid;
+  bool cddbInfo_valid;
 
   void reset()
     {
-      cdrw_valid =
+      show_atip = 
+	cdrw_valid =
 	medium_valid =
 	empty_valid =
 	size_valid =
@@ -111,9 +109,8 @@ class K3bCdInfo::PrivateCDInfo
 	appendable_valid =
 	sessions_valid =
 	tocType_valid =
-	tocInfo_valid = false;
-
-      tracks.clear();
+	tocInfo_valid = 
+	cdrw_valid = false;
     }
 };
 
