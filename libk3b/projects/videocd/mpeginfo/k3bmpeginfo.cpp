@@ -87,7 +87,7 @@ K3bMpegInfo::~K3bMpegInfo()
 
 byte K3bMpegInfo::GetByte( llong offset )
 {
-    size_t nread;
+    unsigned long nread;
     if ( ( offset >= m_buffend ) || ( offset < m_buffstart ) ) {
 
         if ( fseeko( m_mpegfile, offset, SEEK_SET ) ) {
@@ -109,7 +109,7 @@ byte K3bMpegInfo::GetByte( llong offset )
 // same as above but improved for backward search
 byte K3bMpegInfo::bdGetByte( llong offset )
 {
-    size_t nread;
+    unsigned long nread;
     if ( ( offset >= m_buffend ) || ( offset < m_buffstart ) ) {
         llong start = offset - BUFFERSIZE + 1 ;
         start = start >= 0 ? start : 0;
