@@ -51,12 +51,13 @@ class K3bSetup2: public KCModule
   void updatePrograms();
   void updateDevices();
   QString burningGroup() const;
+    void makeReadOnly();
 
   class Private;
   Private* d;
 
   base_K3bSetup2* w;
-  
+
   KAboutData* m_aboutData;
 };
 

@@ -113,6 +113,9 @@ K3bSetup2::K3bSetup2( QWidget *parent, const char *name, const QStringList& )
   d->deviceManager->scanbus();
 
   load();
+  if (getuid() != 0 || !d->config->checkConfigFilesWritable( true )) {
+      makeReadOnly();
+  }
 };
 
 
@@ -170,7 +173,7 @@ void K3bSetup2::updatePrograms()
 
 	d->listBinMap.insert( bi, b );
 	d->binListMap.insert( b, bi );
-	
+
 	// check the item on first insertion or if it was checked before
 	bi->setOn( checkMap.contains(b) ? checkMap[b] : true );
 
@@ -178,7 +181,7 @@ void K3bSetup2::updatePrograms()
 
 	bi->setText( 3, QString::number( perm, 8 ).rightJustify( 4, '0' ) + " " + fi.owner() + "." + fi.group() );
 	if( w->m_checkUseBurningGroup->isChecked() ) {
-	  if( perm != 0004710 || 
+	  if( perm != 0004710 ||
 	      fi.owner() != "root" ||
 	      fi.group() != burningGroup() ) {
 	    bi->setText( 4, "4710 root." + burningGroup() );
@@ -188,7 +191,7 @@ void K3bSetup2::updatePrograms()
 	    bi->setText( 4, i18n("no change") );
 	}
 	else {
-	  if( perm != 0004711 || 
+	  if( perm != 0004711 ||
 	      fi.owner() != "root" ||
 	      fi.group() != "root" ) {
 	    bi->setText( 4, "4711 root.root" );
@@ -226,13 +229,13 @@ void K3bSetup2::updateDevices()
     }
     else {
       // create a checkviewitem
-      QCheckListItem* bi = new QCheckListItem( w->m_viewDevices, 
-					       device->vendor() + " " + device->description(), 
+      QCheckListItem* bi = new QCheckListItem( w->m_viewDevices,
+					       device->vendor() + " " + device->description(),
 					       QCheckListItem::CheckBox );
 
       d->listDeviceMap.insert( bi, device );
       d->deviceListMap.insert( device, bi );
-      
+
       // check the item on first insertion or if it was checked before
       bi->setOn( checkMap.contains(device) ? checkMap[device] : true );
 
@@ -243,7 +246,7 @@ void K3bSetup2::updateDevices()
       bi->setText( 2, QString::number( perm, 8 ).rightJustify( 3, '0' ) + " " + fi.owner() + "." + fi.group() );
       if( w->m_checkUseBurningGroup->isChecked() ) {
 	// we ignore the device's owner here
-	if( perm != 0000660 || 
+	if( perm != 0000660 ||
 	    fi.group() != burningGroup() ) {
 	  bi->setText( 3, "660 " + fi.owner() + "." + burningGroup() );
 	  d->changesNeeded = bi->isOn();
@@ -431,7 +434,7 @@ void K3bSetup2::slotAddDevice()
 {
   bool ok;
   QString newDevicename = KLineEditDlg::getText( i18n("Please enter the device name where K3b should search\n"
-						      "for a new drive (example: /dev/mebecdrom):"), 
+						      "for a new drive (example: /dev/mebecdrom):"),
 						 "/dev/", &ok, this );
 
   if( ok ) {
@@ -441,9 +444,20 @@ void K3bSetup2::slotAddDevice()
       emit changed( d->changesNeeded );
     }
     else
-      KMessageBox::error( this, i18n("Could not find an additional device at\n%1").arg(newDevicename), 
+      KMessageBox::error( this, i18n("Could not find an additional device at\n%1").arg(newDevicename),
 			  i18n("Error"), false );
   }
+}
+
+void K3bSetup2::makeReadOnly()
+{
+    w->m_checkUseBurningGroup->setEnabled( false );
+    w->m_editBurningGroup->setEnabled( false );
+    w->m_editUsers->setEnabled( false );
+    w->m_viewDevices->setEnabled( false );
+    w->m_buttonAddDevice->setEnabled( false );
+    w->m_viewPrograms->setEnabled( false );
+    w->m_editSearchPath->setEnabled( false );
 }
 
 
