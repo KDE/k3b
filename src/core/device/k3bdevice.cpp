@@ -357,7 +357,7 @@ K3bDiskInfo::type  K3bCdDevice::CdDevice::diskType()
   return ret;
 }
 
-bool K3bCdDevice::CdDevice::isDVD()
+bool K3bCdDevice::CdDevice::isDVD() const
 {
   // if the device is already opened we do not close it
   // to allow fast multible method calls in a row
@@ -411,7 +411,7 @@ int K3bCdDevice::CdDevice::isReady() const
 }
 
 
-int K3bCdDevice::CdDevice::isEmpty()
+int K3bCdDevice::CdDevice::isEmpty() const
 {
   // if the device is already opened we do not close it
   // to allow fast multible method calls in a row
@@ -497,7 +497,7 @@ K3b::Msf K3bCdDevice::CdDevice::discSize()
 }
 
 
-bool K3bCdDevice::CdDevice::getDiscInfo( K3bCdDevice::disc_info_t* info )
+bool K3bCdDevice::CdDevice::getDiscInfo( K3bCdDevice::disc_info_t* info ) const
 {
   // if the device is already opened we do not close it
   // to allow fast multible method calls in a row
@@ -560,7 +560,7 @@ K3b::Msf K3bCdDevice::CdDevice::remainingSize()
     return 0;
 }
 
-int K3bCdDevice::CdDevice::numSessions()
+int K3bCdDevice::CdDevice::numSessions() const
 {
   // if the device is already opened we do not close it
   // to allow fast multible method calls in a row
@@ -599,7 +599,7 @@ int K3bCdDevice::CdDevice::numSessions()
   return ret;
 }
 
-int K3bCdDevice::CdDevice::tocType()
+int K3bCdDevice::CdDevice::tocType() const
 {
   // if the device is already opened we do not close it
   // to allow fast multible method calls in a row
@@ -841,7 +841,7 @@ bool K3bCdDevice::CdDevice::block( bool b) const
   return ret;
 }
 
-bool K3bCdDevice::CdDevice::rewritable()
+bool K3bCdDevice::CdDevice::rewritable() const
 {
   if( !burner() )  // no chance to detect empty discs in readers
     return false;
@@ -1010,8 +1010,8 @@ K3bCdDevice::DiskInfo K3bCdDevice::CdDevice::diskInfo()
 
 
 // this is stolen from cdrdao's GenericMMC driver
-bool K3bCdDevice::CdDevice::getTrackIndex( long lba, 
-					   int *trackNr, 
+bool K3bCdDevice::CdDevice::getTrackIndex( long lba,
+					   int *trackNr,
 					   int *indexNr,
 					   unsigned char *ctl )
 {
