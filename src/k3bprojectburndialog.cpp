@@ -28,6 +28,7 @@
 #include <qgroupbox.h>
 #include <qlabel.h>
 #include <qtoolbutton.h>
+#include <qpushbutton.h>
 #include <qlayout.h>
 #include <qvariant.h>
 #include <qtooltip.h>
