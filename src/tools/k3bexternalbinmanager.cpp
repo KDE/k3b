@@ -288,7 +288,7 @@ K3bExternalBin* K3bExternalBinManager::probeTranscode( const QString& path )
 
     pos += 11;
 
-    int endPos = m_gatheredOutput.find( ")", pos+1 );
+    int endPos = m_gatheredOutput.find( QRegExp("[\\s\\)]"), pos+1 );
     if( endPos < 0 )
       return 0;
 

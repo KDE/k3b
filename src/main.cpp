@@ -33,7 +33,6 @@
 #include "k3bsplash.h"
 #include "tools/k3bglobals.h"
 
-#include "k3blamelib.h"
 
 static const char *description = 
 I18N_NOOP("K3b is a CD burning program that has two aims:\nusability and as many features as possible.");
@@ -94,12 +93,6 @@ int main(int argc, char *argv[])
 	QTimer::singleShot( 5000, splash, SLOT(close()) );
 
 	splash->show();
-      }
-
-      K3bLameLib* lib = K3bLameLib::self();
-      if( lib ) {
-	if( lib->init() )
-	  qDebug("Lame version: %i", lib->getVersion() );
       }
 
 
