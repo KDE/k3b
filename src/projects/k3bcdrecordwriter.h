@@ -44,8 +44,6 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   K3bCdrecordWriter* addArgument( const QString& );
   void clearArguments();
 
-  bool write( const char* data, int len );
-
   int fd() const;
 
  public slots:
@@ -53,7 +51,6 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   void cancel();
 
   void setDao( bool b );
-  void setProvideStdin( bool b ) { m_stdin = b; }
   void setWritingMode( int );
   void setCueFile( const QString& s);
   void setClone( bool b );
@@ -76,7 +73,6 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   K3bProcess* m_process;
 
   int m_writingMode;
-  bool m_stdin;
   bool m_totalTracksParsed;
   bool m_clone;
   bool m_cue;

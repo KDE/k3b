@@ -683,7 +683,6 @@ bool K3bCdCopyJob::writeNextSession()
   d->cdrecordWriter->setSimulate( m_simulate );
   d->cdrecordWriter->setBurnproof( m_burnfree );
   d->cdrecordWriter->setBurnSpeed( m_speed );
-  d->cdrecordWriter->setProvideStdin( m_onTheFly );
 
 
   // create the cdrecord arguments

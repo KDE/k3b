@@ -41,6 +41,14 @@
 #include <cmath>
 
 
+class K3bIsoImager::Private
+{
+public:
+  QString imagePath;
+  QFile imageFile;
+};
+
+
 K3bIsoImager::K3bIsoImager( K3bDataDoc* doc, QObject* parent, const char* name )
   : K3bJob( parent, name ),
     m_pathSpecFile(0),
@@ -54,16 +62,17 @@ K3bIsoImager::K3bIsoImager( K3bDataDoc* doc, QObject* parent, const char* name )
     m_noDeepDirectoryRelocation( false ),
     m_importSession( false ),
     m_device(0),
-    m_lastOutput(0),
     m_mkisofsPrintSizeResult( 0 ),
     m_fdToWriteTo(-1),
     m_dvdVideo(false)
 {
+  d = new Private;
 }
 
 
 K3bIsoImager::~K3bIsoImager()
 {
+  delete d;
   cleanup();
 }
 
@@ -80,61 +89,10 @@ void K3bIsoImager::writeToFd( int fd )
 }
 
 
-void K3bIsoImager::slotReceivedStdout( KProcess*, char* d, int len )
+void K3bIsoImager::writeToImageFile( const QString& path )
 {
-  // We need to deep copy the data since we cannot trust on KProcess to not emit any
-  // output after being suspended
-  // it seems to me that KProcess is not perfect here but who am I to blame ;)
-
-  QByteArray* buf = new QByteArray;
-  buf->duplicate( d, len );
-  m_data.enqueue( buf );
-
-  if( !m_processSuspended ) {
-    m_process->suspend();
-    m_processSuspended = true;
-
-    outputData();
-  }
-}
-
-
-void K3bIsoImager::outputData()
-{
-  // we do not need the old data any longer since it has been written
-  if( m_lastOutput ) {
-    delete m_lastOutput;
-    m_lastOutput = 0;
-  }
-
-  // we need to keep the data until we are resumed since the data will mostly be written to
-  // a KProcess (see KProcess::writeStdin)
-  m_lastOutput = m_data.dequeue();
-  emit data( m_lastOutput->data(), m_lastOutput->size() );
-}
-
-
-void K3bIsoImager::resume()
-{
-  // if mkisofs is writing directly to another fd the
-  // process never gets suspended since we are not connected to it's
-  // (non active anyway) stdout signal and m_data is always empty
-
-  if( m_fdToWriteTo == -1 ) {
-    // check if there is data left
-    if( m_data.count() > 0 ) {
-      outputData();
-    }
-    else {
-      if( m_processExited ) {
-	slotProcessExited( m_process );
-      }
-      else {
-	m_processSuspended = false;
-	m_process->resume();
-      }
-    }
-  }
+  d->imagePath = path;
+  m_fdToWriteTo = -1;
 }
 
 
@@ -192,57 +150,58 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
 {
   m_processExited = true;
 
+  if( d->imageFile.isOpen() )
+    d->imageFile.close();
+
   if( m_device )
     m_device->close();
 
   if( m_canceled )
     return;
 
-  if( m_data.count() <= 0 ) {
-    if( p->normalExit() ) {
-      if( p->exitStatus() == 0 ) {
-	emit finished( true );
-      }
-      else  {
-	switch( p->exitStatus() ) {
-	case 104:
-	  // connection reset by peer
-	  // This only happens if cdrecord does not finish successfully
-	  // so we may leave the error handling to it meaning we handle this
-	  // as a known error
-	  break;
-
-	case 2:
-	  // mkisofs seems to have a bug that prevents to use filenames
-	  // that contain one or more backslashes
-	  // mkisofs 1.14 has the bug, 1.15a40 not
-	  // TODO: find out the version that fixed the bug
-	  if( m_containsFilesWithMultibleBackslashes &&
-	      k3bcore->externalBinManager()->binObject( "mkisofs" )->version < K3bVersion( 1, 15, -1, "a40" ) ) {
-	    emit infoMessage( i18n("Due to a bug in mkisofs <= 1.15a40, K3b is unable to handle "
-				   "filenames that contain more than one backslash:"), ERROR );
-
-	    break;
-	  }
-	  // otherwise just fall through
-
-	default:
-	  emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg("mkisofs").arg(p->exitStatus()),
-			    K3bJob::ERROR );
-	  emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
-	  emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
-	}
-
-	emit finished( false );
-      }
+  if( p->normalExit() ) {
+    if( p->exitStatus() == 0 ) {
+      emit finished( true );
     }
-    else {
-      emit infoMessage( i18n("%1 did not exit cleanly.").arg("mkisofs"), ERROR );
+    else  {
+      switch( p->exitStatus() ) {
+      case 104:
+	// connection reset by peer
+	// This only happens if cdrecord does not finish successfully
+	// so we may leave the error handling to it meaning we handle this
+	// as a known error
+	break;
+
+      case 2:
+	// mkisofs seems to have a bug that prevents to use filenames
+	// that contain one or more backslashes
+	// mkisofs 1.14 has the bug, 1.15a40 not
+	// TODO: find out the version that fixed the bug
+	if( m_containsFilesWithMultibleBackslashes &&
+	    k3bcore->externalBinManager()->binObject( "mkisofs" )->version < K3bVersion( 1, 15, -1, "a40" ) ) {
+	  emit infoMessage( i18n("Due to a bug in mkisofs <= 1.15a40, K3b is unable to handle "
+				 "filenames that contain more than one backslash:"), ERROR );
+
+	  break;
+	}
+	// otherwise just fall through
+
+      default:
+	emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg("mkisofs").arg(p->exitStatus()),
+			  K3bJob::ERROR );
+	emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
+	emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
+      }
+
       emit finished( false );
     }
-
-    cleanup();
   }
+  else {
+    emit infoMessage( i18n("%1 did not exit cleanly.").arg("mkisofs"), ERROR );
+    emit finished( false );
+  }
+
+  cleanup();
 }
 
 
@@ -443,11 +402,19 @@ void K3bIsoImager::start()
   connect( m_process, SIGNAL(stderrLine( const QString& )),
 	   this, SLOT(slotReceivedStderr( const QString& )) );
 
-  if( m_fdToWriteTo == -1 )
-    connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
-	     this, SLOT(slotReceivedStdout(KProcess*, char*, int)) );
-  else
-    m_process->dupStdout( m_fdToWriteTo );
+  if( m_fdToWriteTo != -1 )
+    m_process->writeToFd( m_fdToWriteTo );
+  else {
+    d->imageFile.setName( d->imagePath );
+    if( d->imageFile.open( IO_WriteOnly ) )
+      m_process->writeToFd( d->imageFile.handle() );
+    else {
+      emit infoMessage( i18n("Could not open %1 for writing").arg(d->imagePath), ERROR );
+      cleanup();
+      emit finished(false);
+      return;
+    }
+  }
 
 
   kdDebug() << "***** mkisofs parameters:\n";
@@ -488,7 +455,7 @@ void K3bIsoImager::cancel()
 	m_device->close();
     }
 
-  if( !m_processExited || m_data.count() > 0 ) {
+  if( !m_processExited ) {
     emit canceled();
     emit finished(false);
   }
@@ -526,7 +493,7 @@ bool K3bIsoImager::addMkisofsParameters()
       // but Andy told me that on FreeBSD we only have /dev/fd/0, 1, and 2
       // so if K3b will ever run well on FreeBSD we are ready...
       //
-      m_process->dupStdin( fd ); // make mkisofs's stdin a copy of fd
+      m_process->readFromFd( fd ); // make mkisofs's stdin a copy of fd
 
       // PROBLEM: when writing on the fly cdrecord waits for mkisofs to release the device
       //          Since we open and not close the device here it seems to happen sometimes

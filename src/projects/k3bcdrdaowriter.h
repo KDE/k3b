@@ -86,8 +86,6 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
   void setEject(bool e) { m_eject=e; };  
 // ---------------------
 
-  void setProvideStdin( bool b ) { m_stdin = b; }
-
   /**
    * If set true the job ignores the global K3b setting
    * and does not eject the CD-RW after finishing
@@ -109,7 +107,6 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
   void setBlankArguments();
   void setCommonArguments();
 
-  bool write(const char* data, int len);
   bool cueSheet();
 
   QString findDriverFile( const K3bExternalBin* bin );
@@ -144,8 +141,6 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
 
   int m_cdrdaoComm[2];
   QSocket         *m_comSock;
-
-  bool m_stdin;
 
   bool m_canceled;
 

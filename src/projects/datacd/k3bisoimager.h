@@ -59,12 +59,14 @@ class K3bIsoImager : public K3bJob
   void calculateSize();
 
   /**
-   * lets the isoimager write directly into fd instead of emitting
-   * data() signals.
+   * lets the isoimager write directly into fd instead of writing
+   * to an image file.
    * Be aware that this only makes sense before starting the job.
    * To disable just set @p fd to -1
    */
   void writeToFd( int fd );
+
+  void writeToImageFile( const QString& path );
 
   /**
    * If dev == 0 K3bIsoImager will ignore the data in the previous session. 
@@ -77,23 +79,11 @@ class K3bIsoImager : public K3bJob
    */
   void setVideoDvd( bool b ) { m_dvdVideo = b; }
 
-  /**
-   * after data has been emitted image creation will
-   * be suspended until resume() is called
-   */
-  virtual void resume();
-
   K3bCdDevice::CdDevice* device() const { return m_device; }
   K3bDataDoc* doc() const { return m_doc; }
 
  signals:
   void sizeCalculated( int exitCode, int size );
-
-  /**
-   * after data has been emitted image creation will
-   * be suspended until resume() is called
-   */
-  //  void data( char* data, int len );
 
  protected:
   bool addMkisofsParameters();
@@ -133,7 +123,6 @@ class K3bIsoImager : public K3bJob
   bool m_canceled;
 
  protected slots:
-  void slotReceivedStdout( KProcess*, char*, int );
   virtual void slotReceivedStderr( const QString& );
   virtual void slotProcessExited( KProcess* );
 
@@ -143,6 +132,9 @@ class K3bIsoImager : public K3bJob
   void slotMkisofsPrintSizeFinished();
 
  private:
+  class Private;
+  Private* d;
+
   K3bDataDoc* m_doc;
 
   bool m_noDeepDirectoryRelocation;
@@ -150,9 +142,6 @@ class K3bIsoImager : public K3bJob
   bool m_importSession;
   QString m_multiSessionInfo;
   K3bCdDevice::CdDevice* m_device;
-
-  QPtrQueue<QByteArray> m_data;
-  QByteArray* m_lastOutput;
 
   // used for mkisofs -print-size parsing
   QString m_collectedMkisofsPrintSizeStdout;

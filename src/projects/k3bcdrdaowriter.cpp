@@ -461,12 +461,11 @@ void K3bCdrdaoWriter::start()
   m_process = new K3bProcess();
   m_process->setRunPrivileged(true);
   m_process->setSplitStdout(false);
+  m_process->setRawStdin(true);
   connect( m_process, SIGNAL(stderrLine(const QString&)),
            this, SLOT(slotStdLine(const QString&)) );
   connect( m_process, SIGNAL(processExited(KProcess*)),
            this, SLOT(slotProcessExited(KProcess*)) );
-  connect( m_process, SIGNAL(wroteStdin(KProcess*)),
-           this, SIGNAL(dataWritten()) );
 
   m_canceled = false;
   m_knownError = false;
@@ -554,7 +553,7 @@ void K3bCdrdaoWriter::start()
       break;
     }
 
-  if( !m_process->start( KProcess::NotifyOnExit, m_stdin ? KProcess::All : KProcess::AllOutput ) )
+  if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) )
     {
       // something went wrong when starting the program
       // it "should" be the executable
@@ -776,12 +775,6 @@ void K3bCdrdaoWriter::getCdrdaoMessage()
 {
   parseCdrdaoMessage(m_comSock);
 }
-
-bool K3bCdrdaoWriter::write( const char* data, int len )
-{
-  return m_process->writeStdin( data, len );
-}
-
 
 
 void K3bCdrdaoWriter::unknownCdrdaoLine( const QString& line )

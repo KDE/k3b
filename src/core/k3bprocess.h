@@ -58,39 +58,66 @@ class K3bProcess : public KProcess
   /** 
    * get stdin file descriptor
    * Only makes sense while process is running.
+   *
+   * Only use with setRawStdin
    */
   int stdinFd() const;
 
   /** 
    * get stdout file descriptor
    * Only makes sense while process is running.
+   *
+   * Only use with setRawStdout
    */
   int stdoutFd() const;
 
   /**
-   * makes the stdout fd of this process a copy of @p fd
-   * closing it first.
-   * This means that all this process writes to stdout will directly
-   * be written to @p fd.
-   * Be aware that you won't get any stdoutReady() or receivedStdout()
-   * signals anymore
+   * @deprecated use writeToFd
+   */
+  void dupStdout( int fd ) KDE_DEPRECATED;
+
+  /**
+   * @deprecated use readFromFd
+   */
+  void dupStdin( int fd ) KDE_DEPRECATED;
+
+  /**
+   * Make the process write to @fd instead of Stdout.
+   * This means you won't get any stdoutReady() or receivedStdout()
+   * signals anymore.
+   *
    * Only use this before starting the process.
    */
-  void dupStdout( int fd );
+  void writeToFd( int fd );
 
-  void dupStdin( int fd );
+  /**
+   * Make the process read from @fd instead of Stdin.
+   * This means you won't get any wroteStdin()
+   * signals anymore.
+   *
+   * Only use this before starting the process.
+   */
+  void readFromFd( int fd );
 
   /** 
-   * If set to true one needs to create a socketnotifier on one's own.
-   * There will be no wroteStdin() signal
+   * If set true the process' stdin fd will be available
+   * through @stdinFd.
+   * Be aware that you will not get any wroteStdin signals
+   * anymore.
+   *
+   * Only use this before starting the process.
    */
-  void setRawStdin(bool b) { m_rawStdin = b; }
+  void setRawStdin(bool b);
 
   /** 
-   * If set to true K3bProcess emits stdoutReady instead of the KProcess receivedStdout() 
-   * signal and the data has to read by the user directly from the file descriptor
+   * If set true the process' stdout fd will be available
+   * through @stdoutFd.
+   * Be aware that you will not get any stdoutReady or receivedStdout
+   * signals anymore.
+   *
+   * Only use this before starting the process.
    */
-  void setRawStdout(bool b) { m_rawStdout = b; }
+  void setRawStdout(bool b);
 
   class OutputCollector;
 
@@ -127,6 +154,16 @@ class K3bProcess : public KProcess
    */
   int commSetupDoneC();
 
+  /**
+   * reimplemeted from KProcess
+   */
+  int setupCommunication( Communication comm );
+
+  /**
+   * reimplemeted from KProcess
+   */
+  void commClose();
+
  private:
   void splitOutput( char*, int, bool );
 
@@ -134,9 +171,6 @@ class K3bProcess : public KProcess
   Private* d;
 
   bool m_bSplitStdout;
-
-  bool m_rawStdin;
-  bool m_rawStdout;
 
   bool m_suppressEmptyLines;
 };

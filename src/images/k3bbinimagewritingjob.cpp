@@ -119,7 +119,6 @@ bool K3bBinImageWritingJob::prepareWriter()
     writer->setSimulate( m_simulate );
     writer->setBurnproof( m_burnproof );
     writer->setBurnSpeed( m_speed );
-    writer->setProvideStdin( false );
     writer->setCueFile ( m_tocFile );
 
     if( m_noFix ) {

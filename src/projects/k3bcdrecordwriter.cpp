@@ -66,7 +66,6 @@ public:
 
 K3bCdrecordWriter::K3bCdrecordWriter( K3bDevice* dev, QObject* parent, const char* name )
   : K3bAbstractWriter( dev, parent, name ),
-    m_stdin(false),
     m_clone(false),
     m_cue(false),
     m_forceNoEject(false)
@@ -141,10 +140,10 @@ void K3bCdrecordWriter::prepareProcess()
   m_process->setRunPrivileged(true);
   m_process->setSplitStdout(true);
   m_process->setSuppressEmptyLines(true);
+  m_process->setRawStdin(true);  // we only use stdin when writing on-the-fly
   connect( m_process, SIGNAL(stdoutLine(const QString&)), this, SLOT(slotStdLine(const QString&)) );
   connect( m_process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotStdLine(const QString&)) );
   connect( m_process, SIGNAL(processExited(KProcess*)), this, SLOT(slotProcessExited(KProcess*)) );
-  connect( m_process, SIGNAL(wroteStdin(KProcess*)), this, SIGNAL(dataWritten()) );
 
   m_cdrecordBinObject = k3bcore->externalBinManager()->binObject("cdrecord");
 
@@ -338,15 +337,6 @@ void K3bCdrecordWriter::cancel()
       }
     }
   }
-}
-
-
-bool K3bCdrecordWriter::write( const char* data, int len )
-{
-  if( m_process )
-    return m_process->writeStdin( data, len );
-  else
-    return -1;
 }
 
 
@@ -646,7 +636,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
 
     // now send a <CR> to cdrecord
     // hopefully this will do it since I have no possibility to test it!
-    m_process->writeStdin( "\n", 1 );
+    ::write( fd(), "\n", 1 );
   }
   else if( s_burnfreeCounterRx.search( line ) ) {
     bool ok;

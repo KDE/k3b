@@ -39,18 +39,25 @@ public:
 
   int dupStdoutFd;
   int dupStdinFd;
+
+  bool rawStdin;
+  bool rawStdout;
+
+  int in[2];
+  int out[2];
 };
 
 
 K3bProcess::K3bProcess()
   : KProcess(),
     m_bSplitStdout(false),
-    m_rawStdin(false),
-    m_rawStdout(false),
     m_suppressEmptyLines(true)
 {
   d = new Private();
   d->dupStdinFd = d->dupStdoutFd = -1;
+  d->rawStdout = d->rawStdin = false;
+  d->in[0] = d->in[1] = -1;
+  d->out[0] = d->out[1] = -1;
 }
 
 K3bProcess::~K3bProcess()
@@ -185,32 +192,68 @@ void K3bProcess::splitOutput( char* data, int len, bool stdout )
 }
 
 
+int K3bProcess::setupCommunication( Communication comm )
+{
+  if( KProcess::setupCommunication( comm ) ) {
+
+    //
+    // Setup our own socketpair
+    //
+
+    if( d->rawStdin || d->dupStdinFd ) {
+      if( socketpair(AF_UNIX, SOCK_STREAM, 0, d->in) == 0 ) {
+	fcntl(d->in[0], F_SETFD, FD_CLOEXEC);
+	fcntl(d->in[1], F_SETFD, FD_CLOEXEC);
+      }
+      else
+	return 0;
+    }
+
+    if( d->rawStdout || d->dupStdoutFd ) {
+      if( socketpair(AF_UNIX, SOCK_STREAM, 0, d->out) == 0 ) {
+	fcntl(d->out[0], F_SETFD, FD_CLOEXEC);
+	fcntl(d->out[1], F_SETFD, FD_CLOEXEC);
+      }
+      else {
+	if( d->rawStdin || d->dupStdinFd ) {
+	  close(d->in[0]);
+	  close(d->in[1]);
+	}
+	return 0;
+      }
+    }
+
+    return 1;
+  }
+  else
+    return 0;
+}
+
+
+void K3bProcess::commClose()
+{
+  if( d->rawStdin || d->dupStdinFd ) {
+    close(d->in[1]);
+    d->in[1] = -1;
+  }
+  if( d->rawStdout || d->dupStdoutFd ) {
+    close(d->out[0]);
+    d->out[0] = -1;
+  }
+
+  KProcess::commClose();
+}
+
+
 int K3bProcess::commSetupDoneP()
 {
   int ok = KProcess::commSetupDoneP();
 
-  if( communication & Stdin ) {
-    // this fixed an issue introduced in kde 3.2 rc1 which for some reason 
-    // makes in[1] O_NONBLOCK which causes our whole K3bProcess<->K3bProcess
-    // communication to fail
-    fcntl(in[1], F_SETFL, ~O_NONBLOCK & fcntl(in[1], F_GETFL));
-  }
-
-  if( m_rawStdout ) {
-    disconnect( outnot, SIGNAL(activated(int)),
-		this, SLOT(slotChildOutput(int)));
-    connect( outnot, SIGNAL(activated(int)),
-	     this, SIGNAL(stdoutReady(int)) );
-  }
-  if( m_rawStdin || d->dupStdinFd != -1 ) {
-    delete innot;
-    innot = 0;
-  }
-
-  if( d->dupStdoutFd != -1 ) {
-    delete outnot;
-    outnot = 0;
-  }
+  if( d->rawStdin || d->dupStdinFd )
+    close(d->in[0]);
+  if( d->rawStdout || d->dupStdoutFd )
+    close(d->out[1]);
+  d->in[0] = d->out[1] = -1;
 
   return ok;
 }
@@ -221,23 +264,28 @@ int K3bProcess::commSetupDoneC()
   int ok = KProcess::commSetupDoneC();
 
   if( d->dupStdoutFd != -1 ) {
-    if( ::dup2( d->dupStdoutFd, STDOUT_FILENO ) != -1 ) {
-      kdDebug() << "(K3bProcess) Successfully duplicated " << d->dupStdoutFd << " to " << STDOUT_FILENO << endl;
-    }
-    else {
+    if( ::dup2( d->dupStdoutFd, STDOUT_FILENO ) < 0 ) {
       kdDebug() << "(K3bProcess) Error while dup( " << d->dupStdoutFd << ", " << STDOUT_FILENO << endl;
       ok = 0;
-      communication = (Communication) (communication & ~Stdout);
     }
   }
-  if( d->dupStdinFd != -1 ) {
-    if( ::dup2( d->dupStdinFd, STDIN_FILENO ) != -1 ) {
-      kdDebug() << "(K3bProcess) Successfully duplicated " << d->dupStdinFd << " to " << STDIN_FILENO << endl;
+  else if( d->rawStdout ) {
+    if( ::dup2( d->out[1], STDOUT_FILENO ) < 0 ) {
+      kdDebug() << "(K3bProcess) Error while dup( " << d->out[1] << ", " << STDOUT_FILENO << endl;
+      ok = 0;
     }
-    else {
+  }
+
+  if( d->dupStdinFd != -1 ) {
+    if( ::dup2( d->dupStdinFd, STDIN_FILENO ) < 0 ) {
       kdDebug() << "(K3bProcess) Error while dup( " << d->dupStdinFd << ", " << STDIN_FILENO << endl;
       ok = 0;
-      communication = (Communication) (communication & ~Stdin);
+    }
+  }
+  else if( d->rawStdin ) {
+    if( ::dup2( d->in[0], STDIN_FILENO ) < 0 ) {
+      kdDebug() << "(K3bProcess) Error while dup( " << d->in[0] << ", " << STDIN_FILENO << endl;
+      ok = 0;
     }
   }
 
@@ -248,25 +296,67 @@ int K3bProcess::commSetupDoneC()
 
 int K3bProcess::stdinFd() const
 {
-  return in[1];
+  if( d->rawStdin )
+    return d->in[1];
+  else
+    return -1;
 }
 
 int K3bProcess::stdoutFd() const
 {
-  return out[0];
+  if( d->rawStdout )
+    return d->out[0];
+  else
+    return -1;
 }
 
 
 void K3bProcess::dupStdout( int fd )
 {
-  d->dupStdoutFd = fd;
+  writeToFd( fd );
 }
 
 void K3bProcess::dupStdin( int fd )
 {
-  d->dupStdinFd = fd;
+  readFromFd( fd );
 }
 
+
+void K3bProcess::writeToFd( int fd )
+{
+  d->dupStdoutFd = fd;
+  if( fd != -1 )
+    d->rawStdout = false;
+}
+
+void K3bProcess::readFromFd( int fd )
+{
+  d->dupStdinFd = fd;
+  if( fd != -1 )
+    d->rawStdin = false;
+}
+
+
+void K3bProcess::setRawStdin(bool b)
+{
+  if( b ) {
+    d->rawStdin = true;
+    d->dupStdinFd = -1;
+  }
+  else
+    d->rawStdin = false;
+}
+
+
+void K3bProcess::setRawStdout(bool b)
+{
+  if( b ) {
+    d->rawStdout = true;
+    d->dupStdoutFd = -1;
+  }
+  else
+    d->rawStdout = false;
+}
 
 
 K3bProcess::OutputCollector::OutputCollector( KProcess* p )

@@ -61,9 +61,7 @@ class K3bDataJob : public K3bBurnJob
   void setImager( K3bIsoImager* );
 
  protected slots:
-  void slotReceivedIsoImagerData( const char* data, int len );
   void slotIsoImagerFinished( bool success );
-  void slotDataWritten();
   void slotIsoImagerPercent(int);
   void slotSizeCalculationFinished( int, int );
   void slotWriterJobPercent( int p );

@@ -60,7 +60,6 @@ K3bMixedJob::K3bMixedJob( K3bMixedDoc* doc, QObject* parent )
   m_isoImager = new K3bIsoImager( doc->dataDoc(), this );
   connect( m_isoImager, SIGNAL(sizeCalculated(int, int)), this, SLOT(slotSizeCalculationFinished(int, int)) );
   connect( m_isoImager, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
-  connect( m_isoImager, SIGNAL(data(const char*, int)), this, SLOT(slotReceivedIsoImagerData(const char*, int)) );
   connect( m_isoImager, SIGNAL(percent(int)), this, SLOT(slotIsoImagerPercent(int)) );
   connect( m_isoImager, SIGNAL(finished(bool)), this, SLOT(slotIsoImagerFinished(bool)) );
   connect( m_isoImager, SIGNAL(debuggingOutput(const QString&, const QString&)),
@@ -82,16 +81,12 @@ K3bMixedJob::K3bMixedJob( K3bMixedDoc* doc, QObject* parent )
 
   m_writer = 0;
   m_tocFile = 0;
-  m_isoImageFile = 0;
-  m_isoImageFileStream= 0;
   m_tempData = new K3bAudioJobTempData( m_doc->audioDoc(), this );
 }
 
 
 K3bMixedJob::~K3bMixedJob()
 {
-  delete m_isoImageFile;
-  delete m_isoImageFileStream;
   delete m_waveFileWriter;
   delete m_tocFile;
 }
@@ -265,28 +260,6 @@ void K3bMixedJob::slotSizeCalculationFinished( int status, int size )
 }
 
 
-void K3bMixedJob::slotReceivedIsoImagerData( const char* data, int len )
-{
-  if( m_doc->onTheFly() ) {
-    if( !m_writer->write( data, len ) )
-      kdDebug() << "(K3bMixedJob) Error while writing data to Writer" << endl;
-  }
-  else {
-    m_isoImageFileStream->writeRawBytes( data, len );
-    m_isoImager->resume();
-  }
-}
-
-
-void K3bMixedJob::slotDataWritten()
-{
-  if( m_currentAction == WRITING_ISO_IMAGE )
-    m_isoImager->resume();
-  else
-    m_audioDecoder->resume();
-}
-
-
 void K3bMixedJob::slotIsoImagerFinished( bool success )
 {
   if( m_canceled || m_errorOccuredAndAlreadyReported )
@@ -307,7 +280,6 @@ void K3bMixedJob::slotIsoImagerFinished( bool success )
     }
   }
   else {
-    m_isoImageFile->close();
     emit infoMessage( i18n("Iso image successfully created."), SUCCESS );
 
     if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
@@ -428,19 +400,8 @@ void K3bMixedJob::slotAudioDecoderFinished( bool success )
 
 void K3bMixedJob::slotReceivedAudioDecoderData( const char* data, int len )
 {
-  if( m_doc->onTheFly() ) {
-    if( !m_writer->write( (char*)data, len ) ) {
-      kdDebug() << "(K3bMixedJob) Error while writing data to Writer" << endl;
-      emit infoMessage( i18n("IO error"), ERROR );
-      cleanupAfterError();
-      emit finished(false);
-      return;
-    }
-  }
-  else {
-    m_waveFileWriter->write( data, len );
-    m_audioDecoder->resume();
-  }
+  m_waveFileWriter->write( data, len );
+  m_audioDecoder->resume();
 }
 
 
@@ -485,7 +446,6 @@ bool K3bMixedJob::prepareWriter()
     writer->setSimulate( m_doc->dummy() );
     writer->setBurnproof( m_doc->burnproof() );
     writer->setBurnSpeed( m_doc->speed() );
-    writer->setProvideStdin( m_doc->onTheFly() );
 
     if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
       if( m_currentAction == WRITING_ISO_IMAGE ) {
@@ -527,10 +487,6 @@ bool K3bMixedJob::prepareWriter()
     writer->setMulti( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION
 		      && m_currentAction == WRITING_AUDIO_IMAGE );
 
-    if( m_doc->onTheFly() ) {
-      writer->setProvideStdin(true);
-    }
-
     writer->setTocFile( m_tocFile->name() );
 
     m_writer = writer;
@@ -545,7 +501,6 @@ bool K3bMixedJob::prepareWriter()
   connect( m_writer, SIGNAL(buffer(int)), this, SIGNAL(bufferStatus(int)) );
   connect( m_writer, SIGNAL(writeSpeed(int, int)), this, SIGNAL(writeSpeed(int, int)) );
   connect( m_writer, SIGNAL(finished(bool)), this, SLOT(slotWriterFinished(bool)) );
-  connect( m_writer, SIGNAL(dataWritten()), this, SLOT(slotDataWritten()) );
   //  connect( m_writer, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
   connect( m_writer, SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
   connect( m_writer, SIGNAL(debuggingOutput(const QString&, const QString&)),
@@ -612,7 +567,7 @@ bool K3bMixedJob::writeTocFile()
       if( m_doc->onTheFly() )
 	*s << "DATAFILE \"-\" " << m_isoImager->size()*2048 << endl;
       else
-	*s << "DATAFILE \"" << m_isoImageFile->name() << "\"" << endl;
+	*s << "DATAFILE \"" << m_isoImageFilePath << "\"" << endl;
       *s << endl;
     }
 
@@ -670,7 +625,7 @@ void K3bMixedJob::addDataTrack( K3bCdrecordWriter* writer )
   if( m_doc->onTheFly() )
     writer->addArgument( QString("-tsize=%1s").arg(m_isoImager->size()) )->addArgument("-");
   else
-    writer->addArgument( m_isoImageFile->name() );
+    writer->addArgument( m_isoImageFilePath );
 }
 
 
@@ -815,21 +770,14 @@ void K3bMixedJob::createIsoImage()
   m_currentAction = CREATING_ISO_IMAGE;
 
   // prepare iso image file
-  m_isoImageFile = new QFile( m_tempFilePrefix + "_datatrack.iso" );
-  if( !m_isoImageFile->open( IO_WriteOnly ) ) {
-    emit infoMessage( i18n("Could not open file %1 for writing.").arg(m_isoImageFile->name()), ERROR );
-    cleanupAfterError();
-    emit finished( false );
-    return;
-  }
-
-  m_isoImageFileStream = new QDataStream( m_isoImageFile );
+  m_isoImageFilePath = m_tempFilePrefix + "_datatrack.iso";
 
   if( !m_doc->onTheFly() )
     emit newTask( i18n("Creating iso image file") );
-  emit newSubTask( i18n("Creating iso image in %1").arg(m_isoImageFile->name()) );
-  emit infoMessage( i18n("Creating iso image in %1").arg(m_isoImageFile->name()), INFO );
+  emit newSubTask( i18n("Creating iso image in %1").arg(m_isoImageFilePath) );
+  emit infoMessage( i18n("Creating iso image in %1").arg(m_isoImageFilePath), INFO );
 
+  m_isoImager->writeToImageFile( m_isoImageFilePath );
   m_isoImager->start();
 }
 
@@ -854,10 +802,9 @@ void K3bMixedJob::removeBufferFiles()
 {
   emit infoMessage( i18n("Removing buffer files."), INFO );
 
-  if( m_isoImageFile )
-    if( m_isoImageFile->exists() )
-      if( !m_isoImageFile->remove() )
-	emit infoMessage( i18n("Could not delete file %1.").arg(m_isoImageFile->name()), ERROR );
+  if( QFile::exists( m_isoImageFilePath ) )
+      if( !QFile::remove( m_isoImageFilePath ) )
+	emit infoMessage( i18n("Could not delete file %1.").arg(m_isoImageFilePath), ERROR );
 
   QPtrListIterator<K3bAudioTrack> it( *m_doc->audioDoc()->tracks() );
   for( ; it.current(); ++it ) {

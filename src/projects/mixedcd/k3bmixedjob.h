@@ -58,7 +58,6 @@ class K3bMixedJob : public K3bBurnJob
  protected slots:
   // iso imager slots
   void slotSizeCalculationFinished( int, int );
-  void slotReceivedIsoImagerData( const char*, int );
   void slotIsoImagerFinished( bool success );
   void slotIsoImagerPercent(int);
 
@@ -76,7 +75,6 @@ class K3bMixedJob : public K3bBurnJob
   void slotWriterFinished( bool success );
   void slotWriterNextTrack(int, int);
   void slotWriterJobPercent(int);
-  void slotDataWritten();
 
   // normalizing slots
   void slotNormalizeJobFinished( bool );
@@ -107,8 +105,8 @@ class K3bMixedJob : public K3bBurnJob
   K3bMsInfoFetcher* m_msInfoFetcher;
   K3bAudioNormalizeJob* m_normalizeJob;
 
-  QFile* m_isoImageFile;
-  QDataStream* m_isoImageFileStream;
+  QString m_isoImageFilePath;
+
   KTempFile* m_tocFile;
 
   enum Action { CREATING_ISO_IMAGE,

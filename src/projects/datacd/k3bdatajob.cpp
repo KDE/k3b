@@ -64,9 +64,6 @@ public:
 
   KTempFile* tocFile;
 
-  QFile imageFile;
-  QDataStream imageFileStream;
-
   int usedDataMode;
   int usedWritingApp;
   int usedWritingMode;
@@ -196,19 +193,10 @@ void K3bDataJob::writeImage()
     // TODO: check if the image file is part of the project and if so warn the user
     //       and append some number to make the path unique.
 
-    // open the file for writing
-    d->imageFile.setName( d->doc->tempDir() );
-    if( !d->imageFile.open( IO_WriteOnly ) ) {
-      emit infoMessage( i18n("Could not open %1 for writing").arg(d->doc->tempDir()), ERROR );
-      cancelAll();
-      emit finished(false);
-      return;
-    }
-
     emit infoMessage( i18n("Writing image file to %1").arg(d->doc->tempDir()), INFO );
     emit newSubTask( i18n("Creating image file") );
 
-    d->imageFileStream.setDevice( &d->imageFile );
+    m_isoImager->writeToImageFile( d->doc->tempDir() );
     m_isoImager->start();
   }
 }
@@ -243,24 +231,6 @@ void K3bDataJob::cancel()
 }
 
 
-void K3bDataJob::slotReceivedIsoImagerData( const char* data, int len )
-{
-  if( !d->doc->onlyCreateImages() && d->doc->onTheFly() ) {
-    if( !m_writerJob ) {
-      kdError() << "(K3bDataJob) ERROR: no writer job" << endl;
-      cancelAll();
-      return;
-    }
-    if( !m_writerJob->write( data, len ) )
-      kdError() << "(K3bDataJob) Error while writing data to Writer" << endl;
-  }
-  else {
-    d->imageFileStream.writeRawBytes( data, len );
-    m_isoImager->resume();
-  }
-}
-
-
 void K3bDataJob::slotIsoImagerPercent( int p )
 {
   if( d->doc->onlyCreateImages() ) {
@@ -284,7 +254,7 @@ void K3bDataJob::slotIsoImagerFinished( bool success )
 
   if( !d->doc->onTheFly() ||
       d->doc->onlyCreateImages() ) {
-    d->imageFile.close();
+
     if( success ) {
       emit infoMessage( i18n("Image successfully created in %1").arg(d->doc->tempDir()), K3bJob::SUCCESS );
       d->imageFinished = true;
@@ -349,21 +319,15 @@ void K3bDataJob::slotWriterNextTrack( int t, int tt )
 }
 
 
-void K3bDataJob::slotDataWritten()
-{
-  m_isoImager->resume();
-}
-
-
 void K3bDataJob::slotWriterJobFinished( bool success )
 {
   if( d->canceled )
     return;
 
   if( !d->doc->onTheFly() && d->doc->removeImages() ) {
-    if( d->imageFile.exists() ) {
-      d->imageFile.remove();
-      emit infoMessage( i18n("Removed image file %1").arg(d->imageFile.name()), K3bJob::SUCCESS );
+    if( QFile::exists( d->doc->tempDir() ) ) {
+      QFile::remove( d->doc->tempDir() );
+      emit infoMessage( i18n("Removed image file %1").arg(d->doc->tempDir()), K3bJob::SUCCESS );
     }
   }
 
@@ -443,7 +407,6 @@ void K3bDataJob::setWriterJob( K3bAbstractWriter* writer )
   connect( m_writerJob, SIGNAL(buffer(int)), this, SIGNAL(bufferStatus(int)) );
   connect( m_writerJob, SIGNAL(writeSpeed(int, int)), this, SIGNAL(writeSpeed(int, int)) );
   connect( m_writerJob, SIGNAL(finished(bool)), this, SLOT(slotWriterJobFinished(bool)) );
-  connect( m_writerJob, SIGNAL(dataWritten()), this, SLOT(slotDataWritten()) );
   connect( m_writerJob, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
   connect( m_writerJob, SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
   connect( m_writerJob, SIGNAL(debuggingOutput(const QString&, const QString&)), 
@@ -456,7 +419,6 @@ void K3bDataJob::setImager( K3bIsoImager* imager )
   m_isoImager = imager;
   connect( m_isoImager, SIGNAL(sizeCalculated(int, int)), this, SLOT(slotSizeCalculationFinished(int, int)) );
   connect( m_isoImager, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
-  connect( m_isoImager, SIGNAL(data(const char*, int)), this, SLOT(slotReceivedIsoImagerData(const char*, int)) );
   connect( m_isoImager, SIGNAL(percent(int)), this, SLOT(slotIsoImagerPercent(int)) );
   connect( m_isoImager, SIGNAL(finished(bool)), this, SLOT(slotIsoImagerFinished(bool)) );
   connect( m_isoImager, SIGNAL(debuggingOutput(const QString&, const QString&)), 
@@ -519,7 +481,6 @@ bool K3bDataJob::prepareWriterJob()
 
     if( d->doc->onTheFly() ) {
       writer->addArgument( QString("-tsize=%1s").arg(m_isoImager->size()) )->addArgument("-");
-      writer->setProvideStdin(true);
     }
     else {
       writer->addArgument( d->doc->tempDir() );
@@ -536,10 +497,6 @@ bool K3bDataJob::prepareWriterJob()
     // multisession
     writer->setMulti( d->doc->multiSessionMode() == K3bDataDoc::START ||
 		      d->doc->multiSessionMode() == K3bDataDoc::CONTINUE );
-
-    if( d->doc->onTheFly() ) {
-      writer->setProvideStdin(true);
-    }
 
     // now write the tocfile
     if( d->tocFile ) delete d->tocFile;

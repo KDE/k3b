@@ -124,19 +124,10 @@ void K3bDvdJob::writeImage()
   if( m_doc->tempDir().isEmpty() )
     m_doc->setTempDir( K3b::findUniqueFilePrefix( m_doc->isoOptions().volumeID() ) + ".iso" );
     
-  // open the file for writing
-  m_imageFile.setName( m_doc->tempDir() );
-  if( !m_imageFile.open( IO_WriteOnly ) ) {
-    emit infoMessage( i18n("Could not open %1 for writing").arg(m_doc->tempDir()), ERROR );
-    cleanup();
-    emit finished(false);
-    return;
-  }
-
   emit infoMessage( i18n("Writing image file to %1").arg(m_doc->tempDir()), INFO );
   emit newSubTask( i18n("Creating image file") );
 
-  m_imageFileStream.setDevice( &m_imageFile );
+  m_isoImager->writeToImageFile( m_doc->tempDir() );
   m_isoImager->start();
 }
 
@@ -148,8 +139,6 @@ void K3bDvdJob::prepareIsoImager()
     m_isoImager->setVideoDvd( m_videoDvd );
     connect( m_isoImager, SIGNAL(infoMessage(const QString&, int)), 
 	     this, SIGNAL(infoMessage(const QString&, int)) );
-    connect( m_isoImager, SIGNAL(data(const char*, int)), 
-	     this, SLOT(slotReceivedIsoImagerData(const char*, int)) );
     connect( m_isoImager, SIGNAL(percent(int)), this, SLOT(slotIsoImagerPercent(int)) );
     connect( m_isoImager, SIGNAL(finished(bool)), this, SLOT(slotIsoImagerFinished(bool)) );
     connect( m_isoImager, SIGNAL(debuggingOutput(const QString&, const QString&)), 
@@ -173,13 +162,6 @@ void K3bDvdJob::prepareGrowisofsImager()
     connect( m_growisofsImager, SIGNAL(debuggingOutput(const QString&, const QString&)), 
 	     this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
   }
-}
-
-
-void K3bDvdJob::slotReceivedIsoImagerData( const char* data, int len )
-{
-  m_imageFileStream.writeRawBytes( data, len );
-  m_isoImager->resume();
 }
 
 
@@ -220,7 +202,6 @@ void K3bDvdJob::slotIsoImagerFinished( bool success )
     return;
   }
 
-  m_imageFile.close();
   if( success ) {
     emit infoMessage( i18n("Image successfully created in %1").arg(m_doc->tempDir()), K3bJob::SUCCESS );
     
@@ -392,9 +373,9 @@ void K3bDvdJob::slotVerificationFinished( bool success )
 void K3bDvdJob::cleanup()
 {
   if( m_canceled || m_doc->removeImages() ) {
-    if( m_imageFile.exists() ) {
-      m_imageFile.remove();
-      emit infoMessage( i18n("Removed image file %1").arg(m_imageFile.name()), K3bJob::SUCCESS );
+    if( QFile::exists( m_doc->tempDir() ) ) {
+      QFile::remove( m_doc->tempDir() );
+      emit infoMessage( i18n("Removed image file %1").arg(m_doc->tempDir()), K3bJob::SUCCESS );
     }
   }
 }

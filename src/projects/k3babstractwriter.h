@@ -37,8 +37,6 @@ class K3bAbstractWriter : public K3bJob
   bool burnproof() const { return m_burnproof; }
   bool simulate() const { return m_simulate; }
 
-  virtual bool write( const char* data, int len ) = 0;
-
   /**
    * This can be used to setup direct streaming between two processes
    * for example the cdrecordwriter returnes the stdin fd which can be
@@ -64,7 +62,6 @@ class K3bAbstractWriter : public K3bJob
  signals:
   void burnDeviceBuffer( int );
   void buffer( int );
-  void dataWritten();
   void writeSpeed( int, int );
 
  protected:

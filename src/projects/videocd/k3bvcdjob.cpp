@@ -405,10 +405,6 @@ bool K3bVcdJob::prepareWriterJob()
         writer->setSimulate( m_doc->dummy() );
         writer->setBurnSpeed( m_doc->speed() );
 
-        if ( m_doc->onTheFly() ) {
-            writer->setProvideStdin( true );
-        }
-
         writer->setTocFile( m_cueFile );
 
         m_writerJob = writer;
@@ -420,7 +416,6 @@ bool K3bVcdJob::prepareWriterJob()
         writer->setSimulate( m_doc->dummy() );
         writer->setBurnSpeed( m_doc->speed() );
         writer->setBurnproof( m_doc->burnproof() );
-        writer->setProvideStdin( false );
         writer->setDao( true );
         writer->setCueFile( m_cueFile );
 

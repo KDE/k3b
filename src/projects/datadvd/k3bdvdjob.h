@@ -25,7 +25,6 @@ class K3bDataDoc;
 class K3bGrowisofsImager;
 class K3bGrowisofsWriter;
 class K3bIsoImager;
-class QDataStream;
 
 
 class K3bDvdJob : public K3bBurnJob
@@ -62,7 +61,6 @@ class K3bDvdJob : public K3bBurnJob
   void setVideoDvd( bool b ) { m_videoDvd = b; }
 
  protected slots:
-  void slotReceivedIsoImagerData( const char* data, int len );
   void slotIsoImagerFinished( bool success );
   void slotIsoImagerPercent(int);
   void slotGrowisofsImagerPercent(int);
@@ -78,9 +76,6 @@ class K3bDvdJob : public K3bBurnJob
   K3bIsoImager* m_isoImager;
   K3bGrowisofsImager* m_growisofsImager;
   K3bGrowisofsWriter* m_writerJob;
-
-  QFile m_imageFile;
-  QDataStream m_imageFileStream;
 
   bool m_canceled;
   bool m_writingStarted;

@@ -278,22 +278,8 @@ void K3bAudioJob::slotAudioDecoderFinished( bool success )
 
 void K3bAudioJob::slotReceivedAudioDecoderData( const char* data, int len )
 {
-  if( !m_doc->onlyCreateImages() && m_doc->onTheFly() ) {
-    if( !m_writer->write( (char*)data, len ) ) {
-      kdError() << "(K3bAudioJob) Error while writing data to Writer" << endl;
-      emit infoMessage( i18n("IO error"), ERROR );
-      if( !m_written )
-	emit infoMessage( i18n("Internal Error! Please report!"), ERROR );
-      cleanupAfterError();
-      emit finished(false);
-      return;
-    }
-    m_written = false;
-  }
-  else {
-    m_waveFileWriter->write( data, len );
-    m_audioStreamer->resume();
-  }
+  m_waveFileWriter->write( data, len );
+  m_audioStreamer->resume();
 }
 
 
@@ -313,8 +299,6 @@ void K3bAudioJob::slotAudioDecoderNextTrack( int t, int tt )
     else {
       kdDebug() << "(K3bAudioJob) Successfully opened Wavefilewriter on "
 		<< m_waveFileWriter->filename() << endl;
-//       m_audioStreamer->writeToFd( m_waveFileWriter->fd() );
-//       m_audioStreamer->setLittleEndian(true);
     }
   }
 }
@@ -340,7 +324,6 @@ bool K3bAudioJob::prepareWriter()
     writer->setSimulate( m_doc->dummy() );
     writer->setBurnproof( m_doc->burnproof() );
     writer->setBurnSpeed( m_doc->speed() );
-    writer->setProvideStdin( m_doc->onTheFly() );
 
     writer->addArgument( "-useinfo" );
 
@@ -383,7 +366,6 @@ bool K3bAudioJob::prepareWriter()
     writer->setCommand( K3bCdrdaoWriter::WRITE );
     writer->setSimulate( m_doc->dummy() );
     writer->setBurnSpeed( m_doc->speed() );
-    writer->setProvideStdin( m_doc->onTheFly() );
     writer->setTocFile( m_tempData->tocFileName() );
 
     m_writer = writer;
