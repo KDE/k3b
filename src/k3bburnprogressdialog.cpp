@@ -114,8 +114,6 @@ K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name,
   // FIXME: this is bad hacking (although it should work!)
   // -----
   if( !showSubProgress ) {
-    m_labelFileName->hide();
-    m_labelTrackProgress->hide();
     m_progressTrack->hide();
   }
   // -----
