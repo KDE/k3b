@@ -212,7 +212,7 @@ void K3bMixedJob::slotMsInfoFetched( bool success )
 
 void K3bMixedJob::slotSizeCalculationFinished( int status, int size )
 {
-  emit infoMessage( i18n("Size calculated:") + i18n("%1 (1 Byte)", "%1 (%n bytes)", size*2048).arg(size), status );
+  emit infoMessage( i18n("Size calculated:") + i18n("%1 (1 Byte)", "%1 (%n bytes)", size*2048).arg(size), INFO );
   if( status != ERROR ) {
 
     // 1. data in first track:
@@ -336,7 +336,7 @@ void K3bMixedJob::slotWriterFinished( bool success )
 
   if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION && m_currentAction == WRITING_AUDIO_IMAGE ) {
     // reload the media
-    emit infoMessage( i18n("Reloading the media"), PROCESS );
+    emit infoMessage( i18n("Reloading the media"), INFO );
     m_doc->burner()->eject();
     qApp->processEvents();
     m_doc->burner()->load();
@@ -375,7 +375,7 @@ void K3bMixedJob::slotAudioDecoderFinished( bool success )
     m_waveFileWriter->close();
 
     // TODO: enable me after message freeze
-    //    emit infoMessage( i18n("Audio images successfully created."), INFO );
+    //    emit infoMessage( i18n("Audio images successfully created."), STATUS );
 
     if( m_doc->mixedType() == K3bMixedDoc::DATA_FIRST_TRACK )
       m_currentAction = WRITING_ISO_IMAGE;

@@ -183,7 +183,7 @@ void K3bDataJob::writeImage()
 
 void K3bDataJob::slotSizeCalculationFinished( int status, int size )
 {
-  emit infoMessage( i18n("Size calculated:") + i18n("%1 (1 Byte)", "%1 (%n bytes)", size*2048).arg(size), status );
+  emit infoMessage( i18n("Size calculated:") + i18n("%1 (1 Byte)", "%1 (%n bytes)", size*2048).arg(size), INFO );
   if( status != ERROR ) {
     // this only happens in on-the-fly mode
     if( prepareWriterJob() ) {
