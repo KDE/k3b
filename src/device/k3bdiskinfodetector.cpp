@@ -180,18 +180,22 @@ void K3bCdDevice::DiskInfoDetector::slotIsVCD(KIO::Job* job)
 {
   m_info.isVCD = false;
   if (job->error() == 0 ) {
-    QString infofile = m_device->mountPoint() + QString("/vcd/info.vcd");
-    QDataStream s(new QFile(infofile));
-    char info[9];
-    info[8] = '\0';
-    if ( s.device()->open(IO_ReadOnly) ) {
-      s.readRawBytes(info,8);
-      kdDebug() << "(K3bDiskInfoDetector) VCD: " << QString(info) << endl;
-      s.device()->close();
-      if ( QString(info) == QString("VIDEO_CD") ||
-           QString(info) == QString("SUPERVCD") ||
-           QString(info) == QString("HQ-VCD  ") )
-        m_info.isVCD = true;
+    QStringList files;
+    files << QString("/vcd/info.vcd") << QString("/svcd/info.vcd");
+    for ( QStringList::Iterator it = files.begin(); it != files.end(); ++it ) {
+      QFile f(m_device->mountPoint() + *it);
+      QDataStream s(&f);
+      char info[9];
+      ::memset(info,0,9);
+      if ( s.device()->open(IO_ReadOnly) ) {
+        s.readRawBytes(info,8);
+        kdDebug() << "(K3bDiskInfoDetector) VCD: " << QString(info) << endl;
+        s.device()->close();
+        if ( QString(info) == QString("VIDEO_CD") ||
+             QString(info) == QString("SUPERVCD") ||
+             QString(info) == QString("HQ-VCD  ") )
+          m_info.isVCD = true;
+      }
     }
     KIO::unmount(m_device->mountPoint());
   }
