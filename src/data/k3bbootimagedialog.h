@@ -19,7 +19,7 @@
 
 #include <kdialogbase.h>
 
-class K3bBootImageWidget;
+class K3bBootImagePropertiesWidget;
 class K3bBootImage;
 class K3bDataDoc;
 
