@@ -413,30 +413,30 @@ bool K3bIsoImager::addMkisofsParameters()
     s.truncate(32);  // ensure max length
     *m_process << "-V" << s;
   }
-  if( !m_doc->isoOptions().volumeSetId().isEmpty() ) {
-    QString s = m_doc->isoOptions().volumeSetId();
-    s.truncate(128);  // ensure max length
-    *m_process << "-volset" << s;
-  }
-  if( !m_doc->isoOptions().applicationID().isEmpty() ) {
-    QString s = m_doc->isoOptions().applicationID();
-    s.truncate(128);  // ensure max length
-    *m_process << "-A" << s;
-  }
-  if( !m_doc->isoOptions().publisher().isEmpty() ) {
-    QString s = m_doc->isoOptions().publisher();
-    s.truncate(128);  // ensure max length
-    *m_process << "-P" << s;
-  }
-  if( !m_doc->isoOptions().preparer().isEmpty() ) {
-    QString s = m_doc->isoOptions().preparer();
-    s.truncate(128);  // ensure max length
-    *m_process << "-p" << s;
-  }
-  if( !m_doc->isoOptions().systemId().isEmpty() ) {
-    QString s = m_doc->isoOptions().systemId();
-    s.truncate(32);  // ensure max length
-    *m_process << "-sysid" << s;
+  QString s = m_doc->isoOptions().volumeSetId();
+  s.truncate(128);  // ensure max length
+  *m_process << "-volset" << s;
+  
+  s = m_doc->isoOptions().applicationID();
+  s.truncate(128);  // ensure max length
+  *m_process << "-A" << s;
+  
+  s = m_doc->isoOptions().publisher();
+  s.truncate(128);  // ensure max length
+  *m_process << "-P" << s;
+  
+  s = m_doc->isoOptions().preparer();
+  s.truncate(128);  // ensure max length
+  *m_process << "-p" << s;
+  
+  s = m_doc->isoOptions().systemId();
+  s.truncate(32);  // ensure max length
+  *m_process << "-sysid" << s;
+  
+  if( m_doc->isoOptions().volumeSetSize() > 0 ) {
+    *m_process << "-volset-size" << QString::number(m_doc->isoOptions().volumeSetSize());
+    if( m_doc->isoOptions().volumeSetNumber() > 0 )
+      *m_process << "-volset-seqno" << QString::number(m_doc->isoOptions().volumeSetNumber());
   }
 
   if( m_doc->isoOptions().createRockRidge() ) {

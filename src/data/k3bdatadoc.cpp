@@ -544,6 +544,12 @@ bool K3bDataDoc::loadDocumentData( QDomElement* rootElem )
     else if( e.nodeName() == "volume_set_id" )
       isoOptions().setVolumeSetId( e.text() );
 
+    else if( e.nodeName() == "volume_set_size" )
+      isoOptions().setVolumeSetSize( e.text().toInt() );
+
+    else if( e.nodeName() == "volume_set_number" )
+      isoOptions().setVolumeSetNumber( e.text().toInt() );
+
     else if( e.nodeName() == "system_id" )
       isoOptions().setSystemId( e.text() );
 
@@ -812,6 +818,14 @@ bool K3bDataDoc::saveDocumentData( QDomElement* docElem )
 
   topElem = doc.createElement( "volume_set_id" );
   topElem.appendChild( doc.createTextNode( isoOptions().volumeSetId() ) );
+  headerElem.appendChild( topElem );
+
+  topElem = doc.createElement( "volume_set_size" );
+  topElem.appendChild( doc.createTextNode( QString::number(isoOptions().volumeSetSize()) ) );
+  headerElem.appendChild( topElem );
+
+  topElem = doc.createElement( "volume_set_number" );
+  topElem.appendChild( doc.createTextNode( QString::number(isoOptions().volumeSetNumber()) ) );
   headerElem.appendChild( topElem );
 
   topElem = doc.createElement( "system_id" );

@@ -87,6 +87,7 @@ namespace K3b
   QString prepareDir( const QString& dir );
 
   K3bVersion kernelVersion();
+  QString systemName();
 };
 
 #endif

@@ -14,6 +14,9 @@
  */
 
 #include "k3bisooptions.h"
+#include <k3bcore.h>
+#include <tools/k3bversion.h>
+#include <tools/k3bglobals.h>
 
 #include <kconfig.h>
 #include <klocale.h>
@@ -22,7 +25,9 @@
 
 K3bIsoOptions::K3bIsoOptions()
   : m_volumeID( i18n("Project name", "Data") ),
-    m_applicationID( "K3B" ),
+    m_applicationID( QString("K3B THE CD KREATOR VERSION %1 (C) 2003 THE K3B TEAM").arg(k3bcore->version()) ),
+    m_preparer( i18n("K3b - Version %1").arg(k3bcore->version()) ),
+    m_systemId( K3b::systemName().upper() ),
     m_inputCharset( "iso8859-1" ),
     m_whiteSpaceTreatmentReplaceString( "_" )
 {
@@ -52,6 +57,9 @@ K3bIsoOptions::K3bIsoOptions()
   m_preserveFilePermissions = false;
 
   m_whiteSpaceTreatment = noChange;
+
+  m_volumeSetSize = 0; // 0 == unused
+  m_volumeSetNumber = 0;  // 0 == unused
 }
 
 
@@ -63,6 +71,8 @@ void K3bIsoOptions::save( KConfig* c )
   c->writeEntry( "publisher", m_publisher );
   c->writeEntry( "system id", m_systemId );
   c->writeEntry( "volume set id", m_volumeSetId );
+  c->writeEntry( "volume set size", m_volumeSetSize );
+  c->writeEntry( "volume set number", m_volumeSetNumber );
 
   c->writeEntry( "rock_ridge", m_createRockRidge );
   c->writeEntry( "joliet", m_createJoliet );
@@ -122,6 +132,8 @@ K3bIsoOptions K3bIsoOptions::load( KConfig* c )
   options.setPublisher( c->readEntry( "publisher", options.publisher() ) );
   options.setSystemId( c->readEntry( "system id", options.systemId() ) );
   options.setVolumeSetId( c->readEntry( "volume set id", options.volumeSetId() ) );
+  options.setVolumeSetSize( c->readNumEntry( "volume set size", options.volumeSetSize() ) );
+  options.setVolumeSetNumber( c->readNumEntry( "volume set number", options.volumeSetNumber() ) );
 
   options.setForceInputCharset( c->readBoolEntry( "force input charset", options.forceInputCharset() ) );
   if( options.forceInputCharset() )

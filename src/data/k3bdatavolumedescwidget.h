@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -32,6 +32,9 @@ class K3bDataVolumeDescWidget : public base_K3bDataVolumeDescWidget
 
   void load( const K3bIsoOptions& );
   void save( K3bIsoOptions& );
+
+ private slots:
+  void slotVolumeSetSizeChanged( int );
 };
 
 #endif

@@ -58,6 +58,8 @@ class K3bIsoOptions
   const QString& applicationID() const { return m_applicationID; }
   const QString& volumeID() const { return m_volumeID; }
   const QString& volumeSetId() const { return m_volumeSetId; }
+  int volumeSetSize() const { return m_volumeSetSize; }
+  int volumeSetNumber() const { return m_volumeSetNumber; }
   const QString& publisher() const { return m_publisher; }
   const QString& preparer() const { return m_preparer; }
 	
@@ -83,6 +85,8 @@ class K3bIsoOptions
   void setApplicationID( const QString& s ) { m_applicationID = s; }
   void setVolumeID( const QString& s ) { m_volumeID = s; }
   void setVolumeSetId( const QString& s ) { m_volumeSetId = s; }
+  void setVolumeSetSize( int size ) { m_volumeSetSize = size; }
+  void setVolumeSetNumber( int n ) { m_volumeSetNumber = n; }
   void setPublisher( const QString& s ) { m_publisher = s; }
   void setPreparer( const QString& s ) { m_preparer = s; }
 
@@ -116,7 +120,9 @@ class K3bIsoOptions
   QString m_publisher;
   QString m_systemId;
   QString m_volumeSetId;
-	
+
+  int m_volumeSetSize;
+  int m_volumeSetNumber;	
 
   bool m_bForceInputCharset;
   QString m_inputCharset;

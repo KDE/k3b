@@ -19,6 +19,7 @@
 #include "k3bisovalidator.h"
 
 #include <qlineedit.h>
+#include <qspinbox.h>
 
 
 K3bDataVolumeDescWidget::K3bDataVolumeDescWidget( QWidget* parent, const char* name )
@@ -35,6 +36,9 @@ K3bDataVolumeDescWidget::K3bDataVolumeDescWidget( QWidget* parent, const char* n
   m_editPreparer->setValidator( isoValidator );
   m_editSystem->setValidator( isoValidator );
   m_editApplication->setValidator( isoValidator );
+
+  connect( m_spinVolumeSetSize, SIGNAL(valueChanged(int)),
+	   this, SLOT(slotVolumeSetSizeChanged(int)) );
 }
 
 
@@ -47,6 +51,8 @@ void K3bDataVolumeDescWidget::load( const K3bIsoOptions& o )
 {
   m_editVolumeName->setText( o.volumeID() );
   m_editVolumeSetName->setText( o.volumeSetId() );
+  m_spinVolumeSetSize->setValue( o.volumeSetSize() );
+  m_spinVolumeSetNumber->setValue( o.volumeSetNumber() );
   m_editPublisher->setText( o.publisher() );
   m_editPreparer->setText( o.preparer() );
   m_editSystem->setText( o.systemId() );
@@ -58,11 +64,18 @@ void K3bDataVolumeDescWidget::save( K3bIsoOptions& o )
 {
   o.setVolumeID( m_editVolumeName->text() );
   o.setVolumeSetId( m_editVolumeSetName->text() );
+  o.setVolumeSetSize( m_spinVolumeSetSize->value() );
+  o.setVolumeSetNumber( m_spinVolumeSetNumber->value() );
   o.setPublisher( m_editPublisher->text() );
   o.setPreparer( m_editPreparer->text() );
   o.setSystemId( m_editSystem->text() );
   o.setApplicationID( m_editApplication->text() );
 }
 
+
+void K3bDataVolumeDescWidget::slotVolumeSetSizeChanged( int i )
+{
+  m_spinVolumeSetNumber->setMaxValue( i );
+}
 
 #include "k3bdatavolumedescwidget.moc"
