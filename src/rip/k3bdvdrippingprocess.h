@@ -59,9 +59,12 @@ private slots:
     //void slotParseError( KProcess *p, char *text, int len);
     void slotParseOutput( KProcess *p, char *text, int len);
     void slotExited( KProcess* );
-    void slotAudioProcessFinished();
+    //void slotAudioProcessFinished();
     void slotPreProcessingDvd();
-    void slotJobDebug( KIO::Job *job );
+    //void slotJobDebug( KIO::Job *job );
+    void slotIfoCopyFinished( KIO::Job *job );
+    void slotPreProcessingFinished( KIO::Job *job );
+
 private:
     QWidget *m_parent;
     QFile m_outputFile;
@@ -96,17 +99,19 @@ private:
     // if dvd is already mounted this will be set to true during preProcessingDVD
     bool m_dvdAlreadyMounted;
 
-    K3bDvdAudioGain *m_audioProcess;
+    //K3bDvdAudioGain *m_audioProcess;
     //K3bExternalBin *m_tccatBin;
 
     void checkRippingMode();
     void startRippingProcess();
     void preProcessingDvd();
-    void postProcessingDvd();
-    void postProcessingFinished();
+//    void postProcessingDvd();
+//    void postProcessingFinished();
     QString getFilename();
     float getAudioGain();
     void saveConfig();
+    // generates 01 form 1, 02 from 2 of the current title to rip
+    QString formattedTitleset();
 };
 
 #endif
