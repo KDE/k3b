@@ -3553,7 +3553,7 @@ bool K3bCdDevice::CdDevice::getPerformance( unsigned char** data, int& dataLen,
   cmd[10] = type;
   if( cmd.transport( TR_DIR_READ, header, 8 + 16 ) == 0 ) {
     // again with real length
-    dataLen = from4Byte( header ) + 8;
+    dataLen = from4Byte( header ) + 4;
 
     *data = new unsigned char[dataLen];
     ::memset( *data, 0, dataLen );

@@ -824,10 +824,10 @@ bool K3bCdCopyJob::writeNextSession()
     bool multi = d->doNotCloseLastSession || (d->numSessions > 1 && d->currentWrittenSession < d->toc.count());
     int usedWritingMode = m_writingMode;
     if( usedWritingMode == K3b::WRITING_MODE_AUTO ) {
-      if( !m_writerDevice->dao() || d->toc.count() > 1 || multi )
-	usedWritingMode = K3b::TAO;
-      else
-	usedWritingMode = K3b::DAO;
+      // a lot of writers have problems to write pure Data CDs in DAO mode with cdrecord.
+      // So we simply always use TAO. I don't like it that much but maybe this will finally
+      // get rid of the bug reports...
+      usedWritingMode = K3b::TAO;
     }
     d->cdrecordWriter->setWritingMode( usedWritingMode );
 

@@ -583,12 +583,10 @@ void K3bDataJob::determineWritingMode()
 
 
   // determine the writing mode
+  // which is basicly to always use TAO since so many writers have problems to write Data CDs in DAO
+  // mode. Is there any drawback?
   if( d->doc->writingMode() == K3b::WRITING_MODE_AUTO ) {
-    if( d->doc->multiSessionMode() == K3bDataDoc::NONE &&
-	writer()->dao() )
-      d->usedWritingMode = K3b::DAO;
-    else
-      d->usedWritingMode = K3b::TAO;
+    d->usedWritingMode = K3b::TAO;
   }
   else
     d->usedWritingMode = d->doc->writingMode();
@@ -602,9 +600,6 @@ void K3bDataJob::determineWritingMode()
 	d->usedWritingApp = K3b::CDRDAO;
       else if( k3bcore->externalBinManager()->binObject( "cdrdao" ) && d->usedDataMode == K3b::MODE2 )
 	d->usedWritingApp = K3b::CDRDAO;
-      else if( k3bcore->externalBinManager()->binObject( "cdrdao" ) && 
-	       k3bcore->externalBinManager()->binObject( "cdrdao" )->version >= K3bVersion( 1, 1, 8 ) )
-	d->usedWritingApp = K3b::CDRDAO;
       else
 	d->usedWritingApp = K3b::CDRECORD;
     }
@@ -613,11 +608,6 @@ void K3bDataJob::determineWritingMode()
   }
   else
     d->usedWritingApp = writingApp();
-
-  if( d->usedWritingApp == K3b::CDRECORD && d->doc->writingMode() == K3b::WRITING_MODE_AUTO ) {
-    // fall back to TAO. Is there any backdraw? Except that the track will contain two bogus sectors?
-    d->usedWritingMode = K3b::TAO;
-  }
 }
 
 

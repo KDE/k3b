@@ -19,6 +19,7 @@
 #include "k3bdiritem.h"
 #include "k3bfileitem.h"
 #include <kcutlabel.h>
+#include <k3bvalidators.h>
 
 #include <qpushbutton.h>
 #include <qlayout.h>
@@ -215,6 +216,7 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( K3bDataItem* dataItem, QWidget
 					  "It sorts the order in which the file data is "
 					  "written to the image.") );
 
+  m_editName->setValidator( K3bValidators::iso9660Validator( false, this ) );
   m_editName->setReadOnly( !dataItem->isRenameable() );
   m_editName->setFocus();
 }

@@ -272,24 +272,17 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
     if( usedWriteMode == K3b::WRITING_MODE_AUTO ) {
       // cdrecord seems to have problems when writing in mode2 in dao mode
       // so with cdrecord we use TAO
-      if( m_noFix || m_dataMode == K3b::MODE2 || !m_device->dao() )
-	usedWriteMode = K3b::TAO;
-      else
-	usedWriteMode = K3b::DAO;
+      // and many writers fail to write DAO with cdrecord.
+      // Is there any backdraw? Except that the track will contain two bogus sectors?
+      usedWriteMode = K3b::TAO;
     }
 
-    // and many writers fail to write DAO with cdrecord. With this release we try cdrdao ;)
     int usedApp = writingApp();
     if( usedApp == K3b::DEFAULT ) {
-      if( k3bcore->externalBinManager()->binObject( "cdrdao" ) && 
-	  ( k3bcore->externalBinManager()->binObject( "cdrdao" )->version >= K3bVersion( 1, 1, 7 ) ||
-	   ( usedWriteMode == K3b::DAO && ( m_dataMode == K3b::MODE2 || m_noFix ) ) ) )
+      if( usedWriteMode == K3b::DAO && ( m_dataMode == K3b::MODE2 || m_noFix ) )
 	usedApp = K3b::CDRDAO;
       else {
-	// fall back to TAO. Is there any backdraw? Except that the track will contain two bogus sectors?
 	usedApp = K3b::CDRECORD;
-	if( m_writingMode == K3b::WRITING_MODE_AUTO )
-	  usedWriteMode = K3b::TAO;
       }
     }
 
