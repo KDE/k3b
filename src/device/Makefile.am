@@ -6,8 +6,8 @@ lib_LTLIBRARIES = libk3bdevice.la
 
 libk3bdevice_la_LIBADD = $(LIB_KIO) $(RESMGR_LIB)
 
-# FIXME: improve that versioning stuff (info libtool -> versioning)
-libk3bdevice_la_LDFLAGS = $(all_libraries) -version-info 1:0:0 -no-undefined
+# lib version 2 for K3b 0.11.x 
+libk3bdevice_la_LDFLAGS = $(all_libraries) -version-info 2:0:0 -no-undefined
 
 libk3bdevice_la_SOURCES = k3bdevice.cpp k3bscsicommand.cpp k3btrack.cpp k3btoc.cpp k3bdevicemanager.cpp k3bmsf.cpp k3bdiskinfo.cpp k3bdeviceglobals.cpp k3bcrc.cpp k3bcdtext.cpp
 

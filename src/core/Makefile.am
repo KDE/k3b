@@ -4,7 +4,7 @@ lib_LTLIBRARIES = libk3bcore.la
 
 libk3bcore_la_LIBADD = $(LIB_KIO) ../device/libk3bdevice.la
 
-# FIXME: improve that versioning stuff (info libtool -> versioning)
+# lib version 2 for K3b 0.11 
 libk3bcore_la_LDFLAGS = $(all_libraries) -version-info 2:0:0 -no-undefined
 
 libk3bcore_la_SOURCES = k3bcore.cpp k3bglobals.cpp k3bdefaultexternalprograms.cpp k3bexternalbinmanager.cpp k3bversion.cpp k3bprocess.cpp k3bjob.cpp k3bthread.cpp k3bthreadjob.cpp

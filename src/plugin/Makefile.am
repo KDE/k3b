@@ -14,8 +14,7 @@ lib_LTLIBRARIES = libk3bplugin.la
 
 libk3bplugin_la_LIBADD = ../device/libk3bdevice.la ../core/libk3bcore.la $(USED_LIBSAMPLERATE)
 
-# FIXME: improve that versioning stuff (info libtool -> versioning)
-libk3bplugin_la_LDFLAGS = $(all_libraries) -version-info 1:0:0 -no-undefined
+libk3bplugin_la_LDFLAGS = $(all_libraries) -version-info 2:0:0 -no-undefined
 
 libk3bplugin_la_SOURCES = 	k3bplugin.cpp \
 				k3bpluginfactory.cpp \

@@ -75,6 +75,8 @@ void K3bWritingModeWidget::initWhatsThisHelp()
   static QString s_taoHelp = i18n("<em>Track At Once</em> should be supported by every CD writer. "
 				  "The laser will be turned off after every track.<br>"
 				  "Most CD writers need this mode for writing multisession CDs.");
+  // TODO: add something like: "No CD-TEXT writing in TAO mode."
+
   static QString s_rawHelp = i18n("RAW writing mode. The error correction data is created by the "
 				  "software instead of the writer device.<br>"
 				  "Try this if your CD writer fails to write in DAO and TAO.");
