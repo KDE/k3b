@@ -47,6 +47,7 @@
 #include <vcd/k3bvcddoc.h>
 #include <mixed/k3bmixeddoc.h>
 #include <movix/k3bmovixdoc.h>
+#include <dvd/k3bdvddoc.h>
 #include <k3bcore.h>
 #include <device/k3bdevicemanager.h>
 
@@ -242,8 +243,12 @@ K3bDoc* K3bDoc::openDocument(const KURL& url )
     newDoc = new K3bMixedDoc( 0 );
   else if( xmlDoc.doctype().name() == "k3b_movix_project" )
     newDoc = new K3bMovixDoc( 0 );
-  else
+  else if( xmlDoc.doctype().name() == "k3b_dvd_project" )
+    newDoc = new K3bDvdDoc( 0 );
+  else {
     kdDebug() << "(K3bDoc) unknown doc type: " << xmlDoc.doctype().name() << endl;
+    return 0;
+  }
 
   // we do this to load the writer and the writing speed
   // since those are not saved in a project file

@@ -141,7 +141,7 @@ void K3bDataFileView::slotDropped( QDropEvent* e, QListViewItem*, QListViewItem*
 
   // determine K3bDirItem to add the items to
   K3bDirItem* parent = 0;
-  if( K3bDataDirViewItem* dirViewItem = dynamic_cast<K3bDataDirViewItem*>( itemAt(e->pos()) ) ) {
+  if( K3bDataDirViewItem* dirViewItem = dynamic_cast<K3bDataDirViewItem*>( itemAt(contentsToViewport(e->pos())) ) ) {
     parent = dirViewItem->dirItem();
   }
   else {

@@ -65,7 +65,7 @@ public:
   QLabel* labelFoundMedia;
   QLabel* pixLabel;
 
-  K3bCdDevice::DeviceHandler* deviceHandler;
+  //  K3bCdDevice::DeviceHandler* deviceHandler;
 };
 
 
@@ -77,9 +77,9 @@ K3bEmptyDiscWaiter::K3bEmptyDiscWaiter( K3bDevice* device, QWidget* parent, cons
   d = new Private();
   d->device = device;
 
-  d->deviceHandler = new K3bCdDevice::DeviceHandler( device, this );
-  connect( d->deviceHandler, SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
-	   this, SLOT(slotDeviceHandlerFinished(K3bCdDevice::DeviceHandler*)) );
+//   d->deviceHandler = new K3bCdDevice::DeviceHandler( device, this );
+//   connect( d->deviceHandler, SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
+// 	   this, SLOT(slotDeviceHandlerFinished(K3bCdDevice::DeviceHandler*)) );
 
   // setup the gui
   // -----------------------------
@@ -211,7 +211,7 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
   if( !mediaState.isEmpty() )
     mediaState = " (" + mediaState +")";
 
-  d->labelFoundMedia->setText( K3bCdDevice::mediaTypeString( d->deviceHandler->ngDiskInfo().mediaType() ) 
+  d->labelFoundMedia->setText( K3bCdDevice::mediaTypeString( dh->ngDiskInfo().mediaType() ) 
 			       + mediaState );
 
   if( dh->success() ) {
@@ -312,7 +312,7 @@ void K3bEmptyDiscWaiter::slotUser1()
 void K3bEmptyDiscWaiter::finishWaiting( int code )
 {
   kdDebug() << "(K3bEmptyDiscWaiter) finishWaiting() " << endl;
-  d->deviceHandler->cancel();
+  //  d->deviceHandler->cancel();
 
   d->result = code;
   if( d->dialogVisible )

@@ -44,11 +44,12 @@ K3bThread::~K3bThread()
 
 void K3bThread::cancel()
 {
-  if( running() )
+  if( running() ) {
     terminate();
-  if( m_eventHandler ) {
-    emitCanceled();
-    emitFinished(false);
+    if( m_eventHandler ) {
+      emitCanceled();
+      emitFinished(false);
+    }
   }
 }
 
