@@ -302,7 +302,7 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
 
       item = new K3bListViewItem( isoRootItem, 
 				  m_infoView->lastItem(),
-				  i18n("System:"), 
+				  i18n("System Id:"), 
 				  isoF.primaryDescriptor().systemId.isEmpty()
 				  ? QString("-") 
 				  : isoF.primaryDescriptor().systemId );
@@ -310,7 +310,7 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
 
       item = new K3bListViewItem( isoRootItem, 
 				  m_infoView->lastItem(),
-				  i18n("Volume:"), 
+				  i18n("Volume Id:"), 
 				  isoF.primaryDescriptor().volumeId.isEmpty() 
 				  ? QString("-") 
 				  : isoF.primaryDescriptor().volumeId );
@@ -318,7 +318,7 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
 
       item = new K3bListViewItem( isoRootItem, 
 				  m_infoView->lastItem(),
-				  i18n("Volume Set:"), 
+				  i18n("Volume Set Id:"), 
 				  isoF.primaryDescriptor().volumeSetId.isEmpty()
 				  ? QString("-")
 				  : isoF.primaryDescriptor().volumeSetId );
@@ -326,7 +326,7 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
 
       item = new K3bListViewItem( isoRootItem, 
 				  m_infoView->lastItem(),
-				  i18n("Publisher:"), 
+				  i18n("Publisher Id:"), 
 				  isoF.primaryDescriptor().publisherId.isEmpty() 
 				  ? QString("-") 
 				  : isoF.primaryDescriptor().publisherId );
@@ -334,14 +334,14 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
 
       item = new K3bListViewItem( isoRootItem, 
 				  m_infoView->lastItem(),
-				  i18n("Preparer:"), 
+				  i18n("Preparer Id:"), 
 				  isoF.primaryDescriptor().preparerId.isEmpty() 
 				  ? QString("-") : isoF.primaryDescriptor().preparerId );
       item->setForegroundColor( 0, Qt::gray );
 
       item = new K3bListViewItem( isoRootItem, 
 				  m_infoView->lastItem(),
-				  i18n("Application:"), 
+				  i18n("Application Id:"), 
 				  isoF.primaryDescriptor().applicationId.isEmpty()
 				  ? QString("-") 
 				  : isoF.primaryDescriptor().applicationId );
