@@ -1,6 +1,6 @@
 AM_CPPFLAGS = -I$(srcdir)/../../plugin -I$(srcdir)/../../core -I$(srcdir)/../../core/device $(all_includes)
 
-lib_LTLIBRARIES = libk3bsoxencoder.la
+kde_module_LTLIBRARIES = libk3bsoxencoder.la
 
 libk3bsoxencoder_la_SOURCES = base_k3bsoxencoderconfigwidget.ui k3bsoxencoder.cpp
 

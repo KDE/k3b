@@ -1,6 +1,6 @@
 AM_CPPFLAGS = -I$(srcdir)/../../plugin -I$(srcdir)/../../core/device $(all_includes)
 
-lib_LTLIBRARIES = libk3bmaddecoder.la
+kde_module_LTLIBRARIES = libk3bmaddecoder.la
 
 libk3bmaddecoder_la_SOURCES = k3bmaddecoder.cpp
 

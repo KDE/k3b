@@ -1,6 +1,6 @@
 AM_CPPFLAGS = -I$(srcdir)/../../plugin -I$(srcdir)/../../core/device $(all_includes)
 
-lib_LTLIBRARIES = libk3boggvorbisdecoder.la
+kde_module_LTLIBRARIES = libk3boggvorbisdecoder.la
 
 libk3boggvorbisdecoder_la_SOURCES = k3boggvorbisdecoder.cpp
 
