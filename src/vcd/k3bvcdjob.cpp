@@ -584,7 +584,7 @@ void K3bVcdJob::createCdrdaoProgress( int made, int size )
     
   emit processedSubSize( made, size );
   emit subPercent( 100*made / size );
-  emit processedSize( made, size );
+  // emit processedSize( made, size );
   emit percent( 66 + (34*made / size ) );
 }
 
