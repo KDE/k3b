@@ -22,7 +22,7 @@
 ## Process this file with automake to produce Makefile.in
 
 noinst_LIBRARIES =	libmad.a
-include_HEADERS =	mad.h
+#include_HEADERS =	mad.h
 
 EXTRA_DIST =		COPYRIGHT mad.h.sed
 
@@ -30,7 +30,7 @@ exported_headers =  \
 	version.h fixed.h bit.h timer.h stream.h frame.h synth.h decoder.h
 
 noinst_headers =  \
-	$(exported_headers) global.h layer12.h layer3.h huffman.h
+	$(exported_headers) mad.h global.h layer12.h layer3.h huffman.h
 
 data_includes =  \
 	D.dat imdct_s.dat qc_table.dat rq_table.dat sf_table.dat
