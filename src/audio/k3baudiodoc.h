@@ -54,17 +54,17 @@ public:
 	bool newDocument();
 
 	QTime audioSize() const;
-	bool padding() const { return m_padding; }
+	bool padding() const;
 	int numberOfTracks() const { return m_tracks->count(); }
 
-	K3bAudioTrack* currentProcessedTrack() const { return m_currentProcessedTrack; }
-	
 	K3bAudioTrack* current() const { return m_tracks->current(); }
 	K3bAudioTrack* next() { return m_tracks->next(); }
 	K3bAudioTrack* prev() { return m_tracks->prev(); }
 	K3bAudioTrack* at( uint i ) { return m_tracks->at( i ); }
 	K3bAudioTrack* take( uint i ) { return m_tracks->take( i ); }
 
+	K3bAudioBurnDialog* burnDialog();
+	
 	/** get the current size of the project */
 	int size();
 	
@@ -76,6 +76,9 @@ public:
 	const QString& arranger() const { return m_cdTextArranger; }
 
 	QString writeTOC( const QString& filename );
+	int numOfTracks();
+	int allMp3Decoded();
+	K3bAudioTrack* nextTrackToDecode();
 	
 public slots:
 	/**
@@ -91,10 +94,9 @@ public slots:
 //	void addTracks( QList<K3bAudioTrack>& tracks );
 	void removeTrack( int position );
 	void moveTrack( uint oldPos, uint newPos );
-	void showBurnDialog();
 
 	void setPadding( bool p ) { m_padding = p; }
-	void cancel();
+//	void cancel();
 
 	// CD-Text
 	void writeCdText( bool b ) { m_cdText = b; }
@@ -109,31 +111,12 @@ protected slots:
  	void addMp3File( const QString& fileName, uint position );
 	void addWavFile( const QString& fileName, uint position );
 	
-	void slotTestOutput( const QString& text );
-	/** Convert mp3 into wav since cdrecord is used **/
-	void prepareTracks();
-	void write();
-	void writeImage( const QString& filename );
-
- 	void startRecording();
-	void parseCdrecordOutput( KProcess*, char* output, int len );
-	void cdrecordFinished();
-	void bufferFiles( );
-	void parseMpgDecodingOutput( KProcess*, char* output, int len );
 	void parseMpgTestingOutput( KProcess*, char* output, int len );
-	void fileBufferingFinished();
 	void mp3FileTestingFinished();
 
 signals:
 	void newTrack( K3bAudioTrack* );
 	void trackRemoved( uint );
-	void nextTrackProcessed();
-	void trackPercent( int percent );
-	void trackProcessedSize( int processed, int size );
-	void trackProcessedMinutes( const QTime& );
-	void processedMinutes( const QTime& );
-	void startDecoding();
-	void processedTrackName( const QString& );
 
 protected:
  	/** reimplemented from K3bDoc */
@@ -156,17 +139,10 @@ private:
 	/** The last added file. This is saved even if the file not exists or
 	the url is malformed. */
 	KURL addedFile;
-	bool startBurningAfterBuffering;
-	
-	/** used to determine the overall progress **/
-	int m_iNumFilesToBuffer;
-	int m_iNumFilesAlreadyBuffered;
-	
+
 	QList<K3bAudioTrack>* m_tracks;
-	K3bAudioTrack* m_currentProcessedTrack;
 	K3bAudioTrack* m_lastAddedTrack;
 	
- 	QString lastTempFile;
  	uint lastAddedPosition;
  	
 	K3bAudioBurnDialog* m_burnDialog;

@@ -16,7 +16,7 @@
  ***************************************************************************/
 
 #ifndef K3BDOC_H
-#define K3B_H
+#define K3BDOC_H
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -40,6 +40,7 @@ class KTempFile;
 class K3bDevice;
 class KProcess;
 class K3bApp;
+
 
 /**	K3bDoc provides a document object for a document-view model.
   *
@@ -67,6 +68,8 @@ public:
 
 	enum DocType { AUDIO = 1, DATA = 2 };
 
+	int docType() const { return m_docType; }
+	
     /** adds a view to the document which represents the document contents. Usually this is your main view. */
     virtual void addView(K3bView *view);
     /** removes a view from the list of currently connected views */
@@ -104,29 +107,9 @@ public:
 	  /** Create a new view */
   	virtual K3bView* newView( QWidget* parent ) = 0;
 
- 	/**
-	 * For writing "on the fly "
-	 * Connect to the signals (at least result())
-	 * which will be deleted after the writing finished. To get the result
-	 * use error().
-	 **/
-	virtual void write() = 0;
-
-	/**
-	 * Writing an image file to cdr. To create an image use
-	 * @p writeImage.
-	 **/
-	void write( const QString& imageFile, bool deleteImage = true );
-	virtual void writeImage( const QString& filename ) = 0;
-	// vielleicht sollte man die 2. write-fkt einfach
-	// iso-images schreiben lassen. Braucht man dann
-	// noch ein TOC-file und kann man images auch track-at-once
-	// schreiben?
-
 	const QString& projectName() const { return m_projectName; }
 	bool dao() const { return m_dao; }
 	bool dummy() const { return m_dummy; }
-	bool eject() const { return m_eject; }
 	int speed() const { return m_speed; }
 	K3bDevice* burner() const { return m_burner; }
 	virtual int size() = 0;
@@ -138,8 +121,6 @@ public:
 	int error() const;
 	QString errorString() const;
 
-	bool workInProgress() const;
-
 public slots:
     /** calls repaint() on all views connected to the document object and is called by the view by which the document has been changed.
      * As this view normally repaints itself, it is excluded from the paintEvent.
@@ -147,29 +128,14 @@ public slots:
     void updateAllViews(K3bView *sender);
 	void setDummy( bool d );
 	void setDao( bool d );
-	void setEject( bool e );
 	void setSpeed( int speed );
 	void setBurner( K3bDevice* dev );
 	
-	virtual void showBurnDialog() = 0;
-	/** in the default implementation no canceled signal is emmited! */
-	virtual void cancel();
-
-protected slots:
-	virtual void startRecording() = 0;
-	virtual void parseCdrecordOutput( KProcess*, char* output, int len ) = 0;
-	virtual void cdrecordFinished() = 0;
+	virtual int numOfTracks() = 0;
 
 signals:
-	void infoMessage( const QString& );
-	void canceled();
 	void result();
 	void percent( int percent );
-	void processedSize( unsigned long processed, unsigned long size );
-	void timeLeft( const QTime& );
-	void bufferStatus( int percent );
-	void startWriting();
-	void writingLeadOut();
 	 	
 protected:
   	/** when deriving from K3bDoc this method really opens the document since
@@ -180,16 +146,11 @@ protected:
 	    saveDocument only opens the file and calls this method. */
   	virtual bool saveDocumentData( QFile& f ) = 0;
 
-	void emitResult();
-	void emitCanceled();
-	virtual void emitProgress( unsigned long size, unsigned long processed, int speed = 0 );
-	void emitMessage( const QString& msg );
-
-	QTimer* m_timer;
 	KProcess* m_process;
 	
 	int  m_error;
-	
+	int m_docType;
+
 private:
     /** the modified flag of the current document */
     bool modified;
@@ -200,7 +161,6 @@ private:
 	K3bDevice* m_burner;
 	bool m_dao;
 	bool m_dummy;
-	bool m_eject;
 	int  m_speed;
 };
 

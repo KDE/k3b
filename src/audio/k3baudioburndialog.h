@@ -63,23 +63,17 @@ protected:
 	
 	// the burn tab
 	// ---------------------------------------------------------
-    QGroupBox* m_groupDevice;
-    QComboBox* m_comboSpeed;
-    QComboBox* m_comboWriter;
-    QGroupBox* m_groupOptions;
-    QCheckBox* m_checkDummy;
-    QCheckBox* m_checkDao;
-    QCheckBox* m_checkOnTheFly;
-    QCheckBox* m_checkPadding;
-	QCheckBox* m_checkCdText;
-    QGroupBox* m_groupTempDir;
     QLabel* m_labelCdSize;
     QLabel* m_labelFreeSpace;
     QLineEdit* m_editDirectory;
     QToolButton* m_buttonFindDir;
-    QGridLayout* m_groupDeviceLayout;
-    QVBoxLayout* m_groupOptionsLayout;
-    QGridLayout* m_groupTempDirLayout;
+    QCheckBox* m_checkCdText;
+    QCheckBox* m_checkDao;
+    QCheckBox* m_checkOnTheFly;
+    QCheckBox* m_checkPadding;
+    QComboBox* m_comboSpeed;
+    QComboBox* m_comboWriter;
+    QCheckBox* m_checkSimulate;
 	// -----------------------------------------------------------
 	
 	// the cd-text-tab

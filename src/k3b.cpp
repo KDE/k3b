@@ -40,6 +40,7 @@
 
 // application specific includes
 #include "k3b.h"
+#include "k3bglobals.h"
 #include "k3bview.h"
 #include "k3bdirview.h"
 #include "audio/k3baudiodoc.h"
@@ -49,6 +50,9 @@
 #include "k3bcopywidget.h"
 #include "k3bripperwidget.h"
 #include "k3boptiondialog.h"
+#include "k3bburnprogressdialog.h"
+#include "audio/k3baudioburndialog.h"
+#include "audio/k3baudiojob.h"
 
 
 K3bApp* k3bMain()
@@ -86,6 +90,7 @@ K3bApp::K3bApp()
 
   m_audioTrackDialog = 0;
   m_optionDialog = 0;
+  m_burnProgressDialog = 0;
 }
 
 K3bApp::~K3bApp()
@@ -636,9 +641,24 @@ void K3bApp::slotFileBurn()
 	QWidget* w = m_documentTab->currentPage();
 	if( w )
 	{
-		if( w->inherits( "K3bView" ) ) {
-			K3bDoc* doc = ((K3bView*)w)->getDocument();
-			doc->showBurnDialog();
+		if( K3bAudioView* _view = dynamic_cast<K3bAudioView*>(w) ) {
+			K3bAudioDoc* doc = (K3bAudioDoc*)_view->getDocument();
+				
+			if( doc && doc->burnDialog()->exec(true) == K3bAudioBurnDialog::Burn )
+			{
+				if( !m_burnProgressDialog )
+					m_burnProgressDialog = new K3bBurnProgressDialog( this );
+				K3bJob* job;
+					
+				// first we have to decode all the mp3-files:
+				job = new K3bAudioJob( (K3bAudioDoc*)_view->getDocument() );
+				
+				connect( job, SIGNAL(finished( K3bJob* )), this, SLOT(slotJobFinished( K3bJob* )) );
+				
+				m_burnProgressDialog->setJob( job );
+				m_burnProgressDialog->show();
+				job->start();
+			}
 		}
 		else if( w->inherits( "K3bCopyWidget" ) ) {
 			// TODO: do whatever to copy a cd
@@ -691,12 +711,31 @@ void K3bApp::slotCurrentDocChanged( QWidget* w )
 }
 
 
-QString K3bApp::findTempFile( const QString& dir, const QString& ending )
+QString K3bApp::findTempFile( const QString& ending, const QString& d )
 {
+	QString dir(d);
+	if( dir.isEmpty() ) {
+		config()->setGroup( "General Options" );
+		dir = config()->readEntry( "Temp Dir", locateLocal( "appdata", "temp/" ) );
+	}
 	// find a free filename
 	int num = 1;
 	while( QFile::exists( dir + "k3b-" + QString::number( num ) + "." + ending ) )
 		num++;
 
 	return dir + "k3b-" + QString::number( num ) + "." + ending;
+}
+
+
+bool K3bApp::eject()
+{
+	config()->setGroup( "Writing Options" );
+	return config()->readBoolEntry( "Eject when finished", true );
+}
+
+
+void K3bApp::slotJobFinished( K3bJob* job )
+{
+	job->disconnect();
+	delete job;
 }

@@ -35,8 +35,7 @@ K3bAudioTrack::K3bAudioTrack( QList<K3bAudioTrack>* parent, const QString& filen
 }
 
 K3bAudioTrack::K3bAudioTrack( const K3bAudioTrack& track )
-: m_file( track.absPath() ),	m_bufferFile(), m_artist( track.artist() ),
-	m_title( track.title() ), m_length( track.length() )
+: m_file( track.absPath() ),	m_bufferFile(), m_length( track.length() ), m_artist( track.artist() ), m_title( track.title() )
 {
 	m_parent = track.m_parent;
 	m_pregap  = track.pregap();

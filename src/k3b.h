@@ -43,6 +43,9 @@ class K3bDirView;
 class K3bDeviceManager;
 class K3bAudioTrackDialog;
 class K3bOptionDialog;
+class K3bBurnProgressDialog;
+class K3bJob;
+
 
 /** Access to the "lonely" K3bApp Object */
 K3bApp* k3bMain();
@@ -87,7 +90,9 @@ class K3bApp : public KDockMainWindow
 	
 	/** returns a free temp filename in the given directory
 	 * @parm dir the directory where to find the tempfile, should end with '/' **/
-	QString findTempFile( const QString& dir, const QString& ending = "tmp" );
+	QString findTempFile( const QString& ending, const QString& dir = QString::null );
+
+	bool eject();
 	
   protected:
     /** queryClose is called by KTMainWindow on each closeEvent of a window. Against the
@@ -176,6 +181,8 @@ class K3bApp : public KDockMainWindow
 	void slotNewAudioDoc();
 	void slotNewDataDoc();
 
+	void slotJobFinished( K3bJob* job );
+
   private:
     /** save general Options like all bar positions and status as well as the geometry and the recent file list to the configuration
      * file
@@ -237,6 +244,7 @@ class K3bApp : public KDockMainWindow
     K3bDirView* m_dirView;
     K3bAudioTrackDialog* m_audioTrackDialog;
 	K3bOptionDialog* m_optionDialog;
+	K3bBurnProgressDialog* m_burnProgressDialog;
 };
 
 #endif // K3B_H

@@ -18,6 +18,7 @@
 #include "k3bburnprogressdialog.h"
 #include "audio/k3baudiodoc.h"
 #include "audio/k3baudiotrack.h"
+#include "audio/k3baudiojob.h"
 
 #include <qgroupbox.h>
 #include <qlabel.h>
@@ -32,22 +33,21 @@
 
 #include <kprogress.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 
 
-K3bBurnProgressDialog::K3bBurnProgressDialog( K3bDoc* _doc, QWidget *parent, const char *name )
+K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name )
   : KDialog(parent,name, true)
 {
-  doc = _doc;
   setupGUI();
   setupConnections();
-	
-  if( doc->burner() )
-    m_labelWriter->setText( "Writer: " + doc->burner()->vendor + " " + doc->burner()->description );
-		
+  	
   m_groupBuffer->setEnabled( false );
 
   alreadyWrittenMb = 0;
   alreadyWrittenTrackMb = 0;
+
+  m_job = 0;
 }
 
 K3bBurnProgressDialog::~K3bBurnProgressDialog()
@@ -157,53 +157,27 @@ void K3bBurnProgressDialog::setupGUI()
 
 void K3bBurnProgressDialog::setupConnections()
 {
-  connect( m_buttonCancel, SIGNAL(pressed()), this, SIGNAL(cancelPressed()) );
-
-  connect( doc, SIGNAL(startWriting()), this, SLOT(startWriting()) );
-  connect( doc, SIGNAL(startDecoding()), this, SLOT(startDecoding()) );
-	
-  connect( doc, SIGNAL(infoMessage(const QString&)), this, SLOT(displayInfo(const QString&)) );
-	
-  connect( doc, SIGNAL(percent(int)), m_progressCd, SLOT(setValue(int)) );
-  connect( doc, SIGNAL(trackPercent(int)), m_progressTrack, SLOT(setValue(int)) );
-  connect( doc, SIGNAL(bufferStatus(int)), m_progressBuffer, SLOT(setValue(int)) );
-	
-//   connect( doc, SIGNAL(processedSize(unsigned long, unsigned long)), this, SLOT(updateCdSizeProgress(unsigned long, unsigned long)) );
-  connect( doc, SIGNAL(processedMinutes(const QTime&)), this, SLOT(updateCdTimeProgress(const QTime&)) );
-  connect( doc, SIGNAL(trackProcessedSize(int, int)), this, SLOT(updateTrackSizeProgress(int, int)) );
-  //	connect( doc, SIGNAL(trackProcessedMinutes(const QTime&)), this, SLOT(updateTrackTimeProgress(const QTime&)) );
-
-  connect( doc, SIGNAL(nextTrackProcessed()), this, SLOT(nextTrack()) );
-  connect( doc, SIGNAL(result()), this, SLOT(finished()) );
+	connect( m_buttonCancel, SIGNAL(pressed()), this, SLOT(slotCancelPressed()) );
+	connect( m_buttonOk, SIGNAL(clicked()), this, SLOT(close()) );
 }
 
 
-// void K3bBurnProgressDialog::updateCdSizeProgress( unsigned long processed, unsigned long size )
-// {
-//   m_labelCdProgress->setText( i18n("%1 of %2 written").arg( processed ).arg( size ) );
-// }
-
-void K3bBurnProgressDialog::updateCdTimeProgress( const QTime& processedMin )
+void K3bBurnProgressDialog::updateCdSizeProgress( int processed, int size )
 {
-  QString str = processedMin.toString();
-  str += " / ";
-  str += ((K3bAudioDoc*)doc)->audioSize().toString();
-  m_labelCdTime->setText( str );
+	m_labelCdProgress->setText( i18n("%1 of %2 written").arg( processed ).arg( size ) );
 }
+
+//void K3bBurnProgressDialog::updateCdTimeProgress( const QTime& processedMin )
+//{
+//  QString str = processedMin.toString();
+//  str += " / ";
+//  str += ((K3bAudioDoc*)doc)->audioSize().toString();
+//  m_labelCdTime->setText( str );
+//}
 
 void K3bBurnProgressDialog::updateTrackSizeProgress( int processedTrackSize, int trackSize )
 {
-  switch( currentAction ) {
-  case DECODING:
-    m_labelTrackProgress->setText( i18n("%1 of %2 frames processed").arg(processedTrackSize).arg(trackSize) );
-    break;
-  case WRITING_AUDIO:
-  case WRITING_DATA:
-    alreadyWrittenTrackMb = processedTrackSize;
-    m_labelTrackProgress->setText( i18n("%1 of %2 MB written").arg(processedTrackSize).arg(trackSize) );
-    m_labelCdProgress->setText( i18n("%1 of %2 written").arg( alreadyWrittenMb ).arg( doc->size() ) );
-    break;
-  }
+   	m_labelTrackProgress->setText( i18n("%1 of %2 processed").arg(processedTrackSize).arg(trackSize) );
 }
 
 //void K3bBurnProgressDialog::updateTrackTimeProgress( const QTime& processedTrackTime )
@@ -221,18 +195,7 @@ void K3bBurnProgressDialog::displayInfo( const QString& infoString )
 void K3bBurnProgressDialog::nextTrack()
 {
   alreadyWrittenMb += alreadyWrittenTrackMb;
-
-  K3bAudioTrack* _track = ((K3bAudioDoc*)doc)->currentProcessedTrack();
-  if( _track ) {
-    switch( currentAction ) {
-    case DECODING:
-      m_labelFileName->setText( QString("Decoding Track %1 - '%2'").arg( _track->index() +1 ).arg( _track->fileName() ) );
-      break;
-    case WRITING_AUDIO:
-      m_labelFileName->setText( QString("Writing Track %1 - '%2'").arg( _track->index() +1 ).arg( _track->fileName() ) );
-      break;
-    }
-  }
+  currentTrackNumber++;
 }
 
 
@@ -240,34 +203,101 @@ void K3bBurnProgressDialog::finished()
 {
   m_labelFileName->setText("Writing finished");
   m_labelTrackProgress->setText("");
-  m_groupBuffer->setEnabled( false );
+//  m_groupBuffer->setEnabled( false );
 
   m_buttonCancel->hide();
   m_buttonOk->show();
-	
-  connect( m_buttonOk, SIGNAL(clicked()), this, SLOT(close()) );
 }
 
-void K3bBurnProgressDialog::startDecoding()
+//void K3bBurnProgressDialog::startDecoding()
+//{
+//	// hide some unuseful things here
+//	m_labelCdProgress->hide();
+//
+//	m_groupBuffer->setEnabled( false );
+//	currentAction = DECODING;
+//}
+
+
+//void K3bBurnProgressDialog::startWriting()
+//{
+//	m_labelCdProgress->show();
+//	m_progressTrack->setValue(0);
+//	m_labelFileName->setText( "Writing Pregap" );
+//	
+//	m_groupBuffer->setEnabled( true );
+//	
+//	if( K3bAudioDoc* a = dynamic_cast<K3bAudioDoc*>(doc) )
+//		currentAction = WRITING_AUDIO;
+//	else
+//		currentAction = WRITING_DATA;
+//}
+
+
+void K3bBurnProgressDialog::setJob( K3bJob* job )
 {
-	// hide some unuseful things here
-	m_labelCdProgress->hide();
-
-	m_groupBuffer->setEnabled( false );
-	currentAction = DECODING;
-}
-
-
-void K3bBurnProgressDialog::startWriting()
-{
-	m_labelCdProgress->show();
+	// clear everything
+	m_buttonOk->hide();
+	m_buttonCancel->show();
+	m_viewInfo->setText("");
+	m_progressBuffer->setValue(0);
 	m_progressTrack->setValue(0);
-	m_labelFileName->setText( "Writing Pregap" );
+	m_progressCd->setValue(0);
+	m_labelFileName->setText("");
+
+	// disconnect from the former job
+	if( m_job )
+		disconnect( m_job );
+	m_job = job;
 	
-	m_groupBuffer->setEnabled( true );
+	currentTrackNumber = 0;
+
+	// connect to all the shit
+	connect( job, SIGNAL(infoMessage(const QString&)), this, SLOT(displayInfo(const QString&)) );
 	
-	if( K3bAudioDoc* a = dynamic_cast<K3bAudioDoc*>(doc) )
-		currentAction = WRITING_AUDIO;
-	else
-		currentAction = WRITING_DATA;
+	connect( job, SIGNAL(percent(int)), m_progressCd, SLOT(setValue(int)) );
+	connect( job, SIGNAL(subPercent(int)), m_progressTrack, SLOT(setValue(int)) );
+
+	connect( job, SIGNAL(processedSubSize(int, int)), this, SLOT(updateTrackSizeProgress(int, int)) );
+	connect( job, SIGNAL(processedSize(int, int)), this, SLOT(updateCdSizeProgress(int, int)) );
+
+//	connect( job, SIGNAL(newTrack()), this, SLOT(nextTrack()) );
+	connect( job, SIGNAL(newSubJob(const QString&)), m_labelFileName, SLOT(setText(const QString&)) );
+	connect( job, SIGNAL(finished(K3bJob*)), this, SLOT(finished()) );
+	
+
+	if( K3bAudioJob* ajob = dynamic_cast<K3bAudioJob*>( job ) )
+	{
+		if( ajob->doc()->burner() )
+    		m_labelWriter->setText( "Writer: " + ajob->doc()->burner()->vendor + " " + ajob->doc()->burner()->description );
+
+    	// connect to the "special" signals
+		connect( ajob, SIGNAL(bufferStatus(int)), m_progressBuffer, SLOT(setValue(int)) );
+		
+		m_groupBuffer->setEnabled( true ); 	
+	}
+}
+
+
+//void K3bBurnProgressDialog::slotNewFile(const QString& fileName)
+//{
+//	if( dynamic_cast<K3bMp3DecodingJob*>(m_job) )
+//      m_labelFileName->setText( QString("Decoding Track %1 - '%2'").arg( currentTrackNumber ).arg( fileName ) );
+//	else if( dynamic_cast<K3bAudioJob*>(m_job) )
+//      m_labelFileName->setText( QString("Writing Track %1 - '%2'").arg( currentTrackNumber ).arg( fileName ) );
+//}
+
+void K3bBurnProgressDialog::slotCancelPressed()
+{
+	if( m_job )
+		if( KMessageBox::questionYesNo( this, "Do you really want to cancel?", "Cancel" ) == KMessageBox::Yes ) {
+			m_job->cancel();
+			m_buttonCancel->hide();
+			m_buttonOk->show();
+		}
+}
+
+void K3bBurnProgressDialog::show()
+{
+	QWidget::show();
 }

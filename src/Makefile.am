@@ -1,11 +1,11 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 bin_PROGRAMS = k3b
-k3b_SOURCES = k3bburnprogressdialog.cpp k3boptiondialog.cpp k3bfillstatusdisplay.cpp k3bstickybutton.cpp k3bprogressdialog.cpp k3bdevicemanager.cpp k3bripperwidget.cpp k3bcopywidget.cpp k3bdirview.cpp k3bview.cpp k3bdoc.cpp k3b.cpp main.cpp 
+k3b_SOURCES = k3bjob.cpp k3bburnprogressdialog.cpp k3boptiondialog.cpp k3bfillstatusdisplay.cpp k3bstickybutton.cpp k3bprogressdialog.cpp k3bdevicemanager.cpp k3bripperwidget.cpp k3bcopywidget.cpp k3bdirview.cpp k3bview.cpp k3bdoc.cpp k3b.cpp main.cpp 
 k3b_LDADD   = ./data/libdata.a ./cdinfo/libcdinfo.a ./audio/libaudio.a -lkfile -lkdeui -lkdecore $(LIB_QT) $(LIBSOCKET)
 
 SUBDIRS = data cdinfo audio 
 
-EXTRA_DIST = main.cpp k3b.cpp k3b.h k3bdoc.cpp k3bdoc.h k3bview.cpp k3bview.h k3bui.rc k3b.desktop lo32-app-k3b.png lo16-app-k3b.png k3bdirview.cpp k3bdirview.h k3bcopywidget.cpp k3bcopywidget.h k3bripperwidget.cpp k3bripperwidget.h k3bdevicemanager.cpp k3bdevicemanager.h k3bglobals.h k3bprogressdialog.h k3bprogressdialog.cpp k3bstickybutton.cpp k3bstickybutton.h k3bfillstatusdisplay.cpp k3bfillstatusdisplay.h k3boptiondialog.cpp k3boptiondialog.h k3bburnprogressdialog.cpp k3bburnprogressdialog.h 
+EXTRA_DIST = main.cpp k3b.cpp k3b.h k3bdoc.cpp k3bdoc.h k3bview.cpp k3bview.h k3bui.rc k3b.desktop lo32-app-k3b.png lo16-app-k3b.png k3bdirview.cpp k3bdirview.h k3bcopywidget.cpp k3bcopywidget.h k3bripperwidget.cpp k3bripperwidget.h k3bdevicemanager.cpp k3bdevicemanager.h k3bglobals.h k3bprogressdialog.h k3bprogressdialog.cpp k3bstickybutton.cpp k3bstickybutton.h k3bfillstatusdisplay.cpp k3bfillstatusdisplay.h k3boptiondialog.cpp k3boptiondialog.h k3bburnprogressdialog.cpp k3bburnprogressdialog.h k3bjob.cpp k3bjob.h 
 
 install-data-local:
 	$(mkinstalldirs) $(kde_appsdir)/Applications/

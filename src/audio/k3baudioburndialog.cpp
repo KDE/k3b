@@ -59,159 +59,6 @@ K3bAudioBurnDialog::~K3bAudioBurnDialog(){
 }
 
 
-//void K3bAudioBurnDialog::setupGUI()
-//{
-//    Form1Layout = new QHBoxLayout( this );
-//    Form1Layout->setSpacing( spacingHint() );
-//    Form1Layout->setMargin( marginHint() );
-//
-//    m_mainTab = new QTabWidget( this, "m_mainTab" );
-//    m_mainTab->setAutoMask( FALSE );
-//    m_mainTab->setTabShape( QTabWidget::Rounded );
-//    m_mainTab->setMargin( 0 );
-//
-//    tab = new QWidget( m_mainTab, "tab" );
-//    m_mainTab->insertTab( tab, i18n( "CD-Text" ) );
-//
-//    tab_2 = new QWidget( m_mainTab, "tab_2" );
-//    tabLayout = new QGridLayout( tab_2 );
-//    tabLayout->setSpacing( spacingHint() );
-//    tabLayout->setMargin( marginHint() );
-//
-//    m_layoutDevice = new QGridLayout;
-//    m_layoutDevice->setSpacing( spacingHint() );
-//    m_layoutDevice->setMargin( 0 );
-//
-//    m_comboSpeed = new QComboBox( FALSE, tab_2, "m_comboSpeed" );
-//    TextLabel1 = new QLabel( tab_2, "TextLabel1" );
-//    TextLabel1->setText( i18n( "Burning Speed" ) );
-//    TextLabel2 = new QLabel( tab_2, "TextLabel2" );
-//    TextLabel2->setText( i18n( "Burning Device" ) );
-//    m_comboWriter = new QComboBox( FALSE, tab_2, "m_comboWriter" );
-//	
-//	m_layoutDevice->addWidget( m_comboSpeed, 0, 3 );
-//    m_layoutDevice->addWidget( TextLabel1, 0, 2 );
-//    m_layoutDevice->addWidget( TextLabel2, 0, 0 );
-//    m_layoutDevice->addWidget( m_comboWriter, 0, 1 );
-//    m_layoutDevice->setColStretch( 1, 1 );
-//
-//    tabLayout->addMultiCellLayout( m_layoutDevice, 0, 0, 0, 1 );
-//
-//    m_groupImage = new QGroupBox( tab_2, "m_groupImage" );
-//    m_groupImage->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, m_groupImage->sizePolicy().hasHeightForWidth() ) );
-//    m_groupImage->setLineWidth( 1 );
-//    m_groupImage->setMargin( 0 );
-//    m_groupImage->setTitle( i18n( "Image" ) );
-//    m_groupImage->setColumnLayout(0, Qt::Vertical );
-//    m_groupImage->layout()->setSpacing( 0 );
-//    m_groupImage->layout()->setMargin( 0 );
-//    m_groupImageLayout = new QGridLayout( m_groupImage->layout() );
-//    m_groupImageLayout->setAlignment( Qt::AlignTop );
-//    m_groupImageLayout->setSpacing( spacingHint() );
-//    m_groupImageLayout->setMargin( marginHint() );
-//
-//    TextLabel4 = new QLabel( m_groupImage, "TextLabel4" );
-//    TextLabel4->setText( i18n( "Image location" ) );
-//    m_inputImagePath = new QLineEdit( m_groupImage, "m_inputImagePath" );
-//    m_buttonImagePath = new QPushButton( m_groupImage, "m_buttonImagePath" );
-//    m_buttonImagePath->setText( i18n( "Choose..." ) );
-//    TextLabel5 = new QLabel( m_groupImage, "TextLabel5" );
-//    TextLabel5->setText( i18n( "Space left:" ) );
-//    TextLabel6 = new QLabel( m_groupImage, "TextLabel6" );
-//    TextLabel6->setText( i18n( "Size of Image" ) );
-//    m_labelSpaceLeft = new QLabel( m_groupImage, "m_labelSpaceLeft" );
-//    m_labelSpaceLeft->setText( i18n( "0" ) );
-//    m_labelImageSize = new QLabel( m_groupImage, "m_labelImageSize" );
-//    m_labelImageSize->setText( i18n( "0" ) );
-//    m_checkDeleteImage = new QCheckBox( m_groupImage, "m_checkDeleteImage" );
-//    m_checkDeleteImage->setText( i18n( "Delete Image after burning" ) );
-//
-//    m_groupImageLayout->addWidget( TextLabel4, 0, 0 );
-//    m_groupImageLayout->addMultiCellWidget( m_inputImagePath, 1, 1, 0, 1 );
-//    m_groupImageLayout->addWidget( m_buttonImagePath, 1, 2 );
-//    m_groupImageLayout->addWidget( TextLabel5, 2, 0 );
-//    m_groupImageLayout->addWidget( TextLabel6, 3, 0 );
-//    m_groupImageLayout->addWidget( m_labelSpaceLeft, 2, 1 );
-//    m_groupImageLayout->addWidget( m_labelImageSize, 3, 1 );
-//    m_groupImageLayout->addMultiCellWidget( m_checkDeleteImage, 4, 4, 0, 2 );
-//
-//    tabLayout->addMultiCellWidget( m_groupImage, 1, 5, 0, 0 );
-//
-//    m_checkOnTheFly = new QCheckBox( tab_2, "m_checkOnTheFly" );
-//    m_checkOnTheFly->setText( i18n( "Writing on the fly" ) );
-//
-//    tabLayout->addWidget( m_checkOnTheFly, 4, 1 );
-//
-//    m_checkCdtext = new QCheckBox( tab_2, "m_checkCdtext" );
-//    m_checkCdtext->setEnabled( FALSE );
-//    m_checkCdtext->setText( i18n( "Write CD-Text" ) );
-//    m_checkCdtext->setTristate( FALSE );
-//
-//    tabLayout->addWidget( m_checkCdtext, 3, 1 );
-//
-//    m_checkDao = new QCheckBox( tab_2, "m_checkDao" );
-//    m_checkDao->setText( i18n( "DiscAtOnce" ) );
-//
-//    tabLayout->addWidget( m_checkDao, 1, 1 );
-//
-//    m_checkDummy = new QCheckBox( tab_2, "m_checkDummy" );
-//    m_checkDummy->setText( i18n( "Simulate Burning" ) );
-//
-//    tabLayout->addWidget( m_checkDummy, 2, 1 );
-//
-//	m_checkPadding = new QCheckBox( tab_2, "m_checkPadding" );
-//    m_checkPadding->setText( i18n( "Use Padding" ) );
-//
-//    tabLayout->addWidget( m_checkPadding, 5, 1 );
-//
-//    QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
-//    tabLayout->addItem( spacer, 5, 1 );
-//	tabLayout->setColStretch( 0, 1 );
-//
-//    m_mainTab->insertTab( tab_2, i18n( "Burning" ) );
-//    Form1Layout->addWidget( m_mainTab );
-//
-//    m_layoutButtons = new QVBoxLayout;
-//    m_layoutButtons->setSpacing( spacingHint() );
-//    m_layoutButtons->setMargin( 0 );
-//
-//    m_buttonBurn = new QPushButton( this, "m_buttonBurn" );
-//    m_buttonBurn->setText( i18n( "&Burn" ) );
-//    m_layoutButtons->addWidget( m_buttonBurn );
-//
-//    m_buttonSave = new QPushButton( this, "m_buttonSave" );
-//    m_buttonSave->setText( i18n( "Save" ) );
-//    m_layoutButtons->addWidget( m_buttonSave );
-//
-//    m_buttonCancel = new QPushButton( this, "m_buttonCancel" );
-//    m_buttonCancel->setText( i18n( "Cancel" ) );
-//    m_layoutButtons->addWidget( m_buttonCancel );
-//    QSpacerItem* spacer_2 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
-//    m_layoutButtons->addItem( spacer_2 );
-//    Form1Layout->addLayout( m_layoutButtons );
-
-//    // signals and slots connections
-//    connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_groupImage, SLOT(setDisabled(bool)) );
-//	connect( m_buttonSave, SIGNAL(clicked()), this, SLOT(saveClicked()) );
-//	connect( m_buttonCancel, SIGNAL(clicked()), this, SLOT(reject()) );
-//	connect( m_buttonBurn, SIGNAL(clicked()), this, SLOT(burnClicked()) );
-//	
-//    // tab order
-//    setTabOrder( m_mainTab, m_comboWriter );
-//    setTabOrder( m_comboWriter, m_comboSpeed );
-//    setTabOrder( m_comboSpeed, m_checkDao );
-//    setTabOrder( m_checkDao, m_checkDummy );
-//    setTabOrder( m_checkDummy, m_checkCdtext );
-//    setTabOrder( m_checkCdtext, m_checkOnTheFly );
-//    setTabOrder( m_checkOnTheFly, m_inputImagePath );
-//    setTabOrder( m_inputImagePath, m_buttonImagePath );
-//    setTabOrder( m_buttonImagePath, m_checkDeleteImage );
-//    setTabOrder( m_checkDeleteImage, m_buttonBurn );
-//    setTabOrder( m_buttonBurn, m_buttonSave );
-//    setTabOrder( m_buttonSave, m_buttonCancel );
-//}
-
-
 void K3bAudioBurnDialog::saveSettings()
 {
 	// save temp dir
@@ -220,7 +67,7 @@ void K3bAudioBurnDialog::saveSettings()
 	k3bMain()->config()->sync();
 
 	doc->setDao( m_checkDao->isChecked() );
-	doc->setDummy( m_checkDummy->isChecked() );
+	doc->setDummy( m_checkSimulate->isChecked() );
 	doc->setPadding( m_checkPadding->isChecked() );
 	((K3bAudioDoc*)doc)->writeCdText( m_checkCdText->isChecked() );
 	
@@ -284,7 +131,7 @@ void K3bAudioBurnDialog::readSettings()
 	m_editDirectory->setText( k3bMain()->config()->readEntry( "Temp Dir", locateLocal( "appdata", "temp/" ) ) );
 	
 	m_checkDao->setChecked( doc->dao() );
-	m_checkDummy->setChecked( doc->dummy() );
+	m_checkSimulate->setChecked( doc->dummy() );
 	m_checkPadding->setChecked( doc->padding() );
 	m_checkCdText->setChecked( ((K3bAudioDoc*)doc)->cdText() );
 
@@ -318,88 +165,20 @@ void K3bAudioBurnDialog::readSettings()
 
 void K3bAudioBurnDialog::setupBurnTab( QFrame* frame )
 {
-    QGridLayout* mainLayout = new QGridLayout( frame );
-    mainLayout->setSpacing( spacingHint() );
-    mainLayout->setMargin( marginHint() );
+    QGridLayout* frameLayout = new QGridLayout( frame );
+    frameLayout->setSpacing( spacingHint() );
+    frameLayout->setMargin( marginHint() );
 
-    m_groupDevice = new QGroupBox( frame, "m_groupDevice" );
-    m_groupDevice->setTitle( i18n( "Burning Device" ) );
-    m_groupDevice->setColumnLayout(0, Qt::Vertical );
-    m_groupDevice->layout()->setSpacing( 0 );
-    m_groupDevice->layout()->setMargin( 0 );
-    m_groupDeviceLayout = new QGridLayout( m_groupDevice->layout() );
-    m_groupDeviceLayout->setAlignment( Qt::AlignTop );
-    m_groupDeviceLayout->setSpacing( spacingHint() );
-    m_groupDeviceLayout->setMargin( marginHint() );
-
-    QLabel* TextLabel1 = new QLabel( m_groupDevice, "TextLabel1" );
-    TextLabel1->setText( i18n( "Burning Speed" ) );
-
-    m_groupDeviceLayout->addWidget( TextLabel1, 0, 1 );
-
-    m_comboSpeed = new QComboBox( FALSE, m_groupDevice, "m_comboSpeed" );
-    m_comboSpeed->insertItem( i18n( "1x" ) );
-    m_comboSpeed->insertItem( i18n( "2x" ) );
-    m_comboSpeed->insertItem( i18n( "4x" ) );
-    m_comboSpeed->insertItem( i18n( "8x" ) );
-    m_comboSpeed->insertItem( i18n( "12x" ) );
-    m_comboSpeed->setAutoMask( FALSE );
-    m_comboSpeed->setDuplicatesEnabled( FALSE );
-
-    m_groupDeviceLayout->addWidget( m_comboSpeed, 1, 1 );
-
-    m_comboWriter = new QComboBox( FALSE, m_groupDevice, "m_comboWriter" );
-
-    m_groupDeviceLayout->addWidget( m_comboWriter, 1, 0 );
-
-    QLabel* TextLabel1_2 = new QLabel( m_groupDevice, "TextLabel1_2" );
-    TextLabel1_2->setText( i18n( "Device" ) );
-
-    m_groupDeviceLayout->addWidget( TextLabel1_2, 0, 0 );
-
-    mainLayout->addMultiCellWidget( m_groupDevice, 0, 0, 0, 1 );
-
-    m_groupOptions = new QGroupBox( frame, "m_groupOptions" );
-    m_groupOptions->setTitle( i18n( "Options" ) );
-    m_groupOptions->setColumnLayout(0, Qt::Vertical );
-    m_groupOptions->layout()->setSpacing( 0 );
-    m_groupOptions->layout()->setMargin( 0 );
-    m_groupOptionsLayout = new QVBoxLayout( m_groupOptions->layout() );
-    m_groupOptionsLayout->setAlignment( Qt::AlignTop );
-    m_groupOptionsLayout->setSpacing( spacingHint() );
-    m_groupOptionsLayout->setMargin(  marginHint() );
-
-    m_checkDummy = new QCheckBox( m_groupOptions, "m_checkDummy" );
-    m_checkDummy->setText( i18n( "Simulate Burning" ) );
-    m_groupOptionsLayout->addWidget( m_checkDummy );
-
-    m_checkDao = new QCheckBox( m_groupOptions, "m_checkDao" );
-    m_checkDao->setText( i18n( "DiscAtOnce" ) );
-    m_groupOptionsLayout->addWidget( m_checkDao );
-
-    m_checkOnTheFly = new QCheckBox( m_groupOptions, "m_checkOnTheFly" );
-    m_checkOnTheFly->setText( i18n( "Writing on the fly" ) );
-    m_groupOptionsLayout->addWidget( m_checkOnTheFly );
-
-    m_checkPadding = new QCheckBox( m_groupOptions, "m_checkPadding" );
-    m_checkPadding->setText( i18n( "Use Padding" ) );
-    m_groupOptionsLayout->addWidget( m_checkPadding );
-
-    m_checkCdText = new QCheckBox( m_groupOptions, "m_checkCdText" );
-    m_checkCdText->setText( i18n( "CD Text" ) );
-    m_groupOptionsLayout->addWidget( m_checkCdText );
-
-    mainLayout->addWidget( m_groupOptions, 1, 1 );
-
-    m_groupTempDir = new QGroupBox( frame, "m_groupTempDir" );
+    // --- temp group ---------------------------------------------------------
+    QGroupBox* m_groupTempDir = new QGroupBox( frame, "m_groupTempDir" );
     m_groupTempDir->setTitle( i18n( "Temp Directory" ) );
     m_groupTempDir->setColumnLayout(0, Qt::Vertical );
     m_groupTempDir->layout()->setSpacing( 0 );
     m_groupTempDir->layout()->setMargin( 0 );
-    m_groupTempDirLayout = new QGridLayout( m_groupTempDir->layout() );
+    QGridLayout* m_groupTempDirLayout = new QGridLayout( m_groupTempDir->layout() );
     m_groupTempDirLayout->setAlignment( Qt::AlignTop );
     m_groupTempDirLayout->setSpacing( spacingHint() );
-    m_groupTempDirLayout->setMargin(  marginHint() );
+    m_groupTempDirLayout->setMargin( marginHint() );
 
     QLabel* TextLabel1_3 = new QLabel( m_groupTempDir, "TextLabel1_3" );
     TextLabel1_3->setText( i18n( "Files are buffered in" ) );
@@ -417,13 +196,13 @@ void K3bAudioBurnDialog::setupBurnTab( QFrame* frame )
     m_groupTempDirLayout->addWidget( TextLabel4, 3, 0 );
 
     m_labelCdSize = new QLabel( m_groupTempDir, "m_labelCdSize" );
-    m_labelCdSize->setText(  "0 MB" );
+    m_labelCdSize->setText( i18n( "0 MB" ) );
     m_labelCdSize->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
 
     m_groupTempDirLayout->addMultiCellWidget( m_labelCdSize, 3, 3, 1, 2 );
 
     m_labelFreeSpace = new QLabel( m_groupTempDir, "m_labelFreeSpace" );
-    m_labelFreeSpace->setText( "0.0 MB" );
+    m_labelFreeSpace->setText( i18n( "0.0 MB" ) );
     m_labelFreeSpace->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
 
     m_groupTempDirLayout->addMultiCellWidget( m_labelFreeSpace, 2, 2, 1, 2 );
@@ -437,16 +216,109 @@ void K3bAudioBurnDialog::setupBurnTab( QFrame* frame )
     QToolTip::add(  m_buttonFindDir, i18n( "Find directory..." ) );
 
     m_groupTempDirLayout->addWidget( m_buttonFindDir, 1, 2 );
+    // -------------------------------------------------- temp group ---
 
-    mainLayout->addWidget( m_groupTempDir, 1, 0 );
+
+    // ---- options group ------------------------------------------------
+    QGroupBox* m_groupOptions = new QGroupBox( frame, "m_groupOptions" );
+    m_groupOptions->setTitle( i18n( "Options" ) );
+    m_groupOptions->setColumnLayout(0, Qt::Vertical );
+    m_groupOptions->layout()->setSpacing( 0 );
+    m_groupOptions->layout()->setMargin( 0 );
+    QVBoxLayout* m_groupOptionsLayout = new QVBoxLayout( m_groupOptions->layout() );
+    m_groupOptionsLayout->setAlignment( Qt::AlignTop );
+    m_groupOptionsLayout->setSpacing( spacingHint() );
+    m_groupOptionsLayout->setMargin( marginHint() );
+
+    m_checkCdText = new QCheckBox( m_groupOptions, "m_checkCdText" );
+    m_checkCdText->setText( i18n( "Write CD-Text" ) );
+
+    m_checkDao = new QCheckBox( m_groupOptions, "m_checkDao" );
+    m_checkDao->setText( i18n( "DiscAtOnce" ) );
+
+    m_checkSimulate = new QCheckBox( m_groupOptions, "m_checkSimulate" );
+    m_checkSimulate->setText( i18n( "Simulate Writing" ) );
+
+//    m_checkOnTheFly = new QCheckBox( m_groupOptions, "m_checkOnTheFly" );
+//    m_checkOnTheFly->setText( i18n( "Writing on the fly" ) );
+//    m_groupOptionsLayout->addWidget( m_checkOnTheFly );
+
+    m_checkPadding = new QCheckBox( m_groupOptions, "m_checkPadding" );
+    m_checkPadding->setText( i18n( "Use Padding" ) );
+
+    m_groupOptionsLayout->addWidget( m_checkSimulate );
+    m_groupOptionsLayout->addWidget( m_checkCdText );
+    m_groupOptionsLayout->addWidget( m_checkPadding );
+    m_groupOptionsLayout->addWidget( m_checkDao );
+    // --------------------------------------------------- options group ---
+
+    // --- device group ----------------------------------------------------
+    QGroupBox* m_groupDevice = new QGroupBox( frame, "m_groupDevice" );
+    m_groupDevice->setTitle( i18n( "Burning Device" ) );
+    m_groupDevice->setColumnLayout(0, Qt::Vertical );
+    m_groupDevice->layout()->setSpacing( 0 );
+    m_groupDevice->layout()->setMargin( 0 );
+    QGridLayout* m_groupDeviceLayout = new QGridLayout( m_groupDevice->layout() );
+    m_groupDeviceLayout->setAlignment( Qt::AlignTop );
+    m_groupDeviceLayout->setSpacing( spacingHint() );
+    m_groupDeviceLayout->setMargin( marginHint() );
+
+    QLabel* TextLabel1 = new QLabel( m_groupDevice, "TextLabel1" );
+    TextLabel1->setText( i18n( "Burning Speed" ) );
+
+    m_groupDeviceLayout->addWidget( TextLabel1, 0, 1 );
+
+    m_comboSpeed = new QComboBox( FALSE, m_groupDevice, "m_comboSpeed" );
+    m_comboSpeed->setAutoMask( FALSE );
+    m_comboSpeed->setDuplicatesEnabled( FALSE );
+
+    m_groupDeviceLayout->addWidget( m_comboSpeed, 1, 1 );
+
+    m_comboWriter = new QComboBox( FALSE, m_groupDevice, "m_comboWriter" );
+
+    m_groupDeviceLayout->addWidget( m_comboWriter, 1, 0 );
+
+    QLabel* TextLabel1_2 = new QLabel( m_groupDevice, "TextLabel1_2" );
+    TextLabel1_2->setText( i18n( "Device" ) );
+
+    m_groupDeviceLayout->addWidget( TextLabel1_2, 0, 0 );
+    // --------------------------------------------------------- device group ---
+
+
+//    // --- actions group --------------------------------------------------------
+//    QGroupBox* m_groupActions = new QGroupBox( frame, "m_groupActions" );
+//    m_groupActions->setLineWidth( 0 );
+//    m_groupActions->setTitle( i18n( "Actions to perform" ) );
+//    m_groupActions->setColumnLayout(0, Qt::Vertical );
+//    m_groupActions->layout()->setSpacing( 0 );
+//    m_groupActions->layout()->setMargin( 0 );
+//    QVBoxLayout* m_groupActionsLayout = new QVBoxLayout( m_groupActions->layout() );
+//    m_groupActionsLayout->setAlignment( Qt::AlignTop );
+//    m_groupActionsLayout->setSpacing( spacingHint() );
+//    m_groupActionsLayout->setMargin( marginHint() );
+//
+//    m_checkBufferFiles = new QCheckBox( m_groupActions, "m_checkBufferFiles" );
+//    m_checkBufferFiles->setText( i18n( "Cache Files" ) );
+//    m_groupActionsLayout->addWidget( m_checkBufferFiles );
+//
+//
+//    m_checkWrite = new QCheckBox( m_groupActions, "m_checkWrite" );
+//    m_checkWrite->setText( i18n( "Write" ) );
+//    m_groupActionsLayout->addWidget( m_checkWrite );
+//    // ---------------------------------------------------------- actions group ---
+
+
+//    frameLayout->addMultiCellWidget( m_groupActions, 0, 1, 0, 0 );
+    frameLayout->addWidget( m_groupTempDir, 1, 1 );
+    frameLayout->addWidget( m_groupOptions, 1, 0 );
+    frameLayout->addMultiCellWidget( m_groupDevice, 0, 0, 0, 1 );
 
     m_groupTempDirLayout->setColStretch( 1 , 1);
     m_groupDeviceLayout->setColStretch( 0 , 1);
-	mainLayout->setRowStretch( 1, 1 );
-	mainLayout->setColStretch( 0, 1 );
+	frameLayout->setRowStretch( 1, 1 );
+	frameLayout->setColStretch( 1, 1 );
 
     // tab order
-    setTabOrder( m_comboWriter, m_comboSpeed );
 
     connect( m_buttonFindDir, SIGNAL(clicked()), this, SLOT(slotFindDir()) );
 }

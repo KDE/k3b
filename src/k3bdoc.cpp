@@ -48,7 +48,6 @@ K3bDoc::K3bDoc( QObject* parent )
 	pViewList->setAutoDelete(false);
 
 	m_process = new KProcess();
-	m_timer = new QTimer( this );
 	m_burner = 0;
 	m_dao = true;
 	m_error = K3b::NOT_STARTED;
@@ -62,12 +61,6 @@ K3bDoc::~K3bDoc()
 	delete pViewList;
 }
 
-void K3bDoc::write( const QString& imageFile, bool deleteImage )
-{
-	// use KProcess to start cdrecord
-	// write image to cd
-}
-
 void K3bDoc::setDao( bool b )
 {
 	m_dao = b;
@@ -76,11 +69,6 @@ void K3bDoc::setDao( bool b )
 void K3bDoc::setDummy( bool b )
 {
 	m_dummy = b;
-}
-
-void K3bDoc::setEject( bool e )
-{
-	m_eject = e;
 }
 
 void K3bDoc::setSpeed( int speed )
@@ -93,54 +81,6 @@ void K3bDoc::setBurner( K3bDevice* dev )
 	m_burner = dev;
 	if( dev )
 		qDebug( QString("(K3bDoc) Setting writer to %1 %2").arg( dev->device()).arg(dev->description) );
-}
-
-
-bool K3bDoc::workInProgress() const
-{
-	return m_process->isRunning();
-}
-
-
-int K3bDoc::error() const
-{
-	return m_error;
-}
-
-
-void K3bDoc::cancel()
-{
-	if( workInProgress() )
-		m_process->kill();
-		
-	m_error = K3b::CANCELED;
-	m_process->disconnect();
-	emitMessage("Process canceled.");
-	emitResult();
-}
-
-
-void K3bDoc::emitResult()
-{
-	emit result();
-}
-
-void K3bDoc::emitCanceled()
-{
-	emit canceled();
-}
-
-void K3bDoc::emitProgress( unsigned long _size, unsigned long _processed, int _speed )
-{
-	// TODO: do anything with speed or remove it
-	int _percent = (int)( 100.0 * (double)_processed / (double)_size );
-	emit percent( _percent );
-	emit processedSize( _size, size() );
-}
-
-void K3bDoc::emitMessage( const QString& msg )
-{
-	emit infoMessage( i18n(msg) );
 }
 
 
@@ -218,11 +158,11 @@ void K3bDoc::closeDocument()
 
 bool K3bDoc::newDocument()
 {
-  /////////////////////////////////////////////////
-  // TODO: Add your document initialization code here
-  /////////////////////////////////////////////////
-  modified=false;
-  return true;
+	m_dummy = false;
+	m_dao = true;
+	
+	modified=false;
+	return true;
 }
 
 bool K3bDoc::openDocument(const KURL &url, const char *format )

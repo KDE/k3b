@@ -63,10 +63,10 @@ public:
 	void setLength( const QTime& time ) { m_length = time; }
 	
 	void setBufferFile( const QString& file ) { m_bufferFile = file; }
-	  /** returns the filesize of the track */
-	  uint size() const;
-	  /** returns the index in the list */
-	  int index() const;
+	/** returns the filesize of the track */
+	uint size() const;
+	/** returns the index in the list */
+	int index() const;
 
 protected:
 	QList<K3bAudioTrack>* m_parent;
@@ -74,12 +74,18 @@ protected:
 private:	
 	QFile m_file;
 	QString m_bufferFile;
+	QTime m_length;
 	int  m_filetype;
 	int  m_pregap;
+	
+	/** CD-Text: copy protection */
+	bool m_copy;
+	/** CD-Text: PERFORMER */
 	QString m_artist;
+	/** CD-Text: TITLE (track) */
 	QString m_title;
+	/** CD-Text: TITLE (cd) */
 	QString m_album;
-	QTime m_length;
 };
 
 

@@ -32,6 +32,7 @@ class QPushButton;
 class QTextView;
 class K3bDoc;
 class QTime;
+class K3bJob;
 
 
 /**
@@ -43,12 +44,12 @@ class K3bBurnProgressDialog : public KDialog  {
   Q_OBJECT
 
  public:
-  K3bBurnProgressDialog( K3bDoc*, QWidget *parent=0, const char *name=0);
+  K3bBurnProgressDialog( QWidget *parent=0, const char *name=0);
   ~K3bBurnProgressDialog();
 
-  enum action { DECODING = 1, WRITING_AUDIO = 2, WRITING_DATA = 3 };
-
-  void setAction( int );
+  void setJob( K3bJob* job );
+  /** reimplemented from QDialog since we need this to return imideately! */
+  void show();
 
  protected:
   void setupGUI();
@@ -75,27 +76,25 @@ class K3bBurnProgressDialog : public KDialog  {
   QGridLayout* m_groupProgressLayout;
 
  private:
-  K3bDoc* doc;
-  int currentAction;
+  K3bJob* m_job;
   int alreadyWrittenMb;
   int alreadyWrittenTrackMb;
-
- signals:
-  void cancelPressed();
+  int currentTrackNumber;
 
  protected slots:
-  void updateCdTimeProgress( const QTime& processedTime );
-  //  void updateCdSizeProgress( unsigned long processed, unsigned long size );
+//  void updateCdTimeProgress( const QTime& processedTime );
+  void updateCdSizeProgress( int processed, int size );
   //  void updateTrackTimeProgress( const QTime& processedTrackTime );
   void updateTrackSizeProgress( int processed, int size );
   void displayInfo( const QString& infoString );
 
   void finished();
   void nextTrack();
+  void slotCancelPressed();
 
  public slots:
-  void startWriting();
-  void startDecoding();
+//  void startWriting();
+//  void startDecoding();
 };
 
 #endif
