@@ -22,7 +22,7 @@ K3bIdeDevice::K3bIdeDevice( cdrom_drive* drive )
   if( (i = model.find("compatible")) != -1 )
     model.remove( i, 10 );
 
-  model.stripWhiteSpace();
+  model = model.stripWhiteSpace();
 
   // we assume that all letters up to the first white space 
   // belong to the vendor string and the rest is the model
