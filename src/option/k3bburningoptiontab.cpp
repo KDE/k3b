@@ -65,7 +65,7 @@ void K3bBurningOptionTab::setupGui()
   m_editDefaultPregap = new KIntNumInput( m_groupAudio );
   m_comboPregapFormat = new QComboBox( m_groupAudio );
 
-  QLabel* labelDefaultPregap = new QLabel( i18n("Default pregap:"), m_groupAudio );
+  QLabel* labelDefaultPregap = new QLabel( i18n("&Default pregap:"), m_groupAudio );
 
   groupAudioLayout->addWidget( labelDefaultPregap, 0, 0 );
   groupAudioLayout->addWidget( m_editDefaultPregap, 0, 1 );
@@ -85,10 +85,10 @@ void K3bBurningOptionTab::setupGui()
   m_groupData->layout()->setSpacing( KDialog::spacingHint() );
   m_groupData->layout()->setMargin( KDialog::marginHint() );
 
-  m_checkUseID3Tag = new QCheckBox( i18n("Use audio tags for filenames"), m_groupData );
-  m_checkDropDoubles = new QCheckBox( i18n("Discard identical names"), m_groupData );
-  m_checkListHiddenFiles = new QCheckBox( i18n("List hidden files"), m_groupData );
-  m_checkListSystemFiles = new QCheckBox( i18n("List system files"), m_groupData );
+  m_checkUseID3Tag = new QCheckBox( i18n("&Use audio tags for filenames"), m_groupData );
+  m_checkDropDoubles = new QCheckBox( i18n("&Discard identical names"), m_groupData );
+  m_checkListHiddenFiles = new QCheckBox( i18n("List &hidden files"), m_groupData );
+  m_checkListSystemFiles = new QCheckBox( i18n("List &system files"), m_groupData );
   // -----------------------------------------------------------------------
 
   // default cd size group
@@ -101,10 +101,10 @@ void K3bBurningOptionTab::setupGui()
   groupCdSizeLayout->setSpacing( KDialog::spacingHint() );
   groupCdSizeLayout->setMargin( KDialog::marginHint() );
 
-  m_radio74Minutes    = new QRadioButton( i18n("75 minutes (650 MB)"), groupCdSize );
-  m_radio80Minutes    = new QRadioButton( i18n("80 minutes (700 MB)"), groupCdSize );
-  m_radio100Minutes   = new QRadioButton( i18n("100 minutes (800 MB)"), groupCdSize );
-  m_radioCustomCdSize = new QRadioButton( i18n("Custom:"), groupCdSize );
+  m_radio74Minutes    = new QRadioButton( i18n("&75 minutes (650 MB)"), groupCdSize );
+  m_radio80Minutes    = new QRadioButton( i18n("&80 minutes (700 MB)"), groupCdSize );
+  m_radio100Minutes   = new QRadioButton( i18n("&100 minutes (800 MB)"), groupCdSize );
+  m_radioCustomCdSize = new QRadioButton( i18n("&Custom:"), groupCdSize );
   m_editCustomCdSize  = new KLineEdit( groupCdSize );
 
   m_editCustomCdSize->setValidator( new QIntValidator( m_editCustomCdSize ) );
@@ -143,9 +143,9 @@ void K3bBurningOptionTab::setupGui()
   groupAdvancedLayout->setSpacing( KDialog::spacingHint() );
   groupAdvancedLayout->setMargin( KDialog::marginHint() );
 
-  m_checkEject = new QCheckBox( i18n("Do not eject CD after write process"), advancedTab );
-  m_checkOverburn = new QCheckBox( i18n("Allow overburning (not supported by cdrecord <= 1.10)"), advancedTab );
-  m_checkManualWritingBufferSize = new QCheckBox( i18n("Manual writing buffer size"), advancedTab );
+  m_checkEject = new QCheckBox( i18n("Do not &eject CD after write process"), advancedTab );
+  m_checkOverburn = new QCheckBox( i18n("Allow &overburning (not supported by cdrecord <= 1.10)"), advancedTab );
+  m_checkManualWritingBufferSize = new QCheckBox( i18n("&Manual writing buffer size"), advancedTab );
   m_editWritingBufferSizeCdrecord = new KIntNumInput( 4, advancedTab );
   m_editWritingBufferSizeCdrdao = new KIntNumInput( 32, advancedTab );
 
@@ -161,7 +161,7 @@ void K3bBurningOptionTab::setupGui()
   bufferLayout->addColSpacing( 0, 30 );
   bufferLayout->setColStretch( 4, 1 );
 
-  m_checkAllowWritingAppSelection = new QCheckBox( i18n("Manual writing application selection"), advancedTab );
+  m_checkAllowWritingAppSelection = new QCheckBox( i18n("Manual writing application &selection"), advancedTab );
 
   groupAdvancedLayout->addWidget( m_checkOverburn, 0, 0 );
   groupAdvancedLayout->addWidget( m_checkEject, 1, 0 );
@@ -184,8 +184,8 @@ void K3bBurningOptionTab::setupGui()
 
   // put all in the main tabbed
   // -----------------------------------------------------------------------
-  mainTabbed->addTab( projectTab, i18n("Projects") );
-  mainTabbed->addTab( advancedTab, i18n("Advanced") );
+  mainTabbed->addTab( projectTab, i18n("&Projects") );
+  mainTabbed->addTab( advancedTab, i18n("&Advanced") );
 
 
   QToolTip::add( m_checkListHiddenFiles, i18n("Add hidden files in subdirectories") );
