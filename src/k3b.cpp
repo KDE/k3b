@@ -72,6 +72,7 @@
 #include "data/k3bisoimagewritingdialog.h"
 #include "data/k3bbinimagewritingdialog.h"
 #include "tools/k3bexternalbinmanager.h"
+#include "tools/k3bdefaultexternalprograms.h"
 #include "k3bprojecttabwidget.h"
 #include "rip/songdb/k3bsongmanager.h"
 #include "k3baudioplayer.h"
@@ -895,6 +896,7 @@ void K3bMainWindow::init()
   // ===============================================================================
   emit initializationInfo( i18n("Searching for external programs...") );
 
+  ::addDefaultPrograms( K3bExternalBinManager::self() );
   K3bExternalBinManager::self()->search();
 
   if( globalConfig.hasGroup("External Programs") ) {

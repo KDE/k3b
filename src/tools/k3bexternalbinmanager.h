@@ -8,12 +8,80 @@
 #include <qptrlist.h>
 
 
-class QString;
 class KConfig;
 class KProcess;
 
 
 class K3bExternalProgram;
+
+
+class K3bExternalBinVersion 
+{
+ public:
+  /**
+   * construct an empty version object
+   * with version 0.1
+   */
+  K3bExternalBinVersion();
+
+  /**
+   * copy constructor
+   */
+  K3bExternalBinVersion( const K3bExternalBinVersion& );
+
+  /**
+   * this constructor tries to parse the given version string
+   */
+  K3bExternalBinVersion( const QString& version );
+
+  /**
+   * sets the version and generates a version string from it
+   */
+  K3bExternalBinVersion( int majorVersion, int minorVersion, int pachlevel = -1, const QString& suffix = QString::null );
+
+  /**
+   * tries to parse the version string
+   * used by the constructor
+   */
+  void setVersion( const QString& );
+
+  /**
+   * sets the version and generates a version string from it
+   * used by the constructor
+   *
+   * If minorVersion or pachlevel are -1 they will not be used when generating the version string.
+   */
+  void setVersion( int majorVersion, int minorVersion = -1, int patchlevel = -1, const QString& suffix = QString::null );
+
+  const QString& versionString() const { return m_versionString; }
+  int majorVersion() const { return m_majorVersion; }
+  int minorVersion() const { return m_minorVersion; }
+  int patchLevel() const { return m_patchLevel; }
+  const QString& suffix() const { return m_suffix; }
+
+  /**
+   * just to make it possible to use as a QString
+   */
+  operator const QString& () const { return m_versionString; }
+  K3bExternalBinVersion& operator=( const QString& v );
+
+  /**
+   * If minorVersion or pachlevel are -1 they will not be used when generating the version string.
+   * If minorVersion is -1 patchlevel will be ignored.
+   */
+  static QString createVersionString( int majorVersion, 
+				      int minorVersion = -1, 
+				      int patchlevel = -1, 
+				      const QString& suffix = QString::null );
+
+ private:
+  QString m_versionString;
+  int m_majorVersion;
+  int m_minorVersion;
+  int m_patchLevel;
+  QString m_suffix;
+};
+
 
 class K3bExternalBin
 {
@@ -39,11 +107,17 @@ class K3bExternalBin
 };
 
 
+/**
+ * This is the main class that represents a program
+ * It's scan method has to be reimplemented for every program
+ * It manages a list of K3bExternalBin-objects that each represent
+ * one installed version of the program.
+ */
 class K3bExternalProgram
 {
  public:
   K3bExternalProgram( const QString& name );
-  ~K3bExternalProgram();
+  virtual ~K3bExternalProgram();
 
   const K3bExternalBin* defaultBin() const { return m_bins.getFirst(); }
 
@@ -60,12 +134,39 @@ class K3bExternalProgram
 
   const QPtrList<K3bExternalBin>& bins() const { return m_bins; }
 
+  /**
+   * this scans for the program in the given path,
+   * adds the found bin object to the list and returnes true.
+   * if nothing could be found false is returned.
+   */
+  virtual bool scan( const QString& ) {return false;}//= 0;
+
+  class OutputCollector;
+
  private:
   QString m_name;
   QStringList m_userParameters;
   QPtrList<K3bExternalBin> m_bins;
 };
 
+
+class K3bExternalProgram::OutputCollector : public QObject
+{
+  Q_OBJECT
+
+ public:
+  OutputCollector( KProcess* );
+  void setProcess( KProcess* );
+
+  const QString& output() const { return m_gatheredOutput; }
+
+ private slots:
+  void slotGatherOutput( KProcess*, char*, int );
+
+ private:
+  QString m_gatheredOutput;
+  KProcess* m_process;
+};
 
 
 class K3bExternalBinManager : public QObject
@@ -99,25 +200,28 @@ class K3bExternalBinManager : public QObject
 
   const QStringList& searchPath() const { return m_searchPath; }
 
- private slots:
-  void gatherOutput(KProcess*, char*, int);
+  void addProgram( K3bExternalProgram* );
+  void clear();
+
+/*  private slots: */
+/*   void gatherOutput(KProcess*, char*, int); */
 
  private:
   K3bExternalBinManager();
 
-  void createProgramContainer();
+/*   void createProgramContainer(); */
 
-  K3bExternalBin* probeCdrecord( const QString& );
-  K3bExternalBin* probeMkisofs( const QString& );
-  K3bExternalBin* probeCdrdao( const QString& );
-  K3bExternalBin* probeTranscode( const QString& );
-  K3bExternalBin* probeMovix( const QString& );
-  K3bExternalBin* probeVcd( const QString& );
+/*   K3bExternalBin* probeCdrecord( const QString& ); */
+/*   K3bExternalBin* probeMkisofs( const QString& ); */
+/*   K3bExternalBin* probeCdrdao( const QString& ); */
+/*   K3bExternalBin* probeTranscode( const QString& ); */
+/*   K3bExternalBin* probeMovix( const QString& ); */
+/*   K3bExternalBin* probeVcd( const QString& ); */
 
   QMap<QString, K3bExternalProgram*> m_programs;
   QStringList m_searchPath;
 
-  QString m_noPath;  // used for binPath() to return const string
+  static QString m_noPath;  // used for binPath() to return const string
 
   QString m_gatheredOutput;
 };
