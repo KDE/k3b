@@ -48,7 +48,6 @@
 #include "device/k3bdevicemanager.h"
 #include "audio/k3baudiotrackdialog.h"
 #include "k3bcopywidget.h"
-#include "k3bripperwidget.h"
 #include "option/k3boptiondialog.h"
 #include "k3bburnprogressdialog.h"
 #include "k3bprojectburndialog.h"

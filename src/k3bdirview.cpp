@@ -49,7 +49,7 @@
 #include "kiotree/kiotreemodule.h"
 #include "kiotree/kiotreeitem.h"
 #include "kiotree/kiotreetoplevelitem.h"
-#include "audio/k3bcdview.h"
+#include "rip/k3bcdview.h"
 #include "k3bfileview.h"
 #include "device/k3bdevicemanager.h"
 #include "device/k3bdevice.h"

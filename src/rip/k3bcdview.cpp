@@ -142,7 +142,7 @@ void K3bCdView::reload(){
 }
 
 void K3bCdView::editFilenames(){
-    KPopupMenu <
+    //KPopupMenu <
 }
 
 void K3bCdView::changeSelectionMode(){
