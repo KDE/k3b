@@ -29,6 +29,7 @@ K3bExternalBinManager::K3bExternalBinManager( QObject* parent )
   : QObject( parent )
 {
     m_process = new KProcess();
+
     for( int i=0; i< NUM_BIN_PROGRAMS; i++) {
         m_binMap.insert( binPrograms[ i ], new K3bExternalBin( binPrograms[ i ] ));
     }
@@ -58,16 +59,19 @@ void K3bExternalBinManager::searchVersion( int programArrayIndex ){
         if( QFile::exists( bin ) ) {
 
             m_process->clearArguments();
-            m_process->disconnect();
-            m_process->setName( binPrograms[ programArrayIndex ] );
+	    m_process->setName( binPrograms[ programArrayIndex ] );
             *m_process << bin << "--version";
-            connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
-	          this, SLOT(slotParseOutputVersion(KProcess*, char*, int)) );
-            connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
-	          this, SLOT(slotParseOutputVersion(KProcess*, char*, int)) );
+
+	    m_process->disconnect();
+	    connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
+		     this, SLOT(slotParseOutputVersion(KProcess*, char*, int)) );
+	    connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
+		     this, SLOT(slotParseOutputVersion(KProcess*, char*, int)) );
+
             m_process->start( KProcess::Block, KProcess::AllOutput );
             if( m_binMap[  binPrograms[ programArrayIndex ] ]->version.isEmpty() ) {
-                qDebug("(K3bExternalBinManager) " + bin + " seems not to be "+ binPrograms[ programArrayIndex ]+" version >= " + binVersions[ programArrayIndex ] );
+                qDebug("(K3bExternalBinManager) " + bin + " seems not to be "+ 
+		       binPrograms[ programArrayIndex ]+" version >= " + binVersions[ programArrayIndex ] );
             } else {
 	        m_binMap[ binPrograms[ programArrayIndex ] ]->path = bin;
 	        break;  // bin found
@@ -133,44 +137,12 @@ void K3bExternalBinManager::checkVersions()
     }
   }
 
-  binO = binObject("mpg123");
-  if( binO ) {
-    binO->version = QString::null;
-    if( QFile::exists( binO->path ) ) {
 
-      m_process->clearArguments();
-      m_process->disconnect();
-      *m_process << binO->path;
-      connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
-	       this, SLOT(slotParseMpg123Version(KProcess*, char*, int)) );
-      m_process->start( KProcess::Block, KProcess::Stderr );
-      if( m_binMap["mpg123"]->version.isEmpty() ) {
-	qDebug("(K3bExternalBinManager) " + binO->path + " seems not to be mpg123.");
-      }
-    }
-  }
-
-  binO = binObject("sox");
-  if( binO ) {
-    binO->version = QString::null;
-    if( QFile::exists( binO->path ) ) {
-
-      m_process->clearArguments();
-      m_process->disconnect();
-      *m_process << binO->path << "-h";
-      connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
-	       this, SLOT(slotParseSoxVersion(KProcess*, char*, int)) );
-      m_process->start( KProcess::Block, KProcess::Stderr );
-      if( m_binMap["sox"]->version.isEmpty() ) {
-	qDebug("(K3bExternalBinManager) " + binO->path + " seems not to be sox.");
-      }
-    }
-  }
   checkTranscodeVersion();
 }
 
 void K3bExternalBinManager::checkTranscodeVersion(){
-  for( int i=5;  i < 10; i++){
+  for( int i=3;  i < 8; i++){
     K3bExternalBin* binO = binObject( binPrograms[ i ] );
     bool wrongVersion = false;
     if( binO ) {
@@ -220,10 +192,10 @@ void K3bExternalBinManager::slotParseOutputVersion( KProcess* p, char* data, int
             slotParseCdrdaoVersion(p, data, len);
             break;
         case 3:
-            slotParseMpg123Version(p, data, len);
+            slotParseTranscodeVersion(p, data, len);
             break;
         case 4:
-            slotParseSoxVersion(p, data, len);
+            slotParseTranscodeVersion(p, data, len);
             break;
         case 5:
             slotParseTranscodeVersion(p, data, len);
@@ -232,12 +204,6 @@ void K3bExternalBinManager::slotParseOutputVersion( KProcess* p, char* data, int
             slotParseTranscodeVersion(p, data, len);
             break;
         case 7:
-            slotParseTranscodeVersion(p, data, len);
-            break;
-        case 8:
-            slotParseTranscodeVersion(p, data, len);
-            break;
-        case 9:
             slotParseTranscodeVersion(p, data, len);
             break;
         default:
@@ -290,46 +256,6 @@ void K3bExternalBinManager::slotParseCdrdaoVersion( KProcess*, char* data, int l
   }
 }
 
-
-void K3bExternalBinManager::slotParseMpg123Version( KProcess*, char* data, int len )
-{
-  if( m_binMap.contains( "mpg123" ) ) {
-    QString buffer = QString::fromLatin1( data, len );
-    QStringList lines = QStringList::split( "\n", buffer );
-    
-    for( QStringList::Iterator str = lines.begin(); str != lines.end(); str++ ) {
-      if( (*str).contains( "Version" ) ) {
-	int start = (*str).find( "Version" ) + 8;
-	int findStart = ( start > -1 ? start : 0 );
-	int end   = (*str).find( ' ', findStart );
-	
-	if( start > -1 && end > -1 ) {
-	  m_binMap["mpg123"]->version = (*str).mid( start, end-start );
-	  break;   // version found
-	}
-      }
-    }
-  }
-}
-
-
-void K3bExternalBinManager::slotParseSoxVersion( KProcess*, char* data, int len )
-{
-  if( m_binMap.contains( "sox" ) ) {
-    QString buffer = QString::fromLatin1( data, len );
-    QStringList lines = QStringList::split( "\n", buffer );
-    
-    for( QStringList::Iterator str = lines.begin(); str != lines.end(); str++ ) {
-      if( (*str).contains( "Version" ) ) {
-	int start = (*str).find( "Version" ) + 8;
-	if( start > -1 ) {
-	  m_binMap["sox"]->version = (*str).mid( start );
-	  break;   // version found
-	}
-      }
-    }
-  }
-}
 
 void K3bExternalBinManager::slotParseTranscodeVersion( KProcess* p, char* data, int len ) {
     QString name( p->name() );

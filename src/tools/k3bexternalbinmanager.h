@@ -4,15 +4,15 @@
 #include <qmap.h>
 #include <qobject.h>
 
-static const char* binPrograms[] =  { "mkisofs", "cdrecord", "cdrdao", "mpg123", "sox",
+static const char* binPrograms[] =  { "mkisofs", "cdrecord", "cdrdao",
                     "transcode", "tccat", "tcprobe", "tcscan", "tcextract" };
-static const char* binVersions[] =  { "1.13", "1.9", "1.1.3", "1.59", "unknown",
+static const char* binVersions[] =  { "1.13", "1.9", "1.1.3",
                     "0.6.0pre3", "0.6.0pre3", "0.6.0pre3", "0.6.0pre3", "0.6.0pre3" };
 static const char* searchPaths[] = { "/usr/bin/", "/usr/local/bin/",
 				       "/usr/sbin/", "/usr/local/sbin/",
 				       "/opt/schily/bin/" };
 
-static const int NUM_BIN_PROGRAMS = 10;
+static const int NUM_BIN_PROGRAMS = 8;
 static const int NUM_SEARCH_PATHS = 5;
 
 class QString;
@@ -62,8 +62,6 @@ Q_OBJECT
  private slots:
   void slotParseCdrdaoVersion( KProcess*, char* data, int len );
   void slotParseCdrtoolsVersion( KProcess*, char* data, int len );
-  void slotParseMpg123Version( KProcess*, char* data, int len );
-  void slotParseSoxVersion( KProcess*, char* data, int len );
   void slotParseOutputVersion( KProcess *p, char* data, int len );
   void slotParseTranscodeVersion( KProcess *p, char* data, int len );
 
