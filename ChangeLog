@@ -22,6 +22,11 @@ generic resampling for all audio plugins
 support for mono files
 support for 8Bit wave files
 FLAC decoding plugin (thanks to John Steele Scott)
+check if a DVD-R(W) writer supports incremental streaming before trying multisession
+check if a DVD-R(W) writer supports testwriting before trying a simulation
+fixed DVD-Copy. We needed to determine the size of the data to copy for ourselves instead of relying
+	on the kernel
+Automatic CD-writing speed selection (chooses always the max for now)
 	
 0.10
 DVD writing support with the DVD+RW-tools by Andy Polyakov <appro@fy.chalmers.se>

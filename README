@@ -1,12 +1,14 @@
-K3b Version 0.10
+K3b Version 0.11
 
 Thanx for downloading K3b - The CD Kreator
 
 These are the features so far:
  - the most userfriendly interface ever ;-)
+   - themable (for now with Ayo's original theme and a crystal theme from Everaldo)
 
  - writing audio-cds
-   - from mp3, ogg vorbis, and wav files (on-the-fly or with images)
+   - from mp3, ogg vorbis, flac, and wav files (on-the-fly or with images)
+   - decoding plugin system
    - cd-text support
    - ID3-tag support
    - little gimmick: hide the first track (so that you have to search back from the beginning of the cd to find it)
@@ -23,7 +25,7 @@ These are the features so far:
    - adding new empty directories to data tree
    - renaming of files (manually or automatically for mp3-files) (for joliet and rockrigde)
    - support for most of the mkisofs-options (I don't think anyone will ever use them! ;-))
-   - multisession support (including importing old sessions)
+   - multisession support (including importing old sessions and overwriting files from old sessions)
    - El Torito bootable cd support
 
  - writing Video CDs
@@ -47,9 +49,12 @@ These are the features so far:
 
  - blanking of cdrws
 
- - cd ripping to wav
+ - cd ripping to wav, mp3, ogg-vorbis, flac, or whatever format needed
+   - encoding plugin system
    - cddb support
    - sophisticated pattern system to automatically organize the ripped tracks
+   - m3u playlist creation
+   - CD-TEXT support
 
  - dvd ripping with the transcode tools
 
@@ -74,7 +79,11 @@ What you need to run K3b:
  - cdrdao, the other linux cd writing program from Andreas Mueller
  - optional the transcode tools for DVD ripping and DivX/XviD encoding from Thomas Oestreich
  - optional vcdimager >= 0.7 for creating video cds
-
+ - optional libmad for mp3 decoding
+ - optional ogg-vorbis libraries for encoding and decoding
+ - optional the FLAC++ libraries for flac-decoding
+ - optional the eMovix package
+ 
 See INSTALL for further information
 
 
