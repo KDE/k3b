@@ -214,7 +214,8 @@ void K3bDiskInfoView::displayInfo( const K3bDiskInfo& info )
       m_infoWidget->hide();
     }
 
-    if( !info.empty && info.tocType == K3bDiskInfo::DATA ) {
+    if( !info.empty && 
+	( info.tocType == K3bDiskInfo::DATA || info.tocType == K3bDiskInfo::DVD ) ) {
       m_isoInfoWidget->show();
       if( showLine ) showLine = true;
 
