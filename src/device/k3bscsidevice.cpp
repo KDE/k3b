@@ -13,6 +13,12 @@ extern "C" {
 K3bScsiDevice::K3bScsiDevice( cdrom_drive* drive )
   : K3bDevice( drive )
 {
+  m_burnproof     = false;
+  m_maxReadSpeed  = 0;
+  m_maxReadSpeed  = 0;
+  m_maxWriteSpeed = 0;
+  m_maxWriteSpeed = 0;
+  m_burner        = false;
 }
 
 
@@ -24,7 +30,7 @@ K3bScsiDevice::~K3bScsiDevice()
 bool K3bScsiDevice::init()
 {
   qDebug( "(K3bScsiDevice) Initializing device %s...", devicename().latin1() );
-  ScsiIf  scsiIf( devicename().latin1() );
+  ScsiIf scsiIf( devicename().latin1() );
   if( scsiIf.init() != 0 ) {
     qDebug( "(K3bScsiDevice) Could not open device " + devicename() );
     return false;
@@ -55,30 +61,26 @@ bool K3bScsiDevice::init()
   qDebug ( "(K3bScsiDevice) Get device information for device %s.", devicename().latin1() );
   if( getModePage( &scsiIf,  0x2a, mp, 32, NULL, NULL, 0 ) != 0 ) {
     qDebug( "(K3bScsiDevice) Cannot retrieve drive capabilities mode page from device %s.", devicename().latin1() );
-    return false;
+    qDebug( "(K3bScsiDevice) Capabilities have to be set manually for device %s.", devicename().latin1() );
   }
-
-  m_burnproof = ( mp[4] & 0x80 ) ? true : false;
-  //  int accurateAudioStream = mp[5] & 0x02 ? 1 : 0;
-  // speed must be diveded by 176
-  m_maxReadSpeed = ( mp[14] << 8 ) | mp[15];
-  m_maxReadSpeed  /= 176;
-  m_maxWriteSpeed = ( mp[20] << 8 ) | mp[21];
-  m_maxWriteSpeed /= 176;
-  m_burner = ( m_maxWriteSpeed > 0 ) ? true : false;
-
-  m_description = scsiIf.product();
-  m_vendor = scsiIf.vendor();
-  m_version = scsiIf.revision();
-
-
-  qDebug( "(K3bScsiDevice) %s max write: %i", devicename().latin1(), m_maxWriteSpeed );
-  qDebug( "(K3bScsiDevice) %s max read : %i", devicename().latin1(), m_maxReadSpeed );
-
+  else {
+    m_burnproof = ( mp[4] & 0x80 ) ? true : false;
+    //  int accurateAudioStream = mp[5] & 0x02 ? 1 : 0;
+    // speed must be diveded by 176
+    m_maxReadSpeed = ( mp[14] << 8 ) | mp[15];
+    m_maxReadSpeed  /= 176;
+    m_maxWriteSpeed = ( mp[20] << 8 ) | mp[21];
+    m_maxWriteSpeed /= 176;
+    m_burner = ( m_maxWriteSpeed > 0 ) ? true : false;
+    
+    m_description = scsiIf.product();
+    m_vendor = scsiIf.vendor();
+    m_version = scsiIf.revision();
+  }
 
   // testing
   // ---------------
-  diskInfo();
+  //  diskInfo();
 
 
   return true;
