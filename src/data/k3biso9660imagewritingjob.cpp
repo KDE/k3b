@@ -117,7 +117,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter()
 	( m_dataMode == K3b::MODE2 || m_noFix ) )
       usedApp = K3b::CDRDAO;
     else
-      usedApp == K3b::CDRECORD;
+      usedApp = K3b::CDRECORD;
   }
 
 
