@@ -133,6 +133,12 @@ void K3bVcdDoc::addUrl( const KURL& url )
     addTrack( url, m_tracks->count() );
 }
 
+bool K3bVcdDoc::isImage( const KURL& url )
+{
+    QImage p;
+    return p.load( QFile::encodeName( url.path() ) );
+}
+
 void K3bVcdDoc::addUrls( const KURL::List& urls )
 {
     addTracks( urls, m_tracks->count() );
@@ -203,10 +209,10 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
                 vcdOptions() ->setMpegVersion( mpegVersion );
                 KMessageBox::information( kapp->mainWidget(),
                                           i18n( "K3b will create a %1 image from the given MPEG "
-						"files, but these files must already be in %2 "
-						"format. K3b performs no resample on MPEG files." )
-					  .arg(i18n("VCD"))
-					  .arg(i18n("VCD")),
+                                          "files, but these files must already be in %2 "
+                                          "format. K3b performs no resample on MPEG files." )
+                                          .arg(i18n("VCD"))
+                                          .arg(i18n("VCD")),
                                           i18n( "Information" ) );
                 m_urlAddingTimer->start( 0 );
             } else if ( vcdType() == NONE ) {
@@ -215,13 +221,13 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
                 bool force = false;
                 force = ( KMessageBox::questionYesNo( kapp->mainWidget(),
                                                       i18n( "K3b will create a %1 image from the given MPEG "
-							    "files, but these files must already be in %2 "
-							    "format. K3b performs no resample on MPEG files yet." )
-						      .arg(i18n("SVCD"))
-						      .arg(i18n("SVCD"))
-						      + "\n\n"
+                                                      "files, but these files must already be in %2 "
+                                                      "format. K3b performs no resample on MPEG files yet." )
+                                                      .arg(i18n("SVCD"))
+                                                      .arg(i18n("SVCD"))
+                                                      + "\n\n"
                                                       + i18n( "Note: Forcing mpeg2 as VCD is not supported by "
-							      "some standalone DVD players." ),
+                                                      "some standalone DVD players." ),
                                                       i18n( "Information" ),
                                                       i18n( "&OK" ),
                                                       i18n( "Forcing VCD" ) ) == KMessageBox::No );
@@ -319,13 +325,19 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
             Mpeg->PrintInfos();
             delete Mpeg;
             return newTrack;
-        } else {
-            KMessageBox::error( kapp->mainWidget(), "(" + url.path() + ")\n" +
-                                i18n( "Only MPEG1 and MPEG2 video files are supported." ),
-                                i18n( "Wrong File Format" ) );
         }
-    }
-    return 0;
+    } else if ( isImage( url ) ) { // image track
+            // for future use
+            // photoalbum starts here
+            // return here the new photoalbum track
+     }
+
+     // error (unsupported files)
+     KMessageBox::error( kapp->mainWidget(), "(" + url.path() + ")\n" +
+                         i18n( "Only MPEG1 and MPEG2 video files are supported." ),
+                         i18n( "Wrong File Format" ) );
+    
+     return 0;
 }
 
 

@@ -36,7 +36,6 @@ K3bVcdView::K3bVcdView( K3bVcdDoc* pDoc, QWidget* parent, const char *name )
     m_doc = pDoc;
 
     // --- setup GUI ---------------------------------------------------
-    QGridLayout* grid = new QGridLayout( this );
 
     m_vcdlist = new K3bVcdListView( this, pDoc, this );
     setMainWidget( m_vcdlist );

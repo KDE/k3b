@@ -23,6 +23,7 @@
 #include <qstringlist.h>
 #include <qdatetime.h>
 #include <qtextstream.h>
+#include <qimage.h>
 
 // Kde Includes
 #include <kurl.h>
@@ -147,6 +148,8 @@ class K3bVcdDoc : public K3bDoc
         KIO::filesize_t calcTotalSize() const;
         KIO::filesize_t ISOsize() const;
 
+        bool isImage( const KURL& url );
+        
         K3bVcdTrack* m_lastAddedTrack;
         K3bVcdOptions* m_vcdOptions;
 
