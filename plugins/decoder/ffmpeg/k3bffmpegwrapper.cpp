@@ -285,7 +285,11 @@ bool K3bFFMpegFile::seek( const K3b::Msf& msf )
   Q_UINT64 timestamp = (Q_UINT64)(seconds * (double)AV_TIME_BASE);
 
   // FIXME: do we really need the start_time and why?
+#if LIBAVFORMAT_BUILD >= 4619
   return ( av_seek_frame( d->formatContext, -1, timestamp + d->formatContext->start_time, 0 ) >= 0 );
+#else
+  return ( av_seek_frame( d->formatContext, -1, timestamp + d->formatContext->start_time ) >= 0 );
+#endif
 }
 
 
