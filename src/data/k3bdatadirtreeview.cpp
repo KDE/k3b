@@ -178,23 +178,25 @@ void K3bDataDirTreeView::updateContents()
       // check if we have an entry and if not, create one
       // we can assume that a listViewItem for the parent exists
       // since we go top to bottom
-      if( K3bDirItem* dirItem = dynamic_cast<K3bDirItem*>( item ) )
+      if( item->isDir() )
 	{
-	  if( !m_itemMap.contains(dirItem) ) {
+	  K3bDirItem* dirItem = dynamic_cast<K3bDirItem*>( item );
+
+	  QMapIterator<K3bDirItem*, K3bDataDirViewItem*> itDirItem = m_itemMap.find( dirItem );
+	  if( itDirItem == m_itemMap.end() ) {
 	    K3bDataDirViewItem* parentViewItem = m_itemMap[dirItem->parent()];
 	    K3bDataDirViewItem* newDirItem = new K3bDataDirViewItem( dirItem, parentViewItem );
 	    m_itemMap.insert( dirItem, newDirItem );
 	  }
 	  else {
 	    // check if parent still correct (to get moved items)
-	    K3bDataDirViewItem* dirViewItem = m_itemMap[dirItem];
+	    K3bDataDirViewItem* dirViewItem = itDirItem.data();
 	    K3bDataDirViewItem* parentViewItem = (K3bDataDirViewItem*)dirViewItem->parent();
-	    if( dirItem->parent() != parentViewItem->dirItem() ) {
-	      // get the new parent view item
-	      K3bDataDirViewItem* newParentViewItem = m_itemMap[dirItem->parent()];
+	    K3bDataDirViewItem* dirParentViewItem = m_itemMap[dirItem->parent()];
+	    if( dirParentViewItem != parentViewItem ) {
 	      // reparent it
 	      parentViewItem->takeItem( dirViewItem );
-	      newParentViewItem->insertItem( dirViewItem );
+	      dirParentViewItem->insertItem( dirViewItem );
 	    }
 	  }
 	}
@@ -222,23 +224,34 @@ void K3bDataDirTreeView::updateContents()
 
 void K3bDataDirTreeView::slotDataItemRemoved( K3bDataItem* item )
 {
-  if( K3bDirItem* dirItem = dynamic_cast<K3bDirItem*>( item ) )
-    if( m_itemMap.contains( dirItem ) )
-      {
-	K3bDataDirViewItem* viewItem = m_itemMap[dirItem];
-	m_itemMap.remove( dirItem );
-	delete viewItem;
+  if( K3bDirItem* dirItem = dynamic_cast<K3bDirItem*>( item ) ) {
+    QMapIterator<K3bDirItem*, K3bDataDirViewItem*> it = m_itemMap.find( dirItem );
+    if( it != m_itemMap.end() ) {
+      K3bDataDirViewItem* viewItem = it.data();
+      m_itemMap.remove( it );
+
+      // we don't get removedInfo for the child items
+      // so we need to remove them here
+      QPtrListIterator<K3bDataItem> it( *dirItem->children() );
+      for( ; it.current(); ++it ) {
+	if( it.current()->isDir() )
+	  slotDataItemRemoved( it.current() );
       }
+
+      delete viewItem;
+    }
+  }
 }
 
 
 void K3bDataDirTreeView::setCurrentDir( K3bDirItem* dirItem )
 {
-  if( m_itemMap.contains( dirItem ) ) {
-    setCurrentItem( m_itemMap[dirItem] );
-    m_itemMap[dirItem]->setOpen(true);
-    if( m_itemMap[dirItem] != root() )
-      m_itemMap[dirItem]->parent()->setOpen(true);
+  QMapIterator<K3bDirItem*, K3bDataDirViewItem*> it = m_itemMap.find( dirItem );
+  if( it != m_itemMap.end() ) {
+    setCurrentItem( it.data() );
+    it.data()->setOpen(true);
+    if( it.data() != root() )
+      it.data()->parent()->setOpen(true);
   }
   else {
     kdDebug() << "Tried to set unknown dirItem to current" << endl;

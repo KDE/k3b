@@ -211,7 +211,7 @@ long K3bDirItem::numFiles() const
   return m_files;
   int num = 0;
 
-  QListIterator<K3bDataItem> it( *m_children );
+  QPtrListIterator<K3bDataItem> it( *m_children );
   for( ; it.current(); ++it )
     if( !it.current()->isDir() )
       num++;
