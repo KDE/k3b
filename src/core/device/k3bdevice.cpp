@@ -20,6 +20,7 @@
 #include "k3btoc.h"
 #include "k3bdiskinfo.h"
 #include "k3bmmc.h"
+#include "k3bscsicommand.h"
 
 #include <qstringlist.h>
 #include <qfile.h>
@@ -160,16 +161,12 @@ bool K3bCdDevice::CdDevice::init()
   d->deviceType = 0;
   d->supportedProfiles = 0;
 
-  struct cdrom_generic_command cmd;
+  ScsiCommand cmd( open() );
   unsigned char header[8];
-  ::memset( &cmd, 0, sizeof(struct cdrom_generic_command) );
   ::memset( header, 0, 8 );
-  cmd.cmd[0] = 0x46;	// GET CONFIGURATION
-  cmd.cmd[8] = 8;
-  cmd.buffer = header;
-  cmd.buflen = 8;
-  cmd.data_direction = CGC_DATA_READ;
-  if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) ) {
+  cmd[0] = 0x46;	// GET CONFIGURATION
+  cmd[8] = 8;
+  if( cmd.transport( TR_DIR_READ, header, 8 ) ) {
     kdDebug() << "(K3bCdDevice) " << blockDeviceName() << ": GET_CONFIGURATION failed." << endl;
   }
   else {
@@ -182,12 +179,10 @@ bool K3bCdDevice::CdDevice::init()
     int len = header[0]<<24 | header[1]<<16 | header[2]<<8 | header[3];
     unsigned char* profiles = new unsigned char[len];
     ::memset( profiles, 0, len );
-    cmd.cmd[6] = len>>16;
-    cmd.cmd[7] = len>>8;
-    cmd.cmd[8] = len;
-    cmd.buffer = profiles;
-    cmd.buflen = len;
-    if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) ) {
+    cmd[6] = len>>16;
+    cmd[7] = len>>8;
+    cmd[8] = len;
+    if( cmd.transport( TR_DIR_READ, profiles, len ) ) {
       kdDebug() << "(K3bCdDevice) " << blockDeviceName() << ": GET_CONFIGURATION with correct size failed." << endl;
     }
     else {
@@ -611,15 +606,12 @@ bool K3bCdDevice::CdDevice::init()
 
   // inquiry
   unsigned char inq[36];
-  ::memset( &cmd, 0, sizeof(struct cdrom_generic_command) );
+  cmd.clear();
   ::memset( inq, 0, sizeof(inq) );
-  cmd.cmd[0] = GPCMD_INQUIRY; // 0x12
-  cmd.cmd[4] = sizeof(inq);
-  cmd.cmd[5] = 0;
-  cmd.buffer = inq;
-  cmd.buflen = sizeof(inq);
-  cmd.data_direction = CGC_DATA_READ;
-  if( ::ioctl( open(), CDROM_SEND_PACKET, &cmd) ) {
+  cmd[0] = 0x12;  // GPCMD_INQUIRY
+  cmd[4] = sizeof(inq);
+  cmd[5] = 0;
+  if( cmd.transport( TR_DIR_READ, inq, sizeof(inq) ) ) {
     kdError() << "(K3bCdDevice) Unable to do inquiry." << endl;
     close();
     return false;
@@ -979,18 +971,14 @@ bool K3bCdDevice::CdDevice::getDiscInfo( K3bCdDevice::disc_info_t* info ) const
   if (open() < 0)
     return false;
 
-  struct cdrom_generic_command cmd;
 
-  ::memset(&cmd,0,sizeof (struct cdrom_generic_command));
   ::memset(info, 0, sizeof(disc_info_t));
 
-  cmd.cmd[0] = GPCMD_READ_DISC_INFO;
-  cmd.cmd[8] = sizeof(disc_info_t);
-  cmd.buffer = (unsigned char*)info;
-  cmd.buflen = sizeof(disc_info_t);
-  cmd.data_direction = CGC_DATA_READ;
+  ScsiCommand cmd( open() );
+  cmd[0] = 0x51;   // GPCMD_READ_DISC_INFO;
+  cmd[8] = sizeof(disc_info_t);
 
-  if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) ) {
+  if( cmd.transport( TR_DIR_READ, info, sizeof(disc_info_t) ) ) {
     success = false;
     kdDebug() << "(K3bCdDevice::CdDevice) could not get disk info (size: "
 	      << sizeof(disc_info_t) << ")" << endl;
@@ -1054,18 +1042,15 @@ int K3bCdDevice::CdDevice::numSessions() const
 //     ret = inf.n_sessions_l | (inf.n_sessions_m << 8);
 //   }
 //   else {
-    struct cdrom_generic_command cmd;
-    unsigned char dat[4];
 
-    ::memset(&cmd,0,sizeof (struct cdrom_generic_command));
+    unsigned char dat[4];
     ::memset(dat,0,4);
-    cmd.cmd[0] = GPCMD_READ_TOC_PMA_ATIP;
+
+    ScsiCommand cmd( open() );
+    cmd[0] = 0x43;  // GPCMD_READ_TOC_PMA_ATIP;
     // Format Field: 0-TOC, 1-Session Info, 2-Full TOC, 3-PMA, 4-ATIP, 5-CD-TEXT
-    cmd.cmd[2] = 1;
-    cmd.cmd[8] = 4;
-    cmd.buffer = dat;
-    cmd.buflen = 4;
-    cmd.data_direction = CGC_DATA_READ;
+    cmd[2] = 1;
+    cmd[8] = 4;
     //
     // Session Info
     // ============
@@ -1073,7 +1058,7 @@ int K3bCdDevice::CdDevice::numSessions() const
     // Byte   2: First Complete Session Number (Hex) - always 1
     // Byte   3: Last Complete Session Number (Hex)
     //
-    if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) == 0 )
+    if( cmd.transport( TR_DIR_READ, dat, 4 ) == 0 )
       ret = dat[3];
     else
       kdDebug() << "(K3bCdDevice) could not get session info !" << endl;
@@ -1094,19 +1079,16 @@ int K3bCdDevice::CdDevice::tocType() const
   if (open() < 0)
     return ret;
 
-  struct cdrom_generic_command cmd;
   unsigned char dat[15];
-
-  ::memset(&cmd,0,sizeof (struct cdrom_generic_command));
   ::memset(dat,0,15);
-  cmd.cmd[0] = GPCMD_READ_TOC_PMA_ATIP;
+
+  ScsiCommand cmd( open() );
+  cmd[0] = 0x43;  // GPCMD_READ_TOC_PMA_ATIP;
   // Format Field: 0-TOC, 1-Session Info, 2-Full TOC, 3-PMA, 4-ATIP, 5-CD-TEXT
-  cmd.cmd[1] = 2;
-  cmd.cmd[2] = 2;
-  cmd.cmd[8] = 15;
-  cmd.buffer = dat;
-  cmd.buflen = 15;
-  cmd.data_direction = CGC_DATA_READ;
+  cmd[1] = 2;
+  cmd[2] = 2;
+  cmd[8] = 15;
+
   //
   // Full Toc
   // ============
@@ -1134,7 +1116,7 @@ int K3bCdDevice::CdDevice::tocType() const
 
   // WHY DON'T WE DO THIS WITH DISC_INFO???
 
-  if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) == 0 )
+  if( cmd.transport( TR_DIR_READ, dat, 15 ) == 0 )
     if ( dat[7] == 0xA0 )
       ret = dat[13];
     else
@@ -1371,8 +1353,6 @@ bool K3bCdDevice::CdDevice::rewritable() const
 
 bool K3bCdDevice::CdDevice::eject()
 {
-  if ( !KIO::findDeviceMountPoint(d->mountDeviceName).isEmpty() )
-    unmount();
   if(open() != -1 ) {
     int r = ::ioctl( d->deviceFd, CDROMEJECT );
     close();
@@ -1393,33 +1373,6 @@ bool K3bCdDevice::CdDevice::load()
   return false;
 }
 
-int K3bCdDevice::CdDevice::mount()
-{
-  int ret = -1;
-  if( !KIO::findDeviceMountPoint(d->mountDeviceName).isEmpty() )
-    return 0;
-
-  QString cmd("/bin/mount ");
-  cmd += KProcess::quote(d->mountPoint);
-  if ( ::system(QFile::encodeName(cmd)) == 0 )
-    ret = 1;
-
-  return ret;
-}
-
-int K3bCdDevice::CdDevice::unmount()
-{
-  int ret = -1;
-  if( KIO::findDeviceMountPoint(d->mountDeviceName).isEmpty() )
-    return 0;
-
-  QString cmd("/bin/umount ");
-  cmd += KProcess::quote(d->mountPoint);
-  if (::system(QFile::encodeName(cmd)) == 0)
-    ret = 0;
-
-  return ret;
-}
 
 void K3bCdDevice::CdDevice::addDeviceNode( const QString& n )
 {
@@ -1535,17 +1488,15 @@ int K3bCdDevice::CdDevice::supportedProfiles() const
 
 int K3bCdDevice::CdDevice::currentProfile()
 {
-  struct cdrom_generic_command cmd;
   unsigned char profileBuf[8];
-  ::memset( &cmd, 0, sizeof(struct cdrom_generic_command) );
   ::memset( profileBuf, 0, 8 );
-  cmd.cmd[0] = 0x46;	// GET CONFIGURATION
-  cmd.cmd[1] = 1;
-  cmd.cmd[8] = 8;
-  cmd.buffer = profileBuf;
-  cmd.buflen = 8;
-  cmd.data_direction = CGC_DATA_READ;
-  if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) ) {
+
+  ScsiCommand cmd( open() );
+  cmd[0] = 0x46;	// GET CONFIGURATION
+  cmd[1] = 1;
+  cmd[8] = 8;
+
+  if( cmd.transport( TR_DIR_READ, profileBuf, 8 ) ) {
     kdDebug() << "(K3bCdDevice) GET_CONFIGURATION failed." << endl;
     return -1;
   }
@@ -1588,7 +1539,7 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo()
     }
     inf.m_currentProfile = profile;
 
-    struct cdrom_generic_command cmd;
+    ScsiCommand cmd( open() );
 
     if( inf.diskState() != STATE_NO_MEDIA ) {
       disc_info_t dInf;
@@ -1659,15 +1610,11 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo()
 
 	// try the READ FORMAT CAPACITIES command
 	unsigned char buffer[254]; // for reading the size of the returned data
-	::memset( &cmd, 0, sizeof(struct cdrom_generic_command) );
 	::memset( buffer, 0, 12 );
-	cmd.cmd[0] = GPCMD_READ_FORMAT_CAPACITIES;
-	cmd.cmd[8] = 12;
-	cmd.cmd[9] = 0;
-	cmd.buffer = buffer;
-	cmd.buflen = 12;
-	cmd.data_direction = CGC_DATA_READ;
-	if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) ) {
+	cmd[0] = 0x23;  // GPCMD_READ_FORMAT_CAPACITIES;
+	cmd[8] = 12;
+	cmd[9] = 0;
+	if( cmd.transport( TR_DIR_READ, buffer, 12 ) ) {
 	  kdDebug() << "(K3bCdDevice) READ_FORMAT_CAPACITIES failed." << endl;
 	}
 	else {
@@ -1677,11 +1624,9 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo()
 	    realLength = 251;
 	  }
 	  ::memset( buffer, 0, realLength+4 );
-	  cmd.cmd[7] = (realLength+4) >> 8;
-	  cmd.cmd[8] = (realLength+4) & 0xFF;
-	  cmd.buffer = buffer;
-	  cmd.buflen = realLength+4;
-	  if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) ) {
+	  cmd[7] = (realLength+4) >> 8;
+	  cmd[8] = (realLength+4) & 0xFF;
+	  if( cmd.transport( TR_DIR_READ, buffer, realLength+4 ) ) {
 	    kdDebug() << "(K3bCdDevice) READ_FORMAT_CAPACITIES failed." << endl;
 	  }
 	  else {
@@ -1711,19 +1656,17 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo()
 	//	if( inf.numTracks() == 1 ) {
 	  // read the last track's last sector
 	  unsigned char trackHeader[32];
-	  ::memset( &cmd, 0, sizeof(struct cdrom_generic_command) );
+	  cmd.clear();
 	  ::memset( trackHeader, 0, 32 );
-	  cmd.cmd[0] = 0x52;	// READ TRACK INFORMATION
-	  cmd.cmd[1] = 1; // T_inv - the invisible or incomplete track
-	  cmd.cmd[2] = 0xFF;
-	  cmd.cmd[3] = 0xFF;
-	  cmd.cmd[4] = 0xFF;
-	  cmd.cmd[5] = 0xFF;
-	  cmd.cmd[8] = 32;
-	  cmd.cmd[9] = 0;
-	  cmd.buffer = trackHeader;
-	  cmd.data_direction = CGC_DATA_READ;
-	  if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) ) {
+	  cmd[0] = 0x52;	// READ TRACK INFORMATION
+	  cmd[1] = 1; // T_inv - the invisible or incomplete track
+	  cmd[2] = 0xFF;
+	  cmd[3] = 0xFF;
+	  cmd[4] = 0xFF;
+	  cmd[5] = 0xFF;
+	  cmd[8] = 32;
+	  cmd[9] = 0;
+	  if( cmd.transport( TR_DIR_READ, trackHeader, 32 ) ) {
 	    kdDebug() << "(K3bCdDevice) READ_TRACK_INFORMATION failed." << endl;
 
 	    kdDebug() << "(K3bCdDevice) getting disk size via toc." << endl;
@@ -1753,14 +1696,11 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo()
       inf.m_mediaType = -1;
       if( readsDvd() ) {
 	unsigned char dvdheader[20];
-	::memset( &cmd, 0, sizeof(struct cdrom_generic_command) );
 	::memset( dvdheader, 0, 20 );
-	cmd.cmd[0] = GPCMD_READ_DVD_STRUCTURE;
-	cmd.cmd[9] = 20;
-	cmd.buffer = dvdheader;
-	cmd.buflen = 20;
-	cmd.data_direction = CGC_DATA_READ;
-	if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) ) {
+	cmd.clear();
+	cmd[0] = 0xad;  // GPCMD_READ_DVD_STRUCTURE;
+	cmd[9] = 20;
+	if( cmd.transport( TR_DIR_READ, dvdheader, 20 ) ) {
 	  kdDebug() << "(K3bCdDevice::CdDevice) Unable to read DVD structure." << endl;
 	}
 	else {
@@ -1838,37 +1778,33 @@ bool K3bCdDevice::CdDevice::getTrackIndex( long lba,
 
 
   if (open() != -1) {
-    struct cdrom_generic_command cmd;
     unsigned short dataLen = 0x30;
     unsigned char data[0x30];
     int waitLoops = 10;
     int waitFailed = 0;
 
     // play one audio block
-    ::memset(&cmd,0,sizeof (struct cdrom_generic_command));
-    cmd.cmd[0] = GPCMD_PLAY_AUDIO_10;
-    cmd.cmd[2] = lba >> 24;
-    cmd.cmd[3] = lba >> 16;
-    cmd.cmd[4] = lba >> 8;
-    cmd.cmd[5] = lba;
-    cmd.cmd[7] = 0;
-    cmd.cmd[8] = 1;
+    ScsiCommand cmd( open() );
+    cmd[0] = 0x45;  // GPCMD_PLAY_AUDIO_10;
+    cmd[2] = lba >> 24;
+    cmd[3] = lba >> 16;
+    cmd[4] = lba >> 8;
+    cmd[5] = lba;
+    cmd[7] = 0;
+    cmd[8] = 1;
 
-    if( ::ioctl( d->deviceFd, CDROM_SEND_PACKET, &cmd ) ) {
+    if( cmd.transport() ) {
       kdError() << "(K3bCdDevice::CdDevice) Cannot play audio block." << endl;
       return false;
     }
 
     // wait until the play command finished
-    ::memset(&cmd,0,sizeof (struct cdrom_generic_command));
-    cmd.cmd[0] = GPCMD_MECHANISM_STATUS;
-    cmd.cmd[9] = 8;
-    cmd.buffer = data;
-    cmd.buflen = dataLen;
-    cmd.data_direction = CGC_DATA_READ;
+    cmd.clear();
+    cmd[0] = 0xbd;  // GPCMD_MECHANISM_STATUS;
+    cmd[9] = 8;
 
     while( waitLoops > 0 ) {
-      if( ::ioctl( d->deviceFd, CDROM_SEND_PACKET, &cmd ) == 0 ) {
+      if( cmd.transport( TR_DIR_READ, data, dataLen ) == 0 ) {
 	if ((data[1] >> 5) == 1) // still playing?
 	  waitLoops--;
 	else
@@ -1889,18 +1825,15 @@ bool K3bCdDevice::CdDevice::getTrackIndex( long lba,
     }
 
     // read sub channel information
-    ::memset(&cmd,0,sizeof (struct cdrom_generic_command));
-    cmd.cmd[0] = GPCMD_READ_SUBCHANNEL;
-    cmd.cmd[2] = 0x40; // get sub channel data
-    cmd.cmd[3] = 0x01; // get sub Q channel data
-    cmd.cmd[6] = 0;
-    cmd.cmd[7] = dataLen >> 8;
-    cmd.cmd[8] = dataLen;
-    cmd.buffer = data;
-    cmd.buflen = dataLen;
-    cmd.data_direction = CGC_DATA_READ;
+    cmd.clear();
+    cmd[0] = 0x42; // GPCMD_READ_SUBCHANNEL;
+    cmd[2] = 0x40; // get sub channel data
+    cmd[3] = 0x01; // get sub Q channel data
+    cmd[6] = 0;
+    cmd[7] = dataLen >> 8;
+    cmd[8] = dataLen;
 
-    if( ::ioctl( d->deviceFd, CDROM_SEND_PACKET, &cmd ) ) {
+    if( cmd.transport( TR_DIR_READ, data, dataLen ) ) {
       kdError() << "(K3bCdDevice::CdDevice) Cannot read sub Q channel data." << endl;
       return false;
     }
@@ -1928,23 +1861,20 @@ bool K3bCdDevice::CdDevice::readSectorsRaw(unsigned char *buf, int start, int co
 
 
   if (open() != -1) {
-    struct cdrom_generic_command cmd;
-    ::memset(&cmd,0,sizeof (struct cdrom_generic_command));
-    cmd.cmd[0] = GPCMD_READ_CD;
-    cmd.cmd[1] = 0; // all types
-    cmd.cmd[2] = (start >> 24) & 0xff;
-    cmd.cmd[3] = (start >> 16) & 0xff;
-    cmd.cmd[4] = (start >>  8) & 0xff;
-    cmd.cmd[5] = start & 0xff;
-    cmd.cmd[6] = (count >> 16) & 0xff;
-    cmd.cmd[7] = (count >>  8) & 0xff;
-    cmd.cmd[8] = count & 0xff;
-    cmd.cmd[9] = 0x80 | 0x40 | 0x20 | 0x10 | 0x08;
+    ScsiCommand cmd( open() );
+    cmd[0] = 0xbe;  // GPCMD_READ_CD;
+    cmd[1] = 0; // all types
+    cmd[2] = (start >> 24) & 0xff;
+    cmd[3] = (start >> 16) & 0xff;
+    cmd[4] = (start >>  8) & 0xff;
+    cmd[5] = start & 0xff;
+    cmd[6] = (count >> 16) & 0xff;
+    cmd[7] = (count >>  8) & 0xff;
+    cmd[8] = count & 0xff;
+    cmd[9] = 0x80 | 0x40 | 0x20 | 0x10 | 0x08;
                  // DATA_SYNC | DATA_ALLHEADER | DATA_USER | DATA_EDC;
-    cmd.buffer = buf;
-    cmd.buflen = count*2352;
-    cmd.data_direction = CGC_DATA_READ;
-    if( ::ioctl( d->deviceFd, CDROM_SEND_PACKET, &cmd ) ) {
+
+    if( cmd.transport( TR_DIR_READ, buf, count*2352 ) ) {
       kdError() << "(K3bCdDevice::CdDevice) Cannot read raw sectors." << endl;
       return false;
     }
@@ -1996,18 +1926,14 @@ bool K3bCdDevice::CdDevice::modeSense( int page, unsigned char* pageData, int pa
 
   bool ret = false;
 
-  struct cdrom_generic_command cmd;
-  ::memset( &cmd, 0, sizeof(struct cdrom_generic_command) );
-  cmd.cmd[0] = 0x5A;	// MODE SENSE
-  cmd.cmd[2] = page;
-  cmd.cmd[7] = pageLen>>8;
-  cmd.cmd[8] = pageLen;
-  cmd.buffer = pageData;
-  cmd.buflen = pageLen;
-  cmd.data_direction = CGC_DATA_READ;
-  if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) == 0 ) {
-    ret = true;
-  }
+  ScsiCommand cmd( open() );
+  cmd[0] = 0x5A;	// MODE SENSE
+  cmd[1] = 0x08;        // Disable Block Descriptors
+  cmd[2] = page;
+  cmd[7] = pageLen>>8;
+  cmd[8] = pageLen;
+  cmd[9] = 0;
+  ret = ( cmd.transport( TR_DIR_READ, pageData, pageLen ) == 0 );
 
   if( needToClose )
     close();
@@ -2027,18 +1953,13 @@ bool K3bCdDevice::CdDevice::modeSelect( unsigned char* page, int pageLen, bool p
 
   bool ret = false;
 
-  struct cdrom_generic_command cmd;
-  ::memset( &cmd, 0, sizeof(struct cdrom_generic_command) );
-  cmd.cmd[0] = 0x55;	// MODE SELECT
-  cmd.cmd[1] = ( sp ? 1 : 0 ) | ( pf ? 0x10 : 0 );
-  cmd.cmd[7] = pageLen>>8;
-  cmd.cmd[8] = pageLen;
-  cmd.buffer = page;
-  cmd.buflen = pageLen;
-  cmd.data_direction = CGC_DATA_READ;
-  if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) == 0 ) {
-    ret = true;
-  }
+  ScsiCommand cmd( open() );
+  cmd[0] = 0x55;	// MODE SELECT
+  cmd[1] = ( sp ? 1 : 0 ) | ( pf ? 0x10 : 0 );
+  cmd[7] = pageLen>>8;
+  cmd[8] = pageLen;
+  cmd[9] = 0;
+  ret = ( cmd.transport( TR_DIR_WRITE, page, pageLen ) == 0 );
 
   if( needToClose )
     close();
@@ -2064,16 +1985,14 @@ void K3bCdDevice::CdDevice::checkWriteModes()
     kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": modeSense 0x05 failed!" << endl;
   }
   else {
-    int blockDescrLen = (buffer[6]<<8)&0xF0 | buffer[7];
     int dataLen = (buffer[0]<<8)&0xF0 | buffer[1];
 
-    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": blockDescLen: " << blockDescrLen << endl
-	      << "                        dataLen: " << dataLen << endl;
+    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": dataLen: " << dataLen << endl;
 
     kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": modesense data: " << endl;
     debugBitfield( buffer, dataLen+8 );
 
-    wr_param_page_05* mp = (struct wr_param_page_05*)(buffer+8+blockDescrLen);
+    wr_param_page_05* mp = (struct wr_param_page_05*)(buffer+8);
 
     // reset some stuff to be on the safe side
     mp->multi_session = 0;
@@ -2113,7 +2032,7 @@ void K3bCdDevice::CdDevice::checkWriteModes()
     // SAO
     mp->write_type = 0x02; // Session-at-once
 
-    if( modeSelect( buffer, dataLen+8, 1, 0 ) )
+    if( modeSelect( buffer, dataLen+2, 1, 0 ) )
       m_writeModes |= SAO;
     else
       kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": modeSelect with SAO failed." << endl;
@@ -2121,19 +2040,19 @@ void K3bCdDevice::CdDevice::checkWriteModes()
     // RAW
     mp->write_type = 0x03; // RAW
     mp->dbtype = 1;        // Raw data with P and Q Sub-channel (2368 bytes)
-    if( modeSelect( buffer, dataLen+8, 1, 0 ) ) {
+    if( modeSelect( buffer, dataLen+2, 1, 0 ) ) {
       m_writeModes |= RAW;
       m_writeModes |= RAW_R16;
     }
 
     mp->dbtype = 2;        // Raw data with P-W Sub-channel (2448 bytes)
-    if( modeSelect( buffer, dataLen+8, 1, 0 ) ) {
+    if( modeSelect( buffer, dataLen+2, 1, 0 ) ) {
       m_writeModes |= RAW;
       m_writeModes |= RAW_R96P;
     }
 
     mp->dbtype = 3;        // Raw data with P-W raw Sub-channel (2368 bytes)
-    if( modeSelect( buffer, dataLen+8, 1, 0 ) ) {
+    if( modeSelect( buffer, dataLen+2, 1, 0 ) ) {
       m_writeModes |= RAW;
       m_writeModes |= RAW_R96R;
     }

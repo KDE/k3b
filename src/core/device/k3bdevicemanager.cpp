@@ -449,6 +449,10 @@ void K3bCdDevice::DeviceManager::determineCapabilities(K3bDevice *dev)
   // and thus do not give us their supported features
   //
   if( dev->m_writeModes == 0 ) {
+
+    kdDebug() << "(K3bDeviceManager) calling cdrecord to determine supported writemodes for "
+	      << dev->blockDeviceName() << endl;
+
     KProcess driverProc, capProc;
     driverProc << cdrecordBin->path;
 

@@ -267,8 +267,6 @@ namespace K3bCdDevice
 
     bool eject();
     bool load();
-    int  mount();
-    int  unmount();
 
     int writingModes() const { return m_writeModes; }
     bool supportsWriteMode( WriteMode );

@@ -75,14 +75,6 @@ public:
 	success = dev->eject();
 	success = success && dev->load();
 	break;
-      case MOUNT:
-        errorCode = dev->mount();
-	success = (errorCode >= 0 );
-	break;
-      case UNMOUNT:
-        errorCode = dev->unmount();
-	success = (errorCode >= 0 );
-        break;
       case MEDIUM_STATE:
 	dev->open();
 	//	info.mediaType = dev->mediaType();
@@ -243,17 +235,6 @@ void K3bCdDevice::DeviceHandler::eject()
 {
   sendCommand(DeviceHandler::EJECT);
 }
-
-void K3bCdDevice::DeviceHandler::mount()
-{
-  sendCommand(DeviceHandler::MOUNT);
-}
-
-void K3bCdDevice::DeviceHandler::unmount()
-{
-  sendCommand(DeviceHandler::UNMOUNT);
-}
-
 
 K3bCdDevice::DeviceHandler* K3bCdDevice::sendCommand( int command, CdDevice* dev )
 {

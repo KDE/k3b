@@ -83,8 +83,6 @@ namespace K3bCdDevice
 	UNBLOCK,
 	EJECT,
 	RELOAD,
-	MOUNT,
-	UNMOUNT,
 	MEDIUM_STATE /* empty, appendable, full, no disk */
       };
 
@@ -103,8 +101,6 @@ namespace K3bCdDevice
       void getNumSessions();
       void block( bool );
       void eject();
-      void mount();
-      void unmount();
 
     protected:
       /**
@@ -163,14 +159,6 @@ namespace K3bCdDevice
 
   inline DeviceHandler* unblock(CdDevice* dev) {
     return sendCommand(DeviceHandler::UNBLOCK,dev);
-  }
-
-  inline DeviceHandler* mount(CdDevice* dev) {
-    return sendCommand(DeviceHandler::MOUNT,dev);
-  }
-
-  inline DeviceHandler* unmount(CdDevice* dev) {
-    return sendCommand(DeviceHandler::UNMOUNT,dev);
   }
 
   inline DeviceHandler* eject(CdDevice* dev) {
