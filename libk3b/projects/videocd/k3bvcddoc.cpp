@@ -243,12 +243,23 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
                 delete Mpeg;
                 return 0;
             }
+
             K3bVcdTrack* newTrack = new K3bVcdTrack( m_tracks, url.path() );
             *( newTrack->mpeg_info ) = *( Mpeg->mpeg_info );
+
+            if ( newTrack->isSegment() && !vcdOptions()->PbcEnabled() ) {
+                KMessageBox::information( kapp->mainWidget(),
+                                          i18n( "PBC (Playback control) enabled.\n"
+                                                "Videoplayers can not reach Segments (Mpeg Still Pictures) without Playback control ." ) ,
+                                          i18n( "Information" ) );
+
+                  vcdOptions()->setPbcEnabled( true );
+             }
 
             // set defaults;
             newTrack->setPlayTime( vcdOptions() ->PbcPlayTime() );
             newTrack->setWaitTime( vcdOptions() ->PbcWaitTime() );
+            newTrack->setPbcNumKeys( vcdOptions() ->PbcNumkeysEnabled() );
             delete Mpeg;
 
             // debugging output
@@ -302,6 +313,8 @@ void K3bVcdDoc::addTrack( K3bVcdTrack* track, uint position )
 
     if ( track->isSegment() )
         vcdOptions() ->increaseSegments( );
+    else
+        vcdOptions() ->increaseSequence( );
 
     emit newTracks();
 
@@ -333,6 +346,8 @@ void K3bVcdDoc::removeTrack( K3bVcdTrack* track )
 
         if ( track->isSegment() )
             vcdOptions() ->decreaseSegments( );
+        else
+            vcdOptions() ->decreaseSequence( );
 
         delete track;
 
@@ -537,6 +552,7 @@ void K3bVcdDoc::loadDefaultSettings( KConfig* c )
 
     c->setGroup( "Video project settings" );
     vcdOptions() ->setPbcEnabled( c->readBoolEntry( "Use Playback Control", false ) );
+    vcdOptions() ->setPbcNumkeysEnabled( c->readBoolEntry( "Use numeric keys to navigate chapters", false ) );
     vcdOptions() ->setPbcPlayTime( c->readNumEntry( "Play each Sequence/Segment", 1 ) );
     vcdOptions() ->setPbcWaitTime( c->readNumEntry( "Time to wait after each Sequence/Segment", 2 ) );
 }

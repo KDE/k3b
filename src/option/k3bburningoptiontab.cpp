@@ -107,13 +107,12 @@ void K3bBurningOptionTab::setupGui()
   m_spinWaitTime->setMinValue( -1 );
   m_spinWaitTime->setValue( 2 );
   m_spinWaitTime->setSuffix( i18n( " second(s)" ) );
-  m_spinWaitTime->setSpecialValueText( i18n( "infinite" ) );  
+  m_spinWaitTime->setSpecialValueText( i18n( "infinite" ) );
 
   /* not implemented yet ********************************/
   m_checkUseNumKey = new QCheckBox( i18n("Use numeric keys by default"), groupVideo );
-  m_checkUseNumKey->setHidden( true );
   /*************************************************/
-  
+
   m_labelPlayTime->setDisabled( true );
   m_spinPlayTime->setDisabled( true );
   m_labelWaitTime->setDisabled( true );
@@ -185,9 +184,9 @@ void K3bBurningOptionTab::setupGui()
 
 
   connect( m_checkManualWritingBufferSize, SIGNAL(toggled(bool)),
-	   m_editWritingBufferSize, SLOT(setEnabled(bool)) );
+           m_editWritingBufferSize, SLOT(setEnabled(bool)) );
   connect( m_checkManualWritingBufferSize, SIGNAL(toggled(bool)),
-	   this, SLOT(slotSetDefaultBufferSizes(bool)) );
+           this, SLOT(slotSetDefaultBufferSizes(bool)) );
 
 
   m_editWritingBufferSize->setDisabled( true );
@@ -211,25 +210,25 @@ void K3bBurningOptionTab::setupGui()
   QToolTip::add( m_checkUseNumKey, i18n("Use numeric keys to navigate chapters by default (In addition to 'Previous' and 'Next')") );
   QToolTip::add( m_labelWaitTime, i18n("Time to wait after each sequence/segment by default.") );
   QToolTip::add( m_labelPlayTime, i18n("Play each sequence/segment by default.") );
-  
+
   QWhatsThis::add( m_checkListHiddenFiles, i18n("<p>If this option is checked, hidden files "
-						"in directories added to a data project will "
-						"also be added.</p>" ) );
+                                                "in directories added to a data project will "
+                                                "also be added.</p>" ) );
   QWhatsThis::add( m_checkListSystemFiles, i18n("<p>If this option is checked, system files "
-						"(fifos, devices, sockets) "
-						"in directories added to a data project will "
-						"also be added.</p>" ) );
+                                                "(fifos, devices, sockets) "
+                                                "in directories added to a data project will "
+                                                "also be added.</p>" ) );
   QWhatsThis::add( m_checkAllowWritingAppSelection, i18n("<p>If this option is checked K3b gives "
-							 "the possibility to choose between cdrecord "
-							 "and cdrdao when writing a cd."
-							 "<p>This may be useful if one of the programs "
-							 "does not support the used writer."
-							 "<p><b>Be aware that K3b does not support both "
-							 "programs in all project types.</b>") );
+                                                         "the possibility to choose between cdrecord "
+                                                         "and cdrdao when writing a cd."
+                                                         "<p>This may be useful if one of the programs "
+                                                         "does not support the used writer."
+                                                         "<p><b>Be aware that K3b does not support both "
+                                                         "programs in all project types.</b>") );
 
   QWhatsThis::add( m_checkAutoErasingRewritable, i18n("<p>If this option is checked K3b will automatically "
-						      "erase CD-RWs and format DVD-RWs if one is found instead "
-						      "of an empty media before writing.") );
+                                                      "erase CD-RWs and format DVD-RWs if one is found instead "
+                                                      "of an empty media before writing.") );
 
   QWhatsThis::add( m_checkUsePbc, i18n( "<p>Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 disc formats."
                              "<p>PBC allows control of the playback of play items and the possibility of interaction with the user through the remote control or some other input device available." ) );
@@ -249,7 +248,7 @@ void K3bBurningOptionTab::readSettings()
   m_spinWaitTime->setValue( c->readNumEntry( "Time to wait after each Sequence/Segment", 2 ) );
   m_spinPlayTime->setValue( c->readNumEntry( "Play each Sequence/Segment", 1 ) );
   m_checkUseNumKey->setChecked( c->readBoolEntry("Use numeric keys to navigate chapters", false) );
-  
+
   c->setGroup( "Data project settings" );
   m_checkListHiddenFiles->setChecked( c->readBoolEntry("Add hidden files", true ) );
   m_checkListSystemFiles->setChecked( c->readBoolEntry("Add system files", false ) );
@@ -280,7 +279,7 @@ void K3bBurningOptionTab::saveSettings()
   c->writeEntry( "Time to wait after each Sequence/Segment", m_spinWaitTime->value() );
   c->writeEntry( "Play each Sequence/Segment", m_spinPlayTime->value() );
   c->writeEntry( "Use numeric keys to navigate chapters", m_checkUseNumKey->isChecked() );
-  
+
   c->setGroup( "Data project settings" );
   c->writeEntry( "Add hidden files", m_checkListHiddenFiles->isChecked() );
   c->writeEntry( "Add system files", m_checkListSystemFiles->isChecked() );

@@ -165,6 +165,30 @@ bool K3bVcdXmlView::write( const QString& fname )
     QDomElement elemsequenceItem;
     QDomElement elemsegmentItem;
 
+    // if we have segments, elemsegmentItems must be before any sequence in xml file order
+    if ( m_doc->vcdOptions()->haveSegments()  )
+        elemsegmentItems = addSubElement( xmlDoc, root, "segment-items" );
+
+    // sequence must always available ...
+    elemsequenceItems = addSubElement( xmlDoc, root, "sequence-items" );
+    // if we have no sequence (photo (s)vcd) we must add a dummy sequence they inform the user to turn on pbc on there videoplayer
+    if ( !m_doc->vcdOptions()->haveSequence() )  {
+            QString filename;
+            if  ( m_doc->vcdOptions()->mpegVersion() == 1 )
+                filename = locate( "data", "k3b/extra/k3bphotoVCD.mpg" );
+            else
+                filename = locate( "data", "k3b/extra/k3bphotoSVCD.mpg" );
+
+            elemsequenceItem = addSubElement( xmlDoc, elemsequenceItems, "sequence-item" );
+            elemsequenceItem.setAttribute( "src", QString( "%1" ).arg( QFile::encodeName(  filename ) ) );
+            elemsequenceItem.setAttribute( "id", "sequence-000"  );
+            // default entry
+            QDomElement elemdefaultEntry;
+            elemdefaultEntry = addSubElement( xmlDoc, elemsequenceItem, "default-entry" );
+            elemdefaultEntry.setAttribute( "id", "entry-000"  );
+    }
+
+
     // pbc
     QDomElement elemPbc;
 
@@ -172,10 +196,6 @@ bool K3bVcdXmlView::write( const QString& fname )
     QPtrListIterator<K3bVcdTrack> it( *m_doc->tracks() );
     for ( ; it.current(); ++it ) {
         if ( !it.current() ->isSegment() ) {
-            // sequence-items element needed at least a sequence to fit the XML
-            if ( elemsequenceItems.isNull() )
-                elemsequenceItems = addSubElement( xmlDoc, root, "sequence-items" );
-
             QString seqId = QString::number( it.current() ->index() ).rightJustify( 3, '0' );
 
             elemsequenceItem = addSubElement( xmlDoc, elemsequenceItems, "sequence-item" );
@@ -189,9 +209,6 @@ bool K3bVcdXmlView::write( const QString& fname )
 
         } else {
             // sequence-items element needs at least one segment to fit the XML
-            if ( elemsegmentItems.isNull() )
-                elemsegmentItems = addSubElement( xmlDoc, root, "segment-items" );
-
             elemsegmentItem = addSubElement( xmlDoc, elemsegmentItems, "segment-item" );
             elemsegmentItem.setAttribute( "src", QString( "%1" ).arg( QFile::encodeName( it.current() ->absPath() ) ) );
             elemsegmentItem.setAttribute( "id", QString( "segment-%1" ).arg( QString::number( it.current() ->index() ).rightJustify( 3, '0' ) ) );

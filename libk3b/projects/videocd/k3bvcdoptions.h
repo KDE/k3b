@@ -254,6 +254,15 @@ class K3bVcdOptions
         {
             return m_pbcenabled;
         };
+        void setPbcNumkeysEnabled( const bool& b )
+        {
+            m_pbcnumkeysenabled = b;
+        }
+        bool PbcNumkeysEnabled() const
+        {
+            return m_pbcnumkeysenabled;
+        };
+
         void setPbcPlayTime( const int i )
         {
             m_def_pbcplaytime = i;
@@ -301,13 +310,28 @@ class K3bVcdOptions
         {
             return m_segment > 0;
         };
+        void increaseSequence( )
+        {
+            m_sequence += 1;
+        }
+        void decreaseSequence( )
+        {
+            m_sequence -= 1;
+        }
+
+        bool haveSequence() const
+        {
+            return m_sequence > 0;
+        };
 
     private:
         int m_restriction;
         int m_segment;
+        int m_sequence;
 
         // pbc
         bool m_pbcenabled;
+        bool m_pbcnumkeysenabled;
 
         // volume descriptor
         QString m_volumeID;
