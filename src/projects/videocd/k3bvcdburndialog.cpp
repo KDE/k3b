@@ -204,10 +204,10 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
 
     QWhatsThis::add
         ( m_checkAutoDetect, i18n( "<p>If Autodetect is:</p>"
-                                   "<ul><li>ON, than k3b will set the right VideoCD Type.</li>"
-                                   "<li>OFF then the user needs to set the right VideoCD type himself.</li></ul>"
-                                   "<p>You are not sure about the right VideoCD Type? In this case it is a good option to turn Autodetect ON.</p>"
-                                   "<p>You will force the VideoCD Type? Then you must turn Autodetect OFF. Useful for some standalone DVD Players without SVCD support</p>" ) );
+                                   "<ul><li>ON then K3b will set the correct VideoCD type.</li>"
+                                   "<li>OFF then the correct VideoCD type needs to be set by the user.</li></ul>"
+                                   "<p>If you are not sure about the correct VideoCD type, it is best to turn Autodetect ON.</p>"
+                                   "<p>If you want to force the VideoCD type, you must turn Autodetect OFF. This is useful for some standalone DVD players without SVCD support.</p>" ) );
 
     QWhatsThis::add
         ( m_checkNonCompliant, i18n( "<ul><li>Rename <b>\"/MPEG2\"</b> folder on SVCDs to (non-compliant) \"/MPEGAV\".</li>"

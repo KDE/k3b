@@ -167,7 +167,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
     case K3bCdDevice::MEDIA_DVD_PLUS_R:
 
       if( dh->ngDiskInfo().numSessions() > 1 ) {
-	emit infoMessage( i18n("K3b does not support copying multisession DVDs."), ERROR );
+	emit infoMessage( i18n("K3b does not support copying multi-session DVDs."), ERROR );
 	emit finished(false);
 	d->running = false;
 	return;
@@ -182,8 +182,8 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
     case K3bCdDevice::MEDIA_DVD_PLUS_RW:
     case K3bCdDevice::MEDIA_DVD_RW_OVWR:
       {
-	emit infoMessage( i18n("K3b needs to rely on the size saved in the ISO9660 header."), WARNING );
-	emit infoMessage( i18n("This might result in a corrupt copy if the source was mastered with a buggy software."), WARNING );
+	emit infoMessage( i18n("K3b relies on the size saved in the ISO9660 header."), WARNING );
+	emit infoMessage( i18n("This might result in a corrupt copy if the source was mastered with buggy software."), WARNING );
 
 	K3bIso9660 isoF( m_readerDevice, 0 );
 	if( isoF.open( IO_ReadOnly ) ) {
@@ -473,9 +473,9 @@ bool K3bDvdCopyJob::waitForDvd()
       if( m_simulate ) {
 	if( KMessageBox::warningYesNo( qApp->activeWindow(),
 				       i18n("K3b does not support simulation with DVD+R(W) media. "
-					    "Do you really want to continue? The media will be written "
-					    "for real."),
-				       i18n("No simulation with DVD+R(W)") ) == KMessageBox::No ) {
+					    "Do you really want to continue? The media will actually be "
+					    "written to."),
+				       i18n("No Simulation with DVD+R(W)") ) == KMessageBox::No ) {
 	  cancel();
 	  return false;
 	}
@@ -484,7 +484,7 @@ bool K3bDvdCopyJob::waitForDvd()
       }
       
       if( m_speed > 0 ) {
-	emit infoMessage( i18n("DVD+R(W) writers do take care of the writing speed themselves."), INFO );
+	emit infoMessage( i18n("DVD+R(W) writers take care of the writing speed themselves."), INFO );
 	emit infoMessage( i18n("The K3b writing speed setting is ignored for DVD+R(W) media."), INFO );
       }
 
