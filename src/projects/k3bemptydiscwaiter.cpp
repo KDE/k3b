@@ -110,7 +110,7 @@ K3bEmptyDiscWaiter::K3bEmptyDiscWaiter( K3bDevice* device, QWidget* parent, cons
 
 
   QToolTip::add( actionButton(KDialogBase::User1), 
-		 i18n("Force K3b to continue if it seems not to detect your empty CD-R(W)/DVD±R(W).") );
+		 i18n("Force K3b to continue if it seems not to detect your empty CD-R(W)/DVDÂ±R(W).") );
 }
 
 
