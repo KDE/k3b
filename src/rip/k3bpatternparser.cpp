@@ -1,19 +1,18 @@
-/***************************************************************************
-                          k3bpatternparser.cpp  -  description
-                             -------------------
-    begin                : Sun Dec 2 2001
-    copyright            : (C) 2001 by Sebastian Trueg
-    email                : trueg@informatik.uni-freiburg.de
- ***************************************************************************/
+/* 
+ *
+ * $Id$
+ * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This file is part of the K3b project.
+ * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * See the file "COPYING" for the exact licensing terms.
+ */
 
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
 
 #include "k3bpatternparser.h"
 
@@ -42,10 +41,10 @@ QString K3bPatternParser::parsePattern( const K3bCddbResultEntry& entry,
       if( i < pattern.length() ) {
 	switch( pattern[i] ) {
 	case 'a':
-	  dir.append( entry.artists[trackNumber-1] );
+	  dir.append( entry.artists[trackNumber-1].isEmpty() ? i18n("unknown") : entry.artists[trackNumber-1] );
 	  break;
 	case 't':
-	  dir.append( entry.titles[trackNumber-1] );
+	  dir.append( entry.titles[trackNumber-1].isEmpty() ? i18n("unknown") : entry.titles[trackNumber-1] );
 	  break;
 	case 'n':
 	  dir.append( QString::number(trackNumber).rightJustify( 2, '0' ) );
@@ -57,13 +56,13 @@ QString K3bPatternParser::parsePattern( const K3bCddbResultEntry& entry,
 	  dir.append( entry.genre.isEmpty() ? entry.category : entry.genre );
 	  break;
 	case 'r':
-	  dir.append( entry.cdArtist );
+	  dir.append( entry.cdArtist.isEmpty() ? i18n("unknown") : entry.cdArtist );
 	  break;
 	case 'm':
-	  dir.append( entry.cdTitle );
+	  dir.append( entry.cdTitle.isEmpty() ? i18n("unknown") : entry.cdTitle );
 	  break;
 	case 'x':
-	  dir.append( entry.cdExtInfo );
+	  dir.append( entry.cdExtInfo ); // I think it makes more sense to allow empty extinfos
 	  break;
 	case 'd':
 	  dir.append( KGlobal::locale()->formatDate( QDate::currentDate() ) );

@@ -453,6 +453,8 @@ void K3bDeviceWidget::updateDeviceListViews()
 	wm += "PACKET ";
       if( dev->device->supportsWriteMode( K3bDevice::TAO ) )
 	wm += "TAO ";
+      if( dev->device->supportsWriteMode( K3bDevice::RAW ) )
+	wm += "RAW ";
       if( dev->device->supportsWriteMode( K3bDevice::RAW_R16 ) )
 	wm += "RAW/R16 ";
       if( dev->device->supportsWriteMode( K3bDevice::RAW_R96R ) )

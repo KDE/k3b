@@ -20,6 +20,7 @@
 #include <k3bprocess.h>
 #include <device/k3bdevice.h>
 #include <device/k3bdevicemanager.h>
+#include <k3bglobals.h>
 
 #include <kconfig.h>
 #include <klocale.h>
@@ -46,7 +47,10 @@ void K3bDvdrecordWriter::prepareProcess()
   connect( m_process, SIGNAL(processExited(KProcess*)), this, SLOT(slotProcessExited(KProcess*)) );
   connect( m_process, SIGNAL(wroteStdin(KProcess*)), this, SIGNAL(dataWritten()) );
 
-  m_cdrecordBinObject = k3bcore->externalBinManager()->binObject("dvdrecord");
+//   if( k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "dvd-patch" ) )
+//     m_cdrecordBinObject = k3bcore->externalBinManager()->binObject("cdrecord");
+//   else
+    m_cdrecordBinObject = k3bcore->externalBinManager()->binObject("dvdrecord");
 
   if( !m_cdrecordBinObject )
     return;
@@ -68,6 +72,7 @@ void K3bDvdrecordWriter::prepareProcess()
   // DVDs are only written in DAO mode (and Packet, but we do not support that since it does not
   //                                    make much sense here)  
   *m_process << "-dao";
+  setWritingMode( K3b::DAO ); // just to make sure the CdrecordWriter emits the correct messages
     
   if( simulate() )
     *m_process << "-dummy";

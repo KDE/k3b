@@ -19,6 +19,9 @@
 
 #include <k3bdvdrecordwriter.h>
 #include <k3bisoimager.h>
+#include <k3bemptydiscwaiter.h>
+
+#include <klocale.h>
 
 
 K3bDvdJob::K3bDvdJob( K3bDvdDoc* doc, QObject* parent )
@@ -81,6 +84,46 @@ bool K3bDvdJob::prepareWriterJob()
 	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
 
   return true;
+}
+
+
+void K3bDvdJob::waitForDisk()
+{
+  if( K3bEmptyDiscWaiter::wait( m_doc->burner(), 
+				m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
+				m_doc->multiSessionMode() == K3bDataDoc::FINISH, 
+				true )
+      == K3bEmptyDiscWaiter::CANCELED ) {
+    cancel();
+  }
+}
+
+
+QString K3bDvdJob::jobDescription() const
+{
+  if( m_doc->onlyCreateImages() ) {
+    return i18n("Creating Data Image File");
+  }
+  else {
+    if( m_doc->isoOptions().volumeID().isEmpty() ) {
+      if( m_doc->multiSessionMode() == K3bDataDoc::NONE )
+	return i18n("Writing Data DVD");
+      else
+	return i18n("Writing Multisession DVD");
+    }
+    else {
+      if( m_doc->multiSessionMode() == K3bDataDoc::NONE )
+	return i18n("Writing Data DVD (%1)").arg(m_doc->isoOptions().volumeID());
+      else
+	return i18n("Writing Multisession DVD (%1)").arg(m_doc->isoOptions().volumeID());
+    }
+  }
+}
+
+
+QString K3bDvdJob::jobDetails() const
+{
+  return i18n("Iso9660 Filesystem (Size: %1)").arg(KIO::convertSize( m_doc->size() ));
 }
 
 #include "k3bdvdjob.moc"

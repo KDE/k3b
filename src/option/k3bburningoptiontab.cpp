@@ -156,37 +156,6 @@ void K3bBurningOptionTab::setupGui()
   connect( m_checkUsePbc, SIGNAL(toggled(bool)), m_spinWaitTime, SLOT(setEnabled(bool)) );
   connect( m_checkUsePbc, SIGNAL(toggled(bool)), m_checkUseNumKey, SLOT(setEnabled(bool)) );
 
-  // -----------------------------------------------------------------------
-  // default cd size group
-  // -----------------------------------------------------------------------
-  QButtonGroup* groupCdSize = new QButtonGroup( 0, Qt::Vertical, i18n("Default CD Size"), projectTab );
-  groupCdSize->layout()->setSpacing( 0 );
-  groupCdSize->layout()->setMargin( 0 );
-  QGridLayout* groupCdSizeLayout = new QGridLayout( groupCdSize->layout() );
-  groupCdSizeLayout->setAlignment( Qt::AlignTop );
-  groupCdSizeLayout->setSpacing( KDialog::spacingHint() );
-  groupCdSizeLayout->setMargin( KDialog::marginHint() );
-
-  m_radio74Minutes    = new QRadioButton( i18n("&%1 minutes (%2 MB)").arg(74).arg(650), groupCdSize );
-  m_radio80Minutes    = new QRadioButton( i18n("&%1 minutes (%2 MB)").arg(80).arg(700), groupCdSize );
-  m_radio100Minutes   = new QRadioButton( i18n("&%1 minutes (%2 MB)").arg(90).arg(800), groupCdSize );
-  m_radioCustomCdSize = new QRadioButton( i18n("&Custom:"), groupCdSize );
-  m_editCustomCdSize  = new KLineEdit( groupCdSize );
-
-  m_editCustomCdSize->setValidator( new QIntValidator( m_editCustomCdSize ) );
-
-  groupCdSizeLayout->addMultiCellWidget( m_radio74Minutes, 0, 0, 0, 2 );
-  groupCdSizeLayout->addMultiCellWidget( m_radio80Minutes, 1, 1, 0, 2 );
-  groupCdSizeLayout->addMultiCellWidget( m_radio100Minutes, 2, 2, 0, 2 );
-  groupCdSizeLayout->addWidget( m_radioCustomCdSize, 3, 0 );
-  groupCdSizeLayout->addWidget( m_editCustomCdSize, 3, 1 );
-  groupCdSizeLayout->addWidget( new QLabel( i18n("minutes"), groupCdSize ), 3, 2 );
-
-  connect( m_radioCustomCdSize, SIGNAL(toggled(bool)), m_editCustomCdSize, SLOT(setEnabled(bool)) );
-  connect( m_radioCustomCdSize, SIGNAL(toggled(bool)), m_editCustomCdSize, SLOT(setFocus()) );
-  m_editCustomCdSize->setDisabled( true );
-  // -----------------------------------------------------------------------
-
 
   QGridLayout* projectGrid = new QGridLayout( projectTab );
   projectGrid->setSpacing( KDialog::spacingHint() );
@@ -195,8 +164,7 @@ void K3bBurningOptionTab::setupGui()
   projectGrid->addWidget( m_groupAudio, 0, 0 );
   projectGrid->addWidget( m_groupData, 1, 0 );
   projectGrid->addWidget( groupVideo, 2, 0 );
-  projectGrid->addWidget( groupCdSize, 3, 0 );
-  projectGrid->setRowStretch( 4, 1 );
+  projectGrid->setRowStretch( 3, 1 );
 
   // ///////////////////////////////////////////////////////////////////////
 
@@ -349,23 +317,6 @@ void K3bBurningOptionTab::readSettings()
   }
   m_checkAllowWritingAppSelection->setChecked( c->readBoolEntry( "Manual writing app selection", false ) );
 
-  int defaultCdSize = c->readNumEntry( "Default cd size", 74 );
-  switch( defaultCdSize ) {
-  case 74:
-    m_radio74Minutes->setChecked( true );
-    break;
-  case 80:
-    m_radio80Minutes->setChecked( true );
-    break;
-  case 100:
-    m_radio100Minutes->setChecked( true );
-    break;
-  default:
-    m_radioCustomCdSize->setChecked( true );
-    m_editCustomCdSize->setText( QString::number(defaultCdSize) );
-    break;
-  }
-
   m_editCdrecordProDVDKey->setText( c->readEntry( "cdrecord-prodvd_key" ) );
 }
 
@@ -398,15 +349,6 @@ void K3bBurningOptionTab::saveSettings()
   c->writeEntry( "Cdrecord buffer", m_editWritingBufferSizeCdrecord->value() );
   c->writeEntry( "Cdrdao buffer", m_editWritingBufferSizeCdrdao->value() );
   c->writeEntry( "Manual writing app selection", m_checkAllowWritingAppSelection->isChecked() );
-
-  if( m_radio74Minutes->isChecked() )
-    c->writeEntry( "Default cd size", 74 );
-  else if( m_radio80Minutes->isChecked() )
-    c->writeEntry( "Default cd size", 80 );
-  else if( m_radio100Minutes->isChecked() )
-    c->writeEntry( "Default cd size", 100 );
-  if( m_radioCustomCdSize->isChecked() )
-    c->writeEntry( "Default cd size", m_editCustomCdSize->text().toInt() );
 
   c->writeEntry( "cdrecord-prodvd_key", m_editCdrecordProDVDKey->text() );
 }

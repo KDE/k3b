@@ -20,7 +20,7 @@
 #include "k3bcddblocaldbtab.h"
 #include "k3bdeviceoptiontab.h"
 #include "k3bburningoptiontab.h"
-#include "k3bpatternoptiontab.h"
+//#include "k3bpatternoptiontab.h"
 #include "k3bexternalbinoptiontab.h"
 #include "k3bmiscoptiontab.h"
 #include <k3bsystemproblemdialog.h>
@@ -46,7 +46,7 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
   setupDevicePage();	
   setupProgramsPage();
   setupCddbPage();
-  setupPatternPage();
+  //  setupPatternPage();
   setupNotifyPage();
   setupMiscPage();
 
@@ -55,7 +55,7 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
   //  m_cddbLocalTab->readSettings();
   m_deviceOptionTab->readDevices();
   m_burningOptionTab->readSettings();
-  m_patternOptionTab->readSettings();
+  //  m_patternOptionTab->readSettings();
   m_miscOptionTab->readSettings();
   m_notifyOptionTab->readSettings();
 
@@ -96,7 +96,7 @@ bool K3bOptionDialog::saveSettings()
   //  m_cddbLocalTab->apply();
   m_deviceOptionTab->saveDevices();
   m_burningOptionTab->saveSettings();
-  m_patternOptionTab->apply();
+  //  m_patternOptionTab->apply();
   m_externalBinOptionTab->saveSettings();
   m_notifyOptionTab->saveSettings();
 
@@ -183,18 +183,18 @@ void K3bOptionDialog::setupDevicePage()
 }
 
 
-void K3bOptionDialog::setupPatternPage()
-{
-  QFrame* frame = addPage( i18n("CD Ripping"), i18n("Setup Audio CD Ripping Patterns"),
-			   KGlobal::instance()->iconLoader()->loadIcon( "misc", KIcon::NoGroup, KIcon::SizeMedium ) );
+// void K3bOptionDialog::setupPatternPage()
+// {
+//   QFrame* frame = addPage( i18n("CD Ripping"), i18n("Setup Audio CD Ripping Patterns"),
+// 			   KGlobal::instance()->iconLoader()->loadIcon( "misc", KIcon::NoGroup, KIcon::SizeMedium ) );
 
-  QVBoxLayout* box = new QVBoxLayout( frame );
-  box->setSpacing( 0 );
-  box->setMargin( 0 );
+//   QVBoxLayout* box = new QVBoxLayout( frame );
+//   box->setSpacing( 0 );
+//   box->setMargin( 0 );
 
-  m_patternOptionTab = new K3bPatternOptionTab( frame, "patternOptionTab" );
-  box->addWidget( m_patternOptionTab );
-}
+//   m_patternOptionTab = new K3bPatternOptionTab( frame, "patternOptionTab" );
+//   box->addWidget( m_patternOptionTab );
+// }
 
 
 void K3bOptionDialog::setupMiscPage()

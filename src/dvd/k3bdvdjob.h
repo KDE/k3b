@@ -31,8 +31,14 @@ class K3bDvdJob : public K3bDataJob
   K3bDvdJob( K3bDvdDoc*, QObject* parent = 0 );
   virtual ~K3bDvdJob();
 
+  virtual QString jobDescription() const;
+  virtual QString jobDetails() const;
+
  protected:
   virtual bool prepareWriterJob();
+
+ protected slots:
+  virtual void waitForDisk();
 
  private:
   K3bDvdDoc* m_doc;

@@ -52,6 +52,14 @@ class K3bDataJob : public K3bBurnJob
   void cancel();
   void start();
 
+  /**
+   * Used to specify a non-default writer.
+   * If this does notget called K3bDataJob determines
+   * the writer itself.
+   */
+  void setWriterJob( K3bAbstractWriter* );
+  void setImager( K3bIsoImager* );
+
  protected slots:
   void slotReceivedIsoImagerData( const char* data, int len );
   void slotIsoImagerFinished( bool success );
@@ -64,9 +72,16 @@ class K3bDataJob : public K3bBurnJob
   void slotMsInfoFetched(bool);
   void writeImage();
   void cancelAll();
+
+  /**
+   * Just a little helper method that makes subclassing easier.
+   * Basicly used for DVD writing.
+   */
+  virtual void waitForDisk();
 		
  protected:
   virtual bool prepareWriterJob();
+  virtual void prepareImager();
 
   K3bAbstractWriter* m_writerJob;
   K3bIsoImager* m_isoImager;

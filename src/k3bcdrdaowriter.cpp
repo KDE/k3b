@@ -402,6 +402,8 @@ K3bCdrdaoWriter* K3bCdrdaoWriter::addArgument( const QString& arg )
 
 void K3bCdrdaoWriter::start()
 {
+  emit started();
+
   if( m_process )
     delete m_process;  // kdelibs want this!
   m_process = new K3bProcess();
@@ -421,7 +423,7 @@ void K3bCdrdaoWriter::start()
 
   if( !m_cdrdaoBinObject )
     {
-      emit infoMessage( i18n("Could not find cdrdao executable."), ERROR );
+      emit infoMessage( i18n("Could not find %1 executable.").arg("cdrdao"), ERROR );
       emit finished(false);
       return;
     }
@@ -531,8 +533,6 @@ void K3bCdrdaoWriter::start()
 	  emit infoMessage(i18n("Starting blanking..."), K3bJob::PROCESS );
 	  emit newTask( i18n("Blanking") );
 	}
-
-      emit started();
     }
 }
 

@@ -135,6 +135,8 @@ class K3bIsoImager : public K3bJob
   int m_fdToWriteTo;
 
   bool m_containsFilesWithMultibleBackslashes;
+
+  double m_firstProgressValue;
 };
 
 

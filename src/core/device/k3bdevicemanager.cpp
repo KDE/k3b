@@ -40,12 +40,18 @@
 #include <errno.h>
 #include <sys/stat.h>
 #include <sys/ioctl.h>
+
 /* Fix definitions for 2.5 kernels */
 #include <linux/version.h>
+
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,4,21) 
+typedef unsigned long long __u64; 
+#endif
+
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,5,50)
-typedef unsigned long long __u64;
 typedef unsigned char u8;
 #endif
+
 #include <linux/../scsi/scsi.h> /* cope with silly includes */
 #include <linux/cdrom.h>
 #include <linux/major.h>
@@ -239,38 +245,38 @@ int K3bCdDevice::DeviceManager::scanbus()
 
   // we also check all these nodes to make sure to get all links and stuff
 
-  static const char* devicenames[] = {
-    "/dev/hda",
-    "/dev/hdb",
-    "/dev/hdc",
-    "/dev/hdd",
-    "/dev/hde",
-    "/dev/hdf",
-    "/dev/hdg",
-    "/dev/hdh",
-    "/dev/hdi",
-    "/dev/hdj",
-    "/dev/hdk",
-    "/dev/hdl",
-    "/dev/dvd",
-    "/dev/cdrom",
-    "/dev/cdrecorder",
-    0
-  };
-  int i = 0;
-  while( devicenames[i] ) {
-    if( addDevice( devicenames[i] ) )
-      m_foundDevices++;
-    ++i;
-  }
-  for( int i = 0; i < 16; i++ ) {
-    if( addDevice( QString("/dev/scd%1").arg(i).ascii() ) )
-      m_foundDevices++;
-  }
-  for( int i = 0; i < 16; i++ ) {
-    if( addDevice( QString("/dev/sr%1").arg(i).ascii() ) )
-      m_foundDevices++;
-  }
+//   static const char* devicenames[] = {
+//     "/dev/hda",
+//     "/dev/hdb",
+//     "/dev/hdc",
+//     "/dev/hdd",
+//     "/dev/hde",
+//     "/dev/hdf",
+//     "/dev/hdg",
+//     "/dev/hdh",
+//     "/dev/hdi",
+//     "/dev/hdj",
+//     "/dev/hdk",
+//     "/dev/hdl",
+//     "/dev/dvd",
+//     "/dev/cdrom",
+//     "/dev/cdrecorder",
+//     0
+//   };
+//   int i = 0;
+//   while( devicenames[i] ) {
+//     if( addDevice( devicenames[i] ) )
+//       m_foundDevices++;
+//     ++i;
+//   }
+//   for( int i = 0; i < 16; i++ ) {
+//     if( addDevice( QString("/dev/scd%1").arg(i).ascii() ) )
+//       m_foundDevices++;
+//   }
+//   for( int i = 0; i < 16; i++ ) {
+//     if( addDevice( QString("/dev/sr%1").arg(i).ascii() ) )
+//       m_foundDevices++;
+//   }
 
   scanFstab();
 
@@ -280,37 +286,21 @@ int K3bCdDevice::DeviceManager::scanbus()
 
 void K3bCdDevice::DeviceManager::printDevices()
 {
-  kdDebug() << "\nReader:" << endl;
-  for( K3bDevice * dev = cdReader().first(); dev != 0; dev = cdReader().next() ) {
-    kdDebug() << "  " << ": "
-	      << dev->ioctlDevice() << " "
-	      << dev->blockDeviceName() << " "
-	      << dev->vendor() << " "
-	      << dev->description() << " "
-	      << dev->version() << endl
-	      << "    "
-	      << dev->mountDevice() << " "
-	      << dev->mountPoint() << endl;
-    kdDebug() << "Reader aliases: " << endl;
-    for(QStringList::ConstIterator it = dev->deviceNodes().begin(); it != dev->deviceNodes().end(); ++it )
-      kdDebug() << "     " << *it << endl;
-  }
-  kdDebug() << "\nWriter:" << endl;
-  for( K3bDevice * dev = cdWriter().first(); dev != 0; dev = cdWriter().next() ) {
-    kdDebug() << "  " << ": "
-	      << dev->ioctlDevice() << " "
-	      << dev->blockDeviceName() << " "
-	      << dev->vendor() << " "
-	      << dev->description() << " "
-	      << dev->version() << " "
-	      << dev->maxWriteSpeed() << endl
-	      << "    "
-	      << dev->mountDevice() << " "
-	      << dev->mountPoint() << endl;
-    kdDebug() << "Writer aliases: " << endl;
-    for(QStringList::ConstIterator it = dev->deviceNodes().begin(); it != dev->deviceNodes().end(); ++it )
-      kdDebug() << "     " << *it << endl;
-
+  kdDebug() << "Devices:" << endl
+	    << "------------------------------" << endl;
+  QPtrListIterator<CdDevice> it( allDevices() );
+  for( ; *it; ++it ) {
+    CdDevice* dev = *it;
+    kdDebug() << "Blockdevice:    " << dev->blockDeviceName() << endl
+	      << "Vendor:         " << dev->vendor() << endl
+	      << "Description:    " << dev->description() << endl
+	      << "Version:        " << dev->version() << endl
+	      << "MountDevice:    " << dev->mountDevice() << endl
+	      << "Mountpoint:     " << dev->mountPoint() << endl
+	      << "Write speed:    " << dev->maxWriteSpeed() << endl
+	      << "Profiles:       " << mediaTypeString( dev->supportedProfiles() ) << endl
+	      << "Reader aliases: " << dev->deviceNodes().join(", ") << endl
+	      << "------------------------------" << endl;
   }
 }
 
@@ -449,107 +439,65 @@ void K3bCdDevice::DeviceManager::determineCapabilities(K3bDevice *dev)
 
   kdDebug() << "(K3bDeviceManager) probing capabilities for device " << dev->blockDeviceName() << endl;
 
-  KProcess driverProc, capProc;
-  driverProc << cdrecordBin->path;
+  //
+  // This is just a temp solution for those drives that do not support the GET CONFIGURATION command
+  // and thus do not give us their supported features
+  //
+  if( dev->m_writeModes == 0 ) {
+    KProcess driverProc, capProc;
+    driverProc << cdrecordBin->path;
 
-  driverProc << QString("dev=%1").arg(externalBinDeviceParameter(dev, cdrecordBin));
+    driverProc << QString("dev=%1").arg(externalBinDeviceParameter(dev, cdrecordBin));
 
-  driverProc << "-checkdrive";
-  connect( &driverProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
-	   this, SLOT(slotCollectStdout(KProcess*, char*, int)) );
+    driverProc << "-checkdrive";
+    connect( &driverProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
+	     this, SLOT(slotCollectStdout(KProcess*, char*, int)) );
 
-  m_processOutput = "";
+    m_processOutput = "";
 
-  driverProc.start( KProcess::Block, KProcess::Stdout );
-  // this should work for all drives
-  // so we are always able to say if a drive is a writer or not
-  if( driverProc.exitStatus() == 0 )
-    {
-      dev->m_burner = true;
-      dev->m_writeModes = 0;
-      QStringList lines = QStringList::split( "\n", m_processOutput );
-      for( QStringList::const_iterator it = lines.begin(); it != lines.end(); ++it )
-	{
-	  const QString& line = *it;
+    driverProc.start( KProcess::Block, KProcess::Stdout );
+    // this should work for all drives
+    // so we are always able to say if a drive is a writer or not
+    if( driverProc.exitStatus() == 0 )
+      {
+	dev->m_burner = true;
+	dev->m_writeModes = 0;
+	QStringList lines = QStringList::split( "\n", m_processOutput );
+	for( QStringList::const_iterator it = lines.begin(); it != lines.end(); ++it )
+	  {
+	    const QString& line = *it;
 
-	  // no info in cdrecord <= 1.10 !!!!!
-	  if( line.startsWith( "Supported modes" ) )
-	    {
-	      QStringList modes = QStringList::split( " ", line.mid(16) );
-	      if( modes.contains( "SAO" ) )
-		dev->m_writeModes |= K3bDevice::SAO;
-	      if( modes.contains( "TAO" ) )
-		dev->m_writeModes |= K3bDevice::TAO;
-	      if( modes.contains( "PACKET" ) )
-		dev->m_writeModes |= K3bDevice::PACKET;
-	      if( modes.contains( "SAO/R96R" ) )
-		dev->m_writeModes |= K3bDevice::SAO_R96R;
-	      if( modes.contains( "SAO/R96P" ) )
-		dev->m_writeModes |= K3bDevice::SAO_R96P;
-	      if( modes.contains( "RAW/R16" ) )
-		dev->m_writeModes |= K3bDevice::RAW_R16;
-	      if( modes.contains( "RAW/R96R" ) )
-		dev->m_writeModes |= K3bDevice::RAW_R96R;
-	      if( modes.contains( "RAW/R96P" ) )
-		dev->m_writeModes |= K3bDevice::RAW_R96P;
-	      break;
-	    }
-	}
-    }
+	    // no info in cdrecord <= 1.10 !!!!!
+	    if( line.startsWith( "Supported modes" ) )
+	      {
+		QStringList modes = QStringList::split( " ", line.mid(16) );
+		if( modes.contains( "SAO" ) )
+		  dev->m_writeModes |= K3bDevice::SAO;
+		if( modes.contains( "TAO" ) )
+		  dev->m_writeModes |= K3bDevice::TAO;
+		if( modes.contains( "PACKET" ) )
+		  dev->m_writeModes |= K3bDevice::PACKET;
+		if( modes.contains( "SAO/R96R" ) )
+		  dev->m_writeModes |= K3bDevice::SAO_R96R;
+		if( modes.contains( "SAO/R96P" ) )
+		  dev->m_writeModes |= K3bDevice::SAO_R96P;
+		if( modes.contains( "RAW/R16" ) )
+		  dev->m_writeModes |= K3bDevice::RAW_R16;
+		if( modes.contains( "RAW/R96R" ) )
+		  dev->m_writeModes |= K3bDevice::RAW_R96R;
+		if( modes.contains( "RAW/R96P" ) )
+		  dev->m_writeModes |= K3bDevice::RAW_R96P;
+		break;
+	      }
+	  }
+      }
 
-  // default to dao and tao if no write modes info was available (cdrecord <= 1.10)
-  // I include this hack because I think it's better to get an error:
-  //   "mode not supported" when trying to write instead of never getting to choose DAO!
-  if( dev->m_writeModes == 0 )
-    dev->m_writeModes = K3bDevice::SAO|K3bDevice::TAO;
-
-
-
-  // check drive capabilities
-  // does only work for generic-mmc drives
-  capProc << cdrecordBin->path;
-  capProc << QString("dev=%1").arg(externalBinDeviceParameter(dev, cdrecordBin));
-  capProc << "-prcap";
-
-  connect( &capProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
-	   this, SLOT(slotCollectStdout(KProcess*, char*, int)) );
-
-  m_processOutput = "";
-
-  capProc.start( KProcess::Block, KProcess::Stdout );
-
-  QStringList lines = QStringList::split( "\n", m_processOutput );
-
-  // parse output
-  for( QStringList::const_iterator it = lines.begin(); it != lines.end(); ++it )
-    {
-      const QString& line = *it;
-
-      if( line.startsWith("  ") )
-	{
-	  if( line.contains("Buffer-Underrun-Free recording") ||
-		   line.contains("support BURN-Proof") )
-	    dev->m_burnproof = !line.contains( "not" );
-
-	  else if( line.contains( "Maximum read  speed" ) ) //lukas: are there really two spaces? trueg: Yes, there are! ;)
-	    dev->m_maxReadSpeed = K3b::round( line.mid( line.find(":")+1 ).toDouble() * 1000.0 / ( 2352.0 * 75.0 ) );
-
-	  else if( line.contains( "Maximum write speed" ) )
-	    dev->m_maxWriteSpeed = K3b::round( line.mid( line.find(":")+1 ).toDouble() * 1000.0 / ( 2352.0 * 75.0 ) );
-
-	  else if( line.contains( "Buffer size" ) )
-	    dev->m_bufferSize = line.mid( line.find(":")+1 ).toInt();
-	}
-      else if( line.startsWith("Vendor_info") )
-        dev->m_vendor = line.mid( line.find(":")+3, 8 ).stripWhiteSpace();
-      else if( line.startsWith("Identifikation") )
-        dev->m_description = line.mid( line.find(":")+3, 16 ).stripWhiteSpace();
-      else if( line.startsWith("Revision") )
-        dev->m_version = line.mid( line.find(":")+3, 4 ).stripWhiteSpace();
-      else
-        kdDebug() << "(K3bDeviceManager) unused cdrecord output: " << line << endl;
-
-    }
+    // default to dao and tao if no write modes info was available (cdrecord <= 1.10)
+    // I include this hack because I think it's better to get an error:
+    //   "mode not supported" when trying to write instead of never getting to choose DAO!
+    if( dev->m_writeModes == 0 )
+      dev->m_writeModes = K3bDevice::SAO|K3bDevice::TAO;
+  }
 }
 
 

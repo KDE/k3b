@@ -73,8 +73,8 @@ void K3bCdrecordWriter::setDao( bool b )
 
 void K3bCdrecordWriter::setCueFile( const QString& s)
 {
-    m_cue = true;
-    m_cueFile = s;
+  m_cue = true;
+  m_cueFile = s;
 }
   
 void K3bCdrecordWriter::setClone( bool b )
@@ -217,10 +217,12 @@ void K3bCdrecordWriter::clearArguments()
 
 void K3bCdrecordWriter::start()
 {
+  emit started();
+
   prepareProcess();
 
   if( !m_cdrecordBinObject ) {
-    emit infoMessage( i18n("Could not find %1 executable.").arg(m_cdrecordBinObject->name()), ERROR );
+    emit infoMessage( i18n("Could not find %1 executable.").arg("cdrecord"), ERROR );
     emit finished(false);
     return;
   }
@@ -275,7 +277,6 @@ void K3bCdrecordWriter::start()
     }
 
     m_writeSpeedInitialized = false;
-    emit started();
   }
 }
 
@@ -296,7 +297,10 @@ void K3bCdrecordWriter::cancel()
 
 bool K3bCdrecordWriter::write( const char* data, int len )
 {
-  return m_process->writeStdin( data, len );
+  if( m_process )
+    return m_process->writeStdin( data, len );
+  else
+    return -1;
 }
 
 

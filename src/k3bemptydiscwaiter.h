@@ -18,8 +18,11 @@
 #define K3BEMPTYDISCWAITER_H
 
 #include <kdialogbase.h>
-#include "device/k3bdevice.h"
 
+namespace K3bCdDevice {
+  class CdDevice;
+  class DeviceHandler;
+}
 
 
 /**
@@ -35,9 +38,13 @@ class K3bEmptyDiscWaiter : public KDialogBase
  Q_OBJECT
 
  public: 
-  K3bEmptyDiscWaiter( K3bDevice* device, QWidget* parent = 0, const char* name = 0 );
+  K3bEmptyDiscWaiter( K3bCdDevice::CdDevice* device, QWidget* parent = 0, const char* name = 0 );
   ~K3bEmptyDiscWaiter();
 
+  /**
+   * This should be replaced by the mediaType that was found or -1 for forced.
+   * MEDIA_NONE if canceled.
+   */
   enum returnValue { DISK_READY, CANCELED };
 
   /**
@@ -45,8 +52,10 @@ class K3bEmptyDiscWaiter : public KDialogBase
    * @param appendable if true a not empty but appendable disk is also
    *                   considered as valid.
    * @returns DISK_READY or CANCELED
+   *
+   * TODO: instead of the dvd flag an or-combination of MediaTypes should be used.
    */
-  int waitForEmptyDisc( bool appendable = false );
+  int waitForEmptyDisc( bool appendable = false, bool dvd = false );
 
   /**
    * the same as waitForEmptyDisc( false );
@@ -56,7 +65,7 @@ class K3bEmptyDiscWaiter : public KDialogBase
   /**
    * This only openes a dialog if the first check failed.
    */
-  static int wait( K3bDevice* device, bool appendable = false );
+  static int wait( K3bCdDevice::CdDevice* device, bool appendable = false, bool dvd = false );
 
  signals:
   void canceled();
@@ -66,7 +75,8 @@ class K3bEmptyDiscWaiter : public KDialogBase
   void slotCancel();
   void slotUser1();
   void startDeviceHandler();
-  void slotDeviceHandlerFinished( bool );
+  void slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* );
+  void showDialog();
 
  protected:
   void closeEvent( QCloseEvent* ) {}

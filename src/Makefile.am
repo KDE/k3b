@@ -5,6 +5,7 @@ k3b_SOURCES = k3bcore.cpp k3bapplication.cpp k3bdiroperator.cpp kdndfileview.cpp
 			k3bview.cpp \
 			k3bcdrecordwriter.cpp \
 			k3bdvdrecordwriter.cpp \
+			k3bgrowisofswriter.cpp \
 			k3babstractwriter.cpp \
 			k3bcdrdaowriter.cpp \
 			k3bjobprogressdialog.cpp k3binteractiondialog.cpp \

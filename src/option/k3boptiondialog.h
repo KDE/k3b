@@ -23,11 +23,10 @@ class K3bCddbOptionTab;
 class K3bCddbLocalDBTab;
 class K3bDeviceOptionTab;
 class K3bBurningOptionTab;
-class K3bPatternOptionTab;
 class K3bExternalBinOptionTab;
 class K3bMiscOptionTab;
 class K3bNotifyOptionTab;
-
+// class  K3bPatternOptionTab;
 
 /**
   *@author Sebastian Trueg
@@ -68,8 +67,8 @@ class K3bOptionDialog : public KDialogBase
   void setupCddbPage();		
 
   // pattern tab
-  K3bPatternOptionTab *m_patternOptionTab;
-  void setupPatternPage();
+/*   K3bPatternOptionTab *m_patternOptionTab; */
+/*   void setupPatternPage(); */
 
   // misc options
   K3bMiscOptionTab* m_miscOptionTab;

@@ -132,6 +132,13 @@ void K3bIsoImager::slotReceivedStderr( const QString& line )
   if( !line.isEmpty() ) {
     emit debuggingOutput( "mkisofs", line );
 
+    //
+    // in multisession mode mkisofs' progress does not start at 0 but at (X+Y)/X
+    // where X is the data already on the cd and Y the data to create
+    // This is not very dramatic but kind or ugly.
+    // We just save the first emitted progress value and to some math ;)
+    //
+
     if( line.contains( "done, estimate" ) ) {
 
       QString perStr = line;
@@ -142,7 +149,10 @@ void K3bIsoImager::slotReceivedStderr( const QString& line )
 	kdDebug() << "(K3bIsoImager) Parsing did not work for " << perStr << endl;
       }
       else {
-	emit percent( (int)p );
+	if( m_firstProgressValue < 0 )
+	  m_firstProgressValue = p;
+
+	emit percent( (int)( (p - m_firstProgressValue)*100.0/(100.0 - m_firstProgressValue) ) );
       }
     }
     else if( line.contains( "extents written" ) ) {
@@ -339,6 +349,7 @@ void K3bIsoImager::start()
   cleanup();
 
   m_containsFilesWithMultibleBackslashes = false;
+  m_firstProgressValue = -1;
 
   m_process = new K3bProcess();
 

@@ -33,7 +33,8 @@ class QRadioButton;
 class QCheckBox;
 class QSpinBox;
 class QComboBox;
-class QToolButton;
+class K3bCddbPatternWidget;
+
 
 /**
   *@author Sebastian Trueg
@@ -59,7 +60,6 @@ class K3bAudioRippingDialog : public K3bInteractionDialog
   QValueList<int> m_trackNumbers;
 
   KListView*    m_viewTracks;
-  QToolButton*  m_buttonPattern;
   KURLRequester* m_editStaticRipPath;
   QCheckBox*    m_checkUsePattern;
 
@@ -72,6 +72,8 @@ class K3bAudioRippingDialog : public K3bInteractionDialog
   QSpinBox* m_spinRetries;
   QCheckBox* m_checkNeverSkip;
   QCheckBox* m_checkSingleFile;
+
+  K3bCddbPatternWidget* m_patternWidget;
 
   void setupGui();
   void setupContextHelp();

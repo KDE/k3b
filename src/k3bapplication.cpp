@@ -90,6 +90,7 @@ void K3bApplication::init()
   emit initializationInfo( i18n("Ready.") );
 
 
+  config()->setGroup( "General Options" );
   if( config()->readBoolEntry( "check system config", true ) ) {
     emit initializationInfo( i18n("Checking System") );
     K3bSystemProblemDialog::checkSystem();

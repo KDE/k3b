@@ -49,9 +49,6 @@ K3bFillStatusDisplayWidget::K3bFillStatusDisplayWidget( K3bDoc* doc, QWidget* pa
   : QWidget( parent ),
     m_doc(doc)
 {
-  k3bcore->config()->setGroup( "General Options" );
-  m_cdSize.addMinutes( k3bcore->config()->readNumEntry( "Default cd size", 74 ) );
-
   setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred ) );	
 }
 
@@ -180,6 +177,8 @@ public:
   KToggleAction* actionDvd4_7GB;
   KToggleAction* actionCustomSize;
   KAction* actionDetermineSize;
+  KAction* actionSaveUserDefaults;
+  KAction* actionLoadUserDefaults;
 
   KPopupMenu* popup;
   KPopupMenu* dvdPopup;
@@ -189,6 +188,9 @@ public:
   K3bFillStatusDisplayWidget* displayWidget;
 
   bool showDvdSizes;
+  bool showTime;
+
+  K3bDoc* doc;
 };
 
 
@@ -196,7 +198,7 @@ K3bFillStatusDisplay::K3bFillStatusDisplay(K3bDoc* doc, QWidget *parent, const c
   : QFrame(parent,name)
 {
   d = new Private;
-  showDvdSizes( false );
+  d->doc = doc;
 
   setFrameStyle( Panel | Sunken );
 
@@ -216,24 +218,7 @@ K3bFillStatusDisplay::K3bFillStatusDisplay(K3bDoc* doc, QWidget *parent, const c
 
   setupPopupMenu();
 
-  // defaults to megabytes
-  d->displayWidget->setShowTime(false);
-  d->actionShowMegs->setChecked( true );
-
-  switch( d->displayWidget->cdSize().totalFrames()/75/60 ) {
-  case 74:
-    d->action74Min->setChecked( true );
-    break;
-  case 80:
-    d->action80Min->setChecked( true );
-    break;
-  case 100:
-    d->action100Min->setChecked( true );
-    break;
-  default:
-    d->actionCustomSize->setChecked( true );
-    break;
-  }
+  showDvdSizes( false );
 }
 
 K3bFillStatusDisplay::~K3bFillStatusDisplay()
@@ -285,6 +270,13 @@ void K3bFillStatusDisplay::setupPopupMenu()
   d->actionDetermineSize = new KAction( i18n("From Disk..."), "cdrom_unmount", 0,
 				       this, SLOT(slotDetermineSize()), 
 				       d->actionCollection, "fillstatus_size_from_disk" );
+
+  d->actionLoadUserDefaults = new KAction( i18n("User Defaults"), "", 0, 
+					   this, SLOT(slotLoadUserDefaults()),
+					   d->actionCollection, "load_user_defaults" );
+  d->actionSaveUserDefaults = new KAction( i18n("Save User Defaults"), "", 0, 
+					   this, SLOT(slotSaveUserDefaults()),
+					   d->actionCollection, "save_user_defaults" );
  
   d->popup->insertTitle( i18n("Show Size In") );
   d->actionShowMinutes->plug( d->popup );
@@ -295,11 +287,17 @@ void K3bFillStatusDisplay::setupPopupMenu()
   d->action100Min->plug( d->popup );
   d->actionCustomSize->plug( d->popup );
   d->actionDetermineSize->plug( d->popup );
+  d->popup->insertSeparator();
+  d->actionLoadUserDefaults->plug( d->popup );
+  d->actionSaveUserDefaults->plug( d->popup );
 
   d->dvdPopup->insertTitle( i18n("DVD Size") );
   d->actionDvd4_7GB->plug( d->dvdPopup );
   d->actionCustomSize->plug( d->dvdPopup );
   d->actionDetermineSize->plug( d->dvdPopup );
+  d->dvdPopup->insertSeparator();
+  d->actionLoadUserDefaults->plug( d->dvdPopup );
+  d->actionSaveUserDefaults->plug( d->dvdPopup );
 
   connect( d->displayWidget, SIGNAL(contextMenu(const QPoint&)), this, SLOT(slotPopupMenu(const QPoint&)) );
 }
@@ -313,6 +311,7 @@ void K3bFillStatusDisplay::showSize()
   d->action80Min->setText( i18n("%1 MB").arg(700) );
   d->action100Min->setText( i18n("%1 MB").arg(880) );
 
+  d->showTime = false;
   d->displayWidget->setShowTime(false);
 }
 	
@@ -324,6 +323,7 @@ void K3bFillStatusDisplay::showTime()
   d->action80Min->setText( i18n("unused", "%n minutes", 80) );
   d->action100Min->setText( i18n("unused", "%n minutes", 100) );
 
+  d->showTime = true;
   d->displayWidget->setShowTime(true);
 }
 
@@ -331,6 +331,7 @@ void K3bFillStatusDisplay::showTime()
 void K3bFillStatusDisplay::showDvdSizes( bool b )
 {
   d->showDvdSizes = b;
+  slotLoadUserDefaults();
 }
 
 
@@ -410,6 +411,54 @@ void K3bFillStatusDisplay::slotRemainingSize( K3bCdDevice::DeviceHandler* dh )
     KMessageBox::error( parentWidget(), i18n("Could not get remaining size of disk.") );
   }
 }
+
+
+void K3bFillStatusDisplay::slotLoadUserDefaults()
+{
+  // load project specific values
+  KConfig* c = k3bcore->config();
+  c->setGroup( "default " + d->doc->documentType() + " settings" );
+
+  // defaults to megabytes
+  d->showTime = c->readBoolEntry( "show minutes", false );
+  d->displayWidget->setShowTime(d->showTime);
+  d->actionShowMegs->setChecked( !d->showTime );
+  d->actionShowMinutes->setChecked( d->showTime );
+
+
+  long size = c->readNumEntry( "default media size", d->showDvdSizes ? 510*60*75 : 74*60*75 );
+  d->displayWidget->setCdSize( size );
+
+  switch( d->displayWidget->cdSize().totalFrames()/75/60 ) {
+  case 74:
+    d->action74Min->setChecked( true );
+    break;
+  case 80:
+    d->action80Min->setChecked( true );
+    break;
+  case 100:
+    d->action100Min->setChecked( true );
+    break;
+  case 510:
+    d->actionDvd4_7GB->setChecked( true );
+    break;
+  default:
+    d->actionCustomSize->setChecked( true );
+    break;
+  }
+}
+
+
+void K3bFillStatusDisplay::slotSaveUserDefaults()
+{
+  // save project specific values
+  KConfig* c = k3bcore->config();
+  c->setGroup( "default " + d->doc->documentType() + " settings" );
+
+  c->writeEntry( "show minutes", d->showTime );
+  c->writeEntry( "default media size", d->displayWidget->cdSize().totalFrames() );
+}
+
 
 
 #include "k3bfillstatusdisplay.moc"

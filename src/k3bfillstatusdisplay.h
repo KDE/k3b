@@ -98,6 +98,9 @@ class K3bFillStatusDisplay : public QFrame  {
   void slotDetermineSize();
   void slotRemainingSize( K3bCdDevice::DeviceHandler* );
 
+  void slotLoadUserDefaults();
+  void slotSaveUserDefaults();
+
  private:
   class Private;
   Private* d;

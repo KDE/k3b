@@ -56,6 +56,7 @@ namespace K3bCdDevice
       ~DeviceHandler();
 
       const DiskInfo& diskInfo() const;
+      const NextGenerationDiskInfo& ngDiskInfo() const;
       const Toc& toc() const;
       const K3b::Msf& diskSize() const;
       const K3b::Msf& remainingSize() const;
@@ -72,6 +73,7 @@ namespace K3bCdDevice
 
       enum Command {
 	DISKINFO,
+	NG_DISKINFO,
 	TOC,
 	DISKSIZE,
 	REMAININGSIZE,

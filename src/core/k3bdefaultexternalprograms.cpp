@@ -57,6 +57,7 @@ void K3b::addDefaultPrograms( K3bExternalBinManager* m )
   m->addProgram( new K3bCdrdaoProgram() );
   m->addProgram( new K3bEMovixProgram() );
   m->addProgram( new K3bNormalizeProgram() );
+  m->addProgram( new K3bGrowisofsProgram() );
 }
 
 
@@ -96,8 +97,7 @@ bool K3bCdrecordProgram::scan( const QString& p )
       pos = out.output().find( "Cdrecord-ProDVD" );
     }
     else {
-      // the space after "Cdrecord" is so K3b does not find Cdrecord-ProDVD
-      pos = out.output().find( "Cdrecord " );
+      pos = out.output().find( "Cdrecord" );
     }
     if( pos < 0 )
       return false;
@@ -154,6 +154,9 @@ bool K3bCdrecordProgram::scan( const QString& p )
     delete bin;
     return false;
   }
+
+  if( !m_dvdPro && bin->version.suffix().endsWith( "-dvd" ) )
+    bin->addFeature( "dvd-patch" );
 
   // FIXME: are these version correct?
   if( bin->version >= K3bVersion("1.11a38") )
@@ -714,7 +717,6 @@ bool K3bVcdbuilderProgram::scan( const QString& p )
 K3bNormalizeProgram::K3bNormalizeProgram()
   : K3bExternalProgram( "normalize" )
 {
-
 }
 
 
@@ -751,6 +753,61 @@ bool K3bNormalizeProgram::scan( const QString& p )
       return false;
 
     int endPos = out.output().find( QRegExp("\\s"), pos+1 );
+    if( endPos < 0 )
+      return false;
+
+    bin = new K3bExternalBin( this );
+    bin->path = path;
+    bin->version = out.output().mid( pos, endPos-pos );
+  }
+  else {
+    kdDebug() << "(K3bCdrecordProgram) could not start " << path << endl;
+    return false;
+  }
+
+  addBin( bin );
+  return true;
+}
+
+
+K3bGrowisofsProgram::K3bGrowisofsProgram()
+  : K3bExternalProgram( "growisofs" )
+{
+}
+
+bool K3bGrowisofsProgram::scan( const QString& p )
+{
+  if( p.isEmpty() )
+    return false;
+
+  QString path = p;
+  QFileInfo fi( path );
+  if( fi.isDir() ) {
+    if( path[path.length()-1] != '/' )
+      path.append("/");
+    path.append("growisofs");
+  }
+
+  if( !QFile::exists( path ) )
+    return false;
+
+  K3bExternalBin* bin = 0;
+
+  // probe version
+  KProcess vp;
+  OutputCollector out( &vp );
+
+  vp << path << "-version";
+  if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
+    int pos = out.output().find( "growisofs" );
+    if( pos < 0 )
+      return false;
+
+    pos = out.output().find( QRegExp("\\d"), pos );
+    if( pos < 0 )
+      return false;
+
+    int endPos = out.output().find( ",", pos+1 );
     if( endPos < 0 )
       return false;
 

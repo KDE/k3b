@@ -55,19 +55,13 @@ K3bDataJob::K3bDataJob( K3bDataDoc* doc, QObject* parent )
   m_doc = doc;
   m_writerJob = 0;
   m_tocFile = 0;
-
-  m_isoImager = new K3bIsoImager( m_doc, this );
-  connect( m_isoImager, SIGNAL(sizeCalculated(int, int)), this, SLOT(slotSizeCalculationFinished(int, int)) );
-  connect( m_isoImager, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
-  connect( m_isoImager, SIGNAL(data(const char*, int)), this, SLOT(slotReceivedIsoImagerData(const char*, int)) );
-  connect( m_isoImager, SIGNAL(percent(int)), this, SLOT(slotIsoImagerPercent(int)) );
-  connect( m_isoImager, SIGNAL(finished(bool)), this, SLOT(slotIsoImagerFinished(bool)) );
-  connect( m_isoImager, SIGNAL(debuggingOutput(const QString&, const QString&)), 
-	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
+  m_isoImager = 0;
 
   m_msInfoFetcher = new K3bMsInfoFetcher( this );
   connect( m_msInfoFetcher, SIGNAL(finished(bool)), this, SLOT(slotMsInfoFetched(bool)) );
   connect( m_msInfoFetcher, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
+  connect( m_msInfoFetcher, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
 
   m_imageFinished = true;
 }
@@ -98,14 +92,14 @@ void K3bDataJob::start()
   m_canceled = false;
   m_imageFinished = false;
 
+  prepareImager();
+
   if( !m_doc->onlyCreateImages() && 
       ( m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
 	m_doc->multiSessionMode() == K3bDataDoc::FINISH ) ) {
     m_msInfoFetcher->setDevice( m_doc->burner() );
-    if( K3bEmptyDiscWaiter::wait( m_doc->burner(), true ) == K3bEmptyDiscWaiter::CANCELED ) {
-      cancel();
-      return;
-    }
+    waitForDisk();
+
     // just to be sure we did not get canceled during the async discWaiting
     if( m_canceled )
       return;
@@ -277,10 +271,8 @@ bool K3bDataJob::startWriting()
   if( m_doc->multiSessionMode() == K3bDataDoc::NONE ||
       m_doc->multiSessionMode() == K3bDataDoc::START ) {
 	  
-    if( K3bEmptyDiscWaiter::wait( m_doc->burner() ) == K3bEmptyDiscWaiter::CANCELED ) {
-      cancel();
-      return false;
-    }
+    waitForDisk();
+
     // just to be sure we did not get canceled during the async discWaiting
     if( m_canceled )
       return false;
@@ -339,10 +331,50 @@ void K3bDataJob::slotWriterJobFinished( bool success )
 }
 
 
+void K3bDataJob::setWriterJob( K3bAbstractWriter* writer )
+{
+  m_writerJob = writer;
+  connect( m_writerJob, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
+  connect( m_writerJob, SIGNAL(percent(int)), this, SLOT(slotWriterJobPercent(int)) );
+  connect( m_writerJob, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSize(int, int)) );
+  connect( m_writerJob, SIGNAL(subPercent(int)), this, SIGNAL(subPercent(int)) );
+  connect( m_writerJob, SIGNAL(processedSubSize(int, int)), this, SIGNAL(processedSubSize(int, int)) );
+  connect( m_writerJob, SIGNAL(nextTrack(int, int)), this, SLOT(slotWriterNextTrack(int, int)) );
+  connect( m_writerJob, SIGNAL(buffer(int)), this, SIGNAL(bufferStatus(int)) );
+  connect( m_writerJob, SIGNAL(writeSpeed(int)), this, SIGNAL(writeSpeed(int)) );
+  connect( m_writerJob, SIGNAL(finished(bool)), this, SLOT(slotWriterJobFinished(bool)) );
+  connect( m_writerJob, SIGNAL(dataWritten()), this, SLOT(slotDataWritten()) );
+  connect( m_writerJob, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
+  connect( m_writerJob, SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
+  connect( m_writerJob, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
+}
+
+
+void K3bDataJob::setImager( K3bIsoImager* imager )
+{
+  m_isoImager = imager;
+  connect( m_isoImager, SIGNAL(sizeCalculated(int, int)), this, SLOT(slotSizeCalculationFinished(int, int)) );
+  connect( m_isoImager, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
+  connect( m_isoImager, SIGNAL(data(const char*, int)), this, SLOT(slotReceivedIsoImagerData(const char*, int)) );
+  connect( m_isoImager, SIGNAL(percent(int)), this, SLOT(slotIsoImagerPercent(int)) );
+  connect( m_isoImager, SIGNAL(finished(bool)), this, SLOT(slotIsoImagerFinished(bool)) );
+  connect( m_isoImager, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
+}
+
+
+void K3bDataJob::prepareImager()
+{
+  if( !m_isoImager )
+    setImager( new K3bIsoImager( m_doc, this ) );
+}
+
+
 bool K3bDataJob::prepareWriterJob()
 {
   if( m_writerJob )
-    delete m_writerJob;
+    return true;
 
   // It seems as if cdrecord is not able to append sessions in dao mode whereas cdrdao is
   if( m_usedWritingApp == K3b::CDRECORD )  {
@@ -391,7 +423,7 @@ bool K3bDataJob::prepareWriterJob()
       writer->addArgument( m_doc->tempDir() );
     }
 
-    m_writerJob = writer;
+    setWriterJob( writer );
   }
   else {
     // create cdrdao job
@@ -438,24 +470,9 @@ bool K3bDataJob::prepareWriterJob()
 
     writer->setTocFile( m_tocFile->name() );
 
-    m_writerJob = writer;
+    setWriterJob( writer );
   }
     
-  connect( m_writerJob, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
-  connect( m_writerJob, SIGNAL(percent(int)), this, SLOT(slotWriterJobPercent(int)) );
-  connect( m_writerJob, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSize(int, int)) );
-  connect( m_writerJob, SIGNAL(subPercent(int)), this, SIGNAL(subPercent(int)) );
-  connect( m_writerJob, SIGNAL(processedSubSize(int, int)), this, SIGNAL(processedSubSize(int, int)) );
-  connect( m_writerJob, SIGNAL(nextTrack(int, int)), this, SLOT(slotWriterNextTrack(int, int)) );
-  connect( m_writerJob, SIGNAL(buffer(int)), this, SIGNAL(bufferStatus(int)) );
-  connect( m_writerJob, SIGNAL(writeSpeed(int)), this, SIGNAL(writeSpeed(int)) );
-  connect( m_writerJob, SIGNAL(finished(bool)), this, SLOT(slotWriterJobFinished(bool)) );
-  connect( m_writerJob, SIGNAL(dataWritten()), this, SLOT(slotDataWritten()) );
-  connect( m_writerJob, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
-  connect( m_writerJob, SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
-  connect( m_writerJob, SIGNAL(debuggingOutput(const QString&, const QString&)), 
-	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
-
   return true;
 }
 
@@ -552,6 +569,17 @@ void K3bDataJob::cancelAll()
   }
 
   emit finished(false);
+}
+
+
+void K3bDataJob::waitForDisk()
+{
+  if( K3bEmptyDiscWaiter::wait( m_doc->burner(), 
+				m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
+				m_doc->multiSessionMode() == K3bDataDoc::FINISH )
+      == K3bEmptyDiscWaiter::CANCELED ) {
+    cancel();
+  }
 }
 
 

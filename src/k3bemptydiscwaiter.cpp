@@ -28,10 +28,12 @@
 #include <qpushbutton.h>
 #include <qapplication.h>
 #include <qeventloop.h>
+#include <qfont.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
+#include <kactivelabel.h>
 
 
 class K3bEmptyDiscWaiter::Private
@@ -42,11 +44,12 @@ public:
     inLoop = false;
   }
 
-  K3bDevice* device;
+  K3bCdDevice::CdDevice* device;
   QPushButton* buttonCancel;
   QPushButton* buttonForce;
 
   bool appendable;
+  bool waitForDvd;
 
   int result;
   int dialogVisible;
@@ -55,7 +58,9 @@ public:
   bool forced;
   bool canceled;
 
-  QLabel* label;
+  QLabel* labelRequest;
+  QLabel* labelFoundMedia;
+  QLabel* pixLabel;
 
   K3bCdDevice::DeviceHandler* deviceHandler;
 };
@@ -70,28 +75,37 @@ K3bEmptyDiscWaiter::K3bEmptyDiscWaiter( K3bDevice* device, QWidget* parent, cons
   d->device = device;
 
   d->deviceHandler = new K3bCdDevice::DeviceHandler( device, this );
-  connect( d->deviceHandler, SIGNAL(finished(bool)),
-	   this, SLOT(slotDeviceHandlerFinished(bool)) );
+  connect( d->deviceHandler, SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
+	   this, SLOT(slotDeviceHandlerFinished(K3bCdDevice::DeviceHandler*)) );
 
   // setup the gui
   // -----------------------------
-  d->label = new QLabel( plainPage() );
-  d->label->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
-  QLabel* pixLabel = new QLabel( plainPage() );
-  pixLabel->setAlignment( Qt::AlignCenter | Qt::AlignVCenter );
-  pixLabel->setPixmap( KGlobal::instance()->iconLoader()->loadIcon( "cdwriter_unmount", 
-								    KIcon::NoGroup, KIcon::SizeMedium ) );
-  QHBoxLayout* box = new QHBoxLayout( plainPage() );
-  box->setSpacing( 20 );
-  box->setMargin( marginHint() );
-  box->addWidget( pixLabel );
-  box->addWidget( d->label );
-  box->setStretchFactor( d->label, 1 );
+  d->labelRequest = new QLabel( plainPage() );
+  d->labelRequest->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
+  d->labelFoundMedia = new QLabel( plainPage() );
+  d->pixLabel = new QLabel( plainPage() );
+  d->pixLabel->setAlignment( Qt::AlignHCenter | Qt::AlignTop );
+
+  QFont f( d->labelFoundMedia->font() );
+  f.setBold(true);
+  d->labelFoundMedia->setFont( f );
+
+  QGridLayout* grid = new QGridLayout( plainPage() );
+  grid->setMargin( marginHint() );
+  grid->setSpacing( spacingHint() );
+
+  grid->addMultiCellWidget( d->pixLabel, 0, 2, 0, 0 );
+  grid->addColSpacing( 1, 20 );
+  grid->addWidget( new QLabel( i18n("Found media:"), plainPage() ), 0, 2 );
+  grid->addWidget( d->labelFoundMedia, 0, 3 );
+  grid->addMultiCellWidget( d->labelRequest, 1, 1, 2, 3 );
+  grid->setRowStretch( 2, 1 );
+  grid->setColStretch( 3, 1 );
   // -----------------------------
 
 
   QToolTip::add( actionButton(KDialogBase::User1), 
-		 i18n("Force K3b to continue if it seems not to detect your empty CDR.") );
+		 i18n("Force K3b to continue if it seems not to detect your empty CD-R(W)/DVD+-R(W).") );
 }
 
 
@@ -101,7 +115,7 @@ K3bEmptyDiscWaiter::~K3bEmptyDiscWaiter()
 }
 
 
-int K3bEmptyDiscWaiter::waitForEmptyDisc( bool appendable )
+int K3bEmptyDiscWaiter::waitForEmptyDisc( bool appendable, bool dvd )
 {
   if ( d->inLoop ) {
     kdError() << "(K3bEmptyDiscWaiter) Recursive call detected." << endl;
@@ -109,14 +123,22 @@ int K3bEmptyDiscWaiter::waitForEmptyDisc( bool appendable )
   }
 
   d->appendable = appendable;
+  d->waitForDvd = dvd;
   d->dialogVisible = false;
   d->forced = false;
   d->canceled = false;
 
   if( appendable )
-    d->label->setText( i18n("Please insert an appendable CDR medium into drive<p><b>%1 %2 (%3)</b>.").arg(d->device->vendor()).arg(d->device->description()).arg(d->device->devicename()) );
+    d->labelRequest->setText( i18n("Please insert an appendable %4 medium into drive<p><b>%1 %2 (%3)</b>.").arg(d->device->vendor()).arg(d->device->description()).arg(d->device->devicename()).arg( dvd ? i18n("DVD") : i18n("CDR") ) );
   else
-    d->label->setText( i18n("Please insert an empty CDR medium into drive<p><b>%1 %2 (%3)</b>.").arg(d->device->vendor()).arg(d->device->description()).arg(d->device->devicename()) );
+    d->labelRequest->setText( i18n("Please insert an empty %4 medium into drive<p><b>%1 %2 (%3)</b>.").arg(d->device->vendor()).arg(d->device->description()).arg(d->device->devicename()).arg( dvd ? i18n("DVD") : i18n("CDR") ) );
+
+  if( dvd )
+    d->pixLabel->setPixmap( KGlobal::instance()->iconLoader()->loadIcon( "dvd_unmount", 
+									 KIcon::NoGroup, KIcon::SizeMedium ) );
+  else
+    d->pixLabel->setPixmap( KGlobal::instance()->iconLoader()->loadIcon( "cdwriter_unmount", 
+									 KIcon::NoGroup, KIcon::SizeMedium ) );
 
   adjustSize();
 
@@ -125,6 +147,8 @@ int K3bEmptyDiscWaiter::waitForEmptyDisc( bool appendable )
   d->inLoop = true;
   QApplication::eventLoop()->enterLoop();
   
+  kdDebug() << "(K3bEmptyDiscWaiter) waitForEmptyDisc() finished" << endl;
+
   return d->result;
 }
 
@@ -137,30 +161,59 @@ int K3bEmptyDiscWaiter::exec()
 
 void K3bEmptyDiscWaiter::startDeviceHandler()
 {
-  d->deviceHandler->sendCommand( K3bCdDevice::DeviceHandler::MEDIUM_STATE );
+  //
+  // For some reason utilizing the DeviceHandler more than once introduces problems.
+  //
+
+  connect( K3bCdDevice::sendCommand( K3bCdDevice::DeviceHandler::NG_DISKINFO, d->device ), 
+	   SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
+	   this, 
+	   SLOT(slotDeviceHandlerFinished(K3bCdDevice::DeviceHandler*)) );
+  //  d->deviceHandler->sendCommand( K3bCdDevice::DeviceHandler::NG_DISKINFO );
 }
 
 
-void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( bool success )
+void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* dh )
 {
+  kdDebug() << "(K3bEmptyDiscWaiter) slotDeviceHandlerFinished() " << endl;
   if( d->forced || d->canceled )
     return;
 
-  if( success ) {
-    int x = d->deviceHandler->errorCode();
-    if( x == K3bDevice::EMPTY || ( x == K3bDevice::APPENDABLE && d->appendable ) ) {
-      
+  QString mediaState;
+  if( dh->ngDiskInfo().diskState() == K3bCdDevice::STATE_COMPLETE )
+    mediaState = i18n("complete");
+  else if( dh->ngDiskInfo().diskState() == K3bCdDevice::STATE_INCOMPLETE )
+    mediaState = i18n("appendable");
+  else if( dh->ngDiskInfo().diskState() == K3bCdDevice::STATE_EMPTY )
+    mediaState = i18n("empty");
+
+  if( !mediaState.isEmpty() )
+    mediaState = " (" + mediaState +")";
+
+  d->labelFoundMedia->setText( K3bCdDevice::mediaTypeString( d->deviceHandler->ngDiskInfo().mediaType() ) 
+			       + mediaState );
+
+  if( dh->success() ) {
+    if( ((d->waitForDvd && dh->ngDiskInfo().isDvdMedia() )
+	 ||
+	 (!d->waitForDvd && !dh->ngDiskInfo().isDvdMedia() )
+	 )
+	&&
+	( dh->ngDiskInfo().empty()
+	  ||
+	  ( dh->ngDiskInfo().appendable() && d->appendable )
+	  )
+	)
       finishWaiting( DISK_READY );
-    }
     else {
-      if( x == K3bDevice::COMPLETE || x == K3bDevice::APPENDABLE ) {
+      if( dh->ngDiskInfo().rewritable() ) {
 	
 	// this should not block for long since the device has been opened recently
 	if( d->device->rewritable() ) {
 	  if( KMessageBox::questionYesNo( qApp->activeWindow(),
 					  i18n("K3b found rewritable disk in %1 - %2. "
 					       "Should it be erased?").arg(d->device->vendor()).arg(d->device->description()),
-					  i18n("Found CD-RW") ) == KMessageBox::Yes ) {
+					  i18n("Found rewritable disk") ) == KMessageBox::Yes ) {
 	    // start a k3bblankingjob
 	    K3bErasingInfoDialog infoDialog( qApp->activeWindow() );
 	    
@@ -171,7 +224,7 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( bool success )
 	    connect( &infoDialog, SIGNAL(cancelClicked()), &job, SLOT(cancel()) );
 	    job.start();
 	    // if the Job did not eject we do it...
-	    K3bCdDevice::eject( d->device );
+	    K3bCdDevice::reload( d->device );
 	    infoDialog.exec();
 	  }
 	  else
@@ -179,26 +232,36 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( bool success )
 	}
       }
       else {
-	// we need to show the dialog if not done already
-	if( !d->dialogVisible ) {
-	  d->dialogVisible = true;
-	  clearWFlags( WDestructiveClose );
-	  setWFlags( WShowModal );
-	  show();
-	}
+	showDialog();
       }
       
       QTimer::singleShot( 1000, this, SLOT(startDeviceHandler()) );
     }
   }
   else { // success == false
+    kdDebug() << "(K3bEmptyDiscWaiter) devicehandler error." << endl;
+    showDialog();
     QTimer::singleShot( 1000, this, SLOT(startDeviceHandler()) );
+  }
+}
+
+
+void K3bEmptyDiscWaiter::showDialog()
+{
+  // we need to show the dialog if not done already
+  if( !d->dialogVisible ) {
+    d->dialogVisible = true;
+    clearWFlags( WDestructiveClose );
+    setWFlags( WShowModal );
+    setResult( 0 );
+    show();
   }
 }
 
 
 void K3bEmptyDiscWaiter::slotCancel()
 {
+  kdDebug() << "(K3bEmptyDiscWaiter) slotCancel() " << endl;
   d->canceled = true;
   finishWaiting( CANCELED );
 }
@@ -213,6 +276,7 @@ void K3bEmptyDiscWaiter::slotUser1()
 
 void K3bEmptyDiscWaiter::finishWaiting( int code )
 {
+  kdDebug() << "(K3bEmptyDiscWaiter) finishWaiting() " << endl;
   d->deviceHandler->cancel();
 
   d->result = code;
@@ -221,15 +285,16 @@ void K3bEmptyDiscWaiter::finishWaiting( int code )
 
   if( d->inLoop ) {
     d->inLoop = false;
+    kdDebug() << "(K3bEmptyDiscWaiter) exitLoop " << endl;
     QApplication::eventLoop()->exitLoop();
   }
 }
 
 
-int K3bEmptyDiscWaiter::wait( K3bDevice* device, bool appendable )
+int K3bEmptyDiscWaiter::wait( K3bDevice* device, bool appendable, bool dvd )
 {
   K3bEmptyDiscWaiter d( device, qApp->activeWindow() );
-  return d.waitForEmptyDisc( appendable );
+  return d.waitForEmptyDisc( appendable, dvd );
 }
 
 #include "k3bemptydiscwaiter.moc"

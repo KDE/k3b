@@ -198,6 +198,25 @@ void K3bSystemProblemDialog::checkSystem()
 				       true ) );
   }
 
+  if( !k3bcore->deviceManager()->dvdWriter().isEmpty() ) {
+    if( !k3bcore->externalBinManager()->foundBin( "growisofs" ) ) {
+      problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+					 i18n("Unable to find %1 executable").arg("growisofs"),
+					 i18n("K3b uses growisofs to actually write dvds. "
+					      "Without growisofs you won't be able to write dvds. "
+					      "Make sure to install at least version 5.10."),
+					 i18n("Install the growisofs package."),
+					 false ) );
+    }
+    else if( k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3bVersion( 5, 10 ) ) {
+      problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+					 i18n("Used %1 version %2 is outdated").arg("growisofs").arg(k3bcore->externalBinManager()->binObject( "growisofs" )->version),
+					 i18n("K3b needs at least growisofs version 5.10 to write dvds. "
+					      "All older versions will not work and K3b will refuse to use them."),
+					 i18n("Install a more recent version of growisofs."),
+					 false ) );
+    }
+  }
 
   // 2. ATAPI devices
   bool atapiReader = false;
@@ -280,7 +299,7 @@ void K3bSystemProblemDialog::checkSystem()
 					     i18n("When K3b %1 was released no version of cdrdao "
 						  "was able to write without SCSI emulation. "
 						  "Although it is possible that there actually "
-						  "is a version with ATAPI support it is unlikely."),
+						  "is a version with ATAPI support it is unlikely.").arg(k3bcore->version()),
 					     i18n("The best and recommended solution is to enable "
 						  "ide-scsi (SCSI emulation) for all writer devices. "
 						  "This way you won't have any problems."),

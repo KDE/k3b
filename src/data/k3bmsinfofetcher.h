@@ -18,8 +18,10 @@
 
 #include <k3bjob.h>
 
-
-class K3bCdDevice::CdDevice;
+namespace K3bCdDevice {
+  class CdDevice;
+  class DeviceHandler;
+}
 class KProcess;
 
 class K3bMsInfoFetcher : public K3bJob
@@ -43,6 +45,8 @@ class K3bMsInfoFetcher : public K3bJob
  private slots:
   void slotProcessExited();
   void slotCollectOutput( KProcess*, char* output, int len );
+  void slotMediaDetectionFinished( K3bCdDevice::DeviceHandler* );
+  void getMsInfo();
 
  private:
   QString m_msInfo;
@@ -54,6 +58,7 @@ class K3bMsInfoFetcher : public K3bJob
   K3bCdDevice::CdDevice* m_device;
 
   bool m_canceled;
+  bool m_dvd;
 };
 
 #endif

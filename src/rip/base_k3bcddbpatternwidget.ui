@@ -1,0 +1,174 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>base_K3bCddbPatternWidget</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>base_K3bPatternOptionTab</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>281</width>
+            <height>152</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Ripping Pattern</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>11</number>
+        </property>
+        <property name="spacing">
+            <number>6</number>
+        </property>
+        <widget class="KURLLabel" row="2" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>m_specialStringsLabel</cstring>
+            </property>
+            <property name="text">
+                <string>See special strings</string>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter|AlignRight</set>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="4" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>m_checkFilenameReplace</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>1</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string>Replace all blanks in filename with:</string>
+            </property>
+        </widget>
+        <widget class="KLineEdit" row="3" column="2">
+            <property name="name">
+                <cstring>m_editDirectoryReplace</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
+            </property>
+            <property name="text">
+                <string>_</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="3" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>m_checkDirectoryReplace</cstring>
+            </property>
+            <property name="text">
+                <string>Replace all blanks in directory with:</string>
+            </property>
+        </widget>
+        <widget class="KLineEdit" row="4" column="2">
+            <property name="name">
+                <cstring>m_editFilenameReplace</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
+            </property>
+            <property name="text">
+                <string>_</string>
+            </property>
+        </widget>
+        <widget class="KComboBox" row="0" column="1" rowspan="1" colspan="2">
+            <item>
+                <property name="text">
+                    <string>%r/%m</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>%g/%r - %m</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>music/ripped-tracks</string>
+                </property>
+            </item>
+            <property name="name">
+                <cstring>m_comboAdvancedDirectoryPattern</cstring>
+            </property>
+            <property name="editable">
+                <bool>true</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Insert your custom pattern here</string>
+            </property>
+        </widget>
+        <widget class="KComboBox" row="1" column="1" rowspan="1" colspan="2">
+            <item>
+                <property name="text">
+                    <string>%a - %t</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Track %n - %t (%a)</string>
+                </property>
+            </item>
+            <property name="name">
+                <cstring>m_comboAdvancedFilenamePattern</cstring>
+            </property>
+            <property name="editable">
+                <bool>true</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Insert your custom pattern here</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="text">
+                <string>Directory Pattern:</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>textLabel2</cstring>
+            </property>
+            <property name="text">
+                <string>Filename Pattern:</string>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>m_checkDirectoryReplace</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_editDirectoryReplace</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_checkFilenameReplace</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_editFilenameReplace</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+</connections>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kurllabel.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>klineedit.h</includehint>
+</includehints>
+</UI>

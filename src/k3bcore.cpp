@@ -31,6 +31,7 @@
 #include <kstandarddirs.h>
 
 
+
 class K3bCore::Private {
 public:
   Private( const KAboutData* about )
@@ -140,14 +141,12 @@ void K3bCore::init()
   if( globalConfig.hasGroup("Devices") ) {
     globalConfig.setGroup( "Devices" );
 
-    if( globalConfigVersion >= K3bVersion("0.10") )
-      d->deviceManager->readConfig( &globalConfig );
+    d->deviceManager->readConfig( &globalConfig );
   }
 
   if( config()->hasGroup("Devices") ) {
     config()->setGroup( "Devices" );
-    if( configVersion >= K3bVersion("0.10") )
-      d->deviceManager->readConfig( config() );
+    d->deviceManager->readConfig( config() );
   }
 
   d->deviceManager->printDevices();

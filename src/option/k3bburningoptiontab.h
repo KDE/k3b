@@ -57,12 +57,6 @@ Q_OBJECT
   KIntNumInput* m_editDefaultPregap;
   bool          m_bPregapSeconds;
 
-  QRadioButton* m_radio74Minutes;
-  QRadioButton* m_radio80Minutes;
-  QRadioButton* m_radio100Minutes;
-  QRadioButton* m_radioCustomCdSize;
-  KLineEdit*    m_editCustomCdSize;
-
   QCheckBox*    m_checkEject;
   QCheckBox*    m_checkOverburn;
   QCheckBox*    m_checkManualWritingBufferSize;
