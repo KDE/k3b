@@ -39,7 +39,7 @@ static long audioBitrate[] = { 64000L, 96000L, 112000L, 128000L, 160000L, 192000
 static QString codec[] = { "xvid", "divx4", "divx5", "xvidcvs" };
 static int cdSizes[] = { 650, 700, 1300, 1400, 695, 705 };
 
-K3bDivxAVSet::K3bDivxAVSet( K3bDivxCodecData *data, QWidget *parent, const char *name ) 
+K3bDivxAVSet::K3bDivxAVSet( K3bDivxCodecData *data, QWidget *parent, const char *name )
   : QGroupBox( parent, name ),
     m_parser(0) {
     m_data = data;
@@ -47,9 +47,9 @@ K3bDivxAVSet::K3bDivxAVSet( K3bDivxCodecData *data, QWidget *parent, const char 
     setupGui();
 }
 
-K3bDivxAVSet::~K3bDivxAVSet() 
+K3bDivxAVSet::~K3bDivxAVSet()
 {
-  if( m_parser ) delete m_parser;
+  delete m_parser;
 }
 
 void K3bDivxAVSet::setupGui() {
