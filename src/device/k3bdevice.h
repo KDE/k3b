@@ -1,9 +1,27 @@
+/***************************************************************************
+                          k3bdevice.h  -  description
+                             -------------------
+    begin                : Tue May 14 2002
+    copyright            : (C) 2002 by Sebastian Trueg
+    email                : trueg@informatik.uni-freiburg.de
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 
 #ifndef K3BDEVICE_H
 #define K3BDEVICE_H
 
 #include <qstringlist.h>
 #include "../cdinfo/k3bdiskinfo.h"
+
+/* #define SUPPORT_IDE */
 
 class K3bToc;
 
