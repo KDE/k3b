@@ -60,7 +60,8 @@ namespace K3bCdDevice
   private slots:
     void slotDeviceHandlerFinished(bool);
     void slotIsVideoDvd( bool dvd );
-    void slotIsVCD( KIO::Job *);
+    void slotIsVCD( KIO::Job * );
+    void slotFinished( KIO::Job * );
 
   protected:
     CdDevice* m_device;

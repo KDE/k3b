@@ -206,10 +206,14 @@ void K3bCdDevice::DiskInfoDetector::slotIsVCD(KIO::Job* job)
           m_info.isVCD = true;
       }
     }
-    KIO::unmount(m_device->mountPoint());
-  }
+    connect(KIO::unmount(m_device->mountPoint()), SIGNAL(result(KIO::Job*)), this, SLOT(slotFinished(KIO::Job*)) );
+  } else
+    finish(true);
+}
 
-  finish(true);
+void K3bCdDevice::DiskInfoDetector::slotFinished(KIO::Job*)
+{
+   finish(true);
 }
 
 void K3bCdDevice::DiskInfoDetector::slotDeviceHandlerFinished( bool success )
