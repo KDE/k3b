@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>base_K3bSetup2PermissionWidget</class>
 <author>Sebastian Trueg</author>
 <widget class="QWidget">
@@ -31,7 +31,7 @@
                 <cstring>m_infoLabel</cstring>
             </property>
             <property name="text">
-                <string>&lt;p&gt;&lt;b&gt;Hallo&lt;/b&gt; Ein bischen text</string>
+                <string></string>
             </property>
         </widget>
         <widget class="QButtonGroup">
@@ -114,7 +114,7 @@
                         <property name="clickable">
                             <bool>true</bool>
                         </property>
-                        <property name="resizeable">
+                        <property name="resizable">
                             <bool>true</bool>
                         </property>
                     </column>
@@ -142,7 +142,7 @@
                     </property>
                 </widget>
                 <spacer row="2" column="1">
-                    <property name="name" stdset="0">
+                    <property name="name">
                         <cstring>Spacer1</cstring>
                     </property>
                     <property name="orientation">
@@ -166,7 +166,7 @@
                         <property name="clickable">
                             <bool>true</bool>
                         </property>
-                        <property name="resizeable">
+                        <property name="resizable">
                             <bool>true</bool>
                         </property>
                     </column>
@@ -250,4 +250,9 @@
     </connection>
 </connections>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kactivelabel.h</includehint>
+    <includehint>klistview.h</includehint>
+    <includehint>klistview.h</includehint>
+</includehints>
 </UI>
