@@ -266,6 +266,18 @@ bool K3bApplication::processCmdLineArgs()
     else
       m_mainWindow->slotWriteCdImage();
   }
+  else if( args->isSet( "dvdimage" ) ) {
+    if ( args->count() == 1 )
+      m_mainWindow->slotWriteDvdIsoImage( args->url(0) );
+    else
+      m_mainWindow->slotWriteDvdIsoImage();
+  }
+  else if( args->isSet( "image" ) && args->count() == 1 ) {
+    if( K3b::filesize( args->url(0) ) > 1000*1024*1024 )
+      m_mainWindow->slotWriteDvdIsoImage( args->url(0) );
+    else
+      m_mainWindow->slotWriteCdImage( args->url(0) );
+  }
   else if(args->count()) {
     for( int i = 0; i < args->count(); i++ ) {
       m_mainWindow->openDocument( args->url(i) );

@@ -57,6 +57,8 @@ static KCmdLineOptions options[] =
         { "copycd", I18N_NOOP("Open the CD copy dialog"), 0 },
         { "copydvd", I18N_NOOP("Open the DVD copy dialog"), 0 },
         { "cdimage", I18N_NOOP("Write a CD image to a CD-R(W)"), 0 },
+        { "dvdimage", I18N_NOOP("Write a DVD ISO9660 image to a DVD±R(W)"), 0 },
+        { "image", I18N_NOOP("Write a CD or DVD image to a CD-R(W) or DVD±R(W) depending on the size"), 0 },
 	{ "erasecd", I18N_NOOP("Erase a CDRW"), 0 },
 	{ "formatdvd", I18N_NOOP("Format a DVD-RW or DVD+RW"), 0 },
 	{ "lang <language>", I18N_NOOP("Set the GUI language"), 0 },

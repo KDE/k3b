@@ -53,7 +53,7 @@ K3bSplash::K3bSplash( QWidget* parent, const char* name )
     picLabel->setPixmap( theme->pixmap( "k3b_splash" ) );
 
   m_infoBox = new QLabel( this );
-  m_infoBox->setMargin( 2 );
+  m_infoBox->setMargin( 5 );
   m_infoBox->setPaletteBackgroundColor( black );
   m_infoBox->setPaletteForegroundColor( white );
 
