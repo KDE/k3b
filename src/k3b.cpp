@@ -761,9 +761,15 @@ void K3bApp::slotFileBurn()
 
 void K3bApp::init()
 {
+  emit initializationInfo( i18n("Reading Options...") );
+
   readOptions();
 
+  emit initializationInfo( i18n("Searching for external programs...") );
+
   searchExternalProgs();
+
+  emit initializationInfo( i18n("Scanning for cd devices...") );
 
   m_deviceManager = new K3bDeviceManager( this );
 
@@ -777,7 +783,11 @@ void K3bApp::init()
 			
   m_deviceManager->printDevices();
 
+  emit initializationInfo( i18n("Initializing cd view...") );
+
   m_dirView->setupFinalize( m_deviceManager );
+
+  emit initializationInfo( i18n("Ready") );
 }
 
 

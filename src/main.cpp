@@ -19,8 +19,10 @@
 #include <kaboutdata.h>
 #include <klocale.h>
 
+#include <qtimer.h>
+
 #include "k3b.h"
-//#include "k3bsplash.h"
+#include "k3bsplash.h"
 
 
 static const char *description = 
@@ -57,11 +59,15 @@ int main(int argc, char *argv[])
       K3bApp *k3bMainWidget = new K3bApp();
       app.setMainWidget( k3bMainWidget );
 
+      K3bSplash* splash = new K3bSplash( k3bMainWidget );
+      splash->connect( k3bMainWidget, SIGNAL(initializationInfo(const QString&)), SLOT(addInfo(const QString&)) );
+      splash->show();
+
       k3bMainWidget->init();
       k3bMainWidget->show();
 
-//       K3bSplash* splash = new K3bSplash( k3bMainWidget );
-//       splash->show();
+      // kill the splash after 10 seconds
+      QTimer::singleShot( 10000, splash, SLOT(close()) );
 
       KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 		

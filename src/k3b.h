@@ -71,7 +71,7 @@ class K3bApp : public KDockMainWindow
 {
   Q_OBJECT
 
-    public:
+ public:
   /** construtor of K3bApp, calls all init functions to create the application.
    * @see initMenuBar initToolBar
    */
@@ -97,6 +97,9 @@ class K3bApp : public KDockMainWindow
   void showOptionDialog( int = 0 );
   bool useID3TagForMp3Renaming() const { return m_useID3TagForMp3Renaming; }
   void setUseID3TagForMp3Renaming( bool b ) { m_useID3TagForMp3Renaming = b; }
+
+ signals:
+  void initializationInfo( const QString& );
 
  public slots:
   /** No descriptions */

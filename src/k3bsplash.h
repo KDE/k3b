@@ -6,6 +6,7 @@
 
 class QListBox;
 class QMouseEvent;
+class QPaintEvent;
 class QString;
 
 
@@ -22,6 +23,7 @@ Q_OBJECT
 
  protected:
   void mousePressEvent( QMouseEvent* );
+  void paintEvent( QPaintEvent* );
 
  private:
   QListBox* m_infoBox;

@@ -34,6 +34,7 @@
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qiconset.h>
+#include <qvaluelist.h>
 
 // KDE-includes
 #include <kmimetype.h>
@@ -79,6 +80,13 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
   m_cdView->hide();
   m_initialized = false;
   connect( m_kiotree, SIGNAL(urlActivated(const KURL&)), this, SLOT(slotDirActivated(const KURL&)) );
+
+  // split in the middle
+  QValueList<int> sizes = m_mainSplitter->sizes();
+  int all = sizes[0] + sizes[1];
+  sizes[0] = all/2 + (all%2);
+  sizes[1] = all/2;
+  m_mainSplitter->setSizes( sizes );
 }
 
 K3bDirView::~K3bDirView()
