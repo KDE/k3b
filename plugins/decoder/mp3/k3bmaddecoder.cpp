@@ -107,18 +107,13 @@ QString K3bMadDecoder::metaInfo( MetaDataField f )
   switch( f ) {
   case META_TITLE:
     return TStringToQString( file.tag()->title() );
-    break;
   case META_ARTIST:
     return TStringToQString( file.tag()->artist() );
-    break;
   case META_COMMENT:
     return TStringToQString( file.tag()->comment() );
-    break;
   default:
-    break;
+    return QString::null;
   }
-
-  return QString::null;
 
 #else
   return K3bAudioDecoder::metaInfo( f );

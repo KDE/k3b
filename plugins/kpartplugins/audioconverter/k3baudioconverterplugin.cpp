@@ -215,7 +215,7 @@ void K3bAudioConverterPluginDialog::slotStartClicked()
     if( encoder )
       type = d->extensionMap[m_w->comboFormat->currentItem()];
 
-    K3bJobProgressDialog* dlg = new K3bJobProgressDialog( this );
+    K3bJobProgressDialog* dlg = new K3bJobProgressDialog( parentWidget() );
     K3bAudioConverterJob* job = new K3bAudioConverterJob( m_w->viewFiles, encoder, type, m_w->editDir->url(), dlg );
 
     hide();

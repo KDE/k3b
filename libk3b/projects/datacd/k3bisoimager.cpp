@@ -678,6 +678,7 @@ int K3bIsoImager::writePathSpec()
     int num = writePathSpecForDir( m_doc->root(), *t );
 
     m_pathSpecFile->close();
+
     return num;
   }
   else

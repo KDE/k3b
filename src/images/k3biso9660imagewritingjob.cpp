@@ -278,19 +278,19 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
   delete m_writer;
 
   if( mediaType == K3bDevice::MEDIA_CD_R || mediaType == K3bDevice::MEDIA_CD_RW ) {
-    int usedWriteMode = m_writingMode;
-    if( usedWriteMode == K3b::WRITING_MODE_AUTO ) {
+    int usedWritingMode = m_writingMode;
+    if( usedWritingMode == K3b::WRITING_MODE_AUTO ) {
       // cdrecord seems to have problems when writing in mode2 in dao mode
       // so with cdrecord we use TAO
       if( m_noFix || m_dataMode == K3b::MODE2 || !m_device->dao() )
-	usedWriteMode = K3b::TAO;
+	usedWritingMode = K3b::TAO;
       else
-	usedWriteMode = K3b::DAO;
+	usedWritingMode = K3b::DAO;
     }
 
     int usedApp = writingApp();
     if( usedApp == K3b::DEFAULT ) {
-      if( usedWriteMode == K3b::DAO &&
+      if( usedWritingMode == K3b::DAO &&
 	  ( m_dataMode == K3b::MODE2 || m_noFix ) )
 	usedApp = K3b::CDRDAO;
       else
@@ -301,7 +301,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
     if( usedApp == K3b::CDRECORD ) {
       K3bCdrecordWriter* writer = new K3bCdrecordWriter( m_device, this );
 
-      writer->setWritingMode( usedWriteMode );
+      writer->setWritingMode( usedWritingMode );
       writer->setSimulate( m_simulate );
       writer->setBurnSpeed( m_speed );
 

@@ -32,6 +32,8 @@ class K3bMovixBin : public K3bExternalBin
   const QStringList& movixFiles() const { return m_movixFiles; }
   const QStringList& isolinuxFiles() const { return m_isolinuxFiles; }
 
+  // TODO: add 0.9.0 codecs, backgrounds, remotes, and keyboard-i18n
+
   /** returnes empty string if font was not found */
   QString subtitleFontDir( const QString& font ) const;
   /** returnes empty string if lang was not found */

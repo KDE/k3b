@@ -26,24 +26,28 @@
 QString K3bDevice::deviceTypeString( int t )
 {
   QStringList s;
-  if( t & K3bDevice::CDR )
+  if( t & K3bDevice::DEVICE_CD_R )
     s += i18n("CD-R");
-  if( t & K3bDevice::CDRW )
+  if( t & K3bDevice::DEVICE_CD_RW )
     s += i18n("CD-RW");
-  if( t & K3bDevice::CDROM )
+  if( t & K3bDevice::DEVICE_CD_ROM )
     s += i18n("CD-ROM");
-  if( t & K3bDevice::DVD )
+  if( t & K3bDevice::DEVICE_DVD_ROM )
     s += i18n("DVD-ROM");
-  if( t & K3bDevice::DVDRAM )
+  if( t & K3bDevice::DEVICE_DVD_RAM )
     s += i18n("DVD-RAM");
-  if( t & K3bDevice::DVDR )
+  if( t & K3bDevice::DEVICE_DVD_R )
     s += i18n("DVD-R");
-  if( t & K3bDevice::DVDRW )
+  if( t & K3bDevice::DEVICE_DVD_RW )
     s += i18n("DVD-RW");
-  if( t & K3bDevice::DVDPR )
+  if( t & K3bDevice::DEVICE_DVD_R_DL )
+    s += i18n("DVD-R DL");
+  if( t & K3bDevice::DEVICE_DVD_PLUS_R )
     s += i18n("DVD+R");
-  if( t & K3bDevice::DVDPRW )
+  if( t & K3bDevice::DEVICE_DVD_PLUS_RW )
     s += i18n("DVD+RW");
+  if( t & K3bDevice::DEVICE_DVD_PLUS_R_DL )
+    s += i18n("DVD+R DL");
 
   if( s.isEmpty() )
     return i18n("Error");
@@ -55,24 +59,28 @@ QString K3bDevice::deviceTypeString( int t )
 QString K3bDevice::writingModeString( int m )
 {
   QStringList s;
-  if( m & K3bDevice::SAO )
+  if( m & K3bDevice::WRITINGMODE_SAO )
     s += i18n("SAO");
-  if( m & K3bDevice::TAO )
+  if( m & K3bDevice::WRITINGMODE_TAO )
     s += i18n("TAO");
-  if( m & K3bDevice::RAW )
+  if( m & K3bDevice::WRITINGMODE_RAW )
     s += i18n("RAW");
-  if( m & K3bDevice::PACKET )
-    s += i18n("PACKET");
-  if( m & K3bDevice::SAO_R96P )
+  if( m & K3bDevice::WRITINGMODE_SAO_R96P )
     s += i18n("SAO/R96P");
-  if( m & K3bDevice::SAO_R96R )
+  if( m & K3bDevice::WRITINGMODE_SAO_R96R )
     s += i18n("SAO/R96R");
-  if( m & K3bDevice::RAW_R16 )
-    s += i18n("SAO/R16");
-  if( m & K3bDevice::RAW_R96P )
+  if( m & K3bDevice::WRITINGMODE_RAW_R16 )
+    s += i18n("RAW/R16");
+  if( m & K3bDevice::WRITINGMODE_RAW_R96P )
     s += i18n("RAW/R96P");
-  if( m & K3bDevice::RAW_R96R )
+  if( m & K3bDevice::WRITINGMODE_RAW_R96R )
     s += i18n("RAW/R96R");
+  if( m & K3bDevice::WRITINGMODE_INCR_SEQ )
+    s += i18n("Incremental Sequential");
+  if( m & K3bDevice::WRITINGMODE_RES_OVWR )
+    s += i18n("Restricted Overwrite");
+  if( m & K3bDevice::WRITINGMODE_LAYER_JUMP )
+    s += i18n("Layer Jump");
 
   if( s.isEmpty() )
     return i18n("None");

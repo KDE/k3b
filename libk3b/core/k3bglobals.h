@@ -20,6 +20,7 @@
 #include <qstring.h>
 #include <kio/global.h>
 #include <kurl.h>
+#include <k3bdevicetypes.h>
 
 class KConfig;
 class K3bVersion;
@@ -59,15 +60,15 @@ namespace K3b
    * DAO   - Disk at once (or session at once)
    * RAW   - Raw mode
    *
-   * may be or'ed together.
+   * may be or'ed together (except for WRITING_MODE_AUTO of course)
    */
   enum WritingMode { 
-    WRITING_MODE_AUTO = 1, 
-    TAO = 2, 
-    DAO = 4, 
-    RAW = 8,
-    WRITING_MODE_INCR_SEQ = 16,  // Incremental Sequential
-    WRITING_MODE_RES_OVWR = 32 // Restricted Overwrite
+    WRITING_MODE_AUTO = 0, 
+    TAO = K3bDevice::WRITINGMODE_TAO, 
+    DAO = K3bDevice::WRITINGMODE_SAO, 
+    RAW = K3bDevice::WRITINGMODE_RAW,
+    WRITING_MODE_INCR_SEQ = K3bDevice::WRITINGMODE_INCR_SEQ,  // Incremental Sequential
+    WRITING_MODE_RES_OVWR = K3bDevice::WRITINGMODE_RES_OVWR // Restricted Overwrite
   };
 
   QString writingModeString( int );
@@ -136,11 +137,6 @@ namespace K3b
   K3bVersion simpleKernelVersion();
 
   QString systemName();
-
-  /**
-   * This gets introduced in QT 3.2 but we already need it now
-   */
-  unsigned long long toULongLong( const QString&, bool* ok = 0, int base = 10 );
 
   KIO::filesize_t filesize( const KURL& );
 

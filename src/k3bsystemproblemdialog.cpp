@@ -86,9 +86,9 @@ K3bSystemProblemDialog::K3bSystemProblemDialog( const QValueList<K3bSystemProble
 
   if( K3bTheme* theme = k3bthememanager->currentTheme() ) {
     pixmapLabelLeft->setPaletteBackgroundColor( theme->backgroundColor() );
-    pixmapLabelLeft->setPixmap( theme->pixmap( "diskinfo_left" ) );
+    pixmapLabelLeft->setPixmap( theme->pixmap( K3bTheme::MEDIA_LEFT ) );
     pixmapLabelRight->setPaletteBackgroundColor( theme->backgroundColor() );
-    pixmapLabelRight->setPixmap( theme->pixmap( "diskinfo_right" ) );
+    pixmapLabelRight->setPixmap( theme->pixmap( K3bTheme::MEDIA_NONE ) );
     labelTitle->setPaletteBackgroundColor( theme->backgroundColor() );
     labelTitle->setPaletteForegroundColor( theme->foregroundColor() );
   }

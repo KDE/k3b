@@ -1,5 +1,22 @@
 
 picsdir = $(kde_datadir)/k3b/pics/crystal
-pics_DATA = k3b_splash.png k3b_cd_copy.png k3bprojectview_left.png k3bprojectview_left_short.png k3bprojectview_right.png k3b_probing_cd.png diskinfo_audio.png diskinfo_data.png diskinfo_dvd.png diskinfo_empty.png diskinfo_left.png diskinfo_mixed.png k3b_progress_dialog_failed.png k3b_progress_dialog_success.png diskinfo_right.png k3b_3d_logo.png k3bsetup2_guy.png k3b.theme
+
+pics_DATA = 	splash.png \
+		project_left.png \
+		project_right.png \
+		probing.png \
+		media_audio.png \
+		media_data.png \
+		media_video.png \
+		media_empty.png \
+		media_left.png \
+		media_mixed.png \
+		media_none.png \
+		progress_working.png \
+		progress_fail.png \
+		progress_success.png \
+		progress_right.png \
+		welcome_bg.png \
+		k3b.theme
 
 EXTRA_DIST = $(pics_DATA)

@@ -26,8 +26,8 @@
 #include <k3bcddb.h>
 #include <k3bcddbresult.h>
 #include <k3bcddbquery.h>
-#include <k3bprojectmanager.h>
 #include <k3bprogressdialog.h>
+#include <k3bpluginfactory.h>
 
 #include <kdebug.h>
 #include <kaction.h>
@@ -35,24 +35,21 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kconfig.h>
-#include <kgenericfactory.h>
-#include <kapplication.h>
 
 #include <qstring.h>
 
 
+K_EXPORT_COMPONENT_FACTORY( libk3baudioprojectcddbplugin, K3bPluginFactory<K3bAudioProjectCddbPlugin>( "libk3baudioprojectcddbplugin" ) )
+
+
 K3bAudioProjectCddbPlugin::K3bAudioProjectCddbPlugin( QObject* parent, 
-						      const char* name,
-						      const QStringList& )
-  : KParts::Plugin( parent, name ),
+						      const char* name )
+  : K3bProjectPlugin( AUDIO_CD, false, parent, name ),
     m_cddb(0),
     m_progress(0)
 {
-  KAction* a = new KAction( i18n("&Query Cddb for Audio Project"),
-			    0, 0,
-			    this, SLOT(slotQuery()),
-			    actionCollection(), "audio_project_cddb_plugin" );
-  a->setToolTip( i18n("Query a cddb entry for the current audio project.") );
+  setText( i18n("Query Cddb") );
+  setToolTip( i18n("Query a cddb entry for the current audio project.") );
 }
 
 
@@ -62,12 +59,13 @@ K3bAudioProjectCddbPlugin::~K3bAudioProjectCddbPlugin()
 }
 
 
-void K3bAudioProjectCddbPlugin::slotQuery()
+void K3bAudioProjectCddbPlugin::activate( K3bDoc* doc, QWidget* parent )
 {
-  m_doc = dynamic_cast<K3bAudioDoc*>( K3bProjectManager::instance()->activeDoc() );
+  m_doc = dynamic_cast<K3bAudioDoc*>( doc );
+  m_parentWidget = parent;
 
-  if( !m_doc ) {
-    KMessageBox::sorry( 0, i18n("Please select an audio project for a cddb query.") );
+  if( !m_doc || m_doc->numOfTracks() == 0 ) {
+    KMessageBox::sorry( parent, i18n("Please select a non-empty audio project for a cddb query.") );
   }
   else {
     if( !m_cddb ) {
@@ -76,7 +74,7 @@ void K3bAudioProjectCddbPlugin::slotQuery()
 	       this, SLOT(slotCddbQueryFinished(int)) );
     }
     if( !m_progress )
-      m_progress = new K3bProgressDialog( i18n("Query Cddb"), kapp->mainWidget(), i18n("Audio Project") );
+      m_progress = new K3bProgressDialog( i18n("Query Cddb"), parent, i18n("Audio Project") );
 
     // read the k3b config :)
     KConfig* c = k3bcore->config();
@@ -119,14 +117,17 @@ void K3bAudioProjectCddbPlugin::slotCddbQueryFinished( int error )
     }
   }
   else if( error == K3bCddbQuery::NO_ENTRY_FOUND ) {
-    KMessageBox::information( kapp->mainWidget(), i18n("No CDDB entry found."), i18n("CDDB") );
+    KMessageBox::information( m_parentWidget, i18n("No CDDB entry found."), i18n("CDDB") );
   }
   else {
-    KMessageBox::information( kapp->mainWidget(), m_cddb->errorString(), i18n("Cddb error") );
+    KMessageBox::information( m_parentWidget, m_cddb->errorString(), i18n("Cddb error") );
   }
+
+  // make sure the progress dialog does not get deleted by it's parent
+  delete m_progress;
+  m_doc = 0;
+  m_parentWidget = 0;
+  m_progress = 0;
 }
-
-
-K_EXPORT_COMPONENT_FACTORY( libk3baudioprojectcddbplugin, KGenericFactory<K3bAudioProjectCddbPlugin> )
 
 #include "k3baudioprojectcddbplugin.moc"

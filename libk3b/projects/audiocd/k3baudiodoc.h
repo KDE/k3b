@@ -98,6 +98,10 @@ class K3bAudioDoc : public K3bDoc
    */
   K3bDevice::CdText cdTextData() const;
 
+  int audioRippingParanoiaMode() const { return m_audioRippingParanoiaMode; }
+  int audioRippingRetries() const { return m_audioRippingRetries; }
+  bool audioRippingIgnoreReadErrors() const { return m_audioRippingIgnoreReadErrors; }
+
   /**
    * Represent the structure of the doc as CD Table of Contents.
    */
@@ -140,6 +144,11 @@ class K3bAudioDoc : public K3bDoc
   void setComposer( const QString& v ) { m_cdTextData.setComposer( v ); }
   void setUpc_ean( const QString& v ) { m_cdTextData.setUpcEan( v ); }
   void setCdTextMessage( const QString& v ) { m_cdTextData.setMessage( v ); }
+
+  // Audio-CD Ripping
+  void setAudioRippingParanoiaMode( int i ) { m_audioRippingParanoiaMode = i; }
+  void setAudioRippingRetries( int r ) { m_audioRippingRetries = r; }
+  void setAudioRippingIgnoreReadErrors( bool b ) { m_audioRippingIgnoreReadErrors = b; }
 
   void removeCorruptTracks();
 
@@ -211,6 +220,11 @@ class K3bAudioDoc : public K3bDoc
   K3bDevice::CdText m_cdTextData;
   bool m_cdText;
   // --------------------------------------------------
+
+  // Audio ripping
+  int m_audioRippingParanoiaMode;
+  int m_audioRippingRetries;
+  bool m_audioRippingIgnoreReadErrors;
 
   //
   // decoder housekeeping

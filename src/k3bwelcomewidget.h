@@ -88,13 +88,18 @@ class K3bWelcomeWidget::Display : public QWidget
   void dropped( const KURL::List& );
 
  protected:
+  void resizeEvent( QResizeEvent* );
   void paintEvent( QPaintEvent* );
   void dropEvent( QDropEvent* event );
   void dragEnterEvent( QDragEnterEvent* event );
 
  private:
+  void repositionButtons();
+
   QSimpleRichText* m_header;
   QSize m_size;
+  QSize m_buttonSize;
+  int m_cols;
 
   QPtrList<KAction> m_actions;
   QPtrList<QToolButton> m_buttons;

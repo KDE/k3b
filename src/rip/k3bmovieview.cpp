@@ -23,6 +23,7 @@
 #include <kcutlabel.h>
 #include <k3btoolbox.h>
 #include <k3bstdguiitems.h>
+#include <k3bthememanager.h>
 
 #include <qstring.h>
 #include <qlayout.h>
@@ -72,7 +73,7 @@ K3bMovieView::~K3bMovieView()
 void K3bMovieView::setupGUI()
 {
   setTitle( i18n("Video DVD") );
-  setRightPixmap( "diskinfo_dvd" );
+  setRightPixmap( K3bTheme::MEDIA_VIDEO );
 
   QVBoxLayout* layout = new QVBoxLayout( mainWidget() );
   layout->setSpacing(0);

@@ -13,6 +13,9 @@ libk3b_la_LDFLAGS = $(all_libraries) -version-info 1:0:0 -no-undefined
 
 SUBDIRS = core plugin tools projects cddb
 
+#pkgconfigdir = $(libdir)/pkgconfig
+#pkgconfig_DATA = libk3b.pc
+
 messages: rc.cpp
 	$(EXTRACTRC) `find . -name "*.rc" -o -name "*.ui"` > rc.cpp
 	$(XGETTEXT) `find -name "*.cpp" -o -name "*.h"` -o $(podir)/libk3b.pot

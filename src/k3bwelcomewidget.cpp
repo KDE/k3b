@@ -112,7 +112,8 @@ void K3bWelcomeWidget::Display::rebuildGui()
   if( numActions > 0 ) {
     // step 2: calculate rows and columns
     // for now we simply create 1-3 rows and as may cols as neccessary
-    int cols = 0, rows = 0;
+    m_cols = 0;
+    int rows = 0;
     if( numActions < 3 )
       rows = 1;
     else if( numActions > 6 )
@@ -120,9 +121,9 @@ void K3bWelcomeWidget::Display::rebuildGui()
     else
       rows = 2;
 
-    cols = numActions/rows;
+    m_cols = numActions/rows;
     if( numActions%rows )
-      cols++;
+      m_cols++;
 
     // step 3: create buttons
     for( QPtrListIterator<KAction> it( m_actions ); it.current(); ++it ) {
@@ -146,33 +147,48 @@ void K3bWelcomeWidget::Display::rebuildGui()
     // step 4: calculate button size
     // determine the needed button size (since all buttons should be equal in size
     // we use the max of all sizes)
-    QSize buttonSize = m_buttons.first()->sizeHint();
+    m_buttonSize = m_buttons.first()->sizeHint();
     for( QPtrListIterator<QToolButton> it( m_buttons ); it.current(); ++it ) {
-      buttonSize = buttonSize.expandedTo( it.current()->sizeHint() );
+      m_buttonSize = m_buttonSize.expandedTo( it.current()->sizeHint() );
     }
 
     // step 5: position buttons
     // starting rect
-    int row = 0;
-    int col = 0;
-    for( QPtrListIterator<QToolButton> it( m_buttons ); it.current(); ++it ) {
-      QToolButton* b = it.current();
-
-      b->setGeometry( QRect( QPoint( 80+(col*buttonSize.width()), 80+(row*buttonSize.height()) ), 
-			     buttonSize ) );
-      b->show();
-
-      col++;
-      if( col == cols ) {
-	col = 0;
-	row++;
-      }
-    }
+    repositionButtons();
 
     // step 6: calculate widget size
-    m_size = QSize( QMAX(40+m_header->widthUsed(), 80+(buttonSize.width()*cols)),
-		    80+(buttonSize.height()*rows) );
+    m_size = QSize( QMAX(40+m_header->widthUsed(), 160+(m_buttonSize.width()*m_cols)),
+		    160+(m_buttonSize.height()*rows) );
   }
+}
+
+
+void K3bWelcomeWidget::Display::repositionButtons()
+{
+  int leftMargin = QMAX( 80, (width() - (m_buttonSize.width()*m_cols))/2 );
+
+  int row = 0;
+  int col = 0;
+  for( QPtrListIterator<QToolButton> it( m_buttons ); it.current(); ++it ) {
+    QToolButton* b = it.current();
+    
+    b->setGeometry( QRect( QPoint( leftMargin+(col*m_buttonSize.width()), 80+(row*m_buttonSize.height()) ), 
+			   m_buttonSize ) );
+    b->show();
+    
+    col++;
+    if( col == m_cols ) {
+      col = 0;
+      row++;
+    }
+  }
+}
+
+
+void K3bWelcomeWidget::Display::resizeEvent( QResizeEvent* e )
+{
+  QWidget::resizeEvent(e);
+  repositionButtons();
 }
 
 
@@ -323,7 +339,7 @@ void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
 void K3bWelcomeWidget::slotThemeChanged()
 {
   if( K3bTheme* theme = k3bthememanager->currentTheme() ) {
-    main->setPaletteBackgroundPixmap( theme->pixmap( "k3b_3d_logo" ) );
+    main->setPaletteBackgroundPixmap( theme->pixmap( K3bTheme::WELCOME_BG ) );
     main->setHeaderBackgroundColor( theme->backgroundColor() );
     main->setHeaderForegroundColor( theme->foregroundColor() );
   }

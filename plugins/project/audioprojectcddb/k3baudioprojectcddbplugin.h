@@ -17,22 +17,24 @@
 #define _K3B_AUDIO_PROJECT_CDDB_PLUGIN_H_
 
 
-#include <kparts/plugin.h>
+#include <k3bprojectplugin.h>
 
 class K3bCddb;
 class K3bAudioDoc;
 class K3bProgressDialog;
+class QWidget;
 
-class K3bAudioProjectCddbPlugin : public KParts::Plugin
+class K3bAudioProjectCddbPlugin : public K3bProjectPlugin
 {
   Q_OBJECT
 
  public:
-  K3bAudioProjectCddbPlugin( QObject* parent, const char* name, const QStringList& );
-  virtual ~K3bAudioProjectCddbPlugin();
+  K3bAudioProjectCddbPlugin( QObject* parent, const char* name );
+  ~K3bAudioProjectCddbPlugin();
 
- public slots:
-  void slotQuery();
+  int pluginSystemVersion() const { return 3; }
+
+  void activate( K3bDoc* doc, QWidget* parent );
 
  private slots:
   void slotCddbQueryFinished( int result );
@@ -41,6 +43,7 @@ class K3bAudioProjectCddbPlugin : public KParts::Plugin
   K3bCddb* m_cddb;
   K3bAudioDoc* m_doc;
   K3bProgressDialog* m_progress;
+  QWidget* m_parentWidget;
 };
 
 

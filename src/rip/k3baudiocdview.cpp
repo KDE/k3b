@@ -133,8 +133,8 @@ K3bAudioCdView::K3bAudioCdView( QWidget* parent, const char *name )
   initActions();
   slotTrackSelectionChanged(0);
 
-  setLeftPixmap( "diskinfo_left" );
-  setRightPixmap( "diskinfo_audio" );
+  setLeftPixmap( K3bTheme::MEDIA_LEFT );
+  setRightPixmap( K3bTheme::MEDIA_AUDIO );
 }
 
 

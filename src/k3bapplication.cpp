@@ -50,8 +50,7 @@
 #include <qtimer.h>
 
 
-K3bApplication* K3bApplication::s_k3bApp = 0;
-
+K3bApplication::Core* K3bApplication::Core::s_k3bAppCore = 0;
 
 
 K3bApplication::K3bApplication()
@@ -66,18 +65,12 @@ K3bApplication::K3bApplication()
 
   m_core = new Core( this );
 
-  m_songManager = K3bSongManager::instance();  // this is bad stuff!!!
-
+  // TODO: move to K3bCore?
   // from this point on available through K3bAudioServer::instance()
   m_audioServer = new K3bAudioServer( this, "K3bAudioServer" );
 
   connect( m_core, SIGNAL(initializationInfo(const QString&)),
 	   SIGNAL(initializationInfo(const QString&)) );
-  s_k3bApp = this;
-
-  K3bThemeManager* themeManager = new K3bThemeManager( this );
-  themeManager->loadThemes();
-  themeManager->readConfig( config() );
 
   connect( this, SIGNAL(shutDown()), SLOT(slotShutDown()) );
 }
@@ -86,7 +79,6 @@ K3bApplication::K3bApplication()
 K3bApplication::~K3bApplication()
 {
   // we must not delete m_mainWindow here, QApplication takes care of it
-  delete m_songManager;  // this is bad stuff!!!
 }
 
 
@@ -334,22 +326,33 @@ bool K3bApplication::processCmdLineArgs()
 
 void K3bApplication::slotShutDown()
 {
-  songManager()->save();
-
   K3bThread::waitUntilFinished();
-
-  k3bthememanager->saveConfig( config() );
 }
+
 
 
 K3bApplication::Core::Core( QObject* parent )
   : K3bCore( parent )
 {
+  s_k3bAppCore = this;
+
+  // FIXME: this is bad stuff!!! Make this a normal instance and
+  //        only use it in the application
+  m_songManager = K3bSongManager::instance();
+
+  m_themeManager = new K3bThemeManager( this );
 }
 
 
 K3bApplication::Core::~Core()
 {
+  delete m_songManager;  // this is bad stuff!!!
+}
+
+
+KConfig* K3bApplication::Core::config() const
+{
+  return kapp->config();
 }
 
 
@@ -357,6 +360,9 @@ void K3bApplication::Core::init()
 {
   emit initializationInfo( i18n("Loading all plugins...") );
   pluginManager()->loadAll();
+
+  emit initializationInfo( i18n("Loading all themes...") );
+  m_themeManager->loadThemes();
 
   emit initializationInfo( i18n("Searching for external programs...") );
 
@@ -373,9 +379,41 @@ void K3bApplication::Core::init()
 
   emit initializationInfo( i18n("Scanning for CD devices...") );
 
-  if( !deviceManager()->scanbus() )
+  if( !deviceManager()->scanBus() )
     kdDebug() << "No Devices found!" << endl;
 }
 
+
+void K3bApplication::Core::readSettings( KConfig* cnf )
+{
+  K3bCore::readSettings( cnf );
+
+  KConfig* c = cnf;
+  if( !c )
+    c = config();
+
+  QString oldGrp = c->group();
+
+  m_themeManager->readConfig( config() );
+
+  c->setGroup( oldGrp );
+}
+
+
+void K3bApplication::Core::saveSettings( KConfig* cnf )
+{
+  K3bCore::saveSettings( cnf );
+
+  KConfig* c = cnf;
+  if( !c )
+    c = config();
+
+  QString oldGrp = c->group();
+
+  m_themeManager->saveConfig( config() );
+  m_songManager->save();
+
+  c->setGroup( oldGrp );
+}
 
 #include "k3bapplication.moc"

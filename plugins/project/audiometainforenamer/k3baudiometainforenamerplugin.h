@@ -17,10 +17,8 @@
 #define _K3B_AUDIO_METAINFO_RENAMER_PLUGIN_H_
 
 
-#include <kparts/plugin.h>
-#include <klibloader.h>
-
-#include <k3binteractiondialog.h>
+#include <k3bprojectplugin.h>
+#include <qwidget.h>
 
 
 class K3bDataDoc;
@@ -29,22 +27,27 @@ class K3bFileItem;
 class QListViewItem;
 
 
-class K3bAudioMetainfoRenamerPluginDialog : public K3bInteractionDialog
+class K3bAudioMetainfoRenamerPluginWidget : public QWidget, public K3bProjectPluginGUIBase
 {
   Q_OBJECT
 
  public:
-  K3bAudioMetainfoRenamerPluginDialog( K3bDataDoc* doc, QWidget* parent = 0, const char* name = 0 );
-  ~K3bAudioMetainfoRenamerPluginDialog();
+  K3bAudioMetainfoRenamerPluginWidget( K3bDoc* doc, QWidget* parent = 0, const char* name = 0 );
+  ~K3bAudioMetainfoRenamerPluginWidget();
 
- protected slots:
-  void slotStartClicked();
-  void slotSaveClicked();
+  QString title() const;
+  QString subTitle() const;
+
+  void loadDefaults();
+  void readSettings( KConfig* );
+  void saveSettings( KConfig* );
+
+  void activate();
+
+ private slots:
+  void slotScanClicked();
 
  private:
-  void loadK3bDefaults();
-  void loadUserDefaults( KConfig* );
-  void saveUserDefaults( KConfig* );
   void scanDir( K3bDirItem*, QListViewItem* parent );
   QString createNewName( K3bFileItem* );
   bool find( K3bDirItem*, const QString& );
@@ -54,16 +57,17 @@ class K3bAudioMetainfoRenamerPluginDialog : public K3bInteractionDialog
 };
 
 
-class K3bAudioMetainfoRenamerPlugin : public KParts::Plugin
+class K3bAudioMetainfoRenamerPlugin : public K3bProjectPlugin
 {
   Q_OBJECT
 
  public:
-  K3bAudioMetainfoRenamerPlugin( QObject* parent, const char* name, const QStringList& );
-  virtual ~K3bAudioMetainfoRenamerPlugin();
+  K3bAudioMetainfoRenamerPlugin( QObject* parent, const char* name );
+  ~K3bAudioMetainfoRenamerPlugin();
 
- public slots:
-  void slotDoRename();
+  int pluginSystemVersion() const { return 3; }
+
+  K3bProjectPluginGUIBase* createGUI( K3bDoc*, QWidget* = 0, const char* = 0 );
 };
 
 

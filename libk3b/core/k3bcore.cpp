@@ -36,8 +36,6 @@
 #include <qptrlist.h>
 
 
-#define LIBK3B_VERSION "0.11.98"
-
 
 class K3bCore::Private {
 public:
@@ -90,7 +88,6 @@ K3bCore::K3bCore( QObject* parent, const char* name )
 K3bCore::~K3bCore()
 {
   delete d->globalSettings;
-  delete d->pluginManager;
   delete d;
 }
 
@@ -128,6 +125,8 @@ const K3bVersion& K3bCore::version() const
 KConfig* K3bCore::config() const
 {
   if( !d->config ) {
+    kdDebug() << "(K3bCore) opening k3b config file." << endl;
+    kdDebug() << "(K3bCore) while I am a " << className() << endl;
     d->deleteConfig = true;
     d->config = new KConfig( "k3brc" );
   }
@@ -143,7 +142,7 @@ void K3bCore::init()
   d->pluginManager->loadAll();
 
   d->externalBinManager->search();
-  if( !d->deviceManager->scanbus() )
+  if( !d->deviceManager->scanBus() )
     kdDebug() << "No Devices found!" << endl;
 }
 

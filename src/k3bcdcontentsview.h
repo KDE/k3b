@@ -18,7 +18,7 @@
 #define K3BCD_CONTENTS_VIEW_H
 
 #include <qwidget.h>
-
+#include <k3bthememanager.h>
 
 class QLabel;
 
@@ -42,8 +42,8 @@ class K3bCdContentsView : public QWidget
   QWidget* mainWidget();
   void setMainWidget( QWidget* );
   void setTitle( const QString& );
-  void setLeftPixmap( const QString& );
-  void setRightPixmap( const QString& );
+  void setLeftPixmap( K3bTheme::PixmapType );
+  void setRightPixmap( K3bTheme::PixmapType );
 
  private slots:
   void slotThemeChanged();
@@ -53,8 +53,8 @@ class K3bCdContentsView : public QWidget
   QLabel* m_labelTitle;
   QLabel* m_pixmapLabelLeft;
   QLabel* m_pixmapLabelRight;
-  QString m_leftPixName;
-  QString m_rightPixName;
+  K3bTheme::PixmapType m_leftPixmap;
+  K3bTheme::PixmapType m_rightPixmap;
 };
 
 #endif

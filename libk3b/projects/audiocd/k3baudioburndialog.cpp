@@ -17,6 +17,8 @@
 #include "k3baudioburndialog.h"
 #include "k3baudioview.h"
 #include "k3baudiotrackplayer.h"
+#include "k3baudiotrack.h"
+#include "k3baudiocdtracksource.h"
 #include <k3bcore.h>
 #include "k3baudiodoc.h"
 #include <k3bdevice.h>
@@ -44,6 +46,8 @@
 #include <qptrlist.h>
 #include <qstringlist.h>
 #include <qpoint.h>
+#include <qhbox.h>
+#include <qspinbox.h>
 
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -69,6 +73,7 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
   addPage( m_cdtextWidget, i18n("CD-Text") );
 
   // create advanced tab
+  // ----------------------------------------------------------
   QWidget* advancedTab = new QWidget( this );
   QGridLayout* advancedTabGrid = new QGridLayout( advancedTab );
   advancedTabGrid->setSpacing( spacingHint() );
@@ -80,9 +85,21 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
   QGroupBox* advancedGimmickGroup = new QGroupBox( 1, Qt::Vertical, i18n("Gimmicks"), advancedTab );
   m_checkHideFirstTrack = new QCheckBox( i18n( "Hide first track" ), advancedGimmickGroup, "m_checkHideFirstTrack" );
 
+  m_audioRippingGroup = new QGroupBox( 3, Qt::Vertical, i18n("Audio Ripping"), advancedTab );
+  QHBox* box = new QHBox( m_audioRippingGroup );
+  box->setSpacing( spacingHint() );
+  box->setStretchFactor(new QLabel( i18n("Paranoia mode:"), box ), 1 );
+  m_comboParanoiaMode = K3bStdGuiItems::paranoiaModeComboBox( box );
+  box = new QHBox( m_audioRippingGroup );
+  box->setSpacing( spacingHint() );
+  box->setStretchFactor( new QLabel( i18n("Read retries:"), box ), 1 );
+  m_spinAudioRippingReadRetries = new QSpinBox( 1, 128, 1, box );
+  m_checkAudioRippingIgnoreReadErrors = new QCheckBox( i18n("Ignore read errors"), m_audioRippingGroup );
+
   advancedTabGrid->addWidget( advancedSettingsGroup, 0, 0 );
   advancedTabGrid->addWidget( advancedGimmickGroup, 1, 0 );
-  advancedTabGrid->setRowStretch( 2, 1 );
+  advancedTabGrid->addWidget( m_audioRippingGroup, 2, 0 );
+  advancedTabGrid->setRowStretch( 3, 1 );
 
   addPage( advancedTab, i18n("Advanced") );
 
@@ -132,6 +149,11 @@ void K3bAudioBurnDialog::saveSettings()
   // -- save Cd-Text ------------------------------------------------
   m_cdtextWidget->save( m_doc );
 
+  // audio ripping
+  m_doc->setAudioRippingParanoiaMode( m_comboParanoiaMode->currentText().toInt() );
+  m_doc->setAudioRippingRetries( m_spinAudioRippingReadRetries->value() );
+  m_doc->setAudioRippingIgnoreReadErrors( m_checkAudioRippingIgnoreReadErrors->isChecked() );
+
   doc()->setTempDir( m_tempDirSelectionWidget->tempPath() );
 }
 
@@ -145,6 +167,11 @@ void K3bAudioBurnDialog::readSettings()
 
   // read CD-Text ------------------------------------------------------------
   m_cdtextWidget->load( m_doc );
+
+  // audio ripping
+  m_comboParanoiaMode->setCurrentItem( m_doc->audioRippingParanoiaMode() );
+  m_checkAudioRippingIgnoreReadErrors->setChecked( m_doc->audioRippingIgnoreReadErrors() );
+  m_spinAudioRippingReadRetries->setValue( m_doc->audioRippingRetries() );
 
   if( !doc()->tempDir().isEmpty() )
     m_tempDirSelectionWidget->setTempPath( doc()->tempDir() );
@@ -161,6 +188,10 @@ void K3bAudioBurnDialog::loadK3bDefaults()
   m_checkHideFirstTrack->setChecked( false );
   m_checkNormalize->setChecked(false);
 
+  m_comboParanoiaMode->setCurrentItem( 0 );
+  m_checkAudioRippingIgnoreReadErrors->setChecked( false );
+  m_spinAudioRippingReadRetries->setValue( 128 );
+
   toggleAllOptions();
 }
 
@@ -173,6 +204,10 @@ void K3bAudioBurnDialog::loadUserDefaults( KConfig* c )
   m_checkHideFirstTrack->setChecked( c->readBoolEntry( "hide_first_track", false ) );
   m_checkNormalize->setChecked( c->readBoolEntry( "normalize", false ) );
 
+  m_comboParanoiaMode->setCurrentItem( c->readNumEntry( "paranoia mode", 0 ) );
+  m_checkAudioRippingIgnoreReadErrors->setChecked( c->readBoolEntry( "ignore read errors", false ) );
+  m_spinAudioRippingReadRetries->setValue( c->readNumEntry( "read retries", 128 ) );
+
   toggleAllOptions();
 }
 
@@ -184,6 +219,10 @@ void K3bAudioBurnDialog::saveUserDefaults( KConfig* c )
   c->writeEntry( "cd_text", m_cdtextWidget->isChecked() );
   c->writeEntry( "hide_first_track", m_checkHideFirstTrack->isChecked() );
   c->writeEntry( "normalize", m_checkNormalize->isChecked() );
+
+  c->writeEntry( "paranoia mode", m_comboParanoiaMode->currentText() );
+  c->writeEntry( "ignore read errors", m_checkAudioRippingIgnoreReadErrors->isChecked() );
+  c->writeEntry( "read retries", m_spinAudioRippingReadRetries->value() );
 }
 
 void K3bAudioBurnDialog::toggleAllOptions()
@@ -220,6 +259,37 @@ void K3bAudioBurnDialog::toggleAllOptions()
 
   // we are not able to normalize in on-the-fly mode
   m_checkNormalize->setDisabled( m_checkOnTheFly->isChecked() && !m_checkOnlyCreateImage->isChecked() );
+}
+
+
+void K3bAudioBurnDialog::showEvent( QShowEvent* e )
+{
+  // we only show the audio ripping options when there are audio cd track sources
+  bool showRipOptions = false;
+  if( m_doc->firstTrack() ) {
+    K3bAudioTrack* track = m_doc->firstTrack();
+    K3bAudioDataSource* source = track->firstSource();
+    
+    while( source ) {
+      
+      if( dynamic_cast<K3bAudioCdTrackSource*>(source) ) {
+	showRipOptions = true;
+	break;
+      }
+      
+      // next source
+      source = source->next();
+      if( !source ) {
+	track = track->next();
+	if( track )
+	  source = track->firstSource();
+      }
+    }
+  }
+
+  m_audioRippingGroup->setShown( showRipOptions );
+
+  K3bProjectBurnDialog::showEvent(e);
 }
 
 #include "k3baudioburndialog.moc"

@@ -95,8 +95,11 @@ bool K3bAudioCdTrackSource::initParanoia()
       if( !m_cdParanoiaLib->initParanoia( m_lastUsedDevice, m_toc ) )
 	return false;
 
-      // TODO: read config, but then the config is created in src (maybe we should create K3bCdparanoiaLib::saveSettings
-      //                    and readSettings methods or make this source configurable)
+      if( doc() ) {
+	m_cdParanoiaLib->setParanoiaMode( doc()->audioRippingParanoiaMode() );
+	m_cdParanoiaLib->setNeverSkip( !doc()->audioRippingIgnoreReadErrors() );
+	m_cdParanoiaLib->setMaxRetries( doc()->audioRippingRetries() );
+      }
 
       m_cdParanoiaLib->initReading( m_toc[m_cdTrackNumber-1].firstSector().lba() + startOffset().lba() + m_position.lba(), 
 				    m_toc[m_cdTrackNumber-1].firstSector().lba() + lastSector().lba() );

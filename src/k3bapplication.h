@@ -20,12 +20,14 @@
 #include <kuniqueapplication.h>
 #include <k3bcore.h>
 
-#define k3bapp K3bApplication::k3bApplication()
+#define k3bappcore K3bApplication::Core::k3bAppCore()
+
 
 class K3bMainWindow;
 class K3bInterface;
 class K3bSongManager;
 class K3bAudioServer;
+class K3bThemeManager;
 
 
 class K3bApplication : public KUniqueApplication
@@ -41,9 +43,6 @@ class K3bApplication : public KUniqueApplication
   int newInstance();
 
   K3bMainWindow* k3bMainWindow() const;
-  K3bSongManager* songManager() const { return m_songManager; }
-
-  static K3bApplication* k3bApplication() { return s_k3bApp; }
 
   class Core;
 
@@ -60,18 +59,12 @@ class K3bApplication : public KUniqueApplication
   K3bInterface* m_interface;
   Core* m_core;
   K3bMainWindow* m_mainWindow;
-  K3bSongManager* m_songManager;
   K3bAudioServer* m_audioServer;
 
   bool m_needToInit;
-
-  static K3bApplication* s_k3bApp;
 };
 
 
-/**
- * Just to show some info in the splash screen
- */
 class K3bApplication::Core : public K3bCore
 {
   Q_OBJECT
@@ -82,11 +75,30 @@ class K3bApplication::Core : public K3bCore
 
   void init();
 
+  // make sure the libk3b uses the same configuration
+  // needed since the lib still depends on K3bCore::config
+  // the goal is to make the lib independant from the config
+  KConfig* config() const;
+
+  void readSettings( KConfig* c = 0 );
+  void saveSettings( KConfig* c = 0 );
+
+  K3bSongManager* songManager() const { return m_songManager; }
+  K3bThemeManager* themeManger() const { return m_themeManager; }
+
+  static Core* k3bAppCore() { return s_k3bAppCore; }
+
  signals:
   /**
    * This is used for showing info in the K3b splashscreen
    */
   void initializationInfo( const QString& );
+
+ private:
+  K3bSongManager* m_songManager;
+  K3bThemeManager* m_themeManager;
+
+  static Core* s_k3bAppCore;
 };
 
 #endif

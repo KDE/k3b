@@ -23,26 +23,7 @@
 
 namespace K3bDevice
 {
-
-  struct cdtext_pack {
-    unsigned char id1;
-    unsigned char id2;
-    unsigned char id3;
-#ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
-    unsigned char dbcc:       1;
-    unsigned char blocknum:   3;
-    unsigned char charpos:    4;
-#else
-    unsigned char charpos:    4;
-    unsigned char blocknum:   3;
-    unsigned char dbcc:       1;
-#endif
-    unsigned char data[12];
-    unsigned char crc[2];
-  };
-
-
-  // TODO: add language stuff
+  struct cdtext_pack;
 
   class TrackCdText
     {

@@ -121,6 +121,7 @@ class K3bInteractionDialog : public KDialog
 			  const QString& whatsthis = QString::null );
 
  protected slots:
+   // FIXME: replace these with protected methods which are called from private slots.
   virtual void slotStartClicked();
 
   /**
@@ -178,11 +179,12 @@ class K3bInteractionDialog : public KDialog
   void slotLoadUserDefaults();
   void slotSaveUserDefaults();
   void slotLoadLastSettings();
-  void slotSaveLastSettings();
+  void slotStartClickedInternal();
 
  private:
   void initConnections();
   void initToolTipsAndWhatsThis();
+  void saveLastSettings();
 
   QPushButton* m_buttonK3bDefaults;
   QPushButton* m_buttonUserDefaults;

@@ -18,6 +18,7 @@
 #include "k3bglobals.h"
 #include <k3bversion.h>
 #include <k3bdevice.h>
+#include <k3bdeviceglobals.h>
 #include <k3bexternalbinmanager.h>
 
 #include <kglobal.h>
@@ -249,75 +250,12 @@ bool K3b::kbFreeOnFs( const QString& path, unsigned long& size, unsigned long& a
 }
 
 
-
-// from the QT 3.2 version of qstring.h
-
-static bool ok_in_base( QChar c, int base )
-{
-  if ( base <= 10 )
-    return c.isDigit() && c.digitValue() < base;
-  else
-    return c.isDigit() || (c >= 'a' && c < char('a'+base-10))
-      || (c >= 'A' && c < char('A'+base-10));
-}
-
-#ifndef ULLONG_MAX
-#define ULLONG_MAX 18446744073709551615ULL
-#endif
-
-unsigned long long K3b::toULongLong( const QString& s, bool* ok, int base )
-{
-  const QChar *p = s.unicode();
-  unsigned long long val = 0;
-  int l = s.length();
-  const unsigned long long max_mult = ULLONG_MAX / base;
-  bool is_ok = FALSE;
-  if ( !p )
-    goto bye;
-  while ( l && p->isSpace() )                 // skip leading space
-    l--,p++;
-  if ( !l )
-    goto bye;
-  if ( *p == '+' )
-    l--,p++;
-
-  // NOTE: toLongLong() code is similar
-  if ( !l || !ok_in_base(*p,base) )
-    goto bye;
-  while ( l && ok_in_base(*p,base) ) {
-    l--;
-    uint dv;
-    if ( p->isDigit() ) {
-      dv = p->digitValue();
-    } else {
-      if ( *p >= 'a' && *p <= 'z' )
-	dv = *p - 'a' + 10;
-      else
-	dv = *p - 'A' + 10;
-    }
-    if ( val > max_mult || (val == max_mult && dv > ULLONG_MAX % base) )
-      goto bye;
-    val = base * val + dv;
-    p++;
-  }
-
-  while ( l && p->isSpace() )                 // skip trailing space
-    l--,p++;
-  if ( !l )
-    is_ok = TRUE;
- bye:
-  if ( ok )
-    *ok = is_ok;
-  return is_ok ? val : 0;
-}
-
-
 KIO::filesize_t K3b::filesize( const KURL& url )
 {
   KIO::filesize_t fSize = 0;
   // we use KIO since QFileInfo does provide the size as unsigned int wich is way too small for DVD images
   KIO::UDSEntry uds;
-  KIO::NetAccess::stat( url, uds );
+  KIO::NetAccess::stat( url, uds, 0 );
   for( KIO::UDSEntry::const_iterator it = uds.begin(); it != uds.end(); ++it ) {
     if( (*it).m_uds == KIO::UDS_SIZE ) {
       fSize = (*it).m_long;
@@ -372,7 +310,7 @@ QString K3b::appendNumberToFilename( const QString& name, int num, unsigned int 
 bool K3b::plainAtapiSupport()
 {
   // IMPROVEME!!!
-  return ( K3b::kernelVersion() >= K3bVersion( 2, 5, 40 ) );
+  return ( K3b::simpleKernelVersion() >= K3bVersion( 2, 5, 40 ) );
 }
 
 
@@ -380,7 +318,7 @@ bool K3b::hackedAtapiSupport()
 {
   // IMPROVEME!!!
   // FIXME: since when does the kernel support this?
-  return ( K3b::kernelVersion() >= K3bVersion( 2, 4, 0 ) );
+  return ( K3b::simpleKernelVersion() >= K3bVersion( 2, 4, 0 ) );
 }
 
 
@@ -414,20 +352,8 @@ int K3b::writingAppFromString( const QString& s )
 
 QString K3b::writingModeString( int mode )
 {
-  switch( mode ) {
-  case WRITING_MODE_AUTO:
+  if( mode == WRITING_MODE_AUTO )
     return i18n("Auto");
-  case TAO:
-    return i18n("TAO");
-  case DAO:
-    return i18n("DAO");
-  case RAW:
-    return i18n("Raw");
-  case WRITING_MODE_INCR_SEQ:
-    return i18n("Incremental Sequential");
-  case WRITING_MODE_RES_OVWR:
-    return i18n("Restricted Overwrite");
-  default:
-    return i18n("Unknown writing mode");
-  }
+  else
+    return K3bDevice::writingModeString( mode );
 }

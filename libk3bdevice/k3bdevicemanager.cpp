@@ -204,7 +204,7 @@ QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::allDevices()
 }
 
 
-int K3bDevice::DeviceManager::scanbus()
+int K3bDevice::DeviceManager::scanBus()
 {
   m_foundDevices = 0;
 
@@ -677,7 +677,7 @@ K3bDevice::Device* K3bDevice::DeviceManager::addDevice( K3bDevice::Device *devic
 
     // not every drive is able to read CDs
     // there are some 1st generation DVD writer that cannot
-    if( device->type() & K3bDevice::CDROM )
+    if( device->type() & K3bDevice::DEVICE_CD_ROM )
       d->cdReader.append( device );
     if( device->readsDvd() )
       d->dvdReader.append( device );

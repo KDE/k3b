@@ -109,11 +109,10 @@ void K3bThemeOptionTab::selectionChanged()
     m_centerPreviewLabel->setText( i18n("K3b - The CD/DVD Kreator") );
     m_centerPreviewLabel->setPaletteBackgroundColor( item->theme->backgroundColor() );
     m_centerPreviewLabel->setPaletteForegroundColor( item->theme->foregroundColor() );
-    m_leftPreviewLabel->setPixmap( item->theme->pixmap( "k3bprojectview_left_short" ) );
-    m_rightPreviewLabel->setPixmap( item->theme->pixmap( "k3bprojectview_right" ) );
+    m_leftPreviewLabel->setPixmap( item->theme->pixmap( K3bTheme::PROJECT_LEFT ) );
+    m_rightPreviewLabel->setPixmap( item->theme->pixmap( K3bTheme::PROJECT_RIGHT ) );
 
-    QFileInfo fi( item->theme->path() );
-    m_buttonRemoveTheme->setEnabled( fi.isWritable() ); 
+    m_buttonRemoveTheme->setEnabled( item->theme->local() ); 
   }
 }
 

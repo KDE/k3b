@@ -28,12 +28,12 @@ class QComboBox;
 class QGroupBox;
 class QLabel;
 class QLineEdit;
-class QToolButton;
+class QSpinBox;
 class K3bWriterSelectionWidget;
 class K3bTempDirSelectionWidget;
 class K3bAudioDoc;
 class K3bAudioCdTextWidget;
-
+class QShowEvent;
 
 
 /**
@@ -41,30 +41,39 @@ class K3bAudioCdTextWidget;
   */
 class K3bAudioBurnDialog : public K3bProjectBurnDialog  
 {
-   Q_OBJECT
+  Q_OBJECT;
 
  public:
-   K3bAudioBurnDialog(K3bAudioDoc* doc, QWidget *parent=0, const char *name=0, bool modal = true );
-   ~K3bAudioBurnDialog();
-
+  K3bAudioBurnDialog(K3bAudioDoc* doc, QWidget *parent=0, const char *name=0, bool modal = true );
+  ~K3bAudioBurnDialog();
+   
  protected:
-   void saveSettings();
-   void readSettings();
-   void loadK3bDefaults();
-   void loadUserDefaults( KConfig* );
-   void saveUserDefaults( KConfig* );
-
-   QCheckBox* m_checkHideFirstTrack;
-   QCheckBox* m_checkNormalize;
-   K3bAudioCdTextWidget* m_cdtextWidget;
-   K3bAudioDoc* m_doc;
+  void saveSettings();
+  void readSettings();
+  void loadK3bDefaults();
+  void loadUserDefaults( KConfig* );
+  void saveUserDefaults( KConfig* );
+  void showEvent( QShowEvent* );
 
  protected slots:
-   /**
-    * Reimplemented for internal reasons (shut down the audio player)
-    */
-   void slotStartClicked();
-   void toggleAllOptions();
+  /**
+   * Reimplemented for internal reasons (shut down the audio player)
+   */
+  void slotStartClicked();
+  void toggleAllOptions();
+
+ private:
+  /**
+   * We need this here to be able to hide/show the group
+   */
+  QGroupBox* m_audioRippingGroup;
+  QCheckBox* m_checkHideFirstTrack;
+  QCheckBox* m_checkNormalize;
+  QCheckBox* m_checkAudioRippingIgnoreReadErrors;
+  QSpinBox* m_spinAudioRippingReadRetries;
+  QComboBox* m_comboParanoiaMode;
+  K3bAudioCdTextWidget* m_cdtextWidget;
+  K3bAudioDoc* m_doc;
 };
 
 #endif

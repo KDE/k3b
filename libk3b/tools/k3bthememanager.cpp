@@ -23,6 +23,7 @@
 
 #include <qpixmap.h>
 #include <qfile.h>
+#include <qfileinfo.h>
 #include <qdir.h>
 #include <qstringlist.h>
 
@@ -45,6 +46,66 @@ const QPixmap& K3bTheme::pixmap( const QString& name ) const
   return m_emptyPixmap;
 }
 
+
+const QPixmap& K3bTheme::pixmap( K3bTheme::PixmapType t ) const
+{
+  QString name;
+
+  switch( t ) {
+  case MEDIA_AUDIO:
+    name = "media_audio";
+    break;
+  case MEDIA_DATA:
+    name = "media_data";
+    break;
+  case MEDIA_VIDEO:
+    name = "media_video";
+    break;
+  case MEDIA_EMPTY:
+    name = "media_empty";
+    break;
+  case MEDIA_MIXED:
+    name = "media_mixed";
+    break;
+  case MEDIA_NONE:
+    name = "media_none";
+    break;
+  case MEDIA_LEFT:
+    name = "media_left";
+    break;
+  case PROGRESS_WORKING:
+    name = "progress_working";
+    break;
+  case PROGRESS_SUCCESS:
+    name = "progress_success";
+    break;
+  case PROGRESS_FAIL:
+    name = "progress_fail";
+    break;
+  case PROGRESS_RIGHT:
+    name = "progress_right";
+    break;
+  case SPLASH:
+    name = "splash";
+    break;
+  case PROBING:
+    name = "probing";
+    break;
+  case PROJECT_LEFT:
+    name = "project_left";
+    break;
+  case PROJECT_RIGHT:
+    name = "project_right";
+    break;
+  case WELCOME_BG:
+    name = "welcome_bg";
+    break;
+  default:
+    break;
+  }
+
+  return pixmap( name );
+}
 
 
 class K3bThemeManager::Private
@@ -180,6 +241,8 @@ void K3bThemeManager::loadTheme( const QString& name )
     K3bTheme* t = new K3bTheme();
     t->m_name = name;
     t->m_path = path.left( path.length() - 9 );
+    QFileInfo fi( t->m_path );
+    t->m_local = fi.isWritable();
 
     // load the stuff
     KSimpleConfig cfg( path, true );

@@ -390,7 +390,7 @@ void K3bCdCopyDialog::loadUserDefaults( KConfig* c )
   m_checkOnTheFly->setChecked( c->readBoolEntry( "on_the_fly", false ) );
   m_checkDeleteImages->setChecked( c->readBoolEntry( "delete_images", true ) );
   m_checkOnlyCreateImage->setChecked( c->readBoolEntry( "only_create_image", false ) );
-  m_comboParanoiaMode->setCurrentItem( c->readNumEntry( "paranoia_mode", 3 ) );
+  m_comboParanoiaMode->setCurrentItem( c->readNumEntry( "paranoia_mode", 0 ) );
 
   m_spinCopies->setValue( c->readNumEntry( "copies", 1 ) );
 

@@ -165,6 +165,92 @@ QString K3bVersion::createVersionString( int majorVersion,
 }
 
 
+int K3bVersion::compareSuffix( const QString& suffix1, const QString& suffix2 )
+{
+  static QRegExp rcRx( "rc(\\d+)" );
+  static QRegExp preRx( "pre(\\d+)" );
+  static QRegExp betaRx( "beta(\\d+)" );
+  static QRegExp alphaRx( "a(?:lpha)?(\\d+)" );
+
+  // first we check if one of the suffixes (or both are empty) becasue that case if simple
+  if( suffix1.isEmpty() ) {
+    if( suffix2.isEmpty() )
+      return 0;
+    else
+      return 1; // empty greater than the non-empty (should we treat something like 1.0a as greater than 1.0?)
+  }
+  else if( suffix2.isEmpty() )
+    return -1;
+
+  // now search for our special suffixes
+  if( rcRx.exactMatch( suffix1 ) ) {
+    int v1 = rcRx.cap(1).toInt();
+
+    if( rcRx.exactMatch( suffix2 ) ) {
+      int v2 = rcRx.cap(1).toInt();
+      return ( v1 == v2 ? 0 : ( v1 < v2 ? -1 : 1 ) );
+    }
+    else if( preRx.exactMatch( suffix2 ) ||
+	     betaRx.exactMatch( suffix2 ) ||
+	     alphaRx.exactMatch( suffix2 ) )
+      return 1; // rc > than all the others
+    else
+      return QString::compare( suffix1, suffix2 );
+  }
+
+  else if( preRx.exactMatch( suffix1 ) ) {
+    int v1 = preRx.cap(1).toInt();
+
+    if( rcRx.exactMatch( suffix2 ) ) {
+      return -1; // pre is less than rc
+    }
+    else if( preRx.exactMatch( suffix2 ) ) {
+      int v2 = preRx.cap(1).toInt();
+      return ( v1 == v2 ? 0 : ( v1 < v2 ? -1 : 1 ) );
+    }
+    else if( betaRx.exactMatch( suffix2 ) ||
+	     alphaRx.exactMatch( suffix2 ) )
+      return 1; // pre is greater than beta or alpha
+    else
+      return QString::compare( suffix1, suffix2 );
+  }
+
+  else if( betaRx.exactMatch( suffix1 ) ) {
+    int v1 = betaRx.cap(1).toInt();
+
+    if( rcRx.exactMatch( suffix2 ) ||
+	preRx.exactMatch( suffix2 ) )
+      return -1; // beta is less than rc or pre
+    else if( betaRx.exactMatch( suffix2 ) ) {
+      int v2 = betaRx.cap(1).toInt();
+      return ( v1 == v2 ? 0 : ( v1 < v2 ? -1 : 1 ) );
+    }
+    else if( alphaRx.exactMatch( suffix2 ) )
+      return 1; // beta is greater then alpha
+    else
+      return QString::compare( suffix1, suffix2 );
+  }
+
+  else if( alphaRx.exactMatch( suffix1 ) ) {
+    int v1 = alphaRx.cap(1).toInt();
+
+    if( rcRx.exactMatch( suffix2 ) ||
+	preRx.exactMatch( suffix2 ) ||
+	betaRx.exactMatch( suffix2 ) )
+      return -1; // alpha is less than all the others
+    else if( alphaRx.exactMatch( suffix2 ) ) {
+      int v2 = alphaRx.cap(1).toInt();
+      return ( v1 == v2 ? 0 : ( v1 < v2 ? -1 : 1 ) );
+    }
+    else
+      return QString::compare( suffix1, suffix2 );
+  }
+
+  else
+    return QString::compare( suffix1, suffix2 );
+}
+
+
 bool operator<( const K3bVersion& v1, const K3bVersion& v2 )
 {
   // both version objects need to be valid
@@ -187,16 +273,7 @@ bool operator<( const K3bVersion& v1, const K3bVersion& v2 )
 	    ( v2.patchLevel() == -1 && v1.patchLevel() == 0 )
 	    )
 	  {
-	    // we treat the version without suffix as newer as all versions that have a suffix
-	    if( v1.suffix().isEmpty() && !v2.suffix().isEmpty() )
-	      return false;
-	    else if( v2.suffix().isEmpty() && !v1.suffix().isEmpty() )
-	      return true;
-	    // we need to handle this case specially since QString("") < QString::null is true
-	    else if( v1.suffix().isEmpty() && v2.suffix().isEmpty() )
-	      return false;
-	    else
-	      return ( v1.suffix() < v2.suffix() );
+	    return K3bVersion::compareSuffix( v1.suffix(), v2.suffix() ) < 0;
 	  }
 	else
 	  return ( v1.patchLevel() < v2.patchLevel() );
@@ -219,8 +296,7 @@ bool operator==( const K3bVersion& v1, const K3bVersion& v2 )
   return ( v1.majorVersion() == v2.majorVersion() &&
 	   v1.minorVersion() == v2.minorVersion() &&
 	   v1.patchLevel() == v2.patchLevel() &&
-	   ( v1.suffix() == v2.suffix() ||
-	     v1.suffix().isEmpty() && v2.suffix().isEmpty() ) );
+	   K3bVersion::compareSuffix( v1.suffix(), v2.suffix() ) == 0 );
 }
 
 

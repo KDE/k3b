@@ -24,6 +24,7 @@
 #include <k3bdeviceselectiondialog.h>
 #include <k3bfillstatusdisplay.h>
 #include <k3bcore.h>
+#include <k3bprojectplugin.h>
 
 #include <klocale.h>
 #include <kurl.h>
@@ -75,6 +76,7 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
 		    SLOT(editBootImages()), actionCollection(),
 		    "project_data_edit_boot_images" );
 
+  addPluginButtons( K3bProjectPlugin::DATA_CD );
 
   // this is just for testing (or not?)
   // most likely every project type will have it's rc file in the future

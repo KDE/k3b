@@ -24,6 +24,7 @@
 #include <qpixmap.h>
 
 
+// FIXME: remove this and mov the whole thing to K3bApplication::Core
 #define k3bthememanager K3bThemeManager::k3bThemeManager()
 
 class KConfig;
@@ -35,6 +36,30 @@ class K3bTheme
   QColor backgroundColor() const { return m_bgColor; }
   QColor foregroundColor() const { return m_fgColor; }
 
+  enum PixmapType {
+    MEDIA_AUDIO,      /**< Media information header, right side when showing an audio CD. */
+    MEDIA_DATA,       /**< Media information header, right side when showing a data media. */
+    MEDIA_VIDEO,      /**< Media information header, right side when showing a video media. */
+    MEDIA_EMPTY,      /**< Media information header, right side when showing an empty media. */
+    MEDIA_MIXED,      /**< Media information header, right side when showing a mixed mode CD. */
+    MEDIA_NONE,       /**< Media information header, right side default pixmap (no media). */
+    MEDIA_LEFT,       /**< Media information header, left side. */
+    PROGRESS_WORKING, /**< Progress dialog, left top while working. */
+    PROGRESS_SUCCESS, /**< Progress dialog, left top on success. */
+    PROGRESS_FAIL,    /**< Progress dialog, left top on failure. */
+    PROGRESS_RIGHT,   /**< Progress dialog, right top. */
+    SPLASH,           /**< K3b splash screen. Size not important. */
+    PROBING,          /**< Shown while probing media information. Size not important. */
+    PROJECT_LEFT,     /**< Project header left side. */
+    PROJECT_RIGHT,    /**< Project header right side. */
+    WELCOME_BG        /**< Background pixmap of the welcome window. */
+  };
+
+  const QPixmap& pixmap( PixmapType ) const;
+
+  /**
+   * \deprecated use pixmap( PixmapType )
+   */
   const QPixmap& pixmap( const QString& name ) const;
 
   const QString& name() const { return m_name; }
@@ -42,10 +67,21 @@ class K3bTheme
   const QString& comment() const { return m_comment; }
   const QString& version() const { return m_version; }
 
+  /**
+   * Global themes are installed for all users and cannot be deleted.
+   */
+  bool global() const { return !local(); }
+
+  /**
+   * Local themes are installed in the user's home directory and can be deleted.
+   */
+  bool local() const { return m_local; }
+
   const QString& path() const { return m_path; }
 
  private:
   QString m_path;
+  bool m_local;
   QString m_name;
   QString m_author;
   QString m_comment;

@@ -25,11 +25,11 @@
 #include <k3bmsf.h>
 #include <k3btoolbox.h>
 #include <kactionclasses.h>
+#include <k3bprojectplugin.h>
 
 // QT-includes
 #include <qlayout.h>
 #include <qstring.h>
-#include <qvbox.h>
 
 // KDE-includes
 #include <klocale.h>
@@ -42,22 +42,23 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
 {
   m_doc = pDoc;
 
-  // FIXME: move the toolbox into K3bView
-  QVBox* box = new QVBox( this );
-  K3bToolBox* toolBox = new K3bToolBox( box, "toolbox" );
-  m_songlist = new K3bAudioTrackView( m_doc, box );
-  setMainWidget( box );
+  m_songlist = new K3bAudioTrackView( m_doc, this );
+  setMainWidget( m_songlist );
   fillStatusDisplay()->showTime();
 
-  toolBox->addButton( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_PLAY ) );
-  toolBox->addButton( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_PAUSE ) );
-  toolBox->addButton( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_STOP ) );
-  toolBox->addSpacing();
-  toolBox->addButton( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_PREV ) );
-  toolBox->addButton( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_NEXT ) );
-  toolBox->addSpacing();
-  toolBox->addWidgetAction( static_cast<KWidgetAction*>(m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_SEEK )) );
-  toolBox->addStretch();
+  toolBox()->addButton( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_PLAY ) );
+  toolBox()->addButton( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_PAUSE ) );
+  toolBox()->addButton( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_STOP ) );
+  toolBox()->addSpacing();
+  toolBox()->addButton( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_PREV ) );
+  toolBox()->addButton( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_NEXT ) );
+  toolBox()->addSpacing();
+  toolBox()->addWidgetAction( static_cast<KWidgetAction*>(m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_SEEK )) );
+  toolBox()->addSeparator();
+
+  addPluginButtons( K3bProjectPlugin::AUDIO_CD );
+
+  toolBox()->addStretch();
 }
 
 K3bAudioView::~K3bAudioView()

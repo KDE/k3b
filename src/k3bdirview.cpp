@@ -88,8 +88,8 @@ protected:
     QSize pixSize;
     if( K3bTheme* theme = k3bthememanager->currentTheme() ) {
       p.fillRect( e->rect(), theme->backgroundColor() );
-      p.drawPixmap( 0, 0, theme->pixmap( "k3b_probing_cd" ) );
-      pixSize = theme->pixmap( "k3b_probing_cd" ).size();
+      p.drawPixmap( 0, 0, theme->pixmap( K3bTheme::PROBING ) );
+      pixSize = theme->pixmap( K3bTheme::PROBING ).size();
       p.setPen( theme->foregroundColor() );
     }
 

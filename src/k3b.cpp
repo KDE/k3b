@@ -1540,8 +1540,8 @@ void K3bMainWindow::slotClearProject()
 void K3bMainWindow::slotThemeChanged()
 {
   if( K3bTheme* theme = k3bthememanager->currentTheme() ) {
-    d->leftDocPicLabel->setPixmap( theme->pixmap( "k3bprojectview_left_short" ) );
-    d->rightDocPicLabel->setPixmap( theme->pixmap( "k3bprojectview_right" ) );
+    d->leftDocPicLabel->setPixmap( theme->pixmap( K3bTheme::PROJECT_LEFT ) );
+    d->rightDocPicLabel->setPixmap( theme->pixmap( K3bTheme::PROJECT_RIGHT ) );
     d->centerDocLabel->setPaletteBackgroundColor( theme->backgroundColor() );
     d->centerDocLabel->setPaletteForegroundColor( theme->foregroundColor() );
   }

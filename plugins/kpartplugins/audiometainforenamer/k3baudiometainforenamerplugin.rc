@@ -1,8 +1,0 @@
-<!DOCTYPE kpartgui>
-<kpartplugin name="k3baudiometainforenamerplugin" library="libk3baudiometainforenamerplugin">
-<MenuBar>
- <Menu name="project"><text>Project</text>
-  <Action name="rename_audio_files_plugin"/>
- </Menu>
-</MenuBar>
-</kpartplugin>

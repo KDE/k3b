@@ -157,6 +157,7 @@ bool K3bMovixProgram::scan( const QString& p )
     //
     // now check the boot-messages languages
     //
+    // FIXME: since 0.9.0rc1 this is called "translations"
     dir.cd( "boot-messages" );
     bin->m_supportedLanguages = dir.entryList(QDir::Dirs);
     bin->m_supportedLanguages.remove(".");

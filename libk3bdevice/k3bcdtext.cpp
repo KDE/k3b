@@ -27,6 +27,23 @@
 
 namespace K3bDevice {
 
+  struct cdtext_pack {
+    unsigned char id1;
+    unsigned char id2;
+    unsigned char id3;
+#ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
+    unsigned char dbcc:       1;
+    unsigned char blocknum:   3;
+    unsigned char charpos:    4;
+#else
+    unsigned char charpos:    4;
+    unsigned char blocknum:   3;
+    unsigned char dbcc:       1;
+#endif
+    unsigned char data[12];
+    unsigned char crc[2];
+  };
+
   /**
    * This one is taken from cdrecord
    */
@@ -158,7 +175,7 @@ void K3bDevice::CdText::setRawPackData( const unsigned char* data, int len )
       pack[i].crc[0] ^= 0xff;
       pack[i].crc[1] ^= 0xff;
 
-      Q_UINT16 crc = K3bCrc::calcX25( reinterpret_cast<unsigned char*>(&pack[i]), 18 );
+      Q_UINT16 crc = calcX25( reinterpret_cast<unsigned char*>(&pack[i]), 18 );
 
       pack[i].crc[0] ^= 0xff;
       pack[i].crc[1] ^= 0xff;
@@ -443,7 +460,7 @@ QByteArray K3bDevice::CdText::createPackData( int packType, unsigned int& packCo
 void K3bDevice::CdText::savePack( cdtext_pack* pack, QByteArray& data, unsigned int& dataFill ) const
 {
   // create CRC
-  Q_UINT16 crc = K3bCrc::calcX25( reinterpret_cast<unsigned char*>(pack), sizeof(cdtext_pack)-2 );
+  Q_UINT16 crc = calcX25( reinterpret_cast<unsigned char*>(pack), sizeof(cdtext_pack)-2 );
 
   // invert for Redbook compliance
   crc ^= 0xffff;
@@ -539,7 +556,8 @@ QCString K3bDevice::encodeCdText( const QString& s, bool* illegalChars )
   if( illegalChars )
     *illegalChars = false;
 
-  QTextCodec* codec = QTextCodec::codecForName("Latin1");
+  // TODO: do this without QT
+  QTextCodec* codec = QTextCodec::codecForName("ISO8859-1");
   if( codec ) {
     QCString encoded = codec->fromUnicode( s );
     return encoded;
@@ -589,7 +607,7 @@ bool K3bDevice::CdText::checkCrc( const unsigned char* data, int len )
       pack[i].crc[0] ^= 0xff;
       pack[i].crc[1] ^= 0xff;
 
-      int crc = K3bCrc::calcX25( reinterpret_cast<unsigned char*>(&pack[i]), 18 );
+      int crc = calcX25( reinterpret_cast<unsigned char*>(&pack[i]), 18 );
 
       pack[i].crc[0] ^= 0xff;
       pack[i].crc[1] ^= 0xff;

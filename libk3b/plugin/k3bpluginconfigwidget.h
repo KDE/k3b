@@ -31,6 +31,7 @@ class K3bPluginConfigWidget : public QWidget
  public slots:
   /**
    * Use k3bcore->config() to store the settings
+   * FIXME: add a KConfig parameter here
    */
   virtual void loadConfig();
   virtual void saveConfig();

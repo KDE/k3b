@@ -18,7 +18,7 @@
 #include <kdebug.h>
 
 
-Q_UINT16 g_x25Table[1<<8] = {
+static Q_UINT16 g_x25Table[1<<8] = {
   0x0000,  0x1021,  0x2042,  0x3063,  0x4084,  0x50a5,  0x60c6,  0x70e7,
   0x8108,  0x9129,  0xa14a,  0xb16b,  0xc18c,  0xd1ad,  0xe1ce,  0xf1ef,
   0x1231,  0x0210,  0x3273,  0x2252,  0x52b5,  0x4294,  0x72f7,  0x62d6,
@@ -54,7 +54,7 @@ Q_UINT16 g_x25Table[1<<8] = {
 };
 
 
-Q_UINT16 K3bCrc::calcX25( unsigned char* message, unsigned int len, Q_UINT16 crc )
+Q_UINT16 K3bDevice::calcX25( unsigned char* message, unsigned int len, Q_UINT16 crc )
 {
   while( len-- ) {
     crc = (crc<<8) ^ g_x25Table[(crc>>8) ^ (*message++)];
@@ -64,7 +64,7 @@ Q_UINT16 K3bCrc::calcX25( unsigned char* message, unsigned int len, Q_UINT16 crc
 }
 
 
-bool K3bCrc::checkQCrc( unsigned char* subdata )
+bool K3bDevice::checkQCrc( unsigned char* subdata )
 {
   // Red Book for some reason inverts the CRC bytes
   subdata[10] ^= 0xff;
@@ -78,13 +78,3 @@ bool K3bCrc::checkQCrc( unsigned char* subdata )
 
   return( crc == 0x0000 );
 }
-
-
-K3bCrc::K3bCrc()
-{
-}
-
-
-// K3bCrc* K3bCrc::x25()
-// {
-// }

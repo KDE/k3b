@@ -26,18 +26,28 @@ class KToggleAction;
 class KWidgetAction;
 class QGridLayout;
 class QPopupMenu;
+class QResizeEvent;
 
 
-
+/**
+ * internal class. Do not use!
+ */
 class K3bToolBoxButton : public QToolButton
 {
   Q_OBJECT
 
  public:
   K3bToolBoxButton( KAction*, QWidget* parent );
+  K3bToolBoxButton( const QString& text, const QString& icon, 
+		    const QString& tooltip, const QString& whatsthis,
+		    QObject* receiver, const char* slot,
+		    QWidget* parent );
 
  private slots:
   void slotPopupActivated();
+
+ protected:
+  void resizeEvent( QResizeEvent* );
 
  private:
   QPopupMenu* m_popupMenu;
@@ -52,8 +62,12 @@ class K3bToolBox : public QFrame
   K3bToolBox( QWidget* parent = 0, const char* name = 0 );
   ~K3bToolBox();
 
-  void addButton( KAction* );
-  void addToggleButton( KToggleAction* );
+  K3bToolBoxButton* addButton( const QString& text, const QString& icon, 
+			       const QString& tooltip = QString::null, const QString& whatsthis = QString::null,
+			       QObject* receiver = 0, const char* slot = 0,
+			       bool forceTextLabel = false );
+  K3bToolBoxButton* addButton( KAction*, bool forceTextLabel = false );
+  K3bToolBoxButton* addToggleButton( KToggleAction* );
   void addWidgetAction( KWidgetAction* );
 
   /**
@@ -64,7 +78,7 @@ class K3bToolBox : public QFrame
   void addWidget( QWidget* );
   void addLabel( const QString& );
   void addSpacing();
-  void addLineSpacing();
+  void addSeparator();
   void addStretch();
 
  protected:

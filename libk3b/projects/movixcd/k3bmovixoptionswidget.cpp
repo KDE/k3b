@@ -42,6 +42,8 @@ K3bMovixOptionsWidget::~K3bMovixOptionsWidget()
 void K3bMovixOptionsWidget::init( const K3bMovixBin* bin )
 {
   m_comboSubtitleFontset->insertStringList( bin->supportedSubtitleFonts() );
+
+  // FIXME: use KLocale to get the names of the languages (also change the option loading/saveing accordingly)
   m_comboBootMessageLanguage->insertStringList( bin->supportedLanguages() );
   m_comboDefaultBootLabel->insertStringList( bin->supportedBootLabels() );
 }

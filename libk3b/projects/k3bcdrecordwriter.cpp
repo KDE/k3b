@@ -189,11 +189,11 @@ void K3bCdrecordWriter::prepareProcess()
     }
   }
   else if( m_writingMode == K3b::RAW ) {
-    if( burnDevice()->supportsWriteMode( K3bDevice::RAW_R96R ) )
+    if( burnDevice()->supportsWritingMode( K3bDevice::RAW_R96R ) )
       *m_process << "-raw96r";
-    else if( burnDevice()->supportsWriteMode( K3bDevice::RAW_R16 ) )
+    else if( burnDevice()->supportsWritingMode( K3bDevice::RAW_R16 ) )
       *m_process << "-raw16";
-    else if( burnDevice()->supportsWriteMode( K3bDevice::RAW_R96P ) )
+    else if( burnDevice()->supportsWritingMode( K3bDevice::RAW_R96P ) )
       *m_process << "-raw96p";
     else {
       emit infoMessage( i18n("Writer does not support raw writing."), WARNING );

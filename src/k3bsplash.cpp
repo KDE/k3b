@@ -50,7 +50,7 @@ K3bSplash::K3bSplash( QWidget* parent, const char* name )
 
   QLabel* picLabel = new QLabel( this );
   if( K3bTheme* theme = k3bthememanager->currentTheme() )
-    picLabel->setPixmap( theme->pixmap( "k3b_splash" ) );
+    picLabel->setPixmap( theme->pixmap( K3bTheme::SPLASH ) );
 
   m_infoBox = new QLabel( this );
   m_infoBox->setMargin( 5 );

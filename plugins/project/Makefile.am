@@ -1,0 +1,1 @@
+SUBDIRS = audioprojectcddb audiometainforenamer

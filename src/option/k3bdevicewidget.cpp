@@ -324,7 +324,7 @@ void K3bDeviceWidget::updateDeviceListViews()
     typeItem->setForegroundColor( 1, gray );
     typeItem = new K3bListViewItem( devRoot, typeItem,
 				    i18n("Writes DVD-R Dual Layer:"),
-				    (dev->device->supportedProfiles() & K3bDevice::MEDIA_DVD_R_DL)
+				    (dev->device->type() & K3bDevice::DEVICE_DVD_R_DL)
 				    ? i18n("yes") : i18n("no") );
     typeItem->setForegroundColor( 1, gray );
     typeItem = new K3bListViewItem( devRoot, typeItem,
@@ -333,7 +333,7 @@ void K3bDeviceWidget::updateDeviceListViews()
     typeItem->setForegroundColor( 1, gray );
     typeItem = new K3bListViewItem( devRoot, typeItem,
 				    i18n("Writes DVD+R Double Layer:"),
-				    (dev->device->supportedProfiles() & K3bDevice::MEDIA_DVD_PLUS_R_DL)
+				    (dev->device->type() & K3bDevice::DEVICE_DVD_PLUS_R_DL)
 				    ? i18n("yes") : i18n("no") );
     typeItem->setForegroundColor( 1, gray );
     // --------------------------------

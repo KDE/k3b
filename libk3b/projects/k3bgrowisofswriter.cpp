@@ -415,9 +415,9 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
     
     // parse progress
     int pos = line.find( "/" );
-    unsigned long long done = K3b::toULongLong( line.left( pos ) );  // TODO: for QT 3.2: toULongLong
+    unsigned long long done = line.left( pos ).toULongLong();
     bool ok = true;
-    d->overallSizeFromOutput = K3b::toULongLong( line.mid( pos+1, line.find( "(", pos ) - pos - 1 ), &ok ); // TODO: for QT 3.2: toULongLong
+    d->overallSizeFromOutput = line.mid( pos+1, line.find( "(", pos ) - pos - 1 ).toULongLong( &ok );
     if( ok ) {
       int p = (int)(100 * done / d->overallSizeFromOutput);
       if( p > d->lastProgress ) {

@@ -1,1 +1,1 @@
-SUBDIRS = decoder encoder kpartplugins audiooutput
+SUBDIRS = decoder encoder kpartplugins audiooutput project

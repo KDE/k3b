@@ -23,6 +23,7 @@
 
 // include files for Qt
 #include <qwidget.h>
+#include <qptrdict.h>
 
 #include <kxmlguiclient.h>
 
@@ -30,6 +31,8 @@ class K3bDoc;
 class KActionCollection;
 class K3bFillStatusDisplay;
 class K3bProjectBurnDialog;
+class K3bToolBox;
+class K3bProjectPlugin;
 
 
 /** 
@@ -53,8 +56,6 @@ class K3bView : public QWidget, public KXMLGUIClient
   K3bDoc* getDocument() const { return m_doc; }
   K3bDoc* doc() const { return m_doc; }
 
-  //  virtual KActionCollection* actionCollection() const;
-
   void setMainWidget( QWidget* );
 
  public slots:
@@ -74,12 +75,26 @@ class K3bView : public QWidget, public KXMLGUIClient
    */
   virtual K3bProjectBurnDialog* newBurnDialog( QWidget* = 0, const char* = 0 ) = 0;
 
+  /**
+   * Call this to add the projectplugin buttons to the toolbox. It is not called 
+   * automatically to make it possible to add other buttons before.
+   *
+   * @param projectType the type of the project (@see K3bProjectPlugin)
+   */
+  void addPluginButtons( int projectType );
+
   K3bFillStatusDisplay* fillStatusDisplay() const { return m_fillStatusDisplay; }
+  K3bToolBox* toolBox() const { return m_toolBox; }
+
+ private slots:
+  void slotPluginButtonClicked();
 
  private:
   K3bDoc* m_doc;
-  //  KActionCollection* m_actionCollection;
   K3bFillStatusDisplay* m_fillStatusDisplay;
+  K3bToolBox* m_toolBox;
+
+  QPtrDict<K3bProjectPlugin> m_plugins;
 };
 
 #endif // K3BVIEW_H

@@ -18,22 +18,18 @@
 
 #include <qglobal.h>
 
-class K3bCrc
+namespace K3bDevice
 {
- public:
   //  static K3bCrc* x25();
 
   // bool check( unsigned char* message, unsigned int len, unsigned char* crc, unsigned int crcLen );
 
-  static Q_UINT16 calcX25( unsigned char* message, unsigned int len, Q_UINT16 start = 0x0000 );
+  Q_UINT16 calcX25( unsigned char* message, unsigned int len, Q_UINT16 start = 0x0000 );
 
   /**
    * subdata is 12 bytes in long.
    */
-  static bool checkQCrc( unsigned char* subdata );
-
- private:
-  K3bCrc();
+  bool checkQCrc( unsigned char* subdata );
 };
 
 #endif

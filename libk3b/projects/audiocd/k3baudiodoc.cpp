@@ -113,7 +113,10 @@ bool K3bAudioDoc::newDocument()
 
   m_cdText = false;
   m_cdTextData.clear();
-  
+  m_audioRippingParanoiaMode = 0;
+  m_audioRippingRetries = 128;
+  m_audioRippingIgnoreReadErrors = false;
+
   return K3bDoc::newDocument();
 }
 
@@ -863,6 +866,9 @@ void K3bAudioDoc::loadDefaultSettings( KConfig* c )
   m_cdText = c->readBoolEntry( "cd_text", false );
   m_hideFirstTrack = c->readBoolEntry( "hide_first_track", false );
   setNormalize( c->readBoolEntry( "normalize", false ) );
+  setAudioRippingParanoiaMode( c->readNumEntry( "paranoia mode", 0 ) );
+  setAudioRippingRetries( c->readNumEntry( "read retries", 128 ) );
+  setAudioRippingIgnoreReadErrors( c->readBoolEntry( "ignore read errors", false ) );
 }
 
 
@@ -943,12 +949,11 @@ void K3bAudioDoc::slotHouseKeeping()
       const QPtrList<K3bAudioTrack>& tracks = m_decoderMetaInfoSetMap[thread->m_decoder];
       for( QPtrListIterator<K3bAudioTrack> it( tracks ); *it; ++it ) {
 	K3bAudioTrack* track = *it;
-	// we directly access the cdtext objet here to avoid the changed signal
-	track->m_cdText.setTitle( thread->m_decoder->metaInfo( K3bAudioDecoder::META_TITLE ) );
-	track->m_cdText.setPerformer( thread->m_decoder->metaInfo( K3bAudioDecoder::META_ARTIST ) );
-	track->m_cdText.setSongwriter( thread->m_decoder->metaInfo( K3bAudioDecoder::META_SONGWRITER ) );
-	track->m_cdText.setComposer( thread->m_decoder->metaInfo( K3bAudioDecoder::META_COMPOSER ) );
-	track->m_cdText.setMessage( thread->m_decoder->metaInfo( K3bAudioDecoder::META_COMMENT ) );
+	track->setTitle( thread->m_decoder->metaInfo( K3bAudioDecoder::META_TITLE ) );
+	track->setPerformer( thread->m_decoder->metaInfo( K3bAudioDecoder::META_ARTIST ) );
+	track->setSongwriter( thread->m_decoder->metaInfo( K3bAudioDecoder::META_SONGWRITER ) );
+	track->setComposer( thread->m_decoder->metaInfo( K3bAudioDecoder::META_COMPOSER ) );
+	track->setCdTextMessage( thread->m_decoder->metaInfo( K3bAudioDecoder::META_COMMENT ) );
       }
       m_decoderMetaInfoSetMap.erase( thread->m_decoder );
       m_audioTrackStatusThreads.removeRef( thread );

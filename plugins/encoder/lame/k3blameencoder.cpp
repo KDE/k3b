@@ -32,6 +32,7 @@
 #include <qspinbox.h>
 #include <qgroupbox.h>
 #include <qbuttongroup.h>
+#include <qtextcodec.h>
 
 
 #include <lame/lame.h>
@@ -194,27 +195,33 @@ void K3bLameEncoder::finishEncoderInternal()
 
 void K3bLameEncoder::setMetaDataInternal( K3bAudioEncoder::MetaDataField f, const QString& value )
 {
+  // let's not use UTF-8 here since I don't know how to tell lame...
+  // FIXME: when we use the codec we only get garbage. Why?
+  QTextCodec* codec = 0;//QTextCodec::codecForName( "ISO8859-1" );
+//  if( !codec )
+//    kdDebug() << "(K3bLameEncoder) could not find codec ISO8859-1." << endl;
+
   switch( f ) {
   case META_TRACK_TITLE:
-    id3tag_set_title( d->flags, value.latin1() );
+    id3tag_set_title( d->flags, codec ? codec->fromUnicode(value).data() : value.latin1() );
     break;
   case META_TRACK_ARTIST:
-    id3tag_set_artist( d->flags, value.latin1() );
+    id3tag_set_artist( d->flags, codec ? codec->fromUnicode(value).data() : value.latin1() );
     break;
   case META_ALBUM_TITLE:
-    id3tag_set_album( d->flags, value.latin1() );
+    id3tag_set_album( d->flags, codec ? codec->fromUnicode(value).data() : value.latin1() );
     break;
   case META_ALBUM_COMMENT:
-    id3tag_set_comment( d->flags, value.latin1() );
+    id3tag_set_comment( d->flags, codec ? codec->fromUnicode(value).data() : value.latin1() );
     break;
   case META_YEAR:
-    id3tag_set_year( d->flags, value.latin1() );
+    id3tag_set_year( d->flags, codec ? codec->fromUnicode(value).data() : value.latin1() );
     break;
   case META_TRACK_NUMBER:
-    id3tag_set_track( d->flags, value.latin1() );
+    id3tag_set_track( d->flags, codec ? codec->fromUnicode(value).data() : value.latin1() );
     break;
   case META_GENRE:
-    if( id3tag_set_genre( d->flags, value.latin1() ) )
+    if( id3tag_set_genre( d->flags, codec ? codec->fromUnicode(value).data() : value.latin1() ) )
       kdDebug() << "(K3bLameEncoder) unable to set genre." << endl;
     break;
   default:

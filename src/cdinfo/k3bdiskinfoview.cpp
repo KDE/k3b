@@ -165,37 +165,37 @@ void K3bDiskInfoView::displayInfo( K3bDevice::DiskInfoDetector* did )
   if( ngInfo.diskState() == K3bDevice::STATE_NO_MEDIA ) {
     (void)new QListViewItem( m_infoView, i18n("No Disk") );
     setTitle( i18n("No disk in drive") );
-    setRightPixmap( "diskinfo_right" );
+    setRightPixmap( K3bTheme::MEDIA_NONE );
   }
   else {
 
     if( ngInfo.empty() ) {
       setTitle( i18n("Empty %1 media").arg(K3bDevice::mediaTypeString( ngInfo.mediaType(), true )) );
-      setRightPixmap( "diskinfo_empty" );
+      setRightPixmap( K3bTheme::MEDIA_EMPTY );
     } 
     else {
       switch( toc.contentType() ) {
       case K3bDevice::AUDIO:
         setTitle( i18n("Audio CD") );
-	setRightPixmap( "diskinfo_audio" );
+	setRightPixmap( K3bTheme::MEDIA_AUDIO );
         break;
       case K3bDevice::DATA:
 	if( K3bDevice::isDvdMedia( ngInfo.mediaType() ) ) {
 	  setTitle( did->isVideoDvd() ? i18n("Video DVD") : i18n("DVD") );
-	  setRightPixmap( "diskinfo_dvd" );
+	  setRightPixmap( K3bTheme::MEDIA_VIDEO );
 	}
 	else {
 	  setTitle( did->isVideoCd() ? i18n("Video CD") : i18n("Data CD") );
-	  setRightPixmap( "diskinfo_data" );
+	  setRightPixmap( K3bTheme::MEDIA_DATA );
 	}
         break;
       case K3bDevice::MIXED:
         setTitle( did->isVideoCd() ? i18n("Video CD") : i18n("Mixed mode CD") );
-	setRightPixmap( "diskinfo_mixed" );
+	setRightPixmap( K3bTheme::MEDIA_MIXED );
         break;
       default:
 	setTitle( i18n("Unknown disk type") );
-	setRightPixmap( "diskinfo_right" );
+	setRightPixmap( K3bTheme::MEDIA_NONE );
       }
     }
 

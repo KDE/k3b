@@ -34,50 +34,126 @@ namespace K3bDevice {
 
   class Device;
 
+  /**
+   * \brief Manages all devices.
+   *
+   * Searches the system for devices and maintains lists of them.
+   *
+   * <b>Basic usage:</b>
+   * \code
+   *   K3bDevice::DeviceManager* manager = new K3bDevice::DeviceManager( this );
+   *   manager->scanBus();
+   *   manager->scanFstab();
+   *   K3bDevice::Device* dev = manager->findDevice( "/dev/cdrom" );
+   * \endcode
+   */
   class DeviceManager : public QObject
     {
       Q_OBJECT
 
     public:
+      /**
+       * Creates a new DeviceManager
+       */
       DeviceManager( QObject* parent = 0, const char* name = 0 );
       ~DeviceManager();
 
+      /**
+       * \deprecated use findDevice( const QString& )
+       */
       Device* deviceByName( const QString& );
 
+      /**
+       * Search an SCSI device by SCSI bus, id, and lun.
+       *
+       * \note This method does not initialize new devices.
+       *       Devices cannot be found until they have been added via addDevice(const QString&)
+       *       or scanBus().
+       *
+       * \return The corresponding device or 0 if there is no such device.
+       */
       Device* findDevice( int bus, int id, int lun );
+
+      /**
+       * Search a device by blockdevice name.
+       *
+       * \note This method does not initialize new devices.
+       *       Devices cannot be found until they have been added via addDevice(const QString&)
+       *       or scanBus().
+       *
+       * \return The corresponding device or 0 if there is no such device.
+       */
       Device* findDevice( const QString& devicename );
 
       /**
-       * Before getting the devices do a @ref scanbus().
-       * @return List of all cd writer devices.
-       * @deprecated use cdWriter
+       * Before getting the devices do a @ref scanBus().
+       * \return List of all cd writer devices.
+       * \deprecated use cdWriter()
        */
       QPtrList<Device>& burningDevices();
 
       /**
-       * Note that all burning devices can also be used as
-       * reading device and are not present in this list.
-       * Before getting the devices do a @ref scanbus().
-       * @return List of all reader devices without writer devices.
-       * @deprecated use cdReader
+       * \return List of all reader devices without writer devices.
+       * \deprecated use cdReader()
        **/
       QPtrList<Device>& readingDevices();
 
+      /**
+       * Before getting the devices do a @ref scanBus() or add 
+       * devices via addDevice( const QString& ).
+       *
+       * \return List of all devices.
+       */
       QPtrList<Device>& allDevices();
 
+      /**
+       * Before getting the devices do a @ref scanBus() or add 
+       * devices via addDevice( const QString& ).
+       *
+       * \return List of all cd writer devices.
+       */
       QPtrList<Device>& cdWriter();
+
+      /**
+       * Before getting the devices do a @ref scanBus() or add 
+       * devices via addDevice( const QString& ).
+       *
+       * \return List of all cd reader devices.
+       */
       QPtrList<Device>& cdReader();
+
+      /**
+       * Before getting the devices do a @ref scanBus() or add 
+       * devices via addDevice( const QString& ).
+       *
+       * \return List of all DVD writer devices.
+       */
       QPtrList<Device>& dvdWriter();
+
+      /**
+       * Before getting the devices do a @ref scanBus() or add 
+       * devices via addDevice( const QString& ).
+       *
+       * \return List of all DVD reader devices.
+       */
       QPtrList<Device>& dvdReader();
 
-      /** writes to stderr **/
+      /**
+       * Writes a list of all devices to stderr.
+       */
       void printDevices();
 
       /**
-       * Returns number of found devices
+       * Scan the system for devices. Call this to initialize all devices.
+       *
+       * \return Number of found devices.
        **/
-      int scanbus();
+      int scanBus();
 
+      /**
+       * Searches for mountpoints of the devices. This methos will also add devices
+       * that have an entry in the fstab file and have not yet been found.
+       */
       void scanFstab();
 
       /**
@@ -93,10 +169,17 @@ namespace K3bDevice {
       void clear();
 
       /**
-       * add a new device like "/dev/mebecdrom" to be sensed
-       * by the deviceManager.
+       * Add a new device.
+       *
+       * \param dev Name of a block device or link to a block device. If the 
+       *            corresponding device has already been detected it will simply
+       *            be returned. Otherwise if a device is found it will be initialized
+       *            and added to the internal lists (meaning it can be accessed through
+       *            emthods like cdReader()).
+       *
+       * \return The device if it could be found or 0 otherwise.
        */
-      Device* addDevice( const QString& );
+      Device* addDevice( const QString& dev );
 
     signals:
       /**

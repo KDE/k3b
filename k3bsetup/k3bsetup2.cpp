@@ -133,7 +133,7 @@ K3bSetup2::K3bSetup2( QWidget *parent, const char *name, const QStringList& )
   d->externalBinManager->addProgram( new K3bCdrecordProgram(false) );
 
   d->externalBinManager->search();
-  d->deviceManager->scanbus();
+  d->deviceManager->scanBus();
 
   load();
 

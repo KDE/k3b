@@ -1,4 +1,4 @@
-AM_CPPFLAGS= -I$(srcdir)/../core -I$(srcdir)/../../libk3bdevice -I$(srcdir)/../tools -I$(srcdir)/datacd -I$(srcdir)/audiocd -I$(srcdir)/mixedcd -I$(srcdir)/movixcd -I$(srcdir)/movixdvd -I$(srcdir)/datadvd -I$(srcdir)/videocd -I$(srcdir)/videodvd $(all_includes)
+AM_CPPFLAGS= -I$(srcdir)/../core -I$(srcdir)/../plugin -I$(srcdir)/../../libk3bdevice -I$(srcdir)/../tools -I$(srcdir)/datacd -I$(srcdir)/audiocd -I$(srcdir)/mixedcd -I$(srcdir)/movixcd -I$(srcdir)/movixdvd -I$(srcdir)/datadvd -I$(srcdir)/videocd -I$(srcdir)/videodvd $(all_includes)
 
 noinst_LTLIBRARIES = libk3bproject.la
 
@@ -29,7 +29,8 @@ libk3bproject_la_SOURCES = k3babstractwriter.cpp \
 			   k3bjobprogresssystemtray.cpp \
 			   k3bimagefilereader.cpp \
 			   k3bcuefileparser.cpp \
-			   k3bpipebuffer.cpp
+			   k3bpipebuffer.cpp \
+			   k3bprojectplugindialog.cpp
 
 include_HEADERS =          k3bblankingjob.h \
                            k3bdoc.h \

@@ -168,10 +168,10 @@ public:
 
 
 K3bDevice::Device::Device( const QString& devname )
-  : m_writeModes(0),
-    m_bus(-1),
+  : m_bus(-1),
     m_target(-1),
     m_lun(-1),
+    m_writeModes(0),
     m_automount(false)
 {
   d = new Private;
@@ -203,7 +203,7 @@ bool K3bDevice::Device::init()
   //
   // they all should read CD-ROM.
   //
-  d->deviceType = CDROM;
+  d->deviceType = DEVICE_CD_ROM;
 
   d->supportedProfiles = 0;
 
@@ -233,547 +233,33 @@ bool K3bDevice::Device::init()
     m_version = QString::fromLocal8Bit( (char*)(inq->revision), 4 ).stripWhiteSpace();
   }
 
-
-
   //
   // We probe all features of the device. Since not all devices support the GET CONFIGURATION command
   // we also query the mode page 2A and use the cdrom.h stuff to get as much information as possible
   //
-
-  // TODO: do multiple calls with length 65530 and different starting features (only for future versions of MMC.
-  //       MMC4 says it's never more than 1KB)
-
-  unsigned char header[2048];
-  ::memset( header, 0, 2048 );
-
-  cmd.clear();
-  cmd[0] = MMC_GET_CONFIGURATION;
-  cmd[8] = 8;
-  if( cmd.transport( TR_DIR_READ, header, 8 ) ) {
-    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": GET_CONFIGURATION failed." << endl;
-  }
-  else {
-    int len = from4Byte( header );
-
-    //
-    // Some buggy firmwares do not return the size of the available data
-    // but the returned data. So we use a high power of 2 to be on the safe side
-    // with these buggy drives.
-    // We cannot use this as default since many firmwares fail with a too high data length.
-    //
-    if( len == 8 ) {
-      cmd[7] = 2048>>8;
-      cmd[8] = 2048;
-      if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 )
-	len = from2Byte( header );
-    }
-
-    // again with full length
-    unsigned char* profiles = new unsigned char[len];
-    ::memset( profiles, 0, len );
-    cmd[6] = len>>16;
-    cmd[7] = len>>8;
-    cmd[8] = len;
-
-    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": GET_CONFIGURATION length: " << len << "." << endl;
-
-    if( cmd.transport( TR_DIR_READ, profiles, len ) ) {
-      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": GET_CONFIGURATION failed." << endl;
-    }
-    else {
-      for( int i = 8; i < len; ) {
-	short feature = from2Byte( &profiles[i] );
-	int featureLen = profiles[i+3];
-	i+=4; // skip feature header
-
-	//
-	// now i indexes the first byte of the feature dependant data
-	//
-
-	switch( feature ) {
-	case FEATURE_PROFILE_LIST:
-	  for( int j = 0; j < featureLen; j+=4 ) {
-	    short profile = from2Byte( &profiles[i+j] );
-
-	    switch (profile) {
-	    case 0x10:
-	      d->supportedProfiles |= MEDIA_DVD_ROM;
-	      d->deviceType |= DVD;
-	      break;
-	    case 0x11:
-	      d->supportedProfiles |= MEDIA_DVD_R_SEQ;
-	      d->deviceType |= DVDR;
-	      break;
-	    case 0x12:
-	      d->supportedProfiles |= MEDIA_DVD_RAM;
-	      break;
-	    case 0x13:
-	      d->supportedProfiles |= MEDIA_DVD_RW_OVWR;
-	      d->deviceType |= DVDRW;
-	      break;
-	    case 0x14:
-	      d->supportedProfiles |= MEDIA_DVD_RW_SEQ;
-	      d->deviceType |= DVDRW;
-	      break;
-	    case 0x15:
-	      d->supportedProfiles |= MEDIA_DVD_R_DL_SEQ;
-	      d->deviceType |= DVDRW;
-	      break;
-	    case 0x16:
-	      d->supportedProfiles |= MEDIA_DVD_R_DL_JUMP;
-	      d->deviceType |= DVDRW;
-	      break;
-	    case 0x1A:
-	      d->supportedProfiles |= MEDIA_DVD_PLUS_RW;
-	      d->deviceType |= DVDPRW;
-	      break;
-	    case 0x1B: 
-	      d->supportedProfiles |= MEDIA_DVD_PLUS_R;
-	      d->deviceType |= DVDPR;
-	      break;
-	    case 0x2B:
-	      d->supportedProfiles |= MEDIA_DVD_PLUS_R_DL;
-	      d->deviceType |= DVDPR;
-	      break;
-	    case 0x08:
-	      d->supportedProfiles |= MEDIA_CD_ROM;
-	      d->deviceType |= CDROM;
-	      break;
-	    case 0x09:
-	      d->supportedProfiles |= MEDIA_CD_R;
-	      d->deviceType |= CDR;
-	      break;
-	    case 0x0A:
-	      d->supportedProfiles |= MEDIA_CD_RW;
-	      d->deviceType |= CDRW;
-	      break;
-	    default:
-	      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " unknown profile: "
-			<< profile << endl;
-	    }
-	  }
-	  break;
-
-	case FEATURE_CORE:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Core" << endl;
-	  break;
-
-	case FEATURE_MORPHING:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Morphing" << endl;
-	  break;
-
-	case FEATURE_REMOVABLE_MEDIA:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Removable Medium" << endl;
-	  break;
-
-	case FEATURE_WRITE_PROTECT:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Write Protect" << endl;
-	  break;
-
-	  // 0x05 - 0x0F reserved
-
-	case FEATURE_RANDOM_READABLE:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Random Readable" << endl;
-	  break;
-
-	  // 0x11 - 0x1C reserved
-
-	case FEATURE_MULTI_READ:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Multi-Read" << endl;
-	  d->deviceType |= CDROM;
-	  break;
-
-	case FEATURE_CD_READ:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD Read" << endl;
-	  d->deviceType |= CDROM;
-	  break;
-
-	case FEATURE_DVD_READ:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD Read" << endl;
-	  d->deviceType |= DVD;
-	  break;
-
-	case FEATURE_RANDOM_WRITABLE:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Random Writable" << endl;
-	  break;
-
-	case FEATURE_INCREMENTAL_STREAMING_WRITABLE:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Incremental Streaming Writable" << endl;
-	  break;
-
-	case FEATURE_SECTOR_ERASABLE:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Sector Erasable" << endl;
-	  break;
-
-	case FEATURE_FORMATTABLE:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Formattable" << endl;
-	  break;
-
-	case FEATURE_DEFECT_MANAGEMENT:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Defect Management" << endl;
-	  break;
-
-	case FEATURE_WRITE_ONCE:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Write Once" << endl;
-	  break;
-
-	case FEATURE_RESTRICTED_OVERWRITE:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Restricted Overwrite" << endl;
-	  break;
-
-	case FEATURE_CD_RW_CAV_WRITE:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD-RW CAV Write" << endl;
-	  d->deviceType |= CDRW;
-	  d->deviceType |= CDR;
-	  break;
-
-	case FEATURE_MRW:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "MRW" << endl;
-	  break;
-
-	case FEATURE_ENHANCED_DEFECT_REPORTING:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Enhanced Defect Reporting" << endl;
-	  break;
-
-	case FEATURE_DVD_PLUS_RW:
-	  {
-	    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD+RW" << endl;
-#if __BYTE_ORDER == __BIG_ENDIAN
-	    struct dvd_plus_rw_feature {
-	      unsigned char reserved1   : 7;
-	      unsigned char write       : 1;
-	      unsigned char reserved2   : 6;
-	      unsigned char quick_start : 1;
-	      unsigned char close_only  : 1;
-	      // and some stuff we do not use here...
-	    };
-#else
-	    struct dvd_plus_rw_feature {
-	      unsigned char write       : 1;
-	      unsigned char reserved1   : 7;
-	      unsigned char close_only  : 1;
-	      unsigned char quick_start : 1;
-	      unsigned char reserved2   : 6;
-	      // and some stuff we do not use here...
-	    };
-#endif
-
-	    struct dvd_plus_rw_feature* p = (struct dvd_plus_rw_feature*)&profiles[i];
-	    if( p->write ) d->deviceType |= DVDPRW;
-	    break;
-	  }
-
-	case FEATURE_DVD_PLUS_R:
-	  {
-	    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD+R" << endl;
-#if __BYTE_ORDER == __BIG_ENDIAN
-	    struct dvd_plus_r_feature {
-	      unsigned char reserved1      : 7;
-	      unsigned char write          : 1;
-	      unsigned char reserved2[3];
-	      unsigned char reserved3      : 6;
-	      unsigned char write_4x_max   : 1;
-	      unsigned char write_2_4x_max : 1;
-	      // and some stuff we do not use here...
-	    };
-#else
-	    struct dvd_plus_r_feature {
-	      unsigned char write     : 1;
-	      unsigned char reserved1 : 7;
-	      unsigned char reserved2[3];
-	      unsigned char write_2_4x_max : 1;
-	      unsigned char write_4x_max   : 1;
-	      unsigned char reserved3      : 6;
-	      // and some stuff we do not use here...
-	    };
-#endif
-	    struct dvd_plus_r_feature* p = (struct dvd_plus_r_feature*)&profiles[i];
-	    if( p->write ) d->deviceType |= DVDPR;
-	    break;
-	  }
-
-	case FEATURE_RIGID_RESTRICTED_OVERWRITE:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Rigid Restricted Overwrite" << endl;
-	  break;
-
-	case FEATURE_CD_TRACK_AT_ONCE:
-	  {
-	    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD Track At Once" << endl;
-#if __BYTE_ORDER == __BIG_ENDIAN
-	    struct cd_track_at_once_feature {
-	      unsigned char reserved1 : 1;
-	      unsigned char BUF       : 1;  // Burnfree
-	      unsigned char reserved2 : 1;
-	      unsigned char rw_raw    : 1;  // Writing R-W subcode in Raw mode
-	      unsigned char rw_pack   : 1;  // Writing R-W subcode in Packet mode
-	      unsigned char testwrite : 1;  // Simulation write support
-	      unsigned char cd_rw     : 1;  // CD-RW support
-	      unsigned char rw_sub    : 1;  // Write R-W sub channels with user data
-	      unsigned char reserved3;
-	      unsigned char data_type[2];
-	    };
-#else
-	    struct cd_track_at_once_feature {
-	      unsigned char rw_sub    : 1;  // Write R-W sub channels with user data
-	      unsigned char cd_rw     : 1;  // CD-RW support
-	      unsigned char testwrite : 1;  // Simulation write support
-	      unsigned char rw_pack   : 1;  // Writing R-W subcode in Packet mode
-	      unsigned char rw_raw    : 1;  // Writing R-W subcode in Raw mode
-	      unsigned char reserved2 : 1;
-	      unsigned char BUF       : 1;  // Burnfree
-	      unsigned char reserved1 : 1;
-	      unsigned char reserved3;
-	      unsigned char data_type[2];
-	    };
-#endif
-
-	    struct cd_track_at_once_feature* p = (struct cd_track_at_once_feature*)&profiles[i];
-	    m_writeModes |= TAO;
-	    if( p->BUF ) d->burnfree = true;
-	    d->deviceType |= CDR;
-	    if( p->cd_rw ) d->deviceType |= CDRW;
-	    break;
-	  }
-
-	case FEATURE_CD_MASTERING:
-	  {
-	    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD Mastering" << endl;
-#if __BYTE_ORDER == __BIG_ENDIAN
-	    struct cd_mastering_feature {
-	      unsigned char reserved1 : 1;
-	      unsigned char BUF       : 1;  // Burnfree
-	      unsigned char SAO       : 1;  // Session At Once writing
-	      unsigned char raw_ms    : 1;  // Writing Multisession in Raw Writing Mode
-	      unsigned char raw       : 1;  // Writing in RAW mode
-	      unsigned char testwrite : 1;  // Simulation write support
-	      unsigned char cd_rw     : 1;  // CD-RW support
-	      unsigned char rw_sub    : 1;  // Write R-W sub channels with user data
-	      unsigned char max_cue_length[3];
-	    };
-#else
-	    struct cd_mastering_feature {
-	      unsigned char rw_sub    : 1;  // Write R-W sub channels with user data
-	      unsigned char cd_rw     : 1;  // CD-RW support
-	      unsigned char testwrite : 1;  // Simulation write support
-	      unsigned char raw       : 1;  // Writing in RAW mode
-	      unsigned char raw_ms    : 1;  // Writing Multisession in Raw Writing Mode
-	      unsigned char SAO       : 1;  // Session At Once writing
-	      unsigned char BUF       : 1;  // Burnfree
-	      unsigned char reserved1 : 1;
-	      unsigned char max_cue_length[3];
-	    };
-#endif
-
-	    struct cd_mastering_feature* p = (struct cd_mastering_feature*)&profiles[i];
-	    if( p->BUF ) d->burnfree = true;
-	    d->deviceType |= CDR;
-	    if( p->cd_rw ) d->deviceType |= CDRW;
-	    if( p->SAO ) m_writeModes |= SAO;
-	    if( p->raw || p->raw_ms ) m_writeModes |= RAW;  // perhaps we should extend this to RAW/R96P|R
-	    break;
-	  }
-
-	case FEATURE_DVD_R_RW_WRITE:
-	  {
-	    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD-R/-RW Write" << endl;
-#if __BYTE_ORDER == __BIG_ENDIAN
-	    struct dvd_r_rw_write_feature {
-	      unsigned char reserved1 : 1;
-	      unsigned char BUF       : 1;  // Burnfree
-	      unsigned char reserved2 : 3;
-	      unsigned char testwrite : 1;  // Simulation write support
-	      unsigned char dvd_rw    : 1;  // DVD-RW Writing
-	      unsigned char reserved3 : 1;
-	      unsigned char reserved4[3];
-	    };
-#else
-	    struct dvd_r_rw_write_feature {
-	      unsigned char reserved3 : 1;
-	      unsigned char dvd_rw    : 1;  // DVD-RW Writing
-	      unsigned char testwrite : 1;  // Simulation write support
-	      unsigned char reserved2 : 3;
-	      unsigned char BUF       : 1;  // Burnfree
-	      unsigned char reserved1 : 1;
-	      unsigned char reserved4[3];
-	    };
-#endif
-
-	    struct dvd_r_rw_write_feature* p = (struct dvd_r_rw_write_feature*)&profiles[i];
-	    if( p->BUF ) d->burnfree = true;
-	    d->deviceType |= DVDR;
-	    if( p->dvd_rw ) d->deviceType |= DVDRW;
-
-	    m_dvdMinusTestwrite = p->testwrite;
-	    break;
-	  }
-
-	case FEATURE_DDCD_READ:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DDCD Read" << endl;
-	  break;
-
-	case FEATURE_DDCD_R_WRITE:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DDCD-R Write" << endl;
-	  break;
-
-	case FEATURE_DDCD_RW_WRITE:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DDCD-RW Write" << endl;
-	  break;
-
-	  // 0x33 0x38
-
-	case FEATURE_LAYER_JUMP_RECORDING:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Layer Jump Recording" << endl;
-	  d->deviceType |= DVDRW;
-	  d->supportedProfiles |= MEDIA_DVD_R_DL_JUMP;
-	  break;
-
-	case FEATURE_CD_RW_MEDIA_WRITE_SUPPORT:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD-RW Media Write Support" << endl;
-	  d->deviceType |= CDRW;
-	  d->deviceType |= CDR;
-	  break;
-
-	  // 0x38- 0xFF reserved
-
-	case FEATURE_POWER_MANAGEMENT:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Power Management" << endl;
-	  break;
-
-	  // 0x101 reserved
-
-	case FEATURE_EMBEDDED_CHANGER:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Embedded Changer" << endl;
-	  break;
-
-	case FEATURE_CD_AUDIO_ANALOG_PLAY:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD Audio analog play" << endl;
-	  break;
-
-	case FEATURE_MICROCODE_UPGRADE:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Microcode Upgrade" << endl;
-	  break;
-
-	case FEATURE_TIMEOUT:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Timeout" << endl;
-	  break;
-
-	case FEATURE_DVD_CSS:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD-CSS" << endl;
-	  break;
-
-	case FEATURE_REAL_TIME_STREAMING:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Read Time Streaming" << endl;
-	  break;
-
-	case FEATURE_LOGICAL_UNIT_SERIAL_NUMBER:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Logical Unit Serial Number" << endl;
-	  break;
-
-	  // 0x109 reserved
-
-	case FEATURE_DISC_CONTROL_BLOCKS:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Disc Control Blocks" << endl;
-	  break;
-
-	case FEATURE_DVD_CPRM:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD CPRM" << endl;
-	  break;
-
-	  //  0x10C - 0x1FE reserved
-
-	case FEATURE_FIRMWARE_DATE:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Firmware Date" << endl;
-	  break;
-
-	  // 0x200 - 0xFEFF reserved
-
-	  // 0xFF00 - 0xFFFF vendor specific
-
-	default:
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": unknown feature: "
-		    << feature << endl;
-	  break;
-	}
-
-	// skip feature dependent data
-	i += featureLen;
-      }
-    }
-
-    delete [] profiles;
-  }
-
+  checkFeatures();
 
   //
-  // Check the supported write modes (TAO, SAO, RAW) by trying to set them
+  // Check the supported write modes (WRITINGMODE_TAO, WRITINGMODE_SAO, WRITINGMODE_RAW) by trying to set them
   // We do this before checking mode page 2A in case some readers allow changin
   // the write parameter page
   //
-  checkWriteModes();
+  checkWritingModes();
 
   //
   // Most current drives support the 2A mode page
   // Here we can get some more information (cdrecord -prcap does exactly this)
   //
-  unsigned char* mm_cap_buffer = 0;
-  int mm_cap_len = 0;
-  if( modeSense( &mm_cap_buffer, mm_cap_len, 0x2A ) ) {
-    mm_cap_page_2A* mm_p = (mm_cap_page_2A*)(mm_cap_buffer+8);
-    if( mm_p->BUF )
-      d->burnfree = true;
-
-    if( mm_p->cd_r_write )
-      d->deviceType |= CDR;
-    else
-      d->deviceType &= ~CDR;
-
-    if( mm_p->cd_rw_write )
-      d->deviceType |= CDRW;
-    else
-      d->deviceType &= ~CDRW;
-
-    if( mm_p->dvd_r_write )
-      d->deviceType |= DVDR;
-    else
-      d->deviceType &= ~DVDR;
-
-    if( mm_p->dvd_rom_read || mm_p->dvd_r_read )
-      d->deviceType |= DVD;
-
-    m_maxReadSpeed = from2Byte(mm_p->max_read_speed);
-    m_bufferSize = from2Byte( mm_p->buffer_size );
-
-    delete [] mm_cap_buffer;
-  }
-  else {
-    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": read mode page 2A failed!" << endl;
-  }
+  checkFor2AFeatures();
 
   m_maxWriteSpeed = determineMaximalWriteSpeed();
-
 
   //
   // Check Just-Link via Ricoh mode page 0x30
   //
-  if( !d->burnfree ) {
-    unsigned char* ricoh = 0;
-    int ricohLen = 0;
-    if( modeSense( &ricoh, ricohLen, 0x30 ) ) {
-
-      //
-      // 8 byte mode header + 6 byte page data
-      //
-
-      if( ricohLen >= 14 ) {
-	ricoh_mode_page_30* rp = (ricoh_mode_page_30*)(ricoh+8);
-	d->burnfree = rp->BUEFS;
-      }
-
-      delete [] ricoh;
-    }
-  }
-
-
+  if( !d->burnfree )
+    checkForJustLink();
+  
   //
   // Support for some very old drives
   //
@@ -790,7 +276,7 @@ bool K3bDevice::Device::furtherInit()
 #ifdef Q_OS_LINUX
 
   //
-  // Since all CDR drives at least support TAO, all CDRW drives should support
+  // Since all CDR drives at least support WRITINGMODE_TAO, all CDRW drives should support
   // mode page 2a and all DVD writer should support mode page 2a or the GET CONFIGURATION
   // command this is redundant and may be removed for BSD ports or even completely
   //
@@ -805,18 +291,18 @@ bool K3bDevice::Device::furtherInit()
     return false;
   }
 
-  d->deviceType |= CDROM;
+  d->deviceType |= DEVICE_CD_ROM;
 
   if (drivetype & CDC_CD_R)
-    d->deviceType |= CDR;
+    d->deviceType |= DEVICE_CD_R;
   if (drivetype & CDC_CD_RW)
-    d->deviceType |= CDRW;
+    d->deviceType |= DEVICE_CD_RW;
   if (drivetype & CDC_DVD_R)
-    d->deviceType |= DVDR;
+    d->deviceType |= DEVICE_DVD_R;
   if (drivetype & CDC_DVD_RAM)
-    d->deviceType |= DVDRAM;
+    d->deviceType |= DEVICE_DVD_RAM;
   if (drivetype & CDC_DVD)
-    d->deviceType |= DVD;
+    d->deviceType |= DEVICE_DVD_ROM;
 
   close();
 
@@ -849,8 +335,8 @@ void K3bDevice::Device::checkForAncientWriters()
 					description().startsWith("RCD 4X4") ) )
       ||
       ( vendor().startsWith("Traxdata") && description().startsWith("CDR4120") ) ) {
-    m_writeModes = TAO;
-    d->deviceType = CDROM|CDR;
+    m_writeModes = WRITINGMODE_TAO;
+    d->deviceType = DEVICE_CD_ROM|DEVICE_CD_R;
     m_maxWriteSpeed = 4;
     m_maxReadSpeed = 12;
     m_bufferSize = 1024;
@@ -858,24 +344,24 @@ void K3bDevice::Device::checkForAncientWriters()
   }
   else if( vendor().startsWith("MATSHITA") ) {
     if( description().startsWith("CD-R   CW-7501") ) {
-      m_writeModes = TAO|SAO;
-      d->deviceType = CDROM|CDR;
+      m_writeModes = WRITINGMODE_TAO|WRITINGMODE_SAO;
+      d->deviceType = DEVICE_CD_ROM|DEVICE_CD_R;
       m_maxWriteSpeed = 2;
       m_maxReadSpeed = 4;
       m_bufferSize = 1024;
       d->burnfree = false;
     }
     if( description().startsWith("CD-R   CW-7502") ) {
-      m_writeModes = TAO|SAO;
-      d->deviceType = CDROM|CDR;
+      m_writeModes = WRITINGMODE_TAO|WRITINGMODE_SAO;
+      d->deviceType = DEVICE_CD_ROM|DEVICE_CD_R;
       m_maxWriteSpeed = 4;
       m_maxReadSpeed = 8;
       m_bufferSize = 1024;
       d->burnfree = false;
     }
     else if( description().startsWith("CD-R56S") ) {
-      m_writeModes |= TAO;
-      d->deviceType |= CDROM|CDR;
+      m_writeModes |= WRITINGMODE_TAO;
+      d->deviceType |= DEVICE_CD_ROM|DEVICE_CD_R;
       m_maxWriteSpeed = 6;
       m_maxReadSpeed = 24;
       m_bufferSize = 1302;
@@ -884,8 +370,8 @@ void K3bDevice::Device::checkForAncientWriters()
   }
   else if( vendor().startsWith("HP") ) {
     if( description().startsWith("CD-Writer 6020") ) {
-      m_writeModes = TAO;
-      d->deviceType = CDROM|CDR;
+      m_writeModes = WRITINGMODE_TAO;
+      d->deviceType = DEVICE_CD_ROM|DEVICE_CD_R;
       m_maxWriteSpeed = 2;
       m_maxReadSpeed = 6;
       m_bufferSize = 1024;
@@ -906,19 +392,19 @@ K3bDevice::Interface K3bDevice::Device::interfaceType()
 
 bool K3bDevice::Device::dao() const
 {
-  return m_writeModes & SAO;
+  return m_writeModes & WRITINGMODE_SAO;
 }
 
 
 bool K3bDevice::Device::supportsRawWriting() const
 {
-  return( writingModes() & (RAW|RAW_R16|RAW_R96P|RAW_R96R) );
+  return( writingModes() & (WRITINGMODE_RAW|WRITINGMODE_RAW_R16|WRITINGMODE_RAW_R96P|WRITINGMODE_RAW_R96R) );
 }
 
 
 bool K3bDevice::Device::writesCd() const
 {
-  return ( d->deviceType & CDR ) && ( m_writeModes & TAO );
+  return ( d->deviceType & DEVICE_CD_R ) && ( m_writeModes & WRITINGMODE_TAO );
 }
 
 
@@ -930,7 +416,7 @@ bool K3bDevice::Device::burner() const
 
 bool K3bDevice::Device::writesCdrw() const
 {
-  return d->deviceType & CDRW;
+  return d->deviceType & DEVICE_CD_RW;
 }
 
 
@@ -942,19 +428,19 @@ bool K3bDevice::Device::writesDvd() const
 
 bool K3bDevice::Device::writesDvdPlus() const
 {
-  return d->deviceType & (DVDPR|DVDPRW);
+  return d->deviceType & (DEVICE_DVD_PLUS_R|DEVICE_DVD_PLUS_RW);
 }
 
 
 bool K3bDevice::Device::writesDvdMinus() const
 {
-  return d->deviceType & (DVDR|DVDRW);
+  return d->deviceType & (DEVICE_DVD_R|DEVICE_DVD_RW);
 }
 
 
 bool K3bDevice::Device::readsDvd() const
 {
-  return d->deviceType & (DVD|DVDR|DVDRAM);
+  return d->deviceType & (DEVICE_DVD_ROM|DEVICE_DVD_R|DEVICE_DVD_RAM|DEVICE_DVD_PLUS_R);
 }
 
 
@@ -1029,9 +515,8 @@ bool K3bDevice::Device::burnfree() const
 
 bool K3bDevice::Device::isDVD() const
 {
-  if( d->deviceType & ( DVDR | DVDRAM | DVD ) ) {
+  if( readsDvd() )
     return( dvdMediaType() != MEDIA_UNKNOWN );
-  }
   else
     return false;
 }
@@ -1999,12 +1484,6 @@ const QStringList& K3bDevice::Device::deviceNodes() const
 }
 
 
-bool K3bDevice::Device::supportsWriteMode( WriteMode w )
-{
-  return (m_writeModes & w);
-}
-
-
 K3bDevice::Device::Handle K3bDevice::Device::handle() const
 {
 #ifdef Q_OS_FREEBSD
@@ -2126,8 +1605,8 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
     int dataLen = 0;
 
 //     //
-//     // Set writing mode to TAO.
-//     // In RAW writing mode we do not get the values we want.
+//     // Set writing mode to WRITINGMODE_TAO.
+//     // In WRITINGMODE_RAW writing mode we do not get the values we want.
 //     //
 //     if( modeSense( &data, dataLen, 0x05 ) ) {
 //       wr_param_page_05* mp = (struct wr_param_page_05*)(data+8);
@@ -2145,7 +1624,7 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
 //       mp->audio_pause_len[0] = 0;
 //       mp->audio_pause_len[1] = 150;
 
-//       mp->write_type = 0x01;  // TAO
+//       mp->write_type = 0x01;  // WRITINGMODE_TAO
 //       mp->track_mode = 4;     // MMC-4 says: 5, cdrecord uses 4 ???
 //       mp->dbtype = 8;         // Mode 1
 
@@ -2638,7 +2117,795 @@ bool K3bDevice::Device::readSectorsRaw(unsigned char *buf, int start, int count)
 }
 
 
-void K3bDevice::Device::checkWriteModes()
+
+void K3bDevice::Device::checkForJustLink()
+{
+  unsigned char* ricoh = 0;
+  int ricohLen = 0;
+  if( modeSense( &ricoh, ricohLen, 0x30 ) ) {
+    
+    //
+    // 8 byte mode header + 6 byte page data
+    //
+    
+    if( ricohLen >= 14 ) {
+      ricoh_mode_page_30* rp = (ricoh_mode_page_30*)(ricoh+8);
+      d->burnfree = rp->BUEFS;
+    }
+    
+    delete [] ricoh;
+  }
+}
+
+
+void K3bDevice::Device::checkFeatures()
+{
+  // TODO: why not call GET PERFORMANCE with RT=2 for all 10 features we actually use. That way we can use a fixed
+  //       allocation length and I heard even Plextor drives work that way.
+
+  unsigned char header[1024];
+  ::memset( header, 0, 1024 );
+
+  ScsiCommand cmd( this );
+  cmd[0] = MMC_GET_CONFIGURATION;
+  cmd[1] = 2;
+
+
+  //
+  // CD writing features
+  //
+  cmd[2] = FEATURE_CD_MASTERING>>8;
+  cmd[3] = FEATURE_CD_MASTERING;
+  cmd[8] = 16;
+  if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
+    int len = from4Byte( header );
+    if( len == 12 ) {
+      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD Mastering" << endl;
+#if __BYTE_ORDER == __BIG_ENDIAN
+      struct cd_mastering_feature {
+	unsigned char reserved1 : 1;
+	unsigned char BUF       : 1;  // Burnfree
+	unsigned char SAO       : 1;  // Session At Once writing
+	unsigned char raw_ms    : 1;  // Writing Multisession in Raw Writing Mode
+	unsigned char raw       : 1;  // Writing in WRITINGMODE_RAW mode
+	unsigned char testwrite : 1;  // Simulation write support
+	unsigned char cd_rw     : 1;  // CD-RW support
+	unsigned char rw_sub    : 1;  // Write R-W sub channels with user data
+	unsigned char max_cue_length[3];
+      };
+#else
+      struct cd_mastering_feature {
+	unsigned char rw_sub    : 1;  // Write R-W sub channels with user data
+	unsigned char cd_rw     : 1;  // CD-RW support
+	unsigned char testwrite : 1;  // Simulation write support
+	unsigned char raw       : 1;  // Writing in WRITINGMODE_RAW mode
+	unsigned char raw_ms    : 1;  // Writing Multisession in Raw Writing Mode
+	unsigned char SAO       : 1;  // Session At Once writing
+	unsigned char BUF       : 1;  // Burnfree
+	unsigned char reserved1 : 1;
+	unsigned char max_cue_length[3];
+      };
+#endif
+
+      struct cd_mastering_feature* p = (struct cd_mastering_feature*)&header[12];
+      if( p->BUF ) d->burnfree = true;
+      d->deviceType |= DEVICE_CD_R;
+      if( p->cd_rw )
+	d->deviceType |= DEVICE_CD_RW;
+//       if( p->WRITINGMODE_SAO ) m_writeModes |= WRITINGMODE_SAO;
+//       if( p->raw || p->raw_ms ) m_writeModes |= WRITINGMODE_RAW;  // WRITINGMODE_RAW16 always supported when raw is supported?
+    }
+  }
+
+  cmd[2] = FEATURE_CD_TRACK_AT_ONCE>>8;
+  cmd[3] = FEATURE_CD_TRACK_AT_ONCE;
+  cmd[8] = 16;
+  if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
+    int len = from4Byte( header );
+    if( len == 12 ) {
+      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD Track At Once" << endl;
+#if __BYTE_ORDER == __BIG_ENDIAN
+      struct cd_track_at_once_feature {
+	unsigned char reserved1 : 1;
+	unsigned char BUF       : 1;  // Burnfree
+	unsigned char reserved2 : 1;
+	unsigned char rw_raw    : 1;  // Writing R-W subcode in Raw mode
+	unsigned char rw_pack   : 1;  // Writing R-W subcode in Packet mode
+	unsigned char testwrite : 1;  // Simulation write support
+	unsigned char cd_rw     : 1;  // CD-RW support
+	unsigned char rw_sub    : 1;  // Write R-W sub channels with user data
+	unsigned char reserved3;
+	unsigned char data_type[2];
+      };
+#else
+      struct cd_track_at_once_feature {
+	unsigned char rw_sub    : 1;  // Write R-W sub channels with user data
+	unsigned char cd_rw     : 1;  // CD-RW support
+	unsigned char testwrite : 1;  // Simulation write support
+	unsigned char rw_pack   : 1;  // Writing R-W subcode in Packet mode
+	unsigned char rw_raw    : 1;  // Writing R-W subcode in Raw mode
+	unsigned char reserved2 : 1;
+	unsigned char BUF       : 1;  // Burnfree
+	unsigned char reserved1 : 1;
+	unsigned char reserved3;
+	unsigned char data_type[2];
+      };
+#endif
+
+      struct cd_track_at_once_feature* p = (struct cd_track_at_once_feature*)&header[12];
+      m_writeModes |= WRITINGMODE_TAO;
+      if( p->BUF ) d->burnfree = true;
+      d->deviceType |= DEVICE_CD_R;
+      if( p->cd_rw )
+	d->deviceType |= DEVICE_CD_RW;
+
+      // is the following correct? What exactly does rw_sub tell us?
+//       if( m_writeModes & WRITINGMODE_RAW ) {
+// 	if( p->rw_raw ) m_writeModes |= WRITINGMODE_RAW_R96R;
+// 	if( p->rw_pack ) m_writeModes |= WRITINGMODE_RAW_R96P;
+//       }
+
+//       // check the data types for 1, 2, and 3 (raw16, raw96p, and raw96r)
+//        debugBitfield( p->data_type, 2 );
+//       if( m_writeModes & WRITINGMODE_RAW ) {
+// 	if( p->data_type[1] & 0x20 ) m_writeModes |= WRITINGMODE_RAW_R16;
+// 	if( p->data_type[1] & 0x40 ) m_writeModes |= WRITINGMODE_RAW_R96P;
+// 	if( p->data_type[1] & 0x80 ) m_writeModes |= WRITINGMODE_RAW_R96R;
+//       }
+    }
+  }
+
+  cmd[2] = FEATURE_CD_RW_MEDIA_WRITE_SUPPORT>>8;
+  cmd[3] = FEATURE_CD_RW_MEDIA_WRITE_SUPPORT;
+  cmd[8] = 16;
+  if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
+    int len = from4Byte( header );
+    if( len == 12 ) {
+      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD-RW Media Write Support" << endl;
+      d->deviceType |= (DEVICE_CD_R|DEVICE_CD_RW);
+    }
+  }
+
+
+  //
+  // DVD+R(W) writing features
+  //
+  cmd[2] = FEATURE_DVD_PLUS_R>>8;
+  cmd[3] = FEATURE_DVD_PLUS_R;
+  cmd[8] = 16;
+  if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
+    int len = from4Byte( header );
+    if( len == 12 ) {
+      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD+R" << endl;
+      if( header[12] & 0x1 )
+	d->deviceType |= DEVICE_DVD_PLUS_R;
+    }
+  }
+
+  cmd[2] = FEATURE_DVD_PLUS_RW>>8;
+  cmd[3] = FEATURE_DVD_PLUS_RW;
+  cmd[8] = 16;
+  if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
+    int len = from4Byte( header );
+    if( len == 12 ) {
+      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD+RW" << endl;
+#if __BYTE_ORDER == __BIG_ENDIAN
+      struct dvd_plus_rw_feature {
+	unsigned char reserved1   : 7;
+	unsigned char write       : 1;
+	unsigned char reserved2   : 6;
+	unsigned char quick_start : 1;
+	unsigned char close_only  : 1;
+	// and some stuff we do not use here...
+      };
+#else
+      struct dvd_plus_rw_feature {
+	unsigned char write       : 1;
+	unsigned char reserved1   : 7;
+	unsigned char close_only  : 1;
+	unsigned char quick_start : 1;
+	unsigned char reserved2   : 6;
+	// and some stuff we do not use here...
+      };
+#endif
+
+      struct dvd_plus_rw_feature* p = (struct dvd_plus_rw_feature*)&header[12];
+      if( p->write )
+	d->deviceType |= DEVICE_DVD_PLUS_RW;
+    }
+  }
+
+
+  cmd[2] = FEATURE_DVD_PLUS_R_DOUBLE_LAYER>>8;
+  cmd[3] = FEATURE_DVD_PLUS_R_DOUBLE_LAYER;
+  cmd[8] = 16;
+  if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
+    int len = from4Byte( header );
+    if( len == 12 ) {
+      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD+R Double Layer" << endl;
+      if( header[12] & 0x1 )
+	d->deviceType |= DEVICE_DVD_PLUS_R_DL;
+    }
+  }
+
+
+
+  //
+  // DVD-R(W)
+  //
+  cmd[2] = FEATURE_DVD_R_RW_WRITE>>8;
+  cmd[3] = FEATURE_DVD_R_RW_WRITE;
+  cmd[8] = 16;
+  if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
+    int len = from4Byte( header );
+    if( len == 12 ) {
+      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD-R/-RW Write" << endl;
+#if __BYTE_ORDER == __BIG_ENDIAN
+      struct dvd_r_rw_write_feature {
+	unsigned char reserved1 : 1;
+	unsigned char BUF       : 1;  // Burnfree
+	unsigned char reserved2 : 3;
+	unsigned char testwrite : 1;  // Simulation write support
+	unsigned char dvd_rw    : 1;  // DVD-RW Writing
+	unsigned char reserved3 : 1;
+	unsigned char reserved4[3];
+      };
+#else
+      struct dvd_r_rw_write_feature {
+	unsigned char reserved3 : 1;
+	unsigned char dvd_rw    : 1;  // DVD-RW Writing
+	unsigned char testwrite : 1;  // Simulation write support
+	unsigned char reserved2 : 3;
+	unsigned char BUF       : 1;  // Burnfree
+	unsigned char reserved1 : 1;
+	unsigned char reserved4[3];
+      };
+#endif
+
+      struct dvd_r_rw_write_feature* p = (struct dvd_r_rw_write_feature*)&header[12];
+      if( p->BUF ) d->burnfree = true;
+      d->deviceType |= DEVICE_DVD_R;
+      if( p->dvd_rw )
+	d->deviceType |= DEVICE_DVD_RW;
+
+      m_dvdMinusTestwrite = p->testwrite;
+    }
+  }
+
+
+  //
+  // DVD-RW restricted overwrite check
+  //
+  cmd[2] = FEATURE_RIGID_RESTRICTED_OVERWRITE>>8;
+  cmd[3] = FEATURE_RIGID_RESTRICTED_OVERWRITE;
+  cmd[8] = 16;
+  if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
+    int len = from4Byte( header );
+    if( len == 12 ) {
+      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Rigid Restricted Overwrite" << endl;
+      m_writeModes |= WRITINGMODE_RES_OVWR;
+    }
+  }
+
+
+
+
+  // FIXME: get rid of all the profiles. We don't need them for features anymore!
+  //        the stuff above should be sufficient!
+
+
+
+  // all features
+  cmd.clear();
+  cmd[0] = MMC_GET_CONFIGURATION;
+  cmd[8] = 8;
+  if( cmd.transport( TR_DIR_READ, header, 8 ) ) {
+    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": GET_CONFIGURATION with failed." << endl;
+    return;
+  }
+
+  //
+  // At this point we have successfully called GET CONFIGURATION to get the available data's length
+  //
+  int len = from4Byte( header );
+
+  //
+  // Some buggy firmwares do not return the size of the available data
+  // but the returned data. So we use a high power of 2 to be on the safe side
+  // with these buggy drives.
+  // We cannot use this as default since many firmwares fail with a too high data length.
+  //
+  if( len == 8 ) {
+    cmd[7] = 1024>>8;
+    cmd[8] = 1024;
+    if( cmd.transport( TR_DIR_READ, header, 1024 ) == 0 )
+      len = from4Byte( header );
+  }
+
+  // again with full length
+  unsigned char* profiles = new unsigned char[len];
+  ::memset( profiles, 0, len );
+  cmd[6] = len>>16;
+  cmd[7] = len>>8;
+  cmd[8] = len;
+
+  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": GET_CONFIGURATION length: " << len << "." << endl;
+
+  if( cmd.transport( TR_DIR_READ, profiles, len ) ) {
+    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": GET_CONFIGURATION failed." << endl;
+  }
+  else {
+    for( int i = 8; i < len; ) {
+      short feature = from2Byte( &profiles[i] );
+      int featureLen = profiles[i+3];
+      i+=4; // skip feature header
+
+      //
+      // now i indexes the first byte of the feature dependant data
+      //
+
+      switch( feature ) {
+      case FEATURE_PROFILE_LIST:
+	for( int j = 0; j < featureLen; j+=4 ) {
+	  short profile = from2Byte( &profiles[i+j] );
+
+	  switch (profile) {
+	  case 0x10:
+	    d->supportedProfiles |= MEDIA_DVD_ROM;
+	    d->deviceType |= DEVICE_DVD_ROM;
+	    break;
+	  case 0x11:
+	    d->supportedProfiles |= MEDIA_DVD_R_SEQ;
+	    d->deviceType |= DEVICE_DVD_R;
+	    break;
+	  case 0x12:
+	    d->supportedProfiles |= MEDIA_DVD_RAM;
+	    d->deviceType |= DEVICE_DVD_RAM;
+	    break;
+	  case 0x13:
+	    d->supportedProfiles |= MEDIA_DVD_RW_OVWR;
+	    d->deviceType |= DEVICE_DVD_RW;
+	    break;
+	  case 0x14:
+	    d->supportedProfiles |= MEDIA_DVD_RW_SEQ;
+	    d->deviceType |= DEVICE_DVD_RW;
+	    break;
+	  case 0x15:
+	    d->supportedProfiles |= MEDIA_DVD_R_DL_SEQ;
+	    d->deviceType |= (DEVICE_DVD_R|DEVICE_DVD_R_DL);
+	    break;
+	  case 0x16:
+	    d->supportedProfiles |= MEDIA_DVD_R_DL_JUMP;
+	    d->deviceType |= (DEVICE_DVD_R|DEVICE_DVD_R_DL);
+	    break;
+	  case 0x1A:
+	    d->supportedProfiles |= MEDIA_DVD_PLUS_RW;
+	    d->deviceType |= DEVICE_DVD_PLUS_RW;
+	    break;
+	  case 0x1B: 
+	    d->supportedProfiles |= MEDIA_DVD_PLUS_R;
+	    d->deviceType |= DEVICE_DVD_PLUS_R;
+	    break;
+	  case 0x2B:
+	    d->supportedProfiles |= MEDIA_DVD_PLUS_R_DL;
+	    d->deviceType |= (DEVICE_DVD_PLUS_R|DEVICE_DVD_PLUS_R_DL);
+	    break;
+	  case 0x08:
+	    d->supportedProfiles |= MEDIA_CD_ROM;
+	    d->deviceType |= DEVICE_CD_ROM;
+	    break;
+	  case 0x09:
+	    d->supportedProfiles |= MEDIA_CD_R;
+	    d->deviceType |= DEVICE_CD_R;
+	    break;
+	  case 0x0A:
+	    d->supportedProfiles |= MEDIA_CD_RW;
+	    d->deviceType |= DEVICE_CD_RW;
+	    break;
+	  default:
+	    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " unknown profile: "
+		      << profile << endl;
+	  }
+	}
+	break;
+
+      case FEATURE_CORE:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Core" << endl;
+	break;
+
+      case FEATURE_MORPHING:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Morphing" << endl;
+	break;
+
+      case FEATURE_REMOVABLE_MEDIA:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Removable Medium" << endl;
+	break;
+
+      case FEATURE_WRITE_PROTECT:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Write Protect" << endl;
+	break;
+
+	// 0x05 - 0x0F reserved
+
+      case FEATURE_RANDOM_READABLE:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Random Readable" << endl;
+	break;
+
+	// 0x11 - 0x1C reserved
+
+      case FEATURE_MULTI_READ:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Multi-Read" << endl;
+	d->deviceType |= DEVICE_CD_ROM;
+	break;
+
+      case FEATURE_CD_READ:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD Read" << endl;
+	d->deviceType |= DEVICE_CD_ROM;
+	break;
+
+      case FEATURE_DVD_READ:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD Read" << endl;
+	d->deviceType |= DEVICE_DVD_ROM;
+	break;
+
+      case FEATURE_RANDOM_WRITABLE:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Random Writable" << endl;
+	break;
+
+      case FEATURE_INCREMENTAL_STREAMING_WRITABLE:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Incremental Streaming Writable" << endl;
+	break;
+
+      case FEATURE_SECTOR_ERASABLE:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Sector Erasable" << endl;
+	break;
+
+      case FEATURE_FORMATTABLE:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Formattable" << endl;
+	break;
+
+      case FEATURE_DEFECT_MANAGEMENT:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Defect Management" << endl;
+	break;
+
+      case FEATURE_WRITE_ONCE:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Write Once" << endl;
+	break;
+
+      case FEATURE_RESTRICTED_OVERWRITE:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Restricted Overwrite" << endl;
+	break;
+
+      case FEATURE_CD_RW_CAV_WRITE:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD-RW CAV Write" << endl;
+	d->deviceType |= DEVICE_CD_RW;
+	d->deviceType |= DEVICE_CD_R;
+	break;
+
+      case FEATURE_MRW:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "MRW" << endl;
+	break;
+
+      case FEATURE_ENHANCED_DEFECT_REPORTING:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Enhanced Defect Reporting" << endl;
+	break;
+
+      case FEATURE_DVD_PLUS_RW:
+	{
+	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD+RW" << endl;
+#if __BYTE_ORDER == __BIG_ENDIAN
+	  struct dvd_plus_rw_feature {
+	    unsigned char reserved1   : 7;
+	    unsigned char write       : 1;
+	    unsigned char reserved2   : 6;
+	    unsigned char quick_start : 1;
+	    unsigned char close_only  : 1;
+	    // and some stuff we do not use here...
+	  };
+#else
+	  struct dvd_plus_rw_feature {
+	    unsigned char write       : 1;
+	    unsigned char reserved1   : 7;
+	    unsigned char close_only  : 1;
+	    unsigned char quick_start : 1;
+	    unsigned char reserved2   : 6;
+	    // and some stuff we do not use here...
+	  };
+#endif
+
+	  struct dvd_plus_rw_feature* p = (struct dvd_plus_rw_feature*)&profiles[i];
+	  if( p->write ) d->deviceType |= DEVICE_DVD_PLUS_RW;
+	  break;
+	}
+
+      case FEATURE_DVD_PLUS_R:
+	{
+	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD+R" << endl;
+#if __BYTE_ORDER == __BIG_ENDIAN
+	  struct dvd_plus_r_feature {
+	    unsigned char reserved1      : 7;
+	    unsigned char write          : 1;
+	    unsigned char reserved2[3];
+	    unsigned char reserved3      : 6;
+	    unsigned char write_4x_max   : 1;
+	    unsigned char write_2_4x_max : 1;
+	    // and some stuff we do not use here...
+	  };
+#else
+	  struct dvd_plus_r_feature {
+	    unsigned char write     : 1;
+	    unsigned char reserved1 : 7;
+	    unsigned char reserved2[3];
+	    unsigned char write_2_4x_max : 1;
+	    unsigned char write_4x_max   : 1;
+	    unsigned char reserved3      : 6;
+	    // and some stuff we do not use here...
+	  };
+#endif
+	  struct dvd_plus_r_feature* p = (struct dvd_plus_r_feature*)&profiles[i];
+	  if( p->write ) d->deviceType |= DEVICE_DVD_PLUS_R;
+	  break;
+	}
+
+      case FEATURE_DVD_PLUS_R_DOUBLE_LAYER:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD+R Double Layer" << endl;
+	if( profiles[i+4] & 0x1 )
+	  d->deviceType |= DEVICE_DVD_PLUS_R_DL;
+	break;
+
+      case FEATURE_RIGID_RESTRICTED_OVERWRITE:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Rigid Restricted Overwrite" << endl;
+	m_writeModes |= WRITINGMODE_RES_OVWR;
+	break;
+
+      case FEATURE_CD_TRACK_AT_ONCE:
+	{
+	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD Track At Once" << endl;
+#if __BYTE_ORDER == __BIG_ENDIAN
+	  struct cd_track_at_once_feature {
+	    unsigned char reserved1 : 1;
+	    unsigned char BUF       : 1;  // Burnfree
+	    unsigned char reserved2 : 1;
+	    unsigned char rw_raw    : 1;  // Writing R-W subcode in Raw mode
+	    unsigned char rw_pack   : 1;  // Writing R-W subcode in Packet mode
+	    unsigned char testwrite : 1;  // Simulation write support
+	    unsigned char cd_rw     : 1;  // CD-RW support
+	    unsigned char rw_sub    : 1;  // Write R-W sub channels with user data
+	    unsigned char reserved3;
+	    unsigned char data_type[2];
+	  };
+#else
+	  struct cd_track_at_once_feature {
+	    unsigned char rw_sub    : 1;  // Write R-W sub channels with user data
+	    unsigned char cd_rw     : 1;  // CD-RW support
+	    unsigned char testwrite : 1;  // Simulation write support
+	    unsigned char rw_pack   : 1;  // Writing R-W subcode in Packet mode
+	    unsigned char rw_raw    : 1;  // Writing R-W subcode in Raw mode
+	    unsigned char reserved2 : 1;
+	    unsigned char BUF       : 1;  // Burnfree
+	    unsigned char reserved1 : 1;
+	    unsigned char reserved3;
+	    unsigned char data_type[2];
+	  };
+#endif
+
+	  struct cd_track_at_once_feature* p = (struct cd_track_at_once_feature*)&profiles[i];
+	  m_writeModes |= WRITINGMODE_TAO;
+	  if( p->BUF ) d->burnfree = true;
+	  d->deviceType |= DEVICE_CD_R;
+	  if( p->cd_rw ) d->deviceType |= DEVICE_CD_RW;
+	  break;
+	}
+
+      case FEATURE_CD_MASTERING:
+	{
+	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD Mastering" << endl;
+#if __BYTE_ORDER == __BIG_ENDIAN
+	  struct cd_mastering_feature {
+	    unsigned char reserved1 : 1;
+	    unsigned char BUF       : 1;  // Burnfree
+	    unsigned char SAO       : 1;  // Session At Once writing
+	    unsigned char raw_ms    : 1;  // Writing Multisession in Raw Writing Mode
+	    unsigned char raw       : 1;  // Writing in WRITINGMODE_RAW mode
+	    unsigned char testwrite : 1;  // Simulation write support
+	    unsigned char cd_rw     : 1;  // CD-RW support
+	    unsigned char rw_sub    : 1;  // Write R-W sub channels with user data
+	    unsigned char max_cue_length[3];
+	  };
+#else
+	  struct cd_mastering_feature {
+	    unsigned char rw_sub    : 1;  // Write R-W sub channels with user data
+	    unsigned char cd_rw     : 1;  // CD-RW support
+	    unsigned char testwrite : 1;  // Simulation write support
+	    unsigned char raw       : 1;  // Writing in WRITINGMODE_RAW mode
+	    unsigned char raw_ms    : 1;  // Writing Multisession in Raw Writing Mode
+	    unsigned char SAO       : 1;  // Session At Once writing
+	    unsigned char BUF       : 1;  // Burnfree
+	    unsigned char reserved1 : 1;
+	    unsigned char max_cue_length[3];
+	  };
+#endif
+
+	  struct cd_mastering_feature* p = (struct cd_mastering_feature*)&profiles[i];
+	  if( p->BUF ) d->burnfree = true;
+	  d->deviceType |= DEVICE_CD_R;
+	  if( p->cd_rw ) d->deviceType |= DEVICE_CD_RW;
+	  if( p->SAO ) m_writeModes |= WRITINGMODE_SAO;
+	  if( p->raw || p->raw_ms ) m_writeModes |= WRITINGMODE_RAW;  // perhaps we should extend this to WRITINGMODE_RAW/R96P|R
+	  break;
+	}
+
+      case FEATURE_DVD_R_RW_WRITE:
+	{
+	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD-R/-RW Write" << endl;
+#if __BYTE_ORDER == __BIG_ENDIAN
+	  struct dvd_r_rw_write_feature {
+	    unsigned char reserved1 : 1;
+	    unsigned char BUF       : 1;  // Burnfree
+	    unsigned char reserved2 : 3;
+	    unsigned char testwrite : 1;  // Simulation write support
+	    unsigned char dvd_rw    : 1;  // DVD-RW Writing
+	    unsigned char reserved3 : 1;
+	    unsigned char reserved4[3];
+	  };
+#else
+	  struct dvd_r_rw_write_feature {
+	    unsigned char reserved3 : 1;
+	    unsigned char dvd_rw    : 1;  // DVD-RW Writing
+	    unsigned char testwrite : 1;  // Simulation write support
+	    unsigned char reserved2 : 3;
+	    unsigned char BUF       : 1;  // Burnfree
+	    unsigned char reserved1 : 1;
+	    unsigned char reserved4[3];
+	  };
+#endif
+
+	  struct dvd_r_rw_write_feature* p = (struct dvd_r_rw_write_feature*)&profiles[i];
+	  if( p->BUF ) d->burnfree = true;
+	  d->deviceType |= DEVICE_DVD_R;
+	  if( p->dvd_rw ) d->deviceType |= DEVICE_DVD_RW;
+	  m_writeModes |= WRITINGMODE_INCR_SEQ;
+	  m_dvdMinusTestwrite = p->testwrite;
+	  break;
+	}
+
+      case FEATURE_DDCD_READ:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DDCD Read" << endl;
+	break;
+
+      case FEATURE_DDCD_R_WRITE:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DDCD-R Write" << endl;
+	break;
+
+      case FEATURE_DDCD_RW_WRITE:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DDCD-RW Write" << endl;
+	break;
+
+	// 0x33 0x38
+
+      case FEATURE_LAYER_JUMP_RECORDING:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Layer Jump Recording" << endl;
+	d->deviceType |= DEVICE_DVD_R_DL;
+	m_writeModes |= WRITINGMODE_LAYER_JUMP;
+	break;
+
+      case FEATURE_CD_RW_MEDIA_WRITE_SUPPORT:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD-RW Media Write Support" << endl;
+	d->deviceType |= DEVICE_CD_RW;
+	d->deviceType |= DEVICE_CD_R;
+	break;
+
+	// 0x38- 0xFF reserved
+
+      case FEATURE_POWER_MANAGEMENT:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Power Management" << endl;
+	break;
+
+	// 0x101 reserved
+
+      case FEATURE_EMBEDDED_CHANGER:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Embedded Changer" << endl;
+	break;
+
+      case FEATURE_CD_AUDIO_ANALOG_PLAY:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD Audio analog play" << endl;
+	break;
+
+      case FEATURE_MICROCODE_UPGRADE:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Microcode Upgrade" << endl;
+	break;
+
+      case FEATURE_TIMEOUT:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Timeout" << endl;
+	break;
+
+      case FEATURE_DVD_CSS:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD-CSS" << endl;
+	break;
+
+      case FEATURE_REAL_TIME_STREAMING:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Read Time Streaming" << endl;
+	break;
+
+      case FEATURE_LOGICAL_UNIT_SERIAL_NUMBER:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Logical Unit Serial Number" << endl;
+	break;
+
+	// 0x109 reserved
+
+      case FEATURE_DISC_CONTROL_BLOCKS:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Disc Control Blocks" << endl;
+	break;
+
+      case FEATURE_DVD_CPRM:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD CPRM" << endl;
+	break;
+
+	//  0x10C - 0x1FE reserved
+
+      case FEATURE_FIRMWARE_DATE:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Firmware Date" << endl;
+	break;
+
+	// 0x200 - 0xFEFF reserved
+
+	// 0xFF00 - 0xFFFF vendor specific
+
+      default:
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": unknown feature: "
+		  << feature << endl;
+	break;
+      }
+
+      // skip feature dependent data
+      i += featureLen;
+    }
+  }
+
+  delete [] profiles;
+}
+
+
+void K3bDevice::Device::checkFor2AFeatures()
+{
+  unsigned char* mm_cap_buffer = 0;
+  int mm_cap_len = 0;
+
+  if( modeSense( &mm_cap_buffer, mm_cap_len, 0x2A ) ) {
+    mm_cap_page_2A* mm_p = (mm_cap_page_2A*)(mm_cap_buffer+8);
+    if( mm_p->BUF )
+      d->burnfree = true;
+
+    if( mm_p->cd_r_write )
+      d->deviceType |= DEVICE_CD_R;
+    else
+      d->deviceType &= ~DEVICE_CD_R;
+
+    if( mm_p->cd_rw_write )
+      d->deviceType |= DEVICE_CD_RW;
+    else
+      d->deviceType &= ~DEVICE_CD_RW;
+
+    if( mm_p->dvd_r_write )
+      d->deviceType |= DEVICE_DVD_R;
+    else
+      d->deviceType &= ~DEVICE_DVD_R;
+
+    if( mm_p->dvd_rom_read || mm_p->dvd_r_read )
+      d->deviceType |= DEVICE_DVD_ROM;
+
+    m_maxReadSpeed = from2Byte(mm_p->max_read_speed);
+    m_bufferSize = from2Byte( mm_p->buffer_size );
+
+    delete [] mm_cap_buffer;
+  }
+  else {
+    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": read mode page 2A failed!" << endl;
+  }
+}
+
+
+void K3bDevice::Device::checkWritingModes()
 {
   // if the device is already opened we do not close it
   // to allow fast multible method calls in a row
@@ -2677,54 +2944,67 @@ void K3bDevice::Device::checkWriteModes()
     mp->audio_pause_len[0] = 0;
     mp->audio_pause_len[1] = 150;
 
-    m_writeModes = 0;
-
-    // TAO
+    // WRITINGMODE_TAO
     mp->write_type = 0x01;  // Track-at-once
     mp->track_mode = 4;     // MMC-4 says: 5, cdrecord uses 4 ?
     mp->dbtype = 8;         // Mode 1
 
-    //    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": modeselect TAO data: " << endl;
+    //    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": modeselect WRITINGMODE_TAO data: " << endl;
     //    debugBitfield( buffer, dataLen );
 
 
     //
-    // if a writer does not support TAO it surely does not support SAO or RAW writing since TAO is the minimal
+    // if a writer does not support WRITINGMODE_TAO it surely does not support WRITINGMODE_SAO or WRITINGMODE_RAW writing since WRITINGMODE_TAO is the minimal
     // requirement
     //
 
     if( modeSelect( buffer, dataLen, 1, 0 ) ) {
-      m_writeModes |= TAO;
-      d->deviceType |= CDR;
+      m_writeModes |= WRITINGMODE_TAO;
+      d->deviceType |= DEVICE_CD_R;
 
-      // SAO
+      // WRITINGMODE_SAO
       mp->write_type = 0x02; // Session-at-once
 
       if( modeSelect( buffer, dataLen, 1, 0 ) )
-	m_writeModes |= SAO;
+	m_writeModes |= WRITINGMODE_SAO;
 
-      // RAW
-      mp->write_type = 0x03; // RAW
+//       mp->dbtype = 1;        // Raw data with P and Q Sub-channel (2368 bytes)
+//       if( modeSelect( buffer, dataLen, 1, 0 ) ) {
+// 	m_writeModes |= WRITINGMODE_RAW_R16;
+//       }
+
+      mp->dbtype = 2;        // Raw data with P-W Sub-channel (2448 bytes)
+      if( modeSelect( buffer, dataLen, 1, 0 ) ) {
+	m_writeModes |= WRITINGMODE_SAO_R96P;
+      }
+
+      mp->dbtype = 3;        // Raw data with P-W raw Sub-channel (2448 bytes)
+      if( modeSelect( buffer, dataLen, 1, 0 ) ) {
+	m_writeModes |= WRITINGMODE_SAO_R96R;
+      }
+
+      // WRITINGMODE_RAW
+      mp->write_type = 0x03; // WRITINGMODE_RAW
       mp->dbtype = 1;        // Raw data with P and Q Sub-channel (2368 bytes)
       if( modeSelect( buffer, dataLen, 1, 0 ) ) {
-	m_writeModes |= RAW;
-	m_writeModes |= RAW_R16;
+	m_writeModes |= WRITINGMODE_RAW;
+	m_writeModes |= WRITINGMODE_RAW_R16;
       }
 
       mp->dbtype = 2;        // Raw data with P-W Sub-channel (2448 bytes)
       if( modeSelect( buffer, dataLen, 1, 0 ) ) {
-	m_writeModes |= RAW;
-	m_writeModes |= RAW_R96P;
+	m_writeModes |= WRITINGMODE_RAW;
+	m_writeModes |= WRITINGMODE_RAW_R96P;
       }
 
-      mp->dbtype = 3;        // Raw data with P-W raw Sub-channel (2368 bytes)
+      mp->dbtype = 3;        // Raw data with P-W raw Sub-channel (2448 bytes)
       if( modeSelect( buffer, dataLen, 1, 0 ) ) {
-	m_writeModes |= RAW;
-	m_writeModes |= RAW_R96R;
+	m_writeModes |= WRITINGMODE_RAW;
+	m_writeModes |= WRITINGMODE_RAW_R96R;
       }
     }
     else {
-      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": modeSelect with TAO failed. No writer" << endl;
+      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": modeSelect with WRITINGMODE_TAO failed. No writer" << endl;
     }
 
 

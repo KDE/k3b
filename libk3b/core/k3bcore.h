@@ -19,6 +19,7 @@
 
 #include <qobject.h>
 
+#define LIBK3B_VERSION "0.11.98"
 
 #define k3bcore K3bCore::k3bCore()
 
@@ -99,10 +100,10 @@ class K3bCore : public QObject
   const K3bVersion& version() const;
 
   /**
-   * Returns the K3b configuration from k3brc.
+   * Default implementation returns the K3b configuration from k3brc.
    * Normally this should not be used.
    */
-  KConfig* config() const;
+  virtual KConfig* config() const;
 
   static K3bCore* k3bCore() { return s_k3bCore; }
 

@@ -68,7 +68,7 @@ public:
 	int dataLen = 0;
 	if( dev->readTocPmaAtip( &data, dataLen, 5, false, 0 ) ) {
 	  // we need more than the header and a multible of 18 bytes to have valid CD-TEXT
-	  if( dataLen > 4 && dataLen%sizeof(cdtext_pack) == 4 ) {
+	  if( dataLen > 4 && dataLen%18 == 4 ) {
 	    cdTextRaw.assign( reinterpret_cast<char*>(data), dataLen );
 	  }
 	  else {

@@ -18,12 +18,60 @@
 #include <kaction.h>
 #include <kpopupmenu.h>
 #include <ktoolbarbutton.h>
+#include <kiconloader.h>
 
 #include <qtoolbutton.h>
 #include <qsizepolicy.h>
 #include <qlayout.h>
 #include <qwhatsthis.h>
+#include <qtooltip.h>
 #include <qlabel.h>
+#include <qvbox.h>
+#include <qstyle.h>
+#include <qpainter.h>
+#include <qevent.h>
+
+
+/**
+ * internal class. Do not use!
+ */
+class K3bToolBoxSeparator : public QWidget
+{
+  //  Q_OBJECT
+
+ public:
+  K3bToolBoxSeparator( K3bToolBox* parent );
+  
+  QSize sizeHint() const;
+  
+ protected:
+  void paintEvent( QPaintEvent * );
+};
+
+
+K3bToolBoxSeparator::K3bToolBoxSeparator( K3bToolBox* parent )
+  : QWidget( parent )
+{
+  setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Minimum ) );
+}
+
+
+QSize K3bToolBoxSeparator::sizeHint() const
+{
+  int extent = style().pixelMetric( QStyle::PM_DockWindowSeparatorExtent,
+				    this );
+  return QSize( extent, 0 );
+}
+
+
+void K3bToolBoxSeparator::paintEvent( QPaintEvent* )
+{
+  QPainter p( this );
+  QStyle::SFlags flags = QStyle::Style_Default|QStyle::Style_Horizontal;
+
+  style().drawPrimitive( QStyle::PE_DockWindowSeparator, &p, rect(),
+			 colorGroup(), flags );
+}
 
 
 
@@ -31,14 +79,15 @@ K3bToolBoxButton::K3bToolBoxButton( KAction* action, QWidget* parent )
   : QToolButton( parent ),
     m_popupMenu(0)
 {
-  setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed) );
-  setIconSet( action->iconSet() );
-  setTextLabel( action->toolTip(), true );
-  setTextLabel( action->text() );
+  setSizePolicy( QSizePolicy(QSizePolicy::Fixed, sizePolicy().verData()) );
   setAutoRaise( true );
+
+  setIconSet( action->iconSet() );
+  setTextLabel( action->text() );
   setEnabled( action->isEnabled() );
 
   QWhatsThis::add( this, action->whatsThis() );
+  QToolTip::add( this, action->toolTip() );
 
   if( KToggleAction* ta = dynamic_cast<KToggleAction*>( action ) ) {
     setToggleButton( true );
@@ -65,10 +114,46 @@ K3bToolBoxButton::K3bToolBoxButton( KAction* action, QWidget* parent )
 }
 
 
+K3bToolBoxButton::K3bToolBoxButton( const QString& text, const QString& icon, 
+				    const QString& tooltip, const QString& whatsthis,
+				    QObject* receiver, const char* slot,
+				    QWidget* parent )
+  : QToolButton( parent ),
+    m_popupMenu(0)
+{
+  setSizePolicy( QSizePolicy(QSizePolicy::Fixed, sizePolicy().verData()) );
+  setAutoRaise( true );
+
+  setTextLabel( text );
+
+  if( icon.isEmpty() )
+    setUsesTextLabel( true );
+  else
+    setIconSet( SmallIconSet( icon ) );
+
+  QWhatsThis::add( this, whatsthis );
+  QToolTip::add( this, tooltip );
+
+  if( receiver && slot )
+    connect( this, SIGNAL(clicked()), receiver, slot );
+}
+
+
 void K3bToolBoxButton::slotPopupActivated()
 {
   // force the toolbutton to open the popupmenu instantly
   openPopup();
+}
+
+
+void K3bToolBoxButton::resizeEvent( QResizeEvent* e )
+{
+  QToolButton::resizeEvent( e );
+
+  // force icon-only buttons to be square
+  if( e->oldSize().height() != e->size().height() &&
+      !usesTextLabel() )
+    setFixedWidth( e->size().height() );
 }
 
 
@@ -97,9 +182,30 @@ K3bToolBox::~K3bToolBox()
 }
 
 
-void K3bToolBox::addButton( KAction* action )
+K3bToolBoxButton* K3bToolBox::addButton( KAction* action, bool forceText )
 {
-  addWidget( new K3bToolBoxButton( action, this ) );
+  K3bToolBoxButton* b = new K3bToolBoxButton( action, this );
+  if( forceText ) {
+    b->setUsesTextLabel( true );
+    b->setTextPosition( QToolButton::BesideIcon );
+  }
+  addWidget( b );
+  return b;
+}
+
+
+K3bToolBoxButton* K3bToolBox::addButton( const QString& text, const QString& icon, 
+					 const QString& tooltip, const QString& whatsthis,
+					 QObject* receiver, const char* slot,
+					 bool forceText )
+{
+  K3bToolBoxButton* b = new K3bToolBoxButton( text, icon, tooltip, whatsthis, receiver, slot, this );
+  if( forceText ) {
+    b->setUsesTextLabel( true );
+    b->setTextPosition( QToolButton::BesideIcon );
+  }
+  addWidget( b );
+  return b;
 }
 
 
@@ -112,11 +218,10 @@ void K3bToolBox::addSpacing()
 }
 
 
-void K3bToolBox::addLineSpacing()
+void K3bToolBox::addSeparator()
 {
-  QFrame* line = new QFrame( this );
-  line->setFrameStyle( QFrame::VLine|QFrame::Sunken );
-  addWidget( line );
+  K3bToolBoxSeparator* s = new K3bToolBoxSeparator( this );
+  addWidget( s );
 }
 
 
@@ -154,9 +259,9 @@ void K3bToolBox::addWidget( QWidget* w )
 }
 
 
-void K3bToolBox::addToggleButton( KToggleAction* action )
+K3bToolBoxButton* K3bToolBox::addToggleButton( KToggleAction* action )
 {
-  addButton( action );
+  return addButton( action );
 }
 
 

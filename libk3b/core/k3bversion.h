@@ -19,6 +19,22 @@
 
 #include <qstring.h>
 
+/**
+ * \brief Representation of a version.
+ *
+ * K3bVersion represents a version consisting of a major version (accessible via majorVersion()),
+ * a minor version (accessible via minorVersion()), a patchLevel (accessible via patchLevel()),
+ * and a suffix (accessible via suffix()).
+ *
+ * The major version is mandatory while all other fields are optional (in case of the minor version 
+ * and the patchlevel -1 means that the field is undefined).
+ *
+ * K3bVersion tries to treat version suffixes in an "intelligent" way to properly compare versions
+ * (see compareSuffix() for more details).
+ *
+ * K3bVersion may also be used everywhere a QString is needed as it automatically converts to a
+ * string representation using createVersionString().
+ */
 class K3bVersion 
 {
  public:
@@ -80,6 +96,24 @@ class K3bVersion
 				      int minorVersion = -1, 
 				      int patchlevel = -1, 
 				      const QString& suffix = QString::null );
+
+  /**
+   * "Intelligent" comparision of two version suffixes.
+   *
+   * This method checks for the following types of suffixes and treats them in the
+   * following order:
+   *
+   * [empty prefix] > rcX > preX > betaX > alphaX = aX (where X is a number)
+   *
+   * Every other suffixes are compared alphanumerical.
+   * An empty prefix is always considered newer than an unknown non-emtpy suffix (e.g. not one of the above.)
+   *
+   * @return \li -1 if suffix1 is less than suffix2
+   *         \li 0 if suffix1 equals suffix2 (be aware that this is not the same as comparing to strings as 
+   *             alphaX equals aX in this case.)
+   *         \li 1 if suffix1 is greater than suffix2
+   */
+  static int compareSuffix( const QString& suffix1, const QString& suffix2 );
 
  private:
   static void splitVersionString( const QString& s, int& num, QString& suffix );

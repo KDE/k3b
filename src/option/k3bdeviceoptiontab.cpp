@@ -83,7 +83,7 @@ void K3bDeviceOptionTab::saveDevices()
 void K3bDeviceOptionTab::slotRefreshButtonClicked()
 {
   k3bcore->deviceManager()->clear();
-  k3bcore->deviceManager()->scanbus();
+  k3bcore->deviceManager()->scanBus();
   
   m_deviceWidget->init();
 }

@@ -28,7 +28,9 @@
 K3bCdContentsView::K3bCdContentsView( bool withHeader,
 				      QWidget* parent, const char* name )
   : QWidget( parent, name ),
-    m_centerWidget(0)
+    m_centerWidget(0),
+    m_leftPixmap( K3bTheme::MEDIA_LEFT ),
+    m_rightPixmap( K3bTheme::MEDIA_NONE )
 {
   if( withHeader ) {
     QGridLayout* mainGrid = new QGridLayout( this );
@@ -94,16 +96,16 @@ void K3bCdContentsView::setTitle( const QString& s )
 }
 
 
-void K3bCdContentsView::setLeftPixmap( const QString& s )
+void K3bCdContentsView::setLeftPixmap( K3bTheme::PixmapType s )
 {
-  m_leftPixName = s;
+  m_leftPixmap = s;
   slotThemeChanged();
 }
 
 
-void K3bCdContentsView::setRightPixmap( const QString& s )
+void K3bCdContentsView::setRightPixmap( K3bTheme::PixmapType s )
 {
-  m_rightPixName = s;
+  m_rightPixmap = s;
   slotThemeChanged();
 }
 
@@ -111,14 +113,10 @@ void K3bCdContentsView::setRightPixmap( const QString& s )
 void K3bCdContentsView::slotThemeChanged()
 {
   if( K3bTheme* theme = k3bthememanager->currentTheme() ) {
-    m_pixmapLabelLeft->setPixmap( theme->pixmap( m_leftPixName.isEmpty() 
-						 ? QString("diskinfo_left")
-						 : m_leftPixName ) );
+    m_pixmapLabelLeft->setPixmap( theme->pixmap( m_leftPixmap ) );
     m_labelTitle->setPaletteBackgroundColor( theme->backgroundColor() );
     m_labelTitle->setPaletteForegroundColor( theme->foregroundColor() );
-    m_pixmapLabelRight->setPixmap( theme->pixmap( m_rightPixName.isEmpty()
-						  ? QString("diskinfo_right")
-						  : m_rightPixName ) );
+    m_pixmapLabelRight->setPixmap( theme->pixmap( m_rightPixmap ) );
   }
 }
 

@@ -83,9 +83,9 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
 
   if( K3bTheme* theme = k3bthememanager->currentTheme() ) {
     pixmapLabelLeft->setPaletteBackgroundColor( theme->backgroundColor() );
-    pixmapLabelLeft->setPixmap( theme->pixmap( "diskinfo_left" ) );
+    pixmapLabelLeft->setPixmap( theme->pixmap( K3bTheme::MEDIA_LEFT ) );
     pixmapLabelRight->setPaletteBackgroundColor( theme->backgroundColor() );
-    pixmapLabelRight->setPixmap( theme->pixmap( "diskinfo_right" ) );
+    pixmapLabelRight->setPixmap( theme->pixmap( K3bTheme::MEDIA_NONE ) );
     m_labelTitle->setPaletteBackgroundColor( theme->backgroundColor() );
     m_labelTitle->setPaletteForegroundColor( theme->foregroundColor() );
   }
@@ -178,15 +178,13 @@ void K3bInteractionDialog::initConnections()
 {
   if( m_buttonStart ) {
     connect( m_buttonStart, SIGNAL(clicked()),
-	     this, SLOT(slotStartClicked()) );
-    connect( m_buttonStart, SIGNAL(clicked()),
-	     this, SLOT(slotSaveLastSettings()) );
+	     this, SLOT(slotStartClickedInternal()) );
   }
   if( m_buttonSave ) {
+//     connect( m_buttonSave, SIGNAL(clicked()),
+// 	     this, SLOT(slotSaveLastSettings()) );
     connect( m_buttonSave, SIGNAL(clicked()),
 	     this, SLOT(slotSaveClicked()) );
-    connect( m_buttonSave, SIGNAL(clicked()),
-	     this, SLOT(slotSaveLastSettings()) );
   }
   if( m_buttonCancel )
     connect( m_buttonCancel, SIGNAL(clicked()),
@@ -285,13 +283,20 @@ void K3bInteractionDialog::slotLoadLastSettings()
 }
 
 
-void K3bInteractionDialog::slotSaveLastSettings()
+void K3bInteractionDialog::saveLastSettings()
 {
   KConfig* c = k3bcore->config();
   QString lastGroup = c->group();
   c->setGroup( "last used " + m_configGroup );
   saveUserDefaults( c );
   c->setGroup( lastGroup );
+}
+
+
+void K3bInteractionDialog::slotStartClickedInternal()
+{
+  saveLastSettings();
+  slotStartClicked();
 }
 
 
