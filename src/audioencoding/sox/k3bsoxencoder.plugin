@@ -1,9 +1,9 @@
 [K3b Plugin]
 Lib=libk3bsoxencoder
 Group=AudioEncoder
-Name=K3b Sox Audio Encoder
+Name=K3b SoX Audio Encoder
 Author=Sebastian Trueg
 Email=trueg@k3b.org
 Version=1.0
-Comment=Encoding module to encode many file formats using sox
+Comment=Encoding module to encode many file formats using SoX
 License=GPL
