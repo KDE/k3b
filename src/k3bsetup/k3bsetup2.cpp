@@ -143,7 +143,7 @@ K3bSetup2::K3bSetup2( QWidget *parent, const char *name, const QStringList& )
   //
   QTimer::singleShot( 0, this, SLOT(updateViews()) );
 
-  if (getuid() != 0 
+  if (getuid() != 0
 #if KDE_IS_VERSION(3,1,90)
       || !d->config->checkConfigFilesWritable( true )
 #endif
@@ -167,7 +167,7 @@ void K3bSetup2::updateViews()
   updatePrograms();
   updateDevices();
 
-  emit changed( d->changesNeeded );
+  emit changed( ( getuid() != 0 ) ? false : d->changesNeeded );
 }
 
 
