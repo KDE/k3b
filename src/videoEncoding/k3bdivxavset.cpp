@@ -184,7 +184,7 @@ void K3bDivxAVSet::slotCalcBitrate(){
          vBitrate *= 1.024; // correction vor divx4
      }
      vBitrate = vBitrate - audioBitrate[ aBitrateIndex ];
-     m_vBitrate->setText( m_vBitrateDesc + i18n("%1 kbits").arg(vBitrate/1000) );
+     m_vBitrate->setText( m_vBitrateDesc + i18n("1 kbit", "%n kbits", vBitrate/1000) );
      m_data->setVideoBitrate( vBitrate/1000 );
      m_data->setAudioBitrate( audioBitrate[ aBitrateIndex ]/1000 );
 }

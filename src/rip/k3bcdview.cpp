@@ -154,7 +154,7 @@ void K3bCdView::showCdView( const K3bDiskInfo& info )
   }
 
   m_labelCdArtist->setText( i18n("Audio CD") + "\n" + 
-			    i18n("%1 minutes").arg( K3b::framesToString(m_lastDiskInfo.toc.length()) ) );
+			    i18n("Length: %1").arg( K3b::framesToString(m_lastDiskInfo.toc.length()) ) );
 
   KConfig* c = kapp->config();
   c->setGroup("Cddb");
@@ -221,7 +221,7 @@ void K3bCdView::slotCddbQueryFinished( bool success )
 
       // and update the cd info 
       QString i = QString("%1 - %2\n").arg(entry.cdArtist).arg(entry.cdTitle);
-      i.append( i18n("%1 minutes").arg( K3b::framesToString(m_lastDiskInfo.toc.length()) ) );
+      i.append( i18n("Length: %1").arg( K3b::framesToString(m_lastDiskInfo.toc.length()) ) );
       if( !entry.cdExtInfo.isEmpty() )
 	i.append( QString("\n(%1)").arg(entry.cdExtInfo) );
       m_labelCdArtist->setText( i );
