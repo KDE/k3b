@@ -262,9 +262,13 @@ bool K3bAudioDoc::readM3uFile( const KURL& url, int pos )
   while( !t.atEnd() ) {
     QString line = t.readLine();
     if( line[0] != '#' ) {
-      KURL url;
-      url.setPath( line );
-      urlsToAdd.enqueue( new PrivateUrlToAdd( url , pos++ ) );
+      KURL mp3url;
+      // relative paths
+      if( line[0] != '/' )
+        mp3url.setPath( url.directory(false) + line );
+      else
+        mp3url.setPath( line );
+      urlsToAdd.enqueue( new PrivateUrlToAdd( mp3url , pos++ ) );
     }
   }
 
