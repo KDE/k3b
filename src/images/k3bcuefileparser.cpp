@@ -16,6 +16,7 @@
 #include "k3bcuefileparser.h"
 
 #include <k3bmsf.h>
+#include <k3bglobals.h>
 
 #include <qfile.h>
 #include <qfileinfo.h>
@@ -124,13 +125,16 @@ bool K3bCueFileParser::parseLine( QString& line )
 
     QString dataFile = fileRx.cap(1);
 
+    //
     // find data file
-    if( dataFile[0] == '/' ) {
+    //
+
+    // first try filename as a hole (absolut)
+    if( QFile::exists( dataFile ) )
       setImageFilename( dataFile );
-    }
     else {
       // relative path
-      setImageFilename( filename().mid( 0, filename().findRev('/') + 1 ) + dataFile );
+      setImageFilename( K3b::parentDir(filename()) + dataFile.section( '/', -1 ) );
     }
 
     //
