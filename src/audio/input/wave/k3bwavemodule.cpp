@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -89,8 +89,22 @@ void K3bWaveModule::slotConsumerReady()
     m_alreadyDecodedData += read;
     emit percent( (int)((double)m_alreadyDecodedData * 100.0 / (double)audioTrack()->size()) );
   }
+  else if( read == 0 ) {
+    // check if we need to pad
+    int bytesToPad = audioTrack()->size() - m_alreadyDecodedData;
+    if( bytesToPad > 0 ) {
+      kdDebug() << "(K3bWaveModule) we need to pad " << bytesToPad << " bytes." << endl;
+      char* c = new char[bytesToPad];
+      memset( c, 0, bytesToPad );
+      emit output( (const unsigned char*)c, bytesToPad );
+      m_alreadyDecodedData += bytesToPad;
+      delete [] c;
+    }
+    else
+      emit finished( true );
+  }
   else
-    emit finished( read == 0 );
+    emit finished( false );
 }
 
 
@@ -345,14 +359,22 @@ unsigned long K3bWaveModule::identifyWaveFile( QFile* f )
 
   // found data chunk
   int headerLen = f->at();
-  if( headerLen + chunkLen > f->size() ) {
+  if( headerLen + chunkLen > (int)f->size() ) {
     kdDebug() << f->name() << ": file length " << f->size()
       << " does not match length from WAVE header " << headerLen << " + " << chunkLen
       << " - using actual length." << endl;
-    return (f->size() - headerLen)/2352;
+
+    // we pad to a multible of 2352 bytes
+    int size = (f->size() - headerLen)/2352;
+    if( (f->size() - headerLen)%2352 > 0 )
+      size++;
+    return size;
   }
   else {
-    return chunkLen/2352;
+    int size = chunkLen/2352;
+    if( chunkLen%2352 > 0 )
+      size++;
+    return size;
   }
 }
 

@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -62,6 +62,7 @@ class K3bWaveFileWriter
  private:
   void writeEmptyHeader();
   void updateHeader();
+  void padTo2352();
 
   QFile m_outputFile;
   QDataStream m_outputStream;

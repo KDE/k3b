@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -55,6 +55,8 @@ void K3bWaveFileWriter::close()
 {
   if( isOpen() ) {
     if( m_dataWritten ) {
+      padTo2352();
+
       // update wave header
       updateHeader();
 
@@ -158,5 +160,21 @@ void K3bWaveFileWriter::updateHeader()
 
     // jump back to the end
     m_outputFile.at( m_outputFile.size() );
+  }
+}
+
+
+void K3bWaveFileWriter::padTo2352()
+{ 
+  int bytesToPad =  m_dataWritten % 2352;
+  if( bytesToPad > 0 ) {
+    kdDebug() << "(K3bWaveFileWriter) padding wave file with " << bytesToPad << " bytes." << endl;
+
+    char* c = new char[bytesToPad];
+    memset( c, 0, bytesToPad );
+    m_outputStream.writeRawBytes( c, bytesToPad );
+    delete [] c;
+
+    m_dataWritten += bytesToPad;
   }
 }
