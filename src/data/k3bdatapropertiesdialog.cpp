@@ -17,7 +17,7 @@
 
 #include "k3bdatapropertiesdialog.h"
 
-#include "k3bdataitem.h"
+#include "k3bdiritem.h"
 #include "k3bfileitem.h"
 
 #include <qpushbutton.h>
@@ -34,8 +34,7 @@
 
 
 K3bDataPropertiesDialog::K3bDataPropertiesDialog( K3bDataItem* dataItem, QWidget* parent, const char* name )
-  : KDialogBase( KDialogBase::Plain, i18n("File properties"), KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok,
-		 parent, name, true, true )
+  : KDialogBase( Plain, i18n("File properties"), Ok|Cancel, Ok, parent, name, true, true )
 {
   m_dataItem = dataItem;
 
@@ -86,6 +85,7 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( K3bDataItem* dataItem, QWidget
     QString localLocation = fileItem->url().path(-1);
     localLocation.truncate( localLocation.findRev('/') );
     m_labelLocalLocation->setText( localLocation );
+    m_labelSize->setText( KIO::convertSize(dataItem->k3bSize()) );
   }
   else {
     labelMimeType->setPixmap( KMimeType::pixmapForURL( KURL( "/" )) );
@@ -95,6 +95,9 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( K3bDataItem* dataItem, QWidget
     m_labelLocalName->hide();
     m_labelLocalLocation->hide();
     line->hide();
+    K3bDirItem* dirItem = (K3bDirItem*)dataItem;
+    m_labelSize->setText( KIO::convertSize(dataItem->k3bSize()) + 
+			  i18n("\n(in %1 files and %2 directories)").arg(dirItem->numFiles()).arg(dirItem->numDirs()) );
   }
 
   m_editName->setText( dataItem->k3bName() );
@@ -106,8 +109,6 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( K3bDataItem* dataItem, QWidget
   if( location.isEmpty() )
     location = "/";
   m_labelLocation->setText( location );
-
-  m_labelSize->setText( KIO::convertSize(dataItem->k3bSize()) );
 
   m_editName->setFocus();
 }

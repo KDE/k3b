@@ -240,12 +240,6 @@ void K3bDataView::showPopupMenu( QListViewItem* item, const QPoint& point )
 
 void K3bDataView::slotNewDir()
 {
-  bool ok;
-  QString name = KLineEditDlg::getText( i18n("Please insert the name for the new directory"),
-					"New directory", &ok, k3bMain() );
-  if( !ok )
-    return;
-
   K3bDirItem* parent;
   if( m_dataDirTree->hasFocus() ) 
     {
@@ -255,6 +249,21 @@ void K3bDataView::slotNewDir()
     {
       parent = m_dataFileView->currentDir();
     }
+
+  QString name;
+  bool ok;
+
+  name = KLineEditDlg::getText( i18n("Please insert the name for the new directory"),
+				"New directory", &ok, k3bMain() );
+
+  while( ok && K3bDataDoc::nameAlreadyInDir( name, parent ) ) {
+    name = KLineEditDlg::getText( i18n("A file with that name already exists.\nPlease insert the name for the new directory"),
+				  "New directory", &ok, k3bMain() );
+  }
+
+  if( !ok )
+    return;
+
 
   m_doc->addEmptyDir( name, parent );
 }

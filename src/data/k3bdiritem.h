@@ -52,12 +52,17 @@ class K3bDirItem : public K3bDataItem
 
   long k3bSize() const;
 
+  int numFiles() const;
+  int numDirs() const;
+
   /**
    * returns true if item is a subItem of 
    * this dir item 
    * (returns also true if item == this
    */
   bool isSubItem( K3bDataItem* item ) const;
+
+  bool isDir() const { return true; }
 	
  private:
   QList<K3bDataItem>* m_children;

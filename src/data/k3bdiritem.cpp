@@ -147,3 +147,23 @@ bool K3bDirItem::isSubItem( K3bDataItem* item ) const
 
   return false;
 }
+
+
+int K3bDirItem::numFiles() const
+{
+  int num = 0;
+
+  QListIterator<K3bDataItem> it( *m_children );
+  for( ; it.current(); ++it )
+    if( !it.current()->isDir() )
+      num++;
+
+  return num;
+}
+
+
+int K3bDirItem::numDirs() const
+{
+  return m_children->count() - numFiles();
+}
+

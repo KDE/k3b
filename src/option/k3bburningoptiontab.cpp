@@ -75,9 +75,10 @@ void K3bBurningOptionTab::setupGui()
   groupDataLayout->setSpacing( KDialog::spacingHint() );
   groupDataLayout->setMargin( KDialog::marginHint() );
 
-  m_checkUseID3Tag = new QCheckBox( "Use ID3 Tags for filenames", m_groupData );
-
+  m_checkUseID3Tag = new QCheckBox( i18n("Use audio tags for filenames"), m_groupData );
+  m_checkDropDoubles = new QCheckBox( i18n("Discard identical names"), m_groupData );
   groupDataLayout->addWidget( m_checkUseID3Tag, 0, 0 );
+  groupDataLayout->addWidget( m_checkDropDoubles, 1, 0 );
 
   // -----------------------------------------------------------------------
 
@@ -152,6 +153,7 @@ void K3bBurningOptionTab::readSettings()
 
   c->setGroup( "Data project settings" );
   m_checkUseID3Tag->setChecked( c->readBoolEntry("Use ID3 Tag for mp3 renaming", false) );
+  m_checkDropDoubles->setChecked( c->readBoolEntry("Drop doubles", false) );
 
   c->setGroup( "Audio project settings" );
   m_editDefaultPregap->setValue( c->readNumEntry( "default pregap", 150 ) );
@@ -176,7 +178,8 @@ void K3bBurningOptionTab::saveSettings()
 
   c->setGroup( "Data project settings" );
   c->writeEntry( "Use ID3 Tag for mp3 renaming", m_checkUseID3Tag->isChecked() );
-	
+  c->writeEntry( "Drop doubles", m_checkDropDoubles->isChecked() );
+
   k3bMain()->setUseID3TagForMp3Renaming( m_checkUseID3Tag->isChecked() );
 
   c->setGroup( "Audio project settings" );

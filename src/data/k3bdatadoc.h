@@ -143,6 +143,9 @@ class K3bDataDoc : public K3bDoc
 	
   // ----------------------------------------------------------------- mkisofs-options -----------
 	
+
+  static bool nameAlreadyInDir( const QString&, K3bDirItem* );
+
  public slots:
   /** add urls to the compilation.
    * @param dir the directory where to add the urls, by default this is the root directory.
@@ -176,10 +179,15 @@ class K3bDataDoc : public K3bDoc
    */
   void saveDataItem( K3bDataItem* item, QDomDocument* doc, QDomElement* parent );
 
+  void createDirItem( const QFileInfo& f, K3bDirItem* parent );
+  void createFileItem( const QFileInfo& f, K3bDirItem* parent );
+
   class PrivateItemToAdd {
   public:
     PrivateItemToAdd( const QString& p, K3bDirItem* i )
       :fileInfo(p) { parent = i; }
+    PrivateItemToAdd( const QFileInfo& f, K3bDirItem* i )
+      :fileInfo(f) { parent = i; }
     QFileInfo fileInfo;
     K3bDirItem* parent;
   };

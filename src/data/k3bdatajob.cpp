@@ -25,6 +25,8 @@
 #include "../device/k3bdevice.h"
 #include "../device/k3bemptydiscwaiter.h"
 #include "k3bdiritem.h"
+#include "../tools/k3bexternalbinmanager.h"
+
 
 #include <kprocess.h>
 #include <kapp.h>
@@ -77,12 +79,15 @@ void K3bDataJob::start()
     m_pathSpecFile = locateLocal( "appdata", "temp/" ) + "k3b_" + QTime::currentTime().toString() + ".mkisofs";
     if( !writePathSpec( m_pathSpecFile ) ) {
       emit infoMessage( i18n("Could not write to temporary file %1").arg( m_pathSpecFile ), K3bJob::ERROR );
+      cancelAll();
       emit finished( false );
     }
 		
     // determine iso-size
     m_process = new KProcess();
-    addMkisofsParameters();
+    if( !addMkisofsParameters() )
+      return;
+
     *m_process << "-print-size" << "-q";
     // add empty dummy dir since one path-spec is needed
     *m_process << m_doc->dummyDir();
@@ -96,6 +101,7 @@ void K3bDataJob::start()
       qDebug( "(K3bDataJob) could not start mkisofs: %s", kapp->config()->readEntry( "mkisofs path" ).latin1() );
       emit infoMessage( i18n("Could not start mkisofs!"), K3bJob::ERROR );
       delete m_process;
+      cancelAll();
       emit finished( false );
       return;
     }
@@ -105,6 +111,7 @@ void K3bDataJob::start()
     if( m_isoSize.isEmpty() ) {
       emit infoMessage( i18n("Could not retrieve size of data. On-the-fly writing did not work."), K3bJob::ERROR );
       emit infoMessage( i18n("Please creata an image first!"), K3bJob::ERROR );
+      cancelAll();
       emit finished( false );
     }
     else {
@@ -130,14 +137,23 @@ void K3bDataJob::slotStartWritingOnTheFly()
   // create a kshellprocess and do it on the fly!
   m_process = new KShellProcess();
 
-  addMkisofsParameters();
+  if( !addMkisofsParameters() )
+    return;
 				
   // add empty dummy dir since one path-spec is needed
   *m_process << m_doc->dummyDir();
   *m_process << "|";
 		
-  // now add the cdrecord parameters
-  *m_process << kapp->config()->readEntry( "cdrecord path" );
+  // use cdrecord to burn the cd
+  if( !k3bMain()->externalBinManager()->foundBin( "cdrecord" ) ) {
+    qDebug("(K3bAudioJob) could not find cdrecord executable" );
+    emit infoMessage( i18n("Cdrecord executable not found."), K3bJob::ERROR );
+    cancelAll();
+    emit finished( false );
+    return;
+  }
+
+  *m_process << k3bMain()->externalBinManager()->binPath( "cdrecord" );
 
   // and now we add the needed arguments...
   // display progress
@@ -201,6 +217,7 @@ void K3bDataJob::slotStartWritingOnTheFly()
       // it "should" be the executable
       qDebug("(K3bDataJob) could not start mkisofs/cdrecord");
       emit infoMessage( i18n("Could not start mkisofs/cdrecord!"), K3bJob::ERROR );
+      cancelAll();
       emit finished( false );
     }
   else
@@ -231,7 +248,8 @@ void K3bDataJob::writeImage()
   m_process->clearArguments();
   m_process->disconnect();
 			
-  addMkisofsParameters();
+  if( !addMkisofsParameters() )
+    return;
 	
   *m_process << "-o" << m_doc->isoImage();
 	
@@ -257,6 +275,7 @@ void K3bDataJob::writeImage()
       m_pathSpecFile = QString::null;
 		
       emit infoMessage( i18n("Could not start mkisofs!"), K3bJob::ERROR );
+      cancelAll();
       emit finished( false );
     }
   else
@@ -285,9 +304,17 @@ void K3bDataJob::slotStartWriting()
   m_process->clearArguments();
   m_process->disconnect();
 	
-  // now add the cdrecord parameters
-  kapp->config()->setGroup( "External Programs" );
-  *m_process << kapp->config()->readEntry( "cdrecord path" );
+  // use cdrecord to burn the cd
+  if( !k3bMain()->externalBinManager()->foundBin( "cdrecord" ) ) {
+    qDebug("(K3bAudioJob) could not find cdrecord executable" );
+    emit infoMessage( i18n("Cdrecord executable not found."), K3bJob::ERROR );
+    cancelAll();
+    emit finished( false );
+    return;
+  }
+
+  // OK, we need a new cdrecord process...
+  *m_process << k3bMain()->externalBinManager()->binPath( "cdrecord" );
 	
   // and now we add the needed arguments...
   // display progress
@@ -347,6 +374,7 @@ void K3bDataJob::slotStartWriting()
       // it "should" be the executable
       qDebug("(K3bDataJob) could not start cdrecord");
       emit infoMessage( i18n("Could not start cdrecord!"), K3bJob::ERROR );
+      cancelAll();
       emit finished( false );
     }
   else
@@ -440,7 +468,7 @@ void K3bDataJob::slotParseMkisofsOutput( KProcess*, char* output, int len )
       }
 
       else {
-	cout << (*str).latin1() << endl;
+	qDebug("(mkisofs) " + *str );
       }
     }
 }
@@ -599,7 +627,7 @@ void K3bDataJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
       }
       else {
 	// debugging
-	cout << *str << endl;
+	qDebug("(cdrecord) " + *str);
       }
     } // for every line
 
@@ -704,10 +732,17 @@ void K3bDataJob::slotCdrecordFinished()
 
 
 
-void K3bDataJob::addMkisofsParameters()
+bool K3bDataJob::addMkisofsParameters()
 {
-  kapp->config()->setGroup( "External Programs" );
-  *m_process << kapp->config()->readEntry( "mkisofs path" );
+  if( !k3bMain()->externalBinManager()->foundBin( "mkisofs" ) ) {
+    qDebug("(K3bAudioJob) could not find mkisofs executable" );
+    emit infoMessage( i18n("Mkisofs executable not found."), K3bJob::ERROR );
+    cancelAll();
+    emit finished( false );
+    return false;
+  }
+
+  *m_process << k3bMain()->externalBinManager()->binPath( "mkisofs" );
 	
   // add the arguments
   *m_process << "-gui";
@@ -776,6 +811,8 @@ void K3bDataJob::addMkisofsParameters()
   QStringList _params = kapp->config()->readListEntry( "mkisofs parameters" );
   for( QStringList::Iterator it = _params.begin(); it != _params.end(); ++it )
     *m_process << *it;
+
+  return true;
 }
 
 
@@ -854,6 +891,39 @@ void K3bDataJob::splitDoc()
   }
 }
 */
+
+
+void K3bDataJob::cancelAll()
+{
+  if( m_process )
+    if( m_process->isRunning() ) {
+      m_process->disconnect(this);
+      m_process->kill();
+      
+      // we need to unlock the writer because cdrdao/cdrecord locked it while writing
+      bool block = m_doc->burner()->block( false );
+      if( !block )
+	emit infoMessage( i18n("Could not unlock cd drive."), K3bJob::ERROR );
+    }
+
+  // remove toc-file
+//   if( QFile::exists( m_tocFile ) ) {
+//      qDebug("(K3bAudioOnTheFlyJob) Removing temporary TOC-file");
+//      QFile::remove( m_tocFile );
+//   }
+//   m_tocFile = QString::null;
+
+  // remove path-spec-file
+  if( QFile::exists( m_pathSpecFile ) ) {
+    QFile::remove( m_pathSpecFile );
+    m_pathSpecFile = QString::null;
+  }
+
+  if( m_doc->deleteImage() ) {
+    QFile::remove( m_doc->isoImage() );
+    m_doc->setIsoImage("");
+  }
+}
 
 
 #include "k3bdatajob.moc"

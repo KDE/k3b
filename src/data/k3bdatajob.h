@@ -65,8 +65,9 @@ class K3bDataJob : public K3bBurnJob
 		
   void writeImage();
   void writeCD();
-  void addMkisofsParameters();
+  bool addMkisofsParameters();
   bool writePathSpec( const QString& filename );
+  void cancelAll();
 };
 
 #endif

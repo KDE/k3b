@@ -92,8 +92,8 @@ bool K3bAudioDoc::newDocument()
 unsigned long K3bAudioDoc::size() const 
 {
   unsigned long size = 0;
-  for( K3bAudioTrack* _t = m_tracks->first(); _t; _t = m_tracks->next() ) {
-    size += _t->size();
+  for( QListIterator<K3bAudioTrack> it(*m_tracks); it.current(); ++it ) {
+    size += it.current()->size();
   }	
 
   return size;
@@ -102,12 +102,12 @@ unsigned long K3bAudioDoc::size() const
 
 unsigned long K3bAudioDoc::length() const
 {
-  unsigned long size = 0;
-  for( K3bAudioTrack* _t = m_tracks->first(); _t; _t = m_tracks->next() ) {
-    size += _t->length() + _t->pregap();
+  unsigned long length = 0;
+  for( QListIterator<K3bAudioTrack> it(*m_tracks); it.current(); ++it ) {
+    length += it.current()->length() + it.current()->pregap();
   }	
 
-  return size;
+  return length;
 }
 
 

@@ -45,15 +45,15 @@ void K3bDataItem::setK3bName( const QString& name ) {
     qDebug( "(K3bDataItem) name contained invalid characters!" );
     return;
   }
-  if( parent() ) {
-    QList<K3bDataItem>* _itemsInDir = parent()->children();
-    for( K3bDataItem* _it = _itemsInDir->first(); _it; _it = _itemsInDir->next() ) {
-      if( _it != this && _it->k3bName() == name ) {
-	qDebug( "(K3bDataItem) already a file with that name in directory: " + _it->k3bName() );
-	return;
-      }
-    }
-  }
+//   if( parent() ) {
+//     QList<K3bDataItem>* _itemsInDir = parent()->children();
+//     for( K3bDataItem* _it = _itemsInDir->first(); _it; _it = _itemsInDir->next() ) {
+//       if( _it != this && _it->k3bName() == name ) {
+// 	qDebug( "(K3bDataItem) already a file with that name in directory: " + _it->k3bName() );
+// 	return;
+//       }
+//     }
+//   }
 
   m_k3bName = name;
 }

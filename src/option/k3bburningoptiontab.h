@@ -35,6 +35,7 @@ Q_OBJECT
   QGroupBox*    m_groupAdvanced;
 
   QCheckBox*    m_checkUseID3Tag;
+  QCheckBox*    m_checkDropDoubles;
 
   QComboBox*    m_comboPregapFormat;
   KIntNumInput* m_editDefaultPregap;

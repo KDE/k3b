@@ -56,6 +56,8 @@ class K3bDataItem
   virtual K3bDirItem* addDataItem( K3bDataItem* ) = 0;
 
   virtual void reparent( K3bDirItem* );
+
+  virtual bool isDir() const { return false; }
 	
  protected:
   QString m_k3bName;

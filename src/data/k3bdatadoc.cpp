@@ -36,6 +36,8 @@
 #include <kurl.h>
 #include <kstatusbar.h>
 #include <klocale.h>
+#include <klineeditdlg.h>
+#include <kmimemagic.h>
 
 #include <id3/tag.h>
 #include <id3/misc_support.h>
@@ -115,8 +117,7 @@ void K3bDataDoc::slotAddUrlsToDir( const QStringList& urls, K3bDirItem* dirItem 
 
   for( QStringList::ConstIterator it = urls.begin(); it != urls.end(); ++it ) 
     {
-      KURL kurl( *it );
-      m_queuedToAddItems.enqueue( new PrivateItemToAdd(kurl.path(), dirItem ) );
+      m_queuedToAddItems.enqueue( new PrivateItemToAdd(KURL(*it).path(), dirItem ) );
     }
 
   m_queuedToAddItemsTimer->start(0);
@@ -127,88 +128,139 @@ void K3bDataDoc::slotAddUrlsToDir( const QStringList& urls, K3bDirItem* dirItem 
 void K3bDataDoc::slotAddQueuedItems()
 {
   PrivateItemToAdd* item = m_queuedToAddItems.dequeue();
-  if( item )
-    {
+  if( item ) {
+    m_queuedToAddItemsTimer->stop();
 
-      // TODO: add an option for the following:
-      //       1. drop a file with an already existing name
-      //       2. append a "(n)" to the file where n is the number of equal files
-      //          i.a. myFirstFile.txt and myFirstFile.txt(1)
-
-      bool add = true;
-      QList<K3bDataItem>* itemsInDir = item->parent->children();
-      for( K3bDataItem* it = itemsInDir->first(); it; it = itemsInDir->next() ) {
-	if( it->k3bName() == item->fileInfo.fileName() ) {
-	  qDebug( "(K3bDataItem) already a file with that name in directory: " + it->k3bName() );
-	  add = false;
-	  break;
-	  //	      emit infoMessage( "There was already a file with that name in directory: " + it->k3bName() );
-	}
-      }
-
-      if( add )
-	{
-	  setModified( true );
-
-	  if( item->fileInfo.isDir() )
-	    {
-	      K3bDirItem* newDirItem = new K3bDirItem( item->fileInfo.fileName(), this, item->parent );
-	      
-	      QStringList dlist = QDir( item->fileInfo.absFilePath() ).entryList();
-	      dlist.remove(".");
-	      dlist.remove("..");
-	      
-	      for( QStringList::Iterator it = dlist.begin(); it != dlist.end(); ++it ) {
-		m_queuedToAddItems.enqueue( new PrivateItemToAdd( item->fileInfo.absFilePath() + "/" + *it, 
-								  newDirItem ) );
-	      }
-	    }
-	  else
-	    {
-	      if( item->fileInfo.isSymLink() ) {
-		if( !item->fileInfo.exists() ) {
-		  // we have a broken link that should be dropped
-		  qDebug( "(K3bDataDoc) found broken symlink!");
-		}
-		else {
-		  qDebug("(K3bDataDoc) found symlink...");
-		  // TODO:
-		  // two choices (to be configured):
-		  // 1. replace symlinks: create an item for linkDest and rename it to the links name
-		  // 2. use symlinks:     create an item for linkDest (with original path) and the symlink
-		  //                      !Rockridge must be enabled otherwise mkisofs will drop all symlinks!
-		}
-	      }
-
-
-	      K3bFileItem* newK3bItem = new K3bFileItem( item->fileInfo.absFilePath(), this, item->parent );
-	      m_size += newK3bItem->k3bSize();
-	      
-	      if( k3bMain()->useID3TagForMp3Renaming() && newK3bItem->mimetype() == "audio/x-mp3" ) {
-		ID3_Tag tag( item->fileInfo.absFilePath().latin1() );
-		
-		ID3_Frame* frame = tag.Find( ID3FID_TITLE );
-		QString title(ID3_GetString(frame, ID3FN_TEXT ));
-		
-		frame = tag.Find( ID3FID_LEADARTIST );
-		QString artist(ID3_GetString(frame, ID3FN_TEXT ));
-		
-		if( !title.isEmpty() && !artist.isEmpty() ) {
-		  //	      qDebug( "(K3bDataDoc) setting k3bname to: \"" + artist + " - " + title + ".mp3\"" );
-		  newK3bItem->setK3bName( artist + " - " + title + ".mp3" );
-		}
-	      }
-	    }
-	}
-
-      delete item;
+    setModified( true );
+	
+    if( item->fileInfo.isDir() ) {
+      createDirItem( item->fileInfo, item->parent );
     }
-  else
-    {
-      m_queuedToAddItemsTimer->stop();
-      emit newFileItems();
-      k3bMain()->statusBar()->clear();
+    else {
+      createFileItem( item->fileInfo, item->parent );
     }
+    
+    delete item;
+    m_queuedToAddItemsTimer->start(0);
+  }
+  else {
+    m_queuedToAddItemsTimer->stop();
+    emit newFileItems();
+    k3bMain()->statusBar()->clear();
+  }
+}
+
+
+void K3bDataDoc::createDirItem( const QFileInfo& f, K3bDirItem* parent )
+{
+  QString newName = f.fileName();
+
+  if( nameAlreadyInDir( newName, parent ) ) {
+    k3bMain()->config()->setGroup("Data project settings");
+    bool dropDoubles = k3bMain()->config()->readBoolEntry( "Drop doubles", false );
+    if( dropDoubles )
+      return;
+
+    bool ok = true;
+    while( ok && nameAlreadyInDir( newName, parent ) ) {
+      newName = KLineEditDlg::getText( i18n("Directory with that name already exists. Please enter new name."), 
+				       newName, &ok, k3bMain() );
+    }
+    if( !ok )
+      return;
+  }
+
+  K3bDirItem* newDirItem = new K3bDirItem( newName, this, parent );
+  
+  QStringList dlist = QDir( f.absFilePath() ).entryList();
+  dlist.remove(".");
+  dlist.remove("..");
+  
+  for( QStringList::Iterator it = dlist.begin(); it != dlist.end(); ++it ) {
+    QFileInfo newF(f.absFilePath() + "/" + *it);
+    if( newF.isDir() )
+      m_queuedToAddItems.enqueue( new PrivateItemToAdd( newF, newDirItem ) );
+    else
+      createFileItem( newF, newDirItem );
+  }
+}
+
+
+void K3bDataDoc::createFileItem( const QFileInfo& f, K3bDirItem* parent )
+{
+  if( f.isSymLink() ) {
+    if( !f.exists() ) {
+      // we have a broken link that should be dropped
+      qDebug( "(K3bDataDoc) found broken symlink!");
+    }
+    else {
+      qDebug("(K3bDataDoc) found symlink...");
+      // TODO:
+      // two choices (to be configured):
+      // 1. replace symlinks: create an item for linkDest and rename it to the links name
+      // 2. use symlinks:     create an item for linkDest (with original path) and the symlink
+      //                      !Rockridge must be enabled otherwise mkisofs will drop all symlinks!
+    }
+    qDebug("(K3bDataDoc) dropping symlink. FIXME");
+    return;
+  }
+
+
+  QString newName = f.fileName();
+
+  QString mimetype = KMimeMagic::self()->findFileType(f.absFilePath())->mimeType();
+  if( k3bMain()->useID3TagForMp3Renaming() && mimetype == "audio/mpeg" ) {
+    ID3_Tag tag( f.absFilePath().latin1() );
+		
+    ID3_Frame* frame = tag.Find( ID3FID_TITLE );
+    QString title(ID3_GetString(frame, ID3FN_TEXT ));
+		
+    frame = tag.Find( ID3FID_LEADARTIST );
+    QString artist(ID3_GetString(frame, ID3FN_TEXT ));
+		
+    if( !title.isEmpty() && !artist.isEmpty() ) {
+      newName = artist + " - " + title + ".mp3";
+    }
+  }
+
+
+  if( nameAlreadyInDir( newName, parent ) ) {
+    k3bMain()->config()->setGroup("Data project settings");
+    bool dropDoubles = k3bMain()->config()->readBoolEntry( "Drop doubles", false );
+    if( dropDoubles )
+      return;
+
+    bool ok = true;
+    do {
+      newName = KLineEditDlg::getText( i18n("File with that name already exists. Please enter new name."), 
+				       newName, &ok, k3bMain() );
+    } while( ok && nameAlreadyInDir( newName, parent ) );
+
+    if( !ok )
+      return;
+  }
+
+
+  K3bFileItem* newK3bItem = new K3bFileItem( f.absFilePath(), this, parent, newName );
+  m_size += newK3bItem->k3bSize();
+}
+
+
+bool K3bDataDoc::nameAlreadyInDir( const QString& name, K3bDirItem* dir )
+{
+  if( !dir ) {
+    return false;
+  }
+
+  QListIterator<K3bDataItem> it( *dir->children() );
+  for( ; it.current(); ++it ) {
+    if( it.current()->k3bName() == name ) {
+      qDebug( "(K3bDataDoc) already a file with that name in directory: " + name );
+      return true;
+    }
+  }
+  
+  return false;
 }
 
 
