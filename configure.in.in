@@ -107,6 +107,12 @@ AC_TRY_COMPILE([
 	[linux_scsi=yes])
 AC_MSG_RESULT($linux_scsi)
 
+if test "FreeBSD" = `uname -s` ; then
+	# I'll be damned if lousy coding prevents us from running
+	# this application.
+	linux_scsi=yes
+fi
+
 if test "x$linux_scsi" = "xno" ; then
 	DO_NOT_COMPILE="$DO_NOT_COMPILE k3b"
 fi
@@ -205,7 +211,7 @@ AM_CONDITIONAL(compile_libsamplerate, [test -z "$LIBSAMPLERATE"])
 
 
 ARTS_LIBS=""
-if test "$build_arts" == "yes"; then
+if test "x$build_arts" = "xyes"; then
 	dnl Find aRts
 	KDE_CHECK_HEADERS(arts/artsflow.h,
 		[KDE_CHECK_HEADERS(arts/kmedia2.h,
@@ -217,7 +223,7 @@ if test "$build_arts" == "yes"; then
 fi
 AC_SUBST(ARTS_LIBS)
 AM_CONDITIONAL(include_arts, [test -n "$ARTS_LIBS"])
-if test "$build_arts" == "yes"; and test x$arts_available = xyes; then
+if test "x$build_arts" = "xyes" -a "x$arts_available" = "xyes"; then
 	AC_DEFINE(WITH_ARTS,1,[defined if arts support is compiled in])
 fi
 
