@@ -240,7 +240,7 @@ void K3bCdrecordWriter::prepareProcess()
 
   bool manualBufferSize = k3bcore->config()->readBoolEntry( "Manual buffer size", false );
   if( manualBufferSize ) {
-    *m_process << QString("fs=%1m").arg( k3bcore->config()->readNumEntry( "Cdrecord buffer", 4 ) );
+    *m_process << QString("fs=%1m").arg( k3bcore->config()->readNumEntry( "Fifo buffer", 4 ) );
   }
     
   bool overburn = k3bcore->config()->readBoolEntry( "Allow overburning", false );

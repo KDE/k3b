@@ -296,11 +296,12 @@ void K3bCdrdaoWriter::setWriteArguments()
 
   bool manualBufferSize =
     k3bcore->config()->readBoolEntry( "Manual buffer size", false );
-  if( manualBufferSize )
-  {
-    *m_process << "--buffers"
-    << QString::number( k3bcore->config()->
-                        readNumEntry( "Cdrdao buffer", 32 ) );
+  if( manualBufferSize ) {
+    //
+    // one buffer in cdrdao holds 1 second of audio data = 75 frames = 75 * 2352 bytes
+    //
+    int bufSizeInMb = k3bcore->config()->readNumEntry( "Fifo buffer", 4 );
+    *m_process << "--buffers" << QString::number( bufSizeInMb/(75*2352) );
   }
 
   bool overburn =

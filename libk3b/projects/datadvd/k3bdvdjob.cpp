@@ -282,6 +282,8 @@ void K3bDvdJob::cancel()
     m_isoImager->cancel();
   if( m_growisofsImager )
     m_growisofsImager->cancel();
+  if( m_writerJob )
+    m_writerJob->cancel();
   if( d->verificationJob )
     d->verificationJob->cancel();
 

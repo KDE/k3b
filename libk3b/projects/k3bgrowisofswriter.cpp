@@ -25,6 +25,7 @@
 #include <k3bglobals.h>
 #include <k3bthroughputestimator.h>
 #include <k3bgrowisofshandler.h>
+#include <k3bpipebuffer.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -45,7 +46,9 @@ public:
       process( 0 ),
       growisofsBin( 0 ),
       trackSize(-1),
-      trackSizePadding(0) {
+      trackSizePadding(0),
+      usingRingBuffer(false),
+      ringBuffer(0) {
   }
 
   int writingMode;
@@ -72,6 +75,9 @@ public:
   long trackSizePadding;
 
   unsigned long long overallSizeFromOutput;
+
+  bool usingRingBuffer;
+  K3bPipeBuffer* ringBuffer;
 };
 
 
@@ -109,8 +115,12 @@ bool K3bGrowisofsWriter::active() const
 
 int K3bGrowisofsWriter::fd() const
 {
-  if( d->process )
-    return d->process->stdinFd();
+  if( d->process ) {
+    if( d->usingRingBuffer )
+      return d->ringBuffer->inFd();
+    else
+      return d->process->stdinFd();
+  }
   else
     return -1;
 }
@@ -118,8 +128,12 @@ int K3bGrowisofsWriter::fd() const
 
 bool K3bGrowisofsWriter::closeFd()
 {
+  //
   // do the padding
-  if( d->trackSizePadding > 0 ) {
+  // In case we use the ring buffer the padded bytes will also be written to the buffer
+  // and the buffer will close the process' stdin fd anyway.
+  //
+  if( !d->canceled && d->trackSizePadding > 0 ) {
     kdDebug() << "(K3bGrowisofsWriter) padding with " << d->trackSizePadding << " blocks." << endl;
     char buf[d->trackSizePadding*2048];
     ::memset( buf, 0, d->trackSizePadding*2048 );
@@ -166,10 +180,14 @@ bool K3bGrowisofsWriter::prepareProcess()
   *d->process << d->growisofsBin;
 
   QString s = burnDevice()->blockDeviceName() + "=";
-  if( d->image.isEmpty() )
+  if( d->image.isEmpty() ) {
     s += "/dev/fd/0";
-  else
+    d->usingRingBuffer = true;
+  }
+  else {
     s += d->image;
+    d->usingRingBuffer = false;
+  }
 
   // for now we do not support multisession
   *d->process << "-Z" << s;
@@ -279,6 +297,22 @@ void K3bGrowisofsWriter::start()
 	emit newTask( i18n("Writing") );
 	emit infoMessage( i18n("Starting writing..."), K3bJob::INFO );
       }
+
+
+      // create the ring buffer
+      if( d->usingRingBuffer ) {
+	if( !d->ringBuffer ) {
+	  d->ringBuffer = new K3bPipeBuffer( this, this );
+	  connect( d->ringBuffer, SIGNAL(percent(int)), this, SIGNAL(buffer(int)) );
+	}
+
+	d->ringBuffer->writeToFd( d->process->stdinFd() );
+	k3bcore->config()->setGroup("General Options");
+	bool manualBufferSize = k3bcore->config()->readBoolEntry( "Manual buffer size", false );
+	int bufSize = ( manualBufferSize ? k3bcore->config()->readNumEntry( "Fifo buffer", 4 ) : 4 );
+	d->ringBuffer->setBufferSize( bufSize );
+	d->ringBuffer->start();
+      }
     }
   }
 }
@@ -290,6 +324,8 @@ void K3bGrowisofsWriter::cancel()
     d->canceled = true;
     closeFd();
     d->process->kill();
+    if( d->usingRingBuffer && d->ringBuffer )
+      d->ringBuffer->cancel();
   }
 }
 
@@ -389,9 +425,10 @@ void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
     if( p->exitStatus() == 0 ) {
 
       // the output stops before 100%, so we do it manually
+      // TODO: this should be done when flushing the cache
       emit percent( 100 );
       emit processedSize( d->overallSizeFromOutput/1024/1024,
-			  d->overallSizeFromOutput/1024/2024 );
+			  d->overallSizeFromOutput/1024/1024 );
 
       int s = d->speedEst->average();
       if( s > 0 )

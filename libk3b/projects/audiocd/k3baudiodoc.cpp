@@ -105,6 +105,10 @@ K3bAudioDoc::~K3bAudioDoc()
 
 bool K3bAudioDoc::newDocument()
 {
+  // delete all tracks
+  while( m_firstTrack )
+    delete m_firstTrack->take();
+
   return K3bDoc::newDocument();
 }
 
