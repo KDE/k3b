@@ -168,13 +168,14 @@ void K3bDataJob::slotMsInfoFetched()
   kdDebug() << "(K3bDataJob) msinfo fetched" << endl;
 
   // now parse the output
-  QStringList list = QStringList::split( ",", m_collectedOutput );
+  QString firstLine = m_collectedOutput.left( m_collectedOutput.find("\n") );
+  QStringList list = QStringList::split( ",",  firstLine );
   if( list.count() == 2 ) {
     bool ok1, ok2;
     list.first().toInt( &ok1 );
     list[1].toInt( &ok2 );
     if( ok1 && ok2 )
-      m_msInfo = m_collectedOutput.stripWhiteSpace();
+      m_msInfo = firstLine.stripWhiteSpace();
     else
       m_msInfo = QString::null;
   }
