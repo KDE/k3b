@@ -201,7 +201,6 @@ void K3bVideoCdRip::slotParseVcdXRipOutput( KProcess*, char* output, int len )
 
         xml_root = xml_doc.documentElement();
 
-        // There should be only one... but ...
         for ( QDomNode node = xml_root.firstChild(); !node.isNull(); node = node.nextSibling() ) {
             QDomElement el = node.toElement();
             if ( el.isNull() )

@@ -356,10 +356,18 @@ void K3bVideoCdView::slotTrackSelectionChanged( QListViewItem* item )
 
 void K3bVideoCdView::slotStateChanged( QListViewItem* item )
 {
+    /* > QT 3.1
     if ( !item == 0 && item ->isSelectable() ) {
         if ( ( ( VideoTrackViewCheckItem* ) item) ->state() == QCheckListItem::On)
             slotSelect();
         else if ( ( ( VideoTrackViewCheckItem* ) item) ->state() == QCheckListItem::Off)
+            slotDeselect();
+    }
+    */
+    if ( !item == 0 && item ->isSelectable() ) {
+        if ( ( ( VideoTrackViewCheckItem* ) item) ->isOn() )
+            slotSelect();
+        else
             slotDeselect();
     }
 }
