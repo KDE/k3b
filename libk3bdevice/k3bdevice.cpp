@@ -2692,10 +2692,23 @@ void K3bDevice::Device::checkWriteModes()
 int K3bDevice::Device::determineMaximalWriteSpeed() const
 {
   int ret = 0;
+  unsigned char* data = 0;
+  int dataLen = 0;
 
   QValueList<int> list = determineSupportedWriteSpeeds();
-  for( QValueList<int>::iterator it = list.begin(); it != list.end(); ++it )
-    ret = QMAX( ret, *it );
+  if( !list.isEmpty() ) {
+    for( QValueList<int>::iterator it = list.begin(); it != list.end(); ++it )
+      ret = QMAX( ret, *it );
+  }
+  else if( modeSense( &data, dataLen, 0x2A ) ) {
+    mm_cap_page_2A* mm = (mm_cap_page_2A*)&data[8];
+
+    // MMC1 used byte 18 and 19 for the max write speed
+    if( dataLen > 19 )
+      ret = from2Byte( mm->max_write_speed );
+
+    delete [] data;
+  }
 
   if( ret > 0 )
     return ret;
@@ -2764,10 +2777,6 @@ QValueList<int> K3bDevice::Device::determineSupportedWriteSpeeds() const
 	    ret.insert( it, s );
 	  }
 	}
-      }
-      else if( dataLen > 19 ) {
-	// MMC1 used byte 18 and 19 for the max write speed
-	ret.append( from2Byte( mm->max_write_speed ) );
       }
 
       delete [] data;
