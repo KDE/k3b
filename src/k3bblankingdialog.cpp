@@ -140,6 +140,8 @@ void K3bBlankingDialog::slotStartClicked()
     d->job = new K3bBlankingJob( this );
     connect( d->job, SIGNAL(infoMessage(const QString&,int)), 
 	     this, SLOT(slotInfoMessage(const QString&,int)) );
+    connect( d->job, SIGNAL(finished(bool)), 
+	     this, SLOT(slotJobFinished(bool)) );
   }
 
   d->job->setDevice( m_writerSelectionWidget->writerDevice() );
@@ -152,7 +154,6 @@ void K3bBlankingDialog::slotStartClicked()
   if( !d->erasingDlg )
     d->erasingDlg = new K3bErasingInfoDialog( i18n("Erasing CD-RW"), this );
 
-  connect( d->job, SIGNAL(finished(bool)), this, SLOT(slotJobFinished(bool)) );
   connect( d->erasingDlg, SIGNAL(cancelClicked()), d->job, SLOT(cancel()) );
 
   d->job->start();
