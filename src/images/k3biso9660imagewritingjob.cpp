@@ -312,7 +312,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
       if( (m_dataMode == K3b::DATA_MODE_AUTO && m_noFix) ||
 	  m_dataMode == K3b::MODE2 ) {
 	if( k3bcore->externalBinManager()->binObject("cdrecord") && 
-	    k3bcore->externalBinManager()->binObject("cdrecord")->version >= K3bVersion( 2, 1, -1, "a12" ) )
+	    k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "xamix" ) )
 	  writer->addArgument( "-xa" );
 	else
 	  writer->addArgument( "-xa1" );

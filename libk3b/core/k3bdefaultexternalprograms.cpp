@@ -187,7 +187,16 @@ bool K3bCdrecordProgram::scan( const QString& p )
     if( out.output().contains( "cuefile=" ) && 
 	bin->version > K3bVersion( 2, 1, -1, "a14") ) // cuefile handling was still buggy in a14
       bin->addFeature( "cuefile" );
-    
+
+    // new mode 2 options since cdrecord 2.01a12
+    // we use both checks here since the help was not updated in 2.01a12 yet (well, I 
+    // just double-checked and the help page is proper but there is no harm in having 
+    // two checks)
+    // and the version check does not handle versions like 2.01-dvd properly
+    if( out.output().contains( "-xamix" ) ||
+	bin->version >= K3bVersion( 2, 1, -1, "a12" ) )
+      bin->addFeature( "xamix" );
+   
     // check if we run cdrecord as root
     struct stat s;
     if( !::stat( QFile::encodeName(path), &s ) ) {

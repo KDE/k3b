@@ -700,7 +700,7 @@ void K3bMixedJob::addDataTrack( K3bCdrecordWriter* writer )
   // add data track
   if(  m_usedDataMode == K3b::MODE2 ) {
     if( k3bcore->externalBinManager()->binObject("cdrecord") && 
-	(k3bcore->externalBinManager()->binObject("cdrecord")->version >= K3bVersion( 2, 1, -1, "a12" ) ))
+	k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "xamix" ) )
       writer->addArgument( "-xa" );
     else
       writer->addArgument( "-xa1" );
