@@ -1,6 +1,6 @@
 /*
  * libmad - MPEG audio decoder library
- * Copyright (C) 2000-2001 Robert Leslie
+ * Copyright (C) 2000-2003 Underbit Technologies, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -288,8 +288,8 @@ unsigned char const sfb_8000_short[] = {
 # define sfb_12000_mixed  sfb_16000_mixed
 # define sfb_11025_mixed  sfb_12000_mixed
 
-/* the 8000 Hz short block scalefactor bands do not break after the first 36
-   frequency lines, so this is probably wrong */
+/* the 8000 Hz short block scalefactor bands do not break after
+   the first 36 frequency lines, so this is probably wrong */
 static
 unsigned char const sfb_8000_mixed[] = {
   /* long */  12, 12, 12,
@@ -382,7 +382,7 @@ mad_fixed_t const ca[8] = {
  * IMDCT coefficients for short blocks
  * derived from section 2.4.3.4.10.2 of ISO/IEC 11172-3
  *
- * imdct_s[i/even][k] = cos((PI / 24) * (2 * (i / 2) + 7) * (2 * k + 1))
+ * imdct_s[i/even][k] = cos((PI / 24) * (2 *       (i / 2) + 7) * (2 * k + 1))
  * imdct_s[i /odd][k] = cos((PI / 24) * (2 * (6 + (i-1)/2) + 7) * (2 * k + 1))
  */
 static
@@ -461,7 +461,7 @@ mad_fixed_t const is_table[7] = {
  * derived from section 2.4.3.2 of ISO/IEC 13818-3
  *
  * is_lsf_table[0][i] = (1 / sqrt(sqrt(2)))^(i + 1)
- * is_lsf_table[1][i] = (1 / sqrt(2))^(i + 1)
+ * is_lsf_table[1][i] = (1 /      sqrt(2)) ^(i + 1)
  */
 static
 mad_fixed_t const is_lsf_table[2][15] = {
@@ -2042,31 +2042,31 @@ void III_overlap(mad_fixed_t const output[36], mad_fixed_t overlap[18],
     tmp2 = overlap[1];
 
     for (i = 0; i < 16; i += 2) {
-      sample[i + 0][sb] = output[i + 0] + tmp1;
+      sample[i + 0][sb] = output[i + 0 +  0] + tmp1;
       overlap[i + 0]    = output[i + 0 + 18];
       tmp1 = overlap[i + 2];
 
-      sample[i + 1][sb] = output[i + 1] + tmp2;
+      sample[i + 1][sb] = output[i + 1 +  0] + tmp2;
       overlap[i + 1]    = output[i + 1 + 18];
       tmp2 = overlap[i + 3];
     }
 
-    sample[16][sb] = output[16] + tmp1;
+    sample[16][sb] = output[16 +  0] + tmp1;
     overlap[16]    = output[16 + 18];
-    sample[17][sb] = output[17] + tmp2;
+    sample[17][sb] = output[17 +  0] + tmp2;
     overlap[17]    = output[17 + 18];
   }
 # elif 0
   for (i = 0; i < 18; i += 2) {
-    sample[i + 0][sb] = output[i + 0] + overlap[i + 0];
+    sample[i + 0][sb] = output[i + 0 +  0] + overlap[i + 0];
     overlap[i + 0]    = output[i + 0 + 18];
 
-    sample[i + 1][sb] = output[i + 1] + overlap[i + 1];
+    sample[i + 1][sb] = output[i + 1 +  0] + overlap[i + 1];
     overlap[i + 1]    = output[i + 1 + 18];
   }
 # else
   for (i = 0; i < 18; ++i) {
-    sample[i][sb] = output[i] + overlap[i];
+    sample[i][sb] = output[i +  0] + overlap[i];
     overlap[i]    = output[i + 18];
   }
 # endif
@@ -2454,12 +2454,12 @@ int mad_layer_III(struct mad_stream *stream, struct mad_frame *frame)
       stream->error = error;
       result = -1;
     }
+
+    /* designate ancillary bits */
+
+    stream->anc_ptr    = ptr;
+    stream->anc_bitlen = md_len * CHAR_BIT - data_bitlen;
   }
-
-  /* designate ancillary bits */
-
-  stream->anc_ptr    = ptr;
-  stream->anc_bitlen = md_len * CHAR_BIT - data_bitlen;
 
 # if 0 && defined(DEBUG)
   fprintf(stderr,

@@ -1,6 +1,6 @@
 /*
  * libmad - MPEG audio decoder library
- * Copyright (C) 2000-2001 Robert Leslie
+ * Copyright (C) 2000-2003 Underbit Technologies, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@
  * used in both Layer I and Layer II decoding
  */
 static
-mad_fixed_t const sf_table[63] = {
+mad_fixed_t const sf_table[64] = {
 # include "sf_table.dat"
 };
 
@@ -163,10 +163,17 @@ int mad_layer_I(struct mad_stream *stream, struct mad_frame *frame)
       if (allocation[ch][sb]) {
 	scalefactor[ch][sb] = mad_bit_read(&stream->ptr, 6);
 
+# if defined(OPT_STRICT)
+	/*
+	 * Scalefactor index 63 does not appear in Table B.1 of
+	 * ISO/IEC 11172-3. Nonetheless, other implementations accept it,
+	 * so we only reject it if OPT_STRICT is defined.
+	 */
 	if (scalefactor[ch][sb] == 63) {
 	  stream->error = MAD_ERROR_BADSCALEFACTOR;
 	  return -1;
 	}
+# endif
       }
     }
   }
@@ -431,12 +438,19 @@ int mad_layer_II(struct mad_stream *stream, struct mad_frame *frame)
 	if (scfsi[ch][sb] & 1)
 	  scalefactor[ch][sb][1] = scalefactor[ch][sb][scfsi[ch][sb] - 1];
 
+# if defined(OPT_STRICT)
+	/*
+	 * Scalefactor index 63 does not appear in Table B.1 of
+	 * ISO/IEC 11172-3. Nonetheless, other implementations accept it,
+	 * so we only reject it if OPT_STRICT is defined.
+	 */
 	if (scalefactor[ch][sb][0] == 63 ||
 	    scalefactor[ch][sb][1] == 63 ||
 	    scalefactor[ch][sb][2] == 63) {
 	  stream->error = MAD_ERROR_BADSCALEFACTOR;
 	  return -1;
 	}
+# endif
       }
     }
   }

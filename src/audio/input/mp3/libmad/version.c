@@ -1,6 +1,6 @@
 /*
  * libmad - MPEG audio decoder library
- * Copyright (C) 2000-2001 Robert Leslie
+ * Copyright (C) 2000-2003 Underbit Technologies, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,16 @@ char const mad_copyright[] = "Copyright (C) " MAD_PUBLISHYEAR " " MAD_AUTHOR;
 char const mad_author[]    = MAD_AUTHOR " <" MAD_EMAIL ">";
 
 char const mad_build[] = ""
+# if defined(DEBUG)
+  "DEBUG "
+# elif defined(NDEBUG)
+  "NDEBUG "
+# endif
+
+# if defined(EXPERIMENTAL)
+  "EXPERIMENTAL "
+# endif
+
 # if defined(FPM_64BIT)
   "FPM_64BIT "
 # elif defined(FPM_INTEL)
@@ -77,15 +87,5 @@ char const mad_build[] = ""
 
 # if defined(OPT_STRICT)
   "OPT_STRICT "
-# endif
-
-# if defined(EXPERIMENTAL)
-  "EXPERIMENTAL "
-# endif
-
-# if defined(DEBUG)
-  "DEBUG "
-# elif defined(NDEBUG)
-  "NDEBUG "
 # endif
 ;

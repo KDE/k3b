@@ -1,6 +1,6 @@
 /*
  * libmad - MPEG audio decoder library
- * Copyright (C) 2000-2001 Robert Leslie
+ * Copyright (C) 2000-2003 Underbit Technologies, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -210,10 +210,17 @@ int decode_header(struct mad_header *header, struct mad_stream *stream)
   /* emphasis */
   header->emphasis = mad_bit_read(&stream->ptr, 2);
 
-  if (header->emphasis == 2) {
+# if defined(OPT_STRICT)
+  /*
+   * ISO/IEC 11172-3 says this is a reserved emphasis value, but
+   * streams exist which use it anyway. Since the value is not important
+   * to the decoder proper, we allow it unless OPT_STRICT is defined.
+   */
+  if (header->emphasis == MAD_EMPHASIS_RESERVED) {
     stream->error = MAD_ERROR_BADEMPHASIS;
     return -1;
   }
+# endif
 
   /* error_check() */
 
@@ -282,10 +289,6 @@ int free_bitrate(struct mad_stream *stream, struct mad_header const *header)
   }
 
   stream->freerate = rate * 1000;
-
-# if 0 && defined(DEBUG)
-  fprintf(stderr, "free bitrate == %lu\n", stream->freerate);
-# endif
 
   return 0;
 }

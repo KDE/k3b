@@ -1,6 +1,6 @@
 /*
  * libmad - MPEG audio decoder library
- * Copyright (C) 2000-2001 Robert Leslie
+ * Copyright (C) 2000-2003 Underbit Technologies, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,6 +52,10 @@
 # include "synth.h"
 # include "decoder.h"
 
+/*
+ * NAME:	decoder->init()
+ * DESCRIPTION:	initialize a decoder object with callback routines
+ */
 void mad_decoder_init(struct mad_decoder *decoder, void *data,
 		      enum mad_flow (*input_func)(void *,
 						  struct mad_stream *),
@@ -522,6 +526,10 @@ int run_async(struct mad_decoder *decoder)
 }
 # endif
 
+/*
+ * NAME:	decoder->run()
+ * DESCRIPTION:	run the decoder thread either synchronously or asynchronously
+ */
 int mad_decoder_run(struct mad_decoder *decoder, enum mad_decoder_mode mode)
 {
   int result;
@@ -554,6 +562,10 @@ int mad_decoder_run(struct mad_decoder *decoder, enum mad_decoder_mode mode)
   return result;
 }
 
+/*
+ * NAME:	decoder->message()
+ * DESCRIPTION:	send a message to and receive a reply from the decoder process
+ */
 int mad_decoder_message(struct mad_decoder *decoder,
 			void *message, unsigned int *len)
 {
