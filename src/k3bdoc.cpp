@@ -318,6 +318,14 @@ bool K3bDoc::saveGeneralDocumentData( QDomElement* part )
   propElem.setAttribute( "activated", onTheFly() ? "yes" : "no" );
   mainElem.appendChild( propElem );
 
+  propElem = doc.createElement( "only_create_images" );
+  propElem.setAttribute( "activated", onlyCreateImages() ? "yes" : "no" );
+  mainElem.appendChild( propElem );
+
+  propElem = doc.createElement( "remove_images" );
+  propElem.setAttribute( "activated", removeImages() ? "yes" : "no" );
+  mainElem.appendChild( propElem );
+
   part->appendChild( mainElem );
 
   return true;
@@ -353,6 +361,12 @@ bool K3bDoc::readGeneralDocumentData( const QDomElement& elem )
 
     if( e.nodeName() == "on_the_fly")
       setOnTheFly( e.attributeNode( "activated" ).value() == "yes" );
+
+    if( e.nodeName() == "only_create_images")
+      setOnlyCreateImages( e.attributeNode( "activated" ).value() == "yes" );
+
+    if( e.nodeName() == "remove_images")
+      setRemoveImages( e.attributeNode( "activated" ).value() == "yes" );
   }
 
 
