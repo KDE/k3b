@@ -47,12 +47,12 @@ class K3bAudioTrackDialog : public KDialogBase
   ~K3bAudioTrackDialog();
 	
  protected slots:
-  void slotChangePregapFormat( const QString& );
   void slotOk();
   void slotApply();
 
   void slotTrackStartChanged( int value );
   void slotTrackEndChanged( int value );
+  void updateTrackLengthDisplay();
 
  private:
   QPtrList<K3bAudioTrack> m_tracks;
@@ -68,16 +68,13 @@ class K3bAudioTrackDialog : public KDialogBase
   KCutLabel* m_displayFileName;
   QLabel* m_displaySize;
   QLabel* m_displayLength;
-  KIntNumInput* m_inputPregap;
-  QComboBox* m_comboPregapFormat;
+  K3bMsfEdit* m_inputPregap;
   QCheckBox* m_checkPreEmp;
   QCheckBox* m_checkCopy;
 
   K3bMsfEdit* m_editTrackStart;
   K3bMsfEdit* m_editTrackEnd;
 
-  bool m_bPregapSeconds;
-	
   void setupGui();
   void setupConnections();
 };

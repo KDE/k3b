@@ -872,6 +872,11 @@ void K3bMixedJob::removeBufferFiles()
 
 void K3bMixedJob::determineWritingMode()
 {
+  // we don't need this when only creating image and it is possible
+  // that the burn device is null
+  if( m_doc->onlyCreateImages() )
+    return;
+
   // at first we determine the data mode
   // --------------------------------------------------------------
   if( m_doc->dataDoc()->dataMode() == K3b::DATA_MODE_AUTO ) {

@@ -405,7 +405,6 @@ void K3bWriterSelectionWidget::slotWriterChanged()
     k3bcore->config()->setGroup( "General Options" );
     k3bcore->config()->writeEntry( "current_writer", dev->devicename() );
     k3bcore->config()->setGroup( oldGroup );
-    setSpeed( dev->currentWriteSpeed() );
   }
 }
 
@@ -436,12 +435,7 @@ void K3bWriterSelectionWidget::setSupportedWritingApps( int i )
 void K3bWriterSelectionWidget::loadConfig( KConfig* c )
 {
   setWriterDevice( k3bcore->deviceManager()->findDevice( c->readEntry( "writer_device" ) ) );
-  setSpeed( c->readNumEntry( "writing_speed",  
-			     d->dvd 
-			     ? 0 
-			     : ( writerDevice() 
-				 ? writerDevice()->currentWriteSpeed() 
-				 : 1 ) ) );
+  setSpeed( c->readNumEntry( "writing_speed",  0 ) );
   setWritingApp( writingAppFromString( c->readEntry( "writing_app" ) ) );
 }
 

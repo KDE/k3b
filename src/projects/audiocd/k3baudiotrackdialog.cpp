@@ -51,9 +51,6 @@ K3bAudioTrackDialog::K3bAudioTrackDialog( QPtrList<K3bAudioTrack>& tracks, QWidg
   setupGui();
   setupConnections();
 	
-  m_bPregapSeconds = true;
-
-
   if( !m_tracks.isEmpty() ) {
 
     K3bAudioTrack* track = m_tracks.first();
@@ -73,10 +70,7 @@ K3bAudioTrackDialog::K3bAudioTrackDialog( QPtrList<K3bAudioTrack>& tracks, QWidg
     m_checkCopy->setChecked( track->copyProtection() );
     m_checkPreEmp->setChecked( track->preEmp() );
     
-    if( m_bPregapSeconds )
-      m_inputPregap->setValue( track->pregap().totalFrames() / 75 );
-    else
-      m_inputPregap->setValue( track->pregap().totalFrames() );
+    m_inputPregap->setMsfValue( track->pregap() );
     
     for( track = m_tracks.next(); track != 0; track = m_tracks.next() ) {
 
@@ -169,10 +163,7 @@ void K3bAudioTrackDialog::slotApply()
     if( m_checkPreEmp->state() != QButton::NoChange )
       track->setPreEmp( m_checkPreEmp->isChecked() );
 
-    if( m_bPregapSeconds )
-      track->setPregap( m_inputPregap->value()*75 );
-    else
-      track->setPregap( m_inputPregap->value() );
+    track->setPregap( m_inputPregap->msfValue() );
   }
 
   if( m_tracks.count() == 1 ) {
@@ -203,21 +194,16 @@ void K3bAudioTrackDialog::setupGui()
   optionsGrid->setMargin( marginHint() );
 
   QLabel* labelPregap = new QLabel( i18n("&Pregap:"), optionsTab );
-  m_inputPregap       = new KIntNumInput( optionsTab, "m_inputPregap" );
-  m_comboPregapFormat = new QComboBox( optionsTab );
+  m_inputPregap       = new K3bMsfEdit( optionsTab, "m_inputPregap" );
   labelPregap->setBuddy( m_inputPregap );
 
   m_checkPreEmp       = new QCheckBox( i18n( "Pr&eemphasis" ), optionsTab, "m_checkPreEmp" );
   m_checkCopy         = new QCheckBox( i18n( "&Copy protected" ), optionsTab, "m_checkCopy" );
 
-  m_comboPregapFormat->insertItem( i18n("Seconds" ) );
-  m_comboPregapFormat->insertItem( i18n("Frames" ) );
-
   optionsGrid->addWidget( labelPregap, 0, 0 );
   optionsGrid->addWidget( m_inputPregap, 0, 1 );
-  optionsGrid->addWidget( m_comboPregapFormat, 0, 2 );
-  optionsGrid->addMultiCellWidget( m_checkPreEmp, 1, 1, 0, 2 );
-  optionsGrid->addMultiCellWidget( m_checkCopy, 2, 2, 0, 2 );
+  optionsGrid->addMultiCellWidget( m_checkPreEmp, 1, 1, 0, 1 );
+  optionsGrid->addMultiCellWidget( m_checkCopy, 2, 2, 0, 1 );
 
   optionsGrid->setRowStretch( 3, 1 );
   // /////////////////////////////////////////////////
@@ -393,8 +379,14 @@ void K3bAudioTrackDialog::setupGui()
     m_editTrackStart = new K3bMsfEdit( tab );
     m_editTrackEnd = new K3bMsfEdit( tab );
 
-    tabLayout->addWidget( m_editTrackStart, 0, 0 );
-    tabLayout->addWidget( m_editTrackEnd, 0, 1 );
+    QLabel* labelStart = new QLabel( i18n("Track start"), tab );
+    QLabel* labelEnd = new QLabel( i18n("Track end"), tab );
+    labelEnd->setAlignment( QLabel::AlignVCenter | QLabel::AlignRight );
+
+    tabLayout->addWidget( labelStart, 0, 0 );
+    tabLayout->addWidget( labelEnd, 0, 1 );
+    tabLayout->addWidget( m_editTrackStart, 1, 0 );
+    tabLayout->addWidget( m_editTrackEnd, 1, 1 );
 
     mainTabbed->addTab( tab, i18n("Edit track") );
 
@@ -423,24 +415,6 @@ void K3bAudioTrackDialog::setupGui()
 
 void K3bAudioTrackDialog::setupConnections()
 {
-  connect( m_comboPregapFormat, SIGNAL(activated(const QString&)), 
-	   this, SLOT(slotChangePregapFormat(const QString&)) );
-}
-
-void K3bAudioTrackDialog::slotChangePregapFormat( const QString& str )
-{
-  if( str == i18n( "Seconds" ) ) {
-    if( !m_bPregapSeconds ) {
-      m_bPregapSeconds = true;
-      m_inputPregap->setValue( m_inputPregap->value() / 75 );
-    }
-  }
-  else {
-    if( m_bPregapSeconds ) {
-      m_bPregapSeconds = false;
-      m_inputPregap->setValue( m_inputPregap->value() * 75 );
-    }
-  }
 }
 
 
@@ -449,6 +423,7 @@ void K3bAudioTrackDialog::slotTrackStartChanged( int value )
   // make sure a track is always at least 4 seconds in length as defined in 
   // the Red Book
   m_editTrackEnd->setRange( value + 300, m_tracks.first()->fileLength().totalFrames() );
+  updateTrackLengthDisplay();
 }
 
 
@@ -457,6 +432,15 @@ void K3bAudioTrackDialog::slotTrackEndChanged( int value )
   // make sure a track is always at least 4 seconds in length as defined in 
   // the Red Book
   m_editTrackStart->setRange( 0, value - 300 );
+  updateTrackLengthDisplay();
+}
+
+
+void K3bAudioTrackDialog::updateTrackLengthDisplay()
+{
+  K3b::Msf len = m_editTrackEnd->msfValue() - m_editTrackStart->msfValue();
+  m_displayLength->setText( len.toString() );
+  m_displaySize->setText( KIO::convertSize(len.audioBytes()) );
 }
 
 

@@ -582,6 +582,11 @@ bool K3bDataJob::prepareWriterJob()
 
 void K3bDataJob::determineWritingMode()
 {
+  // we don't need this when only creating image and it is possible
+  // that the burn device is null
+  if( d->doc->onlyCreateImages() )
+    return;
+
   // first of all we determine the data mode
   if( d->doc->dataMode() == K3b::DATA_MODE_AUTO ) {
     if( !d->doc->onlyCreateImages() &&
