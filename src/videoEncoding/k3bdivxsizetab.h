@@ -36,6 +36,7 @@ public:
     ~K3bDivxSizeTab();
     void show();
     void resetView();
+    void updateView();
 private:
     K3bDivxCodecData *m_data;
     K3bDivxCrop *m_crop;

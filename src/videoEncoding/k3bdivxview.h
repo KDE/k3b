@@ -52,6 +52,7 @@ private:
     K3bBurnProgressDialog *m_divxDialog;
 
     void setupGui();
+    int checkSettings();
 };
 
 #endif

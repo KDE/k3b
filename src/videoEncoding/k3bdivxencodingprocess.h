@@ -49,6 +49,8 @@ private:
     int m_speedFlag;
     int m_speedTrigger;
     int m_pass;
+    int m_speedInitialFlag;
+
 
     void startEncoding();
 

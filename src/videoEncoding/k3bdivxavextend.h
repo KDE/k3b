@@ -47,7 +47,7 @@ private:
     KComboBox *m_comboLanguage;
     QSlider *m_sliderCrispness;
     QLabel *m_labelCrispness;
-    KRestrictedLine *m_editAudioGain;
+    //KRestrictedLine *m_editAudioGain;
     K3bDivxCodecData *m_data;
 
     void setupGui();

@@ -48,8 +48,11 @@ public:
     ~K3bDivxCrop();
     void initPreview( );
     void resetView();
+    void updateView();
 public slots:
     void slotUpdateFinalSize();
+    void slotAutoCropMode( int buttonStatus );
+
 protected:
 //   void drawContents( QPainter* p );
 private:
@@ -78,6 +81,9 @@ private:
     void setCorrectedSpinValue( KIntSpinBox *box, int step );
     void updateSpinBox( int step );
     void encodePreview();
+    int checkMaxValidSpinValue( KIntSpinBox *box , int);
+    void enableManuelCrop( bool );
+
 private slots:
     void slotParseProcess( KProcess* p, char *buffer, int length);
     void slotSpinTop( int );
