@@ -167,6 +167,8 @@ void K3bVcdJob::xmlGen()
 
 void K3bVcdJob::vcdxBuild()
 {
+    emit newTask( i18n("Creating image files") );
+
     m_stage = stageUnknown;
     firstTrack = true;
     delete m_process;
