@@ -44,6 +44,8 @@ static KCmdLineOptions options[] =
     { "+[File]", I18N_NOOP("file to open"), 0 },
     { "data", I18N_NOOP("Create a new data project and add all given files"), 0 },
     { "audio", I18N_NOOP("Create a new audio project and add all given files"), 0 },
+    { "vcd", I18N_NOOP("Create a new video cd project and add all given files"), 0 },
+    { "mixed", I18N_NOOP("Create a new mixed mode project and add all given files"), 0 },
     { "copy", I18N_NOOP("Open the cd copy dialog"), 0 },
     { "image", I18N_NOOP("Write an ISO or bin/cue image to cd"), 0 },
     { 0, 0, 0 }
@@ -59,10 +61,12 @@ int main(int argc, char *argv[])
   aboutData.addAuthor("Sebastian Trueg",I18N_NOOP("Maintainer"), "trueg@k3b.org");
   aboutData.addAuthor("Thomas Froescher",I18N_NOOP("Video-ripping and encoding"), "tfroescher@k3b.org");
   aboutData.addAuthor("Christian Kvasny",I18N_NOOP("VCD Project"), "chris@k3b.org");
+  aboutData.addAuthor("Klaus-Dieter Krannich", I18N_NOOP("Cdrdao handling and cd-copy") );
+
   aboutData.addCredit("Ayo", I18N_NOOP("For his bombastic artwork."), "73lab@free.fr" );
   aboutData.addCredit("Crissi", I18N_NOOP("For extensive testing and the first German translation."), "crissi99@gmx.de");
   aboutData.addCredit("Joerg Schilling", I18N_NOOP("For his great cdrtools and the patient answers to all my questions.") );
-  aboutData.addCredit("Klaus-Dieter Krannich", I18N_NOOP("For the hint on the cdrdao --remote parameter") );
+
 	
   KCmdLineArgs::init( argc, argv, &aboutData );
   KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
@@ -119,6 +123,22 @@ int main(int argc, char *argv[])
       else if( args->isSet( "audio" ) ) {
 	// create new audio project and add all arguments
 	k3bMainWidget->slotNewAudioDoc();
+	K3bDoc* doc = k3bMainWidget->activeDoc();
+	for( int i = 0; i < args->count(); i++ ) {
+	  doc->addUrl( args->url(i) );
+	}
+      }
+      else if( args->isSet( "mixed" ) ) {
+	// create new audio project and add all arguments
+	k3bMainWidget->slotNewMixedDoc();
+	K3bDoc* doc = k3bMainWidget->activeDoc();
+	for( int i = 0; i < args->count(); i++ ) {
+	  doc->addUrl( args->url(i) );
+	}
+      }
+      else if( args->isSet( "vcd" ) ) {
+	// create new audio project and add all arguments
+	k3bMainWidget->slotNewVcdDoc();
 	K3bDoc* doc = k3bMainWidget->activeDoc();
 	for( int i = 0; i < args->count(); i++ ) {
 	  doc->addUrl( args->url(i) );
