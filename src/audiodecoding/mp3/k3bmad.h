@@ -43,6 +43,12 @@ public:
    */
   bool skipTag();
 
+  /**
+   * Find first frame and seek to the beginning of that frame.
+   * This is used to skip the junk that many mp3 files start with.
+   */
+  bool seekFirstHeader();
+
   bool eof() const;
   bool inputError() const;
   QIODevice::Offset inputPos() const;
