@@ -223,11 +223,12 @@ void K3bRipperWidget::rip(){
     m_ripDialog = new K3bBurnProgressDialog( this, "Ripping" );
     m_ripDialog->setCaption( i18n("Ripping process") );
     m_ripDialog->setJob( m_copy );
-    if( m_closeAfterRipping->isChecked() )
-        connect( m_ripDialog, SIGNAL( closed() ), this, SLOT( close() ) );
-    m_ripDialog->show();
 
     m_copy->start();
+    m_ripDialog->exec();
+
+    if( m_closeAfterRipping->isChecked() )
+      slotClose();
 }
 
 void K3bRipperWidget::useStatic(){

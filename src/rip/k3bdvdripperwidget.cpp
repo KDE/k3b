@@ -185,9 +185,8 @@ void K3bDvdRipperWidget::rip(){
     m_ripDialog->setCaption( i18n("Ripping process") );
     m_ripDialog->setJob( m_ripJob );
 
-    m_ripDialog->show();
-
     m_ripJob->start();
+    m_ripDialog->exec();
 }
 
 void K3bDvdRipperWidget::slotRipJobDeleted(){

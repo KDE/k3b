@@ -4,6 +4,8 @@
 
 #include <qstring.h>
 
+#include <krun.h>
+
 typedef Q_INT16 size16;
 typedef Q_INT32 size32;
 
@@ -149,27 +151,8 @@ bool K3bDevice::block( bool block ) const
 }
 
 
-// K3bToc K3bDevice::readToc()
-// {
-//   cdrom_drive* drive = open();
-//   if( !drive )
-//     return K3bToc();
+void K3bDevice::eject() const
+{
+  KRun::runCommand( "eject " + ioctlDevice() );
+}
 
-//   K3bToc toc;
-//   int discFirstSector = cdda_disc_firstsector( drive );
-//   toc.setFirstSector( discFirstSector );
-
-//   int tracks = cdda_tracks( drive );
-//   for( int i = 1; i <= tracks; i++ ) {
-    
-//     int firstSector = cdda_track_firstsector( drive, i );
-//     int lastSector = cdda_track_lastsector( drive, i );
-//     int type = ( cdda_track_audiop( drive, i ) ? K3bTrack::AUDIO : K3bTrack::DATA );
-
-//     toc.append( new K3bTrack(firstSector, lastSector, type, QString("Track %1").arg(i)) );
-//   }
-
-//   close();
-
-//   return toc;
-// }

@@ -39,6 +39,7 @@
 #include <qpoint.h>
 #include <qfontmetrics.h>
 #include <qtimer.h>
+#include <qfont.h>
 
 #include <kprogress.h>
 #include <klocale.h>
@@ -128,8 +129,6 @@ K3bBurnProgressDialog::~K3bBurnProgressDialog()
 void K3bBurnProgressDialog::closeEvent( QCloseEvent* e )
 {
   if( m_buttonClose->isVisible() ) {
-    hide();
-    emit closed();
     KDialog::closeEvent( e );
   }
 }
@@ -223,6 +222,10 @@ void K3bBurnProgressDialog::setupGUI()
   mainLayout->addWidget( m_buttonShowDebug, 4, 2 );
   mainLayout->addMultiCellWidget( m_groupProgress, 2, 2, 0, 3 );
   mainLayout->addMultiCellWidget( m_groupBuffer, 3, 3, 0, 3 );
+
+  QFont f( m_groupProgress->font() );
+  f.setBold( true );
+  m_groupProgress->setFont( f );
 }
 
 
@@ -356,11 +359,6 @@ void K3bBurnProgressDialog::slotCancelPressed()
       if( m_job )
 	m_job->cancel();
     }
-}
-
-void K3bBurnProgressDialog::show()
-{
-  QWidget::show();
 }
 
 

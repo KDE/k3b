@@ -127,7 +127,7 @@ void K3bTempDirSelectionWidget::slotFreeTempSpace(const QString&,
 void K3bTempDirSelectionWidget::slotUpdateFreeTempSpace()
 {
   QString path = m_editDirectory->text();
-  qDebug("(K3bProjectBurnDialg) Check free disk space");
+
   if( QFile::exists( path ) ) {
     connect( KDiskFreeSp::findUsageInfo( path ), 
 	     SIGNAL(foundMountPoint(const QString&, unsigned long, unsigned long, unsigned long)),

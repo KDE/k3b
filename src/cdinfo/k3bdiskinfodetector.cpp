@@ -32,7 +32,7 @@ K3bDiskInfoDetector::~K3bDiskInfoDetector()
 
 void K3bDiskInfoDetector::detect( K3bDevice* device )
 {
-  if( !m_device ) {
+  if( !device ) {
     qDebug("(K3bDiskInfoDetector) detect should really not be called with NULL!");
     return;
   }
@@ -64,6 +64,9 @@ void K3bDiskInfoDetector::fetchDiskInfo()
 
     *m_process << "disk-info";
     *m_process << "--device" << m_device->busTargetLun();
+
+    if( m_device->cdrdaoDriver() != "auto" )
+      *m_process << "--driver" << m_device->cdrdaoDriver();
 
     connect( m_process, SIGNAL(processExited(KProcess*)),
 	     this, SLOT(slotDiskInfoFinished()) );

@@ -217,8 +217,8 @@ bool K3bDeviceManager::saveConfig( KConfig* c )
   while( dev != 0 ) {
     QStringList list;
     list << ( !dev->genericDevice().isEmpty() ? dev->genericDevice() : dev->ioctlDevice() )
-	 << QString::number(dev->maxReadSpeed());
-       
+	 << QString::number(dev->maxReadSpeed())
+       	 << dev->cdrdaoDriver();
 
     c->writeEntry( QString("Reader%1").arg(i), list );
 

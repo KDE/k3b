@@ -49,12 +49,10 @@ class K3bBurnProgressDialog : public KDialog  {
 
  public:
   K3bBurnProgressDialog( QWidget* parent = 0, const char* name = 0, bool showSubProgress = true, 
-			 QWidget* extraInfo = 0, bool modal = true, WFlags = WDestructiveClose );
+			 QWidget* extraInfo = 0, bool modal = true, WFlags = 0 );
   ~K3bBurnProgressDialog();
 
   void setJob( K3bJob* job );
-  /** reimplemented from QDialog since we need this to return imideately! */
-  void show();
 
  protected slots:
   void updateCdSizeProgress( int processed, int size );
@@ -71,9 +69,6 @@ class K3bBurnProgressDialog : public KDialog  {
   void slotUpdateTime();
 
   void slotShowDebuggingOutput();
-
- signals:
-  void closed();
 
  protected:
   void closeEvent( QCloseEvent* );

@@ -161,13 +161,15 @@ void K3bIsoImageWritingDialog::slotUser1()
 
   // create a progresswidget
   K3bBurnProgressDialog* d = new K3bBurnProgressDialog( k3bMain(), "burnProgress", false );
-  connect( d, SIGNAL(closed()), this, SLOT(show()) );
 
   d->setJob( m_job );
   hide();
-  d->show();
 
   m_job->start();
+  d->exec();
+  delete d;
+
+  slotClose();
 }
 
 

@@ -479,6 +479,7 @@ void K3bDeviceOptionTab::saveDevices()
     tempDev = m_tempReader.first();
     while( tempDev != 0 ) {
       tempDev->device->setMaxReadSpeed( tempDev->maxReadSpeed );
+      tempDev->device->setCdrdaoDriver( tempDev->cdrdaoDriver );
 
       tempDev = m_tempReader.next();
     }

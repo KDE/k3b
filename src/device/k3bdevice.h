@@ -150,7 +150,7 @@ class K3bDevice
    */
   virtual bool block( bool ) const;
 
-  //  K3bToc readToc();
+  void eject() const;
 
  protected:
   QString m_vendor;

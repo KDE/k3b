@@ -49,9 +49,6 @@ class K3bProjectBurnDialog : public KDialogBase
    virtual void slotUser2();
    virtual void slotCancel();
 
- private slots:
-   void slotJobFinished();
-
  signals:
    void writerChanged();
 

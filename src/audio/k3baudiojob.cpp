@@ -30,12 +30,12 @@
 #include <kprocess.h>
 #include <klocale.h>
 #include <kconfig.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kurl.h>
 
 #include <qstring.h>
 #include <qdatetime.h>
-//#include <qfile.h>
+#include <qfile.h>
 #include <qtimer.h>
 
 #include <iostream>
@@ -369,6 +369,8 @@ void K3bAudioJob::cancelAll()
     bool block = m_doc->burner()->block( false );
     if( !block )
       emit infoMessage( i18n("Could not unlock cd drive."), K3bJob::ERROR );
+    else
+      m_doc->burner()->eject();
   }
 
   // remove toc-file
@@ -693,7 +695,7 @@ void K3bAudioJob::cdrdaoWrite()
   // device
   // TODO: check if device is in use and throw exception if so
 
-  *m_process << "--device" << m_doc->burner()->genericDevice();
+  *m_process << "--device" << m_doc->burner()->busTargetLun();
   if( m_doc->burner()->cdrdaoDriver() != "auto" ) {
     *m_process << "--driver";
     if( m_doc->burner()->cdTextCapable() == 1 )

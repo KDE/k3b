@@ -93,24 +93,18 @@ void K3bProjectBurnDialog::slotUser1()
   m_job = m_doc->newBurnJob();
   //  m_job->setWritingApp( m_writerSelectionWidget->writingApp() );
 
-  // will be deleted at close (WDestructiveClose)
-  K3bBurnProgressDialog* d = new K3bBurnProgressDialog( k3bMain() );
-  connect( d, SIGNAL(closed()), this, SLOT(slotJobFinished()) );
-  d->setJob( m_job );
+  K3bBurnProgressDialog d( k3bMain() );
+  d.setJob( m_job );
 
   hide();
 
-  d->show();
   m_job->start();
+  d.exec();
+
+
+  delete m_job;
 
   done( Burn );
-}
-
-
-void K3bProjectBurnDialog::slotJobFinished()
-{
-  delete m_job;
-  m_job = 0;
 }
 
 

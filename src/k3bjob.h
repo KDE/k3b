@@ -42,7 +42,7 @@ class K3bJob : public QObject
   enum MessageType { STATUS, PROCESS, ERROR };
 
  protected:
-  K3bJob();
+  K3bJob( QObject* parent = 0 );
 
  public slots:
   virtual void start() = 0;
@@ -69,12 +69,18 @@ class K3bBurnJob : public K3bJob
   Q_OBJECT
 	
  public:
-  K3bBurnJob( ) {}
+  K3bBurnJob( QObject* parent = 0 )
+    : K3bJob( parent ) {}
 	
   virtual K3bDoc* doc() const { return 0; }
-  virtual K3bDevice* writer() const = 0;
+  virtual K3bDevice* writer() const { return 0; }
 
  signals:
   void bufferStatus( int );
+
+ protected slots:
+  virtual void parseCdrdaoStdoutLine( const QString& line );
+  virtual void createCdrdaoProgress( int made, int size );
+  virtual void startNewCdrdaoTrack();
 };
 #endif
