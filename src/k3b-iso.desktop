@@ -3,7 +3,7 @@
 Type=Application
 Exec=k3b --image %U
 Icon=k3b
-Terminal=0
+Terminal=false
 Name=K3b
 Name[hi]=के3बी
 Name[xx]=xxK3bxx
