@@ -73,7 +73,7 @@ picture only to cut off black borders."));
     modeGroup->layout()->setMargin( KDialog::marginHint() );
     m_buttonFast = new QRadioButton( i18n("Fast (-B)"), modeGroup );
     m_buttonExactly = new QRadioButton( i18n("Exact (-Z)"), modeGroup );
-    QWhatsThis::add( modeGroup, i18n("\"Fast\" resizing is much faster than the \"Exact\" resizing but is limited to a resize step multiple of 8 pixels."));
+    QWhatsThis::add( modeGroup, i18n("\"Fast\" resizing is much faster than \"Exact\" resizing, but is limited to a resize step multiple of 8 pixels."));
 
     QGroupBox *groupCrop = new QGroupBox( this );
     groupCrop->setColumnLayout(0, Qt::Vertical );

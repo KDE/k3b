@@ -67,7 +67,7 @@ Regarding quality, try all the different codecs to find out which you prefer. Se
 is quite small. Sometimes DivX4 (smoother) is better and other times XviD (sharper)."));
     QWhatsThis::add( codec, wt_codec );
     QLabel *codecmode = new QLabel( i18n("Codec mode:"), this );
-    QString wt_codecmode( i18n("Select the mode for video encoding. 1-pass encoding has lower quality than 2-pass, but requires half the time to encode a video.\
+    QString wt_codecmode( i18n("Select the mode for video encoding. 1-pass encoding has lower quality than 2-pass, but requires half the time to encode a video. \
 In 2-pass mode the video will be encoded twice. The first time, the video will only be analyzed to get the best quality in the second encoding pass."));
     QWhatsThis::add( codecmode, wt_codecmode );
     m_vBitrateDesc = i18n("Bitrate:");
