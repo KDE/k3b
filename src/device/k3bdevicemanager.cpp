@@ -178,7 +178,7 @@ int K3bCdDevice::DeviceManager::scanbus()
   info.close();
 
   // try to find symlinks
-  QString cmd = QString("find /dev -type l -printf \"%p\n\" | egrep '%1cdrom|dvd|cdwriter|cdrecorder'").arg(devstring);
+  QString cmd = QString("find /dev -type l -printf \"%p\t%l\n\" | egrep '%1cdrom|dvd|cdwriter|cdrecorder' | cut -f1").arg(devstring);
   FILE *fd = popen(cmd.ascii(),"r");
   if (fd) {
      QFile links;
@@ -196,6 +196,7 @@ int K3bCdDevice::DeviceManager::scanbus()
   pclose(fd);
 
   // we also check all these nodes to make sure to get all links and stuff
+
   static const char* devicenames[] = {
     "/dev/hda",
     "/dev/hdb",
