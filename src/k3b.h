@@ -255,6 +255,9 @@ class K3bMainWindow : public KDockMainWindow
 
   void slotEditToolbars();
 
+  void slotDataImportSession();
+  void slotDataClearImportedSession();
+
  private:
   void fileSave( K3bDoc* doc = 0 );
   void fileSaveAs( K3bDoc* doc = 0 );
@@ -317,6 +320,10 @@ class K3bMainWindow : public KDockMainWindow
   KToggleAction* actionViewDirView;
   KToggleAction* actionViewAudioPlayer;
   KToggleAction* actionViewDocumentHeader;
+
+  // project actions
+  KAction* actionDataImportSession;
+  KAction* actionDataClearImportedSession;
 
   KDockWidget* mainDock;
   KDockWidget* dirDock;

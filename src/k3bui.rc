@@ -3,15 +3,20 @@
 <MenuBar>
   <Action name="window_menu"/>
   <Menu name="file"><text>&amp;Project</text>
-  	<Action name="file_burn"/>
   	<Action name="file_export" append="save_merge"/>
-  	<Action name="project_add_files" append="print_merge"/>
   </Menu>
   <Menu name="tools"><text>&amp;Tools</text>
   	<Action name="tools_copy_cd"/>
 	<Action name="tools_blank_cdrw"/>
 	<Action name="tools_write_iso"/>
 	<Action name="tools_encode_video"/>
+  </Menu>
+  <Menu name="project"><text>&amp;Project</text>
+        <Action name="project_data_import_session"/>
+        <Action name="project_data_clear_imported_session"/>
+	<Separator/>
+  	<Action name="project_add_files"/>
+  	<Action name="file_burn"/>
   </Menu>
   <Menu name="settings">
   	<Action name="view_dir" append="show_merge"/>

@@ -29,6 +29,10 @@ class K3bDataItem;
 class K3bFileItem;
 class K3bDirItem;
 class K3bFillStatusDisplay;
+class K3bDevice;
+namespace KIO {
+  class Job;
+};
 
 
 /**
@@ -47,12 +51,22 @@ class K3bDataView : public K3bView
 
    K3bDirItem* currentDir() const;
 
+ public slots:
+   void importSession();
+   void clearImportedSession();
+
+ private slots:
+   void slotMountFinished( KIO::Job* job );
+
  private:
    K3bDataDirTreeView* m_dataDirTree;
    K3bDataFileView* m_dataFileView;
    K3bFillStatusDisplay* m_fillStatusDisplay;
 		
    K3bDataDoc* m_doc;
+
+   // used for mounting when importing old session
+   K3bDevice* m_device;
 };
 
 

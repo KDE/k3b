@@ -34,6 +34,9 @@ K3bDirItem::~K3bDirItem()
   // delete all children
   m_children->setAutoDelete( true );
   delete m_children;
+
+  // inform the doc, so it can decrease the size and inform the views
+  doc()->itemDeleted( this );
 }
 
 K3bDirItem* K3bDirItem::addDataItem( K3bDataItem* item )
@@ -153,6 +156,7 @@ K3bDataItem* K3bDirItem::find( const QString& filename ) const
 
 long K3bDirItem::k3bSize() const
 {
+  return 0;
   QListIterator<K3bDataItem> it( *m_children );
   long size = 0;
   for( ; it.current(); ++it )

@@ -17,10 +17,18 @@
 
 #include "k3bdataitem.h"
 #include "k3bdiritem.h"
+#include "k3bdatadoc.h"
 #include <kdebug.h>
 
 
 K3bDataItem::K3bDataItem( K3bDataDoc* doc, K3bDataItem* parent )
+  : m_bHideOnRockRidge(true),
+    m_bHideOnJoliet(true),
+    m_bRemoveable(true),
+    m_bRenameable(true),
+    m_bMovable(true),
+    m_bHideable(true),
+    m_bWriteToCd(true)
 {
   m_doc = doc;
   m_bHideOnRockRidge = m_bHideOnJoliet = false;
@@ -126,6 +134,8 @@ void K3bDataItem::reparent( K3bDirItem* newParent )
 
 bool K3bDataItem::hideOnRockRidge() const
 { 
+  if( !isHideable() )
+    return false;
   if( parent() )
     return m_bHideOnRockRidge || parent()->hideOnRockRidge();
   else 
@@ -135,6 +145,8 @@ bool K3bDataItem::hideOnRockRidge() const
 
 bool K3bDataItem::hideOnJoliet() const
 {
+  if( !isHideable() )
+    return false;
   if( parent() ) 
     return m_bHideOnJoliet || parent()->hideOnJoliet();
   else

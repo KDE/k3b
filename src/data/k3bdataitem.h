@@ -32,6 +32,9 @@ class K3bDataItem
 {
  public: 
   K3bDataItem( K3bDataDoc* doc, K3bDataItem* parent = 0 );
+  /**
+   * ALWAYS CALL K3bDataDoc::itemDeleted(this) in the destructor of derived classes
+   */
   virtual ~K3bDataItem();
 	
   K3bDirItem* parent() const { return m_parentDir; }
@@ -42,7 +45,8 @@ class K3bDataItem
   virtual void setK3bName( const QString& );
   void setJolietName( const QString& );
   /** 
-   * returns the path as defined by the k3b-hierachy, NOT starting with a slash (since this is used for graft-points!) 
+   * returns the path as defined by the k3b-hierachy, NOT starting with a slash
+   * (since this is used for graft-points!) 
    * directories have a trailing "/"
    */
   virtual QString k3bPath();
@@ -73,6 +77,22 @@ class K3bDataItem
 
   virtual bool isValid() const { return true; }
 
+  // these are all needed for special fileitems like
+  // imported sessions or the movix filesystem
+  virtual bool isRemoveable() const { return m_bRemoveable; }
+  virtual bool isMoveable() const { return m_bMovable; }
+  virtual bool isRenameable() const { return m_bRenameable; }
+  virtual bool isHideable() const { return m_bHideable; }
+  virtual bool writeToCd() const { return m_bWriteToCd; }
+  virtual const QString& extraInfo() const { return m_extraInfo; }
+
+  void setRenameable( bool b ) { m_bRenameable = b; }
+  void setMoveable( bool b ) { m_bMovable = b; }
+  void setRemoveable( bool b ) { m_bRemoveable = b; }
+  void setHideable( bool b ) { m_bHideable = b; }
+  void setWriteToCd( bool b ) { m_bWriteToCd = b; }
+  void setExtraInfo( const QString& i ) { m_extraInfo = i; }
+
  protected:
   QString m_k3bName;
   /**
@@ -86,6 +106,12 @@ class K3bDataItem
 
   bool m_bHideOnRockRidge;
   bool m_bHideOnJoliet;
+  bool m_bRemoveable;
+  bool m_bRenameable;
+  bool m_bMovable;
+  bool m_bHideable;
+  bool m_bWriteToCd;
+  QString m_extraInfo;
 };
 
 #endif

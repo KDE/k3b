@@ -83,5 +83,8 @@ class K3bRootItem : public K3bDirItem
 
   const QString& k3bName();
   void setK3bName( const QString& );
+
+  bool isMoveable() const { return false; }
+  bool isRemoveable() const { return false; }
 };
 #endif

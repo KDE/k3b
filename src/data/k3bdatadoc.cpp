@@ -45,13 +45,13 @@
 #include <kfilemetainfo.h>
 #include <kdebug.h>
 #include <kglobal.h>
+#include <kprogress.h>
 
 
 
 K3bDataDoc::K3bDataDoc( QObject* parent )
   : K3bDoc( parent )
 {
-  m_docType = DATA;
   m_root = 0;
 
   m_queuedToAddItemsTimer = new QTimer( this );
@@ -154,7 +154,7 @@ void K3bDataDoc::slotAddQueuedItems()
 
     if( !item->fileInfo.exists() )
       return;
-	
+
     if( item->fileInfo.isDir() && !item->fileInfo.isSymLink() ) {
       createDirItem( item->fileInfo, item->parent );
     }
@@ -181,13 +181,13 @@ void K3bDataDoc::slotAddQueuedItems()
 }
 
 
-void K3bDataDoc::createDirItem( QFileInfo& f, K3bDirItem* parent )
+K3bDirItem* K3bDataDoc::createDirItem( QFileInfo& f, K3bDirItem* parent )
 {
   QString newName = f.fileName();
 
   if( newName.isEmpty() ) {
     kdDebug() << "(K3bDataDoc) tried to create dir without name." << endl;
-    return;
+    return 0;
   }
 
 
@@ -207,7 +207,7 @@ void K3bDataDoc::createDirItem( QFileInfo& f, K3bDirItem* parent )
     // symLink resolved
     if( f.absFilePath().startsWith( link.absFilePath() ) ) {
       KMessageBox::error( k3bMain(), i18n("Found recursion in directory tree. Omitting\n%1").arg(f.absFilePath()) );
-      return;
+      return 0;
     }
   }
 
@@ -216,7 +216,7 @@ void K3bDataDoc::createDirItem( QFileInfo& f, K3bDirItem* parent )
     k3bMain()->config()->setGroup("Data project settings");
     bool dropDoubles = k3bMain()->config()->readBoolEntry( "Drop doubles", false );
     if( dropDoubles )
-      return;
+      return 0;
 
     bool ok = true;
     while( ok && nameAlreadyInDir( newName, parent ) ) {
@@ -224,7 +224,7 @@ void K3bDataDoc::createDirItem( QFileInfo& f, K3bDirItem* parent )
 				       newName, &ok, k3bMain() );
     }
     if( !ok )
-      return;
+      return 0;
   }
 
   K3bDirItem* newDirItem = new K3bDirItem( newName, this, parent );
@@ -249,10 +249,12 @@ void K3bDataDoc::createDirItem( QFileInfo& f, K3bDirItem* parent )
     else
       createFileItem( newF, newDirItem );
   }
+
+  return newDirItem;
 }
 
 
-void K3bDataDoc::createFileItem( QFileInfo& f, K3bDirItem* parent )
+K3bFileItem* K3bDataDoc::createFileItem( QFileInfo& f, K3bDirItem* parent )
 {
   QString newName = f.fileName();
 
@@ -298,7 +300,7 @@ void K3bDataDoc::createFileItem( QFileInfo& f, K3bDirItem* parent )
     k3bMain()->config()->setGroup("Data project settings");
     bool dropDoubles = k3bMain()->config()->readBoolEntry( "Drop doubles", false );
     if( dropDoubles )
-      return;
+      return 0;
 
     bool ok = true;
     do {
@@ -307,12 +309,14 @@ void K3bDataDoc::createFileItem( QFileInfo& f, K3bDirItem* parent )
     } while( ok && nameAlreadyInDir( newName, parent ) );
 
     if( !ok )
-      return;
+      return 0;
   }
 
 
   K3bFileItem* newK3bItem = new K3bFileItem( f.absFilePath(), this, parent, newName );
   m_size += newK3bItem->k3bSize();
+
+  return newK3bItem;
 }
 
 
@@ -807,16 +811,20 @@ void K3bDataDoc::removeItem( K3bDataItem* item )
   if( !item )
     return;
 
-  if( item == root() )
-    kdDebug() << "(K3bDataDoc) tried to remove root-entry!" << endl;
-  else {
-    emit itemRemoved( item );
-    
-    m_size -= item->k3bSize();
-
+  if( item->isRemoveable() ) {
     // the item takes care of it's parent!
     delete item;
   }
+  else
+    kdDebug() << "(K3bDataDoc) tried to remove non-movable entry!" << endl;
+}
+
+
+// called by the K3bDataItem's destructor
+void K3bDataDoc::itemDeleted( K3bDataItem* item )
+{
+  emit itemRemoved( item );
+  m_size -= item->k3bSize();
 }
 
 
@@ -824,6 +832,11 @@ void K3bDataDoc::moveItem( K3bDataItem* item, K3bDirItem* newParent )
 {
   if( !item || !newParent ) {
     kdDebug() << "(K3bDataDoc) item or parentitem was NULL while moving." << endl;
+    return;
+  }
+
+  if( !item->isMoveable() ) {
+    kdDebug() << "(K3bDataDoc) item is not movable! " << endl;
     return;
   }
 
@@ -1009,6 +1022,146 @@ void K3bDataDoc::loadDefaultSettings()
 
   m_deleteImage = c->readBoolEntry( "remove_image", true );
   m_onlyCreateImage = c->readBoolEntry( "only_create_image", false );
+}
+
+
+void K3bDataDoc::setMultiSessionMode( int mode )
+{
+  m_multisessionMode = mode; 
+
+  if( m_multisessionMode != CONTINUE && m_multisessionMode != FINISH )
+    clearImportedSession();
+}
+
+
+void K3bDataDoc::importSession( const QString& path )
+{
+  // remove previous imported sessions
+  clearImportedSession();
+
+  // set multisession option
+  if( m_multisessionMode != CONTINUE && m_multisessionMode != FINISH )
+    m_multisessionMode = CONTINUE;
+
+  // add all files from cd as readonly fileitems
+  KProgressDialog d( 0, 0, i18n("Importing session"), i18n("Importing old session from %1").arg(path) );
+  d.show();
+
+  int dirFilter = QDir::All | QDir::Hidden | QDir::System;
+
+  QStringList dlist = QDir( path ).entryList( dirFilter );
+  dlist.remove(".");
+  dlist.remove("..");
+  
+  d.progressBar()->setTotalSteps( dlist.count() );
+
+  for( QStringList::Iterator it = dlist.begin(); it != dlist.end(); ++it ) {
+    createSessionImportItems( path + "/" + *it, root() );
+
+    d.progressBar()->setValue( d.progressBar()->value() + 1 );
+  }
+
+  emit newFileItems();
+
+  d.hide();
+}
+
+
+void K3bDataDoc::createSessionImportItems( const QString& path, K3bDirItem* parent )
+{
+  QFileInfo newF(path);
+  K3bDataItem* oldItem = parent->find( newF.fileName() );
+  if( oldItem ) {
+    // remove the item already in the project since mkisofs is not
+    // capable of overwriting files
+    if( (oldItem->isDir() && !newF.isDir()) ||
+	!oldItem->isDir() ) {
+	delete oldItem;
+	oldItem = 0;
+    }
+  }
+
+  if( newF.isDir() && !newF.isSymLink() ) {
+    kdDebug() << "(K3bDataDoc) sessionimport: new diritem: " << newF.filePath() << endl;
+
+    K3bDirItem* dir = 0;
+    if( !oldItem ) {
+      dir = new K3bDirItem( newF.fileName(), this, parent );
+      dir->setRemoveable(false);
+      dir->setRenameable(false);
+      dir->setMoveable(false);
+      dir->setHideable(false);
+      dir->setWriteToCd(false);
+      dir->setExtraInfo( i18n("From previous session") );
+      m_oldSession.append( dir );
+    }
+    else
+      dir = (K3bDirItem*)oldItem;
+
+    int dirFilter = QDir::All | QDir::Hidden | QDir::System;
+    QStringList dlist = QDir( path ).entryList( dirFilter );
+    dlist.remove(".");
+    dlist.remove("..");
+
+    for( QStringList::Iterator it = dlist.begin(); it != dlist.end(); ++it ) {
+      createSessionImportItems( path + "/" + *it, dir );
+    }
+  }
+  else {
+    kdDebug() << "(K3bDataDoc) sessionimport: new fileitem: " << newF.filePath() << endl;
+
+    K3bFileItem* item = new K3bFileItem( newF.absFilePath(), this, parent, newF.fileName() );
+    item->setRemoveable(false);
+    item->setRenameable(false);
+    item->setMoveable(false);
+    item->setHideable(false);
+    item->setWriteToCd(false);
+    item->setExtraInfo( i18n("From previous session") );
+    m_oldSession.append( item );
+    m_size += item->k3bSize();
+  }
+}
+
+
+void K3bDataDoc::clearImportedSession()
+{
+  m_oldSession.setAutoDelete(false);
+  K3bDataItem* item = m_oldSession.first();
+  while( !m_oldSession.isEmpty() ) {
+    if( item == 0 )
+      item = m_oldSession.first();
+
+    if( item->isDir() ) {
+      K3bDirItem* dir = (K3bDirItem*)item;
+      if( dir->numDirs() + dir->numFiles() == 0 ) {
+	// this imported dir is not needed anymore 
+	// since it is empty
+	m_oldSession.remove();
+	delete dir;
+      }
+      else {
+	for( QPtrListIterator<K3bDataItem> it( *dir->children() ); it.current(); ++it ) {
+	  if( !m_oldSession.contains(it.current()) ) {
+	    m_oldSession.remove();
+	    // now the dir becomes a totally normal dir
+	    dir->setRemoveable(true);
+	    dir->setRenameable(true);
+	    dir->setMoveable(true);
+	    dir->setHideable(true);
+	    dir->setWriteToCd(true);
+	    dir->setExtraInfo( "" );
+	    break;
+	  }
+	}
+      }
+    }
+    else {
+      m_oldSession.remove();
+      delete item;
+    }
+
+    item = m_oldSession.next();
+  }
 }
 
 

@@ -249,8 +249,9 @@ void K3bDataFileView::setupActions()
 void K3bDataFileView::showPopupMenu( KListView*, QListViewItem* item, const QPoint& point )
 {
   if( item ) {
-    m_actionRemove->setEnabled( true );
-    m_actionRename->setEnabled( true );
+    K3bDataItem* di = ((K3bDataViewItem*)item)->dataItem();
+    m_actionRemove->setEnabled( di->isRemoveable() );
+    m_actionRename->setEnabled( di->isRenameable() );
     if( currentDir() == m_doc->root() )
       m_actionParentDir->setEnabled( false );
     else

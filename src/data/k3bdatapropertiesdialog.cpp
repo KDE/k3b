@@ -42,6 +42,7 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( K3bDataItem* dataItem, QWidget
   m_dataItem = dataItem;
 
   QLabel* labelMimeType = new QLabel( plainPage() );
+  QLabel* extraInfoLabel = new QLabel( plainPage() );
   m_editName = new KLineEdit( plainPage() );
   m_labelType = new QLabel( plainPage() );
   m_labelLocation = new QLabel( plainPage() );
@@ -60,20 +61,21 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( K3bDataItem* dataItem, QWidget
   line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
   grid->addMultiCellWidget( line, 1, 1, 0, 2 );
   grid->addWidget( new QLabel( i18n("Type:"), plainPage() ), 2, 0 );
-  grid->addWidget( new QLabel( i18n("Location:"), plainPage() ), 3, 0 );
-  grid->addWidget( new QLabel( i18n("Size:"), plainPage() ), 4, 0 );
+  grid->addWidget( new QLabel( i18n("Location:"), plainPage() ), 4, 0 );
+  grid->addWidget( new QLabel( i18n("Size:"), plainPage() ), 5, 0 );
   grid->addWidget( m_labelType, 2, 2 );
-  grid->addWidget( m_labelLocation, 3, 2 );
-  grid->addWidget( m_labelSize, 4, 2 );
+  grid->addWidget( extraInfoLabel, 3, 2 );
+  grid->addWidget( m_labelLocation, 4, 2 );
+  grid->addWidget( m_labelSize, 5, 2 );
   line = new QFrame( plainPage() );
   line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
-  grid->addMultiCellWidget( line, 5, 5, 0, 2 );
+  grid->addMultiCellWidget( line, 6, 6, 0, 2 );
   QLabel* label1 = new QLabel( i18n("Local name:"), plainPage() );
-  grid->addWidget(  label1, 6, 0 );
+  grid->addWidget(  label1, 7, 0 );
   QLabel* label2 = new QLabel( i18n("Local location:"), plainPage() );
-  grid->addWidget( label2, 7, 0 );
-  grid->addWidget( m_labelLocalName, 6, 2 );
-  grid->addWidget( m_labelLocalLocation, 7, 2 );
+  grid->addWidget( label2, 8, 0 );
+  grid->addWidget( m_labelLocalName, 7, 2 );
+  grid->addWidget( m_labelLocalLocation, 8, 2 );
 
   grid->addColSpacing( 1, 50 );
   grid->setColStretch( 2, 1 );
@@ -114,19 +116,20 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( K3bDataItem* dataItem, QWidget
   if( location.isEmpty() )
     location = "/";
   m_labelLocation->setText( location );
-
+  extraInfoLabel->setText( QString( "(%1)" ).arg(dataItem->extraInfo()) );
+  extraInfoLabel->setShown( !dataItem->extraInfo().isEmpty() );
 
   // OPTIONS
   // /////////////////////////////////////////////////
   line = new QFrame( plainPage() );
   line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
-  grid->addMultiCellWidget( line, 8, 8, 0, 2 );
+  grid->addMultiCellWidget( line, 9, 9, 0, 2 );
   m_checkHideOnRockRidge = new QCheckBox( i18n("Hide on Rockridge"), plainPage() );
   m_checkHideOnJoliet = new QCheckBox( i18n("Hide on Joliet"), plainPage() );
 
-  grid->addMultiCellWidget( m_checkHideOnRockRidge, 9, 9, 0, 2 );
-  grid->addMultiCellWidget( m_checkHideOnJoliet, 10, 10, 0, 2 );
-  grid->setRowStretch( 11, 1 );
+  grid->addMultiCellWidget( m_checkHideOnRockRidge, 10, 10, 0, 2 );
+  grid->addMultiCellWidget( m_checkHideOnJoliet, 11, 11, 0, 2 );
+  grid->setRowStretch( 12, 1 );
 
 
   m_checkHideOnJoliet->setChecked( dataItem->hideOnJoliet() );
@@ -137,6 +140,10 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( K3bDataItem* dataItem, QWidget
     m_checkHideOnRockRidge->setDisabled( dataItem->parent()->hideOnRockRidge() );
     m_checkHideOnJoliet->setDisabled( dataItem->parent()->hideOnJoliet() );
   }
+
+  m_checkHideOnJoliet->setShown( dataItem->isHideable() );
+  m_checkHideOnRockRidge->setShown( dataItem->isHideable() );
+  line->setShown( dataItem->isHideable() );
 
   QToolTip::add( m_checkHideOnRockRidge, i18n("") );
   QToolTip::add( m_checkHideOnJoliet, i18n("") );
@@ -156,6 +163,7 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( K3bDataItem* dataItem, QWidget
 					     "on the Joliet filesystem.</p>") );
 
 
+  m_editName->setReadOnly( !dataItem->isRenameable() );
   m_editName->setFocus();
 }
 

@@ -56,6 +56,8 @@ K3bFileItem::K3bFileItem( const QString& filePath, K3bDataDoc* doc, K3bDirItem* 
 
 K3bFileItem::~K3bFileItem()
 {
+  // inform the doc, so it can decrease the size and inform the views
+  doc()->itemDeleted( this );
 }
 
 

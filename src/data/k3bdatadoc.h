@@ -25,6 +25,7 @@
 #include <qqueue.h>
 #include <qfileinfo.h>
 #include <qstringlist.h>
+#include <qptrlist.h>
 
 #include <kurl.h>
 
@@ -53,6 +54,8 @@ class K3bDataDoc : public K3bDoc
  public:
   K3bDataDoc( QObject* parent );
   ~K3bDataDoc();
+
+  int docType() const { return DATA; }
 
   enum mutiSessionModes { NONE, START, CONTINUE, FINISH };
 
@@ -99,7 +102,7 @@ class K3bDataDoc : public K3bDoc
   void setOnlyCreateImage( bool b ) { m_onlyCreateImage = b; }
 
   int multiSessionMode() const { return m_multisessionMode; }
-  void setMultiSessionMode( int mode ) { m_multisessionMode = mode; }
+  void setMultiSessionMode( int mode );
 
   static bool nameAlreadyInDir( const QString&, K3bDirItem* );
 
@@ -112,6 +115,11 @@ class K3bDataDoc : public K3bDoc
   void slotAddUrlsToDir( const KURL::List&, K3bDirItem* dir = 0 );
   void addUrl( const KURL& url );
   void addUrls( const KURL::List& urls );
+
+  void importSession( const QString& path );
+  void clearImportedSession();
+
+  void itemDeleted( K3bDataItem* item );
 
  signals:
   void itemRemoved( K3bDataItem* );
@@ -131,6 +139,8 @@ class K3bDataDoc : public K3bDoc
   void loadDefaultSettings();
 
  private:
+  void createSessionImportItems( const QString& path, K3bDirItem* parent );
+
   /**
    * load recursivly
    */
@@ -140,8 +150,8 @@ class K3bDataDoc : public K3bDoc
    */
   void saveDataItem( K3bDataItem* item, QDomDocument* doc, QDomElement* parent );
 
-  void createDirItem( QFileInfo& f, K3bDirItem* parent );
-  void createFileItem( QFileInfo& f, K3bDirItem* parent );
+  K3bDirItem* createDirItem( QFileInfo& f, K3bDirItem* parent );
+  K3bFileItem* createFileItem( QFileInfo& f, K3bDirItem* parent );
 
   void informAboutNotFoundFiles();
 
@@ -182,6 +192,7 @@ class K3bDataDoc : public K3bDoc
   K3bIsoOptions m_isoOptions;
 
   int m_multisessionMode;
+  QPtrList<K3bDataItem> m_oldSession;
 };
 
 #endif

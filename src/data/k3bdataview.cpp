@@ -20,6 +20,8 @@
 #include "../k3bfillstatusdisplay.h"
 #include "../k3b.h"
 #include "k3bdataburndialog.h"
+#include <device/k3bdevice.h>
+#include <tools/k3bdeviceselectiondialog.h>
 
 
 #include <klocale.h>
@@ -27,6 +29,9 @@
 #include <kapplication.h>
 #include <kpopupmenu.h>
 #include <kaction.h>
+#include <kmessagebox.h>
+#include <kio/global.h>
+#include <kio/job.h>
 
 #include <qpixmap.h>
 #include <qsplitter.h>
@@ -124,5 +129,39 @@ K3bDirItem* K3bDataView::currentDir() const
 //   m_fillStatusDisplay->repaint();	
 // }
 
+
+void K3bDataView::importSession()
+{
+  // get the writer
+  m_device = K3bDeviceSelectionDialog::selectWriter( this, i18n("Please select the appendable disk") );
+
+  // TODO: check if it's a data cd and appendable and show some dialog
+
+
+  // mount the cd
+  connect( KIO::mount( true, 0L, m_device->mountDevice(), m_device->mountPoint(), false ), SIGNAL(result(KIO::Job*)),
+	   this, SLOT(slotMountFinished(KIO::Job*)) );
+}
+
+
+void K3bDataView::slotMountFinished( KIO::Job* job )
+{
+  if( job->error() ) {
+    KMessageBox::error( this, KIO::buildErrorString( job->error(), m_device->vendor() + " " + m_device->description() ) );
+  }
+  else {
+    m_doc->setBurner( m_device );
+    m_doc->importSession( m_device->mountPoint() );
+
+    // unmount the cd
+    KIO::unmount( m_device->mountPoint(), false );
+  }
+}
+
+
+void K3bDataView::clearImportedSession()
+{
+  m_doc->clearImportedSession();
+}
 
 #include "k3bdataview.moc"

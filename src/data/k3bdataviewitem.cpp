@@ -40,6 +40,10 @@ void K3bDataViewItem::paintCell( QPainter* p, const QColorGroup& cg, int column,
 {
   QColorGroup _cg = cg;
 
+  if( !dataItem()->isRemoveable() && dataItem()->doc()->root() != dataItem() ) {
+    _cg.setColor( QColorGroup::Text, Qt::gray );
+  }
+
   if( column == 0 ) {
     const QPixmap *pm = listView()->viewport()->backgroundPixmap();
     if (pm && !pm->isNull())

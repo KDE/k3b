@@ -124,6 +124,10 @@ K3bMainWindow::K3bMainWindow()
   actionFileExport->setEnabled( false );
   actionProjectAddFiles->setEnabled( false );
 
+  actionDataImportSession->setEnabled( false );
+  actionDataClearImportedSession->setEnabled( false );
+
+
   m_optionDialog = 0;
 
   // since the icons are not that good activate the text on the toolbar
@@ -157,7 +161,7 @@ void K3bMainWindow::initActions()
 
   KStdAction::configureToolbars(this, SLOT(slotEditToolbars()), actionCollection());
 
-  actionFileBurn = new KAction( i18n("&Burn..."), "cdwriter_unmount", 0, this, SLOT(slotFileBurn()), 
+  actionFileBurn = new KAction( i18n("&Burn..."), "cdwriter_unmount", CTRL + Key_B, this, SLOT(slotFileBurn()), 
 			  actionCollection(), "file_burn");
   actionFileExport = new KAction( i18n("E&xport..."), "revert", 0, this, SLOT(slotFileExport()),
 			    actionCollection(), "file_export" );
@@ -199,6 +203,19 @@ void K3bMainWindow::initActions()
 
   actionSettingsK3bSetup = new KAction(i18n("K3b &Setup"), "configure", 0, this, SLOT(slotK3bSetup()),
 				       actionCollection(), "settings_k3bsetup" );
+
+
+  // Project actions
+  // ==============================================================================================================
+
+  // Data Project
+  actionDataImportSession = new KAction(i18n("&Import Session"), "gear", 0, this, SLOT(slotDataImportSession()),
+					actionCollection(), "project_data_import_session" );
+  actionDataClearImportedSession = new KAction(i18n("&Clear imported Session"), "gear", 0, this, 
+					       SLOT(slotDataClearImportedSession()), actionCollection(), 
+					       "project_data_clear_imported_session" );
+
+  // ==============================================================================================================
 
 
   actionFileNewMenu->setStatusText(i18n("Creates a new project"));
@@ -924,6 +941,19 @@ void K3bMainWindow::init()
 
 void K3bMainWindow::slotCurrentDocChanged( QWidget* )
 {
+  // check the doctype
+  K3bView* view = activeView();
+  if( view ) {
+    switch( view->getDocument()->docType() ) {
+    case K3bDoc::DATA:
+      actionDataClearImportedSession->setEnabled(true);
+      actionDataImportSession->setEnabled(true);
+      break;
+    default:
+      actionDataClearImportedSession->setEnabled(false);
+      actionDataImportSession->setEnabled(false);
+    }
+  }
 }
 
 
@@ -1065,6 +1095,26 @@ K3bExternalBinManager* K3bMainWindow::externalBinManager()
 K3bDeviceManager* K3bMainWindow::deviceManager()
 {
   return K3bDeviceManager::self();
+}
+
+
+void K3bMainWindow::slotDataImportSession()
+{
+  if( activeView() ) {
+    if( K3bDataView* view = dynamic_cast<K3bDataView*>(activeView()) ) {
+      view->importSession();
+    }
+  }
+}
+
+
+void K3bMainWindow::slotDataClearImportedSession()
+{
+  if( activeView() ) {
+    if( K3bDataView* view = dynamic_cast<K3bDataView*>(activeView()) ) {
+      view->clearImportedSession();
+    }
+  }
 }
 
 #include "k3b.moc"
