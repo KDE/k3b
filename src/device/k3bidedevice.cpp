@@ -16,10 +16,10 @@ K3bIdeDevice::K3bIdeDevice( cdrom_drive* drive )
 
   // the cd_paranoia-lib puts vendor, model, and version in one string
   // we need to split it
-
-  if( (int i = model.find("ATAPI")) != -1 )
+  int i;
+  if( (i = model.find("ATAPI")) != -1 )
     model.remove( i, 5 );
-  if( (int i = model.find("compatible")) != -1 )
+  if( (i = model.find("compatible")) != -1 )
     model.remove( i, 10 );
 
   model.stripWhiteSpace();
