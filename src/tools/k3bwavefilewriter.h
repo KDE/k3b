@@ -59,6 +59,12 @@ class K3bWaveFileWriter
    */
   void write( const char* data, int len, Endianess e = BigEndian );
 
+  /**
+   * returnes a filedescriptor with the already opened file
+   * or -1 if isOpen() is false
+   */
+  int fd() const;
+
  private:
   void writeEmptyHeader();
   void updateHeader();
@@ -67,8 +73,6 @@ class K3bWaveFileWriter
   QFile m_outputFile;
   QDataStream m_outputStream;
   QString m_filename;
-
-  long m_dataWritten;
 };
 
 #endif

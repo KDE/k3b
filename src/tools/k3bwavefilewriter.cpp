@@ -20,7 +20,6 @@
 K3bWaveFileWriter::K3bWaveFileWriter()
   : m_outputStream( &m_outputFile )
 {
-  m_dataWritten = 0;
 }
 
 
@@ -33,8 +32,6 @@ K3bWaveFileWriter::~K3bWaveFileWriter()
 bool K3bWaveFileWriter::open( const QString& filename )
 {
   close();
-
-  m_dataWritten = 0;
 
   m_outputFile.setName( filename );
 
@@ -54,7 +51,7 @@ bool K3bWaveFileWriter::open( const QString& filename )
 void K3bWaveFileWriter::close()
 {
   if( isOpen() ) {
-    if( m_dataWritten ) {
+    if( m_outputFile.at() > 0 ) {
       padTo2352();
 
       // update wave header
@@ -107,8 +104,6 @@ void K3bWaveFileWriter::write( const char* data, int len, Endianess e )
 
       delete [] buffer;
     }
-
-    m_dataWritten += len;
   }
 }
 
@@ -140,8 +135,9 @@ void K3bWaveFileWriter::updateHeader()
 
     m_outputFile.flush();
 
+    long fileSize = m_outputFile.at();
     char c[4];
-    Q_INT32 wavSize(m_dataWritten + 44 - 8);
+    Q_INT32 wavSize(fileSize - 8);
 
     // jump to the wavSize position in the header
 
@@ -153,10 +149,10 @@ void K3bWaveFileWriter::updateHeader()
     m_outputStream.writeRawBytes( c, 4 );
 
     m_outputFile.at( 40 );
-    c[0] = (m_dataWritten   >> 0 ) & 0xff;
-    c[1] = (m_dataWritten   >> 8 ) & 0xff;
-    c[2] = (m_dataWritten   >> 16) & 0xff;
-    c[3] = (m_dataWritten   >> 24) & 0xff;
+    c[0] = (fileSize   >> 0 ) & 0xff;
+    c[1] = (fileSize   >> 8 ) & 0xff;
+    c[2] = (fileSize   >> 16) & 0xff;
+    c[3] = (fileSize   >> 24) & 0xff;
     m_outputStream.writeRawBytes( c, 4 );
 
     // jump back to the end
@@ -167,7 +163,7 @@ void K3bWaveFileWriter::updateHeader()
 
 void K3bWaveFileWriter::padTo2352()
 { 
-  int bytesToPad =  m_dataWritten % 2352;
+  int bytesToPad = ( m_outputFile.at() - 44 ) % 2352;
   if( bytesToPad > 0 ) {
     kdDebug() << "(K3bWaveFileWriter) padding wave file with " << bytesToPad << " bytes." << endl;
 
@@ -175,7 +171,11 @@ void K3bWaveFileWriter::padTo2352()
     memset( c, 0, bytesToPad );
     m_outputStream.writeRawBytes( c, bytesToPad );
     delete [] c;
-
-    m_dataWritten += bytesToPad;
   }
+}
+
+
+int K3bWaveFileWriter::fd() const
+{
+  return m_outputFile.handle();
 }

@@ -1,6 +1,6 @@
 
 noinst_LTLIBRARIES = libkostore.la
-INCLUDES = $(all_includes)
+AM_CPPFLAGS= $(all_includes)
 
 ####### Files
 
