@@ -19,7 +19,8 @@
 #define K3BPATTERNOPTIONTAB_H
 
 #include "base_k3bpatternoptiontab.h"
-#include "../k3bcddb.h"
+
+#include <cddb/k3bcddbquery.h>
 
 
 /**
@@ -45,7 +46,7 @@ class K3bPatternOptionTab : public base_K3bPatternOptionTab
   QString patternForName( const QString& name );
   QString basicPatternItemFromIndex( int, bool );
 
-  K3bCddbEntry m_exampleEntry;
+  K3bCddbResultEntry m_exampleEntry;
 };
 
 #endif

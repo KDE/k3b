@@ -43,7 +43,7 @@ K3bCddbMultiEntriesDialog::K3bCddbMultiEntriesDialog( QWidget* parent, const cha
   setMinimumSize( 280, 200 );
 }
 
-int K3bCddbMultiEntriesDialog::selectCddbEntry( const K3bCddbQuery& query, QWidget* parent )
+int K3bCddbMultiEntriesDialog::selectCddbEntry( const K3bCddbResult& query, QWidget* parent )
 {
   K3bCddbMultiEntriesDialog d( parent );
 

@@ -1,10 +1,10 @@
 /***************************************************************************
-                          k3bpatternparser.h  -  description
+                          k3bcddbresult.h  -  description
                              -------------------
-    begin                : Sun Dec 2 2001
+    begin                : Sun Oct 7 2001
     copyright            : (C) 2001 by Sebastian Trueg
     email                : trueg@informatik.uni-freiburg.de
- ***************************************************************************/
+***************************************************************************/
 
 /***************************************************************************
  *                                                                         *
@@ -15,25 +15,48 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef K3BPATTERNPARSER_H
-#define K3BPATTERNPARSER_H
 
-#include <qstring.h>
-
-#include <cddb/k3bcddbquery.h>
+#ifndef K3B_CDDB_RESULT_H
+#define K3B_CDDB_RESULT_H
 
 
-/**
-  *@author Sebastian Trueg
-  */
-class K3bPatternParser 
+#include <qstringlist.h>
+
+
+class K3bCddbResultEntry
 {
- public: 
-  static QString parsePattern( const K3bCddbResultEntry& entry, 
-			       unsigned int trackNumber,
-			       const QString& pattern, 
-			       bool replace = false, 
-			       const QString& replaceString = "_" );
+ public:
+  QStringList titles;
+  QStringList artists;
+  QStringList extInfos;
+
+  QString cdTitle;
+  QString cdArtist;
+  QString cdExtInfo;
+
+  QString genre;
+  QString category;
+  QString discid;
+
+  QString rawData;
+};
+
+
+class K3bCddbResult
+{
+ public:
+  K3bCddbResult();
+  //  K3bCddbQuery( const K3bCddbQuery& );
+
+  void clear();
+  void addEntry( const K3bCddbResultEntry& = K3bCddbResultEntry() );
+  const K3bCddbResultEntry& entry( unsigned int number = 0 ) const;
+  int foundEntries() const;
+
+ private:
+  QValueList<K3bCddbResultEntry> m_entries;
+
+  K3bCddbResultEntry m_emptyEntry;
 };
 
 #endif

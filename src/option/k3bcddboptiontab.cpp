@@ -11,6 +11,7 @@
 #include <qtooltip.h>
 #include <qwhatsthis.h>
 #include <qstringlist.h>
+#include <qcombobox.h>
 
 
 #include <kdialog.h>
@@ -42,13 +43,9 @@ K3bCddbOptionTab::K3bCddbOptionTab( QWidget* parent,  const char* name )
   m_groupLocalDirLayout->setMargin( KDialog::marginHint() );
   m_groupLocalDirLayout->setSpacing( KDialog::spacingHint() );
 
-  m_groupCddbpServer->layout()->setMargin( 0 );
-  m_groupCddbpServerLayout->setMargin( KDialog::marginHint() );
-  m_groupCddbpServerLayout->setSpacing( KDialog::spacingHint() );
-
-  m_groupHttpServer->layout()->setMargin( 0 );
-  m_groupHttpServerLayout->setMargin( KDialog::marginHint() );
-  m_groupHttpServerLayout->setSpacing( KDialog::spacingHint() );
+  m_groupCddbServer->layout()->setMargin( 0 );
+  m_groupCddbServerLayout->setMargin( KDialog::marginHint() );
+  m_groupCddbServerLayout->setSpacing( KDialog::spacingHint() );
 
   m_groupProxy->layout()->setMargin( 0 );
   m_groupProxyLayout->setMargin( KDialog::marginHint() );
@@ -63,8 +60,7 @@ K3bCddbOptionTab::K3bCddbOptionTab( QWidget* parent,  const char* name )
 
   m_boxProxyServerLayout->setSpacing( KDialog::spacingHint() );
   m_boxLocalDirectoryLayout->setSpacing( KDialog::spacingHint() );
-  m_boxHttpServerLayout->setSpacing( KDialog::spacingHint() );
-  m_boxCddbpServerLayout->setSpacing( KDialog::spacingHint() );
+  m_boxCddbServerLayout->setSpacing( KDialog::spacingHint() );
   // -----------------------------------------------------------------------------
 
 
@@ -73,16 +69,13 @@ K3bCddbOptionTab::K3bCddbOptionTab( QWidget* parent,  const char* name )
   m_viewLocalDir->setDragEnabled( true );
   m_viewLocalDir->setDropVisualizer( true );
 
-  m_viewHttpServer->setSorting(-1);
-  m_viewHttpServer->setAcceptDrops( true );
-  m_viewHttpServer->setDragEnabled( true );
-  m_viewHttpServer->setDropVisualizer( true );
+  m_viewCddbServer->setSorting(-1);
+  m_viewCddbServer->setAcceptDrops( true );
+  m_viewCddbServer->setDragEnabled( true );
+  m_viewCddbServer->setDropVisualizer( true );
 
-  m_viewCddbpServer->setSorting(-1);
-  m_viewCddbpServer->setAcceptDrops( true );
-  m_viewCddbpServer->setDragEnabled( true );
-  m_viewCddbpServer->setDropVisualizer( true );
-
+  m_comboCddbType->insertItem( "Http" );
+  m_comboCddbType->insertItem( "Cddbp" );
 
   // setup connections
   // -----------------------------------------------------------------------------
@@ -91,19 +84,16 @@ K3bCddbOptionTab::K3bCddbOptionTab( QWidget* parent,  const char* name )
   connect( m_buttonAddLocalDir, SIGNAL(clicked()), this, SLOT(slotLocalDirAdd()) );
   connect( m_buttonRemoveLocalDir, SIGNAL(clicked()), this, SLOT(slotLocalDirRemove()) );
 
-  connect( m_buttonAddHttpServer, SIGNAL(clicked()), this, SLOT(slotHttpServerAdd()) );
-  connect( m_buttonRemoveHttpServer, SIGNAL(clicked()), this, SLOT(slotHttpServerRemove()) );
-
-  connect( m_buttonAddCddbpServer, SIGNAL(clicked()), this, SLOT(slotCddbpServerAdd()) );
-  connect( m_buttonRemoveCddbpServer, SIGNAL(clicked()), this, SLOT(slotCddbpServerRemove()) );
+  connect( m_buttonAddCddbServer, SIGNAL(clicked()), this, SLOT(slotCddbServerAdd()) );
+  connect( m_buttonRemoveCddbServer, SIGNAL(clicked()), this, SLOT(slotCddbServerRemove()) );
 
   connect( m_radioUseManualProxy, SIGNAL(toggled(bool)), this, SLOT(enDisableButtons()) );
   connect( m_editLocalDir, SIGNAL(textChanged(const QString&)), this, SLOT(enDisableButtons()) );
-  connect( m_editHttpServer, SIGNAL(textChanged(const QString&)), this, SLOT(enDisableButtons()) );
-  connect( m_editCddbpServer, SIGNAL(textChanged(const QString&)), this, SLOT(enDisableButtons()) );
+  connect( m_editCddbServer, SIGNAL(textChanged(const QString&)), this, SLOT(enDisableButtons()) );
   connect( m_viewLocalDir, SIGNAL(selectionChanged()), this, SLOT(enDisableButtons()) );
-  connect( m_viewHttpServer, SIGNAL(selectionChanged()), this, SLOT(enDisableButtons()) );
-  connect( m_viewCddbpServer, SIGNAL(selectionChanged()), this, SLOT(enDisableButtons()) );
+  connect( m_viewCddbServer, SIGNAL(selectionChanged()), this, SLOT(enDisableButtons()) );
+  connect( m_comboCddbType, SIGNAL(highlighted(int)), 
+	   this, SLOT(slotServerTypeChanged()) );
   // -----------------------------------------------------------------------------
 
   enDisableButtons();
@@ -125,10 +115,9 @@ void K3bCddbOptionTab::readSettings()
   QStringList httpServer = c->readListEntry( "http server" );
   QStringList localCddbDirs = c->readListEntry( "local cddb dirs" );
 
-  m_checkHttpCddb->setChecked( c->readBoolEntry( "use remote cddb", false ) );
+  m_checkRemoteCddb->setChecked( c->readBoolEntry( "use remote cddb", false ) );
   m_checkUseLocalCddb->setChecked( c->readBoolEntry( "use local cddb query", true ) );
   m_checkSaveLocalEntries->setChecked( c->readBoolEntry( "save cddb entries locally", true ) );
-  m_checkCddbp->setChecked( c->readBoolEntry( "query via cddbp", false ) );
   m_checkManualCgiPath->setChecked( c->readBoolEntry( "use manual cgi path", false ) );
   m_editManualCgiPath->setText( c->readEntry( "cgi path", "~cddb/cddb.cgi" ) );
   m_editProxyServer->setText( c->readEntry( "proxy server" ) );
@@ -136,9 +125,7 @@ void K3bCddbOptionTab::readSettings()
 
   if( localCddbDirs.isEmpty() )
     localCddbDirs.append( "~/.cddb/" );
-  if( cddbpServer.isEmpty() )
-    cddbpServer.append( "freedb.org:8880" );
-  if( httpServer.isEmpty() )
+  if( cddbpServer.isEmpty() && httpServer.isEmpty() )
     httpServer.append( "freedb.org:80" );
 
   if( c->readEntry( "proxy settings type", "kde" ) == "kde" )
@@ -165,7 +152,7 @@ void K3bCddbOptionTab::readSettings()
       port = "80";
     }
 
-    (void)new KListViewItem( m_viewHttpServer, m_viewHttpServer->lastItem(), server, port );
+    (void)new KListViewItem( m_viewCddbServer, m_viewCddbServer->lastItem(), "Http", server, port );
   }
 
   for( QStringList::const_iterator it = cddbpServer.begin(); it != cddbpServer.end(); ++it ) {
@@ -180,7 +167,7 @@ void K3bCddbOptionTab::readSettings()
       port = "8880";
     }
 
-    (void)new KListViewItem( m_viewCddbpServer, m_viewCddbpServer->lastItem(), server, port );
+    (void)new KListViewItem( m_viewCddbServer, m_viewCddbServer->lastItem(), "Cddbp", server, port );
   }
 
   enDisableButtons();
@@ -193,11 +180,10 @@ void K3bCddbOptionTab::apply()
 
   c->setGroup( "Cddb" );
 
-  c->writeEntry( "use remote cddb", m_checkHttpCddb->isChecked() );
+  c->writeEntry( "use remote cddb", m_checkRemoteCddb->isChecked() );
   c->writeEntry( "use local cddb query", m_checkUseLocalCddb->isChecked() );
   c->writeEntry( "use proxy server", m_checkUseProxy->isChecked() );
   c->writeEntry( "save cddb entries locally", m_checkSaveLocalEntries->isChecked() );
-  c->writeEntry( "query via cddbp", m_checkCddbp->isChecked() );
   c->writeEntry( "use manual cgi path", m_checkManualCgiPath->isChecked() );
   c->writeEntry( "cgi path", m_editManualCgiPath->text() );
   c->writeEntry( "proxy server", m_editProxyServer->text() );
@@ -205,8 +191,7 @@ void K3bCddbOptionTab::apply()
 
   c->writeEntry( "proxy settings type", m_radioUseKdeProxy->isChecked() ? "kde" : "manual" );
 
-  QStringList cddbpServer;
-  QStringList httpServer;
+  QStringList cddbServer;
   QStringList localCddbDirs;
 
   QListViewItemIterator it( m_viewLocalDir );
@@ -215,20 +200,21 @@ void K3bCddbOptionTab::apply()
     ++it;
   }
 
-  QListViewItemIterator it1( m_viewHttpServer );
+  QListViewItemIterator it1( m_viewCddbServer );
   while( it1.current() ) {
-    httpServer.append( it1.current()->text(0) + ":" + it1.current()->text(1) );
+    cddbServer.append( it1.current()->text(1) + ":" + it1.current()->text(2) );
     ++it1;
   }
 
-  QListViewItemIterator it2( m_viewCddbpServer );
-  while( it2.current() ) {
-    cddbpServer.append( it2.current()->text(0) + ":" + it2.current()->text(1) );
-    ++it2;
-  }
+  // new config
+  c->writeEntry( "cddb server", cddbServer );
 
-  c->writeEntry( "cddbp server", cddbpServer );
-  c->writeEntry( "http server", httpServer );
+  // old config <= 0.7.3
+  if( c->hasKey( "http server" ) )
+    c->deleteEntry( "http server" );
+  if( c->hasKey( "cddbp server" ) )
+    c->deleteEntry( "cddbp server" );
+
   c->writeEntry( "local cddb dirs", localCddbDirs );
 }
 
@@ -259,40 +245,22 @@ void K3bCddbOptionTab::slotLocalDirRemove()
 }
 
 
-void K3bCddbOptionTab::slotHttpServerAdd()
+void K3bCddbOptionTab::slotCddbServerAdd()
 {
-  if( !m_editHttpServer->text().isEmpty() ) {
-    (void)new KListViewItem( m_viewHttpServer, m_viewHttpServer->lastItem(), 
-			     m_editHttpServer->text(), QString::number( m_editHttpPort->value() ) );
+  if( !m_editCddbServer->text().isEmpty() ) {
+    (void)new KListViewItem( m_viewCddbServer, m_viewCddbServer->lastItem(), 
+			     m_comboCddbType->currentText(),
+			     m_editCddbServer->text(), 
+			     QString::number( m_editCddbPort->value() ) );
 
     enDisableButtons();
   }
 }
 
 
-void K3bCddbOptionTab::slotHttpServerRemove()
+void K3bCddbOptionTab::slotCddbServerRemove()
 {
-  if( QListViewItem* item = m_viewHttpServer->selectedItem() )
-    delete item;
-
-  enDisableButtons();
-}
-
-
-void K3bCddbOptionTab::slotCddbpServerAdd()
-{ 
-  if( !m_editCddbpServer->text().isEmpty() ) {
-    (void)new KListViewItem( m_viewCddbpServer, m_viewCddbpServer->lastItem(), 
-			     m_editCddbpServer->text(), QString::number( m_editCddbpPort->value() ) );
-
-    enDisableButtons();
-  }
-}
-
-
-void K3bCddbOptionTab::slotCddbpServerRemove()
-{
-  if( QListViewItem* item = m_viewCddbpServer->selectedItem() )
+  if( QListViewItem* item = m_viewCddbServer->selectedItem() )
     delete item;
 
   enDisableButtons();
@@ -304,13 +272,16 @@ void K3bCddbOptionTab::enDisableButtons()
   m_buttonAddLocalDir->setDisabled( m_editLocalDir->text().isEmpty() );
   m_buttonRemoveLocalDir->setDisabled( m_viewLocalDir->selectedItem() == 0 );
 
-  m_buttonAddHttpServer->setDisabled( m_editHttpServer->text().isEmpty() );
-  m_buttonRemoveHttpServer->setDisabled( m_viewHttpServer->selectedItem() == 0 );
-
-  m_buttonAddCddbpServer->setDisabled( m_editCddbpServer->text().isEmpty() );
-  m_buttonRemoveCddbpServer->setDisabled( m_viewCddbpServer->selectedItem() == 0 );
+  m_buttonAddCddbServer->setDisabled( m_editCddbServer->text().isEmpty() );
+  m_buttonRemoveCddbServer->setDisabled( m_viewCddbServer->selectedItem() == 0 );
 
   m_boxProxyServer->setEnabled( m_radioUseManualProxy->isChecked() && m_checkUseProxy->isChecked() );
+}
+
+
+void K3bCddbOptionTab::slotServerTypeChanged()
+{
+  m_editCddbPort->setValue( m_comboCddbType->currentText() == "Http" ? 80 : 8080 );
 }
 
 

@@ -1,8 +1,8 @@
 /***************************************************************************
-                          k3bcddbmultientriesdialog.h  -  description
+                          k3bcddbsubmit.cpp  -  description
                              -------------------
-    begin                : Sun Feb 10 2002
-    copyright            : (C) 2002 by Sebastian Trueg
+    begin                : Sun Oct 7 2001
+    copyright            : (C) 2001 by Sebastian Trueg
     email                : trueg@informatik.uni-freiburg.de
  ***************************************************************************/
 
@@ -15,34 +15,36 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef K3BCDDBMULTIENTRIESDIALOG_H
-#define K3BCDDBMULTIENTRIESDIALOG_H
+#include "k3bcddbsubmit.h"
 
-#include <kdialogbase.h>
-
-#include "cddb/k3bcddbquery.h"
+#include <qtimer.h>
 
 
-class QStringList;
-class KListBox;
-
-/**
-  *@author Sebastian Trueg
-  */
-class K3bCddbMultiEntriesDialog : public KDialogBase  
+K3bCddbSubmit::K3bCddbSubmit( QObject* parent, const char* name )
+  : QObject( parent, name )
 {
-  Q_OBJECT
+}
 
- public:
-  ~K3bCddbMultiEntriesDialog();
-  
-  static int selectCddbEntry( const K3bCddbResult& query, QWidget* parent = 0 );
 
- protected:
-  K3bCddbMultiEntriesDialog( QWidget* parent = 0, const char* name = 0);
+K3bCddbSubmit::~K3bCddbSubmit()
+{
+}
 
- private:
-  KListBox *m_listBox;
-};
 
-#endif
+void K3bCddbSubmit::submit( const K3bCddbResultEntry& entry )
+{
+  m_resultEntry = entry;
+
+  if( m_resultEntry.rawData.isEmpty() )
+    createDataStream( m_resultEntry );
+
+  QTimer::singleShot( 0, this, SLOT(doSubmit()) );
+}
+
+
+void K3bCddbSubmit::createDataStream( K3bCddbResultEntry& )
+{
+  // FIXME
+}
+
+#include "k3bcddbsubmit.moc"

@@ -1,10 +1,10 @@
 /***************************************************************************
-                          k3bcddbmultientriesdialog.h  -  description
+                          k3bcddbresult.cpp  -  description
                              -------------------
-    begin                : Sun Feb 10 2002
-    copyright            : (C) 2002 by Sebastian Trueg
+    begin                : Sun Oct 7 2001
+    copyright            : (C) 2001 by Sebastian Trueg
     email                : trueg@informatik.uni-freiburg.de
- ***************************************************************************/
+***************************************************************************/
 
 /***************************************************************************
  *                                                                         *
@@ -15,34 +15,36 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef K3BCDDBMULTIENTRIESDIALOG_H
-#define K3BCDDBMULTIENTRIESDIALOG_H
 
-#include <kdialogbase.h>
-
-#include "cddb/k3bcddbquery.h"
+#include "k3bcddbresult.h"
 
 
-class QStringList;
-class KListBox;
-
-/**
-  *@author Sebastian Trueg
-  */
-class K3bCddbMultiEntriesDialog : public KDialogBase  
+K3bCddbResult::K3bCddbResult()
 {
-  Q_OBJECT
+}
 
- public:
-  ~K3bCddbMultiEntriesDialog();
-  
-  static int selectCddbEntry( const K3bCddbResult& query, QWidget* parent = 0 );
 
- protected:
-  K3bCddbMultiEntriesDialog( QWidget* parent = 0, const char* name = 0);
+void K3bCddbResult::clear()
+{
+  m_entries.clear();
+}
 
- private:
-  KListBox *m_listBox;
-};
 
-#endif
+int K3bCddbResult::foundEntries() const
+{
+  return m_entries.count();
+}
+
+const K3bCddbResultEntry& K3bCddbResult::entry( unsigned int number ) const
+{
+  if( number >= m_entries.count() )
+    return m_emptyEntry;
+
+  return m_entries[number];
+}
+
+
+void K3bCddbResult::addEntry( const K3bCddbResultEntry& entry )
+{
+  m_entries.append( entry );
+}

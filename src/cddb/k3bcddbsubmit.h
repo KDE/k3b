@@ -1,8 +1,8 @@
 /***************************************************************************
-                          k3bcddbmultientriesdialog.h  -  description
+                          k3bcddbsubmit.h  -  description
                              -------------------
-    begin                : Sun Feb 10 2002
-    copyright            : (C) 2002 by Sebastian Trueg
+    begin                : Sun Oct 7 2001
+    copyright            : (C) 2001 by Sebastian Trueg
     email                : trueg@informatik.uni-freiburg.de
  ***************************************************************************/
 
@@ -15,34 +15,47 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef K3BCDDBMULTIENTRIESDIALOG_H
-#define K3BCDDBMULTIENTRIESDIALOG_H
+#ifndef K3BCDDB_SUBMIT_H
+#define K3BCDDB_SUBMIT_H
 
-#include <kdialogbase.h>
+#include <qobject.h>
+#include <qstring.h>
 
-#include "cddb/k3bcddbquery.h"
+#include "k3bcddbresult.h"
 
 
-class QStringList;
-class KListBox;
 
-/**
-  *@author Sebastian Trueg
-  */
-class K3bCddbMultiEntriesDialog : public KDialogBase  
+class K3bCddbSubmit : public QObject
 {
   Q_OBJECT
 
  public:
-  ~K3bCddbMultiEntriesDialog();
-  
-  static int selectCddbEntry( const K3bCddbResult& query, QWidget* parent = 0 );
+  K3bCddbSubmit( QObject* parent = 0, const char* name = 0 );
+  virtual ~K3bCddbSubmit();
+
+  int error() const { return m_error; }
+
+  enum State { SUCCESS, WORKING, IO_ERROR, CONNECTION_ERROR };
+
+ public slots:
+  void submit( const K3bCddbResultEntry& );
+
+ signals:
+  void infoMessage( const QString& );
+  void submitFinished( K3bCddbSubmit* );
+
+ protected slots:
+  virtual void doSubmit() = 0;
+  void setError( int e ) { m_error = e; }
 
  protected:
-  K3bCddbMultiEntriesDialog( QWidget* parent = 0, const char* name = 0);
+  K3bCddbResultEntry& resultEntry() { return m_resultEntry; }
 
  private:
-  KListBox *m_listBox;
+  void createDataStream( K3bCddbResultEntry& entry );
+
+  int m_error;
+  K3bCddbResultEntry m_resultEntry;
 };
 
 #endif

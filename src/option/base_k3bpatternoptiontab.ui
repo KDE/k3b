@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>base_K3bPatternOptionTab</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>695</width>
-            <height>606</height>
+            <width>709</width>
+            <height>618</height>
         </rect>
     </property>
     <property name="caption">
@@ -68,6 +68,12 @@
                                 <horstretch>0</horstretch>
                                 <verstretch>0</verstretch>
                             </sizepolicy>
+                        </property>
+                        <property name="frameShape">
+                            <enum>NoFrame</enum>
+                        </property>
+                        <property name="frameShadow">
+                            <enum>Plain</enum>
                         </property>
                         <property name="text">
                             <string>&lt;p&gt;You are free to add any text in the fields of the filename pattern. This text will be added between the selected entries.</string>
@@ -166,7 +172,7 @@
                         </grid>
                     </widget>
                     <spacer>
-                        <property name="name" stdset="0">
+                        <property name="name">
                             <cstring>Spacer7</cstring>
                         </property>
                         <property name="orientation">
@@ -301,7 +307,7 @@
                                 <hsizetype>1</hsizetype>
                                 <vsizetype>1</vsizetype>
                                 <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
+                                <verstretch>1</verstretch>
                             </sizepolicy>
                         </property>
                         <property name="text">
@@ -310,7 +316,8 @@
 &lt;li&gt;%t - Will be replaced by the title of the track
 &lt;li&gt;%n - Will be replaced by the track number
 &lt;li&gt;%e - Will be replaced by extended information about the track
-&lt;li&gt;%g - Will be replaced by the genre of the CD</string>
+&lt;li&gt;%g - Will be replaced by the genre of the CD
+&lt;/ul&gt;</string>
                         </property>
                         <property name="alignment">
                             <set>WordBreak|AlignTop</set>
@@ -325,7 +332,7 @@
                                 <hsizetype>1</hsizetype>
                                 <vsizetype>1</vsizetype>
                                 <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
+                                <verstretch>1</verstretch>
                             </sizepolicy>
                         </property>
                         <property name="text">
@@ -333,7 +340,8 @@
 &lt;li&gt;%r - Will be replaced by the album artist (differs from %a only on soundtracks or compilations)
 &lt;li&gt;%m - Will be replaced by the album title
 &lt;li&gt;%x - Will be replaced by extended information about the CD
-&lt;li&gt;%d - Will be replaced by the current date</string>
+&lt;li&gt;%d - Will be replaced by the current date
+&lt;/ul&gt;</string>
                         </property>
                         <property name="alignment">
                             <set>WordBreak|AlignTop</set>
@@ -382,7 +390,7 @@
                     <number>6</number>
                 </property>
                 <spacer row="0" column="2">
-                    <property name="name" stdset="0">
+                    <property name="name">
                         <cstring>Spacer2</cstring>
                     </property>
                     <property name="orientation">
@@ -399,7 +407,7 @@
                     </property>
                 </spacer>
                 <spacer row="1" column="2">
-                    <property name="name" stdset="0">
+                    <property name="name">
                         <cstring>Spacer1</cstring>
                     </property>
                     <property name="orientation">
@@ -484,7 +492,7 @@
                     <number>6</number>
                 </property>
                 <spacer>
-                    <property name="name" stdset="0">
+                    <property name="name">
                         <cstring>Spacer8</cstring>
                     </property>
                     <property name="orientation">
@@ -540,7 +548,7 @@
                     </property>
                 </widget>
                 <spacer>
-                    <property name="name" stdset="0">
+                    <property name="name">
                         <cstring>Spacer9</cstring>
                     </property>
                     <property name="orientation">
@@ -662,4 +670,18 @@
     <slot access="protected">slotUpdateExample()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kcombobox.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>ksqueezedtextlabel.h</includehint>
+</includehints>
 </UI>

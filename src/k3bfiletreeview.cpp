@@ -37,6 +37,7 @@ K3bDeviceBranch::K3bDeviceBranch( KFileTreeView* view, K3bDevice* dev, KFileTree
 		       : SmallIcon("cdrom_unmount") ),
 		     false, item ), m_device( dev )
 {
+  root()->setExpandable(false);
 }
 
 
@@ -140,7 +141,7 @@ void K3bFileTreeView::setTreeDirOnlyMode( bool b )
 }
 
 
-void K3bFileTreeView::followUrl( const KURL& url )
+void K3bFileTreeView::followUrl( const KURL& )
 {
   // FIXME: suche in branches() rootUrl(), ist in url? dann find im branch
 }

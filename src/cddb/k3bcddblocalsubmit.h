@@ -1,8 +1,8 @@
 /***************************************************************************
-                          k3bcddbmultientriesdialog.h  -  description
+                          k3bcddblocalsubmit.h  -  description
                              -------------------
-    begin                : Sun Feb 10 2002
-    copyright            : (C) 2002 by Sebastian Trueg
+    begin                : Sun Oct 7 2001
+    copyright            : (C) 2001 by Sebastian Trueg
     email                : trueg@informatik.uni-freiburg.de
  ***************************************************************************/
 
@@ -15,34 +15,30 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef K3BCDDBMULTIENTRIESDIALOG_H
-#define K3BCDDBMULTIENTRIESDIALOG_H
+#ifndef K3BCDDB_LOCAL_SUBMIT_H
+#define K3BCDDB_LOCAL_SUBMIT_H
 
-#include <kdialogbase.h>
+#include "k3bcddbsubmit.h"
 
-#include "cddb/k3bcddbquery.h"
+#include <qstring.h>
 
 
-class QStringList;
-class KListBox;
-
-/**
-  *@author Sebastian Trueg
-  */
-class K3bCddbMultiEntriesDialog : public KDialogBase  
+class K3bCddbLocalSubmit : public K3bCddbSubmit
 {
   Q_OBJECT
 
  public:
-  ~K3bCddbMultiEntriesDialog();
-  
-  static int selectCddbEntry( const K3bCddbResult& query, QWidget* parent = 0 );
+  K3bCddbLocalSubmit( QObject* parent = 0, const char* name = 0 );
+  ~K3bCddbLocalSubmit();
 
- protected:
-  K3bCddbMultiEntriesDialog( QWidget* parent = 0, const char* name = 0);
+ public slots:
+  void setCddbDir( const QString& dir ) { m_cddbDir = dir; }
+
+ protected slots:
+  void doSubmit();
 
  private:
-  KListBox *m_listBox;
+  QString m_cddbDir;
 };
 
 #endif

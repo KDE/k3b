@@ -24,9 +24,9 @@
 
 #include "../k3bjob.h"
 #include "../tools/k3bwavefilewriter.h"
-#include "../k3bcddb.h"
 #include "../cdinfo/k3bdiskinfo.h"
 
+#include <cddb/k3bcddbquery.h>
 
 typedef Q_INT16 size16;
 typedef Q_INT32 size32;
@@ -57,7 +57,7 @@ class K3bCddaCopy : public K3bJob
 
  public slots:
   void setDevice( K3bDevice* dev ) { m_device = dev; }
-  void setCddbEntry( const K3bCddbEntry& e ) { m_cddbEntry = e; }
+  void setCddbEntry( const K3bCddbResultEntry& e ) { m_cddbEntry = e; }
   void setCopyTracks( const QValueList<int>& t ) { m_tracksToCopy = t; }
   void setUsePattern( bool b ) { m_bUsePattern = b; }
   void setBaseDirectory( const QString& path ) { m_baseDirectory = path; }
@@ -75,7 +75,7 @@ class K3bCddaCopy : public K3bJob
   bool createDirectory( const QString& dir );
   bool startRip( unsigned int i );
 
-  K3bCddbEntry m_cddbEntry;
+  K3bCddbResultEntry m_cddbEntry;
   K3bDiskInfo m_diskInfo;
   K3bDevice* m_device;
 

@@ -24,7 +24,8 @@
 
 #include "../k3bcdcontentsview.h"
 #include "../cdinfo/k3bdiskinfo.h"
-#include "../k3bcddb.h"
+
+#include <cddb/k3bcddbquery.h>
 
 /* #include <qmemarray.h> */
 /* #include <qstringlist.h> */
@@ -37,8 +38,8 @@ class QString;
 //struct cdrom_drive;
 
 
-class K3bCddb;
 class K3bCdda;
+class K3bCddb;
 class K3bCddaCopy;
 class K3bPatternParser;
 class K3bCDListView;
@@ -49,7 +50,7 @@ class QListViewItem;
 class KActionCollection;
 class K3bDevice;
 class K3bDiskInfo;
-class K3bCddbQuery;
+class K3bCddbResult;
 class QLabel;
 class KAction;
 class KPopupMenu;
@@ -80,7 +81,7 @@ class K3bCdView : public K3bCdContentsView
 
 
  private slots:
-  void slotCddbQueryFinished( K3bCddb* );
+  void slotCddbQueryFinished( bool );
   void slotPrepareRipping();
   void slotSelectAll();
   void slotDeselectAll();
@@ -97,7 +98,7 @@ class K3bCdView : public K3bCdContentsView
   K3bCDListView *m_listView;
   //  QListViewItem *m_testItemPattern;
 
-  K3bCddbQuery m_lastQuery;
+  K3bCddbResult m_lastQuery;
   int m_lastSelectedCddbEntry;
   K3bDiskInfo m_lastDiskInfo;
 

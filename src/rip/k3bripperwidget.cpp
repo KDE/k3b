@@ -16,7 +16,6 @@
  ***************************************************************************/
 
 #include "k3bripperwidget.h"
-#include "../k3bcddb.h"
 #include "k3bcddacopy.h"
 #include "k3bcdview.h"
 #include "k3bpatternparser.h"
@@ -61,7 +60,7 @@
 
 
 
-K3bRipperWidget::K3bRipperWidget(const K3bDiskInfo& diskInfo, const K3bCddbEntry& entry, const QValueList<int>& tracks,
+K3bRipperWidget::K3bRipperWidget(const K3bDiskInfo& diskInfo, const K3bCddbResultEntry& entry, const QValueList<int>& tracks,
 				 QWidget *parent, const char *name )
   : KDialogBase( parent, name, true, i18n("Ripping CD"), User1|Ok, Ok, false, KStdGuiItem::close() ),
     m_diskInfo( diskInfo ), m_cddbEntry( entry ), m_trackNumbers( tracks )

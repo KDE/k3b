@@ -23,7 +23,8 @@
 #include <kdialogbase.h>
 #include <qstringlist.h>
 
-#include "../k3bcddb.h"
+#include <cddb/k3bcddbquery.h>
+
 #include "../cdinfo/k3bdiskinfo.h"
 
 class KListView;
@@ -43,7 +44,7 @@ class K3bRipperWidget : public KDialogBase
   Q_OBJECT
 
  public: 
-  K3bRipperWidget( const K3bDiskInfo&, const K3bCddbEntry&, const QValueList<int>&, 
+  K3bRipperWidget( const K3bDiskInfo&, const K3bCddbResultEntry&, const QValueList<int>&, 
 		   QWidget *parent = 0, const char *name = 0 );
   ~K3bRipperWidget();
 
@@ -53,7 +54,7 @@ class K3bRipperWidget : public KDialogBase
 
  private:
   K3bDiskInfo m_diskInfo;
-  K3bCddbEntry m_cddbEntry;
+  K3bCddbResultEntry m_cddbEntry;
   QValueList<int> m_trackNumbers;
 
   KListView*    m_viewTracks;

@@ -51,7 +51,7 @@ bool K3bLameLib::load()
 {
   lame_lame_init = (lame_global_flags* (*) (void))s_lib->resolve( "lame_init" );
   lame_lame_get_version = (int (*) (const lame_global_flags*))s_lib->resolve( "lame_get_version" );
-
+  
   // check if all symbols could be resoled
   if( lame_lame_init == 0 ) {
     kdDebug() << "(K3bLameLib) Error: could not resolve 'lame_init'" << endl;

@@ -1,8 +1,8 @@
 /***************************************************************************
-                          k3bcddbmultientriesdialog.h  -  description
+                          k3bcddblocalquery.h  -  description
                              -------------------
-    begin                : Sun Feb 10 2002
-    copyright            : (C) 2002 by Sebastian Trueg
+    begin                : Mon Nov 4 2002
+    copyright            : (C) 2001 by Sebastian Trueg
     email                : trueg@informatik.uni-freiburg.de
  ***************************************************************************/
 
@@ -15,34 +15,34 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef K3BCDDBMULTIENTRIESDIALOG_H
-#define K3BCDDBMULTIENTRIESDIALOG_H
 
-#include <kdialogbase.h>
+#ifndef K3BCDDB_LOCAL_QUERY_H
+#define K3BCDDB_LOCAL_QUERY_H
 
-#include "cddb/k3bcddbquery.h"
+#include "k3bcddbquery.h"
+#include "k3bcddbresult.h"
+
+#include <qstring.h>
+#include <qvaluelist.h>
 
 
-class QStringList;
-class KListBox;
-
-/**
-  *@author Sebastian Trueg
-  */
-class K3bCddbMultiEntriesDialog : public KDialogBase  
+class K3bCddbLocalQuery : public K3bCddbQuery
 {
   Q_OBJECT
 
  public:
-  ~K3bCddbMultiEntriesDialog();
-  
-  static int selectCddbEntry( const K3bCddbResult& query, QWidget* parent = 0 );
+  K3bCddbLocalQuery( QObject* parent = 0, const char* name = 0 );
+  ~K3bCddbLocalQuery();
+
+ public slots:
+  void setCddbDir( const QString& dir ) { m_cddbDir = dir; }
 
  protected:
-  K3bCddbMultiEntriesDialog( QWidget* parent = 0, const char* name = 0);
+  void doQuery();
 
  private:
-  KListBox *m_listBox;
+  QString m_cddbDir;
+  QValueList<K3bCddbResultEntry> m_matches;
 };
 
 #endif

@@ -16,7 +16,6 @@
  ***************************************************************************/
 
 #include "k3bpatternparser.h"
-#include "../k3bcddb.h"
 
 #include <qregexp.h>
 #include <qdatetime.h>
@@ -25,7 +24,7 @@
 #include <klocale.h>
 
 
-QString K3bPatternParser::parsePattern( const K3bCddbEntry& entry, 
+QString K3bPatternParser::parsePattern( const K3bCddbResultEntry& entry, 
 					unsigned int trackNumber,
 					const QString& pattern, 
 					bool replace, 

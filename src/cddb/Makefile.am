@@ -1,0 +1,8 @@
+INCLUDES = $(all_includes) -I..
+
+METASOURCES = AUTO
+
+noinst_LTLIBRARIES = libcddb.la
+
+libcddb_la_SOURCES = k3bcddbquery.cpp k3bcddb.cpp k3bcddbresult.cpp k3bcddbhttpquery.cpp k3bcddbpquery.cpp k3bcddblocalquery.cpp k3bcddbsubmit.cpp k3bcddblocalsubmit.cpp
+
