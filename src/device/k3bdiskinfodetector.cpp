@@ -190,7 +190,7 @@ void K3bCdDevice::DiskInfoDetector::slotIsVCD(KIO::Job* job)
 
   if ( doit ) {
     QStringList files;
-    files << QString("/vcd/info.vcd") << QString("/svcd/info.vcd");
+    files << QString("/vcd/info.vcd") << QString("/svcd/info.svd");
     for ( QStringList::Iterator it = files.begin(); it != files.end(); ++it ) {
       QFile f(m_device->mountPoint() + *it);
       QDataStream s(&f);
