@@ -73,7 +73,7 @@ K3bApp* k3bMain()
 
 
 K3bApp::K3bApp()
-  : KDockMainWindow(0,"K3b")
+  : KDockMainWindow(0,"K3b 0.5.0")
 {
   m_config=kapp->config();
   untitledCount=0;
