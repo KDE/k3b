@@ -21,6 +21,7 @@
 #include "k3babstractwriter.h"
 
 #include <qvaluelist.h>
+#include <qstringlist.h>
 
 class K3bExternalBin;
 class K3bProcess;
@@ -36,9 +37,7 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   ~K3bCdrecordWriter();
 
   /**
-   * call this before adding new arguments
-   * it will clear the aruments and add device and speed
-   * and stuff
+   * deprecated. Does nothing.
    */
   void prepareArgumentList();
 
@@ -46,6 +45,7 @@ class K3bCdrecordWriter : public K3bAbstractWriter
    * to be used in chain: addArgument(x)->addArgument(y)
    */
   K3bCdrecordWriter* addArgument( const QString& );
+  void clearArguments();
 
   bool write( const char* data, int len );
 
@@ -71,6 +71,8 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   void slotUnblockWhileCancellationFinished( bool success );
 
  private:
+  void prepareProcess();
+
   const K3bExternalBin* m_cdrecordBinObject;
   K3bProcess* m_process;
 
@@ -102,6 +104,7 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   bool m_writeSpeedInitialized;
 
   QValueList<int> m_trackSizes;
+  QStringList m_arguments;
 };
 
 #endif

@@ -106,6 +106,12 @@ void K3bCdrecordWriter::setWritingMode( int mode )
 
 void K3bCdrecordWriter::prepareArgumentList()
 {
+  kdDebug() << "(K3bCdrecordWriter) FIXME: REMOVE THIS METHOD AS IT DOES NOTHING!!!!" << endl;
+}
+
+
+void K3bCdrecordWriter::prepareProcess()
+{
   if( m_process ) delete m_process;  // kdelibs want this!
   m_process = new K3bProcess();
   m_process->setSplitStdout(true);
@@ -194,18 +200,30 @@ void K3bCdrecordWriter::prepareArgumentList()
   const QStringList& params = m_cdrecordBinObject->userParameters();
   for( QStringList::const_iterator it = params.begin(); it != params.end(); ++it )
     *m_process << *it;
+
+  // add the user parameters
+  for( QStringList::const_iterator it = m_arguments.begin(); it != m_arguments.end(); ++it )
+    *m_process << *it;
 }
 
 
 K3bCdrecordWriter* K3bCdrecordWriter::addArgument( const QString& arg )
 {
-  *m_process << arg;
+  m_arguments.append( arg );
   return this;
+}
+
+
+void K3bCdrecordWriter::clearArguments()
+{
+  m_arguments.clear();
 }
 
 
 void K3bCdrecordWriter::start()
 {
+  prepareProcess();
+
   if( !m_cdrecordBinObject ) {
     emit infoMessage( i18n("Could not find %1 executable.").arg(m_cdrecordBinObject->name()), ERROR );
     emit finished(false);
@@ -496,6 +514,10 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   }
   else if( line.contains("Input/output error.") ) {
     emit infoMessage( i18n("Input/output error. Not necessarily serious."), ERROR );
+  }
+  else if( line.startsWith( "Cdrecord " ) ) {
+    // display some credit for Joerg ;)
+    emit infoMessage( line, INFO );
   }
   else {
     // debugging
