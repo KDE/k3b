@@ -30,7 +30,7 @@ const char* K3bDeviceManager::deviceNames[] =
 
 
 K3bDeviceManager::K3bDeviceManager( QObject * parent )
-  :  QObject( parent ), m_reader(), m_writer()
+  :  QObject( parent )
 {
   m_reader.setAutoDelete( true );
   m_writer.setAutoDelete( true );

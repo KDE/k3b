@@ -69,8 +69,6 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
   readPrograms();
   m_cddbPage->readSettings();
   m_deviceOptionTab->readDevices();
-  	
-  resize( 620, 500 );
 }
 
 
@@ -220,21 +218,6 @@ bool K3bOptionDialog::savePrograms()
 }
 
 
-void K3bOptionDialog::setupDevicePage()
-{
-  QFrame* frame = addPage( i18n("Devices"), i18n("Setup SCSI CD Devices"),
-			   KGlobal::instance()->iconLoader()->loadIcon( "blockdevice", KIcon::NoGroup, KIcon::SizeMedium ) );
-
-  QGridLayout* mainGrid = new QGridLayout( frame );
-  mainGrid->setSpacing(0);
-  mainGrid->setMargin(0);
-  m_deviceOptionTab = new K3bDeviceOptionTab( frame, "deviceOptionTab" );  
-  mainGrid->addWidget( m_deviceOptionTab, 0, 0 );
-}
-
-
-
-
 void K3bOptionDialog::slotDefault()
 {
   switch( activePageIndex() )
@@ -295,4 +278,17 @@ void K3bOptionDialog::setupCddbPage()
   mainGrid->setMargin(0);
   m_cddbPage = new K3bOptionCddb(frame, "cddbpage");
   mainGrid->addWidget( m_cddbPage, 0, 0 );
+}
+
+
+void K3bOptionDialog::setupDevicePage()
+{
+  QFrame* frame = addPage( i18n("Devices"), i18n("Setup SCSI CD Devices"),
+			   KGlobal::instance()->iconLoader()->loadIcon( "blockdevice", KIcon::NoGroup, KIcon::SizeMedium ) );
+
+  QHBoxLayout* box = new QHBoxLayout( frame );
+  box->setSpacing(0);
+  box->setMargin(0);
+  m_deviceOptionTab = new K3bDeviceOptionTab( frame, "deviceOptionTab" );  
+  box->addWidget( m_deviceOptionTab );
 }
