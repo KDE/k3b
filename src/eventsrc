@@ -53,6 +53,7 @@ Name[pt]=Erro no processo
 Name[pt_BR]=Erro no Processo
 Name[ru]=Ошибка
 Name[sv]=Processfel
+Name[tr]=İşlemde hata var
 Name[xx]=xxProcess errorxx
 Comment=Process finished with errors
 Comment[da]=Processen afsluttede med fejl
