@@ -68,7 +68,7 @@ bool K3bScsiDevice::init()
     }
     else {
       qDebug( "(K3bScsiDevice) id: %i lun: %i", idLun.id, idLun.lun );
-      m_target = idLun.id;
+      m_target = idLun.id & 0xff;
       m_lun = idLun.lun;
     }
     ::close( devFile );
