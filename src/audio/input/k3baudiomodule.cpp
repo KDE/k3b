@@ -23,7 +23,7 @@ void K3bAudioModule::start()
 }
 
 
-void K3bAudioModule::setConsumer( QObject* c = 0, const char* goOnSignal = 0 )
+void K3bAudioModule::setConsumer( QObject* c, const char* goOnSignal )
 {
   if( m_consumer ) {
     disconnect(m_consumer);
