@@ -61,7 +61,6 @@ static KCmdLineOptions options[] =
 	{ "erasecd", I18N_NOOP("Erase a CDRW"), 0 },
 	{ "formatdvd", I18N_NOOP("Format a DVD-RW or DVD+RW"), 0 },
 	{ "lang <language>", I18N_NOOP("Set the GUI language"), 0 },
-	{ "forcenew", I18N_NOOP("Force a new instance even if an idle one is running"), 0 },
 	{ "nosplash", I18N_NOOP("Disable the splash screen"), 0 },
 	{ "ao <method>", I18N_NOOP("Set the audio output method (like arts or alsa depending on the installed plugins)"), 0 },
         KCmdLineLastOption
@@ -111,6 +110,7 @@ int main( int argc, char* argv[] )
 		  << " current is: " << KGlobal::locale()->language() << endl;
   
     K3bApplication app;
+    app.init();
 
     return app.exec();
   }

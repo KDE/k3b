@@ -197,7 +197,7 @@ void K3bApplication::init()
 int K3bApplication::newInstance()
 {
   if( m_needToInit ) {
-    init();
+    //    init();
     m_needToInit = false;
   }
   else
