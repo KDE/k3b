@@ -86,8 +86,6 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
     setupLabelTab();
     setupAdvancedTab();
 
-    SetImagePath();
-
     readSettings();
 
     connect( m_spinVolumeCount, SIGNAL( valueChanged( int ) ), this, SLOT( slotSpinVolumeCount() ) );
@@ -471,7 +469,7 @@ void K3bVcdBurnDialog::setupLabelTab()
     m_editVolumeId->setMaxLength( 32 );
     m_editAlbumId->setMaxLength( 16 );
     // only ISO646 a-Characters
-    m_editPublisher->setValidator( K3bValidators::iso646Validator( K3bValidators::Iso646_d, true, m_editVolumeId ) );
+    m_editPublisher->setValidator( K3bValidators::iso646Validator( K3bValidators::Iso646_a, true, m_editVolumeId ) );
     m_editPublisher->setMaxLength( 128 );
 
     m_spinVolumeNumber->setMinValue( 1 );
@@ -601,8 +599,6 @@ void K3bVcdBurnDialog::slotLoadK3bDefaults()
 
 void K3bVcdBurnDialog::saveSettings()
 {
-    SetImagePath();
-
     // set AlbumID if empty
     if ( m_editVolumeId->text().length() < 1 ) {
         if ( m_radioSvcd10->isChecked() )
@@ -627,7 +623,7 @@ void K3bVcdBurnDialog::saveSettings()
 
     vcdDoc() ->setRemoveImages( m_checkRemoveBufferFiles->isChecked() );
     // save image file & path (.bin)
-    vcdDoc() ->setVcdImage( m_tempDirSelectionWidget->tempPath() + m_editVolumeId->text() + ".bin" );
+    vcdDoc() ->setVcdImage( m_tempDirSelectionWidget->tempPath() + "/" + m_editVolumeId->text() + ".bin" );
 
     vcdDoc() ->setVcdType( m_groupVcdFormat->id( m_groupVcdFormat->selected() ) );
 
@@ -745,6 +741,9 @@ void K3bVcdBurnDialog::readSettings()
     m_spinRearMarginTrack->setValue( vcdDoc() ->vcdOptions() ->RearMarginTrack() );
     m_spinFrontMarginTrackSVCD->setValue( vcdDoc() ->vcdOptions() ->FrontMarginTrackSVCD() );
     m_spinRearMarginTrackSVCD->setValue( vcdDoc() ->vcdOptions() ->RearMarginTrackSVCD() );
+
+    if ( !doc()->tempDir().isEmpty() )
+        m_tempDirSelectionWidget->setTempPath( doc() ->tempDir() );
 
     K3bProjectBurnDialog::readSettings();
 
@@ -910,22 +909,6 @@ void K3bVcdBurnDialog::loadDefaultCdiConfig()
         m_editCdiCfg->setCursorPosition( 0, 0, false );
         m_groupCdi->setEnabled( m_checkCdiSupport->isChecked() );
     }
-}
-
-void K3bVcdBurnDialog::SetImagePath()
-{
-    QFileInfo fi( m_tempDirSelectionWidget->tempPath() );
-    QString path;
-
-    if ( fi.isDir() || fi.extension( false ) != "bin" )
-        path = fi.filePath();
-    else
-        path = fi.dirPath();
-
-    if ( path[ path.length() - 1 ] != '/' )
-        path.append( "/" );
-
-    m_tempDirSelectionWidget->setTempPath( path );
 }
 
 void K3bVcdBurnDialog::slotSpinVolumeCount()
