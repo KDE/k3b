@@ -5,7 +5,9 @@
 #include <kconfig.h>
 #include <kurl.h>
 #include <kprocess.h>
+
 #include <qtimer.h>
+#include <qfile.h>
 
 #include <stdio.h>
 #include <sys/types.h>
@@ -39,7 +41,7 @@ void K3bWavModule::slotGatherInformation()
   // try to determine the track length
   unsigned long dataLength;
   long buffy;
-  if( waveLength( audioTrack()->absPath().latin1(),
+  if( waveLength( QFile::encodeName(audioTrack()->absPath()),
 		  0,
 		  &buffy,
 		  &dataLength ) == 0 )
@@ -48,7 +50,7 @@ void K3bWavModule::slotGatherInformation()
 	      dataLength, (float)dataLength / 588.0 );
       qDebug( "(K3bWavModule) Setting track's length to %f frames", ceil( (double)dataLength / 588.0 ) );
 
-      audioTrack()->setLength( (int)ceil( (double)dataLength / 588.0 ), true );
+      audioTrack()->setLength( (int)ceil( (double)dataLength / 588.0 ) );
     }
   else
     qDebug( "(K3bWavModule) Could not determine length of track!" );
@@ -81,7 +83,7 @@ void K3bWavModule::addArguments()
 
   *m_process << "-V";
   // input
-  *m_process << QString( "\"%1\"" ).arg( audioTrack()->absPath() );
+  *m_process << QString("\"%1\"").arg(QFile::encodeName( audioTrack()->absPath() ));
 
   // output options
   *m_process << "-t" << "raw";    // filetype raw 

@@ -35,7 +35,6 @@ class K3bJob : public QObject
   Q_OBJECT
 
  public:
-  int error() { return m_error; }
   virtual ~K3bJob();
 
   virtual bool active() const { return false; }
@@ -44,7 +43,6 @@ class K3bJob : public QObject
 
  protected:
   K3bJob();
-  int m_error;
 
  public slots:
   virtual void start() = 0;
@@ -56,7 +54,7 @@ class K3bJob : public QObject
   void subPercent( int p );
   void started();
   void canceled();
-  void finished( K3bJob* job );
+  void finished( bool success );
   void processedSize( int processed, int size );
   void processedSubSize( int processed, int size );
   void newTrack();

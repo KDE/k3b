@@ -275,4 +275,24 @@ bool K3bDoc::readGeneralDocumentData( const QDomElement& elem )
 }
 
 
+void K3bDoc::disable()
+{
+  K3bView* view = pViewList->first();
+  while( view ) {
+    view->setDisabled( true );
+    view = pViewList->next();
+  }
+}
+
+
+void K3bDoc::enable()
+{
+  K3bView* view = pViewList->first();
+  while( view ) {
+    view->setEnabled( true );
+    view = pViewList->next();
+  }
+}
+
+
 #include "k3bdoc.moc"

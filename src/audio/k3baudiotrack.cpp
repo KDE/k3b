@@ -35,7 +35,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <stream.h>
+
 
 
 K3bAudioTrack::K3bAudioTrack( QList<K3bAudioTrack>* parent, const QString& filename )
@@ -45,7 +45,6 @@ K3bAudioTrack::K3bAudioTrack( QList<K3bAudioTrack>* parent, const QString& filen
   m_copy = false;
   m_preEmp = false;
   m_length = 0;
-  m_isAccurateLength = false;
   
   kapp->config()->setGroup( "Audio project settings" );
   m_pregap = kapp->config()->readNumEntry( "default pregap", 150 );

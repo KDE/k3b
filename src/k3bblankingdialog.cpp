@@ -132,7 +132,7 @@ void K3bBlankingDialog::slotUser1()
   if( m_job == 0 ) {
     m_job = new K3bBlankingJob();
     connect( m_job, SIGNAL(infoMessage(const QString&,int)), this, SLOT(slotInfoMessage(const QString&,int)) );
-    connect( m_job, SIGNAL(finished(K3bJob*)), this, SLOT(slotJobFinished()) );
+    connect( m_job, SIGNAL(finished(bool)), this, SLOT(slotJobFinished(bool)) );
   }
 
   m_job->setDevice( m_writerSelectionWidget->writerDevice() );
@@ -191,7 +191,7 @@ void K3bBlankingDialog::slotInfoMessage( const QString& str, int type )
 }
 
 
-void K3bBlankingDialog::slotJobFinished()
+void K3bBlankingDialog::slotJobFinished(bool)
 {
   actionButton( KDialogBase::User1 )->setEnabled( true );
   actionButton( KDialogBase::User2 )->setText( i18n("Close") );

@@ -203,8 +203,6 @@ class K3bMainWindow : public KDockMainWindow
   void slotNewAudioDoc();
   void slotNewDataDoc();
 
-  void slotJobFinished( K3bJob* job );
-
  private:
   void fileSave( K3bDoc* doc = 0 );
   void fileSaveAs( K3bDoc* doc = 0 );

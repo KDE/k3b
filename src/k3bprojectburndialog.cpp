@@ -21,6 +21,8 @@
 #include "device/k3bdevice.h"
 #include "device/k3bdevicemanager.h"
 #include "k3bwriterselectionwidget.h"
+#include "k3bburnprogressdialog.h"
+#include "k3bjob.h"
 
 #include <qcombobox.h>
 #include <qgroupbox.h>
@@ -41,6 +43,7 @@
 #include <kconfig.h>
 #include <kstddirs.h>
 #include <kfiledialog.h>
+#include <kmessagebox.h>
 #include "kdiskfreesp.h"
 
 
@@ -56,6 +59,7 @@ K3bProjectBurnDialog::K3bProjectBurnDialog(K3bDoc* doc, QWidget *parent, const c
   m_labelCdSize = 0;
   m_labelFreeSpace = 0;
   m_freeTempSpace = 0;
+  m_job = 0;
 }
 
 
@@ -145,14 +149,16 @@ K3bProjectBurnDialog::~K3bProjectBurnDialog(){
 
 int K3bProjectBurnDialog::exec( bool burn )
 {
-  if( burn )
+  if( burn && m_job == 0 )
     actionButton(User1)->show();
   else
     actionButton(User1)->hide();
 
   readSettings();
 		
-  return QDialog::exec();
+  KDialogBase::show();
+
+  return 0;
 }
 
 
@@ -170,8 +176,38 @@ void K3bProjectBurnDialog::slotCancel()
 
 void K3bProjectBurnDialog::slotUser1()
 {
+  if( m_job ) {
+    KMessageBox::sorry( k3bMain(), i18n("Sorry, K3b is already working on this project!"), i18n("Sorry") );
+    return;
+  }
+
   saveSettings();
+
+  // avoid interaction with the document while the job is working
+  m_doc->disable();
+
+  m_job = m_doc->newBurnJob();
+
+  // will be deleted at close (WDestructiveClose)
+  K3bBurnProgressDialog* d = new K3bBurnProgressDialog( k3bMain() );
+  connect( d, SIGNAL(closed()), this, SLOT(slotJobFinished()) );
+  d->setJob( m_job );
+
+  hide();
+
+  d->show();
+  m_job->start();
+
   done( Burn );
+}
+
+
+void K3bProjectBurnDialog::slotJobFinished()
+{
+  m_doc->enable();
+
+  delete m_job;
+  m_job = 0;
 }
 
 
@@ -193,7 +229,7 @@ void K3bProjectBurnDialog::readSettings()
   if( m_groupTempDir ) {
     k3bMain()->config()->setGroup( "General Options" );
     QString tempdir = k3bMain()->config()->readEntry( "Temp Dir", locateLocal( "appdata", "temp/" ) );
-    m_editDirectory->setText( tempdir + "image.iso" );
+    m_editDirectory->setText( tempdir );
     slotUpdateFreeTempSpace();
     m_labelCdSize->setText( QString().sprintf( " %.2f MB", ((float)doc()->size())/1024.0/1024.0 ) );
   }
@@ -230,7 +266,6 @@ void K3bProjectBurnDialog::slotUpdateFreeTempSpace()
 
 void K3bProjectBurnDialog::slotTempDirButtonPressed()
 {
-  // TODO: ask for confirmation if already exists
   QString dir = KFileDialog::getExistingDirectory( m_editDirectory->text(), k3bMain(), i18n("Select Temp Directory") );
   if( !dir.isEmpty() ) {
     setTempDir( dir );
@@ -257,7 +292,18 @@ QString K3bProjectBurnDialog::tempPath() const
 QString K3bProjectBurnDialog::tempDir() const
 {
   if( m_groupTempDir ) {
-    return QFileInfo( m_editDirectory->text() ).dirPath() + "/";
+    QString dir( m_editDirectory->text() );
+
+    QFileInfo info(dir);
+    if( info.exists() && info.isDir() ) {
+      if( dir.at(dir.length()-1) != '/' )
+	dir.append("/");
+      return dir;
+    }
+    else {
+      dir.truncate( dir.findRev('/')+1 );
+      return dir;
+    }
   }
   else
     return "";

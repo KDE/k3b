@@ -24,10 +24,8 @@ class K3bAudioDoc;
 class K3bAudioTrack;
 class QString;
 class QTimer;
+class KProcess;
 
-
-#include <kprocess.h>
-#include <qfile.h>
 
 /**
   *@author Sebastian Trueg
@@ -49,6 +47,7 @@ class K3bAudioOnTheFlyJob : public K3bBurnJob  {
   void cancel();
 	
  protected slots:
+  void slotRecalcNextTrackLength( bool s );
   void slotTryStart();
   void slotStartWriting();
 
@@ -62,8 +61,7 @@ class K3bAudioOnTheFlyJob : public K3bBurnJob  {
 
  private:
   QTimer* m_streamingTimer;
-  QTimer* m_waitingForLengthTimer;
-  KProcess m_process;
+  KProcess* m_process;
   K3bAudioDoc* m_doc;
 
   K3bAudioTrack* m_currentProcessedTrack;
@@ -78,20 +76,6 @@ class K3bAudioOnTheFlyJob : public K3bBurnJob  {
   char* m_currentWrittenData;
   long m_currentModuleDataLength;
   bool m_streamingStarted;
-
-  // buffer --------------------
-/*   char* m_ringBuffer; */
-/*   long m_bufferReader; */
-/*   long m_bufferWriter; */
-/*   long m_bufferSize; */
-  // ---------------------------
-
-
-  // testing
-  //  QFile* m_testFile;
-		
- signals:
-  void writingLeadOut();
 };
 
 #endif

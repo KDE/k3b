@@ -61,8 +61,9 @@ K3bExternalBinModule::~K3bExternalBinModule()
 
 bool K3bExternalBinModule::getStream()
 {
-  if( m_process->isRunning() )
-    return false;
+  if( m_process->isRunning() ) {
+    m_process->kill();
+  }
 
   m_process->clearArguments();
 

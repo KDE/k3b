@@ -17,11 +17,8 @@ class K3bAudioModule : public QObject
   Q_OBJECT
 
  public:
-  K3bAudioModule( K3bAudioTrack* track )
-    {
-      m_track = track;
-    }
-  virtual ~K3bAudioModule() {}
+  K3bAudioModule( K3bAudioTrack* track );
+  virtual ~K3bAudioModule();
 
   K3bAudioTrack* audioTrack() const { return m_track; }
 
@@ -31,6 +28,13 @@ class K3bAudioModule : public QObject
    * but not when loading a project.
    */
   virtual void init() {}
+
+  /**
+   * call this on every module to have perfect track length
+   * information. Might take a while for some modules (mp3)
+   * (This is bad but nessesary!)
+   */
+  virtual void recalcLength();
 
   /** check if the url contains the correct filetype **/
 //  virtual bool valid() const = 0;
@@ -59,6 +63,12 @@ class K3bAudioModule : public QObject
   void output( int len );
   void percent( int );
   void finished( bool );
+
+ private slots:
+   /**
+   * used interally
+   */
+  void successFinish();
 
  private:
   K3bAudioTrack* m_track;

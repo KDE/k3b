@@ -14,6 +14,7 @@
 
 #include <qstring.h>
 #include <qfileinfo.h>
+#include <qfile.h>
 #include <qtimer.h>
 
 #include <kprocess.h>
@@ -26,14 +27,12 @@
 #include <iostream>
 
 
-bool K3bMp3Module::staticIsDataBeingEncoded = false;
 
 
 K3bMp3Module::K3bMp3Module( K3bAudioTrack* track )
   : K3bExternalBinModule( track )
 {
   m_decodingProcess = new KShellProcess();
-  m_rawDataCountTimer = new QTimer( this );
 }
 
 
@@ -58,7 +57,7 @@ void K3bMp3Module::addArguments()
   *m_process << "-b" << "10000";  // 2 Mb
 
   *m_process << "-s";
-  *m_process << QString( "\"%1\"" ).arg( audioTrack()->absPath() );
+  *m_process << QString("\"%1\"").arg(QFile::encodeName( audioTrack()->absPath() ));
 
   *m_process << "|";
   
@@ -85,8 +84,9 @@ void K3bMp3Module::addArguments()
 
 KURL K3bMp3Module::writeToWav( const KURL& url )
 {
-  if( m_decodingProcess->isRunning() )
-    return KURL();
+  if( m_decodingProcess->isRunning() ) {
+    m_decodingProcess->kill();
+  }
 
   m_decodingProcess->clearArguments();
   m_decodingProcess->disconnect();
@@ -104,11 +104,14 @@ KURL K3bMp3Module::writeToWav( const KURL& url )
 
   *m_decodingProcess << "-v" << "-w";
   *m_decodingProcess << url.path();
-  *m_decodingProcess << QString( "\"%1\"" ).arg( audioTrack()->absPath() );
+  *m_decodingProcess << QString("\"%1\"").arg(QFile::encodeName( audioTrack()->absPath() ));
 
   if( !m_decodingProcess->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
     qDebug( "(K3bMp3Module) could not start mpg123 process." );
     return KURL();
+  }
+  else {
+    m_currentToWavUrl = url;
   }
   
   return url;
@@ -117,6 +120,7 @@ KURL K3bMp3Module::writeToWav( const KURL& url )
 
 void K3bMp3Module::slotWriteToWavFinished()
 {
+  m_currentToWavUrl = QString::null;
   if( m_decodingProcess->normalExit() && m_decodingProcess->exitStatus() == 0 )
     emit finished( true );
   else
@@ -148,7 +152,7 @@ void K3bMp3Module::slotGatherInformation()
   unsigned char* datapointer;
 
 
-  FILE *fd = fopen(audioTrack()->absPath().latin1(),"r");
+  FILE *fd = fopen( QFile::encodeName(audioTrack()->absPath()),"r");
   if( fd == NULL )
     qDebug( "(K3bMp3Module) could not open file " + audioTrack()->absPath() );
   else
@@ -159,7 +163,7 @@ void K3bMp3Module::slotGatherInformation()
       
       // some hacking
       if( data[0] == 'I' && data[1] == 'D' && data[2] == '3' ) {
-	fd = fopen(audioTrack()->absPath().latin1(),"r");
+	fd = fopen( QFile::encodeName(audioTrack()->absPath()),"r");
 	fseek(fd, _id3TagSize, SEEK_SET);
 	readbytes = fread(&data, 1, 1024, fd);
 	fclose(fd);
@@ -219,14 +223,16 @@ void K3bMp3Module::slotGatherInformation()
 	}
     }
 
+}
 
-  // ---------------------
-  // from now on the module will try to use the static process
-  // staticCountRawDataProcess every 500 msec until it is "free"
-  // ---------------------
-  m_rawDataCountTimer->disconnect();
-  connect( m_rawDataCountTimer, SIGNAL(timeout()), this, SLOT(slotStartCountRawData()) );
-  m_rawDataCountTimer->start(500);
+void K3bMp3Module::recalcLength()
+{
+  if( m_decodingProcess->isRunning() ) {
+    m_decodingProcess->kill();
+  }
+
+  // better start a timer and not call it direct because of the signals
+  QTimer::singleShot( 0, this, SLOT(slotStartCountRawData()) );
 }
 
 
@@ -234,48 +240,44 @@ void K3bMp3Module::slotStartCountRawData()
 {
   // ===================
   // here we start a mpg123 process to decode the complete file and count it's output
-  // in the background. Tjis is neccessary since we need the perfect size of the input
+  // in the background. This is neccessary since we need the perfect size of the input
   // for burning on-the-fly!
   // ===================
 
-  if( !staticIsDataBeingEncoded && !m_decodingProcess->isRunning() )
-    {
-      m_rawData = 0;
+  m_rawData = 0;
 
-      m_rawDataCountTimer->stop();
+  qDebug( "(K3bMp3Module) start counting raw data for track: " + audioTrack()->fileName() );
+      
+  m_decodingProcess->clearArguments();
+  m_decodingProcess->disconnect();
+  kapp->config()->setGroup( "External Programs" );
+      
+  *m_decodingProcess << kapp->config()->readEntry( "mpg123 path" );
+      
+  // switch on buffer
+  // TODO: let the user specify the buffer-size
+  *m_decodingProcess << "-b" << "2048";  // 2 Mb
+      
+  *m_decodingProcess << "-s";
+  *m_decodingProcess << QString("\"%1\"").arg(QFile::encodeName( audioTrack()->absPath() ));
 
-      qDebug( "(K3bMp3Module) start counting raw data for track: " + audioTrack()->fileName() );
+  //       cerr << endl;
+  //       for( char* it = m_decodingProcess->args()->first(); it != 0; 
+  // 	   it = m_decodingProcess->args()->next() )
+  // 	cerr << it << " ";
+  //       cerr << endl;
       
-      m_decodingProcess->clearArguments();
-      m_decodingProcess->disconnect();
-      kapp->config()->setGroup( "External Programs" );
+  connect( m_decodingProcess, SIGNAL(receivedStdout(KProcess*, char*, int)), 
+	   this, SLOT(slotCountRawData(KProcess*, char*, int)) );
+  //       connect( m_decodingProcess, SIGNAL(receivedStderr(KProcess*, char*, int)), 
+  // 	    this, SLOT(slotParseStdErrOutput(KProcess*, char*, int)) );
+  connect( m_decodingProcess, SIGNAL(processExited(KProcess*)), this, SLOT(slotCountRawDataFinished()) );
       
-      *m_decodingProcess << kapp->config()->readEntry( "mpg123 path" );
-      
-      // switch on buffer
-      // TODO: let the user specify the buffer-size
-      *m_decodingProcess << "-b" << "2048";  // 2 Mb
-      
-      *m_decodingProcess << "-s";
-      *m_decodingProcess << QString("\"%1\"").arg( audioTrack()->absPath() );
+  if( !m_decodingProcess->start( KProcess::NotifyOnExit, KProcess::Stdout ) ) {
+    qDebug( "(K3bMp3Module) could not start mpg123 process." );
 
-//       cerr << endl;
-//       for( char* it = m_decodingProcess->args()->first(); it != 0; 
-// 	   it = m_decodingProcess->args()->next() )
-// 	cerr << it << " ";
-//       cerr << endl;
-      
-      connect( m_decodingProcess, SIGNAL(receivedStdout(KProcess*, char*, int)), 
-	       this, SLOT(slotCountRawData(KProcess*, char*, int)) );
-//       connect( m_decodingProcess, SIGNAL(receivedStderr(KProcess*, char*, int)), 
-// 	    this, SLOT(slotParseStdErrOutput(KProcess*, char*, int)) );
-      connect( m_decodingProcess, SIGNAL(processExited(KProcess*)), this, SLOT(slotCountRawDataFinished()) );
-      
-      if( !m_decodingProcess->start( KProcess::NotifyOnExit, KProcess::Stdout ) )
-	qDebug( "(K3bMp3Module) could not start mpg123 process." );
-      else
-	staticIsDataBeingEncoded = true;
-    }
+    emit finished( false );
+  }
 }
 
 
@@ -290,13 +292,17 @@ void K3bMp3Module::slotCountRawDataFinished()
   m_decodingProcess->disconnect();
   m_decodingProcess->clearArguments();
 
-  audioTrack()->setLength( (int)(ceil((float)m_rawData / 2352.0) ) /* here we need bytesPerFrame */, 
-			   true /* this indicates that the length is perfect and so useful for on-the-fly-burning */ );
-
-  qDebug( "(K3bMp3Module) bytes in raw data: %ld,  frames: %f, ceil: %d", 
-	  m_rawData, (float)m_rawData / 2352.0, (int)(ceil((float)m_rawData / 2352.0) ) );
-
-  staticIsDataBeingEncoded = false;
+  if( m_decodingProcess->normalExit() && m_decodingProcess->exitStatus() == 0 ) {
+    audioTrack()->setLength( (int)(ceil((float)m_rawData / 2352.0) ) /* here we need bytesPerFrame */ );
+    
+    qDebug( "(K3bMp3Module) bytes in raw data: %ld,  frames: %f, ceil: %d", 
+	    m_rawData, (float)m_rawData / 2352.0, (int)(ceil((float)m_rawData / 2352.0) ) );
+    
+    emit finished( true );
+  }
+  else {
+    emit finished( false );
+  }
 }
 
 
@@ -313,13 +319,26 @@ void K3bMp3Module::slotParseStdErrOutput(KProcess*, char* output, int len)
       if( (*str).left(10).contains("Frame#") ) {
 	int made, togo;
 	bool ok;
-	made = (*str).mid(8,5).toInt(&ok);
-	if( !ok )
-	  qDebug("parsing did not work for " + (*str).mid(8,5) );
-	togo = (*str).mid(15,5).toInt(&ok);
-	if( !ok )
-	  qDebug("parsing did not work for " + (*str).mid(15,5) );
-			
+	int pos1 = (*str).find('#');
+	int pos2 = (*str).find('[');
+	int pos3 = (*str).find(']');
+
+	if( pos1 == -1 || pos2 == -1 || pos3 == -1 ) {
+	  qDebug("parsing did not work for " + *str );
+	  return;
+	}
+
+	made = (*str).mid(pos1+1,pos2-pos1-1).toInt(&ok);
+	if( !ok ) {
+	  qDebug("parsing did not work for " + (*str).mid(pos1+1,pos2-pos1-1) );
+	  return;
+	}
+	togo = (*str).mid(pos2+1,pos3-pos2-1).toInt(&ok);
+	if( !ok ) {
+	    qDebug("parsing did not work for " + (*str).mid(pos2+1,pos3-pos2-1) );
+	    return;
+	}
+
 	emit percent( 100 * made / (made+togo) );
       }
       else
@@ -332,10 +351,16 @@ void K3bMp3Module::cancel()
 {
   // cancel whatever in process
   m_decodingProcess->disconnect();
-  if( m_decodingProcess->isRunning() )
-    m_decodingProcess->kill();
+  m_decodingProcess->kill();
 
+  if( !m_currentToWavUrl.isEmpty() ) {
+    if( QFile::exists( m_currentToWavUrl.path() ) ) {
+      QFile::remove( m_currentToWavUrl.path() );
+    }
+    m_currentToWavUrl = QString::null;
+    
   K3bExternalBinModule::cancel();
+  }
 }
 
 

@@ -53,23 +53,23 @@ Q_OBJECT
     bool cdTextCapable;
   };
 
-  QList<PrivateTempDevice> m_tempReader;
-  QList<PrivateTempDevice> m_tempWriter;
-  PrivateTempDevice* m_currentTempDevice;
+  QList<K3bDeviceOptionTab::PrivateTempDevice> m_tempReader;
+  QList<K3bDeviceOptionTab::PrivateTempDevice> m_tempWriter;
+  K3bDeviceOptionTab::PrivateTempDevice* m_currentTempDevice;
 
   class PrivateDeviceViewItem : public KListViewItem {
   public:
-    PrivateDeviceViewItem( PrivateTempDevice* dev, KListView* view )
+    PrivateDeviceViewItem( K3bDeviceOptionTab::PrivateTempDevice* dev, KListView* view )
       : KListViewItem( view ) { device = dev; }
-    PrivateDeviceViewItem( PrivateTempDevice* dev, QListViewItem* item )
+    PrivateDeviceViewItem( K3bDeviceOptionTab::PrivateTempDevice* dev, QListViewItem* item )
       : KListViewItem( item ) { device = dev; }
 
-    PrivateTempDevice* device;
+    K3bDeviceOptionTab::PrivateTempDevice* device;
   };
 
 
   void updateDeviceListViews();
-  void updateDeviceInfoBox( PrivateTempDevice* dev = 0 );
+  void updateDeviceInfoBox( K3bDeviceOptionTab::PrivateTempDevice* dev = 0 );
   void showWriterSpecificProps( bool );
 
   QGroupBox*    m_groupDeviceInfo;

@@ -34,6 +34,7 @@
 
 #include <qstring.h>
 #include <qdatetime.h>
+#include <qfile.h>
 
 #include <iostream>
 #include <cmath>
@@ -45,6 +46,7 @@ K3bAudioJob::K3bAudioJob( K3bAudioDoc* doc )
   : K3bBurnJob( )
 {
   m_doc = doc;
+  m_process = new KShellProcess();
 	
   m_iDocSize = doc->size();
   m_iTracksAlreadyWrittenSize = 0;
@@ -53,6 +55,7 @@ K3bAudioJob::K3bAudioJob( K3bAudioDoc* doc )
 
 K3bAudioJob::~K3bAudioJob()
 {
+  delete m_process;
 }
 
 
@@ -166,6 +169,24 @@ void K3bAudioJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 				
 	    }
 	}
+      else if( (*str).startsWith( "Fixating" ) ) {
+	emit newSubTask( i18n("Fixating") );
+      }
+      else if( (*str).contains("seconds.") ) {
+	emit infoMessage( "in " + (*str).mid( (*str).find("seconds") - 2 ), K3bJob::PROCESS );
+      }
+      else if( (*str).startsWith( "Writing pregap" ) ) {
+	emit newSubTask( i18n("Writing pregap") );
+      }
+      else if( (*str).startsWith( "Performing OPC" ) ) {
+	emit infoMessage( i18n("Performing OPC"), K3bJob::PROCESS );
+      }
+      else if( (*str).startsWith( "Sending" ) ) {
+	emit infoMessage( i18n("Sending CUE sheet"), K3bJob::PROCESS );
+      }
+      else if( (*str).contains( "Turning BURN-Proof" ) ) {
+	emit infoMessage( i18n("Enabled BURN-Proof"), K3bJob::PROCESS );
+      }
       else if( (*str).startsWith( "Starting new" ) )
 	{
 	  emit newTrack();
@@ -308,8 +329,13 @@ void K3bAudioJob::slotParseCdrdaoOutput( KProcess*, char* output, int len )
 
 void K3bAudioJob::cancel()
 {
-  if( error() == K3b::WORKING ) {
-    m_process.kill();
+  if( m_currentTrackInfo ) {
+    m_currentTrackInfo->track->module()->cancel();
+  }
+
+  if( m_process->isRunning() ) {
+    m_process->disconnect();
+    m_process->kill();
 	
     // we need to unlock the writer because cdrecord locked it while writing
     bool block = m_doc->burner()->block( false );
@@ -327,9 +353,9 @@ void K3bAudioJob::cancel()
     }
   }
 	
-  m_error = K3b::CANCELED;
   emit infoMessage( i18n("Writing canceled."), K3bJob::ERROR );
-  emit finished( this );
+  emit finished( false );
+  qDebug("(K3bAudioJob) slot cancel finished!");
 }
 
 void K3bAudioJob::start()
@@ -340,8 +366,6 @@ void K3bAudioJob::start()
 	
   emit started();
 	
-  m_error = K3b::WORKING;
-
   emit infoMessage( i18n("Buffering files"), K3bJob::STATUS );
   emit newTask( i18n("Buffering files") );
 
@@ -352,14 +376,14 @@ void K3bAudioJob::start()
 
 void K3bAudioJob::slotCdrecordFinished()
 {
-  if( m_process.normalExit() )
+  if( m_process->normalExit() )
     {
       // TODO: check the process' exitStatus()
-      switch( m_process.exitStatus() )
+      switch( m_process->exitStatus() )
 	{
 	case 0:
-	  m_error = K3b::SUCCESS;
 	  emit infoMessage( i18n("Burning successfully finished"), K3bJob::STATUS );
+	  emit finished( true );
 	  break;
 				
 	default:
@@ -367,36 +391,33 @@ void K3bAudioJob::slotCdrecordFinished()
 	  emit infoMessage( i18n("Cdrecord returned some error!"), K3bJob::ERROR );
 	  emit infoMessage( i18n("Sorry, no error handling yet!") + " :-((", K3bJob::ERROR );
 	  emit infoMessage( i18n("Please send me a mail with the last output..."), K3bJob::ERROR );
-	  m_error = K3b::CDRECORD_ERROR;
+	  emit finished( false );
 	  break;
 	}
     }
   else
     {
-      m_error = K3b::CDRECORD_ERROR;
       emit infoMessage( i18n("Cdrecord did not exit cleanly!"), K3bJob::ERROR );
+      emit finished( false );
     }
 
 
   clearBufferFiles();
 
-
-  emit finished( this );
-
-  m_process.disconnect();
+  m_process->disconnect();
 }
 
 
 void K3bAudioJob::slotCdrdaoFinished()
 {
-  if( m_process.normalExit() )
+  if( m_process->normalExit() )
     {
       // TODO: check the process' exitStatus()
-      switch( m_process.exitStatus() )
+      switch( m_process->exitStatus() )
 	{
 	case 0:
-	  m_error = K3b::SUCCESS;
 	  emit infoMessage( i18n("Burning successfully finished"), K3bJob::STATUS );
+	  emit finished( true );
 	  break;
 				
 	default:
@@ -404,14 +425,14 @@ void K3bAudioJob::slotCdrdaoFinished()
 	  emit infoMessage( i18n("Cdrdao returned some error!"), K3bJob::ERROR );
 	  emit infoMessage( i18n("Sorry, no error handling yet!") + " :-((", K3bJob::ERROR );
 	  emit infoMessage( i18n("Please send me a mail with the last output..."), K3bJob::ERROR );
-	  m_error = K3b::CDRDAO_ERROR;
+	  emit finished( false );
 	  break;
 	}
     }
   else
     {
-      m_error = K3b::CDRDAO_ERROR;
       emit infoMessage( i18n("Cdrdao did not exit cleanly!"), K3bJob::ERROR );
+      emit finished( false );
     }
 
   // remove toc-file
@@ -421,9 +442,7 @@ void K3bAudioJob::slotCdrdaoFinished()
   
   clearBufferFiles();
 
-  emit finished( this );
-
-  m_process.disconnect();
+  m_process->disconnect();
 }
 
 
@@ -452,8 +471,7 @@ void K3bAudioJob::decodeNextFile()
       qDebug( "(K3bAudioJob) Could not buffer file: " + m_currentTrackInfo->track->absPath() );
       emit infoMessage( i18n("Could not buffer file: '%1'").arg( m_currentTrackInfo->track->fileName() ), K3bJob::ERROR );
 
-      m_error = K3b::IO_ERROR;
-      emit finished( this );
+      emit finished( false );
     }
     else
       m_currentTrackInfo->urlToDecodedWav = bufferFile;
@@ -500,9 +518,12 @@ void K3bAudioJob::slotStartWriting()
     info->track->setBufferFile( info->urlToDecodedWav.path() );
   }
   // -----------------------------------------------------
+
+  if( m_process->isRunning() )
+    m_process->kill();
 	
-  m_process.clearArguments();
-  m_process.disconnect();
+  m_process->clearArguments();
+  m_process->disconnect();
 	
   firstTrack = true;
 
@@ -530,47 +551,46 @@ void K3bAudioJob::slotStartWriting()
       qDebug( "(K3bAudioJob) Could not write TOC-file." );
       emit infoMessage( i18n("Could not write correct TOC-file."), K3bJob::ERROR );
 
-      m_error = K3b::IO_ERROR;
-      emit finished( this );
+      emit finished( false );
     }
     else {
       // start a new cdrdao process
       kapp->config()->setGroup("External Programs");
 
-      m_process << kapp->config()->readEntry( "cdrdao path" );
-      m_process << "write";
+      *m_process << kapp->config()->readEntry( "cdrdao path" );
+      *m_process << "write";
 
       // device
-      m_process << "--device" << m_doc->burner()->genericDevice();
+      *m_process << "--device" << m_doc->burner()->genericDevice();
       if( m_doc->burner()->cdrdaoDriver() != "auto" ) {
-	m_process << "--driver";
+	*m_process << "--driver";
 	if( m_doc->burner()->cdTextCapable() == 1 )
-	  m_process << QString("%1:0x00000010").arg( m_doc->burner()->cdrdaoDriver() );
+	  *m_process << QString("%1:0x00000010").arg( m_doc->burner()->cdrdaoDriver() );
 	else
-	  m_process << m_doc->burner()->cdrdaoDriver();
+	  *m_process << m_doc->burner()->cdrdaoDriver();
       }
 
       // additional parameters from config
       QStringList _params = kapp->config()->readListEntry( "cdrdao parameters" );
       for( QStringList::Iterator it = _params.begin(); it != _params.end(); ++it )
-	m_process << *it;
+	*m_process << *it;
 			
       if( m_doc->dummy() )
-	m_process << "--simulate";
+	*m_process << "--simulate";
       if( k3bMain()->eject() )
-	m_process << "--eject";
+	*m_process << "--eject";
 			
       // writing speed
-      m_process << "--speed" << QString::number(  m_doc->speed() );
+      *m_process << "--speed" << QString::number(  m_doc->speed() );
 
       // supress the 10 seconds gap to the writing
-      m_process << "-n";
+      *m_process << "-n";
 			
       // toc-file
-      m_process << QString("\"%1\"").arg(m_tocFile);
+      *m_process << QString("\"%1\"").arg(QFile::encodeName(m_tocFile));
 			
       // debugging output
-      QStrList* _args = m_process.args();
+      QStrList* _args = m_process->args();
       QStrListIterator _it(*_args);
       while( _it ) {
 	cout << *_it << " ";
@@ -579,30 +599,28 @@ void K3bAudioJob::slotStartWriting()
       cout << flush;
 	
       // connect to the cdrdao slots
-      connect( &m_process, SIGNAL(processExited(KProcess*)),
+      connect( m_process, SIGNAL(processExited(KProcess*)),
 	       this, SLOT(slotCdrdaoFinished()) );
-      connect( &m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
+      connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
 	       this, SLOT(slotParseCdrdaoOutput(KProcess*, char*, int)) );
-      connect( &m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
+      connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
 	       this, SLOT(slotParseCdrdaoOutput(KProcess*, char*, int)) );
 		
-      if( !m_process.start( KProcess::NotifyOnExit, KProcess::AllOutput ) )
+      if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) )
 	{
 	  // something went wrong when starting the program
 	  // it "should" be the executable
 	  qDebug("(K3bAudioJob) could not start cdrdao");
-	  m_error = K3b::CDRDAO_ERROR;
 				
 	  // remove toc-file
 	  QFile::remove( m_tocFile );
 	  m_tocFile = QString::null;
 
 	  emit infoMessage( i18n("Could not start cdrdao!"), K3bJob::ERROR );
-	  emit finished( this );
+	  emit finished( false );
 	}
       else
 	{
-	  m_error = K3b::WORKING;
 	  if( m_doc->dummy() )
 	    emit infoMessage( i18n("Starting simulation at %1x speed...").arg(m_doc->speed()), K3bJob::STATUS );
 	  else
@@ -616,52 +634,52 @@ void K3bAudioJob::slotStartWriting()
 	
     // OK, we need a new cdrecord process...
     kapp->config()->setGroup("External Programs");
-    m_process << kapp->config()->readEntry( "cdrecord path" );
+    *m_process << kapp->config()->readEntry( "cdrecord path" );
 
     // and now we add the needed arguments...
     // display progress
-    m_process << "-v";
+    *m_process << "-v";
 
     if( m_doc->dummy() )
-      m_process << "-dummy";
+      *m_process << "-dummy";
     if( m_doc->dao() )
-      m_process << "-dao";
+      *m_process << "-dao";
     if( k3bMain()->eject() )
-      m_process << "-eject";
+      *m_process << "-eject";
 
     // add speed
     QString s = QString("-speed=%1").arg( m_doc->speed() );
-    m_process << s;
+    *m_process << s;
 
     // add the device
     s = QString("-dev=%1").arg( m_doc->burner()->genericDevice() );
-    m_process << s;
+    *m_process << s;
 	
     // test if padding is nessessary
     // padding is enabled by default if any mp3 files have been converted!
     if( m_doc->padding() )
-      m_process << "-pad";
+      *m_process << "-pad";
 
     // additional parameters from config
     QStringList _params = kapp->config()->readListEntry( "cdrecord parameters" );
     for( QStringList::Iterator it = _params.begin(); it != _params.end(); ++it )
-      m_process << *it;
+      *m_process << *it;
 
 				
     // add all the tracks
     for( const K3bAudioTrack* i = m_doc->at(0); i != 0; i = m_doc->next() )
       {
 	s = QString("-pregap=%1").arg( i->pregap() );
-	m_process << s;
+	*m_process << s;
 	if( !i->bufferFile().isEmpty() )
-	  m_process << i->bufferFile();
+	  *m_process << QString("\"%1\"").arg(QFile::encodeName(i->bufferFile()));
 	else
-	  m_process << i->absPath();
+	  *m_process << QString("\"%1\"").arg(QFile::encodeName(i->absPath()));
       }
 
 	
     // debugging output
-    QStrList* _args = m_process.args();
+    QStrList* _args = m_process->args();
     QStrListIterator _it(*_args);
     while( _it ) {
       cout << *_it << " ";
@@ -670,25 +688,24 @@ void K3bAudioJob::slotStartWriting()
     cout << flush;
 	
     // connect to the cdrecord slots
-    connect( &m_process, SIGNAL(processExited(KProcess*)),
+    connect( m_process, SIGNAL(processExited(KProcess*)),
 	     this, SLOT(slotCdrecordFinished()) );
-    connect( &m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
+    connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
 	     this, SLOT(slotParseCdrecordOutput(KProcess*, char*, int)) );
-    connect( &m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
+    connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
 	     this, SLOT(slotParseCdrecordOutput(KProcess*, char*, int)) );
 	
-    if( !m_process.start( KProcess::NotifyOnExit, KProcess::AllOutput ) )
+    if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) )
       {
 	// something went wrong when starting the program
 	// it "should" be the executable
 	qDebug("(K3bAudioJob) could not start cdrecord");
-	m_error = K3b::CDRECORD_ERROR;
+
 	emit infoMessage( i18n("Could not start cdrecord!"), K3bJob::ERROR );
-	emit finished( this );
+	emit finished( false );
       }
     else
       {
-	m_error = K3b::WORKING;
 	if( m_doc->dummy() )
 	  emit infoMessage( i18n("Starting simulation at %1x speed...").arg(m_doc->speed()), K3bJob::STATUS );
 	else

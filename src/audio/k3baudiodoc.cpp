@@ -20,7 +20,6 @@
 #include "k3baudiodoc.h"
 #include "k3baudioview.h"
 #include "k3baudiotrack.h"
-#include "../k3bprogressdialog.h"
 #include "k3baudioburndialog.h"
 #include "k3baudiojob.h"
 #include "k3baudioontheflyjob.h"
@@ -461,7 +460,7 @@ bool K3bAudioDoc::writeTOC( const QString& filename )
   QFile file( filename );
   if( !file.open( IO_WriteOnly ) ) {
     qDebug( "(K3bAudioDoc) Could not open toc-file %s", filename.latin1() );
-    return QString::null;
+    return false;
   }
 
   bool success = true;

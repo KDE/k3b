@@ -54,7 +54,6 @@ class K3bAudioTrack
 
   /** returns length of track in frames **/
   int length() const { return m_length; }
-  bool isAccurateLength() const { return m_isAccurateLength; }
 	
   const QString& artist() const { return m_artist; }
   const QString& title() const { return m_title; }
@@ -87,7 +86,7 @@ class K3bAudioTrack
 	
   void setAlbum( const QString& t ) { m_album = t; }
 	
-  void setLength( int time, bool accurate = false ) { m_length = time; m_isAccurateLength = accurate; }
+  void setLength( int time ) { m_length = time; }
 	
   void setBufferFile( const QString& file );
   /** returns the filesize of the track */
@@ -108,7 +107,6 @@ class K3bAudioTrack
 
   /** length of track in frames (1/75sec) **/
   int m_length;
-  bool m_isAccurateLength;
 
   /** frames: 75 frames are one second **/
   int m_pregap;

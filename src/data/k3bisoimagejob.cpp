@@ -102,14 +102,14 @@ void K3bIsoImageJob::start()
   // check if everything is set
   if( m_device == 0 || !m_device->burner() ) {
     emit infoMessage( i18n("Please specify a cd writing device"), K3bJob::ERROR );
-    emit finished( this );
+    emit finished( false );
     return;
   }
 
 
   if( !QFile::exists( m_imagePath ) ) {
     emit infoMessage( i18n("Could not find image %1").arg(m_imagePath), K3bJob::ERROR );
-    emit finished( this );
+    emit finished( false );
     return;
   }
 
@@ -169,7 +169,7 @@ void K3bIsoImageJob::slotStartWriting()
   }
   cout << endl << flush;
 
-  *m_process << m_imagePath;
+  *m_process << QString("\"%1\"").arg(QFile::encodeName(m_imagePath));
 				
 
 
@@ -178,13 +178,11 @@ void K3bIsoImageJob::slotStartWriting()
       // something went wrong when starting the program
       // it "should" be the executable
       qDebug("(K3bIsoImageJob) could not start cdrecord");
-      m_error = K3b::CDRECORD_ERROR;
       emit infoMessage( i18n("Could not start cdrecord!"), K3bJob::ERROR );
-      emit finished( this );
+      emit finished( false );
     }
   else
     {
-      m_error = K3b::WORKING;
       if( m_dummy )
 	emit infoMessage( i18n("Starting simulation at %1x speed...").arg(m_speed), K3bJob::STATUS );
       else
@@ -209,9 +207,8 @@ void K3bIsoImageJob::cancel()
     // m_doc->burner()->eject();
   }
 
-  m_error = K3b::CANCELED;
   emit infoMessage( i18n("Writing canceled."), K3bJob::ERROR );
-  emit finished( this );
+  emit finished( false );
 }
 
 
@@ -351,11 +348,12 @@ void K3bIsoImageJob::slotCdrecordFinished()
       switch( m_process->exitStatus() )
 	{
 	case 0:
-	  m_error = K3b::SUCCESS;
 	  if( m_dummy )
 	    emit infoMessage( i18n("Simulation successfully finished"), K3bJob::STATUS );
 	  else
 	    emit infoMessage( i18n("Writing successfully finished"), K3bJob::STATUS );
+
+	  emit finished( true );
 	  break;
 				
 	default:
@@ -363,18 +361,15 @@ void K3bIsoImageJob::slotCdrecordFinished()
 	  emit infoMessage( i18n("Cdrecord returned some error! (code %1)").arg(m_process->exitStatus()), K3bJob::ERROR );
 	  emit infoMessage( i18n("Sorry, no error handling yet! :-(("), K3bJob::ERROR );
 	  emit infoMessage( i18n("Please send me a mail with the last output..."), K3bJob::ERROR );
-	  m_error = K3b::CDRECORD_ERROR;
+	  emit finished( false );
 	  break;
 	}
     }
   else
     {
-      m_error = K3b::CDRECORD_ERROR;
       emit infoMessage( i18n("Cdrecord did not exit cleanly."), K3bJob::ERROR );
+      emit finished( false );
     }
-
-		
-  emit finished( this );
 }
 
 

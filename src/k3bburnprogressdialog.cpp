@@ -143,6 +143,7 @@ K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name,
   // setup the statusbar progress
   m_statusBarProgress = new PrivateStatusBarProgress( k3bMain()->statusBar() );
   m_statusBarProgress->progress->installEventFilter( this );
+  m_statusBarProgress->label->installEventFilter( this );
 }
 
 K3bBurnProgressDialog::~K3bBurnProgressDialog()
@@ -157,7 +158,7 @@ K3bBurnProgressDialog::~K3bBurnProgressDialog()
 
 bool K3bBurnProgressDialog::eventFilter(QObject* object, QEvent* event)
 {
-  if( dynamic_cast<KProgress*>(object) == m_statusBarProgress->progress &&
+  if( (object == m_statusBarProgress->progress || object == m_statusBarProgress->label) &&
       event->type() == QEvent::MouseButtonPress ) {
 
     // remove the statusbar-widgets
@@ -340,11 +341,15 @@ void K3bBurnProgressDialog::displayInfo( const QString& infoString, int type )
 }
 
 
-void K3bBurnProgressDialog::finished()
+void K3bBurnProgressDialog::finished( bool success )
 {
   qDebug( "(K3bBurnProgressDialog) received finished signal!");
 
-  m_labelFileName->setText( i18n("Writing finished") );
+  m_job = 0;
+
+  if( success ) {
+    m_labelFileName->setText( i18n("Process finished") );
+  }
   m_labelTrackProgress->setText("");
 
   m_buttonCancel->hide();
@@ -403,7 +408,7 @@ void K3bBurnProgressDialog::setJob( K3bBurnJob* job )
   connect( job, SIGNAL(newTask(const QString&)), this, SLOT(slotNewTask(const QString&)) );
   connect( job, SIGNAL(newSubTask(const QString&)), this, SLOT(slotNewSubTask(const QString&)) );
   connect( job, SIGNAL(started()), this, SLOT(started()) );
-  connect( job, SIGNAL(finished(K3bJob*)), this, SLOT(finished()) );
+  connect( job, SIGNAL(finished(bool)), this, SLOT(finished(bool)) );
 	
   connect( job, SIGNAL(debuggingOutput(const QString&, const QString&)), 
 	   this, SLOT(mapDebuggingOutput(const QString&, const QString&)) );

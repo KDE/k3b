@@ -38,6 +38,7 @@
 #include <klineeditdlg.h>
 #include <kstddirs.h>
 #include <krun.h>
+#include <kurl.h>
 
 #include <stdlib.h>
 
@@ -52,9 +53,7 @@
 #include "audio/k3baudiotrackdialog.h"
 #include "k3bcopywidget.h"
 #include "option/k3boptiondialog.h"
-#include "k3bburnprogressdialog.h"
 #include "k3bprojectburndialog.h"
-#include "audio/k3baudiojob.h"
 #include "data/k3bdatadoc.h"
 #include "data/k3bdataview.h"
 #include "data/k3bdatajob.h"
@@ -762,34 +761,23 @@ K3bAudioTrackDialog* K3bMainWindow::audioTrackDialog()
 void K3bMainWindow::slotFileBurn()
 {
   QWidget* w = m_documentTab->currentPage();
-  if( w )
-    {
-      if( K3bView* _view = dynamic_cast<K3bView*>(w) ) {
-	K3bDoc* doc = _view->getDocument();
-				
-	if( doc )
-	  {
-	    // test if there is something to burn
-	    if( doc->numOfTracks() == 0 ) {
-	      KMessageBox::information( kapp->mainWidget(), "There is nothing to burn!", "So what?", QString::null, false );
-	      return;
-	    }
-				
-	    if( _view->burnDialog()->exec(true) == K3bProjectBurnDialog::Burn ) {
-		K3bBurnProgressDialog* burnProgressDialog = new K3bBurnProgressDialog( this );
-					
-	      K3bBurnJob* job = _view->getDocument()->newBurnJob();
-				
-	      burnProgressDialog->setJob( job );
-					
-	      // BAD!!!! :-(( the job is deleted before the burnprocessdialog is hidden!!!
-	      connect( job, SIGNAL(finished( K3bJob* )), this, SLOT(slotJobFinished( K3bJob* )) );
-	      burnProgressDialog->show();
-	      job->start();
-	    }
-	  }
+
+  if( w ) {
+    if( K3bView* _view = dynamic_cast<K3bView*>(w) ) {
+      K3bDoc* doc = _view->getDocument();
+      
+      if( doc ) {
+	// test if there is something to burn
+	if( doc->numOfTracks() == 0 ) {
+	  KMessageBox::information( kapp->mainWidget(), "There is nothing to burn!", "So what?", QString::null, false );
+	}
+	else {
+	  _view->burnDialog()->exec(true);
+	  qDebug("shown");
+	}
       }
     }
+  }
 }
 
 
@@ -858,20 +846,18 @@ void K3bMainWindow::slotCurrentDocChanged( QWidget* w )
 
 QString K3bMainWindow::findTempFile( const QString& ending, const QString& d )
 {
-  QString dir(d);
-  if( dir.isEmpty() ) {
+  KURL url(d);
+  if( d.isEmpty() ) {
     config()->setGroup( "General Options" );
-    dir = config()->readEntry( "Temp Dir", locateLocal( "appdata", "temp/" ) );
+    url = config()->readEntry( "Temp Dir", locateLocal( "appdata", "temp/" ) );
   }
-  if( dir.at(dir.length() - 1) != '/' )
-    dir += "/";
 	
   // find a free filename
   int num = 1;
-  while( QFile::exists( dir + "k3b-" + QString::number( num ) + "." + ending ) )
+  while( QFile::exists( url.path() + "k3b-" + QString::number( num ) + "." + ending ) )
     num++;
 
-  return dir + "k3b-" + QString::number( num ) + "." + ending;
+  return url.path() + "k3b-" + QString::number( num ) + "." + ending;
 }
 
 
@@ -879,13 +865,6 @@ bool K3bMainWindow::eject()
 {
   config()->setGroup( "General Options" );
   return config()->readBoolEntry( "Eject when finished", true );
-}
-
-
-void K3bMainWindow::slotJobFinished( K3bJob* job )
-{
-  job->disconnect();
-  delete job;
 }
 
 

@@ -4,9 +4,8 @@
 
 #include "k3bexternalbinmodule.h"
 
-class QTimer;
 class KShellProcess;
-
+class KURL;
 
 class K3bMp3Module : public K3bExternalBinModule
 {
@@ -22,6 +21,8 @@ class K3bMp3Module : public K3bExternalBinModule
   KURL writeToWav( const KURL& url );
 
   void init();
+
+  void recalcLength();
 
  public slots:
   void cancel();
@@ -47,17 +48,9 @@ class K3bMp3Module : public K3bExternalBinModule
   bool mp3Protection(unsigned int header);
   double compute_tpf( unsigned int header );
 
-
-  QTimer* m_rawDataCountTimer;
+  KURL m_currentToWavUrl;
   KShellProcess* m_decodingProcess;
   long m_rawData;
-
-  /**
-   * Since we do not want to run several mpg123 
-   * processes at a time we use a static variable
-   * to check if some object is currenty working
-   */
-  static bool staticIsDataBeingEncoded;
 };
 
 

@@ -23,10 +23,9 @@
 class K3bAudioDoc;
 class K3bAudioTrack;
 class QString;
-
+class KProcess;
 
 #include <qlist.h>
-#include <kprocess.h>
 #include <kurl.h>
 
 
@@ -79,7 +78,7 @@ class K3bAudioJob : public K3bBurnJob  {
   void decodeNextFile();
   void startWriting();
 	
-  KShellProcess m_process;
+  KProcess* m_process;
   K3bAudioDoc* m_doc;
   const K3bAudioTrack* m_currentProcessedTrack;
   bool firstTrack;

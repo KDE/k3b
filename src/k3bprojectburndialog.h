@@ -26,6 +26,7 @@ class QLineEdit;
 class QToolButton;
 class QTimer;
 class K3bDoc;
+class K3bBurnJob;
 class K3bDevice;
 class K3bWriterSelectionWidget;
 
@@ -58,9 +59,12 @@ class K3bProjectBurnDialog : public KDialogBase
    virtual void slotOk();
    virtual void slotCancel();
    virtual void slotTempDirButtonPressed();
+   void setTempDir( const QString& );
+
+ private slots:
    void slotUpdateFreeTempSpace();
    void slotFreeTempSpace(const QString&, unsigned long, unsigned long, unsigned long);
-   void setTempDir( const QString& );
+   void slotJobFinished();
 
  signals:
    void writerChanged();
@@ -88,6 +92,7 @@ class K3bProjectBurnDialog : public KDialogBase
    int m_freeTempSpace;
 
    K3bDoc* m_doc;
+   K3bBurnJob* m_job;
 };
 
 #endif

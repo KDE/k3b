@@ -69,6 +69,11 @@ class K3bDoc : public QObject
 
   enum DocType { AUDIO = 1, DATA = 2 };
 
+
+  virtual void disable();
+  virtual void enable();
+
+
   virtual int docType() const { return m_docType; }
 	
   /** adds a view to the document which represents the document contents. Usually this is your main view. */

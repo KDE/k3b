@@ -23,6 +23,9 @@
 
 namespace K3b
 {
+  /**
+   * not used anymore
+   */
   enum Error { NOT_STARTED = 1, SUCCESS = 2, IMAGE_FINISHED = 3,
 	       CANCELED = 4, FILE_NOT_FOUND = 5,
 	       BUFFER_UNDERRUN = 6, WRITE_ERROR = 7,
@@ -35,9 +38,9 @@ namespace K3b
   enum FileType { MP3 = 1, WAV = 2 };
   
   
-	QString framesToString( int h, bool showFrames = true );
-   QString sizeToTime(long size);
-/* 	bool parseFrames( const QString&, int& ); */
+  QString framesToString( int h, bool showFrames = true );
+  QString sizeToTime(long size);
+  /* 	bool parseFrames( const QString&, int& ); */
 };
 
 #endif
