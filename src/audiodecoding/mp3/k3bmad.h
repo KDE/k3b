@@ -52,6 +52,7 @@ public:
   bool eof() const;
   bool inputError() const;
   QIODevice::Offset inputPos() const;
+  QIODevice::Offset streamPos() const;
   bool inputSeek( QIODevice::Offset pos );
 
   void initMad();
