@@ -40,7 +40,14 @@ public:
 	K3bDataDoc* doc() const { return m_doc; }
 	const QString& k3bName();
 	void setK3bName( const QString& );
+	/** returns the path as defined by the k3b-hierachy, NOT starting with a slash (since this is used for graft-points!) */
+	virtual QString k3bPath();
+
+	virtual K3bDataItem* nextSibling();
 	
+	/** returns the path to the file on the local filesystem */
+	virtual QString localPath() = 0;
+		
 private:
 	K3bDirItem* m_parentDir;
 	K3bDataDoc* m_doc;

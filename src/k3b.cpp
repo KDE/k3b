@@ -188,9 +188,7 @@ void K3bApp::createClient(K3bDoc* doc)
   m_documentTab->showPage( w );
 
   fileBurn->setEnabled( true );
-
-  if( dynamic_cast<K3bAudioDoc*>(doc) )
-  	fileExport->setEnabled( true );
+  fileExport->setEnabled( true );
 }
 
 void K3bApp::openDocumentFile(const KURL& url)
@@ -444,16 +442,20 @@ void K3bApp::slotFileSaveAs()
 
 void K3bApp::slotFileExport()
 {
-	K3bAudioView* m = dynamic_cast<K3bAudioView*>( m_documentTab->currentPage() );
-	if( m ) {
+	if( K3bAudioView* m = dynamic_cast<K3bAudioView*>( m_documentTab->currentPage() ) ) {
 		QString file = KFileDialog::getSaveFileName( QDir::home().absPath(), "*.toc", k3bMain(), i18n("Export to cdrdao-toc-file") );
 		if( !file.isEmpty() ) {
 			if( ((K3bAudioDoc*)m->getDocument())->writeTOC( file ).isEmpty() )
 				KMessageBox::error( this, i18n("Could not write to file %1").arg( file ), i18n("I/O Error") );
 		}
 	}
-	else
-		qDebug( "(K3bApp) Tried to export from non-audio-view!");
+	else if( K3bDataView* m = dynamic_cast<K3bDataView*>( m_documentTab->currentPage() ) ) {
+		QString file = KFileDialog::getSaveFileName( QDir::home().absPath(), "*.mkisofs", k3bMain(), i18n("Export to mkisofs-pathspec-file") );
+		if( !file.isEmpty() ) {
+			if( ((K3bDataDoc*)m->getDocument())->writePathSpec( file ).isEmpty() )
+				KMessageBox::error( this, i18n("Could not write to file %1").arg( file ), i18n("I/O Error") );
+		}
+	}
 }
 
 
@@ -714,16 +716,12 @@ void K3bApp::slotDirDockHidden()
 
 void K3bApp::slotCurrentDocChanged( QWidget* w )
 {
-	if( w->inherits( "K3bAudioView" ) )
-		fileExport->setEnabled( true );
-	else
-		fileExport->setEnabled( false );
-		
 	if( w->inherits( "K3bView" ) ) {
 		// activate actions for file-handling
 		fileClose->setEnabled( true );
 		fileSave->setEnabled( true );
 		fileSaveAs->setEnabled( true );
+		fileExport->setEnabled( true );
 	}
 	else {
 		// the active window does not represent a file (e.g. the copy-widget)

@@ -40,9 +40,26 @@ public:
 	void addDataItem( K3bDataItem* item );
 	K3bDataItem* takeDataItem( K3bDataItem* item );
 	K3bDataItem* takeDataItem( int index );
+	/** reimplemented from K3bDataItem */
+	virtual QString k3bPath();
+	
+	K3bDataItem* nextSibling();
+	K3bDataItem* nextChild( K3bDataItem* );
+  /** returns an empty dummy directory */
+  QString localPath();
 	
 private:
 	QList<K3bDataItem>* m_children;
 };
 
+
+class K3bRootItem : public K3bDirItem
+{
+public:
+	K3bRootItem( K3bDataDoc* );
+	~K3bRootItem();
+
+	/** reimplemented from K3bDataItem */
+	QString k3bPath();
+};
 #endif

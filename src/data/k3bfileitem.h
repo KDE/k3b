@@ -49,6 +49,9 @@ public:
 	const QString& rockRidgeName() const { return m_rockRidgeName; }
 	
 	QString absIsoPath();
+//	K3bDataItem* nextSibling();
+	/** reimplemented from K3bDataItem */
+	QString localPath();
 	
 private:
 	QString m_isoName;

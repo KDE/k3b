@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include "k3bdiritem.h"
+#include "k3bdatadoc.h"
 
 #include <qstring.h>
 #include <qlist.h>
@@ -51,4 +52,57 @@ K3bDataItem* K3bDirItem::takeDataItem( K3bDataItem* item )
 K3bDataItem* K3bDirItem::takeDataItem( int index )
 {
 	return m_children->take( index );
+}
+
+
+QString K3bDirItem::k3bPath()
+{
+	if( !parent() )
+		return k3bName() + "/";
+	else
+		return parent()->k3bPath() + k3bName() + "/";
+}
+
+
+K3bDataItem* K3bDirItem::nextSibling()
+{
+	if( !m_children->isEmpty() )
+		return m_children->getFirst();
+	else
+		return K3bDataItem::nextSibling();
+}
+
+
+K3bDataItem* K3bDirItem::nextChild( K3bDataItem* prev )
+{
+	// search for prev in children
+	if( m_children->find( prev ) < 0 ) {
+		return 0;
+	}
+	else
+		 return m_children->next();
+}
+
+
+QString K3bDirItem::localPath()
+{
+	return doc()->dummyDir();
+}
+
+
+
+K3bRootItem::K3bRootItem( K3bDataDoc* doc )
+	: K3bDirItem( "/", doc, 0 )
+{
+}
+
+
+K3bRootItem::~K3bRootItem()
+{
+}
+
+QString K3bRootItem::k3bPath()
+{
+	// graft-points have to start with the name of the directory or the file, not with a slash or anything!
+	return "";
 }

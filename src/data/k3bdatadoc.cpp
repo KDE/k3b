@@ -24,6 +24,11 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qfileinfo.h>
+#include <qfile.h>
+#include <qtextstream.h>
+
+#include <kstddirs.h>
+
 
 K3bDataDoc::K3bDataDoc( QObject* parent )
 	: K3bDoc( parent )
@@ -45,7 +50,7 @@ bool K3bDataDoc::newDocument()
 	if( m_root )
 		delete m_root;
 		
-	m_root = new K3bDirItem( "ISO-CD", this, 0 );
+	m_root = new K3bRootItem( this );
 	
 	m_name = "Dummyname";
 	
@@ -156,4 +161,43 @@ void K3bDataDoc::removeItem( K3bDataItem* item )
 		delete item;
 		qDebug( "(K3bDataDoc) now the item has been deleted!");
 	}
+}
+
+
+QString K3bDataDoc::writePathSpec( const QString& filename )
+{
+	QFile file( filename );
+	if( !file.open( IO_WriteOnly ) ) {
+		qDebug( "(K3bDataDoc) Could not open path-spec-file %s", filename.latin1() );
+		return QString::null;
+	}
+	
+	QTextStream t(&file);
+
+	// start writing the path-specs
+	// iterate over all the dataItems
+	K3bDataItem* item = root()->nextSibling();
+	
+	while( item ) {
+		t << item->k3bPath() << "=" << item->localPath() << "\n";
+		
+		item = item->nextSibling();
+	}
+	
+	file.close();
+	return filename;
+}
+
+
+QString K3bDataDoc::dummyDir()
+{
+	QDir _appDir( locateLocal( "appdata", "temp/" ) );
+	if( !_appDir.cd( "dummydir" ) ) {
+		_appDir.mkdir( "dummydir" );
+	}
+	m_dummyDir = _appDir.absPath();
+	
+	// TODO: test if dummy dir is empty
+	
+	return m_dummyDir + "/";
 }

@@ -45,3 +45,29 @@ void K3bDataItem::setK3bName( const QString& name ){
 const QString& K3bDataItem::k3bName(){
 	return m_k3bName;
 }
+
+
+QString K3bDataItem::k3bPath()
+{
+	if( !m_parentDir )
+		return k3bName();
+	else
+		return m_parentDir->k3bPath() + k3bName();
+}
+
+
+K3bDataItem* K3bDataItem::nextSibling()
+{
+	K3bDataItem* _item = this;
+	K3bDirItem* _parentItem = parent();
+	
+	while( _parentItem ) {
+		if( K3bDataItem* i = _parentItem->nextChild( _item ) )
+			return i;
+		
+		_item = _parentItem;
+		_parentItem = _item->parent();
+	}
+
+	return 0;
+}

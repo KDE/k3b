@@ -22,7 +22,7 @@
 #include <qfileinfo.h>
 #include <qstring.h>
 
-//#include <kurl.h>
+#include <kurl.h>
 
 
 K3bFileItem::K3bFileItem( const QString& filePath, K3bDataDoc* doc, K3bDirItem* dir )
@@ -47,4 +47,43 @@ QString K3bFileItem::absIsoPath()
 {
 //	return m_dir->absIsoPath() + m_isoName;
 	return QString::null;
+}
+
+
+//K3bDataItem* K3bFileItem::nextSibling()
+//{
+//	K3bDataItem* _item = this;
+//	K3bDataItem* _parentItem = parent();
+//	
+//	while( _parentItem ) {
+//		if( K3bDataItem* i = _parentItem->nextChild( _item ) )
+//			return i;
+//		
+//		_item = _parentItem;
+//		_parentItem = _item->parent();
+//	}
+//
+//	return 0;
+//		
+//	if( parent() ) {
+//		if( K3bDataItem* i = parent()->nextChild( this ) )
+//			return i;
+//		else {
+//			// test if parent() has a parent
+//			if( parent()->parent() )
+//				return parent()->parent()->nextChild( parent() );
+//			else
+//				return 0;
+//		}
+//	}
+//	else {
+//		qDebug( "(K3bFileItem) ERROR: K3bFileItem without parent dirItem!!");
+//		return 0;
+//	}
+//}
+
+
+QString K3bFileItem::localPath()
+{
+	return url().path();
 }
