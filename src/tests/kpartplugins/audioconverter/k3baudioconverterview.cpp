@@ -37,7 +37,9 @@ K3bAudioConverterView::~K3bAudioConverterView()
 
 bool K3bAudioConverterView::acceptDrag( QDropEvent* event ) const
 {
-  event->accept( KURLDrag::canDecode( event ) );
+  bool b = KURLDrag::canDecode( event ) ;
+  event->accept( b );
+  return b;
 }
 
 
