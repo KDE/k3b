@@ -151,8 +151,9 @@ void K3bMixedJob::start()
 	return;
       }
       
-      if( startWriting() )
+      if( startWriting() ) {
 	m_audioDecoder->start();
+      }
     }
   }
   else {
@@ -771,6 +772,17 @@ bool K3bMixedJob::startWriting()
   }
 	
   m_writer->start();
+
+  if( m_doc->onTheFly() ) {
+    // now the writer is running and we can get it's stdin
+    // we only use this method when writing on-the-fly since
+    // we cannot easily change the audioDecode fd while it's working
+    // which we would need to do since we write into several
+    // image files.
+    m_audioDecoder->writeToFd( m_writer->fd() );
+    m_isoImager->writeToFd( m_writer->fd() );
+  }
+
   return true;
 }
 

@@ -91,7 +91,19 @@ void K3bAudioJob::start()
       return;
     }
 
-    startWriting();
+    if( startWriting() ) {
+
+      // now the writer is running and we can get it's stdin
+      // we only use this method when writing on-the-fly since
+      // we cannot easily change the audioDecode fd while it's working
+      // which we would need to do since we write into several
+      // image files.
+      m_audioDecoder->writeToFd( m_writer->fd() );
+    }
+    else {
+      // startWriting() already did the cleanup
+      return; 
+    }
   }
   else {
     emit infoMessage( i18n("Creating image files in %1").arg(m_doc->tempDir()), INFO );
@@ -360,7 +372,7 @@ void K3bAudioJob::slotAudioDecoderSubPercent( int p )
 }
 
 
-void K3bAudioJob::startWriting()
+bool K3bAudioJob::startWriting()
 {
   if( m_doc->dummy() )
     emit newTask( i18n("Simulating") );
@@ -371,10 +383,11 @@ void K3bAudioJob::startWriting()
   K3bEmptyDiscWaiter waiter( m_doc->burner(), k3bMain() );
   if( waiter.waitForEmptyDisc() == K3bEmptyDiscWaiter::CANCELED ) {
     cancel();
-    return;
+    return false;
   }
 	
   m_writer->start();
+  return true;
 }
 
 
