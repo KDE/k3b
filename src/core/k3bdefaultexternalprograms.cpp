@@ -138,7 +138,9 @@ bool K3bCdrecordProgram::scan( const QString& p )
       bin->addFeature( "overburn" );
     if( out.output().contains( "-text" ) )
       bin->addFeature( "cdtext" );
-    if( out.output().contains( "-clone" ) )  // cdrecord ProDVD
+    if( out.output().contains( "-tao" ) )
+      bin->addFeature( "tao" );
+    if( out.output().contains( "-clone" ) )
       bin->addFeature( "clone" );
     if( out.output().contains( "cuefile=" ) && 
 	bin->version > K3bVersion( 2, 1, -1, "a14") ) // cuefile handling was still buggy in a14

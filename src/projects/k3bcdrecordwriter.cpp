@@ -182,6 +182,8 @@ void K3bCdrecordWriter::prepareProcess()
   else if( m_writingMode == K3b::RAW ) {
     *m_process << "-raw";
   }
+  else if( m_cdrecordBinObject->hasFeature( "tao" ) )
+    *m_process << "-tao";
     
   if( simulate() )
     *m_process << "-dummy";
