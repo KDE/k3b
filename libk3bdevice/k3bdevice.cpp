@@ -115,8 +115,10 @@ int K3bCdDevice::openDevice( const char* name )
   if( fd < 0 )
     fd = ::open( name, O_RDONLY | O_NONBLOCK );
 
-  if( fd < 0 )
+  if( fd < 0 ) {
+    kdDebug() << "(K3bCdDevice) Error: could not open device " << name << endl;
     fd = -1;
+  }
 
   return fd;
 }
@@ -1897,11 +1899,6 @@ int K3bCdDevice::CdDevice::open() const
 #ifdef Q_OS_LINUX
   if( d->deviceFd == -1 )
     d->deviceFd = openDevice( QFile::encodeName(devicename()) );
-  if (d->deviceFd < 0)
-  {
-    kdDebug() << "(K3bCdDevice) Error: could not open device." << endl;
-    d->deviceFd = -1;
-  }
 
   return d->deviceFd;
 #endif
@@ -2519,12 +2516,8 @@ void K3bCdDevice::CdDevice::checkWriteModes()
   // if the device is already opened we do not close it
   // to allow fast multible method calls in a row
   bool needToClose = !isOpen();
-  bool attemptopen = true;
-#ifdef Q_OS_FREEBSD
-  attemptopen = false;
-#endif
 
-  if (attemptopen && (open() < 0))
+  if( open() < 0 )
     return;
 
   // header size is 8
@@ -2611,7 +2604,7 @@ void K3bCdDevice::CdDevice::checkWriteModes()
     delete [] buffer;
   }
 
-  if( attemptopen && needToClose )
+  if( needToClose )
     close();
 }
 
