@@ -81,7 +81,8 @@ K3bDevice* K3bDeviceManager::findDevice( const QString& devicename )
 {
   QPtrListIterator<K3bDevice> it( m_allDevices );
   while( it.current() ) {
-    if( it.current()->ioctlDevice() == devicename )
+    if( it.current()->ioctlDevice() == devicename ||
+	it.current()->genericDevice() == devicename )
       return it.current();
 
     ++it;

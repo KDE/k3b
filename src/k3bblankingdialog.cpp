@@ -226,6 +226,9 @@ void K3bBlankingDialog::slotWriterChanged()
   // check if it is a cdrw writer
   K3bDevice* dev = m_writerSelectionWidget->writerDevice();
 
+  if( !dev )
+    return;
+
   if( dev->writesCdrw() )
     actionButton( KDialogBase::User1 )->setEnabled( true );
   else {

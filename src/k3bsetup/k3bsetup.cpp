@@ -268,17 +268,19 @@ void K3bSetup::doApplyDevicePermissions( uint groupId )
 	kdDebug() << "(K3bSetup) Could not find generic device: " << dev->genericDevice() << endl;
 	emit error( i18n("Could not find generic device (%1)").arg(dev->genericDevice()) );
       }
+
+      // TODO: serach for additionell devices like scdX, srX
+    }
+
+    if( QFile::exists( dev->ioctlDevice() ) ) {
+      chown( QFile::encodeName(dev->ioctlDevice()), 0, groupId );
+      chmod( QFile::encodeName(dev->ioctlDevice()), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP );
     }
     else {
-      if( QFile::exists( dev->ioctlDevice() ) ) {
-	chown( QFile::encodeName(dev->ioctlDevice()), 0, groupId );
-	chmod( QFile::encodeName(dev->ioctlDevice()), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP );
-      }
-      else {
-	kdDebug() << "(K3bSetup) Could not find ioctl device: " << dev->ioctlDevice() << endl;
-	emit error( i18n("Could not find ioctl device (%1)").arg(dev->ioctlDevice()) );
-      }
+      kdDebug() << "(K3bSetup) Could not find ioctl device: " << dev->ioctlDevice() << endl;
+      emit error( i18n("Could not find ioctl device (%1)").arg(dev->ioctlDevice()) );
     }
+
 
 
     dev = m_deviceManager->allDevices().next();
