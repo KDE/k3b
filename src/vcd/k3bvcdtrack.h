@@ -34,6 +34,10 @@ class K3bVcdTrack
   QString absPath() const { return QFileInfo(m_file).absFilePath(); }
   KIO::filesize_t size() const;
   int index() const;
+  
+  const QString& title() const { return m_title; }
+  void setTitle( const QString& t ) { m_title = t; }
+  
   // video
   int mpegType() const {return m_mpegtype;}
   int mpegVideoVersion() const {return m_mpegvideoversion;}
@@ -99,6 +103,7 @@ class K3bVcdTrack
   QList<K3bVcdTrack>* m_parent;
   int m_filetype;
   QFile m_file;
+  QString m_title;
   // video
   int m_mpegtype;
   int m_mpegvideoversion;

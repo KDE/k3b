@@ -23,11 +23,13 @@
 K3bVcdListViewItem::K3bVcdListViewItem( K3bVcdTrack* track, K3bListView* parent )
   : K3bListViewItem( parent ), m_track(track)
 {
+    setEditor( 1, LINE );
 }
 
 K3bVcdListViewItem::K3bVcdListViewItem( K3bVcdTrack* track, K3bListView* parent, QListViewItem* after )
   : K3bListViewItem( parent, after ), m_track(track)
 {
+    setEditor( 1, LINE );
 }
 
 
@@ -42,7 +44,7 @@ QString K3bVcdListViewItem::text(int i) const
     case 0:
       return QString::number( m_track->index() +1 ).rightJustify( 2, ' ' );
     case 1:
-      return m_track->fileName();
+      return m_track->title();
     case 2:
       // track mpegtype
       return m_track->mpegVersion();
@@ -64,6 +66,9 @@ QString K3bVcdListViewItem::text(int i) const
     case 8:
       // track size
       return KIO::convertSize( m_track->size() );
+    case 9:
+      // filename
+      return m_track->fileName();
 
     default:
       return KListViewItem::text(i);
@@ -72,6 +77,11 @@ QString K3bVcdListViewItem::text(int i) const
 
 void K3bVcdListViewItem::setText(int col, const QString& text )
 {
+  if( col == 1 ) {
+    // this is the title field
+    m_track->setTitle( text );
+  }
+
   KListViewItem::setText( col, text );
 }
 

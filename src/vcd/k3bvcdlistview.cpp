@@ -79,7 +79,7 @@ K3bVcdListView::~K3bVcdListView(){
 
 void K3bVcdListView::setupColumns(){
   addColumn( i18n("No.") );
-  addColumn( i18n("Filename") );
+  addColumn( i18n("Title") );
   addColumn( i18n("Type") );
   addColumn( i18n("Size") );
   addColumn( i18n("Display") );  
@@ -87,6 +87,7 @@ void K3bVcdListView::setupColumns(){
   addColumn( i18n("Mbps") );  
   addColumn( i18n("Duration") );
   addColumn( i18n("File Size") );
+  addColumn( i18n("Filename") );
 }
 
 
