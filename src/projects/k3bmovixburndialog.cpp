@@ -141,7 +141,7 @@ void K3bMovixBurnDialog::loadK3bDefaults()
 }
 
 
-void K3bMovixBurnDialog::loadUserDefaults( KConfig* c )
+void K3bMovixBurnDialog::loadUserDefaults( KConfigBase* c )
 {
   K3bProjectBurnDialog::loadUserDefaults(c);
 
@@ -162,7 +162,7 @@ void K3bMovixBurnDialog::loadUserDefaults( KConfig* c )
 }
 
 
-void K3bMovixBurnDialog::saveUserDefaults( KConfig* c )
+void K3bMovixBurnDialog::saveUserDefaults( KConfigBase* c )
 {
   K3bProjectBurnDialog::saveUserDefaults(c);
 

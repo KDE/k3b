@@ -18,7 +18,7 @@
 
 #include <qstring.h>
 
-class KConfig;
+class KConfigBase;
 
 
 class K3bIsoOptions
@@ -109,9 +109,9 @@ class K3bIsoOptions
   void setDiscardBrokenSymlinks( bool b ) { m_discardBrokenSymlinks = b; }
 
 
-  void save( KConfig* c );
+  void save( KConfigBase* c );
 
-  static K3bIsoOptions load( KConfig* c );
+  static K3bIsoOptions load( KConfigBase* c );
   static K3bIsoOptions defaults();
 
  private:

@@ -47,8 +47,8 @@ class K3bDvdBurnDialog : public K3bProjectBurnDialog
 
  protected:
    void loadK3bDefaults();
-   void loadUserDefaults( KConfig* );
-   void saveUserDefaults( KConfig* );
+   void loadUserDefaults( KConfigBase* );
+   void saveUserDefaults( KConfigBase* );
 
  private:
    void setupSettingsTab();

@@ -330,7 +330,7 @@ void K3bAudioProjectConvertingDialog::loadK3bDefaults()
   refresh();
 }
 
-void K3bAudioProjectConvertingDialog::loadUserDefaults( KConfig* c )
+void K3bAudioProjectConvertingDialog::loadUserDefaults( KConfigBase* c )
 {
   m_optionWidget->loadConfig( c );
   m_patternWidget->loadConfig( c );
@@ -339,7 +339,7 @@ void K3bAudioProjectConvertingDialog::loadUserDefaults( KConfig* c )
 }
 
 
-void K3bAudioProjectConvertingDialog::saveUserDefaults( KConfig* c )
+void K3bAudioProjectConvertingDialog::saveUserDefaults( KConfigBase* c )
 {
   m_optionWidget->saveConfig( c );
   m_patternWidget->saveConfig( c );

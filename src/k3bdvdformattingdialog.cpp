@@ -139,7 +139,7 @@ void K3bDvdFormattingDialog::slotWriterChanged()
 } 
 
 
-void K3bDvdFormattingDialog::loadUserDefaults( KConfig* c )
+void K3bDvdFormattingDialog::loadUserDefaults( KConfigBase* c )
 {
   m_checkForce->setChecked( c->readBoolEntry( "force", false ) );
   m_checkQuickFormat->setChecked( c->readBoolEntry( "quick format", true ) );
@@ -148,7 +148,7 @@ void K3bDvdFormattingDialog::loadUserDefaults( KConfig* c )
 } 
 
 
-void K3bDvdFormattingDialog::saveUserDefaults( KConfig* c )
+void K3bDvdFormattingDialog::saveUserDefaults( KConfigBase* c )
 {
   c->writeEntry( "force", m_checkForce->isChecked() );
   c->writeEntry( "quick format", m_checkQuickFormat->isChecked() );

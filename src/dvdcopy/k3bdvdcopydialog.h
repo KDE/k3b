@@ -41,8 +41,8 @@ class K3bDvdCopyDialog : public K3bInteractionDialog
   void slotToggleAll();
 
  private:
-  void loadUserDefaults( KConfig* );
-  void saveUserDefaults( KConfig* );
+  void loadUserDefaults( KConfigBase* );
+  void saveUserDefaults( KConfigBase* );
   void loadK3bDefaults();
 
   K3bWriterSelectionWidget* m_writerSelectionWidget;

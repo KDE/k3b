@@ -231,7 +231,7 @@ void K3bDataBurnDialog::loadK3bDefaults()
 }
 
 
-void K3bDataBurnDialog::loadUserDefaults( KConfig* c )
+void K3bDataBurnDialog::loadUserDefaults( KConfigBase* c )
 {
   K3bProjectBurnDialog::loadUserDefaults(c);
 
@@ -249,7 +249,7 @@ void K3bDataBurnDialog::loadUserDefaults( KConfig* c )
 }
 
 
-void K3bDataBurnDialog::saveUserDefaults( KConfig* c )
+void K3bDataBurnDialog::saveUserDefaults( KConfigBase* c )
 {
   K3bProjectBurnDialog::saveUserDefaults(c);
 

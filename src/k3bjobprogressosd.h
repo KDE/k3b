@@ -21,7 +21,7 @@
 
 class QPaintEvent;
 class QMouseEvent;
-class KConfig;
+class KConfigBase;
 
 /**
  * An OSD displaying a text and a progress bar.
@@ -39,8 +39,8 @@ class K3bJobProgressOSD : public QWidget
   int screen() const { return m_screen; }
   const QPoint& position() const { return m_position; }
 
-  void readSettings( KConfig* );
-  void saveSettings( KConfig* );
+  void readSettings( KConfigBase* );
+  void saveSettings( KConfigBase* );
 
  public slots:
   void setScreen( int );

@@ -282,7 +282,7 @@ void K3bBlankingDialog::loadK3bDefaults()
   //  m_checkForce->setChecked(false);
 }
 
-void K3bBlankingDialog::loadUserDefaults( KConfig* c )
+void K3bBlankingDialog::loadUserDefaults( KConfigBase* c )
 {
   m_writerSelectionWidget->loadConfig( c );
   slotWritingAppChanged( m_writerSelectionWidget->writingApp() );
@@ -304,7 +304,7 @@ void K3bBlankingDialog::loadUserDefaults( KConfig* c )
   //  m_checkForce->setChecked( c->readBoolEntry( "force", false ) );
 }
 
-void K3bBlankingDialog::saveUserDefaults( KConfig* c )
+void K3bBlankingDialog::saveUserDefaults( KConfigBase* c )
 {
   QString mode;
   switch( d->comboTypeMap[m_comboEraseMode->currentItem()] ) {

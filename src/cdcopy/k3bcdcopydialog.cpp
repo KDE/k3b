@@ -381,7 +381,7 @@ void K3bCdCopyDialog::slotToggleAll()
 }
 
 
-void K3bCdCopyDialog::loadUserDefaults( KConfig* c )
+void K3bCdCopyDialog::loadUserDefaults( KConfigBase* c )
 {
   m_writerSelectionWidget->loadConfig( c );
   m_comboSourceDevice->setSelectedDevice( k3bcore->deviceManager()->findDevice( c->readEntry( "source_device" ) ) );
@@ -411,7 +411,7 @@ void K3bCdCopyDialog::loadUserDefaults( KConfig* c )
   slotToggleAll();
 }
 
-void K3bCdCopyDialog::saveUserDefaults( KConfig* c )
+void K3bCdCopyDialog::saveUserDefaults( KConfigBase* c )
 {
   m_writingModeWidget->saveConfig( c );
   c->writeEntry( "simulate", m_checkSimulate->isChecked() );

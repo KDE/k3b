@@ -100,7 +100,7 @@ bool K3bCddbPatternWidget::replaceBlanks() const
 }
 
 
-void K3bCddbPatternWidget::loadConfig( KConfig* c )
+void K3bCddbPatternWidget::loadConfig( KConfigBase* c )
 {
   m_comboPlaylistPattern->setEditText( c->readEntry( "playlist pattern", "%A - %T" ) );
   m_comboFilenamePattern->setEditText( c->readEntry( "filename pattern", "%A - %T/%a - %t" ) );
@@ -109,7 +109,7 @@ void K3bCddbPatternWidget::loadConfig( KConfig* c )
 }
 
 
-void K3bCddbPatternWidget::saveConfig( KConfig* c )
+void K3bCddbPatternWidget::saveConfig( KConfigBase* c )
 {
   c->writeEntry( "playlist pattern", m_comboPlaylistPattern->currentText() );
   c->writeEntry( "filename pattern", m_comboFilenamePattern->currentText() );

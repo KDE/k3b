@@ -109,8 +109,8 @@ class K3bDvdRipperWidget : public K3bInteractionDialog
  
  private:
   void loadK3bDefaults();
-  void loadUserDefaults( KConfig* );
-  void saveUserDefaults( KConfig* );
+  void loadUserDefaults( KConfigBase* );
+  void saveUserDefaults( KConfigBase* );
 };
 
 #endif

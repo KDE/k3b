@@ -229,7 +229,7 @@ void K3bVideoCdRippingDialog::loadK3bDefaults()
     slotUpdateFreeSpace();
 }
 
-void K3bVideoCdRippingDialog::loadUserDefaults( KConfig* c )
+void K3bVideoCdRippingDialog::loadUserDefaults( KConfigBase* c )
 {
     m_editDirectory ->setURL( c->readPathEntry( "last ripping directory", QDir::homeDirPath() ) );
     m_ignoreExt ->setChecked( c->readBoolEntry( "ignore ext", false ) );
@@ -239,7 +239,7 @@ void K3bVideoCdRippingDialog::loadUserDefaults( KConfig* c )
     slotUpdateFreeSpace();
 }
 
-void K3bVideoCdRippingDialog::saveUserDefaults( KConfig* c )
+void K3bVideoCdRippingDialog::saveUserDefaults( KConfigBase* c )
 {
     c->writePathEntry( "last ripping directory", m_editDirectory->url() );
     c->writeEntry( "ignore ext", m_ignoreExt ->isChecked( ) );

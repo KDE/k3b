@@ -423,7 +423,7 @@ void K3bDvdRipperWidget::loadK3bDefaults()
 }
 
 
-void K3bDvdRipperWidget::loadUserDefaults( KConfig* c )
+void K3bDvdRipperWidget::loadUserDefaults( KConfigBase* c )
 {
   m_editStaticRipPath->setURL( c->readPathEntry( "last ripping directory", QDir::homeDirPath() ) );
   m_checkOpenEncoding->setChecked( c->readBoolEntry( "open_encoding", false ) );
@@ -431,7 +431,7 @@ void K3bDvdRipperWidget::loadUserDefaults( KConfig* c )
 }
 
 
-void K3bDvdRipperWidget::saveUserDefaults( KConfig* c )
+void K3bDvdRipperWidget::saveUserDefaults( KConfigBase* c )
 {
   c->writePathEntry( "last ripping directory", m_editStaticRipPath->url() );
   c->writeEntry( "open_encoding", m_checkOpenEncoding->isChecked() );

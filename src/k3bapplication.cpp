@@ -381,11 +381,7 @@ void K3bApplication::Core::readSettings( KConfig* cnf )
   if( !c )
     c = config();
 
-  QString oldGrp = c->group();
-
   m_themeManager->readConfig( config() );
-
-  c->setGroup( oldGrp );
 }
 
 
@@ -397,11 +393,7 @@ void K3bApplication::Core::saveSettings( KConfig* cnf )
   if( !c )
     c = config();
 
-  QString oldGrp = c->group();
-
   m_themeManager->saveConfig( config() );
-
-  c->setGroup( oldGrp );
 }
 
 

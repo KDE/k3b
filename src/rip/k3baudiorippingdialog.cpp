@@ -295,10 +295,6 @@ void K3bAudioRippingDialog::slotStartClicked()
 
 void K3bAudioRippingDialog::refresh()
 {
-//   QString oldGroup = k3bcore->config()->group();
-//   KConfig* c = k3bcore->config();
-//   c->setGroup( "Audio Ripping" );
-
   m_viewTracks->clear();
   d->filenames.clear();
 
@@ -452,7 +448,7 @@ void K3bAudioRippingDialog::loadK3bDefaults()
   refresh();
 }
 
-void K3bAudioRippingDialog::loadUserDefaults( KConfig* c )
+void K3bAudioRippingDialog::loadUserDefaults( KConfigBase* c )
 {
   m_comboParanoiaMode->setCurrentItem( c->readNumEntry( "paranoia_mode", 0 ) );
   m_spinRetries->setValue( c->readNumEntry( "read_retries", 20 ) );
@@ -465,7 +461,7 @@ void K3bAudioRippingDialog::loadUserDefaults( KConfig* c )
   refresh();
 }
 
-void K3bAudioRippingDialog::saveUserDefaults( KConfig* c )
+void K3bAudioRippingDialog::saveUserDefaults( KConfigBase* c )
 {
   c->writeEntry( "paranoia_mode", m_comboParanoiaMode->currentText().toInt() );
   c->writeEntry( "read_retries", m_spinRetries->value() );

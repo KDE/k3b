@@ -96,7 +96,7 @@ K3bDataDoc::MultiSessionMode K3bDataMultiSessionCombobox::multiSessionMode() con
 }
 
 
-void K3bDataMultiSessionCombobox::saveConfig( KConfig* c )
+void K3bDataMultiSessionCombobox::saveConfig( KConfigBase* c )
 {
   QString s;
   switch( currentItem() ) {
@@ -121,7 +121,7 @@ void K3bDataMultiSessionCombobox::saveConfig( KConfig* c )
 }
 
 
-void K3bDataMultiSessionCombobox::loadConfig( KConfig* c )
+void K3bDataMultiSessionCombobox::loadConfig( KConfigBase* c )
 {
   QString s = c->readEntry( "multisession mode" );
   if( s == "none" )

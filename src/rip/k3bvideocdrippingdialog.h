@@ -45,8 +45,8 @@ class K3bVideoCdRippingDialog : public K3bInteractionDialog
   void setupContextHelp();
 
   void loadK3bDefaults();
-  void loadUserDefaults( KConfig* );
-  void saveUserDefaults( KConfig* );
+  void loadUserDefaults( KConfigBase* );
+  void saveUserDefaults( KConfigBase* );
   
   K3bTempDirSelectionWidget* m_tempDirSelectionWidget;
 

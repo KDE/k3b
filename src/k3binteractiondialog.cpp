@@ -256,40 +256,28 @@ void K3bInteractionDialog::slotLoadK3bDefaults()
 
 void K3bInteractionDialog::slotLoadUserDefaults()
 {
-  KConfig* c = k3bcore->config();
-  QString lastGroup = c->group();
-  c->setGroup( m_configGroup );
-  loadUserDefaults( c );
-  c->setGroup( lastGroup );
+  KConfigGroup c( k3bcore->config(), m_configGroup );
+  loadUserDefaults( &c );
 }
 
 void K3bInteractionDialog::slotSaveUserDefaults()
 {
-  KConfig* c = k3bcore->config();
-  QString lastGroup = c->group();
-  c->setGroup( m_configGroup );
-  saveUserDefaults( c );
-  c->setGroup( lastGroup );
+  KConfigGroup c( k3bcore->config(), m_configGroup );
+  saveUserDefaults( &c );
 }
 
 
 void K3bInteractionDialog::slotLoadLastSettings()
 {
-  KConfig* c = k3bcore->config();
-  QString lastGroup = c->group();
-  c->setGroup( "last used " + m_configGroup );
-  loadUserDefaults( c );
-  c->setGroup( lastGroup );
+  KConfigGroup c( k3bcore->config(), "last used " + m_configGroup );
+  loadUserDefaults( &c );
 }
 
 
 void K3bInteractionDialog::saveLastSettings()
 {
-  KConfig* c = k3bcore->config();
-  QString lastGroup = c->group();
-  c->setGroup( "last used " + m_configGroup );
-  saveUserDefaults( c );
-  c->setGroup( lastGroup );
+  KConfigGroup c( k3bcore->config(), "last used " + m_configGroup );
+  saveUserDefaults( &c );
 }
 
 
@@ -402,12 +390,12 @@ void K3bInteractionDialog::setSaveButtonText( const QString& text,
 }
 
 
-void K3bInteractionDialog::saveUserDefaults( KConfig* )
+void K3bInteractionDialog::saveUserDefaults( KConfigBase* )
 {
 }
 
 
-void K3bInteractionDialog::loadUserDefaults( KConfig* )
+void K3bInteractionDialog::loadUserDefaults( KConfigBase* )
 {
 }
 

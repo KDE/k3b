@@ -19,7 +19,7 @@
 #include <qcombobox.h>
 #include <k3bdatadoc.h>
 
-class KConfig;
+class KConfigBase;
 
 
 class K3bDataMultiSessionCombobox : public QComboBox
@@ -37,8 +37,8 @@ class K3bDataMultiSessionCombobox : public QComboBox
 
   void setForceNoMultisession( bool );
 
-  void saveConfig( KConfig* );
-  void loadConfig( KConfig* );
+  void saveConfig( KConfigBase* );
+  void loadConfig( KConfigBase* );
 
  public slots:
   void setMultiSessionMode( K3bDataDoc::MultiSessionMode );

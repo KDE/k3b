@@ -671,7 +671,9 @@ void K3bCdImageWritingDialog::createAudioCueItems( const K3bCueFileParser& cp )
     K3bListViewItem* trackItem = 
       new K3bListViewItem( trackParent, m_infoView->lastItem(),
 			   i18n("Track") + " " + QString::number(i).rightJustify( 2, '0' ),
-			   "    " + (*it).length().toString() );
+			   "    " + ( i < cp.toc().count() 
+				      ? (*it).length().toString() 
+				      : QString("??:??:??") ) );
 
     if( !cp.cdText().isEmpty() && !cp.cdText()[i-1].isEmpty() )
       trackItem->setText( 1,
@@ -834,7 +836,7 @@ void K3bCdImageWritingDialog::slotMd5SumCompare()
 }
 
 
-void K3bCdImageWritingDialog::loadUserDefaults( KConfig* c )
+void K3bCdImageWritingDialog::loadUserDefaults( KConfigBase* c )
 {
   m_writingModeWidget->loadConfig( c );
   m_checkDummy->setChecked( c->readBoolEntry("simulate", false ) );
@@ -872,7 +874,7 @@ void K3bCdImageWritingDialog::loadUserDefaults( KConfig* c )
 }
 
 
-void K3bCdImageWritingDialog::saveUserDefaults( KConfig* c )
+void K3bCdImageWritingDialog::saveUserDefaults( KConfigBase* c )
 {
   m_writingModeWidget->saveConfig( c ),
   c->writeEntry( "simulate", m_checkDummy->isChecked() );

@@ -31,7 +31,7 @@ class K3bFlatButton;
 class QPaintEvent;
 class QResizeEvent;
 class QSimpleRichText;
-class KConfig;
+class KConfigBase;
 class QMouseEvent;
 
 
@@ -43,8 +43,8 @@ class K3bWelcomeWidget : public QScrollView
   K3bWelcomeWidget( K3bMainWindow*, QWidget* parent = 0, const char* name = 0 );
   ~K3bWelcomeWidget();
 
-  void loadConfig( KConfig* c );
-  void saveConfig( KConfig* c );
+  void loadConfig( KConfigBase* c );
+  void saveConfig( KConfigBase* c );
 
   class Display;
 

@@ -30,7 +30,7 @@ class QTabWidget;
 class QSpinBox;
 class QVBoxLayout;
 class K3bWritingModeWidget;
-class KConfig;
+class KConfigBase;
 
 
 /**
@@ -105,7 +105,7 @@ class K3bProjectBurnDialog : public K3bInteractionDialog
     *   <li>writing speed</li>
     * </ul>
     */
-   virtual void loadUserDefaults( KConfig* );
+   virtual void loadUserDefaults( KConfigBase* );
 
    /**
     * The default implementation saves the following settings to the KConfig.
@@ -120,7 +120,7 @@ class K3bProjectBurnDialog : public K3bInteractionDialog
     *   <li>writing speed</li>
     * </ul>
     */
-   virtual void saveUserDefaults( KConfig* );
+   virtual void saveUserDefaults( KConfigBase* );
 
    /**
     * The default implementation saves the following settings to the doc and may be called 

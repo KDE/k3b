@@ -155,18 +155,16 @@ K3bTheme* K3bThemeManager::currentTheme() const
 }
 
 
-void K3bThemeManager::readConfig( KConfig* c )
+void K3bThemeManager::readConfig( KConfigBase* c )
 {
-  c->setGroup( "General Options" );
-  setCurrentTheme( c->readEntry( "current theme", "crystal" ) );
+  setCurrentTheme( KConfigGroup( c, "General Options" ).readEntry( "current theme", "crystal" ) );
 }
 
 
-void K3bThemeManager::saveConfig( KConfig* c )
+void K3bThemeManager::saveConfig( KConfigBase* c )
 {
-  c->setGroup( "General Options" );
   if( !d->currentThemeName.isEmpty() )
-    c->writeEntry( "current theme", d->currentThemeName );
+    KConfigGroup( c, "General Options" ).writeEntry( "current theme", d->currentThemeName );
 }
 
 

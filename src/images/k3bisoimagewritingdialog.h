@@ -56,8 +56,8 @@ class K3bIsoImageWritingDialog : public K3bInteractionDialog
   void slotMd5SumCompare();
 
  protected:
-  void loadUserDefaults( KConfig* );
-  void saveUserDefaults( KConfig* );
+  void loadUserDefaults( KConfigBase* );
+  void saveUserDefaults( KConfigBase* );
   void loadK3bDefaults();
 
   void calculateMd5Sum( const QString& );

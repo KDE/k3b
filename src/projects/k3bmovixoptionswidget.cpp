@@ -97,7 +97,7 @@ void K3bMovixOptionsWidget::loadDefaults()
 }
 
 
-void K3bMovixOptionsWidget::loadConfig( KConfig* c )
+void K3bMovixOptionsWidget::loadConfig( KConfigBase* c )
 {
   QString s = c->readEntry("subtitle_fontset");
   if( !s.isEmpty() && s != "none" && m_comboSubtitleFontset->contains(s) )
@@ -129,7 +129,7 @@ void K3bMovixOptionsWidget::loadConfig( KConfig* c )
 }
 
 
-void K3bMovixOptionsWidget::saveConfig( KConfig* c )
+void K3bMovixOptionsWidget::saveConfig( KConfigBase* c )
 {
   if( m_comboSubtitleFontset->currentItem() == 0 )
     c->writeEntry( "subtitle_fontset", "none" );

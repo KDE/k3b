@@ -18,7 +18,7 @@
 
 #include <qstring.h>
 
-class KConfig;
+class KConfigBase;
 
 class K3bVcdOptions
 {
@@ -241,9 +241,9 @@ class K3bVcdOptions
         }
 
         bool checkCdiFiles();
-        void save( KConfig* c );
+        void save( KConfigBase* c );
 
-        static K3bVcdOptions load( KConfig* c );
+        static K3bVcdOptions load( KConfigBase* c );
         static K3bVcdOptions defaults();
 
         void setPbcEnabled( const bool& b )

@@ -65,7 +65,7 @@ K3bIsoOptions::K3bIsoOptions()
 }
 
 
-void K3bIsoOptions::save( KConfig* c )
+void K3bIsoOptions::save( KConfigBase* c )
 {
   c->writeEntry( "volume id", m_volumeID );
   c->writeEntry( "application id", m_applicationID );
@@ -126,7 +126,7 @@ void K3bIsoOptions::save( KConfig* c )
 }
 
 
-K3bIsoOptions K3bIsoOptions::load( KConfig* c )
+K3bIsoOptions K3bIsoOptions::load( KConfigBase* c )
 {
   K3bIsoOptions options;
 

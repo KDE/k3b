@@ -45,8 +45,8 @@ class K3bMixedBurnDialog : public K3bProjectBurnDialog
 
  protected:
    void loadK3bDefaults();
-   void loadUserDefaults( KConfig* );
-   void saveUserDefaults( KConfig* );
+   void loadUserDefaults( KConfigBase* );
+   void saveUserDefaults( KConfigBase* );
 
    K3bDataVolumeDescWidget* m_volumeDescWidget;
    K3bDataImageSettingsWidget* m_imageSettingsWidget;

@@ -239,7 +239,7 @@ void K3bDvdBurnDialog::loadK3bDefaults()
 }
 
 
-void K3bDvdBurnDialog::loadUserDefaults( KConfig* c )
+void K3bDvdBurnDialog::loadUserDefaults( KConfigBase* c )
 {
   K3bProjectBurnDialog::loadUserDefaults(c);
 
@@ -256,7 +256,7 @@ void K3bDvdBurnDialog::loadUserDefaults( KConfig* c )
 }
 
 
-void K3bDvdBurnDialog::saveUserDefaults( KConfig* c )
+void K3bDvdBurnDialog::saveUserDefaults( KConfigBase* c )
 {
   K3bProjectBurnDialog::saveUserDefaults(c);
 

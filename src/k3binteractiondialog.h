@@ -23,7 +23,7 @@ class QGridLayout;
 class QLabel;
 class QPushButton;
 class K3bTitleLabel;
-class KConfig;
+class KConfigBase;
 
 
 /**
@@ -139,7 +139,7 @@ class K3bInteractionDialog : public KDialog
    * The save/load buttons are only activated if the config group is
    * set in the constructor.
    */
-  virtual void saveUserDefaults( KConfig* config );
+  virtual void saveUserDefaults( KConfigBase* config );
 
   /**
    * Reimplement this to support the save/load user default buttons.
@@ -148,7 +148,7 @@ class K3bInteractionDialog : public KDialog
    * The save/load buttons are only activated if the config group is
    * set in the constructor.
    */
-  virtual void loadUserDefaults( KConfig* config );
+  virtual void loadUserDefaults( KConfigBase* config );
 
   /**
    * Reimplement this to support the "k3b defaults" button.

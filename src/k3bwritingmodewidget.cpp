@@ -193,7 +193,7 @@ void K3bWritingModeWidget::slotActivated( int )
 }
 
 
-void K3bWritingModeWidget::saveConfig( KConfig* c )
+void K3bWritingModeWidget::saveConfig( KConfigBase* c )
 {
   switch( writingMode() ) {
   case K3b::DAO:
@@ -217,7 +217,7 @@ void K3bWritingModeWidget::saveConfig( KConfig* c )
   }
 }
 
-void K3bWritingModeWidget::loadConfig( KConfig* c )
+void K3bWritingModeWidget::loadConfig( KConfigBase* c )
 {
   QString mode = c->readEntry( "writing_mode" );
   if ( mode == "dao" )

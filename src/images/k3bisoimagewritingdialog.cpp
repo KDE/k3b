@@ -426,7 +426,7 @@ void K3bIsoImageWritingDialog::slotMd5SumCompare()
 }
 
 
-void K3bIsoImageWritingDialog::loadUserDefaults( KConfig* c )
+void K3bIsoImageWritingDialog::loadUserDefaults( KConfigBase* c )
 {
   m_writingModeWidget->loadConfig( c );
   m_checkDummy->setChecked( c->readBoolEntry("simulate", false ) );
@@ -440,7 +440,7 @@ void K3bIsoImageWritingDialog::loadUserDefaults( KConfig* c )
 }
 
 
-void K3bIsoImageWritingDialog::saveUserDefaults( KConfig* c )
+void K3bIsoImageWritingDialog::saveUserDefaults( KConfigBase* c )
 {
   m_writingModeWidget->saveConfig( c ),
   c->writeEntry( "simulate", m_checkDummy->isChecked() );

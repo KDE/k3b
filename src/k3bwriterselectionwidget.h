@@ -20,7 +20,7 @@
 #include <qwidget.h>
 
 class KComboBox;
-class KConfig;
+class KConfigBase;
 class QLabel;
 class K3bDeviceComboBox;
 class QToolButton;
@@ -52,8 +52,8 @@ class K3bWriterSelectionWidget : public QWidget
   int writingApp() const;
 
   void loadDefaults();
-  void loadConfig( KConfig* );
-  void saveConfig( KConfig* );
+  void loadConfig( KConfigBase* );
+  void saveConfig( KConfigBase* );
 
  public slots:
   void setWriterDevice( K3bDevice::Device* );
@@ -82,7 +82,7 @@ class K3bWriterSelectionWidget : public QWidget
  private slots:
   void slotRefreshWriterSpeeds();
   void slotWritingAppSelected( int id );
-  void slotConfigChanged( KConfig* c );
+  void slotConfigChanged( KConfigBase* c );
   void slotSpeedChanged( int index );
   void slotWriterChanged();
   void slotDetermineSupportedWriteSpeeds();

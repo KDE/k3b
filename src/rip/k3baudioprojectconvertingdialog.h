@@ -54,8 +54,8 @@ class K3bAudioProjectConvertingDialog : public K3bInteractionDialog
 
  protected:
   void loadK3bDefaults();
-  void loadUserDefaults( KConfig* );
-  void saveUserDefaults( KConfig* );
+  void loadUserDefaults( KConfigBase* );
+  void saveUserDefaults( KConfigBase* );
 
  private:
   K3bCddbPatternWidget* m_patternWidget;

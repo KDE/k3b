@@ -244,7 +244,7 @@ K3bWelcomeWidget::~K3bWelcomeWidget()
 }
 
 
-void K3bWelcomeWidget::loadConfig( KConfig* c )
+void K3bWelcomeWidget::loadConfig( KConfigBase* c )
 {
   c->setGroup( "Welcome Widget" );
   QStringList sl = c->readListEntry( "welcome_actions" );
@@ -267,7 +267,7 @@ void K3bWelcomeWidget::loadConfig( KConfig* c )
 }
 
 
-void K3bWelcomeWidget::saveConfig( KConfig* c )
+void K3bWelcomeWidget::saveConfig( KConfigBase* c )
 {
   c->setGroup( "Welcome Widget" );
 

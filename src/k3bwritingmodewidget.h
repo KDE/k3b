@@ -20,7 +20,7 @@
 #include <kcombobox.h>
 
 
-class KConfig;
+class KConfigBase;
 
 
 /**
@@ -37,11 +37,11 @@ class K3bWritingModeWidget : public KComboBox
 
   int writingMode() const;
 
-  void saveConfig( KConfig* );
+  void saveConfig( KConfigBase* );
   /**
    * This will not emit the writingModeChanged signal
    */
-  void loadConfig( KConfig* );
+  void loadConfig( KConfigBase* );
 
  public slots:
   /**

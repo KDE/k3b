@@ -51,8 +51,8 @@ class K3bAudioBurnDialog : public K3bProjectBurnDialog
   void saveSettings();
   void readSettings();
   void loadK3bDefaults();
-  void loadUserDefaults( KConfig* );
-  void saveUserDefaults( KConfig* );
+  void loadUserDefaults( KConfigBase* );
+  void saveUserDefaults( KConfigBase* );
   void showEvent( QShowEvent* );
 
  protected slots:

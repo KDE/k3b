@@ -233,13 +233,10 @@ void K3bWriterSelectionWidget::init()
 }
 
 
-void K3bWriterSelectionWidget::slotConfigChanged( KConfig* c )
+void K3bWriterSelectionWidget::slotConfigChanged( KConfigBase* c )
 {
-  QString oldGroup = c->group();
-  c->setGroup("General Options");
-  bool manualAppSelect = c->readBoolEntry( "Manual writing app selection", false );
-  c->setGroup( oldGroup );
-  if( manualAppSelect ) {
+  KConfigGroup g( c, "General Options" );
+  if( g.readBoolEntry( "Manual writing app selection", false ) ) {
     m_comboWritingApp->show();
     m_writingAppLabel->show();
   }
@@ -369,12 +366,8 @@ int K3bWriterSelectionWidget::writerSpeed() const
 
 int K3bWriterSelectionWidget::writingApp() const
 {
-  KConfig* c = k3bcore->config();
-  QString oldGroup = c->group();
-  c->setGroup("General Options");
-  bool b = c->readBoolEntry( "Manual writing app selection", false );
-  c->setGroup( oldGroup );
-  if( b ) {
+  KConfigGroup g( k3bcore->config(), "General Options" );
+  if( g.readBoolEntry( "Manual writing app selection", false ) ) {
     return selectedWritingApp();
   }
   else
@@ -401,10 +394,8 @@ void K3bWriterSelectionWidget::slotWriterChanged()
 
   // save last selected writer
   if( K3bDevice::Device* dev = writerDevice() ) {
-    QString oldGroup = k3bcore->config()->group();
-    k3bcore->config()->setGroup( "General Options" );
-    k3bcore->config()->writeEntry( "current_writer", dev->devicename() );
-    k3bcore->config()->setGroup( oldGroup );
+    KConfigGroup g( k3bcore->config(), "General Options" );
+    g.writeEntry( "current_writer", dev->devicename() );
   }
 }
 
@@ -432,7 +423,7 @@ void K3bWriterSelectionWidget::setSupportedWritingApps( int i )
 }
 
 
-void K3bWriterSelectionWidget::loadConfig( KConfig* c )
+void K3bWriterSelectionWidget::loadConfig( KConfigBase* c )
 {
   setWriterDevice( k3bcore->deviceManager()->findDevice( c->readEntry( "writer_device" ) ) );
   setSpeed( c->readNumEntry( "writing_speed",  0 ) );
@@ -440,7 +431,7 @@ void K3bWriterSelectionWidget::loadConfig( KConfig* c )
 }
 
 
-void K3bWriterSelectionWidget::saveConfig( KConfig* c )
+void K3bWriterSelectionWidget::saveConfig( KConfigBase* c )
 {
   c->writeEntry( "writing_speed", writerSpeed() );
   c->writeEntry( "writer_device", writerDevice() ? writerDevice()->devicename() : QString::null );

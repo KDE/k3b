@@ -248,7 +248,7 @@ void K3bDvdCopyDialog::slotStartClicked()
 }
 
 
-void K3bDvdCopyDialog::loadUserDefaults( KConfig* c )
+void K3bDvdCopyDialog::loadUserDefaults( KConfigBase* c )
 {
   m_comboSourceDevice->setSelectedDevice( k3bcore->deviceManager()->findDevice( c->readEntry( "source_device" ) ) );
 
@@ -272,7 +272,7 @@ void K3bDvdCopyDialog::loadUserDefaults( KConfig* c )
 }
 
 
-void K3bDvdCopyDialog::saveUserDefaults( KConfig* c )
+void K3bDvdCopyDialog::saveUserDefaults( KConfigBase* c )
 {
   m_tempDirSelectionWidget->saveConfig();
 

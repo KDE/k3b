@@ -25,7 +25,7 @@
 
 
 
-class KConfig;
+class KConfigBase;
 
 
 class K3bTheme
@@ -119,8 +119,8 @@ class K3bThemeManager : public QObject
   void themeChanged( K3bTheme* );
 
  public slots:
-  void readConfig( KConfig* );
-  void saveConfig( KConfig* );
+  void readConfig( KConfigBase* );
+  void saveConfig( KConfigBase* );
   void setCurrentTheme( const QString& );
   void setCurrentTheme( K3bTheme* );
   void loadThemes();

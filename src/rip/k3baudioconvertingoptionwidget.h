@@ -22,7 +22,7 @@
 #include <kio/global.h>
 
 class K3bAudioEncoder;
-class KConfig;
+class KConfigBase;
 
 
 /**
@@ -55,8 +55,8 @@ class K3bAudioConvertingOptionWidget : public base_K3bAudioRippingOptionWidget
 
  public slots:
   void loadDefaults();
-  void loadConfig( KConfig* );
-  void saveConfig( KConfig* );
+  void loadConfig( KConfigBase* );
+  void saveConfig( KConfigBase* );
 
  signals:
   void changed();

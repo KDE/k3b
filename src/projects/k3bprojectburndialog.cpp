@@ -316,7 +316,7 @@ void K3bProjectBurnDialog::readSettings()
 }
 
 
-void K3bProjectBurnDialog::saveUserDefaults( KConfig* c )
+void K3bProjectBurnDialog::saveUserDefaults( KConfigBase* c )
 {
   m_writingModeWidget->saveConfig( c );
   c->writeEntry( "simulate", m_checkSimulate->isChecked() );
@@ -332,7 +332,7 @@ void K3bProjectBurnDialog::saveUserDefaults( KConfig* c )
 }
 
 
-void K3bProjectBurnDialog::loadUserDefaults( KConfig* c )
+void K3bProjectBurnDialog::loadUserDefaults( KConfigBase* c )
 {
   m_tempDirSelectionWidget->setTempPath( K3b::defaultTempPath() );
 

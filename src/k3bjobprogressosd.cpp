@@ -270,7 +270,7 @@ QPoint K3bJobProgressOSD::fixupPosition( const QPoint& pp )
 }
 
 
-void K3bJobProgressOSD::readSettings( KConfig* c )
+void K3bJobProgressOSD::readSettings( KConfigBase* c )
 {
   QString oldGroup = c->group();
   c->setGroup( "OSD Position" );
@@ -282,7 +282,7 @@ void K3bJobProgressOSD::readSettings( KConfig* c )
 }
 
 
-void K3bJobProgressOSD::saveSettings( KConfig* c )
+void K3bJobProgressOSD::saveSettings( KConfigBase* c )
 {
   QString oldGroup = c->group();
   c->setGroup( "OSD Position" );

@@ -188,7 +188,7 @@ void K3bAudioConvertingOptionWidget::loadDefaults()
 }
 
 
-void K3bAudioConvertingOptionWidget::loadConfig( KConfig* c )
+void K3bAudioConvertingOptionWidget::loadConfig( KConfigBase* c )
 {
   m_editBaseDir->setURL( c->readPathEntry( "last ripping directory", QDir::homeDirPath() ) );
 
@@ -215,7 +215,7 @@ void K3bAudioConvertingOptionWidget::loadConfig( KConfig* c )
 }
 
 
-void K3bAudioConvertingOptionWidget::saveConfig( KConfig* c )
+void K3bAudioConvertingOptionWidget::saveConfig( KConfigBase* c )
 {
   c->writePathEntry( "last ripping directory", m_editBaseDir->url() );
 

@@ -1113,11 +1113,8 @@ void K3bMainWindow::slotNewToolBarConfig()
 
 bool K3bMainWindow::eject()
 {
-  QString oldGroup = config()->group();
-  config()->setGroup( "General Options" );
-  bool eject = !config()->readBoolEntry( "No cd eject", false );
-  config()->setGroup( oldGroup );
-  return eject;
+  KConfigGroup c( config(), "General Options" );
+  return !c.readBoolEntry( "No cd eject", false );
 }
 
 

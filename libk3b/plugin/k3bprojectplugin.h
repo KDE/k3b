@@ -41,8 +41,8 @@ class K3bProjectPluginGUIBase
   virtual QString title() const = 0;
   virtual QString subTitle() const { return QString::null; }
 
-  virtual void readSettings( KConfig* ) {}
-  virtual void saveSettings( KConfig* ) {}
+  virtual void readSettings( KConfigBase* ) {}
+  virtual void saveSettings( KConfigBase* ) {}
 
   /**
    * Load system defaults for the GUI
