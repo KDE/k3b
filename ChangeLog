@@ -1,3 +1,7 @@
+0.11.12
+Another qt 3.1 compile fix
+Mkisofs 2.02 obsoletes the use of -L, -H, and -P. Replaced them by the long versions.
+	
 0.11.11
 Qt 3.1 compile fix
 Honor the manual writing app selection for automatic CDRW erasing.

@@ -474,35 +474,9 @@ bool K3bIsoImager::addMkisofsParameters()
 {
   // add multisession info
   if( !m_multiSessionInfo.isEmpty() ) {
-    *m_process << "-C" << m_multiSessionInfo;
+    *m_process << "-cdrecord-params" << m_multiSessionInfo;
     if( m_device ) {
-
-      //
-      // To make sure that mkisofs does not need root permissions we open the device
-      // and pass the open device to mkisofsheader
-      //
-
-//       int fd = m_device->open();
-//       if( fd == -1 ) {
-// 	emit infoMessage( i18n("Unable to open device %1.").arg(m_device->blockDeviceName()), ERROR );
-// 	return false;
-//       }
-
-      //
-      // we want mkisofs to read from fd
-      // we could do that by just passing /dev/fd/$(fd)
-      // but Andy told me that on FreeBSD we only have /dev/fd/0, 1, and 2
-      // so if K3b will ever run well on FreeBSD we are ready...
-      //
-      //      m_process->readFromFd( fd ); // make mkisofs's stdin a copy of fd
-
-      // PROBLEM: when writing on the fly cdrecord waits for mkisofs to release the device
-      //          Since we open and not close the device here it seems to happen sometimes
-      //          that cdrecord is not able to open the device at all. So we need to close it
-      //          somewhere...
-
-      //      *m_process << "-M" << QString("/dev/fd/0");
-      *m_process << "-M" << m_device->blockDeviceName();
+      *m_process << "-prev-session" << m_device->blockDeviceName();
     }
   }
 
@@ -513,11 +487,11 @@ bool K3bIsoImager::addMkisofsParameters()
   if( !m_doc->isoOptions().volumeID().isEmpty() ) {
     QString s = m_doc->isoOptions().volumeID();
     s.truncate(32);  // ensure max length
-    *m_process << "-V" << s;
+    *m_process << "-volid" << s;
   }
   else {
     emit infoMessage( i18n("No volume id specified. Using default."), WARNING );
-    *m_process << "-V" << "CDROM";
+    *m_process << "-volid" << "CDROM";
   }
 
   QString s = m_doc->isoOptions().volumeSetId();
@@ -526,15 +500,15 @@ bool K3bIsoImager::addMkisofsParameters()
 
   s = m_doc->isoOptions().applicationID();
   s.truncate(128);  // ensure max length
-  *m_process << "-A" << s;
+  *m_process << "-appid" << s;
 
   s = m_doc->isoOptions().publisher();
   s.truncate(128);  // ensure max length
-  *m_process << "-P" << s;
+  *m_process << "-publisher" << s;
 
   s = m_doc->isoOptions().preparer();
   s.truncate(128);  // ensure max length
-  *m_process << "-p" << s;
+  *m_process << "-preparer" << s;
 
   s = m_doc->isoOptions().systemId();
   s.truncate(32);  // ensure max length
@@ -549,15 +523,15 @@ bool K3bIsoImager::addMkisofsParameters()
 
   if( m_doc->isoOptions().createRockRidge() ) {
     if( m_doc->isoOptions().preserveFilePermissions() )
-      *m_process << "-R";
+      *m_process << "-rock";
     else
-      *m_process << "-r";
+      *m_process << "-rational-rock";
     if( m_rrHideFile )
       *m_process << "-hide-list" << m_rrHideFile->name();
   }
 
   if( m_doc->isoOptions().createJoliet() ) {
-    *m_process << "-J";
+    *m_process << "-joliet";
     if( m_doc->isoOptions().jolietLong() )
       *m_process << "-joliet-long";
     if( m_jolietHideFile )
@@ -568,15 +542,15 @@ bool K3bIsoImager::addMkisofsParameters()
     *m_process << "-udf";
 
   if( m_doc->isoOptions().ISOuntranslatedFilenames()  ) {
-    *m_process << "-U";
+    *m_process << "-untranslated-filenames";
   }
   else {
     if( m_doc->isoOptions().ISOallowPeriodAtBegin()  )
-      *m_process << "-L";
+      *m_process << "-allow-leading-dots";
     if( m_doc->isoOptions().ISOallow31charFilenames()  )
-      *m_process << "-l";
+      *m_process << "-full-iso9660-filenames";
     if( m_doc->isoOptions().ISOomitVersionNumbers() && !m_doc->isoOptions().ISOmaxFilenameLength() )
-      *m_process << "-N";
+      *m_process << "-omit-version-number";
     if( m_doc->isoOptions().ISOrelaxedFilenames()  )
       *m_process << "-relaxed-filenames";
     if( m_doc->isoOptions().ISOallowLowercase()  )
@@ -586,20 +560,20 @@ bool K3bIsoImager::addMkisofsParameters()
     if( m_doc->isoOptions().ISOallowMultiDot()  )
       *m_process << "-allow-multidot";
     if( m_doc->isoOptions().ISOomitTrailingPeriod() )
-      *m_process << "-d";
+      *m_process << "-omit-period";
   }
 
   if( m_doc->isoOptions().ISOmaxFilenameLength()  )
     *m_process << "-max-iso9660-filenames";
 
   if( m_noDeepDirectoryRelocation  )
-    *m_process << "-D";
+    *m_process << "-disable-deep-relocation";
 
   if( m_doc->isoOptions().followSymbolicLinks() )
-    *m_process << "-f";
+    *m_process << "-follow-links";
 
   if( m_doc->isoOptions().createTRANS_TBL()  )
-    *m_process << "-T";
+    *m_process << "-translation-table";
   if( m_doc->isoOptions().hideTRANS_TBL()  )
     *m_process << "-hide-joliet-trans-tbl";
 
@@ -621,7 +595,7 @@ bool K3bIsoImager::addMkisofsParameters()
 
       K3bBootItem* bootItem = *it;
 
-      *m_process << "-b";
+      *m_process << "-eltorito-boot";
       *m_process << bootItem->writtenPath();
 
       if( bootItem->imageType() == K3bBootItem::HARDDISK ) {
@@ -643,7 +617,7 @@ bool K3bIsoImager::addMkisofsParameters()
       first = false;
     }
 
-    *m_process << "-c" << m_doc->bootCataloge()->writtenPath();
+    *m_process << "-eltorito-catalog" << m_doc->bootCataloge()->writtenPath();
   }
 
 

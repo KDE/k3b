@@ -179,7 +179,7 @@ void K3bCdDevice::NextGenerationDiskInfo::debug() const
 	    << "Tracks:          " << numTracks() << endl
 	    << "Capacity:        " << capacity().toString() 
 	    << " (LBA " << QString::number(capacity().lba())
-	    << ") (" << QString::number(capacity().mode1Bytes()) << " Bytes) (" 
+	    << ") (" << QString::number((unsigned long)capacity().mode1Bytes()) << " Bytes) (" 
 	    << KIO::convertSize(capacity().mode1Bytes()) << ")" << endl
 
 	    << "Remaining size:  " << remainingSize().toString() 
