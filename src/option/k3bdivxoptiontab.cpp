@@ -17,7 +17,7 @@
 #include "k3bdivxoptiontab.h"
 
 #include <kconfig.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kcombobox.h>
 #include <knuminput.h>
 
