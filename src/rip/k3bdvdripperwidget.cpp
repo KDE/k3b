@@ -38,6 +38,7 @@
 #include <qcheckbox.h>
 #include <qdatastream.h>
 #include <qdir.h>
+#include <qfile.h>
 
 #include <kaction.h>
 #include <kconfig.h>
@@ -74,6 +75,8 @@ K3bDvdRipperWidget::K3bDvdRipperWidget(const QString& device, QWidget *parent, c
   m_device = k3bcore->deviceManager()->deviceByName( device )->ioctlDevice();
   m_bytes = 0;
   m_finalClose = false;
+  m_openEncoding = false;
+
   m_ripDialog = 0;
   setupGui();
 
@@ -139,6 +142,11 @@ void K3bDvdRipperWidget::init( const QValueList<K3bDvdContent>& list ){
 }
 
 void K3bDvdRipperWidget::rip(){
+
+    QString path = m_editStaticRipPath->url();
+    if( path.endsWith("/") )
+        m_editStaticRipPath->setURL( path.left( path.length()-1 ));
+
   if( !m_enoughSpace ) {
     KMessageBox::error( this, i18n("Not enough space left in %1").arg(m_editStaticRipPath->url()) );
     return;
@@ -178,34 +186,22 @@ void K3bDvdRipperWidget::rip(){
 
 
 void K3bDvdRipperWidget::slotSetDependDirs( const QString& p ) {
-  /*
-    QString path = p;
-    if( path.endsWith("/") )
-    path = path.left( path.length()-1 );
-    QString vob = m_editStaticRipPathVob->text();
-    int index = vob.findRev("/");
-    vob = vob.mid( index+1 );
-    m_editStaticRipPathVob->setText( path + "/" + vob );
-    QString tmp = m_editStaticRipPathTmp->text();
-    index = tmp.findRev("/");
-    tmp = tmp.mid( index+1 );
-    m_editStaticRipPathTmp->setText( path + "/" + tmp );
-  */
-  QDir space( p );
-  if( !space.exists() ){
-    int index = p.findRev("/");
-    QString tmp = tmp.mid( index+1 );
-    kdDebug() << "(K3bDvdRipperWidget) new directory. Check existing." << endl;
-    space.setPath( tmp );
-    if ( !space.exists() ){
-      kdDebug() << "(K3bDvdRipperWidget) Error: directory doesn't exists: " << tmp << endl;
-      return;
+    QString tmp = p;
+    QDir space( tmp );
+    if( !space.exists() ){
+        int index = tmp.findRev( "/" );
+        tmp = tmp.left( index+1 );
+        kdDebug() << "(K3bDvdRipperWidget) new directory. Check existing." << endl;
+        space.setPath( tmp );
+        if ( !space.exists() ){
+            kdDebug() << "(K3bDvdRipperWidget) Error: directory doesn't exists: " << tmp << endl;
+            return;
+        }
     }
-  }
-  struct statfs fs;
-  ::statfs(p.latin1(),&fs);
-  unsigned int kBfak = fs.f_bsize/1024;
-  slotFreeTempSpace(p,fs.f_blocks*kBfak,(fs.f_blocks-fs.f_bfree)*kBfak,fs.f_bavail*kBfak);
+    struct statfs fs;
+    ::statfs(QFile::encodeName( tmp ), &fs);
+    unsigned int kBfak = fs.f_bsize/1024;
+    slotFreeTempSpace( tmp, fs.f_blocks*kBfak, (fs.f_blocks-fs.f_bfree)*kBfak, fs.f_bavail*kBfak );
 }
 
 void K3bDvdRipperWidget::slotFreeTempSpace( const QString&, unsigned long kBSize,
@@ -351,8 +347,9 @@ void K3bDvdRipperWidget::openEncodingDialog(){
 
   data.setAviFile( m_editStaticRipPath->url() + "/video-k3b.avi");
   K3bDivxView d(&data, this, "divx");
-  d.slotUpdateView();
   d.exec();
+  d.slotUpdateView();
+
   close();
 
   // TODO set defaults from config
