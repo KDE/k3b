@@ -27,6 +27,7 @@ class QString;
 class QSpinBox;
 class KIntNumInput;
 class QRadioButton;
+class K3bMsfEdit;
 
 
 
@@ -42,7 +43,6 @@ Q_OBJECT
   void readSettings();
 
  private slots:
-  void slotChangePregapFormat( const QString& );
   void slotSetDefaultBufferSizes( bool );
 
  private:
@@ -51,9 +51,7 @@ Q_OBJECT
   QCheckBox*    m_checkListHiddenFiles;
   QCheckBox*    m_checkListSystemFiles;
 
-  QComboBox*    m_comboPregapFormat;
-  KIntNumInput* m_editDefaultPregap;
-  bool          m_bPregapSeconds;
+  K3bMsfEdit*   m_editDefaultPregap;
 
   QCheckBox*    m_checkEject;
   QCheckBox*    m_checkAutoErasingRewritable;

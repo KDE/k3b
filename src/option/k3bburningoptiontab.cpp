@@ -14,7 +14,8 @@
  */
 
 #include "k3bburningoptiontab.h"
-#include "../k3b.h"
+#include <k3bmsfedit.h>
+#include <k3bcore.h>
 
 #include <qlabel.h>
 #include <qcombobox.h>
@@ -40,9 +41,6 @@ K3bBurningOptionTab::K3bBurningOptionTab( QWidget* parent, const char* name )
   : QWidget( parent, name )
 {
   setupGui();
-
-  m_bPregapSeconds = false;
-  m_comboPregapFormat->setCurrentItem( 1 );
 }
 
 
@@ -75,21 +73,13 @@ void K3bBurningOptionTab::setupGui()
   groupAudioLayout->setSpacing( KDialog::spacingHint() );
   groupAudioLayout->setMargin( KDialog::marginHint() );
 
-  m_editDefaultPregap = new KIntNumInput( m_groupAudio );
-  m_comboPregapFormat = new QComboBox( m_groupAudio );
+  m_editDefaultPregap = new K3bMsfEdit( m_groupAudio );
 
   QLabel* labelDefaultPregap = new QLabel( i18n("&Default pregap:"), m_groupAudio );
   labelDefaultPregap->setBuddy( m_editDefaultPregap );
 
   groupAudioLayout->addWidget( labelDefaultPregap, 0, 0 );
   groupAudioLayout->addWidget( m_editDefaultPregap, 0, 1 );
-  groupAudioLayout->addWidget( m_comboPregapFormat, 0, 2 );
-
-  m_comboPregapFormat->insertItem( i18n( "Seconds" ) );
-  m_comboPregapFormat->insertItem( i18n( "Frames" ) );
-
-  connect( m_comboPregapFormat, SIGNAL(activated(const QString&)),
-	   this, SLOT(slotChangePregapFormat(const QString&)) );
   // -----------------------------------------------------------------------
 
 
@@ -267,7 +257,7 @@ void K3bBurningOptionTab::setupGui()
 
 void K3bBurningOptionTab::readSettings()
 {
-  KConfig* c = kapp->config();
+  KConfig* c = k3bcore->config();
 
   c->setGroup( "Video project settings" );
   m_checkUsePbc->setChecked( c->readBoolEntry("Use Playback Control", false) );
@@ -281,8 +271,6 @@ void K3bBurningOptionTab::readSettings()
 
   c->setGroup( "Audio project settings" );
   m_editDefaultPregap->setValue( c->readNumEntry( "default pregap", 150 ) );
-  m_bPregapSeconds = false;
-  m_comboPregapFormat->setCurrentItem( 1 );
 
   c->setGroup( "General Options" );
   m_checkEject->setChecked( c->readBoolEntry( "No cd eject", false ) );
@@ -300,7 +288,7 @@ void K3bBurningOptionTab::readSettings()
 
 void K3bBurningOptionTab::saveSettings()
 {
-  KConfig* c = kapp->config();
+  KConfig* c = k3bcore->config();
 
   c->setGroup( "Video project settings" );
   c->writeEntry( "Use Playback Control", m_checkUsePbc->isChecked() );
@@ -313,7 +301,7 @@ void K3bBurningOptionTab::saveSettings()
   c->writeEntry( "Add system files", m_checkListSystemFiles->isChecked() );
 
   c->setGroup( "Audio project settings" );
-  c->writeEntry( "default pregap", m_bPregapSeconds ? m_editDefaultPregap->value() * 75 : m_editDefaultPregap->value() );
+  c->writeEntry( "default pregap", m_editDefaultPregap->value() );
 
   c->setGroup( "General Options" );
   c->writeEntry( "No cd eject", m_checkEject->isChecked() );
@@ -323,23 +311,6 @@ void K3bBurningOptionTab::saveSettings()
   c->writeEntry( "Cdrecord buffer", m_editWritingBufferSizeCdrecord->value() );
   c->writeEntry( "Cdrdao buffer", m_editWritingBufferSizeCdrdao->value() );
   c->writeEntry( "Manual writing app selection", m_checkAllowWritingAppSelection->isChecked() );
-}
-
-
-void K3bBurningOptionTab::slotChangePregapFormat( const QString& format )
-{
-  if( format == i18n( "Seconds" ) ) {
-    if( !m_bPregapSeconds ) {
-      m_bPregapSeconds = true;
-      m_editDefaultPregap->setValue( m_editDefaultPregap->value() / 75 );
-    }
-  }
-  else {
-    if( m_bPregapSeconds ) {
-      m_bPregapSeconds = false;
-      m_editDefaultPregap->setValue( m_editDefaultPregap->value() * 75 );
-    }
-  }
 }
 
 
