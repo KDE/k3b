@@ -20,6 +20,7 @@
 #include "k3bdiritem.h"
 #include "k3bdataview.h"
 #include "k3bdatajob.h"
+#include "../k3b.h"
 
 #include <qdir.h>
 #include <qstring.h>
@@ -29,6 +30,10 @@
 #include <qtextstream.h>
 
 #include <kstddirs.h>
+#include <kurl.h>
+
+#include <id3/tag.h>
+#include <id3/misc_support.h>
 
 
 K3bDataDoc::K3bDataDoc( QObject* parent )
@@ -62,7 +67,9 @@ bool K3bDataDoc::newDocument()
 
 	m_createRockRidge = true;
 	m_createJoliet = false;
-		
+	m_deleteImage = true;
+	m_onlyCreateImage = false;
+	
 	return K3bDoc::newDocument();
 }
 
@@ -99,9 +106,7 @@ void K3bDataDoc::slotAddURLs( const QStringList& urls, K3bDirItem* dirItem )
 			slotAddDirectory( k.path(), dirItem );
 		}
 		else {
-			qDebug("       -file-");
-			// TODO: test if already in compilation (shall we allow equal files with different names?)
-			emit newFile( new K3bFileItem( *_it, this, dirItem ) );
+			addNewFile( *_it, dirItem );
 		}
 	}
 }
@@ -131,8 +136,43 @@ void K3bDataDoc::slotAddDirectory( const QString& url, K3bDirItem* parent )
 		if( QFileInfo( _d.absPath() + "/" + *_it ).isDir() )
 			slotAddDirectory(  _d.absPath() + "/" + *_it, _newDirItem );
 		else
-			emit newFile( new K3bFileItem( _d.absPath() + "/" + *_it, this, _newDirItem ) );
+			addNewFile( _d.absPath() + "/" + *_it, _newDirItem );
 	}
+}
+
+
+
+void K3bDataDoc::addNewFile( const QString& path, K3bDirItem* dir )
+{
+	K3bFileItem* _item =	new K3bFileItem( path, this, dir );
+	qDebug( "---- adding file " + _item->url().path() );
+	
+	if( k3bMain()->useID3TagForMp3Renaming() && _item->mimetype() == "audio/x-mp3" ) {
+		ID3_Tag _tag( _item->url().path() );
+		
+		ID3_Frame* _frame = _tag.Find( ID3FID_TITLE );
+		QString _title(ID3_GetString(_frame, ID3FN_TEXT ));
+		
+		_frame = _tag.Find( ID3FID_LEADARTIST );
+		QString _artist(ID3_GetString(_frame, ID3FN_TEXT ));
+		
+		if( !_title.isEmpty() && !_artist.isEmpty() ) {
+			qDebug( "(K3bDataDoc) setting k3bname to: \"" + _artist + " - " + _title + ".mp3\"" );
+			_item->setK3bName( _artist + " - " + _title + ".mp3" );
+		}
+	}
+	
+	// test if already in directory
+	QList<K3bDataItem>* _itemsInDir = dir->children();
+	for( K3bDataItem* _it = _itemsInDir->first(); _it; _it = _itemsInDir->next() ) {
+		if( _it != _item && _it->k3bName() == KURL( path ).fileName() ) {
+			qDebug( "(K3bDataDoc) already a file with that name in directory: " + _it->k3bName() );
+			delete _item;
+			return;
+		}
+	}
+
+	emit newFile( _item );
 }
 
 

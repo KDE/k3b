@@ -31,13 +31,23 @@ K3bDataItem::K3bDataItem( K3bDataDoc* doc, K3bDirItem* parent )
 
 K3bDataItem::~K3bDataItem()
 {
-	// remove his from parentdir
+	// remove this from parentdir
 	if( m_parentDir )
 		m_parentDir->takeDataItem( this );
 }
 
 
-void K3bDataItem::setK3bName( const QString& name ){
+void K3bDataItem::setK3bName( const QString& name ) {
+	if( parent() ) {
+		QList<K3bDataItem>* _itemsInDir = parent()->children();
+		for( K3bDataItem* _it = _itemsInDir->first(); _it; _it = _itemsInDir->next() ) {
+			if( _it != this && _it->k3bName() == name ) {
+				qDebug( "(K3bDataItem) already a file with that name in directory: " + _it->k3bName() );
+				return;
+			}
+		}
+	}
+
 	m_k3bName = name;
 }
 

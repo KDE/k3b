@@ -94,6 +94,8 @@ class K3bApp : public KDockMainWindow
 
 	bool eject();
 	void showOptionDialog( int = 0 );
+	bool useID3TagForMp3Renaming() const { return m_useID3TagForMp3Renaming; }
+	void setUseID3TagForMp3Renaming( bool b ) { m_useID3TagForMp3Renaming = b; }
 	
   protected:
     /** queryClose is called by KTMainWindow on each closeEvent of a window. Against the
@@ -246,6 +248,8 @@ class K3bApp : public KDockMainWindow
     K3bAudioTrackDialog* m_audioTrackDialog;
 	K3bOptionDialog* m_optionDialog;
 	K3bBurnProgressDialog* m_burnProgressDialog;
+	
+	bool m_useID3TagForMp3Renaming;
 };
 
 #endif // K3B_H

@@ -46,8 +46,8 @@ public:
 
 protected:
 	void setupBurnTab( QFrame* frame );
-//	void setupISOTab( QFrame* frame );
 	void setupAdvancedTab( QFrame* frame );
+	void setupSettingsTab( QFrame* frame );
 
 	// --- general tab -------------------------	
     QLabel* TextLabel1;
@@ -64,10 +64,23 @@ protected:
     QCheckBox* m_checkDummy;
     QCheckBox* m_checkOnTheFly;
     QCheckBox* m_checkOnlyCreateImage;
-    QCheckBox* m_deleteImage;
+    QCheckBox* m_checkDeleteImage;
     QCheckBox* m_checkDao;
 	// ----------------------------------------------
 
+	// --- settings tab ---------------------------
+    QLineEdit* m_editVolumeID;
+    QLineEdit* m_editPublisher;
+    QLineEdit* m_editPreparer;
+    QCheckBox* m_checkCreateRR;
+    QCheckBox* m_checkCreateJoliet;
+    QButtonGroup* m_groupWhiteSpace;
+    QRadioButton* m_radioSpaceLeave;
+    QRadioButton* m_radioSpaceReplace;
+    QRadioButton* m_radioSpaceStrip;
+    QRadioButton* m_radioSpaceExtended;
+	// ----------------------------------------------
+	
 	// --- advanced tab -------------------------
     QPushButton* m_buttonSaveAsDefault;
     QGroupBox* m_groupPreSettings;
@@ -77,8 +90,6 @@ protected:
     QRadioButton* m_radioIsoLevel1;
     QRadioButton* m_radioIsoLevel2;
     QRadioButton* m_radioIsoLevel3;
-    QCheckBox* m_checkCreateJoliet;
-    QCheckBox* m_checkCreateRR;
     QCheckBox* m_checkNoDeepDirRel;
     QCheckBox* m_checkPadding;
     QCheckBox* m_checkHideRR_MOVED;

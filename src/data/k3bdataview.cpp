@@ -330,7 +330,7 @@ QString K3bDataView::K3bPrivateDataRootViewItem::text( int index ) const
 {
 	switch( index ) {
 		case 0:
-			return m_doc->name();
+			return m_doc->volumeID();
 		case 1:
 			return i18n("ISO-CD");
 		default:
@@ -342,7 +342,7 @@ QString K3bDataView::K3bPrivateDataRootViewItem::text( int index ) const
 void K3bDataView::K3bPrivateDataRootViewItem::setText( int col, const QString& text )
 {
 	if( col == 0 )
-		m_doc->setName( text );
+		m_doc->setVolumeID( text );
 
 	QListViewItem::setText( col, text );
 }

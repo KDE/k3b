@@ -42,6 +42,9 @@
 
 #include <iostream>
 
+// ID3lib-includes
+#include <id3/tag.h>
+#include <id3/misc_support.h>
 
 K3bAudioDoc::K3bAudioDoc( QObject* parent )
 	: K3bDoc( parent )
@@ -78,56 +81,6 @@ bool K3bAudioDoc::newDocument()
 	m_padding = false;
 	
 	return K3bDoc::newDocument();
-}
-
-
-void K3bAudioDoc::parseMpgTestingOutput( KProcess*, char* output, int len )
-{
-	QString buffer = QString::fromLatin1( output, len );
-	
-	// split to lines
-	QStringList lines = QStringList::split( "\n", buffer );
-	
-	for( QStringList::Iterator str = lines.begin(); str != lines.end(); str++ )
-	{
-		if( testFiles && (*str).left(10).contains("Frame#") ) {
-			int made, togo;
-			bool ok;
-			made = (*str).mid(8,5).toInt(&ok);
-			if( !ok )
-				qDebug("parsing did not work for " + (*str).mid(8,5) );
-			else {
-				togo = (*str).mid(15,5).toInt(&ok);
-				if( !ok )
-					qDebug("parsing did not work for " + (*str).mid(15,5) );
-				else
-					emit percent( 100*made/(made+togo) );
-			}
-		}
-		else if( (*str).left(10).contains("Title") ) {
-			qDebug("parsing this: [[" + (*str) +"]]");
-			qDebug("setting mp3-tags to: " + (*str).mid(9,30).simplifyWhiteSpace()  + " and " +  (*str).mid(49,30).simplifyWhiteSpace());
-			m_lastAddedTrack->setTitle( (*str).mid(9,30).simplifyWhiteSpace() );
-			m_lastAddedTrack->setArtist( (*str).mid(49,30).simplifyWhiteSpace() );
-		}
-		else if( (*str).contains("Decoding of") ) {
-			qDebug("parsing this: [[" + (*str)+"]]" );
-			int h, m, s;
-			h=m=s=0;
-			QString timeStr = (*str).mid( 1, 10 );
-			timeStr.truncate( timeStr.find(']') );
-			qDebug("parsing this: [[" + timeStr +"]]" );
-			QStringList list = QStringList::split( ':', timeStr );
-			int i = 0;
-			if( list.count() > 2 )
-				h = list[i++].toInt();
-			m = list[i++].toInt();
-			s = list[i++].toInt();
-			
-			qDebug("setting length to %i:%i:%i", h,m,s);
-			m_lastAddedTrack->setLength( QTime(h,m,s) );
-		}
-	}
 }
 
 
@@ -231,7 +184,25 @@ void K3bAudioDoc::addMp3File( const QString& fileName, uint position )
 	m_lastAddedTrack = new K3bAudioTrack( m_tracks, fileName );
 	
 	lastAddedPosition = position;
+
+	// first try of id3lib -----------------------------------------------------------------
+	ID3_Tag _tag( fileName.latin1() );
+	qDebug( "ID3_Tag created" );
+	ID3_Frame* _frame = _tag.Find( ID3FID_TITLE );
+	qDebug( "ID3_Frame created" );
+	if( _frame )
+		m_lastAddedTrack->setTitle( QString(ID3_GetString(_frame, ID3FN_TEXT )) );
+	else
+		qDebug("No title info found.");
+		
+	_frame = _tag.Find( ID3FID_LEADARTIST );
+	if( _frame )
+		m_lastAddedTrack->setArtist( QString(ID3_GetString(_frame, ID3FN_TEXT )) );
+	else
+		qDebug("No artist info found.");
+	// ----------------------------------------------------------------------- id3lib ---
 	
+		
 	kapp->config()->setGroup( "External Programs" );
 	
 	// test the file with mpg123
@@ -261,10 +232,6 @@ void K3bAudioDoc::addMp3File( const QString& fileName, uint position )
 		// connect to the mpg123-slots
 		connect( m_process, SIGNAL(processExited(KProcess*)),
 				 this, SLOT(mp3FileTestingFinished()) );
-//		connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
-//				 this, SLOT(parseMpgTestingOutput(KProcess*, char*, int)) );
- 		connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
-				 this, SLOT(parseMpgTestingOutput(KProcess*, char*, int)) );
 	}
 }
 

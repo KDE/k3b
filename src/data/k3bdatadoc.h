@@ -72,8 +72,12 @@ public:
 	K3bBurnJob* newBurnJob();
 	
 	int whiteSpaceTreatment() const { return m_whiteSpaceTreatment; }
+	bool deleteImage() const { return m_deleteImage; }
+	bool onlyCreateImage() const { return m_onlyCreateImage; }
 	
 	void setWhiteSpaceTreatment( int i ) { m_whiteSpaceTreatment = i; }
+	void setDeleteImage( bool b ) { m_deleteImage = b; }
+	void setOnlyCreateImage( bool b ) { m_onlyCreateImage = b; }
 	
 	// -- mkisofs-options ----------------------------------------------------------------------
 	bool createRockRidge() const { return m_createRockRidge; }
@@ -95,6 +99,9 @@ public:
 	bool padding() const { return m_padding; }
 
 	int ISOLevel() const { return m_isoLevel; }
+	const QString& volumeID() const { return m_volumeID; }
+	const QString& publisher() const { return m_publisher; }
+	const QString& preparer() const { return m_preparer; }
 	
 	void setCreateRockRidge( bool b ) { m_createRockRidge = b; }
 	void setCreateJoliet( bool b ) {  m_createJoliet = b; }
@@ -115,6 +122,10 @@ public:
 	void setPadding( bool b ) {  m_padding = b; }
 	
 	void setISOLevel( int i ) { m_isoLevel = i; }
+	void setVolumeID( const QString& s ) { m_volumeID = s; }
+	void setPublisher( const QString& s ) { m_publisher = s; }
+	void setPreparer( const QString& s ) { m_preparer = s; }
+	
 	// ----------------------------------------------------------------- mkisofs-options -----------
 	
 public slots:
@@ -136,13 +147,22 @@ protected:
  	bool loadDocumentData( QFile& f );
  	/** reimplemented from K3bDoc */
  	bool saveDocumentData( QFile& f );
-	
+
+ 	void addNewFile( const QString&, K3bDirItem* );
+ 		
 private:
 	K3bRootItem* m_root;
 	QString m_name;
 	QString m_dummyDir;
 	QString m_isoImage;
+
+	QString m_volumeID;
+	QString m_preparer;
+	QString m_publisher;
 	
+	bool m_deleteImage;
+	bool m_onlyCreateImage;
+		
 	int m_whiteSpaceTreatment;
 	
 	// mkisofs options -------------------------------------

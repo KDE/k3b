@@ -44,6 +44,7 @@ K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const ch
 	: K3bProjectBurnDialog( _doc, parent, name, modal )
 {
 	setupBurnTab( addPage( i18n("Burning") ) );
+	setupSettingsTab( addPage( i18n("Settings") ) );
 	setupAdvancedTab( addPage( i18n("Advanced") ) );
 	
 	readSettings();
@@ -59,7 +60,9 @@ void K3bDataBurnDialog::saveSettings()
 	doc()->setDao( m_checkDao->isChecked() );
 	doc()->setDummy( m_checkDummy->isChecked() );
 	doc()->setOnTheFly( m_checkOnTheFly->isChecked() );
-		
+	((K3bDataDoc*)doc())->setOnlyCreateImage( m_checkOnlyCreateImage->isChecked() );
+	((K3bDataDoc*)doc())->setDeleteImage( m_checkDeleteImage->isChecked() );
+			
 	// -- saving current speed --------------------------------------
 	doc()->setSpeed( writerSpeed() );
 	
@@ -84,6 +87,10 @@ void K3bDataBurnDialog::saveSettings()
 	((K3bDataDoc*)doc())->setCreateTRANS_TBL( m_checkCreateTRANS_TBL->isChecked() );
 	((K3bDataDoc*)doc())->setHideTRANS_TBL( m_checkHideTRANS_TBL->isChecked() );
 	((K3bDataDoc*)doc())->setPadding( m_checkPadding->isChecked() );
+	
+	((K3bDataDoc*)doc())->setVolumeID( m_editVolumeID->text() );
+	((K3bDataDoc*)doc())->setPublisher( m_editPublisher->text() );
+	((K3bDataDoc*)doc())->setPreparer( m_editPreparer->text() );
 	// ------------------------------------- saving mkisofs-options --
 }
 
@@ -100,7 +107,13 @@ void K3bDataBurnDialog::readSettings()
 	
 	m_checkDao->setChecked( doc()->dao() );
 	m_checkDummy->setChecked( doc()->dummy() );
-
+	m_checkOnlyCreateImage->setChecked( ((K3bDataDoc*)doc())->onlyCreateImage() );
+	m_checkDeleteImage->setChecked( ((K3bDataDoc*)doc())->deleteImage() );
+	
+	m_editVolumeID->setText(  ((K3bDataDoc*)doc())->volumeID() );
+	m_editPublisher->setText(  ((K3bDataDoc*)doc())->publisher() );
+	m_editPreparer->setText(  ((K3bDataDoc*)doc())->preparer() );
+	
 	K3bProjectBurnDialog::readSettings();
 }
 
@@ -186,9 +199,9 @@ void K3bDataBurnDialog::setupBurnTab( QFrame* frame )
     m_checkOnlyCreateImage->setText( i18n( "Only create image" ) );
     m_groupOptionsLayout->addWidget( m_checkOnlyCreateImage );
 
-    m_deleteImage = new QCheckBox( m_groupOptions, "m_deleteImage" );
-    m_deleteImage->setText( i18n( "Delete image" ) );
-    m_groupOptionsLayout->addWidget( m_deleteImage );
+    m_checkDeleteImage = new QCheckBox( m_groupOptions, "m_checkDeleteImage" );
+    m_checkDeleteImage->setText( i18n( "Delete image" ) );
+    m_groupOptionsLayout->addWidget( m_checkDeleteImage );
 
     m_checkDao = new QCheckBox( m_groupOptions, "m_checkDao" );
     m_checkDao->setText( i18n( "Disc at once" ) );
@@ -197,7 +210,7 @@ void K3bDataBurnDialog::setupBurnTab( QFrame* frame )
     frameLayout->addWidget( m_groupOptions, 1, 0 );
 
     // signals and slots connections
-    connect( m_checkOnTheFly, SIGNAL( toggled(bool) ), m_deleteImage, SLOT( setDisabled(bool) ) );
+    connect( m_checkOnTheFly, SIGNAL( toggled(bool) ), m_checkDeleteImage, SLOT( setDisabled(bool) ) );
     connect( m_checkOnTheFly, SIGNAL( toggled(bool) ), m_groupTempDir, SLOT( setDisabled(bool) ) );
     connect( m_checkOnTheFly, SIGNAL( toggled(bool) ), m_checkOnlyCreateImage, SLOT( setDisabled(bool) ) );
 
@@ -281,16 +294,6 @@ void K3bDataBurnDialog::setupAdvancedTab( QFrame* frame )
     Layout1->setSpacing( spacingHint() );
     Layout1->setMargin( 0 );
 
-    m_checkCreateJoliet = new QCheckBox( frameSettings, "m_checkCreateJoliet" );
-    m_checkCreateJoliet->setText( i18n( "Generate Joilet entries" ) );
-    Layout1->addWidget( m_checkCreateJoliet );
-
-    m_checkCreateRR = new QCheckBox( frameSettings, "m_checkCreateRR" );
-    m_checkCreateRR->setText( i18n( "Generate Rockridge Entries" ) );
-    Layout1->addWidget( m_checkCreateRR );
-    QSpacerItem* spacer_2 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
-    Layout1->addItem( spacer_2 );
-
     m_checkNoDeepDirRel = new QCheckBox( frameSettings, "m_checkNoDeepDirRel" );
     m_checkNoDeepDirRel->setText( i18n( "no deep directory relocation" ) );
     Layout1->addWidget( m_checkNoDeepDirRel );
@@ -310,6 +313,10 @@ void K3bDataBurnDialog::setupAdvancedTab( QFrame* frame )
     m_checkHideTRANS_TBL = new QCheckBox( frameSettings, "m_checkHideTRANS_TBL" );
     m_checkHideTRANS_TBL->setText( i18n( "hide TRANS_TBL in Joliet" ) );
     Layout1->addWidget( m_checkHideTRANS_TBL );
+
+    QSpacerItem* spacer_2 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
+    Layout1->addItem( spacer_2 );
+
 
     frameSettingsLayout->addMultiCellLayout( Layout1, 0, 1, 1, 1 );
     QSpacerItem* spacer_3 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
@@ -371,8 +378,8 @@ void K3bDataBurnDialog::setupAdvancedTab( QFrame* frame )
     connect( m_checkUntranslatedNames, SIGNAL( toggled(bool) ), m_checkMultiDot, SLOT( setDisabled(bool) ) );
     connect( m_checkUntranslatedNames, SIGNAL( toggled(bool) ), m_checkMaxNames, SLOT( setDisabled(bool) ) );
 
-	connect( m_checkCreateJoliet, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
-	connect( m_checkCreateRR, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
+//	connect( m_checkCreateJoliet, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
+//	connect( m_checkCreateRR, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
 	connect(	m_checkNoDeepDirRel, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
 	connect(	m_checkPadding, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
 	connect(	m_checkHideRR_MOVED, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
@@ -391,6 +398,98 @@ void K3bDataBurnDialog::setupAdvancedTab( QFrame* frame )
 
     connect( m_comboPreSettings, SIGNAL(activated(const QString&)), this, SLOT(slotLoadPreSettings(const QString&)) );
     connect( m_buttonSaveAsDefault, SIGNAL(clicked()), this, SLOT(slotSaveDefaults()) );
+}
+
+
+void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
+{
+    QGridLayout* frameLayout = new QGridLayout( frame );
+    frameLayout->setSpacing( spacingHint() );
+    frameLayout->setMargin( marginHint() );
+
+    QGroupBox* _groupVolumeInfo = new QGroupBox( frame, "_groupVolumeInfo" );
+    _groupVolumeInfo->setTitle( i18n( "Information" ) );
+    _groupVolumeInfo->setColumnLayout(0, Qt::Vertical );
+    _groupVolumeInfo->layout()->setSpacing( 0 );
+    _groupVolumeInfo->layout()->setMargin( 0 );
+    QGridLayout* _groupVolumeInfoLayout = new QGridLayout( _groupVolumeInfo->layout() );
+    _groupVolumeInfoLayout->setAlignment( Qt::AlignTop );
+    _groupVolumeInfoLayout->setSpacing( spacingHint() );
+    _groupVolumeInfoLayout->setMargin( marginHint() );
+
+    QLabel* _labelVolumeID = new QLabel( _groupVolumeInfo, "m_labelVolumeID" );
+    _labelVolumeID->setText( i18n( "Volume ID" ) );
+
+    _groupVolumeInfoLayout->addWidget( _labelVolumeID, 0, 0 );
+
+    QLabel* _labelPublisher = new QLabel( _groupVolumeInfo, "m_labelPublisher" );
+    _labelPublisher->setText( i18n( "Publisher" ) );
+
+    _groupVolumeInfoLayout->addWidget( _labelPublisher, 1, 0 );
+
+    QLabel* _labelPreparer = new QLabel( _groupVolumeInfo, "m_labelPreparer" );
+    _labelPreparer->setText( i18n( "Preparer" ) );
+
+    _groupVolumeInfoLayout->addWidget( _labelPreparer, 2, 0 );
+
+    m_editVolumeID = new QLineEdit( _groupVolumeInfo, "m_editVolumeID" );
+    m_editVolumeID->setMaxLength( 32 );
+
+    _groupVolumeInfoLayout->addWidget( m_editVolumeID, 0, 1 );
+
+    m_editPublisher = new QLineEdit( _groupVolumeInfo, "m_editPublisher" );
+    m_editPublisher->setMaxLength( 128 );
+
+    _groupVolumeInfoLayout->addWidget( m_editPublisher, 1, 1 );
+
+    m_editPreparer = new QLineEdit( _groupVolumeInfo, "m_editPreparer" );
+    m_editPreparer->setMaxLength( 128 );
+
+    _groupVolumeInfoLayout->addWidget( m_editPreparer, 2, 1 );
+
+    frameLayout->addMultiCellWidget( _groupVolumeInfo, 0, 3, 1, 1 );
+
+    m_checkCreateRR = new QCheckBox( frame, "m_checkCreateRR" );
+    m_checkCreateRR->setText( i18n( "Generate Rockridge Entries" ) );
+
+    frameLayout->addWidget( m_checkCreateRR, 1, 0 );
+
+    m_checkCreateJoliet = new QCheckBox( frame, "m_checkCreateJoliet" );
+    m_checkCreateJoliet->setText( i18n( "Generate Joilet entries" ) );
+
+    frameLayout->addWidget( m_checkCreateJoliet, 0, 0 );
+
+    QButtonGroup* m_groupWhiteSpace = new QButtonGroup( frame, "m_groupWhiteSpace" );
+    m_groupWhiteSpace->setTitle( i18n( "Whitespace treatment" ) );
+    m_groupWhiteSpace->setColumnLayout(0, Qt::Vertical );
+    m_groupWhiteSpace->layout()->setSpacing( 0 );
+    m_groupWhiteSpace->layout()->setMargin( 0 );
+    QVBoxLayout* m_groupWhiteSpaceLayout = new QVBoxLayout( m_groupWhiteSpace->layout() );
+    m_groupWhiteSpaceLayout->setAlignment( Qt::AlignTop );
+    m_groupWhiteSpaceLayout->setSpacing( spacingHint() );
+    m_groupWhiteSpaceLayout->setMargin( marginHint() );
+
+    m_radioSpaceLeave = new QRadioButton( m_groupWhiteSpace, "m_radioSpaceLeave" );
+    m_radioSpaceLeave->setText( i18n( "leave them" ) );
+    m_radioSpaceLeave->setChecked( TRUE );
+    m_groupWhiteSpaceLayout->addWidget( m_radioSpaceLeave );
+
+    m_radioSpaceReplace = new QRadioButton( m_groupWhiteSpace, "m_radioSpaceReplace" );
+    m_radioSpaceReplace->setText( i18n( "replace with underscores" ) );
+    m_groupWhiteSpaceLayout->addWidget( m_radioSpaceReplace );
+
+    m_radioSpaceStrip = new QRadioButton( m_groupWhiteSpace, "m_radioSpaceStrip" );
+    m_radioSpaceStrip->setText( i18n( "strip" ) );
+    m_groupWhiteSpaceLayout->addWidget( m_radioSpaceStrip );
+
+    m_radioSpaceExtended = new QRadioButton( m_groupWhiteSpace, "m_radioSpaceExtended" );
+    m_radioSpaceExtended->setText( i18n( "extended strip" ) );
+    m_groupWhiteSpaceLayout->addWidget( m_radioSpaceExtended );
+
+    frameLayout->addWidget( m_groupWhiteSpace, 3, 0 );
+    QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
+    frameLayout->addItem( spacer, 2, 0 );
+
 }
 
 

@@ -247,6 +247,9 @@ void K3bApp::saveOptions()
   m_config->writeEntry("ToolBarPos", (int) toolBar("mainToolBar")->barPos());
   fileOpenRecent->saveEntries(m_config,"Recent Files");
 
+	m_config->setGroup("ISO Options");
+	m_config->writeEntry( "Use ID3 Tag for mp3 renaming", m_useID3TagForMp3Renaming );
+
   // TODO: save dock positions!
 }
 
@@ -277,6 +280,9 @@ void K3bApp::readOptions()
   {
     resize(size);
   }
+
+	m_config->setGroup("ISO Options");
+	m_useID3TagForMp3Renaming = m_config->readBoolEntry("Use ID3 Tag for mp3 renaming", false);
 }
 
 void K3bApp::saveProperties(KConfig *)
@@ -653,6 +659,7 @@ void K3bApp::slotNewDataDoc()
   KURL url;
   url.setFileName(fileName);
   doc->setURL(url);
+  doc->setVolumeID( QString("ISO_%1").arg(untitledCount) );
 
   // create the window
   createClient(doc);
@@ -778,3 +785,4 @@ void K3bApp::slotJobFinished( K3bJob* job )
 	job->disconnect();
 	delete job;
 }
+

@@ -116,7 +116,6 @@ protected slots:
  	void addMp3File( const QString& fileName, uint position );
 	void addWavFile( const QString& fileName, uint position );
 	
-	void parseMpgTestingOutput( KProcess*, char* output, int len );
 	void mp3FileTestingFinished();
 
 signals:

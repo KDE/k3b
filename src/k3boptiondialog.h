@@ -29,6 +29,7 @@ class QPushButton;
 class QGroupBox;
 class QXEmbed;
 class QWidgetStack;
+class QCheckBox;
 
 
 /**
@@ -73,7 +74,11 @@ private:
 	QXEmbed* m_embedPermission;
 	QPushButton* m_buttonStartPS;
 	QWidget* m_containerInfo;
+
+	// burning tab
+	QCheckBox* m_checkUseID3Tag;
 	
+		
     void setupProgramsPage();
     void readPrograms();
     bool savePrograms();
@@ -83,6 +88,10 @@ private:
 	void saveDevices();
 
 	void setupPermissionPage();
+
+	void setupBurningPage();
+	void readBurningSettings();
+	void saveBurningSettings();
 	
 	bool devicesChanged;
 			

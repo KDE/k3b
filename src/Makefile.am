@@ -1,7 +1,7 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 bin_PROGRAMS = k3b
 k3b_SOURCES = kcutlabel.cpp k3bprojectburndialog.cpp k3bjob.cpp k3bburnprogressdialog.cpp k3boptiondialog.cpp k3bfillstatusdisplay.cpp k3bstickybutton.cpp k3bprogressdialog.cpp k3bdevicemanager.cpp k3bripperwidget.cpp k3bcopywidget.cpp k3bdirview.cpp k3bview.cpp k3bdoc.cpp k3b.cpp main.cpp 
-k3b_LDADD   = ./data/libdata.a ./cdinfo/libcdinfo.a ./audio/libaudio.a -lkfile -lkdeui -lkdecore $(LIB_QT) $(LIBSOCKET)
+k3b_LDADD   = ./data/libdata.a ./cdinfo/libcdinfo.a ./audio/libaudio.a -lid3 -lkfile -lkdeui -lkdecore $(LIB_QT) $(LIBSOCKET)
 
 SUBDIRS = data cdinfo audio 
 
@@ -35,7 +35,7 @@ uninstall-local:
 # kde_wallpaperdir  Where general wallpapers should go to.
 
 # set the include path for X, qt and KDE
-INCLUDES= $(all_includes)
+INCLUDES= $(all_includes) -Iid3lib/include -Iid3lib/include/id3
 
 METASOURCES = AUTO
 
