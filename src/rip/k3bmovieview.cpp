@@ -283,7 +283,8 @@ void K3bMovieView::slotRip()
 void K3bMovieView::slotContextMenu( KListView*, QListViewItem *lvi, const QPoint& p )
 {
   m_ripTitle = dynamic_cast<K3bDvdRipListViewItem*>(lvi);
-  m_popupMenu->exec(p);
+  if( m_ripTitle)
+	  m_popupMenu->exec(p);
 }
 
 
