@@ -40,7 +40,7 @@ void K3bRippingPatternOptionTab::setup(){
 
     QGridLayout *frameLayout = new QGridLayout( this );
     frameLayout->setSpacing( KDialog::spacingHint() );
-    frameLayout->setMargin( KDialog::marginHint() );
+    frameLayout->setMargin( 0 );
 
     QVGroupBox *groupPattern = new QVGroupBox( this, "use_pattern" );
     groupPattern->setTitle( i18n( "General" ) );

@@ -29,7 +29,7 @@ K3bExternalBinOptionTab::K3bExternalBinOptionTab( K3bExternalBinManager* manager
 
   QGridLayout* frameLayout = new QGridLayout( this );
   frameLayout->setSpacing( KDialog::spacingHint() );
-  frameLayout->setMargin( KDialog::marginHint() );
+  frameLayout->setMargin( 0 );
 
   m_viewPrograms = new KListView( this, "m_viewPrograms" );
   m_viewPrograms->addColumn( i18n( "found" ) );

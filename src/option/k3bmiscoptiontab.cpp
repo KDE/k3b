@@ -23,6 +23,7 @@
 #include <qlineedit.h>
 #include <qtoolbutton.h>
 #include <qlabel.h>
+#include <qgroupbox.h>
 
 #include <klocale.h>
 #include <kconfig.h>
@@ -30,6 +31,7 @@
 #include <kfiledialog.h>
 #include <kstddirs.h>
 #include <kmessagebox.h>
+#include <kiconloader.h>
 #include <kio/netaccess.h>
 
 
@@ -38,22 +40,22 @@ K3bMiscOptionTab::K3bMiscOptionTab(QWidget *parent, const char *name )
 {
   m_checkShowSplash = new QCheckBox( i18n("Show splash screen"), this );
 
-  m_editTempDir = new QLineEdit( this );
-  m_buttonTempDir = new QToolButton( this );
-  m_buttonTempDir->setText( "..." );
+  QGroupBox* groupTempDir = new QGroupBox( 2, Qt::Horizontal, i18n("Default temp directory"), this );
+  groupTempDir->layout()->setMargin( KDialog::marginHint() );
+  groupTempDir->layout()->setSpacing( KDialog::spacingHint() );
+
+  m_editTempDir = new QLineEdit( groupTempDir );
+  m_buttonTempDir = new QToolButton( groupTempDir );
+  m_buttonTempDir->setIconSet( SmallIconSet( "fileopen" ) );
 
 
   QGridLayout* mainGrid = new QGridLayout( this );
   mainGrid->setAlignment( Qt::AlignTop );
   mainGrid->setSpacing( KDialog::spacingHint() );
-  mainGrid->setMargin( KDialog::marginHint() );
+  mainGrid->setMargin( 0 );
 
-  mainGrid->addMultiCellWidget( m_checkShowSplash, 0, 0, 0, 2 );
-  mainGrid->addWidget( new QLabel( i18n("Default temp directory:"), this ), 1, 0 );
-  mainGrid->addWidget( m_editTempDir, 1, 1 );
-  mainGrid->addWidget( m_buttonTempDir, 1, 2 );
-
-  mainGrid->setColStretch( 1, 1 );
+  mainGrid->addWidget( m_checkShowSplash, 0, 0 );
+  mainGrid->addWidget( groupTempDir, 1, 0 );
 
   connect( m_buttonTempDir, SIGNAL(clicked()), this, SLOT(slotGetTempDir()) );
 }
