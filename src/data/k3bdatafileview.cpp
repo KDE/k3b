@@ -38,13 +38,14 @@ K3bDataFileView::K3bDataFileView( K3bDataView* view, K3bDataDoc* doc, QWidget* p
   setDropHighlighter( true );
   setDragEnabled( true );
   setItemsMovable( false );
+  setAllColumnsShowFocus( true );
 	
   addColumn( i18n("Name") );
   addColumn( i18n("Type") );
   addColumn( i18n("Size") );
 
   setItemsRenameable( true );
-  setSelectionModeExt( KListView::Konqueror );
+  setSelectionModeExt( KListView::Extended );
 
   setValidator( new KCharValidator( this, "isoValidator", "\\/;:*$", KCharValidator::InvalidChars ) );
   

@@ -137,6 +137,12 @@ void K3bIsoImageJob::slotStartWriting()
   // display progress
   *m_process << "-v";
 
+  k3bMain()->config()->setGroup( "General Options" );
+  bool manualBufferSize = k3bMain()->config()->readBoolEntry( "Manual buffer size", false );
+  if( manualBufferSize ) {
+    *m_process << QString("fs=%1").arg( k3bMain()->config()->readNumEntry( "Cdrecord buffer", 4 ) );
+  }
+
   if( m_dummy )
     *m_process << "-dummy";
   if( m_dao )

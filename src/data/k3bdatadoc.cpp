@@ -113,6 +113,12 @@ void K3bDataDoc::slotAddQueuedItems()
   PrivateItemToAdd* item = m_queuedToAddItems.dequeue();
   if( item )
     {
+
+      // TODO: add an option for the following:
+      //       1. drop a file with an already existing name
+      //       2. append a "(n)" to the file where n is the number of equal files
+      //          i.a. myFirstFile.txt and myFirstFile.txt(1)
+
       bool add = true;
       QList<K3bDataItem>* itemsInDir = item->parent->children();
       for( K3bDataItem* it = itemsInDir->first(); it; it = itemsInDir->next() ) {
@@ -131,7 +137,6 @@ void K3bDataDoc::slotAddQueuedItems()
 	  if( item->fileInfo.isDir() )
 	    {
 	      K3bDirItem* newDirItem = new K3bDirItem( item->fileInfo.fileName(), this, item->parent );
-	      //	      emit newDir( newDirItem );
 	      
 	      QStringList dlist = QDir( item->fileInfo.absFilePath() ).entryList();
 	      dlist.remove(".");
@@ -144,9 +149,25 @@ void K3bDataDoc::slotAddQueuedItems()
 	    }
 	  else
 	    {
+	      if( item->fileInfo.isSymLink() ) {
+		if( !item->fileInfo.exists() ) {
+		  // we have a broken link that should be dropped
+		  qDebug( "(K3bDataDoc) found broken symlink!");
+		}
+		else {
+		  qDebug("(K3bDataDoc) found symlink...");
+		  // TODO:
+		  // two choices (to be configured):
+		  // 1. replace symlinks: create an item for linkDest and rename it to the links name
+		  // 2. use symlinks:     create an item for linkDest (with original path) and the symlink
+		  //                      !Rockridge must be enabled otherwise mkisofs will drop all symlinks!
+		}
+	      }
+
+
 	      K3bFileItem* newK3bItem = new K3bFileItem( item->fileInfo.absFilePath(), this, item->parent );
 	      m_size += newK3bItem->k3bSize();
-
+	      
 	      if( k3bMain()->useID3TagForMp3Renaming() && newK3bItem->mimetype() == "audio/x-mp3" ) {
 		ID3_Tag tag( item->fileInfo.absFilePath().latin1() );
 		
@@ -187,14 +208,14 @@ K3bDirItem* K3bDataDoc::addEmptyDir( const QString& name, K3bDirItem* parent )
 }
 
 
-long K3bDataDoc::size() const
+unsigned long K3bDataDoc::size() const
 {
   return m_size;	
   //  return root()->k3bSize();
 }
 
 
-int K3bDataDoc::length() const
+unsigned long K3bDataDoc::length() const
 {
   // 1 block consists of 2048 bytes real data
   // and 1 block equals to 1 audio frame
@@ -570,7 +591,7 @@ void K3bDataDoc::removeItem( K3bDataItem* item )
 	
     m_size -= item->k3bSize();
     if( m_size < 0 ) {
-      qDebug( "(K3bDataDoc) Size of project is: %l, that CANNOT be! Will exit! PLEASE REPORT!", m_size );
+      qDebug( "(K3bDataDoc) Size of project is: %i, that CANNOT be! Will exit! PLEASE REPORT!", (int)m_size );
       exit(0);
     }
 
@@ -675,7 +696,7 @@ QString K3bDataDoc::treatWhitespace( const QString& path )
   // It could happen that two files with different names
   // will have the same name after the treatment
   // Perhaps we should add a number at the end or something
-  // similar
+  // similar (s.a.)
 
 
   if( whiteSpaceTreatment() != K3bDataDoc::normal ) {

@@ -143,6 +143,12 @@ void K3bDataJob::slotStartWritingOnTheFly()
   // display progress
   *m_process << "-v";
 
+  k3bMain()->config()->setGroup( "General Options" );
+  bool manualBufferSize = k3bMain()->config()->readBoolEntry( "Manual buffer size", false );
+  if( manualBufferSize ) {
+    *m_process << QString("fs=%1").arg( k3bMain()->config()->readNumEntry( "Cdrecord buffer", 4 ) );
+  }
+
   if( m_doc->dummy() )
     *m_process << "-dummy";
   if( m_doc->dao() )
@@ -286,6 +292,12 @@ void K3bDataJob::slotStartWriting()
   // and now we add the needed arguments...
   // display progress
   *m_process << "-v";
+
+  k3bMain()->config()->setGroup( "General Options" );
+  bool manualBufferSize = k3bMain()->config()->readBoolEntry( "Manual buffer size", false );
+  if( manualBufferSize ) {
+    *m_process << QString("fs=%1").arg( k3bMain()->config()->readNumEntry( "Cdrecord buffer", 4 ) );
+  }
 
   if( m_doc->dummy() )
     *m_process << "-dummy";
@@ -739,8 +751,14 @@ void K3bDataJob::addMkisofsParameters()
     *m_process << "-max-iso9660-filenames";	
   if( m_doc->noDeepDirectoryRelocation()  )
     *m_process << "-D";	
+
+
+  // this should be handled internally by K3b.
+  // the config dialog should give the option to choose between using symlinks and not
   if( m_doc->followSymbolicLinks()  )
     *m_process << "-f";	
+
+
   if( m_doc->hideRR_MOVED()  )
     *m_process << "-hide-rr-moved";	
   if( m_doc->createTRANS_TBL()  )

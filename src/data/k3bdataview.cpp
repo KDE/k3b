@@ -356,7 +356,7 @@ K3bDataDirViewItem::K3bDataDirViewItem( K3bDirItem* dir, QListView* parent )
   assert( dir );
 
   m_dirItem = dir;
-  setPixmap( 0, *(new QPixmap(KMimeType::pixmapForURL( KURL( "/" ), 0, KIcon::Small ) )) );
+  setPixmap( 0, KMimeType::pixmapForURL( KURL( "/" ), 0, KIcon::Small ) );
 }
 
 
@@ -366,7 +366,7 @@ K3bDataDirViewItem::K3bDataDirViewItem( K3bDirItem* dir, QListViewItem* parent )
   assert( dir );
 
   m_dirItem = dir;
-  setPixmap( 0, *(new QPixmap(KMimeType::pixmapForURL( KURL( "/" ), 0, KIcon::Small ) )) );
+  setPixmap( 0, KMimeType::pixmapForURL( KURL( "/" ), 0, KIcon::Small ) );
 }
 
 
@@ -479,7 +479,7 @@ K3bDataRootViewItem::K3bDataRootViewItem( K3bDataDoc* doc, QListView* parent )
   : K3bDataDirViewItem( doc->root(), parent )
 {
   m_doc = doc;
-  setPixmap( 0, kapp->iconLoader()->loadIcon( "cdrom_unmount", KIcon::Small, 16 ) );
+  setPixmap( 0, SmallIcon( "cdrom_unmount" ) );
 }
 
 
