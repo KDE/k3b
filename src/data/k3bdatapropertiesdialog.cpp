@@ -19,6 +19,7 @@
 
 #include "k3bdiritem.h"
 #include "k3bfileitem.h"
+#include <kcutlabel.h>
 
 #include <qpushbutton.h>
 #include <qlayout.h>
@@ -45,10 +46,10 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( K3bDataItem* dataItem, QWidget
   QLabel* extraInfoLabel = new QLabel( plainPage() );
   m_editName = new KLineEdit( plainPage() );
   m_labelType = new QLabel( plainPage() );
-  m_labelLocation = new QLabel( plainPage() );
+  m_labelLocation = new KCutLabel( plainPage() );
   m_labelSize = new QLabel( plainPage() );
-  m_labelLocalName = new QLabel( plainPage() );
-  m_labelLocalLocation = new QLabel( plainPage() );
+  m_labelLocalName = new KCutLabel( plainPage() );
+  m_labelLocalLocation = new KCutLabel( plainPage() );
 
 
   QGridLayout* grid = new QGridLayout( plainPage() );
