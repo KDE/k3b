@@ -127,7 +127,12 @@ K3bMainWindow::K3bMainWindow()
   initView();
   initStatusBar();
   initActions();
-  createShellGUI(true);
+  createGUI(0L);
+
+  // disable the "K3b handbook action"
+  KAction* helpAction = actionCollection()->action("help_contents");
+  if( helpAction )
+    helpAction->setEnabled(false);
 
   // fill the tabs action menu
   m_documentTab->insertAction( actionFileSave );
@@ -947,15 +952,16 @@ void K3bMainWindow::slotCurrentDocChanged( QWidget* )
 void K3bMainWindow::slotEditToolbars()
 {
   saveMainWindowSettings( m_config, "main_window_settings" );
-  KEditToolbar dlg( actionCollection() );
+  KEditToolbar dlg( factory() );
   connect(&dlg, SIGNAL(newToolbarConfig()), SLOT(slotNewToolBarConfig()));
-  dlg.exec();
+  if( dlg.exec() )
+    createGUI(0L);
 }
 
 
 void K3bMainWindow::slotNewToolBarConfig()
 {
-//  createGUI();
+  //  createGUI(0L);
   slotCurrentDocChanged(0);  // make sure the project-specific actions get activated
   applyMainWindowSettings( m_config, "main_window_settings" );
 }
