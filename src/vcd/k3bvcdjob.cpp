@@ -48,7 +48,6 @@ K3bVcdJob::K3bVcdJob( K3bVcdDoc* doc )
   m_process = 0;
   m_currentWrittenTrackNumber = 0;
   m_bytesFinishedTracks = 0;
-  m_writeProcess = false;
 }
 
 
@@ -84,16 +83,12 @@ void K3bVcdJob::cancelAll()
     m_process->disconnect(this);
     m_process->kill();
 
-    // check if this was a vcdx... process or not.
-    if (m_writeProcess) {
-      m_writeProcess = false;
-      // we need to unlock the writer because cdrdao/cdrecord locked it while writing
-      bool block = m_doc->burner()->block( false );
-      if( !block )
-        emit infoMessage( i18n("Could not unlock CD drive."), K3bJob::ERROR );
-      else if ( k3bMain()->eject() )
-        m_doc->burner()->eject();
-    }
+    // we need to unlock the writer because cdrdao/cdrecord locked it while writing
+    bool block = m_doc->burner()->block( false );
+    if( !block )
+      emit infoMessage( i18n("Could not unlock CD drive."), K3bJob::ERROR );
+    else if ( k3bMain()->eject() )
+      m_doc->burner()->eject();
   }
 }
 
@@ -245,8 +240,8 @@ void K3bVcdJob::vcdxBuild()
                                    exit
   */
 
-  // m_process->clearArguments();
   m_stage = stageUnknown;
+  firstTrack = true;
   delete m_process;
   m_process = new KProcess();
 
@@ -343,32 +338,24 @@ void K3bVcdJob::slotParseVcdxBuildOutput( KProcess*, char* output, int len )
           emit subPercent( (int) (100.0 * (double)pos / (double)size) );
           emit processedSubSize( pos/1024/1024, size/1024/1024 );
 
+          // this is the first of three processes.
           double relOverallWritten = ( (double)m_bytesFinishedTracks + (double)pos ) / (double)doc()->size();
-          emit percent( (int)(100.0 * relOverallWritten)  );
+          emit percent( (int)(33.0 * relOverallWritten)  );
 
           m_bytesFinished = pos;
           m_stage = stageScan;
 
         }
         else if (oper == "write") {
+          /*
           if (m_stage == stageScan) {
             emit subPercent( (int) (100.0 * (double)pos / (double)size) );
             emit processedSubSize( (pos*2324)/1024/1024, (size*2324)/1024/1024 );
           }
+          */
           emit subPercent( (int) (100.0 * (double)pos / (double)size) );
-          emit processedSubSize( (pos*2324)/1024/1024, (size*2324)/1024/1024 );
-
-          // double relOverallWritten = ( (double)m_bytesFinishedTracks + (double)(pos) ) / (double)size;
-          // emit percent( (int)(100.0 * relOverallWritten)  );
-          // emit percent( (int)(50)  );
-          emit percent( (int) (100.0 * (double)pos / (double)size) );
-
-          // if(!firstTrack) {
-          //  m_bytesFinishedTracks += size;
-          //  m_currentWrittenTrackNumber++;
-          // }
-          // else
-          //   firstTrack = false;
+          emit processedSubSize( (pos*2352)/1024/1024, (size*2352)/1024/1024 );
+          emit percent( 33 + (int) (33.0 * (double)pos / (double)size) );
 
           m_stage = stageWrite;
         }
@@ -385,6 +372,8 @@ void K3bVcdJob::slotParseVcdxBuildOutput( KProcess*, char* output, int len )
           const QString text = tel.data();
           if (m_stage == stageWrite && level == "information")
             kdDebug() << QString("(K3bVcdJob) VcdxBuild information, %1").arg(text) << endl;
+            if( (text).startsWith( "writing track" ) )
+              emit newSubTask( i18n("Creating Image for track %1").arg((text).mid(14)) );
           else {
             if (level != "error") {
               kdDebug() << QString("(K3bVcdJob) vcdxbuild warning, %1").arg(text) << endl;
@@ -544,7 +533,7 @@ void K3bVcdJob::createCdrdaoProgress( int made, int size )
     kdDebug() << "(K3bVcdJob) got trackSize " << trackSize << endl;
 
   emit processedSize( made, size );
-  emit percent( 100*made / size );
+  emit percent( 66 + (34*made / size ) );
 }
 
 void K3bVcdJob::startNewCdrdaoTrack()
@@ -558,6 +547,7 @@ void K3bVcdJob::startNewCdrdaoTrack()
 
   m_currentWrittenTrack = m_doc->at( m_currentWrittenTrackNumber );
   emit newSubTask( i18n("Writing track %1: '%2'").arg(m_currentWrittenTrackNumber + 1).arg(m_currentWrittenTrack->fileName()) );
+  kdDebug() << QString("(K3bVcdJob) Writing track %1: Filename: %2").arg(m_currentWrittenTrackNumber + 1).arg(m_currentWrittenTrack->absPath());
 }
 
 void K3bVcdJob::slotCdrdaoFinished()
