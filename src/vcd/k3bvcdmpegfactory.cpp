@@ -43,16 +43,6 @@ K3bVcdMpegFactory::~K3bVcdMpegFactory()
 {
 }
 
-K3bVcdMpegFactory* K3bVcdMpegFactory::self()
-{
-  static K3bVcdMpegFactory* factoryInstance = 0;
-  if( factoryInstance == 0 ) {
-    factoryInstance = new K3bVcdMpegFactory();
-  }
-
-  return factoryInstance;
-}
-
 unsigned int K3bVcdMpegFactory::getMpegFileType(const KURL& url)
 {
   unsigned long i;

@@ -34,14 +34,13 @@ class K3bVcdMpegFactory : public QObject
   Q_OBJECT
 
  public:
+   K3bVcdMpegFactory();
   ~K3bVcdMpegFactory();
     
   public:
   unsigned int getMpegFileType(const KURL&);
-  static K3bVcdMpegFactory* self();
    
   private:
-  K3bVcdMpegFactory();
   
   FILE* bitfile;
   // QFile* bitfile;
