@@ -357,6 +357,48 @@ void K3bVcdBurnDialog::setupAdvancedTab()
 
     groupGapsLayout->setRowStretch( 4, 0 );
 
+    groupGapsLayout->addMultiCellWidget( m_checkGaps, 1, 1, 0, 4 );
+    groupGapsLayout->addWidget( m_labelPreGapLeadout, 2, 0 );
+    groupGapsLayout->addWidget( m_spinPreGapLeadout, 2, 1 );
+    groupGapsLayout->addWidget( m_labelPreGapTrack, 2, 3 );
+    groupGapsLayout->addWidget( m_spinPreGapTrack, 2, 4 );
+
+    groupGapsLayout->addWidget( m_labelFrontMarginTrack, 3, 0 );
+    groupGapsLayout->addWidget( m_spinFrontMarginTrack, 3, 1 );
+    groupGapsLayout->addWidget( m_spinFrontMarginTrackSVCD, 3, 1 );
+    groupGapsLayout->addWidget( m_labelRearMarginTrack, 3, 3 );
+    groupGapsLayout->addWidget( m_spinRearMarginTrack, 3, 4 );
+    groupGapsLayout->addWidget( m_spinRearMarginTrackSVCD, 3, 4 );
+
+    groupGapsLayout->setRowStretch( 4, 0 );
+    groupGapsLayout->addMultiCellWidget( m_checkGaps, 1, 1, 0, 4 );
+    groupGapsLayout->addWidget( m_labelPreGapLeadout, 2, 0 );
+    groupGapsLayout->addWidget( m_spinPreGapLeadout, 2, 1 );
+    groupGapsLayout->addWidget( m_labelPreGapTrack, 2, 3 );
+    groupGapsLayout->addWidget( m_spinPreGapTrack, 2, 4 );
+
+    groupGapsLayout->addWidget( m_labelFrontMarginTrack, 3, 0 );
+    groupGapsLayout->addWidget( m_spinFrontMarginTrack, 3, 1 );
+    groupGapsLayout->addWidget( m_spinFrontMarginTrackSVCD, 3, 1 );
+    groupGapsLayout->addWidget( m_labelRearMarginTrack, 3, 3 );
+    groupGapsLayout->addWidget( m_spinRearMarginTrack, 3, 4 );
+    groupGapsLayout->addWidget( m_spinRearMarginTrackSVCD, 3, 4 );
+
+    groupGapsLayout->setRowStretch( 4, 0 );
+    groupGapsLayout->addMultiCellWidget( m_checkGaps, 1, 1, 0, 4 );
+    groupGapsLayout->addWidget( m_labelPreGapLeadout, 2, 0 );
+    groupGapsLayout->addWidget( m_spinPreGapLeadout, 2, 1 );
+    groupGapsLayout->addWidget( m_labelPreGapTrack, 2, 3 );
+    groupGapsLayout->addWidget( m_spinPreGapTrack, 2, 4 );
+
+    groupGapsLayout->addWidget( m_labelFrontMarginTrack, 3, 0 );
+    groupGapsLayout->addWidget( m_spinFrontMarginTrack, 3, 1 );
+    groupGapsLayout->addWidget( m_spinFrontMarginTrackSVCD, 3, 1 );
+    groupGapsLayout->addWidget( m_labelRearMarginTrack, 3, 3 );
+    groupGapsLayout->addWidget( m_spinRearMarginTrack, 3, 4 );
+    groupGapsLayout->addWidget( m_spinRearMarginTrackSVCD, 3, 4 );
+
+    groupGapsLayout->setRowStretch( 4, 0 );
 
     // ------------------------------------------------------- misc group ----
     m_groupMisc = new QGroupBox( 0, Qt::Vertical, i18n( "Misc" ), w );

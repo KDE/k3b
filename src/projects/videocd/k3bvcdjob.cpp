@@ -182,7 +182,7 @@ void K3bVcdJob::vcdxBuild()
     if ( !bin ) {
         kdDebug() << "(K3bVcdJob) could not find vcdxbuild executable" << endl;
         emit infoMessage( i18n("Could not find %1 executable.").arg("vcdxbuild"), K3bJob::ERROR );
-        emit infoMessage(i18n( "To create VideoCD's you must install VcdImager >= 0.7.12." ), K3bJob::INFO );
+        emit infoMessage(i18n( "To %1 VideoCD's you must install VcdImager >= 0.7.12." ).arg( i18n("create") ), K3bJob::INFO );
         emit infoMessage(i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ),K3bJob::INFO );
         cancelAll();
         emit finished( false );
