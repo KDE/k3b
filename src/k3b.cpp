@@ -82,6 +82,8 @@ K3bMainWindow* k3bMain()
 K3bMainWindow::K3bMainWindow()
   : KDockMainWindow(0,"K3b")
 {
+  setPlainCaption( "K3b - The CD Kreator" );
+
   m_config = kapp->config();
   untitledCount = 0;
   pDocList = new QList<K3bDoc>();
