@@ -16,7 +16,7 @@
 
 #include "kcutlabel.h"
 
-#include <tools/k3bstringutils.h>
+#include <k3bstringutils.h>
 
 #include <qtooltip.h>
 #include <qstringlist.h>

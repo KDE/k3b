@@ -15,7 +15,7 @@
 
 #include "k3bcutcombobox.h"
 
-#include <tools/k3bstringutils.h>
+#include <k3bstringutils.h>
 
 #include <qfontmetrics.h>
 #include <qevent.h>

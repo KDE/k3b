@@ -20,7 +20,7 @@
 #include <qstringlist.h>
 
 #include <k3binteractiondialog.h>
-#include <device/k3bdiskinfo.h>
+#include <k3bdiskinfo.h>
 #include "k3bvideocdrippingoptions.h"
 
 class KListView;
