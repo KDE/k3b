@@ -28,6 +28,7 @@ class K3bCueFileParser : public K3bImageFileReader
 {
  public:
   K3bCueFileParser( const QString& filename = QString::null );
+  ~K3bCueFileParser();
 
   /**
    * CDRDAO does not use this image filename but replaces the extension from the cue file
@@ -38,8 +39,13 @@ class K3bCueFileParser : public K3bImageFileReader
 
  private:
   void readFile();
+  bool parseLine( QString& line );
+  void simplifyWhiteSpace( QString& s );
 
   bool m_imageFilenameInCue;
+
+  class Private;
+  Private* d;
 };
 
 #endif
