@@ -297,7 +297,8 @@ void K3bAudioDoc::removeTrack( K3bAudioTrack* track )
     delete track;
 
     // now make sure the first track has a pregap of at least 150 frames
-    m_tracks->first()->setPregap( m_tracks->first()->pregap() );
+    if( m_tracks->first() )
+      m_tracks->first()->setPregap( m_tracks->first()->pregap() );
   }
 }
 
