@@ -99,7 +99,7 @@ class K3bAudioEncoder : public K3bPlugin
 
   /**
    * K3b uses the following types:
-   * Title, Artist, Comment, Year, Albumtitle, Albumartist
+   * Title, Artist, Comment, Year
    * Calling this method does only make sense after successfully
    * calling openFile and before calling encode.
    * This calls setMetaDataInternal.

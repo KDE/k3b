@@ -172,7 +172,7 @@ namespace K3bCdDevice
    * Use this with the GPCMD_READ_TOC_PMA_ATIP command
    * where format is set to 2 (Full TOC)
    */
-  typedef struct toc_track_descriptor {
+  struct toc_raw_track_descriptor {
     unsigned char session_number;
 #ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
     unsigned char adr     : 4;
@@ -190,18 +190,7 @@ namespace K3bCdDevice
     unsigned char p_min;
     unsigned char p_sec;
     unsigned char p_frame;
-  } toc_track_descriptor_t;
-
-
-  /*
-   * Use this with the GPCMD_READ_TOC_PMA_ATIP command
-   */
-  typedef struct toc_pma_atip {
-    Q_UINT16 length;
-    unsigned char first;
-    unsigned char last;
-    toc_track_descriptor_t descriptor;
-  } toc_pma_atip_t;
+  };
 
 
 #ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
@@ -464,6 +453,72 @@ namespace K3bCdDevice
     unsigned char vendor_uniq[4];
   };
 #endif
+
+
+  struct toc_track_descriptor {
+    unsigned char res1;
+#ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
+    unsigned char adr     : 4;
+    unsigned char control : 4;
+#else
+    unsigned char control : 4;
+    unsigned char adr     : 4;
+#endif
+    unsigned char track_no;
+    unsigned char res2;
+    unsigned char start_adr[4];
+  };
+
+
+  struct atip_descriptor {
+    unsigned char dataLength[2];
+    unsigned char res1;
+    unsigned char res2;
+#ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
+    unsigned char ind_wr_power : 4;  // indicated writing power
+    unsigned char ddcd         : 1;  // DDCD
+    unsigned char ref_speed    : 3;  // reference Speed
+    unsigned char zero         : 1;  // 0
+    unsigned char uru          : 1;  // Uru
+    unsigned char res3         : 6;
+    unsigned char one          : 1;  // 1
+    unsigned char disc_type    : 1;  // Disc Type
+    unsigned char disc_subtype : 3;  // Disc Sub-Type
+    unsigned char a1_valid     : 1;
+    unsigned char a2_valid     : 1;
+    unsigned char a3_valid     : 1;
+#else
+    unsigned char ref_speed    : 3;  // reference Speed
+    unsigned char ddcd         : 1;  // DDCD
+    unsigned char ind_wr_power : 4;  // indicated writing power
+    unsigned char res3         : 6;
+    unsigned char uru          : 1;  // Uru
+    unsigned char zero         : 1;  // 0
+    unsigned char a3_valid     : 1;
+    unsigned char a2_valid     : 1;
+    unsigned char a1_valid     : 1;
+    unsigned char disc_subtype : 3;  // Disc Sub-Type
+    unsigned char disc_type    : 1;  // Disc Type
+    unsigned char one          : 1;  // 1
+#endif
+    unsigned char res4;
+    unsigned char lead_in_m;
+    unsigned char lead_in_s;
+    unsigned char lead_in_f;
+    unsigned char res5;
+    unsigned char lead_out_m;
+    unsigned char lead_out_s;
+    unsigned char lead_out_f;
+    unsigned char res6;
+    unsigned char a1[3];
+    unsigned char res7;
+    unsigned char a2[3];
+    unsigned char res8;
+    unsigned char a3[3];
+    unsigned char res9;
+    unsigned char s4[3];
+    unsigned char res10;
+  };
 }
 
 

@@ -19,7 +19,10 @@
 
 K3bCdDevice::Track::Track()
   : m_type(-1),
-    m_mode(-1)
+    m_mode(-1),
+    m_copyPermitted(true),
+    m_preEmphasis(false),
+    m_session(0)
 {
 }
 
@@ -29,6 +32,9 @@ K3bCdDevice::Track::Track( const Track& track )
     m_lastSector( track.lastSector() ),
     m_type( track.type() ),
     m_mode( track.mode() ),
+    m_copyPermitted( track.copyPermitted() ),
+    m_preEmphasis( track.preEmphasis() ),
+    m_session( track.session() ),
     m_title( track.title() )
 {
 }
@@ -43,6 +49,9 @@ K3bCdDevice::Track::Track( const K3b::Msf& firstSector,
     m_lastSector( lastSector ), 
     m_type( type ), 
     m_mode( mode ), 
+    m_copyPermitted(true),
+    m_preEmphasis(false),
+    m_session(0),
     m_title( title )
 {
 }

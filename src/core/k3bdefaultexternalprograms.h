@@ -140,4 +140,13 @@ class K3bDvdformatProgram : public K3bExternalProgram
   bool scan( const QString& );
 };
 
+
+class K3bCdda2wavProgram : public K3bExternalProgram
+{
+ public:
+  K3bCdda2wavProgram();
+
+  bool scan( const QString& );
+};
+
 #endif

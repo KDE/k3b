@@ -27,6 +27,8 @@ namespace K3bCdDevice
 
   class Track
   {
+    friend class CdDevice;
+
   public:
     enum TrackType { 
       AUDIO, 
@@ -52,13 +54,30 @@ namespace K3bCdDevice
 
     const QString& title() const { return m_title; }
     int type() const { return m_type; }
+
+    /**
+     * Invalid for DVDs and Audio CDs
+     */
     int mode() const { return m_mode; }
+
+    /**
+     * Invalid for DVDs
+     */
+    bool copyPermitted() const { return m_copyPermitted; }
+
+    /**
+     * Only valid for audio tracks
+     */
+    bool preEmphasis() const { return m_preEmphasis; }
+
     const K3b::Msf& firstSector() const { return m_firstSector; }
     const K3b::Msf& lastSector() const { return m_lastSector; }
     K3b::Msf length() const;
-
-    void setFirstSector( const K3b::Msf& s ) { m_firstSector = s; }
-    void setLastSector( const K3b::Msf& s ) { m_lastSector = s; }
+    
+    /**
+     * 0 if unknown
+     */
+    int session() const { return m_session; }
 
     void setTitle( const QString& );
 
@@ -67,6 +86,11 @@ namespace K3bCdDevice
     K3b::Msf m_lastSector;
     int m_type;
     int m_mode;
+    bool m_copyPermitted;
+    bool m_preEmphasis;
+
+    int m_session;
+
     QString m_title;
   };
 }

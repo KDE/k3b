@@ -203,6 +203,8 @@ void K3bIso9660ImageWritingJob::slotVerificationProgress( int p )
 
 void K3bIso9660ImageWritingJob::slotWriterPercent( int p )
 {
+  emit subPercent( p );
+
   if( m_verifyData )
     emit percent( p/2 );
   else
@@ -356,7 +358,6 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
 
   connect( m_writer, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
   connect( m_writer, SIGNAL(percent(int)), this, SLOT(slotWriterPercent(int)) );
-  connect( m_writer, SIGNAL(subPercent(int)), this, SIGNAL(subPercent(int)) );
   connect( m_writer, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSize(int, int)) );
   connect( m_writer, SIGNAL(buffer(int)), this, SIGNAL(bufferStatus(int)) );
   connect( m_writer, SIGNAL(writeSpeed(int, int)), this, SIGNAL(writeSpeed(int, int)) );

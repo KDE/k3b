@@ -176,7 +176,8 @@
 The command at least has to contain the filename (%f). Metainfo may be set with:&lt;br&gt;
 &lt;b&gt;%t&lt;/b&gt; - Title; &lt;b&gt;%a&lt;/b&gt; - Artist; &lt;b&gt;%c&lt;/b&gt; - Comment; &lt;b&gt;%y&lt;/b&gt; - Year&lt;br&gt;
 Be aware that these values might be empty.&lt;br&gt;
-The program has to read the data from stdin.</string>
+The program has to read the data from stdin.&lt;br&gt;
+If you only here static you most likely need to swap the byte order.</string>
                             </property>
                         </widget>
                         <widget class="KLineEdit">

@@ -20,6 +20,7 @@
 #include <device/k3bdiskinfo.h>
 #include <k3bglobals.h>
 #include <k3bstdguiitems.h>
+#include <k3blistview.h>
 
 #include <qlabel.h>
 #include <qlayout.h>
@@ -348,22 +349,41 @@ void K3bDiskInfoView::displayInfo( const K3bDiskInfo& info )
     if( m_infoView->childCount() )
       (void)new KListViewItem( m_infoView, m_infoView->lastChild() ); // empty spacer item
 
-    KListViewItem* trackItem = new HeaderViewItem( m_infoView, m_infoView->lastChild(), i18n("Tracks") );
+    KListViewItem* trackHeaderItem = new HeaderViewItem( m_infoView, m_infoView->lastChild(), i18n("Tracks") );
     if( info.toc.isEmpty() )
-      (void)new KListViewItem( trackItem, i18n("Disk is Empty") );
+      (void)new KListViewItem( trackHeaderItem, i18n("Disk is Empty") );
     else {
       // create header item
-      KListViewItem* item = new KListViewItem( trackItem,
-                            i18n("Type"),
-                            i18n("First Sector"),
-                            i18n("Last Sector"),
-                            i18n("Length") );
+      KListViewItem* item = new KListViewItem( trackHeaderItem,
+					       i18n("Type"),
+					       i18n("Attributes"),
+					       i18n("First-Last Sector"),
+					       i18n("Length") );
+
+      int lastSession = 0;
+
+      // if we have multible sessions we create a header item for every session
+      KListViewItem* trackItem = 0;
+      if( info.sessions > 1 && info.toc[0].session() > 0 ) {
+	trackItem = new HeaderViewItem( trackHeaderItem, item, i18n("Session %1").arg(1) );
+	lastSession = 1;
+      }
+      else
+	trackItem = trackHeaderItem;
 
       // create items for the tracks
       K3bToc::const_iterator it;
       int index = 1;
       for( it = info.toc.begin(); it != info.toc.end(); ++it ) {
         const K3bTrack& track = *it;
+
+	if( info.sessions > 1 && track.session() != lastSession ) {
+	  lastSession = track.session();
+	  trackItem->setOpen(true);
+	  trackItem = new HeaderViewItem( trackHeaderItem, 
+					  m_infoView->lastItem()->parent(), 
+					  i18n("Session %1").arg(lastSession) );
+	}
 
         item = new KListViewItem( trackItem, item );
         QString text;
@@ -384,14 +404,20 @@ void K3bDiskInfoView::displayInfo( const K3bDiskInfo& info )
 	    text = i18n("Data");
         }
         item->setText( 0, i18n("%1 (%2)").arg( QString::number(index).rightJustify( 2, ' ' )).arg(text) );
-        item->setText( 1, QString::number( track.firstSector().lba() ) );
-        item->setText( 2, QString::number( track.lastSector().lba() ) );
+	item->setText( 1, QString( "%1/%2" )
+		       .arg( track.copyPermitted() ? i18n("copy") : i18n("no copy") )
+		       .arg( track.type() == K3bTrack::AUDIO 
+			    ? ( track.preEmphasis() ?  i18n("preemp") : i18n("no preemp") )
+			    : ( track.preEmphasis() ?  i18n("incremental") : i18n("uninterrupted") ) ) );
+        item->setText( 2, QString("%1 - %2").arg(track.firstSector().lba()).arg(track.lastSector().lba()) );
         item->setText( 3, QString::number( track.length().lba() ) + " (" + track.length().toString() + ")" );
 
         ++index;
       }
+
+      trackItem->setOpen(true);
     }
-    trackItem->setOpen( true );
+    trackHeaderItem->setOpen( true );
   }
 }
 

@@ -131,3 +131,19 @@ void K3bCdDevice::debugBitfield( unsigned char* data, long len )
     kdDebug() << index << " - " << bitString << " - " << (int)data[i] << endl;
   }
 }
+
+
+unsigned short K3bCdDevice::from2Byte( unsigned char* d )
+{
+  return ( d[0] << 8 & 0xFF00 |
+	   d[1]      & 0xFF );
+}
+
+
+unsigned long K3bCdDevice::from4Byte( unsigned char* d )
+{
+  return ( d[0] << 24 & 0xFF000000 |
+	   d[1] << 16 & 0xFF0000 |
+	   d[2] << 8  & 0xFF00 |
+	   d[3]       & 0xFF );
+}

@@ -26,6 +26,9 @@ namespace K3bCdDevice
   QString writingModeString( int );
   QString mediaTypeString( int );
   void debugBitfield( unsigned char* data, long len );
+
+  unsigned short from2Byte( unsigned char* );
+  unsigned long from4Byte( unsigned char* );
 }
 
 #endif

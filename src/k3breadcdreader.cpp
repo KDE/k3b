@@ -295,7 +295,7 @@ void K3bReadcdReader::slotProcessExited( KProcess* p )
       emit finished( true );
     }
     else {
-      emit infoMessage( i18n("Readcd returned error: %1").arg(p->exitStatus()), ERROR );
+      emit infoMessage( i18n("%1 returned error: %1").arg("Readcd").arg(p->exitStatus()), ERROR );
       emit finished( false );
     }
   }

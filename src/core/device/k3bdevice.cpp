@@ -187,7 +187,7 @@ bool K3bCdDevice::CdDevice::init()
     }
     else {
       for( int i = 8; i < len; ) {
-	short feature = profiles[i]<<8 | profiles[i+1];
+	short feature = from2Byte( &profiles[i] );
 	int featureLen = profiles[i+3];
 	i+=4; // skip feature header
 
@@ -198,7 +198,7 @@ bool K3bCdDevice::CdDevice::init()
 	switch( feature ) {
 	case 0x000: // Profile List
 	  for( int j = 0; j < featureLen; j+=4 ) {
-	    short profile = profiles[i+j]<<8|profiles[i+1+j];
+	    short profile = from2Byte( &profiles[i+j] );
 
 	    switch (profile) {
 	    case 0x10: d->supportedProfiles |= MEDIA_DVD_ROM;
@@ -557,12 +557,16 @@ bool K3bCdDevice::CdDevice::init()
   // Most current drives support the 2A mode page
   // Here we can get some more information (cdrecord -prcap does exactly this)
   //
-  mm_cap_page_2A mm_p;
-  if( readModePage2A( &mm_p ) ) {
-    if( mm_p.BUF ) d->burnfree = true;
-    if( mm_p.cd_rw_write ) d->deviceType |= CDRW;
-    m_maxWriteSpeed = (int)( (mm_p.max_write_speed[0]<<8 | mm_p.max_write_speed[1]) * 1000.0 / ( 2352.0 * 75.0 ) );
-    m_maxReadSpeed = (int)( (mm_p.max_read_speed[0]<<8 | mm_p.max_read_speed[1]) * 1000.0 / ( 2352.0 * 75.0 ) );
+  unsigned char* mm_cap_buffer = 0;
+  int mm_cap_len = 0;
+  if( modeSense( &mm_cap_buffer, mm_cap_len, 0x2A ) ) {
+    mm_cap_page_2A* mm_p = (mm_cap_page_2A*)(mm_cap_buffer+8);
+    if( mm_p->BUF ) d->burnfree = true;
+    if( mm_p->cd_rw_write ) d->deviceType |= CDRW;
+    m_maxWriteSpeed = (int)( from2Byte(mm_p->max_write_speed) * 1000.0 / ( 2352.0 * 75.0 ) );
+    m_maxReadSpeed = (int)( from2Byte(mm_p->max_read_speed) * 1000.0 / ( 2352.0 * 75.0 ) );
+
+    delete [] mm_cap_buffer;
   }
   else {
     kdDebug() << "(K3bCdDevice) " << blockDeviceName() << ": read mode page 2A failed!" << endl;
@@ -904,7 +908,7 @@ int K3bCdDevice::CdDevice::isEmpty() const
     ret = NO_DISK;
   } else {
     disc_info_t inf;
-    if( getDiscInfo( &inf ) ) {
+    if( readDiscInfo( &inf ) ) {
       switch( inf.status ) {
       case 0:
         ret = EMPTY;
@@ -943,7 +947,7 @@ K3b::Msf K3bCdDevice::CdDevice::discSize()
     return ret;
 
   disc_info_t inf;
-  if( getDiscInfo( &inf ) ) {
+  if( readDiscInfo( &inf ) ) {
     if ( inf.lead_out_m != 0xFF && inf.lead_out_s != 0xFF && inf.lead_out_f != 0xFF ) {
       ret = K3b::Msf( inf.lead_out_m, inf.lead_out_s, inf.lead_out_f );
       ret -= 150;
@@ -970,7 +974,7 @@ K3b::Msf K3bCdDevice::CdDevice::discSize()
 }
 
 
-bool K3bCdDevice::CdDevice::getDiscInfo( K3bCdDevice::disc_info_t* info ) const
+bool K3bCdDevice::CdDevice::readDiscInfo( K3bCdDevice::disc_info_t* info ) const
 {
   // if the device is already opened we do not close it
   // to allow fast multible method calls in a row
@@ -1008,7 +1012,7 @@ K3b::Msf K3bCdDevice::CdDevice::remainingSize()
 
   disc_info_t inf;
 
-  if( getDiscInfo( &inf ) ) {
+  if( readDiscInfo( &inf ) ) {
     if ( inf.lead_in_m != 0xFF && inf.lead_in_s != 0xFF && inf.lead_in_f != 0xFF ) {
       ret = K3b::Msf( inf.lead_in_m, inf.lead_in_s, inf.lead_in_f );
     }
@@ -1046,14 +1050,6 @@ int K3bCdDevice::CdDevice::numSessions() const
   // gets counted as session sometimes :()
   //
 
-  unsigned char dat[4];
-  ::memset(dat,0,4);
-  
-  ScsiCommand cmd( open() );
-  cmd[0] = 0x43;  // GPCMD_READ_TOC_PMA_ATIP;
-  // Format Field: 0-TOC, 1-Session Info, 2-Full TOC, 3-PMA, 4-ATIP, 5-CD-TEXT
-  cmd[2] = 1;
-  cmd[8] = 4;
   //
   // Session Info
   // ============
@@ -1061,15 +1057,20 @@ int K3bCdDevice::CdDevice::numSessions() const
   // Byte   2: First Complete Session Number (Hex) - always 1
   // Byte   3: Last Complete Session Number (Hex)
   //
-  if( cmd.transport( TR_DIR_READ, dat, 4 ) == 0 )
+
+  unsigned char* dat = 0;
+  int len = 0;
+  if( readTocPmaAtip( &dat, len, 1, 0, 0 ) )
     ret = dat[3];
   else
     kdDebug() << "(K3bCdDevice) could not get session info !" << endl;
   
   if( needToClose )
     close();
+
   return ret;
 }
+
 
 int K3bCdDevice::CdDevice::tocType() const
 {
@@ -1179,6 +1180,8 @@ int K3bCdDevice::CdDevice::getTrackDataMode(int lba)
   if (open() < 0)
     return ret;
 
+  // FIXME: use the raw-reading method
+
   K3b::Msf msf(lba + CD_MSF_OFFSET);
   unsigned char data[CD_FRAMESIZE_RAW];
   data[0] = msf.minutes();
@@ -1210,6 +1213,8 @@ int K3bCdDevice::CdDevice::getTrackDataMode(int lba)
   return ret;
 }
 
+
+
 K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc()
 {
   // if the device is already opened we do not close it
@@ -1217,6 +1222,151 @@ K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc()
   bool needToClose = !isOpen();
 
   Toc toc;
+
+  if( open() == -1 )
+    return toc;
+
+  if( !readRawToc( toc ) ) {
+    kdDebug() << "(K3bCdDevice::CdDevice) MMC READ RAW TOC failed." << endl;
+
+    unsigned char* data = 0;
+    int dataLen = 0;
+    if( readTocPmaAtip( &data, dataLen, 0, 0, 1 ) ) {
+      int lastTrack = data[3];
+      toc_track_descriptor* td = (toc_track_descriptor*)&data[4];
+      for( int i = 0; i < lastTrack; ++i ) {
+	Track track( from4Byte( td[i].start_adr ),
+		     from4Byte( td[i+1].start_adr )-1,
+		     (td[i].control & 0x4) ? Track::DATA : Track::AUDIO,
+		     getTrackDataMode( from4Byte( td[i].start_adr ) ) );
+	track.m_copyPermitted = ( td[i].control & 0x2 );
+	track.m_preEmphasis = ( td[i].control & 0x1 );
+	toc.append( track );
+      }
+      
+      delete [] data;
+    }
+    else {
+      kdDebug() << "(K3bCdDevice::CdDevice) MMC READ TOC failed. falling back to cdrom.h." << endl;
+      readTocLinux(toc);
+    }
+
+    fixupToc( toc );
+  }
+
+  if( needToClose )
+    close();
+
+  return toc;
+}
+
+
+bool K3bCdDevice::CdDevice::readRawToc( K3bCdDevice::Toc& toc )
+{
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
+  bool success = false;
+
+  toc.clear();
+
+  if( open() != -1 ) {
+    //
+    // Read Raw TOC (format: 0010b)
+    //
+    // For POINT from 01h-63h we get all the tracks
+    // POINT a1h gices us the last track number in the session in PMIN
+    // POINT a2h gives the start of the session lead-out in PMIN,PSEC,PFRAME
+    //
+
+    unsigned char* data = 0;
+    int dataLen = 0;
+
+    if( readTocPmaAtip( &data, dataLen, 2, false, 1 ) ) {
+      success = true;
+
+      toc_raw_track_descriptor* tr = (toc_raw_track_descriptor*)&data[4];
+
+      K3b::Msf sessionLeadOut;
+
+      for( int i = 0; i < (dataLen-4)/11; ++i ) {
+	kdDebug() << "Session |  ADR   | CONTROL|  TNO   | POINT  |  Min   |  Sec   | Frame  |  Zero  |  PMIN  |  PSEC  | PFRAME |" << endl;
+	QString s;
+	s += QString( " %1 |" ).arg( (int)tr[i].session_number, 6 );
+	s += QString( " %1 |" ).arg( (int)tr[i].adr, 6 );
+	s += QString( " %1 |" ).arg( (int)tr[i].control, 6 );
+	s += QString( " %1 |" ).arg( (int)tr[i].tno, 6 );
+	s += QString( " %1 |" ).arg( (int)tr[i].point, 6, 16 );
+	s += QString( " %1 |" ).arg( (int)tr[i].min, 6 );
+	s += QString( " %1 |" ).arg( (int)tr[i].sec, 6 );
+	s += QString( " %1 |" ).arg( (int)tr[i].frame, 6 );
+	s += QString( " %1 |" ).arg( (int)tr[i].zero, 6, 16 );
+	s += QString( " %1 |" ).arg( (int)tr[i].p_min, 6 );
+	s += QString( " %1 |" ).arg( (int)tr[i].p_sec, 6 );
+	s += QString( " %1 |" ).arg( (int)tr[i].p_frame, 6 );
+	kdDebug() << s << endl << endl;
+
+	if( tr[i].adr == 1 && tr[i].point <= 0x63 ) {
+	  // track
+	  K3bTrack track;
+	  track.m_session = tr[i].session_number;
+	  track.m_firstSector = K3b::Msf( tr[i].p_min, tr[i].p_sec, tr[i].p_frame ) - 150; // :( We use 00:00:00 == 0 lba)
+	  track.m_type = ( tr[i].control & 0x4 ? Track::DATA : Track::AUDIO );
+	  track.m_mode = ( track.type() == Track::DATA ? getTrackDataMode(track.firstSector().lba()) : Track::UNKNOWN );
+	  track.m_copyPermitted = ( tr[i].control & 0x2 );
+	  track.m_preEmphasis = ( tr[i].control & 0x1 );
+
+	  //
+	  // only do this within a session because otherwise we already set the last sector with the session leadout
+	  //
+	  if( !toc.isEmpty() )
+	    if( toc[toc.count()-1].session() == track.session() )
+	      toc[toc.count()-1].m_lastSector = track.firstSector() - 1;
+
+	  toc.append(track);
+	}
+	else if( tr[i].point == 0xa2 ) {
+	  //
+	  // since the session is always reported before the tracks this is where we do this:
+	  // set the previous session's last tracks's last sector to the first sector of the
+	  // session leadout (which was reported before the tracks)
+	  //
+	  // This only happens on multisession CDs
+	  //
+	  if( !toc.isEmpty() )
+	    toc[toc.count()-1].m_lastSector = sessionLeadOut - 1;
+
+	  // this is save since the descriptors are reported in ascending order of the session number
+	  sessionLeadOut = K3b::Msf( tr[i].p_min, tr[i].p_sec, tr[i].p_frame ) - 150; // :( We use 00:00:00 == 0 lba)
+	}
+      }
+
+      // set the last track's last sector
+      if( !toc.isEmpty() )
+	toc[toc.count()-1].m_lastSector = sessionLeadOut - 1;
+
+      delete [] data;
+    }
+  }
+
+  if( needToClose )
+    close();
+
+  return success;
+}
+
+
+// fallback
+bool K3bCdDevice::CdDevice::readTocLinux( K3bCdDevice::Toc& toc )
+{
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
+  bool success = true;
+
+  toc.clear();
 
   struct cdrom_tochdr tochdr;
   struct cdrom_tocentry tocentry;
@@ -1229,7 +1379,9 @@ K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc()
     //
     if( ::ioctl(d->deviceFd,CDROMREADTOCHDR,&tochdr) ) {
       kdDebug() << "(K3bCdDevice) could not get toc header !" << endl;
-    } else {
+      success = false;
+    } 
+    else {
       Track lastTrack;
       for (int i = tochdr.cdth_trk0; i <= tochdr.cdth_trk1 + 1; i++) {
         ::memset(&tocentry,0,sizeof (struct cdrom_tocentry));
@@ -1260,14 +1412,20 @@ K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc()
         //                 2: CD-XA Mode2
         //
 
-        if( ::ioctl(d->deviceFd,CDROMREADTOCENTRY,&tocentry) )
+        if( ::ioctl(d->deviceFd,CDROMREADTOCENTRY,&tocentry) ) {
           kdDebug() << "(K3bCdDevice) error reading tocentry " << i << endl;
+	  success = false;
+	  break;
+	}
 
         int startSec = tocentry.cdte_addr.lba;
         int control  = tocentry.cdte_ctrl & 0x0f;
         int mode     = tocentry.cdte_datamode;
         if( i > tochdr.cdth_trk0 ) {
-          toc.append( Track( lastTrack.firstSector(), startSec-1, lastTrack.type(), lastTrack.mode() ) );
+	  Track track( lastTrack.firstSector(), startSec-1, lastTrack.type(), lastTrack.mode() );
+	  track.m_preEmphasis = control & 0x1;
+	  track.m_copyPermitted = control & 0x2;
+          toc.append( track );
         }
         int trackType = 0;
         int trackMode = Track::UNKNOWN;
@@ -1281,20 +1439,40 @@ K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc()
           mode = getTrackDataMode(startSec);
           if( mode != Track::UNKNOWN )
             trackMode = mode;
-        } else
+        } 
+	else
           trackType = Track::AUDIO;
 
         lastTrack = Track( startSec, startSec, trackType, trackMode );
       }
     }
 
+    if( needToClose )
+      close();
+  }
+  else
+    success = false;
+
+  return success;
+}
+
+
+bool K3bCdDevice::CdDevice::fixupToc( K3bCdDevice::Toc& toc )
+{
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
+  bool success = false;
+
+  if( open() != -1 ) {
     //
     // we probaly need to fixup the toc for multisession mixed-mode cds 
     // since the last audio track's last sector is reported to be in the second
     // session. This code is based on the FixupTOC stuff from the audiocd kioslave
     // Hopefully it works. TODO: we need something better here!
     //
-    if( numSessions() > 1 && toc.contentType() == MIXED ) {
+    if( numSessions() > 1 || toc.contentType() == MIXED ) {
       kdDebug() << "(K3bCdDevice::CdDevice) fixup multisession toc..." << endl;
 
       // we need to update the last secotor of every last track in every session
@@ -1304,7 +1482,7 @@ K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc()
       ms.addr_format = CDROM_LBA;
       if( ::ioctl( d->deviceFd, CDROMMULTISESSION, &ms ) == 0 ) {
 	if( ms.xa_flag ) {
-	  toc[toc.count()-2].setLastSector( ms.addr.lba - 11400 -1 ); // -1 because we are settings the last secotor, not the first of the next track as in the kioslave
+	  toc[toc.count()-2].m_lastSector = ms.addr.lba - 11400 -1; // -1 because we are settings the last secotor, not the first of the next track as in the kioslave
 	  kdDebug() << "(K3bCdDevice::CdDevice) success." << endl;
 	}
 	else
@@ -1313,14 +1491,14 @@ K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc()
       else
 	kdDebug() << "(K3bCdDevice::CdDevice) CDROMMULTISESSION failed." << endl;
     }
-
-
-    if( needToClose )
-      close();
   }
 
-  return toc;
+  if( needToClose )
+    close();
+
+  return success;
 }
+
 
 bool K3bCdDevice::CdDevice::block( bool b) const
 {
@@ -1354,7 +1532,7 @@ bool K3bCdDevice::CdDevice::rewritable() const
 
   disc_info_t inf;
 
-  if( getDiscInfo( &inf ) )
+  if( readDiscInfo( &inf ) )
     return inf.erasable;
   else
     return false;
@@ -1527,7 +1705,7 @@ int K3bCdDevice::CdDevice::currentProfile()
     return -1;
   }
   else {
-    unsigned short profile = profileBuf[6]<<8 | profileBuf[7];
+    short profile = from2Byte( &profileBuf[6] );
     switch (profile) {
     case 0x00: return MEDIA_NONE;
     case 0x10: return MEDIA_DVD_ROM;
@@ -1569,7 +1747,7 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo()
 
     if( inf.diskState() != STATE_NO_MEDIA ) {
       disc_info_t dInf;
-      if( getDiscInfo( &dInf ) ) {
+      if( readDiscInfo( &dInf ) ) {
 
 	//
 	// Copy the needed values from the disk_info struct
@@ -1635,9 +1813,10 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo()
 	  inf.diskState() == STATE_INCOMPLETE ) {
 	K3b::Msf readFrmtCap;
 	if( readFormatCapacity( readFrmtCap ) ) {
-		//kdDebug() << "(K3bCdDevice::CdDevice) READ FORMAT CAPACITY: " << readFrmtCap
-		//    << " other capacity: " << inf.m_capacity << endl;
-	  inf.m_capacity = readFrmtCap;
+	  kdDebug() << "(K3bCdDevice::CdDevice) READ FORMAT CAPACITY: " << readFrmtCap.toString()
+		    << " other capacity: " << inf.m_capacity.toString() << endl;
+	  if( readFrmtCap > 0 )
+	    inf.m_capacity = readFrmtCap;
 	}
       }
       else {
@@ -1814,45 +1993,56 @@ bool K3bCdDevice::CdDevice::readFormatCapacity( K3b::Msf& r )
 
   if( open() != -1 ) {
 
-    bool success = true;
+    bool success = false;
 
-    unsigned char buffer[254]; // for reading the size of the returned data
-    ::memset( buffer, 0, 12 );
+    unsigned char header[4]; // for reading the size of the returned data
+    ::memset( header, 0, 4 );
 
     ScsiCommand cmd( open() );
     cmd[0] = 0x23;  // GPCMD_READ_FORMAT_CAPACITIES;
-    cmd[8] = 12;
-    cmd[9] = 0;
-    if( cmd.transport( TR_DIR_READ, buffer, 12 ) ) {
-      success = false;
-    }
-    else {
-      int realLength = buffer[3];
-      if( realLength + 4 > 256 ) {
-	kdDebug() << "(K3bCdDevice) ERROR: READ_FORMAT_CAPACITIES data length > 256!" << endl;
-	realLength = 251;
-      }
-      ::memset( buffer, 0, realLength+4 );
-      cmd[7] = (realLength+4) >> 8;
-      cmd[8] = (realLength+4) & 0xFF;
-      if( cmd.transport( TR_DIR_READ, buffer, realLength+4 ) ) {
-	success = false;
-      }
-      else {
+    cmd[8] = 4;
+    if( cmd.transport( TR_DIR_READ, header, 4 ) == 0 ) {
+      int realLength = header[3] + 4;
+
+      unsigned char* buffer = new unsigned char[realLength];
+      ::memset( buffer, 0, realLength );
+
+      cmd[7] = realLength >> 8;
+      cmd[8] = realLength & 0xFF;
+      if( cmd.transport( TR_DIR_READ, buffer, realLength ) == 0 ) {
 	//
 	// now find the 00h format type since that contains the number of adressable blocks
 	// and the block size used for formatting the whole media.
 	// There may be multible occurences of this descriptor (MMC4 says so) but I think it's
 	// sufficient to read the first one
+	// 00h may not be supported by the unit (e.g. CD-RW)
+	// for this case we fall back to the first descriptor (the current/maximum descriptor)
 	//
-	for( int i = 12; i < realLength; ++i ) {
-	  if( (buffer[i+4]>>2) == 0 /*00h*/ ) {
+	for( int i = 12; i < realLength-4; ++i ) {
+	  if( (buffer[i+4]>>2) == 0 ) {
 	    // found the descriptor
-	    r = buffer[i]<<24 | buffer[i+1]<<16 | buffer[i+2]<<8 | buffer[i+3];
+	    r = from4Byte( &buffer[i] );
+	    success = true;
 	    break;
 	  }
 	}
+
+	if( !success ) {
+	  // try the current/maximum descriptor
+	  int descType = buffer[8] & 0x03;
+	  if( descType == 1 || descType == 2 ) {
+	    // 1: unformatted :)
+	    // 2: formatted. Here we get the used capacity (lead-in to last lead-out/border-out)
+	    r = from4Byte( &buffer[4] );
+	    success = true;
+
+	    // FIXME: we assume a blocksize of 2048 here. Is that correct? Wouldn' it be better to use
+	    //        the blocksize from the descriptor?
+	  }
+	}
       }
+
+      delete [] buffer;
     }
 
     if( needToClose )
@@ -1864,93 +2054,6 @@ bool K3bCdDevice::CdDevice::readFormatCapacity( K3b::Msf& r )
     return false;
 }
 
-
-// this is stolen from cdrdao's GenericMMC driver
-bool K3bCdDevice::CdDevice::getTrackIndex( long lba,
-					   int *trackNr,
-					   int *indexNr,
-					   unsigned char *ctl )
-{
-  // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
-  bool needToClose = !isOpen();
-
-
-  if (open() != -1) {
-    unsigned short dataLen = 0x30;
-    unsigned char data[0x30];
-    int waitLoops = 10;
-    int waitFailed = 0;
-
-    // play one audio block
-    ScsiCommand cmd( open() );
-    cmd[0] = 0x45;  // GPCMD_PLAY_AUDIO_10;
-    cmd[2] = lba >> 24;
-    cmd[3] = lba >> 16;
-    cmd[4] = lba >> 8;
-    cmd[5] = lba;
-    cmd[7] = 0;
-    cmd[8] = 1;
-
-    if( cmd.transport() ) {
-      kdError() << "(K3bCdDevice::CdDevice) Cannot play audio block." << endl;
-      return false;
-    }
-
-    // wait until the play command finished
-    cmd.clear();
-    cmd[0] = 0xbd;  // GPCMD_MECHANISM_STATUS;
-    cmd[9] = 8;
-
-    while( waitLoops > 0 ) {
-      if( cmd.transport( TR_DIR_READ, data, dataLen ) == 0 ) {
-	if ((data[1] >> 5) == 1) // still playing?
-	  waitLoops--;
-	else
-	  waitLoops = 0;
-      }
-      else {
-	waitFailed = 1;
-	waitLoops = 0;
-      }
-    }
-
-    if(waitFailed) {
-      // The play operation immediately returns success status and the waiting
-      // loop above failed. Wait here for a while until the desired block is
-      // played. It takes ~13 msecs to play a block but access time is in the
-      // order of several 100 msecs
-      ::usleep(300000);
-    }
-
-    // read sub channel information
-    cmd.clear();
-    cmd[0] = 0x42; // GPCMD_READ_SUBCHANNEL;
-    cmd[2] = 0x40; // get sub channel data
-    cmd[3] = 0x01; // get sub Q channel data
-    cmd[6] = 0;
-    cmd[7] = dataLen >> 8;
-    cmd[8] = dataLen;
-
-    if( cmd.transport( TR_DIR_READ, data, dataLen ) ) {
-      kdError() << "(K3bCdDevice::CdDevice) Cannot read sub Q channel data." << endl;
-      return false;
-    }
-
-    *trackNr = data[6];
-    *indexNr = data[7];
-    if (ctl != 0) {
-      *ctl = data[5] & 0x0f;
-    }
-
-    if( needToClose )
-      close();
-
-    return true;
-  }
-  else
-    return false;
-}
 
 bool K3bCdDevice::CdDevice::readSectorsRaw(unsigned char *buf, int start, int count)
 {
@@ -1989,32 +2092,7 @@ bool K3bCdDevice::CdDevice::readSectorsRaw(unsigned char *buf, int start, int co
 }
 
 
-bool K3bCdDevice::CdDevice::readModePage2A( struct mm_cap_page_2A* p ) const
-{
-  unsigned char data[22+8]; // MMC-1: 22 byte, header: 8 byte
-  ::memset( data, 0, 22+8 );
-
-  // to be as compatible as posiible we just use the MMC-1 part of the
-  // mode page. Since we do not use the new stuff yet this is not a problem at all.
-  // the MMC-1 part is 22 bytesin size.
-
-  // MM Capabilities and Mechanical Status Page: 0x2A
-  if( modeSense( 0x2A, data, 22+8 ) ) {
-    //
-    // this might be not perfect regarding performance but this
-    // way we do not need to keep the MODE SENSE header in the
-    // mm_cap_page_2A struct
-    //
-    ::memcpy( p, data+8, 22 );
-
-    return true;
-  }
-  else
-    return false;
-}
-
-
-bool K3bCdDevice::CdDevice::modeSense( int page, unsigned char* pageData, int pageLen ) const
+bool K3bCdDevice::CdDevice::modeSense( unsigned char** pageData, int& pageLen, int page ) const
 {
   // if the device is already opened we do not close it
   // to allow fast multible method calls in a row
@@ -2025,14 +2103,28 @@ bool K3bCdDevice::CdDevice::modeSense( int page, unsigned char* pageData, int pa
 
   bool ret = false;
 
+  unsigned char header[8];
+  ::memset( header, 0, 8 );
+
   ScsiCommand cmd( open() );
   cmd[0] = 0x5A;	// MODE SENSE
   cmd[1] = 0x08;        // Disable Block Descriptors
   cmd[2] = page;
-  cmd[7] = pageLen>>8;
-  cmd[8] = pageLen;
-  cmd[9] = 0;
-  ret = ( cmd.transport( TR_DIR_READ, pageData, pageLen ) == 0 );
+  cmd[8] = 8;           // first we determine the data length
+  if( cmd.transport( TR_DIR_READ, header, 8 ) == 0 ) {
+    // again with real length
+    pageLen = from2Byte( header ) + 2;
+
+    *pageData = new unsigned char[pageLen];
+    ::memset( *pageData, 0, pageLen );
+
+    cmd[7] = pageLen>>8;
+    cmd[8] = pageLen;
+    if( cmd.transport( TR_DIR_READ, *pageData, pageLen ) == 0 )
+      ret = true;
+    else
+      delete [] *pageData;
+  }
 
   if( needToClose )
     close();
@@ -2077,19 +2169,17 @@ void K3bCdDevice::CdDevice::checkWriteModes()
     return;
 
   // header size is 8
-  unsigned char buffer[100];
-  ::memset( buffer, 0, 100 );
+  unsigned char* buffer = 0;
+  int dataLen = 0;
 
-  if( !modeSense( 0x05, buffer, 100 ) ) {
+  if( !modeSense( &buffer, dataLen, 0x05 ) ) {
     kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": modeSense 0x05 failed!" << endl;
   }
   else {
-    int dataLen = (buffer[0]<<8)&0xF0 | buffer[1];
-
     kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": dataLen: " << dataLen << endl;
 
     kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": modesense data: " << endl;
-    debugBitfield( buffer, dataLen+8 );
+    debugBitfield( buffer, dataLen );
 
     wr_param_page_05* mp = (struct wr_param_page_05*)(buffer+8);
 
@@ -2119,10 +2209,10 @@ void K3bCdDevice::CdDevice::checkWriteModes()
     mp->dbtype = 8;         // Mode 1
 
     kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": modeselect TAO data: " << endl;
-    debugBitfield( buffer, dataLen+8 );
+    debugBitfield( buffer, dataLen );
 
 
-    if( modeSelect( buffer, dataLen+2, 1, 0 ) )
+    if( modeSelect( buffer, dataLen, 1, 0 ) )
       m_writeModes |= TAO;
     else
       kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": modeSelect with TAO failed." << endl;
@@ -2131,7 +2221,7 @@ void K3bCdDevice::CdDevice::checkWriteModes()
     // SAO
     mp->write_type = 0x02; // Session-at-once
 
-    if( modeSelect( buffer, dataLen+2, 1, 0 ) )
+    if( modeSelect( buffer, dataLen, 1, 0 ) )
       m_writeModes |= SAO;
     else
       kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": modeSelect with SAO failed." << endl;
@@ -2139,24 +2229,72 @@ void K3bCdDevice::CdDevice::checkWriteModes()
     // RAW
     mp->write_type = 0x03; // RAW
     mp->dbtype = 1;        // Raw data with P and Q Sub-channel (2368 bytes)
-    if( modeSelect( buffer, dataLen+2, 1, 0 ) ) {
+    if( modeSelect( buffer, dataLen, 1, 0 ) ) {
       m_writeModes |= RAW;
       m_writeModes |= RAW_R16;
     }
 
     mp->dbtype = 2;        // Raw data with P-W Sub-channel (2448 bytes)
-    if( modeSelect( buffer, dataLen+2, 1, 0 ) ) {
+    if( modeSelect( buffer, dataLen, 1, 0 ) ) {
       m_writeModes |= RAW;
       m_writeModes |= RAW_R96P;
     }
 
     mp->dbtype = 3;        // Raw data with P-W raw Sub-channel (2368 bytes)
-    if( modeSelect( buffer, dataLen+2, 1, 0 ) ) {
+    if( modeSelect( buffer, dataLen, 1, 0 ) ) {
       m_writeModes |= RAW;
       m_writeModes |= RAW_R96R;
     }
+
+    delete [] buffer;
   }
     
   if( needToClose )
     close();
+}
+
+
+bool K3bCdDevice::CdDevice::readTocPmaAtip( unsigned char** data, int& dataLen, int format, bool time, int track ) const
+{
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
+  if( open() < 0 )
+    return false;
+
+  bool ret = false;
+
+  unsigned char header[4];
+  ::memset( header, 0, 4 );
+
+  ScsiCommand cmd( open() );
+  cmd[0] = 0x43;  // READ TOC/PMA/ATIP
+  cmd[1] = ( time ? 0x2 : 0x0 );
+  cmd[2] = format & 0x0F;
+  cmd[6] = track;
+  cmd[7] = 0;
+  cmd[8] = 4; // we only read the length first
+
+  if( cmd.transport( TR_DIR_READ, header, 4 ) == 0 ) {
+    // again with real length
+    dataLen = from2Byte( header ) + 4;
+
+    *data = new unsigned char[dataLen];
+    ::memset( *data, 0, dataLen );
+
+    cmd[7] = dataLen>>8;
+    cmd[8] = dataLen;
+    if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 )
+      ret = true;
+    else
+      delete [] *data;
+  }
+  else
+    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ TOC/PMA/ATIP length failed." << endl;
+
+  if( needToClose )
+    close();
+
+  return ret;
 }

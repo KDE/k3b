@@ -59,6 +59,7 @@ void K3b::addDefaultPrograms( K3bExternalBinManager* m )
   m->addProgram( new K3bNormalizeProgram() );
   m->addProgram( new K3bGrowisofsProgram() );
   m->addProgram( new K3bDvdformatProgram() );
+  m->addProgram( new K3bCdda2wavProgram() );
 }
 
 
@@ -911,6 +912,89 @@ bool K3bDvdformatProgram::scan( const QString& p )
   bin->copyright = "Andy Polyakov <appro@fy.chalmers.se>";
 
   // check if we run dvd+rw-format as root
+  if( !getuid() )
+    bin->addFeature( "suidroot" );
+  else {
+    struct stat s;
+    if( !::stat( QFile::encodeName(path), &s ) ) {
+      if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
+	bin->addFeature( "suidroot" );
+    }
+  }
+
+  addBin( bin );
+  return true;
+}
+
+
+
+K3bCdda2wavProgram::K3bCdda2wavProgram()
+  : K3bExternalProgram( "cdda2wav" )
+{
+}
+
+bool K3bCdda2wavProgram::scan( const QString& p )
+{
+  if( p.isEmpty() )
+    return false;
+
+  QString path = p;
+  QFileInfo fi( path );
+  if( fi.isDir() ) {
+    if( path[path.length()-1] != '/' )
+      path.append("/");
+    path.append("cdda2wav");
+  }
+
+  if( !QFile::exists( path ) )
+    return false;
+
+  K3bExternalBin* bin = 0;
+
+  // probe version
+  KProcess vp;
+  OutputCollector out( &vp );
+
+  vp << path << "-h";
+  if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
+    int pos = out.output().find( "cdda2wav" );
+    if( pos < 0 )
+      return false;
+
+    pos = out.output().find( "Version", pos );
+    if( pos < 0 )
+      return false;
+
+    pos += 8;
+
+    // the version does not end in a space but the kernel info
+    int endPos = out.output().find( QRegExp("[^\\d\\.]"), pos );
+    if( endPos < 0 )
+      return false;
+
+    bin = new K3bExternalBin( this );
+    bin->path = path;
+    bin->version = out.output().mid( pos, endPos-pos );
+
+    // features (we do this since the cdda2wav help says that the short
+    //           options will disappear soon)
+    if( out.output().find( "-info-only" ) )
+      bin->addFeature( "info-only" ); // otherwise use the -J option
+    if( out.output().find( "-no-infofile" ) )
+      bin->addFeature( "no-infofile" ); // otherwise use the -H option
+    if( out.output().find( "-gui" ) )
+      bin->addFeature( "gui" ); // otherwise use the -g option
+    if( out.output().find( "-bulk" ) )
+      bin->addFeature( "bulk" ); // otherwise use the -B option
+    if( out.output().find( "dev=" ) )
+      bin->addFeature( "dev" ); // otherwise use the -B option
+  }
+  else {
+    kdDebug() << "(K3bCdda2wavProgram) could not start " << path << endl;
+    return false;
+  }
+
+  // check if we run as root
   if( !getuid() )
     bin->addFeature( "suidroot" );
   else {

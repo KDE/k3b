@@ -254,12 +254,7 @@ namespace K3bCdDevice
      */
     //    int getTrackHeader(int lba);
 
-    bool getTrackIndex( long lba,
-			int *trackNr,
-			int *indexNr,
-			unsigned char *ctl );
-
-   /**
+    /**
      * block or unblock the drive's tray
      * returns true on success and false on scsi-error
      */
@@ -316,10 +311,40 @@ namespace K3bCdDevice
   protected:
     bool furtherInit();
 
-    bool getDiscInfo( K3bCdDevice::disc_info_t* info ) const;
-    bool readModePage2A( struct K3bCdDevice::mm_cap_page_2A* p ) const;
+    bool readDiscInfo( K3bCdDevice::disc_info_t* info ) const;
+
     bool modeSelect( unsigned char* page, int pageLen, bool pf, bool sp ) const;
-    bool modeSense( int page, unsigned char* pageData, int pageLen ) const;
+
+    /**
+     * if true is returned pageLen specifies the actual length of *pageData which needs to be
+     * deleted after using.
+     */
+    bool modeSense( unsigned char** pageData, int& pageLen, int page ) const;
+
+    /**
+     * if true is returned dataLen specifies the actual length of *data which needs to be
+     * deleted after using.
+     */
+    bool readTocPmaAtip( unsigned char** data, int& dataLen, int format, bool time, int track ) const;
+
+    /**
+     * Fallback method that uses the evil cdrom.h stuff
+     */
+    bool readTocLinux( Toc& );
+
+    /**
+     * The preferred toc reading method for all CDs. Also reads session info.
+     * undefined for DVDs.
+     */
+    bool readRawToc( Toc& );
+
+    /**
+     * Fixes the last block on CD-Extra disks. This is needed if the readRawToc failed since
+     * in that case the first sector of the last session's first track is used as the previous
+     * session's last track's last sector which is wrong. There is a 11400 block session lead-in
+     * between them. This method fixes this only for the last session and only on linux.
+     */
+    bool fixupToc( Toc& );
 
     void checkWriteModes();
 
