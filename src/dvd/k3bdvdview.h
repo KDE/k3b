@@ -1,0 +1,51 @@
+/***************************************************************************
+                          k3bdvdview.h  -  description
+                             -------------------
+    begin                : Sun Mar 31 2002
+    copyright            : (C) 2002 by Sebastian Trueg
+    email                : trueg@informatik.uni-freiburg.de
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+#ifndef K3BDVDVIEW_H
+#define K3BDVDVIEW_H
+
+#include "../k3bview.h"
+
+class K3bDvdDoc;
+class K3bDvdDirectories;
+class K3bDvdAVSet;
+class K3bDvdAVExtend;
+class K3bDvdCodecData;
+class K3bDvdBaseTab;
+class K3bDvdSizeTab;
+/**
+  *@author Sebastian Trueg
+  */
+
+class K3bDvdView : public K3bView  {
+     Q_OBJECT
+public:
+    K3bDvdView( K3bDvdDoc* pDoc, QWidget* parent=0, const char *name=0 );
+    ~K3bDvdView();
+    /** dummy implementation from K3bView */
+    K3bProjectBurnDialog* burnDialog();
+
+private:
+    K3bDvdCodecData *m_codingData;
+    K3bDvdDoc* m_doc;
+    K3bDvdBaseTab *m_baseTab;
+    K3bDvdSizeTab *m_sizeTab;
+
+    void setupGui();
+};
+
+#endif
