@@ -1,6 +1,6 @@
 
 #include "k3baudiomodule.h"
-#include "k3baudiotrack.h"
+#include "../k3baudiotrack.h"
 
 #include <qtimer.h>
 
@@ -22,7 +22,7 @@ void K3bAudioModule::recalcLength()
 }
 
 
-vois K3bAudioModule::successFinish()
+void K3bAudioModule::successFinish()
 {
   emit finished( true );
 }
