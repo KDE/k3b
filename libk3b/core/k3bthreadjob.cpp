@@ -15,8 +15,8 @@
 
 #include "k3bthreadjob.h"
 #include "k3bthread.h"
-#include <k3bprogressinfoevent.h>
-#include <k3bdataevent.h>
+#include "k3bprogressinfoevent.h"
+#include "k3bdataevent.h"
 
 #include <kdebug.h>
 #include <kapplication.h>

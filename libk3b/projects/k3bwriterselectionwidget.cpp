@@ -39,7 +39,6 @@
 #include <qptrvector.h>
 #include <qcursor.h>
 #include <qapplication.h>
-#include <qmap.h>
 
 
 class K3bWriterSelectionWidget::Private

@@ -30,7 +30,6 @@
 #define private public // need protected for m_open access for the HACK, and public for setting KArchiveFile::m_size
 #include <karchive.h>
 #undef private
-#include <karchive.h>
 
 class KoZipFileEntry;
 /**

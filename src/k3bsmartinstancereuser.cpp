@@ -18,7 +18,6 @@
 #include <dcopref.h>
 #include <kurl.h>
 #include <kdebug.h>
-#include <kurl.h>
 #include <kwin.h>
 #include <kstartupinfo.h>
 

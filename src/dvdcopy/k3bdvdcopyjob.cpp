@@ -25,7 +25,6 @@
 #include <k3bglobals.h>
 #include <k3bcore.h>
 #include <k3bgrowisofswriter.h>
-#include <k3breadcdreader.h>
 #include <k3bversion.h>
 #include <k3biso9660.h>
 

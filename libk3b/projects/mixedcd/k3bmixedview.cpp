@@ -24,7 +24,6 @@
 #include <k3bdatafileview.h>
 #include <k3bdatadoc.h>
 #include <k3baudiotrackview.h>
-#include <k3baudiodoc.h>
 #include <k3bfillstatusdisplay.h>
 
 #include <qwidgetstack.h>

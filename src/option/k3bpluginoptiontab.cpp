@@ -27,7 +27,6 @@
 #include <kdebug.h>
 #include <klistview.h>
 #include <kdialogbase.h>
-#include <kmessagebox.h>
 #include <kconfig.h>
 
 #include <qstringlist.h>

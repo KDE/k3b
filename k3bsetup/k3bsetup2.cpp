@@ -32,7 +32,6 @@
 #include <kmessagebox.h>
 #include <kinputdialog.h>
 #include <kstandarddirs.h>
-#include <kglobal.h>
 #include <kconfig.h>
 #include <kdeversion.h>
 

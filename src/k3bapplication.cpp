@@ -28,7 +28,7 @@
 #include <k3bversion.h>
 #include <songdb/k3bsongmanager.h>
 #include <k3bdoc.h>
-#include <k3bsystemproblemdialog.h>
+#include "k3bsystemproblemdialog.h"
 #include <k3bthread.h>
 #include <k3bpluginmanager.h>
 #include <k3bthememanager.h>

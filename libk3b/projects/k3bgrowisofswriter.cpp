@@ -24,7 +24,7 @@
 #include <k3bdiskinfo.h>
 #include <k3bglobals.h>
 #include <k3bthroughputestimator.h>
-#include <k3bgrowisofshandler.h>
+#include "k3bgrowisofshandler.h"
 #include <k3bpipebuffer.h>
 
 #include <klocale.h>

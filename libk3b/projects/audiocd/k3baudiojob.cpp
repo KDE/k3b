@@ -16,11 +16,11 @@
 
 #include "k3baudiojob.h"
 
-#include <k3baudioimager.h>
+#include "k3baudioimager.h"
 #include <k3baudiodoc.h>
-#include <k3baudiotrack.h>
-#include <k3baudiodatasource.h>
-#include <k3baudionormalizejob.h>
+#include "k3baudiotrack.h"
+#include "k3baudiodatasource.h"
+#include "k3baudionormalizejob.h"
 #include "k3baudiojobtempdata.h"
 #include <k3bdevicemanager.h>
 #include <k3bdevicehandler.h>

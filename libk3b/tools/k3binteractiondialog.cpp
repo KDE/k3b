@@ -19,7 +19,7 @@
 #include "kcutlabel.h"
 #include "k3bstdguiitems.h"
 
-#include <k3bthememanager.h>
+#include "k3bthememanager.h"
 
 #include <qlabel.h>
 #include <qpushbutton.h>

@@ -104,7 +104,7 @@
 #include "k3bwelcomewidget.h"
 #include <k3bpluginmanager.h>
 #include <k3bpluginfactory.h>
-#include <k3bsystemproblemdialog.h>
+#include "k3bsystemproblemdialog.h"
 #include <k3baudiodecoder.h>
 #include <k3bthememanager.h>
 #include <k3biso9660.h>

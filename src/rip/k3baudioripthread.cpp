@@ -21,7 +21,7 @@
 #include <k3bjob.h>
 #include <k3baudioencoder.h>
 #include <k3bwavefilewriter.h>
-#include <k3bcuefilewriter.h>
+#include "k3bcuefilewriter.h"
 
 #include <k3bdevice.h>
 #include <k3btoc.h>

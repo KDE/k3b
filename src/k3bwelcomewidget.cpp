@@ -38,7 +38,6 @@
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kpopupmenu.h>
-#include <kiconloader.h>
 
 
 K3bWelcomeWidget::Display::Display( QWidget* parent )

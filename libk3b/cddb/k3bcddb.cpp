@@ -33,7 +33,7 @@
 
 #include <k3btoc.h>
 #include <k3btrack.h>
-#include <k3bcddbmultientriesdialog.h>
+#include "k3bcddbmultientriesdialog.h"
 
 
 K3bCddb::K3bCddb( QObject* parent, const char* name )

@@ -24,8 +24,6 @@
 #include <k3bglobals.h>
 #include <k3bdatavolumedescwidget.h>
 #include <k3bisooptions.h>
-#include <k3bglobals.h>
-#include <k3bwritingmodewidget.h>
 #include <k3bstdguiitems.h>
 
 #include <kconfig.h>

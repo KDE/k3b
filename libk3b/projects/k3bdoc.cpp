@@ -59,8 +59,8 @@
 #include <k3bcore.h>
 #include <k3bdevicemanager.h>
 
-#include <kostore/koStore.h>
-#include <kostore/koStoreDevice.h>
+#include "kostore/koStore.h"
+#include "kostore/koStoreDevice.h"
 
 
 K3bDoc::K3bDoc( QObject* parent )

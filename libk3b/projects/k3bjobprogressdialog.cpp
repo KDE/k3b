@@ -35,7 +35,6 @@
 #include <qwhatsthis.h>
 #include <qdatetime.h>
 #include <qstring.h>
-#include <qtextview.h>
 #include <qhbox.h>
 #include <qheader.h>
 #include <qscrollbar.h>

@@ -24,7 +24,6 @@
 //#include <qhbuttongroup.h>
 //#include <qradiobutton.h>
 #include <qlabel.h>
-#include <qwhatsthis.h>
 
 #include <kdialog.h>
 #include <klocale.h>
