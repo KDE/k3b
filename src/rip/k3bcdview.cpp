@@ -186,22 +186,22 @@ void K3bCdView::slotCddbQueryFinished( K3bCddb* cddb )
 
 
       qDebug("cddb info:" );
-      qDebug("DTITLE:  '" + entry.cdTitle + "'");
-      qDebug("DARTIST: '" + entry.cdArtist + "'");
-      qDebug("DEXT:    '" + entry.cdExtInfo+ "'" );
-      qDebug("DISCID:  '" + entry.discid+ "'" );
+      qDebug("DTITLE:  '%s'", entry.cdTitle.latin1());
+      qDebug("DARTIST: '%s'", entry.cdArtist.latin1());
+      qDebug("DEXT:    '%s'", entry.cdExtInfo.latin1());
+      qDebug("DISCID:  '%s'", entry.discid.latin1());
 
       for( QStringList::const_iterator it = entry.titles.begin();
 	   it != entry.titles.end(); ++it ) {
-	qDebug("TTITLE:  '" + *it + "'" );
+	qDebug("TTITLE:  '%s'", (*it).latin1());
       }
       for( QStringList::const_iterator it = entry.artists.begin();
 	   it != entry.artists.end(); ++it ) {
-	qDebug("TARTIST: '" + *it + "'");
+	qDebug("TARTIST: '%s'", (*it).latin1());
       }
       for( QStringList::const_iterator it = entry.extInfos.begin();
 	   it != entry.extInfos.end(); ++it ) {
-	qDebug("TEXT:    '" + *it + "'");
+	qDebug("TEXT:    '%s'", (*it).latin1());
       }
 
       // now update the listview

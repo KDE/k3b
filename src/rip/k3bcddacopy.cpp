@@ -57,7 +57,7 @@ void K3bCddaCopy::start()
   //bool result = true;
   m_bytesAll = 0;
   m_interrupt = false;
-  qDebug("(K3bCddaCopy) Start copying " + QString::number( m_bytes) );
+  qDebug("(K3bCddaCopy) Start copying %ld", m_bytes );
   m_drive = m_device->open();
   emit started();
   emit newTask( i18n("Copy cdrom ")  );

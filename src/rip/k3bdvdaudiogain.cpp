@@ -22,6 +22,7 @@
 #include <qstring.h>
 #include <qdir.h>
 
+#include <kdebug.h>
 #include <kprocess.h>
 
 K3bDvdAudioGain::K3bDvdAudioGain( const QString &dir) : QObject() {
@@ -52,12 +53,12 @@ bool K3bDvdAudioGain::start(){
     if( !testDir.exists() ){
         bool result = testDir.mkdir( m_dirname );
         if( result ){
-            qDebug("(K3bDvdAudioGain) Fatal Error, couldn't create directory <" + m_dirname + ">.");
+            qDebug("(K3bDvdAudioGain) Fatal Error, couldn't create directory <%s>.", m_dirname.latin1());
             return false;
         }
     }
     QString outputfile = m_dirname + "/audioGain.log";
-    qDebug("K3bDvdAudioGain) Audio processing " + tcextract->path + " -x ac3 -t vob | " + tcdecode->path + " -x ac3 | " + tcscan->path + " -x pcm ");
+    kdDebug() << "K3bDvdAudioGain) Audio processing " << tcextract->path << " -x ac3 -t vob | " << tcdecode->path << " -x ac3 | " << tcscan->path << " -x pcm ";
     *m_audioProcess << tcextract->path << " -x ac3 -t vob |" << tcdecode->path << " -x ac3 |" << tcscan->path << " -x pcm " << "&>" << outputfile;
     //connect( m_audioProcess, SIGNAL( receivedStdout( KProcess*, char*, int)), this, SLOT(slotParseOutput(KProcess*, char*, int)) );
     //connect( m_audioProcess, SIGNAL( receivedStderr( KProcess*, char*, int)), this, SLOT(slotParseError(KProcess*, char*, int)) );
@@ -89,12 +90,12 @@ void K3bDvdAudioGain::closeStdin( ){
 
 void K3bDvdAudioGain::slotParseOutput( KProcess *p, char *buffer, int len ){
     QString tmp = QString::fromLatin1( buffer, len );
-    qDebug("(K3bDvdAudioGain) AudioProcessing output: " + tmp);
+    qDebug("(K3bDvdAudioGain) AudioProcessing output: %s", tmp.latin1());
 }
 
 void K3bDvdAudioGain::slotParseError( KProcess *p, char *buffer, int len ){
     QString tmp = QString::fromLatin1( buffer, len );
-    qDebug("(K3bDvdAudioGain) AudioProcessing error: " + tmp);
+    qDebug("(K3bDvdAudioGain) AudioProcessing error: %s", tmp.latin1());
 }
 
 void K3bDvdAudioGain::slotExited( KProcess *p){

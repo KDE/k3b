@@ -115,7 +115,7 @@ void K3bTcWrapper::slotTcprobeExited( KProcess *p){
         index = titles.find(",");
         titles = titles.mid(index+1).stripWhiteSpace();
         index = titles.find("angle");
-        qDebug("string: " + titles);
+        qDebug("string: %s", titles.latin1());
         m_allAngle = titles.mid(0, index).stripWhiteSpace().toInt();
         m_firstProbeDone = true;
         qDebug("(K3bTcWrapper) Found titles %i/%i, angles %i", m_currentTitle, m_allTitle, m_allAngle);
@@ -125,8 +125,8 @@ void K3bTcWrapper::slotTcprobeExited( KProcess *p){
         QString titles = errorLines[ 1 ];
         int index = titles.find(":");
         int end = titles.find("chap");
-        qDebug("Title: " + titles.mid(index+1, end-index ));
-        qDebug("Chapters " + QString::number(titles.mid(index+1, end-index-1 ).stripWhiteSpace().toInt() ) );
+        qDebug("Title: %s", titles.mid(index+1, end-index ).latin1());
+        qDebug("Chapters %s", QString::number(titles.mid(index+1, end-index-1 ).stripWhiteSpace().toInt() ).latin1() );
         con.setMaxChapter( (titles.mid(index+1, end-index-1).stripWhiteSpace()).toInt() );
         con.setTitleNumber( m_currentTitle );
 

@@ -60,7 +60,7 @@
 #define COMBO_NONE  4
 
 
-K3bPatternWidget::K3bPatternWidget(QWidget *parent, const char *name=0 ) : QWidget(parent,name){
+K3bPatternWidget::K3bPatternWidget(QWidget *parent, const char *name ) : QWidget(parent,name){
     setup();
 }
 K3bPatternWidget::~K3bPatternWidget(){

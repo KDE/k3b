@@ -57,10 +57,10 @@ bool K3bCdda::openDrive( struct cdrom_drive *drive ){
 
 struct cdrom_drive* K3bCdda::pickDrive( QString newPath )
 {
-    qDebug("(K3bCdda) new drive: " + newPath);
+    qDebug("(K3bCdda) new drive: %s", newPath.latin1());
     QCString path( QFile::encodeName( newPath ) );
     struct cdrom_drive *drive = 0;
-    qDebug("(K3bCdda) reformatted path: " + path);
+    qDebug("(K3bCdda) reformatted path: %s", path.data());
 
     if( !path.isEmpty(  ) && path != "/" )
         drive = cdda_identify( path, CDDA_MESSAGE_PRINTIT, 0 );

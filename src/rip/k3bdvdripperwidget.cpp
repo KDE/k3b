@@ -288,7 +288,7 @@ void K3bDvdRipperWidget::slotParseError( KProcess *p, char *text, int len ){
         if( tmp.contains("blocks") ){
             m_detectTitleSizeDone = true;
             m_titleSize = (double) K3bDvdRippingProcess::tccatParsedBytes( text, len );
-            qDebug("(K3bDvdRipperWidget) Titlesize to rip: " + QString::number(m_titleSize) );
+            qDebug("(K3bDvdRipperWidget) Titlesize to rip: %f", m_titleSize );
             p->kill();
         }
     }
