@@ -254,7 +254,7 @@ void K3bDirView::slotMountDevice( K3bDevice* device )
   const QString& mountPoint = device->mountPoint();
 
   if( !mountPoint.isEmpty() ){
-    if( KIO::findDeviceMountPoint( device->ioctlDevice() ).isEmpty() )
+    if( KIO::findDeviceMountPoint( device->mountDevice() ).isEmpty() )
       connect( KIO::mount( true, "autofs", device->mountDevice(), mountPoint, true ), SIGNAL(result(KIO::Job*)),
 	       this, SLOT(reload()) );
 
