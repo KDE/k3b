@@ -18,6 +18,10 @@
 
 #include <qobject.h>
 
+namespace K3bDevice {
+  class Device;
+}
+
 
 /**
  * This class handles the output parsing for growisofs
@@ -46,8 +50,9 @@ class K3bGrowisofsHandler : public QObject
    * This will basicly reset the error type
    * @param dao was growisofs called with DAO?
    */
-  void reset( bool dao = false );
+  void reset( K3bDevice::Device* = 0, bool dao = false );
 
+  void handleStart();
   void handleLine( const QString& );
   void handleExit( int exitCode );
 
@@ -61,9 +66,13 @@ class K3bGrowisofsHandler : public QObject
    */
   void flushingCache();
 
+ private slots:
+  void slotCheckBufferStatus();
+
  private:
   int m_error;
   bool m_dao;
+  K3bDevice::Device* m_device;
 };
 
 #endif

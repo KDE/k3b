@@ -24,7 +24,8 @@
 
 
 KCutLabel::KCutLabel( const QString &text , QWidget *parent, const char *name )
- : QLabel ( parent, name ) {
+ : QLabel ( parent, name ),
+   m_minChars(1) {
   QSizePolicy myLabelSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
   setSizePolicy(myLabelSizePolicy);
   m_fullText = text;
@@ -32,7 +33,8 @@ KCutLabel::KCutLabel( const QString &text , QWidget *parent, const char *name )
 }
 
 KCutLabel::KCutLabel( QWidget *parent, const char *name )
- : QLabel ( parent, name ) {
+ : QLabel ( parent, name ),
+   m_minChars(1) {
   QSizePolicy myLabelSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
   setSizePolicy(myLabelSizePolicy);
 }
@@ -40,16 +42,30 @@ KCutLabel::KCutLabel( QWidget *parent, const char *name )
 QSize KCutLabel::minimumSizeHint() const
 {
   QSize sh = QLabel::minimumSizeHint();
-  sh.setWidth(-1);
+  if( m_minChars == 0 )
+    sh.setWidth(-1);
+  else if( m_minChars < (int)m_fullText.length() )
+    sh.setWidth( QMIN( fontMetrics().width( m_fullText.left(m_minChars) + "..." ), 
+		       fontMetrics().width( m_fullText ) ) );
+
   return sh;
 }
 
 
-void KCutLabel::resizeEvent( QResizeEvent * ) {
+void KCutLabel::setMinimumVisibleText( int i )
+{
+  m_minChars = i;
   cutTextToLabel();
 }
 
-void KCutLabel::setText( const QString &text ) {
+
+void KCutLabel::resizeEvent( QResizeEvent * )
+{
+  cutTextToLabel();
+}
+
+void KCutLabel::setText( const QString &text )
+{
   m_fullText = text;
   cutTextToLabel();
 }
@@ -63,7 +79,11 @@ void KCutLabel::cutTextToLabel()
     QString newText;
     QStringList lines = QStringList::split( "\n", m_fullText );
     for( QStringList::Iterator it = lines.begin(); it != lines.end(); ++it ) {
-      QString squeezedText = K3b::cutToWidth( fontMetrics(), *it, size().width() );
+      QString squeezedText = K3b::cutToWidth( fontMetrics(), 
+					      *it, 
+					      QMAX( size().width(), 
+						    QMIN( fontMetrics().width( m_fullText.left(m_minChars) + "..." ), 
+							  fontMetrics().width( m_fullText ) ) ) );
       newText += squeezedText;
       newText += "\n";
       if( squeezedText != *it )
@@ -74,7 +94,11 @@ void KCutLabel::cutTextToLabel()
     QLabel::setText( newText );
   }
   else {
-    QString squeezedText = K3b::cutToWidth( fontMetrics(), m_fullText, size().width() );
+    QString squeezedText = K3b::cutToWidth( fontMetrics(), 
+					    m_fullText, 
+					    QMAX( size().width(), 
+						  QMIN( fontMetrics().width( m_fullText.left(m_minChars) + "..." ), 
+							fontMetrics().width( m_fullText ) ) ) );
     QLabel::setText( squeezedText );
     if( squeezedText != m_fullText )
       QToolTip::add( this, m_fullText );      

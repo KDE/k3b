@@ -436,12 +436,17 @@ void K3bIsoImager::start()
   kdDebug() << s << endl << flush;
   emit debuggingOutput("mkisofs command:", s);
 
-  if( m_doc->needToCutFilenames() )
-    emit infoMessage( i18n("Some filenames need to be shortened due to the %1 char restriction "
-			   "of the Joliet extensions.")
-		      .arg( m_doc->isoOptions().jolietLong() ? 103 : 64 ), 
-		      WARNING );
-
+  if( m_doc->needToCutFilenames() ) {
+    if( !questionYesNo( i18n("Some filenames need to be shortened due to the %1 char restriction "
+			     "of the Joliet extensions. Continue anyway?")
+			.arg( m_doc->isoOptions().jolietLong() ? 103 : 64 ) ) ) {
+      emit canceled();
+      emit finished( false );
+      cleanup();
+      return;
+    }
+  }
+  
   if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput) ) {
     // something went wrong when starting the program
     // it "should" be the executable

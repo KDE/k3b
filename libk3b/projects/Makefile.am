@@ -12,7 +12,6 @@ libk3bproject_la_SOURCES = k3babstractwriter.cpp \
                            k3bblankingjob.cpp \
                            k3bdoc.cpp \
                            k3bcdrdaowriter.cpp \
-                           k3bemptydiscwaiter.cpp \
                            k3bcdrecordwriter.cpp \
 			   k3binffilewriter.cpp \
 			   k3btocfilewriter.cpp \
@@ -24,7 +23,6 @@ include_HEADERS =          k3bblankingjob.h \
                            k3bdoc.h \
 	                   k3bgrowisofswriter.h \
                            k3bcdrdaowriter.h \
-                           k3bemptydiscwaiter.h \
                            k3bcdrecordwriter.h \
 			   k3binffilewriter.h \
 			   k3btocfilewriter.h \

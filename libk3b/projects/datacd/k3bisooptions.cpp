@@ -34,7 +34,7 @@ K3bIsoOptions::K3bIsoOptions()
   m_bForceInputCharset = false;
 
   m_createRockRidge = true;
-  m_createJoliet = false;
+  m_createJoliet = true;
   m_createUdf = false;
   m_ISOallowLowercase = false;
   m_ISOallowPeriodAtBegin = false;

@@ -46,6 +46,14 @@ class K3bJob : public QObject, public K3bJobHandler
 
   virtual bool active() const { return false; }
 
+  /**
+   * The default implementation is based on the canceled() signal.
+   *
+   * This means that one cannot count on this value beeing valid
+   * in a slot connected to the canceled() signal.
+   */
+  virtual bool hasBeenCanceled() const { return m_canceled; }
+
   virtual QString jobDescription() const { return "K3bJob"; }
   virtual QString jobDetails() const { return QString::null; }
 
@@ -60,6 +68,8 @@ class K3bJob : public QObject, public K3bJobHandler
    * from a slot connected to a subjob's finished signal.
    * You may do something like this:
    * 
+   * FIXME: this blows!
+   *
    * if( numRunningSubJobs() == 0 || ( numRunningSubJobs() == 1 && runningSubJobs().containsRef(job) ) )
    */
   unsigned int numRunningSubJobs() const;
@@ -139,10 +149,13 @@ class K3bJob : public QObject, public K3bJobHandler
  private slots:
   void slotStarted();
   void slotFinished( bool );
+  void slotCanceled();
 
  private:
   K3bJobHandler* m_jobHandler;
   QPtrList<K3bJob> m_runningSubJobs;
+
+  bool m_canceled;
 };
 
 

@@ -37,7 +37,6 @@
 #include <k3bcore.h>
 #include <k3bdoc.h>
 #include <k3bprocess.h>
-#include <k3bemptydiscwaiter.h>
 #include <k3bdevice.h>
 #include <k3bexternalbinmanager.h>
 #include <k3bglobals.h>
@@ -382,7 +381,7 @@ void K3bVcdJob::startWriterjob()
 {
     kdDebug() << QString( "(K3bVcdJob) writing copy %1 of %2" ).arg( m_currentcopy ).arg( m_doc->copies() ) << endl;
     if ( prepareWriterJob() ) {
-        if ( K3bEmptyDiscWaiter::wait( m_doc->burner() ) == K3bEmptyDiscWaiter::CANCELED ) {
+        if ( waitForMedia( m_doc->burner() ) < 0 ) {
             cancel();
             return ;
         }

@@ -27,7 +27,8 @@
 
 K3bJob::K3bJob( K3bJobHandler* handler, QObject* parent, const char* name )
   : QObject( parent, name ),
-    m_jobHandler( handler )
+    m_jobHandler( handler ),
+    m_canceled(false)
 {
   //
   // Connect to the started and finished signals to properly register
@@ -38,6 +39,8 @@ K3bJob::K3bJob( K3bJobHandler* handler, QObject* parent, const char* name )
 	   this, SLOT(slotStarted()) );
   connect( this, SIGNAL(finished(bool)),
 	   this, SLOT(slotFinished(bool)) );
+  connect( this, SIGNAL(canceled()),
+	   this, SLOT(slotCanceled()) );
 }
 
 K3bJob::~K3bJob()
@@ -47,6 +50,8 @@ K3bJob::~K3bJob()
 
 void K3bJob::slotStarted()
 {
+  m_canceled = false;
+
   if( parent() && parent()->inherits( "K3bJob" ) )
     static_cast<K3bJob*>(parent())->registerSubJob( this );
   else
@@ -60,6 +65,12 @@ void K3bJob::slotFinished( bool )
     static_cast<K3bJob*>(parent())->unregisterSubJob( this );
   else
     k3bcore->unregisterJob( this );
+}
+
+
+void K3bJob::slotCanceled()
+{
+  m_canceled = true;
 }
 
 

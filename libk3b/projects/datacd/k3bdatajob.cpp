@@ -303,7 +303,11 @@ void K3bDataJob::slotIsoImagerFinished( bool success )
       }
     }
     else {
-      emit infoMessage( i18n("Error while creating ISO image"), ERROR );
+      if( m_isoImager->hasBeenCanceled() )
+	emit canceled();
+      else
+	emit infoMessage( i18n("Error while creating ISO image"), ERROR );
+
       cancelAll();
     }
   }

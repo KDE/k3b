@@ -71,7 +71,7 @@ const QString& K3bDataItem::k3bName() const
 QString K3bDataItem::k3bPath() const
 {
   if( !parent() )
-    return "";  // the root item is the only one not having a parent
+    return QString::null;  // the root item is the only one not having a parent
   else if( isDir() )
     return parent()->k3bPath() + k3bName() + "/";
   else
@@ -82,7 +82,7 @@ QString K3bDataItem::k3bPath() const
 QString K3bDataItem::writtenPath() const
 {
   if( !parent() )
-    return "";  // the root item is the only one not having a parent
+    return QString::null;  // the root item is the only one not having a parent
   else if( isDir() )
     return parent()->writtenPath() + writtenName() + "/";
   else

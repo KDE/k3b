@@ -40,6 +40,11 @@ class KCutLabel : public QLabel
  public slots:
   void setText( const QString & );
 
+  /**
+   * \param i the number of characters that have to be visible. Default is 1.
+   */
+  void setMinimumVisibleText( int i );
+
  protected:
   /**
    * used when widget is resized
@@ -49,7 +54,10 @@ class KCutLabel : public QLabel
    * does the dirty work
    */
   void cutTextToLabel();
+
+ private:
   QString m_fullText;
+  int m_minChars;
 };
 
 #endif // KCUTLABEL_H

@@ -907,18 +907,19 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
      QKeyEvent* ke = static_cast<QKeyEvent*>(e);
      if( ke->key() == Key_Tab ) {
        if( o == m_editorLineEdit || o == m_editorMsfEdit || o == m_editorSpinBox ) {
+	 K3bListViewItem* lastEditItem = m_currentEditItem;
+
 	 doRename();
 
-	 if( m_currentEditItem ) {
+	 if( lastEditItem ) {
 	   // can we rename one of the other columns?
 	   int col = currentEditColumn()+1;
-	   while( col < columns() && m_currentEditItem->editorType( col ) == K3bListViewItem::NONE )
+	   while( col < columns() && lastEditItem->editorType( col ) == K3bListViewItem::NONE )
 	     ++col;
 	   if( col < columns() )
-	     editItem( m_currentEditItem, col );
-	   // the m_currentEditItem might become 0 above
+	     editItem( lastEditItem, col );
 	   else if( K3bListViewItem* nextItem = 
-		    dynamic_cast<K3bListViewItem*>( m_currentEditItem ? m_currentEditItem->nextSibling() : 0 ) ) {
+		    dynamic_cast<K3bListViewItem*>( lastEditItem->nextSibling() ) ) {
 	     // edit first column
 	     col = 0;
 	     while( col < columns() && nextItem->editorType( col ) == K3bListViewItem::NONE )
@@ -934,10 +935,11 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
      }
      if( ke->key() == Key_Return ) {
        if( o == m_editorLineEdit || o == m_editorMsfEdit || o == m_editorSpinBox ) {
+	 K3bListViewItem* lastEditItem = m_currentEditItem;
 	 doRename();
-	 // the m_currentEditItem might become 0 above
+
 	 if( K3bListViewItem* nextItem = 
-	     dynamic_cast<K3bListViewItem*>( m_currentEditItem ? m_currentEditItem->nextSibling() : 0 ) )
+	     dynamic_cast<K3bListViewItem*>( lastEditItem->nextSibling() ) )
 	   editItem( nextItem, currentEditColumn() );
 	 else
 	   hideEditor();

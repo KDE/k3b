@@ -245,10 +245,10 @@ bool K3bGrowisofsWriter::prepareProcess()
       *d->process << "-use-the-force-luke=dao:" + QString::number(d->trackSize + trackSizePadding);
     else
       *d->process << "-use-the-force-luke=dao";
-    d->gh->reset(true);
+    d->gh->reset( burnDevice(), true );
   }
   else
-    d->gh->reset(false);
+    d->gh->reset( burnDevice(), false );
 
   if( dvdCompat )
     *d->process << "-dvd-compat";
@@ -336,6 +336,7 @@ void K3bGrowisofsWriter::start()
 	emit infoMessage( i18n("Starting writing..."), K3bJob::INFO );
       }
 
+      d->gh->handleStart();
 
       // create the ring buffer
       if( d->usingRingBuffer ) {

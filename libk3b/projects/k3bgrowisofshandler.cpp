@@ -18,10 +18,13 @@
 #include <k3bjob.h>
 #include <k3bcore.h>
 #include <k3bglobalsettings.h>
+#include <k3bdevice.h>
 
 #include <klocale.h>
 #include <kglobal.h>
 #include <kdebug.h>
+
+#include <qtimer.h>
 
 #include <errno.h>
 #include <string.h>
@@ -39,11 +42,19 @@ K3bGrowisofsHandler::~K3bGrowisofsHandler()
 }
 
 
-void K3bGrowisofsHandler::reset( bool dao )
+void K3bGrowisofsHandler::reset( K3bDevice::Device* dev, bool dao )
 {
+  m_device = dev;
   m_error = ERROR_UNKNOWN;
   m_dao = dao;
 }
+
+
+void K3bGrowisofsHandler::handleStart()
+{
+  QTimer::singleShot( 2000, this, SLOT(slotCheckBufferStatus()) );
+}
+
 
 void K3bGrowisofsHandler::handleLine( const QString& line )
 {
@@ -82,6 +93,10 @@ void K3bGrowisofsHandler::handleLine( const QString& line )
       emit infoMessage( line, K3bJob::ERROR );
   }
   else if( line.contains( "flushing cache" ) ) {
+    // here is where we already should stop queriying the buffer fill
+    // since the device is only used there so far...
+    m_device = 0;
+    
     emit flushingCache();
     emit newSubTask( i18n("Flushing Cache")  );
     emit infoMessage( i18n("Flushing the cache may take some time."), K3bJob::INFO );
@@ -201,6 +216,24 @@ void K3bGrowisofsHandler::handleExit( int exitCode )
     else {
       emit infoMessage( i18n("Fatal error during recording: %1").arg(strerror(exitCode)), 
 			K3bJob::ERROR );
+    }
+  }
+
+  reset();
+}
+
+
+void K3bGrowisofsHandler::slotCheckBufferStatus()
+{
+  // FIXME: do this in a thread
+  if( m_device ) {
+    long long size, avail;
+    if( !m_device->readBufferCapacity( size, avail ) && size > 0 ) {
+      emit deviceBuffer( 100*(size-avail)/size );
+      QTimer::singleShot( 500, this, SLOT(slotCheckBufferStatus()) );
+    }
+    else {
+      kdDebug() << "(K3bGrowisofsHandler) stopping buffer check." << endl;
     }
   }
 }

@@ -166,7 +166,7 @@ void K3bGrowisofsImager::start()
   // The imager is only used in multisession mode, so we never use DAO and do not need to care about the
   // size of the track or anything.
   //
-  d->gh->reset( false );
+  d->gh->reset( m_doc->burner(), false );
 
   //
   // Some DVD writers do not allow changing the writing speed so we allow
@@ -261,6 +261,8 @@ void K3bGrowisofsImager::start()
       emit newTask( i18n("Writing") );
       emit infoMessage( i18n("Starting writing..."), K3bJob::INFO );
     }
+
+    d->gh->handleStart();
   }
 }
 
