@@ -35,7 +35,6 @@
 #include <kprocess.h>
 #include <kapplication.h>
 #include <kstandarddirs.h>
-#include <klocale.h>
 #include <kconfig.h>
 
 // application specific includes
@@ -115,14 +114,14 @@ void K3bDoc::removeView(K3bView *view)
     changedViewList();
 }
 
-void K3bDoc::changedViewList(){	
-	
+void K3bDoc::changedViewList(){
+
   K3bView *w;
   if( (int)pViewList->count() == 1 ) {
     w = pViewList->first();
     w->setCaption( URL().fileName() );
   }
-  else{	
+  else{
     int i;
     for( i = 1, w = pViewList->first(); w != 0; i++, w = pViewList->next() )
       w->setCaption( QString(URL().fileName()+":%1").arg(i) );
@@ -202,10 +201,10 @@ K3bDoc* K3bDoc::openDocument(const KURL& url )
       f.close();
     }
   }
-  
+
   // ///////////////////////////////////////////////
   KIO::NetAccess::removeTempFile( tmpfile );
-  
+
   if( !success ) {
     kdDebug() << "(K3bDoc) could not open file " << url.path() << endl;
     return 0;
@@ -221,9 +220,9 @@ K3bDoc* K3bDoc::openDocument(const KURL& url )
     newDoc = new K3bVcdDoc( k3bMain() );
   else
     kdDebug() << "(K3bDoc) unknown doc type: " << xmlDoc.doctype().name() << endl;
-      
+
   // ---------
-  // load the data into the document	
+  // load the data into the document
   if( newDoc != 0 ) {
     newDoc->newDocument();
     if( newDoc->loadDocumentData( &xmlDoc ) ) {
@@ -232,7 +231,7 @@ K3bDoc* K3bDoc::openDocument(const KURL& url )
       return newDoc;
     }
   }
-  
+
 
   delete newDoc;
   return 0;
@@ -252,7 +251,7 @@ bool K3bDoc::saveDocument(const KURL& url )
 
   // open the document inside the store
   store->open( "maindata.xml" );
-  
+
   // save the data in the document
   QDomDocument xmlDoc( documentType() );
   bool success = saveDocumentData( &xmlDoc );

@@ -25,9 +25,7 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qpixmap.h>
-#include <qstring.h>
 #include <qstringlist.h>
-#include <qsplitter.h>
 #include <qdragobject.h>
 #include <qstrlist.h>
 #include <qheader.h>
@@ -144,11 +142,11 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
 
 
   m_devicePopupMenu = new KActionMenu( this );
-  KAction* actionDiskInfo = new KAction( i18n("&Disk info"), "info", 0, this, SLOT(slotShowDiskInfo()), 
+  KAction* actionDiskInfo = new KAction( i18n("&Disk info"), "info", 0, this, SLOT(slotShowDiskInfo()),
 					 this, "disk_info");
-  KAction* actionUnmount = new KAction( i18n("&Unmount"), "cdrom_unmount", 0, this, SLOT(slotUnmountDisk()), 
+  KAction* actionUnmount = new KAction( i18n("&Unmount"), "cdrom_unmount", 0, this, SLOT(slotUnmountDisk()),
 					this, "disk_unmount");
-  KAction* actionEject = new KAction( i18n("&Eject"), "", 0, this, SLOT(slotEjectDisk()), 
+  KAction* actionEject = new KAction( i18n("&Eject"), "", 0, this, SLOT(slotEjectDisk()),
 					this, "disk_eject");
 
   m_devicePopupMenu->insert( actionDiskInfo );
@@ -221,9 +219,9 @@ void K3bDirView::slotDiskInfoReady( const K3bDiskInfo& info )
     // check for MIXED_MODE and ask
     bool mount = false;
     if( info.tocType == K3bDiskInfo::MIXED  ) {
-      mount = ( KMessageBox::questionYesNo( this, 
+      mount = ( KMessageBox::questionYesNo( this,
 					    i18n("Found Mixed-mode CD. Do you want K3b to mount the data part or show all the tracks?"),
-					    i18n("Mixed-mode CD"), 
+					    i18n("Mixed-mode CD"),
 					    i18n("Mount CD"),
 					    i18n("Show tracks") ) == KMessageBox::Yes );
     }
@@ -245,7 +243,7 @@ void K3bDirView::slotMountDevice( K3bDevice* device )
     if( KIO::findDeviceMountPoint( device->ioctlDevice() ).isEmpty() )
       connect( KIO::mount( true, "autofs", device->mountDevice(), mountPoint, true ), SIGNAL(result(KIO::Job*)),
 	       this, SLOT(reload()) );
-    
+
     KURL url = KURL( mountPoint );
     slotDirActivated( url );
   }
@@ -275,7 +273,7 @@ void K3bDirView::slotShowDiskInfo()
 void K3bDirView::slotUnmountDisk()
 {
   if( m_lastDevice ) {
-    KIO::unmount( m_lastDevice->mountPoint() );    
+    KIO::unmount( m_lastDevice->mountPoint() );
   }
 }
 

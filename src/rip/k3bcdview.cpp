@@ -44,7 +44,6 @@
 #include <klistview.h>
 #include <kpopupmenu.h>
 #include <kio/global.h>
-#include <kaction.h>
 #include <kstdaction.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
@@ -56,9 +55,9 @@ K3bCdView::K3bCdView( QWidget* parent, const char *name )
 {
   m_cddb = new K3bCddb( this );
 
-  connect( m_cddb, SIGNAL(infoMessage(const QString&)), 
+  connect( m_cddb, SIGNAL(infoMessage(const QString&)),
 	   k3bMain(), SLOT(showBusyInfo(const QString&)) );
-  connect( m_cddb, SIGNAL(queryFinished(bool)), 
+  connect( m_cddb, SIGNAL(queryFinished(bool)),
 	   k3bMain(), SLOT(endBusy()) );
 
   connect( m_cddb, SIGNAL(queryFinished(bool)),
@@ -143,7 +142,7 @@ void K3bCdView::showCdView( const K3bDiskInfo& info )
 
     // for now skip data tracks since we are not able to rip them to iso
     if( (*it).type() == K3bTrack::AUDIO )
-      (void)new KListViewItem( m_listView, 
+      (void)new KListViewItem( m_listView,
 			       QString::number(index).rightJustify( 2, '0' ),
 			       "", i18n("Track%1").arg(index),
 			       K3b::framesToString( (*it).length(), false ),
@@ -153,7 +152,7 @@ void K3bCdView::showCdView( const K3bDiskInfo& info )
     index++;
   }
 
-  m_labelCdArtist->setText( i18n("Audio CD") + "\n" + 
+  m_labelCdArtist->setText( i18n("Audio CD") + "\n" +
 			    i18n("Length: %1").arg( K3b::framesToString(m_lastDiskInfo.toc.length()) ) );
 
   KConfig* c = kapp->config();
@@ -219,7 +218,7 @@ void K3bCdView::slotCddbQueryFinished( bool success )
 	item->setText( 6, entry.extInfos[no] );
       }
 
-      // and update the cd info 
+      // and update the cd info
       QString i = QString("%1 - %2\n").arg(entry.cdArtist).arg(entry.cdTitle);
       i.append( i18n("Length: %1").arg( K3b::framesToString(m_lastDiskInfo.toc.length()) ) );
       if( !entry.cdExtInfo.isEmpty() )

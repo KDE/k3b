@@ -51,7 +51,6 @@
 #include <qdir.h>
 #include <qstringlist.h>
 #include <qmessagebox.h>
-#include <qgroupbox.h>
 #include <qfont.h>
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
@@ -159,9 +158,9 @@ void K3bRipperWidget::init()
   m_radioMp3->setChecked( filetype == "mp3" );
 
   m_editStaticRipPath->setText( c->readEntry( "last ripping directory", QDir::homeDirPath() ) );
-  m_checkUsePattern->setChecked( !m_cddbEntry.cdArtist.isEmpty() && 
+  m_checkUsePattern->setChecked( !m_cddbEntry.cdArtist.isEmpty() &&
 				 m_cddbEntry.titles.count() >= m_diskInfo.toc.count() );
-    
+
   refresh();
 }
 
@@ -248,12 +247,12 @@ void K3bRipperWidget::refresh()
     QString filename, directory;
 
     if( m_checkUsePattern->isChecked() && m_cddbEntry.titles.count() >= *it ) {
-      filename = K3bPatternParser::parsePattern( m_cddbEntry, *it, 
+      filename = K3bPatternParser::parsePattern( m_cddbEntry, *it,
 						 c->readEntry( "filename pattern", "%a - %t" ),
 						 c->readBoolEntry( "replace blank in filename", false ),
 						 c->readEntry( "filename replace string", "_" ) ) + extension;
-      
-      directory = K3bPatternParser::parsePattern( m_cddbEntry, *it, 
+
+      directory = K3bPatternParser::parsePattern( m_cddbEntry, *it,
 						  c->readEntry( "directory pattern", "%r/%m" ),
 						  c->readBoolEntry( "replace blank in directory", false ),
 						  c->readEntry( "directory replace string", "_" ) );

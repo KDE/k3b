@@ -50,7 +50,6 @@
 #include <qptrlist.h>
 #include <qstringlist.h>
 #include <qpoint.h>
-#include <qtabwidget.h>
 #include <qfileinfo.h>
 
 #include <klocale.h>
@@ -64,23 +63,23 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
 {
 
   m_vcdDoc = _doc;
-  
+
   QTabWidget* tab = new QTabWidget( k3bMainWidget() );
   QFrame* f1 = new QFrame( tab );
   QFrame* f2 = new QFrame( tab );
   QFrame* f3 = new QFrame( tab );
-  
+
   tab->addTab( f1, i18n("Burning") );
   tab->addTab( f2, i18n("VideoCD") );
   tab->addTab( f3, i18n("Label") );
-  
+
   setupBurnTab( f1 );
   setupVideoCdTab( f2 );
   setupLabelTab( f3 );
-    
+
   // connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_tempDirSelectionWidget, SLOT(setDisabled(bool)) );
   // connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkDeleteImage, SLOT(setDisabled(bool)) );
-  
+
   QFileInfo fi( m_tempDirSelectionWidget->tempPath() );
   QString path;
 
@@ -180,7 +179,7 @@ void K3bVcdBurnDialog::setupVideoCdTab( QFrame* frame )
 
   m_groupVcdFormatLayout->addWidget( m_radioVcd11 );
   m_groupVcdFormatLayout->addWidget( m_radioVcd20 );
-  m_groupVcdFormatLayout->addWidget( m_radioSvcd10 );    
+  m_groupVcdFormatLayout->addWidget( m_radioSvcd10 );
   // --------------------------------------------------- VcdFormat group ---
 
   // ---- option group ------------------------------------------------
@@ -233,7 +232,7 @@ void K3bVcdBurnDialog::setupLabelTab( QFrame* frame )
   m_editAlbumId = new QLineEdit( frame, "m_editAlbumId" );
   m_spinVolumeCount = new QSpinBox( frame, "m_editVolumeCount" );
   m_spinVolumeNumber = new QSpinBox( frame, "m_editVolumeNumber" );
-  
+
   QFrame* line = new QFrame( frame );
   line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
 
@@ -269,7 +268,7 @@ void K3bVcdBurnDialog::setupLabelTab( QFrame* frame )
   labelVolumeNumber->setEnabled(false);
   m_spinVolumeCount->setEnabled(false);
   m_spinVolumeNumber->setEnabled(false);
-  
+
 }
 
 
@@ -313,7 +312,7 @@ void K3bVcdBurnDialog::loadDefaults()
   // m_editPublisher->setText( o->publisher() );
   // m_editPreparer->setText( o->preparer() );
   // m_editSystem->setText( o->systemId() );
-  
+
 }
 
 void K3bVcdBurnDialog::saveSettings()
@@ -334,11 +333,11 @@ void K3bVcdBurnDialog::saveSettings()
 
   // save image file path (.bin)
   ((K3bVcdDoc*)doc())->setVcdImage( m_tempDirSelectionWidget->tempPath() );
-  
+
   // TODO: save vcdType
   vcdDoc()->vcdOptions()->setVolumeId( m_editVolumeId->text() );
   vcdDoc()->vcdOptions()->setAlbumId( m_editAlbumId->text() );
-  
+
 }
 
 
@@ -368,7 +367,7 @@ void K3bVcdBurnDialog::readSettings()
     break;
   }
 
-  
+
   m_editVolumeId->setText( vcdDoc()->vcdOptions()->volumeId() );
   m_editAlbumId->setText( vcdDoc()->vcdOptions()->albumId() );
 
@@ -386,7 +385,7 @@ void K3bVcdBurnDialog::loadUserDefaults()
   // m_checkOnTheFly->setChecked( c->readBoolEntry( "on_the_fly", true ) );
   // m_checkBurnProof->setChecked( c->readBoolEntry( "burnproof", true ) );
   m_checkDeleteImage->setChecked( c->readBoolEntry( "remove_image", true ) );
-  
+
 }
 
 
@@ -400,7 +399,7 @@ void K3bVcdBurnDialog::saveUserDefaults()
   // c->writeEntry( "on_the_fly", m_checkOnTheFly->isChecked() );
 
   c->writeEntry( "remove_image", m_checkDeleteImage->isChecked() );
-  
+
 }
 
 #include "k3bvcdburndialog.moc"

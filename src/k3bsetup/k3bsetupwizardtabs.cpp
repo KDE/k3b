@@ -21,7 +21,6 @@
 #include <qwhatsthis.h>
 #include <qpixmap.h>
 #include <qptrlist.h>
-#include <qpixmap.h>
 
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -119,7 +118,7 @@ void DeviceTab::slotRefreshButtonClicked()
   // reread devices
   setup()->deviceManager()->clear();
   setup()->deviceManager()->scanbus();
-  
+
   m_deviceWidget->init();
 }
 
@@ -185,7 +184,7 @@ FstabEntriesTab::FstabEntriesTab( int i, int o, K3bSetupWizard* wizard )
   setPixmap( QPixmap(locate( "data", "k3b/pics/k3bsetup_fstab.png" )) );
 
   QWidget* main = new QWidget( this, "main" );
-  QGridLayout* mainGrid = new QGridLayout( main ); 
+  QGridLayout* mainGrid = new QGridLayout( main );
   mainGrid->setSpacing( KDialog::spacingHint() );
   mainGrid->setMargin( 0 );
 
@@ -226,7 +225,7 @@ FstabEntriesTab::FstabEntriesTab( int i, int o, K3bSetupWizard* wizard )
   setMainWidget( main );
 
   connect( m_buttonSelectMountPoint, SIGNAL(clicked()), this, SLOT(slotSelectMountPoint()) );
-  connect( m_viewFstab, SIGNAL(itemRenamed(QListViewItem*, const QString&, int)), 
+  connect( m_viewFstab, SIGNAL(itemRenamed(QListViewItem*, const QString&, int)),
 	   this, SLOT(slotMountPointChanged(QListViewItem*, const QString&, int)) );
 }
 
@@ -253,7 +252,7 @@ void FstabEntriesTab::readSettings()
 
       dev->setMountPoint( item->text(3) );
     }
-      
+
     i++;
     dev = setup()->deviceManager()->readingDevices().next();
   }
@@ -276,7 +275,7 @@ void FstabEntriesTab::readSettings()
 
       dev->setMountPoint( item->text(3) );
     }
-      
+
     i++;
     dev = setup()->deviceManager()->burningDevices().next();
   }
@@ -298,7 +297,7 @@ void FstabEntriesTab::slotMountPointChanged( QListViewItem* item, const QString&
     // check if newMp is an absolute path
     if( !newMp.startsWith("/") )
       newMp.prepend("/");
-    
+
     item->setText( 2, newMp );
     deviceItem->device->setMountPoint( newMp );
   }
@@ -335,7 +334,7 @@ ExternalBinTab::ExternalBinTab( int i, int o, K3bSetupWizard* wizard )
   setPixmap( QPixmap(locate( "data", "k3b/pics/k3bsetup_programs.png" )) );
 
   QWidget* main = new QWidget( this, "m_page5" );
-  QGridLayout* mainGrid = new QGridLayout( main ); 
+  QGridLayout* mainGrid = new QGridLayout( main );
   mainGrid->setSpacing( KDialog::spacingHint() );
   mainGrid->setMargin( 0 );
 
@@ -389,7 +388,7 @@ PermissionTab::PermissionTab( int i, int o, K3bSetupWizard* wizard )
 
 
   QWidget* main = new QWidget( this, "main" );
-  QGridLayout* mainGrid = new QGridLayout( main ); 
+  QGridLayout* mainGrid = new QGridLayout( main );
   mainGrid->setSpacing( KDialog::spacingHint() );
   mainGrid->setMargin( 0 );
 
@@ -437,7 +436,7 @@ PermissionTab::PermissionTab( int i, int o, K3bSetupWizard* wizard )
 //   Line1->setFrameShadow( QFrame::Sunken );
 //   Line1->setFrameShape( QFrame::HLine );
 
-  QVBoxLayout* Layout1 = new QVBoxLayout( 0, 0, 6, "Layout1"); 
+  QVBoxLayout* Layout1 = new QVBoxLayout( 0, 0, 6, "Layout1");
   QSpacerItem* spacer_3 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
   Layout1->addItem( spacer_3 );
 
@@ -513,7 +512,7 @@ bool PermissionTab::saveSettings()
   if( !m_checkPermissionsDevices->isChecked() && !setup()->deviceManager()->allDevices().isEmpty() )
     if( KMessageBox::warningYesNo( this, i18n("You chose not to change device permissions. K3b will not be able "
 					       "to provide extended features like detection of writer capabilities. "
-					      "Continue?") ) 
+					      "Continue?") )
 	== KMessageBox::No )
       return false;
 

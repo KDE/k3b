@@ -23,7 +23,6 @@
 #include <knuminput.h>
 #include <kconfig.h>
 #include <kapplication.h>
-#include <kiconloader.h>
 
 
 K3bCddbOptionTab::K3bCddbOptionTab( QWidget* parent,  const char* name )
@@ -109,9 +108,9 @@ K3bCddbOptionTab::K3bCddbOptionTab( QWidget* parent,  const char* name )
   connect( m_editCddbServer, SIGNAL(textChanged(const QString&)), this, SLOT(enDisableButtons()) );
   connect( m_viewLocalDir, SIGNAL(selectionChanged()), this, SLOT(enDisableButtons()) );
   connect( m_viewCddbServer, SIGNAL(selectionChanged()), this, SLOT(enDisableButtons()) );
-  connect( m_comboCddbType, SIGNAL(highlighted(int)), 
+  connect( m_comboCddbType, SIGNAL(highlighted(int)),
 	   this, SLOT(slotServerTypeChanged()) );
-  connect( m_comboCddbType, SIGNAL(activated(int)), 
+  connect( m_comboCddbType, SIGNAL(activated(int)),
 	   this, SLOT(slotServerTypeChanged()) );
   // -----------------------------------------------------------------------------
 
@@ -242,11 +241,11 @@ void K3bCddbOptionTab::slotKdeProxySettings()
   KRun::runCommand( "kcmshell proxy" );
 }
 
-  
+
 void K3bCddbOptionTab::slotLocalDirAdd()
 {
   if( !m_editLocalDir->text().isEmpty() ) {
-    (void)new KListViewItem( m_viewLocalDir, m_viewLocalDir->lastItem(), 
+    (void)new KListViewItem( m_viewLocalDir, m_viewLocalDir->lastItem(),
 			     m_editLocalDir->text() );
 
     enDisableButtons();
@@ -266,9 +265,9 @@ void K3bCddbOptionTab::slotLocalDirRemove()
 void K3bCddbOptionTab::slotCddbServerAdd()
 {
   if( !m_editCddbServer->text().isEmpty() ) {
-    (void)new KListViewItem( m_viewCddbServer, m_viewCddbServer->lastItem(), 
+    (void)new KListViewItem( m_viewCddbServer, m_viewCddbServer->lastItem(),
 			     m_comboCddbType->currentText(),
-			     m_editCddbServer->text(), 
+			     m_editCddbServer->text(),
 			     QString::number( m_editCddbPort->value() ) );
 
     enDisableButtons();
@@ -296,9 +295,9 @@ void K3bCddbOptionTab::enDisableButtons()
 
   m_buttonAddCddbServer->setDisabled( m_editCddbServer->text().isEmpty() );
   m_buttonRemoveCddbServer->setDisabled( m_viewCddbServer->selectedItem() == 0 );
-  m_buttonCddbServerUp->setDisabled( m_viewCddbServer->selectedItem() == 0 || 
+  m_buttonCddbServerUp->setDisabled( m_viewCddbServer->selectedItem() == 0 ||
 				     m_viewCddbServer->selectedItem() == m_viewCddbServer->firstChild() );
-  m_buttonCddbServerDown->setDisabled( m_viewCddbServer->selectedItem() == 0 || 
+  m_buttonCddbServerDown->setDisabled( m_viewCddbServer->selectedItem() == 0 ||
 				       m_viewCddbServer->selectedItem() == m_viewCddbServer->lastItem() );
 
   m_boxProxyServer->setEnabled( m_radioUseManualProxy->isChecked() && m_checkUseProxy->isChecked() );
