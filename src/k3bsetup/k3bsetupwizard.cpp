@@ -527,6 +527,7 @@ void K3bSetupWizard::slotAddDevice()
   if( ok ) {
     if( K3bDevice* dev = m_deviceManager->addDevice( newDevicename ) ) {
       updateDevices();
+      updateFstabEntries();
     }
     else
       KMessageBox::error( this, "Sorry, could not find an additional device at\n" + newDevicename, i18n("Error"), false );
