@@ -45,7 +45,9 @@ K3bVcdTrack::~K3bVcdTrack()
 
 unsigned long K3bVcdTrack::size() const
 {
-  return (m_file.size() + 2351) / 2352 * 2352;
+  // mode2 -> mode1 int(( n+2047 ) / 2048) * 2352
+  // mode1 -> mode2 int(( n+2351 ) / 2352) * 2048
+  return long(( m_file.size()+2351 ) / 2352) * 2048;
 }
 
 void K3bVcdTrack::setMpegType(const QString& mt)
@@ -76,6 +78,62 @@ void K3bVcdTrack::setMpegFps(const QString& fps)
 void K3bVcdTrack::setMpegMbps(const QString& mbps)
 {
   m_mpegmbps = mbps;
+}
+
+void K3bVcdTrack::setMpegAspectRatio(const QString& ratio)
+{
+  m_mpegaspect_ratio = ratio;
+}
+
+void K3bVcdTrack::setMpegProgressive(const bool& progressive)
+{
+  m_mpegprogressive = progressive;
+}
+
+void K3bVcdTrack::setMpegChromaFormat(const QString& chromaformat)
+{
+  m_mpegchroma_format = chromaformat;
+}
+
+// audio
+void K3bVcdTrack::setMpegAudioType(const int& type)
+{
+  m_mpegaudiotype = type;
+}
+
+void K3bVcdTrack::setMpegAudioLayer(const int& layer)
+{
+  m_mpegaudiolayer = layer;
+}
+
+void K3bVcdTrack::setMpegAudioDuration(const QString& duration)
+{
+  m_mpegaudioduration = duration;
+}
+
+void K3bVcdTrack::setMpegAudioKbps(const QString& kbps)
+{
+  m_mpegaudiokbps = kbps;
+}
+
+void K3bVcdTrack::setMpegAudioHz(const QString& hz)
+{
+  m_mpegaudiohz = hz;
+}
+
+void K3bVcdTrack::setMpegAudioFrame(const QString& frame)
+{
+  m_mpegaudioframe = frame;
+}
+
+void K3bVcdTrack::setMpegAudioMode(const int& mode)
+{
+  m_mpegaudiomode = mode;
+}
+
+void K3bVcdTrack::setMpegAudioModeExt(const int& modeext)
+{
+  m_mpegaudiomodeext = modeext;
 }
 
 

@@ -203,12 +203,10 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
     K3bVcdTrack* newTrack =  new K3bVcdTrack( m_tracks, url.path() );
     char HMS[30];
     QString mt;
-
-    m_mpeg->SecsToHMS(HMS, m_mpeg->Duration());
-
+    m_mpeg->SecsToHMS(HMS, m_mpeg->Video->duration);
     mt.append(i18n(" MPEG%1").arg(mpeg));
 
-    newTrack->setMpegDisplaySize(" n/a");
+    newTrack->setMpegDisplaySize(QString(" %1 x %2").arg(m_mpeg->Video->hsize).arg(m_mpeg->Video->vsize));
     if (m_mpeg->DExt){
       switch (m_mpeg->DExt->video_format) {
         case 0 : mt.append(i18n("  Component")); break;
@@ -221,7 +219,7 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
       if ((m_mpeg->DExt->h_display_size != m_mpeg->Video->hsize) || (m_mpeg->DExt->v_display_size != m_mpeg->Video->vsize))
         newTrack->setMpegDisplaySize(QString(" %1 x %2").arg(m_mpeg->DExt->h_display_size).arg(m_mpeg->DExt->v_display_size));
     }
-    
+
     newTrack->setMpegSize(QString(" %1 x %2").arg(m_mpeg->Video->hsize).arg(m_mpeg->Video->vsize));
     newTrack->setMpegFps(QString(" %1").arg(m_mpeg->Video->frame_rate));
     newTrack->setMpegMbps(QString(" %1").arg(m_mpeg->Video->bitrate/2500.0));
@@ -229,6 +227,24 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
     newTrack->setMpegDuration(HMS);
     newTrack->setMpegType(mt);
 
+    newTrack->setMpegAspectRatio(QString("%1").arg(m_mpeg->Video->aspect_ratio));
+
+    if (m_mpeg->SExt){
+      newTrack->setMpegProgressive(m_mpeg->SExt->progressive);
+      newTrack->setMpegChromaFormat(QString("%1").arg(m_mpeg->SExt->chroma_format));
+    }
+    // audio
+    if (m_mpeg->has_audio()) {
+      m_mpeg->SecsToHMS(HMS, m_mpeg->Audio->duration);
+      newTrack->setMpegAudioType(m_mpeg->Audio->mpeg_ver);
+      newTrack->setMpegAudioLayer(m_mpeg->Audio->layer);
+      newTrack->setMpegAudioDuration(HMS);
+      newTrack->setMpegAudioKbps(QString("%1").arg(m_mpeg->Audio->bitrate));
+      newTrack->setMpegAudioHz(QString("%1").arg(m_mpeg->Audio->sampling_rate));
+      newTrack->setMpegAudioFrame(QString("%1").arg(m_mpeg->Audio->frame_length));
+      newTrack->setMpegAudioMode(m_mpeg->Audio->mode);
+      newTrack->setMpegAudioModeExt(m_mpeg->Audio->modext);
+    }
 
     return newTrack;
   }
