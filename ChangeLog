@@ -1,3 +1,6 @@
+0.8.1
+fixed compiling problems with kernel < 2.4.3
+
 0.8
 advanced options: manually selection of writing app (cdrecord or cdrdao)
 
