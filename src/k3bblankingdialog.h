@@ -22,7 +22,6 @@
 
 class QGroupBox;
 class QComboBox;
-class QCheckBox;
 class QCloseEvent;
 class KListView;
 class K3bWriterSelectionWidget;
@@ -53,7 +52,6 @@ Q_OBJECT
   K3bWriterSelectionWidget* m_writerSelectionWidget;
 
   QComboBox* m_comboEraseMode;
-  QCheckBox* m_checkForce;
   QGroupBox* m_groupOutput;
   KListView* m_viewOutput;
 

@@ -20,6 +20,7 @@
 #include <device/k3bdevicehandler.h>
 #include <k3bglobals.h>
 #include <k3bcore.h>
+#include <k3biso9660.h>
 #include "k3bblankingjob.h"
 #include <k3bbusywidget.h>
 #include "k3bdiskerasinginfodialog.h"
@@ -256,14 +257,18 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
 
       if( dh->ngDiskInfo().diskState() == K3bCdDevice::STATE_COMPLETE &&
 	  d->wantedMediaState == K3bCdDevice::STATE_EMPTY ) {
-	// TODO: check if the media contains a filesystem
-	if( KMessageBox::questionYesNo( qApp->activeWindow(),
-					i18n("Found %1 media in %2 - %3. "
-					     "Should it be overwritten?")
-					.arg("DVD+RW")
-					.arg(d->device->vendor())
-					.arg(d->device->description()),
-					i18n("Found %1").arg("DVD+RW") ) == KMessageBox::Yes ) {
+	// check if the media contains a filesystem
+	K3bIso9660 isoF( d->device->open() );
+	bool hasIso = isoF.open( IO_ReadOnly );
+	d->device->close();
+
+	if( !hasIso || KMessageBox::questionYesNo( qApp->activeWindow(),
+						   i18n("Found %1 media in %2 - %3. "
+							"Should it be overwritten?")
+						   .arg("DVD+RW")
+						   .arg(d->device->vendor())
+						   .arg(d->device->description()),
+						   i18n("Found %1").arg("DVD+RW") ) == KMessageBox::Yes ) {
 	  finishWaiting( K3bCdDevice::MEDIA_DVD_PLUS_RW );
 	}
 	else {
@@ -335,14 +340,18 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
 
 	kdDebug() << "(K3bEmptyDiscWaiter) ------ DVD-RW restricted overwrite." << endl;
 
-	// TODO: check if the media contains a filesystem
-	if( KMessageBox::questionYesNo( qApp->activeWindow(),
-					i18n("Found %1 media in %2 - %3. "
-					     "Should it be overwritten?")
-					.arg(K3bCdDevice::mediaTypeString(dh->ngDiskInfo().currentProfile()))
-					.arg(d->device->vendor())
-					.arg(d->device->description()),
-					i18n("Found %1").arg("DVD-RW") ) == KMessageBox::Yes ) {
+	// check if the media contains a filesystem
+	K3bIso9660 isoF( d->device->open() );
+	bool hasIso = isoF.open( IO_ReadOnly );
+	d->device->close();
+
+	if( !hasIso || KMessageBox::questionYesNo( qApp->activeWindow(),
+						   i18n("Found %1 media in %2 - %3. "
+							"Should it be overwritten?")
+						   .arg(K3bCdDevice::mediaTypeString(dh->ngDiskInfo().currentProfile()))
+						   .arg(d->device->vendor())
+						   .arg(d->device->description()),
+						   i18n("Found %1").arg("DVD-RW") ) == KMessageBox::Yes ) {
 	  finishWaiting( K3bCdDevice::MEDIA_DVD_RW_OVWR );
 	}
 	else {

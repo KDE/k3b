@@ -110,12 +110,12 @@ void K3bBlankingDialog::setupGui()
   // ------------------------------------------------------------------------
 
   // -- setup option group --------------------------------------------------
-  QGroupBox* groupOptions = new QGroupBox( 1, Qt::Vertical, i18n("Options"), frame );
-  groupOptions->layout()->setSpacing( spacingHint() );
-  groupOptions->layout()->setMargin( marginHint() );
+//   QGroupBox* groupOptions = new QGroupBox( 1, Qt::Vertical, i18n("Options"), frame );
+//   groupOptions->layout()->setSpacing( spacingHint() );
+//   groupOptions->layout()->setMargin( marginHint() );
 
-  m_checkForce = new QCheckBox( i18n("&Force"), groupOptions );
-  QToolTip::add( m_checkForce, i18n("Try this if K3b is not able to blank a CD-RW in normal mode") );
+//   m_checkForce = new QCheckBox( i18n("&Force"), groupOptions );
+//   QToolTip::add( m_checkForce, i18n("Try this if K3b is not able to blank a CD-RW in normal mode") );
   // ------------------------------------------------------------------------
 
 
@@ -123,10 +123,10 @@ void K3bBlankingDialog::setupGui()
   grid->setSpacing( spacingHint() );
   grid->setMargin( 0 );
 
-  grid->addMultiCellWidget( m_writerSelectionWidget, 0, 0, 0, 1 );
+  grid->addMultiCellWidget( m_writerSelectionWidget, 0, 0, 0, 0 );
   grid->addWidget( groupBlankType, 1, 0 );
-  grid->addWidget( groupOptions, 1, 1 );
-  grid->addMultiCellWidget( m_groupOutput, 2, 2, 0, 1 );
+  //  grid->addWidget( groupOptions, 1, 1 );
+  grid->addMultiCellWidget( m_groupOutput, 2, 2, 0, 0 );
 }
 
 
@@ -144,7 +144,8 @@ void K3bBlankingDialog::slotStartClicked()
 
   d->job->setDevice( m_writerSelectionWidget->writerDevice() );
   d->job->setSpeed( m_writerSelectionWidget->writerSpeed() );
-  d->job->setForce( m_checkForce->isChecked() );
+  // why should one ever not want to force?
+  d->job->setForce( true /*m_checkForce->isChecked()*/ );
   d->job->setWritingApp(m_writerSelectionWidget->writingApp());
   d->job->setMode( d->comboTypeMap[m_comboEraseMode->currentItem()] );
 
@@ -267,7 +268,7 @@ void K3bBlankingDialog::slotLoadK3bDefaults()
 {
   m_writerSelectionWidget->loadDefaults();
   m_comboEraseMode->setCurrentItem( d->typeComboMap[K3bBlankingJob::Fast] );
-  m_checkForce->setChecked(false);
+  //  m_checkForce->setChecked(false);
 }
 
 void K3bBlankingDialog::slotLoadUserDefaults()
@@ -292,7 +293,7 @@ void K3bBlankingDialog::slotLoadUserDefaults()
       m_comboEraseMode->setCurrentItem( d->typeComboMap[K3bBlankingJob::Unclose] );
   }
 
-  m_checkForce->setChecked( c->readBoolEntry( "force", false ) );
+  //  m_checkForce->setChecked( c->readBoolEntry( "force", false ) );
 }
 
 void K3bBlankingDialog::slotSaveUserDefaults()
@@ -320,7 +321,7 @@ void K3bBlankingDialog::slotSaveUserDefaults()
   }
   c->writeEntry( "erase_mode", mode );
 
-  c->writeEntry( "force", m_checkForce->isChecked() );
+  //  c->writeEntry( "force", m_checkForce->isChecked() );
 
   m_writerSelectionWidget->saveConfig( c );
 }

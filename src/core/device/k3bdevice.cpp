@@ -242,10 +242,12 @@ bool K3bCdDevice::CdDevice::init()
 
 	case 0x01D: // Multi-Read
 	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Multi-Read" << endl;
+	  d->deviceType |= CDROM;
 	  break;
 
 	case 0x01E: // CD Read
 	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "CD Read" << endl;
+	  d->deviceType |= CDROM;
 	  break;
 
 	case 0x01F: // DVD Read
@@ -583,26 +585,23 @@ bool K3bCdDevice::CdDevice::init()
     return false;
   }
     
-  d->deviceType |= CDROM;  // all drives should be able to read cdroms
-  
-  if (drivetype & CDC_CD_R) {
-    d->deviceType |= CDR;
-  }
-  if (drivetype & CDC_CD_RW) {
-    d->deviceType |= CDRW;
-  }
-  if (drivetype & CDC_DVD_R) {
-    d->deviceType |= DVDR;
-  }
-  if (drivetype & CDC_DVD_RAM) {
-    d->deviceType |= DVDRAM;
-  }
-  if (drivetype & CDC_DVD) {
-    d->deviceType |= DVD;
-  }
-  
+  // FIXME: not all drives are able to read cdroms
+  // (some 1st generation DVD writers)
+  d->deviceType |= CDROM;
 
-  if( burner() )
+  if (drivetype & CDC_CD_R)
+    d->deviceType |= CDR;
+  if (drivetype & CDC_CD_RW)
+    d->deviceType |= CDRW;
+  if (drivetype & CDC_DVD_R)
+    d->deviceType |= DVDR;
+  if (drivetype & CDC_DVD_RAM)
+    d->deviceType |= DVDRAM;
+  if (drivetype & CDC_DVD)
+    d->deviceType |= DVD;
+   
+
+  if( writesCd() )
     checkWriteModes();
 
 
@@ -672,9 +671,15 @@ bool K3bCdDevice::CdDevice::dao() const
 }
 
 
-bool K3bCdDevice::CdDevice::burner() const
+bool K3bCdDevice::CdDevice::writesCd() const
 {
   return d->deviceType & CDR;
+}
+
+
+bool K3bCdDevice::CdDevice::burner() const
+{
+  return writesCd();
 }
 
 
@@ -1684,9 +1689,6 @@ bool K3bCdDevice::CdDevice::block( bool b) const
 
 bool K3bCdDevice::CdDevice::rewritable() const
 {
-  if( !burner() )  // no chance to detect empty discs in readers
-    return false;
-
   unsigned char* data = 0;
   int dataLen = 0;
 

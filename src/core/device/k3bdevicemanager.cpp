@@ -589,17 +589,18 @@ K3bDevice* K3bCdDevice::DeviceManager::addDevice( const QString& devicename )
 
     d->allDevices.append( device );
 
-    // every drive should be able to read CDs
-    d->cdReader.append( device );
-
+    // not every drive is able to read CDs
+    // there are some 1st generation DVD writer that cannot
+    if( device->type() & CdDevice::CDROM )
+      d->cdReader.append( device );
     if( device->readsDvd() )
       d->dvdReader.append( device );
-    if( device->burner() )
+    if( device->writesCd() )
       d->cdWriter.append( device );
     if( device->writesDvd() )
       d->dvdWriter.append( device );
 
-    if( device->burner() ) {
+    if( device->writesCd() ) {
       // default to max write speed
       kdDebug() << "(K3bDeviceManager) setting current write speed of device " 
 		<< device->blockDeviceName() 

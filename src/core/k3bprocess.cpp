@@ -141,10 +141,6 @@ void K3bProcess::splitOutput( char* data, int len, bool stdout )
 
   for( it = lines.begin(); it != lines.end(); ++it ) {
     QString& str = *it;
-    if( str[0] == '\r' )
-      str = str.mid( 1 );
-
-    //    kdDebug() << "(K3bProcess)         emitting line: '" << str << "'" << endl;
 
     if( stdout )
       emit stdoutLine( str );

@@ -79,7 +79,10 @@ namespace K3bCdDevice
     const QString& vendor() const { return m_vendor; }
     const QString& description() const { return m_description; }
     const QString& version() const { return m_version; }
+
+    // depr. use writesCd
     bool           burner() const;
+    bool           writesCd() const;
     bool           writesCdrw() const;
     bool           writesDvd() const;
     bool           readsDvd() const;
