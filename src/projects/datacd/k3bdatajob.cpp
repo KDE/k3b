@@ -748,7 +748,7 @@ QString K3bDataJob::jobDetails() const
     return i18n("Iso9660 Filesystem (Size: %1) - %n copy", 
 		"Iso9660 Filesystem (Size: %1) - %n copies",
 		d->doc->copies() )
-      .arg(KIO::convertSize( d->doc->size() ))
+      .arg(KIO::convertSize( d->doc->size() ));
   else
     return i18n("Iso9660 Filesystem (Size: %1)")
       .arg(KIO::convertSize( d->doc->size() ));
