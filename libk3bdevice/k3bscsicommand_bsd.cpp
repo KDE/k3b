@@ -19,6 +19,7 @@
 #include <kdebug.h>
 
 #include <stdio.h>
+#include <errno.h>
 #include <camlib.h>
 #include <cam/scsi/scsi_message.h>
 #include <cam/scsi/scsi_pass.h>
@@ -86,7 +87,6 @@ int K3bCdDevice::ScsiCommand::transport( TransportDirection dir,
       debugError( d->ccb.csio.cdb_io.cdb_bytes[0],
 		  senset->error_code & SSD_ERRCODE,
 		  senset->flags & SSD_KEY,
-		  senset->flags & SSD_KEY,
 		  senset->add_sense_code,
 		  senset->add_sense_code_qual );
       return ret;
@@ -124,7 +124,6 @@ int K3bCdDevice::ScsiCommand::transport( TransportDirection dir,
 	  debugError( d->ccb.csio.cdb_io.cdb_bytes[0],
 		      senset->error_code & SSD_ERRCODE,
 		      senset->flags & SSD_KEY,
-		      senset->flags & SSD_KEY,
 		      senset->add_sense_code,
 		      senset->add_sense_code_qual );
 	  return -1;
@@ -137,7 +136,6 @@ int K3bCdDevice::ScsiCommand::transport( TransportDirection dir,
 	  struct scsi_sense_data* senset = (struct scsi_sense_data*)sense;
 	  debugError( d->ccb.csio.cdb_io.cdb_bytes[0],
 		      senset->error_code & SSD_ERRCODE,
-		      senset->flags & SSD_KEY,
 		      senset->flags & SSD_KEY,
 		      senset->add_sense_code,
 		      senset->add_sense_code_qual );
@@ -156,7 +154,6 @@ int K3bCdDevice::ScsiCommand::transport( TransportDirection dir,
   struct scsi_sense_data* senset = (struct scsi_sense_data*)sense;
   debugError( d->ccb.csio.cdb_io.cdb_bytes[0],
 	      senset->error_code & SSD_ERRCODE,
-	      senset->flags & SSD_KEY,
 	      senset->flags & SSD_KEY,
 	      senset->add_sense_code,
 	      senset->add_sense_code_qual );
