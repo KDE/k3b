@@ -16,6 +16,5 @@ SUBDIRS = core plugin tools projects cddb
 #pkgconfigdir = $(libdir)/pkgconfig
 #pkgconfig_DATA = libk3b.pc
 
-messages: rc.cpp
-	$(EXTRACTRC) `find . -name "*.rc" -o -name "*.ui"` > rc.cpp
+messages:
 	$(XGETTEXT) `find -name "*.cpp" -o -name "*.h"` -o $(podir)/libk3b.pot
