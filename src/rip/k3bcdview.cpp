@@ -42,17 +42,15 @@
 #include <klistview.h>
 #include <kpopupmenu.h>
 #include <kio/global.h>
+#include <kaction.h>
+#include <kstdaction.h>
+
 
 extern "C" {
 #include "../libwm/include/workman.h"
 }
 
 
-#define RELOAD_BUTTON_INDEX         0
-#define GRAB_BUTTON_INDEX             1
-#define SELECTION_BUTTON_INDEX    2
-#define PLAY_BUTTON_INDEX              3
-#define STOP_BUTTON_INDEX              4
 //#define DEFAULT_CDROM                 "/dev/cdrom"
 #define DEFAULT_CDDB_HOST           "freedb.org:888"
 #define COLUMN_NUMBER       0
@@ -64,19 +62,25 @@ extern "C" {
 
 K3bCdView::K3bCdView(QWidget *parent, const char *name=0)
   : QVBox(parent, name){
-  m_initialized=false;
+
   readSettings();
+
+  setupGUI();
 }
 
 K3bCdView::~K3bCdView(){
-  if( m_initialized ){
-    delete m_cddb;
-    delete m_cdda;
-  }
+
+  // FIXME: shouldn't these be QObjects?
+  delete m_cddb;
+  delete m_cdda;
 }
 
 void K3bCdView::setupGUI(){
+  // FIXME: the toolbar can be moved around and not be docked again
   KToolBar *toolBar = new KToolBar( k3bMain(), this, "cdviewtoolbar" );
+
+  m_actionCollection = new KActionCollection( this );
+
   m_listView = new KListView(this, "cdviewcontent");
   m_listView->addColumn(i18n( "No") );
   m_listView->addColumn(i18n( "Artist") );
@@ -89,38 +93,31 @@ void K3bCdView::setupGUI(){
   m_listView->setShowSortIndicator(true);
   m_listView->setAllColumnsShowFocus(true);
 
-  KIconLoader *_il = new KIconLoader("k3b");
-  toolBar->insertButton( _il->iconPath("reload", KIcon::Toolbar), 	RELOAD_BUTTON_INDEX);
-  toolBar->insertButton( _il->iconPath("editcopy", KIcon::Toolbar), 	GRAB_BUTTON_INDEX);
-  toolBar->insertButton( _il->iconPath("view_choose", KIcon::Toolbar), 	SELECTION_BUTTON_INDEX);
-  toolBar->insertButton( _il->iconPath("1rightarrow", KIcon::Toolbar), 	PLAY_BUTTON_INDEX);
-  toolBar->insertButton( _il->iconPath("player_stop", KIcon::Toolbar), 	STOP_BUTTON_INDEX);
-  KToolBarButton *_buttonGrab = toolBar->getButton(GRAB_BUTTON_INDEX);
-  KToolBarButton *_buttonReload = toolBar->getButton(RELOAD_BUTTON_INDEX);
-  KToolBarButton *_buttonSelectionMode = toolBar->getButton(SELECTION_BUTTON_INDEX);
-  _buttonSelectionMode->setText(i18n("Selection Mode") );
-  KToolBarButton *_buttonPlay = toolBar->getButton( PLAY_BUTTON_INDEX);
-  KToolBarButton *_buttonStop = toolBar->getButton( STOP_BUTTON_INDEX);
 
-  m_cddb = new K3bCddb(  );
+  KAction* reloadAction   = KStdAction::redisplay( this, SLOT(reload()), m_actionCollection );
+  KAction* copyAction     = KStdAction::copy( this, SLOT(prepareRipping()), m_actionCollection );
+  KAction* viewModeAction = new KAction( i18n("&Selection Mode"), "view_choose", 0, this, 
+					 SLOT(changeSelectionMode()), m_actionCollection );
+  KAction* playAction     = new KAction( i18n("&Play"), "1rightarrow", 0, this, SLOT(play()), 
+					 m_actionCollection );
+  KAction* stopAction     = new KAction( i18n("&Stop"), "player_stop", 0, this, SLOT(stop()), 
+					 m_actionCollection );
+
+  reloadAction->plug( toolBar );
+  copyAction->plug( toolBar );
+  viewModeAction->plug( toolBar );
+  playAction->plug( toolBar );
+  stopAction->plug( toolBar );
+
+
+  m_cddb = new K3bCddb();
   m_cdda = new K3bCdda();
   m_parser = new K3bPatternParser( &m_dirPatternList, &m_filePatternList, m_cddb );
-  // connect to the actions
-  connect( _buttonReload, SIGNAL(clicked()), this, SLOT(reload()) );
-  connect( _buttonGrab, SIGNAL(clicked()), this, SLOT(prepareRipping()) );
-  connect( _buttonSelectionMode, SIGNAL(clicked()), this, SLOT(changeSelectionMode()) );
-  connect( _buttonPlay, SIGNAL(clicked()), this, SLOT( play() ) );
-  connect( _buttonStop, SIGNAL(clicked()), this, SLOT( stop() ) );
-  connect( m_listView, SIGNAL(rightButtonClicked ( QListViewItem *, const QPoint &, int )), this, SLOT(slotMenuActivated(QListViewItem*, const QPoint &, int) ) );
+
+  connect( m_listView, SIGNAL(rightButtonClicked ( QListViewItem *, const QPoint &, int )), 
+	   this, SLOT(slotMenuActivated(QListViewItem*, const QPoint &, int) ) );
 }
 
-void K3bCdView::show(){
-  if( !m_initialized){
-    m_initialized=true;
-    setupGUI();
-  }
-  QWidget::show();
-}
 
 void K3bCdView::checkView( ){
   // read cddb settings each time to get changes in optiondialog

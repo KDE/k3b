@@ -43,11 +43,13 @@ class K3bPatternParser;
 class KListView;
 class QListViewItem;
 class QPoint;
+class KActionCollection;
+
+
 
 /**
   *@author Sebastian Trueg
   */
-
 class K3bCdView : public QVBox  
 {
   Q_OBJECT
@@ -55,7 +57,7 @@ class K3bCdView : public QVBox
  public:
   K3bCdView(QWidget *, const char *);
   ~K3bCdView();
-  void show();
+
   void showCdContent();
   void refresh();
   void setFilePatternList(QStringList p){ m_filePatternList = p; };
@@ -87,6 +89,7 @@ class K3bCdView : public QVBox
   QStringList m_filePatternList;
   QStringList m_dirPatternList;
 
+  KActionCollection* m_actionCollection;
 
   void addItem(int, QString, QString, QString, long, QString);
   //QString prepareFilename(QString);
