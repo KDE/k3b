@@ -36,7 +36,7 @@
 #include "../k3bglobals.h"
 
 
-K3bAudioTrackDialog::K3bAudioTrackDialog( QList<K3bAudioTrack>& tracks, QWidget *parent, const char *name )
+K3bAudioTrackDialog::K3bAudioTrackDialog( QPtrList<K3bAudioTrack>& tracks, QWidget *parent, const char *name )
   : KDialogBase( KDialogBase::Plain, i18n("Audio track"), KDialogBase::Ok|KDialogBase::Cancel|KDialogBase::Apply,
 		 KDialogBase::Ok, parent, name )
 {

@@ -21,7 +21,8 @@
 #include "../k3bview.h"
 #include "k3bdatadirtreeview.h"
 #include "k3bdatafileview.h"
-#include "../kdelibs_patched/klistview.h"
+
+#include <klistview.h>
 
 
 

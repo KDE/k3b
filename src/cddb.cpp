@@ -29,13 +29,23 @@
 #ifdef HAVE_SYS_SELECT_H
 #include <sys/select.h>
 #endif
+
+#include <netinet/in.h>
+
 #include <errno.h>
 #include <unistd.h>
 #include <kdebug.h>
+
+#define KSOCK_NO_BROKEN // we need this very very old method in this fucked piece of code!
 #include <ksock.h>
+
 #include <klocale.h>
 
+#include <qregexp.h>
+
 #include "cddb.h"
+
+typedef sockaddr_in ksockaddr_in;
 
 
 #ifdef __need_timeval

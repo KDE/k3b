@@ -38,12 +38,14 @@
 #include <qscrollbar.h>
 #include <qpoint.h>
 #include <qfontmetrics.h>
+#include <qtimer.h>
 
 #include <kprogress.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <klistview.h>
 #include <kiconloader.h>
+#include <kstatusbar.h>
 
 
 
@@ -103,7 +105,7 @@ K3bBurnProgressDialog::PrivateDebugWidget::PrivateDebugWidget( QMap<QString, QSt
 K3bBurnProgressDialog::PrivateStatusBarProgress::PrivateStatusBarProgress( QWidget* parent )
   : QWidget( parent )
 {
-  progress = new KProgress( 0, 100, 0, Qt::Horizontal, this, "m_statusBarProgress" );
+  progress = new KProgress( this, "m_statusBarProgress" );
 
   label = new KCutLabel( this );
   label->setText( i18n("Progress") );
@@ -232,7 +234,7 @@ void K3bBurnProgressDialog::setupGUI()
   m_groupBufferLayout->setMargin( marginHint() );
 
   m_labelWriter = new QLabel( i18n("Writer"), m_groupBuffer );
-  m_progressBuffer = new KProgress( 0, 100, 0, Qt::Horizontal, m_groupBuffer, "m_progressBuffer" );
+  m_progressBuffer = new KProgress( m_groupBuffer, "m_progressBuffer" );
   m_progressBuffer->setMaximumWidth( 150 );
 
   m_groupBufferLayout->addWidget( m_labelWriter );
@@ -254,11 +256,11 @@ void K3bBurnProgressDialog::setupGUI()
   m_groupProgressLayout->setSpacing( spacingHint() );
   m_groupProgressLayout->setMargin( marginHint() );
 
-  m_progressTrack = new KProgress( 0, 100, 0, Qt::Horizontal, m_groupProgress, "m_progressTrack" );
+  m_progressTrack = new KProgress( m_groupProgress, "m_progressTrack" );
 
   m_groupProgressLayout->addMultiCellWidget( m_progressTrack, 1, 1, 0, 1 );
 
-  m_progressCd = new KProgress( 0, 100, 0, Qt::Horizontal, m_groupProgress, "m_progressCd" );
+  m_progressCd = new KProgress( m_groupProgress, "m_progressCd" );
 
   m_groupProgressLayout->addMultiCellWidget( m_progressCd, 4, 4, 0, 1 );
 

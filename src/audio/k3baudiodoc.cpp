@@ -77,7 +77,7 @@ bool K3bAudioDoc::newDocument()
 
   delete m_tracks;
 	
-  m_tracks = new QList<K3bAudioTrack>;
+  m_tracks = new QPtrList<K3bAudioTrack>;
   m_tracks->setAutoDelete( false );
 	
   m_cdText = true;

@@ -94,7 +94,7 @@ K3bMainWindow::K3bMainWindow()
 
   m_config = kapp->config();
   untitledCount = 0;
-  pDocList = new QList<K3bDoc>();
+  pDocList = new QPtrList<K3bDoc>();
   pDocList->setAutoDelete(true);
 
   ///////////////////////////////////////////////////////////////////
@@ -220,11 +220,11 @@ void K3bMainWindow::initView()
   // --- Document Dock ----------------------------------------------------------------------------
   // create styled document box
   QFrame* documentBox = new QFrame( mainDock );
-  documentBox->setFrameStyle( QFrame::NoFrame | QFrame::Plain );
+  documentBox->setFrameStyle( QFrame::Box | QFrame::Plain );
+  documentBox->setLineWidth( 5 );
   QVBoxLayout* documentLayout = new QVBoxLayout( documentBox );
   documentLayout->setAutoAdd( true );
-  documentLayout->setMargin( KDialog::marginHint() );
-  documentLayout->setSpacing( KDialog::spacingHint() );
+  documentLayout->setMargin( 5 );
 
   QLabel* projectHeader = new QLabel( documentBox );
   projectHeader->setText( i18n("Current Projects") );
@@ -232,13 +232,24 @@ void K3bMainWindow::initView()
   projectHeader->setFont( KGlobalSettings::windowTitleFont() );
   projectHeader->setMargin( 2 );
 
+  QPalette oldPal( documentBox->palette() );
   QPalette p( documentBox->palette() );
+  p.setColor( QColorGroup::Foreground, KGlobalSettings::activeTitleColor() );
+  documentBox->setPalette( p );
   p.setColor( QColorGroup::Background, KGlobalSettings::activeTitleColor() );
   p.setColor( QColorGroup::Foreground, KGlobalSettings::activeTextColor() );
   projectHeader->setPalette( p );
 
+  QFrame* documentHull = new QFrame( documentBox );
+  documentHull->setFrameStyle( QFrame::Box | QFrame::Plain );
+  documentHull->setLineWidth( 5 );
+  QHBoxLayout* hullLayout = new QHBoxLayout( documentHull );
+  hullLayout->setAutoAdd( true );
+  hullLayout->setMargin( 10 );
+
   // add the document tab to the styled document box
-  m_documentTab = new K3bProjectTabWidget( documentBox );
+  m_documentTab = new K3bProjectTabWidget( documentHull );
+  m_documentTab->setPalette( oldPal );
   mainDock->setWidget( documentBox );
   connect( m_documentTab, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotCurrentDocChanged(QWidget*)) );
 

@@ -28,6 +28,7 @@
 #include <qmultilineedit.h>
 #include <qmessagebox.h>
 #include <qtabwidget.h>
+#include <qpushbutton.h>
 
 #include <klocale.h>
 #include <kconfig.h>

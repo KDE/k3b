@@ -36,12 +36,12 @@
 #include <qlayout.h>
 #include <qiconset.h>
 #include <qvaluelist.h>
+#include <qlabel.h>
 
 // KDE-includes
 #include <kmimetype.h>
 #include <kcursor.h>
 #include <kfiledetailview.h>
-#include <kfileviewitem.h>
 #include <ktoolbar.h>
 #include <kiconloader.h>
 #include <kurl.h>
@@ -54,7 +54,6 @@
 #include <kprocess.h>
 #include <kio/job.h>
 #include <kcombobox.h>
-#include <kdialog.h>
 
 #include "kiotree/kiotree.h"
 #include "kiotree/kiotreemodule.h"
@@ -74,8 +73,6 @@
 K3bDirView::K3bDirView(QWidget *parent, const char *name )
   : QVBox(parent, name)
 {
-  setMargin( KDialog::marginHint() );
-
   KToolBar* toolBar = new KToolBar( k3bMain(), this, "dirviewtoolbar" );
 
   m_mainSplitter    = new QSplitter( this );
@@ -141,7 +138,7 @@ void K3bDirView::setupFinalize( K3bDeviceManager *dm )
   m_fileView->show();
   K3bDevice *dev;
   KURL result;
-  QList<K3bDevice> devices = dm->readingDevices();
+  QPtrList<K3bDevice> devices = dm->readingDevices();
   for ( dev = devices.first(); dev != 0; dev=devices.next() ) {
     KURL url = KURL( dev->devicename() );
     url.setProtocol("k3b_cdview");

@@ -25,13 +25,12 @@
 
 #include <qdir.h>
 #include <qstring.h>
-#include <qstringlist.h>
 #include <qfileinfo.h>
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qtimer.h>
 #include <qdom.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 #include <kstddirs.h>
 #include <kurl.h>
@@ -705,7 +704,7 @@ void K3bDataDoc::moveItem( K3bDataItem* item, K3bDirItem* newParent )
 }
 
 
-void K3bDataDoc::moveItems( QList<K3bDataItem> itemList, K3bDirItem* newParent )
+void K3bDataDoc::moveItems( QPtrList<K3bDataItem> itemList, K3bDirItem* newParent )
 {
   if( !newParent ) {
     qDebug( "(K3bDataDoc) tried to move items to nowhere...!" );

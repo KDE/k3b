@@ -25,8 +25,8 @@
 class KDirOperator;
 class QDragObject;
 class KURL;
-class KFileFilter;
-class KFileViewItem;
+class KFileFilterCombo;
+class KFileItem;
 class KActionCollection;
 
 
@@ -56,13 +56,13 @@ class K3bFileView : public QVBox
  private:
   class PrivateFileView;
   KDirOperator *m_dirOp;
-  KFileFilter* m_filterWidget;
+  KFileFilterCombo* m_filterWidget;
 
   void setupGUI();
 
  private slots:
   void slotFilterChanged();
-  void slotFileHighlighted( const KFileViewItem* item );
+  void slotFileHighlighted( const KFileItem* item );
   void slotCheckActions();
 };
 
@@ -75,7 +75,7 @@ class K3bFileView::PrivateFileView : public KFileDetailView
   PrivateFileView( QWidget* parent, const char* name );
 
  protected:
-  QDragObject* dragObject() const;
+  QDragObject* dragObject();
 };
 
 

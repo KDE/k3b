@@ -50,7 +50,7 @@
 K3bDoc::K3bDoc( QObject* parent )
   : QObject( parent )
 {
-  pViewList = new QList<K3bView>;
+  pViewList = new QPtrList<K3bView>;
   pViewList->setAutoDelete(false);
 
   m_burner = 0;

@@ -3,6 +3,7 @@
 #include "k3b.h"
 #include "k3bglobals.h"
 #include "device/k3bdevice.h"
+#include "tools/k3bexternalbinmanager.h"
 
 #include <kprocess.h>
 #include <kconfig.h>
@@ -52,9 +53,16 @@ void K3bBlankingJob::start()
     return;
 
   m_process->clearArguments();
-  KConfig* c = kapp->config();
-  c->setGroup( "External Programs" );
-  *m_process << c->readEntry( "cdrecord path" );
+
+  if( !k3bMain()->externalBinManager()->foundBin( "cdrecord" ) ) {
+    qDebug("(K3bBlankingJob) could not find cdrecord executable" );
+    emit infoMessage( i18n("Cdrecord executable not found."), K3bJob::ERROR );
+
+    emit finished( false );
+    return;
+  }
+
+  *m_process << k3bMain()->externalBinManager()->binPath( "cdrecord" );
   *m_process << QString("dev=%1").arg( m_device->devicename() );
   *m_process << QString("speed=%1").arg(m_speed);
   if( m_force )
@@ -86,11 +94,9 @@ void K3bBlankingJob::start()
 
   // debugging output
   cout << "***** cdrecord parameters:\n";
-  QStrList* _args = m_process->args();
-  QStrListIterator _it(*_args);
-  while( _it ) {
-    cout << *_it << " ";
-    ++_it;
+  for( QValueList<QCString>::const_iterator it = m_process->args().begin();
+       it != m_process->args().end(); ++it ) {  
+    cout << *it << " ";
   }
   cout << endl << flush;
 

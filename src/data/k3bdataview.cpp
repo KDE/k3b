@@ -41,7 +41,7 @@
 #include <qlayout.h>
 #include <qdragobject.h>
 #include <qheader.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 #include <assert.h>
 
@@ -53,16 +53,17 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
   m_burnDialog = 0;
 	
   // --- setup GUI ---------------------------------------------------
-  QSplitter* _main = new QSplitter( this );	
-  m_dataDirTree = new K3bDataDirTreeView( this, doc, _main );
-  m_dataFileView = new K3bDataFileView( this, doc, _main );
+  QSplitter* mainSplitter = new QSplitter( this );	
+  m_dataDirTree = new K3bDataDirTreeView( this, doc, mainSplitter );
+  m_dataFileView = new K3bDataFileView( this, doc, mainSplitter );
   m_fillStatusDisplay = new K3bFillStatusDisplay( doc, this );
 	
-  QVBoxLayout* _box = new QVBoxLayout( this );
-  _box->addWidget( _main );
-  _box->addWidget( m_fillStatusDisplay );
-  _box->setSpacing( 5 );
-  _box->setMargin( 2 );
+  QVBoxLayout* box = new QVBoxLayout( this );
+  box->addWidget( mainSplitter );
+  box->addWidget( m_fillStatusDisplay );
+  box->setStretchFactor( mainSplitter, 1 );
+  box->setSpacing( 5 );
+  box->setMargin( 2 );
 
   setupActions();
   setupPopupMenu();	
@@ -138,8 +139,8 @@ void K3bDataView::slotDropped( KListView* listView, QDropEvent* e, QListViewItem
     // check if items have been moved
     if( e->source() == m_dataFileView->viewport() ) {
       // move all selected items
-      QList<QListViewItem> selectedViewItems = m_dataFileView->selectedItems();
-      QList<K3bDataItem> selectedDataItems;
+      QPtrList<QListViewItem> selectedViewItems = m_dataFileView->selectedItems();
+      QPtrList<K3bDataItem> selectedDataItems;
       QListIterator<QListViewItem> it( selectedViewItems );
       for( ; it.current(); ++it ) {
 	K3bDataViewItem* dataViewItem = dynamic_cast<K3bDataViewItem*>( it.current() );
@@ -281,7 +282,7 @@ void K3bDataView::slotRemoveItem()
       m_doc->removeItem( dirViewItem->dirItem() );
   }
   else if( m_dataFileView->hasFocus() ) {
-    QList<QListViewItem> items = m_dataFileView->selectedItems();
+    QPtrList<QListViewItem> items = m_dataFileView->selectedItems();
     QListIterator<QListViewItem> it( items );
     for(; it.current(); ++it ) {
       if( K3bDataViewItem* d = dynamic_cast<K3bDataViewItem*>( it.current() ) )

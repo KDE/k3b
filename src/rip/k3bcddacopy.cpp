@@ -22,7 +22,7 @@
 #include "k3bcdview.h"
 #include "k3bripperwidget.h"
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstringlist.h>
 #include <qstring.h>
 #include <qtimer.h>

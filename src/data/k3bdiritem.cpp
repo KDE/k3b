@@ -19,13 +19,13 @@
 #include "k3bdatadoc.h"
 
 #include <qstring.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 K3bDirItem::K3bDirItem(const QString& name, K3bDataDoc* doc, K3bDirItem* parentDir)
   : K3bDataItem( doc, parentDir )
 {
   m_k3bName = name;
-  m_children = new QList<K3bDataItem>();
+  m_children = new QPtrList<K3bDataItem>();
 }
 
 K3bDirItem::~K3bDirItem()

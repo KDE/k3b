@@ -21,10 +21,12 @@
 #include "k3bdataitem.h"
 #include "k3bdiritem.h"
 
-#include "../kdelibs_patched/kcharvalidator.h"
-
 #include <qdragobject.h>
 #include <qheader.h>
+#include <qvalidator.h>
+#include <qregexp.h>
+
+#include "../klistviewlineedit.h"
 
 
 K3bDataDirTreeView::K3bDataDirTreeView( K3bDataView* view, K3bDataDoc* doc, QWidget* parent )
@@ -45,7 +47,8 @@ K3bDataDirTreeView::K3bDataDirTreeView( K3bDataView* view, K3bDataDoc* doc, QWid
 	
   setItemsRenameable( true );
 
-  setValidator( new KCharValidator( this, "isoValidator", "\\/;:*$", KCharValidator::InvalidChars ) );
+  m_editor = new KListViewLineEdit( this );
+  m_editor->setValidator( new QRegExpValidator( QRegExp("^[\\/;:*$]"), m_editor ) );
 
   m_doc = doc;	
   m_root = new K3bDataRootViewItem( doc, this );
@@ -54,6 +57,18 @@ K3bDataDirTreeView::K3bDataDirTreeView( K3bDataView* view, K3bDataDoc* doc, QWid
   connect( this, SIGNAL(clicked(QListViewItem*)), this, SLOT(slotExecuted(QListViewItem*)) );
   connect( this, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(slotExecuted(QListViewItem*)) );
   connect( m_doc, SIGNAL(itemRemoved(K3bDataItem*)), this, SLOT(slotDataItemRemoved(K3bDataItem*)) );
+  connect( m_editor, SIGNAL(done(QListViewItem*,int)), this, SLOT(doneEditing(QListViewItem*,int)) );
+}
+
+
+K3bDataDirTreeView::~K3bDataDirTreeView()
+{
+}
+
+
+void K3bDataDirTreeView::rename( QListViewItem* item, int c )
+{
+  m_editor->load( item, c );
 }
 
 

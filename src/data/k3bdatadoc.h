@@ -22,6 +22,7 @@
 
 #include <qqueue.h>
 #include <qfileinfo.h>
+#include <qstringlist.h>
 
 #include <kurl.h>
 

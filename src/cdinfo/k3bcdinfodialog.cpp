@@ -23,7 +23,7 @@
 
 #include <qlayout.h>
 #include <qcombobox.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qlabel.h>
 #include <klocale.h>
 #include <qpushbutton.h>
@@ -57,7 +57,7 @@ K3bCdInfoDialog::K3bCdInfoDialog( QWidget* parent, const char* name, bool modal 
 
 
   // -- read devices ----------------------------------------------
-  QList<K3bDevice> devices = k3bMain()->deviceManager()->burningDevices();
+  QPtrList<K3bDevice> devices = k3bMain()->deviceManager()->burningDevices();
   K3bDevice* dev = devices.first();
   while( dev ) {
     m_comboDevice->insertItem( dev->vendor() + " " + dev->description() + " (" + dev->devicename() + ")" );

@@ -35,9 +35,9 @@
 #include <ktoolbarbutton.h>
 #include <kurl.h>
 #include <kurldrag.h>
-#include <kfilefilter.h>
+#include <kfilefiltercombo.h>
 #include <klocale.h>
-#include <kfileviewitem.h>
+#include <kfileitem.h>
 #include <kmessagebox.h>
 
 
@@ -49,18 +49,18 @@ K3bFileView::PrivateFileView::PrivateFileView( QWidget* parent, const char* name
 }
 
 	
-QDragObject* K3bFileView::PrivateFileView::dragObject() const
+QDragObject* K3bFileView::PrivateFileView::dragObject()
 {
   if( !currentItem() )
     return 0;
 	
-  const KFileViewItemList* list = KFileView::selectedItems();
-  QListIterator<KFileViewItem> it(*list);
+  const KFileItemList* list = KFileView::selectedItems();
+  QListIterator<KFileItem> it(*list);
   KURL::List urls;
 	
   for( ; it.current(); ++it )
     urls.append( it.current()->url() );
-		
+
   return KURLDrag::newDrag( urls, viewport() );
 }
 
@@ -126,7 +126,7 @@ void K3bFileView::setupGUI()
 
   // create filter selection combobox
   QLabel* filterLabel = new QLabel( i18n("&Filter:"), toolBar, "filterLabel" );
-  m_filterWidget = new KFileFilter( toolBar, "filterwidget" );
+  m_filterWidget = new KFileFilterCombo( toolBar, "filterwidget" );
   m_filterWidget->setEditable( true );
   QString filter = i18n("*|All files");
   filter += "\n" + i18n("audio/x-mp3 application/x-ogg audio/wav |Sound files");
@@ -137,7 +137,7 @@ void K3bFileView::setupGUI()
   filterLabel->setBuddy(m_filterWidget);
   connect( m_filterWidget, SIGNAL(filterChanged()), SLOT(slotFilterChanged()) );
 
-  connect( m_dirOp, SIGNAL(fileHighlighted(const KFileViewItem*)), this, SLOT(slotFileHighlighted(const KFileViewItem*)) );
+  connect( m_dirOp, SIGNAL(fileHighlighted(const KFileItem*)), this, SLOT(slotFileHighlighted(const KFileItem*)) );
   connect( m_dirOp, SIGNAL(urlEntered(const KURL&)), this, SIGNAL(urlEntered(const KURL&)) );
 }
 
@@ -148,11 +148,11 @@ void K3bFileView::setUrl(const KURL& url, bool forward)
 }
 
 
-void K3bFileView::slotFileHighlighted( const KFileViewItem* item )
+void K3bFileView::slotFileHighlighted( const KFileItem* item )
 {
   // check if there are audio files under the selected ones
   bool play = false;
-  for( QListIterator<KFileViewItem> it( *(m_dirOp->selectedItems()) ); it.current(); ++it ) {
+  for( QListIterator<KFileItem> it( *(m_dirOp->selectedItems()) ); it.current(); ++it ) {
     if( k3bMain()->audioPlayer()->supportsMimetype(it.current()->mimetype()) ) {
       play = true;
       break;
@@ -175,7 +175,7 @@ void K3bFileView::slotAudioFilePlay()
   // play selected audio files
   QStringList files;
 
-  for( QListIterator<KFileViewItem> it( *(m_dirOp->selectedItems()) ); it.current(); ++it ) {
+  for( QListIterator<KFileItem> it( *(m_dirOp->selectedItems()) ); it.current(); ++it ) {
     if( k3bMain()->audioPlayer()->supportsMimetype(it.current()->mimetype()) ) {
       files.append( it.current()->url().path() );
     }
@@ -191,7 +191,7 @@ void K3bFileView::slotAudioFileEnqueue()
   // play selected audio files
   QStringList files;
 
-  for( QListIterator<KFileViewItem> it( *(m_dirOp->selectedItems()) ); it.current(); ++it ) {
+  for( QListIterator<KFileItem> it( *(m_dirOp->selectedItems()) ); it.current(); ++it ) {
     if( k3bMain()->audioPlayer()->supportsMimetype(it.current()->mimetype()) ) {
       files.append( it.current()->url().path() );
     }
@@ -208,7 +208,7 @@ void K3bFileView::slotAddFilesToProject()
     KMessageBox::error( this, i18n("Please create a project before adding files"), i18n("No active Project"));
   else {
     QStringList files;
-    for( QListIterator<KFileViewItem> it( *(m_dirOp->selectedItems()) ); it.current(); ++it ) {
+    for( QListIterator<KFileItem> it( *(m_dirOp->selectedItems()) ); it.current(); ++it ) {
       files.append( it.current()->url().path() );
     }
     

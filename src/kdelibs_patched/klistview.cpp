@@ -728,7 +728,7 @@ void KListView::contentsDropEvent(QDropEvent* e)
 
 void KListView::movableDropEvent (QListViewItem* parent, QListViewItem* afterme)
 {
-  QList<QListViewItem> items, afterFirsts, afterNows;
+  QPtrList<QListViewItem> items, afterFirsts, afterNows;
   QListViewItem *current=currentItem();
   bool hasMoved=false;
   for (QListViewItem *i = firstChild(), *iNext=0; i != 0; i = iNext)
@@ -980,9 +980,9 @@ void KListView::setDropVisualizer(bool b)
   d->dropVisualizer=b;
 }
 
-QList<QListViewItem> KListView::selectedItems() const
+QPtrList<QListViewItem> KListView::selectedItems() const
 {
-  QList<QListViewItem> list;
+  QPtrList<QListViewItem> list;
   for (QListViewItem *i=firstChild(); i!=0; i=i->itemBelow())
         if (i->isSelected()) list.append(i);
   return list;

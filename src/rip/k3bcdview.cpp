@@ -260,7 +260,7 @@ void K3bCdView::play(){
     QMessageBox::critical( this, i18n("Player Error"), i18n("Sorry, this is only a demonstration which may not work."), i18n("Ok") );
     return;
   }
-  QList<QListViewItem> items = m_listView->selectedItems();
+  QPtrList<QListViewItem> items = m_listView->selectedItems();
   int itemIndex = 1;
   if( !items.isEmpty() ){
     itemIndex = m_listView->itemIndex( items.first() ) + 1;
@@ -333,7 +333,7 @@ void K3bCdView::changeSelectionMode(){
 }
 
 void K3bCdView::prepareRipping(){
-  QList<QListViewItem> selectedList = m_listView->selectedItems();
+  QPtrList<QListViewItem> selectedList = m_listView->selectedItems();
   if( selectedList.isEmpty() ){
     QMessageBox::critical( this, i18n("Ripping Error"), i18n("Please select the title to rip."), i18n("Ok") );
     return;

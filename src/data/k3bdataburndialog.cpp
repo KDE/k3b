@@ -36,10 +36,11 @@
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
 #include <qfileinfo.h>
+#include <qvalidator.h>
+#include <qregexp.h>
 
 #include <kmessagebox.h>
 #include <klineedit.h>
-#include "../kdelibs_patched/kcharvalidator.h"
 #include <klocale.h>
 #include <kconfig.h>
 #include <kstddirs.h>
@@ -433,7 +434,7 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
 
   _groupVolumeInfoLayout->addWidget( _labelPreparer, 3, 0 );
 
-  KCharValidator* isoValidator = new KCharValidator( this, "isoValidator", "\\/;:*$\"", KCharValidator::InvalidChars );
+  QRegExpValidator* isoValidator = new QRegExpValidator( QRegExp("^[\\/;:*$\"]"), this, "isoValidator" );
 
   m_editVolumeID = new KLineEdit( _groupVolumeInfo, "m_editVolumeID" );
   // are this really the allowed characters?

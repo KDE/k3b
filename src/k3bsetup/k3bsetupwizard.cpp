@@ -26,7 +26,7 @@
 #include <qwhatsthis.h>
 #include <qpixmap.h>
 #include <qfile.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qtextstream.h>
 
 #include <klocale.h>

@@ -19,7 +19,7 @@
 #define K3BDATADIRTREEVIEW_H
 
 
-#include "../kdelibs_patched/klistview.h"
+#include <klistview.h>
 
 
 #include <qmap.h>
@@ -29,6 +29,7 @@ class K3bDataDoc;
 class K3bDataDirViewItem;
 class K3bDirItem;
 class K3bDataItem;
+class KListViewLineEdit;
 
 
 /**
@@ -41,7 +42,7 @@ class K3bDataDirTreeView : public KListView
 
  public:
   K3bDataDirTreeView( K3bDataView*, K3bDataDoc*, QWidget* parent );
-  ~K3bDataDirTreeView() {}
+  ~K3bDataDirTreeView();
 
   K3bDataDirViewItem* root() { return m_root; }
 		
@@ -52,6 +53,7 @@ class K3bDataDirTreeView : public KListView
   K3bDataDoc* m_doc;
   K3bDataDirViewItem* m_root;
   K3bDataView* m_view;
+  KListViewLineEdit* m_editor;
 
   /**
    * We save the dirItems in a map to have a fast way
@@ -62,7 +64,8 @@ class K3bDataDirTreeView : public KListView
  public slots:
   void updateContents();
   void setCurrentDir( K3bDirItem* );
-	
+  void rename( QListViewItem* item, int	col );
+
  private slots:
   void slotExecuted( QListViewItem* );
   void slotDataItemRemoved( K3bDataItem* );

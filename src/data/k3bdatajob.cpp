@@ -873,7 +873,7 @@ void K3bDataJob::splitDoc()
 
   K3bDataItem* item = m_doc->root();
   long size = 0;
-  QList<K3bDataItem> *newList = new QList<K3bDataItem>();
+  QPtrList<K3bDataItem> *newList = new QList<K3bDataItem>();
 
   while( item ) {
 
@@ -885,7 +885,7 @@ void K3bDataJob::splitDoc()
     }
     else {
       m_splittedLists.append( newList );
-      newList = new QList<K3bDataItem>();
+      newList = new QPtrList<K3bDataItem>();
       size = 0;
     }
   }

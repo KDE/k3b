@@ -174,7 +174,7 @@ K3bAudioPlayer::K3bAudioPlayer( QWidget* parent, const char* name )
   // ------------------------------------------------------------------------
   QGridLayout* grid = new QGridLayout( this );
   grid->setSpacing( 2 );
-  grid->setMargin( 5 );
+  grid->setMargin( 0 );
 
   grid->addWidget( m_buttonPlay, 1, 0 );
   grid->addWidget( m_buttonPause, 1, 1 );
@@ -591,7 +591,7 @@ void K3bAudioPlayer::slotDropped( QDropEvent* e, QListViewItem* after )
 
 void K3bAudioPlayer::slotRemoveSelected()
 {
-  QList<QListViewItem> selected = m_viewPlayList->selectedItems();
+  QPtrList<QListViewItem> selected = m_viewPlayList->selectedItems();
   for( QListViewItem* item = selected.first(); item; item = selected.next() ) {
     if( item == m_currentItem )
       setCurrentItem(0);

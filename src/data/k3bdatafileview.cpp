@@ -21,9 +21,13 @@
 #include "k3bdataitem.h"
 #include "k3bdiritem.h"
 #include "k3bfileitem.h"
-#include "../kdelibs_patched/kcharvalidator.h"
 
+#include "../klistviewlineedit.h"
+
+#include <qvalidator.h>
 #include <qdragobject.h>
+#include <qregexp.h>
+
 #include <klocale.h>
 
 
@@ -46,7 +50,8 @@ K3bDataFileView::K3bDataFileView( K3bDataView* view, K3bDataDoc* doc, QWidget* p
   setItemsRenameable( true );
   setSelectionModeExt( KListView::Extended );
 
-  setValidator( new KCharValidator( this, "isoValidator", "\\/;:*$", KCharValidator::InvalidChars ) );
+  m_editor = new KListViewLineEdit( this );
+  m_editor->setValidator( new QRegExpValidator( QRegExp("^[\\/;:*$]"), m_editor ) );
   
   m_doc = doc;
   m_currentDir = doc->root();
@@ -54,6 +59,18 @@ K3bDataFileView::K3bDataFileView( K3bDataView* view, K3bDataDoc* doc, QWidget* p
 
   connect( m_doc, SIGNAL(itemRemoved(K3bDataItem*)), this, SLOT(slotDataItemRemoved(K3bDataItem*)) );
   connect( this, SIGNAL(executed(QListViewItem*)), this, SLOT(slotExecuted(QListViewItem*)) );
+  connect( m_editor, SIGNAL(done(QListViewItem*,int)), this, SLOT(doneEditing(QListViewItem*,int)) );
+}
+
+
+K3bDataFileView::~K3bDataFileView()
+{
+}
+
+
+void K3bDataFileView::rename( QListViewItem* item, int c )
+{
+  m_editor->load( item, c );
 }
 
 

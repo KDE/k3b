@@ -18,7 +18,7 @@
 #ifndef K3BDATAFILEVIEW_H
 #define K3BDATAFILEVIEW_H
 
-#include "../kdelibs_patched/klistview.h"
+#include <klistview.h>
 
 
 class K3bDataDoc;
@@ -26,6 +26,7 @@ class K3bDirItem;
 class K3bDataView;
 class K3bDataItem;
 class QDropEvent;
+class KListViewLineEdit;
 
 
 /**
@@ -38,7 +39,7 @@ class K3bDataFileView : public KListView
 
  public:
   K3bDataFileView( K3bDataView*, K3bDataDoc*, QWidget* parent );
-  ~K3bDataFileView() {}
+  ~K3bDataFileView();
 	
   K3bDirItem* currentDir() const { return m_currentDir; }
 
@@ -48,7 +49,8 @@ class K3bDataFileView : public KListView
  public slots:
   void slotSetCurrentDir( K3bDirItem* );
   void updateContents();
-	
+  void rename( QListViewItem* item, int	col );
+
  private slots:
   void slotDataItemRemoved( K3bDataItem* );
   void slotExecuted( QListViewItem* );
@@ -60,6 +62,7 @@ class K3bDataFileView : public KListView
   K3bDataDoc* m_doc;
   K3bDirItem* m_currentDir;
   K3bDataView* m_view;
+  KListViewLineEdit* m_editor;
 };
 
 #endif

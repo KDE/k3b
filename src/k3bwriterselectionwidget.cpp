@@ -88,7 +88,7 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget(QWidget *parent, const char *
 
 
   // -- read cd-writers ----------------------------------------------
-  QList<K3bDevice> _devices = k3bMain()->deviceManager()->burningDevices();
+  QPtrList<K3bDevice> _devices = k3bMain()->deviceManager()->burningDevices();
   K3bDevice* _dev = _devices.first();
   while( _dev ) {
     m_comboWriter->insertItem( _dev->vendor() + " " + _dev->description() + " (" + _dev->genericDevice() + ")" );

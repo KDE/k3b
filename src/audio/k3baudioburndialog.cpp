@@ -34,7 +34,7 @@
 #include <qwhatsthis.h>
 #include <qgrid.h>
 #include <qtoolbutton.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstringlist.h>
 #include <qpoint.h>
 

@@ -5,7 +5,7 @@
 
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 #include <kprocess.h>
 #include <kapp.h>
@@ -54,19 +54,19 @@ K3bDeviceManager::~K3bDeviceManager()
 }
 
 
-QList<K3bDevice>& K3bDeviceManager::burningDevices()
+QPtrList<K3bDevice>& K3bDeviceManager::burningDevices()
 {
   return m_writer;
 }
 
 
-QList<K3bDevice>& K3bDeviceManager::readingDevices()
+QPtrList<K3bDevice>& K3bDeviceManager::readingDevices()
 {
   return m_reader;
 }
 
 
-QList<K3bDevice>& K3bDeviceManager::allDevices()
+QPtrList<K3bDevice>& K3bDeviceManager::allDevices()
 {
   return m_allDevices;
 }

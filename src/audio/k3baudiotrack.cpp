@@ -37,7 +37,7 @@
 
 
 
-K3bAudioTrack::K3bAudioTrack( QList<K3bAudioTrack>* parent, const QString& filename )
+K3bAudioTrack::K3bAudioTrack( QPtrList<K3bAudioTrack>* parent, const QString& filename )
 : m_file(filename)
 {
   m_parent = parent;

@@ -34,7 +34,7 @@
 #include <qcombobox.h>
 #include <qframe.h>
 #include <qlayout.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qfont.h>

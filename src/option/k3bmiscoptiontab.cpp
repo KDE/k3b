@@ -29,8 +29,8 @@
 #include <kdialog.h>
 #include <kfiledialog.h>
 #include <kstddirs.h>
-
-
+#include <kmessagebox.h>
+#include <kio/netaccess.h>
 
 
 K3bMiscOptionTab::K3bMiscOptionTab(QWidget *parent, const char *name ) 
@@ -82,9 +82,38 @@ bool K3bMiscOptionTab::saveSettings()
   c->setGroup( "General Options" );
   c->writeEntry( "Show splash", m_checkShowSplash->isChecked() );
 
-  // TODO: check if the temp dir exists and create it if not
-  //       check if the temp dir is absolute
-  //       check if it is a valid directoryname
+  QString tempDir = m_editTempDir->text();
+  QFileInfo fi( tempDir );
+
+  if( fi.isRelative() ) {
+    fi.setFile( fi.absFilePath() );
+  }
+
+  if( !fi.exists() ) {
+    if( KMessageBox::questionYesNo( this, i18n("Directory does not exist. Create?"), 
+				    i18n("Create Directory") ) == KMessageBox::Yes ) {
+      if( !KIO::NetAccess::mkdir( fi.absFilePath() ) ) {
+	KMessageBox::error( this, i18n("Could not create directory\n(%1)").arg(fi.absFilePath()) );
+	return false;
+      }
+    }
+    else {
+      // the dir does not exist and the user doesn't want to create it
+      return false;
+    }
+  }
+
+  if( fi.isDir() ) {
+    KMessageBox::information( this, i18n("You specified a file as temp directory. K3b will use it's base path as temp directory."), i18n("Warning"), i18n("Don't show again.") );
+    fi.setFile( fi.dirPath() );
+  }
+
+  // check for writing permission
+  if( !fi.isWritable() ) {
+    KMessageBox::error( this, i18n("You don't have permission to write to %1.").arg(fi.absFilePath()) );
+    return false;
+  }
+
   c->writeEntry( "Temp Dir", m_editTempDir->text() );
 
   return true;
