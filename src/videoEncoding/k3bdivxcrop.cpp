@@ -13,7 +13,6 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
->>>>>>> 1.11
 
 #include "k3bdivxcrop.h"
 #include "k3bdivxpreview.h"
@@ -263,7 +262,7 @@ void K3bDivxCrop::slotEncodePreview( ) {
     kdDebug( ) << "(K3bDivxCrop::slotEncodePreview)" << endl;
     QString debugString( "" );
     previewProcess = new KShellProcess(); // = new KShellProcess;
-    *previewProcess << k3bMain() ->externalBinManager() ->binObject( "transcode" ) ->path;
+    *previewProcess << k3bcore->externalBinManager() ->binObject( "transcode" ) ->path;
     *previewProcess << " -i " + m_data->getProjectDir() + "/vob";
     if ( m_data->isTcDvdMode() ) {
         *previewProcess << " -x dvd -T " + m_data->getTitle() + "," + QString::number( m_sliderPreview->value() ) + ",1";
@@ -275,7 +274,7 @@ void K3bDivxCrop::slotEncodePreview( ) {
     }
     *previewProcess << " -y ppm -V -w 1200 -a 0 -c 4-5 "; // -V
     *previewProcess << " -o " + m_data->getProjectDir() + "/preview";
-    kdDebug() << k3bMain() ->externalBinManager() ->binObject( "transcode" ) ->path
+    kdDebug() << k3bcore->externalBinManager() ->binObject( "transcode" ) ->path
     << " -i " + m_data->getProjectDir() + "/vob -y ppm -V -w 1200 -a 0 -c 4-5 "
     << "-o " + m_data->getProjectDir() + "/preview" << debugString << endl;
     connect( previewProcess, SIGNAL( receivedStdout( KProcess*, char*, int ) ),

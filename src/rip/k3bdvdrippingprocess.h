@@ -47,6 +47,7 @@ public:
     void start( );
     void cancel();
     void setRipSize( double );
+    void setAngle( const QString& angle ){ m_angle= angle; };
     static float tccatParsedBytes( char *text, int len);
     bool isInitFailed(){ return m_preProcessingFailed; }
 
@@ -83,7 +84,6 @@ private:
     KShellProcess *m_ripProcess;
     QString m_title, m_angle;
     int m_currentRipTitle;
-    int m_currentRipAngle;
     int m_currentVobIndex;
     int m_maxTitle;
     unsigned int m_percent;
@@ -107,6 +107,8 @@ private:
     //K3bExternalBin *m_tccatBin;
      // flag of already tried to mount dvd as iso9660, if true try to mount as udf and mv aller upper_case names to lower_case names
     bool  m_udfMount;
+    QString m_videoCaseSensitive;
+    QString m_vobCaseSensitive;
     void checkRippingMode();
     void startRippingProcess();
     void preProcessingDvd();

@@ -46,11 +46,12 @@ private slots:
     void slotParseEncoding( KProcess *p, char *buffer, int lenght);
     void slotAudioExited( KProcess *p );
     void slotParseAudio( KProcess *p, char *buffer, int lenght);
-    void slotStartAudioProcessing( KIO::Job *job );
+    void slotStartAudioProcessing( );
     void slotStartEncoding();
     void slotShutdown( bool );
     void slotFinishedCheckVobDirectory( );
     void slotFinishedRestoreBackup();
+    void slotFinishedCopyIfos(KIO::Job*);
     //void slotPercent( unsigned int );
 private:
     K3bDivxCodecData *m_data;

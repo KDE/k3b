@@ -71,10 +71,10 @@ void K3bDivXEncodingProcess::slotFinishedCopyIfos(KIO::Job* job){
 void K3bDivXEncodingProcess::slotStartAudioProcessing( ) {
     kdDebug() << "(K3bDivXEncodingProcess) Run transcode." << endl;
     m_process = new KShellProcess;
-    const K3bExternalBin *tccatBin = k3bMain() ->externalBinManager() ->binObject( "tccat" );
-    const K3bExternalBin *tcextractBin = k3bMain() ->externalBinManager() ->binObject( "tcextract" );
-    const K3bExternalBin *tcdecodeBin = k3bMain() ->externalBinManager() ->binObject( "tcdecode" );
-    const K3bExternalBin *tcscanBin = k3bMain() ->externalBinManager() ->binObject( "tcscan" );
+    const K3bExternalBin *tccatBin = k3bcore->externalBinManager() ->binObject( "tccat" );
+    const K3bExternalBin *tcextractBin = k3bcore->externalBinManager() ->binObject( "tcextract" );
+    const K3bExternalBin *tcdecodeBin = k3bcore->externalBinManager() ->binObject( "tcdecode" );
+    const K3bExternalBin *tcscanBin = k3bcore->externalBinManager() ->binObject( "tcscan" );
     // parse audio for   gain to normalize
     *m_process << "nice" << "-10";
     *m_process << tccatBin->path << " -i" << m_data->getProjectDir() + "/vob" << "-t" << "vob" << "-P" << m_data->getTitle();
@@ -109,7 +109,7 @@ void K3bDivXEncodingProcess::slotStartEncoding() {
     m_speedInitialFlag = 0;
     QString debugPass( "" );
     kdDebug() << "(K3bDivXEncodingProcess) Run transcode." << endl;
-    const K3bExternalBin *transcodeBin = k3bMain() ->externalBinManager() ->binObject( "transcode" );
+    const K3bExternalBin *transcodeBin = k3bcore->externalBinManager() ->binObject( "transcode" );
     m_process = new KShellProcess;
 
     *m_process << "nice" << "-10";

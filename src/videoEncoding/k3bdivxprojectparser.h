@@ -41,6 +41,7 @@ class K3bDivxCodecData;
   *@author Sebastian Trueg
   */
 
+
 class K3bDivXProjectParser : public QXmlDefaultHandler  {
 public: 
     K3bDivXProjectParser( K3bDivxCodecData* );

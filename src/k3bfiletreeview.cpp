@@ -39,11 +39,11 @@
 
 
 K3bDeviceBranch::K3bDeviceBranch( KFileTreeView* view, K3bDevice* dev, KFileTreeViewItem* item )
-  : KFileTreeBranch( view, KURL(dev->mountPoint()), i18n("Drive: %1").arg(dev->vendor()),
+  : KFileTreeBranch( view, KURL(), i18n("Drive: %1 - %2").arg(dev->vendor()).arg(dev->description()),
 		     ( dev->burner()
 		       ? SmallIcon("cdwriter_unmount")
 		       : SmallIcon("cdrom_unmount") ),
-		     false, item ), m_device( dev )
+		     false, item ), m_device( dev ) 
 {
   root()->setExpandable(false);
 }

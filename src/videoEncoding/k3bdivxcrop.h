@@ -94,12 +94,15 @@ private:
     int m_previewOffset;
     KIO::filesize_t m_maxDirSize;
     bool m_firstPictureLine;
+    bool m_tcDvdModeChanged;
 
     void setupGui();
+    void initSlider();
     void setSpinBoxMode( int step );
     void setCorrectedSpinValue( KIntSpinBox *box, int step );
     void updateSpinBox( int step );
     void encodePreview();
+    void copyIfos();
     int checkMaxValidSpinValue( KIntSpinBox *box , int);
     void enableManuelCrop( bool );
     void autoCrop();
@@ -115,6 +118,7 @@ private slots:
     void slotSpinRight( int );
     void slotResizeMode( int );
     void slotPreviewChanged( int );
+    void slotTcDvdModeGroup( int id );
 };
 
 #endif

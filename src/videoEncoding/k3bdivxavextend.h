@@ -54,6 +54,7 @@ public:
     ~K3bDivxAVExtend();
     void updateView();
     void initView();
+    enum InterlaceMode { SMARTDEINTER = 5, DILYUVMMX = 6 };
 
 signals:
     void dataChanged();
@@ -68,6 +69,9 @@ private:
     QLabel *m_labelCrispness;
     //KRestrictedLine *m_editAudioGain;
     K3bDivxCodecData *m_data;
+    QString m_wrongsettings;
+    QString m_smartError;
+    QString m_dilError;
 
     void setupGui();
 private slots:

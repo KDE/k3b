@@ -43,7 +43,7 @@ public:
     void setDvdTitle( const QValueList<K3bDvdContent> &titles );
     void setBaseFilename( const QString& f ){ m_filename = f; };
     void setDevice( const QString& f ){ m_device = f; };
-    void setRipSize( double size );
+    void setSettings( double size, const QString& angle );
     bool isStartFailed(){ return m_preProcessingFailed; };
 
     QString jobDescription() const;
@@ -74,6 +74,7 @@ private:
     QString m_directory;
     QString m_dirvob;
     QString m_dirtmp;
+    QString m_angle;
     QWidget *m_parent;
     K3bDvdRippingProcess *m_ripProcess;
     double m_ripSize;

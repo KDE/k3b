@@ -55,6 +55,7 @@ public:
     ~K3bDivxAVSet();
     void updateView();
     void init();
+    static void initGuiFactoryCodec( KComboBox &box );
 
 public slots:
     void slotViewAc3Bitrate();
@@ -65,6 +66,7 @@ private:
     KComboBox *m_comboCodec;
     QLabel *m_vBitrate;
     QLabel *m_aAC3Bitrate;
+    QLabel *m_mp3bitrate;
     QRadioButton *m_buttonOnePass;
     QRadioButton *m_buttonTwoPass;
     QRadioButton *m_buttonCbr;

@@ -32,6 +32,7 @@
 
 #include "k3bdivxcodecdata.h"
 #include "k3bdivxprojectparser.h"
+#include "k3bdivxavextend.h"
 
 #include "kio/global.h"
 #include <kdebug.h>
@@ -54,6 +55,7 @@ K3bDivxCodecData::K3bDivxCodecData(){
     m_audioLanguage=0;
     m_useNormalize = true;
     m_shutdown = false;
+    m_tcDvdMode = false;
 }
 
 K3bDivxCodecData::~K3bDivxCodecData(){
@@ -136,7 +138,16 @@ QString K3bDivxCodecData::getSize(){
     return m_width + "x" + m_height;
 }
 QString K3bDivxCodecData::getParaDeinterlace(){
-     return " -I " + QString::number(m_deinterlaceMode);
+     // this must be in sync with k3bdivxavextend kombobox deinterlace
+     QString result = "";
+     if( m_deinterlaceMode <= 4 ){
+        result = " -I " + QString::number(m_deinterlaceMode);
+     } else if( m_deinterlaceMode == K3bDivxAVExtend::SMARTDEINTER ) {
+        result = " -J smartdeinter=diffmode=2:highq=1:cubic=1";
+     } else if( m_deinterlaceMode == K3bDivxAVExtend::DILYUVMMX ) {
+        result =  " -J dilyuvmmx";
+     }
+     return result;
 }
 QString K3bDivxCodecData::getParaAudioLanguage(){
      return " -a " + QString::number(m_audioLanguage);

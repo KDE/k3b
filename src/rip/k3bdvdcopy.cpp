@@ -52,6 +52,7 @@ void K3bDvdCopy::start(){
     m_ripProcess->setDevice( m_device );
     m_ripProcess->setDirectories( m_directory, m_dirvob, m_dirtmp );
     m_ripProcess->setRipSize( m_ripSize );
+    m_ripProcess->setAngle( m_angle );
     //m_ripProcess->setJob( m_ripJob );
     connect( m_ripProcess, SIGNAL( interrupted() ), m_parent, SLOT( slotRipJobDeleted() ) );
     connect( m_ripProcess, SIGNAL( finished( bool ) ), this, SLOT( ripFinished( bool ) ) );
@@ -99,7 +100,8 @@ void K3bDvdCopy::slotDataRate( unsigned long l){
 void K3bDvdCopy::setDvdTitle( const QValueList<K3bDvdContent> &titles ){
     m_ripTitles = titles;
 }
-void K3bDvdCopy::setRipSize( double size ){
+void K3bDvdCopy::setSettings( double size, const QString& angle ){
+    m_angle = angle;
     m_ripSize = size;
 }
 

@@ -50,6 +50,7 @@
 #include <kprocess.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
+#include <kcombobox.h>
 #include <kurlrequester.h>
 
 // OS determination and specific includes. Unsupported systems
@@ -79,6 +80,9 @@ K3bDvdRipperWidget::K3bDvdRipperWidget(const QString& device, QWidget *parent, c
 
   m_ripDialog = 0;
   setupGui();
+  m_startEncoding = false;
+  m_ripProcess = 0;
+  m_ripJob = 0;
 
   slotLoadUserDefaults();
 }
@@ -87,66 +91,85 @@ K3bDvdRipperWidget::~K3bDvdRipperWidget(){
 }
 
 void K3bDvdRipperWidget::setupGui(){
-  setMinimumWidth( 500 );
-  QWidget *frame = mainWidget();
-  QGridLayout *mainLayout = new QGridLayout( frame );
+    setMinimumWidth( 500 );
+    QWidget *frame = mainWidget();
+    QGridLayout *mainLayout = new QGridLayout( frame );
 
-  QGroupBox *groupPattern = new QGroupBox( i18n( "Destination Directory" ), frame, "pattern" );
-  groupPattern->setColumnLayout(1, Qt::Vertical );
-  groupPattern->setInsideMargin( marginHint() );
-  m_editStaticRipPath = new KURLRequester(groupPattern, "staticeditpattern");
-  m_editStaticRipPath->setMode( KFile::Directory );
+    QGroupBox *groupPattern = new QGroupBox( i18n( "Destination Directory" ), frame, "pattern" );
+    groupPattern->setColumnLayout(1, Qt::Vertical ); // 0,
+    groupPattern->setInsideMargin( marginHint() );
+    m_editStaticRipPath = new KURLRequester( groupPattern, "staticeditpattern" );
+    m_editStaticRipPath->setMode( KFile::Directory );
 
-  QGroupBox *ripOptions = new QGroupBox( i18n( "Options" ), frame, "ripOptions" );
-  ripOptions->setColumnLayout(2, Qt::Vertical );
-  ripOptions->setInsideMargin( marginHint() );
-  ripOptions->setInsideSpacing( spacingHint() );
-  m_checkOpenEncoding = new QCheckBox( i18n( "Open encoding dialog after ripping." ), ripOptions );
-  m_checkStartEncoding = new QCheckBox( i18n( "Start encoding with default settings after ripping." ), ripOptions );
-  // TODO
-  m_checkStartEncoding->setEnabled( false );
+    //QGridLayout *dirsLayout = new QGridLayout( groupPattern->layout() );
+    //dirsLayout->setSpacing( KDialog::spacingHint() );
+    //dirsLayout->setMargin( KDialog::marginHint() );
+    //m_editStaticRipPath = new KLineEdit(groupPattern, "staticeditpattern");
+    //m_editStaticRipPath->setText( QDir::homeDirPath() );
+    //m_buttonStaticDir = new QToolButton(  groupPattern, "m_buttonStaticDir" );
+    //m_buttonStaticDir->setIconSet( SmallIconSet( "fileopen" ) );
 
-  QGroupBox *groupSize = new QGroupBox( i18n( "Available Space" ), frame, "size" );
-  groupSize->setColumnLayout(0, Qt::Vertical );
-  groupSize->layout()->setMargin( 0 );
-  QGridLayout *sizeLayout = new QGridLayout( groupSize->layout() );
-  sizeLayout->setSpacing( KDialog::spacingHint() );
-  sizeLayout->setMargin( KDialog::marginHint() );
-  m_fillDisplay = new K3bDvdFillDisplay( groupSize );
-  m_fillDisplay->setFixedHeight( 20 );
-  m_hardDiskSpace = new QLabel( groupSize );
-  sizeLayout->addMultiCellWidget( m_fillDisplay, 0, 0, 0, 1 );
-  sizeLayout->addMultiCellWidget( m_hardDiskSpace, 0, 0, 2, 2 );
-  sizeLayout->setColStretch( 0, 20 );
+    //dirsLayout->addMultiCellWidget( m_editStaticRipPath, 0,0,0,2 );
+    //dirsLayout->addMultiCellWidget( m_buttonStaticDir, 0,0,3,3 );
 
-  mainLayout->addWidget( groupPattern, 0, 0 );
-  mainLayout->addWidget( groupSize, 1, 0 );
-  mainLayout->addWidget( ripOptions, 2, 0 );
-  mainLayout->setRowStretch( 2, 1 );
+    QGroupBox *ripOptions = new QGroupBox( i18n( "Options" ), frame, "ripOptions" );
+    ripOptions->setColumnLayout(0, Qt::Vertical );
+    QGridLayout *optionsLayout = new QGridLayout( ripOptions->layout() );
+    optionsLayout->setSpacing( KDialog::spacingHint() );
+    optionsLayout->setMargin( KDialog::marginHint() );
+    m_checkOpenEncoding = new QCheckBox( i18n( "Open encoding dialog after ripping." ), ripOptions );
+    m_checkStartEncoding = new QCheckBox( i18n( "Start encoding with default settings after ripping." ), ripOptions );
+    // TODO
+    m_checkStartEncoding->setEnabled( false );
+    m_comboAngle = new KComboBox( FALSE, ripOptions, "comboRipAngle" );
+    m_labelAngle = new QLabel(i18n("Select the angle to rip:"), ripOptions);
+    optionsLayout->addMultiCellWidget( m_labelAngle, 0, 0, 0, 0);
+    optionsLayout->addMultiCellWidget( m_comboAngle, 0, 0, 1, 1);
+    optionsLayout->addMultiCellWidget( m_checkOpenEncoding, 1, 1, 0, 0);
+    optionsLayout->addMultiCellWidget( m_checkStartEncoding, 2, 2, 0, 0);
 
-  setStartButtonText( i18n( "Start Ripping" ), i18n( "This starts the DVD copy.") );
+    QGroupBox *groupSize = new QGroupBox( i18n( "Available Space" ), frame, "size" );
+    groupSize->setColumnLayout(0, Qt::Vertical );
+    QGridLayout *sizeLayout = new QGridLayout( groupSize->layout() );
+    sizeLayout->setSpacing( KDialog::spacingHint() );
+    sizeLayout->setMargin( KDialog::marginHint() );
+    m_fillDisplay = new K3bDvdFillDisplay( groupSize );
+    m_fillDisplay->setFixedHeight( 20 );
+    m_hardDiskSpace = new QLabel( groupSize );
+    sizeLayout->addMultiCellWidget( m_fillDisplay, 0, 0, 0, 1 );
+    sizeLayout->addMultiCellWidget( m_hardDiskSpace, 0, 0, 2, 2 );
+    sizeLayout->setColStretch( 0, 20 );
 
-  connect( this, SIGNAL( startClicked() ), this, SLOT(rip() ) );
+    mainLayout->addMultiCellWidget( groupPattern, 0, 0, 0, 1 );
+    mainLayout->addMultiCellWidget( groupSize, 1, 1, 0, 1 );
+    mainLayout->addMultiCellWidget( ripOptions, 2, 2, 0, 1 );
 
-  connect(m_checkOpenEncoding, SIGNAL( stateChanged( int ) ), this, SLOT( slotCheckOpenEncoding( int ) ));
-  connect(m_checkStartEncoding, SIGNAL( stateChanged( int ) ), this, SLOT( slotCheckStartEncoding( int ) ));
-  //connect(m_buttonStaticDirVob, SIGNAL(clicked()), this, SLOT(slotFindStaticDirVob()) );
-  //connect(m_buttonStaticDirTmp, SIGNAL(clicked()), this, SLOT(slotFindStaticDirTmp()) );
-  connect(m_editStaticRipPath, SIGNAL( textChanged( const QString& )), this, SLOT( slotSetDependDirs( const QString& )) );
+    setStartButtonText( i18n( "Start Ripping" ), i18n( "This starts the DVD copy.") );
+    connect( this, SIGNAL( closeClicked() ), this, SLOT( close() ) );
+    connect( this, SIGNAL( startClicked() ), this, SLOT( rip() ) );
+    //connect(m_buttonStaticDir, SIGNAL(clicked()), this, SLOT(slotFindStaticDir()) );
+    connect(m_checkOpenEncoding, SIGNAL( stateChanged( int ) ), this, SLOT( slotCheckOpenEncoding( int ) ));
+    connect(m_checkStartEncoding, SIGNAL( stateChanged( int ) ), this, SLOT( slotCheckStartEncoding( int ) ));
+    //connect(m_buttonStaticDirVob, SIGNAL(clicked()), this, SLOT(slotFindStaticDirVob()) );
+    //connect(m_buttonStaticDirTmp, SIGNAL(clicked()), this, SLOT(slotFindStaticDirTmp()) );
+    connect(m_editStaticRipPath, SIGNAL( textChanged( const QString& )), this, SLOT( slotSetDependDirs( const QString& )) );
 }
 
 void K3bDvdRipperWidget::init( const QValueList<K3bDvdContent>& list ){
-  m_ripTitles.clear();
-  m_ripTitles = list;
-  checkSize();
+    m_ripTitles.clear();
+    m_ripTitles = list;
+    checkSize();
+    DvdTitle::Iterator dvd;
+    // currently only one title to rip supported
+    dvd = m_ripTitles.begin( );
+    m_comboAngle->insertStringList( *(*dvd).getAngles() );
+    if( m_comboAngle->count() == 1 ){
+        m_comboAngle->setDisabled( true );
+        m_labelAngle->setDisabled( true );
+    }
 }
 
 void K3bDvdRipperWidget::rip(){
-
-    QString path = m_editStaticRipPath->url();
-    if( path.endsWith("/") )
-        m_editStaticRipPath->setURL( path.left( path.length()-1 ));
-
   if( !m_enoughSpace ) {
     KMessageBox::error( this, i18n("Not enough space left in %1").arg(m_editStaticRipPath->url()) );
     return;
@@ -161,9 +184,8 @@ void K3bDvdRipperWidget::rip(){
 			     m_editStaticRipPath->url()+"/tmp", 
 			     m_ripTitles, 
 			     this );
-
-  m_ripJob->setRipSize( m_vobSize );
-
+  m_ripJob->setSettings( m_vobSize, m_comboAngle->currentText() );
+  
   if( !m_ripDialog ) {
     m_ripDialog = new K3bJobProgressDialog( this, "Ripping", false );
     K3bDvdExtraRipStatus *ripStatus = new K3bDvdExtraRipStatus( m_ripDialog );
@@ -172,11 +194,10 @@ void K3bDvdRipperWidget::rip(){
 	     ripStatus, SLOT( slotEstimatedTime( unsigned int )) );
     connect( m_ripJob, SIGNAL( finished( bool )), this, SLOT( slotOpenEncoding( bool )) );
     m_ripDialog->setExtraInfo( ripStatus );
+    connect( m_ripDialog, SIGNAL( closeClicked()), this, SLOT( slotRipJobDeleted() ));
   }
 
-  // doesn't work proper, TODO later
-  //if ( !m_ripJob->isStartFailed() ){
-  hide();
+  hide(); 
 
   m_ripDialog->startJob( m_ripJob );
   //} 
@@ -184,41 +205,61 @@ void K3bDvdRipperWidget::rip(){
   delete m_ripJob;
 }
 
-
-void K3bDvdRipperWidget::slotSetDependDirs( const QString& p ) {
-    QString tmp = p;
-    QDir space( tmp );
-    if( !space.exists() ){
-        int index = tmp.findRev( "/" );
-        tmp = tmp.left( index+1 );
-        kdDebug() << "(K3bDvdRipperWidget) new directory. Check existing." << endl;
-        space.setPath( tmp );
-        if ( !space.exists() ){
-            kdDebug() << "(K3bDvdRipperWidget) Error: directory doesn't exists: " << tmp << endl;
-            return;
-        }
-    }
-    struct statfs fs;
-    ::statfs(QFile::encodeName( tmp ), &fs);
-    unsigned int kBfak = fs.f_bsize/1024;
-    slotFreeTempSpace( tmp, fs.f_blocks*kBfak, (fs.f_blocks-fs.f_bfree)*kBfak, fs.f_bavail*kBfak );
+void K3bDvdRipperWidget::slotRipJobDeleted(){
+    kdDebug() << "(K3bDvdRipperWidget) Rip job finished/interrupted." << endl;
+    m_ripJob->ripFinished( true );
+    m_ripDialog->close();
+    delete m_ripJob;
+    delete m_ripProcess;
+    m_ripJob = 0;
+    m_ripProcess = 0;
 }
 
-void K3bDvdRipperWidget::slotFreeTempSpace( const QString&, unsigned long kBSize,
-					    unsigned long kBUsed, unsigned long kBAvail ){
-  m_fillDisplay->setKbSize( kBSize );
-  m_fillDisplay->setKbAvailable( kBAvail );
-  m_fillDisplay->setKbUsed( kBUsed );
-  kdDebug() << "(K3bDvdRipperWidget) DVD VobSize: " << m_vobSize << endl;
-  m_fillDisplay->setKbDvd( (unsigned long) (m_vobSize/1000) );
-  if( kBAvail > m_vobSize/1000 ) {
-    m_enoughSpace = true;
-  } else {
-    m_enoughSpace = false;
-  }
-  m_fillDisplay->repaint();
-  QString overview = m_fillDisplay->freeWithDvd() + QString().sprintf( " / %.2f GBytes", ((float)kBSize)/1000000);
-  m_hardDiskSpace->setText( overview );
+void K3bDvdRipperWidget::closeEvent( QCloseEvent *e){
+    e->accept();
+}
+
+
+void K3bDvdRipperWidget::slotFindStaticDir() {
+    QString path = KFileDialog::getExistingDirectory( m_editStaticRipPath->url(), this, i18n("Select Ripping Directory") );
+    if( !path.isEmpty() ) {
+        m_editStaticRipPath->setURL( path );
+        slotSetDependDirs( path );
+    }
+}
+
+void K3bDvdRipperWidget::slotSetDependDirs( const QString& p ) {    
+    // get real directory of /home/me/abcdef -> /home/me
+    QString tmp = p;
+    QDir space( p ); // add / to be sure
+    if( !space.exists() ){
+        int index = p.findRev("/");
+        kdDebug() << "P: " << p << endl;
+        tmp = p.left( index+1 );
+        kdDebug() << "(K3bDvdRipperWidget) new directory. Check existing: " << tmp << endl;
+    }
+    struct statfs fs;
+    ::statfs(tmp.latin1(),&fs);
+    unsigned int kBfak = (unsigned int)(fs.f_bsize/1024);
+    slotFreeTempSpace(tmp,fs.f_blocks*kBfak,(fs.f_blocks-fs.f_bfree)*kBfak,fs.f_bavail*kBfak);
+}
+
+void K3bDvdRipperWidget::slotFreeTempSpace( const QString &, unsigned long kBSize,
+        unsigned long kBUsed, unsigned long kBAvail ){
+    m_fillDisplay->setKbSize( kBSize );
+    m_fillDisplay->setKbAvailable( kBAvail );
+    m_fillDisplay->setKbUsed( kBUsed );
+    kdDebug() << "(K3bDvdRipperWidget) DVD VobSize: " << m_vobSize << ", KBAvail: " << kBAvail << endl;
+    m_fillDisplay->setKbDvd( (unsigned long) (m_vobSize/1000) );
+     if( kBAvail > m_vobSize/1000 ) {
+        m_enoughSpace = true;
+    } else {
+        m_enoughSpace = false;
+    }
+    m_fillDisplay->repaint();
+    kdDebug() << m_fillDisplay->freeWithDvd()<< endl;
+    QString overview = m_fillDisplay->freeWithDvd() + QString().sprintf( " / %.2f GBytes", ((float)kBSize)/1000000);
+    m_hardDiskSpace->setText( overview );
 }
 bool K3bDvdRipperWidget::createDirs(){
   bool result = true;
@@ -306,20 +347,23 @@ void K3bDvdRipperWidget::slotCheckStartEncoding( int state ){
 }
 
 void K3bDvdRipperWidget::slotOpenEncoding( bool result ){
-  kdDebug() << "(K3bDvdRipperWidget) Finished ripping status: " << result
-	    << ", Initstatus: " << m_ripJob->isStartFailed() << endl;
-  /* TODO fix
-     if( !result && m_ripJob->isStartFailed() ){
-     m_ripDialog->close();
-     }
-  */
-  if( result && m_openEncoding ){
-    m_ripDialog->close();
-    // fill data
-    openEncodingDialog();
-    // calculate final size depend on quality
-    // start encoding
-  }
+    kdDebug() << "(K3bDvdRipperWidget) Finished ripping status: " << result
+        << ", Initstatus: " << m_ripJob->isStartFailed() << endl;
+    if( !result ){
+        m_ripDialog->close();
+        delete m_ripProcess;
+        m_ripProcess = 0;
+    }
+    
+    if( result && m_openEncoding ){
+        m_ripDialog->close();
+        delete m_ripProcess;
+        m_ripProcess = 0;
+        // fill data
+        openEncodingDialog();
+        // calculate final size depend on quality
+        // start encoding
+    }
 }
 
 void K3bDvdRipperWidget::slotStartEncoding( bool ){

@@ -47,9 +47,14 @@
 #include <krestrictedline.h>
 #include <kcombobox.h>
 #include <kdebug.h>
+#include <kmessagebox.h>
+
 
 K3bDivxAVExtend::K3bDivxAVExtend( K3bDivxCodecData *data, QWidget *parent, const char *name ) : QGroupBox( parent,name) {
      m_data =  data;
+     m_wrongsettings = i18n("Wrong setting");
+     m_dilError = i18n("The deinterlace filter YUVDeinterlaceMMX doesn't work with RGB mode. You must enable using YUV colorspace.");
+     m_smartError = i18n("The deinterlace filter SmartDeinterlace doesn't work with YUV colorspace. It only works with RGB. You must disable using YUV colorspace.");
      setupGui();
 }
 
@@ -79,9 +84,14 @@ the video during playback instead."));
 You can probably choose AC3 6ch, AC3 2ch and MPEG2 Stereo in descending order, depending on your language (It doesn't matter if DTS works or not, you can still try it).") );
     QWhatsThis::add( language, wt_language);
     QLabel *deinterlace = new QLabel( i18n("Deinterlace mode:"), this );
-    QString wt_deinterlace( i18n("Select a deinterlace mode if you have interlaced material. \"Fast\" is the standard deinterlace mode, \"Encoder Based\" uses \
-the internal deinterlace of the codec (be aware that some codecs may have no deinterlacer), \"Zoom to Full Frame\" no matter how it works but it is rather good and slow. Use this if \"Fast\" still produces interlace \
-stripes or color artifacts (red shadow, etc.), \"Drop Field/Half Height\" uses only one field and scales it." ));
+    QString wt_deinterlace( i18n("Select a deinterlace mode if you have interlaced material.<ul><li><strong>Fast</strong> is the standard deinterlace mode</li>\
+<li><strong>Encoder Based</strong> uses the internal deinterlace of the codec (be aware that some codecs may have no deinterlacer)</li>\
+<li><strong>Zoom to Full Frame</strong> no matter how it works but it is rather good and slow. Use this if <strong>Fast</strong> still produces interlace \
+stripes or color artifacts (red shadow, etc.)<li>\
+<li><strong>Drop Field/Half Height</strong> uses only one field and scales it.</li>\
+<li><strong>SmartDeinterlace</strong> provides a smart, motion-based deinterlacing capability. Ported from VirtualDub by Tilmann Bitterberg. Operates in RGB space only.\
+Tilmann did some testing of deinterlace filters available in transcode. You can view and read the result on tibit.org/video/. </li>\
+<li><strong>YUVDeinterlaceMMX</strong> is a deinterlace for YUV mode by Thomas Oestreich.</li></ul>"));
     QWhatsThis::add( deinterlace, wt_deinterlace);
     QGroupBox *groupCrispness = new QGroupBox( this );
     groupCrispness->setColumnLayout(0, Qt::Horizontal );
@@ -110,6 +120,9 @@ also has YUV colorspace and it is twice fast as RGB. You only need RGB colorspac
     m_comboDeinterlace->insertItem(i18n("2 - Encoder Based"));
     m_comboDeinterlace->insertItem(i18n("3 - Zoom to Full Frame"));
     m_comboDeinterlace->insertItem(i18n("4 - Drop Field/Half Height"));
+    m_comboDeinterlace->insertItem(i18n("Filter - SmartDeinterlace"));
+    m_comboDeinterlace->insertItem(i18n("Filter - YUVDeinterlaceMMX"));
+    
     QWhatsThis::add( m_comboDeinterlace, wt_deinterlace);
     m_comboLanguage = new KComboBox( this );
     QWhatsThis::add( m_comboLanguage, wt_language);
@@ -179,11 +192,31 @@ void K3bDivxAVExtend::slotCrispness( int value ){
          m_labelCrispness->setText( QString::number( value ) + " %");
      }
 }
-
 void K3bDivxAVExtend::slotDeinterlace( int index ){
+    if( index == SMARTDEINTER && m_checkYuv->isChecked() ){
+        // smartdeinterlace, only rgb
+        KMessageBox::error( this, m_smartError,m_wrongsettings );
+        m_comboDeinterlace->setCurrentItem(0);
+        return;
+    } else if ( index == DILYUVMMX && ! m_checkYuv->isChecked() ){
+        // yuvdilmmx, only yuv
+        KMessageBox::error( this, m_dilError, m_wrongsettings); 
+        m_comboDeinterlace->setCurrentItem(0);
+        return;
+    }
     m_data->setDeinterlace( index );
 }
+
 void K3bDivxAVExtend::slotYuv( int state ){
+    if ( state == 0 && m_data->getDeinterlace() == DILYUVMMX ){
+        KMessageBox::error( this, m_dilError, m_wrongsettings); 
+        m_checkYuv->setEnabled( true );
+        return;
+    } else if (state == 2 && m_data->getDeinterlace() == SMARTDEINTER ){
+        KMessageBox::error( this, m_smartError,m_wrongsettings );
+        m_checkYuv->setEnabled( false );
+        return;
+    }
     m_data->setYuv( state );
 }
 void K3bDivxAVExtend::slotResample( int state ){

@@ -17,6 +17,7 @@
 
 #include "k3btcwrapper.h"
 #include "k3bdvdcontent.h"
+#include "../k3bprocess.h"
 #include "../device/k3bdevice.h"
 #include "../device/k3bdevicemanager.h"
 #include "../tools/k3bexternalbinmanager.h"
@@ -24,9 +25,10 @@
 
 #include <qstring.h>
 
-#include <kprocess.h>
+//#include <kprocess.h>
 #include <klocale.h>
 #include <kdebug.h>
+
 
 K3bTcWrapper::K3bTcWrapper( QObject* parent )
   : QObject( parent )
@@ -61,12 +63,16 @@ void K3bTcWrapper::runTcprobe()
 
   const K3bExternalBin *bin = k3bcore->externalBinManager()->binObject("tcprobe");
   KShellProcess *p = new KShellProcess();
+  //K3bProcess *p = new K3bProcess();
   emit tcprobeTitleParsed( m_currentTitle );
 
   *p << bin->path << "-i" <<  m_device->ioctlDevice() << "-T" << QString::number(m_currentTitle);
-
+  //p->setSplitStdout( true );
   connect( p, SIGNAL(receivedStderr(KProcess*, char*, int)), this, SLOT(slotParseTcprobeError(KProcess*, char*, int)) );
   connect( p, SIGNAL(receivedStdout(KProcess*, char*, int)), this, SLOT(slotParseTcprobeOutput(KProcess*, char*, int)) );
+  //connect( p, SIGNAL(stderrLine(const QString&)), this, SLOT(slotParseTcprobeError(const QString&)) );
+  //connect( p, SIGNAL(stdoutLine(const QString&)), this, SLOT(slotParseTcprobeOutput(const QString&)) );
+  
   connect( p, SIGNAL(processExited(KProcess*)), this, SLOT(slotTcprobeExited( KProcess* )) );
 
   if( !p->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
@@ -77,7 +83,20 @@ void K3bTcWrapper::runTcprobe()
 }
 
 void K3bTcWrapper::slotParseTcprobeOutput( KProcess *, char *text, int len){
-    m_outputBuffer += QString::fromLocal8Bit( text, len );
+//void K3bTcWrapper::slotParseTcprobeOutput( const QString &text){
+    //kdDebug() << "Stdout: " << text << endl;
+    //kdDebug() << "Stdout Latin: " << QString::fromLatin1( text, len) << endl;
+    //kdDebug() << "Stdout Ascii: " << QString::fromAscii( text, len) << endl;
+    //int z = printf("Blub: %s", text);
+    //QString buffer = QString("");
+    //kdDebug() << "Laenge: " << len << endl;
+    // due to cutted output when non-printing signs occur, prepare the output here
+    for ( int i=0; i < len; i++){
+        QChar c( text[i] );
+        if ( c.isPrint() || ( c == "\n" || c == "\0" )){
+            m_outputBuffer += c;
+        }
+    }
 }
 
 void K3bTcWrapper::slotParseTcprobeError( KProcess *, char *text, int len){
@@ -85,7 +104,9 @@ void K3bTcWrapper::slotParseTcprobeError( KProcess *, char *text, int len){
 }
 
 void K3bTcWrapper::slotTcprobeExited( KProcess *){
+    //kdDebug() << "==============================================================================" << endl;
     //kdDebug() << "(K3bTcWrapper) Tcprobe output\n" << m_outputBuffer << endl;
+    //kdDebug() << "==============================================================================" << endl;    
     //kdDebug() << "(K3bTcWrapper) Tcprobe error\n" << m_errorBuffer << endl;
     kdDebug() << "(K3bTcWrapper) Tcprobe finished" << endl;
     // split to lines
@@ -217,7 +238,13 @@ K3bDvdContent K3bTcWrapper::parseTcprobe(){
       } else if( (*str).contains("frame size") ){
           int index = (*str).find(": -g");
           int end = (*str).find( " ", index+5);
-          title.setRes( (*str).mid( index+5, end-index-5 ) );
+          QString str_res = (*str).mid( index+5, end-index-5 );
+          kdDebug() << "(K3bTcWrapper) Framesize: <" << str_res << ">" << endl;
+          int width = str_res.mid( 0, 3 ).toInt();
+          if( width != 720 ){
+            kdDebug() << "(K3bTcWrapper) WARNING: parsed resolution <"<< str_res << ">is not 720x576, using default resolution of 720x576." << endl;
+          }
+          title.setRes( str_res );
       } else if( (*str).contains("aspect") ){
           int index = (*str).find("ratio:");
           int end = (*str).find( " ", index+7);

@@ -211,7 +211,7 @@ void K3bDivxPreview::setCroppingLines(){
 
 void K3bDivxPreview::setTopLine( int offset ){
     kdDebug() << "(K3bDivxPreview::setTopLine)" << endl;
-    offset = offset/m_imageScale;
+    offset = (int) offset/m_imageScale;
     int old = (int) m_lineTop->y();
     m_lineTop->setY( m_sprite->topEdge() + offset );
     repaintContents( 0, old, visibleWidth(), 2 ); // old line
@@ -221,7 +221,7 @@ void K3bDivxPreview::setTopLine( int offset ){
 
 void K3bDivxPreview::setLeftLine( int offset ){
     kdDebug() << "(K3bDivxPreview::setLeftLine)" << endl;
-    offset = offset/m_imageScale;
+    offset = (int) offset/m_imageScale;
     int old = (int) m_lineLeft->x();
     m_lineLeft->setX( m_sprite->leftEdge() + offset );
     repaintContents( old, 0, 2, visibleHeight() ); // old line
@@ -231,7 +231,7 @@ void K3bDivxPreview::setLeftLine( int offset ){
 
 void K3bDivxPreview::setBottomLine( int offset ){
     kdDebug() << "(K3bDivxPreview::setBottomLine)" << endl;
-    offset = offset/m_imageScale;
+    offset = (int) offset/m_imageScale;
     int old = (int) m_lineBottom->y();
     m_lineBottom->setY( m_sprite->bottomEdge() - offset );
     repaintContents( 0, old, visibleWidth(), 2 ); // old line
@@ -241,7 +241,7 @@ void K3bDivxPreview::setBottomLine( int offset ){
 
 void K3bDivxPreview::setRightLine( int offset ){
     kdDebug() << "(K3bDivxPreview::setRightLine)" << endl;
-    offset = offset/m_imageScale;
+    offset = (int) offset/m_imageScale;
     int old = m_lineRight->x();
     m_lineRight->setX( m_sprite->rightEdge() - offset );
     repaintContents( old, 0, 2, visibleHeight() ); // old line

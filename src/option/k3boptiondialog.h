@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -26,6 +26,7 @@ class K3bBurningOptionTab;
 class K3bPatternOptionTab;
 class K3bExternalBinOptionTab;
 class K3bMiscOptionTab;
+class K3bDivxOptionTab;
 class K3bNotifyOptionTab;
 
 
@@ -74,10 +75,14 @@ class K3bOptionDialog : public KDialogBase
   // misc options
   K3bMiscOptionTab* m_miscOptionTab;
   void setupMiscPage();
-
+  
   // notify options
   K3bNotifyOptionTab* m_notifyOptionTab;
   void setupNotifyPage();
+  
+  // divx options
+  K3bDivxOptionTab* m_divxOptionTab;
+  void setupDivxPage();
 };
 
 #endif

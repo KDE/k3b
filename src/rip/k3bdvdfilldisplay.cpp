@@ -22,6 +22,7 @@
 #include <qstring.h>
 
 #include <klocale.h>
+#include <kdebug.h>
 
 K3bDvdFillDisplay::K3bDvdFillDisplay(QWidget *parent, const char *name ) : QFrame(parent,name) {
     setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred ) );
@@ -42,7 +43,6 @@ void K3bDvdFillDisplay::drawContents( QPainter* p ){
     QColor color( Qt::green );
     QRect rect( contentsRect() );
     int maxWidth = rect.width();
-    unsigned long used = m_used + m_dvd;
     float full = (float) m_used / (float) m_size;
     m_dvdFull = (float) ( m_used+m_dvd ) / (float) m_size;
     if( m_dvdFull > 1.0 ) m_dvdFull = 1.0;
@@ -63,12 +63,14 @@ void K3bDvdFillDisplay::drawContents( QPainter* p ){
         QRect rectO( (int)maxWidth *m_dvdFull, 0, (int)maxWidth * ( m_aviFull-m_dvdFull), rect.height() );
         p->fillRect( rectO, Qt::yellow );
     }
-    p->fillRect( rect, color );
+    p->fillRect( rect, color );    
 }
 
 QString K3bDvdFillDisplay::freeWithDvdAvi(){
     return QString().sprintf( "%.2f %% ",  (m_aviFull*100) ) + i18n("(full)");
 }
 QString K3bDvdFillDisplay::freeWithDvd(){
-    return QString().sprintf( "%.2f %% ",  (m_dvdFull*100) )+ i18n("(full)");
+    m_dvdFull = (float) ( m_used+m_dvd ) / (float) m_size;
+    if( m_dvdFull > 1.0 ) m_dvdFull = 1.0;
+    return QString().sprintf( "%.2f %% ",  (float)(m_dvdFull*100) )+ i18n("(full)");
 }

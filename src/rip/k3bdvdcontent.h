@@ -67,7 +67,7 @@ public:
     QStringList* getAudioList() { return &m_audioList; };
     QStringList* getAngles() { return &m_selectedAngle; };
     QStringList* getSelectedChapter() { return &m_selectedChapters; };
-
+    unsigned int getMaxAngle() { return m_maxAngle; }
     QSize& getRes() { return m_res; };
     QSize& getAspect() { return m_aspect; };
     QTime& getTime() { return m_time; };

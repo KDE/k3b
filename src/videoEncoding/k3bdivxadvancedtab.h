@@ -17,7 +17,7 @@
                           k3bdivxadvancedtab.h  -  description
                              -------------------
     begin                : Tue Jul 30 2002
-    copyright            : (C) 2002 by Sebastian Trueg
+    copyright          : (C) 2002 by Sebastian Trueg
     email                : trueg@informatik.uni-freiburg.de
  ***************************************************************************/
 

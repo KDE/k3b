@@ -49,6 +49,7 @@ class K3bTcWrapper : public QObject
 private slots:
   void slotParseTcprobeOutput( KProcess *p, char *text, int index);
   void slotParseTcprobeError( KProcess *p, char *text, int index);
+  //void slotParseTcprobeOutput( const QString &text );
   void slotTcprobeExited( KProcess* );
 
 signals:

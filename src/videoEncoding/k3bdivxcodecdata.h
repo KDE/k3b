@@ -60,6 +60,7 @@ public:
     // getters for project parsed datas
     QString getTitle(){ return m_title; }
     QString getFrames(){ return m_frames; }
+    int getChapters(){ return m_chapters.toInt(); }
     long getFramesValue();
     QStringList getAudioLanguages(){ return m_listAudio; };
     const QString& getAudioLanguageAc3Bitrate( int i ) const;
@@ -101,6 +102,7 @@ public:
     //additional encoding settings
     void setDeinterlace( int mode ){ m_deinterlaceMode = mode; }
     QString getParaDeinterlace();
+    int getDeinterlace() { return m_deinterlaceMode; }
     void setAudioLanguage( int lang ){ m_audioLanguage = lang; }
     QString getParaAudioLanguage();
     void setAudioResample( int buttonState );
@@ -114,7 +116,8 @@ public:
     QString getCrispness() { return m_crispness; }
     QString getParaAudioGain();
     int getAudioLanguage() { return m_audioLanguage; };
-
+    bool isTcDvdMode() { return m_tcDvdMode; }
+    void setTcDvdMode(bool enabled) { m_tcDvdMode=enabled; };
     // ac3 settings
     void setAc3( int );
     QString getParaAc3() { return m_ac3; }
@@ -176,6 +179,7 @@ private:
     QString m_yuv;
     QString m_keyframes;
     QString m_crispness;
+    bool m_tcDvdMode;
     bool m_projectLoaded;
     bool m_useAc3;
     bool m_useNormalize;
