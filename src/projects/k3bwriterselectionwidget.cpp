@@ -41,6 +41,7 @@ class K3bWriterSelectionWidget::Private
 public:
   int maxSpeed;
   bool dvd;
+  bool forceAutoSpeed;
 };
 
 
@@ -49,6 +50,7 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( bool dvd, QWidget *parent, c
 {
   d = new Private;
   d->dvd = dvd;
+  d->forceAutoSpeed = false;
 
   QGroupBox* groupWriter = new QGroupBox( this );
   groupWriter->setTitle( i18n( "Burning Device" ) );
@@ -199,6 +201,11 @@ void K3bWriterSelectionWidget::init()
 					 "<p>In most cases there will only be one writer available which "
 					 "does not leave much choice.") );
     QWhatsThis::add( m_comboSpeed, i18n("<p>Select the speed with which you want the writer to burn."
+					"<p><b>Auto</b><br>"
+					"This will choose the maximum writing speed possible with the used "
+					"medium. Be aware that this might not be a good choice when writing "
+					"an Audio-CD on-the-fly since the decoding of the audio files may take "
+					"too long to allow a continuous data stream."
 					"<p>1x refers to 150 KB/s."
 					"<p><b>Caution:</b> Make sure your system is able to send the data "
 					"fast enough to prevent buffer underruns.") );
@@ -231,22 +238,23 @@ void K3bWriterSelectionWidget::slotConfigChanged( KConfig* c )
 
 void K3bWriterSelectionWidget::slotRefreshWriterSpeeds()
 {
-  if( d->dvd ) {
-    m_comboSpeed->clear();
-    m_comboSpeed->insertItem( i18n("Auto") );
+  m_comboSpeed->clear();
+  m_comboSpeed->insertItem( i18n("Auto") );
+  if( !d->forceAutoSpeed ) {
     m_comboSpeed->insertItem( "1x" );
-  }
-  else if( K3bDevice* dev = writerDevice() ) {
-    // add speeds to combobox
-    m_comboSpeed->clear();
-    m_comboSpeed->insertItem( "1x" );
-    int speed = 2;
-    while( speed <= dev->maxWriteSpeed() ) {
-      m_comboSpeed->insertItem( QString( "%1x" ).arg(speed) );
-      speed += 2;
+    
+    K3bDevice* dev = writerDevice();
+    
+    if( !d->dvd && dev ) {
+      // add speeds to combobox
+      int speed = 2;
+      while( speed <= dev->maxWriteSpeed() ) {
+	m_comboSpeed->insertItem( QString( "%1x" ).arg(speed) );
+	speed += 2;
+      }
+      
+      d->maxSpeed = speed;
     }
-
-    d->maxSpeed = speed;
   }
 }
 
@@ -271,7 +279,7 @@ void K3bWriterSelectionWidget::setWriterDevice( K3bDevice* dev )
 
 void K3bWriterSelectionWidget::setSpeed( int s )
 {
-  if( d->dvd && s == 0 )
+  if( s == 0 )
     m_comboSpeed->setCurrentItem( 0 ); // Auto
   else if( d->dvd )
     m_comboSpeed->setCurrentItem( 1 ); // 1x
@@ -307,11 +315,10 @@ void K3bWriterSelectionWidget::setWritingApp( int app )
 
 int K3bWriterSelectionWidget::writerSpeed() const
 {
-  if( d->dvd ) {
-    // 0 for Auto
-    // 1 for 1x
-    return m_comboSpeed->currentItem();
-  }
+  if( m_comboSpeed->currentItem() == 0 )
+    return 0; // Auto
+  else if( d->dvd )
+    return 1;
   else {
     QString strSpeed = m_comboSpeed->currentText();
     strSpeed.truncate( strSpeed.find('x') );
@@ -426,16 +433,16 @@ void K3bWriterSelectionWidget::saveConfig( KConfig* c )
 
 void K3bWriterSelectionWidget::loadDefaults()
 {
-  // ignore the writer and the writer speed in CD mode
-  if( d->dvd )
-    m_comboSpeed->setCurrentItem( 0 ); // Auto
+  // ignore the writer
+  m_comboSpeed->setCurrentItem( 0 ); // Auto
   setWritingApp( K3b::DEFAULT );
 }
 
 
 void K3bWriterSelectionWidget::setForceAutoSpeed( bool b )
 {
-  m_comboSpeed->setDisabled(b);
+  d->forceAutoSpeed = b;
+  slotRefreshWriterSpeeds();
 }
 
 #include "k3bwriterselectionwidget.moc"

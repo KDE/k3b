@@ -53,6 +53,7 @@ public:
   K3bThroughputEstimator* speedEst;
   bool running;
   bool usingBurnfree;
+  int usedSpeed;
 };
 
 
@@ -151,7 +152,16 @@ void K3bCdrecordWriter::prepareProcess()
     
   // Again we assume the device to be set!
   *m_process << QString("dev=%1").arg(K3bCdDevice::externalBinDeviceParameter(burnDevice(), m_cdrecordBinObject));
-  *m_process << QString("speed=%1").arg(burnSpeed());
+
+  d->usedSpeed = burnSpeed();
+  if( d->usedSpeed == 0 ) {
+    // try to determine the writeSpeed
+    // if it fails determineMaximalWriteSpeed() will return 0 and
+    // the choice is left to cdrecord
+    d->usedSpeed = burnDevice()->determineMaximalWriteSpeed()/175;
+  }
+  if( d->usedSpeed != 0 )
+    *m_process << QString("speed=%1").arg(d->usedSpeed);
     
   if( m_writingMode == K3b::DAO ) {
     if( burnDevice()->dao() )
@@ -280,24 +290,24 @@ void K3bCdrecordWriter::start()
     if( simulate() ) {
       emit newTask( i18n("Simulating") );
       if( m_writingMode == K3b::DAO )
-	emit infoMessage( i18n("Starting dao simulation at %1x speed...").arg(burnSpeed()), 
+	emit infoMessage( i18n("Starting dao simulation at %1x speed...").arg(d->usedSpeed), 
 			  K3bJob::INFO );
       else if( m_writingMode == K3b::RAW )
-	emit infoMessage( i18n("Starting raw simulation at %1x speed...").arg(burnSpeed()), 
+	emit infoMessage( i18n("Starting raw simulation at %1x speed...").arg(d->usedSpeed), 
 			  K3bJob::INFO );
       else
-	emit infoMessage( i18n("Starting tao simulation at %1x speed...").arg(burnSpeed()), 
+	emit infoMessage( i18n("Starting tao simulation at %1x speed...").arg(d->usedSpeed), 
 			  K3bJob::INFO );
     }
     else {
       emit newTask( i18n("Writing") );
 
       if( m_writingMode == K3b::DAO )
-	emit infoMessage( i18n("Starting dao writing at %1x speed...").arg(burnSpeed()), K3bJob::INFO );
+	emit infoMessage( i18n("Starting dao writing at %1x speed...").arg(d->usedSpeed), K3bJob::INFO );
       else if( m_writingMode == K3b::RAW )
-	emit infoMessage( i18n("Starting raw writing at %1x speed...").arg(burnSpeed()), K3bJob::INFO );
+	emit infoMessage( i18n("Starting raw writing at %1x speed...").arg(d->usedSpeed), K3bJob::INFO );
       else
-	emit infoMessage( i18n("Starting tao writing at %1x speed...").arg(burnSpeed()), K3bJob::INFO );
+	emit infoMessage( i18n("Starting tao writing at %1x speed...").arg(d->usedSpeed), K3bJob::INFO );
     }
   }
 }
@@ -469,8 +479,8 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
     int pos = line.find( "at speed" );
     int po2 = line.find( QRegExp("\\D"), pos + 9 );
     int speed = line.mid( pos+9, po2-pos-9 ).toInt();
-    if( speed < burnSpeed() ) {
-      emit infoMessage( i18n("Medium or burner do not support writing at %1x speed").arg(burnSpeed()), K3bJob::WARNING );
+    if( speed < d->usedSpeed ) {
+      emit infoMessage( i18n("Medium or burner do not support writing at %1x speed").arg(d->usedSpeed), K3bJob::WARNING );
       emit infoMessage( i18n("Switching down burn speed to %1x").arg(speed), K3bJob::WARNING );
     }
   }
@@ -629,7 +639,7 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	emit infoMessage( i18n("OPC failed. Probably the writer does not like the medium."), ERROR );
 	break;
       case CANNOT_SET_SPEED:
-	emit infoMessage( i18n("Unable to set write speed to %1.").arg(burnSpeed()), ERROR );
+	emit infoMessage( i18n("Unable to set write speed to %1.").arg(d->usedSpeed), ERROR );
 	emit infoMessage( i18n("Probably this is lower than your writer's lowest writing speed."), ERROR );
 	break;
       case CANNOT_SEND_CUE_SHEET:

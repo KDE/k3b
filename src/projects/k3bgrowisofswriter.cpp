@@ -24,17 +24,15 @@
 #include <device/k3bdiskinfo.h>
 #include <k3bglobals.h>
 #include <k3bthroughputestimator.h>
+#include <k3bgrowisofshandler.h>
 
 #include <klocale.h>
 #include <kdebug.h>
-#include <kglobal.h>
 #include <kconfig.h>
+#include <kglobal.h>
 
 #include <qvaluelist.h>
 //#include <qdatetime.h>
-
-#include <errno.h>
-#include <string.h>
 
 
 class K3bGrowisofsWriter::Private
@@ -62,6 +60,7 @@ public:
   bool writingStarted;
 
   K3bThroughputEstimator* speedEst;
+  K3bGrowisofsHandler* gh;
 };
 
 
@@ -72,6 +71,12 @@ K3bGrowisofsWriter::K3bGrowisofsWriter( K3bCdDevice::CdDevice* dev, QObject* par
   d->speedEst = new K3bThroughputEstimator( this );
   connect( d->speedEst, SIGNAL(throughput(int)),
 	   this, SLOT(slotThroughput(int)) );
+
+  d->gh = new K3bGrowisofsHandler( this );
+  connect( d->gh, SIGNAL(infoMessage(const QString&, int)),
+	   this,SIGNAL(infoMessage(const QString&, int)) );
+  connect( d->gh, SIGNAL(newSubTask(const QString&)),
+	   this, SIGNAL(newSubTask(const QString&)) );
 }
 
 
@@ -170,8 +175,12 @@ bool K3bGrowisofsWriter::prepareProcess()
   // ----------------------------------------
   if( simulate() )
     *d->process << "-use-the-force-luke=dummy";
-  if( d->writingMode == K3b::DAO )
+  if( d->writingMode == K3b::DAO ) {
     *d->process << "-use-the-force-luke=dao";
+    d->gh->reset(true);
+  }
+  else
+    d->gh->reset(false);
 
   int speed = burnSpeed();
   if( speed == 0 ) {
@@ -180,7 +189,7 @@ bool K3bGrowisofsWriter::prepareProcess()
     // the choice is left to growisofs which means that the choice is
     // really left to the drive since growisofs does not change the speed
     // if no option is given
-    speed = burnDevice()->determineOptimalWriteSpeed();
+    speed = burnDevice()->determineMaximalWriteSpeed();
   }
   if( speed != 0 )
     *d->process << QString("-speed=%1").arg( (double)speed/1385.0, 0, 'g', 1 );
@@ -240,10 +249,6 @@ void K3bGrowisofsWriter::start()
 	emit newTask( i18n("Simulating") );
 	emit infoMessage( i18n("Starting simulation..."), 
 			  K3bJob::INFO );
-	//
-	// TODO: info message that DVD+R(W) has no dummy mode and the speed setting is not used
-	//       perhaps we could determine the media type in the writer?
-	//
       }
       else {
 	emit newTask( i18n("Writing") );
@@ -285,8 +290,6 @@ void K3bGrowisofsWriter::setImageToWrite( const QString& filename )
 void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
 {
   emit debuggingOutput( d->growisofsBin->name(), line );
-
-  int pos = 0;
 
   if( line.contains( "remaining" ) ) {
 
@@ -333,57 +336,9 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
       kdDebug() << "(K3bGrowisofsWriter) progress parsing failed: '" 
 		<< line.mid( pos+1, line.find( "(", pos ) - pos - 1 ).stripWhiteSpace() << "'" << endl;
   }
-  else if( line.contains( "flushing cache" ) ) {
-    emit newSubTask( i18n("Flushing Cache")  );
-    emit infoMessage( i18n("Flushing the cache may take some time") + "...", INFO );
-  }
-  else if( line.contains( "updating RMA" ) ) {
-    emit newSubTask( i18n("Updating RMA") );
-    emit infoMessage( i18n("Updating RMA") + "...", INFO );
-  }
-  else if( line.contains( "closing session" ) ) {
-    emit newSubTask( i18n("Closing Session") );
-    emit infoMessage( i18n("Closing Session") + "...", INFO );
-  }
-  else if( line.contains( "writing lead-out" ) ) {
-    emit newSubTask( i18n("Writing Lead-out") );
-    emit infoMessage( i18n("Writing the lead-out may take a while."), INFO );
-  }
-  else if( line.contains( "FEATURE 21h is not on" ) ) {
-    if( d->writingMode != K3b::DAO ) {
-      emit infoMessage( i18n("Writer does not support Incremental Streaming"), WARNING );
-      emit infoMessage( i18n("Engaging DAO"), WARNING );
-    }
-  }
-  else if( ( pos = line.find( "Current Write Speed" ) ) > 0 ) {
-    // parse write speed
-    // /dev/sr0: "Current Write Speed" is 2.4x1385KBps
 
-    pos += 24;
-    int endPos = line.find( "x", pos );
-    bool ok = true;
-    double speed = line.mid( pos, endPos-pos ).toDouble(&ok);
-    if( ok )
-      emit infoMessage( i18n("Writing speed: %1 kb/s (%2x)")
-			.arg((int)(speed*1385.0))
-			.arg(KGlobal::locale()->formatNumber(speed)), INFO );
-    else
-      kdDebug() << "(K3bGrowisofsWriter) parsing error: '" << line.mid( pos, endPos-pos ) << "'" << endl;
-  }
-  else if( line.startsWith( ":-[" ) ) {
-    // Error
-
-    // :-[ PERFORM OPC failed with SK=3h/ASC=73h/ASCQ=03h
-    if( line.contains( "PERFORM OPC" ) )
-      emit infoMessage( i18n("OPC failed. Please try writing speed 1x."), ERROR );
-
-    // :-[ attempt -blank=full or re-run with -dvd-compat -dvd-compat to engage DAO ]
-    else if( line.contains( "engage DAO" ) || line.contains( "media is not formatted or unsupported" ) ) 
-      emit infoMessage( i18n("Please try again with writing mode DAO."), ERROR );
-  }
-  else {
-    kdDebug() << "(growisofs) " << line << endl;
-  }
+  else
+    d->gh->handleLine( line );
 }
 
 
@@ -404,39 +359,12 @@ void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
       d->success = true;
     }
     else {
-      //
-      // The growisofs error codes:
-      //
-      // 128 + errno: fatal error upon program startup
-      // errno      : fatal error during recording
-      //
-      
-      if( p->exitStatus() > 128 ) {
-	// for now we just emit a message with the error
-	// in the future when I know more about what kinds of errors may occure
-	// we will enhance this
-	emit infoMessage( i18n("Fatal error at startup: %1").arg(strerror(p->exitStatus()-128)), 
-			  ERROR );
-      }
-      else if( p->exitStatus() == 1 ) {
-	// Doku says: warning at exit
-	// Example: mkisofs error
-	//          unable to reload
-	// So basically this is just for mkisofs failure since we do not let growisofs reload the media
-	emit infoMessage( i18n("Warning at exit: (1)"), ERROR );
-	emit infoMessage( i18n("Most likely mkisofs failed in some way."), ERROR );
-      }
-      else {
-	emit infoMessage( i18n("Fatal error during recording: %1").arg(strerror(p->exitStatus())), 
-			  ERROR );
-      }
-
+      d->gh->handleExit( p->exitStatus() );
       d->success = false;
     }
   }
   else {
-    emit infoMessage( i18n("%1 did not exit cleanly.").arg(d->growisofsBin->name()), 
-		      ERROR );
+    emit infoMessage( i18n("%1 did not exit cleanly.").arg(d->growisofsBin->name()), ERROR );
     d->success = false;
   }
 

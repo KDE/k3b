@@ -295,6 +295,12 @@ namespace K3bCdDevice
     bool readFormatCapacity( K3b::Msf& ) const;
 
     /**
+     * Does only make sense for cd media.
+     * @returns -1 on error K3bCdDevice::MediaType otherwise
+     */
+    int cdMediaType() const;
+
+    /**
      * Does only make sense for dvd media.
      * @returns -1 on error K3bCdDevice::MediaType otherwise
      */
@@ -303,7 +309,7 @@ namespace K3bCdDevice
     /**
      * @returnes the speed in kb/s or 0 on failure.
      */
-    int determineOptimalWriteSpeed() const;
+    int determineMaximalWriteSpeed() const;
 
     /**
      * @return fd on success; -1 on failure

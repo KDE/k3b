@@ -347,9 +347,12 @@ bool K3bCdDevice::CdDevice::init()
 	    kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "DVD+R" << endl;
 #if __BYTE_ORDER == __BIG_ENDIAN
 	    struct dvd_plus_r_feature {
-	      unsigned char reserved1 : 7;
-	      unsigned char write     : 1;
+	      unsigned char reserved1      : 7;
+	      unsigned char write          : 1;
 	      unsigned char reserved2[3];
+	      unsigned char reserved3      : 6;
+	      unsigned char write_4x_max   : 1;
+	      unsigned char write_2_4x_max : 1;
 	      // and some stuff we do not use here...
 	    };
 #else
@@ -357,6 +360,9 @@ bool K3bCdDevice::CdDevice::init()
 	      unsigned char write     : 1;
 	      unsigned char reserved1 : 7;
 	      unsigned char reserved2[3];
+	      unsigned char write_2_4x_max : 1;
+	      unsigned char write_4x_max   : 1;
+	      unsigned char reserved3      : 6;
 	      // and some stuff we do not use here...
 	    };
 #endif
@@ -1004,14 +1010,20 @@ int K3bCdDevice::CdDevice::numSessions() const
   // Byte   3: Last Complete Session Number (Hex)
   //
 
+  int ret = -1;
+
   unsigned char* dat = 0;
   int len = 0;
-  if( readTocPmaAtip( &dat, len, 1, 0, 0 ) )
-    return dat[3];
+  if( readTocPmaAtip( &dat, len, 1, 0, 0 ) ) {
+    ret = dat[3];
+
+    delete [] dat;
+  }
   else {
     kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": could not get session info !" << endl;
-    return -1;
   }
+
+  return ret;
 }
 
 
@@ -1219,8 +1231,9 @@ K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc() const
       if( !readFormattedToc( toc ) ) {
 	kdDebug() << "(K3bCdDevice::CdDevice) MMC READ TOC failed. falling back to cdrom.h." << endl;
 	readTocLinux(toc);
-	fixupToc( toc );
       }
+
+      fixupToc( toc );
     }
   }
 
@@ -1666,42 +1679,42 @@ bool K3bCdDevice::CdDevice::readTocLinux( K3bCdDevice::Toc& toc ) const
 
 bool K3bCdDevice::CdDevice::fixupToc( K3bCdDevice::Toc& toc ) const
 {
-  // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
-  bool needToClose = !isOpen();
-
   bool success = false;
 
-  if( open() != -1 ) {
-    //
-    // we probaly need to fixup the toc for multisession mixed-mode cds 
-    // since the last audio track's last sector is reported to be in the second
-    // session. This code is based on the FixupTOC stuff from the audiocd kioslave
-    // Hopefully it works. TODO: we need something better here!
-    //
-    if( numSessions() > 1 || toc.contentType() == MIXED ) {
-      kdDebug() << "(K3bCdDevice::CdDevice) fixup multisession toc..." << endl;
+  //
+  // This is a very lame method of fixing the TOC of an Advanced Audio CD
+  // (a CD with two sessions: one with audio tracks and one with the data track)
+  // If a drive does not support reading raw toc or reading track info we only
+  // get every track's first sector. But between sessions there is a gap which is used
+  // for ms stuff. In this case it's 11400 sectors in size. When ripping ausio we would 
+  // include these 11400 sectors which would result in a strange ending audio file.
+  //
+  if( numSessions() > 1 || toc.contentType() == MIXED ) {
+    kdDebug() << "(K3bCdDevice::CdDevice) fixup multisession toc..." << endl;
 
-      // we need to update the last secotor of every last track in every session
-      // for now we only update the track before the last session...
+    //
+    // we need to update the last sector of every last track in every session
+    // for now we only update the track before the last session...
+    // This is the most often case: Advanced Audio CD
+    //
 
-      struct cdrom_multisession ms;
-      ms.addr_format = CDROM_LBA;
-      if( ::ioctl( d->deviceFd, CDROMMULTISESSION, &ms ) == 0 ) {
-	if( ms.xa_flag ) {
-	  toc[toc.count()-2].m_lastSector = ms.addr.lba - 11400 -1; // -1 because we are settings the last secotor, not the first of the next track as in the kioslave
-	  kdDebug() << "(K3bCdDevice::CdDevice) success." << endl;
-	}
-	else
-	  kdDebug() << "(K3bCdDevice::CdDevice) no xa." << endl;
-      }
-      else
-	kdDebug() << "(K3bCdDevice::CdDevice) CDROMMULTISESSION failed." << endl;
+    unsigned char* data = 0;
+    int dataLen = 0;
+    if( readTocPmaAtip( &data, dataLen, 1, false, 0 ) ) {
+
+      //
+      // data[6]    - first track number in last complete session
+      // data[8-11] - start adress of first track in last session
+      //
+
+      toc[(unsigned int)data[6]-2].m_lastSector = from4Byte( &data[8] ) - 11400 - 1;
+
+      delete [] data;
+      success = true;
     }
+    else
+      kdDebug() << "(K3bCdDevice::CdDevice) FIXUP TOC failed." << endl;
   }
-
-  if( needToClose )
-    close();
 
   return success;
 }
@@ -2055,45 +2068,9 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
 	  inf.m_capacity = readCap + 1;
 	}
 	else {
-	  kdDebug() << "(K3bCdDevice) READ_FORMAT_CAPACITIES failed. Falling back to READ TRACK INFO." << endl;
+	  kdDebug() << "(K3bCdDevice) READ CAPACITY failed. Falling back to READ TRACK INFO." << endl;
 
-	  //
-	  // We first try READ TRACK INFO MMC command since the cdrom.h toc stuff seems not to work
-	  // properly on DVD media.
-	  //
-	  //	if( inf.numTracks() == 1 ) {
-	  // read the last track's last sector
-	  unsigned char trackHeader[32];
-	  cmd.clear();
-	  ::memset( trackHeader, 0, 32 );
-	  cmd[0] = 0x52;	// READ TRACK INFORMATION
-	  cmd[1] = 1; // T_inv - the invisible or incomplete track
-	  cmd[2] = 0xFF;
-	  cmd[3] = 0xFF;
-	  cmd[4] = 0xFF;
-	  cmd[5] = 0xFF;
-	  cmd[8] = 32;
-	  cmd[9] = 0;
-	  if( cmd.transport( TR_DIR_READ, trackHeader, 32 ) ) {
-	    kdDebug() << "(K3bCdDevice) READ_TRACK_INFORMATION failed." << endl;
-	    kdDebug() << "(K3bCdDevice) getting disk size via toc." << endl;
-	    
-	    // TODO: use readToc!
-
-	    struct cdrom_tocentry tocentry;
-	    tocentry.cdte_track = CDROM_LEADOUT;
-	    tocentry.cdte_format = CDROM_LBA;
-	    if( ::ioctl(d->deviceFd,CDROMREADTOCENTRY,&tocentry) )
-	      kdDebug() << "(K3bCdDevice) error reading lead out " << endl;
-	    else {
-	      inf.m_capacity = tocentry.cdte_addr.lba;
-	      inf.m_capacity -= 1;  // we need the last sector of the last track, not the first from the lead-out
-	    }
-	  }
-	  else {
-	    // not sure about this....
-	    inf.m_capacity = from4Byte( &trackHeader[8] );
-	  }
+	  inf.m_capacity = readToc().length();
 	}
       }
 
@@ -2137,6 +2114,27 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
   }
   
   return inf;
+}
+
+
+int K3bCdDevice::CdDevice::cdMediaType() const
+{
+  int m = -1;
+
+  unsigned char* data = 0;
+  int dataLen = 0;
+  if( readTocPmaAtip( &data, dataLen, 4, false, 0 ) ) {
+    if( (data[6]>>6)&1 )
+      m = MEDIA_CD_RW;
+    else
+      m = MEDIA_CD_R;
+
+    delete [] data;
+  }
+  else
+    m = MEDIA_CD_ROM;
+
+  return m;
 }
 
 
@@ -2469,10 +2467,8 @@ bool K3bCdDevice::CdDevice::mechanismStatus( unsigned char** data, int& dataLen 
 }
 
 
-int K3bCdDevice::CdDevice::determineOptimalWriteSpeed() const
+int K3bCdDevice::CdDevice::determineMaximalWriteSpeed() const
 {
-  // we simply try and return 0 if it fails
-
   int ret = 0;
 
   unsigned char* data = 0;
@@ -2494,8 +2490,12 @@ int K3bCdDevice::CdDevice::determineOptimalWriteSpeed() const
 	ret = QMAX( ret, s );
       }
     }
+    else if( dataLen > 19 ) {
+      // MMC1 used byte 18 and 19 for the max write speed
+      ret = from2Byte( &data[18] );
+    }
     else
-      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": no writing speed info. No MMC3 drive?" << endl;
+      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": no writing speed info. No MMC drive?" << endl;
 
     delete [] data;
   }

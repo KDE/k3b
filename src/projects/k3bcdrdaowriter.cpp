@@ -85,6 +85,8 @@ public:
   }
 
   K3bThroughputEstimator* speedEst;
+
+  int usedSpeed;
 };
 
 
@@ -266,7 +268,8 @@ void K3bCdrdaoWriter::setWriteArguments()
   }
 
   // burn speed
-  *m_process << "--speed" << QString("%1").arg(burnSpeed());
+  if( d->usedSpeed != 0 )
+    *m_process << "--speed" << QString("%1").arg(d->usedSpeed);
 
   //simulate
   if( simulate() )
@@ -394,7 +397,8 @@ void K3bCdrdaoWriter::setBlankArguments()
   }
 
   // burn speed
-  *m_process << "--speed" << QString("%1").arg(burnSpeed());
+  if( d->usedSpeed != 0 )
+    *m_process << "--speed" << QString("%1").arg(d->usedSpeed);
 
   // blank-mode
   *m_process << "--blank-mode";
@@ -479,6 +483,17 @@ void K3bCdrdaoWriter::start()
     emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3").arg(m_cdrdaoBinObject->name()).arg(m_cdrdaoBinObject->version).arg(m_cdrdaoBinObject->copyright), INFO );
 
 
+  // since the --speed parameter is used several times in this code we
+  // determine the speed in auto once at the beginning
+  d->usedSpeed = burnSpeed();
+  if( d->usedSpeed == 0 ) {
+    // try to determine the writeSpeed
+    // if it fails determineMaximalWriteSpeed() will return 0 and
+    // the choice is left to cdrdao
+    d->usedSpeed = burnDevice()->determineMaximalWriteSpeed()/175;
+  }
+
+
   switch ( m_command )
     {
     case WRITE:
@@ -554,13 +569,13 @@ void K3bCdrdaoWriter::start()
 	case WRITE:
 	  if( simulate() )
 	    {
-	      emit infoMessage(i18n("Starting dao simulation at %1x speed...").arg(burnSpeed()), 
+	      emit infoMessage(i18n("Starting dao simulation at %1x speed...").arg(d->usedSpeed), 
 			       K3bJob::INFO );
 	      emit newTask( i18n("Simulating") );
 	    }
 	  else
 	    {
-	      emit infoMessage( i18n("Starting dao writing at %1x speed...").arg(burnSpeed()), K3bJob::INFO );
+	      emit infoMessage( i18n("Starting dao writing at %1x speed...").arg(d->usedSpeed), K3bJob::INFO );
 	      emit newTask( i18n("Writing") );
 	    }
 	  break;
@@ -571,12 +586,12 @@ void K3bCdrdaoWriter::start()
 	case COPY:
 	  if( simulate() )
 	    {
-	      emit infoMessage(i18n("Starting simulation copy at %1x speed...").arg(burnSpeed()), K3bJob::INFO );
+	      emit infoMessage(i18n("Starting simulation copy at %1x speed...").arg(d->usedSpeed), K3bJob::INFO );
 	      emit newTask( i18n("Simulating") );
 	    }
 	  else
 	    {
-	      emit infoMessage( i18n("Starting copy at %1x speed...").arg(burnSpeed()), K3bJob::INFO );
+	      emit infoMessage( i18n("Starting copy at %1x speed...").arg(d->usedSpeed), K3bJob::INFO );
 	      emit newTask( i18n("Copying") );
 	    }
 	  break;
@@ -774,9 +789,9 @@ void K3bCdrdaoWriter::unknownCdrdaoLine( const QString& line )
     int pos = line.find( "at speed" );
     int po2 = line.find( QRegExp("\\D"), pos + 9 );
     int speed = line.mid( pos+9, po2-pos-9 ).toInt();
-    if( speed < burnSpeed() )
+    if( speed < d->usedSpeed )
     {
-      emit infoMessage( i18n("Medium or burner do not support writing at %1x speed").arg(burnSpeed()), K3bJob::WARNING );
+      emit infoMessage( i18n("Medium or burner do not support writing at %1x speed").arg(d->usedSpeed), K3bJob::WARNING );
       emit infoMessage( i18n("Switching down burn speed to %1x").arg(speed), K3bJob::WARNING );
     }
   }

@@ -45,7 +45,6 @@ public:
   }
 
   K3bDataVerifyingJob* verificationJob;
-  bool simulate;
 };
 
 
@@ -90,9 +89,8 @@ void K3bDvdJob::start()
 
   m_canceled = false;
   m_writingStarted = false;
-  d->simulate = m_doc->dummy();
 
-  if( d->simulate )
+  if( m_doc->dummy() )
     m_doc->setVerifyData( false );
 
   if( !m_doc->onTheFly() || m_doc->onlyCreateImages() ) {
@@ -268,61 +266,21 @@ bool K3bDvdJob::prepareWriterJob()
   if( m_writerJob )
     delete m_writerJob;
 
-//   //
-//   // determine the writer
-//   // default is always Growisofs
-//   // only if the user chooses dvdrecord manually we use it
-//   // dvdrecord does not support multisession!
-//   //
-//   // Possibility: Use a K3bDataJob and set it's writer when using dvdrecord
-//   //
-
-//   if( m_usedWritingApp == K3b::DVDRECORD )  {
-//     K3bDvdrecordWriter* writer = new K3bDvdrecordWriter( m_doc->burner(), this );
-
-//     writer->setSimulate( d->simulate );
-//     writer->setBurnproof( m_doc->burnproof() );
-//     writer->setBurnSpeed( m_doc->speed() );
-
-//     // multisession
-//     if( m_doc->multiSessionMode() == K3bDataDoc::START ||
-// 	m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ) {
-//       writer->addArgument("-multi");
-//     }
-
-//     if( m_doc->onTheFly() &&
-// 	( m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
-// 	  m_doc->multiSessionMode() == K3bDataDoc::FINISH ) )
-//       writer->addArgument("-waiti");
-
-//     if( m_doc->onTheFly() ) {
-//       writer->addArgument( QString("-tsize=%1s").arg(m_isoImager->size()) )->addArgument("-");
-//       writer->setProvideStdin(true);
-//     }
-//     else {
-//       writer->addArgument( m_doc->tempDir() );
-//     }
-
-//     m_writerJob = writer;
-//   }
-//   else {
-    K3bGrowisofsWriter* writer = new K3bGrowisofsWriter( m_doc->burner(), this );
-
-    // these do only make sense with DVD-R(W)
-    writer->setSimulate( d->simulate );
-    //    writer->setBurnproof( m_doc->burnproof() );
-    writer->setBurnSpeed( m_doc->speed() );
-    writer->setWritingMode( m_doc->writingMode() );
-
-    //
-    // for now we only use the K3bGrowisofsWriter for writing images
-    // in every other case we use the K3bGrowisofsImager.
-    //
-
-    writer->setImageToWrite( m_doc->tempDir() );
-
-    m_writerJob = writer;
-    //  }
+  K3bGrowisofsWriter* writer = new K3bGrowisofsWriter( m_doc->burner(), this );
+  
+  // these do only make sense with DVD-R(W)
+  writer->setSimulate( m_doc->dummy() );
+  writer->setBurnSpeed( m_doc->speed() );
+  writer->setWritingMode( m_doc->writingMode() );
+  
+  //
+  // for now we only use the K3bGrowisofsWriter for writing images
+  // in every other case we use the K3bGrowisofsImager.
+  //
+  
+  writer->setImageToWrite( m_doc->tempDir() );
+  
+  m_writerJob = writer;
 
 
   connect( m_writerJob, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
@@ -465,7 +423,7 @@ bool K3bDvdJob::waitForDvd()
 
   else {
     if( m & (K3bCdDevice::MEDIA_DVD_PLUS_RW|K3bCdDevice::MEDIA_DVD_PLUS_R) ) {
-      if( d->simulate ) {
+      if( m_doc->dummy() ) {
 	if( KMessageBox::warningYesNo( qApp->activeWindow(),
 				       i18n("K3b does not support simulation with DVD+R(W) media. "
 					    "Do you really want to continue? The media will be written "
@@ -475,7 +433,7 @@ bool K3bDvdJob::waitForDvd()
 	  return false;
 	}
 
-	d->simulate = false;
+	m_doc->setDummy( false );
       }
       
       if( m_doc->speed() > 0 ) {
@@ -497,7 +455,7 @@ bool K3bDvdJob::waitForDvd()
 	emit infoMessage( i18n("Writing DVD+R."), INFO );
     }
     else {
-      if( d->simulate && !m_doc->burner()->dvdMinusTestwrite() ) {
+      if( m_doc->dummy() && !m_doc->burner()->dvdMinusTestwrite() ) {
 	if( KMessageBox::warningYesNo( qApp->activeWindow(),
 				       i18n("Your writer (%1 %2) does not support simulation with DVD-R(W) media. "
 					    "Do you really want to continue? The media will be written "
@@ -509,7 +467,7 @@ bool K3bDvdJob::waitForDvd()
 	  return false;
 	}
 
-	d->simulate = false;
+	m_doc->setDummy( false );
       }
 
 

@@ -10,6 +10,7 @@ libk3bproject_la_LDFLAGS = $(all_libraries) -version-info 1:0:0 -no-undefined
 libk3bproject_la_SOURCES = k3babstractwriter.cpp \
 	                   k3bdatamodewidget.cpp \
 	                   k3bgrowisofswriter.cpp \
+	                   k3bgrowisofshandler.cpp \
 	                   k3bview.cpp \
                            k3bblankingjob.cpp \
                            k3bdoc.cpp \
