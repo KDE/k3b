@@ -16,7 +16,6 @@
  ***************************************************************************/
 
 #include "k3bdvdview.h"
-#include "k3bdvddoc.h"
 #include "k3bdvdcodecdata.h"
 #include "k3bdvdbasetab.h"
 #include "k3bdvdsizetab.h"
