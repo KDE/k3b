@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -89,23 +89,10 @@ void K3bCdrecordWriter::prepareArgumentList()
   if( burnproof() ) {
     if( burnDevice()->burnproof() ) {
       // with cdrecord 1.11a02 burnproof was renamed to burnfree
-      // we have to be aware that 1.9 is bigger than 1.11
-      int dotpos = m_cdrecordBinObject->version.find(".");
-      int alphapos = m_cdrecordBinObject->version.find( QRegExp("\\D"), dotpos+1 );
-	
-      int major = m_cdrecordBinObject->version.left( dotpos ).toInt();
-      int minor = m_cdrecordBinObject->version.mid( dotpos + 1, (alphapos > 0 ? alphapos-dotpos-1 : -1 ) ).toInt();
-      QString alpha = (alphapos > 0 ? m_cdrecordBinObject->version.mid( alphapos ) : "" );
-	
-      kdDebug() << "(K3bCdrecordWriter) dotpos: " << dotpos << "; alphapos: " << alphapos << endl;
-      kdDebug() << "(K3bCdrecordWriter) major: " << major << "; minor: " << minor << "; alpha: " << alpha << endl;
-	
-      if( major > 1 || 
-	  (major == 1 && 
-	   (minor > 11 || minor == 11 && alpha > "a02") ) )
-	*m_process << "driveropts=burnfree";
-      else
+      if( m_cdrecordBinObject->version < K3bExternalBinVersion( "1.11a02" ) )
 	*m_process << "driveropts=burnproof";
+      else
+	*m_process << "driveropts=burnfree";
     }
     else
       emit infoMessage( i18n("Writer does not support buffer underrun free recording (BURNPROOF)"), INFO );

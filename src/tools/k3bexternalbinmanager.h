@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -35,7 +35,8 @@ class K3bExternalBinVersion
  public:
   /**
    * construct an empty version object
-   * with version 0.1
+   * which is invalid
+   * @ see isValid()
    */
   K3bExternalBinVersion();
 
@@ -59,6 +60,8 @@ class K3bExternalBinVersion
    * used by the constructor
    */
   void setVersion( const QString& );
+
+  bool isValid() const;
 
   /**
    * sets the version and generates a version string from it
@@ -90,6 +93,8 @@ class K3bExternalBinVersion
 				      const QString& suffix = QString::null );
 
  private:
+  static void splitVersionString( const QString& s, int& num, QString& suffix );
+
   QString m_versionString;
   int m_majorVersion;
   int m_minorVersion;
@@ -98,12 +103,15 @@ class K3bExternalBinVersion
 };
 
 
+bool operator<( const K3bExternalBinVersion& v1, const K3bExternalBinVersion& v2 );
+
+
 class K3bExternalBin
 {
  public:
   K3bExternalBin( K3bExternalProgram* );
 
-  QString version;
+  K3bExternalBinVersion version;
   QString path;
 
   const QString& name() const;
@@ -218,20 +226,8 @@ class K3bExternalBinManager : public QObject
   void addProgram( K3bExternalProgram* );
   void clear();
 
-/*  private slots: */
-/*   void gatherOutput(KProcess*, char*, int); */
-
  private:
   K3bExternalBinManager();
-
-/*   void createProgramContainer(); */
-
-/*   K3bExternalBin* probeCdrecord( const QString& ); */
-/*   K3bExternalBin* probeMkisofs( const QString& ); */
-/*   K3bExternalBin* probeCdrdao( const QString& ); */
-/*   K3bExternalBin* probeTranscode( const QString& ); */
-/*   K3bExternalBin* probeMovix( const QString& ); */
-/*   K3bExternalBin* probeVcd( const QString& ); */
 
   QMap<QString, K3bExternalProgram*> m_programs;
   QStringList m_searchPath;

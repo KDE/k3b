@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -30,24 +30,6 @@
 
 
 
-// static const char* vcdTools[] =  { "vcdxgen",
-// 				   "vcdxbuild",
-// 				   0 };
-
-// static const char* transcodeTools[] =  { "transcode",
-// 					 "tcprobe",
-// 					 "tccat",
-// 					 "tcscan",
-// 					 "tcextract",
-// 					 "tcdecode",
-// 					 0 };
-
-// static const char* binPrograms[] =  { "cdrecord",
-// 				      "cdrdao",
-// 				      "mkisofs",
-// 				      0 };
-
-
 QString K3bExternalBinManager::m_noPath = "";
 
 
@@ -58,8 +40,10 @@ QString K3bExternalBinManager::m_noPath = "";
 // ///////////////////////////////////////////////////////////
 
 K3bExternalBinVersion::K3bExternalBinVersion()
+  : m_majorVersion( -1 ),
+    m_minorVersion( -1 ),
+    m_patchLevel( -1 )
 {
-  setVersion( 0, 1 );
 }
 
 K3bExternalBinVersion::K3bExternalBinVersion( const K3bExternalBinVersion& v )
@@ -86,10 +70,74 @@ K3bExternalBinVersion::K3bExternalBinVersion( int majorVersion,
 
 void K3bExternalBinVersion::setVersion( const QString& v )
 {
-  m_versionString = v;
+  QString suffix;
+  splitVersionString( v, m_majorVersion, suffix );
+  if( m_majorVersion >= 0 ) {
+    if( suffix.startsWith(".") ) {
+      suffix = suffix.mid( 1 );
+      splitVersionString( suffix, m_minorVersion, suffix );
+      if( m_minorVersion < 0 ) {
+	kdDebug() << "(K3bExternalBinVersion) suffix must not start with a dot!" << endl;
+	m_majorVersion = -1;
+	m_minorVersion = -1;
+	m_patchLevel = -1;
+	m_suffix = "";
+      }
+      else {
+	if( suffix.startsWith(".") ) {
+	  suffix = suffix.mid( 1 );
+	  splitVersionString( suffix, m_patchLevel, suffix );
+	  if( m_patchLevel < 0 ) {
+	    kdDebug() << "(K3bExternalBinVersion) suffix must not start with a dot!" << endl;
+	    m_majorVersion = -1;
+	    m_minorVersion = -1;
+	    m_patchLevel = -1;
+	    m_suffix = "";
+	  }
+	  else {
+	    m_suffix = suffix;
+	  }
+	}
+	else {
+	  m_patchLevel = -1;
+	  m_suffix = suffix;
+	}
+      }
+    }
+    else {
+      m_minorVersion = -1;
+      m_patchLevel = -1;
+      m_suffix = suffix;
+    }
+  }
 
-  // TODO: parse the string
+  m_versionString = createVersionString( m_majorVersion, m_minorVersion, m_patchLevel, m_suffix );
 }
+
+
+void K3bExternalBinVersion::splitVersionString( const QString& s, int& num, QString& suffix )
+{
+  int pos = s.find( QRegExp("\\D") );
+  if( pos < 0 ) {
+    num = s.toInt();
+    suffix = "";
+  }
+  else if( pos == 0 ) {
+    num = -1;
+    suffix = s;
+  }
+  else {
+    num = s.left( pos ).toInt();
+    suffix = s.mid( pos );
+  }
+}
+
+
+bool K3bExternalBinVersion::isValid() const
+{
+  return (m_majorVersion >= 0);
+}
+
 
 void K3bExternalBinVersion::setVersion( int majorVersion, 
 					int minorVersion, 
@@ -114,20 +162,58 @@ QString K3bExternalBinVersion::createVersionString( int majorVersion,
 						    int patchlevel, 
 						    const QString& suffix )
 {
-  QString s = QString::number(majorVersion);
+  if( majorVersion >= 0 ) {
+    QString s = QString::number(majorVersion);
+    
+    if( minorVersion > -1 ) {
+      s.append( QString(".%1").arg(minorVersion) );
+      if( patchlevel > -1 )
+	s.append( QString(".%1").arg(patchlevel) );
+    }
+    
+    if( !suffix.isNull() )
+      s.append( suffix );
 
-  if( minorVersion > -1 ) {
-    s.append( QString(".%1").arg(minorVersion) );
-    if( patchlevel > -1 )
-      s.append( QString(".%1").arg(patchlevel) );
+    return s;
   }
-
-  if( !suffix.isNull() )
-    s.append( suffix );
-
-  return s;
+  else
+    return "";
 }
 
+
+bool operator<( const K3bExternalBinVersion& v1, const K3bExternalBinVersion& v2 )
+{
+  // both version objects need to be valid
+
+  if( v1.majorVersion() == v2.majorVersion() ) {
+
+    // 1 == 1.0
+    if( ( v1.minorVersion() == v2.minorVersion() )
+	||
+	( v1.minorVersion() == 1 && v2.minorVersion() == 0 )
+	||
+	( v2.minorVersion() == 1 && v1.minorVersion() == 0 ) 
+	)
+      {
+	// 1.0 == 1.0.0
+	if( ( v1.patchLevel() == v2.patchLevel() )
+	    ||
+	    ( v1.patchLevel() == 1 && v2.patchLevel() == 0 )
+	    ||
+	    ( v2.patchLevel() == 1 && v1.patchLevel() == 0 )
+	    )
+	  {
+	    return ( v1.suffix() < v2.suffix() );
+	  }
+	else
+	  return ( v1.patchLevel() < v2.patchLevel() );
+      }
+    else
+      return ( v1.minorVersion() < v2.minorVersion() );
+  }
+  else 
+    return ( v1.majorVersion() < v2.majorVersion() );
+}
 
 
 
@@ -145,7 +231,7 @@ K3bExternalBin::K3bExternalBin( K3bExternalProgram* p )
 
 bool K3bExternalBin::isEmpty() const
 {
-  return version.isEmpty();
+  return !version.isValid();
 }
 
 
@@ -194,8 +280,10 @@ K3bExternalProgram::~K3bExternalProgram()
 
 void K3bExternalProgram::addBin( K3bExternalBin* bin )
 {
-  if( !m_bins.contains( bin ) )
+  if( !m_bins.contains( bin ) ) {
+
     m_bins.append( bin );
+  }
 }
 
 void K3bExternalProgram::setDefault( K3bExternalBin* bin )
@@ -269,371 +357,6 @@ K3bExternalBinManager::~K3bExternalBinManager()
 {
   clear();
 }
-
-
-// K3bExternalBin* K3bExternalBinManager::probeCdrecord( const QString& path )
-// {
-//   if( !QFile::exists( path ) )
-//     return 0;
-
-//   K3bExternalBin* bin = 0;
-
-//   // probe version
-//   KProcess vp;
-//   vp << path << "-version";
-//   connect( &vp, SIGNAL(receivedStdout(KProcess*, char*, int)), this, SLOT(gatherOutput(KProcess*, char*, int)) );
-//   connect( &vp, SIGNAL(receivedStderr(KProcess*, char*, int)), this, SLOT(gatherOutput(KProcess*, char*, int)) );
-//   m_gatheredOutput = "";
-//   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
-//     int pos = m_gatheredOutput.find( "Cdrecord" );
-//     if( pos < 0 )
-//       return 0;
-
-//     pos = m_gatheredOutput.find( QRegExp("[0-9]"), pos );
-//     if( pos < 0 )
-//       return 0;
-
-//     int endPos = m_gatheredOutput.find( ' ', pos+1 );
-//     if( endPos < 0 )
-//       return 0;
-
-//     bin = new K3bExternalBin( program("cdrecord") );
-//     bin->path = path;
-//     bin->version = m_gatheredOutput.mid( pos, endPos-pos );
-//   }
-//   else {
-//     kdDebug() << "(K3bExternalBinManager) could not start " << path << endl;
-//     return 0;
-//   }
-
-
-
-//   // probe features
-//   KProcess fp;
-//   fp << path << "-help";
-//   connect( &fp, SIGNAL(receivedStdout(KProcess*, char*, int)), this, SLOT(gatherOutput(KProcess*, char*, int)) );
-//   connect( &fp, SIGNAL(receivedStderr(KProcess*, char*, int)), this, SLOT(gatherOutput(KProcess*, char*, int)) );
-//   m_gatheredOutput = "";
-//   if( fp.start( KProcess::Block, KProcess::AllOutput ) ) {
-//     if( m_gatheredOutput.contains( "gracetime" ) )
-//       bin->addFeature( "gracetime" );
-//     if( m_gatheredOutput.contains( "-overburn" ) )
-//       bin->addFeature( "overburn" );
-//     if( m_gatheredOutput.contains( "-text" ) )
-//       bin->addFeature( "cdtext" );
-//     if( m_gatheredOutput.contains( "-clone" ) )  // cdrecord ProDVD
-//       bin->addFeature( "clone" );
-
-//     // check if we run cdrecord as root
-//     if( !getuid() )
-//       bin->addFeature( "suidroot" );
-//     else {
-//       struct stat s;
-//       if( !::stat( QFile::encodeName(path), &s ) ) {
-// 	if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
-// 	  bin->addFeature( "suidroot" );
-//       }
-//     }
-//   }
-//   else {
-//     kdDebug() << "(K3bExternalBinManager) could not start " << bin->path << endl;
-//     delete bin;
-//     return 0;
-//   }
-
-//   return bin;
-// }
-
-
-// K3bExternalBin* K3bExternalBinManager::probeMkisofs( const QString& path )
-// {
-//   if( !QFile::exists( path ) )
-//     return 0;
-
-//   K3bExternalBin* bin = 0;
-
-//   // probe version
-//   KProcess vp;
-//   vp << path << "-version";
-//   connect( &vp, SIGNAL(receivedStdout(KProcess*, char*, int)), this, SLOT(gatherOutput(KProcess*, char*, int)) );
-//   connect( &vp, SIGNAL(receivedStderr(KProcess*, char*, int)), this, SLOT(gatherOutput(KProcess*, char*, int)) );
-//   m_gatheredOutput = "";
-//   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
-//     int pos = m_gatheredOutput.find( "mkisofs" );
-//     if( pos < 0 )
-//       return 0;
-
-//     pos = m_gatheredOutput.find( QRegExp("[0-9]"), pos );
-//     if( pos < 0 )
-//       return 0;
-
-//     int endPos = m_gatheredOutput.find( ' ', pos+1 );
-//     if( endPos < 0 )
-//       return 0;
-
-//     bin = new K3bExternalBin( program("mkisofs") );
-//     bin->path = path;
-//     bin->version = m_gatheredOutput.mid( pos, endPos-pos );
-//   }
-//   else {
-//     kdDebug() << "(K3bExternalBinManager) could not start " << path << endl;
-//     return 0;
-//   }
-
-
-
-//   // probe features
-//   KProcess fp;
-//   fp << path << "-help";
-//   connect( &fp, SIGNAL(receivedStdout(KProcess*, char*, int)), this, SLOT(gatherOutput(KProcess*, char*, int)) );
-//   connect( &fp, SIGNAL(receivedStderr(KProcess*, char*, int)), this, SLOT(gatherOutput(KProcess*, char*, int)) );
-//   m_gatheredOutput = "";
-//   if( fp.start( KProcess::Block, KProcess::AllOutput ) ) {
-//     if( m_gatheredOutput.contains( "-udf" ) )
-//       bin->addFeature( "udf" );
-//     if( m_gatheredOutput.contains( "-dvd-video" ) )
-//       bin->addFeature( "dvd-video" );
-//     if( m_gatheredOutput.contains( "-joliet-long" ) )
-//       bin->addFeature( "joliet-long" );
-
-//     // check if we run mkisofs as root
-//     if( !getuid() )
-//       bin->addFeature( "suidroot" );
-//     else {
-//       struct stat s;
-//       if( !::stat( QFile::encodeName(path), &s ) ) {
-// 	if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
-// 	  bin->addFeature( "suidroot" );
-//       }
-//     }
-//   }
-//   else {
-//     kdDebug() << "(K3bExternalBinManager) could not start " << bin->path << endl;
-//     delete bin;
-//     return 0;
-//   }
-
-//   return bin;
-// }
-
-
-// K3bExternalBin* K3bExternalBinManager::probeCdrdao( const QString& path )
-// {
-//   if( !QFile::exists( path ) )
-//     return 0;
-
-//   K3bExternalBin* bin = 0;
-
-//   // probe version
-//   KProcess vp;
-//   vp << path ;
-//   connect( &vp, SIGNAL(receivedStdout(KProcess*, char*, int)), this, SLOT(gatherOutput(KProcess*, char*, int)) );
-//   connect( &vp, SIGNAL(receivedStderr(KProcess*, char*, int)), this, SLOT(gatherOutput(KProcess*, char*, int)) );
-//   m_gatheredOutput = "";
-//   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
-//     int pos = m_gatheredOutput.find( "Cdrdao version" );
-//     if( pos < 0 )
-//       return 0;
-
-//     pos = m_gatheredOutput.find( QRegExp("[0-9]"), pos );
-//     if( pos < 0 )
-//       return 0;
-
-//     int endPos = m_gatheredOutput.find( ' ', pos+1 );
-//     if( endPos < 0 )
-//       return 0;
-
-//     bin = new K3bExternalBin( program("cdrdao") );
-//     bin->path = path;
-//     bin->version = m_gatheredOutput.mid( pos, endPos-pos );
-//   }
-//   else {
-//     kdDebug() << "(K3bExternalBinManager) could not start " << path << endl;
-//     return 0;
-//   }
-
-
-
-//   // probe features
-//   KProcess fp;
-//   fp << path << "write" << "-h";
-//   connect( &fp, SIGNAL(receivedStdout(KProcess*, char*, int)), this, SLOT(gatherOutput(KProcess*, char*, int)) );
-//   connect( &fp, SIGNAL(receivedStderr(KProcess*, char*, int)), this, SLOT(gatherOutput(KProcess*, char*, int)) );
-//   m_gatheredOutput = "";
-//   if( fp.start( KProcess::Block, KProcess::AllOutput ) ) {
-//     if( m_gatheredOutput.contains( "--overburn" ) )
-//       bin->addFeature( "overburn" );
-//     if( m_gatheredOutput.contains( "--multi" ) )
-//       bin->addFeature( "multisession" );
-
-//     // check if we run cdrdao as root
-//     if( !getuid() )
-//       bin->addFeature( "suidroot" );
-//     else {
-//       struct stat s;
-//       if( !::stat( QFile::encodeName(path), &s ) ) {
-// 	if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
-// 	  bin->addFeature( "suidroot" );
-//       }
-//     }
-//   }
-//   else {
-//     kdDebug() << "(K3bExternalBinManager) could not start " << bin->path << endl;
-//     delete bin;
-//     return 0;
-//   }
-
-//   return bin;
-// }
-
-
-
-// K3bExternalBin* K3bExternalBinManager::probeTranscode( const QString& path )
-// {
-//   if( !QFile::exists( path ) )
-//     return 0;
-
-//   K3bExternalBin* bin = 0;
-
-//   // probe version
-//   KProcess vp;
-//   vp << path ;
-//   connect( &vp, SIGNAL(receivedStdout(KProcess*, char*, int)), this, SLOT(gatherOutput(KProcess*, char*, int)) );
-//   connect( &vp, SIGNAL(receivedStderr(KProcess*, char*, int)), this, SLOT(gatherOutput(KProcess*, char*, int)) );
-//   m_gatheredOutput = "";
-//   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
-//     int pos = m_gatheredOutput.find( "transcode v" );
-//     if( pos < 0 )
-//       return 0;
-
-//     pos += 11;
-
-//     int endPos = m_gatheredOutput.find( QRegExp("[\\s\\)]"), pos+1 );
-//     if( endPos < 0 )
-//       return 0;
-
-//     bin = new K3bExternalBin( program("transcode") );
-//     bin->path = path;
-//     bin->version = m_gatheredOutput.mid( pos, endPos-pos );
-//   }
-//   else {
-//     kdDebug() << "(K3bExternalBinManager) could not start " << path << endl;
-//     return 0;
-//   }
-
-//   return bin;
-// }
-
-
-// K3bExternalBin* K3bExternalBinManager::probeMovix( const QString& path )
-// {
-//   // first test if we have a version info (eMovix >= 0.8.0pre3)
-//   if( !QFile::exists( path + "/movix-version") )
-//     return 0;
-
-//   K3bExternalBin* bin = 0;
-
-//   // probe version
-//   KProcess vp;
-//   vp << path + "/movix-version" ;
-//   connect( &vp, SIGNAL(receivedStdout(KProcess*, char*, int)), this, SLOT(gatherOutput(KProcess*, char*, int)) );
-//   m_gatheredOutput = "";
-//   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
-//     // movix-version just gives us the version number on stdout
-//     if( !m_gatheredOutput.isEmpty() ) {
-//       bin = new K3bExternalBin( program("eMovix") );
-//       bin->version = m_gatheredOutput.stripWhiteSpace();
-//     }
-//   }
-//   else {
-//     kdDebug() << "(K3bExternalBinManager) could not start " << path << "/movix-version" << endl;
-//     return 0;
-//   }
-
-//   // now search for the config and the files
-//   if( !QFile::exists( path + "/movix-conf") ) {
-//     delete bin;
-//     return 0;
-//   }
-
-//   KProcess cp;
-//   cp << path + "/movix-conf";
-//   connect( &cp, SIGNAL(receivedStdout(KProcess*, char*, int)), this, SLOT(gatherOutput(KProcess*, char*, int)) );
-//   m_gatheredOutput = "";
-//   if( cp.start( KProcess::Block, KProcess::AllOutput ) ) {
-//     // now search the needed files in the given dir
-//     if( m_gatheredOutput.isEmpty() ) {
-//       kdDebug() << "(K3bExternalBinManager) no eMovix config info" << endl;
-//       delete bin;
-//       return 0;
-//     }
-
-//     // we need the following files:
-//     // isolinux/initrd.gz
-//     // isolinux/iso.sort
-//     // isolinux/isolinux.bin
-//     // isolinux/isolinux.cfg
-//     // isolinux/movix.lss
-//     // isolinux/mphelp.txt
-//     // isolinux/mxhelp.txt
-//     // isolinux/trblst.txt
-//     // isolinux/credits.txt
-//     // isolinux/kernel/vmlinuz
-
-//     // TODO: search the files
-
-//     // the eMovix bin does not contain the path to any executable but the path to the eMovix files
-//     bin->path = m_gatheredOutput.stripWhiteSpace();
-//     return bin;
-//   }
-//   else {
-//     kdDebug() << "(K3bExternalBinManager) could not start " << path << "/movix-conf" << endl;
-//     delete bin;
-//     return 0;
-//   }
-// }
-
-
-// K3bExternalBin* K3bExternalBinManager::probeVcd( const QString& path )
-// {
-//   if( !QFile::exists( path ) )
-//     return 0;
-
-//   K3bExternalBin* bin = 0;
-
-//   // probe version
-//   KProcess vp;
-//   vp << path << "-V";
-//   connect( &vp, SIGNAL(receivedStdout(KProcess*, char*, int)), this, SLOT(gatherOutput(KProcess*, char*, int)) );
-//   connect( &vp, SIGNAL(receivedStderr(KProcess*, char*, int)), this, SLOT(gatherOutput(KProcess*, char*, int)) );
-//   m_gatheredOutput = "";
-//   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
-//     int pos = m_gatheredOutput.find( "GNU VCDImager" );
-//     if( pos < 0 )
-//       return 0;
-
-//     pos += 14;
-
-//     int endPos = m_gatheredOutput.find( QRegExp("[\\n\\)]"), pos+1 );
-//     if( endPos < 0 )
-//       return 0;
-
-//     bin = new K3bExternalBin( program("vcdxgen") );
-//     bin->path = path;
-//     bin->version = m_gatheredOutput.mid( pos, endPos-pos ).stripWhiteSpace();
-//   }
-//   else {
-//     kdDebug() << "(K3bExternalBinManager) could not start " << path << endl;
-//     return 0;
-//   }
-
-//   return bin;
-// }
-
-// void K3bExternalBinManager::gatherOutput( KProcess*, char* data, int len )
-// {
-//   m_gatheredOutput.append( QString::fromLatin1( data, len ) );
-// }
 
 
 bool K3bExternalBinManager::readConfig( KConfig* c )
@@ -719,32 +442,11 @@ void K3bExternalBinManager::clear()
   m_programs.clear();
 }
 
-// void K3bExternalBinManager::createProgramContainer()
-// {
-//   for( int i = 0; binPrograms[i]; ++i ) {
-//     if( m_programs.find( binPrograms[i] ) == m_programs.end() )
-//       m_programs.insert( binPrograms[i], new K3bExternalProgram( binPrograms[i] ) );
-//   }
-//   for( int i = 0; transcodeTools[i]; ++i ) {
-//     if( m_programs.find( transcodeTools[i] ) == m_programs.end() )
-//       m_programs.insert( transcodeTools[i], new K3bExternalProgram( transcodeTools[i] ) );
-//   }  
-//   for( int i = 0; vcdTools[i]; ++i ) {
-//     if( m_programs.find( vcdTools[i] ) == m_programs.end() )
-//       m_programs.insert( vcdTools[i], new K3bExternalProgram( vcdTools[i] ) );
-//   }
-
-//   if( m_programs.find( "eMovix" ) == m_programs.end() )
-//     m_programs.insert( "eMovix", new K3bExternalProgram( "eMovix" ) );
-// }
-
 
 void K3bExternalBinManager::search()
 {
   if( m_searchPath.isEmpty() )
     loadDefaultSearchPath();
-
-  //  createProgramContainer();
 
   for( QMap<QString, K3bExternalProgram*>::iterator it = m_programs.begin(); it != m_programs.end(); ++it ) {
     it.data()->clear();
@@ -752,71 +454,31 @@ void K3bExternalBinManager::search()
 
   // do not search one path twice
   QStringList paths;
-  for( QStringList::const_iterator it = m_searchPath.begin(); it != m_searchPath.end(); ++it )
-    if( !paths.contains( *it ) && !paths.contains( *it + "/" ) )
-      paths.append(*it);
+  for( QStringList::const_iterator it = m_searchPath.begin(); it != m_searchPath.end(); ++it ) {
+    QString p = *it;
+    if( p[p.length()-1] == '/' )
+      p.truncate( p.length()-1 );
+    if( !paths.contains( p ) && !paths.contains( p + "/" ) )
+      paths.append(p);
+  }
 
   // get the environment path variable
   char* env_path = ::getenv("PATH");
   if( env_path ) {
     QStringList env_pathList = QStringList::split(":", QString::fromLocal8Bit(env_path));
-    for( QStringList::const_iterator it = env_pathList.begin(); it != env_pathList.end(); ++it )
-      if( !paths.contains( *it ) && !paths.contains( *it + "/" ) )
-	paths.append(*it);
+    for( QStringList::const_iterator it = env_pathList.begin(); it != env_pathList.end(); ++it ) {
+      QString p = *it;
+      if( p[p.length()-1] == '/' )
+	p.truncate( p.length()-1 );
+      if( !paths.contains( p ) && !paths.contains( p + "/" ) )
+	paths.append(p);
+    }
   }
 
 
-  for( QStringList::const_iterator it = paths.begin(); it != paths.end(); ++it ) {
+  for( QStringList::const_iterator it = paths.begin(); it != paths.end(); ++it )
     for( QMap<QString, K3bExternalProgram*>::iterator pit = m_programs.begin(); pit != m_programs.end(); ++pit )
       pit.data()->scan(*it);
-
-    //    QString path = *it;
-//     if( path[path.length()-1] == '/' )
-//       path.truncate( path.length()-1 );
-
-//     QFileInfo fi( path );
-//     if( !fi.exists() )
-//       continue;
-
-//     K3bExternalBin* cdrecordBin = 0;
-//     K3bExternalBin* mkisofsBin = 0;
-//     K3bExternalBin* cdrdaoBin = 0;
-
-//     if( fi.isDir() ) {
-//        cdrecordBin = probeCdrecord( path + "/cdrecord" );
-//        mkisofsBin = probeMkisofs( path + "/mkisofs" );
-//        cdrdaoBin = probeCdrdao( path + "/cdrdao" );
-
-//        for( int i = 0; transcodeTools[i]; ++i ) {
-//            K3bExternalBin* bin = probeTranscode( path + "/" + QString::fromLatin1(transcodeTools[i]) );
-//            if( bin )
-//            m_programs[ transcodeTools[i] ]->addBin( bin );
-//        }
-//        for( int i = 0; vcdTools[i]; ++i ) {
-//          K3bExternalBin* bin = probeVcd( path + "/" + QString::fromLatin1(vcdTools[i]) );
-//          if( bin )
-//           m_programs[ vcdTools[i] ]->addBin( bin );
-//        }
-//        K3bExternalBin* movixBin = probeMovix( path );
-//        if( movixBin )
-//          m_programs[ "eMovix" ]->addBin( movixBin );
-//     }
-//     else {
-//        cdrecordBin = probeCdrecord( path );
-//        mkisofsBin = probeMkisofs( path );
-//        cdrdaoBin = probeCdrdao( path );
-
-//        // TODO: is there any way to test the other tools?
-//     }
-//     if( cdrecordBin )
-//       m_programs["cdrecord"]->addBin( cdrecordBin );
-//     if( mkisofsBin )
-//       m_programs["mkisofs"]->addBin( mkisofsBin );
-//     if( cdrdaoBin )
-//       m_programs["cdrdao"]->addBin( cdrdaoBin );
-  }
-
-
 
   // TESTING
   // /////////////////////////
@@ -829,9 +491,12 @@ void K3bExternalBinManager::search()
     kdDebug() << "(K3bExternalBinManager) Cdrecord " << bin->version << " features: "
 	      << bin->features().join( ", " ) << endl;
 
-    if( bin->version >= "1.11a02" )
-      kdDebug() << "(K3bExternalBinManager) seems to be cdrecord version >= 1.11a02, using burnfree instead of burnproof" << endl;
-    if( bin->version >= "1.11a31" )
+    if( bin->version >= K3bExternalBinVersion("1.11a02") )
+      kdDebug() << "(K3bExternalBinManager) "
+		<< bin->version.majorVersion() << " " << bin->version.minorVersion() << " " << bin->version.patchLevel()
+		<< " " << bin->version.suffix()
+		<< " seems to be cdrecord version >= 1.11a02, using burnfree instead of burnproof" << endl;
+    if( bin->version >= K3bExternalBinVersion("1.11a31") )
       kdDebug() << "(K3bExternalBinManager) seems to be cdrecord version >= 1.11a31, support for Just Link via burnfree "
 		<< "driveroption" << endl;
   }

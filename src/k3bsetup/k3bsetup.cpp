@@ -1,19 +1,18 @@
-/***************************************************************************
-                          k3bsetup.cpp  -  description
-                             -------------------
-    begin                : Sat Dec  1 16:18:59 CET 2001
-    copyright            : (C) 2001 by Sebastian Trueg
-    email                : trueg@informatik.uni-freiburg.de
- ***************************************************************************/
+/* 
+ *
+ * $Id: $
+ * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This file is part of the K3b project.
+ * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * See the file "COPYING" for the exact licensing terms.
+ */
 
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
 
 #include "k3bsetup.h"
 
@@ -308,7 +307,7 @@ void K3bSetup::doApplyExternalProgramPermissions( uint groupId )
       const K3bExternalBin* binObject = *it;
 
       if( QFile::exists(binObject->path) ) {
-	if( !binObject->version.isEmpty() ) {
+	if( binObject->version.isValid() ) {
 	  kdDebug() << "(K3bSetup) setting permissions for " << programs[i] << "." << endl;
 	  chown( QFile::encodeName(binObject->path), 0, groupId );
 	  chmod( QFile::encodeName(binObject->path), S_ISUID|S_IRUSR|S_IWUSR|S_IXUSR|S_IXGRP );
