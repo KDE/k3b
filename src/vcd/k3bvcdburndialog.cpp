@@ -68,15 +68,8 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
   readSettings();
 
   connect( m_spinVolumeCount, SIGNAL(valueChanged(int)), this, SLOT(slotSpinVolumeCount()) );
-  connect( m_spinVolumeNumber, SIGNAL(valueChanged(int)), this, SLOT(slotSpinVolumeNumber()) );
-
-  connect( m_editAlbumId, SIGNAL(textChanged(const QString&)), this, SLOT(slotAlbumIdChanged()) );
-  connect( m_editVolumeId, SIGNAL(textChanged(const QString&)), this, SLOT(slotVolumeIdChanged()) );
   connect( m_editVolumeId, SIGNAL(textChanged(const QString&)), this, SLOT(slotSetImagePath()) );
-  
   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotOnlyCreateImageChecked(bool)) );
-  connect( m_checkNonCompliant, SIGNAL(toggled(bool)), this, SLOT(slotNonCompliantToggled()) );
-  connect( m_check2336, SIGNAL(toggled(bool)), this, SLOT(slot2336Toggled()) );
   connect( m_groupVcdFormat, SIGNAL(clicked(int)), this, SLOT(slotVcdTypeClicked(int)) );
   connect( m_checkCdiSupport, SIGNAL(toggled(bool)), this, SLOT(slotCdiSupportChecked(bool)) );
 
@@ -293,13 +286,7 @@ void K3bVcdBurnDialog::setupLabelTab()
 
 void K3bVcdBurnDialog::slotOk()
 {
-  // save users CDI_VCD.CFG
-  if (m_editCdiCfg->edited())
-    saveCdiConfig();
     
-  // Add imagename to path when the user has changed the path in m_tempDirSelectionWidget
-  slotSetImagePath();
-  
   if( QFile::exists( m_tempDirSelectionWidget->tempPath() ) ) {
     if( KMessageBox::questionYesNo( this, i18n("Do you want to overwrite %1").arg(m_tempDirSelectionWidget->tempPath()), i18n("File exists...") )
         != KMessageBox::Yes )
@@ -348,6 +335,8 @@ void K3bVcdBurnDialog::loadDefaults()
 
 void K3bVcdBurnDialog::saveSettings()
 {
+  slotSetImagePath();
+
   doc()->setTempDir( m_tempDirSelectionWidget->tempPath() );
   doc()->setDao( true );
   doc()->setDummy( m_checkSimulate->isChecked() );
@@ -370,6 +359,12 @@ void K3bVcdBurnDialog::saveSettings()
 
   vcdDoc()->vcdOptions()->setBrokenSVcdMode(m_checkNonCompliant->isChecked());
   vcdDoc()->vcdOptions()->setSector2336(m_check2336->isChecked());
+
+  vcdDoc()->vcdOptions()->setCdiSupport( m_checkCdiSupport->isChecked() );
+  vcdDoc()->setOnlyCreateImage( m_checkOnlyCreateImage->isChecked() );
+
+  vcdDoc()->vcdOptions()->setVolumeNumber(m_spinVolumeNumber->value());
+  vcdDoc()->vcdOptions()->setVolumeCount(m_spinVolumeCount->value());
 
   if (m_editCdiCfg->edited())
     saveCdiConfig();
@@ -588,41 +583,10 @@ void K3bVcdBurnDialog::slotSetImagePath()
   m_tempDirSelectionWidget->setTempPath( path );
 }
 
-void K3bVcdBurnDialog::slotNonCompliantToggled()
-{
-  vcdDoc()->vcdOptions()->setBrokenSVcdMode(m_checkNonCompliant->isChecked());
-}
-
-void K3bVcdBurnDialog::slot2336Toggled()
-{
-  vcdDoc()->vcdOptions()->setSector2336(m_check2336->isChecked());
-}
 
 void K3bVcdBurnDialog::slotSpinVolumeCount()
 {
-  int c = m_spinVolumeCount->value();
-  m_spinVolumeNumber->setMaxValue(c);
-  vcdDoc()->vcdOptions()->setVolumeCount(c);
-}
-
-void K3bVcdBurnDialog::slotSpinVolumeNumber()
-{
-  vcdDoc()->vcdOptions()->setVolumeNumber(m_spinVolumeNumber->value());  
-}
-
-void K3bVcdBurnDialog::slotVolumeIdChanged()
-{
-  vcdDoc()->vcdOptions()->setVolumeId(m_editVolumeId->text());  
-}
-
-void K3bVcdBurnDialog::slotAlbumIdChanged()
-{
-  vcdDoc()->vcdOptions()->setAlbumId(m_editAlbumId->text());
-}
-
-void K3bVcdBurnDialog::slotOnlyCreateImageChecked( bool c )
-{
-  vcdDoc()->setOnlyCreateImage( c );
+  m_spinVolumeNumber->setMaxValue(m_spinVolumeCount->value());
 }
 
 void K3bVcdBurnDialog::slotVcdTypeClicked( int i)
@@ -650,7 +614,6 @@ void K3bVcdBurnDialog::slotVcdTypeClicked( int i)
 void K3bVcdBurnDialog::slotCdiSupportChecked( bool b)
 {
   m_groupCdi->setEnabled( b );
-  vcdDoc()->vcdOptions()->setCdiSupport(b);
 }
 
 #include "k3bvcdburndialog.moc"

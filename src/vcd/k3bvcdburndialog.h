@@ -97,14 +97,8 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
    void loadUserDefaults();
    void saveUserDefaults();
 
-   void slotNonCompliantToggled();
-   void slot2336Toggled();
    void slotSpinVolumeCount();
-   void slotSpinVolumeNumber();
-   void slotOnlyCreateImageChecked(bool);
    void slotSetImagePath();
-   void slotVolumeIdChanged();
-   void slotAlbumIdChanged();
    void slotVcdTypeClicked(int);
    void slotCdiSupportChecked(bool);
 };
