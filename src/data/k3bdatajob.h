@@ -21,11 +21,14 @@
 #include "../k3bjob.h"
 
 #include <kprocess.h>
+#include <qfile.h>
 
 class K3bDataDoc;
 class QString;
-class QTextStream;
-class K3bDirItem;
+class QDataStream;
+class K3bAbstractWriter;
+class K3bIsoImager;
+
 
 /**
   *@author Sebastian Trueg
@@ -47,41 +50,34 @@ class K3bDataJob : public K3bBurnJob
   void start();
 
  protected slots:
-  void slotParseCdrecordOutput( KProcess*, char*, int );
-  void slotParseMkisofsOutput( KProcess*, char*, int );
-  void slotMkisofsFinished();
-  void slotCdrecordFinished();
+  void slotReceivedIsoImagerData( char* data, int len );
+  void slotIsoImagerFinished( bool success );
+  void slotDataWritten();
+  void slotIsoImagerPercent(int);
+  void slotSizeCalculationFinished( int, int );
+  void slotWriterJobPercent( int p );
+  void slotWriterJobFinished( bool success );
   void slotCollectOutput( KProcess*, char*, int );
   void fetchMultiSessionInfo();
-  void fetchIsoSize();
   void slotMsInfoFetched();
-  void slotIsoSizeFetched();
   void writeImage();
-  void writeCD();
+  void startWriting();
+  void prepareWriterJob();
   void cancelAll();
 		
  private:
-  void writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream );
-  QString escapeGraftPoint( const QString& str );
-
   K3bDataDoc* m_doc;
-  QString m_pathSpecFile;
-  QString m_rrHideFile;
-  QString m_jolietHideFile;
   KProcess* m_process;
 
   bool m_imageFinished;
 
-  bool m_noDeepDirectoryRelocation;
-
-  QString m_isoSize;
   QString m_msInfo;
   QString m_collectedOutput;
-		
-  bool addMkisofsParameters();
-  bool writePathSpec( const QString& filename );
-  bool writeRRHideFile( const QString& filename );
-  bool writeJolietHideFile( const QString& filename );
+
+  QFile m_imageFile;
+  QDataStream m_imageFileStream;
+  K3bAbstractWriter* m_writerJob;
+  K3bIsoImager* m_isoImager;
 };
 
 #endif

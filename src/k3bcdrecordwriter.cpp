@@ -137,7 +137,7 @@ void K3bCdrecordWriter::start()
   }
   kdDebug() << s << endl << flush;
 
-
+  m_currentTrack = 0;
 
   emit newSubTask( i18n("Preparing write process...") );
 
@@ -192,6 +192,8 @@ bool K3bCdrecordWriter::write( const char* data, int len )
 
 void K3bCdrecordWriter::slotStdLine( const QString& line )
 {
+  emit debuggingOutput( "cdrecord", line );
+
   if( line.startsWith( "Track" ) )
     {
       //			kdDebug() << "Parsing line [[" << line << "]]"endl;
@@ -274,7 +276,8 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
     }
   else if( line.startsWith( "Starting new" ) )
     {
-      emit newSubTask( i18n("Writing ISO data") );
+      m_currentTrack++;
+      emit newSubTask( i18n("Writing track %1").arg(m_currentTrack) );
     }
   else if( line.startsWith( "Fixating" ) ) {
     emit newSubTask( i18n("Fixating") );

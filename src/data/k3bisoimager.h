@@ -9,7 +9,6 @@ class K3bDataDoc;
 class K3bDirItem;
 class QTextStream;
 class K3bProcess;
-class K3bExternalBinManager;
 
 
 
@@ -18,8 +17,10 @@ class K3bIsoImager : public K3bJob
  Q_OBJECT
 
  public:
-  K3bIsoImager( K3bExternalBinManager*, K3bDataDoc*, QObject* parent = 0, const char* name = 0 );
+  K3bIsoImager( K3bDataDoc*, QObject* parent = 0, const char* name = 0 );
   ~K3bIsoImager();
+
+  int size() const { return m_mkisofsPrintSizeResult; }
 
  public slots:
   void start();
@@ -52,8 +53,6 @@ class K3bIsoImager : public K3bJob
   void slotMkisofsPrintSizeFinished();
 
  private:
-  K3bExternalBinManager* m_externalBinManager;
-
   K3bDataDoc* m_doc;
 
   QString m_pathSpecFile;

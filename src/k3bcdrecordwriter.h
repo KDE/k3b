@@ -65,6 +65,8 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   bool m_dao;
   bool m_rawWrite;
   bool m_stdin;
+
+  int m_currentTrack;
 };
 
 #endif

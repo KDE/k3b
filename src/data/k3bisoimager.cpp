@@ -16,9 +16,8 @@
 
 
 
-K3bIsoImager::K3bIsoImager( K3bExternalBinManager* exbm, K3bDataDoc* doc, QObject* parent, const char* name )
+K3bIsoImager::K3bIsoImager( K3bDataDoc* doc, QObject* parent, const char* name )
   : K3bJob( parent, name ),
-    m_externalBinManager( exbm ),
     m_doc( doc ),
     m_noDeepDirectoryRelocation( false ),
     m_importSession( false ),
@@ -91,6 +90,8 @@ void K3bIsoImager::resume()
 
 void K3bIsoImager::slotReceivedStderr( const QString& line )
 {
+  emit debuggingOutput( "mkisofs", line );
+
   if( line.contains( "done, estimate" ) ) {
 
     QString perStr = line;
@@ -330,22 +331,21 @@ void K3bIsoImager::cancel()
 void K3bIsoImager::setMultiSessionInfo( const QString& info )
 {
   m_multiSessionInfo = info;
-  m_importSession = true;
 }
 
 
 bool K3bIsoImager::addMkisofsParameters()
 {
-  if( !m_externalBinManager->foundBin( "mkisofs" ) ) {
+  if( !K3bExternalBinManager::self()->foundBin( "mkisofs" ) ) {
     kdDebug() << "(K3bIsoImager) could not find mkisofs executable" << endl;
     emit infoMessage( i18n("Mkisofs executable not found."), K3bJob::ERROR );
     return false;
   }
 
-  *m_process << m_externalBinManager->binPath( "mkisofs" );
+  *m_process << K3bExternalBinManager::self()->binPath( "mkisofs" );
 
   // add multisession info
-  if( m_importSession ) {
+  if( !m_multiSessionInfo.isEmpty() ) {
 
     // it has to be the device we are writing to cause only this makes sense
     *m_process << "-M" << m_doc->burner()->busTargetLun();
@@ -441,7 +441,7 @@ bool K3bIsoImager::addMkisofsParameters()
 
 
   // additional parameters from config
-  const QStringList& params = m_externalBinManager->binObject( "mkisofs" )->userParameters();
+  const QStringList& params = K3bExternalBinManager::self()->binObject( "mkisofs" )->userParameters();
   for( QStringList::const_iterator it = params.begin(); it != params.end(); ++it )
     *m_process << *it;
 

@@ -36,7 +36,7 @@ K3bMixedJob::K3bMixedJob( K3bMixedDoc* doc, QObject* parent )
   : K3bBurnJob( parent ),
     m_doc( doc )
 {
-  m_isoImager = new K3bIsoImager( k3bMain()->externalBinManager(), doc->dataDoc(), this );
+  m_isoImager = new K3bIsoImager( doc->dataDoc(), this );
   connect( m_isoImager, SIGNAL(sizeCalculated(int, int)), this, SLOT(slotSizeCalculationFinished(int, int)) );
   connect( m_isoImager, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
   connect( m_isoImager, SIGNAL(data(char*, int)), this, SLOT(slotReceivedIsoImagerData(char*, int)) );
