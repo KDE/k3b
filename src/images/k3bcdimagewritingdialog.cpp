@@ -19,7 +19,7 @@
 #include "k3bbinimagewritingjob.h"
 #include "k3bcuefileparser.h"
 #include "k3bclonetocreader.h"
-#include <cdclone/k3bclonejob.h>
+#include <cdcopy/k3bclonejob.h>
 
 #include <k3bdevicemanager.h>
 #include <k3bdevice.h>
