@@ -20,6 +20,7 @@
 #define K3BVCDBURNDIALOG_H
 
 #include "../k3bprojectburndialog.h"
+#include <qmultilineedit.h>
 
 class QCheckBox;
 class QGroupBox;
@@ -28,6 +29,7 @@ class QSpinBox;
 class QRadioButton;
 class QLabel;
 class QLineEdit;
+class QMultiLineEdit;
 class QToolButton;
 class K3bWriterSelectionWidget;
 class K3bTempDirSelectionWidget;
@@ -46,6 +48,7 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
  
  protected:
    void setupVideoCdTab();
+   void setupAdvancedTab();
    void setupLabelTab();
    void saveSettings();
    void readSettings();
@@ -64,7 +67,13 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
    QGroupBox* m_groupOptions;
    QCheckBox* m_checkNonCompliant;
    QCheckBox* m_check2336;
-      
+
+   // CD-i
+   QGroupBox* m_groupCdi;
+   QCheckBox* m_checkCdiSupport;
+   QMultiLineEdit* m_editCdiCfg;
+
+            
    // -----------------------------------------------------------
    // the video-label-tab
    // -----------------------------------------------------------
@@ -75,6 +84,7 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
 
    QSpinBox* m_spinVolumeCount;
    QSpinBox* m_spinVolumeNumber;
+
    // -----------------------------------------------------------
 
  private:

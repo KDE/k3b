@@ -63,6 +63,7 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
   m_optionGroupLayout->addItem( spacer );
 
   setupVideoCdTab();
+  setupAdvancedTab();
   setupLabelTab();
 
   slotSetImagePath();
@@ -99,6 +100,9 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
   QToolTip::add(m_spinVolumeNumber, i18n("Specify album set sequence number ( <= volume-count )") );
   QToolTip::add(m_spinVolumeCount, i18n("Specify number of volumes in album set") );
 
+  QToolTip::add(m_checkCdiSupport, i18n("Enable CD-i Application Support for VideoCD Type 1.1 & 2.0") );
+  QToolTip::add(m_editCdiCfg, i18n("Configuration parameters (only for VCD 2.0)") );
+  
   // What's This info
   // -------------------------------------------------------------------------  
   QWhatsThis::add( m_radioVcd11, i18n("<p>This is the most basic <b>Video CD</b> specification dating back to 1993, which has the following characteristics:"
@@ -151,6 +155,17 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
    QWhatsThis::add( m_check2336, i18n("<p>though most devices will have problems with such an out-of-specification media."
                                       "<p><b>You may want use this option for images longer than 80 minutes</b>") );
                                               
+   QWhatsThis::add( m_checkCdiSupport, i18n("<p>To allow the play of Video-CD's on a CD-i player, the Video-CD standard requires that a CD-i application program must be present."
+                                            "<p>This program is designed to:"
+                                            "<ul><li>provide full play back control as defined in the PSD of the standard</l>"
+                                            "<li>be extremely simple to use and easy-to-learn for the end-user</li></ul>"
+                                            "<p>The program runs on CD-i players equipped with the CDRTOS 1.1(.1) operating system and a Digital Video extension cartridge.") );
+
+   QWhatsThis::add( m_editCdiCfg, i18n("Configuration parameters only available for VideoCD 2.0"
+                                       "<p>The engine works perfectly well when used as is."
+                                       "<p>You have the option to configure the VCD application."
+                                       "<p>You can adapt the colour and / or the shape of the cursor and lots more.") );
+
 }
 
 
@@ -175,21 +190,49 @@ void K3bVcdBurnDialog::setupVideoCdTab()
   m_checkNonCompliant = new QCheckBox( i18n( "Enable Broken SVCD mode" ), m_groupOptions );
   m_check2336 = new QCheckBox( i18n( "Use 2336 byte Sectors" ), m_groupOptions );
 
-  // ----------------------------------------------------------------------
-  QGridLayout* grid = new QGridLayout( w );
-  grid->setMargin( marginHint() );
-  grid->setSpacing( spacingHint() );
-  grid->addWidget( m_groupVcdFormat, 0, 0 );
-  grid->addWidget( m_groupOptions, 0, 1 );
-
   // Only available on SVCD Type
   m_checkNonCompliant->setEnabled( false );
   m_checkNonCompliant->setChecked( false );
   
+  // ----------------------------------------------------------------------
+  QGridLayout* grid = new QGridLayout( w );
+  grid->setMargin( marginHint() );
+  grid->setSpacing( spacingHint() );
+  // grid->addMultiCellWidget( m_groupVcdFormat, 0, 1, 0, 0 );
+  grid->addWidget( m_groupVcdFormat, 0, 0 );
+  grid->addMultiCellWidget( m_groupOptions, 0, 0, 1, 3 );
+
   // TODO: enable this in the future, k3b canot resample now.
   m_groupVcdFormat->setEnabled(false);
 
   addPage( w, i18n("Settings") );
+}
+
+void K3bVcdBurnDialog::setupAdvancedTab()
+{
+  QWidget* w = new QWidget( k3bMainWidget() );
+
+  // ------------------------------------------------- CD-i Application ---
+  m_groupCdi = new QGroupBox( 4, Qt::Vertical, i18n("VideoCD on CD-i"), w );
+  m_checkCdiSupport = new QCheckBox( i18n( "Enable CD-i Support" ), m_groupCdi );
+  m_editCdiCfg = new QMultiLineEdit( m_groupCdi, "m_editCdiCfg" );
+
+  // Only available on VCD Type 1.1 or 2.0
+  m_groupCdi->setEnabled( false );
+
+  // Only available on VCD Type 2.0
+  m_editCdiCfg->setEnabled( false );
+  m_editCdiCfg->insertLine("CURCOL=GREEN");
+  m_editCdiCfg->insertLine("PSDCURCOL=YELLOW");
+  m_editCdiCfg->insertLine("PSDCURSHAPE=STAR");
+
+  // ----------------------------------------------------------------------
+  QGridLayout* grid = new QGridLayout( w );
+  grid->setMargin( marginHint() );
+  grid->setSpacing( spacingHint() );
+  grid->addWidget( m_groupCdi, 0, 0 );
+
+  addPage( w, i18n("Advanced") );
 }
 
 void K3bVcdBurnDialog::setupLabelTab()
