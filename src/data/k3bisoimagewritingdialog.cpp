@@ -67,6 +67,7 @@ K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( QWidget* parent, const char*
 
   k3bMain()->config()->setGroup("General Options");
   m_editImagePath->setText( k3bMain()->config()->readEntry( "last written image", "" ) );
+  updateImageSize( m_editImagePath->text() );
 }
 
 
