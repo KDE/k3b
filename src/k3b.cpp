@@ -68,6 +68,7 @@
 #include "vcd/k3bvcddoc.h"
 #include "k3bblankingdialog.h"
 #include "data/k3bisoimagewritingdialog.h"
+#include "data/k3bbinimagewritingdialog.h"
 #include "tools/k3bexternalbinmanager.h"
 #include "k3bprojecttabwidget.h"
 #include "rip/songdb/k3bsongmanager.h"
@@ -201,6 +202,9 @@ void K3bMainWindow::initActions()
 			    actionCollection(), "tools_encode_video");
   actionToolsWriteIsoImage = new KAction(i18n("&Write ISO Image..."), "gear", 0, this, SLOT(slotWriteIsoImage()),
 					 actionCollection(), "tools_write_iso" );
+  
+  actionToolsWriteBinImage = new KAction(i18n("&Write Bin/Cue Image..."), "gear", 0, this, SLOT(slotWriteBinImage()),
+					 actionCollection(), "tools_write_bin" );
 
   actionCdCopy = new KAction(i18n("&Copy CD..."), "cdcopy", 0, this, SLOT(slotCdCopy()),
 			     actionCollection(), "tools_copy_cd" );
@@ -1018,6 +1022,20 @@ void K3bMainWindow::slotWriteIsoImage( const KURL& url )
 {
   K3bIsoImageWritingDialog d( this, "isodialog" );
   d.setImage( url );
+  d.exec();
+}
+
+void K3bMainWindow::slotWriteBinImage()
+{
+  K3bBinImageWritingDialog d( this, "bindialog" );
+  d.exec();
+}
+
+
+void K3bMainWindow::slotWriteBinImage( const KURL& url )
+{
+  K3bBinImageWritingDialog d( this, "bindialog" );
+  d.setTocFile( url );
   d.exec();
 }
 

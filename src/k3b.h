@@ -131,6 +131,8 @@ class K3bMainWindow : public KDockMainWindow
   void slotBlankCdrw();
   void slotWriteIsoImage();
   void slotWriteIsoImage( const KURL& url );
+  void slotWriteBinImage();
+  void slotWriteBinImage( const KURL& url );
   // encoding dialog for transcode encoding utility
   void slotDivxEncoding();
   void slotCdCopy();
@@ -316,6 +318,7 @@ class K3bMainWindow : public KDockMainWindow
   KAction* actionToolsBlankCdrw;
   KAction* actionToolsDivxEncoding;
   KAction* actionToolsWriteIsoImage;
+  KAction* actionToolsWriteBinImage;
   KAction* actionCdCopy;
   KAction* actionProjectAddFiles;
   KToggleAction* actionViewToolBar;
