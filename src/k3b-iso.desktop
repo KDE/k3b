@@ -1,8 +1,10 @@
 # KDE Config File  
 [Desktop Entry]
 Type=Application
-Exec=k3b --isoimage %f
+Exec=k3b --cdimage %f
 Icon=k3b
 Terminal=0
 Name=K3b
+Name[hi]=के3बी
+Name[xx]=xxK3bxx
 MimeType=application/x-iso;
