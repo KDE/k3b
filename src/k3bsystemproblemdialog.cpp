@@ -343,9 +343,9 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 					     K3b::kernelVersion() > K3bVersion( 2, 5, 0 )
 					     ? i18n("Install cdrdao >= 1.1.8 which supports writing to "
 						    "ATAPI devices directly.")
-					     : i18n("The best and recommended solution is to  "
-						    "ide-scsi (SCSI emulation) for all writer devices. "
-						    "This way you won't have any problems. Or you install "
+					     : i18n("The best, and recommended, solution is to use "
+						    "ide-scsi (SCSI emulation) for all writer devices: "
+						    "this way you will not have any problems; or, you can install "
 						    "(or select as the default) a more recent version of %1.").arg("cdrdao"),
 					     false ) );
 	}
