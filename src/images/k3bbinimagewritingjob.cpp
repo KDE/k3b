@@ -83,7 +83,7 @@ bool K3bBinImageWritingJob::prepareWriter()
   int usedWritingApp = writingApp();
   const K3bExternalBin* cdrecordBin = k3bcore->externalBinManager()->binObject("cdrecord");
   if( usedWritingApp == K3b::CDRECORD || 
-      ( usedWritingApp == K3b::DEFAULT && cdrecordBin && cdrecordBin->hasFeature("cuefile") ) ) {
+      ( usedWritingApp == K3b::DEFAULT && cdrecordBin && cdrecordBin->hasFeature("cuefile") && m_device->dao() ) ) {
     usedWritingApp = K3b::CDRECORD;
 
     // IMPROVEME: check if it's a cdrdao toc-file

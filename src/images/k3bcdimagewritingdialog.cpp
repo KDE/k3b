@@ -66,7 +66,7 @@
 #include <qwhatsthis.h>
 #include <qspinbox.h>
 #include <qmap.h>
-
+#include <qptrqueue.h>
 
 
 class K3bCdImageWritingDialog::Private
@@ -118,6 +118,8 @@ K3bCdImageWritingDialog::K3bCdImageWritingDialog( QWidget* parent, const char* n
 	   this, SLOT(slotToggleAll()) );
   connect( m_editImagePath, SIGNAL(textChanged(const QString&)), 
 	   this, SLOT(slotUpdateImage(const QString&)) );
+  connect( m_checkDummy, SIGNAL(toggled(bool)),
+	   this, SLOT(slotToggleAll()) );
 
   slotLoadUserDefaults();
 }
@@ -273,6 +275,11 @@ void K3bCdImageWritingDialog::slotStartClicked()
   c->setGroup( "image writing" );
   if( c->readPathEntry( "last written image" ).isEmpty() )
     c->writePathEntry( "last written image", m_editImagePath->url() );
+
+  if( d->imageFile.isEmpty() )
+    d->imageFile = m_editImagePath->url();
+  if( d->tocFile.isEmpty() )
+    d->tocFile = m_editImagePath->url();
 
   // create the job
   K3bBurnJob* job = 0;
@@ -617,6 +624,18 @@ void K3bCdImageWritingDialog::slotToggleAll()
   }
   else {
     m_buttonStart->setEnabled( false );
+  }
+
+  switch( currentImageType() ) {
+  case IMAGE_CDRDAO_TOC:
+    m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRDAO );
+    break;
+  case IMAGE_CDRECORD_CLONE:
+    m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRECORD );
+    break;
+  default:
+    m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRECORD|K3b::CDRDAO );
+    break;
   }
 
   K3bListViewItem* item = dynamic_cast<K3bListViewItem*>(m_infoView->firstChild());
