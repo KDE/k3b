@@ -374,7 +374,7 @@ namespace K3bCdDevice
     int currentProfile() const;
 
     /**
-     * @returns true if the requested feature is supported with the mounted media.
+     * @returns true if the requested feature is supported and also current.
      */
     bool supportsFeature( unsigned int feature ) const;
 
@@ -644,7 +644,7 @@ namespace K3bCdDevice
     void searchIndexTransitions( long start, long end, K3bCdDevice::Track& track ) const;
     void checkWriteModes();
     void checkForAncientWriters();
-
+    bool rawTocDataWithBcdValues( unsigned char* data, int dataLen ) const;
 
     QString m_vendor;
     QString m_description;

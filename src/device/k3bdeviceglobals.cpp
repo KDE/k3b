@@ -149,3 +149,21 @@ unsigned long K3bCdDevice::from4Byte( unsigned char* d )
 	   d[2] << 8  & 0xFF00 |
 	   d[3]       & 0xFF );
 }
+
+
+char K3bCdDevice::fromBcd( const char& i )
+{
+  return (i & 0x0f) + 10 * ( (i >> 4) & 0x0f );
+}
+
+
+char K3bCdDevice::toBcd( const char& i )
+{
+  return ( i % 10 ) | ( ( (( i / 10 ) % 10) << 4 ) & 0xf0 );
+}
+
+
+bool K3bCdDevice::isValidBcd( const char& i )
+{
+  return ( i & 0x0f ) <= 0x09 && ( i & 0xf0 ) <= 0x90;
+}

@@ -32,6 +32,10 @@ namespace K3bCdDevice
 
   unsigned short from2Byte( unsigned char* );
   unsigned long from4Byte( unsigned char* );
+  
+  char fromBcd( const char& );
+  char toBcd( const char& );
+  bool isValidBcd( const char& );
 }
 
 #endif
