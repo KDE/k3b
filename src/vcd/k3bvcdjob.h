@@ -30,13 +30,16 @@ class K3bVcdJob : public K3bBurnJob
   Q_OBJECT
 
  public:
-  K3bVcdJob( K3bVcdDoc* );
+  K3bVcdJob( K3bVcdDoc*, QObject* parent = 0, const char* name = 0 );
   ~K3bVcdJob();
 
   K3bDoc* doc() const;
   K3bVcdDoc* vcdDoc() const {return m_doc;};
   K3bDevice* writer() const;
 
+  QString jobDescription() const;
+  QString jobDetails() const;
+		
  public slots:
   void start();
   void cancel();

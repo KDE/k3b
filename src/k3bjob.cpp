@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -34,8 +34,8 @@ K3bJob::~K3bJob()
 }
 
 
-K3bBurnJob::K3bBurnJob( QObject* parent )
-  : K3bJob( parent ),
+K3bBurnJob::K3bBurnJob( QObject* parent, const char* name )
+  : K3bJob( parent, name ),
     m_writeMethod( K3b::DEFAULT )
 {
 }

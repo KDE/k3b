@@ -1,6 +1,6 @@
 /*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -220,6 +220,8 @@ void K3bCddaCopy::slotTrackFinished( bool success )
       emit infoMessage( i18n("Error while ripping track %1").arg( m_currentTrackIndex ), ERROR );
     }
 
+    if( m_interrupt )
+      emit canceled();
     emit finished( false );
   }
 }
@@ -293,6 +295,22 @@ bool K3bCddaCopy::createDirectory( const QString& path )
 
   return true;
 }
+
+
+QString K3bCddaCopy::jobDescription() const 
+{
+  if( m_cddbEntry.titles.count() == 0 )
+    return i18n("Ripping audio tracks");
+  else
+    return i18n("Ripping audio tracks from %1").arg(m_cddbEntry.cdTitle);
+}
+
+QString K3bCddaCopy::jobDetails() const 
+{
+  return i18n("%1 tracks").arg(m_tracksToCopy.count());
+}
+
+
 
 #ifdef QT_THREAD_SUPPORT
 void K3bCddaCopy::customEvent( QCustomEvent* e )

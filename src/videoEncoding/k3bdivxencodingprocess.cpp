@@ -390,4 +390,17 @@ void K3bDivXEncodingProcess::restoreBackupFiles() {
 void K3bDivXEncodingProcess::slotFinishedRestoreBackup(){
 }
 
+
+QString K3bDivXEncodingProcess::jobDescription() const
+{
+  return i18n("Encoding video");
+}
+
+QString K3bDivXEncodingProcess::jobDetails() const
+{
+  // TODO: here we could show a lot of info!
+  //       choose wisely!
+  return m_data->getSize();
+}
+
 #include "k3bdivxencodingprocess.moc"

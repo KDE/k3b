@@ -26,7 +26,7 @@ class QCheckBox;
 class KLineEdit;
 class QString;
 class QLabel;
-class K3bBurnProgressDialog;
+class K3bJobProgressDialog;
 class K3bDvdRippingProcess;
 class K3bDvdCopy;
 class KDiskFreeSp;
@@ -62,7 +62,7 @@ private:
     KLineEdit *m_editStaticRipPath;
     long m_bytes;
     DvdTitle m_ripTitles;
-    K3bBurnProgressDialog *m_ripDialog;
+    K3bJobProgressDialog *m_ripDialog;
     K3bDvdRippingProcess *m_ripProcess;
     K3bDvdCopy *m_ripJob;
     bool m_enoughSpace;

@@ -46,6 +46,9 @@ public:
     void setRipSize( double size );
     bool isStartFailed(){ return m_preProcessingFailed; };
 
+    QString jobDescription() const;
+    QString jobDetails() const;
+		
 public slots:
     void start();
     void cancel();

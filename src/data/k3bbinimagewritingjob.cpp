@@ -142,4 +142,15 @@ void K3bBinImageWritingJob::slotNextTrack( int t, int tt ) {
 }
 
 
+QString K3bBinImageWritingJob::jobDescription() const
+{
+  return i18n("Writing cue/bin image");
+}
+
+
+QString K3bBinImageWritingJob::jobDetails() const
+{
+  return m_tocFile.section("/", -1);
+}
+		
 #include "k3bbinimagewritingjob.moc"

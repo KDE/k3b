@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -174,6 +174,19 @@ bool K3bIso9660ImageWritingJob::prepareWriter()
 
   return true;
 }
+
+
+QString K3bIso9660ImageWritingJob::jobDescription() const
+{
+  return i18n("Writing Iso9660 image");
+}
+
+
+QString K3bIso9660ImageWritingJob::jobDetails() const
+{
+  return m_imagePath.section("/", -1);
+}
+		
 
 
 #include "k3biso9660imagewritingjob.moc"

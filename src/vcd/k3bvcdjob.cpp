@@ -35,6 +35,7 @@
 #include <kstandarddirs.h>
 #include <kurl.h>
 #include <ktempfile.h>
+#include <kio/global.h>
 
 #include <qstring.h>
 #include <qdatetime.h>
@@ -45,8 +46,8 @@
 #include <qdom.h>
 
 
-K3bVcdJob::K3bVcdJob( K3bVcdDoc* doc )
-  : K3bBurnJob()
+K3bVcdJob::K3bVcdJob( K3bVcdDoc* doc, QObject* parent, const char* name )
+  : K3bBurnJob(parent, name)
 {
   m_doc = doc;
   m_process = 0;
@@ -463,6 +464,29 @@ void K3bVcdJob::slotWriterJobFinished( bool success )
     cancelAll();
     emit finished(false);
   }
+}
+
+
+QString K3bVcdJob::jobDescription() const
+{
+  switch( m_doc->vcdType() ) {
+  case K3bVcdDoc::VCD11:
+    return i18n("Writing Video CD (Version 1.1)");
+  case K3bVcdDoc::VCD20:
+    return i18n("Writing Video CD (Version 2.0)");
+  case K3bVcdDoc::SVCD10:
+    return i18n("Writing Super Video CD");
+  case K3bVcdDoc::HQVCD:
+    return i18n("Writing High Quality Video CD");
+  default:
+    return i18n("Writing Video CD");
+  }
+}
+
+
+QString K3bVcdJob::jobDetails() const
+{
+  return i18n("1 MPEG (%1)", "%n MPEGs (%1)", m_doc->tracks()->count()).arg(KIO::convertSize(m_doc->size()));
 }
 
 #include "k3bvcdjob.moc"

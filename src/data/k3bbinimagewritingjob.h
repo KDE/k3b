@@ -36,8 +36,12 @@ class K3bBinImageWritingJob : public K3bBurnJob
  public: 
   K3bBinImageWritingJob( QObject* parent = 0 );
   ~K3bBinImageWritingJob();
+
   K3bDevice* writer() const { return m_cdrdaowriter->burnDevice(); };
 
+  QString jobDescription() const;
+  QString jobDetails() const;
+		
  public slots:
   void start();
   void cancel();
@@ -47,8 +51,12 @@ class K3bBinImageWritingJob : public K3bBurnJob
   void setSimulate( bool b ) { m_cdrdaowriter->setSimulate(b); }
   void setForce(bool b) { m_cdrdaowriter->setForce(b); };
   void setMulti(bool b) { m_cdrdaowriter->setMulti(b); };
-  void setTocFile(const QString& s) { m_cdrdaowriter->setTocFile(s); }
+  void setTocFile(const QString& s) { 
+    m_cdrdaowriter->setTocFile(s); 
+    m_tocFile = s; 
+  }
   void setCopies(int c) { m_copies=c; };
+
  private slots:
   void cdrdaoWrite();  
 
@@ -65,6 +73,8 @@ class K3bBinImageWritingJob : public K3bBurnJob
   int m_finishedCopies;
 
   K3bCdrdaoWriter *m_cdrdaowriter;
+
+  QString m_tocFile;
 };
 
 #endif

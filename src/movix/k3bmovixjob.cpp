@@ -29,6 +29,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <ktempfile.h>
+#include <kio/global.h>
 
 #include <qtextstream.h>
 #include <qdir.h>
@@ -340,6 +341,20 @@ void K3bMovixJob::cleanUp()
   m_playlistFile = 0;
   m_isolinuxConfigFile = 0;
   m_movixRcFile = 0;
+}
+
+QString K3bMovixJob::jobDescription() const
+{
+  if( m_doc->isoOptions().volumeID().isEmpty() )
+    return i18n("Writing eMovix cd");
+  else
+    return i18n("Writing eMovix cd (%1)").arg(m_doc->isoOptions().volumeID());
+}
+
+
+QString K3bMovixJob::jobDetails() const
+{
+  return i18n("1 file (%1)", "%n files (%1)", m_doc->movixFileItems().count()).arg(KIO::convertSize(m_doc->size()));
 }
 
 #include "k3bmovixjob.moc"

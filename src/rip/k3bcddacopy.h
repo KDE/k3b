@@ -1,6 +1,6 @@
 /*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -52,6 +52,9 @@ class K3bCddaCopy : public K3bJob
  public:
   K3bCddaCopy( QObject* parent = 0 );
   ~K3bCddaCopy();
+
+  QString jobDescription() const;
+  QString jobDetails() const;
 
  public slots:
   void setDevice( K3bDevice* dev ) { m_device = dev; }

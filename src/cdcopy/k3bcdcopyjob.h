@@ -36,7 +36,11 @@ class K3bCdCopyJob : public K3bBurnJob
  public:
   K3bCdCopyJob( QObject* parent = 0 );
   ~K3bCdCopyJob();
+
   K3bDevice* writer() const { return m_cdrdaowriter->burnDevice(); };
+	
+  QString jobDescription() const;
+  QString jobDetails() const;
 
  public slots:
   void start();

@@ -34,6 +34,10 @@ class K3bDivXEncodingProcess : public K3bJob  {
 public:
     K3bDivXEncodingProcess(K3bDivxCodecData *data, QWidget *parent=0, const char *name=0);
     ~K3bDivXEncodingProcess();
+
+    QString jobDescription() const;
+    QString jobDetails() const;
+	
 public slots:
     void start();
     void cancel();

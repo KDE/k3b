@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -17,116 +17,35 @@
 #ifndef K3BBURNPROGRESSDIALOG_H
 #define K3BBURNPROGRESSDIALOG_H
 
-#include <kdialog.h>
+#include <k3bjobprogressdialog.h>
 
-#include <qvariant.h>
-#include <qmap.h>
-#include <qstringlist.h>
-#include <qdatetime.h>
-
-class QVBoxLayout;
-class QHBoxLayout;
-class QGridLayout;
-class QGroupBox;
-class QLabel;
+class K3bBurnJob;
 class KProgress;
-class QPushButton;
-class KListView;
-class K3bDoc;
-class QTime;
-class QTimer;
-class K3bJob;
-class KCutLabel;
-class QCloseEvent;
-class KSystemTray;
-
+class QLabel;
 
 
 /**
   *@author Sebastian Trueg
   */
-class K3bBurnProgressDialog : public KDialog  {
+class K3bBurnProgressDialog : public K3bJobProgressDialog  {
 
   Q_OBJECT
 
  public:
   K3bBurnProgressDialog( QWidget* parent = 0, const char* name = 0, bool showSubProgress = true, 
-			 bool showBuffer = true, bool modal = true, WFlags = 0 );
+			 bool modal = true, WFlags = 0 );
   ~K3bBurnProgressDialog();
 
-  void setJob( K3bJob* job );
-  void setExtraInfo( QWidget *extra );
-
-  /** just reimplemented to show the systemtray */
-  void show();
+  void setJob( K3bJob* );
+  void setBurnJob( K3bBurnJob* );
 
  protected slots:
-  void updateCdSizeProgress( int processed, int size );
-  void updateTrackSizeProgress( int processed, int size );
-  void displayInfo( const QString& infoString, int type );
-
-  void mapDebuggingOutput( const QString&, const QString& );
-
-  void finished(bool);
-  void canceled();
-
-  void slotCancelPressed();
-  void slotNewSubTask(const QString& name);
-  void slotNewTask(const QString& name);
-  void started();
-  void slotUpdateTime();
-
-  void slotShowDebuggingOutput();
-
-  void animateSystemTray( int );
-
-  void slotUpdateCaption( int );
   void slotWriteSpeed( int );
 
  protected:
-  void closeEvent( QCloseEvent* );
-
-  void setupGUI();
-  void setupConnections();
-	
-  QGroupBox* m_groupInfo;
-  KListView* m_viewInfo;
-  QPushButton* m_buttonCancel;
-  QPushButton* m_buttonClose;
-  QPushButton* m_buttonShowDebug;
-  QGroupBox* m_groupBuffer;
-  KProgress* m_progressBuffer;
-  QGroupBox* m_groupProgress;
-  KProgress* m_progressTrack;
-  KProgress* m_progressCd;
-  KCutLabel* m_labelFileName;
-  QLabel* m_labelTrackProgress;
-  QLabel* m_labelCdTime;
-  QLabel* m_labelCdProgress;
-  QLabel* m_labelWriteSpeed;
-		
-  QGridLayout* mainLayout;
-  QHBoxLayout* m_groupInfoLayout;
-  QGridLayout* m_groupProgressLayout;
-
-  // debugging output display
-  class PrivateDebugWidget;
-
-  KSystemTray* m_systemTray;
-
- private:
-  K3bJob* m_job;
-  QTimer* m_timer;
-  QTime m_startTime;
-
-  QMap<QString, QStringList> m_debugOutputMap;
-
-  bool m_showBuffer;
-  bool m_bCanceled;
-  bool m_bShowSystemTrayProgress;
-  int m_lastAnimatedProgress;
-
-  QString m_plainCaption;
+  QLabel* m_labelWriter;
+  KProgress* m_progressWritingBuffer;
+  QLabel* m_labelWritingSpeed;
 };
 
 #endif

@@ -36,7 +36,7 @@
 #include "k3bdivxsizetab.h"
 #include "k3bdivxadvancedtab.h"
 #include "k3bdivxencodingprocess.h"
-#include "../k3bburnprogressdialog.h"
+#include "../k3bjobprogressdialog.h"
 
 #include <qlayout.h>
 #include <qsizepolicy.h>
@@ -139,7 +139,7 @@ void K3bDivxView::slotUser1(){
     }
     m_divxJob = new K3bDivXEncodingProcess( m_codingData, this );
 
-    m_divxDialog = new K3bBurnProgressDialog( this, "Encoding", true );
+    m_divxDialog = new K3bJobProgressDialog( this, "Encoding", true );
     m_divxDialog->setCaption( i18n("Encoding process") );
     m_divxDialog->setJob( m_divxJob );
 

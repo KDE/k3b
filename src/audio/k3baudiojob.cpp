@@ -124,6 +124,7 @@ void K3bAudioJob::cancel()
   m_audioDecoder->cancel();
   emit infoMessage( i18n("Writing canceled."), K3bJob::ERROR );
   removeBufferFiles();
+  emit canceled();
   emit finished(false);
 }
 
@@ -420,5 +421,18 @@ void K3bAudioJob::removeBufferFiles()
   }
 }
 
+QString K3bAudioJob::jobDescription() const
+{
+  if( m_doc->title().isEmpty() )
+    return i18n("Writing audio cd");
+  else
+    return i18n("Writing audio cd (%1)").arg(m_doc->title());
+}
+
+
+QString K3bAudioJob::jobDetails() const
+{
+  return i18n("1 track (%2 minutes)", "%n track (%2 minutes)", m_doc->numOfTracks()).arg(m_doc->length().toString());
+}
 
 #include "k3baudiojob.moc"

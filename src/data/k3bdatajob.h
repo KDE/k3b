@@ -43,6 +43,9 @@ class K3bDataJob : public K3bBurnJob
 	
   K3bDoc* doc() const;
   K3bDevice* writer() const;
+
+  QString jobDescription() const;
+  QString jobDetails() const;
 		
  public slots:
   void cancel();

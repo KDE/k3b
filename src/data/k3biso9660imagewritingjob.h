@@ -38,6 +38,9 @@ class K3bIso9660ImageWritingJob : public K3bBurnJob
 
   K3bDevice* writer() const { return m_device; };
 	
+  QString jobDescription() const;
+  QString jobDetails() const;
+		
  public slots:
   void cancel();
   void start();

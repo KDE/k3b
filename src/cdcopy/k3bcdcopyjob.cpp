@@ -375,4 +375,20 @@ void K3bCdCopyJob::slotNextTrack( int t, int tt ) {
 }
 
 
+	
+QString K3bCdCopyJob::jobDescription() const
+{
+  if( m_onTheFly )
+    return i18n("Copying cd on-the-fly");
+  else
+    return i18n("Copying cd");
+}
+
+
+QString K3bCdCopyJob::jobDetails() const
+{
+  return i18n("1 copy", "%n copies", m_copies );
+}
+
+
 #include "k3bcdcopyjob.moc"

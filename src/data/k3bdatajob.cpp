@@ -485,4 +485,18 @@ void K3bDataJob::cancelAll()
 }
 
 
+QString K3bDataJob::jobDescription() const
+{
+  if( m_doc->isoOptions().volumeID().isEmpty() ) 
+    return i18n("Writing Iso9660 data cd");
+  else
+    return i18n("Writing Iso9660 data cd (%1)").arg(m_doc->isoOptions().volumeID().isEmpty());
+}
+
+
+QString K3bDataJob::jobDetails() const
+{
+  return i18n("Size: %1").arg(KIO::convertSize( m_doc->size() ));
+}
+
 #include "k3bdatajob.moc"

@@ -103,4 +103,14 @@ void K3bDvdCopy::setRipSize( double size ){
     m_ripSize = size;
 }
 
+QString K3bDvdCopy::jobDescription() const
+{
+  return i18n("Ripping Video DVD");
+}
+
+QString K3bDvdCopy::jobDetails() const
+{
+  return i18n("1 title", "%n titles", m_ripTitles.count());  
+}
+
 #include "k3bdvdcopy.moc"

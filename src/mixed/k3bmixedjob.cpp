@@ -44,6 +44,7 @@
 #include <klocale.h>
 #include <ktempfile.h>
 #include <kio/netaccess.h>
+#include <kio/global.h>
 
 
 // for the fifo
@@ -185,6 +186,7 @@ void K3bMixedJob::cancel()
   m_msInfoFetcher->cancel();
   emit infoMessage( i18n("Writing canceled."), K3bJob::ERROR );
   removeBufferFiles();
+  emit canceled();
   emit finished(false);
 }
 
@@ -843,5 +845,19 @@ void K3bMixedJob::removeBufferFiles()
   }
 }
 
+
+QString K3bMixedJob::jobDescription() const
+{
+  if( m_doc->audioDoc()->title().isEmpty() )
+    return i18n("Writing mixed mode cd");
+  else
+    return i18n("Writing mixed mode cd (%1)").arg(m_doc->audioDoc()->title());
+}
+
+
+QString K3bMixedJob::jobDetails() const
+{
+  return i18n("%1 tracks (%2 minutes audio data, %3 Iso9660 data)").arg(m_doc->numOfTracks()).arg(m_doc->audioDoc()->length().toString()).arg(KIO::convertSize(m_doc->dataDoc()->size()));
+}
 
 #include "k3bmixedjob.moc"

@@ -37,6 +37,9 @@ class K3bJob : public QObject
 
   virtual bool active() const { return false; }
 
+  virtual QString jobDescription() const { return "K3bJob"; }
+  virtual QString jobDetails() const { return QString::null; }
+
   enum MessageType { STATUS, PROCESS, ERROR, INFO };
 
  protected:
@@ -68,7 +71,7 @@ class K3bBurnJob : public K3bJob
   Q_OBJECT
 	
  public:
-  K3bBurnJob( QObject* parent = 0 );
+  K3bBurnJob( QObject* parent = 0, const char* name = 0 );
 	
   virtual K3bDoc* doc() const { return 0; }
   virtual K3bDevice* writer() const { return 0; }

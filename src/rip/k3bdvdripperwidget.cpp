@@ -20,7 +20,7 @@
 #include "k3bdvdfilldisplay.h"
 #include "k3bdvdextraripstatus.h"
 #include "k3bdvdrippingprocess.h"
-#include "../k3bburnprogressdialog.h"
+#include "../k3bjobprogressdialog.h"
 #include "../k3b.h"
 #include "../device/k3bdevicemanager.h"
 #include "../device/k3bdevice.h"
@@ -147,7 +147,7 @@ void K3bDvdRipperWidget::rip(){
   m_ripJob = new K3bDvdCopy(m_device, m_editStaticRipPath->text(), m_editStaticRipPath->text()+"/vob", m_editStaticRipPath->text()+"/tmp", m_ripTitles, this );
   m_ripJob->setRipSize( m_vobSize );
 
-  m_ripDialog = new K3bBurnProgressDialog( this, "Ripping", false );
+  m_ripDialog = new K3bJobProgressDialog( this, "Ripping", false );
   m_ripDialog->setCaption( i18n("Ripping process") );
   m_ripDialog->setJob( m_ripJob );
   K3bDvdExtraRipStatus *ripStatus = new K3bDvdExtraRipStatus( m_ripDialog );

@@ -19,7 +19,7 @@
 #include "k3bcddacopy.h"
 #include "k3bcdview.h"
 #include "k3bpatternparser.h"
-#include "../k3bburnprogressdialog.h"
+#include <k3bjobprogressdialog.h>
 #include "songdb/k3bsong.h"
 #include "songdb/k3bsongmanager.h"
 #include "../k3b.h"
@@ -265,7 +265,7 @@ void K3bRipperWidget::slotOk()
   job->setNeverSkip( m_checkNeverSkip->isChecked() );
   job->setSingleFile( m_checkSingleFile->isChecked() );
 
-  K3bBurnProgressDialog ripDialog( this, "Ripping" );
+  K3bJobProgressDialog ripDialog( this, "Ripping" );
   ripDialog.setJob( job );
 
   job->start();
