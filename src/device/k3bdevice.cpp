@@ -770,6 +770,16 @@ void K3bCdDevice::CdDevice::checkForAncientWriters()
       d->burnfree = false;
     }
   }
+  else if( vendor().startsWith("HP") ) {
+    if( description().startsWith("CD-Writer 6020") ) {
+      m_writeModes = TAO;
+      d->deviceType = CDROM|CDR;
+      m_maxWriteSpeed = 2;
+      m_maxReadSpeed = 6;
+      m_bufferSize = 1024;
+      d->burnfree = false;
+    }
+  }
 }
 
 
