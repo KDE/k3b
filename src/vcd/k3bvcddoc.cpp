@@ -1,6 +1,6 @@
 /*
 *
-* $Id$
+* $Id: $
 * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
 *
 * This file is part of the K3b project.
@@ -93,7 +93,7 @@ KIO::filesize_t K3bVcdDoc::calcTotalSize() const
 {
     unsigned long long sum = 0;
     if ( m_tracks ) {
-        for ( K3bVcdTrack * track = m_tracks->first(); track; track = m_tracks->next() ) {
+        for ( K3bVcdTrack* track = m_tracks->first(); track; track = m_tracks->next() ) {
             sum += track->size();
         }
     }
@@ -146,7 +146,7 @@ void K3bVcdDoc::addTracks( const KURL::List& urls, uint position )
 void K3bVcdDoc::slotWorkUrlQueue()
 {
     if ( !urlsToAdd.isEmpty() ) {
-        PrivateUrlToAdd * item = urlsToAdd.dequeue();
+        PrivateUrlToAdd* item = urlsToAdd.dequeue();
         lastAddedPosition = item->position;
 
         // append at the end by default
@@ -163,7 +163,7 @@ void K3bVcdDoc::slotWorkUrlQueue()
             return ;
         }
 
-        if ( K3bVcdTrack * newTrack = createTrack( item->url ) )
+        if ( K3bVcdTrack* newTrack = createTrack( item->url ) )
             addTrack( newTrack, lastAddedPosition );
 
         delete item;
@@ -173,6 +173,9 @@ void K3bVcdDoc::slotWorkUrlQueue()
         m_urlAddingTimer->stop();
 
         emit newTracks();
+
+        // reorder pbc tracks
+        setPbcTracks();
 
         informAboutNotFoundFiles();
     }
@@ -319,7 +322,7 @@ void K3bVcdDoc::addTrack( const KURL& url, uint position )
 void K3bVcdDoc::addTrack( K3bVcdTrack* track, uint position )
 {
     if ( m_tracks->count() >= 98 ) {
-        kdDebug() << "(K3bVcdDoc) VCD Green Book (Red Book) only allows 98 tracks." << endl;
+        kdDebug() << "(K3bVcdDoc) VCD Green Book only allows 98 tracks." << endl;
         // TODO: show some messagebox
         delete track;
         return ;
@@ -349,16 +352,26 @@ void K3bVcdDoc::removeTrack( K3bVcdTrack* track )
         // take the current item
         track = m_tracks->take();
 
+        // remove all pbc references to us?
+        if ( track->hasRevRef() )
+            track->delRefToUs();
+
+        // remove all pbc references from us?
+        track->delRefFromUs();
+
         // emit signal before deleting the track to avoid crashes
         // when the view tries to call some of the tracks' methods
         emit newTracks();
 
         delete track;
-        kdDebug() << QString( "(K3bVcdDoc) removeTrack count = %1" ).arg( numOfTracks() ) << endl;
+
         if ( numOfTracks() == 0 ) {
             setVcdType( NONE );
             vcdOptions() ->setAutoDetect( true );
         }
+
+        // reorder pbc tracks
+        setPbcTracks();
     }
 }
 
@@ -375,6 +388,9 @@ void K3bVcdDoc::moveTrack( const K3bVcdTrack* track, const K3bVcdTrack* after )
     // if after == 0 findRef returnes -1
     int pos = m_tracks->findRef( after );
     m_tracks->insert( pos + 1, track );
+
+    // reorder pbc tracks
+    setPbcTracks();
 }
 
 
@@ -437,9 +453,114 @@ void K3bVcdDoc::setVcdType( int type )
     }
 }
 
+void K3bVcdDoc::setPbcTracks()
+{
+    // reorder pbc tracks
+    /*    if ( !vcdOptions()->PbcEnabled() )
+            return;
+    */
+    if ( m_tracks ) {
+        int count = m_tracks->count();
+        kdDebug() << QString( "K3bVcdDoc::setPbcTracks() - we have %1 tracks in list." ).arg( count ) << endl;
+
+        QPtrListIterator<K3bVcdTrack> iterTrack( *m_tracks );
+        K3bVcdTrack* track;
+        while ( ( track = iterTrack.current() ) != 0 ) {
+            ++iterTrack;
+            for ( int i = 0; i < K3bVcdTrack::_maxPbcTracks; i++ ) {
+                // do not change userdefined tracks
+                if ( !track->isPbcUserDefined( i ) ) {
+                    if ( track->getPbcTrack( i ) )
+                        track->getPbcTrack( i ) ->delFromRevRefList( track );
+
+                    K3bVcdTrack* t = 0L;
+                    int index = track->index();
+
+                    // we are the last track
+                    if ( index == count - 1 ) {
+                        switch ( i ) {
+                            case K3bVcdTrack::PREVIOUS:
+                                // we are not alone :)
+                                if ( count > 1 ) {
+                                    t = at( index - 1 );
+                                    t->addToRevRefList( track );
+                                    track->setPbcTrack( i, t );
+                                } else {
+                                    track->setPbcTrack( i );
+                                    track->setPbcNonTrack( i, K3bVcdTrack::VIDEOEND );
+                                }
+                                break;
+                            case K3bVcdTrack::AFTERTIMEOUT:
+                            case K3bVcdTrack::NEXT:
+                                track->setPbcTrack( i );
+                                track->setPbcNonTrack( i, K3bVcdTrack::VIDEOEND );
+                                break;
+                            case K3bVcdTrack::RETURN:
+                                track->setPbcTrack( i );
+                                track->setPbcNonTrack( i, K3bVcdTrack::VIDEOEND );
+                                break;
+                            case K3bVcdTrack::DEFAULT:
+                                track->setPbcTrack( i );
+                                track->setPbcNonTrack( i, K3bVcdTrack::DISABLED );
+                                break;
+                        }
+                    }
+                    // we are the first track
+                    else if ( index == 0 ) {
+                        switch ( i ) {
+                            case K3bVcdTrack::PREVIOUS:
+                                track->setPbcTrack( i );
+                                track->setPbcNonTrack( i, K3bVcdTrack::VIDEOEND );
+                                break;
+                            case K3bVcdTrack::AFTERTIMEOUT:
+                            case K3bVcdTrack::NEXT:
+                                t = at( index + 1 );
+                                t->addToRevRefList( track );
+                                track->setPbcTrack( i, t );
+                                break;
+                            case K3bVcdTrack::RETURN:
+                                track->setPbcTrack( i );
+                                track->setPbcNonTrack( i, K3bVcdTrack::VIDEOEND );
+                                break;
+                            case K3bVcdTrack::DEFAULT:
+                                track->setPbcTrack( i );
+                                track->setPbcNonTrack( i, K3bVcdTrack::DISABLED );
+                                break;
+                        }
+                    }
+                    // we are one of the other tracks and have PREVIOUS and NEXT Track
+                    else {
+                        switch ( i ) {
+                            case K3bVcdTrack::PREVIOUS:
+                                t = at( index - 1 );
+                                t->addToRevRefList( track );
+                                track->setPbcTrack( i, t );
+                                break;
+                            case K3bVcdTrack::AFTERTIMEOUT:
+                            case K3bVcdTrack::NEXT:
+                                t = at( index + 1 );
+                                t->addToRevRefList( track );
+                                track->setPbcTrack( i, t );
+                                break;
+                            case K3bVcdTrack::RETURN:
+                                track->setPbcTrack( i );
+                                track->setPbcNonTrack( i, K3bVcdTrack::VIDEOEND );
+                                break;
+                            case K3bVcdTrack::DEFAULT:
+                                track->setPbcTrack( i );
+                                track->setPbcNonTrack( i, K3bVcdTrack::DISABLED );
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 void K3bVcdDoc::loadDefaultSettings()
 {
-    KConfig * c = k3bMain() ->config();
+    KConfig* c = k3bMain() ->config();
 
     c->setGroup( "Videocd settings" );
 
@@ -494,7 +615,7 @@ bool K3bVcdDoc::loadDocumentData( QDomElement* root )
         else {
             KURL k;
             k.setPath( url );
-            if ( K3bVcdTrack * track = createTrack( k ) ) {
+            if ( K3bVcdTrack* track = createTrack( k ) ) {
                 QDomNodeList trackNodes = trackElem.childNodes();
                 addTrack( track, m_tracks->count() );
             }
@@ -537,7 +658,7 @@ bool K3bVcdDoc::saveDocumentData( QDomElement* docElem )
     // -------------------------------------------------------------
     QDomElement contentsElem = doc.createElement( "contents" );
 
-    for ( K3bVcdTrack * track = first(); track != 0; track = next() ) {
+    for ( K3bVcdTrack* track = first(); track != 0; track = next() ) {
 
         QDomElement trackElem = doc.createElement( "track" );
         trackElem.setAttribute( "url", KIO::decodeFileName( track->absPath() ) );

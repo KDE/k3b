@@ -35,17 +35,14 @@ K3bVcdTrack::K3bVcdTrack( QPtrList<K3bVcdTrack>* parent, const QString& filename
     m_parent = parent;
     m_title = QFileInfo( m_file ).baseName( true );
 
-    m_pbcprevious = 0L;
-    m_pbcnext = 0L;
-    m_pbcreturn = 0L;
-    m_pbcdefault = 0L;
+    m_revreflist = new QPtrList<K3bVcdTrack>;
 
-    m_pbcprevious_enabled = false;
-    m_pbcnext_enabled = false;
-    m_pbcreturn_enabled = false;
-    m_pbcdefault_enabled = false;
+    for ( int i = 0; i < K3bVcdTrack::_maxPbcTracks; i++ ) {
+        m_pbctrackmap.insert( i, 0L );
+        m_pbcnontrackmap.insert( i, K3bVcdTrack::DISABLED );
+        m_pbcusrdefmap.insert( i, false );
+    }
 
-    m_pbcuserdefined = false;
     m_segment = false;
 }
 
@@ -201,4 +198,87 @@ int K3bVcdTrack::index() const
     if ( i < 0 )
         kdDebug() << "(K3bVcdTrack) I'm not part of my parent!" << endl;
     return i;
+}
+
+void K3bVcdTrack::addToRevRefList( K3bVcdTrack* revreftrack )
+{
+    kdDebug() << "K3bVcdTrack::addToRevRefList: track = " << revreftrack << endl;
+
+    m_revreflist->append( revreftrack );
+
+    kdDebug() << "K3bVcdTrack::hasRevRef count = " << m_revreflist->count() << " empty = " << m_revreflist->isEmpty() << endl;
+}
+
+void K3bVcdTrack::delFromRevRefList( K3bVcdTrack* revreftrack )
+{
+    if ( !m_revreflist->isEmpty() ) {
+        m_revreflist->remove
+        ( revreftrack );
+    }
+}
+
+bool K3bVcdTrack::hasRevRef()
+{
+    return !m_revreflist->isEmpty() ;
+}
+
+void K3bVcdTrack::delRefToUs()
+{
+    for ( K3bVcdTrack* track = m_revreflist->first(); track; track = m_revreflist->next() ) {
+        for ( int i = 0; i < K3bVcdTrack::_maxPbcTracks; i++ ) {
+            kdDebug() << "K3bVcdTrack::delRefToUs count = " << m_revreflist->count() << " empty = " << m_revreflist->isEmpty() << " track = " << track << " this = " << this << endl;
+            if ( this == track->getPbcTrack( i ) ) {
+                track->setPbcTrack( i );
+                track->setUserDefined( i, false );
+                track->delFromRevRefList( this );
+            }
+        }
+    }
+}
+
+void K3bVcdTrack::delRefFromUs()
+{
+    for ( int i = 0; i < K3bVcdTrack::_maxPbcTracks; i++ ) {
+        if ( this->getPbcTrack( i ) ) {
+            this->getPbcTrack( i ) ->delFromRevRefList( this );
+        }
+    }
+}
+
+void K3bVcdTrack::setPbcTrack( int which, K3bVcdTrack* pbctrack )
+{
+    kdDebug() << "K3bVcdTrack::setPbcTrack " << which << ", " << pbctrack << endl;
+    m_pbctrackmap.replace( which, pbctrack );
+}
+
+void K3bVcdTrack::setPbcNonTrack( int which, int type )
+{
+    kdDebug() << "K3bVcdTrack::setNonPbcTrack " << which << ", " << type << endl;
+    m_pbcnontrackmap.replace( which, type );
+}
+
+void K3bVcdTrack::setUserDefined( int which, bool ud )
+{
+    m_pbcusrdefmap.replace( which, ud );
+}
+
+K3bVcdTrack* K3bVcdTrack::getPbcTrack( const int& which )
+{
+    if ( m_pbctrackmap.find( which ) == m_pbctrackmap.end() )
+        return 0;
+    else
+        return m_pbctrackmap[ which ];
+}
+
+int K3bVcdTrack::getNonPbcTrack( const int& which )
+{
+    if ( m_pbcnontrackmap.find( which ) == m_pbcnontrackmap.end() )
+        return 0;
+    else
+        return m_pbcnontrackmap[ which ];
+}
+
+bool K3bVcdTrack::isPbcUserDefined( int which )
+{
+    return m_pbcusrdefmap[ which ];
 }

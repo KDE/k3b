@@ -38,7 +38,7 @@ class K3bVcdTrackDialog : public KDialogBase
         Q_OBJECT
 
     public:
-        K3bVcdTrackDialog( QPtrList<K3bVcdTrack>& tracks, QPtrList<K3bVcdTrack>& selectedTracks, QWidget *parent = 0, const char *name = 0 );
+        K3bVcdTrackDialog( QPtrList<K3bVcdTrack>& tracks, QPtrList<K3bVcdTrack>& selectedTracks, QWidget* parent = 0, const char* name = 0 );
         ~K3bVcdTrackDialog();
 
     protected slots:
@@ -98,6 +98,8 @@ class K3bVcdTrackDialog : public KDialogBase
         void setupAudioTab();
         void setupVideoTab();
         void fillGui();
+
+        void setPbcTrack(K3bVcdTrack*, K3bCutComboBox*, int);
 };
 
 #endif

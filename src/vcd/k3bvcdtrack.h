@@ -16,11 +16,13 @@
 #ifndef K3BVCDTRACK_H
 #define K3BVCDTRACK_H
 
+// Qt Includes
 #include <qstring.h>
 #include <qfileinfo.h>
 #include <qfile.h>
 #include <qptrlist.h>
 
+// Kde Includes
 #include <kio/global.h>
 
 
@@ -37,33 +39,26 @@ class K3bVcdTrack
 
         const QString& title() const { return m_title; }
         void setTitle( const QString& t ) { m_title = t; }
+        void setSegment(bool segment) { m_segment = segment; }
+        bool isSegment() { return m_segment; }
 
         // PBC
-        void setPrevious(K3bVcdTrack* pbc_previous = 0L) { m_pbcprevious = pbc_previous; }
-        void setNext(K3bVcdTrack* pbc_next = 0L) { m_pbcnext = pbc_next; }
-        void setReturn(K3bVcdTrack* pbc_return = 0L) { m_pbcreturn = pbc_return; }
-        void setDefault(K3bVcdTrack* pbc_default = 0L) { m_pbcdefault = pbc_default; }
+        enum PbcTracks { PREVIOUS, NEXT, RETURN, DEFAULT, AFTERTIMEOUT, _maxPbcTracks };
+        enum PbcTypes { DISABLED, VIDEOEND };
 
-        void setPreviousEnabled(bool pbc_previous_enabled) { m_pbcprevious_enabled = pbc_previous_enabled; }
-        void setNextEnabled(bool pbc_next_enabled) { m_pbcnext_enabled = pbc_next_enabled; }
-        void setReturnEnabled(bool pbc_return_enabled) { m_pbcreturn_enabled = pbc_return_enabled; }
-        void setDefaultEnabled(bool pbc_default_enabled) { m_pbcdefault_enabled = pbc_default_enabled; }
+        void addToRevRefList( K3bVcdTrack* revreftrack );
+        void delFromRevRefList( K3bVcdTrack* revreftrack );
+        bool hasRevRef();
+        void delRefToUs();
+        void delRefFromUs();
 
-        void setUserDefined(bool pbc_userdefined) { m_pbcuserdefined = pbc_userdefined; }
-        void setSegment(bool segment) { m_segment = segment; }
+        void setPbcTrack( int, K3bVcdTrack* pbctrack = 0L );
+        void setPbcNonTrack( int, int );
+        void setUserDefined( int, bool );
 
-        K3bVcdTrack* Previous() { return m_pbcprevious; }
-        K3bVcdTrack* Next() { return m_pbcnext; }
-        K3bVcdTrack* Return() { return m_pbcreturn; }
-        K3bVcdTrack* Default() { return m_pbcdefault; }
-
-        bool isPreviousEnabled() { return m_pbcprevious_enabled; }
-        bool isNextEnabled() { return m_pbcnext_enabled; }
-        bool isReturnEnabled() { return m_pbcreturn_enabled; }
-        bool isDefaultEnabled() { return m_pbcdefault_enabled; }
-
-        bool isPbcUserDefined() { return m_pbcuserdefined; }
-        bool isSegment() { return m_segment; }
+        K3bVcdTrack* getPbcTrack( const int& );
+        int getNonPbcTrack( const int& );
+        bool isPbcUserDefined( int );
 
         // video
         int mpegType() const { return m_mpegtype; }
@@ -128,23 +123,16 @@ class K3bVcdTrack
         void setMpegAudioOriginal(const bool&);
 
     protected:
-        QList<K3bVcdTrack>* m_parent;
+        QPtrList<K3bVcdTrack>* m_parent;
 
         // PBC
-        K3bVcdTrack* m_pbcprevious;
-        K3bVcdTrack* m_pbcnext;
-        K3bVcdTrack* m_pbcreturn;
-        K3bVcdTrack* m_pbcdefault;
+        QPtrList<K3bVcdTrack>* m_revreflist;          // List of Tracks which points to us
+        QMap<int, K3bVcdTrack*> m_pbctrackmap;  // Pbc Tracks (Previous, Next, ...)
+        QMap<int, int> m_pbcnontrackmap;             // Pbc NON Track types (Previous, Next, ...)
+        QMap<int, bool> m_pbcusrdefmap;              // Pbc is userdefined or defaults (Previous, Next, ...)
+        /*********************************************************************************************/
 
-        bool m_pbcprevious_enabled;
-        bool m_pbcnext_enabled;
-        bool m_pbcreturn_enabled;
-        bool m_pbcdefault_enabled;
-
-        bool m_pbcuserdefined;
         bool m_segment;
-        /***************************/
-
         int m_filetype;
         QFile m_file;
         QString m_title;

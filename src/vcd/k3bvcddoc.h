@@ -16,10 +16,7 @@
 #ifndef K3BVCDDOC_H
 #define K3BVCDDOC_H
 
-#include "k3bvcdoptions.h"
-#include "mpeginfo/mpeg.h"
-#include <k3bdoc.h>
-
+// Qt Includes
 #include <qptrqueue.h>
 #include <qfile.h>
 #include <qstring.h>
@@ -27,7 +24,13 @@
 #include <qdatetime.h>
 #include <qtextstream.h>
 
+// Kde Includes
 #include <kurl.h>
+
+// K3b Includes
+#include "k3bvcdoptions.h"
+#include "mpeginfo/mpeg.h"
+#include <k3bdoc.h>
 
 class K3bApp;
 class K3bVcdTrack;
@@ -67,7 +70,7 @@ class K3bVcdDoc : public K3bDoc
         K3bVcdTrack* at( uint i ) { return m_tracks->at( i ); }
         K3bVcdTrack* take( uint i ) { return m_tracks->take( i ); }
 
-        const QList<K3bVcdTrack>* tracks() const { return m_tracks; }
+        const QPtrList<K3bVcdTrack>* tracks() const { return m_tracks; }
 
         /** get the current size of the project */
         KIO::filesize_t size() const;
@@ -123,6 +126,7 @@ class K3bVcdDoc : public K3bDoc
     private:
         K3bVcdTrack* createTrack( const KURL& url );
         void informAboutNotFoundFiles();
+        void setPbcTracks();
 
         QStringList m_notFoundFiles;
         QString m_vcdImage;
@@ -141,7 +145,7 @@ class K3bVcdDoc : public K3bDoc
         QQueue<PrivateUrlToAdd> urlsToAdd;
         QTimer* m_urlAddingTimer;
 
-        QList<K3bVcdTrack>* m_tracks;
+        QPtrList<K3bVcdTrack>* m_tracks;
         KIO::filesize_t calcTotalSize() const;
         KIO::filesize_t ISOsize() const;
 

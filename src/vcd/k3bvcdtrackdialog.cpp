@@ -13,7 +13,7 @@
 * See the file "COPYING" for the exact licensing terms.
 */
 
-
+// Qt Includes
 #include <qbuttongroup.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
@@ -28,7 +28,7 @@
 #include <qradiobutton.h>
 #include <qtable.h>
 
-
+// Kde Includes
 #include <kiconloader.h>
 #include <kio/global.h>
 #include <klocale.h>
@@ -36,6 +36,7 @@
 #include <knuminput.h>
 #include <kurl.h>
 
+// K3b Includes
 #include "k3bvcdtrackdialog.h"
 #include "k3bvcdtrack.h"
 #include "../kcutlabel.h"
@@ -44,9 +45,8 @@
 #include "../tools/k3blistview.h"
 #include <tools/k3bcutcombobox.h>
 
-
-K3bVcdTrackDialog::K3bVcdTrackDialog( QPtrList<K3bVcdTrack>& tracks, QPtrList<K3bVcdTrack>& selectedTracks, QWidget *parent, const char *name )
-        : KDialogBase( KDialogBase::Plain, i18n( "Video Track Properties" ), KDialogBase::Ok,
+K3bVcdTrackDialog::K3bVcdTrackDialog( QPtrList<K3bVcdTrack>& tracks, QPtrList<K3bVcdTrack>& selectedTracks, QWidget* parent, const char* name )
+        : KDialogBase( KDialogBase::Plain, i18n( "Video Track Properties" ), KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Apply,
                        KDialogBase::Ok, parent, name )
 {
     prepareGui();
@@ -61,7 +61,7 @@ K3bVcdTrackDialog::K3bVcdTrackDialog( QPtrList<K3bVcdTrack>& tracks, QPtrList<K3
 
     if ( !m_selectedTracks.isEmpty() ) {
 
-        K3bVcdTrack * selectedTrack = m_selectedTracks.first();
+        K3bVcdTrack* selectedTrack = m_selectedTracks.first();
 
         m_displayFileName->setText( selectedTrack->fileName() );
         m_displayLength->setText( selectedTrack->mpegDuration() );
@@ -83,30 +83,41 @@ void K3bVcdTrackDialog::slotOk()
     done( 0 );
 }
 
+void K3bVcdTrackDialog::setPbcTrack( K3bVcdTrack* selected, K3bCutComboBox* box, int which )
+{
+    // TODO: Unset Userdefined on default settings
+    kdDebug() << QString( "K3bVcdTrackDialog::setPbcTrack: currentItem = %1, count = %2" ).arg( box->currentItem() ).arg( m_tracks.count() ) << endl;
+
+    if ( selected->getPbcTrack( which ) == m_tracks.at( box->currentItem() ) ) {
+        if ( selected->getNonPbcTrack( which ) == ( int ) ( box->currentItem() - m_tracks.count() ) ) {
+            kdDebug() << "K3bVcdTrackDialog::setPbcTrack: not changed, return" << endl;
+            return ;
+        }
+    }
+
+    if ( selected->getPbcTrack( which ) )
+        selected->getPbcTrack( which ) ->delFromRevRefList( selected );
+
+    if ( box->currentItem() > ( int ) m_tracks.count() - 1 ) {
+        selected->setPbcTrack( which );
+        selected->setPbcNonTrack( which, box->currentItem() - m_tracks.count() );
+    } else {
+        selected->setPbcTrack( which, m_tracks.at( box->currentItem() ) );
+        m_tracks.at( box->currentItem() ) ->addToRevRefList( selected );
+    }
+
+    selected->setUserDefined( which, true );
+}
+
 void K3bVcdTrackDialog::slotApply()
 {
-    // TODO: apply button :)
-    K3bVcdTrack * selectedTrack = m_selectedTracks.first();
+    K3bVcdTrack* selectedTrack = m_selectedTracks.first();
 
-    if ( m_pbc_previous->currentItem() > ( int ) m_tracks.count() )
-        selectedTrack->setPrevious();
-    else
-        selectedTrack->setPrevious( m_tracks.at( m_pbc_previous->currentItem() ) );
-
-    if ( m_pbc_next->currentItem() > ( int ) m_tracks.count() )
-        selectedTrack->setNext();
-    else
-        selectedTrack->setNext( m_tracks.at( m_pbc_next->currentItem() ) );
-
-    if ( m_pbc_return->currentItem() > ( int ) m_tracks.count() )
-        selectedTrack->setReturn();
-    else
-        selectedTrack->setReturn( m_tracks.at( m_pbc_return->currentItem() ) );
-
-    if ( m_pbc_default->currentItem() > ( int ) m_tracks.count() )
-        selectedTrack->setDefault();
-    else
-        selectedTrack->setDefault( m_tracks.at( m_pbc_default->currentItem() ) );
+    setPbcTrack( selectedTrack, m_pbc_previous, K3bVcdTrack::PREVIOUS );
+    setPbcTrack( selectedTrack, m_pbc_next, K3bVcdTrack::NEXT );
+    setPbcTrack( selectedTrack, m_pbc_return, K3bVcdTrack::RETURN );
+    setPbcTrack( selectedTrack, m_pbc_default, K3bVcdTrack::DEFAULT );
+    setPbcTrack( selectedTrack, m_comboAfterTimeout, K3bVcdTrack::AFTERTIMEOUT );
 
 }
 
@@ -286,42 +297,48 @@ void K3bVcdTrackDialog::fillGui()
         m_copyright_audio->setText( tmp );
     }
 
-
-    // TODO: make this better :) only for testing now
-    /////////////////////////////////////////////////////////////////////////////////////////////////
-
-    // add tracks to combobox
+    // add tracktitles to combobox
     int iPrevious = -1;
     int iNext = -1;
     int iReturn = -1;
     int iDefault = -1;
+    int iAfterTimeOut = -1;
 
     K3bVcdTrack* track;
     K3bListViewItem* item;
     for ( track = m_tracks.first(); track; track = m_tracks.next() ) {
         QPixmap pm = KMimeType::pixmapForURL( KURL( track->absPath() ), 0, KIcon::Desktop, 16 );
-        // TODO: Mpeg Stills are Segments :)
-        QString s = i18n( "%1 - Sequence-%2" ).arg( track->title() ).arg( QString::number( track->index() + 1 ).rightJustify( 3, '0' ) );
+        QString s;
+        if ( track == m_selectedTracks.first() ) {
+            s = i18n( "self" );
+            item = new K3bListViewItem( m_list_keys, QString( "%1" ).arg( m_pbc_previous->count() ), s );
+            item->setEditor( 1, K3bListViewItem::COMBO );
+        } else if ( track->isSegment() ) {
+            s = i18n( "Segment-%1 - %2" ).arg( QString::number( track->index() + 1 ).rightJustify( 3, '0' ) ).arg( track->title() );
+        } else {
+            s = i18n( "Sequence-%1 - %2" ).arg( QString::number( track->index() + 1 ).rightJustify( 3, '0' ) ).arg( track->title() );
+        }
+
         m_pbc_previous->insertItem( pm, s );
-        if ( track == selectedTrack->Previous() )
+        if ( track == selectedTrack->getPbcTrack( K3bVcdTrack::PREVIOUS ) )
             iPrevious = m_pbc_previous->count() - 1;
 
         m_pbc_next->insertItem( pm, s );
-        if ( track == selectedTrack->Next() )
+        if ( track == selectedTrack->getPbcTrack( K3bVcdTrack::NEXT ) )
             iNext = m_pbc_next->count() - 1;
 
         m_pbc_return->insertItem( pm, s );
-        if ( track == selectedTrack->Return() )
+        if ( track == selectedTrack->getPbcTrack( K3bVcdTrack::RETURN ) )
             iReturn = m_pbc_return->count() - 1;
 
         m_pbc_default->insertItem( pm, s );
-        if ( track == selectedTrack->Default() )
+        if ( track == selectedTrack->getPbcTrack( K3bVcdTrack::DEFAULT ) )
             iDefault = m_pbc_default->count() - 1;
 
         m_comboAfterTimeout->insertItem( pm, s );
+        if ( track == selectedTrack->getPbcTrack( K3bVcdTrack::AFTERTIMEOUT ) )
+            iAfterTimeOut = m_comboAfterTimeout->count() - 1;
 
-        item = new K3bListViewItem( m_list_keys, QString( "%1" ).arg( m_pbc_previous->count() ), s );
-        item->setEditor( 1, K3bListViewItem::COMBO );
     }
 
     // add Event Disabled
@@ -331,6 +348,7 @@ void K3bVcdTrackDialog::fillGui()
     m_pbc_next->insertItem( pmDisabled, txtDisabled );
     m_pbc_return->insertItem( pmDisabled, txtDisabled );
     m_pbc_default->insertItem( pmDisabled, txtDisabled );
+    m_comboAfterTimeout->insertItem( pmDisabled, txtDisabled );
 
     // add VideoCD End
     QPixmap pmEnd = SmallIcon( "cdrom_unmount" );
@@ -339,34 +357,38 @@ void K3bVcdTrackDialog::fillGui()
     m_pbc_next->insertItem( pmEnd, txtEnd );
     m_pbc_return->insertItem( pmEnd, txtEnd );
     m_pbc_default->insertItem( pmEnd, txtEnd );
+    m_comboAfterTimeout->insertItem( pmEnd, txtEnd );
 
     if ( iPrevious < 0 )
-        m_pbc_previous->setCurrentItem( m_tracks.count() );
+        m_pbc_previous->setCurrentItem( m_tracks.count() + selectedTrack->getNonPbcTrack( K3bVcdTrack::PREVIOUS ) );
     else
         m_pbc_previous->setCurrentItem( iPrevious );
 
     if ( iNext < 0 )
-        m_pbc_next->setCurrentItem( m_tracks.count() );
+        m_pbc_next->setCurrentItem( m_tracks.count() + selectedTrack->getNonPbcTrack( K3bVcdTrack::NEXT ) );
     else
         m_pbc_next->setCurrentItem( iNext );
 
     if ( iReturn < 0 )
-        m_pbc_return->setCurrentItem( m_tracks.count() );
+        m_pbc_return->setCurrentItem( m_tracks.count() + selectedTrack->getNonPbcTrack( K3bVcdTrack::RETURN ) );
     else
         m_pbc_return->setCurrentItem( iReturn );
 
     if ( iDefault < 0 )
-        m_pbc_default->setCurrentItem( m_tracks.count() );
+        m_pbc_default->setCurrentItem( m_tracks.count() + selectedTrack->getNonPbcTrack( K3bVcdTrack::DEFAULT ) );
     else
         m_pbc_default->setCurrentItem( iDefault );
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////
+    if ( iAfterTimeOut < 0 )
+        m_comboAfterTimeout->setCurrentItem( m_tracks.count() + selectedTrack->getNonPbcTrack( K3bVcdTrack::AFTERTIMEOUT ) );
+    else
+        m_comboAfterTimeout->setCurrentItem( iAfterTimeOut );
 
 }
 
 void K3bVcdTrackDialog::prepareGui()
 {
-    QFrame * frame = plainPage();
+    QFrame* frame = plainPage();
 
     QGridLayout* mainLayout = new QGridLayout( frame );
     mainLayout->setSpacing( spacingHint() );
@@ -435,7 +457,7 @@ void K3bVcdTrackDialog::setupPbcTab()
     // /////////////////////////////////////////////////
     // Playback Control TAB
     // /////////////////////////////////////////////////
-    QWidget * w = new QWidget( m_mainTabbed );
+    QWidget* w = new QWidget( m_mainTabbed );
 
     QGridLayout* grid = new QGridLayout( w );
     grid->setAlignment( Qt::AlignTop );
@@ -453,7 +475,7 @@ void K3bVcdTrackDialog::setupPbcTab()
     QLabel* labelPlaying = new QLabel( i18n( "Playing track" ) , groupPlay, "labelPlaying" );
 
     m_spin_times = new QSpinBox( groupPlay, "m_spin_times" );
-    m_spin_times->setValue( 0 );
+    m_spin_times->setValue( 1 );
     m_spin_times->setSuffix( i18n( " time(s)" ) );
     m_spin_times->setSpecialValueText( i18n( "forever" ) );
 
@@ -462,14 +484,14 @@ void K3bVcdTrackDialog::setupPbcTab()
     m_spin_waittime = new QSpinBox( groupPlay, "m_spinSeconds" );
     m_spin_waittime->setMinValue( -1 );
     m_spin_waittime->setValue( 0 );
-    m_spin_waittime->setEnabled( false );
+    // m_spin_waittime->setEnabled( false );
     m_spin_waittime->setSuffix( i18n( " seconds" ) );
     m_spin_waittime->setSpecialValueText( i18n( "infinite" ) );
 
     m_labelAfterTimeout = new QLabel( i18n( "after timeout playing" ), groupPlay, "m_labelTimeout" );
-    m_labelAfterTimeout->setEnabled( false );
+    // m_labelAfterTimeout->setEnabled( false );
     m_comboAfterTimeout = new K3bCutComboBox( K3bCutComboBox::SQUEEZE, groupPlay, "m_comboAfterTimeout" );
-    m_comboAfterTimeout->setEnabled( false );
+    //    m_comboAfterTimeout->setEnabled( false );
 
     groupPlayLayout->addWidget( labelPlaying, 1, 0 );
     groupPlayLayout->addWidget( m_spin_times, 1, 1 );
@@ -525,7 +547,7 @@ void K3bVcdTrackDialog::setupPbcKeyTab()
     // /////////////////////////////////////////////////
     // Playback Control Numeric Key's TAB
     // /////////////////////////////////////////////////
-    QWidget * w = new QWidget( m_mainTabbed );
+    QWidget* w = new QWidget( m_mainTabbed );
 
     QGridLayout* grid = new QGridLayout( w );
     grid->setAlignment( Qt::AlignTop );
@@ -558,7 +580,7 @@ void K3bVcdTrackDialog::setupAudioTab()
     // /////////////////////////////////////////////////
     // AUDIO TAB
     // /////////////////////////////////////////////////
-    QWidget * w = new QWidget( m_mainTabbed );
+    QWidget* w = new QWidget( m_mainTabbed );
 
     QGridLayout* grid = new QGridLayout( w );
     grid->setAlignment( Qt::AlignTop );
@@ -636,7 +658,7 @@ void K3bVcdTrackDialog::setupVideoTab()
     // /////////////////////////////////////////////////
     // VIDEO TAB
     // /////////////////////////////////////////////////
-    QWidget * w = new QWidget( m_mainTabbed );
+    QWidget* w = new QWidget( m_mainTabbed );
 
     QGridLayout* grid = new QGridLayout( w );
     grid->setAlignment( Qt::AlignTop );
