@@ -22,7 +22,8 @@ faster cddb access (older versions just queried all entries, now only the select
 K3b is now threaded.
 Gui beautifying.
 videocd:
-   add customizing of Gaps and Margins
+   add playback control (PBC)
+	 add customizing of Gaps and Margins
    add HQ-VIDEOCD support
    add relaxed APS support (this controls whether APS constraints are strict or relaxed)
    add category restriction support
