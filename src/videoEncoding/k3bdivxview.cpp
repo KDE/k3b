@@ -158,7 +158,12 @@ void K3bDivxView::slotStartClicked()
     m_divxJob = new K3bDivXEncodingProcess( m_codingData, this );
 
   K3bJobProgressDialog d( this, "Encoding", true );
+
+  hide();
+
   d.startJob( m_divxJob );
+
+  close();
 
   /*
     K3bDivxExtraRipStatus *ripStatus = new K3bDivxExtraRipStatus( m_ripDialog );

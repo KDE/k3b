@@ -286,7 +286,7 @@ void K3bProjectBurnDialog::slotSaveUserDefaults()
   KConfig* c = kapp->config();
 
   c->setGroup( "General Options" );
-  c->writePathEntry( "Temp Dir", m_tempDirSelectionWidget->tempPath() );
+  c->writeEntry( "Temp Dir", m_tempDirSelectionWidget->tempPath() );
 
   c->setGroup( "default " + doc()->documentType() + " settings" );
 
