@@ -84,7 +84,6 @@ class K3bVcdJob : public K3bBurnJob
   int m_stage;
   int m_currentWrittenTrackNumber;
   
-  bool m_writeProcess;
   bool firstTrack;
   bool m_burnProof;
   bool m_keepImage;
