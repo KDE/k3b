@@ -886,18 +886,47 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
 {
   if( e->type() == QEvent::KeyPress ) { 
      QKeyEvent* ke = static_cast<QKeyEvent*>(e);
-     if( ke->key() == Key_Return ) {
-       doRename();
+     if( ke->key() == Key_Tab ) {
        if( o == m_editorLineEdit || o == m_editorMsfEdit || o == m_editorSpinBox ) {
+	 doRename();
+
+	 if( m_currentEditItem ) {
+	   // can we rename one of the other columns?
+	   int col = currentEditColumn()+1;
+	   while( col < columns() && m_currentEditItem->editorType( col ) == K3bListViewItem::NONE )
+	     ++col;
+	   if( col < columns() )
+	     editItem( m_currentEditItem, col );
+	   else if( K3bListViewItem* nextItem = dynamic_cast<K3bListViewItem*>( m_currentEditItem->nextSibling() ) ) {
+	     // edit first column
+	     col = 0;
+	     while( col < columns() && nextItem->editorType( col ) == K3bListViewItem::NONE )
+	       ++col;
+	     editItem( nextItem, col );
+	   }
+	   else
+	     hideEditor();
+	 }
+
+	 return true;
+       }
+     }
+     if( ke->key() == Key_Return ) {
+       if( o == m_editorLineEdit || o == m_editorMsfEdit || o == m_editorSpinBox ) {
+	 doRename();
 	 if( K3bListViewItem* nextItem = dynamic_cast<K3bListViewItem*>( m_currentEditItem->nextSibling() ) )
 	   editItem( nextItem, currentEditColumn() );
 	 else
 	   hideEditor();
+
+	 return true;
        }
      }
      else if( ke->key() == Key_Escape ) {
        if( o == m_editorLineEdit || o == m_editorSpinBox || o == m_editorMsfEdit )
 	 hideEditor();
+
+       return true;
      }
   }
   else if( e->type() == QEvent::FocusOut ) {
