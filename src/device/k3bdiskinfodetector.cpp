@@ -44,18 +44,17 @@ typedef unsigned long long __u64;
 
 
 K3bCdDevice::DiskInfoDetector::DiskInfoDetector( QObject* parent )
-  : QObject( parent ),
+    : QObject( parent ),
     m_tcWrapper(0)
 {
   m_deviceHandler = new DeviceHandler( this );
   connect( m_deviceHandler, SIGNAL(finished(bool)),
-	   this, SLOT(slotDeviceHandlerFinished(bool)) );
+           this, SLOT(slotDeviceHandlerFinished(bool)) );
 }
 
 
 K3bCdDevice::DiskInfoDetector::~DiskInfoDetector()
-{
-}
+{}
 
 
 void K3bCdDevice::DiskInfoDetector::detect( CdDevice* device )
@@ -90,18 +89,7 @@ void K3bCdDevice::DiskInfoDetector::fetchExtraInfo()
   else
     calculateDiscId();
 
-  // TODO: there are cds around that have multible data tracks and that are no vcds
-  if (m_info.tocType == DiskInfo::DATA && m_info.toc.count() > 1 && m_info.sessions == 1) {
-    m_info.isVCD = true;
-    finish(true);
-    kdDebug() << "(k3bdiskinfodetector) found VCD" << endl;
-  } else if ( m_device->isDVD() ) {
-    m_info.empty = false;
-    m_info.noDisk = false;
-    m_info.tocType = DiskInfo::DVD;
-    testForVideoDvd();
-  } else
-     finish(true);
+  testForVCD();
 }
 
 void K3bCdDevice::DiskInfoDetector::fetchIsoInfo()
@@ -165,17 +153,47 @@ void K3bCdDevice::DiskInfoDetector::testForVideoDvd()
 
     m_tcWrapper->isDvdInsert( m_device );
 
-  }
-  else
+  } else
     finish(true);
 }
 
 void K3bCdDevice::DiskInfoDetector::slotIsVideoDvd( bool dvd )
 {
-  if( dvd ) {
-    m_info.empty = false;
-    m_info.noDisk = false;
+  if( dvd )
     m_info.isVideoDvd = true;
+
+  finish(true);
+}
+
+void K3bCdDevice::DiskInfoDetector::testForVCD()
+{
+  if (m_info.tocType == DiskInfo::DATA && m_info.toc.count() > 1 && m_info.sessions == 1 )
+    connect( KIO::mount( true, "auto", m_device->mountDevice(), m_device->mountPoint(), true ),
+             SIGNAL(result(KIO::Job*)), this, SLOT(slotIsVCD(KIO::Job*)) );
+  else if (m_info.tocType == DiskInfo::DVD)
+    testForVideoDvd();
+  else
+    finish(true);
+}
+
+void K3bCdDevice::DiskInfoDetector::slotIsVCD(KIO::Job* job)
+{
+  m_info.isVCD = false;
+  if (job->error() == 0 ) {
+    QString infofile = m_device->mountPoint() + QString("/vcd/info.vcd");
+    QDataStream s(new QFile(infofile));
+    char info[9];
+    info[8] = '\0';
+    if ( s.device()->open(IO_ReadOnly) ) {
+      s.readRawBytes(info,8);
+      kdDebug() << "(K3bDiskInfoDetector) VCD: " << QString(info) << endl;
+      s.device()->close();
+      if ( QString(info) == QString("VIDEO_CD") ||
+           QString(info) == QString("SUPERVCD") ||
+           QString(info) == QString("HQ-VCD  ") )
+        m_info.isVCD = true;
+    }
+    KIO::unmount(m_device->mountPoint());
   }
 
   finish(true);

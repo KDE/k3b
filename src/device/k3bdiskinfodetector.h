@@ -19,6 +19,7 @@
 #define K3BDISKINFO_DETECTOR_H
 
 #include <qobject.h>
+#include <kio/job.h>
 
 typedef Q_INT32 size32;
 
@@ -54,10 +55,12 @@ namespace K3bCdDevice
     void fetchIsoInfo();
     void calculateDiscId();
     void testForVideoDvd();
+    void testForVCD();
 
   private slots:
     void slotDeviceHandlerFinished(bool);
     void slotIsVideoDvd( bool dvd );
+    void slotIsVCD( KIO::Job *);
 
   protected:
     CdDevice* m_device;
