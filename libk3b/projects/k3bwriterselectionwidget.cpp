@@ -101,6 +101,10 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( bool dvd, QWidget *parent, c
 
   mainLayout->addWidget( groupWriter, 0, 0 );
 
+  // tab order
+  setTabOrder( m_comboWriter, m_comboSpeed );
+  setTabOrder( m_comboSpeed, m_buttonDetermineSpeed );
+  setTabOrder( m_buttonDetermineSpeed, m_comboWritingApp );
 
   connect( m_comboWriter, SIGNAL(selectionChanged(K3bDevice::Device*)), this, SIGNAL(writerChanged()) );
   connect( m_comboWritingApp, SIGNAL(activated(int)), this, SLOT(slotWritingAppSelected(int)) );

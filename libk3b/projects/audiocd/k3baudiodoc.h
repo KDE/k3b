@@ -210,14 +210,6 @@ class K3bAudioDoc : public K3bDoc
   // --------------------------------------------------
   K3bDevice::CdText m_cdTextData;
   bool m_cdText;
-  QString m_cdTextTitle;
-  QString m_cdTextArtist;
-  QString m_cdTextDisc_id;
-  QString m_cdTextArranger;
-  QString m_cdTextUpc_Ean;
-  QString m_cdTextSongwriter;
-  QString m_cdTextComposer;
-  QString m_cdTextMessage;
   // --------------------------------------------------
 
   //

@@ -58,6 +58,7 @@
 #include <ktip.h>
 #include <kxmlguifactory.h>
 #include <kstdguiitem.h>
+#include <kio/global.h>
 
 #include <stdlib.h>
 
@@ -584,19 +585,92 @@ void K3bMainWindow::readOptions()
 }
 
 
-void K3bMainWindow::saveProperties( KConfig* )
+void K3bMainWindow::saveProperties( KConfig* c )
 {
+  // 1. put saved projects in the config
+  // 2. save every modified project in  "~/.kde/share/apps/k3b/sessions/" + KApp->sessionId()
+  // 3. save the url of the project (might be something like "AudioCD1") in the config
+  // 4. save the status of every project (modified/saved)
 
+  QString saveDir = KGlobal::dirs()->saveLocation( "appdata", "sessions/" + qApp->sessionId() + "/", true );
+
+  const QPtrList<K3bDoc>& docs = d->projectManager->projects();
+  c->writeEntry( "Number of projects", docs.count() );
+
+  int cnt = 1;
+  for( QPtrListIterator<K3bDoc> it( docs ); *it; ++it ) {
+    // the "name" of the project (or the original url if isSaved())
+    c->writePathEntry( QString("%1 url").arg(cnt), (*it)->URL().url() );
+
+    // is the doc modified
+    c->writeEntry( QString("%1 modified").arg(cnt), (*it)->isModified() );
+
+    // has the doc already been saved?
+    c->writeEntry( QString("%1 saved").arg(cnt), (*it)->isSaved() );
+
+    // where does the session management save it? If it's not modified and saved this is
+    // the same as the url
+    KURL saveUrl = (*it)->URL();
+    if( !(*it)->isSaved() || (*it)->isModified() )
+      saveUrl = KURL::fromPathOrURL( saveDir + QString::number(cnt) );
+    c->writePathEntry( QString("%1 saveurl").arg(cnt), saveUrl.url() );
+
+    // finally save it
+    (*it)->saveDocument( saveUrl );
+
+    ++cnt;
+  }
 }
 
 
-void K3bMainWindow::readProperties( KConfig* )
+void K3bMainWindow::readProperties( KConfig* c )
 {
+  // 1. read all projects from the config
+  // 2. simply open all of them
+  // 3. reset the saved urls and the modified state
+  // 4. delete "~/.kde/share/apps/k3b/sessions/" + KApp->sessionId()
+
+  QString saveDir = KGlobal::dirs()->saveLocation( "appdata", "sessions/" + qApp->sessionId() + "/", true );
+  kdDebug() << "(K3bMainWindow::readProperties) saveDir: " << saveDir << endl;
+
+  int cnt = c->readNumEntry( "Number of projects", 0 );
+  kdDebug() << "(K3bMainWindow::readProperties) num: " << cnt << endl;
+
+  for( int i = 1; i <= cnt; ++i ) {
+    // in this case the constructor works since we saved as url()
+    KURL url = c->readPathEntry( QString("%1 url").arg(i) );
+
+    bool modified = c->readBoolEntry( QString("%1 modified").arg(i) );
+
+    bool saved = c->readBoolEntry( QString("%1 saved").arg(i) );
+
+    KURL saveUrl = c->readPathEntry( QString("%1 saveurl").arg(i) );
+
+    // now load the project
+    K3bDoc* doc = K3bDoc::openDocument( saveUrl );
+
+    // remove the temp file
+    if( !saved || modified )
+      QFile::remove( saveUrl.path() );
+
+    // reset the url
+    doc->setURL( url );
+    doc->setModified( modified );
+    doc->setSaved( saved );
+
+    createClient( doc );
+  }
+
+  // and now remove the temp dir
+  KIO::del( KURL::fromPathOrURL(saveDir), false, false );
 }
 
 
 bool K3bMainWindow::queryClose()
 {
+  if( kapp->sessionSaving() ) 
+    return true;
+
   // ---------------------------------
   // we need to manually close all the views to ensure that
   // each of them receives a close-event and
@@ -652,13 +726,13 @@ void K3bMainWindow::slotFileOpen()
 {
   slotStatusMsg(i18n("Opening file..."));
 
-  KURL url = KFileDialog::getOpenURL( QString::null,
-				      i18n("*.k3b|K3b Projects"),
-				      this,
-				      i18n("Open File") );
-  if( !url.isEmpty() ) {
-    openDocument(url);
-    actionFileOpenRecent->addURL( url );
+  KURL::List urls = KFileDialog::getOpenURLs( QString::null,
+					      i18n("*.k3b|K3b Projects"),
+					      this,
+					      i18n("Open File(s)") );
+  for( KURL::List::iterator it = urls.begin(); it != urls.end(); ++it ) {
+    openDocument( *it );
+    actionFileOpenRecent->addURL( *it );
   }
 }
 

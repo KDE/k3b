@@ -105,31 +105,28 @@ int main( int argc, char* argv[] )
   KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
   KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
 
-  KInstance* dummyInstance = new KInstance( "Dummy_k3b" );
-  KSimpleConfig cfg( "k3brc" );
-  cfg.setGroup( "General Options" );
-  bool alwaysNew = ( cfg.readEntry( "Multiple Instances", "smart" ) == "always_new" );
-  delete dummyInstance;
+  K3bApplication app;
 
+  app.config()->setGroup( "General Options" );
+  bool alwaysNew = ( app.config()->readEntry( "Multiple Instances", "smart" ) == "always_new" );
+  
   //
   // In case no unblocked instance of K3b was found we create a new one.
   //
-  if( alwaysNew || args->isSet( "forcenew" ) || !K3bSmartInstanceReuser::reuseInstance(args) ) {
-
-    K3bApplication app;
-
+  if( app.isRestored() || alwaysNew || args->isSet( "forcenew" ) || !K3bSmartInstanceReuser::reuseInstance(args) ) {
+    
     if( args->isSet("lang") )
       if( !KGlobal::locale()->setLanguage(args->getOption("lang")) )
 	kdDebug() << "Unable to set to language " << args->getOption("lang") 
 		  << " current is: " << KGlobal::locale()->language() << endl;
-
-
+    
+    
     //
     // this will init everything
     // and also handle the command line arguments
     //
     app.init();
-
+    
     return app.exec();
   }
 }

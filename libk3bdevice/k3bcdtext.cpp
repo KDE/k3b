@@ -20,6 +20,8 @@
 
 #include <kdebug.h>
 
+#include <qtextcodec.h>
+
 #include <string.h>
 
 
@@ -537,19 +539,26 @@ QCString K3bDevice::encodeCdText( const QString& s, bool* illegalChars )
   if( illegalChars )
     *illegalChars = false;
 
-  QCString r(s.length()+1);
-
-  for( unsigned int i = 0; i < s.length(); ++i ) {
-    if( s[i].latin1() == 0 ) { // non-ASCII charater
-      r[i] = ' ';
-      if( illegalChars )
-	*illegalChars = true;
-    }
-    else
-      r[i] = s[i].latin1();
+  QTextCodec* codec = QTextCodec::codecForName("Latin1");
+  if( codec ) {
+    QCString encoded = codec->fromUnicode( s );
+    return encoded;
   }
+  else {
+    QCString r(s.length()+1);
 
-  return r;
+    for( unsigned int i = 0; i < s.length(); ++i ) {
+      if( s[i].latin1() == 0 ) { // non-ASCII charater
+	r[i] = ' ';
+	if( illegalChars )
+	  *illegalChars = true;
+      }
+      else
+	r[i] = s[i].latin1();
+    }
+
+    return r;
+  }
 }
 
 

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>base_K3bAudioCdTextWidget</class>
 <comment>Widget to edit the global CD-Text in a K3b audio project.</comment>
 <author>Sebastian Trueg</author>
@@ -10,9 +10,12 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>570</width>
-            <height>307</height>
+            <width>428</width>
+            <height>312</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>K3bAudioCDTextWidget</string>
     </property>
     <grid>
         <property name="name">
@@ -45,34 +48,6 @@
             </property>
             <property name="buddy" stdset="0">
                 <cstring>m_editPerformer</cstring>
-            </property>
-        </widget>
-        <widget class="Line" row="1" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>line1</cstring>
-            </property>
-            <property name="frameShape">
-                <enum>HLine</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Sunken</enum>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-        </widget>
-        <widget class="Line" row="4" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>line2</cstring>
-            </property>
-            <property name="frameShape">
-                <enum>HLine</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Sunken</enum>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
             </property>
         </widget>
         <widget class="QLayoutWidget" row="5" column="1">
@@ -297,10 +272,36 @@
                 <cstring>m_editTitle</cstring>
             </property>
         </widget>
+        <widget class="Line" row="1" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>line3</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>HLine</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+        </widget>
+        <widget class="Line" row="4" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>line4</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>HLine</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+        </widget>
     </grid>
 </widget>
-<customwidgets>
-</customwidgets>
 <connections>
     <connection>
         <sender>m_buttonCopyTitle</sender>
@@ -351,14 +352,4 @@
     <slot access="protected" specifier="pure virtual">slotCopySongwriter()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-</includehints>
 </UI>

@@ -46,6 +46,10 @@ void K3bProjectTabWidget::insertTab( K3bDoc* doc )
   QTabWidget::insertTab( doc->view(), doc->view()->caption(), 0 );
   connect( doc, SIGNAL(saved(K3bDoc*)), this, SLOT(slotDocSaved(K3bDoc*)) );
   connect( doc, SIGNAL(changed(K3bDoc*)), this, SLOT(slotDocChanged(K3bDoc*)) );
+  if( doc->isModified() )
+    slotDocChanged( doc );
+  else
+    slotDocSaved( doc );
 }
 
 

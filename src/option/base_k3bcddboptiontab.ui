@@ -539,6 +539,15 @@
 </connections>
 <tabstops>
     <tabstop>m_mainTabbed</tabstop>
+    <tabstop>m_checkUseLocalCddb</tabstop>
+    <tabstop>m_checkSaveLocalEntries</tabstop>
+    <tabstop>m_editLocalDir</tabstop>
+    <tabstop>m_viewLocalDir</tabstop>
+    <tabstop>m_checkRemoteCddb</tabstop>
+    <tabstop>m_comboCddbType</tabstop>
+    <tabstop>m_editCddbServer</tabstop>
+    <tabstop>m_editCddbPort</tabstop>
+    <tabstop>m_viewCddbServer</tabstop>
     <tabstop>m_checkManualCgiPath</tabstop>
     <tabstop>m_editManualCgiPath</tabstop>
 </tabstops>

@@ -164,10 +164,10 @@ void K3bBurningOptionTab::setupGui()
   bufferLayout->setSpacing( KDialog::spacingHint() );
 
   m_checkOverburn = new QCheckBox( i18n("Allow &overburning (not supported by cdrecord <= 1.10)"), groupWritingApp );
-  m_checkAllowWritingAppSelection = new QCheckBox( i18n("Manual writing application &selection"), groupWritingApp );
   m_checkManualWritingBufferSize = new QCheckBox( i18n("&Manual writing buffer size") + ":", groupWritingApp );
   m_editWritingBufferSize = new KIntNumInput( 4, groupWritingApp );
   m_editWritingBufferSize->setSuffix( " " + i18n("MB") );
+  m_checkAllowWritingAppSelection = new QCheckBox( i18n("Manual writing application &selection"), groupWritingApp );
   bufferLayout->addMultiCellWidget( m_checkOverburn, 0, 0, 0, 2 );
   bufferLayout->addWidget( m_checkManualWritingBufferSize, 1, 0 );
   bufferLayout->addWidget( m_editWritingBufferSize, 1, 1 );

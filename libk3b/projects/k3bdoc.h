@@ -94,7 +94,7 @@ class K3bDoc : public QObject
   /** 
    * sets the modified flag for the document after a modifying action on the view connected to the document.
    */
-  void setModified( bool m = true) { m_modified = m; }
+  void setModified( bool m = true );
 
   /** 
    * returns if the document is modified or not. Use this to determine 
@@ -152,6 +152,11 @@ class K3bDoc : public QObject
    * @return true if the document has successfully been saved to a file
    */
   bool isSaved() const { return m_saved; }
+
+  /**
+   * Used for session management. Use with care.
+   */
+  void setSaved( bool s ) { m_saved = s; }
 
   /**
    * Should return the name of the document type.

@@ -96,6 +96,22 @@ void K3bDoc::slotChanged()
 }
 
 
+void K3bDoc::setModified( bool m )
+{
+  if( m != m_modified ) {
+    m_modified = m;
+    if( m )    
+      emit changed();
+    else {
+      // not perfect but we need this to make sure a loaded doc is
+      // detected as not modfied (perhaps a modified signal would be better?)
+      emit saved();
+      emit saved(this);
+    }
+  }
+}
+
+
 void K3bDoc::setDummy( bool b )
 {
   m_dummy = b;
@@ -247,7 +263,8 @@ K3bDoc* K3bDoc::openDocument(const KURL& url )
     QDomElement root = xmlDoc.documentElement();
     if( newDoc->loadDocumentData( &root ) ) {
       newDoc->setURL( url );
-      newDoc->m_saved = true;
+      newDoc->setSaved( true );
+      newDoc->setModified( false );
       return newDoc;
     }
   }
@@ -259,6 +276,8 @@ K3bDoc* K3bDoc::openDocument(const KURL& url )
 
 bool K3bDoc::saveDocument(const KURL& url )
 {
+  // FIXME: allow usage of KIO
+
   // create the store
   KoStore* store = KoStore::createStore( url.path(), KoStore::Write, "application/x-k3b" );
   if( !store )

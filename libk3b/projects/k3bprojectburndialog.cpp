@@ -274,6 +274,11 @@ void K3bProjectBurnDialog::prepareGui()
   m_tempDirSelectionWidget = new K3bTempDirSelectionWidget( tempW );
   grid->addWidget( m_tempDirSelectionWidget, 0, 0 );
   m_tempDirSelectionWidget->setNeededSize( doc()->size() );
+
+  // tab order
+  setTabOrder( m_writerSelectionWidget, m_writingModeWidget );
+  setTabOrder( m_writingModeWidget, groupCopies );
+  setTabOrder( groupCopies, m_optionGroup );
 }
 
 

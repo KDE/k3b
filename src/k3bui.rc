@@ -7,13 +7,13 @@
   </Menu>
 
   <Menu name="tools"><text>&amp;Tools</text>
-	<Menu name="cd_tools"><text>CD</text>
+	<Menu name="cd_tools"><text>&amp;CD</text>
 		<Action name="tools_copy_cd" />
 	  	<Action name="tools_clone_cd" />
 		<Action name="tools_blank_cdrw" />
 		<Action name="tools_write_cd_image" />
 	</Menu>
-	<Menu name="dvd_tools"><text>DVD</text>
+	<Menu name="dvd_tools"><text>&amp;DVD</text>
 	  	<Action name="tools_copy_dvd" />
 		<Action name="tools_format_dvd" />
 		<Action name="tools_write_dvd_iso" />

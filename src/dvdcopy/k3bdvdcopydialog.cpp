@@ -177,6 +177,11 @@ K3bDvdCopyDialog::K3bDvdCopyDialog( QWidget* parent, const char* name, bool moda
   // //////////////////////////////////////////////////////////////////////////
 
 
+  // tab order
+  setTabOrder( m_writingModeWidget, m_spinCopies );
+  setTabOrder( m_spinCopies, groupOptions );
+
+
   //
   // setup connections
   // //////////////////////////////////////////////////////////////////////////

@@ -99,20 +99,21 @@ K3bMainWindow* K3bApplication::k3bMainWindow() const
 
 void K3bApplication::init()
 {
-  KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-
-  config()->setGroup( "General Options" );
   QGuardedPtr<K3bSplash> splash;
-  if( config()->readBoolEntry("Show splash", true) && args->isSet( "splash" ) ) {
-    splash = new K3bSplash( 0 );
-    splash->connect( this, SIGNAL(initializationInfo(const QString&)), SLOT(addInfo(const QString&)) );
-    
-    // kill the splash after 5 seconds
-    QTimer::singleShot( 5000, splash, SLOT(close()) );
-    
-    splash->show();
-  }
+  if( !isRestored() ) {
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
+    config()->setGroup( "General Options" );
+    if( config()->readBoolEntry("Show splash", true) && args->isSet( "splash" ) ) {
+      splash = new K3bSplash( 0 );
+      splash->connect( this, SIGNAL(initializationInfo(const QString&)), SLOT(addInfo(const QString&)) );
+      
+      // kill the splash after 5 seconds
+      QTimer::singleShot( 5000, splash, SLOT(close()) );
+      
+      splash->show();
+    }
+  }
 
   // load the plugins before doing anything else
   // they might add external bins
@@ -138,7 +139,6 @@ void K3bApplication::init()
   emit initializationInfo( i18n("Creating GUI...") );
 
   m_mainWindow = new K3bMainWindow();
-  setMainWidget( m_mainWindow );
 
   if( dcopClient()->registerAs( "k3b" ) ) {
     m_interface = new K3bInterface( m_mainWindow );
@@ -148,59 +148,66 @@ void K3bApplication::init()
     kdDebug() << "(K3bApplication) unable to attach to dcopserver!" << endl;
   }
 
-  m_mainWindow->show();
+  if( isRestored() ) {
+    m_mainWindow->restore(1);
+  }
+  else {
+    setMainWidget( m_mainWindow );
 
-  emit initializationInfo( i18n("Ready.") );
+    m_mainWindow->show();
 
-  config()->setGroup( "General Options" );
+    emit initializationInfo( i18n("Ready.") );
 
-  //
-  // K3b is able to autodetect most every device feature. One exception is the writing speed
-  // So the first time K3b is started with some device configuration we ask the user to verify
-  // the writing speeds if any writers are installed
-  //
-  // To check if there is a writer whose config has not been verified yet we search for a config
-  // entry for every writer containing a valid writing speed entry (we changed from cd writing 
-  // speed multiplicator to KB/s)
-  //
-  K3bVersion configVersion( config()->readEntry( "config version", "0.1" ) );
-  QPtrList<K3bDevice::Device> wlist( k3bcore->deviceManager()->cdWriter() );
-  bool needToVerify = ( configVersion < K3bVersion( 0, 10, 99 ) );
-  if( !needToVerify ) {
-    // search the config
-    config()->setGroup( "Devices" );
+    config()->setGroup( "General Options" );
 
-    for( QPtrListIterator<K3bDevice::Device> it( k3bcore->deviceManager()->cdWriter() ); *it; ++it ) {
-      K3bDevice::Device* dev = *it;
-      QString configEntryName = dev->vendor() + " " + dev->description();
-      QStringList list = config()->readListEntry( configEntryName );
-      if( list.count() > 1 && list[1].toInt() > 175 )
-	wlist.removeRef( dev );
-    }
+    //
+    // K3b is able to autodetect most every device feature. One exception is the writing speed
+    // So the first time K3b is started with some device configuration we ask the user to verify
+    // the writing speeds if any writers are installed
+    //
+    // To check if there is a writer whose config has not been verified yet we search for a config
+    // entry for every writer containing a valid writing speed entry (we changed from cd writing 
+    // speed multiplicator to KB/s)
+    //
+    K3bVersion configVersion( config()->readEntry( "config version", "0.1" ) );
+    QPtrList<K3bDevice::Device> wlist( k3bcore->deviceManager()->cdWriter() );
+    bool needToVerify = ( configVersion < K3bVersion( 0, 10, 99 ) );
+    if( !needToVerify ) {
+      // search the config
+      config()->setGroup( "Devices" );
+
+      for( QPtrListIterator<K3bDevice::Device> it( k3bcore->deviceManager()->cdWriter() ); *it; ++it ) {
+	K3bDevice::Device* dev = *it;
+	QString configEntryName = dev->vendor() + " " + dev->description();
+	QStringList list = config()->readListEntry( configEntryName );
+	if( list.count() > 1 && list[1].toInt() > 175 )
+	  wlist.removeRef( dev );
+      }
     
-    // the devices left in wlist are the once not verified yet
-    needToVerify = !wlist.isEmpty();
+      // the devices left in wlist are the once not verified yet
+      needToVerify = !wlist.isEmpty();
+    }
+
+    if( needToVerify && !wlist.isEmpty() ) {
+      if( splash )
+	splash->close();
+      K3bWriterSpeedVerificationDialog::verify( wlist, m_mainWindow );
+    }
+
+
+    config()->setGroup( "General Options" );
+    if( config()->readBoolEntry( "check system config", true ) ) {
+      emit initializationInfo( i18n("Checking System") );
+      K3bSystemProblemDialog::checkSystem();
+    }
+
+
+    if( processCmdLineArgs() ) {
+      KTipDialog::showTip( m_mainWindow );
+    }
+
+    emit initializationDone();
   }
-
-  if( needToVerify && !wlist.isEmpty() ) {
-    if( splash )
-      splash->close();
-    K3bWriterSpeedVerificationDialog::verify( wlist, m_mainWindow );
-  }
-
-
-  config()->setGroup( "General Options" );
-  if( config()->readBoolEntry( "check system config", true ) ) {
-    emit initializationInfo( i18n("Checking System") );
-    K3bSystemProblemDialog::checkSystem();
-  }
-
-
-  if( processCmdLineArgs() ) {
-    KTipDialog::showTip( m_mainWindow );
-  }
-
-  emit initializationDone();
 }
 
 

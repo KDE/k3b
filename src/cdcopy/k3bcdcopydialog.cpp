@@ -74,14 +74,14 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   mainGrid->setSpacing( spacingHint() );
   mainGrid->setMargin( 0 );
 
-  m_writerSelectionWidget = new K3bWriterSelectionWidget( false, main );
-  m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRECORD );
   QGroupBox* groupSource = new QGroupBox( 1, Qt::Vertical, i18n("CD Reader Device"), main );
   groupSource->setInsideSpacing( spacingHint() );
   groupSource->setInsideMargin( marginHint() );
-
   m_comboSourceDevice = new K3bDeviceComboBox( groupSource );
   m_comboSourceDevice->addDevices( k3bcore->deviceManager()->cdReader() );
+
+  m_writerSelectionWidget = new K3bWriterSelectionWidget( false, main );
+  m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRECORD );
 
   // tab widget --------------------
   QTabWidget* tabWidget = new QTabWidget( main );
@@ -94,10 +94,6 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   optionTabGrid->setSpacing( spacingHint() );
   optionTabGrid->setMargin( marginHint() );
 
-  QGroupBox* groupWritingMode = new QGroupBox( 1, Qt::Vertical, i18n("Writing Mode"), optionTab );
-  groupWritingMode->setInsideMargin( marginHint() );
-  m_writingModeWidget = new K3bWritingModeWidget( groupWritingMode );
-
   QGroupBox* groupCopyMode = new QGroupBox( 1, Qt::Vertical, i18n("Copy Mode"), optionTab );
   groupCopyMode->setInsideMargin( marginHint() );
   groupCopyMode->setInsideSpacing( spacingHint() );
@@ -108,13 +104,9 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
 //   m_radioNormalCopy = new QRadioButton( i18n("Normal copy"), m_groupCopyMode );
 //   m_radioCloneCopy = new QRadioButton( i18n("Clone copy"), m_groupCopyMode );
 
-  QGroupBox* groupOptions = new QGroupBox( 5, Qt::Vertical, i18n("Options"), optionTab );
-  groupOptions->setInsideSpacing( spacingHint() );
-  groupOptions->setInsideMargin( marginHint() );
-  m_checkSimulate = K3bStdGuiItems::simulateCheckbox( groupOptions );
-  m_checkOnTheFly = K3bStdGuiItems::onTheFlyCheckbox( groupOptions );
-  m_checkOnlyCreateImage = K3bStdGuiItems::onlyCreateImagesCheckbox( groupOptions );
-  m_checkDeleteImages = K3bStdGuiItems::removeImagesCheckbox( groupOptions );
+  QGroupBox* groupWritingMode = new QGroupBox( 1, Qt::Vertical, i18n("Writing Mode"), optionTab );
+  groupWritingMode->setInsideMargin( marginHint() );
+  m_writingModeWidget = new K3bWritingModeWidget( groupWritingMode );
 
   QGroupBox* groupCopies = new QGroupBox( 2, Qt::Horizontal, i18n("Copies"), optionTab );
   groupCopies->setInsideSpacing( spacingHint() );
@@ -123,6 +115,14 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   pixLabel->setPixmap( SmallIcon( "cdcopy", KIcon::SizeMedium ) );
   pixLabel->setScaledContents( false );
   m_spinCopies = new QSpinBox( 1, 99, 1, groupCopies );
+
+  QGroupBox* groupOptions = new QGroupBox( 5, Qt::Vertical, i18n("Options"), optionTab );
+  groupOptions->setInsideSpacing( spacingHint() );
+  groupOptions->setInsideMargin( marginHint() );
+  m_checkSimulate = K3bStdGuiItems::simulateCheckbox( groupOptions );
+  m_checkOnTheFly = K3bStdGuiItems::onTheFlyCheckbox( groupOptions );
+  m_checkOnlyCreateImage = K3bStdGuiItems::onlyCreateImagesCheckbox( groupOptions );
+  m_checkDeleteImages = K3bStdGuiItems::removeImagesCheckbox( groupOptions );
 
   optionTabGrid->addWidget( groupCopyMode, 0, 0 );
   optionTabGrid->addWidget( groupWritingMode, 1, 0 );
@@ -167,6 +167,11 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
 
   m_checkIgnoreReadErrors = new QCheckBox( i18n("Ignore read errors"), groupGeneral );
 
+  QGroupBox* groupData = new QGroupBox( 1, Qt::Vertical, i18n("Data"), advancedTab ); 
+  groupData->setInsideSpacing( spacingHint() );
+  groupData->setInsideMargin( marginHint() );
+  m_checkNoCorrection = new QCheckBox( i18n("No error correction"), groupData );
+
   QGroupBox* groupAudio = new QGroupBox( 3, Qt::Vertical, i18n("Audio"), advancedTab ); 
   groupAudio->setInsideSpacing( spacingHint() );
   groupAudio->setInsideMargin( marginHint() );
@@ -176,11 +181,6 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   m_comboParanoiaMode = K3bStdGuiItems::paranoiaModeComboBox( box );
   m_checkReadCdText = new QCheckBox( i18n("Copy CD-Text"), groupAudio );
   m_checkPrefereCdText = new QCheckBox( i18n("Prefer CD-Text"), groupAudio );
-
-  QGroupBox* groupData = new QGroupBox( 1, Qt::Vertical, i18n("Data"), advancedTab ); 
-  groupData->setInsideSpacing( spacingHint() );
-  groupData->setInsideMargin( marginHint() );
-  m_checkNoCorrection = new QCheckBox( i18n("No error correction"), groupData );
 
   advancedTabGrid->addWidget( groupGeneral, 0, 0 );
   advancedTabGrid->addWidget( groupData, 1, 0 );

@@ -254,7 +254,7 @@ K3bAudioConverterPlugin::K3bAudioConverterPlugin( QObject* parent,
 						  const QStringList& )
   : KParts::Plugin( parent, name )
 {
-  (void) new KAction( i18n("&Convert Audio Files..."),
+  (void) new KAction( i18n("C&onvert Audio Files..."),
 		      0, 0,
 		      this, SLOT(slotConvert()),
 		      actionCollection(), "convert_audio_files_plugin" );
