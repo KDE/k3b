@@ -132,6 +132,8 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
 
   bool m_canceled;
 
+  bool m_knownError;
+
 // parser
 
   int m_size;

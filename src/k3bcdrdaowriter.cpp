@@ -84,7 +84,6 @@ K3bCdrdaoWriter::K3bCdrdaoWriter( K3bDevice* dev, QObject* parent, const char* n
     m_paranoiaMode(-1),
     m_session(-1),
     m_eject(k3bMain()->eject()),
-  m_cdrdaoBinObject( K3bExternalBinManager::self()->binObject("cdrdao") ),
   m_process(0),
   m_comSock(0),
   m_currentTrack(0) 
@@ -359,6 +358,15 @@ void K3bCdrdaoWriter::start() {
 	   this, SIGNAL(dataWritten()) );
 
   m_canceled = false;
+  m_knownError = false;
+
+  m_cdrdaoBinObject = K3bExternalBinManager::self()->binObject("cdrdao");
+
+  if( !m_cdrdaoBinObject ) {
+    emit infoMessage( i18n("Could not find cdrdao executable."), ERROR );
+    emit finished(false);
+    return;
+  }
 
   switch ( m_command ) {
   case WRITE:
@@ -539,11 +547,12 @@ void K3bCdrdaoWriter::slotProcessExited( KProcess* p ) {
       break;
 
     default:
-      // no recording device and also other errors!! :-(
-      emit infoMessage( i18n("Cdrdao returned an error! (code %1)").arg(p->exitStatus()), K3bJob::ERROR );
-      emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
-      emit infoMessage( i18n("Please send me an email with the last output..."), K3bJob::ERROR );
-      emit finished( false );
+      if( !m_knownError ) {
+	emit infoMessage( i18n("Cdrdao returned an error! (code %1)").arg(p->exitStatus()), K3bJob::ERROR );
+	emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
+	emit infoMessage( i18n("Please send me an email with the last output..."), K3bJob::ERROR );
+	emit finished( false );
+      }
       break;
     }
   } else {
@@ -623,6 +632,7 @@ void K3bCdrdaoWriter::parseCdrdaoError( const QString& line ) {
     emit infoMessage( i18n("No cdrdao driver found."), K3bJob::ERROR );
     emit infoMessage( i18n("Please select one manually in the device settings."), K3bJob::ERROR );
     emit infoMessage( i18n("For most current drives this would be 'generic-mmc'."), K3bJob::ERROR );
+    m_knownError = true;
   } else if( line.contains( "Cannot setup device" ) ) {
     // no nothing...
   } else if( line.contains( "not ready") ) {
@@ -630,6 +640,7 @@ void K3bCdrdaoWriter::parseCdrdaoError( const QString& line ) {
   } else if( line.contains("Drive does not accept any cue sheet") ) {
     emit infoMessage( i18n("Cue sheet not accepted."), K3bJob::ERROR );
     emit infoMessage( i18n("Try setting the first pregap to 0."), K3bJob::ERROR );
+    m_knownError = true;
   } else if( !line.contains( "remote progress message" ) )
     emit infoMessage( line, K3bJob::ERROR );
 }
