@@ -356,24 +356,7 @@ void K3bVcdBurnDialog::saveSettings()
   // save image file & path (.bin)
   vcdDoc()->setVcdImage( m_tempDirSelectionWidget->tempPath() + m_editVolumeId->text() + ".bin");
 
-  int id = m_groupVcdFormat->id(m_groupVcdFormat->selected());
-  vcdDoc()->setVcdType(id);
-  switch(id) {
-    case 0:
-      vcdDoc()->vcdOptions()->setVcdClass("vcd");
-      vcdDoc()->vcdOptions()->setVcdVersion("1.1");
-      break;
-    case 1:
-      //vcd 2.0
-      vcdDoc()->vcdOptions()->setVcdClass("vcd");
-      vcdDoc()->vcdOptions()->setVcdVersion("2.0");
-      break;
-    case 2:
-      //svcd 1.0
-      vcdDoc()->vcdOptions()->setVcdClass("svcd");
-      vcdDoc()->vcdOptions()->setVcdVersion("1.0");
-      break;
-  }
+  vcdDoc()->setVcdType(m_groupVcdFormat->id(m_groupVcdFormat->selected()));
   
   vcdDoc()->vcdOptions()->setVolumeId( m_editVolumeId->text() );
   vcdDoc()->vcdOptions()->setAlbumId( m_editAlbumId->text() );
@@ -657,10 +640,9 @@ void K3bVcdBurnDialog::slotCdiSupportChecked( bool b)
 
 void K3bVcdBurnDialog::slotAutoDetect( bool b)
 {
-	if (b) {
-	// TODO: here i must check for the Mpeg Filetype to set the right VCD Type
-	// in Autodetection Mode
-	}
+	if (b)
+	    m_groupVcdFormat->setButton(vcdDoc()->vcdOptions()->mpegVersion());
+	
 	m_groupVcdFormat->setDisabled( b );
 
 }

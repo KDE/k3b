@@ -37,6 +37,8 @@ class K3bVcdOptions
 
   const QString& vcdClass() const { return m_vcdclass; }
   const QString& vcdVersion() const { return m_vcdversion; }
+  
+  const int mpegVersion() const { return m_mpegversion; }
 
   const int volumeCount() const { return m_volumeCount; }
   const int volumeNumber()const { return m_volumeNumber; }
@@ -55,7 +57,8 @@ class K3bVcdOptions
 
   void setVcdClass( const QString& s ) { m_vcdclass = s; }
   void setVcdVersion( const QString& s ) { m_vcdversion = s; }
-
+  
+  void setMpegVersion( const int v ) { m_mpegversion = v; }
   void setVolumeCount( const int c ) { m_volumeCount = c; }
   void setVolumeNumber( const int n ) { m_volumeNumber = n; }
   
@@ -85,9 +88,10 @@ class K3bVcdOptions
   QString m_vcdclass;
   QString m_vcdversion;
     
+  int m_mpegversion;
   int m_volumeCount;
   int m_volumeNumber;
-    
+  
   bool m_autodetect;
   bool m_cdisupport;
   bool m_brokensvcdmode;

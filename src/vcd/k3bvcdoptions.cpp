@@ -30,6 +30,7 @@ K3bVcdOptions::K3bVcdOptions()
     m_systemId( "CD-RTOS CD-BRIDGE" ),
     m_vcdclass( "vcd" ),
     m_vcdversion( "2.0" ),
+    m_mpegversion( 1 ),
     m_volumeCount( 1 ),
     m_volumeNumber( 1 ),
     m_autodetect( true ),
