@@ -103,12 +103,12 @@ void K3bDivxResize::initView(){
 }
 
 void K3bDivxResize::resetView(){
+    kdDebug() << "(K3bDivxResize::resetView) Reset slider" << endl;
     m_sliderResize->setValue(704);
-    kdDebug() << "(K3bDivxResize) Reset slider" << endl;
 }
 
 void K3bDivxResize::slotUpdateView(){
-     kdDebug() << "(K3bDivxResize) update view" << endl;
+     kdDebug() << "(K3bDivxResize::slotUpdateView)" << endl;
      m_labelWidth->setText( QString::number( m_data->getWidthValue() - (m_data->getResizeWidth()*8) ) );
      int currentHeight = m_data->getHeightValue() -( m_data->getResizeHeight() *8 );
      int currentWidth = m_data->getWidthValue() - ( m_data->getResizeWidth() *8 );
@@ -147,7 +147,7 @@ void K3bDivxResize::slotUpdateView(){
 }
 
 void K3bDivxResize::slotResizeChanged( int value ){
-     kdDebug() << "(K3bDivxResize) Resize" << endl;
+     kdDebug() << "(K3bDivxResize::slotResizeChanged)" << endl;
      m_data->setResizeWidth( (704-value) / 8 );
      int h = (int) ((value-m_data->getCropLeft() - m_data->getCropRight() ) / m_realAspect);
      h = h + m_data->getCropBottom() + m_data->getCropTop();
@@ -155,13 +155,13 @@ void K3bDivxResize::slotResizeChanged( int value ){
      int comboIndex = 72 - (h / 8);
      m_data->setResizeHeight( comboIndex );
      m_comboHeight->setCurrentItem( comboIndex );
-     slotUpdateView();
+     //slotUpdateView();
      emit sizeChanged();
 }
 
 void K3bDivxResize::slotHeightChanged( int index ){
     m_data->setResizeHeight( index );
-    slotUpdateView();
+    //slotUpdateView();
     emit sizeChanged();
 }
 #include "k3bdivxresize.moc"

@@ -27,6 +27,7 @@
 #include <kdialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kdebug.h>
 
 
 K3bDivxSizeTab::K3bDivxSizeTab(K3bDivxCodecData *data, QWidget *parent, const char *name ) : QWidget(parent,name) {
@@ -44,7 +45,6 @@ void K3bDivxSizeTab::setupGui(){
     mainLayout->setMargin( 0 ); //KDialog::marginHint() );
     m_crop = new K3bDivxCrop( m_data, this );
     m_resize = new K3bDivxResize( m_data, this );
-
     //mainLayout->addMultiCellWidget( m_info, 0, 1, 0, 0 );
     mainLayout->addMultiCellWidget( m_crop, 0, 1, 0, 1 );
     mainLayout->addMultiCellWidget( m_resize, 2, 2, 0, 1 );
@@ -56,22 +56,29 @@ void K3bDivxSizeTab::setupGui(){
 }
 
 void K3bDivxSizeTab::show(){
-    QWidget::show();
-    if( this->isEnabled() ){
-        if( !m_initialized ){
-             m_crop->initPreview( );
-             m_resize->initView();
-        }
-        m_crop->updateView();
-        m_resize->slotUpdateView();
-        m_initialized = true;
+   kdDebug( ) << "(K3bDivxSizeTab::show)" << endl;
+   if( this->isEnabled() ){
+       if( !m_initialized ){
+           kdDebug( ) << "(K3bDivxSizeTab::show) Crop init" << endl;
+           m_crop->initPreview( );
+           m_resize->initView();
+           //m_crop->slotUpdateView();
+           m_initialized = true;
+           connect( m_crop, SIGNAL( previewEncoded()), m_crop, SLOT( slotUpdateView() ));
+       } else {
+           kdDebug( ) << "(K3bDivxSizeTab::show) Crop update" << endl;
+           m_crop->slotUpdateView();
+           m_resize->slotUpdateView();
+       }
+       QWidget::show();
     } else {
-        KMessageBox::information( this, i18n("You must load a K3b DVD Project file and \n set a file name for the final AVI.") );
+       QWidget::show();
+       KMessageBox::information( this, i18n("You must load a K3b DVD Project file and \n set a file name for the final AVI.") );
     }
 }
 
 void K3bDivxSizeTab::updateView(){
-    m_crop->updateView();
+    m_crop->slotUpdateView();
 }
 
 void K3bDivxSizeTab::resetView(){
