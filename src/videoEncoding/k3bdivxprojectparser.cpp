@@ -78,6 +78,8 @@ bool K3bDivXProjectParser::characters( const QString& content ) {
             m_data->setAudioGain( con );
         } else if( m_contentTag == "aspectratio" ){
             m_data->setAspectRatio( con );
+        } else if( m_contentTag == "aspectratioAnamorph" ){
+            m_data->setAspectRatioAnamorph( con );
         } else if( m_contentTag == "width" ){
             m_data->setWidth( con );
         } else if( m_contentTag == "height" ){
