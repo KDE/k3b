@@ -45,7 +45,7 @@ class K3bGlobalSettings
   void setEjectMedia( bool b ) { m_eject = b; }
   void setBurnfree( bool b ) { m_burnfree = b; }
   void setOverburn( bool b ) { m_overburn = b; }
-  void setUseManualBufferSize( bool b ) { m_useManualBufferSize; }
+  void setUseManualBufferSize( bool b ) { m_useManualBufferSize = b; }
   void setBufferSize( int size ) { m_bufferSize = size; }
 
  private:
