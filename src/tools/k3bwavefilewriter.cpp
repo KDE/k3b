@@ -132,6 +132,9 @@ void K3bWaveFileWriter::writeEmptyHeader()
 void K3bWaveFileWriter::updateHeader()
 {
   if( isOpen() ) {
+
+    m_outputFile.flush();
+
     char c[4];
     Q_INT32 wavSize(m_dataWritten + 44 - 8);
 

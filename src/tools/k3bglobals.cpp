@@ -51,13 +51,13 @@ QString K3b::sizeToTime(long size){
 
 Q_INT16 K3b::swapByteOrder( Q_INT16 i )
 {
-  return (i << 8) | (i >> 8 );
+  return ((i << 8) & 0xff00) | ((i >> 8 ) & 0xff);
 }
 
 
 Q_INT32 K3b::swapByteOrder( Q_INT32 i )
 {
-  return (i << 24) | ((i << 8) & 0xff0000) | ((i >> 8) & 0xff00) | (i >> 24);
+  return ((i << 24) & 0xff000000) | ((i << 8) & 0xff0000) | ((i >> 8) & 0xff00) | ((i >> 24) & 0xff );
 }
 
 

@@ -839,8 +839,11 @@ unsigned long K3bAudioDoc::identifyWaveFile( const KURL& url )
     }
 
     inputStream >> chunkLen;
+    qDebug("----before bs: %li", chunkLen );
     chunkLen = K3b::swapByteOrder( chunkLen );
+    qDebug("----after  bs: %li", chunkLen );
     chunkLen += chunkLen & 1; // round to multiple of 2
+    qDebug("----after rnd: %li", chunkLen );
 
     // skip chunk data of unknown chunk
     if( qstrncmp(magic, "data", 4) )
@@ -853,7 +856,8 @@ unsigned long K3bAudioDoc::identifyWaveFile( const KURL& url )
   // found data chunk
   int headerLen = inputFile.at();
   if( headerLen + chunkLen > inputFile.size() ) {
-    qDebug( filename + ": file length does not match length from WAVE header - using actual length." );
+    qDebug( filename + ": file length %i does not match length from WAVE header %i + %i - using actual length.",
+	    inputFile.size(), headerLen, chunkLen);
     return (inputFile.size() - headerLen)/2352;
   }
   else {

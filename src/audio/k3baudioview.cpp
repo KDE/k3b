@@ -125,7 +125,9 @@ void K3bAudioView::setupPopupMenu()
   m_actionPlay->plug( m_popupMenu );
   m_actionRemove->plug( m_popupMenu );
   m_popupMenu->insertSeparator();
-  m_actionProperties->plug( m_popupMenu);
+  m_actionProperties->plug( m_popupMenu );
+  m_popupMenu->insertSeparator();
+  k3bMain()->actionCollection()->action("file_burn")->plug( m_popupMenu );
 }
 
 
