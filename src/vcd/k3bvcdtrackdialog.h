@@ -36,7 +36,7 @@ class K3bVcdTrackDialog : public KDialogBase
   Q_OBJECT
 
  public:
-  K3bVcdTrackDialog( QList<K3bVcdTrack>& tracks, QList<K3bVcdTrack>& selectedTracks, QWidget *parent=0, const char *name=0);
+  K3bVcdTrackDialog( QPtrList<K3bVcdTrack>& tracks, QPtrList<K3bVcdTrack>& selectedTracks, QWidget *parent=0, const char *name=0);
   ~K3bVcdTrackDialog();
 
  protected slots:
@@ -44,8 +44,6 @@ class K3bVcdTrackDialog : public KDialogBase
   void slotApply();
 
  private slots:
-  void slotPlayForever(bool);
-  void slotWaitInfinite(bool);
   void slotPlayTimeChanged(int);
   void slotWaitTimeChanged(int);
   
@@ -75,16 +73,14 @@ class K3bVcdTrackDialog : public KDialogBase
   QLabel* m_format_video;
   QLabel* m_size_video;
   QLabel* m_displaysize_video;
+
+  QLabel* m_labelAfterTimeout;
+  QLabel* m_labelWait;
   
-  QRadioButton* m_radio_playtime;
-  QRadioButton* m_radio_playforever;
-  QRadioButton* m_radio_waittime;
-  QRadioButton* m_radio_waitinfinite;
-  
-  QComboBox* m_nav_previous;
-  QComboBox* m_nav_next;
-  QComboBox* m_nav_return;
-  QComboBox* m_nav_default;
+  QComboBox* m_pbc_previous;
+  QComboBox* m_pbc_next;
+  QComboBox* m_pbc_return;
+  QComboBox* m_pbc_default;
   QComboBox* m_comboAfterTimeout;
   
   QCheckBox* m_check_usekeys;
@@ -94,11 +90,8 @@ class K3bVcdTrackDialog : public KDialogBase
   QSpinBox* m_spin_times;
   QSpinBox* m_spin_waittime;
 
-  QButtonGroup* m_groupPlay;
-  QButtonGroup* m_groupWait;
-  
   void prepareGui();
-  void setupNavigationTab();
+  void setupPbcTab();
   void setupAudioTab();
   void setupVideoTab();
   void fillGui();

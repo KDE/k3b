@@ -50,7 +50,7 @@ K3bVcdTrackDialog::K3bVcdTrackDialog( QPtrList<K3bVcdTrack>& tracks, QPtrList<K3
 {
   prepareGui();
   
-  setupNavigationTab();
+  setupPbcTab();
   setupVideoTab();
   setupAudioTab();
 
@@ -87,25 +87,25 @@ void K3bVcdTrackDialog::slotApply()
   // TODO: apply button :)
   K3bVcdTrack* selectedTrack = m_selectedTracks.first();
 
-  if (m_nav_previous->currentItem() > m_tracks.count())
+  if (m_pbc_previous->currentItem() > m_tracks.count())
     selectedTrack->setPrevious();
   else
-    selectedTrack->setPrevious( m_tracks.at( m_nav_previous->currentItem()) );
+    selectedTrack->setPrevious( m_tracks.at( m_pbc_previous->currentItem()) );
 
-  if (m_nav_next->currentItem() > m_tracks.count())
+  if (m_pbc_next->currentItem() > m_tracks.count())
     selectedTrack->setNext();
   else
-    selectedTrack->setNext( m_tracks.at( m_nav_next->currentItem()) );
+    selectedTrack->setNext( m_tracks.at( m_pbc_next->currentItem()) );
 
-  if (m_nav_return->currentItem() > m_tracks.count())
+  if (m_pbc_return->currentItem() > m_tracks.count())
     selectedTrack->setReturn();
   else
-    selectedTrack->setReturn( m_tracks.at( m_nav_return->currentItem()) );
+    selectedTrack->setReturn( m_tracks.at( m_pbc_return->currentItem()) );
     
-  if (m_nav_default->currentItem() > m_tracks.count())
+  if (m_pbc_default->currentItem() > m_tracks.count())
     selectedTrack->setDefault();
   else
-    selectedTrack->setDefault( m_tracks.at( m_nav_default->currentItem()) );
+    selectedTrack->setDefault( m_tracks.at( m_pbc_default->currentItem()) );
 
 }
 
@@ -240,21 +240,21 @@ void K3bVcdTrackDialog::fillGui()
   for( track = m_tracks.first(); track; track = m_tracks.next() ) {
     QPixmap pm = KMimeType::pixmapForURL( KURL(track->absPath()), 0, KIcon::Desktop, 16 );
     QString s = i18n("%1 - Sequence-%2").arg(track->title()).arg(track->index() +1);
-    m_nav_previous->insertItem(pm, s);
+    m_pbc_previous->insertItem(pm, s);
     if (track == selectedTrack->Previous())
-      iPrevious = m_nav_previous->count() -1;
+      iPrevious = m_pbc_previous->count() -1;
     
-    m_nav_next->insertItem(pm, s);
+    m_pbc_next->insertItem(pm, s);
     if (track == selectedTrack->Next())
-      iNext = m_nav_next->count() -1;
+      iNext = m_pbc_next->count() -1;
 
-    m_nav_return->insertItem(pm, s);
+    m_pbc_return->insertItem(pm, s);
     if (track == selectedTrack->Return())
-      iReturn = m_nav_return->count() -1;
+      iReturn = m_pbc_return->count() -1;
 
-    m_nav_default->insertItem(pm, s);
+    m_pbc_default->insertItem(pm, s);
     if (track == selectedTrack->Default())
-      iDefault = m_nav_default->count() -1;
+      iDefault = m_pbc_default->count() -1;
 
     m_comboAfterTimeout->insertItem(pm, s);
   }
@@ -262,38 +262,38 @@ void K3bVcdTrackDialog::fillGui()
   // add Event Disabled
   QPixmap pmDisabled = SmallIcon( "stop" );
   QString txtDisabled = i18n("Event Disabled");
-  m_nav_previous->insertItem(pmDisabled, txtDisabled);
-  m_nav_next->insertItem(pmDisabled, txtDisabled);
-  m_nav_return->insertItem(pmDisabled, txtDisabled);
-  m_nav_default->insertItem(pmDisabled, txtDisabled);
+  m_pbc_previous->insertItem(pmDisabled, txtDisabled);
+  m_pbc_next->insertItem(pmDisabled, txtDisabled);
+  m_pbc_return->insertItem(pmDisabled, txtDisabled);
+  m_pbc_default->insertItem(pmDisabled, txtDisabled);
 
   // add VideoCD End
   QPixmap pmEnd = SmallIcon( "cdrom_unmount" );
   QString txtEnd = i18n("VideoCD END");
-  m_nav_previous->insertItem(pmEnd, txtEnd);
-  m_nav_next->insertItem(pmEnd, txtEnd);
-  m_nav_return->insertItem(pmEnd, txtEnd);
-  m_nav_default->insertItem(pmEnd, txtEnd);
+  m_pbc_previous->insertItem(pmEnd, txtEnd);
+  m_pbc_next->insertItem(pmEnd, txtEnd);
+  m_pbc_return->insertItem(pmEnd, txtEnd);
+  m_pbc_default->insertItem(pmEnd, txtEnd);
 
   if (iPrevious < 0)
-    m_nav_previous->setCurrentItem(m_tracks.count());
+    m_pbc_previous->setCurrentItem(m_tracks.count());
   else
-    m_nav_previous->setCurrentItem(iPrevious);
+    m_pbc_previous->setCurrentItem(iPrevious);
 
   if (iNext < 0)
-    m_nav_next->setCurrentItem(m_tracks.count());
+    m_pbc_next->setCurrentItem(m_tracks.count());
   else
-    m_nav_next->setCurrentItem(iNext);
+    m_pbc_next->setCurrentItem(iNext);
 
   if (iReturn < 0)
-    m_nav_return->setCurrentItem(m_tracks.count());
+    m_pbc_return->setCurrentItem(m_tracks.count());
   else
-    m_nav_return->setCurrentItem(iReturn);
+    m_pbc_return->setCurrentItem(iReturn);
 
   if (iDefault < 0)
-    m_nav_default->setCurrentItem(m_tracks.count());
+    m_pbc_default->setCurrentItem(m_tracks.count());
   else
-    m_nav_default->setCurrentItem(iDefault);
+    m_pbc_default->setCurrentItem(iDefault);
 
   /////////////////////////////////////////////////////////////////////////////////////////////////
   
@@ -364,103 +364,90 @@ void K3bVcdTrackDialog::prepareGui()
 
 }
 
-void K3bVcdTrackDialog::setupNavigationTab()
+void K3bVcdTrackDialog::setupPbcTab()
 {
   // /////////////////////////////////////////////////
-  // NAVIGATION TAB
+  // Playback Control TAB
   // /////////////////////////////////////////////////
   QWidget* w = new QWidget( m_mainTabbed );
-
+  
   QGridLayout* grid = new QGridLayout( w );
   grid->setAlignment( Qt::AlignTop );
   grid->setSpacing( spacingHint() );
   grid->setMargin( marginHint() );
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  m_groupPlay = new QButtonGroup(i18n("Playing track ..."), w );
-  m_groupPlay->setColumnLayout(0, Qt::Vertical );
-  m_groupPlay->setExclusive(true);
-  m_groupPlay->layout()->setSpacing( spacingHint() );
-  m_groupPlay->layout()->setMargin( marginHint() );
+  QGroupBox* groupPlay = new QGroupBox(i18n("Options"), w );
+  groupPlay->setColumnLayout(0, Qt::Vertical );
+  groupPlay->layout()->setSpacing( spacingHint() );
+  groupPlay->layout()->setMargin( marginHint() );
 
-  QGridLayout*  groupPlayLayout = new QGridLayout( m_groupPlay->layout() );
+  QGridLayout*  groupPlayLayout = new QGridLayout( groupPlay->layout() );
   groupPlayLayout->setAlignment( Qt::AlignTop );
-  
-  m_spin_times = new QSpinBox( m_groupPlay, "m_spin_times" );
-  m_spin_times->setMinValue(1);
-  
-  m_radio_playtime = new QRadioButton( i18n("%1 times").arg(m_spin_times->value()), m_groupPlay, "m_radio_playtime" );
-  m_radio_playtime->setChecked(true);
-  m_radio_playforever = new QRadioButton( i18n("forever"), m_groupPlay, "m_radio_playforever" );
 
-  groupPlayLayout->addWidget( m_radio_playtime, 1, 0 );
-  groupPlayLayout->addWidget( m_spin_times, 1, 1 );
-  groupPlayLayout->addMultiCellWidget( m_radio_playforever, 2, 2, 0, 1 );
-
-  groupPlayLayout->setRowStretch( 5, 1 );
+  QLabel* labelPlaying = new QLabel( i18n("Playing track") , groupPlay, "labelPlaying" );
+ 
+  m_spin_times = new QSpinBox( groupPlay, "m_spin_times" );
+  m_spin_times->setValue(0);
+  m_spin_times->setSuffix(i18n(" time(s)"));
+  m_spin_times->setSpecialValueText(i18n("forever"));
   
   //////////////////////////////////////////////////////////////////////////////////////////
-  m_groupWait = new QButtonGroup(i18n("than wait ..."), w );
-  m_groupWait->setColumnLayout(0, Qt::Vertical );
-  m_groupWait->setExclusive(true);
-  m_groupWait->layout()->setSpacing( spacingHint() );
-  m_groupWait->layout()->setMargin( marginHint() );
-  
-  QGridLayout*  groupWaitLayout = new QGridLayout( m_groupWait->layout() );
-  groupWaitLayout->setAlignment( Qt::AlignTop );
-  
-  m_spin_waittime = new QSpinBox( m_groupWait, "m_spinSeconds" );
+  m_labelWait = new QLabel( i18n( "than wait" ), groupPlay, "m_labelWait" );
+  m_spin_waittime = new QSpinBox( groupPlay, "m_spinSeconds" );
+  m_spin_waittime->setMinValue(-1);
+  m_spin_waittime->setValue(0);
   m_spin_waittime->setEnabled(false);
+  m_spin_waittime->setSuffix(i18n(" seconds"));
+  m_spin_waittime->setSpecialValueText(i18n("infinite"));
   
-  m_radio_waitinfinite = new QRadioButton( i18n("infinite"), m_groupWait, "m_radio_waitinfinite" );
-  m_radio_waitinfinite->setChecked(true);
+  m_labelAfterTimeout = new QLabel( i18n( "after timeout playing" ), groupPlay, "m_labelTimeout" );
 
-  m_radio_waittime = new QRadioButton( i18n("%1 seconds").arg(m_spin_waittime->value()), m_groupWait, "m_radio_waittime" );
-  
-  QLabel* labelAfterTimeout = new QLabel( i18n( "after timeout playing" ), m_groupWait, "labelTimeout" );
-
-  m_comboAfterTimeout = new QComboBox( m_groupWait, "m_comboAfterTimeout" );
+  m_comboAfterTimeout = new QComboBox( groupPlay, "m_comboAfterTimeout" );
   m_comboAfterTimeout->setEnabled(false);
+  
+  groupPlayLayout->addWidget( labelPlaying, 1, 0 );
+  groupPlayLayout->addWidget( m_spin_times, 1, 1 );
+  groupPlayLayout->addWidget( m_labelWait, 1, 2);
+  groupPlayLayout->addWidget( m_spin_waittime, 1, 3);
+  groupPlayLayout->addMultiCellWidget( m_labelAfterTimeout, 2, 2, 2, 3);
+  groupPlayLayout->addMultiCellWidget( m_comboAfterTimeout, 3, 3, 2, 3);
 
-  groupWaitLayout->addMultiCellWidget(m_radio_waitinfinite, 1, 1, 0, 1);
-  groupWaitLayout->addWidget(m_radio_waittime, 2, 0);
-  groupWaitLayout->addWidget(m_spin_waittime, 2, 1);
-  groupWaitLayout->addMultiCellWidget(labelAfterTimeout, 3, 3, 1, 1);
-  groupWaitLayout->addMultiCellWidget(m_comboAfterTimeout, 4, 4, 1, 1);
+  groupPlayLayout->setRowStretch( 4, 1 );
 
-  groupWaitLayout->setRowStretch( 5, 1 );
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  QGroupBox* groupNav = new QGroupBox(i18n("Key pressed interaction"), w );
-  groupNav->setColumnLayout(0, Qt::Vertical );
-  groupNav->layout()->setSpacing( spacingHint() );
-  groupNav->layout()->setMargin( marginHint() );
+  QGroupBox* groupPbc = new QGroupBox(i18n("Key pressed interaction"), w );
+  groupPbc->setColumnLayout(0, Qt::Vertical );
+  groupPbc->layout()->setSpacing( spacingHint() );
+  groupPbc->layout()->setMargin( marginHint() );
 
-  QGridLayout*  groupNavLayout = new QGridLayout( groupNav->layout() );
-  groupNavLayout->setAlignment( Qt::AlignTop );
-  
-  QLabel* labelNav_previous = new QLabel( i18n( "Privious:" ), groupNav, "labelNav_previous" );
-  QLabel* labelNav_next  = new QLabel( i18n( "Next:" ), groupNav, "labelNav_next" );
-  QLabel* labelNav_return  = new QLabel( i18n( "Return:" ), groupNav, "labelNav_return" );
-  QLabel* labelNav_default  = new QLabel( i18n( "Default:" ), groupNav, "labelNav_default" );
+  QGridLayout*  groupPbcLayout = new QGridLayout( groupPbc->layout() );
+  groupPbcLayout->setAlignment( Qt::AlignTop );
 
-  m_nav_previous = new QComboBox( groupNav, "m_nav_previous" );
-  m_nav_next = new QComboBox( groupNav, "m_nav_next" );
-  m_nav_return = new QComboBox( groupNav, "m_nav_return" );
-  m_nav_default = new QComboBox( groupNav, "m_nav_default" );
-  groupNavLayout->addWidget(labelNav_previous, 2, 0);
-  groupNavLayout->addWidget(m_nav_previous, 2, 1);
+  QLabel* labelPbc_previous = new QLabel( i18n( "Privious:" ), groupPbc, "labelPbc_previous" );
+  QLabel* labelPbc_next  = new QLabel( i18n( "Next:" ), groupPbc, "labelPbc_next" );
+  QLabel* labelPbc_return  = new QLabel( i18n( "Return:" ), groupPbc, "labelPbc_return" );
+  QLabel* labelPbc_default  = new QLabel( i18n( "Default:" ), groupPbc, "labelPbc_default" );
 
-  groupNavLayout->addWidget(labelNav_next, 3, 0);
-  groupNavLayout->addWidget(m_nav_next, 3, 1);
+  m_pbc_previous = new QComboBox( groupPbc, "m_pbc_previous" );
+  m_pbc_next = new QComboBox( groupPbc, "m_pbc_next" );
+  m_pbc_return = new QComboBox( groupPbc, "m_pbc_return" );
+  m_pbc_default = new QComboBox( groupPbc, "m_pbc_default" );
 
-  groupNavLayout->addWidget(labelNav_return, 4, 0);
-  groupNavLayout->addWidget(m_nav_return, 4, 1);
+  groupPbcLayout->addWidget(labelPbc_previous, 2, 0);
+  groupPbcLayout->addWidget(m_pbc_previous, 2, 1);
 
-  groupNavLayout->addWidget(labelNav_default, 5, 0);
-  groupNavLayout->addWidget(m_nav_default, 5, 1);
+  groupPbcLayout->addWidget(labelPbc_next, 3, 0);
+  groupPbcLayout->addWidget(m_pbc_next, 3, 1);
 
-  
+  groupPbcLayout->addWidget(labelPbc_return, 4, 0);
+  groupPbcLayout->addWidget(m_pbc_return, 4, 1);
+
+  groupPbcLayout->addWidget(labelPbc_default, 5, 0);
+  groupPbcLayout->addWidget(m_pbc_default, 5, 1);
+
+
   //////////////////////////////////////////////////////////////////////////////////////////
   QGroupBox* groupKey = new QGroupBox( 6, Qt::Vertical, i18n("Numeric keys"), w );
   groupKey->setEnabled( false );
@@ -472,21 +459,18 @@ void K3bVcdTrackDialog::setupNavigationTab()
   m_list_keys->addColumn(i18n("Key"));
   m_list_keys->addColumn(i18n("Playing"));
   m_list_keys->setResizeMode( QListView::LastColumn );
-  
+
   m_check_overwritekeys = new QCheckBox( i18n("Overwrite default assignment"), groupKey, "m_check_overwritekeys" );
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  grid->addWidget( m_groupPlay, 0, 0 );
-  grid->addWidget( m_groupWait, 0, 1 );
-  grid->addWidget( groupNav, 1, 0 );
+  grid->addMultiCellWidget( groupPlay, 0, 0, 0, 1 );
+  grid->addWidget( groupPbc, 1, 0 );
   grid->addWidget( groupKey, 1, 1 );
 
-  grid->setRowStretch( 2, 1 );
+  grid->setRowStretch( 2, 0 );
 
-  m_mainTabbed->addTab( w, i18n("Navigation") );
+  m_mainTabbed->addTab( w, i18n("Playback Control") );
 
-  connect( m_radio_playforever, SIGNAL(toggled(bool)), this, SLOT(slotPlayForever(bool)) );
-  connect( m_radio_waitinfinite, SIGNAL(toggled(bool)), this, SLOT(slotWaitInfinite(bool)) );
   connect( m_spin_times, SIGNAL(valueChanged(int)), this, SLOT(slotPlayTimeChanged(int)) );
   connect( m_spin_waittime, SIGNAL(valueChanged(int)), this, SLOT(slotWaitTimeChanged(int)) );
 }
@@ -605,26 +589,34 @@ void K3bVcdTrackDialog::setupVideoTab()
   m_mainTabbed->addTab( w, i18n("Video") );
 }
 
-void K3bVcdTrackDialog::slotPlayForever(bool on)
-{
-  m_groupWait->setDisabled(on);
-  m_spin_times->setDisabled(on);
-}
-
-void K3bVcdTrackDialog::slotWaitInfinite(bool on)
-{
-  m_spin_waittime->setDisabled(on);
-  m_comboAfterTimeout->setDisabled(on);
-}
-
 void K3bVcdTrackDialog::slotPlayTimeChanged(int value)
 {
-  m_radio_playtime->setText(i18n("%1 times").arg(value));
+  if (value == 0) {
+    m_labelWait->setEnabled(false);
+    m_spin_waittime->setEnabled(false);
+    m_labelAfterTimeout->setEnabled(false);
+    m_comboAfterTimeout->setEnabled(false);
+  }
+  else {
+    m_labelWait->setEnabled(true);
+    m_spin_waittime->setEnabled(true);
+    if (m_spin_waittime->value() > -1) {
+      m_labelAfterTimeout->setEnabled(true);
+      m_comboAfterTimeout->setEnabled(true);
+    }
+  }
 }
 
 void K3bVcdTrackDialog::slotWaitTimeChanged(int value)
 {
-  m_radio_waittime->setText(i18n("%1 seconds").arg(value));
+  if (value < 0) {
+    m_labelAfterTimeout->setEnabled(false);
+    m_comboAfterTimeout->setEnabled(false);
+  }
+  else {
+    m_labelAfterTimeout->setEnabled(true);
+    m_comboAfterTimeout->setEnabled(true);
+  }
 }
 
 #include "k3bvcdtrackdialog.moc"
