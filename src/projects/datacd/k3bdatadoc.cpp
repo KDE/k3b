@@ -1306,7 +1306,7 @@ void K3bDataDoc::importSession( K3bCdDevice::CdDevice* device )
 
 void K3bDataDoc::slotTocRead( K3bCdDevice::DeviceHandler* dh )
 {
-  if( dh->success() ) {
+  if( dh->success() && !dh->toc().isEmpty() ) {
     K3bCdDevice::Toc::const_iterator it = dh->toc().end();
     --it; // this is valid since there is at least one data track
     while( it != dh->toc().begin() && (*it).type() != K3bCdDevice::Track::DATA )
