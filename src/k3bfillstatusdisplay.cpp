@@ -152,8 +152,15 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
 	
   // draw the text marks
   crect = rect();
-  crect.setLeft( (int)(one*cdSize) );
-  p.drawText( crect, Qt::AlignLeft | Qt::AlignVCenter, " " + QString::number((long)cdSize) );
+  QString text = QString::number((long)cdSize);
+  int textLength = fontMetrics().width(text);
+  if( textLength+4 > crect.width() - (int)(one*cdSize) ) {
+    // we don't have enough space on the right, so we paint to the left of the line
+    crect.setLeft( (int)(one*cdSize) - textLength -4 );
+  }
+  else
+    crect.setLeft( (int)(one*cdSize) + 4 );
+  p.drawText( crect, Qt::AlignLeft | Qt::AlignVCenter, text );
 }
 
 
