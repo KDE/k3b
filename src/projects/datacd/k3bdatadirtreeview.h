@@ -54,7 +54,7 @@ class K3bDataDirTreeView : public K3bListView
   KActionCollection* actionCollection() const { return m_actionCollection; }
 
  public slots:
-  void updateContents();
+  void checkForNewItems();
   void setCurrentDir( K3bDirItem* );
 
  signals:

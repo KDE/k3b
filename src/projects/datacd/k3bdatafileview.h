@@ -56,7 +56,7 @@ class K3bDataFileView : public K3bListView
 	
  public slots:
   void slotSetCurrentDir( K3bDirItem* );
-  void updateContents();
+  void checkForNewItems();
 
  private slots:
   void slotDataItemRemoved( K3bDataItem* );

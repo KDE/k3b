@@ -1037,16 +1037,11 @@ void K3bDataDoc::removeItem( K3bDataItem* item )
 	  pi = m_queuedToAddItems.next();
       }
     }
-//     else if( item->isFile() ) {
-//       // restore the item imported from an old session
-//       if( K3bDataItem* oldSessionItem = ((K3bFileItem*)item)->replaceItemFromOldSession() ) {
-// 	item->parent()->addDataItem( oldSessionItem );
-//       }
-//     }
 
     delete item;
 
-    emit changed();
+    // This is a little HACK that is need to prevent a crash in the K3bDataFileView
+    QTimer::singleShot( 0, this, SIGNAL(changed()) );
   }
   else
     kdDebug() << "(K3bDataDoc) tried to remove non-removable entry!" << endl;
@@ -1532,7 +1527,8 @@ void K3bDataDoc::removeBootItem( K3bBootItem* item )
     delete m_bootCataloge;
     m_bootCataloge = 0;
 
-    emit changed();
+    // This is a little HACK that is need to prevent a crash in the K3bDataFileView
+    QTimer::singleShot( 0, this, SIGNAL(changed()) );
   }
 }
 

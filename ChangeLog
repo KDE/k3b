@@ -1,7 +1,8 @@
 0.11.5
 Do not ask for overwriting directories in cloning dialog
 Again fixed some disk detection problems which were introduced with the previous fixes :-(
-
+Fixed a crash which occured if the last boot image was displayed in the fileview while removing it.
+	
 0.11.4
 Fixed adding of hidden files (wrong naming of config entries)
 Use a default imagefile name for cloning if none was specified.

@@ -69,12 +69,12 @@ K3bDataFileView::K3bDataFileView( K3bView* view, K3bDataDirTreeView* dirTreeView
 
   m_doc = doc;
   m_currentDir = doc->root();
-  updateContents();
+  checkForNewItems();
 
   connect( m_treeView, SIGNAL(dirSelected(K3bDirItem*)), this, SLOT(slotSetCurrentDir(K3bDirItem*)) );
   connect( m_doc, SIGNAL(itemRemoved(K3bDataItem*)), this, SLOT(slotDataItemRemoved(K3bDataItem*)) );
-  connect( m_doc, SIGNAL(newFileItems()), this, SLOT(updateContents()) );
-  connect( m_doc, SIGNAL(changed()), this, SLOT(updateContents()) );
+  connect( m_doc, SIGNAL(newFileItems()), this, SLOT(checkForNewItems()) );
+  connect( m_doc, SIGNAL(changed()), this, SLOT(checkForNewItems()) );
   connect( this, SIGNAL(executed(QListViewItem*)), this, SLOT(slotExecuted(QListViewItem*)) );
   connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
 	   this, SLOT(showPopupMenu(KListView*, QListViewItem*, const QPoint&)) );
@@ -95,7 +95,7 @@ void K3bDataFileView::slotSetCurrentDir( K3bDirItem* dir )
   if( dir ) {
     m_currentDir = dir;
     clearItems();
-    updateContents();
+    checkForNewItems();
   }
 }
 
@@ -107,7 +107,7 @@ void K3bDataFileView::clearItems()
 }
 
 
-void K3bDataFileView::updateContents()
+void K3bDataFileView::checkForNewItems()
 {
   hideEditor();
 
