@@ -1,3 +1,6 @@
+0.11.3
+fixed features detection with some devices.
+
 0.11.2
 K3bProcess now has a clean API and a non-stupid implementation which fixes the kde 3.2 issue
 way better than the hotfix from 0.11.1.

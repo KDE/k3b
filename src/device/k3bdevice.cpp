@@ -189,385 +189,400 @@ bool K3bCdDevice::CdDevice::init()
   // TODO: do multiple calls with length 65530 and different starting features (only for future versions of MMC.
   //       MMC4 says it's never more than 1KB)
 
-  unsigned char profiles[65530];
-  ::memset( profiles, 0, 65530 );
+  unsigned char header[8];
+  ::memset( header, 0, 8 );
   cmd[0] = MMC::GET_CONFIGURATION;
-  cmd[7] = 65530>>8;
-  cmd[8] = 65530;
-  if( cmd.transport( TR_DIR_READ, profiles, 65530 ) ) {
+  cmd[8] = 8;
+  if( cmd.transport( TR_DIR_READ, header, 8 ) ) {
     kdDebug() << "(K3bCdDevice) " << blockDeviceName() << ": GET_CONFIGURATION failed." << endl;
   }
   else {
-    int len = from4Byte( profiles );
+    int len = from4Byte( header );
 
-    for( int i = 8; i < len; ) {
-      short feature = from2Byte( &profiles[i] );
-      int featureLen = profiles[i+3];
-      i+=4; // skip feature header
+    // again with full length
+    unsigned char* profiles = new unsigned char[len];
+    ::memset( profiles, 0, len );
+    cmd[6] = len>>16;
+    cmd[7] = len>>8;
+    cmd[8] = len;
 
-      //
-      // now i indexes the first byte of the feature dependant data
-      //
+    kdDebug() << "(K3bCdDevice) " << blockDeviceName() << ": GET_CONFIGURATION length: " << len << "." << endl;
 
-      switch( feature ) {
-      case 0x000: // Profile List
-	for( int j = 0; j < featureLen; j+=4 ) {
-	  short profile = from2Byte( &profiles[i+j] );
+    if( cmd.transport( TR_DIR_READ, profiles, len ) ) {
+      kdDebug() << "(K3bCdDevice) " << blockDeviceName() << ": GET_CONFIGURATION failed." << endl;
+    }
+    else {
+      for( int i = 8; i < len; ) {
+	short feature = from2Byte( &profiles[i] );
+	int featureLen = profiles[i+3];
+	i+=4; // skip feature header
 
-	  switch (profile) {
-	  case 0x10: d->supportedProfiles |= MEDIA_DVD_ROM; break;
-	  case 0x11: d->supportedProfiles |= MEDIA_DVD_R_SEQ; break;
-	  case 0x12: d->supportedProfiles |= MEDIA_DVD_RAM; break;
-	  case 0x13: d->supportedProfiles |= MEDIA_DVD_RW_OVWR; break;
-	  case 0x14: d->supportedProfiles |= MEDIA_DVD_RW_SEQ; break;
-	  case 0x1A: d->supportedProfiles |= MEDIA_DVD_PLUS_RW; break;
-	  case 0x1B: d->supportedProfiles |= MEDIA_DVD_PLUS_R; break;
-	  case 0x08: d->supportedProfiles |= MEDIA_CD_ROM; break;
-	  case 0x09: d->supportedProfiles |= MEDIA_CD_R; break;
-	  case 0x0A: d->supportedProfiles |= MEDIA_CD_RW; break;
-	  default: 
-	    kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " unknown profile: " 
-		      << profile << endl;
+	//
+	// now i indexes the first byte of the feature dependant data
+	//
+
+	switch( feature ) {
+	case 0x000: // Profile List
+	  for( int j = 0; j < featureLen; j+=4 ) {
+	    short profile = from2Byte( &profiles[i+j] );
+
+	    switch (profile) {
+	    case 0x10: d->supportedProfiles |= MEDIA_DVD_ROM; break;
+	    case 0x11: d->supportedProfiles |= MEDIA_DVD_R_SEQ; break;
+	    case 0x12: d->supportedProfiles |= MEDIA_DVD_RAM; break;
+	    case 0x13: d->supportedProfiles |= MEDIA_DVD_RW_OVWR; break;
+	    case 0x14: d->supportedProfiles |= MEDIA_DVD_RW_SEQ; break;
+	    case 0x1A: d->supportedProfiles |= MEDIA_DVD_PLUS_RW; break;
+	    case 0x1B: d->supportedProfiles |= MEDIA_DVD_PLUS_R; break;
+	    case 0x08: d->supportedProfiles |= MEDIA_CD_ROM; break;
+	    case 0x09: d->supportedProfiles |= MEDIA_CD_R; break;
+	    case 0x0A: d->supportedProfiles |= MEDIA_CD_RW; break;
+	    default: 
+	      kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " unknown profile: " 
+			<< profile << endl;
+	    }
 	  }
-	}
-	break;
+	  break;
 
-      case 0x001: // Core
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Core" << endl;
-	break;
+	case 0x001: // Core
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Core" << endl;
+	  break;
 
-      case 0x002: // Morphing
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Morphing" << endl;
-	break;
+	case 0x002: // Morphing
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Morphing" << endl;
+	  break;
 
-      case 0x003: // Removable Medium
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Removable Medium" << endl;
-	break;
+	case 0x003: // Removable Medium
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Removable Medium" << endl;
+	  break;
 
-      case 0x004: // Write Protect
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Write Protect" << endl;
-	break;
+	case 0x004: // Write Protect
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Write Protect" << endl;
+	  break;
 
-	// 0x05 - 0x0F reserved
+	  // 0x05 - 0x0F reserved
 
-      case 0x010: // Random Readable
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Random Readable" << endl;
-	break;
+	case 0x010: // Random Readable
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Random Readable" << endl;
+	  break;
 
-	// 0x11 - 0x1C reserved
+	  // 0x11 - 0x1C reserved
 
-      case 0x01D: // Multi-Read
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Multi-Read" << endl;
-	d->deviceType |= CDROM;
-	break;
+	case 0x01D: // Multi-Read
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Multi-Read" << endl;
+	  d->deviceType |= CDROM;
+	  break;
 
-      case 0x01E: // CD Read
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "CD Read" << endl;
-	d->deviceType |= CDROM;
-	break;
+	case 0x01E: // CD Read
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "CD Read" << endl;
+	  d->deviceType |= CDROM;
+	  break;
 
-      case 0x01F: // DVD Read
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "DVD Read" << endl;
-	d->deviceType |= DVD;
-	break;
+	case 0x01F: // DVD Read
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "DVD Read" << endl;
+	  d->deviceType |= DVD;
+	  break;
 
-      case 0x020: // Random Writable
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Random Writable" << endl;
-	break;
+	case 0x020: // Random Writable
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Random Writable" << endl;
+	  break;
 
-      case 0x021: // Incremental Streaming Writable
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Incremental Streaming Writable" << endl;
-	break;
+	case 0x021: // Incremental Streaming Writable
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Incremental Streaming Writable" << endl;
+	  break;
 
-      case 0x022: // Sector Erasable
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Sector Erasable" << endl;
-	break;
+	case 0x022: // Sector Erasable
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Sector Erasable" << endl;
+	  break;
 
-      case 0x023: // Formattable
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Formattable" << endl;
-	break;
+	case 0x023: // Formattable
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Formattable" << endl;
+	  break;
 
-      case 0x024: // Defect Management
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Defect Management" << endl;
-	break;
+	case 0x024: // Defect Management
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Defect Management" << endl;
+	  break;
 
-      case 0x025: // Write Once
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Write Once" << endl;
-	break;
+	case 0x025: // Write Once
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Write Once" << endl;
+	  break;
 
-      case 0x026: // Restricted Overwrite
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Restricted Overwrite" << endl;
-	break;
+	case 0x026: // Restricted Overwrite
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Restricted Overwrite" << endl;
+	  break;
 
-      case 0x027: // CD-RW CAV Write
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "CD-RW CAV Write" << endl;
-	d->deviceType |= CDRW;
-	break;
+	case 0x027: // CD-RW CAV Write
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "CD-RW CAV Write" << endl;
+	  d->deviceType |= CDRW;
+	  break;
 
-      case 0x028: // MRW
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "MRW" << endl;
-	break;
+	case 0x028: // MRW
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "MRW" << endl;
+	  break;
 
-      case 0x029: // Enhanced Defect Reporting
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Enhanced Defect Reporting" << endl;
-	break;
+	case 0x029: // Enhanced Defect Reporting
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Enhanced Defect Reporting" << endl;
+	  break;
 
-      case 0x02A: // DVD+RW
-	{
-	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "DVD+RW" << endl;
+	case 0x02A: // DVD+RW
+	  {
+	    kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "DVD+RW" << endl;
 #if __BYTE_ORDER == __BIG_ENDIAN
-	  struct dvd_plus_rw_feature {
-	    unsigned char reserved1   : 7;
-	    unsigned char write       : 1;
-	    unsigned char reserved2   : 6;
-	    unsigned char quick_start : 1;
-	    unsigned char close_only  : 1;
-	    // and some stuff we do not use here...
-	  };
+	    struct dvd_plus_rw_feature {
+	      unsigned char reserved1   : 7;
+	      unsigned char write       : 1;
+	      unsigned char reserved2   : 6;
+	      unsigned char quick_start : 1;
+	      unsigned char close_only  : 1;
+	      // and some stuff we do not use here...
+	    };
 #else
-	  struct dvd_plus_rw_feature {
-	    unsigned char write       : 1;
-	    unsigned char reserved1   : 7;
-	    unsigned char close_only  : 1;
-	    unsigned char quick_start : 1;
-	    unsigned char reserved2   : 6;
-	    // and some stuff we do not use here...
-	  };
+	    struct dvd_plus_rw_feature {
+	      unsigned char write       : 1;
+	      unsigned char reserved1   : 7;
+	      unsigned char close_only  : 1;
+	      unsigned char quick_start : 1;
+	      unsigned char reserved2   : 6;
+	      // and some stuff we do not use here...
+	    };
 #endif
 	    
-	  struct dvd_plus_rw_feature* p = (struct dvd_plus_rw_feature*)&profiles[i];
-	  if( p->write ) d->deviceType |= DVDPRW;
-	  break;
-	}
+	    struct dvd_plus_rw_feature* p = (struct dvd_plus_rw_feature*)&profiles[i];
+	    if( p->write ) d->deviceType |= DVDPRW;
+	    break;
+	  }
 
-      case 0x02B: // DVD+R
-	{
-	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "DVD+R" << endl;
+	case 0x02B: // DVD+R
+	  {
+	    kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "DVD+R" << endl;
 #if __BYTE_ORDER == __BIG_ENDIAN
-	  struct dvd_plus_r_feature {
-	    unsigned char reserved1      : 7;
-	    unsigned char write          : 1;
-	    unsigned char reserved2[3];
-	    unsigned char reserved3      : 6;
-	    unsigned char write_4x_max   : 1;
-	    unsigned char write_2_4x_max : 1;
-	    // and some stuff we do not use here...
-	  };
+	    struct dvd_plus_r_feature {
+	      unsigned char reserved1      : 7;
+	      unsigned char write          : 1;
+	      unsigned char reserved2[3];
+	      unsigned char reserved3      : 6;
+	      unsigned char write_4x_max   : 1;
+	      unsigned char write_2_4x_max : 1;
+	      // and some stuff we do not use here...
+	    };
 #else
-	  struct dvd_plus_r_feature {
-	    unsigned char write     : 1;
-	    unsigned char reserved1 : 7;
-	    unsigned char reserved2[3];
-	    unsigned char write_2_4x_max : 1;
-	    unsigned char write_4x_max   : 1;
-	    unsigned char reserved3      : 6;
-	    // and some stuff we do not use here...
-	  };
+	    struct dvd_plus_r_feature {
+	      unsigned char write     : 1;
+	      unsigned char reserved1 : 7;
+	      unsigned char reserved2[3];
+	      unsigned char write_2_4x_max : 1;
+	      unsigned char write_4x_max   : 1;
+	      unsigned char reserved3      : 6;
+	      // and some stuff we do not use here...
+	    };
 #endif
-	  struct dvd_plus_r_feature* p = (struct dvd_plus_r_feature*)&profiles[i];
-	  if( p->write ) d->deviceType |= DVDPR;
+	    struct dvd_plus_r_feature* p = (struct dvd_plus_r_feature*)&profiles[i];
+	    if( p->write ) d->deviceType |= DVDPR;
+	    break;
+	  }
+
+	case 0x02C: // Rigid Restricted Overwrite
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Rigid Restricted Overwrite" << endl;
 	  break;
-	}
 
-      case 0x02C: // Rigid Restricted Overwrite
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Rigid Restricted Overwrite" << endl;
-	break;
-
-      case 0x02D: // CD Track At Once
-	{
-	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "CD Track At Once" << endl;
+	case 0x02D: // CD Track At Once
+	  {
+	    kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "CD Track At Once" << endl;
 #if __BYTE_ORDER == __BIG_ENDIAN
-	  struct cd_track_at_once_feature {
-	    unsigned char reserved1 : 1;
-	    unsigned char BUF       : 1;  // Burnfree
-	    unsigned char reserved2 : 1;
-	    unsigned char rw_raw    : 1;  // Writing R-W subcode in Raw mode
-	    unsigned char rw_pack   : 1;  // Writing R-W subcode in Packet mode
-	    unsigned char testwrite : 1;  // Simulation write support
-	    unsigned char cd_rw     : 1;  // CD-RW support
-	    unsigned char rw_sub    : 1;  // Write R-W sub channels with user data
-	    unsigned char reserved3;
-	    unsigned char data_type[2];
-	  };
+	    struct cd_track_at_once_feature {
+	      unsigned char reserved1 : 1;
+	      unsigned char BUF       : 1;  // Burnfree
+	      unsigned char reserved2 : 1;
+	      unsigned char rw_raw    : 1;  // Writing R-W subcode in Raw mode
+	      unsigned char rw_pack   : 1;  // Writing R-W subcode in Packet mode
+	      unsigned char testwrite : 1;  // Simulation write support
+	      unsigned char cd_rw     : 1;  // CD-RW support
+	      unsigned char rw_sub    : 1;  // Write R-W sub channels with user data
+	      unsigned char reserved3;
+	      unsigned char data_type[2];
+	    };
 #else
-	  struct cd_track_at_once_feature {
-	    unsigned char rw_sub    : 1;  // Write R-W sub channels with user data
-	    unsigned char cd_rw     : 1;  // CD-RW support
-	    unsigned char testwrite : 1;  // Simulation write support
-	    unsigned char rw_pack   : 1;  // Writing R-W subcode in Packet mode
-	    unsigned char rw_raw    : 1;  // Writing R-W subcode in Raw mode
-	    unsigned char reserved2 : 1;
-	    unsigned char BUF       : 1;  // Burnfree
-	    unsigned char reserved1 : 1;
-	    unsigned char reserved3;
-	    unsigned char data_type[2];
-	  };
-#endif
-
-	  struct cd_track_at_once_feature* p = (struct cd_track_at_once_feature*)&profiles[i];
-	  m_writeModes |= TAO;
-	  if( p->BUF ) d->burnfree = true;
-	  d->deviceType |= CDR;
-	  if( p->cd_rw ) d->deviceType |= CDRW;
-	  break;
-	}
-
-      case 0x02E: // CD Mastering
-	{
-	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "CD Mastering" << endl;
-#if __BYTE_ORDER == __BIG_ENDIAN
-	  struct cd_mastering_feature {
-	    unsigned char reserved1 : 1;
-	    unsigned char BUF       : 1;  // Burnfree
-	    unsigned char SAO       : 1;  // Session At Once writing
-	    unsigned char raw_ms    : 1;  // Writing Multisession in Raw Writing Mode
-	    unsigned char raw       : 1;  // Writing in RAW mode
-	    unsigned char testwrite : 1;  // Simulation write support
-	    unsigned char cd_rw     : 1;  // CD-RW support
-	    unsigned char rw_sub    : 1;  // Write R-W sub channels with user data
-	    unsigned char max_cue_length[3];
-	  };
-#else
-	  struct cd_mastering_feature {
-	    unsigned char rw_sub    : 1;  // Write R-W sub channels with user data
-	    unsigned char cd_rw     : 1;  // CD-RW support
-	    unsigned char testwrite : 1;  // Simulation write support
-	    unsigned char raw       : 1;  // Writing in RAW mode
-	    unsigned char raw_ms    : 1;  // Writing Multisession in Raw Writing Mode
-	    unsigned char SAO       : 1;  // Session At Once writing
-	    unsigned char BUF       : 1;  // Burnfree
-	    unsigned char reserved1 : 1;
-	    unsigned char max_cue_length[3];
-	  };
+	    struct cd_track_at_once_feature {
+	      unsigned char rw_sub    : 1;  // Write R-W sub channels with user data
+	      unsigned char cd_rw     : 1;  // CD-RW support
+	      unsigned char testwrite : 1;  // Simulation write support
+	      unsigned char rw_pack   : 1;  // Writing R-W subcode in Packet mode
+	      unsigned char rw_raw    : 1;  // Writing R-W subcode in Raw mode
+	      unsigned char reserved2 : 1;
+	      unsigned char BUF       : 1;  // Burnfree
+	      unsigned char reserved1 : 1;
+	      unsigned char reserved3;
+	      unsigned char data_type[2];
+	    };
 #endif
 
-	  struct cd_mastering_feature* p = (struct cd_mastering_feature*)&profiles[i];
-	  if( p->BUF ) d->burnfree = true;
-	  d->deviceType |= CDR;
-	  if( p->cd_rw ) d->deviceType |= CDRW;
-	  if( p->SAO ) m_writeModes |= SAO;
-	  if( p->raw || p->raw_ms ) m_writeModes |= RAW;  // perhaps we should extend this to RAW/R96P|R
-	  break;
-	}
+	    struct cd_track_at_once_feature* p = (struct cd_track_at_once_feature*)&profiles[i];
+	    m_writeModes |= TAO;
+	    if( p->BUF ) d->burnfree = true;
+	    d->deviceType |= CDR;
+	    if( p->cd_rw ) d->deviceType |= CDRW;
+	    break;
+	  }
 
-      case 0x02F: // DVD-R/-RW Write
-	{
-	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "DVD-R/-RW Write" << endl;
+	case 0x02E: // CD Mastering
+	  {
+	    kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "CD Mastering" << endl;
 #if __BYTE_ORDER == __BIG_ENDIAN
-	  struct dvd_r_rw_write_feature {
-	    unsigned char reserved1 : 1;
-	    unsigned char BUF       : 1;  // Burnfree
-	    unsigned char reserved2 : 3;
-	    unsigned char testwrite : 1;  // Simulation write support
-	    unsigned char dvd_rw    : 1;  // DVD-RW Writing
-	    unsigned char reserved3 : 1;
-	    unsigned char reserved4[3];
-	  };
+	    struct cd_mastering_feature {
+	      unsigned char reserved1 : 1;
+	      unsigned char BUF       : 1;  // Burnfree
+	      unsigned char SAO       : 1;  // Session At Once writing
+	      unsigned char raw_ms    : 1;  // Writing Multisession in Raw Writing Mode
+	      unsigned char raw       : 1;  // Writing in RAW mode
+	      unsigned char testwrite : 1;  // Simulation write support
+	      unsigned char cd_rw     : 1;  // CD-RW support
+	      unsigned char rw_sub    : 1;  // Write R-W sub channels with user data
+	      unsigned char max_cue_length[3];
+	    };
 #else
-	  struct dvd_r_rw_write_feature {
-	    unsigned char reserved3 : 1;
-	    unsigned char dvd_rw    : 1;  // DVD-RW Writing
-	    unsigned char testwrite : 1;  // Simulation write support
-	    unsigned char reserved2 : 3;
-	    unsigned char BUF       : 1;  // Burnfree
-	    unsigned char reserved1 : 1;
-	    unsigned char reserved4[3];
-	  };
+	    struct cd_mastering_feature {
+	      unsigned char rw_sub    : 1;  // Write R-W sub channels with user data
+	      unsigned char cd_rw     : 1;  // CD-RW support
+	      unsigned char testwrite : 1;  // Simulation write support
+	      unsigned char raw       : 1;  // Writing in RAW mode
+	      unsigned char raw_ms    : 1;  // Writing Multisession in Raw Writing Mode
+	      unsigned char SAO       : 1;  // Session At Once writing
+	      unsigned char BUF       : 1;  // Burnfree
+	      unsigned char reserved1 : 1;
+	      unsigned char max_cue_length[3];
+	    };
 #endif
 
-	  struct dvd_r_rw_write_feature* p = (struct dvd_r_rw_write_feature*)&profiles[i];
-	  if( p->BUF ) d->burnfree = true;
-	  d->deviceType |= DVDR;
-	  if( p->dvd_rw ) d->deviceType |= DVDRW;
+	    struct cd_mastering_feature* p = (struct cd_mastering_feature*)&profiles[i];
+	    if( p->BUF ) d->burnfree = true;
+	    d->deviceType |= CDR;
+	    if( p->cd_rw ) d->deviceType |= CDRW;
+	    if( p->SAO ) m_writeModes |= SAO;
+	    if( p->raw || p->raw_ms ) m_writeModes |= RAW;  // perhaps we should extend this to RAW/R96P|R
+	    break;
+	  }
 
-	  m_dvdMinusTestwrite = p->testwrite;
+	case 0x02F: // DVD-R/-RW Write
+	  {
+	    kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "DVD-R/-RW Write" << endl;
+#if __BYTE_ORDER == __BIG_ENDIAN
+	    struct dvd_r_rw_write_feature {
+	      unsigned char reserved1 : 1;
+	      unsigned char BUF       : 1;  // Burnfree
+	      unsigned char reserved2 : 3;
+	      unsigned char testwrite : 1;  // Simulation write support
+	      unsigned char dvd_rw    : 1;  // DVD-RW Writing
+	      unsigned char reserved3 : 1;
+	      unsigned char reserved4[3];
+	    };
+#else
+	    struct dvd_r_rw_write_feature {
+	      unsigned char reserved3 : 1;
+	      unsigned char dvd_rw    : 1;  // DVD-RW Writing
+	      unsigned char testwrite : 1;  // Simulation write support
+	      unsigned char reserved2 : 3;
+	      unsigned char BUF       : 1;  // Burnfree
+	      unsigned char reserved1 : 1;
+	      unsigned char reserved4[3];
+	    };
+#endif
+
+	    struct dvd_r_rw_write_feature* p = (struct dvd_r_rw_write_feature*)&profiles[i];
+	    if( p->BUF ) d->burnfree = true;
+	    d->deviceType |= DVDR;
+	    if( p->dvd_rw ) d->deviceType |= DVDRW;
+
+	    m_dvdMinusTestwrite = p->testwrite;
+	    break;
+	  }
+
+	case 0x030: // DDCD Read
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "DDCD Read" << endl;
+	  break;
+
+	case 0x031: // DDCD-R Write
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "DDCD-R Write" << endl;
+	  break;
+
+	case 0x032: // DDCD-RW Write
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "DDCD-RW Write" << endl;
+	  break;
+
+	  // 0x33 0x38
+
+	case 0x037: // CD-RW Media Write Support
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "CD-RW Media Write Support" << endl;
+	  d->deviceType |= CDRW;
+	  break;
+
+	  // 0x38- 0xFF reserved
+
+	case 0x100: // Power Management
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Power Management" << endl;
+	  break;
+
+	  // 0x101 reserved
+
+	case 0x102: // Embedded Changer
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Embedded Changer" << endl;
+	  break;
+
+	case 0x103: // CD Audio analog play
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "CD Audio analog play" << endl;
+	  break;
+
+	case 0x104: // Microcode Upgrade
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Microcode Upgrade" << endl;
+	  break;
+
+	case 0x105: // Timeout
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Timeout" << endl;
+	  break;
+
+	case 0x106: // DVD-CSS
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "DVD-CSS" << endl;
+	  break;
+
+	case 0x107: // Read Time Streaming
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Read Time Streaming" << endl;
+	  break;
+
+	case 0x108: // Logical Unit Serial Number
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Logical Unit Serial Number" << endl;
+	  break;
+
+	  // 0x109 reserved
+
+	case 0x10A: // Disc Control Blocks
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Disc Control Blocks" << endl;
+	  break;
+
+	case 0x10B: // DVD CPRM
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "DVD CPRM" << endl;
+	  break;
+
+	  //  0x10C - 0x1FE reserved
+
+	case 0x1FF: // Firmware Date
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Firmware Date" << endl;
+	  break;
+
+	  // 0x200 - 0xFEFF reserved
+
+	  // 0xFF00 - 0xFFFF vendor specific
+
+	default:
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << ": unknown feature: " 
+		    << feature << endl;
 	  break;
 	}
 
-      case 0x030: // DDCD Read
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "DDCD Read" << endl;
-	break;
-
-      case 0x031: // DDCD-R Write
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "DDCD-R Write" << endl;
-	break;
-
-      case 0x032: // DDCD-RW Write
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "DDCD-RW Write" << endl;
-	break;
-
-	// 0x33 0x38
-
-      case 0x037: // CD-RW Media Write Support
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "CD-RW Media Write Support" << endl;
-	d->deviceType |= CDRW;
-	break;
-
-	// 0x38- 0xFF reserved
-
-      case 0x100: // Power Management
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Power Management" << endl;
-	break;
-
-	// 0x101 reserved
-
-      case 0x102: // Embedded Changer
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Embedded Changer" << endl;
-	break;
-
-      case 0x103: // CD Audio analog play
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "CD Audio analog play" << endl;
-	break;
-
-      case 0x104: // Microcode Upgrade
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Microcode Upgrade" << endl;
-	break;
-
-      case 0x105: // Timeout
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Timeout" << endl;
-	break;
-
-      case 0x106: // DVD-CSS
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "DVD-CSS" << endl;
-	break;
-
-      case 0x107: // Read Time Streaming
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Read Time Streaming" << endl;
-	break;
-
-      case 0x108: // Logical Unit Serial Number
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Logical Unit Serial Number" << endl;
-	break;
-
-	// 0x109 reserved
-
-      case 0x10A: // Disc Control Blocks
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Disc Control Blocks" << endl;
-	break;
-
-      case 0x10B: // DVD CPRM
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "DVD CPRM" << endl;
-	break;
-
-	//  0x10C - 0x1FE reserved
-
-      case 0x1FF: // Firmware Date
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Firmware Date" << endl;
-	break;
-
-	// 0x200 - 0xFEFF reserved
-
-	// 0xFF00 - 0xFFFF vendor specific
-
-      default:
-	kdDebug() << "(K3bCdDevice) " << blockDeviceName() << ": unknown feature: " 
-		  << feature << endl;
-	break;
+	// skip feature dependent data
+	i += featureLen;
       }
-
-      // skip feature dependent data
-      i += featureLen;
     }
+
+    delete [] profiles;
   }
 
 
@@ -2033,12 +2048,14 @@ int K3bCdDevice::CdDevice::dvdMediaType() const
   int m = -1;
 
   if( readsDvd() ) {
-    unsigned char dvdheader[20];
-    ::memset( dvdheader, 0, 20 );
+    // 4 bytes header + 2048 bytes layer descriptor
+    unsigned char dvdheader[4+2048];
+    ::memset( dvdheader, 0, 4+2048 );
     ScsiCommand cmd( this );
     cmd[0] = MMC::READ_DVD_STRUCTURE;
-    cmd[9] = 20;
-    if( cmd.transport( TR_DIR_READ, dvdheader, 20 ) ) {
+    cmd[8] = (4+2048)>>8;
+    cmd[9] = 4+2048;
+    if( cmd.transport( TR_DIR_READ, dvdheader, 4+2048 ) ) {
       kdDebug() << "(K3bCdDevice::CdDevice) Unable to read DVD structure." << endl;
 
       //
