@@ -3,6 +3,8 @@ Check size of returned CD-TEXT data to be a multiple of the pack length. This sh
 	with CD copy.
 Audio Project: Do not overwrite CD-Text values loaded from the project file with the ones detected.
 Added --copydvd command line parameter
+Do only read MCN and ISRCs when copying an audio cd since scanning them takes a very long time.
+Fixed cdrdao 1.1.8 version handling (no ATAPI warning)
 	
 0.11.6
 Fixed length calculation for long FLAC files.

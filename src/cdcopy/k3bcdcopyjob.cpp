@@ -170,8 +170,10 @@ void K3bCdCopyJob::start()
 
   emit newSubTask( i18n("Reading Table of Contents") );
 
-  connect( K3bCdDevice::diskInfo( m_readerDevice ), SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
-	   this, SLOT(slotDiskInfoReady(K3bCdDevice::DeviceHandler*)) );
+  connect( K3bCdDevice::sendCommand( K3bCdDevice::DeviceHandler::DISKINFO_ISRC_MCN, m_readerDevice ), 
+	   SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
+	   this, 
+	   SLOT(slotDiskInfoReady(K3bCdDevice::DeviceHandler*)) );
 }
 
 

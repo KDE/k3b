@@ -50,6 +50,17 @@ public:
 	    cdText = dev->readCdText();
 	}
 	break;
+      case DISKINFO_ISRC_MCN:
+	success = (dev->open() != -1);
+	ngInfo = dev->ngDiskInfo();
+	if( !ngInfo.empty() ) {
+	  toc = dev->readToc();
+	  if( toc.contentType() == AUDIO ||
+	      toc.contentType() == MIXED )
+	    cdText = dev->readCdText();
+	}
+	dev->readIsrcMcn( toc );
+	break;
       case NG_DISKINFO:
 	// FIXME: we need a better method to check if
 	// this succeeded
@@ -59,6 +70,10 @@ public:
       case TOC:
       case TOCTYPE:
 	toc = dev->readToc();
+	success = true;
+	break;
+      case ISRC_MCN:
+	dev->readIsrcMcn( toc );
 	success = true;
 	break;
       case CD_TEXT:
