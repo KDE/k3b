@@ -20,8 +20,9 @@
 #include <klocale.h>
 #include <krun.h>
 #include <kmessagebox.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kconfig.h>
+#include <kstdguiitem.h>
 
 #include <qfile.h>
 #include <qtimer.h>
@@ -61,9 +62,13 @@ int main(int argc, char *argv[])
   QString globalConfig = KGlobal::dirs()->findResourceDir( "data", "k3b/k3bui.rc" ) + "k3b/k3bsetup";
   
   if( !QFile::exists( globalConfig ) ) {
-    KMessageBox::information( 0, i18n("It seems as if you have not run K3bSetup yet. So it will be started now."),
-			      i18n("K3b Setup") );
-    KRun::runCommand( "kdesu k3bsetup" );
+    if( KMessageBox::warningYesNo( 0, i18n("It seems as if you have not run K3bSetup yet. It is recommended to do so. "
+					   "Should K3bSetup be started?"),
+				   i18n("K3b Setup"), KStdGuiItem::yes(), KStdGuiItem::no(), 
+				   i18n("Don't bother me again.") ) == KMessageBox::Yes ) {
+      KRun::runCommand( "kdesu k3bsetup" );
+      exit(0);
+    }
   }
   
 
