@@ -241,8 +241,6 @@ class K3bMainWindow : public KDockMainWindow
    */
   void initStatusBar();
 
-  void searchExternalProgs();
-
   /** the configuration object of the application */
   KConfig *m_config;
 
