@@ -96,13 +96,13 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
   QToolTip::add(m_checkSegmentFolder, i18n("Add allways an empty `/SEGMENT' directory") );
   QToolTip::add(m_checkRelaxedAps, i18n("This controls whether APS constraints are strict or relaxed. ") );
   QToolTip::add(m_checkUpdateScanOffsets, i18n("This controls whether to update the scan data information contained in the MPEG-2 video streams.") );
-  QToolTip::add(m_spinRestriction, i18n("This element allows to set viewing restrictions which may be interpreted by the playing device.") );
+  QToolTip::add(m_labelRestriction, i18n("This element allows to set viewing restrictions which may be interpreted by the playing device.") );
 
   QToolTip::add( m_checkGaps, i18n("This option enable customizing of Gaps and Margins.") );
-  QToolTip::add( m_spinPreGapLeadout, i18n("Used to set the amount of empty sectors added before the lead-out area begins.") );
-  QToolTip::add( m_spinPreGapTrack, i18n("Used to set the track pre-gap for all tracks in sectors globally.") );
-  QToolTip::add( m_spinFrontMarginTrack, i18n("Set's the front margin for sequence items.") );
-  QToolTip::add( m_spinRearMarginTrack, i18n("Set's the rear margin for sequence items.") );
+  QToolTip::add( m_labelPreGapLeadout, i18n("Used to set the amount of empty sectors added before the lead-out area begins.") );
+  QToolTip::add( m_labelPreGapTrack, i18n("Used to set the track pre-gap for all tracks in sectors globally.") );
+  QToolTip::add( m_labelFrontMarginTrack, i18n("Set's the front margin for sequence items.") );
+  QToolTip::add( m_labelRearMarginTrack, i18n("Set's the rear margin for sequence items.") );
    
   // What's This info
   // -------------------------------------------------------------------------
@@ -339,7 +339,7 @@ void K3bVcdBurnDialog::setupVideoCdTab()
   m_checkCdiSupport = new QCheckBox( i18n( "Enable CD-i support" ), m_groupOptions );
 
   // ------------------------------------------------- CD-i Application ---
-  m_groupCdi = new QGroupBox( 4, Qt::Vertical, i18n("Video on CD-i"), w );
+  m_groupCdi = new QGroupBox( 4, Qt::Vertical, i18n("VideoCD on CD-i"), w );
   m_editCdiCfg = new QMultiLineEdit( m_groupCdi, "m_editCdiCfg" );
   m_editCdiCfg->setFrameShape( QTextEdit::NoFrame );
 
