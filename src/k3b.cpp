@@ -173,7 +173,7 @@ void K3bMainWindow::initActions()
   actionFileSaveAs = KStdAction::saveAs(this, SLOT(slotFileSaveAs()), actionCollection());
   actionFileClose = KStdAction::close(this, SLOT(slotFileClose()), actionCollection());
   actionFileQuit = KStdAction::quit(this, SLOT(slotFileQuit()), actionCollection());
-  createStandardStatusBarAction();
+  actionViewStatusBar = KStdAction::showStatusbar(this, SLOT(slotViewStatusBar()), actionCollection());
   actionSettingsConfigure = KStdAction::preferences(this, SLOT(slotSettingsConfigure()), actionCollection() );
 
   KStdAction::configureToolbars(this, SLOT(slotEditToolbars()), actionCollection());
@@ -747,6 +747,19 @@ void K3bMainWindow::slotFileQuit()
 {
   close();
 }
+
+
+void K3bMainWindow::slotViewStatusBar()
+{
+  //turn Statusbar on or off
+  if(actionViewStatusBar->isChecked()) {
+    statusBar()->show();
+  }
+  else {
+    statusBar()->hide();
+  }
+}
+
 
 void K3bMainWindow::slotStatusMsg(const QString &text)
 {
