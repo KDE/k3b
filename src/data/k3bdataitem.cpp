@@ -60,8 +60,21 @@ void K3bDataItem::setK3bName( const QString& name ) {
 }
 
 
-const QString& K3bDataItem::k3bName(){
+void K3bDataItem::setJolietName( const QString& name )
+{
+  m_jolietName = name;
+}
+
+
+const QString& K3bDataItem::k3bName()
+{
   return m_k3bName;
+}
+
+
+const QString& K3bDataItem::jolietName()
+{
+  return m_jolietName;
 }
 
 
@@ -71,6 +84,15 @@ QString K3bDataItem::k3bPath()
     return k3bName();
   else
     return m_parentDir->k3bPath() + k3bName();
+}
+
+
+QString K3bDataItem::jolietPath()
+{
+  if( !m_parentDir )
+    return jolietName();
+  else
+    return m_parentDir->jolietPath() + jolietName();
 }
 
 

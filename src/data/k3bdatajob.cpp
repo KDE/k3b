@@ -885,20 +885,117 @@ bool K3bDataJob::writePathSpec( const QString& filename )
 
   // start writing the path-specs
   // iterate over all the dataItems
-  K3bDataItem* item = m_doc->root()->nextSibling();
+//   K3bDataItem* item = m_doc->root()->nextSibling();
 
 	
-  while( item ) {
-    t << escapeGraftPoint( m_doc->treatWhitespace(item->k3bPath()) ) << "=" << escapeGraftPoint( item->localPath() ) << "\n";
+//   while( item ) {
+//     t << escapeGraftPoint( m_doc->treatWhitespace(item->k3bPath()) ) 
+//       << "=" << escapeGraftPoint( item->localPath() ) << "\n";
 		
-    item = item->nextSibling();
-  }
-	
+//     item = item->nextSibling();
+//   }
+
+  writePathSpecForDir( m_doc->root(), t );	
 
   file.close();
   
   return true;
 }
+
+
+void K3bDataJob::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream )
+{
+  // if joliet is enabled we need to cut long names since mkisofs is not able to do it
+
+  if( m_doc->createJoliet() ) {
+    // create new joliet names and use jolietPath for graftpoints
+    // sort dirItem->children entries and rename all to fit joliet
+    // which is about x characters
+
+    kdDebug() << "(K3bDataJob) creating joliet names for directory: " << dirItem->k3bName() << endl;
+
+    QPtrList<K3bDataItem> sortedChildren;
+
+    // insertion sort
+    for( QPtrListIterator<K3bDataItem> it( *dirItem->children() ); it.current(); ++it ) {
+      K3bDataItem* item = it.current();
+
+      unsigned int i = 0;
+      while( i < sortedChildren.count() && item->k3bName() > sortedChildren.at(i)->k3bName() )
+	++i;
+
+      sortedChildren.insert( i, item );
+    }
+
+    unsigned int begin = 0;
+    unsigned int sameNameCount = 0;
+    unsigned int jolietMaxLength = 64;
+    while( begin < sortedChildren.count() ) {
+      if( sortedChildren.at(begin)->k3bName().length() > jolietMaxLength ) {
+	kdDebug() << "(K3bDataJob) filename to long for joliet: " 
+		  << sortedChildren.at(begin)->k3bName() << endl;
+	sameNameCount = 1;
+	
+	while( begin + sameNameCount < sortedChildren.count() && 
+	       sortedChildren.at( begin + sameNameCount )->k3bName().left(jolietMaxLength) 
+	       == sortedChildren.at(begin)->k3bName().left(jolietMaxLength) )
+	  sameNameCount++;
+
+	kdDebug() << "K3bDataJob) found " << sameNameCount << " files with same joliet name" << endl;
+
+	unsigned int charsForNumber = QString::number(sameNameCount).length();
+	for( int i = begin; i < begin + sameNameCount; i++ ) {
+	  // we always reserve 5 chars for the extension
+	  QString extension = sortedChildren.at(i)->k3bName().right(5);
+	  if( !extension.contains(".") )
+	    extension = "";
+	  else
+	    extension = extension.mid( extension.find(".") );
+	  QString jolietName = sortedChildren.at(i)->k3bName().left(jolietMaxLength-charsForNumber-extension.length()-1);
+	  jolietName.append( " " );
+	  jolietName.append( QString::number( i-begin ).rightJustify( charsForNumber, '0') );
+	  jolietName.append( extension );
+	  sortedChildren.at(i)->setJolietName( jolietName );
+
+	  kdDebug() << "(K3bDataJob) set joliet name for " 
+		    << sortedChildren.at(i)->k3bName() << " to "
+		    << jolietName << endl;
+	}
+		      
+	begin += sameNameCount;
+      }
+      else {
+	sortedChildren.at(begin)->setJolietName( sortedChildren.at(begin)->k3bName() );
+	begin++;
+      }
+    }
+
+    // now create the graft points
+    for( QPtrListIterator<K3bDataItem> it( *dirItem->children() ); it.current(); ++it ) {
+      K3bDataItem* item = it.current();
+      stream << escapeGraftPoint( m_doc->treatWhitespace(item->jolietPath()) ) 
+	     << "=" << escapeGraftPoint( item->localPath() ) << "\n";
+    }
+  }
+  else {
+    // use k3bPath as normal for graftpoints
+    // if rr is enabled all will be cool
+    // if neither rr nor joliet are enabled we get very awful names but mkisofs
+    // takes care of it
+    for( QPtrListIterator<K3bDataItem> it( *dirItem->children() ); it.current(); ++it ) {
+      K3bDataItem* item = it.current();
+      stream << escapeGraftPoint( m_doc->treatWhitespace(item->k3bPath()) ) 
+	     << "=" << escapeGraftPoint( item->localPath() ) << "\n";
+    }
+  }
+
+  // recursively write graft points for all subdirs
+  for( QPtrListIterator<K3bDataItem> it( *dirItem->children() ); it.current(); ++it ) {
+    if( K3bDirItem* item = dynamic_cast<K3bDirItem*>(it.current()) )
+      writePathSpecForDir( item, stream );
+  }
+}
+
 
 /*
   void K3bDataJob::splitDoc()

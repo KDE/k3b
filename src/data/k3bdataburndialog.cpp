@@ -76,9 +76,9 @@ K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const ch
 
   QFileInfo fi( m_tempDirSelectionWidget->tempPath() );
   if( fi.isFile() )
-    m_tempDirSelectionWidget->setTempPath( fi.dirPath() + "image.iso" );
+    m_tempDirSelectionWidget->setTempPath( fi.dirPath() + "/image.iso" );
   else
-    m_tempDirSelectionWidget->setTempPath( fi.filePath() + "image.iso" );
+    m_tempDirSelectionWidget->setTempPath( fi.filePath() + "/image.iso" );
 
   m_tempDirSelectionWidget->setNeededSize( doc()->size() );
 }

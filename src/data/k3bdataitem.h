@@ -38,12 +38,15 @@ class K3bDataItem
 	
   K3bDataDoc* doc() const { return m_doc; }
   const QString& k3bName();
+  const QString& jolietName();
   void setK3bName( const QString& );
+  void setJolietName( const QString& );
   /** 
    * returns the path as defined by the k3b-hierachy, NOT starting with a slash (since this is used for graft-points!) 
    * directories have a trailing "/"
    */
   virtual QString k3bPath();
+  virtual QString jolietPath();
 
   virtual K3bDataItem* nextSibling();
 	
@@ -61,6 +64,10 @@ class K3bDataItem
 	
  protected:
   QString m_k3bName;
+  /**
+   * this is used if Joliet extensions are enabled for cutting the filenames
+   */
+  QString m_jolietName;
 
  private:
   K3bDirItem* m_parentDir;

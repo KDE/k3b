@@ -25,6 +25,7 @@ K3bDirItem::K3bDirItem(const QString& name, K3bDataDoc* doc, K3bDirItem* parentD
   : K3bDataItem( doc, parentDir )
 {
   m_k3bName = name;
+  m_jolietName = name;
   m_children = new QPtrList<K3bDataItem>();
 }
 
@@ -60,10 +61,13 @@ K3bDataItem* K3bDirItem::takeDataItem( int index )
 
 QString K3bDirItem::k3bPath()
 {
-  if( !parent() )
-    return k3bName() + "/";
-  else
-    return parent()->k3bPath() + k3bName() + "/";
+  return K3bDataItem::k3bPath() + "/";
+}
+
+
+QString K3bDirItem::jolietPath()
+{
+  return K3bDataItem::jolietPath() + "/";
 }
 
 
@@ -109,6 +113,14 @@ QString K3bRootItem::k3bPath()
   // graft-points have to start with the name of the directory or the file, not with a slash or anything!
   return "";
 }
+
+
+QString K3bRootItem::jolietPath()
+{
+  // graft-points have to start with the name of the directory or the file, not with a slash or anything!
+  return "";
+}
+
 
 bool K3bDirItem::alreadyInDirectory( const QString& fileName ) const
 {

@@ -24,7 +24,8 @@
 
 class K3bDataDoc;
 class QString;
-
+class QTextStream;
+class K3bDirItem;
 
 /**
   *@author Sebastian Trueg
@@ -60,6 +61,7 @@ class K3bDataJob : public K3bBurnJob
   void cancelAll();
 		
  private:
+  void writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream );
   QString escapeGraftPoint( const QString& str );
 
   K3bDataDoc* m_doc;

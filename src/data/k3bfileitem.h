@@ -44,9 +44,9 @@ public:
 	
   bool exists() const;
 	
-  const QString& isoName() const { return m_isoName; }
-  const QString& joiletName() const { return m_joiletName; }
-  const QString& rockRidgeName() const { return m_rockRidgeName; }
+/*   const QString& isoName() const { return m_isoName; } */
+/*   const QString& joiletName() const { return m_joiletName; } */
+/*   const QString& rockRidgeName() const { return m_rockRidgeName; } */
 	
   QString absIsoPath();
   //	K3bDataItem* nextSibling();
@@ -59,9 +59,9 @@ public:
   K3bDirItem* addDataItem( K3bDataItem* item );
 	
  private:
-  QString m_isoName;
-  QString m_joiletName;
-  QString m_rockRidgeName;
+/*   QString m_isoName; */
+/*   QString m_joiletName; */
+/*   QString m_rockRidgeName; */
   unsigned long m_size;
 };
 

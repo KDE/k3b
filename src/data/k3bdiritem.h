@@ -20,7 +20,7 @@
 
 
 #include <qstring.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 #include "k3bdataitem.h"
 
@@ -36,12 +36,13 @@ class K3bDirItem : public K3bDataItem
   K3bDirItem( const QString& name, K3bDataDoc*, K3bDirItem* parentDir = 0 );
   ~K3bDirItem();
 	
-  QList<K3bDataItem>* children() const { return m_children; }
+  QPtrList<K3bDataItem>* children() const { return m_children; }
   K3bDirItem* addDataItem( K3bDataItem* item );
   K3bDataItem* takeDataItem( K3bDataItem* item );
   K3bDataItem* takeDataItem( int index );
   /** reimplemented from K3bDataItem */
   virtual QString k3bPath();
+  virtual QString jolietPath();
 	
   K3bDataItem* nextSibling();
   K3bDataItem* nextChild( K3bDataItem* );
@@ -65,7 +66,7 @@ class K3bDirItem : public K3bDataItem
   bool isDir() const { return true; }
 	
  private:
-  QList<K3bDataItem>* m_children;
+  QPtrList<K3bDataItem>* m_children;
 };
 
 
@@ -77,5 +78,6 @@ class K3bRootItem : public K3bDirItem
 
   /** reimplemented from K3bDataItem */
   QString k3bPath();
+  QString jolietPath();
 };
 #endif
