@@ -196,7 +196,7 @@ void K3bVcdListView::showPropertiesDialog()
     QPtrList<K3bVcdTrack> selected = selectedTracks();
     if ( !selected.isEmpty() && selected.count() == 1 ) {
         QPtrList<K3bVcdTrack> tracks = *m_doc->tracks();
-        K3bVcdTrackDialog d( tracks, selected, this );
+        K3bVcdTrackDialog d( m_doc, tracks, selected, this );
         if ( d.exec() ) {
             repaint();
         }

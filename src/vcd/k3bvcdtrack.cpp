@@ -43,7 +43,7 @@ K3bVcdTrack::K3bVcdTrack( QPtrList<K3bVcdTrack>* parent, const QString& filename
         m_pbcusrdefmap.insert( i, false );
     }
 
-		m_segment = false;
+    m_segment = false;
 }
 
 

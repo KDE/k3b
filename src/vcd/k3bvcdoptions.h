@@ -91,8 +91,15 @@ class K3bVcdOptions
         static K3bVcdOptions load( KConfig* c );
         static K3bVcdOptions defaults();
 
+        bool loadDefaultPBC();
+        bool loadDefaultPBCNumKeys();
+        int loadDefaultPBCWaitTime();
+        int loadDefaultPBCPlayTime();
+                                                                
         void setPbcEnabled( const bool& b ) { m_pbcenabled = b; }
         bool PbcEnabled() const { return m_pbcenabled; };
+        void setPbcNumKeys( const bool& b ) { m_pbcnumkeys = b; }
+        bool PbcNumKeys() const { return m_pbcnumkeys; };
 
         void setSegmentFolder( const bool& b ) { m_segmentfolder = b; }
         bool SegmentFolder() const { return m_segmentfolder; };
@@ -104,9 +111,9 @@ class K3bVcdOptions
         int m_restriction;
 
         // pbc
-        bool loadDefaultPBC();
         bool m_pbcenabled;
-
+        bool m_pbcnumkeys;
+        
         // volume descriptor
         QString m_volumeID;
         QString m_albumID;

@@ -27,6 +27,7 @@ class K3bListView;
 class QLabel;
 class QCheckBox;
 class QComboBox;
+class QGroupBox;
 class QRadioButton;
 class QButtonGroup;
 class KCutLabel;
@@ -38,7 +39,7 @@ class K3bVcdTrackDialog : public KDialogBase
         Q_OBJECT
 
     public:
-        K3bVcdTrackDialog( QPtrList<K3bVcdTrack>& tracks, QPtrList<K3bVcdTrack>& selectedTracks, QWidget* parent = 0, const char* name = 0 );
+        K3bVcdTrackDialog( K3bVcdDoc*, QPtrList<K3bVcdTrack>& tracks, QPtrList<K3bVcdTrack>& selectedTracks, QWidget* parent = 0, const char* name = 0 );
         ~K3bVcdTrackDialog();
 
     protected slots:
@@ -50,6 +51,7 @@ class K3bVcdTrackDialog : public KDialogBase
         void slotWaitTimeChanged( int );
 
     private:
+        K3bVcdDoc* m_vcdDoc;
         QPtrList<K3bVcdTrack> m_tracks;
         QPtrList<K3bVcdTrack> m_selectedTracks;
         QTabWidget* m_mainTabbed;
@@ -79,6 +81,10 @@ class K3bVcdTrackDialog : public KDialogBase
         QLabel* m_labelAfterTimeout;
         QLabel* m_labelWait;
 
+        QGroupBox* m_groupPlay;
+        QGroupBox* m_groupPbc;
+        QWidget* m_widgetnumkeys;
+        
         K3bCutComboBox* m_pbc_previous;
         K3bCutComboBox* m_pbc_next;
         K3bCutComboBox* m_pbc_return;
@@ -98,8 +104,10 @@ class K3bVcdTrackDialog : public KDialogBase
         void setupAudioTab();
         void setupVideoTab();
         void fillGui();
+        void fillPbcGui();
 
         void setPbcTrack(K3bVcdTrack*, K3bCutComboBox*, int);
+        K3bVcdOptions* VcdOptions() { return m_vcdDoc->vcdOptions(); }
 };
 
 #endif

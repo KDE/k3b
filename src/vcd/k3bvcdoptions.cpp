@@ -31,6 +31,7 @@
 K3bVcdOptions::K3bVcdOptions()
         : m_restriction( 0 ),
         m_pbcenabled( loadDefaultPBC() ),
+        m_pbcnumkeys( loadDefaultPBCNumKeys() ),
         m_volumeID( i18n( "Project name", "VIDEOCD" ) ),
         m_albumID( "" ),
         m_volumeSetId( "" ),
@@ -115,8 +116,8 @@ K3bVcdOptions K3bVcdOptions::load( KConfig* c )
     options.setVolumeSetId( c->readEntry( "volume_set_id", options.volumeSetId() ) );
     options.setPreparer( c->readEntry( "preparer", options.preparer() ) );
     options.setPublisher( c->readEntry( "publisher", options.publisher() ) );
-    options.setVolumeCount( ( c->readEntry( "volume_count", QString( "%1" ).arg( options.volumeCount() ) ) ).toInt() );
-    options.setVolumeNumber( ( c->readEntry( "volume_number", QString( "%1" ).arg( options.volumeNumber() ) ) ).toInt() );
+    options.setVolumeCount( c->readNumEntry( "volume_count",  options.volumeCount() ) );
+    options.setVolumeNumber( c->readNumEntry( "volume_number", options.volumeNumber() ) );
     options.setAutoDetect( c->readBoolEntry( "autodetect", options.AutoDetect() ) );
     options.setCdiSupport( c->readBoolEntry( "cdi_support", options.CdiSupport() ) );
     options.setNonCompliantMode( c->readBoolEntry( "broken_svcd_mode", options.NonCompliantMode() ) );
@@ -125,11 +126,11 @@ K3bVcdOptions K3bVcdOptions::load( KConfig* c )
     options.setRelaxedAps( c->readBoolEntry( "RelaxedAps", options.RelaxedAps() ) );
     options.setPbcEnabled( c->readBoolEntry( "PbcEnabled", options.PbcEnabled() ) );
     options.setSegmentFolder( c->readBoolEntry( "SegmentFolder", options.SegmentFolder() ) );
-    options.setRestriction( ( c->readEntry( "Restriction", QString( "%1" ).arg( options.Restriction() ) ) ).toInt() );
-    options.setPreGapLeadout( ( c->readEntry( "PreGapLeadout", QString( "%1" ).arg( options.PreGapLeadout() ) ) ).toInt() );
-    options.setPreGapTrack( ( c->readEntry( "PreGapTrack", QString( "%1" ).arg( options.PreGapTrack() ) ) ).toInt() );
-    options.setFrontMarginTrack( ( c->readEntry( "FrontMarginTrack", QString( "%1" ).arg( options.FrontMarginTrack() ) ) ).toInt() );
-    options.setRearMarginTrack( ( c->readEntry( "RearMarginTrack", QString( "%1" ).arg( options.RearMarginTrack() ) ) ).toInt() );
+    options.setRestriction( c->readNumEntry( "Restriction", options.Restriction() ) );
+    options.setPreGapLeadout( c->readNumEntry( "PreGapLeadout", options.PreGapLeadout() ) );
+    options.setPreGapTrack( c->readNumEntry( "PreGapTrack", options.PreGapTrack() ) );
+    options.setFrontMarginTrack( c->readNumEntry( "FrontMarginTrack", options.FrontMarginTrack() ) );
+    options.setRearMarginTrack( c->readNumEntry( "RearMarginTrack", options.RearMarginTrack() ) );
     options.setUseGaps( c->readBoolEntry( "UseGaps", options.UseGaps() ) );
 
     return options;
@@ -141,6 +142,28 @@ bool K3bVcdOptions::loadDefaultPBC()
     c->setGroup( "Video project settings" );
     return c->readBoolEntry("Use Playback Control", false);
 }
+
+bool K3bVcdOptions::loadDefaultPBCNumKeys()
+{
+    KConfig* c = kapp->config();
+    c->setGroup( "Video project settings" );
+    return c->readBoolEntry("Use numeric keys to navigate chapters", false);
+}
+
+int K3bVcdOptions::loadDefaultPBCPlayTime()
+{
+    KConfig* c = kapp->config();
+    c->setGroup( "Video project settings" );
+    return c->readNumEntry( "Play each Sequence/Segment", 1 );
+}
+
+int K3bVcdOptions::loadDefaultPBCWaitTime()
+{
+    KConfig* c = kapp->config();
+    c->setGroup( "Video project settings" );
+    return c->readNumEntry( "Time to wait after each Sequence/Segment", 2 );
+}
+
 
 K3bVcdOptions K3bVcdOptions::defaults()
 {

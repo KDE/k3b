@@ -297,6 +297,11 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
                 newTrack->setMpegAudioModeExt( Mpeg->Audio->modext );
             }
 
+            // set defaults;
+            K3bVcdOptions options = K3bVcdOptions();
+            newTrack->setPlayTime( options.loadDefaultPBCPlayTime() );
+            newTrack->setWaitTime( options.loadDefaultPBCWaitTime() );
+
             // for debuging
             Mpeg->PrintInfos();
             delete Mpeg;
@@ -456,8 +461,10 @@ void K3bVcdDoc::setVcdType( int type )
 void K3bVcdDoc::setPbcTracks()
 {
     // reorder pbc tracks
+    /*
     if ( !vcdOptions()->PbcEnabled() )
         return;
+    */
 
     if ( m_tracks ) {
         int count = m_tracks->count();
