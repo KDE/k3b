@@ -6,6 +6,7 @@ AM_CPPFLAGS=	-I$(srcdir)/../../core \
 		-I$(srcdir)/.. \
 		-I$(srcdir)/../datacd \
 		-I$(srcdir)/../audiocd \
+		-I$(srcdir)/../../plugin \
 		-I../datacd \
 		-I../audiocd \
 		$(all_includes)
