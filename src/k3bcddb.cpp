@@ -606,7 +606,7 @@ void K3bCddb::slotReadyRead()
 	m_matches.erase( m_matches.begin() );
 	
 	// write entry to local cddb dir
-	if( m_bSaveCddbEntriesLocally ) {
+	if( m_bSearchLocalDirs && m_bSaveCddbEntriesLocally ) {
 	  saveLocalEntry( entry, m_parsingBuffer );
 	}
 
