@@ -129,7 +129,8 @@ void K3bGrowisofsImager::start()
   //
   // add the growisofs options
   //
-  if( m_doc->multiSessionMode() == K3bDataDoc::NONE )
+  if( m_doc->multiSessionMode() == K3bDataDoc::NONE ||
+      m_doc->multiSessionMode() == K3bDataDoc::START )
     *m_process << "-Z";
   else
     *m_process << "-M";
