@@ -59,7 +59,7 @@ class K3bDoc : public QObject
 {
   Q_OBJECT
 
-    friend K3bView;
+    friend class K3bView;
 
  public:
   /** Constructor for the fileclass of the application */

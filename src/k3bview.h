@@ -50,7 +50,7 @@ class K3bView : public QWidget
 {
   Q_OBJECT
 
-    friend K3bDoc;
+    friend class K3bDoc;
 
  public:
   /** Constructor for the view
