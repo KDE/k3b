@@ -30,6 +30,7 @@ class QRadioButton;
 class QButtonGroup;
 
 class K3bDataDoc;
+class KRestrictedLine;
 
 
 /**
@@ -62,10 +63,10 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    // ----------------------------------------------
 
    // --- settings tab ---------------------------
-   QLineEdit* m_editApplicationID;
-   QLineEdit* m_editVolumeID;
-   QLineEdit* m_editPublisher;
-   QLineEdit* m_editPreparer;
+   KRestrictedLine* m_editApplicationID;
+   KRestrictedLine* m_editVolumeID;
+   KRestrictedLine* m_editPublisher;
+   KRestrictedLine* m_editPreparer;
    QCheckBox* m_checkCreateRR;
    QCheckBox* m_checkCreateJoliet;
    QButtonGroup* m_groupWhiteSpace;
@@ -109,6 +110,12 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    void slotSaveDefaults();
    void slotSelectCustom();
    void slotWriterChanged();
+
+   /**
+    * converts all the ISO-header field strings
+    * to upercase
+    */
+   void slotConvertAllToUpperCase();
 };
 
 #endif

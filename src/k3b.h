@@ -36,7 +36,7 @@ class QVBox;
 class QTabWidget;
 
 // forward declaration of the K3b classes
-class K3bApp;
+class K3bMainWindow;
 class K3bDoc;
 class K3bView;
 class K3bDirView;
@@ -47,8 +47,8 @@ class K3bBurnProgressDialog;
 class K3bJob;
 
 
-/** Access to the "lonely" K3bApp Object */
-K3bApp* k3bMain();
+/** Access to the "lonely" K3bMainWindow Object */
+K3bMainWindow* k3bMain();
 
 
 /**
@@ -58,7 +58,7 @@ K3bApp* k3bMain();
   * Child windows are created in createClient(), which gets a document instance as it's document to
   * display whereby one document can have several views.The MDI child is an instance of K3bView,
   * the document an instance of K3bDoc.
-  * K3bApp reimplements the methods that KDockMainWindow provides for main window handling and supports
+  * K3bMainWindow reimplements the methods that KDockMainWindow provides for main window handling and supports
   * full session management as well as keyboard accelerator configuration by using KAccel.
   * @see KDockMainWindow
   * @see KApplication
@@ -67,22 +67,21 @@ K3bApp* k3bMain();
   *
   * @author Sebastian Trueg
   */
-class K3bApp : public KDockMainWindow
+class K3bMainWindow : public KDockMainWindow
 {
   Q_OBJECT
 
  public:
-  /** construtor of K3bApp, calls all init functions to create the application.
+  /** construtor of K3bMainWindow, calls all init functions to create the application.
    * @see initMenuBar initToolBar
    */
-  K3bApp();
-  ~K3bApp();
+  K3bMainWindow();
+  ~K3bMainWindow();
 
   /** opens a file specified by commandline option */
   void openDocumentFile(const KURL& url=0);
 
-  K3bDeviceManager* deviceManager() { return m_deviceManager; };
-  K3bOptionDialog* optionDialog() { return m_optionDialog; };
+  K3bDeviceManager* deviceManager() { return m_deviceManager; }
   K3bAudioTrackDialog* audioTrackDialog();
   KConfig* config() { return m_config; }
 	
@@ -153,6 +152,12 @@ class K3bApp : public KDockMainWindow
    */
   void createClient(K3bDoc* doc);
 
+  /**
+   * checks if doc is modified and asks the user for saving if so.
+   * returns false if the user chose cancel.
+   */
+  bool canCloseDocument( K3bDoc* );
+
  private slots:
   /** clears the document in the actual view to reuse it as the new document */
   void slotFileNew();
@@ -200,6 +205,9 @@ class K3bApp : public KDockMainWindow
   void slotJobFinished( K3bJob* job );
 
  private:
+  void fileSave( K3bDoc* doc = 0 );
+  void fileSaveAs( K3bDoc* doc = 0 );
+
   /** save general Options like all bar positions and status as well as the geometry and the recent file list to the configuration
    * file
    */ 	
@@ -236,24 +244,24 @@ class K3bApp : public KDockMainWindow
   K3bDeviceManager* m_deviceManager;
 
   // KAction pointers to enable/disable actions
-  KActionMenu* fileNewMenu;
-  KAction* fileNewAudio;
-  KAction* fileNewData;
-  KAction* fileOpen;
-  KRecentFilesAction* fileOpenRecent;
-  KAction* fileSave;
-  KAction* fileSaveAs;
-  KAction* fileClose;
-  KAction* fileQuit;
-  KAction* fileBurn;
-  KAction* settingsConfigure;
-  KAction* fileExport;
-  KAction* toolsCdInfo;
-  KAction* toolsBlankCdrw;
+  KActionMenu* actionFileNewMenu;
+  KAction* actionFileNewAudio;
+  KAction* actionFileNewData;
+  KAction* actionFileOpen;
+  KRecentFilesAction* actionFileOpenRecent;
+  KAction* actionFileSave;
+  KAction* actionFileSaveAs;
+  KAction* actionFileClose;
+  KAction* actionFileQuit;
+  KAction* actionFileBurn;
+  KAction* actionSettingsConfigure;
+  KAction* actionFileExport;
+  KAction* actionToolsCdInfo;
+  KAction* actionToolsBlankCdrw;
 	
-  KToggleAction* viewToolBar;
-  KToggleAction* viewStatusBar;
-  KToggleAction* viewDirView;
+  KToggleAction* actionViewToolBar;
+  KToggleAction* actionViewStatusBar;
+  KToggleAction* actionViewDirView;
 
   KDockWidget* mainDock;
   KDockWidget* dirDock;

@@ -39,7 +39,7 @@ public:
    * Creates a new K3bFileItem
    * @param fileName if fileName end with a slash the item will become a directory.
    */
-  K3bFileItem( const QString& fileName, K3bDataDoc* doc, K3bDirItem* dir );
+  K3bFileItem( const QString& fileName, K3bDataDoc* doc, K3bDirItem* dir, const QString& k3bName = 0 );
   ~K3bFileItem();
 	
   bool exists() const;

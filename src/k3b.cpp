@@ -59,11 +59,11 @@
 #include "k3bblankingdialog.h"
 
 
-K3bApp* k3bMain()
+K3bMainWindow* k3bMain()
 {
-  K3bApp* _app = dynamic_cast<K3bApp*>( kapp->mainWidget() );
+  K3bMainWindow* _app = dynamic_cast<K3bMainWindow*>( kapp->mainWidget() );
   if( !_app ) {
-    qDebug( "No K3bApp found!");
+    qDebug( "No K3bMainWindow found!");
     exit(1);
   }
   return _app;
@@ -71,11 +71,11 @@ K3bApp* k3bMain()
 
 
 
-K3bApp::K3bApp()
+K3bMainWindow::K3bMainWindow()
   : KDockMainWindow(0,"K3b")
 {
-  m_config=kapp->config();
-  untitledCount=0;
+  m_config = kapp->config();
+  untitledCount = 0;
   pDocList = new QList<K3bDoc>();
   pDocList->setAutoDelete(true);
 
@@ -87,75 +87,76 @@ K3bApp::K3bApp()
 
   ///////////////////////////////////////////////////////////////////
   // disable actions at startup
-  fileSave->setEnabled(false);
-  fileSaveAs->setEnabled(false);
-  fileBurn->setEnabled( false );
-  fileExport->setEnabled( false );
+  actionFileSave->setEnabled(false);
+  actionFileSaveAs->setEnabled(false);
+  actionFileBurn->setEnabled( false );
+  actionFileExport->setEnabled( false );
 
   m_audioTrackDialog = 0;
   m_optionDialog = 0;
   m_burnProgressDialog = 0;
 }
 
-K3bApp::~K3bApp()
+K3bMainWindow::~K3bMainWindow()
 {
   delete pDocList;
 }
 
 
-void K3bApp::initActions()
+void K3bMainWindow::initActions()
 {
-  fileOpen = KStdAction::open(this, SLOT(slotFileOpen()), actionCollection());
-  fileOpenRecent = KStdAction::openRecent(this, SLOT(slotFileOpenRecent(const KURL&)), actionCollection());
-  fileSave = KStdAction::save(this, SLOT(slotFileSave()), actionCollection());
-  fileSaveAs = KStdAction::saveAs(this, SLOT(slotFileSaveAs()), actionCollection());
-  fileClose = KStdAction::close(this, SLOT(slotFileClose()), actionCollection());
-  fileQuit = KStdAction::quit(this, SLOT(slotFileQuit()), actionCollection());
-  viewToolBar = KStdAction::showToolbar(this, SLOT(slotViewToolBar()), actionCollection());
-  viewStatusBar = KStdAction::showStatusbar(this, SLOT(slotViewStatusBar()), actionCollection());
-  settingsConfigure = KStdAction::preferences(this, SLOT(slotSettingsConfigure()), actionCollection() );
+  actionFileOpen = KStdAction::open(this, SLOT(slotFileOpen()), actionCollection());
+  actionFileOpenRecent = KStdAction::openRecent(this, SLOT(slotFileOpenRecent(const KURL&)), actionCollection());
+  actionFileSave = KStdAction::save(this, SLOT(slotFileSave()), actionCollection());
+  actionFileSaveAs = KStdAction::saveAs(this, SLOT(slotFileSaveAs()), actionCollection());
+  actionFileClose = KStdAction::close(this, SLOT(slotFileClose()), actionCollection());
+  actionFileQuit = KStdAction::quit(this, SLOT(slotFileQuit()), actionCollection());
+  actionViewToolBar = KStdAction::showToolbar(this, SLOT(slotViewToolBar()), actionCollection());
+  actionViewStatusBar = KStdAction::showStatusbar(this, SLOT(slotViewStatusBar()), actionCollection());
+  actionSettingsConfigure = KStdAction::preferences(this, SLOT(slotSettingsConfigure()), actionCollection() );
 
-  fileBurn = new KAction( i18n("&Burn..."), "cdwriter_unmount", 0, this, SLOT(slotFileBurn()), 
+  actionFileBurn = new KAction( i18n("&Burn..."), "cdwriter_unmount", 0, this, SLOT(slotFileBurn()), 
 			  actionCollection(), "file_burn");
-  fileExport = new KAction( i18n("E&xport..."), "revert", 0, this, SLOT(slotFileExport()), 
+  actionFileExport = new KAction( i18n("E&xport..."), "revert", 0, this, SLOT(slotFileExport()), 
 			    actionCollection(), "file_export" );
 
-  fileNewMenu = new KActionMenu( i18n("&New Project"), "filenew", actionCollection(), "file_new" );
-  fileNewAudio = new KAction(i18n("New &Audio project"), "sound", 0, this, SLOT(slotNewAudioDoc()), 
+  actionFileNewMenu = new KActionMenu( i18n("&New Project"), "filenew", actionCollection(), "file_new" );
+  actionFileNewAudio = new KAction(i18n("New &Audio project"), "sound", 0, this, SLOT(slotNewAudioDoc()), 
 			     actionCollection(), "file_new_audio");
-  fileNewData = new KAction(i18n("New &Data project"),"tar", 0, this, SLOT(slotNewDataDoc()), 
+  actionFileNewData = new KAction(i18n("New &Data project"),"tar", 0, this, SLOT(slotNewDataDoc()), 
 			    actionCollection(), "file_new_data");
-  fileNewMenu->insert( fileNewAudio );
-  fileNewMenu->insert( fileNewData );
-  fileNewMenu->setDelayed( false );
 
-  viewDirView = new KToggleAction(i18n("Show Directories"), "view_sidetree", 0, this, SLOT(slotShowDirView()), 
+  actionFileNewMenu->insert( actionFileNewAudio );
+  actionFileNewMenu->insert( actionFileNewData );
+  actionFileNewMenu->setDelayed( false );
+
+  actionViewDirView = new KToggleAction(i18n("Show Directories"), "view_sidetree", 0, this, SLOT(slotShowDirView()), 
 				  actionCollection(), "view_dir");
 
-  toolsCdInfo = new KAction(i18n("CD &Info"), "cdrom_unmount", 0, this, SLOT(slotCdInfo()), 
+  actionToolsCdInfo = new KAction(i18n("CD &Info"), "cdrom_unmount", 0, this, SLOT(slotCdInfo()), 
 			    actionCollection(), "tools_cd_info" );
 
-  toolsBlankCdrw = new KAction(i18n("&Blank CD-RW"), "cdwriter_unmount", 0, this, SLOT(slotBlankCdrw()), 
+  actionToolsBlankCdrw = new KAction(i18n("&Blank CD-RW"), "cdwriter_unmount", 0, this, SLOT(slotBlankCdrw()), 
 			       actionCollection(), "tools_blank_cdrw" );
 
-  fileNewMenu->setStatusText(i18n("Creates a new project"));
-  fileOpen->setStatusText(i18n("Opens an existing project"));
-  fileOpenRecent->setStatusText(i18n("Opens a recently used file"));
-  fileSave->setStatusText(i18n("Saves the actual project"));
-  fileSaveAs->setStatusText(i18n("Saves the actual project as..."));
-  fileClose->setStatusText(i18n("Closes the actual project"));
-  fileQuit->setStatusText(i18n("Quits the application"));
+  actionFileNewMenu->setStatusText(i18n("Creates a new project"));
+  actionFileOpen->setStatusText(i18n("Opens an existing project"));
+  actionFileOpenRecent->setStatusText(i18n("Opens a recently used file"));
+  actionFileSave->setStatusText(i18n("Saves the actual project"));
+  actionFileSaveAs->setStatusText(i18n("Saves the actual project as..."));
+  actionFileClose->setStatusText(i18n("Closes the actual project"));
+  actionFileQuit->setStatusText(i18n("Quits the application"));
 
-  viewToolBar->setStatusText(i18n("Enables/disables the toolbar"));
-  viewStatusBar->setStatusText(i18n("Enables/disables the statusbar"));
+  actionViewToolBar->setStatusText(i18n("Enables/disables the toolbar"));
+  actionViewStatusBar->setStatusText(i18n("Enables/disables the statusbar"));
 
-  viewDirView->setChecked( true );
+  actionViewDirView->setChecked( true );
 
   createGUI();
 }
 
 
-void K3bApp::initStatusBar()
+void K3bMainWindow::initStatusBar()
 {
   ///////////////////////////////////////////////////////////////////
   // STATUSBAR
@@ -164,7 +165,7 @@ void K3bApp::initStatusBar()
 }
 
 
-void K3bApp::initView()
+void K3bMainWindow::initView()
 {
   // setup main docking things
   mainDock = createDockWidget( "Workspace", SmallIcon("idea") );
@@ -176,9 +177,6 @@ void K3bApp::initView()
   mainDock->setWidget( m_documentTab );
   connect( m_documentTab, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotCurrentDocChanged(QWidget*)) );
 
-  // add the cd-copy-widget to the tab
-  //   m_documentTab->addTab( new K3bCopyWidget( m_documentTab ), "&Copy CD" );
-  //  m_documentTab->addTab( new K3bRipperWidget( m_documentTab ), "&Ripping" );
 
   dirDock = createDockWidget( "DirDock", SmallIcon("idea") );
   m_dirView = new K3bDirView( dirDock );
@@ -190,7 +188,7 @@ void K3bApp::initView()
 }
 
 
-void K3bApp::createClient(K3bDoc* doc)
+void K3bMainWindow::createClient(K3bDoc* doc)
 {
   K3bView* w = doc->newView( m_documentTab );
   w->installEventFilter(this);
@@ -199,13 +197,14 @@ void K3bApp::createClient(K3bDoc* doc)
   m_documentTab->insertTab( w, w->caption(), 0 );
   m_documentTab->showPage( w );
 
-  fileBurn->setEnabled( true );
-  fileExport->setEnabled( true );
-  fileSave->setEnabled( true );
-  fileSaveAs->setEnabled( true );
+  actionFileBurn->setEnabled( true );
+  actionFileExport->setEnabled( true );
+  actionFileSave->setEnabled( true );
+  actionFileSaveAs->setEnabled( true );
 }
 
-void K3bApp::openDocumentFile(const KURL& url)
+
+void K3bMainWindow::openDocumentFile(const KURL& url)
 {
   slotStatusMsg(i18n("Opening file..."));
   K3bDoc* doc;
@@ -228,7 +227,9 @@ void K3bApp::openDocumentFile(const KURL& url)
       return;	
     }
 
-  fileOpenRecent->addURL(url);
+  actionFileOpenRecent->addURL(url);
+
+  pDocList->append(doc);
 
   // create the window
   createClient(doc);
@@ -237,7 +238,7 @@ void K3bApp::openDocumentFile(const KURL& url)
 }
 
 
-void K3bApp::saveOptions()
+void K3bMainWindow::saveOptions()
 {	
   m_config->setGroup("General Options");
   m_config->writeEntry("Geometry", size());
@@ -245,7 +246,7 @@ void K3bApp::saveOptions()
   m_config->writeEntry("Show Statusbar",statusBar()->isVisible());
   m_config->writeEntry("Show DirView",m_dirView->isVisible());
   m_config->writeEntry("ToolBarPos", (int) toolBar("mainToolBar")->barPos());
-  fileOpenRecent->saveEntries(m_config,"Recent Files");
+  actionFileOpenRecent->saveEntries(m_config,"Recent Files");
 
   m_config->setGroup("ISO Options");
   m_config->writeEntry( "Use ID3 Tag for mp3 renaming", m_useID3TagForMp3Renaming );
@@ -255,17 +256,17 @@ void K3bApp::saveOptions()
 }
 
 
-void K3bApp::readOptions()
+void K3bMainWindow::readOptions()
 {
   m_config->setGroup("General Options");
 
   // bar status settings
   bool bViewToolbar = m_config->readBoolEntry("Show Toolbar", true);
-  viewToolBar->setChecked(bViewToolbar);
+  actionViewToolBar->setChecked(bViewToolbar);
   slotViewToolBar();
 
   bool bViewStatusbar = m_config->readBoolEntry("Show Statusbar", true);
-  viewStatusBar->setChecked(bViewStatusbar);
+  actionViewStatusBar->setChecked(bViewStatusbar);
   slotViewStatusBar();
 
   // bar position settings
@@ -274,7 +275,7 @@ void K3bApp::readOptions()
   toolBar("mainToolBar")->setBarPos(toolBarPos);
 
   // initialize the recent file list
-  fileOpenRecent->loadEntries(m_config,"Recent Files");
+  actionFileOpenRecent->loadEntries(m_config,"Recent Files");
 
   QSize size=m_config->readSizeEntry("Geometry");
   if(!size.isEmpty())
@@ -289,94 +290,112 @@ void K3bApp::readOptions()
   m_useID3TagForMp3Renaming = m_config->readBoolEntry("Use ID3 Tag for mp3 renaming", false);
 }
 
-void K3bApp::saveProperties(KConfig *)
+
+void K3bMainWindow::saveProperties( KConfig* )
 {
 
 }
 
 
-void K3bApp::readProperties(KConfig*)
+void K3bMainWindow::readProperties( KConfig* )
 {
 }
 
-bool K3bApp::queryClose()
-{
-  QStringList saveFiles;
-  //  K3bDoc* doc;
-  if(pDocList->isEmpty())
-    return true;
 
-  // nothing to save so far
+bool K3bMainWindow::queryClose()
+{
+  // ---------------------------------
+  // we need to manually close all the views to ensure that
+  // each of them receives a close-event and
+  // the user is asked for every modified doc to save the changes
+  // ---------------------------------
+
+  while( K3bView* view = (K3bView*)m_documentTab->currentPage() )
+  {
+    if( !view->close(true) )
+      return false;
+  }
+  
   return true;
-
-//   for(doc=pDocList->first(); doc!=0;doc=pDocList->next())
-//     {
-//       if(doc->isModified())
-// 	saveFiles.append(doc->URL().fileName());
-//     }
-//   if(saveFiles.isEmpty())
-//     return true;
-
-//   switch (KMessageBox::questionYesNoList(this,
-// 					 i18n("One or more documents have been modified.\nSave changes before exiting?"),saveFiles))
-//     {
-//     case KMessageBox::Yes:
-//       for(doc=pDocList->first(); doc!=0;doc=pDocList->next())
-// 	{
-// 	  if(doc->URL().fileName().contains(i18n("Untitled")))
-// 	    slotFileSaveAs();
-// 	  else
-// 	    {
-// 	      if(!doc->saveDocument(doc->URL()))
-// 		{
-// 		  KMessageBox::error (this,i18n("Could not save the current document !"), i18n("I/O Error !"));
-// 		  return false;
-// 		}
-// 	    }
-// 	}
-//       return true;
-//     case KMessageBox::No:
-//     default:
-//       return true;
-//     }
 }
 
-bool K3bApp::queryExit()
+
+bool K3bMainWindow::eventFilter(QObject* object, QEvent* event)
+{
+  if( (event->type() == QEvent::Close) && ((K3bMainWindow*)object != this) )
+    {
+      QCloseEvent* e=(QCloseEvent*)event;
+
+      K3bView* pView = (K3bView*)object;
+      if( pView ) {
+	K3bDoc* pDoc = pView->getDocument();
+
+	// ---------------------------------
+	// if it is not the last view we can remove it
+	// if it is the last view we need to ask the user (that is done in canCloseDocument())
+	// since K3bView has set the WDestructiveClose flag there is no need wondering about
+	// the proper garbage collection with the views
+	// ---------------------------------
+	if( ( pDoc->isLastView() && canCloseDocument(pDoc) )  ||
+	    !pDoc->isLastView() ) {
+
+	  pDoc->removeView( pView );
+	  m_documentTab->removePage( pView );
+
+	  // ---------------------------------
+	  // if it was the last view we removed the doc should be removed
+	  // ---------------------------------
+	  if( !pDoc->firstView() ) {
+	    pDocList->remove( pDoc );
+	  }
+	  e->accept();
+	  return false;
+	}
+	else {
+	  e->ignore();
+	  return true;
+	}
+
+      }
+    }
+
+  return QWidget::eventFilter( object, event );    // standard event processing
+}
+
+
+bool K3bMainWindow::canCloseDocument( K3bDoc* doc )
+{
+  if( !doc->isModified() ) {
+    return true;
+  }
+
+  switch ( KMessageBox::warningYesNoCancel(this, i18n("%1 has unsaved data.").arg( doc->URL().fileName() ), 
+					   i18n("Closing project..."), i18n("&Save"), i18n("&Discard") ) )
+    {
+    case KMessageBox::Yes:
+      fileSave( doc );
+    case KMessageBox::No:
+      return true;
+
+    default:
+      return false;
+    }
+}
+
+bool K3bMainWindow::queryExit()
 {
   saveOptions();
   return true;
 }
 
-bool K3bApp::eventFilter(QObject* object, QEvent* event)
-{
-  if((event->type() == QEvent::Close)&&((K3bApp*)object!=this))
-    {
-      QCloseEvent* e=(QCloseEvent*)event;
 
-      K3bView* pView=(K3bView*)object;
-      if( pView ) {
-	K3bDoc* pDoc=pView->getDocument();
-	if(pDoc->canCloseFrame(pView))
-	  {
-	    pDoc->removeView(pView);
-	    m_documentTab->removePage( pView );
-	    if(!pDoc->firstView())
-	      pDocList->remove(pDoc);
-	    e->accept();
-	  }
-	else
-	  e->ignore();
-      }
-    }
-  return QWidget::eventFilter( object, event );    // standard event processing
-}
 
 /////////////////////////////////////////////////////////////////////
 // SLOT IMPLEMENTATION
 /////////////////////////////////////////////////////////////////////
 
 
-void K3bApp::slotFileNew()
+void K3bMainWindow::slotFileNew()
 {
   slotStatusMsg(i18n("Creating new document..."));
 
@@ -385,7 +404,7 @@ void K3bApp::slotFileNew()
   slotStatusMsg(i18n("Ready."));
 }
 
-void K3bApp::slotFileOpen()
+void K3bMainWindow::slotFileOpen()
 {
   slotStatusMsg(i18n("Opening file..."));
 	
@@ -394,13 +413,13 @@ void K3bApp::slotFileOpen()
   if(!url.isEmpty())
     {
       openDocumentFile(url);
-      fileOpenRecent->addURL( url );
+      actionFileOpenRecent->addURL( url );
     }
 
   slotStatusMsg(i18n("Ready."));
 }
 
-void K3bApp::slotFileOpenRecent(const KURL& url)
+void K3bMainWindow::slotFileOpenRecent(const KURL& url)
 {
   slotStatusMsg(i18n("Opening file..."));
   	
@@ -409,65 +428,98 @@ void K3bApp::slotFileOpenRecent(const KURL& url)
   slotStatusMsg(i18n("Ready."));
 }
 
-void K3bApp::slotFileSave()
+
+void K3bMainWindow::slotFileSave()
+{
+  K3bView* m = dynamic_cast<K3bView*>(m_documentTab->currentPage() );
+  if( m ) {
+    K3bDoc* doc = m->getDocument();
+    fileSave( doc );
+  }
+
+}
+
+void K3bMainWindow::fileSave( K3bDoc* doc )
 {
   slotStatusMsg(i18n("Saving file..."));
 
-  K3bView* m = dynamic_cast<K3bView*>(m_documentTab->currentPage() );
-  if( m )
-    {
-      K3bDoc* doc = m->getDocument();
-      if(doc->URL().fileName().contains(i18n("Untitled")))
-	slotFileSaveAs();
-      else
-	if(!doc->saveDocument(doc->URL()))
-	  KMessageBox::error (this,i18n("Could not save the current document !"), i18n("I/O Error !"));
-    }
+  if( doc == 0 ) {
+    K3bView* m = dynamic_cast<K3bView*>(m_documentTab->currentPage() );
+    if( m )
+      doc = m->getDocument();
+  }
+  if( doc != 0 ) {
+    if( doc->URL().fileName().contains(i18n("Untitled")) )
+      fileSaveAs( doc );
+    else
+      if( !doc->saveDocument(doc->URL()) )
+	KMessageBox::error (this,i18n("Could not save the current document !"), i18n("I/O Error !"));
+  }
 
   slotStatusMsg(i18n("Ready."));
 }
 
-void K3bApp::slotFileSaveAs()
+
+void K3bMainWindow::slotFileSaveAs()
+{
+  K3bView* m = dynamic_cast<K3bView*>(m_documentTab->currentPage() );
+  if( m ) {
+    K3bDoc* doc = m->getDocument();
+    fileSaveAs( doc );
+  }
+}
+
+
+void K3bMainWindow::fileSaveAs( K3bDoc* doc )
 {
   slotStatusMsg(i18n("Saving file with a new filename..."));
 
-  QString url = KFileDialog::getSaveFileName(QDir::currentDirPath(),
-					     i18n("*.k3b|K3b Projects"), this, i18n("Save as..."));
-  if(!url.isEmpty())
-    {
-      if( url.mid( url.findRev('.')+1 ) != "k3b" ) {
-	if( url[ url.length()-1 ] != '.' )
-	  url += ".";
-	url += "k3b";
-      }
+  if( doc == 0 ) {
+    K3bView* m = dynamic_cast<K3bView*>(m_documentTab->currentPage() );
+    if( m )
+      doc = m->getDocument();
+  }
 
-      if( !QFile::exists(url) ||
-	  ( QFile::exists(url) && 
-	    KMessageBox::questionYesNo( this, i18n("Do you want to overwrite %1").arg(url), i18n("File exists...") ) 
-	    == KMessageBox::Yes ) ) {
+  if( doc != 0 ) {
 
-	K3bView* m = dynamic_cast<K3bView*>(m_documentTab->currentPage() );
-	if( m )
-	  {
-	    K3bDoc* doc =	m->getDocument();
-	    if(!doc->saveDocument(url))
-	      {
-		KMessageBox::error (this,i18n("Could not save the current document !"), i18n("I/O Error !"));
-		return;
-	      }
-	    doc->changedViewList();
-	    m_documentTab->changeTab( m, m->caption() );   // does not fit with the multible view architecture !!!
-	    //setWndTitle(m);
-	    fileOpenRecent->addURL(url);
-	  }
+    QString url = KFileDialog::getSaveFileName(QDir::currentDirPath(),
+					       i18n("*.k3b|K3b Projects"), this, i18n("Save as..."));
+    
+    
+    if(!url.isEmpty())
+      {
+
+	// default to ending ".k3b"
+	if( url.mid( url.findRev('.')+1 ) != "k3b" ) {
+	  if( url[ url.length()-1 ] != '.' )
+	    url += ".";
+	  url += "k3b";
+	}
+
+	if( !QFile::exists(url) ||
+	    ( QFile::exists(url) && 
+	      KMessageBox::questionYesNo( this, i18n("Do you want to overwrite %1").arg(url), i18n("File exists...") ) 
+	      == KMessageBox::Yes ) ) {
+
+	  if(!doc->saveDocument(url))
+	    {
+	      KMessageBox::error (this,i18n("Could not save the current document !"), i18n("I/O Error !"));
+	      return;
+	    }
+	  doc->changedViewList();
+	  K3bView* view = doc->firstView();
+	  m_documentTab->changeTab( view, view->caption() );  // CAUTION: Does not work for multible views!
+
+	  actionFileOpenRecent->addURL(url);
+	}
       }
-    }
+  }
   
   slotStatusMsg(i18n("Ready."));
 }
 
 
-void K3bApp::slotFileExport()
+void K3bMainWindow::slotFileExport()
 {
   if( K3bAudioView* m = dynamic_cast<K3bAudioView*>( m_documentTab->currentPage() ) ) {
     QString file = KFileDialog::getSaveFileName( QDir::home().absPath(), "*.toc", k3bMain(), i18n("Export to cdrdao-toc-file") );
@@ -486,48 +538,32 @@ void K3bApp::slotFileExport()
 }
 
 
-void K3bApp::slotFileClose()
+void K3bMainWindow::slotFileClose()
 {
   slotStatusMsg(i18n("Closing file..."));
+
   K3bView* m = dynamic_cast<K3bView*>( m_documentTab->currentPage() );
   if( m )
     {
-      K3bDoc* doc=m->getDocument();
-      doc->closeDocument();
+      m->close(true);
     }
 	
   slotStatusMsg(i18n("Ready."));
 }
 
 
-void K3bApp::slotFileQuit()
+void K3bMainWindow::slotFileQuit()
 {
-  slotStatusMsg(i18n("Exiting..."));
-  //  saveOptions();
-  // close the first window, the list makes the next one the first again.
-  // This ensures that queryClose() is called on each window to ask for closing
-  //  KMainWindow* w;
-  //  if(memberList)
-  //  {
-  //    for(w=memberList->first(); w!=0; w=memberList->first())
-  //    {
-  //      // only close the window if the closeEvent is accepted. If the user presses Cancel on the saveModified() dialog,
-  //      // the window and the application stay open.
-  //      if(!w->close())
-  //        break;
-  //    }
-  //  }	
-
   close();		
 }
 
 
-void K3bApp::slotViewToolBar()
+void K3bMainWindow::slotViewToolBar()
 {
   slotStatusMsg(i18n("Toggle the toolbar..."));
   ///////////////////////////////////////////////////////////////////
   // turn Toolbar on or off
-  if(!viewToolBar->isChecked())
+  if(!actionViewToolBar->isChecked())
     {
       toolBar("mainToolBar")->hide();
     }
@@ -539,12 +575,12 @@ void K3bApp::slotViewToolBar()
   slotStatusMsg(i18n("Ready."));
 }
 
-void K3bApp::slotViewStatusBar()
+void K3bMainWindow::slotViewStatusBar()
 {
   slotStatusMsg(i18n("Toggle the statusbar..."));
   ///////////////////////////////////////////////////////////////////
   //turn Statusbar on or off
-  if(!viewStatusBar->isChecked())
+  if(!actionViewStatusBar->isChecked())
     {
       statusBar()->hide();
     }
@@ -557,7 +593,7 @@ void K3bApp::slotViewStatusBar()
 }
 
 
-void K3bApp::slotStatusMsg(const QString &text)
+void K3bMainWindow::slotStatusMsg(const QString &text)
 {
   ///////////////////////////////////////////////////////////////////
   // change status message permanently
@@ -566,24 +602,24 @@ void K3bApp::slotStatusMsg(const QString &text)
 }
 
 
-void K3bApp::slotShowDirView()
+void K3bMainWindow::slotShowDirView()
 {
   // undock and hide or 'redock' and show
   if( !dirDock->isVisible() ) {
     dirDock->manualDock( mainDock, KDockWidget::DockLeft, 30 );
     manager()->readConfig( m_config, "Docking Config" );
     dirDock->show();
-    viewDirView->setChecked( true );
+    actionViewDirView->setChecked( true );
   }
   else {
     dirDock->hide();
     dirDock->undock();
-    viewDirView->setChecked( false );
+    actionViewDirView->setChecked( false );
   }
 }
 
 
-void K3bApp::slotSettingsConfigure()
+void K3bMainWindow::slotSettingsConfigure()
 {
   if( !m_optionDialog )
     m_optionDialog = new K3bOptionDialog( this, "SettingsDialog", true );
@@ -593,7 +629,7 @@ void K3bApp::slotSettingsConfigure()
 }
 
 
-void K3bApp::showOptionDialog( int index )
+void K3bMainWindow::showOptionDialog( int index )
 {
   if( !m_optionDialog )
     m_optionDialog = new K3bOptionDialog( this, "SettingsDialog", true );
@@ -605,7 +641,7 @@ void K3bApp::showOptionDialog( int index )
 }
 
 
-void K3bApp::searchExternalProgs()
+void K3bMainWindow::searchExternalProgs()
 {
   m_config->setGroup("External Programs");
 
@@ -617,11 +653,11 @@ void K3bApp::searchExternalProgs()
   if( !m_config->hasKey("cdrdao path") ) {
     if( QFile::exists( "/usr/bin/cdrdao" ) ) {
       _cdrdao = "/usr/bin/cdrdao";
-      qDebug("(K3bApp) found cdrdao in " + _cdrdao );
+      qDebug("(K3bMainWindow) found cdrdao in " + _cdrdao );
     }
     else if( QFile::exists( "/usr/local/bin/cdrdao" ) ) {
       _cdrdao = "/usr/local/bin/cdrdao";
-      qDebug("(K3bApp) found cdrdao in " + _cdrdao );
+      qDebug("(K3bMainWindow) found cdrdao in " + _cdrdao );
     }
     else {
       bool ok = true;
@@ -634,11 +670,11 @@ void K3bApp::searchExternalProgs()
   if( !m_config->hasKey("sox path") ) {
     if( QFile::exists( "/usr/bin/sox" ) ) {
       _sox = "/usr/bin/sox";
-      qDebug("(K3bApp) found sox in " + _sox );
+      qDebug("(K3bMainWindow) found sox in " + _sox );
     }
     else if( QFile::exists( "/usr/local/bin/sox" ) ) {
       _sox = "/usr/local/bin/sox";
-      qDebug("(K3bApp) found sox in " + _sox );
+      qDebug("(K3bMainWindow) found sox in " + _sox );
     }
     else {
       bool ok = true;
@@ -651,11 +687,11 @@ void K3bApp::searchExternalProgs()
   if( !m_config->hasKey("cdrecord path") ) {
     if( QFile::exists( "/usr/bin/cdrecord" ) ) {
       _cdrecord = "/usr/bin/cdrecord";
-      qDebug("(K3bApp) found cdrecord in " + _cdrecord );
+      qDebug("(K3bMainWindow) found cdrecord in " + _cdrecord );
     }
     else if( QFile::exists( "/usr/local/bin/cdrecord" ) ) {
       _cdrecord = "/usr/local/bin/cdrecord";
-      qDebug("(K3bApp) found cdrecord in " + _cdrecord );
+      qDebug("(K3bMainWindow) found cdrecord in " + _cdrecord );
     }
     else {
       bool ok = true;
@@ -668,11 +704,11 @@ void K3bApp::searchExternalProgs()
   if( !m_config->hasKey( "mpg123 path" ) ) {
     if( QFile::exists( "/usr/bin/mpg123" ) ) {
       _mpg123 = "/usr/bin/mpg123";
-      qDebug("(K3bApp) found mpg123 in " + _mpg123 );
+      qDebug("(K3bMainWindow) found mpg123 in " + _mpg123 );
     }
     else if( QFile::exists( "/usr/local/bin/mpg123" ) ) {
       _mpg123 = "/usr/local/bin/mpg123";
-      qDebug("(K3bApp) found mpg123 in " + _mpg123 );
+      qDebug("(K3bMainWindow) found mpg123 in " + _mpg123 );
     }
     else {
       bool ok = true;
@@ -685,7 +721,7 @@ void K3bApp::searchExternalProgs()
   m_config->sync();
 }
 
-void K3bApp::slotNewAudioDoc()
+void K3bMainWindow::slotNewAudioDoc()
 {
   slotStatusMsg(i18n("Creating new Audio Project."));
 
@@ -705,7 +741,7 @@ void K3bApp::slotNewAudioDoc()
   slotStatusMsg(i18n("Ready."));
 }
 
-void K3bApp::slotNewDataDoc()
+void K3bMainWindow::slotNewDataDoc()
 {
   slotStatusMsg(i18n("Creating new Data Project."));
 
@@ -726,7 +762,7 @@ void K3bApp::slotNewDataDoc()
   slotStatusMsg(i18n("Ready."));
 }
 
-K3bAudioTrackDialog* K3bApp::audioTrackDialog()
+K3bAudioTrackDialog* K3bMainWindow::audioTrackDialog()
 {
   if( !m_audioTrackDialog )
     m_audioTrackDialog = new K3bAudioTrackDialog( this );
@@ -734,7 +770,7 @@ K3bAudioTrackDialog* K3bApp::audioTrackDialog()
   return m_audioTrackDialog;
 }
 
-void K3bApp::slotFileBurn()
+void K3bMainWindow::slotFileBurn()
 {
   QWidget* w = m_documentTab->currentPage();
   if( w )
@@ -769,7 +805,7 @@ void K3bApp::slotFileBurn()
 }
 
 
-void K3bApp::init()
+void K3bMainWindow::init()
 {
   emit initializationInfo( i18n("Reading Options...") );
 
@@ -801,33 +837,33 @@ void K3bApp::init()
 }
 
 
-void K3bApp::slotDirDockHidden()
+void K3bMainWindow::slotDirDockHidden()
 {
   // save dock positions!
   manager()->writeConfig( m_config, "Docking Config" );
-  viewDirView->setChecked( false );
+  actionViewDirView->setChecked( false );
 }
 
 
-void K3bApp::slotCurrentDocChanged( QWidget* w )
+void K3bMainWindow::slotCurrentDocChanged( QWidget* w )
 {
   if( w->inherits( "K3bView" ) ) {
     // activate actions for file-handling
-    fileClose->setEnabled( true );
-    fileSave->setEnabled( true );
-    fileSaveAs->setEnabled( true );
-    fileExport->setEnabled( true );
+    actionFileClose->setEnabled( true );
+    actionFileSave->setEnabled( true );
+    actionFileSaveAs->setEnabled( true );
+    actionFileExport->setEnabled( true );
   }
   else {
     // the active window does not represent a file (e.g. the copy-widget)
-    fileClose->setEnabled( false );
-    fileSave->setEnabled( false );
-    fileSaveAs->setEnabled( false );
+    actionFileClose->setEnabled( false );
+    actionFileSave->setEnabled( false );
+    actionFileSaveAs->setEnabled( false );
   }
 }
 
 
-QString K3bApp::findTempFile( const QString& ending, const QString& d )
+QString K3bMainWindow::findTempFile( const QString& ending, const QString& d )
 {
   QString dir(d);
   if( dir.isEmpty() ) {
@@ -846,40 +882,40 @@ QString K3bApp::findTempFile( const QString& ending, const QString& d )
 }
 
 
-bool K3bApp::eject()
+bool K3bMainWindow::eject()
 {
   config()->setGroup( "General Options" );
   return config()->readBoolEntry( "Eject when finished", true );
 }
 
 
-void K3bApp::slotJobFinished( K3bJob* job )
+void K3bMainWindow::slotJobFinished( K3bJob* job )
 {
   job->disconnect();
   delete job;
 }
 
 
-void K3bApp::slotErrorMessage(const QString& message)
+void K3bMainWindow::slotErrorMessage(const QString& message)
 {
   KMessageBox::error( this, message );
 }
 
 
-void K3bApp::slotWarningMessage(const QString& message)
+void K3bMainWindow::slotWarningMessage(const QString& message)
 {
   KMessageBox::sorry( this, message );
 }
 
 
-void K3bApp::slotCdInfo()
+void K3bMainWindow::slotCdInfo()
 {
   K3bCdInfoDialog* d = new K3bCdInfoDialog( this, "cdinfod" );
   d->show();  // will delete itself (modeless)
 }
 
 
-void K3bApp::slotBlankCdrw()
+void K3bMainWindow::slotBlankCdrw()
 {
   // K3bBlankingDialog is modeless so don't use exec!
   // the dialog also does a delayed self-destrcut

@@ -20,17 +20,17 @@
 #include <qpainter.h>
 #include <qdir.h>
 #include <qtabwidget.h>
-// include files for KDE
+
 
 // application specific includes
 #include "k3b.h"
 #include "k3bview.h"
 #include "k3bdoc.h"
 
-K3bView::K3bView(K3bDoc* pDoc, QWidget *parent, const char* name, int wflags)
-  : QWidget(parent, name, wflags)
+K3bView::K3bView( K3bDoc* pDoc, QWidget *parent, const char* name )
+  : QWidget( parent, name )
 {
-  doc=pDoc;
+  doc = pDoc;
 }
 
 K3bView::~K3bView()
@@ -52,7 +52,7 @@ void K3bView::closeEvent(QCloseEvent*){
 
 // DO NOT CALL QWidget::closeEvent(e) here !!
 // This will accept the closing by QCloseEvent::accept() by default.
-// The installed eventFilter() in K3bApp takes care for closing the widget
+// The installed eventFilter() in K3bMainWindow takes care for closing the widget
 // or ignoring the close event
 		
 }

@@ -37,6 +37,7 @@
 #include <qbuttongroup.h>
 
 #include <kmessagebox.h>
+#include <krestrictedline.h>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kstddirs.h>
@@ -422,22 +423,30 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
 
   _groupVolumeInfoLayout->addWidget( _labelPreparer, 3, 0 );
 
-  m_editVolumeID = new QLineEdit( _groupVolumeInfo, "m_editVolumeID" );
+  m_editVolumeID = new KRestrictedLine( _groupVolumeInfo, "m_editVolumeID" );
+  // are this really the allowed characters?
+  m_editVolumeID->setValidChars( "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-. " );
   m_editVolumeID->setMaxLength( 32 );
 
   _groupVolumeInfoLayout->addWidget( m_editVolumeID, 0, 1 );
 
-  m_editApplicationID = new QLineEdit( _groupVolumeInfo, "m_editApplicationID" );
-  m_editApplicationID->setMaxLength( 32 );
+  m_editApplicationID = new KRestrictedLine( _groupVolumeInfo, "m_editApplicationID" );
+  // are this really the allowed characters?
+  m_editApplicationID->setValidChars( "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-. " );
+  m_editApplicationID->setMaxLength( 128 );
 
   _groupVolumeInfoLayout->addWidget( m_editApplicationID, 1, 1 );
 
-  m_editPublisher = new QLineEdit( _groupVolumeInfo, "m_editPublisher" );
+  m_editPublisher = new KRestrictedLine( _groupVolumeInfo, "m_editPublisher" );
+  // are this really the allowed characters?
+  m_editPublisher->setValidChars( "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-. " );
   m_editPublisher->setMaxLength( 128 );
 
   _groupVolumeInfoLayout->addWidget( m_editPublisher, 2, 1 );
 
-  m_editPreparer = new QLineEdit( _groupVolumeInfo, "m_editPreparer" );
+  m_editPreparer = new KRestrictedLine( _groupVolumeInfo, "m_editPreparer" );
+  // are this really the allowed characters?
+  m_editPreparer->setValidChars( "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-. " );
   m_editPreparer->setMaxLength( 128 );
 
   _groupVolumeInfoLayout->addWidget( m_editPreparer, 3, 1 );
@@ -484,6 +493,11 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
   frameLayout->addWidget( m_groupWhiteSpace, 3, 0 );
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
   frameLayout->addItem( spacer, 2, 0 );
+
+//   connect( m_editVolumeID, SIGNAL(textChanged(const QString&)), this, SLOT(slotConvertAllToUpperCase()) );
+//   connect( m_editApplicationID, SIGNAL(textChanged(const QString&)), this, SLOT(slotConvertAllToUpperCase()) );
+//   connect( m_editPreparer, SIGNAL(textChanged(const QString&)), this, SLOT(slotConvertAllToUpperCase()) );
+//   connect( m_editPublisher, SIGNAL(textChanged(const QString&)), this, SLOT(slotConvertAllToUpperCase()) );
 }
 
 
@@ -618,4 +632,13 @@ void K3bDataBurnDialog::slotUser1()
     KMessageBox::sorry( this, "Not enough space in temp directory. Either change the directory or select on-the-fly burning." );
   else
     K3bProjectBurnDialog::slotUser1();
+}
+
+
+void K3bDataBurnDialog::slotConvertAllToUpperCase()
+{
+  m_editApplicationID->setText( m_editApplicationID->text().upper() );
+  m_editVolumeID->setText( m_editVolumeID->text().upper() );
+  m_editPublisher->setText( m_editPublisher->text().upper() );
+  m_editPreparer->setText( m_editPreparer->text().upper() );
 }

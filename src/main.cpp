@@ -52,22 +52,23 @@ int main(int argc, char *argv[])
  
   if (app.isRestored())
     {
-      RESTORE(K3bApp);
+      RESTORE(K3bMainWindow);
     }
   else 
     {
-      K3bApp *k3bMainWidget = new K3bApp();
+      K3bMainWindow *k3bMainWidget = new K3bMainWindow();
       app.setMainWidget( k3bMainWidget );
 
       K3bSplash* splash = new K3bSplash( k3bMainWidget );
       splash->connect( k3bMainWidget, SIGNAL(initializationInfo(const QString&)), SLOT(addInfo(const QString&)) );
+
+      // kill the splash after 15 seconds
+      QTimer::singleShot( 15000, splash, SLOT(close()) );
+
       splash->show();
 
       k3bMainWidget->init();
       k3bMainWidget->show();
-
-      // kill the splash after 10 seconds
-      QTimer::singleShot( 10000, splash, SLOT(close()) );
 
       KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 		

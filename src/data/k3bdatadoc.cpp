@@ -66,7 +66,7 @@ bool K3bDataDoc::newDocument()
   m_size = 0;
 	
   m_name = "Dummyname";
-  m_applicationID = "K3b";    // thy name on every cd!
+  m_applicationID = "K3B";    // thy name on every cd!
   m_isoImage = QString::null;
 
   m_createRockRidge = true;
@@ -200,7 +200,7 @@ long K3bDataDoc::size() const
 int K3bDataDoc::length() const
 {
   // 1 block consists of 2048 bytes real data
-  // and 1 block are needed to store 1 audio frame
+  // and 1 block equals to 1 audio frame
   // so this is the way to calculate:
 
   return size() / 2048;
@@ -213,9 +213,190 @@ QString K3bDataDoc::documentType() const
 }
 
 
-bool K3bDataDoc::loadDocumentData( QDomDocument* )
+bool K3bDataDoc::loadDocumentData( QDomDocument* doc )
 {
-  // TODO: so what? load the shit! ;-)
+  if( doc->doctype().name() != documentType() )
+    return false;
+
+  QDomNodeList nodes = doc->documentElement().childNodes();
+
+  if( nodes.item(0).nodeName() != "general" ) {
+    qDebug( "(K3bDataDoc) could not find 'general' section." );
+    return false;
+  }
+  if( !readGeneralDocumentData( nodes.item(0).toElement() ) )
+    return false;
+
+
+  // parse options
+  // -----------------------------------------------------------------
+  if( nodes.item(1).nodeName() != "options" ) {
+    qDebug( "(K3bDataDoc) could not find 'options' section." );
+    return false;
+  }
+  QDomNodeList optionList = nodes.item(1).childNodes();
+  for( uint i = 0; i < optionList.count(); i++ ) {
+
+    QDomElement e = optionList.item(i).toElement();
+    if( e.isNull() )
+      return false;
+
+    if( e.nodeName() == "rock_ridge")
+      setCreateRockRidge( e.attributeNode( "activated" ).value() == "yes" );
+
+    else if( e.nodeName() == "joliet")
+      setCreateJoliet( e.attributeNode( "activated" ).value() == "yes" );
+
+    else if( e.nodeName() == "iso_allow_lowercase")
+      setISOallowLowercase( e.attributeNode( "activated" ).value() == "yes" );
+
+    else if( e.nodeName() == "iso_allow_period_at_begin")
+      setISOallowPeriodAtBegin( e.attributeNode( "activated" ).value() == "yes" );
+      
+    else if( e.nodeName() == "iso_allow_31_char")
+      setISOallow31charFilenames( e.attributeNode( "activated" ).value() == "yes" );
+
+    else if( e.nodeName() == "iso_omit_version_numbers")
+      setISOomitVersionNumbers( e.attributeNode( "activated" ).value() == "yes" );
+
+    else if( e.nodeName() == "iso_max_filename_length")
+      setISOmaxFilenameLength( e.attributeNode( "activated" ).value() == "yes" );
+
+    else if( e.nodeName() == "iso_relaxed_filenames")
+      setISOrelaxedFilenames( e.attributeNode( "activated" ).value() == "yes" );
+
+    else if( e.nodeName() == "iso_no_iso_translate")
+      setISOnoIsoTranslate( e.attributeNode( "activated" ).value() == "yes" );
+
+    else if( e.nodeName() == "iso_allow_multidot")
+      setISOallowMultiDot( e.attributeNode( "activated" ).value() == "yes" );
+
+    else if( e.nodeName() == "iso_untranslated_filenames")
+      setISOuntranslatedFilenames( e.attributeNode( "activated" ).value() == "yes" );
+
+    else if( e.nodeName() == "no_deep_dir_relocation")
+      setNoDeepDirectoryRelocation( e.attributeNode( "activated" ).value() == "yes" );
+
+    else if( e.nodeName() == "follow_symbolic_links")
+      setFollowSymbolicLinks( e.attributeNode( "activated" ).value() == "yes" );
+
+    else if( e.nodeName() == "hide_rr_moved")
+      setHideRR_MOVED( e.attributeNode( "activated" ).value() == "yes" );
+
+    else if( e.nodeName() == "create_trans_tbl")
+      setCreateTRANS_TBL( e.attributeNode( "activated" ).value() == "yes" );
+
+    else if( e.nodeName() == "hide_trans_tbl")
+      setHideTRANS_TBL( e.attributeNode( "activated" ).value() == "yes" );
+
+    else if( e.nodeName() == "padding")
+      setPadding( e.attributeNode( "activated" ).value() == "yes" );
+
+    else if( e.nodeName() == "iso_level")
+      setISOLevel( e.text().toInt() );
+
+    else
+      qDebug( "(K3bDataDoc) unknown option entry: " + e.nodeName() );
+  }
+  // -----------------------------------------------------------------
+
+
+
+  // parse header
+  // -----------------------------------------------------------------
+  if( nodes.item(2).nodeName() != "header" ) {
+    qDebug( "(K3bDataDoc) could not find 'header' section." );
+    return false;
+  }
+  QDomNodeList headerList = nodes.item(2).childNodes();
+  for( uint i = 0; i < headerList.count(); i++ ) {
+
+    QDomElement e = headerList.item(i).toElement();
+    if( e.isNull() )
+      return false;
+
+    if( e.nodeName() == "volume_id" )
+      setVolumeID( e.text() );
+
+    else if( e.nodeName() == "application_id" )
+      setApplicationID( e.text() );
+    
+    else if( e.nodeName() == "publisher" )
+      setPublisher( e.text() );
+    
+    else if( e.nodeName() == "preparer" )
+      setPreparer( e.text() );
+    
+    else
+      qDebug( "(K3bDataDoc) unknown header entry: " + e.nodeName() );
+    
+  }
+  // -----------------------------------------------------------------
+
+
+
+  // parse files
+  // -----------------------------------------------------------------
+  if( nodes.item(3).nodeName() != "files" ) {
+    qDebug( "(K3bDataDoc) could not find 'files' section." );
+    return false;
+  }
+
+  if( m_root == 0 )
+    m_root = new K3bRootItem( this );    
+
+  QDomNodeList filesList = nodes.item(3).childNodes();
+  for( uint i = 0; i < filesList.count(); i++ ) {
+
+    QDomElement e = filesList.item(i).toElement();
+    if( !loadDataItem( e, root() ) )
+      return false;
+  }
+
+  // -----------------------------------------------------------------
+
+
+
+  emit newFileItems();
+
+  return true;
+}
+
+
+bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
+{
+  if( elem.nodeName() == "file" ) {
+    QDomElement urlElem = elem.firstChild().toElement();
+    if( urlElem.isNull() ) {
+      qDebug( "(K3bDataDoc) file-element without url!" );
+      return false;
+    }
+
+    if( !QFile::exists( urlElem.text() ) )
+      qDebug( "(K3bDataDoc) Could not find file: " + urlElem.text() );
+    else {
+      K3bFileItem* newK3bItem = new K3bFileItem( urlElem.text(), this, parent, elem.attributeNode( "name" ).value() );
+      m_size += newK3bItem->k3bSize();
+    }
+  }
+  else if( elem.nodeName() == "directory" ) {
+    K3bDirItem* newDirItem = new K3bDirItem( elem.attributeNode( "name" ).value(), this, parent );
+    QDomNodeList childNodes = elem.childNodes();
+    for( uint i = 0; i < childNodes.count(); i++ ) {
+      
+      QDomElement e = childNodes.item(i).toElement();
+      if( !loadDataItem( e, newDirItem ) )
+	return false;
+    }
+
+  }
+  else {
+    qDebug( "(K3bDataDoc) wrong tag in files-section: " + elem.nodeName() );
+    return false;
+  }
+
+
+
   return true;
 }
 
@@ -241,6 +422,10 @@ bool K3bDataDoc::saveDocumentData( QDomDocument* doc )
 
   topElem = doc->createElement( "iso_allow_lowercase" );
   topElem.setAttribute( "activated", ISOallowLowercase() ? "yes" : "no" );
+  optionsElem.appendChild( topElem );
+
+  topElem = doc->createElement( "iso_allow_period_at_begin" );
+  topElem.setAttribute( "activated", ISOallowPeriodAtBegin() ? "yes" : "no" );
   optionsElem.appendChild( topElem );
 
   topElem = doc->createElement( "iso_allow_31_char" );
@@ -384,7 +569,7 @@ void K3bDataDoc::removeItem( K3bDataItem* item )
 	
     m_size -= item->k3bSize();
     if( m_size < 0 ) {
-      qDebug( "(K3bDataDoc) Size of project is: %i, that CANNOT be! Will exit", m_size );
+      qDebug( "(K3bDataDoc) Size of project is: %i, that CANNOT be! Will exit! PLEASE REPORT!", m_size );
       exit(0);
     }
 

@@ -42,8 +42,8 @@
 #include <kapp.h>
 
 
-K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name, int wflags )
-  : K3bView( pDoc, parent, name, wflags )
+K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name )
+  : K3bView( pDoc, parent, name )
 {
   m_doc = pDoc;
 

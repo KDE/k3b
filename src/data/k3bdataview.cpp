@@ -79,6 +79,9 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
 
   connect( m_doc, SIGNAL(itemRemoved(K3bDataItem*)), m_fillStatusDisplay, SLOT(update()) );
   connect( m_doc, SIGNAL(newFileItems()), m_fillStatusDisplay, SLOT(update()) );
+
+  m_dataDirTree->updateContents();
+  m_dataFileView->updateContents();
 }
 
 

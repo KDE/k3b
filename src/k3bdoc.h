@@ -36,8 +36,7 @@ class K3bView;
 class QTimer;
 class KTempFile;
 class K3bDevice;
-class KProcess;
-class K3bApp;
+class K3bMainWindow;
 class K3bBurnJob;
 class QDomDocument;
 class QDomElement;
@@ -47,9 +46,9 @@ class QDomElement;
 /**	K3bDoc provides a document object for a document-view model.
   *
   * The K3bDoc class provides a document object that can be used in conjunction with the classes
-  * K3bApp and K3bView to create a document-view model for MDI (Multiple Document Interface)
+  * K3bMainWindow and K3bView to create a document-view model for MDI (Multiple Document Interface)
   * KDE 2 applications based on KApplication and KTMainWindow as main classes and QWorkspace as MDI manager widget.
-  * Thereby, the document object is created by the K3bApp instance (and kept in a document list) and contains
+  * Thereby, the document object is created by the K3bMainWindow instance (and kept in a document list) and contains
   * the document structure with the according methods for manipulating the document
   * data by K3bView objects. Also, K3bDoc contains the methods for serialization of the document data
   * from and to files.
@@ -70,7 +69,7 @@ class K3bDoc : public QObject
 
   enum DocType { AUDIO = 1, DATA = 2 };
 
-  int docType() const { return m_docType; }
+  virtual int docType() const { return m_docType; }
 	
   /** adds a view to the document which represents the document contents. Usually this is your main view. */
   virtual void addView(K3bView *view);
@@ -82,21 +81,14 @@ class K3bDoc : public QObject
   K3bView* firstView(){ return pViewList->first(); };
   /** returns true, if the requested view is the last view of the document */
   bool isLastView();
-  /** This method gets called when the user is about to close a frame window. It checks, if more than one view
-   * is connected to the document (then the frame can be closed), if pFrame is the last view and the document is
-   * modified, the user gets asked if he wants to save the document.
-   */
-  bool canCloseFrame(K3bView* pFrame);
+
   /** sets the modified flag for the document after a modifying action on the view connected to the document.*/
   void setModified(bool _m=true){ modified=_m; };
   /** returns if the document is modified or not. Use this to determine if your document needs saving by the user on closing.*/
   bool isModified(){ return modified; };
-  /** deletes the document's contents */
-  virtual void deleteContents();
+
   /** this virtual version only sets the modified flag */
   virtual bool newDocument();
-  /** closes the acutal document */
-  void closeDocument();
 
   static K3bDoc* openDocument(const KURL &url);
 
@@ -177,9 +169,7 @@ class K3bDoc : public QObject
    */
   virtual QString documentType() const = 0;
 
-  KProcess* m_process;
-	
-  int  m_error;
+  int m_error;
   int m_docType;
 
  private:

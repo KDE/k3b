@@ -53,7 +53,6 @@ K3bDoc::K3bDoc( QObject* parent )
   pViewList = new QList<K3bView>;
   pViewList->setAutoDelete(false);
 
-  m_process = new KProcess();
   m_burner = 0;
   m_dao = true;
   m_onTheFly = true;
@@ -64,7 +63,6 @@ K3bDoc::K3bDoc( QObject* parent )
 
 K3bDoc::~K3bDoc()
 {
-  delete m_process;
   delete pViewList;
 }
 
@@ -105,21 +103,19 @@ void K3bDoc::removeView(K3bView *view)
   pViewList->remove(view);
   if(!pViewList->isEmpty())
     changedViewList();
-  else
-    deleteContents();
 }
 
 void K3bDoc::changedViewList(){	
 	
   K3bView *w;
-  if((int)pViewList->count() == 1){
-    w=pViewList->first();
-    w->setCaption(URL().fileName());
+  if( (int)pViewList->count() == 1 ) {
+    w = pViewList->first();
+    w->setCaption( URL().fileName() );
   }
   else{	
     int i;
-    for( i=1,w=pViewList->first(); w!=0; i++, w=pViewList->next())
-      w->setCaption(QString(URL().fileName()+":%1").arg(i));	
+    for( i = 1, w = pViewList->first(); w != 0; i++, w = pViewList->next() )
+      w->setCaption( QString(URL().fileName()+":%1").arg(i) );
   }
 }
 
@@ -135,7 +131,6 @@ void K3bDoc::updateAllViews(K3bView *sender)
     {
       w->update(sender);
     }
-
 }
 
 void K3bDoc::setURL(const KURL &url)
@@ -148,23 +143,6 @@ const KURL& K3bDoc::URL() const
   return doc_url;
 }
 
-void K3bDoc::closeDocument()
-{
-  K3bView *w;
-  if(!isLastView())
-    {
-      for(w=pViewList->first(); w!=0; w=pViewList->next())
-	{
-	  if(!w->close())
-	    break;
-	}
-    }
-  if(isLastView())
-    {
-      w=pViewList->first();
-      w->close();
-    }
-}
 
 bool K3bDoc::newDocument()
 {
@@ -208,6 +186,7 @@ K3bDoc* K3bDoc::openDocument(const KURL& url )
   // ---------
   // load the data into the document	
   if( newDoc != 0 ) {
+    newDoc->newDocument();
     if( newDoc->loadDocumentData( &xmlDoc ) ) {
       newDoc->setURL( url );
       return newDoc;
@@ -241,66 +220,6 @@ bool K3bDoc::saveDocument(const KURL& url )
   return success;
 }
 
-void K3bDoc::deleteContents()
-{
-  /////////////////////////////////////////////////
-  // TODO: Add implementation to delete the document contents
-  /////////////////////////////////////////////////
-
-}
-
-bool K3bDoc::canCloseFrame(K3bView* pFrame)
-{
-  if(!isLastView())
-    return true;
-		
-  bool ret=false;
-  if(isModified())
-    {
-      KURL saveURL;
-      switch(KMessageBox::warningYesNoCancel(pFrame, i18n("The current file has been modified.\n"
-							  "Do you want to save it?"),URL().fileName()))
-	{
-	case KMessageBox::Yes:
-	  if(URL().fileName().contains(i18n("Untitled")))
-	    {
-	      saveURL=KFileDialog::getSaveURL(QDir::currentDirPath(),
-					      i18n("*|All files"), pFrame, i18n("Save as..."));
-	      if(saveURL.isEmpty())
-          	return false;
-	    }
-	  else
-	    saveURL=URL();
-					
-	  if(!saveDocument(saveURL))
-	    {
-	      switch(KMessageBox::warningYesNo(pFrame,i18n("Could not save the current document !\n"
-							   "Close anyway ?"), i18n("I/O Error !")))
-		{
-		case KMessageBox::Yes:
-		  ret=true;
-		case KMessageBox::No:
-		  ret=false;
-		}	        			
-	    }
-	  else
-	    ret=true;
-	  break;
-	case KMessageBox::No:
-	  ret=true;
-	  break;
-	case KMessageBox::Cancel:
-	default:
-	  ret=false; 				
-	  break;
-	}
-    }
-  else
-    ret=true;
-		
-  return ret;
-}
-
 
 bool K3bDoc::saveGeneralDocumentData( QDomElement* part )
 {
@@ -308,18 +227,15 @@ bool K3bDoc::saveGeneralDocumentData( QDomElement* part )
   QDomElement mainElem = doc.createElement( "general" );
 
   QDomElement propElem = doc.createElement( "dao" );
-  QDomText textElem = doc.createTextNode( dao() ? "yes" : "no" );
-  propElem.appendChild( textElem );
+  propElem.setAttribute( "activated", dao() ? "yes" : "no" );
   mainElem.appendChild( propElem );
 
   propElem = doc.createElement( "dummy" );
-  textElem = doc.createTextNode( dummy() ? "yes" : "no" );
-  propElem.appendChild( textElem );
+  propElem.setAttribute( "activated", dummy() ? "yes" : "no" );
   mainElem.appendChild( propElem );
 
   propElem = doc.createElement( "on_the_fly" );
-  textElem = doc.createTextNode( onTheFly() ? "yes" : "no" );
-  propElem.appendChild( textElem );
+  propElem.setAttribute( "activated", onTheFly() ? "yes" : "no" );
   mainElem.appendChild( propElem );
 
   part->appendChild( mainElem );
@@ -328,8 +244,28 @@ bool K3bDoc::saveGeneralDocumentData( QDomElement* part )
 }
 
 
-bool K3bDoc::readGeneralDocumentData( const QDomElement& )
+bool K3bDoc::readGeneralDocumentData( const QDomElement& elem )
 {
+  if( elem.nodeName() != "general" )
+    return false;
+
+  QDomNodeList nodes = elem.childNodes();
+  for( uint i = 0; i < nodes.count(); i++ ) {
+
+    QDomElement e = nodes.item(i).toElement();
+    if( e.isNull() )
+      return false;
+
+    if( e.nodeName() == "dao")
+      setDao( e.attributeNode( "activated" ).value() == "yes" );
+
+    if( e.nodeName() == "dummy")
+      setDummy( e.attributeNode( "activated" ).value() == "yes" );
+
+    if( e.nodeName() == "on_the_fly")
+      setOnTheFly( e.attributeNode( "activated" ).value() == "yes" );
+  }
+
 
   return true;
 }

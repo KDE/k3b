@@ -30,10 +30,10 @@ class K3bProjectBurnDialog;
 
 
 /** The K3bView class provides the view widget for the document instance connected to it and is displayed
- * as a MDI child window in the main view area of the K3bApp class instance. The K3bApp class also has an eventFilter()
+ * as a MDI child window in the main view area of the K3bMainWindow class instance. The K3bMainWindow class also has an eventFilter()
  * method that gets installed on every K3bView instance to control events of the type QEvent::Close.	
  * The document connected to the view instance keeps a list of all view that represent the document contents as there
- * can be more than one view. Views get created in K3bApp::createClient() and automatically added to the list of views.
+ * can be more than one view. Views get created in K3bMainWindow::createClient() and automatically added to the list of views.
  * The K3bView class inherits QWidget as a base. Another possible inheritance besides specialized widgets could be
  * QMainWindow so that you can easily set up the main area of your view by setting another view
  * as main widget (QMainWindow::setMainWidget() ).
@@ -55,7 +55,7 @@ class K3bView : public QWidget
   /** Constructor for the view
    * @param pDoc  your document instance that the view represents. Create a document before calling the constructor
    * or connect an already existing document to a new MDI child widget.*/
-  K3bView(K3bDoc* pDoc, QWidget* parent, const char *name = 0, int wflags = 0);
+  K3bView(K3bDoc* pDoc, QWidget* parent, const char *name = 0 );
 
   /** Destructor for the main view */
   ~K3bView();
@@ -70,7 +70,7 @@ class K3bView : public QWidget
 
  protected:
   /** overwritten QWidget::closeEvent() to catch closing views. Does nothing, as the closeEvents for
-   * K3bView's are processed by K3bApp::eventFilter(), so this overwitten closeEvent is necessary
+   * K3bView's are processed by K3bMainWindow::eventFilter(), so this overwitten closeEvent is necessary
    * and has to be empty. Don't overwrite this method !
    */
   virtual void closeEvent(QCloseEvent* e);

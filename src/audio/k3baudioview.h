@@ -49,7 +49,7 @@ class K3bAudioView : public K3bView  {
   Q_OBJECT
 	
  public: 
-  K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name = 0, int wflags = 0 );
+  K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name = 0 );
   ~K3bAudioView();
 
   K3bProjectBurnDialog* burnDialog();

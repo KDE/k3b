@@ -163,6 +163,13 @@ class K3bDataDoc : public K3bDoc
   QString treatWhitespace( const QString& );
  	 		
  private:
+  /**
+   * load recursivly
+   */
+  bool loadDataItem( QDomElement& e, K3bDirItem* parent );
+  /**
+   * save recursivly
+   */
   void saveDataItem( K3bDataItem* item, QDomDocument* doc, QDomElement* parent );
 
   class PrivateItemToAdd {
