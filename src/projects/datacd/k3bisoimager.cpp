@@ -610,7 +610,7 @@ bool K3bIsoImager::addMkisofsParameters( bool printSize )
 	*m_process << "-no-emul-boot";
 	if( bootItem->loadSegment() > 0 )
 	  *m_process << "-boot-load-seg" << QString::number(bootItem->loadSegment());
-	if( bootItem->loadSegment() > 0 )
+	if( bootItem->loadSize() > 0 )
 	  *m_process << "-boot-load-size" << QString::number(bootItem->loadSize());
       }
 

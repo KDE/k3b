@@ -897,7 +897,8 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
 	     ++col;
 	   if( col < columns() )
 	     editItem( m_currentEditItem, col );
-	   else if( K3bListViewItem* nextItem = dynamic_cast<K3bListViewItem*>( m_currentEditItem->nextSibling() ) ) {
+	   else if( K3bListViewItem* nextItem = 
+		    dynamic_cast<K3bListViewItem*>( m_currentEditItem ? m_currentEditItem->nextSibling() : 0 ) ) {
 	     // edit first column
 	     col = 0;
 	     while( col < columns() && nextItem->editorType( col ) == K3bListViewItem::NONE )
@@ -914,7 +915,8 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
      if( ke->key() == Key_Return ) {
        if( o == m_editorLineEdit || o == m_editorMsfEdit || o == m_editorSpinBox ) {
 	 doRename();
-	 if( K3bListViewItem* nextItem = dynamic_cast<K3bListViewItem*>( m_currentEditItem->nextSibling() ) )
+	 if( K3bListViewItem* nextItem = 
+	     dynamic_cast<K3bListViewItem*>( m_currentEditItem ? m_currentEditItem->nextSibling() : 0 ) )
 	   editItem( nextItem, currentEditColumn() );
 	 else
 	   hideEditor();
