@@ -29,6 +29,7 @@
 #include <qstringlist.h>
 #include <qvaluelist.h>
 #include <qregexp.h>
+#include <qurloperator.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -59,6 +60,7 @@ K3bCdrdaoWriter::K3bCdrdaoWriter( K3bDevice* dev, QObject* parent, const char* n
     qsn(0),
     m_prepareArgumentListCalled(false)
 {
+
   m_parser = new K3bCdrdaoParser();
   connect(m_parser,SIGNAL(newSubTask(const QString&)),
 	  this,SIGNAL(newSubTask(const QString&)));
@@ -283,6 +285,11 @@ void K3bCdrdaoWriter::start()
     if( m_tocFile.isEmpty() )
       m_tocFile = k3bMain()->findTempFile( "toc" );
 
+    // workaround, cdrdao kill the tocfile when --remote parameter is set
+    // hope to fix it in the future
+    QUrlOperator *cp = new QUrlOperator();
+    cp->copy(m_tocFile,m_tocFile+QString(".bak"),false,false);
+
     if( m_command != BLANK )
       *m_process << m_tocFile;
   }
@@ -347,6 +354,11 @@ void K3bCdrdaoWriter::cancel()
     emit canceled();
     emit finished( false );
   }
+
+  // workaround, cdrdao kill the tocfile when --remote parameter is set
+  // hope to fix it in the future
+  QUrlOperator *cp = new QUrlOperator();
+  cp->copy(m_tocFile+QString(".bak"),m_tocFile,true,false);
 }
 
 
@@ -395,6 +407,11 @@ void K3bCdrdaoWriter::slotProcessExited( KProcess* p )
     ::close( cdrdaoComm[0] );
     ::close( cdrdaoComm[1] );
   }
+
+  // workaround, cdrdao kill the tocfile when --remote parameter is set
+  // hope to fix it in the future
+  QUrlOperator *cp = new QUrlOperator();
+  cp->copy(m_tocFile+QString(".bak"),m_tocFile,true,false);
 }
 
 
