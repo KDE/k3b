@@ -84,13 +84,15 @@ class K3bVcdTrackDialog : public KDialogBase
         QGroupBox* m_groupPlay;
         QGroupBox* m_groupPbc;
         QWidget* m_widgetnumkeys;
-        
+
         K3bCutComboBox* m_pbc_previous;
         K3bCutComboBox* m_pbc_next;
         K3bCutComboBox* m_pbc_return;
         K3bCutComboBox* m_pbc_default;
         K3bCutComboBox* m_comboAfterTimeout;
 
+				QCheckBox* m_check_reactivity;
+				QCheckBox* m_check_pbc;
         QCheckBox* m_check_usekeys;
         QCheckBox* m_check_overwritekeys;
         K3bListView* m_list_keys;
