@@ -71,6 +71,8 @@ class K3bDataItem
 
   virtual int depth() const;
 
+  virtual bool isValid() const { return true; }
+
  protected:
   QString m_k3bName;
   /**

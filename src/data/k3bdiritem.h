@@ -50,6 +50,7 @@ class K3bDirItem : public K3bDataItem
   QString localPath();
 
   bool alreadyInDirectory( const QString& fileName ) const;
+  K3bDataItem* find( const QString& filename ) const;
 
   long k3bSize() const;
 

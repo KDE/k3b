@@ -21,6 +21,8 @@
 
 #include <qfileinfo.h>
 #include <qstring.h>
+#include <qstringlist.h>
+#include <qregexp.h>
 
 #include <kurl.h>
 
@@ -116,4 +118,57 @@ QString K3bFileItem::localPath()
 K3bDirItem* K3bFileItem::addDataItem( K3bDataItem* item )
 {
   return parent()->addDataItem( item );
+}
+
+
+bool K3bFileItem::isValid() const
+{
+  if( isLink() ) {
+    QString dest = linkDest();
+
+    if( dest[0] == '/' )
+      return false;  // absolut links can never be part of the compilation!
+
+    // parse the link 
+    K3bDirItem* dir = parent();
+
+    QStringList tokens = QStringList::split( QRegExp("/+"), dest );  // two slashes or more do the same as one does!
+
+    unsigned int i = 0;
+    while( i < tokens.size() ) {
+      if( tokens[i] == "." ) {
+	// ignore it
+      }
+      else if( tokens[i] == ".." ) {
+	// change the directory
+	dir = dir->parent();
+	if( dir == 0 )
+	  return false;
+      }
+      else {
+	// search for the item in dir
+	K3bDataItem* d = dir->find( tokens[i] );
+	if( d == 0 )
+	  return false;
+
+	if( d->isDir() ) {
+	  // change directory
+	  dir = (K3bDirItem*)d;
+	}
+	else {
+	  if( i+1 != tokens.size() )
+	    return false;  // if di is a file we need to be at the last token
+	  else
+	    return (dest[dest.length()-1] != '/');   // if the link destination ends with a slash 
+                                            	   // it can only point to a directory!
+	}
+      }
+
+      i++;
+    }
+
+    return true;
+  }
+  else
+    return true;
 }

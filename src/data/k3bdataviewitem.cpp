@@ -31,8 +31,9 @@ K3bDataViewItem::~K3bDataViewItem()
 
 void K3bDataViewItem::paintCell( QPainter* p, const QColorGroup& cg, int column, int width, int align )
 {
+  QColorGroup _cg = cg;
+
   if( column == 0 ) {
-    QColorGroup _cg = cg;
     const QPixmap *pm = listView()->viewport()->backgroundPixmap();
     if (pm && !pm->isNull())
       {
@@ -62,8 +63,16 @@ void K3bDataViewItem::paintCell( QPainter* p, const QColorGroup& cg, int column,
       width -= tw;
     }
   }
+  else if( column == 4 ) {
+    if( dataItem()->isSymLink() ) {
+      if( !dataItem()->isValid() ) {
+	// paint the link in red
+	_cg.setColor( QColorGroup::Text, Qt::red );
+      }
+    }
+  }
 
-  KListViewItem::paintCell( p, cg, column, width, align );
+  KListViewItem::paintCell( p, _cg, column, width, align );
 }
 
 
@@ -173,7 +182,7 @@ QString K3bDataFileViewItem::text( int index ) const
   case 3:
     return m_fileItem->localPath();
   case 4:
-    return m_fileItem->linkDest();
+    return ( m_fileItem->isValid() ? m_fileItem->linkDest() : m_fileItem->linkDest() + i18n(" (broken)") );
   default:
     return "";
   }

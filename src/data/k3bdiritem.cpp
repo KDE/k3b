@@ -134,14 +134,20 @@ void K3bRootItem::setK3bName( const QString& text )
 }
 
 
-bool K3bDirItem::alreadyInDirectory( const QString& fileName ) const
+bool K3bDirItem::alreadyInDirectory( const QString& filename ) const
+{
+  return (find( filename ) != 0);
+}
+
+
+K3bDataItem* K3bDirItem::find( const QString& filename ) const
 {
   QListIterator<K3bDataItem> it( *m_children );
   for( ; it.current(); ++it ) {
-    if( it.current()->k3bName() == fileName )
-      return true;
+    if( it.current()->k3bName() == filename )
+      return it.current();
   }
-  return false;
+  return 0;
 }
 
 

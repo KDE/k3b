@@ -1004,8 +1004,12 @@ void K3bDataJob::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream )
     // now create the graft points
     for( QPtrListIterator<K3bDataItem> it( *dirItem->children() ); it.current(); ++it ) {
       K3bDataItem* item = it.current();
-      if( m_doc->isoOptions().discardSymlinks() && item->isSymLink() )
-	continue;
+      if( item->isSymLink() ) {
+	if( m_doc->isoOptions().discardSymlinks() )
+	  continue;
+	else if( m_doc->isoOptions().discardBrokenSymlinks() && !item->isValid() )
+	  continue;
+      }
 
       stream << escapeGraftPoint( m_doc->treatWhitespace(item->jolietPath()) ) 
 	     << "=" << escapeGraftPoint( item->localPath() ) << "\n";

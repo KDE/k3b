@@ -59,6 +59,10 @@ public:
 	
   bool isSymLink() const { return isLink(); }
 
+  /** returns true if the item is not a link or 
+   *  if the link's destination is part of the compilation */
+  bool isValid() const;
+
  private:
 /*   QString m_isoName; */
 /*   QString m_joiletName; */
