@@ -85,6 +85,12 @@ QValidator::State K3bIntValidator::validate ( QString &str, int & ) const
   if( !ok )
     return QValidator::Invalid;
 
+  if( m_min && val > 0 && val < m_min )
+    return QValidator::Acceptable;
+
+  if( m_max && val < 0 && val > m_max )
+    return QValidator::Acceptable;
+
   if( (m_max && val > m_max) || (m_min && val < m_min) )
     return QValidator::Invalid;
 
