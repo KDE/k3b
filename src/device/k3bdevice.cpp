@@ -670,8 +670,7 @@ int K3bCdDevice::CdDevice::getTrackHeader(int lba)
   if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) == 0 )
     ret = dat[0];
   else
-    kdDebug() << "(K3bCdDevice) could not get track header !" << endl;
-
+    kdDebug() << "(K3bCdDevice) could not get track header, (lba " << lba << ") ! "  << strerror(errno) << endl;
   if( needToClose )
     close();
   return ret;
@@ -744,14 +743,15 @@ K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc()
         }
         int trackType = 0;
         int trackMode = Track::UNKNOWN;
-        if( control & 0x04 )
+        if( (control & 0x04 ) && (tocentry.cdte_track != CDROM_LEADOUT) )
         {
           trackType = Track::DATA;
           if( mode == 1 )
             trackMode = Track::MODE1;
           else if( mode == 2 )
             trackMode = Track::MODE2;
-          if ( (mode=getTrackDataMode(tocentry.cdte_track)) != -1 )
+          mode = m_burner ? getTrackDataMode(tocentry.cdte_track) : getTrackHeader(startSec);
+          if ( mode != -1 )
             switch (mode)
             {
             case 1: trackMode = Track::MODE1;break;
