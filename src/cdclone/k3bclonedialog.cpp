@@ -26,6 +26,7 @@
 #include <k3bcore.h>
 #include <k3bexternalbinmanager.h>
 #include <k3bburnprogressdialog.h>
+#include <k3bthememanager.h>
 
 #include <qlayout.h>
 #include <qgroupbox.h>
@@ -100,7 +101,8 @@ K3bCloneDialog::K3bCloneDialog( QWidget* parent, const char* name, bool modal )
   groupCopies->setInsideSpacing( spacingHint() );
   groupCopies->setInsideMargin( marginHint() );
   QLabel* pixLabel = new QLabel( groupCopies );
-  pixLabel->setPixmap( locate( "appdata", "pics/k3b_cd_copy.png" ) );
+  if( K3bTheme* theme = k3bthememanager->currentTheme() )
+    pixLabel->setPixmap( theme->pixmap( "k3b_cd_copy" ) );
   pixLabel->setScaledContents( false );
   m_spinCopies = new QSpinBox( groupCopies );
   m_spinCopies->setMinValue( 1 );

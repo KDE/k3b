@@ -28,6 +28,7 @@
 #include <k3bburnprogressdialog.h>
 #include <k3bglobals.h>
 #include <k3bexternalbinmanager.h>
+#include <k3bthememanager.h>
 
 #include <kguiitem.h>
 #include <klocale.h>
@@ -97,7 +98,8 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   m_checkDeleteImages = K3bStdGuiItems::removeImagesCheckbox( groupOptions );
 
   QLabel* pixLabel = new QLabel( groupCopies );
-  pixLabel->setPixmap( locate( "appdata", "pics/k3b_cd_copy.png" ) );
+  if( K3bTheme* theme = k3bthememanager->currentTheme() )
+    pixLabel->setPixmap( theme->pixmap( "k3b_cd_copy" ) );
   pixLabel->setScaledContents( false );
   m_spinCopies = new QSpinBox( groupCopies );
   m_spinCopies->setMinValue( 1 );
