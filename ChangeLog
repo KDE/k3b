@@ -29,6 +29,11 @@ no need for special mkisofs permissons anymore. K3b now openes the device itself
 added a little color animation when dropping files onto a directory in data projects
 	it is always hard to tell if one dropped on the correct dir. If some one has a better animation 
 	I would be interested in replacing this simple one.
+Added CD-TEXT reading (used for Audio CD ripping)
+sox encoder plugin to encode to all audio formats supported by sox (will anyone ever use this??)
+encoder plugin that let's you specify a commandline to encode the data. Typical example would be calling lame to
+	encode to mp3.
+much better TOC reading. K3b now displays multisession info.
 	
 0.9
 support for eMovix 0.8.0rc2

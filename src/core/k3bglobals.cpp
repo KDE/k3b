@@ -213,7 +213,7 @@ static bool ok_in_base( QChar c, int base )
 }
 
 #ifndef ULLONG_MAX
-static const unsigned long long ULLONG_MAX(18446744073709551615);
+#define ULLONG_MAX 18446744073709551615ULL
 #endif
 
 unsigned long long K3b::toULongLong( const QString& s, bool* ok, int base )

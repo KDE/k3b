@@ -18,6 +18,7 @@
 
 #include <device/k3btoc.h>
 #include <device/k3bdiskinfo.h>
+#include <device/k3bdevicehandler.h>
 #include <k3blistview.h>
 #include <cddb/k3bcddbresult.h>
 #include <device/k3bmsf.h>
@@ -180,13 +181,6 @@ K3bAudioCdView::~K3bAudioCdView()
 void K3bAudioCdView::setDisk( const K3bCdDevice::DiskInfo& info )
 {
   m_diskInfo = info;
-  reload();
-}
-
-
-void K3bAudioCdView::reload()
-{
-  m_trackView->clear();
 
   // initialize cddb info for editing
   m_cddbInfo = K3bCddbResultEntry();
@@ -195,6 +189,9 @@ void K3bAudioCdView::reload()
     m_cddbInfo.artists.append("");
     m_cddbInfo.extInfos.append("");
   }
+
+  m_trackView->clear();
+  enableInteraction(false);
 
   // create a listviewItem for every audio track
   int index = 1;
@@ -215,7 +212,52 @@ void K3bAudioCdView::reload()
 
   updateDisplay();
 
-  queryCddb();
+  // check if we have CD-TEXT (FIXME: this needs to be done elsewhere when replacing diskinfo with ngdiskinfo
+  connect( K3bCdDevice::sendCommand( K3bCdDevice::DeviceHandler::CD_TEXT, m_diskInfo.device ),
+           SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
+           this,
+           SLOT(slotCdTextReady(K3bCdDevice::DeviceHandler*)) );
+}
+
+
+void K3bAudioCdView::slotCdTextReady( K3bCdDevice::DeviceHandler* dh )
+{
+  m_cdText = dh->cdText();
+      
+  reload();
+}
+
+
+void K3bAudioCdView::reload()
+{
+  // simulate a cddb entry with the cdtext data
+  m_cddbInfo.cdTitle = m_cdText.title();
+  m_cddbInfo.cdArtist = m_cdText.performer();
+  m_cddbInfo.cdExtInfo = m_cdText.message();
+
+  for( unsigned int i = 0; i < m_cdText.count(); ++i ) {
+    m_cddbInfo.titles[i] = m_cdText.trackCdText(i).title();
+    m_cddbInfo.artists[i] = m_cdText.trackCdText(i).performer();
+    m_cddbInfo.extInfos[i] = m_cdText.trackCdText(i).message();
+  }
+
+  updateDisplay();
+
+  KConfig* c = k3bcore->config();
+  c->setGroup("Cddb");
+  bool useCddb = ( c->readBoolEntry( "use local cddb query", true ) || 
+		   c->readBoolEntry( "use remote cddb", false ) );
+
+  if( m_cdText.isEmpty() ||
+      ( useCddb && KMessageBox::questionYesNo( this, 
+					       i18n("Found Cd-Text. Do you want to use it instead of querying CDDB?"),
+					       i18n("Found Cd-Text"), 
+					       KStdGuiItem::yes(),
+					       KStdGuiItem::no(),
+					       "prefereCdTextOverCddb" ) == KMessageBox::No ) )
+    queryCddb();
+  else
+    enableInteraction(true);
 }
 
 
@@ -428,10 +470,8 @@ void K3bAudioCdView::queryCddb()
   if( c->readBoolEntry( "use local cddb query", true ) || 
       c->readBoolEntry( "use remote cddb", false ) ) {
 
-    // disable all interaction
-    m_trackView->setEnabled(false);
-    m_toolBox->setEnabled(false);
-
+    enableInteraction(false);
+ 
     m_cddb->query( m_diskInfo.toc );
   }
 }
@@ -467,12 +507,6 @@ void K3bAudioCdView::slotCddbQueryFinished( int error )
     // 	kdDebug() << "TEXT:    '" << *it << "'" << endl;
     //       }
 
-    // now update the listview
-    for( QListViewItemIterator it( m_trackView ); it.current(); ++it ) {
-      AudioTrackViewItem* item = (AudioTrackViewItem*)it.current();
-      item->updateCddbData( m_cddbInfo );
-    }
-
     updateDisplay();
   }
   else if( error == K3bCddbQuery::NO_ENTRY_FOUND ) {
@@ -482,8 +516,7 @@ void K3bAudioCdView::slotCddbQueryFinished( int error )
     KMessageBox::information( this, m_cddb->errorString(), i18n("Cddb error") );
   }
 
-  m_trackView->setEnabled(true);
-  m_toolBox->setEnabled(true);
+  enableInteraction(true);
 }
 
 
@@ -513,6 +546,12 @@ void K3bAudioCdView::slotDeselect()
 
 void K3bAudioCdView::updateDisplay()
 {
+  // update the listview
+  for( QListViewItemIterator it( m_trackView ); it.current(); ++it ) {
+    AudioTrackViewItem* item = (AudioTrackViewItem*)it.current();
+    item->updateCddbData( m_cddbInfo );
+  }
+
   if( !m_cddbInfo.cdTitle.isEmpty() ) {
     QString s = m_cddbInfo.cdTitle;
     if( !m_cddbInfo.cdArtist.isEmpty() )
@@ -525,6 +564,13 @@ void K3bAudioCdView::updateDisplay()
   m_labelLength->setText( i18n("1 track (%1)", 
 			       "%n tracks (%1)", 
 			       m_diskInfo.toc.count()).arg(K3b::Msf(m_diskInfo.toc.length()).toString()) );
+}
+
+
+void K3bAudioCdView::enableInteraction( bool b )
+{
+  m_trackView->setEnabled(b);
+  m_toolBox->setEnabled(b);
 }
 
 #include "k3baudiocdview.moc"

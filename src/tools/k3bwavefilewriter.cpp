@@ -140,19 +140,25 @@ void K3bWaveFileWriter::updateHeader()
     char c[4];
 
     // jump to the wavSize position in the header
-    m_outputFile.at( 4 );
-    c[0] = (wavSize   >> 0 ) & 0xff;
-    c[1] = (wavSize   >> 8 ) & 0xff;
-    c[2] = (wavSize   >> 16) & 0xff;
-    c[3] = (wavSize   >> 24) & 0xff;
-    m_outputStream.writeRawBytes( c, 4 );
+    if( m_outputFile.at( 4 ) ) {
+      c[0] = (wavSize   >> 0 ) & 0xff;
+      c[1] = (wavSize   >> 8 ) & 0xff;
+      c[2] = (wavSize   >> 16) & 0xff;
+      c[3] = (wavSize   >> 24) & 0xff;
+      m_outputStream.writeRawBytes( c, 4 );
+    }
+    else
+      kdDebug() << "(K3bWaveFileWriter) unable to seek in file: " << m_outputFile.name() << endl;
 
-    m_outputFile.at( 40 );
-    c[0] = (dataSize   >> 0 ) & 0xff;
-    c[1] = (dataSize   >> 8 ) & 0xff;
-    c[2] = (dataSize   >> 16) & 0xff;
-    c[3] = (dataSize   >> 24) & 0xff;
-    m_outputStream.writeRawBytes( c, 4 );
+    if( m_outputFile.at( 40 ) ) {
+      c[0] = (dataSize   >> 0 ) & 0xff;
+      c[1] = (dataSize   >> 8 ) & 0xff;
+      c[2] = (dataSize   >> 16) & 0xff;
+      c[3] = (dataSize   >> 24) & 0xff;
+      m_outputStream.writeRawBytes( c, 4 );
+    }
+    else
+      kdDebug() << "(K3bWaveFileWriter) unable to seek in file: " << m_outputFile.name() << endl;
 
     // jump back to the end
     m_outputFile.at( m_outputFile.size() );

@@ -264,7 +264,7 @@ void K3bDvdFormattingJob::slotProcessFinished( KProcess* p )
     d->running = false;
   }
   else {
-    emit infoMessage( i18n("Ejecting CD..."), INFO );
+    emit infoMessage( i18n("Ejecting DVD..."), INFO );
     connect( K3bCdDevice::eject( d->device ), 
 	     SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
 	     this, 

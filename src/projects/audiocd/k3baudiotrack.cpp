@@ -15,7 +15,6 @@
 
 
 #include "k3baudiotrack.h"
-#include "k3baudiotitlemetainfo.h"
 
 #include <k3baudiodecoder.h>
 #include <k3bcore.h>
@@ -36,7 +35,7 @@
 K3bAudioTrack::K3bAudioTrack( QPtrList<K3bAudioTrack>* parent, const QString& filename )
   : m_file(filename),
     m_length(0),
-    m_status(K3bAudioTitleMetaInfo::OK)
+    m_status(0)
 {
   m_parent = parent;
   m_copy = false;

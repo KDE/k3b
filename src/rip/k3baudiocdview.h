@@ -21,7 +21,7 @@
 
 #include <device/k3bdiskinfo.h>
 #include <cddb/k3bcddbresult.h>
-
+#include <k3bcdtext.h>
 
 class K3bListView;
 class KListView;
@@ -33,6 +33,9 @@ class K3bCddb;
 class QLabel;
 class K3bToolBox;
 
+namespace K3bCdDevice {
+  class DeviceHandler;
+}
 
 
 class K3bAudioCdView : public K3bCdContentsView
@@ -58,6 +61,7 @@ class K3bAudioCdView : public K3bCdContentsView
   void slotItemRenamed( QListViewItem*, const QString&, int );
   void slotCddbQueryFinished( int );
   void slotTrackSelectionChanged( QListViewItem* );
+  void slotCdTextReady( K3bCdDevice::DeviceHandler* dh );
 
   void slotEditTrackCddb();
   void slotEditAlbumCddb();
@@ -70,6 +74,7 @@ class K3bAudioCdView : public K3bCdContentsView
  private:
   void initActions();
   void updateDisplay();
+  void enableInteraction( bool );
 
   K3bCdDevice::DiskInfo m_diskInfo;
   K3bCddbResultEntry m_cddbInfo;
@@ -85,6 +90,8 @@ class K3bAudioCdView : public K3bCdContentsView
   class AudioTrackViewItem;
 
   K3bCddb* m_cddb;
+
+  K3bCdDevice::AlbumCdText m_cdText;
 };
 
 

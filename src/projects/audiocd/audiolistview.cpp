@@ -19,7 +19,7 @@
 #include "k3baudiotrack.h"
 #include "k3baudiotrackdialog.h"
 #include "k3baudiodoc.h"
-#include "k3baudiotitlemetainfo.h"
+
 #include <k3bview.h>
 #include <k3bvalidators.h>
 
@@ -204,20 +204,14 @@ void K3bAudioListView::slotAnimation()
 
       if( item->animationIconNumber > 0 ) {
 	if( item->audioTrack()->length() > 0
-	    || item->audioTrack()->status() == K3bAudioTitleMetaInfo::CORRUPT ) {
+	    || item->audioTrack()->status() != 0 ) {
 	  // set status icon
-	  switch( item->audioTrack()->status() ) {
-	  case K3bAudioTitleMetaInfo::OK:
-	    item->setPixmap( 3, SmallIcon( "greenled" ) );
-	    break;
-	  case K3bAudioTitleMetaInfo::RECOVERABLE:
-	    item->setPixmap( 3, SmallIcon( "yellowled" ) );
-	    break;
-	  case K3bAudioTitleMetaInfo::CORRUPT:
-	    item->setPixmap( 3, SmallIcon( "redled" ) );
-	    break;
-	  }
-
+	  item->setPixmap( 3, 
+			   ( item->audioTrack()->status() == 0 
+			     ? SmallIcon( "greenled" )
+			     : SmallIcon( "redled" ) )
+			   );
+	  
 	  item->animationIconNumber = 0;
 	}
 	else {

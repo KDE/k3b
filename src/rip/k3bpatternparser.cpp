@@ -32,7 +32,7 @@ QString K3bPatternParser::parsePattern( const K3bCddbResultEntry& entry,
   if( entry.titles.count() < trackNumber )
     return "";
 
-  QString dir;
+  QString dir, s;
   for( unsigned int i = 0; i < pattern.length(); ++i ) {
 
     if( pattern[i] == '%' ) {
@@ -41,34 +41,49 @@ QString K3bPatternParser::parsePattern( const K3bCddbResultEntry& entry,
       if( i < pattern.length() ) {
 	switch( pattern[i] ) {
 	case 'a':
-	  dir.append( entry.artists[trackNumber-1].isEmpty() 
+	  s = entry.artists[trackNumber-1];
+	  s.replace( '/', '_' );
+	  dir.append( s.isEmpty() 
 		      ? i18n("unknown") + QString(" %1").arg(trackNumber)
-		      : entry.artists[trackNumber-1] );
+		      : s );
 	  break;
 	case 't':
-	  dir.append( entry.titles[trackNumber-1].isEmpty() 
+	  s = entry.titles[trackNumber-1];
+	  s.replace( '/', '_' );
+	  dir.append( s.isEmpty() 
 		      ? i18n("Track %1").arg(trackNumber) 
-		      : entry.titles[trackNumber-1] );
+		      : s );
 	  break;
 	case 'n':
 	  dir.append( QString::number(trackNumber).rightJustify( 2, '0' ) );
 	  break;
+	case 'y':
+	  dir.append( QString::number( entry.year ) );
+	  break;
 	case 'e':
-	  dir.append( entry.extInfos[trackNumber-1] );
+	  s = entry.extInfos[trackNumber-1];
+	  s.replace( '/', '_' );
+	  dir.append( s );
 	  break;
 	case 'g':
-	  dir.append( entry.genre.isEmpty() ? entry.category : entry.genre );
+	  s = ( entry.genre.isEmpty() ? entry.category : entry.genre );
+	  s.replace( '/', '_' );
+	  dir.append( s );
 	  break;
 	case 'r':
 	  dir.append( entry.cdArtist.isEmpty() 
 		      ? i18n("unknown") : entry.cdArtist );
 	  break;
 	case 'm':
-	  dir.append( entry.cdTitle.isEmpty() 
-		      ? i18n("unknown") : entry.cdTitle );
+	  s = entry.cdTitle;
+	  s.replace( '/', '_' );
+	  dir.append( s.isEmpty() 
+		      ? i18n("unknown") : s );
 	  break;
 	case 'x':
-	  dir.append( entry.cdExtInfo ); // I think it makes more sense to allow empty extinfos
+	  s = entry.cdExtInfo;
+	  s.replace( '/', '_' );
+	  dir.append( s ); // I think it makes more sense to allow empty extinfos
 	  break;
 	case 'd':
 	  dir.append( KGlobal::locale()->formatDate( QDate::currentDate() ) );

@@ -46,6 +46,10 @@ public:
 	info.toc = dev->readToc();
 	success = true;
 	break;
+      case CD_TEXT:
+	cdText = dev->readCdText();
+	success = !cdText.isEmpty();
+	break;
       case DISKSIZE:
 	info.size = dev->discSize();
 	success = (info.size != 0);
@@ -94,6 +98,7 @@ public:
   int command;
   DiskInfo info;
   NextGenerationDiskInfo ngInfo;
+  AlbumCdText cdText;
   CdDevice* dev;
 };
 
@@ -158,6 +163,11 @@ const K3bCdDevice::NextGenerationDiskInfo& K3bCdDevice::DeviceHandler::ngDiskInf
 const K3bCdDevice::Toc& K3bCdDevice::DeviceHandler::toc() const
 {
   return m_thread->info.toc;
+}
+
+const K3bCdDevice::AlbumCdText& K3bCdDevice::DeviceHandler::cdText() const
+{
+  return m_thread->cdText;
 }
 
 const K3b::Msf& K3bCdDevice::DeviceHandler::diskSize() const

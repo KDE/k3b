@@ -23,7 +23,8 @@
 // more or less a hack... this hole cdtect thing is not perfect
 #include <k3bvalidators.h>
 
-#include "k3baudiotitlemetainfo.h"
+#include <kdebug.h>
+
 
 namespace K3bCdDevice
 {
@@ -31,14 +32,10 @@ namespace K3bCdDevice
 
   class TrackCdText
     {
+      friend class CdDevice;
+      
     public:
       TrackCdText() {
-      }
-
-      // TODO: add some more info
-      TrackCdText( const K3bAudioTitleMetaInfo& info ) 
-	: m_title( info.title() ),
-	m_performer( info.artist() ) {
       }
 
       const QString& title() const { return m_title; }
@@ -57,6 +54,25 @@ namespace K3bCdDevice
       void setMessage( const QString& s ) { m_message = K3bValidators::fixup(s, K3bValidators::cdTextCharSet()); }
       void setIsrc( const QString& s ) { m_isrc = K3bValidators::fixup(s, K3bValidators::cdTextCharSet()); }
 
+      bool isEmpty() const {
+	if( !m_title.isEmpty() )
+	  return false;
+	if( !m_performer.isEmpty() )
+	  return false;
+	if( !m_songwriter.isEmpty() )
+	  return false;
+	if( !m_composer.isEmpty() )
+	  return false;
+	if( !m_arranger.isEmpty() )
+	  return false;
+	if( !m_message.isEmpty() )
+	  return false;
+	if( !m_isrc.isEmpty() )
+	  return false;
+
+	return true;
+      }
+
     private:
       QString m_title;
       QString m_performer;
@@ -69,8 +85,59 @@ namespace K3bCdDevice
 
   class AlbumCdText
     {
+      friend class CdDevice;
+
     public:
       AlbumCdText() {
+      }
+
+      AlbumCdText( int size ) {
+	resize( size );
+      }
+
+      unsigned int count() const {
+	return m_trackCdText.count();
+      }
+
+      void resize( int size ) {
+	m_trackCdText.resize( size );
+      }
+
+      bool isEmpty() const {
+	if( !m_title.isEmpty() )
+	  return false;
+	if( !m_performer.isEmpty() )
+	  return false;
+	if( !m_songwriter.isEmpty() )
+	  return false;
+	if( !m_composer.isEmpty() )
+	  return false;
+	if( !m_arranger.isEmpty() )
+	  return false;
+	if( !m_message.isEmpty() )
+	  return false;
+	if( !m_discId.isEmpty() )
+	  return false;
+	if( !m_upcEan.isEmpty() )
+	  return false;
+	
+	for( unsigned int i = 0; i < m_trackCdText.count(); ++i )
+	  if( !m_trackCdText[i].isEmpty() )
+	    return false;
+
+	return true;
+      }
+
+      void clear() {
+	m_trackCdText.clear();
+	m_title.setLength(0);
+	m_performer.setLength(0);
+	m_songwriter.setLength(0);
+	m_composer.setLength(0);
+	m_arranger.setLength(0);
+	m_message.setLength(0);
+	m_discId.setLength(0);
+	m_upcEan.setLength(0);
       }
 
       const QString& title() const { return m_title; }
@@ -94,6 +161,30 @@ namespace K3bCdDevice
       const TrackCdText& trackCdText( int i ) const { return m_trackCdText[i]; }
       void addTrackCdText( const TrackCdText& t ) { m_trackCdText.append(t); }
 
+      void debug() {
+	// debug the stuff
+	kdDebug() << "CD-TEXT data:" << endl
+		  << "Global:" << endl
+		  << "  Title:      " << title() << endl
+		  << "  Performer:  " << performer() << endl
+		  << "  Songwriter: " << songwriter() << endl
+		  << "  Composer:   " << composer() << endl
+		  << "  Arranger:   " << arranger() << endl
+		  << "  Message:    " << message() << endl
+		  << "  Disc ID:    " << discId() << endl
+		  << "  Upc Ean:    " << upcEan() << endl;
+	for( unsigned int i = 0; i < m_trackCdText.count(); ++i ) {
+	  kdDebug() << "Track " << (i+1) << ":" << endl
+		    << "  Title:      " << trackCdText(i).title() << endl
+		    << "  Performer:  " << trackCdText(i).performer() << endl
+		    << "  Songwriter: " << trackCdText(i).songwriter() << endl
+		    << "  Composer:   " << trackCdText(i).composer() << endl
+		    << "  Arranger:   " << trackCdText(i).arranger() << endl
+		    << "  Message:    " << trackCdText(i).message() << endl
+		    << "  Isrc:       " << trackCdText(i).isrc() << endl;
+	}
+      }
+	
     private:
       QString m_title;
       QString m_performer;

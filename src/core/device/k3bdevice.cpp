@@ -563,8 +563,8 @@ bool K3bCdDevice::CdDevice::init()
     mm_cap_page_2A* mm_p = (mm_cap_page_2A*)(mm_cap_buffer+8);
     if( mm_p->BUF ) d->burnfree = true;
     if( mm_p->cd_rw_write ) d->deviceType |= CDRW;
-    m_maxWriteSpeed = (int)( from2Byte(mm_p->max_write_speed) * 1000.0 / ( 2352.0 * 75.0 ) );
-    m_maxReadSpeed = (int)( from2Byte(mm_p->max_read_speed) * 1000.0 / ( 2352.0 * 75.0 ) );
+    m_maxWriteSpeed = (int)( from2Byte(mm_p->max_write_speed) * 1024.0 / ( 2352.0 * 75.0 ) );
+    m_maxReadSpeed = (int)( from2Byte(mm_p->max_read_speed) * 1024.0 / ( 2352.0 * 75.0 ) );
 
     delete [] mm_cap_buffer;
   }
@@ -1292,8 +1292,8 @@ bool K3bCdDevice::CdDevice::readRawToc( K3bCdDevice::Toc& toc )
 
       K3b::Msf sessionLeadOut;
 
-      for( int i = 0; i < (dataLen-4)/11; ++i ) {
 	kdDebug() << "Session |  ADR   | CONTROL|  TNO   | POINT  |  Min   |  Sec   | Frame  |  Zero  |  PMIN  |  PSEC  | PFRAME |" << endl;
+      for( int i = 0; i < (dataLen-4)/11; ++i ) {
 	QString s;
 	s += QString( " %1 |" ).arg( (int)tr[i].session_number, 6 );
 	s += QString( " %1 |" ).arg( (int)tr[i].adr, 6 );
@@ -1307,7 +1307,7 @@ bool K3bCdDevice::CdDevice::readRawToc( K3bCdDevice::Toc& toc )
 	s += QString( " %1 |" ).arg( (int)tr[i].p_min, 6 );
 	s += QString( " %1 |" ).arg( (int)tr[i].p_sec, 6 );
 	s += QString( " %1 |" ).arg( (int)tr[i].p_frame, 6 );
-	kdDebug() << s << endl << endl;
+	kdDebug() << s << endl;
 
 	if( tr[i].adr == 1 && tr[i].point <= 0x63 ) {
 	  // track
@@ -1356,6 +1356,166 @@ bool K3bCdDevice::CdDevice::readRawToc( K3bCdDevice::Toc& toc )
     close();
 
   return success;
+}
+
+
+K3bCdDevice::AlbumCdText K3bCdDevice::CdDevice::readCdText( unsigned int trackCount )
+{
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
+  bool success = false;
+
+  K3bCdDevice::AlbumCdText textData;
+
+  if( open() != -1 ) {
+    unsigned char* data = 0;
+    int dataLen = 0;
+    
+    if( trackCount <= 0 ) {
+      // we need to determine the number of tracks first
+      if( readTocPmaAtip( &data, dataLen, 0, 0, 1 ) ) {
+	trackCount = data[3];
+
+	delete [] data;
+      }
+      else
+	kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": unable to determine number of tracks." << endl;
+    }
+
+    // if we failed to determine the trackCount it's still <= 0
+    if( trackCount > 0 ) {
+      if( readTocPmaAtip( &data, dataLen, 5, false, 0 ) ) {
+      
+	textData.resize( trackCount );
+
+	cdtext_pack* pack = (cdtext_pack*)&data[4];
+
+	kdDebug() << endl << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": CD_TEXT:" << endl;
+	kdDebug() << " id1    | id2    | id3    | charps | blockn | dbcc | data           | crc |" << endl;
+      
+	for( int i = 0; i < (dataLen-4)/18; ++i ) {
+	  QString s;
+	  s += QString( " %1 |" ).arg( pack[i].id1, 6, 16 );
+	  s += QString( " %1 |" ).arg( pack[i].id2, 6 );
+	  s += QString( " %1 |" ).arg( pack[i].id3, 6 );
+	  s += QString( " %1 |" ).arg( pack[i].charpos, 6 );
+	  s += QString( " %1 |" ).arg( pack[i].blocknum, 6 );
+	  s += QString( " %1 |" ).arg( pack[i].dbcc, 4 );
+	  char str[12];
+	  sprintf( str, "%c%c%c%c%c%c%c%c%c%c%c%c",
+		   pack[i].data[0] == '\0' ? '°' : pack[i].data[0],
+		   pack[i].data[1] == '\0' ? '°' : pack[i].data[1],
+		   pack[i].data[2] == '\0' ? '°' : pack[i].data[2],
+		   pack[i].data[3] == '\0' ? '°' : pack[i].data[3],
+		   pack[i].data[4] == '\0' ? '°' : pack[i].data[4],
+		   pack[i].data[5] == '\0' ? '°' : pack[i].data[5],
+		   pack[i].data[6] == '\0' ? '°' : pack[i].data[6],
+		   pack[i].data[7] == '\0' ? '°' : pack[i].data[7],
+		   pack[i].data[8] == '\0' ? '°' : pack[i].data[8],
+		   pack[i].data[9] == '\0' ? '°' : pack[i].data[9],
+		   pack[i].data[10] == '\0' ? '°' : pack[i].data[10],
+		   pack[i].data[11] == '\0' ? '°' : pack[i].data[11] );
+	  s += QString( " %1 |" ).arg( "'" + QCString(str,13) + "'", 14 );
+	  //      s += QString( " %1 |" ).arg( QString::fromLatin1( (char*)pack[i].crc, 2 ), 3 );
+	  kdDebug() << s << endl;
+
+
+	  //
+	  // id1 tells us the tracknumber of the data (0 for global)
+	  // data may contain multible \0. In that case after every \0 the track number increases 1
+	  //
+	  // QString::fromLocal8Bit stops at the first \0. So we do not need to care about that ourselves
+	  //
+
+	  char* nullPos = (char*)pack[i].data - 1;
+	
+	  unsigned int trackNo = pack[i].id2;
+	  while( nullPos && trackNo <= trackCount ) {
+	    QString txtstr = QString::fromLocal8Bit( (char*)nullPos+1, 11 - (nullPos - (char*)pack[i].data) );
+	  
+	    switch( pack[i].id1 ) {
+	    case 0x80: // Title
+	      if( trackNo == 0 )
+		textData.m_title.append( txtstr );
+	      else
+		textData.m_trackCdText[trackNo-1].m_title.append( txtstr );
+	      break;
+
+	    case 0x81: // Performer
+	      if( trackNo == 0 )
+		textData.m_performer.append( txtstr );
+	      else
+		textData.m_trackCdText[trackNo-1].m_performer.append( txtstr );
+	      break;
+
+	    case 0x82: // Writer
+	      if( trackNo == 0 )
+		textData.m_songwriter.append( txtstr );
+	      else
+		textData.m_trackCdText[trackNo-1].m_songwriter.append( txtstr );
+	      break;
+
+	    case 0x83: // Composer
+	      if( trackNo == 0 )
+		textData.m_composer.append( txtstr );
+	      else
+		textData.m_trackCdText[trackNo-1].m_composer.append( txtstr );
+	      break;
+
+	    case 0x84: // Arranger
+	      if( trackNo == 0 )
+		textData.m_arranger.append( txtstr );
+	      else
+		textData.m_trackCdText[trackNo-1].m_arranger.append( txtstr );
+	      break;
+
+	    case 0x85: // Message
+	      if( trackNo == 0 )
+		textData.m_message.append( txtstr );
+	      else
+		textData.m_trackCdText[trackNo-1].m_message.append( txtstr );
+	      break;
+
+	    case 0x86: // Disc identification
+	      // only global
+	      if( trackNo == 0 )
+		textData.m_discId.append( txtstr );
+	      break;
+
+	    case 0x8e: // Upc or isrc
+	      if( trackNo == 0 )
+		textData.m_upcEan.append( txtstr );
+	      else
+		textData.m_trackCdText[trackNo-1].m_isrc.append( txtstr );
+	      break;
+
+	      // TODO: support for binary data
+	      // 0x88: TOC 
+	      // 0x89: second TOC
+	      // 0x8f: Size information
+
+	    default:
+	      break;
+	    }
+	  
+	    trackNo++;
+	    nullPos = (char*)::memchr( nullPos+1, '\0', 11 - (nullPos - (char*)pack[i].data) );
+	  }
+	}
+    
+	delete [] data;
+
+	success = true;
+      }
+    } // valid trackCount
+
+    if( needToClose )
+      close();
+  }
+
+  return textData;
 }
 
 
@@ -1878,6 +2038,8 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo()
 	    kdDebug() << "(K3bCdDevice) READ_TRACK_INFORMATION failed." << endl;
 	    kdDebug() << "(K3bCdDevice) getting disk size via toc." << endl;
 	    
+	    // TODO: use readToc!
+
 	    struct cdrom_tocentry tocentry;
 	    tocentry.cdte_track = CDROM_LEADOUT;
 	    tocentry.cdte_format = CDROM_LBA;

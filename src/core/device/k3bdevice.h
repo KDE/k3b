@@ -20,7 +20,7 @@
 #include <qstringlist.h>
 #include "k3bdiskinfo.h"
 #include "k3bmmc.h"
-
+#include "k3bcdtext.h"
 #include "k3bmsf.h"
 
 
@@ -231,6 +231,12 @@ namespace K3bCdDevice
      *  returns the toc of the disc
      */
     Toc readToc();
+
+    /**
+     * read the CD-TEXT. 
+     * @param trackCount if specified this method doed not need to determine them which saves time.
+     */
+    AlbumCdText readCdText( unsigned int trackCount = 0 );
 
      /**
      *  returns the DataMode of the track

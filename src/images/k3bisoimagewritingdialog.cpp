@@ -104,10 +104,6 @@ K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( bool dvd, QWidget* parent, c
   slotLoadUserDefaults();
   slotWriterChanged();
 
-  k3bcore->config()->setGroup("General Options");
-  m_editImagePath->setURL( k3bcore->config()->readPathEntry( QString("last written %1 isoimage").arg(d->dvd 
-												     ? "DVD" 
-												     : "CD" ) ) );
   updateImageSize( m_editImagePath->url() );
 
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()),
@@ -239,9 +235,10 @@ void K3bIsoImageWritingDialog::slotStartClicked()
   m_md5Job->cancel();
 
   // save the path
-  k3bcore->config()->setGroup("General Options");
-  k3bcore->config()->writePathEntry( QString("last written %1 isoimage").arg(d->dvd ? "DVD" : "CD" ),
-				     m_editImagePath->url() );
+  KConfig* c = k3bcore->config();
+  c->setGroup( d->dvd ? "Iso9660 DVD image writing" : "Iso9660 image writing" );
+  if( c->readPathEntry( "last written image" ).isEmpty() )
+    c->writePathEntry( "last written image", m_editImagePath->url() );
 
   // create the job
   if( m_job == 0 )
@@ -492,7 +489,10 @@ void K3bIsoImageWritingDialog::slotLoadUserDefaults()
   m_checkVerify->setChecked( c->readBoolEntry( "verify_data", false ) );
 
   m_writerSelectionWidget->loadConfig( c );
+
+  m_editImagePath->setURL( c->readPathEntry( "last written image" ) );
 }
+
 
 void K3bIsoImageWritingDialog::slotSaveUserDefaults()
 {
@@ -510,6 +510,8 @@ void K3bIsoImageWritingDialog::slotSaveUserDefaults()
   c->writeEntry( "verify_data", m_checkVerify->isChecked() );
 
   m_writerSelectionWidget->saveConfig( c );
+
+  c->writePathEntry( "last written image", m_editImagePath->url() );
 }
 
 void K3bIsoImageWritingDialog::slotLoadK3bDefaults()

@@ -426,7 +426,7 @@ void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
   if( k3bcore->config()->readBoolEntry( "No cd eject", false ) )
     emit finished(d->success);
   else {
-    emit infoMessage( i18n("Ejecting CD..."), INFO );
+    emit infoMessage( i18n("Ejecting DVD..."), INFO );
     connect( K3bCdDevice::eject( burnDevice() ), 
 	     SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
 	     this, 

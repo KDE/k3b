@@ -21,6 +21,7 @@
 #include "k3bdevice.h"
 #include "k3bdiskinfo.h"
 #include "k3bmsf.h"
+#include "k3bcdtext.h"
 
 
 class QCustomEvent;
@@ -58,6 +59,7 @@ namespace K3bCdDevice
       const DiskInfo& diskInfo() const;
       const NextGenerationDiskInfo& ngDiskInfo() const;
       const Toc& toc() const;
+      const AlbumCdText& cdText() const;
       const K3b::Msf& diskSize() const;
       const K3b::Msf& remainingSize() const;
       int tocType() const;
@@ -75,6 +77,7 @@ namespace K3bCdDevice
 	DISKINFO,
 	NG_DISKINFO,
 	TOC,
+	CD_TEXT,
 	DISKSIZE,
 	REMAININGSIZE,
 	TOCTYPE,

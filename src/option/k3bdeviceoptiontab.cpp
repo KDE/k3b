@@ -45,7 +45,8 @@ K3bDeviceOptionTab::K3bDeviceOptionTab( QWidget* parent, const char* name )
   m_labelDevicesInfo->setText( i18n( "K3b tries to detect all your devices properly. "
 				     "You can add devices that have not been detected and change "
 				     "the black values by clicking in the list. If K3b is unable "
-				     "to detect your drive, run K3bSetup to set the correct permissions." ) );
+				     "to detect your drive, you need to modify their permissions "
+				     "to give K3b write access to all devices." ) );
   // ------------------------------------------------
 
   m_deviceWidget = new K3bDeviceWidget( k3bcore->deviceManager(), this );

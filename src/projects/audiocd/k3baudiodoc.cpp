@@ -20,7 +20,7 @@
 #include "k3baudiotrack.h"
 #include "k3baudioburndialog.h"
 #include "k3baudiojob.h"
-#include "k3baudiotitlemetainfo.h"
+
 #include <songdb/k3bsong.h>
 #include <songdb/k3bsongmanager.h>
 #include <k3bthread.h>
@@ -76,9 +76,9 @@ public:
 protected:
   void run() {
     if( m_track->module()->analyseFile() )
-      m_track->setStatus( K3bAudioTitleMetaInfo::OK );
+      m_track->setStatus( 0 );
     else
-      m_track->setStatus( K3bAudioTitleMetaInfo::CORRUPT );
+      m_track->setStatus( -1 );
     emitFinished(true);
   }
 
@@ -627,7 +627,7 @@ void K3bAudioDoc::removeCorruptTracks()
 {
   K3bAudioTrack* track = m_tracks->first();
   while( track ) {
-    if( track->status() == K3bAudioTitleMetaInfo::CORRUPT ) {
+    if( track->status() != 0 ) {
       removeTrack(track);
       track = m_tracks->current();
     }
@@ -644,7 +644,7 @@ void K3bAudioDoc::slotDetermineTrackStatus()
     kdDebug() << "(K3bAudioDoc) AudioTrackStatusThread not running." << endl;
     // find the next track to meta-info
     for( QPtrListIterator<K3bAudioTrack> it( *m_tracks ); *it; ++it ) {
-      if( it.current()->length() == 0 && it.current()->status() != K3bAudioTitleMetaInfo::CORRUPT ) {
+      if( it.current()->length() == 0 && it.current()->status() == 0 ) {
 	kdDebug() << "(K3bAudioDoc) starting AudioTrackStatusThread for " << it.current()->absPath() << endl;
 	m_trackStatusThread->analyseTrack( it.current() );
 	return;

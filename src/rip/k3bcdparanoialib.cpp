@@ -45,7 +45,7 @@ int K3bCdparanoiaLib::s_counter = 0;
 
 
 
-static void paranoiaCallback( long sector, int status )
+static void paranoiaCallback( long, int status )
 {
   // do nothing so far....
   return;
@@ -431,8 +431,9 @@ bool K3bCdparanoiaLib::initParanoia( K3bCdDevice::CdDevice* dev )
   }
 
   if( paranoiaInit( dev->blockDeviceName() ) ) {
-    // set some default
-    return initReading( 1 );
+    d->startSector = d->currentSector = d->lastSector = 0;
+
+    return true;
   }
   else {
     cleanup();
@@ -451,7 +452,7 @@ void K3bCdparanoiaLib::cleanup()
 bool K3bCdparanoiaLib::initReading( unsigned int track )
 {
   if( d->device ) {
-    if( track < d->toc.count() ) {
+    if( track <= d->toc.count() ) {
       const K3bCdDevice::Track& k3bTrack = d->toc[track-1];
       if( k3bTrack.type() == K3bCdDevice::Track::AUDIO ) {
 	return initReading( k3bTrack.firstSector().lba(), k3bTrack.lastSector().lba() );
@@ -475,6 +476,8 @@ bool K3bCdparanoiaLib::initReading( unsigned int track )
 
 bool K3bCdparanoiaLib::initReading( long start, long end )
 {
+  kdDebug() << "(K3bCdparanoiaLib) initReading( " << start << ", " << end << " )" << endl;
+
   if( d->device ) {
     if( d->toc.firstSector().lba() <= start &&
 	d->toc.lastSector().lba() >= end ) {
@@ -500,7 +503,9 @@ bool K3bCdparanoiaLib::initReading( long start, long end )
 Q_INT16* K3bCdparanoiaLib::read( int* statusCode )
 {
   if( d->currentSector > d->lastSector ) {
-    kdDebug() << "(K3bCdparanoiaLib) finished ripping." << endl;
+    kdDebug() << "(K3bCdparanoiaLib) finished ripping. read " 
+	      << (d->currentSector - d->startSector) << " sectors." << endl
+	      << "                   current sector: " << d->currentSector << endl;
     d->status = S_OK;
     if( statusCode )
       *statusCode = d->status;

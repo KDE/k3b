@@ -146,6 +146,7 @@ void K3bCddbPatternWidget::slotSeeSpecialStrings()
 			     "<li>%a - artist of the track\n"
 			     "<li>%t - title of the track\n"
 			     "<li>%n - track number\n"
+			     "<li>%y - year of the CD\n"
 			     "<li>%e - extended information about the track\n"
 			     "<li>%g - genre of the CD\n"
 			     "<li>%r - album artist (differs from %a only on soundtracks or compilations)\n"
