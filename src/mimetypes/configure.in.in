@@ -1,0 +1,14 @@
+AC_MSG_CHECKING([if we need to add mime types for KDE 3.1])
+
+# Not sure if it is the best check for the KDE version but at least it works
+MIMETYPE_KDEVERSION=`kde-config --version 2>/dev/null \
+  | $AWK '/KDE/ {print $2;}'`
+
+# KDE post-3.1 starts at 3.1.90 (we are using string compares)
+if test "$MIMETYPE_KDEVERSION" \< "3.1.90" ; then
+    AC_MSG_RESULT([yes (KDE $MIMETYPE_KDEVERSION)])
+else
+    AC_MSG_RESULT([no (KDE $MIMETYPE_KDEVERSION)])
+fi
+
+AM_CONDITIONAL(compile_mimetypes_kde31, test "$MIMETYPE_KDEVERSION" \< "3.1.90")
