@@ -766,7 +766,7 @@ QString K3bCdDevice::DeviceManager::resolveSymLink( const QString& path )
 bool K3bCdDevice::plainAtapiSupport()
 {
   // IMPROVEME!!!
-  return ( K3b::kernelVersion() >= K3bVersion("2.5.40") );
+  return ( K3b::kernelVersion() >= K3bVersion( 2, 5, 40 ) );
 }
 
 
@@ -774,7 +774,7 @@ bool K3bCdDevice::hackedAtapiSupport()
 {
   // IMPROVEME!!!
   // FIXME: since when does the kernel support this?
-  return ( K3b::kernelVersion() >= K3bVersion("2.4") );
+  return ( K3b::kernelVersion() >= K3bVersion( 2, 4, 0 ) );
 }
 
 

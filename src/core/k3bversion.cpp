@@ -216,7 +216,10 @@ bool operator>( const K3bVersion& v1, const K3bVersion& v2 )
 
 bool operator==( const K3bVersion& v1, const K3bVersion& v2 )
 {
-  return (!operator<( v2, v1 ) && !operator<( v1, v2 ));
+  return ( v1.majorVersion() == v2.majorVersion() &&
+	   v1.minorVersion() == v2.minorVersion() &&
+	   v1.patchLevel() == v2.patchLevel() &&
+	   v1.suffix() == v2.suffix() );
 }
 
 
