@@ -15,12 +15,14 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "k3b.h"
 #include "k3baudioview.h"
 #include "k3baudiodoc.h"
 #include "audiolistview.h"
 #include "audiolistviewitem.h"
 #include "k3baudiotrack.h"
 #include "k3baudiotrackdialog.h"
+#include "k3bfillstatusdisplay.h"
 
 // QT-includes
 #include <qlayout.h>
@@ -35,16 +37,21 @@
 #include <kaction.h>
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kapp.h>
 
 
 K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name, int wflags )
  : K3bView( pDoc, parent, name, wflags )
 {
 	QGridLayout* grid = new QGridLayout( this );
+	grid->setSpacing( 6 );
+	
 	m_songlist = new AudioListView( this );
+	m_fillStatusDisplay = new K3bFillStatusDisplay( doc, this );
 	m_propertiesDialog = 0;
 		
 	grid->addWidget( m_songlist, 0, 0 );
+	grid->addWidget( m_fillStatusDisplay, 1, 0 );
 
 	setupPopupMenu();
 		
@@ -78,6 +85,7 @@ void K3bAudioView::addItem( K3bAudioTrack* _track )
 {
 	qDebug( "(K3bAudioView) adding new item to list: " + _track->fileName() );
 	(void)new AudioListViewItem( _track, m_songlist );
+	m_fillStatusDisplay->repaint();
 }
 
 void K3bAudioView::slotDropped( KListView* listView, QDropEvent* e, QListViewItem* after )
@@ -151,10 +159,10 @@ void K3bAudioView::updatePropertiesDialog( QListViewItem* _item )
 void K3bAudioView::showPropertiesDialog()
 {
 	if( !m_propertiesDialog ) {
-		// create a new instance
-		m_propertiesDialog = new K3bAudioTrackDialog( this );
-		}
-		
+		// get an instance from K3bApp
+		m_propertiesDialog = doc->k3bMain()->audioTrackDialog();
+		connect( m_songlist, SIGNAL(itemRenamed(QListViewItem*)), m_propertiesDialog, SLOT(updateView()) );
+	}		
 	if( !m_propertiesDialog->isVisible() )
 		m_propertiesDialog->show();
 	

@@ -32,6 +32,8 @@ class KListView;
 class KPopupMenu;
 class KAction;
 class K3bAudioTrackDialog;
+class K3bFillStatusDisplay;
+
 
 /**
   *@author Sebastian Trueg
@@ -53,6 +55,7 @@ private:
 	AudioListView* m_songlist;
 	KPopupMenu* m_popupMenu;
 	K3bAudioTrackDialog* m_propertiesDialog;
+	K3bFillStatusDisplay* m_fillStatusDisplay;
 	
 signals:
  	void dropped(const QStringList&, uint position);

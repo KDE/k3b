@@ -18,7 +18,6 @@
 #include "k3bdirview.h"
 
 // QT-includes
-#include <qvbox.h>
 #include <qdir.h>
 #include <qlistview.h>
 #include <qstring.h>
@@ -31,6 +30,10 @@
 #include <qdragobject.h>
 #include <qstrlist.h>
 #include <qheader.h>
+#include <qsplitter.h>
+#include <qpushbutton.h>
+#include <qlayout.h>
+#include <qiconset.h>
 
 // KDE-includes
 #include <kmimetype.h>
@@ -270,24 +273,52 @@ QDragObject* K3bDirView::PrivateFileView::dragObject() const
 ////////////////////////////////////////////////////////////////////
 
 K3bDirView::K3bDirView(QWidget *parent, const char *name )
- : QSplitter(parent, name)
+ : QVBox(parent, name)
 {
-	QVBox* box = new QVBox( this );
-	QVBox* box2 = new QVBox( this );
+	m_mainSplitter = new QSplitter( this );
+	QVBox* box = new QVBox( m_mainSplitter );
+	QWidget* box2 = new QWidget( m_mainSplitter );
+	QGridLayout* _box2Layout = new QGridLayout( box2 );
+	_box2Layout->setSpacing( 0 );
+	
 	m_dirView = new PrivateDirView( box );
-	
-	KToolBar* toolbar = new KToolBar( box2, "filetoolbar", true, false );
-	
+
 	m_fileView = new KDirOperator( QDir::home().absPath(), box2 );
 	m_fileView->setView( new PrivateFileView( m_fileView, "fileview" ) );	
 	
 	// add some actions to the toolbar
-	m_fileView->actionCollection()->action("up")->plug( toolbar );
-	m_fileView->actionCollection()->action("home")->plug( toolbar );
-	m_fileView->actionCollection()->action("reload")->plug( toolbar );
+	KAction* _actionUp = m_fileView->actionCollection()->action("up");
+	KAction* _actionHome = m_fileView->actionCollection()->action("home");
+	KAction* _actionReload = m_fileView->actionCollection()->action("reload");
 	
-	//((KListView*)(m_fileView->viewWidget()))->setDragEnabled( true );
+	QPushButton* _buttonUp = new QPushButton( _actionUp->iconSet(), _actionUp->text(), box2 );
+	QPushButton* _buttonHome = new QPushButton( _actionHome->iconSet(), _actionHome->text(), box2 );
+	QPushButton* _buttonReload = new QPushButton( _actionReload->iconSet(), _actionReload->text(), box2 );
 	
+	// add the buttons and the fileview in the layout
+//	QGridLayout* _buttonLayout = new QGridLayout;
+//	_buttonLayout->setMargin( 5 );
+//	_buttonLayout->setSpacing( 0 );
+//	_buttonLayout->addWidget( _buttonUp, 0, 0 );
+//	_buttonLayout->addWidget( _buttonHome, 0, 1 );
+//	_buttonLayout->addWidget( _buttonReload, 0, 2 );
+	_box2Layout->addWidget( _buttonUp, 0, 0 );
+	_box2Layout->addWidget( _buttonHome, 0, 1 );
+	_box2Layout->addWidget( _buttonReload, 0, 2 );
+//	_box2Layout->addLayout( _buttonLayout, 0, 0 );
+	_box2Layout->addMultiCellWidget( m_fileView, 2, 2, 0, 3 );
+	_box2Layout->setRowStretch( 2, 1 );
+	
+	// the buttons should be square
+	_buttonUp->setMaximumWidth( _buttonUp->height() );
+	_buttonHome->setMaximumWidth( _buttonUp->height() );
+	_buttonReload->setMaximumWidth( _buttonUp->height() );
+	
+	// connect to the actions
+	connect( _buttonUp, SIGNAL(clicked()), _actionUp, SLOT(activate()) );
+	connect( _buttonHome, SIGNAL(clicked()), _actionHome, SLOT(activate()) );
+	connect( _buttonReload, SIGNAL(clicked()), _actionReload, SLOT(activate()) );
+		
   connect( m_dirView, SIGNAL(folderSelected(const QString&) ), this, SLOT(slotFolderSelected(const QString&) ) );
   connect( m_fileView, SIGNAL( dirActivated(const KFileViewItem*) ), this, SLOT( slotFileItemSelected(const KFileViewItem*) ) );
 }

@@ -18,7 +18,7 @@
 #ifndef K3BDIRVIEW_H
 #define K3BDIRVIEW_H
 
-#include <qsplitter.h>
+#include <qvbox.h>
 #include <qfile.h>
 #include <qstring.h>
 
@@ -28,13 +28,14 @@
 
 class KFileViewItem;
 class QDragObject;
+class QSplitter;
 
 /**
   *@author Sebastian Trueg
   */
 
 
-class K3bDirView : public QSplitter  {
+class K3bDirView : public QVBox  {
    Q_OBJECT
 
 public:
@@ -52,6 +53,7 @@ private:
 	
 	PrivateDirView* m_dirView;
 	KDirOperator* m_fileView;
+	QSplitter* m_mainSplitter;
 };
 
 

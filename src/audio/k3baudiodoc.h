@@ -30,6 +30,7 @@
 
 class K3bApp;
 class K3bAudioTrack;
+class K3bAudioBurnDialog;
 class QWidget;
 
 /**Document class for an audio project. It uses a @p K3bAudioProject
@@ -45,11 +46,28 @@ public:
 	K3bAudioDoc( K3bApp*, const QString& cdrecord = "/usr/bin/cdrecord", const QString& mpg123 = "/usr/bin/mpg123");
 	~K3bAudioDoc();
 	
-  /** reimplemented from K3bDoc */
-  K3bView* newView( QWidget* parent );
-  /** reimplemented from K3bDoc */
-  void addView(K3bView* view);
+	/** reimplemented from K3bDoc */
+	K3bView* newView( QWidget* parent );
+	/** reimplemented from K3bDoc */
+	void addView(K3bView* view);
 
+	bool newDocument();
+
+	QTime audioSize() const;
+	bool padding() const { return m_padding; }
+	int numberOfTracks() const { return m_tracks->count(); }
+
+	K3bAudioTrack* currentProcessedTrack() const { return m_currentProcessedTrack; }
+	
+	K3bAudioTrack* current() const { return m_tracks->current(); }
+	K3bAudioTrack* next() { return m_tracks->next(); }
+	K3bAudioTrack* prev() { return m_tracks->prev(); }
+	K3bAudioTrack* at( uint i ) { return m_tracks->at( i ); }
+	K3bAudioTrack* take( uint i ) { return m_tracks->take( i ); }
+
+	/** get the current size of the project */
+	int size();
+	
 public slots:
 	/**
 	 * will test the file and add it to the project.
@@ -64,7 +82,10 @@ public slots:
 //	void addTracks( QList<K3bAudioTrack>& tracks );
 	void removeTrack( int position );
 	void moveTrack( uint oldPos, uint newPos );
+	void showBurnDialog();
 
+	void setPadding( bool p ) { m_padding = p; }
+	
 protected slots:
  	/** processes queue "urlsToAdd" **/
  	void addNextTrack();
@@ -77,23 +98,12 @@ protected slots:
 	void write();
 	void writeImage( const QString& filename );
 
-//	const QTime& audioSize() const;
-	int numberOfTracks() const { return m_tracks.count(); }
-
-	K3bAudioTrack* current() const { return m_tracks.current(); }
-	K3bAudioTrack* next() { return m_tracks.next(); }
-	K3bAudioTrack* prev() { return m_tracks.prev(); }
-	K3bAudioTrack* at( uint i ) { return m_tracks.at( i ); }
-	K3bAudioTrack* take( uint i ) { return m_tracks.take( i ); }
-
-	/** get the current size of the project */
-	int size();
-
-  	void startRecording();
+ 	void startRecording();
 	void parseCdrecordOutput( KProcess*, char* output, int len );
 	void cdrecordFinished();
 	void bufferFiles( );
-	void parseMpg123Output( KProcess*, char* output, int len );
+	void parseMpgDecodingOutput( KProcess*, char* output, int len );
+	void parseMpgTestingOutput( KProcess*, char* output, int len );
 	void fileBufferingFinished();
 	void mp3FileTestingFinished();
 
@@ -101,10 +111,11 @@ signals:
 	void newTrack( K3bAudioTrack* );
 	void trackRemoved( uint );
 	void nextTrackProcessed();
-	void trackPercent( unsigned long precent );
-	void trackProcessedSize( unsigned long size );
+	void trackPercent( int percent );
+	void trackProcessedSize( int processed, int size );
 	void trackProcessedMinutes( const QTime& );
 	void processedMinutes( const QTime& );
+	void startDecoding();
 
 protected:
  	/** reimplemented from K3bDoc */
@@ -128,20 +139,27 @@ private:
 	the url is malformed. */
 	KURL addedFile;
 	bool startBurningAfterBuffering;
-
-	QList<K3bAudioTrack> m_tracks;
-	K3bAudioTrack* m_currentBufferedTrack;
+	
+	/** used to determine the overall progress **/
+	int m_iNumFilesToBuffer;
+	int m_iNumFilesAlreadyBuffered;
+	
+	QList<K3bAudioTrack>* m_tracks;
+	K3bAudioTrack* m_currentProcessedTrack;
 	K3bAudioTrack* m_lastAddedTrack;
-
+	
 	/** path to mpg123 executable **/
 	QString m_mpg123;
 
  	QString lastTempFile;
  	uint lastAddedPosition;
+ 	
+	K3bAudioBurnDialog* m_burnDialog;
 
  	// settings
  	/** if true the adding of files will take longer */
  	bool testFiles;
+ 	bool m_padding;
 };
 
 

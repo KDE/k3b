@@ -1,7 +1,7 @@
 /***************************************************************************
-                          audiolistviewitem.h  -  description
+                          k3bfillstatusdisplay.h  -  description
                              -------------------
-    begin                : Tue Mar 27 2001
+    begin                : Tue Apr 10 2001
     copyright            : (C) 2001 by Sebastian Trueg
     email                : trueg@informatik.uni-freiburg.de
  ***************************************************************************/
@@ -15,39 +15,32 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef AUDIOLISTVIEWITEM_H
-#define AUDIOLISTVIEWITEM_H
+#ifndef K3BFILLSTATUSDISPLAY_H
+#define K3BFILLSTATUSDISPLAY_H
 
-#include <qlistview.h>
-#include <qstring.h>
+#include <qframe.h>
 
-class K3bAudioTrack;
+class QPainter;
+class K3bDoc;
 
 
 /**
   *@author Sebastian Trueg
   */
 
-class AudioListViewItem : public QListViewItem  {
+class K3bFillStatusDisplay : public QFrame  {
+
+   Q_OBJECT
 
 public:
-	AudioListViewItem( K3bAudioTrack* track, QListView* parent );
-	AudioListViewItem( K3bAudioTrack* track, QListView* parent, QListViewItem* after );
-	~AudioListViewItem();
+	K3bFillStatusDisplay(K3bDoc* doc, QWidget *parent=0, const char *name=0);
+	~K3bFillStatusDisplay();
 
-	/** reimplemented from QListViewItem */
-	QString text(int i) const;
+protected:
+	void drawContents(QPainter*);
 	
-	/** reimplemented from QListViewItem */
-	void setText(int col, const QString& text );
-	
-	/** reimplemented from QListViewItem */
-	QString key( int column, bool a ) const;
-	
-	K3bAudioTrack* audioTrack() { return m_track; }
-		
 private:
-	K3bAudioTrack* m_track;
+	K3bDoc* doc;
 };
 
 #endif

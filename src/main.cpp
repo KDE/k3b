@@ -54,6 +54,7 @@ int main(int argc, char *argv[])
   {
     K3bApp *testmdi = new K3bApp();
     testmdi->show();
+    testmdi->init();
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 		
@@ -61,8 +62,8 @@ int main(int argc, char *argv[])
 		{
 			for(int i=0;i<args->count();i++)
 			{
-        testmdi->openDocumentFile(args->arg(i));
-		  }
+				testmdi->openDocumentFile(args->arg(i));
+			}
 		}
 		
 		args->clear();

@@ -41,7 +41,7 @@
 #include "k3bglobals.h"
 
 K3bDoc::K3bDoc( K3bApp* _k3bMain, const QString& cdrecord )
-	: m_cdrecord(cdrecord)
+	: QObject( _k3bMain ), m_cdrecord(cdrecord)
 {
 	m_k3bMain = _k3bMain;
 
@@ -95,6 +95,8 @@ void K3bDoc::setSpeed( int speed )
 void K3bDoc::setBurner( K3bDevice* dev )
 {
 	m_burner = dev;
+	if( dev )
+		qDebug( QString("(K3bDoc) Setting writer to %1 %2").arg( dev->device).arg(dev->description) );
 }
 
 
@@ -111,17 +113,16 @@ int K3bDoc::error() const
 
 QString K3bDoc::findTempFile( const QString& ending )
 {
-	QString dir = kapp->dirs()->resourceDirs( "tmp" ).first();
-	// TODO: check if the returned dirs end with "/"
-	if( dir.isEmpty() )
-		dir = "/tmp/";
-
+	// searching in default group
+	k3bMain()->config()->setGroup( "" );
+	QString dir = k3bMain()->config()->readEntry( "Temp Dir", "/usr/cdburn/" );//locateLocal( "appdata", "temp/" ) );
+	
 	// find a free filename
 	int num = 1;
-	while( QFile::exists( dir + "k3b-" + QString::number( num ) + ending ) )
+	while( QFile::exists( dir + "k3b-" + QString::number( num ) + "." + ending ) )
 		num++;
 
-	return dir + "k3b-" + QString::number( num ) + ending;
+	return dir + "k3b-" + QString::number( num ) + "." + ending;
 }
 
 void K3bDoc::cancel()
@@ -146,12 +147,12 @@ void K3bDoc::emitCanceled()
 	emit canceled();
 }
 
-void K3bDoc::emitProgress( unsigned long size, unsigned long processed, int speed )
+void K3bDoc::emitProgress( unsigned long _size, unsigned long _processed, int _speed )
 {
 	// TODO: do anything with speed or remove it
-	int _percent = (int)( 100.0 * (double)processed / (double)size );
+	int _percent = (int)( 100.0 * (double)_processed / (double)_size );
 	emit percent( _percent );
-	emit processedSize( size );
+	emit processedSize( _size, size() );
 }
 
 void K3bDoc::emitMessage( const QString& msg )
@@ -341,4 +342,3 @@ bool K3bDoc::canCloseFrame(K3bView* pFrame)
 		
 	return ret;
 }
-

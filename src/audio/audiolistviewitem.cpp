@@ -39,36 +39,54 @@ AudioListViewItem::~AudioListViewItem()
 
 QString AudioListViewItem::text(int i) const
 {
+	// TODO: think about a really nice solution!
+	QString _num = QString::number( m_track->index() +1 );
+	if( _num.length() == 1 )
+		_num = "0" + _num;
+	
 	switch( i )
 	{
 		case 0:
-			// TODO: think about a really nice solution!
-			return QString::number( m_track->index() +1 );
+			return _num;
 		case 1:
-			// track title
-			if( m_track->title().isEmpty() || m_track->artist().isEmpty() )
-				return m_track->fileName();
-			else
-				return m_track->artist() + " - " + m_track->title();
+			return m_track->artist();
 		case 2:
+			return m_track->title();
+		case 3:
+			return m_track->fileName();
+		case 4:
 			// track length
 			return m_track->length().toString();
-		case 3:
+		case 5:
 			// track pregap
 			return QString::number( m_track->pregap() );
-		case 4:
-			// start time
-			// TODO: fix it, fix it, fix it....
-			return "START";
-		case 5:
-			// end time
-			// TODO: fix it, fix it, fix it....
-			return "END";
 		default:
 			return "xxx";
 	}
 }
 
+void AudioListViewItem::setText(int col, const QString& text )
+{
+	if( col == 1 ) {
+		// this is the cd-text artist field
+		m_track->setArtist( text );
+	}
+	else if( col == 2 ) {
+		// this is the cd-text title field
+		m_track->setTitle( text );
+	}
+	else if(col == 5) {
+		// track pregap
+		// only insert integers 0-XX
+		// TODO: find out the max pregap!
+		bool ok;
+		int p = text.toInt(&ok);
+		if(ok)
+			m_track->setPregap(p);
+	}
+}
+
+	
 QString AudioListViewItem::key( int column, bool ascending ) const
 {
 	// The tracks should be sorted according to their track-number :-)

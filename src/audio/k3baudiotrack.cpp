@@ -16,12 +16,22 @@
  ***************************************************************************/
 
 #include "k3baudiotrack.h"
+#include "k3bglobals.h"
+
+#include <qstring.h>
+#include <qfileinfo.h>
+
 
 K3bAudioTrack::K3bAudioTrack( QList<K3bAudioTrack>* parent, const QString& filename )
 : m_file(filename), m_bufferFile(), m_length()
 {
 	m_parent = parent;
 	m_pregap = 2;
+	
+	if( QFileInfo( m_file ).extension(false).contains("mp3", false) )
+		m_filetype = K3b::MP3;
+	else
+		m_filetype = K3b::WAV;
 }
 
 K3bAudioTrack::K3bAudioTrack( const K3bAudioTrack& track )
@@ -36,6 +46,8 @@ K3bAudioTrack::K3bAudioTrack( const K3bAudioTrack& track )
 K3bAudioTrack::~K3bAudioTrack()
 {
 	// delete the buffer file
+	qDebug( "Deleting buffered file" + m_bufferFile );
+	
 	if( !m_bufferFile.isEmpty() )
 		QFile::remove( m_bufferFile );
 }

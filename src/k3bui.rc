@@ -2,8 +2,14 @@
 <kpartgui name="k3b" version="0.1">
 <MenuBar>
   <Action name="window_menu"/>
+  <Menu name="file">
+  	<Action name="file_burn"/>
+  </Menu>
   <Menu name="settings">
   	<Action name="view_dir"/>
   </Menu>
 </MenuBar>
+<ToolBar name="mainToolBar">
+	<Action name="file_new_menu"/>
+</ToolBar>
 </kpartgui>

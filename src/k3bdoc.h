@@ -141,7 +141,8 @@ public:
 
 	bool workInProgress() const;
 
-	
+	K3bApp* k3bMain() const { return m_k3bMain; }
+		
 public slots:
     /** calls repaint() on all views connected to the document object and is called by the view by which the document has been changed.
      * As this view normally repaints itself, it is excluded from the paintEvent.
@@ -152,6 +153,8 @@ public slots:
 	void setEject( bool e );
 	void setSpeed( int speed );
 	void setBurner( K3bDevice* dev );
+	
+	virtual void showBurnDialog() = 0;
 	/** in the default implementation no canceled signal is emmited! */
 	virtual void cancel();
 
@@ -165,12 +168,13 @@ signals:
 	void canceled();
 	void result();
 	void percent( int percent );
-	void processedSize( unsigned long size );
+	void processedSize( unsigned long processed, unsigned long size );
 	void timeLeft( const QTime& );
- 	
+	void bufferStatus( int percent );
+	void startWriting();
+	void writingLeadOut();
+	 	
 protected:
-	K3bApp* k3bMain() const { return m_k3bMain; }
-
   	/** when deriving from K3bDoc this method really opens the document since
 	      openDocument only opens a tempfile and calls this method. */
 	virtual bool loadDocumentData( QFile& f ) = 0;

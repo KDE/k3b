@@ -25,6 +25,7 @@
 #include <qstring.h>
 #include <qsplitter.h>
 #include <qevent.h>
+#include <qtabwidget.h>
 
 // include files for KDE
 #include <kiconloader.h>
@@ -35,6 +36,7 @@
 #include <kconfig.h>
 #include <kstdaction.h>
 #include <klineeditdlg.h>
+#include <kstddirs.h>
 
 // application specific includes
 #include "k3b.h"
@@ -42,12 +44,13 @@
 #include "k3bdirview.h"
 #include "k3baudiodoc.h"
 #include "k3bdevicemanager.h"
-
+#include "k3baudiotrackdialog.h"
+#include "k3bcopywidget.h"
 
 K3bApp::K3bApp()
-	: KMainWindow(0,"K3b")
+	: KDockMainWindow(0,"K3b")
 {
-  config=kapp->config();
+  m_config=kapp->config();
   untitledCount=0;
   pDocList = new QList<K3bDoc>();
   pDocList->setAutoDelete(true);
@@ -64,12 +67,9 @@ K3bApp::K3bApp()
   // disable actions at startup
   fileSave->setEnabled(false);
   fileSaveAs->setEnabled(false);
+  fileBurn->setEnabled( false );
 
-  searchExternalProgs();
-
-  //TODO: find cdrecord path
-  m_deviceManager = new K3bDeviceManager( m_cdrecord, this );
-  m_deviceManager->printDevices();
+  m_audioTrackDialog = 0;
 }
 
 K3bApp::~K3bApp()
@@ -78,7 +78,6 @@ K3bApp::~K3bApp()
 
 void K3bApp::initActions()
 {
-  fileNew = KStdAction::openNew(this, SLOT(slotFileNew()), actionCollection());
   fileOpen = KStdAction::open(this, SLOT(slotFileOpen()), actionCollection());
   fileOpenRecent = KStdAction::openRecent(this, SLOT(slotFileOpenRecent(const KURL&)), actionCollection());
   fileSave = KStdAction::save(this, SLOT(slotFileSave()), actionCollection());
@@ -88,12 +87,18 @@ void K3bApp::initActions()
   viewToolBar = KStdAction::showToolbar(this, SLOT(slotViewToolBar()), actionCollection());
   viewStatusBar = KStdAction::showStatusbar(this, SLOT(slotViewStatusBar()), actionCollection());
 
+  fileBurn = new KAction( i18n("&Burn..."), 0, this, SLOT(slotFileBurn()), actionCollection(), "file_burn");
+
+  fileNewMenu = new KActionMenu( i18n("&New Project"), SmallIconSet("filenew"), actionCollection(), "file_new" );
+  fileNewAudio = new KAction(i18n("New &Audio project"), SmallIconSet("filenew"), 0, this, SLOT(newAudioDoc()), actionCollection(), "file_new_audio");
+  fileNewData = new KAction(i18n("New &Data project"), SmallIconSet("filenew"), 0, this, SLOT(newDataDoc()), actionCollection(), "file_new_data");
+  fileNewMenu->insert( fileNewAudio );
+  fileNewMenu->insert( fileNewData );
+  fileNewMenu->setDelayed( false );
+
   viewDirView = new KToggleAction(i18n("Show Directories"), 0, this, SLOT(slotShowDirView()), actionCollection(), "view_dir");
 
-  windowTile = new KAction(i18n("&Tile"), 0, this, SLOT(slotWindowTile()), actionCollection(),"window_tile");
-  windowCascade = new KAction(i18n("&Cascade"), 0, this, SLOT(slotWindowCascade()), actionCollection(),"window_cascade");
-
-  fileNew->setStatusText(i18n("Creates a new document"));
+  fileNewMenu->setStatusText(i18n("Creates a new document"));
   fileOpen->setStatusText(i18n("Opens an existing document"));
   fileOpenRecent->setStatusText(i18n("Opens a recently used file"));
   fileSave->setStatusText(i18n("Saves the actual document"));
@@ -105,9 +110,6 @@ void K3bApp::initActions()
   viewStatusBar->setStatusText(i18n("Enables/disables the statusbar"));
 
   viewDirView->setChecked( true );
-
-  windowMenu = new KActionMenu(i18n("&Window"), actionCollection(), "window_menu");
-  connect(windowMenu->popupMenu(), SIGNAL(aboutToShow()), this, SLOT(windowMenuAboutToShow()));
 
   createGUI();
 
@@ -128,21 +130,41 @@ void K3bApp::initView()
   ////////////////////////////////////////////////////////////////////
   // here the main view of the KMainWindow is created by a background box and
   // the QWorkspace instance for MDI view.
-  QSplitter* view_back = new QSplitter( this );
-  view_back->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
-  pWorkspace = new QWorkspace( view_back );
-  m_dirView = new K3bDirView( view_back );
-  setCentralWidget(view_back);
+  mainDock = createDockWidget( "Workspace", SmallIcon("idea") );
+  setView( mainDock );
+  setMainDockWidget( mainDock );
+  mainDock->setEnableDocking( KDockWidget::DockNone );
+
+//  pWorkspace = new QWorkspace( mainDock );
+//  mainDock->setWidget( pWorkspace );
+
+  m_documentTab = new QTabWidget( mainDock );
+  mainDock->setWidget( m_documentTab );
+  connect( m_documentTab, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotCurrentDocChanged(QWidget*)) );
+
+  // add the cd-copy-widget to the tab
+  m_documentTab->addTab( new K3bCopyWidget( m_documentTab ), "&Copy CD" );
+
+  dirDock = createDockWidget( "DirDock", SmallIcon("idea") );
+  m_dirView = new K3bDirView( dirDock );
+  dirDock->setWidget( m_dirView );
+  dirDock->setEnableDocking( KDockWidget::DockCorner );
+  connect( dirDock, SIGNAL(headerCloseButtonClicked()), this, SLOT(slotDirDockHidden()) );
+
+  // dock it!
+  dirDock->manualDock( mainDock, KDockWidget::DockLeft, 30 );
 }
 
 
 void K3bApp::createClient(K3bDoc* doc)
 {
-  K3bView* w = doc->newView( pWorkspace );
+  K3bView* w = doc->newView( m_documentTab );
   w->installEventFilter(this);
   doc->addView(w);
   w->setIcon(kapp->miniIcon());
-  w->show();
+  m_documentTab->addTab( w, w->caption() );
+
+  fileBurn->setEnabled( true );
 }
 
 void K3bApp::openDocumentFile(const KURL& url)
@@ -192,38 +214,41 @@ void K3bApp::openDocumentFile(const KURL& url)
 
 void K3bApp::saveOptions()
 {	
-  config->setGroup("General Options");
-  config->writeEntry("Geometry", size());
-  config->writeEntry("Show Toolbar", toolBar()->isVisible());
-  config->writeEntry("Show Statusbar",statusBar()->isVisible());
-  config->writeEntry("ToolBarPos", (int) toolBar("mainToolBar")->barPos());
-  fileOpenRecent->saveEntries(config,"Recent Files");
+qDebug("Saving options!");
+
+  m_config->setGroup("General Options");
+  m_config->writeEntry("Geometry", size());
+  m_config->writeEntry("Show Toolbar", toolBar()->isVisible());
+  m_config->writeEntry("Show Statusbar",statusBar()->isVisible());
+  m_config->writeEntry("ToolBarPos", (int) toolBar("mainToolBar")->barPos());
+  fileOpenRecent->saveEntries(m_config,"Recent Files");
+
+  m_config->writeEntry("Temp Dir", "/usr/cdburn/");
 }
 
 
 void K3bApp::readOptions()
 {
-	
-  config->setGroup("General Options");
+  m_config->setGroup("General Options");
 
   // bar status settings
-  bool bViewToolbar = config->readBoolEntry("Show Toolbar", true);
+  bool bViewToolbar = m_config->readBoolEntry("Show Toolbar", true);
   viewToolBar->setChecked(bViewToolbar);
   slotViewToolBar();
 
-  bool bViewStatusbar = config->readBoolEntry("Show Statusbar", true);
+  bool bViewStatusbar = m_config->readBoolEntry("Show Statusbar", true);
   viewStatusBar->setChecked(bViewStatusbar);
   slotViewStatusBar();
 
   // bar position settings
   KToolBar::BarPosition toolBarPos;
-  toolBarPos=(KToolBar::BarPosition) config->readNumEntry("ToolBarPos", KToolBar::Top);
+  toolBarPos=(KToolBar::BarPosition) m_config->readNumEntry("ToolBarPos", KToolBar::Top);
   toolBar("mainToolBar")->setBarPos(toolBarPos);
 
   // initialize the recent file list
-  fileOpenRecent->loadEntries(config,"Recent Files");
+  fileOpenRecent->loadEntries(m_config,"Recent Files");
 
-  QSize size=config->readSizeEntry("Geometry");
+  QSize size=m_config->readSizeEntry("Geometry");
   if(!size.isEmpty())
   {
     resize(size);
@@ -242,7 +267,6 @@ void K3bApp::readProperties(KConfig* _cfg)
 
 bool K3bApp::queryClose()
 {
-
   QStringList saveFiles;
   K3bDoc* doc;
   if(pDocList->isEmpty())
@@ -293,16 +317,19 @@ bool K3bApp::eventFilter(QObject* object, QEvent* event)
     QCloseEvent* e=(QCloseEvent*)event;
 
     K3bView* pView=(K3bView*)object;
-    K3bDoc* pDoc=pView->getDocument();
-    if(pDoc->canCloseFrame(pView))
-    {
-      pDoc->removeView(pView);
-      if(!pDoc->firstView())
-        pDocList->remove(pDoc);
-      e->accept();
-    }
-    else
-      e->ignore();
+    if( pView ) {
+	    K3bDoc* pDoc=pView->getDocument();
+	    if(pDoc->canCloseFrame(pView))
+	    {
+	      pDoc->removeView(pView);
+	      m_documentTab->removePage( pView );
+	      if(!pDoc->firstView())
+	        pDocList->remove(pDoc);
+	      e->accept();
+	    }
+	    else
+	      e->ignore();
+	}
   }
   return QWidget::eventFilter( object, event );    // standard event processing
 }
@@ -392,7 +419,7 @@ void K3bApp::slotFileSaveAs()
 void K3bApp::slotFileClose()
 {
   slotStatusMsg(i18n("Closing file..."));
-  K3bView* m = (K3bView*)pWorkspace->activeWindow();
+  K3bView* m = dynamic_cast<K3bView*>( m_documentTab->currentPage() );
   if( m )
   {
     K3bDoc* doc=m->getDocument();
@@ -406,20 +433,23 @@ void K3bApp::slotFileClose()
 void K3bApp::slotFileQuit()
 {
   slotStatusMsg(i18n("Exiting..."));
-  saveOptions();
+//  saveOptions();
   // close the first window, the list makes the next one the first again.
   // This ensures that queryClose() is called on each window to ask for closing
-  KMainWindow* w;
-  if(memberList)
-  {
-    for(w=memberList->first(); w!=0; w=memberList->first())
-    {
-      // only close the window if the closeEvent is accepted. If the user presses Cancel on the saveModified() dialog,
-      // the window and the application stay open.
-      if(!w->close())
-        break;
-    }
-  }	
+//  KMainWindow* w;
+//  if(memberList)
+//  {
+//    for(w=memberList->first(); w!=0; w=memberList->first())
+//    {
+//      // only close the window if the closeEvent is accepted. If the user presses Cancel on the saveModified() dialog,
+//      // the window and the application stay open.
+//      if(!w->close())
+//        break;
+//    }
+//  }	
+
+  close();		
+
   slotStatusMsg(i18n("Ready."));
 }
 
@@ -455,17 +485,9 @@ void K3bApp::slotViewStatusBar()
     statusBar()->show();
   }
 
-  slotStatusMsg(i18n("Ready."));
+   slotStatusMsg(i18n("Ready."));
 }
 
-
-void K3bApp::slotWindowTile(){
-  pWorkspace->tile();
-}
-
-void K3bApp::slotWindowCascade(){
-  pWorkspace->cascade();
-}
 
 void K3bApp::slotStatusMsg(const QString &text)
 {
@@ -476,48 +498,23 @@ void K3bApp::slotStatusMsg(const QString &text)
 }
 
 
-void K3bApp::windowMenuAboutToShow()
+void K3bApp::slotShowDirView()
 {
-  windowMenu->popupMenu()->clear();
-  windowMenu->insert(windowCascade);
-  windowMenu->insert(windowTile);
-
-  if ( pWorkspace->windowList().isEmpty() ){
-    windowCascade->setEnabled(false);
-    windowTile->setEnabled(false);
-  }
-  else{
-    windowCascade->setEnabled(true);
-    windowTile->setEnabled(true);
-  }
-  windowMenu->popupMenu()->insertSeparator();
-
-  QWidgetList windows = pWorkspace->windowList();
-  for ( int i = 0; i < int(windows.count()); ++i )
-  {
-    int id = windowMenu->popupMenu()->insertItem(QString("&%1 ").arg(i+1)+windows.at(i)->caption(), this, SLOT( windowMenuActivated( int ) ) );
-    windowMenu->popupMenu()->setItemParameter( id, i );
-    windowMenu->popupMenu()->setItemChecked( id, pWorkspace->activeWindow() == windows.at(i) );
-  }
-}
-
-void K3bApp::windowMenuActivated( int id )
-{
-  QWidget* w = pWorkspace->windowList().at( id );
-  if ( w )
-    w->setFocus();
-}
-
-
-void K3bApp::slotShowDirView(){
-	if( !m_dirView->isVisible() )
-		m_dirView->show();
-	else
-		m_dirView->hide();
+	// undock and hide or 'redock' and show
+	if( !dirDock->isVisible() ) {
+		dirDock->manualDock( mainDock, KDockWidget::DockLeft, 30 );
+		dirDock->show();
+	}
+	else {
+		dirDock->hide();
+		dirDock->undock();
+	}
 }
 
 void K3bApp::searchExternalProgs()
 {
+	// TODO: check if already in config!
+
 	if( QFile::exists( "/usr/bin/cdrecord" ) ) {
 		m_cdrecord = "/usr/bin/cdrecord";
 		qDebug("(K3bApp) found cdrecord in " + m_cdrecord );
@@ -544,5 +541,86 @@ void K3bApp::searchExternalProgs()
 		bool ok = true;
 		while( !QFile::exists( m_mpg123 ) && ok )
 			m_mpg123 = KLineEditDlg::getText( "Could not find mpg123. Please insert the full path...", "mpg123", &ok, this );
+	}
+}
+
+void K3bApp::newAudioDoc()
+{
+  slotStatusMsg(i18n("Creating new Audio Project."));
+
+  K3bAudioDoc* doc = new K3bAudioDoc( this, m_cdrecord, m_mpg123 );
+  pDocList->append(doc);
+  doc->newDocument();
+
+  untitledCount+=1;
+  QString fileName=QString(i18n("Untitled%1")).arg(untitledCount);
+  KURL url;
+  url.setFileName(fileName);
+  doc->setURL(url);
+
+  // create the window
+  createClient(doc);
+
+  slotStatusMsg(i18n("Ready."));
+}
+
+void K3bApp::newDataDoc()
+{
+}
+
+K3bAudioTrackDialog* K3bApp::audioTrackDialog()
+{
+	if( !m_audioTrackDialog )
+		m_audioTrackDialog = new K3bAudioTrackDialog( this );
+		
+	return m_audioTrackDialog;
+}
+
+void K3bApp::slotFileBurn()
+{
+	QWidget* w = m_documentTab->currentPage();
+	if( w )
+	{
+		if( w->inherits( "K3bView" ) ) {
+			K3bDoc* doc = m->getDocument();
+			doc->showBurnDialog();
+		}
+		else if( w->inherits( "K3bCopyWidget" ) ) {
+			// TODO: do whatever to copy a cd
+		}
+	}
+}
+
+
+void K3bApp::init()
+{
+  searchExternalProgs();
+
+  m_deviceManager = new K3bDeviceManager( m_cdrecord, this );
+  m_deviceManager->printDevices();
+}
+
+
+void K3bApp::slotDirDockHidden()
+{
+	// check if that is really true
+	if( !dirDock->isVisible() )
+		viewDirView->setChecked( false );
+}
+
+
+void K3bApp::slotCurrentDocChanged( QWidget* w )
+{
+	if( w->inherits( "K3bView" ) ) {
+		// activate actions for file-handling
+		fileClose->setEnabled( true );
+		fileSave->setEnabled( true );
+		fileSaveAs->setEnabled( true );
+	}
+	else {
+		// the active window does not represent a file (e.g. the copy-widget)
+		fileClose->setEnabled( false );
+		fileSave->setEnabled( false );
+		fileSaveAs->setEnabled( false );
 	}
 }
