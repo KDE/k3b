@@ -199,6 +199,7 @@ void K3bDevice::setBurnproof( bool b )
 K3bDiskInfo::type  K3bDevice::diskType() {
 
   int status;
+  K3bDiskInfo::type ret = K3bDiskInfo::UNKNOWN;
   int cdromfd = ::open( devicename().latin1(), O_RDONLY | O_NONBLOCK );
   if (cdromfd < 0) {
     kdDebug() << "(K3bDevice) Error: could not open device." << endl;
@@ -206,21 +207,47 @@ K3bDiskInfo::type  K3bDevice::diskType() {
   }
 
   if ( (status = ::ioctl(cdromfd,CDROM_DISC_STATUS)) >= 0 ) {
-    ::close(cdromfd);
     switch (status) {
-      case CDS_AUDIO:   return K3bDiskInfo::AUDIO;
+      case CDS_AUDIO:   ret = K3bDiskInfo::AUDIO;
+                        break;
       case CDS_DATA_1:
-      case CDS_DATA_2:  return K3bDiskInfo::DATA;
+      case CDS_DATA_2:  ret = K3bDiskInfo::DATA;
+                        break;
       case CDS_XA_2_1: 
       case CDS_XA_2_2: 
-      case CDS_MIXED:   return K3bDiskInfo::MIXED;
-      case CDS_NO_DISC: return K3bDiskInfo::NODISC;
-      case CDS_NO_INFO: return K3bDiskInfo::UNKNOWN;
+      case CDS_MIXED:   ret = K3bDiskInfo::MIXED;
+                        break;
+      case CDS_NO_DISC: ret = K3bDiskInfo::NODISC;
+                        break;
+      case CDS_NO_INFO: ret = K3bDiskInfo::UNKNOWN;
     }
   }
+  if ( isDVD() )
+    ret =  K3bDiskInfo::DVD;
+    
   ::close(cdromfd);
-  return K3bDiskInfo::UNKNOWN;
+  return ret;
 
+}
+
+bool K3bDevice::isDVD() {
+  bool ret = false;
+  int cdromfd = ::open( devicename().latin1(), O_RDONLY | O_NONBLOCK );
+  if (cdromfd < 0) {
+    kdDebug() << "(K3bDevice) Error: could not open device." << endl;
+    return ret;
+  }
+  if ( d->deviceType & (DVDR | DVDRAM | DVDROM) ) {
+//     try to read the physical dvd-structure
+//     if this fails, we probably cannot take any further (usefull) dvd-action
+     dvd_struct dvdinfo;
+     ::memset(&dvdinfo,0,sizeof(dvd_struct));
+     dvdinfo.type = DVD_STRUCT_PHYSICAL;
+     if ( ::ioctl(cdromfd,DVD_READ_STRUCT,&dvdinfo) == 0 ) 
+       ret = true;
+  }
+  ::close(cdromfd);
+  return ret;
 }
 
 int K3bDevice::isReady() const

@@ -199,6 +199,7 @@ class K3bDevice
 
   virtual bool rewritable();
 
+  bool isDVD();
   K3bDiskInfo::type diskType();
   int numSessions();
   int discSize();
