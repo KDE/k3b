@@ -20,7 +20,7 @@
 
 #include <kdialogbase.h>
 
-class K3bDvdDoc;
+//class K3bDvdDoc;
 class K3bDvdDirectories;
 class K3bDvdAVSet;
 class K3bDvdAVExtend;
@@ -39,9 +39,10 @@ public:
 private slots:
     void slotUser1();
     void slotUser2();
+
 private:
     K3bDvdCodecData *m_codingData;
-    K3bDvdDoc* m_doc;
+    //K3bDvdDoc* m_doc;
     K3bDvdBaseTab *m_baseTab;
     K3bDvdSizeTab *m_sizeTab;
 

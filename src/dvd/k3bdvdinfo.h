@@ -22,6 +22,7 @@
 #include <qgroupbox.h>
 class QLabel;
 class QGridLayout;
+class K3bDvdCodecData;
 
 /**
   *@author Sebastian Trueg
@@ -32,6 +33,7 @@ class K3bDvdInfo : public QGroupBox  {
 public:
     K3bDvdInfo(QWidget *parent=0, const char *name=0);
     ~K3bDvdInfo();
+    void updateData( K3bDvdCodecData *data);
 protected:
     QGridLayout *m_mainLayout;
     void setupGui();
@@ -40,7 +42,6 @@ private:
     QLabel *m_frames;
     QLabel *m_size;
     QLabel *m_aspect;
-
 
 };
 

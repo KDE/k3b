@@ -32,6 +32,7 @@ class K3bDvdInfoExtend : public K3bDvdInfo  {
 public: 
     K3bDvdInfoExtend(QWidget *parent=0, const char *name=0);
     ~K3bDvdInfoExtend();
+    void updateData( K3bDvdCodecData *data );
 private:
     QLabel *m_quality;
 

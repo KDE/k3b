@@ -21,6 +21,7 @@
 #include "k3bdvdavset.h"
 #include "k3bdvdavextend.h"
 #include "k3bdvdinfo.h"
+#include "k3bdivxdatagui.h"
 
 #include <qlayout.h>
 #include <qsizepolicy.h>
@@ -54,6 +55,22 @@ void K3bDvdBaseTab::setupGui(){
     //mainLayout->addItem( spacer, 2, 0);
     //mainLayout->addItem( spacer2, 2, 1);
     mainLayout->setRowStretch( 2, 20 );
+
+    connect( m_avsettings, SIGNAL( dataChanged( K3bDivXDataGui*) ), this, SLOT( slotUpdateData( K3bDivXDataGui* ) ));
+    connect( m_directories, SIGNAL( dataChanged( K3bDivXDataGui*) ), this, SLOT( slotUpdateData( K3bDivXDataGui* ) ));
+}
+
+void K3bDvdBaseTab::slotUpdateData( K3bDivXDataGui *dataGui ){
+    qDebug("(K3bDvdBaseTab) Update date"); //
+    dataGui->updateData( m_datas );
+    updateView();
+}
+
+void K3bDvdBaseTab::updateView(){
+    //m_avsettings->setLength( m_datas->getLength() );
+    m_info->updateData( m_datas );
+    m_avsettings->updateData( m_datas );
+    m_avextended->updateData( m_datas );
 }
 
 #include "k3bdvdbasetab.moc"

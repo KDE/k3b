@@ -41,4 +41,9 @@ void K3bDvdInfoExtend::setupGui(){
     m_mainLayout->setRowStretch( 5, 20 );
 }
 
+void K3bDvdInfoExtend::updateData( K3bDvdCodecData *data ){
+     K3bDvdInfo::updateData( data );
+}
+
+
 #include "k3bdvdinfoextend.moc"

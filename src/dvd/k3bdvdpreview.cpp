@@ -22,7 +22,7 @@
 
 K3bDvdPreview::K3bDvdPreview(QCanvas* c, QWidget *parent, const char *name ) : QCanvasView( c, parent,name) {
      can = c;
-     lineTop = new QCanvasLine( can );
+/*     lineTop = new QCanvasLine( can );
      lineTop->setPoints( 1, 1, width(), height() );
      QPen pen( Qt::black, 2 );
      lineTop->setPen( pen );
@@ -30,9 +30,9 @@ K3bDvdPreview::K3bDvdPreview(QCanvas* c, QWidget *parent, const char *name ) : Q
      lineTop->setY( 0 );
      lineTop->setZ( 55 );
      lineTop->show( );
-
+*/
     //setCanvas( canvas );
-    setBaseSize(300, 150 );
+    setBaseSize(800, 600 );
     //QCanvasPixmap *preview = new QCanvasPixmap( canvas
 }
 
@@ -41,6 +41,17 @@ K3bDvdPreview::~K3bDvdPreview(){
 
 void K3bDvdPreview::drawContents( QPainter* p ){
     can->resize( width(), height() );
+    //resize( 800, 600 );
+}
+
+void K3bDvdPreview::setPreviewPicture( QCanvasPixmap *p ){
+    can->resize( 800, 600 );
+    //resize( 800, 600 );
+    //can->resize( p->width(), p->height() );
+    QCanvasPixmapArray *a = new QCanvasPixmapArray();
+    a->setImage(0, p);
+    QCanvasSprite *sprite = new QCanvasSprite ( a, can );
+    sprite->show();
 }
 
 #include "k3bdvdpreview.moc"

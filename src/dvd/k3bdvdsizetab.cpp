@@ -53,4 +53,10 @@ void K3bDvdSizeTab::setupGui(){
 
 }
 
+void K3bDvdSizeTab::show(){
+    QWidget::show();
+    m_info->updateData( m_datas );
+    m_crop->initPreview( m_datas );
+}
+
 #include "k3bdvdsizetab.moc"

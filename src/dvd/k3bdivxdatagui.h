@@ -1,7 +1,7 @@
 /***************************************************************************
-                          k3bdvdcrop.h  -  description
+                          k3bdivxdatagui.h  -  description
                              -------------------
-    begin                : Tue Apr 2 2002
+    begin                : Sun Apr 21 2002
     copyright            : (C) 2002 by Sebastian Trueg
     email                : trueg@informatik.uni-freiburg.de
  ***************************************************************************/
@@ -15,51 +15,23 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef K3BDVDCROP_H
-#define K3BDVDCROP_H
+#ifndef K3BDIVXDATAGUI_H
+#define K3BDIVXDATAGUI_H
 
 #include <qwidget.h>
 #include <qgroupbox.h>
-class QRadioButton;
-class QCheckBox;
-class QSlider;
-class QCanvasView;
-class QCanvas;
-class QPainter;
-class QCanvasLine;
-class KIntSpinBox;
-class K3bDvdCodecData;
-class KProcess;
-class K3bDvdPreview;
 
+class K3bDvdCodecData;
 
 /**
   *@author Sebastian Trueg
   */
 
-class K3bDvdCrop : public QGroupBox  {
-   Q_OBJECT
-public: 
-    K3bDvdCrop(QWidget *parent=0, const char *name=0);
-    ~K3bDvdCrop();
-    void initPreview( K3bDvdCodecData*);
-protected:
-//   void drawContents( QPainter* p );
-private:
-    QRadioButton *m_buttonExactly;
-    QRadioButton *m_buttonFast;
-    QCheckBox *m_autoCrop;
-    KIntSpinBox *m_spinTop;
-    KIntSpinBox *m_spinBottom;
-    KIntSpinBox *m_spinLeft;
-    KIntSpinBox *m_spinRight;
-    QSlider *m_sliderPreview;
-
-    K3bDvdPreview *m_preview;
-    void setupGui();
-private slots:
-    void slotParseProcess( KProcess* p, char *buffer, int length);
-
+class K3bDivXDataGui : public QGroupBox  {
+public:
+    K3bDivXDataGui(QWidget *parent=0, const char *name=0);
+    ~K3bDivXDataGui();
+    virtual void updateData( K3bDvdCodecData *data ) = 0;
 };
 
 #endif

@@ -17,7 +17,7 @@
 
 #include "k3bdvdcrop.h"
 #include "k3bdvdpreview.h"
-
+#include "k3bdvdcodecdata.h"
 
 #include <qlabel.h>
 #include <qslider.h>
@@ -26,7 +26,7 @@
 #include <qradiobutton.h>
 #include <qlayout.h>
 #include <qframe.h>
-
+#include <qimage.h>
 #include <qcanvas.h>
 
 #include <kdialog.h>
@@ -34,6 +34,7 @@
 #include <klineedit.h>
 #include <kcombobox.h>
 #include <knuminput.h>
+#include <kprocess.h>
 
 K3bDvdCrop::K3bDvdCrop(QWidget *parent, const char *name ) : QGroupBox(parent,name) {
      setupGui();
@@ -50,8 +51,8 @@ void K3bDvdCrop::setupGui(){
     mainLayout->setMargin( KDialog::marginHint() );
 
     QCanvas *c = new QCanvas(30, 15);
-    c->setAdvancePeriod(30);
-    K3bDvdPreview *pre = new K3bDvdPreview( c, this );
+    //c->setAdvancePeriod(30);
+    m_preview = new K3bDvdPreview( c, this );
 
     m_sliderPreview = new QSlider( Horizontal,  this );
 
@@ -62,6 +63,7 @@ void K3bDvdCrop::setupGui(){
     modeGroup->insert( m_buttonExactly  );
 
     QGroupBox *groupCrop = new QGroupBox( this );
+
     groupCrop->setColumnLayout(0, Qt::Vertical );
     QGridLayout *cropLayout = new QGridLayout( groupCrop->layout() );
     cropLayout->setSpacing( KDialog::spacingHint() );
@@ -83,11 +85,35 @@ void K3bDvdCrop::setupGui(){
     cropLayout->addMultiCellWidget( m_spinBottom, 5, 5, 2, 2);
     cropLayout->addMultiCellWidget( m_spinRight, 4, 4, 3, 3);
 
-    mainLayout->addMultiCellWidget( pre, 0, 2, 0, 1);
+    mainLayout->addMultiCellWidget( m_preview, 0, 2, 0, 1);
     mainLayout->addMultiCellWidget( m_sliderPreview, 3, 3, 0, 1);
     mainLayout->addMultiCellWidget( modeGroup, 0, 0, 2, 2);
     mainLayout->addMultiCellWidget( groupCrop, 1, 1, 2, 2);
 
+}
+
+void K3bDvdCrop::initPreview( K3bDvdCodecData *data){
+     KShellProcess p; // = new KShellProcess;
+     p << "/usr/local/bin/transcode -i ";
+     p << data->getProjectDir() + "/vob";
+     qDebug("Projectdir: " + data->getProjectDir()+"/vob");
+     p << " -x vob -V -y ppm -w 1200 -a 0 -L 300000 -c 4-5";
+     p << "-o " + data->getProjectDir() + "/preview";
+     connect( &p, SIGNAL(receivedStdout(KProcess*, char*, int)),
+	       this, SLOT(slotParseProcess(KProcess*, char*, int)) );
+     connect( &p, SIGNAL(receivedStderr(KProcess*, char*, int)),
+	       this, SLOT(slotParseProcess(KProcess*, char*, int)) );
+     if( !p.start( KProcess::Block, KProcess::AllOutput ) ){
+         qDebug("Error process starting");
+     }
+     QCanvasPixmap *pix = new QCanvasPixmap( data->getProjectDir() + "/preview00000.ppm");
+     m_preview->setPreviewPicture( pix );
+
+}
+
+void K3bDvdCrop::slotParseProcess( KProcess* p, char *data, int len){
+    QString tmp = QString::fromLatin1( data, len );
+    qDebug( tmp );
 }
 
 #include "k3bdvdcrop.moc"

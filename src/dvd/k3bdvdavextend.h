@@ -18,7 +18,7 @@
 #ifndef K3BDVDAVEXTEND_H
 #define K3BDVDAVEXTEND_H
 
-#include <qgroupbox.h>
+#include "k3bdivxdatagui.h"
 
 class QWidget;
 class QCheckBox;
@@ -30,11 +30,12 @@ class KComboBox;
   *@author Sebastian Trueg
   */
 
-class K3bDvdAVExtend : public QGroupBox  {
+class K3bDvdAVExtend : public K3bDivXDataGui  {
    Q_OBJECT
 public: 
     K3bDvdAVExtend(QWidget *parent=0, const char *name=0);
     ~K3bDvdAVExtend();
+void updateData( K3bDvdCodecData *);
 private:
     QCheckBox *m_checkResample;
     KLineEdit *m_editKeyframes;

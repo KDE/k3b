@@ -24,6 +24,7 @@ class K3bDvdAVSet;
 class K3bDvdAVExtend;
 class K3bDvdCodecData;
 class K3bDvdInfo;
+class K3bDivXDataGui;
 
 /**
   *@author Sebastian Trueg
@@ -41,6 +42,9 @@ private:
     K3bDvdAVExtend *m_avextended;
     K3bDvdInfo *m_info;
     void setupGui();
+    void updateView();
+private slots:
+    void slotUpdateData( K3bDivXDataGui *dataGui );
 };
 
 #endif

@@ -58,14 +58,15 @@ void K3bDvdView::setupGui(){
 
     m_codingData = new K3bDvdCodecData();
 
-    m_baseTab = new K3bDvdBaseTab( m_codingData, gridBasic );
-    m_sizeTab = new K3bDvdSizeTab( m_codingData, gridSize );
+    m_baseTab = new K3bDvdBaseTab( m_codingData, gridBasic, "basetab" );
+    m_sizeTab = new K3bDvdSizeTab( m_codingData, gridSize, "sizetab");
     //mainTabPool->addTab( m_baseTab, i18n("Codec settings") );
     //mainTabPool->addTab( m_sizeTab, i18n("Re/Size settings") );
     //mainTabPool->show();
 
     basicLayout->addWidget( m_baseTab, 0,0 );
     sizeLayout->addWidget( m_sizeTab, 0,0 );
+
 }
 
 void K3bDvdView::slotUser1(){

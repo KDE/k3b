@@ -330,13 +330,13 @@ void K3bDvdRippingProcess::saveConfig(){
     }
     QTextStream t( &f );
     t << "<k3bDVDTitles>\n";
-    t << "    <title number=" << (*m_dvd).getTitleNumber() << ">\n";
+    t << "    <title number=\"" << (*m_dvd).getTitleNumber() << "\">\n";
     t << "        " << "<frames>" << (*m_dvd).getFrames() << "</frames>\n";
     t << "        " << "<fps>" << (*m_dvd).getFramerate() << "</fps>\n";
     t << "        " << "<time>" << (*m_dvd).getStrTime() << "</time>\n";
     t << "        " << "<audiogain>" << getAudioGain() << "</audiogain>\n";
-    t << "        " << "<aspectratio>" << (*m_dvd).getStrAspect() << "<aspectratio>\n";
-    t << "        " << "<width>" << (*m_dvd).getRes().width() << "</widht>\n";
+    t << "        " << "<aspectratio>" << (*m_dvd).getStrAspect() << "</aspectratio>\n";
+    t << "        " << "<width>" << (*m_dvd).getRes().width() << "</width>\n";
     t << "        " << "<height>" << (*m_dvd).getRes().height() << "</height>\n";
     t << "        " << "<chapters>" << (*m_dvd).getMaxChapters() << "</chapters>\n";
     QStringList *list=(*m_dvd).getAudioList();

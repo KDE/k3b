@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include "k3bdvdinfo.h"
+#include "k3bdvdcodecdata.h"
 #include <qlabel.h>
 #include <qslider.h>
 #include <qcheckbox.h>
@@ -63,5 +64,12 @@ void K3bDvdInfo::setupGui(){
     m_mainLayout->addMultiCellWidget( m_aspect, 3, 3, 1, 1);
     m_mainLayout->addItem( spacer, 0, 2);
 
+}
+
+void K3bDvdInfo::updateData( K3bDvdCodecData *data ){
+     m_frames->setText( data->getFrames() );
+     m_length->setText( data->getLength() );
+     m_size->setText( data->getSize() );
+     m_aspect->setText( data->getAspectRatio() );
 }
 

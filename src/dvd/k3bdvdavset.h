@@ -18,20 +18,24 @@
 #ifndef K3BDVDAVSET_H
 #define K3BDVDAVSET_H
 
-#include <qwidget.h>
-#include <qgroupbox.h>
+#include "k3bdivxdatagui.h"
 
 class KComboBox;
 class QRadioButton;
+class K3bDvdCodecData;
+class K3bDivXDataGui;
 /**
   *@author Sebastian Trueg
   */
 
-class K3bDvdAVSet : public QGroupBox  {
+class K3bDvdAVSet : public K3bDivXDataGui  {
    Q_OBJECT
 public: 
     K3bDvdAVSet( QWidget *parent=0, const char *name=0 );
     ~K3bDvdAVSet();
+    void updateData( K3bDvdCodecData *data);
+signals:
+    void dataChanged( K3bDivXDataGui *);
 private:
     KComboBox *m_comboCd;
     KComboBox *m_comboMp3;
@@ -40,7 +44,7 @@ private:
     QRadioButton *m_buttonOnePass;
     QRadioButton *m_buttonTwoPass;
 
-
+    int m_lengthSecs;
     void setupGui();
 };
 

@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include "k3bdvdavset.h"
+#include "k3bdvdcodecdata.h"
 
 #include <qlabel.h>
 #include <qlayout.h>
@@ -26,7 +27,7 @@
 #include <kdialog.h>
 #include <kcombobox.h>
 
-K3bDvdAVSet::K3bDvdAVSet(QWidget *parent, const char *name ) : QGroupBox( parent,name ) {
+K3bDvdAVSet::K3bDvdAVSet(QWidget *parent, const char *name ) : K3bDivXDataGui( parent,name ) {
      setupGui();
 }
 K3bDvdAVSet::~K3bDvdAVSet(){
@@ -78,6 +79,11 @@ void K3bDvdAVSet::setupGui(){
     mainLayout->addMultiCellWidget( modeGroup, 3, 3, 1, 2);
     mainLayout->addItem( spacer, 4, 1);
 
+}
+
+void K3bDvdAVSet::updateData( K3bDvdCodecData *data){
+    QTime t = data->getTime();
+    m_lengthSecs = t.hour()*3600 + t.minute()*60 + t.second();
 }
 
 #include "k3bdvdavset.moc"

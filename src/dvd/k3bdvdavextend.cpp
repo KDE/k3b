@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include "k3bdvdavextend.h"
+#include "k3bdvdcodecdata.h"
 
 #include <qlabel.h>
 #include <qslider.h>
@@ -28,7 +29,7 @@
 #include <klineedit.h>
 #include <kcombobox.h>
 
-K3bDvdAVExtend::K3bDvdAVExtend(QWidget *parent, const char *name ) : QGroupBox(parent,name) {
+K3bDvdAVExtend::K3bDvdAVExtend(QWidget *parent, const char *name ) : K3bDivXDataGui(parent,name) {
      setupGui();
 }
 
@@ -52,6 +53,9 @@ void K3bDvdAVExtend::setupGui(){
     m_checkResample = new QCheckBox( i18n( "Resample to 44.1 kHz" ), this );
     m_checkYuv = new QCheckBox( i18n( "Use YUV colorspace." ), this );
     m_comboDeinterlace = new KComboBox( this );
+    m_comboDeinterlace->insertItem("0 - Fast");
+    m_comboDeinterlace->insertItem("1 - Smart");
+    m_comboDeinterlace->insertItem("2 - Encoder based");
     m_comboLanguage = new KComboBox( this );
     m_editAudioGain = new KLineEdit( this );
     m_editKeyframes = new KLineEdit( this );
@@ -74,5 +78,10 @@ void K3bDvdAVExtend::setupGui(){
     mainLayout->addMultiCellWidget( m_editAudioGain, 7, 7, 1, 1);
 
 }
+void K3bDvdAVExtend::updateData( K3bDvdCodecData *data ){
+    m_comboLanguage->clear();
+    m_comboLanguage->insertStringList( data->getAudioLanguages() );
+}
+
 
 #include "k3bdvdavextend.moc"

@@ -18,20 +18,26 @@
 #ifndef K3BDVDDIRECTORIES_H
 #define K3BDVDDIRECTORIES_H
 
-#include <qgroupbox.h>
+#include "k3bdivxdatagui.h"
+#include <qstring.h>
 
 class KLineEdit;
 class QPushButton;
+class K3bDvdCodecData;
+class K3bDivXDataGui;
 
 /**
   *@author Sebastian Trueg
   */
 
-class K3bDvdDirectories : public QGroupBox  {
+class K3bDvdDirectories : public K3bDivXDataGui  {
     Q_OBJECT
 public: 
-	K3bDvdDirectories( QWidget *parent=0, const char *name=0);
-	~K3bDvdDirectories();
+    K3bDvdDirectories( QWidget *parent=0, const char *name=0);
+    ~K3bDvdDirectories();
+    void updateData( K3bDvdCodecData *data );
+signals:
+    void dataChanged( K3bDivXDataGui *);
 private:
     KLineEdit *m_editVideoPath;
     QPushButton *m_buttonVideoDir;
@@ -42,6 +48,10 @@ private:
 
     void setupGui();
 
+private slots:
+    void slotAviClicked();
+    void slotAudioClicked();
+    void slotVideoClicked();
 };
 
 #endif

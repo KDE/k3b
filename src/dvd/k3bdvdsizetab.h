@@ -34,6 +34,7 @@ class K3bDvdSizeTab : public QWidget  {
 public: 
     K3bDvdSizeTab( K3bDvdCodecData *data, QWidget *parent=0, const char *name=0);
     ~K3bDvdSizeTab();
+    void show();
 private:
     K3bDvdCodecData *m_datas;
     K3bDvdCrop *m_crop;

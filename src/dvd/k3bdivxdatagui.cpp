@@ -1,7 +1,7 @@
 /***************************************************************************
-                          k3bdvdpreview.h  -  description
+                          k3bdivxdatagui.cpp  -  description
                              -------------------
-    begin                : Tue Apr 2 2002
+    begin                : Sun Apr 21 2002
     copyright            : (C) 2002 by Sebastian Trueg
     email                : trueg@informatik.uni-freiburg.de
  ***************************************************************************/
@@ -15,35 +15,11 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef K3BDVDPREVIEW_H
-#define K3BDVDPREVIEW_H
+#include "k3bdivxdatagui.h"
 
-#include <qwidget.h>
-#include <qcanvas.h>
+K3bDivXDataGui::K3bDivXDataGui(QWidget *parent, const char *name ) : QGroupBox(parent,name) {
+}
 
-class QCanvasLine;
-class QCanvas;
-class QCanvasPixmap;
-class QPainter;
 
-/**
-  *@author Sebastian Trueg
-  */
-
-class K3bDvdPreview : public QCanvasView  {
-   Q_OBJECT
-public: 
-    K3bDvdPreview(QCanvas* c, QWidget *parent=0, const char *name=0);
-    ~K3bDvdPreview();
-    void setPreviewPicture( QCanvasPixmap *p );
-
-protected:
-   void drawContents( QPainter* p );
-
-private:
-    QCanvasLine *lineTop;
-    QCanvas *can;
-
-};
-
-#endif
+K3bDivXDataGui::~K3bDivXDataGui(){
+}

@@ -1,7 +1,7 @@
 /***************************************************************************
-                          k3bdvddoc.h  -  description
+                          k3bdivxprojectparser.h  -  description
                              -------------------
-    begin                : Sun Mar 31 2002
+    begin                : Sun Apr 21 2002
     copyright            : (C) 2002 by Sebastian Trueg
     email                : trueg@informatik.uni-freiburg.de
  ***************************************************************************/
@@ -15,41 +15,30 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef K3BDVDDOC_H
-#define K3BDVDDOC_H
+#ifndef K3BDIVXPROJECTPARSER_H
+#define K3BDIVXPROJECTPARSER_H
 
-#include "../k3bdoc.h"
-class QObject;
-class K3bView;
+#include <qxml.h>
+#include <qstring.h>
 
+class K3bDvdCodecData;
 /**
   *@author Sebastian Trueg
   */
 
-class K3bDvdDoc : public K3bDoc  {
-     Q_OBJECT
-public:
-    K3bDvdDoc( QObject* );
-    ~K3bDvdDoc();
-    /** reimplemented from K3bDoc */
-    K3bView* newView( QWidget* parent );
-    /** reimplemented from K3bDoc */
-    void addView(K3bView* view);
-    /** reimplemented from K3bDoc */
-    bool newDocument();
+class K3bDivXProjectParser : public QXmlDefaultHandler  {
+public: 
+    K3bDivXProjectParser( K3bDvdCodecData* );
+    ~K3bDivXProjectParser();
+    bool startDocument();
+    bool startElement( const QString&, const QString&, const QString&, const QXmlAttributes& );
+    bool endElement( const QString&, const QString&, const QString& );
+    bool characters( const QString& content );
 
-    /** reimplemented from K3bDoc */
-    long unsigned int size() const { return 0; }
-    long unsigned int length() const { return 0; }
-    K3bBurnJob* newBurnJob() { return 0; }
-    void addUrl( const KURL & ) {};
-    void addUrls( const KURL::List& ) {};
-    bool loadDocumentData( QDomDocument* ) { return false; }
-    bool saveDocumentData( QDomDocument* ) { return false; }
-    QString documentType() const { return "k3b_dvd_project"; }
-
- protected:
-    void loadDefaultSettings();
+private:
+    K3bDvdCodecData *m_datas;
+    int m_level;
+    QString m_contentTag;
 };
 
 #endif
