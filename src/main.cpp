@@ -45,7 +45,7 @@ static const char *description = I18N_NOOP("A CD and DVD burning application");
 
 static KCmdLineOptions options[] =
     {
-        { "+[File(s)]", I18N_NOOP("file(s) to open"), 0 },
+        { "+[URL(s)]", I18N_NOOP("file(s) to open"), 0 },
         { "datacd", I18N_NOOP("Create a new data CD project and add all given files"), 0 },
         { "audiocd", I18N_NOOP("Create a new audio CD project and add all given files"), 0 },
         { "videocd", I18N_NOOP("Create a new video CD project and add all given files"), 0 },

@@ -1,7 +1,7 @@
 # KDE Config File  
 [Desktop Entry]
 Type=Application
-Exec=k3b --cdimage %f
+Exec=k3b --cdimage %U
 Icon=k3b
 Terminal=0
 Name=K3b
