@@ -18,6 +18,7 @@
 #include "k3bvcdburndialog.h"
 #include "../k3b.h"
 #include "k3bvcddoc.h"
+#include "k3bvcdoptions.h"
 #include "../device/k3bdevice.h"
 #include "../k3bwriterselectionwidget.h"
 #include "../k3btempdirselectionwidget.h"
@@ -43,6 +44,7 @@
 #include <qstringlist.h>
 #include <qpoint.h>
 #include <qtabwidget.h>
+#include <qfileinfo.h>
 
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -53,6 +55,9 @@
 K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char *name, bool modal )
   : K3bProjectBurnDialog( _doc, parent, name, modal )
 {
+
+  m_vcdDoc = _doc;
+  
   QTabWidget* tab = new QTabWidget( k3bMainWidget() );
   QFrame* f1 = new QFrame( tab );
   QFrame* f2 = new QFrame( tab );
@@ -69,9 +74,23 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
   // connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_tempDirSelectionWidget, SLOT(setDisabled(bool)) );
   // connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkRemoveBufferFiles, SLOT(setDisabled(bool)) );
 
+  QFileInfo fi( m_tempDirSelectionWidget->tempPath() );
+  QString path;
+
+  if( fi.isFile() )
+    path = fi.dirPath();
+  else
+    path = fi.filePath();
+
+  if( path[path.length()-1] != '/' )
+    path.append("/");
+
+  path.append( vcdDoc()->vcdOptions()->volumeId() + ".bin" );
+  m_tempDirSelectionWidget->setTempPath( path );
+
   m_tempDirSelectionWidget->setNeededSize( doc()->size() );
 
-  loadDefaults();
+  // loadDefaults();
   readSettings();
 }
 
@@ -198,12 +217,12 @@ void K3bVcdBurnDialog::setupLabelTab( QFrame* frame )
 
   m_checkApplicationId = new QCheckBox( i18n( "Write Application Id" ), frame, "m_checkApplicationId" );
 
-  QLabel* labelVolume = new QLabel( i18n( "ISO &Volume Label:" ), frame, "labelVolume" );
+  QLabel* labelVolumeId = new QLabel( i18n( "&Volume Label:" ), frame, "labelVolumeId" );
   QLabel* labelAlbumId = new QLabel( i18n( "&Album Id:" ), frame, "labelAlbumId" );
   QLabel* labelVolumeCount = new QLabel( i18n( "Number of CDs in &Album:" ), frame, "labelVolumeCount" );
   QLabel* labelVolumeNumber = new QLabel( i18n( "CD is &Number:" ), frame, "labelVolumeNumber" );
 
-  m_editVolume = new QLineEdit( frame, "m_editDisc_id" );
+  m_editVolumeId = new QLineEdit( frame, "m_editDisc_id" );
   m_editAlbumId = new QLineEdit( frame, "m_editAlbumId" );
   m_spinVolumeCount = new QSpinBox( frame, "m_editVolumeCount" );
   m_spinVolumeNumber = new QSpinBox( frame, "m_editVolumeNumber" );
@@ -214,8 +233,8 @@ void K3bVcdBurnDialog::setupLabelTab( QFrame* frame )
   mainGrid->addMultiCellWidget( m_checkApplicationId, 0, 0, 0, 1 );
   mainGrid->addMultiCellWidget( line, 1, 1, 0, 1 );
 
-  mainGrid->addWidget( labelVolume, 2, 0 );
-  mainGrid->addWidget( m_editVolume, 2, 1 );
+  mainGrid->addWidget( labelVolumeId, 2, 0 );
+  mainGrid->addWidget( m_editVolumeId, 2, 1 );
   mainGrid->addWidget( labelAlbumId, 3, 0 );
   mainGrid->addWidget( m_editAlbumId, 3, 1 );
   mainGrid->addWidget( labelVolumeCount, 4, 0 );
@@ -227,13 +246,13 @@ void K3bVcdBurnDialog::setupLabelTab( QFrame* frame )
   mainGrid->setRowStretch( 5, 1 );
 
   // buddies
-  labelVolume->setBuddy( m_editVolume );
+  labelVolumeId->setBuddy( m_editVolumeId );
   labelAlbumId->setBuddy( m_editAlbumId );
   labelVolumeCount->setBuddy( m_spinVolumeCount );
   labelVolumeNumber->setBuddy( m_spinVolumeNumber );
 
   // tab order
-  setTabOrder( m_editVolume, m_editAlbumId);
+  setTabOrder( m_editVolumeId, m_editAlbumId);
   setTabOrder( m_editAlbumId, m_spinVolumeCount );
   setTabOrder( m_spinVolumeCount, m_spinVolumeNumber );
 
@@ -242,11 +261,24 @@ void K3bVcdBurnDialog::setupLabelTab( QFrame* frame )
 
 void K3bVcdBurnDialog::slotOk()
 {
-  // check if enough space in tempdir if not on-the-fly
-  if( doc()->size()/1024 > m_tempDirSelectionWidget->freeTempSpace() )
-    KMessageBox::sorry( this, i18n("Not enough space in temporary directory.") );
-  else
-    K3bProjectBurnDialog::slotOk();
+  // check if enough space in tempdir
+  if( doc()->size()/1024 > m_tempDirSelectionWidget->freeTempSpace() ) {
+    KMessageBox::sorry( this, i18n("Not enough space in temporary directory. Either change the directory or select on-the-fly burning.") );
+    return;
+  }
+  else {
+    QFileInfo fi( m_tempDirSelectionWidget->tempPath() );
+    if( fi.isDir() )
+      m_tempDirSelectionWidget->setTempPath( fi.filePath() + "/image.bin" );
+
+    if( QFile::exists( m_tempDirSelectionWidget->tempPath() ) ) {
+      if( KMessageBox::questionYesNo( this, i18n("Do you want to overwrite %1").arg(m_tempDirSelectionWidget->tempPath()), i18n("File exists...") )
+        != KMessageBox::Yes )
+      return;
+    }
+  }
+
+  K3bProjectBurnDialog::slotOk();
 }
 
 
@@ -259,8 +291,14 @@ void K3bVcdBurnDialog::loadDefaults()
   m_checkRemoveBufferFiles->setChecked( true );
 
   m_checkApplicationId->setChecked( true );
-  m_editVolume->setText( "VIDEOCD" );
-  m_checkVcd20->setChecked( true );
+
+  m_editVolumeId->setText( vcdDoc()->vcdOptions()->volumeId() );
+  m_editAlbumId->setText( vcdDoc()->vcdOptions()->albumId() );
+
+  // TODO: for the future
+  // m_editPublisher->setText( o->publisher() );
+  // m_editPreparer->setText( o->preparer() );
+  // m_editSystem->setText( o->systemId() );
   
 }
 
@@ -279,6 +317,16 @@ void K3bVcdBurnDialog::saveSettings()
 
   // -- saving current device --------------------------------------
   doc()->setBurner( m_writerSelectionWidget->writerDevice() );
+
+  // save image file path (.bin)
+  ((K3bVcdDoc*)doc())->setVcdImage( m_tempDirSelectionWidget->tempPath() );
+  // save cue file path (.cue)
+  // ((K3bVcdDoc*)doc())->setVcdCueFile( "" );
+
+  
+  // TODO: save vcdType
+  vcdDoc()->vcdOptions()->setAlbumId( m_editAlbumId->text() );
+  
 }
 
 
@@ -289,10 +337,31 @@ void K3bVcdBurnDialog::readSettings()
   m_checkSimulate->setChecked( doc()->dummy() );
   // m_checkRemoveBufferFiles->setChecked( ((K3bVcdDoc*)doc())->removeBufferFiles() );
 
- 
+  // read vcdType
+  switch( ((K3bVcdDoc*)doc())->vcdType() ) {
+  case K3bVcdDoc::VCD11:
+      m_checkVcd11->setChecked( true );
+    break;
+  case K3bVcdDoc::VCD20:
+      m_checkVcd20->setChecked( true );
+    break;
+  case K3bVcdDoc::SVCD10:
+      m_checkSvcd10->setChecked( true );
+    break;
+  // case K3bVcdDoc::HQVCD:
+  //   m_checkHqVcd->setChecked( true );
+  //  break;
+  default:
+      m_checkVcd20->setChecked( true );
+    break;
+  }
+
+  m_editVolumeId->setText( vcdDoc()->vcdOptions()->volumeId() );
+  m_editAlbumId->setText( vcdDoc()->vcdOptions()->albumId() );
+
+
   K3bProjectBurnDialog::readSettings();
 }
-
 
 void K3bVcdBurnDialog::loadUserDefaults()
 {

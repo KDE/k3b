@@ -35,7 +35,7 @@ class QToolButton;
 class K3bWriterSelectionWidget;
 class K3bTempDirSelectionWidget;
 class K3bVcdDoc;
-
+class K3bVcdOptions;
 
 class K3bVcdBurnDialog : public K3bProjectBurnDialog
 {
@@ -45,6 +45,8 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
    K3bVcdBurnDialog(K3bVcdDoc* doc, QWidget *parent=0, const char *name=0, bool modal = true );
    ~K3bVcdBurnDialog();
 
+ K3bVcdDoc* vcdDoc() const {return m_vcdDoc;};
+ 
  protected:
    void setupBurnTab( QFrame* frame );
    void setupVideoCdTab( QFrame* frame );
@@ -77,19 +79,23 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
    // the video-label-tab
    // -----------------------------------------------------------
 
-   QLineEdit* m_editVolume;
+   QLineEdit* m_editVolumeId;
    QLineEdit* m_editAlbumId;
 
    QSpinBox* m_spinVolumeCount;
    QSpinBox* m_spinVolumeNumber;
    // -----------------------------------------------------------
 
+ private:
+  K3bVcdDoc* m_vcdDoc;
+  
  protected slots:
    void slotOk();
 
    void loadDefaults();
    void loadUserDefaults();
    void saveUserDefaults();
+
 };
 
 #endif
