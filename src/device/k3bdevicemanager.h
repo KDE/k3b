@@ -76,7 +76,7 @@ class K3bDeviceManager : public QObject
    * by the deviceManager.
    */
   K3bDevice* addDevice( const QString& );
-
+  
  private slots:
   void slotCollectStdout( KProcess*, char* data, int len );
 
@@ -88,8 +88,9 @@ class K3bDeviceManager : public QObject
    * does not make sense.
    **/
   K3bDeviceManager();
-
-  K3bDevice::interface determineInterfaceType(struct stat);
+  
+  bool testForCdrom( const QString& );
+  K3bDevice::interface determineInterfaceType(const QString&);
   bool determineBusIdLun( const QString &dev, int& bus, int& id, int& lun );
   void determineCapabilities(K3bDevice *dev);
   QString resolveSymLink( const QString& path );
