@@ -141,7 +141,7 @@ void K3bCdView::showCdView( const K3bDiskInfo& info )
   for( K3bToc::const_iterator it = info.toc.begin(); it != info.toc.end(); ++it ) {
     (void)new KListViewItem( m_listView, 
 			     QString::number(index).rightJustify( 2, '0' ),
-			     i18n("Track%1").arg(index), "", 
+			     "", i18n("Track%1").arg(index),
 			     K3b::framesToString( (*it).length(), false ),
 			     KIO::convertSize( (*it).length() * 2352 ),
 			     (*it).type() == K3bTrack::AUDIO ? i18n("Audio") : i18n("Data") );
