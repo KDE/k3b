@@ -580,7 +580,7 @@ void K3bAudioPlayer::slotUpdateFilename()
 void K3bAudioPlayer::slotUpdateDisplay()
 {
   if( m_currentItem ) {
-    // we need to set the length here because sometimes it is not ready in the beginning (??)
+    // we need to set the length here because sometimes it is not ready in the beginning (?)
     if( !m_bLengthReady && length() > 0 ) {
       slotUpdateLength( length() );
       m_seekSlider->setMaxValue( length() );
