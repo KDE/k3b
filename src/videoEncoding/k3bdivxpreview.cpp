@@ -135,6 +135,7 @@ void K3bDivxPreview::resetView(){
 void K3bDivxPreview::updatePreviewPicture( const QString &image ){
     delete m_sprite;
     QValueList<QCanvasItem*> cl = can->allItems();
+    kdDebug() << "(K3bDivxPreview) CanvasItems: " << QString::number( cl.count() ) << endl;
     QImage i( image );
     QImage preview = i.scale( 720/m_imageScale, 576/m_imageScale );
     m_previewPixmap = new QCanvasPixmap( preview );
