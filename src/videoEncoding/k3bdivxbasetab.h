@@ -34,6 +34,8 @@ class K3bDivxBaseTab : public QWidget  {
 public:
     K3bDivxBaseTab( K3bDivxCodecData *data, QWidget *parent=0, const char *name=0);
     ~K3bDivxBaseTab();
+public slots:
+    void slotUpdateView(  );
 signals:
     void projectLoaded();
 private:
@@ -43,8 +45,6 @@ private:
     K3bDivxAVExtend *m_avextended;
     K3bDivxInfo *m_info;
     void setupGui();
-private slots:
-    void slotUpdateView(  );
 };
 
 #endif
