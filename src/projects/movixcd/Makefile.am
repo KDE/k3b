@@ -4,6 +4,6 @@ METASOURCES = AUTO
 
 noinst_LTLIBRARIES = libmovix.la
 
-libmovix_la_SOURCES = base_k3bmovixoptionswidget.ui k3bmovixlistview.cpp k3bmovixdoc.cpp k3bmovixview.cpp k3bmovixburndialog.cpp k3bmovixjob.cpp k3bmovixinstallation.cpp k3bmovixoptionswidget.cpp k3bmovixfileitem.cpp k3bmovixdocpreparer.cpp
+libmovix_la_SOURCES = base_k3bmovixoptionswidget.ui k3bmovixprogram.cpp k3bmovixlistview.cpp k3bmovixdoc.cpp k3bmovixview.cpp k3bmovixburndialog.cpp k3bmovixjob.cpp k3bmovixoptionswidget.cpp k3bmovixfileitem.cpp k3bmovixdocpreparer.cpp
 
 include_HEADERS = k3bmovixdoc.h k3bmovixjob.h k3bmovixview.h k3bmovixfileitem.h

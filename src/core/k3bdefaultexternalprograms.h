@@ -91,17 +91,6 @@ class K3bTranscodeProgram : public K3bExternalProgram
 };
 
 
-class K3bEMovixProgram : public K3bExternalProgram
-{
- public:
-  K3bEMovixProgram();
-
-  bool scan( const QString& );
-
-  bool supportsUserParameters() const { return false; }
-};
-
-
 class K3bVcdbuilderProgram : public K3bExternalProgram
 {
  public:

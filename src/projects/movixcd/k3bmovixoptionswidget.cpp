@@ -16,7 +16,7 @@
 
 #include "k3bmovixoptionswidget.h"
 #include "k3bmovixdoc.h"
-#include "k3bmovixinstallation.h"
+#include "k3bmovixprogram.h"
 
 #include <kcombobox.h>
 #include <klocale.h>
@@ -39,11 +39,11 @@ K3bMovixOptionsWidget::~K3bMovixOptionsWidget()
 }
 
 
-void K3bMovixOptionsWidget::init( K3bMovixInstallation* installation )
+void K3bMovixOptionsWidget::init( const K3bMovixBin* bin )
 {
-  m_comboSubtitleFontset->insertStringList( installation->supportedSubtitleFonts() );
-  m_comboBootMessageLanguage->insertStringList( installation->supportedLanguages() );
-  m_comboDefaultBootLabel->insertStringList( installation->supportedBootLabels() );
+  m_comboSubtitleFontset->insertStringList( bin->supportedSubtitleFonts() );
+  m_comboBootMessageLanguage->insertStringList( bin->supportedLanguages() );
+  m_comboDefaultBootLabel->insertStringList( bin->supportedBootLabels() );
 }
 
 

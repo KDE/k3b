@@ -1197,7 +1197,7 @@ void K3bMainWindow::slotWriteCdImage()
 
 void K3bMainWindow::slotWriteDvdIsoImage()
 {
-  K3bIsoImageWritingDialog d( true, this );
+  K3bIsoImageWritingDialog d( this );
   d.exec();
 }
 

@@ -83,11 +83,7 @@ int K3bAudioTrack::index() const
 
 void K3bAudioTrack::setPregap( const K3b::Msf& p )
 {
-  // red book needs a pregap for the first track of at last 150 frames
-  if( (index() == 0) && (p < 150) )
-    m_pregap = 150;
-  else
-    m_pregap = p; 
+  m_pregap = p; 
 }
 
 

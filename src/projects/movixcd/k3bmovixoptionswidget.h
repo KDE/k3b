@@ -20,7 +20,7 @@
 #include "base_k3bmovixoptionswidget.h"
 
 class K3bMovixDoc;
-class K3bMovixInstallation;
+class K3bMovixBin;
 class KConfig;
 
 
@@ -33,7 +33,7 @@ class K3bMovixOptionsWidget : public base_K3bMovixOptionsWidget
   ~K3bMovixOptionsWidget();
 
  public slots:
-  void init( K3bMovixInstallation* );
+  void init( const K3bMovixBin* );
   void readSettings( K3bMovixDoc* );
   void saveSettings( K3bMovixDoc* );
   void loadConfig( KConfig* c );

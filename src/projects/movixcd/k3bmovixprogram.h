@@ -13,47 +13,52 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#ifndef _K3B_MOVIX_PROGRAM_H_
+#define _K3B_MOVIX_PROGRAM_H_
 
-#ifndef _K3B_MOVIX_INSTALLTION_H_
-#define _K3B_MOVIX_INSTALLTION_H_
+#include <k3bexternalbinmanager.h>
 
-#include <qstringlist.h>
 
-class K3bExternalBin;
-
-class K3bMovixInstallation
+class K3bMovixBin : public K3bExternalBin
 {
  public:
-  ~K3bMovixInstallation();
+  K3bMovixBin( K3bExternalProgram* p )
+    : K3bExternalBin( p ) {
+  }
 
-  /** path to the eMovix installation */
-  const QString& path() const { return m_movixPath; }
   const QStringList& supportedBootLabels() const { return m_supportedBootLabels; }
   const QStringList& supportedSubtitleFonts() const { return m_supportedSubtitleFonts; }
   const QStringList& supportedLanguages() const { return m_supportedLanguages; }
+  const QStringList& movixFiles() const { return m_movixFiles; }
+  const QStringList& isolinuxFiles() const { return m_isolinuxFiles; }
 
   /** returnes empty string if font was not found */
   QString subtitleFontDir( const QString& font ) const;
   /** returnes empty string if lang was not found */
   QString languageDir( const QString& lang ) const;
 
-  /**
-   * returns 0 if not every necessary files could be found
-   */
-  static K3bMovixInstallation* probeInstallation( const K3bExternalBin* );
-
-  const QStringList& movixFiles();
-  static QStringList isolinuxFiles();
-
  private:
-  K3bMovixInstallation( const K3bExternalBin* );
-
-  const K3bExternalBin* m_bin;
   QString m_movixPath;
   QStringList m_movixFiles;
+  QStringList m_isolinuxFiles;
   QStringList m_supportedBootLabels;
   QStringList m_supportedSubtitleFonts;
   QStringList m_supportedLanguages;
+
+  friend class K3bMovixProgram;
 };
+
+
+class K3bMovixProgram : public K3bExternalProgram
+{
+ public:
+  K3bMovixProgram();
+
+  bool scan( const QString& );
+
+  bool supportsUserParameters() const { return false; }
+};
+
+
 
 #endif

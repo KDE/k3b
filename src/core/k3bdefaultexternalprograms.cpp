@@ -56,7 +56,6 @@ void K3b::addDefaultPrograms( K3bExternalBinManager* m )
   m->addProgram( new K3bMkisofsProgram() );
   m->addProgram( new K3bReadcdProgram() );
   m->addProgram( new K3bCdrdaoProgram() );
-  m->addProgram( new K3bEMovixProgram() );
   m->addProgram( new K3bNormalizeProgram() );
   m->addProgram( new K3bGrowisofsProgram() );
   m->addProgram( new K3bDvdformatProgram() );
@@ -582,77 +581,6 @@ bool K3bTranscodeProgram::scan( const QString& p )
   return true;
 }
 
-
-K3bEMovixProgram::K3bEMovixProgram()
-  : K3bExternalProgram( "eMovix" )
-{
-}
-
-bool K3bEMovixProgram::scan( const QString& p )
-{
-  if( p.isEmpty() )
-    return false;
-
-  QString path = p;
-  if( path[path.length()-1] != '/' )
-    path.append("/");
-
-  // first test if we have a version info (eMovix >= 0.8.0pre3)
-  if( !QFile::exists( path + "movix-version" ) )
-    return false;
-
-  K3bExternalBin* bin = 0;
-
-  // probe version
-  KProcess vp;
-  vp << path + "movix-version";
-  K3bProcess::OutputCollector out( &vp );
-  if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
-    // movix-version just gives us the version number on stdout
-    if( !out.output().isEmpty() ) {
-      bin = new K3bExternalBin( this );
-      bin->version = out.output().stripWhiteSpace();
-    }
-  }
-  else {
-    kdDebug() << "(K3bEMovixProgram) could not start " << path << "movix-version" << endl;
-    return false;
-  }
-
-
-  // now search for the config and the files
-  if( !QFile::exists( path + "movix-conf" ) ) {
-    delete bin;
-    return false;
-  }
-
-  KProcess cp;
-  cp << path + "movix-conf";
-  out.setProcess( &cp );
-  if( cp.start( KProcess::Block, KProcess::AllOutput ) ) {
-    // now search the needed files in the given dir
-    if( out.output().isEmpty() ) {
-      kdDebug() << "(K3bEMovixProgram) no eMovix config info" << endl;
-      delete bin;
-      return false;
-    }
-
-    // we save the path to all the movix scripts.
-    bin->path = path;
-
-    // check if we have a version of eMovix which contains the movix-files script
-    if( QFile::exists( path + "movix-files" ) )
-      bin->addFeature( "files" );
-
-    addBin(bin);
-    return true;
-  }
-  else {
-    kdDebug() << "(K3bExternalBinManager) could not start " << path << endl;
-    delete bin;
-    return false;
-  }
-}
 
 
 K3bVcdbuilderProgram::K3bVcdbuilderProgram( const QString& p )

@@ -471,7 +471,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
 	  // so we just use the track sizes and do a bit of math...
 	  //
 
-	  if( (int)d->tracks.count() > m_currentTrack-1 &&
+	  if( d->tracks.count() > m_currentTrack-1 &&
 	      size > 0 ) {
 	    double convV = (double)d->tracks[m_currentTrack-1].size/(double)size;
 	    made = (int)((double)made * convV);
@@ -574,7 +574,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   else if( line.startsWith( "Starting new" ) ) {
     m_totalTracksParsed = true;
     if( m_currentTrack > 0 ) {// nothing has been written at the start of track 1
-      if( (int)d->tracks.count() > m_currentTrack-1 )
+      if( d->tracks.count() > m_currentTrack-1 )
 	m_alreadyWritten += d->tracks[m_currentTrack-1].size;
       else
 	kdError() << "(K3bCdrecordWriter) Did not parse all tracks sizes!" << endl;

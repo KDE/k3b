@@ -32,6 +32,7 @@
 #include <k3bpluginmanager.h>
 #include <k3bthememanager.h>
 #include <k3bmsf.h>
+#include <k3bmovixprogram.h>
 
 #include <ktip.h>
 #include <klocale.h>
@@ -87,6 +88,12 @@ void K3bApplication::init()
   // they might add external bins
   K3bPluginManager* pluginManager = new K3bPluginManager( this );
   pluginManager->loadAll();
+
+  //
+  // The eMovix program is a special case which is not part of
+  // the default programs handled by K3bCore
+  //
+  m_core->externalBinManager()->addProgram( new K3bMovixProgram() );
 
   m_core->init();
 

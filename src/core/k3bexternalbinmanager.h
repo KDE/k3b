@@ -35,6 +35,7 @@ class K3bExternalBin
 {
  public:
   K3bExternalBin( K3bExternalProgram* );
+  virtual ~K3bExternalBin() {}
 
   K3bVersion version;
   QString path;

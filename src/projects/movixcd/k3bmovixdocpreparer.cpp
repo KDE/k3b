@@ -15,7 +15,7 @@
 
 #include "k3bmovixdocpreparer.h"
 #include "k3bmovixdoc.h"
-#include "k3bmovixinstallation.h"
+#include "k3bmovixprogram.h"
 #include "k3bmovixfileitem.h"
 
 
@@ -40,7 +40,6 @@ class K3bMovixDocPreparer::Private
 public:
   Private()
    : doc(0),
-     installation(0),
      playlistFile(0),
      isolinuxConfigFile(0),
      movixRcFile(0),
@@ -52,7 +51,7 @@ public:
   }
 
   K3bMovixDoc* doc;
-  K3bMovixInstallation* installation;
+  const K3bMovixBin* eMovixBin;
 
   KTempFile* playlistFile;
   KTempFile* isolinuxConfigFile;
@@ -137,14 +136,11 @@ void K3bMovixDocPreparer::removeMovixStructures()
   d->mplayerDir = 0;
   d->playlistFileItem = 0;
 
-  delete d->installation;
-
   // remove all the temp files
   delete d->playlistFile;
   delete d->isolinuxConfigFile;
   delete d->movixRcFile;
 
-  d->installation = 0;
   d->playlistFile = 0;
   d->isolinuxConfigFile = 0;
   d->movixRcFile = 0;
@@ -195,7 +191,7 @@ bool K3bMovixDocPreparer::writeIsolinuxConfigFile()
 
     // now open the default isolinux.cfg and copy everything except the first line which contains
     // the default boot label
-    QFile f( d->installation->path() + "/isolinux/isolinux.cfg" );
+    QFile f( d->eMovixBin->path + "/isolinux/isolinux.cfg" );
     if( f.open( IO_ReadOnly ) ) {
 
       QTextStream isolinuxConfigOrig( &f );
@@ -260,10 +256,8 @@ bool K3bMovixDocPreparer::writeMovixRcFile()
 
 bool K3bMovixDocPreparer::addMovixFiles()
 {
-  delete d->installation;
-
-  d->installation = K3bMovixInstallation::probeInstallation( k3bcore->externalBinManager()->binObject("eMovix") );
-  if( d->installation ) {
+  d->eMovixBin = dynamic_cast<const K3bMovixBin*>( k3bcore->externalBinManager()->binObject("eMovix") );
+  if( d->eMovixBin ) {
 
     // first of all we create the directories
     d->isolinuxDir = new K3bDirItem( "isolinux", d->doc, d->doc->root() );
@@ -271,10 +265,10 @@ bool K3bMovixDocPreparer::addMovixFiles()
     K3bDirItem* kernelDir = d->doc->addEmptyDir( "kernel", d->isolinuxDir );
 
     // add the linux kernel
-    (void)new K3bFileItem( d->installation->path() + "/isolinux/kernel/vmlinuz", d->doc, kernelDir );
+    (void)new K3bFileItem( d->eMovixBin->path + "/isolinux/kernel/vmlinuz", d->doc, kernelDir );
 
     // add the boot image
-    K3bBootItem* bootItem = d->doc->createBootItem( d->installation->path() + "/isolinux/isolinux.bin",
+    K3bBootItem* bootItem = d->doc->createBootItem( d->eMovixBin->path + "/isolinux/isolinux.bin",
 						    d->isolinuxDir );
     bootItem->setImageType( K3bBootItem::NONE );
     bootItem->setLoadSize( 4 );
@@ -291,25 +285,25 @@ bool K3bMovixDocPreparer::addMovixFiles()
     // the following sucks! Redesign it!
 
     // add all the isolinux files
-    QStringList isolinuxFiles = d->installation->isolinuxFiles();
+    QStringList isolinuxFiles = d->eMovixBin->isolinuxFiles();
     isolinuxFiles.remove( "isolinux.bin" );
     isolinuxFiles.remove( "isolinux.cfg" );
     isolinuxFiles.remove( "kernel/vmlinuz" );
     for( QStringList::const_iterator it = isolinuxFiles.begin();
 	 it != isolinuxFiles.end(); ++it ) {
-      QString path = d->installation->path() + "/isolinux/" + *it;
+      QString path = d->eMovixBin->path + "/isolinux/" + *it;
       (void)new K3bFileItem( path, d->doc, d->isolinuxDir );
     }
 
-    const QStringList& movixFiles = d->installation->movixFiles();
+    const QStringList& movixFiles = d->eMovixBin->movixFiles();
     for( QStringList::const_iterator it = movixFiles.begin();
 	 it != movixFiles.end(); ++it ) {
-      QString path = d->installation->path() + "/movix/" + *it;
+      QString path = d->eMovixBin->path + "/movix/" + *it;
       (void)new K3bFileItem( path, d->doc, d->movixDir );
     }
 
     // add doku files
-    QString path = d->installation->languageDir( d->doc->bootMessageLanguage() );
+    QString path = d->eMovixBin->languageDir( d->doc->bootMessageLanguage() );
     QDir dir(path);
     QStringList helpFiles = dir.entryList(QDir::Files);
     for( QStringList::const_iterator it = helpFiles.begin();
@@ -325,7 +319,7 @@ bool K3bMovixDocPreparer::addMovixFiles()
 	d->doc->subtitleFontset() != i18n("none") ) {
       d->mplayerDir = new K3bDirItem( "mplayer", d->doc, d->doc->root() );
 
-      QString fontPath = d->installation->subtitleFontDir( d->doc->subtitleFontset() );
+      QString fontPath = d->eMovixBin->subtitleFontDir( d->doc->subtitleFontset() );
       QFileInfo fontType( fontPath );
       if( fontType.isDir() ) {
 	K3bDirItem* fontDir = new K3bDirItem( "font", d->doc, d->mplayerDir );

@@ -341,10 +341,6 @@ void K3bAudioDoc::removeTrack( K3bAudioTrack* track )
       
     delete track;
 
-    // now make sure the first track has a pregap of at least 150 frames
-    if( m_tracks->first() )
-      m_tracks->first()->setPregap( m_tracks->first()->pregap() );
-
     setModified();
   }
 }
@@ -362,9 +358,6 @@ void K3bAudioDoc::moveTrack( const K3bAudioTrack* track, const K3bAudioTrack* af
   // if after == 0 findRef returnes -1
   int pos = m_tracks->findRef( after );
   m_tracks->insert( pos+1, track );
-
-  // now make sure the first track has a pregap of at least 150 frames
-  m_tracks->first()->setPregap( m_tracks->first()->pregap() );
 
   setModified();
 

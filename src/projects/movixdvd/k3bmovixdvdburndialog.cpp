@@ -16,8 +16,9 @@
 
 #include "k3bmovixdvdburndialog.h"
 #include "k3bmovixdvddoc.h"
-#include "k3bmovixinstallation.h"
-#include "k3bmovixoptionswidget.h"
+
+#include <k3bmovixprogram.h>
+#include <k3bmovixoptionswidget.h>
 
 #include <k3bdataimagesettingswidget.h>
 #include <k3bdataadvancedimagesettingswidget.h>
@@ -33,11 +34,11 @@
 #include <k3bcore.h>
 
 #include <klocale.h>
-#include <kdebug.h>
 #include <kmessagebox.h>
 #include <kio/global.h>
 #include <kapplication.h>
 #include <kconfig.h>
+#include <kdebug.h>
 
 #include <qcheckbox.h>
 #include <qlayout.h>
@@ -47,8 +48,7 @@
 
 K3bMovixDvdBurnDialog::K3bMovixDvdBurnDialog( K3bMovixDvdDoc* doc, QWidget* parent, const char* name, bool modal )
   : K3bProjectBurnDialog( doc, parent, name, modal, true ),
-    m_doc(doc),
-    m_installation(0)
+    m_doc(doc)
 {
   prepareGui();
 
@@ -97,8 +97,6 @@ K3bMovixDvdBurnDialog::K3bMovixDvdBurnDialog( K3bMovixDvdDoc* doc, QWidget* pare
 
 K3bMovixDvdBurnDialog::~K3bMovixDvdBurnDialog()
 {
-  if( m_installation )
-    delete m_installation;
 }
 
 
@@ -172,7 +170,7 @@ void K3bMovixDvdBurnDialog::saveSettings()
   m_doc->setTempDir( m_tempDirSelectionWidget->tempPath() );
 }
 
-#include <kdebug.h>
+
 void K3bMovixDvdBurnDialog::readSettings()
 {
   K3bProjectBurnDialog::readSettings();
@@ -182,21 +180,16 @@ void K3bMovixDvdBurnDialog::readSettings()
   m_volumeDescWidget->load( m_doc->isoOptions() );
 
   m_checkVerify->setChecked( m_doc->verifyData() );
+
   // first of all we need a movix installation object
-  bool installCorrect = false;
-  if ( k3bcore->externalBinManager()->binObject("eMovix") )
-  {
-      m_installation = K3bMovixInstallation::probeInstallation( k3bcore->externalBinManager()->binObject("eMovix") );
-      if( m_installation ) {
-          m_movixOptionsWidget->init( m_installation );
-          m_movixOptionsWidget->readSettings( m_doc );
-          installCorrect = true;
-      }
+  const K3bMovixBin* bin = dynamic_cast<const K3bMovixBin*>( k3bcore->externalBinManager()->binObject("eMovix") );
+  if( bin ) {
+    m_movixOptionsWidget->init( bin );
+    m_movixOptionsWidget->readSettings( m_doc );
   }
-  if ( !installCorrect )
-  {
-      KMessageBox::error( this, i18n("Could not find a valid eMovix installation.") );
-      slotCancelClicked();
+  else {
+    KMessageBox::error( this, i18n("Could not find a valid eMovix installation.") );
+    slotCancelClicked();
   }
 }
 

@@ -16,7 +16,7 @@
 
 #include "k3bmovixburndialog.h"
 #include "k3bmovixdoc.h"
-#include "k3bmovixinstallation.h"
+#include "k3bmovixprogram.h"
 #include "k3bmovixoptionswidget.h"
 
 #include <k3bdataimagesettingswidget.h>
@@ -47,8 +47,7 @@
 
 K3bMovixBurnDialog::K3bMovixBurnDialog( K3bMovixDoc* doc, QWidget* parent, const char* name, bool modal )
   : K3bProjectBurnDialog( doc, parent, name, modal ),
-    m_doc(doc),
-    m_installation(0)
+    m_doc(doc)
 {
   prepareGui();
 
@@ -99,8 +98,6 @@ K3bMovixBurnDialog::K3bMovixBurnDialog( K3bMovixDoc* doc, QWidget* parent, const
 
 K3bMovixBurnDialog::~K3bMovixBurnDialog()
 {
-  if( m_installation )
-    delete m_installation;
 }
 
 
@@ -226,9 +223,9 @@ void K3bMovixBurnDialog::readSettings()
   m_dataModeWidget->setDataMode( m_doc->dataMode() );
 
   // first of all we need a movix installation object
-  m_installation = K3bMovixInstallation::probeInstallation( k3bcore->externalBinManager()->binObject("eMovix") );
-  if( m_installation ) {
-    m_movixOptionsWidget->init( m_installation );
+  const K3bMovixBin* bin = dynamic_cast<const K3bMovixBin*>( k3bcore->externalBinManager()->binObject("eMovix") );
+  if( bin ) {
+    m_movixOptionsWidget->init( bin );
     m_movixOptionsWidget->readSettings( m_doc );
   }
   else {
