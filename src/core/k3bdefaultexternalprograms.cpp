@@ -96,8 +96,7 @@ bool K3bCdrecordProgram::scan( const QString& p )
       pos = out.output().find( "Cdrecord-ProDVD" );
     }
     else {
-      // the space after "Cdrecord" is so K3b does not find Cdrecord-ProDVD
-      pos = out.output().find( "Cdrecord " );
+      pos = out.output().find( "Cdrecord" );
     }
     if( pos < 0 )
       return false;
