@@ -1451,7 +1451,11 @@ bool K3bCdDevice::CdDevice::readRawToc( K3bCdDevice::Toc& toc ) const
 	//
 	// First we try to determine if the raw toc data uses BCD values
 	//
-	bool isBcd = rawTocDataWithBcdValues( data, dataLen );
+	int isBcd = rawTocDataWithBcdValues( data, dataLen );
+	if( isBcd == -1 ) {
+	  delete [] data;
+	  return false;
+	}
 
 	toc_raw_track_descriptor* tr = (toc_raw_track_descriptor*)&data[4];
 	
@@ -3586,12 +3590,13 @@ bool K3bCdDevice::CdDevice::getPerformance( unsigned char** data, int& dataLen,
 }
 
 
-bool K3bCdDevice::CdDevice::rawTocDataWithBcdValues( unsigned char* data, int dataLen ) const
+int K3bCdDevice::CdDevice::rawTocDataWithBcdValues( unsigned char* data, int dataLen ) const
 {
   toc_raw_track_descriptor* tr = (toc_raw_track_descriptor*)&data[4];
- 
-  int isBcd = -1;
- 
+
+  bool notBcd = false;
+  bool notHex = false;
+
   //
   // in most cases this will already tell us if a drive does not provide bcd numbers
   // (which should be all newer MMC drives)
@@ -3601,7 +3606,7 @@ bool K3bCdDevice::CdDevice::rawTocDataWithBcdValues( unsigned char* data, int da
       if( !K3bCdDevice::isValidBcd(tr[i].p_min) ||
 	  !K3bCdDevice::isValidBcd(tr[i].p_sec) ||
 	  !K3bCdDevice::isValidBcd(tr[i].p_frame) ) {
-	isBcd = 0;
+	notBcd = true;
 	break;
       }
 
@@ -3609,63 +3614,123 @@ bool K3bCdDevice::CdDevice::rawTocDataWithBcdValues( unsigned char* data, int da
       // and bcd values are never bigger than 99.
       else if( (int)K3bCdDevice::fromBcd(tr[i].p_sec) >= 60 ||
 	       (int)K3bCdDevice::fromBcd(tr[i].p_frame) >= 75 ) {
-	isBcd = 0;
+	notBcd = true;
 	break;
       }
     }
   }
 
-  if( isBcd == -1 ) {
-    // 
-    // all values are valid bcd values but we still don't know for sure if they are really 
-    // used as bcd. So we also check the HEX values.
-    //
-    for( int i = 0; i < (dataLen-4)/(int)sizeof(toc_raw_track_descriptor); ++i ) {
-      if( tr[i].adr == 1 && tr[i].point <= 0xa2 ) {
-	if( (int)tr[i].p_min > 99 ||
-	    (int)tr[i].p_sec >= 60 ||
-	    (int)tr[i].p_frame >= 75 ) {
-	  isBcd = 1;
-	  break;
-	}
+
+  //
+  // all values are valid bcd values but we still don't know for sure if they are really
+  // used as bcd. So we also check the HEX values.
+  //
+  for( int i = 0; i < (dataLen-4)/(int)sizeof(toc_raw_track_descriptor); ++i ) {
+    if( tr[i].adr == 1 && tr[i].point <= 0xa2 ) {
+      if( (int)tr[i].p_min > 99 ||
+	  (int)tr[i].p_sec >= 60 ||
+	  (int)tr[i].p_frame >= 75 ) {
+	notHex = true;
+	break;
       }
     }
   }
+  
 
-  if( isBcd == -1 ) {
+  //
+  // If all values are valid bcd and valid hex we check the start sectors of the tracks.
+  //
+  if( !notHex || !notBcd ) {
+    K3b::Msf sessionLeadOutHex, sessionLeadOutBcd;
+    K3b::Msf lastTrackHex, lastTrackBcd;
+
+    for( int i = 0; i < (dataLen-4)/(int)sizeof(toc_raw_track_descriptor); ++i ) {
+
+      if( tr[i].adr == 1 ) {
+	if( tr[i].point < 0x64 ) {
+	  
+	  // check hex values
+	  if( K3b::Msf( tr[i].p_min, tr[i].p_sec, tr[i].p_frame ) <
+	      lastTrackHex )
+	    notHex = true;
+	  
+	  // check bcd values
+	  if( K3b::Msf( K3bCdDevice::fromBcd(tr[i].p_min), K3bCdDevice::fromBcd(tr[i].p_sec), K3bCdDevice::fromBcd(tr[i].p_frame) ) <
+	      lastTrackBcd )
+	    notBcd = true;
+
+	  lastTrackBcd = K3b::Msf( K3bCdDevice::fromBcd(tr[i].p_min), K3bCdDevice::fromBcd(tr[i].p_sec), K3bCdDevice::fromBcd(tr[i].p_frame) );
+	  lastTrackHex = K3b::Msf( tr[i].p_min, tr[i].p_sec, tr[i].p_frame );
+	}
+	else if( tr[i].point == 0xa2 ) {
+	  if( sessionLeadOutHex < lastTrackHex )
+	    notHex = true;
+	  if( sessionLeadOutBcd < lastTrackBcd )
+	    notBcd = true;
+
+	  sessionLeadOutHex = K3b::Msf( tr[i].p_min, tr[i].p_sec, tr[i].p_frame );
+	  sessionLeadOutBcd = K3b::Msf( K3bCdDevice::fromBcd(tr[i].p_min), K3bCdDevice::fromBcd(tr[i].p_sec), K3bCdDevice::fromBcd(tr[i].p_frame) );
+	}
+      }
+    }
+
+    // check the last track
+    if( sessionLeadOutHex < lastTrackHex )
+      notHex = true;
+    if( sessionLeadOutBcd < lastTrackBcd )
+      notBcd = true;
+  }
+
+
+  if( !notBcd && !notHex ) {
     kdDebug() << "(K3bCdDevice::CdDevice) need to compare raw toc to formatted toc. :(" << endl;
     //
     // All values are valid bcd and valid HEX values so we compare with the formatted toc.
     // This slows us down a lot but in most cases this should not be reached anyway.
     //
-    isBcd = 0;
+    // TODO: also check the bcd values
+    //
     K3bCdDevice::Toc formattedToc;
     if( readFormattedToc( formattedToc, false ) ) {
       for( int i = 0; i < (dataLen-4)/(int)sizeof(toc_raw_track_descriptor); ++i ) {
-	if( tr[i].adr == 1 ) {
-	  if( tr[i].point < 0x64 ) {
-	    unsigned int track = (int)tr[i].point;
-	    if( track > formattedToc.count() ) {
-	      isBcd = 1;
-	      break;
-	    }
-	    K3b::Msf pos( tr[i].p_min,
-			  tr[i].p_sec,
-			  tr[i].p_frame );
-	    pos -= 150;
-	    if( pos != formattedToc[track-1].firstSector() ) {
-	      isBcd = 1;
-	      break;
-	    }
+	if( tr[i].adr == 1 && tr[i].point < 0x64 ) {
+	  unsigned int track = (int)tr[i].point;
+
+	  // FIXME: do bcd drive also encode the track number in bcd? If so test it, too.
+
+	  if( track > formattedToc.count() ) {
+	    notHex = true;
+	    break;
 	  }
+
+	  K3b::Msf posHex( tr[i].p_min,
+			   tr[i].p_sec,
+			   tr[i].p_frame );
+	  K3b::Msf posBcd( K3bCdDevice::fromBcd(tr[i].p_min), 
+			   K3bCdDevice::fromBcd(tr[i].p_sec), 
+			   K3bCdDevice::fromBcd(tr[i].p_frame) );
+	  posHex -= 150;
+	  posBcd -= 150;
+	  if( posHex != formattedToc[track-1].firstSector() )
+	    notHex = true;
+	  if( posBcd != formattedToc[track-1].firstSector() )
+	    notBcd = true;
 	}
       }
     }
   }
-  else if( isBcd == 0 )
-    kdDebug() << "(K3bCdDevice::CdDevice) found invalid bcd values. No bcd toc." << endl;
-  else
-    kdDebug() << "(K3bCdDevice::CdDevice) found invalid hex values. bcd toc." << endl;
 
-  return ( isBcd == 1 );
+  if( notBcd )
+    kdDebug() << "(K3bCdDevice::CdDevice) found invalid bcd values. No bcd toc." << endl;
+  if( notHex )
+    kdDebug() << "(K3bCdDevice::CdDevice) found invalid hex values. No hex toc." << endl;
+
+  if( notBcd == notHex ) {
+    kdDebug() << "(K3bCdDevice::CdDevice) unable to determine if hex or bcd." << endl;
+    return -1;
+  }
+  else if( notBcd )
+    return 0;
+  else
+    return 1;
 }
