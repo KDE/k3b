@@ -1,2 +1,6 @@
-SUBDIRS = wave $(AUDIO_DECODER_TO_COMPILE) 
 
+if include_OGG
+DECOGGDIR = ogg
+endif
+
+SUBDIRS = wave $(DECOGGDIR)

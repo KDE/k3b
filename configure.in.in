@@ -112,12 +112,6 @@ dnl this will define WORDS_BIGENDIAN or do nothing
 AC_C_BIGENDIAN()
 
 
-dnl ----- this will contain the subdirs to compile in the audiodecoder dir
-AUDIO_DECODER_TO_COMPILE=""
-dnl ----- this will contain the subdirs to compile in the audioencoder dir
-AUDIO_ENCODER_TO_COMPILE=""
-
-
 AC_MSG_CHECKING(for ogg/vorbis headers)
 ogg_vorbis=no
 AC_TRY_COMPILE([
@@ -135,8 +129,7 @@ if test x$ogg_vorbis = xyes; then
 fi
 if test x$ogg_vorbis = xyes; then
 	AC_DEFINE(OGG_VORBIS,1,[Define if you have ogg/vorbis installed])
-	AUDIO_DECODER_TO_COMPILE="$AUDIO_DECODER_TO_COMPILE ogg"
-	AUDIO_ENCODER_TO_COMPILE="$AUDIO_ENCODER_TO_COMPILE ogg"
+        AM_CONDITIONAL(include_OGG, true)
 fi
 
 
@@ -150,11 +143,6 @@ AC_CHECK_HEADER(mad.h, [
 	])
 ])
 AC_SUBST(MAD_LIB)
-
-
-AC_SUBST(AUDIO_DECODER_TO_COMPILE)
-AC_SUBST(AUDIO_ENCODER_TO_COMPILE)
-
 
 dnl === check for id3lib ============
 ID3_LIB=""
