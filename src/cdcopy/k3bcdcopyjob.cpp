@@ -226,7 +226,7 @@ void K3bCdCopyJob::cdrdaoFinished(bool ok) {
     if (ok) {
         if ( m_onlyCreateImage ) {
             emit infoMessage(
-                i18n("Image '%1' and toc-file '%2' successfully created").arg(m_tempPath).arg(m_tocFile),
+                i18n("Image '%1' and TOC file '%2' successfully created").arg(m_tempPath).arg(m_tocFile),
                 K3bJob::INFO );
             if ( ++m_finishedSessions == m_sessions )
                 finishAll();

@@ -183,15 +183,16 @@ void K3bWriterSelectionWidget::init()
 					"Let the DVD writer decide which speed to use for the media. "
 					"This is the recommended selection for most media.</p>"
 					"<p><b>1x</b><br>"
-					"Some DVD writers reportedly fail to determine optimal speed "
-					"for no-name media and pick one higher than the media can stand "
-					"which results in corrupted recordings. This option forces the "
-					"writer to switch to 1x speed to be on the safe side. When using "
-					"no-name media it is recommended to use this option.</p>"
+					"Some DVD writers reportedly fail to determine the optimal speed "
+					"for unbranded media and may use one that is higher than the "
+					"media supports, resulting in corrupted recordings. This option "
+					"forces the writer to switch to 1x speed to be on the safe side. "
+					"When using unbranded media it is recommended to use this option."
+					"</p>"
 					"<p>1x refers to 1385 KB/s.</p>"
 					"<p><b>Caution:</b> Be aware that the speed selection only makes "
 					"sense for DVD-R(W) writers since DVD+R(W) writers always choose "
-					"the speed automagically.") );
+					"the speed automatically.") );
   }
   else {
     QWhatsThis::add( m_comboWriter, i18n("<p>Select the CD writer that you want to use."

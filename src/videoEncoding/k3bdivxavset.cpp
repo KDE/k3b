@@ -87,7 +87,7 @@ In 2-pass mode the video will be encoded twice. The first time, the video will o
 
     m_vBitrateCustom = new QSpinBox( 1, 2048, 1, this );
     m_vBitrateCustom->setSuffix(" MByte");
-    QString wt_custombitrate( i18n( "Select individual filesize of the encoded video instead using \"number of CDs\"." ) );
+    QString wt_custombitrate( i18n( "Select the individual filesize of the encoded video instead of using \"number of CDs\"." ) );
     QWhatsThis::add( m_vBitrateCustom, wt_custombitrate );
 
     m_checkAc3Passthrough = new QCheckBox( i18n( "AC3 pass-through mode" ), this );

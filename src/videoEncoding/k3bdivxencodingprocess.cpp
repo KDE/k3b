@@ -246,7 +246,7 @@ void K3bDivXEncodingProcess::slotParseEncoding( KProcess *, char *buffer, int le
     m_speedFlag = 0;
     QString tmp = QString::fromLocal8Bit( buffer, len );
     if ( tmp.contains( "file read error" ) ) {
-      infoMessage( i18n( "Starting transcode failed. K3b hasn't successful backed up unused files.Verify that there are no other files than *.vob-files in %1. K3b should have backuped all files in %2. " ).arg( m_data->getProjectDir() + "/vob" ).arg( m_data->getProjectDir() + "/tmp" ), K3bJob::ERROR );
+      infoMessage( i18n( "Starting transcode failed. K3b has not successfully backed up unused files. Verify that there are no other files than .vob files in %1. K3b should have backed up all files in %2." ).arg( m_data->getProjectDir() + "/vob" ).arg( m_data->getProjectDir() + "/tmp" ), K3bJob::ERROR );
       cancel( );
       m_interalInterrupt = true;
       return ;

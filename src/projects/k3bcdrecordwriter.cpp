@@ -652,7 +652,7 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	    emit infoMessage( i18n("Please choose a lower burning speed."), ERROR );
 	break;
       case HIGH_SPEED_MEDIUM:
-	emit infoMessage( i18n("Found a high speed medium not suitable for the used burner."), ERROR );
+	emit infoMessage( i18n("Found a high speed medium not suitable for the writer being used."), ERROR );
 	break;
       case UNKNOWN:
 	emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg(m_cdrecordBinObject->name()).arg(p->exitStatus()), 

@@ -401,12 +401,12 @@ QString K3bSetup2::quickHelp() const
   return i18n("<h2>K3bSetup 2</h2>"
 	      "<p>This simple setup assistant is able to set the permissions needed by K3b in order to "
 	      "burn CDs and DVDs."
-	      "<p>It does not take things like devfs or resmgr into accout. In most cases this is not a "
-	      "problem but on some systems the permissions may be altered the next time you login or restart "
-	      "your computer. In those cases it is best to consult the distribution documentation."
-	      "<p>The important thing K3bSetup 2 does is giving write access to the CD and DVD devices."
+	      "<p>It does not take into account devfs or resmgr, or similar. In most cases this is not a "
+	      "problem, but on some systems the permissions may be altered the next time you login or restart "
+	      "your computer. In these cases it is best to consult the distribution's documentation."
+	      "<p>The important task that K3bSetup 2 performs is grant write access to the CD and DVD devices."
 	      "<p><b>Caution:</b> Although K3bSetup 2 should not be able "
-	      "to mess up your system no guarantee can be given.");
+	      "to damage your system, no guarantee can be given.");
 }
 
 

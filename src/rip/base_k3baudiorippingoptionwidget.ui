@@ -149,10 +149,10 @@ which can be used with programs like xmms or noatun.
                                 <string>Use relative paths instead of absolute</string>
                             </property>
                             <property name="whatsThis" stdset="0">
-                                <string>&lt;p&gt;If this option is checked the playlist entries will be relative to its location.
-&lt;p&gt;Example: Your playlist is located in &lt;em&gt;/home/myself/music&lt;/em&gt; and
-your audiofiles in &lt;em&gt;/home/myself/music/cool&lt;/em&gt;. Then the entries in the
-playlist will look like: &lt;em&gt;cool/track1.ogg&lt;/em&gt;.</string>
+                                <string>&lt;p&gt;If this option is checked, the entries in the playlist will be relative to its location.
+&lt;p&gt;Example: If your playlist is located in &lt;em&gt;/home/myself/music&lt;/em&gt; and
+your audio files are in &lt;em&gt;/home/myself/music/cool&lt;/em&gt;; then the entries in the
+playlist will look something like: &lt;em&gt;cool/track1.ogg&lt;/em&gt;.</string>
                             </property>
                         </widget>
                     </hbox>

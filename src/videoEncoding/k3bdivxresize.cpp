@@ -61,7 +61,7 @@ correct the height of the video to fit it."));
     groupSize->setFrameStyle( Plain | NoFrame );
     groupSize->layout()->setSpacing( 0 );
     groupSize->layout()->setMargin( 0 );
-    QWhatsThis::add( groupSize, i18n("The aspect ratio error shows the difference from the original aspect ratio. If cropping is used, the apsect \
+    QWhatsThis::add( groupSize, i18n("The aspect ratio error shows the difference from the original aspect ratio. If cropping is used, the aspect \
 ratio error shows the difference from the \"best match\" aspect ratio (i.e. 4:3, 16:9 or letterbox 1:2.35). To correct the aspect ratio manually change \
 the height."));
     (void)new QLabel( i18n("Width:"), groupSize );
