@@ -5,6 +5,7 @@ K3b now searches for the Debian cdrecord wrapper script and properly selects the
 Fixed writing speed parsing with patched cdrecord
 Add leading zero to tracknumber meta data field when encoding audio tracks.
 Fixed data project size calculation if files from different devices have the same inode number.
+It is now possible to enter hexadecimal values in the boot image load segment fields.
 	
 0.11.7
 Check size of returned CD-TEXT data to be a multiple of the pack length. This should fix problems
