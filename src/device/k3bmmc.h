@@ -107,15 +107,8 @@ namespace K3bCdDevice
 
     unsigned char disc_bar_code[8];
 
-    //
-    // We need to make sure the structure has a proper size
-    // I think it needs to be a power of 2.
-    // With ide-scsi there is no problem. But without the
-    // GPCMD_READ_DISC_INFO command failes if the size is 34
-    //
-
-/*     unsigned char reserved3; */
-/*     unsigned char opc_entries; */
+    unsigned char reserved3;
+    unsigned char* opc_entries;
   } disc_info_t;
 
 

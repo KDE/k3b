@@ -977,14 +977,19 @@ K3b::Msf K3bCdDevice::CdDevice::discSize() const
 
 bool K3bCdDevice::CdDevice::readDiscInfo( unsigned char** data, int& dataLen ) const
 {
-  unsigned char header[2];
-  ::memset( header, 0, 2 );
+  //
+  // Some buggy firmwares (or is this normal behaviour?) do not return the size of the available data
+  // but the returned data. So we use a high power of 2 to be on the safe side.
+  //
+  unsigned char header[2048];
+  ::memset( header, 0, 2048 );
 
   ScsiCommand cmd( this );
   cmd[0] = MMC::READ_DISK_INFORMATION;
-  cmd[8] = 2;
+  cmd[7] = 2048>>8;
+  cmd[8] = 2048;
 
-  if( cmd.transport( TR_DIR_READ, header, 2 ) == 0 ) {
+  if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 ) {
     // again with real length
     dataLen = from2Byte( header ) + 2;
 
@@ -2159,15 +2164,20 @@ bool K3bCdDevice::CdDevice::readSectorsRaw(unsigned char *buf, int start, int co
 
 bool K3bCdDevice::CdDevice::modeSense( unsigned char** pageData, int& pageLen, int page ) const
 {
-  unsigned char header[8];
-  ::memset( header, 0, 8 );
+  //
+  // Some buggy firmwares (or is this normal behaviour?) do not return the size of the available data
+  // but the returned data. So we use a high power of 2 to be on the safe side.
+  //
+  unsigned char header[2048];
+  ::memset( header, 0, 2048 );
 
   ScsiCommand cmd( this );
   cmd[0] = MMC::MODE_SENSE;
   cmd[1] = 0x08;        // Disable Block Descriptors
   cmd[2] = page;
-  cmd[8] = 8;           // first we determine the data length
-  if( cmd.transport( TR_DIR_READ, header, 8 ) == 0 ) {
+  cmd[7] = 2048>>8;
+  cmd[8] = 2048;           // first we determine the data length
+  if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 ) {
     // again with real length
     pageLen = from2Byte( header ) + 2;
 
@@ -2303,18 +2313,22 @@ void K3bCdDevice::CdDevice::checkWriteModes()
 
 bool K3bCdDevice::CdDevice::readTocPmaAtip( unsigned char** data, int& dataLen, int format, bool time, int track ) const
 {
-  unsigned char header[2];
-  ::memset( header, 0, 2 );
+  //
+  // Some buggy firmwares (or is this normal behaviour?) do not return the size of the available data
+  // but the returned data. So we use a high power of 2 to be on the safe side.
+  //
+  unsigned char header[2048];
+  ::memset( header, 0, 2048 );
 
   ScsiCommand cmd( this );
   cmd[0] = MMC::READ_TOC_PMA_ATIP;
   cmd[1] = ( time ? 0x2 : 0x0 );
   cmd[2] = format & 0x0F;
   cmd[6] = track;
-  cmd[7] = 0;
-  cmd[8] = 2; // we only read the length first
+  cmd[7] = 2048>>8;
+  cmd[8] = 2048; // we only read the length first
 
-  if( cmd.transport( TR_DIR_READ, header, 2 ) == 0 ) {
+  if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 ) {
     // again with real length
     dataLen = from2Byte( header ) + 2;
 
@@ -2341,13 +2355,18 @@ bool K3bCdDevice::CdDevice::readTocPmaAtip( unsigned char** data, int& dataLen, 
 
 bool K3bCdDevice::CdDevice::mechanismStatus( unsigned char** data, int& dataLen ) const
 {
-  unsigned char header[8];
-  ::memset( header, 0, 8 );
+  //
+  // Some buggy firmwares (or is this normal behaviour?) do not return the size of the available data
+  // but the returned data. So we use a high power of 2 to be on the safe side.
+  //
+  unsigned char header[2048];
+  ::memset( header, 0, 2048 );
 
   ScsiCommand cmd( this );
   cmd[0] = MMC::MECHANISM_STATUS;
-  cmd[9] = 8;     // first we read the header
-  if( cmd.transport( TR_DIR_READ, header, 8 ) == 0 ) {
+  cmd[8] = 2048>>8;
+  cmd[9] = 2048;     // first we read the header
+  if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 ) {
     // again with real length
     dataLen = from4Byte( &header[6] ) + 8;
 
@@ -2577,16 +2596,21 @@ bool K3bCdDevice::CdDevice::readSubChannel( unsigned char** data, int& dataLen,
 					    unsigned int subchannelParam,
 					    unsigned int trackNumber ) const
 {
-  unsigned char header[4];
-  ::memset( header, 0, 4 );
+  //
+  // Some buggy firmwares (or is this normal behaviour?) do not return the size of the available data
+  // but the returned data. So we use a high power of 2 to be on the safe side.
+  //
+  unsigned char header[2048];
+  ::memset( header, 0, 2048 );
 
   ScsiCommand cmd( this );
   cmd[0] = MMC::READ_SUB_CHANNEL;
   cmd[2] = 0x40;    // SUBQ
   cmd[3] = subchannelParam;
   cmd[6] = trackNumber;   // only used when subchannelParam == 03h (ISRC)
-  cmd[8] = 4;      // first we read the header
-  if( cmd.transport( TR_DIR_READ, header, 4 ) == 0 ) {
+  cmd[7] = 2048>>8;
+  cmd[8] = 2048;      // first we read the header
+  if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 ) {
     // again with real length
     dataLen = from2Byte( &header[2] ) + 4;
 
@@ -2613,8 +2637,12 @@ bool K3bCdDevice::CdDevice::readSubChannel( unsigned char** data, int& dataLen,
 
 bool K3bCdDevice::CdDevice::readTrackInformation( unsigned char** data, int& dataLen, int type, unsigned long value ) const
 {
-  unsigned char header[4];
-  ::memset( header, 0, 4 );
+  //
+  // Some buggy firmwares (or is this normal behaviour?) do not return the size of the available data
+  // but the returned data. So we use a high power of 2 to be on the safe side.
+  //
+  unsigned char header[2048];
+  ::memset( header, 0, 2048 );
 
   ScsiCommand cmd( this );
   cmd[0] = MMC::READ_TRACK_INFORMATION;
@@ -2634,8 +2662,9 @@ bool K3bCdDevice::CdDevice::readTrackInformation( unsigned char** data, int& dat
     return false;
   }
 
-  cmd[8] = 4;      // first we read the header
-  if( cmd.transport( TR_DIR_READ, header, 4 ) == 0 ) {
+  cmd[7] = 2048>>8;
+  cmd[8] = 2048;      // first we read the header
+  if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 ) {
     // again with real length
     dataLen = from2Byte( header ) + 2;
 
@@ -2882,16 +2911,21 @@ void K3bCdDevice::CdDevice::searchIndexTransitions( long start, long end, K3bCdD
 
 bool K3bCdDevice::CdDevice::getFeature( unsigned char** data, int& dataLen, unsigned int feature ) const
 {
-  unsigned char header[8];
-  ::memset( header, 0, 8 );
+  //
+  // Some buggy firmwares (or is this normal behaviour?) do not return the size of the available data
+  // but the returned data. So we use a high power of 2 to be on the safe side.
+  //
+  unsigned char header[2048];
+  ::memset( header, 0, 2048 );
 
   ScsiCommand cmd( this );
   cmd[0] = MMC::GET_CONFIGURATION;
   cmd[1] = 2;      // read only specified feature
   cmd[2] = feature>>8;
   cmd[3] = feature;
-  cmd[8] = 8;      // we only read the data length first
-  if( cmd.transport( TR_DIR_READ, header, 8 ) ) {
+  cmd[7] = 2048>>8;
+  cmd[8] = 2048;      // we only read the data length first
+  if( cmd.transport( TR_DIR_READ, header, 2048 ) ) {
     // again with real length
     dataLen = from4Byte( header ) + 4;
 
