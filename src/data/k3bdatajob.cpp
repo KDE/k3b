@@ -814,28 +814,22 @@ bool K3bDataJob::addMkisofsParameters()
   *m_process << "-graft-points";
 
   if( !m_doc->isoOptions().volumeID().isEmpty() ) {
-    QString s = m_doc->isoOptions().volumeID();
-    *m_process << "-V" << s.replace( QRegExp("\\s"), "_" );
+    *m_process << "-V" << m_doc->isoOptions().volumeID();
   }
   if( !m_doc->isoOptions().volumeSetId().isEmpty() ) {
-    QString s = m_doc->isoOptions().volumeSetId();
-    *m_process << "-volset" << s.replace( QRegExp("\\s"), "_" );;
+    *m_process << "-volset" << m_doc->isoOptions().volumeSetId();
   }
   if( !m_doc->isoOptions().applicationID().isEmpty() ) {
-    QString s = m_doc->isoOptions().applicationID();
-    *m_process << "-A" << s.replace( QRegExp("\\s"), "_" );;
+    *m_process << "-A" << m_doc->isoOptions().applicationID();
   }
   if( !m_doc->isoOptions().publisher().isEmpty() ) {
-    QString s = m_doc->isoOptions().publisher();
-    *m_process << "-P" << s.replace( QRegExp("\\s"), "_" );;
+    *m_process << "-P" << m_doc->isoOptions().publisher();
   }
   if( !m_doc->isoOptions().preparer().isEmpty() ) {
-    QString s = m_doc->isoOptions().preparer();
-    *m_process << "-p" << s.replace( QRegExp("\\s"), "_" );;
+    *m_process << "-p" << m_doc->isoOptions().preparer();
   }
   if( !m_doc->isoOptions().systemId().isEmpty() ) {
-    QString s = m_doc->isoOptions().systemId();
-    *m_process << "-sysid" << s.replace( QRegExp("\\s"), "_" );;
+    *m_process << "-sysid" << m_doc->isoOptions().systemId();
   }
 
   if( m_doc->isoOptions().createRockRidge() ) {

@@ -304,27 +304,27 @@ bool K3bIsoImager::addMkisofsParameters()
 
   if( !m_doc->isoOptions().volumeID().isEmpty() ) {
     QString s = m_doc->isoOptions().volumeID();
-    *m_process << "-V" << s.replace( QRegExp("\\s"), "_" );
+    *m_process << "-V" << s;
   }
   if( !m_doc->isoOptions().volumeSetId().isEmpty() ) {
     QString s = m_doc->isoOptions().volumeSetId();
-    *m_process << "-volset" << s.replace( QRegExp("\\s"), "_" );;
+    *m_process << "-volset" << s;
   }
   if( !m_doc->isoOptions().applicationID().isEmpty() ) {
     QString s = m_doc->isoOptions().applicationID();
-    *m_process << "-A" << s.replace( QRegExp("\\s"), "_" );;
+    *m_process << "-A" << s;
   }
   if( !m_doc->isoOptions().publisher().isEmpty() ) {
     QString s = m_doc->isoOptions().publisher();
-    *m_process << "-P" << s.replace( QRegExp("\\s"), "_" );;
+    *m_process << "-P" << s;
   }
   if( !m_doc->isoOptions().preparer().isEmpty() ) {
     QString s = m_doc->isoOptions().preparer();
-    *m_process << "-p" << s.replace( QRegExp("\\s"), "_" );;
+    *m_process << "-p" << s;
   }
   if( !m_doc->isoOptions().systemId().isEmpty() ) {
     QString s = m_doc->isoOptions().systemId();
-    *m_process << "-sysid" << s.replace( QRegExp("\\s"), "_" );;
+    *m_process << "-sysid" << s;
   }
 
   if( m_doc->isoOptions().createRockRidge() ) {
