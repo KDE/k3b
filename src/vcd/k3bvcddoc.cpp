@@ -1,6 +1,6 @@
 /*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
  *
  * This file is part of the K3b project.
@@ -191,17 +191,32 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
     int mpegVersion = Mpeg->MpegVersion();
     // no mpeg audio files at this time!!
     if (mpegVersion > 0 && Mpeg->has_video()) {
-      if (vcdType() == NONE) {
+      if (vcdType() == NONE && mpegVersion < 2) {
         m_urlAddingTimer->stop();
         setVcdType(vcdTypes(mpegVersion));
-        KMessageBox::information(kapp->mainWidget(),"(" + url.path() + ")\n" +
+        KMessageBox::information(kapp->mainWidget(),
           i18n("K3b will create a (S)VCD image from the given MPEG files, but these files must already be in (S)VCD format. K3b performs no resample on MPEG files yet. This looks like an MPEG%1 file and K3b set the type to %2.").arg(mpegVersion).arg((mpegVersion==1)?"VCD 2.0": "SVCD"),
           i18n("Set Type to %1 (MPEG%2)").arg((mpegVersion==1)?"VCD 2.0":"SVCD").arg(mpegVersion) );
         m_urlAddingTimer->start(0);
       }
+      else if (vcdType() == NONE) {
+          bool force = false;
+          force = ( KMessageBox::questionYesNo( kapp->mainWidget(),
+	    i18n("K3b will create a (S)VCD image from the given MPEG files, but these files must already be in (S)VCD format. K3b performs no resample on MPEG files yet."),
+	    i18n("Information"),
+	    i18n("OK"),
+	    i18n("Force VCD") ) == KMessageBox::No );
+          if( force ) {
+              setVcdType(vcdTypes(1));
+	      vcdOptions()->setAutoDetect( false );
+	  } 
+	  else
+	      setVcdType(vcdTypes(mpegVersion));
+      }
       
-      if (vcdType() != vcdTypes(mpegVersion)) {
-        KMessageBox::error( kapp->mainWidget(), "(" + url.path() + ")\n" +
+      
+      if (numOfTracks() > 0 && first()->mpegVideoVersion() != mpegVersion) {
+	KMessageBox::error( kapp->mainWidget(), "(" + url.path() + ")\n" +
           i18n("You can't mix MPEG1 and MPEG2 video files.\nPlease start a new Project for this filetype.\nResample not implemented in K3b yet :("),
           i18n("Wrong File Type for this Project") );
 
@@ -326,8 +341,10 @@ void K3bVcdDoc::removeTrack( K3bVcdTrack* track )
 
     delete track;
     kdDebug() << QString("(K3bVcdDoc) removeTrack count = %1").arg(numOfTracks()) << endl;
-    if (numOfTracks() == 0)
-      this->setVcdType(NONE);
+    if (numOfTracks() == 0) {
+      setVcdType(NONE);
+      vcdOptions()->setAutoDetect( true );
+    }
   }
 }
 

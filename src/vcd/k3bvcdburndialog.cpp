@@ -1,6 +1,6 @@
 /*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
  *
  * This file is part of the K3b project.
@@ -179,7 +179,6 @@ void K3bVcdBurnDialog::setupVideoCdTab()
 
   m_groupOptions = new QGroupBox( 4, Qt::Vertical, i18n("Options"), w );
   m_checkAutoDetect = new QCheckBox( i18n( "Autodetect VideoCD type" ), m_groupOptions );
-  m_checkAutoDetect->setChecked( true );
   
   m_checkNonCompliant = new QCheckBox( i18n( "Enable Broken SVCD mode" ), m_groupOptions );
   // Only available on SVCD Type
@@ -203,9 +202,6 @@ void K3bVcdBurnDialog::setupVideoCdTab()
   grid->addWidget( m_groupOptions, 0, 1 );
   grid->addWidget( m_groupCdi, 1, 1 );
   
-  // TODO: enable this in the future, k3b canot resample now.
-  m_groupVcdFormat->setEnabled(false);
-
   addPage( w, i18n("Settings") );
 }
 
@@ -313,6 +309,8 @@ void K3bVcdBurnDialog::loadDefaults()
   m_editAlbumId->setText( "" );
 
   m_checkAutoDetect->setChecked( true );
+  m_groupVcdFormat->setDisabled( true );
+  
   m_check2336->setChecked( false );
   m_checkNonCompliant->setChecked( false );
 
@@ -358,7 +356,8 @@ void K3bVcdBurnDialog::saveSettings()
   // save image file & path (.bin)
   vcdDoc()->setVcdImage( m_tempDirSelectionWidget->tempPath() + m_editVolumeId->text() + ".bin");
 
-  // TODO: save vcdType
+  vcdDoc()->setVcdType(m_groupVcdFormat->id(m_groupVcdFormat->selected()));
+
   vcdDoc()->vcdOptions()->setVolumeId( m_editVolumeId->text() );
   vcdDoc()->vcdOptions()->setAlbumId( m_editAlbumId->text() );
 
@@ -408,6 +407,8 @@ void K3bVcdBurnDialog::readSettings()
   m_spinVolumeNumber->setValue( vcdDoc()->vcdOptions()->volumeNumber() );
 
   m_checkAutoDetect->setChecked( vcdDoc()->vcdOptions()->AutoDetect() );
+  m_groupVcdFormat->setDisabled( vcdDoc()->vcdOptions()->AutoDetect() );
+  
   m_check2336->setChecked( vcdDoc()->vcdOptions()->Sector2336() );
 
   m_checkCdiSupport->setEnabled( false );
