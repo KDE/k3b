@@ -22,6 +22,7 @@ These are the features so far:
    - renaming of files (manually or automatically for mp3-files) (for joliet and rockrigde)
    - support for most of the mkisofs-options (I don't think anyone will ever use them! ;-))
    - multisession support (including importing old sessions)
+   - El Torito bootable cd support
 
  - writing Video CDs
    - VCD 1.1, 2.0, SVCD
@@ -30,6 +31,8 @@ These are the features so far:
  - writing mixed-mode cds
    - CD-Extra (CD-Plus, Enhanced Audio CD) support
 
+ - writing eMovix cds
+   
  - writing existing iso-images and cue/bin images to cd
 
  - cd copy (data, audio, mixed mode)

@@ -1,13 +1,11 @@
 - audio ripping to mp3 (ogg)
 - audio normalize
-* bootable cds (work in progress)
-* mixed-mode cds (work in progress)
 * video cd (work in progress)
 * video cd cd-i support
 - video cd Mpeg Stills, photoalbum, portfolio
 - video cd Interactive Menues (automenues)
 - make audio decoding pluggable
-* eMovix support
+- udf support
 
 legend:
 - planned

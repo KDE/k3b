@@ -1,10 +1,24 @@
-devices rewrite, use generic packet ioctl's
-cdinfo rewrite, use generic packet ioctl's 
-merged cdrdaoparser and cdrdaowriter
+0.9
+added system notification
+added eMovix project
+added bootable cd support (multible images)
+the environment PATH is searched for external bins
+more error handling
+dropped KDE/QT 3.0.x compatibility, now K3b requires at least 3.1
+internals:
+  devices rewrite, use generic packet ioctl's
+  cdinfo rewrite, use generic packet ioctl's 
+  merged cdrdaoparser and cdrdaowriter
 added multisession cd copy
 
 0.8.1
 fixed compiling problems with kernel < 2.4.3
+fixed onlyCreateImage in data project
+fixed handling of cdrecord burnfree/burnproof driveroption in versions < 1.10
+fixed error with localized docking config that caused empty windows when changing the language
+introduced workaround for serious cdrdao bug that caused tocfiles to be deleted
+disabled the delete shortcut in the fileview (way too many users deleted files by accident when they 
+	wanted to remove project items)
 
 0.8
 advanced options: manually selection of writing app (cdrecord or cdrdao)
