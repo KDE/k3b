@@ -44,8 +44,8 @@ K3bSetup::K3bSetup( QObject* parent )
   : QObject( parent )
 {
   // create a K3bDeviceManager
-  m_externalBinManager = new K3bExternalBinManager( this );
-  m_deviceManager = new K3bDeviceManager( m_externalBinManager, this );
+  m_externalBinManager = K3bExternalBinManager::self();
+  m_deviceManager = K3bDeviceManager::self();
 
 
   m_config = new KSimpleConfig( K3b::globalConfig() );

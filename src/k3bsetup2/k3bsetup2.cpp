@@ -20,6 +20,7 @@
 #include "k3bsetup2finishpage.h"
 #include "k3bsetup2task.h"
 #include "fstab/k3bsetup2fstabwidget.h"
+#include "permissions/k3bsetup2permissionpage.h"
 
 #include <tools/k3bglobals.h>
 #include <tools/k3blistview.h>
@@ -45,9 +46,6 @@
 K3bSetup2::K3bSetup2( QWidget* parent, const char* name, bool modal, WFlags flags )
   : KDialog( parent, name, modal, flags )
 {
-  m_externalBinManager = new K3bExternalBinManager( this );
-  m_deviceManager = new K3bDeviceManager( m_externalBinManager, this );
-
   setupGui();
   m_numberOfPages = 0;
   setupPages();
@@ -123,10 +121,9 @@ void K3bSetup2::setupGui()
 
 void K3bSetup2::setupPages()
 {
-  K3bSetup2Page* page = new K3bSetup2FstabWidget( m_deviceManager, m_taskView, m_pageStack );
-  addPage( page, 1 );
-  page = new K3bSetup2FinishPage( m_pageStack );
-  addPage( page, 2 );
+  addPage( new K3bSetup2FstabWidget( m_taskView, m_pageStack ), 1 );
+  addPage( new K3bSetup2PermissionPage( m_taskView, m_pageStack ), 2 );
+  addPage( new K3bSetup2FinishPage( m_pageStack ), 3 );
 }
 
 
@@ -134,8 +131,8 @@ void K3bSetup2::init()
 {
   // TODO: show a dialog
 
-  m_externalBinManager->search();
-  m_deviceManager->scanbus();
+  K3bExternalBinManager::self()->search();
+  K3bDeviceManager::self()->scanbus();
 
   // load all pages
   for( int i = 1; m_pageStack->widget(i); ++i )
@@ -152,9 +149,6 @@ void K3bSetup2::addPage( K3bSetup2Page* page, int id )
 
 void K3bSetup2::accept()
 {
-  // TODO: let the pages set the status of
-  // their tasks to "done"
-
   ((K3bSetup2FinishPage*)m_pageStack->widget(m_numberOfPages))->showBusy(true);
   m_closeButton->setDisabled(true);
   m_backButton->setDisabled(true);

@@ -23,16 +23,16 @@
 
 #include "../k3bsetup2page.h"
 
-#include <qlist.h>
+#include <qmap.h>
 #include <qstring.h>
 
 
-class K3bDeviceManager;
 class KConfig;
 class K3bListView;
 class QCheckBox;
 class QListViewItem;
 class K3bListView;
+class K3bSetup2Task;
 
 
 class K3bSetup2FstabWidget : public K3bSetup2Page
@@ -40,7 +40,7 @@ class K3bSetup2FstabWidget : public K3bSetup2Page
   Q_OBJECT
 
  public:
-  K3bSetup2FstabWidget( K3bDeviceManager*, K3bListView*, QWidget* parent = 0, const char* name = 0 );
+  K3bSetup2FstabWidget( K3bListView*, QWidget* parent = 0, const char* name = 0 );
   ~K3bSetup2FstabWidget();
 
  public slots:
@@ -49,15 +49,17 @@ class K3bSetup2FstabWidget : public K3bSetup2Page
 
  private slots:
   void slotItemRenamed( QListViewItem*, const QString&, int );
-
+  void clearTasks();
+  void updateTasks();
+  
  private:
-   K3bDeviceManager* m_deviceManager;
-
    K3bListView* m_viewWithEntry;
    K3bListView* m_viewNoEntry;
    QCheckBox* m_checkCreateNewEntries;
 
    class FstabViewItem;
+
+   QMap<FstabViewItem*, K3bSetup2Task*> m_tasks;
 };
 
 

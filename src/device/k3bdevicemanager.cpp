@@ -46,9 +46,10 @@ const char* K3bDeviceManager::deviceNames[] =
 
 
 
-K3bDeviceManager::K3bDeviceManager( K3bExternalBinManager* exM, QObject * parent )
-  : QObject( parent ), m_externalBinManager( exM )
+K3bDeviceManager::K3bDeviceManager( )
+  : QObject()
 {
+  m_externalBinManager = K3bExternalBinManager::self();
   m_reader.setAutoDelete( true );
   m_writer.setAutoDelete( true );
   m_allDevices.setAutoDelete( false );
@@ -550,5 +551,14 @@ QString K3bDeviceManager::resolveSymLink( const QString& path )
   return QString::null;
 }
 
+
+K3bDeviceManager* K3bDeviceManager::self()
+{
+  static K3bDeviceManager* instance = 0;
+  if( !instance )
+    instance = new K3bDeviceManager();
+
+  return instance;
+}
 
 #include "k3bdevicemanager.moc"

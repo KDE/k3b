@@ -21,11 +21,13 @@
 #include "k3bsetup2task.h"
 
 #include <kiconloader.h>
+#include <klocale.h>
 
 
 K3bSetup2Task::K3bSetup2Task( const QString& text, K3bListView* parent )
   : K3bListViewItem( parent, parent->lastItem(), text )
 {
+  setText(1, i18n("pending") );
 }
 
 
@@ -33,7 +35,7 @@ void K3bSetup2Task::setHelp( const QString& t )
 {
   m_help = t;
   if( !t.isEmpty() )
-    setButton( 2, true );
+    setButton( 1, true );
 }
 
 

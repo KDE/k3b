@@ -22,14 +22,9 @@ class K3bDeviceManager : public QObject
   Q_OBJECT
 
  public:
-  /**
-   * Constructs a device-manager and scans the scsi-bus
-   * for devices. Every instance of K3bDeviceManager on
-   * a machine is equal, so having multible instances
-   * does not make sense.
-   **/
-  K3bDeviceManager( K3bExternalBinManager*, QObject * parent );
   ~K3bDeviceManager();
+
+  static K3bDeviceManager* self();
 
   K3bDevice* deviceByName( const QString& );
 
@@ -86,6 +81,14 @@ class K3bDeviceManager : public QObject
   void slotCollectStdout( KProcess*, char* data, int len );
 
  private:
+  /**
+   * Constructs a device-manager and scans the scsi-bus
+   * for devices. Every instance of K3bDeviceManager on
+   * a machine is equal, so having multible instances
+   * does not make sense.
+   **/
+  K3bDeviceManager();
+
   bool determineBusIdLun( int cdromfd, int& bus, int& id, int& lun );
   QString resolveSymLink( const QString& path );
 

@@ -20,9 +20,6 @@
 
 #include <kdialog.h>
 
-class K3bDeviceManager;
-class K3bExternalBinManager;
-
 class QWidgetStack;
 class KPushButton;
 class QLabel;
@@ -42,9 +39,6 @@ class K3bSetup2 : public KDialog
   ~K3bSetup2();
 
   void addPage( K3bSetup2Page*, int id );
-
-  K3bExternalBinManager* externalBinManager() const;
-  K3bDeviceManager* deviceManager() const;
 
  public slots:
   void init();
@@ -71,9 +65,6 @@ class K3bSetup2 : public KDialog
 
   QLabel* m_headerLabel;
   
-  K3bExternalBinManager* m_externalBinManager;
-  K3bDeviceManager* m_deviceManager;
-
   int m_numberOfPages;
   int m_visiblePageIndex;
 };

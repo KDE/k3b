@@ -21,7 +21,7 @@
 #ifndef K3BSETUP2_TASK_H
 #define K3BSETUP2_TASK_H
 
-#include <k3blistview.h>
+#include <tools/k3blistview.h>
 
 #include <qstring.h>
 

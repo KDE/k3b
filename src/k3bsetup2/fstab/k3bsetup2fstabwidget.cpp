@@ -19,6 +19,7 @@
 
 
 #include "k3bsetup2fstabwidget.h"
+#include "../k3bsetup2task.h"
 
 #include <device/k3bdevicemanager.h>
 #include <device/k3bdevice.h>
@@ -75,9 +76,8 @@ private:
 
 
 
-K3bSetup2FstabWidget::K3bSetup2FstabWidget( K3bDeviceManager* devMan, K3bListView* tv, QWidget* parent, const char* name )
-  : K3bSetup2Page( tv, i18n("Settings up /etc/fstab"), parent, name ),
-    m_deviceManager( devMan )
+K3bSetup2FstabWidget::K3bSetup2FstabWidget( K3bListView* tv, QWidget* parent, const char* name )
+  : K3bSetup2Page( tv, i18n("Settings up /etc/fstab"), parent, name )
 {
   setPixmap( QPixmap(locate( "data", "k3b/pics/k3bsetup_fstab.png" )) );
 
@@ -139,11 +139,13 @@ void K3bSetup2FstabWidget::load( KConfig* c )
 {
   // read     "create fstab entries" 
 
+  clearTasks();
+
   // clear all views
   m_viewNoEntry->clear();
   m_viewWithEntry->clear();
 
-  QListIterator<K3bDevice> it( m_deviceManager->allDevices() );
+  QListIterator<K3bDevice> it( K3bDeviceManager::self()->allDevices() );
   int cdromCount = 0;
   int cdwriterCount = 0;
   while( K3bDevice* dev = *it ) {
@@ -174,6 +176,8 @@ void K3bSetup2FstabWidget::load( KConfig* c )
     ++it;
   }
 
+  updateTasks();
+
   m_checkCreateNewEntries->setEnabled( m_viewNoEntry->childCount() > 0 );
 }
 
@@ -200,6 +204,12 @@ bool K3bSetup2FstabWidget::save( KConfig* c )
       QFile newFstabFile( fstabPath.path() );
       if( !newFstabFile.open( IO_Raw | IO_WriteOnly | IO_Append ) ) {
 	kdDebug() << "(K3bSetup2FstabWidget) could not open file " << fstabPath.path() << endl;
+
+	QMap<FstabViewItem*, K3bSetup2Task*>::Iterator it;
+	for ( it = m_tasks.begin(); it != m_tasks.end(); ++it ) {
+	  it.data()->setFinished( false, i18n("Could not open file %1").arg(fstabPath.path()) );
+	}
+
 	return false;
       }
       QTextStream newFstabStream( &newFstabFile );
@@ -210,18 +220,20 @@ bool K3bSetup2FstabWidget::save( KConfig* c )
 	KStandardDirs::makeDir( fv->text(2) );
 
 	// write fstab entry
-	newFstabStream << fv->device()->ioctlDevice() << "\t" 
-		       << fv->text(2) << "\t"
+	newFstabStream << fv->mountDevice << "\t" 
+		       << fv->mountPoint << "\t"
 		       << "auto" << "\t"
 		       << "ro,noauto,user,exec" << "\t"
 		       << "0 0" << "\n";
+
+	m_tasks[fv]->setFinished( true );
       }
 
       newFstabFile.close();
 
 
       // reread fstab
-      m_deviceManager->scanFstab();
+      K3bDeviceManager::self()->scanFstab();
       
       // reload new entries
       load(c);
@@ -276,7 +288,39 @@ void K3bSetup2FstabWidget::slotItemRenamed( QListViewItem* item, const QString& 
 	fv->mountPoint = str;
     }
   }
+
+  updateTasks();
 }
 
+
+void K3bSetup2FstabWidget::updateTasks()
+{
+  QListViewItemIterator it(m_viewNoEntry);
+  while( it.current() ) {
+    FstabViewItem* item = (FstabViewItem*)it.current();
+    if( !m_tasks.contains( item ) ) {
+      K3bSetup2Task* task = new K3bSetup2Task( i18n("Create fstab entry for device %1").arg(item->device()->ioctlDevice()), 
+					       taskView() );
+      m_tasks[item] = task;
+    }
+    
+    m_tasks[item]->setHelp(i18n("<qt>K3bSetup will add an entry to fstab that allows all users to mount "
+				"disks in drive %1 %2."
+				"<qt>The line will look like this:").arg(item->device()->vendor()).arg(item->device()->description())
+			   + QString("<qt>%1  %2  auto ro,noauto,user,exec  0 0").arg(item->mountDevice).arg(item->mountPoint) );
+    
+    ++it;
+  }
+}
+
+
+void K3bSetup2FstabWidget::clearTasks()
+{
+  QMap<FstabViewItem*, K3bSetup2Task*>::Iterator it;
+  for ( it = m_tasks.begin(); it != m_tasks.end(); ++it ) {
+    delete it.data();
+    m_tasks.erase(it);
+  }
+}
 
 #include "k3bsetup2fstabwidget.moc"

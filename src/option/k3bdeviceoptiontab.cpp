@@ -1,13 +1,13 @@
 #include "k3bdeviceoptiontab.h"
 #include "../device/k3bdevicemanager.h"
 #include "../device/k3bdevicewidget.h"
-#include "../k3b.h"
 #include "../tools/k3bglobals.h"
 
 #include <qlabel.h>
 #include <qstring.h>
 #include <qlayout.h>
 
+#include <kapplication.h>
 #include <kdialog.h>
 #include <klocale.h>
 #include <kconfig.h>
@@ -29,7 +29,7 @@ K3bDeviceOptionTab::K3bDeviceOptionTab( QWidget* parent, const char* name )
   m_labelDevicesInfo->setText( i18n( "K3b tries to detect all your devices properly. You can add devices that have not been detected and change the cdrdao driver for the generic SCSI drives. If K3b is unable to detect your drive, run K3bSetup to set the correct permissions." ) );
   // ------------------------------------------------
 
-  m_deviceWidget = new K3bDeviceWidget( k3bMain()->deviceManager(), this );
+  m_deviceWidget = new K3bDeviceWidget( K3bDeviceManager::self(), this );
 
   frameLayout->addWidget( m_labelDevicesInfo, 0, 0 );
   frameLayout->addWidget( m_deviceWidget, 1, 0 );
@@ -56,19 +56,19 @@ void K3bDeviceOptionTab::saveDevices()
   m_deviceWidget->apply();
 
   // save the config
-  k3bMain()->deviceManager()->saveConfig( k3bMain()->config() );
+  K3bDeviceManager::self()->saveConfig( kapp->config() );
 }
 
 
 void K3bDeviceOptionTab::slotRefreshButtonClicked()
 {
-  k3bMain()->deviceManager()->clear();
-  k3bMain()->deviceManager()->scanbus();
+  K3bDeviceManager::self()->clear();
+  K3bDeviceManager::self()->scanbus();
   
   KConfig globalConfig( K3b::globalConfig() );
   
   globalConfig.setGroup( "Devices" );
-  k3bMain()->deviceManager()->readConfig( &globalConfig );
+  K3bDeviceManager::self()->readConfig( &globalConfig );
 
   m_deviceWidget->init();
 }

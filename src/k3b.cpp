@@ -417,8 +417,8 @@ void K3bMainWindow::saveOptions()
   manager()->writeConfig( m_config, "Docking Config" );
 
   m_config->setGroup( "External Programs" );
-  m_externalBinManager->saveConfig( m_config );
-  m_deviceManager->saveConfig( m_config );
+  K3bExternalBinManager::self()->saveConfig( m_config );
+  K3bDeviceManager::self()->saveConfig( m_config );
 
   emit saveConfig( config() );
 }
@@ -872,20 +872,17 @@ void K3bMainWindow::init()
   // ===============================================================================
   emit initializationInfo( i18n("Searching for external programs...") );
 
-  m_externalBinManager = new K3bExternalBinManager( this );
-  m_externalBinManager->search();
+  K3bExternalBinManager::self()->search();
 
   if( globalConfig.hasGroup("External Programs") ) {
     globalConfig.setGroup( "External Programs" );
-    m_externalBinManager->readConfig( &globalConfig );
+    K3bExternalBinManager::self()->readConfig( &globalConfig );
   }
 
   if( config()->hasGroup("External Programs") ) {
     config()->setGroup( "External Programs" );
-    m_externalBinManager->readConfig( config() );
+    K3bExternalBinManager::self()->readConfig( config() );
   }
-  // not thread/kprocess safe
-  //m_externalBinManager->checkVersions();
 
   // ===============================================================================
 
@@ -894,27 +891,25 @@ void K3bMainWindow::init()
   // ===============================================================================
   emit initializationInfo( i18n("Scanning for CD devices...") );
 
-  m_deviceManager = new K3bDeviceManager( m_externalBinManager, this );
-
-  if( !m_deviceManager->scanbus() )
+  if( !K3bDeviceManager::self()->scanbus() )
     kdDebug() << "No Devices found!" << endl;
 
   if( globalConfig.hasGroup("Devices") ) {
     globalConfig.setGroup( "Devices" );
-    m_deviceManager->readConfig( &globalConfig );
+    K3bDeviceManager::self()->readConfig( &globalConfig );
   }
 
   if( config()->hasGroup("Devices") ) {
     config()->setGroup( "Devices" );
-    m_deviceManager->readConfig( config() );
+    K3bDeviceManager::self()->readConfig( config() );
   }
 			
-  m_deviceManager->printDevices();
+  K3bDeviceManager::self()->printDevices();
   // ===============================================================================
 
   emit initializationInfo( i18n("Initializing CD view...") );
 
-  m_dirView->setupFinalize( m_deviceManager );
+  m_dirView->setupFinalize( K3bDeviceManager::self() );
 
   // ===============================================================================
   emit initializationInfo( i18n("Reading local CDDB database...") );
@@ -1058,6 +1053,18 @@ void K3bMainWindow::slotViewDocumentHeader()
   else {
     m_documentHeader->hide();
   }		
+}
+
+
+K3bExternalBinManager* K3bMainWindow::externalBinManager()
+{
+  return K3bExternalBinManager::self();
+}
+
+
+K3bDeviceManager* K3bMainWindow::deviceManager()
+{
+  return K3bDeviceManager::self();
 }
 
 #include "k3b.moc"

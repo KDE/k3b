@@ -36,7 +36,7 @@
         </widget>
         <widget class="QButtonGroup">
             <property name="name">
-                <cstring>ButtonGroup1</cstring>
+                <cstring>m_groupPermissionSelect</cstring>
             </property>
             <property name="frameShape">
                 <enum>NoFrame</enum>
@@ -81,7 +81,7 @@
                         <cstring>m_radioSelectUsers</cstring>
                     </property>
                     <property name="text">
-                        <string>Select users</string>
+                        <string>Select users (recommended)</string>
                     </property>
                 </widget>
             </vbox>
@@ -106,7 +106,7 @@
                 <property name="spacing">
                     <number>6</number>
                 </property>
-                <widget class="KListView" row="1" column="0" rowspan="3" colspan="1">
+                <widget class="KListView" row="0" column="0" rowspan="3" colspan="1">
                     <column>
                         <property name="text">
                             <string>CD-Writing Users</string>
@@ -118,14 +118,6 @@
                             <bool>true</bool>
                         </property>
                     </column>
-                <item>
-                    <property name="text">
-                        <string>trueg</string>
-                    </property>
-                    <property name="pixmap">
-                        <pixmap></pixmap>
-                    </property>
-                </item>
                     <property name="name">
                         <cstring>m_viewWritingUsers</cstring>
                     </property>
@@ -133,7 +125,7 @@
                         <bool>true</bool>
                     </property>
                 </widget>
-                <widget class="QToolButton" row="2" column="1">
+                <widget class="QToolButton" row="1" column="1">
                     <property name="name">
                         <cstring>m_buttonAdd</cstring>
                     </property>
@@ -141,7 +133,7 @@
                         <string>&lt;-</string>
                     </property>
                 </widget>
-                <widget class="QToolButton" row="1" column="1">
+                <widget class="QToolButton" row="0" column="1">
                     <property name="name">
                         <cstring>m_buttonRemove</cstring>
                     </property>
@@ -149,7 +141,7 @@
                         <string>-&gt;</string>
                     </property>
                 </widget>
-                <spacer row="3" column="1">
+                <spacer row="2" column="1">
                     <property name="name" stdset="0">
                         <cstring>Spacer1</cstring>
                     </property>
@@ -166,7 +158,7 @@
                         </size>
                     </property>
                 </spacer>
-                <widget class="KListView" row="1" column="2" rowspan="3" colspan="1">
+                <widget class="KListView" row="0" column="2" rowspan="3" colspan="1">
                     <column>
                         <property name="text">
                             <string>Non-CD-Writing Users</string>
@@ -185,7 +177,7 @@
                         <bool>true</bool>
                     </property>
                 </widget>
-                <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="3">
+                <widget class="QLayoutWidget" row="3" column="0" rowspan="1" colspan="3">
                     <property name="name">
                         <cstring>Layout1</cstring>
                     </property>
