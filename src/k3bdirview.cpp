@@ -64,6 +64,7 @@
 #include "device/k3bdevicemanager.h"
 #include "device/k3bdevice.h"
 #include "k3b.h"
+#include "rip/k3bfilmview.h"
 
 
 
@@ -83,14 +84,15 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
   //KURL url = KURL();
   //url.setProtocol("k3b_cdview");
   //m_kiotree->addTopLevelDir( url, "Audio CD Init");
-	
+
   m_fileView = new K3bFileView(box2, "fileview");
 
   // cd view
   m_cdView = new K3bCdView(box2, "cdview");
   m_cdView->hide();
+  m_filmView = new K3bFilmView(box2, "filmview");
+  m_filmView->hide();
   m_initialized = false;
-
 
   // split in the middle
   QValueList<int> sizes = m_mainSplitter->sizes();
@@ -118,6 +120,7 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
   connect( m_kiotree, SIGNAL(urlActivated(const KURL&)), this, SLOT(slotDirActivated(const KURL&)) );
   connect( m_fileView, SIGNAL(urlEntered(const KURL&)), m_kiotree, SLOT(followURL(const KURL&)) );
   connect( m_fileView, SIGNAL(urlEntered(const KURL&)), this, SLOT(slotUpdateURLCombo(const KURL&)) );
+  connect( m_filmView, SIGNAL(notSupportedDisc( const QString& ) ), this, SLOT(slotDriveActivated( const QString& )) );
 }
 
 K3bDirView::~K3bDirView()
@@ -163,36 +166,25 @@ void K3bDirView::setupFinalize( K3bDeviceManager *dm )
 }
 
 
-void K3bDirView::slotCDDirActivated(const QString& device)
+void K3bDirView::slotDriveActivated(const QString& device)
 {
-  /* without root right i dont know how to mount the device to a specific directory.
-     i can only mount devices listed in fstab. so i have to check if fstab devices are the
-     same as our sgX device and can mount then on the fstab directory but not temporary
-     for k3b. :-(  Any idea ??????
-  */
-
-  // YES: mount K3bDevice::ioctlDevice() if K3bDevice::mountPoint() is not empty! :-)
-  //      otherwise there is no possibility to mount (K3bDeviceManager searches fstb for us!
-
-  // But: should not K3bCdView take care of this?
-
-  KConfig* c = kapp->config();
-  c->setGroup( "General Options" );
-  QString tempdir = c->readEntry( "Temp Dir", locateLocal( "appdata", "temp/" ) );
-  qDebug("(K3bDirView) Mount dir: " + tempdir);
-  QDir mt = QDir(tempdir);
-  if( !mt.exists() )
-    mt.mkdir("tempcd");
-  qDebug("(K3bDirView) new dir for cd.");
-  //KAutoMount *tempCdView = new KAutoMount ( true, "iso9660", "/dev/cdrecorder", "/abc", "/home/ft0001/bla", false );
-  //KRun::runCommand( "ls -l" );//mount -t iso9660 /dev/cdrecorder /abc");
-  //FileProtocol *fp = new FileProtocol("dummy", "k3b");
-  //fp->mount( true, "iso9660", device, "/abc" );
-  //KIO::mount( true, "iso9660", "/dev/cdrecorder", "/home/ft0001/cdr", true);
-  //const KURL url = KURL( tempdir + "tempcd");
-  //slotDirActivated( url );
+  K3bDevice *dev = k3bMain()->deviceManager()->deviceByName( device );
+  QString mountPoint = dev->mountPoint();
+  if( !mountPoint.isEmpty() ){
+    KIO::mount( true, "autofs", dev->ioctlDevice(), mountPoint, true );
+  }
+  const KURL url = KURL( mountPoint);
+  slotDirActivated( url );
 }
 
+void K3bDirView::slotCheckDvd( const QString& device ) {
+    // cdview calls this so hide cd
+    m_cdView->hide();
+    K3bDevice *dev = k3bMain()->deviceManager()->deviceByName( device );
+    // if insert disc can't be read a notSupportDisc(string device) signal is emitted -> mount cd and show data
+    m_filmView->setDevice( device );
+    m_filmView->show();
+}
 
 void K3bDirView::slotUpdateURLCombo( const KURL& url )
 {
@@ -214,8 +206,10 @@ void K3bDirView::slotDirActivated( const KURL& url )
     m_urlCombo->setEditText( url.path() );
     m_fileView->show();
     m_cdView->hide();
+    m_filmView->hide();
   } else {
     m_fileView->hide();
+    m_filmView->hide();
     m_cdView->show();
     m_cdView->showCdView( url.path() );
   }
