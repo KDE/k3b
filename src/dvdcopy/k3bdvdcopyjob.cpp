@@ -113,7 +113,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
     d->running = false;
   }
   else {
-    if( dh->ngDiskInfo().capacity() > K3b::Msf( 510 ) ) {
+    if( dh->ngDiskInfo().capacity() > K3b::Msf( 510*60*75 ) ) {
       if( KMessageBox::warningYesNo( qApp->activeWindow(), 
 				     i18n("The source DVD seems to be too large (%1) to make it's contents fit on "
 					  "a normal writable DVD media which have a capacity of approximately "
