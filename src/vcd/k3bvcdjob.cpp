@@ -228,6 +228,19 @@ void K3bVcdJob::vcdxGen()
     break;
   }
 
+  // check for cd-i application
+  if ( vcdDoc()->vcdOptions()->CdiSupport() && vcdDoc()->vcdOptions()->checkCdiFiles()) {
+    *m_process << "--iso-application-id" << QString("%1").arg(QFile::encodeName(vcdDoc()->vcdOptions()->applicationId()));
+    *m_process << "--add-file-2336" << QString("%1,CDI/CDI_IMAG.RTF").arg(locate("data", "k3b/cdi/cdi_imag.rtf"));
+    *m_process << "--add-file" << QString("%1,,CDI/CDI_TEXT.FNT").arg(locate("data", "k3b/cdi/cdi_text.fnt"));
+    *m_process << "--add-file" << QString("%1,,CDI/CDI_VCD.APP").arg(locate("data", "k3b/cdi/cdi_vcd.app"));
+    QString usercdicfg = locateLocal("appdata", "cdi/cdi_vcd.cfg");
+    if (QFile::exists(usercdicfg))
+      *m_process << "--add-file" << QString("%1,,CDI/CDI_VCD.CFG").arg(usercdicfg);
+    else
+      *m_process << "--add-file" << QString("%1,,CDI/CDI_VCD.CFG").arg(locate("data", "k3b/cdi/cdi_vcd.cfg"));
+  }
+
   kdDebug() << QString("(K3bVcdJob) xmlfile = \"%1\"").arg(QFile::encodeName(m_xmlFile)) << endl;
   *m_process << "-o" << QString("%1").arg(QFile::encodeName(m_xmlFile));
 
@@ -244,6 +257,15 @@ void K3bVcdJob::vcdxGen()
     this, SLOT(slotCollectOutput(KProcess*, char*, int)) );
   connect( m_process, SIGNAL(processExited(KProcess*)),
     this, SLOT(slotVcdxGenFinished()) );
+
+
+  kdDebug() << "***** vcdxgen parameters:\n";
+  const QValueList<QCString>& args = m_process->args();
+  QString s;
+  for( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
+      s += *it + " ";
+  }
+  kdDebug() << s << endl << flush;
 
 
   if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {

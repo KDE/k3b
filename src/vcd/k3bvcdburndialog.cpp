@@ -43,6 +43,7 @@
 #include <klocale.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
+#include <kstandarddirs.h>
 
 
 K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char *name, bool modal )
@@ -84,7 +85,9 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
   // connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_spinCopies, SLOT(setDisabled(bool)) );
   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkSimulate, SLOT(setDisabled(bool)) );
   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkRemoveBufferFiles, SLOT(setDisabled(bool)) );
-        
+  connect( m_groupVcdFormat, SIGNAL(clicked(int)), this, SLOT(slotVcdTypeClicked(int)) );
+  connect( m_checkCdiSupport, SIGNAL(toggled(bool)), this, SLOT(slotCdiSupportChecked(bool)) );
+
   // ToolTips
   // -------------------------------------------------------------------------
   QToolTip::add( m_radioVcd11, i18n("Select Video CD type %1").arg("(VCD 1.1)") );
@@ -198,20 +201,11 @@ void K3bVcdBurnDialog::setupVideoCdTab()
   m_check2336 = new QCheckBox( i18n( "Use 2336 byte Sectors" ), m_groupOptions );
 
   m_checkCdiSupport = new QCheckBox( i18n( "Enable CD-i support" ), m_groupOptions );
-  m_checkCdiSupport->setEnabled( false );
   
   // ------------------------------------------------- CD-i Application ---
   m_groupCdi = new QGroupBox( 4, Qt::Vertical, i18n("Video on CD-i"), w );
   m_editCdiCfg = new QMultiLineEdit( m_groupCdi, "m_editCdiCfg" );
   m_editCdiCfg->setFrameShape( QTextEdit::NoFrame );
-  // Only available on VCD Type 1.1 or 2.0
-  m_groupCdi->setEnabled( false );
-  // Only available on VCD Type 2.0
-  m_editCdiCfg->setEnabled( false );
-  m_editCdiCfg->insertLine("CURCOL=GREEN");
-  m_editCdiCfg->insertLine("PSDCURCOL=YELLOW");
-  m_editCdiCfg->insertLine("PSDCURSHAPE=STAR");
-
 
   // ----------------------------------------------------------------------
   QGridLayout* grid = new QGridLayout( w );
@@ -307,6 +301,10 @@ void K3bVcdBurnDialog::setupLabelTab()
 
 void K3bVcdBurnDialog::slotOk()
 {
+  // save users CDI_VCD.CFG
+  if (m_editCdiCfg->edited())
+    saveCdiConfig();
+    
   // Add imagename to path when the user has changed the path in m_tempDirSelectionWidget
   slotSetImagePath();
   
@@ -336,7 +334,20 @@ void K3bVcdBurnDialog::loadDefaults()
 
   m_spinVolumeNumber->setValue( 1 );
   m_spinVolumeCount->setValue( 1 );
-  
+
+  m_groupCdi->setEnabled( false );
+
+  if (!m_radioSvcd10->isChecked()) {
+    m_checkCdiSupport->setEnabled(vcdDoc()->vcdOptions()->checkCdiFiles());
+    m_checkCdiSupport->setChecked(m_checkCdiSupport->isEnabled());
+  }
+  else {
+    m_checkCdiSupport->setEnabled(false);
+    m_checkCdiSupport->setChecked(false);
+  }
+
+  loadDefaultCdiConfig();    
+
   // TODO: for the future
   // m_editPublisher->setText( o->publisher() );
   // m_editPreparer->setText( o->preparer() );
@@ -368,6 +379,8 @@ void K3bVcdBurnDialog::saveSettings()
   vcdDoc()->vcdOptions()->setBrokenSVcdMode(m_checkNonCompliant->isChecked());
   vcdDoc()->vcdOptions()->setSector2336(m_check2336->isChecked());
 
+  if (m_editCdiCfg->edited())
+    saveCdiConfig();
 }
 
 
@@ -403,18 +416,28 @@ void K3bVcdBurnDialog::readSettings()
 
   m_check2336->setChecked( vcdDoc()->vcdOptions()->Sector2336() );
 
+  m_checkCdiSupport->setEnabled( false );
+  m_checkCdiSupport->setChecked( false );
+  m_groupCdi->setEnabled( false );
+
   if ( m_radioSvcd10->isChecked() ) {
     m_checkNonCompliant->setChecked( vcdDoc()->vcdOptions()->BrokenSVcdMode() );
   }
   else {
     m_checkNonCompliant->setChecked( false );
     m_checkNonCompliant->setEnabled( false );
+    if (vcdDoc()->vcdOptions()->checkCdiFiles()) {
+      m_checkCdiSupport->setEnabled( true );
+      m_checkCdiSupport->setChecked( vcdDoc()->vcdOptions()->CdiSupport() );
+    }
   }
 
   m_editVolumeId->setText( vcdDoc()->vcdOptions()->volumeId() );
   m_editAlbumId->setText( vcdDoc()->vcdOptions()->albumId() );
 
   K3bProjectBurnDialog::readSettings();
+
+  loadCdiConfig();
 }
 
 void K3bVcdBurnDialog::loadUserDefaults()
@@ -427,12 +450,20 @@ void K3bVcdBurnDialog::loadUserDefaults()
   
   m_check2336->setChecked( o.Sector2336() );
     
+  m_checkCdiSupport->setChecked( false );
+  m_checkCdiSupport->setEnabled( false );
+  m_groupCdi->setEnabled( false );
+
   if ( m_radioSvcd10->isChecked() ) {
     m_checkNonCompliant->setChecked( o.BrokenSVcdMode() );
   }
   else {
     m_checkNonCompliant->setChecked( false );
     m_checkNonCompliant->setEnabled( false );
+    if (vcdDoc()->vcdOptions()->checkCdiFiles()) {
+      m_checkCdiSupport->setEnabled( true );
+      m_checkCdiSupport->setChecked( o.CdiSupport() );
+    }
   }
 
   m_spinVolumeCount->setValue( o.volumeCount() );
@@ -446,6 +477,7 @@ void K3bVcdBurnDialog::loadUserDefaults()
   m_checkRemoveBufferFiles->setChecked( c->readBoolEntry( "remove_image", true ) );
   m_checkOnlyCreateImage->setChecked( c->readBoolEntry( "only_create_image", false ) );
 
+  loadCdiConfig();
 }
 
 
@@ -467,9 +499,78 @@ void K3bVcdBurnDialog::saveUserDefaults()
   o.setSector2336(m_check2336->isChecked());
   o.setVolumeCount(m_spinVolumeCount->value());
   o.setVolumeNumber(m_spinVolumeNumber->value());  
+  o.setCdiSupport(m_checkCdiSupport->isChecked());
   o.save( c );
 
   m_tempDirSelectionWidget->saveConfig();
+
+  saveCdiConfig();
+}
+
+void K3bVcdBurnDialog::saveCdiConfig()
+{
+
+    QString filename = locateLocal( "appdata", "cdi/cdi_vcd.cfg");
+    if (QFile::exists(filename))
+      QFile::remove(filename);
+      
+    QFile cdi(filename);
+    if ( !cdi.open( IO_WriteOnly ))
+      return;
+
+    QTextStream s( &cdi );
+    int i = m_editCdiCfg->numLines();
+
+    for ( int j = 0; j < i; j++)
+        s << QString("%1").arg(m_editCdiCfg->textLine(j)) << "\n";
+
+    cdi.close();
+
+    m_editCdiCfg->setEdited(false);
+}
+
+void K3bVcdBurnDialog::loadCdiConfig()
+{
+    QString filename = locateLocal( "appdata", "cdi/cdi_vcd.cfg");
+    if (QFile::exists(filename)) {
+      QFile cdi(filename);
+      if ( !cdi.open( IO_ReadOnly )) {
+        loadDefaultCdiConfig();
+        return;
+      }
+
+      QTextStream s( &cdi );
+
+      while ( !s.atEnd() )
+            m_editCdiCfg->insertLine( s.readLine() );
+
+      cdi.close();
+      m_editCdiCfg->setEdited(false);
+    }
+    else
+      loadDefaultCdiConfig();
+    
+}
+
+void K3bVcdBurnDialog::loadDefaultCdiConfig()
+{
+    QString filename = locate( "data", "k3b/cdi/cdi_vcd.cfg");
+    if (QFile::exists(filename)) {
+      QFile cdi(filename);
+      if ( !cdi.open( IO_ReadOnly )) {
+        m_checkCdiSupport->setChecked( false );
+        m_checkCdiSupport->setEnabled( false );
+        return;
+      }
+
+      QTextStream s( &cdi );
+
+      while ( !s.atEnd() )
+            m_editCdiCfg->insertLine( s.readLine() );
+
+      cdi.close();
+      m_editCdiCfg->setEdited(true);
+    }
 }
 
 void K3bVcdBurnDialog::slotSetImagePath()
@@ -539,6 +640,34 @@ void K3bVcdBurnDialog::slotOnlyCreateImageChecked( bool c )
   }
 
   vcdDoc()->setOnlyCreateImage( c );
+}
+
+void K3bVcdBurnDialog::slotVcdTypeClicked( int i)
+{
+
+  switch(i) {
+    case 0:
+      // vcd 1.1 no support for version 3.x.
+      // v4 work also for vcd 1.1 but without CD-i menues.
+      // Do anybody use vcd 1.1 with cd-i????
+    case 1:
+      //vcd 2.0
+      m_checkCdiSupport->setEnabled( true );
+      m_groupCdi->setEnabled( m_checkCdiSupport->isChecked() );
+      break;
+    case 2:
+      //svcd 1.0
+      m_checkCdiSupport->setEnabled( false );
+      m_groupCdi->setEnabled( false );
+      break;
+  }
+  
+}
+
+void K3bVcdBurnDialog::slotCdiSupportChecked( bool b)
+{
+  m_groupCdi->setEnabled( b );
+  vcdDoc()->vcdOptions()->setCdiSupport(b);
 }
 
 #include "k3bvcdburndialog.moc"

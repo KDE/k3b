@@ -19,34 +19,47 @@
 
 #include <kconfig.h>
 #include <klocale.h>
+#include <kstandarddirs.h>
+
 #include <qstring.h>
+#include <qfile.h>
 
 
 K3bVcdOptions::K3bVcdOptions()
   : m_volumeID( i18n("Project name", "VIDEOCD") ),
-    m_applicationId( "CDI/CDI_VCD.APP;1" ),
-    m_systemId( "CD-RTOS CD-BRIDGE" ),    
     m_volumeSetId( "" ),
+    m_volumeCount( 1 ),
+    m_volumeNumber( 1 ),
+    m_cdisupport( false ),
     m_brokensvcdmode( false ),
     m_sector2336( false ),
-    m_volumeCount( 1 ),
-    m_volumeNumber( 1 )
+    m_applicationId( "CDI/CDI_VCD.APP;1" ),
+    m_systemId( "CD-RTOS CD-BRIDGE" )
 {
 
 }
 
+bool K3bVcdOptions::checkCdiFiles()
+{
+  if( !QFile::exists( locate("data","k3b/cdi/cdi_imag.rtf") )) return false;
+  if( !QFile::exists( locate("data","k3b/cdi/cdi_text.fnt") )) return false;
+  if( !QFile::exists( locate("data","k3b/cdi/cdi_vcd.app") )) return false;  
+  if( !QFile::exists( locate("data","k3b/cdi/cdi_vcd.cfg") )) return false;
+  return true;
+}
 
 void K3bVcdOptions::save( KConfig* c )
 {
   c->writeEntry( "volume_id", m_volumeID );
   c->writeEntry( "album_id", m_albumID );
+  c->writeEntry( "volume_set_id", m_volumeSetId );
   c->writeEntry( "preparer", m_preparer );
   c->writeEntry( "publisher", m_publisher );
-  c->writeEntry( "volume_set_id", m_volumeSetId );
+  c->writeEntry( "volume_count", m_volumeCount );
+  c->writeEntry( "volume_number", m_volumeNumber );
+  c->writeEntry( "cdi_support", m_cdisupport );
   c->writeEntry( "broken_svcd_mode", m_brokensvcdmode );
   c->writeEntry( "2336_sectors", m_sector2336 );
-  c->writeEntry( "volume_count", m_volumeCount );  
-  c->writeEntry( "volume_number", m_volumeNumber );  
 }
 
 
@@ -56,13 +69,14 @@ K3bVcdOptions K3bVcdOptions::load( KConfig* c )
 
   options.setVolumeId( c->readEntry( "volume_id", options.volumeId() ) );
   options.setAlbumId( c->readEntry( "album_id", options.albumId() ) );
+  options.setVolumeSetId( c->readEntry( "volume_set_id", options.volumeSetId() ) );
   options.setPreparer( c->readEntry( "preparer", options.preparer() ) );
   options.setPublisher( c->readEntry( "publisher", options.publisher() ) );
-  options.setVolumeSetId( c->readEntry( "volume_set_id", options.volumeSetId() ) );
-  options.setBrokenSVcdMode( c->readBoolEntry( "broken_svcd_mode", options.BrokenSVcdMode() ) );
-  options.setSector2336( c->readBoolEntry( "2336_sectors", options.Sector2336() ) );
   options.setVolumeCount( ( c->readEntry( "volume_count", QString("%1").arg(options.volumeCount()) )).toInt() );
   options.setVolumeNumber( ( c->readEntry( "volume_number", QString("%1").arg(options.volumeNumber()) )).toInt() );
+  options.setCdiSupport( c->readBoolEntry( "cdi_support", options.CdiSupport() ) );
+  options.setBrokenSVcdMode( c->readBoolEntry( "broken_svcd_mode", options.BrokenSVcdMode() ) );
+  options.setSector2336( c->readBoolEntry( "2336_sectors", options.Sector2336() ) );
   
   return options;
 }

@@ -112,7 +112,13 @@ unsigned long long K3bVcdDoc::calcTotalSize() const
 
 unsigned long long K3bVcdDoc::size() const
 {
-  return calcTotalSize();
+  // mode2 -> mode1 int(( n+2047 ) / 2048) * 2352
+  // mode1 -> mode2 int(( n+2351 ) / 2352) * 2048
+  // 135 116b for vcd iso
+  // 1 269 384b for cd-isupport
+
+  long tracksize = long(( calcTotalSize()+2351 ) / 2352) * 2048;
+  return tracksize + 1404500;
 }
 
 unsigned long long K3bVcdDoc::length() const

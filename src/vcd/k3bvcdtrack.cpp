@@ -45,9 +45,7 @@ K3bVcdTrack::~K3bVcdTrack()
 
 unsigned long K3bVcdTrack::size() const
 {
-  // mode2 -> mode1 int(( n+2047 ) / 2048) * 2352
-  // mode1 -> mode2 int(( n+2351 ) / 2352) * 2048
-  return long(( m_file.size()+2351 ) / 2352) * 2048;
+  return m_file.size();
 }
 
 void K3bVcdTrack::setMpegType(const int& mt)

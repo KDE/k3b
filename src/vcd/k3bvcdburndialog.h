@@ -88,6 +88,9 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
 
  private:
   K3bVcdDoc* m_vcdDoc;
+  void saveCdiConfig();
+  void loadCdiConfig();
+  void loadDefaultCdiConfig();
   
  protected slots:
    void slotOk();
@@ -104,6 +107,8 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
    void slotSetImagePath();
    void slotVolumeIdChanged();
    void slotAlbumIdChanged();
+   void slotVcdTypeClicked(int);
+   void slotCdiSupportChecked(bool);
 };
 
 #endif
