@@ -159,6 +159,15 @@ K3bCdrdaoWriter::~K3bCdrdaoWriter()
 }
 
 
+int K3bCdrdaoWriter::fd() const
+{
+  if( m_process )
+    return m_process->stdin();
+  else
+    return -1;
+}
+
+
 void K3bCdrdaoWriter::prepareArgumentList()
 {
 

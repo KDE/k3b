@@ -39,6 +39,13 @@ class K3bAbstractWriter : public K3bJob
 
   virtual bool write( const char* data, int len ) = 0;
 
+  /**
+   * This can be used to setup direct streaming between two processes
+   * for example the cdrecordwriter returnes the stdin fd which can be
+   * connected to the stdout fd of mkisofs in the isoimager
+   */
+  virtual int fd() const { return -1; }
+
  public slots:
   void setBurnDevice( K3bDevice* dev ) { m_burnDevice = dev; }
   void setBurnSpeed( int s ) { m_burnSpeed = s; }

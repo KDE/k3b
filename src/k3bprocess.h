@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -21,6 +21,17 @@
 #include <kprocess.h>
 #include <qstring.h>
 
+
+/**
+ * This is an enhanced KProcess.
+ * It splits the stderr output to lines making sure the client gets every line as it 
+ * was written by the process.
+ * Aditionally one may set raw stdout and stdin handling using the stdin() and stdout() methods
+ * to get the process' file descriptors.
+ * Last but not least K3bProcess is able to duplicate stdout making it possible to connect two 
+ * K3bProcesses like used in K3bDataJob to duplicate mkisofs' stdout to the stdin of the writer 
+ * (cdrecord or cdrdao)
+ */
 class K3bProcess : public KProcess
 {
   Q_OBJECT
@@ -31,15 +42,39 @@ class K3bProcess : public KProcess
 
   bool start( RunMode run = NotifyOnExit, Communication com = NoCommunication );
 
-  /** get stdin socket */
+  /** 
+   * get stdin file descriptor
+   * Only makes sense while process is running.
+   */
   int stdin() const;
-  /** get stdout socket */
+
+  /** 
+   * get stdout file descriptor
+   * Only makes sense while process is running.
+   */
   int stdout() const;
 
-  /** if set to true one needs to create a socketnotifier on one's own */
+  /**
+   * makes the stdout fd of this process a copy of @p fd
+   * closing it first.
+   * This means that all this process writes to stdout will directly
+   * be written to @p fd.
+   * Be aware that you won't get any stdoutReady() or receivedStdout()
+   * signals anymore
+   * Only use this before starting the process.
+   */
+  void dupStdout( int fd );
+
+  /** 
+   * If set to true one needs to create a socketnotifier on one's own.
+   * There will be no wroteStdin() signal
+   */
   void setRawStdin(bool b) { m_rawStdin = b; }
-  /** if set to true K3bProcess emits stdoutReady instead of the KProcess signal
-   *  and the data has to read by the user */
+
+  /** 
+   * If set to true K3bProcess emits stdoutReady instead of the KProcess receivedStdout() 
+   * signal and the data has to read by the user directly from the file descriptor
+   */
   void setRawStdout(bool b) { m_rawStdout = b; }
 
  public slots:
@@ -52,14 +87,23 @@ class K3bProcess : public KProcess
  signals:
   void stderrLine( const QString& line );
   void stdoutLine( const QString& line );
-  /** gets emitted if raw stdout mode has been requested */
-  void stdoutReady(int);
+
+  /** 
+   * Gets emitted if raw stdout mode has been requested
+   * The data has to be read from @p fd.
+   */
+  void stdoutReady( int fd );
 
  protected:
   /**
    * reimplemeted from KProcess
    */
   int commSetupDoneP();
+
+  /**
+   * reimplemeted from KProcess
+   */
+  int commSetupDoneC();
 
  private:
   void splitOutput( char*, int, bool );
@@ -70,6 +114,8 @@ class K3bProcess : public KProcess
 
   bool m_rawStdin;
   bool m_rawStdout;
+
+  int m_dupStdoutFd;
 };
 
 

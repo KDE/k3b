@@ -50,6 +50,15 @@ K3bCdrecordWriter::~K3bCdrecordWriter()
 }
 
 
+int K3bCdrecordWriter::fd() const
+{
+  if( m_process )
+    return m_process->stdin();
+  else
+    return -1;
+}
+
+
 void K3bCdrecordWriter::prepareArgumentList()
 {
   if( m_process ) delete m_process;  // kdelibs want this!

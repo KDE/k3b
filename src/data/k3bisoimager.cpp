@@ -48,7 +48,8 @@ K3bIsoImager::K3bIsoImager( K3bDataDoc* doc, QObject* parent, const char* name )
     m_processSuspended(false),
     m_processExited(false),
     m_lastOutput(0),
-    m_mkisofsPrintSizeResult( 0 )
+    m_mkisofsPrintSizeResult( 0 ),
+    m_fdToWriteTo(-1)
 {
 }
 
@@ -56,6 +57,12 @@ K3bIsoImager::K3bIsoImager( K3bDataDoc* doc, QObject* parent, const char* name )
 K3bIsoImager::~K3bIsoImager()
 {
   cleanup();
+}
+
+
+void K3bIsoImager::writeToFd( int fd )
+{
+  m_fdToWriteTo = fd;
 }
 
 
@@ -316,18 +323,20 @@ void K3bIsoImager::start()
   connect( m_process, SIGNAL(stderrLine( const QString& )),
 	   this, SLOT(slotReceivedStderr( const QString& )) );
 
-  connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
-	   this, SLOT(slotReceivedStdout(KProcess*, char*, int)) );
+  if( m_fdToWriteTo == -1 )
+    connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
+	     this, SLOT(slotReceivedStdout(KProcess*, char*, int)) );
+  else
+    m_process->dupStdout( m_fdToWriteTo );
 
-  if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput) )
-    {
-      // something went wrong when starting the program
-      // it "should" be the executable
-      kdDebug() << "(K3bIsoImager) could not start mkisofs" << endl;
-      emit infoMessage( i18n("Could not start mkisofs."), K3bJob::ERROR );
-      emit finished( false );
-      cleanup();
-    }
+  if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput) ) {
+    // something went wrong when starting the program
+    // it "should" be the executable
+    kdDebug() << "(K3bIsoImager) could not start mkisofs" << endl;
+    emit infoMessage( i18n("Could not start mkisofs."), K3bJob::ERROR );
+    emit finished( false );
+    cleanup();
+  }
   else {
     m_processExited = false;
     m_processSuspended = false;

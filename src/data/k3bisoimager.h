@@ -46,6 +46,14 @@ class K3bIsoImager : public K3bJob
   void calculateSize();
 
   /**
+   * lets the isoimager write directly into fd instead of emitting
+   * data() signals.
+   * Be aware that this only makes sense before starting the job.
+   * To disable just set @p fd to -1
+   */
+  void writeToFd( int fd );
+
+  /**
    * If dev == 0 K3bIsoImager will ignore the data in the previous session. 
    * This is usable for CD-Extra.
    */
@@ -122,6 +130,8 @@ class K3bIsoImager : public K3bJob
   bool m_canceled;
 
   QStringList m_tempFiles;
+
+  int m_fdToWriteTo;
 };
 
 

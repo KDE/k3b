@@ -47,6 +47,8 @@ class K3bCdrecordWriter : public K3bAbstractWriter
 
   bool write( const char* data, int len );
 
+  int fd() const;
+
  public slots:
   void start();
   void cancel();

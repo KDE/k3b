@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -21,11 +21,18 @@
 #include <qsocketnotifier.h>
 #include <kdebug.h>
 
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <fcntl.h>
+
 
 K3bProcess::K3bProcess()
   : KProcess(),
     m_rawStdin(false),
-    m_rawStdout(false)
+    m_rawStdout(false),
+    m_dupStdoutFd(-1)
 {
   m_bSplitStdout = false;
 }
@@ -164,6 +171,63 @@ int K3bProcess::commSetupDoneP()
   return ok;
 }
 
+
+// this is just the same as in KProcess except the additional
+// m_dupStdoutFd stuff
+int K3bProcess::commSetupDoneC()
+{
+  int ok = 1;
+  struct linger so;
+  memset(&so, 0, sizeof(so));
+
+  if (communication & Stdin)
+    close(in[1]);
+  if (communication & Stdout)
+    close(out[0]);
+  if (communication & Stderr)
+    close(err[0]);
+
+  if (communication & Stdin)
+    ok &= dup2(in[0],  STDIN_FILENO) != -1;
+  else {
+    int null_fd = open( "/dev/null", O_RDONLY );
+    ok &= dup2( null_fd, STDIN_FILENO ) != -1;
+    close( null_fd );
+  }
+
+  if( m_dupStdoutFd != -1 ) {
+    if( ::dup2( m_dupStdoutFd, STDOUT_FILENO ) != -1 ) {
+      kdDebug() << "(K3bProcess) Successfully duplicated " << m_dupStdoutFd << " to " << STDOUT_FILENO << endl;
+    }
+    else {
+      kdDebug() << "(K3bProcess) Error while dup( " << m_dupStdoutFd << ", " << STDOUT_FILENO << endl;
+      ok = 0;
+      communication = (Communication) (communication & ~Stdout);
+    }
+  }
+  else if (communication & Stdout) {
+    ok &= dup2(out[1], STDOUT_FILENO) != -1;
+    ok &= !setsockopt(out[1], SOL_SOCKET, SO_LINGER, (char*)&so, sizeof(so));
+  }
+  else {
+    int null_fd = open( "/dev/null", O_WRONLY );
+    ok &= dup2( null_fd, STDOUT_FILENO ) != -1;
+    close( null_fd );
+  }
+  if (communication & Stderr) {
+    ok &= dup2(err[1], STDERR_FILENO) != -1;
+    ok &= !setsockopt(err[1], SOL_SOCKET, SO_LINGER, reinterpret_cast<char *>(&so), sizeof(so));
+  }
+  else {
+    int null_fd = open( "/dev/null", O_WRONLY );
+    ok &= dup2( null_fd, STDERR_FILENO ) != -1;
+    close( null_fd );
+  }
+  return ok;
+}
+
+
+
 int K3bProcess::stdin() const
 {
   return in[1];
@@ -172,6 +236,12 @@ int K3bProcess::stdin() const
 int K3bProcess::stdout() const
 {
   return out[0];
+}
+
+
+void K3bProcess::dupStdout( int fd )
+{
+  m_dupStdoutFd = fd;
 }
 
 #include "k3bprocess.moc"

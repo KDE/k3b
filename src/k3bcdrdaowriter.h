@@ -49,6 +49,8 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
   K3bCdrdaoWriter* addArgument( const QString& );
   K3bDevice* sourceDevice() { return m_sourceDevice; };
 
+  int fd() const;
+
  private:
   void reinitParser();
   void parseCdrdaoLine( const QString& line );

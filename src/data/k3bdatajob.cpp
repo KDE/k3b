@@ -185,8 +185,12 @@ void K3bDataJob::slotSizeCalculationFinished( int status, int size )
   if( status != ERROR ) {
     // this only happens in on-the-fly mode
     if( prepareWriterJob() ) {
-      if( startWriting() )
+      if( startWriting() ) {
+	// try a direct connection between the processes
+	if( m_writerJob->fd() != -1 )
+	  m_isoImager->writeToFd( m_writerJob->fd() );
 	m_isoImager->start();
+      }
     }
   }
   else {
