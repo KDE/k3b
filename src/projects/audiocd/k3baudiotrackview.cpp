@@ -323,7 +323,9 @@ void K3bAudioTrackView::slotChanged()
 
   if( newTracks ) {
     m_animationTimer->start(200);
+    showAllSources();
   }
+
   kdDebug() << "(K3bAudioTrackView::slotChanged) finished" << endl;
 }
 
@@ -340,8 +342,12 @@ K3bAudioTrackViewItem* K3bAudioTrackView::getTrackViewItem( K3bAudioTrack* track
     // 
     // disable the item until the files have been analysed
     // so the user may not change the cd-text until the one from the
-    // file is loaded
+    // file is loaded.
     //
+    // Since for some reason QT thinks it's bad to open disabled items
+    // we need to open it before disabling it
+    //
+    newItem->showSources( track->numberSources() != 1 );
     newItem->setEnabled( false );
     m_trackItemMap[track] = newItem;
 
@@ -404,13 +410,12 @@ void K3bAudioTrackView::slotTrackRemoved( K3bAudioTrack* track )
 
 void K3bAudioTrackView::showAllSources()
 {
-//   uint kb = KApplication::keyboardModifiers();
-//   bool show = ( kb & (XK_Control_L|XK_Control_R) ) && hasFocus();
+  // TODO: add an action to show all sources
 
   QListViewItem* item = firstChild();
   while( item ) {
     if( K3bAudioTrackViewItem* tv = dynamic_cast<K3bAudioTrackViewItem*>( item ) )
-      tv->showSources( /*show ||*/ tv->track()->numberSources() != 1 );
+      tv->showSources( tv->track()->numberSources() != 1 );
     item = item->nextSibling();
   }
 }

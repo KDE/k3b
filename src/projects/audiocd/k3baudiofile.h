@@ -60,6 +60,9 @@ class K3bAudioFile : public K3bAudioDataSource
    */
   void setEndOffset( const K3b::Msf& );
 
+  const K3b::Msf& startOffset() const { return m_startOffset; }
+  const K3b::Msf& endOffset() const { return m_endOffset; }
+
   /**
    * Get the last used sector in the file.
    */

@@ -93,7 +93,7 @@ QString K3bAudioTrackViewItem::text(int i) const
     }
 }
 
-void K3bAudioTrackViewItem::setText(int col, const QString& text )
+void K3bAudioTrackViewItem::setText( int col, const QString& text )
 {
   if( col == 1 ) {
     // this is the cd-text artist field
