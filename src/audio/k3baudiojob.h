@@ -93,6 +93,9 @@ class K3bAudioJob : public K3bBurnJob
   bool m_written;
 
   QString m_tempFilePrefix;
+
+  int m_usedWritingApp;
+  int m_usedWritingMode;
 };
 
 #endif
