@@ -37,3 +37,7 @@ A: Most likely you installed K3b in the wrong directory. All KDE programs are in
 
 Q: The linking always breaks with the missing -laudio.
 A: You need to install NAS.
+
+Q: I can't find how to run k3bsetup.
+A: Since K3b version 0.10 it's a kcontrolcenter module.
+    You can find it in the KDE - Controlcenter or try "kdesu kcmshell k3bsetup2"

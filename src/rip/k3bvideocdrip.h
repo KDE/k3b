@@ -18,6 +18,7 @@
 
 #include <k3bjob.h>
 #include <device/k3bdiskinfo.h>
+#include "k3bvideocdrippingoptions.h"
 
 class QString;
 class KProcess;
@@ -28,23 +29,13 @@ class K3bVideoCdRip : public K3bJob
         Q_OBJECT
 
     public:
-        K3bVideoCdRip( QObject* parent = 0, const char* name = 0 );
+        K3bVideoCdRip( K3bVideoCdRippingOptions* options, QObject* parent = 0, const char* name = 0 );
         ~K3bVideoCdRip();
 
-        void setRipSource( QString ripsource )
-        {
-            m_ripsource = ripsource;
-        };
-        void setDestination( QString dest )
-        {
-            m_destPath = dest;
-        };
-        void setVideoCdSize( long s )
-        {
-            m_videocdsize = s;
-        };
-
         enum { CDROM, BIN_IMAGE, NRG_IMAGE };
+
+        QString jobDescription() const;
+        QString jobDetails() const;
 
     public slots:
         void start();
@@ -68,12 +59,10 @@ class K3bVideoCdRip : public K3bJob
         int m_ripsourceType;
 
         long m_subPosition;
-        long m_videocdsize;
 
         QString m_collectedOutput;
-        QString m_ripsource;
-        QString m_destPath;
 
+        K3bVideoCdRippingOptions * m_videooptions;
 
         bool m_canceled;
 

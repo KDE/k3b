@@ -17,11 +17,11 @@
 #ifndef _K3B_VIDEOCD_RIPPING_DIALOG_H_
 #define _K3B_VIDEOCD_RIPPING_DIALOG_H_
 
-#include <k3binteractiondialog.h>
-
 #include <qstringlist.h>
 
+#include <k3binteractiondialog.h>
 #include <device/k3bdiskinfo.h>
+#include "k3bvideocdrippingoptions.h"
 
 class KListView;
 class QCheckBox;
@@ -37,7 +37,7 @@ class K3bVideoCdRippingDialog : public K3bInteractionDialog
   Q_OBJECT
 
  public: 
-  K3bVideoCdRippingDialog( const QString ripsource, const long size, QWidget* parent = 0, const char* name = 0 );
+  K3bVideoCdRippingDialog( K3bVideoCdRippingOptions* options, QWidget* parent = 0, const char* name = 0 );
   ~K3bVideoCdRippingDialog();
 
  private:
@@ -54,9 +54,10 @@ class K3bVideoCdRippingDialog : public K3bInteractionDialog
   QCheckBox* m_sector2336;
   QCheckBox* m_extractXML;
 
-  long m_videocdsize;
-  QString m_ripsource;
-    
+  K3bVideoCdRippingOptions* m_videooptions;
+
+  unsigned long m_freeSpace;
+
  private slots:
   void slotStartClicked();
 
@@ -64,7 +65,9 @@ class K3bVideoCdRippingDialog : public K3bInteractionDialog
   void slotLoadUserDefaults();
   void slotSaveUserDefaults();
 
-  void slotToggleAll();
+  void slotUpdateFreeSpace();
+  void slotFreeSpace(const QString&, unsigned long, unsigned long, unsigned long);
+
 };
 
 #endif

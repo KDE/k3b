@@ -55,7 +55,7 @@ void K3bVideoCdInfo::cancelAll()
 void K3bVideoCdInfo::info( const QString& device )
 {
     if ( !k3bcore ->externalBinManager() ->foundBin( "vcdxrip" ) ) {
-        kdDebug() << "(K3bVideoCd::info) could not find vcdxrip executable" << endl;
+        kdDebug() << "(K3bVideoCdInfo::info) could not find vcdxrip executable" << endl;
         emit infoFinished( false );
         return ;
     }
@@ -75,7 +75,7 @@ void K3bVideoCdInfo::info( const QString& device )
              this, SLOT( slotInfoFinished() ) );
 
     if ( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
-        kdDebug() << "(K3bVideoCd::info) could not start vcdxrip" << endl;
+        kdDebug() << "(K3bVideoCdInfo::info) could not start vcdxrip" << endl;
         cancelAll();
         emit infoFinished( false );
     }
@@ -89,7 +89,6 @@ void K3bVideoCdInfo::slotParseOutput( KProcess*, char* output, int len )
     QStringList lines = QStringList::split( "\n", buffer );
 
     for ( QStringList::Iterator str = lines.begin(); str != lines.end(); str++ ) {
-        // kdDebug() << "slotParseOutput: Lines: " << *str << endl;
 
         if ( ( *str ).contains( "<?xml" ) )
             m_isXml = true;
@@ -178,7 +177,7 @@ void K3bVideoCdInfo::parseXmlData()
                                  );
             }
         } else {
-            kdDebug() << QString( "(K3bVideoCd::parseXmlData) tagName '%1' not used" ).arg( tagName ) << endl;
+            kdDebug() << QString( "(K3bVideoCdInfo::parseXmlData) tagName '%1' not used" ).arg( tagName ) << endl;
         }
     }
 }

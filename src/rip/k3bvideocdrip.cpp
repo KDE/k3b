@@ -36,9 +36,10 @@
 #include <k3bglobals.h>
 #include <k3bprocess.h>
 
-K3bVideoCdRip::K3bVideoCdRip( QObject* parent, const char* name )
+K3bVideoCdRip::K3bVideoCdRip( K3bVideoCdRippingOptions* options, QObject* parent, const char* name )
         : K3bJob( parent, name ),
         m_ripsourceType( 0 ),
+        m_videooptions( options ),
         m_canceled( false ),
         m_process( 0 )
 {}
@@ -48,6 +49,7 @@ K3bVideoCdRip::~K3bVideoCdRip()
 {
     if ( m_process )
         delete m_process;
+
 }
 
 
@@ -113,7 +115,30 @@ void K3bVideoCdRip::vcdxRip()
     for ( QStringList::const_iterator it = params.begin(); it != params.end(); ++it )
         *m_process << *it;
 
-    *m_process << "--gui" << "--progress" << "-i" << m_ripsource << "-o" << "/dev/null";
+    *m_process << "--gui" << "--progress";
+
+     if ( !m_videooptions ->getVideoCdRipFiles() )
+        *m_process << "--nofiles";
+
+     if ( !m_videooptions ->getVideoCdRipSegments() )
+        *m_process << "--nosegments";
+        
+     if ( !m_videooptions ->getVideoCdRipSequences() )
+        *m_process << "--nosequences";
+
+     if ( m_videooptions ->getVideoCdIgnoreExt() )
+        *m_process << "--no-ext-psd";
+
+     if ( m_videooptions ->getVideoCdSector2336() )
+        *m_process << "--sector-2336";
+        
+     *m_process << "-i" << QString( "%1" ).arg( QFile::encodeName( m_videooptions ->getVideoCdSource() ) );
+
+     if ( m_videooptions ->getVideoCdExtractXml() )
+        *m_process << "-o" << QString( "%1" ).arg( QFile::encodeName( m_videooptions ->getVideoCdDescription() + ".xml" ) );
+     else
+        *m_process << "-o" << "/dev/null";
+      
 
     connect( m_process, SIGNAL( receivedStderr( KProcess*, char*, int ) ),
              this, SLOT( slotParseVcdXRipOutput( KProcess*, char*, int ) ) );
@@ -122,7 +147,7 @@ void K3bVideoCdRip::vcdxRip()
     connect( m_process, SIGNAL( processExited( KProcess* ) ),
              this, SLOT( slotVcdXRipFinished() ) );
 
-    m_process->setWorkingDirectory( QUrl( m_destPath ).dirPath() );
+    m_process->setWorkingDirectory( QUrl( m_videooptions ->getVideoCdDestination() ).dirPath() );
 
     // vcdxrip comandline parameters
     kdDebug() << "***** vcdxrip parameters:" << endl;
@@ -137,7 +162,7 @@ void K3bVideoCdRip::vcdxRip()
 
     emit newTask( i18n( "Extracting" ) );
     emit infoMessage( i18n( "Start extracting." ), K3bJob::INFO );
-    emit infoMessage( i18n( "Extract files from %1 to %2." ).arg( m_ripsource ).arg( m_destPath ), K3bJob::INFO );
+    emit infoMessage( i18n( "Extract files from %1 to %2." ).arg( m_videooptions ->getVideoCdSource() ).arg( m_videooptions ->getVideoCdDestination() ), K3bJob::INFO );
             
     if ( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
         kdDebug() << "(K3bVideoCdRip) could not start vcdxrip" << endl;
@@ -187,10 +212,10 @@ void K3bVideoCdRip::slotParseVcdXRipOutput( KProcess*, char* output, int len )
 
                     m_bytesFinished = pos;
 
-                    double relOverallWritten = ( ( double ) overallPos ) / ( double ) m_videocdsize ;
+                    double relOverallWritten = ( ( double ) overallPos ) / ( double ) m_videooptions ->getVideoCdSize() ;
                     emit percent( ( int ) ( 100 * relOverallWritten ) );
 
-                    kdDebug() << QString( "(K3bVideoCdRip::slotParseVcdXRipOutput) overallPos = %1, relOverallWritten = %2, videolen = " ).arg( overallPos ).arg( relOverallWritten ) << m_videocdsize << endl;
+                    kdDebug() << QString( "(K3bVideoCdRip::slotParseVcdXRipOutput) overallPos = %1, relOverallWritten = %2, videolen = " ).arg( overallPos ).arg( relOverallWritten ) << m_videooptions ->getVideoCdSize()  << endl;
 
                 } else {
                     return ;
@@ -266,7 +291,7 @@ void K3bVideoCdRip::parseInformation( QString text )
                 // extracting item0001.mpg... (start lsn 225, 1 segments)
                 int end = text.find(  ",", index );
                 int overallPos = text.mid( index + 11, end - index - 11 ).stripWhiteSpace().toLong();
-                double relOverallWritten = ( ( double ) overallPos ) / ( double ) m_videocdsize ;
+                double relOverallWritten = ( ( double ) overallPos ) / ( double ) m_videooptions ->getVideoCdSize()  ;
                 emit percent( ( int ) ( 100 * relOverallWritten ) );
             }
 
@@ -287,7 +312,16 @@ void K3bVideoCdRip::parseInformation( QString text )
             emit newSubTask( i18n( "Extracting %1 to %2" ).arg( extractFileName ).arg( toFileName ) );
         }
     }
+}
 
+QString K3bVideoCdRip::jobDescription() const
+{
+    return i18n( "Extracting %1" ).arg( m_videooptions ->getVideoCdDescription() );
+}
+
+QString K3bVideoCdRip::jobDetails() const
+{
+    return QString( "(%1)" ).arg ( KIO::convertSize( m_videooptions ->getVideoCdSize() ) );
 }
 
 #include "k3bvideocdrip.moc"

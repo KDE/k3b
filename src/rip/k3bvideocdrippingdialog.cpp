@@ -15,42 +15,25 @@
 
 
 // kde include
-#include <kcombobox.h>
 #include <klocale.h>
 #include <kapplication.h>
 #include <kconfig.h>
-#include <klistview.h>
 #include <kurlrequester.h>
-#include <kfiledialog.h>
-#include <kio/global.h>
-#include <kiconloader.h>
-#include <kstdguiitem.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
-#include <kurllabel.h>
 
 // qt includes
 #include <qgroupbox.h>
-#include <qheader.h>
 #include <qcheckbox.h>
 #include <qlabel.h>
-#include <qpushbutton.h>
+#include <qtimer.h>
 #include <qlayout.h>
-#include <qvariant.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
 #include <qdir.h>
+#include <qfileinfo.h>
 #include <qstringlist.h>
-#include <qmessagebox.h>
-#include <qfont.h>
 #include <qhbox.h>
-#include <qtoolbutton.h>
-#include <qtabwidget.h>
-#include <qspinbox.h>
-#include <qptrlist.h>
-#include <qintdict.h>
-#include <qpair.h>
-#include <qvalidator.h>
 
 // k3b includes
 #include "k3bvideocdrippingdialog.h"
@@ -59,22 +42,21 @@
 #include <k3bjobprogressdialog.h>
 #include <k3bcore.h>
 #include <k3bglobals.h>
-#include <device/k3btrack.h>
 #include <k3bstdguiitems.h>
-#include <k3btempdirselectionwidget.h>
 
-K3bVideoCdRippingDialog::K3bVideoCdRippingDialog( const QString ripsource, const long size, QWidget* parent, const char* name )
-        : K3bInteractionDialog( parent, name ), m_videocdsize( size ), m_ripsource( ripsource )
+K3bVideoCdRippingDialog::K3bVideoCdRippingDialog( K3bVideoCdRippingOptions* options, QWidget* parent, const char* name )
+        : K3bInteractionDialog( parent, name ), m_videooptions( options )
 {
     setupGui();
     setupContextHelp();
 
-    setTitle( i18n( "VideoCd Ripping" ) );
+    setTitle( i18n( "Video CD Ripping" ) );
 }
 
 
 K3bVideoCdRippingDialog::~K3bVideoCdRippingDialog()
-{}
+{
+}
 
 
 void K3bVideoCdRippingDialog::setupGui()
@@ -137,6 +119,11 @@ void K3bVideoCdRippingDialog::setupGui()
     setStartButtonText( i18n( "Start Ripping" ), i18n( "Starts extracting the selected VideoCd tracks" ) );
     // ----------------------------------------------------------------------------------
 
+    connect( m_editDirectory, SIGNAL(textChanged(const QString&)), this, SLOT(slotUpdateFreeSpace()) );
+
+    slotLoadUserDefaults();
+
+    m_labelNecessarySize ->setText( KIO::convertSize( m_videooptions ->getVideoCdSize() ) );    
 }
 
 
@@ -146,11 +133,31 @@ void K3bVideoCdRippingDialog::setupContextHelp()
 void K3bVideoCdRippingDialog::slotStartClicked()
 {
 
-    K3bVideoCdRip * rip = new K3bVideoCdRip();
-    rip->setRipSource( m_ripsource );
-    rip->setDestination( m_editDirectory->url() );
-    rip->setVideoCdSize( m_videocdsize );
+    QStringList filesExists;
+    QDir d;
+    d.setPath( m_editDirectory ->url() );
+    const QFileInfoList* list = d.entryInfoList();
+    QFileInfoListIterator it( *list );
+    QFileInfo* fi;
+    while ( ( fi = it.current() ) != 0 ) {
+        if ( fi ->fileName() != "." && fi ->fileName() != ".." )
+            filesExists.append( QString( "%1 (%2)" ).arg( QFile::encodeName( fi ->fileName() ) ).arg( KIO::convertSize( fi ->size() ) ) );
+        ++it;
+    }
 
+    if( !filesExists.isEmpty() )
+        if( KMessageBox::questionYesNoList( this,
+                                i18n("Continue although the folder is not empty?"),
+                                filesExists,
+                                i18n("Files exist") ) == KMessageBox::No )
+        return;
+
+    m_videooptions ->setVideoCdIgnoreExt( m_ignoreExt ->isChecked() );
+    m_videooptions ->setVideoCdSector2336( m_sector2336 ->isChecked() );
+    m_videooptions ->setVideoCdExtractXml( m_extractXML ->isChecked() );
+    m_videooptions ->setVideoCdDestination( m_editDirectory ->url() );
+
+    K3bVideoCdRip * rip = new K3bVideoCdRip( m_videooptions );
     K3bJobProgressDialog ripDialog( kapp->mainWidget(), "Ripping" );
 
     hide();
@@ -161,16 +168,66 @@ void K3bVideoCdRippingDialog::slotStartClicked()
     close();
 }
 
+void K3bVideoCdRippingDialog::slotFreeSpace(const QString&,
+						  unsigned long,
+						  unsigned long,
+						  unsigned long kbAvail)
+{
+    m_labelFreeSpace->setText( KIO::convertSizeFromKB(kbAvail) );
+
+    m_freeSpace = kbAvail;
+
+    if( m_freeSpace < m_videooptions ->getVideoCdSize() /1024 )
+        m_labelNecessarySize->setPaletteForegroundColor( red );
+    else
+        m_labelNecessarySize->setPaletteForegroundColor( m_labelFreeSpace->paletteForegroundColor() );
+
+    QTimer::singleShot( 1000, this, SLOT(slotUpdateFreeSpace()) );
+}
+
+
+void K3bVideoCdRippingDialog::slotUpdateFreeSpace()
+{
+    QString path = m_editDirectory->url();
+
+    if( !QFile::exists( path ) )
+        path.truncate( path.findRev('/') );
+
+    unsigned long size, avail;
+    if( K3b::kbFreeOnFs( path, size, avail ) )
+        slotFreeSpace( path, size, 0, avail );
+    else
+        m_labelFreeSpace->setText("-");
+}
+
 void K3bVideoCdRippingDialog::slotLoadK3bDefaults()
-{}
+{
+    m_editDirectory->setURL( QDir::homeDirPath() );
+    m_ignoreExt ->setChecked( false );
+    m_sector2336 ->setChecked( false );
+    m_extractXML ->setChecked( false );
+}
 
 void K3bVideoCdRippingDialog::slotLoadUserDefaults()
-{}
+{
+    KConfig* c = k3bcore->config();
+    c->setGroup( "Video CD Ripping" );
+
+    m_editDirectory ->setURL( c->readPathEntry( "last ripping directory", QDir::homeDirPath() ) );
+    m_ignoreExt ->setChecked( c->readBoolEntry( "ignore ext", false ) );
+    m_sector2336 ->setChecked( c->readBoolEntry( "sector 2336", false ) );
+    m_extractXML ->setChecked( c->readBoolEntry( "extract xml", false ) );
+}
 
 void K3bVideoCdRippingDialog::slotSaveUserDefaults()
-{}
+{
+    KConfig* c = k3bcore->config();
+    c->setGroup( "Video CD Ripping" );
 
-void K3bVideoCdRippingDialog::slotToggleAll()
-{}
+    c->writeEntry( "last ripping directory", m_editDirectory->url() );
+    c->writeEntry( "ignore ext", m_ignoreExt ->isChecked( ) );
+    c->writeEntry( "sector 2336", m_sector2336 ->isChecked( ) );
+    c->writeEntry( "extract xml", m_extractXML ->isChecked( ) );
+}
 
 #include "k3bvideocdrippingdialog.moc"

@@ -33,6 +33,7 @@ class QListViewItem;
 
 class K3bListView;
 class K3bToolBox;
+class K3bVideoCdRippingOptions;
 
 namespace K3bCdDevice
 {
@@ -63,6 +64,7 @@ class K3bVideoCdView : public K3bCdContentsView
     private slots:
         void slotContextMenu( KListView*, QListViewItem*, const QPoint& );
         void slotTrackSelectionChanged( QListViewItem* );
+        void slotStateChanged( QListViewItem* );
         void slotVideoCdInfoFinished( bool );
 
         void startRip();
@@ -81,7 +83,6 @@ class K3bVideoCdView : public K3bCdContentsView
         void enableInteraction( bool );
         void buildTree( QListViewItem *parentItem, const QDomElement &parentElement, QString pname = QString::null );
 
-
         K3bCdDevice::DiskInfo m_diskInfo;
 
         KActionCollection* m_actionCollection;
@@ -89,6 +90,7 @@ class K3bVideoCdView : public K3bCdContentsView
 
         K3bVideoCdInfoResult m_videocdinfoResult;
         K3bVideoCdInfo* m_videocdinfo;
+        K3bVideoCdRippingOptions* m_videooptions;
 
         K3bListView* m_trackView;
         K3bToolBox* m_toolBox;
@@ -98,8 +100,9 @@ class K3bVideoCdView : public K3bCdContentsView
 
         QValueList<VideoTrackViewCheckItem *> m_contentList;
 
-        long m_videocdsize;
-
+        unsigned long m_videocddatasize;
+        unsigned long m_videocdmpegsize;
+        
 };
 
 #endif
