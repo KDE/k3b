@@ -121,44 +121,55 @@ dnl - check the byte order -
 dnl this will define WORDS_BIGENDIAN or do nothing
 AC_C_BIGENDIAN()
 
+dnl === Ogg Vorbis Test - Begin ===
+AC_ARG_WITH(oggvorbis, AS_HELP_STRING([--without-oggvorbis], [build without OggVorbis support (default=no)]), [ac_cv_use_oggvorbis=$withval], [ac_cv_use_oggvorbis=yes])
 
-AC_MSG_CHECKING(for ogg/vorbis headers)
-ogg_vorbis=no
-AC_TRY_COMPILE([
-		#include <vorbis/codec.h>
-		#include <vorbis/vorbisfile.h>
+if test "$ac_cv_use_oggvorbis" = "yes"; then
+
+  AC_MSG_CHECKING(for ogg/vorbis headers)
+  ogg_vorbis=no
+  AC_TRY_COMPILE([
+  		#include <vorbis/codec.h>
+  		#include <vorbis/vorbisfile.h>
                 ],[
                 ],[
                 ogg_vorbis=yes
                 ])
-AC_MSG_RESULT($ogg_vorbis)
-if test x$ogg_vorbis = xyes; then
-   dnl we need the ogg_vorbis_lib because otherwise we override LIBS !
-   AC_CHECK_LIB(vorbisfile,ov_open,ogg_vorbis_lib=yes,
-                ogg_vorbis=no,[$all_libraries -lvorbisfile -lvorbis -logg])
-fi
-if test x$ogg_vorbis = xyes; then
+  AC_MSG_RESULT($ogg_vorbis)
+  if test x$ogg_vorbis = xyes; then
+     dnl we need the ogg_vorbis_lib because otherwise we override LIBS !
+     AC_CHECK_LIB(vorbisfile,ov_open,ogg_vorbis_lib=yes,
+                  ogg_vorbis=no,[$all_libraries -lvorbisfile -lvorbis -logg])
+  fi
+  if test x$ogg_vorbis = xyes; then
 	AC_DEFINE(OGG_VORBIS,1,[Define if you have ogg/vorbis installed])
+  fi
 fi
 
 AM_CONDITIONAL(include_OGG, [test x$ogg_vorbis = xyes])
+dnl === Ogg Vorbis Test - End ===
 
+dnl === libmad MPEG decoder check - begin ===
+AC_ARG_WITH(libmad, AS_HELP_STRING([--without-libmad], [build without libmad support (default=no)]), [ac_cv_use_libmad=$withval], [ac_cv_use_libmad=yes])
 
-dnl === libmad MPEG decoder check ===
-MAD_LIB=""
-KDE_CHECK_HEADER(mad.h, [
+if test "$ac_cv_use_libmad" = "yes"; then
+  MAD_LIB=""
+  KDE_CHECK_HEADER(mad.h, [
 	AC_CHECK_LIB(mad, mad_synth_frame, [
 		MAD_LIB="-lmad"
 		AC_DEFINE(HAVE_LIBMAD,1,[defined if you have libmad headers and libraries])],
 		[],
 		$all_libraries
 	)
-])
-AC_SUBST(MAD_LIB)
+  ])
+  AC_SUBST(MAD_LIB)
+
+fi
 
 AM_CONDITIONAL(include_MP3, [test -n "$MAD_LIB"])
+dnl === libmad MPeg decoder check - end ===
 
-dnl === test for libsndfile ===
+dnl === test for libsndfile - begin ===
 dnl
 dnl Don't use PKG_CHECK, since if there is no pkg-config installed,
 dnl then there is no auto* magic for it either.
@@ -169,69 +180,86 @@ if test -z "$PKG_CONFIG"; then
     AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
 fi
 
-SNDFILE_CFLAGS=""
-SNDFILE_LIBS=""
-if test "$PKG_CONFIG" = "no" ; then
-    ac_cv_sndfile=0
-    echo "*** The pkg-config script could not be found. Make sure it is"
-    echo "*** in your path, or set the PKG_CONFIG environment variable"
-    echo "*** to the full path to pkg-config."
-    echo "*** Or see http://www.freedesktop.org/software/pkgconfig to get pkg-config."
-else
-    if !(`$PKG_CONFIG --exists sndfile`) ; then
-        echo "*** sndfile is not installed."
-        ac_cv_sndfile=0
-    else
-        if !(`$PKG_CONFIG --atleast-version="1.0.2" sndfile`) ; then
-            echo "*** You need at least version 1.0.2 of sndfile."
-            ac_cv_sndfile=0
-        else
-            ac_cv_sndfile=1
-            SNDFILE_CFLAGS=`$PKG_CONFIG --cflags sndfile`
-            SNDFILE_LIBS=`$PKG_CONFIG --libs sndfile`
-        fi
-    fi
+AC_ARG_WITH(sndfile, AS_HELP_STRING([--without-sndfile], [build without libsndfile support (default=no)]), [ac_cv_use_sndfile=$withval], [ac_cv_use_sndfile=yes])
+
+if test "$ac_cv_use_sndfile" = "yes"; then
+  SNDFILE_CFLAGS=""
+  SNDFILE_LIBS=""
+  if test "$PKG_CONFIG" = "no" ; then
+      ac_cv_sndfile=0
+      echo "*** The pkg-config script could not be found. Make sure it is"
+      echo "*** in your path, or set the PKG_CONFIG environment variable"
+      echo "*** to the full path to pkg-config."
+      echo "*** Or see http://www.freedesktop.org/software/pkgconfig to get pkg-config."
+  else
+      if !(`$PKG_CONFIG --exists sndfile`) ; then
+          echo "*** sndfile is not installed."
+          ac_cv_sndfile=0
+      else
+          if !(`$PKG_CONFIG --atleast-version="1.0.2" sndfile`) ; then
+              echo "*** You need at least version 1.0.2 of sndfile."
+              ac_cv_sndfile=0
+          else
+              ac_cv_sndfile=1
+              SNDFILE_CFLAGS=`$PKG_CONFIG --cflags sndfile`
+              SNDFILE_LIBS=`$PKG_CONFIG --libs sndfile`
+          fi
+      fi
+  fi
+
+  AC_DEFINE_UNQUOTED([HAVE_SNDFILE],${ac_cv_sndfile},
+  			[Set to 1 if you have libsndfile.])
+  AC_SUBST(SNDFILE_CFLAGS)
+  AC_SUBST(SNDFILE_LIBS)
 fi
 
-
-dnl PKG_CHECK_MODULES(SNDFILE, sndfile >= 1.0.2, ac_cv_sndfile=1, ac_cv_sndfile=0)
-
-AC_DEFINE_UNQUOTED([HAVE_SNDFILE],${ac_cv_sndfile},
-			[Set to 1 if you have libsndfile.])
-
-AC_SUBST(SNDFILE_CFLAGS)
-AC_SUBST(SNDFILE_LIBS)
-
-AM_CONDITIONAL(include_AIFF, [test $ac_cv_sndfile = 1])
+AM_CONDITIONAL(include_AIFF, [test x$ac_cv_sndfile = x1])
+dnl === test for libsndfile - end ===
 
 
-dnl === test for FLAC++ and FLAC ====
+dnl === test for FLAC++ and FLAC - begin ====
+AC_ARG_WITH(flac, AS_HELP_STRING([--without-flac], [build without FLAC support (default=no)]), [ac_cv_use_flac=$withval], [ac_cv_use_flac=yes])
+
 have_flac=no
-KDE_CHECK_HEADERS(FLAC++/decoder.h, [
-   AC_CHECK_LIB(FLAC,FLAC__seekable_stream_decoder_process_single,
+if test "$ac_cv_use_flac" = "yes"; then
+  KDE_CHECK_HEADERS(FLAC++/decoder.h, [
+     AC_CHECK_LIB(FLAC,FLAC__seekable_stream_decoder_process_single,
 	        have_flac=yes,[],$all_libraries)])
-AM_CONDITIONAL(include_FLAC, [test x$have_flac = xyes])
+fi
 
+AM_CONDITIONAL(include_FLAC, [test x$have_flac = xyes])
+dnl === test for FLAC++ and FLAC - end ====
+
+dnl === test for LAME - begin ====
+AC_ARG_WITH(lame, AS_HELP_STRING([--without-lame], [build without LAME support (default=no)]), [ac_cv_use_lame=$withval], [ac_cv_use_lame=yes])
 
 have_lame=no
-KDE_CHECK_HEADERS(lame/lame.h, [
-	AC_CHECK_LIB(mp3lame, lame_init, [
-		have_lame=yes
-		AC_DEFINE(HAVE_LAME,1,[defined if you have the lame header and lib])
-		], [], $all_libraries -lm)
-])
+if test "$ac_cv_use_lame" = "yes"; then
+  KDE_CHECK_HEADERS(lame/lame.h, [
+  	AC_CHECK_LIB(mp3lame, lame_init, [
+  		have_lame=yes
+  		AC_DEFINE(HAVE_LAME,1,[defined if you have the lame header and lib])
+  		], [], $all_libraries -lm)
+  ])
+fi
+
 AM_CONDITIONAL(include_LAME, [test x$have_lame = xyes])
+dnl === test for LAME - end ====
 
+dnl === check for resmgr - begin ============
+AC_ARG_WITH(resmgr, AS_HELP_STRING([--without-resmgr], [build without ResMgr support (default=no)]), [ac_cv_use_resmgr=$withval], [ac_cv_use_resmgr=yes])
 
-dnl === check for resmgr ============
-RESMGR_LIB=""
-KDE_CHECK_HEADERS(resmgr.h, [
-       KDE_CHECK_LIB(resmgr,rsm_open_device,[
-               RESMGR_LIB="-lresmgr"
-               AC_DEFINE(HAVE_RESMGR,1,[defined if you have resmgr libraries and headers])
-       ])
-])
-AC_SUBST(RESMGR_LIB)
+if test "$ac_cv_use_regmgr" = "yes"; then
+  RESMGR_LIB=""
+  KDE_CHECK_HEADERS(resmgr.h, [
+         KDE_CHECK_LIB(resmgr,rsm_open_device,[
+                 RESMGR_LIB="-lresmgr"
+                 AC_DEFINE(HAVE_RESMGR,1,[defined if you have resmgr libraries and headers])
+         ])
+  ])
+  AC_SUBST(RESMGR_LIB)
+fi
+dnl === check for resmgr - end ============
 
 AC_ARG_WITH(external-libsamplerate,
 	[  --with-external-libsamplerate   use the libsamplerate provided by the system (default=yes)],
