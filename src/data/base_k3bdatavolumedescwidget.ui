@@ -9,7 +9,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>430</width>
+            <width>439</width>
             <height>233</height>
         </rect>
     </property>
@@ -126,7 +126,7 @@
                         <cstring>m_spinVolumeSetSize</cstring>
                     </property>
                     <property name="specialValueText">
-                        <string>unused</string>
+                        <string>-</string>
                     </property>
                     <property name="minValue">
                         <number>0</number>
@@ -154,7 +154,7 @@
                         <cstring>m_spinVolumeSetNumber</cstring>
                     </property>
                     <property name="specialValueText">
-                        <string>unused</string>
+                        <string>-</string>
                     </property>
                     <property name="maxValue">
                         <number>2</number>

@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -185,6 +185,9 @@ K3bMovixListView::K3bMovixListView( K3bMovixDoc* doc, QWidget* parent, const cha
   connect( m_doc, SIGNAL(subTitleItemRemoved(K3bMovixFileItem*)), this, SLOT(slotSubTitleItemRemoved(K3bMovixFileItem*)) );
   connect( this, SIGNAL(dropped(KListView*, QDropEvent*, QListViewItem*)),
 	   this, SLOT(slotDropped(KListView*, QDropEvent*, QListViewItem*)) );
+
+  // let's see what the doc already has
+  slotNewFileItems();
 }
 
 

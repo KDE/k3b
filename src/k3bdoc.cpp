@@ -47,6 +47,7 @@
 #include <data/k3bdatadoc.h>
 #include <vcd/k3bvcddoc.h>
 #include <mixed/k3bmixeddoc.h>
+#include <movix/k3bmovixdoc.h>
 #include <k3bcore.h>
 #include <device/k3bdevicemanager.h>
 
@@ -218,6 +219,8 @@ K3bDoc* K3bDoc::openDocument(const KURL& url )
     newDoc = new K3bVcdDoc( k3bMain() );
   else if( xmlDoc.doctype().name() == "k3b_mixed_project" )
     newDoc = new K3bMixedDoc( k3bMain() );
+  else if( xmlDoc.doctype().name() == "k3b_movix_project" )
+    newDoc = new K3bMovixDoc( k3bMain() );
   else
     kdDebug() << "(K3bDoc) unknown doc type: " << xmlDoc.doctype().name() << endl;
 

@@ -401,10 +401,58 @@ bool K3bDataDoc::loadDocumentData( QDomElement* rootElem )
     kdDebug() << "(K3bDataDoc) could not find 'options' section." << endl;
     return false;
   }
-  QDomNodeList optionList = nodes.item(1).childNodes();
-  for( uint i = 0; i < optionList.count(); i++ ) {
+  if( !loadDocumentDataOptions( nodes.item(1).toElement() ) )
+    return false;
+  // -----------------------------------------------------------------
 
-    QDomElement e = optionList.item(i).toElement();
+
+
+  // parse header
+  // -----------------------------------------------------------------
+  if( nodes.item(2).nodeName() != "header" ) {
+    kdDebug() << "(K3bDataDoc) could not find 'header' section." << endl;
+    return false;
+  }
+  if( !loadDocumentDataHeader( nodes.item(2).toElement() ) )
+    return false;
+  // -----------------------------------------------------------------
+
+
+
+  // parse files
+  // -----------------------------------------------------------------
+  if( nodes.item(3).nodeName() != "files" ) {
+    kdDebug() << "(K3bDataDoc) could not find 'files' section." << endl;
+    return false;
+  }
+
+  if( m_root == 0 )
+    m_root = new K3bRootItem( this );    
+
+  QDomNodeList filesList = nodes.item(3).childNodes();
+  for( uint i = 0; i < filesList.count(); i++ ) {
+
+    QDomElement e = filesList.item(i).toElement();
+    if( !loadDataItem( e, root() ) )
+      return false;
+  }
+
+  // -----------------------------------------------------------------
+
+  emit newFileItems();
+
+  informAboutNotFoundFiles();
+
+  return true;
+}
+
+
+bool K3bDataDoc::loadDocumentDataOptions( QDomElement elem )
+{
+  QDomNodeList headerList = elem.childNodes();
+  for( uint i = 0; i < headerList.count(); i++ ) {
+
+    QDomElement e = headerList.item(i).toElement();
     if( e.isNull() )
       return false;
 
@@ -512,17 +560,14 @@ bool K3bDataDoc::loadDocumentData( QDomElement* rootElem )
     else
       kdDebug() << "(K3bDataDoc) unknown option entry: " << e.nodeName() << endl;
   }
-  // -----------------------------------------------------------------
+
+  return true;
+}
 
 
-
-  // parse header
-  // -----------------------------------------------------------------
-  if( nodes.item(2).nodeName() != "header" ) {
-    kdDebug() << "(K3bDataDoc) could not find 'header' section." << endl;
-    return false;
-  }
-  QDomNodeList headerList = nodes.item(2).childNodes();
+bool K3bDataDoc::loadDocumentDataHeader( QDomElement headerElem )
+{
+  QDomNodeList headerList = headerElem.childNodes();
   for( uint i = 0; i < headerList.count(); i++ ) {
 
     QDomElement e = headerList.item(i).toElement();
@@ -555,35 +600,7 @@ bool K3bDataDoc::loadDocumentData( QDomElement* rootElem )
 
     else
       kdDebug() << "(K3bDataDoc) unknown header entry: " << e.nodeName() << endl;
-    
   }
-  // -----------------------------------------------------------------
-
-
-
-  // parse files
-  // -----------------------------------------------------------------
-  if( nodes.item(3).nodeName() != "files" ) {
-    kdDebug() << "(K3bDataDoc) could not find 'files' section." << endl;
-    return false;
-  }
-
-  if( m_root == 0 )
-    m_root = new K3bRootItem( this );    
-
-  QDomNodeList filesList = nodes.item(3).childNodes();
-  for( uint i = 0; i < filesList.count(); i++ ) {
-
-    QDomElement e = filesList.item(i).toElement();
-    if( !loadDataItem( e, root() ) )
-      return false;
-  }
-
-  // -----------------------------------------------------------------
-
-  emit newFileItems();
-
-  informAboutNotFoundFiles();
 
   return true;
 }
@@ -661,10 +678,38 @@ bool K3bDataDoc::saveDocumentData( QDomElement* docElem )
 
   saveGeneralDocumentData( docElem );
 
-
   // all options
   // ----------------------------------------------------------------------
   QDomElement optionsElem = doc.createElement( "options" );
+  saveDocumentDataOptions( optionsElem );
+  docElem->appendChild( optionsElem );
+  // ----------------------------------------------------------------------
+
+  // the header stuff
+  // ----------------------------------------------------------------------
+  QDomElement headerElem = doc.createElement( "header" );
+  docElem->appendChild( headerElem );
+
+
+  // now do the "real" work: save the entries
+  // ----------------------------------------------------------------------
+  QDomElement topElem = doc.createElement( "files" );
+
+  QPtrListIterator<K3bDataItem> it( *root()->children() );
+  for( ; it.current(); ++it ) {
+    saveDataItem( it.current(), &doc, &topElem );
+  }
+
+  docElem->appendChild( topElem );
+  // ----------------------------------------------------------------------
+
+  return true;
+}
+
+
+void K3bDataDoc::saveDocumentDataOptions( QDomElement& optionsElem )
+{
+  QDomDocument doc = optionsElem.ownerDocument();
 
   QDomElement topElem = doc.createElement( "rock_ridge" );
   topElem.setAttribute( "activated", isoOptions().createRockRidge() ? "yes" : "no" );
@@ -803,16 +848,15 @@ bool K3bDataDoc::saveDocumentData( QDomElement* docElem )
     break;
   }
   optionsElem.appendChild( topElem );
-
-  docElem->appendChild( optionsElem );
   // ----------------------------------------------------------------------
+}
 
 
-  // the header stuff
-  // ----------------------------------------------------------------------
-  QDomElement headerElem = doc.createElement( "header" );
+void K3bDataDoc::saveDocumentDataHeader( QDomElement& headerElem )
+{
+  QDomDocument doc = headerElem.ownerDocument();
 
-  topElem = doc.createElement( "volume_id" );
+  QDomElement topElem = doc.createElement( "volume_id" );
   topElem.appendChild( doc.createTextNode( isoOptions().volumeID() ) );
   headerElem.appendChild( topElem );
 
@@ -843,27 +887,8 @@ bool K3bDataDoc::saveDocumentData( QDomElement* docElem )
   topElem = doc.createElement( "preparer" );
   topElem.appendChild( doc.createTextNode( isoOptions().preparer() ) );
   headerElem.appendChild( topElem );
-
-  docElem->appendChild( headerElem );
   // ----------------------------------------------------------------------
-
-
-
-  // now do the "real" work: save the entries
-  // ----------------------------------------------------------------------
-  topElem = doc.createElement( "files" );
-
-  QPtrListIterator<K3bDataItem> it( *root()->children() );
-  for( ; it.current(); ++it ) {
-    saveDataItem( it.current(), &doc, &topElem );
-  }
-
-  docElem->appendChild( topElem );
-  // ----------------------------------------------------------------------
-
-  return true;
 }
-
 
 
 void K3bDataDoc::saveDataItem( K3bDataItem* item, QDomDocument* doc, QDomElement* parent )

@@ -139,6 +139,11 @@ class K3bDataDoc : public K3bDoc
   /** reimplemented from K3bDoc */
   virtual bool saveDocumentData( QDomElement* );
 
+  void saveDocumentDataOptions( QDomElement& optionsElem );
+  void saveDocumentDataHeader( QDomElement& headerElem );
+  bool loadDocumentDataOptions( QDomElement optionsElem );
+  bool loadDocumentDataHeader( QDomElement optionsElem );
+
   virtual QString documentType() const;
 
   void loadDefaultSettings();

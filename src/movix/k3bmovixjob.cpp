@@ -354,7 +354,9 @@ QString K3bMovixJob::jobDescription() const
 
 QString K3bMovixJob::jobDetails() const
 {
-  return i18n("1 file (%1)", "%n files (%1)", m_doc->movixFileItems().count()).arg(KIO::convertSize(m_doc->size()));
+  return i18n("1 file (%1) and about 8 MB eMovix data", 
+	      "%n files (%1) and about 8 MB eMovix data", 
+	      m_doc->movixFileItems().count()).arg(KIO::convertSize(m_doc->size()));
 }
 
 #include "k3bmovixjob.moc"
