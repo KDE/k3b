@@ -67,14 +67,14 @@ WelcomeTab::WelcomeTab( int i, int o, K3bSetupWizard* wizard )
 // == DEVICES-TAB ===========================================================================================================
 
 DeviceTab::DeviceTab( int i, int o, K3bSetupWizard* wizard )
-  : K3bSetupTab( i, o, i18n("Setup CD devices"), wizard )
+  : K3bSetupTab( i, o, i18n("Setup CD Devices"), wizard )
 {
   QWidget* main = new QWidget( this );
   QGridLayout* mainGrid = new QGridLayout( main );
   mainGrid->setSpacing( KDialog::spacingHint() );
   mainGrid->setMargin( 0 );
 
-  m_buttonAddDevice = new QPushButton( i18n( "Add device" ), main, "m_buttonAddDevice" );
+  m_buttonAddDevice = new QPushButton( i18n( "Add Device" ), main, "m_buttonAddDevice" );
 
   m_labelSetupDrives = new QLabel( main, "m_labelSetupDrives" );
   m_labelSetupDrives->setText( i18n( "<p>K3b Setup has detected the following CD drives.</p>"
@@ -83,14 +83,14 @@ DeviceTab::DeviceTab( int i, int o, K3bSetupWizard* wizard )
   m_labelSetupDrives->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
 
 
-  QGroupBox* groupReader = new QGroupBox( i18n("Reading devices"), main );
+  QGroupBox* groupReader = new QGroupBox( i18n("Reading Devices"), main );
   groupReader->setColumnLayout(1, Qt::Vertical );
   groupReader->layout()->setSpacing( KDialog::spacingHint() );
   groupReader->layout()->setMargin( KDialog::marginHint() );
 
   m_viewSetupReader = new KListView( groupReader, "m_viewSetupReader" );
-  m_viewSetupReader->addColumn( i18n( "system device" ) );
-  m_viewSetupReader->addColumn( i18n( "value" ) );
+  m_viewSetupReader->addColumn( i18n( "System Device" ) );
+  m_viewSetupReader->addColumn( i18n( "Value" ) );
   m_viewSetupReader->header()->hide();
   m_viewSetupReader->setSorting( -1 );
   m_viewSetupReader->setAllColumnsShowFocus( true );
@@ -100,14 +100,14 @@ DeviceTab::DeviceTab( int i, int o, K3bSetupWizard* wizard )
 
 
 
-  QGroupBox* groupWriter = new QGroupBox( i18n("Writing devices"), main );
+  QGroupBox* groupWriter = new QGroupBox( i18n("Writing Devices"), main );
   groupWriter->setColumnLayout(1, Qt::Vertical );
   groupWriter->layout()->setSpacing( KDialog::spacingHint() );
   groupWriter->layout()->setMargin( KDialog::marginHint() );
 
   m_viewSetupWriter = new KListView( groupWriter, "m_viewSetupWriter" );
-  m_viewSetupWriter->addColumn( i18n( "system device" ) );
-  m_viewSetupWriter->addColumn( i18n( "value" ) );
+  m_viewSetupWriter->addColumn( i18n( "System Device" ) );
+  m_viewSetupWriter->addColumn( i18n( "Value" ) );
   m_viewSetupWriter->header()->hide();
   m_viewSetupWriter->setSorting( -1 );
   m_viewSetupWriter->setAllColumnsShowFocus( true );
@@ -165,7 +165,7 @@ void DeviceTab::readSettings()
     item->setText( 1, dev->version() );
 
     item = new K3bDeviceViewItem( dev, item_2, item );
-    item->setText( 0, i18n( "Max read speed" ) );
+    item->setText( 0, i18n( "Max Read Speed" ) );
     item->setText( 1, QString::number( dev->maxReadSpeed() ) );
 
     item_2->setOpen( TRUE );
@@ -193,11 +193,11 @@ void DeviceTab::readSettings()
     item->setText( 1, dev->version() );
 
     item = new K3bDeviceViewItem( dev, item_2, item );
-    item->setText( 0, i18n( "Max read speed" ) );
+    item->setText( 0, i18n( "Max Read Speed" ) );
     item->setText( 1, QString::number( dev->maxReadSpeed() ) );
 
     item = new K3bDeviceViewItem( dev, item_2, item );
-    item->setText( 0, i18n( "Max write speed" ) );
+    item->setText( 0, i18n( "Max Write Speed" ) );
     item->setText( 1, QString::number( dev->maxWriteSpeed() ) );
     
     item = new K3bDeviceViewItem( dev, item_2, item );
@@ -216,7 +216,7 @@ bool DeviceTab::saveSettings()
   if( setup()->deviceManager()->allDevices().isEmpty() )
     if( KMessageBox::warningYesNo( this, i18n("K3b Setup did not find any cd devices on your system. "
 					      "K3b is not of much use without any. Do you really want to continue?"),
-				   i18n("Missing cd devices") ) == KMessageBox::No )
+				   i18n("Missing CD Devices") ) == KMessageBox::No )
       return false;
 
   return true;
@@ -245,7 +245,7 @@ void DeviceTab::slotDeviceItemRenamed( QListViewItem* item, const QString& newTe
 
   K3bDeviceViewItem* deviceItem = dynamic_cast<K3bDeviceViewItem*>( item );
   if( deviceItem != 0 ) {
-    if( item->text(0) == i18n("Max read speed") ) {
+    if( item->text(0) == i18n("Max Read Speed") ) {
       bool ok;
       int newSpeed = newText.toInt( &ok );
       if( ok )
@@ -253,7 +253,7 @@ void DeviceTab::slotDeviceItemRenamed( QListViewItem* item, const QString& newTe
       else
 	item->setText( 1, QString::number( deviceItem->device->maxReadSpeed() ) );
     }
-    else if( item->text(0) == i18n("Max write speed") ) {
+    else if( item->text(0) == i18n("Max Write Speed") ) {
       bool ok;
       int newSpeed = newText.toInt( &ok );
       if( ok )
@@ -283,7 +283,7 @@ void DeviceTab::slotDeviceItemRenamed( QListViewItem* item, const QString& newTe
 // == NOWRITER-TAB ===========================================================================================================
 
 NoWriterTab::NoWriterTab( int i, int o, K3bSetupWizard* wizard )
-  : K3bSetupTab( i, o, i18n("No cd writer found"), wizard )
+  : K3bSetupTab( i, o, i18n("No CD Writer Found"), wizard )
 {
   QLabel* label = new QLabel( this, "m_labelNoWriter" );
   label->setText( i18n( "<p><b>K3b Setup did not find a cd writer on your system.</b></p>\n"
@@ -330,7 +330,7 @@ bool NoWriterTab::appropriate()
 // == FSTAB-TAB ===========================================================================================================
 
 FstabEntriesTab::FstabEntriesTab( int i, int o, K3bSetupWizard* wizard )
-  : K3bSetupTab( i, o, i18n("Setup mount points for the cd drives"), wizard )
+  : K3bSetupTab( i, o, i18n("Setup Mount Points for the CD Drives"), wizard )
 {
   QWidget* main = new QWidget( this, "main" );
   QGridLayout* mainGrid = new QGridLayout( main ); 
@@ -357,7 +357,7 @@ FstabEntriesTab::FstabEntriesTab( int i, int o, K3bSetupWizard* wizard )
   m_checkFstab = new QCheckBox( i18n("Let K3b Setup create fstab entries."), main );
   m_checkFstab->setChecked( true );
 
-  m_buttonSelectMountPoint = new QPushButton( i18n("Select mount point"), main );
+  m_buttonSelectMountPoint = new QPushButton( i18n("Select Mount Point"), main );
 
 
   mainGrid->addMultiCellWidget( m_labelFstab, 0, 0, 0, 1 );
@@ -474,7 +474,7 @@ void FstabEntriesTab::slotSelectMountPoint()
 // == EXTBIN-TAB ===========================================================================================================
 
 ExternalBinTab::ExternalBinTab( int i, int o, K3bSetupWizard* wizard )
-  : K3bSetupTab( i, o, i18n("Setup external applications used by K3b"), wizard )
+  : K3bSetupTab( i, o, i18n("Setup External Applications Used by K3b"), wizard )
 {
   QWidget* main = new QWidget( this, "m_page5" );
   QGridLayout* mainGrid = new QGridLayout( main ); 
@@ -495,16 +495,16 @@ ExternalBinTab::ExternalBinTab( int i, int o, K3bSetupWizard* wizard )
   m_labelWarning->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
 
   m_viewExternalPrograms = new KListView( main, "m_viewExternalPrograms" );
-  m_viewExternalPrograms->addColumn( i18n( "found" ) );
-  m_viewExternalPrograms->addColumn( i18n( "program" ) );
-  m_viewExternalPrograms->addColumn( i18n( "version" ) );
-  m_viewExternalPrograms->addColumn( i18n( "path" ) );
+  m_viewExternalPrograms->addColumn( i18n( "Found" ) );
+  m_viewExternalPrograms->addColumn( i18n( "Program" ) );
+  m_viewExternalPrograms->addColumn( i18n( "Version" ) );
+  m_viewExternalPrograms->addColumn( i18n( "Path" ) );
   m_viewExternalPrograms->setAllColumnsShowFocus( true );
   m_viewExternalPrograms->setItemsRenameable( true );
   m_viewExternalPrograms->setRenameable( 0, false );
   m_viewExternalPrograms->setRenameable( 3, true );
 
-  m_buttonSelectExternalBin = new QPushButton( i18n("Find program"), main );
+  m_buttonSelectExternalBin = new QPushButton( i18n("Find Program"), main );
 
   mainGrid->addMultiCellWidget( m_labelExternalPrograms, 0, 0, 0, 1 );
   mainGrid->addMultiCellWidget( m_labelWarning, 1, 1, 0, 1 );
@@ -601,7 +601,7 @@ void ExternalBinTab::slotSelectExternalBin()
 
   QString newPath;
   newPath = KFileDialog::getOpenFileName( QString::null, QString::null, this, 
-					  i18n("Please select %1 executable").arg(item->text(1)) );
+					  i18n("Please Select %1 Executable").arg(item->text(1)) );
 
   if( !newPath.isEmpty() )
     slotExternalProgramItemRenamed( item, newPath, 2 );
@@ -615,7 +615,7 @@ void ExternalBinTab::slotSelectExternalBin()
 // == PERMISSION-TAB ===========================================================================================================
 
 PermissionTab::PermissionTab( int i, int o, K3bSetupWizard* wizard )
-  : K3bSetupTab( i, o, i18n("Setup some nesseccary permissions for K3b"), wizard )
+  : K3bSetupTab( i, o, i18n("Setup Some Necessary Permissions for K3b"), wizard )
 {
   QWidget* main = new QWidget( this, "main" );
   QGridLayout* mainGrid = new QGridLayout( main ); 
@@ -634,7 +634,7 @@ PermissionTab::PermissionTab( int i, int o, K3bSetupWizard* wizard )
   m_labelPermissions1->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
 
   m_groupUsers = new QGroupBox( main, "m_groupUsers" );
-  m_groupUsers->setTitle( i18n( "K3b users" ) );
+  m_groupUsers->setTitle( i18n( "K3b Users" ) );
   m_groupUsers->setColumnLayout(0, Qt::Vertical );
   m_groupUsers->layout()->setSpacing( 0 );
   m_groupUsers->layout()->setMargin( 0 );
@@ -644,8 +644,8 @@ PermissionTab::PermissionTab( int i, int o, K3bSetupWizard* wizard )
   groupUsersLayout->setAlignment( Qt::AlignTop );
 
   m_boxUsers = new QListBox( m_groupUsers, "m_boxUsers" );
-  m_buttonRemoveUser = new QPushButton( i18n( "Remove user" ), m_groupUsers, "m_buttonRemoveUser" );
-  m_buttonAddUser = new QPushButton( i18n( "Add user" ), m_groupUsers, "m_buttonAddUser" );
+  m_buttonRemoveUser = new QPushButton( i18n( "Remove User" ), m_groupUsers, "m_buttonRemoveUser" );
+  m_buttonAddUser = new QPushButton( i18n( "Add User" ), m_groupUsers, "m_buttonAddUser" );
   QSpacerItem* spacer_2 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
 
   groupUsersLayout->addMultiCellWidget( m_boxUsers, 0, 2, 0, 0 );
@@ -654,11 +654,11 @@ PermissionTab::PermissionTab( int i, int o, K3bSetupWizard* wizard )
   groupUsersLayout->addItem( spacer_2, 2, 1 );
 
   m_checkPermissionsDevices = new QCheckBox( main, "m_checkPermissionsDevices" );
-  m_checkPermissionsDevices->setText( i18n( "let K3b Setup do the needed changes for the devices" ) );
+  m_checkPermissionsDevices->setText( i18n( "Let K3b Setup do the needed changes for the devices" ) );
   m_checkPermissionsDevices->setChecked( TRUE );
 
   m_checkPermissionsExternalPrograms = new QCheckBox( main, "m_checkPermissionsExternalPrograms" );
-  m_checkPermissionsExternalPrograms->setText( i18n( "let K3b Setup do the needed changes for the external programs" ) );
+  m_checkPermissionsExternalPrograms->setText( i18n( "Let K3b Setup do the needed changes for the external programs" ) );
   m_checkPermissionsExternalPrograms->setChecked( TRUE );
 
 //   QFrame* Line1 = new QFrame( main, "Line1" );
@@ -675,7 +675,7 @@ PermissionTab::PermissionTab( int i, int o, K3bSetupWizard* wizard )
   Layout1->addWidget( m_buttonPermissionsDetails );
 
   m_groupWriterGroup = new QGroupBox( main, "m_groupWriterGroup" );
-  m_groupWriterGroup->setTitle( i18n( "cd writing group" ) );
+  m_groupWriterGroup->setTitle( i18n( "CD Writing Group" ) );
   m_groupWriterGroup->setColumnLayout(1, Qt::Vertical );
   m_groupWriterGroup->layout()->setSpacing( KDialog::spacingHint() );
   m_groupWriterGroup->layout()->setMargin( KDialog::marginHint() );
@@ -728,7 +728,7 @@ bool PermissionTab::saveSettings()
 
   if( ( m_checkPermissionsExternalPrograms->isChecked() || m_checkPermissionsDevices->isChecked() )
       && m_editPermissionsGroup->text().isEmpty() ) {
-    KMessageBox::error( this, i18n("Please specify a cd writing group."), i18n("Missing group name") );
+    KMessageBox::error( this, i18n("Please specify a cd writing group."), i18n("Missing Group Name") );
     return false;
   }
 
@@ -822,7 +822,7 @@ void PermissionTab::slotPermissionsDetails()
 // == FINISH-TAB ===========================================================================================================
 
 FinishTab::FinishTab( int i, int o, K3bSetupWizard* wizard )
-  : K3bSetupTab( i, o, i18n("Save your settings"), wizard )
+  : K3bSetupTab( i, o, i18n("Save Your Settings"), wizard )
 {
   ((QLabel*)m_labelSetupLogo)->setPixmap( QPixmap(locate( "data", "k3b/pics/k3bsetup_2.png" )) );
 

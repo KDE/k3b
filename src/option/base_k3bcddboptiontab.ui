@@ -262,11 +262,6 @@
                                     <property name="spacing">
                                         <number>6</number>
                                     </property>
-                                    <widget class="QListBox" row="1" column="0" rowspan="4" colspan="4">
-                                        <property name="name">
-                                            <cstring>m_listCddbpServer</cstring>
-                                        </property>
-                                    </widget>
                                     <widget class="QPushButton" row="0" column="4">
                                         <property name="name">
                                             <cstring>m_buttonAddCddbpServer</cstring>
@@ -348,6 +343,36 @@
                                             <number>8880</number>
                                         </property>
                                     </widget>
+                                    <widget class="KListView" row="1" column="0" rowspan="4" colspan="4">
+                                        <column>
+                                            <property name="text">
+                                                <string>Server</string>
+                                            </property>
+                                            <property name="clickable">
+                                                <bool>true</bool>
+                                            </property>
+                                            <property name="resizeable">
+                                                <bool>true</bool>
+                                            </property>
+                                        </column>
+                                        <column>
+                                            <property name="text">
+                                                <string>Port</string>
+                                            </property>
+                                            <property name="clickable">
+                                                <bool>true</bool>
+                                            </property>
+                                            <property name="resizeable">
+                                                <bool>true</bool>
+                                            </property>
+                                        </column>
+                                        <property name="name">
+                                            <cstring>m_viewCddpServer</cstring>
+                                        </property>
+                                        <property name="allColumnsShowFocus">
+                                            <bool>true</bool>
+                                        </property>
+                                    </widget>
                                 </grid>
                             </widget>
                         </vbox>
@@ -403,7 +428,7 @@
                             <cstring>m_groupProxy</cstring>
                         </property>
                         <property name="title">
-                            <string>Proxy settings</string>
+                            <string>Proxy Settings</string>
                         </property>
                         <vbox>
                             <property name="name">
@@ -579,7 +604,7 @@
                             <cstring>m_groupCgi</cstring>
                         </property>
                         <property name="title">
-                            <string>cgi</string>
+                            <string>Cgi-path</string>
                         </property>
                         <grid>
                             <property name="name">
@@ -725,7 +750,6 @@
     <tabstop>m_buttonRemoveCddbpServer</tabstop>
     <tabstop>m_buttonCddbpServerUp</tabstop>
     <tabstop>m_buttonCddbpServerDown</tabstop>
-    <tabstop>m_listCddbpServer</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

@@ -48,8 +48,8 @@ K3bDiskInfoView::K3bDiskInfoView( QWidget* parent, const char* name )
   m_labelAppendable       = new QLabel( m_infoWidget );
   m_labelSessions         = new QLabel( m_infoWidget );
 
-  infoLayout->addWidget( new QLabel( i18n("Total Capacity of medium:"), m_infoWidget ), 0, 0 );
-  infoLayout->addWidget( new QLabel( i18n("Remaining Capacity:"), m_infoWidget ), 1, 0 );
+  infoLayout->addWidget( new QLabel( i18n("Total capacity of medium:"), m_infoWidget ), 0, 0 );
+  infoLayout->addWidget( new QLabel( i18n("Remaining capacity:"), m_infoWidget ), 1, 0 );
   infoLayout->addWidget( new QLabel( i18n("Medium type:"), m_infoWidget ), 2, 0 );
   infoLayout->addWidget( m_labelSize, 0, 1 );
   infoLayout->addWidget( m_labelRemaining, 1, 1 );
@@ -58,7 +58,7 @@ K3bDiskInfoView::K3bDiskInfoView( QWidget* parent, const char* name )
 
   infoLayout->addWidget( new QLabel( i18n("Is rewritable:"), m_infoWidget ), 0, 3 );
   infoLayout->addWidget( new QLabel( i18n("Is appendable:"), m_infoWidget ), 1, 3 );
-  infoLayout->addWidget( new QLabel( i18n("Number of Sessions:"), m_infoWidget ), 2, 3 );
+  infoLayout->addWidget( new QLabel( i18n("Number of sessions:"), m_infoWidget ), 2, 3 );
   infoLayout->addWidget( m_labelCdrw, 0, 4 );
   infoLayout->addWidget( m_labelAppendable, 1, 4 );
   infoLayout->addWidget( m_labelSessions, 2, 4 );

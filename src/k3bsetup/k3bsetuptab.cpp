@@ -30,7 +30,7 @@ protected:
     rect.setLeft( rect.left() + 20 );
     rect.setRight( rect.right() - 20 );
     rect.setTop( rect.top() + 10 );
-    rect.setBottom( rect.top() + 40 );
+    //    rect.setBottom( rect.top() + 40 );
 
     p->drawText( rect, AlignTop|AlignHCenter|WordBreak, m_text );
   }

@@ -353,22 +353,22 @@ void K3bDataBurnDialog::setupAdvancedTab( QFrame* frame )
   m_radioIsoLevel3 = new QRadioButton( i18n("Level 3"), m_groupIsoLevel, "m_radioIsoLevel3" );
 
 
-  m_checkCreateRockRidge   = new QCheckBox( i18n( "Generate Rockridge Entries" ), frameSettings, "m_checkCreateRockRidge" );
-  m_checkCreateJoliet      = new QCheckBox( i18n( "Generate Joilet entries" ), frameSettings, "m_checkCreateJoliet" );
+  m_checkCreateRockRidge   = new QCheckBox( i18n( "Generate rockridge entries" ), frameSettings, "m_checkCreateRockRidge" );
+  m_checkCreateJoliet      = new QCheckBox( i18n( "Generate joilet entries" ), frameSettings, "m_checkCreateJoliet" );
 
-  m_checkNoDeepDirRel      = new QCheckBox( i18n( "no deep directory relocation" ), frameSettings, "m_checkNoDeepDirRel" );
-  m_checkHideRR_MOVED      = new QCheckBox( i18n( "hide RR_MOVED" ), frameSettings, "m_checkHideRR_MOVED" );
-  m_checkCreateTRANS_TBL   = new QCheckBox( i18n( "create TRANS_TBL entries" ), frameSettings, "m_checkCreateTRANS_TBL" );
-  m_checkHideTRANS_TBL     = new QCheckBox( i18n( "hide TRANS_TBL in Joliet" ), frameSettings, "m_checkHideTRANS_TBL" );
-  m_checkUntranslatedNames = new QCheckBox( i18n( "allow untranslated filenames" ), frameSettings, "m_checkUntranslatedNames" );
-  m_checkAllow31           = new QCheckBox( i18n( "allow 31 character filenames" ), frameSettings, "m_checkAllow31" );
-  m_checkMaxNames          = new QCheckBox( i18n( "max length (37) filenames" ), frameSettings, "m_checkMaxNames" );
-  m_checkBeginPeriod       = new QCheckBox( i18n( "allow beginning period" ), frameSettings, "m_checkBeginPeriod" );
-  m_checkRelaxedNames      = new QCheckBox( i18n( "relaxed filenames" ), frameSettings, "m_checkRelaxedNames" );
-  m_checkOmitVersion       = new QCheckBox( i18n( "omit version numbers" ), frameSettings, "m_checkOmitVersion" );
-  m_checkNoISOTrans        = new QCheckBox( i18n( "allow # and ~" ), frameSettings, "m_checkNoISOTrans" );
-  m_checkMultiDot          = new QCheckBox( i18n( "allow multible dots" ), frameSettings, "m_checkMultiDot" );
-  m_checkLowercase         = new QCheckBox( i18n( "allow lowercase filenames" ), frameSettings, "m_checkLowercase" );
+  m_checkNoDeepDirRel      = new QCheckBox( i18n( "No deep directory relocation" ), frameSettings, "m_checkNoDeepDirRel" );
+  m_checkHideRR_MOVED      = new QCheckBox( i18n( "Hide RR_MOVED" ), frameSettings, "m_checkHideRR_MOVED" );
+  m_checkCreateTRANS_TBL   = new QCheckBox( i18n( "Create TRANS_TBL entries" ), frameSettings, "m_checkCreateTRANS_TBL" );
+  m_checkHideTRANS_TBL     = new QCheckBox( i18n( "Hide TRANS_TBL in joliet" ), frameSettings, "m_checkHideTRANS_TBL" );
+  m_checkUntranslatedNames = new QCheckBox( i18n( "Allow untranslated filenames" ), frameSettings, "m_checkUntranslatedNames" );
+  m_checkAllow31           = new QCheckBox( i18n( "Allow 31 character filenames" ), frameSettings, "m_checkAllow31" );
+  m_checkMaxNames          = new QCheckBox( i18n( "Max length (37) filenames" ), frameSettings, "m_checkMaxNames" );
+  m_checkBeginPeriod       = new QCheckBox( i18n( "Allow beginning period" ), frameSettings, "m_checkBeginPeriod" );
+  m_checkRelaxedNames      = new QCheckBox( i18n( "Relaxed filenames" ), frameSettings, "m_checkRelaxedNames" );
+  m_checkOmitVersion       = new QCheckBox( i18n( "Omit version numbers" ), frameSettings, "m_checkOmitVersion" );
+  m_checkNoISOTrans        = new QCheckBox( i18n( "Allow # and ~" ), frameSettings, "m_checkNoISOTrans" );
+  m_checkMultiDot          = new QCheckBox( i18n( "Allow multible dots" ), frameSettings, "m_checkMultiDot" );
+  m_checkLowercase         = new QCheckBox( i18n( "Allow lowercase filenames" ), frameSettings, "m_checkLowercase" );
 
 
   frameSettingsLayout->addWidget( m_checkCreateRockRidge, 0, 0 );
@@ -420,12 +420,12 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
   _groupVolumeInfoLayout->setSpacing( spacingHint() );
   _groupVolumeInfoLayout->setMargin( marginHint() );
 
-  _groupVolumeInfoLayout->addWidget( new QLabel( i18n( "Volume ID" ), _groupVolumeInfo, "m_labelVolumeID" ), 0, 0 );
-  _groupVolumeInfoLayout->addWidget( new QLabel( i18n( "Volume Set ID" ), _groupVolumeInfo, "m_labelVolumeSetID" ), 1, 0 );
-  _groupVolumeInfoLayout->addWidget( new QLabel( i18n( "Publisher" ), _groupVolumeInfo, "m_labelPublisher" ), 2, 0 );
-  _groupVolumeInfoLayout->addWidget( new QLabel( i18n( "Preparer" ), _groupVolumeInfo, "m_labelPreparer" ), 3, 0 );
-  _groupVolumeInfoLayout->addWidget( new QLabel( i18n( "System ID" ), _groupVolumeInfo, "m_labelSystemID" ), 4, 0 );
-  _groupVolumeInfoLayout->addWidget( new QLabel( i18n( "Application ID" ), _groupVolumeInfo, "m_labelApplicationID" ), 5, 0 );
+  _groupVolumeInfoLayout->addWidget( new QLabel( i18n( "Volume id:" ), _groupVolumeInfo, "m_labelVolumeID" ), 0, 0 );
+  _groupVolumeInfoLayout->addWidget( new QLabel( i18n( "Volume set id:" ), _groupVolumeInfo, "m_labelVolumeSetID" ), 1, 0 );
+  _groupVolumeInfoLayout->addWidget( new QLabel( i18n( "Publisher:" ), _groupVolumeInfo, "m_labelPublisher" ), 2, 0 );
+  _groupVolumeInfoLayout->addWidget( new QLabel( i18n( "Preparer:" ), _groupVolumeInfo, "m_labelPreparer" ), 3, 0 );
+  _groupVolumeInfoLayout->addWidget( new QLabel( i18n( "System id:" ), _groupVolumeInfo, "m_labelSystemID" ), 4, 0 );
+  _groupVolumeInfoLayout->addWidget( new QLabel( i18n( "Application id:" ), _groupVolumeInfo, "m_labelApplicationID" ), 5, 0 );
 
   // are this really the allowed characters? What about Joliet or UDF?
   K3bIsoValidator* isoValidator = new K3bIsoValidator( this, "isoValidator" );
@@ -458,7 +458,7 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
 
 
   m_groupWhiteSpace = new QButtonGroup( frame, "m_groupWhiteSpace" );
-  m_groupWhiteSpace->setTitle( i18n( "Whitespace treatment" ) );
+  m_groupWhiteSpace->setTitle( i18n( "Whitespace Treatment" ) );
   m_groupWhiteSpace->setColumnLayout(0, Qt::Vertical );
   m_groupWhiteSpace->layout()->setSpacing( 0 );
   m_groupWhiteSpace->layout()->setMargin( 0 );
@@ -467,10 +467,10 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
   m_groupWhiteSpaceLayout->setSpacing( spacingHint() );
   m_groupWhiteSpaceLayout->setMargin( marginHint() );
 
-  m_radioSpaceLeave    = new QRadioButton( i18n( "leave them" ), m_groupWhiteSpace, "m_radioSpaceLeave" );
-  m_radioSpaceReplace  = new QRadioButton( i18n( "replace with underscores" ), m_groupWhiteSpace, "m_radioSpaceReplace" );
-  m_radioSpaceStrip    = new QRadioButton( i18n( "strip" ), m_groupWhiteSpace, "m_radioSpaceStrip" );
-  m_radioSpaceExtended = new QRadioButton( i18n( "extended strip" ), m_groupWhiteSpace, "m_radioSpaceExtended" );
+  m_radioSpaceLeave    = new QRadioButton( i18n( "Leave them" ), m_groupWhiteSpace, "m_radioSpaceLeave" );
+  m_radioSpaceReplace  = new QRadioButton( i18n( "Replace with underscores" ), m_groupWhiteSpace, "m_radioSpaceReplace" );
+  m_radioSpaceStrip    = new QRadioButton( i18n( "Strip" ), m_groupWhiteSpace, "m_radioSpaceStrip" );
+  m_radioSpaceExtended = new QRadioButton( i18n( "Extended strip" ), m_groupWhiteSpace, "m_radioSpaceExtended" );
 
   m_groupWhiteSpaceLayout->addWidget( m_radioSpaceLeave, 0, 0 );
   m_groupWhiteSpaceLayout->addWidget( m_radioSpaceReplace, 1, 0 );
@@ -501,10 +501,10 @@ void K3bDataBurnDialog::setupMultisessionTab( QFrame* frame )
   m_groupMultiSession->setInsideMargin( 0 );
   m_groupMultiSession->setFrameStyle( QFrame::NoFrame | QFrame::Plain );
 
-  m_radioMultiSessionNone = new QRadioButton( i18n("&No Multisession"), m_groupMultiSession );
-  m_radioMultiSessionStart = new QRadioButton( i18n("&Start Multisession"), m_groupMultiSession );
-  m_radioMultiSessionContinue = new QRadioButton( i18n("&Continue Multisession"), m_groupMultiSession );
-  m_radioMultiSessionFinish = new QRadioButton( i18n("&Finish Multisession"), m_groupMultiSession );
+  m_radioMultiSessionNone = new QRadioButton( i18n("&No multisession"), m_groupMultiSession );
+  m_radioMultiSessionStart = new QRadioButton( i18n("&Start multisession"), m_groupMultiSession );
+  m_radioMultiSessionContinue = new QRadioButton( i18n("&Continue multisession"), m_groupMultiSession );
+  m_radioMultiSessionFinish = new QRadioButton( i18n("&Finish multisession"), m_groupMultiSession );
 
   frameLayout->addWidget( m_groupMultiSession, 0, 0 );
 }

@@ -39,7 +39,7 @@
 
 
 K3bAudioTrackDialog::K3bAudioTrackDialog( QPtrList<K3bAudioTrack>& tracks, QWidget *parent, const char *name )
-  : KDialogBase( KDialogBase::Plain, i18n("Audio track properties"), KDialogBase::Ok|KDialogBase::Cancel|KDialogBase::Apply,
+  : KDialogBase( KDialogBase::Plain, i18n("Audio Track Properties"), KDialogBase::Ok|KDialogBase::Cancel|KDialogBase::Apply,
 		 KDialogBase::Ok, parent, name )
 {
   setupGui();
@@ -216,12 +216,12 @@ void K3bAudioTrackDialog::setupGui()
   cdTextTabLayout->setSpacing( spacingHint() );
   cdTextTabLayout->setMargin( marginHint() );
 
-  QLabel* labelMessage    = new QLabel( i18n( "&Message" ), cdTextTab, "labelMessage" );
-  QLabel* labelPerformer  = new QLabel( i18n( "&Performer" ), cdTextTab, "labelPerformer" );
-  QLabel* labelTitle      = new QLabel( i18n( "&Title" ), cdTextTab, "labelTitle" );
-  QLabel* labelIsrc       = new QLabel( i18n( "&ISRC" ), cdTextTab, "labelIsrc" );
-  QLabel* labelSongwriter = new QLabel( i18n( "&Songwriter" ), cdTextTab, "labelSongwriter" );
-  QLabel* labelArranger   = new QLabel( i18n( "&Arranger" ), cdTextTab, "labelArranger" );
+  QLabel* labelMessage    = new QLabel( i18n( "&Message:" ), cdTextTab, "labelMessage" );
+  QLabel* labelPerformer  = new QLabel( i18n( "&Performer:" ), cdTextTab, "labelPerformer" );
+  QLabel* labelTitle      = new QLabel( i18n( "&Title:" ), cdTextTab, "labelTitle" );
+  QLabel* labelIsrc       = new QLabel( i18n( "&ISRC:" ), cdTextTab, "labelIsrc" );
+  QLabel* labelSongwriter = new QLabel( i18n( "&Songwriter:" ), cdTextTab, "labelSongwriter" );
+  QLabel* labelArranger   = new QLabel( i18n( "&Arranger:" ), cdTextTab, "labelArranger" );
 
   labelMessage->setAlignment( Qt::AlignLeft | Qt::AlignTop );
 

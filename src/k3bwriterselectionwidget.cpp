@@ -48,7 +48,7 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget(QWidget *parent, const char *
   groupWriterLayout->setMargin( KDialog::marginHint() );
 
   QLabel* labelSpeed = new QLabel( groupWriter, "TextLabel1" );
-  labelSpeed->setText( i18n( "Burning Speed" ) );
+  labelSpeed->setText( i18n( "Burning speed" ) );
     
   m_comboSpeed = new QComboBox( FALSE, groupWriter, "m_comboSpeed" );
   m_comboSpeed->setAutoMask( FALSE );

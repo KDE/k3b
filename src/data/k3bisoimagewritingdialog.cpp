@@ -51,7 +51,7 @@
 
 
 K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( QWidget* parent, const char* name, bool modal )
-  : KDialogBase( parent, name, modal, i18n("Write image to cd"), User1|User2,
+  : KDialogBase( parent, name, modal, i18n("Write Image To CD"), User1|User2,
 		 User1, false, KGuiItem( i18n("Write"), "write", i18n("Start writing") ), KStdGuiItem::close() )
 {
   setupGui();
@@ -85,7 +85,7 @@ void K3bIsoImageWritingDialog::setupGui()
 
   // image group box
   // -----------------------------------------------------------------------
-  QGroupBox* groupImage = new QGroupBox( i18n("Image to write"), frame );
+  QGroupBox* groupImage = new QGroupBox( i18n("Image to Write"), frame );
   groupImage->setColumnLayout(0, Qt::Vertical );
   groupImage->layout()->setSpacing( 0 );
   groupImage->layout()->setMargin( 0 );

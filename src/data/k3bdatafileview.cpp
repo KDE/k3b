@@ -46,7 +46,7 @@ K3bDataFileView::K3bDataFileView( K3bDataView* view, K3bDataDoc* doc, QWidget* p
   addColumn( i18n("Name") );
   addColumn( i18n("Type") );
   addColumn( i18n("Size") );
-  addColumn( i18n("Local path") );
+  addColumn( i18n("Local Path") );
 
   setItemsRenameable( true );
   setSelectionModeExt( KListView::Extended );

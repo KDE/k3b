@@ -129,7 +129,7 @@ void K3bOptionDialog::setupBurningPage()
 
 void K3bOptionDialog::setupProgramsPage()
 {
-  QFrame* frame = addPage( i18n("Programs"), i18n("Setup external programs"),
+  QFrame* frame = addPage( i18n("Programs"), i18n("Setup External Programs"),
 			   KGlobal::instance()->iconLoader()->loadIcon( "exec", KIcon::NoGroup, KIcon::SizeMedium ) );
 
   QGridLayout* _frameLayout = new QGridLayout( frame );
@@ -143,7 +143,7 @@ void K3bOptionDialog::setupProgramsPage()
 
 void K3bOptionDialog::setupCddbPage()
 {
-  QFrame* frame = addPage( i18n("CDDB"), i18n("Setup the Cddb server"),
+  QFrame* frame = addPage( i18n("CDDB"), i18n("Setup the Cddb Server"),
 			   KGlobal::instance()->iconLoader()->loadIcon( "connect_established", KIcon::NoGroup, KIcon::SizeMedium ) );
 
   QGridLayout* mainGrid = new QGridLayout( frame );

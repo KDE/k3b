@@ -51,7 +51,7 @@ void K3bBurningOptionTab::setupGui()
   // audio settings group
   // -----------------------------------------------------------------------
   QGroupBox* m_groupAudio = new QGroupBox( projectTab, "m_groupAudio" );
-  m_groupAudio->setTitle( i18n( "Audio project" ) );
+  m_groupAudio->setTitle( i18n( "Audio Project" ) );
   m_groupAudio->setColumnLayout(0, Qt::Vertical );
   m_groupAudio->layout()->setSpacing( 0 );
   m_groupAudio->layout()->setMargin( 0 );
@@ -79,7 +79,7 @@ void K3bBurningOptionTab::setupGui()
 
   // data settings group
   // -----------------------------------------------------------------------
-  QGroupBox* m_groupData = new QGroupBox( 2, Qt::Vertical, i18n( "Data project" ), projectTab, "m_groupData" );
+  QGroupBox* m_groupData = new QGroupBox( 2, Qt::Vertical, i18n( "Data Project" ), projectTab, "m_groupData" );
   m_groupData->layout()->setSpacing( KDialog::spacingHint() );
   m_groupData->layout()->setMargin( KDialog::marginHint() );
 

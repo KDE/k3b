@@ -36,12 +36,12 @@
 
 
 K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const char *name ) 
-  : QGroupBox( 4, Qt::Vertical, i18n( "Temp directory" ), parent, name )
+  : QGroupBox( 4, Qt::Vertical, i18n( "Temp Directory" ), parent, name )
 {
   layout()->setSpacing( KDialog::spacingHint() );
   layout()->setMargin( KDialog::marginHint() );
 
-  QLabel* TextLabel1_3 = new QLabel( i18n( "Write Image file to" ), this, "TextLabel1_3" );
+  QLabel* TextLabel1_3 = new QLabel( i18n( "Write image file to" ), this, "TextLabel1_3" );
 
   QHBox* urlRequesterBox = new QHBox( this );
   urlRequesterBox->setSpacing( KDialog::spacingHint() );

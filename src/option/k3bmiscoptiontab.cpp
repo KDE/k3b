@@ -40,7 +40,7 @@ K3bMiscOptionTab::K3bMiscOptionTab(QWidget *parent, const char *name )
 {
   m_checkShowSplash = new QCheckBox( i18n("Show splash screen"), this );
 
-  QGroupBox* groupTempDir = new QGroupBox( 2, Qt::Horizontal, i18n("Default temp directory"), this );
+  QGroupBox* groupTempDir = new QGroupBox( 2, Qt::Horizontal, i18n("Default Temp Directory"), this );
   groupTempDir->layout()->setMargin( KDialog::marginHint() );
   groupTempDir->layout()->setSpacing( KDialog::spacingHint() );
 

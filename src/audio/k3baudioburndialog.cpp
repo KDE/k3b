@@ -58,7 +58,7 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
   setupCdTextTab( f2 );
 
   tab->addTab( f1, i18n("Burning") );
-  tab->addTab( f2, i18n("CD-Text") );
+  tab->addTab( f2, i18n("CD-text") );
 
   // create advanced tab
   QWidget* advancedTab = new QWidget( tab );
@@ -69,7 +69,7 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
   QGroupBox* advancedOptionGroup = new QGroupBox( 1, Qt::Vertical, i18n("Options"), advancedTab );
   QGroupBox* advancedGimmickGroup = new QGroupBox( 1, Qt::Vertical, i18n("Gimmicks"), advancedTab );
 
-  m_checkPadding = new QCheckBox( i18n( "Use Padding" ), advancedOptionGroup, "m_checkPadding" );
+  m_checkPadding = new QCheckBox( i18n( "Use padding" ), advancedOptionGroup, "m_checkPadding" );
   m_checkHideFirstTrack = new QCheckBox( i18n( "Hide first track" ), advancedGimmickGroup, "m_checkHideFirstTrack" );
 
   advancedTabGrid->addWidget( advancedOptionGroup, 0, 0 );
@@ -197,16 +197,16 @@ void K3bAudioBurnDialog::setupCdTextTab( QFrame* frame )
   mainGrid->setMargin( marginHint() );
 
 
-  m_checkCdText = new QCheckBox( i18n( "Write CD-Text" ), frame, "m_checkCdText" );
+  m_checkCdText = new QCheckBox( i18n( "Write CD-text" ), frame, "m_checkCdText" );
 
-  QLabel* labelDisc_id = new QLabel( i18n( "&Disc ID" ), frame, "labelDisc_id" );
-  QLabel* labelMessage = new QLabel( i18n( "&Message" ), frame, "labelMessage" );
+  QLabel* labelDisc_id = new QLabel( i18n( "&Disc ID:" ), frame, "labelDisc_id" );
+  QLabel* labelMessage = new QLabel( i18n( "&Message:" ), frame, "labelMessage" );
   labelMessage->setAlignment( int( QLabel::AlignTop | QLabel::AlignLeft ) );
-  QLabel* labelUpc_ean = new QLabel( i18n( "&UPC EAN" ), frame, "labelUpc_ean" );
-  QLabel* labelArranger = new QLabel( i18n( "&Arranger" ), frame, "labelArranger" );
-  QLabel* labelSongwriter = new QLabel( i18n( "&Songwriter" ), frame, "labelSongwriter" );
-  QLabel* labelPerformer = new QLabel( i18n( "&Performer" ), frame, "labelPerformer" );
-  QLabel* labelTitle = new QLabel( i18n( "&Title" ), frame, "labelTitle" );
+  QLabel* labelUpc_ean = new QLabel( i18n( "&UPC EAN:" ), frame, "labelUpc_ean" );
+  QLabel* labelArranger = new QLabel( i18n( "&Arranger:" ), frame, "labelArranger" );
+  QLabel* labelSongwriter = new QLabel( i18n( "&Songwriter:" ), frame, "labelSongwriter" );
+  QLabel* labelPerformer = new QLabel( i18n( "&Performer:" ), frame, "labelPerformer" );
+  QLabel* labelTitle = new QLabel( i18n( "&Title:" ), frame, "labelTitle" );
 
   m_editDisc_id = new QLineEdit( frame, "m_editDisc_id" );
   QToolTip::add(  m_editDisc_id, i18n( "International Standard Recording Code" ) );
