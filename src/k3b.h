@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -26,6 +26,7 @@
 // include files for Qt
 #include <qstrlist.h>
 #include <qworkspace.h>
+#include <qptrlist.h>
 
 // include files for KDE
 #include <kapplication.h>
@@ -102,9 +103,6 @@ class K3bMainWindow : public KDockMainWindow
    * @returns a pointer to the doc associated with the currently visible view or 0 if no project was created
    */
   K3bDoc* activeDoc() const;
-
-  /** does some initialisation like searching for external programs */
-  void init();
 
   /** returns a free temp filename in the given directory
    * @parm dir the directory where to find the tempfile, should end with '/' **/
@@ -222,6 +220,8 @@ class K3bMainWindow : public KDockMainWindow
 
   void slotFileBurn();
   void slotDirDockHidden();
+  void slotProjectDockHidden();
+
   void slotSettingsConfigure();
 
   /** checks if the currently visible tab is a k3bview
@@ -230,9 +230,6 @@ class K3bMainWindow : public KDockMainWindow
 
   void slotFileQuit();
 
-  /** toggles the toolbar
-   */
-  void slotViewToolBar();
   /** toggles the statusbar
    */
   void slotViewStatusBar();
@@ -248,6 +245,7 @@ class K3bMainWindow : public KDockMainWindow
   void slotStatusMsg(const QString &text);
 
   void slotShowDirView();
+  void slotShowProjectView();
 
   void slotProjectAddFiles();
 
@@ -319,9 +317,9 @@ class K3bMainWindow : public KDockMainWindow
   KAction* actionToolsWriteBinImage;
   KAction* actionCdCopy;
   KAction* actionProjectAddFiles;
-  KToggleAction* actionViewToolBar;
   KToggleAction* actionViewStatusBar;
   KToggleAction* actionViewDirView;
+  KToggleAction* actionViewProjectView;
   KToggleAction* actionViewAudioPlayer;
   KToggleAction* actionViewDocumentHeader;
 
@@ -329,6 +327,8 @@ class K3bMainWindow : public KDockMainWindow
   KAction* actionDataImportSession;
   KAction* actionDataClearImportedSession;
   KAction* actionDataEditBootImages;
+
+  QPtrList<KAction> m_dataProjectActions;
 
   KDockWidget* mainDock;
   KDockWidget* dirDock;

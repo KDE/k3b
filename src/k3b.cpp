@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -80,17 +80,19 @@
 #include "k3btempdirselectionwidget.h"
 #include "tools/k3bbusywidget.h"
 #include "k3bstatusbarmanager.h"
+#include "k3bfiletreecombobox.h"
 
 
+
+static K3bMainWindow* s_k3bMainWindow = 0;
 
 K3bMainWindow* k3bMain()
 {
-  K3bMainWindow* _app = dynamic_cast<K3bMainWindow*>( kapp->mainWidget() );
-  if( !_app ) {
+  if( !s_k3bMainWindow ) {
     kdDebug() << "No K3bMainWindow found!" << endl;
     exit(1);
   }
-  return _app;
+  return s_k3bMainWindow;
 }
 
 
@@ -98,6 +100,8 @@ K3bMainWindow* k3bMain()
 K3bMainWindow::K3bMainWindow()
   : KDockMainWindow(0,"K3b")
 {
+  s_k3bMainWindow = this;
+
   setPlainCaption( i18n("K3b - The CD Kreator") );
 
   m_config = kapp->config();
@@ -110,17 +114,27 @@ K3bMainWindow::K3bMainWindow()
   pDocList = new QPtrList<K3bDoc>();
   pDocList->setAutoDelete(true);
 
+  //setup splitter behaviour
+  manager()->setSplitterHighResolution(true);
+  manager()->setSplitterOpaqueResize(true);
+  manager()->setSplitterKeepSize(true);
 
-  // the system tray widget
-  //  m_systemTray = new KSystemTray( this );
-
-  //m_systemTray->show();
-
+  resize(787,478);  // default optimized for 800x600
 
   ///////////////////////////////////////////////////////////////////
   // call inits to invoke all other construction parts
+  initView();
   initStatusBar();
   initActions();
+  createGUI();
+
+  // fill the tabs action menu
+  m_documentTab->insertAction( actionFileSave );
+  m_documentTab->insertAction( actionFileSaveAs );
+  m_documentTab->insertAction( actionFileClose );
+  m_documentTab->insertAction( actionFileBurn );
+
+  readOptions();
 
   ///////////////////////////////////////////////////////////////////
   // disable actions at startup
@@ -131,18 +145,15 @@ K3bMainWindow::K3bMainWindow()
 
   actionDataImportSession->setEnabled( false );
   actionDataClearImportedSession->setEnabled( false );
-  //  actionDataEditBootImages->setEnabled(false);
-  toolBar("dataToolBar")->hide();
-
-  m_optionDialog = 0;
-
-  // since the icons are not that good activate the text on the toolbar
-  //  toolBar()->setIconText( KToolBar::IconTextRight );
+  actionDataEditBootImages->setEnabled(false);
 }
 
 K3bMainWindow::~K3bMainWindow()
 {
   delete pDocList;
+  delete mainDock;
+  delete m_audioPlayerDock;
+  delete dirDock;
 }
 
 
@@ -161,11 +172,11 @@ void K3bMainWindow::initActions()
   actionFileSaveAs = KStdAction::saveAs(this, SLOT(slotFileSaveAs()), actionCollection());
   actionFileClose = KStdAction::close(this, SLOT(slotFileClose()), actionCollection());
   actionFileQuit = KStdAction::quit(this, SLOT(slotFileQuit()), actionCollection());
-  actionViewToolBar = KStdAction::showToolbar(this, SLOT(slotViewToolBar()), actionCollection());
   actionViewStatusBar = KStdAction::showStatusbar(this, SLOT(slotViewStatusBar()), actionCollection());
   actionSettingsConfigure = KStdAction::preferences(this, SLOT(slotSettingsConfigure()), actionCollection() );
 
   KStdAction::configureToolbars(this, SLOT(slotEditToolbars()), actionCollection());
+  setStandardToolBarMenuEnabled(true);
 
   actionFileBurn = new KAction( i18n("&Burn..."), "cdwriter_unmount", CTRL + Key_B, this, SLOT(slotFileBurn()),
 			  actionCollection(), "file_burn");
@@ -195,6 +206,9 @@ void K3bMainWindow::initActions()
 
   actionViewDirView = new KToggleAction(i18n("Show Directories"), 0, this, SLOT(slotShowDirView()),
 				  actionCollection(), "view_dir");
+
+  actionViewProjectView = new KToggleAction(i18n("Show Project View"), 0, this, SLOT(slotShowProjectView()),
+					    actionCollection(), "view_show_project_view");
 
   actionViewAudioPlayer = new KToggleAction(i18n("Show Audio Player"), 0, this, SLOT(slotViewAudioPlayer()),
 					    actionCollection(), "view_audio_player");
@@ -228,11 +242,28 @@ void K3bMainWindow::initActions()
   actionDataClearImportedSession = new KAction(i18n("&Clear imported Session"), "gear", 0, this,
 					       SLOT(slotDataClearImportedSession()), actionCollection(),
 					       "project_data_clear_imported_session" );
-   actionDataEditBootImages = new KAction(i18n("&Edit boot images"), "cdtrack", 0, this,
+  actionDataEditBootImages = new KAction(i18n("&Edit boot images"), "cdtrack", 0, this,
  					 SLOT(slotEditBootImages()), actionCollection(),
  					 "project_data_edit_boot_images" );
-
+  
+  m_dataProjectActions.append( actionDataImportSession );
+  m_dataProjectActions.append( actionDataClearImportedSession );
+  m_dataProjectActions.append( actionDataEditBootImages );
   // ==============================================================================================================
+
+  // --- filetreecombobox-toolbar -------------------------------------------------------------------
+  K3bFileTreeComboBox* m_fileTreeComboBox = new K3bFileTreeComboBox( 0 );
+  connect( m_fileTreeComboBox, SIGNAL(urlExecuted(const KURL&)), m_dirView, SLOT(showUrl(const KURL& )) );
+  connect( m_fileTreeComboBox, SIGNAL(deviceExecuted(K3bDevice*)), m_dirView, SLOT(showDevice(K3bDevice* )) );
+
+  KWidgetAction* fileTreeComboAction = new KWidgetAction( m_fileTreeComboBox, 
+							  i18n("&Quick dir selector"),
+							  0, 0, 0,
+							  actionCollection(), "quick_dir_selector" );
+  fileTreeComboAction->setAutoSized(true);
+  (void)new KAction( i18n("Go"), "key_enter", 0, m_fileTreeComboBox, SLOT(slotGoUrl()), actionCollection(), "go_url" );
+  // ---------------------------------------------------------------------------------------------
+
 
 
   actionFileNewMenu->setStatusText(i18n("Creates a new project"));
@@ -245,12 +276,6 @@ void K3bMainWindow::initActions()
   actionFileSaveAs->setStatusText(i18n("Saves the actual project as..."));
   actionFileClose->setStatusText(i18n("Closes the actual project"));
   actionFileQuit->setStatusText(i18n("Quits the application"));
-
-  actionViewToolBar->setStatusText(i18n("Enables/disables the toolbar"));
-  actionViewStatusBar->setStatusText(i18n("Enables/disables the statusbar"));
-
-
-  createGUI();
 }
 
 
@@ -275,11 +300,16 @@ void K3bMainWindow::endBusy()
 void K3bMainWindow::initView()
 {
   // setup main docking things
-  mainDock = createDockWidget( "Workspace", SmallIcon("idea") );
+  mainDock = createDockWidget( "project_view", SmallIcon("idea"), 0, 
+			       kapp->makeStdCaption( i18n("Project View") ), i18n("Project View") );
   setView( mainDock );
   setMainDockWidget( mainDock );
-  mainDock->setDockSite( KDockWidget::DockCorner );
-  mainDock->setEnableDocking( KDockWidget::DockNone );
+  connect( mainDock, SIGNAL(iMBeingClosed()), this, SLOT(slotProjectDockHidden()) );
+  connect( mainDock, SIGNAL(hasUndocked()), this, SLOT(slotProjectDockHidden()) );
+
+
+//   mainDock->setDockSite( KDockWidget::DockCorner );
+//   mainDock->setEnableDocking( KDockWidget::DockFullDocking/*DockNone*/ );
 
 
   // --- Document Dock ----------------------------------------------------------------------------
@@ -321,21 +351,17 @@ void K3bMainWindow::initView()
 
   mainDock->setWidget( documentHull );
   connect( m_documentTab, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotCurrentDocChanged(QWidget*)) );
-
-  // fill the tabs action menu
-  m_documentTab->insertAction( actionFileSave );
-  m_documentTab->insertAction( actionFileSaveAs );
-  m_documentTab->insertAction( actionFileClose );
-  m_documentTab->insertAction( actionFileBurn );
   // ---------------------------------------------------------------------------------------------
 
 
   // --- Directory Dock --------------------------------------------------------------------------
-  dirDock = createDockWidget( "K3b Dir View", SmallIcon("idea") );
+  dirDock = createDockWidget( "directory_tree", SmallIcon("idea"), 0,
+			      kapp->makeStdCaption( i18n("Dir View") ), i18n("Dir View") );
   m_dirView = new K3bDirView( dirDock );
+  m_dirView->setupFinalize( K3bDeviceManager::self() );
   dirDock->setWidget( m_dirView );
-  dirDock->setEnableDocking( KDockWidget::DockCorner );
-  dirDock->manualDock( mainDock, KDockWidget::DockTop, 30 );
+  //  dirDock->setEnableDocking( KDockWidget::DockFullDocking/*DockCorner*/ );
+  dirDock->manualDock( mainDock, KDockWidget::DockTop, 3000 );
 
   connect( dirDock, SIGNAL(iMBeingClosed()), this, SLOT(slotDirDockHidden()) );
   connect( dirDock, SIGNAL(hasUndocked()), this, SLOT(slotDirDockHidden()) );
@@ -343,11 +369,12 @@ void K3bMainWindow::initView()
 
 
   // --- Audioplayer Dock ------------------------------------------------------------------------
-  m_audioPlayerDock = createDockWidget( "K3b Audio Player", SmallIcon("1rightarrow") );
+  m_audioPlayerDock = createDockWidget( "audio_player", SmallIcon("1rightarrow"), 0,
+					kapp->makeStdCaption( i18n("Audioplayer") ), i18n("Audioplayer") );
   m_audioPlayer = new K3bAudioPlayer( this, "k3b_audio_player" );
   m_audioPlayerDock->setWidget( m_audioPlayer );
-  m_audioPlayerDock->setEnableDocking( KDockWidget::DockCorner );
-  m_audioPlayerDock->manualDock( mainDock, KDockWidget::DockBottom, m_audioPlayer->height() );
+  //  m_audioPlayerDock->setEnableDocking( KDockWidget::DockFullDocking/*DockCorner*/ );
+  m_audioPlayerDock->manualDock( mainDock, KDockWidget::DockRight, 3000 );
 
   connect( m_audioPlayerDock, SIGNAL(iMBeingClosed()), this, SLOT(slotAudioPlayerHidden()) );
   connect( m_audioPlayerDock, SIGNAL(hasUndocked()), this, SLOT(slotAudioPlayerHidden()) );
@@ -431,7 +458,6 @@ void K3bMainWindow::openDocumentFile(const KURL& url)
 void K3bMainWindow::saveOptions()
 {
   m_config->setGroup("General Options");
-  saveMainWindowSettings( m_config );
   m_config->writeEntry("Show Document Header", m_documentHeader->isVisible());
   actionFileOpenRecent->saveEntries(m_config,"Recent Files");
 
@@ -443,6 +469,8 @@ void K3bMainWindow::saveOptions()
   K3bDeviceManager::self()->saveConfig( m_config );
 
   m_dirView->saveConfig( config() );
+
+  saveMainWindowSettings( m_config, "main_window_settings" );
 }
 
 
@@ -450,14 +478,8 @@ void K3bMainWindow::readOptions()
 {
   m_config->setGroup("General Options");
 
-  // toolbar and statusbar settings
-  applyMainWindowSettings( m_config );
-  actionViewToolBar->setChecked( !toolBar()->isHidden() );
-  actionViewStatusBar->setChecked( !statusBar()->isHidden() );
-
   bool bViewDocumentHeader = m_config->readBoolEntry("Show Document Header", true);
   actionViewDocumentHeader->setChecked(bViewDocumentHeader);
-  slotViewDocumentHeader();
 
   // initialize the recent file list
   actionFileOpenRecent->loadEntries(m_config,"Recent Files");
@@ -467,6 +489,11 @@ void K3bMainWindow::readOptions()
 
   m_config->setGroup("ISO Options");
   m_useID3TagForMp3Renaming = m_config->readBoolEntry("Use ID3 Tag for mp3 renaming", false);
+
+  applyMainWindowSettings( m_config, "main_window_settings" );
+
+  slotViewDocumentHeader();
+  slotCheckDockWidgetStatus();
 }
 
 
@@ -706,17 +733,6 @@ void K3bMainWindow::slotFileQuit()
 }
 
 
-void K3bMainWindow::slotViewToolBar()
-{
-  // turn Toolbar on or off
-  if(actionViewToolBar->isChecked()) {
-    toolBar("mainToolBar")->show();
-  }
-  else {
-    toolBar("mainToolBar")->hide();
-  }
-}
-
 void K3bMainWindow::slotViewStatusBar()
 {
   //turn Statusbar on or off
@@ -861,6 +877,8 @@ void K3bMainWindow::slotDivxEncoding(){
     d.exec();
 }
 
+
+// TODO: move this into K3bDoc
 void K3bMainWindow::slotFileBurn()
 {
   K3bView* view = activeView();
@@ -882,70 +900,6 @@ void K3bMainWindow::slotFileBurn()
 }
 
 
-void K3bMainWindow::init()
-{
-  emit initializationInfo( i18n("Reading Options...") );
-
-
-  KConfig globalConfig( K3b::globalConfig() );
-
-  readOptions();
-
-  // external bin manager
-  // ===============================================================================
-  emit initializationInfo( i18n("Searching for external programs...") );
-
-  K3b::addDefaultPrograms( K3bExternalBinManager::self() );
-  K3bExternalBinManager::self()->search();
-
-  if( globalConfig.hasGroup("External Programs") ) {
-    globalConfig.setGroup( "External Programs" );
-    K3bExternalBinManager::self()->readConfig( &globalConfig );
-  }
-
-  if( config()->hasGroup("External Programs") ) {
-    config()->setGroup( "External Programs" );
-    K3bExternalBinManager::self()->readConfig( config() );
-  }
-
-  // ===============================================================================
-
-
-  // device manager
-  // ===============================================================================
-  emit initializationInfo( i18n("Scanning for CD devices...") );
-
-  if( !K3bDeviceManager::self()->scanbus() )
-    kdDebug() << "No Devices found!" << endl;
-
-  if( globalConfig.hasGroup("Devices") ) {
-    globalConfig.setGroup( "Devices" );
-    K3bDeviceManager::self()->readConfig( &globalConfig );
-  }
-
-  if( config()->hasGroup("Devices") ) {
-    config()->setGroup( "Devices" );
-    K3bDeviceManager::self()->readConfig( config() );
-  }
-
-  K3bDeviceManager::self()->printDevices();
-  // ===============================================================================
-
-  emit initializationInfo( i18n("Initializing CD view...") );
-
-  m_dirView->setupFinalize( K3bDeviceManager::self() );
-
-  // ===============================================================================
-  emit initializationInfo( i18n("Reading local CDDB database...") );
-  config()->setGroup("Cddb");
-  QString filename = config()->readEntry("songlistPath", locateLocal("data", "k3b") + "/songlist.xml");
-  m_songManager = new K3bSongManager();
-  m_songManager->load( filename );
-
-  emit initializationInfo( i18n("Ready") );
-}
-
-
 void K3bMainWindow::slotCurrentDocChanged( QWidget* )
 {
   // check the doctype
@@ -955,14 +909,14 @@ void K3bMainWindow::slotCurrentDocChanged( QWidget* )
     case K3bDoc::DATA:
       actionDataClearImportedSession->setEnabled(true);
       actionDataImportSession->setEnabled(true);
-      //      actionDataEditBootImages->setEnabled(true);
-      toolBar("dataToolBar")->show();
+      actionDataEditBootImages->setEnabled(true);
+      plugActionList( "data_project_actions", m_dataProjectActions );
       break;
     default:
       actionDataClearImportedSession->setEnabled(false);
       actionDataImportSession->setEnabled(false);
-      //      actionDataEditBootImages->setEnabled(false);
-      toolBar("dataToolBar")->hide();
+      actionDataEditBootImages->setEnabled(false);
+      unplugActionList( "data_project_actions" );
     }
   }
 }
@@ -970,7 +924,7 @@ void K3bMainWindow::slotCurrentDocChanged( QWidget* )
 
 void K3bMainWindow::slotEditToolbars()
 {
-  saveMainWindowSettings( m_config, "General Options" );
+  saveMainWindowSettings( m_config, "main_window_settings" );
   KEditToolbar dlg( actionCollection() );
   connect(&dlg, SIGNAL(newToolbarConfig()), SLOT(slotNewToolBarConfig()));
   dlg.exec();
@@ -980,7 +934,8 @@ void K3bMainWindow::slotEditToolbars()
 void K3bMainWindow::slotNewToolBarConfig()
 {
   createGUI();
-  applyMainWindowSettings(m_config, "General Options");
+  slotCurrentDocChanged(0);  // make sure the project-specific actions get activated
+  applyMainWindowSettings( m_config, "main_window_settings" );
 }
 
 QString K3bMainWindow::findTempFile( const QString& ending, const QString& d )
@@ -1102,6 +1057,13 @@ void K3bMainWindow::slotShowDirView()
 }
 
 
+void K3bMainWindow::slotShowProjectView()
+{
+  mainDock->changeHideShowState();
+  slotCheckDockWidgetStatus();
+}
+
+
 void K3bMainWindow::slotAudioPlayerHidden()
 {
   actionViewAudioPlayer->setChecked( false );
@@ -1114,10 +1076,17 @@ void K3bMainWindow::slotDirDockHidden()
 }
 
 
+void K3bMainWindow::slotProjectDockHidden()
+{
+  actionViewProjectView->setChecked( false );
+}
+
+
 void K3bMainWindow::slotCheckDockWidgetStatus()
 {
   actionViewAudioPlayer->setChecked( m_audioPlayerDock->isVisible() );
   actionViewDirView->setChecked( dirDock->isVisible() );
+  actionViewProjectView->setChecked( mainDock->isVisible() );
 }
 
 

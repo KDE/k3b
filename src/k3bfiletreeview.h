@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -25,6 +25,8 @@
 class K3bDeviceManager;
 class K3bDevice;
 class KFileTreeBranch;
+class KActionCollection;
+class KActionMenu;
 class QPoint;
 class QDropEvent;
 class QDragEnterEvent;
@@ -67,11 +69,17 @@ class K3bFileTreeView : public KFileTreeView
    * adds home and root dir branch
    */
   void addDefaultBranches();
-
   void addCdDeviceBranches( K3bDeviceManager* );
+
+  /** returns 0 if no device is selected */
+  K3bDevice* selectedDevice() const;
+  /** returnes an empty url if no url is selected */
+  KURL selectedUrl() const;
+
  public slots:
   void followUrl( const KURL& url );
   void setTreeDirOnlyMode( bool b );
+  void enablePopupMenu( bool b ) { m_menuEnabled = b; }
 
  protected:
   virtual void contentsDropEvent(QDropEvent* event);
@@ -81,15 +89,25 @@ class K3bFileTreeView : public KFileTreeView
  signals:
   void urlExecuted( const KURL& url );
   void deviceExecuted( K3bDevice* dev );
+
+  /** only gets emitted if the menu is disabled */
   void contextMenu( K3bDevice*, const QPoint& );
+  /** only gets emitted if the menu is disabled */
+  void contextMenu( const KURL& url, const QPoint& );
   
  private slots:
   void slotItemExecuted( QListViewItem* item );
   void slotContextMenu( KListView*, QListViewItem*, const QPoint& );
 
  private:
+  void initActions();
+
   bool m_dirOnlyMode;
   QMap<KFileTreeBranch*, K3bDevice*> m_deviceBranchesMap;
+  KActionCollection* m_actionCollection;
+  KActionMenu* m_devicePopupMenu;
+  KActionMenu* m_urlPopupMenu;
+  bool m_menuEnabled;
 };
 
 #endif

@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -22,11 +22,14 @@
 
 #include "device/k3bdevicemanager.h"
 #include "device/k3bdevice.h"
+#include "cdinfo/k3bdiskinfo.h"
 
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kurl.h>
 #include <kstandarddirs.h>
+#include <kaction.h>
+#include <kio/global.h>
 
 #include <qdir.h>
 #include <qevent.h>
@@ -37,7 +40,7 @@
 
 
 K3bDeviceBranch::K3bDeviceBranch( KFileTreeView* view, K3bDevice* dev, KFileTreeViewItem* item )
-  : KFileTreeBranch( view, KURL(), i18n("Drive: %1").arg(dev->vendor()),
+  : KFileTreeBranch( view, KURL(dev->mountPoint()), i18n("Drive: %1").arg(dev->vendor()),
 		     ( dev->burner()
 		       ? SmallIcon("cdwriter_unmount")
 		       : SmallIcon("cdrom_unmount") ),
@@ -47,13 +50,16 @@ K3bDeviceBranch::K3bDeviceBranch( KFileTreeView* view, K3bDevice* dev, KFileTree
 }
 
 
-bool K3bDeviceBranch::populate( const KURL&, KFileTreeViewItem* )
+bool K3bDeviceBranch::populate( const KURL& url, KFileTreeViewItem* item )
 {
-  // do nothing for now, perhaps we could mount in the future...?
-
-  emit populateFinished( root() );
-
-  return true;
+  QString mp = KIO::findDeviceMountPoint( m_device->mountDevice() );
+  if( !mp.isEmpty() ) {
+    return KFileTreeBranch::populate( url, item );
+  }
+  else {
+    emit populateFinished( root() );
+    return true;
+  }
 }
 
 
@@ -70,17 +76,43 @@ K3bFileTreeView::K3bFileTreeView( QWidget *parent, const char *name )
   setRootIsDecorated(true);
 
   m_dirOnlyMode = true;
+  m_menuEnabled = false;
 
   //connect( this, SIGNAL(currentChanged(QListViewItem*)), this, SLOT(slotItemExecuted(QListViewItem*)) );
   connect( this, SIGNAL(executed(QListViewItem*)), this, SLOT(slotItemExecuted(QListViewItem*)) );
   connect( this, SIGNAL(contextMenu(KListView*, QListViewItem* , const QPoint& )),
 	   this, SLOT(slotContextMenu(KListView*, QListViewItem* , const QPoint& )) );
+
+  initActions();
 }
 
 
 K3bFileTreeView::~K3bFileTreeView()
 {
 }
+
+
+void K3bFileTreeView::initActions()
+{
+//   m_actionCollection = new KActionCollection( this );
+
+//   m_devicePopupMenu = new KActionMenu( m_actionCollection, "device_popup_menu" );
+//   m_urlPopupMenu = new KActionMenu( m_actionCollection, "url_popup_menu" );
+
+//   KAction* actionDiskInfo = new KAction( i18n("&Disk info"), "info", 0, this, SLOT(slotShowDiskInfo()),
+// 					 m_actionCollection, "disk_info");
+//   KAction* actionUnmount = new KAction( i18n("&Unmount"), "cdrom_unmount", 0, this, SLOT(slotUnmountDisk()),
+// 					m_actionCollection, "disk_unmount");
+//   KAction* actionEject = new KAction( i18n("&Eject"), "", 0, this, SLOT(slotEjectDisk()),
+// 					m_actionCollection, "disk_eject");
+
+//   m_devicePopupMenu->insert( actionDiskInfo );
+//   m_devicePopupMenu->insert( new KActionSeparator( this ) );
+//   m_devicePopupMenu->insert( actionUnmount );
+//   m_devicePopupMenu->insert( actionEject );
+
+}
+
 
 /*
 void K3bFileTreeView::slotDropped() {
@@ -93,7 +125,6 @@ void K3bFileTreeView::contentsDropEvent(QDropEvent* event) {
     if ( QTextDrag::decode(event, text) ) {
         if ( text == CD_DRAG) {
             event->accept();
-            QImage image;
             kdDebug() << "(K3bFileTreeView) Drop text index: " << text << endl;
             // correct entry  if scrollbar are visible and scrolled
             KFileTreeViewItem *item = dynamic_cast<KFileTreeViewItem*>( itemAt( contentsToViewport( event->pos() ) ));
@@ -204,18 +235,62 @@ void K3bFileTreeView::setTreeDirOnlyMode( bool b )
 }
 
 
-void K3bFileTreeView::followUrl( const KURL& )
+void K3bFileTreeView::followUrl( const KURL& url )
 {
-  // FIXME: suche in branches() rootUrl(), ist in url? dann find im branch
+  KFileTreeBranchIterator it( branches() );
+  for( ; *it; ++it ) {
+    if( !m_deviceBranchesMap.contains( *it ) )
+      if( KFileTreeViewItem* item = (*it)->findTVIByURL( url ) ) {
+	setCurrentItem( item );
+	setSelected(item, true);
+      }
+  }
 }
 
 
 void K3bFileTreeView::slotContextMenu( KListView*, QListViewItem* item, const QPoint& p )
 {
   KFileTreeViewItem* treeItem = dynamic_cast<KFileTreeViewItem*>(item);
-  if( treeItem )
+  if( treeItem ) {
+    bool device = m_deviceBranchesMap.contains( treeItem->branch() );
+
+//     if( m_menuEnabled ) {
+//       if( device )
+// 	m_devicePopupMenu->popup(p);
+//       else
+// 	m_urlPopupMenu->popup(p);
+//     }
+//     else {
+      if( device )
+	emit contextMenu( m_deviceBranchesMap[treeItem->branch()], p );
+      else
+	emit contextMenu( treeItem->url(), p );
+      //    }
+  }
+  else
+    kdWarning() << "(K3bFileTreeView) found viewItem that is no KFileTreeViewItem!" << endl;
+}
+
+
+K3bDevice* K3bFileTreeView::selectedDevice() const
+{
+  KFileTreeViewItem* treeItem = dynamic_cast<KFileTreeViewItem*>(selectedItem());
+  if( treeItem ) {
     if( m_deviceBranchesMap.contains( treeItem->branch() ) )
-      emit contextMenu( m_deviceBranchesMap[treeItem->branch()], p );
+      return m_deviceBranchesMap[treeItem->branch()];
+  }
+  return 0;
+}
+
+
+KURL K3bFileTreeView::selectedUrl() const
+{
+  KFileTreeViewItem* treeItem = dynamic_cast<KFileTreeViewItem*>(selectedItem());
+  if( treeItem ) {
+    if( !m_deviceBranchesMap.contains( treeItem->branch() ) )
+      return treeItem->url();
+  }
+  return KURL();
 }
 
 

@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
@@ -28,6 +28,7 @@
 #include <stdlib.h>
 
 #include "k3b.h"
+#include "k3bapplication.h"
 #include "k3bsplash.h"
 #include "tools/k3bglobals.h"
 #include "k3bdoc.h"
@@ -44,6 +45,7 @@ static KCmdLineOptions options[] =
         { "audio", I18N_NOOP("Create a new audio project and add all given files"), 0 },
         { "vcd", I18N_NOOP("Create a new video cd project and add all given files"), 0 },
         { "mixed", I18N_NOOP("Create a new mixed mode project and add all given files"), 0 },
+        { "emovix", I18N_NOOP("Create a new eMovix project and add all given files"), 0 },
         { "copy", I18N_NOOP("Open the cd copy dialog"), 0 },
         { "isoimage", I18N_NOOP("Write an ISO image to cd"), 0 },
         { "binimage", I18N_NOOP("Write an Bin/Cue image to cd"), 0 },
@@ -54,7 +56,7 @@ static KCmdLineOptions options[] =
 int main(int argc, char *argv[]) {
 
     KAboutData aboutData( "k3b", I18N_NOOP("K3b"),
-                          "0.8", description, KAboutData::License_GPL,
+                          "0.9", description, KAboutData::License_GPL,
                           "(c) 1999 - 2003, Sebastian Trueg", 0, 0, "trueg@kde.org");
     aboutData.addAuthor("Sebastian Trueg",I18N_NOOP("Maintainer"), "trueg@k3b.org");
     aboutData.addAuthor("Thomas Froescher",I18N_NOOP("Video-ripping and encoding"), "tfroescher@k3b.org");
@@ -69,7 +71,7 @@ int main(int argc, char *argv[]) {
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
 
-    KApplication app;
+    K3bApplication app;
 
 
     //   if (app.isRestored())
@@ -92,14 +94,11 @@ int main(int argc, char *argv[]) {
       }
     }
 
-    K3bMainWindow *k3bMainWidget = new K3bMainWindow();
-    app.setMainWidget( k3bMainWidget );
-    k3bMainWidget->initView();  // needs a kapp instance
-
-    k3bMainWidget->config()->setGroup( "General Options" );
-    if( k3bMainWidget->config()->readBoolEntry("Show splash", true) ) {
-        K3bSplash* splash = new K3bSplash( k3bMainWidget );
-        splash->connect( k3bMainWidget, SIGNAL(initializationInfo(const QString&)), SLOT(addInfo(const QString&)) );
+    app.config()->setGroup( "General Options" );
+    K3bSplash* splash = 0;
+    if( app.config()->readBoolEntry("Show splash", true) ) {
+        splash = new K3bSplash( 0 );
+        splash->connect( &app, SIGNAL(initializationInfo(const QString&)), SLOT(addInfo(const QString&)) );
 
         // kill the splash after 5 seconds
         QTimer::singleShot( 5000, splash, SLOT(close()) );
@@ -107,8 +106,18 @@ int main(int argc, char *argv[]) {
         splash->show();
     }
 
+    // this will init the devicemanager and stuff
+    app.init();
 
-    k3bMainWidget->init();
+    if( splash )
+      splash->addInfo( i18n("Setting up GUI...") );
+
+    K3bMainWindow *k3bMainWidget = new K3bMainWindow();
+    app.setMainWidget( k3bMainWidget );
+
+    if( splash )
+      splash->addInfo( i18n("Ready.") );
+
     k3bMainWidget->show();
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
@@ -137,6 +146,13 @@ int main(int argc, char *argv[]) {
     } else if( args->isSet( "vcd" ) ) {
         // create new audio project and add all arguments
         k3bMainWidget->slotNewVcdDoc();
+        K3bDoc* doc = k3bMainWidget->activeDoc();
+        for( int i = 0; i < args->count(); i++ ) {
+            doc->addUrl( args->url(i) );
+        }
+    } else if( args->isSet( "emovix" ) ) {
+        // create new audio project and add all arguments
+        k3bMainWidget->slotNewMovixDoc();
         K3bDoc* doc = k3bMainWidget->activeDoc();
         for( int i = 0; i < args->count(); i++ ) {
             doc->addUrl( args->url(i) );

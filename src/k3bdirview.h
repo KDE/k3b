@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -55,12 +55,15 @@ class K3bDirView : public QVBox
  public:
   K3bDirView(QWidget *parent=0, const char *name=0);
   ~K3bDirView();
+
   void setupFinalize( K3bDeviceManager *dm );
-  //K3bFileTreeView* getFileTreeView() { return m_fileTreeView; }
+
   K3bCdView* getCdView() { return m_cdView; }
 
  public slots:
   void saveConfig( KConfig* c );
+  void showUrl( const KURL& );
+  void showDevice( K3bDevice* );
   
  protected slots:
   void slotDirActivated( const KURL& );

@@ -141,7 +141,7 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
 //   m_urlCombo->setDuplicatesEnabled( false );
 
 
-  m_devicePopupMenu = new KActionMenu( this );
+  m_devicePopupMenu = new KActionMenu( this, "device_popup_menu" );
   KAction* actionDiskInfo = new KAction( i18n("&Disk info"), "info", 0, this, SLOT(slotShowDiskInfo()),
 					 this, "disk_info");
   KAction* actionUnmount = new KAction( i18n("&Unmount"), "cdrom_unmount", 0, this, SLOT(slotUnmountDisk()),
@@ -176,26 +176,24 @@ void K3bDirView::setupFinalize( K3bDeviceManager *dm )
 }
 
 
+void K3bDirView::showUrl( const KURL& url )
+{
+  slotDirActivated( url );
+}
+
+
+void K3bDirView::showDevice( K3bDevice* dev )
+{
+  slotDetectDiskInfo( dev );
+}
+
+
 void K3bDirView::slotDetectDiskInfo( K3bDevice* dev )
 {
-//   KDialog* infoDialog = new KDialog( this, "waitForDiskInfoDialog", true, WDestructiveClose );
-//   infoDialog->setCaption( i18n("Please wait...") );
-//   QHBoxLayout* infoLayout = new QHBoxLayout( infoDialog );
-//   infoLayout->setSpacing( KDialog::spacingHint() );
-//   infoLayout->setMargin( KDialog::marginHint() );
-//   infoLayout->setAutoAdd( true );
-//   QLabel* picLabel = new QLabel( infoDialog );
-//   picLabel->setPixmap( DesktopIcon( "cdwriter_unmount" ) );
-//   QLabel* infoLabel = new QLabel( i18n("K3b is trying to fetch information about the inserted disk."), infoDialog );
-
   m_viewStack->raiseWidget( m_noViewView );
   k3bMain()->showBusyInfo( i18n("Trying to fetch information about the inserted disk.") );
 
   m_diskInfoDetector->detect( dev );
-//   connect( m_diskInfoDetector, SIGNAL(diskInfoReady(const K3bDiskInfo&)),
-// 	   infoDialog, SLOT(close()) );
-
-//   infoDialog->show();
 }
 
 

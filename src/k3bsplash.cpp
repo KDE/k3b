@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -14,7 +14,6 @@
  */
 
 #include "k3bsplash.h"
-#include "k3b.h"
 
 #include <qapplication.h>
 #include <qlabel.h>

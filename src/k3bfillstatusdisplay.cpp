@@ -107,7 +107,7 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
   long tolerance;
 
   if( m_showTime ) {
-    docSize = m_doc->length() / 75 / 60;
+    docSize = m_doc->length().totalFrames() / 75 / 60;
     cdSize = m_cdSize.totalFrames() / 75 / 60;
     maxValue = (cdSize > docSize ? cdSize : docSize) + 10;
     tolerance = 1;

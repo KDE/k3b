@@ -1,38 +1,38 @@
-<!DOCTYPE kpartgui>
-<kpartgui name="k3b" version="0.8">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="k3b" version="2">
 <MenuBar>
-  <Action name="window_menu"/>
+  <Action name="window_menu" />
   <Menu name="tools"><text>&amp;Tools</text>
-  	<Action name="tools_copy_cd"/>
-	<Action name="tools_blank_cdrw"/>
-	<Action name="tools_write_iso"/>
-        <Action name="tools_write_bin"/>
-	<Action name="tools_encode_video"/>
+  	<Action name="tools_copy_cd" />
+	<Action name="tools_blank_cdrw" />
+	<Action name="tools_write_iso" />
+        <Action name="tools_write_bin" />
+	<Action name="tools_encode_video" />
   </Menu>
   <Menu name="project"><text>&amp;Project</text>
-        <Action name="project_data_import_session"/>
-        <Action name="project_data_clear_imported_session"/>
-	<Action name="project_data_edit_boot_images"/>
-	<Separator/>
-  	<Action name="project_add_files"/>
-  	<Action name="file_burn"/>
+  	<Action name="project_add_files" />
+  	<Action name="file_burn" />
+	<WeakSeparator />
+	<ActionList name="data_project_actions" />
   </Menu>
   <Menu name="settings">
-  	<Action name="view_dir" append="show_merge"/>
-  	<Action name="view_audio_player" append="show_merge"/>
-  	<Action name="view_document_header" append="show_merge"/>
-	<Action name="settings_k3bsetup"/>
+  	<Action name="view_show_project_view" append="show_merge" />
+  	<Action name="view_dir" append="show_merge" />
+  	<Action name="view_audio_player" append="show_merge" />
+  	<Action name="view_document_header" append="show_merge" />
+	<Action name="settings_k3bsetup" />
   </Menu>
 </MenuBar>
 <ToolBar name="mainToolBar">
-	<Action name="file_burn"/>
-	<Separator/>
-	<Action name="tools_copy_cd"/>
-	<Action name="tools_blank_cdrw"/>
+	<Action name="file_burn" />
+	<Separator />
+	<Action name="tools_copy_cd" />
+	<Action name="tools_blank_cdrw" />
+	<WeakSeparator />
+	<ActionList name="data_project_actions" />
 </ToolBar>
-<ToolBar name="dataToolBar">
-	<Action name="project_data_import_session"/>
-        <Action name="project_data_clear_imported_session"/>
-	<Action name="project_data_edit_boot_images"/>
+<ToolBar name="quickDirSelector" newline="true" fullWidth="true"><text>&amp;Quick Dir Selector</text>
+	<Action name="quick_dir_selector" />
+	<Action name="go_url" />
 </ToolBar>
 </kpartgui>
