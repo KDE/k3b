@@ -139,22 +139,14 @@ void K3bApplication::init()
     // search the config
     config()->setGroup( "Devices" );
 
-    int devNum = 1;
-    QStringList list = config()->readListEntry( "Device1" );
-    devNum = 1;
-    while( !list.isEmpty() ) {
-      if( K3bDevice* dev = k3bcore->deviceManager()->deviceByName( list[0] ) ) {
-	if( dev->vendor() == list[1] && 
-	    dev->description() == list[2] &&
-	    list[4].toInt() > 175 ) {
-	  wlist.removeRef( dev );
-	}
-      }
-    
-      devNum++;
-      list = config()->readListEntry( QString( "Device%1" ).arg( devNum ) );
+    for( QPtrListIterator<K3bCdDevice::CdDevice> it( k3bcore->deviceManager()->cdWriter() ); *it; ++it ) {
+      K3bCdDevice::CdDevice* dev = *it;
+      QString configEntryName = dev->vendor() + " " + dev->description();
+      QStringList list = config()->readListEntry( configEntryName );
+      if( list.count() > 1 && list[1].toInt() > 175 )
+	wlist.removeRef( dev );
     }
-
+    
     // the devices left in wlist are the once not verified yet
     needToVerify = !wlist.isEmpty();
   }

@@ -2521,9 +2521,14 @@ bool K3bCdDevice::CdDevice::modeSense( unsigned char** pageData, int& pageLen, i
     cmd[8] = pageLen;
     if( cmd.transport( TR_DIR_READ, *pageData, pageLen ) == 0 )
       return true;
-    else
+    else {
       delete [] *pageData;
+      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": MODE SENSE with real length "
+		<< pageLen << " failed." << endl;
+    }
   }
+  else
+    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": MODE SENSE length det failed." << endl;
 
   return false;
 }
@@ -2755,7 +2760,10 @@ int K3bCdDevice::CdDevice::determineMaximalWriteSpeed() const
   for( QValueList<int>::iterator it = list.begin(); it != list.end(); ++it )
     ret = QMAX( ret, *it );
 
-  return ret;
+  if( ret > 0 )
+    return ret;
+  else
+    return m_maxWriteSpeed;
 }
 
 
