@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>281</width>
-            <height>152</height>
+            <width>431</width>
+            <height>197</height>
         </rect>
     </property>
     <property name="caption">
@@ -134,7 +134,7 @@
                 <cstring>textLabel1</cstring>
             </property>
             <property name="text">
-                <string>Directory Pattern:</string>
+                <string>Directory pattern:</string>
             </property>
         </widget>
         <widget class="QLabel" row="1" column="0">
@@ -142,7 +142,7 @@
                 <cstring>textLabel2</cstring>
             </property>
             <property name="text">
-                <string>Filename Pattern:</string>
+                <string>Filename pattern:</string>
             </property>
         </widget>
     </grid>

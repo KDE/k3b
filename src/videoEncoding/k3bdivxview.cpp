@@ -88,17 +88,17 @@ void K3bDivxView::setupGui()
   gridAdvanced->layout()->setMargin( 0 );//  KDialog::marginHint() );
   */
   QGrid *gridBasic = new QGrid( 0, mainTab );
-  mainTab->addTab( gridBasic, i18n("Basic Audio/Video settings") );
+  mainTab->addTab( gridBasic, i18n("Basic Audio/Video Settings") );
   gridBasic->layout()->setSpacing( spacingHint() );
   gridBasic->layout()->setMargin( marginHint() );
 
   QGrid *gridSize = new QGrid( 0, mainTab );
-  mainTab->addTab( gridSize, i18n("Advanced Audio/Video settings") );
+  mainTab->addTab( gridSize, i18n("Advanced Audio/Video Settings") );
   gridSize->layout()->setSpacing( spacingHint() );
   gridSize->layout()->setMargin( marginHint() );
 
   QGrid *gridAdvanced = new QGrid( 0, mainTab );
-  mainTab->addTab( gridAdvanced, i18n("Expert settings") );
+  mainTab->addTab( gridAdvanced, i18n("Expert Settings") );
   gridAdvanced->layout()->setSpacing( spacingHint() );
   gridAdvanced->layout()->setMargin( marginHint() );
   

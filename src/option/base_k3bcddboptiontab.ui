@@ -14,7 +14,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>K3b CDDB Options</string>
+        <string>CDDB Options</string>
     </property>
     <vbox>
         <property name="name">
@@ -443,7 +443,7 @@
                             </sizepolicy>
                         </property>
                         <property name="title">
-                            <string>Cgi Path</string>
+                            <string>CGI Path</string>
                         </property>
                         <grid>
                             <property name="name">
@@ -482,7 +482,7 @@
                                     <cstring>m_checkManualCgiPath</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Manual Cgi path</string>
+                                    <string>Manual CGI path</string>
                                 </property>
                             </widget>
                         </grid>

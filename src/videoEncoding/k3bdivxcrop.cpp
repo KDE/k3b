@@ -78,7 +78,7 @@ picture only to cut off black borders." ) );
     rightColGroup->setFrameStyle( Plain | NoFrame );
 
 
-    QVButtonGroup *modeGroup = new QVButtonGroup( i18n( "Resize mode" ), rightColGroup );
+    QVButtonGroup *modeGroup = new QVButtonGroup( i18n( "Resize Mode" ), rightColGroup );
     modeGroup->layout() ->setMargin( KDialog::marginHint() );
     m_buttonFast = new QRadioButton( i18n( "Fast (-B)" ), modeGroup );
     m_buttonExactly = new QRadioButton( i18n( "Exact (-Z)" ), modeGroup );
@@ -102,7 +102,7 @@ picture only to cut off black borders." ) );
     m_autoCrop = new QCheckBox( i18n( "Automatically crop" ), groupCrop );
 
     // transcode DVD - VOB mode
-    QVButtonGroup *tcDvdModeGroup = new QVButtonGroup( i18n( "Transcode's input mode" ), rightColGroup );
+    QVButtonGroup *tcDvdModeGroup = new QVButtonGroup( i18n( "Transcode's Input Mode" ), rightColGroup );
     //m_tcDvdModeGroup->layout() ->setSpacing( KDialog::spacingHint() );
     tcDvdModeGroup->layout() ->setMargin( KDialog::marginHint() );
     //m_tcDvdModeGroup->setFrameStyle( Plain | NoFrame );
@@ -126,7 +126,7 @@ picture only to cut off black borders." ) );
     QGridLayout *finalLayout = new QGridLayout( groupFinal->layout() );
     finalLayout->setSpacing( KDialog::spacingHint() );
     finalLayout->setMargin( KDialog::marginHint() );
-    groupFinal->setTitle( i18n( "Final video" ) );
+    groupFinal->setTitle( i18n( "Final Video" ) );
     QLabel *size = new QLabel( i18n( "Size:" ), groupFinal );
     QLabel *aspect = new QLabel( i18n( "Aspect ratio:" ), groupFinal );
     QLabel *quality = new QLabel( i18n( "Video quality:" ), groupFinal );

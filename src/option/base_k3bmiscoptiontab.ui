@@ -63,7 +63,7 @@
                         <cstring>m_checkSystemConfig</cstring>
                     </property>
                     <property name="text">
-                        <string>Check System Configuration</string>
+                        <string>Check system configuration</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Check system Configuration</string>
