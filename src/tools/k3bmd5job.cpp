@@ -19,6 +19,7 @@
 #include <kmdcodec.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kio/netaccess.h>
 
 #include <qfile.h>
 #include <qtimer.h>
@@ -46,6 +47,8 @@ public:
 
   unsigned long long maxSize;
   unsigned long long readData;
+
+  KIO::filesize_t imageSize;
 
   static const int BUFFERSIZE = 1024*20;
 };
@@ -88,7 +91,20 @@ void K3bMd5Job::start()
       emit finished(false);
       return;
     }
+
+    // we use KIO since QFile does provide the size as unsigned int which is way too small for DVD images
+    KIO::UDSEntry uds;
+    KIO::NetAccess::stat( d->filename, uds );
+    for( KIO::UDSEntry::const_iterator it = uds.begin(); it != uds.end(); ++it ) {
+      if( (*it).m_uds == KIO::UDS_SIZE ) {
+	d->imageSize = (*it).m_long;
+	break;
+      }
+    }
   }
+  else
+    d->imageSize = 0;
+
     
   d->md5.reset();
   d->finished = false;
@@ -155,7 +171,7 @@ void K3bMd5Job::slotUpdate()
 	d->readData += read;
 	d->md5.update( d->data, read );
 	if( d->fileDes < 0 )
-	  emit percent( (int)((double)d->file.at() * 100.0 / (double)d->file.size()) );
+	  emit percent( (int)((double)d->readData * 100.0 / (double)d->imageSize) );
 	else if( d->maxSize > 0 )
 	  emit percent( (int)((double)d->readData * 100.0 / (double)d->maxSize) );
       }
