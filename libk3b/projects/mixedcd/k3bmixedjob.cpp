@@ -469,7 +469,7 @@ void K3bMixedJob::slotAudioDecoderFinished( bool success )
 void K3bMixedJob::slotAudioDecoderNextTrack( int t, int tt )
 {
   if( m_doc->onlyCreateImages() || !m_doc->onTheFly() ) {
-    K3bAudioTrack* track = m_doc->audioDoc()->getTrack(t-1);
+    K3bAudioTrack* track = m_doc->audioDoc()->getTrack(t);
     emit newSubTask( i18n("Decoding audio track %1 of %2%3")
 		     .arg(t)
 		     .arg(tt)
@@ -721,14 +721,14 @@ void K3bMixedJob::slotWriterNextTrack( int t, int )
 
   if( m_doc->mixedType() == K3bMixedDoc::DATA_FIRST_TRACK ) {
     if( t > 1 )
-      track = m_doc->audioDoc()->getTrack(t-2);
+      track = m_doc->audioDoc()->getTrack(t-1);
   }
   else if( m_doc->mixedType() == K3bMixedDoc::DATA_LAST_TRACK ) {
     if( t < m_doc->audioDoc()->numOfTracks()+1 )
-      track = m_doc->audioDoc()->getTrack(t-1);
+      track = m_doc->audioDoc()->getTrack(t);
   }
   else if( m_currentAction == WRITING_AUDIO_IMAGE )
-    track = m_doc->audioDoc()->getTrack(t-1);
+    track = m_doc->audioDoc()->getTrack(t);
   else
     t = m_doc->numOfTracks();
 
