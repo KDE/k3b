@@ -440,6 +440,8 @@ bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
 
 bool K3bDataDoc::saveDocumentData( QDomDocument* doc )
 {
+  doc->appendChild( doc->createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"ISO 8859-1\"" ) );
+
   QDomElement docElem = doc->createElement( documentType() );
 
   saveGeneralDocumentData( &docElem );
