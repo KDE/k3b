@@ -25,6 +25,7 @@ class K3bMixedDoc;
 class K3bIsoImager;
 class QFile;
 class QDataStream;
+class K3bAbstractWriter;
 
 
 /**
@@ -49,10 +50,13 @@ class K3bMixedJob : public K3bBurnJob
   void slotSizeCalculationFinished( int, int );
   void slotReceivedIsoImagerData( char*, int );
   void slotIsoImagerFinished( bool success );
+  void slotDataWritten();
+  void slotWriterFinished( bool success );
 
  private:
   K3bMixedDoc* m_doc;
   K3bIsoImager* m_isoImager;
+  K3bAbstractWriter* m_writer;
 
   QFile* m_isoImageFile;
   QDataStream* m_isoImageFileStream;

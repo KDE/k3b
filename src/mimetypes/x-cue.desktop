@@ -2,5 +2,11 @@
 Type=MimeType
 Patterns=*.cue;*.CUE
 MimeType=application/x-cue
-Icon=cdtrack
+Icon=cdimage
 Comment=CDRWIN cue-sheet
+Comment[da]=CDRWIN hjælpe-ark
+Comment[de]=CDRWIN im "Cue-Sheet"-Modus (Berechnung von Daten durch das Brennerlaufwerk)
+Comment[es]=Archivo de imagen de CD de CDRWIN
+Comment[pt]=Projecto do CDRWIN
+Comment[pt_BR]=Projecto do CDRWIN
+Comment[sv]=Cd-rw index-blad

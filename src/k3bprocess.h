@@ -33,10 +33,12 @@ class K3bProcess : public KProcess
 
   bool start( RunMode run = NotifyOnExit, Communication com = NoCommunication );
 
+ public slots:
+  void setSplitStdout( bool b ) { m_bSplitStdout = b; }
+
  private slots:
   void slotSplitStderr( KProcess*, char*, int );
   void slotSplitStdout( KProcess*, char*, int );
-  void setSplitStdout( bool b ) { m_bSplitStdout = b; }
 
  signals:
   void stderrLine( const QString& line );

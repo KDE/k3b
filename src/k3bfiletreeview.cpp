@@ -63,7 +63,8 @@ K3bFileTreeView::K3bFileTreeView( QWidget *parent, const char *name )
 
   m_dirOnlyMode = true;
 
-  connect( this, SIGNAL(executed(QListViewItem*)), this, SLOT(slotItemExecuted(QListViewItem*)) );
+  //  connect( this, SIGNAL(executed(QListViewItem*)), this, SLOT(slotItemExecuted(QListViewItem*)) );
+  connect( this, SIGNAL(clicked(QListViewItem*)), this, SLOT(slotItemExecuted(QListViewItem*)) );
   connect( this, SIGNAL(contextMenu(KListView*, QListViewItem* , const QPoint& )),
 	   this, SLOT(slotContextMenu(KListView*, QListViewItem* , const QPoint& )) );
 }

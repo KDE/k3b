@@ -54,13 +54,15 @@ int main(int argc, char *argv[])
 {
 
   KAboutData aboutData( "k3b", I18N_NOOP("K3b"),
-			"0.7.5", description, KAboutData::License_GPL,
+			"0.8", description, KAboutData::License_GPL,
 			"(c) 1999 - 2002, Sebastian Trueg", 0, 0, "trueg@informatik.uni-freiburg.de");
   aboutData.addAuthor("Sebastian Trueg",I18N_NOOP("Maintainer"), "trueg@informatik.uni-freiburg.de");
-  aboutData.addAuthor("Thomas Froescher",I18N_NOOP("Developer"), "tfroescher@gmx.de");
+  aboutData.addAuthor("Thomas Froescher",I18N_NOOP("Video-ripping and encoding"), "tfroescher@gmx.de");
+  aboutData.addAuthor("Christian Kvasny",I18N_NOOP("VCD Project"), "chris@ckvsoft.at");
   aboutData.addCredit("Ayo", I18N_NOOP("For his bombastic artwork."), "73lab@free.fr" );
   aboutData.addCredit("Crissi", I18N_NOOP("For extensive testing and the first German translation."), "crissi99@gmx.de");
   aboutData.addCredit("Joerg Schilling", I18N_NOOP("For his great cdrtools and the patient answers to all my questions.") );
+  aboutData.addCredit("Klaus-Dieter Krannich", I18N_NOOP("For the hint on the cdrdao --remote parameter") );
 	
   KCmdLineArgs::init( argc, argv, &aboutData );
   KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
