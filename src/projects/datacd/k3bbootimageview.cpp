@@ -17,6 +17,7 @@
 
 #include "k3bdatadoc.h"
 #include "k3bbootitem.h"
+#include <k3bintvalidator.h>
 
 #include <klocale.h>
 #include <klistview.h>
@@ -25,7 +26,6 @@
 
 #include <qpushbutton.h>
 #include <qstring.h>
-#include <qvalidator.h>
 #include <qgroupbox.h>
 #include <qlineedit.h>
 #include <qcheckbox.h>
@@ -87,11 +87,7 @@ K3bBootImageView::K3bBootImageView( K3bDataDoc* doc, QWidget* parent, const char
   connect( m_radioNoEmulation, SIGNAL(toggled(bool)),
 	   this, SLOT(slotNoEmulationToggled(bool)) );
 
-  // TODO: allow base 8, 10, or 16 numbers
-  // TODO: allow A-F if string starts with 0x
-  //       allow only 0-7 if string starts with 00
-  //  QRegExpValidator* v = new QRegExpValidator( QRegExp( "(0x|00)?[1-9]\\d*" ), this );
-  QIntValidator* v = new QIntValidator( this );
+  K3bIntValidator* v = new K3bIntValidator( this );
   m_editLoadSegment->setValidator( v );
   m_editLoadSize->setValidator( v );
 
@@ -177,8 +173,8 @@ void K3bBootImageView::loadBootItemSettings( K3bBootItem* item )
 
     m_checkNoBoot->setChecked( item->noBoot() );
     m_checkInfoTable->setChecked( item->bootInfoTable() );
-    m_editLoadSegment->setText( QString::number( item->loadSegment() ) );
-    m_editLoadSize->setText( QString::number( item->loadSize() ) );
+    m_editLoadSegment->setText( "0x" + QString::number( item->loadSegment(), 16 ) );
+    m_editLoadSize->setText( "0x" + QString::number( item->loadSize(), 16 ) );
 
     if( item->imageType() == K3bBootItem::FLOPPY )
       m_radioFloppy->setChecked(true);
@@ -206,24 +202,15 @@ void K3bBootImageView::slotOptionsChanged()
       i->setNoBoot( m_checkNoBoot->isChecked() );
       i->setBootInfoTable( m_checkInfoTable->isChecked() );
 
-//       bool ok = true;
-//       i->setLoadSegment( m_editLoadSegment->text().toInt( &ok, 
-// 							  m_editLoadSegment->text().startsWith("0x")
-// 							  ? 16
-// 							  : ( m_editLoadSegment->text().startsWith( "00" )
-// 							      ? 8
-// 							      : 10 ) ) );
-//       i->setLoadSize( m_editLoadSize->text().toInt( &ok, 
-// 						    m_editLoadSize->text().startsWith("0x")
-// 						    ? 16
-// 						    : ( m_editLoadSize->text().startsWith( "00" )
-// 							? 8
-// 							: 10 ) ) );
-//       if( !ok )
-// 	kdDebug() << "(K3bBootImageView) parsing number failed." << endl;
+      // TODO: create some class K3bIntEdit : public QLineEdit
+      bool ok = true;
+      i->setLoadSegment( K3bIntValidator::toInt( m_editLoadSegment->text(), &ok ) );
+      if( !ok )
+	kdDebug() << "(K3bBootImageView) parsing number failed: " << m_editLoadSegment->text().lower() << endl;
+      i->setLoadSize( K3bIntValidator::toInt( m_editLoadSize->text(), &ok ) );
+      if( !ok )
+	kdDebug() << "(K3bBootImageView) parsing number failed: " << m_editLoadSize->text().lower() << endl;
 
-      i->setLoadSegment( m_editLoadSegment->text().toInt() );
-      i->setLoadSize( m_editLoadSize->text().toInt() );
       if( m_radioFloppy->isChecked() )
 	i->setImageType( K3bBootItem::FLOPPY );
       else if( m_radioHarddisk->isChecked() )
