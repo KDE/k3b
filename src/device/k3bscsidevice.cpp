@@ -9,6 +9,13 @@ extern "C" {
 #include <cdda_interface.h>
 }
 
+#include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/ioctl.h>
+
+#include "sg_err.h"
+
 
 K3bScsiDevice::K3bScsiDevice( cdrom_drive* drive )
   : K3bDevice( drive )
@@ -32,6 +39,39 @@ bool K3bScsiDevice::init()
   if( scsiIf.init() != 0 ) {
     qDebug( "(K3bScsiDevice) Could not open device " + genericDevice() );
     return false;
+  }
+
+
+  // determine bus, target, lun
+  int devFile = ::open( genericDevice().latin1(), O_RDONLY | O_NONBLOCK);
+  if( !devFile ) {
+    qDebug("(K3bScsiDevice) Could not open generic device.");
+  }
+  else {
+    struct ScsiIdLun {
+      int id;
+      int lun;
+    };
+    int bus = -1;
+    ScsiIdLun idLun;
+    idLun.id = -1; idLun.lun = -1;
+
+    if ( ioctl( devFile, SCSI_IOCTL_GET_BUS_NUMBER, &bus) < 0 ) {
+      qDebug( "(K3bScsiDevice) %s: Need a filename that resolves to a SCSI device.", genericDevice().latin1() );
+    }
+    else {
+      qDebug( "(K3bScsiDevice) bus: %i", bus );
+      m_bus = bus;
+    }
+    if ( ioctl( devFile, SCSI_IOCTL_GET_IDLUN, &idLun ) < 0) {
+      qDebug( "(K3bScsiDevice) %s: Need a filename that resolves to a SCSI device (2).", genericDevice().latin1() );
+    }
+    else {
+      qDebug( "(K3bScsiDevice) id: %i lun: %i", idLun.id, idLun.lun );
+      m_target = idLun.id;
+      m_lun = idLun.lun;
+    }
+    ::close( devFile );
   }
 
 

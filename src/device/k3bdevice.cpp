@@ -29,6 +29,8 @@ K3bDevice::K3bDevice( cdrom_drive* drive )
   m_maxReadSpeed = 0;
   m_burnproof = false;
   m_burner = false;
+
+  m_bus = m_target = m_lun = -1;
 }
 
 
@@ -84,6 +86,12 @@ const QString& K3bDevice::ioctlDevice() const
 const QString& K3bDevice::genericDevice() const
 {
   return m_genericDevice;
+}
+
+
+QString K3bDevice::busTargetLun() const
+{
+  return QString("%1,%2,%3").arg(m_bus).arg(m_target).arg(m_lun);
 }
 
 

@@ -63,6 +63,10 @@ class K3bDevice
    * needed for mounting the drive
    */
   virtual const QString& ioctlDevice() const;
+
+  /** makes only sense to use with sg devices */
+  virtual QString busTargetLun() const;
+
   virtual int            maxWriteSpeed() const { return m_maxWriteSpeed; }
   virtual const QString& cdrdaoDriver() const { return m_cdrdaoDriver; }
 
@@ -160,6 +164,11 @@ class K3bDevice
   int m_maxWriteSpeed;
 
   cdrom_drive* m_cdromStruct;
+
+  // only needed for scsi devices
+  int m_bus;
+  int m_target;
+  int m_lun;
 
  private:
   QString m_genericDevice;
