@@ -752,10 +752,25 @@ bool K3bCdCopyJob::writeNextSession()
     //
     int usedWritingMode = m_writingMode;
     if( usedWritingMode == K3b::WRITING_MODE_AUTO ) {
-      if( m_writerDevice->dao() )
-	usedWritingMode = K3b::DAO;
-      else if( m_writerDevice->supportsRawWriting() )
+      // there are a lot of writers out there which produce coasters
+      // in dao mode if the CD contains pregaps of length 0 (or maybe already != 2 secs?)
+      bool zeroPregap = false;
+      if( d->numSessions == 1 ) {
+	for( K3bCdDevice::Toc::const_iterator it = d->toc.begin(); it != d->toc.end(); ++it ) {
+	  const K3bCdDevice::Track& track = *it;
+	  if( track.index( 0, false ) == -1 ) {
+	    ++it;
+	    if( it != d->toc.end() )
+	      zeroPregap = true;
+	    --it;
+	  }
+	}
+      }
+
+      if( zeroPregap && m_writerDevice->supportsRawWriting() )
 	usedWritingMode = K3b::RAW;
+      else if( m_writerDevice->dao() )
+	usedWritingMode = K3b::DAO;
       else
 	usedWritingMode = K3b::TAO;
     }

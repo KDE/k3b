@@ -99,8 +99,22 @@ void K3bAudioJob::start()
       // there are none-DAO writers that are supported by cdrdao
       if( !writer()->dao() && writingApp() == K3b::CDRECORD )
 	m_usedWritingMode = K3b::TAO;
-      else
-	m_usedWritingMode = K3b::DAO;
+      else {
+	// there are a lot of writers out there which produce coasters
+	// in dao mode if the CD contains pregaps of length 0 (or maybe already != 2 secs?)
+	bool zeroPregap = false;
+	for( QPtrListIterator<K3bAudioTrack> it( *m_doc->tracks() ); it.current(); ++it ) {
+	  K3bAudioTrack* track = it.current();
+	  if( track->pregap() != 150 ) {
+	    zeroPregap = true;
+	    break;
+	  }
+	}
+	if( zeroPregap && writer->supportsRawWriting() )
+	  m_usedWritingMode = K3b::RAW;
+	else
+	  m_usedWritingMode = K3b::DAO;
+      }
     }
     else
       m_usedWritingMode = m_doc->writingMode();
