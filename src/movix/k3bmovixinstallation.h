@@ -41,7 +41,7 @@ class K3bMovixInstallation
    */
   static K3bMovixInstallation* probeInstallation( const QString& path );
 
-  static QStringList movixFiles();
+  QStringList movixFiles();
   static QStringList isolinuxFiles();
 
  private:
