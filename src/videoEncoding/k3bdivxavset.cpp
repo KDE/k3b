@@ -139,10 +139,10 @@ void K3bDivxAVSet::slotCalcBitrate(){
      int sizeIndex = m_comboCd->currentItem();
      int aBitrateIndex = m_comboMp3->currentItem();
      if( m_lengthSecs < 1 ){
-         kdDebug() << "(K3bDivxAVSet) Fatal error: no video length. You load an project file" << endl;
+         kdDebug() << "(K3bDivxAVSet) Fatal error: no video length. You must load an project file" << endl;
          return;
      }
-     long vBitrate = ( finalSize[ sizeIndex ] / m_lengthSecs * 8 ) - audioBitrate[ aBitrateIndex ];
+     long vBitrate = ( finalSize[ sizeIndex ] / m_lengthSecs * 8 ) *1.024 - audioBitrate[ aBitrateIndex ]; // one correct 1.024 K->1024
      m_vBitrate->setText( m_vBitrateDesc + i18n("%1 kbits").arg(vBitrate/1000) );
      m_data->setVideoBitrate( vBitrate/1000 );
      m_data->setAudioBitrate( audioBitrate[ aBitrateIndex ]/1000 );
