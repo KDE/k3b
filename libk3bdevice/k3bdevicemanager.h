@@ -119,6 +119,10 @@ namespace K3bCdDevice {
 
       class Private;
       Private* d;
+
+      CdDevice *addDevice( CdDevice* );
+      void BSDDeviceScan();
+      void LinuxDeviceScan();
     };
 }
 

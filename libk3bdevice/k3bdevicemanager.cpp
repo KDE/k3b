@@ -30,15 +30,18 @@
 #include <kprocess.h>
 #include <kapplication.h>
 #include <kconfig.h>
+#include <ktempfile.h>
 
 #include <iostream>
 #include <fstab.h>
 #include <limits.h>
+#include <assert.h>
 
-#ifdef __FreeBSD__
+#ifdef Q_OS_FREEBSD
 #include <sys/param.h>
 #include <sys/ucred.h>
 #include <sys/mount.h>
+#include <osreldate.h>
 #endif
 
 #include <stdio.h>
@@ -84,6 +87,11 @@ typedef unsigned char u8;
 #endif // Q_OS_LINUX
 
 
+#ifdef Q_OS_FREEBSD
+#include <cam/cam.h>
+#include <cam/scsi/scsi_pass.h>
+#include <camlib.h>
+#endif
 
 class K3bCdDevice::DeviceManager::Private
 {
@@ -196,6 +204,19 @@ int K3bCdDevice::DeviceManager::scanbus()
 {
   m_foundDevices = 0;
 
+#ifdef Q_OS_LINUX
+  LinuxDeviceScan();
+#endif
+#ifdef Q_OS_FREEBSD
+  BSDDeviceScan();
+#endif
+  scanFstab();
+
+  return m_foundDevices;
+}
+
+void K3bCdDevice::DeviceManager::LinuxDeviceScan()
+{
   QFile info("/proc/sys/dev/cdrom/info");
   QString line,devstring;
   info.open(IO_ReadOnly);
@@ -286,9 +307,139 @@ int K3bCdDevice::DeviceManager::scanbus()
 //       m_foundDevices++;
 //   }
 
-  scanFstab();
+}
 
-  return m_foundDevices;
+void K3bCdDevice::DeviceManager::BSDDeviceScan()
+{
+// Unfortunately uses lots of FBSD-specific data structures
+#ifndef Q_OS_FREEBSD
+	bool bsdspecificcode = false;
+	assert(bsdspecificcode);
+#endif
+
+#ifdef Q_OS_FREEBSD
+	union ccb ccb;
+	int fd;
+	int need_close = 0;
+	int skip_device = 0;
+	int bus, target, lun;
+	QString dev1, dev2;
+
+	if ((fd = open(XPT_DEVICE, O_RDWR)) == -1)
+	{
+		kdDebug() << "couldn't open %s " << XPT_DEVICE << endl;
+		return;
+	}
+
+	memset(&ccb, 0, sizeof(ccb));
+
+	ccb.ccb_h.func_code = XPT_DEV_MATCH;
+	char buffer[100*sizeof(struct dev_match_result)];
+	ccb.cdm.match_buf_len = 100*sizeof(struct dev_match_result);
+	ccb.cdm.matches = (struct dev_match_result *)buffer;
+	ccb.cdm.num_matches = 0;
+	ccb.cdm.num_patterns = 0;
+	ccb.cdm.pattern_buf_len = 0;
+	do {
+		if (ioctl(fd, CAMIOCOMMAND, &ccb) == -1) {
+			kdDebug() << "(BSDDeviceScan) error sending CAMIOCOMMAND ioctl: " << errno << endl;
+			break;
+		}
+
+		if ((ccb.ccb_h.status != CAM_REQ_CMP)
+		 || ((ccb.cdm.status != CAM_DEV_MATCH_LAST) && (ccb.cdm.status != CAM_DEV_MATCH_MORE))) {
+			kdDebug() << "(BSDDeviceScan) got CAM error " << ccb.ccb_h.status << ", CDM error %d" << ccb.cdm.status << endl;
+			break;
+		}
+		kdDebug() << "(BSDDeviceScan) number of matches " << (int)ccb.cdm.num_matches << endl;
+		for (int i = 0; i < (int)ccb.cdm.num_matches; i++) {
+			switch (ccb.cdm.matches[i].type) {
+			case DEV_MATCH_DEVICE: {
+				struct device_match_result *dev_result = &ccb.cdm.matches[i].result.device_result;
+
+				if (dev_result->flags & DEV_RESULT_UNCONFIGURED)
+				{
+					skip_device = 1;
+					break;
+				}
+				else
+					skip_device = 0;
+				if (need_close)
+				{
+					QString pass = dev1;
+					QString dev = "/dev/" + dev2;
+					if (dev2.startsWith("pass"))
+					{
+						pass = dev2;
+						dev = "/dev/" + dev1;
+					}
+#if __FreeBSD_version < 500100
+					dev += "c";
+#endif
+
+					CdDevice* device = new CdDevice(dev.latin1());
+					device->m_bus = bus;
+					device->m_target = target;
+					device->m_lun = lun;
+					device->m_passDevice = "/dev/" + pass;
+					kdDebug() << "(BSDDeviceScan) add device " << dev << ":" << bus << ":" << target << ":" << lun << endl;
+					addDevice(device);
+					need_close = 0;
+				}
+				bus = dev_result->path_id;
+				target = dev_result->target_id;
+				lun = dev_result->target_lun;
+
+				need_close = 1;
+
+				break;
+			}
+			case DEV_MATCH_PERIPH: {
+				struct periph_match_result *periph_result = &ccb.cdm.matches[i].result.periph_result;
+
+				if (skip_device != 0)
+					break;
+
+				if (need_close > 1)
+					dev1 = periph_result->periph_name + QString::number(periph_result->unit_number);
+				else
+					dev2 = periph_result->periph_name + QString::number(periph_result->unit_number);
+
+				need_close++;
+				break;
+			}
+			case DEV_MATCH_BUS : {
+				bool cannotmatchbus = false;
+				assert(cannotmatchbus);
+			}
+			}
+		}
+
+	} while ((ccb.ccb_h.status == CAM_REQ_CMP)
+		&& (ccb.cdm.status == CAM_DEV_MATCH_MORE));
+
+	if (need_close)
+	{
+					QString pass = dev1;
+					QString dev = "/dev/" + dev2;
+					if (dev2.startsWith("pass"))
+					{
+						pass = dev2;
+						dev = "/dev/" + dev1;
+					}
+#if __FreeBSD_version < 500100
+					dev += "c";
+#endif
+					CdDevice* device = new CdDevice(dev.latin1());
+					device->m_bus = bus;
+					device->m_target = target;
+					device->m_lun = lun;
+					device->m_passDevice = "/dev/" + pass;
+					kdDebug() << "(BSDDeviceScan) add device " << dev << ":" << bus << ":" << target << ":" << lun << endl;
+					addDevice(device);
+	}
+	close(fd);
+#endif
 }
 
 
@@ -348,7 +499,7 @@ bool K3bCdDevice::DeviceManager::readConfig( KConfig* c )
   c->setGroup( "Devices" );
 
   QStringList deviceSearchPath = c->readListEntry( "device_search_path" );
-  for( QStringList::iterator it = deviceSearchPath.begin(); 
+  for( QStringList::iterator it = deviceSearchPath.begin();
        it != deviceSearchPath.end(); ++it )
     addDevice( *it );
 
@@ -370,7 +521,7 @@ bool K3bCdDevice::DeviceManager::readConfig( KConfig* c )
 	dev->setCdrdaoDriver( list[2] );
       if( list.count() > 3 )
 	dev->setCdTextCapability( list[3] == "yes" );
-    }      
+    }
   }
 
   scanFstab();
@@ -426,6 +577,12 @@ bool K3bCdDevice::DeviceManager::saveConfig( KConfig* c )
 bool K3bCdDevice::DeviceManager::testForCdrom(const QString& devicename)
 {
   bool ret = false;
+  bool testingneeded = true;
+#ifdef Q_OS_FREEBSD
+  testingneeded = false;
+#endif
+  if (!testingneeded) return ret;
+
   int cdromfd = K3bCdDevice::openDevice( devicename.ascii() );
   if (cdromfd < 0) {
     kdDebug() << "could not open device " << devicename << " (" << strerror(errno) << ")" << endl;
@@ -473,11 +630,22 @@ K3bCdDevice::CdDevice* K3bCdDevice::DeviceManager::addDevice( const QString& dev
 {
   K3bCdDevice::CdDevice* device = 0;
 
+  bool bsdstyle = false;
+#ifdef Q_OS_FREEBSD
+  bsdstyle = true;
+#endif
+
+  if (bsdstyle)
+  {
+    device = findDevice(devicename);
+    if (device) return 0;
+
+  }
   // resolve all symlinks
   QString resolved = resolveSymLink( devicename );
   kdDebug() << devicename << " resolved to " << resolved << endl;
 
-  if  ( !testForCdrom(resolved) )
+  if  ( !bsdstyle && !testForCdrom(resolved) )
     return 0;
 
   if ( K3bCdDevice::CdDevice* oldDev = findDevice(resolved) ) {
@@ -487,7 +655,8 @@ K3bCdDevice::CdDevice* K3bCdDevice::DeviceManager::addDevice( const QString& dev
   }
 
   int bus = -1, target = -1, lun = -1;
-  bool scsi = determineBusIdLun( resolved, bus, target, lun );
+  // BSD forces scsi to false here.
+  bool scsi = !bsdstyle && determineBusIdLun( resolved, bus, target, lun );
   if(scsi) {
     if ( K3bCdDevice::CdDevice* oldDev = findDevice(bus, target, lun) ) {
       kdDebug() << "(K3bCdDevice::DeviceManager) dev " << resolved  << " already found" << endl;
@@ -502,6 +671,13 @@ K3bCdDevice::CdDevice* K3bCdDevice::DeviceManager::addDevice( const QString& dev
     device->m_target = target;
     device->m_lun = lun;
   }
+
+  return addDevice(device);
+}
+
+K3bCdDevice::CdDevice* K3bCdDevice::DeviceManager::addDevice( K3bCdDevice::CdDevice *device)
+{
+  const QString devicename = device->devicename();
 
   if( !device->init() ) {
     kdDebug() << "Could not initialize device " << devicename << endl;
@@ -541,6 +717,11 @@ K3bCdDevice::CdDevice* K3bCdDevice::DeviceManager::addDevice( const QString& dev
 
 void K3bCdDevice::DeviceManager::scanFstab()
 {
+  bool bsdstyle = false;
+#ifdef Q_OS_FREEBSD
+  bsdstyle = true;
+#endif
+
   ::setfsent();
 
   // clear all mount-Infos
@@ -580,8 +761,21 @@ void K3bCdDevice::DeviceManager::scanFstab()
 
     if( K3bCdDevice::CdDevice* dev = findDevice( resolveSymLink(md) ) )
     {
+      struct stat filestat;
+      bool usefilestat = false;
       kdDebug() << "(K3bCdDevice::DeviceManager) found device for " << md << ": " << resolveSymLink(md) << endl;
-      if( dev->mountDevice().isEmpty() ) {
+      if (bsdstyle)
+      {
+        // Several mount points for one device might exist. If more than one are found, the one with
+        // user permission should have a higher priority.
+        if (mountInfo->fs_file &&
+	     !stat(mountInfo->fs_file, &filestat) &&
+	     filestat.st_uid == geteuid())
+	{
+	  usefilestat = true;
+	}
+      }
+      if( usefilestat || dev->mountDevice().isEmpty() ) {
         dev->setMountPoint( mountInfo->fs_file );
         dev->setMountDevice( md );
 	dev->m_supermount = supermount;
@@ -592,17 +786,25 @@ void K3bCdDevice::DeviceManager::scanFstab()
       // compare bus, id, lun since the same device can for example be
       // determined as /dev/srX or /dev/scdX
       int bus = -1, id = -1, lun = -1;
-      if( determineBusIdLun( mountInfo->fs_spec, bus, id, lun ) ) {
-        if( K3bCdDevice::CdDevice* dev = findDevice( bus, id, lun ) ) {
+      K3bCdDevice::CdDevice * dev = 0;
+      if (bsdstyle)
+      {
+        dev = findDevice( mountInfo->fs_spec );
+      }
+      else
+      {
+        if( determineBusIdLun( mountInfo->fs_spec, bus, id, lun ) )
+          dev = findDevice( bus, id, lun );
+      }
+
+      if (dev)
+      {
           if( dev->mountDevice().isEmpty() ) {
             dev->setMountPoint( mountInfo->fs_file );
             dev->setMountDevice( md );
 	    dev->m_supermount = supermount;
           }
-        }
       }
-
-
     }
   } // while mountInfo
 
@@ -657,7 +859,13 @@ bool K3bCdDevice::DeviceManager::determineBusIdLun( const QString& dev, int& bus
 
   ::close(cdromfd);
   return ret;
-#else
+#endif
+
+#ifdef Q_OS_FREEBSD
+  Q_UNUSED(dev);
+  Q_UNUSED(bus);
+  Q_UNUSED(id);
+  Q_UNUSED(lun);
   return false;
 #endif
 }
