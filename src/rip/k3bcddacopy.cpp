@@ -40,7 +40,9 @@
 
 K3bCddaCopy::K3bCddaCopy( QObject* parent ) 
   : K3bJob( parent ),
-    m_bUsePattern( true )
+    m_bUsePattern( true ),
+    m_paranoiaMode(3),
+    m_paranoiaRetries(20)
 {
   m_device = 0;
   
@@ -128,6 +130,9 @@ bool K3bCddaCopy::startRip( unsigned int i )
   }
 
   kdDebug() << "(K3bCddaCopy) starting K3bAudioRip" << endl;
+
+  m_audioRip->setParanoiaMode( m_paranoiaMode );
+  m_audioRip->setMaxRetries( m_paranoiaRetries );
 
   if( !m_audioRip->ripTrack( m_device, m_tracksToCopy[i] ) ) {
     m_waveFileWriter.close();

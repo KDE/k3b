@@ -4,6 +4,7 @@
 
 class QWidget;
 class QCheckBox;
+class QComboBox;
 
 
 class K3bStdGuiItems
@@ -16,6 +17,7 @@ class K3bStdGuiItems
   static QCheckBox* removeImagesCheckbox( QWidget* parent = 0, const char* name = 0 );
   static QCheckBox* onTheFlyCheckbox( QWidget* parent = 0, const char* name = 0 );
   static QCheckBox* cdTextCheckbox( QWidget* parent = 0, const char* name = 0);
+  static QComboBox* paranoiaModeComboBox( QWidget* parent = 0, const char* name = 0 );
 
  private:
   K3bStdGuiItems() {}

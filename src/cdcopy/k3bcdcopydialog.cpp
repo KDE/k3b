@@ -21,6 +21,7 @@
 #include "../k3bwriterselectionwidget.h"
 #include "../k3btempdirselectionwidget.h"
 #include "../k3b.h"
+#include "../k3bstdguiitems.h"
 #include "../device/k3bdevice.h"
 #include "../device/k3bdevicemanager.h"
 #include "../k3bburnprogressdialog.h"
@@ -114,12 +115,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   m_checkFastToc = new QCheckBox( i18n("Fast TOC"), advancedTab );
   m_checkRawCopy = new QCheckBox( i18n("Raw Copy"), advancedTab );
 
-  m_comboParanoiaMode = new QComboBox( advancedTab );
-  m_comboParanoiaMode->insertItem( "0" );
-  m_comboParanoiaMode->insertItem( "1" );
-  m_comboParanoiaMode->insertItem( "2" );
-  m_comboParanoiaMode->insertItem( "3" );
-  m_comboParanoiaMode->setCurrentItem( 3 );
+  m_comboParanoiaMode = K3bStdGuiItems::paranoiaModeComboBox( advancedTab );
 
   advancedTabGrid->addMultiCellWidget( m_checkFastToc, 0, 0, 0, 2 );
   advancedTabGrid->addMultiCellWidget( m_checkRawCopy, 1, 1, 0, 2 );
@@ -176,7 +172,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   QToolTip::add( m_comboSourceDevice, i18n("Select the drive with the CD to duplicatey") );
   QToolTip::add( m_spinCopies, i18n("Number of copies") );
   QToolTip::add( m_checkRawCopy, i18n("Write all data sectors as 2352 byte blocks") );
-  QToolTip::add( m_comboParanoiaMode, i18n("Set the paranoia level when reading audio cds") );
+
 
   // What's This info
   // --------------------------------------------------------------------------------
@@ -206,14 +202,6 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
 					"with reading data cds."
 					"<p>Has no effect on audio cds."
 					"<p>Does not work in on-the-fly mode.") );
-  QWhatsThis::add( m_comboParanoiaMode, i18n("<p>Sets the correction mode for digital audio extraction."
-					    "<ul><li>0: No checking, data is copied directly from the drive. "
-					    "This should work with all current drives as they include their own "
-					    "hardware based correction.</li>"
-					    "<li>1: Perform overlapped reading to avoid jitter.</li>"
-					    "<li>2: Like 1 but with additional checks of the read audio data.</li>"
-					    "<li>3: Like 2 but with additional scratch detection and repair.</li></ul>"
-					    "<p><b>The extraction speed reduces from 0 to 3.</b>") );
 }
 
 

@@ -3,6 +3,7 @@
 #include <qcheckbox.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
+#include <qcombobox.h>
 
 #include <klocale.h>
 
@@ -95,5 +96,26 @@ QCheckBox* K3bStdGuiItems::cdTextCheckbox( QWidget* parent, const char* name )
 			   "(mostly car CD players)."
 			   "<p>Since a CD-TEXT enhanced CD will work in any CD player it is never a bad "
 			   "idea to enable this (if you specified the data).") );
+  return c;
+}
+
+
+QComboBox* K3bStdGuiItems::paranoiaModeComboBox( QWidget* parent, const char* name )
+{
+  QComboBox* c = new QComboBox( parent, name );
+  c->insertItem( "0" );
+  c->insertItem( "1" );
+  c->insertItem( "2" );
+  c->insertItem( "3" );
+  c->setCurrentItem( 3 );
+  QToolTip::add( c, i18n("Set the paranoia level for reading audio cds") );
+  QWhatsThis::add( c, i18n("<p>Sets the correction mode for digital audio extraction."
+			   "<ul><li>0: No checking, data is copied directly from the drive. "
+			   "This should work with all current drives as they include their own "
+			   "hardware based correction.</li>"
+			   "<li>1: Perform overlapped reading to avoid jitter.</li>"
+			   "<li>2: Like 1 but with additional checks of the read audio data.</li>"
+			   "<li>3: Like 2 but with additional scratch detection and repair.</li></ul>"
+			   "<p><b>The extraction speed reduces from 0 to 3.</b>") );
   return c;
 }

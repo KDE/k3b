@@ -33,7 +33,7 @@ class QToolButton;
 class QButtonGroup;
 class QRadioButton;
 class QCheckBox;
-
+class QSpinBox;
 
 
 /**
@@ -47,7 +47,8 @@ class K3bRipperWidget : public KDialogBase
   K3bRipperWidget( const K3bDiskInfo&, const K3bCddbResultEntry&, const QValueList<int>&, 
 		   QWidget *parent = 0, const char *name = 0 );
   ~K3bRipperWidget();
-  void setStaticDir( QString path );
+  void setStaticDir( const QString& path );
+
  public slots:  
   void refresh();
   void init();
@@ -68,7 +69,11 @@ class K3bRipperWidget : public KDialogBase
   QRadioButton* m_radioMp3;
   QRadioButton* m_radioOgg;
 
+  QComboBox* m_comboParanoiaMode;
+  QSpinBox* m_spinRetries;
+
   void setupGui();
+  void setupContextHelp();
   
  private slots:
   void slotUser1();

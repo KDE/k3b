@@ -25,7 +25,7 @@
 #include "../k3b.h"
 #include "../tools/k3bglobals.h"
 #include "../device/k3btrack.h"
-
+#include "../k3bstdguiitems.h"
 
 #include <kcombobox.h>
 #include <klocale.h>
@@ -56,6 +56,9 @@
 #include <qbuttongroup.h>
 #include <qhbox.h>
 #include <qtoolbutton.h>
+#include <qtabwidget.h>
+#include <qspinbox.h>
+
 
 
 
@@ -67,6 +70,7 @@ K3bRipperWidget::K3bRipperWidget(const K3bDiskInfo& diskInfo, const K3bCddbResul
   setButtonBoxOrientation( Vertical );
 
   setupGui();
+  setupContextHelp();
 
   init();
 
@@ -82,7 +86,6 @@ void K3bRipperWidget::setupGui()
   Form1Layout->setSpacing( KDialog::spacingHint() );
   Form1Layout->setMargin( 0 );
 
-  //  QVGroupBox *groupListView = new QVGroupBox(frame, "list" );
   m_viewTracks = new KListView( frame, "m_viewTracks" );
   m_viewTracks->addColumn(i18n( "Filename") );
   m_viewTracks->addColumn(i18n( "Length") );
@@ -91,7 +94,15 @@ void K3bRipperWidget::setupGui()
   m_viewTracks->addColumn(i18n( "Path") );
 
 
-  QGroupBox* groupOptions = new QGroupBox( 0, Qt::Vertical, i18n("Options"), frame );
+  QTabWidget* mainTab = new QTabWidget( frame );
+
+  QWidget* optionPage = new QWidget( mainTab );
+  QHBoxLayout* optionPageLayout = new QHBoxLayout( optionPage );
+  optionPageLayout->setMargin( marginHint() );
+  optionPageLayout->setSpacing( spacingHint() );
+  mainTab->addTab( optionPage, i18n("Options") );
+
+  QGroupBox* groupOptions = new QGroupBox( 0, Qt::Vertical, i18n("Destination"), optionPage );
   groupOptions->layout()->setMargin( 0 );
   QGridLayout* groupOptionsLayout = new QGridLayout( groupOptions->layout() );
   groupOptionsLayout->setMargin( marginHint() );
@@ -116,16 +127,38 @@ void K3bRipperWidget::setupGui()
   groupOptionsLayout->setColStretch( 0, 1 );
 
 
-  m_groupFileType = new QButtonGroup( 4, Qt::Vertical, i18n("File Type"), frame );
+  m_groupFileType = new QButtonGroup( 4, Qt::Vertical, i18n("File Type"), optionPage );
   m_radioWav = new QRadioButton( i18n("Wave"), m_groupFileType );
   m_radioMp3 = new QRadioButton( i18n("MP3"), m_groupFileType );
   m_radioOgg = new QRadioButton( i18n("Ogg Vorbis"), m_groupFileType ); // TODO: test if ogg available
 
+  optionPageLayout->addWidget( groupOptions );
+  optionPageLayout->addWidget( m_groupFileType );
+  optionPageLayout->setStretchFactor( groupOptions, 1 );
 
-  Form1Layout->addMultiCellWidget( m_viewTracks, 0, 0, 0, 1 );
-  Form1Layout->addMultiCellWidget( groupOptions, 1, 1, 0, 0 );
-  Form1Layout->addWidget( m_groupFileType, 1, 1 );
-  Form1Layout->setColStretch( 0, 20 );
+
+  QWidget* advancedPage = new QWidget( mainTab );
+  QGridLayout* advancedPageLayout = new QGridLayout( advancedPage );
+  advancedPageLayout->setMargin( marginHint() );
+  advancedPageLayout->setSpacing( spacingHint() );
+  mainTab->addTab( advancedPage, i18n("Advanced") );
+
+  m_comboParanoiaMode = K3bStdGuiItems::paranoiaModeComboBox( advancedPage );
+  m_spinRetries = new QSpinBox( advancedPage );
+  m_spinRetries->setValue(20);
+
+  advancedPageLayout->addWidget( new QLabel( i18n("Paranoia mode:"), advancedPage ), 0, 0 );
+  advancedPageLayout->addWidget( m_comboParanoiaMode, 0, 1 );
+  advancedPageLayout->addWidget( new QLabel( i18n("Read retries:"), advancedPage ), 1, 0 );
+  advancedPageLayout->addWidget( m_spinRetries, 1, 1 );
+
+  advancedPageLayout->setRowStretch( 2, 1 );
+  advancedPageLayout->setColStretch( 2, 1 );
+
+
+  Form1Layout->addWidget( m_viewTracks, 0, 0 );
+  Form1Layout->addWidget( mainTab, 1, 0 );
+
 
   setButtonOKText( i18n( "Start Ripping" ), i18n( "Starts copying the selected tracks") );
 
@@ -136,6 +169,17 @@ void K3bRipperWidget::setupGui()
   connect( m_radioOgg, SIGNAL(toggled(bool)), this, SLOT(refresh()) );
   connect( m_radioMp3, SIGNAL(toggled(bool)), this, SLOT(refresh()) );
 }
+
+
+void K3bRipperWidget::setupContextHelp()
+{
+  QToolTip::add( m_spinRetries, i18n("Maximal number of read retries") );
+  QWhatsThis::add( m_spinRetries, i18n("<p>The maximum number of read retries. After this K3b will "
+				       "stop trying."
+				       "<p>Does only make sense in combination with paranoia mode 3"
+				       "<p><b>FIX ME: I'm not sure if I'm making sense.</b>") );
+}
+
 
 K3bRipperWidget::~K3bRipperWidget()
 {
@@ -191,6 +235,8 @@ void K3bRipperWidget::slotOk()
   job->setUsePattern( m_checkUsePattern->isChecked() );
   job->setBaseDirectory( m_editStaticRipPath->text() );
   job->setCopyTracks( m_trackNumbers );
+  job->setParanoiaMode( m_comboParanoiaMode->currentText().toInt() );
+  job->setMaxRetries( m_spinRetries->value() );
 
   K3bBurnProgressDialog ripDialog( this, "Ripping" );
   ripDialog.setJob( job );
@@ -279,7 +325,7 @@ void K3bRipperWidget::slotFindStaticDir() {
   }
 }
 
-void K3bRipperWidget::setStaticDir( QString path ){
+void K3bRipperWidget::setStaticDir( const QString& path ){
     m_editStaticRipPath->setText( path );
 }
 

@@ -24,7 +24,7 @@ class K3bAudioRip : public QObject
  public slots:
   void cancel();
   void setParanoiaMode( int mode ) { m_paranoiaMode = mode; }
-  void setRetries( int r ) { m_paranoiaRetries = r; }
+  void setMaxRetries( int r ) { m_paranoiaRetries = r; }
 
  signals:
   void output( const QByteArray& );

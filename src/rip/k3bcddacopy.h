@@ -61,6 +61,8 @@ class K3bCddaCopy : public K3bJob
   void setCopyTracks( const QValueList<int>& t ) { m_tracksToCopy = t; }
   void setUsePattern( bool b ) { m_bUsePattern = b; }
   void setBaseDirectory( const QString& path ) { m_baseDirectory = path; }
+  void setParanoiaMode( int mode ) { m_paranoiaMode = mode; }
+  void setMaxRetries( int r ) { m_paranoiaRetries = r; }
 
   void start();
   void cancel();
@@ -101,6 +103,9 @@ class K3bCddaCopy : public K3bJob
   QValueList<int> m_tracksToCopy;
   long m_bytes;
   long m_bytesAll;
+
+  int m_paranoiaMode;
+  int m_paranoiaRetries;
 };
 
 #endif
