@@ -84,6 +84,12 @@ const QPixmap& K3bTheme::pixmap( K3bTheme::PixmapType t ) const
   case PROGRESS_RIGHT:
     name = "progress_right";
     break;
+  case DIALOG_LEFT:
+    name = "dialog_left";
+    break;
+  case DIALOG_RIGHT:
+    name = "dialog_left";
+    break;
   case SPLASH:
     name = "splash";
     break;

@@ -67,7 +67,7 @@ int K3bProjectInterface::length()
 }
 
 
-Q_INT64 K3bProjectInterface::size()
+KIO::filesize_t K3bProjectInterface::size()
 {
   return m_doc->size();
 }

@@ -19,6 +19,7 @@
 
 #include <dcopobject.h>
 #include <kurl.h>
+#include <kio/global.h>
 
 class K3bDoc;
 
@@ -50,7 +51,7 @@ class K3bProjectInterface : public DCOPObject
   /**
    * \return size of the project in bytes.
    */
-  virtual Q_INT64 size();
+  virtual KIO::filesize_t size();
 
  private:
   K3bDoc* m_doc;

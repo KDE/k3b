@@ -46,6 +46,8 @@ class K3bTheme
     PROGRESS_SUCCESS, /**< Progress dialog, left top on success. */
     PROGRESS_FAIL,    /**< Progress dialog, left top on failure. */
     PROGRESS_RIGHT,   /**< Progress dialog, right top. */
+    DIALOG_LEFT,      /**< Action dialog, left top. */
+    DIALOG_RIGHT,     /**< Action dialog, right top. */
     SPLASH,           /**< K3b splash screen. Size not important. */
     PROBING,          /**< Shown while probing media information. Size not important. */
     PROJECT_LEFT,     /**< Project header left side. */
