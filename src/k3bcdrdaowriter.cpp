@@ -346,7 +346,8 @@ void K3bCdrdaoWriter::start() {
     switch ( m_command ) {
       case WRITE:
       case COPY:
-           if ( link(m_tocFile.latin1(),(m_tocFile+QString(".bak")).latin1()) == -1 )
+      	   if (!m_tocFile.isEmpty())
+             if ( link(m_tocFile.latin1(),(m_tocFile+QString(".bak")).latin1()) == -1 )
                kdDebug() << "(cdrdaowriter) backup tocfile " <<   m_tocFile << " failed." << endl;
            break;
       case BLANK:
@@ -445,8 +446,9 @@ void K3bCdrdaoWriter::cancel() {
         switch ( m_command ) {
           case WRITE:
           case COPY:
-            if ( rename((m_tocFile+QString(".bak")).latin1(),m_tocFile.latin1()) == -1 )
-               kdDebug() << "(cdrdaowriter) restore tocfile " <<   m_tocFile << " failed." << endl;
+            if ( !m_tocFile.isEmpty() )
+	      if ( rename((m_tocFile+QString(".bak")).latin1(),m_tocFile.latin1()) == -1 )
+                kdDebug() << "(cdrdaowriter) restore tocfile " <<   m_tocFile << " failed." << endl;
             break;
           case BLANK:
           case READ:
@@ -469,9 +471,10 @@ void K3bCdrdaoWriter::slotProcessExited( KProcess* p ) {
     switch ( m_command ) {
       case WRITE:
       case COPY:
-        if ( rename((m_tocFile+QString(".bak")).latin1(),m_tocFile.latin1()) == -1 )
-          kdDebug() << "(cdrdaowriter) restore tocfile " <<   m_tocFile << " failed." << endl;
-          break;
+        if (!m_tocFile.isEmpty() )
+          if ( rename((m_tocFile+QString(".bak")).latin1(),m_tocFile.latin1()) == -1 )
+            kdDebug() << "(cdrdaowriter) restore tocfile " <<   m_tocFile << " failed." << endl;
+        break;
       case BLANK:
       case READ:
         break;
