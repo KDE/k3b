@@ -42,7 +42,7 @@ int K3bScsiDevice::isReady() const
 {
   ScsiIf scsiIf( genericDevice().latin1() );
   if( scsiIf.init() != 0 ) {
-    qDebug( "(K3bScsiDevice) Could not open device " + genericDevice() );
+    qDebug( "(K3bScsiDevice) Could not open device %s", genericDevice().latin1() );
     return 1;
   }
 
@@ -189,7 +189,7 @@ int K3bScsiDevice::isEmpty()
 {
   ScsiIf scsiIf( genericDevice().latin1() );
   if( scsiIf.init() != 0 ) {
-    qDebug( "(K3bScsiDevice) Could not open device " + genericDevice() );
+    qDebug( "(K3bScsiDevice) Could not open device %s", genericDevice().latin1() );
     return -1;
   }
 
@@ -228,7 +228,7 @@ bool K3bScsiDevice::block( bool block ) const
 
   ScsiIf scsiIf( genericDevice().latin1() );
   if( scsiIf.init() != 0 ) {
-    qDebug( "(K3bScsiDevice) Could not open device " + genericDevice() );
+    qDebug( "(K3bScsiDevice) Could not open device %s", genericDevice().latin1() );
     return false;
   }
 

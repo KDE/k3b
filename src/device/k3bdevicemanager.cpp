@@ -8,6 +8,7 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qptrlist.h>
+#include <qfile.h>
 
 #include <kprocess.h>
 #include <kapp.h>
@@ -94,6 +95,7 @@ int K3bDeviceManager::scanbus()
 }
 
 
+#if 0
 void K3bDeviceManager::printDevices()
 {
   cout << "\nReader:" << endl;
@@ -109,6 +111,7 @@ void K3bDeviceManager::printDevices()
   }
   cout << flush;
 }
+#endif
 
 
 void K3bDeviceManager::clear()
@@ -290,13 +293,13 @@ K3bDevice* K3bDeviceManager::initializeScsiDevice( cdrom_drive* drive )
     ::close( devFile );
   }
   else {
-    qDebug("(K3bDeviceManager) ERROR: Could not open device " + dev->genericDevice() );
+    qDebug("(K3bDeviceManager) ERROR: Could not open device %s", dev->genericDevice().latin1() );
     return 0;
   }
 
   // now scan with cdrecord for a driver
   if( m_externalBinManager->foundBin( "cdrecord" ) ) {
-    qDebug("(K3bDeviceManager) probing capabilities for device " + dev->genericDevice() );
+    qDebug("(K3bDeviceManager) probing capabilities for device %s", dev->genericDevice().latin1() );
 
     KProcess driverProc, capProc;
     driverProc << m_externalBinManager->binPath( "cdrecord" );
@@ -347,7 +350,7 @@ K3bDevice* K3bDeviceManager::initializeScsiDevice( cdrom_drive* drive )
 	else if( line.contains( "Buffer size" ) )
 	  dev->m_bufferSize = line.mid( line.find(":")+1 ).toInt();
 	else
-	  qDebug("(K3bDeviceManager) unusable cdrecord output: " + line );
+	  qDebug("(K3bDeviceManager) unusable cdrecord output: %s", line.latin1() );
 	
       }
       else if( line.startsWith("Vendor_info") )
@@ -357,7 +360,7 @@ K3bDevice* K3bDeviceManager::initializeScsiDevice( cdrom_drive* drive )
       else if( line.startsWith("Revision") )
 	dev->m_version = line.mid( line.find(":")+3, 4 ).stripWhiteSpace();
       else
-	qDebug("(K3bDeviceManager) unusable cdrecord output: " + line );
+	qDebug("(K3bDeviceManager) unusable cdrecord output: %s", line.latin1() );
       
     }
     
@@ -377,7 +380,7 @@ K3bDevice* K3bDeviceManager::initializeIdeDevice( cdrom_drive* drive )
 
 K3bDevice* K3bDeviceManager::addDevice( const QString& devicename )
 {
-  cdrom_drive *drive = cdda_identify( devicename, CDDA_MESSAGE_FORGETIT, 0 );
+  cdrom_drive *drive = cdda_identify( QFile::encodeName(devicename), CDDA_MESSAGE_FORGETIT, 0 );
   if( drive == 0 ) {
     qDebug( "(K3bDeviceManager) %s could not be opened.", devicename.latin1() );
     return 0;

@@ -47,8 +47,11 @@ class K3bDeviceManager : public QObject
 
   QList<K3bDevice>& allDevices();
 
+
+#if 0
   /** writes to stdout **/
   void printDevices();
+#endif
 
   /**
    * Returns number of found devices and constructs
