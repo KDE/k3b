@@ -25,8 +25,8 @@
 #include <qlist.h>
 
 
-class AudioListView;
-class AudioListViewItem;
+class K3bAudioListView;
+class K3bAudioListViewItem;
 class QWidget;
 class K3bAudioDoc;
 class K3bAudioTrack;
@@ -38,7 +38,6 @@ class KAction;
 class K3bFillStatusDisplay;
 class K3bAudioBurnDialog;
 class K3bProjectBurnDialog;
-class QTimer;
 
 
 /**
@@ -63,14 +62,12 @@ class K3bAudioView : public K3bView  {
 	
   KAction* m_actionProperties;
   KAction* m_actionRemove;
-  AudioListView* m_songlist;
+  K3bAudioListView* m_songlist;
   KPopupMenu* m_popupMenu;
   K3bFillStatusDisplay* m_fillStatusDisplay;
   K3bAudioBurnDialog* m_burnDialog;
 
-  QTimer* m_displayRefreshTimer;
-
-  QMap<K3bAudioTrack*, AudioListViewItem*> m_itemMap;
+  QMap<K3bAudioTrack*, K3bAudioListViewItem*> m_itemMap;
   QList<K3bAudioTrack> selectedTracks();
 
  signals:

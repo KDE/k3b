@@ -22,7 +22,6 @@
 #include "k3baudiotrack.h"
 #include "k3baudioburndialog.h"
 #include "k3baudiojob.h"
-#include "k3baudioontheflyjob.h"
 #include "input/k3baudiomodulefactory.h"
 #include "input/k3baudiomodule.h"
 #include "../rip/songdb/k3bsong.h"
@@ -35,7 +34,6 @@
 #include <qfile.h>
 #include <qdom.h>
 #include <qdatetime.h>
-#include <qtextstream.h>
 #include <qtimer.h>
 
 // KDE-includes
@@ -80,9 +78,6 @@ bool K3bAudioDoc::newDocument()
   m_tracks = new QList<K3bAudioTrack>;
   m_tracks->setAutoDelete( false );
 	
-  // setting defaults that should come from k3bmain
-  testFiles = false;
-
   m_cdText = true;
   m_padding = false;
   m_hideFirstTrack = false;
@@ -93,8 +88,8 @@ bool K3bAudioDoc::newDocument()
 
 
 
-long K3bAudioDoc::size() const {
-  long size = 0;
+unsigned long K3bAudioDoc::size() const {
+  unsigned long size = 0;
   for( K3bAudioTrack* _t = m_tracks->first(); _t; _t = m_tracks->next() ) {
     size += _t->size();
   }	
@@ -103,9 +98,9 @@ long K3bAudioDoc::size() const {
 }
 
 
-int K3bAudioDoc::length() const
+unsigned long K3bAudioDoc::length() const
 {
-  int size = 0;
+  unsigned long size = 0;
   for( K3bAudioTrack* _t = m_tracks->first(); _t; _t = m_tracks->next() ) {
     size += _t->length() + _t->pregap();
   }	
@@ -127,15 +122,15 @@ void K3bAudioDoc::addTracks(const QStringList& urls, uint position )
 void K3bAudioDoc::slotWorkUrlQueue()
 {
   if( !urlsToAdd.isEmpty() ) {
-    PrivateUrlToAdd* _item = urlsToAdd.dequeue();
-    lastAddedPosition = _item->position;
+    PrivateUrlToAdd* item = urlsToAdd.dequeue();
+    lastAddedPosition = item->position;
 		
     // append at the end by default
     if( lastAddedPosition > m_tracks->count() )
       lastAddedPosition = m_tracks->count();
 	
-    addedFile = KURL( _item->url );
-    delete _item;
+    addedFile = KURL( item->url );
+    delete item;
 		
     if( !addedFile.isValid() ) {
       qDebug( addedFile.path() + " not valid" );
@@ -147,14 +142,31 @@ void K3bAudioDoc::slotWorkUrlQueue()
 				"Error", QString::null, false );
       return;
     }
-	
-    if( K3bAudioModuleFactory::moduleAvailable( addedFile ) ) {
+
+    // TODO: check if it is a textfile and if so try to create a KURL from every line
+    //       for now drop all non-local urls
+    //       add all existing files
+    unsigned long length = isWaveFile( addedFile );
+    if( length > 0 || K3bAudioModuleFactory::moduleAvailable( addedFile ) ) {
       K3bAudioTrack* newTrack =  new K3bAudioTrack( m_tracks, addedFile.path() );
+      if( length > 0 ) {
+	newTrack->setLength( length );  // no module needed for wave files
+      }
+      else {
+	K3bAudioModule* module = K3bAudioModuleFactory::createModule( newTrack );
+	newTrack->setModule( module );
+
+	// connect to the finished signal to ensure the calculated length and status of the file 
+	// will be displayed properly
+	// FIXME: it does not seem to work. The filldisplay is not updated at all
+	connect( module, SIGNAL(finished(bool)), this, SLOT(updateAllViews()) );
+      }
+
       K3bSong *song = k3bMain()->songManager()->findSong( addedFile.path() );
       if( song != 0 ){
-          newTrack->setArtist( song->getArtist() );
-          newTrack->setAlbum( song->getAlbum() );
-          newTrack->setTitle( song->getTitle() );
+	newTrack->setArtist( song->getArtist() );
+	newTrack->setAlbum( song->getAlbum() );
+	newTrack->setTitle( song->getTitle() );
       }
       addTrack( newTrack, lastAddedPosition );
     }
@@ -184,6 +196,7 @@ void K3bAudioDoc::addTrack( K3bAudioTrack* track, uint position )
 {
   if( m_tracks->count() >= 99 ) {
     qDebug( "(K3bAudioDoc) Red Book only allows 99 tracks." );
+    // TODO: show some messagebox
     delete track;
     return;
   }
@@ -345,6 +358,8 @@ bool K3bAudioDoc::loadDocumentData( QDomDocument* doc )
 
 bool K3bAudioDoc::saveDocumentData( QDomDocument* doc )
 {
+  doc->appendChild( doc->createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"ISO 8859-1\"" ) );
+
   QDomElement docElem = doc->createElement( documentType() );
 
   saveGeneralDocumentData( &docElem );
@@ -360,31 +375,31 @@ bool K3bAudioDoc::saveDocumentData( QDomDocument* doc )
   QDomElement cdTextMain = doc->createElement( "cd-text" );
   cdTextMain.setAttribute( "activated", cdText() ? "yes" : "no" );
   QDomElement cdTextElem = doc->createElement( "title" );
-  cdTextElem.appendChild( doc->createTextNode(title()) );
+  cdTextElem.appendChild( doc->createTextNode( (title())) );
   cdTextMain.appendChild( cdTextElem );
 
   cdTextElem = doc->createElement( "artist" );
-  cdTextElem.appendChild( doc->createTextNode(artist()) );
+  cdTextElem.appendChild( doc->createTextNode( (artist())) );
   cdTextMain.appendChild( cdTextElem );
 
   cdTextElem = doc->createElement( "arranger" );
-  cdTextElem.appendChild( doc->createTextNode(arranger()) );
+  cdTextElem.appendChild( doc->createTextNode( (arranger())) );
   cdTextMain.appendChild( cdTextElem );
 
   cdTextElem = doc->createElement( "songwriter" );
-  cdTextElem.appendChild( doc->createTextNode(songwriter()) );
+  cdTextElem.appendChild( doc->createTextNode( (songwriter())) );
   cdTextMain.appendChild( cdTextElem );
 
   cdTextElem = doc->createElement( "disc_id" );
-  cdTextElem.appendChild( doc->createTextNode(disc_id()) );
+  cdTextElem.appendChild( doc->createTextNode( (disc_id())) );
   cdTextMain.appendChild( cdTextElem );
 
   cdTextElem = doc->createElement( "upc_ean" );
-  cdTextElem.appendChild( doc->createTextNode(upc_ean()) );
+  cdTextElem.appendChild( doc->createTextNode( (upc_ean())) );
   cdTextMain.appendChild( cdTextElem );
 
   cdTextElem = doc->createElement( "message" );
-  cdTextElem.appendChild( doc->createTextNode(cdTextMessage()) );
+  cdTextElem.appendChild( doc->createTextNode( (cdTextMessage())) );
   cdTextMain.appendChild( cdTextElem );
 
   docElem.appendChild( cdTextMain );
@@ -402,31 +417,31 @@ bool K3bAudioDoc::saveDocumentData( QDomDocument* doc )
     // add cd-text
     cdTextMain = doc->createElement( "cd-text" );
     cdTextElem = doc->createElement( "title" );
-    cdTextElem.appendChild( doc->createTextNode(track->title()) );
+    cdTextElem.appendChild( doc->createTextNode( (track->title())) );
     cdTextMain.appendChild( cdTextElem );
     
     cdTextElem = doc->createElement( "artist" );
-    cdTextElem.appendChild( doc->createTextNode(track->artist()) );
+    cdTextElem.appendChild( doc->createTextNode( (track->artist())) );
     cdTextMain.appendChild( cdTextElem );
     
     cdTextElem = doc->createElement( "arranger" );
-    cdTextElem.appendChild( doc->createTextNode(track->arranger()) );
+    cdTextElem.appendChild( doc->createTextNode( (track->arranger()) ) );
     cdTextMain.appendChild( cdTextElem );
     
     cdTextElem = doc->createElement( "songwriter" );
-    cdTextElem.appendChild( doc->createTextNode(track->songwriter()) );
+    cdTextElem.appendChild( doc->createTextNode( (track->songwriter()) ) );
     cdTextMain.appendChild( cdTextElem );
     
     cdTextElem = doc->createElement( "isrc" );
-    cdTextElem.appendChild( doc->createTextNode(track->isrc()) );
+    cdTextElem.appendChild( doc->createTextNode( ( track->isrc()) ) );
     cdTextMain.appendChild( cdTextElem );
     
     cdTextElem = doc->createElement( "album" );
-    cdTextElem.appendChild( doc->createTextNode(track->album()) );
+    cdTextElem.appendChild( doc->createTextNode( (track->album()) ) );
     cdTextMain.appendChild( cdTextElem );
     
     cdTextElem = doc->createElement( "message" );
-    cdTextElem.appendChild( doc->createTextNode(track->cdTextMessage()) );
+    cdTextElem.appendChild( doc->createTextNode( (track->cdTextMessage()) ) );
     cdTextMain.appendChild( cdTextElem );
 
     trackElem.appendChild( cdTextMain );
@@ -479,13 +494,23 @@ bool K3bAudioDoc::writeTOC( const QString& filename )
 
   bool success = true;
 
-  int _trackStart = 0;
+  long stdinDataLength = 0;
 	
   QTextStream t(&file);
-  // --- writing the TOC -------------------
+
+
+  // ===========================================================================
   // header
+  // ===========================================================================
+
+  // little comment
   t << "// TOC-file to use with cdrdao created by K3b" << "\n\n";
+
+  // we create a CDDA tocfile
   t << "CD_DA\n\n";
+
+  // create the album CD-TEXT entries if needed
+  // ---------------------------------------------------------------------------
   if( cdText() ) {
     t << "CD_TEXT {" << "\n";
     t << "  LANGUAGE_MAP { 0: EN }\n";
@@ -506,9 +531,20 @@ bool K3bAudioDoc::writeTOC( const QString& filename )
     t << "  }" << "\n";
     t << "}" << "\n\n";
   }
-	
-  // tracks
+  // ---------------------------------------------------------------------------
+
+
+
+
+  // ===========================================================================
+  // the tracks
+  // ===========================================================================
+
   K3bAudioTrack* _track = first();
+
+  // if we need to hide the first song in the first tracks' pregap
+  // we process the first two songs at once
+
   if( hideFirstTrack() ) {
     K3bAudioTrack* hiddenTrack = _track;
     _track = next();
@@ -518,6 +554,17 @@ bool K3bAudioDoc::writeTOC( const QString& filename )
     }
     else {
       t << "TRACK AUDIO" << "\n";
+
+
+      // _track is the "real" first track so it's copy and preemp information is used
+      if( _track->copyProtection() )
+	t << "COPY" << "\n";
+      
+      if( _track->preEmp() )
+	t << "PRE_EMPHASIS" << "\n";
+
+      // CD-TEXT if needed
+      // ------------------------------------------------------------------------
       if( cdText() ) {
 	t << "CD_TEXT {" << "\n";
 	t << "  LANGUAGE 0 {" << "\n";
@@ -534,51 +581,24 @@ bool K3bAudioDoc::writeTOC( const QString& filename )
 	t << "  }" << "\n";
 	t << "}" << "\n";
       }
+      // ------------------------------------------------------------------------
 
-      t << "FILE ";
-      if( onTheFly() ) {
-	t << "\"-\" ";   // read from stdin
-	t << K3b::framesToString( _trackStart );        // where does the track start in stdin
-	t << " " << K3b::framesToString( hiddenTrack->length() );   // here we need the perfect length !!!!!
-	t << "\n";
-	
-	_trackStart += hiddenTrack->length();
-      }
-      else {
-	if( hiddenTrack->bufferFile().isEmpty() ) {
-	  t << "\"" << hiddenTrack->absPath() << "\"" << " 0" << "\n";
-	  qDebug( "(K3bAudioDoc) not all files buffered. toc-file cannot be used for writing." );
-	  success = false;
-	}
-	else
-	  t << "\"" << hiddenTrack->bufferFile() << "\"" << " 0" << "\n";
-      }
-      t << "START" << "\n"; // use the whole file as pregap
 
-      t << "FILE ";
-      if( onTheFly() ) {
-	t << "\"-\" ";   // read from stdin
-	t << K3b::framesToString( _trackStart );        // where does the track start in stdin
-	t << " " << K3b::framesToString( _track->length() );   // here we need the perfect length !!!!!
-	t << "\n";
-	
-	_trackStart += _track->length();
-      }
-      else {
-	if( _track->bufferFile().isEmpty() ) {
-	  t << "\"" << _track->absPath() << "\"" << " 0" << "\n";
-	  qDebug( "(K3bAudioDoc) not all files buffered. toc-file cannot be used for writing." );
-	  success = false;
-	}
-	else
-	  t << "\"" << _track->bufferFile() << "\"" << " 0" << "\n";
-      }
+      // the "hidden" file will be used as pregap for the "first" track
+      success = success && addTrackToToc( hiddenTrack, t, stdinDataLength );
+      t << "START" << "\n"; // use the whole hidden file as pregap
 
+
+      // now comes the "real" first track
+      success = success && addTrackToToc( _track, t, stdinDataLength );
       t << "\n";
     }
 
     _track = next();
   }
+
+
+  // now iterate over the rest of the tracks
   
   for( ; _track != 0; _track = next() ) {
     t << "TRACK AUDIO" << "\n";
@@ -589,6 +609,8 @@ bool K3bAudioDoc::writeTOC( const QString& filename )
     if( _track->preEmp() )
       t << "PRE_EMPHASIS" << "\n";
 
+    // CD-TEXT if needed
+    // ------------------------------------------------------------------------
     if( cdText() ) {
       t << "CD_TEXT {" << "\n";
       t << "  LANGUAGE 0 {" << "\n";
@@ -605,35 +627,46 @@ bool K3bAudioDoc::writeTOC( const QString& filename )
       t << "  }" << "\n";
       t << "}" << "\n";
     }
+    // ------------------------------------------------------------------------
 
     if( _track->pregap() > 0 ) {
       t << "PREGAP " << K3b::framesToString( _track->pregap() ) << "\n";
     }
 
-    t << "FILE ";
-    if( onTheFly() ) {
-      t << "\"-\" ";   // read from stdin
-      t << K3b::framesToString( _trackStart );        // where does the track start in stdin
-      t << " " << K3b::framesToString( _track->length() );   // here we need the perfect length !!!!!
-      t << "\n";
-
-      _trackStart += _track->length();
-    }
-    else {
-      if( _track->bufferFile().isEmpty() ) {
- 	t << "\"" << _track->absPath() << "\"" << " 0" << "\n";
-	qDebug( "(K3bAudioDoc) not all files buffered. toc-file cannot be used for writing." );
-	success = false;
-      }
-      else
-	t << "\"" << _track->bufferFile() << "\"" << " 0" << "\n";
-    }
-
+    success = success && addTrackToToc( _track, t, stdinDataLength );
     t << "\n";
   }
   // --------------------------------- TOC --	
 	
   file.close();
+
+  return success;
+}
+
+
+bool K3bAudioDoc::addTrackToToc( K3bAudioTrack* track, QTextStream& t, long& stdinDataLength )
+{
+  bool success = true;
+
+  t << "FILE ";
+  if( track->isWave() ) {
+    t << "\"" << track->absPath() << "\"" << " 0" << "\n";
+  }
+  else if( onTheFly() ) {
+    t << "\"-\" ";   // read from stdin
+    t << K3b::framesToString( stdinDataLength );        // where does the track start in stdin
+    t << " " << K3b::framesToString( track->length() );   // here we need the perfect length !!!!!
+    t << "\n";
+    
+    stdinDataLength += track->length();
+  }
+  else {
+    if( track->bufferFile().isEmpty() ) {
+      qDebug( "(K3bAudioDoc) not all files buffered. toc-file cannot be used for writing." );
+      success = false;
+    }
+    t << "\"" << track->bufferFile() << "\"" << " 0" << "\n";
+  }
 
   return success;
 }
@@ -658,10 +691,20 @@ bool K3bAudioDoc::padding() const
 
 K3bBurnJob* K3bAudioDoc::newBurnJob()
 {
-  if( onTheFly() )
-    return new K3bAudioOnTheFlyJob( this );
+  return new K3bAudioJob( this );
+}
+
+
+unsigned long K3bAudioDoc::isWaveFile( const KURL& url )
+{
+  // we take url as a lokal file
+  long headerLength;
+  unsigned long dataLength;
+  int x = K3b::waveLength( url.path().latin1(), 0, &headerLength, &dataLength );
+  if( x )
+    return 0;
   else
-    return new K3bAudioJob( this );
+    return dataLength;
 }
 
 

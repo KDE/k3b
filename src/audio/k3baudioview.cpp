@@ -52,7 +52,7 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
   grid->setSpacing( 5 );
   grid->setMargin( 2 );
 	
-  m_songlist = new AudioListView( this );
+  m_songlist = new K3bAudioListView( this );
   m_fillStatusDisplay = new K3bFillStatusDisplay( doc, this );
   m_fillStatusDisplay->showTime();
   m_burnDialog = 0;
@@ -77,10 +77,6 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
 
   connect( pDoc, SIGNAL(newTracks()), this, SLOT(slotUpdateItems()) );
 
-
-  m_displayRefreshTimer = new QTimer( this );
-  connect( m_displayRefreshTimer, SIGNAL(timeout()), this, SLOT(update()) );
-  m_displayRefreshTimer->start(1000);
 
   slotUpdateItems();
 }
@@ -129,12 +125,11 @@ void K3bAudioView::slotDropped( KListView*, QDropEvent* e, QListViewItem* after 
   QString droppedText;
   QTextDrag::decode( e, droppedText );
   QStringList _urls = QStringList::split("\r\n", droppedText );
-  AudioListViewItem* _item = (AudioListViewItem*)after;
   uint _pos;
-  if( _item == 0L )
+  if( after == 0L )
     _pos = 0;
   else
-    _pos = _item->text(0).toInt();
+    _pos = after->text(0).toInt();
 		
   emit dropped( _urls, _pos );
 }
@@ -144,15 +139,11 @@ void K3bAudioView::slotItemMoved( QListViewItem* item, QListViewItem*, QListView
   if( !item)
     return;
 		
-  AudioListViewItem *_item, *_now;
-  _item = (AudioListViewItem*)item;
-  _now = (AudioListViewItem*)afterNow;
-	
   uint before, after;
   // text starts at 1 but QList starts at 0
-  before = _item->text(0).toInt()-1;
-  if( _now ) {
-    after = _now->text(0).toInt()-1;
+  before = item->text(0).toInt()-1;
+  if( afterNow ) {
+    after = afterNow->text(0).toInt()-1;
     if( before > after )
       after++;
   }
@@ -185,7 +176,7 @@ QList<K3bAudioTrack> K3bAudioView::selectedTracks()
   QList<K3bAudioTrack> _selectedTracks;
   QList<QListViewItem> selectedItems = m_songlist->selectedItems();
   for( QListViewItem* item = selectedItems.first(); item != 0; item = selectedItems.next() ) {
-    AudioListViewItem* audioItem = dynamic_cast<AudioListViewItem*>(item);
+    K3bAudioListViewItem* audioItem = dynamic_cast<K3bAudioListViewItem*>(item);
     if( audioItem ) {
       _selectedTracks.append( audioItem->audioTrack() );
     }
@@ -222,7 +213,7 @@ void K3bAudioView::slotUpdateItems()
   // iterate through all viewItems and check if the track is still there
 //   QListViewItemIterator it( m_songlist );
 //   for( ; it.current(); ++it ) {
-//     AudioListViewItem* item = (AudioListViewItem*)it.current();
+//     K3bAudioListViewItem* item = (K3bAudioListViewItem*)it.current();
 //     bool stillThere = false;
 
 //     for( K3bAudioTrack* track = m_doc->first(); track != 0; track = m_doc->next() ) {
@@ -244,7 +235,7 @@ void K3bAudioView::slotUpdateItems()
   K3bAudioTrack* lastTrack = 0;
   while( track != 0 ) {
     if( !m_itemMap.contains( track ) )
-      m_itemMap.insert( track, new AudioListViewItem( track, m_songlist, m_itemMap[lastTrack] ) );
+      m_itemMap.insert( track, new K3bAudioListViewItem( track, m_songlist, m_itemMap[lastTrack] ) );
 
     lastTrack = track;
     track = m_doc->next();

@@ -16,13 +16,18 @@
  ***************************************************************************/
 
 #include "audiolistview.h"
+#include "audiolistviewitem.h"
+#include "k3baudiotrack.h"
 
 #include <qevent.h>
 #include <qdragobject.h>
 #include <qheader.h>
+#include <qtimer.h>
+
+#include <kiconloader.h>
 
 
-AudioListView::AudioListView(QWidget *parent, const char *name )
+K3bAudioListView::K3bAudioListView(QWidget *parent, const char *name )
   : KListView(parent,name)
 {
   setAcceptDrops( true );
@@ -33,12 +38,15 @@ AudioListView::AudioListView(QWidget *parent, const char *name )
 		
   setupColumns();
   header()->setClickEnabled( false );
+
+  m_animationTimer = new QTimer( this );
+  connect( m_animationTimer, SIGNAL(timeout()), this, SLOT(slotAnimation()) );
 }
 
-AudioListView::~AudioListView(){
+K3bAudioListView::~K3bAudioListView(){
 }
 
-void AudioListView::setupColumns(){
+void K3bAudioListView::setupColumns(){
   addColumn( "No" );
   addColumn( "Artist (CD-Text)" );
   addColumn( "Title (CD-Text)" );
@@ -52,12 +60,12 @@ void AudioListView::setupColumns(){
   setRenameable( 2 );
 }
 
-bool AudioListView::acceptDrag(QDropEvent* e) const{
+bool K3bAudioListView::acceptDrag(QDropEvent* e) const{
   return ( e->source() == viewport() || QTextDrag::canDecode(e) );
 }
 
 
-void AudioListView::insertItem( QListViewItem* item )
+void K3bAudioListView::insertItem( QListViewItem* item )
 {
   KListView::insertItem( item );
 
@@ -65,6 +73,55 @@ void AudioListView::insertItem( QListViewItem* item )
   if( selectedItems().isEmpty() ) {
     setSelected( firstChild(), true );
   }
+
+  if( !m_animationTimer->isActive() )
+    m_animationTimer->start( 50 );
+}
+
+
+
+void K3bAudioListView::slotAnimation()
+{
+  QListViewItemIterator it( this );
+
+  bool animate = false;
+
+  for (; it.current(); ++it )
+    {
+      K3bAudioListViewItem* item = (K3bAudioListViewItem*)it.current();
+
+      if( item->animationIconNumber > 0 ) {
+	if( item->audioTrack()->length() > 0 ) {
+	  // set status icon
+	  switch( item->audioTrack()->status() ) {
+	  case K3bAudioTrack::OK:
+	    item->setPixmap( 3, SmallIcon( "ok" ) );
+	    break;
+	  case K3bAudioTrack::RECOVERABLE:
+	    item->setPixmap( 3, SmallIcon( "undo" ) );
+	    break;
+	  case K3bAudioTrack::CORRUPT:
+	    item->setPixmap( 3, SmallIcon( "stop" ) );
+	    break;
+	  }
+	  
+	  item->animationIconNumber = 0;
+	}
+	else {
+	  int& iconNumber = item->animationIconNumber;
+	  QString icon = QString( "kiotreework%1" ).arg( iconNumber );
+	  item->setPixmap( 3, SmallIcon( icon ) );
+	  iconNumber++;
+	  if ( iconNumber > 6 )
+	    iconNumber = 1;
+
+	  animate = true;
+	}
+      }
+    }
+
+  if( !animate )
+    m_animationTimer->stop();
 }
 
 

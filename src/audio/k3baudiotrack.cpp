@@ -22,7 +22,6 @@
 #include <id3/tag.h>
 #include <id3/misc_support.h>
 
-#include "input/k3baudiomodulefactory.h"
 #include "input/k3baudiomodule.h"
 
 #include <kapp.h>
@@ -50,13 +49,7 @@ K3bAudioTrack::K3bAudioTrack( QList<K3bAudioTrack>* parent, const QString& filen
   m_pregap = kapp->config()->readNumEntry( "default pregap", 150 );
   
 
-  // create a module for decoding and so on
-  // we do not know which type of module it will be
-  // it could be a mp3-module or anything else
-  // the module will start collecting information about
-  // the file like the tracklength asyncronously
-
-  m_module = K3bAudioModuleFactory::createModule( this );
+  m_module = 0;
 }
 
 
@@ -66,7 +59,7 @@ K3bAudioTrack::~K3bAudioTrack()
 }
 
 
-uint K3bAudioTrack::size() const
+unsigned long K3bAudioTrack::size() const
 {
   return length() * 2352;
 }

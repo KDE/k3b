@@ -25,6 +25,7 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qdatetime.h>
+#include <qtextstream.h>
 
 #include <kurl.h>
 
@@ -66,9 +67,11 @@ class K3bAudioDoc : public K3bDoc
   K3bAudioTrack* at( uint i ) { return m_tracks->at( i ); }
   K3bAudioTrack* take( uint i ) { return m_tracks->take( i ); }
 
+  const QList<K3bAudioTrack>* tracks() const { return m_tracks; }
+
   /** get the current size of the project */
-  long size() const;
-  int length() const;
+  unsigned long size() const;
+  unsigned long length() const;
 	
   // CD-Text
   bool cdText() const { return m_cdText; }
@@ -134,6 +137,10 @@ class K3bAudioDoc : public K3bDoc
   bool saveDocumentData( QDomDocument* );
 
   QString documentType() const;
+
+  bool addTrackToToc( K3bAudioTrack* track, QTextStream& t, long& stdinDataLength );
+
+  unsigned long isWaveFile( const KURL& url );
 
  private:
   class PrivateUrlToAdd

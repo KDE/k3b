@@ -24,6 +24,8 @@ class K3bAudioDoc;
 class K3bAudioTrack;
 class QString;
 class KProcess;
+class QFile;
+class QDataStream;
 
 #include <qlist.h>
 #include <kurl.h>
@@ -53,41 +55,48 @@ class K3bAudioJob : public K3bBurnJob  {
   void slotParseCdrdaoOutput( KProcess*, char* output, int len );
   void slotCdrecordFinished();
   void slotCdrdaoFinished();
-  void slotEmitProgress( int trackMade, int TrackSize );
-  void slotModuleFinished( bool );
+  void slotModuleProgress( int percent );
+  void slotModuleFinished( bool success );
+  void slotWroteData();
+  void slotModuleOutput( const unsigned char* data, int len );
   void slotStartWriting();
+  void slotTryStart();
 	
  private:
-  class SAudioTrackInfo {
-  public:
-    SAudioTrackInfo( K3bAudioTrack* t, const KURL& url )
-      :urlToDecodedWav( url )
-      {
-	track = t;
-	decoded = false;
-      }
-    K3bAudioTrack* track;
-    KURL urlToDecodedWav;
-    bool decoded;
-  };
-  QList<SAudioTrackInfo> m_trackInfoList;
-  SAudioTrackInfo* m_currentTrackInfo;
-
-  void createTrackInfo();
   void clearBufferFiles();
-  void decodeNextFile();
+  bool decodeNextFile();
   void startWriting();
+  void cancelAll();
+  void cdrdaoWrite();
+  void cdrecordWrite();
 	
   KProcess* m_process;
   K3bAudioDoc* m_doc;
-  const K3bAudioTrack* m_currentProcessedTrack;
+  K3bAudioTrack* m_currentDecodedTrack;
+  K3bAudioTrack* m_currentWrittenTrack;
+
   bool firstTrack;
   QString m_tocFile;
-  int m_iNumTracksAlreadyWritten;
-  int m_iNumFilesToDecode;
-  int m_iNumFilesAlreadyDecoded;
-  int m_iTracksAlreadyWrittenSize;
-  int m_iDocSize;
+
+  int m_currentDecodedTrackNumber;
+  int m_currentWrittenTrackNumber;
+
+  QFile* m_currentWrittenWavFile;
+  QDataStream* m_currentWrittenWavStream;
+
+  unsigned long m_writtenData;
+  unsigned long m_dataToDecode;
+  unsigned long m_decodedData;
+  unsigned long m_currentModuleDataLength;
+  int m_decodingPercentage;
+
+  bool m_working;
+  /** we save this here to avoid problems when the settings
+   * might be changed in the doc */
+  bool m_onTheFly;
+  bool m_bLengthInfoEmited;
+
+  int m_writingApp;
 
  signals:
   void writingLeadOut();

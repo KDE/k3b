@@ -18,8 +18,7 @@
 #ifndef AUDIOLISTVIEWITEM_H
 #define AUDIOLISTVIEWITEM_H
 
-#include <qlistview.h>
-#include <qstring.h>
+#include <klistview.h>
 
 class K3bAudioTrack;
 
@@ -28,12 +27,12 @@ class K3bAudioTrack;
   *@author Sebastian Trueg
   */
 
-class AudioListViewItem : public QListViewItem  {
+class K3bAudioListViewItem : public KListViewItem  {
 
  public:
-  AudioListViewItem( K3bAudioTrack* track, QListView* parent );
-  AudioListViewItem( K3bAudioTrack* track, QListView* parent, QListViewItem* after );
-  ~AudioListViewItem();
+  K3bAudioListViewItem( K3bAudioTrack* track, QListView* parent );
+  K3bAudioListViewItem( K3bAudioTrack* track, QListView* parent, QListViewItem* after );
+  ~K3bAudioListViewItem();
 
   /** reimplemented from QListViewItem */
   QString text(int i) const;
@@ -45,6 +44,8 @@ class AudioListViewItem : public QListViewItem  {
   QString key( int column, bool a ) const;
 	
   K3bAudioTrack* audioTrack() { return m_track; }
+
+  int animationIconNumber;
 		
  private:
   K3bAudioTrack* m_track;

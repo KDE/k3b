@@ -45,6 +45,9 @@ class K3bAudioTrack
 
   K3bAudioModule* module() const { return m_module; }
 
+  // TODO: this should only be accessable by K3bAudioDoc
+  void setModule( K3bAudioModule* module ) { m_module = module; }
+
   QString fileName() const { return QFileInfo(m_file).fileName(); }
   QString absPath() const { return QFileInfo(m_file).absFilePath(); }
 
@@ -53,7 +56,7 @@ class K3bAudioTrack
   int pregap() const { return m_pregap; }
 
   /** returns length of track in frames **/
-  int length() const { return m_length; }
+  unsigned long length() const { return m_length; }
 	
   const QString& artist() const { return m_artist; }
   const QString& title() const { return m_title; }
@@ -86,13 +89,27 @@ class K3bAudioTrack
 	
   void setAlbum( const QString& t ) { m_album = t; }
 	
-  void setLength( int time ) { m_length = time; }
+  void setLength( unsigned long time ) { m_length = time; }
 	
   void setBufferFile( const QString& file );
-  /** returns the filesize of the track */
-  uint size() const;
+
+  /** returns the raw size of the track (16bit, 44800 kHz, stereo) */
+  unsigned long size() const;
+
   /** returns the index in the list */
   int index() const;
+
+  int status() const { return m_status; }
+  void setStatus( int status ) { m_status = status; }
+
+  bool isWave() const { return (m_module == 0); }
+
+  /**
+   * status of the file.<b>
+   * RECOVERABLE means that there are errors in the file that K3b is able to fix.
+   * CORRUPT means K3b is not able to handle the file and it needs to be removed from the project.
+   */
+  enum file_status { OK, RECOVERABLE, CORRUPT };
 
  protected:
   QList<K3bAudioTrack>* m_parent;
@@ -106,11 +123,14 @@ class K3bAudioTrack
   QString m_bufferFile;
 
   /** length of track in frames (1/75sec) **/
-  int m_length;
+  unsigned long m_length;
 
   /** frames: 75 frames are one second **/
   int m_pregap;
-	
+  
+  /** Status of the file. see file_status */
+  int m_status;
+
   /** CD-Text: copy protection */
   bool m_copy;
   bool m_preEmp;

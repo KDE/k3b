@@ -22,33 +22,30 @@
 #include "../k3bglobals.h"
 
 
-AudioListViewItem::AudioListViewItem( K3bAudioTrack* track, QListView* parent )
-  : QListViewItem( parent )
+K3bAudioListViewItem::K3bAudioListViewItem( K3bAudioTrack* track, QListView* parent )
+  : KListViewItem( parent )
 {
   m_track = track;
+  animationIconNumber = 1;
 }
 
-AudioListViewItem::AudioListViewItem( K3bAudioTrack* track, QListView* parent, QListViewItem* after )
-  : QListViewItem( parent, after )
+K3bAudioListViewItem::K3bAudioListViewItem( K3bAudioTrack* track, QListView* parent, QListViewItem* after )
+  : KListViewItem( parent, after )
 {
   m_track = track;
+  animationIconNumber = 1;
 }
 
-AudioListViewItem::~AudioListViewItem()
+K3bAudioListViewItem::~K3bAudioListViewItem()
 {
 }
 
-QString AudioListViewItem::text(int i) const
+QString K3bAudioListViewItem::text(int i) const
 {
-  // TODO: think about a really nice solution!
-  QString _num = QString::number( m_track->index() +1 );
-  if( _num.length() == 1 )
-    _num = "0" + _num;
-	
   switch( i )
     {
     case 0:
-      return _num;
+      return QString::number( m_track->index() +1 );
     case 1:
       return m_track->artist();
     case 2:
@@ -62,11 +59,11 @@ QString AudioListViewItem::text(int i) const
     case 5:
       return m_track->fileName();
     default:
-      return "";
+      return KListViewItem::text(i);
     }
 }
 
-void AudioListViewItem::setText(int col, const QString& text )
+void K3bAudioListViewItem::setText(int col, const QString& text )
 {
   if( col == 1 ) {
     // this is the cd-text artist field
@@ -76,18 +73,21 @@ void AudioListViewItem::setText(int col, const QString& text )
     // this is the cd-text title field
     m_track->setTitle( text );
   }
-//   else if(col == 5) {
-//     // track pregap
-//     // TODO: find out the max pregap!
-// 	int value;
-//     if( K3b::parseHundredth( text, value ) )
-//       m_track->setPregap(value*75/100);   // frames
-//   }
+
+  KListViewItem::setText( col, text );
 }
 
 	
-QString AudioListViewItem::key( int, bool ) const
+QString K3bAudioListViewItem::key( int, bool ) const
 {
   // The tracks should be sorted according to their track-number :-)
-  return text(0);
+  // although Red book only supports 99 tracks this goes up to 999 - it does not hurt ;-)
+
+  QString num = QString::number( m_track->index() );
+  if( num.length() == 1 )
+    return "00" + num;
+  else if( num.length() == 2 )
+    return "0" + num;
+  
+  return num;
 }

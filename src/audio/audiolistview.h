@@ -22,18 +22,19 @@
 #include <klistview.h>
 
 class QDragEnterEvent;
+class QTimer;
+
 
 /**
   *@author Sebastian Trueg
   */
-
-class AudioListView : public KListView  
+class K3bAudioListView : public KListView  
 {
   Q_OBJECT
 
  public:
-  AudioListView(QWidget *parent=0, const char *name=0);
-  ~AudioListView();
+  K3bAudioListView(QWidget *parent=0, const char *name=0);
+  ~K3bAudioListView();
 
   /**
    * reimplemented from KListView
@@ -42,6 +43,11 @@ class AudioListView : public KListView
 
  private:
   void setupColumns();
+
+  QTimer* m_animationTimer;
+
+ private slots:
+  void slotAnimation();
 
  protected:
   bool acceptDrag(QDropEvent* e) const;
