@@ -6,6 +6,7 @@
 #include "../audio/k3baudiodoc.h"
 
 #include <qfileinfo.h>
+#include <qdom.h>
 
 #include <klocale.h>
 #include <kconfig.h>
@@ -76,13 +77,99 @@ void K3bMixedDoc::addUrls( const KURL::List& urls )
 }
 
 
-bool K3bMixedDoc::loadDocumentData( QDomDocument* )
+bool K3bMixedDoc::loadDocumentData( QDomElement* rootElem )
 {
+  QDomNodeList nodes = rootElem->childNodes();
+
+  if( nodes.length() < 4 )
+    return false;
+
+  if( nodes.item(0).nodeName() != "general" )
+    return false;
+  if( !readGeneralDocumentData( nodes.item(0).toElement() ) )
+    return false;
+
+  if( nodes.item(1).nodeName() != "audio" )
+    return false;
+  QDomElement audioElem = nodes.item(1).toElement();
+  if( !m_audioDoc->loadDocumentData( &audioElem ) )
+    return false;
+
+  if( nodes.item(2).nodeName() != "data" )
+    return false;
+  QDomElement dataElem = nodes.item(2).toElement();
+  if( !m_dataDoc->loadDocumentData( &dataElem ) )
+    return false;
+
+  if( nodes.item(3).nodeName() != "mixed" )
+    return false;
+
+  QDomNodeList optionList = nodes.item(3).childNodes();
+  for( uint i = 0; i < optionList.count(); i++ ) {
+
+    QDomElement e = optionList.item(i).toElement();
+    if( e.isNull() )
+      return false;
+
+    if( e.nodeName() == "remove_buffer_files" )
+      setRemoveBufferFiles( e.toElement().text() == "yes" );
+    else if( e.nodeName() == "image_path" )
+      setImagePath( e.toElement().text() );
+    else if( e.nodeName() == "mixed_type" ) {
+      QString mt = e.toElement().text();
+      if( mt == "last_track" )
+	setMixedType( DATA_LAST_TRACK );
+      else if( mt == "second_session" )
+	setMixedType( DATA_SECOND_SESSION );
+      else
+	setMixedType( DATA_FIRST_TRACK );
+    }
+  }
+
+  return true;
 }
 
 
-bool K3bMixedDoc::saveDocumentData( QDomDocument* )
+bool K3bMixedDoc::saveDocumentData( QDomElement* docElem )
 {
+  QDomDocument doc = docElem->ownerDocument();
+  saveGeneralDocumentData( docElem );
+
+  QDomElement audioElem = doc.createElement( "audio" );
+  m_audioDoc->saveDocumentData( &audioElem );
+  docElem->appendChild( audioElem );
+
+  QDomElement dataElem = doc.createElement( "data" );
+  m_dataDoc->saveDocumentData( &dataElem );
+  docElem->appendChild( dataElem );
+
+  QDomElement mixedElem = doc.createElement( "mixed" );
+  docElem->appendChild( mixedElem );
+
+  QDomElement bufferFilesElem = doc.createElement( "remove_buffer_files" );
+  bufferFilesElem.appendChild( doc.createTextNode( removeBufferFiles() ? "yes" : "no" ) );
+  mixedElem.appendChild( bufferFilesElem );
+
+  QDomElement imagePathElem = doc.createElement( "image_path" );
+  imagePathElem.appendChild( doc.createTextNode( imagePath() ) );
+  mixedElem.appendChild( imagePathElem );
+
+  QDomElement mixedTypeElem = doc.createElement( "mixed_type" );
+  switch( mixedType() ) {
+  case DATA_FIRST_TRACK:
+    mixedTypeElem.appendChild( doc.createTextNode( "first_track" ) );
+    break;
+  case DATA_LAST_TRACK:
+    mixedTypeElem.appendChild( doc.createTextNode( "last_track" ) );
+    break;
+  case DATA_SECOND_SESSION:
+    mixedTypeElem.appendChild( doc.createTextNode( "second_session" ) );
+    break;
+  }
+  mixedElem.appendChild( mixedTypeElem );
+
+
+  return true;
 }
 
   
@@ -97,7 +184,16 @@ void K3bMixedDoc::loadDefaultSettings()
   setBurnproof( c->readBoolEntry( "burnproof", true ) );
   setRemoveBufferFiles( c->readBoolEntry( "remove_buffer_files", true ) );
 
-  // TODO: load mixed type
+  m_audioDoc->writeCdText( c->readBoolEntry( "cd_text", false ) );
+
+  // load mixed type
+  if( c->readEntry( "mixed_type" ) == "last_track" )
+    m_mixedType = DATA_LAST_TRACK;
+  else if( c->readEntry( "mixed_type" ) == "second_session" )
+    m_mixedType = DATA_SECOND_SESSION;
+  else
+    m_mixedType = DATA_FIRST_TRACK;
+
 
   K3bIsoOptions o = K3bIsoOptions::load( c );
   dataDoc()->isoOptions() = o;

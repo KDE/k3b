@@ -10,6 +10,7 @@
 #include <k3btempdirselectionwidget.h>
 #include <k3bisooptions.h>
 #include <tools/k3bglobals.h>
+#include <audio/k3baudiocdtextwidget.h>
 
 
 #include <qtabwidget.h>
@@ -41,7 +42,9 @@ K3bMixedBurnDialog::K3bMixedBurnDialog( K3bMixedDoc* doc, QWidget *parent, const
 
   setupSettingsPage();
 
-  // TODO: create a cd-text page
+  // create cd-text page
+  m_cdtextWidget = new K3bAudioCdTextWidget( this );
+  addPage( m_cdtextWidget, i18n("CD-Text") );
 
   // create volume descriptor tab
   m_volumeDescWidget = new K3bDataVolumeDescWidget( this );
@@ -60,7 +63,7 @@ K3bMixedBurnDialog::K3bMixedBurnDialog( K3bMixedDoc* doc, QWidget *parent, const
 
   createContextHelp();
 
-  connect( m_checkDao, SIGNAL(toggled()), this, SLOT(slotToggleEverything()) );
+  connect( m_checkDao, SIGNAL(toggled(bool)), this, SLOT(slotToggleEverything()) );
   connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(slotToggleEverything()) );
 
   slotWriterChanged();
@@ -80,7 +83,7 @@ void K3bMixedBurnDialog::setupSettingsPage()
   // to fulfill the standard we also need the special file structure
   // but in the case of our simple mixed mode cd we allow to create blue book cds without
   // these special files and directories
-  m_radioMixedTypeSessions = new QRadioButton( i18n("Data in second session"), m_groupMixedType );
+  m_radioMixedTypeSessions = new QRadioButton( i18n("Data in second session (CD-Extra)"), m_groupMixedType );
   m_groupMixedType->setExclusive(true);
 
   QGridLayout* grid = new QGridLayout( w );
@@ -94,6 +97,7 @@ void K3bMixedBurnDialog::setupSettingsPage()
 
 void K3bMixedBurnDialog::createContextHelp()
 {
+  QToolTip::add( m_radioMixedTypeFirstTrack, i18n("First track will contain the data") );
   QWhatsThis::add( m_radioMixedTypeFirstTrack, i18n("<p><b>Standard mixed mode cd 1</b>"
 						    "<p>K3b will write the data track before all "
 						    "audio tracks."
@@ -102,6 +106,7 @@ void K3bMixedBurnDialog::createContextHelp()
 						    "<p><b>Caution:</b> It could lead to problems with some older "
 						    "hifi audio cd player that try to play the data track.") );
 
+  QToolTip::add( m_radioMixedTypeLastTrack, i18n("Last track will contain the data") );
   QWhatsThis::add( m_radioMixedTypeLastTrack, i18n("<p><b>Standard mixed mode cd 2</b>"
 						   "<p>K3b will write the data track after all "
 						   "audio tracks."
@@ -110,6 +115,7 @@ void K3bMixedBurnDialog::createContextHelp()
 						   "<p><b>Caution:</b> It could lead to problems with some older "
 						   "hifi audio cd player that try to play the data track.") );
 
+  QToolTip::add( m_radioMixedTypeSessions, i18n("The data will be written in a second session") );
   QWhatsThis::add( m_radioMixedTypeSessions, i18n("<p><b>Blue book cd</b>"
 						  "<p>K3b will create a multisession cd with "
 						  "2 sessions. The first session will contain all "
@@ -142,13 +148,14 @@ void K3bMixedBurnDialog::saveSettings()
   // -- saving current device --------------------------------------
   m_doc->setBurner( m_writerSelectionWidget->writerDevice() );
 
-  if( m_groupMixedType->selected() == m_radioMixedTypeFirstTrack )
-    m_doc->setMixedType( K3bMixedDoc::DATA_FIRST_TRACK );
-  else if( m_groupMixedType->selected() == m_radioMixedTypeLastTrack )
+  if( m_groupMixedType->selected() == m_radioMixedTypeLastTrack )
     m_doc->setMixedType( K3bMixedDoc::DATA_LAST_TRACK );
   else if( m_groupMixedType->selected() == m_radioMixedTypeSessions )
     m_doc->setMixedType( K3bMixedDoc::DATA_SECOND_SESSION );
+  else
+    m_doc->setMixedType( K3bMixedDoc::DATA_FIRST_TRACK );
 
+  m_cdtextWidget->save( m_doc->audioDoc() );
 
   // save iso image settings
   m_imageSettingsWidget->save( m_doc->dataDoc()->isoOptions() );
@@ -185,6 +192,8 @@ void K3bMixedBurnDialog::readSettings()
     break;
   }
 
+  m_cdtextWidget->load( m_doc->audioDoc() );
+
   m_imageSettingsWidget->load( m_doc->dataDoc()->isoOptions() );
   m_advancedImageSettingsWidget->load( m_doc->dataDoc()->isoOptions() );
   m_volumeDescWidget->load( m_doc->dataDoc()->isoOptions() );
@@ -200,6 +209,7 @@ void K3bMixedBurnDialog::loadDefaults()
    m_checkOnTheFly->setChecked( true );
    m_checkBurnproof->setChecked( true );
    m_checkRemoveBufferFiles->setChecked( true );
+   m_cdtextWidget->setChecked( false );
 
    m_radioMixedTypeFirstTrack->setChecked(true);
 
@@ -220,7 +230,15 @@ void K3bMixedBurnDialog::loadUserDefaults()
   m_checkBurnproof->setChecked( c->readBoolEntry( "burnproof", true ) );
   m_checkRemoveBufferFiles->setChecked( c->readBoolEntry( "remove_buffer_files", true ) );
 
-  // TODO: load mixed type
+  m_cdtextWidget->setChecked( c->readBoolEntry( "cd_text", false ) );
+
+  // load mixed type
+  if( c->readEntry( "mixed_type" ) == "last_track" )
+    m_radioMixedTypeLastTrack->setChecked(true);
+  else if( c->readEntry( "mixed_type" ) == "second_session" )
+    m_radioMixedTypeSessions->setChecked(true);
+  else
+    m_radioMixedTypeFirstTrack->setChecked(true);
 
   K3bIsoOptions o = K3bIsoOptions::load( c );
   m_imageSettingsWidget->load( o );
@@ -241,7 +259,15 @@ void K3bMixedBurnDialog::saveUserDefaults()
   c->writeEntry( "burnproof", m_checkBurnproof->isChecked() );
   c->writeEntry( "remove_buffer_files", m_checkRemoveBufferFiles->isChecked() );
 
-  // TODO: save mixed type
+  c->writeEntry( "cd_text", m_cdtextWidget->isChecked() );
+
+  // save mixed type
+  if( m_groupMixedType->selected() == m_radioMixedTypeLastTrack )
+   c->writeEntry( "mixed_type", "last_track" );
+  else if( m_groupMixedType->selected() == m_radioMixedTypeSessions )
+   c->writeEntry( "mixed_type", "second_session" );
+  else
+    c->writeEntry( "mixed_type", "first_track" );
 
   K3bIsoOptions o;
   m_imageSettingsWidget->save( o );

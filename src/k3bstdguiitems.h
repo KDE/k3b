@@ -15,6 +15,7 @@ class K3bStdGuiItems
   static QCheckBox* onlyCreateImagesCheckbox( QWidget* parent = 0, const char* name = 0 );
   static QCheckBox* removeImagesCheckbox( QWidget* parent = 0, const char* name = 0 );
   static QCheckBox* onTheFlyCheckbox( QWidget* parent = 0, const char* name = 0 );
+  static QCheckBox* cdTextCheckbox( QWidget* parent = 0, const char* name = 0);
 
  private:
   K3bStdGuiItems() {}

@@ -167,13 +167,15 @@ class K3bDoc : public QObject
    * when deriving from K3bDoc this method really opens the document since
    * openDocument only opens a tempfile and calls this method. 
    */
-  virtual bool loadDocumentData( QDomDocument* ) = 0;
+  virtual bool loadDocumentData( QDomElement* root ) = 0;
 	
   /** 
    * when deriving from K3bDoc this method really saves the document since
    * saveDocument only opens the file and calls this method. 
+   * Append all child elements to docElem.
+   * XML header was already created
    */
-  virtual bool saveDocumentData( QDomDocument* ) = 0;
+  virtual bool saveDocumentData( QDomElement* docElem ) = 0;
 
   bool saveGeneralDocumentData( QDomElement* );
   bool readGeneralDocumentData( const QDomElement& );

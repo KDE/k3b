@@ -3,16 +3,19 @@
 #include "k3bmixeddoc.h"
 #include "k3bmixedburndialog.h"
 
-#include "../audio/k3baudiodoc.h"
-#include "../data/k3bdatadirtreeview.h"
-#include "../data/k3bdataviewitem.h"
-#include "../data/k3bdatafileview.h"
-#include "../audio/audiolistview.h"
-#include "../k3bfillstatusdisplay.h"
+#include <audio/k3baudiodoc.h>
+#include <data/k3bdatadirtreeview.h>
+#include <data/k3bdataviewitem.h>
+#include <data/k3bdatafileview.h>
+#include <data/k3bdatadoc.h>
+#include <audio/audiolistview.h>
+#include <audio/k3baudiodoc.h>
+#include <k3bfillstatusdisplay.h>
 
 #include <qwidgetstack.h>
 #include <qsplitter.h>
 #include <qlayout.h>
+#include <qvaluelist.h>
 
 #include <kdialog.h>
 #include <klocale.h>
@@ -47,7 +50,20 @@ K3bMixedView::K3bMixedView( K3bMixedDoc* doc, QWidget* parent, const char* name 
   connect( m_dataDirTreeView, SIGNAL(urlsDropped(const KURL::List&, QListViewItem*)),
 	   this, SLOT(slotUrlsDropped(const KURL::List&, QListViewItem*)) );
 
+  connect( m_audioListView, SIGNAL(lengthReady()), m_fillStatusDisplay, SLOT(update()) );
+  connect( m_doc->audioDoc(), SIGNAL(newTracks()), m_fillStatusDisplay, SLOT(update()) );
+  connect( m_doc->dataDoc(), SIGNAL(itemRemoved(K3bDataItem*)), m_fillStatusDisplay, SLOT(update()) );
+  connect( m_doc->dataDoc(), SIGNAL(newFileItems()), m_fillStatusDisplay, SLOT(update()) );
+
+
   m_widgetStack->raiseWidget( m_dataFileView );
+
+  // split
+  QValueList<int> sizes = splitter->sizes();
+  int all = sizes[0] + sizes[1];
+  sizes[1] = all*2/3;
+  sizes[0] = all - sizes[1];
+  splitter->setSizes( sizes );
 }
 
 

@@ -41,6 +41,7 @@ class K3bVcdMpegFactory;
 class QWidget;
 class QTimer;
 class QDomDocument;
+class QDomElement;
 
 
 class K3bVcdDoc : public K3bDoc
@@ -117,9 +118,9 @@ class K3bVcdDoc : public K3bDoc
 
  protected:
   /** reimplemented from K3bDoc */
-  bool loadDocumentData( QDomDocument* );
+  bool loadDocumentData( QDomElement* root );
   /** reimplemented from K3bDoc */
-  bool saveDocumentData( QDomDocument* );
+  bool saveDocumentData( QDomElement* );
 
   
   QString documentType() const;

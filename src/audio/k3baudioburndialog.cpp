@@ -99,14 +99,6 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
   QToolTip::add( m_checkSimulate, i18n("Only simulate the writing process") );
   QToolTip::add( m_checkHideFirstTrack, i18n("Hide the first track in the first pregap") );
   QToolTip::add( m_checkRemoveBufferFiles, i18n("Remove images from harddisk when finished") );
-  QToolTip::add( m_editDisc_id, i18n("CD-TEXT information field") );
-  QToolTip::add( m_editUpc_ean, i18n("CD-TEXT information field") );
-  QToolTip::add( m_editMessage, i18n("CD-TEXT information field") );
-  QToolTip::add( m_editPerformer, i18n("CD-TEXT information field") );
-  QToolTip::add( m_editArranger, i18n("CD-TEXT information field") );
-  QToolTip::add( m_editTitle, i18n("CD-TEXT information field") );
-  QToolTip::add( m_editSongwriter, i18n("CD-TEXT information field") );
-  QToolTip::add( m_editComposer, i18n("CD-TEXT information field") );
 
   // What's This info
   // -------------------------------------------------------------------------
@@ -141,13 +133,6 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
   QWhatsThis::add( m_checkRemoveBufferFiles, i18n("<p>If this option is checked K3b will remove any created images after the "
 						  "writing has finished."
 						  "<p>Uncheck this if you want to keep the images.") );
-  QWhatsThis::add( m_editDisc_id, i18n("") );
-  QWhatsThis::add( m_editUpc_ean, i18n("") );
-  QWhatsThis::add( m_editMessage, i18n("") );
-  QWhatsThis::add( m_editPerformer, i18n("") );
-  QWhatsThis::add( m_editArranger, i18n("") );
-  QWhatsThis::add( m_editTitle, i18n("") );
-  QWhatsThis::add( m_editSongwriter, i18n("") );
 }
 
 K3bAudioBurnDialog::~K3bAudioBurnDialog(){
@@ -274,7 +259,6 @@ void K3bAudioBurnDialog::setupCdTextTab( QFrame* frame )
   QLabel* labelTitle = new QLabel( i18n( "&Title:" ), frame, "labelTitle" );
 
   m_editDisc_id = new QLineEdit( frame, "m_editDisc_id" );
-  QToolTip::add(  m_editDisc_id, i18n( "International Standard Recording Code" ) );
   m_editUpc_ean = new QLineEdit( frame, "m_editUpc_ean" );
   m_editMessage = new QLineEdit( frame, "m_editMessage" );
   m_editPerformer = new QLineEdit( frame, "m_editPerformer" );
@@ -328,6 +312,23 @@ void K3bAudioBurnDialog::setupCdTextTab( QFrame* frame )
   setTabOrder( m_editComposer, m_editUpc_ean );
   setTabOrder( m_editUpc_ean, m_editDisc_id );
   setTabOrder( m_editDisc_id, m_editMessage );
+
+  QToolTip::add(  m_editDisc_id, i18n( "International Standard Recording Code" ) );
+  QToolTip::add( m_editUpc_ean, i18n("CD-TEXT information field") );
+  QToolTip::add( m_editMessage, i18n("CD-TEXT information field") );
+  QToolTip::add( m_editPerformer, i18n("CD-TEXT information field") );
+  QToolTip::add( m_editArranger, i18n("CD-TEXT information field") );
+  QToolTip::add( m_editTitle, i18n("CD-TEXT information field") );
+  QToolTip::add( m_editSongwriter, i18n("CD-TEXT information field") );
+  QToolTip::add( m_editComposer, i18n("CD-TEXT information field") );
+
+  QWhatsThis::add( m_editDisc_id, i18n("") );
+  QWhatsThis::add( m_editUpc_ean, i18n("") );
+  QWhatsThis::add( m_editMessage, i18n("") );
+  QWhatsThis::add( m_editPerformer, i18n("") );
+  QWhatsThis::add( m_editArranger, i18n("") );
+  QWhatsThis::add( m_editTitle, i18n("") );
+  QWhatsThis::add( m_editSongwriter, i18n("") );
 }
 
 

@@ -374,15 +374,12 @@ QString K3bDataDoc::documentType() const
 }
 
 
-bool K3bDataDoc::loadDocumentData( QDomDocument* doc )
+bool K3bDataDoc::loadDocumentData( QDomElement* rootElem )
 {
-  if( doc->doctype().name() != documentType() )
-    return false;
-
   if( !root() )
     newDocument();
 
-  QDomNodeList nodes = doc->documentElement().childNodes();
+  QDomNodeList nodes = rootElem->childNodes();
 
   if( nodes.item(0).nodeName() != "general" ) {
     kdDebug() << "(K3bDataDoc) could not find 'general' section." << endl;
@@ -605,177 +602,172 @@ bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
 }
 
 
-bool K3bDataDoc::saveDocumentData( QDomDocument* doc )
+bool K3bDataDoc::saveDocumentData( QDomElement* docElem )
 {
-  doc->appendChild( doc->createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
+  QDomDocument doc = docElem->ownerDocument();
 
-  QDomElement docElem = doc->createElement( documentType() );
-
-  saveGeneralDocumentData( &docElem );
+  saveGeneralDocumentData( docElem );
 
 
   // all options
   // ----------------------------------------------------------------------
-  QDomElement optionsElem = doc->createElement( "options" );
+  QDomElement optionsElem = doc.createElement( "options" );
 
-  QDomElement topElem = doc->createElement( "rock_ridge" );
+  QDomElement topElem = doc.createElement( "rock_ridge" );
   topElem.setAttribute( "activated", isoOptions().createRockRidge() ? "yes" : "no" );
   optionsElem.appendChild( topElem );
 
-  topElem = doc->createElement( "joliet" );
+  topElem = doc.createElement( "joliet" );
   topElem.setAttribute( "activated", isoOptions().createJoliet() ? "yes" : "no" );
   optionsElem.appendChild( topElem );
 
-  topElem = doc->createElement( "iso_allow_lowercase" );
+  topElem = doc.createElement( "iso_allow_lowercase" );
   topElem.setAttribute( "activated", isoOptions().ISOallowLowercase() ? "yes" : "no" );
   optionsElem.appendChild( topElem );
 
-  topElem = doc->createElement( "iso_allow_period_at_begin" );
+  topElem = doc.createElement( "iso_allow_period_at_begin" );
   topElem.setAttribute( "activated", isoOptions().ISOallowPeriodAtBegin() ? "yes" : "no" );
   optionsElem.appendChild( topElem );
 
-  topElem = doc->createElement( "iso_allow_31_char" );
+  topElem = doc.createElement( "iso_allow_31_char" );
   topElem.setAttribute( "activated", isoOptions().ISOallow31charFilenames() ? "yes" : "no" );
   optionsElem.appendChild( topElem );
 
-  topElem = doc->createElement( "iso_omit_version_numbers" );
+  topElem = doc.createElement( "iso_omit_version_numbers" );
   topElem.setAttribute( "activated", isoOptions().ISOomitVersionNumbers() ? "yes" : "no" );
   optionsElem.appendChild( topElem );
 
-  topElem = doc->createElement( "iso_omit_trailing_period" );
+  topElem = doc.createElement( "iso_omit_trailing_period" );
   topElem.setAttribute( "activated", isoOptions().ISOomitTrailingPeriod() ? "yes" : "no" );
   optionsElem.appendChild( topElem );
 
-  topElem = doc->createElement( "iso_max_filename_length" );
+  topElem = doc.createElement( "iso_max_filename_length" );
   topElem.setAttribute( "activated", isoOptions().ISOmaxFilenameLength() ? "yes" : "no" );
   optionsElem.appendChild( topElem );
 
-  topElem = doc->createElement( "iso_relaxed_filenames" );
+  topElem = doc.createElement( "iso_relaxed_filenames" );
   topElem.setAttribute( "activated", isoOptions().ISOrelaxedFilenames() ? "yes" : "no" );
   optionsElem.appendChild( topElem );
 
-  topElem = doc->createElement( "iso_no_iso_translate" );
+  topElem = doc.createElement( "iso_no_iso_translate" );
   topElem.setAttribute( "activated", isoOptions().ISOnoIsoTranslate() ? "yes" : "no" );
   optionsElem.appendChild( topElem );
 
-  topElem = doc->createElement( "iso_allow_multidot" );
+  topElem = doc.createElement( "iso_allow_multidot" );
   topElem.setAttribute( "activated", isoOptions().ISOallowMultiDot() ? "yes" : "no" );
   optionsElem.appendChild( topElem );
 
-  topElem = doc->createElement( "iso_untranslated_filenames" );
+  topElem = doc.createElement( "iso_untranslated_filenames" );
   topElem.setAttribute( "activated", isoOptions().ISOuntranslatedFilenames() ? "yes" : "no" );
   optionsElem.appendChild( topElem );
 
-  topElem = doc->createElement( "follow_symbolic_links" );
+  topElem = doc.createElement( "follow_symbolic_links" );
   topElem.setAttribute( "activated", isoOptions().followSymbolicLinks() ? "yes" : "no" );
   optionsElem.appendChild( topElem );
 
-  topElem = doc->createElement( "create_trans_tbl" );
+  topElem = doc.createElement( "create_trans_tbl" );
   topElem.setAttribute( "activated", isoOptions().createTRANS_TBL() ? "yes" : "no" );
   optionsElem.appendChild( topElem );
 
-  topElem = doc->createElement( "hide_trans_tbl" );
+  topElem = doc.createElement( "hide_trans_tbl" );
   topElem.setAttribute( "activated", isoOptions().hideTRANS_TBL() ? "yes" : "no" );
   optionsElem.appendChild( topElem );
 
-  topElem = doc->createElement( "iso_level" );
-  topElem.appendChild( doc->createTextNode( QString::number(isoOptions().ISOLevel()) ) );
+  topElem = doc.createElement( "iso_level" );
+  topElem.appendChild( doc.createTextNode( QString::number(isoOptions().ISOLevel()) ) );
   optionsElem.appendChild( topElem );
 
-  topElem = doc->createElement( "discard_symlinks" );
+  topElem = doc.createElement( "discard_symlinks" );
   topElem.setAttribute( "activated", isoOptions().discardSymlinks() ? "yes" : "no" );
   optionsElem.appendChild( topElem );
 
-  topElem = doc->createElement( "discard_broken_symlinks" );
+  topElem = doc.createElement( "discard_broken_symlinks" );
   topElem.setAttribute( "activated", isoOptions().discardBrokenSymlinks() ? "yes" : "no" );
   optionsElem.appendChild( topElem );
 
-  topElem = doc->createElement( "preserve_file_permissions" );
+  topElem = doc.createElement( "preserve_file_permissions" );
   topElem.setAttribute( "activated", isoOptions().preserveFilePermissions() ? "yes" : "no" );
   optionsElem.appendChild( topElem );
 
-  topElem = doc->createElement( "force_input_charset" );
+  topElem = doc.createElement( "force_input_charset" );
   topElem.setAttribute( "activated", isoOptions().forceInputCharset() ? "yes" : "no" );
   optionsElem.appendChild( topElem );
 
-  topElem = doc->createElement( "input_charset" );
-  topElem.appendChild( doc->createTextNode( isoOptions().inputCharset() ) );
+  topElem = doc.createElement( "input_charset" );
+  topElem.appendChild( doc.createTextNode( isoOptions().inputCharset() ) );
   optionsElem.appendChild( topElem );
 
 
-  topElem = doc->createElement( "whitespace_treatment" );
+  topElem = doc.createElement( "whitespace_treatment" );
   switch( isoOptions().whiteSpaceTreatment() ) {
   case K3bIsoOptions::strip:
-    topElem.appendChild( doc->createTextNode( "strip" ) );
+    topElem.appendChild( doc.createTextNode( "strip" ) );
     break;
   case K3bIsoOptions::extended:
-    topElem.appendChild( doc->createTextNode( "extended" ) );
+    topElem.appendChild( doc.createTextNode( "extended" ) );
     break;
   case K3bIsoOptions::replace:
-    topElem.appendChild( doc->createTextNode( "replace" ) );
+    topElem.appendChild( doc.createTextNode( "replace" ) );
     break;
   default:
-    topElem.appendChild( doc->createTextNode( "noChange" ) );
+    topElem.appendChild( doc.createTextNode( "noChange" ) );
     break;
   }
   optionsElem.appendChild( topElem );
 
-  topElem = doc->createElement( "whitespace_replace_string" );
-  topElem.appendChild( doc->createTextNode( isoOptions().whiteSpaceTreatmentReplaceString() ) );
+  topElem = doc.createElement( "whitespace_replace_string" );
+  topElem.appendChild( doc.createTextNode( isoOptions().whiteSpaceTreatmentReplaceString() ) );
   optionsElem.appendChild( topElem );
 
 
-  docElem.appendChild( optionsElem );
+  docElem->appendChild( optionsElem );
   // ----------------------------------------------------------------------
 
 
   // the header stuff
   // ----------------------------------------------------------------------
-  QDomElement headerElem = doc->createElement( "header" );
+  QDomElement headerElem = doc.createElement( "header" );
 
-  topElem = doc->createElement( "volume_id" );
-  topElem.appendChild( doc->createTextNode( isoOptions().volumeID() ) );
+  topElem = doc.createElement( "volume_id" );
+  topElem.appendChild( doc.createTextNode( isoOptions().volumeID() ) );
   headerElem.appendChild( topElem );
 
-  topElem = doc->createElement( "volume_set_id" );
-  topElem.appendChild( doc->createTextNode( isoOptions().volumeSetId() ) );
+  topElem = doc.createElement( "volume_set_id" );
+  topElem.appendChild( doc.createTextNode( isoOptions().volumeSetId() ) );
   headerElem.appendChild( topElem );
 
-  topElem = doc->createElement( "system_id" );
-  topElem.appendChild( doc->createTextNode( isoOptions().systemId() ) );
+  topElem = doc.createElement( "system_id" );
+  topElem.appendChild( doc.createTextNode( isoOptions().systemId() ) );
   headerElem.appendChild( topElem );
 
-  topElem = doc->createElement( "application_id" );
-  topElem.appendChild( doc->createTextNode( isoOptions().applicationID() ) );
+  topElem = doc.createElement( "application_id" );
+  topElem.appendChild( doc.createTextNode( isoOptions().applicationID() ) );
   headerElem.appendChild( topElem );
 
-  topElem = doc->createElement( "publisher" );
-  topElem.appendChild( doc->createTextNode( isoOptions().publisher() ) );
+  topElem = doc.createElement( "publisher" );
+  topElem.appendChild( doc.createTextNode( isoOptions().publisher() ) );
   headerElem.appendChild( topElem );
 
-  topElem = doc->createElement( "preparer" );
-  topElem.appendChild( doc->createTextNode( isoOptions().preparer() ) );
+  topElem = doc.createElement( "preparer" );
+  topElem.appendChild( doc.createTextNode( isoOptions().preparer() ) );
   headerElem.appendChild( topElem );
 
-  docElem.appendChild( headerElem );
+  docElem->appendChild( headerElem );
   // ----------------------------------------------------------------------
 
 
 
   // now do the "real" work: save the entries
   // ----------------------------------------------------------------------
-  topElem = doc->createElement( "files" );
+  topElem = doc.createElement( "files" );
 
   QListIterator<K3bDataItem> it( *root()->children() );
   for( ; it.current(); ++it ) {
-    saveDataItem( it.current(), doc, &topElem );
+    saveDataItem( it.current(), &doc, &topElem );
   }
 
-  docElem.appendChild( topElem );
+  docElem->appendChild( topElem );
   // ----------------------------------------------------------------------
-
-  doc->appendChild( docElem );
-
 
   return true;
 }

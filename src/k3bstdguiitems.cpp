@@ -37,7 +37,16 @@ QCheckBox* K3bStdGuiItems::burnproofCheckbox( QWidget* parent, const char* name 
   QWhatsThis::add( c, i18n("<p>If this option is checked, K3b enables <em>Burnfree</em> "
 			   "(or <em>Just Link</em>). This is "
 			   "a feature of the CD writer which avoids buffer underruns."
-			   "<p>It was formaly known as <em>Burnproof</em> but since "
+			   "<p>Without <em>burnfree</em> if the writer would not get any more "
+			   "data a buffer underrun would occure since the writer needs "
+			   "a constant stream of data to write the cd."
+			   "<p>With <em>burnfree</em> the writer can <em>mark</em> the current "
+			   "position of the laser and get back to it when the buffer is filled again."
+			   "But since this means having little data gaps on the cd <b>it is "
+			   "highly recommended to always choose an appropriate writing "
+			   "speed to prevent the usage of burnfree, especially for audio cds</b> "
+			   "(in the worst case one would hear the gap)."
+			   "<p><em>Burnfree</em> was formaly known as <em>Burnproof</em> but since "
 			   "it has become part of the MMC standard it was renamed.") );
   return c;
 }
@@ -72,5 +81,19 @@ QCheckBox* K3bStdGuiItems::onTheFlyCheckbox( QWidget* parent, const char* name )
 			   "the data is sent to the writer fast enough.")
 		   + i18n("<p>It is recommended to try a simulation first.") );
   QToolTip::add( c, i18n("Write files directly to CD without creating an image") );
+  return c;
+}
+
+QCheckBox* K3bStdGuiItems::cdTextCheckbox( QWidget* parent, const char* name )
+{
+  QCheckBox* c = new QCheckBox( i18n("Write CD-TEXT"), parent, name );
+  QToolTip::add( c, i18n("Create CD-TEXT entries") );
+  QWhatsThis::add( c, i18n("<p>If this option is checked K3b uses some otherwise unused space on the audio "
+			   "CD to store additional information, like the artist or the CD title."
+			   "<p>CD-TEXT is an extension to the audio CD standard introduced by Sony."
+			   "<p>CD-TEXT will only be usable on CD players that support this extension "
+			   "(mostly car CD players)."
+			   "<p>Since a CD-TEXT enhanced CD will work in any CD player it is never a bad "
+			   "idea to enable this (if you specified the data).") );
   return c;
 }

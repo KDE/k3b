@@ -6,6 +6,7 @@
 class K3bAudioDoc;
 class K3bDataDoc;
 class QDomDocument;
+class QDomElement;
 class K3bBurnJob;
 class K3bView;
 class QWidget;
@@ -50,8 +51,8 @@ class K3bMixedDoc : public K3bDoc
   void setRemoveBufferFiles( bool b ) { m_removeBufferFiles = b; }
 
  protected:
-  bool loadDocumentData( QDomDocument* );
-  bool saveDocumentData( QDomDocument* );
+  bool loadDocumentData( QDomElement* );
+  bool saveDocumentData( QDomElement* );
   QString documentType() const { return "k3b_mixed_project"; }
   
   void loadDefaultSettings();

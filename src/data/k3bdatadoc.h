@@ -42,6 +42,7 @@ class QString;
 class QStringList;
 class QWidget;
 class QDomDocument;
+class QDomElement;
 
 
 
@@ -138,9 +139,9 @@ class K3bDataDoc : public K3bDoc
 
  protected:
   /** reimplemented from K3bDoc */
-  bool loadDocumentData( QDomDocument* );
+  bool loadDocumentData( QDomElement* root );
   /** reimplemented from K3bDoc */
-  bool saveDocumentData( QDomDocument* );
+  bool saveDocumentData( QDomElement* );
 
   QString documentType() const;
 
@@ -205,6 +206,8 @@ class K3bDataDoc : public K3bDoc
   // boot cd stuff
   K3bDataItem* m_bootCataloge;
   QPtrList<K3bBootImage> m_bootImages;
+
+  friend class K3bMixedDoc;
 };
 
 #endif

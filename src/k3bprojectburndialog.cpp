@@ -25,6 +25,7 @@
 #include "k3bstdguiitems.h"
 #include "device/k3bdevice.h"
 
+
 #include <qstring.h>
 #include <qpushbutton.h>
 #include <qtooltip.h>
@@ -40,6 +41,7 @@
 #include <kmessagebox.h>
 #include <kguiitem.h>
 #include <kstdguiitem.h>
+#include <kdebug.h>
 
 
 
@@ -179,11 +181,12 @@ void K3bProjectBurnDialog::slotOk()
   prepareJob( m_job );
 
   K3bBurnProgressDialog d( k3bMain() );
+
+
   d.setJob( m_job );
+  m_job->start();
 
   hide();
-
-  m_job->start();
   d.exec();
 
 
@@ -235,6 +238,8 @@ void K3bProjectBurnDialog::prepareGui()
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotWriterChanged()) );
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkRemoveBufferFiles, SLOT(setDisabled(bool)) );
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_tempDirSelectionWidget, SLOT(setDisabled(bool)) );
+
+  m_tempDirSelectionWidget->setNeededSize( doc()->size() );
 }
 
 

@@ -346,14 +346,11 @@ void K3bVcdDoc::loadDefaultSettings()
 }
 
 
-bool K3bVcdDoc::loadDocumentData( QDomDocument* doc )
+bool K3bVcdDoc::loadDocumentData( QDomElement* root )
 {
   newDocument();
 
-  if( doc->doctype().name() != documentType() )
-    return false;
-
-  QDomNodeList nodes = doc->documentElement().childNodes();
+  QDomNodeList nodes = root->childNodes();
 
   if( nodes.length() < 3 )
     return false;
@@ -407,46 +404,41 @@ bool K3bVcdDoc::loadDocumentData( QDomDocument* doc )
 }
 
 
-bool K3bVcdDoc::saveDocumentData( QDomDocument* doc)
+bool K3bVcdDoc::saveDocumentData( QDomElement* docElem)
 {
-  doc->appendChild( doc->createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
-
-  QDomElement docElem = doc->createElement( documentType() );
-
-  saveGeneralDocumentData( &docElem );
+  QDomDocument doc = docElem->ownerDocument();
+  saveGeneralDocumentData( docElem );
 
   // save Vcd Label
-  QDomElement vcdMain = doc->createElement( "vcd" );
-  QDomElement vcdElem = doc->createElement( "albumId" );
-  vcdElem.appendChild( doc->createTextNode( ( vcdOptions()->albumId() )) );
+  QDomElement vcdMain = doc.createElement( "vcd" );
+  QDomElement vcdElem = doc.createElement( "albumId" );
+  vcdElem.appendChild( doc.createTextNode( ( vcdOptions()->albumId() )) );
   vcdMain.appendChild( vcdElem );
 
-  vcdElem = doc->createElement( "volumeId" );
-  vcdElem.appendChild( doc->createTextNode( (vcdOptions()->volumeId() )) );
+  vcdElem = doc.createElement( "volumeId" );
+  vcdElem.appendChild( doc.createTextNode( (vcdOptions()->volumeId() )) );
   vcdMain.appendChild( vcdElem );
 
-  vcdElem = doc->createElement( "vcdType" );
-  vcdElem.appendChild( doc->createTextNode( (QString("%1").arg(vcdType()) )) );
+  vcdElem = doc.createElement( "vcdType" );
+  vcdElem.appendChild( doc.createTextNode( (QString("%1").arg(vcdType()) )) );
   vcdMain.appendChild( vcdElem );
 
-  docElem.appendChild( vcdMain );
+  docElem->appendChild( vcdMain );
   
   // save the tracks
   // -------------------------------------------------------------
-  QDomElement contentsElem = doc->createElement( "contents" );
+  QDomElement contentsElem = doc.createElement( "contents" );
 
   for( K3bVcdTrack* track = first(); track != 0; track = next() ) {
 
-    QDomElement trackElem = doc->createElement( "track" );
+    QDomElement trackElem = doc.createElement( "track" );
     trackElem.setAttribute( "url", KIO::decodeFileName(track->absPath()) );
 
     contentsElem.appendChild( trackElem );
   }
   // -------------------------------------------------------------
 
-  docElem.appendChild( contentsElem );
-
-  doc->appendChild( docElem );
+  docElem->appendChild( contentsElem );
 
   return true;
 }

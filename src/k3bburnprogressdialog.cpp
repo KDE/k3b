@@ -383,8 +383,7 @@ void K3bBurnProgressDialog::setJob( K3bJob* job )
 
   connect( job, SIGNAL(debuggingOutput(const QString&, const QString&)),
 	   this, SLOT(mapDebuggingOutput(const QString&, const QString&)) );
-
-
+  
 
   K3bBurnJob* burnJob = dynamic_cast<K3bBurnJob*>( job );
   if( m_showBuffer && burnJob ) {
@@ -550,5 +549,5 @@ void K3bBurnProgressDialog::slotUpdateCaption( int percent )
   k3bMain()->setPlainCaption( QString( "(%1%) %2" ).arg(percent).arg(m_plainCaption) );
 }
 
-
+  
 #include "k3bburnprogressdialog.moc"

@@ -34,7 +34,7 @@ class K3bAudioTrack;
 class QWidget;
 class QTimer;
 class QDomDocument;
-
+class QDomElement;
 
 /**Document class for an audio project. 
  *@author Sebastian Trueg
@@ -84,13 +84,10 @@ class K3bAudioDoc : public K3bDoc
   const QString& upc_ean() const { return m_cdTextUpc_Ean; }
   const QString& cdTextMessage() const { return m_cdTextMessage; }
 
-  bool writeTOC( const QString& filename );
   int numOfTracks() const;
 
   K3bBurnJob* newBurnJob();
 
-  static unsigned long identifyWaveFile( const KURL& url );
-		
  public slots:
   /**
    * will test the file and add it to the project.
@@ -106,7 +103,6 @@ class K3bAudioDoc : public K3bDoc
   void addTrack( K3bAudioTrack* track, uint position = 0 );
 
 
-  // --- TODO: this should read: removeTrack( K3bAudioTrack* )
   void removeTrack( K3bAudioTrack* );
   void moveTrack( const K3bAudioTrack* track, const K3bAudioTrack* after );
 
@@ -138,13 +134,11 @@ class K3bAudioDoc : public K3bDoc
 
  protected:
   /** reimplemented from K3bDoc */
-  bool loadDocumentData( QDomDocument* );
+  bool loadDocumentData( QDomElement* );
   /** reimplemented from K3bDoc */
-  bool saveDocumentData( QDomDocument* );
+  bool saveDocumentData( QDomElement* );
 
   QString documentType() const;
-
-  bool addTrackToToc( K3bAudioTrack* track, QTextStream& t, long& stdinDataLength );
 
   unsigned long isWaveFile( const KURL& url );
 
@@ -200,6 +194,8 @@ class K3bAudioDoc : public K3bDoc
   QString m_cdTextComposer;
   QString m_cdTextMessage;
   // --------------------------------------------------
+
+  friend class K3bMixedDoc;
 };
 
 

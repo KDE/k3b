@@ -29,6 +29,7 @@ class K3bDataAdvancedImageSettingsWidget;
 class K3bDataVolumeDescWidget;
 class QButtonGroup;
 class QRadioButton;
+class K3bAudioCdTextWidget;
 
 
 /**
@@ -46,6 +47,7 @@ class K3bMixedBurnDialog : public K3bProjectBurnDialog
    K3bDataVolumeDescWidget* m_volumeDescWidget;
    K3bDataImageSettingsWidget* m_imageSettingsWidget;
    K3bDataAdvancedImageSettingsWidget* m_advancedImageSettingsWidget;
+   K3bAudioCdTextWidget* m_cdtextWidget;
 
  protected slots:
    void slotOk();

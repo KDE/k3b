@@ -226,23 +226,11 @@ bool K3bAudioDoc::readM3uFile( const KURL& url, int pos )
 
 K3bAudioTrack* K3bAudioDoc::createTrack( const KURL& url )
 {
-  //  unsigned long length = identifyWaveFile( url );
-  if( /*length > 0 || */ K3bAudioModuleFactory::self()->moduleAvailable( url ) ) {
+  if( K3bAudioModuleFactory::self()->moduleAvailable( url ) ) {
     K3bAudioTrack* newTrack =  new K3bAudioTrack( m_tracks, url.path() );
-    /*    if( length > 0 ) {
-      newTrack->setLength( length );  // no module needed for wave files
-      newTrack->setStatus( K3bAudioTrack::OK );
-    }
-    else {*/
-      K3bAudioModule* module = K3bAudioModuleFactory::self()->createModule( newTrack );
-      newTrack->setModule( module );
-
-      // connect to the finished signal to ensure the calculated length and status of the file 
-      // will be displayed properly
-      // FIXME: it does not seem to work. The filldisplay is not updated at all
-      //connect( module, SIGNAL(finished(bool)), this, SLOT(updateAllViews()) );
-      //    }
-
+    K3bAudioModule* module = K3bAudioModuleFactory::self()->createModule( newTrack );
+    newTrack->setModule( module );
+    
     K3bSong *song = k3bMain()->songManager()->findSong( url.path() );
     if( song != 0 ){
       newTrack->setArtist( song->getArtist() );
@@ -344,17 +332,14 @@ QString K3bAudioDoc::documentType() const
 }
 
 
-bool K3bAudioDoc::loadDocumentData( QDomDocument* doc )
+bool K3bAudioDoc::loadDocumentData( QDomElement* root )
 {
   newDocument();
 
   // we will parse the dom-tree and create a K3bAudioTrack for all entries immediately
   // this should not take long and so not block the gui
 
-  if( doc->doctype().name() != documentType() )
-    return false;
-
-  QDomNodeList nodes = doc->documentElement().childNodes();
+  QDomNodeList nodes = root->childNodes();
 
   if( nodes.length() < 4 )
     return false;
@@ -453,110 +438,107 @@ bool K3bAudioDoc::loadDocumentData( QDomDocument* doc )
   return true;
 }
 
-bool K3bAudioDoc::saveDocumentData( QDomDocument* doc )
+bool K3bAudioDoc::saveDocumentData( QDomElement* docElem )
 {
-  doc->appendChild( doc->createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
-
-  QDomElement docElem = doc->createElement( documentType() );
-
-  saveGeneralDocumentData( &docElem );
+  QDomDocument doc = docElem->ownerDocument();
+  saveGeneralDocumentData( docElem );
 
   // add padding
-  QDomElement paddingElem = doc->createElement( "padding" );
-  paddingElem.appendChild( doc->createTextNode( padding() ? "yes" : "no" ) );
-  docElem.appendChild( paddingElem );
+  QDomElement paddingElem = doc.createElement( "padding" );
+  paddingElem.appendChild( doc.createTextNode( padding() ? "yes" : "no" ) );
+  docElem->appendChild( paddingElem );
 
 
   // save disc cd-text
   // -------------------------------------------------------------
-  QDomElement cdTextMain = doc->createElement( "cd-text" );
+  QDomElement cdTextMain = doc.createElement( "cd-text" );
   cdTextMain.setAttribute( "activated", cdText() ? "yes" : "no" );
-  QDomElement cdTextElem = doc->createElement( "title" );
-  cdTextElem.appendChild( doc->createTextNode( (title())) );
+  QDomElement cdTextElem = doc.createElement( "title" );
+  cdTextElem.appendChild( doc.createTextNode( (title())) );
   cdTextMain.appendChild( cdTextElem );
 
-  cdTextElem = doc->createElement( "artist" );
-  cdTextElem.appendChild( doc->createTextNode( (artist())) );
+  cdTextElem = doc.createElement( "artist" );
+  cdTextElem.appendChild( doc.createTextNode( (artist())) );
   cdTextMain.appendChild( cdTextElem );
 
-  cdTextElem = doc->createElement( "arranger" );
-  cdTextElem.appendChild( doc->createTextNode( (arranger())) );
+  cdTextElem = doc.createElement( "arranger" );
+  cdTextElem.appendChild( doc.createTextNode( (arranger())) );
   cdTextMain.appendChild( cdTextElem );
 
-  cdTextElem = doc->createElement( "songwriter" );
-  cdTextElem.appendChild( doc->createTextNode( (songwriter())) );
+  cdTextElem = doc.createElement( "songwriter" );
+  cdTextElem.appendChild( doc.createTextNode( (songwriter())) );
   cdTextMain.appendChild( cdTextElem );
 
-  cdTextElem = doc->createElement( "disc_id" );
-  cdTextElem.appendChild( doc->createTextNode( (disc_id())) );
+  cdTextElem = doc.createElement( "disc_id" );
+  cdTextElem.appendChild( doc.createTextNode( (disc_id())) );
   cdTextMain.appendChild( cdTextElem );
 
-  cdTextElem = doc->createElement( "upc_ean" );
-  cdTextElem.appendChild( doc->createTextNode( (upc_ean())) );
+  cdTextElem = doc.createElement( "upc_ean" );
+  cdTextElem.appendChild( doc.createTextNode( (upc_ean())) );
   cdTextMain.appendChild( cdTextElem );
 
-  cdTextElem = doc->createElement( "message" );
-  cdTextElem.appendChild( doc->createTextNode( (cdTextMessage())) );
+  cdTextElem = doc.createElement( "message" );
+  cdTextElem.appendChild( doc.createTextNode( (cdTextMessage())) );
   cdTextMain.appendChild( cdTextElem );
 
-  docElem.appendChild( cdTextMain );
+  docElem->appendChild( cdTextMain );
   // -------------------------------------------------------------
 
   // save the tracks
   // -------------------------------------------------------------
-  QDomElement contentsElem = doc->createElement( "contents" );
+  QDomElement contentsElem = doc.createElement( "contents" );
 
   for( K3bAudioTrack* track = first(); track != 0; track = next() ) {
 
-    QDomElement trackElem = doc->createElement( "track" );
+    QDomElement trackElem = doc.createElement( "track" );
     trackElem.setAttribute( "url", KIO::decodeFileName(track->absPath()) );
 
     // add cd-text
-    cdTextMain = doc->createElement( "cd-text" );
-    cdTextElem = doc->createElement( "title" );
-    cdTextElem.appendChild( doc->createTextNode( (track->title())) );
+    cdTextMain = doc.createElement( "cd-text" );
+    cdTextElem = doc.createElement( "title" );
+    cdTextElem.appendChild( doc.createTextNode( (track->title())) );
     cdTextMain.appendChild( cdTextElem );
     
-    cdTextElem = doc->createElement( "artist" );
-    cdTextElem.appendChild( doc->createTextNode( (track->artist())) );
+    cdTextElem = doc.createElement( "artist" );
+    cdTextElem.appendChild( doc.createTextNode( (track->artist())) );
     cdTextMain.appendChild( cdTextElem );
     
-    cdTextElem = doc->createElement( "arranger" );
-    cdTextElem.appendChild( doc->createTextNode( (track->arranger()) ) );
+    cdTextElem = doc.createElement( "arranger" );
+    cdTextElem.appendChild( doc.createTextNode( (track->arranger()) ) );
     cdTextMain.appendChild( cdTextElem );
     
-    cdTextElem = doc->createElement( "songwriter" );
-    cdTextElem.appendChild( doc->createTextNode( (track->songwriter()) ) );
+    cdTextElem = doc.createElement( "songwriter" );
+    cdTextElem.appendChild( doc.createTextNode( (track->songwriter()) ) );
     cdTextMain.appendChild( cdTextElem );
     
-    cdTextElem = doc->createElement( "isrc" );
-    cdTextElem.appendChild( doc->createTextNode( ( track->isrc()) ) );
+    cdTextElem = doc.createElement( "isrc" );
+    cdTextElem.appendChild( doc.createTextNode( ( track->isrc()) ) );
     cdTextMain.appendChild( cdTextElem );
     
-    cdTextElem = doc->createElement( "album" );
-    cdTextElem.appendChild( doc->createTextNode( (track->album()) ) );
+    cdTextElem = doc.createElement( "album" );
+    cdTextElem.appendChild( doc.createTextNode( (track->album()) ) );
     cdTextMain.appendChild( cdTextElem );
     
-    cdTextElem = doc->createElement( "message" );
-    cdTextElem.appendChild( doc->createTextNode( (track->cdTextMessage()) ) );
+    cdTextElem = doc.createElement( "message" );
+    cdTextElem.appendChild( doc.createTextNode( (track->cdTextMessage()) ) );
     cdTextMain.appendChild( cdTextElem );
 
     trackElem.appendChild( cdTextMain );
 
 
     // add pregap
-    QDomElement pregapElem = doc->createElement( "pregap" );    
-    pregapElem.appendChild( doc->createTextNode( QString::number(track->pregap()) ) );
+    QDomElement pregapElem = doc.createElement( "pregap" );    
+    pregapElem.appendChild( doc.createTextNode( QString::number(track->pregap()) ) );
     trackElem.appendChild( pregapElem );
 
     // add copy protection
-    QDomElement copyElem = doc->createElement( "copy_protection" );    
-    copyElem.appendChild( doc->createTextNode( track->copyProtection() ? "yes" : "no" ) );
+    QDomElement copyElem = doc.createElement( "copy_protection" );    
+    copyElem.appendChild( doc.createTextNode( track->copyProtection() ? "yes" : "no" ) );
     trackElem.appendChild( copyElem );
 
     // add pre emphasis
-    copyElem = doc->createElement( "pre_emphasis" );    
-    copyElem.appendChild( doc->createTextNode( track->preEmp() ? "yes" : "no" ) );
+    copyElem = doc.createElement( "pre_emphasis" );    
+    copyElem.appendChild( doc.createTextNode( track->preEmp() ? "yes" : "no" ) );
     trackElem.appendChild( copyElem );
 
 
@@ -564,9 +546,7 @@ bool K3bAudioDoc::saveDocumentData( QDomDocument* doc )
   }
   // -------------------------------------------------------------
 
-  docElem.appendChild( contentsElem );
-
-  doc->appendChild( docElem );
+  docElem->appendChild( contentsElem );
 
   return true;
 }
@@ -575,209 +555,6 @@ bool K3bAudioDoc::saveDocumentData( QDomDocument* doc )
 void K3bAudioDoc::addView(K3bView* view)
 {
   K3bDoc::addView( view );
-}
-
-
-bool K3bAudioDoc::writeTOC( const QString& filename )
-{
-  QFile file( filename );
-  if( !file.open( IO_WriteOnly ) ) {
-    kdDebug() << "(K3bAudioDoc) Could not open toc-file " << filename << endl;
-    return false;
-  }
-
-  bool success = true;
-
-  long stdinDataLength = 0;
-	
-  QTextStream t(&file);
-
-
-
-  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  // from the cdrdao manpage:
-  // ------------------------
-  // If one of the CD-TEXT items TITLE, PERFORMER, SONGWRITER, COMPOSER, ARRANGER, ISRC is defined for at least on  track  or
-  // in  the  global section it must be defined for all tracks and in the global section. If a DISC_ID item is defined in the
-  // global section, an ISRC entry must be defined for each track.
-  //
-  // Question: does it make any difference to specify empty cd-text fields?
-  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
-  // ===========================================================================
-  // header
-  // ===========================================================================
-
-  // little comment
-  t << "// TOC-file to use with cdrdao created by K3b" << "\n\n";
-
-  // we create a CDDA tocfile
-  t << "CD_DA\n\n";
-
-  // create the album CD-TEXT entries if needed
-  // ---------------------------------------------------------------------------
-  if( cdText() ) {
-    t << "CD_TEXT {" << "\n";
-    t << "  LANGUAGE_MAP { 0: EN }\n";
-    t << "  LANGUAGE 0 {\n";
-    t << "    TITLE " << "\"" << prepareForTocFile(title()) << "\"" << "\n";
-    t << "    PERFORMER " << "\"" << prepareForTocFile(artist()) << "\"" << "\n";
-    //    if( !disc_id().isEmpty() )
-      t << "    DISC_ID " << "\"" << prepareForTocFile(disc_id()) << "\"" << "\n";
-      //    if( !upc_ean().isEmpty() )
-      t << "    UPC_EAN " << "\"" << prepareForTocFile(upc_ean()) << "\"" << "\n";
-    t << "\n";
-    //    if( !arranger().isEmpty() )
-      t << "    ARRANGER " << "\"" << prepareForTocFile(arranger()) << "\"" << "\n";
-      //    if( !songwriter().isEmpty() )
-      t << "    SONGWRITER " << "\"" << prepareForTocFile(songwriter()) << "\"" << "\n";
-      t << "    COMPOSER " << "\"" << prepareForTocFile(composer()) << "\"" << "\n";
-      //    if( !cdTextMessage().isEmpty() )
-      t << "    MESSAGE " << "\"" << prepareForTocFile(cdTextMessage()) << "\"" << "\n";
-    t << "  }" << "\n";
-    t << "}" << "\n\n";
-  }
-  // ---------------------------------------------------------------------------
-
-
-
-
-  // ===========================================================================
-  // the tracks
-  // ===========================================================================
-
-  K3bAudioTrack* _track = first();
-
-  // if we need to hide the first song in the first tracks' pregap
-  // we process the first two songs at once
-
-  if( hideFirstTrack() ) {
-    K3bAudioTrack* hiddenTrack = _track;
-    _track = next();
-    if( _track == 0 ) {
-      // we cannot hide a lonely track
-      _track = first();
-    }
-    else {
-      t << "TRACK AUDIO" << "\n";
-
-
-      // _track is the "real" first track so it's copy and preemp information is used
-      if( _track->copyProtection() )
-        t << "COPY" << "\n";
-      
-      if( _track->preEmp() )
-        t << "PRE_EMPHASIS" << "\n";
-
-      // CD-TEXT if needed
-      // ------------------------------------------------------------------------
-      if( cdText() ) {
-        t << "CD_TEXT {" << "\n";
-        t << "  LANGUAGE 0 {" << "\n";
-        t << "    TITLE " << "\"" << prepareForTocFile(_track->title()) << "\"" << "\n";
-        t << "    PERFORMER " << "\"" << prepareForTocFile(_track->artist()) << "\"" << "\n";
-        //	if( !_track->isrc().isEmpty() )
-        t << "    ISRC " << "\"" << prepareForTocFile(_track->isrc()) << "\"" << "\n";
-        //	if( !_track->arranger().isEmpty() )
-        t << "    ARRANGER " << "\"" << prepareForTocFile(_track->arranger()) << "\"" << "\n";
-        //	if( !_track->songwriter().isEmpty() )
-        t << "    SONGWRITER " << "\"" << prepareForTocFile(_track->songwriter()) << "\"" << "\n";
-        t << "    COMPOSER " << "\"" << prepareForTocFile(_track->composer()) << "\"" << "\n";
-        //	if( !_track->cdTextMessage().isEmpty() )
-        t << "    MESSAGE " << "\"" << prepareForTocFile(_track->cdTextMessage()) << "\"" << "\n";
-        t << "  }" << "\n";
-        t << "}" << "\n";
-      }
-      // ------------------------------------------------------------------------
-
-
-      // the "hidden" file will be used as pregap for the "first" track
-      success = success && addTrackToToc( hiddenTrack, t, stdinDataLength );
-      t << "START" << "\n"; // use the whole hidden file as pregap
-
-
-      // now comes the "real" first track
-      success = success && addTrackToToc( _track, t, stdinDataLength );
-      t << "\n";
-    }
-
-    _track = next();
-  }
-
-
-  // now iterate over the rest of the tracks
-  
-  for( ; _track != 0; _track = next() ) {
-    t << "TRACK AUDIO" << "\n";
-
-    if( _track->copyProtection() )
-      t << "COPY" << "\n";
-
-    if( _track->preEmp() )
-      t << "PRE_EMPHASIS" << "\n";
-
-    // CD-TEXT if needed
-    // ------------------------------------------------------------------------
-    if( cdText() ) {
-      t << "CD_TEXT {" << "\n";
-      t << "  LANGUAGE 0 {" << "\n";
-      t << "    TITLE " << "\"" << prepareForTocFile(_track->title()) << "\"" << "\n";
-      t << "    PERFORMER " << "\"" << prepareForTocFile(_track->artist()) << "\"" << "\n";
-      //      if( !_track->isrc().isEmpty() )
-      t << "    ISRC " << "\"" << prepareForTocFile(_track->isrc()) << "\"" << "\n";
-      //      if( !_track->arranger().isEmpty() )
-      t << "    ARRANGER " << "\"" << prepareForTocFile(_track->arranger()) << "\"" << "\n";
-      //      if( !_track->songwriter().isEmpty() )
-      t << "    SONGWRITER " << "\"" << prepareForTocFile(_track->songwriter()) << "\"" << "\n";
-      t << "    COMPOSER " << "\"" << prepareForTocFile(_track->composer()) << "\"" << "\n";
-      //      if( !_track->cdTextMessage().isEmpty() )
-      t << "    MESSAGE " << "\"" << prepareForTocFile(_track->cdTextMessage()) << "\"" << "\n";
-      t << "  }" << "\n";
-      t << "}" << "\n";
-    }
-    // ------------------------------------------------------------------------
-
-    if( _track->pregap() > 0 ) {
-      t << "PREGAP " << K3b::framesToString( _track->pregap() ) << "\n";
-    }
-
-    success = success && addTrackToToc( _track, t, stdinDataLength );
-    t << "\n";
-  }
-  // --------------------------------- TOC --	
-
-  file.close();
-
-  return success;
-}
-
-
-bool K3bAudioDoc::addTrackToToc( K3bAudioTrack* track, QTextStream& t, long& stdinDataLength )
-{
-  bool success = true;
-
-  t << "FILE ";
-  if( track->isWave() ) {
-    t << "\"" << track->absPath() << "\"" << " 0" << "\n";
-  }
-  else if( onTheFly() ) {
-    t << "\"-\" ";   // read from stdin
-    t << K3b::framesToString( stdinDataLength );        // where does the track start in stdin
-    t << " " << K3b::framesToString( track->length() );   // here we need the perfect length !!!!!
-    t << "\n";
-    
-    stdinDataLength += track->length();
-  }
-  else {
-    if( track->bufferFile().isEmpty() ) {
-      kdDebug() << "(K3bAudioDoc) not all files buffered. toc-file cannot be used for writing." << endl;
-      success = false;
-    }
-    t << "\"" << track->bufferFile() << "\"" << " 0" << "\n";
-  }
-
-  return success;
 }
 
 
@@ -799,7 +576,7 @@ K3bBurnJob* K3bAudioDoc::newBurnJob()
 }
 
 
-
+// deprected
 QString K3bAudioDoc::prepareForTocFile( const QString& str )
 {
   // since "\" is the only special character I now of so far...
@@ -811,143 +588,6 @@ QString K3bAudioDoc::prepareForTocFile( const QString& str )
   }
 
   return newStr;
-}
-
-
-/**
- * Returns the length of the wave file in frames (1/75 second) if
- * it is a 16bit stereo 44100 kHz wave file
- * Otherwise 0 is returned.
- */
-unsigned long K3bAudioDoc::identifyWaveFile( const KURL& url )
-{
-  QString filename = url.path();
-
-  QFile inputFile( filename );
-  if( !inputFile.open(IO_ReadOnly) ) {
-    kdDebug() << "Could not open file: " << filename << endl;
-    return 0;
-  }
-
-  QDataStream inputStream( &inputFile );
-
-  char magic[4];
-
-  inputStream.readRawBytes( magic, 4 );
-  if( inputStream.atEnd() || qstrncmp(magic, "RIFF", 4) ) {
-    kdDebug() << filename << ": not a RIFF file." << endl;
-    return 0;
-  }
-
-  inputFile.at( 8 );
-  inputStream.readRawBytes( magic, 4 );
-  if( inputStream.atEnd() || qstrncmp(magic, "WAVE", 4) ) {
-    kdDebug() << filename << ": not a wave file." << endl;
-    return 0;
-  }
-
-  Q_INT32 chunkLen;
-
-  while( qstrncmp(magic, "fmt ", 4) ) {
-
-    inputStream.readRawBytes( magic, 4 );
-    if( inputStream.atEnd() ) {
-      kdDebug() << filename << ": could not find format chunk." << endl;
-      return 0;
-    }
-
-    inputStream >> chunkLen;
-    chunkLen = K3b::swapByteOrder( chunkLen );
-    chunkLen += chunkLen & 1; // round to multiple of 2
-
-    // skip chunk data of unknown chunk
-    if( qstrncmp(magic, "fmt ", 4) )
-      if( !inputFile.at( inputFile.at() + chunkLen ) ) {
-        kdDebug() << filename << ": could not seek in file." << endl;
-        return 0;
-      }
-  }
-
-  // found format chunk
-  if( chunkLen < 16 )
-    return 0;
-
-  Q_INT16 waveFormat;
-  inputStream >> waveFormat;
-  if (inputStream.atEnd() || K3b::swapByteOrder(waveFormat) != 1) {
-    kdDebug() << filename << ": not in PCM format: " << waveFormat << endl;
-    return 0;
-  }
-
-  Q_INT16 waveChannels;
-  inputStream >> waveChannels;
-  if (inputStream.atEnd() || K3b::swapByteOrder(waveChannels) != 2) {
-    kdDebug() << filename << ": found " << waveChannels << " channel(s), require 2 channels." << endl;
-    return 0;
-  }
-
-  Q_INT32 waveRate;
-  inputStream >> waveRate; 
-  if (inputStream.atEnd() || K3b::swapByteOrder(waveRate) != 44100) {
-     kdDebug() << filename << ": found sampling rate " << waveRate << "d, require 44100." << endl;
-     return 0;
-  }
-
-  Q_INT16 buffer16;
-  Q_INT32 buffer32;
-  inputStream >> buffer32; // skip average bytes/second
-  inputStream >> buffer16; // skip block align
-
-  Q_INT16 waveBits;
-  inputStream >> waveBits;
-  if (inputStream.atEnd() || K3b::swapByteOrder(waveBits) != 16) {
-    kdDebug() << filename << ": found " << waveBits << " bits per sample, require 16." << endl;
-    return 0;
-  }
-
-  chunkLen -= 16;
-  // skip all other (unknown) format chunk fields
-  if( !inputFile.at( inputFile.at() + chunkLen ) ) {
-    kdDebug() << filename << ": could not seek in file." << endl;
-    return 0;
-  }
-
-
-  // search data chunk
-  while( qstrncmp(magic,"data", 4) ) {
-
-    inputStream.readRawBytes( magic, 4 );
-    if( inputStream.atEnd()  ) {
-      kdDebug() << filename << ": could not find data chunk." << endl;
-      return 0;
-    }
-
-    inputStream >> chunkLen;
-    kdDebug() << "----before bs: " << chunkLen << "i" << endl;
-    chunkLen = K3b::swapByteOrder( chunkLen );
-    kdDebug() << "----after  bs: " << chunkLen << "i" << endl;
-    chunkLen += chunkLen & 1; // round to multiple of 2
-    kdDebug() << "----after rnd: " << chunkLen << "i" << endl;
-
-    // skip chunk data of unknown chunk
-    if( qstrncmp(magic, "data", 4) )
-      if( !inputFile.at( inputFile.at() + chunkLen ) ) {
-        kdDebug() << filename << ": could not seek in file." << endl;
-        return 0;
-      }
-  }
-
-  // found data chunk
-  int headerLen = inputFile.at();
-  if( headerLen + chunkLen > inputFile.size() ) {
-    kdDebug() << filename << ": file length " << inputFile.size()
-      << " does not match length from WAVE header " << headerLen << " + " << chunkLen
-      << " - using actual length." << endl;
-    return (inputFile.size() - headerLen)/2352;
-  }
-  else {
-    return chunkLen/2352;
-  }
 }
 
 

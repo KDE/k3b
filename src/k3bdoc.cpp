@@ -36,6 +36,7 @@
 #include <kapplication.h>
 #include <kstandarddirs.h>
 #include <kconfig.h>
+#include <kdebug.h>
 
 // application specific includes
 #include "k3b.h"
@@ -46,7 +47,8 @@
 #include "audio/k3baudiodoc.h"
 #include "data/k3bdatadoc.h"
 #include "vcd/k3bvcddoc.h"
-#include <kdebug.h>
+#include "mixed/k3bmixeddoc.h"
+
 
 #include <kostore/koStore.h>
 #include <kostore/koStoreDevice.h>
@@ -218,6 +220,8 @@ K3bDoc* K3bDoc::openDocument(const KURL& url )
     newDoc = new K3bDataDoc( k3bMain() );
   else if( xmlDoc.doctype().name() == "k3b_vcd_project" )
     newDoc = new K3bVcdDoc( k3bMain() );
+  else if( xmlDoc.doctype().name() == "k3b_mixed_project" )
+    newDoc = new K3bMixedDoc( k3bMain() );
   else
     kdDebug() << "(K3bDoc) unknown doc type: " << xmlDoc.doctype().name() << endl;
 
@@ -225,7 +229,8 @@ K3bDoc* K3bDoc::openDocument(const KURL& url )
   // load the data into the document
   if( newDoc != 0 ) {
     newDoc->newDocument();
-    if( newDoc->loadDocumentData( &xmlDoc ) ) {
+    QDomElement root = xmlDoc.documentElement();
+    if( newDoc->loadDocumentData( &root ) ) {
       newDoc->setURL( url );
       newDoc->setSaved(true);
       return newDoc;
@@ -254,7 +259,11 @@ bool K3bDoc::saveDocument(const KURL& url )
 
   // save the data in the document
   QDomDocument xmlDoc( documentType() );
-  bool success = saveDocumentData( &xmlDoc );
+
+  xmlDoc.appendChild( xmlDoc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
+  QDomElement docElem = xmlDoc.createElement( documentType() );
+  xmlDoc.appendChild( docElem );
+  bool success = saveDocumentData( &docElem );
   if( success ) {
     KoStoreDevice dev(store);
     dev.open( IO_WriteOnly );
