@@ -202,6 +202,7 @@ K3bDoc* K3bDoc::openDocument(const KURL& url )
     newDoc->newDocument();
     if( newDoc->loadDocumentData( &xmlDoc ) ) {
       newDoc->setURL( url );
+      newDoc->setSaved(true);
       return newDoc;
     }
   }
