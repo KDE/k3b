@@ -175,10 +175,14 @@ void K3bDvdFormattingJob::slotStderrLine( const QString& line )
 // * 4.7GB DVD-RW media in Sequential mode detected.
 // * blanking 100.0|
 
+// * formatting 100.0|
+
   emit debuggingOutput( "dvd+rw-format", line );
 
   int pos = line.find( "blanking" );
-  if( pos > 0 ) {
+  if( pos < 0 )
+    pos = line.find( "formatting" );
+  if( pos >= 0 ) {
     int endPos = line.find( QRegExp("[^\\d\\.]"), pos );
     bool ok;
     int progress = (int)(line.mid( pos, endPos - pos ).toDouble(&ok));
@@ -270,7 +274,7 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler*
 
     if( dh->ngDiskInfo().mediaType() != K3bCdDevice::MEDIA_DVD_RW &&
 	dh->ngDiskInfo().mediaType() != K3bCdDevice::MEDIA_DVD_PLUS_RW ) {
-      emit infoMessage( i18n("No DVD±RW media found. Unable to format."), ERROR );
+      emit infoMessage( i18n("No rewritable DVD media found. Unable to format."), ERROR );
       emit finished(false);
       d->running = false;
       return;
@@ -333,7 +337,7 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler*
 	
 
 	//
-	// Is it possible to have an empty DVD-RW in restricted overwrite mode????
+	// Is it possible to have an empty DVD-RW in restricted overwrite mode???? It seems so....
 	//
 	
 	if( dh->ngDiskInfo().empty() &&
@@ -349,16 +353,13 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler*
 	  else
 	    format = false;
 	}
-	else if( dh->ngDiskInfo().currentProfile() == K3bCdDevice::MEDIA_DVD_RW_OVWR ) {
-	  emit infoMessage( i18n("No need to format %1 media."). arg(K3bCdDevice::mediaTypeString(dh->ngDiskInfo().currentProfile())), INFO );
-	  if( d->force )
-	    emit infoMessage( i18n("Forcing formatting anyway."), INFO );
-	  else
-	    format = false;
-	}
-	else {  // DVD-RW in sequential incremental mode
-	  blank = true;
-	}
+// 	else if( dh->ngDiskInfo().currentProfile() == K3bCdDevice::MEDIA_DVD_RW_OVWR ) {
+// 	  emit infoMessage( i18n("No need to format %1 media."). arg(K3bCdDevice::mediaTypeString(dh->ngDiskInfo().currentProfile())), INFO );
+// 	  if( d->force )
+// 	    emit infoMessage( i18n("Forcing formatting anyway."), INFO );
+// 	  else
+// 	    format = false;
+// 	}
 	
 
 	if( format ) {

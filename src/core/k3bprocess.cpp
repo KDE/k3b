@@ -74,10 +74,24 @@ void K3bProcess::slotSplitStderr( KProcess*, char* data, int len )
 
 void K3bProcess::splitOutput( char* data, int len, bool stdout )
 {
-  QString buffer = QString::fromLocal8Bit( data, len );
-  buffer.replace( "\r\n", "\n" );
-  buffer.replace( "\r", "\n" );
-  QStringList lines = QStringList::split( "\n", buffer, !m_suppressEmptyLines );
+  //
+  // The stderr splitting is mainly used for parsing of messages
+  // That's why we simplify the data before proceeding
+  //
+
+  QString buffer;
+  for( int i = 0; i < len; i++ ) {
+    while( data[i] == '\b' )  // we skip all backspaces.
+      i++;
+    if( data[i] == '\r' )
+      buffer += '\n';
+    else if( data[i] == '\t' )  // replace tabs with a single space
+      buffer += " ";
+    else
+      buffer += data[i];
+  }
+
+  QStringList lines = QStringList::split( '\n', buffer, !m_suppressEmptyLines );
 
   QString* unfinishedLine = ( stdout ? &m_unfinishedStdoutLine : &m_unfinishedStderrLine );
 

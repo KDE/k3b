@@ -34,7 +34,6 @@ typedef Q_INT32 size32;
 
 #include <sys/types.h>
 #include <sys/ioctl.h>
-#include <linux/cdrom.h>
 
 #include <fstab.h>
 #include <mntent.h>

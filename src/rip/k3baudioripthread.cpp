@@ -25,11 +25,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <linux/cdrom.h>
-#include <string.h>
-#include <sys/ioctl.h>
-#include <fcntl.h>
-#include <errno.h>
 
 // from cdda_paranoia.h
 #define PARANOIA_CB_READ           0

@@ -28,16 +28,7 @@
 #include <qfile.h>
 
 
-#include <sys/ioctl.h>		// ioctls
 #include <unistd.h>		// lseek, read. etc
-#include <fcntl.h>		// O_RDONLY etc.
-/* Fix 2.5 kernel definitions */
-#include <linux/version.h>
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,5,50)
-typedef unsigned long long __u64;
-#endif
-#include <linux/cdrom.h>	// ioctls for cdrom
-#include <stdlib.h>
 
 
 K3bCdDevice::DiskInfoDetector::DiskInfoDetector( QObject* parent )
