@@ -48,6 +48,7 @@ class K3bStatusBarManager : public QObject
   QLabel* m_labelInfoMessage;
   QLabel* m_pixFreeTemp;
   QLabel* m_labelFreeTemp;
+  QLabel* m_versionBox;
   K3bBusyWidget* m_busyWidget;
 
   K3bMainWindow* m_mainWindow;

@@ -32,11 +32,13 @@
 #include <qurl.h>
 #include <qvaluelist.h>
 #include <qregexp.h>
+#include <qfile.h>
 
 #include <klocale.h>
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
+#include <ktempfile.h>
 
 #include <errno.h>
 #include <string.h>
@@ -46,7 +48,8 @@
 class K3bCdrecordWriter::Private
 {
 public:
-  Private() {
+  Private()
+    : cdTextFile(0) {
   }
 
   K3bThroughputEstimator* speedEst;
@@ -60,6 +63,8 @@ public:
   };
 
   QValueList<Track> tracks;
+
+  KTempFile* cdTextFile;
 };
 
 
@@ -81,6 +86,7 @@ K3bCdrecordWriter::K3bCdrecordWriter( K3bDevice* dev, QObject* parent, const cha
 
 K3bCdrecordWriter::~K3bCdrecordWriter()
 {
+  delete d->cdTextFile;
   delete d;
   delete m_process;
 }
@@ -137,6 +143,7 @@ void K3bCdrecordWriter::prepareProcess()
   if( m_process ) delete m_process;  // kdelibs want this!
   m_process = new K3bProcess();
   m_process->setRunPrivileged(true);
+  m_process->setPriority( KProcess::PrioHighest );
   m_process->setSplitStdout(true);
   m_process->setSuppressEmptyLines(true);
   m_process->setRawStdin(true);  // we only use stdin when writing on-the-fly
@@ -182,12 +189,14 @@ void K3bCdrecordWriter::prepareProcess()
   else if( m_writingMode == K3b::RAW ) {
     *m_process << "-raw";
   }
-    
+  else if( m_cdrecordBinObject->hasFeature( "tao" ) )
+    *m_process << "-tao";
+
   if( simulate() )
     *m_process << "-dummy";
     
   d->usingBurnfree = false;
-  if( burnproof() ) {
+  if( k3bcore->config()->readBoolEntry( "burnfree", true ) ) {
     if( burnDevice()->burnproof() ) {
 
       d->usingBurnfree = true;
@@ -203,13 +212,23 @@ void K3bCdrecordWriter::prepareProcess()
   }
   
   if( m_cue ) {
-      m_process->setWorkingDirectory(QUrl(m_cueFile).dirPath());
+    m_process->setWorkingDirectory(QUrl(m_cueFile).dirPath());
     *m_process << QString("cuefile=%1").arg( m_cueFile );
   }
   
   if( m_clone )
     *m_process << "-clone";
   
+  if( m_rawCdText.size() > 0 ) {
+    delete d->cdTextFile;
+    d->cdTextFile = new KTempFile( QString::null, ".dat" );
+    d->cdTextFile->setAutoDelete(true);
+    d->cdTextFile->file()->writeBlock( m_rawCdText );
+    d->cdTextFile->close();
+    
+    *m_process << "textfile=" + d->cdTextFile->name();
+  }
+
   if( !k3bcore->config()->readBoolEntry( "No cd eject", false ) &&
       !m_forceNoEject )
     *m_process << "-eject";
@@ -336,167 +355,99 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   static QRegExp s_burnfreeCounterRx( "^BURN\\-Free\\swas\\s(\\d+)\\stimes\\sused" );
   static QRegExp s_burnfreeCounterRxPredict( "^Total\\sof\\s(\\d+)\\s\\spossible\\sbuffer\\sunderruns\\spredicted" );
 
+  // tracknumber: cap(1)
+  // done: cap(2)
+  // complete: cap(3)
+  // fifo: cap(4)
+  // buffer: cap(5)
+  static QRegExp s_progressRx( "Track\\s(\\d\\d)\\:\\s*(\\d*)\\sof\\s*(\\d*)\\sMB\\swritten\\s\\(fifo\\s*(\\d*)\\%\\)\\s*(?:\\[buf\\s*(\\d*)\\%\\])?.*" );
+  
   emit debuggingOutput( m_cdrecordBinObject->name(), line );
   
   //
   // Progress and toc parsing
   //
 
-  if( line.startsWith( "@01T" ) && m_totalSize == 0) // dvdrecord GUI mode
-    {
-      m_totalSize = line.mid(4).section(':', 0, 0).toInt();
-    }
-  else if( line.startsWith( "@" ) ) // dvdrecord GUI mode
-    {
-      m_currentTrack = line.mid(1, 2).toInt();
-      m_alreadyWritten = line.mid(4).section(':', 0, 0).toInt();
-      emit processedSubSize( m_alreadyWritten, m_totalSize );
-      emit subPercent( 100*m_alreadyWritten/m_totalSize );
-    }
-  else if( line.startsWith( "Track " ) )
-    {
-      if( !m_totalTracksParsed ) {
-	// this is not the progress display but the list of tracks that will get written
-	// we always extract the tracknumber to get the highest at last
-	bool ok;
-	int tt = line.mid( 6, 2 ).toInt(&ok);
+  if( line.startsWith( "Track " ) ) {
+    if( !m_totalTracksParsed ) {
+      // this is not the progress display but the list of tracks that will get written
+      // we always extract the tracknumber to get the highest at last
+      bool ok;
+      int tt = line.mid( 6, 2 ).toInt(&ok);
 
-	if( ok ) {
-	  struct Private::Track track;
-	  track.audio  = ( line.mid( 10, 5 ) == "audio" );
+      if( ok ) {
+	struct Private::Track track;
+	track.audio  = ( line.mid( 10, 5 ) == "audio" );
 
-	  m_totalTracks = tt;
+	m_totalTracks = tt;
 
-	  int sizeStart = line.find( QRegExp("\\d"), 10 );
-	  int sizeEnd = line.find( "MB", sizeStart );
-	  track.size = line.mid( sizeStart, sizeEnd-sizeStart ).toInt(&ok);
+	int sizeStart = line.find( QRegExp("\\d"), 10 );
+	int sizeEnd = line.find( "MB", sizeStart );
+	track.size = line.mid( sizeStart, sizeEnd-sizeStart ).toInt(&ok);
 	  
-	  if( ok ) {
-	    d->tracks.append(track);
-	    m_totalSize += track.size;
-	  }
-	  else
-	    kdDebug() << "(K3bCdrecordWriter) track number parse error: " 
-		      << line.mid( sizeStart, sizeEnd-sizeStart ) << endl;
+	if( ok ) {
+	  d->tracks.append(track);
+	  m_totalSize += track.size;
 	}
 	else
 	  kdDebug() << "(K3bCdrecordWriter) track number parse error: " 
-		    << line.mid( 6, 2 ) << endl;
+		    << line.mid( sizeStart, sizeEnd-sizeStart ) << endl;
+      }
+      else
+	kdDebug() << "(K3bCdrecordWriter) track number parse error: " 
+		  << line.mid( 6, 2 ) << endl;
+    }
+
+    else if( s_progressRx.exactMatch( line ) ) {
+      int num = s_progressRx.cap(1).toInt();
+      int made = s_progressRx.cap(2).toInt();
+      int size = s_progressRx.cap(3).toInt();
+      int fifo = s_progressRx.cap(4).toInt();
+
+      emit buffer( fifo );
+      m_lastFifoValue = fifo;
+
+      if( s_progressRx.numCaptures() > 4 )
+	emit deviceBuffer( s_progressRx.cap(5).toInt() );
+
+      //
+      // cdrecord's output sucks a bit.
+      // we get track sizes that differ from the sizes in the progress
+      // info since these are dependant on the writing mode.
+      // so we just use the track sizes and do a bit of math...
+      //
+
+      if( d->tracks.count() > m_currentTrack-1 && size > 0 ) {
+	double convV = (double)d->tracks[m_currentTrack-1].size/(double)size;
+	made = (int)((double)made * convV);
+	size = d->tracks[m_currentTrack-1].size;
+      }
+      else {
+	kdError() << "(K3bCdrecordWriter) Did not parse all tracks sizes!" << endl;
       }
 
-      else if( line.contains( "fifo", false ) > 0 )
-	{
-	  // parse progress
-	  int num, made, size, fifo;
-	  bool ok;
+      if( size > 0 ) {
+	emit processedSubSize( made, size );
+	emit subPercent( 100*made/size );
+      }
 
-	  // --- parse number of track ---------------------------------------
-	  // ----------------------------------------------------------------------
-	  int pos1 = 5;
-	  int pos2 = line.find(':');
-	  if( pos1 == -1 ) {
-	    kdDebug() << "parsing did not work" << endl;
-	    return;
-	  }
-	  // now pos2 to the first colon :-)
-	  num = line.mid(pos1,pos2-pos1).toInt(&ok);
-	  if(!ok)
-	    kdDebug() << "parsing did not work" << endl;
+      if( m_totalSize > 0 ) {
+	emit processedSize( m_alreadyWritten+made, m_totalSize );
+	emit percent( 100*(m_alreadyWritten+made)/m_totalSize );
+      }
 
-	  // --- parse already written Megs -----------------------------------
-	  // ----------------------------------------------------------------------
-	  pos1 = line.find(':');
-	  if( pos1 == -1 ) {
-	    kdDebug() << "parsing did not work" << endl;
-	    return;
-	  }
-	  pos2 = line.find("of");
-	  if( pos2 == -1 ) {
-	    kdDebug() << "parsing did not work" << endl;
-	    return;
-	  }
-	  // now pos1 point to the colon and pos2 to the 'o' of 'of' :-)
-	  pos1++;
-	  made = line.mid(pos1,pos2-pos1).toInt(&ok);
-	  if(!ok)
-	    kdDebug() << "parsing did not work" << endl;
-
-	  // --- parse total size of track ---------------------------------------
-	  // ------------------------------------------------------------------------
-	  pos1 = line.find("MB");
-	  if( pos1 == -1 ) {
-	    kdDebug() << "parsing did not work" << endl;
-	    return;
-	  }
-	  // now pos1 point to the 'M' of 'MB' and pos2 to the 'o' of 'of' :-)
-	  pos2 += 2;
-	  size = line.mid(pos2,pos1-pos2).toInt(&ok);
-	  if(!ok)
-	    kdDebug() << "parsing did not work" << endl;
-
-	  // --- parse status of fifo --------------------------------------------
-	  // ------------------------------------------------------------------------
-	  pos1 = line.find("fifo");
-	  if( pos1 == -1 ) {
-	    kdDebug() << "parsing did not work" << endl;
-	    return;
-	  }
-	  pos2 = line.find('%');
-	  if( pos2 == -1 ) {
-	    kdDebug() << "parsing did not work" << endl;
-	    return;
-	  }
-	  // now pos1 point to the 'f' of 'fifo' and pos2 to the %o'  :-)
-	  pos1+=4;
-	  fifo = line.mid(pos1,pos2-pos1).toInt(&ok);
-	  if(!ok)
-	    kdDebug() << "parsing did not work" << endl;
-
-	  // -------------------------------------------------------------------
-	  // -------- parsing finished --------------------------------------
-
-
-	  emit buffer( fifo );
-	  m_lastFifoValue = fifo;
-
-	  //
-	  // cdrecord's output sucks a bit.
-	  // we get track sizes that differ from the sizes in the progress
-	  // info since these are dependant on the writing mode.
-	  // so we just use the track sizes and do a bit of math...
-	  //
-
-	  if( d->tracks.count() > m_currentTrack-1 &&
-	      size > 0 ) {
-	    double convV = (double)d->tracks[m_currentTrack-1].size/(double)size;
-	    made = (int)((double)made * convV);
-	    size = d->tracks[m_currentTrack-1].size;
-	  }
-	  else {
-	    kdError() << "(K3bCdrecordWriter) Did not parse all tracks sizes!" << endl;
-	  }
-
-	  if( size > 0 ) {
-	    emit processedSubSize( made, size );
-	    emit subPercent( 100*made/size );
-	  }
-
-	  if( m_totalSize > 0 ) {
-	    emit processedSize( m_alreadyWritten+made, m_totalSize );
-	    emit percent( 100*(m_alreadyWritten+made)/m_totalSize );
-	  }
-
-	  d->speedEst->dataWritten( (m_alreadyWritten+made)*1024 );
-	}
+      d->speedEst->dataWritten( (m_alreadyWritten+made)*1024 );
     }
+  }
 
   //
   // Cdrecord starts all error and warning messages with it's path
+  // With Debian's script it starts with cdrecord
   //
 
-  else if( line.startsWith( m_cdrecordBinObject->path ) ) {
+  else if( line.startsWith( "cdrecord" ) || line.startsWith( m_cdrecordBinObject->path ) ) {
     // get rid of the path and the following colon and space
-    QString errStr = line.mid( m_cdrecordBinObject->path.length() + 2 );
+    QString errStr = line.mid( line.find(':') + 2 );
 
     if( errStr.startsWith( "Drive does not support SAO" ) ) {
       emit infoMessage( i18n("DAO (Disk At Once) recording not supported with this writer"), K3bJob::ERROR );
@@ -661,6 +612,10 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
 
 void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 {
+  // remove temporary cdtext file
+  delete d->cdTextFile;
+  d->cdTextFile = 0;
+
   if( d->canceled ) {
     // this will unblock and eject the drive and emit the finished/canceled signals
     K3bAbstractWriter::cancel();

@@ -24,6 +24,7 @@
 class K3bDataDoc;
 class K3bDirItem;
 class K3bDataItem;
+class K3bFileItem;
 class QTextStream;
 class K3bProcess;
 class KProcess;
@@ -74,11 +75,6 @@ class K3bIsoImager : public K3bJob
    */
   void setMultiSessionInfo( const QString&, K3bCdDevice::CdDevice* dev = 0 );
 
-  /**
-   * Set to true to pass -dvd-video to mkisofs
-   */
-  void setVideoDvd( bool b ) { m_dvdVideo = b; }
-
   K3bCdDevice::CdDevice* device() const { return m_device; }
   K3bDataDoc* doc() const { return m_doc; }
 
@@ -86,7 +82,7 @@ class K3bIsoImager : public K3bJob
   void sizeCalculated( int exitCode, int size );
 
  protected:
-  bool addMkisofsParameters();
+  virtual bool addMkisofsParameters();
 
   /**
    * calls writePathSpec, writeRRHideFile, and writeJolietHideFile
@@ -100,13 +96,14 @@ class K3bIsoImager : public K3bJob
   /**
    * @returns The number of entries written or -1 on error
    */
-  int writePathSpec();
+  virtual int writePathSpec();
   bool writeRRHideFile();
   bool writeJolietHideFile();
   bool writeSortWeightFile();
 
   // used by writePathSpec
-  int writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream );
+  virtual int writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream );
+  virtual void writePathSpecForFile( K3bFileItem*, QTextStream& stream );
   QString escapeGraftPoint( const QString& str );
 
   int parseProgress( const QString& );
@@ -118,7 +115,6 @@ class K3bIsoImager : public K3bJob
 
   K3bProcess* m_process;
 
-  bool m_processSuspended;
   bool m_processExited;
   bool m_canceled;
 
@@ -155,8 +151,6 @@ class K3bIsoImager : public K3bJob
   bool m_containsFilesWithMultibleBackslashes;
 
   double m_firstProgressValue;
-
-  bool m_dvdVideo;
 };
 
 

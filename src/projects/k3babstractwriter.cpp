@@ -29,7 +29,6 @@ K3bAbstractWriter::K3bAbstractWriter( K3bDevice* dev, QObject* parent, const cha
   : K3bJob( parent, name ),
     m_burnDevice(dev),
     m_burnSpeed(1),
-    m_burnproof(false),
     m_simulate(false)
 {
 }

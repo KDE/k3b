@@ -35,7 +35,6 @@ K3bBinImageWritingJob::K3bBinImageWritingJob( QObject* parent )
   : K3bBurnJob( parent ),
     m_device(0),
     m_simulate(false),
-    m_burnproof(false),
     m_force(false),
     m_noFix(false),
     m_tocFile(0),
@@ -117,7 +116,6 @@ bool K3bBinImageWritingJob::prepareWriter()
 
     writer->setDao( true );
     writer->setSimulate( m_simulate );
-    writer->setBurnproof( m_burnproof );
     writer->setBurnSpeed( m_speed );
     writer->setCueFile ( m_tocFile );
 
@@ -141,9 +139,6 @@ bool K3bBinImageWritingJob::prepareWriter()
 
     // multisession
     writer->setMulti( m_noFix );
-
-    // burnproof
-    writer->setBurnproof( m_burnproof );
 
     writer->setTocFile( m_tocFile );
 

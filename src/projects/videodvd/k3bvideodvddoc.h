@@ -32,6 +32,8 @@ class K3bVideoDvdDoc : public K3bDvdDoc
 
   virtual bool newDocument();
 
+  K3bDirItem* videoTsDir() const { return m_videoTsDir; }
+
   // TODO: implement load- and saveDocumentData since we do not need all those options
 
  protected:
@@ -40,6 +42,9 @@ class K3bVideoDvdDoc : public K3bDvdDoc
 
   virtual K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
   //  virtual K3bView* newView( QWidget* parent );
+
+ private:
+  K3bDirItem* m_videoTsDir;
 };
 
 #endif

@@ -120,6 +120,7 @@ bool K3bGrowisofsWriter::prepareProcess()
   delete d->process;
   d->process = new K3bProcess();
   d->process->setRunPrivileged(true);
+  d->process->setPriority( KProcess::PrioHighest );
   d->process->setSplitStdout(true);
   d->process->setRawStdin(true);
   connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotReceivedStderr(const QString&)) );
@@ -150,9 +151,6 @@ bool K3bGrowisofsWriter::prepareProcess()
 
   QString s = burnDevice()->blockDeviceName() + "=";
   if( d->image.isEmpty() )
-    // read from stdin (in this case growisofs reads the size of the Iso9660 filesystem from it's header
-    //                  resulting in the restriction to iso9660 images. Thus we are not able to write pure
-    //                  udf images to stdin.)
     s += "/dev/fd/0";
   else
     s += d->image;
@@ -166,14 +164,16 @@ bool K3bGrowisofsWriter::prepareProcess()
   // we check for existing filesystems ourselves, so we always force the overwrite...
   *d->process << "-use-the-force-luke=tty";
 
-  if( d->growisofsBin->version > K3bVersion( 5, 17, -1 ) && d->trackSize > 0 )
+  // if reading from an image let growisofs use the size of the image
+  if( d->growisofsBin->version > K3bVersion( 5, 17, -1 ) && d->trackSize > 0 && d->image.isEmpty() )
     *d->process << "-use-the-force-luke=tracksize:" + QString::number(d->trackSize);
 
   // this only makes sense for DVD-R(W) media
   if( simulate() )
     *d->process << "-use-the-force-luke=dummy";
   if( d->writingMode == K3b::DAO ) {
-    if( d->growisofsBin->version >= K3bVersion( 5, 15, -1 ) && d->trackSize > 0 )
+    // if reading from an image let growisofs use the size of the image
+    if( d->growisofsBin->version >= K3bVersion( 5, 15, -1 ) && d->trackSize > 0 && d->image.isEmpty() )
       *d->process << "-use-the-force-luke=dao:" + QString::number(d->trackSize);
     else
       *d->process << "-use-the-force-luke=dao";
@@ -198,7 +198,9 @@ bool K3bGrowisofsWriter::prepareProcess()
     }
     
     if( speed != 0 )
-      *d->process << QString("-speed=%1").arg( (double)speed/1385.0, 0, 'g', 1 );
+      *d->process << QString("-speed=%1").arg( speed%1385 > 0
+					      ? QString::number( (float)speed/1385.0, 'f', 1 )  // example: DVD+R(W): 2.4x
+					      : QString::number( speed/1385 ) );
   }
 
   if( k3bcore->config()->readBoolEntry( "Allow overburning", false ) )

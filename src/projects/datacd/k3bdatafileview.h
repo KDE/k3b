@@ -19,10 +19,13 @@
 
 #include <k3blistview.h>
 
+#include <qmap.h>
+
 
 class K3bDataDoc;
 class K3bDirItem;
 class K3bDataView;
+class K3bDataViewItem;
 class K3bDataItem;
 class QDropEvent;
 class KActionCollection;
@@ -53,7 +56,7 @@ class K3bDataFileView : public K3bListView
 	
  public slots:
   void slotSetCurrentDir( K3bDirItem* );
-  void updateContents();
+  void checkForNewItems();
 
  private slots:
   void slotDataItemRemoved( K3bDataItem* );
@@ -71,6 +74,7 @@ class K3bDataFileView : public K3bListView
   QDragObject* dragObject();
 
  private:
+  void clearItems();
   void setupActions();
 
   KActionCollection* m_actionCollection;
@@ -86,7 +90,8 @@ class K3bDataFileView : public K3bListView
   K3bDataDoc* m_doc;
   K3bDirItem* m_currentDir;
   K3bDataDirTreeView* m_treeView;
-  bool m_updatesEnabled;
+
+  QMap<K3bDataItem*, K3bDataViewItem*> m_itemMap;
 };
 
 #endif

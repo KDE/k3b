@@ -306,14 +306,19 @@ void K3bDiskInfoView::displayInfo( K3bCdDevice::DiskInfoDetector* did )
 							    m_infoView->lastChild(), 
 							    i18n("CD-TEXT (excerpt)") );
 
-      // TODO: global CDtext
-
       // create header item
       KListViewItem* item = new KListViewItem( cdTextHeaderItem,
 					       i18n("Performer"),
 					       i18n("Title"),
 					       i18n("Songwriter"),
 					       i18n("Composer") );
+      item = new KListViewItem( cdTextHeaderItem, item );
+      item->setText( 0, i18n("CD:") + " " +
+		     did->cdText().performer() );
+      item->setText( 1, did->cdText().title() );
+      item->setText( 2, did->cdText().songwriter() );
+      item->setText( 3, did->cdText().composer() );
+      
       int index = 1;
       for( unsigned int i = 0; i < did->cdText().count(); ++i ) {
         item = new KListViewItem( cdTextHeaderItem, item );

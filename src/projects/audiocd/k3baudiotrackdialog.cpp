@@ -37,7 +37,7 @@
 #include <k3bvalidators.h>
 #include <kcutlabel.h>
 #include <k3bmsf.h>
-#include <k3bvalidators.h>
+#include <k3bcdtextvalidator.h>
 #include <k3baudiodecoder.h>
 #include <k3bmsfedit.h>
 
@@ -244,7 +244,7 @@ void K3bAudioTrackDialog::setupGui()
   m_editMessage->setWordWrap( QTextEdit::WidgetWidth );
   line1->setFrameStyle( QFrame::HLine | QFrame::Sunken );
   m_editIsrc->setValidator( K3bValidators::isrcValidator( m_editIsrc ) );
-  QValidator* cdTextVal = K3bValidators::cdTextValidator( this );
+  QValidator* cdTextVal = new K3bCdTextValidator( this );
   m_editPerformer->setValidator( cdTextVal );
   m_editTitle->setValidator( cdTextVal );
   //  m_editMessage->setValidator( cdTextVal );

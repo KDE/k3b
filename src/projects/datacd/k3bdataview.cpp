@@ -61,8 +61,8 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
 
   connect( m_dataFileView, SIGNAL(dirSelected(K3bDirItem*)), m_dataDirTree, SLOT(setCurrentDir(K3bDirItem*)) );
 
-  m_dataDirTree->updateContents();
-  m_dataFileView->updateContents();
+  m_dataDirTree->checkForNewItems();
+  m_dataFileView->checkForNewItems();
 
 
   // the data actions

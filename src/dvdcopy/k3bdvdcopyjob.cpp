@@ -598,6 +598,8 @@ bool K3bDvdCopyJob::waitForDvd()
 			   k3bcore->externalBinManager()->binObject( "growisofs" )->version >= K3bVersion( 5, 15, -1 ) );
 
 
+      // TODO: check for feature 0x21
+
       if( m & K3bCdDevice::MEDIA_DVD_RW_OVWR ) {
 	emit infoMessage( i18n("Writing DVD-RW in restricted overwrite mode."), INFO );
 	d->usedWritingMode = K3b::WRITING_MODE_RES_OVWR;

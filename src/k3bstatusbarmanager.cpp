@@ -27,6 +27,7 @@
 #include <kio/global.h>
 #include <kstatusbar.h>
 #include <kaboutdata.h>
+#include <kaction.h>
 
 #include <qlabel.h>
 #include <qhbox.h>
@@ -57,13 +58,14 @@ K3bStatusBarManager::K3bStatusBarManager( K3bMainWindow* parent )
   m_labelInfoMessage = new QLabel( " ", m_mainWindow->statusBar() );
 
   // setup version info
-  QLabel* versionBox = new QLabel( QString("K3b %1").arg(k3bcore->version()), m_mainWindow->statusBar() );
+  m_versionBox = new QLabel( QString("K3b %1").arg(k3bcore->version()), m_mainWindow->statusBar() );
+  m_versionBox->installEventFilter( this );
 
   // setup the statusbar
   m_mainWindow->statusBar()->addWidget( m_labelInfoMessage, 1 ); // for showing some info
   m_mainWindow->statusBar()->addWidget( boxFreeTemp, 0, true );
   m_mainWindow->statusBar()->addWidget( m_busyWidget, 0, true );
-  m_mainWindow->statusBar()->addWidget( versionBox, 0, true );
+  m_mainWindow->statusBar()->addWidget( m_versionBox, 0, true );
 
   connect( m_mainWindow, SIGNAL(configChanged(KConfig*)), this, SLOT(update()) );
 
@@ -131,8 +133,13 @@ void K3bStatusBarManager::endBusy()
 
 bool K3bStatusBarManager::eventFilter( QObject* o, QEvent* e )
 {
-  if( o == m_labelFreeTemp->parentWidget() && e->type() == QEvent::MouseButtonDblClick )
-    m_mainWindow->showOptionDialog( 7 );  // FIXME: use an enumeration for the option pages
+  if( e->type() == QEvent::MouseButtonDblClick ) {
+    if( o == m_labelFreeTemp->parentWidget() )
+      m_mainWindow->showOptionDialog( 7 );  // FIXME: use an enumeration for the option pages
+    else if( o == m_versionBox )
+      if( KAction* a = m_mainWindow->action( "help_about_app" ) )
+	a->activate();
+  }
 
   return QObject::eventFilter( o, e );
 }

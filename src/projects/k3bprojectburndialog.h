@@ -27,6 +27,7 @@ class K3bTempDirSelectionWidget;
 class QGroupBox;
 class QCheckBox;
 class QTabWidget;
+class QSpinBox;
 class QVBoxLayout;
 class K3bWritingModeWidget;
 class KConfig;
@@ -65,7 +66,6 @@ class K3bProjectBurnDialog : public K3bInteractionDialog
     *   <li>Writing mode</li>
     *   <li>Simulate</li>
     *   <li>on the fly</li>
-    *   <li>burnfree</li>
     *   <li>remove images</li>
     *   <li>only create images</li>
     * </ul>
@@ -80,7 +80,6 @@ class K3bProjectBurnDialog : public K3bInteractionDialog
     *   <li>Writing mode</li>
     *   <li>Simulate</li>
     *   <li>on the fly</li>
-    *   <li>burnfree</li>
     *   <li>remove images</li>
     *   <li>only create images</li>
     *   <li>writer</li>
@@ -97,7 +96,6 @@ class K3bProjectBurnDialog : public K3bInteractionDialog
     *   <li>Writing mode</li>
     *   <li>Simulate</li>
     *   <li>on the fly</li>
-    *   <li>burnfree</li>
     *   <li>remove images</li>
     *   <li>only create images</li>
     *   <li>writer</li>
@@ -133,7 +131,6 @@ class K3bProjectBurnDialog : public K3bInteractionDialog
     *   <li>Writing mode</li>
     *   <li>Simulate</li>
     *   <li>on the fly</li>
-    *   <li>burnfree</li>
     *   <li>remove images</li>
     *   <li>only create images</li>
     *   <li>writer</li>
@@ -149,7 +146,6 @@ class K3bProjectBurnDialog : public K3bInteractionDialog
     *   <li>Writing mode</li>
     *   <li>Simulate</li>
     *   <li>on the fly</li>
-    *   <li>burnfree</li>
     *   <li>remove images</li>
     *   <li>only create images</li>
     *   <li>writer</li>
@@ -172,10 +168,10 @@ class K3bProjectBurnDialog : public K3bInteractionDialog
    QGroupBox* m_optionGroup;
    QVBoxLayout* m_optionGroupLayout;
    QCheckBox* m_checkOnTheFly;
-   QCheckBox* m_checkBurnproof;
    QCheckBox* m_checkSimulate;
    QCheckBox* m_checkRemoveBufferFiles;
    QCheckBox* m_checkOnlyCreateImage;
+   QSpinBox* m_spinCopies;
 
  private:
    K3bDoc* m_doc;

@@ -444,7 +444,6 @@ bool K3bMixedJob::prepareWriter()
       writer->setWritingMode( m_usedAudioWritingMode );
 
     writer->setSimulate( m_doc->dummy() );
-    writer->setBurnproof( m_doc->burnproof() );
     writer->setBurnSpeed( m_doc->speed() );
 
     if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
@@ -590,9 +589,23 @@ bool K3bMixedJob::writeTocFile()
 void K3bMixedJob::addAudioTracks( K3bCdrecordWriter* writer )
 {
   writer->addArgument( "-useinfo" );
-  if( m_doc->audioDoc()->cdText() )
-    writer->addArgument( "-text" );
+
+  // add raw cdtext data
+  if( m_doc->audioDoc()->cdText() ) {
+    K3bCdDevice::AlbumCdText td = m_doc->audioDoc()->cdTextData();
+    for( QPtrListIterator<K3bAudioTrack> it( *m_doc->audioDoc()->tracks() ); it.current(); ++it )
+      td.addTrackCdText( (*it)->cdText() );
+    writer->setRawCdText( td.rawPackData() );
+  }
+
   writer->addArgument( "-audio" );
+
+  // we always pad because although K3b makes sure all tracks' lenght are multible of 2352
+  // it seems that normalize sometimes corrupts these lengths
+  writer->addArgument( "-pad" );
+
+  // Allow tracks shorter than 4 seconds
+  writer->addArgument( "-shorttrack" );
 
   // add all the audio tracks
   QPtrListIterator<K3bAudioTrack> it( *m_doc->audioDoc()->tracks() );
@@ -849,14 +862,7 @@ void K3bMixedJob::determineWritingMode()
       k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "cdtext" );
     cdrecordUsable =
       !( !cdrecordOnTheFly && m_doc->onTheFly() ) &&
-      !( m_doc->audioDoc()->cdText() &&
-	 // the inf-files we use do only support artist and title in the global section
-	 ( !m_doc->audioDoc()->arranger().isEmpty() ||
-	   !m_doc->audioDoc()->songwriter().isEmpty() ||
-	   !m_doc->audioDoc()->composer().isEmpty() ||
-	   !m_doc->audioDoc()->cdTextMessage().isEmpty() ||
-	   !cdrecordCdText )
-	 );
+      !( m_doc->audioDoc()->cdText() && !cdrecordCdText );
   }
 
   // Writing Application
@@ -932,16 +938,6 @@ void K3bMixedJob::determineWritingMode()
       }
       else if( m_usedAudioWritingMode == K3b::TAO ) {
 	emit infoMessage( i18n("It is not possible to write CD-Text in TAO mode. Try DAO or RAW."), WARNING );
-      }
-      else {
-	if( !m_doc->audioDoc()->arranger().isEmpty() )
-	  emit infoMessage( i18n("K3b does not support Album arranger CD-Text with cdrecord."), ERROR );
-	if( !m_doc->audioDoc()->songwriter().isEmpty() )
-	  emit infoMessage( i18n("K3b does not support Album songwriter CD-Text with cdrecord."), ERROR );
-	if( !m_doc->audioDoc()->composer().isEmpty() )
-	  emit infoMessage( i18n("K3b does not support Album composer CD-Text with cdrecord."), ERROR );
-	if( !m_doc->audioDoc()->cdTextMessage().isEmpty() )
-	  emit infoMessage( i18n("K3b does not support Album comment CD-Text with cdrecord."), ERROR );
       }
     }
   }

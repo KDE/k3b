@@ -1,36 +1,51 @@
-0.11.90
-Add missed VCD 3.0 track interpretation option for SVCD's
+0.12
+Support for all global CD-Text fields with cdrecord.
+Some GUI changes: cleaned up the action dialogs, moved the burnfree option to the global settings dialog
+	since turning it off should be a very seldomly used task.
+Added support for multiple copies to the projects (in progress)
+Added missed VCD 3.0 track interpretation option for SVCD's
+	
+0.11.7
+Check size of returned CD-TEXT data to be a multiple of the pack length. This should fix problems
+	with CD copy.
 
 0.11.6
 Fixed length calculation for long FLAC files.
-Allow Audio CDs that violate the Red Book standard (Tracks shorter than 4 seconds).
-Some improvements in disk-info retrieval (hopefully fixing some issues ;).
+Allow Audio CDs that violate the Red Book standard (Tracks shorter than 4 seconds)
+Some improvements in disk-info retrieval
 
 0.11.5
-Again fixed some disk detection problems which were introduced with the previous fixes.
+Do not ask for overwriting directories in cloning dialog
+Again fixed some disk detection problems which were introduced with the previous fixes :-(
 Fixed a crash which occured if the last boot image was displayed in the fileview while removing it.
-Added support for ID3 Tags in FLAC files (thanks to John Steele Scott).
-Do not ask to overwrite directories in cloning dialog.
-
+Support for ID3 Tags in FLAC files.
+Support for cdrdao 1.1.8.
+	
 0.11.4
-Fixed adding of hidden files.
+Fixed adding of hidden files (wrong naming of config entries)
 Use a default imagefile name for cloning if none was specified.
-Use the Joliet names if no Rockridge is available in session import.
-
+Use the Joliet names if no Rockridge is available in session import
+	
 0.11.3
-Fixed multisession writing problems on some systems.
-Fixed capabilites detection on some systems.
-Readded the documentation which I missed the last time.
+fixed features detection with some devices.
+fixed multisession writing on some systems (K3b used to open the device instead of leaving it to mkisofs to
+	prevent permission problems. Sadly this does not work with all systems since it seems that K3b does
+	not close the device early enough so cdrecord cannot open it.)
 
 0.11.2
 K3bProcess now has a clean API and a non-stupid implementation which fixes the kde 3.2 issue
 way better than the hotfix from 0.11.1.
 Fixed a crash at K3b start which happened with ROM drives that return zero length modepage 0x05 data.
-Bugfix: added the -dvd-video option to growisofs in on-the-fly mode for VideoDVD
 fixed onthefly DVD copy issues
 K3b now uses the internal reader for DVD copy instead of readcd
 added read retries and "ignore read error" options to the dvd copy dialog
 fixed handling of empty raw toc data
+fixed the bug that made K3b try to use cdrdao for DVD iso image writing.
+add files to a project by dropping them on the corresponding tab
+removed the "query cddb" option from the copy dialog since this is configured globally anyway.
+fixed loading of VideoDVD projects
+Fixed VideoDVD project with a HACK. mkisofs is not able to create a VideoDVD using graft-points which
+	is the default in K3b. So now K3b links all VIDEO_TS files in a temp directory.
 	
 0.11.1
 fixed an issue introduced with KDE 3.2rc1 which caused on-the-fly data writing to fail all the time.

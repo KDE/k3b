@@ -31,7 +31,6 @@
 #include <qgroupbox.h>
 #include <qlabel.h>
 #include <qlineedit.h>
-#include <qmultilineedit.h>
 #include <qpushbutton.h>
 #include <qtabwidget.h>
 #include <qlayout.h>

@@ -46,7 +46,6 @@ class K3bBinImageWritingJob : public K3bBurnJob
 
   void setWriter( K3bCdDevice::CdDevice* dev ) { m_device = dev; }
   void setSimulate( bool b ) { m_simulate = b; }
-  void setBurnproof( bool b ) { m_burnproof = b; }
   void setForce(bool b) { m_force = b; }
   void setMulti( bool b ) { m_noFix = b; }
   void setTocFile( const QString& s);
@@ -65,7 +64,6 @@ class K3bBinImageWritingJob : public K3bBurnJob
 
   K3bCdDevice::CdDevice* m_device;
   bool m_simulate;
-  bool m_burnproof;
   bool m_force;
   bool m_noFix;
   QString m_tocFile;

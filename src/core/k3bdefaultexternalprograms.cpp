@@ -138,8 +138,10 @@ bool K3bCdrecordProgram::scan( const QString& p )
       bin->addFeature( "overburn" );
     if( out.output().contains( "-text" ) )
       bin->addFeature( "cdtext" );
-    if( out.output().contains( "-clone" ) )  // cdrecord ProDVD
+    if( out.output().contains( "-clone" ) )
       bin->addFeature( "clone" );
+    if( out.output().contains( "-tao" ) )
+      bin->addFeature( "tao" );
     if( out.output().contains( "cuefile=" ) && 
 	bin->version > K3bVersion( 2, 1, -1, "a14") ) // cuefile handling was still buggy in a14
       bin->addFeature( "cuefile" );
@@ -481,6 +483,10 @@ bool K3bCdrdaoProgram::scan( const QString& p )
     bin = new K3bExternalBin( this );
     bin->path = path;
     bin->version = out.output().mid( pos, endPos-pos );
+
+    pos = out.output().find( "(C)", endPos+1 ) + 4;
+    endPos = out.output().find( '\n', pos );
+    bin->copyright = out.output().mid( pos, endPos-pos );
   }
   else {
     kdDebug() << "(K3bCdrdaoProgram) could not start " << path << endl;
@@ -528,6 +534,9 @@ bool K3bCdrdaoProgram::scan( const QString& p )
     //    bin->addFeature( "plain-atapi" );
     bin->addFeature( "hacked-atapi" );
   }
+
+  if( bin->version >= K3bVersion( 1, 1, 8 ) )
+    bin->addFeature( "plain-atapi" );
 
   addBin(bin);
   return true;

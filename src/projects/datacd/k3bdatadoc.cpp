@@ -253,9 +253,9 @@ K3bDirItem* K3bDataDoc::createDirItem( QFileInfo& f, K3bDirItem* parent )
   c->setGroup( "Data project settings" );
 
   int dirFilter = QDir::All;
-  if( c->readBoolEntry( "List hidden files", false ) )
+  if( c->readBoolEntry( "Add hidden files", true ) )
     dirFilter |= QDir::Hidden;
-  if( c->readBoolEntry( "List system files", false ) )
+  if( c->readBoolEntry( "Add system files", false ) )
     dirFilter |= QDir::System;
 
   QStringList dlist = QDir( f.absFilePath() ).entryList( dirFilter );
@@ -702,7 +702,20 @@ bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
     }
   }
   else if( elem.nodeName() == "directory" ) {
-    K3bDirItem* newDirItem = new K3bDirItem( elem.attributeNode( "name" ).value(), this, parent );
+    // This is for the VideoDVD project which already contains the *_TS folders
+    K3bDirItem* newDirItem = 0;
+    if( K3bDataItem* item = parent->find( elem.attributeNode( "name" ).value() ) ) {
+      if( item->isDir() ) {
+	newDirItem = static_cast<K3bDirItem*>(item);
+      }
+      else {
+	kdError() << "(K3bDataDoc) INVALID DOCUMENT: item " << item->k3bPath() << " saved twice" << endl;
+	return false;
+      }
+    }
+	
+    if( !newDirItem )
+      newDirItem = new K3bDirItem( elem.attributeNode( "name" ).value(), this, parent );
     QDomNodeList childNodes = elem.childNodes();
     for( uint i = 0; i < childNodes.count(); i++ ) {
 
@@ -1033,7 +1046,8 @@ void K3bDataDoc::removeItem( K3bDataItem* item )
 
     delete item;
 
-    emit changed();
+    // This is a little HACK that is need to prevent a crash in the K3bDataFileView
+    QTimer::singleShot( 0, this, SIGNAL(changed()) );
   }
   else
     kdDebug() << "(K3bDataDoc) tried to remove non-removable entry!" << endl;
@@ -1299,30 +1313,41 @@ void K3bDataDoc::importSession( K3bCdDevice::CdDevice* device )
 void K3bDataDoc::slotTocRead( K3bCdDevice::DeviceHandler* dh )
 {
   if( dh->success() ) {
-    K3bCdDevice::Toc::const_iterator it = dh->toc().end();
-    --it; // this is valid since there is at least one data track
-    while( it != dh->toc().begin() && (*it).type() != K3bCdDevice::Track::DATA )
-      --it;
-    long startSec = (*it).firstSector().lba();
+    if( dh->toc().isEmpty() ) {
+      KMessageBox::error( qApp->activeWindow(), i18n("Could not find a session to import."),
+			  i18n("Unable to import session") );
+    }
+    else {
+      K3bCdDevice::Toc::const_iterator it = dh->toc().end();
+      --it; // this is valid since there is at least one data track
+      while( it != dh->toc().begin() && (*it).type() != K3bCdDevice::Track::DATA )
+	--it;
+      long startSec = (*it).firstSector().lba();
     
-    // since in iso9660 it is possible that two files share it's data
-    // simply summing the file sizes could result in wrong values
-    // that's why we use the size from the toc. This is more accurate
-    // anyway since there might be files overwritten or removed
-    m_oldSessionSize = (*it).lastSector().mode1Bytes();
+      // since in iso9660 it is possible that two files share it's data
+      // simply summing the file sizes could result in wrong values
+      // that's why we use the size from the toc. This is more accurate
+      // anyway since there might be files overwritten or removed
+      m_oldSessionSize = (*it).lastSector().mode1Bytes();
 
-    kdDebug() << "(K3bDataDoc) imported session size: " << KIO::convertSize(m_oldSessionSize) << endl;
+      kdDebug() << "(K3bDataDoc) imported session size: " << KIO::convertSize(m_oldSessionSize) << endl;
 
-    K3bIso9660 iso( burner(), startSec );
-    iso.open();
+      K3bIso9660 iso( burner(), startSec );
+      iso.open();
 
-    // import some former settings
-    isoOptions().setCreateJoliet( iso.firstJolietDirEntry() != 0 );
-    isoOptions().setVolumeID( iso.primaryDescriptor().volumeId );
-    // TODO: also import some other pd fields
+      // import some former settings
+      isoOptions().setCreateJoliet( iso.firstJolietDirEntry() != 0 );
+      isoOptions().setVolumeID( iso.primaryDescriptor().volumeId );
+      // TODO: also import some other pd fields
 
-    const K3bIso9660Directory* rootDir = iso.firstIsoDirEntry();
-    createSessionImportItems( rootDir, root() );
+      const K3bIso9660Directory* rootDir = iso.firstRRDirEntry();
+      if( !rootDir )
+	rootDir = iso.firstJolietDirEntry();
+      if( !rootDir )
+	rootDir = iso.firstIsoDirEntry();
+
+      createSessionImportItems( rootDir, root() );
+    }
   }
   else {
     kdDebug() << "(K3bDataDoc) unable to read toc." << endl;
@@ -1514,7 +1539,8 @@ void K3bDataDoc::removeBootItem( K3bBootItem* item )
     delete m_bootCataloge;
     m_bootCataloge = 0;
 
-    emit changed();
+    // This is a little HACK that is need to prevent a crash in the K3bDataFileView
+    QTimer::singleShot( 0, this, SIGNAL(changed()) );
   }
 }
 

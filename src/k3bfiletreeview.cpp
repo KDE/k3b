@@ -375,12 +375,15 @@ void K3bFileTreeView::setTreeDirOnlyMode( bool b )
 
 void K3bFileTreeView::followUrl( const KURL& url )
 {
+  // TODO: first try the current branch
   KFileTreeBranchIterator it( branches() );
   for( ; *it; ++it ) {
     if( !d->branchDeviceMap.contains( *it ) )
       if( KFileTreeViewItem* item = (*it)->findTVIByURL( url ) ) {
 	setCurrentItem( item );
 	setSelected(item, true);
+	ensureItemVisible( item );
+	return;
       }
   }
 }

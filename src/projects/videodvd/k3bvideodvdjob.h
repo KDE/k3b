@@ -22,6 +22,10 @@
 
 class K3bVideoDvdDoc;
 
+/**
+ * This class heavily depends on K3bDvdJob and uses some of it's internals.
+ * This is bad design but makes this classes code very small.
+ */
 class K3bVideoDvdJob : public K3bDvdJob
 {
   Q_OBJECT
@@ -37,6 +41,8 @@ class K3bVideoDvdJob : public K3bDvdJob
   void start();
 
  private:
+  void prepareIsoImager();
+
   K3bVideoDvdDoc* m_doc;
 };
 

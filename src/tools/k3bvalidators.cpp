@@ -51,21 +51,9 @@ QString K3bValidators::fixup( const QString& input, const QRegExp& rx, const QCh
 }
 
 
-QRegExp K3bValidators::cdTextCharSet()
-{
-  return QRegExp("^[^\"/]*$");
-}
-
-
 K3bValidator* K3bValidators::isrcValidator( QObject* parent, const char* name )
 {
   return new K3bValidator( QRegExp("^[A-Z\\d]{2,2}-[A-Z\\d]{3,3}-\\d{2,2}-\\d{5,5}$"), parent, name );
-}
-
-
-K3bValidator* K3bValidators::cdTextValidator( QObject* parent, const char* name )
-{
-  return new K3bValidator( cdTextCharSet(), parent, name );
 }
 
 

@@ -40,7 +40,8 @@
 
 
 K3bDataFileView::K3bDataFileView( K3bView* view, K3bDataDirTreeView* dirTreeView, K3bDataDoc* doc, QWidget* parent )
-  : K3bListView( parent ), m_view(view), m_updatesEnabled(true)
+  : K3bListView( parent ), 
+    m_view(view)
 {
   m_treeView = dirTreeView;
 
@@ -68,12 +69,12 @@ K3bDataFileView::K3bDataFileView( K3bView* view, K3bDataDirTreeView* dirTreeView
 
   m_doc = doc;
   m_currentDir = doc->root();
-  updateContents();
+  checkForNewItems();
 
   connect( m_treeView, SIGNAL(dirSelected(K3bDirItem*)), this, SLOT(slotSetCurrentDir(K3bDirItem*)) );
   connect( m_doc, SIGNAL(itemRemoved(K3bDataItem*)), this, SLOT(slotDataItemRemoved(K3bDataItem*)) );
-  connect( m_doc, SIGNAL(newFileItems()), this, SLOT(updateContents()) );
-  connect( m_doc, SIGNAL(changed()), this, SLOT(updateContents()) );
+  connect( m_doc, SIGNAL(newFileItems()), this, SLOT(checkForNewItems()) );
+  connect( m_doc, SIGNAL(changed()), this, SLOT(checkForNewItems()) );
   connect( this, SIGNAL(executed(QListViewItem*)), this, SLOT(slotExecuted(QListViewItem*)) );
   connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
 	   this, SLOT(showPopupMenu(KListView*, QListViewItem*, const QPoint&)) );
@@ -93,35 +94,44 @@ void K3bDataFileView::slotSetCurrentDir( K3bDirItem* dir )
 {
   if( dir ) {
     m_currentDir = dir;
-    updateContents();
+    clearItems();
+    checkForNewItems();
   }
 }
 
 
-void K3bDataFileView::updateContents()
+void K3bDataFileView::clearItems()
 {
-  if (!m_updatesEnabled)
-    return;
-    
+  m_itemMap.clear();
+  K3bListView::clear();
+}
+
+
+void K3bDataFileView::checkForNewItems()
+{
+  kdDebug() << "(K3bDataFileView::checkForNewItems()" << endl;
   hideEditor();
 
-  // clear view
-  clear();
-
-  // perhaps we should check if the K3bDirItem m_currentDir still exists
-
+  // add items that are not there yet
   for( QPtrListIterator<K3bDataItem> it( m_currentDir->children() ); it.current(); ++it ) {
-    if( it.current()->isDir() )
-      (void)new K3bDataDirViewItem( (K3bDirItem*)it.current(), this );
-    else if( it.current()->isFile() )
-      (void)new K3bDataFileViewItem( (K3bFileItem*)it.current(), this );
-    else if( it.current()->isSpecialFile() )
-      (void)new K3bSpecialDataViewItem( (K3bSpecialDataItem*)it.current(), this );
-    else if( it.current()->isFromOldSession() )
-      (void)new K3bSessionImportViewItem( (K3bSessionImportItem*)it.current(), this );
-    else
-      kdDebug() << "(K3bDataFileView) ERROR: unknown data item type" << endl;
+    if( !m_itemMap.contains( it.current() ) ) {
+      K3bDataViewItem* vi = 0;
+      if( it.current()->isDir() )
+	vi = new K3bDataDirViewItem( (K3bDirItem*)it.current(), this );
+      else if( it.current()->isFile() )
+	vi = new K3bDataFileViewItem( (K3bFileItem*)it.current(), this );
+      else if( it.current()->isSpecialFile() )
+	vi = new K3bSpecialDataViewItem( (K3bSpecialDataItem*)it.current(), this );
+      else if( it.current()->isFromOldSession() )
+	vi = new K3bSessionImportViewItem( (K3bSessionImportItem*)it.current(), this );
+      else
+	kdDebug() << "(K3bDataFileView) ERROR: unknown data item type" << endl;
+
+      if( vi )
+	m_itemMap[it.current()] = vi;
+    }
   }
+  kdDebug() << "(K3bDataFileView::checkForNewItems finished." << endl;
 }
 
 
@@ -203,8 +213,7 @@ void K3bDataFileView::slotDropped( QDropEvent* e, QListViewItem*, QListViewItem*
 
 void K3bDataFileView::slotDataItemRemoved( K3bDataItem* item )
 {
-  if (!m_updatesEnabled)
-    return;
+  kdDebug() << "(K3bDataFileView::slotDataItemRemoved) " << item->k3bName() << endl;
 
   if( item->isDir() ) {
     if( ((K3bDirItem*)item)->isSubItem( currentDir() ) ) {
@@ -212,15 +221,12 @@ void K3bDataFileView::slotDataItemRemoved( K3bDataItem* item )
     }
   }
   
-  if( item->parent() == currentDir() ) {
-    QListViewItemIterator it(this);
-    for( ; it.current(); ++it ) {
-      if( ((K3bDataViewItem*)it.current())->dataItem() == item ) {
-	delete it.current();
-	break;
-      }
-    } // for it
+  if( m_itemMap.contains( item ) ) {
+    kdDebug() << "(K3bDataFileView::slotDataItemRemoved) removing " << item->k3bName() << endl;
+    delete m_itemMap[item];
+    m_itemMap.remove(item);
   }
+  kdDebug() << "(K3bDataFileView::slotDataItemRemoved finished" << endl;
 }
 
 
@@ -314,16 +320,12 @@ void K3bDataFileView::slotRenameItem()
 
 void K3bDataFileView::slotRemoveItem()
 {
-  bool oldUpdatesEnabled = m_updatesEnabled;
-  m_updatesEnabled = false;
   QPtrList<QListViewItem> items = selectedItems();
   QPtrListIterator<QListViewItem> it( items );
   for(; it.current(); ++it ) {
     if( K3bDataViewItem* d = dynamic_cast<K3bDataViewItem*>( it.current() ) )
       m_doc->removeItem( d->dataItem() );
   }
-  m_updatesEnabled = oldUpdatesEnabled;
-  updateContents();
 }
 
 

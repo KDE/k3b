@@ -1,7 +1,7 @@
 /*
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2004 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
@@ -64,8 +64,7 @@ public:
       audioSessionReader(0),
       cdrecordWriter(0),
       infFileWriter(0),
-      cddb(0),
-      cdTextFile(0) {
+      cddb(0) {
   }
 
   bool canceled;
@@ -107,8 +106,6 @@ public:
   bool haveCddb;
   bool haveCdText;
 
-  KTempFile* cdTextFile;
-
   QValueVector<bool> dataSessionProbablyTAORecorded;
 
   // used to determine progress
@@ -125,7 +122,6 @@ K3bCdCopyJob::K3bCdCopyJob( QObject* parent )
     m_onTheFly(true),
     m_ignoreReadErrors(false),
     m_readRetries(128),
-    m_queryCddb(false),
     m_preferCdText(false),
     m_writingMode( K3b::WRITING_MODE_AUTO )
 {
@@ -135,7 +131,6 @@ K3bCdCopyJob::K3bCdCopyJob( QObject* parent )
 
 K3bCdCopyJob::~K3bCdCopyJob()
 {
-  delete d->cdTextFile;
   delete d->infFileWriter;
   delete d;
 }
@@ -344,7 +339,8 @@ void K3bCdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
 void K3bCdCopyJob::slotCdTextReady( K3bCdDevice::DeviceHandler* dh )
 {
   if( dh->success() ) {
-    emit infoMessage( i18n("Found CD-TEXT."), SUCCESS );
+    K3bCdDevice::AlbumCdText cdt( dh->cdTextRaw() );
+    emit infoMessage( i18n("Found CD-TEXT (%1 - %2).").arg(cdt.performer()).arg(cdt.title()), SUCCESS );
 
     d->cdTextRaw = dh->cdTextRaw();
     d->haveCdText = true;
@@ -359,10 +355,7 @@ void K3bCdCopyJob::slotCdTextReady( K3bCdDevice::DeviceHandler* dh )
 
     d->haveCdText = false;
 
-    if( m_queryCddb )
-      queryCddb();
-    else
-      startCopy();
+    queryCddb();
   }
 }
 
@@ -681,7 +674,6 @@ bool K3bCdCopyJob::writeNextSession()
   d->cdrecordWriter->setBurnDevice( m_writerDevice );
   d->cdrecordWriter->clearArguments();
   d->cdrecordWriter->setSimulate( m_simulate );
-  d->cdrecordWriter->setBurnproof( m_burnfree );
   d->cdrecordWriter->setBurnSpeed( m_speed );
 
 
@@ -765,25 +757,17 @@ bool K3bCdCopyJob::writeNextSession()
       d->cdrecordWriter->addArgument( "-multi" );
 
     if( d->haveCddb || d->haveCdText ) {
-      // TODO:       if( usedWritingMode == K3b::TAO ) {
-      //     emit infoMessage( "no cd-text in TAO mode." )
-      //    }
-      if( d->haveCdText && ( !d->haveCddb || m_preferCdText ) ) {
-
-	// create a temp file containing the raw cdtext data
-	// TODO: move this to K3bCdrecordWriter
-
-	delete d->cdTextFile;
-	d->cdTextFile = new KTempFile( QString::null, ".dat" );
-	d->cdTextFile->setAutoDelete(true);
-	d->cdTextFile->file()->writeBlock( d->cdTextRaw );
-	d->cdTextFile->close();
-
+      if( usedWritingMode == K3b::TAO ) {
+	emit infoMessage( i18n("It is not possible to write CD-Text in TAO mode."), WARNING );
+      }
+      else if( d->haveCdText && ( !d->haveCddb || m_preferCdText ) ) {
 	// use the raw CDTEXT data
-	d->cdrecordWriter->addArgument( "textfile=" + d->cdTextFile->name() );
+	d->cdrecordWriter->setRawCdText( d->cdTextRaw );
       }
       else {
-	// cdrecord will use the cdtext data in the inf files	
+	// make sure the writer job does not create raw cdtext
+	d->cdrecordWriter->setRawCdText( QByteArray() );
+	// cdrecord will use the cdtext data in the inf files
 	d->cdrecordWriter->addArgument( "-text" );
       }
     }
@@ -793,7 +777,7 @@ bool K3bCdCopyJob::writeNextSession()
     //
     // add all the audio tracks
     //
-    d->cdrecordWriter->addArgument( "-audio" );
+    d->cdrecordWriter->addArgument( "-audio" )->addArgument( "-shorttrack" );
 
     for( unsigned int i = 0; i < d->infNames.count(); ++i ) {
       if( m_onTheFly )
@@ -991,9 +975,6 @@ void K3bCdCopyJob::slotMediaReloadedForNextSession( K3bCdDevice::DeviceHandler* 
 
 void K3bCdCopyJob::cleanup()
 {
-  delete d->cdTextFile;
-  d->cdTextFile = 0;
-
   if( m_onTheFly || d->canceled || !m_keepImage || d->error ) {
     emit infoMessage( i18n("Removing temporary files."), INFO );
     for( QStringList::iterator it = d->infNames.begin(); it != d->infNames.end(); ++it )

@@ -115,20 +115,34 @@ K3bDvdCopyDialog::K3bDvdCopyDialog( QWidget* parent, const char* name, bool moda
   m_spinCopies->setMinValue( 1 );
   m_spinCopies->setMaxValue( 99 );
 
-  m_tempDirSelectionWidget = new K3bTempDirSelectionWidget( optionTab );
-  m_tempDirSelectionWidget->setSelectionMode( K3bTempDirSelectionWidget::FILE );
-
   optionTabGrid->addWidget( groupWritingMode, 0, 0 );
-  optionTabGrid->addWidget( groupOptions, 1, 0 );
-  optionTabGrid->addWidget( groupCopies, 2, 0 );
-  optionTabGrid->addMultiCellWidget( m_tempDirSelectionWidget, 0, 2, 1, 1 );
-  optionTabGrid->setRowStretch( 2, 1 );
+  optionTabGrid->addMultiCellWidget( groupOptions, 0, 1, 1, 1 );
+  optionTabGrid->addWidget( groupCopies, 1, 0 );
+  optionTabGrid->setRowStretch( 1, 1 );
   optionTabGrid->setColStretch( 1, 1 );
 
   tabWidget->addTab( optionTab, i18n("&Options") );
 
 
+  //
+  // Image tab
+  // //////////////////////////////////////////////////////////////////////////
+  QWidget* imageTab = new QWidget( tabWidget );
+  QGridLayout* imageTabGrid = new QGridLayout( imageTab );
+  imageTabGrid->setSpacing( spacingHint() );
+  imageTabGrid->setMargin( marginHint() );
+
+  m_tempDirSelectionWidget = new K3bTempDirSelectionWidget( imageTab );
+  m_tempDirSelectionWidget->setSelectionMode( K3bTempDirSelectionWidget::FILE );
+
+  imageTabGrid->addWidget( m_tempDirSelectionWidget, 0, 0 );
+
+  tabWidget->addTab( imageTab, i18n("&Image") );
+
+
+  //
   // advanced tab ------------------
+  // //////////////////////////////////////////////////////////////////////////
   QWidget* advancedTab = new QWidget( tabWidget );
   QGridLayout* advancedTabGrid = new QGridLayout( advancedTab );
   advancedTabGrid->setSpacing( spacingHint() );

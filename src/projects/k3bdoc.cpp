@@ -74,7 +74,6 @@ K3bDoc::K3bDoc( QObject* parent )
   m_burner = 0;
   m_onTheFly = true;
   m_overburn = false;
-  m_burnproof = true;
   m_speed = 0;  // Auto
 
   m_writingApp = K3b::DEFAULT;
@@ -127,10 +126,6 @@ void K3bDoc::setSpeed( int speed )
 void K3bDoc::setBurner( K3bDevice* dev )
 {
   m_burner = dev;
-  if( dev ) {
-    if( !dev->burnproof() )
-      setBurnproof( false );
-  }
 }
 
 
@@ -428,7 +423,6 @@ void K3bDoc::loadDefaultSettings( KConfig* c )
 
   setDummy( c->readBoolEntry( "simulate", false ) );
   setOnTheFly( c->readBoolEntry( "on_the_fly", true ) );
-  setBurnproof( c->readBoolEntry( "burnproof", true ) );
   setRemoveImages( c->readBoolEntry( "remove_image", true ) );
   setOnlyCreateImages( c->readBoolEntry( "only_create_image", false ) );
 

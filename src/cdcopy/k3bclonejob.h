@@ -55,7 +55,6 @@ class K3bCloneJob : public K3bBurnJob
   void setOnlyBurnExistingImage( bool b ) { m_onlyBurnExistingImage = b; }
   void setSimulate( bool b ) { m_simulate = b; }
   void setWriteSpeed( int s ) { m_speed = s; }
-  void setBurnfree( bool b ) { m_burnfree = b; }
   void setCopies( int c ) { m_copies = c; }
   void setReadRetries( int i ) { m_readRetries = i; }
 
@@ -86,7 +85,6 @@ class K3bCloneJob : public K3bBurnJob
   bool m_running;
 
   bool m_simulate;
-  bool m_burnfree;
   int m_speed;
   int m_copies;
   bool m_onlyCreateImage;

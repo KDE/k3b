@@ -266,6 +266,10 @@ void K3bCdDevice::DiskInfoDetector::slotDeviceHandlerFinished( K3bCdDevice::Devi
     d->ngDiskInfo = handler->ngDiskInfo();
     d->ngDiskInfo.debug();
     d->cdText = handler->cdText();
+
+    // some debugging
+    AlbumCdText x( d->cdText.rawPackData() );
+
     d->toc = handler->toc();
     fetchExtraInfo();
   }

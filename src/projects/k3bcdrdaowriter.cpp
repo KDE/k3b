@@ -98,7 +98,6 @@ K3bCdrdaoWriter::K3bCdrdaoWriter( K3bCdDevice::CdDevice* dev, QObject* parent, c
     m_readRaw(false),
     m_multi(false),
     m_force(false),
-    m_burnproof(true),
     m_onTheFly(false),
     m_fastToc(false),
     m_readSubchan(None),
@@ -284,7 +283,8 @@ void K3bCdrdaoWriter::setWriteArguments()
     *m_process << "--force";
 
   // burnproof
-  if ( !m_burnproof ) {
+  k3bcore->config()->setGroup("General Options");
+  if ( !k3bcore->config()->readBoolEntry( "burnfree", true ) ) {
     if( m_cdrdaoBinObject->hasFeature( "disable-burnproof" ) )
       *m_process << "--buffer-under-run-protection" << "0";
     else
@@ -460,6 +460,7 @@ void K3bCdrdaoWriter::start()
     delete m_process;  // kdelibs want this!
   m_process = new K3bProcess();
   m_process->setRunPrivileged(true);
+  m_process->setPriority( KProcess::PrioHighest );
   m_process->setSplitStdout(false);
   m_process->setRawStdin(true);
   connect( m_process, SIGNAL(stderrLine(const QString&)),

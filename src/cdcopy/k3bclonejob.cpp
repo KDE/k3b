@@ -51,7 +51,6 @@ K3bCloneJob::K3bCloneJob( QObject* parent, const char* name )
     m_canceled(false),
     m_running(false),
     m_simulate(false),
-    m_burnfree(true),
     m_speed(1),
     m_copies(1),
     m_onlyCreateImage(false),
@@ -106,6 +105,9 @@ void K3bCloneJob::start()
 
   if( m_imagePath.isEmpty() ) {
     m_imagePath = K3b::findTempFile( "img" );
+  }
+  else if( QFileInfo(m_imagePath).isDir() ) {
+    m_imagePath = K3b::findTempFile( "img", m_imagePath );
   }
 
   if( m_onlyBurnExistingImage ) {
@@ -175,7 +177,6 @@ void K3bCloneJob::prepareWriter()
   m_writerJob->setWritingMode( K3b::RAW );
   m_writerJob->setClone( true );
   m_writerJob->setSimulate( m_simulate );
-  m_writerJob->setBurnproof( m_burnfree );
   m_writerJob->setBurnSpeed( m_speed );
   m_writerJob->addArgument( m_imagePath );
 }

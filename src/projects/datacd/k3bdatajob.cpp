@@ -455,7 +455,6 @@ bool K3bDataJob::prepareWriterJob()
 
     writer->setWritingMode( d->usedWritingMode );
     writer->setSimulate( d->doc->dummy() );
-    writer->setBurnproof( d->doc->burnproof() );
     writer->setBurnSpeed( d->doc->speed() );
 
     // multisession
@@ -625,7 +624,7 @@ void K3bDataJob::cancelAll()
 
   // remove iso-image if it is unfinished or the user selected to remove image
   if( QFile::exists( d->doc->tempDir() ) ) {
-    if( !d->doc->onTheFly() && (d->doc->removeImages() || !d->imageFinished) ) {
+    if( (!d->doc->onTheFly() || d->doc->onlyCreateImages() ) && (d->doc->removeImages() || !d->imageFinished) ) {
       emit infoMessage( i18n("Removing ISO image %1").arg(d->doc->tempDir()), K3bJob::SUCCESS );
       QFile::remove( d->doc->tempDir() );
     }

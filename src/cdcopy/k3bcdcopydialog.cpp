@@ -57,6 +57,7 @@
 #include <qradiobutton.h>
 #include <qsizepolicy.h>
 #include <qfile.h>
+#include <qfileinfo.h>
 
 
 K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal )
@@ -95,18 +96,20 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   groupWritingMode->setInsideMargin( marginHint() );
   m_writingModeWidget = new K3bWritingModeWidget( groupWritingMode );
 
-  m_groupCopyMode = new QButtonGroup( 2, Qt::Horizontal, i18n("Copy Mode"), optionTab );
-  m_groupCopyMode->setInsideMargin( marginHint() );
-  m_groupCopyMode->setInsideSpacing( spacingHint() );
-  m_groupCopyMode->setExclusive( true );
-  m_radioNormalCopy = new QRadioButton( i18n("Normal Copy"), m_groupCopyMode );
-  m_radioCloneCopy = new QRadioButton( i18n("Clone Copy"), m_groupCopyMode );
+  QGroupBox* groupCopyMode = new QGroupBox( 1, Qt::Vertical, i18n("Copy Mode"), optionTab );
+  groupCopyMode->setInsideMargin( marginHint() );
+  groupCopyMode->setInsideSpacing( spacingHint() );
+  m_comboCopyMode = new QComboBox( groupCopyMode );
+  m_comboCopyMode->insertItem( i18n("Normal Copy") );
+  m_comboCopyMode->insertItem( i18n("Clone Copy") );
+//   m_groupCopyMode->setExclusive( true );
+//   m_radioNormalCopy = new QRadioButton( i18n("Normal Copy"), m_groupCopyMode );
+//   m_radioCloneCopy = new QRadioButton( i18n("Clone Copy"), m_groupCopyMode );
 
   QGroupBox* groupOptions = new QGroupBox( 5, Qt::Vertical, i18n("Options"), optionTab );
   groupOptions->setInsideSpacing( spacingHint() );
   groupOptions->setInsideMargin( marginHint() );
   m_checkSimulate = K3bStdGuiItems::simulateCheckbox( groupOptions );
-  m_checkBurnfree = K3bStdGuiItems::burnproofCheckbox( groupOptions );
   m_checkOnTheFly = K3bStdGuiItems::onTheFlyCheckbox( groupOptions );
   m_checkOnlyCreateImage = K3bStdGuiItems::onlyCreateImagesCheckbox( groupOptions );
   m_checkDeleteImages = K3bStdGuiItems::removeImagesCheckbox( groupOptions );
@@ -120,17 +123,30 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   pixLabel->setScaledContents( false );
   m_spinCopies = new QSpinBox( 1, 99, 1, groupCopies );
 
-  m_tempDirSelectionWidget = new K3bTempDirSelectionWidget( optionTab );
-
-  optionTabGrid->addWidget( groupWritingMode, 0, 0 );
-  optionTabGrid->addWidget( m_groupCopyMode, 0, 1 );
-  optionTabGrid->addWidget( groupOptions, 1, 0 );
+  optionTabGrid->addWidget( groupCopyMode, 0, 0 );
+  optionTabGrid->addWidget( groupWritingMode, 1, 0 );
+  optionTabGrid->addMultiCellWidget( groupOptions, 0, 2, 1, 1 );
   optionTabGrid->addWidget( groupCopies, 2, 0 );
-  optionTabGrid->addMultiCellWidget( m_tempDirSelectionWidget, 1, 2, 1, 1 );
   optionTabGrid->setRowStretch( 2, 1 );
   optionTabGrid->setColStretch( 1, 1 );
 
   tabWidget->addTab( optionTab, i18n("&Options") );
+
+
+  //
+  // image tab ------------------
+  //
+  QWidget* imageTab = new QWidget( tabWidget );
+  QGridLayout* imageTabGrid = new QGridLayout( imageTab );
+  imageTabGrid->setSpacing( spacingHint() );
+  imageTabGrid->setMargin( marginHint() );
+
+  m_tempDirSelectionWidget = new K3bTempDirSelectionWidget( imageTab );
+
+  imageTabGrid->addWidget( m_tempDirSelectionWidget, 0, 0 );
+
+  tabWidget->addTab( imageTab, i18n("&Image") );
+
 
   //
   // advanced tab ------------------
@@ -150,17 +166,16 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
 
   m_checkIgnoreReadErrors = new QCheckBox( i18n("Ignore read errors"), groupGeneral );
 
-  QGroupBox* groupAudio = new QGroupBox( 3, Qt::Vertical, i18n("Audio"), advancedTab ); 
+  QGroupBox* groupAudio = new QGroupBox( 2, Qt::Vertical, i18n("Audio"), advancedTab ); 
   groupAudio->setInsideSpacing( spacingHint() );
   groupAudio->setInsideMargin( marginHint() );
   box = new QHBox( groupAudio );
   box->setSpacing( spacingHint() );
   box->setStretchFactor(new QLabel( i18n("Paranoia mode:"), box ), 1 );
   m_comboParanoiaMode = K3bStdGuiItems::paranoiaModeComboBox( box );
-  m_checkQueryCddb = new QCheckBox( i18n("Query cddb"), groupAudio );
   m_checkPrefereCdText = new QCheckBox( i18n("Prefer CD-Text"), groupAudio );
 
-  QGroupBox* groupData = new QGroupBox( 1, Qt::Vertical, i18n("Data"), advancedTab ); 
+  QGroupBox* groupData = new QGroupBox( 1, Qt::Vertical, i18n("Cloning"), advancedTab ); 
   groupData->setInsideSpacing( spacingHint() );
   groupData->setInsideMargin( marginHint() );
   m_checkNoCorrection = new QCheckBox( i18n("No error correction"), groupData );
@@ -184,16 +199,11 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
   connect( m_checkSimulate, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
-  connect( m_checkQueryCddb, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
-  connect( m_radioCloneCopy, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
-  connect( m_radioNormalCopy, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
+  connect( m_comboCopyMode, SIGNAL(activated(int)), this, SLOT(slotToggleAll()) );
 
 
-  QToolTip::add( m_radioNormalCopy, i18n("Normal copy for most CD types") );
-  QToolTip::add( m_radioCloneCopy, i18n("Raw clone copy") );
   QToolTip::add( m_checkIgnoreReadErrors, i18n("Skip unreadable sectors") );
   QToolTip::add( m_checkNoCorrection, i18n("Disable the source drive's error correction") );
-  QToolTip::add( m_checkQueryCddb, i18n("Query the cddb database for audio titles") );
   QToolTip::add( m_checkPrefereCdText, i18n("Use CD-Text instead of cddb if available.") );
 
 
@@ -202,22 +212,24 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
 					     "that are unreadable by intention can be read."
 					     "<p>This may be useful for cloning CDs with copy "
 					     "protection based on corrupted sectors.") );
-  QWhatsThis::add( m_radioNormalCopy, i18n("<p>This is the normal copy mode recommended for most CD types. "
-					   "It allows copying Audio CDs, multi and single session Data CDs, and "
-					   "Enhanced Audio CDs (an Audio CD containing an additional data session)."
-					   "<p>For VideoCDs please use the CD Cloning mode.") );
-  QWhatsThis::add( m_radioCloneCopy, i18n("<p>In CD Cloning mode K3b performs a raw copy of the CD. That means it does "
-					  "not care about the content but simply copies the CD bit by bit. It may be used "
-					  "to copy VideoCDs or CDs which contain erroneous sectors."
-					  "<p><b>Caution:</b> Only single session CDs can be cloned.") );
-  QWhatsThis::add( m_checkQueryCddb, i18n("<p>If this option is checked K3b will query the Cddb database for audio track titles "
-					  "and add them to the resulting CD copy."
-					  "<p>If K3b finds a Cddb entry it will overwrite any CD-TEXT data found on the source "
-					  "unless <em>Prefer CD-Text</em> is checked.") );
   QWhatsThis::add( m_checkPrefereCdText, i18n("<p>If this option is checked and K3b finds CD-Text on the source media it will be "
 					      "copied to the resulting CD ignoring any potentially existing Cddb entries.") );
   QWhatsThis::add( m_checkIgnoreReadErrors, i18n("<p>If this option is checked and K3b is not able to read a sector from the "
 						 "source CD it will replace it with zeros on the resulting copy.") );
+
+
+  QWhatsThis::add( m_comboCopyMode, 
+		   "<p><b>" + i18n("Normal Copy") + "</b>"
+		   + i18n("<p>This is the normal copy mode recommended for most CD types. "
+			  "It allows copying Audio CDs, multi and single session Data CDs, and "
+			  "Enhanced Audio CDs (an Audio CD containing an additional data session)."
+			  "<p>For VideoCDs please use the CD Cloning mode.")
+		   + "<p><b>" + i18n("Clone Copy") + "</b>"
+		   + i18n("<p>In CD Cloning mode K3b performs a raw copy of the CD. That means it does "
+			  "not care about the content but simply copies the CD bit by bit. It may be used "
+			  "to copy VideoCDs or CDs which contain erroneous sectors."
+			  "<p><b>Caution:</b> Only single session CDs can be cloned.") );
+
 
   slotLoadUserDefaults();
 }
@@ -238,13 +250,13 @@ void K3bCdCopyDialog::slotStartClicked()
 {
   K3bBurnJob* burnJob = 0;
 
-  if( m_radioCloneCopy->isChecked() ) {
+  if( m_comboCopyMode->currentItem() == 1 ) {
 
     //
     // check for m_tempDirSelectionWidget->tempPath() and
     // m_tempDirSelectionWidget-tempPath() + ".toc"
     //
-    if( QFile::exists( m_tempDirSelectionWidget->tempPath() ) ) {
+    if( QFileInfo( m_tempDirSelectionWidget->tempPath() ).isFile() ) {
       if( KMessageBox::warningYesNo( this,
 				     i18n("Do you want to overwrite %1?").arg(m_tempDirSelectionWidget->tempPath()),
 				     i18n("File Exists") )
@@ -252,7 +264,7 @@ void K3bCdCopyDialog::slotStartClicked()
 	return;
     }
     
-    if( QFile::exists( m_tempDirSelectionWidget->tempPath() + ".toc" ) ) {
+    if( QFileInfo( m_tempDirSelectionWidget->tempPath() + ".toc" ).isFile() ) {
       if( KMessageBox::warningYesNo( this,
 				     i18n("Do you want to overwrite %1?").arg(m_tempDirSelectionWidget->tempPath() + ".toc"),
 				     i18n("File Exists") )
@@ -270,7 +282,6 @@ void K3bCdCopyDialog::slotStartClicked()
     job->setOnlyCreateImage( m_checkOnlyCreateImage->isChecked() );
     job->setSimulate( m_checkSimulate->isChecked() );
     job->setWriteSpeed( m_writerSelectionWidget->writerSpeed() );
-    job->setBurnfree( m_checkBurnfree->isChecked() );
     job->setCopies( m_checkSimulate->isChecked() ? 1 : m_spinCopies->value() );
     job->setReadRetries( m_spinRetries->value() );
 
@@ -290,10 +301,8 @@ void K3bCdCopyDialog::slotStartClicked()
     job->setCopies( m_checkSimulate->isChecked() ? 1 : m_spinCopies->value() );
     job->setParanoiaMode( m_comboParanoiaMode->currentText().toInt() );
     job->setReadRetries( m_spinRetries->value() );
-    job->setQueryCddb( m_checkQueryCddb->isChecked() );
     job->setPreferCdText( m_checkPrefereCdText->isChecked() );
     job->setIgnoreReadErrors( m_checkIgnoreReadErrors->isChecked() );
-    job->setBurnfree( m_checkBurnfree->isChecked() );
     job->setWritingMode( m_writingModeWidget->writingMode() );
 
     burnJob = job;
@@ -317,14 +326,6 @@ void K3bCdCopyDialog::slotStartClicked()
 void K3bCdCopyDialog::slotToggleAll()
 {
   K3bCdDevice::CdDevice* dev = m_writerSelectionWidget->writerDevice();
-  if( dev ) {
-    if( dev->burnfree() )
-      m_checkBurnfree->setEnabled( !m_checkOnlyCreateImage->isChecked() );
-    else {
-      m_checkBurnfree->setEnabled( false );
-      m_checkBurnfree->setChecked( false );
-    }
-  }
 
   m_checkSimulate->setEnabled( !m_checkOnlyCreateImage->isChecked() );
   m_checkDeleteImages->setEnabled( !m_checkOnlyCreateImage->isChecked() && !m_checkOnTheFly->isChecked() );
@@ -335,7 +336,7 @@ void K3bCdCopyDialog::slotToggleAll()
   if ( m_checkOnlyCreateImage->isChecked() )
     m_checkDeleteImages->setChecked( false );
 
-   if( m_groupCopyMode->selected() == m_radioCloneCopy ) {
+   if( m_comboCopyMode->currentItem() == 1 ) {
      // cdrecord does not support cloning on-the-fly
      m_checkOnTheFly->setChecked(false);
      m_checkOnTheFly->setEnabled(false);
@@ -349,22 +350,19 @@ void K3bCdCopyDialog::slotToggleAll()
      }
      else
        m_checkOnTheFly->setEnabled( !m_checkOnlyCreateImage->isChecked() );
-     m_checkPrefereCdText->setEnabled( m_checkQueryCddb->isChecked() );
 
      m_writingModeWidget->setSupportedModes( K3b::TAO|K3b::DAO|K3b::RAW );
    }
 
-   m_comboParanoiaMode->setDisabled( m_groupCopyMode->selected() == m_radioCloneCopy );
+   m_comboParanoiaMode->setDisabled( m_comboCopyMode->currentItem() == 1 );
 
    // no CD-TEXT in TAO mode
-   m_checkQueryCddb->setDisabled( m_writingModeWidget->writingMode() == K3b::TAO ||
-				  m_groupCopyMode->selected() == m_radioCloneCopy );
    m_checkPrefereCdText->setDisabled( m_writingModeWidget->writingMode() == K3b::TAO ||
-				      m_groupCopyMode->selected() == m_radioCloneCopy );
+				      m_comboCopyMode->currentItem() == 1 );
 
-   m_checkIgnoreReadErrors->setDisabled( m_groupCopyMode->selected() == m_radioCloneCopy );
+   m_checkIgnoreReadErrors->setDisabled( m_comboCopyMode->currentItem() == 1 );
 
-   m_checkNoCorrection->setEnabled( m_groupCopyMode->selected() == m_radioCloneCopy );
+   m_checkNoCorrection->setEnabled( m_comboCopyMode->currentItem() == 1 );
 
    m_writingModeWidget->setEnabled( !m_checkOnlyCreateImage->isChecked() );
 
@@ -379,7 +377,6 @@ void K3bCdCopyDialog::slotLoadUserDefaults()
 
   m_writingModeWidget->loadConfig( c );
   m_checkSimulate->setChecked( c->readBoolEntry( "simulate", false ) );
-  m_checkBurnfree->setChecked( c->readBoolEntry( "burnfree", true ) );
   m_checkOnTheFly->setChecked( c->readBoolEntry( "on_the_fly", false ) );
   m_checkDeleteImages->setChecked( c->readBoolEntry( "delete_images", true ) );
   m_checkOnlyCreateImage->setChecked( c->readBoolEntry( "only_create_image", false ) );
@@ -392,11 +389,10 @@ void K3bCdCopyDialog::slotLoadUserDefaults()
   m_comboSourceDevice->setSelectedDevice( k3bcore->deviceManager()->findDevice( c->readEntry( "source_device" ) ) );
 
   if( c->readEntry( "copy mode", "normal" ) == "normal" )
-    m_radioNormalCopy->setChecked(true);
+    m_comboCopyMode->setCurrentItem( 0 );
   else
-    m_radioCloneCopy->setChecked(true);
+    m_comboCopyMode->setCurrentItem( 1 );
 
-  m_checkQueryCddb->setChecked( c->readBoolEntry( "query cddb", false ) );
   m_checkPrefereCdText->setChecked( c->readBoolEntry( "prefer cdtext", false ) );
   m_checkIgnoreReadErrors->setChecked( c->readBoolEntry( "ignore read errors", false ) );
   m_checkNoCorrection->setChecked( c->readBoolEntry( "no correction", false ) );
@@ -413,7 +409,6 @@ void K3bCdCopyDialog::slotSaveUserDefaults()
 
   m_writingModeWidget->saveConfig( c );
   c->writeEntry( "simulate", m_checkSimulate->isChecked() );
-  c->writeEntry( "burnfree", m_checkBurnfree->isChecked() );
   c->writeEntry( "on_the_fly", m_checkOnTheFly->isChecked() );
   c->writeEntry( "delete_images", m_checkDeleteImages->isChecked() );
   c->writeEntry( "only_create_image", m_checkOnlyCreateImage->isChecked() );
@@ -424,14 +419,13 @@ void K3bCdCopyDialog::slotSaveUserDefaults()
 
   c->writeEntry( "source_device", m_comboSourceDevice->selectedDevice()->devicename() );
 
-  c->writeEntry( "query cddb", m_checkQueryCddb->isChecked() );
   c->writeEntry( "prefer cdtext", m_checkPrefereCdText->isChecked() );
   c->writeEntry( "ignore read errors", m_checkIgnoreReadErrors->isChecked() );
   c->writeEntry( "no correction", m_checkNoCorrection->isChecked() );
   c->writeEntry( "retries", m_spinRetries->value() );
 
   QString s;
-  if( m_radioCloneCopy->isChecked() )
+  if( m_comboCopyMode->currentItem() == 1 )
     s = "clone";
   else
     s = "normal";
@@ -443,17 +437,15 @@ void K3bCdCopyDialog::slotLoadK3bDefaults()
   m_writingModeWidget->setWritingMode( K3b::WRITING_MODE_AUTO );
   m_writerSelectionWidget->loadDefaults();
   m_checkSimulate->setChecked( false );
-  m_checkBurnfree->setChecked(true);
   m_checkOnTheFly->setChecked( false );
   m_checkDeleteImages->setChecked( true );
   m_checkOnlyCreateImage->setChecked( false );
   m_comboParanoiaMode->setCurrentItem(0);
   m_spinCopies->setValue(1);
-  m_checkQueryCddb->setChecked(false);
   m_checkPrefereCdText->setChecked(false);
   m_checkIgnoreReadErrors->setChecked(false);
   m_checkNoCorrection->setChecked(false);
-  m_radioNormalCopy->setChecked(true);
+  m_comboCopyMode->setCurrentItem( 0 ); // normal
   m_spinRetries->setValue(128);
 
   slotToggleAll();

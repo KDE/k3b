@@ -33,7 +33,6 @@ class QSpinBox;
 class QComboBox;
 class K3bWritingModeWidget;
 class QButtonGroup;
-class QRadioButton;
 
 
 /**
@@ -62,11 +61,9 @@ class K3bCdCopyDialog : public K3bInteractionDialog
   K3bWriterSelectionWidget* m_writerSelectionWidget;
   K3bTempDirSelectionWidget* m_tempDirSelectionWidget;
   QCheckBox* m_checkSimulate;
-  QCheckBox* m_checkBurnfree;
   QCheckBox* m_checkOnTheFly;
   QCheckBox* m_checkDeleteImages;
   QCheckBox* m_checkOnlyCreateImage;
-  QCheckBox* m_checkQueryCddb;
   QCheckBox* m_checkPrefereCdText;
   QCheckBox* m_checkIgnoreReadErrors;
   QCheckBox* m_checkNoCorrection;
@@ -75,9 +72,7 @@ class K3bCdCopyDialog : public K3bInteractionDialog
   QSpinBox* m_spinCopies;
   QSpinBox* m_spinRetries;
   K3bWritingModeWidget* m_writingModeWidget;
-  QButtonGroup* m_groupCopyMode;
-  QRadioButton* m_radioNormalCopy;
-  QRadioButton* m_radioCloneCopy;
+  QComboBox* m_comboCopyMode;
 };
 
 #endif

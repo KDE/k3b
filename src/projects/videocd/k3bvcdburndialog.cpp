@@ -597,7 +597,6 @@ void K3bVcdBurnDialog::slotLoadK3bDefaults()
 
     m_writingModeWidget->setWritingMode( K3b::WRITING_MODE_AUTO );
     m_checkSimulate->setChecked( false );
-    m_checkBurnproof->setChecked( true );
     m_checkRemoveBufferFiles->setChecked( true );
     m_checkOnlyCreateImage->setChecked( false );
 
@@ -663,7 +662,6 @@ void K3bVcdBurnDialog::saveSettings()
     doc() ->setTempDir( m_tempDirSelectionWidget->tempPath() );
     doc() ->setDummy( m_checkSimulate->isChecked() );
     doc() ->setOnTheFly( false );
-    doc() ->setBurnproof( m_checkBurnproof->isChecked() );
 
     // -- saving current speed --------------------------------------
     doc() ->setSpeed( m_writerSelectionWidget->writerSpeed() );
@@ -718,7 +716,6 @@ void K3bVcdBurnDialog::readSettings()
 {
     m_checkSimulate->setChecked( doc() ->dummy() );
     m_checkRemoveBufferFiles->setChecked( vcdDoc() ->removeImages() );
-    m_checkBurnproof->setChecked( doc() ->burnproof() );
     m_checkOnlyCreateImage->setChecked( vcdDoc() ->onlyCreateImages() );
 
     m_checkNonCompliant->setEnabled( false );

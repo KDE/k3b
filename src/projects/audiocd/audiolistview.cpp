@@ -21,7 +21,7 @@
 #include "k3baudiodoc.h"
 
 #include <k3bview.h>
-#include <k3bvalidators.h>
+#include <k3bcdtextvalidator.h>
 
 #include <qheader.h>
 #include <qtimer.h>
@@ -58,7 +58,7 @@ K3bAudioListView::K3bAudioListView( K3bView* view, K3bAudioDoc* doc, QWidget *pa
 
   setSorting( 0 );
 
-  setValidator( K3bValidators::cdTextValidator( this ) );
+  setValidator( new K3bCdTextValidator( this ) );
 
   setupActions();
   setupPopupMenu();

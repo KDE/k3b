@@ -48,6 +48,8 @@ Q_OBJECT
  private:
   void setupGui();
 
+  QCheckBox*    m_checkBurnfree;
+
   QCheckBox*    m_checkListHiddenFiles;
   QCheckBox*    m_checkListSystemFiles;
 

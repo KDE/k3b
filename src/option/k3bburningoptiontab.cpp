@@ -16,6 +16,7 @@
 #include "k3bburningoptiontab.h"
 #include <k3bmsfedit.h>
 #include <k3bcore.h>
+#include <k3bstdguiitems.h>
 
 #include <qlabel.h>
 #include <qcombobox.h>
@@ -61,25 +62,25 @@ void K3bBurningOptionTab::setupGui()
   // //////////////////////////////////////////////////////////////////////
   QWidget* projectTab = new QWidget( mainTabbed );
 
+  // general settings group
+  // -----------------------------------------------------------------------
+  QGroupBox* groupGeneral = new QGroupBox( 1, Qt::Vertical, i18n("General"), projectTab );
+  groupGeneral->setInsideSpacing( KDialog::spacingHint() );
+  groupGeneral->setInsideMargin( KDialog::marginHint() );
+
+  m_checkBurnfree = K3bStdGuiItems::burnproofCheckbox( groupGeneral );
+  // -----------------------------------------------------------------------
+
+
   // audio settings group
   // -----------------------------------------------------------------------
-  QGroupBox* m_groupAudio = new QGroupBox( projectTab, "m_groupAudio" );
-  m_groupAudio->setTitle( i18n( "Audio Project" ) );
-  m_groupAudio->setColumnLayout(0, Qt::Vertical );
-  m_groupAudio->layout()->setSpacing( 0 );
-  m_groupAudio->layout()->setMargin( 0 );
-  QGridLayout* groupAudioLayout = new QGridLayout( m_groupAudio->layout() );
-  groupAudioLayout->setAlignment( Qt::AlignTop );
-  groupAudioLayout->setSpacing( KDialog::spacingHint() );
-  groupAudioLayout->setMargin( KDialog::marginHint() );
-
-  m_editDefaultPregap = new K3bMsfEdit( m_groupAudio );
+  QGroupBox* m_groupAudio = new QGroupBox( 2, Qt::Horizontal, i18n( "Audio Project" ), projectTab, "m_groupAudio" );
+  m_groupAudio->setInsideSpacing( KDialog::spacingHint() );
+  m_groupAudio->setInsideMargin( KDialog::marginHint() );
 
   QLabel* labelDefaultPregap = new QLabel( i18n("&Default pregap:"), m_groupAudio );
+  m_editDefaultPregap = new K3bMsfEdit( m_groupAudio );
   labelDefaultPregap->setBuddy( m_editDefaultPregap );
-
-  groupAudioLayout->addWidget( labelDefaultPregap, 0, 0 );
-  groupAudioLayout->addWidget( m_editDefaultPregap, 0, 1 );
   // -----------------------------------------------------------------------
 
 
@@ -149,10 +150,11 @@ void K3bBurningOptionTab::setupGui()
   projectGrid->setSpacing( KDialog::spacingHint() );
   projectGrid->setMargin( KDialog::marginHint() );
 
-  projectGrid->addWidget( m_groupAudio, 0, 0 );
-  projectGrid->addWidget( m_groupData, 1, 0 );
-  projectGrid->addWidget( groupVideo, 2, 0 );
-  projectGrid->setRowStretch( 3, 1 );
+  projectGrid->addWidget( groupGeneral, 0, 0 );
+  projectGrid->addWidget( m_groupAudio, 1, 0 );
+  projectGrid->addWidget( m_groupData, 2, 0 );
+  projectGrid->addWidget( groupVideo, 3, 0 );
+  projectGrid->setRowStretch( 4, 1 );
 
   // ///////////////////////////////////////////////////////////////////////
 
@@ -217,7 +219,7 @@ void K3bBurningOptionTab::setupGui()
 
   // put all in the main tabbed
   // -----------------------------------------------------------------------
-  mainTabbed->addTab( projectTab, i18n("&Projects") );
+  mainTabbed->addTab( projectTab, i18n("&Writing") );
   mainTabbed->addTab( advancedTab, i18n("&Advanced") );
 
   QToolTip::add( m_checkListHiddenFiles, i18n("Add hidden files in subdirectories") );
@@ -259,6 +261,9 @@ void K3bBurningOptionTab::readSettings()
 {
   KConfig* c = k3bcore->config();
 
+  c->setGroup("General Options");
+  m_checkBurnfree->setChecked( c->readBoolEntry( "burnfree", true ) );
+
   c->setGroup( "Video project settings" );
   m_checkUsePbc->setChecked( c->readBoolEntry("Use Playback Control", false) );
   m_spinWaitTime->setValue( c->readNumEntry( "Time to wait after each Sequence/Segment", 2 ) );
@@ -289,6 +294,9 @@ void K3bBurningOptionTab::readSettings()
 void K3bBurningOptionTab::saveSettings()
 {
   KConfig* c = k3bcore->config();
+
+  c->setGroup("General Options");
+  c->writeEntry( "burnfree", m_checkBurnfree->isChecked() );
 
   c->setGroup( "Video project settings" );
   c->writeEntry( "Use Playback Control", m_checkUsePbc->isChecked() );

@@ -89,6 +89,10 @@ void K3bGrowisofsImager::start()
   d->lastProcessedSize = d->lastPercent = 0;
 
   m_process = new K3bProcess();
+  m_process->setRunPrivileged(true);
+  m_process->setPriority( KProcess::PrioHighest );
+  m_process->setSuppressEmptyLines(true);
+
   m_growisofsBin = k3bcore->externalBinManager()->binObject( "growisofs" );
   m_mkisofsBin = k3bcore->externalBinManager()->binObject( "mkisofs" );
   if( !m_growisofsBin ) {
@@ -176,7 +180,9 @@ void K3bGrowisofsImager::start()
     }
     
     if( speed != 0 )
-      *m_process << QString("-speed=%1").arg( (double)speed/1385.0, 0, 'g', 1 );
+      *m_process << QString("-speed=%1").arg( speed%1385 > 0
+					      ? QString::number( (float)speed/1385.0, 'f', 1 )  // example: DVD+R(W): 2.4x
+					      : QString::number( speed/1385 ) );
   }
 
   if( k3bcore->config()->readBoolEntry( "Allow overburning", false ) )

@@ -50,12 +50,6 @@ namespace K3bValidators
   QString fixup( const QString&, const QRegExp&, const QChar& replaceChar = '_' );
 
   /**
-   * FIXME: for now this only forbids " and /.
-   * What is the CDText charset?
-   */
-  QRegExp cdTextCharSet();
-
-  /**
    * Validates an ISRC code of the form "CCOOOYYSSSSS" where:
    * <ul>
    * <li>C: country code (upper case letters or digits)</li>
@@ -66,11 +60,6 @@ namespace K3bValidators
    */
   K3bValidator* isrcValidator( QObject* parent = 0, const char* name = 0 );
   
-  /**
-   * Creates a validator with cdTextCharSet()
-   */
-  K3bValidator* cdTextValidator( QObject* parent = 0, const char* name = 0 );
-
   /**
    * This needs to be replaced by something better in the future...
    * Even the name sucks!

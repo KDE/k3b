@@ -81,7 +81,7 @@ K3bDataDirTreeView::K3bDataDirTreeView( K3bView* view, K3bDataDoc* doc, QWidget*
   connect( this, SIGNAL(clicked(QListViewItem*)), this, SLOT(slotExecuted(QListViewItem*)) );
   connect( this, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(slotExecuted(QListViewItem*)) );
   connect( m_doc, SIGNAL(itemRemoved(K3bDataItem*)), this, SLOT(slotDataItemRemoved(K3bDataItem*)) );
-  connect( m_doc, SIGNAL(newFileItems()), this, SLOT(updateContents()) );
+  connect( m_doc, SIGNAL(newFileItems()), this, SLOT(checkForNewItems()) );
   connect( this, SIGNAL(contextMenu(KListView*,QListViewItem*, const QPoint&)),
 	   this, SLOT(showPopupMenu(KListView*,QListViewItem*, const QPoint&)) );
   connect( this, SIGNAL(dropped(QDropEvent*, QListViewItem*, QListViewItem*)),
@@ -160,7 +160,7 @@ void K3bDataDirTreeView::slotDropped( QDropEvent* e, QListViewItem*, QListViewIt
 }
 
 
-void K3bDataDirTreeView::updateContents()
+void K3bDataDirTreeView::checkForNewItems()
 {
   // check for removed items
   K3bDataItem* item;

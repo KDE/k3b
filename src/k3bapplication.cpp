@@ -159,7 +159,7 @@ void K3bApplication::init()
     needToVerify = !wlist.isEmpty();
   }
 
-  if( needToVerify ) {
+  if( needToVerify && !wlist.isEmpty() ) {
     K3bWriterSpeedVerificationDialog::verify( wlist, m_mainWindow );
   }
 

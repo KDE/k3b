@@ -55,6 +55,8 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   void setCueFile( const QString& s);
   void setClone( bool b );
 
+  void setRawCdText( const QByteArray& a ) { m_rawCdText = a; }
+
   /**
    * If set true the job ignores the global K3b setting
    * and does not eject the CD-RW after finishing
@@ -104,6 +106,8 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   int m_cdrecordError;
 
   bool m_forceNoEject;
+
+  QByteArray m_rawCdText;
 
   class Private;
   Private* d;

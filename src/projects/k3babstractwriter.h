@@ -34,7 +34,6 @@ class K3bAbstractWriter : public K3bJob
 
   K3bCdDevice::CdDevice* burnDevice() const;
   int burnSpeed() const { return m_burnSpeed; }
-  bool burnproof() const { return m_burnproof; }
   bool simulate() const { return m_simulate; }
 
   /**
@@ -56,12 +55,12 @@ class K3bAbstractWriter : public K3bJob
 
   void setBurnDevice( K3bCdDevice::CdDevice* dev ) { m_burnDevice = dev; }
   void setBurnSpeed( int s ) { m_burnSpeed = s; }
-  void setBurnproof( bool b ) { m_burnproof = b; }
   void setSimulate( bool b ) { m_simulate = b; }
 
  signals:
   void burnDeviceBuffer( int );
   void buffer( int );
+  void deviceBuffer( int );
   void writeSpeed( int, int );
 
  protected:
@@ -74,7 +73,6 @@ class K3bAbstractWriter : public K3bJob
  private:
   K3bCdDevice::CdDevice* m_burnDevice;
   int m_burnSpeed;
-  bool m_burnproof;
   bool m_simulate;
 };
 

@@ -56,15 +56,13 @@ K3bIsoImager::K3bIsoImager( K3bDataDoc* doc, QObject* parent, const char* name )
     m_jolietHideFile(0),
     m_sortWeightFile(0),
     m_process( 0 ),
-    m_processSuspended(false),
     m_processExited(false),
     m_doc( doc ),
     m_noDeepDirectoryRelocation( false ),
     m_importSession( false ),
     m_device(0),
     m_mkisofsPrintSizeResult( 0 ),
-    m_fdToWriteTo(-1),
-    m_dvdVideo(false)
+    m_fdToWriteTo(-1)
 {
   d = new Private;
 }
@@ -102,10 +100,6 @@ void K3bIsoImager::slotReceivedStderr( const QString& line )
     emit debuggingOutput( "mkisofs", line );
 
     if( line.contains( "done, estimate" ) ) {
-
-      if( m_device )
-	m_device->close();  // release the device for cdrecord
-
       int p = parseProgress( line );
       if( p != -1 )
 	emit percent( p );
@@ -153,52 +147,49 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
   if( d->imageFile.isOpen() )
     d->imageFile.close();
 
-  if( m_device )
-    m_device->close();
+  if( !m_canceled ) {
 
-  if( m_canceled )
-    return;
-
-  if( p->normalExit() ) {
-    if( p->exitStatus() == 0 ) {
-      emit finished( true );
-    }
-    else  {
-      switch( p->exitStatus() ) {
-      case 104:
-	// connection reset by peer
-	// This only happens if cdrecord does not finish successfully
-	// so we may leave the error handling to it meaning we handle this
-	// as a known error
-	break;
-
-      case 2:
-	// mkisofs seems to have a bug that prevents to use filenames
-	// that contain one or more backslashes
-	// mkisofs 1.14 has the bug, 1.15a40 not
-	// TODO: find out the version that fixed the bug
-	if( m_containsFilesWithMultibleBackslashes &&
-	    k3bcore->externalBinManager()->binObject( "mkisofs" )->version < K3bVersion( 1, 15, -1, "a40" ) ) {
-	  emit infoMessage( i18n("Due to a bug in mkisofs <= 1.15a40, K3b is unable to handle "
-				 "filenames that contain more than one backslash:"), ERROR );
-
-	  break;
-	}
-	// otherwise just fall through
-
-      default:
-	emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg("mkisofs").arg(p->exitStatus()),
-			  K3bJob::ERROR );
-	emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
-	emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
+    if( p->normalExit() ) {
+      if( p->exitStatus() == 0 ) {
+	emit finished( true );
       }
+      else  {
+	switch( p->exitStatus() ) {
+	case 104:
+	  // connection reset by peer
+	  // This only happens if cdrecord does not finish successfully
+	  // so we may leave the error handling to it meaning we handle this
+	  // as a known error
+	  break;
 
+	case 2:
+	  // mkisofs seems to have a bug that prevents to use filenames
+	  // that contain one or more backslashes
+	  // mkisofs 1.14 has the bug, 1.15a40 not
+	  // TODO: find out the version that fixed the bug
+	  if( m_containsFilesWithMultibleBackslashes &&
+	      k3bcore->externalBinManager()->binObject( "mkisofs" )->version < K3bVersion( 1, 15, -1, "a40" ) ) {
+	    emit infoMessage( i18n("Due to a bug in mkisofs <= 1.15a40, K3b is unable to handle "
+				   "filenames that contain more than one backslash:"), ERROR );
+
+	    break;
+	  }
+	  // otherwise just fall through
+
+	default:
+	  emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg("mkisofs").arg(p->exitStatus()),
+			    K3bJob::ERROR );
+	  emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
+	  emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
+	}
+
+	emit finished( false );
+      }
+    }
+    else {
+      emit infoMessage( i18n("%1 did not exit cleanly.").arg("mkisofs"), ERROR );
       emit finished( false );
     }
-  }
-  else {
-    emit infoMessage( i18n("%1 did not exit cleanly.").arg("mkisofs"), ERROR );
-    emit finished( false );
   }
 
   cleanup();
@@ -358,7 +349,6 @@ void K3bIsoImager::init()
   m_containsFilesWithMultibleBackslashes = false;
   m_firstProgressValue = -1;
   m_processExited = false;
-  m_processSuspended = false;
   m_canceled = false;
 }
 
@@ -371,6 +361,8 @@ void K3bIsoImager::start()
   init();
 
   m_process = new K3bProcess();
+  m_process->setRunPrivileged(true);
+
   const K3bExternalBin* mkisofsBin = k3bcore->externalBinManager()->binObject( "mkisofs" );
   if( !mkisofsBin ) {
     kdDebug() << "(K3bIsoImager) could not find mkisofs executable" << endl;
@@ -451,8 +443,6 @@ void K3bIsoImager::cancel()
     if( !m_processExited ) {
       disconnect(m_process);
       m_process->kill();
-      if( m_device )
-	m_device->close();
     }
 
   if( !m_processExited ) {
@@ -474,34 +464,8 @@ bool K3bIsoImager::addMkisofsParameters()
   // add multisession info
   if( !m_multiSessionInfo.isEmpty() ) {
     *m_process << "-C" << m_multiSessionInfo;
-    if( m_device ) {
-
-      //
-      // To make sure that mkisofs does not need root permissions we open the device
-      // and pass the open device to mkisofs
-      //
-
-      int fd = m_device->open();
-      if( fd == -1 ) {
-	emit infoMessage( i18n("Unable to open device %1.").arg(m_device->blockDeviceName()), ERROR );
-	return false;
-      }
-
-      //
-      // we want mkisofs to read from fd
-      // we could do that by just passing /dev/fd/$(fd)
-      // but Andy told me that on FreeBSD we only have /dev/fd/0, 1, and 2
-      // so if K3b will ever run well on FreeBSD we are ready...
-      //
-      m_process->readFromFd( fd ); // make mkisofs's stdin a copy of fd
-
-      // PROBLEM: when writing on the fly cdrecord waits for mkisofs to release the device
-      //          Since we open and not close the device here it seems to happen sometimes
-      //          that cdrecord is not able to open the device at all. So we need to close it
-      //          somewhere...
-
-      *m_process << "-M" << QString("/dev/fd/0");
-    }
+    if( m_device )
+      *m_process << "-M" << m_device->blockDeviceName();
   }
 
   // add the arguments
@@ -564,9 +528,6 @@ bool K3bIsoImager::addMkisofsParameters()
 
   if( m_doc->isoOptions().createUdf() )
     *m_process << "-udf";
-
-  if( m_dvdVideo )
-    *m_process << "-dvd-video";
 
   if( m_doc->isoOptions().ISOuntranslatedFilenames()  ) {
     *m_process << "-U";
@@ -706,49 +667,57 @@ int K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream 
 	// that contain one or more backslashes
 	if( item->writtenPath().contains("\\") )
 	  m_containsFilesWithMultibleBackslashes = true;
-	
-	stream << escapeGraftPoint( item->writtenPath() )
-	       << "=";
 
-	if( m_doc->bootImages().containsRef( dynamic_cast<K3bBootItem*>(item) ) ) { // boot-image-backup-hack
+
+	if( item->isDir() ) {
+	  stream << escapeGraftPoint( item->writtenPath() )
+		 << "="
+		 << dummyDir( item->sortWeight() ) << endl;
 	  
-	  // create temp file
-	  KTempFile temp;
-	  QString tempPath = temp.name();
-	  temp.unlink();
-	  
-	  if( !KIO::NetAccess::copy( item->localPath(), tempPath ) ) {
-	    emit infoMessage( i18n("Could not write to temporary file %1").arg(tempPath), ERROR );
+	  int x = writePathSpecForDir( dynamic_cast<K3bDirItem*>(item), stream );
+	  if( x >= 0 )
+	    num += x;
+	  else
 	    return -1;
-	  }
-	  
-	  static_cast<K3bBootItem*>(item)->setTempPath( tempPath );
-
-	  m_tempFiles.append(tempPath);
-	  stream << escapeGraftPoint( tempPath ) << endl;
 	}
-	else if( item->isDir() )
-	  stream << dummyDir( item->sortWeight() ) << endl;
-	else
-	  stream << escapeGraftPoint( item->localPath() ) << endl;
+	else {
+	  writePathSpecForFile( static_cast<K3bFileItem*>(item), stream );
+	}
       }
       else
 	emit infoMessage( i18n("Could not find %1. Skipping...").arg(item->localPath()), WARNING );
-    }
-
-    // recursively write graft points for all subdirs
-    if( item->isDir() ) {
-      int x = writePathSpecForDir( dynamic_cast<K3bDirItem*>(item), stream );
-      if( x >= 0 )
-	num += x;
-      else
-	return -1;
     }
   }
 
   return num;
 }
 
+
+void K3bIsoImager::writePathSpecForFile( K3bFileItem* item, QTextStream& stream )
+{
+  stream << escapeGraftPoint( item->writtenPath() )
+	 << "=";
+  
+  if( m_doc->bootImages().containsRef( dynamic_cast<K3bBootItem*>(item) ) ) { // boot-image-backup-hack
+    
+    // create temp file
+    KTempFile temp;
+    QString tempPath = temp.name();
+    temp.unlink();
+    
+    if( !KIO::NetAccess::copy( item->localPath(), tempPath ) ) {
+      emit infoMessage( i18n("Could not write to temporary file %1").arg(tempPath), ERROR );
+      return -1;
+    }
+    
+    static_cast<K3bBootItem*>(item)->setTempPath( tempPath );
+    
+    m_tempFiles.append(tempPath);
+    stream << escapeGraftPoint( tempPath ) << endl;
+  }
+  else
+    stream << escapeGraftPoint( item->localPath() ) << endl;
+}
 
 
 bool K3bIsoImager::writeRRHideFile()

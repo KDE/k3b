@@ -218,7 +218,6 @@ void K3bCdImageWritingDialog::setupGui()
   optionGroup->setInsideMargin( marginHint() );
   optionGroup->setInsideSpacing( spacingHint() );
   m_checkDummy = K3bStdGuiItems::simulateCheckbox( optionGroup );
-  m_checkBurnProof = K3bStdGuiItems::burnproofCheckbox( optionGroup );
   m_checkVerify = K3bStdGuiItems::verifyCheckBox( optionGroup );
 
   optionTabLayout->addMultiCellWidget( m_writerSelectionWidget, 0, 0, 0, 1 );
@@ -292,7 +291,6 @@ void K3bCdImageWritingDialog::slotStartClicked()
       _job->setImagePath( d->imageFile );
       _job->setSimulate( m_checkDummy->isChecked() );
       _job->setWriteSpeed( m_writerSelectionWidget->writerSpeed() );
-      _job->setBurnfree( m_checkBurnProof->isChecked() );
       _job->setCopies( m_checkDummy->isChecked() ? 1 : m_spinCopies->value() );
       _job->setOnlyBurnExistingImage( true );
       
@@ -311,7 +309,6 @@ void K3bCdImageWritingDialog::slotStartClicked()
       job_->setTocFile( d->tocFile );
       job_->setSimulate(m_checkDummy->isChecked());
       job_->setMulti(m_checkNoFix->isChecked());
-      job_->setBurnproof(m_checkBurnProof->isChecked());
       job_->setCopies( m_checkDummy->isChecked() ? 1 : m_spinCopies->value() );
       
       job = job_;
@@ -327,7 +324,6 @@ void K3bCdImageWritingDialog::slotStartClicked()
       job_->setSimulate( m_checkDummy->isChecked() );
       job_->setWritingMode( m_writingModeWidget->writingMode() );
       job_->setVerifyData( m_checkVerify->isChecked() );
-      job_->setBurnproof( m_checkBurnProof->isChecked() );
       job_->setNoFix( m_checkNoFix->isChecked() );
       job_->setDataMode( m_dataModeWidget->dataMode() );
       job_->setImagePath( d->imageFile );
@@ -603,14 +599,6 @@ void K3bCdImageWritingDialog::slotToggleAll()
     m_buttonStart->setEnabled( currentImageType() != IMAGE_UNKNOWN 
 			       && QFile::exists( m_editImagePath->url() ) );
 
-    if( !m_writerSelectionWidget->writerDevice()->burnproof() ) {
-      m_checkBurnProof->setChecked( false );
-      m_checkBurnProof->setDisabled( true );
-    }
-    else {
-      m_checkBurnProof->setEnabled( true );
-    }
-
     // cdrecord clone and cue both need DAO
     if( m_writerSelectionWidget->writingApp() != K3b::CDRDAO 
 	&& currentImageType() == IMAGE_ISO )
@@ -731,7 +719,6 @@ void K3bCdImageWritingDialog::slotLoadUserDefaults()
 
   m_writingModeWidget->loadConfig( c );
   m_checkDummy->setChecked( c->readBoolEntry("simulate", false ) );
-  m_checkBurnProof->setChecked( c->readBoolEntry("burnproof", true ) );
   m_checkNoFix->setChecked( c->readBoolEntry("multisession", false ) );
   m_dataModeWidget->loadConfig(c);
  
@@ -765,7 +752,6 @@ void K3bCdImageWritingDialog::slotSaveUserDefaults()
 
   m_writingModeWidget->saveConfig( c ),
   c->writeEntry( "simulate", m_checkDummy->isChecked() );
-  c->writeEntry( "burnproof", m_checkBurnProof->isChecked() );
   c->writeEntry( "multisession", m_checkNoFix->isChecked() );
   m_dataModeWidget->saveConfig(c);
   
@@ -803,7 +789,6 @@ void K3bCdImageWritingDialog::slotLoadK3bDefaults()
   m_writingModeWidget->setWritingMode( K3b::WRITING_MODE_AUTO );
   m_checkDummy->setChecked( false );
   m_checkVerify->setChecked( false );
-  m_checkBurnProof->setChecked( true );
   m_checkNoFix->setChecked( false );
   m_dataModeWidget->setDataMode( K3b::DATA_MODE_AUTO );
   m_comboImageType->setCurrentItem(0);

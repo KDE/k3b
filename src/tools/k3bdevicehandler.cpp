@@ -18,6 +18,8 @@
 #include <k3bprogressinfoevent.h>
 #include <k3bthread.h>
 #include <k3bdevice.h>
+#include <k3bcdtext.h>
+
 
 // TODO : allow a bitwise or of the command types
 
@@ -68,12 +70,13 @@ public:
 	  unsigned char* data = 0;
 	  int dataLen = 0;
 	  if( dev->readTocPmaAtip( &data, dataLen, 5, false, 0 ) ) {
-	    // we need more than the header to have valid CD-TEXT
-	    if( dataLen > 4 ) {
+	    // we need more than the header and a multible of 18 bytes to have valid CD-TEXT
+	    if( dataLen > 4 && dataLen%sizeof(cdtext_pack) == 4 ) {
 	      cdTextRaw.assign( reinterpret_cast<char*>(data), dataLen );
 	      success = true;
 	    }
 	    else {
+	      kdDebug() << "(K3bCdDevice::DeviceHandler) invalid CD-TEXT length: " << dataLen << endl;
 	      delete [] data;
 	      success = false;
 	    }

@@ -19,6 +19,8 @@
 
 #include <kdialog.h>
 
+#include <k3bjobhandler.h>
+
 #include <qdatetime.h>
 
 class QVBoxLayout;
@@ -42,7 +44,7 @@ class K3bJobProgressSystemTray;
 
 
 
-class K3bJobProgressDialog : public KDialog
+class K3bJobProgressDialog : public KDialog, public K3bJobHandler
 {
   Q_OBJECT
 
@@ -76,6 +78,20 @@ class K3bJobProgressDialog : public KDialog
 
   QSize sizeHint() const;
 
+  /**
+   * @reimplemented from K3bJobHandler
+   */
+  int waitForMedia( K3bCdDevice::CdDevice*,
+		    int mediaState = K3bCdDevice::STATE_EMPTY,
+		    int mediaType = K3bCdDevice::MEDIA_WRITABLE_CD,
+		    const QString& message = QString::null );
+  
+  /**
+   * @reimplemented from K3bJobHandler
+   */
+  bool questionYesNo( const QString& text,
+		      const QString& caption = QString::null );
+  
  protected slots:
   virtual void slotProcessedSize( int processed, int size );
   virtual void slotProcessedSubSize( int processed, int size );

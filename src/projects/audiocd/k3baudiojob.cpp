@@ -23,6 +23,7 @@
 #include "k3baudiojobtempdata.h"
 #include <k3bdevicemanager.h>
 #include <k3bdevice.h>
+#include <k3bcdtext.h>
 #include <k3bmsf.h>
 #include <k3bwavefilewriter.h>
 #include <k3bglobals.h>
@@ -85,6 +86,13 @@ void K3bAudioJob::start()
 {
   emit started();
 
+//       K3bCdDevice::AlbumCdText td = m_doc->cdTextData();
+//       for( QPtrListIterator<K3bAudioTrack> it( *m_doc->tracks() ); it.current(); ++it )
+// 	td.addTrackCdText( (*it)->cdText() );
+//       K3bCdDevice::AlbumCdText(td.rawPackData()).debug();
+//       emit finished(true);
+//       return;
+
   m_written = true;
   m_canceled = false;
   m_errorOccuredAndAlreadyReported = false;
@@ -118,16 +126,8 @@ void K3bAudioJob::start()
 	// there are none-DAO writers that are supported by cdrdao
 	if( !writer()->dao() ||
 	    ( !cdrecordOnTheFly && m_doc->onTheFly() ) ||
-	    ( m_doc->cdText() &&
-	      // the inf-files we use do only support artist and title in the global section
-	      ( !m_doc->arranger().isEmpty() ||
-		!m_doc->songwriter().isEmpty() ||
-		!m_doc->composer().isEmpty() ||
-		!m_doc->cdTextMessage().isEmpty() ||
-		!cdrecordCdText )
-	      ) ||
-	    m_doc->hideFirstTrack()
-	    )
+	    ( m_doc->cdText() && !cdrecordCdText ) ||
+	    m_doc->hideFirstTrack() )
 	  m_usedWritingApp = K3b::CDRDAO;
 	else
 	  m_usedWritingApp = K3b::CDRECORD;
@@ -154,16 +154,6 @@ void K3bAudioJob::start()
       }
       else if( m_usedWritingMode == K3b::TAO ) {
 	emit infoMessage( i18n("It is not possible to write CD-Text in TAO mode. Try DAO or RAW."), WARNING );
-      }
-      else {
-	if( !m_doc->arranger().isEmpty() )
-	  emit infoMessage( i18n("K3b does not support Album arranger CD-Text with cdrecord."), ERROR );
-	if( !m_doc->songwriter().isEmpty() )
-	  emit infoMessage( i18n("K3b does not support Album songwriter CD-Text with cdrecord."), ERROR );
-	if( !m_doc->composer().isEmpty() )
-	  emit infoMessage( i18n("K3b does not support Album composer CD-Text with cdrecord."), ERROR );
-	if( !m_doc->cdTextMessage().isEmpty() )
-	  emit infoMessage( i18n("K3b does not support Album comment CD-Text with cdrecord."), ERROR );
       }
     }
   }
@@ -322,17 +312,23 @@ bool K3bAudioJob::prepareWriter()
 
     writer->setWritingMode( m_usedWritingMode );
     writer->setSimulate( m_doc->dummy() );
-    writer->setBurnproof( m_doc->burnproof() );
     writer->setBurnSpeed( m_doc->speed() );
 
     writer->addArgument( "-useinfo" );
 
-    if( m_doc->cdText() )
-      writer->addArgument( "-text" );
+    if( m_doc->cdText() ) {
+      K3bCdDevice::AlbumCdText td = m_doc->cdTextData();
+      for( QPtrListIterator<K3bAudioTrack> it( *m_doc->tracks() ); it.current(); ++it )
+	td.addTrackCdText( (*it)->cdText() );
+      writer->setRawCdText( td.rawPackData() );
+    }
 
     // we always pad because although K3b makes sure all tracks' lenght are multible of 2352
-    // it seems that normalize sometimes corrupts these lenght
+    // it seems that normalize sometimes corrupts these lengths
     writer->addArgument( "-pad" );
+
+    // Allow tracks shorter than 4 seconds
+    writer->addArgument( "-shorttrack" );
 
     // add all the audio tracks
     writer->addArgument( "-audio" );
@@ -481,7 +477,7 @@ void K3bAudioJob::cleanupAfterError()
 
 void K3bAudioJob::removeBufferFiles()
 {
-  emit infoMessage( i18n("Removing buffer files."), INFO );
+  emit infoMessage( i18n("Removing temporary files."), INFO );
 
   m_tempData->cleanup();
 }

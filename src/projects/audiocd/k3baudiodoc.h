@@ -84,6 +84,8 @@ class K3bAudioDoc : public K3bDoc
   const QString& upc_ean() const { return m_cdTextData.upcEan(); }
   const QString& cdTextMessage() const { return m_cdTextData.message(); }
 
+  const K3bCdDevice::AlbumCdText& cdTextData() const { return m_cdTextData; }
+
   int numOfTracks() const;
 
   K3bBurnJob* newBurnJob();
