@@ -24,4 +24,4 @@ libk3bplugin_la_SOURCES = 	k3bplugin.cpp \
 				k3baudiodecoder.cpp \
 				k3baudioencoder.cpp
 
-include_HEADERS = k3bplugin.h k3bpluginfactory.h k3bpluginmanager.h k3baudiodecoder.h k3baudioencoder.h
+include_HEADERS = k3bplugin.h k3bpluginfactory.h k3bpluginmanager.h k3baudiodecoder.h k3baudioencoder.h k3bpluginconfigwidget.h
