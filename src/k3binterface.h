@@ -51,6 +51,13 @@ class K3bInterface : public DCOPObject
 
   QValueList<DCOPRef> projects();
 
+  void copyCd();
+  void copyDvd();
+  void eraseCdrw();
+  void formatDvd();
+  void burnCdImage( const KURL& url );
+  void burnDvdImage( const KURL& url );
+  
   /**
    * Add URLs to the current active project.
    * If no project is open a new Audio or Data CD
@@ -59,6 +66,11 @@ class K3bInterface : public DCOPObject
    */
   void addUrls( const KURL::List& urls );
   void addUrl( const KURL& url );
+
+  /**
+   * @return true if currenty some job is running.
+   */
+  bool blocked() const;
 
  private:
   K3bMainWindow* m_main;

@@ -18,9 +18,11 @@
 #include "k3bprojectinterface.h"
 #include "k3b.h"
 #include "k3bdoc.h"
+#include <k3bcore.h>
 
 #include <dcopclient.h>
 #include <qptrlist.h>
+#include <qtimer.h>
 
 
 
@@ -108,4 +110,50 @@ void K3bInterface::addUrl( const KURL& url )
   KURL::List l;
   l.append(url);
   addUrls( l );
+}
+
+
+void K3bInterface::copyCd()
+{
+  // HACK since we want this method to return immediately
+  QTimer::singleShot( 0, m_main, SLOT(slotCdCopy()) );
+}
+
+
+void K3bInterface::copyDvd()
+{
+  // HACK since we want this method to return immediately
+  QTimer::singleShot( 0, m_main, SLOT(slotDvdCopy()) );
+}
+
+
+void K3bInterface::eraseCdrw()
+{
+  // HACK since we want this method to return immediately
+  QTimer::singleShot( 0, m_main, SLOT(slotBlankCdrw()) );
+}
+
+
+void K3bInterface::formatDvd()
+{
+  // HACK since we want this method to return immediately
+  QTimer::singleShot( 0, m_main, SLOT(slotFormatDvd()) );
+}
+
+
+void K3bInterface::burnCdImage( const KURL& url )
+{
+  m_main->slotWriteCdImage( url );
+}
+
+
+void K3bInterface::burnDvdImage( const KURL& url )
+{
+  m_main->slotWriteDvdIsoImage( url );
+}
+
+
+bool K3bInterface::blocked() const
+{
+  return k3bcore->jobsRunning();
 }

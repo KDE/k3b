@@ -22,14 +22,20 @@
 #include <kconfig.h>
 #include <kstdguiitem.h>
 #include <kdebug.h>
+#include <dcopclient.h>
+#include <dcopref.h>
+#include <kurl.h>
 
 #include <qfile.h>
 #include <qtimer.h>
+#include <qcstring.h>
+#include <qdatastream.h>
 
 #include <stdlib.h>
 
 #include "k3bapplication.h"
 #include "k3bsplash.h"
+#include "k3bsmartinstancereuser.h"
 #include <k3bglobals.h>
 
 
@@ -59,45 +65,52 @@ static KCmdLineOptions options[] =
         KCmdLineLastOption
     };
 
-int main(int argc, char *argv[]) {
+int main( int argc, char* argv[] )
+{
 
-    KAboutData aboutData( "k3b", I18N_NOOP("K3b"),
-                          "0.11.93", description, KAboutData::License_GPL,
-                          I18N_NOOP("(c) 1999 - 2004, Sebastian Trueg and the K3b Team"), 0, "http://www.k3b.org" );
-    aboutData.addAuthor("Sebastian Trueg",I18N_NOOP("Maintainer"), "trueg@k3b.org");
-    aboutData.addAuthor("Thomas Froescher",I18N_NOOP("VideoDVD ripping and video encoding"), "tfroescher@k3b.org");
-    aboutData.addAuthor("Christian Kvasny",I18N_NOOP("VideoCD Project and VideoCD ripping"), "chris@k3b.org");
-    aboutData.addAuthor("Klaus-Dieter Krannich", I18N_NOOP("Developer"), "kd@k3b.org" );
+  KAboutData aboutData( "k3b", I18N_NOOP("K3b"),
+			"0.11.93", description, KAboutData::License_GPL,
+			I18N_NOOP("(c) 1999 - 2004, Sebastian Trueg and the K3b Team"), 0, "http://www.k3b.org" );
+  aboutData.addAuthor("Sebastian Trueg",I18N_NOOP("Maintainer"), "trueg@k3b.org");
+  aboutData.addAuthor("Thomas Froescher",I18N_NOOP("VideoDVD ripping and video encoding"), "tfroescher@k3b.org");
+  aboutData.addAuthor("Christian Kvasny",I18N_NOOP("VideoCD Project and VideoCD ripping"), "chris@k3b.org");
+  aboutData.addAuthor("Klaus-Dieter Krannich", I18N_NOOP("Developer"), "kd@k3b.org" );
 
-    aboutData.addCredit("Ayo",
-			I18N_NOOP("For his bombastic artwork."),
-			"73lab@free.fr" );
-    aboutData.addCredit("Christoph Thielecke",
-			I18N_NOOP("For extensive testing and the first German translation."),
-			"crissi99@gmx.de");
-    aboutData.addCredit("Andy Polyakov",
-			I18N_NOOP("For the great dvd+rw-tools and the nice cooperation."),
-			"appro@fy.chalmers.se" );
-    aboutData.addCredit("Roberto De Leo",
-			I18N_NOOP("For the very cool eMovix package and his accommodating work."),
-			"peggish@users.sf.net" );
-    aboutData.addCredit("John Steele Scott",
-			I18N_NOOP("For the flac decoding plugin."),
-			"toojays@toojays.net" );
-    aboutData.addCredit("György Szombathelyi",
-			I18N_NOOP("For the very useful isofslib."),
-			"gyurco@users.sourceforge.net" );
-    aboutData.addCredit("Erik de Castro Lopo",
-			I18N_NOOP("For libsamplerate which is used for generic resampling in the audio decoder framework."),
-			"erikd@mega-nerd.com" );
+  aboutData.addCredit("Ayo",
+		      I18N_NOOP("For his bombastic artwork."),
+		      "73lab@free.fr" );
+  aboutData.addCredit("Christoph Thielecke",
+		      I18N_NOOP("For extensive testing and the first German translation."),
+		      "crissi99@gmx.de");
+  aboutData.addCredit("Andy Polyakov",
+		      I18N_NOOP("For the great dvd+rw-tools and the nice cooperation."),
+		      "appro@fy.chalmers.se" );
+  aboutData.addCredit("Roberto De Leo",
+		      I18N_NOOP("For the very cool eMovix package and his accommodating work."),
+		      "peggish@users.sf.net" );
+  aboutData.addCredit("John Steele Scott",
+		      I18N_NOOP("For the flac decoding plugin."),
+		      "toojays@toojays.net" );
+  aboutData.addCredit("György Szombathelyi",
+		      I18N_NOOP("For the very useful isofslib."),
+		      "gyurco@users.sourceforge.net" );
+  aboutData.addCredit("Erik de Castro Lopo",
+		      I18N_NOOP("For libsamplerate which is used for generic resampling in the audio decoder framework."),
+		      "erikd@mega-nerd.com" );
 
 
-    KCmdLineArgs::init( argc, argv, &aboutData );
-    KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
+  KCmdLineArgs::init( argc, argv, &aboutData );
+  KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
+  KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
+
+
+  //
+  // In case no unblocked instance of K3b was found we create a new one.
+  //
+  if( !K3bSmartInstanceReuser::reuseInstance(args) ) {
 
     K3bApplication app;
-
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+      
     if( args->isSet("lang") )
       if( !KGlobal::locale()->setLanguage(args->getOption("lang")) )
 	kdDebug() << "Unable to set to language " << args->getOption("lang") 
@@ -109,15 +122,19 @@ int main(int argc, char *argv[]) {
     if( app.config()->readBoolEntry("Show splash", true) ) {
       splash = new K3bSplash( 0 );
       splash->connect( &app, SIGNAL(initializationInfo(const QString&)), SLOT(addInfo(const QString&)) );
-      
+	
       // kill the splash after 5 seconds
       QTimer::singleShot( 5000, splash, SLOT(close()) );
-      
+	
       splash->show();
     }
 
+    //
     // this will init everything
+    // and also handle the command line arguments
+    //
     app.init();
 
     return app.exec();
+  }
 }

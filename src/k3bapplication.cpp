@@ -248,10 +248,10 @@ void K3bApplication::init()
     m_mainWindow->slotBlankCdrw();
   else if( args->isSet("formatdvd") )
     m_mainWindow->slotFormatDvd();
+  else
+    KTipDialog::showTip( m_mainWindow );
 
   args->clear();
-
-  KTipDialog::showTip( m_mainWindow );
 }
 
 
