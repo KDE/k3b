@@ -340,7 +340,7 @@ ExternalBinTab::ExternalBinTab( int i, int o, K3bSetupWizard* wizard )
   mainGrid->setMargin( 0 );
 
   m_labelExternalPrograms = new QLabel( main, "m_labelExternalPrograms" );
-  m_labelExternalPrograms->setText( i18n( "<p>K3b uses cdrdao, cdrecord and mkisofs to actually write the CDs. "
+  m_labelExternalPrograms->setText( i18n( "<p>K3b uses cdrdao and cdrecord to actually write the CDs. "
 					  "It is recommended to install these programs. K3b will run without them but major"
 					  " functions (for example CD writing!) will be disabled.</p>" ) );
   m_labelExternalPrograms->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
@@ -394,7 +394,7 @@ PermissionTab::PermissionTab( int i, int o, K3bSetupWizard* wizard )
   mainGrid->setMargin( 0 );
 
   m_labelPermissions1 = new QLabel( main, "m_labelPermissions1" );
-  m_labelPermissions1->setText( i18n( "<p>The external programs need to be run as root, since they need write access to "
+  m_labelPermissions1->setText( i18n( "<p>Cdrecord and cdrdao need to be run as root, since they need write access to "
 				      "the CD drives and to run with higher priority. K3b also needs write access to the "
 				      "CD drives (for extended functionality like detecting the capacity of a CD).</p>"
 				      "<p>If you know what you are doing you can skip this and setup the permissions "
@@ -429,7 +429,7 @@ PermissionTab::PermissionTab( int i, int o, K3bSetupWizard* wizard )
   m_checkPermissionsDevices->setChecked( TRUE );
 
   m_checkPermissionsExternalPrograms = new QCheckBox( main, "m_checkPermissionsExternalPrograms" );
-  m_checkPermissionsExternalPrograms->setText( i18n( "Let K3b setup make the required changes for the external programs" ) );
+  m_checkPermissionsExternalPrograms->setText( i18n( "Let K3b setup make the required changes for cdrecord and cdrdao" ) );
   m_checkPermissionsExternalPrograms->setChecked( TRUE );
 
 //   QFrame* Line1 = new QFrame( main, "Line1" );
