@@ -47,6 +47,9 @@ public:
     bool loadDocumentData( QDomDocument* ) { return false; }
     bool saveDocumentData( QDomDocument* ) { return false; }
     QString documentType() const { return "k3b_dvd_project"; }
+
+ protected:
+    void loadDefaultSettings();
 };
 
 #endif

@@ -37,4 +37,8 @@ void K3bDvdDoc::addView(K3bView* view){
     K3bDoc::addView( view );
 }
 
+void K3bDvdDoc::loadDefaultSettings()
+{
+}
+
 #include "k3bdvddoc.moc"

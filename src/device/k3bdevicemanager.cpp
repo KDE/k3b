@@ -273,14 +273,16 @@ K3bDevice* K3bDeviceManager::initializeScsiDevice( cdrom_drive* drive )
     connect( &driverProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
 	     this, SLOT(slotCollectStdout(KProcess*, char*, int)) );
     
-    m_processOutput.clear();
+    m_processOutput = "";
     
     driverProc.start( KProcess::Block, KProcess::Stdout );
     
+    QStringList lines = QStringList::split( "\n", m_processOutput );
+
     // parse output
-    for( QStringList::const_iterator it = m_processOutput.begin(); it != m_processOutput.end(); ++it ) {
+    for( QStringList::const_iterator it = lines.begin(); it != lines.end(); ++it ) {
       const QString& line = *it;
-      
+
       if( line.startsWith("  ") ) {
 	if( line.contains("write CD-R media") )
 	  dev->m_burner = !line.contains( "not" );
@@ -299,6 +301,8 @@ K3bDevice* K3bDeviceManager::initializeScsiDevice( cdrom_drive* drive )
 	
 	else if( line.contains( "Buffer size" ) )
 	  dev->m_bufferSize = K3b::round( line.mid( line.find(":")+1 ).toDouble() * 1024.0 / ( 2352.0 * 75.0 ) );
+	else
+	  qDebug("(K3bDeviceManager) unusable cdrecord output: " + line );
 	
       }
       else if( line.startsWith("Vendor_info") )
@@ -390,7 +394,7 @@ void K3bDeviceManager::scanFstab()
 
 void K3bDeviceManager::slotCollectStdout( KProcess*, char* data, int len )
 {
-  m_processOutput += QStringList::split( "\n", QString::fromLatin1( data, len ) );
+  m_processOutput += QString::fromLocal8Bit( data, len );
 }
 
 

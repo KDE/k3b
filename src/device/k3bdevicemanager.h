@@ -85,7 +85,7 @@ class K3bDeviceManager : public QObject
   QList<K3bDevice> m_allDevices;;
   int m_foundDevices;
 
-  QStringList m_processOutput;
+  QString m_processOutput;
 
   void scanFstab();
   K3bDevice* initializeScsiDevice( cdrom_drive* );
