@@ -312,7 +312,6 @@ void K3bIsoImageJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 	      emit processedSize( made, size );
 
 	      emit percent( 100*made/size );
-	      emit subPercent( 100*made/size );
 	    }
 	}
       else if( (*str).startsWith( "Starting new" ) )

@@ -158,7 +158,7 @@ void K3bIsoImageWritingDialog::slotOk()
   m_job->setImagePath( m_editImagePath->text() );
 
   // create a progresswidget
-  K3bBurnProgressDialog* d = new K3bBurnProgressDialog( k3bMain() );
+  K3bBurnProgressDialog* d = new K3bBurnProgressDialog( k3bMain(), "burnProgress", false );
   connect( d, SIGNAL(closed()), this, SLOT(show()) );
 
   d->setJob( m_job );

@@ -48,7 +48,8 @@ class K3bBurnProgressDialog : public KDialog  {
   Q_OBJECT
 
  public:
-  K3bBurnProgressDialog( QWidget* = 0, const char* = 0, bool = true, WFlags = WDestructiveClose );
+  K3bBurnProgressDialog( QWidget* parent = 0, const char* name = 0, bool showSubProgress = true, 
+			 QWidget* extraInfo = 0, bool modal = true, WFlags = WDestructiveClose );
   ~K3bBurnProgressDialog();
 
   void setJob( K3bJob* job );
