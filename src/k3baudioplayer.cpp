@@ -390,12 +390,14 @@ void K3bAudioPlayer::stop()
     m_playObject.halt();
     m_playObject = Arts::PlayObject::null();
     m_bLengthReady = false;
-
-    slotUpdateFilename();
-    m_seekSlider->setValue(0);
+ 
     emit stopped();
   }
 #endif
+
+  m_seekSlider->setValue(0);
+  slotUpdateFilename();
+  slotUpdateCurrentTime(0);
 }
 
 
@@ -529,8 +531,7 @@ void K3bAudioPlayer::slotCheckEnd()
 	play();
       }
       else {
-	m_updateTimer->stop();
-	seek(0);
+	stop();
       }
       emit ended();
     }
@@ -543,7 +544,7 @@ void K3bAudioPlayer::setCurrentItem( QListViewItem* item )
 {
   if( item == 0 ) {
     stop();
-    m_labelOverallTime->setText("00:00:00");
+    m_labelOverallTime->setText("00:00");
     m_labelFilename->setText( i18n("no file") );
     m_currentItem = 0;
   }
