@@ -647,7 +647,8 @@ bool K3bCdDevice::DeviceManager::determineBusIdLun( const QString& dev, int& bus
     {
       id  = idLun.id & 0xff;
       lun = (idLun.id >> 8) & 0xff;
-      kdDebug() << "bus: " << bus << ", id: " << id << ", lun: " << lun << endl;
+      kdDebug() << "(K3bCdDevice::DeviceManager) " << dev 
+		<< " bus: " << bus << ", id: " << id << ", lun: " << lun << endl;
       ret = true;
     }
   }

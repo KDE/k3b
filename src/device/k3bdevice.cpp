@@ -1921,15 +1921,28 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
 	  break;
 	}
 
+	inf.m_numTracks = (dInf->last_track_l & 0xff) | (dInf->last_track_m<<8 & 0xff00);
+	if( inf.diskState() == STATE_EMPTY )
+	  inf.m_numTracks = 0;
+	else if( inf.diskState() == STATE_INCOMPLETE )
+	  inf.m_numTracks--;  // do not count the invisible track
+
 	inf.m_rewritable = dInf->erasable;
 
-	// MMC-4 says that only CD-R(W) should return proper sizes here. 
-	// Does that means that lead_out_r is rather useless?
+	//
+	// This is the Last Possible Lead-Out Start Adress in HMSF format
+	// This is only valid for CD-R(W) and DVD+R media.
+	// For complete media this shall be filled with 0xff
+	// 
 	inf.m_capacity = K3b::Msf( dInf->lead_out_m + dInf->lead_out_r*60, 
 				   dInf->lead_out_s, 
 				   dInf->lead_out_f ) - 150;
 
-	// Why do we need to substract 4500 again??
+	//
+	// This is the position where the next Session shall be recorded in HMSF format
+	// This is only valid for CD-R(W) and DVD+R media.
+	// For complete media this shall be filled with 0xff
+	//
 	if( inf.appendable() )
 	  inf.m_remaining = inf.capacity() - K3b::Msf( dInf->lead_in_m + dInf->lead_in_r*60, 
 						       dInf->lead_in_s, 
@@ -1956,17 +1969,18 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
       }
     
 
-      int sessions = numSessions();
-      if( sessions >= 0 ) {
-	inf.m_numSessions = sessions;
+      //
+      // Number of sessions for non-empty disks
+      //
+      if( inf.diskState() != STATE_EMPTY ) {
+	int sessions = numSessions();
+	if( sessions >= 0 )
+	  inf.m_numSessions = sessions;
+	else
+	  kdDebug() << "(K3bCdDevice) could not get session info via READ TOC/PMA/ATIP." << endl;
       }
-      else {
-	kdDebug() << "(K3bCdDevice) could not get session info via READ TOC/PMA/ATIP." << endl;
-	if( inf.empty() ) {
-	  // just to fix the info for empty disks
-	  inf.m_numSessions = 0;
-	}
-      }
+      else
+	inf.m_numSessions = 0;
 
 
       //
@@ -1978,12 +1992,67 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
 
       if( inf.diskState() == STATE_EMPTY ||
 	  inf.diskState() == STATE_INCOMPLETE ) {
-	K3b::Msf readFrmtCap;
-	if( readFormatCapacity( readFrmtCap ) ) {
-	  kdDebug() << "(K3bCdDevice::CdDevice) READ FORMAT CAPACITY: " << readFrmtCap.toString()
-		    << " other capacity: " << inf.m_capacity.toString() << endl;
-	  if( readFrmtCap > 0 )
-	    inf.m_capacity = readFrmtCap;
+
+	if( !(inf.mediaType() & MEDIA_WRITABLE_CD|MEDIA_DVD_PLUS_R) ) {
+	  K3b::Msf readFrmtCap;
+	  if( readFormatCapacity( readFrmtCap ) ) {
+	    kdDebug() << "(K3bCdDevice::CdDevice) READ FORMAT CAPACITY: " << readFrmtCap.toString()
+		      << " capacity from DISK INFO: " << inf.m_capacity.toString() << endl;
+	    if( readFrmtCap > 0 )
+	      inf.m_capacity = readFrmtCap;
+	  }
+	}
+
+	if( inf.diskState() == STATE_INCOMPLETE ) {
+
+	  //
+	  // Set writing mode to TAO.
+	  // In RAW writing mode we do not get the values we want.
+	  //
+	  if( modeSense( &data, dataLen, 0x05 ) ) {
+	    wr_param_page_05* mp = (struct wr_param_page_05*)(data+8);
+	    
+	    // reset some stuff to be on the safe side
+	    mp->PS = 0;
+	    mp->BUFE = 0;
+	    mp->multi_session = 0;
+	    mp->test_write = 0;
+	    mp->LS_V = 0;
+	    mp->copy = 0;
+	    mp->fp = 0;
+	    mp->host_appl_code= 0;
+	    mp->session_format = 0;
+	    mp->audio_pause_len[0] = 0;
+	    mp->audio_pause_len[1] = 150;
+
+	    mp->write_type = 0x01;  // TAO
+	    mp->track_mode = 4;     // MMC-4 says: 5, cdrecord uses 4 ???
+	    mp->dbtype = 8;         // Mode 1
+
+	    if( !modeSelect( data, dataLen, 1, 0 ) ) {
+	      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": modeSelect 0x05 failed!" << endl;
+	    }
+
+	    delete [] data;
+	  }
+	  else
+	    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": modeSense 0x05 failed!" << endl;
+
+
+	  // read next writable adress
+	  if( readTrackInformation( &data, dataLen, 0x1, 0xff ) ) {
+	    track_info_t* trackInfo = (track_info_t*)data;
+	    if( trackInfo->nwa_v ) {
+	      K3b::Msf nwa = from4Byte( trackInfo->next_writable );
+	      kdDebug() << "(K3bCdDevice::CdDevice) Next writale adress valid: " << nwa.toString() << endl;
+	      inf.m_remaining = inf.m_capacity - nwa - 150;  // reserve space for pre-gap after lead-in (??)
+	    }
+	    else {
+	      kdDebug() << "(K3bCdDevice::CdDevice) Next writale adress invalid." << endl;
+	    }
+
+	    delete [] data;
+	  }
 	}
       }
       else {
@@ -2001,10 +2070,8 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
 	else {
 	  kdDebug() << "(K3bCdDevice) READ CAPACITY failed. Falling back to READ TRACK INFO." << endl;
 
-	  unsigned char* trackData = 0;
-	  int trackDataLen = 0;
-	  if( readTrackInformation( &trackData, trackDataLen, 0x1, 0xff ) ) {
-	    track_info_t* trackInfo = (track_info_t*)trackData;
+	  if( readTrackInformation( &data, dataLen, 0x1, 0xff ) ) {
+	    track_info_t* trackInfo = (track_info_t*)data;
 	    inf.m_capacity = from4Byte( trackInfo->track_start );
 
 	    delete [] data;
@@ -2022,7 +2089,7 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
   }
   
   return inf;
-  }
+}
 
 
 int K3bCdDevice::CdDevice::cdMediaType() const
@@ -2225,6 +2292,15 @@ bool K3bCdDevice::CdDevice::modeSense( unsigned char** pageData, int& pageLen, i
 
 bool K3bCdDevice::CdDevice::modeSelect( unsigned char* page, int pageLen, bool pf, bool sp ) const
 {
+  page[0] = 0;
+  page[1] = 0;
+  page[4] = 0;
+  page[5] = 0;
+
+  // we do not support Block Descriptors here
+  page[6] = 0;
+  page[7] = 0;
+
   ScsiCommand cmd( this );
   cmd[0] = MMC::MODE_SELECT;
   cmd[1] = ( sp ? 1 : 0 ) | ( pf ? 0x10 : 0 );
@@ -2262,6 +2338,8 @@ void K3bCdDevice::CdDevice::checkWriteModes()
     wr_param_page_05* mp = (struct wr_param_page_05*)(buffer+8);
 
     // reset some stuff to be on the safe side
+    mp->PS = 0;
+    mp->BUFE = 0;
     mp->multi_session = 0;
     mp->test_write = 0;
     mp->LS_V = 0;
@@ -2269,17 +2347,10 @@ void K3bCdDevice::CdDevice::checkWriteModes()
     mp->fp = 0;
     mp->host_appl_code= 0;
     mp->session_format = 0;
-    mp->audio_pause_len[0] = (150 >> 8) & 0xFF;
-    mp->audio_pause_len[1] = 150 & 0xFF;
+    mp->audio_pause_len[0] = 0;
+    mp->audio_pause_len[1] = 150;
 
     m_writeModes = 0;
-
-    buffer[0] = 0;
-    buffer[1] = 0;
-//     buffer[2] = 0;
-//     buffer[3] = 0;
-    buffer[4] = 0;
-    buffer[5] = 0;
 
     // TAO
     mp->write_type = 0x01;  // Track-at-once
