@@ -21,7 +21,6 @@
 #include "k3bcddblocaldbtab.h"
 #include "k3bdeviceoptiontab.h"
 #include "k3bburningoptiontab.h"
-#include "k3brippingpatternoptiontab.h"
 #include "k3bpatternoptiontab.h"
 #include "k3bexternalbinoptiontab.h"
 #include "k3bmiscoptiontab.h"
