@@ -19,6 +19,7 @@
 #define K3BCDINFO_H
 
 #include <klistview.h>
+#include <qlist.h>
 
 class KAction;
 class K3bDevice;
@@ -59,10 +60,22 @@ class K3bCdInfo : public KListView
   QTimer* m_infoTimer;
 
   class PrivateCDInfo;
+  class PrivateTrackInfo;
   PrivateCDInfo* m_cdinfo;
 
   void updateView();
 };
+
+class K3bCdInfo::PrivateTrackInfo
+{
+ public:
+  int number;
+  int startBlock;
+  int mode;
+  int control;
+  bool leadout;
+};
+
 
 class K3bCdInfo::PrivateCDInfo
 {
@@ -71,17 +84,22 @@ class K3bCdInfo::PrivateCDInfo
   QString medium;
   bool empty;
   QString size;
+  QString remaining;
   bool appendable;
   int sessions;
   QString tocType;
+  QList<K3bCdInfo::PrivateTrackInfo> tracks;
 
   bool cdrw_valid;
   bool medium_valid;
   bool empty_valid;
   bool size_valid;
+  bool remaining_valid;
   bool appendable_valid;
   bool sessions_valid;
   bool tocType_valid;
+
+  bool tocInfo_valid;
 
   void reset()
     {
@@ -89,9 +107,13 @@ class K3bCdInfo::PrivateCDInfo
 	medium_valid =
 	empty_valid =
 	size_valid =
+	remaining_valid =
 	appendable_valid =
 	sessions_valid =
-	tocType_valid = false;
+	tocType_valid =
+	tocInfo_valid = false;
+
+      tracks.clear();
     }
 };
 
