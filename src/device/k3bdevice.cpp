@@ -1354,67 +1354,71 @@ bool K3bCdDevice::CdDevice::readRawToc( K3bCdDevice::Toc& toc ) const
     int dataLen = 0;
 
     if( readTocPmaAtip( &data, dataLen, 2, false, 1 ) ) {
-      success = true;
+      if( dataLen > 4 ) {
+	success = true;
 
-      toc_raw_track_descriptor* tr = (toc_raw_track_descriptor*)&data[4];
-
-      K3b::Msf sessionLeadOut;
-
+	toc_raw_track_descriptor* tr = (toc_raw_track_descriptor*)&data[4];
+	
+	K3b::Msf sessionLeadOut;
+	
 	kdDebug() << "Session |  ADR   | CONTROL|  TNO   | POINT  |  Min   |  Sec   | Frame  |  Zero  |  PMIN  |  PSEC  | PFRAME |" << endl;
-      for( int i = 0; i < (dataLen-4)/11; ++i ) {
-	QString s;
-	s += QString( " %1 |" ).arg( (int)tr[i].session_number, 6 );
-	s += QString( " %1 |" ).arg( (int)tr[i].adr, 6 );
-	s += QString( " %1 |" ).arg( (int)tr[i].control, 6 );
-	s += QString( " %1 |" ).arg( (int)tr[i].tno, 6 );
-	s += QString( " %1 |" ).arg( (int)tr[i].point, 6, 16 );
-	s += QString( " %1 |" ).arg( (int)tr[i].min, 6 );
-	s += QString( " %1 |" ).arg( (int)tr[i].sec, 6 );
-	s += QString( " %1 |" ).arg( (int)tr[i].frame, 6 );
-	s += QString( " %1 |" ).arg( (int)tr[i].zero, 6, 16 );
-	s += QString( " %1 |" ).arg( (int)tr[i].p_min, 6 );
-	s += QString( " %1 |" ).arg( (int)tr[i].p_sec, 6 );
-	s += QString( " %1 |" ).arg( (int)tr[i].p_frame, 6 );
-	kdDebug() << s << endl;
-
-	if( tr[i].adr == 1 && tr[i].point <= 0x63 ) {
-	  // track
-	  K3bTrack track;
-	  track.m_session = tr[i].session_number;
-	  track.m_firstSector = K3b::Msf( tr[i].p_min, tr[i].p_sec, tr[i].p_frame ) - 150; // :( We use 00:00:00 == 0 lba)
-	  track.m_type = ( tr[i].control & 0x4 ? Track::DATA : Track::AUDIO );
-	  track.m_mode = ( track.type() == Track::DATA ? getTrackDataMode(track) : Track::UNKNOWN );
-	  track.m_copyPermitted = ( tr[i].control & 0x2 );
-	  track.m_preEmphasis = ( tr[i].control & 0x1 );
-
-	  //
-	  // only do this within a session because otherwise we already set the last sector with the session leadout
-	  //
-	  if( !toc.isEmpty() )
-	    if( toc[toc.count()-1].session() == track.session() )
-	      toc[toc.count()-1].m_lastSector = track.firstSector() - 1;
-
-	  toc.append(track);
+	for( int i = 0; i < (dataLen-4)/11; ++i ) {
+	  QString s;
+	  s += QString( " %1 |" ).arg( (int)tr[i].session_number, 6 );
+	  s += QString( " %1 |" ).arg( (int)tr[i].adr, 6 );
+	  s += QString( " %1 |" ).arg( (int)tr[i].control, 6 );
+	  s += QString( " %1 |" ).arg( (int)tr[i].tno, 6 );
+	  s += QString( " %1 |" ).arg( (int)tr[i].point, 6, 16 );
+	  s += QString( " %1 |" ).arg( (int)tr[i].min, 6 );
+	  s += QString( " %1 |" ).arg( (int)tr[i].sec, 6 );
+	  s += QString( " %1 |" ).arg( (int)tr[i].frame, 6 );
+	  s += QString( " %1 |" ).arg( (int)tr[i].zero, 6, 16 );
+	  s += QString( " %1 |" ).arg( (int)tr[i].p_min, 6 );
+	  s += QString( " %1 |" ).arg( (int)tr[i].p_sec, 6 );
+	  s += QString( " %1 |" ).arg( (int)tr[i].p_frame, 6 );
+	  kdDebug() << s << endl;
+	  
+	  if( tr[i].adr == 1 && tr[i].point <= 0x63 ) {
+	    // track
+	    K3bTrack track;
+	    track.m_session = tr[i].session_number;
+	    track.m_firstSector = K3b::Msf( tr[i].p_min, tr[i].p_sec, tr[i].p_frame ) - 150; // :( We use 00:00:00 == 0 lba)
+	    track.m_type = ( tr[i].control & 0x4 ? Track::DATA : Track::AUDIO );
+	    track.m_mode = ( track.type() == Track::DATA ? getTrackDataMode(track) : Track::UNKNOWN );
+	    track.m_copyPermitted = ( tr[i].control & 0x2 );
+	    track.m_preEmphasis = ( tr[i].control & 0x1 );
+	    
+	    //
+	    // only do this within a session because otherwise we already set the last sector with the session leadout
+	    //
+	    if( !toc.isEmpty() )
+	      if( toc[toc.count()-1].session() == track.session() )
+		toc[toc.count()-1].m_lastSector = track.firstSector() - 1;
+	    
+	    toc.append(track);
+	  }
+	  else if( tr[i].point == 0xa2 ) {
+	    //
+	    // since the session is always reported before the tracks this is where we do this:
+	    // set the previous session's last tracks's last sector to the first sector of the
+	    // session leadout (which was reported before the tracks)
+	    //
+	    // This only happens on multisession CDs
+	    //
+	    if( !toc.isEmpty() )
+	      toc[toc.count()-1].m_lastSector = sessionLeadOut - 1;
+	    
+	    // this is save since the descriptors are reported in ascending order of the session number
+	    sessionLeadOut = K3b::Msf( tr[i].p_min, tr[i].p_sec, tr[i].p_frame ) - 150; // :( We use 00:00:00 == 0 lba)
+	  }
 	}
-	else if( tr[i].point == 0xa2 ) {
-	  //
-	  // since the session is always reported before the tracks this is where we do this:
-	  // set the previous session's last tracks's last sector to the first sector of the
-	  // session leadout (which was reported before the tracks)
-	  //
-	  // This only happens on multisession CDs
-	  //
-	  if( !toc.isEmpty() )
-	    toc[toc.count()-1].m_lastSector = sessionLeadOut - 1;
 
-	  // this is save since the descriptors are reported in ascending order of the session number
-	  sessionLeadOut = K3b::Msf( tr[i].p_min, tr[i].p_sec, tr[i].p_frame ) - 150; // :( We use 00:00:00 == 0 lba)
-	}
+	// set the last track's last sector
+	if( !toc.isEmpty() )
+	  toc[toc.count()-1].m_lastSector = sessionLeadOut - 1;
       }
-
-      // set the last track's last sector
-      if( !toc.isEmpty() )
-	toc[toc.count()-1].m_lastSector = sessionLeadOut - 1;
+      else
+	kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << " empty raw toc." << endl;
 
       delete [] data;
     }
