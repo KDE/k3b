@@ -21,6 +21,8 @@
 #include "../k3b.h"
 #include "../tools/k3bexternalbinmanager.h"
 
+#include <stdlib.h>
+
 #include <qlabel.h>
 #include <qslider.h>
 #include <qcheckbox.h>
@@ -29,8 +31,10 @@
 #include <qlayout.h>
 #include <qframe.h>
 #include <qimage.h>
+#include <qcolor.h>
 #include <qcanvas.h>
 #include <qwhatsthis.h>
+#include <qdir.h>
 
 #include <kdialog.h>
 #include <klocale.h>
@@ -63,6 +67,7 @@ void K3bDivxCrop::setupGui(){
     QWhatsThis::add( m_preview, i18n("Preview picture off the video to crop it properly. The colors and the quality are NOT the final state, so use this \
 picture only to cut of black borders"));
     m_sliderPreview = new QSlider( Horizontal,  this );
+    m_sliderPreview->setValue( 5 );
     QWhatsThis::add( m_sliderPreview, i18n("Move through to video to find a light picture to do a proper cut of the black bars"));
     QVButtonGroup *modeGroup = new QVButtonGroup( i18n("Resize mode"), this );
     modeGroup->layout()->setMargin( KDialog::marginHint() );
@@ -147,10 +152,14 @@ void K3bDivxCrop::updateView(){
     m_spinTop->setMaxValue( m_data->getHeightValue()/2 - 50 );
     m_spinLeft->setMaxValue( m_data->getWidthValue()/2 - 100 );
     m_spinRight->setMaxValue( m_data->getWidthValue()/2 - 100 );
+    slotAutoCropMode( m_autoCrop->state() );
 }
 
 void K3bDivxCrop::resetView(){
     m_preview->resetView();
+    resetCrop();
+}
+void K3bDivxCrop::resetCrop(){
     m_spinTop->setValue( 0 );
     m_spinLeft->setValue( 0 );
     m_spinBottom->setValue( 0 );
@@ -165,12 +174,30 @@ void K3bDivxCrop::initPreview( ){
 }
 
 void K3bDivxCrop::encodePreview( ){
+    // delete ifos
+    QDir vobs( m_data->getProjectDir() + "/vob");
+    if( vobs.exists() ){
+        QStringList ifos = vobs.entryList("*.ifo");
+        for ( QStringList::Iterator it = ifos.begin(); it != ifos.end(); ++it ) {
+            (*it) = m_data->getProjectDir() + "/vob/" +(*it);
+        }
+        KURL::List ifoList( ifos );
+//        KURL dest( m_dirvob );
+        connect( KIO::del( ifoList, false, false ), SIGNAL( result( KIO::Job *) ), this, SLOT( slotEncodePreview( ) ) );
+        kdDebug() << "(K3bDivxEncodingProcess) Delete IFO files in " << vobs.path() << endl;
+    }
+}
+
+void K3bDivxCrop::slotEncodePreview( ){
     previewProcess = new KShellProcess(); // = new KShellProcess;
      *previewProcess << k3bMain()->externalBinManager()->binObject("transcode")->path;
      *previewProcess << " -i " + m_data->getProjectDir() + "/vob";
-     *previewProcess << " -x vob -y ppm -V -w 1200 -a 0 -c 4-5"; // -V
+     *previewProcess << " -x vob -y ppm -V -w 1200 -a 0 -c 4-5 "; // -V
      *previewProcess << " -L " + QString::number( m_previewOffset );
-     *previewProcess << "-o " + m_data->getProjectDir() + "/preview";
+     *previewProcess << " -o " + m_data->getProjectDir() + "/preview";
+     kdDebug() << k3bMain()->externalBinManager()->binObject("transcode")->path
+     << " -i " + m_data->getProjectDir() + "/vob -x vob -y ppm -V -w 1200 -a 0 -c 4-5 "
+     << " -L " + QString::number( m_previewOffset ) << "-o " + m_data->getProjectDir() + "/preview" << endl;
      connect( previewProcess, SIGNAL(receivedStdout(KProcess*, char*, int)),
 	       this, SLOT(slotParseProcess(KProcess*, char*, int)) );
      connect( previewProcess, SIGNAL(receivedStderr(KProcess*, char*, int)),
@@ -218,6 +245,7 @@ void K3bDivxCrop::slotAutoCropMode( int buttonStatus ){
           enableManuelCrop( true );
       } else if( buttonStatus == 2 ){
           enableManuelCrop( false );
+          autoCrop();
       }
 }
 
@@ -232,12 +260,14 @@ void K3bDivxCrop::slotUpdateFinalSize(){
     // quality videobitrate / ( width *height *fps ), used by GordianKnot
     float q = m_data->getVideoBitrateValue() * 1000 / ( w * h * m_data->getFramerateValue() );
     m_finalQuality->setText( QString::number( q, 'f', 3 ) );
+    emit cropChanged();
 }
 
 void K3bDivxCrop::slotPreviewChanged( int v ){
     m_previewOffset = v*m_maxDirSize/100;
     encodePreview();
     m_preview->updatePreviewPicture( m_data->getProjectDir() + "/preview00000.ppm" );
+    slotAutoCropMode( m_autoCrop->state() );  // update auto cropping
 }
 
 void K3bDivxCrop::slotParseProcess( KProcess* p, char *data, int len){
@@ -286,5 +316,122 @@ void K3bDivxCrop::slotResizeMode( int id ){
      }
 }
 
+void K3bDivxCrop::autoCrop(){
+    resetCrop();
+    QImage i( m_data->getProjectDir() + "/preview00000.ppm" );
+    kdDebug() << "Image: " << QString::number( i.width() ) << "x" << QString::number( i.height() ) << endl;
+    int difArray[25];
+    int topCrop = 0;
+    int bottomCrop = 0;
+    // top line
+    for( unsigned int y = 0; y < 200; y++ ){
+        int index =0;
+        m_firstPictureLine = ( y == 0)?true:false;
+        for( unsigned int x=50; x < 654; x=x+25 ){
+            difArray[index] = checkPixels( &i, x, y, 0, 1);
+            index++;
+        }
+        if( checkLine( difArray ) ){
+            kdDebug() << "Found line: " << QString::number( y ) << endl;
+            int correct = y - ( y % m_spinTop->lineStep() );
+            kdDebug() << "Corrected line: " << QString::number( correct ) << endl;
+            m_spinTop->setValue( correct );
+            slotSpinTop( correct );
+            topCrop = correct;
+            break;
+        }
+    }
+    // bottom line
+    for( unsigned int y = 575; y > 300; y-- ){
+        m_firstPictureLine = ( y == 575)?true:false;
+        int index =0;
+        for( unsigned int x=50; x < 654; x=x+25 ){
+            difArray[index] = checkPixels( &i, x, y, 0, -1);
+            index++;
+        }
+        if( checkLine( difArray ) ){
+            bottomCrop = 576 - y;
+            kdDebug() << "Found line: " << QString::number( y ) << endl;
+            int correct = bottomCrop - ( bottomCrop % m_spinBottom->lineStep() );
+            kdDebug() << "Corrected line: " << QString::number( correct ) << endl;
+            m_spinBottom->setValue( correct );
+            slotSpinBottom( correct );
+            break;
+        }
+    }
+
+    // left line
+    for( unsigned int x=0; x < 200; x++ ){
+        m_firstPictureLine = ( x == 0)?true:false;
+        int index =0;
+
+        for( unsigned int y = 140; y < 430; y=y+12 ){
+            difArray[index] = checkPixels( &i, x, y, 1, 0);
+            index++;
+        }
+        if( checkLine( difArray ) ){
+            kdDebug() << "Found line: " << QString::number( x ) << endl;
+            int correct = x - ( x % m_spinLeft->lineStep() );
+            kdDebug() << "Corrected line: " << QString::number( correct ) << endl;
+            m_spinLeft->setValue( correct );
+            slotSpinLeft( correct );
+            break;
+        }
+    }
+    // right line
+    for( unsigned int x=719; x > 520; x-- ){
+        m_firstPictureLine = ( x == 719) ? true : false;
+        int index =0;
+        for( unsigned int y = 140; y < 430; y=y+12 ){
+            difArray[index] = checkPixels( &i, x, y, -1, 0);
+            index++;
+        }
+        if( checkLine( difArray ) ){
+            int r = 720 - x;
+            kdDebug() << "Found line: " << QString::number( r ) << endl;
+            int correct = r - ( r % m_spinRight->lineStep() );
+            kdDebug() << "Corrected line: " << QString::number( correct ) << endl;
+            m_spinRight->setValue( correct );
+            slotSpinRight( correct );
+            break;
+        }
+    }
+    emit cropChanged();
+}
+int K3bDivxCrop::checkPixels( QImage *i, int x, int y, int xoffset, int yoffset ){
+    int result = 0;
+    int grey = 0;
+    if( !m_firstPictureLine ){
+        grey = qGray( i->pixel( x, y ) );
+    }
+    int grey2 = qGray( i->pixel( x+xoffset, y+yoffset ) );
+    int difference = grey2 -grey;
+    if( difference > 0 ){
+        kdDebug() << "( " + QString::number(x) + "," + QString::number(y) + "): " << QString::number( difference )
+        << "," << QString::number( grey ) << "," << QString::number( grey2 ) << endl;
+        result  = difference;
+    }
+    return result;
+}
+bool K3bDivxCrop::checkLine( int difArray[ 25 ] ){
+    int cropOk = 0;
+    int cropOk2 = 0;
+    int cropOk3 = 0;
+    for( int a=0; a < 25; a++ ){
+        if( difArray[ a ] > 10 ){
+            cropOk++;
+        } else if( difArray[ a ] > 2 ){
+            cropOk2++;
+        } else if( difArray[ a ] > 20 ){
+            cropOk3++;
+        }
+    }
+    if( cropOk > 5  ||
+        cropOk2 > 9 ||
+        cropOk3 > 1 ){
+        return true;
+    }
+    return false;
+}
 
 #include "k3bdivxcrop.moc"

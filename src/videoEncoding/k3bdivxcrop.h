@@ -21,7 +21,6 @@
 #include <qwidget.h>
 #include <qgroupbox.h>
 #include <kdirsize.h>
-#include <kdirsize.h>
 
 class QRadioButton;
 class QCheckBox;
@@ -30,6 +29,7 @@ class QCanvasView;
 class QCanvas;
 class QPainter;
 class QLabel;
+class QImage;
 class QCanvasLine;
 class KIntSpinBox;
 class K3bDivxCodecData;
@@ -52,7 +52,9 @@ public:
 public slots:
     void slotUpdateFinalSize();
     void slotAutoCropMode( int buttonStatus );
-
+    void slotEncodePreview();
+signals:
+    void cropChanged();
 protected:
 //   void drawContents( QPainter* p );
 private:
@@ -75,6 +77,7 @@ private:
      // how many (2*kbytes) should move on movie (transcode -L parameter)
     int m_previewOffset;
     KIO::filesize_t m_maxDirSize;
+    bool m_firstPictureLine;
 
     void setupGui();
     void setSpinBoxMode( int step );
@@ -83,6 +86,10 @@ private:
     void encodePreview();
     int checkMaxValidSpinValue( KIntSpinBox *box , int);
     void enableManuelCrop( bool );
+    void autoCrop();
+    bool checkLine( int difArray[ 25 ] );
+    int checkPixels( QImage *i, int x, int y, int xoffset, int yoffset );
+    void resetCrop();
 
 private slots:
     void slotParseProcess( KProcess* p, char *buffer, int length);
