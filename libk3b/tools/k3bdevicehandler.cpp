@@ -98,6 +98,9 @@ public:
       if( command & LOAD )
 	success = (success && dev->load());
 
+      if( command & BUFFER_CAPACITY )
+	success = dev->readBufferCapacity( bufferCapacity, availableBufferCapacity );
+	
       dev->close();
     }
     emitFinished(success);
@@ -110,6 +113,8 @@ public:
   Toc toc;
   CdText cdText;
   QByteArray cdTextRaw;
+  long long bufferCapacity;
+  long long availableBufferCapacity;
   Device* dev;
 };
 
@@ -201,6 +206,16 @@ int K3bDevice::DeviceHandler::tocType() const
 int K3bDevice::DeviceHandler::numSessions() const
 {
   return m_thread->ngInfo.numSessions();
+}
+
+long long K3bDevice::DeviceHandler::bufferCapacity() const
+{
+  return m_thread->bufferCapacity;
+}
+
+long long K3bDevice::DeviceHandler::availableBufferCapacity() const
+{
+  return m_thread->availableBufferCapacity;
 }
 
 void K3bDevice::DeviceHandler::setDevice( Device* dev )

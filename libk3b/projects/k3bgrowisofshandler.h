@@ -20,6 +20,7 @@
 
 namespace K3bDevice {
   class Device;
+  class DeviceHandler;
 }
 
 
@@ -68,6 +69,7 @@ class K3bGrowisofsHandler : public QObject
 
  private slots:
   void slotCheckBufferStatus();
+  void slotCheckBufferStatusDone( K3bDevice::DeviceHandler* );
 
  private:
   int m_error;

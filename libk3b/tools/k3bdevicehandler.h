@@ -65,6 +65,8 @@ namespace K3bDevice
       K3b::Msf remainingSize() const;
       int tocType() const;
       int numSessions() const;
+      long long bufferCapacity() const;
+      long long availableBufferCapacity() const;
 
       bool success() const;
 
@@ -132,7 +134,11 @@ namespace K3bDevice
 	 *
 	 * Always successfull, even with an empty or no media at all!
 	 */
-	DISKINFO = 4096  // TODO: rename this in somthing like: DISKINFO_COMPLETE
+	DISKINFO = 4096,  // TODO: rename this in somthing like: DISKINFO_COMPLETE
+	/**
+	 * Determine the device buffer state.
+	 */
+	BUFFER_CAPACITY = 8192
       };
 
     signals:

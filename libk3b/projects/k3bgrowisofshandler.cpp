@@ -19,6 +19,7 @@
 #include <k3bcore.h>
 #include <k3bglobalsettings.h>
 #include <k3bdevice.h>
+#include <k3bdevicehandler.h>
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -225,16 +226,21 @@ void K3bGrowisofsHandler::handleExit( int exitCode )
 
 void K3bGrowisofsHandler::slotCheckBufferStatus()
 {
-  // FIXME: do this in a thread
-  if( m_device ) {
-    long long size, avail;
-    if( !m_device->readBufferCapacity( size, avail ) && size > 0 ) {
-      emit deviceBuffer( 100*(size-avail)/size );
-      QTimer::singleShot( 500, this, SLOT(slotCheckBufferStatus()) );
-    }
-    else {
-      kdDebug() << "(K3bGrowisofsHandler) stopping buffer check." << endl;
-    }
+  connect( K3bDevice::sendCommand( K3bDevice::DeviceHandler::BUFFER_CAPACITY, m_device ),
+	   SIGNAL(finished(K3bDevice::DeviceHandler*)),
+	   this,
+	   SLOT(slotCheckBufferStatusDone(K3bDevice::DeviceHandler*)) );
+}
+
+
+void K3bGrowisofsHandler::slotCheckBufferStatusDone( K3bDevice::DeviceHandler* dh )
+{
+  if( dh->success() && dh->bufferCapacity() > 0 ) {
+    emit deviceBuffer( 100 * (dh->bufferCapacity() - dh->availableBufferCapacity() ) / dh->bufferCapacity() );
+    QTimer::singleShot( 500, this, SLOT(slotCheckBufferStatus()) );
+  }
+  else {
+    kdDebug() << "(K3bGrowisofsHandler) stopping buffer check." << endl;
   }
 }
 
