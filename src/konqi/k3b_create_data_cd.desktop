@@ -2,7 +2,7 @@
 Actions=CreateK3bDataProject
 Encoding=UTF-8
 ServiceTypes=all/allfiles,inode/directory
-ExcludeServiceTypes=application/x-iso
+ExcludeServiceTypes=application/x-iso,kdedevice/*
 
 [Desktop Action CreateK3bDataProject]
 Exec=k3b --datacd %F
