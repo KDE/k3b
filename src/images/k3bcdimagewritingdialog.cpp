@@ -19,6 +19,7 @@
 #include "k3bbinimagewritingjob.h"
 #include "k3bcuefileparser.h"
 #include "k3bclonetocreader.h"
+#include "k3baudiocuefilewritingjob.h"
 #include <cdcopy/k3bclonejob.h>
 
 #include <k3bdevicemanager.h>
@@ -224,6 +225,7 @@ void K3bCdImageWritingDialog::setupGui()
   optionGroup->setInsideMargin( marginHint() );
   optionGroup->setInsideSpacing( spacingHint() );
   m_checkDummy = K3bStdGuiItems::simulateCheckbox( optionGroup );
+  m_checkOnTheFly = K3bStdGuiItems::onTheFlyCheckbox( optionGroup );
   m_checkVerify = K3bStdGuiItems::verifyCheckBox( optionGroup );
 
   optionTabLayout->addMultiCellWidget( m_writerSelectionWidget, 0, 0, 0, 1 );
@@ -307,9 +309,21 @@ void K3bCdImageWritingDialog::slotStartClicked()
     }
     break;
 
-  case IMAGE_AUDIO_CUE:
-    KMessageBox::sorry( this, i18n("Not implemented yet. For now add the cue file to an audio project.") );
-    return;
+  case IMAGE_AUDIO_CUE: 
+    {
+      K3bAudioCueFileWritingJob* job_ = new K3bAudioCueFileWritingJob( &dlg, this );
+      
+      job_->setBurnDevice( m_writerSelectionWidget->writerDevice() );
+      job_->setSpeed( m_writerSelectionWidget->writerSpeed() );
+      job_->setSimulate( m_checkDummy->isChecked() );
+      job_->setWritingMode( m_writingModeWidget->writingMode() );
+      job_->setCueFile( d->tocFile );
+      job_->setCopies( m_checkDummy->isChecked() ? 1 : m_spinCopies->value() );
+      job_->setOnTheFly( m_checkOnTheFly->isChecked() );
+
+      job = job_;
+    }
+    break;
 
   case IMAGE_CUE_BIN:
     // for now the K3bBinImageWritingJob decides if it's a toc or a cue file
@@ -660,10 +674,13 @@ void K3bCdImageWritingDialog::slotToggleAll()
 
     // cdrecord clone and cue both need DAO
     if( m_writerSelectionWidget->writingApp() != K3b::CDRDAO 
-	&& currentImageType() == IMAGE_ISO )
+	&& ( currentImageType() == IMAGE_ISO ||
+	     currentImageType() == IMAGE_AUDIO_CUE ) )
       m_writingModeWidget->setSupportedModes( K3b::TAO|K3b::DAO|K3b::RAW ); // stuff supported by cdrecord
     else
       m_writingModeWidget->setSupportedModes( K3b::DAO );
+
+    m_checkOnTheFly->setEnabled( currentImageType() == IMAGE_AUDIO_CUE );
 
     // some stuff is only available for iso images
     m_checkNoFix->setEnabled( currentImageType() == IMAGE_ISO );
@@ -776,6 +793,8 @@ void K3bCdImageWritingDialog::loadUserDefaults( KConfig* c )
   m_writingModeWidget->loadConfig( c );
   m_checkDummy->setChecked( c->readBoolEntry("simulate", false ) );
   m_checkNoFix->setChecked( c->readBoolEntry("multisession", false ) );
+  m_checkOnTheFly->setChecked( c->readBoolEntry("on_the_fly", true ) );
+
   m_dataModeWidget->loadConfig(c);
  
   m_checkVerify->setChecked( c->readBoolEntry( "verify_data", false ) );
@@ -810,6 +829,7 @@ void K3bCdImageWritingDialog::saveUserDefaults( KConfig* c )
   m_writingModeWidget->saveConfig( c ),
   c->writeEntry( "simulate", m_checkDummy->isChecked() );
   c->writeEntry( "multisession", m_checkNoFix->isChecked() );
+  c->writeEntry( "on_the_fly", m_checkOnTheFly->isChecked() );
   m_dataModeWidget->saveConfig(c);
   
   c->writeEntry( "verify_data", m_checkVerify->isChecked() );
@@ -850,6 +870,7 @@ void K3bCdImageWritingDialog::loadK3bDefaults()
   m_checkDummy->setChecked( false );
   m_checkVerify->setChecked( false );
   m_checkNoFix->setChecked( false );
+  m_checkOnTheFly->setChecked( true );
   m_dataModeWidget->setDataMode( K3b::DATA_MODE_AUTO );
   m_comboImageType->setCurrentItem(0);
 
