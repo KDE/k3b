@@ -35,6 +35,10 @@ K3bDivxCodecData::K3bDivxCodecData(){
     m_audioGain="1.0";
     m_audioBitrate=128;
     m_anamorph = false;
+    m_mp3CodecMode = 0; // cbr
+    m_audioLanguage=0;
+    m_listAudioAc3Bitrate = 0;
+    m_useNormalize = true;
 }
 
 K3bDivxCodecData::~K3bDivxCodecData(){
@@ -44,7 +48,11 @@ void K3bDivxCodecData::setProjectFile( const QString& file ){
 
     m_projectFile = file;
     int index = file.findRev("/");
-    m_projectDir = file.left( index );
+    if( index == -1){
+        m_projectDir = "";
+    } else {
+        m_projectDir = file.left( index );
+    }
     kdDebug() << "ProjectDir: " << m_projectDir << endl;
     loadData();
 }
@@ -101,6 +109,11 @@ void K3bDivxCodecData::addLanguage( const QString& l){
     m_listAudio << l;
 }
 
+void K3bDivxCodecData::addLanguageAc3Bitrate ( const QString& l){
+    m_listAudioAc3Bitrate << l;
+    m_useAc3 = true;
+}
+
 QString K3bDivxCodecData::getSize(){
     return m_width + "x" + m_height;
 }
@@ -126,6 +139,14 @@ void K3bDivxCodecData::setYuv( int buttonState ){
     }
 }
 
+void K3bDivxCodecData::setAc3( int buttonState ){
+    if( buttonState == 0 ){
+        m_ac3 = "";
+    } else if( buttonState == 2 ){
+        m_ac3 = " -A -N 0x2000";
+    }
+}
+
 void K3bDivxCodecData::setCrispness( int value ){
     m_crispness = QString::number( value );
 }
@@ -145,7 +166,7 @@ QString K3bDivxCodecData::getParaCodec(){
 }
 
 QString K3bDivxCodecData::getParaAudioBitrate(){
-    return " -b " + QString::number(m_audioBitrate);
+    return " -b " + QString::number(m_audioBitrate) + "," + QString::number( m_mp3CodecMode );
 }
 QString K3bDivxCodecData::getParaVideoBitrate(){
       return " -w " + QString::number( m_videoBitrate );
@@ -153,3 +174,11 @@ QString K3bDivxCodecData::getParaVideoBitrate(){
 long K3bDivxCodecData::getFramesValue(){
     return m_frames.toLong();
 }
+void K3bDivxCodecData::resetAudioLanguages(){
+    m_listAudio.clear();
+    m_audioLanguage=0;
+    m_listAudioAc3Bitrate.clear();
+    m_listAudioAc3Bitrate = 0;
+    m_useAc3 = false;
+}
+

@@ -32,10 +32,15 @@ public:
     K3bDivxCodecData();
     ~K3bDivxCodecData();
     // file/dir settings
+    /**
+    * Sets the project file and uses the path as project path.
+    */
     void setProjectFile( const QString &file );
     void setAviFile( const QString &file ){ m_aviFile = file; };
     QString getAviFile(){ return m_aviFile; };
     QString getProjectDir(){ return m_projectDir; };
+    QString getProjectFile(){ return m_projectFile; };
+    bool projectLoaded(){ return m_projectLoaded; }
 
     // setters for project parser
     void setTitle( const QString& t ){ m_title= t;};
@@ -49,12 +54,16 @@ public:
     void setHeight( const QString& );
     void setChapters( const QString& c ){ m_chapters = c;};
     void addLanguage( const QString& );
+    void addLanguageAc3Bitrate( const QString& );
+    void resetAudioLanguages( );
     void setFramerate( const QString& f ){ m_framerate = f; }
+    void setMp3CodecMode( int id ){ m_mp3CodecMode = id; }
     // getters for project parsed datas
     QString getTitle(){ return m_title; }
     QString getFrames(){ return m_frames; }
     long getFramesValue();
     QStringList getAudioLanguages(){ return m_listAudio; };
+    QStringList getAudioLanguagesAc3Bitrate(){ return m_listAudioAc3Bitrate; };
     QString getSize();
     QString getAspectRatio(){ return m_aspectRatio;};
     float getAspectRatioValue(){ return m_fAspectRatio; }
@@ -105,12 +114,20 @@ public:
     void setCrispness( int value );
     QString getCrispness() { return m_crispness; }
     QString getParaAudioGain();
-     //
-     int getVideoBitrateValue();
-     float getFramerateValue();
-     void setProjectDir( const QString& dir) { m_projectDir = dir; }
-     bool projectLoaded(){ return m_projectLoaded; }
+    // ac3 settings
+    void setAc3( int );
+    QString getParaAc3() { return m_ac3; }
+    bool isAc3Set(){ return m_useAc3; }
+    // advanced/debug stuff
+    void setNormalize( bool b ){ m_useNormalize = b; }
+    bool isNormalize() { return m_useNormalize; }
+    void setShutdown( bool b ){ m_shutdown = b; }
+    bool isShutdown(){ return m_shutdown; }
+    //
+    int getVideoBitrateValue();
+    float getFramerateValue();
 private:
+    // file/dir settings
     QString m_projectFile;
     QString m_projectDir;
     QString m_aviFile;
@@ -132,7 +149,9 @@ private:
     QString m_height;
     int m_iHeight;
     QString m_chapters;
+    // languages
     QStringList m_listAudio;
+    QStringList m_listAudioAc3Bitrate;
     // cropping data
     int m_cropTop;
     int m_cropLeft;
@@ -145,6 +164,8 @@ private:
     int m_audioBitrate;
     int m_videoBitrate;
     int m_codecMode; // 1pass, 2pass
+    int m_mp3CodecMode; // 0=cbr, 1=vbr
+    QString m_ac3; // nothing or " -A -N 0x2000"
     QString m_codec;
     // add encoding settings
     int m_deinterlaceMode; // 0-4
@@ -154,6 +175,9 @@ private:
     QString m_keyframes;
     QString m_crispness;
     bool m_projectLoaded;
+    bool m_useAc3;
+    bool m_useNormalize;
+    bool m_shutdown;
 
     void loadData();
 };
