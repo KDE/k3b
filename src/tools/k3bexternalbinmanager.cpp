@@ -14,6 +14,10 @@
 
 
 
+static const char* vcdTools[] =  { "vcdxgen",
+					 "vcdxbuild",
+					 0 };
+
 static const char* transcodeTools[] =  { "transcode",
 					 "tcprobe",
 					 "tccat",
@@ -329,6 +333,42 @@ K3bExternalBin* K3bExternalBinManager::probeTranscode( const QString& path )
   return bin;
 }
 
+K3bExternalBin* K3bExternalBinManager::probeVcd( const QString& path )
+{
+  if( !QFile::exists( path ) )
+    return 0;
+
+  K3bExternalBin* bin = 0;
+
+  // probe version
+  KProcess vp;
+  vp << path << "-V";
+  connect( &vp, SIGNAL(receivedStdout(KProcess*, char*, int)), this, SLOT(gatherOutput(KProcess*, char*, int)) );
+  connect( &vp, SIGNAL(receivedStderr(KProcess*, char*, int)), this, SLOT(gatherOutput(KProcess*, char*, int)) );
+  m_gatheredOutput = "";
+  if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
+    int pos = m_gatheredOutput.find( "GNU VCDImager" );
+    if( pos < 0 )
+      return 0;
+
+    pos += 14;
+
+    int endPos = m_gatheredOutput.find( QRegExp("[\\n\\)]"), pos+1 );
+    if( endPos < 0 )
+      return 0;
+
+    bin = new K3bExternalBin( "vcdxgen" );
+    bin->path = path;
+    bin->version = m_gatheredOutput.mid( pos, endPos-pos );
+  }
+  else {
+    kdDebug() << "(K3bExternalBinManager) could not start " << path << endl;
+    return 0;
+  }
+
+  return bin;
+}
+
 
 
 void K3bExternalBinManager::gatherOutput( KProcess*, char* data, int len )
@@ -417,6 +457,11 @@ void K3bExternalBinManager::createProgramContainer()
     if( m_programs.find( transcodeTools[i] ) == m_programs.end() )
       m_programs.insert( transcodeTools[i], new K3bExternalProgram( transcodeTools[i] ) );
   }  
+  for( int i = 0; vcdTools[i]; ++i ) {
+    if( m_programs.find( vcdTools[i] ) == m_programs.end() )
+      m_programs.insert( vcdTools[i], new K3bExternalProgram( vcdTools[i] ) );
+  }
+
 }
 
 
@@ -450,10 +495,17 @@ void K3bExternalBinManager::search()
        cdrdaoBin = probeCdrdao( path + "/cdrdao" );
 
        for( int i = 0; transcodeTools[i]; ++i ) {
-	 K3bExternalBin* bin = probeTranscode( path + "/" + QString::fromLatin1(transcodeTools[i]) );
-	 if( bin )
-	   m_programs[ transcodeTools[i] ]->addBin( bin );
+         K3bExternalBin* bin = probeTranscode( path + "/" + QString::fromLatin1(transcodeTools[i]) );
+         if( bin )
+          m_programs[ transcodeTools[i] ]->addBin( bin );
        }
+
+       for( int i = 0; vcdTools[i]; ++i ) {
+         K3bExternalBin* bin = probeVcd( path + "/" + QString::fromLatin1(vcdTools[i]) );
+         if( bin )
+          m_programs[ vcdTools[i] ]->addBin( bin );
+       }
+
     }
     else {
        cdrecordBin = probeCdrecord( path );
