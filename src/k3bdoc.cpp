@@ -40,6 +40,8 @@
 #include "k3bview.h"
 #include "k3bdoc.h"
 #include "k3bglobals.h"
+#include "device/k3bdevice.h"
+
 
 K3bDoc::K3bDoc( QObject* parent )
   : QObject( parent )
@@ -80,8 +82,8 @@ void K3bDoc::setBurner( K3bDevice* dev )
 {
   m_burner = dev;
   if( dev ) {
-    qDebug( QString("(K3bDoc) Setting writer to %1 %2").arg( dev->devicename).arg(dev->description) );
-    if( !dev->burnproof )
+    qDebug( QString("(K3bDoc) Setting writer to %1 %2").arg( dev->devicename()).arg(dev->description()) );
+    if( !dev->burnproof() )
       setBurnProof( false );
   }
 }

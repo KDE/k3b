@@ -45,7 +45,7 @@
 #include "k3bdirview.h"
 #include "audio/k3baudiodoc.h"
 #include "audio/k3baudioview.h"
-#include "k3bdevicemanager.h"
+#include "device/k3bdevicemanager.h"
 #include "audio/k3baudiotrackdialog.h"
 #include "k3bcopywidget.h"
 #include "k3bripperwidget.h"

@@ -53,7 +53,6 @@ class K3bOptionDialog : public KDialogBase
   void slotOk();
   void slotApply();
   void slotDefault();
-  void slotStartPS();
 	
  private:
   // programs Tab
@@ -73,25 +72,48 @@ class K3bOptionDialog : public KDialogBase
   KActionMenu* m_menuDevices;
   KAction* m_actionNewDevice;
   KAction* m_actionRemoveDevice;
-  /** list to save changes to the devices before appying */
-  QList<K3bDevice> m_tempReader;
-  QList<K3bDevice> m_tempWriter;
+  /** list to save changes to the devices before applying */
+  class PrivateTempDevice {
+  public:
+    PrivateTempDevice() {
+      burner = false;
+      burnproof = false;
+      maxReadSpeed = maxWriteSpeed = 0;
+    }
+
+    PrivateTempDevice( const QString & _vendor,
+		       const QString & _description,
+		       const QString & _version,
+		       bool _burner,
+		       bool _burnproof,
+		       int _maxReadSpeed,
+		       const QString & _devicename, int _maxBurnSpeed = 0 )
+      : vendor( _vendor ),
+      description( _description ), version( _version ), burner( _burner ),
+      burnproof( _burnproof ), maxReadSpeed( _maxReadSpeed ),
+      devicename( _devicename ), maxWriteSpeed( _maxBurnSpeed ) {}
+    
+    QString vendor;
+    QString description;
+    QString version;
+    bool burner;
+    bool burnproof;
+    int maxReadSpeed;
+    QString devicename;
+    int maxWriteSpeed;
+  };
+  QList<PrivateTempDevice> m_tempReader;
+  QList<PrivateTempDevice> m_tempWriter;
 
   class PrivateDeviceViewItem : public KListViewItem {
   public:
-    PrivateDeviceViewItem( K3bDevice* dev, KListView* view )
+    PrivateDeviceViewItem( PrivateTempDevice* dev, KListView* view )
       : KListViewItem( view ) { device = dev; }
-    PrivateDeviceViewItem( K3bDevice* dev, QListViewItem* item )
+    PrivateDeviceViewItem( PrivateTempDevice* dev, QListViewItem* item )
       : KListViewItem( item ) { device = dev; }
 
-    K3bDevice* device;
+    PrivateTempDevice* device;
   };
-
-  // permission tab
-  QWidgetStack* m_stackPermission;
-  QXEmbed* m_embedPermission;
-  QPushButton* m_buttonStartPS;
-  QWidget* m_containerInfo;
 
   // burning tab
   QCheckBox* m_checkUseID3Tag;
@@ -103,10 +125,8 @@ class K3bOptionDialog : public KDialogBase
   void setupDevicePage();
   void readDevices();
   void updateDeviceListViews();
-  void updateDeviceInfoBox( K3bDevice* dev = 0 );
+  void updateDeviceInfoBox( PrivateTempDevice* dev = 0 );
   void saveDevices();
-
-  void setupPermissionPage();
 
   void setupBurningPage();
   void readBurningSettings();

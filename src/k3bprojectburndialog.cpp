@@ -18,6 +18,8 @@
 #include "k3bprojectburndialog.h"
 #include "k3b.h"
 #include "k3bdoc.h"
+#include "device/k3bdevice.h"
+#include "device/k3bdevicemanager.h"
 
 #include <qcombobox.h>
 #include <qgroupbox.h>
@@ -208,7 +210,7 @@ void K3bProjectBurnDialog::slotRefreshWriterSpeeds()
     m_comboSpeed->clear();
     m_comboSpeed->insertItem( "1x" );
     int _speed = 2;
-    while( _speed <= _dev->maxWriteSpeed ) {
+    while( _speed <= _dev->maxWriteSpeed() ) {
       m_comboSpeed->insertItem( QString( "%1x" ).arg(_speed) );
       _speed+=2;
     }
@@ -243,7 +245,7 @@ void K3bProjectBurnDialog::readSettings()
     QList<K3bDevice> _devices = k3bMain()->deviceManager()->burningDevices();
     K3bDevice* _dev = _devices.first();
     while( _dev ) {
-      m_comboWriter->insertItem( _dev->vendor + " " + _dev->description + " (" + _dev->devicename + ")" );
+      m_comboWriter->insertItem( _dev->vendor() + " " + _dev->description() + " (" + _dev->devicename() + ")" );
       _dev = _devices.next();
     }
 	

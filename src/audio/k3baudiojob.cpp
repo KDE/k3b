@@ -23,6 +23,7 @@
 #include "k3baudiodoc.h"
 #include "k3baudiotrack.h"
 #include "k3bmp3decodingjob.h"
+#include "../device/k3bdevice.h"
 
 #include <kprocess.h>
 #include <klocale.h>
@@ -527,7 +528,7 @@ void K3bAudioJob::startWriting()
       m_process << "write";
 
       // device (e.g. /dev/sg1)
-      m_process << "--device" << m_doc->burner()->devicename;
+      m_process << "--device" << m_doc->burner()->devicename();
 			
       // additional parameters from config
       QStringList _params = kapp->config()->readListEntry( "cdrdao parameters" );
@@ -610,7 +611,7 @@ void K3bAudioJob::startWriting()
     m_process << s;
 
     // add the device (e.g. /dev/sg1)
-    s = QString("-dev=%1").arg( m_doc->burner()->devicename );
+    s = QString("-dev=%1").arg( m_doc->burner()->devicename() );
     m_process << s;
 	
     // test if padding is nessessary

@@ -109,7 +109,7 @@ sub_dirs=
 type=po
 
 [src/Makefile.am]
-files=src/main.cpp,src/k3b.cpp,src/k3b.h,src/k3bdoc.cpp,src/k3bdoc.h,src/k3bview.cpp,src/k3bview.h,src/k3bui.rc,src/k3b.desktop,src/lo32-app-k3b.png,src/lo16-app-k3b.png,src/k3bdirview.cpp,src/k3bdirview.h,src/k3bcopywidget.cpp,src/k3bcopywidget.h,src/k3bripperwidget.cpp,src/k3bripperwidget.h,src/k3bdevicemanager.cpp,src/k3bdevicemanager.h,src/k3bglobals.h,src/k3bprogressdialog.h,src/k3bprogressdialog.cpp,src/k3bstickybutton.cpp,src/k3bstickybutton.h,src/k3bfillstatusdisplay.cpp,src/k3bfillstatusdisplay.h,src/k3boptiondialog.cpp,src/k3boptiondialog.h,src/k3bburnprogressdialog.cpp,src/k3bburnprogressdialog.h,src/k3bjob.cpp,src/k3bjob.h,src/k3bprojectburndialog.cpp,src/k3bprojectburndialog.h,src/kcutlabel.cpp,src/kcutlabel.h,src/k3bglobals.cpp,src/nonsticky.png,src/sticky.png,src/hi16-app-k3b.png,src/hi32-app-k3b.png,src/hi48-app-k3b.png,src/kdiskfreesp.h
+files=src/main.cpp,src/k3b.cpp,src/k3b.h,src/k3bdoc.cpp,src/k3bdoc.h,src/k3bview.cpp,src/k3bview.h,src/k3bui.rc,src/k3b.desktop,src/lo32-app-k3b.png,src/lo16-app-k3b.png,src/k3bdirview.cpp,src/k3bdirview.h,src/k3bcopywidget.cpp,src/k3bcopywidget.h,src/k3bripperwidget.cpp,src/k3bripperwidget.h,src/k3bglobals.h,src/k3bprogressdialog.h,src/k3bprogressdialog.cpp,src/k3bstickybutton.cpp,src/k3bstickybutton.h,src/k3bfillstatusdisplay.cpp,src/k3bfillstatusdisplay.h,src/k3boptiondialog.cpp,src/k3boptiondialog.h,src/k3bburnprogressdialog.cpp,src/k3bburnprogressdialog.h,src/k3bjob.cpp,src/k3bjob.h,src/k3bprojectburndialog.cpp,src/k3bprojectburndialog.h,src/kcutlabel.cpp,src/kcutlabel.h,src/k3bglobals.cpp,src/nonsticky.png,src/sticky.png,src/hi16-app-k3b.png,src/hi32-app-k3b.png,src/hi48-app-k3b.png,src/kdiskfreesp.h
 sub_dirs=data,cdinfo,audio,device,kiotree
 type=prog_main
 
@@ -488,7 +488,7 @@ install_location=
 type=HEADER
 
 [src/device/Makefile.am]
-files=src/device/ScsiIf-common.cc,src/device/Sample.h,src/device/ScsiIf-linux.cc,src/device/ScsiIf.h,src/device/sg_err.cc,src/device/sg_err.h,src/device/util.cc,src/device/util.h
+files=src/device/ScsiIf-common.cc,src/device/Sample.h,src/device/ScsiIf-linux.cc,src/device/ScsiIf.h,src/device/sg_err.cc,src/device/sg_err.h,src/device/util.cc,src/device/util.h,src/device/k3bdevice.h,src/device/k3bdevice.cpp,src/device/k3bdevicemanager.cpp,src/device/k3bdevicemanager.h,src/device/k3bemptydiscwaiter.cpp,src/device/k3bemptydiscwaiter.h
 sharedlib_LDFLAGS=-version-info 0:0:1
 sharedlib_rootname=device
 sub_dirs=
@@ -513,6 +513,42 @@ install_location=
 type=SOURCE
 
 [src/device/ScsiIf.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/device/k3bdevice.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/device/k3bdevice.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/device/k3bdevicemanager.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/device/k3bdevicemanager.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/device/k3bemptydiscwaiter.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/device/k3bemptydiscwaiter.h]
 dist=true
 install=false
 install_location=
@@ -645,18 +681,6 @@ install_location=
 type=SOURCE
 
 [src/k3bcopywidget.h]
-dist=true
-install=false
-install_location=
-type=HEADER
-
-[src/k3bdevicemanager.cpp]
-dist=true
-install=false
-install_location=
-type=SOURCE
-
-[src/k3bdevicemanager.h]
 dist=true
 install=false
 install_location=

@@ -8,38 +8,7 @@
 #include <qlist.h>
 
 class KProcess;
-class ScsiIf;
-
-
-class K3bDevice 
-{
- public:
-  K3bDevice() { maxReadSpeed = maxWriteSpeed = 0; burner = 0; burnproof = 0;}
-  K3bDevice( K3bDevice * );
-  K3bDevice( const QString & _vendor,
-	     const QString & _description,
-	     const QString & _version,
-	     bool _burner,
-	     bool _burnproof,
-	     int _maxReadSpeed,
-	     const QString & _devicename, int _maxBurnSpeed = 0 )
-    : vendor( _vendor ),
-    description( _description ), version( _version ), burner( _burner ),
-    burnproof( _burnproof ), maxReadSpeed( _maxReadSpeed ),
-    devicename( _devicename ), maxWriteSpeed( _maxBurnSpeed ) 
-    {}
-
-  //      ~K3bDevice();
-
-  QString vendor;
-  QString description;
-  QString version;
-  bool burner;
-  bool burnproof;
-  int maxReadSpeed;
-  QString devicename;
-  int maxWriteSpeed;
-};
+class K3bDevice;
 
 
 class K3bDeviceManager : public QObject 
@@ -97,22 +66,6 @@ class K3bDeviceManager : public QObject
   int m_foundDevices;
 
   static const int DEV_ARRAY_SIZE = 16;
-
-  ScsiIf *m_scsiIf;
-
-  /**
-   * Simply copied from the cdrdao code.
-   */
-  int getModePage( int pageCode, unsigned char *buf, long bufLen,
-		   unsigned char *modePageHeader,
-		   unsigned char *blockDesc, int showErrorMsgvoid );
-
-  /**
-   * Simply copied from the cdrdao code.
-   */
-  int sendCmd( const unsigned char *cmd, int cmdLen,
-	       const unsigned char *dataOut, int dataOutLen,
-	       unsigned char *dataIn, int dataInLen, int showErrorMsg );
 
   K3bDevice* scanDevice( const char *dev, int showErrorMsg = 1 );
 };

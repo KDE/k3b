@@ -28,7 +28,6 @@
 #include <qlist.h>
 #include <qfile.h>
 
-#include "k3bdevicemanager.h"
 
 // include files for KDE
 #include <kurl.h>

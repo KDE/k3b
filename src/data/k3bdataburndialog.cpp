@@ -18,6 +18,7 @@
 #include "k3bdataburndialog.h"
 #include "k3bdatadoc.h"
 #include "../k3b.h"
+#include "../device/k3bdevice.h"
 
 #include <qcheckbox.h>
 #include <qcombobox.h>
@@ -54,7 +55,7 @@ K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const ch
   slotLoadPreSettings( i18n("K3b Default" ) );
 
   if( K3bDevice* dev = writerDevice() )
-    m_checkBurnProof->setEnabled( dev->burnproof );
+    m_checkBurnProof->setEnabled( dev->burnproof() );
 }
 
 K3bDataBurnDialog::~K3bDataBurnDialog(){
@@ -589,7 +590,7 @@ void K3bDataBurnDialog::slotSelectCustom()
 void K3bDataBurnDialog::slotWriterChanged()
 {
   if( K3bDevice* dev = writerDevice() )
-    m_checkBurnProof->setEnabled( dev->burnproof );
+    m_checkBurnProof->setEnabled( dev->burnproof() );
 }
 
 

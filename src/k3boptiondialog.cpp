@@ -16,7 +16,8 @@
  ***************************************************************************/
 
 #include "k3boptiondialog.h"
-#include "k3bdevicemanager.h"
+#include "device/k3bdevicemanager.h"
+#include "device/k3bdevice.h"
 #include "k3b.h"
 
 #include <qheader.h>
@@ -367,14 +368,28 @@ void K3bOptionDialog::readDevices()
   // add the reading devices
   K3bDevice* dev = dm->readingDevices().first();
   while( dev ) {
-    m_tempReader.append( new K3bDevice( dev ) );
+    m_tempReader.append( new PrivateTempDevice( dev->vendor(), 
+						dev->description(), 
+						dev->version(),
+						dev->burner(),
+						dev->burnproof(),
+						dev->maxReadSpeed(),
+						dev->devicename(),
+						dev->maxWriteSpeed() ) );
     dev = dm->readingDevices().next();
   }
 	
   // add the writing devices
   dev = dm->burningDevices().first();
   while( dev ) {
-    m_tempWriter.append( new K3bDevice( dev ) );
+    m_tempWriter.append( new PrivateTempDevice( dev->vendor(), 
+						dev->description(), 
+						dev->version(),
+						dev->burner(),
+						dev->burnproof(),
+						dev->maxReadSpeed(),
+						dev->devicename(),
+						dev->maxWriteSpeed() ) );
     dev = dm->burningDevices().next();
   }
 
@@ -389,7 +404,7 @@ void K3bOptionDialog::updateDeviceListViews()
 
   PrivateDeviceViewItem* item;
 
-  K3bDevice* dev = m_tempReader.first();
+  PrivateTempDevice* dev = m_tempReader.first();
   while( dev ) {
     // add item to m_viewDevices
     item = new PrivateDeviceViewItem( dev, m_viewDevicesReader );
@@ -413,7 +428,7 @@ void K3bOptionDialog::updateDeviceListViews()
 }
 
 
-void K3bOptionDialog::updateDeviceInfoBox( K3bDevice* dev )
+void K3bOptionDialog::updateDeviceInfoBox( PrivateTempDevice* dev )
 {
   m_viewDeviceInfo->clear();
   if( dev ) {
@@ -455,7 +470,7 @@ void K3bOptionDialog::updateDeviceInfoBox( K3bDevice* dev )
 void K3bOptionDialog::slotDeviceInfoRenamed( QListViewItem* item )
 {
   if( item->listView() == m_viewDeviceInfo ) {
-    K3bDevice* dev = ((PrivateDeviceViewItem*)item)->device;
+    PrivateTempDevice* dev = ((PrivateDeviceViewItem*)item)->device;
     if( item->text(0) == "Vendor" )
       dev->vendor = item->text(1);
     else if( item->text(0) == "Model name" )
@@ -506,14 +521,14 @@ void K3bOptionDialog::slotNewDevice()
 {
   // check what kind of device
   if( m_viewDevicesReader->hasFocus() ) {
-    K3bDevice* dev = new K3bDevice();
+    PrivateTempDevice* dev = new PrivateTempDevice();
     m_tempReader.append( dev );
     PrivateDeviceViewItem* _item = new PrivateDeviceViewItem( dev, m_viewDevicesReader );
     _item->setPixmap( 0, KGlobal::instance()->iconLoader()->loadIcon( "cdrom_unmount", KIcon::NoGroup, KIcon::SizeSmall ) );
     m_viewDevicesReader->setSelected( _item, true );
   }
   else if( m_viewDevicesWriter->hasFocus() ) {
-    K3bDevice* dev = new K3bDevice();
+    PrivateTempDevice* dev = new PrivateTempDevice();
     m_tempWriter.append( dev );
     PrivateDeviceViewItem* _item = new PrivateDeviceViewItem( dev, m_viewDevicesWriter );
     _item->setPixmap( 0, KGlobal::instance()->iconLoader()->loadIcon( "cdwriter_unmount", KIcon::NoGroup, KIcon::SizeSmall ) );
@@ -555,7 +570,7 @@ void K3bOptionDialog::saveDevices()
     QString entryName;
     int entryNum = 1;
 		
-    K3bDevice* dev = m_tempReader.first();
+    PrivateTempDevice* dev = m_tempReader.first();
     while( dev ) {
       QStringList list;
       list.append( dev->vendor ); // vendor
@@ -646,68 +661,6 @@ void K3bOptionDialog::slotDefault()
       }
       break;
     }
-}
-
-
-void K3bOptionDialog::setupPermissionPage()
-{
-  QFrame* frame = addPage( i18n("Permissions"), i18n("Setup Permissions"),
-			   KGlobal::instance()->iconLoader()->loadIcon( "lock", KIcon::NoGroup, KIcon::SizeMedium ) );
-	
-  QVBoxLayout* _frameLayout = new QVBoxLayout( frame );
-  m_stackPermission = new QWidgetStack( frame, "permWidgetStack" );
-  _frameLayout->addWidget( m_stackPermission );
-
-  m_embedPermission = new QXEmbed( m_stackPermission, "permEmbedWidget" );
-  m_containerInfo = new QWidget( m_stackPermission );
-
-  QGridLayout* _containerLayout = new QGridLayout( m_containerInfo );
-  _containerLayout->setSpacing( spacingHint() );
-  _containerLayout->setMargin( marginHint() );
-
-  QLabel* _labelPermissionInfo = new QLabel( m_containerInfo, "permLabel" );
-  _labelPermissionInfo->setText( i18n("In order to work correct the external programs like cdrecord need special permissions. Start K3bPS to configure these." ) );
-  _labelPermissionInfo->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter | QLabel::AlignLeft ) );
-
-  m_buttonStartPS = new QPushButton( i18n("Start K3bPS"), m_containerInfo );
-
-  _containerLayout->addMultiCellWidget( _labelPermissionInfo, 0,0,0,1 );
-  _containerLayout->addWidget( m_buttonStartPS, 1, 1 );
-
-  m_stackPermission->addWidget( m_containerInfo, 1 );
-  m_stackPermission->addWidget( m_embedPermission, 2 );
-  m_stackPermission->raiseWidget( m_containerInfo );
-
-  connect( m_buttonStartPS, SIGNAL(clicked()), this, SLOT(slotStartPS()) );
-}
-
-
-void K3bOptionDialog::slotStartPS()
-{
-  // register at DCOP server
-  DCOPClient* _dcop = kapp->dcopClient();
-  _dcop->attach();
-  _dcop->registerAs( kapp->name() );
-	
-  m_stackPermission->raiseWidget( m_embedPermission );
-	
-  // start the process
-  KProcess _process;
-  _process << "kdesu";
-  _process << "k3bps";
-  _process.start( KProcess::DontCare );
-	
-  // embed the process
-  //	WId _id;
-  m_embedPermission->setAutoDelete( true );
-  QCString reply_type;
-  QByteArray reply_data;
-	
-  //	if( _dcop->call( "k3bps", "kapp/k3bpsapp", "winId()", QByteArray(), reply_type, reply_data ) ) {
-  //		QDataStream answer(reply_data, IO_ReadOnly);
-  //		answer >> _id;
-  //		m_embedPermission->embed( _id );
-  //	}
 }
 
 

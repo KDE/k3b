@@ -20,6 +20,7 @@
 #include "audio/k3baudiotrack.h"
 #include "audio/k3baudiojob.h"
 #include "kcutlabel.h"
+#include "device/k3bdevice.h"
 
 #include <qgroupbox.h>
 #include <qlabel.h>
@@ -244,7 +245,7 @@ void K3bBurnProgressDialog::setJob( K3bBurnJob* job )
 	if( job->doc() )
 	{
 		if( job->doc()->burner() )
-    		m_labelWriter->setText( "Writer: " + job->doc()->burner()->vendor + " " + job->doc()->burner()->description );
+    		m_labelWriter->setText( "Writer: " + job->doc()->burner()->vendor() + " " + job->doc()->burner()->description() );
 
     	// connect to the "special" signals
 		connect( job, SIGNAL(bufferStatus(int)), m_progressBuffer, SLOT(setValue(int)) );

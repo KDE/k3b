@@ -18,7 +18,7 @@
 #include "k3baudioburndialog.h"
 #include "../k3b.h"
 #include "k3baudiodoc.h"
-#include "../k3bdevicemanager.h"
+#include "../device/k3bdevice.h"
 
 #include <qcheckbox.h>
 #include <qcombobox.h>

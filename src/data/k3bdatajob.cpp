@@ -20,6 +20,7 @@
 #include "k3bdatadoc.h"
 #include "../k3b.h"
 #include "../k3bglobals.h"
+#include "../device/k3bdevice.h"
 
 #include <kprocess.h>
 #include <kapp.h>
@@ -103,7 +104,7 @@ void K3bDataJob::start()
       *m_process << "-dao";
     if( k3bMain()->eject() )
       *m_process << "-eject";
-    if( m_doc->burnProof() && m_doc->burner()->burnproof )
+    if( m_doc->burnProof() && m_doc->burner()->burnproof() )
       *m_process << "driveropts=burnproof";
 
     // add speed
@@ -111,7 +112,7 @@ void K3bDataJob::start()
     *m_process << s;
 
     // add the device (e.g. /dev/sg1)
-    s = QString("-dev=%1").arg( m_doc->burner()->devicename );
+    s = QString("-dev=%1").arg( m_doc->burner()->devicename() );
     *m_process << s;
 
     // additional parameters from config
@@ -240,7 +241,7 @@ void K3bDataJob::writeCD()
     *m_process << "-dao";
   if( k3bMain()->eject() )
     *m_process << "-eject";
-  if( m_doc->burnProof() && m_doc->burner()->burnproof )
+  if( m_doc->burnProof() && m_doc->burner()->burnproof() )
     *m_process << "driveropts=burnproof";
 
   // add speed
@@ -248,7 +249,7 @@ void K3bDataJob::writeCD()
   *m_process << s;
 
   // add the device (e.g. /dev/sg1)
-  s = QString("-dev=%1").arg( m_doc->burner()->devicename );
+  s = QString("-dev=%1").arg( m_doc->burner()->devicename() );
   *m_process << s;
 
   // additional parameters from config
