@@ -159,6 +159,8 @@ void K3bCddbHttpQuery::slotReadyRead()
   while( m_socket->canReadLine() ) {
     QString line = stream.readLine();
 
+    kdDebug() << "(K3bCddbHttpQuery) line: " << line << endl;
+
     switch( m_state ) {
 
     case QUERY:
@@ -193,6 +195,8 @@ void K3bCddbHttpQuery::slotReadyRead()
 	emit infoMessage( i18n("No match found") );
 	setError(NO_ENTRY_FOUND);
 	emit queryFinished( this );
+	m_socket->close();
+	return;
       }
 
       else {
@@ -200,6 +204,8 @@ void K3bCddbHttpQuery::slotReadyRead()
 	emit infoMessage( i18n("Error while querying") );
 	setError(QUERY_ERROR);
 	emit queryFinished( this );
+	m_socket->close();
+	return;
       }
       break;
 
@@ -234,6 +240,8 @@ void K3bCddbHttpQuery::slotReadyRead()
 	m_matches.erase( m_matches.begin() );  // remove the unreadable match
 	setError(READ_ERROR);
 	emit queryFinished( this );
+	m_socket->close();
+	return;
       }
       break;
     

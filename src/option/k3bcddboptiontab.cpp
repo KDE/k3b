@@ -312,7 +312,7 @@ void K3bCddbOptionTab::enDisableButtons()
 
 void K3bCddbOptionTab::slotServerTypeChanged()
 {
-  m_editCddbPort->setValue( m_comboCddbType->currentText() == "Http" ? 80 : 8080 );
+  m_editCddbPort->setValue( m_comboCddbType->currentText() == "Http" ? 80 : 8880 );
 }
 
 

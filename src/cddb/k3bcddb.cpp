@@ -133,15 +133,18 @@ void K3bCddb::slotQueryFinished( K3bCddbQuery* query )
       m_iCurrentQueriedServer = 0;
       remoteQuery();
     }
-    else
+    else {
       emit queryFinished( false );
+    }
   }
   else {
     m_iCurrentQueriedServer++;
-    if( m_iCurrentQueriedServer < m_cddbServer.size() )
+    if( m_iCurrentQueriedServer < m_cddbServer.size() ) {
       remoteQuery();
-   else
+    }
+    else {
       emit queryFinished( false );
+    }
   }
 }
 

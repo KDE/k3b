@@ -94,6 +94,8 @@ void K3bCddbpQuery::slotReadyRead()
   while( m_socket->canReadLine() ) {
     QString line = stream.readLine();
 
+    kdDebug() << "(K3bCddbpQuery) line: " << line << endl;
+
     switch( m_state ) {
     case GREETING:
       if( getCode( line ) == 200 || getCode( line ) == 201) {
