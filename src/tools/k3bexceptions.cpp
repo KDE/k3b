@@ -22,9 +22,10 @@ bool K3bExceptions::brokenDaoAudio( K3bCdDevice::CdDevice* dev )
       dev->description().upper().startsWith("DVR-106D") )
     return true;
 
-  if( dev->vendor().upper().startsWith("HL-DT-ST") &&
-      dev->description().upper().startsWith("RW/DVD GCC-4320B") )
-    return true;
+  if( dev->vendor().upper().startsWith("HL-DT-ST") )
+    if( dev->description().upper().startsWith("RW/DVD GCC-4320B") ||
+	dev->description().upper().contains("GCE-8520B") )
+      return true;
 
   if( dev->vendor().upper().startsWith("PHILIPS") &&
       dev->description().upper().startsWith("CDRWDVD3210") )
@@ -33,7 +34,8 @@ bool K3bExceptions::brokenDaoAudio( K3bCdDevice::CdDevice* dev )
   if( dev->vendor().upper().startsWith("LITE-ON") )
     if( dev->description().upper().startsWith("LTR-32123S") ||
 	dev->description().upper().startsWith("LTR-40125S") ||
-	dev->description().upper().contains("LTC-48161H") )
+	dev->description().upper().contains("LTC-48161H") ||
+	dev->description().upper().startsWith("DVDRW LDW-811S") )
     return true;
 
   return false;

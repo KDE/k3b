@@ -470,7 +470,7 @@ void K3bListView::clear()
 void K3bListView::slotClicked( QListViewItem* item, const QPoint&, int col )
 {
   if( K3bListViewItem* k3bItem = dynamic_cast<K3bListViewItem*>(item) ) {
-    if( m_lastClickedItem == item || !m_doubleClickForEdit )
+    if( item->isEnabled() && (m_lastClickedItem == item || !m_doubleClickForEdit) )
       showEditor( k3bItem, col );
     else
       hideEditor();
@@ -486,7 +486,7 @@ void K3bListView::editItem( K3bListViewItem* item, int col )
 {
   if( item == 0 )
     hideEditor();
-  else {
+  else if( item->isEnabled() ) {
     showEditor( item, col );
   }
 }
@@ -803,6 +803,7 @@ void K3bListView::slotEditorSpinBoxValueChanged( int value )
 
 void K3bListView::slotEditorMsfEditValueChanged( int value )
 {
+  // FIXME: do we always need to update the value. Isn't it enough to do it at the end?
   if( renameItem( m_currentEditItem, m_currentEditColumn, QString::number(value) ) ) {
     m_currentEditItem->setText( m_currentEditColumn, QString::number(value) );
     emit itemRenamed( m_currentEditItem, QString::number(value), m_currentEditColumn );
