@@ -30,6 +30,7 @@
 #include <klocale.h>
 #include <kstdguiitem.h>
 #include <kstandarddirs.h>
+#include <kmessagebox.h> 
 
 #include <qcheckbox.h>
 #include <qspinbox.h>
@@ -182,6 +183,8 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
       m_comboSourceDevice->insertItem( dev->vendor() + " " + dev->description() + " (" + dev->blockDeviceName() + ")" );
     dev = devices.next();
   }
+  if ( !devices.first() )
+     enableButton(User1,false);
 
   connect( m_comboSourceDevice, SIGNAL(activated(int)), this, SLOT(slotSourceSelected()) );
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotSourceSelected()) );
@@ -281,7 +284,7 @@ K3bDevice* K3bCdCopyDialog::readingDevice() const
 void K3bCdCopyDialog::slotUser1()
 {
   K3bCdCopyJob* job = new K3bCdCopyJob( this );
-
+  
   job->setWriter( m_writerSelectionWidget->writerDevice() );
   job->setSpeed( m_writerSelectionWidget->writerSpeed() );
   job->setReader( readingDevice() );
@@ -331,9 +334,11 @@ void K3bCdCopyDialog::slotUser2()
 
 void K3bCdCopyDialog::slotOnlyCreateImageChecked( bool c )
 {
-  if( c )
+  if( c ) 
     m_checkDeleteImages->setChecked( false );
-
+  if ( !m_writerSelectionWidget->writerDevice() )
+       enableButton(User1,c);
+    
   // check if we can enable on-the-fly
   slotSourceSelected();
 }
