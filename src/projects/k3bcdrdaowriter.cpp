@@ -87,7 +87,7 @@ public:
 };
 
 
-K3bCdrdaoWriter::K3bCdrdaoWriter( K3bDevice* dev, QObject* parent, const char* name )
+K3bCdrdaoWriter::K3bCdrdaoWriter( K3bCdDevice::CdDevice* dev, QObject* parent, const char* name )
   : K3bAbstractWriter( dev, parent, name ),
     m_command(WRITE),
     m_blankMode(MINIMAL),
@@ -116,15 +116,15 @@ K3bCdrdaoWriter::K3bCdrdaoWriter( K3bDevice* dev, QObject* parent, const char* n
   k3bcore->config()->setGroup("General Options");
   m_eject = !k3bcore->config()->readBoolEntry( "No cd eject", false );
 
-  QPtrList<K3bDevice> devices;
-  K3bDevice *d;
+  QPtrList<K3bCdDevice::CdDevice> devices;
+  K3bCdDevice::CdDevice *d;
   if ( !dev )
   {
     devices = k3bcore->deviceManager()->burningDevices();
     d = devices.first();
     while( d )
     {
-      if( d->interfaceType() == K3bDevice::SCSI )
+      if( d->interfaceType() == K3bCdDevice::CdDevice::SCSI )
       {
         setBurnDevice(d);
         break;
@@ -136,7 +136,7 @@ K3bCdrdaoWriter::K3bCdrdaoWriter( K3bDevice* dev, QObject* parent, const char* n
   d = devices.first();
   while( d )
   {
-    if( d->interfaceType() == K3bDevice::SCSI )
+    if( d->interfaceType() == K3bCdDevice::CdDevice::SCSI )
     {
       m_sourceDevice = d;
       break;
@@ -230,6 +230,10 @@ void K3bCdrdaoWriter::prepareArgumentList()
       << K3bCdDevice::externalBinDeviceParameter(m_sourceDevice, m_cdrdaoBinObject);
     if ( m_sourceDevice->cdrdaoDriver() != "auto" )
       *m_process << "--driver" << m_sourceDevice->cdrdaoDriver();
+    else if( defaultToGenericMMC( m_sourceDevice, false ) ) {
+      kdDebug() << "(K3bCdrdaoWriter) defaulting to generic-mmc driver for " << m_sourceDevice->blockDeviceName() << endl;
+      *m_process << "--driver" << "generic-mmc";
+    }
     setReadArguments();
     break;
   case BLANK:
@@ -254,6 +258,10 @@ void K3bCdrdaoWriter::setWriteArguments()
       *m_process << QString("%1:0x00000010").arg( burnDevice()->cdrdaoDriver() );
     else
       *m_process << burnDevice()->cdrdaoDriver();
+  }
+  else if( defaultToGenericMMC( burnDevice(), true ) ) {
+    kdDebug() << "(K3bCdrdaoWriter) defaulting to generic-mmc driver for " << burnDevice()->blockDeviceName() << endl;
+    *m_process << "--driver" << "generic-mmc";
   }
 
   // burn speed
@@ -354,6 +362,10 @@ void K3bCdrdaoWriter::setCopyArguments()
   *m_process << "--source-device" << K3bCdDevice::externalBinDeviceParameter(m_sourceDevice, m_cdrdaoBinObject);
   if ( m_sourceDevice->cdrdaoDriver() != "auto" )
     *m_process << "--source-driver" << m_sourceDevice->cdrdaoDriver();
+  else if( defaultToGenericMMC( m_sourceDevice, false ) ) {
+    kdDebug() << "(K3bCdrdaoWriter) defaulting to generic-mmc driver for " << m_sourceDevice->blockDeviceName() << endl;
+    *m_process << "--source-driver" << "generic-mmc";
+  }
 
   // on-the-fly
   if ( m_onTheFly )
@@ -373,6 +385,10 @@ void K3bCdrdaoWriter::setBlankArguments()
       *m_process << QString("%1:0x00000010").arg( burnDevice()->cdrdaoDriver() );
     else
       *m_process << burnDevice()->cdrdaoDriver();
+  }
+  else if( defaultToGenericMMC( burnDevice(), true ) ) {
+    kdDebug() << "(K3bCdrdaoWriter) defaulting to generic-mmc driver for " << burnDevice()->blockDeviceName() << endl;
+    *m_process << "--driver" << "generic-mmc";
   }
 
   // burn speed
@@ -988,5 +1004,69 @@ void K3bCdrdaoWriter::slotThroughput( int t )
 {
   emit writeSpeed( t, 150 );
 }
+
+
+QString K3bCdrdaoWriter::findDriverFile( const K3bExternalBin* bin )
+{
+  if( !bin )
+    return QString::null;
+
+  // cdrdao normally in (prefix)/bin and driver table in (prefix)/share/cdrdao
+  QString path = bin->path;
+  path.truncate( path.findRev("/") );
+  path.truncate( path.findRev("/") );
+  path += "/share/cdrdao/drivers";
+  if( QFile::exists(path) )
+    return path;
+  else {
+    kdDebug() << "(K3bCdrdaoWriter) could not find cdrdao driver table." << endl;
+    return QString::null;
+  }
+}
+
+
+// returns true if the driver file could be opened and no driver could be found
+// TODO: cache the drivers
+bool K3bCdrdaoWriter::defaultToGenericMMC( K3bCdDevice::CdDevice* dev, bool writer )
+{
+  QString driverTable = findDriverFile( m_cdrdaoBinObject );
+  if( !driverTable.isEmpty() ) {
+    QFile f( driverTable );
+    if( f.open( IO_ReadOnly ) ) {
+      // read all drivers
+      QStringList drivers;
+      QTextStream fStr( &f );
+      while( !fStr.atEnd() ) {
+	QString line = fStr.readLine();
+	if( line.isEmpty() )
+	  continue;
+	if( line[0] == '#' )
+	  continue;
+	if( line[0] == 'R' && writer )
+	  continue;
+	if( line[0] == 'W' && !writer )
+	  continue;
+	drivers.append(line);
+      }
+
+      // search for the driver
+      for( QStringList::const_iterator it = drivers.begin(); it != drivers.end(); ++it ) {
+	if( (*it).section( '|', 1, 1 ) == dev->vendor() &&
+	    (*it).section( '|', 2, 2 ) == dev->description() )
+	  return false;
+      }
+
+      // no driver found
+      return true;
+    }
+    else {
+      kdDebug() << "(K3bCdrdaoWriter) could not open driver table " << driverTable << endl;
+      return false;
+    }
+  }
+  else
+    return false;
+}
+
 
 #include "k3bcdrdaowriter.moc"

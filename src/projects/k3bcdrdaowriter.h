@@ -111,6 +111,10 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
 
   bool write(const char* data, int len);
   bool cueSheet();
+
+  QString findDriverFile( const K3bExternalBin* bin );
+  bool defaultToGenericMMC( K3bCdDevice::CdDevice* dev, bool writer );
+
   // options
   // ---------------------
   int        m_command;
