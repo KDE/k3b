@@ -26,6 +26,7 @@ class K3bMovixInstallation;
 class K3bDataImageSettingsWidget;
 class K3bDataAdvancedImageSettingsWidget;
 class K3bDataVolumeDescWidget;
+class QCheckBox;
 
 
 class K3bMovixDvdBurnDialog : public K3bProjectBurnDialog
@@ -42,6 +43,8 @@ class K3bMovixDvdBurnDialog : public K3bProjectBurnDialog
   void slotSaveUserDefaults();
   void slotStartClicked();
 
+  void toggleAllOptions();
+
  protected:
   void saveSettings();
   void readSettings();
@@ -53,6 +56,8 @@ class K3bMovixDvdBurnDialog : public K3bProjectBurnDialog
   K3bDataImageSettingsWidget* m_imageSettingsWidget;
   K3bDataAdvancedImageSettingsWidget* m_advancedImageSettingsWidget;
   K3bMovixInstallation* m_installation;
+
+  QCheckBox* m_checkVerify;
 };
 
 #endif

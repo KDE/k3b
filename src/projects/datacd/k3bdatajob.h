@@ -69,6 +69,8 @@ class K3bDataJob : public K3bBurnJob
   void slotWriterJobPercent( int p );
   void slotWriterNextTrack( int t, int tt );
   void slotWriterJobFinished( bool success );
+  void slotVerificationProgress( int );
+  void slotVerificationFinished( bool );
   void slotMsInfoFetched(bool);
   void writeImage();
   void cancelAll();
@@ -91,19 +93,8 @@ class K3bDataJob : public K3bBurnJob
   bool startWriting();
   void determineWritingMode();
 
-  K3bDataDoc* m_doc;
-
-  bool m_imageFinished;
-  bool m_canceled;
-
-  KTempFile* m_tocFile;
-
-  QFile m_imageFile;
-  QDataStream m_imageFileStream;
-
-  int m_usedDataMode;
-  int m_usedWritingApp;
-  int m_usedWritingMode;
+  class Private;
+  Private* d;
 };
 
 #endif

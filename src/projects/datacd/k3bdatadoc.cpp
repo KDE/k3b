@@ -520,6 +520,9 @@ bool K3bDataDoc::loadDocumentDataOptions( QDomElement elem )
 	setMultiSessionMode( NONE );
     }
 
+    else if( e.nodeName() == "verify_data" )
+      setVerifyData( e.attributeNode( "activated" ).value() == "yes" );      
+
     else
       kdDebug() << "(K3bDataDoc) unknown option entry: " << e.nodeName() << endl;
   }
@@ -819,6 +822,10 @@ void K3bDataDoc::saveDocumentDataOptions( QDomElement& optionsElem )
     break;
   }
   optionsElem.appendChild( topElem );
+
+  topElem = doc.createElement( "verify_data" );
+  topElem.setAttribute( "activated", verifyData() ? "yes" : "no" );
+  optionsElem.appendChild( topElem );
   // ----------------------------------------------------------------------
 }
 
@@ -1020,16 +1027,15 @@ QString K3bDataDoc::writePathSpec( const QString& filename )
 }
 
 
-const QString& K3bDataDoc::dummyDir()
+QString K3bDataDoc::dummyDir()
 {
   QDir _appDir( locateLocal( "appdata", "temp/" ) );
   if( !_appDir.cd( "dummydir" ) ) {
     _appDir.mkdir( "dummydir" );
     _appDir.cd( "dummydir" );
   }
-  m_dummyDir = _appDir.absPath() + "/";
 
-  return m_dummyDir;
+  return _appDir.absPath() + "/";
 }
 
 K3bBurnJob* K3bDataDoc::newBurnJob()
@@ -1119,6 +1125,8 @@ void K3bDataDoc::loadDefaultSettings( KConfig* c )
     setDataMode( K3b::MODE2 );
   else
     setDataMode( K3b::DATA_MODE_AUTO );
+
+  m_verifyData = c->readBoolEntry( "verify data", false );
 }
 
 

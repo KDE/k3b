@@ -28,6 +28,7 @@
 #include <k3bisooptions.h>
 #include <k3bglobals.h>
 #include <k3bwritingmodewidget.h>
+#include <k3bstdguiitems.h>
 
 #include <kconfig.h>
 #include <klocale.h>
@@ -51,6 +52,10 @@ K3bDvdBurnDialog::K3bDvdBurnDialog( K3bDvdDoc* doc, QWidget *parent, const char 
   prepareGui();
 
   setTitle( i18n("Dvd Project"), i18n("Size: %1").arg( KIO::convertSize(doc->size()) ) );
+
+  // for now we just put the verify checkbox on the main page...
+  m_checkVerify = K3bStdGuiItems::verifyCheckBox( m_optionGroup );
+  m_optionGroupLayout->addWidget( m_checkVerify );
 
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
   m_optionGroupLayout->addItem( spacer );
@@ -159,6 +164,8 @@ void K3bDvdBurnDialog::saveSettings()
     m_doc->setMultiSessionMode( K3bDataDoc::FINISH );
   else
     m_doc->setMultiSessionMode( K3bDataDoc::NONE );
+
+  m_doc->setVerifyData( m_checkVerify->isChecked() );
 }
 
 
@@ -185,6 +192,7 @@ void K3bDvdBurnDialog::readSettings()
   if( !doc()->tempDir().isEmpty() )
     m_tempDirSelectionWidget->setTempPath( doc()->tempDir() );
 
+  m_checkVerify->setChecked( m_doc->verifyData() );
 
   m_imageSettingsWidget->load( m_doc->isoOptions() );
   m_advancedImageSettingsWidget->load( m_doc->isoOptions() );
@@ -229,6 +237,13 @@ void K3bDvdBurnDialog::toggleAllOptions()
       m_radioMultiSessionFinish->setEnabled(true);
     }
   }
+
+  if( m_checkOnlyCreateImage->isChecked() ) {
+    m_checkVerify->setChecked(false);
+    m_checkVerify->setEnabled(false);
+  }
+  else
+    m_checkVerify->setEnabled(true);
 }
 
 
@@ -239,6 +254,8 @@ void K3bDvdBurnDialog::slotLoadK3bDefaults()
   m_imageSettingsWidget->load( K3bIsoOptions::defaults() );
   m_advancedImageSettingsWidget->load( K3bIsoOptions::defaults() );
   m_volumeDescWidget->load( K3bIsoOptions::defaults() );
+
+  m_checkVerify->setChecked( false );
 
   toggleAllOptions();
 }
@@ -255,6 +272,8 @@ void K3bDvdBurnDialog::slotLoadUserDefaults()
   m_advancedImageSettingsWidget->load( o );
   m_volumeDescWidget->load( o );
 
+  m_checkVerify->setChecked( c->readBoolEntry( "verify data", false ) );
+
   toggleAllOptions();
 }
 
@@ -270,6 +289,8 @@ void K3bDvdBurnDialog::slotSaveUserDefaults()
   m_advancedImageSettingsWidget->save( o );
   m_volumeDescWidget->save( o );
   o.save( c );
+
+  c->writeEntry( "verify data", m_checkVerify->isChecked() );
 
   if( m_tempDirSelectionWidget->isEnabled() ) {
     m_tempDirSelectionWidget->saveConfig();

@@ -65,6 +65,9 @@ class K3bDvdJob : public K3bBurnJob
   void slotWriterJobPercent( int );
   void slotWritingFinished( bool );
 
+  void slotVerificationProgress( int p );
+  void slotVerificationFinished( bool success );
+
  private:
   K3bDataDoc* m_doc;
   K3bIsoImager* m_isoImager;
@@ -78,6 +81,9 @@ class K3bDvdJob : public K3bBurnJob
   bool m_writingStarted;
 
   bool waitForDvd();
+
+  class Private;
+  Private* d;
 };
 
 #endif

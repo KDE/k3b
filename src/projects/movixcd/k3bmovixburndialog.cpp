@@ -77,6 +77,10 @@ K3bMovixBurnDialog::K3bMovixBurnDialog( K3bMovixDoc* doc, QWidget* parent, const
   m_advancedImageSettingsWidget->layout()->setMargin( marginHint() );
   addPage( m_advancedImageSettingsWidget, i18n("Advanced") );
 
+  // for now we just put the verify checkbox on the main page...
+  m_checkVerify = K3bStdGuiItems::verifyCheckBox( m_optionGroup );
+  m_optionGroupLayout->addWidget( m_checkVerify );
+
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
   m_optionGroupLayout->addItem( spacer );
 
@@ -134,6 +138,8 @@ void K3bMovixBurnDialog::slotLoadK3bDefaults()
 
   m_movixOptionsWidget->loadDefaults();
 
+  m_checkVerify->setChecked( false );
+
   toggleAllOptions();
 }
 
@@ -155,6 +161,8 @@ void K3bMovixBurnDialog::slotLoadUserDefaults()
 
   m_movixOptionsWidget->loadConfig(c);
 
+  m_checkVerify->setChecked( c->readBoolEntry( "verify data", false ) );
+
   toggleAllOptions();
 }
 
@@ -174,6 +182,8 @@ void K3bMovixBurnDialog::slotSaveUserDefaults()
   m_advancedImageSettingsWidget->save( o );
   m_volumeDescWidget->save( o );
   o.save( c );
+
+  c->writeEntry( "verify data", m_checkVerify->isChecked() );
 
   m_movixOptionsWidget->saveConfig(c);
 }
@@ -196,6 +206,8 @@ void K3bMovixBurnDialog::saveSettings()
 
   // save image file path
   m_doc->setTempDir( m_tempDirSelectionWidget->tempPath() );
+
+  m_doc->setVerifyData( m_checkVerify->isChecked() );
 }
 
 
@@ -204,6 +216,8 @@ void K3bMovixBurnDialog::readSettings()
   K3bProjectBurnDialog::readSettings();
 
   m_checkStartMultiSesssion->setChecked( m_doc->multiSessionMode() == K3bDataDoc::START );
+
+  m_checkVerify->setChecked( m_doc->verifyData() );
 
   m_imageSettingsWidget->load( m_doc->isoOptions() );
   m_advancedImageSettingsWidget->load( m_doc->isoOptions() );
@@ -255,5 +269,17 @@ void K3bMovixBurnDialog::slotStartClicked()
   K3bProjectBurnDialog::slotStartClicked();
 }
 
+
+void K3bMovixBurnDialog::toggleAllOptions()
+{
+  K3bProjectBurnDialog::toggleAllOptions();
+
+  if( m_checkOnlyCreateImage->isChecked() ) {
+    m_checkVerify->setChecked(false);
+    m_checkVerify->setEnabled(false);
+  }
+  else
+    m_checkVerify->setEnabled(true);
+}
 
 #include "k3bmovixburndialog.moc"

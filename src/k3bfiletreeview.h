@@ -19,10 +19,6 @@
 
 
 #include <kfiletreeview.h>
-#include <device/k3bdevice.h>
-#include <device/k3bdevicemanager.h>
-
-#include <qmap.h>
 
 class KFileTreeBranch;
 class KActionCollection;
@@ -31,21 +27,44 @@ class QPoint;
 class QDropEvent;
 class QDragEnterEvent;
 
+namespace K3bCdDevice {
+  class CdDevice;
+  class DeviceManager;
+}
+
+namespace KIO {
+  class Job;
+}
+
 
 class K3bDeviceBranch : public KFileTreeBranch
 {
   Q_OBJECT
 
  public:
-  K3bDeviceBranch( KFileTreeView*, K3bDevice* dev, KFileTreeViewItem* item = 0 );
+  K3bDeviceBranch( KFileTreeView*, K3bCdDevice::CdDevice* dev, KFileTreeViewItem* item = 0 );
 
-  K3bDevice* device() const { return m_device; }
+  K3bCdDevice::CdDevice* device() const { return m_device; }
 
-// public slots:
+ signals:
+  /**
+   * mountPoint is empty if not successfull
+   */
+  void mountFinished( K3bDeviceBranch*, const QString& mountPoint );
+  void unmountFinished( K3bDeviceBranch*, bool success );
+
+ public slots:
+  void mount();
+  void unmount();
+
 //  bool populate( const KURL& url, KFileTreeViewItem* v );
 
+ private slots:
+  void slotMountFinished( KIO::Job* );
+  void slotUnmountFinished( KIO::Job* );
+
  private:
-  K3bDevice* m_device;
+  K3bCdDevice::CdDevice* m_device;
 };
 
 
@@ -65,17 +84,21 @@ class K3bFileTreeView : public KFileTreeView
   virtual KFileTreeBranch* addBranch( KFileTreeBranch* );
   virtual KFileTreeBranch* addBranch( const KURL& url, const QString& name, const QPixmap& , bool showHidden = false );
 
+  K3bDeviceBranch* branch( K3bCdDevice::CdDevice* dev );
+
   /**
    * adds home and root dir branch
    */
   void addDefaultBranches();
-  void addCdDeviceBranches( K3bDeviceManager* );
+  void addCdDeviceBranches( K3bCdDevice::DeviceManager* );
 
   /** returns 0 if no device is selected */
-  K3bDevice* selectedDevice() const;
+  K3bCdDevice::CdDevice* selectedDevice() const;
   /** returnes an empty url if no url is selected */
   KURL selectedUrl() const;
-  void setSelectedDevice(K3bDevice* dev);
+  void setSelectedDevice(K3bCdDevice::CdDevice* dev);
+
+
  public slots:
   void followUrl( const KURL& url );
   void setTreeDirOnlyMode( bool b );
@@ -88,12 +111,15 @@ class K3bFileTreeView : public KFileTreeView
 
  signals:
   void urlExecuted( const KURL& url );
-  void deviceExecuted( K3bDevice* dev );
+  void deviceExecuted( K3bCdDevice::CdDevice* dev );
 
   /** only gets emitted if the menu is disabled */
-  void contextMenu( K3bDevice*, const QPoint& );
+  void contextMenu( K3bCdDevice::CdDevice*, const QPoint& );
   /** only gets emitted if the menu is disabled */
   void contextMenu( const KURL& url, const QPoint& );
+
+  void mountFinished( K3bDeviceBranch*, const QString& mountPoint );
+  void unmountFinished( K3bDeviceBranch*, bool success );
   
  private slots:
   void slotItemExecuted( QListViewItem* item );
@@ -102,8 +128,10 @@ class K3bFileTreeView : public KFileTreeView
  private:
   void initActions();
 
+  class Private;
+  Private* d;
+
   bool m_dirOnlyMode;
-  QMap<KFileTreeBranch*, K3bDevice*> m_deviceBranchesMap;
   KActionCollection* m_actionCollection;
   KActionMenu* m_devicePopupMenu;
   KActionMenu* m_urlPopupMenu;

@@ -36,7 +36,7 @@ K3bBlankingJob::K3bBlankingJob( QObject* parent )
     m_writerJob(0),
     m_force(false),
     m_device(0),
-    m_speed(1),
+    m_speed(0),
     m_mode(Fast),
     m_writingApp(K3b::DEFAULT),
     m_canceled(false),

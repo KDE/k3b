@@ -21,6 +21,7 @@
 #include <qlabel.h>
 #include <qfile.h>
 #include <qtextstream.h>
+#include <qpixmap.h>
 
 #include <klocale.h>
 #include <ktextbrowser.h>

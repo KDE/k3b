@@ -53,6 +53,7 @@ class K3bFileView : public K3bCdContentsView
   void urlEntered( const KURL& url );
 
  public slots:
+  void setDir( const QString& );
   void slotAudioFilePlay();
   void slotAudioFileEnqueue();
   void slotAddFilesToProject();

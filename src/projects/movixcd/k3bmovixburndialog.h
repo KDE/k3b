@@ -44,6 +44,8 @@ class K3bMovixBurnDialog : public K3bProjectBurnDialog
   void slotSaveUserDefaults();
   void slotStartClicked();
 
+  void toggleAllOptions();
+
  protected:
   void saveSettings();
   void readSettings();
@@ -60,6 +62,8 @@ class K3bMovixBurnDialog : public K3bProjectBurnDialog
 
   QCheckBox* m_checkStartMultiSesssion;
   K3bDataModeWidget* m_dataModeWidget;
+
+  QCheckBox* m_checkVerify;
 };
 
 

@@ -48,6 +48,7 @@ K3bMovixDvdJob::K3bMovixDvdJob( K3bMovixDvdDoc* doc, QObject* parent )
 	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
   connect( m_dvdJob, SIGNAL(infoMessage(const QString&, int)),
 	   this, SIGNAL(infoMessage(const QString&, int)) );
+  connect( m_dvdJob, SIGNAL(burning(bool)), this, SIGNAL(burning(bool)) );
 
   // we need to clean up here
   connect( m_dvdJob, SIGNAL(finished(bool)), this, SLOT(slotDvdJobFinished(bool)) );

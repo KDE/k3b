@@ -44,7 +44,8 @@
 class K3bEmptyDiscWaiter::Private
 {
 public:
-  Private() {
+  Private()
+    : erasingInfoDialog(0) {
     dialogVisible = false;
     inLoop = false;
   }
@@ -67,6 +68,7 @@ public:
   QLabel* labelFoundMedia;
   QLabel* pixLabel;
 
+  K3bErasingInfoDialog* erasingInfoDialog;
   //  K3bCdDevice::DeviceHandler* deviceHandler;
 };
 
@@ -278,21 +280,23 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
 	  d->dialogVisible = false;
 	}
 
+	if( !d->erasingInfoDialog )
+	  d->erasingInfoDialog = new K3bErasingInfoDialog( QString::null, this );
+
+
 	if( dh->ngDiskInfo().mediaType() == K3bCdDevice::MEDIA_CD_RW ) {
 	  // start a k3bblankingjob
-	  K3bErasingInfoDialog infoDialog( false, i18n("Erasing CD-RW"), qApp->activeWindow() );
+	  d->erasingInfoDialog->setText( i18n("Erasing CD-RW") );
 	  
-	  // TODO: what about setting the speed?
-
 	  K3bBlankingJob job;
 	  job.setDevice( d->device );
 	  job.setMode( K3bBlankingJob::Fast );
 	  job.setForceNoEject(true);
-	  connect( &job, SIGNAL(finished(bool)), &infoDialog, SLOT(close()) );
+	  job.setSpeed( 0 ); // this should use the max.
 	  connect( &job, SIGNAL(finished(bool)), this, SLOT(slotErasingFinished(bool)) );
-	  connect( &infoDialog, SIGNAL(cancelClicked()), &job, SLOT(cancel()) );
+	  connect( d->erasingInfoDialog, SIGNAL(cancelClicked()), &job, SLOT(cancel()) );
 	  job.start();
-	  infoDialog.exec();
+	  d->erasingInfoDialog->exec(false);
 	}
 	else {
 	  //
@@ -313,13 +317,12 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
 	  job.setForce( false );
 	  job.setForceNoEject(true);
 
-	  K3bErasingInfoDialog infoDialog( true, i18n("Formatting DVD-RW"), qApp->activeWindow() );
-	  connect( &job, SIGNAL(finished(bool)), &infoDialog, SLOT(close()) );
+	  d->erasingInfoDialog->setText( i18n("Formatting DVD-RW") );
 	  connect( &job, SIGNAL(finished(bool)), this, SLOT(slotErasingFinished(bool)) );
-	  connect( &job, SIGNAL(percent(int)), &infoDialog, SLOT(setProgress(int)) );
-	  connect( &infoDialog, SIGNAL(cancelClicked()), &job, SLOT(cancel()) );
+	  connect( &job, SIGNAL(percent(int)), d->erasingInfoDialog, SLOT(setProgress(int)) );
+	  connect( d->erasingInfoDialog, SIGNAL(cancelClicked()), &job, SLOT(cancel()) );
 	  job.start();
-	  infoDialog.exec();
+	  d->erasingInfoDialog->exec(true);
 	}
       }
       else {
@@ -395,14 +398,17 @@ void K3bEmptyDiscWaiter::slotErasingFinished( bool success )
   }
   else {
     K3bCdDevice::eject( d->device );
+    d->erasingInfoDialog->hide();
     KMessageBox::error( qApp->activeWindow(), i18n("Erasing failed.") );
-    QTimer::singleShot( 1000, this, SLOT(startDeviceHandler()) );
+    QTimer::singleShot( 0, this, SLOT(startDeviceHandler()) );
   }
 }
 
 
 void K3bEmptyDiscWaiter::slotReloadingAfterErasingFinished( K3bCdDevice::DeviceHandler* dh )
 {
+  d->erasingInfoDialog->hide();
+
   if( !dh->success() ) {
     KMessageBox::error( qApp->activeWindow(), i18n("Unable to reload media. Please reload manually."),
 			i18n("Reload failed") );

@@ -48,6 +48,7 @@ K3bMovixJob::K3bMovixJob( K3bMovixDoc* doc, QObject* parent )
 	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
   connect( m_dataJob, SIGNAL(infoMessage(const QString&, int)),
 	   this, SIGNAL(infoMessage(const QString&, int)) );
+  connect( m_dataJob, SIGNAL(burning(bool)), this, SIGNAL(burning(bool)) );
 
   // we need to clean up here
   connect( m_dataJob, SIGNAL(finished(bool)), this, SLOT(slotDataJobFinished(bool)) );

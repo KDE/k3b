@@ -98,6 +98,13 @@ class K3bBurnJob : public K3bJob
   void bufferStatus( int );
   void writeSpeed(int);
 
+  /**
+   * This signal may be used to inform when the burning starts or ends
+   * The BurningProgressDialog for example uses it to enable and disable
+   * the buffer and writing speed displays.
+   */
+  void burning(bool);
+
  private:
   int m_writeMethod;
 };

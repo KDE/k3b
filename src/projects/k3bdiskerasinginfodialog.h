@@ -23,6 +23,7 @@
 class K3bBusyWidget;
 class QLabel;
 class KProgress;
+class QWidgetStack;
 
 
 class K3bErasingInfoDialog : public KDialogBase
@@ -30,20 +31,25 @@ class K3bErasingInfoDialog : public KDialogBase
   Q_OBJECT
 
  public:
-  K3bErasingInfoDialog( bool progress, const QString& text,
+  K3bErasingInfoDialog( const QString& text = QString::null,
 			QWidget* parent = 0, const char* name = 0 );
   ~K3bErasingInfoDialog();
 
+  int exec( bool showProgress );
+
  public slots:
+  void setText( const QString& );
   void slotFinished( bool success );
   void setProgress( int p );
 
+ private slots:
+  void slotCancel();
+
  private:
   QLabel* m_label;
+  QWidgetStack* m_stack;
   K3bBusyWidget* m_busyWidget;
   KProgress* m_progressBar;
-
-  bool m_progress;
 };
 
 

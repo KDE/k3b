@@ -27,6 +27,7 @@ class K3bDataVolumeDescWidget;
 class QGroupBox;
 class QRadioButton;
 class QButtonGroup;
+class QCheckBox;
 
 
 class K3bDvdBurnDialog : public K3bProjectBurnDialog
@@ -67,6 +68,8 @@ class K3bDvdBurnDialog : public K3bProjectBurnDialog
    QRadioButton* m_radioMultiSessionContinue;
    QRadioButton* m_radioMultiSessionFinish;
    // ---------------------------------------------
+
+   QCheckBox* m_checkVerify;
 
    K3bDvdDoc* m_doc;
 };

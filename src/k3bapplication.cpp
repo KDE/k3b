@@ -27,6 +27,7 @@
 #include <songdb/k3bsongmanager.h>
 #include <k3bdoc.h>
 #include <k3bsystemproblemdialog.h>
+#include <k3bthread.h>
 
 #include <ktip.h>
 #include <klocale.h>
@@ -195,6 +196,8 @@ void K3bApplication::slotShutDown()
 {
   m_core->saveConfig();
   songManager()->save();
+
+  K3bThread::waitUntilFinished();
 }
 
 #include "k3bapplication.moc"

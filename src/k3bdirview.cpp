@@ -19,13 +19,13 @@
 
 #include "rip/k3baudiocdview.h"
 #include "k3bfileview.h"
-#include "device/k3bdevicemanager.h"
-#include "device/k3bdevice.h"
 #include "rip/k3bmovieview.h"
 #include "k3bfiletreeview.h"
 #include "cdinfo/k3bdiskinfodetector.h"
 #include "cdinfo/k3bdiskinfoview.h"
 #include <device/k3bdevicehandler.h>
+#include <device/k3bdevice.h>
+#include <device/k3bdevicemanager.h>
 
 #include <unistd.h>
 // QT-includes
@@ -57,7 +57,6 @@
 #include <kiconloader.h>
 #include <kurl.h>
 #include <klocale.h>
-#include <kautomount.h>
 #include <kstandarddirs.h>
 #include <kio/file.h>
 #include <kio/global.h>
@@ -70,6 +69,7 @@
 #include <kmessagebox.h>
 #include <kstdaction.h>
 #include <kconfig.h>
+#include <kaction.h>
 
 
 class K3bNoViewView : public QWidget
@@ -177,10 +177,14 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
 //   connect( m_urlCombo, SIGNAL(returnPressed(const QString&)), this, SLOT(slotDirActivated(const QString&)) );
 //   connect( m_urlCombo, SIGNAL(activated(const QString&)), this, SLOT(slotDirActivated(const QString&)) );
 
-  connect( m_fileTreeView, SIGNAL(urlExecuted(const KURL&)), this, SLOT(slotDirActivated(const KURL&)) );
-  connect( m_fileTreeView, SIGNAL(deviceExecuted(K3bDevice*)), this, SLOT(slotDetectDiskInfo(K3bDevice*)) );
-  connect( m_fileTreeView, SIGNAL(contextMenu(K3bDevice*, const QPoint&)),
-	   this, SLOT(slotFileTreeContextMenu(K3bDevice*, const QPoint&)) );
+  connect( m_fileTreeView, SIGNAL(urlExecuted(const KURL&)), 
+	   this, SLOT(slotDirActivated(const KURL&)) );
+  connect( m_fileTreeView, SIGNAL(deviceExecuted(K3bCdDevice::CdDevice*)), 
+	   this, SLOT(slotDetectDiskInfo(K3bCdDevice::CdDevice*)) );
+  connect( m_fileTreeView, SIGNAL(contextMenu(K3bCdDevice::CdDevice*, const QPoint&)),
+	   this, SLOT(slotFileTreeContextMenu(K3bCdDevice::CdDevice*, const QPoint&)) );
+  connect( m_fileTreeView, SIGNAL(mountFinished(K3bDeviceBranch*, const QString&)),
+	   this, SLOT(slotMountFinished(K3bDeviceBranch*, const QString&)) );
   connect( m_fileView, SIGNAL(urlEntered(const KURL&)), m_fileTreeView, SLOT(followUrl(const KURL&)) );
   connect( m_fileView, SIGNAL(urlEntered(const KURL&)), this, SLOT(slotUpdateURLCombo(const KURL&)) );
 }
@@ -196,18 +200,25 @@ void K3bDirView::showUrl( const KURL& url )
 }
 
 
-void K3bDirView::showDevice( K3bDevice* dev )
+void K3bDirView::showDevice( K3bCdDevice::CdDevice* dev )
 {
   slotDetectDiskInfo( dev );
 }
 
 
-void K3bDirView::slotDetectDiskInfo( K3bDevice* dev )
+void K3bDirView::slotDetectDiskInfo( K3bCdDevice::CdDevice* dev )
 {
-  m_viewStack->raiseWidget( m_noViewView );
-  m_fileTreeView->setSelectedDevice( dev );
-  k3bcore->requestBusyInfo( i18n("Trying to fetch information about the inserted disk.") );
-  m_diskInfoDetector->detect( dev );
+  // to speed things up we first check if the media is already mounted
+  QString mp = KIO::findDeviceMountPoint( dev->mountDevice() );
+  if( !mp.isEmpty() ) {
+    slotDirActivated( mp );
+  }
+  else {
+    m_viewStack->raiseWidget( m_noViewView );
+    m_fileTreeView->setSelectedDevice( dev );
+    k3bcore->requestBusyInfo( i18n("Trying to fetch information about the inserted disk.") );
+    m_diskInfoDetector->detect( dev );
+  }
 }
 
 
@@ -251,39 +262,22 @@ void K3bDirView::slotDiskInfoReady( const K3bDiskInfo& info )
   }
 }
 
-void K3bDirView::slotMountDevice( K3bDevice* device )
+void K3bDirView::slotMountDevice( K3bCdDevice::CdDevice* device )
 {
-  const QString& mountPoint = device->mountPoint();
-  if( !mountPoint.isEmpty() ){
-    m_fileTreeView->setSelectedDevice( device );
+  m_lastDevice = device;
 
-    if( KIO::findDeviceMountPoint( device->mountPoint() ).isEmpty() )
-      connect( KIO::mount( true, 0, device->mountDevice(), mountPoint, false ), SIGNAL(result(KIO::Job*)),
-	       this, SLOT( slotMountFinished(KIO::Job*) ) );
-    else
-      slotDirActivated( device->mountPoint() );
-  }
-  else {
-    KMessageBox::error( this, i18n("K3b could not mount %1. Please run K3bSetup.").arg(device->mountDevice()),
-			i18n("I/O error") );
+  m_fileTreeView->branch( device )->mount();
+}
+
+void K3bDirView::slotMountFinished( K3bDeviceBranch*, const QString& mp )
+{
+  if( !mp.isEmpty() ) {
+    slotDirActivated( mp );
+    reload(); // HACK to get the contents shown... FIXME
   }
 }
 
-void K3bDirView::slotMountFinished( KIO::Job* job )
-{
-  if( job->error() ) {
-    job->showErrorDialog( this );
-    slotDirActivated( QDir::homeDirPath() );
-  }
-  else {
-    K3bDeviceBranch* branch = dynamic_cast<K3bDeviceBranch*>(m_fileTreeView->currentKFileTreeViewItem()->branch());
-    branch->openURL( branch->device()->mountPoint(), false, true );
-    branch->setOpen( true );
-    slotDirActivated( branch->device()->mountPoint() );
-  }
-}
-
-void K3bDirView::slotFileTreeContextMenu( K3bDevice* dev, const QPoint& p )
+void K3bDirView::slotFileTreeContextMenu( K3bCdDevice::CdDevice* dev, const QPoint& p )
 {
   m_lastDevice = dev;
   m_devicePopupMenu->popup( p );
@@ -309,13 +303,11 @@ void K3bDirView::slotUnlockDevice()
 void K3bDirView::slotUnmountDisk()
 {
   k3bcore->requestBusyInfo( i18n("Unmounting disk.") );
-  K3bDeviceBranch *branch = dynamic_cast<K3bDeviceBranch *>(m_fileTreeView->currentKFileTreeViewItem()->branch());
+  K3bDeviceBranch* branch = m_fileTreeView->branch( m_lastDevice );
   if( branch ) {
-    if( m_fileView->url().isParentOf( branch->device()->mountPoint() ) )
+    if( m_fileView->url().isParentOf( branch->rootUrl() ) )
       m_fileView->setUrl( QDir::homeDirPath() );
-    branch->setAutoUpdate(false);
-    connect( KIO::unmount( branch->device()->mountPoint(), false ), SIGNAL(result(KIO::Job*)),
-	     this, SLOT( slotUnmountFinished(KIO::Job*) ) );
+    branch->unmount();
   }
   else {
     KMessageBox::sorry( this, i18n("No device selected.") );
@@ -332,9 +324,9 @@ void K3bDirView::slotUnmountFinished( KIO::Job* job )
 
 void K3bDirView::slotEjectDisk()
 {
-  K3bDeviceBranch *branch = dynamic_cast<K3bDeviceBranch *>(m_fileTreeView->currentKFileTreeViewItem()->branch());
+  K3bDeviceBranch *branch = m_fileTreeView->branch( m_lastDevice );
   if( branch ) {
-    branch->setAutoUpdate(false);
+    //    branch->setAutoUpdate(false);
     connect( KIO::unmount( branch->device()->mountPoint(), false ), SIGNAL(result(KIO::Job*)),
 	     this, SLOT( slotEjectFinished() ) );
   }
@@ -346,7 +338,7 @@ void K3bDirView::slotEjectDisk()
 
 void K3bDirView::slotEjectFinished()
 {
-  K3bDeviceBranch *branch = dynamic_cast<K3bDeviceBranch *>(m_fileTreeView->currentKFileTreeViewItem()->branch());
+  K3bDeviceBranch *branch = m_fileTreeView->branch( m_lastDevice );
   if( branch ) {
     branch->setAutoUpdate(true);
     

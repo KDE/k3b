@@ -308,7 +308,8 @@ void K3bMainWindow::initActions()
   // --- filetreecombobox-toolbar -------------------------------------------------------------------
   K3bFileTreeComboBox* m_fileTreeComboBox = new K3bFileTreeComboBox( 0 );
   connect( m_fileTreeComboBox, SIGNAL(urlExecuted(const KURL&)), m_dirView, SLOT(showUrl(const KURL& )) );
-  connect( m_fileTreeComboBox, SIGNAL(deviceExecuted(K3bDevice*)), m_dirView, SLOT(showDevice(K3bDevice* )) );
+  connect( m_fileTreeComboBox, SIGNAL(deviceExecuted(K3bCdDevice::CdDevice*)), m_dirView, 
+	   SLOT(showDevice(K3bCdDevice::CdDevice* )) );
 
   KWidgetAction* fileTreeComboAction = new KWidgetAction( m_fileTreeComboBox,
 							  i18n("&Quick Dir Selector"),

@@ -70,8 +70,8 @@ K3bFileTreeComboBox::K3bFileTreeComboBox( QWidget* parent, const char* name )
   // HACK! Why the hell is QComboBox that closed???
   listBox()->insertItem( "HACK" );
 
-  connect( m_fileTreeView, SIGNAL(deviceExecuted(K3bDevice*)),
-	   this, SLOT(slotDeviceExecuted(K3bDevice*)) );
+  connect( m_fileTreeView, SIGNAL(deviceExecuted(K3bCdDevice::CdDevice*)),
+	   this, SLOT(slotDeviceExecuted(K3bCdDevice::CdDevice*)) );
   connect( m_fileTreeView, SIGNAL(urlExecuted(const KURL&)),
 	   this, SLOT(slotUrlExecuted(const KURL&)) );
 
@@ -89,7 +89,7 @@ K3bFileTreeComboBox::~K3bFileTreeComboBox()
 }
 
 
-void K3bFileTreeComboBox::slotDeviceExecuted( K3bDevice* dev )
+void K3bFileTreeComboBox::slotDeviceExecuted( K3bCdDevice::CdDevice* dev )
 {
   setEditText( SmallIcon("cdrom_unmount"), dev->vendor() + " " + dev->description() + " (" + dev->ioctlDevice() + ")" );
   popdown();

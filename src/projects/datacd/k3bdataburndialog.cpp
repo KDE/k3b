@@ -67,6 +67,10 @@ K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const ch
 
   setTitle( i18n("Data Project"), i18n("Size: %1").arg( KIO::convertSize(_doc->size()) ) );
 
+  // for now we just put the verify checkbox on the main page...
+  m_checkVerify = K3bStdGuiItems::verifyCheckBox( m_optionGroup );
+  m_optionGroupLayout->addWidget( m_checkVerify );
+
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
   m_optionGroupLayout->addItem( spacer );
 
@@ -130,6 +134,8 @@ void K3bDataBurnDialog::saveSettings()
     ((K3bDataDoc*)doc())->setMultiSessionMode( K3bDataDoc::NONE );
 
   ((K3bDataDoc*)doc())->setDataMode( m_dataModeWidget->dataMode() );
+
+  ((K3bDataDoc*)doc())->setVerifyData( m_checkVerify->isChecked() );
 }
 
 
@@ -156,6 +162,7 @@ void K3bDataBurnDialog::readSettings()
   if( !doc()->tempDir().isEmpty() )
     m_tempDirSelectionWidget->setTempPath( doc()->tempDir() );
 
+  m_checkVerify->setChecked( ((K3bDataDoc*)doc())->verifyData() );
 
   m_imageSettingsWidget->load( ((K3bDataDoc*)doc())->isoOptions() );
   m_advancedImageSettingsWidget->load( ((K3bDataDoc*)doc())->isoOptions() );
@@ -256,6 +263,8 @@ void K3bDataBurnDialog::slotLoadK3bDefaults()
   m_advancedImageSettingsWidget->load( K3bIsoOptions::defaults() );
   m_volumeDescWidget->load( K3bIsoOptions::defaults() );
 
+  m_checkVerify->setChecked( false );
+
   toggleAllOptions();
 }
 
@@ -272,6 +281,8 @@ void K3bDataBurnDialog::slotLoadUserDefaults()
   m_imageSettingsWidget->load( o );
   m_advancedImageSettingsWidget->load( o );
   m_volumeDescWidget->load( o );
+
+  m_checkVerify->setChecked( c->readBoolEntry( "verify data", false ) );
 
   toggleAllOptions();
 }
@@ -291,9 +302,25 @@ void K3bDataBurnDialog::slotSaveUserDefaults()
   m_volumeDescWidget->save( o );
   o.save( c );
 
+  c->writeEntry( "verify data", m_checkVerify->isChecked() );
+
   if( m_tempDirSelectionWidget->isEnabled() ) {
     m_tempDirSelectionWidget->saveConfig();
   }
 }
+
+
+void K3bDataBurnDialog::toggleAllOptions()
+{
+  K3bProjectBurnDialog::toggleAllOptions();
+
+  if( m_checkOnlyCreateImage->isChecked() ) {
+    m_checkVerify->setChecked(false);
+    m_checkVerify->setEnabled(false);
+  }
+  else
+    m_checkVerify->setEnabled(true);
+}
+
 
 #include "k3bdataburndialog.moc"

@@ -162,6 +162,18 @@ QCheckBox* K3bStdGuiItems::normalizeCheckBox( QWidget* parent, const char* name 
 }
 
 
+QCheckBox* K3bStdGuiItems::verifyCheckBox( QWidget* parent, const char* name )
+{
+  QCheckBox* c = new QCheckBox( i18n("Verify written data"), parent, name );
+  QToolTip::add( c, i18n("Compare MD5 Sums of all written files") );
+  QWhatsThis::add( c, i18n("<p>If this option is checked after the successful "
+			   "writing K3b will compare the MD5 Sums of all written "
+			   "files with their local sources to verify the "
+			   "correctness of the process.") );
+  return c;
+}
+
+
 QFrame* K3bStdGuiItems::purpleFrame( QWidget* parent, const char* name )
 {
   QFrame* frame = new QFrame( parent, name );
@@ -227,8 +239,8 @@ QFrame* K3bStdGuiItems::purpleFrame( QWidget* parent, const char* name )
   frame->setPalette( pal );
   frame->setFrameShape( QFrame::StyledPanel );
   frame->setFrameShadow( QFrame::Sunken );
-  frame->setLineWidth( 2 );
-  frame->setMargin( 2 );
+  frame->setLineWidth( 1 );
+  frame->setMargin( 1 );
 
   return frame;
 }

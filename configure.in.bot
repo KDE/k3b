@@ -6,7 +6,7 @@ if test x$ogg_vorbis = xyes; then
 	echo "Ogg Vorbis support:                   yes"
 else
 	echo "Ogg Vorbis support:                   no"
-	echo "    The Ogg Vorbis decoding plugin won't be compiled."
+	echo "    The Ogg Vorbis decoding and encoding plugins won't be compiled."
 fi
 
 echo ""
@@ -27,9 +27,9 @@ fi
 echo ""
 
 if test HAVE_RESMGR; then
-	echo "SuSE Resmgr support:                  yes"
+	echo "Resmgr support:                       yes"
 else
-	echo "SuSE Resmgr support:                  no"
+	echo "Resmgr support:                       no"
 fi
 echo "-----------------------------------------"
 echo ""

@@ -75,6 +75,10 @@ K3bMovixDvdBurnDialog::K3bMovixDvdBurnDialog( K3bMovixDvdDoc* doc, QWidget* pare
   m_advancedImageSettingsWidget->layout()->setMargin( marginHint() );
   addPage( m_advancedImageSettingsWidget, i18n("Advanced") );
 
+  // for now we just put the verify checkbox on the main page...
+  m_checkVerify = K3bStdGuiItems::verifyCheckBox( m_optionGroup );
+  m_optionGroupLayout->addWidget( m_checkVerify );
+
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
   m_optionGroupLayout->addItem( spacer );
 
@@ -108,6 +112,8 @@ void K3bMovixDvdBurnDialog::slotLoadK3bDefaults()
 
   m_movixOptionsWidget->loadDefaults();
 
+  m_checkVerify->setChecked( false );
+
   toggleAllOptions();
 }
 
@@ -125,6 +131,8 @@ void K3bMovixDvdBurnDialog::slotLoadUserDefaults()
 
   m_movixOptionsWidget->loadConfig(c);
 
+  m_checkVerify->setChecked( c->readBoolEntry( "verify data", false ) );
+
   toggleAllOptions();
 }
 
@@ -141,6 +149,8 @@ void K3bMovixDvdBurnDialog::slotSaveUserDefaults()
   m_volumeDescWidget->save( o );
   o.save( c );
 
+  c->writeEntry( "verify data", m_checkVerify->isChecked() );
+
   m_movixOptionsWidget->saveConfig(c);
 }
 
@@ -156,6 +166,8 @@ void K3bMovixDvdBurnDialog::saveSettings()
   m_advancedImageSettingsWidget->save( m_doc->isoOptions() );
   m_volumeDescWidget->save( m_doc->isoOptions() );
 
+  m_doc->setVerifyData( m_checkVerify->isChecked() );
+
   // save image file path
   m_doc->setTempDir( m_tempDirSelectionWidget->tempPath() );
 }
@@ -168,6 +180,8 @@ void K3bMovixDvdBurnDialog::readSettings()
   m_imageSettingsWidget->load( m_doc->isoOptions() );
   m_advancedImageSettingsWidget->load( m_doc->isoOptions() );
   m_volumeDescWidget->load( m_doc->isoOptions() );
+
+  m_checkVerify->setChecked( m_doc->verifyData() );
 
   // first of all we need a movix installation object
   QString path = k3bcore->externalBinManager()->binPath("eMovix");
@@ -203,5 +217,17 @@ void K3bMovixDvdBurnDialog::slotStartClicked()
   K3bProjectBurnDialog::slotStartClicked();
 }
 
+
+void K3bMovixDvdBurnDialog::toggleAllOptions()
+{
+  K3bProjectBurnDialog::toggleAllOptions();
+
+  if( m_checkOnlyCreateImage->isChecked() ) {
+    m_checkVerify->setChecked(false);
+    m_checkVerify->setEnabled(false);
+  }
+  else
+    m_checkVerify->setEnabled(true);
+}
 
 #include "k3bmovixdvdburndialog.moc"

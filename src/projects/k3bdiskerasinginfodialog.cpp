@@ -21,14 +21,14 @@
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qframe.h>
+#include <qwidgetstack.h>
 
 #include <klocale.h>
 #include <kprogress.h>
 
 
-K3bErasingInfoDialog::K3bErasingInfoDialog( bool progress, const QString& text, QWidget* parent, const char* name ) 
-  : KDialogBase( parent, name, true, i18n("Erasing"), Cancel|Ok, Ok, true ),
-    m_progress(progress)
+K3bErasingInfoDialog::K3bErasingInfoDialog( const QString& text, QWidget* parent, const char* name ) 
+  : KDialogBase( parent, name, true, i18n("Erasing"), Cancel|Ok, Ok, true )
 {
   QFrame* main = makeMainWidget();
   QGridLayout* mainLayout = new QGridLayout( main );
@@ -36,20 +36,16 @@ K3bErasingInfoDialog::K3bErasingInfoDialog( bool progress, const QString& text, 
   mainLayout->setSpacing( spacingHint() );
 
   m_label = new QLabel( text, main );
-  if( m_progress )
-    m_progressBar = new KProgress( main );
-  else
-    m_busyWidget = new K3bBusyWidget( main );
+  m_stack = new QWidgetStack( main );
+  m_progressBar = new KProgress( m_stack );
+  m_busyWidget = new K3bBusyWidget( m_stack );
+  m_stack->addWidget( m_progressBar );
+  m_stack->addWidget( m_busyWidget );
 
   mainLayout->addWidget( m_label, 0, 0 );
-  if( m_progress )
-    mainLayout->addWidget( m_progressBar, 1, 0 );
-  else
-    mainLayout->addWidget( m_busyWidget, 1, 0 );
+  mainLayout->addWidget( m_stack, 1, 0 );
 
   showButtonOK( false );
-  if( !m_progress )
-    m_busyWidget->showBusy( true );
 }
 
 
@@ -57,10 +53,30 @@ K3bErasingInfoDialog::~K3bErasingInfoDialog()
 {}
 
 
+int K3bErasingInfoDialog::exec( bool progress )
+{
+  if( progress )
+    m_stack->raiseWidget( m_progressBar );
+  else
+    m_stack->raiseWidget( m_busyWidget );
+
+  m_busyWidget->showBusy( !progress );
+
+  actionButton( Cancel )->setEnabled(true);
+
+  return KDialogBase::exec();
+}
+
+
+void K3bErasingInfoDialog::setText( const QString& text )
+{
+  m_label->setText( text );
+}
+
+
 void K3bErasingInfoDialog::slotFinished( bool success )
 {
-  if( !m_progress )
-    m_busyWidget->showBusy( false );
+  m_busyWidget->showBusy( false );
 
   showButtonOK( true );
   showButtonCancel( false );
@@ -72,10 +88,17 @@ void K3bErasingInfoDialog::slotFinished( bool success )
 }
 
 
+void K3bErasingInfoDialog::slotCancel()
+{
+  emit cancelClicked();
+  // we simply forbid to click cancel twice
+  actionButton( Cancel )->setEnabled(false);
+}
+
+
 void K3bErasingInfoDialog::setProgress( int p )
 {
-  if( m_progress )
-    m_progressBar->setProgress( p );
+  m_progressBar->setProgress( p );
 }
 
 #include "k3bdiskerasinginfodialog.moc"

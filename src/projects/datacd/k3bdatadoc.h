@@ -82,11 +82,12 @@ class K3bDataDoc : public K3bDoc
 
   QString treatWhitespace( const QString& );
 	
-  /** returns an empty dummy dir for use with K3bDirItems.
-      Creates one if nessessary.
-      The dummy dir is used to create empty dirs on the iso-filesystem! 
-      TODO: should be moved to K3bMainWidget or K3bApp (if we ever create and need one) */
-  const QString& dummyDir();
+  /**
+   * returns an empty dummy dir for use with K3bDirItems.
+   * Creates one if nessessary.
+   * The dummy dir is used to create empty dirs on the iso-filesystem! 
+   */
+  static QString dummyDir();
 
   virtual K3bBurnJob* newBurnJob();
 	
@@ -95,6 +96,9 @@ class K3bDataDoc : public K3bDoc
 
   int dataMode() const { return m_dataMode; }
   void setDataMode( int m ) { m_dataMode = m; }
+
+  void setVerifyData( bool b ) { m_verifyData = b; }
+  bool verifyData() const { return m_verifyData; }
 
   static bool nameAlreadyInDir( const QString&, K3bDirItem* );
 
@@ -187,9 +191,10 @@ class K3bDataDoc : public K3bDoc
 
   K3bRootItem* m_root;
   QString m_name;
-  QString m_dummyDir;
 
   int m_dataMode;
+
+  bool m_verifyData;
 
   KIO::filesize_t m_size;
 		

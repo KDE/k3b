@@ -71,6 +71,8 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    QGroupBox* m_groupDataMode;
    K3bDataModeWidget* m_dataModeWidget;
 
+   QCheckBox* m_checkVerify;
+
  protected slots:
    void slotStartClicked();
    void saveSettings();
@@ -79,6 +81,8 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    void slotLoadK3bDefaults();
    void slotLoadUserDefaults();
    void slotSaveUserDefaults();
+
+   void toggleAllOptions();
 };
 
 #endif

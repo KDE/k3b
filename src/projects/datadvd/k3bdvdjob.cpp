@@ -18,8 +18,10 @@
 #include "k3bdvddoc.h"
 #include "k3bgrowisofsimager.h"
 
+#include <k3bcore.h>
 #include <k3bdvdrecordwriter.h>
 #include <k3bisoimager.h>
+#include <k3bdataverifyingjob.h>
 #include <k3bgrowisofswriter.h>
 #include <k3bemptydiscwaiter.h>
 #include <k3bglobals.h>
@@ -32,6 +34,18 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kapplication.h>
+#include <kconfig.h>
+
+
+class K3bDvdJob::Private
+{
+public:
+  Private()
+    : verificationJob(0) {
+  }
+
+  K3bDataVerifyingJob* verificationJob;
+};
 
 
 K3bDvdJob::K3bDvdJob( K3bDataDoc* doc, QObject* parent )
@@ -41,11 +55,13 @@ K3bDvdJob::K3bDvdJob( K3bDataDoc* doc, QObject* parent )
     m_growisofsImager( 0 ),
     m_writerJob( 0 )
 {
+  d = new Private();
 }
 
 
 K3bDvdJob::~K3bDvdJob()
 {
+  delete d;
 }
 
 
@@ -159,21 +175,26 @@ void K3bDvdJob::slotReceivedIsoImagerData( const char* data, int len )
 
 void K3bDvdJob::slotIsoImagerPercent( int p )
 {
-  if( m_doc->onlyCreateImages() ) {
-    emit percent( p  );
-    emit subPercent( p );
-  }
-  else {
-    emit subPercent( p );
+  emit subPercent( p );
+
+  if( m_doc->onlyCreateImages() )
+    emit percent( p );
+  else if( m_doc->verifyData() ) 
+    emit percent( p/3 );
+  else
     emit percent( p/2 );
-  }
 }
 
 
 void K3bDvdJob::slotGrowisofsImagerPercent( int p )
 {
   emit subPercent( p );
-  emit percent( p );
+
+  if( m_doc->verifyData() )
+    emit percent( p/2 );
+  else
+    emit percent( p );
+
   if( !m_writingStarted ) {
     m_writingStarted = true;
     emit newSubTask( i18n("Writing data") );
@@ -313,7 +334,10 @@ bool K3bDvdJob::prepareWriterJob()
 void K3bDvdJob::slotWriterJobPercent( int p )
 {
   // we only use the writer when creating an image first
-  emit percent( 50 + p/2 );
+  if( m_doc->verifyData() )
+    emit percent( 33 + p/3 ); 
+  else
+    emit percent( 50 + p/2 );
 }
 
 
@@ -325,7 +349,66 @@ void K3bDvdJob::slotWritingFinished( bool success )
     return;
   }
 
+  if( success ) {
+    // allright
+    // the writerJob should have emited the "simulation/writing successful" signal
+
+    if( m_doc->verifyData() ) {
+      if( !d->verificationJob ) {
+	d->verificationJob = new K3bDataVerifyingJob( this );
+	connect( d->verificationJob, SIGNAL(infoMessage(const QString&, int)),
+		 this, SIGNAL(infoMessage(const QString&, int)) );
+	connect( d->verificationJob, SIGNAL(newTask(const QString&)),
+		 this, SIGNAL(newSubTask(const QString&)) );
+	connect( d->verificationJob, SIGNAL(percent(int)),
+		 this, SLOT(slotVerificationProgress(int)) );
+	connect( d->verificationJob, SIGNAL(percent(int)),
+		 this, SIGNAL(subPercent(int)) );
+	connect( d->verificationJob, SIGNAL(finished(bool)),
+		 this, SLOT(slotVerificationFinished(bool)) );
+      }
+      d->verificationJob->setDoc( m_doc );
+      d->verificationJob->setDevice( m_doc->burner() );
+
+      emit newTask( i18n("Verifying written data") );
+      emit burning(false);
+
+      d->verificationJob->start();
+    }
+    else
+      emit finished(true);
+  }
+  else {
+    cleanup();
+    emit finished( false );
+  }
+}
+
+
+void K3bDvdJob::slotVerificationProgress( int p )
+{
+  // we simply think of the verification as 1/2 or 1/3 of the work...
+  if( m_doc->onTheFly() )
+    emit percent( 50 + p/2 );
+  else {
+    emit percent( 66 + p/3 );
+  }
+}
+
+
+void K3bDvdJob::slotVerificationFinished( bool success )
+{
+  if( m_canceled ) {
+    emit canceled();
+    emit finished(false);
+    return;
+  }
+
   cleanup();
+
+  k3bcore->config()->setGroup("General Options");
+  if( !k3bcore->config()->readBoolEntry( "No cd eject", false ) )
+    K3bCdDevice::eject( m_doc->burner() );
   
   emit finished( success );
 }

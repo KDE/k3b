@@ -35,7 +35,7 @@ class K3bThread : public QThread
   K3bThread( unsigned int stackSize, QObject* eventHandler = 0  );
   virtual ~K3bThread();
 
-  void setProgressInfoEventHandler( QObject* eventHandler ) { m_eventHandler = eventHandler; }
+  void setProgressInfoEventHandler( QObject* eventHandler );
 
   /**
    * to provide the same api like K3bJob
@@ -46,6 +46,12 @@ class K3bThread : public QThread
 
   virtual QString jobDescription() const;
   virtual QString jobDetails() const;
+
+  /**
+   * waits until all running K3bThread have finished.
+   * This is used by K3bApplication.
+   */
+  static void waitUntilFinished();
 
  protected:
   virtual void run() = 0;
@@ -68,7 +74,8 @@ class K3bThread : public QThread
   void emitNextTrack( int track, int trackNum );
 
  private:
-  QObject* m_eventHandler;
+  class Private;
+  Private* d;
 };
 
 #endif

@@ -136,6 +136,13 @@ void K3bFileView::setupGUI()
   actionPlay->setEnabled( false );
 }
 
+void K3bFileView::setDir( const QString& dir )
+{
+  KURL url;
+  url.setPath(dir);
+  setUrl( url );
+}
+
 
 void K3bFileView::setUrl(const KURL& url, bool forward)
 {

@@ -148,14 +148,14 @@ void K3bBlankingDialog::slotStartClicked()
   d->job->setWritingApp(m_writerSelectionWidget->writingApp());
   d->job->setMode( d->comboTypeMap[m_comboEraseMode->currentItem()] );
 
-  K3bErasingInfoDialog dlg( false, i18n("Erasing CD-RW"), this );
+  K3bErasingInfoDialog dlg( i18n("Erasing CD-RW"), this );
 
   connect( d->job, SIGNAL(finished(bool)), &dlg, SLOT(close()) );
   connect( d->job, SIGNAL(finished(bool)), this, SLOT(slotJobFinished(bool)) );
   connect( &dlg, SIGNAL(cancelClicked()), d->job, SLOT(cancel()) );
 
   d->job->start();
-  dlg.exec();
+  dlg.exec(false);
 }
 
 

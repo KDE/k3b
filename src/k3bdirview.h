@@ -18,15 +18,8 @@
 #define K3BDIRVIEW_H
 
 #include <qvbox.h>
-#include <qfile.h>
 #include <qstring.h>
 
-#include <klistview.h>
-#include <kdiroperator.h>
-#include <kfiledetailview.h>
-#include <device/k3bdevice.h>
-#include <device/k3bdevicemanager.h>
-#include <cdinfo/k3bdiskinfodetector.h>
 
 class QSplitter;
 class KURL;
@@ -42,6 +35,17 @@ class KActionMenu;
 class QScrollView;
 class QLabel;
 class KConfig;
+class K3bDeviceBranch;
+
+namespace K3bCdDevice {
+  class CdDevice;
+  class DiskInfo;
+  class DiskInfoDetector;
+}
+
+namespace KIO {
+  class Job;
+}
 
 
 /**
@@ -60,25 +64,25 @@ class K3bDirView : public QVBox
  public slots:
   void saveConfig( KConfig* c );
   void showUrl( const KURL& );
-  void showDevice( K3bDevice* );
+  void showDevice( K3bCdDevice::CdDevice* );
   
  protected slots:
   void slotDirActivated( const KURL& );
   void slotDirActivated( const QString& );
   void slotUpdateURLCombo( const KURL& url );
-  void slotMountDevice( K3bDevice* dev );
-  void slotMountFinished(KIO::Job*);
+  void slotMountDevice( K3bCdDevice::CdDevice* dev );
+  void slotMountFinished( K3bDeviceBranch*, const QString& );
   void slotDiskInfoReady( const K3bCdDevice::DiskInfo& info );
   void reload();
   void home();
-  void slotDetectDiskInfo( K3bDevice* dev );
+  void slotDetectDiskInfo( K3bCdDevice::CdDevice* dev );
   void slotShowDiskInfo();
   void slotUnlockDevice();
   void slotUnmountDisk();
   void slotUnmountFinished(KIO::Job*);
   void slotEjectDisk();
   void slotEjectFinished();
-  void slotFileTreeContextMenu( K3bDevice* dev, const QPoint& p );
+  void slotFileTreeContextMenu( K3bCdDevice::CdDevice* dev, const QPoint& p );
 
  private:
   QWidgetStack* m_viewStack;
@@ -99,10 +103,10 @@ class K3bDirView : public QVBox
 
   KActionCollection* m_actionCollection;
 
-  K3bDiskInfoDetector* m_diskInfoDetector;
+  K3bCdDevice::DiskInfoDetector* m_diskInfoDetector;
   bool m_bViewDiskInfo;
   KActionMenu* m_devicePopupMenu;
-  K3bDevice* m_lastDevice;
+  K3bCdDevice::CdDevice* m_lastDevice;
 };
 
 #endif

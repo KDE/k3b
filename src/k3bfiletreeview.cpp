@@ -15,8 +15,8 @@
 
 
 #include "k3bfiletreeview.h"
-#include "k3b.h"
-#include "k3bdirview.h"
+//#include "k3b.h"
+//#include "k3bdirview.h"
 
 #include <device/k3bdevicemanager.h>
 #include <device/k3bdevice.h>
@@ -35,38 +35,96 @@
 #include <qdragobject.h>
 #include <qcursor.h>
 #include <qnamespace.h>
+#include <qmap.h>
+#include <qptrdict.h>
 
 
 
-K3bDeviceBranch::K3bDeviceBranch( KFileTreeView* view, K3bDevice* dev, KFileTreeViewItem* item )
+
+K3bDeviceBranch::K3bDeviceBranch( KFileTreeView* view, K3bCdDevice::CdDevice* dev, KFileTreeViewItem* item )
   : KFileTreeBranch( view, KURL(dev->mountPoint()), QString(" %1 - %2").arg(dev->vendor()).arg(dev->description()),
 		     ( dev->burner()
 		       ? SmallIcon("cdwriter_unmount")
 		       : SmallIcon("cdrom_unmount") ),
 		     false, item ), m_device( dev )
 {
+  setAutoUpdate(true);
   root()->setExpandable(false);
 }
 
 
-// bool K3bDeviceBranch::populate( const KURL& url, KFileTreeViewItem* item )
-// {
-//   QString mp = KIO::findDeviceMountPoint( m_device->mountDevice() );
-//   if( !mp.isEmpty() ) {
-//     return KFileTreeBranch::populate( url, item );
-//   }
-//   else {
-//     // if the device is not mounted we don't need to do anything
-//     emit populateFinished( root() );
-//     return true;
-//   }
-// }
+void K3bDeviceBranch::mount()
+{
+  if( !m_device->mountPoint().isEmpty() ) {
+    QString mp = KIO::findDeviceMountPoint( m_device->mountDevice() );
+    if( mp.isEmpty() )
+      connect( KIO::mount( true, 0, m_device->mountDevice(), m_device->mountPoint(), false ), SIGNAL(result(KIO::Job*)),
+	       this, SLOT( slotMountFinished(KIO::Job*) ) );
+    else {
+      kdDebug() << "(K3bDeviceBranch) device already mounted on " << mp << endl;
+      emit clear();
+      populate( mp, root() );
+      emit mountFinished( this, mp );
+    }
+  }
+  else
+    emit mountFinished( this, QString::null );
+}
 
 
+void K3bDeviceBranch::unmount()
+{
+  setAutoUpdate(false);
+  connect( KIO::unmount( device()->mountPoint(), false ), SIGNAL(result(KIO::Job*)),
+	   this, SLOT( slotUnmountFinished(KIO::Job*) ) );
+}
+
+
+void K3bDeviceBranch::slotMountFinished( KIO::Job* job )
+{
+  if( job->error() ) {
+    job->showErrorDialog();
+    emit mountFinished( this, QString::null );
+  }
+  else {
+    emit clear();
+    populate( m_device->mountPoint(), root() );
+    emit mountFinished( this, m_device->mountPoint() );
+  }
+}
+
+
+void K3bDeviceBranch::slotUnmountFinished( KIO::Job* job )
+{
+  if( job->error() ) {
+    job->showErrorDialog();
+    emit unmountFinished( this, false );
+  }
+  else {
+    emit clear();
+    emit unmountFinished( this, true );
+  }
+
+  setAutoUpdate(true);
+}
+
+
+
+class K3bFileTreeView::Private
+{
+public:
+  Private() {
+  }
+
+  QPtrDict<K3bDeviceBranch> deviceBranchDict;
+  QMap<KFileTreeBranch*, K3bCdDevice::CdDevice*> branchDeviceMap;
+};
 
 K3bFileTreeView::K3bFileTreeView( QWidget *parent, const char *name )
   : KFileTreeView( parent,  name )
 {
+  d = new Private();
+
   addColumn( i18n("Directories") );
   setDragEnabled( true );
   setAcceptDrops( true );
@@ -90,6 +148,7 @@ K3bFileTreeView::K3bFileTreeView( QWidget *parent, const char *name )
 
 K3bFileTreeView::~K3bFileTreeView()
 {
+  delete d;
 }
 
 
@@ -184,20 +243,29 @@ void K3bFileTreeView::addDefaultBranches()
 void K3bFileTreeView::addCdDeviceBranches( K3bDeviceManager* dm )
 {
   // remove all previous added device branches
-  for( QMap<KFileTreeBranch*, K3bDevice*>::Iterator it = m_deviceBranchesMap.begin();
-       it != m_deviceBranchesMap.end(); ++it ) {
+  for( QMap<KFileTreeBranch*, K3bCdDevice::CdDevice*>::Iterator it = d->branchDeviceMap.begin();
+       it != d->branchDeviceMap.end(); ++it ) {
     removeBranch( it.key() );
   }
-  m_deviceBranchesMap.clear();
 
+  // clear the maps
+  d->branchDeviceMap.clear();
+  d->deviceBranchDict.clear();
 
-  QPtrList<K3bDevice>& devices = dm->allDevices();
-  for ( K3bDevice* dev = devices.first(); dev != 0; dev = devices.next() ) {
+  QPtrList<K3bCdDevice::CdDevice>& devices = dm->allDevices();
+  for ( K3bCdDevice::CdDevice* dev = devices.first(); dev != 0; dev = devices.next() ) {
 
-    KFileTreeBranch* newBranch = addBranch( new K3bDeviceBranch( this, dev ) );
+    K3bDeviceBranch* newBranch = new K3bDeviceBranch( this, dev );
+    addBranch( newBranch );
 
-    // add to map
-    m_deviceBranchesMap.insert( newBranch, dev );
+    connect( newBranch, SIGNAL(mountFinished(K3bDeviceBranch*, const QString&)),
+	     this, SIGNAL(mountFinished(K3bDeviceBranch*, const QString&)) );
+    connect( newBranch, SIGNAL(unmountFinished(K3bDeviceBranch*, bool)),
+	     this, SIGNAL(unmountFinished(K3bDeviceBranch*, bool)) );
+
+    // add to maps
+    d->branchDeviceMap.insert( newBranch, dev );
+    d->deviceBranchDict.insert( (void*)dev, newBranch );
   }
 }
 
@@ -223,9 +291,9 @@ KFileTreeBranch* K3bFileTreeView::addBranch( const KURL& url, const QString& nam
 void K3bFileTreeView::slotItemExecuted( QListViewItem* item )
 {
   KFileTreeViewItem* treeItem = static_cast<KFileTreeViewItem*>(item);
-  if( m_deviceBranchesMap.contains( treeItem->branch() ) &&
+  if( d->branchDeviceMap.contains( treeItem->branch() ) &&
       treeItem == treeItem->branch()->root() )
-    emit deviceExecuted( m_deviceBranchesMap[treeItem->branch()] );
+    emit deviceExecuted( d->branchDeviceMap[treeItem->branch()] );
   else
     emit urlExecuted( treeItem->url() );
 }
@@ -241,7 +309,7 @@ void K3bFileTreeView::followUrl( const KURL& url )
 {
   KFileTreeBranchIterator it( branches() );
   for( ; *it; ++it ) {
-    if( !m_deviceBranchesMap.contains( *it ) )
+    if( !d->branchDeviceMap.contains( *it ) )
       if( KFileTreeViewItem* item = (*it)->findTVIByURL( url ) ) {
 	setCurrentItem( item );
 	setSelected(item, true);
@@ -254,7 +322,7 @@ void K3bFileTreeView::slotContextMenu( KListView*, QListViewItem* item, const QP
 {
   KFileTreeViewItem* treeItem = dynamic_cast<KFileTreeViewItem*>(item);
   if( treeItem ) {
-    bool device = m_deviceBranchesMap.contains( treeItem->branch() );
+    bool device = d->branchDeviceMap.contains( treeItem->branch() );
 
 //     if( m_menuEnabled ) {
 //       if( device )
@@ -266,7 +334,7 @@ void K3bFileTreeView::slotContextMenu( KListView*, QListViewItem* item, const QP
       setCurrentItem( treeItem );
       setSelected( treeItem, true);
       if( device )
-	emit contextMenu( m_deviceBranchesMap[treeItem->branch()], p );
+	emit contextMenu( d->branchDeviceMap[treeItem->branch()], p );
       else
 	emit contextMenu( treeItem->url(), p );
       //    }
@@ -276,12 +344,12 @@ void K3bFileTreeView::slotContextMenu( KListView*, QListViewItem* item, const QP
 }
 
 
-K3bDevice* K3bFileTreeView::selectedDevice() const
+K3bCdDevice::CdDevice* K3bFileTreeView::selectedDevice() const
 {
   KFileTreeViewItem* treeItem = dynamic_cast<KFileTreeViewItem*>(selectedItem());
   if( treeItem ) {
-    if( m_deviceBranchesMap.contains( treeItem->branch() ) )
-      return m_deviceBranchesMap[treeItem->branch()];
+    if( d->branchDeviceMap.contains( treeItem->branch() ) )
+      return d->branchDeviceMap[treeItem->branch()];
   }
   return 0;
 }
@@ -291,16 +359,16 @@ KURL K3bFileTreeView::selectedUrl() const
 {
   KFileTreeViewItem* treeItem = dynamic_cast<KFileTreeViewItem*>(selectedItem());
   if( treeItem ) {
-    if( !m_deviceBranchesMap.contains( treeItem->branch() ) )
+    if( !d->branchDeviceMap.contains( treeItem->branch() ) )
       return treeItem->url();
   }
   return KURL();
 }
 
-void K3bFileTreeView::setSelectedDevice(K3bDevice* dev)
+void K3bFileTreeView::setSelectedDevice(K3bCdDevice::CdDevice* dev)
 {
-  for(QMap<KFileTreeBranch*, K3bDevice*>::iterator it = m_deviceBranchesMap.begin();
-      it != m_deviceBranchesMap.end(); ++it)
+  for(QMap<KFileTreeBranch*, K3bCdDevice::CdDevice*>::iterator it = d->branchDeviceMap.begin();
+      it != d->branchDeviceMap.end(); ++it)
   {
     kdDebug() << "Select " << dev->devicename() << endl;
     if ( *it == dev ) {
@@ -309,6 +377,12 @@ void K3bFileTreeView::setSelectedDevice(K3bDevice* dev)
       return;
     }
   }
+}
+
+
+K3bDeviceBranch* K3bFileTreeView::branch( K3bCdDevice::CdDevice* dev )
+{
+  return d->deviceBranchDict.find( (void*)dev );
 }
 
 #include "k3bfiletreeview.moc"

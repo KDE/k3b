@@ -17,7 +17,6 @@
 #define _K3B_FILETREE_COMBOBOX_H_
 
 #include <kcombobox.h>
-#include "device/k3bdevice.h"
 
 class K3bFileTreeView;
 class QEvent;
@@ -25,6 +24,9 @@ class QKeyEvent;
 class QMouseEvent;
 class QPaintEvent;
 
+namespace K3bCdDevice {
+  class CdDevice;
+}
 
 class K3bFileTreeComboBox : public KComboBox
 {
@@ -45,10 +47,10 @@ class K3bFileTreeComboBox : public KComboBox
 
  signals:
   void urlExecuted( const KURL& url );
-  void deviceExecuted( K3bDevice* dev );
+  void deviceExecuted( K3bCdDevice::CdDevice* dev );
 
  private slots:
-  void slotDeviceExecuted( K3bDevice* );
+  void slotDeviceExecuted( K3bCdDevice::CdDevice* );
   void slotUrlExecuted( const KURL& url );
 
  protected:

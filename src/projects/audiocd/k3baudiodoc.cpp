@@ -252,6 +252,7 @@ K3bAudioTrack* K3bAudioDoc::createTrack( const KURL& url )
   for( QPtrListIterator<K3bPluginFactory> it( fl );
        it.current(); ++it ) {
     if( ((K3bAudioDecoderFactory*)it.current())->canDecode( url ) ) {
+      kdDebug() << "(K3bAudioDoc) using " << it.current()->className() << " for decoding of " << url.path() << endl;
       K3bAudioTrack* newTrack =  new K3bAudioTrack( m_tracks, url.path() );
       newTrack->setModule( (K3bAudioDecoder*)((K3bAudioDecoderFactory*)it.current())->createPlugin() );
       return newTrack;
