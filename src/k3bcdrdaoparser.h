@@ -24,6 +24,7 @@
 #include <k3bjob.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <qsocket.h>
 
 struct ProgressMsg;
 
@@ -35,10 +36,10 @@ class K3bCdrdaoParser : public QObject
  public:
   K3bCdrdaoParser( QObject* parent = 0, const char* name = 0 );
   virtual ~K3bCdrdaoParser();
-
+  void reinit();
   void parseCdrdaoLine( const QString& line );
   void parseCdrdaoError( const QString& line ); 
-  void parseCdrdaoMessage(int);	  
+  void parseCdrdaoMessage(QSocket *comSock);	  
 
  signals:
   void newSubTask( const QString& job );

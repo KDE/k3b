@@ -966,7 +966,7 @@ QString K3bMainWindow::findTempFile( const QString& ending, const QString& d )
   KURL url;
   if( d.isEmpty() ) {
     config()->setGroup( "General Options" );
-    url = config()->readEntry( "Temp Dir", locateLocal( "appdata", "temp/" ) );
+    url.setPath( config()->readEntry( "Temp Dir", locateLocal( "appdata", "temp/" ) ) );
   }
   else {
     url.setPath(d + (d[d.length()-1] != '/' ? "/" : "") );

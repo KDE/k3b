@@ -126,7 +126,13 @@ void K3bMixedJob::start()
   else {
     // prepare iso image file
     m_isoImageFile = new QFile( k3bMain()->findTempFile( "iso", m_doc->imagePath() ) );
-    m_isoImageFile->open( IO_WriteOnly );
+    if( !m_isoImageFile->open( IO_WriteOnly ) ) {
+      emit infoMessage( i18n("Could not open file %1 for writing.").arg(m_isoImageFile->name()), ERROR );
+      cleanupAfterError();
+      emit finished( false );
+      return;
+    }
+
     m_isoImageFileStream = new QDataStream( m_isoImageFile );
 
     emit newTask( i18n("Creating image files") );
@@ -349,7 +355,13 @@ void K3bMixedJob::slotAudioDecoderNextTrack( int t )
     emit newSubTask( i18n("Decoding audiotrack %1 (%2)").arg(t).arg(m_doc->audioDoc()->at(t-1)->fileName()) );
     //emit infoMessage( i18n("Decoding audiotrack %1 (%2)").arg(t).arg(m_doc->audioDoc()->at(t-1)->fileName()), INFO );
     QString bf = k3bMain()->findTempFile( "wav", m_doc->imagePath() );
-    m_waveFileWriter->open( bf );
+    if( !m_waveFileWriter->open( bf ) ) {
+      emit infoMessage( i18n("Could not open file %1 for writing.").arg(m_waveFileWriter->filename()), ERROR );
+      cleanupAfterError();
+      emit finished( false );
+      return;
+    }
+
     m_doc->audioDoc()->at(t-1)->setBufferFile( bf );
   }
   else if( m_usingFifo ) {

@@ -145,7 +145,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   while( dev ) {
     // cdrdao only supports SCSI devices
     if( dev->interfaceType() == K3bDevice::SCSI )
-      m_comboSourceDevice->insertItem( dev->vendor() + " " + dev->description() + " (" + dev->genericDevice() + ")" );
+      m_comboSourceDevice->insertItem( dev->vendor() + " " + dev->description() + " (" + dev->blockDeviceName() + ")" );
     dev = devices.next();
   }
 

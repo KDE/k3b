@@ -23,7 +23,8 @@
 
 #include "k3babstractwriter.h"
 #include "k3bcdrdaoparser.h"
-#include <qsocketnotifier.h>
+#include <qsocket.h>
+#include <qsocketdevice.h>
 
 class K3bExternalBin;
 class K3bProcess;
@@ -35,24 +36,19 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
   Q_OBJECT
 
  public:
+
+  enum Command { WRITE, COPY, READ, BLANK };
+  enum BlankMode { FULL, MINIMAL };
+  enum SubMode { None, RW, RW_RAW };
+
   K3bCdrdaoWriter( K3bDevice* dev, QObject* parent = 0, const char* name = 0 );
   ~K3bCdrdaoWriter();
-
-  /**
-   * call this before adding new arguments
-   * it will clear the aruments and add device and speed
-   * and stuff
-   */
-  void prepareArgumentList(bool copy = false );
 
   /**
    * to be used in chain: addArgument(x)->addArgument(y)
    */
   K3bCdrdaoWriter* addArgument( const QString& );
-  bool write( const char* data, int len );
-
-  enum Command { WRITE, COPY, BLANK };
-  enum BlankMode { FULL, MINIMAL };
+  K3bDevice* sourceDevice() { return m_sourceDevice; };
 
  public slots:
   void start();
@@ -62,15 +58,20 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
   // ---------------------
   void setCommand( int c ) { m_command = c; }
   void setBlankMode( int b ) { m_blankMode = b; }
-  void setSourceDevice( K3bDevice* dev ) { m_sourceDevice = dev; }
-  void setRawWrite( bool b ) { m_rawWrite = b; }
   void setMulti( bool b ) { m_multi = b; }
   void setForce( bool b ) { m_force = b; }
   void setOnTheFly( bool b ) { m_onTheFly = b; }
-  void setFastToc( bool b ) { m_fastToc = b; }
-  void setParanoiaMode( int i ) { m_paranoiaMode = i; }
-  void setDatFile( const QString& s ) { m_dataFile = s; }
+  void setDataFile( const QString& s ) { m_dataFile = s; }
   void setTocFile( const QString& s ) { m_tocFile = s; }
+
+  void setSourceDevice( K3bDevice* dev ) { m_sourceDevice = dev; }
+  void setSourceDriver(QString& s) { m_sourceDriver=s; }
+  void setFastToc( bool b ) { m_fastToc = b; }
+  void setReadRaw( bool b ) { m_readRaw = b; }
+  void setReadSubchan(SubMode m) { m_readSubchan=m; };
+  void setParanoiaMode( int i ) { m_paranoiaMode = i; }
+  void setTaoSource(bool b) { m_taoSource=b; };
+  void setTaoSourceAdjust(int a) { m_taoSourceAdjust=a; };
   // ---------------------
 
   void setProvideStdin( bool b ) { m_stdin = b; }
@@ -82,34 +83,44 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
   void slotUnknownCdrdaoLine( const QString& );
 
  private:
+  void prepareArgumentList();
+  void setWriteArguments();
+  void setReadArguments();
+  void setCopyArguments();
+  void setBlankArguments();
+  void setCommonArguments();
+
+  bool write(const char* data, int len);
   // options
   // ---------------------
-  int m_command;
-  int m_blankMode;
+  int        m_command;
+  int        m_blankMode;
   K3bDevice* m_sourceDevice;
-  bool m_rawWrite;
-  bool m_multi;
-  bool m_force;
-  bool m_onTheFly;
-  bool m_fastToc;
-  int m_paranoiaMode;
-  QString m_dataFile;
-  QString m_tocFile;
+  QString    m_sourceDriver; 
+  QString    m_dataFile;
+  QString    m_tocFile;
+  bool       m_readRaw;
+  bool       m_multi;
+  bool       m_force;
+  bool       m_onTheFly;
+  bool       m_fastToc;
+  SubMode    m_readSubchan;
+  bool       m_taoSource;
+  int        m_taoSourceAdjust;
+  int        m_paranoiaMode;
+  int        m_session;
   // ---------------------
 
   const K3bExternalBin* m_cdrdaoBinObject;
   K3bProcess* m_process;
 
   int m_currentTrack;
-  int cdrdaoComm[2];
-  QSocketNotifier *qsn;
+  int m_cdrdaoComm[2];
+  QSocket         *m_comSock;
   K3bCdrdaoParser *m_parser;
 
   bool m_stdin;  
 
-
-  // temporary var
-  bool m_prepareArgumentListCalled;
 };
 
 #endif

@@ -21,7 +21,7 @@
 #include "../k3bjob.h"
 #include "../k3bcdrdaowriter.h"
 #include "../k3bcdrdaoreader.h"
-#include <qsocketnotifier.h>
+#include <qurloperator.h>
 
 class K3bProcess;
 class K3bDevice;
@@ -45,7 +45,7 @@ class K3bCdCopyJob : public K3bBurnJob
   void cancel();
 
   void setWriter( K3bDevice* dev ) { m_cdrdaowriter->setBurnDevice(dev); }
-  void setReader( K3bDevice* dev ) { m_cdrdaoreader->setReadDevice(dev); }
+  void setReader( K3bDevice* dev ) { m_cdrdaowriter->setSourceDevice(dev); }
   void setSpeed( int s ) { m_cdrdaowriter->setBurnSpeed(s); }
   void setOnTheFly( bool b ) { m_onTheFly = b; }
   void setKeepImage( bool b ) { m_keepImage = b; }
@@ -54,9 +54,9 @@ class K3bCdCopyJob : public K3bBurnJob
   /** not usable for cdrdao (enabled by default) */
   void setTempPath( const QString& path ) { m_tempPath= path; }
   void setCopies( int c ) { m_copies = c; }
-  void setFastToc( bool b ) { m_fastToc = b; }
-  void setReadRaw( bool b ) { m_readRaw = b; }
-  void setParanoiaMode( int i ) { m_paranoiaMode = i; }
+  void setFastToc( bool b ) { m_cdrdaowriter->setFastToc(b); }
+  void setReadRaw( bool b ) { m_cdrdaowriter->setReadRaw(b); }
+  void setParanoiaMode( int i ) { m_cdrdaowriter->setParanoiaMode(i); }
 
  private slots:
   void diskInfoReady( const K3bDiskInfo& info );
@@ -64,17 +64,14 @@ class K3bCdCopyJob : public K3bBurnJob
   void cdrdaoDirectCopy();
   void cdrdaoRead(); 
   void cdrdaoWrite();  
-  void readFinished(bool);
+
   void cdrdaoFinished(bool);
   void finishAll();
   void cancelAll();
 
-  void addCdrdaoReadArguments();
-
   void copyPercent(int p);
   void copySubPercent(int p);
-  void slotReaderNextTrack( int, int );
-  void slotWriterNextTrack( int, int );
+  void slotNextTrack( int, int );
 
  private:
   int m_copies;
@@ -83,16 +80,14 @@ class K3bCdCopyJob : public K3bBurnJob
   bool m_keepImage;
   bool m_onlyCreateImage;
   bool m_onTheFly;
-  bool m_fastToc;
-  bool m_readRaw;
-  int m_paranoiaMode;
 
   QString m_tempPath;
   QString m_tocFile;
 
+  QString m_job;
   K3bCdrdaoWriter *m_cdrdaowriter;
-  K3bCdrdaoReader *m_cdrdaoreader;
   K3bDiskInfoDetector* m_diskInfoDetector;
+  QUrlOperator *m_cp;
 };
 
 #endif
