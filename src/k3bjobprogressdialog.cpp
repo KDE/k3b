@@ -21,6 +21,8 @@
 #include <device/k3bdevice.h>
 #include <k3b.h>
 #include <k3bstdguiitems.h>
+#include <k3bcore.h>
+#include <tools/k3bversion.h>
 
 #include <qgroupbox.h>
 #include <qlabel.h>
@@ -78,6 +80,13 @@ K3bJobProgressDialog::PrivateDebugWidget::PrivateDebugWidget( QMap<QString, QStr
   grid->setColStretch( 0, 1 );
 
   connect( okButton, SIGNAL(pressed()), this, SLOT(accept()) );
+
+  debugView->append( "System\n" );
+  debugView->append( "-----------------------\n" );
+  debugView->append( "K3b Version: " + k3bcore->version() + "\n" );
+  debugView->append( "KDE Version: " + QString(KDE::versionString()) + "\n" );
+  debugView->append( "QT Version:  " + QString(qVersion()) + "\n" );
+  debugView->append( "\n" );
 
   // add the debugging output
   for( QMap<QString, QStringList>::Iterator itMap = map.begin(); itMap != map.end(); ++itMap ) {

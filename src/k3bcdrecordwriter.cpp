@@ -393,6 +393,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
 
 
 	  emit buffer( fifo );
+	  m_lastFifoValue = fifo;
 
 	  //
 	  // cdrecord's output sucks a bit.
@@ -441,9 +442,11 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   else if( line.contains("seconds.") ) {
     int pos2 = line.find("seconds.") - 2;
     int pos1 = line.findRev( QRegExp("\\D"), pos2 ) + 1;
-    emit infoMessage( i18n("Starting in 1 second", 
-			   "Starting in %n seconds", 
-			   line.mid(pos1, pos2-pos1+1).toInt()), K3bJob::PROCESS );
+    int secs = line.mid(pos1, pos2-pos1+1).toInt();
+    if( secs > 0 )
+      emit infoMessage( i18n("Starting in 1 second", 
+			     "Starting in %n seconds", 
+			     secs), K3bJob::PROCESS );
   }
   else if( line.startsWith( "Writing pregap" ) ) {
     emit newSubTask( i18n("Writing pregap") );
@@ -554,11 +557,16 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	emit infoMessage( i18n("Probably a problem with the medium."), ERROR );
 	break;
       case UNKNOWN:
-	// no recording device and also other errors!! :-(
-	emit infoMessage( i18n("Cdrecord returned an unknown error! (code %1)").arg(p->exitStatus()), 
-			  K3bJob::ERROR );
-	emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
-	emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
+	if( m_lastFifoValue <= 3 ) {
+	  emit infoMessage( i18n("Probably a buffer underrun occured."), ERROR );
+	}
+	else {
+	  // no recording device and also other errors!! :-(
+	  emit infoMessage( i18n("Cdrecord returned an unknown error! (code %1)").arg(p->exitStatus()), 
+			    K3bJob::ERROR );
+	  emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
+	  emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
+	}
 	break;
       }
       emit finished( false );
