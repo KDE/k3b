@@ -843,11 +843,7 @@ void K3bMainWindow::init()
   emit initializationInfo( i18n("Reading Options...") );
 
 
-  // this is a little not to hard hack to ensure that we get the "global" k3b appdir
-  // k3bui.rc should always be in $KDEDIR/share/apps/k3b/
-  QString globalConfigDir = KGlobal::dirs()->findResourceDir( "data", "k3b/k3bui.rc" ) + "k3b";
-  QString globalConfigFile =  globalConfigDir + "/k3bsetup";
-  KConfig globalConfig( globalConfigFile );
+  KConfig globalConfig( K3b::globalConfig() );
 
   readOptions();
 
@@ -917,10 +913,9 @@ void K3bMainWindow::slotCurrentDocChanged( QWidget* )
 
 void K3bMainWindow::slotEditToolbars()
 {
-  KEditToolbar dlg(actionCollection());
+  showOptionDialog( 6 );
 
-  if (dlg.exec())
-    createGUI();
+  createGUI();
 }
 
 

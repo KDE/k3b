@@ -20,6 +20,7 @@
 #include "../device/k3bdevicemanager.h"
 #include "../device/k3bdevice.h"
 #include "../tools/k3bexternalbinmanager.h"
+#include "../tools/k3bglobals.h"
 
 #include <kconfig.h>
 #include <ksimpleconfig.h>
@@ -46,10 +47,7 @@ K3bSetup::K3bSetup( QObject* parent )
   m_deviceManager = new K3bDeviceManager( m_externalBinManager, this );
 
 
-  // this is a little not to hard hack to ensure that we get the "global" k3b appdir
-  // k3bui.rc should always be in $KDEDIR/share/apps/k3b/
-  m_configPath = KGlobal::dirs()->findResourceDir( "data", "k3b/k3bui.rc" ) + "k3b/k3bsetup";
-  m_config = new KSimpleConfig( m_configPath );
+  m_config = new KSimpleConfig( K3b::globalConfig() );
 
 
   // initialize external programs

@@ -27,7 +27,7 @@ class K3bBurningOptionTab;
 class K3bPatternOptionTab;
 class K3bExternalBinOptionTab;
 class K3bMiscOptionTab;
-
+class KEditToolbarWidget;
 
 /**
   *@author Sebastian Trueg
@@ -74,6 +74,10 @@ class K3bOptionDialog : public KDialogBase
   // misc options
   K3bMiscOptionTab* m_miscOptionTab;
   void setupMiscPage();
+
+  // toolbar tab
+  KEditToolbarWidget* m_editToolbarWidget;
+  void setupToolBarTab();
 };
 
 #endif

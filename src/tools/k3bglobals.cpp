@@ -20,6 +20,9 @@
 #include "../device/Sample.h"
 #include "../device/util.h"
 
+#include <kglobal.h>
+#include <kstandarddirs.h>
+
 #include <qdatastream.h>
 
 #include <cmath>
@@ -64,4 +67,12 @@ Q_INT32 K3b::swapByteOrder( Q_INT32 i )
 int K3b::round( double d )
 {
   return (int)( floor(d) + 0.5 <= d ? ceil(d) : floor(d) );
+}
+
+
+QString K3b::globalConfig()
+{
+  // this is a little not to hard hack to ensure that we get the "global" k3b appdir
+  // k3b_cd_copy.png should always be in $KDEDIR/share/apps/k3b/pics/
+  return KGlobal::dirs()->findResourceDir( "data", "k3b/pics/k3b_cd_copy.png" ) + "k3b/k3bsetup";
 }

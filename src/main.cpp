@@ -31,6 +31,7 @@
 
 #include "k3b.h"
 #include "k3bsplash.h"
+#include "tools/k3bglobals.h"
 
 
 static const char *description = 
@@ -62,11 +63,7 @@ int main(int argc, char *argv[])
   KApplication app;
 
 
-  // this is a little not to hard hack to ensure that we get the "global" k3b appdir
-  // k3bui.rc should always be in $KDEDIR/share/apps/k3b/
-  QString globalConfig = KGlobal::dirs()->findResourceDir( "data", "k3b/k3bui.rc" ) + "k3b/k3bsetup";
-  
-  if( !QFile::exists( globalConfig ) ) {
+  if( !QFile::exists( K3b::globalConfig() ) ) {
     if( KMessageBox::warningYesNo( 0, i18n("It seems as if you have not run K3bSetup yet. It is recommended to do so. "
 					   "Should K3bSetup be started?"),
 				   i18n("K3b Setup"), KStdGuiItem::yes(), KStdGuiItem::no(), 

@@ -33,6 +33,8 @@ namespace K3b
   Q_INT32 swapByteOrder( Q_INT32 i );
 
   int round( double );
+
+  QString globalConfig();
 };
 
 #endif
