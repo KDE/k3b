@@ -530,6 +530,9 @@ void K3bListView::hideEditor()
 
 void K3bListView::showEditor( K3bListViewItem* item, int col )
 {
+  if( !item )
+    return;
+
   if( item->needButton( col ) || item->editorType(col) != K3bListViewItem::NONE ) {
     m_currentEditColumn = col;
     m_currentEditItem = item;
