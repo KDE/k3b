@@ -556,11 +556,9 @@ void K3bVcdJob::cdrdaoWrite()
 
   if( m_doc->dummy() ) {
     emit infoMessage( i18n("Starting simulation at %1x speed...").arg(m_doc->speed()), K3bJob::STATUS );
-    emit newSubTask( i18n("Writing image ... (Simulation)") );
   }
   else {
     emit infoMessage( i18n("Starting recording at %1x speed...").arg(m_doc->speed()), K3bJob::STATUS );
-    emit newSubTask( i18n("Writing image ...") );
   }
 }
 
@@ -575,6 +573,16 @@ void K3bVcdJob::createCdrdaoProgress( int made, int size )
   emit subPercent( 100*made / size );
   emit processedSize( made, size );
   emit percent( 66 + (34*made / size ) );
+}
+
+void K3bVcdJob::startNewCdrdaoTrack()
+{
+  if( m_doc->dummy() ) {
+    emit newSubTask( i18n("Writing cue/bin image ... (Simulation)") );
+  }
+  else {
+    emit newSubTask( i18n("Writing cue/bin image ...") );
+  }
 }
 
 void K3bVcdJob::slotCdrdaoFinished()

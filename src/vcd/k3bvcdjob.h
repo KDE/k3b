@@ -61,10 +61,12 @@ class K3bVcdJob : public K3bBurnJob
   void slotVcdxBuildFinished();
   void slotParseVcdxBuildOutput( KProcess*, char* output, int len );
   void slotCdrdaoFinished();
+
+  /** reimplemented from K3bBurnJob */
+  void createCdrdaoProgress( int made, int size );
+  void startNewCdrdaoTrack();
         
  private:
-  void createCdrdaoProgress( int made, int size );
-  // void startNewCdrdaoTrack();
   void vcdxGen();
   void vcdxBuild();
   
