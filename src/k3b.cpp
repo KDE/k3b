@@ -74,7 +74,7 @@
 #include "cdcopy/k3bcdcopydialog.h"
 #include "videoEncoding/k3bdivxview.h"
 #include "k3btempdirselectionwidget.h"
-#include "k3bbusywidget.h"
+#include "tools/k3bbusywidget.h"
 
 
 

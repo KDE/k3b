@@ -1,6 +1,6 @@
 #include "k3bdiskerasinginfodialog.h"
 
-#include "../k3bbusywidget.h"
+#include "tools/k3bbusywidget.h"
 
 #include <qlabel.h>
 #include <qpushbutton.h>
