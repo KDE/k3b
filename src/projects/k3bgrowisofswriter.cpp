@@ -198,7 +198,9 @@ bool K3bGrowisofsWriter::prepareProcess()
     }
     
     if( speed != 0 )
-      *d->process << QString("-speed=%1").arg( (double)speed/1385.0, 0, 'g', 1 );
+      *d->process << QString("-speed=%1").arg( speed%1385 > 0
+					      ? QString::number( (float)speed/1385.0, 'f', 1 )  // example: DVD+R(W): 2.4x
+					      : QString::number( speed/1385 ) );
   }
 
   if( k3bcore->config()->readBoolEntry( "Allow overburning", false ) )
