@@ -69,8 +69,8 @@ void K3bFileView::setupGUI()
 
   m_toolBox = new K3bToolBox( this );
 
-  layout->addWidget( m_dirOp );
   layout->addWidget( m_toolBox );
+  layout->addWidget( m_dirOp );
   layout->setStretchFactor( m_dirOp, 1 );
 
 

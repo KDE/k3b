@@ -158,6 +158,7 @@ public:
     // 2. get it on
     K3b::Msf currentSector = m_firstSector;
     m_nextReadSector = 0;
+    m_errorSectorCount = 0;
     bool writeError = false;
     bool readError = false;
     int lastPercent = 0;
@@ -216,6 +217,10 @@ public:
 	emitProcessedSize( readMb, ( m_lastSector.lba() - m_firstSector.lba() + 1 ) / 512 );
       }
     }
+
+    if( m_errorSectorCount > 0 )
+      emitInfoMessage( i18n("Ignored %n erroneous sector.", "Ignored a total of %n erroneous sectors.", m_errorSectorCount ),
+		       K3bJob::ERROR );
 
     // cleanup
     m_device->close();
@@ -289,7 +294,8 @@ public:
 
       if( !success ) {
 	if( m_ignoreReadErrors ) {
-	  emitInfoMessage( i18n("Ignoring read error in sector %1.").arg(sector), K3bJob::WARNING );
+	  emitInfoMessage( i18n("Ignoring read error in sector %1.").arg(sector), K3bJob::ERROR );
+	  ++m_errorSectorCount;
 	  ::memset( &buffer[i], 0, 1 );
 	  success = true;
 	}
@@ -322,6 +328,8 @@ public:
   int m_sectorSize;
   bool m_useLibdvdcss;
   K3bLibDvdCss* m_libcss;
+
+  int m_errorSectorCount;
 };
 
 
