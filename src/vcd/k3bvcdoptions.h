@@ -35,6 +35,9 @@ class K3bVcdOptions
   const QString& publisher() const { return m_publisher; }
   const QString& preparer() const { return m_preparer; }
 
+  const bool& BrokenSVcdMode() const { return m_brokensvcdmode; }
+  const bool& Sector2336() const { return m_sector2336; }
+
   void setSystemId( const QString& s ) { m_systemId = s; }
   void setAlbumId( const QString& s ) { m_albumID = s; }
   void setVolumeId( const QString& s ) { m_volumeID = s; }
@@ -42,6 +45,9 @@ class K3bVcdOptions
   void setPublisher( const QString& s ) { m_publisher = s; }
   void setPreparer( const QString& s ) { m_preparer = s; }
 
+  void setBrokenSVcdMode( const bool& b ) { m_brokensvcdmode = b; }
+  void setSector2336( const bool& b ) { m_sector2336 = b; }
+  
   void save( KConfig* c );
 
   static K3bVcdOptions load( KConfig* c );
@@ -56,6 +62,9 @@ class K3bVcdOptions
   QString m_publisher;
   QString m_systemId;
   QString m_volumeSetId;
+
+  bool m_brokensvcdmode;
+  bool m_sector2336;
 
 };
 

@@ -42,7 +42,7 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
    K3bVcdBurnDialog(K3bVcdDoc* doc, QWidget *parent=0, const char *name=0, bool modal = true );
    ~K3bVcdBurnDialog();
 
- K3bVcdDoc* vcdDoc() const {return m_vcdDoc;};
+ K3bVcdDoc* vcdDoc() const {return m_vcdDoc;}
  
  protected:
    void setupVideoCdTab();
@@ -85,6 +85,9 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
    void loadUserDefaults();
    void saveUserDefaults();
 
+   void slotNonCompliantToggled();
+   void slot2336Toggled();
+   
 };
 
 #endif

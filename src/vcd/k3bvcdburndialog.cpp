@@ -84,6 +84,11 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
   m_tempDirSelectionWidget->setNeededSize( doc()->size() );
 
   readSettings();
+  if( K3bDevice* dev = m_writerSelectionWidget->writerDevice() )
+    m_checkBurnproof->setEnabled( dev->burnproof() );
+
+  connect( m_checkNonCompliant, SIGNAL(toggled(bool)), this, SLOT(slotNonCompliantToggled()) );
+  connect( m_check2336, SIGNAL(toggled(bool)), this, SLOT(slot2336Toggled()) );
 }
 
 
@@ -115,9 +120,9 @@ void K3bVcdBurnDialog::setupVideoCdTab()
   grid->addWidget( m_groupVcdFormat, 0, 0 );
   grid->addWidget( m_groupOptions, 0, 1 );
 
-  // TODO: set enabled to false, k2b canot resample now.
+  // TODO: set enabled to false, k3b canot resample now.
   m_groupVcdFormat->setEnabled(false);
-  m_groupOptions->setEnabled(false);
+  // m_groupOptions->setEnabled(false);
 
   addPage( w, i18n("Settings") );
 }
@@ -306,6 +311,16 @@ void K3bVcdBurnDialog::saveUserDefaults()
   c->writeEntry( "remove_image", m_checkRemoveBufferFiles->isChecked() );
 
   m_tempDirSelectionWidget->saveConfig();
+}
+
+void K3bVcdBurnDialog::slotNonCompliantToggled()
+{
+  vcdDoc()->vcdOptions()->setBrokenSVcdMode(m_checkNonCompliant->isChecked());  
+}
+
+void K3bVcdBurnDialog::slot2336Toggled()
+{
+  vcdDoc()->vcdOptions()->setSector2336(m_check2336->isChecked());
 }
 
 #include "k3bvcdburndialog.moc"

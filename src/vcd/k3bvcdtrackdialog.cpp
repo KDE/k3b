@@ -188,7 +188,7 @@ void K3bVcdTrackDialog::fillGui()
     if (track->MpegAudioOriginal())
       tmp.append(i18n("original"));
     else
-      tmp.append(i18n("copy"));
+      tmp.append(i18n("duplicate"));
 
     m_copyright_audio->setText(tmp);
   }

@@ -43,6 +43,7 @@ class K3bVcdJob : public K3bBurnJob
   ~K3bVcdJob();
 
   K3bDoc* doc() const;
+  K3bVcdDoc* vcdDoc() const {return m_doc;};
   K3bDevice* writer() const;
 
  public slots:

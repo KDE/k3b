@@ -195,8 +195,13 @@ void K3bVcdJob::vcdxGen()
   // AlbumID
   *m_process << QString("--info-album-id=%1").arg(m_doc->vcdOptions()->albumId());
 
+  if ( vcdDoc()->vcdOptions()->BrokenSVcdMode() ) {
+    kdDebug() << "(K3bVcdJop) Broken Svcd Mode = on" << endl;
+    *m_process << "--broken-svcd-mode";
+  }
+
   // set vcdType
-  switch( ((K3bVcdDoc*)doc())->vcdType() ) {
+  switch( vcdDoc()->vcdType() ) {
   case K3bVcdDoc::VCD11:
         *m_process << "-t" << "vcd11";
     break;
@@ -307,6 +312,11 @@ void K3bVcdJob::vcdxBuild()
   }
 
   *m_process << k3bMain()->externalBinManager()->binPath( "vcdxbuild" );
+
+  if ( vcdDoc()->vcdOptions()->BrokenSVcdMode() ) {
+    kdDebug() << "(K3bVcdJop) Write 2336 Sectors = on" << endl;
+    *m_process << "--sector-2336";
+  }
 
   *m_process << "--progress" << "--gui";
 
