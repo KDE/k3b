@@ -35,6 +35,7 @@
 #include <kconfig.h>
 #include <kio/netaccess.h>
 #include <kstandarddirs.h>
+#include <ktempfile.h>
 
 #include <errno.h>
 #include <string.h>
@@ -74,6 +75,8 @@ K3bCdrdaoWriter::K3bCdrdaoWriter( K3bDevice* dev, QObject* parent, const char* n
     m_sourceDevice(0),
     m_dataFile(QString("")),
     m_tocFile(QString("")),
+    m_cueFileLnk(QString("")),
+    m_binFileLnk(QString("")),    
     m_readRaw(false),
     m_multi(false),
     m_force(false),
@@ -371,8 +374,11 @@ void K3bCdrdaoWriter::setCommonArguments()
   if ( ! m_dataFile.isEmpty() )
     *m_process << "--datafile" << m_dataFile;
 
+  // BIN/CUE
+  if ( ! m_cueFileLnk.isEmpty() )
+    *m_process << m_cueFileLnk;
   // TOC File
-  if ( ! m_tocFile.isEmpty() )
+  else if ( ! m_tocFile.isEmpty() )
     *m_process << m_tocFile;
 }
 
@@ -414,15 +420,20 @@ void K3bCdrdaoWriter::start()
   case COPY:
     if (!m_tocFile.isEmpty())
     {
-      // workaround, cdrdao deletes the tocfile when --remote parameter is set
 
-      m_backupTocFile = m_tocFile + ".k3bbak";
-      if ( !KIO::NetAccess::copy(m_tocFile,m_backupTocFile) )
-      {
-        kdDebug() << "(K3bCdrdaoWriter) could not backup " << m_tocFile << " to " << m_backupTocFile << endl;
-        emit infoMessage( i18n("Could not backup tocfile."), ERROR );
-        emit finished(false);
-        return;
+      // if tocfile is a cuesheet than create symlinks to *.cue and the binary listed inside the cuesheet.
+      // now works without the .bin extension too.
+      if ( !cueSheet() ) {
+          m_backupTocFile = m_tocFile + ".k3bbak";
+
+          // workaround, cdrdao deletes the tocfile when --remote parameter is set
+          if ( !KIO::NetAccess::copy(m_tocFile,m_backupTocFile) )
+          {
+            kdDebug() << "(K3bCdrdaoWriter) could not backup " << m_tocFile << " to " << m_backupTocFile << endl;
+            emit infoMessage( i18n("Could not backup tocfile."), ERROR );
+            emit finished(false);
+            return;
+          }
       }
     }
     break;
@@ -547,6 +558,46 @@ void K3bCdrdaoWriter::cancel()
   emit finished( false );
 }
 
+bool K3bCdrdaoWriter::cueSheet()
+{
+    if ( m_tocFile.lower().endsWith( ".cue" ) ) {
+        QFile f( m_tocFile );
+        if ( f.open( IO_ReadOnly ) ) {
+            QTextStream ts( &f );
+            if ( !ts.eof() ) {
+                QString line = ts.readLine();
+                f.close();
+                int pos = line.find( "FILE \"" );
+                if( pos < 0 )
+                    return false;
+
+                pos += 6;
+                int endPos = line.find( "\" BINARY", pos+1 );
+                if( endPos < 0 )
+                    return false;
+
+                line = line.mid( pos, endPos-pos );
+
+                KTempFile tempF;
+                QString tempFile = tempF.name();
+                tempF.unlink();
+
+                if ( symlink(line.latin1(), (tempFile + ".bin").latin1() ) == -1 )
+                    return false;
+                if ( symlink(m_tocFile.latin1(), (tempFile + ".cue").latin1() ) == -1 )
+                    return false;
+
+                kdDebug() << QString("K3bCdrdaoWriter::cueSheet() BinFile: %1.bin").arg( tempFile ) << endl;
+                kdDebug() << QString("K3bCdrdaoWriter::cueSheet() CueFile: %1.cue").arg( tempFile ) << endl;
+                m_binFileLnk = tempFile + ".bin";
+                m_cueFileLnk = tempFile + ".cue";
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
 
 void K3bCdrdaoWriter::slotStdLine( const QString& line )
 {
@@ -561,7 +612,11 @@ void K3bCdrdaoWriter::slotProcessExited( KProcess* p )
   {
   case WRITE:
   case COPY:
-    if( !QFile::exists( m_tocFile ) && !m_onTheFly )
+    if ( !m_binFileLnk.isEmpty() ) {
+        // KIO::NetAccess::del(m_cueFileLnk);
+        // KIO::NetAccess::del(m_binFileLnk);
+    }
+    else if( !QFile::exists( m_tocFile ) && !m_onTheFly )
     {
       // cdrdao removed the tocfile :(
       // we need to recover it

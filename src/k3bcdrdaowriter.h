@@ -100,6 +100,7 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
   void setCommonArguments();
 
   bool write(const char* data, int len);
+  bool cueSheet();
   // options
   // ---------------------
   int        m_command;
@@ -107,6 +108,8 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
   K3bDevice* m_sourceDevice;
   QString    m_dataFile;
   QString    m_tocFile;
+  QString    m_cueFileLnk;
+  QString    m_binFileLnk;
   QString m_backupTocFile;
   bool       m_readRaw;
   bool       m_multi;
