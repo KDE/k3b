@@ -16,6 +16,7 @@
 #include <qtooltip.h>
 #include <qwhatsthis.h>
 #include <qfile.h>
+#include <qptrlist.h>
 
 
 // TODO: possible solution: make changes direct and check versions
@@ -80,95 +81,19 @@ void K3bExternalBinOptionTab::readSettings()
 {
   // clear the view before adding anything!
   m_viewPrograms->clear();
+
   KListViewItem *item;
-  for( int i=0; i < NUM_BIN_PROGRAMS ; i++ ) {
+  QPtrList<K3bExternalBin> list = m_manager->list();
+  for( QPtrListIterator<K3bExternalBin> it( list ); it.current(); ++it ) {
+    K3bExternalBin* binObject = it.current();
+
     item =  new KListViewItem( m_viewPrograms );
-    item->setPixmap( 0, m_manager->foundBin( binPrograms[ i ] ) ? SmallIcon("ok") : SmallIcon("stop") );
-    item->setText( 1, binPrograms[ i ] );
-    item->setText( 3, m_manager->binPath( binPrograms[ i ] ) );
-    K3bExternalBin* cdrecordBin = m_manager->binObject( binPrograms[ i ] );
-    if( cdrecordBin ) {
-        item->setText( 2, cdrecordBin->version );
-        item->setText( 4, cdrecordBin->parameters );
-    }
+    item->setPixmap( 0, m_manager->foundBin( binObject->name() ) ? SmallIcon("ok") : SmallIcon("stop") );
+    item->setText( 1, binObject->name() );
+    item->setText( 3, binObject->path );
+    item->setText( 2, binObject->version );
+    item->setText( 4, binObject->parameters );
   }
-  /*
-
-  KListViewItem* item = new KListViewItem( m_viewPrograms );
-  item->setPixmap( 0, m_manager->foundBin( "cdrecord" ) ? SmallIcon("ok") : SmallIcon("stop") );
-  item->setText( 1, "cdrecord" );
-  item->setText( 3, m_manager->binPath( "cdrecord" ) );
-  K3bExternalBin* cdrecordBin = m_manager->binObject( "cdrecord" );
-  if( cdrecordBin ) {
-    item->setText( 2, cdrecordBin->version );
-    item->setText( 4, cdrecordBin->parameters );
-  }
-
-
-  item = new KListViewItem( m_viewPrograms, item );
-  item->setPixmap( 0, m_manager->foundBin( "mkisofs" ) ? SmallIcon("ok") : SmallIcon("stop") );
-  item->setText( 1, "mkisofs" );
-  item->setText( 3, m_manager->binPath( "mkisofs" ) );
-  K3bExternalBin* mkisofsBin = m_manager->binObject( "mkisofs" );
-  if( mkisofsBin ) {
-    item->setText( 2, mkisofsBin->version );
-    item->setText( 4, mkisofsBin->parameters );
-  }
-
-
-  item = new KListViewItem( m_viewPrograms, item );
-  item->setPixmap( 0, m_manager->foundBin( "cdrdao" ) ? SmallIcon("ok") : SmallIcon("stop") );
-  item->setText( 1, "cdrdao" );
-  item->setText( 3, m_manager->binPath( "cdrdao" ) );
-  K3bExternalBin* cdrdaoBin = m_manager->binObject( "cdrdao" );
-  if( cdrdaoBin ) {
-    item->setText( 2, cdrdaoBin->version );
-    item->setText( 4, cdrdaoBin->parameters );
-  }
-
-
-<<<<<<< k3bexternalbinoptiontab.cpp
-  item = new KListViewItem( m_viewPrograms, item );
-  item->setPixmap( 0, m_manager->foundBin( "mpg123" ) ? SmallIcon("ok") : SmallIcon("stop") );
-  item->setText( 1, "mpg123" );
-  item->setText( 3, m_manager->binPath( "mpg123" ) );
-  K3bExternalBin* mpg123Bin = m_manager->binObject( "mpg123" );
-  if( mpg123Bin ) {
-    item->setText( 2, mpg123Bin->version );
-    item->setText( 4, mpg123Bin->parameters );
-  }
-
-
-  item = new KListViewItem( m_viewPrograms, item );
-  item->setPixmap( 0, m_manager->foundBin( "sox" ) ? SmallIcon("ok") : SmallIcon("stop") );
-  item->setText( 1, "sox" );
-  item->setText( 3, m_manager->binPath( "sox" ) );
-  K3bExternalBin* soxBin = m_manager->binObject( "sox" );
-  if( soxBin ) {
-    item->setText( 2, soxBin->version );
-    item->setText( 4, soxBin->parameters );
-  }
-    */
-//   item = new KListViewItem( m_viewPrograms, item );
-//   item->setPixmap( 0, m_manager->foundBin( "mpg123" ) ? SmallIcon("ok") : SmallIcon("stop") );
-//   item->setText( 1, "mpg123" );
-//   item->setText( 3, m_manager->binPath( "mpg123" ) );
-//   K3bExternalBin* mpg123Bin = m_manager->binObject( "mpg123" );
-//   if( mpg123Bin ) {
-//     item->setText( 2, mpg123Bin->version );
-//     item->setText( 4, mpg123Bin->parameters );
-//   }
-
-
-//   item = new KListViewItem( m_viewPrograms, item );
-//   item->setPixmap( 0, m_manager->foundBin( "sox" ) ? SmallIcon("ok") : SmallIcon("stop") );
-//   item->setText( 1, "sox" );
-//   item->setText( 3, m_manager->binPath( "sox" ) );
-//   K3bExternalBin* soxBin = m_manager->binObject( "sox" );
-//   if( soxBin ) {
-//     item->setText( 2, soxBin->version );
-//     item->setText( 4, soxBin->parameters );
-//   }
 }
 
 
@@ -186,7 +111,7 @@ void K3bExternalBinOptionTab::saveSettings()
 }
 
 
-void K3bExternalBinOptionTab::slotItemRenamed( QListViewItem* item, const QString& newText, int col )
+void K3bExternalBinOptionTab::slotItemRenamed( QListViewItem* item, const QString& newText, int )
 {
   QString bin = item->text(1);
   if( newText.mid( newText.findRev('/')+1 ) == bin &&

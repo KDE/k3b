@@ -9,24 +9,49 @@
 #include <qfile.h>
 
 
+#define TRANSCODE_START 3
+#define TRANSCODE_END 9
+
 // binary program name without path
 // to add a new one add the name at the end of the array and implement your own
 // version of checkVersions and add a case in slotParseOutputVersion.
-//static const char* binPrograms[] =  { "mkisofs", "cdrecord", "cdrdao", "mpg123", "sox", "transcode", "tccat", "tcprobe", "tcscan", "tcextract", "tcdecode" };
-// command argument to show the version number of the programs to check
-//static const char* binVersionFlag[] =  { "--version", "--version", "--version", "--version", "-h", "-version", "--version", "-version", "-version", "-version", "-v" };
-// minimum version of the programs
-//static const char* binVersions[] =  { "1.13", "1.9", "1.1.3", "unknown", "unknown", "0.6.0pre3", "0.6.0pre3", "0.6.0pre3", "0.6.0pre3", "0.6.0pre3", "0.6.0pre3" };
 
-static const char* binPrograms[] =  { "mkisofs", "cdrecord", "cdrdao",
-                    "transcode", "tcprobe", "tccat", "tcscan", "tcextract", "tcdecode" };
-static const char* binVersions[] =  { "1.13", "1.9", "1.1.3",
-                    "0.6.0pre3", "0.6.0pre3", "0.6.0pre3", "0.6.0pre3", "0.6.0pre3", "0.6.0pre3" };
-static const char* binVersionFlag[] =  { "--version", "--version", "--version", "-version", "-version", "-version", "-version", "-version", "-version" };
+static const int NUM_BIN_PROGRAMS = 9;
+static const int NUM_SEARCH_PATHS = 5;
 
-static const char* searchPaths[] = { "/usr/bin/", "/usr/local/bin/",
-				       "/usr/sbin/", "/usr/local/sbin/",
-				       "/opt/schily/bin/" };
+static const char* binPrograms[] =  { "mkisofs", 
+				      "cdrecord", 
+				      "cdrdao",
+				      "transcode", 
+				      "tcprobe", 
+				      "tccat", 
+				      "tcscan", 
+				      "tcextract", 
+				      "tcdecode" };
+static const char* binVersions[] =  { "1.13", 
+				      "1.9", 
+				      "1.1.3",
+				      "0.6.0pre3", 
+				      "0.6.0pre3", 
+				      "0.6.0pre3", 
+				      "0.6.0pre3", 
+				      "0.6.0pre3", 
+				      "0.6.0pre3" };
+static const char* binVersionFlag[] =  { "--version", 
+					 "--version", 
+					 "--version", 
+					 "-version", 
+					 "-version", 
+					 "-version", 
+					 "-version", 
+					 "-version", 
+					 "-version" };
+ 
+static const char* searchPaths[] = { "/usr/bin/", 
+				     "/usr/local/bin/",
+				     "/usr/sbin/", 
+				     "/usr/local/sbin/",
+				     "/opt/schily/bin/" };
 
 
 
@@ -274,7 +299,6 @@ void K3bExternalBinManager::slotParseCdrtoolsVersion( KProcess*p, char* data, in
 
 void K3bExternalBinManager::slotParseCdrdaoVersion( KProcess*, char* data, int len )
 {
- kdDebug() << "Check cdrdao" << endl;
   if( m_binMap.contains( "cdrdao" ) ) {
     QString buffer = QString::fromLatin1( data, len );
     QStringList lines = QStringList::split( "\n", buffer );
@@ -368,6 +392,19 @@ K3bExternalBin* K3bExternalBinManager::binObject( const QString& name )
   else
     return 0;
 }
+
+
+QPtrList<K3bExternalBin> K3bExternalBinManager::list() const
+{
+  QList<K3bExternalBin> l;
+
+  QMap<QString, K3bExternalBin*>::const_iterator it = m_binMap.begin();
+  for( ; it != m_binMap.end(); ++it )
+    l.append( it.data() );
+
+  return l;
+}
+
 
 #include "k3bexternalbinmanager.moc"
 

@@ -4,14 +4,8 @@
 #include <qmap.h>
 #include <qobject.h>
 #include <qstring.h>
+#include <qptrlist.h>
 
-
-//static const int NUM_BIN_PROGRAMS = 11; // 11
-static const int NUM_BIN_PROGRAMS = 9;
-static const int NUM_SEARCH_PATHS = 5;
-
-#define TRANSCODE_START 3
-#define TRANSCODE_END 9
 
 class QString;
 class KConfig;
@@ -56,6 +50,8 @@ Q_OBJECT
   bool foundBin( const QString& name );
   const QString& binPath( const QString& name );
   K3bExternalBin* binObject( const QString& name );
+
+  QPtrList<K3bExternalBin> list() const;
 
  private slots:
   void slotParseCdrdaoVersion( KProcess*, char* data, int len );
