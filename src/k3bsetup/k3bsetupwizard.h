@@ -20,8 +20,10 @@ class QListViewItem;
 
 class K3bSetup;
 class K3bDeviceManager;
+class K3bExternalBinManager;
 class KSimpleConfig;
 class KListView;
+
 
 class K3bSetupWizard : public KWizard
 { 
@@ -50,10 +52,12 @@ class K3bSetupWizard : public KWizard
   void slotRemoveUser();
   void slotPermissionsDetails();
   void slotDeviceItemRenamed( QListViewItem*, const QString&, int );
+  void slotExternalProgramItemRenamed( QListViewItem*, const QString&, int );
   void slotSelectMountPoint();
 
  private:
   void updateDevices();
+  void updateExternalPrograms();
   void updateFstabEntries();
   void createNewFstab();
 
@@ -61,6 +65,7 @@ class K3bSetupWizard : public KWizard
 
   K3bSetup* m_setup;
   K3bDeviceManager* m_deviceManager;
+  K3bExternalBinManager* m_externalBinManager;
   KSimpleConfig* m_config;
   QString m_configPath;
   

@@ -12,10 +12,10 @@ extern "C" {
 }
 
 
-const char* K3bDevice::cdrdao_drivers[13] = { "plextor", "plextor-scan", "cdd2600", "generic-mmc", 
+const char* K3bDevice::cdrdao_drivers[13] = { "auto", "plextor", "plextor-scan", "cdd2600", "generic-mmc", 
 					      "generic-mmc-raw", "ricoh-mp6200", "sony-cdu920", 
 					      "sony-cdu948", "taiyo-yuden", "teac-cdr55", "toshiba", 
-					      "yamaha-cdr10x", "auto" };
+					      "yamaha-cdr10x" };
 
 
 K3bDevice::K3bDevice( cdrom_drive* drive )

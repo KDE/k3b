@@ -316,7 +316,7 @@ void K3bDeviceOptionTab::updateDeviceListViews()
   while( dev ) {
     // add item to m_viewDevices
     item = new PrivateDeviceViewItem( dev, m_viewDevicesReader );
-    item->setPixmap( 0, KGlobal::instance()->iconLoader()->loadIcon( "cdrom_unmount", KIcon::NoGroup, KIcon::SizeSmall ) );
+    item->setPixmap( 0, SmallIcon( "cdrom_unmount" ) );
     item->setText( 1, dev->device->vendor() );
     item->setText( 2, dev->device->description() );
 
@@ -327,11 +327,18 @@ void K3bDeviceOptionTab::updateDeviceListViews()
   while( dev ) {
     // add item to m_viewDevices
     item = new PrivateDeviceViewItem( dev, m_viewDevicesWriter );
-    item->setPixmap( 0, KGlobal::instance()->iconLoader()->loadIcon( "cdwriter_unmount", KIcon::NoGroup, KIcon::SizeSmall ) );
+    item->setPixmap( 0, SmallIcon( "cdwriter_unmount" ) );
     item->setText( 1, dev->device->vendor() );
     item->setText( 2, dev->device->description() );
 
     dev = m_tempWriter.next();
+  }
+
+  if( QListViewItem* i = m_viewDevicesReader->firstChild() ) {
+    m_viewDevicesReader->setSelected( i, true );
+  }
+  else if( QListViewItem* i = m_viewDevicesWriter->firstChild() ) {
+    m_viewDevicesWriter->setSelected( i, true );
   }
 }
 
@@ -351,6 +358,7 @@ void K3bDeviceOptionTab::updateDeviceInfoBox( PrivateTempDevice* tempDev )
     m_labelDescription->setText( dev->description() );
     m_labelVersion->setText( dev->version() );
     m_spinReadSpeed->setValue( tempDev->maxReadSpeed );
+    m_comboDriver->setEnabled( true );
 
     int i = 0;
     while( i < m_comboDriver->count() ) {
@@ -403,6 +411,7 @@ void K3bDeviceOptionTab::updateDeviceInfoBox( PrivateTempDevice* tempDev )
     m_labelDescription->setText( "" );
     m_labelVersion->setText( "" );
     m_spinReadSpeed->setValue( 0 );
+    m_comboDriver->setDisabled( true );
   }    
 }
 

@@ -4,6 +4,7 @@
 
 #include "../device/k3bdevicemanager.h"
 #include "../device/k3bdevice.h"
+#include "../k3bexternalbinmanager.h"
 
 #include <pwd.h>
 #include <stdio.h>
@@ -88,6 +89,7 @@ K3bSetupWizard::K3bSetupWizard( QWidget* parent,  const char* name, bool modal, 
   // create a K3bDeviceManager
   m_deviceManager = new K3bDeviceManager( this );
 
+  m_externalBinManager = new K3bExternalBinManager( this );
 
 
   // =================================================================================================================
@@ -237,14 +239,31 @@ K3bSetupWizard::K3bSetupWizard( QWidget* parent,  const char* name, bool modal, 
   pageLayout_3->addWidget( pixmapLabel3, 0, 0 );
 
   m_labelNoWriter = new QLabel( m_page3, "m_labelNoWriter" );
-  m_labelNoWriter->setText( i18n( "K3b did not find a cd writer on your system. If you have no cd writer and want to use K3b only"
-				  " for cd ripping everything is fine.\n"
-				  "If you have an Atapi writer you should enable SCSI emulation.\n"
+  m_labelNoWriter->setText( i18n( "<p><b>K3b Setup did not find a cd writer on your system.</b></p>\n"
+				  "<p>If you have no cd writer and want to use K3b only for cd ripping everything is fine.</p>\n"
+				  "<p>If you are sure you have either a SCSI cd writer or enabled SCSI emulation please go back "
+				  "and add the device manually. If that does not work... well... please report!</p>\n"
+				  "<p>Otherwise you need to enable SCSI emulation for (at least) your ATAPI cd writer (although "
+				  "it is recommended to enable SCSI emulation for all cd drives it is not nessesary) since this "
+				  "is the only thing K3b Setup is not able to do for you (yet).</p>\n"
+				  "<p><b>How to enable SCSI emulation</b></p>\n"
 				  "\n"
-				  "[Description how to do this]\n"
-				  "\n"
-				  "If you are sure you have either a SCSI cd writer or enabled SCSI emulation please go back and"
-				  " add the device. If that does not work... well... please report!" ) );
+				  "<ol>\n"
+				  "<li>Make sure your kernel supports SCSI emulation at least as a module. If you use a standard "
+				  "kernel from your distribution this likely is the case. Try loading the module with <pre>modprobe "
+				  "ide-scsi</pre> as root. If your kernel does not support SCSI emulation you need to build your own "
+				  "kernel or at least a module. Sorry but that goes beyond the scope of this documentation.</li>\n"
+				  "<li>If your kernel supports SCSI emulation as a module it is recommended to add an entry in "
+				  "/etc/modules.conf so that the module is loaded automagically. Otherwise you have to load it "
+				  "with <pre>modprobe ide-scsi</pre> everytime you need it.\n"
+				  "</li>\n"
+				  "<li>The last step is to inform the kernel that you are about to use SCSI emulation at boottime. "
+				  "If you are using lilo (what is highly recommended) you need to add "
+				  "<pre>append = \"hdc=ide-scsi hdd=ide-scsi\"</pre> to your /etc/lilo.conf and rerun lilo as "
+				  "root to install the new configuration.\n"
+				  "After rebooting your system your cd writer is ready for action.</li>\n"
+				  "</ol>\n"
+				  "<p>If you experience problems feel free to contact me.</p>" ) );
   m_labelNoWriter->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter ) );
 
   pageLayout_3->addWidget( m_labelNoWriter, 0, 1 );
@@ -321,10 +340,14 @@ K3bSetupWizard::K3bSetupWizard( QWidget* parent,  const char* name, bool modal, 
   pageLayout_5->addMultiCellWidget( pixmapLabel5, 0, 1, 0, 0 );
 
   m_viewExternalPrograms = new KListView( m_page5, "m_viewExternalPrograms" );
-  m_viewExternalPrograms->addColumn( i18n( "program" ) );
   m_viewExternalPrograms->addColumn( i18n( "found" ) );
+  m_viewExternalPrograms->addColumn( i18n( "program" ) );
+  m_viewExternalPrograms->addColumn( i18n( "version" ) );
   m_viewExternalPrograms->addColumn( i18n( "path" ) );
   m_viewExternalPrograms->setAllColumnsShowFocus( true );
+  m_viewExternalPrograms->setItemsRenameable( true );
+  m_viewExternalPrograms->setRenameable( 0, false );
+  m_viewExternalPrograms->setRenameable( 3, true );
 
 
   pageLayout_5->addWidget( m_viewExternalPrograms, 1, 1 );
@@ -397,9 +420,8 @@ K3bSetupWizard::K3bSetupWizard( QWidget* parent,  const char* name, bool modal, 
   pageLayout_6->addMultiCellWidget( Line1, 4, 4, 1, 3 );
 
   m_labelPermissions2 = new QLabel( m_page6, "m_labelPermissions2" );
-  m_labelPermissions2->setText( i18n( "Please specify the users that will use K3b. You can also specify an alternative group name"
-				      " if you want to. If you do not know what that means just leave the default. (See \"Details\" "
-				      "for more information.)" ) );
+  m_labelPermissions2->setText( i18n( "Please specify the users that will use K3b. You can also specify an alternative group name."
+				      " If you do not know what that means just leave the default." ) );
   m_labelPermissions2->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
 
   pageLayout_6->addWidget( m_labelPermissions2, 1, 1 );
@@ -432,9 +454,9 @@ K3bSetupWizard::K3bSetupWizard( QWidget* parent,  const char* name, bool modal, 
   m_editPermissionsGroup->setText( i18n( "cdrecording" ) );
   groupWriterGroupLayout->addWidget( m_editPermissionsGroup );
 
-  pageLayout_6->addWidget( m_groupWriterGroup, 3, 1 );
+  pageLayout_6->addWidget( m_groupWriterGroup, 2, 1 );
   QSpacerItem* spacer_4 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
-  pageLayout_6->addItem( spacer_4, 2, 1 );
+  pageLayout_6->addItem( spacer_4, 3, 1 );
   addPage( m_page6, i18n( "Setup permissions" ) );
   // -----------------------------------------------------------------------------------------------------------
 
@@ -477,6 +499,9 @@ K3bSetupWizard::K3bSetupWizard( QWidget* parent,  const char* name, bool modal, 
 
   connect( m_viewSetupReader, SIGNAL(itemRenamed(QListViewItem*, const QString&, int)), 
 	   this, SLOT(slotDeviceItemRenamed(QListViewItem*, const QString&, int)) );
+
+  connect( m_viewExternalPrograms, SIGNAL(itemRenamed(QListViewItem*, const QString&, int)), 
+	   this, SLOT(slotExternalProgramItemRenamed(QListViewItem*, const QString&, int)) );
 
   setFinishEnabled( m_page7, true );
 }
@@ -565,13 +590,46 @@ void K3bSetupWizard::slotRemoveUser()
 
 void K3bSetupWizard::slotPermissionsDetails()
 {
-  QString info = i18n("more details to follow");
+  QString info = i18n("<p>These are the permission changes K3b Setup will perform and why:</p>\n"
+		      "<table>\n"
+		      "<tr>\n"
+		      " <td>change permission for cdrecord, mksiofs, and cdrdao to 4710</td>\n"
+		      " <td>cdrecord and cdrdao need write access to all the cd drives and all three programs run with higher "
+		      "priority. That is why they need to be run as root.</td>\n"
+		      "</tr>\n"
+		      "<tr>\n"
+		      " <td>add cdrecord, mkisofs, and cdrdao to group 'cdrecording'</td>\n"
+		      " <td>not everybody shall be allowed to execute these programs since running a program as suid root "
+		      "always is a security risk.</td>\n"
+		      "</tr>\n"
+		      "<tr>\n"
+		      " <td>add the selected users to group 'cdrecording'</td>\n"
+		      " <td>these users will be able to run cdrecord, mkisofs, and cdrdao</td>\n"
+		      "</tr>\n"
+		      "<tr>\n"
+		      " <td>change permission for all detected SCSI drives to 660</td>\n"
+		      " <td>K3b needs write access to the SCSI cd drives in order to detect writing speed and things like that</td>\n"
+		      "</tr>\n"
+		      "<tr>\n"
+		      " <td>change permission for all detected ATAPI drives to 620</td>\n"
+		      " <td>K3b needs only read access to the ATAPI drives since it is not (yet) able to detect speed and stuff "
+		      "for ATAPI devices.</td>\n"
+		      "</tr>\n"
+		      "<tr>\n"
+		      " <td>add all detected devices to group 'cdrecording'</td>\n"
+		      " <td>since write access to devices is always a security risk (although one can not do much bad with writing "
+		      "to a cdrom device) only the selcted users will be able to access the drives</td>\n"
+		      "</tr>\n"
+		      "</table>");
+
   KMessageBox::information( this, info, i18n("K3b Setup Permission Details") );
 }
 
 
 void K3bSetupWizard::init()
 {
+  // initialize devices
+  // ================================================
   m_deviceManager->scanbus();
 
   if( m_config->hasGroup("Devices") ) {
@@ -581,6 +639,21 @@ void K3bSetupWizard::init()
 
   // create listViewItems
   updateDevices();
+  // ================================================
+
+
+  // initialize external programs
+  // ================================================
+  m_externalBinManager->search();
+
+  if( m_config->hasGroup("External Programs") ) {
+    m_config->setGroup( "External Programs" );
+    m_externalBinManager->readConfig( m_config );
+  }
+
+  updateExternalPrograms();
+  // ================================================
+
 
   updateFstabEntries();
 
@@ -606,7 +679,7 @@ void K3bSetupWizard::updateDevices()
   while( dev != 0 ) {
     // add device to device list
     PrivateDeviceViewItem* item_2 = new PrivateDeviceViewItem( dev, m_viewSetupReader, dev->devicename() );
-    item_2->setPixmap( 0, KGlobal::instance()->iconLoader()->loadIcon( "cdrom_unmount", KIcon::NoGroup, KIcon::SizeSmall ) );
+    item_2->setPixmap( 0, SmallIcon( "cdrom_unmount") );
 
     PrivateDeviceViewItem* item = new PrivateDeviceViewItem( dev, item_2 );
     item->setText( 0, i18n( "Vendor" ) );
@@ -634,7 +707,7 @@ void K3bSetupWizard::updateDevices()
   while( dev != 0 ) {
     // add device to device list
     PrivateDeviceViewItem* item_2 = new PrivateDeviceViewItem( dev, m_viewSetupWriter, dev->devicename() );
-    item_2->setPixmap( 0, KGlobal::instance()->iconLoader()->loadIcon( "cdwriter_unmount", KIcon::NoGroup, KIcon::SizeSmall ) );
+    item_2->setPixmap( 0, SmallIcon( "cdwriter_unmount" ) );
 
     PrivateDeviceViewItem* item = new PrivateDeviceViewItem( dev, item_2 );
     item->setText( 0, i18n( "Vendor" ) );
@@ -667,7 +740,52 @@ void K3bSetupWizard::updateDevices()
 }
 
 
-void K3bSetupWizard::slotDeviceItemRenamed(QListViewItem* item, const QString& newText, int col )
+void K3bSetupWizard::updateExternalPrograms()
+{
+  m_viewExternalPrograms->clear();
+
+  KListViewItem* item = new KListViewItem( m_viewExternalPrograms );
+  //  item->setText( 0, m_externalBinManager->foundBin( "cdrecord" ) ? i18n("yes") : i18n("no") );
+  item->setPixmap( 0, m_externalBinManager->foundBin( "cdrecord" ) ? SmallIcon( "ok" ) : SmallIcon( "stop" ) );
+  item->setText( 1, "cdrecord" );
+  item->setText( 2, m_externalBinManager->binObject( "cdrecord" )->version );
+  item->setText( 3, m_externalBinManager->binPath( "cdrecord" ) );
+
+
+  item = new KListViewItem( m_viewExternalPrograms, item );
+  //  item->setText( 0, m_externalBinManager->foundBin( "mkisofs" ) ? i18n("yes") : i18n("no") );
+  item->setPixmap( 0, m_externalBinManager->foundBin( "mkisofs" ) ? SmallIcon( "ok" ) : SmallIcon( "stop" ) );
+  item->setText( 1, "mkisofs" );
+  item->setText( 2, m_externalBinManager->binObject( "mkisofs" )->version );
+  item->setText( 3, m_externalBinManager->binPath( "mkisofs" ) );
+
+
+  item = new KListViewItem( m_viewExternalPrograms, item );
+  //  item->setText( 0, m_externalBinManager->foundBin( "cdrdao" ) ? i18n("yes") : i18n("no") );
+  item->setPixmap( 0, m_externalBinManager->foundBin( "cdrdao" ) ? SmallIcon( "ok" ) : SmallIcon( "stop" ) );
+  item->setText( 1, "cdrdao" );
+  item->setText( 2, m_externalBinManager->binObject( "cdrdao" )->version );
+  item->setText( 3, m_externalBinManager->binPath( "cdrdao" ) );
+
+
+  item = new KListViewItem( m_viewExternalPrograms, item );
+  //  item->setText( 0, m_externalBinManager->foundBin( "mpg123" ) ? i18n("yes") : i18n("no") );
+  item->setPixmap( 0, m_externalBinManager->foundBin( "mpg123" ) ? SmallIcon( "ok" ) : SmallIcon( "stop" ) );
+  item->setText( 1, "mpg123" );
+  item->setText( 2, m_externalBinManager->binObject( "mpg123" )->version );
+  item->setText( 3, m_externalBinManager->binPath( "mpg123" ) );
+
+
+  item = new KListViewItem( m_viewExternalPrograms, item );
+  //  item->setText( 0, m_externalBinManager->foundBin( "sox" ) ? i18n("yes") : i18n("no") );
+  item->setPixmap( 0, m_externalBinManager->foundBin( "sox" ) ? SmallIcon( "ok" ) : SmallIcon( "stop" ) );
+  item->setText( 1, "sox" );
+  item->setText( 2, m_externalBinManager->binObject( "sox" )->version );
+  item->setText( 3, m_externalBinManager->binPath( "sox" ) );
+}
+
+
+void K3bSetupWizard::slotDeviceItemRenamed( QListViewItem* item, const QString& newText, int col )
 {
   if( col != 1 )
     return;
@@ -704,6 +822,21 @@ void K3bSetupWizard::slotDeviceItemRenamed(QListViewItem* item, const QString& n
 }
 
 
+void K3bSetupWizard::slotExternalProgramItemRenamed( QListViewItem* item, const QString& newText, int col )
+{
+  QString bin = item->text(1);
+  K3bExternalBin* binO = m_externalBinManager->binObject( bin );
+  if( binO ) {
+    binO->path = newText;
+    m_externalBinManager->checkVersions();
+    updateExternalPrograms();
+  }
+  else {
+    qDebug( "(K3bSetupWizard) Could not fins bin " + bin );
+  }
+}
+
+
 void K3bSetupWizard::slotSelectMountPoint()
 {
   if( m_viewFstab->selectedItem() == 0 )
@@ -729,7 +862,7 @@ void K3bSetupWizard::updateFstabEntries()
   int i = 0;
   while( dev != 0 ) {
     PrivateDeviceViewItem* item = new PrivateDeviceViewItem( dev, m_viewFstab );
-    item->setPixmap( 0, KGlobal::instance()->iconLoader()->loadIcon( "cdrom_unmount", KIcon::NoGroup, KIcon::SizeSmall ) );
+    item->setPixmap( 0, SmallIcon( "cdrom_unmount" ) );
     item->setText( 0, dev->vendor() + " " + dev->description() );
     item->setText( 1, dev->ioctlDevice() );
     if( !dev->mountPoint().isEmpty() )
@@ -751,7 +884,7 @@ void K3bSetupWizard::updateFstabEntries()
   i = 0;
   while( dev != 0 ) {
     PrivateDeviceViewItem* item = new PrivateDeviceViewItem( dev, m_viewFstab );
-    item->setPixmap( 0, KGlobal::instance()->iconLoader()->loadIcon( "cdwriter_unmount", KIcon::NoGroup, KIcon::SizeSmall ) );
+    item->setPixmap( 0, SmallIcon( "cdwriter_unmount" ) );
     item->setText( 0, dev->vendor() + " " + dev->description() );
     item->setText( 1, dev->ioctlDevice() );
     if( !dev->mountPoint().isEmpty() )
@@ -784,7 +917,10 @@ void K3bSetupWizard::apply()
 
   // save external programs
   // -----------------------------------------------------------------------
-
+  if( m_config->hasGroup( "External Programs" ) )
+    m_config->deleteGroup( "External Programs" );
+  m_config->setGroup( "External Programs" );
+  m_externalBinManager->saveConfig( m_config );
   // -----------------------------------------------------------------------
 
 

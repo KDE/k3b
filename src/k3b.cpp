@@ -60,6 +60,8 @@
 #include "cdinfo/k3bcdinfodialog.h"
 #include "k3bblankingdialog.h"
 #include "data/k3bisoimagewritingdialog.h"
+#include "k3bexternalbinmanager.h"
+
 
 
 K3bMainWindow* k3bMain()
@@ -773,7 +775,6 @@ void K3bMainWindow::slotFileBurn()
 	}
 	else {
 	  _view->burnDialog()->exec(true);
-	  qDebug("shown");
 	}
       }
     }
@@ -788,14 +789,33 @@ void K3bMainWindow::init()
 
   // this is a little not to hard hack to ensure that we get the "global" k3b appdir
   // k3bui.rc should always be in $KDEDIR/share/apps/k3b/
-  QString globalConfig = KGlobal::dirs()->findResourceDir( "data", "k3b/k3bui.rc" ) + "k3b/k3bsetup";
+  QString globalConfigFile = KGlobal::dirs()->findResourceDir( "data", "k3b/k3bui.rc" ) + "k3b/k3bsetup";
+  KConfig globalConfig( globalConfigFile );
 
   readOptions();
 
+  // external bin manager
+  // ===============================================================================
   emit initializationInfo( i18n("Searching for external programs...") );
 
-  searchExternalProgs();
+  m_externalBinManager = new K3bExternalBinManager( this );
+  m_externalBinManager->search();
 
+  if( globalConfig.hasGroup("External Programs") ) {
+    globalConfig.setGroup( "External Programs" );
+    m_externalBinManager->readConfig( &globalConfig );
+  }
+
+  if( config()->hasGroup("External Programs") ) {
+    config()->setGroup( "External Programs" );
+    m_externalBinManager->readConfig( config() );
+  }
+
+  // ===============================================================================
+
+
+  // device manager
+  // ===============================================================================
   emit initializationInfo( i18n("Scanning for cd devices...") );
 
   m_deviceManager = new K3bDeviceManager( this );
@@ -803,12 +823,18 @@ void K3bMainWindow::init()
   if( !m_deviceManager->scanbus() )
     qDebug( "No Devices found!" );
 
+  if( globalConfig.hasGroup("Devices") ) {
+    globalConfig.setGroup( "Devices" );
+    m_deviceManager->readConfig( &globalConfig );
+  }
+
   if( config()->hasGroup("Devices") ) {
     config()->setGroup( "Devices" );
     m_deviceManager->readConfig( config() );
   }
 			
   m_deviceManager->printDevices();
+  // ===============================================================================
 
   emit initializationInfo( i18n("Initializing cd view...") );
 

@@ -19,22 +19,12 @@
 #define K3BOPTIONDIALOG_H
 
 #include <kdialogbase.h>
-#include <klistview.h>
 
-class KListView;
-class QLabel;
-class QListViewItem;
-class QPushButton;
-class QGroupBox;
-class QXEmbed;
-class QWidgetStack;
-class QCheckBox;
-
-class K3bDevice;
 class K3bCddbOptionTab;
 class K3bDeviceOptionTab;
 class K3bBurningOptionTab;
 class K3bRippingPatternOptionTab;
+class K3bExternalBinOptionTab;
 
 
 /**
@@ -56,14 +46,9 @@ class K3bOptionDialog : public KDialogBase
   void slotDefault();
 	
  private:
-  // programs Tab
-  KListView* m_viewPrograms;
-  QPushButton* m_buttonSearch;
-  QLabel* m_labelInfo;
-
+  // programs tab
+  K3bExternalBinOptionTab* m_externalBinOptionTab;
   void setupProgramsPage();
-  void readPrograms();
-  bool savePrograms();
 
   // device tab
   K3bDeviceOptionTab* m_deviceOptionTab;	
@@ -80,9 +65,6 @@ class K3bOptionDialog : public KDialogBase
   // ripping pattern tab
   K3bRippingPatternOptionTab *m_rippingPatternOptionTab;
   void setupRippingPatternPage();
-  //void readGeneralRippingOption();
-  //void applyGeneralRippingOption();
-  //QCheckBox *m_usePattern;
 };
 
 #endif

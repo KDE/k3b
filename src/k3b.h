@@ -41,6 +41,7 @@ class K3bDoc;
 class K3bView;
 class K3bDirView;
 class K3bDeviceManager;
+class K3bExternalBinManager;
 class K3bAudioTrackDialog;
 class K3bOptionDialog;
 class K3bJob;
@@ -81,6 +82,7 @@ class K3bMainWindow : public KDockMainWindow
   void openDocumentFile(const KURL& url=0);
 
   K3bDeviceManager* deviceManager() { return m_deviceManager; }
+  K3bExternalBinManager* externalBinManager() { return m_externalBinManager; }
   K3bAudioTrackDialog* audioTrackDialog();
   KConfig* config() { return m_config; }
 	
@@ -241,6 +243,7 @@ class K3bMainWindow : public KDockMainWindow
   QList<K3bDoc> *pDocList;	
 
   K3bDeviceManager* m_deviceManager;
+  K3bExternalBinManager* m_externalBinManager;
 
   // KAction pointers to enable/disable actions
   KActionMenu* actionFileNewMenu;

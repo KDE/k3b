@@ -17,6 +17,7 @@ class K3bExternalBin
 
   QString version;
   QString path;
+  QString parameters;
 
   const QString& name() const;
   bool isEmpty() const;
@@ -36,6 +37,7 @@ Q_OBJECT
   ~K3bExternalBinManager();
 
   void search();
+  void checkVersions();
 
   /**
    * read config and add changes to current map
@@ -50,6 +52,8 @@ Q_OBJECT
  private slots:
   void slotParseCdrdaoVersion( KProcess*, char* data, int len );
   void slotParseCdrtoolsVersion( KProcess*, char* data, int len );
+  void slotParseMpg123Version( KProcess*, char* data, int len );
+  void slotParseSoxVersion( KProcess*, char* data, int len );
 
  private:
   QMap<QString, K3bExternalBin*> m_binMap;

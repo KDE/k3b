@@ -312,14 +312,14 @@ void K3bBurnProgressDialog::displayInfo( const QString& infoString, int type )
   // set the icon
   switch( type ) {
   case K3bJob::ERROR:
-    item->setPixmap( 0, kapp->iconLoader()->loadIcon( "stop", KIcon::Small, 16 ) );
+    item->setPixmap( 0, SmallIcon( "stop" ) );
     break;
   case K3bJob::PROCESS:
-    item->setPixmap( 0, kapp->iconLoader()->loadIcon( "cdwriter_unmount", KIcon::Small, 16 ) );
+    item->setPixmap( 0, SmallIcon( "cdwriter_unmount" ) );
     break;
   case K3bJob::STATUS:
   default:
-    item->setPixmap( 0, kapp->iconLoader()->loadIcon( "ok", KIcon::Small, 16 ) );
+    item->setPixmap( 0, SmallIcon( "ok" ) );
   }
 
   // scroll down (does not work :-(
