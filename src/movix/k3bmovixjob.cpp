@@ -214,6 +214,8 @@ bool K3bMovixJob::writeMovixRcFile()
       *s << "eject=y" << endl;
     if( m_doc->randomPlay() )
       *s << "random=y" << endl;
+    if( m_doc->noDma() )
+      *s << "dma=n" << endl;
 
     m_movixRcFile->close();    
     return true;

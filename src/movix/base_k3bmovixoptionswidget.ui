@@ -10,7 +10,7 @@
             <x>0</x>
             <y>0</y>
             <width>427</width>
-            <height>365</height>
+            <height>396</height>
         </rect>
     </property>
     <property name="caption">
@@ -120,7 +120,7 @@
                         <string>Loop playlist:</string>
                     </property>
                 </widget>
-                <widget class="QCheckBox" row="2" column="0" rowspan="2" colspan="2">
+                <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="2">
                     <property name="name">
                         <cstring>m_checkRandomPlay</cstring>
                     </property>
@@ -132,6 +132,20 @@
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>&lt;p&gt;If this option is checked the order in which the files are played is determined randomly everytime it is played.</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="3" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>m_checkNoDma</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Do not use DMA</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Do not use DMA for CD access</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;If this option is checked the resulting eMovix CD will not use DMA for accessing the drive. This will slow down reading from the CD but may be neccessary on some systems that do not support DMA.&lt;/p&gt;</string>
                     </property>
                 </widget>
             </grid>
@@ -256,7 +270,6 @@
 </connections>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>qwidget.h</includehint>
     <includehint>kcombobox.h</includehint>
     <includehint>kcombobox.h</includehint>
     <includehint>kcombobox.h</includehint>

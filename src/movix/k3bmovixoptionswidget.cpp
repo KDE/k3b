@@ -59,6 +59,7 @@ void K3bMovixOptionsWidget::readSettings( K3bMovixDoc* doc )
   m_checkReboot->setChecked( doc->reboot() );
   m_checkEject->setChecked( doc->ejectDisk() );
   m_checkRandomPlay->setChecked( doc->randomPlay() );
+  m_checkNoDma->setChecked( doc->noDma() );
 }
 
 
@@ -74,6 +75,7 @@ void K3bMovixOptionsWidget::saveSettings( K3bMovixDoc* doc )
   doc->setUnwantedMPlayerOptions( m_editUnwantedMplayerOptions->text() );
   doc->setLoopPlaylist( m_spinLoop->value() );
   doc->setRandomPlay( m_checkRandomPlay->isChecked() );
+  doc->setNoDma( m_checkNoDma->isChecked() );
 }
 
 
@@ -89,6 +91,7 @@ void K3bMovixOptionsWidget::loadDefaults()
   m_checkReboot->setChecked( false );
   m_checkEject->setChecked( false );
   m_checkRandomPlay->setChecked( false );
+  m_checkNoDma->setChecked( false );
 }
 
 
@@ -120,6 +123,7 @@ void K3bMovixOptionsWidget::loadConfig( KConfig* c )
   m_checkReboot->setChecked( c->readBoolEntry( "reboot", false ) );
   m_checkEject->setChecked( c->readBoolEntry( "eject", false ) );
   m_checkRandomPlay->setChecked( c->readBoolEntry( "random_play", false ) );
+  m_checkNoDma->setChecked( c->readBoolEntry( "no_dma", false ) );
 }
 
 
@@ -148,6 +152,7 @@ void K3bMovixOptionsWidget::saveConfig( KConfig* c )
   c->writeEntry( "reboot", m_checkReboot->isChecked() );
   c->writeEntry( "eject", m_checkEject->isChecked() );
   c->writeEntry( "random_play", m_checkRandomPlay->isChecked() );
+  c->writeEntry( "no_dma", m_checkNoDma->isChecked() );
 }
 
 #include "k3bmovixoptionswidget.moc"

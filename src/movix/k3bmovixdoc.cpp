@@ -180,6 +180,8 @@ bool K3bMovixDoc::loadDocumentData( QDomElement* rootElem )
       setEjectDisk( e.attributeNode( "activated" ).value() == "yes" );
     else if( e.nodeName() == "random_play")
       setRandomPlay( e.attributeNode( "activated" ).value() == "yes" );
+    else if( e.nodeName() == "no_dma")
+      setNoDma( e.attributeNode( "activated" ).value() == "yes" );
     else if( e.nodeName() == "subtitle_fontset")
       setSubtitleFontset( e.text() );
     else if( e.nodeName() == "boot_message_language")
@@ -291,6 +293,10 @@ bool K3bMovixDoc::saveDocumentData( QDomElement* docElem )
 
   propElem = doc.createElement( "random_play" );
   propElem.setAttribute( "activated", randomPlay() ? "yes" : "no" );
+  movixOptElem.appendChild( propElem );
+
+  propElem = doc.createElement( "no_dma" );
+  propElem.setAttribute( "activated", noDma() ? "yes" : "no" );
   movixOptElem.appendChild( propElem );
 
   propElem = doc.createElement( "subtitle_fontset" );
@@ -444,6 +450,7 @@ void K3bMovixDoc::loadDefaultSettings( KConfig* c )
   setReboot( c->readBoolEntry( "reboot", false ) );
   setEjectDisk( c->readBoolEntry( "eject", false ) );
   setRandomPlay( c->readBoolEntry( "random_play", false ) );
+  setNoDma( c->readBoolEntry( "no_dma", false ) );
 }
 
 #include "k3bmovixdoc.moc"

@@ -61,6 +61,7 @@ class K3bMovixDoc : public K3bDataDoc
   const QString& additionalMPlayerOptions() const { return m_additionalMPlayerOptions; }
   const QString& unwantedMPlayerOptions() const { return m_unwantedMPlayerOptions; }
   int loopPlaylist() const { return m_loopPlaylist; }
+  bool noDma() const { return m_noDma; }
 
   void setShutdown( bool v ) { m_shutdown = v; }
   void setReboot( bool v ) { m_reboot = v; }
@@ -72,7 +73,7 @@ class K3bMovixDoc : public K3bDataDoc
   void setAdditionalMPlayerOptions( const QString& v ) { m_additionalMPlayerOptions = v; }
   void setUnwantedMPlayerOptions( const QString& v ) { m_unwantedMPlayerOptions = v; }
   void setLoopPlaylist( int v ) { m_loopPlaylist = v; }
-
+  void setNoDma( bool b ) { m_noDma = b; }
 
  signals:
   void newMovixFileItems();
@@ -112,6 +113,7 @@ class K3bMovixDoc : public K3bDataDoc
   QString m_additionalMPlayerOptions;
   QString m_unwantedMPlayerOptions;
   int m_loopPlaylist;
+  bool m_noDma;
 };
 
 #endif
