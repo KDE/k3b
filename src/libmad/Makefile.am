@@ -23,7 +23,7 @@
 
 CFLAGS = -O3
 
-noinst_LIBRARIES =	libmad.a
+noinst_LTLIBRARIES =	libmad.la
 #include_HEADERS =	mad.h
 
 exported_headers =  \
@@ -35,15 +35,15 @@ noinst_headers =  \
 data_includes =  \
 	D.dat imdct_s.dat qc_table.dat rq_table.dat sf_table.dat
 
-libmad_a_SOURCES =  \
+libmad_la_SOURCES =  \
 	version.c fixed.c bit.c timer.c stream.c frame.c synth.c decoder.c  \
 	layer12.c layer3.c huffman.c 
 
-EXTRA_libmad_a_SOURCES =	imdct_l_arm.S #synth_mmx.S
+EXTRA_libmad_la_SOURCES =	imdct_l_arm.S #synth_mmx.S
 
 EXTRA_DIST = COPYRIGHT mad.h.sed $(noinst_headers) $(data_includes)
-libmad_a_DEPENDENCIES =	$(ASO_OBJS)
-libmad_a_LIBADD =	$(ASO_OBJS)
+libmad_la_DEPENDENCIES =	$(ASO_OBJS)
+libmad_la_LIBADD =	$(ASO_OBJS)
 
 #CFLAGS  +=	$(ARCH) $(DEBUGGER) $(OPTIMIZER) $(PROFILER)
 #LDFLAGS +=	$(PROFILER)

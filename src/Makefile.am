@@ -1,7 +1,7 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 bin_PROGRAMS = k3b
 k3b_SOURCES = k3bbusywidget.cpp k3bdiroperator.cpp kdndfileview.cpp k3btempdirselectionwidget.cpp k3bfiletreeview.cpp kstringlistdialog.cpp k3bcddbmultientriesdialog.cpp k3baudioplayer.cpp k3bprojecttabbar.cpp k3bprojecttabwidget.cpp k3bwriterselectionwidget.cpp k3bsplash.cpp k3bblankingjob.cpp k3bblankingdialog.cpp k3bcddb.cpp k3bfileview.cpp kcutlabel.cpp k3bprojectburndialog.cpp k3bjob.cpp k3bburnprogressdialog.cpp k3bfillstatusdisplay.cpp k3bdirview.cpp k3bview.cpp k3bdoc.cpp k3btoolbox.cpp k3b.cpp main.cpp
-k3b_LDADD   = ./libmad/libmad.a ./data/libdata.a ./cdinfo/libcdinfo.a ./audio/libaudio.a ./device/libdevice.a ./audio/input/libinput.a ./option/liboption.a ./rip/librip.a ./rip/songdb/libsongdb.a ./tools/libtools.a ./cdcopy/libcdcopy.a ./videoEncoding/libvideoEncoding.a $(CDPARANOIA_LIBS) $(OGG_VORBISLIBS) -lartskde -lqt-mt $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIBSOCKET)
+k3b_LDADD   = ./libmad/libmad.la ./data/libdata.la ./cdinfo/libcdinfo.la ./audio/libaudio.la ./device/libdevice.la ./audio/input/libinput.la ./option/liboption.la ./rip/librip.la ./rip/songdb/libsongdb.la ./tools/libtools.la ./cdcopy/libcdcopy.la ./videoEncoding/libvideoEncoding.la $(CDPARANOIA_LIBS) $(OGG_VORBISLIBS) -lartskde -lqt-mt $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIBSOCKET)
 
 SUBDIRS = libmad data cdinfo audio device option rip tools cdcopy videoEncoding pics icons k3bsetup
 

@@ -1,14 +1,7 @@
-####### kdevelop will overwrite this part!!! (begin)##########
-
 INCLUDES = $(all_includes)
 
-libcdcopy_a_METASOURCES = AUTO
+libcdcopy_la_METASOURCES = AUTO
 
-noinst_LIBRARIES = libcdcopy.a
+noinst_LTLIBRARIES = libcdcopy.la
 
-libcdcopy_a_SOURCES = k3bcdcopydialog.cpp k3bcdcopyjob.cpp 
-
-
-EXTRA_DIST = k3bcdcopydialog.h k3bcdcopyjob.cpp k3bcdcopyjob.h k3bcdcopydialog.cpp 
-
-####### kdevelop will overwrite this part!!! (end)############
+libcdcopy_la_SOURCES = k3bcdcopydialog.cpp k3bcdcopyjob.cpp 

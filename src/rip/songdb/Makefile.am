@@ -1,14 +1,7 @@
-####### kdevelop will overwrite this part!!! (begin)##########
-
 INCLUDES = $(all_includes)
 
-libsongdb_a_METASOURCES = AUTO
+libsongdb_la_METASOURCES = AUTO
 
-noinst_LIBRARIES = libsongdb.a
+noinst_LTLIBRARIES = libsongdb.la
 
-libsongdb_a_SOURCES = k3bsonglistparser.cpp k3bsongcontainer.cpp k3bsongmanager.cpp k3bsong.cpp 
-
-
-EXTRA_DIST = k3bsong.cpp k3bsong.h k3bsongmanager.cpp k3bsongmanager.h k3bsongcontainer.cpp k3bsongcontainer.h k3bsonglistparser.cpp k3bsonglistparser.h 
-
-####### kdevelop will overwrite this part!!! (end)############
+libsongdb_la_SOURCES = k3bsonglistparser.cpp k3bsongcontainer.cpp k3bsongmanager.cpp k3bsong.cpp 
