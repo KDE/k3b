@@ -1,3 +1,10 @@
+0.7.2
+added md5sum to iso-image dialog
+fixed compile problem when ogg-vorbis is not installed
+fixed iso-image volume descriptor problem that caused all descriptors to be enclosed in quotation marks
+added raw-copy option
+better external program handling
+	
 0.7.1
 audio:
  fixed mp3 resampling problems
