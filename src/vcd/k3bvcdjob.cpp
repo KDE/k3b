@@ -165,25 +165,6 @@ void K3bVcdJob::xmlGen()
 
 void K3bVcdJob::vcdxBuild()
 {
-    /*
-    Usage: vcdxbuild [OPTION...]
-      -i, --image-type=TYPE          specify image type for output (default:
-                                     'bincue')
-      -o, --image-option=KEY=VALUE   specify image option
-      -c, --cue-file=FILE            specify cue file for output (default:
-                                     'videocd.cue')
-      -b, --bin-file=FILE            specify bin file for output (default:
-                                     'videocd.bin')
-      --cdrdao-file=FILE             specify cdrdao-style image filename base
-      --sector-2336                  use 2336 byte sectors for output
-      -p, --progress                 show progress
-      -v, --verbose                  be verbose
-      -q, --quiet                    show only critical messages
-      --gui                          enable GUI mode
-      -V, --version                  display version and copyright information and
-                                     exit
-    */
-
     m_stage = stageUnknown;
     firstTrack = true;
     delete m_process;
@@ -193,6 +174,8 @@ void K3bVcdJob::vcdxBuild()
     if ( !k3bMain() ->externalBinManager() ->foundBin( "vcdxbuild" ) ) {
         kdDebug() << "(K3bVcdJob) could not find vcdxbuild executable" << endl;
         emit infoMessage( i18n( "vcdxbuild executable not found." ), K3bJob::ERROR );
+        emit infoMessage(i18n( "To create VideoCD's you must install VcdImager >= 0.7.12." ), K3bJob::INFO );
+        emit infoMessage(i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ),K3bJob::INFO );
         cancelAll();
         emit finished( false );
         return ;
