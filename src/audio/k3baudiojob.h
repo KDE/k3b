@@ -73,7 +73,6 @@ class K3bAudioJob : public K3bBurnJob
 
  private:
   bool prepareWriter();
-  bool writeTocFile();
   bool startWriting();
   void cleanupAfterError();
   void removeBufferFiles();

@@ -22,7 +22,7 @@
 
 class K3bMixedDoc;
 class K3bIsoImager;
-class K3bAudioDecoder;
+class K3bAudioStreamer;
 class QFile;
 class QDataStream;
 class K3bAbstractWriter;
@@ -31,6 +31,7 @@ class KTempFile;
 class K3bCdrecordWriter;
 class K3bMsInfoFetcher;
 class K3bAudioNormalizeJob;
+class K3bAudioJobTempData;
 
 
 /**
@@ -97,7 +98,8 @@ class K3bMixedJob : public K3bBurnJob
 
   K3bMixedDoc* m_doc;
   K3bIsoImager* m_isoImager;
-  K3bAudioDecoder* m_audioDecoder;
+  K3bAudioStreamer* m_audioDecoder;
+  K3bAudioJobTempData* m_tempData;
   K3bWaveFileWriter* m_waveFileWriter;
   K3bAbstractWriter* m_writer;
   K3bMsInfoFetcher* m_msInfoFetcher;

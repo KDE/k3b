@@ -18,6 +18,7 @@
 #define _K3B_AUDIO_JOB_TEMPDATA_H_
 
 #include <qobject.h>
+#include <device/k3bmsf.h>
 
 class K3bAudioTrack;
 class K3bAudioDoc;
@@ -46,8 +47,12 @@ class K3bAudioJobTempData : public QObject
   /**
    * This is called internally by writeTocFile but may be used
    * to create the audio part of a mixed toc file
+   * @param t the stream to write the data to
+   * @param start used for writing on-the-fly: where does the audio data start in stdin
    */
-  bool writeAudioTocFilePart( QTextStream& );
+  bool writeAudioTocFilePart( QTextStream& t, const K3b::Msf& start = K3b::Msf(0) );
+
+  void writeAudioTocCdTextHeader( QTextStream& );
 
   K3bAudioDoc* doc() const;
 

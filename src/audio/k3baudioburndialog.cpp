@@ -196,17 +196,19 @@ void K3bAudioBurnDialog::toggleAllOptions()
   if( m_writingModeWidget->writingMode() == K3b::TAO ||
       m_writingModeWidget->writingMode() == K3b::RAW ||
       m_writerSelectionWidget->writingApp() == K3b::CDRECORD ) {
-    m_checkOnTheFly->setChecked( cdrecordOnTheFly );
-    if( !cdrecordOnTheFly )
-      m_checkOnTheFly->setEnabled( false );
+    m_checkOnTheFly->setEnabled( cdrecordOnTheFly && !m_checkNormalize->isChecked() );
+    if( !cdrecordOnTheFly || m_checkNormalize->isChecked() )
+      m_checkOnTheFly->setChecked( false );
     m_checkHideFirstTrack->setChecked(false);
     m_checkHideFirstTrack->setEnabled(false);
-    m_cdtextWidget->setChecked( cdrecordCdText );
+    m_cdtextWidget->setEnabled( cdrecordCdText );
     if( !cdrecordCdText )
-      m_cdtextWidget->setEnabled(false);
+      m_cdtextWidget->setChecked(false);
   }
   else {
     m_checkOnTheFly->setEnabled( !m_checkOnlyCreateImage->isChecked() && !m_checkNormalize->isChecked() );
+    if( m_checkNormalize->isChecked() )
+      m_checkOnTheFly->setChecked( false );
     m_checkHideFirstTrack->setEnabled( !m_checkOnlyCreateImage->isChecked() );
     m_cdtextWidget->setEnabled(true);
   }

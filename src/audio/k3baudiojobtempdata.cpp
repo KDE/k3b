@@ -235,27 +235,14 @@ bool K3bAudioJobTempData::writeTocFile()
   // we create a CDDA tocfile
   t << "CD_DA\n\n";
 
+  writeAudioTocCdTextHeader( t );
+
   return writeAudioTocFilePart( t );
 }
 
 
-bool K3bAudioJobTempData::writeAudioTocFilePart( QTextStream& t )
+void K3bAudioJobTempData::writeAudioTocCdTextHeader( QTextStream& t )
 {
-  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  // from the cdrdao manpage:
-  // ------------------------
-  // If one of the CD-TEXT items TITLE, PERFORMER, SONGWRITER, COMPOSER, ARRANGER, ISRC is defined for at least on  track  or
-  // in  the  global section it must be defined for all tracks and in the global section. If a DISC_ID item is defined in the
-  // global section, an ISRC entry must be defined for each track.
-  //
-  // Question: does it make any difference to specify empty cd-text fields?
-  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
-  K3b::Msf stdinDataLength(0);
-
-  // create the album CD-TEXT entries if needed
-  // ---------------------------------------------------------------------------
   if( d->doc->cdText() ) {
     t << "CD_TEXT {" << "\n";
     t << "  LANGUAGE_MAP { 0: EN }\n";
@@ -272,10 +259,23 @@ bool K3bAudioJobTempData::writeAudioTocFilePart( QTextStream& t )
     t << "  }" << "\n";
     t << "}" << "\n\n";
   }
-  // ---------------------------------------------------------------------------
+}
 
 
+bool K3bAudioJobTempData::writeAudioTocFilePart( QTextStream& t, const K3b::Msf& startMsf )
+{
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  // from the cdrdao manpage:
+  // ------------------------
+  // If one of the CD-TEXT items TITLE, PERFORMER, SONGWRITER, COMPOSER, ARRANGER, ISRC is defined for at least on  track  or
+  // in  the  global section it must be defined for all tracks and in the global section. If a DISC_ID item is defined in the
+  // global section, an ISRC entry must be defined for each track.
+  //
+  // Question: does it make any difference to specify empty cd-text fields?
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+
+  K3b::Msf stdinDataLength(startMsf);
 
   // ===========================================================================
   // the tracks

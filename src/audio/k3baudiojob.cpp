@@ -19,7 +19,6 @@
 #include <audio/k3baudiostreamer.h>
 #include <audio/k3baudiodoc.h>
 #include <audio/k3baudiotrack.h>
-#include <audio/k3baudiotocfilewriter.h>
 #include <audio/k3baudionormalizejob.h>
 #include "k3baudiojobtempdata.h"
 #include <device/k3bdevicemanager.h>
@@ -312,7 +311,7 @@ bool K3bAudioJob::prepareWriter()
   if( m_usedWritingApp == K3b::CDRECORD ) {
 
     if( !m_tempData->writeInfFiles() ) {
-      kdDebug() << "(K3bDataJob) could not write tocfile." << endl;
+      kdDebug() << "(K3bAudioJob) could not write inf-files." << endl;
       emit infoMessage( i18n("IO Error"), ERROR );
 
       return false;
@@ -384,28 +383,6 @@ bool K3bAudioJob::prepareWriter()
 	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
 
   return true;
-}
-
-
-// obsolet
-bool K3bAudioJob::writeTocFile()
-{
-  if( m_tocFile ) delete m_tocFile;
-  m_tocFile = new KTempFile( QString::null, "toc" );
-  m_tocFile->setAutoDelete(true);
-
-  // write the toc-file
-  if( QTextStream* s = m_tocFile->textStream() ) {
-    *s << "CD_DA" << "\n\n";
-
-    K3bAudioTocfileWriter::writeAudioToc( m_doc, *s );
-
-    m_tocFile->close();
-
-    return true;
-  }
-  else
-    return false;
 }
 
 

@@ -22,11 +22,11 @@
 #include <data/k3bdatadoc.h>
 #include <data/k3bisoimager.h>
 #include <data/k3bmsinfofetcher.h>
-#include <audio/k3baudiodecoder.h>
+#include <audio/k3baudiostreamer.h>
 #include <audio/k3baudiodoc.h>
 #include <audio/k3baudiotrack.h>
-#include <audio/k3baudiotocfilewriter.h>
 #include <audio/k3baudionormalizejob.h>
+#include <audio/k3baudiojobtempdata.h>
 #include <device/k3bdevicemanager.h>
 #include <device/k3bdevice.h>
 #include <device/k3bmsf.h>
@@ -72,7 +72,7 @@ K3bMixedJob::K3bMixedJob( K3bMixedDoc* doc, QObject* parent )
   connect( m_isoImager, SIGNAL(debuggingOutput(const QString&, const QString&)), 
 	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
 
-  m_audioDecoder = new K3bAudioDecoder( doc->audioDoc(), this );
+  m_audioDecoder = new K3bAudioStreamer( doc->audioDoc(), this );
   connect( m_audioDecoder, SIGNAL(data(const char*, int)), this, SLOT(slotReceivedAudioDecoderData(const char*, int)) );
   connect( m_audioDecoder, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
   connect( m_audioDecoder, SIGNAL(percent(int)), this, SLOT(slotAudioDecoderPercent(int)) );
@@ -89,6 +89,8 @@ K3bMixedJob::K3bMixedJob( K3bMixedDoc* doc, QObject* parent )
   m_writer = 0;
   m_tocFile = 0;
   m_isoImageFile = 0;
+
+  m_tempData = new K3bAudioJobTempData( m_doc->audioDoc(), this );
 }
 
 
@@ -122,6 +124,7 @@ void K3bMixedJob::start()
 
   // set some flags that are needed
   m_doc->audioDoc()->setOnTheFly( m_doc->onTheFly() );  // for the toc writer
+  m_doc->audioDoc()->setHideFirstTrack( false );   // unsupported
   m_doc->dataDoc()->setBurner( m_doc->burner() );  // so the isoImager can read ms data
 
 
@@ -440,25 +443,14 @@ void K3bMixedJob::slotReceivedAudioDecoderData( const char* data, int len )
 void K3bMixedJob::slotAudioDecoderNextTrack( int t, int tt )
 {
   if( !m_doc->onTheFly() ) {
-    emit newSubTask( i18n("Decoding audiotrack %1 of %2 (%3)").arg(t).arg(tt).arg(m_doc->audioDoc()->at(t-1)->fileName()) );
-    //emit infoMessage( i18n("Decoding audiotrack %1 (%2)").arg(t).arg(m_doc->audioDoc()->at(t-1)->fileName()), INFO );
-    QString bf = m_tempFilePrefix + "_track" + QString::number(t) + ".wav";
-    if( !m_waveFileWriter->open( bf ) ) {
+    K3bAudioTrack* track = m_doc->audioDoc()->at(t-1);
+    emit newSubTask( i18n("Decoding audiotrack %1 of %2 (%3)").arg(t).arg(tt).arg(track->fileName()) );
+
+    if( !m_waveFileWriter->open( m_tempData->bufferFileName(track) ) ) {
       emit infoMessage( i18n("Could not open file %1 for writing.").arg(m_waveFileWriter->filename()), ERROR );
       cleanupAfterError();
       emit finished( false );
       return;
-    }
-
-    m_doc->audioDoc()->at(t-1)->setBufferFile( bf );
-  }
-  else if( m_usingFifo ) {
-    if( t > 1 )
-      ::close( m_fifo );
-
-    m_fifo = ::open( QFile::encodeName(m_doc->audioDoc()->at(t-1)->bufferFile()), O_WRONLY | O_NONBLOCK );
-    if( m_fifo < 0 ) {
-      kdDebug() << "(K3bMixedJob) Could not open fifo " << strerror(errno) << endl;
     }
   }
 }
@@ -470,6 +462,13 @@ bool K3bMixedJob::prepareWriter()
 
   if( ( m_currentAction == WRITING_ISO_IMAGE && m_usedDataWritingApp == K3b::CDRECORD ) ||
       ( m_currentAction == WRITING_AUDIO_IMAGE && m_usedAudioWritingApp == K3b::CDRECORD ) )  {
+
+    if( !m_tempData->writeInfFiles() ) {
+      kdDebug() << "(K3bMixedJob) could not write inf-files." << endl;
+      emit infoMessage( i18n("IO Error"), ERROR );
+
+      return false;
+    }
 
     K3bCdrecordWriter* writer = new K3bCdrecordWriter( m_doc->burner(), this );
 
@@ -483,8 +482,6 @@ bool K3bMixedJob::prepareWriter()
     writer->setBurnproof( m_doc->burnproof() );
     writer->setBurnSpeed( m_doc->speed() );
     writer->setProvideStdin( m_doc->onTheFly() );
-
-    m_usingFifo = m_doc->onTheFly();
 
     if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
       if( m_currentAction == WRITING_ISO_IMAGE ) {
@@ -574,11 +571,12 @@ bool K3bMixedJob::writeTocFile()
     }
     *s << endl;
 
+    m_tempData->writeAudioTocCdTextHeader( *s );
 
     if( ( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION &&
 	  m_currentAction == WRITING_AUDIO_IMAGE ) ||
 	m_doc->mixedType() == K3bMixedDoc::DATA_LAST_TRACK )
-      K3bAudioTocfileWriter::writeAudioToc( m_doc->audioDoc(), *s );
+      m_tempData->writeAudioTocFilePart( *s );
 
     if( m_doc->mixedType() != K3bMixedDoc::DATA_SECOND_SESSION ||
 	m_currentAction == WRITING_ISO_IMAGE ) {
@@ -587,6 +585,23 @@ bool K3bMixedJob::writeTocFile()
 	*s << "TRACK MODE2_FORM1" << endl;
       else
 	*s << "TRACK MODE1" << endl;
+
+      if( m_doc->mixedType() != K3bMixedDoc::DATA_SECOND_SESSION &&
+	  m_doc->audioDoc()->cdText() ) {
+	// insert fake cdtext
+	*s << "CD_TEXT {" << endl
+	   << "  LANGUAGE 0 {" << endl
+	   << "    TITLE " << "\"\"" << endl
+	   << "    PERFORMER " << "\"\"" << endl
+	   << "    ISRC " << "\"\"" << endl
+	   << "    ARRANGER " << "\"\"" << endl
+	   << "    SONGWRITER " << "\"\"" << endl
+	   << "    COMPOSER " << "\"\"" << endl
+	   << "    MESSAGE " << "\"\"" << endl
+	   << "  }" << endl
+	   << "}" << endl;
+      }
+
       if( m_doc->onTheFly() )
 	*s << "DATAFILE \"-\" " << m_isoImager->size()*2048 << endl;
       else
@@ -595,9 +610,13 @@ bool K3bMixedJob::writeTocFile()
     }
 
     if( m_doc->mixedType() == K3bMixedDoc::DATA_FIRST_TRACK )
-      K3bAudioTocfileWriter::writeAudioToc( m_doc->audioDoc(), *s );
+      m_tempData->writeAudioTocFilePart( *s, m_doc->onTheFly() ? K3b::Msf(m_isoImager->size()) : K3b::Msf() );
 
     m_tocFile->close();
+
+    // backup for debugging
+    KIO::NetAccess::del("/home/trueg/tmp/tocfile_debug_backup.toc");
+    KIO::NetAccess::copy( m_tocFile->name(), "/home/trueg/tmp/tocfile_debug_backup.toc" );
 
     return true;
   }
@@ -608,33 +627,23 @@ bool K3bMixedJob::writeTocFile()
 
 void K3bMixedJob::addAudioTracks( K3bCdrecordWriter* writer )
 {
-  // add all the audio tracks
+  writer->addArgument( "-useinfo" );
+  if( m_doc->audioDoc()->cdText() )
+    writer->addArgument( "-text" );
   writer->addArgument( "-audio" );
 
+  // add all the audio tracks
   QPtrListIterator<K3bAudioTrack> it( *m_doc->audioDoc()->tracks() );
   for( ; it.current(); ++it ) {
     K3bAudioTrack* track = it.current();
 
-    if( !track->copyProtection() )
-      writer->addArgument( "-copy" );
-    else
-      writer->addArgument( "-nocopy" );
-    if( track->preEmp() )
-      writer->addArgument( "-preemp" );
-    else
-     writer->addArgument( "-nopreemp" );
-
-    writer->addArgument( QString("-pregap=%1").arg(track->pregap().totalFrames()) );
     if( m_doc->onTheFly() ) {
-      QString fifoname = QString("/home/trueg/tmp/fifo_track%1").arg(track->index());
-      if( ::mkfifo( fifoname.latin1(), S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH ) == -1 ) {
-	kdDebug() << "(K3bMixedJob) could not create fifo" << endl;
-      }
-      track->setBufferFile( fifoname );  // just a temp solution
-      writer->addArgument( QString("-tsize=%1f").arg(track->length().totalFrames()) )->addArgument(fifoname);
+      // this is only supported by cdrecord versions >= 2.01a13
+      writer->addArgument( QFile::encodeName( m_tempData->infFileName( track ) ) );
     }
-    else
-      writer->addArgument( QFile::encodeName(track->bufferFile()) );
+    else {
+      writer->addArgument( QFile::encodeName( m_tempData->bufferFileName( track ) ) );
+    }
   }
 }
 
@@ -844,9 +853,10 @@ void K3bMixedJob::removeBufferFiles()
   QPtrListIterator<K3bAudioTrack> it( *m_doc->audioDoc()->tracks() );
   for( ; it.current(); ++it ) {
     K3bAudioTrack* track = it.current();
-    if( QFile::exists( track->bufferFile() ) )
-      if( !QFile::remove( track->bufferFile() ) )
-	emit infoMessage( i18n("Could not delete file %1.").arg(track->bufferFile()), ERROR );
+    const QString& f = m_tempData->bufferFileName(track);
+    if( QFile::exists( f ) )
+      if( !QFile::remove( f ) )
+	emit infoMessage( i18n("Could not delete file %1.").arg(f), ERROR );
   }
 }
 
@@ -854,6 +864,7 @@ void K3bMixedJob::removeBufferFiles()
 void K3bMixedJob::determineWritingMode()
 {
   // at first we determine the data mode
+  // --------------------------------------------------------------
   if( m_doc->dataDoc()->dataMode() == K3b::AUTO ) {
     if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION )
       m_usedDataMode = K3b::MODE2;
@@ -864,42 +875,42 @@ void K3bMixedJob::determineWritingMode()
     m_usedDataMode = m_doc->dataDoc()->dataMode();
 
 
-  // determine the writing mode
-  if( m_doc->writingMode() == K3b::WRITING_MODE_AUTO ) {
-    if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
-      if( writingApp() == K3b::CDRECORD )
-	m_usedAudioWritingMode = K3b::TAO;
-      else
-	m_usedAudioWritingMode = K3b::DAO;
-      m_usedDataWritingMode = K3b::TAO;
-    }
-    else {
-      m_usedDataWritingMode = K3b::DAO;
-      m_usedAudioWritingMode = K3b::DAO;
-    }
-  }
-  else {
-    m_usedAudioWritingMode = m_doc->writingMode();
-    m_usedDataWritingMode = m_doc->writingMode();
-  }
+
+  // we try to use cdrecord if possible
+  bool cdrecordOnTheFly = 
+    k3bcore->externalBinManager()->binObject("cdrecord")->version 
+    >= K3bVersion( 2, 1, -1, "a13" );
+  bool cdrecordCdText = 
+    k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "cdtext" );
+  bool cdrecordUsable = 
+    !( !cdrecordOnTheFly && m_doc->onTheFly() ) &&
+    !( m_doc->audioDoc()->cdText() && 
+       // the inf-files we use do only support artist and title in the global section
+       ( !m_doc->audioDoc()->arranger().isEmpty() ||
+	 !m_doc->audioDoc()->songwriter().isEmpty() ||
+	 !m_doc->audioDoc()->composer().isEmpty() ||
+	 !m_doc->audioDoc()->cdTextMessage().isEmpty() ||
+	 !cdrecordCdText ) 
+       );
 
 
+  // Writing Application
+  // --------------------------------------------------------------
   // cdrecord seems to have problems writing xa 1 disks in dao mode? At least on my system!
   if( writingApp() == K3b::DEFAULT ) {
     if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
-      if( m_usedAudioWritingMode == K3b::DAO )
+      if( m_doc->writingMode() == K3b::DAO ||
+	  ( m_doc->writingMode() == K3b::AUTO && !cdrecordUsable ) ) {
 	m_usedAudioWritingApp = K3b::CDRDAO;
-      else
-	m_usedAudioWritingApp = K3b::CDRECORD;
-
-      // cdrecord seems to have problems to write multisession in DAO mode
-      if( m_usedDataWritingMode == K3b::DAO )
 	m_usedDataWritingApp = K3b::CDRDAO;
-      else
+      }
+      else {
+	m_usedAudioWritingApp = K3b::CDRECORD;
 	m_usedDataWritingApp = K3b::CDRECORD;
+      }
     }
     else {
-      if( m_usedAudioWritingMode != K3b::DAO ) {
+      if( cdrecordUsable ) {
 	m_usedAudioWritingApp = K3b::CDRECORD;
 	m_usedDataWritingApp = K3b::CDRECORD;
       }
@@ -912,6 +923,53 @@ void K3bMixedJob::determineWritingMode()
   else {
     m_usedAudioWritingApp = writingApp();
     m_usedDataWritingApp = writingApp();
+  }
+
+
+  // Writing Mode (TAO/DAO/RAW)
+  // --------------------------------------------------------------
+  if( m_doc->writingMode() == K3b::AUTO ) {
+    if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
+      if( m_usedDataWritingApp == K3b::CDRECORD )
+	m_usedDataWritingMode = K3b::TAO;
+      else
+	m_usedDataWritingMode = K3b::DAO;
+      // default to Session at once
+      m_usedAudioWritingMode = K3b::DAO;
+    }
+    else {
+      m_usedDataWritingMode = K3b::DAO;
+      m_usedAudioWritingMode = K3b::DAO;
+    }
+  }
+  else {
+    m_usedAudioWritingMode = m_doc->writingMode();
+    m_usedDataWritingMode = m_doc->writingMode();
+  }
+
+ 
+  if( m_usedDataWritingApp == K3b::CDRECORD ) {
+    if( !cdrecordOnTheFly && m_doc->onTheFly() ) {
+      m_doc->setOnTheFly( false );
+      emit infoMessage( i18n("On-the-fly writing with cdrecord < 2.01a13 not supported."), ERROR );
+    }
+
+    if( m_doc->audioDoc()->cdText() ) {
+      if( !cdrecordCdText ) {
+	m_doc->audioDoc()->writeCdText( false );
+	emit infoMessage( i18n("Cdrecord %1 does not support CD-Text writing.").arg(k3bcore->externalBinManager()->binObject("cdrecord")->version), ERROR );
+      }
+      else {
+	if( !m_doc->audioDoc()->arranger().isEmpty() )
+	  emit infoMessage( i18n("K3b does not support Album arranger CD-Text with cdrecord."), ERROR );
+	if( !m_doc->audioDoc()->songwriter().isEmpty() )
+	  emit infoMessage( i18n("K3b does not support Album songwriter CD-Text with cdrecord."), ERROR );
+	if( !m_doc->audioDoc()->composer().isEmpty() )
+	  emit infoMessage( i18n("K3b does not support Album composer CD-Text with cdrecord."), ERROR );
+	if( !m_doc->audioDoc()->cdTextMessage().isEmpty() )
+	  emit infoMessage( i18n("K3b does not support Album comment CD-Text with cdrecord."), ERROR );
+      }
+    }
   }
 }
 
