@@ -129,7 +129,7 @@ K3bMainWindow::K3bMainWindow()
 
   actionDataImportSession->setEnabled( false );
   actionDataClearImportedSession->setEnabled( false );
-  actionDataEditBootImages->setEnabled(false);
+  //  actionDataEditBootImages->setEnabled(false);
   toolBar("dataToolBar")->hide();
 
   m_optionDialog = 0;
@@ -223,9 +223,9 @@ void K3bMainWindow::initActions()
   actionDataClearImportedSession = new KAction(i18n("&Clear imported Session"), "gear", 0, this,
 					       SLOT(slotDataClearImportedSession()), actionCollection(),
 					       "project_data_clear_imported_session" );
-  actionDataEditBootImages = new KAction(i18n("&Edit boot images"), "cdtrack", 0, this,
-					 SLOT(slotEditBootImages()), actionCollection(),
-					 "project_data_edit_boot_images" );
+//   actionDataEditBootImages = new KAction(i18n("&Edit boot images"), "cdtrack", 0, this,
+// 					 SLOT(slotEditBootImages()), actionCollection(),
+// 					 "project_data_edit_boot_images" );
 
   // ==============================================================================================================
 
@@ -846,7 +846,7 @@ void K3bMainWindow::slotFileBurn()
 
     if( doc ) {
       // test if there is something to burn
-      if( doc->numOfTracks() == 0 ) {
+      if( doc->numOfTracks() == 0 || doc->size() == 0 ) {
 	KMessageBox::information( kapp->mainWidget(), i18n("Please add files to your project first!"),
 				  i18n("No data to burn"), QString::null, false );
       }
@@ -930,13 +930,13 @@ void K3bMainWindow::slotCurrentDocChanged( QWidget* )
     case K3bDoc::DATA:
       actionDataClearImportedSession->setEnabled(true);
       actionDataImportSession->setEnabled(true);
-      actionDataEditBootImages->setEnabled(true);
+      //      actionDataEditBootImages->setEnabled(true);
       toolBar("dataToolBar")->show();
       break;
     default:
       actionDataClearImportedSession->setEnabled(false);
       actionDataImportSession->setEnabled(false);
-      actionDataEditBootImages->setEnabled(false);
+      //      actionDataEditBootImages->setEnabled(false);
       toolBar("dataToolBar")->hide();
     }
   }
