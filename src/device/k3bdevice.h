@@ -8,6 +8,34 @@
 class ScsiIf;
 
 
+/* struct K3bDiskInfo { */
+/*   long capacity;          // recordable capacity of medium */
+/*   Msf  manufacturerId;    // disk identification */
+/*   int  recSpeedLow;       // lowest recording speed */
+/*   int  recSpeedHigh;      // highest recording speed */
+  
+/*   int sessionCnt;         // number of closed sessions */
+/*   int lastTrackNr;        // number of last track on disk */
+  
+/*   long lastSessionLba;    // start lba of first track of last closed session */
+/*   long thisSessionLba;    // start lba of this session */
+  
+/*   int diskTocType;        // type of CD TOC, only valid if CD-R is not empty */
+  
+/*   unsigned int empty  : 1; // 1 for empty disk, else 0 */
+/*   unsigned int append : 1; // 1 if CD-R is appendable, else 0 */
+/*   unsigned int cdrw   : 1; // 1 if disk is a CD-RW */
+  
+/*   struct { */
+/*     unsigned int empty : 1; */
+/*     unsigned int append : 1; */
+/*     unsigned int cdrw : 1; */
+/*     unsigned int capacity : 1; */
+/*     unsigned int manufacturerId : 1; */
+/*       unsigned int recSpeed : 1; */
+/*   } valid; */
+/* }; */
+
 
 class K3bDevice 
 {
