@@ -167,11 +167,14 @@ void K3bCdDevice::DiskInfoDetector::slotIsVideoDvd( bool dvd )
 
 void K3bCdDevice::DiskInfoDetector::testForVCD()
 {
-  if (m_info.tocType == DiskInfo::DATA && m_info.toc.count() > 1 && m_info.sessions == 1 )
-    connect( KIO::mount( true, "auto", m_device->mountDevice(), m_device->mountPoint(), true ),
-             SIGNAL(result(KIO::Job*)), this, SLOT(slotIsVCD(KIO::Job*)) );
-  else if (m_info.tocType == DiskInfo::DVD)
-    testForVideoDvd();
+  if (m_info.tocType == DiskInfo::DATA && m_info.toc.count() > 1 && m_info.sessions == 1 ) {
+    if ( KIO::findDeviceMountPoint( m_device->mountDevice() ).isEmpty() )
+      connect( KIO::mount( true, "auto", m_device->mountDevice(), m_device->mountPoint(), true ),
+               SIGNAL(result(KIO::Job*)), this, SLOT(slotIsVCD(KIO::Job*)) );
+    else
+      slotIsVCD(0);
+  } else if (m_info.tocType == DiskInfo::DVD)
+      testForVideoDvd();
   else
     finish(true);
 }
@@ -179,7 +182,13 @@ void K3bCdDevice::DiskInfoDetector::testForVCD()
 void K3bCdDevice::DiskInfoDetector::slotIsVCD(KIO::Job* job)
 {
   m_info.isVCD = false;
-  if (job->error() == 0 ) {
+  bool doit;
+  if  (job == 0)
+    doit = true;
+  else
+    doit = (job->error() == 0);
+
+  if ( doit ) {
     QStringList files;
     files << QString("/vcd/info.vcd") << QString("/svcd/info.vcd");
     for ( QStringList::Iterator it = files.begin(); it != files.end(); ++it ) {
