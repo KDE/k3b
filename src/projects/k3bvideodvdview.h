@@ -33,6 +33,8 @@ class K3bVideoDvdView : public K3bDvdView
  protected:
   virtual K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
 
+  void init();
+
  private:
   K3bVideoDvdDoc* m_doc;
 };

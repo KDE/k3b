@@ -15,28 +15,13 @@
 
 
 // include files for Qt
-#include <qdir.h>
-#include <qfileinfo.h>
 #include <qwidget.h>
 #include <qstring.h>
-#include <qdatetime.h>
-#include <qfile.h>
-#include <qtimer.h>
 #include <qdom.h>
-#include <qtextstream.h>
-#include <qapplication.h>
 
 // include files for KDE
 #include <klocale.h>
-#include <kmessagebox.h>
-#include <kfiledialog.h>
-#include <kio/job.h>
-#include <kio/netaccess.h>
-#include <kprocess.h>
-#include <kstandarddirs.h>
-#include <kconfig.h>
 #include <kdebug.h>
-
 
 // application specific includes
 #include "k3bdoc.h"
@@ -54,9 +39,6 @@
 #include <k3bcore.h>
 #include <k3bdevicemanager.h>
 
-#include "kostore/koStore.h"
-#include "kostore/koStoreDevice.h"
-
 
 K3bDoc::K3bDoc( QObject* parent )
   : QObject( parent ),
@@ -73,7 +55,6 @@ K3bDoc::K3bDoc( QObject* parent )
   m_saved = false;
 
   m_copies = 1;
-
   connect( this, SIGNAL(changed()), this, SLOT(slotChanged()) );
 }
 
@@ -95,12 +76,6 @@ void K3bDoc::setModified( bool m )
     m_modified = m;
     if( m )    
       emit changed();
-    else {
-      // not perfect but we need this to make sure a loaded doc is
-      // detected as not modfied (perhaps a modified signal would be better?)
-      emit saved();
-      emit saved(this);
-    }
   }
 }
 
@@ -128,16 +103,6 @@ void K3bDoc::addUrl( const KURL& url )
 }
 
 
-// K3bView* K3bDoc::createView( QWidget* parent, const char* )
-// {
-//   K3bView* view = newView( parent );
-//   view->setCaption( URL().fileName() );
-//   m_view = view;
-
-//   return view;
-// }
-
-
 void K3bDoc::setURL( const KURL& url )
 {
   doc_url = url;
@@ -157,165 +122,6 @@ bool K3bDoc::newDocument()
   m_copies = 1;
 
   return true;
-}
-
-
-K3bDoc* K3bDoc::openDocument(const KURL& url )
-{
-  QString tmpfile;
-  KIO::NetAccess::download( url, tmpfile, 0L );
-
-  // ///////////////////////////////////////////////
-  // first check if it's a store or an old plain xml file
-  bool success = false;
-  QDomDocument xmlDoc;
-
-  // try opening a store
-  KoStore* store = KoStore::createStore( tmpfile, KoStore::Read );
-  if( store ) {
-    if( !store->bad() ) {
-      // try opening the document inside the store
-      if( store->open( "maindata.xml" ) ) {
-	QIODevice* dev = store->device();
-	dev->open( IO_ReadOnly );
-	if( xmlDoc.setContent( dev ) )
-	  success = true;
-	dev->close();
-	store->close();
-      }
-    }
-
-    delete store;
-  }
-
-  if( !success ) {
-    // try reading an old plain document
-    QFile f( tmpfile );
-    if ( f.open( IO_ReadOnly ) ) {
-      //
-      // First check if this is really an xml file beacuse if this is a very big file
-      // the setContent method blocks for a very long time
-      //
-      char test[5];
-      if( f.readBlock( test, 5 ) ) {
-	if( ::strncmp( test, "<?xml", 5 ) ) {
-	  kdDebug() << "(K3bDoc) " << url.path() << " seems to be no xml file." << endl;
-	  return 0;
-	}
-	f.reset();
-      }
-      else {
-	kdDebug() << "(K3bDoc) could not read from file." << endl;
-	return 0;
-      }
-      if( xmlDoc.setContent( &f ) )
-	success = true;
-      f.close();
-    }
-  }
-
-  // ///////////////////////////////////////////////
-  KIO::NetAccess::removeTempFile( tmpfile );
-
-  if( !success ) {
-    kdDebug() << "(K3bDoc) could not open file " << url.path() << endl;
-    return 0;
-  }
-
-  // check the documents DOCTYPE
-  K3bDoc* newDoc = 0;
-  if( xmlDoc.doctype().name() == "k3b_audio_project" )
-    newDoc = new K3bAudioDoc( 0 );
-  else if( xmlDoc.doctype().name() == "k3b_data_project" )
-    newDoc = new K3bDataDoc( 0 );
-  else if( xmlDoc.doctype().name() == "k3b_vcd_project" )
-    newDoc = new K3bVcdDoc( 0 );
-  else if( xmlDoc.doctype().name() == "k3b_mixed_project" )
-    newDoc = new K3bMixedDoc( 0 );
-  else if( xmlDoc.doctype().name() == "k3b_movix_project" )
-    newDoc = new K3bMovixDoc( 0 );
-  else if( xmlDoc.doctype().name() == "k3b_movixdvd_project" )
-    newDoc = new K3bMovixDvdDoc( 0 );
-  else if( xmlDoc.doctype().name() == "k3b_dvd_project" )
-    newDoc = new K3bDvdDoc( 0 );
-  else if( xmlDoc.doctype().name() == "k3b_video_dvd_project" )
-    newDoc = new K3bVideoDvdDoc( 0 );
-  else {
-    kdDebug() << "(K3bDoc) unknown doc type: " << xmlDoc.doctype().name() << endl;
-    return 0;
-  }
-
-  // we do this to load the writer and the writing speed
-  // since those are not saved in a project file
-  // FIXME
-  newDoc->loadDefaultSettings( k3bcore->config() );
-
-  // ---------
-  // load the data into the document
-  if( newDoc != 0 ) {
-    newDoc->newDocument();
-    QDomElement root = xmlDoc.documentElement();
-    if( newDoc->loadDocumentData( &root ) ) {
-      newDoc->setURL( url );
-      newDoc->setSaved( true );
-      newDoc->setModified( false );
-      return newDoc;
-    }
-  }
-
-
-  delete newDoc;
-  return 0;
-}
-
-bool K3bDoc::saveDocument(const KURL& url )
-{
-  // FIXME: allow usage of KIO
-
-  // create the store
-  KoStore* store = KoStore::createStore( url.path(), KoStore::Write, "application/x-k3b" );
-  if( !store )
-    return false;
-
-  if( store->bad() ) {
-    delete store;
-    return false;
-  }
-
-  // open the document inside the store
-  store->open( "maindata.xml" );
-
-  // save the data in the document
-  QDomDocument xmlDoc( "k3b_" + documentType() + "_project" );
-
-  xmlDoc.appendChild( xmlDoc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
-  QDomElement docElem = xmlDoc.createElement( "k3b_" + documentType() + "_project" );
-  xmlDoc.appendChild( docElem );
-  bool success = saveDocumentData( &docElem );
-  if( success ) {
-    KoStoreDevice dev(store);
-    dev.open( IO_WriteOnly );
-    QTextStream xmlStream( &dev );
-    xmlDoc.save( xmlStream, 0 );
-
-    setModified( false );
-    setURL( url );
-  }
-
-  // close the document inside the store
-  store->close();
-
-  // remove the store (destructor writes the store to disk)
-  delete store;
-
-  m_saved = success;
-
-  if( success ) {
-    emit saved();
-    emit saved( this );
-  }
-
-  return success;
 }
 
 
@@ -402,35 +208,6 @@ bool K3bDoc::readGeneralDocumentData( const QDomElement& elem )
 
 
   return true;
-}
-
-
-// TODO: this seems not to be the right place for this. Better put this in K3bView
-void K3bDoc::loadDefaultSettings( KConfig* c )
-{
-  c->setGroup( "default " + documentType() + " settings" );
-
-  QString mode = c->readEntry( "writing_mode" );
-  if ( mode == "dao" )
-    setWritingMode( K3b::DAO );
-  else if( mode == "tao" )
-    setWritingMode( K3b::TAO );
-  else if( mode == "raw" )
-    setWritingMode( K3b::RAW );
-  else
-    setWritingMode( K3b::WRITING_MODE_AUTO );
-
-  setDummy( c->readBoolEntry( "simulate", false ) );
-  setOnTheFly( c->readBoolEntry( "on_the_fly", true ) );
-  setRemoveImages( c->readBoolEntry( "remove_image", true ) );
-  setOnlyCreateImages( c->readBoolEntry( "only_create_image", false ) );
-
-  setBurner( k3bcore->deviceManager()->findDevice( c->readEntry( "writer_device" ) ) );
-
-  // Default = 0 (Auto)
-  setSpeed( c->readNumEntry( "writing_speed", burner() ? burner()->currentWriteSpeed() : 0 ) );
-
-  setWritingApp( K3b::writingAppFromString( c->readEntry( "writing_app" ) ) );
 }
 
 

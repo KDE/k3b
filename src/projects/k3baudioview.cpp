@@ -20,10 +20,12 @@
 #include "k3baudioburndialog.h"
 #include "k3baudiotrackplayer.h"
 #include "k3baudioburndialog.h"
+#include <k3bapplication.h>
 
 #include <k3baudiodoc.h>
 #include <k3baudiotrack.h>
 #include <k3baudiofile.h>
+#include <k3bpluginmanager.h>
 
 // this is not here becasue of base_*.ui troubles
 #include "../rip/k3baudioprojectconvertingdialog.h"
@@ -42,6 +44,7 @@
 #include <klocale.h>
 #include <kapplication.h>
 #include <kdebug.h>
+#include <kmessagebox.h>
 
 
 
@@ -102,6 +105,14 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
 
 K3bAudioView::~K3bAudioView()
 {
+}
+
+
+void K3bAudioView::init()
+{
+  if( k3bcore->pluginManager()->plugins( "AudioDecoder" ).isEmpty() )
+    KMessageBox::error( this, i18n("No audio decoder plugins found. You won't be able to add any files "
+				   "to the audio project!") );
 }
 
 

@@ -170,11 +170,6 @@ class K3bAudioDoc : public K3bDoc
 
   QString documentType() const;
 
-  void loadDefaultSettings( KConfig* );
-
-  /** reimplemented from K3bDoc */
-  //  K3bView* newView( QWidget* parent );
-
  private:
   // the stuff for adding files
   // ---------------------------------------------------------

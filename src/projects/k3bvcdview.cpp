@@ -22,6 +22,7 @@
 #include <klocale.h>
 #include <kapplication.h>
 #include <kdebug.h>
+#include <kmessagebox.h>
 
 // K3b Includes
 #include "k3bvcdview.h"
@@ -29,6 +30,9 @@
 #include "k3bvcdlistview.h"
 #include "k3bvcdburndialog.h"
 #include <k3bfillstatusdisplay.h>
+#include <k3bexternalbinmanager.h>
+#include <k3bcore.h>
+
 
 K3bVcdView::K3bVcdView( K3bVcdDoc* pDoc, QWidget* parent, const char *name )
         : K3bView( pDoc, parent, name )
@@ -52,6 +56,19 @@ K3bVcdView::~K3bVcdView()
 K3bProjectBurnDialog* K3bVcdView::newBurnDialog( QWidget * parent, const char * name )
 {
   return new K3bVcdBurnDialog( m_doc, parent, name, true );
+}
+
+
+void K3bVcdView::init()
+{
+  if( !k3bcore->externalBinManager()->foundBin( "vcdxbuild" ) ) {
+    kdDebug() << "(K3bVcdView) could not find vcdxbuild executable" << endl;
+    KMessageBox::information( this,
+			      i18n( "Could not find VcdImager executable. "
+				    "To create VideoCD's you must install VcdImager >= 0.7.12. "
+				    "You can find this on your distribution disks or download "
+				    "it from http://www.vcdimager.org" ) );
+  }
 }
 
 #include "k3bvcdview.moc"

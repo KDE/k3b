@@ -36,14 +36,4 @@ K3bBurnJob* K3bDvdDoc::newBurnJob( K3bJobHandler* hdl, QObject* parent )
   return new K3bDvdJob( this, hdl, parent );
 }
 
-
-void K3bDvdDoc::loadDefaultSettings( KConfig* c )
-{
-  K3bDataDoc::loadDefaultSettings(c);
-
-  // K3bDoc defaults to 1, but for DVDs we need default 0 :(
-  setSpeed( c->readNumEntry( "writing_speed", 0 ) );
-}
-
-
 //#include "k3bdvddoc.moc"

@@ -536,19 +536,6 @@ void K3bVcdDoc::setPbcTracks()
     }
 }
 
-void K3bVcdDoc::loadDefaultSettings( KConfig* c )
-{
-    K3bDoc::loadDefaultSettings( c );
-
-    // FIXME: This are userdefined k3b defaults. should this move to general vcd options?
-
-    c->setGroup( "Video project settings" );
-    vcdOptions() ->setPbcEnabled( c->readBoolEntry( "Use Playback Control", false ) );
-    vcdOptions() ->setPbcNumkeysEnabled( c->readBoolEntry( "Use numeric keys to navigate chapters", false ) );
-    vcdOptions() ->setPbcPlayTime( c->readNumEntry( "Play each Sequence/Segment", 1 ) );
-    vcdOptions() ->setPbcWaitTime( c->readNumEntry( "Time to wait after each Sequence/Segment", 2 ) );
-}
-
 
 bool K3bVcdDoc::loadDocumentData( QDomElement* root )
 {

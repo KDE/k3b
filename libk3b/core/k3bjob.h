@@ -166,6 +166,9 @@ class K3bBurnJob : public K3bJob
  public:
   K3bBurnJob( K3bJobHandler* hdl, QObject* parent = 0, const char* name = 0 );
 	
+  /**
+   * FIXME: what does this here?
+   */
   virtual K3bDoc* doc() const { return 0; }
   virtual K3bDevice::Device* writer() const { return 0; }
 

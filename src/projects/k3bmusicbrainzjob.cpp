@@ -138,13 +138,13 @@ private:
 };
 
 
-K3bMusicBrainzJob::K3bMusicBrainzJob( K3bJobHandler* jh, QWidget* parent, const char* name )
-  : K3bJob( jh, parent, name )
+K3bMusicBrainzJob::K3bMusicBrainzJob( QWidget* parent, const char* name )
+  : K3bSimpleJob( parent, name )
 {
   m_trmThread = new TRMThread();
   m_mbThread = new MusicBrainzThread();
-  m_trmJob = new K3bThreadJob( m_trmThread, jh, this );
-  m_mbJob = new K3bThreadJob( m_mbThread, jh, this );
+  m_trmJob = new K3bThreadJob( m_trmThread, this, this );
+  m_mbJob = new K3bThreadJob( m_mbThread, this, this );
 
   connect( m_trmJob, SIGNAL(percent(int)), this, SIGNAL(subPercent(int)) );
   connect( m_trmJob, SIGNAL(percent(int)), this, SLOT(slotTrmPercent(int)) );

@@ -30,7 +30,6 @@
 #include <qvaluelist.h>
 #include <qfont.h>
 #include <qpalette.h>
-#include <qmap.h>
 #include <qwidgetstack.h>
 
 #include <kdockwidget.h>
@@ -105,10 +104,6 @@
 #include "k3bdvdformattingdialog.h"
 #include "dvdcopy/k3bdvdcopydialog.h"
 //#include "dvdcopy/k3bvideodvdcopydialog.h"
-#include "k3bprojectinterface.h"
-#include "k3bdataprojectinterface.h"
-#include "k3baudioprojectinterface.h"
-#include "k3bmixedprojectinterface.h"
 #include "k3bprojectmanager.h"
 #include "k3bwelcomewidget.h"
 #include <k3bpluginmanager.h>
@@ -125,9 +120,6 @@
 class K3bMainWindow::Private
 {
 public:
-  QMap<K3bDoc*, K3bProjectInterface*> projectInterfaceMap;
-
-  K3bProjectManager* projectManager;
   K3bDoc* lastDoc;
 
   QWidgetStack* documentStack;
@@ -149,20 +141,11 @@ K3bMainWindow::K3bMainWindow()
   manager()->setSplitterKeepSize(true);
 
   d = new Private;
-  d->projectManager = new K3bProjectManager( this );
   d->lastDoc = 0;
 
   setPlainCaption( i18n("K3b - The CD and DVD Kreator") );
 
   m_config = kapp->config();
-  m_audioUntitledCount = 0;
-  m_dataUntitledCount = 0;
-  m_mixedUntitledCount = 0;
-  m_vcdUntitledCount = 0;
-  m_movixUntitledCount = 0;
-  m_movixDvdUntitledCount = 0;
-  m_dvdUntitledCount = 0;
-  m_videoDvdUntitledCount = 0;
 
   resize(780,520);  // default optimized for 800x600
 
@@ -190,7 +173,7 @@ K3bMainWindow::K3bMainWindow()
   // connect to the busy signals
   connect( k3bcore, SIGNAL(busyInfoRequested(const QString&)), this, SLOT(showBusyInfo(const QString&)) );
   connect( k3bcore, SIGNAL(busyFinishRequested()), this, SLOT(endBusy()) );
-
+  connect( k3bappcore->projectManager(), SIGNAL(newProject(K3bDoc*)), this, SLOT(createClient(K3bDoc*)) );
   connect( k3bappcore->themeManager(), SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()) );
 }
 
@@ -342,7 +325,7 @@ void K3bMainWindow::initActions()
 
 const QPtrList<K3bDoc>& K3bMainWindow::projects() const
 {
-  return d->projectManager->projects();
+  return k3bappcore->projectManager()->projects();
 }
 
 
@@ -468,12 +451,6 @@ void K3bMainWindow::initView()
 
 void K3bMainWindow::createClient( K3bDoc* doc )
 {
-  // register the project with the manager
-  d->projectManager->addProject( doc );
-
-  // create the dcop interface
-  dcopInterface( doc );
-
   // create the proper K3bView (maybe we should put this into some other class like K3bProjectManager)
   K3bView* view = 0;
   switch( doc->docType() ) {
@@ -549,19 +526,19 @@ K3bDoc* K3bMainWindow::openDocument(const KURL& url)
     // see if it's an audio cue file
     K3bCueFileParser parser( url.path() );
     if( parser.isValid() && parser.toc().contentType() == K3bDevice::AUDIO ) {
-      K3bDoc* doc = slotNewAudioDoc();
+      K3bDoc* doc = k3bappcore->projectManager()->createProject( K3bDoc::AUDIO );
       doc->addUrl( url );
       return doc;
     }
     else {
       // check, if document already open. If yes, set the focus to the first view
-      K3bDoc* doc = d->projectManager->findByUrl( url );
+      K3bDoc* doc = k3bappcore->projectManager()->findByUrl( url );
       if( doc ) {
 	doc->view()->setFocus();
 	return doc;
       }
 
-      doc = K3bDoc::openDocument( url );
+      doc = k3bappcore->projectManager()->openProject( url );
 
       if( doc == 0 ) {
 	KMessageBox::error (this,i18n("Could not open document!"), i18n("Error!"));
@@ -569,9 +546,6 @@ K3bDoc* K3bMainWindow::openDocument(const KURL& url)
       }
 
       actionFileOpenRecent->addURL(url);
-
-      // create the window
-      createClient(doc);
 
       return doc;
     }
@@ -636,7 +610,7 @@ void K3bMainWindow::saveProperties( KConfig* c )
 
   QString saveDir = KGlobal::dirs()->saveLocation( "appdata", "sessions/" + qApp->sessionId() + "/", true );
 
-  const QPtrList<K3bDoc>& docs = d->projectManager->projects();
+  const QPtrList<K3bDoc>& docs = k3bappcore->projectManager()->projects();
   c->writeEntry( "Number of projects", docs.count() );
 
   int cnt = 1;
@@ -658,13 +632,14 @@ void K3bMainWindow::saveProperties( KConfig* c )
     c->writePathEntry( QString("%1 saveurl").arg(cnt), saveUrl.url() );
 
     // finally save it
-    (*it)->saveDocument( saveUrl );
+    k3bappcore->projectManager()->saveProject( *it, saveUrl );
 
     ++cnt;
   }
 }
 
 
+// FIXME:move this to K3bProjectManager
 void K3bMainWindow::readProperties( KConfig* c )
 {
   // FIXME: do not delete the files here. rather do it when the app is exited normally
@@ -692,14 +667,12 @@ void K3bMainWindow::readProperties( KConfig* c )
     KURL saveUrl = c->readPathEntry( QString("%1 saveurl").arg(i) );
 
     // now load the project
-    if( K3bDoc* doc = K3bDoc::openDocument( saveUrl ) ) {
+    if( K3bDoc* doc = k3bappcore->projectManager()->openProject( saveUrl ) ) {
 
       // reset the url
       doc->setURL( url );
       doc->setModified( modified );
       doc->setSaved( saved );
-      
-      createClient( doc );
     }
     else
       kdDebug() << "(K3bMainWindow) could not open session saved doc " << url.path() << endl;
@@ -801,7 +774,7 @@ void K3bMainWindow::slotFileOpenRecent(const KURL& url)
 
 void K3bMainWindow::slotFileSaveAll()
 {
-  for( QPtrListIterator<K3bDoc> it( d->projectManager->projects() );
+  for( QPtrListIterator<K3bDoc> it( k3bappcore->projectManager()->projects() );
        *it; ++it ) {
     fileSave( *it );
   }
@@ -825,7 +798,7 @@ void K3bMainWindow::fileSave( K3bDoc* doc )
   if( doc != 0 ) {
     if( !doc->isSaved() )
       fileSaveAs( doc );
-    else if( !doc->saveDocument(doc->URL()) )
+    else if( !k3bappcore->projectManager()->saveProject( doc, doc->URL()) )
       KMessageBox::error (this,i18n("Could not save the current document!"), i18n("I/O Error"));
   }
 }
@@ -869,7 +842,7 @@ void K3bMainWindow::fileSaveAs( K3bDoc* doc )
 
         KURL url;
         url.setPath(file);
-	if( !doc->saveDocument(url) ) {
+	if( !k3bappcore->projectManager()->saveProject( doc, url ) ) {
 	  KMessageBox::error (this,i18n("Could not save the current document!"), i18n("I/O Error"));
 	  return;
 	}
@@ -929,16 +902,9 @@ void K3bMainWindow::closeProject( K3bDoc* doc )
 
   // remove the view from the project tab
   m_documentTab->removePage( doc->view() );
-  // remove the DCOP interface
-  QMap<K3bDoc*, K3bProjectInterface*>::iterator it = d->projectInterfaceMap.find( doc );
-  if( it != d->projectInterfaceMap.end() ) {
-    // delete the interface
-    delete it.data();
-    d->projectInterfaceMap.remove( it );
-  }
 
   // remove the project from the manager
-  d->projectManager->removeProject( doc );
+  k3bappcore->projectManager()->removeProject( doc );
 
   // delete view and doc
   delete doc->view();
@@ -1003,23 +969,9 @@ void K3bMainWindow::showOptionDialog( int index )
 
 K3bDoc* K3bMainWindow::slotNewAudioDoc()
 {
-  if( k3bcore->pluginManager()->plugins( "AudioDecoder" ).isEmpty() )
-    KMessageBox::error( this, i18n("No audio decoder plugins found. You won't be able to add any files "
-				   "to the audio project!") );
-
   slotStatusMsg(i18n("Creating new Audio CD Project."));
 
-  K3bAudioDoc* doc = new K3bAudioDoc( this );
-  initializeNewDoc( doc );
-
-  m_audioUntitledCount++;
-  QString fileName = i18n("AudioCD%1").arg(m_audioUntitledCount);
-  KURL url;
-  url.setFileName(fileName);
-  doc->setURL(url);
-
-  // create the window
-  createClient(doc);
+  K3bDoc* doc = k3bappcore->projectManager()->createProject( K3bDoc::AUDIO );
 
   return doc;
 }
@@ -1028,19 +980,7 @@ K3bDoc* K3bMainWindow::slotNewDataDoc()
 {
   slotStatusMsg(i18n("Creating new Data CD Project."));
 
-  K3bDataDoc* doc = new K3bDataDoc( this );
-  initializeNewDoc( doc );
-
-  m_dataUntitledCount++;
-  QString fileName = i18n("DataCD%1").arg(m_dataUntitledCount);
-  if( doc->isoOptions().volumeID().isEmpty() )
-    doc->isoOptions().setVolumeID( i18n("DataCD%1").arg(m_dataUntitledCount) );
-  KURL url;
-  url.setFileName(fileName);
-  doc->setURL(url);
-
-  // create the window
-  createClient(doc);
+  K3bDoc* doc = k3bappcore->projectManager()->createProject( K3bDoc::DATA );
 
   return doc;
 }
@@ -1050,19 +990,7 @@ K3bDoc* K3bMainWindow::slotNewDvdDoc()
 {
   slotStatusMsg(i18n("Creating new Data DVD Project."));
 
-  K3bDvdDoc* doc = new K3bDvdDoc( this );
-  initializeNewDoc( doc );
-
-  m_dvdUntitledCount++;
-  QString fileName = i18n("DataDVD%1").arg(m_dvdUntitledCount);
-  if( doc->isoOptions().volumeID().isEmpty() )
-    doc->isoOptions().setVolumeID( i18n("DataDVD%1").arg(m_dvdUntitledCount) );
-  KURL url;
-  url.setFileName(fileName);
-  doc->setURL(url);
-
-  // create the window
-  createClient(doc);
+  K3bDoc* doc = k3bappcore->projectManager()->createProject( K3bDoc::DVD );
 
   return doc;
 }
@@ -1072,27 +1000,7 @@ K3bDoc* K3bMainWindow::slotNewVideoDvdDoc()
 {
   slotStatusMsg(i18n("Creating new VideoDVD Project."));
 
-  K3bVideoDvdDoc* doc = new K3bVideoDvdDoc( this );
-  initializeNewDoc( doc );
-
-  m_videoDvdUntitledCount++;
-  QString fileName = i18n("VideoDVD%1").arg(m_videoDvdUntitledCount);
-  if( doc->isoOptions().volumeID().isEmpty() )
-    doc->isoOptions().setVolumeID( i18n("VideoDVD%1").arg(m_dvdUntitledCount) );
-  KURL url;
-  url.setFileName(fileName);
-  doc->setURL(url);
-
-  // create the window
-  createClient(doc);
-
-  KMessageBox::information( this,
-			    i18n("Be aware that you need to provide the complete Video DVD filestructure. "
-				 "K3b does not support video transcoding and preparation of video object "
-				 "files yet. That means you need to already have the VTS_X_YY.VOB "
-				 "and VTS_X_YY.IFO files."),
-			    i18n("K3b Video DVD Restrictions"),
-			    "video_dvd_restrictions" );
+  K3bDoc* doc = k3bappcore->projectManager()->createProject( K3bDoc::VIDEODVD );
 
   return doc;
 }
@@ -1102,50 +1010,16 @@ K3bDoc* K3bMainWindow::slotNewMixedDoc()
 {
   slotStatusMsg(i18n("Creating new Mixed Mode CD Project."));
 
-  K3bMixedDoc* doc = new K3bMixedDoc( this );
-  initializeNewDoc( doc );
-
-  m_mixedUntitledCount++;
-  QString fileName=i18n("MixedCD%1").arg(m_mixedUntitledCount);
-  if( doc->dataDoc()->isoOptions().volumeID().isEmpty() )
-    doc->dataDoc()->isoOptions().setVolumeID( i18n("MixedCD%1").arg(m_mixedUntitledCount) );
-  KURL url;
-  url.setFileName(fileName);
-  doc->setURL(url);
-
-  // create the window
-  createClient(doc);
+  K3bDoc* doc = k3bappcore->projectManager()->createProject( K3bDoc::MIXED );
 
   return doc;
 }
 
 K3bDoc* K3bMainWindow::slotNewVcdDoc()
 {
-  if ( !k3bcore->externalBinManager()->foundBin( "vcdxbuild" ) ) {
-    kdDebug() << "(K3bMainWindow) could not find vcdxbuild executable" << endl;
-    KMessageBox::information( this,
-			      i18n( "Could not find VcdImager executable. "
-				    "To create VideoCD's you must install VcdImager >= 0.7.12. "
-				    "You can find this on your distribution disks or download "
-				    "it from http://www.vcdimager.org" ),
-			      i18n( "Information" ) );
-  }
-
   slotStatusMsg(i18n("Creating new Video CD Project."));
 
-  K3bVcdDoc* doc = new K3bVcdDoc( this );
-  initializeNewDoc( doc );
-
-  m_vcdUntitledCount++;
-  QString fileName=i18n("VideoCD%1").arg(m_vcdUntitledCount);
-  if( doc->vcdOptions()->volumeId().isEmpty() )
-    doc->vcdOptions()->setVolumeId( i18n("VideoCD%1").arg(m_vcdUntitledCount) );
-  KURL url;
-  url.setFileName(fileName);
-  doc->setURL(url);
-
-  // create the window
-  createClient(doc);
+  K3bDoc* doc = k3bappcore->projectManager()->createProject( K3bDoc::VCD );
 
   return doc;
 }
@@ -1155,19 +1029,7 @@ K3bDoc* K3bMainWindow::slotNewMovixDoc()
 {
   slotStatusMsg(i18n("Creating new eMovix CD Project."));
 
-  K3bMovixDoc* doc = new K3bMovixDoc( this );
-  initializeNewDoc( doc );
-
-  m_movixUntitledCount++;
-  QString fileName=i18n("eMovixCD%1").arg(m_movixUntitledCount);
-  if( doc->isoOptions().volumeID().isEmpty() )
-    doc->isoOptions().setVolumeID( i18n("eMovixCD%1").arg(m_movixUntitledCount) );
-  KURL url;
-  url.setFileName(fileName);
-  doc->setURL(url);
-
-  // create the window
-  createClient(doc);
+  K3bDoc* doc = k3bappcore->projectManager()->createProject( K3bDoc::MOVIX );
 
   return doc;
 }
@@ -1177,49 +1039,9 @@ K3bDoc* K3bMainWindow::slotNewMovixDvdDoc()
 {
   slotStatusMsg(i18n("Creating new eMovix DVD Project."));
 
-  K3bMovixDvdDoc* doc = new K3bMovixDvdDoc( this );
-  initializeNewDoc( doc );
-
-  m_movixDvdUntitledCount++;
-  QString fileName=i18n("eMovixDVD%1").arg(m_movixDvdUntitledCount);
-  if( doc->isoOptions().volumeID().isEmpty() )
-    doc->isoOptions().setVolumeID( i18n("eMovixDVD%1").arg(m_movixDvdUntitledCount) );
-  KURL url;
-  url.setFileName(fileName);
-  doc->setURL(url);
-
-  // create the window
-  createClient(doc);
+  K3bDoc* doc = k3bappcore->projectManager()->createProject( K3bDoc::MOVIX_DVD );
 
   return doc;
-}
-
-
-void K3bMainWindow::initializeNewDoc( K3bDoc* doc )
-{
-  doc->newDocument();
-  doc->loadDefaultSettings( config() );
-}
-
-
-K3bProjectInterface* K3bMainWindow::dcopInterface( K3bDoc* doc )
-{
-  QMap<K3bDoc*, K3bProjectInterface*>::iterator it = d->projectInterfaceMap.find( doc );
-  if( it == d->projectInterfaceMap.end() ) {
-    K3bProjectInterface* dcopInterface = 0;
-    if( doc->docType() == K3bDoc::DATA || doc->docType() == K3bDoc::DVD )
-      dcopInterface = new K3bDataProjectInterface( static_cast<K3bDataDoc*>(doc) );
-    else if( doc->docType() == K3bDoc::AUDIO )
-      dcopInterface = new K3bAudioProjectInterface( static_cast<K3bAudioDoc*>(doc) );
-    else if( doc->docType() == K3bDoc::MIXED )
-      dcopInterface = new K3bMixedProjectInterface( static_cast<K3bMixedDoc*>(doc) );
-    else
-      dcopInterface = new K3bProjectInterface( doc );
-    d->projectInterfaceMap[doc] = dcopInterface;
-    return dcopInterface;
-  }
-  else
-    return it.data();
 }
 
 
@@ -1236,7 +1058,7 @@ void K3bMainWindow::slotCurrentDocChanged()
   // check the doctype
   K3bView* v = activeView();
   if( v ) {
-    d->projectManager->setActive( v->doc() );
+    k3bappcore->projectManager()->setActive( v->doc() );
 
     //
     // There are two possiblities to plug the project actions:
@@ -1263,8 +1085,8 @@ void K3bMainWindow::slotCurrentDocChanged()
       kdDebug() << "(K3bMainWindow) ERROR: could not get KXMLGUIFactory instance." << endl;
   }
   else
-      d->projectManager->setActive( 0L );
-  if( d->projectManager->isEmpty() ) {
+      k3bappcore->projectManager()->setActive( 0L );
+  if( k3bappcore->projectManager()->isEmpty() ) {
     d->documentStack->raiseWidget( d->welcomeWidget );
     slotStateChanged( "state_project_active", KXMLGUIClient::StateReverse );
   }
@@ -1567,7 +1389,7 @@ void K3bMainWindow::addUrls( const KURL::List& urls )
 
 void K3bMainWindow::slotClearProject()
 {
-  K3bDoc* doc = d->projectManager->activeDoc();
+  K3bDoc* doc = k3bappcore->projectManager()->activeDoc();
   if( doc ) {
     if( KMessageBox::questionYesNo( this,
 				    i18n("Do you really want to clear the current project?"),
@@ -1576,7 +1398,7 @@ void K3bMainWindow::slotClearProject()
 				    KStdGuiItem::no(),
 				    "clear_current_project_dontAskAgain" ) == KMessageBox::Yes ) {
       doc->newDocument();
-      doc->loadDefaultSettings( config() );
+      k3bappcore->projectManager()->loadDefaults( doc );
     }
   }
 }

@@ -2,7 +2,7 @@ AM_CPPFLAGS= -I$(srcdir)/../core -I$(srcdir)/../plugin -I$(srcdir)/../../libk3bd
 
 noinst_LTLIBRARIES = libk3bproject.la
 
-libk3bproject_la_LIBADD = ./datacd/libdata.la ./datadvd/libdvd.la ./mixedcd/libmixed.la ./videocd/libvcd.la ./videodvd/libvideodvd.la ./movixcd/libmovix.la ./movixdvd/libmovixdvd.la ./audiocd/libaudio.la ./kostore/libkostore.la
+libk3bproject_la_LIBADD = ./datacd/libdata.la ./datadvd/libdvd.la ./mixedcd/libmixed.la ./videocd/libvcd.la ./videodvd/libvideodvd.la ./movixcd/libmovix.la ./movixdvd/libmovixdvd.la ./audiocd/libaudio.la
 
 libk3bproject_la_LDFLAGS = $(all_libraries)
 
@@ -28,6 +28,6 @@ include_HEADERS =          k3bblankingjob.h \
 			   k3btocfilewriter.h \
 			   k3bcuefileparser.h
 
-SUBDIRS = kostore datacd audiocd mixedcd movixcd videocd datadvd movixdvd videodvd
+SUBDIRS = datacd audiocd mixedcd movixcd videocd datadvd movixdvd videodvd
 
 METASOURCES = AUTO

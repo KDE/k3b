@@ -100,8 +100,6 @@ class K3bMainWindow : public KParts::DockMainWindow
 
   KSystemTray* systemTray() const { return m_systemTray; }
 
-  K3bProjectInterface* dcopInterface( K3bDoc* doc );
-
  public slots:
   K3bDoc* slotNewAudioDoc();
   K3bDoc* slotNewDataDoc();
@@ -171,23 +169,6 @@ class K3bMainWindow : public KParts::DockMainWindow
    */
   virtual void readProperties(KConfig *_cfg);
 
-  /** creates a new child window. The document that will be connected to it
-   * has to be created before and the instances filled, with e.g. openDocument().
-   * Then call createClient() to get a new MDI child window.
-   * @see K3bDoc#addView
-   * @see K3bDoc#openDocument
-   * @param doc pointer to the document instance that the view will
-   * be connected to.
-   */
-  void createClient(K3bDoc* doc);
-
-  /**
-   * Initializes a newly created doc.
-   * loads the default settings and adds
-   * it to the list of documents.
-   */
-  void initializeNewDoc( K3bDoc* doc );
-
   /**
    * checks if doc is modified and asks the user for saving if so.
    * returns false if the user chose cancel.
@@ -251,6 +232,8 @@ class K3bMainWindow : public KParts::DockMainWindow
 
   void slotThemeChanged();
 
+  void createClient(K3bDoc* doc);
+
  private:
   void fileSave( K3bDoc* doc = 0 );
   void fileSaveAs( K3bDoc* doc = 0 );
@@ -277,16 +260,6 @@ class K3bMainWindow : public KParts::DockMainWindow
 
   /** The MDI-Interface is managed by this tabbed view */
   K3bProjectTabWidget* m_documentTab;
-
-  /** a counter that gets increased each time the user creates a new document with "File"->"New" */
-  int m_audioUntitledCount;
-  int m_dataUntitledCount;
-  int m_mixedUntitledCount;
-  int m_vcdUntitledCount;
-  int m_movixUntitledCount;
-  int m_movixDvdUntitledCount;
-  int m_dvdUntitledCount;
-  int m_videoDvdUntitledCount;
 
   // KAction pointers to enable/disable actions
   KActionMenu* actionFileNewMenu;

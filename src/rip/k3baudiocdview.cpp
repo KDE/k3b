@@ -28,7 +28,7 @@
 #include <k3btoolbox.h>
 #include <kcutlabel.h>
 #include <k3bstdguiitems.h>
-#include <k3bcore.h>
+#include <k3bapplication.h>
 #include <cdinfo/k3bdiskinfodetector.h>
 #include <k3bthememanager.h>
 #include <k3baudiocdtrackdrag.h>
@@ -124,9 +124,9 @@ K3bAudioCdView::K3bAudioCdView( QWidget* parent, const char *name )
   m_cddb = new K3bCddb( this );
 
   connect( m_cddb, SIGNAL(infoMessage(const QString&)),
-	   k3bcore, SLOT(requestBusyInfo(const QString&)) );
+	   k3bappcore, SLOT(requestBusyInfo(const QString&)) );
   connect( m_cddb, SIGNAL(queryFinished(int)),
-	   k3bcore, SLOT(requestBusyFinish()) );
+	   k3bappcore, SLOT(requestBusyFinish()) );
   connect( m_cddb, SIGNAL(queryFinished(int)),
 	   this, SLOT(slotCddbQueryFinished(int)) );
 
@@ -442,7 +442,7 @@ void K3bAudioCdView::queryCddb()
 
 void K3bAudioCdView::slotCddbQueryFinished( int error )
 {
-  k3bcore->requestBusyFinish();
+  k3bappcore->requestBusyFinish();
 
   if( error == K3bCddbQuery::SUCCESS ) {
     m_cddbInfo = m_cddb->result();

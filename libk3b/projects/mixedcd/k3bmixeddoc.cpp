@@ -191,34 +191,6 @@ bool K3bMixedDoc::saveDocumentData( QDomElement* docElem )
 }
 
   
-void K3bMixedDoc::loadDefaultSettings( KConfig* c )
-{
-  K3bDoc::loadDefaultSettings(c);
-
-  m_audioDoc->writeCdText( c->readBoolEntry( "cd_text", false ) );
-  m_audioDoc->setNormalize( c->readBoolEntry( "normalize", false ) );
-
-  // load mixed type
-  if( c->readEntry( "mixed_type" ) == "last_track" )
-    m_mixedType = DATA_LAST_TRACK;
-  else if( c->readEntry( "mixed_type" ) == "first_track" )
-    m_mixedType = DATA_FIRST_TRACK;
-  else
-    m_mixedType = DATA_SECOND_SESSION;
-
-  QString datamode = c->readEntry( "data_track_mode" );
-  if( datamode == "mode1" )
-    m_dataDoc->setDataMode( K3b::MODE1 );
-  else if( datamode == "mode2" )
-    m_dataDoc->setDataMode( K3b::MODE2 );
-  else
-    m_dataDoc->setDataMode( K3b::DATA_MODE_AUTO );
-
-  K3bIsoOptions o = K3bIsoOptions::load( c );
-  dataDoc()->isoOptions() = o;
-}
-
-
 K3bDevice::Toc K3bMixedDoc::toToc( int dataMode, const K3b::Msf& dataTrackLength ) const
 {
   // !inaccurate datatrack size!

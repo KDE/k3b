@@ -150,8 +150,6 @@ class K3bDataDoc : public K3bDoc
   void importSession( K3bDevice::Device* );
   void clearImportedSession();
 
-  virtual void loadDefaultSettings( KConfig* );
-
  signals:
   void itemRemoved( K3bDataItem* );
   void newFileItems();

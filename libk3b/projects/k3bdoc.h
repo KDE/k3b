@@ -76,15 +76,7 @@ class K3bDoc : public QObject
   virtual int docType() const { return m_docType; }
 
   /** 
-   * Create a new view
-   * This should only be called once.
-   *
-   * TODO: remove this. Decide it somewhere in k3b
-   */
-  //  K3bView* createView( QWidget* parent = 0, const char* name = 0 );
-
-  /** 
-   * returns the K3bView created by newView() or null if none has been created
+   * returns the view widget set with setView() or null if none has been set.
    */
   QWidget* view() const { return m_view; }
 
@@ -111,21 +103,18 @@ class K3bDoc : public QObject
   virtual bool newDocument();
 
   /**
-   * Since we have several types of K3b projects we cannot follow the standard and
-   * allow opening an URL in an already created doc. So this static method checks
-   * the type of the saved project and creates a appropriate project object or 0
-   * if no K3b project has been found.
+   * Load a project from an xml stream.
    *
-   * TODO: move this to k3b
+   * This is used to load/save k3b projects. 
    */
-  static K3bDoc* openDocument(const KURL &url);
+  virtual bool loadDocumentData( QDomElement* root ) = 0;
 
   /**
-   * saves the document under filename and format.
+   * Save a project to an xml stream.
    *
-   * TODO: move this to k3b
+   * This is used to load/save k3b projects. 
    */
-  bool saveDocument(const KURL &url);
+  virtual bool saveDocumentData( QDomElement* docElem ) = 0;
 
   /** returns the KURL of the document */
   const KURL& URL() const;
@@ -180,8 +169,6 @@ class K3bDoc : public QObject
  signals:
   void changed();
   void changed( K3bDoc* );
-  void saved();
-  void saved( K3bDoc* );
 
  public slots:
   void setDummy( bool d );
@@ -203,62 +190,12 @@ class K3bDoc : public QObject
   virtual void addUrl( const KURL& url );
   virtual void addUrls( const KURL::List& urls ) = 0;
 
-  /**
-   * load the default project settings from the app configuration
-   * the default implementation opens the correct group and loads
-   * the following settings:
-   * <ul>
-   *   <li>Writing mode</li>
-   *   <li>Simulate</li>
-   *   <li>on the fly</li>
-   *   <li>burnfree</li>
-   *   <li>remove images</li>
-   *   <li>only create images</li>
-   *   <li>writer</li>
-   *   <li>writing speed</li>
-   * </ul>
-   * New implementations should call this before doing anything else.
-   * After that there is no need to change the config group.
-   *
-   * TODO: move this to k3b
-   */
-  virtual void loadDefaultSettings( KConfig* );
-
  protected:
-  /**
-   * when deriving from K3bDoc this method really opens the document since
-   * openDocument only opens a tempfile and calls this method.
-   *
-   * TODO: move this to k3b
-   */
-  virtual bool loadDocumentData( QDomElement* root ) = 0;
-
-  /**
-   * when deriving from K3bDoc this method really saves the document since
-   * saveDocument only opens the file and calls this method.
-   * Append all child elements to docElem.
-   * XML header was already created
-   *
-   * TODO: move this to k3b
-   */
-  virtual bool saveDocumentData( QDomElement* docElem ) = 0;
-
-  /**
-   * TODO: move this to k3b
-   */
-  bool saveGeneralDocumentData( QDomElement* );
-
-  /**
-   * TODO: move this to k3b
-   */
-  bool readGeneralDocumentData( const QDomElement& );
-
   int m_docType;
 
-  /**
-   * TODO: move this to k3b
-   */
-  //  virtual K3bView* newView( QWidget* parent = 0 ) = 0;
+  bool saveGeneralDocumentData( QDomElement* );
+
+  bool readGeneralDocumentData( const QDomElement& );
 
  private slots:
   void slotChanged();
@@ -268,7 +205,6 @@ class K3bDoc : public QObject
   bool m_modified;
   KURL doc_url;
 
-  // TODO: make this a QWidget
   QWidget* m_view;
 
   QString m_tempDir;

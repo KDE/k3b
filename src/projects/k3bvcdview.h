@@ -43,6 +43,8 @@ class K3bVcdView : public K3bView
   
  protected:
   K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
+
+  void init();
   
  private:
   K3bVcdDoc* m_doc;

@@ -35,10 +35,6 @@ class K3bMovixDvdDoc : public K3bMovixDoc
 
  protected:
   QString documentType() const { return "movixdvd"; }
-
-  void loadDefaultSettings( KConfig* );
-
-  //  K3bView* newView( QWidget* parent = 0 );
 };
 
 #endif

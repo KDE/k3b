@@ -184,7 +184,7 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
 
   m_diskInfoDetector = new K3bDiskInfoDetector( this );
   connect( m_diskInfoDetector, SIGNAL(diskInfoReady(K3bDevice::DiskInfoDetector*)),
-	   k3bcore, SLOT(requestBusyFinish()) );
+	   k3bappcore, SLOT(requestBusyFinish()) );
   connect( m_diskInfoDetector, SIGNAL(diskInfoReady(K3bDevice::DiskInfoDetector*)),
 	   this, SLOT(slotDiskInfoReady(K3bDevice::DiskInfoDetector*)) );
 
@@ -327,7 +327,7 @@ void K3bDirView::slotDetectDiskInfo( K3bDevice::Device* dev )
   m_noViewView->setDevice( dev );
   m_viewStack->raiseWidget( m_noViewView );
   m_fileTreeView->setSelectedDevice( dev );
-  k3bcore->requestBusyInfo( i18n("Trying to fetch information about the inserted disk.") );
+  k3bappcore->requestBusyInfo( i18n("Trying to fetch information about the inserted disk.") );
   m_diskInfoDetector->detect( dev );
 }
 
@@ -421,7 +421,7 @@ void K3bDirView::slotUnmountDisk()
 {
   kdDebug() << "(K3bDirView) slotUnmountDisk()" << endl;
 
-  k3bcore->requestBusyInfo( i18n("Unmounting disk.") );
+  k3bappcore->requestBusyInfo( i18n("Unmounting disk.") );
   K3bDeviceBranch* branch = m_fileTreeView->branch( m_lastDevice );
   if( branch ) {
     m_fileView->setAutoUpdate( false ); // in case we look at the mounted path
@@ -437,7 +437,7 @@ void K3bDirView::slotUnmountFinished( K3bDeviceBranch*, bool success )
 {
   kdDebug() << "(K3bDirView) slotUnmountFinished()" << endl;
 
-  k3bcore->requestBusyFinish();
+  k3bappcore->requestBusyFinish();
   m_fileView->setAutoUpdate( true );
   m_fileView->reload();
 
@@ -449,7 +449,7 @@ void K3bDirView::slotEjectDisk()
 {
   kdDebug() << "(K3bDirView) slotEjectDisk()" << endl;
 
-  k3bcore->requestBusyInfo( i18n("Ejecting disk.") );
+  k3bappcore->requestBusyInfo( i18n("Ejecting disk.") );
   K3bDeviceBranch *branch = m_fileTreeView->branch( m_lastDevice );
   if( branch ) {
     m_fileView->setAutoUpdate( false ); // in case we look at the mounted path
@@ -528,7 +528,7 @@ void K3bDirView::slotDirActivated( const KURL& url )
 {
   // cancel any previous disk info retrieval
 //   m_diskInfoDetector->cancel();
-  k3bcore->requestBusyFinish();
+  k3bappcore->requestBusyFinish();
 
   m_fileView->setUrl(url, true);
 //   m_urlCombo->setEditText( url.path() );

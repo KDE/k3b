@@ -78,10 +78,6 @@ class K3bMixedDoc : public K3bDoc
   bool saveDocumentData( QDomElement* );
   QString documentType() const { return "mixed"; }
   
-  void loadDefaultSettings( KConfig* );
-
-  //  K3bView* newView( QWidget* parent );
-
  private:
   K3bDataDoc* m_dataDoc;
   K3bAudioDoc* m_audioDoc;

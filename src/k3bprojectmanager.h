@@ -18,9 +18,11 @@
 
 #include <qobject.h>
 #include <qptrlist.h>
+#include <k3bdoc.h>
 
-class K3bDoc;
+
 class KURL;
+class K3bProjectInterface;
 
 
 class K3bProjectManager : public QObject
@@ -33,21 +35,48 @@ class K3bProjectManager : public QObject
 
   const QPtrList<K3bDoc>& projects() const;
 
+  /**
+   * Create a new project including loading user defaults and creating
+   * the dcop interface.
+   */
+  K3bDoc* createProject( K3bDoc::DocType type );
+
+  /**
+   * Opens a K3b project.
+   * \return 0 if url does not point to a valid k3b project file, the new project otherwise.
+   */
+  K3bDoc* openProject( const KURL &url );
+
+  /**
+   * saves the document under filename and format.
+   */
+  bool saveProject( K3bDoc*, const KURL &url );
+
   K3bDoc* activeDoc() const;
   K3bDoc* findByUrl( const KURL& url );
   bool isEmpty() const;
+
+  /**
+   * Will create if none exists.
+   */
+  K3bProjectInterface* dcopInterface( K3bDoc* doc );
 
  public slots:
   void addProject( K3bDoc* );
   void removeProject( K3bDoc* );
   void setActive( K3bDoc* );
+  void loadDefaults( K3bDoc* );
 
  signals:
   void newProject( K3bDoc* );
+  void projectSaved( K3bDoc* );
   void closingProject( K3bDoc* );
   void activeProjectChanged( K3bDoc* );
 
  private:
+  // used internal
+  K3bDoc* createEmptyProject( K3bDoc::DocType );
+
   class Private;
   Private* d;
 };

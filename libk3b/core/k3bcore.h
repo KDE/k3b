@@ -109,41 +109,12 @@ class K3bCore : public QObject
 
  public slots:
   /**
-   * This will just emit the busyInfoRequested signal
-   * Anyone may connect to it and show the string to the
-   * user in some way.
-   *
-   * FIXME: move this to k3b
-   */
-  void requestBusyInfo( const QString& );
-
-  /**
-   * FIXME: move this to k3b
-   */
-  void requestBusyFinish();
-
-  /**
    * Every running job registers itself with the core.
    * For now this is only used to determine if some job
    * is running.
    */
   void registerJob( K3bJob* job );
   void unregisterJob( K3bJob* job );
-
- signals:
-  /**
-   * Any component may request busy info
-   * In the K3b main app this will be displayed
-   * as a moving square in the taskbar
-   *
-   * FIXME: move this to k3b
-   */
-  void busyInfoRequested( const QString& );
-
-  /**
-   * FIXME: move this to k3b
-   */
-  void busyFinishRequested();
 
  private:
   class Private;

@@ -20,6 +20,7 @@
 #include <k3bdatafileview.h>
 
 #include <klocale.h>
+#include <kmessagebox.h>
 
 
 K3bVideoDvdView::K3bVideoDvdView( K3bVideoDvdDoc* doc, QWidget *parent, const char *name )
@@ -37,6 +38,18 @@ K3bVideoDvdView::~K3bVideoDvdView()
 K3bProjectBurnDialog* K3bVideoDvdView::newBurnDialog( QWidget* parent, const char* name )
 {
   return new K3bVideoDvdBurnDialog( m_doc, parent, name, true );
+}
+
+
+void K3bVideoDvdView::init()
+{
+  KMessageBox::information( this,
+			    i18n("Be aware that you need to provide the complete Video DVD filestructure. "
+				 "K3b does not support video transcoding and preparation of video object "
+				 "files yet. That means you need to already have the VTS_X_YY.VOB "
+				 "and VTS_X_YY.IFO files."),
+			    i18n("K3b Video DVD Restrictions"),
+			    "video_dvd_restrictions" );
 }
 
 //#include "k3bvideodvdview.moc"

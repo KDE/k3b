@@ -27,6 +27,7 @@ class K3bMainWindow;
 class K3bInterface;
 class K3bAudioServer;
 class K3bThemeManager;
+class K3bProjectManager;
 
 
 class K3bApplication : public KUniqueApplication
@@ -82,9 +83,26 @@ class K3bApplication::Core : public K3bCore
 
   K3bThemeManager* themeManager() const { return m_themeManager; }
 
+  K3bProjectManager* projectManager() const { return m_projectManager; }
+
   K3bMainWindow* k3bMainWindow() const { return m_mainWindow; }
 
   static Core* k3bAppCore() { return s_k3bAppCore; }
+
+ public slots:
+  /**
+   * This will just emit the busyInfoRequested signal
+   * Anyone may connect to it and show the string to the
+   * user in some way.
+   *
+   * FIXME: this is bad design
+   */
+  void requestBusyInfo( const QString& );
+
+  /**
+   * FIXME: this is bad design
+   */
+  void requestBusyFinish();
 
  signals:
   /**
@@ -92,9 +110,24 @@ class K3bApplication::Core : public K3bCore
    */
   void initializationInfo( const QString& );
 
+  /**
+   * Any component may request busy info
+   * In the K3b main app this will be displayed
+   * as a moving square in the taskbar
+   *
+   * FIXME: this is bad design
+   */
+  void busyInfoRequested( const QString& );
+
+  /**
+   * FIXME: this is bad design
+   */
+  void busyFinishRequested();
+
  private:
   K3bThemeManager* m_themeManager;
   K3bMainWindow* m_mainWindow;
+  K3bProjectManager* m_projectManager;
 
   static Core* s_k3bAppCore;
 

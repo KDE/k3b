@@ -153,11 +153,6 @@ class K3bVcdDoc : public K3bDoc
 
         QString documentType() const;
 
-        void loadDefaultSettings( KConfig* );
-
-        /** reimplemented from K3bDoc */
-	//        K3bView* newView( QWidget* parent );
-
     private:
         K3bVcdTrack* createTrack( const KURL& url );
         void informAboutNotFoundFiles();

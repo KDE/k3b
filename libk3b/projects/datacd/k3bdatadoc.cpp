@@ -131,7 +131,6 @@ void K3bDataDoc::slotAddUrlsToDir( const KURL::List& urls, K3bDirItem* dirItem )
     }
 
   m_queuedToAddItemsTimer->start(0);
-  k3bcore->requestBusyInfo( i18n( "Adding files to Project %1..." ).arg( isoOptions().volumeID() ) );
 }
 
 
@@ -168,7 +167,6 @@ void K3bDataDoc::slotAddQueuedItems()
     m_numberAddedItems = 0;
     m_queuedToAddItemsTimer->stop();
     emit newFileItems();
-    k3bcore->requestBusyFinish();
     informAboutNotFoundFiles();
   }
 }
@@ -1267,24 +1265,6 @@ void K3bDataDoc::informAboutNotFoundFiles()
 }
 
 
-void K3bDataDoc::loadDefaultSettings( KConfig* c )
-{
-  K3bDoc::loadDefaultSettings(c);
-
-  m_isoOptions = K3bIsoOptions::load( c );
-
-  QString datamode = c->readEntry( "data_track_mode" );
-  if( datamode == "mode1" )
-    setDataMode( K3b::MODE1 );
-  else if( datamode == "mode2" )
-    setDataMode( K3b::MODE2 );
-  else
-    setDataMode( K3b::DATA_MODE_AUTO );
-
-  m_verifyData = c->readBoolEntry( "verify data", false );
-}
-
-
 void K3bDataDoc::setMultiSessionMode( K3bDataDoc::MultiSessionMode mode )
 {
   if( m_multisessionMode != CONTINUE && m_multisessionMode != FINISH )
@@ -1296,8 +1276,6 @@ void K3bDataDoc::setMultiSessionMode( K3bDataDoc::MultiSessionMode mode )
 
 void K3bDataDoc::importSession( K3bDevice::Device* device )
 {
-  k3bcore->requestBusyInfo( i18n( "Importing old session..." ) );
-
   // remove previous imported sessions
   clearImportedSession();
 
@@ -1367,8 +1345,6 @@ void K3bDataDoc::slotTocRead( K3bDevice::DeviceHandler* dh )
     kdDebug() << "(K3bDataDoc) unable to read toc." << endl;
     // FIXME: inform the user. By the way: this all still sucks!
   }
-
-  k3bcore->requestBusyFinish();
 
   emit newFileItems();
 }

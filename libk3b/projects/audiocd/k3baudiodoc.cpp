@@ -846,19 +846,6 @@ void K3bAudioDoc::informAboutNotFoundFiles()
 }
 
 
-void K3bAudioDoc::loadDefaultSettings( KConfig* c )
-{
-  K3bDoc::loadDefaultSettings(c);
-
-  m_cdText = c->readBoolEntry( "cd_text", false );
-  m_hideFirstTrack = c->readBoolEntry( "hide_first_track", false );
-  setNormalize( c->readBoolEntry( "normalize", false ) );
-  setAudioRippingParanoiaMode( c->readNumEntry( "paranoia mode", 0 ) );
-  setAudioRippingRetries( c->readNumEntry( "read retries", 128 ) );
-  setAudioRippingIgnoreReadErrors( c->readBoolEntry( "ignore read errors", false ) );
-}
-
-
 void K3bAudioDoc::removeCorruptTracks()
 {
 //   K3bAudioTrack* track = m_tracks->first();

@@ -62,10 +62,4 @@ K3bBurnJob* K3bVideoDvdDoc::newBurnJob( K3bJobHandler* hdl, QObject* parent )
   return new K3bVideoDvdJob( this, hdl, parent );
 }
 
-
-void K3bVideoDvdDoc::loadDefaultSettings( KConfig* c )
-{
-  K3bDvdDoc::loadDefaultSettings(c);
-}
-
 //#include "k3bdvddoc.moc"

@@ -20,7 +20,7 @@
 
 #ifdef HAVE_MUSICBRAINZ
 
-#include <k3bjob.h>
+#include <k3bsimplejob.h>
 
 
 class K3bAudioTrack;
@@ -32,7 +32,7 @@ class QWidget;
  * This job tries to determine K3bAudioTrack's title and artist using
  * Musicbrainz.
  */
-class K3bMusicBrainzJob : public K3bJob
+class K3bMusicBrainzJob : public K3bSimpleJob
 {
   Q_OBJECT
 
@@ -41,7 +41,7 @@ class K3bMusicBrainzJob : public K3bJob
    * \param parent since we do not use this job with a normal progressdialog we need a widget
    *        as parent
    */
-  K3bMusicBrainzJob( K3bJobHandler*, QWidget* parent = 0, const char* name = 0 );
+  K3bMusicBrainzJob( QWidget* parent = 0, const char* name = 0 );
   ~K3bMusicBrainzJob();
 
  public slots:

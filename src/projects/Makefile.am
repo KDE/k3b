@@ -18,9 +18,11 @@ AM_CPPFLAGS= 	-I$(srcdir)/../../libk3b/core \
 
 METASOURCES = AUTO
 
+SUBDIRS = kostore
+
 noinst_LTLIBRARIES = libprojects.la
 
-libprojects_la_LIBADD = ../rip/librip.la
+libprojects_la_LIBADD = ../rip/librip.la ./kostore/libkostore.la
 
 libprojects_la_SOURCES = k3baudioburndialog.cpp \
 			 k3baudiocdtextwidget.cpp \

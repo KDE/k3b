@@ -17,7 +17,7 @@
 #include "k3bfillstatusdisplay.h"
 #include "k3bdoc.h"
 
-#include <k3bcore.h>
+#include <k3bapplication.h>
 #include <k3bdeviceselectiondialog.h>
 #include <k3bdevice.h>
 #include <k3bdevicemanager.h>
@@ -307,7 +307,7 @@ void K3bFillStatusDisplay::setupPopupMenu()
   d->action100Min = new KRadioAction( i18n("%1 MB").arg(880), 0, this, SLOT(slot100Minutes()),
 				      d->actionCollection, "fillstatus_100minutes" );
   d->actionDvd4_7GB = new KRadioAction( KIO::convertSizeFromKB(4.4*1024*1024), 0, this, SLOT(slotDvd4_7GB()),
-					 d->actionCollection, "fillstatus_dvd_4_7gb" );
+					d->actionCollection, "fillstatus_dvd_4_7gb" );
   d->actionDvdDoubleLayer = new KRadioAction( KIO::convertSizeFromKB(8.0*1024*1024), 0, this, SLOT(slotDvdDoubleLayer()),
 					 d->actionCollection, "fillstatus_dvd_double_layer" );
   d->actionCustomSize = new K3bRadioAction( i18n("Custom..."), 0, this, SLOT(slotCustomSize()),
@@ -502,7 +502,8 @@ void K3bFillStatusDisplay::slotDetermineSize()
 								   : k3bcore->deviceManager()->cdWriter() );
 
   if( dev ) {
-    k3bcore->requestBusyInfo( i18n("Determine size of media in %1").arg(dev->vendor() + " " + dev->description() ) );
+    k3bappcore->requestBusyInfo( i18n("Determine size of media in %1")
+				 .arg(dev->vendor() + " " + dev->description() ) );
 
     connect( K3bDevice::sendCommand( K3bDevice::DeviceHandler::NG_DISKINFO, dev ),
 	     SIGNAL(finished(K3bDevice::DeviceHandler*)),
@@ -513,7 +514,7 @@ void K3bFillStatusDisplay::slotDetermineSize()
 
 void K3bFillStatusDisplay::slotRemainingSize( K3bDevice::DeviceHandler* dh )
 {
-  k3bcore->requestBusyFinish();
+  k3bappcore->requestBusyFinish();
 
   if( dh->success() ) {
     if( dh->diskInfo().diskState() == K3bDevice::STATE_NO_MEDIA ) {

@@ -425,27 +425,4 @@ void K3bMovixDoc::removeSubTitleItem( K3bMovixFileItem* item )
   }
 }
 
-
-void K3bMovixDoc::loadDefaultSettings( KConfig* c )
-{
-  K3bDataDoc::loadDefaultSettings(c);
-
-  setSubtitleFontset( c->readEntry("subtitle_fontset") );
-
-  setLoopPlaylist( c->readNumEntry("loop", 1 ) );
-  setAdditionalMPlayerOptions( c->readEntry( "additional_mplayer_options" ) );
-  setUnwantedMPlayerOptions( c->readEntry( "unwanted_mplayer_options" ) );
-
-  setBootMessageLanguage( c->readEntry("boot_message_language") );
-
-  setDefaultBootLabel( c->readEntry( "default_boot_label" ) );
-
-  setShutdown( c->readBoolEntry( "shutdown", false) );
-  setReboot( c->readBoolEntry( "reboot", false ) );
-  setEjectDisk( c->readBoolEntry( "eject", false ) );
-  setRandomPlay( c->readBoolEntry( "random_play", false ) );
-  setNoDma( c->readBoolEntry( "no_dma", false ) );
-}
-
-
 #include "k3bmovixdoc.moc"

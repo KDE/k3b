@@ -17,13 +17,15 @@
 
 #include "k3bprojecttabwidget.h"
 #include "k3bprojecttabbar.h"
+#include "k3bapplication.h"
+#include "k3bprojectmanager.h"
 
 #include <k3bview.h>
 #include <k3bdoc.h>
 
 #include <kaction.h>
 #include <kiconloader.h>
-
+#include <kdebug.h>
 
 
 K3bProjectTabWidget::K3bProjectTabWidget( QWidget *parent, const char *name, WFlags f )
@@ -44,7 +46,7 @@ K3bProjectTabWidget::~K3bProjectTabWidget()
 void K3bProjectTabWidget::insertTab( K3bDoc* doc )
 {
   QTabWidget::insertTab( doc->view(), doc->view()->caption(), 0 );
-  connect( doc, SIGNAL(saved(K3bDoc*)), this, SLOT(slotDocSaved(K3bDoc*)) );
+  connect( k3bappcore->projectManager(), SIGNAL(projectSaved(K3bDoc*)), this, SLOT(slotDocSaved(K3bDoc*)) );
   connect( doc, SIGNAL(changed(K3bDoc*)), this, SLOT(slotDocChanged(K3bDoc*)) );
   if( doc->isModified() )
     slotDocChanged( doc );

@@ -32,9 +32,6 @@ class K3bDvdDoc : public K3bDataDoc
 
  protected:
   virtual QString documentType() const { return "dvd"; }
-  virtual void loadDefaultSettings( KConfig* );
-
-  //  virtual K3bView* newView( QWidget* parent );
 };
 
 #endif

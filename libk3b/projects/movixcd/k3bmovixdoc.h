@@ -94,10 +94,6 @@ class K3bMovixDoc : public K3bDataDoc
 
   virtual QString documentType() const { return "movix"; }
 
-  virtual void loadDefaultSettings( KConfig* );
-
-  //  virtual K3bView* newView( QWidget* parent = 0);
-
  private slots:
   void slotDataItemRemoved( K3bDataItem* );
 

@@ -608,6 +608,9 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   else if( line.contains("Medium Error") ) {
     m_cdrecordError = MEDIUM_ERROR;
   }
+  else if( line.startsWith( "Error trying to open" ) && line.contains( "(Device or resource busy)" ) ) {
+    m_cdrecordError = DEVICE_BUSY;
+  }
   else {
     // debugging
     kdDebug() << "(" << m_cdrecordBinObject->name() << ") " << line << endl;
@@ -702,6 +705,9 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	break;
       case MEDIUM_ERROR:
 	emit infoMessage( i18n("Most likely the burning failed due to low-quality media."), ERROR );
+	break;
+      case DEVICE_BUSY:
+	emit infoMessage( i18n("Another application is blocking the device (most likely automounting)."), ERROR );
 	break;
       case UNKNOWN:
 	if( p->exitStatus() == 12 && K3b::kernelVersion() >= K3bVersion( 2, 6, 8 ) && m_cdrecordBinObject->hasFeature( "suidroot" ) ) {

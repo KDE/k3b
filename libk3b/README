@@ -1,0 +1,29 @@
+libk3b
+=========================
+
+This is the k3b library which provides a lot of CD/DVD writing classes.
+
+If you want to use it please be aware that the API is far from stable and
+there will be no binary compatibility (or even source compatibility) before
+K3b 1.0.
+
+But you are welcome to help fix the API and improve it whereever it is needed.
+
+
+Usage
+==========================
+
+Just a very basic scetch how to create an audio cd:
+
+1. create a k3bcore instance (this provides all the stuff that is needed by the lib)
+1.1 K3bCore::init() to initialize the core.
+
+2. create a K3bAudioDoc object and add urls to it
+
+3. create a K3bJobHandler derived class (for example a widget which displays the progress)
+
+4. call K3bAudioDoc::newBurnJob or create a K3bAudioJob manually.
+
+5. modify the doc's settings.
+
+6. call K3bAudioJob::start() to start the burning process.

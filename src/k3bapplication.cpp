@@ -20,6 +20,7 @@
 #include "k3bsplash.h"
 #include "k3baudioserver.h"
 #include "k3binterface.h"
+#include "k3bprojectmanager.h"
 
 #include <k3bcore.h>
 #include <k3bdevicemanager.h>
@@ -330,6 +331,7 @@ K3bApplication::Core::Core( QObject* parent )
 {
   s_k3bAppCore = this;
   m_themeManager = new K3bThemeManager( this );
+  m_projectManager = new K3bProjectManager( this );
   // we need the themes on startup (loading them is fast anyway :)
   m_themeManager->loadThemes();
 }
@@ -400,6 +402,17 @@ void K3bApplication::Core::saveSettings( KConfig* cnf )
   m_themeManager->saveConfig( config() );
 
   c->setGroup( oldGrp );
+}
+
+
+void K3bApplication::Core::requestBusyInfo( const QString& text )
+{
+  emit busyInfoRequested( text );
+}
+
+void K3bApplication::Core::requestBusyFinish()
+{
+  emit busyFinishRequested();
 }
 
 #include "k3bapplication.moc"

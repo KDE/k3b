@@ -182,17 +182,6 @@ void K3bCore::saveSettings( KConfig* cnf )
 }
 
 
-void K3bCore::requestBusyInfo( const QString& text )
-{
-  emit busyInfoRequested( text );
-}
-
-void K3bCore::requestBusyFinish()
-{
-  emit busyFinishRequested();
-}
-
-
 void K3bCore::registerJob( K3bJob* job )
 {
   d->runningJobs.append( job );
