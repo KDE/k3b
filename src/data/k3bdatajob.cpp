@@ -35,6 +35,8 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <ktempfile.h>
+#include <kio/global.h>
+#include <kio/job.h>
 
 #include <qstring.h>
 #include <qstringlist.h>
@@ -111,7 +113,16 @@ void K3bDataJob::start()
       cancel();
       return;
     }
-    m_msInfoFetcher->start();
+
+    if( !KIO::findDeviceMountPoint( m_doc->burner()->mountDevice() ).isEmpty() ) {
+      // TODO: enable me after message freeze
+      // emit infoMessage( i18n("Unmounting disk"), INFO );
+      // unmount the cd
+      connect( KIO::unmount( m_doc->burner()->mountPoint(), false ), SIGNAL(result(KIO::Job*)),
+	       m_msInfoFetcher, SLOT(start()) );
+    }
+    else
+      m_msInfoFetcher->start();
   }
   else {
     m_isoImager->setMultiSessionInfo( QString::null );
