@@ -51,8 +51,21 @@
 #include <kmessagebox.h>
 #include <kurlrequester.h>
 
-#include <sys/vfs.h>
+// OS determination and specific includes. Unsupported systems
+// will fail on the statfs() call below. Per-OS support is as
+// follows:
+// 	Linux	- the original k3b authors
+//	FreeBSD	- kde@freebsd.org or groot@kde.org
+#include <qglobal.h>
 
+#ifdef Q_OS_LINUX
+#include <sys/vfs.h>
+#endif
+
+#ifdef Q_OS_FREEBSD
+#include <sys/param.h>
+#include <sys/mount.h>
+#endif
 
 K3bDvdRipperWidget::K3bDvdRipperWidget(const QString& device, QWidget *parent, const char *name )
   : K3bInteractionDialog( parent, name,
