@@ -73,6 +73,9 @@ class K3bWelcomeWidget::Display : public QWidget
   QToolButton* dataDvdDocButton;
   QToolButton* copyCdButton;
 
+  void setHeaderBackgroundColor( const QColor& );
+  void setHeaderForegroundColor( const QColor& );
+
   QSize sizeHint() const { return m_size; }
 
   void addAction( KAction* );
@@ -96,6 +99,9 @@ class K3bWelcomeWidget::Display : public QWidget
   QPtrList<KAction> m_actions;
   QPtrList<QToolButton> m_buttons;
   QMap<QToolButton*, KAction*> m_buttonMap;
+
+  QColor m_headerBgColor;
+  QColor m_headerFgColor;
 
   friend class K3bWelcomeWidget;
 };

@@ -56,6 +56,20 @@ K3bWelcomeWidget::Display::Display( QWidget* parent )
 }
 
 
+void K3bWelcomeWidget::Display::setHeaderBackgroundColor( const QColor& c )
+{
+  m_headerBgColor = c;
+  update();
+}
+
+
+void K3bWelcomeWidget::Display::setHeaderForegroundColor( const QColor& c )
+{
+  m_headerFgColor = c;
+  update();
+}
+
+
 void K3bWelcomeWidget::Display::addAction( KAction* action )
 {
   if( action ) {
@@ -156,7 +170,7 @@ void K3bWelcomeWidget::Display::rebuildGui()
     }
 
     // step 6: calculate widget size
-    m_size = QSize( QMAX(20+m_header->widthUsed(), 80+(buttonSize.width()*cols)),
+    m_size = QSize( QMAX(40+m_header->widthUsed(), 80+(buttonSize.width()*cols)),
 		    80+(buttonSize.height()*rows) );
   }
 }
@@ -167,7 +181,16 @@ void K3bWelcomeWidget::Display::paintEvent( QPaintEvent* e )
   QWidget::paintEvent( e );
 
   QPainter p( this );
-  m_header->draw( &p, 20, 20, QRect(), colorGroup() );
+  QRect rect( 10, 10, QMAX( m_header->widthUsed() + 20, width() - 20 ), m_header->height() + 20 );
+  p.fillRect( rect, m_headerBgColor );
+  p.setPen( m_headerFgColor );
+  p.drawRect( rect );
+  p.drawRect( 10, 10, width()-20, height()-20 );
+  QColorGroup grp( colorGroup() );
+  grp.setColor( QColorGroup::Text, m_headerFgColor );
+  int pos = 20;
+  pos += QMAX( (width()-40-m_header->widthUsed())/2, 0 );
+  m_header->draw( &p, pos, 20, QRect(), grp );
 }
 
 
@@ -301,6 +324,8 @@ void K3bWelcomeWidget::slotThemeChanged()
 {
   if( K3bTheme* theme = k3bthememanager->currentTheme() ) {
     main->setPaletteBackgroundPixmap( theme->pixmap( "k3b_3d_logo" ) );
+    main->setHeaderBackgroundColor( theme->backgroundColor() );
+    main->setHeaderForegroundColor( theme->foregroundColor() );
   }
 }
 
