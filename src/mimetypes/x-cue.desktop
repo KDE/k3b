@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=MimeType
+Patterns=*.cue;*.CUE
+MimeType=application/x-cue
+Icon=cdtrack
+Comment=CDRWIN cue-sheet

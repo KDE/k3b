@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=MimeType
+Patterns=*.iso;*.ISO
+MimeType=application/x-iso
+Icon=cdtrack
+Comment=ISO9660 image file
+Comment[de]=ISO9660 Abbild
