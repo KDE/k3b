@@ -68,6 +68,39 @@ class K3bDeviceBranch : public KFileTreeBranch
 };
 
 
+class K3bFileTreeBranch : public KFileTreeBranch
+{
+  Q_OBJECT
+
+ public:
+  K3bFileTreeBranch( KFileTreeView*,
+		     const KURL& url,
+		     const QString& name,
+		     const QPixmap& pix,
+		     bool showHidden = false,
+		     KFileTreeViewItem* item = 0 );
+};
+
+
+class K3bDeviceBranchViewItem : public KFileTreeViewItem
+{
+ public:
+  K3bDeviceBranchViewItem( KFileTreeViewItem*, KFileItem*, KFileTreeBranch* );
+  K3bDeviceBranchViewItem( KFileTreeView *, KFileItem*, KFileTreeBranch* );
+
+  QString key( int column, bool ascending ) const;
+};
+
+
+class K3bFileTreeViewItem : public KFileTreeViewItem
+{
+ public:
+  K3bFileTreeViewItem( KFileTreeViewItem*, KFileItem*, KFileTreeBranch* );
+  K3bFileTreeViewItem( KFileTreeView *, KFileItem*, KFileTreeBranch* );
+
+  QString key( int column, bool ascending ) const;
+};
+
 
 /**
   *@author Sebastian Trueg
@@ -90,14 +123,19 @@ class K3bFileTreeView : public KFileTreeView
    * adds home and root dir branch
    */
   void addDefaultBranches();
+
   void addCdDeviceBranches( K3bCdDevice::DeviceManager* );
 
-  /** returns 0 if no device is selected */
+  /**
+   * returns 0 if no device is selected 
+   */
   K3bCdDevice::CdDevice* selectedDevice() const;
-  /** returnes an empty url if no url is selected */
+
+  /** 
+   * returnes an empty url if no url is selected
+   */
   KURL selectedUrl() const;
   void setSelectedDevice(K3bCdDevice::CdDevice* dev);
-
 
  public slots:
   void followUrl( const KURL& url );

@@ -18,6 +18,8 @@
 #include "k3bmovixdvdview.h"
 #include "k3bmovixdvdburndialog.h"
 
+#include <kconfig.h>
+
 
 K3bMovixDvdDoc::K3bMovixDvdDoc( QObject* parent )
   : K3bMovixDoc( parent )
@@ -43,6 +45,15 @@ K3bView* K3bMovixDvdDoc::newView( QWidget* parent )
 K3bProjectBurnDialog* K3bMovixDvdDoc::newBurnDialog( QWidget* parent, const char* name )
 {
   return new K3bMovixDvdBurnDialog( this, parent, name, true );
+}
+
+
+void K3bMovixDvdDoc::loadDefaultSettings( KConfig* c )
+{
+  K3bMovixDoc::loadDefaultSettings(c);
+
+  // K3bDoc defaults to 1, but for DVDs we need default 0 :(
+  setSpeed( c->readNumEntry( "writing_speed", 0 ) );
 }
 
 #include "k3bmovixdvddoc.moc"

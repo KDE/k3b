@@ -330,13 +330,10 @@ void K3bDirView::slotUnmountDisk()
 void K3bDirView::slotUnmountFinished( K3bDeviceBranch*, bool success )
 {
   k3bcore->requestBusyFinish();
+  m_fileView->setAutoUpdate( true );
 
-  if( success ) {
-    m_fileView->setAutoUpdate( true );
-
-    if( d->ejectRequested )
-      K3bCdDevice::eject( m_lastDevice );
-  }
+  if( success && d->ejectRequested )
+    K3bCdDevice::eject( m_lastDevice );
 }
 
 void K3bDirView::slotEjectDisk()

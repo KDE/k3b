@@ -47,9 +47,10 @@ K3bView* K3bDvdDoc::newView( QWidget* parent )
 
 void K3bDvdDoc::loadDefaultSettings( KConfig* c )
 {
-  K3bDoc::loadDefaultSettings(c);
+  K3bDataDoc::loadDefaultSettings(c);
 
-  isoOptions() = K3bIsoOptions::load( c );
+  // K3bDoc defaults to 1, but for DVDs we need default 0 :(
+  setSpeed( c->readNumEntry( "writing_speed", 0 ) );
 }
 
 

@@ -400,7 +400,12 @@ void K3bWriterSelectionWidget::setSupportedWritingApps( int i )
 void K3bWriterSelectionWidget::loadConfig( KConfig* c )
 {
   setWriterDevice( k3bcore->deviceManager()->findDevice( c->readEntry( "writer_device" ) ) );
-  setSpeed( writerDevice() ? c->readNumEntry( "writing_speed",  writerDevice()->currentWriteSpeed() ) : 1 );
+  setSpeed( c->readNumEntry( "writing_speed",  
+			     d->dvd 
+			     ? 0 
+			     : ( writerDevice() 
+				 ? writerDevice()->currentWriteSpeed() 
+				 : 1 ) ) );
   setWritingApp( writingAppFromString( c->readEntry( "writing_app" ) ) );
 }
 

@@ -40,13 +40,21 @@
 
 
 
-
 K3bDeviceBranch::K3bDeviceBranch( KFileTreeView* view, K3bCdDevice::CdDevice* dev, KFileTreeViewItem* item )
-  : KFileTreeBranch( view, KURL(dev->mountPoint()), QString(" %1 - %2").arg(dev->vendor()).arg(dev->description()),
+  : KFileTreeBranch( view, 
+		     KURL(dev->mountPoint()), 
+		     QString("%1 - %2").arg(dev->vendor()).arg(dev->description()),
 		     ( dev->burner()
 		       ? SmallIcon("cdwriter_unmount")
 		       : SmallIcon("cdrom_unmount") ),
-		     false, item ), m_device( dev )
+		     false, 
+		     item == 0 
+		     ? new K3bDeviceBranchViewItem( view,
+						    new KFileItem( KURL(dev->mountPoint()), "inode/directory",
+								   S_IFDIR  ),
+						    this )
+		     : item ), 
+    m_device( dev )
 {
   setAutoUpdate(true);
   root()->setExpandable(false);
@@ -111,6 +119,60 @@ void K3bDeviceBranch::slotUnmountFinished( KIO::Job* job )
   }
 
   setAutoUpdate(true);
+}
+
+
+K3bFileTreeBranch::K3bFileTreeBranch( KFileTreeView* view,
+				      const KURL& url,
+				      const QString& name,
+				      const QPixmap& pix,
+				      bool showHidden,
+				      KFileTreeViewItem* item )
+  : KFileTreeBranch( view, url, name, pix, showHidden,
+		     item == 0
+		     ? new K3bFileTreeViewItem( view,
+						new KFileItem( url, "inode/directory",
+							       S_IFDIR  ),
+						this )
+		     : item )
+{
+}
+
+
+
+K3bDeviceBranchViewItem::K3bDeviceBranchViewItem( KFileTreeViewItem* parent, KFileItem* item, KFileTreeBranch* branch )
+  : KFileTreeViewItem( parent, item, branch )
+{
+}
+
+
+K3bDeviceBranchViewItem::K3bDeviceBranchViewItem( KFileTreeView* parent, KFileItem* item, KFileTreeBranch* branch )
+  : KFileTreeViewItem( parent, item, branch )
+{
+}
+
+
+QString K3bDeviceBranchViewItem::key( int column, bool ascending ) const
+{
+  return "0" + KFileTreeViewItem::key( column, ascending );
+}
+
+
+K3bFileTreeViewItem::K3bFileTreeViewItem( KFileTreeViewItem* parent, KFileItem* item, KFileTreeBranch* branch )
+  : KFileTreeViewItem( parent, item, branch )
+{
+}
+
+
+K3bFileTreeViewItem::K3bFileTreeViewItem( KFileTreeView* parent, KFileItem* item, KFileTreeBranch* branch )
+  : KFileTreeViewItem( parent, item, branch )
+{
+}
+
+
+QString K3bFileTreeViewItem::key( int column, bool ascending ) const
+{
+  return "1" + KFileTreeViewItem::key( column, ascending );
 }
 
 
@@ -239,8 +301,8 @@ void K3bFileTreeView::addDefaultBranches()
   KURL home = KURL( QDir::homeDirPath() );
   KURL root = KURL( "/" );
 
-  KFileTreeBranch* treeBranch = addBranch( root, i18n("Root"), SmallIcon("folder_red") );
-  treeBranch = addBranch( home, i18n("Home"), SmallIcon("folder_home") );
+  KFileTreeBranch* treeBranch = addBranch( new K3bFileTreeBranch( this, root, i18n("Root"), SmallIcon("folder_red") ) );
+  treeBranch = addBranch( new K3bFileTreeBranch( this, home, i18n("Home"), SmallIcon("folder_home") ) );
   treeBranch->setOpen( true );
 }
 

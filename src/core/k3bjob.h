@@ -42,6 +42,20 @@ class K3bJob : public QObject
   virtual QString jobDescription() const { return "K3bJob"; }
   virtual QString jobDetails() const { return QString::null; }
 
+  /**
+   * Setup the following connections:
+   * <table>
+   * <th><td>subJob</td><td>this</td></th>
+   * </table>
+   */
+  virtual void connectSubJob( K3bJob* subJob,
+			      const char* finishedSlot = 0,
+			      bool progress = false,
+			      const char* progressSlot = 0,
+			      const char* subProgressSot = 0,
+			      const char* processedSizeSlot = 0,
+			      const char* processedSubSizeSlot = 0 );
+
   enum MessageType { STATUS, PROCESS, ERROR, INFO };
 
  protected:
@@ -65,6 +79,12 @@ class K3bJob : public QObject
   void debuggingOutput(const QString&, const QString&);
   void data( const char* data, int len );
   void nextTrack( int track, int numTracks );
+
+ protected slots:
+  /**
+   * simply converts into an infoMessage
+   */
+  void slotNewSubTask( const QString& str );
 };
 
 

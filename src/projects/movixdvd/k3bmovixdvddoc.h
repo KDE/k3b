@@ -18,6 +18,8 @@
 
 #include <k3bmovixdoc.h>
 
+class KConfig;
+
 
 class K3bMovixDvdDoc : public K3bMovixDoc
 {
@@ -33,6 +35,8 @@ class K3bMovixDvdDoc : public K3bMovixDoc
 
  protected:
   QString documentType() const { return "movixdvd"; }
+
+  void loadDefaultSettings( KConfig* );
 
   K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
   K3bView* newView( QWidget* parent = 0 );

@@ -123,8 +123,6 @@ bool K3bGrowisofsWriter::prepareProcess()
 
   *d->process << d->growisofsBin->path;
 
-  // for now we do not support multisession
-  *d->process << "-Z";
   QString s = burnDevice()->blockDeviceName() + "=";
   if( d->image.isEmpty() )
     // read from stdin (in this case growisofs reads the size of the Iso9660 filesystem from it's header
@@ -134,7 +132,10 @@ bool K3bGrowisofsWriter::prepareProcess()
   else
     s += d->image;
 
-  // now we use the force (luke ;)
+  // for now we do not support multisession
+  *d->process << "-Z" << s;
+
+  // now we use the force (luke ;) do not reload the dvd, K3b does that.
   *d->process << "-use-the-force-luke=notray";
 
   // this only makes sense for DVD-R(W) media
@@ -142,7 +143,7 @@ bool K3bGrowisofsWriter::prepareProcess()
   if( simulate() )
     *d->process << "-use-the-force-luke=dummy";
   if( d->writingMode == K3b::DAO )
-    *d->process << "-use-the-force-luke=dao";  // does DAO apply to DVD+R?
+    *d->process << "-use-the-force-luke=dao";
   if( burnSpeed() == 1 )
     *d->process << QString("-speed=%1").arg(burnSpeed());
   // -------------------------------- DVD-R(W)

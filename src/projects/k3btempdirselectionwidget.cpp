@@ -163,6 +163,25 @@ QString K3bTempDirSelectionWidget::tempPath() const
 }
 
 
+QString K3bTempDirSelectionWidget::tempDirectory() const
+{
+  QString td( m_editDirectory->url() );
+
+  // remove a trailing slash
+  if( td[td.length()-1] == '/' )
+    td.truncate( td.length()-1 );
+
+  QFileInfo fi( td );
+  if( fi.exists() && fi.isDir() )
+    return td + "/";
+
+  // now we treat the last section as a filename and return the path
+  // in front of it
+  td.truncate( td.findRev( '/' ) + 1 );
+  return td;
+}
+
+
 void K3bTempDirSelectionWidget::setSelectionMode( int mode )
 {
   m_mode = mode;
@@ -184,12 +203,7 @@ void K3bTempDirSelectionWidget::setNeededSize( unsigned long bytes )
 void K3bTempDirSelectionWidget::saveConfig()
 {
   k3bcore->config()->setGroup( "General Options" );
-
-  QString path = tempPath();
-  if( m_mode == FILE )
-    path.truncate( path.findRev("/") );
-
-  k3bcore->config()->writePathEntry( "Temp Dir", K3b::prepareDir(path) );
+  k3bcore->config()->writePathEntry( "Temp Dir", tempDirectory() );
 }
 
 #include "k3btempdirselectionwidget.moc"

@@ -40,6 +40,7 @@ class K3bTempDirSelectionWidget : public QGroupBox
 
   unsigned long freeTempSpace() const { return m_freeTempSpace; }
   QString tempPath() const;
+  QString tempDirectory() const;
 
  public slots:
   void setTempPath( const QString& );
