@@ -4,7 +4,8 @@ Some GUI changes: cleaned up the action dialogs, moved the burnfree option to th
 	since turning it off should be a very seldomly used task.
 Added support for multiple copies to the projects (in progress)
 Added missed VCD 3.0 track interpretation option for SVCD's
-	
+New Lame encoding plugin providing a proper configuration dialog.
+
 0.11.7
 Check size of returned CD-TEXT data to be a multiple of the pack length. This should fix problems
 	with CD copy.
