@@ -401,8 +401,10 @@ bool K3bDataJob::prepareWriterJob()
 	  m_doc->multiSessionMode() == K3bDataDoc::FINISH ) )
       writer->addArgument("-waiti");
 
-
-    writer->addArgument( "-data" );
+    if( m_doc->multiSessionMode() == K3bDataDoc::NONE )
+      writer->addArgument( "-data" );  // default to mode1
+    else
+      writer->addArgument( "-xa2" );
 
     if( m_doc->onTheFly() ) {
       writer->addArgument( QString("-tsize=%1s").arg(m_isoImager->size()) )->addArgument("-");
