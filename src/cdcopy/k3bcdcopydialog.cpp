@@ -64,7 +64,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   mainGrid->setMargin( 0 );
 
   m_writerSelectionWidget = new K3bWriterSelectionWidget( main );
-
+  m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRDAO );
   QGroupBox* groupSource = new QGroupBox( 1, Qt::Vertical, i18n("CD Reader Device"), main );
   groupSource->setInsideSpacing( spacingHint() );
   groupSource->setInsideMargin( marginHint() );
