@@ -83,7 +83,10 @@ void K3bDiskInfoDetector::fetchDiskInfo()
       m_info.size = inf[21]*4500 + inf[22]*75 +inf[23] - 150;
       m_info.sizeString = QString("%1:%2:%3").arg(inf[21]).arg(inf[22]).arg(inf[23]);
     }
-    if ( inf[17] != 0xFF && inf[18] != 0xFF && inf[19] != 0xFF ) { // start of last leadin - 4650
+    if (m_info.empty) {
+      m_info.remaining = m_info.size;
+      m_info.remainingString = m_info.sizeString;
+    } else if ( inf[17] != 0xFF && inf[18] != 0xFF && inf[19] != 0xFF ) { // start of last leadin - 4650
       m_info.remaining = m_info.size - inf[17]*4500 - inf[18]*75 - inf[19] - 4650;
       m_info.remainingString = QString("%1:%2:%3").arg(inf[17]).arg(inf[18]).arg(inf[19]);
     }
@@ -103,21 +106,24 @@ void K3bDiskInfoDetector::fetchTocInfo()
     return;
   }
   
-  if ( (status = ::ioctl(m_cdfd,CDROM_DISC_STATUS)) > 0 )
+  if ( (status = ::ioctl(m_cdfd,CDROM_DISC_STATUS)) >= 0 )
     switch (status) {
-      case CDS_AUDIO:  m_info.tocType = K3bDiskInfo::AUDIO;
-                       break;
+      case CDS_AUDIO:   m_info.tocType = K3bDiskInfo::AUDIO;
+                        break;
       case CDS_DATA_1:
-      case CDS_DATA_2: m_info.tocType = K3bDiskInfo::DATA;
-                       break;
+      case CDS_DATA_2:  m_info.tocType = K3bDiskInfo::DATA;
+                        break;
       case CDS_XA_2_1: 
       case CDS_XA_2_2: 
-      case CDS_MIXED:  m_info.tocType = K3bDiskInfo::MIXED;
-                       break;
-      case CDS_NO_DISC: m_info.noDisk = true;
+      case CDS_MIXED:   m_info.tocType = K3bDiskInfo::MIXED;
+                        break;
+      case CDS_NO_DISC: finish(true);
+                        return;  
+      case CDS_NO_INFO: m_info.noDisk = false;
+                        if (m_info.device->burner())
+                           fetchDiskInfo();
                         finish(true);
                         return;  
-
   } else 
      kdDebug() << "(K3bDiskInfoDetector) disc status is " << status << " !" << endl;   
   
