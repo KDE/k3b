@@ -10,7 +10,6 @@
 
 #include <sys/types.h>
 
-class QLibrary;
 
 class K3bCdparanoiaLib
 {
@@ -44,8 +43,8 @@ class K3bCdparanoiaLib
   K3bCdparanoiaLib();
   bool load();
 
-  static QLibrary* s_libInterface;
-  static QLibrary* s_libParanoia;
+  static void* s_libInterface;
+  static void* s_libParanoia;
   static int s_counter;
 
   class Private;
