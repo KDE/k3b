@@ -422,16 +422,25 @@ void K3bDataJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 	}
       else if( (*str).startsWith( "Starting new" ) )
 	{
-	  emit infoMessage( i18n("Writing data...") );
+	  emit newSubTask( i18n("Writing data") );
 	}
       else if( (*str).startsWith( "Fixating" ) ) {
-	emit infoMessage( *str );
+	emit newSubTask( i18n("Fixating") );
       }
       else if( (*str).contains("seconds.") ) {
 	emit infoMessage( *str + " to start of writing..." );
       }
       else if( (*str).startsWith( "Writing pregap" ) ) {
-	emit infoMessage( i18n("Writing pregap...") );
+	emit newSubTask( i18n("Writing pregap") );
+      }
+      else if( (*str).startsWith( "Performing OPC" ) ) {
+	emit infoMessage( i18n("Performing OPC") );
+      }
+      else if( (*str).startsWith( "Sending" ) ) {
+	emit infoMessage( i18n("Sending CUE sheet") );
+      }
+      else if( (*str).contains( "Turning BURN-Proof" ) ) {
+	emit infoMessage( i18n("Enabled BURN-Proof") );
       }
       else {
 	// debugging
