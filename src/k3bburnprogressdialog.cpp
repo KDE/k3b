@@ -165,7 +165,7 @@ K3bBurnProgressDialog::~K3bBurnProgressDialog()
 {
   qDebug("(K3bBurnProgressDialog) deleted");
 
-  // this is bad but I really don't know how to handle the case! :-(
+  // this is bad but I really don't know how to handle the case! :-( (check out kmail source!)
   m_statusBarProgress->reparent( this, 0, QPoint(0,0) );
   delete m_statusBarProgress;
 }

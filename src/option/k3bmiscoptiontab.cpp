@@ -103,7 +103,7 @@ bool K3bMiscOptionTab::saveSettings()
     }
   }
 
-  if( fi.isDir() ) {
+  if( fi.isFile() ) {
     KMessageBox::information( this, i18n("You specified a file as temp directory. K3b will use it's base path as temp directory."), i18n("Warning"), i18n("Don't show again.") );
     fi.setFile( fi.dirPath() );
   }
