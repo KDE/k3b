@@ -296,7 +296,7 @@ bool K3bAudioJob::prepareWriter()
       else
 	writer->addArgument( "-nopreemp" );
 
-      writer->addArgument( QString("-pregap=%1").arg(track->pregap().totalFrames()) );
+      writer->addArgument( QString("pregap=%1").arg(track->pregap().totalFrames()) );
 //       if( m_doc->onTheFly() ) {
 // 	//       QString fifoname = QString("/home/trueg/tmp/fifo_track%1").arg(track->index());
 // 	//       if( ::mkfifo( fifoname.latin1(), S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH ) == -1 ) {
