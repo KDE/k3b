@@ -55,6 +55,7 @@ class K3bVcdJob : public K3bBurnJob
         void slotParseVcdxBuildOutput( KProcess*, char* output, int len );
 
         void slotWriterJobPercent( int p );
+        void slotProcessedSize( int cs, int ts );
         void slotWriterNextTrack( int t, int tt );
         void slotWriterJobFinished( bool success );
 
@@ -65,6 +66,7 @@ class K3bVcdJob : public K3bBurnJob
         void xmlGen();
         void vcdxBuild();
         void parseInformation( QString );
+        void K3bVcdJob::startWriterjob();
 
         int m_copies;
         int m_finishedCopies;
@@ -82,6 +84,7 @@ class K3bVcdJob : public K3bBurnJob
 
         int m_speed;
         int m_stage;
+	int m_currentcopy;
         int m_currentWrittenTrackNumber;
 
         double m_createimageonlypercent;

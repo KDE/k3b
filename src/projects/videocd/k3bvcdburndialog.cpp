@@ -648,6 +648,8 @@ void K3bVcdBurnDialog::slotLoadK3bDefaults()
 
 void K3bVcdBurnDialog::saveSettings()
 {
+    K3bProjectBurnDialog::saveSettings();
+    
     // set AlbumID if empty
     if ( m_editVolumeId->text().length() < 1 ) {
         if ( m_radioSvcd10->isChecked() )
@@ -660,16 +662,8 @@ void K3bVcdBurnDialog::saveSettings()
 
 
     doc() ->setTempDir( m_tempDirSelectionWidget->tempPath() );
-    doc() ->setDummy( m_checkSimulate->isChecked() );
     doc() ->setOnTheFly( false );
 
-    // -- saving current speed --------------------------------------
-    doc() ->setSpeed( m_writerSelectionWidget->writerSpeed() );
-
-    // -- saving current device --------------------------------------
-    doc() ->setBurner( m_writerSelectionWidget->writerDevice() );
-
-    vcdDoc() ->setRemoveImages( m_checkRemoveBufferFiles->isChecked() );
     // save image file & path (.bin)
     vcdDoc() ->setVcdImage( m_tempDirSelectionWidget->tempPath() + "/" + m_editVolumeId->text() + ".bin" );
 
@@ -685,7 +679,7 @@ void K3bVcdBurnDialog::saveSettings()
     vcdDoc() ->vcdOptions() ->setSector2336( m_check2336->isChecked() );
 
     vcdDoc() ->vcdOptions() ->setCdiSupport( m_checkCdiSupport->isChecked() );
-    vcdDoc() ->setOnlyCreateImages( m_checkOnlyCreateImage->isChecked() );
+//    vcdDoc() ->setOnlyCreateImages( m_checkOnlyCreateImage->isChecked() );
 
     vcdDoc() ->vcdOptions() ->setVolumeNumber( m_spinVolumeNumber->value() );
     vcdDoc() ->vcdOptions() ->setVolumeCount( m_spinVolumeCount->value() );
@@ -714,9 +708,7 @@ void K3bVcdBurnDialog::saveSettings()
 
 void K3bVcdBurnDialog::readSettings()
 {
-    m_checkSimulate->setChecked( doc() ->dummy() );
-    m_checkRemoveBufferFiles->setChecked( vcdDoc() ->removeImages() );
-    m_checkOnlyCreateImage->setChecked( vcdDoc() ->onlyCreateImages() );
+    K3bProjectBurnDialog::readSettings();    
 
     m_checkNonCompliant->setEnabled( false );
     m_checkVCD30interpretation->setEnabled( false );
@@ -799,8 +791,6 @@ void K3bVcdBurnDialog::readSettings()
 
     if ( !doc()->tempDir().isEmpty() )
         m_tempDirSelectionWidget->setTempPath( doc() ->tempDir() );
-
-    K3bProjectBurnDialog::readSettings();
 
     loadCdiConfig();
 }

@@ -48,11 +48,14 @@ K3bVcdJob::K3bVcdJob( K3bVcdDoc* doc, K3bJobHandler* jh, QObject* parent, const 
         : K3bBurnJob( jh, parent, name )
 {
     m_doc = doc;
+    m_doc->setCopies( m_doc->dummy() || m_doc->onlyCreateImages() ? 1 : m_doc->copies() );
     m_process = 0;
     m_currentWrittenTrackNumber = 0;
     m_bytesFinishedTracks = 0;
     m_writerJob = 0;
-    m_createimageonlypercent = 33.3;
+    // m_createimageonlypercent = 33.3;
+    m_createimageonlypercent = 100 / ( m_doc->copies() + 2 );
+    m_currentcopy = 1;
     m_imageFinished = false;
 }
 
@@ -149,8 +152,6 @@ void K3bVcdJob::xmlGen()
     KTempFile tempF;
     m_xmlFile = tempF.name();
     tempF.unlink();
-
-    //    emit infoMessage( i18n( "Create XML-file" ), K3bJob::INFO );
 
     K3bVcdXmlView xmlView( m_doc );
 
@@ -370,22 +371,28 @@ void K3bVcdJob::slotVcdxBuildFinished()
             ( m_xmlFile );
 
     kdDebug() << QString( "(K3bVcdJob) create only image: %1" ).arg( vcdDoc() ->onlyCreateImages() ) << endl;
-    if ( !vcdDoc() ->onlyCreateImages() ) {
-        kdDebug() << "(K3bVcdJob) start writing" << endl;
-        if ( prepareWriterJob() ) {
-	  if( K3bEmptyDiscWaiter::wait( m_doc->burner() ) == K3bEmptyDiscWaiter::CANCELED ) {
-	    cancel();
-	    return ;
-	  }
-	  // just to be sure we did not get canceled during the async discWaiting
-	  if( m_canceled )
-	    return;
-
-	  emit burning(true);
-	  m_writerJob->start();
-        }
-    } else {
+    if ( !vcdDoc() ->onlyCreateImages() )
+        startWriterjob();
+    else
         emit finished( true );
+}
+
+void K3bVcdJob::startWriterjob() {
+    kdDebug() << QString("(K3bVcdJob) writing copy %1 of %2").arg( m_currentcopy ).arg( m_doc->copies() ) << endl;
+    if ( prepareWriterJob() ) {
+        if( K3bEmptyDiscWaiter::wait( m_doc->burner() ) == K3bEmptyDiscWaiter::CANCELED ) {
+            cancel();
+	    return ;
+        }
+        // just to be sure we did not get canceled during the async discWaiting
+        if( m_canceled )
+            return;
+            
+        if ( m_doc->copies() > 1 ) 
+            emit newTask( i18n("Writing Copy %1 of %2").arg( m_currentcopy ).arg( m_doc->copies() ) );
+        
+        emit burning(true);
+        m_writerJob->start();
     }
 }
 
@@ -424,7 +431,7 @@ bool K3bVcdJob::prepareWriterJob()
 
     connect( m_writerJob, SIGNAL( infoMessage( const QString&, int ) ), this, SIGNAL( infoMessage( const QString&, int ) ) );
     connect( m_writerJob, SIGNAL( percent( int ) ), this, SLOT( slotWriterJobPercent( int ) ) );
-    connect( m_writerJob, SIGNAL( processedSize( int, int ) ), this, SIGNAL( processedSize( int, int ) ) );
+    connect( m_writerJob, SIGNAL( processedSize( int, int ) ), this, SLOT( slotProcessedSize( int, int ) ) );
     connect( m_writerJob, SIGNAL( subPercent( int ) ), this, SIGNAL( subPercent( int ) ) );
     connect( m_writerJob, SIGNAL( processedSubSize( int, int ) ), this, SIGNAL( processedSubSize( int, int ) ) );
     connect( m_writerJob, SIGNAL( nextTrack( int, int ) ), this, SLOT( slotWriterNextTrack( int, int ) ) );
@@ -441,7 +448,11 @@ bool K3bVcdJob::prepareWriterJob()
 
 void K3bVcdJob::slotWriterJobPercent( int p )
 {
-    emit percent( ( int ) ( 66.6 + p / 3 ) );
+    emit percent( ( int ) ( ( m_createimageonlypercent * ( m_currentcopy + 1 ) ) + p / ( m_doc->copies() + 2 ) ) );
+}
+
+void K3bVcdJob::slotProcessedSize( int cs, int ts ) {
+    emit processedSize( cs + (ts * ( m_currentcopy -1 )) , ts * m_doc->copies() );
 }
 
 void K3bVcdJob::slotWriterNextTrack( int t, int tt )
@@ -454,30 +465,37 @@ void K3bVcdJob::slotWriterJobFinished( bool success )
     if ( m_canceled )
         return ;
 
-    // remove bin-file if it is unfinished or the user selected to remove image
-    if ( QFile::exists( m_doc->vcdImage() ) ) {
-        if ( !m_doc->onTheFly() && m_doc->removeImages() || !m_imageFinished ) {
-            emit infoMessage( i18n( "Removing Binary file %1" ).arg( m_doc->vcdImage() ), K3bJob::SUCCESS );
-            QFile::remove
-                ( m_doc->vcdImage() );
-            m_doc->setVcdImage( "" );
+    if ( m_currentcopy >= m_doc->copies() ) {
+        // remove bin-file if it is unfinished or the user selected to remove image
+        if ( QFile::exists( m_doc->vcdImage() ) ) {
+            if ( !m_doc->onTheFly() && m_doc->removeImages() || !m_imageFinished ) {
+                emit infoMessage( i18n( "Removing Binary file %1" ).arg( m_doc->vcdImage() ), K3bJob::SUCCESS );
+                QFile::remove
+                    ( m_doc->vcdImage() );
+                m_doc->setVcdImage( "" );
+            }
         }
-    }
-
-    // remove cue-file if it is unfinished or the user selected to remove image
-    if ( QFile::exists( m_cueFile ) ) {
-        if ( !m_doc->onTheFly() && m_doc->removeImages() || !m_imageFinished ) {
-            emit infoMessage( i18n( "Removing Cue file %1" ).arg( m_cueFile ), K3bJob::SUCCESS );
-            QFile::remove
-                ( m_cueFile );
-            m_cueFile = "";
+    
+        // remove cue-file if it is unfinished or the user selected to remove image
+        if ( QFile::exists( m_cueFile ) ) {
+            if ( !m_doc->onTheFly() && m_doc->removeImages() || !m_imageFinished ) {
+                emit infoMessage( i18n( "Removing Cue file %1" ).arg( m_cueFile ), K3bJob::SUCCESS );
+                QFile::remove
+                    ( m_cueFile );
+                m_cueFile = "";
+            }
         }
     }
 
     if ( success ) {
         // allright
         // the writerJob should have emited the "simulation/writing successful" signal
-        emit finished( true );
+        if ( m_currentcopy >= m_doc->copies() ) {
+            emit finished( true );
+        } else {
+            m_currentcopy++;
+            startWriterjob();
+        }
     } else {
         cancelAll();
         emit finished( false );
