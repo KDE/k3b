@@ -45,7 +45,7 @@ K3bVcdTrack::~K3bVcdTrack()
 
 unsigned long K3bVcdTrack::size() const
 {
-  return m_file.size();
+  return (m_file.size() + 2351) / 2352 * 2352;
 }
 
 void K3bVcdTrack::setMimeType(const QString& mt)
