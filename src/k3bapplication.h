@@ -44,6 +44,7 @@ class K3bApplication : public KApplication
 
  signals:
   void initializationInfo( const QString& );
+  void initializationDone();
 
  private slots:
   void slotShutDown();
