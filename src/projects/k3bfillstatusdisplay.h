@@ -20,7 +20,6 @@
 
 #include <qframe.h>
 
-#include <device/k3bmsf.h>
 
 class QPaintEvent;
 class QMouseEvent;
@@ -33,6 +32,9 @@ class QToolButton;
 
 namespace K3bCdDevice {
   class DeviceHandler;
+}
+namespace K3b {
+  class Msf;
 }
 
 
@@ -50,7 +52,7 @@ class K3bFillStatusDisplayWidget : public QWidget
   QSize sizeHint() const;
   QSize minimumSizeHint() const;
 
-  const K3b::Msf& cdSize() const { return m_cdSize; }
+  const K3b::Msf& cdSize() const;
 
  public slots:
   void setShowTime( bool b );
@@ -64,9 +66,8 @@ class K3bFillStatusDisplayWidget : public QWidget
   void paintEvent(QPaintEvent*);
 
  private:
-  K3b::Msf m_cdSize;
-  bool m_showTime;
-  K3bDoc* m_doc;
+  class Private;
+  Private* d;
 };
 
 

@@ -57,7 +57,7 @@ class K3bDataDoc : public K3bDoc
   Q_OBJECT
 
  public:
-  K3bDataDoc( QObject* parent );
+  K3bDataDoc( QObject* parent = 0 );
   virtual ~K3bDataDoc();
 
   virtual int docType() const { return DATA; }
@@ -127,6 +127,8 @@ class K3bDataDoc : public K3bDoc
   void importSession( const QString& path );
   void clearImportedSession();
 
+  virtual void loadDefaultSettings( KConfig* );
+
  signals:
   void itemRemoved( K3bDataItem* );
   void newFileItems();
@@ -146,8 +148,6 @@ class K3bDataDoc : public K3bDoc
   bool loadDocumentDataHeader( QDomElement optionsElem );
 
   virtual QString documentType() const;
-
-  virtual void loadDefaultSettings( KConfig* );
 
   K3bFileCompilationSizeHandler* m_sizeHandler;
 

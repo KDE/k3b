@@ -42,6 +42,7 @@
 //#include "k3bprojectinterface.h"
 #include <k3bglobals.h>
 #include <device/k3bdevice.h>
+#include <device/k3bmsf.h>
 #include <k3baudiodoc.h>
 #include <k3bdatadoc.h>
 #include <k3bvcddoc.h>

@@ -17,6 +17,8 @@
 #include <qfile.h>
 
 #include <kstandarddirs.h>
+#include <kdebug.h>
+
 
 #include "k3bvcdxmlview.h"
 #include "k3bvcdtrack.h"

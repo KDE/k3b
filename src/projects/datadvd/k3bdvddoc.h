@@ -16,7 +16,7 @@
 #ifndef _K3B_DVDDOC_H_
 #define _K3B_DVDDOC_H_
 
-#include "../datacd/k3bdatadoc.h"
+#include <k3bdatadoc.h>
 
 class KConfig;
 

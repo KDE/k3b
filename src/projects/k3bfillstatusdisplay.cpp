@@ -46,30 +46,46 @@
 #include <kglobal.h>
 
 
+class K3bFillStatusDisplayWidget::Private
+{
+public:
+  K3b::Msf cdSize;
+  bool showTime;
+  K3bDoc* doc;
+};
+
 
 K3bFillStatusDisplayWidget::K3bFillStatusDisplayWidget( K3bDoc* doc, QWidget* parent )
-  : QWidget( parent ),
-    m_doc(doc)
+  : QWidget( parent )
 {
+  d = new Private();
+  d->doc = doc;
   setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred ) );	
 }
 
 
 K3bFillStatusDisplayWidget::~K3bFillStatusDisplayWidget()
 {
+  delete d;
+}
+
+
+const K3b::Msf& K3bFillStatusDisplayWidget::cdSize() const
+{
+  return d->cdSize;
 }
 
 
 void K3bFillStatusDisplayWidget::setShowTime( bool b )
 {
-  m_showTime = b;
+  d->showTime = b;
   update();
 }
 
 
 void K3bFillStatusDisplayWidget::setCdSize( const K3b::Msf& size )
 {
-  m_cdSize = size;
+  d->cdSize = size;
   update();
 }
 
@@ -106,15 +122,15 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
   long long maxValue;
   long tolerance;
 
-  if( m_showTime ) {
-    docSize = m_doc->length().totalFrames() / 75 / 60;
-    cdSize = m_cdSize.totalFrames() / 75 / 60;
+  if( d->showTime ) {
+    docSize = d->doc->length().totalFrames() / 75 / 60;
+    cdSize = d->cdSize.totalFrames() / 75 / 60;
     maxValue = (cdSize > docSize ? cdSize : docSize) + 10;
     tolerance = 1;
   }
   else {
-    docSize = m_doc->size()/1024/1024;
-    cdSize = m_cdSize.mode1Bytes()/1024/1024;
+    docSize = d->doc->size()/1024/1024;
+    cdSize = d->cdSize.mode1Bytes()/1024/1024;
     maxValue = (cdSize > docSize ? cdSize : docSize) + 100;
     tolerance = 10;
   }
@@ -127,12 +143,12 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
   p.fillRect( crect, Qt::green );
 
   // FIXME: localize the "min" string
-  if( m_showTime )
+  if( d->showTime )
     p.drawText( rect(), Qt::AlignLeft | Qt::AlignVCenter, 
-		 " " + K3b::Msf( m_doc->length() ).toString(false) + " min" );
+		 " " + K3b::Msf( d->doc->length() ).toString(false) + " min" );
   else
     p.drawText( rect(), Qt::AlignLeft | Qt::AlignVCenter, 
-		 " " + KIO::convertSize( m_doc->size() ) );
+		 " " + KIO::convertSize( d->doc->size() ) );
 	
   // draw yellow if cdSize - tolerance < docSize
   if( docSize > cdSize - tolerance ) {

@@ -19,7 +19,7 @@
 
 #include <kdialogbase.h>
 
-#include <device/k3bdiskinfo.h>
+#include <k3bdiskinfo.h>
 
 namespace K3bCdDevice {
   class CdDevice;

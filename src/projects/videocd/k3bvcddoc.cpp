@@ -41,6 +41,8 @@
 #include "k3bvcdburndialog.h"
 #include "k3bvcdjob.h"
 #include <k3bglobals.h>
+#include <device/k3bmsf.h>
+
 
 bool desperate_mode = false;
 bool preserve_header = false;

@@ -19,7 +19,7 @@
 #include "audiolistview.h"
 #include "k3baudioburndialog.h"
 #include <k3bfillstatusdisplay.h>
-
+#include <k3bmsf.h>
 
 // QT-includes
 #include <qlayout.h>

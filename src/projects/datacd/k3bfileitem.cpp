@@ -25,6 +25,7 @@
 #include <qfile.h>
 
 #include <kurl.h>
+#include <kdebug.h>
 
 #include <sys/stat.h>
 

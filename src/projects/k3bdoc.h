@@ -30,7 +30,6 @@
 // include files for KDE
 #include <kurl.h>
 #include <kio/global.h>
-#include "device/k3bmsf.h"
 
 
 // forward declaration of the K3b classes
@@ -45,6 +44,9 @@ class KConfig;
 namespace K3bCdDevice {
   class CdDevice;
 }
+namespace K3b {
+  class Msf;
+}
 
 /**
  * K3bDoc is the base document class.
@@ -57,7 +59,7 @@ class K3bDoc : public QObject
     friend class K3bView;
 
  public:
-  K3bDoc( QObject* );
+  K3bDoc( QObject* = 0 );
   virtual ~K3bDoc();
 
   enum DocType { 
