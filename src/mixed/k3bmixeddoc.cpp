@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -15,10 +15,11 @@
 
 #include "k3bmixeddoc.h"
 #include "k3bmixedjob.h"
-
 #include "k3bmixedview.h"
-#include "../data/k3bdatadoc.h"
-#include "../audio/k3baudiodoc.h"
+
+#include <data/k3bdatadoc.h>
+#include <audio/k3baudiodoc.h>
+#include <tools/k3bglobals.h>
 
 #include <qfileinfo.h>
 #include <qdom.h>
@@ -218,6 +219,13 @@ void K3bMixedDoc::loadDefaultSettings()
   else
     m_mixedType = DATA_FIRST_TRACK;
 
+  QString datamode = c->readEntry( "data_track_mode" );
+  if( datamode == "mode1" )
+    m_dataDoc->setDataMode( K3b::MODE1 );
+  else if( datamode == "mode2" )
+    m_dataDoc->setDataMode( K3b::MODE2 );
+  else
+    m_dataDoc->setDataMode( K3b::AUTO );
 
   K3bIsoOptions o = K3bIsoOptions::load( c );
   dataDoc()->isoOptions() = o;

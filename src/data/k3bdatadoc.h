@@ -107,6 +107,9 @@ class K3bDataDoc : public K3bDoc
   int multiSessionMode() const { return m_multisessionMode; }
   void setMultiSessionMode( int mode );
 
+  int dataMode() const { return m_dataMode; }
+  void setDataMode( int m ) { m_dataMode = m; }
+
   static bool nameAlreadyInDir( const QString&, K3bDirItem* );
 
   K3bIsoOptions& isoOptions() { return m_isoOptions; }
@@ -196,6 +199,8 @@ class K3bDataDoc : public K3bDoc
 
   bool m_deleteImage;
   bool m_onlyCreateImage;
+
+  int m_dataMode;
 
   KIO::filesize_t m_size;
 		

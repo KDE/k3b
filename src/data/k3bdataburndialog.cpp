@@ -26,6 +26,8 @@
 #include <k3btempdirselectionwidget.h>
 #include <k3bjob.h>
 #include <k3bstdguiitems.h>
+#include <tools/k3bdatamodewidget.h>
+#include <tools/k3bglobals.h>
 
 #include <qcheckbox.h>
 #include <qframe.h>
@@ -43,8 +45,6 @@
 #include <qbuttongroup.h>
 #include <qfileinfo.h>
 #include <qtabwidget.h>
-#include <qvalidator.h>
-#include <qregexp.h>
 
 #include <kmessagebox.h>
 #include <klineedit.h>
@@ -56,41 +56,6 @@
 
 
 
-static const char * mkisofsCharacterSets[] = { "cp10081",
-					       "cp10079",
-					       "cp10029",
-					       "cp10007",
-					       "cp10006",
-					       "cp10000",
-					       "koi8-r",
-					       "cp874",
-					       "cp869",
-					       "cp866",
-					       "cp865",
-					       "cp864",
-					       "cp863",
-					       "cp862",
-					       "cp861",
-					       "cp860",
-					       "cp857",
-					       "cp855",
-					       "cp852",
-					       "cp850",
-					       "cp775",
-					       "cp737",
-					       "cp437",
-					       "iso8859-15",
-					       "iso8859-14",
-					       "iso8859-9",
-					       "iso8859-8",
-					       "iso8859-7",
-					       "iso8859-6",
-					       "iso8859-5",
-					       "iso8859-4",
-					       "iso8859-3",
-					       "iso8859-2",
-					       "iso8859-1",
-					       0 };  // terminating zero
 
 
 
@@ -99,20 +64,26 @@ K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const ch
 {
   prepareGui();
 
-  QFrame* f2 = new QFrame( this );
-  QFrame* f3 = new QFrame( this );
-  QFrame* f4 = new QFrame( this );
-
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
   m_optionGroupLayout->addItem( spacer );
 
-  setupVolumeInfoTab( f2 );
-  setupSettingsTab( f3 );
-  setupAdvancedTab( f4 );
+  setupSettingsTab();
 
-  addPage( f2, i18n("Volume Desc") );
-  addPage( f3, i18n("Settings") );
-  addPage( f4, i18n("Advanced") );
+  // create volume descriptor tab
+  m_volumeDescWidget = new K3bDataVolumeDescWidget( this );
+  m_volumeDescWidget->layout()->setMargin( marginHint() );
+  addPage( m_volumeDescWidget, i18n("Volume Desc") );
+
+  // create image settings tab
+  m_imageSettingsWidget = new K3bDataImageSettingsWidget( this );
+  m_imageSettingsWidget->layout()->setMargin( marginHint() );
+  addPage( m_imageSettingsWidget, i18n("Filesystem") );
+
+  // create advanced image settings tab
+  m_advancedImageSettingsWidget = new K3bDataAdvancedImageSettingsWidget( this );
+  m_advancedImageSettingsWidget->layout()->setMargin( marginHint() );
+  addPage( m_advancedImageSettingsWidget, i18n("Advanced") );
+
 
   readSettings();
 
@@ -166,6 +137,8 @@ void K3bDataBurnDialog::saveSettings()
     ((K3bDataDoc*)doc())->setMultiSessionMode( K3bDataDoc::FINISH );
   else
     ((K3bDataDoc*)doc())->setMultiSessionMode( K3bDataDoc::NONE );
+
+  ((K3bDataDoc*)doc())->setDataMode( m_dataModeWidget->dataMode() );
 }
 
 
@@ -202,47 +175,21 @@ void K3bDataBurnDialog::readSettings()
   m_advancedImageSettingsWidget->load( ((K3bDataDoc*)doc())->isoOptions() );
   m_volumeDescWidget->load( ((K3bDataDoc*)doc())->isoOptions() );
 
+  m_dataModeWidget->setDataMode( ((K3bDataDoc*)doc())->dataMode() );
+
   toggleAllOptions();
 }
 
 
-void K3bDataBurnDialog::setupAdvancedTab( QFrame* frame )
+void K3bDataBurnDialog::setupSettingsTab()
 {
+  QWidget* frame = new QWidget( this );
   QGridLayout* frameLayout = new QGridLayout( frame );
   frameLayout->setSpacing( spacingHint() );
   frameLayout->setMargin( marginHint() );
 
-  m_advancedImageSettingsWidget = new K3bDataAdvancedImageSettingsWidget( frame );
-  m_advancedImageSettingsWidget->m_comboInputCharset->setValidator( new QRegExpValidator( QRegExp("[\\w_-]*"), this ) );
-
-  frameLayout->addWidget( m_advancedImageSettingsWidget, 0, 0 );
-
-  // fill charset combo
-  for( int i = 0; mkisofsCharacterSets[i]; i++ ) {
-    m_advancedImageSettingsWidget->m_comboInputCharset->insertItem( QString( mkisofsCharacterSets[i] ) );
-  }
-}
-
-
-void K3bDataBurnDialog::setupVolumeInfoTab( QFrame* frame )
-{
-  QGridLayout* frameLayout = new QGridLayout( frame );
-  frameLayout->setSpacing( spacingHint() );
-  frameLayout->setMargin( marginHint() );
-
-  m_volumeDescWidget = new K3bDataVolumeDescWidget( frame );
-
-  frameLayout->addWidget( m_volumeDescWidget, 0, 0 );
-}
-
-
-void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
-{
-  QGridLayout* frameLayout = new QGridLayout( frame );
-  frameLayout->setSpacing( spacingHint() );
-  frameLayout->setMargin( marginHint() );
-
-  m_imageSettingsWidget = new K3bDataImageSettingsWidget( frame );
+  QGroupBox* groupDataMode = new QGroupBox( 1, Qt::Vertical, i18n("Datatrack Mode"), frame );
+  m_dataModeWidget = new K3bDataModeWidget( groupDataMode );
 
   // Multisession
   // ////////////////////////////////////////////////////////////////////////
@@ -265,11 +212,13 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
   m_groupMultiSessionLayout->addWidget( m_radioMultiSessionFinish, 1, 1 );
 
 
-  frameLayout->addWidget( m_imageSettingsWidget, 0, 0 );
+  frameLayout->addWidget( groupDataMode, 0, 0 );
   frameLayout->addWidget( m_groupMultiSession, 1, 0 );
 
 
-  frameLayout->setRowStretch( 1, 1 );
+  frameLayout->setRowStretch( 2, 1 );
+
+  addPage( frame, i18n("Settings") );
 
   // ToolTips
   // -------------------------------------------------------------------------
@@ -289,13 +238,23 @@ void K3bDataBurnDialog::slotOk()
       m_tempDirSelectionWidget->setTempPath( fi.filePath() + "/image.iso" );
     
     if( QFile::exists( m_tempDirSelectionWidget->tempPath() ) ) {
-      if( KMessageBox::questionYesNo( this, 
-				      i18n("Do you want to overwrite %1").arg(m_tempDirSelectionWidget->tempPath()), 
-				      i18n("File exists...") ) 
+      if( KMessageBox::warningYesNo( this, 
+				     i18n("Do you want to overwrite %1").arg(m_tempDirSelectionWidget->tempPath()), 
+				     i18n("File exists...") ) 
 	  != KMessageBox::Yes )
 	return;
     }
   }
+
+  if( m_checkDao->isChecked() &&
+      !m_radioMultiSessionNone->isChecked() &&
+      m_writerSelectionWidget->writingApp() == K3b::CDRECORD )
+    if( KMessageBox::warningContinueCancel( this,
+					    i18n("Most writers do not support writing "
+						 "multisession cds in DAO mode.") )
+	== KMessageBox::Cancel )
+      return;
+				    
     
   K3bProjectBurnDialog::slotOk();
 }
@@ -310,6 +269,7 @@ void K3bDataBurnDialog::loadDefaults()
 
   m_checkRemoveBufferFiles->setChecked( true );
   m_checkOnlyCreateImage->setChecked( false );
+  m_dataModeWidget->setDataMode( K3b::AUTO );
 
   m_imageSettingsWidget->load( K3bIsoOptions::defaults() );
   m_advancedImageSettingsWidget->load( K3bIsoOptions::defaults() );
@@ -331,6 +291,13 @@ void K3bDataBurnDialog::loadUserDefaults()
   m_checkRemoveBufferFiles->setChecked( c->readBoolEntry( "remove_image", true ) );
   m_checkOnlyCreateImage->setChecked( c->readBoolEntry( "only_create_image", false ) );
 
+  QString datamode = c->readEntry( "data_track_mode" );
+  if( datamode == "mode1" )
+    m_dataModeWidget->setDataMode( K3b::MODE1 );
+  else if( datamode == "mode2" )
+    m_dataModeWidget->setDataMode( K3b::MODE2 );
+  else
+    m_dataModeWidget->setDataMode( K3b::AUTO );
 
   K3bIsoOptions o = K3bIsoOptions::load( c );
   m_imageSettingsWidget->load( o );
@@ -353,6 +320,15 @@ void K3bDataBurnDialog::saveUserDefaults()
   c->writeEntry( "burnproof", m_checkBurnproof->isChecked() );
   c->writeEntry( "remove_image", m_checkRemoveBufferFiles->isChecked() );
   c->writeEntry( "only_create_image", m_checkOnlyCreateImage->isChecked() );
+
+  QString datamode;
+  if( m_dataModeWidget->dataMode() == K3b::MODE1 )
+    datamode = "mode1";
+  else if( m_dataModeWidget->dataMode() == K3b::MODE2 )
+    datamode = "mode2";
+  else
+    datamode = "auto";
+  c->writeEntry( "data_track_mode", datamode );
 
 
   K3bIsoOptions o;

@@ -29,6 +29,7 @@ class K3bDataVolumeDescWidget;
 class QButtonGroup;
 class QRadioButton;
 class K3bAudioCdTextWidget;
+class K3bDataModeWidget;
 
 
 /**
@@ -49,7 +50,6 @@ class K3bMixedBurnDialog : public K3bProjectBurnDialog
    K3bAudioCdTextWidget* m_cdtextWidget;
 
  protected slots:
-   void slotOk();
    void saveSettings();
    void readSettings();
 
@@ -67,6 +67,8 @@ class K3bMixedBurnDialog : public K3bProjectBurnDialog
    QRadioButton* m_radioMixedTypeFirstTrack;
    QRadioButton* m_radioMixedTypeLastTrack;
    QRadioButton* m_radioMixedTypeSessions;
+
+   K3bDataModeWidget* m_dataModeWidget;
 };
 
 #endif

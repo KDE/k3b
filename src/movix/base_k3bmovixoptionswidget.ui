@@ -45,7 +45,7 @@
                         <string>MPlayer subtitle fontset:</string>
                     </property>
                 </widget>
-                <widget class="QSpinBox" row="1" column="1">
+                <widget class="QSpinBox" row="1" column="1" rowspan="1" colspan="2">
                     <property name="name">
                         <cstring>m_spinLoop</cstring>
                     </property>
@@ -62,7 +62,7 @@
                         <string>How often should the playlist be looped</string>
                     </property>
                 </widget>
-                <widget class="QLabel" row="2" column="0">
+                <widget class="QLabel" row="4" column="0">
                     <property name="name">
                         <cstring>textLabel6</cstring>
                     </property>
@@ -70,7 +70,7 @@
                         <string>Additional MPlayer Options:</string>
                     </property>
                 </widget>
-                <widget class="QLabel" row="3" column="0">
+                <widget class="QLabel" row="5" column="0">
                     <property name="name">
                         <cstring>textLabel7</cstring>
                     </property>
@@ -81,7 +81,7 @@
                         <string></string>
                     </property>
                 </widget>
-                <widget class="QLineEdit" row="2" column="1">
+                <widget class="QLineEdit" row="4" column="1" rowspan="1" colspan="2">
                     <property name="name">
                         <cstring>m_editAdditionalMplayerOptions</cstring>
                     </property>
@@ -94,7 +94,7 @@
 &lt;pre&gt;opt1 opt2 opt3&lt;/pre&gt;</string>
                     </property>
                 </widget>
-                <widget class="QLineEdit" row="3" column="1">
+                <widget class="QLineEdit" row="5" column="1" rowspan="1" colspan="2">
                     <property name="name">
                         <cstring>m_editUnwantedMplayerOptions</cstring>
                     </property>
@@ -107,12 +107,20 @@
 &lt;pre&gt;opt1 opt2 opt3&lt;/pre&gt;</string>
                     </property>
                 </widget>
-                <widget class="KComboBox" row="0" column="1">
+                <widget class="KComboBox" row="0" column="1" rowspan="1" colspan="2">
                     <property name="name">
                         <cstring>m_comboSubtitleFontset</cstring>
                     </property>
                 </widget>
-                <widget class="QCheckBox" row="4" column="0" rowspan="1" colspan="2">
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>textLabel3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Loop playlist:</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="2" column="0" rowspan="2" colspan="2">
                     <property name="name">
                         <cstring>m_checkRandomPlay</cstring>
                     </property>
@@ -124,14 +132,6 @@
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>&lt;p&gt;If this option is checked the order in which the files are played is determined randomly everytime it is played.</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>textLabel3</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Loop playlist:</string>
                     </property>
                 </widget>
             </grid>

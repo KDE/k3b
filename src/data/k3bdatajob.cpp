@@ -181,7 +181,7 @@ void K3bDataJob::writeImage()
 
 void K3bDataJob::slotSizeCalculationFinished( int status, int size )
 {
-  emit infoMessage( i18n("Size calculated:") + i18n("%1 (1 Byte)", "%1 (%n bytes)", size*2048).arg(size), INFO );
+  emit infoMessage( i18n("Size calculated:") + i18n("1 block", "%n blocks", size), INFO );
   if( status != ERROR ) {
     // this only happens in on-the-fly mode
     if( prepareWriterJob() ) {
@@ -347,6 +347,10 @@ bool K3bDataJob::prepareWriterJob()
     // Does it really make sence to write DAta ms cds in DAO mode since writing the
     // first session of a cd-extra in DAO mode is no problem with my writer while
     // writing the second data session is only possible in TAO mode.
+    if( m_doc->dao() &&
+	m_doc->multiSessionMode() != K3bDataDoc::NONE )
+      emit infoMessage( i18n("Writing multisession in DAO is not supported by most writers."), INFO );
+
     writer->setDao( m_doc->dao() );
     writer->setSimulate( m_doc->dummy() );
     writer->setBurnproof( m_doc->burnproof() );
@@ -364,7 +368,9 @@ bool K3bDataJob::prepareWriterJob()
 	  m_doc->multiSessionMode() == K3bDataDoc::FINISH ) )
       writer->addArgument("-waiti");
 
-    if( m_doc->multiSessionMode() == K3bDataDoc::NONE )
+    if( ( m_doc->dataMode() == K3b::AUTO &&
+	  m_doc->multiSessionMode() == K3bDataDoc::NONE ) ||
+	m_doc->dataMode() == K3b::MODE1 )
       writer->addArgument( "-data" );  // default to mode1
     else
       writer->addArgument( "-xa1" );
@@ -398,7 +404,9 @@ bool K3bDataJob::prepareWriterJob()
     m_tocFile->setAutoDelete(true);
 
     if( QTextStream* s = m_tocFile->textStream() ) {
-      if( m_doc->multiSessionMode() == K3bDataDoc::NONE ) {
+      if( ( m_doc->dataMode() == K3b::AUTO &&
+	    m_doc->multiSessionMode() == K3bDataDoc::NONE ) ||
+	  m_doc->dataMode() == K3b::MODE1 ) {
 	*s << "CD_ROM" << "\n";
 	*s << "\n";
 	*s << "TRACK MODE1" << "\n";

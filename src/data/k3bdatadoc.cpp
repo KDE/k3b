@@ -22,7 +22,8 @@
 #include "k3bbootitem.h"
 #include "k3bspecialdataitem.h"
 #include <k3b.h>
-
+#include <k3bcore.h>
+#include <tools/k3bglobals.h>
 
 #include <stdlib.h>
 
@@ -80,6 +81,7 @@ bool K3bDataDoc::newDocument()
   m_isoImage = QString::null;
 
   m_multisessionMode = NONE;
+  m_dataMode = K3b::AUTO;
 
   m_isoOptions = K3bIsoOptions();
 
@@ -483,6 +485,14 @@ bool K3bDataDoc::loadDocumentData( QDomElement* rootElem )
     else if( e.nodeName() == "whitespace_replace_string")
       isoOptions().setWhiteSpaceTreatmentReplaceString( e.text() );
 
+    else if( e.nodeName() == "data_track_mode" ) {
+      if( e.text() == "mode1" )
+	m_dataMode = K3b::MODE1;
+      else if( e.text() == "mode2" )
+	m_dataMode = K3b::MODE2;
+      else
+	m_dataMode = K3b::AUTO;
+    }
     else
       kdDebug() << "(K3bDataDoc) unknown option entry: " << e.nodeName() << endl;
   }
@@ -738,6 +748,15 @@ bool K3bDataDoc::saveDocumentData( QDomElement* docElem )
 
   topElem = doc.createElement( "whitespace_replace_string" );
   topElem.appendChild( doc.createTextNode( isoOptions().whiteSpaceTreatmentReplaceString() ) );
+  optionsElem.appendChild( topElem );
+
+  topElem = doc.createElement( "data_track_mode" );
+  if( m_dataMode == K3b::MODE1 )
+    topElem.appendChild( doc.createTextNode( "mode1" ) );
+  else if( m_dataMode == K3b::MODE2 )
+    topElem.appendChild( doc.createTextNode( "mode2" ) );
+  else
+    topElem.appendChild( doc.createTextNode( "auto" ) );
   optionsElem.appendChild( topElem );
 
 
@@ -1033,7 +1052,7 @@ void K3bDataDoc::informAboutNotFoundFiles()
 
 void K3bDataDoc::loadDefaultSettings()
 {
-  KConfig* c = k3bMain()->config();
+  KConfig* c = k3bcore->config();
 
   c->setGroup( "default data settings" );
 
@@ -1046,6 +1065,14 @@ void K3bDataDoc::loadDefaultSettings()
 
   m_deleteImage = c->readBoolEntry( "remove_image", true );
   m_onlyCreateImage = c->readBoolEntry( "only_create_image", false );
+
+  QString datamode = c->readEntry( "data_track_mode" );
+  if( datamode == "mode1" )
+    setDataMode( K3b::MODE1 );
+  else if( datamode == "mode2" )
+    setDataMode( K3b::MODE2 );
+  else
+    setDataMode( K3b::AUTO );
 }
 
 

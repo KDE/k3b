@@ -26,6 +26,8 @@
 #include <k3bwriterselectionwidget.h>
 #include <k3btempdirselectionwidget.h>
 #include <k3bstdguiitems.h>
+#include <tools/k3bglobals.h>
+#include <tools/k3bdatamodewidget.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -34,6 +36,7 @@
 #include <qcheckbox.h>
 #include <qlayout.h>
 #include <qgroupbox.h>
+#include <qfileinfo.h>
 
 
 K3bMovixBurnDialog::K3bMovixBurnDialog( K3bMovixDoc* doc, QWidget* parent, const char* name, bool modal )
@@ -44,7 +47,9 @@ K3bMovixBurnDialog::K3bMovixBurnDialog( K3bMovixDoc* doc, QWidget* parent, const
   prepareGui();
 
   m_movixOptionsWidget = new K3bMovixOptionsWidget( this );
-  addPage( m_movixOptionsWidget, i18n("eMovix Options") );
+  addPage( m_movixOptionsWidget, i18n("eMovix") );
+
+  setupSettingsPage();
 
   // create volume descriptor tab
   m_volumeDescWidget = new K3bDataVolumeDescWidget( this );
@@ -52,16 +57,9 @@ K3bMovixBurnDialog::K3bMovixBurnDialog( K3bMovixDoc* doc, QWidget* parent, const
   addPage( m_volumeDescWidget, i18n("Volume Desc") );
 
   // create image settings tab
-  QWidget* w = new QWidget( this );
-  QVBoxLayout* wl = new QVBoxLayout( w );
-  wl->setAutoAdd(true);
-  wl->setMargin( marginHint() );
-  wl->setSpacing( spacingHint() );
-  m_imageSettingsWidget = new K3bDataImageSettingsWidget( w );
-  QGroupBox* groupMultisession = new QGroupBox( 1, Qt::Vertical, i18n("Multisession"), w );
-  m_checkStartMultiSesssion = K3bStdGuiItems::startMultisessionCheckBox( groupMultisession );
-
-  addPage( w, i18n("Data Settings") );
+  m_imageSettingsWidget = new K3bDataImageSettingsWidget( this );
+  m_imageSettingsWidget->layout()->setMargin( marginHint() );
+  addPage( m_imageSettingsWidget, i18n("Filesystem") );
 
   // create advanced image settings tab
   m_advancedImageSettingsWidget = new K3bDataAdvancedImageSettingsWidget( this );
@@ -77,6 +75,27 @@ K3bMovixBurnDialog::~K3bMovixBurnDialog()
 {
   if( m_installation )
     delete m_installation;
+}
+
+
+void K3bMovixBurnDialog::setupSettingsPage()
+{
+  QWidget* frame = new QWidget( this );
+  QGridLayout* frameLayout = new QGridLayout( frame );
+  frameLayout->setSpacing( spacingHint() );
+  frameLayout->setMargin( marginHint() );
+
+  QGroupBox* groupDataMode = new QGroupBox( 1, Qt::Vertical, i18n("Datatrack Mode"), frame );
+  m_dataModeWidget = new K3bDataModeWidget( groupDataMode );
+
+  QGroupBox* groupMultisession = new QGroupBox( 1, Qt::Vertical, i18n("Multisession"), frame );
+  m_checkStartMultiSesssion = K3bStdGuiItems::startMultisessionCheckBox( groupMultisession );
+
+  frameLayout->addWidget( groupDataMode, 0, 0 );
+  frameLayout->addWidget( groupMultisession, 1, 0 );
+  frameLayout->setRowStretch( 2, 1 );
+
+  addPage( frame, i18n("Settings") );
 }
 
 
@@ -118,6 +137,7 @@ void K3bMovixBurnDialog::saveSettings()
   m_advancedImageSettingsWidget->save( m_doc->isoOptions() );
   m_volumeDescWidget->save( m_doc->isoOptions() );
 	
+  m_doc->setDataMode( m_dataModeWidget->dataMode() );
 
   // save image file path
   m_doc->setIsoImage( m_tempDirSelectionWidget->tempPath() );  
@@ -138,6 +158,8 @@ void K3bMovixBurnDialog::readSettings()
   m_advancedImageSettingsWidget->load( m_doc->isoOptions() );
   m_volumeDescWidget->load( m_doc->isoOptions() );
 
+  m_dataModeWidget->setDataMode( m_doc->dataMode() );
+
   // first of all we need a movix installation object
   QString path = K3bExternalBinManager::self()->binPath("eMovix");
   m_installation = K3bMovixInstallation::probeInstallation( path );
@@ -147,7 +169,39 @@ void K3bMovixBurnDialog::readSettings()
   }
   else {
     KMessageBox::error( this, i18n("Could not find eMovix installation in %1").arg(path) );
+    slotCancel();
   }
+}
+
+
+void K3bMovixBurnDialog::slotOk()
+{
+  if( m_checkOnlyCreateImage->isChecked() ||
+      !m_checkOnTheFly->isChecked() ) {
+    QFileInfo fi( m_tempDirSelectionWidget->tempPath() );
+    if( fi.isDir() )
+      m_tempDirSelectionWidget->setTempPath( fi.filePath() + "/image.iso" );
+    
+    if( QFile::exists( m_tempDirSelectionWidget->tempPath() ) ) {
+      if( KMessageBox::warningYesNo( this, 
+				     i18n("Do you want to overwrite %1").arg(m_tempDirSelectionWidget->tempPath()), 
+				     i18n("File exists...") ) 
+	  != KMessageBox::Yes )
+	return;
+    }
+  }
+
+  if( m_checkDao->isChecked() &&
+      m_checkStartMultiSesssion->isChecked() &&
+      m_writerSelectionWidget->writingApp() == K3b::CDRECORD )
+    if( KMessageBox::warningContinueCancel( this,
+					    i18n("Most writers do not support writing "
+						 "multisession cds in DAO mode.") )
+	== KMessageBox::Cancel )
+      return;
+				    
+    
+  K3bProjectBurnDialog::slotOk();
 }
 
 

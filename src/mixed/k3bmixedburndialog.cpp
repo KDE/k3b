@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -26,7 +26,7 @@
 #include <k3bisooptions.h>
 #include <tools/k3bglobals.h>
 #include <audio/k3baudiocdtextwidget.h>
-
+#include <tools/k3bdatamodewidget.h>
 
 #include <qtabwidget.h>
 #include <qcheckbox.h>
@@ -71,7 +71,7 @@ K3bMixedBurnDialog::K3bMixedBurnDialog( K3bMixedDoc* doc, QWidget *parent, const
   // create image settings tab
   m_imageSettingsWidget = new K3bDataImageSettingsWidget( this );
   m_imageSettingsWidget->layout()->setMargin( marginHint() );
-  addPage( m_imageSettingsWidget, i18n("Data Settings") );
+  addPage( m_imageSettingsWidget, i18n("Filesystem") );
 
   // create advanced image settings tab
   m_advancedImageSettingsWidget = new K3bDataAdvancedImageSettingsWidget( this );
@@ -93,6 +93,10 @@ K3bMixedBurnDialog::K3bMixedBurnDialog( K3bMixedDoc* doc, QWidget *parent, const
 void K3bMixedBurnDialog::setupSettingsPage()
 {
   QWidget* w = new QWidget( k3bMainWidget() );
+
+  QGroupBox* groupDataMode = new QGroupBox( 1, Qt::Vertical, i18n("Datatrack Mode"), w );
+  m_dataModeWidget = new K3bDataModeWidget( groupDataMode );
+
   m_groupMixedType = new QButtonGroup( 4, Qt::Vertical, i18n("Mixed mode type"), w );
   // standard mixed mode
   m_radioMixedTypeFirstTrack = new QRadioButton( i18n("Data in first track"), m_groupMixedType );
@@ -110,6 +114,9 @@ void K3bMixedBurnDialog::setupSettingsPage()
   grid->setMargin( marginHint() );
   grid->setSpacing( spacingHint() );
   grid->addWidget( m_groupMixedType, 0, 0 );
+  grid->addWidget( groupDataMode, 1, 0 );
+  grid->setRowStretch( 2, 1 );
+
 
   addPage( w, i18n("Settings") );
 }
@@ -181,7 +188,8 @@ void K3bMixedBurnDialog::saveSettings()
   m_imageSettingsWidget->save( m_doc->dataDoc()->isoOptions() );
   m_advancedImageSettingsWidget->save( m_doc->dataDoc()->isoOptions() );
   m_volumeDescWidget->save( m_doc->dataDoc()->isoOptions() );
-	
+
+  m_doc->dataDoc()->setDataMode( m_dataModeWidget->dataMode() );	
 
   // save image file path
   m_doc->setImagePath( m_tempDirSelectionWidget->tempPath() );  
@@ -218,6 +226,8 @@ void K3bMixedBurnDialog::readSettings()
   m_advancedImageSettingsWidget->load( m_doc->dataDoc()->isoOptions() );
   m_volumeDescWidget->load( m_doc->dataDoc()->isoOptions() );
 
+  m_dataModeWidget->setDataMode( m_doc->dataDoc()->dataMode() );
+
   slotToggleEverything();
 }
 
@@ -232,6 +242,8 @@ void K3bMixedBurnDialog::loadDefaults()
    m_cdtextWidget->setChecked( false );
 
    m_radioMixedTypeFirstTrack->setChecked(true);
+   
+   m_dataModeWidget->setDataMode( K3b::AUTO );
 
    m_imageSettingsWidget->load( K3bIsoOptions::defaults() );
    m_advancedImageSettingsWidget->load( K3bIsoOptions::defaults() );
@@ -261,6 +273,15 @@ void K3bMixedBurnDialog::loadUserDefaults()
     m_radioMixedTypeSessions->setChecked(true);
   else
     m_radioMixedTypeFirstTrack->setChecked(true);
+
+
+  QString datamode = c->readEntry( "data_track_mode" );
+  if( datamode == "mode1" )
+    m_dataModeWidget->setDataMode( K3b::MODE1 );
+  else if( datamode == "mode2" )
+    m_dataModeWidget->setDataMode( K3b::MODE2 );
+  else
+    m_dataModeWidget->setDataMode( K3b::AUTO );
 
   K3bIsoOptions o = K3bIsoOptions::load( c );
   m_imageSettingsWidget->load( o );
@@ -293,6 +314,15 @@ void K3bMixedBurnDialog::saveUserDefaults()
   else
     c->writeEntry( "mixed_type", "first_track" );
 
+  QString datamode;
+  if( m_dataModeWidget->dataMode() == K3b::MODE1 )
+    datamode = "mode1";
+  else if( m_dataModeWidget->dataMode() == K3b::MODE2 )
+    datamode = "mode2";
+  else
+    datamode = "auto";
+  c->writeEntry( "data_track_mode", datamode );
+
   K3bIsoOptions o;
   m_imageSettingsWidget->save( o );
   m_advancedImageSettingsWidget->save( o );
@@ -302,12 +332,6 @@ void K3bMixedBurnDialog::saveUserDefaults()
   if( m_tempDirSelectionWidget->isEnabled() ) {
     m_tempDirSelectionWidget->saveConfig();
   }
-}
-
-
-void K3bMixedBurnDialog::slotOk()
-{
-  K3bProjectBurnDialog::slotOk();
 }
 
 

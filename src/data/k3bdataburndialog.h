@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -33,7 +33,7 @@ class KLineEdit;
 class K3bDataImageSettingsWidget;
 class K3bDataAdvancedImageSettingsWidget;
 class K3bDataVolumeDescWidget;
-
+class K3bDataModeWidget;
 
 /**
   *@author Sebastian Trueg
@@ -48,9 +48,7 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    ~K3bDataBurnDialog();
 
  protected:
-   void setupAdvancedTab( QFrame* frame );
-   void setupSettingsTab( QFrame* frame );
-   void setupVolumeInfoTab( QFrame* frame );
+   void setupSettingsTab();
 
    K3bDataVolumeDescWidget* m_volumeDescWidget;
 
@@ -69,6 +67,8 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    QRadioButton* m_radioMultiSessionContinue;
    QRadioButton* m_radioMultiSessionFinish;
    // ---------------------------------------------
+
+   K3bDataModeWidget* m_dataModeWidget;
 
  protected slots:
    void slotOk();

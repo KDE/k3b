@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -548,44 +548,41 @@ bool K3bMixedJob::writeTocFile()
 
   // write the toc-file
   if( QTextStream* s = m_tocFile->textStream() ) {
-    if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
 
-      *s << "CD_ROM_XA" << "\n\n";
-
-      // first session
-      if( m_currentAction == WRITING_AUDIO_IMAGE ) {
-	K3bAudioTocfileWriter::writeAudioToc( m_doc->audioDoc(), *s );
-      }
-      // second session
-      else {
-	*s << "TRACK MODE2_FORM1" << "\n";
-	if( m_doc->onTheFly() )
-	  *s << "DATAFILE \"-\" " << m_isoImager->size()*2048 << "\n";
-	else
-	  *s << "DATAFILE \"" << m_isoImageFile->name() << "\"\n";
-      }
+    // TocType
+    if( ( m_doc->dataDoc()->dataMode() == K3b::AUTO && m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) ||
+	m_doc->dataDoc()->dataMode() == K3b::MODE2 ) {
+      *s << "CD_ROM_XA" << endl;
     }
     else {
-      *s << "CD_ROM" << "\n";
-
-      *s << "\n";
-	  
-      if( m_doc->mixedType() == K3bMixedDoc::DATA_LAST_TRACK )
-	K3bAudioTocfileWriter::writeAudioToc( m_doc->audioDoc(), *s );
-	  
-      *s << "\n";
-
-      *s << "TRACK MODE1" << "\n";
-      if( m_doc->onTheFly() )
-	*s << "DATAFILE \"-\" " << m_isoImager->size()*2048 << "\n";
-      else
-	*s << "DATAFILE \"" << m_isoImageFile->name() << "\" 0 \n";
-	  
-      *s << "\n";
-
-      if( m_doc->mixedType() == K3bMixedDoc::DATA_FIRST_TRACK )
-	K3bAudioTocfileWriter::writeAudioToc( m_doc->audioDoc(), *s );
+      *s << "CD_ROM" << endl;
     }
+    *s << endl;
+
+
+    if( ( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION &&
+	  m_currentAction == WRITING_AUDIO_IMAGE ) ||
+	m_doc->mixedType() == K3bMixedDoc::DATA_LAST_TRACK ) 
+      K3bAudioTocfileWriter::writeAudioToc( m_doc->audioDoc(), *s );
+
+    if( m_doc->mixedType() != K3bMixedDoc::DATA_SECOND_SESSION ||
+	m_currentAction == WRITING_ISO_IMAGE ) {
+
+      if( ( m_doc->dataDoc()->dataMode() == K3b::AUTO && m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) ||
+	  m_doc->dataDoc()->dataMode() == K3b::MODE2 )
+	*s << "TRACK MODE2_FORM1" << endl;
+      else
+	*s << "TRACK MODE1" << endl;
+      if( m_doc->onTheFly() )
+	*s << "DATAFILE \"-\" " << m_isoImager->size()*2048 << endl;
+      else
+	*s << "DATAFILE \"" << m_isoImageFile->name() << "\"" << endl;
+      *s << endl;
+    }
+      
+    if( m_doc->mixedType() == K3bMixedDoc::DATA_FIRST_TRACK )
+      K3bAudioTocfileWriter::writeAudioToc( m_doc->audioDoc(), *s );
+  
     m_tocFile->close();
 
 
@@ -634,7 +631,8 @@ void K3bMixedJob::addAudioTracks( K3bCdrecordWriter* writer )
 void K3bMixedJob::addDataTrack( K3bCdrecordWriter* writer )
 {
   // add data track
-  if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION )
+  if( ( m_doc->dataDoc()->dataMode() == K3b::AUTO && m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) ||
+      m_doc->dataDoc()->dataMode() == K3b::MODE2 )
     writer->addArgument( "-xa1" );
   else
     writer->addArgument( "-data" );

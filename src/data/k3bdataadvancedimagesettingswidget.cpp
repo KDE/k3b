@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -25,11 +25,50 @@
 #include <qpoint.h>
 #include <qpainter.h>
 #include <qpalette.h>
+#include <qvalidator.h>
+#include <qregexp.h>
 
 #include <klistview.h>
 #include <kcombobox.h>
 #include <klocale.h>
 #include <kdebug.h>
+
+
+static const char * mkisofsCharacterSets[] = { "cp10081",
+					       "cp10079",
+					       "cp10029",
+					       "cp10007",
+					       "cp10006",
+					       "cp10000",
+					       "koi8-r",
+					       "cp874",
+					       "cp869",
+					       "cp866",
+					       "cp865",
+					       "cp864",
+					       "cp863",
+					       "cp862",
+					       "cp861",
+					       "cp860",
+					       "cp857",
+					       "cp855",
+					       "cp852",
+					       "cp850",
+					       "cp775",
+					       "cp737",
+					       "cp437",
+					       "iso8859-15",
+					       "iso8859-14",
+					       "iso8859-9",
+					       "iso8859-8",
+					       "iso8859-7",
+					       "iso8859-6",
+					       "iso8859-5",
+					       "iso8859-4",
+					       "iso8859-3",
+					       "iso8859-2",
+					       "iso8859-1",
+					       0 };  // terminating zero
 
 
 
@@ -127,70 +166,79 @@ K3bDataAdvancedImageSettingsWidget::K3bDataAdvancedImageSettingsWidget( QWidget*
   : base_K3bAdvancedDataImageSettings( parent, name )
 {
   m_viewIsoSettings->header()->hide();
-
+  
   // create WhatsThis for the isoSettings view
   (void)new PrivateIsoWhatsThis( this );
 
   // create all the view items
- m_checkAllowUntranslatedFilenames = new PrivateCheckViewItem( m_viewIsoSettings, 
-							 i18n( "Allow untranslated filenames" ), 
-							 QCheckListItem::CheckBox );
- m_checkAllowMaxLengthFilenames = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
-						      i18n( "Allow max length filenames (37 characters)" ),
-						      QCheckListItem::CheckBox );
- m_checkAllowFullAscii = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
-					     i18n( "Allow full ASCII charset" ),
-					     QCheckListItem::CheckBox );
- m_checkAllowOther = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
-					 i18n( "Allow ~ and #" ),
-					 QCheckListItem::CheckBox );
- m_checkAllowLowercaseCharacters = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
-						       i18n( "Allow lowercase characters" ),
-						       QCheckListItem::CheckBox );
- m_checkAllowMultiDot = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
-					    i18n( "Allow multiple dots" ),
+  m_checkAllowUntranslatedFilenames = new PrivateCheckViewItem( m_viewIsoSettings, 
+								i18n( "Allow untranslated filenames" ), 
+								QCheckListItem::CheckBox );
+  m_checkAllowMaxLengthFilenames = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
+							     i18n( "Allow max length filenames (37 characters)" ),
+							     QCheckListItem::CheckBox );
+  m_checkAllowFullAscii = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
+						    i18n( "Allow full ASCII charset" ),
+						    QCheckListItem::CheckBox );
+  m_checkAllowOther = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
+						i18n( "Allow ~ and #" ),
+						QCheckListItem::CheckBox );
+  m_checkAllowLowercaseCharacters = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
+							      i18n( "Allow lowercase characters" ),
+							      QCheckListItem::CheckBox );
+  m_checkAllowMultiDot = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
+						   i18n( "Allow multiple dots" ),
+						   QCheckListItem::CheckBox );
+  m_checkAllow31CharFilenames = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
+							  i18n( "Allow 31 character filenames" ),
+							  QCheckListItem::CheckBox );
+  m_checkAllowBeginningPeriod = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
+							  i18n( "Allow leading period" ),
+							  QCheckListItem::CheckBox );
+  m_checkOmitVersionNumbers = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
+							i18n( "Omit version numbers" ),
+							QCheckListItem::CheckBox );
+  m_checkOmitTrailingPeriod = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
+							i18n( "Omit trailing period" ),
+							QCheckListItem::CheckBox );
+
+  m_checkAllowUntranslatedFilenames->setOpen(true);
+
+
+  m_checkCreateTransTbl = new QCheckListItem( m_viewIsoSettings, 
+					      i18n( "Create TRANS.TBL files" ),
+					      QCheckListItem::CheckBox );
+  m_checkHideTransTbl = new QCheckListItem( m_viewIsoSettings, 
+					    i18n( "Hide TRANS.TBL files in Joliet" ),
 					    QCheckListItem::CheckBox );
- m_checkAllow31CharFilenames = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
-						   i18n( "Allow 31 character filenames" ),
+  m_checkFollowSymbolicLinks = new QCheckListItem( m_viewIsoSettings, 
+						   i18n( "Follow symbolic links" ),
 						   QCheckListItem::CheckBox );
- m_checkAllowBeginningPeriod = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
-						   i18n( "Allow leading period" ),
-						   QCheckListItem::CheckBox );
- m_checkOmitVersionNumbers = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
-						 i18n( "Omit version numbers" ),
-						 QCheckListItem::CheckBox );
- m_checkOmitTrailingPeriod = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
-						 i18n( "Omit trailing period" ),
-						 QCheckListItem::CheckBox );
-
- m_checkAllowUntranslatedFilenames->setOpen(true);
 
 
- m_checkCreateTransTbl = new QCheckListItem( m_viewIsoSettings, 
-					     i18n( "Create TRANS.TBL files" ),
-					     QCheckListItem::CheckBox );
- m_checkHideTransTbl = new QCheckListItem( m_viewIsoSettings, 
-					   i18n( "Hide TRANS.TBL files in Joliet" ),
-					   QCheckListItem::CheckBox );
- m_checkFollowSymbolicLinks = new QCheckListItem( m_viewIsoSettings, 
-						  i18n( "Follow symbolic links" ),
-						  QCheckListItem::CheckBox );
+  m_isoLevelController = new QCheckListItem( m_viewIsoSettings,
+					     i18n("ISO Level") );
+
+  m_radioIsoLevel1 = new QCheckListItem( m_isoLevelController, 
+					 i18n("Level 1"),
+					 QCheckListItem::RadioButton );
+  m_radioIsoLevel2 = new QCheckListItem( m_isoLevelController, 
+					 i18n("Level 2"),
+					 QCheckListItem::RadioButton );
+  m_radioIsoLevel3 = new QCheckListItem( m_isoLevelController, 
+					 i18n("Level 3"),
+					 QCheckListItem::RadioButton );
+
+  m_isoLevelController->setOpen(true);
 
 
- m_isoLevelController = new QCheckListItem( m_viewIsoSettings,
-					    i18n("ISO Level") );
 
- m_radioIsoLevel1 = new QCheckListItem( m_isoLevelController, 
-					i18n("Level 1"),
-					QCheckListItem::RadioButton );
- m_radioIsoLevel2 = new QCheckListItem( m_isoLevelController, 
-					i18n("Level 2"),
-					QCheckListItem::RadioButton );
- m_radioIsoLevel3 = new QCheckListItem( m_isoLevelController, 
-					i18n("Level 3"),
-					QCheckListItem::RadioButton );
+  m_comboInputCharset->setValidator( new QRegExpValidator( QRegExp("[\\w_-]*"), this ) );
 
- m_isoLevelController->setOpen(true);
+  // fill charset combo
+  for( int i = 0; mkisofsCharacterSets[i]; i++ ) {
+    m_comboInputCharset->insertItem( QString( mkisofsCharacterSets[i] ) );
+  }
 }
 
 

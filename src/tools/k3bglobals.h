@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -23,7 +23,14 @@
 namespace K3b
 {
   enum WritingApp { DEFAULT = 1, CDRECORD = 2, CDRDAO = 3 };
-  
+
+  /**
+   * AUTO - let K3b determine the best mode
+   * MODE1 - refers to the default Yellow book mode1
+   * MODE2 - refers to CDROM XA mode2 form1
+   */
+  enum DataMode { AUTO, MODE1, MODE2 };
+
   QString framesToString( int h, bool showFrames = true );
   QString sizeToTime( long size );
 
