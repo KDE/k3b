@@ -23,6 +23,8 @@ EXTRA_DIST = main.cpp k3b.cpp k3b.h k3bui.rc k3b.desktop k3bdirview.cpp k3bdirvi
 apps_DATA = k3b.desktop
 appsdir = $(kde_appsdir)/Multimedia
 
+silent_DATA = k3b-iso.desktop
+silentdir = $(kde_appsdir)/.hidden/
 
 ###################
 # this 10 paths are KDE specific. Use them:
