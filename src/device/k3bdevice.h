@@ -220,8 +220,8 @@ class K3bDevice
   bool isDVD();
   K3bDiskInfo::type diskType();
   int numSessions();
-  const K3b::Msf discSize();
-  const K3b::Msf remainingSize();
+  K3b::Msf discSize();
+  K3b::Msf remainingSize();
 
   /**
    * block or unblock the drive's tray

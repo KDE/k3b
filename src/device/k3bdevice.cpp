@@ -357,7 +357,7 @@ int K3bDevice::isEmpty()
   
 }
 
-const K3b::Msf K3bDevice::discSize() {
+K3b::Msf K3bDevice::discSize() {
   K3b::Msf ret(-1);
   int cdromfd = ::open( devicename().ascii(), O_RDONLY | O_NONBLOCK );
   if (cdromfd < 0) {
@@ -389,7 +389,7 @@ const K3b::Msf K3bDevice::discSize() {
   
 }
 
-const K3b::Msf K3bDevice::remainingSize() {
+K3b::Msf K3bDevice::remainingSize() {
   K3b::Msf ret(-1);
   int cdromfd = ::open( devicename().ascii(), O_RDONLY | O_NONBLOCK );
   if (cdromfd < 0) {

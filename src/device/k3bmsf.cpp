@@ -34,6 +34,7 @@ K3b::Msf::Msf( int m, int s, int f )
     m_seconds(s),
     m_frames(f)
 {
+  makeValid();
 }
 
 K3b::Msf::Msf( int i )
