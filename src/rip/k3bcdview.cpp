@@ -20,7 +20,8 @@
 #include "k3bcdda.h"
 #include "k3bcddacopy.h"
 #include "../k3b.h"
-//#include "../option/k3boptiondialog.h"
+#include "../device/k3bdevicemanager.h"
+#include "../device/k3bdevice.h"
 #include "../k3bglobals.h"
 #include "k3bripperwidget.h"
 #include "k3bfilenamepatterndialog.h"
@@ -53,7 +54,7 @@ extern "C" {
 #define PLAY_BUTTON_INDEX              3
 #define STOP_BUTTON_INDEX              4
 //#define DEFAULT_CDROM                 "/dev/cdrom"
-#define DEFAULT_CDDB_HOST           "localhost:888"
+#define DEFAULT_CDDB_HOST           "freedb.org:888"
 #define COLUMN_NUMBER       0
 #define COLUMN_ARTIST         1
 #define COLUMN_FILENAME     5
@@ -225,20 +226,37 @@ void K3bCdView::slotMenuItemActivated(int itemId){
 void K3bCdView::play(){
     qDebug("(K3bCdView) play");
     // the sgx devices dont work, must use the real device i.e sr0, scd0
-    cd_device = (char *)qstrdup(QFile::encodeName("/dev/cdrom"));
-    //wm_drive *drive = find_drive_struct();
-    //wmcd_open(drive);
+    //    cd_device = (char *)qstrdup(QFile::encodeName("/dev/cdrom"));
+    K3bDevice* dev = k3bMain()->deviceManager()->deviceByName( m_device );
+    if( dev ) {
+      cd_device = (char*)(dev->ioctlDevice().latin1());    // Aaaaaarghhhh!!!!!
+      qDebug( "(K3bCdView) playing cd in device %s", cd_device );
+    }
+    else {
+      qDebug("(K3bCdView) Could not open cd device " + m_device );
+      return;
+    }
+    wm_drive *drive = find_drive_struct();
+    if( drive == 0 ) {
+      qDebug("(K3bCdView) could not wmfind device %s", cd_device );
+      return;
+    }
+    if( wmcd_open(drive) != 0 ) {
+      qDebug("(K3bCdView) could not wmopen device %s", cd_device );
+      return;
+    }
+
     // this call also initializes the cd drive and all the stuff
     int i = wm_cd_status();
     qDebug("(K3bCdView) Status of cd: %i", i );
     if( i == 0 ){
-        QMessageBox::critical( this, i18n("Player Error"), i18n("Sorry, this is only a demonstration a may not work.\nAt the moment K3B only supports /dev/cdrom for playing songs.\nPlease insert your CD into the drive which is linked to cdrom or create such a symbolic link."), i18n("Ok") );
+        QMessageBox::critical( this, i18n("Player Error"), i18n("Sorry, this is only a demonstration which may not work."), i18n("Ok") );
         return;
     }
     QList<QListViewItem> items = m_listView->selectedItems();
     int itemIndex = 1;
     if( !items.isEmpty() ){
-        itemIndex = m_listView->itemIndex( items.first() );
+        itemIndex = m_listView->itemIndex( items.first() ) + 1;
         qDebug("(K3bCdView) Play first song in selected list.");
     } else {
         qDebug("(K3bCdView) Play first song of audio cd.");

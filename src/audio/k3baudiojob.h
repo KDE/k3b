@@ -56,6 +56,7 @@ class K3bAudioJob : public K3bBurnJob  {
   void slotCdrdaoFinished();
   void slotEmitProgress( int trackMade, int TrackSize );
   void slotModuleFinished( bool );
+  void slotStartWriting();
 	
  private:
   class SAudioTrackInfo {

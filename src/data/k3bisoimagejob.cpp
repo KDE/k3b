@@ -20,6 +20,7 @@
 #include "../k3b.h"
 #include "../k3bglobals.h"
 #include "../device/k3bdevice.h"
+#include "../device/k3bemptydiscwaiter.h"
 
 #include <kprocess.h>
 #include <kconfig.h>
@@ -113,8 +114,18 @@ void K3bIsoImageJob::start()
   }
 
 
+  K3bEmptyDiscWaiter* waiter = new K3bEmptyDiscWaiter( m_device, k3bMain() );
+  connect( waiter, SIGNAL(discReady()), this, SLOT(slotStartWriting()) );
+  connect( waiter, SIGNAL(canceled()), this, SLOT(cancel()) );
+  waiter->waitForEmptyDisc();
+}
 
 
+void K3bIsoImageJob::slotStartWriting()
+{
+  emit started();
+
+  emit newSubTask( i18n("Preparing write process...") );
 
   m_process->clearArguments();
 	
@@ -180,6 +191,7 @@ void K3bIsoImageJob::start()
 	emit infoMessage( i18n("Starting recording at %1x speed...").arg(m_speed), K3bJob::STATUS );
 
       emit newTask( i18n("Writing ISO Image") );
+
     }
 }
 
@@ -188,7 +200,6 @@ void K3bIsoImageJob::cancel()
 {
   if( m_process->isRunning() ) {
     m_process->kill();
-    emit infoMessage( i18n("Writing canceled."), K3bJob::STATUS );
 
     // we need to unlock the writer because cdrecord locked it while writing
     bool block = m_device->block( false );
@@ -196,11 +207,11 @@ void K3bIsoImageJob::cancel()
       emit infoMessage( i18n("Could not unlock cd drive."), K3bJob::ERROR );
     //    else if( k3bMain()->eject() )
     // m_doc->burner()->eject();
-      
-	
-    m_error = K3b::CANCELED;
-    emit finished( this );
   }
+
+  m_error = K3b::CANCELED;
+  emit infoMessage( i18n("Writing canceled."), K3bJob::ERROR );
+  emit finished( this );
 }
 
 
@@ -298,6 +309,7 @@ void K3bIsoImageJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 	      emit processedSize( made, size );
 
 	      emit percent( 100*made/size );
+	      emit subPercent( 100*made/size );
 	    }
 	}
       else if( (*str).startsWith( "Starting new" ) )

@@ -24,6 +24,7 @@
 #include "k3baudiotrack.h"
 #include "input/k3baudiomodule.h"
 #include "../device/k3bdevice.h"
+#include "../device/k3bemptydiscwaiter.h"
 
 #include <kprocess.h>
 #include <klocale.h>
@@ -309,7 +310,6 @@ void K3bAudioJob::cancel()
 {
   if( error() == K3b::WORKING ) {
     m_process.kill();
-    emit infoMessage( i18n("Writing canceled."), K3bJob::STATUS );
 	
     // we need to unlock the writer because cdrecord locked it while writing
     bool block = m_doc->burner()->block( false );
@@ -325,10 +325,11 @@ void K3bAudioJob::cancel()
       QFile::remove( m_tocFile );
       m_tocFile = QString::null;
     }
-				
-    m_error = K3b::CANCELED;
-    emit finished( this );
   }
+	
+  m_error = K3b::CANCELED;
+  emit infoMessage( i18n("Writing canceled."), K3bJob::ERROR );
+  emit finished( this );
 }
 
 void K3bAudioJob::start()
@@ -475,7 +476,17 @@ void K3bAudioJob::slotModuleFinished( bool success )
   }
 }
 
+
 void K3bAudioJob::startWriting()
+{
+  K3bEmptyDiscWaiter* waiter = new K3bEmptyDiscWaiter( m_doc->burner(), k3bMain() );
+  connect( waiter, SIGNAL(discReady()), this, SLOT(slotStartWriting()) );
+  connect( waiter, SIGNAL(canceled()), this, SLOT(cancel()) );
+  waiter->waitForEmptyDisc();
+}
+
+
+void K3bAudioJob::slotStartWriting()
 {
   emit newTask( i18n("Writing") );
   emit newSubTask( i18n("Preparing write process...") );
@@ -513,7 +524,7 @@ void K3bAudioJob::startWriting()
 		
     // use cdrdao to burn the cd
     emit infoMessage( i18n("Writing TOC-file"), K3bJob::STATUS );
-    m_tocFile = locateLocal( "appdata", "temp/" ) + "k3btemptoc.toc";
+    m_tocFile = locateLocal( "appdata", "temp/k3btemptoc.toc");
     if( !m_doc->writeTOC( m_tocFile ) ) {
 
       qDebug( "(K3bAudioJob) Could not write TOC-file." );

@@ -43,12 +43,16 @@ class K3bEmptyDiscWaiter : public KDialogBase
   K3bEmptyDiscWaiter( K3bDevice* device, QWidget* parent = 0, const char* name = 0 );
   ~K3bEmptyDiscWaiter();
 
+  /**
+   * starts the emptydiskwaiter.
+   * @param appendable if true a not empty but appendable disk is also
+   *                   considered as valid.
+   */
+  void waitForEmptyDisc( bool appendable = false );
+
  signals:
   void canceled();
   void discReady();
-
- public slots:
-  void waitForEmptyDisc();
 
  protected slots:
   void slotCancel();
@@ -63,6 +67,7 @@ class K3bEmptyDiscWaiter : public KDialogBase
   K3bDevice* m_device;
   QPushButton* m_buttonCancel;
   QPushButton* m_buttonForce;
+  bool m_apppendable;
 };
 
 #endif

@@ -23,6 +23,7 @@
 #include "../k3b.h"
 #include "../k3bglobals.h"
 #include "../device/k3bdevice.h"
+#include "../device/k3bemptydiscwaiter.h"
 #include "k3bdiritem.h"
 
 #include <kprocess.h>
@@ -106,98 +107,109 @@ void K3bDataJob::start()
       emit infoMessage( i18n("Please creata an image first!"), K3bJob::ERROR );
       m_error = K3b::MKISOFS_ERROR;
       emit finished(this);
-      return;
     }
-		
-    // start the writing process -------------------------------------------------------------
-    // create a kshellprocess and do it on the fly!
-    m_process = new KShellProcess();
-
-    addMkisofsParameters();
-				
-    // add empty dummy dir since one path-spec is needed
-    *m_process << m_doc->dummyDir();
-    *m_process << "|";
-		
-    // now add the cdrecord parameters
-    *m_process << kapp->config()->readEntry( "cdrecord path" );
-
-    // and now we add the needed arguments...
-    // display progress
-    *m_process << "-v";
-
-    if( m_doc->dummy() )
-      *m_process << "-dummy";
-    if( m_doc->dao() )
-      *m_process << "-dao";
-    if( k3bMain()->eject() )
-      *m_process << "-eject";
-    if( m_doc->burnproof() && m_doc->burner()->burnproof() )
-      *m_process << "driveropts=burnproof";
-
-    // add speed
-    QString s = QString("-speed=%1").arg( m_doc->speed() );
-    *m_process << s;
-
-    // add the device (e.g. /dev/sg1)
-    s = QString("-dev=%1").arg( m_doc->burner()->genericDevice() );
-    *m_process << s;
-
-    // additional parameters from config
-    QStringList _params = kapp->config()->readListEntry( "cdrecord parameters" );
-    for( QStringList::Iterator it = _params.begin(); it != _params.end(); ++it )
-      *m_process << *it;
-
-    // cdrecord needs to know that it should receive data from stdin
-    s = "-tsize=" + m_isoSize;
-    *m_process << s;
-    *m_process << "-";
-			
-    // debugging output
-    cout << "***** mkisofs parameters:\n";
-    QStrList* _args = m_process->args();
-    QStrListIterator _it(*_args);
-    while( _it ) {
-      cout << *_it << " ";
-      ++_it;
+    else {
+      // wait for the user to put an empty disk in the drive
+      K3bEmptyDiscWaiter* waiter = new K3bEmptyDiscWaiter( m_doc->burner(), k3bMain() );
+      connect( waiter, SIGNAL(discReady()), this, SLOT(slotStartWritingOnTheFly()) );
+      connect( waiter, SIGNAL(canceled()), this, SLOT(cancel()) );
+      waiter->waitForEmptyDisc();
     }
-    cout << endl << flush;
-
-			
-    // connect to the cdrecord slots
-    connect( m_process, SIGNAL(processExited(KProcess*)),
-	     this, SLOT(slotCdrecordFinished()) );
-    connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
-	     this, SLOT(slotParseCdrecordOutput(KProcess*, char*, int)) );
-    connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
-	     this, SLOT(slotParseCdrecordOutput(KProcess*, char*, int)) );
-	
-    if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) )
-      {
-	// something went wrong when starting the program
-	// it "should" be the executable
-	qDebug("(K3bDataJob) could not start mkisofs/cdrecord");
-	m_error = K3b::CDRECORD_ERROR;
-	emit infoMessage( i18n("Could not start mkisofs/cdrecord!"), K3bJob::ERROR );
-	emit finished( this );
-      }
-    else
-      {
-	m_error = K3b::WORKING;
-	if( m_doc->dummy() )
-	  emit infoMessage( i18n("Starting simulation at %1x speed...").arg(m_doc->speed()), K3bJob::STATUS );
-	else
-	  emit infoMessage( i18n("Starting recording at %1x speed...").arg(m_doc->speed()), K3bJob::STATUS );
-	
-	emit newTask( i18n("Writing ISO") );
-	emit started();
-      }
-
   }
   else {
     m_process = new KProcess();
     writeImage();
   }
+}
+
+
+void K3bDataJob::slotStartWritingOnTheFly()
+{
+  emit newSubTask( i18n("Preparing write process...") );
+
+  // start the writing process -------------------------------------------------------------
+  // create a kshellprocess and do it on the fly!
+  m_process = new KShellProcess();
+
+  addMkisofsParameters();
+				
+  // add empty dummy dir since one path-spec is needed
+  *m_process << m_doc->dummyDir();
+  *m_process << "|";
+		
+  // now add the cdrecord parameters
+  *m_process << kapp->config()->readEntry( "cdrecord path" );
+
+  // and now we add the needed arguments...
+  // display progress
+  *m_process << "-v";
+
+  if( m_doc->dummy() )
+    *m_process << "-dummy";
+  if( m_doc->dao() )
+    *m_process << "-dao";
+  if( k3bMain()->eject() )
+    *m_process << "-eject";
+  if( m_doc->burnproof() && m_doc->burner()->burnproof() )
+    *m_process << "driveropts=burnproof";
+
+  // add speed
+  QString s = QString("-speed=%1").arg( m_doc->speed() );
+  *m_process << s;
+
+  // add the device (e.g. /dev/sg1)
+  s = QString("-dev=%1").arg( m_doc->burner()->genericDevice() );
+  *m_process << s;
+
+  // additional parameters from config
+  QStringList _params = kapp->config()->readListEntry( "cdrecord parameters" );
+  for( QStringList::Iterator it = _params.begin(); it != _params.end(); ++it )
+    *m_process << *it;
+
+  // cdrecord needs to know that it should receive data from stdin
+  s = "-tsize=" + m_isoSize;
+  *m_process << s;
+  *m_process << "-";
+			
+  // debugging output
+  cout << "***** mkisofs parameters:\n";
+  QStrList* _args = m_process->args();
+  QStrListIterator _it(*_args);
+  while( _it ) {
+    cout << *_it << " ";
+    ++_it;
+  }
+  cout << endl << flush;
+
+			
+  // connect to the cdrecord slots
+  connect( m_process, SIGNAL(processExited(KProcess*)),
+	   this, SLOT(slotCdrecordFinished()) );
+  connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
+	   this, SLOT(slotParseCdrecordOutput(KProcess*, char*, int)) );
+  connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
+	   this, SLOT(slotParseCdrecordOutput(KProcess*, char*, int)) );
+	
+  if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) )
+    {
+      // something went wrong when starting the program
+      // it "should" be the executable
+      qDebug("(K3bDataJob) could not start mkisofs/cdrecord");
+      m_error = K3b::CDRECORD_ERROR;
+      emit infoMessage( i18n("Could not start mkisofs/cdrecord!"), K3bJob::ERROR );
+      emit finished( this );
+    }
+  else
+    {
+      m_error = K3b::WORKING;
+      if( m_doc->dummy() )
+	emit infoMessage( i18n("Starting simulation at %1x speed...").arg(m_doc->speed()), K3bJob::STATUS );
+      else
+	emit infoMessage( i18n("Starting recording at %1x speed...").arg(m_doc->speed()), K3bJob::STATUS );
+	
+      emit newTask( i18n("Writing ISO") );
+      emit started();
+    }
 }
 
 
@@ -258,6 +270,17 @@ void K3bDataJob::writeImage()
 
 void K3bDataJob::writeCD()
 {
+  K3bEmptyDiscWaiter* waiter = new K3bEmptyDiscWaiter( m_doc->burner(), k3bMain() );
+  connect( waiter, SIGNAL(discReady()), this, SLOT(slotStartWriting()) );
+  connect( waiter, SIGNAL(canceled()), this, SLOT(cancel()) );
+  waiter->waitForEmptyDisc();
+}
+
+
+void K3bDataJob::slotStartWriting()
+{
+  emit newSubTask( i18n("Preparing write process...") );
+
   m_process->clearArguments();
   m_process->disconnect();
 	
@@ -337,7 +360,6 @@ void K3bDataJob::cancel()
 {
   if( m_process->isRunning() ) {
     m_process->kill();
-    emit infoMessage( i18n("Writing canceled."), K3bJob::STATUS );
 
     // we need to unlock the writer because cdrecord locked it while writing
     bool block = m_doc->burner()->block( false );
@@ -365,10 +387,11 @@ void K3bDataJob::cancel()
 	emit infoMessage( i18n("Image successfully created in %1").arg(m_doc->isoImage()), K3bJob::STATUS );
       }
     }
-				
-    m_error = K3b::CANCELED;
-    emit finished( this );
-  }
+  }	
+
+  m_error = K3b::CANCELED;
+  emit infoMessage( i18n("Writing canceled."), K3bJob::ERROR );
+  emit finished( this );
 }
 
 

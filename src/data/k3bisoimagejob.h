@@ -53,6 +53,7 @@ class K3bIsoImageJob : public K3bBurnJob
  protected slots:
   void slotParseCdrecordOutput( KProcess*, char*, int );
   void slotCdrecordFinished();
+  void slotStartWriting();
 		
  private:
   KProcess* m_process;

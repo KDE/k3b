@@ -21,8 +21,10 @@
 #include <qtimer.h>
 #include <qlabel.h>
 #include <qlayout.h>
+#include <qtooltip.h>
 
 #include <klocale.h>
+#include <kiconloader.h>
 
 
 K3bEmptyDiscWaiter::K3bEmptyDiscWaiter( K3bDevice* device, QWidget* parent, const char* name )
@@ -33,13 +35,21 @@ K3bEmptyDiscWaiter::K3bEmptyDiscWaiter( K3bDevice* device, QWidget* parent, cons
   m_device = device;
 
   QLabel* label = new QLabel( plainPage() );
-  label->setText( i18n("Please insert an empty cdr medium into drive\n%1 %2 (%3)\nOr press the 'Force' button if you think K3b is not able to detect your cdr.").arg(m_device->vendor()).arg(m_device->description()).arg(m_device->devicename()) );
-  label->setAlignment( Qt::AlignCenter | Qt::AlignVCenter | Qt::WordBreak );
+  label->setText( i18n("Please insert an empty cdr medium into drive<p><b>%1 %2 (%3)</b>.").arg(m_device->vendor()).arg(m_device->description()).arg(m_device->devicename()) );
+  label->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
 
-  QVBoxLayout* box = new QVBoxLayout( plainPage() );
+  QLabel* pixLabel = new QLabel( plainPage() );
+  pixLabel->setAlignment( Qt::AlignCenter | Qt::AlignVCenter );
+  pixLabel->setPixmap( KGlobal::instance()->iconLoader()->loadIcon( "cdwriter_unmount", KIcon::NoGroup, KIcon::SizeMedium ) );
+
+  QHBoxLayout* box = new QHBoxLayout( plainPage() );
+  box->setSpacing( 20 );
+  box->setMargin( marginHint() );
+  box->addWidget( pixLabel );
   box->addWidget( label );
+  box->setStretchFactor( label, 1 );
 
-  setWFlags( WStyle_Customize | WStyle_NoBorder | WStyle_Dialog );
+  QToolTip::add( actionButton(KDialogBase::User1), i18n("Force K3b to continue if it seems not to detect your empty cdr") );
 }
 
 
@@ -47,8 +57,10 @@ K3bEmptyDiscWaiter::~K3bEmptyDiscWaiter()
 {
 }
 
-void K3bEmptyDiscWaiter::waitForEmptyDisc()
+void K3bEmptyDiscWaiter::waitForEmptyDisc( bool appendable )
 {
+  m_apppendable = appendable;
+
   connect( m_timer, SIGNAL(timeout()), this, SLOT(slotTestForEmptyCd()) );
   m_timer->start(1000);
 
@@ -58,7 +70,8 @@ void K3bEmptyDiscWaiter::waitForEmptyDisc()
 
 void K3bEmptyDiscWaiter::slotTestForEmptyCd()
 {
-  if( m_device->isEmpty() == 0 ) {
+  int x = m_device->isEmpty();
+  if( x == 0 || ( x == 1 && m_apppendable ) ) {
     m_timer->stop();
     m_timer->disconnect();
     delayedDestruct();

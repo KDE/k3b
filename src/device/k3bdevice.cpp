@@ -25,6 +25,10 @@ K3bDevice::K3bDevice( cdrom_drive* drive )
   m_cdrdaoDriver = "auto";
   m_cdTextCapable = 0;
   m_cdromStruct = 0;
+  m_maxWriteSpeed = 0;
+  m_maxReadSpeed = 0;
+  m_burnproof = false;
+  m_burner = false;
 }
 
 

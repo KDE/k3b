@@ -187,6 +187,9 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
       m_labelImageSize->setText( s + " kb" );
     }
   }
+  else {
+    m_labelImageSize->setText( "0 kb" );
+  }
 }
 
 

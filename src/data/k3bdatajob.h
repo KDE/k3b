@@ -51,6 +51,8 @@ class K3bDataJob : public K3bBurnJob
   void slotMkisofsFinished();
   void slotCdrecordFinished();
   void slotParseMkisofsSize(KProcess*, char*, int);
+  void slotStartWritingOnTheFly();
+  void slotStartWriting();
 		
  private:
   K3bDataDoc* m_doc;

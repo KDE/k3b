@@ -211,7 +211,6 @@ void K3bAudioOnTheFlyJob::slotParseCdrdaoOutput( KProcess*, char* output, int le
 void K3bAudioOnTheFlyJob::cancel()
 {
   if( error() == K3b::WORKING ) {
-    emit infoMessage( i18n("Writing canceled."), K3bJob::STATUS );
 
     // we need to unlock the writer because cdrecord locked it while writing
     bool block = m_doc->burner()->block( false );
@@ -234,10 +233,11 @@ void K3bAudioOnTheFlyJob::cancel()
       QFile::remove( m_tocFile );
       m_tocFile = QString::null;
     }
-				
-    m_error = K3b::CANCELED;
-    emit finished( this );
   }
+
+  m_error = K3b::CANCELED;
+  emit infoMessage( i18n("Writing canceled."), K3bJob::ERROR );
+  emit finished( this );
 }
 
 
@@ -301,10 +301,12 @@ void K3bAudioOnTheFlyJob::slotStartWriting()
 		
   // use cdrdao to burn the cd
   emit infoMessage( i18n("Writing TOC-file"), K3bJob::STATUS );
-  m_tocFile = m_doc->writeTOC( locateLocal( "appdata", "temp/" ) + "k3btemptoc.toc" );
+  m_tocFile = locateLocal( "appdata", "temp/k3btemptoc.toc");
+  if( !m_doc->writeTOC( m_tocFile ) ) {
 
-  if( m_tocFile.isEmpty() ) {
-    emit infoMessage( i18n("Could not write TOC-file %1").arg( m_tocFile ), K3bJob::ERROR );
+    qDebug( "(K3bAudioJob) Could not write TOC-file." );
+    emit infoMessage( i18n("Could not write correct TOC-file."), K3bJob::ERROR );
+    
     m_error = K3b::IO_ERROR;
     emit finished( this );
   }

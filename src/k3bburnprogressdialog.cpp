@@ -37,6 +37,7 @@
 #include <qheader.h>
 #include <qscrollbar.h>
 #include <qpoint.h>
+#include <qfontmetrics.h>
 
 #include <kprogress.h>
 #include <klocale.h>
@@ -103,7 +104,9 @@ K3bBurnProgressDialog::PrivateStatusBarProgress::PrivateStatusBarProgress( QWidg
   : QWidget( parent )
 {
   progress = new KProgress( 0, 100, 0, Qt::Horizontal, this, "m_statusBarProgress" );
+
   label = new QLabel( this );
+  label->setText( i18n("Progress") );
 
   QHBoxLayout* layout = new QHBoxLayout( this );
   layout->setSpacing( 5 );
@@ -114,6 +117,7 @@ K3bBurnProgressDialog::PrivateStatusBarProgress::PrivateStatusBarProgress( QWidg
   QToolTip::add( progress, i18n("Click to show progress window") );
 
   setMaximumHeight( k3bMain()->statusBar()->height() );
+  setFixedWidth( 150 + label->fontMetrics().width("some sample text") );
 }
 
 
@@ -169,6 +173,7 @@ bool K3bBurnProgressDialog::eventFilter(QObject* object, QEvent* event)
 void K3bBurnProgressDialog::closeEvent( QCloseEvent* e )
 {
   if( m_buttonClose->isVisible() ) {
+    hide();
     emit closed();
     KDialog::closeEvent( e );
   }
@@ -192,7 +197,9 @@ void K3bBurnProgressDialog::setupGUI()
   m_groupInfoLayout->setMargin( marginHint() );
 
   m_viewInfo = new KListView( m_groupInfo, "m_viewInfo" );
-  m_viewInfo->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)7, m_viewInfo->sizePolicy().hasHeightForWidth() ) );
+  m_viewInfo->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, 
+					  (QSizePolicy::SizeType)7, 
+					  m_viewInfo->sizePolicy().hasHeightForWidth() ) );
   m_viewInfo->setMinimumSize( QSize( 500, 0 ) );
   m_viewInfo->addColumn( "type" );
   m_viewInfo->addColumn( "info" );
@@ -439,7 +446,6 @@ void K3bBurnProgressDialog::slotNewSubTask(const QString& name)
   m_progressTrack->setValue(0);
 
   m_statusBarProgress->label->setText( name );
-  m_statusBarProgress->label->update();
 }
 
 void K3bBurnProgressDialog::slotNewTask(const QString& name)
@@ -491,7 +497,6 @@ void K3bBurnProgressDialog::slotToBackground()
   // add the statusbar widgets
   k3bMain()->statusBar()->addWidget( m_statusBarProgress, 0, true );
   m_statusBarProgress->show();
-  m_statusBarProgress->label->setText( i18n("Progress") );
 
   hide();
 }
