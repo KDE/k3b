@@ -758,10 +758,6 @@ void K3bDataDoc::removeItem( K3bDataItem* item )
     emit itemRemoved( item );
     
     m_size -= item->k3bSize();
-    if( m_size < 0 ) {
-      kdDebug() << "(K3bDataDoc) Size of project is: " << (int)m_size << ", that CANNOT be! Will exit! PLEASE REPORT!" << endl;
-      exit(0);
-    }
 
     // the item takes care of it's parent!
     delete item;
