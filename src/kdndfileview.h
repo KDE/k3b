@@ -21,6 +21,8 @@
 #include <kfiledetailview.h>
 #include <kfileiconview.h>
 
+class QMouseEvent;
+
 
 /**
  * adds Drag'n'Drop support

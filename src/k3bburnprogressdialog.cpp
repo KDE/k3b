@@ -47,7 +47,8 @@
 #include <klistview.h>
 #include <kiconloader.h>
 #include <kstatusbar.h>
-
+#include <kconfig.h>
+#include <ksystemtray.h>
 
 
 class K3bBurnProgressDialog::PrivateDebugWidget : public KDialog 
@@ -99,6 +100,9 @@ K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name,
 {
   setCaption( i18n("K3b - Progress") );
 
+  m_systemTray = new KSystemTray( this );
+  m_systemTray->setPixmap( kapp->iconLoader()->loadIcon( "k3b", KIcon::Panel, 24 ) );
+
   setupGUI();
   setupConnections();
 
@@ -121,6 +125,20 @@ K3bBurnProgressDialog::~K3bBurnProgressDialog()
 {
 }
 
+
+void K3bBurnProgressDialog::show()
+{
+  KConfig* c = kapp->config();
+  c->setGroup( "General Options");
+
+  m_bShowSystemTrayProgress = c->readBoolEntry( "Show progress in system tray", true );
+  if( m_bShowSystemTrayProgress ) {
+    m_systemTray->show();
+  }
+
+  KDialog::show();
+}
+
 void K3bBurnProgressDialog::setExtraInfo( QWidget *extra ){
     mainLayout->addMultiCellWidget( extra, 1, 1, 0, 3 );
     extra->show();
@@ -128,6 +146,10 @@ void K3bBurnProgressDialog::setExtraInfo( QWidget *extra ){
 
 void K3bBurnProgressDialog::closeEvent( QCloseEvent* e )
 {
+  QToolTip::remove( m_systemTray );
+  QToolTip::add( m_systemTray, i18n("Ready") );
+  m_systemTray->hide();
+
   if( m_buttonClose->isVisible() ) {
     KDialog::closeEvent( e );
   }
@@ -339,6 +361,7 @@ void K3bBurnProgressDialog::setJob( K3bJob* job )
   connect( job, SIGNAL(infoMessage(const QString&,int)), this, SLOT(displayInfo(const QString&,int)) );
 	
   connect( job, SIGNAL(percent(int)), m_progressCd, SLOT(setValue(int)) );
+  connect( job, SIGNAL(percent(int)), this, SLOT(animateSystemTray(int)) );
   connect( job, SIGNAL(subPercent(int)), m_progressTrack, SLOT(setValue(int)) );
 
   connect( job, SIGNAL(processedSubSize(int, int)), this, SLOT(updateTrackSizeProgress(int, int)) );
@@ -392,6 +415,11 @@ void K3bBurnProgressDialog::slotNewSubTask(const QString& name)
 void K3bBurnProgressDialog::slotNewTask(const QString& name)
 {
   m_groupProgress->setTitle( name );
+
+  if( m_bShowSystemTrayProgress ) {
+    QToolTip::remove( m_systemTray );
+    QToolTip::add( m_systemTray, name );
+  }
 }
 
 
@@ -429,6 +457,15 @@ void K3bBurnProgressDialog::slotShowDebuggingOutput()
 {
   PrivateDebugWidget debugWidget( m_debugOutputMap, this );
   debugWidget.exec();
+}
+
+
+void K3bBurnProgressDialog::animateSystemTray( int percent )
+{
+  if( m_bShowSystemTrayProgress ) {
+    //    QPixmap p = kapp->iconLoader()->loadIcon( "k3b", KIcon::Panel, 24 );
+    // TODO: show <percent> percent of the icon
+  }
 }
 
 

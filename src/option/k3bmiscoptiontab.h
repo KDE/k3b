@@ -43,6 +43,7 @@ class K3bMiscOptionTab : public QWidget
 
  private:
   QCheckBox* m_checkShowSplash;
+  QCheckBox* m_checkShowSystemTrayProgress;
 
   QLineEdit*    m_editTempDir;
   QToolButton*  m_buttonTempDir;

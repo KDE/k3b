@@ -103,9 +103,9 @@ K3bMainWindow::K3bMainWindow()
 
 
   // the system tray widget
-  KSystemTray* m_systemTray = new KSystemTray( this );
-  m_systemTray->setPixmap( kapp->iconLoader()->loadIcon( "k3b", KIcon::Panel, 24 ) );
-  m_systemTray->show();
+  //  m_systemTray = new KSystemTray( this );
+
+  //m_systemTray->show();
 
 
   ///////////////////////////////////////////////////////////////////

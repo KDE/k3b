@@ -49,6 +49,7 @@ class K3bProjectTabWidget;
 class K3bSongManager;
 class K3bAudioPlayer;
 class K3bBusyWidget;
+class KSystemTray;
 
 
 /** Access to the "lonely" K3bMainWindow Object */
@@ -117,6 +118,8 @@ class K3bMainWindow : public KDockMainWindow
    *  must be called after construction
    */
   void initView();
+
+  KSystemTray* systemTray() const { return m_systemTray; }
 
  signals:
   void initializationInfo( const QString& );
@@ -316,6 +319,7 @@ class K3bMainWindow : public KDockMainWindow
   K3bOptionDialog* m_optionDialog;
 
   K3bBusyWidget* m_busyWidget;
+  KSystemTray* m_systemTray;
 	
   bool m_useID3TagForMp3Renaming;
   bool m_initialized;

@@ -275,6 +275,7 @@ void K3bDirView::slotEjectDisk()
 
   if( m_lastDevice ) {
     m_lastDevice->eject();
+    // TODO: check if this was the currently displayed device and if so return to home dir
   }
 }
 

@@ -38,7 +38,7 @@ class QTimer;
 class K3bJob;
 class KCutLabel;
 class QCloseEvent;
-
+class KSystemTray;
 
 /**
   *@author Sebastian Trueg
@@ -54,6 +54,9 @@ class K3bBurnProgressDialog : public KDialog  {
 
   void setJob( K3bJob* job );
   void setExtraInfo( QWidget *extra );
+
+  /** just reimplemented to show the systemtray */
+  void show();
 
  protected slots:
   void updateCdSizeProgress( int processed, int size );
@@ -72,6 +75,8 @@ class K3bBurnProgressDialog : public KDialog  {
   void slotUpdateTime();
 
   void slotShowDebuggingOutput();
+
+  void animateSystemTray( int );
 
  protected:
   void closeEvent( QCloseEvent* );
@@ -103,6 +108,8 @@ class K3bBurnProgressDialog : public KDialog  {
   // debugging output display
   class PrivateDebugWidget;
 
+  KSystemTray* m_systemTray;
+
  private:
   K3bJob* m_job;
   QTimer* m_timer;
@@ -112,6 +119,7 @@ class K3bBurnProgressDialog : public KDialog  {
 
   bool m_showBuffer;
   bool m_bCanceled;
+  bool m_bShowSystemTrayProgress;
 };
 
 #endif

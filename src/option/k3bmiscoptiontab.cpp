@@ -39,6 +39,7 @@ K3bMiscOptionTab::K3bMiscOptionTab(QWidget *parent, const char *name )
   : QWidget(parent,name) 
 {
   m_checkShowSplash = new QCheckBox( i18n("Show splash screen"), this );
+  m_checkShowSystemTrayProgress = new QCheckBox( i18n("Show progress in system tray"), this );
 
   QGroupBox* groupTempDir = new QGroupBox( 2, Qt::Horizontal, i18n("Default Temp Directory"), this );
   groupTempDir->layout()->setMargin( KDialog::marginHint() );
@@ -55,7 +56,8 @@ K3bMiscOptionTab::K3bMiscOptionTab(QWidget *parent, const char *name )
   mainGrid->setMargin( 0 );
 
   mainGrid->addWidget( m_checkShowSplash, 0, 0 );
-  mainGrid->addWidget( groupTempDir, 1, 0 );
+  mainGrid->addWidget( m_checkShowSystemTrayProgress, 1, 0 );
+  mainGrid->addWidget( groupTempDir, 2, 0 );
 
   connect( m_buttonTempDir, SIGNAL(clicked()), this, SLOT(slotGetTempDir()) );
 }
@@ -71,10 +73,10 @@ void K3bMiscOptionTab::readSettings()
   KConfig* c = kapp->config();
   c->setGroup( "General Options" );
   m_checkShowSplash->setChecked( c->readBoolEntry("Show splash", true) );
+  m_checkShowSystemTrayProgress->setChecked( c->readBoolEntry( "Show progress in system tray", true ) );
 
   QString tempdir = c->readEntry( "Temp Dir", locateLocal( "appdata", "temp/" ) );
   m_editTempDir->setText( tempdir );
-
 }
 
 
@@ -83,7 +85,8 @@ bool K3bMiscOptionTab::saveSettings()
   KConfig* c = kapp->config();
   c->setGroup( "General Options" );
   c->writeEntry( "Show splash", m_checkShowSplash->isChecked() );
-
+  c->writeEntry( "Show progress in system tray", m_checkShowSystemTrayProgress->isChecked() );
+;
   QString tempDir = m_editTempDir->text();
   QFileInfo fi( tempDir );
 

@@ -226,7 +226,8 @@ void K3bDataJob::fetchIsoSize()
 
 void K3bDataJob::slotIsoSizeFetched()
 {
-  qDebug("(K3bDataJob) iso size fetched");
+  qDebug("(K3bDataJob) iso size fetched:");
+  qDebug( m_collectedOutput );
 
   // now parse the output
   // this seems to be the format for mkisofs version < 1.14 (to stdout)
@@ -235,10 +236,11 @@ void K3bDataJob::slotIsoSizeFetched()
   }
   // and mkisofs >= 1.14 prints out only the number (to stderr)
   else {
+    int pos = m_collectedOutput.findRev( QRegExp("^\\d") ); // find the size at the end (there could be errors before it)
     bool ok;
-    m_collectedOutput.toInt( &ok );
+    int size = m_collectedOutput.mid( pos ).toInt( &ok );
     if( ok ) {
-      m_isoSize = m_collectedOutput.stripWhiteSpace() + "s";
+      m_isoSize = QString("%1s").arg(size);
     }
   }
     

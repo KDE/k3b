@@ -80,5 +80,4 @@ QDragObject* KDndFileIconView::dragObject()
 }
 
 
-
 #include "kdndfileview.moc"

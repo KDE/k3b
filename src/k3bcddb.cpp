@@ -410,9 +410,9 @@ void K3bCddb::slotReadyRead()
 
       else if( getCode( line ) == 210 ) {
 	// TODO: perhaps add an "exact" field to K3bCddbEntry
-	qDebug("(K3bCddb) Found multible exact matches");
+	qDebug("(K3bCddb) Found multiple exact matches");
 
-	emit infoMessage( i18n("Found multible exact matches") );
+	emit infoMessage( i18n("Found multiple exact matches") );
 
 	m_state = QUERY_DATA;
 
