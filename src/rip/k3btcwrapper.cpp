@@ -76,15 +76,15 @@ void K3bTcWrapper::runTcprobe()
   }
 }
 
-void K3bTcWrapper::slotParseTcprobeOutput( KProcess *p, char *text, int len){
+void K3bTcWrapper::slotParseTcprobeOutput( KProcess *, char *text, int len){
     m_outputBuffer += QString::fromLocal8Bit( text, len );
 }
 
-void K3bTcWrapper::slotParseTcprobeError( KProcess *p, char *text, int len){
+void K3bTcWrapper::slotParseTcprobeError( KProcess *, char *text, int len){
     m_errorBuffer += QString::fromLocal8Bit( text, len );
 }
 
-void K3bTcWrapper::slotTcprobeExited( KProcess *p){
+void K3bTcWrapper::slotTcprobeExited( KProcess *){
     //kdDebug() << "(K3bTcWrapper) Tcprobe output\n" << m_outputBuffer << endl;
     //kdDebug() << "(K3bTcWrapper) Tcprobe error\n" << m_errorBuffer << endl;
     kdDebug() << "(K3bTcWrapper) Tcprobe finished" << endl;
@@ -148,8 +148,8 @@ void K3bTcWrapper::slotTcprobeExited( KProcess *p){
         kdDebug() << titles << endl;
         int index = titles.find(":");
         int end = titles.find("chap");
-        kdDebug() << "Title: " << titles.mid(index+1, end-index) << endl;
-        kdDebug() << "Chapters " << titles.mid(index+1, end-index-1).stripWhiteSpace().toInt() << endl;
+        kdDebug() << "(K3bTcWrapper) Title: " << titles.mid(index+1, end-index) << endl;
+        kdDebug() << "(K3bTcWrapper) Chapters " << titles.mid(index+1, end-index-1).stripWhiteSpace().toInt() << endl;
         con.setMaxChapter( titles.mid(index+1, end-index-1).stripWhiteSpace().toInt() );
         con.setTitleNumber( m_currentTitle );
 
@@ -161,7 +161,7 @@ void K3bTcWrapper::slotTcprobeExited( KProcess *p){
         for( int a=1; a <= m_allAngle; a++){
             con.addAngle( QString::number(a) );
         }
-        kdDebug() << "Angles " << m_allAngle << endl;
+        kdDebug() << "(K3bTcWrapper) Angles " << m_allAngle << endl;
         index = titles.find( "title set");
         titles = titles.mid( index+10).stripWhiteSpace();
         con.setTitleSet( titles.toInt() );
@@ -187,58 +187,59 @@ K3bDvdContent K3bTcWrapper::parseTcprobe(){
             int index = (*str).find( ")" );
             QString tmp = (*str).mid( index+1 );
             if( dvdreaderIndex > 0 ){
-                // audio channels
-
-	      kdDebug() << "(K3bTcWrapper) audio channels: '" << tmp << "'" << endl;
-	      title.getAudioList()->append( tmp );
-	      kdDebug() << "(K3bTcWrapper) audio channels 2" << endl;
-            } else {
-	      // input mode
-	      kdDebug() << "(K3bTcWrapper) input mode" << endl;
-                QStringList mode = QStringList::split( " ", tmp );
-                title.setInput( mode[0] );
-                title.setMode( mode[1] );
-                QStringList extension = mode.grep("letterboxed");
-                if ( extension.count() > 0 ) {
-                    title.setAspectExtension( extension[0] );
-                    title.setAspectAnamorph( "anamorph" );
-                } else {
-                    title.setAspectAnamorph( "" );
-                    extension = mode.grep("scan");
-                    if ( extension.count() > 0 ) {
-                        title.setAspectExtension( extension[0] );
-                    } else {
-                        title.setAspectExtension( "" );
-                    }
+                if( tmp.contains( "kHz" ) ) {
+                    // audio channels
+                    kdDebug() << "(K3bTcWrapper) audio channels: '" << tmp << "'" << endl;
+                    title.getAudioList()->append( tmp );
+                    //kdDebug() << "(K3bTcWrapper) audio channels 2" << endl;
                 }
-            } // end input mode
-            dvdreaderIndex++;
-        } else if( (*str).contains("frame size") ){
-            int index = (*str).find(": -g");
-            int end = (*str).find( " ", index+5);
-            title.setRes( (*str).mid( index+5, end-index-5 ) );
-        } else if( (*str).contains("aspect") ){
-            int index = (*str).find("ratio:");
-            int end = (*str).find( " ", index+7);
-            title.setAspect( (*str).mid( index+7, end-index-7 ) );
-        } else if( (*str).contains("frame rate") ){
-            int index = (*str).find(": -f");
-            int end = (*str).find( " ", index+5);
-            title.setFramerate( (*str).mid( index+5, end-index-5 ) );
-        } else if( (*str).contains("[tcprobe] V:") ){
-            int index = (*str).find("V:");
-            int end = (*str).find( " ", index+3);
-            title.setFrames( (*str).mid( index+3, end-index-3 ) );
-            index = (*str).find("frames,");
-            end = (*str).find( " ", index+8);
-            title.setTime( (*str).mid( index+8, end-index-8 ) );
-        } else if( (*str).contains("[tcprobe] A:") ){
-            int index = (*str).find("A:");
-            title.setAudio( (*str).mid( index+3 ) );
-        } else if( (*str).contains("700 MB |") ){
-            int index = (*str).find("700");
-            title.setVideo( (*str).mid( index+13 ) );
-        }
+            } else {
+               // input mode
+              kdDebug() << "(K3bTcWrapper) input mode" << endl;
+              QStringList mode = QStringList::split( " ", tmp );
+              title.setInput( mode[0] );
+              title.setMode( mode[1] );
+              QStringList extension = mode.grep("letterboxed");
+              if ( extension.count() > 0 ) {
+                  title.setAspectExtension( extension[0] );
+                  title.setAspectAnamorph( "anamorph" );
+              } else {
+                  title.setAspectAnamorph( "" );
+                  extension = mode.grep("scan");
+              if ( extension.count() > 0 ) {
+                  title.setAspectExtension( extension[0] );
+              } else {
+                  title.setAspectExtension( "" );
+              }
+          }
+      } // end input mode
+      dvdreaderIndex++;
+      } else if( (*str).contains("frame size") ){
+          int index = (*str).find(": -g");
+          int end = (*str).find( " ", index+5);
+          title.setRes( (*str).mid( index+5, end-index-5 ) );
+      } else if( (*str).contains("aspect") ){
+          int index = (*str).find("ratio:");
+          int end = (*str).find( " ", index+7);
+          title.setAspect( (*str).mid( index+7, end-index-7 ) );
+      } else if( (*str).contains("frame rate") ){
+          int index = (*str).find(": -f");
+          int end = (*str).find( " ", index+5);
+          title.setFramerate( (*str).mid( index+5, end-index-5 ) );
+      } else if( (*str).contains("[tcprobe] V:") ){
+          int index = (*str).find("V:");
+          int end = (*str).find( " ", index+3);
+          title.setFrames( (*str).mid( index+3, end-index-3 ) );
+          index = (*str).find("frames,");
+          end = (*str).find( " ", index+8);
+          title.setTime( (*str).mid( index+8, end-index-8 ) );
+      } else if( (*str).contains("[tcprobe] A:") ){
+          int index = (*str).find("A:");
+          title.setAudio( (*str).mid( index+3 ) );
+      } else if( (*str).contains("700 MB |") ){
+          int index = (*str).find("700");
+          title.setVideo( (*str).mid( index+13 ) );
+      }
     }
     return title;
 }
