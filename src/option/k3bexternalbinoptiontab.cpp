@@ -81,7 +81,7 @@ void K3bExternalBinOptionTab::readSettings()
   // clear the view before adding anything!
   m_viewPrograms->clear();
   KListViewItem *item;
-  for( int i=0; i < NUM_BIN_PROGRAMS; i++ ) {
+  for( int i=0; i < NUM_BIN_PROGRAMS ; i++ ) {
     item =  new KListViewItem( m_viewPrograms );
     item->setPixmap( 0, m_manager->foundBin( binPrograms[ i ] ) ? SmallIcon("ok") : SmallIcon("stop") );
     item->setText( 1, binPrograms[ i ] );

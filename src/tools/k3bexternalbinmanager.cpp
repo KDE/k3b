@@ -7,13 +7,15 @@
 #include <qregexp.h>
 #include <qfile.h>
 
+
+
 K3bExternalBin::K3bExternalBin( const QString& name )
  : m_name( name )
 {
 }
 
 
-bool K3bExternalBin::isEmpty() const 
+bool K3bExternalBin::isEmpty() const
 {
   return m_name.isEmpty();
 }
@@ -37,7 +39,7 @@ K3bExternalBinManager::K3bExternalBinManager( QObject* parent )
 
 
 K3bExternalBinManager::~K3bExternalBinManager()
-{ 
+{
   delete m_process;
 
   QMap<QString, K3bExternalBin*>::Iterator it = m_binMap.begin();
@@ -57,20 +59,22 @@ void K3bExternalBinManager::searchVersion( int programArrayIndex ){
 
         QString bin = QString("%1%2").arg(searchPaths[i]).arg( binPrograms[ programArrayIndex ] );
         if( QFile::exists( bin ) ) {
-
+            // shit kde3, hangs up when parsing output each second time, fucking bullshit kde3,
+            // seems to be working if deleting and creating new instance of kprocess.
+            delete m_process;
+            m_process = new KProcess();
             m_process->clearArguments();
-	    m_process->setName( binPrograms[ programArrayIndex ] );
-            *m_process << bin << "--version";
-
-	    m_process->disconnect();
-	    connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
-		     this, SLOT(slotParseOutputVersion(KProcess*, char*, int)) );
-	    connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
-		     this, SLOT(slotParseOutputVersion(KProcess*, char*, int)) );
-
+            m_process->disconnect();
+            m_process->setName( binPrograms[ programArrayIndex ] );
+            *m_process << bin << binVersionFlag[ programArrayIndex ];
+            connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
+	          this, SLOT(slotParseOutputVersion(KProcess*, char*, int)) );
+            connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
+	          this, SLOT(slotParseOutputVersion(KProcess*, char*, int)) );
             m_process->start( KProcess::Block, KProcess::AllOutput );
+            qDebug("Process started, go on");
             if( m_binMap[  binPrograms[ programArrayIndex ] ]->version.isEmpty() ) {
-                qDebug("(K3bExternalBinManager) " + bin + " seems not to be "+ 
+                qDebug("(K3bExternalBinManager) " + bin + " seems not to be "+
 		       binPrograms[ programArrayIndex ]+" version >= " + binVersions[ programArrayIndex ] );
             } else {
 	        m_binMap[ binPrograms[ programArrayIndex ] ]->path = bin;
@@ -142,7 +146,7 @@ void K3bExternalBinManager::checkVersions()
 }
 
 void K3bExternalBinManager::checkTranscodeVersion(){
-  for( int i=3;  i < 8; i++){
+  for( int i=TRANSCODE_START;  i < TRANSCODE_END; i++){
     K3bExternalBin* binO = binObject( binPrograms[ i ] );
     bool wrongVersion = false;
     if( binO ) {
@@ -174,6 +178,7 @@ void K3bExternalBinManager::checkTranscodeVersion(){
 
 void K3bExternalBinManager::slotParseOutputVersion( KProcess* p, char* data, int len ) {
     QString task( p->name() );
+    p->kill();
     qDebug("(K3bExternalBinManager) Check output of bin " + task );
     int index = 0;
     for( int i=0; i< NUM_BIN_PROGRAMS; i++) {
@@ -206,47 +211,52 @@ void K3bExternalBinManager::slotParseOutputVersion( KProcess* p, char* data, int
         case 7:
             slotParseTranscodeVersion(p, data, len);
             break;
+        case 8:
+            slotParseTranscodeVersion(p, data, len);
+            break;
         default:
-            qDebug("(K3bExternalBinManager) Version check failed.");
+            qDebug("(K3bExternalBinManager) BUG: Version check failed, add new case in K3bExternalBinManager.");
             break;
     }
 }
 
 
-void K3bExternalBinManager::slotParseCdrtoolsVersion( KProcess*, char* data, int len )
-{
-  QString buffer = QString::fromLatin1( data, len );
-  int start = buffer.find( QRegExp("[0-9]") );
-  int findStart = ( start > -1 ? start : 0 );
-  int end   = buffer.find( ' ', findStart );
-
-  if( start > -1 && end > -1 ) {
-    if( buffer.contains( "mkisofs" ) ) {
-      if( m_binMap.contains( "mkisofs" ) ) {
-	m_binMap["mkisofs"]->version = buffer.mid( start, end-start );
-      }
+void K3bExternalBinManager::slotParseCdrtoolsVersion( KProcess*p, char* data, int len ){
+    p->kill();
+    QString buffer = QString::fromLatin1( data, len );
+    int start = buffer.find( QRegExp("[0-9]") );
+    int findStart = ( start > -1 ? start : 0 );
+    int end   = buffer.find( ' ', findStart );
+    qDebug("Check cdrtools:"+ buffer);
+    if( start > -1 && end > -1 ) {
+        if( buffer.contains( "mkisofs" ) ) {
+            if( m_binMap.contains( "mkisofs" ) ) {
+                m_binMap["mkisofs"]->version = buffer.mid( start, end-start );
+            }
+        } else if( buffer.contains( "Cdrecord" ) ) {
+            if( m_binMap.contains( "cdrecord" ) ) {
+                m_binMap["cdrecord"]->version = buffer.mid( start, end-start );
+            }
+        }
     }
-    else if( buffer.contains( "Cdrecord" ) ) {
-      if( m_binMap.contains( "cdrecord" ) ) {
-	m_binMap["cdrecord"]->version = buffer.mid( start, end-start );
-      }
-    }
-  }
 }
+
+
 
 
 void K3bExternalBinManager::slotParseCdrdaoVersion( KProcess*, char* data, int len )
 {
+ qDebug("Check cdrdao");
   if( m_binMap.contains( "cdrdao" ) ) {
     QString buffer = QString::fromLatin1( data, len );
     QStringList lines = QStringList::split( "\n", buffer );
-    
+
     for( QStringList::Iterator str = lines.begin(); str != lines.end(); str++ ) {
       if( (*str).startsWith( "Cdrdao version" ) ) {
 	int start = (*str).find( "version" ) + 8;
 	int findStart = ( start > -1 ? start : 0 );
 	int end   = (*str).find( ' ', findStart );
-	
+
 	if( start > -1 && end > -1 ) {
 	  m_binMap["cdrdao"]->version = (*str).mid( start, end-start );
 	  break;   // version found

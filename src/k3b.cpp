@@ -822,8 +822,8 @@ void K3bMainWindow::init()
     config()->setGroup( "External Programs" );
     m_externalBinManager->readConfig( config() );
   }
-
-  m_externalBinManager->checkVersions();
+  // not thread/kprocess safe
+  //m_externalBinManager->checkVersions();
 
   // ===============================================================================
 

@@ -156,15 +156,13 @@ void K3bDirView::slotMountDevice( const QString& device )
   slotDirActivated( url );
 }
 
-
-void K3bDirView::slotCheckDvd( const QString& device ) 
-{
-  // cdview calls this so hide cd
-  m_cdView->hide();
-  K3bDevice *dev = k3bMain()->deviceManager()->deviceByName( device );
-  // if insert disc can't be read a notSupportDisc(string device) signal is emitted -> mount cd and show data
-  m_filmView->setDevice( device );
-  m_filmView->show();
+void K3bDirView::slotCheckDvd( const QString& device ) {
+    // cdview calls this so hide cd
+    m_cdView->hide();
+    K3bDevice *dev = k3bMain()->deviceManager()->deviceByName( device );
+    // if insert disc can't be read a notSupportDisc(string device) signal is emitted -> mount cd and show data
+    m_filmView->setDevice( device );
+    m_filmView->showAndCheck();
 }
 
 void K3bDirView::slotUpdateURLCombo( const KURL& url )

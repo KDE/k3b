@@ -17,7 +17,7 @@
 
 #include "k3bjob.h"
 
-K3bJob::K3bJob()
+K3bJob::K3bJob( )
 {
 }
 

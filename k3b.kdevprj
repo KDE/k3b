@@ -20,18 +20,22 @@ type=DATA
 addcxxflags=
 bin_program=k3b
 cxxflags=\s-O2 -g3 -Wall
-ldadd=$(ID3LIB_LIBS) $(CDPARANOIA_LIBS) -lmad -lartskde $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT)
+ldadd=$(ID3LIB_LIBS) $(CDPARANOIA_LIBS) -lmad -lartskde -lqt-mt $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE)
 ldflags=
 
 [General]
-AMChanged=true
+AMChanged=false
 author=Sebastian Trueg
 configure_args=--prefix=/opt/kde3
 email=trueg@informatik.uni-freiburg.de
 kdevprj_version=1.3
 lfv_open_groups=GNU,Translations
 make_options=\s-j1
+<<<<<<< k3b.kdevprj
+makefiles=Makefile.am,src/Makefile.am,doc/Makefile.am,doc/en/Makefile.am,po/Makefile.am,src/data/Makefile.am,src/cdinfo/Makefile.am,src/audio/Makefile.am,src/device/Makefile.am,src/kiotree/Makefile.am,src/audio/input/Makefile.am,src/option/Makefile.am,src/rip/Makefile.am,src/kdelibs_patched/Makefile.am,src/libwm/Makefile.am,src/libwm/include/Makefile.am,src/rip/songdb/Makefile.am,src/tools/Makefile.am
+=======
 makefiles=Makefile.am,src/Makefile.am,doc/Makefile.am,doc/en/Makefile.am,po/Makefile.am,src/data/Makefile.am,src/cdinfo/Makefile.am,src/audio/Makefile.am,src/device/Makefile.am,src/audio/input/Makefile.am,src/option/Makefile.am,src/rip/Makefile.am,src/libwm/Makefile.am,src/libwm/include/Makefile.am,src/rip/songdb/Makefile.am,src/tools/Makefile.am,src/cdcopy/Makefile.am
+>>>>>>> 1.51
 modifyMakefiles=true
 project_name=K3b
 project_type=mdi_kde2
@@ -263,37 +267,6 @@ install_location=
 type=SOURCE
 
 [src/audio/k3baudioview.h]
-dist=true
-install=false
-install_location=
-type=HEADER
-
-[src/cdcopy/Makefile.am]
-files=src/cdcopy/k3bcdcopydialog.cpp,src/cdcopy/k3bcdcopydialog.h,src/cdcopy/k3bcdcopyjob.cpp,src/cdcopy/k3bcdcopyjob.h
-sharedlib_LDFLAGS=-version-info 0:0:1
-sharedlib_rootname=cdcopy
-sub_dirs=
-type=static_library
-
-[src/cdcopy/k3bcdcopydialog.cpp]
-dist=true
-install=false
-install_location=
-type=SOURCE
-
-[src/cdcopy/k3bcdcopydialog.h]
-dist=true
-install=false
-install_location=
-type=HEADER
-
-[src/cdcopy/k3bcdcopyjob.cpp]
-dist=true
-install=false
-install_location=
-type=SOURCE
-
-[src/cdcopy/k3bcdcopyjob.h]
 dist=true
 install=false
 install_location=
@@ -1000,6 +973,11 @@ install=false
 install_location=
 type=HEADER
 
+[src/kdelibs_patched/Makefile.am]
+files=
+sub_dirs=
+type=static_library
+
 [src/kdiskfreesp.h]
 dist=true
 install=false
@@ -1420,7 +1398,7 @@ install_location=
 type=HEADER
 
 [src/rip/Makefile.am]
-files=src/rip/k3bcdda.cpp,src/rip/k3bcdda.h,src/rip/k3bcdview.cpp,src/rip/k3bcdview.h,src/rip/k3bfilenamepatterndialog.cpp,src/rip/k3bfilenamepatterndialog.h,src/rip/k3bripperwidget.cpp,src/rip/k3bcddacopy.cpp,src/rip/k3bcddacopy.h,src/rip/k3bripperwidget.h,src/rip/k3bpatternparser.cpp,src/rip/k3bpatternparser.h,src/rip/k3bpatternwidget.cpp,src/rip/k3bpatternwidget.h,src/rip/k3bfilmview.cpp,src/rip/k3bfilmview.h,src/rip/k3btcwrapper.cpp,src/rip/k3btcwrapper.h,src/rip/k3bdvdcontent.cpp,src/rip/k3bdvdcontent.h
+files=src/rip/k3bcdda.cpp,src/rip/k3bcdda.h,src/rip/k3bcdview.cpp,src/rip/k3bcdview.h,src/rip/k3bfilenamepatterndialog.cpp,src/rip/k3bfilenamepatterndialog.h,src/rip/k3bripperwidget.cpp,src/rip/k3bcddacopy.cpp,src/rip/k3bcddacopy.h,src/rip/k3bripperwidget.h,src/rip/k3bpatternparser.cpp,src/rip/k3bpatternparser.h,src/rip/k3bpatternwidget.cpp,src/rip/k3bpatternwidget.h,src/rip/k3bfilmview.cpp,src/rip/k3bfilmview.h,src/rip/k3btcwrapper.cpp,src/rip/k3btcwrapper.h,src/rip/k3bdvdcontent.cpp,src/rip/k3bdvdcontent.h,src/rip/k3bdvdripperwidget.cpp,src/rip/k3bdvdripperwidget.h,src/rip/k3bdvdrippingprocess.cpp,src/rip/k3bdvdrippingprocess.h,src/rip/k3bdvdcopy.cpp,src/rip/k3bdvdcopy.h,src/rip/k3bdvdaudiogain.cpp,src/rip/k3bdvdaudiogain.h
 sharedlib_LDFLAGS=
 sharedlib_rootname=
 sub_dirs=songdb
@@ -1462,6 +1440,18 @@ install=false
 install_location=
 type=HEADER
 
+[src/rip/k3bdvdaudiogain.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/rip/k3bdvdaudiogain.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
 [src/rip/k3bdvdcontent.cpp]
 dist=true
 install=false
@@ -1469,6 +1459,42 @@ install_location=
 type=SOURCE
 
 [src/rip/k3bdvdcontent.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/rip/k3bdvdcopy.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/rip/k3bdvdcopy.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/rip/k3bdvdripperwidget.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/rip/k3bdvdripperwidget.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/rip/k3bdvdrippingprocess.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/rip/k3bdvdrippingprocess.h]
 dist=true
 install=false
 install_location=
