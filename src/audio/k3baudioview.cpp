@@ -64,11 +64,10 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
   setupActions();
   setupPopupMenu();
 
-  // TODO: create slot dropped that calculates the position where was dropped and passes it to the signal dropped( KURL&, int)
   connect( m_songlist, SIGNAL(dropped(KListView*, QDropEvent*, QListViewItem*)),
 	   this, SLOT(slotDropped(KListView*, QDropEvent*, QListViewItem*)) );
-  connect( m_songlist, SIGNAL(moved(QListViewItem*,QListViewItem*,QListViewItem*)),
-	   this, SLOT(slotItemMoved( QListViewItem*, QListViewItem*, QListViewItem* )) );
+  connect( m_songlist, SIGNAL(moved( QList<QListViewItem>&, QList<QListViewItem>&, QList<QListViewItem>& )),
+	   this, SLOT(slotItemsMoved( QList<QListViewItem>&, QList<QListViewItem>&, QList<QListViewItem>& )) );
 	
   connect( m_songlist, SIGNAL(rightButtonClicked(QListViewItem*, const QPoint&, int)),
 	   this, SLOT(showPopupMenu(QListViewItem*, const QPoint&)) );
@@ -102,11 +101,13 @@ void K3bAudioView::setupActions()
   m_actionRemove = new KAction( i18n( "Remove" ), "editdelete", 
 			      Key_Delete, this, SLOT(slotRemoveTracks()), actionCollection() );
   m_actionPlay = new KAction( i18n( "Play" ), "1rightarrow", 
-			      0, this, SLOT(slotPlayTrack()), actionCollection() );
+			      0, this, SLOT(slotPlaySelected()), actionCollection() );
+
+  m_actionPlayAll = new KAction( i18n( "Play all" ), "1rightarrow",
+				 0, this, SLOT(slotPlayAll()), actionCollection() );
 
   // disabled by default
   m_actionRemove->setEnabled(false);
-  m_actionProperties->setEnabled(false);
   m_actionPlay->setEnabled(false);
 }
 
@@ -114,13 +115,13 @@ void K3bAudioView::setupActions()
 void K3bAudioView::setupPopupMenu()
 {
   m_popupMenu = new KPopupMenu( m_songlist, "AudioViewPopupMenu" );
-  m_actionPlay->plug( m_popupMenu );
+  m_actionPlayAll->plug( m_popupMenu );
   m_popupMenu->insertSeparator();
+  m_actionPlay->plug( m_popupMenu );
   m_actionRemove->plug( m_popupMenu );
   m_popupMenu->insertSeparator();
   m_actionProperties->plug( m_popupMenu);
 }
-
 
 
 void K3bAudioView::slotDropped( KListView*, QDropEvent* e, QListViewItem* after )
@@ -130,39 +131,47 @@ void K3bAudioView::slotDropped( KListView*, QDropEvent* e, QListViewItem* after 
 
   QString droppedText;
   QTextDrag::decode( e, droppedText );
-  QStringList _urls = QStringList::split("\r\n", droppedText );
-  uint _pos;
+  QStringList urls = QStringList::split("\r\n", droppedText );
+  uint pos;
   if( after == 0L )
-    _pos = 0;
+    pos = 0;
   else
-    _pos = after->text(0).toInt();
+    pos = after->text(0).toInt();
 		
-  emit dropped( _urls, _pos );
+  m_doc->addTracks( urls, pos );
 }
 
-void K3bAudioView::slotItemMoved( QListViewItem* item, QListViewItem*, QListViewItem* afterNow )
-{
-  if( !item)
-    return;
-		
-  uint before, after;
-  // text starts at 1 but QList starts at 0
-  before = item->text(0).toInt()-1;
-  if( afterNow ) {
-    after = afterNow->text(0).toInt()-1;
-    if( before > after )
-      after++;
-  }
-  else
-    after = 0;
 
-  m_doc->moveTrack( before, after );
+void K3bAudioView::slotItemsMoved( QList<QListViewItem>& items, 
+				   QList<QListViewItem>&, 
+				   QList<QListViewItem>& afterNow )
+{
+  // move the tracks one after the other
+ 
+  QListIterator<QListViewItem> itI(items);
+  QListIterator<QListViewItem> itAN(afterNow);
+  while( itI.current() && itAN.current() ) {
+    K3bAudioTrack* track           = ((K3bAudioListViewItem*)*itI)->audioTrack();
+    K3bAudioTrack* trackAfterNow   = ((K3bAudioListViewItem*)*itAN)->audioTrack();
+
+    m_doc->moveTrack( track->index(), trackAfterNow->index()+1 );
+
+    ++itI, ++itAN;
+  }
 }
 
 void K3bAudioView::showPopupMenu( QListViewItem* _item, const QPoint& _point )
 {
-  if( _item )
-    m_popupMenu->popup( _point );
+  if( _item ) {
+     m_actionRemove->setEnabled(true);
+     m_actionPlay->setEnabled(true);
+   }
+   else {
+     m_actionRemove->setEnabled(false);
+     m_actionPlay->setEnabled(false);
+   }
+
+  m_popupMenu->popup( _point );
 }
 
 
@@ -173,6 +182,9 @@ void K3bAudioView::showPropertiesDialog()
     K3bAudioTrackDialog* d = new K3bAudioTrackDialog( selected, this );
     d->exec();
     delete d;
+  }
+  else {
+    burnDialog()->exec( false );
   }
 }
 
@@ -209,7 +221,6 @@ void K3bAudioView::slotRemoveTracks()
 
   if( m_doc->numOfTracks() == 0 ) {
     m_actionRemove->setEnabled(false);
-    m_actionProperties->setEnabled(false);
     m_actionPlay->setEnabled(false);
   }
 }
@@ -248,27 +259,38 @@ void K3bAudioView::slotUpdateItems()
     track = m_doc->next();
   }
 
-   m_fillStatusDisplay->update();
+  m_fillStatusDisplay->update();
 
-   if( m_doc->numOfTracks() > 0 ) {
-     m_actionRemove->setEnabled(true);
-     m_actionProperties->setEnabled(true);
-     m_actionPlay->setEnabled(true);
-   }
-   else {
-     m_actionRemove->setEnabled(false);
-     m_actionProperties->setEnabled(false);
-     m_actionPlay->setEnabled(false);
-   }
+  if( m_doc->numOfTracks() > 0 ) {
+    m_actionRemove->setEnabled(true);
+    m_actionPlay->setEnabled(true);
+  }
+  else {
+    m_actionRemove->setEnabled(false);
+    m_actionPlay->setEnabled(false);
+  }
 }
 
 
-void K3bAudioView::slotPlayTrack()
+void K3bAudioView::slotPlaySelected()
 {
-  // for now just play current track
   QList<K3bAudioTrack> selected = selectedTracks();
-  if( !selected.isEmpty() ) {
-    k3bMain()->audioPlayer()->playFile( selected.first()->absPath() );
+  QListIterator<K3bAudioTrack> it( selected );
+  k3bMain()->audioPlayer()->playFile( it.current()->absPath() );
+
+  for( ++it; it.current(); ++it ) {
+    k3bMain()->audioPlayer()->enqueueFile( it.current()->absPath() );
+  }
+}
+
+
+void K3bAudioView::slotPlayAll()
+{
+  QListIterator<K3bAudioTrack> it( *m_doc->tracks() );
+  k3bMain()->audioPlayer()->playFile( it.current()->absPath() );
+  
+  for( ++it; it.current(); ++it ) {
+    k3bMain()->audioPlayer()->enqueueFile( it.current()->absPath() );
   }
 }
 

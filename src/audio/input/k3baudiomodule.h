@@ -10,7 +10,9 @@ class K3bAudioTrack;
 
 
 /**
- * Abstract class for all the audio input.
+ * Abstract streaming class for all the audio input.
+ * Has to output data in the following format:
+ * MSBLeft LSBLeft MSBRight LSBRight (big endian byte order)
  **/
 class K3bAudioModule : public QObject
 {
@@ -21,9 +23,6 @@ class K3bAudioModule : public QObject
   virtual ~K3bAudioModule();
 
   K3bAudioTrack* audioTrack() const { return m_track; }
-
-  /** check if the url contains the correct filetype **/
-//  virtual bool valid() const = 0;
 
   /**
    * The consumer is the object that will handle the output

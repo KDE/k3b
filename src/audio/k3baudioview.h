@@ -53,6 +53,8 @@ class K3bAudioView : public K3bView  {
   ~K3bAudioView();
 
   K3bProjectBurnDialog* burnDialog();
+
+  QList<K3bAudioTrack> selectedTracks();
 		
  private:
   void setupPopupMenu();
@@ -63,6 +65,7 @@ class K3bAudioView : public K3bView  {
   KAction* m_actionProperties;
   KAction* m_actionRemove;
   KAction* m_actionPlay;
+  KAction* m_actionPlayAll;
 
   K3bAudioListView* m_songlist;
   KPopupMenu* m_popupMenu;
@@ -70,24 +73,16 @@ class K3bAudioView : public K3bView  {
   K3bAudioBurnDialog* m_burnDialog;
 
   QMap<K3bAudioTrack*, K3bAudioListViewItem*> m_itemMap;
-  QList<K3bAudioTrack> selectedTracks();
-
- signals:
-  void dropped(const QStringList&, uint position);
-  /** the item at position oldPos should be removed and reinserted at newPos */
-  void itemMoved( uint oldPos, uint newPos );
 
  protected slots:
   void slotUpdateItems();
-
-  /** generates a dropped signal */
   void slotDropped( KListView*, QDropEvent* e, QListViewItem* after );
-  /** emits a signal to move an item */
-  void slotItemMoved( QListViewItem*, QListViewItem*, QListViewItem* );
-  void showPopupMenu( QListViewItem* _item, const QPoint& );
+  void slotItemsMoved( QList<QListViewItem>&, QList<QListViewItem>&, QList<QListViewItem>& );
+  void showPopupMenu( QListViewItem* item, const QPoint& );
   void showPropertiesDialog();
   void slotRemoveTracks();
-  void slotPlayTrack();
+  void slotPlaySelected();
+  void slotPlayAll();
 };
 
 #endif

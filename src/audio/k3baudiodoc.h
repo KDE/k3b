@@ -87,6 +87,8 @@ class K3bAudioDoc : public K3bDoc
   int numOfTracks() const;
 
   K3bBurnJob* newBurnJob();
+
+  static unsigned long identifyWaveFile( const QString& filename );
 		
  public slots:
   /**
@@ -95,6 +97,8 @@ class K3bAudioDoc : public K3bDoc
    * the process is finished and check error()
    * to know about the result.
    **/
+  void addUrl( const QString& );
+  void addUrls( const QStringList& );
   void addTrack( const QString&, uint );
   void addTracks( const QStringList&, uint );
   /** adds a track without any testing */
@@ -103,7 +107,7 @@ class K3bAudioDoc : public K3bDoc
 
   // --- TODO: this should read: removeTrack( K3bAudioTrack* )
   void removeTrack( int position );
-  void moveTrack( uint oldPos, uint newPos );
+  void moveTrack( int oldPos, int newPos );
 
   void setPadding( bool p ) { m_padding = p; }
   //	void cancel();
@@ -141,6 +145,12 @@ class K3bAudioDoc : public K3bDoc
   bool addTrackToToc( K3bAudioTrack* track, QTextStream& t, long& stdinDataLength );
 
   unsigned long isWaveFile( const KURL& url );
+
+  /**
+   * replaces special characters like "\" in str to prepare it
+   * for usage in cdrdao toc-files
+   */
+  QString prepareForTocFile( const QString& str );
 
  private:
   class PrivateUrlToAdd

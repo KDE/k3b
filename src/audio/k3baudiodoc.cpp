@@ -32,6 +32,7 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qfile.h>
+#include <qdatastream.h>
 #include <qdom.h>
 #include <qdatetime.h>
 #include <qtimer.h>
@@ -88,7 +89,8 @@ bool K3bAudioDoc::newDocument()
 
 
 
-unsigned long K3bAudioDoc::size() const {
+unsigned long K3bAudioDoc::size() const 
+{
   unsigned long size = 0;
   for( K3bAudioTrack* _t = m_tracks->first(); _t; _t = m_tracks->next() ) {
     size += _t->size();
@@ -106,6 +108,18 @@ unsigned long K3bAudioDoc::length() const
   }	
 
   return size;
+}
+
+
+void K3bAudioDoc::addUrl( const QString& url )
+{
+  addTrack( url, m_tracks->count() );
+}
+
+
+void K3bAudioDoc::addUrls( const QStringList& urls )
+{
+  addTracks( urls, m_tracks->count() );
 }
 
 
@@ -146,11 +160,11 @@ void K3bAudioDoc::slotWorkUrlQueue()
     // TODO: check if it is a textfile and if so try to create a KURL from every line
     //       for now drop all non-local urls
     //       add all existing files
-    unsigned long length = isWaveFile( addedFile );
+    unsigned long length = identifyWaveFile( addedFile.path() );
     if( length > 0 || K3bAudioModuleFactory::moduleAvailable( addedFile ) ) {
       K3bAudioTrack* newTrack =  new K3bAudioTrack( m_tracks, addedFile.path() );
       if( length > 0 ) {
-	newTrack->setLength( length / 576 );  // no module needed for wave files
+	newTrack->setLength( length );  // no module needed for wave files
 	newTrack->setStatus( K3bAudioTrack::OK );
       }
       else {
@@ -230,11 +244,16 @@ void K3bAudioDoc::removeTrack( int position )
   }
 }
 
-void K3bAudioDoc::moveTrack( uint oldPos, uint newPos )
+void K3bAudioDoc::moveTrack( int oldPos, int newPos )
 {
-  K3bAudioTrack* _track = m_tracks->take( oldPos );
-  if(_track)
-    m_tracks->insert( newPos, _track );
+  // newPos is the nwe position in the current list,
+  // so if oldPos < newPos we have to add the track at newPos-1
+  // after it was removed
+
+  K3bAudioTrack* track = m_tracks->take( oldPos );
+  if(track) {
+    m_tracks->insert( (oldPos < newPos) ? newPos-1 : newPos, track );
+  }
 }
 
 K3bView* K3bAudioDoc::newView( QWidget* parent )
@@ -478,9 +497,6 @@ bool K3bAudioDoc::saveDocumentData( QDomDocument* doc )
 
 void K3bAudioDoc::addView(K3bView* view)
 {
-  K3bAudioView* v = (K3bAudioView*)view;
-  connect( v, SIGNAL(dropped(const QStringList&, uint)), this, SLOT(addTracks(const QStringList&, uint)) );
-	
   K3bDoc::addView( view );
 }
 
@@ -681,11 +697,6 @@ int K3bAudioDoc::numOfTracks() const
 
 bool K3bAudioDoc::padding() const
 {
-//   QListIterator<K3bAudioTrack> it(*m_tracks);
-//   for( ; it.current(); ++it )
-//     if( it.current()->filetype() != K3b::WAV )
-//       return true;
-	
   return m_padding;
 }
 
@@ -696,16 +707,141 @@ K3bBurnJob* K3bAudioDoc::newBurnJob()
 }
 
 
-unsigned long K3bAudioDoc::isWaveFile( const KURL& url )
+
+QString K3bAudioDoc::prepareForTocFile( const QString& str )
 {
-  // we take url as a lokal file
-  long headerLength;
-  unsigned long dataLength;
-  int x = K3b::waveLength( url.path().latin1(), 0, &headerLength, &dataLength );
-  if( x )
+  // FIXME
+  return str;
+}
+
+
+/**
+ * Returns the length of the wave file in frames (1/75 second) if
+ * it is a 16bit stereo 44100 kHz wave file
+ * Otherwise 0 is returned.
+ */
+unsigned long K3bAudioDoc::identifyWaveFile( const QString& filename )
+{
+  QFile inputFile( filename );
+  if( !inputFile.open(IO_ReadOnly) ) {
+    qDebug("Could not open file: " + filename );
     return 0;
-  else
-    return dataLength;
+  }
+
+  QDataStream inputStream( &inputFile );
+
+  char magic[4];
+
+  inputStream.readRawBytes( magic, 4 );
+  if( inputStream.atEnd() || qstrncmp(magic, "RIFF", 4) ) {
+    qDebug( filename + ": not a RIFF file.");
+    return 0;
+  }
+
+  inputFile.at( 8 );
+  inputStream.readRawBytes( magic, 4 );
+  if( inputStream.atEnd() || qstrncmp(magic, "WAVE", 4) ) {
+    qDebug( filename + ": not a wave file.");
+    return 0;
+  }
+
+  Q_INT32 chunkLen;
+
+  while( qstrncmp(magic, "fmt ", 4) ) {
+
+    inputStream.readRawBytes( magic, 4 );
+    if( inputStream.atEnd() ) {
+      qDebug( filename + ": could not find format chunk.");
+      return 0;
+    }
+
+    inputStream >> chunkLen;
+    chunkLen = K3b::swapByteOrder( chunkLen );
+    chunkLen += chunkLen & 1; // round to multiple of 2
+
+    // skip chunk data of unknown chunk
+    if( qstrncmp(magic, "fmt ", 4) )
+      if( !inputFile.at( inputFile.at() + chunkLen ) ) {
+	qDebug( filename + ": could not seek in file.");
+	return 0;
+      }
+  }
+
+  // found format chunk
+  if( chunkLen < 16 )
+    return 0;
+
+  Q_INT16 waveFormat;
+  inputStream >> waveFormat;
+  if (inputStream.atEnd() || K3b::swapByteOrder(waveFormat) != 1) {
+    qDebug( filename + ": not in PCM format: %i", waveFormat);
+    return 0;
+  }
+
+  Q_INT16 waveChannels;
+  inputStream >> waveChannels;
+  if (inputStream.atEnd() || K3b::swapByteOrder(waveChannels) != 2) {
+    qDebug( filename + ": found %d channel(s), require 2 channels.", waveChannels );
+    return 0;
+  }
+
+  Q_INT32 waveRate;
+  inputStream >> waveRate; 
+  if (inputStream.atEnd() || K3b::swapByteOrder(waveRate) != 44100) {
+     qDebug( filename + ": found sampling rate %ld, require 44100.", waveRate);
+     return 0;
+  }
+
+  Q_INT16 buffer16;
+  Q_INT32 buffer32;
+  inputStream >> buffer32; // skip average bytes/second
+  inputStream >> buffer16; // skip block align
+
+  Q_INT16 waveBits;
+  inputStream >> waveBits;
+  if (inputStream.atEnd() || K3b::swapByteOrder(waveBits) != 16) {
+    qDebug( filename + ": found %d bits per sample, require 16.", waveBits);
+    return 0;
+  }
+
+  chunkLen -= 16;
+  // skip all other (unknown) format chunk fields
+  if( !inputFile.at( inputFile.at() + chunkLen ) ) {
+    qDebug( filename + ": could not seek in file.");
+    return 0;
+  }
+
+
+  // search data chunk
+  while( qstrncmp(magic,"data", 4) ) {
+
+    inputStream.readRawBytes( magic, 4 );
+    if( inputStream.atEnd()  ) {
+      qDebug( filename + ": could not find data chunk.");
+      return 0;
+    }
+
+    inputStream >> chunkLen;
+    chunkLen = K3b::swapByteOrder( chunkLen );
+    chunkLen += chunkLen & 1; // round to multiple of 2
+
+    // skip chunk data of unknown chunk
+    if( qstrncmp(magic, "data", 4) )
+      if( !inputFile.at( inputFile.at() + chunkLen ) ) {
+	qDebug( filename + ": could not seek in file.");
+	return 0;
+      }
+  }
+
+  // found data chunk
+  int headerLen = inputFile.at();
+  if( headerLen + chunkLen > inputFile.size() ) {
+    qDebug( filename + ": file length does not match length from WAVE header - using actual length." );
+    return (inputFile.size() - headerLen)/2352;
+  }
+  else {
+    return chunkLen/2352;
+  }
 }
 
 

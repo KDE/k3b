@@ -59,7 +59,7 @@ class K3bMp3Module : public K3bAudioModule
   FILE* m_inputFile;
 
   static const int INPUT_BUFFER_SIZE = 5*8192;
-  static const int OUTPUT_BUFFER_SIZE = 10*8192;
+  static const int OUTPUT_BUFFER_SIZE = 20*8192;
 };
 
 

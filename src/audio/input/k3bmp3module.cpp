@@ -116,6 +116,9 @@ void K3bMp3Module::start()
     mad_synth_init( m_madSynth );    
     
     m_decodingTimer->start(0);
+
+    qDebug("(K3bMp3Module) length of track: %li frames.", audioTrack()->length() );
+    qDebug("(K3bMp3Module) data to decode:  %li bytes.", m_rawDataLengthToStream );
   }
 }
 
@@ -232,12 +235,15 @@ void K3bMp3Module::slotCountFrames()
 	    break;
 	  }
 	}
-      } // if( header decoded )
+      } // if( header not decoded )
+
+      else {
+	m_frameCount++;
+
+	mad_timer_add( m_madTimer, m_madHeader->duration );
+      }
     } // if( input ready )
 
-    m_frameCount++;
-
-    mad_timer_add( m_madTimer, m_madHeader->duration );
   } // for( 1000x )
 }
 
@@ -274,9 +280,9 @@ void K3bMp3Module::slotDecodeNextFrame()
 	size_t bufferSize = m_outputPointer - m_outputBuffer;
 	if( m_rawDataLengthToStream > m_rawDataAlreadyStreamed + bufferSize ) {
 	  // pad as much as possible
-	  size_t freeBuffer = m_outputBufferEnd-m_outputPointer;
+	  size_t freeBuffer = OUTPUT_BUFFER_SIZE - bufferSize;
 	  unsigned long dataToPad = m_rawDataLengthToStream - m_rawDataAlreadyStreamed - bufferSize;
-	  memset( m_outputPointer, 0, OUTPUT_BUFFER_SIZE - freeBuffer );
+	  memset( m_outputPointer, 0, freeBuffer );
 	  m_outputPointer += ( freeBuffer > dataToPad ? dataToPad : freeBuffer );
 
 	  qDebug("(K3bMp3Module) padding data with %i zeros.", ( freeBuffer > dataToPad ? dataToPad : freeBuffer ) );
@@ -311,52 +317,59 @@ void K3bMp3Module::slotDecodeNextFrame()
 	      return;
 	    }
 	  }
-	}
+	} // mad frame could not be decoded
+
+	else {
   
-	m_frameCount++;
+	  m_frameCount++;
 
-	mad_timer_add( m_madTimer, m_madFrame->header.duration );
+	  mad_timer_add( m_madTimer, m_madFrame->header.duration );
 
-	/* Once decoded the frame is synthesized to PCM samples. No errors
-	 * are reported by mad_synth_frame();
-	 */
-	mad_synth_frame( m_madSynth, m_madFrame );
-
-	/* Synthesized samples must be converted from mad's fixed
-	 * point number to the consumer format. Here we use unsigned
-	 * 16 bit little endian integers on two channels. Integer samples
-	 * are temporarily stored in a buffer that is flushed when
-	 * full.
-	 */
-	for( int i = 0; i < m_madSynth->pcm.length; i++ )
-	  {
-	    unsigned short	sample;
+	  /* Once decoded the frame is synthesized to PCM samples. No errors
+	   * are reported by mad_synth_frame();
+	   */
+	  mad_synth_frame( m_madSynth, m_madFrame );
 	  
-	    /* Left channel */
-	    sample = madFixedToUshort( m_madSynth->pcm.samples[0][i] );
-	    *(m_outputPointer++) = sample & 0xff;
-	    *(m_outputPointer++) = sample >> 8;
-	  
-	    /* Right channel. If the decoded stream is monophonic then
-	     * the right output channel is the same as the left one.
-	     */
-	    if( MAD_NCHANNELS( &m_madFrame->header ) == 2 )
-	      sample = madFixedToUshort( m_madSynth->pcm.samples[1][i] );
-	  
-	    *(m_outputPointer++) = sample & 0xff;
-	    *(m_outputPointer++) = sample >> 8;
+	  /* Synthesized samples must be converted from mad's fixed
+	   * point number to the consumer format. Here we use unsigned
+	   * 16 bit big endian integers on two channels. Integer samples
+	   * are temporarily stored in a buffer that is flushed when
+	   * full.
+	   */
+	  for( int i = 0; i < m_madSynth->pcm.length; i++ )
+	    {
+	      unsigned short	sample;
+	      
+	      /* Left channel */
+	      sample = madFixedToUshort( m_madSynth->pcm.samples[0][i] );
+	      *(m_outputPointer++) = sample >> 8;
+	      *(m_outputPointer++) = sample & 0xff;
+	      
+	      /* Right channel. If the decoded stream is monophonic then
+	       * the right output channel is the same as the left one.
+	       */
+	      if( MAD_NCHANNELS( &m_madFrame->header ) == 2 )
+		sample = madFixedToUshort( m_madSynth->pcm.samples[1][i] );
+	      
+	      *(m_outputPointer++) = sample >> 8;
+	      *(m_outputPointer++) = sample & 0xff;
+	      
+	      // this should not happen since we only decode if the
+	      // output buffer has enough free space
+	      if( m_outputPointer == m_outputBufferEnd && i+1 < m_madSynth->pcm.length )
+		{
+		  qDebug( "(K3bMp3Module) buffer overflow!" );
+		  exit(1);
+		}
+	    } // pcm conversion
 
-	    // this should not happen since we only decode if the
-	    // output buffer has enough free space
-	    if( m_outputPointer == m_outputBufferEnd && i+1 < m_madSynth->pcm.length )
-	      {
-		qDebug( "(K3bMp3Module) buffer overflow!" );
-		exit(1);
-	      }
-	  }
-      }
-    }
-  }
+	} // mad frame successfully decoded
+
+      } // input ready
+
+    } // output buffer not full yet
+
+  } // while loop
 
   // now the buffer is full and needs to be streamed to
   // the consumer
@@ -378,8 +391,9 @@ void K3bMp3Module::slotDecodeNextFrame()
   // make sure we don't stream to much
   if( m_rawDataAlreadyStreamed + buffersize > m_rawDataLengthToStream ) {
     bytesToOutput = m_rawDataLengthToStream - m_rawDataAlreadyStreamed;
-    qDebug("(K3bMp3Module) decoded data was longer than calculated length. diff: %i. Cutting data.", 
-	   buffersize - bytesToOutput );
+    qDebug("(K3bMp3Module) decoded data was longer than calculated length. Cutting data." );
+    qDebug("(K3bMp3Module) bytes to stream: %li; bytes already streamed: %li; bytes in buffer: %li.",
+	   m_rawDataLengthToStream, m_rawDataAlreadyStreamed, buffersize );
   }
   
   m_rawDataAlreadyStreamed += bytesToOutput;
@@ -393,7 +407,10 @@ void K3bMp3Module::slotDecodeNextFrame()
 
   m_outputPointer = m_outputBuffer;
 
-  emit percent( (int)(100.0* (double)m_rawDataAlreadyStreamed / (double)m_rawDataLengthToStream) );
+  if( m_rawDataAlreadyStreamed < m_rawDataLengthToStream )
+    emit percent( (int)(100.0* (double)m_rawDataAlreadyStreamed / (double)m_rawDataLengthToStream) );
+  else
+    emit percent( 100 );
 
   if( m_rawDataLengthToStream == m_rawDataAlreadyStreamed )
     m_bOutputFinished = true;

@@ -20,6 +20,8 @@
 
 #include "../k3bjob.h"
 
+#include "../tools/k3bwavefilewriter.h"
+
 class K3bAudioDoc;
 class K3bAudioTrack;
 class QString;
@@ -28,8 +30,6 @@ class QDataStream;
 
 #include <qlist.h>
 #include <kurl.h>
-#include <qfile.h>
-#include <qdatastream.h>
 
 
 /**
@@ -69,6 +69,8 @@ class K3bAudioJob : public K3bBurnJob  {
   void cancelAll();
   void cdrdaoWrite();
   void cdrecordWrite();
+
+  K3bWaveFileWriter m_waveFileWriter;
 	
   KProcess* m_process;
   K3bAudioDoc* m_doc;
@@ -80,9 +82,6 @@ class K3bAudioJob : public K3bBurnJob  {
 
   int m_currentDecodedTrackNumber;
   int m_currentWrittenTrackNumber;
-
-  QFile m_currentWrittenWavFile;
-  QDataStream m_currentWrittenWavStream;
 
   unsigned long m_writtenData;
   unsigned long m_dataToDecode;

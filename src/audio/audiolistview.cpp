@@ -36,6 +36,8 @@ K3bAudioListView::K3bAudioListView(QWidget *parent, const char *name )
   setDragEnabled( true );
   //  setSelectionModeExt( KListView::Konqueror ); // FileManager in KDE3
   setSelectionModeExt( KListView::Extended );
+
+  setSorting( -1 );
 		
   setupColumns();
   header()->setClickEnabled( false );
@@ -61,8 +63,10 @@ void K3bAudioListView::setupColumns(){
   setRenameable( 2 );
 }
 
-bool K3bAudioListView::acceptDrag(QDropEvent* e) const{
-  return ( e->source() == viewport() || QTextDrag::canDecode(e) );
+bool K3bAudioListView::acceptDrag(QDropEvent* e) const
+{
+  // the first is for built-in item moving, the second for dropping urls
+  return ( KListView::acceptDrag(e) || QTextDrag::canDecode(e) );
 }
 
 
