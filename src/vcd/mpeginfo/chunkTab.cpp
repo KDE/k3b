@@ -16,34 +16,35 @@
  ***************************************************************************/
 
 #include "chunkTab.h"
-#include <string.h>
-#include <stdio.h>
 
+#include <qstring.h>
+#include <kdebug.h>
 
 void chunkTab::PrintInfos() {
-	int i;
-	for ( i = 0; i < current_mpeg; i++)
-		MpegTab[i]->PrintInfos();
+  int i;
+  for ( i = 0; i < current_mpeg; i++)
+    MpegTab[i]->PrintInfos();
 }
 
 
 chunk** chunkTab::GetChunks(int* nchunks) {
-	*nchunks = current_chunk;
-	return TheTab;
+  *nchunks = current_chunk;
+  return TheTab;
 }
 
 
 chunkTab::chunkTab(int _max)
 :max(_max), current_mpeg_ptr(0)
 {
-	max = (max > 0)?max:1;
-	TheTab = new chunk*[max];
-	current_chunk = current_mpeg=0;
-	MpegTab = new mpeg*[max];
+  max = (max > 0)?max:1;
+  TheTab = new chunk*[max];
+  current_chunk = current_mpeg=0;
+  MpegTab = new mpeg*[max];
 }
 
 
-bool chunkTab::AddFile(char* filename) {
+bool chunkTab::AddFile(char* filename)
+{
 	int i;
 	if (!filename) {
 		return false;
@@ -74,7 +75,8 @@ bool chunkTab::AddFile(char* filename) {
 
 
 // this adds some room to the internal tabs
-void chunkTab::MoreRoom(int n){
+void chunkTab::MoreRoom(int n)
+{
 	int i;
 	max += n;
 	chunk** tempchunk = new chunk*[max];
@@ -92,7 +94,8 @@ void chunkTab::MoreRoom(int n){
 }
 
 
-bool chunkTab::ParseRange(char* range) {
+bool chunkTab::ParseRange(char* range)
+{
 	char* first_range = range+1;
 	char* second_range = range;
 	int first_range_size = 0;
@@ -116,20 +119,20 @@ bool chunkTab::ParseRange(char* range) {
 	second_range_size = strlen(range)-3-first_range_size;
 
 	if ((sep + slash_sep) == 0) {
-		fprintf(stderr,"Error : No separator in range %s\n", range);
+		kdDebug() << QString("(chunkTab) Error : No separator in range %1").arg(range) << endl;
 		return false;
 	}
 
 	if (sep > 1) {
-		fprintf(stderr,"Invalid range argument %s : too many '-' in format\n", range);
+		kdDebug() << QString("(chunkTab) Invalid range argument %1 : too many '-' in format").arg(range) << endl;
 		return false;
 	}
 	if (slash_sep >1) {
-		fprintf(stderr,"Invalid range argument %s : too many '/' in format\n", range);
+		kdDebug() << QString("(chunkTab) Invalid range argument %1 : too many '/' in format").arg(range) << endl;
 		return false;
 	}
 	if (slash_sep + sep >1) {
-		fprintf(stderr,"Invalid range argument %s : can't mix '-' and '/'\n", range);
+		kdDebug() << QString("(chunkTab) Invalid range argument %1 : can't mix '-' and '/'").arg(range) << endl;
 		return false;
 	}
 
@@ -146,7 +149,7 @@ bool chunkTab::ParseRange(char* range) {
 	if (current_mpeg_ptr != 0)
 		tempchunk->mpegfile = current_mpeg_ptr;
 	else {
-		fprintf(stderr, "Range argument must follow an mpeg file %s \n", range);
+		kdDebug() << QString("(chunkTab) Range argument must follow an mpeg file %1").arg(range) << endl;
 		delete tempchunk;
 		return false;
 	}
@@ -165,14 +168,13 @@ bool chunkTab::ParseRange(char* range) {
 			tempchunk->to_included = false;
 			break;
 		default:
-			fprintf(stderr, "malformed range argument %s"
-				" (range must end with ] or [ )\n", range);
+			kdDebug() << QString("(chunkTab) malformed range argument %1 (range must end with ] or [ )").arg(range) << endl;
 			delete tempchunk;
 			return false;
 	}
 
 	if (first_range_size == 0 && second_range_size == 0) {
-		fprintf(stderr, "Invalid range %s\n",  range);
+		kdDebug() << QString("(chunkTab) Invalid range %1").arg(range) << endl;
 		delete tempchunk;
 		return false;
 	}
@@ -180,11 +182,10 @@ bool chunkTab::ParseRange(char* range) {
 
 	if (sscanf(offset,  _OFF_d "/" _OFF_d , &part, &nparts) == 2) {
 		if ((part <= 0) || (nparts < 0) || (part > nparts)) {
-			fprintf(stderr, "invalid part %s\n", range);
+			kdDebug() << QString("(chunkTab) invalid part %1").arg(range) << endl;
 			delete tempchunk;
 			return false;
 		}
-		//		printf("part %d out of %d\n",part,nparts);
 
 		tempchunk->from =
 			off_t((((tempchunk->mpegfile->Size())*1.0)/nparts)*(part-1));
@@ -196,7 +197,7 @@ bool chunkTab::ParseRange(char* range) {
 	}
 
 	if (slash_sep) {
-		fprintf(stderr, "Invalid part %s\n", range);
+		kdDebug() << QString("(chunkTab) Invalid part %1").arg(range) << endl;
 		delete tempchunk;
 		return false;
 	}
@@ -209,7 +210,7 @@ bool chunkTab::ParseRange(char* range) {
 			&(tempchunk->to), &(tempchunk->sto),
 			&(tempchunk->unit_is_second)))
 		{
-			fprintf(stderr,"Invalid range %s\n",range);
+			kdDebug() << QString("(chunkTab) Invalid range %1").arg(range) << endl;
 			delete tempchunk;
 			return false;
 		}
@@ -231,7 +232,7 @@ bool chunkTab::ParseRange(char* range) {
 			&(tempchunk->from), &(tempchunk->sfrom),
 			&(tempchunk->unit_is_second)))
 		{
-			fprintf(stderr,"Invalid range %s\n",range);
+			kdDebug() << QString("(chunkTab) Invalid range %1").arg(range) << endl;
 			delete tempchunk;
 			return false;
 		}
@@ -249,7 +250,7 @@ bool chunkTab::ParseRange(char* range) {
 		&(tempchunk->from), &(tempchunk->sfrom),
 		&(tempchunk->unit_is_second)))
 	{
-		fprintf(stderr,"Invalid range %s\n",range);
+		kdDebug() << QString("(chunkTab) Invalid range %1").arg(range) << endl;
 		delete tempchunk;
 		return false;
 	}
@@ -257,26 +258,26 @@ bool chunkTab::ParseRange(char* range) {
 	if(!ParseValue(second_range, second_range_size,
 		&(tempchunk->to), &(tempchunk->sto),&insecs))
 	{
-		fprintf(stderr,"Invalid range %s\n",range);
+		kdDebug() << QString("(chunkTab) Invalid range %1").arg(range) << endl;
 		delete tempchunk;
 		return false;
 	}
 
 	if (insecs != tempchunk->unit_is_second) {
-		fprintf(stderr, "Error, mixed seconds with bytes in range %s\n", range);
+		kdDebug() << QString("(chunkTab) Error, mixed seconds with bytes in range %1").arg(range) << endl;
 		delete tempchunk;
 		return false;
 	}
 
 	if (!insecs) {
 		if (tempchunk->from>tempchunk->to) {
-			fprintf(stderr,"Invalid range %s : start greater than stop\n", range);
+			kdDebug() << QString("(chunkTab) Invalid range %1 : start greater than stop").arg(range) << endl;
 			delete tempchunk;
 			return false;
 		}
 	} else {
 		if (tempchunk->sfrom>tempchunk->sto) {
-			fprintf(stderr,"Invalid range %s : start greater than stop\n", range);
+			kdDebug() << QString("(chunkTab) Invalid range %1 : start greater than stop").arg(range) << endl;
 			delete tempchunk;
 			return false;
 		}
@@ -302,8 +303,7 @@ bool chunkTab::ParseRange(char* range) {
 			(tempchunk->to > tempchunk->mpegfile->Size()))
 	{
 
-		fprintf(stderr, "range %s results in invalid [" _OFF_d "-" _OFF_d "] range\n",
-				range, tempchunk->from,tempchunk->to);
+		kdDebug() << QString("(chunkTab) range %1 results in invalid [%2-%3] range").arg(range).arg(tempchunk->from).arg(tempchunk->to) << endl;
 
 
 		delete tempchunk;
@@ -420,7 +420,7 @@ bool chunkTab::ParseBoundaries(char* boundaries) {
 	char* start = boundaries + 1;
 	int size;
 	if (boundaries[strlen(boundaries) - 1] != '}') {
-		fprintf(stderr, "Invalid range %s\n", boundaries);
+		kdDebug() << QString("(chunkTab) Invalid range %1").arg(boundaries) << endl;
 		return false;
 	}
 
@@ -428,7 +428,7 @@ bool chunkTab::ParseBoundaries(char* boundaries) {
 	if (current_mpeg_ptr != 0)
 		tc->mpegfile = current_mpeg_ptr;
 	else {
-		fprintf(stderr, "Range argument must follow an mpeg file %s\n", boundaries);
+		kdDebug() << QString("(chunkTab) Range argument must follow an mpeg file %1").arg(boundaries) << endl;
 		delete tc;
 		return false;
 	}
@@ -442,14 +442,14 @@ bool chunkTab::ParseBoundaries(char* boundaries) {
 		if ((boundaries[i] == '-') || (boundaries[i] == '}')) {
 			size = (&boundaries[i] - start);
 			if (size <= 0) {
-				fprintf(stderr,"Invalid range %s\n",boundaries);
+				kdDebug() << QString("(chunkTab) Invalid range %1").arg(boundaries) << endl;
 				return false;
 			}
 
 			if (!ParseValue(start, size,
 					&(tc->to), &(tc->sto), &(tc->unit_is_second)))
 			{
-				fprintf(stderr,"Invalid range %s\n",boundaries);
+				kdDebug() << QString("(chunkTab) Invalid range %1").arg(boundaries) << endl;
 				return false;
 			}
 			if (current_chunk >= max) MoreRoom(max+20);
@@ -472,13 +472,9 @@ bool chunkTab::ParseBoundaries(char* boundaries) {
 				(tc->to > tc->mpegfile->Size()))
 			{
 				if((tc->to>tc->mpegfile->Size()))
-					fprintf(stderr,
-						"invalid range %s :boundary below end of file " _OFF_d "\n",
-						boundaries, tc->to);
+					kdDebug() << QString("(chunkTab) invalid range %1 :boundary below end of file %2").arg(boundaries).arg(tc->to) << endl;
 				else
-					fprintf(stderr,
-						"range %s results in invalid range [" _OFF_d "-" _OFF_d "]\n",
-						boundaries, tc->from, tc->to);
+					kdDebug() << QString("(chunkTab) range %1 results in invalid range [%2-%3]").arg(boundaries).arg(tc->from).arg(tc->to) << endl;
 
 				delete tc;
 				return false;
@@ -506,11 +502,9 @@ bool chunkTab::ParseBoundaries(char* boundaries) {
 		(tc->to > tc->mpegfile->Size()))
 	{
 		if((tc->to > tc->mpegfile->Size()))
-			fprintf(stderr, "invalid range %s :boundary below end of file " _OFF_d "\n",
-				boundaries, tc->to);
+			kdDebug() << QString("(chunkTab) invalid range %1 :boundary below end of file %2").arg(boundaries).arg(tc->to) << endl;
 		else
-			fprintf(stderr,"range %s results in invalid range [" _OFF_d "-" _OFF_d "]\n",
-				boundaries, tc->from, tc->to);
+			kdDebug() << QString("(chunkTab) range %1 results in invalid range [%2-%3]").arg(boundaries).arg(tc->from).arg(tc->to) << endl;
 		delete tc;
 		return false;
 	}
@@ -521,33 +515,44 @@ bool chunkTab::ParseBoundaries(char* boundaries) {
 
 
 
-void chunkTab::PrintTab() {
+void chunkTab::PrintTab()
+{
 	int i;
-	printf("%d chunks in %d files\n\n", current_chunk,current_mpeg);
+	kdDebug() << QString("(chunkTab) %1 chunks in %2 files").arg(current_chunk).arg(current_mpeg) << endl;
 
 	for (i = 0; i < current_chunk; i++) {
-		printf("chunk %.2d : %p\n    ", i, (void*)(TheTab[i]->mpegfile));
-		if (TheTab[i]->from_included) printf("[");
-		else printf("]");
+    QString dbg;
+    kdDebug() << QString("(chunkTab) chunk %1 : ").arg(i).rightJustify(2,' ') << (void*)(TheTab[i]->mpegfile) << endl;
+		if (TheTab[i]->from_included)
+      dbg.append("[");
+		else
+      dbg.append("]");
 
-		printf( _OFF_d "|" _OFF_d , TheTab[i]->from, TheTab[i]->to);
+		dbg.append(QString("%1|%2").arg(TheTab[i]->from).arg(TheTab[i]->to));
 
-		if (TheTab[i]->to_included) printf("]");
-		else printf("[");
-		if (TheTab[i]->until_file_size) printf(" til EOF");
-		printf("\n\n");
+		if (TheTab[i]->to_included)
+      dbg.append("]");
+		else
+      dbg.append("[");
+		if (TheTab[i]->until_file_size)
+      dbg.append(" til EOF");
+		dbg.append("\n\n");
+
+    kdDebug() << dbg << endl;
 	}
 
 	for (i = 0; i < current_mpeg; i++) {
-		printf("mpeg %.2d : %s [%p](" _OFF_d " bytes)\n",
-			i, MpegTab[i]->Name(), (void*)(MpegTab[i]), MpegTab[i]->Size());
+		  kdDebug() << QString("(chunkTab) mpeg %1 : %2 [").arg(i).rightJustify(2,' ').arg(MpegTab[i]->Name()) << (void*)(MpegTab[i]) << QString("]( %1 bytes)").arg(MpegTab[i]->Size()) << endl;
 	}
+
+  
 }
 
 
 
 
-chunkTab::~chunkTab(){
+chunkTab::~chunkTab()
+{
 	int i;
 	for (i = 0; i < current_chunk; i++) delete TheTab[i];
 	for (i = 0; i < current_mpeg; i++) delete MpegTab[i];
@@ -557,16 +562,17 @@ chunkTab::~chunkTab(){
 
 
 
-bool chunkTab::Nchunks(int n){
+bool chunkTab::Nchunks(int n)
+{
 	int i;
 
 	if (n <=1 ) {
-		fprintf(stderr,"Can not cut in %d parts\n",n);
+		kdDebug() << QString("(chunkTab) Can not cut in %1 parts").arg(n) << endl;
 		return false;
 	}
 
 	if (!current_mpeg_ptr) {
-		fprintf(stderr,"No mpeg file for option -%d\n",n);
+		kdDebug() << QString("(chunkTab) No mpeg file for option -%1").arg(n) << endl;
 		return false;
 	}
 
@@ -592,4 +598,3 @@ bool chunkTab::Nchunks(int n){
 	}
 	return true;
 }
-
