@@ -206,23 +206,25 @@ float K3bDvdRippingProcess::tccatParsedBytes( char *text, int len){
     QString tmp = QString::fromLatin1( text, len );
     float blocks = 0;
     if( tmp.contains("blocks (") ){
-        // TODO parse for start to end blocks( x-y) and use only difference
         int index = tmp.find("blocks (");
-        tmp = tmp.mid(index +10);
-        int end = tmp.find( ")" );
-        tmp= tmp.mid( 0, end);
-        blocks = (tmp.toFloat())*2048;
+        tmp = tmp.mid(index+8); // start range i.e 3645-214245)
+        int end = tmp.find( "-" );
+        QString start= tmp.mid( 0, end); // first value
+        float startBlocks = start.toFloat();
+        tmp=tmp.mid(end+1);
+        end = tmp.find( ")" );
+        tmp= tmp.mid( 0, end); // end value        
+        blocks = (tmp.toFloat()-startBlocks)*2048;
     }
     kdDebug() << "(K3bDvdRippingProcess) Parsed bytes: " << QString::number(blocks, 'f') << endl;
     return blocks;
 }
-
+             
 void K3bDvdRippingProcess::preProcessingDvd( ){
     if( !m_dvdOrgFilenameDetected ){
         kdDebug() << "(K3bDvdRippingProcess) Mount dvd to copy IFO files." << endl;
         K3bDevice *dev = k3bMain()->deviceManager()->deviceByName( m_device );
         m_mountPoint = dev->mountPoint();
-
         if( !m_mountPoint.isEmpty() ){
              QString mount = KIO::findDeviceMountPoint( dev->ioctlDevice() );
              if( mount.isEmpty() ){
