@@ -713,7 +713,7 @@ bool K3bCdCopyJob::writeNextSession()
 	  // It is important that the files have the ending inf because
 	  // cdrecord only checks this
 
-	  KTempFile tmp( "k3b_audio", ".inf" );
+	  KTempFile tmp( QString::null, ".inf" );
 	  d->infNames.append( tmp.name() );
 	  bool success = d->infFileWriter->save( *tmp.textStream() );
 	  tmp.close();
