@@ -21,6 +21,7 @@
 #include "k3baudiodoc.h"
 #include "k3baudiotitlemetainfo.h"
 #include <k3bview.h>
+#include <k3bvalidators.h>
 
 #include <qheader.h>
 #include <qtimer.h>
@@ -57,6 +58,8 @@ K3bAudioListView::K3bAudioListView( K3bView* view, K3bAudioDoc* doc, QWidget *pa
 
   setSorting( 0 );
 
+  setValidator( K3bValidators::cdTextValidator( this ) );
+
   setupActions();
   setupPopupMenu();
 
@@ -73,7 +76,7 @@ K3bAudioListView::K3bAudioListView( K3bView* view, K3bAudioDoc* doc, QWidget *pa
   connect( this, SIGNAL(doubleClicked(QListViewItem*, const QPoint&, int)),
 	   this, SLOT(showPropertiesDialog()) );
 
-  connect( m_doc, SIGNAL(newTracks()), this, SLOT(slotUpdateItems()) );
+  connect( m_doc, SIGNAL(changed()), this, SLOT(slotUpdateItems()) );
   connect( m_doc, SIGNAL(trackRemoved(K3bAudioTrack*)), this, SLOT(slotTrackRemoved(K3bAudioTrack*)) );
 
   slotUpdateItems();
@@ -164,8 +167,6 @@ void K3bAudioListView::slotDropped( KListView*, QDropEvent* e, QListViewItem* af
       trackAfter = track;
       ++it;
     }
-
-    sort();  // This is so lame!
   }
   else {
     KURL::List urls;
@@ -350,6 +351,8 @@ void K3bAudioListView::slotUpdateItems()
     m_actionRemove->setEnabled(false);
     //    m_actionPlay->setEnabled(false);
   }
+
+  sort();  // This is so lame!
 }
 
 #include "audiolistview.moc"

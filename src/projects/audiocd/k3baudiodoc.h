@@ -19,6 +19,8 @@
 
 #include <k3bdoc.h>
 
+#include "k3bcdtext.h"
+
 #include <qptrqueue.h>
 #include <qfile.h>
 #include <qstring.h>
@@ -73,14 +75,14 @@ class K3bAudioDoc : public K3bDoc
 	
   // CD-Text
   bool cdText() const { return m_cdText; }
-  const QString& title() const { return m_cdTextTitle; }
-  const QString& artist() const { return m_cdTextArtist; }
-  const QString& disc_id() const { return m_cdTextDisc_id; }
-  const QString& arranger() const { return m_cdTextArranger; }
-  const QString& songwriter() const { return m_cdTextSongwriter; }
-  const QString& composer() const { return m_cdTextComposer; }
-  const QString& upc_ean() const { return m_cdTextUpc_Ean; }
-  const QString& cdTextMessage() const { return m_cdTextMessage; }
+  const QString& title() const { return m_cdTextData.title(); }
+  const QString& artist() const { return m_cdTextData.performer(); }
+  const QString& disc_id() const { return m_cdTextData.discId(); }
+  const QString& arranger() const { return m_cdTextData.arranger(); }
+  const QString& songwriter() const { return m_cdTextData.songwriter(); }
+  const QString& composer() const { return m_cdTextData.composer(); }
+  const QString& upc_ean() const { return m_cdTextData.upcEan(); }
+  const QString& cdTextMessage() const { return m_cdTextData.message(); }
 
   int numOfTracks() const;
 
@@ -112,14 +114,14 @@ class K3bAudioDoc : public K3bDoc
 
   // CD-Text
   void writeCdText( bool b ) { m_cdText = b; }
-  void setTitle( const QString& v ) { m_cdTextTitle = v; }
-  void setArtist( const QString& v ) { m_cdTextArtist = v; }
-  void setDisc_id( const QString& v ) { m_cdTextDisc_id = v; }
-  void setArranger( const QString& v ) { m_cdTextArranger = v; }
-  void setSongwriter( const QString& v ) { m_cdTextSongwriter = v; }
-  void setComposer( const QString& v ) { m_cdTextComposer = v; }
-  void setUpc_ean( const QString& v ) { m_cdTextUpc_Ean = v; }
-  void setCdTextMessage( const QString& v ) { m_cdTextMessage = v; }
+  void setTitle( const QString& v ) { m_cdTextData.setTitle( v ); }
+  void setArtist( const QString& v ) { m_cdTextData.setPerformer( v ); }
+  void setDisc_id( const QString& v ) { m_cdTextData.setDiscId( v ); }
+  void setArranger( const QString& v ) { m_cdTextData.setArranger( v ); }
+  void setSongwriter( const QString& v ) { m_cdTextData.setSongwriter( v ); }
+  void setComposer( const QString& v ) { m_cdTextData.setComposer( v ); }
+  void setUpc_ean( const QString& v ) { m_cdTextData.setUpcEan( v ); }
+  void setCdTextMessage( const QString& v ) { m_cdTextData.setMessage( v ); }
 
   void removeCorruptTracks();
 
@@ -187,6 +189,7 @@ class K3bAudioDoc : public K3bDoc
  	
   // CD-Text
   // --------------------------------------------------
+  K3bCdDevice::AlbumCdText m_cdTextData;
   bool m_cdText;
   QString m_cdTextTitle;
   QString m_cdTextArtist;

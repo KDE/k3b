@@ -17,28 +17,68 @@
 #include "k3bvalidators.h"
 
 
-QValidator* K3bValidators::isrcValidator( QObject* parent, const char* name )
+K3bValidator::K3bValidator( QObject* parent, const char* name )
+  : QRegExpValidator( parent, name ),
+    m_replaceChar('_')
 {
-  return new QRegExpValidator( QRegExp("^[A-Z\\d]{2,2}-[A-Z\\d]{3,3}-\\d{2,2}-\\d{5,5}$"), parent, name );
 }
 
 
-QValidator* K3bValidators::cdTextValidator( QObject* parent, const char* name )
+K3bValidator::K3bValidator( const QRegExp& rx, QObject* parent, const char* name )
+  : QRegExpValidator( rx, parent, name ),
+    m_replaceChar('_')
 {
-  return new QRegExpValidator( QRegExp("^[^\"]*$"), parent, name );
 }
 
 
-QValidator* K3bValidators::iso9660Validator( bool allowEmpty, QObject* parent, const char* name )
+void K3bValidator::fixup( QString& input ) const
+{
+  for( unsigned int i = 0; i < input.length(); ++i )
+    if( !regExp().exactMatch( input.mid(i, 1) ) )
+      input[i] = m_replaceChar;
+}
+
+
+QString K3bValidators::fixup( const QString& input, const QRegExp& rx, const QChar& replaceChar )
+{
+  QString s;
+  for( unsigned int i = 0; i < input.length(); ++i )
+    if( rx.exactMatch( input.mid(i, 1) ) )
+      s += input[i];
+    else
+      s += replaceChar;
+  return s;
+}
+
+
+QRegExp K3bValidators::cdTextCharSet()
+{
+  return QRegExp("^[^\"/]*$");
+}
+
+
+K3bValidator* K3bValidators::isrcValidator( QObject* parent, const char* name )
+{
+  return new K3bValidator( QRegExp("^[A-Z\\d]{2,2}-[A-Z\\d]{3,3}-\\d{2,2}-\\d{5,5}$"), parent, name );
+}
+
+
+K3bValidator* K3bValidators::cdTextValidator( QObject* parent, const char* name )
+{
+  return new K3bValidator( cdTextCharSet(), parent, name );
+}
+
+
+K3bValidator* K3bValidators::iso9660Validator( bool allowEmpty, QObject* parent, const char* name )
 {
   if( allowEmpty )
-    return new QRegExpValidator( QRegExp( "[^/$\\\"%]*" ), parent, name );
+    return new K3bValidator( QRegExp( "[^/$\\\"%]*" ), parent, name );
   else
-    return new QRegExpValidator( QRegExp( "[^/$\\\"%]+" ), parent, name );
+    return new K3bValidator( QRegExp( "[^/$\\\"%]+" ), parent, name );
 }
 
 
-QValidator* K3bValidators::iso646Validator( int type, bool AllowLowerCase, QObject* parent, const char* name )
+K3bValidator* K3bValidators::iso646Validator( int type, bool AllowLowerCase, QObject* parent, const char* name )
 {
   QRegExp rx;
   switch ( type ) {
@@ -57,5 +97,5 @@ QValidator* K3bValidators::iso646Validator( int type, bool AllowLowerCase, QObje
     break;
   }
 
-  return new QRegExpValidator( rx, parent, name );
+  return new K3bValidator( rx, parent, name );
 }

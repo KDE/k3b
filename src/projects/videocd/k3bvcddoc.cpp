@@ -409,6 +409,8 @@ void K3bVcdDoc::moveTrack( const K3bVcdTrack* track, const K3bVcdTrack* after )
 
     // reorder pbc tracks
     setPbcTracks();
+
+    emit changed();
 }
 
 

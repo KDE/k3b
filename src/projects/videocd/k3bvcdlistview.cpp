@@ -67,7 +67,7 @@ K3bVcdListView::K3bVcdListView( K3bView* view, K3bVcdDoc* doc, QWidget *parent, 
     connect( this, SIGNAL( doubleClicked( QListViewItem*, const QPoint&, int ) ),
              this, SLOT( showPropertiesDialog() ) );
 
-    connect( m_doc, SIGNAL( newTracks() ), this, SLOT( slotUpdateItems() ) );
+    connect( m_doc, SIGNAL( changed() ), this, SLOT( slotUpdateItems() ) );
     connect( m_doc, SIGNAL(trackRemoved(K3bVcdTrack*)), this, SLOT(slotTrackRemoved(K3bVcdTrack*)) );
 
     slotUpdateItems();
@@ -158,8 +158,6 @@ void K3bVcdListView::slotDropped( KListView*, QDropEvent* e, QListViewItem* afte
             trackAfter = track;
             ++it;
         }
-
-        sort();  // This is so lame!
     } else {
         KURL::List urls;
         KURLDrag::decode( e, urls );
@@ -261,6 +259,8 @@ void K3bVcdListView::slotUpdateItems()
     } else {
         m_actionRemove->setEnabled( false );
     }
+
+    sort();  // This is so lame!
 }
 
 #include "k3bvcdlistview.moc"

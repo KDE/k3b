@@ -343,6 +343,8 @@ void K3bAudioDoc::moveTrack( const K3bAudioTrack* track, const K3bAudioTrack* af
   m_tracks->first()->setPregap( m_tracks->first()->pregap() );
 
   setModified();
+
+  emit changed();
 }
 
 
