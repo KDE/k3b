@@ -408,7 +408,7 @@ unsigned short K3bMp3Module::linearRound( mad_fixed_t fixed )
   fixed += (1L << ( MAD_F_FRACBITS - 16 ));
 
   // clip
-  if( fixed >= MAD_F_ONE )
+  if( fixed >= MAD_F_ONE - 1 )
     fixed = MAD_F_ONE - 1;
   else if( fixed < -MAD_F_ONE )
     fixed = -MAD_F_ONE;
