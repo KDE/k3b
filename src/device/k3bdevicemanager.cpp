@@ -35,6 +35,16 @@ typedef Q_INT16 size16;
 typedef Q_INT32 size32;
 
 
+#ifndef IDE_DISK_MAJOR
+/*
+ * Tests for IDE devices
+ */
+#define IDE_DISK_MAJOR(M)       ((M) == IDE0_MAJOR || (M) == IDE1_MAJOR || \
+                                (M) == IDE2_MAJOR || (M) == IDE3_MAJOR || \
+                                (M) == IDE4_MAJOR || (M) == IDE5_MAJOR || \
+                                (M) == IDE6_MAJOR || (M) == IDE7_MAJOR || \
+                                (M) == IDE8_MAJOR || (M) == IDE9_MAJOR)
+#endif /* #ifndef IDE_DISK_MAJOR */
 
 
 K3bDeviceManager::K3bDeviceManager( )
