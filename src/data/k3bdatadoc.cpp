@@ -30,6 +30,7 @@
 #include <qtextstream.h>
 #include <qtimer.h>
 #include <qdom.h>
+#include <qlist.h>
 
 #include <kstddirs.h>
 #include <kurl.h>
@@ -65,6 +66,7 @@ bool K3bDataDoc::newDocument()
   m_size = 0;
 	
   m_name = "Dummyname";
+  m_applicationID = "K3b";    // thy name on every cd!
   m_isoImage = QString::null;
 
   m_createRockRidge = true;
@@ -127,6 +129,8 @@ void K3bDataDoc::slotAddQueuedItems()
 
       if( add )
 	{
+	  setModified( true );
+
 	  if( item->fileInfo.isDir() )
 	    {
 	      K3bDirItem* newDirItem = new K3bDirItem( item->fileInfo.fileName(), this, item->parent );
@@ -138,7 +142,7 @@ void K3bDataDoc::slotAddQueuedItems()
 	      
 	      for( QStringList::Iterator it = dlist.begin(); it != dlist.end(); ++it ) {
 		m_queuedToAddItems.enqueue( new PrivateItemToAdd( item->fileInfo.absFilePath() + "/" + *it, 
-								 newDirItem ) );
+								  newDirItem ) );
 	      }
 	    }
 	  else
@@ -178,6 +182,8 @@ K3bDirItem* K3bDataDoc::addEmptyDir( const QString& name, K3bDirItem* parent )
 {
   K3bDirItem* item = new K3bDirItem( name, this, parent );
 
+  setModified( true );
+
   emit newFileItems();
 
   return item;
@@ -186,15 +192,6 @@ K3bDirItem* K3bDataDoc::addEmptyDir( const QString& name, K3bDirItem* parent )
 
 long K3bDataDoc::size() const
 {
-//   K3bDataItem* item = root();
-//   long _size = 0;
-	
-//   while( item ) {
-//     _size+=item->k3bSize();
-		
-//     item = item->nextSibling();
-//   }
-
   return m_size;	
   //  return root()->k3bSize();
 }
@@ -223,10 +220,156 @@ bool K3bDataDoc::loadDocumentData( QDomDocument* )
 }
 
 
-bool K3bDataDoc::saveDocumentData( QDomDocument* )
+bool K3bDataDoc::saveDocumentData( QDomDocument* doc )
 {
-  // TODO: some saving work...
+  QDomElement docElem = doc->createElement( documentType() );
+
+  saveGeneralDocumentData( &docElem );
+
+
+  // all options
+  // ----------------------------------------------------------------------
+  QDomElement optionsElem = doc->createElement( "options" );
+
+  QDomElement topElem = doc->createElement( "rock_ridge" );
+  topElem.setAttribute( "activated", createRockRidge() ? "yes" : "no" );
+  optionsElem.appendChild( topElem );
+
+  topElem = doc->createElement( "joliet" );
+  topElem.setAttribute( "activated", createJoliet() ? "yes" : "no" );
+  optionsElem.appendChild( topElem );
+
+  topElem = doc->createElement( "iso_allow_lowercase" );
+  topElem.setAttribute( "activated", ISOallowLowercase() ? "yes" : "no" );
+  optionsElem.appendChild( topElem );
+
+  topElem = doc->createElement( "iso_allow_31_char" );
+  topElem.setAttribute( "activated", ISOallow31charFilenames() ? "yes" : "no" );
+  optionsElem.appendChild( topElem );
+
+  topElem = doc->createElement( "iso_omit_version_numbers" );
+  topElem.setAttribute( "activated", ISOomitVersionNumbers() ? "yes" : "no" );
+  optionsElem.appendChild( topElem );
+
+  topElem = doc->createElement( "iso_max_filename_length" );
+  topElem.setAttribute( "activated", ISOmaxFilenameLength() ? "yes" : "no" );
+  optionsElem.appendChild( topElem );
+
+  topElem = doc->createElement( "iso_relaxed_filenames" );
+  topElem.setAttribute( "activated", ISOrelaxedFilenames() ? "yes" : "no" );
+  optionsElem.appendChild( topElem );
+
+  topElem = doc->createElement( "iso_no_iso_translate" );
+  topElem.setAttribute( "activated", ISOnoIsoTranslate() ? "yes" : "no" );
+  optionsElem.appendChild( topElem );
+
+  topElem = doc->createElement( "iso_allow_multidot" );
+  topElem.setAttribute( "activated", ISOallowMultiDot() ? "yes" : "no" );
+  optionsElem.appendChild( topElem );
+
+  topElem = doc->createElement( "iso_untranslated_filenames" );
+  topElem.setAttribute( "activated", ISOuntranslatedFilenames() ? "yes" : "no" );
+  optionsElem.appendChild( topElem );
+
+  topElem = doc->createElement( "no_deep_dir_relocation" );
+  topElem.setAttribute( "activated", noDeepDirectoryRelocation() ? "yes" : "no" );
+  optionsElem.appendChild( topElem );
+
+  topElem = doc->createElement( "follow_symbolic_links" );
+  topElem.setAttribute( "activated", followSymbolicLinks() ? "yes" : "no" );
+  optionsElem.appendChild( topElem );
+
+  topElem = doc->createElement( "hide_rr_moved" );
+  topElem.setAttribute( "activated", hideRR_MOVED() ? "yes" : "no" );
+  optionsElem.appendChild( topElem );
+
+  topElem = doc->createElement( "create_trans_tbl" );
+  topElem.setAttribute( "activated", createTRANS_TBL() ? "yes" : "no" );
+  optionsElem.appendChild( topElem );
+
+  topElem = doc->createElement( "hide_trans_tbl" );
+  topElem.setAttribute( "activated", hideTRANS_TBL() ? "yes" : "no" );
+  optionsElem.appendChild( topElem );
+
+  topElem = doc->createElement( "padding" );
+  topElem.setAttribute( "activated", padding() ? "yes" : "no" );
+  optionsElem.appendChild( topElem );
+
+  topElem = doc->createElement( "iso_level" );
+  topElem.appendChild( doc->createTextNode( QString::number(ISOLevel()) ) );
+  optionsElem.appendChild( topElem );
+
+  docElem.appendChild( optionsElem );
+  // ----------------------------------------------------------------------
+
+
+  // the header stuff
+  // ----------------------------------------------------------------------
+  QDomElement headerElem = doc->createElement( "header" );
+
+  topElem = doc->createElement( "volume_id" );
+  topElem.appendChild( doc->createTextNode( volumeID() ) );
+  headerElem.appendChild( topElem );
+
+  topElem = doc->createElement( "application_id" );
+  topElem.appendChild( doc->createTextNode( applicationID() ) );
+  headerElem.appendChild( topElem );
+
+  topElem = doc->createElement( "publisher" );
+  topElem.appendChild( doc->createTextNode( publisher() ) );
+  headerElem.appendChild( topElem );
+
+  topElem = doc->createElement( "preparer" );
+  topElem.appendChild( doc->createTextNode( preparer() ) );
+  headerElem.appendChild( topElem );
+
+  docElem.appendChild( headerElem );
+  // ----------------------------------------------------------------------
+
+
+
+  // now do the "real" work: save the entries
+  // ----------------------------------------------------------------------
+  topElem = doc->createElement( "files" );
+
+  QListIterator<K3bDataItem> it( *root()->children() );
+  for( ; it.current(); ++it ) {
+    saveDataItem( it.current(), doc, &topElem );
+  }
+
+  docElem.appendChild( topElem );
+  // ----------------------------------------------------------------------
+
+  doc->appendChild( docElem );
+
+
   return true;
+}
+
+
+
+void K3bDataDoc::saveDataItem( K3bDataItem* item, QDomDocument* doc, QDomElement* parent )
+{
+  if( K3bFileItem* fileItem = dynamic_cast<K3bFileItem*>( item ) ) {
+    QDomElement topElem = doc->createElement( "file" );
+    topElem.setAttribute( "name", fileItem->k3bName() );
+    QDomElement subElem = doc->createElement( "url" );
+    subElem.appendChild( doc->createTextNode( fileItem->localPath() ) );
+    topElem.appendChild( subElem );
+
+    parent->appendChild( topElem );
+  }
+  else if( K3bDirItem* dirItem = dynamic_cast<K3bDirItem*>( item ) ) {
+    QDomElement topElem = doc->createElement( "directory" );
+    topElem.setAttribute( "name", dirItem->k3bName() );
+
+    QListIterator<K3bDataItem> it( *dirItem->children() );
+    for( ; it.current(); ++it ) {
+      saveDataItem( it.current(), doc, &topElem );
+    }
+
+    parent->appendChild( topElem );
+  }
 }
 
 

@@ -601,7 +601,9 @@ void K3bDataJob::addMkisofsParameters()
   *m_process << "-graft-points";
 
   if( !m_doc->volumeID().isEmpty() )
-    *m_process << "-V	\"" + m_doc->volumeID() + "\"";
+    *m_process << "-V \"" + m_doc->volumeID() + "\"";
+  if( !m_doc->applicationID().isEmpty() )
+    *m_process << "-A \"" + m_doc->applicationID() + "\"";
   if( !m_doc->publisher().isEmpty() )
     *m_process << "-P \"" + m_doc->publisher() + "\"";
   if( !m_doc->preparer().isEmpty() )

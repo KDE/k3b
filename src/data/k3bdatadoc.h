@@ -108,6 +108,7 @@ class K3bDataDoc : public K3bDoc
   bool padding() const { return m_padding; }
 
   int ISOLevel() const { return m_isoLevel; }
+  const QString& applicationID() const { return m_applicationID; }
   const QString& volumeID() const { return m_volumeID; }
   const QString& publisher() const { return m_publisher; }
   const QString& preparer() const { return m_preparer; }
@@ -131,6 +132,7 @@ class K3bDataDoc : public K3bDoc
   void setPadding( bool b ) {  m_padding = b; }
 	
   void setISOLevel( int i ) { m_isoLevel = i; }
+  void setApplicationID( const QString& s ) { m_applicationID = s; }
   void setVolumeID( const QString& s ) { m_volumeID = s; }
   void setPublisher( const QString& s ) { m_publisher = s; }
   void setPreparer( const QString& s ) { m_preparer = s; }
@@ -161,6 +163,8 @@ class K3bDataDoc : public K3bDoc
   QString treatWhitespace( const QString& );
  	 		
  private:
+  void saveDataItem( K3bDataItem* item, QDomDocument* doc, QDomElement* parent );
+
   class PrivateItemToAdd {
   public:
     PrivateItemToAdd( const QString& p, K3bDirItem* i )
@@ -178,6 +182,7 @@ class K3bDataDoc : public K3bDoc
   QString m_isoImage;
 
   QString m_volumeID;
+  QString m_applicationID;
   QString m_preparer;
   QString m_publisher;
 	

@@ -99,6 +99,7 @@ void K3bDataBurnDialog::saveSettings()
   ((K3bDataDoc*)doc())->setPadding( m_checkPadding->isChecked() );
 	
   ((K3bDataDoc*)doc())->setVolumeID( m_editVolumeID->text() );
+  ((K3bDataDoc*)doc())->setApplicationID( m_editApplicationID->text() );
   ((K3bDataDoc*)doc())->setPublisher( m_editPublisher->text() );
   ((K3bDataDoc*)doc())->setPreparer( m_editPreparer->text() );
   // ------------------------------------- saving mkisofs-options --
@@ -134,11 +135,13 @@ void K3bDataBurnDialog::readSettings()
 
   m_checkDao->setChecked( doc()->dao() );
   m_checkDummy->setChecked( doc()->dummy() );
+  m_checkOnTheFly->setChecked( doc()->onTheFly() );
   m_checkBurnProof->setChecked( doc()->burnProof() );
   m_checkOnlyCreateImage->setChecked( ((K3bDataDoc*)doc())->onlyCreateImage() );
   m_checkDeleteImage->setChecked( ((K3bDataDoc*)doc())->deleteImage() );
 	
   m_editVolumeID->setText(  ((K3bDataDoc*)doc())->volumeID() );
+  m_editApplicationID->setText(  ((K3bDataDoc*)doc())->applicationID() );
   m_editPublisher->setText(  ((K3bDataDoc*)doc())->publisher() );
   m_editPreparer->setText(  ((K3bDataDoc*)doc())->preparer() );
 	
@@ -404,30 +407,40 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
 
   _groupVolumeInfoLayout->addWidget( _labelVolumeID, 0, 0 );
 
+  QLabel* _labelApplicationID = new QLabel( _groupVolumeInfo, "m_labelApplicationID" );
+  _labelApplicationID->setText( i18n( "Application ID" ) );
+
+  _groupVolumeInfoLayout->addWidget( _labelApplicationID, 1, 0 );
+
   QLabel* _labelPublisher = new QLabel( _groupVolumeInfo, "m_labelPublisher" );
   _labelPublisher->setText( i18n( "Publisher" ) );
 
-  _groupVolumeInfoLayout->addWidget( _labelPublisher, 1, 0 );
+  _groupVolumeInfoLayout->addWidget( _labelPublisher, 2, 0 );
 
   QLabel* _labelPreparer = new QLabel( _groupVolumeInfo, "m_labelPreparer" );
   _labelPreparer->setText( i18n( "Preparer" ) );
 
-  _groupVolumeInfoLayout->addWidget( _labelPreparer, 2, 0 );
+  _groupVolumeInfoLayout->addWidget( _labelPreparer, 3, 0 );
 
   m_editVolumeID = new QLineEdit( _groupVolumeInfo, "m_editVolumeID" );
   m_editVolumeID->setMaxLength( 32 );
 
   _groupVolumeInfoLayout->addWidget( m_editVolumeID, 0, 1 );
 
+  m_editApplicationID = new QLineEdit( _groupVolumeInfo, "m_editApplicationID" );
+  m_editApplicationID->setMaxLength( 32 );
+
+  _groupVolumeInfoLayout->addWidget( m_editApplicationID, 1, 1 );
+
   m_editPublisher = new QLineEdit( _groupVolumeInfo, "m_editPublisher" );
   m_editPublisher->setMaxLength( 128 );
 
-  _groupVolumeInfoLayout->addWidget( m_editPublisher, 1, 1 );
+  _groupVolumeInfoLayout->addWidget( m_editPublisher, 2, 1 );
 
   m_editPreparer = new QLineEdit( _groupVolumeInfo, "m_editPreparer" );
   m_editPreparer->setMaxLength( 128 );
 
-  _groupVolumeInfoLayout->addWidget( m_editPreparer, 2, 1 );
+  _groupVolumeInfoLayout->addWidget( m_editPreparer, 3, 1 );
 
   frameLayout->addMultiCellWidget( _groupVolumeInfo, 0, 3, 1, 1 );
 
