@@ -36,6 +36,10 @@ K3bBlankingDialog::K3bBlankingDialog( QWidget* parent, const char* name )
   m_groupBlankType->setButton( 0 );
 
   m_job = 0;
+
+  connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotWriterChanged()) );
+
+  slotWriterChanged();
 }
 
 
@@ -213,6 +217,22 @@ void K3bBlankingDialog::closeEvent( QCloseEvent* e )
   }
   else {
     e->accept();
+  }
+}
+
+
+void K3bBlankingDialog::slotWriterChanged()
+{
+  // check if it is a cdrw writer
+  K3bDevice* dev = m_writerSelectionWidget->writerDevice();
+
+  if( dev->writesCdrw() )
+    actionButton( KDialogBase::User1 )->setEnabled( true );
+  else {
+    actionButton( KDialogBase::User1 )->setEnabled( false );
+    QListViewItem* item = new QListViewItem( m_viewOutput, m_viewOutput->lastItem(), 
+					     i18n("%1 does not support cdrw writing.").arg(dev->devicename()) );
+    item->setPixmap( 0, SmallIcon( "stop" ) );
   }
 }
 

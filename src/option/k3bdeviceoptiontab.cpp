@@ -185,6 +185,8 @@ K3bDeviceOptionTab::K3bDeviceOptionTab( QWidget* parent, const char* name )
   m_comboCdText = new QComboBox( false, m_groupDeviceInfo, "m_comboCdText" );
   m_labelBurnProof = new QLabel( i18n( "BURN-Proof:" ), m_groupDeviceInfo, "labelBurnProof" );
   m_checkBurnProof = new QLabel( m_groupDeviceInfo, "m_checkBurnProof" );
+  m_labelCdrw = new QLabel( i18n( "Write CDRW:" ), m_groupDeviceInfo, "labelCdrw" );
+  m_checkCdrw = new QLabel( m_groupDeviceInfo, "m_checkCdrw" );
   m_labelCdText = new QLabel( i18n( "Write CD-Text:" ), m_groupDeviceInfo, "labelCdText" );
   m_line3 = new QFrame( m_groupDeviceInfo, "line3" );
   m_line3->setFrameStyle( QFrame::HLine | QFrame::Sunken );
@@ -197,6 +199,7 @@ K3bDeviceOptionTab::K3bDeviceOptionTab( QWidget* parent, const char* name )
   m_labelVendor->setBackgroundColor( Qt::white );
   m_labelDescription->setBackgroundColor( Qt::white );
   m_checkBurnProof->setBackgroundColor( Qt::white );
+  m_checkCdrw->setBackgroundColor( Qt::white );
   m_spinReadSpeed->setBackgroundColor( Qt::white );
   m_spinWriteSpeed->setBackgroundColor( Qt::white );
 
@@ -207,6 +210,7 @@ K3bDeviceOptionTab::K3bDeviceOptionTab( QWidget* parent, const char* name )
   m_labelVendor->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
   m_labelDescription->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
   m_checkBurnProof->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
+  m_checkCdrw->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
   m_spinReadSpeed->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
   m_spinWriteSpeed->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
 
@@ -235,6 +239,8 @@ K3bDeviceOptionTab::K3bDeviceOptionTab( QWidget* parent, const char* name )
   groupDeviceInfoLayout->addWidget( m_comboCdText, 11, 1 );
   groupDeviceInfoLayout->addWidget( m_labelBurnProof, 12, 0 );
   groupDeviceInfoLayout->addWidget( m_checkBurnProof, 12, 1 );
+  groupDeviceInfoLayout->addWidget( m_labelCdrw, 13, 0 );
+  groupDeviceInfoLayout->addWidget( m_checkCdrw, 13, 1 );
 
 
   frameLayout->addMultiCellWidget( m_groupDeviceInfo, 1, 2, 1, 1 );
@@ -388,17 +394,10 @@ void K3bDeviceOptionTab::updateDeviceInfoBox( PrivateTempDevice* tempDev )
     
     if( dev->burner() ) {
       m_spinWriteSpeed->setText( QString::number(tempDev->maxWriteSpeed) );
-      m_checkBurnProof->setText( dev->burnproof() ? "yes" : "no" );
-
-      m_comboCdText->clear();
-      if( tempDev->cdrdaoDriver == "auto" ) {
-	m_comboCdText->insertItem( "auto" );
-      }
-      else {
-	m_comboCdText->insertItem( "yes", 0 );
-	m_comboCdText->insertItem( "no", 1 );
-	m_comboCdText->setCurrentItem( tempDev->cdTextCapable ? 0 : 1 );
-      }
+      m_checkBurnProof->setText( dev->burnproof() ? i18n("yes") : i18n("no") );
+      m_checkCdrw->setText( dev->writesCdrw() ? i18n("yes") : i18n("no") );
+       
+      slotCdrdaoDriverChanged( tempDev->cdrdaoDriver );
 
       showWriterSpecificProps( true );
     }
@@ -519,11 +518,11 @@ void K3bDeviceOptionTab::slotCdrdaoDriverChanged( const QString& driver )
     
     m_comboCdText->clear();
     if( driver == "auto" ) {
-      m_comboCdText->insertItem( "auto" );
+      m_comboCdText->insertItem( i18n("auto") );
     }
     else {
-      m_comboCdText->insertItem( "yes", 0 );
-      m_comboCdText->insertItem( "no", 1 );
+      m_comboCdText->insertItem( i18n("yes"), 0 );
+      m_comboCdText->insertItem( i18n("no"), 1 );
       m_comboCdText->setCurrentItem( m_currentTempDevice->cdTextCapable ? 0 : 1 );
     }
 
@@ -535,7 +534,7 @@ void K3bDeviceOptionTab::slotCdrdaoDriverChanged( const QString& driver )
 void K3bDeviceOptionTab::slotCdTextCapabilityChanged( const QString& s )
 {
   if( m_currentTempDevice != 0 ) {
-    m_currentTempDevice->cdTextCapable = ( s == "yes" );
+    m_currentTempDevice->cdTextCapable = ( s == i18n("yes") );
     devicesChanged = true;
   }
 }
@@ -568,6 +567,8 @@ void K3bDeviceOptionTab::showWriterSpecificProps( bool b )
     m_comboCdText->show();
     m_labelBurnProof->show();
     m_checkBurnProof->show();
+    m_labelCdrw->show();
+    m_checkCdrw->show();
   }
   else {
     m_labelWriteSpeed->hide();
@@ -576,6 +577,8 @@ void K3bDeviceOptionTab::showWriterSpecificProps( bool b )
     m_comboCdText->hide();
     m_labelBurnProof->hide();
     m_checkBurnProof->hide();
+    m_labelCdrw->hide();
+    m_checkCdrw->hide();
   }
 }
 

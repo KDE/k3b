@@ -69,13 +69,15 @@ Q_OBJECT
   QLabel*       m_labelDriver;
   QLabel*       m_labelCdText;
   QLabel*       m_labelBurnProof;
+  QLabel*       m_labelCdrw;
   QLabel*       m_labelWriteSpeed;
   QFrame*       m_line3;
   QLabel*       m_spinReadSpeed;
   QLabel*       m_spinWriteSpeed;
   QComboBox*    m_comboDriver;
   QComboBox*    m_comboCdText;
-  QLabel*    m_checkBurnProof;
+  QLabel*       m_checkBurnProof;
+  QLabel*       m_checkCdrw;
 
   bool devicesChanged;
 };

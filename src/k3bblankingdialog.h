@@ -32,6 +32,7 @@ Q_OBJECT
   void slotUser2();
   void slotInfoMessage( const QString& msg, int type );
   void slotJobFinished( bool );
+  void slotWriterChanged();
 
  protected:
   void closeEvent( QCloseEvent* );

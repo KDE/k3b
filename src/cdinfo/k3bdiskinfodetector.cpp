@@ -41,9 +41,16 @@ void K3bDiskInfoDetector::detect( K3bDevice* device )
   m_info = K3bDiskInfo();
   m_info.device = m_device;
 
-  // since fetchTocInfo could already emit the diskInfoReady signal
-  // and detect needs to return before this happens use the timer
-  QTimer::singleShot( 0, this, SLOT(fetchTocInfo()) );
+
+  if( device->interfaceType() == K3bDevice::SCSI ) {
+    // since fetchTocInfo could already emit the diskInfoReady signal
+    // and detect needs to return before this happens use the timer
+    QTimer::singleShot( 0, this, SLOT(fetchTocInfo()) );
+  }
+  else {
+    // IDE device
+    QTimer::singleShot( 0, this, SLOT(fetchIdeInformation()) );
+  }
 }
 
 
@@ -410,6 +417,15 @@ void K3bDiskInfoDetector::slotCollectStdout( KProcess*, char* data, int len )
 void K3bDiskInfoDetector::slotCollectStderr( KProcess*, char* data, int len )
 {
   m_collectedStderr.append( QString::fromLatin1( data, len ) );
+}
+
+
+void K3bDiskInfoDetector::fetchIdeInformation()
+{
+  // TODO: use cdparanoia-lib to retrieve toc
+
+  m_info.valid = false;
+  emit diskInfoReady( m_info );
 }
 
 

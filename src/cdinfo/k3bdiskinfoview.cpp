@@ -166,8 +166,17 @@ void K3bDiskInfoView::displayInfo( const K3bDiskInfo& info )
 {
   m_trackView->clear();
 
+
+  if( !info.valid ) {
+    m_infoWidget->hide();
+    m_isoInfoWidget->hide();
+    m_line->hide();
+    m_labelTocType->setText( i18n("Sorry, K3b was not able to retrieve disk information.") );
+    m_labelDiskPix->setPixmap( SmallIcon( "stop" ) );
+  }
+
   // first check if there is a cd
-  if( info.noDisk ) {
+  else if( info.noDisk ) {
     m_infoWidget->hide();
     m_isoInfoWidget->hide();
     m_line->hide();
@@ -175,7 +184,6 @@ void K3bDiskInfoView::displayInfo( const K3bDiskInfo& info )
     m_labelTocType->setText( i18n("No disk in drive") );
     m_labelDiskPix->setPixmap( SmallIcon( "stop" ) );
   }
-
 
   else {
     bool showLine = false;
