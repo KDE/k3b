@@ -24,6 +24,7 @@
 #include <qcolor.h>
 #include <qrect.h>
 #include <qfont.h>
+#include <qfontmetrics.h>
 
 #include <kaction.h>
 #include <kpopupmenu.h>
@@ -197,7 +198,8 @@ QSize K3bFillStatusDisplay::sizeHint() const
 QSize K3bFillStatusDisplay::minimumSizeHint() const
 {
   int margin = 2;
-  return QSize( -1, 2*frameWidth() + (int)((double)QFont::defaultFont().pixelSize() + 2*margin ) );
+  QFontMetrics fm( font() );
+  return QSize( -1, 2 * frameWidth() + fm.height() + 2 * margin );
 }
 
 
