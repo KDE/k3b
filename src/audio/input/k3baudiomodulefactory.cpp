@@ -64,7 +64,7 @@ K3bAudioModuleFactory* K3bAudioModuleFactory::self()
 
 K3bAudioModule* K3bAudioModuleFactory::createModule( const KURL& url )
 {
-  for( QListIterator<K3bAudioModule> it( m_modules ); it.current(); ++it ) {
+  for( QPtrListIterator<K3bAudioModule> it( m_modules ); it.current(); ++it ) {
     if( it.current()->canDecode( url ) ) {
       return it.current();
     }
@@ -77,7 +77,7 @@ K3bAudioModule* K3bAudioModuleFactory::createModule( const KURL& url )
 
 bool K3bAudioModuleFactory::moduleAvailable( const KURL& url )
 {
-  for( QListIterator<K3bAudioModule> it( m_modules ); it.current(); ++it ) {
+  for( QPtrListIterator<K3bAudioModule> it( m_modules ); it.current(); ++it ) {
     if( it.current()->canDecode( url ) ) {
       return true;
     }

@@ -27,7 +27,7 @@
 
 
 K3bSplash::K3bSplash( QWidget* parent, const char* name )
-  : QVBox( parent, name, WType_Modal|WStyle_Customize|WStyle_NoBorder|WDestructiveClose )
+  : QVBox( parent, name, WType_Dialog|WShowModal|WStyle_Customize|WStyle_NoBorder|WDestructiveClose )
 {
   setMargin( 0 );
   setSpacing( 0 );

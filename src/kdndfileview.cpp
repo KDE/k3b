@@ -69,7 +69,7 @@ QDragObject* KDndFileDetailView::dragObject()
   if( list->isEmpty() )
     return 0;
 
-  QListIterator<KFileItem> it(*list);
+  QPtrListIterator<KFileItem> it(*list);
   KURL::List urls;
 	
   for( ; it.current(); ++it )
@@ -125,7 +125,7 @@ QDragObject* KDndFileIconView::dragObject()
   if( list->isEmpty() )
     return 0;
 
-  QListIterator<KFileItem> it(*list);
+  QPtrListIterator<KFileItem> it(*list);
   KURL::List urls;
 	
   for( ; it.current(); ++it )

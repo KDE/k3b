@@ -157,7 +157,7 @@ bool K3bVcdXmlView::write( const QString& fname )
     QDomElement elemsegmentItem;
 
     // Add Tracks to XML
-    QListIterator<K3bVcdTrack> it( *m_doc->tracks() );
+    QPtrListIterator<K3bVcdTrack> it( *m_doc->tracks() );
     for ( ; it.current(); ++it ) {
         if ( !it.current() ->isSegment() ) {
             // sequence-items element needed at least a sequence to fit the XML

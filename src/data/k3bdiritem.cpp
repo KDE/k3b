@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -182,7 +182,7 @@ bool K3bDirItem::alreadyInDirectory( const QString& filename ) const
 
 K3bDataItem* K3bDirItem::find( const QString& filename ) const
 {
-  QListIterator<K3bDataItem> it( *m_children );
+  QPtrListIterator<K3bDataItem> it( *m_children );
   for( ; it.current(); ++it ) {
     if( it.current()->k3bName() == filename )
       return it.current();
@@ -241,7 +241,7 @@ bool K3bDirItem::isRemoveable() const
     return false;
 
   bool rem = true;
-  QListIterator<K3bDataItem> it( *m_children );
+  QPtrListIterator<K3bDataItem> it( *m_children );
   for( ; it.current(); ++it )
     rem = rem && it.current()->isRemoveable();
   return rem;

@@ -77,7 +77,7 @@ class K3bDataDoc : public K3bDoc
 
   void removeItem( K3bDataItem* item );
   void moveItem( K3bDataItem* item, K3bDirItem* newParent );
-  void moveItems( QList<K3bDataItem> itemList, K3bDirItem* newParent );
+  void moveItems( QPtrList<K3bDataItem> itemList, K3bDirItem* newParent );
 
   K3bDirItem* addEmptyDir( const QString& name, K3bDirItem* parent );
 	

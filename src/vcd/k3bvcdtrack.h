@@ -29,7 +29,7 @@
 class K3bVcdTrack
 {
     public:
-        K3bVcdTrack( QList<K3bVcdTrack>* parent, const QString& filename );
+        K3bVcdTrack( QPtrList<K3bVcdTrack>* parent, const QString& filename );
         ~K3bVcdTrack();
 
         QString fileName() const { return QFileInfo(m_file).fileName(); }

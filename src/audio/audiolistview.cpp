@@ -368,7 +368,7 @@ void K3bAudioListView::slotPlaySelected()
   QPtrList<K3bAudioTrack> selected = selectedTracks();
 
   if( !selected.isEmpty() ) {
-    QListIterator<K3bAudioTrack> it( selected );
+    QPtrListIterator<K3bAudioTrack> it( selected );
     k3bMain()->audioPlayer()->playFile( it.current()->absPath() );
 
     for( ++it; it.current(); ++it ) {
@@ -381,7 +381,7 @@ void K3bAudioListView::slotPlaySelected()
 void K3bAudioListView::slotPlayAll()
 {
   if( !m_doc->tracks()->isEmpty() ) {
-    QListIterator<K3bAudioTrack> it( *m_doc->tracks() );
+    QPtrListIterator<K3bAudioTrack> it( *m_doc->tracks() );
     k3bMain()->audioPlayer()->playFile( it.current()->absPath() );
 
     for( ++it; it.current(); ++it ) {

@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -42,7 +42,7 @@ class K3bAudioTrackDialog : public KDialogBase
   Q_OBJECT
 
  public:
-  K3bAudioTrackDialog( QList<K3bAudioTrack>&, QWidget *parent=0, const char *name=0);
+  K3bAudioTrackDialog( QPtrList<K3bAudioTrack>&, QWidget *parent=0, const char *name=0);
   ~K3bAudioTrackDialog();
 	
  protected slots:
@@ -51,7 +51,7 @@ class K3bAudioTrackDialog : public KDialogBase
   void slotApply();
 			
  private:
-  QList<K3bAudioTrack> m_tracks;
+  QPtrList<K3bAudioTrack> m_tracks;
 
   QLineEdit* m_editPerformer;
   QLineEdit* m_editTitle;

@@ -156,7 +156,7 @@ void K3bFileView::slotFileHighlighted( const KFileItem* )
 {
   // check if there are audio files under the selected ones
   bool play = false;
-  for( QListIterator<KFileItem> it( *(m_dirOp->selectedItems()) ); it.current(); ++it ) {
+  for( QPtrListIterator<KFileItem> it( *(m_dirOp->selectedItems()) ); it.current(); ++it ) {
     if( k3bMain()->audioPlayer()->supportsMimetype(it.current()->mimetype()) ) {
       play = true;
       break;
@@ -179,7 +179,7 @@ void K3bFileView::slotAudioFilePlay()
   // play selected audio files
   QStringList files;
 
-  for( QListIterator<KFileItem> it( *(m_dirOp->selectedItems()) ); it.current(); ++it ) {
+  for( QPtrListIterator<KFileItem> it( *(m_dirOp->selectedItems()) ); it.current(); ++it ) {
     if( k3bMain()->audioPlayer()->supportsMimetype(it.current()->mimetype()) ) {
       files.append( it.current()->url().path() );
     }
@@ -198,7 +198,7 @@ void K3bFileView::slotAudioFileEnqueue()
   // play selected audio files
   QStringList files;
 
-  for( QListIterator<KFileItem> it( *(m_dirOp->selectedItems()) ); it.current(); ++it ) {
+  for( QPtrListIterator<KFileItem> it( *(m_dirOp->selectedItems()) ); it.current(); ++it ) {
     if( k3bMain()->audioPlayer()->supportsMimetype(it.current()->mimetype()) ) {
       files.append( it.current()->url().path() );
     }
@@ -228,7 +228,7 @@ void K3bFileView::slotAddFilesToProject()
   }
   if( k3bMain()->activeDoc() ){
     KURL::List files;
-    for( QListIterator<KFileItem> it( *(m_dirOp->selectedItems()) ); it.current(); ++it ) {
+    for( QPtrListIterator<KFileItem> it( *(m_dirOp->selectedItems()) ); it.current(); ++it ) {
       files.append( it.current()->url() );
     }    
     if( !files.isEmpty() )

@@ -292,7 +292,7 @@ class K3bMainWindow : public KParts::DockMainWindow
   /** a list of all open documents. If the last window of a document gets closed, the installed eventFilter
    * removes this document from the list. The document list is checked for modified documents when the user
    * is about to close the application. */
-  QList<K3bDoc> *pDocList;
+  QPtrList<K3bDoc> *pDocList;
 
   K3bAudioPlayer*        m_audioPlayer;
 

@@ -137,7 +137,7 @@ class K3bVcdDoc : public K3bDoc
         };
 
         /** Holds all the urls that have to be added to the list of tracks. **/
-        QQueue<PrivateUrlToAdd> urlsToAdd;
+        QPtrQueue<PrivateUrlToAdd> urlsToAdd;
         QTimer* m_urlAddingTimer;
 
         QPtrList<K3bVcdTrack>* m_tracks;

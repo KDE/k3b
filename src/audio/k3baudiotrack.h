@@ -37,7 +37,7 @@ class K3bAudioModule;
 class K3bAudioTrack
 {
  public:
-  K3bAudioTrack( QList<K3bAudioTrack>* parent, const QString& filename );
+  K3bAudioTrack( QPtrList<K3bAudioTrack>* parent, const QString& filename );
   ~K3bAudioTrack();
 
   /** returns true if K3b is able to handle the file
@@ -112,7 +112,7 @@ class K3bAudioTrack
   bool isWave() const { return (m_module == 0); }
 
  protected:
-  QList<K3bAudioTrack>* m_parent;
+  QPtrList<K3bAudioTrack>* m_parent;
   int m_filetype;
   QFile m_file;
 

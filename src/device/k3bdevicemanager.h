@@ -51,7 +51,7 @@ class DeviceManager : public QObject
    * Before getting the devices do a @ref scanbus().
    * @return List of all writer devices.
    */
-  QList<K3bDevice>& burningDevices();
+  QPtrList<K3bDevice>& burningDevices();
 
   /**
    * Note that all burning devices can also be used as
@@ -59,9 +59,9 @@ class DeviceManager : public QObject
    * Before getting the devices do a @ref scanbus().
    * @return List of all reader devices without writer devices.
    **/
-  QList<K3bDevice>& readingDevices();
+  QPtrList<K3bDevice>& readingDevices();
 
-  QList<K3bDevice>& allDevices();
+  QPtrList<K3bDevice>& allDevices();
 
 
   /** writes to stderr **/
@@ -112,9 +112,9 @@ class DeviceManager : public QObject
 
   K3bExternalBinManager* m_externalBinManager;
 
-  QList<K3bDevice> m_reader;
-  QList<K3bDevice> m_writer;
-  QList<K3bDevice> m_allDevices;;
+  QPtrList<K3bDevice> m_reader;
+  QPtrList<K3bDevice> m_writer;
+  QPtrList<K3bDevice> m_allDevices;;
   int m_foundDevices;
 
   QString m_processOutput;

@@ -333,7 +333,7 @@ bool K3bDataDoc::nameAlreadyInDir( const QString& name, K3bDirItem* dir )
     return false;
   }
 
-  QListIterator<K3bDataItem> it( *dir->children() );
+  QPtrListIterator<K3bDataItem> it( *dir->children() );
   for( ; it.current(); ++it ) {
     if( it.current()->k3bName() == name ) {
       kdDebug() << "(K3bDataDoc) already a file with that name in directory: " << name << endl;
@@ -839,7 +839,7 @@ bool K3bDataDoc::saveDocumentData( QDomElement* docElem )
   // ----------------------------------------------------------------------
   topElem = doc.createElement( "files" );
 
-  QListIterator<K3bDataItem> it( *root()->children() );
+  QPtrListIterator<K3bDataItem> it( *root()->children() );
   for( ; it.current(); ++it ) {
     saveDataItem( it.current(), &doc, &topElem );
   }
@@ -887,7 +887,7 @@ void K3bDataDoc::saveDataItem( K3bDataItem* item, QDomDocument* doc, QDomElement
     QDomElement topElem = doc->createElement( "directory" );
     topElem.setAttribute( "name", dirItem->k3bName() );
 
-    QListIterator<K3bDataItem> it( *dirItem->children() );
+    QPtrListIterator<K3bDataItem> it( *dirItem->children() );
     for( ; it.current(); ++it ) {
       saveDataItem( it.current(), doc, &topElem );
     }
@@ -961,7 +961,7 @@ void K3bDataDoc::moveItems( QPtrList<K3bDataItem> itemList, K3bDirItem* newParen
     return;
   }
 
-  QListIterator<K3bDataItem> it( itemList );
+  QPtrListIterator<K3bDataItem> it( itemList );
   for( ; it.current(); ++it ) {
     // check if newParent is subdir of item
     if( K3bDirItem* dirItem = dynamic_cast<K3bDirItem*>( it.current() ) ) {

@@ -114,7 +114,7 @@ void K3bDataDirTreeView::slotDropped( QDropEvent* e, QListViewItem*, QListViewIt
       // move all selected items
       QPtrList<QListViewItem> selectedViewItems = m_fileView->selectedItems();
       QPtrList<K3bDataItem> selectedDataItems;
-      QListIterator<QListViewItem> it( selectedViewItems );
+      QPtrListIterator<QListViewItem> it( selectedViewItems );
       for( ; it.current(); ++it ) {
 	K3bDataViewItem* dataViewItem = dynamic_cast<K3bDataViewItem*>( it.current() );
 	if( dataViewItem )

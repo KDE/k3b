@@ -609,7 +609,7 @@ void K3bMixedJob::addAudioTracks( K3bCdrecordWriter* writer )
   // add all the audio tracks
   writer->addArgument( "-audio" );
 
-  QListIterator<K3bAudioTrack> it( *m_doc->audioDoc()->tracks() );
+  QPtrListIterator<K3bAudioTrack> it( *m_doc->audioDoc()->tracks() );
   for( ; it.current(); ++it ) {
     K3bAudioTrack* track = it.current();
 
@@ -832,7 +832,7 @@ void K3bMixedJob::removeBufferFiles()
       if( !m_isoImageFile->remove() )
 	emit infoMessage( i18n("Could not delete file %1.").arg(m_isoImageFile->name()), ERROR );
 
-  QListIterator<K3bAudioTrack> it( *m_doc->audioDoc()->tracks() );
+  QPtrListIterator<K3bAudioTrack> it( *m_doc->audioDoc()->tracks() );
   for( ; it.current(); ++it ) {
     K3bAudioTrack* track = it.current();
     if( QFile::exists( track->bufferFile() ) )
@@ -922,7 +922,7 @@ void K3bMixedJob::normalizeFiles()
 
   // add all the files
   QValueVector<QString> files;
-  QListIterator<K3bAudioTrack> it( *m_doc->audioDoc()->tracks() );
+  QPtrListIterator<K3bAudioTrack> it( *m_doc->audioDoc()->tracks() );
   for( ; it.current(); ++it ) {
     K3bAudioTrack* track = it.current();
     files.append( track->bufferFile() );

@@ -69,7 +69,7 @@ class K3bAudioDoc : public K3bDoc
   K3bAudioTrack* at( uint i ) { return m_tracks->at( i ); }
   K3bAudioTrack* take( uint i ) { return m_tracks->take( i ); }
 
-  const QList<K3bAudioTrack>* tracks() const { return m_tracks; }
+  const QPtrList<K3bAudioTrack>* tracks() const { return m_tracks; }
 
   /** get the current size of the project */
   KIO::filesize_t size() const;
@@ -166,10 +166,10 @@ class K3bAudioDoc : public K3bDoc
       int position;
     };
   /** Holds all the urls that have to be added to the list of tracks. **/
-  QQueue<PrivateUrlToAdd> urlsToAdd;
+  QPtrQueue<PrivateUrlToAdd> urlsToAdd;
   QTimer* m_urlAddingTimer;
 	
-  QList<K3bAudioTrack>* m_tracks;
+  QPtrList<K3bAudioTrack>* m_tracks;
   K3bAudioTrack* m_lastAddedTrack;
 	
   uint lastAddedPosition;

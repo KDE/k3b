@@ -109,7 +109,7 @@ void K3bDataFileView::updateContents()
 
   //  kdDebug() << "(K3bDataFileView) reloading current dir: " << m_currentDir->k3bName() << endl;
 
-  for( QListIterator<K3bDataItem> it( *m_currentDir->children() ); it.current(); ++it ) {
+  for( QPtrListIterator<K3bDataItem> it( *m_currentDir->children() ); it.current(); ++it ) {
     if( it.current()->isDir() )
       (void)new K3bDataDirViewItem( (K3bDirItem*)it.current(), this );
     else if( it.current()->isFile() )
@@ -155,7 +155,7 @@ void K3bDataFileView::slotDropped( QDropEvent* e, QListViewItem*, QListViewItem*
       // move all selected items
       QPtrList<QListViewItem> selectedViewItems = selectedItems();
       QPtrList<K3bDataItem> selectedDataItems;
-      QListIterator<QListViewItem> it( selectedViewItems );
+      QPtrListIterator<QListViewItem> it( selectedViewItems );
       for( ; it.current(); ++it ) {
 	K3bDataViewItem* dataViewItem = dynamic_cast<K3bDataViewItem*>( it.current() );
 	if( dataViewItem )
@@ -292,7 +292,7 @@ void K3bDataFileView::slotRenameItem()
 void K3bDataFileView::slotRemoveItem()
 {
   QPtrList<QListViewItem> items = selectedItems();
-  QListIterator<QListViewItem> it( items );
+  QPtrListIterator<QListViewItem> it( items );
   for(; it.current(); ++it ) {
     if( K3bDataViewItem* d = dynamic_cast<K3bDataViewItem*>( it.current() ) )
       m_doc->removeItem( d->dataItem() );

@@ -208,7 +208,7 @@ class K3bDoc : public QObject
   bool modified;
   KURL doc_url;
   /** the list of the views currently connected to the document */
-  QList<K3bView> *pViewList;
+  QPtrList<K3bView> *pViewList;
   QString m_projectName;
   QString m_tempDir;
   K3bDevice* m_burner;

@@ -281,7 +281,7 @@ bool K3bAudioJob::prepareWriter()
     // add all the audio tracks
     writer->addArgument( "-audio" );
 
-    QListIterator<K3bAudioTrack> it( *m_doc->tracks() );
+    QPtrListIterator<K3bAudioTrack> it( *m_doc->tracks() );
     for( ; it.current(); ++it ) {
       K3bAudioTrack* track = it.current();
     
@@ -447,7 +447,7 @@ void K3bAudioJob::removeBufferFiles()
 {
   emit infoMessage( i18n("Removing buffer files."), INFO );
 
-  QListIterator<K3bAudioTrack> it( *m_doc->tracks() );
+  QPtrListIterator<K3bAudioTrack> it( *m_doc->tracks() );
   for( ; it.current(); ++it ) {
     K3bAudioTrack* track = it.current();
     if( QFile::exists( track->bufferFile() ) )
@@ -474,7 +474,7 @@ void K3bAudioJob::normalizeFiles()
 
   // add all the files
   QValueVector<QString> files;
-  QListIterator<K3bAudioTrack> it( *m_doc->tracks() );
+  QPtrListIterator<K3bAudioTrack> it( *m_doc->tracks() );
   for( ; it.current(); ++it ) {
     K3bAudioTrack* track = it.current();
     files.append( track->bufferFile() );
