@@ -1,1 +1,1 @@
-SUBDIRS = audiometainforenamer debugger
+SUBDIRS = audiometainforenamer
