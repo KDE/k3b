@@ -10,7 +10,9 @@ Fixed writing speed detection with some DVD writers
 Fixed capacity detection with some DVD writers
 Fixed VideoCD creation with enabled PBC
 Remember the last directory in the filebrowser.
-
+Do not remove successfully created CD/DVD copy images if the writing failes but 
+	the user requested to keep the images
+	
 0.11.9
 Fixed data project size calculation (for good this time).
 	
