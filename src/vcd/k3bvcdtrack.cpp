@@ -136,6 +136,16 @@ void K3bVcdTrack::setMpegAudioType(const int& type)
   m_mpegaudiotype = type;
 }
 
+void K3bVcdTrack::setMpegAudioCopyright(const bool& copyright)
+{
+  m_mpegaudiocopyright = copyright;  
+}
+
+void K3bVcdTrack::setMpegAudioOriginal(const bool& original)
+{
+  m_mpegaudiooriginal = original;  
+}
+
 void K3bVcdTrack::setMpegAudioLayer(const int& layer)
 {
   m_mpegaudiolayer = layer;

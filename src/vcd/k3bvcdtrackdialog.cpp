@@ -78,110 +78,120 @@ void K3bVcdTrackDialog::fillGui()
   QString tmp;
   K3bVcdTrack* track = m_tracks.first();
         
-      if (track->mpegVideoVersion() == 1) {
-			  tmp = "Mpeg 1 System File [Video";
-		  }
-			else {
-			  tmp.append("Mpeg 2 Program Stream File [Video");
-			}
+  if (track->mpegVideoVersion() == 1) {
+    tmp = "Mpeg 1 System File [Video";
+  }
+  else {
+    tmp.append(i18n("Mpeg 2 Program Stream File [Video"));
+  }
 
-      if (track->hasAudio())
-        tmp.append("/Audio]");
-			else
-        tmp.append("]");
+  if (track->hasAudio())
+    tmp.append(i18n("/Audio]"));
+  else
+    tmp.append("]");
 
-      m_mpegver_video->setText(tmp);
+  m_mpegver_video->setText(tmp);
 
-      m_rate_video->setText(QString("%1 Mbps").arg(track->mpegMbps()));
+  m_rate_video->setText(QString("%1 Mbps").arg(track->mpegMbps()));
 
-			m_duration_video->setText(track->mpegDuration());
+  m_duration_video->setText(track->mpegDuration());
 
-      switch (track->MpegAspectRatio()) {
-			  case 0: m_rate_video->setText("Invalid aspect ratio (forbidden)"); break;
-				case 1: m_rate_video->setText("Aspect ratio 1/1 (VGA)"); break;
-				case 2: m_rate_video->setText("Aspect ratio 4/3 (TV)"); break;
-				case 3: m_rate_video->setText("Aspect ratio 16/9 (large TV)"); break;
-				case 4: m_rate_video->setText("Aspect ratio 2.21/1 (Cinema)"); break;
-        default: m_rate_video->setText("Invalid Aspect ratio (reserved)");
-			}
+  switch (track->MpegAspectRatio()) {
+    case 0: m_rate_video->setText(i18n("Invalid aspect ratio (forbidden)")); break;
+    case 1: m_rate_video->setText(i18n("Aspect ratio 1/1 (VGA)")); break;
+    case 2: m_rate_video->setText(i18n("Aspect ratio 4/3 (TV)")); break;
+    case 3: m_rate_video->setText(i18n("Aspect ratio 16/9 (large TV)")); break;
+    case 4: m_rate_video->setText(i18n("Aspect ratio 2.21/1 (Cinema)")); break;
+    default: m_rate_video->setText(i18n("Invalid Aspect ratio (reserved)"));
+  }
 
-      m_chromaformat_video->setText("");
-      if (track->MpegSExt()){
-			  if (track->MpegProgressive())
-          tmp = "Not interlaced, chroma format: ";
-			  else
-          tmp = "Interlaced, chroma format: ";
+  m_chromaformat_video->setText(i18n("n/a"));
 
-        switch (track->MpegChromaFormat()){
-				  case 1 : tmp.append("4:2:0");break;
-					case 2 : tmp.append("4:2:2");break;
-					case 3 : tmp.append("4:4:4");break;
-			  }
-        m_chromaformat_video->setText(tmp);
-			}
+  if (track->MpegSExt()){
+    if (track->MpegProgressive())
+      tmp = i18n("Not interlaced");
+    else
+      tmp = i18n("Interlaced");
 
-      m_format_video->setText("");
-      if (track->MpegDExt()){
-			  switch(track->MpegFormat()){
-				  case 0 : m_format_video->setText("Component");break;
-					case 1 : m_format_video->setText("PAL");break;
-					case 2 : m_format_video->setText("NTSC");break;
-					case 3 : m_format_video->setText("SECAM");break;
-					case 4 : m_format_video->setText("MAC");break;
-					case 5 : m_format_video->setText("Unspecified");break;
-			  }
-			}
+    switch (track->MpegChromaFormat()){
+      case 1 : tmp.append(", 4:2:0");break;
+      case 2 : tmp.append(", 4:2:2");break;
+      case 3 : tmp.append(", 4:4:4");break;
+    }
+    m_chromaformat_video->setText(tmp);
+  }
 
-      m_displaysize_video->setText(track->mpegDisplaySize());
-			tmp = track->mpegSize();
-      tmp.append(QString(" %1 fps ").arg(track->mpegFps()));
-      tmp.append(QString(" %1 Mbps").arg(track->mpegMbps()));
-      m_size_video->setText(tmp);
+  m_format_video->setText(i18n("n/a"));
+  if (track->MpegDExt()){
+    switch(track->MpegFormat()){
+      case 0 : m_format_video->setText(i18n("Component"));break;
+      case 1 : m_format_video->setText("PAL");break;
+      case 2 : m_format_video->setText("NTSC");break;
+      case 3 : m_format_video->setText("SECAM");break;
+      case 4 : m_format_video->setText("MAC");break;
+      case 5 : m_format_video->setText(i18n("Unspecified"));break;
+    }
+  }
 
-      if (track->hasAudio()){
-				if (track->MpegAudioType() !=3)
-          m_mpegver_audio->setText(QString("Mpeg %1 layer %2").arg(track->MpegAudioType()).arg(track->MpegAudioLayer()));
-				else
-          m_mpegver_audio->setText(QString("Mpeg 2.5 (rare) layer %1").arg(track->MpegAudioLayer()));
+  m_displaysize_video->setText(track->mpegDisplaySize());
+  tmp = track->mpegSize();
+  tmp.append(QString(" %1 fps").arg(track->mpegFps()));
+  tmp.append(QString(" %1 Mbps").arg(track->mpegMbps()));
+  m_size_video->setText(tmp);
 
-        if (!track->MpegAudioKbps().isNull())
-          m_rate_audio->setText(QString("%1 kbps  %2 Hz").arg(track->MpegAudioKbps()).arg(track->MpegAudioHz()));
-				else
-          m_rate_audio->setText(QString("free bitrate %1 Hz").arg(track->MpegAudioHz()));
+  if (track->hasAudio()){
+    if (track->MpegAudioType() !=3)
+      m_mpegver_audio->setText(i18n("Mpeg %1 layer %2").arg(track->MpegAudioType()).arg(track->MpegAudioLayer()));
+    else
+      m_mpegver_audio->setText(i18n("Mpeg 2.5 (rare) layer %1").arg(track->MpegAudioLayer()));
 
-				switch (track->MpegAudioMode()){
-					case 0: tmp = "Stereo,"; break;
-					case 1: tmp = "Joint Stereo: ";
-				          if (track->MpegAudioLayer() == 1 || track->MpegAudioLayer() == 2){
-								    switch (track->MpegAudioModeExt()){
-									    case 0: tmp.append("(Intensity stereo on bands 4-31/32)"); break;
-									    case 1: tmp.append("(Intensity stereo on bands 8-31/32)"); break;
-									    case 2: tmp.append("(Intensity stereo on bands 12-31/32)"); break;
-									    case 3: tmp.append("(Intensity stereo on bands 16-31/32)"); break;
-								    }
-							    }
-							    else {
-								    //mp3
-								    switch (track->MpegAudioModeExt()){
-									    case 0: tmp.append("(Intensity stereo off, M/S stereo off)"); break;
-									    case 1: tmp.append("(Intensity stereo on, M/S stereo off)"); break;
-									    case 2: tmp.append("(Intensity stereo off, M/S stereo on)"); break;
-									    case 3: tmp.append("(Intensity stereo on, M/S stereo on)"); break;
-								    }
-							    }
-							    break;
-					case 2: tmp = "Dual Channel, "; break;
-					case 3: tmp = "Mono, "; break;
-		    }
+    if (!track->MpegAudioKbps().isNull())
+      m_rate_audio->setText(i18n("%1 kbps %2 Hz").arg(track->MpegAudioKbps()).arg(track->MpegAudioHz()));
+    else
+      m_rate_audio->setText(i18n("free bitrate %1 Hz").arg(track->MpegAudioHz()));
 
-        switch (track->MpegAudioEmphasis()){
-			    case 0: tmp.append("No emphasis"); break;
-				  case 1: tmp.append("Emphasis: 50/15 microsecs"); break;
-					case 2: tmp.append("Emphasis Unknown"); break;
-					case 3: tmp.append("Emphasis CCITT J 17"); break;
-				}
-        m_mode_audio->setText(tmp);
-   }
+    switch (track->MpegAudioMode()){
+      case 0: tmp = i18n("Stereo"); break;
+      case 1: tmp = i18n("Joint Stereo: ");
+              if (track->MpegAudioLayer() == 1 || track->MpegAudioLayer() == 2){
+                switch (track->MpegAudioModeExt()){
+                  case 0: tmp.append(i18n("(Intensity stereo on bands 4-31/32)")); break;
+                  case 1: tmp.append(i18n("(Intensity stereo on bands 8-31/32)")); break;
+                  case 2: tmp.append(i18n("(Intensity stereo on bands 12-31/32)")); break;
+                  case 3: tmp.append(i18n("(Intensity stereo on bands 16-31/32)")); break;
+                }
+              }
+              else {
+                //mp3
+                switch (track->MpegAudioModeExt()){
+                  case 0: tmp.append(i18n("(Intensity stereo off, M/S stereo off)")); break;
+                  case 1: tmp.append(i18n("(Intensity stereo on, M/S stereo off)")); break;
+                  case 2: tmp.append(i18n("(Intensity stereo off, M/S stereo on)")); break;
+                  case 3: tmp.append(i18n("(Intensity stereo on, M/S stereo on)")); break;
+                }
+              }
+              break;
+      case 2: tmp = i18n("Dual Channel"); break;
+      case 3: tmp = "Mono"; break;
+    }
+    m_mode_audio->setText(tmp);
+
+    switch (track->MpegAudioEmphasis()){
+      case 0: m_emphasis_audio->setText(i18n("No emphasis")); break;
+      case 1: m_emphasis_audio->setText(i18n("Emphasis: 50/15 microsecs")); break;
+      case 2: m_emphasis_audio->setText(i18n("Emphasis Unknown")); break;
+      case 3: m_emphasis_audio->setText(i18n("Emphasis CCITT J 17")); break;
+    }
+
+    tmp = "";
+    if (track->MpegAudioCopyright()) tmp.append("(c),");
+    if (track->MpegAudioOriginal())
+      tmp.append(i18n("original"));
+    else
+      tmp.append(i18n("copy"));
+
+    m_copyright_audio->setText(tmp);
+  }
 }
 
 void K3bVcdTrackDialog::setupGui()

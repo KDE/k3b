@@ -52,6 +52,8 @@ class K3bVcdTrack
 
   // audio
   bool hasAudio() const {return m_hasaudio;}
+  bool MpegAudioCopyright() const {return m_mpegaudiocopyright;}
+  bool MpegAudioOriginal() const {return m_mpegaudiooriginal;}
   int MpegAudioType() const {return m_mpegaudiotype;}
   int MpegAudioLayer() const {return m_mpegaudiolayer;}
   QString MpegAudioDuration() const {return m_mpegaudioduration;}
@@ -61,6 +63,7 @@ class K3bVcdTrack
   int MpegAudioMode() const {return m_mpegaudiomode;}
   int MpegAudioModeExt() const {return m_mpegaudiomodeext;}
   int MpegAudioEmphasis() const {return m_mpegaudioemphasis;}
+
   // video
   void setMpegType(const int&);
   void setMpegVideoVersion(const int&);
@@ -88,6 +91,8 @@ class K3bVcdTrack
   void setMpegAudioMode(const int&);
   void setMpegAudioModeExt(const int&);
   void setMpegAudioEmphasis(const int&);
+  void setMpegAudioCopyright(const bool&);
+  void setMpegAudioOriginal(const bool&);
   
  protected:
   QList<K3bVcdTrack>* m_parent;
@@ -111,6 +116,8 @@ class K3bVcdTrack
   int m_mpegchroma_format;
   // audio
   bool m_hasaudio;
+  bool m_mpegaudiocopyright;
+  bool m_mpegaudiooriginal;
   int m_mpegaudiotype;
   int m_mpegaudiolayer;
   QString m_mpegaudioduration;

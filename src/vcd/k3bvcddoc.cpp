@@ -246,6 +246,8 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
       if (Mpeg->has_audio()) {
         Mpeg->SecsToHMS(HMS, Mpeg->Audio->duration);
         newTrack->setHasAudio(true);
+        newTrack->setMpegAudioCopyright(Mpeg->Audio->copyright);
+        newTrack->setMpegAudioOriginal(Mpeg->Audio->original);
         newTrack->setMpegAudioEmphasis(Mpeg->Audio->emphasis_index);
         newTrack->setMpegAudioType(Mpeg->Audio->mpeg_ver);
         newTrack->setMpegAudioLayer(Mpeg->Audio->layer);
