@@ -19,6 +19,11 @@
 
 #include <kdebug.h>
 
+// There is no QString::arg(off_t). Apparently under
+// Linux there's an integral conversion that's allowed. 
+// I don't know which one it is, so explicitly cast instead.
+#define OFF_T_ARG_CAST	(unsigned long)
+
 extern bool desperate_mode;
 extern bool preserve_header;
 int mpeg2found = 0;
@@ -288,7 +293,7 @@ byte mpeg::GetByte( off_t offset )
     if ( ( offset >= buffend ) || ( offset < buffstart ) ) {
 
         if ( FSEEK( MpegFile, offset, SEEK_SET ) ) {
-            kdDebug() << QString( "could not get seek to offset (%1) in file %2 (size:%3)" ).arg( offset ).arg( FileName ).arg( FileSize ) << endl;
+            kdDebug() << QString( "could not get seek to offset (%1) in file %2 (size:%3)" ).arg( OFF_T_ARG_CAST offset ).arg( FileName ).arg( OFF_T_ARG_CAST FileSize ) << endl;
 
             kdDebug() << "AT EOF - please stop me!" << endl;
             return 0x11;
@@ -298,7 +303,7 @@ byte mpeg::GetByte( off_t offset )
         buffend = offset + nread;
         if ( ( offset >= buffend ) || ( offset < buffstart ) ) {
             // weird
-            kdDebug() << QString( "could not get offset %1 in file %2 [%3]" ).arg( offset ).arg( FileName ).arg( FileSize ) << endl;
+            kdDebug() << QString( "could not get offset %1 in file %2 [%3]" ).arg( OFF_T_ARG_CAST offset ).arg( FileName ).arg( OFF_T_ARG_CAST FileSize ) << endl;
 
             kdDebug() << "AT EOF - please stop me!" << endl;
             return 0x11;
@@ -330,7 +335,7 @@ byte mpeg::bdGetByte( off_t offset )
         buffend = start + nread;
         if ( ( offset >= buffend ) || ( offset < buffstart ) ) {
             // weird
-            kdDebug() << QString( "could not get offset %1 in file %2 [%3]" ).arg( offset ).arg( FileName ).arg( FileSize ) << endl;
+            kdDebug() << QString( "could not get offset %1 in file %2 [%3]" ).arg( OFF_T_ARG_CAST offset ).arg( FileName ).arg( OFF_T_ARG_CAST FileSize ) << endl;
 
             return 0x11;
         }
@@ -739,7 +744,7 @@ bool mpeg::ParseVideo( off_t myoffset )
     // did we find header end or are we lost in cyberspace?
     if ( header_end < 0 ) {
         //could not find first GOP
-        kdDebug() << QString( "%1: could not find first GOP after Video Sequence start [%2 (decimal)]" ).arg( FileName ).arg( header_start ) << endl;
+        kdDebug() << QString( "%1: could not find first GOP after Video Sequence start [%2 (decimal)]" ).arg( FileName ).arg( OFF_T_ARG_CAST header_start ) << endl;
         return false;
     }
 
@@ -752,7 +757,7 @@ bool mpeg::ParseVideo( off_t myoffset )
 
     if ( fread( Video->video_header, Video->video_header_size, 1, MpegFile ) != 1 ) {
         // couldn't read video header
-        kdDebug() << QString( "%1: Found video header but couldn't read it [%2-%3]" ).arg( FileName ).arg( header_start ).arg( header_end ) << endl;
+        kdDebug() << QString( "%1: Found video header but couldn't read it [%2-%3]" ).arg( FileName ).arg( OFF_T_ARG_CAST header_start ).arg( OFF_T_ARG_CAST header_end ) << endl;
         return false;
     }
 
@@ -791,12 +796,12 @@ bool mpeg::ParseSystem()
 
     if ( offset != 0 ) {
         // we actually skipped some zeroes
-        kdDebug() << QString( "Skipped %1 zeroes at start of file" ).arg( offset ) << endl;
+        kdDebug() << QString( "Skipped %1 zeroes at start of file" ).arg( OFF_T_ARG_CAST offset ) << endl;
     }
 
     if ( !EnsureMPEG( offset, 0xBA ) ) {
         //this file does not begin with a pack!
-        kdDebug() << QString( "mmm, this file does not start with a pack, offset: %1" ).arg( offset ) << endl;
+        kdDebug() << QString( "mmm, this file does not start with a pack, offset: %1" ).arg( OFF_T_ARG_CAST offset ) << endl;
         kdDebug() << "use the desperate_mode switch as the first option -X to search for a header in the whole file!" << endl;
         kdDebug() << "if you want to force the operation. May yield to an endless loop if no valid header is found!" << endl;
         if ( GetByte( offset + 2 ) != 0x01 ) {
@@ -845,7 +850,7 @@ bool mpeg::ParseSystem()
 
         //Hey no more guess...
         if ( mark != SystemPkt ) {
-            kdDebug() << QString( "%1: Unhandled packet encountered (%2 @ %3) while seeking system headers" ).arg( FileName ).arg( mark ).arg( offset ) << endl;
+            kdDebug() << QString( "%1: Unhandled packet encountered (%2 @ %3) while seeking system headers" ).arg( FileName ).arg( mark ).arg( OFF_T_ARG_CAST offset ) << endl;
 
             offset += 4;
             continue;
@@ -873,7 +878,7 @@ bool mpeg::ParseSystem()
 
         if ( ( startofpack == -1 ) || ( startofpack + PACKlength != offset ) ) {
             // we're probably lost
-            kdDebug() << QString( "%1: System Packet not preceded by a PACK [%2] start of pack : %3 PACKlength : %4 I'll probably crash but I love risk" ).arg( FileName ).arg( offset ).arg( startofpack ).arg( PACKlength ) << endl;
+            kdDebug() << QString( "%1: System Packet not preceded by a PACK [%2] start of pack : %3 PACKlength : %4 I'll probably crash but I love risk" ).arg( FileName ).arg( OFF_T_ARG_CAST offset ).arg( OFF_T_ARG_CAST startofpack ).arg( OFF_T_ARG_CAST PACKlength ) << endl;
             startofpack = offset;
 
             // keep going anyway			return false;
@@ -896,7 +901,7 @@ bool mpeg::ParseSystem()
 
         if ( packettype == AudioPkt ) {
             if ( System->audio_system_header != 0 ) {
-                kdDebug() << QString( "%1: Warning two or more audio sys header encountered [%2]" ).arg( FileName ).arg( offset ) << endl;
+                kdDebug() << QString( "%1: Warning two or more audio sys header encountered [%2]" ).arg( FileName ).arg( OFF_T_ARG_CAST offset ) << endl;
 
                 delete[] System->audio_system_header;
             }
@@ -912,7 +917,7 @@ bool mpeg::ParseSystem()
                 1, MpegFile );
         } else if ( packettype == VideoPkt ) {
             if ( System->video_system_header != 0 ) {
-                kdDebug() << QString( "%1: Warning two or more video sys header encountered [%2]" ).arg( FileName ).arg( offset ) << endl;
+                kdDebug() << QString( "%1: Warning two or more video sys header encountered [%2]" ).arg( FileName ).arg( OFF_T_ARG_CAST offset ) << endl;
 
 
                 delete[] System->video_system_header;
@@ -942,7 +947,7 @@ bool mpeg::ParseSystem()
                 System->video_system_header_length,
                 1, MpegFile );
         } else {
-            kdDebug() << QString( "%1: Unknown system packet %2 [%3]" ).arg( FileName ).arg( packettype ).arg( offset ) << endl;
+            kdDebug() << QString( "%1: Unknown system packet %2 [%3]" ).arg( FileName ).arg( packettype ).arg( OFF_T_ARG_CAST offset ) << endl;
         }
 
 
@@ -1757,7 +1762,7 @@ void mpeg::ParseFramesInGOP( off_t offset )
         switch ( mark ) {
             case 0xB8 :
 
-                kdDebug() << QString( "GOP ends at [%1]" ).arg( off ) << endl;
+                kdDebug() << QString( "GOP ends at [%1]" ).arg( OFF_T_ARG_CAST off ) << endl;
 
                 return ;
             case 0x00 :
@@ -1780,21 +1785,21 @@ void mpeg::ParseFramesInGOP( off_t offset )
                         break;
                 }
 
-                kdDebug() << endl << endl << QString( "%1 (%2)     [%3]" ).arg( type ).arg( pict_ref ).arg( off ) << endl;
+                kdDebug() << endl << endl << QString( "%1 (%2)     [%3]" ).arg( type ).arg( pict_ref ).arg( OFF_T_ARG_CAST off ) << endl;
 
 
                 break;
             case 0xba:
-                kdDebug() << QString( "            PACK    [%1]" ).arg( off ) << endl;
+                kdDebug() << QString( "            PACK    [%1]" ).arg( OFF_T_ARG_CAST off ) << endl;
                 break;
             case VideoPkt:
-                kdDebug() << QString( "            Video   [%1]" ).arg( off ) << endl;
+                kdDebug() << QString( "            Video   [%1]" ).arg( OFF_T_ARG_CAST off ) << endl;
                 break;
             case AudioPkt:
-                kdDebug() << QString( "            Audio   [%1]" ).arg( off ) << endl;
+                kdDebug() << QString( "            Audio   [%1]" ).arg( OFF_T_ARG_CAST off ) << endl;
                 break;
             case PaddingPkt:
-                kdDebug() << QString( "            Padding [%1]" ).arg( off ) << endl;
+                kdDebug() << QString( "            Padding [%1]" ).arg( OFF_T_ARG_CAST off ) << endl;
                 break;
 
         }
@@ -2051,7 +2056,7 @@ long mpeg::ReadPACKMuxRate( off_t offset )
         if ( ( GetByte( offset ) & 0xF0 ) != 0x20 )
 
 
-            kdDebug() << QString( "weird pack header while parsing muxrate (offset %1)" ).arg( offset ) << endl;
+            kdDebug() << QString( "weird pack header while parsing muxrate (offset %1)" ).arg( OFF_T_ARG_CAST offset ) << endl;
 
 
         muxrate = ( GetByte( offset + 5 ) & 0x7F ) << 15;
@@ -2440,7 +2445,7 @@ bool mpeg::ParseTransportStream( off_t offset )
             if ( Transport->PMT_PIDs[ i ] == pid ) {
                 ParsePMT( payload_offset );
                 Transport->read_pmts++;
-                kdDebug() << QString( "PMT at [%1]" ).arg( payload_offset ) << endl;
+                kdDebug() << QString( "PMT at [%1]" ).arg( OFF_T_ARG_CAST payload_offset ) << endl;
 
 
                 break;
@@ -2625,7 +2630,7 @@ void transport::PrintInfos()
     }
 }
 
-void mpeg_descriptors::PrintInfos( char* prefix )
+void mpeg_descriptors::PrintInfos( const char* prefix )
 {
     unsigned int i;
     if ( prefix == 0 )
@@ -2704,7 +2709,7 @@ header_buf *readHeader( FILE *myMpegfile, off_t offset, int rw )
         p->size = size;
         p->buf = nix;
         if ( preserve_header )
-            kdDebug() << QString( "Size of Fix: 0x%1" ).arg( size ) << endl;
+            kdDebug() << QString( "Size of Fix: 0x%1" ).arg( OFF_T_ARG_CAST size ) << endl;
         return ( NULL );
     }
     if ( rw == 2 ) {
@@ -2731,7 +2736,7 @@ void mpeg::print_all_ts( byte kind )
         tsx = ReadTSMpeg2( p + 4 );
         if ( p == -1 )
             break;
-        kdDebug() << QString( "offset:  %1 TS: %2" ).arg( p ).arg( tsx ) << endl;
+        kdDebug() << QString( "offset:  %1 TS: %2" ).arg( OFF_T_ARG_CAST p ).arg( tsx ) << endl;
         p += 4;
 
     }

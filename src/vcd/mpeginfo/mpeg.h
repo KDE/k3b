@@ -51,7 +51,7 @@ class mpeg_descriptors
             if ( languages )
                 delete[] languages;
         }
-        void PrintInfos( char* prefix );
+        void PrintInfos( const char* prefix );
         int video_coding_version;
         int audio_coding_version;
         int CA;
