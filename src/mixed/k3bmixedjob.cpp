@@ -91,7 +91,7 @@ void K3bMixedJob::slotReceivedIsoImagerData( char* data, int len )
 void K3bMixedJob::slotIsoImagerFinished( bool success )
 {
   m_isoImageFile->close();
-  emit infoMessage( i18n("Size of iso image: %1").arg(m_isoImageFile->size() ), INFO );
+  emit infoMessage( i18n("Size of ISO image: %1").arg(m_isoImageFile->size() ), INFO );
   emit finished( success );
 }
 
