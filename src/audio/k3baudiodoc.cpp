@@ -36,6 +36,7 @@
 #include <qdom.h>
 #include <qdatetime.h>
 #include <qtimer.h>
+#include <qtextstream.h>
 
 // KDE-includes
 #include <kprocess.h>
@@ -87,9 +88,9 @@ bool K3bAudioDoc::newDocument()
 
 
 
-unsigned long K3bAudioDoc::size() const 
+unsigned long long K3bAudioDoc::size() const 
 {
-  unsigned long size = 0;
+  unsigned long long size = 0;
   for( QListIterator<K3bAudioTrack> it(*m_tracks); it.current(); ++it ) {
     size += it.current()->size();
   }	
@@ -98,9 +99,9 @@ unsigned long K3bAudioDoc::size() const
 }
 
 
-unsigned long K3bAudioDoc::length() const
+unsigned long long K3bAudioDoc::length() const
 {
-  unsigned long length = 0;
+  unsigned long long length = 0;
   for( QListIterator<K3bAudioTrack> it(*m_tracks); it.current(); ++it ) {
     length += it.current()->length() + it.current()->pregap();
   }	
@@ -151,11 +152,9 @@ void K3bAudioDoc::slotWorkUrlQueue()
       return;
     }
 
-    // TODO: check if it is a textfile and if so try to create a KURL from every line
-    //       for now drop all non-local urls
-    //       add all existing files
-    if( K3bAudioTrack* newTrack = createTrack( item->url ) )
-      addTrack( newTrack, lastAddedPosition );
+    if( !readM3uFile( item->url, lastAddedPosition ) )
+      if( K3bAudioTrack* newTrack = createTrack( item->url ) )
+	addTrack( newTrack, lastAddedPosition );
 
     delete item;
   }
@@ -167,6 +166,39 @@ void K3bAudioDoc::slotWorkUrlQueue()
 
     informAboutNotFoundFiles();
   }
+}
+
+
+bool K3bAudioDoc::readM3uFile( const KURL& url, int pos )
+{
+  // check if the file is a m3u playlist
+  // and if so add all listed files
+
+  QFile f( url.path() );
+  if( !f.open( IO_ReadOnly ) )
+    return false;
+
+  QTextStream t( &f );
+  char buf[7];
+  t.readRawBytes( buf, 7 );
+  if( QString::fromLatin1( buf, 7 ) != "#EXTM3U" )
+    return false;
+
+  // skip the first line
+  t.readLine();
+
+  // read the file
+  while( !t.atEnd() ) {
+    QString line = t.readLine();
+    if( line[0] != '#' ) {
+      KURL url;
+      url.setPath( line );
+      urlsToAdd.enqueue( new PrivateUrlToAdd( url , pos++ ) );
+    }
+  }
+
+  m_urlAddingTimer->start(0);
+  return true;
 }
 
 
@@ -865,7 +897,9 @@ unsigned long K3bAudioDoc::identifyWaveFile( const KURL& url )
   // found data chunk
   int headerLen = inputFile.at();
   if( headerLen + chunkLen > inputFile.size() ) {
-    kdDebug() << filename << ": file length " << inputFile.size() << " does not match length from WAVE header " << headerLen << " + " << chunkLen << " - using actual length." << endl;
+    kdDebug() << filename << ": file length " << inputFile.size() 
+	      << " does not match length from WAVE header " << headerLen << " + " << chunkLen 
+	      << " - using actual length." << endl;
     return (inputFile.size() - headerLen)/2352;
   }
   else {
