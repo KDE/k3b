@@ -229,6 +229,11 @@ K3bDoc* K3bDoc::openDocument(const KURL& url )
   else
     kdDebug() << "(K3bDoc) unknown doc type: " << xmlDoc.doctype().name() << endl;
 
+  // we do this to load the writer and the writing speed
+  // since those are not saved in a project file
+  // FIXME
+  newDoc->loadDefaultSettings( kapp->config() );
+
   // ---------
   // load the data into the document
   if( newDoc != 0 ) {
