@@ -11,4 +11,8 @@ if include_FLAC
 DECFLACDIR = flac
 endif
 
-SUBDIRS = wave $(DECOGGDIR) $(DECMP3DIR) $(DECFLACDIR)
+if include_AIFF
+DECAIFFDIR = libsndfile
+endif
+
+SUBDIRS = wave $(DECOGGDIR) $(DECMP3DIR) $(DECFLACDIR) $(DECAIFFDIR)

@@ -120,7 +120,7 @@ void K3bSoxEncoder::finishEncoderInternal()
 {
   if( d->process ) {
     if( d->process->isRunning() ) {
-      d->process->closeStdin();
+      ::close( d->process->stdinFd() );
 
       // this is kind of evil... 
       // but we need to be sure the process exited when this method returnes
@@ -137,7 +137,7 @@ void K3bSoxEncoder::slotSoxFinished( KProcess* p )
 }
 
 
-bool K3bSoxEncoder::openFile( const QString& ext, const QString& filename )
+bool K3bSoxEncoder::openFile( const QString& ext, const QString& filename, const K3b::Msf& )
 {
   d->fileName = filename;
   return initEncoderInternal( ext );
@@ -157,6 +157,7 @@ bool K3bSoxEncoder::initEncoderInternal( const QString& extension )
     delete d->process;
     d->process = new K3bProcess();
     d->process->setSplitStdout(true);
+    d->process->setRawStdin(true);
 
     connect( d->process, SIGNAL(processExited(KProcess*)),
 	     this, SLOT(slotSoxFinished(KProcess*)) );

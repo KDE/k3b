@@ -179,12 +179,12 @@ bool K3bMad::seekFirstHeader()
 {
   //
   // A lot of mp3 files start with a lot of junk which confuses mad.
-  // We "allow" an mp3 file to start with at most 50 KB of junk. This is just
+  // We "allow" an mp3 file to start with at most 1 KB of junk. This is just
   // some random value since we do not want to search the hole file. That would
   // take way to long for non-mp3 files.
   //
   bool headerFound = findNextHeader();
-  while( !headerFound && !m_inputFile.atEnd() && m_inputFile.at() < 50*1024 ) {
+  while( !headerFound && !m_inputFile.atEnd() && m_inputFile.at() < 1024 ) {
     headerFound = findNextHeader();
   }
 

@@ -66,7 +66,7 @@ class K3bSoxEncoder : public K3bAudioEncoder
   /**
    * reimplemented since sox writes the file itself
    */
-  bool openFile( const QString& ext, const QString& filename );
+  bool openFile( const QString& ext, const QString& filename, const K3b::Msf& );
   void closeFile();
 
  private slots:
