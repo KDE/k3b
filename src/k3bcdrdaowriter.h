@@ -71,7 +71,8 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
   void setParanoiaMode( int i ) { m_paranoiaMode = i; }
   void setTaoSource(bool b) { m_taoSource=b; };
   void setTaoSourceAdjust(int a) { m_taoSourceAdjust=a; };
-  void setSession(int s) { m_session=s; };  
+  void setSession(int s) { m_session=s; };
+  void setEject(bool e) { m_eject=e; };  
 // ---------------------
 
   void setProvideStdin( bool b ) { m_stdin = b; }
@@ -109,6 +110,7 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
   int        m_taoSourceAdjust;
   int        m_paranoiaMode;
   int        m_session;
+  bool       m_eject;
   // ---------------------
 
   const K3bExternalBin* m_cdrdaoBinObject;

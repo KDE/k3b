@@ -60,6 +60,7 @@ K3bCdrdaoWriter::K3bCdrdaoWriter( K3bDevice* dev, QObject* parent, const char* n
     m_taoSourceAdjust(-1),
     m_paranoiaMode(-1),
     m_session(-1),
+    m_eject(k3bMain()->eject()),
     m_cdrdaoBinObject( K3bExternalBinManager::self()->binObject("cdrdao") ),
     m_process(0),
     m_comSock(0),
@@ -313,8 +314,8 @@ void K3bCdrdaoWriter::setCommonArguments() {
     // display debug info
     *m_process << "-n" << "-v" << "2";
     // eject
-    if( k3bMain()->eject() )
-        *m_process << "--eject";
+    if( m_eject )
+       *m_process << "--eject";
     // remote
 
     *m_process << "--remote" <<  QString("%1").arg(m_cdrdaoComm[0]);
@@ -437,14 +438,14 @@ void K3bCdrdaoWriter::cancel() {
                 bool block = burnDevice()->block( false );
                 if( !block )
                     emit infoMessage( i18n("Could not unlock CD drive."), K3bJob::ERROR );
-                else if( k3bMain()->eject() )
+                else if( m_eject )
                     burnDevice()->eject();
             }
             if ( m_command == COPY || m_command == READ ) {
                 bool block = m_sourceDevice->block( false );
                 if( !block )
                     emit infoMessage( i18n("Could not unlock CD drive."), K3bJob::ERROR );
-                else if( k3bMain()->eject() )
+                else if( m_eject )
                     m_sourceDevice->eject();
             }
 
