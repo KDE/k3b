@@ -15,6 +15,10 @@
  *                                                                         *
  ***************************************************************************/
 
+#ifndef K3BGLOBALS_H
+#define K3BGLOBALS_H
+
+
 #include <qstring.h>
 
 namespace K3b
@@ -34,3 +38,5 @@ namespace K3b
 	QString framesToString( int h, bool showFrames = true );
 /* 	bool parseFrames( const QString&, int& ); */
 };
+
+#endif
