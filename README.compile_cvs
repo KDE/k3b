@@ -1,6 +1,0 @@
-Due to the new filestructure K3b cannot be compiled
-as a part of the kdeextragear package anymore.
-You need to link (or copy) Makefile.cvs and the admin
-folder to this directory and call make -f Makefile.cvs
-and configure for K3b seperately until we find a way
-to solve the issue.
