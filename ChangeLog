@@ -1,5 +1,7 @@
 0.8
-changed he option dialog layout -> smaller window
+advanced options: manually selection of writing app (cdrecord or cdrdao)
+
+changed the option dialog layout -> smaller window
 
 fixed problems with first pregap in audio project:
   no need to set the first pregap to 0 on some writers anymore
@@ -16,7 +18,6 @@ customizeable audio ripping
 mixed mode cd creation
 video cd creation
 better error handling
-bootable cds
 
 indivdual selection of final size for encoded movie
 clean vob dir before start and restore it (i.e playing wiht PowerDVD stores
