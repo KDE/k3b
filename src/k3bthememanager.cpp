@@ -88,7 +88,7 @@ const QPixmap& K3bTheme::pixmap( K3bTheme::PixmapType t ) const
     name = "dialog_left";
     break;
   case DIALOG_RIGHT:
-    name = "dialog_left";
+    name = "dialog_right";
     break;
   case SPLASH:
     name = "splash";
