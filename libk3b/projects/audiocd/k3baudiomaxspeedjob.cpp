@@ -51,7 +51,6 @@ public:
     K3bAudioTrack* track = m_doc->firstTrack();
     K3bAudioDataSource* source = track->firstSource();
     bool success = true;
-    QTime t;
     maxSpeed = 175*1000;
 
     while( source && !m_canceled ) {
@@ -61,28 +60,16 @@ public:
 	break;
       }
       
-      // start the timer
-      t.start();
-
       // read some data
-      int data = speedTest( source );
+      int speed = speedTest( source );
 
-      // elapsed millisec
-      int usedT = t.elapsed();
-
-      if( data < 0 ) {
+      if( speed < 0 ) {
 	success = false;
 	break;
       }
-      else if( data > 0 ) {
-
-	// KB/sec (add 1 millisecond to avoid division by 0)
-	int throughput = (data*1000+usedT)/(usedT+1)/1024;
-	kdDebug() << "(K3bAudioMaxSpeedJob) throughput: " << throughput 
-		  << " (" << data << "/" << usedT << ")" << endl;
-	
+      else if( speed > 0 ) {
 	// update the max speed
-	maxSpeed = QMIN( maxSpeed, throughput );
+	maxSpeed = QMIN( maxSpeed, speed );
       }
       
       // next source
@@ -123,19 +110,33 @@ public:
       }
     }
 
+    QTime t;
     int dataRead = 0;
     int r = 0;
+
+    // start the timer
+    t.start();
+
     // read ten seconds of audio data. This is some value which seemed about right. :)
     while( dataRead < 2352*75*10 && (r = source->read( m_buffer, 2352*10 )) > 0 ) {
       dataRead += r;
     }
+
+    // elapsed millisec
+    int usedT = t.elapsed();
 
     if( r < 0 ) {
       kdDebug() << "(K3bAudioMaxSpeedJob) read failure." << endl;
       return -1;
     }
 
-    return dataRead;
+    // KB/sec (add 1 millisecond to avoid division by 0)
+    int throughput = (dataRead*1000+usedT)/(usedT+1)/1024;
+    kdDebug() << "(K3bAudioMaxSpeedJob) throughput: " << throughput 
+	      << " (" << dataRead << "/" << usedT << ")" << endl;
+
+
+    return throughput;
   }
 
   void cancel() {

@@ -143,7 +143,7 @@ public:
   Private() 
     : drive(0),
       paranoia(0),
-      paranoiaMode(1),
+      paranoiaMode(0),
       neverSkip(false),
       maxRetries(20),
       device(0),

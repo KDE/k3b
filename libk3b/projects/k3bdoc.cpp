@@ -78,6 +78,8 @@ K3bDoc::K3bDoc( QObject* parent )
   m_saved = false;
 
   m_copies = 1;
+
+  connect( this, SIGNAL(changed()), this, SLOT(slotChanged()) );
 }
 
 
@@ -85,6 +87,12 @@ K3bDoc::~K3bDoc()
 {
   // remove the project from the manager
   k3bprojectmanager->removeProject( this );
+}
+
+
+void K3bDoc::slotChanged()
+{
+  emit changed( this );
 }
 
 
@@ -288,6 +296,11 @@ bool K3bDoc::saveDocument(const KURL& url )
   delete store;
 
   m_saved = success;
+
+  if( success ) {
+    emit saved();
+    emit saved( this );
+  }
 
   return success;
 }

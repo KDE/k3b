@@ -22,6 +22,7 @@
 #include <k3bdoc.h>
 
 #include <kaction.h>
+#include <kiconloader.h>
 
 
 
@@ -40,6 +41,14 @@ K3bProjectTabWidget::~K3bProjectTabWidget()
 }
 
 
+void K3bProjectTabWidget::insertTab( K3bDoc* doc )
+{
+  QTabWidget::insertTab( doc->view(), doc->view()->caption(), 0 );
+  connect( doc, SIGNAL(saved(K3bDoc*)), this, SLOT(slotDocSaved(K3bDoc*)) );
+  connect( doc, SIGNAL(changed(K3bDoc*)), this, SLOT(slotDocChanged(K3bDoc*)) );
+}
+
+
 void K3bProjectTabWidget::slotUrlsDropped( int id, const KURL::List& urls )
 {
   QWidget* w = page( m_tabBar->indexOf( id ) );
@@ -53,6 +62,17 @@ void K3bProjectTabWidget::insertAction( KAction* action )
   m_tabBar->insertAction( action );
 }
 
+
+void K3bProjectTabWidget::slotDocChanged( K3bDoc* doc )
+{
+  setTabIconSet( doc->view(), SmallIconSet( "filesave" ) );
+}
+
+
+void K3bProjectTabWidget::slotDocSaved( K3bDoc* doc )
+{
+  setTabIconSet( doc->view(), QIconSet() );
+}
 
 #include "k3bprojecttabwidget.moc"
 

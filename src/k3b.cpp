@@ -220,6 +220,8 @@ void K3bMainWindow::initActions()
   actionFileOpenRecent = KStdAction::openRecent(this, SLOT(slotFileOpenRecent(const KURL&)), actionCollection());
   actionFileSave = KStdAction::save(this, SLOT(slotFileSave()), actionCollection());
   actionFileSaveAs = KStdAction::saveAs(this, SLOT(slotFileSaveAs()), actionCollection());
+  actionFileSaveAll = new KAction( i18n("Save All"), "save_all", 0, this, SLOT(slotFileSaveAll()), 
+				   actionCollection(), "file_save_all" );
   actionFileClose = KStdAction::close(this, SLOT(slotFileClose()), actionCollection());
   actionFileCloseAll = new KAction( i18n("Close All"), 0, 0, this, SLOT(slotFileCloseAll()), 
 				    actionCollection(), "file_close_all" );
@@ -466,7 +468,7 @@ void K3bMainWindow::initView()
 void K3bMainWindow::createClient(K3bDoc* doc)
 {
   K3bView* w = doc->createView( m_documentTab );
-  m_documentTab->insertTab( w, w->caption(), 0 );
+  m_documentTab->insertTab( doc );
   m_documentTab->showPage( w );
 
   slotCurrentDocChanged();
@@ -668,6 +670,15 @@ void K3bMainWindow::slotFileOpenRecent(const KURL& url)
 }
 
 
+void K3bMainWindow::slotFileSaveAll()
+{
+  for( QPtrListIterator<K3bDoc> it( d->projectManager->projects() );
+       *it; ++it ) {
+    fileSave( *it );
+  }
+}
+
+
 void K3bMainWindow::slotFileSave()
 {
   if( K3bDoc* doc = activeDoc() ) {
@@ -683,7 +694,7 @@ void K3bMainWindow::fileSave( K3bDoc* doc )
     doc = activeDoc();
   }
   if( doc != 0 ) {
-    if( !doc->saved() )
+    if( !doc->isSaved() )
       fileSaveAs( doc );
     else if( !doc->saveDocument(doc->URL()) )
       KMessageBox::error (this,i18n("Could not save the current document!"), i18n("I/O Error"));

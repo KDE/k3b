@@ -224,6 +224,7 @@ class K3bMainWindow : public KParts::DockMainWindow
   void slotFileSave();
   /** save a document by a new filename*/
   void slotFileSaveAs();
+  void slotFileSaveAll();
   /** asks for saving if the file is modified, then closes the actual file and window*/
   void slotFileClose();
   void slotFileCloseAll();
@@ -320,6 +321,7 @@ class K3bMainWindow : public KParts::DockMainWindow
   KRecentFilesAction* actionFileOpenRecent;
   KAction* actionFileSave;
   KAction* actionFileSaveAs;
+  KAction* actionFileSaveAll;
   KAction* actionFileClose;
   KAction* actionFileCloseAll;
   KAction* actionFileQuit;

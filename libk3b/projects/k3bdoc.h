@@ -151,7 +151,7 @@ class K3bDoc : public QObject
   /**
    * @return true if the document has successfully been saved to a file
    */
-  bool saved() const { return m_saved; }
+  bool isSaved() const { return m_saved; }
 
   /**
    * Should return the name of the document type.
@@ -165,6 +165,9 @@ class K3bDoc : public QObject
 
  signals:
   void changed();
+  void changed( K3bDoc* );
+  void saved();
+  void saved( K3bDoc* );
 
  public slots:
   void setDummy( bool d );
@@ -228,6 +231,9 @@ class K3bDoc : public QObject
   //  K3bProjectInterface* m_dcopInterface;
 
   virtual K3bView* newView( QWidget* parent = 0 ) = 0;
+
+ private slots:
+  void slotChanged();
 
  private:
   /** the modified flag of the current document */

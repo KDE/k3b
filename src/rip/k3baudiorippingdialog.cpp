@@ -429,7 +429,7 @@ void K3bAudioRippingDialog::setStaticDir( const QString& path )
 
 void K3bAudioRippingDialog::loadK3bDefaults()
 {
-  m_comboParanoiaMode->setCurrentItem( 1 );
+  m_comboParanoiaMode->setCurrentItem( 0 );
   m_spinRetries->setValue(20);
   m_checkNeverSkip->setChecked( false );
   m_checkUseIndex0->setChecked( false );
@@ -440,7 +440,7 @@ void K3bAudioRippingDialog::loadK3bDefaults()
 
 void K3bAudioRippingDialog::loadUserDefaults( KConfig* c )
 {
-  m_comboParanoiaMode->setCurrentItem( c->readNumEntry( "paranoia_mode", 1 ) );
+  m_comboParanoiaMode->setCurrentItem( c->readNumEntry( "paranoia_mode", 0 ) );
   m_spinRetries->setValue( c->readNumEntry( "read_retries", 20 ) );
   m_checkNeverSkip->setChecked( c->readBoolEntry( "never_skip", false ) );
   m_checkUseIndex0->setChecked( c->readBoolEntry( "use_index0", false ) );

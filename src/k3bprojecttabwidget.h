@@ -22,6 +22,7 @@
 
 class K3bProjectTabBar;
 class KAction;
+class K3bDoc;
 
 
 /**
@@ -35,6 +36,8 @@ class K3bProjectTabWidget : public QTabWidget
   K3bProjectTabWidget( QWidget *parent = 0, const char *name = 0, WFlags = 0 );
   ~K3bProjectTabWidget();
 
+  void insertTab( K3bDoc* );
+
   /**
    * inserts the given action into the popup menu for the tabs
    */
@@ -42,6 +45,8 @@ class K3bProjectTabWidget : public QTabWidget
 
  private slots:
   void slotUrlsDropped( int id, const KURL::List& ulrs );
+  void slotDocChanged( K3bDoc* );
+  void slotDocSaved( K3bDoc* );
 
  private:
   K3bProjectTabBar* m_tabBar;
