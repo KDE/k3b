@@ -55,6 +55,7 @@ class K3bCdCopyJob : public K3bBurnJob
   void setCopies( int c ) { m_copies = c; }
   void setFastToc( bool b ) { m_fastToc = b; }
   void setReadRaw( bool b );
+  void setParanoiaMode( int i ) { m_paranoiaMode = i; }
 
  private slots:
   void diskInfoReady( const K3bDiskInfo& info );
@@ -95,6 +96,8 @@ class K3bCdCopyJob : public K3bBurnJob
   bool m_dummy;
   bool m_fastToc;
   bool m_readRaw;
+
+  int m_paranoiaMode;
 
   QString m_tempPath;
   QString m_tocFile;

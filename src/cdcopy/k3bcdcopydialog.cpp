@@ -114,9 +114,15 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   m_checkFastToc = new QCheckBox( i18n("Fast TOC"), advancedTab );
   m_checkRawCopy = new QCheckBox( i18n("Raw Copy"), advancedTab );
 
-  advancedTabGrid->addWidget( m_checkFastToc, 0, 0 );
-  advancedTabGrid->addWidget( m_checkRawCopy, 1, 0 );
-  advancedTabGrid->setRowStretch( 2, 1 );
+  m_spinParanoiaMode = new QSpinBox( 0, 3, 1, advancedTab );
+  m_spinParanoiaMode->setValue(3); // default to max
+
+  advancedTabGrid->addMultiCellWidget( m_checkFastToc, 0, 0, 0, 1 );
+  advancedTabGrid->addMultiCellWidget( m_checkRawCopy, 1, 1, 0, 1 );
+  advancedTabGrid->addWidget( new QLabel( i18n("Paranoia Mode:"), advancedTab ), 2, 0 );
+  advancedTabGrid->addWidget( m_spinParanoiaMode, 2, 1 );
+
+  advancedTabGrid->setRowStretch( 3, 1 );
 
   tabWidget->addTab( advancedTab, i18n("&Advanced") );
 
@@ -165,7 +171,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   QToolTip::add( m_comboSourceDevice, i18n("Select the drive with the CD to duplicatey") );
   QToolTip::add( m_spinCopies, i18n("Number of copies") );
   QToolTip::add( m_checkRawCopy, i18n("Write all data sectors as 2352 byte blocks") );
-
+  QToolTip::add( m_spinParanoiaMode, i18n("Set the paranoia level when reading audio cds") );
 
   // What's This info
   // --------------------------------------------------------------------------------
@@ -195,6 +201,14 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
 					"with reading data cds."
 					"<p>Has no effect on audio cds."
 					"<p>Does not work in on-the-fly mode.") );
+  QWhatsThis::add( m_spinParanoiaMode, i18n("<p>Sets the correction mode for digital audio extraction."
+					    "<ul><li>0: No checking, data is copied directly from the drive. "
+					    "This should work with all current drives as they include their own "
+					    "hardware based correction.</li>"
+					    "<li>1: Perform overlapped reading to avoid jitter.</li>"
+					    "<li>2: Like 1 but with additional checks of the read audio data.</li>"
+					    "<li>3: Like 2 but with additional scratch detection and repair.</li></ul>"
+					    "<p><b>The extraction speed reduces from 0 to 3.</b>") );
 }
 
 
@@ -244,6 +258,7 @@ void K3bCdCopyDialog::slotUser1()
   if( !m_checkSimulate->isChecked() )
     job->setCopies( m_spinCopies->value() );
   job->setReadRaw( m_checkRawCopy->isChecked() );
+  job->setParanoiaMode( m_spinParanoiaMode->value() );
 
   // create a progresswidget
   K3bBurnProgressDialog d( k3bMain(), "burnProgress", 

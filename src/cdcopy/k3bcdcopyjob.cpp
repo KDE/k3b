@@ -36,7 +36,8 @@
 
 
 K3bCdCopyJob::K3bCdCopyJob( QObject* parent )
-  : K3bBurnJob( parent )
+  : K3bBurnJob( parent ),
+    m_paranoiaMode( 3 )
 {
   m_process = new KProcess();
 
@@ -447,6 +448,9 @@ void K3bCdCopyJob::addCdrdaoWriteArguments()
   // simulate?
   if( m_dummy )
     *m_process << "--simulate";
+
+
+  *m_process << "--paranoia-mode" << QString::number( m_paranoiaMode );
   
   // additional parameters from config
   QStringList _params = kapp->config()->readListEntry( "cdrdao parameters" );

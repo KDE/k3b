@@ -58,6 +58,7 @@ class K3bCdCopyDialog : public KDialogBase
   QCheckBox* m_checkRawCopy;
   QCheckBox* m_checkOnlyCreateImage;
   QComboBox* m_comboSourceDevice;
+  QSpinBox* m_spinParanoiaMode;
   QSpinBox* m_spinCopies;
 };
 
