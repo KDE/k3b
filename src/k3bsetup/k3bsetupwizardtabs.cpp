@@ -284,7 +284,7 @@ void FstabEntriesTab::readSettings()
   m_viewNoEntry->clear();
   m_viewWithEntry->clear();
 
-  QListIterator<K3bDevice> it( setup()->deviceManager()->allDevices() );
+  QPtrListIterator<K3bDevice> it( setup()->deviceManager()->allDevices() );
   int cdromCount = 0;
   int cdwriterCount = 0;
   while( K3bDevice* dev = *it ) {
