@@ -331,7 +331,7 @@ bool K3bAudioRipThread::ripTrack( int track, const QString& filename )
 	return false;
       }
       
-      Q_INT16* buf = d->paranoiaLib->read( &status );
+      char* buf = d->paranoiaLib->read( &status );
       if( status == K3bCdparanoiaLib::S_OK ) {
 	if( buf == 0 ) {
 	  if( m_singleFile )
@@ -364,7 +364,7 @@ bool K3bAudioRipThread::ripTrack( int track, const QString& filename )
 	}
 	else {
 	  if( d->encoder ) {
-	    if( d->encoder->encode( reinterpret_cast<char*>(buf), 
+	    if( d->encoder->encode( buf, 
 				    CD_FRAMESIZE_RAW ) < 0 ) {
 	      kdDebug() << "(K3bAudioRipThread) error while encoding." << endl;
 	      emitInfoMessage( i18n("Error while encoding track %1.").arg(track), K3bJob::ERROR );
@@ -372,7 +372,7 @@ bool K3bAudioRipThread::ripTrack( int track, const QString& filename )
 	    }
 	  }
 	  else
-	    d->waveFileWriter->write( reinterpret_cast<char*>(buf), 
+	    d->waveFileWriter->write( buf, 
 				      CD_FRAMESIZE_RAW, 
 				      K3bWaveFileWriter::LittleEndian );
 

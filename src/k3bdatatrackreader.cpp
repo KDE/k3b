@@ -99,6 +99,7 @@ public:
     bool writeError = false;
     bool readError = false;
     int lastPercent = 0;
+    unsigned long lastReadMb = 0;
     int bufferLen = s_bufferSizeSectors*m_sectorSize;
     unsigned char* buffer = new unsigned char[bufferLen];
     while( !m_canceled && currentSector <= m_lastSector ) {
@@ -140,8 +141,12 @@ public:
 	lastPercent = percent;
 	emitPercent( percent );
       }
-      
-      // TODO: processedSize
+
+      unsigned long readMb = (currentSector.lba() - m_firstSector.lba() + 1) / 512;
+      if( readMb > lastReadMb ) {
+	lastReadMb = readMb;
+	emitProcessedSize( readMb, ( m_lastSector.lba() - m_firstSector.lba() + 1 ) / 512 );
+      }
       
       currentSector += readSectors;
     }

@@ -41,7 +41,8 @@ public:
   Private() 
     : writingMode( 0 ),
       process( 0 ),
-      growisofsBin( 0 ) {
+      growisofsBin( 0 ),
+      trackSize(-1) {
   }
 
   int writingMode;
@@ -61,6 +62,9 @@ public:
 
   K3bThroughputEstimator* speedEst;
   K3bGrowisofsHandler* gh;
+
+  // used in DAO with growisofs >= 5.15
+  long trackSize;
 };
 
 
@@ -175,7 +179,10 @@ bool K3bGrowisofsWriter::prepareProcess()
   if( simulate() )
     *d->process << "-use-the-force-luke=dummy";
   if( d->writingMode == K3b::DAO ) {
-    *d->process << "-use-the-force-luke=dao";
+    if( d->growisofsBin->version >= K3bVersion( 5, 15, -1 ) && d->trackSize > 0 )
+      *d->process << "-use-the-force-luke=dao:" + QString::number(d->trackSize);
+    else
+      *d->process << "-use-the-force-luke=dao";
     d->gh->reset(true);
   }
   else
@@ -283,6 +290,12 @@ void K3bGrowisofsWriter::cancel()
 void K3bGrowisofsWriter::setWritingMode( int m )
 {
   d->writingMode = m;
+}
+
+
+void K3bGrowisofsWriter::setTrackSize( long size )
+{
+  d->trackSize = size;
 }
 
 

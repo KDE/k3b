@@ -13,6 +13,8 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#include <config.h>
+
 #include "k3bcdparanoialib.h"
 
 #include <k3bdevice.h>
@@ -546,7 +548,7 @@ bool K3bCdparanoiaLib::initReading( long start, long end )
 }
 
 
-Q_INT16* K3bCdparanoiaLib::read( int* statusCode, unsigned int* track )
+char* K3bCdparanoiaLib::read( int* statusCode, unsigned int* track, bool littleEndian )
 {
   if( d->currentSector > d->lastSector ) {
     kdDebug() << "(K3bCdparanoiaLib) finished ripping. read " 
@@ -559,6 +561,21 @@ Q_INT16* K3bCdparanoiaLib::read( int* statusCode, unsigned int* track )
   }
 
   Q_INT16* data = paranoiaRead( paranoiaCallback );
+
+  char* charData = reinterpret_cast<char*>(data);
+
+#ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
+  if( littleEndian ) {
+#else
+  if( !littleEndian ) {
+#endif
+    for( int i = 0; i < CD_FRAMESIZE_RAW-1; i+=2 ) {
+      char b = charData[i];
+      charData[i] = charData[i+1];
+      charData[i+1] = b;
+    }
+  }
+
 
   if( data )
     d->status = S_OK;
@@ -576,7 +593,7 @@ Q_INT16* K3bCdparanoiaLib::read( int* statusCode, unsigned int* track )
   if( d->toc[d->currentTrack-1].lastSector() < d->currentSector )
     d->currentTrack++;
 
-  return data;
+  return charData;
 }
 
 

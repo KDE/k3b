@@ -49,6 +49,12 @@ class K3bGrowisofsWriter : public K3bAbstractWriter
   void setWritingMode( int );
 
   /**
+   * Only used in DAO mode and only supported with growisofs >= 5.15
+   * @param size size in blocks
+   */
+  void setTrackSize( long size );
+
+  /**
    * set this to QString::null or an empty string to let the writer
    * read it's data from fd()
    */

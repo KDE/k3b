@@ -33,7 +33,22 @@ Detection of Justlink support
 Finally the device handling is completely independant. No calls to cdrecord anymore. That's why we
 now have a libk3bdevice.
 Improved writing speed estimation for audio tracks.
-	
+Added a button which determines the supported writing speeds with the mounted media. this way it is possible
+	to also select dvd writing speeds other than 1x
+fixed directory sorting in iso filesystems
+fixed boot image file sorting
+Joliet long support (103 chars joliet filenames)
+improved meta tag handling for audio encoding, support for album title and stuff
+fixed crash when only creating images without an installed cd writer
+writing speed is loaded correctly again
+Completely rewritten CD copy:
+   - Copy Audio, multisession and Mixed mode CDs.
+   - Copy CD-TEXT
+   - Create CD-TEXT from Cddb entries
+   - Audio reading with cdparanoia for high quality ripping
+   - no cdrdao anymore
+Support for new growisofs option to specify the size of a written image in DAO mode
+
 0.10
 DVD writing support with the DVD+RW-tools by Andy Polyakov <appro@fy.chalmers.se>
 DVD formatting

@@ -1539,7 +1539,7 @@ K3bCdDevice::AlbumCdText K3bCdDevice::CdDevice::readCdText( unsigned int trackCo
 	  }
 	}
 	else
-	  kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << " zero-sized CD-TEXT." << endl; 
+	  kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << " zero-sized CD-TEXT: " << dataLen << endl; 
 
 	delete [] data;
 

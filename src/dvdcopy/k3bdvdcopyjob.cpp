@@ -157,6 +157,8 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
     //                    by looking at the ISO9660 header when writing in DAO mode. So in this case
     //                    it would be best for us to do the same....
     //
+    // With growisofs 5.15 we have the option to specify the size of the image to be written in DAO mode.
+    //
 
     switch( dh->ngDiskInfo().mediaType() ) {
     case K3bCdDevice::MEDIA_DVD_ROM:
@@ -175,10 +177,16 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
 
       // growisofs only uses the size from the PVD for reserving
       // writable space in DAO mode
-      if( m_writingMode != K3b::DAO || !m_onTheFly ) {
+      // with version >= 5.15 growisofs supports specifying the size of the track
+      if( m_writingMode != K3b::DAO || !m_onTheFly || 
+	  ( k3bcore->externalBinManager()->binObject( "growisofs" ) && 
+	    k3bcore->externalBinManager()->binObject( "growisofs" )->version >= K3bVersion( 5, 15, -1 ) ) ) {
 	d->lastSector = dh->toc()[0].lastSector();
 	break;
       }
+
+      // fallthrough
+
     case K3bCdDevice::MEDIA_DVD_PLUS_RW:
     case K3bCdDevice::MEDIA_DVD_RW_OVWR:
       {
@@ -197,14 +205,18 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
 	}
       }
       break;
+
     case K3bCdDevice::MEDIA_DVD_RAM:
       emit infoMessage( i18n("K3b does not support copying DVD-RAM."), ERROR );
       emit finished(false);
       d->running = false;
       return;
-      break;
+
     default:
-      kdDebug() << "(K3bDvdCopyJob) unable to determine media type." << endl;
+      emit infoMessage( i18n("Unable to determine DVD media type."), ERROR );
+      emit finished(false);
+      d->running = false;
+      return;
     }
 
 
@@ -307,7 +319,10 @@ void K3bDvdCopyJob::prepareWriter()
 				m_writingMode == K3b::DAO 
 				? K3b::DAO
 				: m_writingMode );
-  
+ 
+  // this is only used in DAO mode with growisofs >= 5.15
+  d->writerJob->setTrackSize( d->lastSector.lba()+1 );
+ 
   if( m_onTheFly )
     d->writerJob->setImageToWrite( QString::null ); // write to stdin
   else

@@ -256,6 +256,23 @@ void K3bCdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
 
 
     //
+    // To copy mode2 data tracks we need cdrecord >= 2.01a12 which introduced the -xa1 and -xamix options
+    //
+    if( k3bcore->externalBinManager()->binObject("cdrecord") && 
+	k3bcore->externalBinManager()->binObject("cdrecord")->version < K3bVersion( 2, 1, -1, "a12" ) ) {
+      for( K3bCdDevice::Toc::const_iterator it = d->toc.begin(); it != d->toc.end(); ++it ) {
+	if( (*it).type() == K3bCdDevice::Track::DATA &&
+	    ( (*it).mode() == K3bCdDevice::Track::XA_FORM1 ||
+	      (*it).mode() == K3bCdDevice::Track::XA_FORM2 ) ) {
+	  emit infoMessage( i18n("K3b needs cdrecord 2.01a12 or newer to copy Mode2 data tracks."), ERROR );
+	  finishJob( true, false );
+	  return;
+	}
+      }
+    }
+
+
+    //
     // We already create the temp filenames here since we need them to check the free space
     //
     if( !m_onTheFly || m_onlyCreateImages ) {
@@ -750,8 +767,6 @@ bool K3bCdCopyJob::writeNextSession()
       d->cdrecordWriter->addArgument( "-multi" );
 
     if( d->haveCddb || d->haveCdText ) {
-      d->cdrecordWriter->addArgument( "-text" );
-
       if( d->haveCdText && ( !d->haveCddb || m_preferCdText ) ) {
 
 	// create a temp file containing the raw cdtext data
@@ -766,7 +781,10 @@ bool K3bCdCopyJob::writeNextSession()
 	// use the raw CDTEXT data
 	d->cdrecordWriter->addArgument( "textfile=" + d->cdTextFile->name() );
       }
-      // else cdrecord will use the cdtext data in the inf files	
+      else {
+	// cdrecord will use the cdtext data in the inf files	
+	d->cdrecordWriter->addArgument( "-text" );
+      }
     }
 
     d->cdrecordWriter->addArgument( "-useinfo" );
@@ -823,15 +841,8 @@ bool K3bCdCopyJob::writeNextSession()
       d->cdrecordWriter->addArgument( "-data" );
     else if( track->mode() == K3bCdDevice::Track::XA_FORM1 )
       d->cdrecordWriter->addArgument( "-xa1" );
-    else {
-//       if( k3bcore->externalBinManager()->binObject("cdrecord") && 
-// 	  k3bcore->externalBinManager()->binObject("cdrecord")->version >= K3bVersion( 2, 1, -1, "a12" ) )
-// 	d->cdrecordWriter->addArgument( "-xa" );
-//       else
-// 	d->cdrecordWriter->addArgument( "-xa1" );
-// FIXME: we need cdrecord >= 2.01a12 for this
+    else
       d->cdrecordWriter->addArgument( "-xamix" );
-    }
 
     if( m_onTheFly ) {
       // HACK: if the track is TAO recorded cut the two run-out sectors

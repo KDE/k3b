@@ -80,8 +80,11 @@ class K3bCdparanoiaLib
    * Read data.
    * if errorCode is set it will be filled.
    * @param track the tracknumer the data belongs to
+   *
+   * This method takes care of swapping the byte-order depending on the
+   * machine type.
    */
-  Q_INT16* read( int* statusCode = 0, unsigned int* track = 0 );
+  char* read( int* statusCode = 0, unsigned int* track = 0, bool littleEndian = true );
 
   /**
    * This onyy is valid after a call to read()

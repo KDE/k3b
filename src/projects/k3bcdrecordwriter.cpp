@@ -353,6 +353,7 @@ bool K3bCdrecordWriter::write( const char* data, int len )
 void K3bCdrecordWriter::slotStdLine( const QString& line )
 {
   static QRegExp s_burnfreeCounterRx( "^BURN\\-Free\\swas\\s(\\d+)\\stimes\\sused" );
+  static QRegExp s_burnfreeCounterRxPredict( "^Total\\sof\\s(\\d+)\\s\\spossible\\sbuffer\\sunderruns\\spredicted" );
 
   emit debuggingOutput( m_cdrecordBinObject->name(), line );
   
@@ -649,6 +650,12 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
     int num = s_burnfreeCounterRx.cap(1).toInt(&ok);
     if( ok )
       emit infoMessage( i18n("Burnfree was used %1 times.").arg(num), INFO );
+  }
+  else if( s_burnfreeCounterRxPredict.search( line ) ) {
+    bool ok;
+    int num = s_burnfreeCounterRxPredict.cap(1).toInt(&ok);
+    if( ok )
+      emit infoMessage( i18n("Buffer was low %1 times.").arg(num), INFO );
   }
   else {
     // debugging
