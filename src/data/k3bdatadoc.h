@@ -22,7 +22,7 @@
 
 #include "../k3bisooptions.h"
 
-#include <qptrqueue.h>
+#include <qptrlist.h>
 #include <qfileinfo.h>
 #include <qstringlist.h>
 #include <qptrlist.h>
@@ -57,22 +57,22 @@ class K3bDataDoc : public K3bDoc
 
  public:
   K3bDataDoc( QObject* parent );
-  ~K3bDataDoc();
+  virtual ~K3bDataDoc();
 
-  int docType() const { return DATA; }
+  virtual int docType() const { return DATA; }
 
   enum mutiSessionModes { NONE, START, CONTINUE, FINISH };
 
   K3bRootItem* root() const { return m_root; }
 
   /** reimplemented from K3bDoc */
-  K3bView* newView( QWidget* parent );
+  virtual K3bView* newView( QWidget* parent );
   /** reimplemented from K3bDoc */
   void addView(K3bView* view);
 
-  bool newDocument();	
-  unsigned long long size() const;
-  unsigned long long length() const;
+  virtual bool newDocument();
+  virtual unsigned long long size() const;
+  virtual unsigned long long length() const;
 
   const QString& name() const { return m_name; }
 
@@ -96,7 +96,7 @@ class K3bDataDoc : public K3bDoc
   const QString& isoImage() const { return m_isoImage; }
   void setIsoImage( const QString& s ) { m_isoImage = s; }
 	
-  K3bBurnJob* newBurnJob();
+  virtual K3bBurnJob* newBurnJob();
 	
   bool deleteImage() const { return m_deleteImage; }
   bool onlyCreateImage() const { return m_onlyCreateImage; }
@@ -123,8 +123,8 @@ class K3bDataDoc : public K3bDoc
    * @param dir the directory where to add the urls, by default this is the root directory.
    **/
   void slotAddUrlsToDir( const KURL::List&, K3bDirItem* dir = 0 );
-  void addUrl( const KURL& url );
-  void addUrls( const KURL::List& urls );
+  virtual void addUrl( const KURL& url );
+  virtual void addUrls( const KURL::List& urls );
 
   void importSession( const QString& path );
   void clearImportedSession();
@@ -138,11 +138,11 @@ class K3bDataDoc : public K3bDoc
 
  protected:
   /** reimplemented from K3bDoc */
-  bool loadDocumentData( QDomElement* root );
+  virtual bool loadDocumentData( QDomElement* root );
   /** reimplemented from K3bDoc */
-  bool saveDocumentData( QDomElement* );
+  virtual bool saveDocumentData( QDomElement* );
 
-  QString documentType() const;
+  virtual QString documentType() const;
 
   void loadDefaultSettings();
 
@@ -173,7 +173,7 @@ class K3bDataDoc : public K3bDoc
     K3bDirItem* parent;
   };
 
-  QQueue<PrivateItemToAdd> m_queuedToAddItems;
+  QPtrList<PrivateItemToAdd> m_queuedToAddItems;
   QTimer* m_queuedToAddItemsTimer;
   int m_numberAddedItems;
 

@@ -134,7 +134,7 @@ void K3bDataDoc::slotAddUrlsToDir( const KURL::List& urls, K3bDirItem* dirItem )
 	// -----------------------------------------------------------------------
 
 	else
-	  m_queuedToAddItems.enqueue( new PrivateItemToAdd(url.path(), dirItem ) );
+	  m_queuedToAddItems.append( new PrivateItemToAdd(url.path(), dirItem ) );
       }
       else
 	m_notFoundFiles.append( url.path() );
@@ -147,7 +147,8 @@ void K3bDataDoc::slotAddUrlsToDir( const KURL::List& urls, K3bDirItem* dirItem )
 
 void K3bDataDoc::slotAddQueuedItems()
 {
-  PrivateItemToAdd* item = m_queuedToAddItems.dequeue();
+  m_queuedToAddItems.first();
+  PrivateItemToAdd* item = m_queuedToAddItems.take();
   if( item ) {
     m_queuedToAddItemsTimer->stop();
 
@@ -246,7 +247,7 @@ K3bDirItem* K3bDataDoc::createDirItem( QFileInfo& f, K3bDirItem* parent )
   for( QStringList::Iterator it = dlist.begin(); it != dlist.end(); ++it ) {
     QFileInfo newF(f.absFilePath() + "/" + *it);
     if( newF.isDir() )
-      m_queuedToAddItems.enqueue( new PrivateItemToAdd( newF, newDirItem ) );
+      m_queuedToAddItems.append( new PrivateItemToAdd( newF, newDirItem ) );
     else
       createFileItem( newF, newDirItem );
   }
@@ -575,7 +576,7 @@ bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
       // -----------------------------------------------------------------------
 
       else {
-	K3bFileItem* newK3bItem = new K3bFileItem( urlElem.text(), this, parent, elem.attributeNode( "name" ).value() );
+	(void)new K3bFileItem( urlElem.text(), this, parent, elem.attributeNode( "name" ).value() );
 	//	m_size += newK3bItem->k3bSize();
       }
     }
@@ -808,6 +809,21 @@ void K3bDataDoc::removeItem( K3bDataItem* item )
     // the item takes care of it's parent!
     //    m_size -= item->k3bSize();
     emit itemRemoved( item );
+
+    // check if any items are pending to be added to this dir (if it's a dir)
+    if( item->isDir() ) {
+      PrivateItemToAdd* pi = m_queuedToAddItems.first();
+      while( pi ) {
+	if( ((K3bDirItem*)item)->isSubItem( pi->parent ) ) {
+	  PrivateItemToAdd* pi2 = m_queuedToAddItems.take();
+	  delete pi2;
+	  pi = m_queuedToAddItems.current();
+	}
+	else
+	  pi = m_queuedToAddItems.next();
+      }
+    }
+
     delete item;
   }
   else
