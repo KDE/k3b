@@ -31,7 +31,11 @@ K3bMad::K3bMad()
   madSynth  = new mad_synth;
   madTimer  = new mad_timer_t;
 
-  m_inputBuffer = new unsigned char[INPUT_BUFFER_SIZE];
+  //
+  // we allocate additional MAD_BUFFER_GUARD bytes to always be able to append the
+  // zero bytes needed for decoding the last frame.
+  //
+  m_inputBuffer = new unsigned char[INPUT_BUFFER_SIZE+MAD_BUFFER_GUARD];
 }
 
 
@@ -112,6 +116,13 @@ bool K3bMad::fillStreamBuffer()
       return false;
     }
     else {
+      readStart += result;
+
+      if( m_inputFile.atEnd() ) {
+	memset( readStart, 0, MAD_BUFFER_GUARD );
+	result += MAD_BUFFER_GUARD;
+      }
+
       // Pipe the new buffer content to libmad's stream decoder facility.
       mad_stream_buffer( madStream, m_inputBuffer, result + remaining );
       madStream->error = MAD_ERROR_NONE;
@@ -157,6 +168,36 @@ bool K3bMad::skipTag()
   }
 
   return true;
+}
+
+
+bool K3bMad::findFirstHeader()
+{
+  //
+  // A lot of mp3 files start with a lot of junk which confuses mad.
+  // We "allow" an mp3 file to start with at most 50 KB of junk. This is just
+  // some random value since we do not want to search the hole file. That would
+  // take way to long for non-mp3 files.
+  //
+  bool headerFound = findNextHeader();
+  while( !headerFound && m_inputFile.at() < 50*1024 ) {
+    headerFound = findNextHeader();
+  }
+
+  // seek back to the begin of the frame
+  if( headerFound ) {
+    int streamSize = madStream->bufend - madStream->buffer;
+    int bytesToFrame = madStream->this_frame - madStream->buffer;
+    m_inputFile.at( m_inputFile.at() - streamSize + bytesToFrame );
+
+    kdDebug() << "(K3bMad) found first header at " << m_inputFile.at() << endl;
+  }
+
+  // reset the stream to make sure mad really starts decoding at out seek position
+  mad_stream_finish( madStream );
+  mad_stream_init( madStream );
+
+  return headerFound;
 }
 
 
@@ -214,8 +255,6 @@ void K3bMad::cleanup()
 
 
 //
-// This is from the arts mad decoder and I did not yet understand it fully. :(
-//
 // LOSTSYNC could happen when mad encounters the id3 tag...
 //
 bool K3bMad::findNextHeader()
@@ -223,13 +262,20 @@ bool K3bMad::findNextHeader()
   if( !fillStreamBuffer() )
     return false;
 
+  //
+  // MAD_RECOVERABLE == true:  frame was read, decoding failed (about to skip frame)
+  // MAD_RECOVERABLE == false: frame was not read, need data
+  //
+
   if( mad_header_decode( &madFrame->header, madStream ) < 0 ) {
     if( !MAD_RECOVERABLE( madStream->error ) ||
 	madStream->error == MAD_ERROR_LOSTSYNC ) {
       return findNextHeader();
     }
+    else
+      kdDebug() << "(K3bMad::findNextHeader) error: " << mad_stream_errorstr( madStream ) << endl;
 
-    // FIXME probably we should not do this here since we son't do it
+    // FIXME probably we should not do this here since we don't do it
     // in the frame decoding
 //     if( !checkFrameHeader( &madFrame->header ) )
 //       return findNextHeader();
@@ -253,14 +299,9 @@ bool K3bMad::decodeNextFrame()
   if( !fillStreamBuffer() )
     return false;
 
-  //
-  // MAD_RECOVERABLE == true:  frame was read, decoding failed (about to skip frame)
-  // MAD_RECOVERABLE == false: frame was not read, need data
-  //
-
   if( mad_frame_decode( madFrame, madStream ) < 0 ) {
     if( !MAD_RECOVERABLE( madStream->error ) ||
-	madStream->error == MAD_ERROR_LOSTSYNC ) {
+ 	madStream->error == MAD_ERROR_LOSTSYNC ) {
       return decodeNextFrame();
     }
 

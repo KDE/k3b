@@ -166,6 +166,9 @@ bool K3bMadDecoder::initDecoderInternal()
   if( !d->handle->skipTag() )
     return false;
 
+  if( !d->handle->findFirstHeader() )
+    return false;
+
   return true;
 }
 
@@ -183,23 +186,13 @@ unsigned long K3bMadDecoder::countFrames()
 
   while( !error && d->handle->findNextHeader() ) {
 
-     if( !bFirstHeaderSaved ) {
+    if( !bFirstHeaderSaved ) {
       bFirstHeaderSaved = true;
       d->firstHeader = d->handle->madFrame->header;
     }
-    else {
-      if( d->handle->madFrame->header.bitrate != d->firstHeader.bitrate )
-	d->vbr = true;
-
-      if( 0 && mad_timer_compare( d->firstHeader.duration, d->handle->madFrame->header.duration ) ) {
-	// The Mp3 standard needs every frame to have the same duration
-	kdDebug() << "(K3bMadDecoder) frame len differs: old: " 
-		  << d->firstHeader.duration.seconds << ":" << d->firstHeader.duration.fraction
-		  << " new: " << d->handle->madFrame->header.duration.seconds << ":" << d->handle->madFrame->header.duration.fraction << endl;
-	error = true;
-      }
-    }
-
+    else if( d->handle->madFrame->header.bitrate != d->firstHeader.bitrate )
+      d->vbr = true;
+    
     //
     // position in stream: postion in file minus the not yet used buffer
     //
@@ -505,11 +498,18 @@ bool K3bMadDecoderFactory::canDecode( const KURL& url )
     return false;
 
   handle.skipTag();
+  if( !handle.findFirstHeader() )
+    return false;
 
   if( handle.findNextHeader() ) {
     int c = MAD_NCHANNELS( &handle.madFrame->header );
     int layer = handle.madFrame->header.layer;
     unsigned int s = handle.madFrame->header.samplerate;
+
+    kdDebug() << "(K3bMadDecoderFactory) first header: " 
+	      << MAD_NCHANNELS( &handle.madFrame->header ) << " "
+	      << handle.madFrame->header.layer << " "
+	      << handle.madFrame->header.samplerate << endl;
 
     //
     // find a second header
@@ -517,6 +517,12 @@ bool K3bMadDecoderFactory::canDecode( const KURL& url )
     // for example wave files.
     //
     if( handle.findNextHeader() ) {
+
+    kdDebug() << "(K3bMadDecoderFactory) second header: " 
+	      << MAD_NCHANNELS( &handle.madFrame->header ) << " "
+	      << handle.madFrame->header.layer << " "
+	      << handle.madFrame->header.samplerate << endl;
+
       // compare the two found headers
       if( MAD_NCHANNELS( &handle.madFrame->header ) == c &&
 	  handle.madFrame->header.layer == layer &&
