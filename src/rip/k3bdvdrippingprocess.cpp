@@ -306,7 +306,7 @@ QString K3bDvdRippingProcess::getFilename(){
     m_currentVobIndex++;
     QFile destFile( result );
     if( destFile.exists() ){
-        int button = QMessageBox::critical( 0, i18n("Ripping Error"), result + i18n(" already exists." ), i18n("Overwrite"), i18n("Cancel") );
+        int button = QMessageBox::critical( 0, i18n("Ripping Error"), i18n("%1 already exists." ).arg(result), i18n("Overwrite"), i18n("Cancel") );
         if( button == 0 )
             return result;
         else
@@ -369,7 +369,7 @@ float K3bDvdRippingProcess::getAudioGain(){
         }
         f.close();
     } else {
-        QMessageBox::critical( 0, i18n("Ripping Error"), i18n("Couldn't get data for audio normalizeing, use default of 1.0."), i18n("Ok") );
+        QMessageBox::critical( 0, i18n("Ripping Error"), i18n("Couldn't get data for audio normalizing, use default of 1.0."), i18n("OK") );
     }
     return result;
 }

@@ -178,8 +178,8 @@ void K3bBurnProgressDialog::setupGUI()
 					  (QSizePolicy::SizeType)7, 
 					  m_viewInfo->sizePolicy().hasHeightForWidth() ) );
   m_viewInfo->setMinimumSize( QSize( 500, 0 ) );
-  m_viewInfo->addColumn( "type" );
-  m_viewInfo->addColumn( "info" );
+  m_viewInfo->addColumn( i18n("type") );
+  m_viewInfo->addColumn( i18n("info") );
   m_viewInfo->header()->hide();
   m_viewInfo->setSorting( -1 );
   m_groupInfoLayout->addWidget( m_viewInfo );
@@ -382,8 +382,8 @@ void K3bBurnProgressDialog::setJob( K3bJob* job )
   K3bBurnJob* burnJob = dynamic_cast<K3bBurnJob*>( job );
   if( m_showBuffer && burnJob ) {
     if( burnJob->writer() )
-      m_labelWriter->setText( i18n("Writer: ") + burnJob->writer()->vendor() + " " + 
-			      burnJob->writer()->description() );
+      m_labelWriter->setText( i18n("Writer: %1 %2").arg(burnJob->writer()->vendor()). 
+			      arg(burnJob->writer()->description()) );
   
     // connect to the "special" signals
     connect( burnJob, SIGNAL(bufferStatus(int)), m_progressBuffer, SLOT(setValue(int)) );

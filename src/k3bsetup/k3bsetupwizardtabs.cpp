@@ -586,12 +586,12 @@ bool PermissionTab::saveSettings()
 
   if( ( m_checkPermissionsExternalPrograms->isChecked() || m_checkPermissionsDevices->isChecked() )
       && m_editPermissionsGroup->text().isEmpty() ) {
-    KMessageBox::error( this, i18n("Please specify a cd writing group."), i18n("Missing Group Name") );
+    KMessageBox::error( this, i18n("Please specify a CD writing group."), i18n("Missing Group Name") );
     return false;
   }
 
   if( m_boxUsers->count() == 0 && m_checkPermissionsExternalPrograms->isChecked() )
-    if( KMessageBox::warningYesNo( this, i18n("You specified no users. Only root will be able to write cds. Continue?") )
+    if( KMessageBox::warningYesNo( this, i18n("You specified no users. Only root will be able to write CDs. Continue?") )
 	== KMessageBox::No )
       return false;
 
@@ -615,7 +615,7 @@ void PermissionTab::slotAddUser()
   while( ok && !validUser ) {
     user = KLineEditDlg::getText( text, QString::null, &ok, this );
     if( ok && !user.isEmpty() )
-      validUser = ( getpwnam( user.latin1() ) != 0 );
+      validUser = ( getpwnam( user.local8Bit() ) != 0 );
     else
       validUser = false;
     text = i18n("No valid user name. Please enter a user name");

@@ -25,6 +25,7 @@
 #include "../k3baudiotrack.h"
 
 #include <qtimer.h>
+#include <qfile.h>
 #include <qstringlist.h>
 
 #include <kurl.h>
@@ -50,7 +51,7 @@ K3bOggVorbisModule::K3bOggVorbisModule( K3bAudioTrack* track )
 
 
   // do some initialization
-  FILE* file = fopen( track->absPath().latin1(), "r" );
+  FILE* file = fopen( QFile::encodeName(track->absPath()), "r" );
   if( !file ) {
     kdDebug() << "(K3bOggVorbisModule) Could not open file " << track->absPath() << endl;
     audioTrack()->setStatus( K3bAudioTrack::CORRUPT );
@@ -110,7 +111,7 @@ K3bOggVorbisModule::~K3bOggVorbisModule()
 void K3bOggVorbisModule::startDecoding()
 {
   // open the file
-  FILE* file = fopen( audioTrack()->absPath().latin1(), "r" );
+  FILE* file = fopen( QFile::encodeName(audioTrack()->absPath()), "r" );
   if( !file ) {
     kdDebug() << "(K3bOggVorbisModule) Could not open file " << audioTrack()->absPath() << endl;
     emit finished( false );
@@ -219,7 +220,7 @@ void K3bOggVorbisModule::slotConsumerReady()
 
 bool K3bOggVorbisModule::canDecode( const KURL& url )
 {
-  FILE* file = fopen( url.path().latin1(), "r" );
+  FILE* file = fopen( QFile::encodeName(url.path()), "r" );
   if( !file ) {
     kdDebug() << "(K3bOggVorbisModule) Could not open file " << url.path() << endl;
     return false;

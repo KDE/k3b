@@ -242,7 +242,7 @@ bool K3bDvdRipperWidget::createDirectory( const QString& dir ){
     QDir destDir( dir );
     if( !destDir.exists() ){
         if( !destDir.mkdir( dir ) ){
-            QMessageBox::critical( 0, i18n("Ripping Error"), i18n("Couldn't create directory <")+dir, i18n("Ok") );
+            QMessageBox::critical( 0, i18n("Ripping Error"), i18n("Couldn't create directory %1").arg(dir), i18n("OK") );
             return false;
         }
     }

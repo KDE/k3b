@@ -43,8 +43,8 @@
 
 
 K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal )
-  : KDialogBase( KDialogBase::Plain, i18n("K3b Cd Copy"), User1|User2, User1, parent, name, modal, false, 
-		 KGuiItem( i18n("Copy"), "copy", i18n("Start cd copy") ), KStdGuiItem::close() )
+  : KDialogBase( KDialogBase::Plain, i18n("K3b CD Copy"), User1|User2, User1, parent, name, modal, false, 
+		 KGuiItem( i18n("Copy"), "copy", i18n("Start CD copy") ), KStdGuiItem::close() )
 {
   setButtonBoxOrientation( Qt::Vertical );
 
@@ -111,7 +111,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   advancedTabGrid->setSpacing( spacingHint() );
   advancedTabGrid->setMargin( marginHint() );
 
-  m_checkFastToc = new QCheckBox( i18n("Fast toc"), advancedTab );
+  m_checkFastToc = new QCheckBox( i18n("Fast TOC"), advancedTab );
 
   advancedTabGrid->addWidget( m_checkFastToc, 0, 0 );
   advancedTabGrid->setRowStretch( 1, 1 );
@@ -166,7 +166,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
 
   // What's This info
   // --------------------------------------------------------------------------------
-  QWhatsThis::add( m_checkFastToc, i18n("<p>If this option is checked K3b will ignore any pregaps and index marks "
+  QWhatsThis::add( m_checkFastToc, i18n("<p>If this option is checked, K3b will ignore any pregaps and index marks "
 					"on an audio cd."
 					"<p><b>Caution:</b> This may result in faster reading but does not guarantee "
 					"an exact copy.") );

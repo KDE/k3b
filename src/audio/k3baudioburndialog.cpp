@@ -322,7 +322,7 @@ void K3bAudioBurnDialog::slotOk()
 {
   // check if enough space in tempdir if not on-the-fly
   if( !m_checkOnTheFly->isChecked() && doc()->size()/1024 > m_tempDirSelectionWidget->freeTempSpace() )
-    KMessageBox::sorry( this, "Not enough space in temp directory." );
+    KMessageBox::sorry( this, i18n("Not enough space in temp directory.") );
   else
     K3bProjectBurnDialog::slotOk();
 }

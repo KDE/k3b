@@ -61,12 +61,12 @@ void K3bDivxAVSet::setupGui(){
     m_comboCd->insertItem( i18n("2 * 650 MB" ) );
     m_comboCd->insertItem( i18n("2 * 700 MB" ) );
     m_comboMp3 = new KComboBox( false, this );
-    m_comboMp3->insertItem( " 64 kbits" );
-    m_comboMp3->insertItem( " 96 kbits" );
-    m_comboMp3->insertItem( "112 kbits" );
-    m_comboMp3->insertItem( "128 kbits" );
-    m_comboMp3->insertItem( "160 kbits" );
-    m_comboMp3->insertItem( "192 kbits" );
+    m_comboMp3->insertItem( i18n(" 64 kbits") );
+    m_comboMp3->insertItem( i18n(" 96 kbits") );
+    m_comboMp3->insertItem( i18n("112 kbits") );
+    m_comboMp3->insertItem( i18n("128 kbits") );
+    m_comboMp3->insertItem( i18n("160 kbits") );
+    m_comboMp3->insertItem( i18n("192 kbits") );
     m_comboCodec = new KComboBox( false, this );
     m_comboCodec->insertItem( "XviD" );
     m_comboCodec->insertItem( "DivX4" );
@@ -113,7 +113,7 @@ void K3bDivxAVSet::slotCalcBitrate(){
          kdDebug() << "(K3bDivxAVSet) Fatal error: no video length." << endl;
      }
      long vBitrate = ( finalSize[ sizeIndex ] / m_lengthSecs * 8 ) - audioBitrate[ aBitrateIndex ];
-     m_vBitrate->setText( m_vBitrateDesc + QString::number( vBitrate/1000 ) + " kbits" );
+     m_vBitrate->setText( m_vBitrateDesc + i18n("%1 kbits").arg(vBitrate/1000) );
      m_data->setVideoBitrate( vBitrate/1000 );
      m_data->setAudioBitrate( audioBitrate[ aBitrateIndex ]/1000 );
 }

@@ -105,13 +105,13 @@ void K3bCdCopyJob::diskInfoReady( const K3bDiskInfo& info )
 
   switch( info.tocType ) {
   case K3bDiskInfo::DATA:
-    emit infoMessage( i18n("Source disk seems to be data cd"), K3bJob::INFO );
+    emit infoMessage( i18n("Source disk seems to be data CD"), K3bJob::INFO );
     break;
   case K3bDiskInfo::AUDIO:
-    emit infoMessage( i18n("Source disk seems to be audio cd"), K3bJob::INFO );
+    emit infoMessage( i18n("Source disk seems to be audio CD"), K3bJob::INFO );
     break;
   case K3bDiskInfo::MIXED:
-    emit infoMessage( i18n("Source disk seems to be mixed mode cd"), K3bJob::INFO );
+    emit infoMessage( i18n("Source disk seems to be mixed mode CD"), K3bJob::INFO );
     break;
   }
 
@@ -123,7 +123,7 @@ void K3bCdCopyJob::diskInfoReady( const K3bDiskInfo& info )
 
 
   if( m_onlyCreateImage && !m_onTheFly )
-    emit newTask( i18n("Creating cd image") );
+    emit newTask( i18n("Creating CD image") );
   else if( m_dummy )
     emit newTask( i18n("CD copy simulation") );
   else
@@ -237,7 +237,7 @@ void K3bCdCopyJob::cdrdaoCopyFinished()
 	// no recording device and also other errors!! :-(
 	emit infoMessage( i18n("Cdrdao returned some error!"), K3bJob::ERROR );
 	emit infoMessage( i18n("Sorry, no error handling yet!") + " :-((", K3bJob::ERROR );
-	emit infoMessage( i18n("Please send me a mail with the last output..."), K3bJob::ERROR );
+	emit infoMessage( i18n("Please send me an email with the last output..."), K3bJob::ERROR );
 	
 	cancelAll();
       }
@@ -320,7 +320,7 @@ void K3bCdCopyJob::cdrdaoReadFinished()
 	// no recording device and also other errors!! :-(
 	emit infoMessage( i18n("Cdrdao returned some error!"), K3bJob::ERROR );
 	emit infoMessage( i18n("Sorry, no error handling yet!") + " :-((", K3bJob::ERROR );
-	emit infoMessage( i18n("Please send me a mail with the last output..."), K3bJob::ERROR );
+	emit infoMessage( i18n("Please send me an email with the last output..."), K3bJob::ERROR );
 	
 	cancelAll();
       }
@@ -406,7 +406,7 @@ void K3bCdCopyJob::cdrdaoWriteFinished()
 	// no recording device and also other errors!! :-(
 	emit infoMessage( i18n("Cdrdao returned some error!"), K3bJob::ERROR );
 	emit infoMessage( i18n("Sorry, no error handling yet!") + " :-((", K3bJob::ERROR );
-	emit infoMessage( i18n("Please send me a mail with the last output..."), K3bJob::ERROR );
+	emit infoMessage( i18n("Please send me an email with the last output..."), K3bJob::ERROR );
 	
 	cancelAll();
       }
@@ -557,9 +557,9 @@ void K3bCdCopyJob::cancelAll()
 
     // we need to unlock the writer because cdrdao/cdrecord locked it while writing
     if( !m_reader->block( false ) )
-      emit infoMessage( i18n("Could not unlock cd reader."), K3bJob::ERROR );
+      emit infoMessage( i18n("Could not unlock CD reader."), K3bJob::ERROR );
     if( !m_writer->block( false ) )
-      emit infoMessage( i18n("Could not unlock cd writer."), K3bJob::ERROR );
+      emit infoMessage( i18n("Could not unlock CD writer."), K3bJob::ERROR );
   }
 
   // remove toc-file

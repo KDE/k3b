@@ -186,7 +186,7 @@ bool K3bCddaCopy::paranoiaRead(struct cdrom_drive *drive, int track, QString des
     bool isOpen = m_waveFileWriter.open( dest );
 
     if( !isOpen ){
-        infoMessage( i18n("Couldn't rip to: ") + dest, ERROR );
+        infoMessage( i18n("Couldn't rip to: %1").arg(dest), ERROR );
 	m_currentWrittenFile = QString::null;
         paranoia_free(m_paranoia);
         m_paranoia = 0;
@@ -195,7 +195,7 @@ bool K3bCddaCopy::paranoiaRead(struct cdrom_drive *drive, int track, QString des
         return false;
     }
 
-    emit newSubTask( i18n("Copy ") + dest  );
+    emit newSubTask( i18n("Copy %1").arg(dest) );
 
     m_rippingTimer->start(0);
 

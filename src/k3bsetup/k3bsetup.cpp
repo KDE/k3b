@@ -139,7 +139,7 @@ bool K3bSetup::saveConfig()
   m_config->sync();
 
   // let everybody read the global K3b config file
-  chmod( m_configPath.latin1(), S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH );
+  chmod( QFile::encodeName(m_configPath), S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH );
 
 
   return true;
@@ -154,7 +154,7 @@ uint K3bSetup::createCdWritingGroup()
   }
 
   // search group and create new if not found
-  struct group* oldGroup = getgrnam( m_cdwritingGroup.latin1() );
+  struct group* oldGroup = getgrnam( m_cdwritingGroup.local8Bit() );
   uint groupId;
   if( oldGroup == 0 ) {
 
@@ -250,7 +250,7 @@ uint K3bSetup::createCdWritingGroup()
 
 void K3bSetup::doApplyDevicePermissions( uint groupId )
 {
-  emit writingSetting( i18n("Changing cd device permissions.") );
+  emit writingSetting( i18n("Changing CD device permissions.") );
 
   // change owner for all devices and
   // change permissions for all devices
@@ -372,7 +372,7 @@ void K3bSetup::doCreateFstabEntries()
 
     // create mountpoint if it does not exist
     if( !QFile::exists( dev->mountPoint() ) ) {
-      if( mkdir( dev->mountPoint().latin1(), S_IRUSR|S_IWUSR|S_IXUSR|S_IRGRP|S_IXGRP|S_IROTH|S_IXOTH ) != 0 ) {
+      if( mkdir( QFile::encodeName(dev->mountPoint()), S_IRUSR|S_IWUSR|S_IXUSR|S_IRGRP|S_IXGRP|S_IROTH|S_IXOTH ) != 0 ) {
 	emit error( i18n("Could not create mount point '%1'").arg(dev->mountPoint()) );
 	createMountPoint = false;
       }
@@ -380,7 +380,7 @@ void K3bSetup::doCreateFstabEntries()
 
     if( createMountPoint ) {
       // set the correct permissions for the mountpoint
-      chmod( dev->mountPoint().latin1(), S_IRUSR|S_IWUSR|S_IXUSR|S_IRGRP|S_IXGRP|S_IROTH|S_IXOTH );
+      chmod( QFile::encodeName(dev->mountPoint()), S_IRUSR|S_IWUSR|S_IXUSR|S_IRGRP|S_IXGRP|S_IROTH|S_IXOTH );
 	
       newFstabStream << dev->ioctlDevice() << "\t" 
 		     << dev->mountPoint() << "\t"

@@ -337,7 +337,7 @@ void K3bDeviceWidget::updateDeviceInfoBox( PrivateTempDevice* tempDev )
       m_labelDevicename->setText( QString("%1 (%2)").arg(dev->devicename()).arg(dev->busTargetLun()) );
     else
       m_labelDevicename->setText( dev->devicename() );
-    m_labelDeviceInterface->setText( dev->interfaceType() == K3bDevice::SCSI ? "Generic Scsi" : "Ide" );
+    m_labelDeviceInterface->setText( dev->interfaceType() == K3bDevice::SCSI ? i18n("Generic SCSI") : i18n("IDE") );
     m_labelVendor->setText( dev->vendor() );
     m_labelDescription->setText( dev->description() );
     m_labelVersion->setText( dev->version() );
@@ -396,7 +396,7 @@ void K3bDeviceWidget::updateDeviceInfoBox( PrivateTempDevice* tempDev )
 void K3bDeviceWidget::slotNewDevice()
 {
   bool ok;
-  QString newDevicename = KLineEditDlg::getText( "Please enter the devicename where\n K3b shall search for a new drive\n(example: /dev/mebecdrom)", "/dev/", &ok, this );
+  QString newDevicename = KLineEditDlg::getText( i18n("Please enter the devicename where\n K3b shall search for a new drive\n(example: /dev/mebecdrom)"), "/dev/", &ok, this );
 
   if( ok ) {
     if( K3bDevice* dev = m_deviceManager->addDevice( newDevicename ) ) {
@@ -405,7 +405,7 @@ void K3bDeviceWidget::slotNewDevice()
       updateDeviceListViews();
     }
     else
-      KMessageBox::error( this, "Sorry, could not find an additional device at\n" + newDevicename, i18n("Error"), false );
+      KMessageBox::error( this, i18n("Sorry, could not find an additional device at\n%1").arg(newDevicename), i18n("Error"), false );
   }
 }
 

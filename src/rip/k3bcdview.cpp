@@ -252,7 +252,7 @@ void K3bCdView::slotPrepareRipping()
 {
   QPtrList<QListViewItem> selectedList = m_listView->selectedItems();
   if( selectedList.isEmpty() ){
-    QMessageBox::critical( this, i18n("Ripping Error"), i18n("Please select the title to rip."), i18n("Ok") );
+    QMessageBox::critical( this, i18n("Ripping Error"), i18n("Please select the title to rip."), i18n("OK") );
     return;
   }
 

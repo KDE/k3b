@@ -429,7 +429,7 @@ void K3bDeviceManager::scanFstab()
     // if we do not have permission to read the device ioctlDevice is empty
     struct fstab* fs = 0;
     if( !dev->ioctlDevice().isEmpty() ) 
-      fs = getfsspec( dev->ioctlDevice().latin1() );
+      fs = getfsspec( QFile::encodeName(dev->ioctlDevice()) );
     if( fs != 0 )
       dev->setMountPoint( fs->fs_file );
 

@@ -88,7 +88,7 @@ void K3bFilmView::setupGui(){
     m_titleView->setItemsRenameable( false );
     m_titleView->setSorting( -1 );
     m_chapterView = new KListView( _groupVideoChapter );
-    m_chapterView->addColumn( "Chapters" );
+    m_chapterView->addColumn( i18n("Chapters") );
     m_chapterView->setItemsRenameable( false );
     m_chapterView->setSorting( -1 );
     m_chapterView->setColumnWidthMode( 0, QListView::Maximum );
@@ -229,7 +229,7 @@ void K3bFilmView::slotDvdChecked( bool successful ){
         m_dvdTitles = m_tcWrapper->getDvdTitles();
         m_titleView->clear();
         for( unsigned int i= m_dvdTitles.count(); i > 0; i--){
-            QCheckListItem *item = new QCheckListItem( m_titleView, i18n("Title ") + QString::number( i ), QCheckListItem::Controller );
+            QCheckListItem *item = new QCheckListItem( m_titleView, i18n("Title %1").arg( i ), QCheckListItem::Controller );
             item->setOpen( true );
             // angle parsing not possible at the moment, more than one angle not supported
             // get Dvdcontent from dvdtitles->getMaxAngle()
@@ -260,7 +260,7 @@ void K3bFilmView::slotTitleSelected(QListViewItem*item){
         }
     } else {
         if( item->text(0).right(1).toInt() != 1){
-            QMessageBox::critical( this, i18n("DVD Error"), i18n("Angle information not supported, title selection always use angle 1."), i18n("Ok") );
+            QMessageBox::critical( this, i18n("DVD Error"), i18n("Angle information not supported, title selection always use angle 1."), i18n("OK") );
         } else {
             if( row > 8 ){
                     row = item->parent()->text(0).right(2).toInt() - 1;
@@ -359,7 +359,7 @@ void K3bFilmView::slotRip(){
         title++;
     }
     if( toRipTitles.isEmpty() ){
-         QMessageBox::critical( this, i18n("Ripping Error"), i18n("Select an title/angle to rip."), i18n("Ok") );
+         QMessageBox::critical( this, i18n("Ripping Error"), i18n("Select an title/angle to rip."), i18n("OK") );
     } else {
         ripWidget->init( toRipTitles );
         ripWidget->show();

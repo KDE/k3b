@@ -69,11 +69,11 @@ void K3bDivxAVExtend::setupGui(){
     m_checkResample = new QCheckBox( i18n( "Resample to 44.1 kHz" ), this );
     m_checkYuv = new QCheckBox( i18n( "Use YUV colorspace." ), this );
     m_comboDeinterlace = new KComboBox( this );
-    m_comboDeinterlace->insertItem("0 - None");
-    m_comboDeinterlace->insertItem("1 - Fast");
-    m_comboDeinterlace->insertItem("2 - Encoder based");
-    m_comboDeinterlace->insertItem("3 - Zoom to full frame");
-    m_comboDeinterlace->insertItem("4 - Drop field / half height");
+    m_comboDeinterlace->insertItem(i18n("0 - None"));
+    m_comboDeinterlace->insertItem(i18n("1 - Fast"));
+    m_comboDeinterlace->insertItem(i18n("2 - Encoder based"));
+    m_comboDeinterlace->insertItem(i18n("3 - Zoom to full frame"));
+    m_comboDeinterlace->insertItem(i18n("4 - Drop field / half height"));
     m_comboLanguage = new KComboBox( this );
     m_editAudioGain = new KRestrictedLine( this, "audioline", "0123456789,." );
     m_editKeyframes = new KRestrictedLine( this, "keyframesline", "0123456789" );

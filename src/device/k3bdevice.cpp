@@ -3,6 +3,7 @@
 #include "k3btoc.h"
 
 #include <qstring.h>
+#include <qfile.h>
 
 #include <kdebug.h>
 #include <krun.h>
@@ -65,7 +66,7 @@ K3bDevice::~K3bDevice()
 cdrom_drive* K3bDevice::open()
 {
   if( m_cdromStruct == 0 ) {
-    m_cdromStruct = cdda_identify( devicename().latin1(), CDDA_MESSAGE_FORGETIT, 0 );
+    m_cdromStruct = cdda_identify( QFile::encodeName(devicename()), CDDA_MESSAGE_FORGETIT, 0 );
     if( !m_cdromStruct ) {
       kdDebug() << "(K3bDevice) Could not open device " << devicename() << endl;
       return 0;

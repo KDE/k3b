@@ -51,7 +51,7 @@ void K3bSetupWizard::showPage( QWidget* page )
 							    
 void K3bSetupWizard::closeEvent( QCloseEvent* e )
 {
-  if( KMessageBox::questionYesNo( this, "Do you really want to discard all changes?", "Close" ) == KMessageBox::Yes )
+  if( KMessageBox::questionYesNo( this, i18n("Do you really want to discard all changes?"), i18n("Close") ) == KMessageBox::Yes )
     e->accept();
   else
     e->ignore();

@@ -1037,7 +1037,7 @@ void K3bDataJob::cancelAll()
       // we need to unlock the writer because cdrdao/cdrecord locked it while writing
       bool block = m_doc->burner()->block( false );
       if( !block )
-	emit infoMessage( i18n("Could not unlock cd drive."), K3bJob::ERROR );
+	emit infoMessage( i18n("Could not unlock CD drive."), K3bJob::ERROR );
       else if( k3bMain()->eject() )
 	m_doc->burner()->eject();
     }
@@ -1051,7 +1051,7 @@ void K3bDataJob::cancelAll()
   // remove iso-image if it is unfinished or the user selected to remove image
   if( QFile::exists( m_doc->isoImage() ) ) {
     if( !m_doc->onTheFly() && m_doc->deleteImage() || !m_imageFinished ) {
-      emit infoMessage( i18n("Removing iso-image %1").arg(m_doc->isoImage()), K3bJob::STATUS );
+      emit infoMessage( i18n("Removing ISO image %1").arg(m_doc->isoImage()), K3bJob::STATUS );
       QFile::remove( m_doc->isoImage() );
       m_doc->setIsoImage("");
     }

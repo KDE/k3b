@@ -602,7 +602,7 @@ void K3bDataBurnDialog::slotOk()
 {
   // check if enough space in tempdir if not on-the-fly
   if( !m_checkOnTheFly->isChecked() && doc()->size()/1024 > m_tempDirSelectionWidget->freeTempSpace() ) {
-    KMessageBox::sorry( this, "Not enough space in temp directory. Either change the directory or select on-the-fly burning." );
+    KMessageBox::sorry( this, i18n("Not enough space in temp directory. Either change the directory or select on-the-fly burning.") );
     return;
   }
   else if( !m_checkOnTheFly->isChecked() ) {

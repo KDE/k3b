@@ -93,8 +93,8 @@ void K3bBlankingDialog::setupGui()
   groupOutputLayout->setMargin( marginHint() );
 
   m_viewOutput = new KListView( m_groupOutput );
-  m_viewOutput->addColumn( "type" );
-  m_viewOutput->addColumn( "message" );
+  m_viewOutput->addColumn( i18n("type") );
+  m_viewOutput->addColumn( i18n("message") );
   m_viewOutput->header()->hide();
   groupOutputLayout->addWidget( m_viewOutput, 0, 0 );
   // ------------------------------------------------------------------------
@@ -170,7 +170,7 @@ void K3bBlankingDialog::slotUser1()
 void K3bBlankingDialog::slotUser2()
 {
   if( m_job && m_job->active() ) {
-    if( KMessageBox::questionYesNo( this, "Do you really want to cancel?", "Cancel" ) == KMessageBox::Yes )
+    if( KMessageBox::questionYesNo( this, i18n("Do you really want to cancel?"), i18n("Cancel") ) == KMessageBox::Yes )
       m_job->cancel();
     }
   else
@@ -207,7 +207,7 @@ void K3bBlankingDialog::slotJobFinished(bool)
 void K3bBlankingDialog::closeEvent( QCloseEvent* e )
 {
   if( m_job && m_job->active() ) {
-    if( KMessageBox::questionYesNo( this, "Do you really want to cancel?", "Cancel" ) == KMessageBox::Yes ) {
+    if( KMessageBox::questionYesNo( this, i18n("Do you really want to cancel?"), i18n("Cancel") ) == KMessageBox::Yes ) {
       m_job->cancel();
       
       e->accept();
@@ -231,7 +231,7 @@ void K3bBlankingDialog::slotWriterChanged()
   else {
     actionButton( KDialogBase::User1 )->setEnabled( false );
     QListViewItem* item = new QListViewItem( m_viewOutput, m_viewOutput->lastItem(), 
-					     i18n("%1 does not support cdrw writing.").arg(dev->devicename()) );
+					     i18n("%1 does not support CD-RW writing.").arg(dev->devicename()) );
     item->setPixmap( 0, SmallIcon( "stop" ) );
   }
 }

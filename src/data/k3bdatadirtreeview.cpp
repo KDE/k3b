@@ -25,6 +25,8 @@
 #include <qdragobject.h>
 #include <qheader.h>
 
+#include <klocale.h>
+
 #include "../klistviewlineedit.h"
 #include <kdebug.h>
 
@@ -43,7 +45,7 @@ K3bDataDirTreeView::K3bDataDirTreeView( K3bDataView* view, K3bDataDoc* doc, QWid
   setItemsMovable( false );
   setAlternateBackground( QColor() );
 
-  addColumn( "Dir" );
+  addColumn( i18n("Dir") );
   header()->hide();
 	
   setItemsRenameable( true );

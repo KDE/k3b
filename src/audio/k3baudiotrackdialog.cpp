@@ -109,7 +109,7 @@ K3bAudioTrackDialog::K3bAudioTrackDialog( QPtrList<K3bAudioTrack>& tracks, QWidg
 
     m_displayFileName->setText( allTrackNames );
     m_displayLength->setText( K3b::framesToString(allTrackLength) );
-    m_displaySize->setText( QString("%1 kb").arg(allTrackSize / 1024) );
+    m_displaySize->setText( i18n("%1 kb").arg(allTrackSize / 1024) );
 
     m_labelMimeType->setPixmap( KMimeType::pixmapForURL( KURL(m_tracks.first()->absPath()) ) );
   }

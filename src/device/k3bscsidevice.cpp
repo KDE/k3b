@@ -16,6 +16,7 @@ extern "C" {
 
 #include "sg_err.h"
 #include <kdebug.h>
+#include <qfile.h>
 
 
 K3bScsiDevice::K3bScsiDevice( cdrom_drive* drive )
@@ -41,7 +42,7 @@ K3bScsiDevice::~K3bScsiDevice()
 //         4: not ready, tray out
 int K3bScsiDevice::isReady() const
 {
-  ScsiIf scsiIf( genericDevice().latin1() );
+  ScsiIf scsiIf( QFile::encodeName(genericDevice()) );
   if( scsiIf.init() != 0 ) {
     kdDebug() << "(K3bScsiDevice) Could not open device " << genericDevice() << endl;
     return 1;
@@ -188,7 +189,7 @@ int K3bScsiDevice::getModePage( ScsiIf *_scsiIf, int pageCode, unsigned char *bu
 
 int K3bScsiDevice::isEmpty()
 {
-  ScsiIf scsiIf( genericDevice().latin1() );
+  ScsiIf scsiIf( QFile::encodeName(genericDevice()) );
   if( scsiIf.init() != 0 ) {
     kdDebug() << "(K3bScsiDevice) Could not open device " << genericDevice() << endl;
     return -1;
@@ -227,7 +228,7 @@ bool K3bScsiDevice::block( bool block ) const
     cmd[4] |= 0x01;
   }
 
-  ScsiIf scsiIf( genericDevice().latin1() );
+  ScsiIf scsiIf( QFile::encodeName(genericDevice()) );
   if( scsiIf.init() != 0 ) {
     kdDebug() << "(K3bScsiDevice) Could not open device " << genericDevice() << endl;
     return false;

@@ -388,7 +388,7 @@ bool K3bAudioDoc::loadDocumentData( QDomDocument* doc )
 
 bool K3bAudioDoc::saveDocumentData( QDomDocument* doc )
 {
-  doc->appendChild( doc->createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"ISO 8859-1\"" ) );
+  doc->appendChild( doc->createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
 
   QDomElement docElem = doc->createElement( documentType() );
 

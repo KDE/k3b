@@ -27,6 +27,7 @@
 #include <kiconloader.h>
 #include <kurl.h>
 #include <kurldrag.h>
+#include <klocale.h>
 
 
 K3bAudioListView::K3bAudioListView(QWidget *parent, const char *name )
@@ -52,12 +53,12 @@ K3bAudioListView::~K3bAudioListView(){
 }
 
 void K3bAudioListView::setupColumns(){
-  addColumn( "No" );
-  addColumn( "Artist (CD-Text)" );
-  addColumn( "Title (CD-Text)" );
-  addColumn( "Length" );
-  addColumn( "Pregap" );
-  addColumn( "Filename" );
+  addColumn( i18n("No") );
+  addColumn( i18n("Artist (CD-Text)") );
+  addColumn( i18n("Title (CD-Text)") );
+  addColumn( i18n("Length") );
+  addColumn( i18n("Pregap") );
+  addColumn( i18n("Filename") );
 	
   setItemsRenameable( true );
   setRenameable( 0, false );

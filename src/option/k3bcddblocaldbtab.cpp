@@ -135,11 +135,11 @@ void K3bCddbLocalDBTab::verifyDb(){
         kdDebug() << "(K3bCddbLocalDBTab) Have missing songs." << endl;
         QStringList::Iterator it;
         for( it = m_missingSongList.begin(); it != m_missingSongList.end(); ++it ){
-            m_logOutput->insertLine( (*it).latin1() );
+            m_logOutput->insertLine( (*it).local8Bit() );
         }
     } else {
         QMessageBox::critical( this, i18n("Database Error"), 
-			       i18n("File doesn't exists <%1>.").arg(m_songListPath->text()), i18n("Ok") );
+			       i18n("File doesn't exists <%1>.").arg(m_songListPath->text()), i18n("OK") );
     }
 }
 void K3bCddbLocalDBTab::findDbEntries(){

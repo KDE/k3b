@@ -62,9 +62,9 @@ int K3bEmptyDiscWaiter::waitForEmptyDisc( bool appendable )
   m_apppendable = appendable;
 
   if( appendable )
-    m_label->setText( i18n("Please insert an appendable cdr medium into drive<p><b>%1 %2 (%3)</b>.").arg(m_device->vendor()).arg(m_device->description()).arg(m_device->devicename()) );
+    m_label->setText( i18n("Please insert an appendable CDR medium into drive<p><b>%1 %2 (%3)</b>.").arg(m_device->vendor()).arg(m_device->description()).arg(m_device->devicename()) );
   else
-    m_label->setText( i18n("Please insert an empty cdr medium into drive<p><b>%1 %2 (%3)</b>.").arg(m_device->vendor()).arg(m_device->description()).arg(m_device->devicename()) );
+    m_label->setText( i18n("Please insert an empty CDR medium into drive<p><b>%1 %2 (%3)</b>.").arg(m_device->vendor()).arg(m_device->description()).arg(m_device->devicename()) );
 
   connect( m_timer, SIGNAL(timeout()), this, SLOT(slotTestForEmptyCd()) );
   m_timer->start(1000);

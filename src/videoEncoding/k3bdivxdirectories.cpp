@@ -116,7 +116,7 @@ void K3bDivxDirectories::slotAudioClicked(){
 void K3bDivxDirectories::slotVideoEdited( const QString& text){
     m_data->setProjectFile( text );
     if( !m_data->projectLoaded() ){
-        KMessageBox::error( this, i18n("Error loading project"), i18n("Error while parsing file: ") + text);
+        KMessageBox::error( this, i18n("Error loading project"), i18n("Error while parsing file: %1").arg(text));
         m_data->setProjectDir( "" );
         return;
     }

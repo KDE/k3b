@@ -230,7 +230,7 @@ void K3bFillStatusDisplay::slot100Minutes()
 void K3bFillStatusDisplay::slotCustomSize()
 {
   bool ok;
-  QString size = KLineEditDlg::getText( i18n("Custom cd size"), i18n("Please specify the size of your CD in minutes:"), 
+  QString size = KLineEditDlg::getText( i18n("Custom CD size"), i18n("Please specify the size of your CD in minutes:"), 
 					   "74", &ok, this, new QIntValidator( this ) );
   if( ok ) {
     m_cdSize = size.toInt();

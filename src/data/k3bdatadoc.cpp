@@ -218,7 +218,7 @@ void K3bDataDoc::createDirItem( QFileInfo& f, K3bDirItem* parent )
 
     // symLink resolved
     if( f.absFilePath().startsWith( link.absFilePath() ) ) {
-      KMessageBox::error( k3bMain(), i18n("Found recursion in directory tree. Omitting") + QString("\n%1").arg(f.absFilePath()) );
+      KMessageBox::error( k3bMain(), i18n("Found recursion in directory tree. Omitting\n%1").arg(f.absFilePath()) );
       return;
     }
   }
@@ -582,7 +582,7 @@ bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
 
 bool K3bDataDoc::saveDocumentData( QDomDocument* doc )
 {
-  doc->appendChild( doc->createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"ISO 8859-1\"" ) );
+  doc->appendChild( doc->createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
 
   QDomElement docElem = doc->createElement( documentType() );
 
