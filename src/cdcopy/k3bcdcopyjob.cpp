@@ -69,6 +69,7 @@ public:
 
   bool canceled;
   bool error;
+  bool readingSuccessful;
   bool running;
 
   unsigned int numSessions;
@@ -142,6 +143,7 @@ void K3bCdCopyJob::start()
   d->running = true;
   d->canceled = false;
   d->error = false;
+  d->readingSuccessful = false;
   d->audioReaderRunning = d->dataReaderRunning = d->writerRunning = false;
   d->sessionSizes.clear();
   d->dataSessionProbablyTAORecorded.clear();
@@ -669,14 +671,18 @@ bool K3bCdCopyJob::writeNextSession()
   if( d->numSessions > 1 ) {
     if( m_simulate )
       emit newTask( i18n("Simulating Session %1").arg(d->currentWrittenSession) );
-    else
+    else if( m_copies > 1 )
       emit newTask( i18n("Writing Copy %1 (Session %2)").arg(d->doneCopies+1).arg(d->currentWrittenSession) );
+    else
+      emit newTask( i18n("Writing Copy (Session %2)").arg(d->currentWrittenSession) );
   }
   else {
     if( m_simulate )
       emit newTask( i18n("Simulating") );
-    else
+    else if( m_copies > 1 )
       emit newTask( i18n("Writing Copy %1").arg(d->doneCopies+1) );
+    else
+      emit newTask( i18n("Writing Copy") );
   }
 
   emit newSubTask( i18n("Waiting for media") );
@@ -926,19 +932,22 @@ void K3bCdCopyJob::slotSessionReaderFinished( bool success )
 	d->currentReadSession++;
 	readNextSession();
       }
-      else if( !m_onlyCreateImages ) {
-	if( m_readerDevice == m_writerDevice ) {
-	  // eject the media
-	  m_readerDevice->eject();
-	}
-	  
-	if( !writeNextSession() ) {
-	  // nothing is running here...
-	  finishJob( d->canceled, d->error );
-	}
-      }
       else {
-	finishJob( false, false );
+	d->readingSuccessful = true;
+	if( !m_onlyCreateImages ) {
+	  if( m_readerDevice == m_writerDevice ) {
+	    // eject the media
+	    m_readerDevice->eject();
+	  }
+	  
+	  if( !writeNextSession() ) {
+	    // nothing is running here...
+	    finishJob( d->canceled, d->error );
+	  }
+	}
+	else {
+	  finishJob( false, false );
+	}
       }
     }
   }
@@ -1026,13 +1035,13 @@ void K3bCdCopyJob::slotMediaReloadedForNextSession( K3bCdDevice::DeviceHandler* 
 
 void K3bCdCopyJob::cleanup()
 {
-  if( m_onTheFly || d->canceled || !m_keepImage || d->error ) {
+  if( m_onTheFly || !m_keepImage || ((d->canceled || d->error) && !d->readingSuccessful) ) {
     emit infoMessage( i18n("Removing temporary files."), INFO );
     for( QStringList::iterator it = d->infNames.begin(); it != d->infNames.end(); ++it )
       QFile::remove( *it );
   }
 
-  if( !m_onTheFly && (d->canceled || d->error || !m_keepImage) ) {
+  if( !m_onTheFly && (!m_keepImage || ((d->canceled || d->error) && !d->readingSuccessful)) ) {
     emit infoMessage( i18n("Removing image files."), INFO );
     for( QStringList::iterator it = d->imageNames.begin(); it != d->imageNames.end(); ++it )
       QFile::remove( *it );
