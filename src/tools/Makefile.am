@@ -11,4 +11,5 @@ noinst_HEADERS = k3bexternalbinmanager.h \
 	         k3bwavefilewriter.h \
                  k3bglobals.h
 
-SUBDIRS = md5sum
+SUBDIRS = md5sum kostore
+

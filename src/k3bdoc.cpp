@@ -48,6 +48,9 @@
 #include "data/k3bdatadoc.h"
 #include <kdebug.h>
 
+#include <kostore/koStore.h>
+#include <kostore/koStoreDevice.h>
+
 
 K3bDoc::K3bDoc( QObject* parent )
   : QObject( parent )
@@ -166,22 +169,42 @@ K3bDoc* K3bDoc::openDocument(const KURL& url )
   QString tmpfile;
   KIO::NetAccess::download( url, tmpfile );
 
-  /////////////////////////////////////////////////
-  QFile f( tmpfile );
-  bool success = true;
-  if ( !f.open( IO_ReadOnly ) )
-    success = false;
-
+  // ///////////////////////////////////////////////
+  // first check if it's a store or an old plain xml file
+  bool success = false;
   QDomDocument xmlDoc;
-  if( !xmlDoc.setContent( &f ) ) {
-    success = false;
+
+  // try opening a store
+  KoStore* store = KoStore::createStore( tmpfile, KoStore::Read );
+  if( store ) {
+    if( !store->bad() ) {
+      // try opening the document inside the store
+      if( store->open( "maindata.xml" ) ) {
+	QIODevice* dev = store->device();
+	dev->open( IO_ReadOnly );
+	if( xmlDoc.setContent( dev ) )
+	  success = true;
+	dev->close();
+	store->close();
+      }
+    }
+
+    delete store;
   }
 
-  f.close();
-
-  /////////////////////////////////////////////////
+  if( !success ) {
+    // try reading an old plain document
+    QFile f( tmpfile );
+    if ( f.open( IO_ReadOnly ) ) {
+      if( xmlDoc.setContent( &f ) )
+	success = true;
+      f.close();
+    }
+  }
+  
+  // ///////////////////////////////////////////////
   KIO::NetAccess::removeTempFile( tmpfile );
-
+  
   if( !success ) {
     kdDebug() << "(K3bDoc) could not open file " << url.path() << endl;
     return 0;
@@ -214,22 +237,37 @@ K3bDoc* K3bDoc::openDocument(const KURL& url )
 
 bool K3bDoc::saveDocument(const KURL& url )
 {
-  QFile f( url.path() );
-  if ( !f.open( IO_WriteOnly ) )
+  // create the store
+  KoStore* store = KoStore::createStore( url.path(), KoStore::Write, "application/x-k3b" );
+  if( !store )
     return false;
+
+  if( store->bad() ) {
+    delete store;
+    return false;
+  }
+
+  // open the document inside the store
+  store->open( "maindata.xml" );
   
+  // save the data in the document
   QDomDocument xmlDoc( documentType() );
   bool success = saveDocumentData( &xmlDoc );
-  
   if( success ) {
-    QTextStream xmlStream( &f );
+    KoStoreDevice dev(store);
+    dev.open( IO_WriteOnly );
+    QTextStream xmlStream( &dev );
     xmlDoc.save( xmlStream, 0 );
 
     modified = false;
     doc_url = url;
   }
 
-  f.close();
+  // close the document inside the store
+  store->close();
+
+  // remove the store (destructor writes the store to disk)
+  delete store;
 
   return success;
 }
