@@ -57,6 +57,7 @@ public:
 
 signals:
     void endRipping();
+    void interrupted();
 
 private slots:
     void slotReadData();

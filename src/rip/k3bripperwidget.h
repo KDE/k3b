@@ -82,6 +82,7 @@ public:
 
 public slots:
     void waitForClose();
+    void slotRippingFinished();
 
 protected:
     QGridLayout* Form1Layout;

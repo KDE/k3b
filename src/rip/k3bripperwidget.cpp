@@ -213,7 +213,8 @@ void K3bRipperWidget::rip(){
 */
     if( !m_copy->run() )
             m_buttonStart->setEnabled( true );
-    connect(m_copy, SIGNAL(endRipping() ), SLOT( waitForClose() ));
+    connect(m_copy, SIGNAL(endRipping() ), SLOT( slotRippingFinished() ));
+    connect(m_copy, SIGNAL(interrupted() ), SLOT( waitForClose() ));
 //#endif
 }
 
@@ -363,5 +364,9 @@ void K3bRipperWidget::waitForClose(){
 #endif
 */
     m_finalClose=true;
-    close();
+    //close();
+}
+
+void K3bRipperWidget::slotRippingFinished(){
+    // further development
 }

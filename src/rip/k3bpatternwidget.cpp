@@ -33,6 +33,7 @@
 #include <qframe.h>
 #include <qstringlist.h>
 #include <qfont.h>
+#include <qtooltip.h>
 
 #include <klocale.h>
 #include <kdialog.h>
@@ -84,24 +85,26 @@ void K3bPatternWidget::setup(){
     QFont font = m_labelSummaryDirectory->font();
     font.setBold(true);
     m_labelSummaryDirectory->setFont( font );
-
+    QToolTip::add( m_labelSummaryDirectory, i18n("Directory to that the songs will be ripped to. Directories will be automatically created ."));
 
     QVGroupBox *groupPatternDirTree = new QVGroupBox(m_groupPatternDir, "filename_patterndir" );
     groupPatternDirTree->setTitle( i18n( "Base Directory" ) );
     m_kioTree = new KioTree( groupPatternDirTree );
     m_kioTree->addTopLevelDir( KURL( QDir::homeDirPath() ) , "Home" );
-
+    //QToolTip::add( m_kioTree, i18n("Basic directory where the songs will be ripped to."));
     m_dirs1 = new QVButtonGroup( i18n("Directory group 1"), m_groupPatternDir );
     m_radioDir1Artist = new QRadioButton(i18n("Artist"), m_dirs1);
     m_radioDir1Album = new QRadioButton(i18n("Album"), m_dirs1);
     m_radioDir1None = new QRadioButton(i18n("None"), m_dirs1);
     m_radioDir1None->setChecked(true);
+    //QToolTip::add( m_dirs1, i18n("If enabled, this directory will created in the base directory and all songs will be ripped this new directory."));
 
     m_dirs2 = new QVButtonGroup( i18n("Directory group 2"), m_groupPatternDir );
     m_radioDir2Artist = new QRadioButton(i18n("Artist"), m_dirs2);
     m_radioDir2Album = new QRadioButton(i18n("Album"), m_dirs2);
     m_radioDir2None = new QRadioButton(i18n("None"), m_dirs2);
     m_radioDir2None->setChecked(true);
+    //QToolTip::add( m_dirs2, i18n("Another subdirectory like the left one."));
 
     QLabel *labelDirpattern = new QLabel(i18n("Pattern") + ":", m_groupPatternDir);
     QFrame* dirline2 = new QFrame( m_groupPatternDir, "dirline" );
@@ -146,11 +149,11 @@ void K3bPatternWidget::setup(){
     QFrame* line2 = new QFrame( m_groupPatternFile, "line2" );
     line2->setFrameStyle( QFrame::HLine | QFrame::Sunken );
     m_editSpaceFile1 = new KLineEdit("_", m_groupPatternFile, "filename_pattern_space1");
-    m_editSpaceFile1->setMaxLength(1);
-    m_editSpaceFile1->setFixedWidth(20);
+    m_editSpaceFile1->setMaxLength(4);
+    m_editSpaceFile1->setFixedWidth(45);
     m_editSpaceFile2 = new KLineEdit("_", m_groupPatternFile, "filename_pattern_space2");
-    m_editSpaceFile2->setMaxLength(1);
-    m_editSpaceFile2->setFixedWidth(20);
+    m_editSpaceFile2->setMaxLength(4);
+    m_editSpaceFile2->setFixedWidth(45);
 
     m_comboFile1 = new KComboBox(TRUE, m_groupPatternFile);
     m_comboFile2 = new KComboBox(TRUE, m_groupPatternFile);
@@ -245,13 +248,8 @@ void K3bPatternWidget::init(QString& album, QListViewItem *item){
     m_finalPatternFile[2]=m_testAlbum;
     m_finalPatternFile[3]=m_editSpaceFile2->text();
     m_finalPatternFile[4]=m_testTitle;
-    KConfig* c = kapp->config();
-    c->setGroup("Cddb");
-    m_useCddb =c->readBoolEntry( "useCddb", false );
-    if( !m_useCddb ){
-        m_dirs1->setDisabled( true );
-        m_dirs2->setDisabled( true );
-    }
+    // prepares gui for with/without cddb
+    initCddb();
     showFinalFilePattern();
     slotShowFinalDirPattern();
 }
@@ -384,6 +382,20 @@ void K3bPatternWidget::apply(){
    c->writeEntry( "dirGroup2", m_dirs2->id( m_dirs2->selected()) );
    c->writeEntry( "spaceReplaceCharDir", m_editDir->text() );
    c->sync();
+   initCddb();
+}
+
+void K3bPatternWidget::initCddb(){
+    KConfig* c = kapp->config();
+    c->setGroup("Cddb");
+    m_useCddb =c->readBoolEntry( "useCddb", false );
+    if( m_useCddb ){
+        m_dirs1->setEnabled( true );
+        m_dirs2->setEnabled( true );
+    } else {
+        m_dirs1->setDisabled( true );
+        m_dirs2->setDisabled( true );
+    }
 }
 
 // slots

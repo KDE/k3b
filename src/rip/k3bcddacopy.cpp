@@ -75,7 +75,10 @@ void K3bCddaCopy::finishedRip(){
     qDebug("(K3bCddaCopy) Finished copying." );
     m_cdda->closeDrive(m_drive);
     qDebug("(K3bCddaCopy) Exit." );
-    emit endRipping();
+    if( m_interrupt )
+        emit interrupted();
+    else
+        emit endRipping();
     //m_progress = 0;
 }
 

@@ -90,6 +90,7 @@ private:
     KLineEdit *m_editFile;
     QGroupBox *m_groupPatternFile;
     bool m_useCddb;
+    void initCddb();
     void setup();
     void setFinalPatternFile(int, int);
     void showFinalFilePattern();
