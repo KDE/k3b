@@ -19,11 +19,16 @@
 #define K3BDISKINFOVIEW_H
 
 #include "../k3bcdcontentsview.h"
-#include <device/k3bdiskinfo.h>
 
 class QLabel;
 class KListView;
+class K3bIso9660;
 
+namespace K3bCdDevice {
+  class DiskInfoDetector;
+  class DiskInfo;
+  class NextGenerationDiskInfo;
+}
 
 class K3bDiskInfoView : public K3bCdContentsView
 {
@@ -36,9 +41,13 @@ class K3bDiskInfoView : public K3bCdContentsView
   void reload();
 
  public slots:
-  void displayInfo( const K3bDiskInfo& info );
+  void displayInfo( const K3bCdDevice::DiskInfo& info );
+  void displayInfo( K3bCdDevice::DiskInfoDetector* );
 
  private:
+  void createMediaInfoItems( const K3bCdDevice::NextGenerationDiskInfo& info );
+  void createIso9660InfoItems( const K3bIso9660* iso );
+
   QLabel* m_labelDiskPix;
   QLabel* m_labelTocType;
 

@@ -307,6 +307,8 @@ namespace K3bCdDevice
     void close() const;
     bool isOpen() const;
 
+    bool seek( long long pos ) const;
+
   protected:
     bool furtherInit();
 

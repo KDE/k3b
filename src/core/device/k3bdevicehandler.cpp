@@ -36,6 +36,10 @@ public:
       switch( command ) {
       case DISKINFO:
 	info = dev->diskInfo();
+	ngInfo = dev->ngDiskInfo();
+	if( info.toc.contentType() == AUDIO ||
+	    info.toc.contentType() == MIXED )
+	  cdText = dev->readCdText();
 	success = info.valid;
 	break;
       case NG_DISKINFO:

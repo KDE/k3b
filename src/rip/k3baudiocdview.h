@@ -34,7 +34,7 @@ class QLabel;
 class K3bToolBox;
 
 namespace K3bCdDevice {
-  class DeviceHandler;
+  class DiskInfoDetector;
 }
 
 
@@ -46,7 +46,7 @@ class K3bAudioCdView : public K3bCdContentsView
   K3bAudioCdView( QWidget* parent = 0, const char * name = 0 );
   ~K3bAudioCdView();
 
-  void setDisk( const K3bCdDevice::DiskInfo& );
+  void setDisk( K3bCdDevice::DiskInfoDetector* );
 
   const K3bCdDevice::DiskInfo& displayedDisk() const { return m_diskInfo; }
 
@@ -61,7 +61,6 @@ class K3bAudioCdView : public K3bCdContentsView
   void slotItemRenamed( QListViewItem*, const QString&, int );
   void slotCddbQueryFinished( int );
   void slotTrackSelectionChanged( QListViewItem* );
-  void slotCdTextReady( K3bCdDevice::DeviceHandler* dh );
 
   void slotEditTrackCddb();
   void slotEditAlbumCddb();

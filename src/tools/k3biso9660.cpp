@@ -21,11 +21,10 @@
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
-#include <grp.h>
-#include <pwd.h>
-#include <assert.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <string.h>
+#include <errno.h>
 
 #include <qcstring.h>
 #include <qdir.h>
@@ -59,7 +58,9 @@ public:
    * to be 0.
    */
   bool at( Offset pos ) {
-    return QFile::at( m_ourPosNull + pos );
+    // QT seems to be unable to seek blcok devices.... :(
+    return (::lseek( m_fd, m_ourPosNull + pos, SEEK_SET ) != -1);
+    //    return QFile::at( m_ourPosNull + pos );
   }
 
 private:
@@ -96,11 +97,12 @@ void K3bIso9660File::setZF(char algo[2],char parms[2],int realsize)
 QByteArray K3bIso9660File::data(long long pos, int count) const
 {
   QByteArray r;
-  int rlen;
-  
-  if ( archive()->device()->at(position()+pos) &&
-       r.resize( ((pos+count) < size()) ? count : size()-pos) ) {
-    rlen=archive()->device()->readBlock( r.data(), r.size() );
+
+  if( !archive()->device()->at( position() + pos ) ) {
+    kdDebug() << "(K3bIso9660File) seek failed: " << strerror(errno) << " (" << errno << ")" << endl;
+  }
+  else if( r.resize( ((pos+count) < size()) ? count : size()-pos) ) {
+    int rlen = archive()->device()->readBlock( r.data(), r.size() );
     if( rlen == -1 )
       r.resize(0);
     else if( rlen != (int)r.size() )
@@ -194,9 +196,11 @@ static int readf(char *buf, int start, int len,void *udata)
   QIODevice* dev = ( static_cast<K3bIso9660*> (udata) )->device();
   
   if( dev->at(start<<11) ) {
-    if( (dev->readBlock(buf, len<<11)) != -1)
+    if( dev->readBlock(buf, len<<11) != -1 )
       return len;
   }
+  else
+    kdDebug() << "(K3bIso9660::ReadRequest) seek failed." << endl;
   kdDebug() << "(K3bIso9660::ReadRequest) failed start: " << start << " len: " << len << endl;
 
   return -1;
@@ -432,8 +436,6 @@ bool K3bIso9660::openArchive( int mode )
 
   FreeISO9660(desc);
   
-  device()->close();
-
   return true;
 }
 

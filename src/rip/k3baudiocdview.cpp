@@ -28,6 +28,7 @@
 #include <kcutlabel.h>
 #include <k3bstdguiitems.h>
 #include <k3bcore.h>
+#include <cdinfo/k3bdiskinfodetector.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -178,9 +179,9 @@ K3bAudioCdView::~K3bAudioCdView()
 }
 
 
-void K3bAudioCdView::setDisk( const K3bCdDevice::DiskInfo& info )
+void K3bAudioCdView::setDisk( K3bCdDevice::DiskInfoDetector* did )
 {
-  m_diskInfo = info;
+  m_diskInfo = did->diskInfo();
 
   // initialize cddb info for editing
   m_cddbInfo = K3bCddbResultEntry();
@@ -210,19 +211,7 @@ void K3bAudioCdView::setDisk( const K3bCdDevice::DiskInfo& info )
     index++;
   }
 
-  updateDisplay();
-
-  // check if we have CD-TEXT (FIXME: this needs to be done elsewhere when replacing diskinfo with ngdiskinfo
-  connect( K3bCdDevice::sendCommand( K3bCdDevice::DeviceHandler::CD_TEXT, m_diskInfo.device ),
-           SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
-           this,
-           SLOT(slotCdTextReady(K3bCdDevice::DeviceHandler*)) );
-}
-
-
-void K3bAudioCdView::slotCdTextReady( K3bCdDevice::DeviceHandler* dh )
-{
-  m_cdText = dh->cdText();
+  m_cdText = did->cdText();
       
   reload();
 }

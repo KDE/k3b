@@ -1784,6 +1784,12 @@ void K3bCdDevice::CdDevice::close() const
 }
 
 
+bool K3bCdDevice::CdDevice::seek( long long pos ) const
+{
+  return (::lseek( open(), pos, SEEK_SET ) != -1);
+}
+
+
 bool K3bCdDevice::CdDevice::isOpen() const
 {
   return ( d->deviceFd != -1 );
@@ -1856,13 +1862,6 @@ K3bCdDevice::DiskInfo K3bCdDevice::CdDevice::diskInfo()
       info.noDisk = true;
     }
   }
-
-  // THIS IS JUST FOR TESTING AND DEBUGGING
-  // --------------------------------------
-  ngDiskInfo().debug();
-  determineOptimalWriteSpeed();
-  // --------------------------------------
-
 
   close();
   return info;
@@ -2351,7 +2350,7 @@ void K3bCdDevice::CdDevice::checkWriteModes()
     kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": dataLen: " << dataLen << endl;
 
     kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": modesense data: " << endl;
-    debugBitfield( buffer, dataLen );
+    //    debugBitfield( buffer, dataLen );
 
     wr_param_page_05* mp = (struct wr_param_page_05*)(buffer+8);
 
@@ -2381,7 +2380,7 @@ void K3bCdDevice::CdDevice::checkWriteModes()
     mp->dbtype = 8;         // Mode 1
 
     kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": modeselect TAO data: " << endl;
-    debugBitfield( buffer, dataLen );
+    //    debugBitfield( buffer, dataLen );
 
 
     if( modeSelect( buffer, dataLen, 1, 0 ) )

@@ -110,10 +110,10 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
   d = new Private;
 
   m_diskInfoDetector = new K3bDiskInfoDetector( this );
-  connect( m_diskInfoDetector, SIGNAL(diskInfoReady(const K3bCdDevice::DiskInfo&)),
+  connect( m_diskInfoDetector, SIGNAL(diskInfoReady(K3bCdDevice::DiskInfoDetector*)),
 	   k3bcore, SLOT(requestBusyFinish()) );
-  connect( m_diskInfoDetector, SIGNAL(diskInfoReady(const K3bCdDevice::DiskInfo&)),
-	   this, SLOT(slotDiskInfoReady(const K3bCdDevice::DiskInfo&)) );
+  connect( m_diskInfoDetector, SIGNAL(diskInfoReady(K3bCdDevice::DiskInfoDetector*)),
+	   this, SLOT(slotDiskInfoReady(K3bCdDevice::DiskInfoDetector*)) );
 
   //  KToolBar* toolBar = new KToolBar( this, "dirviewtoolbar" );
 
@@ -235,42 +235,43 @@ void K3bDirView::slotDetectDiskInfo( K3bCdDevice::CdDevice* dev )
 }
 
 
-void K3bDirView::slotDiskInfoReady( const K3bDiskInfo& info )
+void K3bDirView::slotDiskInfoReady( K3bCdDevice::DiskInfoDetector* did )
 {
-  if( m_bViewDiskInfo ||info.empty || info.noDisk ) {
+  if( m_bViewDiskInfo || did->diskInfo().empty || did->diskInfo().noDisk ) {
     // show cd info
     m_viewStack->raiseWidget( m_infoView );
-    m_infoView->displayInfo( info );
+    m_infoView->displayInfo( did );
     m_bViewDiskInfo = false;
   }
-  else if( info.tocType == K3bDiskInfo::DVD  ) {
-    if( info.isVideoDvd ) {
-      m_movieView->setDevice( info.device );
+  else if( did->diskInfo().tocType == K3bDiskInfo::DVD  ) {
+    if( did->diskInfo().isVideoDvd ) {
+      m_movieView->setDevice( did->diskInfo().device );
       m_viewStack->raiseWidget( m_movieView );
       m_movieView->reload();
     }
     else
-      slotMountDevice( info.device );
+      slotMountDevice( did->diskInfo().device );
   }
-  else if( info.tocType == K3bDiskInfo::DATA  ) {
-    slotMountDevice( info.device );
+  else if( did->diskInfo().tocType == K3bDiskInfo::DATA  ) {
+    slotMountDevice( did->diskInfo().device );
   }
   else {
     // check for MIXED_MODE and ask
     bool mount = false;
-    if( info.tocType == K3bDiskInfo::MIXED  ) {
+    if( did->diskInfo().tocType == K3bDiskInfo::MIXED  ) {
       mount = ( KMessageBox::questionYesNo( this,
-					    i18n("Found Mixed-mode CD. Do you want K3b to mount the data part or show all the tracks?"),
+					    i18n("Found Mixed-mode CD. Do you want K3b to mount the data part "
+						 "or show all the tracks?"),
 					    i18n("Mixed-mode CD"),
 					    i18n("Mount CD"),
 					    i18n("Show tracks") ) == KMessageBox::Yes );
     }
 
     if( mount )
-      slotMountDevice( info.device );
+      slotMountDevice( did->diskInfo().device );
     else {
       m_viewStack->raiseWidget( m_cdView );
-      m_cdView->setDisk( info );
+      m_cdView->setDisk( did );
     }
   }
 }
