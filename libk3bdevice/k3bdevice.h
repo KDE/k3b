@@ -25,6 +25,9 @@
 #include <k3bcdtext.h>
 #include <k3bmsf.h>
 
+#ifdef Q_OS_FREEBSD
+struct cam_device;
+#endif
 
 namespace K3bCdDevice
 {
@@ -454,7 +457,7 @@ namespace K3bCdDevice
      *                     fot the logical unit to select the optimal speed.
      * @param cav Is the speed pure CAV?
      */
-    bool setSpeed( unsigned int readingSpeed, 
+    bool setSpeed( unsigned int readingSpeed,
 		   unsigned int writingSpeed,
 		   bool cav = false ) const;
 
@@ -628,6 +631,13 @@ namespace K3bCdDevice
      */
     bool seek( unsigned long lba ) const;
 
+#ifdef Q_OS_FREEBSD
+    /**
+     * Return the SCSI control handle (only FBSD)
+     */
+    struct cam_device *cam() const;
+#endif
+
   protected:
     bool furtherInit();
 
@@ -687,9 +697,9 @@ namespace K3bCdDevice
     class Private;
     Private* d;
     friend class DeviceManager;
-    friend class ScsiCommand;
   };
 
+#ifdef Q_OS_LINUX
   /**
    * This should always be used to open a device since it
    * uses the resmgr
@@ -697,6 +707,7 @@ namespace K3bCdDevice
    * @internal
    */
   int openDevice( const char* name );
+#endif
 }
 
 #endif

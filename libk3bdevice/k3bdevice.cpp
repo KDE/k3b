@@ -100,7 +100,7 @@ const char* K3bCdDevice::CdDevice::cdrdao_drivers[] =
   };
 
 
-
+#ifdef Q_OS_LINUX
 int K3bCdDevice::openDevice( const char* name )
 {
   int fd = -1;
@@ -118,7 +118,7 @@ int K3bCdDevice::openDevice( const char* name )
 
   return fd;
 }
-
+#endif
 
 
 class K3bCdDevice::CdDevice::Private
@@ -127,7 +127,12 @@ public:
   Private()
     : deviceType(0),
       supportedProfiles(0),
+#ifdef Q_OS_LINUX
       deviceFd(-1),
+#endif
+#ifdef Q_OS_FREEBSD
+      cam(0),
+#endif
       burnfree(false) {
   }
 
@@ -137,7 +142,12 @@ public:
   QString mountPoint;
   QString mountDeviceName;
   QStringList allNodes;
+#ifdef Q_OS_LINUX
   int deviceFd;
+#endif
+#ifdef Q_OS_FREEBSD
+  struct cam_device *cam;
+#endif
   bool burnfree;
 };
 
@@ -1910,6 +1920,13 @@ bool K3bCdDevice::CdDevice::supportsWriteMode( WriteMode w )
 
 int K3bCdDevice::CdDevice::open() const
 {
+#ifdef Q_OS_FREEBSD
+    d->cam = cam_open_pass (m_passDevice.latin1(),O_RDWR,0 /* NULL */);
+    kdDebug() << "(K3bCdDevice::openDevice) open device " << m_passDevice
+	      << ((d->cam)?" succeeded.":" failed.") << endl;
+    return (d->cam ? 0 : -1);
+#endif
+#ifdef Q_OS_LINUX
   if( d->deviceFd == -1 )
     d->deviceFd = openDevice( QFile::encodeName(devicename()) );
   if (d->deviceFd < 0)
@@ -1919,21 +1936,36 @@ int K3bCdDevice::CdDevice::open() const
   }
 
   return d->deviceFd;
+#endif
 }
 
 
 void K3bCdDevice::CdDevice::close() const
 {
+#ifdef Q_OS_FREEBSD
+  if (d->cam)
+  {
+    cam_close_device(d->cam);
+    d->cam = 0;
+  }
+#endif
+#ifdef Q_OS_LINUX
   if( d->deviceFd != -1 ) {
     ::close( d->deviceFd );
     d->deviceFd = -1;
   }
+#endif
 }
 
 
 bool K3bCdDevice::CdDevice::isOpen() const
 {
+#ifdef Q_OS_FREEBSD
+  return d->cam;
+#endif
+#ifdef Q_OS_LINUX
   return ( d->deviceFd != -1 );
+#endif
 }
 
 
@@ -2159,36 +2191,36 @@ K3bCdDevice::DiskInfo K3bCdDevice::CdDevice::diskInfo() const
 	  eda = ( dvdheader[4+9]<<16 | dvdheader[4+10] << 8 | dvdheader[4+11] );
 	  ea0 = ( dvdheader[4+13]<<16 | dvdheader[4+14] << 8 | dvdheader[4+15] );
 
-	  kdDebug() << "First sec data area: " << sda.toString() 
+	  kdDebug() << "First sec data area: " << sda.toString()
 		    << " (LBA " << QString::number(sda.lba())
-		    << ") (" << QString::number(sda.mode1Bytes()) << " Bytes) (" 
+		    << ") (" << QString::number(sda.mode1Bytes()) << " Bytes) ("
 		    << KIO::convertSize(sda.mode1Bytes()) << ")" << endl;
-	  kdDebug() << "Last sec data area: " << eda.toString() 
+	  kdDebug() << "Last sec data area: " << eda.toString()
 		    << " (LBA " << QString::number(eda.lba())
-		    << ") (" << QString::number(eda.mode1Bytes()) << " Bytes) (" 
+		    << ") (" << QString::number(eda.mode1Bytes()) << " Bytes) ("
 		    << KIO::convertSize(eda.mode1Bytes()) << ")" << endl;
-	  kdDebug() << "Last sec layer 1: " << ea0.toString() 
+	  kdDebug() << "Last sec layer 1: " << ea0.toString()
 		    << " (LBA " << QString::number(ea0.lba())
-		    << ") (" << QString::number(ea0.mode1Bytes()) << " Bytes) (" 
+		    << ") (" << QString::number(ea0.mode1Bytes()) << " Bytes) ("
 		    << KIO::convertSize(ea0.mode1Bytes()) << ")" << endl;
 
 
 	  K3b::Msf da0 = ea0 - sda + 1;
 	  K3b::Msf da1 = eda - ea0;
-	  kdDebug() << "Layer 1 length: " << da0.toString() 
+	  kdDebug() << "Layer 1 length: " << da0.toString()
 		    << " (LBA " << QString::number(da0.lba())
-		    << ") (" << QString::number(da0.mode1Bytes()) << " Bytes) (" 
+		    << ") (" << QString::number(da0.mode1Bytes()) << " Bytes) ("
 		    << KIO::convertSize(da0.mode1Bytes()) << ")" << endl;
-	  kdDebug() << "Layer 2 length: " << da1.toString() 
+	  kdDebug() << "Layer 2 length: " << da1.toString()
 		    << " (LBA " << QString::number(da1.lba())
-		    << ") (" << QString::number(da1.mode1Bytes()) << " Bytes) (" 
+		    << ") (" << QString::number(da1.mode1Bytes()) << " Bytes) ("
 		    << KIO::convertSize(da1.mode1Bytes()) << ")" << endl;
 
 	  inf.m_numLayers = ((dvdheader[6]&0x60) == 0 ? 1 : 2);
 	  inf.m_firstLayerSize = da0;
 	}
       }
-    
+
 
       //
       // Number of sessions for non-empty disks
@@ -2909,7 +2941,7 @@ QValueList<int> K3bCdDevice::CdDevice::determineSupportedWriteSpeeds() const
 	  // and need to use the values gained from GET PERFORMANCE.
 	  //
 	  if( dvd && s < 1352 ) {
-	    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+	    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName()
 		      << " Invalid DVD speed: " << s << " KB/s" << endl;
 	    ret.clear();
 	    break;
@@ -2958,7 +2990,7 @@ QValueList<int> K3bCdDevice::CdDevice::determineSupportedWriteSpeeds() const
 
 	  if( dvd )
 	    s = fixupDvdWritingSpeed( s );
-	  
+
 	  QValueList<int>::iterator it = ret.begin();
 	  while( it != ret.end() && *it < s )
 	    ++it;
@@ -3622,7 +3654,7 @@ bool K3bCdDevice::CdDevice::getPerformance( unsigned char** data, int& dataLen,
 }
 
 
-bool K3bCdDevice::CdDevice::setSpeed( unsigned int readingSpeed, 
+bool K3bCdDevice::CdDevice::setSpeed( unsigned int readingSpeed,
 				      unsigned int writingSpeed,
 				      bool cav ) const
 {
@@ -3635,3 +3667,10 @@ bool K3bCdDevice::CdDevice::setSpeed( unsigned int readingSpeed,
   cmd[5] = writingSpeed;
   return ( cmd.transport() == 0 );
 }
+
+#ifdef Q_OS_FREEBSD
+struct cam_device *K3bCdDevice::CdDevice::cam() const
+{
+  return d->cam;
+}
+#endif
