@@ -624,7 +624,7 @@ void K3bVcdTrackDialog::setupPbcKeyTab()
     grid->setSpacing( spacingHint() );
     grid->setMargin( marginHint() );
 
-    QGroupBox* groupKey = new QGroupBox( 4, Qt::Vertical, i18n( "Numeric Keys" ), m_widgetnumkeys );
+    QGroupBox* groupKey = new QGroupBox( 3, Qt::Vertical, i18n( "Numeric Keys" ), m_widgetnumkeys );
     groupKey->setEnabled( false );
     groupKey->layout() ->setSpacing( spacingHint() );
     groupKey->layout() ->setMargin( marginHint() );
@@ -638,8 +638,6 @@ void K3bVcdTrackDialog::setupPbcKeyTab()
     m_check_overwritekeys = new QCheckBox( i18n( "Overwrite default assignment" ), groupKey, "m_check_overwritekeys" );
 
     grid->addWidget( groupKey, 1, 0 );
-
-    grid->setRowStretch( 9, 4 );
 
     m_mainTabbed->addTab( m_widgetnumkeys, i18n( "Numeric Keys" ) );
 }
