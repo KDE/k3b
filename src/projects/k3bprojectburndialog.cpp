@@ -289,6 +289,7 @@ void K3bProjectBurnDialog::saveSettings()
   m_doc->setBurner( m_writerSelectionWidget->writerDevice() );
   m_doc->setWritingMode( m_writingModeWidget->writingMode() );
   m_doc->setWritingApp( m_writerSelectionWidget->writingApp() );
+  m_doc->setCopies( m_spinCopies->value() );
 }
 
 
@@ -302,6 +303,7 @@ void K3bProjectBurnDialog::readSettings()
   m_writerSelectionWidget->setWriterDevice( doc()->burner() );
   m_writerSelectionWidget->setSpeed( doc()->speed() );
   m_writerSelectionWidget->setWritingApp( doc()->writingApp() );
+  m_spinCopies->setValue( m_doc->copies() );
 }
 
 

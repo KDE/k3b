@@ -401,7 +401,7 @@ void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
 void K3bGrowisofsWriter::slotEjectingFinished( K3bCdDevice::DeviceHandler* dh )
 {
   if( !dh->success() )
-    emit infoMessage( "Unable to eject media.", ERROR );
+    emit infoMessage( i18n("Unable to eject media."), ERROR );
 
   emit finished(d->success);
 }

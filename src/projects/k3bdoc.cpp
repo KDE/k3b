@@ -80,6 +80,8 @@ K3bDoc::K3bDoc( QObject* parent )
   m_writingMode = K3b::WRITING_MODE_AUTO;
   m_saved = false;
 
+  m_copies = 1;
+
   m_actionCollection = new KActionCollection( this );
 
   (void)new KAction( i18n("&Burn..."), "cdburn", CTRL + Key_B, this, SLOT(slotBurn()),
@@ -161,6 +163,7 @@ const KURL& K3bDoc::URL() const
 bool K3bDoc::newDocument()
 {
   setModified( false );
+  m_copies = 1;
 
   return true;
 }

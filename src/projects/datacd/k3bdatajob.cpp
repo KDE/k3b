@@ -66,6 +66,9 @@ public:
   int usedWritingApp;
   int usedWritingMode;
 
+  int copies;
+  int copiesDone;
+
   K3bDataVerifyingJob* verificationJob;
 };
 
@@ -115,16 +118,25 @@ void K3bDataJob::start()
 
   d->canceled = false;
   d->imageFinished = false;
+  d->copies = d->doc->copies();
+  d->copiesDone = 0;
 
   prepareImager();
 
-  if( d->doc->dummy() )
+  if( d->doc->dummy() ) {
     d->doc->setVerifyData( false );
+    d->copies = 1;
+  }
+
+  emit newTask( i18n("Preparing data") );
 
   if( !d->doc->onlyCreateImages() && 
       ( d->doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
 	d->doc->multiSessionMode() == K3bDataDoc::FINISH ) ) {
     emit burning(false);
+
+    // no sense continuing the same session twice
+    d->copies = 1;
 
     m_msInfoFetcher->setDevice( d->doc->burner() );
     waitForDisk();
@@ -176,8 +188,6 @@ void K3bDataJob::slotMsInfoFetched(bool success)
 
 void K3bDataJob::writeImage()
 {
-  emit newTask( i18n("Writing data") );
-
   if( d->doc->onTheFly() && !d->doc->onlyCreateImages() ) {
     m_isoImager->calculateSize();
   }
@@ -191,8 +201,9 @@ void K3bDataJob::writeImage()
     // TODO: check if the image file is part of the project and if so warn the user
     //       and append some number to make the path unique.
 
-    emit infoMessage( i18n("Writing image file to %1").arg(d->doc->tempDir()), INFO );
-    emit newSubTask( i18n("Creating image file") );
+    emit newTask( i18n("Creating image file") );
+    emit newSubTask( i18n("Track 1 of 1") );
+    emit infoMessage( i18n("Creating image file in %1").arg(d->doc->tempDir()), INFO );
 
     m_isoImager->writeToImageFile( d->doc->tempDir() );
     m_isoImager->start();
@@ -202,21 +213,28 @@ void K3bDataJob::writeImage()
 
 void K3bDataJob::slotSizeCalculationFinished( int status, int size )
 {
-  emit infoMessage( i18n("Size calculated:") + i18n("1 block", "%n blocks", size), INFO );
-  if( status != ERROR ) {
-    // this only happens in on-the-fly mode
-    if( prepareWriterJob() ) {
-      if( startWriting() ) {
-	// try a direct connection between the processes
-	if( m_writerJob->fd() != -1 )
-	  m_isoImager->writeToFd( m_writerJob->fd() );
-	m_isoImager->start();
-      }
+  emit debuggingOutput( "K3b", QString( "Size of filesystem calculated: %1" ).arg(size) );
+
+  //
+  // this is only called in on-the-fly mode
+  //
+  if( status == ERROR || !startOnTheFlyWriting() )
+    cancelAll();
+}
+
+
+bool K3bDataJob::startOnTheFlyWriting()
+{
+  if( prepareWriterJob() ) {
+    if( startWriterJob() ) {
+      // try a direct connection between the processes
+      if( m_writerJob->fd() != -1 )
+	m_isoImager->writeToFd( m_writerJob->fd() );
+      m_isoImager->start();
+      return true;
     }
   }
-  else {
-    cancelAll();
-  }
+  return false;
 }
 
 
@@ -232,15 +250,22 @@ void K3bDataJob::cancel()
 void K3bDataJob::slotIsoImagerPercent( int p )
 {
   if( d->doc->onlyCreateImages() ) {
-    emit percent( p  );
     emit subPercent( p );
+    emit percent( p );
   }
   else if( !d->doc->onTheFly() ) {
-    if( d->doc->verifyData() )
-      emit percent( p/3 );
-    else
-      emit percent( p/2 );
+    double totalTasks = d->copies;
+    double tasksDone = d->copiesDone; // =0 when creating an image
+    if( d->doc->verifyData() ) {
+      totalTasks*=2;
+      tasksDone*=2;
+    }
+    if( !d->doc->onTheFly() ) {
+      totalTasks+=1.0;
+    }
+
     emit subPercent( p );
+    emit percent( (int)((100.0*tasksDone + (double)p) / totalTasks) );
   }
 }
 
@@ -262,7 +287,7 @@ void K3bDataJob::slotIsoImagerFinished( bool success )
       }
       else {
 	if( prepareWriterJob() )
-	  startWriting();
+	  startWriterJob();
       }
     }
     else {
@@ -275,8 +300,13 @@ void K3bDataJob::slotIsoImagerFinished( bool success )
 }
 
 
-bool K3bDataJob::startWriting()
+bool K3bDataJob::startWriterJob()
 {
+  if( d->doc->dummy() )
+    emit newTask( i18n("Simulating") );
+  else
+    emit newTask( i18n("Writing Copy %1").arg(d->copiesDone+1) );
+
   // if we append a new session we asked for an appendable cd already
   if( d->doc->multiSessionMode() == K3bDataDoc::NONE ||
       d->doc->multiSessionMode() == K3bDataDoc::START ) {
@@ -296,18 +326,18 @@ bool K3bDataJob::startWriting()
 
 void K3bDataJob::slotWriterJobPercent( int p )
 {
-  if( d->doc->onTheFly() ) {
-    if( d->doc->verifyData() )
-      emit percent( p/2 );
-    else
-      emit percent( p );
+  double totalTasks = d->copies;
+  double tasksDone = d->copiesDone;
+  if( d->doc->verifyData() ) {
+    totalTasks*=2;
+    tasksDone*=2;
   }
-  else {
-    if( d->doc->verifyData() )
-      emit percent( 33 + p/3 );
-    else
-      emit percent( 50 + p/2 );
+  if( !d->doc->onTheFly() ) {
+    totalTasks+=1.0;
+    tasksDone+=1.0;
   }
+
+  emit percent( (int)((100.0*tasksDone + (double)p) / totalTasks) );
 }
 
 
@@ -322,17 +352,6 @@ void K3bDataJob::slotWriterJobFinished( bool success )
   if( d->canceled )
     return;
 
-  if( !d->doc->onTheFly() && d->doc->removeImages() ) {
-    if( QFile::exists( d->doc->tempDir() ) ) {
-      QFile::remove( d->doc->tempDir() );
-      emit infoMessage( i18n("Removed image file %1").arg(d->doc->tempDir()), K3bJob::SUCCESS );
-    }
-  }
-
-  if( d->tocFile ) {
-    delete d->tocFile;
-    d->tocFile = 0;
-  }
 
   if( success ) {
     // allright
@@ -360,8 +379,35 @@ void K3bDataJob::slotWriterJobFinished( bool success )
 
       d->verificationJob->start();
     }
-    else
-      emit finished(true);
+    else {
+      d->copiesDone++;
+
+      if( d->copiesDone < d->copies ) {
+	bool failed = false;
+	if( d->doc->onTheFly() )
+	  failed = !startOnTheFlyWriting();
+	else
+	  failed = !startWriterJob();
+
+	if( failed )
+	  cancelAll();
+      }
+      else {
+	if( !d->doc->onTheFly() && d->doc->removeImages() ) {
+	  if( QFile::exists( d->doc->tempDir() ) ) {
+	    QFile::remove( d->doc->tempDir() );
+	    emit infoMessage( i18n("Removed image file %1").arg(d->doc->tempDir()), K3bJob::SUCCESS );
+	  }
+	}
+	
+	if( d->tocFile ) {
+	  delete d->tocFile;
+	  d->tocFile = 0;
+	}
+	
+	emit finished(true);
+      }
+    }
   }
   else {
     cancelAll();
@@ -371,12 +417,15 @@ void K3bDataJob::slotWriterJobFinished( bool success )
 
 void K3bDataJob::slotVerificationProgress( int p )
 {
-  // we simply think of the verification as 1/2 or 1/3 of the work...
-  if( d->doc->onTheFly() )
-    emit percent( 50 + p/2 );
-  else {
-    emit percent( 66 + p/3 );
+  double totalTasks = d->copies*2;
+  double tasksDone = d->copiesDone*2 + 1; // the writing of the current copy has already been finished
+
+  if( !d->doc->onTheFly() ) {
+    totalTasks+=1.0;
+    tasksDone+=1.0;
   }
+  
+  emit percent( (int)((100.0*tasksDone + (double)p) / totalTasks) );
 }
 
 
@@ -385,11 +434,24 @@ void K3bDataJob::slotVerificationFinished( bool success )
   if( d->canceled )
     return;
 
+  d->copiesDone++;
+
   k3bcore->config()->setGroup("General Options");
-  if( !k3bcore->config()->readBoolEntry( "No cd eject", false ) )
+  if( !k3bcore->config()->readBoolEntry( "No cd eject", false ) || d->copiesDone < d->copies )
     K3bCdDevice::eject( d->doc->burner() );
   
-  emit finished( success );
+  if( d->copiesDone < d->copies ) {
+    bool failed = false;
+    if( d->doc->onTheFly() )
+      failed = !startOnTheFlyWriting();
+    else
+      failed = !startWriterJob();
+    
+    if( failed )
+      cancelAll();
+  }
+  else
+    emit finished( success );
 }
 
 
@@ -406,7 +468,6 @@ void K3bDataJob::setWriterJob( K3bAbstractWriter* writer )
   connect( m_writerJob, SIGNAL(deviceBuffer(int)), this, SIGNAL(deviceBuffer(int)) );
   connect( m_writerJob, SIGNAL(writeSpeed(int, int)), this, SIGNAL(writeSpeed(int, int)) );
   connect( m_writerJob, SIGNAL(finished(bool)), this, SLOT(slotWriterJobFinished(bool)) );
-  connect( m_writerJob, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
   connect( m_writerJob, SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
   connect( m_writerJob, SIGNAL(debuggingOutput(const QString&, const QString&)), 
 	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
@@ -634,12 +695,15 @@ void K3bDataJob::cancelAll()
     d->tocFile = 0;
   }
 
+  // TODO: wait for the subjobs to be finished
+
   emit finished(false);
 }
 
 
 void K3bDataJob::waitForDisk()
 {
+  emit newSubTask( i18n("Waiting for media") );
   if( waitForMedia( d->doc->burner(), 
 		    d->doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
 		    d->doc->multiSessionMode() == K3bDataDoc::FINISH ?
@@ -675,7 +739,16 @@ QString K3bDataJob::jobDescription() const
 
 QString K3bDataJob::jobDetails() const
 {
-  return i18n("Iso9660 Filesystem (Size: %1)").arg(KIO::convertSize( d->doc->size() ));
+  if( d->doc->copies() > 1 && 
+      !d->doc->dummy() &&
+      !(d->doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
+	d->doc->multiSessionMode() == K3bDataDoc::FINISH) )
+    return i18n("Iso9660 Filesystem (Size: %1) - %2 copies")
+      .arg(KIO::convertSize( d->doc->size() ))
+      .arg(d->doc->copies());
+  else
+    return i18n("Iso9660 Filesystem (Size: %1)")
+      .arg(KIO::convertSize( d->doc->size() ));
 }
 
 #include "k3bdatajob.moc"

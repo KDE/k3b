@@ -738,7 +738,7 @@ void K3bMainWindow::fileSaveAs( K3bDoc* doc )
 
       if( !QFile::exists(url) ||
 	  ( QFile::exists(url) &&
-	    KMessageBox::questionYesNo( this, i18n("Do you want to overwrite %1").arg(url), i18n("File Exists") )
+	    KMessageBox::questionYesNo( this, i18n("Do you want to overwrite %1?").arg(url), i18n("File Exists") )
 	    == KMessageBox::Yes ) ) {
 
 	if( !doc->saveDocument(KURL(url)) ) {

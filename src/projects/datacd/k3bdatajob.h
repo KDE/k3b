@@ -33,7 +33,6 @@ class K3bMsInfoFetcher;
 /**
   *@author Sebastian Trueg
   */
-
 class K3bDataJob : public K3bBurnJob
 {
   Q_OBJECT
@@ -88,8 +87,9 @@ class K3bDataJob : public K3bBurnJob
   K3bMsInfoFetcher* m_msInfoFetcher;
 
  private:
-  bool startWriting();
+  bool startWriterJob();
   void determineWritingMode();
+  bool startOnTheFlyWriting();
 
   class Private;
   Private* d;

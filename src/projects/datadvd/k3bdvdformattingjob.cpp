@@ -279,7 +279,7 @@ void K3bDvdFormattingJob::slotProcessFinished( KProcess* p )
 void K3bDvdFormattingJob::slotEjectingFinished( K3bCdDevice::DeviceHandler* dh )
 {
   if( !dh->success() )
-    emit infoMessage( "Unable to eject media.", ERROR );
+    emit infoMessage( i18n("Unable to eject media."), ERROR );
 
   emit finished(d->success);
   d->running = false;
@@ -374,7 +374,7 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler*
       emit infoMessage( i18n("Found %1 media.").arg(K3bCdDevice::mediaTypeString(K3bCdDevice::MEDIA_DVD_RW)),
 			INFO );
 
-      if( dh->ngDiskInfo().currentProfile() != -1 ) {
+      if( dh->ngDiskInfo().currentProfile() != K3bCdDevice::MEDIA_UNKNOWN ) {
 	emit infoMessage( i18n("Formatted in %1 mode.").arg(K3bCdDevice::mediaTypeString(dh->ngDiskInfo().currentProfile())), INFO );	
 	
 

@@ -40,6 +40,7 @@ int K3bJob::waitForMedia( K3bCdDevice::CdDevice* device,
 			  int mediaType,
 			  const QString& message )
 {
+  // TODO: What about:   emit newSubTask( i18n("Waiting for media") );
   return m_jobHandler->waitForMedia( device, mediaState, mediaType, message );
 }
 

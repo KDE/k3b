@@ -464,7 +464,7 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
 	     (d->wantedMediaState & dh->ngDiskInfo().diskState()) )
       finishWaiting( dh->ngDiskInfo().mediaType() );
 
-    else if( (dh->ngDiskInfo().currentProfile() != -1) &&
+    else if( (dh->ngDiskInfo().currentProfile() != K3bCdDevice::MEDIA_UNKNOWN) &&
 	     (d->wantedMediaType & dh->ngDiskInfo().currentProfile()) &&
 	     (d->wantedMediaState & dh->ngDiskInfo().diskState()) )
       finishWaiting( dh->ngDiskInfo().mediaType() );

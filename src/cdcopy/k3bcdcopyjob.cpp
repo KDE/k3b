@@ -664,7 +664,7 @@ bool K3bCdCopyJob::writeNextSession()
       emit newTask( i18n("Writing Copy %1").arg(d->doneCopies+1) );
   }
 
-  emit newSubTask( i18n("Waiting for disk") );
+  emit newSubTask( i18n("Waiting for media") );
 
   // if session > 1 we wait for an appendable CD
   if( waitForMedia( m_writerDevice, 

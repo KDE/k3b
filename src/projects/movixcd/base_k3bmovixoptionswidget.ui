@@ -142,10 +142,10 @@
                         <string>Do not use DMA</string>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Do not use DMA for CD access</string>
+                        <string>Do not use DMA for media access</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;If this option is checked the resulting eMovix CD will not use DMA for accessing the drive. This will slow down reading from the CD but may be necessary on some systems that do not support DMA.&lt;/p&gt;</string>
+                        <string>&lt;p&gt;If this option is checked the resulting eMovix CD/DVD will not use DMA for accessing the drive. This will slow down reading from the CD/DVD but may be necessary on some systems that do not support DMA.&lt;/p&gt;</string>
                     </property>
                 </widget>
             </grid>

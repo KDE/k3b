@@ -528,9 +528,9 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
     if( speed != d->usedSpeed ) {
       emit infoMessage( i18n("Medium or burner do not support writing at %1x speed").arg(d->usedSpeed), K3bJob::WARNING );
       if( speed > d->usedSpeed )
-	emit infoMessage( i18n("Switching up burn speed to %1x").arg(speed), K3bJob::WARNING );
+	emit infoMessage( i18n("Switching burn speed up to %1x").arg(speed), K3bJob::WARNING );
       else
-	emit infoMessage( i18n("Switching down burn speed to %1x").arg(speed), K3bJob::WARNING );
+	emit infoMessage( i18n("Switching burn speed down to %1x").arg(speed), K3bJob::WARNING );
     }
   }
   else if( line.startsWith( "Starting new" ) ) {
@@ -705,7 +705,8 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	break;
       case UNKNOWN:
 	if( !wasSourceUnreadable() ) {
-	  emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg(m_cdrecordBinObject->name()).arg(p->exitStatus()), 
+	  emit infoMessage( i18n("%1 returned an unknown error (code %2).")
+			    .arg(m_cdrecordBinObject->name()).arg(p->exitStatus()), 
 			    K3bJob::ERROR );
 	  emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
 	  
@@ -717,7 +718,9 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 #endif
 	  }
 	  else {
-	    emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
+	    emit infoMessage( i18n("If you are running an unpatched cdrecord version..."), ERROR );
+	    emit infoMessage( i18n("...and this error also occurs with high quality media..."), ERROR );
+	    emit infoMessage( i18n("...please send me an email incuding the debugging output."), ERROR );
 	  }
 	}
 	break;

@@ -165,13 +165,13 @@
                         <bool>true</bool>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Add Rock Ridge extensions to the CD</string>
+                        <string>Add Rock Ridge extensions to the file system</string>
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>&lt;p&gt;If this option is checked, K3b will generate the System Use Sharing Protocol records (SUSP) specified by the Rock Ridge Interchange Protocol (IEEE-P1282).
 &lt;p&gt;Rock Ridge extends the ISO-9660 filesystem by features equal to the UNIX filesystems (permissions, symbolic links, very long filenames, ...). It uses ISO-8859 or UTF-16 based characters and allows 255 octets.
 &lt;p&gt;Rock Ridge extensions are located at the end of each ISO-9660 directory record. This makes the Rock Ridge tree closely coupled to the ISO-9660 tree.
-&lt;p&gt;&lt;b&gt;It is highly recommended to use Rock Ridge extensions on every data CD/DVD.&lt;/b&gt;</string>
+&lt;p&gt;&lt;b&gt;It is highly recommended to use Rock Ridge extensions on every data CD or DVD.&lt;/b&gt;</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox">
@@ -182,14 +182,14 @@
                         <string>Generate Joliet extensions</string>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Add Joliet extensions to the CD</string>
+                        <string>Add Joliet extensions to the file system</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;If this option is checked, K3b will add additional Joliet extensions to the CD.
+                        <string>&lt;p&gt;If this option is checked, K3b will add additional Joliet extensions to the ISO-9660 file system.
 &lt;p&gt;Joliet is not an accepted independent international standard like ISO-9660 or Rock Ridge. It is mainly used on Windows systems.
 &lt;p&gt;Joliet does not allow all characters, so the Joliet filenames are not identical to the filenames on disk (as compared to Rock Ridge). Joliet has a filename length limitation of 64 chars (independent from the character coding and type e.g. European vs. Japanese). This is annoying, as modern file systems all allow 255 characters per path name component.
 &lt;p&gt;Joliet uses UTF-16 coding.
-&lt;p&gt;&lt;b&gt;Caution:&lt;/b&gt; With the exception of Linux and FreeBSD, there is no POSIX-like OS that supports Joliet. So &lt;b&gt;never create Joliet only CDs&lt;/b&gt; for that reason.</string>
+&lt;p&gt;&lt;b&gt;Caution:&lt;/b&gt; With the exception of Linux and FreeBSD, there is no POSIX-like OS that supports Joliet. So &lt;b&gt;never create Joliet only CDs or DVDs&lt;/b&gt; for that reason.</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox">
@@ -200,7 +200,7 @@
                         <string>Generate Udf structures</string>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Add Udf structures to the CD</string>
+                        <string>Add Udf structures to the file system</string>
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>&lt;p&gt;If this option is checked K3b will create Udf filesystem structures in addition to the Iso9660 filesystem.
@@ -234,10 +234,10 @@
                         <string>Discard all symlinks</string>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Do not create symbolic links on CD</string>
+                        <string>Do not create symbolic links</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;If this option is checked, K3b will ignore all symbolic links that have been added to the project; meaning that the resulting CD will have no links at all.
+                        <string>&lt;p&gt;If this option is checked, K3b will ignore all symbolic links that have been added to the project; meaning that the resulting file system will have no links at all.
 &lt;p&gt;&lt;b&gt;Caution:&lt;/b&gt; Symbolic links require Rock Ridge extensions!</string>
                     </property>
                 </widget>
@@ -291,9 +291,9 @@
                         <string>Preserve file permissions (backup)</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;If this option is checked, all files on the resulting CD will have exactly the same permissions as the source files. (Otherwise all files will have equal permissions and be owned by root).
+                        <string>&lt;p&gt;If this option is checked, all files in the resulting file system will have exactly the same permissions as the source files. (Otherwise all files will have equal permissions and be owned by root).
 &lt;p&gt;This is mainly useful for backups.
-&lt;p&gt;&lt;b&gt;Caution:&lt;/b&gt; The permissions may not make much sense on other file systems. For example if a user that owns a file on the CD does not exist.</string>
+&lt;p&gt;&lt;b&gt;Caution:&lt;/b&gt; The permissions may not make much sense on other file systems. For example if a user that owns a file on the CD or DVD does not exist.</string>
                     </property>
                 </widget>
             </hbox>

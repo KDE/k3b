@@ -132,7 +132,7 @@ class K3bDoc : public QObject
   bool overburn() const { return m_overburn; }
   bool removeImages() const { return m_removeImages; }
   bool onlyCreateImages() const { return m_onlyCreateImages; }
-
+  int copies() const { return m_copies; }
   int speed() const { return m_speed; }
   K3bCdDevice::CdDevice* burner() const { return m_burner; }
   virtual KIO::filesize_t size() const = 0;
@@ -186,6 +186,7 @@ class K3bDoc : public QObject
   void setTempDir( const QString& dir ) { m_tempDir = dir; }
   void setRemoveImages( bool b ) { m_removeImages = b; }
   void setOnlyCreateImages( bool b ) { m_onlyCreateImages = b; }
+  void setCopies( int c ) { m_copies = c; }
 
   /**
    * the default implementation just calls addUrls with
@@ -261,6 +262,8 @@ class K3bDoc : public QObject
   int m_writingApp;
 
   int m_writingMode;
+
+  int m_copies;
 
   bool m_saved;
 
