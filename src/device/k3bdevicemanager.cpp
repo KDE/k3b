@@ -251,40 +251,23 @@ int K3bCdDevice::DeviceManager::scanbus()
   }
   pclose(fd);
 
-  // we also check all these nodes to make sure to get all links and stuff
 
-//   static const char* devicenames[] = {
-//     "/dev/hda",
-//     "/dev/hdb",
-//     "/dev/hdc",
-//     "/dev/hdd",
-//     "/dev/hde",
-//     "/dev/hdf",
-//     "/dev/hdg",
-//     "/dev/hdh",
-//     "/dev/hdi",
-//     "/dev/hdj",
-//     "/dev/hdk",
-//     "/dev/hdl",
-//     "/dev/dvd",
-//     "/dev/cdrom",
-//     "/dev/cdrecorder",
-//     0
-//   };
-//   int i = 0;
-//   while( devicenames[i] ) {
-//     if( addDevice( devicenames[i] ) )
-//       m_foundDevices++;
-//     ++i;
-//   }
-//   for( int i = 0; i < 16; i++ ) {
-//     if( addDevice( QString("/dev/scd%1").arg(i).ascii() ) )
-//       m_foundDevices++;
-//   }
-//   for( int i = 0; i < 16; i++ ) {
-//     if( addDevice( QString("/dev/sr%1").arg(i).ascii() ) )
-//       m_foundDevices++;
-//   }
+#ifdef Q_OS_LINUX
+  //
+  // Scan the generic devices if we have scsi devices
+  //
+  kdDebug() << "(K3bDevice::DeviceManager) SCANNING FOR GENERIC DEVICES." << endl;
+  for( int i = 0; i < 16; i++ ) {
+    QString sgDev = resolveSymLink( QString("/dev/sg%1").arg(i) );
+    int bus, id, lun;
+    if( determineBusIdLun( sgDev, bus, id, lun ) ) {
+      if( CdDevice* dev = findDevice( bus, id, lun ) ) {
+	dev->m_genericDevice = sgDev;
+      }
+    }
+  }
+  // FIXME: also scan /dev/scsi/hostX.... for devfs without symlinks
+#endif
 
   scanFstab();
 

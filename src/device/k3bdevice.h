@@ -188,6 +188,15 @@ namespace K3bCdDevice
     const QString& blockDeviceName() const;
 
     /**
+     * This is only valid for SCSI devices. Without devfs it's something
+     * like /dev/sg0. Otherwise something like /dev/scsi/host0/bus0/target0/lun0/generic.
+     *
+     * This is not needed in K3b at all. But cdrecord and cdrdao use the sg devices and
+     * we need it to fixup it's permissions in K3bSetup.
+     */
+    const QString& genericDevice() const { return m_genericDevice; }
+
+    /**
      * @return All device nodes for this drive.
      * This mainly makes sense with scsi devices which
      * can be accessed through /dev/scdX or /dev/srX
@@ -677,6 +686,7 @@ namespace K3bCdDevice
 
     bool m_supermount;
 
+    QString m_genericDevice;
 
     class Private;
     Private* d;

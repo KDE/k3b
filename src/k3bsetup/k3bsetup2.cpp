@@ -392,10 +392,18 @@ void K3bSetup2::save()
 
 	if( ::chown( QFile::encodeName(dev->blockDeviceName()), (gid_t)-1, g->gr_gid ) )
 	  success = false;
+
+	if( dev->interfaceType() == K3bCdDevice::CdDevice::SCSI && QFile::exists( dev->genericDevice() ) )
+	  if( ::chmod( QFile::encodeName(dev->genericDevice()), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP ) )
+	    success = false;
       }
       else {
 	if( ::chmod( QFile::encodeName(dev->blockDeviceName()), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH ) )
 	  success = false;
+
+	if( dev->interfaceType() == K3bCdDevice::CdDevice::SCSI && QFile::exists( dev->genericDevice() ) )
+	  if( ::chmod( QFile::encodeName(dev->genericDevice()), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH ) )
+	    success = false;
       }
     }
   }
