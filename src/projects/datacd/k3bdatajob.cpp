@@ -745,9 +745,10 @@ QString K3bDataJob::jobDetails() const
       !d->doc->dummy() &&
       !(d->doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
 	d->doc->multiSessionMode() == K3bDataDoc::FINISH) )
-    return i18n("Iso9660 Filesystem (Size: %1) - %2 copies")
+    return i18n("Iso9660 Filesystem (Size: %1) - %n copy", 
+		"Iso9660 Filesystem (Size: %1) - %n copies",
+		d->doc->copies() )
       .arg(KIO::convertSize( d->doc->size() ))
-      .arg(d->doc->copies());
   else
     return i18n("Iso9660 Filesystem (Size: %1)")
       .arg(KIO::convertSize( d->doc->size() ));
