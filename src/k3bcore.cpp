@@ -27,7 +27,7 @@
 #include <klocale.h>
 #include <kconfig.h>
 #include <kaboutdata.h>
-
+#include <kstandarddirs.h>
 
 
 class K3bCore::Private {
@@ -140,11 +140,12 @@ void K3bCore::init()
   //  emit initializationInfo( i18n("Initializing CD view...") );
 
   // ===============================================================================
-//   emit initializationInfo( i18n("Reading local CDDB database...") );
-//   config()->setGroup("Cddb");
-//   QString filename = config()->readEntry("songlistPath", locateLocal("data", "k3b") + "/songlist.xml");
-//   d->songManager = new K3bSongManager();
-//   d->songManager->load( filename );
+  emit initializationInfo( i18n("Reading local Song database...") );
+  config()->setGroup( "General" );
+
+  QString filename = config()->readEntry( "songlistPath", locateLocal("data", "k3b") + "/songlist.xml" );
+  d->songManager = new K3bSongManager( this );
+  d->songManager->load( filename );
 
   emit initializationInfo( i18n("Ready.") );
 }
@@ -156,6 +157,7 @@ void K3bCore::saveConfig()
   deviceManager()->saveConfig( config() );
   config()->setGroup( "External Programs" );
   externalBinManager()->saveConfig( config() );
+  songManager()->save();
 }
 
 #include "k3bcore.moc"

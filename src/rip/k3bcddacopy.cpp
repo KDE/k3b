@@ -21,6 +21,10 @@
 #include <tools/k3bcdparanoialib.h>
 #include <k3bprogressinfoevent.h>
 #include <k3bthreadjob.h>
+#include <k3bcore.h>
+
+#include "songdb/k3bsong.h"
+#include "songdb/k3bsongmanager.h"
 
 #include <qptrlist.h>
 #include <qstringlist.h>
@@ -152,7 +156,11 @@ bool K3bCddaCopy::startRip( unsigned int i )
 
   m_audioRip->start();
 
-  emit newSubTask( i18n("Reading track %1").arg(m_tracksToCopy[i]) );
+  if( !m_cddbEntry.artists[m_tracksToCopy[i]].isEmpty() &&
+      !m_cddbEntry.titles[m_tracksToCopy[i]].isEmpty() )
+    emit newSubTask( i18n("Reading track %1 (%2 - %3)").arg(m_tracksToCopy[i]).arg(m_cddbEntry.artists[m_tracksToCopy[i]]).arg(m_cddbEntry.titles[m_tracksToCopy[i]]) );
+  else
+    emit newSubTask( i18n("Reading track %1").arg(m_tracksToCopy[i]) );
 
   return true;
 }
@@ -186,8 +194,19 @@ void K3bCddaCopy::slotTrackFinished( bool success )
     m_waveFileWriter.close();
 
   if( success ) {
-    ++m_currentTrackIndex;
   
+    kdDebug() << "(K3bCddaCopy) creating new entry in SongDb." << endl;
+    K3bSong* song = new K3bSong( m_currentWrittenFile.right( m_currentWrittenFile.length() - 1 - m_currentWrittenFile.findRev("/") ),
+				 m_cddbEntry.cdTitle,
+				 m_cddbEntry.artists[m_tracksToCopy[m_currentTrackIndex]],
+				 m_cddbEntry.titles[m_tracksToCopy[m_currentTrackIndex]],
+				 m_cddbEntry.discid,
+				 m_tracksToCopy[m_currentTrackIndex] );
+    k3bcore->songManager()->addSong( m_currentWrittenFile.left(m_currentWrittenFile.findRev("/")), song );
+
+
+    ++m_currentTrackIndex;
+
     if( m_currentTrackIndex < m_tracksToCopy.count() ) {
       if( !startRip( m_currentTrackIndex ) )
 	emit finished( false );

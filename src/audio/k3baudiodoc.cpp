@@ -28,6 +28,7 @@
 #include <k3bthread.h>
 #include <k3bthreadjob.h>
 #include <tools/k3baudiotitlemetainfo.h>
+#include <k3bcore.h>
 
 // QT-includes
 #include <qstring.h>
@@ -82,6 +83,15 @@ protected:
     if( status != K3bAudioTitleMetaInfo::CORRUPT ) {
       m_track->setLength( size );
       m_track->setCdText( info );
+
+      // FIXME: this whole thread sux!
+      K3bSong *song = k3bcore->songManager()->findSong( m_track->absPath() );
+      if( song != 0 ){
+	m_track->setArtist( song->getArtist() );
+	//      newTrack->setAlbum( song->getAlbum() );
+	m_track->setTitle( song->getTitle() );
+      }
+
     }
     emitFinished(true);
   }
@@ -283,13 +293,6 @@ K3bAudioTrack* K3bAudioDoc::createTrack( const KURL& url )
     K3bAudioTrack* newTrack =  new K3bAudioTrack( m_tracks, url.path() );
     newTrack->setModule( module );
     
-    // K3bSong *song = k3bMain()->songManager()->findSong( url.path() );
-//     if( song != 0 ){
-//       newTrack->setArtist( song->getArtist() );
-//       newTrack->setAlbum( song->getAlbum() );
-//       newTrack->setTitle( song->getTitle() );
-//     }
-
     return newTrack;
   }
   else {
