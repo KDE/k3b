@@ -1,6 +1,7 @@
 0.11.6
 Fixed length calculation for long FLAC files.
 Allow Audio CDs that violate the Red Book standard (Tracks shorter than 4 seconds)
+Some improvements in disk-info retrieval
 
 0.11.5
 Do not ask for overwriting directories in cloning dialog
