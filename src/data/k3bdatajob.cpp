@@ -556,7 +556,7 @@ void K3bDataJob::addMkisofsParameters()
     if( m_doc->ISOallowPeriodAtBegin()  )
       *m_process << "-L";
     if( m_doc->ISOallow31charFilenames()  )
-      *m_process << "-I";	
+      *m_process << "-l";	
     if( m_doc->ISOomitVersionNumbers() && !m_doc->ISOmaxFilenameLength() )	
       *m_process << "-N";		
     if( m_doc->ISOrelaxedFilenames()  )
