@@ -650,7 +650,7 @@ namespace K3bCdDevice
     void searchIndexTransitions( long start, long end, K3bCdDevice::Track& track ) const;
     void checkWriteModes();
     void checkForAncientWriters();
-
+    bool rawTocDataWithBcdValues( unsigned char* data, int dataLen ) const;
 
     QString m_vendor;
     QString m_description;

@@ -24,11 +24,18 @@ namespace K3bCdDevice
 {
   QString deviceTypeString( int );
   QString writingModeString( int );
-  QString mediaTypeString( int );
+  /**
+   * @param simplyfied if true the formatting state of DVD media is left out.
+   */
+  QString mediaTypeString( int, bool simplyfied = false );
   void debugBitfield( unsigned char* data, long len );
 
   unsigned short from2Byte( unsigned char* );
   unsigned long from4Byte( unsigned char* );
+  
+  char fromBcd( const char& );
+  char toBcd( const char& );
+  bool isValidBcd( const char& );
 }
 
 #endif

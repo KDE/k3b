@@ -1445,6 +1445,11 @@ bool K3bCdDevice::CdDevice::readRawToc( K3bCdDevice::Toc& toc ) const
       if( dataLen > 4 ) {
 	success = true;
 
+	//
+	// First we try to determine if the raw toc data uses BCD values
+	//
+	bool isBcd = rawTocDataWithBcdValues( data, dataLen );
+
 	toc_raw_track_descriptor* tr = (toc_raw_track_descriptor*)&data[4];
 	
 	K3b::Msf sessionLeadOut;
@@ -1470,7 +1475,15 @@ bool K3bCdDevice::CdDevice::readRawToc( K3bCdDevice::Toc& toc ) const
 	    // track
 	    K3bTrack track;
 	    track.m_session = tr[i].session_number;
-	    track.m_firstSector = K3b::Msf( tr[i].p_min, tr[i].p_sec, tr[i].p_frame ) - 150; // :( We use 00:00:00 == 0 lba)
+
+	    // :( We use 00:00:00 == 0 lba)
+	    if( isBcd )
+	      track.m_firstSector = K3b::Msf( K3bCdDevice::fromBcd(tr[i].p_min),
+					      K3bCdDevice::fromBcd(tr[i].p_sec),
+					      K3bCdDevice::fromBcd(tr[i].p_frame) ) - 150;
+	    else
+	      track.m_firstSector = K3b::Msf( tr[i].p_min, tr[i].p_sec, tr[i].p_frame ) - 150;
+
 	    track.m_type = ( tr[i].control & 0x4 ? Track::DATA : Track::AUDIO );
 	    track.m_mode = ( track.type() == Track::DATA ? getTrackDataMode(track) : Track::UNKNOWN );
 	    track.m_copyPermitted = ( tr[i].control & 0x2 );
@@ -3492,4 +3505,90 @@ bool K3bCdDevice::CdDevice::getPerformance( unsigned char** data, int& dataLen,
 	      << ": GET PERFORMANCE length det failed." << endl;
 
   return false;
+}
+
+
+bool K3bCdDevice::CdDevice::rawTocDataWithBcdValues( unsigned char* data, int dataLen ) const
+{
+  toc_raw_track_descriptor* tr = (toc_raw_track_descriptor*)&data[4];
+ 
+  int isBcd = -1;
+ 
+  //
+  // in most cases this will already tell us if a drive does not provide bcd numbers
+  // (which should be all newer MMC drives)
+  //
+  for( int i = 0; i < (dataLen-4)/(int)sizeof(toc_raw_track_descriptor); ++i ) {
+    if( tr[i].adr == 1 ) {
+      if( !K3bCdDevice::isValidBcd(tr[i].point) ||
+	  !K3bCdDevice::isValidBcd(tr[i].p_min) ||
+	  !K3bCdDevice::isValidBcd(tr[i].p_sec) ||
+	  !K3bCdDevice::isValidBcd(tr[i].p_frame) ) {
+	isBcd = 0;
+	break;
+      }
+
+      // we only need to check sec and frame since min needs to be <= 99
+      // and bcd values are never bigger than 99.
+      else if( (int)K3bCdDevice::fromBcd(tr[i].p_sec) >= 60 ||
+	       (int)K3bCdDevice::fromBcd(tr[i].p_frame) >= 75 ) {
+	isBcd = 0;
+	break;
+      }
+    }
+  }
+
+  if( isBcd == -1 ) {
+    // 
+    // all values are valid bcd values but we still don't know for sure if they are really 
+    // used as bcd. So we also check the HEX values.
+    //
+    for( int i = 0; i < (dataLen-4)/(int)sizeof(toc_raw_track_descriptor); ++i ) {
+      if( tr[i].adr == 1 ) {
+	if( (int)tr[i].p_min > 99 ||
+	    (int)tr[i].p_sec >= 60 ||
+	    (int)tr[i].p_frame >= 75 ) {
+	  isBcd = 1;
+	  break;
+	}
+      }
+    }
+  }
+
+  if( isBcd == -1 ) {
+    kdDebug() << "(K3bCdDevice::CdDevice) need to compare raw toc to formatted toc. :(" << endl;
+    //
+    // All values are valid bcd and valid HEX values so we compare with the formatted toc.
+    // This slows us down a lot but in most cases this should not be reached anyway.
+    //
+    isBcd = 0;
+    K3bCdDevice::Toc formattedToc;
+    if( readFormattedToc( formattedToc, false ) ) {
+      for( int i = 0; i < (dataLen-4)/(int)sizeof(toc_raw_track_descriptor); ++i ) {
+	if( tr[i].adr == 1 ) {
+	  if( tr[i].point < 0xa0 ) {
+	    unsigned int track = (int)tr[i].point;
+	    if( track > formattedToc.count() ) {
+	      isBcd = 1;
+	      break;
+	    }
+	    K3b::Msf pos( tr[i].p_min,
+			  tr[i].p_sec,
+			  tr[i].p_frame );
+	    pos -= 150;
+	    if( pos != formattedToc[track-1].firstSector() ) {
+	      isBcd = 1;
+	      break;
+	    }
+	  }
+	}
+      }
+    }
+  }
+  else if( isBcd == 0 )
+    kdDebug() << "(K3bCdDevice::CdDevice) found invalid bcd values. No bcd toc." << endl;
+  else
+    kdDebug() << "(K3bCdDevice::CdDevice) found invalid hex values. bcd toc." << endl;
+
+  return ( isBcd == 1 );
 }
