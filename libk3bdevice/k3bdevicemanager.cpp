@@ -88,6 +88,13 @@ typedef unsigned char u8;
 #include <cam/cam.h>
 #include <cam/scsi/scsi_pass.h>
 #include <camlib.h>
+
+// Some Linux constants for ioctl() that
+// we don't have (and don't need).
+#define SCSI_BLK_MAJOR(M) (0)
+#define SCSI_IOCTL_GET_IDLUN (0)
+#define SCSI_IOCTL_GET_BUS_NUMBER (0)
+
 #endif
 
 class K3bCdDevice::DeviceManager::Private
@@ -698,8 +705,8 @@ K3bCdDevice::CdDevice* K3bCdDevice::DeviceManager::addDevice( K3bCdDevice::CdDev
 
     if( device->writesCd() ) {
       // default to max write speed
-      kdDebug() << "(K3bCdDevice::DeviceManager) setting current write speed of device " 
-		<< device->blockDeviceName() 
+      kdDebug() << "(K3bCdDevice::DeviceManager) setting current write speed of device "
+		<< device->blockDeviceName()
 		<< " to " << device->maxWriteSpeed() << endl;
       device->setCurrentWriteSpeed( device->maxWriteSpeed() );
     }
@@ -807,7 +814,15 @@ void K3bCdDevice::DeviceManager::slotCollectStdout( KProcess*, char* data, int l
 
 bool K3bCdDevice::DeviceManager::determineBusIdLun( const QString& dev, int& bus, int& id, int& lun )
 {
-#ifdef Q_OS_LINUX
+#ifdef Q_OS_FREEBSD
+  Q_UNUSED(dev);
+  Q_UNUSED(bus);
+  Q_UNUSED(id);
+  Q_UNUSED(lun);
+  return false;
+  /* NOTREACHED */
+#endif
+
   int ret = false;
   int cdromfd = K3bCdDevice::openDevice( dev.ascii() );
   if (cdromfd < 0) {
@@ -846,15 +861,6 @@ bool K3bCdDevice::DeviceManager::determineBusIdLun( const QString& dev, int& bus
 
   ::close(cdromfd);
   return ret;
-#endif
-
-#ifdef Q_OS_FREEBSD
-  Q_UNUSED(dev);
-  Q_UNUSED(bus);
-  Q_UNUSED(id);
-  Q_UNUSED(lun);
-  return false;
-#endif
 }
 
 
