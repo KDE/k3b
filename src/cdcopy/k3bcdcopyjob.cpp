@@ -695,7 +695,6 @@ bool K3bCdCopyJob::writeNextSession()
 
 	d->infFileWriter->setTrack( track );
 	d->infFileWriter->setTrackNumber( trackNumber );
-	d->infFileWriter->setBigEndian( false );
 
 	if( d->haveCddb ) {
 	  d->infFileWriter->setTrackTitle( d->cddbInfo.titles[trackNumber-1] );
@@ -707,6 +706,8 @@ bool K3bCdCopyJob::writeNextSession()
 	}
 
 	if( m_onTheFly ) {
+
+	  d->infFileWriter->setBigEndian( true );
 
 	  // we let KTempFile choose a temp file but delete it on our own
 	  // the same way we delete them when writing with images
@@ -721,6 +722,8 @@ bool K3bCdCopyJob::writeNextSession()
 	    return false;
 	}
 	else {
+	  d->infFileWriter->setBigEndian( false );
+
 	  if( !d->infFileWriter->save( d->infNames[trackNumber-1] ) )
 	    return false;
 	}
