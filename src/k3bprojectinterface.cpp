@@ -92,5 +92,7 @@ QString K3bProjectInterface::projectType() const
     return "datadvd";
   case K3bDoc::VIDEODVD:
     return "videodvd";
+  default:
+    return "unknown";
   }
 }
