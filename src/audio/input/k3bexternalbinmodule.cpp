@@ -55,7 +55,7 @@ K3bExternalBinModule::K3bExternalBinModule( K3bAudioTrack* track )
 K3bExternalBinModule::~K3bExternalBinModule()
 {
   delete m_process;
-  delete m_currentData;
+  delete [] m_currentData;
 }
 
 
@@ -121,7 +121,7 @@ void K3bExternalBinModule::slotReceivedStdout( KProcess*, char* data, int len )
       m_currentData = new char[m_currentDataLength + len];
       memcpy( m_currentData, buffer, m_currentDataLength );
       memcpy( &m_currentData[m_currentDataLength], data, len );
-      delete buffer;
+      delete [] buffer;
 
       m_currentDataLength += len;
     }
@@ -175,7 +175,7 @@ void K3bExternalBinModule::slotProcessFinished()
 	  m_currentData = new char[m_currentDataLength + bytesToPad];
 	  memcpy( m_currentData, buffer, m_currentDataLength );
 	  memset( &m_currentData[m_currentDataLength], bytesToPad, 0 );
-	  delete buffer;
+	  delete [] buffer;
 
 	  m_currentDataLength += bytesToPad;
 
@@ -202,7 +202,7 @@ void K3bExternalBinModule::slotProcessFinished()
       m_currentData = new char[m_currentDataLength + bytesToPad];
       memcpy( m_currentData, buffer, m_currentDataLength );
       memset( &m_currentData[m_currentDataLength], bytesToPad, 0 );
-      delete buffer;
+      delete [] buffer;
 
       m_currentDataLength += bytesToPad;
     }
@@ -224,7 +224,7 @@ int K3bExternalBinModule::readData( char* data, int len )
 
     memcpy( data, m_currentData, i );
 
-    delete m_currentData;
+    delete [] m_currentData;
     m_currentData = 0;
     m_process->resume();
 
@@ -239,7 +239,7 @@ int K3bExternalBinModule::readData( char* data, int len )
     char* buffer = m_currentData;
     m_currentData = new char[m_currentDataLength - len];
     memcpy( m_currentData, &buffer[len], m_currentDataLength - len );
-    delete buffer;
+    delete [] buffer;
 
     m_currentDataLength -= len;
 
@@ -274,7 +274,7 @@ void K3bExternalBinModule::cancel()
   m_clearDataTimer->stop();
   m_infoTimer->stop();
 
-  delete m_currentData;
+  delete [] m_currentData;
   m_currentDataLength = 0;
 
   emit finished( false );
