@@ -214,7 +214,7 @@ void K3bDataBurnDialog::readSettings()
   m_advancedImageSettingsWidget->load( ((K3bDataDoc*)doc())->isoOptions() );
   m_volumeDescWidget->load( ((K3bDataDoc*)doc())->isoOptions() );
 
-  slotWriterChanged();
+  toggleAllOptions();
 }
 
 
@@ -332,7 +332,7 @@ void K3bDataBurnDialog::loadDefaults()
   m_advancedImageSettingsWidget->load( K3bIsoOptions::defaults() );
   m_volumeDescWidget->load( K3bIsoOptions::defaults() );
 
-  slotWriterChanged();
+  toggleAllOptions();
 }
 
 
@@ -354,7 +354,7 @@ void K3bDataBurnDialog::loadUserDefaults()
   m_advancedImageSettingsWidget->load( o );
   m_volumeDescWidget->load( o );
 
-  slotWriterChanged();
+  toggleAllOptions();
 }
 
 

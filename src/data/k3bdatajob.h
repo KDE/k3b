@@ -78,6 +78,8 @@ class K3bDataJob : public K3bBurnJob
   K3bAbstractWriter* m_writerJob;
   K3bIsoImager* m_isoImager;
   K3bMsInfoFetcher* m_msInfoFetcher;
+
+  int m_usedWritingApp;
 };
 
 #endif
