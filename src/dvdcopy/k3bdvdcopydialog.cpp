@@ -40,6 +40,7 @@
 #include <qpushbutton.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
+#include <qhbox.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -70,6 +71,7 @@ K3bDvdCopyDialog::K3bDvdCopyDialog( QWidget* parent, const char* name, bool moda
   groupSource->setInsideSpacing( spacingHint() );
   groupSource->setInsideMargin( marginHint() );
   m_comboSourceDevice = new K3bDeviceComboBox( groupSource );
+  m_comboSourceDevice->addDevices( k3bcore->deviceManager()->dvdReader() );
   // //////////////////////////////////////////////////////////////////////////
 
   //
@@ -127,16 +129,23 @@ K3bDvdCopyDialog::K3bDvdCopyDialog( QWidget* parent, const char* name, bool moda
 
 
   // advanced tab ------------------
-//   QWidget* advancedTab = new QWidget( tabWidget );
-//   QGridLayout* advancedTabGrid = new QGridLayout( advancedTab );
-//   advancedTabGrid->setSpacing( spacingHint() );
-//   advancedTabGrid->setMargin( marginHint() );
+  QWidget* advancedTab = new QWidget( tabWidget );
+  QGridLayout* advancedTabGrid = new QGridLayout( advancedTab );
+  advancedTabGrid->setSpacing( spacingHint() );
+  advancedTabGrid->setMargin( marginHint() );
 
-//   m_checkNoCorr = new QCheckBox( i18n("No Correction"), advancedTab );
-//   advancedTabGrid->addWidget( m_checkNoCorr, 0, 0 );
-//   advancedTabGrid->setRowStretch( 1, 1 );
+  QGroupBox* groupGeneral = new QGroupBox( 2, Qt::Vertical, i18n("General"), advancedTab ); 
+  groupGeneral->setInsideSpacing( spacingHint() );
+  groupGeneral->setInsideMargin( marginHint() );
+  QHBox* box = new QHBox( groupGeneral );
+  box->setSpacing( spacingHint() );
+  box->setStretchFactor( new QLabel( i18n("Read Retries:"), box ), 1 );
+  m_spinRetries = new QSpinBox( 1, 128, 1, box );
+  m_checkIgnoreReadErrors = new QCheckBox( i18n("Ignore read errors"), groupGeneral );
 
-//   tabWidget->addTab( advancedTab, i18n("&Advanced") );
+  advancedTabGrid->addWidget( groupGeneral, 0, 0 );
+
+  tabWidget->addTab( advancedTab, i18n("&Advanced") );
   // //////////////////////////////////////////////////////////////////////////
 
 
@@ -163,25 +172,18 @@ K3bDvdCopyDialog::K3bDvdCopyDialog( QWidget* parent, const char* name, bool moda
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
   connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)), this, SLOT(slotToggleAll()) );
+
+
+  QToolTip::add( m_checkIgnoreReadErrors, i18n("Skip unreadable sectors") );
+  QWhatsThis::add( m_checkIgnoreReadErrors, i18n("<p>If this option is checked and K3b is not able to read a sector from the "
+						 "source CD it will replace it with zeros on the resulting copy.") );
+
+  slotLoadUserDefaults();
 }
 
 
 K3bDvdCopyDialog::~K3bDvdCopyDialog()
 {
-}
-
-
-void K3bDvdCopyDialog::init()
-{
-  // wenn readcd nicht nutzbar ist fällt der job auf QFile zurück. 
-
-  m_comboSourceDevice->clear();
-  QPtrList<K3bDevice>& devices = k3bcore->deviceManager()->dvdReader();
-  for( QPtrListIterator<K3bDevice> it( devices ); it.current(); ++it ) {
-    m_comboSourceDevice->addDevice( it.current() );
-  }
-
-  slotLoadUserDefaults();
 }
 
 
@@ -213,6 +215,8 @@ void K3bDvdCopyDialog::slotStartClicked()
   m_job->setWriteSpeed( m_writerSelectionWidget->writerSpeed() );
   m_job->setCopies( m_checkSimulate->isChecked() ? 1 : m_spinCopies->value() );
   m_job->setWritingMode( m_writingModeWidget->writingMode() );
+  m_job->setIgnoreReadErrors( m_checkIgnoreReadErrors->isChecked() );
+  m_job->setReadRetries( m_spinRetries->value() );
 
   K3bJobProgressDialog* dlg = 0;
   if( m_checkOnlyCreateImage->isChecked() ) {
@@ -241,7 +245,8 @@ void K3bDvdCopyDialog::slotLoadUserDefaults()
   m_checkOnTheFly->setChecked( c->readBoolEntry( "on_the_fly", false ) );
   m_checkOnlyCreateImage->setChecked( c->readBoolEntry( "only_create_image", false ) );
   m_checkDeleteImages->setChecked( c->readBoolEntry( "remove_image", true ) );
-
+  m_checkIgnoreReadErrors->setChecked( c->readBoolEntry( "ignore read errors", false ) );
+  m_spinRetries->setValue( c->readNumEntry( "retries", 128 ) );
   m_spinCopies->setValue( c->readNumEntry( "copies", 1 ) );
 
   m_writerSelectionWidget->loadConfig( c );
@@ -265,7 +270,8 @@ void K3bDvdCopyDialog::slotSaveUserDefaults()
   c->writeEntry( "on_the_fly", m_checkOnTheFly->isChecked() );
   c->writeEntry( "only_create_image", m_checkOnlyCreateImage->isChecked() );
   c->writeEntry( "remove_image", m_checkDeleteImages->isChecked() );
-
+  c->writeEntry( "ignore read errors", m_checkIgnoreReadErrors->isChecked() );
+  c->writeEntry( "retries", m_spinRetries->value() );
   c->writeEntry( "copies", m_spinCopies->value() );
 
   m_writerSelectionWidget->saveConfig( c );
@@ -283,8 +289,9 @@ void K3bDvdCopyDialog::slotLoadK3bDefaults()
   m_checkOnTheFly->setChecked( false );
   m_checkOnlyCreateImage->setChecked( false );
   m_checkDeleteImages->setChecked( true );
-
+  m_checkIgnoreReadErrors->setChecked(false);
   m_spinCopies->setValue( 1 );
+  m_spinRetries->setValue(128);
 
   slotToggleAll();
 }

@@ -59,24 +59,29 @@ public:
     //    if impossible or MODE2 (mode2 formless) finish(false)
 
     m_sectorSize = 0;
-    switch( m_device->getDataMode( m_firstSector ) ) {
-    case K3bCdDevice::Track::MODE1:
-    case K3bCdDevice::Track::DVD:
+    if( m_device->isDVD() ) {
       m_sectorSize = 2048;
-      break;
-    case K3bCdDevice::Track::XA_FORM1:
-      m_sectorSize = 2056;
-      break;
-    case K3bCdDevice::Track::XA_FORM2:
-      m_sectorSize = 2332;
-      break;
-    case K3bCdDevice::Track::MODE2:
-      emitInfoMessage( i18n("No support for reading formless Mode2 sectors."), K3bJob::ERROR );
-    default:
-      emitInfoMessage( i18n("Unsupported sector type."), K3bJob::ERROR );
-      m_device->close();
-      emitFinished(false);
-      return;
+    }
+    else {
+      switch( m_device->getDataMode( m_firstSector ) ) {
+      case K3bCdDevice::Track::MODE1:
+      case K3bCdDevice::Track::DVD:
+	m_sectorSize = 2048;
+	break;
+      case K3bCdDevice::Track::XA_FORM1:
+	m_sectorSize = 2056;
+	break;
+      case K3bCdDevice::Track::XA_FORM2:
+	m_sectorSize = 2332;
+	break;
+      case K3bCdDevice::Track::MODE2:
+	emitInfoMessage( i18n("No support for reading formless Mode2 sectors."), K3bJob::ERROR );
+      default:
+	emitInfoMessage( i18n("Unsupported sector type."), K3bJob::ERROR );
+	m_device->close();
+	emitFinished(false);
+	return;
+      }
     }
     
     emitInfoMessage( i18n("Reading with sector size %1.").arg(m_sectorSize), K3bJob::INFO );

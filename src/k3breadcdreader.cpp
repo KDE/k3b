@@ -66,7 +66,8 @@ K3bReadcdReader::K3bReadcdReader( QObject* parent, const char* name )
     m_clone(false),
     m_noError(false),
     m_c2Scan(false),
-    m_speed(0)
+    m_speed(0),
+    m_retries(128)
 {
   d = new Private();
 }

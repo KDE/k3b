@@ -55,6 +55,8 @@ class K3bDvdCopyJob : public K3bBurnJob
   void setWriteSpeed( int s ) { m_speed = s; }
   void setCopies( int c ) { m_copies = c; }
   void setWritingMode( int w ) { m_writingMode = w; }
+  void setIgnoreReadErrors( bool b ) { m_ignoreReadErrors = b; }
+  void setReadRetries( int i ) { m_readRetries = i; }
 
  private slots:
   void slotDiskInfoReady( K3bCdDevice::DeviceHandler* );
@@ -81,6 +83,8 @@ class K3bDvdCopyJob : public K3bBurnJob
   int m_speed;
   int m_copies;
   bool m_onlyCreateImage;
+  bool m_ignoreReadErrors;
+  int m_readRetries;
 
   int m_writingMode;
 

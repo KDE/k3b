@@ -46,8 +46,6 @@ class K3bDvdCopyDialog : public K3bInteractionDialog
   void slotToggleAll();
 
  private:
-  void init();
-
   K3bWriterSelectionWidget* m_writerSelectionWidget;
   K3bTempDirSelectionWidget* m_tempDirSelectionWidget;
   K3bDeviceComboBox* m_comboSourceDevice;
@@ -56,7 +54,8 @@ class K3bDvdCopyDialog : public K3bInteractionDialog
   QCheckBox* m_checkOnlyCreateImage;
   QCheckBox* m_checkOnTheFly;
   QSpinBox* m_spinCopies;
-
+  QSpinBox* m_spinRetries;
+  QCheckBox* m_checkIgnoreReadErrors;
   K3bWritingModeWidget* m_writingModeWidget;
 
   K3bDvdCopyJob* m_job;

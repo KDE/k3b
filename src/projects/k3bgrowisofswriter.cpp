@@ -34,6 +34,8 @@
 #include <qvaluelist.h>
 //#include <qdatetime.h>
 
+#include <unistd.h>
+
 
 class K3bGrowisofsWriter::Private
 {
@@ -97,15 +99,6 @@ bool K3bGrowisofsWriter::active() const
 }
 
 
-bool K3bGrowisofsWriter::write( const char* data, int len )
-{
-  if( d->process )
-    return d->process->writeStdin( data, len );
-  else
-    return -1;
-}
-
-
 int K3bGrowisofsWriter::fd() const
 {
   if( d->process )
@@ -117,10 +110,7 @@ int K3bGrowisofsWriter::fd() const
 
 bool K3bGrowisofsWriter::closeFd()
 {
-  if( d->process )
-    return d->process->closeStdin();
-  else
-    return false;
+  return ( !::close( fd() ) );
 }
 
 
@@ -134,7 +124,6 @@ bool K3bGrowisofsWriter::prepareProcess()
   connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotReceivedStderr(const QString&)) );
   connect( d->process, SIGNAL(stdoutLine(const QString&)), this, SLOT(slotReceivedStderr(const QString&)) );
   connect( d->process, SIGNAL(processExited(KProcess*)), this, SLOT(slotProcessExited(KProcess*)) );
-  connect( d->process, SIGNAL(wroteStdin(KProcess*)), this, SIGNAL(dataWritten()) );
 
   d->growisofsBin = k3bcore->externalBinManager()->binObject( "growisofs" );
   if( !d->growisofsBin ) {

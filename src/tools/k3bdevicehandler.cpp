@@ -19,6 +19,7 @@
 #include <k3bthread.h>
 #include <k3bdevice.h>
 
+// TODO : allow a bitwise or of the command types
 
 class K3bCdDevice::DeviceHandler::DeviceHandlerThread : public K3bThread
 {

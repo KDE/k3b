@@ -37,8 +37,6 @@ class K3bGrowisofsWriter : public K3bAbstractWriter
 
   bool active() const;
 
-  bool write( const char* data, int len );
-
   int fd() const;
   bool closeFd();
 

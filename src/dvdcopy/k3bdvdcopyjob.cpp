@@ -16,6 +16,7 @@
 #include "k3bdvdcopyjob.h"
 
 #include <k3breadcdreader.h>
+#include <k3bdatatrackreader.h>
 #include <k3bexternalbinmanager.h>
 #include <k3bdevice.h>
 #include <k3bdevicehandler.h>
@@ -45,19 +46,27 @@ public:
       running(false),
       canceled(false),
       writerJob(0),
-      readcdReader(0) {
+      readcdReader(0),
+      dataTrackReader(0),
+      usedWritingMode(0) {
   }
 
   int doneCopies;
 
   bool running;
+  bool readerRunning;
+  bool writerRunning;
   bool canceled;
 
   K3bGrowisofsWriter* writerJob;
   K3bReadcdReader* readcdReader;
+  K3bDataTrackReader* dataTrackReader;
+
   //  QFile bufferFile;
 
   K3b::Msf lastSector;
+
+  int usedWritingMode;
 };
 
 
@@ -71,6 +80,8 @@ K3bDvdCopyJob::K3bDvdCopyJob( QObject* parent, const char* name )
     m_speed(1),
     m_copies(1),
     m_onlyCreateImage(false),
+    m_ignoreReadErrors(false),
+    m_readRetries(128),
     m_writingMode( K3b::WRITING_MODE_AUTO )
 {
   d = new Private();
@@ -90,7 +101,7 @@ void K3bDvdCopyJob::start()
 
   d->canceled = false;
   d->running = true;
-
+  d->readerRunning = d->writerRunning = false;
 
   if( m_onTheFly && 
       k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3bVersion( 5, 12 ) ) {
@@ -103,7 +114,7 @@ void K3bDvdCopyJob::start()
   emit infoMessage( i18n("Checking source media") + "...", INFO );
   emit newSubTask( i18n("Checking source media") );
 
-  connect( K3bCdDevice::sendCommand( K3bCdDevice::DeviceHandler::NG_DISKINFO, m_readerDevice ),
+  connect( K3bCdDevice::sendCommand( K3bCdDevice::DeviceHandler::DISKINFO, m_readerDevice ),
            SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
            this,
            SLOT(slotDiskInfoReady(K3bCdDevice::DeviceHandler*)) );
@@ -246,8 +257,8 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
       emit newTask( i18n("Creating DVD image") );
     }
     else if( m_onTheFly && !m_onlyCreateImage ) {
-      prepareWriter();
       if( waitForDvd() ) {
+	prepareWriter();
 	if( m_simulate )
 	  emit newTask( i18n("Simulating DVD copy") );
 	else if( m_copies > 1 )
@@ -256,6 +267,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
 	  emit newTask( i18n("Writing DVD copy") );
 
 	emit burning(true);
+	d->writerRunning = true;
 	d->writerJob->start();
       }
       else {
@@ -266,7 +278,8 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
     }
 
     prepareReader();
-    d->readcdReader->start();
+    d->readerRunning = true;
+    d->dataTrackReader->start();
   }
 }
 
@@ -275,9 +288,9 @@ void K3bDvdCopyJob::cancel()
 {
   if( d->running ) {
     d->canceled = true;
-    if( d->readcdReader  )
-      d->readcdReader->cancel();
-    if( d->writerJob )
+    if( d->readerRunning  )
+      d->dataTrackReader->cancel();
+    if( d->writerRunning )
       d->writerJob->cancel();
   }
   else {
@@ -288,30 +301,53 @@ void K3bDvdCopyJob::cancel()
 
 void K3bDvdCopyJob::prepareReader()
 {
-  if( !d->readcdReader ) {
-    d->readcdReader = new K3bReadcdReader( this );
-    connect( d->readcdReader, SIGNAL(percent(int)), this, SLOT(slotReaderProgress(int)) );
-    connect( d->readcdReader, SIGNAL(processedSize(int, int)), this, SLOT(slotReaderProcessedSize(int, int)) );
-    connect( d->readcdReader, SIGNAL(finished(bool)), this, SLOT(slotReaderFinished(bool)) );
-    connect( d->readcdReader, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
-    connect( d->readcdReader, SIGNAL(newTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
-    connect( d->readcdReader, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+//   if( !d->readcdReader ) {
+//     d->readcdReader = new K3bReadcdReader( this );
+//     connect( d->readcdReader, SIGNAL(percent(int)), this, SLOT(slotReaderProgress(int)) );
+//     connect( d->readcdReader, SIGNAL(processedSize(int, int)), this, SLOT(slotReaderProcessedSize(int, int)) );
+//     connect( d->readcdReader, SIGNAL(finished(bool)), this, SLOT(slotReaderFinished(bool)) );
+//     connect( d->readcdReader, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
+//     connect( d->readcdReader, SIGNAL(newTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
+//     connect( d->readcdReader, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+//              this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
+//   }
+
+//   d->readcdReader->setReadDevice( m_readerDevice );
+//   d->readcdReader->setReadSpeed( 0 ); // MAX
+//   d->readcdReader->setSectorRange( 0, d->lastSector );
+
+//   if( m_onTheFly && !m_onlyCreateImage )
+//     d->readcdReader->writeToFd( d->writerJob->fd() );
+//   else {
+//     d->readcdReader->writeToFd( -1 );
+//     d->readcdReader->setImagePath( m_imagePath );
+//   }
+
+  if( !d->dataTrackReader ) {
+    d->dataTrackReader = new K3bDataTrackReader( this );
+    connect( d->dataTrackReader, SIGNAL(percent(int)), this, SLOT(slotReaderProgress(int)) );
+    connect( d->dataTrackReader, SIGNAL(processedSize(int, int)), this, SLOT(slotReaderProcessedSize(int, int)) );
+    connect( d->dataTrackReader, SIGNAL(finished(bool)), this, SLOT(slotReaderFinished(bool)) );
+    connect( d->dataTrackReader, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
+    connect( d->dataTrackReader, SIGNAL(newTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
+    connect( d->dataTrackReader, SIGNAL(debuggingOutput(const QString&, const QString&)), 
              this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
   }
 
-  d->readcdReader->setReadDevice( m_readerDevice );
-  d->readcdReader->setReadSpeed( 0 ); // MAX
-  d->readcdReader->setSectorRange( 0, d->lastSector );
-
+  d->dataTrackReader->setDevice( m_readerDevice );
+  d->dataTrackReader->setIgnoreErrors( m_ignoreReadErrors );
+  d->dataTrackReader->setRetries( m_readRetries );
+  d->dataTrackReader->setSectorRange( 0, d->lastSector );
   if( m_onTheFly && !m_onlyCreateImage )
-    d->readcdReader->writeToFd( d->writerJob->fd() );
+    d->dataTrackReader->writeToFd( d->writerJob->fd() );
   else {
-    d->readcdReader->writeToFd( -1 );
-    d->readcdReader->setImagePath( m_imagePath );
+    d->dataTrackReader->writeToFd( -1 );
+    d->dataTrackReader->setImagePath( m_imagePath );
   }
 }
 
 
+// ALWAYS CALL WAITFORDVD BEFORE PREPAREWRITER!
 void K3bDvdCopyJob::prepareWriter()
 {
   delete d->writerJob;
@@ -333,14 +369,7 @@ void K3bDvdCopyJob::prepareWriter()
   // these do only make sense with DVD-R(W)
   d->writerJob->setSimulate( m_simulate );
   d->writerJob->setBurnSpeed( m_speed );
-  // we do not default to DAO in onthefly mode since otherwise growisofs would
-  // use the size from the PVD to reserve space on the DVD and that can be bad
-  // if this size is wrong
-  // TODO: it would be better to save the writing mode in the waitForDvd() method and use it here
-  d->writerJob->setWritingMode( (m_writingMode ==  K3b::WRITING_MODE_AUTO && !m_onTheFly ) ||
-				m_writingMode == K3b::DAO 
-				? K3b::DAO
-				: m_writingMode );
+  d->writerJob->setWritingMode( d->usedWritingMode );
  
   // this is only used in DAO mode with growisofs >= 5.15
   d->writerJob->setTrackSize( d->lastSector.lba()+1 );
@@ -387,7 +416,11 @@ void K3bDvdCopyJob::slotWriterProgress( int p )
 
 void K3bDvdCopyJob::slotReaderFinished( bool success )
 {
+  d->readerRunning = false;
+
   // close the socket
+  // otherwise growisofs will never quit.
+  // FIXME: is it posiible to do this in a generic manner?
   if( d->writerJob )
     d->writerJob->closeFd();
 
@@ -409,12 +442,13 @@ void K3bDvdCopyJob::slotReaderFinished( bool success )
       d->running = false;
     }
     else if( !m_onTheFly ) {
-      prepareWriter();
       if( waitForDvd() ) {
+	prepareWriter();
 	if( m_copies > 1 )
 	  emit newTask( i18n("Writing DVD copy %1").arg(d->doneCopies+1) );
 	else
 	  emit newTask( i18n("Writing DVD copy") );
+	d->writerRunning = true;
 	d->writerJob->start();
       }
       else {
@@ -434,6 +468,8 @@ void K3bDvdCopyJob::slotReaderFinished( bool success )
 
 void K3bDvdCopyJob::slotWriterFinished( bool success )
 {
+  d->writerRunning = false;
+
   // already finished?
   if( !d->running )
     return;
@@ -453,7 +489,9 @@ void K3bDvdCopyJob::slotWriterFinished( bool success )
     if( d->doneCopies < m_copies ) {
 
       if( waitForDvd() ) {
+	prepareWriter();
 	emit newTask( i18n("Writing DVD copy %1").arg(d->doneCopies+1) );
+	d->writerRunning = true;
 	d->writerJob->start();
       }
       else {
@@ -464,7 +502,8 @@ void K3bDvdCopyJob::slotWriterFinished( bool success )
       
       if( m_onTheFly ) {
 	prepareReader();
-	d->readcdReader->start();
+	d->readerRunning = true;
+	d->dataTrackReader->start();
       }
     }
     else {
@@ -507,6 +546,10 @@ bool K3bDvdCopyJob::waitForDvd()
 
   else {
     if( m & (K3bCdDevice::MEDIA_DVD_PLUS_RW|K3bCdDevice::MEDIA_DVD_PLUS_R) ) {
+
+      // just for a clean code
+      d->usedWritingMode = K3b::WRITING_MODE_RES_OVWR;
+
       if( m_simulate ) {
 	if( KMessageBox::warningYesNo( qApp->activeWindow(),
 				       i18n("K3b does not support simulation with DVD+R(W) media. "
@@ -545,25 +588,48 @@ bool K3bDvdCopyJob::waitForDvd()
 	m_simulate = false;
       }
 
+      //
+      // We do not default to DAO in onthefly mode since otherwise growisofs would
+      // use the size from the PVD to reserve space on the DVD and that can be bad
+      // if this size is wrong
+      // With growisofs 5.15 we have the option to specify the size of the image to be written in DAO mode.
+      //
+      bool sizeWithDao = ( k3bcore->externalBinManager()->binObject( "growisofs" ) && 
+			   k3bcore->externalBinManager()->binObject( "growisofs" )->version >= K3bVersion( 5, 15, -1 ) );
+
 
       if( m & K3bCdDevice::MEDIA_DVD_RW_OVWR ) {
 	emit infoMessage( i18n("Writing DVD-RW in restricted overwrite mode."), INFO );
+	d->usedWritingMode = K3b::WRITING_MODE_RES_OVWR;
       }
       else if( m & (K3bCdDevice::MEDIA_DVD_RW_SEQ|
 		    K3bCdDevice::MEDIA_DVD_RW) ) {
-	if( m_writingMode == K3b::WRITING_MODE_INCR_SEQ )
-	  emit infoMessage( i18n("Writing DVD-RW in sequential mode."), INFO );
-	else
+	if( m_writingMode == K3b::DAO ||
+	    ( m_writingMode ==  K3b::WRITING_MODE_AUTO &&
+	      ( sizeWithDao || !m_onTheFly ) ) ) {
 	  emit infoMessage( i18n("Writing DVD-RW in DAO mode."), INFO );
+	  d->usedWritingMode = K3b::DAO;
+	}
+	else {
+	  emit infoMessage( i18n("Writing DVD-RW in sequential mode."), INFO );
+	  d->usedWritingMode = K3b::WRITING_MODE_INCR_SEQ;
+	}
       }
       else if( m & (K3bCdDevice::MEDIA_DVD_R_SEQ|
 		    K3bCdDevice::MEDIA_DVD_R) ) {
-	if( m_writingMode == K3b::WRITING_MODE_INCR_SEQ )
-	  emit infoMessage( i18n("Writing DVD-R in sequential mode."), INFO );
-	else {
-	  if( m_writingMode == K3b::WRITING_MODE_RES_OVWR )
-	    emit infoMessage( i18n("Restricted Overwrite is not possible with DVD-R media."), INFO );
+
+	if( m_writingMode == K3b::WRITING_MODE_RES_OVWR )
+	  emit infoMessage( i18n("Restricted Overwrite is not possible with DVD-R media."), INFO );
+
+	if( m_writingMode == K3b::DAO ||
+	    ( m_writingMode ==  K3b::WRITING_MODE_AUTO &&
+	      ( sizeWithDao || !m_onTheFly ) ) ) {
 	  emit infoMessage( i18n("Writing DVD-R in DAO mode."), INFO );
+	  d->usedWritingMode = K3b::DAO;
+	}
+	else {
+	  emit infoMessage( i18n("Writing DVD-R in sequential mode."), INFO );
+	  d->usedWritingMode = K3b::WRITING_MODE_INCR_SEQ;
 	}
       }
     }
