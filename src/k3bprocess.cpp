@@ -84,12 +84,14 @@ void K3bProcess::splitOutput( char* data, int len, bool stdout )
   // check if line ends with a newline
   // if not save the last line because it is not finished
   QChar c = buffer.right(1).at(0);
-  bool hasUnfinishedLine = !lines.isEmpty() && ( c != '\n' && c != '\r' && c != QChar(46) );  // What is unicode 46?? It is printed as a point
+  bool hasUnfinishedLine = ( c != '\n' && c != '\r' && c != QChar(46) );  // What is unicode 46?? It is printed as a point
   if( hasUnfinishedLine ) {
     kdDebug() << "(K3bProcess) found unfinished line: '" << lines.last() << "'" << endl;
     kdDebug() << "(K3bProcess)             last char: '" << buffer.right(1) << "'" << endl;
     *unfinishedLine = lines.last();
-    lines.pop_back();
+    it = lines.end();
+    --it;
+    lines.remove(it);
   }
 
   for( it = lines.begin(); it != lines.end(); ++it ) {
@@ -97,7 +99,7 @@ void K3bProcess::splitOutput( char* data, int len, bool stdout )
     if( str[0] == '\r' )
       str = str.mid( 1 );
 
-    kdDebug() << "(K3bProcess)         emitting line: '" << str << "'" << endl;
+    //    kdDebug() << "(K3bProcess)         emitting line: '" << str << "'" << endl;
 
     if( stdout )
       emit stdoutLine( str );
