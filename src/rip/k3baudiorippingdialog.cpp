@@ -189,6 +189,7 @@ void K3bAudioRippingDialog::setupGui()
   connect( m_optionWidget->m_checkUsePattern, SIGNAL(toggled(bool)), this, SLOT(refresh()) );
   connect( m_optionWidget->m_checkCreatePlaylist, SIGNAL(toggled(bool)), this, SLOT(refresh()) );
   connect( m_optionWidget->m_checkSingleFile, SIGNAL(toggled(bool)), this, SLOT(refresh()) );
+  connect( m_optionWidget->m_checkWriteCueFile, SIGNAL(toggled(bool)), this, SLOT(refresh()) );
   connect( m_checkUseIndex0, SIGNAL(toggled(bool)), this, SLOT(refresh()) );
   connect( m_optionWidget->m_comboFileType, SIGNAL(activated(int)), this, SLOT(refresh()) );
   connect( m_optionWidget->m_editBaseDir, SIGNAL(textChanged(const QString&)), this, SLOT(refresh()) );
@@ -367,21 +368,29 @@ void K3bAudioRippingDialog::refresh()
       filename = K3bPatternParser::parsePattern( m_cddbEntry, 1,
 						 m_patternWidget->filenamePattern(),
 						 m_patternWidget->replaceBlanks(),
-						 m_patternWidget->blankReplaceString() ) + "." + extension;
+						 m_patternWidget->blankReplaceString() );
     }
     else {
-      filename = i18n("Album") + "." + extension;
+      filename = i18n("Album");
     }
 
 
     (void)new KListViewItem( m_viewTracks,
 			     m_viewTracks->lastItem(),
-			     filename,
+			     filename + "." + extension,
 			     K3b::Msf(length).toString(),
 			     fileSize < 0 ? i18n("unknown") : KIO::convertSize( fileSize ),
 			     i18n("Audio") );
 
-    d->filenames.append( K3b::fixupPath( baseDir + "/" + filename ) );
+    d->filenames.append( K3b::fixupPath( baseDir + "/" + filename + "." + extension ) );
+
+    if( m_optionWidget->m_checkWriteCueFile->isChecked() )
+      (void)new KListViewItem( m_viewTracks,
+			       m_viewTracks->lastItem(),
+			       filename + ".cue",
+			       "-",
+			       "-",
+			       i18n("Cue-file") );
   }
   else {
     for( QValueList<int>::const_iterator it = m_trackNumbers.begin();
