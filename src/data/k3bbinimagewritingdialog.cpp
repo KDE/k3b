@@ -22,6 +22,8 @@
 #include "../k3bwriterselectionwidget.h"
 #include "../k3bburnprogressdialog.h"
 #include "k3bbinimagewritingjob.h"
+#include <k3bstdguiitems.h>
+
 #include <kconfig.h>
 #include <kstandarddirs.h>
 #include <kcutlabel.h>
@@ -96,7 +98,7 @@ void K3bBinImageWritingDialog::setupGui()
   groupOptionsLayout->setSpacing( spacingHint() );
   groupOptionsLayout->setMargin( marginHint() );
 
-  m_checkSimulate = new QCheckBox( i18n("Simulate"), groupOptions );
+  m_checkSimulate = K3bStdGuiItems::simulateCheckbox( groupOptions );
   m_checkMulti    = new QCheckBox( i18n("Multisession"), groupOptions );
   m_checkForce    = new QCheckBox( i18n("Force Writing"), groupOptions );
 
@@ -109,7 +111,10 @@ void K3bBinImageWritingDialog::setupGui()
   boxCopies->setSpacing(10);
   groupOptionsLayout->addWidget( m_checkSimulate, 0, 0 );
   groupOptionsLayout->addWidget( m_checkMulti, 1, 0 );
+
+  // This should go to an advanced tab!
   groupOptionsLayout->addWidget( m_checkForce, 2, 0 );
+
   groupOptionsLayout->addWidget( boxCopies, 3, 0 );
 
   // -----------------------------------------------------------------------
@@ -127,15 +132,10 @@ void K3bBinImageWritingDialog::setupGui()
 
   connect( m_buttonFindTocFile, SIGNAL(clicked()), this, SLOT(slotFindTocFile()) );
 
-  QToolTip::add( m_checkSimulate, i18n("Only simulate the writing process") );
   QToolTip::add( m_checkMulti, i18n("Write Multisession CD, don't close") );
   QToolTip::add( m_checkForce, i18n("Force Writing") );
   QToolTip::add( m_spinCopies, i18n("Number of copies") );
 
-  QWhatsThis::add( m_checkSimulate, i18n("<p>If this option is checked K3b will perform all writing steps with the "
-					 "laser turned off."
-					 "<p>This is useful, for example, to test a higher writing speed "
-					 "or if your system is able to write on-the-fly.") );
   QWhatsThis::add( m_checkMulti, i18n("<p>If this option is checked, the Image is written as the first "
 					 "session of a multisession CD "
            "<p>It is possible to append another session on such disks.") );
