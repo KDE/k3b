@@ -29,5 +29,9 @@ default_presentation=1
 
 [UnknownAudioFileFormat]
 Name=Unknown format
+Name[pt]=Formato desconhecido
+Name[pt_BR]=Formato desconhecido
 Comment=Unknown audiofile format
+Comment[pt]=Formato desconhecido de ficheiro áudio
+Comment[pt_BR]=Formato desconhecido de ficheiro áudio
 default_presentation=2
