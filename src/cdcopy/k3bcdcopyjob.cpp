@@ -649,7 +649,11 @@ bool K3bCdCopyJob::writeNextSession()
   emit newSubTask( i18n("Waiting for disk") );
 
   // if session > 1 we wait for an appendable CD
-  if( waitForMedia( m_writerDevice, d->currentWrittenSession > 1 ) < 0 ) {
+  if( waitForMedia( m_writerDevice, 
+		    d->currentWrittenSession > 1 
+		    ? K3bCdDevice::STATE_INCOMPLETE
+		    : K3bCdDevice::STATE_EMPTY,
+		    K3bCdDevice::MEDIA_WRITABLE_CD ) < 0 ) {
     d->canceled = true;
     return false;
   }
@@ -745,6 +749,12 @@ bool K3bCdCopyJob::writeNextSession()
     //
     int usedWritingMode = m_writingMode;
     if( usedWritingMode == K3b::WRITING_MODE_AUTO ) {
+//       if( K3bExceptions::brokenDaoAudio( m_writerDevice ) ) {
+// 	if( d->numSessions == 1 )
+// 	  usedWritingMode = K3b::RAW;
+// 	else
+// 	  usedWritingMode = K3b::TAO;
+//       }
       if( m_writerDevice->dao() )
 	usedWritingMode = K3b::DAO;
       else if( m_writerDevice->supportsRawWriting() )
