@@ -97,17 +97,21 @@ void K3bCdDevice::DiskInfoThread::fetchSizeInfo()
   m_info->appendable = (empty < 2);
   m_info->empty = (empty == 0);
   m_info->cdrw = (m_device->rewritable() == 1);
-  K3b::Msf size = m_device->discSize();
-  if ( size != K3b::Msf(0) ) {
-    m_info->size = size - 150;
-  }
-  if ( m_info->empty ) {
-    m_info->remaining = m_info->size;
-  } else {
-    size = m_device->remainingSize();
+  if (m_info->appendable) {
+    K3b::Msf size = m_device->discSize();
     if ( size != K3b::Msf(0) ) {
-      m_info->remaining = size - 4650;
+      m_info->size = size - 150;
     }
+    if ( m_info->empty ) {
+      m_info->remaining = m_info->size;
+    } else {
+      size = m_device->remainingSize();
+      if ( size != K3b::Msf(0) ) {
+        m_info->remaining = size - 4650;
+      }
+    }
+  } else {
+       m_info->size = K3b::Msf(m_info->toc.lastSector());
   }
 }
 
