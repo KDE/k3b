@@ -1,6 +1,6 @@
-/* 
+/*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -127,7 +127,7 @@ void K3bMp3Module::startDecoding()
 
     m_decodingTimer->start(0);
 
-    kdDebug() << "(K3bMp3Module) length of track: " << audioTrack()->length() << " frames." << endl;
+    //kdDebug() << "(K3bMp3Module) length of track: " << audioTrack()->length() << " frames." << endl;
     kdDebug() << "(K3bMp3Module) data to decode: " << m_rawDataLengthToStream << " bytes." << endl;
   }
 }
