@@ -211,9 +211,9 @@ void K3bVideoCdRip::slotParseVcdXRipOutput( KProcess*, char* output, int len )
 
             if ( tagName == "progress" ) {
                 const QString oper = el.attribute( "operation" ).lower();
-                const long long overallPos = el.attribute( "position" ).toLong();
-                const long long pos = overallPos - m_subPosition;
-                const long long size = el.attribute( "size" ).toLong() - m_subPosition;
+                const unsigned long long overallPos = el.attribute( "position" ).toLong();
+                const unsigned long long pos = overallPos - m_subPosition;
+                const unsigned long long size = el.attribute( "size" ).toLong() - m_subPosition;
 
                 if ( oper == "extract" ) {
                     emit subPercent( ( int ) ( 100.0 * ( double ) pos / ( double ) size ) );
@@ -221,8 +221,13 @@ void K3bVideoCdRip::slotParseVcdXRipOutput( KProcess*, char* output, int len )
 
                     m_bytesFinished = pos;
 
-                    double relOverallWritten = ( ( double ) overallPos * 1024 ) / ( double ) m_videooptions ->getVideoCdSize() ;
-                    emit percent( ( int ) ( 100 * relOverallWritten ) );
+                    kdDebug() << QString("(slotParseVcdXRipOutput) overall: %1, videocdsize: %2").arg(overallPos  * 2352).arg(m_videooptions ->getVideoCdSize()) << endl;
+                    double relOverallWritten = ( ( double ) overallPos  * 2352 ) / ( double ) m_videooptions ->getVideoCdSize() ;
+                    int newpercent =  ( int ) ( 100 * relOverallWritten );
+                    if ( newpercent > m_oldpercent ) {
+                        emit percent(  newpercent );
+                        m_oldpercent = newpercent;
+                    }
 
                 } else {
                     return ;
@@ -240,6 +245,7 @@ void K3bVideoCdRip::slotParseVcdXRipOutput( KProcess*, char* output, int len )
                         if ( level != "error" ) {
                             kdDebug() << QString( "(K3bVideoCdRip) vcdxrip warning, %1" ).arg( text ) << endl;
                             emit debuggingOutput( "vcdxrip", text );
+                            parseInformation( text );
                         } else {
                             kdDebug() << QString( "(K3bVideoCdRip) vcdxrip error, %1" ).arg( text ) << endl;
                             emit infoMessage( text, K3bJob::ERROR );
@@ -280,8 +286,18 @@ void K3bVideoCdRip::slotVcdXRipFinished()
 
 void K3bVideoCdRip::parseInformation( QString text )
 {
+    // parse warning
+    if ( text.contains( "encountered non-form2 sector" ) ) {
+        // I think this is an error not a warning. Finish ripping with invalid mpegs.
+        emit infoMessage( i18n( "%1 encountered non-form2 sector" ).arg("Vcdxrip"), K3bJob::ERROR );
+        emit infoMessage( i18n( "leaving loop" ), K3bJob::ERROR );
+        cancelAll();
+        emit finished( false );
+        return;
+    }
+    
     // parse extra info
-    if ( text.contains( "detected extended VCD2.0 PBC files" ) )
+    else if ( text.contains( "detected extended VCD2.0 PBC files" ) )
         emit infoMessage( i18n( "detected extended VCD2.0 PBC files" ), K3bJob::INFO );
 
     // parse startposition and extracting sequence info
@@ -298,8 +314,12 @@ void K3bVideoCdRip::parseInformation( QString text )
                 // extracting item0001.mpg... (start lsn 225, 1 segments)
                 int end = text.find(  ",", index );
                 int overallPos = text.mid( index + 11, end - index - 11 ).stripWhiteSpace().toLong();
-                double relOverallWritten = ( ( double ) overallPos * 1024) / ( double ) m_videooptions ->getVideoCdSize()  ;
-                emit percent( ( int ) ( 100 * relOverallWritten ) );
+                double relOverallWritten = ( ( double ) overallPos  * 2352 ) / ( double ) m_videooptions ->getVideoCdSize()  ;
+                int newpercent =  ( int ) ( 100 * relOverallWritten );
+                if ( newpercent > m_oldpercent ) {
+                    emit percent(  newpercent );
+                    m_oldpercent = newpercent;
+                }
             }
 
 

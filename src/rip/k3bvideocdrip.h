@@ -57,6 +57,7 @@ class K3bVideoCdRip : public K3bJob
         int m_stage;
         int m_bytesFinished;
         int m_ripsourceType;
+        int m_oldpercent;
 
         long m_subPosition;
 

@@ -221,11 +221,11 @@ void K3bVideoCdView::setDisk( K3bCdDevice::DiskInfoDetector* did )
         if ( index > 0 ) {
             K3b::Msf length( ( *it ).length() );
             sequenceSize += length;
-            m_videocddatasize += ( length.mode2Form1Bytes() + 2047 ) / 2048;
+            m_videocdmpegsize += length.mode2Form2Bytes();
             ( void ) new VideoTrackViewItem( ( VideoTrackViewCheckItem* ) m_contentList[ 0 ], i18n( "Sequence-%1" ).arg( index ), "", index, length );
         } else {
             K3b::Msf length( ( *it ).length() );
-            m_videocdmpegsize += ( length.mode2Form2Bytes() + 2351 ) / 2352;
+            m_videocddatasize += length.mode2Form1Bytes();
             ( ( VideoTrackViewCheckItem* ) m_contentList[ 1 ] ) ->updateData( length );
             ( void ) new VideoTrackViewCheckItem( ( VideoTrackViewCheckItem* ) m_contentList[ 1 ], i18n( "Files" ) );
             ( void ) new VideoTrackViewCheckItem( ( VideoTrackViewCheckItem* ) m_contentList[ 1 ], i18n( "Segments" ) );
@@ -234,9 +234,8 @@ void K3bVideoCdView::setDisk( K3bCdDevice::DiskInfoDetector* did )
         index++;
     }
 
-    ( ( VideoTrackViewCheckItem* ) m_contentList[ 0 ] ) ->updateData( sequenceSize );
+    ( ( VideoTrackViewCheckItem* ) m_contentList[ 0 ] ) ->updateData( sequenceSize, true );
 
-    m_videooptions ->setVideoCdSize( m_videocddatasize + m_videocdmpegsize );
     m_videooptions ->setVideoCdSource( m_diskInfo.device->devicename() );
     
     m_videocdinfo = new K3bVideoCdInfo( this );
@@ -397,7 +396,8 @@ void K3bVideoCdView::startRip()
         if ( m_videooptions ->getVideoCdRipSequences() )
             videocdsize += m_videocdmpegsize;
 
-        m_videooptions ->setVideoCdSize( videocdsize * 1024 );
+        kdDebug() << QString("(K3bVideoCdView::startRip())  m_videooptions ->setVideoCdSize( %1)").arg( videocdsize ) << endl;
+        m_videooptions ->setVideoCdSize( videocdsize );
         K3bVideoCdRippingDialog rip( m_videooptions, this );
         rip.exec();
     }

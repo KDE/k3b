@@ -1,6 +1,6 @@
 /*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
  *
  * This file is part of the K3b project.
@@ -34,7 +34,7 @@ class K3bVideoCdRippingOptions
                 m_extractXML( false )
         {}
 
-        void setVideoCdSize( long size ) { m_videocdsize = size;}
+        void setVideoCdSize( unsigned long size ) { m_videocdsize = size;}
         void setVideoCdSource( const QString& source ) { m_videocdsource = source;}
         void setVideoCdDestination( const QString& destination ) { m_videocddestination = destination;}
         void setVideoCdDescription( const QString& description ) { m_videocddescription = description;}
