@@ -56,6 +56,10 @@ K3bApplication::K3bApplication()
     m_interface(0),
     m_mainWindow(0)
 {
+  // insert library i18n data
+  KGlobal::locale()->insertCatalogue( "libk3bdevice" );
+  KGlobal::locale()->insertCatalogue( "libk3b" );
+
   m_core = new K3bCore( aboutData()->version(), config(), this );
 
   m_songManager = K3bSongManager::instance();  // this is bad stuff!!!
