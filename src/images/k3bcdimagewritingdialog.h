@@ -28,6 +28,7 @@ class KActiveLabel;
 class KProgress;
 class K3bDataModeWidget;
 class K3bWritingModeWidget;
+class K3bTempDirSelectionWidget;
 class KURLRequester;
 class K3bListView;
 class QSpinBox;
@@ -100,6 +101,7 @@ class K3bCdImageWritingDialog : public K3bInteractionDialog
   QComboBox* m_comboImageType;
 
   K3bListView* m_infoView;
+  K3bTempDirSelectionWidget* m_tempDirSelectionWidget;
 
   class Private;
   Private* d;

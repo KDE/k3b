@@ -53,6 +53,7 @@ class K3bAudioCueFileWritingJob : public K3bBurnJob
   void setSimulate( bool b );
   void setCopies( int c );
   void setOnTheFly( bool b );
+  void setTempDir( const QString& );
 
  private slots:
   void slotAnalyserThreadFinished(bool);

@@ -22,6 +22,7 @@
 #include "k3baudiocuefilewritingjob.h"
 #include <cdcopy/k3bclonejob.h>
 
+#include <k3btempdirselectionwidget.h>
 #include <k3bdevicemanager.h>
 #include <k3bdevice.h>
 #include <k3bwriterselectionwidget.h>
@@ -91,6 +92,13 @@ public:
   QMap<int,int> imageTypeSelectionMapRev;
   QString imageFile;
   QString tocFile;
+
+  QTabWidget* optionTabbed;
+
+  QWidget* advancedTab;
+  QWidget* tempPathTab;
+  bool advancedTabVisible;
+  bool tempPathTabVisible;
 };
 
 
@@ -126,6 +134,8 @@ K3bCdImageWritingDialog::K3bCdImageWritingDialog( QWidget* parent, const char* n
   connect( m_editImagePath, SIGNAL(textChanged(const QString&)), 
 	   this, SLOT(slotUpdateImage(const QString&)) );
   connect( m_checkDummy, SIGNAL(toggled(bool)),
+	   this, SLOT(slotToggleAll()) );
+  connect( m_checkOnTheFly, SIGNAL(toggled(bool)),
 	   this, SLOT(slotToggleAll()) );
 }
 
@@ -194,9 +204,9 @@ void K3bCdImageWritingDialog::setupGui()
 
   // options
   // -----------------------------------------------------------------------
-  QTabWidget* optionTabbed = new QTabWidget( frame );
+  d->optionTabbed = new QTabWidget( frame );
 
-  QWidget* optionTab = new QWidget( optionTabbed );
+  QWidget* optionTab = new QWidget( d->optionTabbed );
   QGridLayout* optionTabLayout = new QGridLayout( optionTab );
   optionTabLayout->setAlignment( Qt::AlignTop );
   optionTabLayout->setSpacing( spacingHint() );
@@ -235,27 +245,42 @@ void K3bCdImageWritingDialog::setupGui()
   optionTabLayout->setRowStretch( 2, 1 );
   optionTabLayout->setColStretch( 1, 1 );
 
-  optionTabbed->addTab( optionTab, i18n("Options") );
+  d->optionTabbed->addTab( optionTab, i18n("Options") );
 
+
+  // image tab ------------------------------------
+  d->tempPathTab = new QWidget( d->optionTabbed );
+  QGridLayout* imageTabGrid = new QGridLayout( d->tempPathTab );
+  imageTabGrid->setSpacing( spacingHint() );
+  imageTabGrid->setMargin( marginHint() );
+
+  m_tempDirSelectionWidget = new K3bTempDirSelectionWidget( d->tempPathTab );
+
+  imageTabGrid->addWidget( m_tempDirSelectionWidget, 0, 0 );
+
+  d->optionTabbed->addTab( d->tempPathTab, i18n("&Image") );
+  d->tempPathTabVisible = true;
+  // -------------------------------------------------------------
 
 
   // advanced ---------------------------------
-  QWidget* advancedTab = new QWidget( optionTabbed );
-  QGridLayout* advancedTabLayout = new QGridLayout( advancedTab );
+  d->advancedTab = new QWidget( d->optionTabbed );
+  QGridLayout* advancedTabLayout = new QGridLayout( d->advancedTab );
   advancedTabLayout->setAlignment( Qt::AlignTop );
   advancedTabLayout->setSpacing( spacingHint() );
   advancedTabLayout->setMargin( marginHint() );
     
-  m_dataModeWidget = new K3bDataModeWidget( advancedTab );
-  m_checkNoFix = K3bStdGuiItems::startMultisessionCheckBox( advancedTab );
+  m_dataModeWidget = new K3bDataModeWidget( d->advancedTab );
+  m_checkNoFix = K3bStdGuiItems::startMultisessionCheckBox( d->advancedTab );
     
-  advancedTabLayout->addWidget( new QLabel( i18n("Data mode:"), advancedTab ), 0, 0 );
+  advancedTabLayout->addWidget( new QLabel( i18n("Data mode:"), d->advancedTab ), 0, 0 );
   advancedTabLayout->addWidget( m_dataModeWidget, 0, 1 );
   advancedTabLayout->addMultiCellWidget( m_checkNoFix, 1, 1, 0, 2 );
   advancedTabLayout->setRowStretch( 2, 1 );
   advancedTabLayout->setColStretch( 2, 1 );
     
-  optionTabbed->addTab( advancedTab, i18n("Advanced") );
+  d->optionTabbed->addTab( d->advancedTab, i18n("Advanced") );
+  d->advancedTabVisible = true;
   // -----------------------------------------------------------------------
 
 
@@ -268,7 +293,7 @@ void K3bCdImageWritingDialog::setupGui()
   grid->addWidget( groupImageUrl, 0, 0 );
   grid->addWidget( groupImageType, 0, 1 );
   grid->addMultiCellWidget( m_infoView, 1, 1, 0, 1 );
-  grid->addMultiCellWidget( optionTabbed, 2, 2, 0, 1 );
+  grid->addMultiCellWidget( d->optionTabbed, 2, 2, 0, 1 );
 
   grid->setRowStretch( 1, 1 );
 }
@@ -320,6 +345,7 @@ void K3bCdImageWritingDialog::slotStartClicked()
       job_->setCueFile( d->tocFile );
       job_->setCopies( m_checkDummy->isChecked() ? 1 : m_spinCopies->value() );
       job_->setOnTheFly( m_checkOnTheFly->isChecked() );
+      job_->setTempDir( m_tempDirSelectionWidget->tempPath() );
 
       job = job_;
     }
@@ -680,17 +706,37 @@ void K3bCdImageWritingDialog::slotToggleAll()
     else
       m_writingModeWidget->setSupportedModes( K3b::DAO );
 
-    m_checkOnTheFly->setEnabled( currentImageType() == IMAGE_AUDIO_CUE );
-
     // some stuff is only available for iso images
-    m_checkNoFix->setEnabled( currentImageType() == IMAGE_ISO );
-    m_dataModeWidget->setEnabled( currentImageType() == IMAGE_ISO );
-    if( m_checkDummy->isChecked() ) {
-      m_checkVerify->setEnabled( false );
-      m_checkVerify->setChecked( false );
+    if( currentImageType() == IMAGE_ISO ) {
+      if( !d->advancedTabVisible )
+	d->optionTabbed->addTab( d->advancedTab, i18n("Advanced") );
+      d->advancedTabVisible = true;
+      if( m_checkDummy->isChecked() ) {
+	m_checkVerify->setEnabled( false );
+	m_checkVerify->setChecked( false );
+      }
     }
-    else
-      m_checkVerify->setEnabled( currentImageType() == IMAGE_ISO );
+    else {
+      if( d->advancedTabVisible )
+	d->optionTabbed->removePage( d->advancedTab );
+      d->advancedTabVisible = false;
+      m_checkVerify->hide();
+    }
+
+    // and some other stuff only makes sense for audio cues
+    if( currentImageType() == IMAGE_AUDIO_CUE ) {
+      if( !d->tempPathTabVisible )
+	d->optionTabbed->addTab( d->tempPathTab, i18n("&Image") );
+      d->tempPathTabVisible = true;
+      m_tempDirSelectionWidget->setDisabled( m_checkOnTheFly->isChecked() );
+    }
+    else {
+      if( d->tempPathTabVisible )
+	d->optionTabbed->removePage( d->tempPathTab );
+      d->tempPathTabVisible = false;
+    }
+    m_checkOnTheFly->setShown( currentImageType() == IMAGE_AUDIO_CUE );
+
     m_spinCopies->setEnabled( !m_checkDummy->isChecked() );
   }
   else {
@@ -820,6 +866,8 @@ void K3bCdImageWritingDialog::loadUserDefaults( KConfig* c )
 
   m_comboImageType->setCurrentItem( x );
 
+  m_tempDirSelectionWidget->setTempPath( K3b::defaultTempPath() );
+
   slotToggleAll();
 }
 
@@ -861,6 +909,9 @@ void K3bCdImageWritingDialog::saveUserDefaults( KConfig* c )
     }
   }
   c->writeEntry( "image type", imageType );
+
+  if( m_tempDirSelectionWidget->isEnabled() )
+    m_tempDirSelectionWidget->saveConfig();
 }
 
 void K3bCdImageWritingDialog::loadK3bDefaults()

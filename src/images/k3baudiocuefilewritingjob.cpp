@@ -173,6 +173,12 @@ void K3bAudioCueFileWritingJob::setCopies( int c )
 }
 
 
+void K3bAudioCueFileWritingJob::setTempDir( const QString& s )
+{
+  m_audioDoc->setTempDir( s );
+}
+
+
 void K3bAudioCueFileWritingJob::slotAnalyserThreadFinished( bool )
 {
   if( !m_canceled ) {
