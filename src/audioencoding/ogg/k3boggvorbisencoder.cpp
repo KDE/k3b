@@ -284,8 +284,8 @@ void K3bOggVorbisEncoder::finishEncoderInternal()
 void K3bOggVorbisEncoder::setMetaDataInternal( const QString& key, const QString& value )
 {
   if( d->vorbisComment ) {
-    char* key_ = qstrdup(key);
-    char* value_ = qstrdup(value);
+    char* key_ = qstrdup( key.local8Bit() );
+    char* value_ = qstrdup( value.local8Bit() );
 
     vorbis_comment_add_tag( d->vorbisComment, key_, value_ );
   }
