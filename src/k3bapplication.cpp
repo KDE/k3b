@@ -242,6 +242,8 @@ void K3bApplication::init()
 
   if( args->isSet("copycd") )
     m_mainWindow->slotCdCopy();
+  else if( args->isSet("copydvd") )
+    m_mainWindow->slotDvdCopy();
   else if( args->isSet("erasecd") )
     m_mainWindow->slotBlankCdrw();
   else if( args->isSet("formatdvd") )

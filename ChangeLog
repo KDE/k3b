@@ -2,6 +2,7 @@
 Check size of returned CD-TEXT data to be a multiple of the pack length. This should fix problems
 	with CD copy.
 Audio Project: Do not overwrite CD-Text values loaded from the project file with the ones detected.
+Added --copydvd command line parameter
 	
 0.11.6
 Fixed length calculation for long FLAC files.
