@@ -39,6 +39,7 @@
 #include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kactivelabel.h>
+#include <knotifyclient.h>
 
 
 class K3bEmptyDiscWaiter::Private
@@ -502,6 +503,9 @@ void K3bEmptyDiscWaiter::showDialog()
 {
   // we need to show the dialog if not done already
   if( !d->dialogVisible ) {
+
+    KNotifyClient::event( "WaitingForMedium" );
+
     d->dialogVisible = true;
     clearWFlags( WDestructiveClose );
     setWFlags( WShowModal );
