@@ -3,6 +3,7 @@ Little fix in capabilities detection (only affects buggy firmwares)
 Properly detect the Philips 2600
 Made multisession selection in DVD project visible.
 Fixed crash when importing session failed.
+Fixed compilation with flac 1.1.2
 
 0.11.20
 Fixed handling of -xa and -xa1 options for dvd patched cdrecord versions in which case K3b

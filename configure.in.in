@@ -173,6 +173,25 @@ if test "$ac_cv_use_flac" = "yes"; then
   KDE_CHECK_HEADERS(FLAC++/decoder.h, [
      AC_CHECK_LIB(FLAC,FLAC__seekable_stream_decoder_process_single,
 	        have_flac=yes,[],$all_libraries)])
+
+  # Hack to get the flac version since I was not able to handle the code from
+  # the flac guys. This is a strange usage of tr but I don't know too much about
+  # shell scripting and this works, so...
+  # BUT: this does not work if we want to use another flac version than the one installed
+  #      where the flac binary is found!
+  K3B_FLAC_VERSION_MAJOR=`flac --version|tr -d "flac "|cut -d "." -f 1`
+  K3B_FLAC_VERSION_MINOR=`flac --version|tr -d "flac "|cut -d "." -f 2`
+  K3B_FLAC_VERSION_PATCHLEVEL=`flac --version|tr -d "flac "|cut -d "." -f 3`
+  if test \( "$K3B_FLAC_VERSION_MAJOR" -gt 1 -o \
+	\( "$K3B_FLAC_VERSION_MAJOR" -eq 1 -a \( "$K3B_FLAC_VERSION_MINOR" -gt 1 -o \
+				 \( "$K3B_FLAC_VERSION_MINOR" -eq 1 -a "$K3B_FLAC_VERSION_PATCHLEVEL" -gt 1 \) \
+	\) \) \); then
+	AC_DEFINE(
+		FLAC_NEWER_THAN_1_1_1, 
+		1,
+		[defined if the installed flac binary's version is bigger than or equal to 1.1.2]
+	)
+  fi
 fi
 
 AM_CONDITIONAL(include_FLAC, [test x$have_flac = xyes])
