@@ -138,8 +138,8 @@ K3bSetup2::K3bSetup2( QWidget *parent, const char *name, const QStringList& )
   load();
 
   //
-  // This is a hack to work around a kcm bug which causes every kc module to start
-  // with disabled apply button
+  // This is a hack to work around a kcm bug which makes the faulty assumption that
+  // every module starts without anything to apply
   //
   QTimer::singleShot( 0, this, SLOT(updateViews()) );
 
@@ -334,7 +334,11 @@ void K3bSetup2::defaults()
   w->m_checkUseBurningGroup->setChecked(false);
   w->m_editBurningGroup->setText( "burning" );
 
-  updateViews();
+  //
+  // This is a hack to work around a kcm bug which makes the faulty assumption that
+  // every module defaults to a state where nothing is to be applied
+  //
+  QTimer::singleShot( 0, this, SLOT(updateViews()) );
 }
 
 
