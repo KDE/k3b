@@ -1,0 +1,4 @@
+wie in KOffice K3bDoc von KParts::ReadWritePart ableiten
+in KOffice ist der view von KParts::PartBase abgeleitet. Warum das?
+alle actions, die das doc ändern, auch ins doc packen.
+alle actions, die nur für die ansicht da sind (zb. properties dialog) in den view
