@@ -90,8 +90,6 @@ K3bAudioDoc::K3bAudioDoc( QObject* parent )
     m_firstTrack(0),
     m_lastTrack(0)
 {
-  m_cdText = false;
-
   m_docType = AUDIO;
   m_audioTrackStatusThreads.setAutoDelete(true);
 }
@@ -109,6 +107,9 @@ bool K3bAudioDoc::newDocument()
   while( m_firstTrack )
     delete m_firstTrack->take();
 
+  m_cdText = false;
+  m_cdTextData.clear();
+  
   return K3bDoc::newDocument();
 }
 
