@@ -149,14 +149,15 @@ void K3bDataBurnDialog::saveSettings()
   ((K3bDataDoc*)doc())->setISOallowPeriodAtBegin( m_checkBeginPeriod->isChecked() );
   ((K3bDataDoc*)doc())->setISOallow31charFilenames( m_checkAllow31->isChecked() );
   ((K3bDataDoc*)doc())->setISOomitVersionNumbers( m_checkOmitVersion->isChecked() );
+  ((K3bDataDoc*)doc())->setISOomitTrailingPeriod( m_checkOmitTrailingPeriod->isChecked() );
   ((K3bDataDoc*)doc())->setISOmaxFilenameLength( m_checkMaxNames->isChecked() );
   ((K3bDataDoc*)doc())->setISOrelaxedFilenames( m_checkRelaxedNames->isChecked() );
   ((K3bDataDoc*)doc())->setISOnoIsoTranslate( m_checkNoISOTrans->isChecked() );
   ((K3bDataDoc*)doc())->setISOallowMultiDot( m_checkMultiDot->isChecked() );
   ((K3bDataDoc*)doc())->setISOuntranslatedFilenames( m_checkUntranslatedNames->isChecked() );
-  ((K3bDataDoc*)doc())->setNoDeepDirectoryRelocation( m_checkNoDeepDirRel->isChecked() );
+  //  ((K3bDataDoc*)doc())->setNoDeepDirectoryRelocation( m_checkNoDeepDirRel->isChecked() );
   //	((K3bDataDoc*)doc())->setFollowSymbolicLinks( m_check->isChecked() );
-  ((K3bDataDoc*)doc())->setHideRR_MOVED( m_checkHideRR_MOVED->isChecked() );
+  //  ((K3bDataDoc*)doc())->setHideRR_MOVED( m_checkHideRR_MOVED->isChecked() );
   ((K3bDataDoc*)doc())->setCreateTRANS_TBL( m_checkCreateTRANS_TBL->isChecked() );
   ((K3bDataDoc*)doc())->setHideTRANS_TBL( m_checkHideTRANS_TBL->isChecked() );
   //  ((K3bDataDoc*)doc())->setPadding( m_checkPadding->isChecked() );
@@ -247,14 +248,15 @@ void K3bDataBurnDialog::readSettings()
   m_checkBeginPeriod->setChecked( ((K3bDataDoc*)doc())->ISOallowPeriodAtBegin() );
   m_checkAllow31->setChecked( ((K3bDataDoc*)doc())->ISOallow31charFilenames() );
   m_checkOmitVersion->setChecked( ((K3bDataDoc*)doc())->ISOomitVersionNumbers() );
+  m_checkOmitTrailingPeriod->setChecked( ((K3bDataDoc*)doc())->ISOomitTrailingPeriod() );
   m_checkMaxNames->setChecked( ((K3bDataDoc*)doc())->ISOmaxFilenameLength() );
   m_checkRelaxedNames->setChecked( ((K3bDataDoc*)doc())->ISOrelaxedFilenames() );
   m_checkNoISOTrans->setChecked( ((K3bDataDoc*)doc())->ISOnoIsoTranslate() );
   m_checkMultiDot->setChecked( ((K3bDataDoc*)doc())->ISOallowMultiDot() );
   m_checkUntranslatedNames->setChecked( ((K3bDataDoc*)doc())->ISOuntranslatedFilenames() );
-  m_checkNoDeepDirRel->setChecked( ((K3bDataDoc*)doc())->noDeepDirectoryRelocation() );
+  //  m_checkNoDeepDirRel->setChecked( ((K3bDataDoc*)doc())->noDeepDirectoryRelocation() );
 
-  m_checkHideRR_MOVED->setChecked( ((K3bDataDoc*)doc())->hideRR_MOVED() );
+  //  m_checkHideRR_MOVED->setChecked( ((K3bDataDoc*)doc())->hideRR_MOVED() );
   m_checkCreateTRANS_TBL->setChecked( ((K3bDataDoc*)doc())->createTRANS_TBL() );
   m_checkHideTRANS_TBL->setChecked( ((K3bDataDoc*)doc())->hideTRANS_TBL() );
   //  m_checkPadding->setChecked( ((K3bDataDoc*)doc())->padding() );
@@ -412,7 +414,7 @@ void K3bDataBurnDialog::setupAdvancedTab( QFrame* frame )
   frameLayout->setSpacing( spacingHint() );
   frameLayout->setMargin( marginHint() );
 
-  m_groupIsoLevel = new QButtonGroup( 3, Qt::Vertical, i18n( "ISO Level" ), frame, "m_groupIsoLevel" );
+  m_groupIsoLevel = new QButtonGroup( 3, Qt::Horizontal, i18n( "ISO Level" ), frame, "m_groupIsoLevel" );
   m_groupIsoLevel->layout()->setSpacing( spacingHint()  );
   m_groupIsoLevel->layout()->setMargin( marginHint() );
 
@@ -421,20 +423,46 @@ void K3bDataBurnDialog::setupAdvancedTab( QFrame* frame )
   m_radioIsoLevel3 = new QRadioButton( i18n("Level 3"), m_groupIsoLevel, "m_radioIsoLevel3" );
 
 
+  QGroupBox* groupIsoFilesystem = new QGroupBox( 0, Qt::Vertical, i18n("ISO9660 File System"), frame );
+  groupIsoFilesystem->layout()->setMargin( 0 );
+  groupIsoFilesystem->layout()->setSpacing( 0 );
+  QGridLayout* groupIsoFilesystemLayout = new QGridLayout( groupIsoFilesystem->layout() );
+  groupIsoFilesystemLayout->setMargin( marginHint() );
+  groupIsoFilesystemLayout->setSpacing( spacingHint() );
 
-  m_checkNoDeepDirRel      = new QCheckBox( i18n( "No deep directory relocation" ), frame, "m_checkNoDeepDirRel" );
-  m_checkHideRR_MOVED      = new QCheckBox( i18n( "Hide RR_MOVED" ), frame, "m_checkHideRR_MOVED" );
-  m_checkCreateTRANS_TBL   = new QCheckBox( i18n( "Create TRANS_TBL entries" ), frame, "m_checkCreateTRANS_TBL" );
-  m_checkHideTRANS_TBL     = new QCheckBox( i18n( "Hide TRANS_TBL in joliet" ), frame, "m_checkHideTRANS_TBL" );
-  m_checkUntranslatedNames = new QCheckBox( i18n( "Allow untranslated filenames" ), frame, "m_checkUntranslatedNames" );
-  m_checkAllow31           = new QCheckBox( i18n( "Allow 31 character filenames" ), frame, "m_checkAllow31" );
-  m_checkMaxNames          = new QCheckBox( i18n( "Max length (37) filenames" ), frame, "m_checkMaxNames" );
-  m_checkBeginPeriod       = new QCheckBox( i18n( "Allow beginning period" ), frame, "m_checkBeginPeriod" );
-  m_checkRelaxedNames      = new QCheckBox( i18n( "Relaxed filenames" ), frame, "m_checkRelaxedNames" );
-  m_checkOmitVersion       = new QCheckBox( i18n( "Omit version numbers" ), frame, "m_checkOmitVersion" );
-  m_checkNoISOTrans        = new QCheckBox( i18n( "Allow # and ~" ), frame, "m_checkNoISOTrans" );
-  m_checkMultiDot          = new QCheckBox( i18n( "Allow multible dots" ), frame, "m_checkMultiDot" );
-  m_checkLowercase         = new QCheckBox( i18n( "Allow lowercase filenames" ), frame, "m_checkLowercase" );
+  //  m_checkNoDeepDirRel      = new QCheckBox( i18n( "No deep directory relocation" ), frame, "m_checkNoDeepDirRel" );
+  //  m_checkHideRR_MOVED      = new QCheckBox( i18n( "Hide RR_MOVED" ), frame, "m_checkHideRR_MOVED" );
+  m_checkCreateTRANS_TBL   = new QCheckBox( i18n( "Create TRANS.TBL files" ), groupIsoFilesystem, "m_checkCreateTRANS_TBL" );
+  m_checkHideTRANS_TBL     = new QCheckBox( i18n( "Hide TRANS.TBL files in joliet" ), groupIsoFilesystem, "m_checkHideTRANS_TBL" );
+  m_checkUntranslatedNames = new QCheckBox( i18n( "Allow untranslated filenames" ), groupIsoFilesystem, "m_checkUntranslatedNames" );
+  m_checkAllow31           = new QCheckBox( i18n( "Allow 31 character filenames" ), groupIsoFilesystem, "m_checkAllow31" );
+  m_checkMaxNames          = new QCheckBox( i18n( "Max length (37) filenames" ), groupIsoFilesystem, "m_checkMaxNames" );
+  m_checkBeginPeriod       = new QCheckBox( i18n( "Allow beginning period" ), groupIsoFilesystem, "m_checkBeginPeriod" );
+  m_checkRelaxedNames      = new QCheckBox( i18n( "Relaxed filenames" ), groupIsoFilesystem, "m_checkRelaxedNames" );
+  m_checkOmitVersion       = new QCheckBox( i18n( "Omit version numbers" ), groupIsoFilesystem, "m_checkOmitVersion" );
+  m_checkOmitTrailingPeriod= new QCheckBox( i18n( "Omit trailing period" ), groupIsoFilesystem );
+  m_checkNoISOTrans        = new QCheckBox( i18n( "Allow # and ~" ), groupIsoFilesystem, "m_checkNoISOTrans" );
+  m_checkMultiDot          = new QCheckBox( i18n( "Allow multible dots" ), groupIsoFilesystem, "m_checkMultiDot" );
+  m_checkLowercase         = new QCheckBox( i18n( "Allow lowercase filenames" ), groupIsoFilesystem, "m_checkLowercase" );
+
+  groupIsoFilesystemLayout->addMultiCellWidget( m_checkUntranslatedNames, 0, 0, 0, 1 );
+  QFrame* line = new QFrame( groupIsoFilesystem );
+  line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+  groupIsoFilesystemLayout->addMultiCellWidget( line, 1, 1, 0, 1 );
+  groupIsoFilesystemLayout->addWidget( m_checkMaxNames, 2, 0);
+  groupIsoFilesystemLayout->addWidget( m_checkBeginPeriod, 3, 0 );
+  groupIsoFilesystemLayout->addWidget( m_checkRelaxedNames, 4, 0 );
+  groupIsoFilesystemLayout->addWidget( m_checkOmitVersion, 5, 0 );
+  groupIsoFilesystemLayout->addWidget( m_checkNoISOTrans, 6, 0 );
+  groupIsoFilesystemLayout->addWidget( m_checkMultiDot, 2, 1 );
+  groupIsoFilesystemLayout->addWidget( m_checkLowercase, 3, 1 );
+  groupIsoFilesystemLayout->addWidget( m_checkOmitTrailingPeriod, 4, 1 );
+  groupIsoFilesystemLayout->addWidget( m_checkAllow31, 6, 1 );
+  line = new QFrame( groupIsoFilesystem );
+  line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+  groupIsoFilesystemLayout->addMultiCellWidget( line, 7, 7, 0, 1 );
+  groupIsoFilesystemLayout->addWidget( m_checkCreateTRANS_TBL, 8, 0 );
+  groupIsoFilesystemLayout->addWidget( m_checkHideTRANS_TBL, 8, 1 );
 
 
   QGroupBox* groupInputCharset = new QGroupBox( 2, Qt::Horizontal, i18n("Input Charset"), frame );
@@ -446,25 +474,15 @@ void K3bDataBurnDialog::setupAdvancedTab( QFrame* frame )
   m_comboInputCharset->setEditable( true );
   m_comboInputCharset->setValidator( new QRegExpValidator( QRegExp("[\\w_-]*"), m_comboInputCharset ) );
 
-  frameLayout->addWidget( m_checkUntranslatedNames, 0, 0 );
-  frameLayout->addWidget( m_checkAllow31, 1, 0 );
-  frameLayout->addWidget( m_checkMaxNames, 2, 0);
-  frameLayout->addWidget( m_checkBeginPeriod, 3, 0 );
-  frameLayout->addWidget( m_checkRelaxedNames, 4, 0 );
-  frameLayout->addWidget( m_checkOmitVersion, 5, 0 );
-  frameLayout->addWidget( m_checkNoISOTrans, 6, 0 );
-  frameLayout->addWidget( m_checkMultiDot, 7, 0 );
-  frameLayout->addWidget( m_checkLowercase, 8, 0 );
 
-  frameLayout->addWidget( m_checkNoDeepDirRel, 0, 1 );
-  frameLayout->addWidget( m_checkHideRR_MOVED, 1, 1 );
-  frameLayout->addWidget( m_checkCreateTRANS_TBL, 2, 1 );
-  frameLayout->addWidget( m_checkHideTRANS_TBL, 3, 1 );
+  //  frameLayout->addWidget( m_checkNoDeepDirRel, 0, 1 );
+  //  frameLayout->addWidget( m_checkHideRR_MOVED, 0, 1 );
 
-  frameLayout->addMultiCellWidget( m_groupIsoLevel, 4, 8, 1, 1 );
-  frameLayout->addMultiCellWidget( groupInputCharset, 9, 9, 0, 1 );
+  frameLayout->addWidget( groupIsoFilesystem, 0, 0 );
+  frameLayout->addWidget( m_groupIsoLevel, 1, 0 );
+  frameLayout->addWidget( groupInputCharset, 2, 0 );
 
-  frameLayout->setRowStretch( 9, 1 );
+  frameLayout->setRowStretch( 2, 1 );
 
 
   // signals and slots connections
@@ -476,6 +494,7 @@ void K3bDataBurnDialog::setupAdvancedTab( QFrame* frame )
   connect( m_checkUntranslatedNames, SIGNAL( toggled(bool) ), m_checkNoISOTrans, SLOT( setDisabled(bool) ) );
   connect( m_checkUntranslatedNames, SIGNAL( toggled(bool) ), m_checkMultiDot, SLOT( setDisabled(bool) ) );
   connect( m_checkUntranslatedNames, SIGNAL( toggled(bool) ), m_checkMaxNames, SLOT( setDisabled(bool) ) );
+  connect( m_checkUntranslatedNames, SIGNAL( toggled(bool) ), m_checkOmitTrailingPeriod, SLOT( setDisabled(bool) ) );
   connect( m_checkForceInputCharset, SIGNAL( toggled(bool) ), m_comboInputCharset, SLOT( setEnabled(bool) ) );
 
   // fill charset combo
@@ -711,23 +730,24 @@ void K3bDataBurnDialog::loadDefaults()
   m_checkDeleteImage->setChecked( true );
   m_checkOnlyCreateImage->setChecked( false );
 
-  m_radioIsoLevel1->setChecked(true);
+  m_radioIsoLevel3->setChecked(true);
 
   m_radioSpaceLeave->setChecked(true);
 
   m_checkForceInputCharset->setChecked( false );
   m_comboInputCharset->setEditText( "iso8859-1" );
 
-  m_checkNoDeepDirRel->setChecked( false );
-  m_checkHideRR_MOVED->setChecked( false );
+  //  m_checkNoDeepDirRel->setChecked( false );
+  //  m_checkHideRR_MOVED->setChecked( false );
   m_checkCreateTRANS_TBL->setChecked( false );
   m_checkHideTRANS_TBL->setChecked( false );
   m_checkUntranslatedNames->setChecked( false );
-  m_checkAllow31->setChecked( false );
+  m_checkAllow31->setChecked( true );
   m_checkMaxNames->setChecked( false );
   m_checkBeginPeriod->setChecked( false );
   m_checkRelaxedNames->setChecked( false );
   m_checkOmitVersion->setChecked( false );
+  m_checkOmitTrailingPeriod->setChecked( false );
   m_checkNoISOTrans->setChecked( false );
   m_checkMultiDot->setChecked( false );
   m_checkLowercase->setChecked( false ); 
@@ -750,7 +770,7 @@ void K3bDataBurnDialog::loadUserDefaults()
   m_checkDeleteImage->setChecked( c->readBoolEntry( "remove_image", true ) );
   m_checkOnlyCreateImage->setChecked( c->readBoolEntry( "only_create_image", false ) );
 
-  switch( c->readNumEntry( "iso_level", 1 ) ) {
+  switch( c->readNumEntry( "iso_level", 3 ) ) {
   case 1:
     m_radioIsoLevel1->setChecked(true);
     break;
@@ -777,17 +797,18 @@ void K3bDataBurnDialog::loadUserDefaults()
 
 
   kapp->config()->setGroup( "Default ISO Settings" );
-  m_checkNoDeepDirRel->setChecked( kapp->config()->readBoolEntry( "no deep dir relocation", false ) );
+  //  m_checkNoDeepDirRel->setChecked( kapp->config()->readBoolEntry( "no deep dir relocation", false ) );
   //  m_checkPadding->setChecked( kapp->config()->readBoolEntry( "padding", false ) );
-  m_checkHideRR_MOVED->setChecked( kapp->config()->readBoolEntry( "hide RR_MOVED", false ) );
+  //  m_checkHideRR_MOVED->setChecked( kapp->config()->readBoolEntry( "hide RR_MOVED", false ) );
   m_checkCreateTRANS_TBL->setChecked( kapp->config()->readBoolEntry( "create TRANS_TBL", false ) );
   m_checkHideTRANS_TBL->setChecked( kapp->config()->readBoolEntry( "hide TRANS_TBL", false ) );
   m_checkUntranslatedNames->setChecked( kapp->config()->readBoolEntry( "untranslated filenames", false ) );
-  m_checkAllow31->setChecked( kapp->config()->readBoolEntry( "allow 31 character filenames", false ) );
+  m_checkAllow31->setChecked( kapp->config()->readBoolEntry( "allow 31 character filenames", true ) );
   m_checkMaxNames->setChecked( kapp->config()->readBoolEntry( "max ISO filenames", false ) );
   m_checkBeginPeriod->setChecked( kapp->config()->readBoolEntry( "allow beginning period", false ) );
   m_checkRelaxedNames->setChecked( kapp->config()->readBoolEntry( "relaxed filenames", false ) );
   m_checkOmitVersion->setChecked( kapp->config()->readBoolEntry( "omit version numbers", false ) );
+  m_checkOmitTrailingPeriod->setChecked( kapp->config()->readBoolEntry( "omit trailing period", false ) );
   m_checkNoISOTrans->setChecked( kapp->config()->readBoolEntry( "no iSO translation", false ) );
   m_checkMultiDot->setChecked( kapp->config()->readBoolEntry( "allow multible dots", false ) );
   m_checkLowercase->setChecked( kapp->config()->readBoolEntry( "allow lowercase filenames", false ) ); 
@@ -833,9 +854,9 @@ void K3bDataBurnDialog::saveUserDefaults()
   c->writeEntry( "input charset", m_comboInputCharset->currentText() );
 
   kapp->config()->setGroup( "Default ISO Settings" );
-  kapp->config()->writeEntry( "no deep dir relocation", m_checkNoDeepDirRel->isChecked( ) );
+  //  kapp->config()->writeEntry( "no deep dir relocation", m_checkNoDeepDirRel->isChecked( ) );
   //  kapp->config()->writeEntry( "padding" , m_checkPadding->isChecked( ) );
-  kapp->config()->writeEntry( "hide RR_MOVED", m_checkHideRR_MOVED->isChecked( ) );
+  //  kapp->config()->writeEntry( "hide RR_MOVED", m_checkHideRR_MOVED->isChecked( ) );
   kapp->config()->writeEntry( "create TRANS_TBL", m_checkCreateTRANS_TBL->isChecked( ) );
   kapp->config()->writeEntry( "hide TRANS_TBL", m_checkHideTRANS_TBL->isChecked( ) );
   kapp->config()->writeEntry( "untranslated filenames", m_checkUntranslatedNames->isChecked( ) );
@@ -844,6 +865,7 @@ void K3bDataBurnDialog::saveUserDefaults()
   kapp->config()->writeEntry( "allow beginning period", m_checkBeginPeriod->isChecked() );
   kapp->config()->writeEntry( "relaxed filenames", m_checkRelaxedNames->isChecked( ) );
   kapp->config()->writeEntry( "omit version numbers", m_checkOmitVersion->isChecked() );
+  kapp->config()->writeEntry( "omit trailing period", m_checkOmitTrailingPeriod->isChecked() );
   kapp->config()->writeEntry( "no iSO translation", m_checkNoISOTrans->isChecked() );
   kapp->config()->writeEntry( "allow multible dots", m_checkMultiDot->isChecked() );
   kapp->config()->writeEntry( "allow lowercase filenames", m_checkLowercase->isChecked( ) );

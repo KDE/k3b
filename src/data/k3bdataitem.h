@@ -37,9 +37,9 @@ class K3bDataItem
   K3bDirItem* parent() const { return m_parentDir; }
 	
   K3bDataDoc* doc() const { return m_doc; }
-  const QString& k3bName();
+  virtual const QString& k3bName();
   const QString& jolietName();
-  void setK3bName( const QString& );
+  virtual void setK3bName( const QString& );
   void setJolietName( const QString& );
   /** 
    * returns the path as defined by the k3b-hierachy, NOT starting with a slash (since this is used for graft-points!) 

@@ -853,6 +853,8 @@ bool K3bDataJob::addMkisofsParameters()
       *m_process << "-no-iso-translate";
     if( m_doc->ISOallowMultiDot()  )
       *m_process << "-allow-multidot";
+    if( m_doc->ISOomitTrailingPeriod() )
+      *m_process << "-d";
   }
 		
   if( m_doc->ISOmaxFilenameLength()  )
@@ -867,8 +869,8 @@ bool K3bDataJob::addMkisofsParameters()
   *m_process << "-f";	
 
 
-  if( m_doc->hideRR_MOVED()  )
-    *m_process << "-hide-rr-moved";	
+//   if( m_doc->hideRR_MOVED()  )
+//     *m_process << "-hide-rr-moved";	
   if( m_doc->createTRANS_TBL()  )
     *m_process << "-T";	
   if( m_doc->hideTRANS_TBL()  )

@@ -79,5 +79,8 @@ class K3bRootItem : public K3bDirItem
   /** reimplemented from K3bDataItem */
   QString k3bPath();
   QString jolietPath();
+
+  const QString& k3bName();
+  void setK3bName( const QString& );
 };
 #endif

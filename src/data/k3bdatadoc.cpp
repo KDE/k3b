@@ -82,14 +82,15 @@ bool K3bDataDoc::newDocument()
   m_ISOallowPeriodAtBegin = false;   // -L
   m_ISOallow31charFilenames = false;  // -I
   m_ISOomitVersionNumbers = false;   // -N
+  m_ISOomitTrailingPeriod = false;   // -d
   m_ISOmaxFilenameLength = false;     // -max-iso9660-filenames (forces -N)
   m_ISOrelaxedFilenames = false;      // -relaxed-filenames
   m_ISOnoIsoTranslate = false;        // -no-iso-translate
   m_ISOallowMultiDot = false;          // -allow-multidot
   m_ISOuntranslatedFilenames = false;   // -U (forces -d, -I, -L, -N, -relaxed-filenames, -allow-lowercase, -allow-multidot, -no-iso-translate)
-  m_noDeepDirectoryRelocation = false;   // -D
+  //  m_noDeepDirectoryRelocation = false;   // -D
   m_followSymbolicLinks = false;       // -f
-  m_hideRR_MOVED = false;  // -hide-rr-moved
+  //  m_hideRR_MOVED = false;  // -hide-rr-moved
   m_createTRANS_TBL = false;    // -T
   m_hideTRANS_TBL = false;    // -hide-joliet-trans-tbl
   m_padding = false;           // -pad
@@ -436,6 +437,9 @@ bool K3bDataDoc::loadDocumentData( QDomDocument* doc )
     else if( e.nodeName() == "iso_omit_version_numbers")
       setISOomitVersionNumbers( e.attributeNode( "activated" ).value() == "yes" );
 
+    else if( e.nodeName() == "iso_omit_trailing_period")
+      setISOomitTrailingPeriod( e.attributeNode( "activated" ).value() == "yes" );
+
     else if( e.nodeName() == "iso_max_filename_length")
       setISOmaxFilenameLength( e.attributeNode( "activated" ).value() == "yes" );
 
@@ -451,14 +455,14 @@ bool K3bDataDoc::loadDocumentData( QDomDocument* doc )
     else if( e.nodeName() == "iso_untranslated_filenames")
       setISOuntranslatedFilenames( e.attributeNode( "activated" ).value() == "yes" );
 
-    else if( e.nodeName() == "no_deep_dir_relocation")
-      setNoDeepDirectoryRelocation( e.attributeNode( "activated" ).value() == "yes" );
+//     else if( e.nodeName() == "no_deep_dir_relocation")
+//       setNoDeepDirectoryRelocation( e.attributeNode( "activated" ).value() == "yes" );
 
     else if( e.nodeName() == "follow_symbolic_links")
       setFollowSymbolicLinks( e.attributeNode( "activated" ).value() == "yes" );
 
-    else if( e.nodeName() == "hide_rr_moved")
-      setHideRR_MOVED( e.attributeNode( "activated" ).value() == "yes" );
+//     else if( e.nodeName() == "hide_rr_moved")
+//       setHideRR_MOVED( e.attributeNode( "activated" ).value() == "yes" );
 
     else if( e.nodeName() == "create_trans_tbl")
       setCreateTRANS_TBL( e.attributeNode( "activated" ).value() == "yes" );
@@ -632,6 +636,10 @@ bool K3bDataDoc::saveDocumentData( QDomDocument* doc )
   topElem.setAttribute( "activated", ISOomitVersionNumbers() ? "yes" : "no" );
   optionsElem.appendChild( topElem );
 
+  topElem = doc->createElement( "iso_omit_trailing_period" );
+  topElem.setAttribute( "activated", ISOomitTrailingPeriod() ? "yes" : "no" );
+  optionsElem.appendChild( topElem );
+
   topElem = doc->createElement( "iso_max_filename_length" );
   topElem.setAttribute( "activated", ISOmaxFilenameLength() ? "yes" : "no" );
   optionsElem.appendChild( topElem );
@@ -652,17 +660,17 @@ bool K3bDataDoc::saveDocumentData( QDomDocument* doc )
   topElem.setAttribute( "activated", ISOuntranslatedFilenames() ? "yes" : "no" );
   optionsElem.appendChild( topElem );
 
-  topElem = doc->createElement( "no_deep_dir_relocation" );
-  topElem.setAttribute( "activated", noDeepDirectoryRelocation() ? "yes" : "no" );
-  optionsElem.appendChild( topElem );
+//   topElem = doc->createElement( "no_deep_dir_relocation" );
+//   topElem.setAttribute( "activated", noDeepDirectoryRelocation() ? "yes" : "no" );
+//   optionsElem.appendChild( topElem );
 
   topElem = doc->createElement( "follow_symbolic_links" );
   topElem.setAttribute( "activated", followSymbolicLinks() ? "yes" : "no" );
   optionsElem.appendChild( topElem );
 
-  topElem = doc->createElement( "hide_rr_moved" );
-  topElem.setAttribute( "activated", hideRR_MOVED() ? "yes" : "no" );
-  optionsElem.appendChild( topElem );
+//   topElem = doc->createElement( "hide_rr_moved" );
+//   topElem.setAttribute( "activated", hideRR_MOVED() ? "yes" : "no" );
+//   optionsElem.appendChild( topElem );
 
   topElem = doc->createElement( "create_trans_tbl" );
   topElem.setAttribute( "activated", createTRANS_TBL() ? "yes" : "no" );
@@ -965,7 +973,7 @@ void K3bDataDoc::loadDefaultSettings()
   m_createJoliet = c->readBoolEntry( "joliet", false );
   m_deleteImage = c->readBoolEntry( "remove_image", true );
   m_onlyCreateImage = c->readBoolEntry( "only_create_image", false );
-  m_isoLevel = c->readNumEntry( "iso_level", 1 );
+  m_isoLevel = c->readNumEntry( "iso_level", 3 );
 
   QString w = c->readEntry( "white_space_treatment", "normal" );
   if( w == "convert" )
@@ -978,13 +986,13 @@ void K3bDataDoc::loadDefaultSettings()
     m_whiteSpaceTreatment = K3bDataDoc::normal;
 
   c->setGroup( "Default ISO Settings" );
-  m_noDeepDirectoryRelocation = c->readBoolEntry( "no deep dir relocation", false );
+  //  m_noDeepDirectoryRelocation = c->readBoolEntry( "no deep dir relocation", false );
   //  m_isoPadding = c->readBoolEntry( "padding", false );
-  m_hideRR_MOVED = c->readBoolEntry( "hide RR_MOVED", false );
+  //  m_hideRR_MOVED = c->readBoolEntry( "hide RR_MOVED", false );
   m_createTRANS_TBL = c->readBoolEntry( "create TRANS_TBL", false );
   m_hideTRANS_TBL = c->readBoolEntry( "hide TRANS_TBL", false );
   m_ISOuntranslatedFilenames = c->readBoolEntry( "untranslated filenames", false );
-  m_ISOallow31charFilenames = c->readBoolEntry( "allow 31 character filenames", false );
+  m_ISOallow31charFilenames = c->readBoolEntry( "allow 31 character filenames", true );
   m_ISOmaxFilenameLength = c->readBoolEntry( "max ISO filenames", false );
   m_ISOallowPeriodAtBegin = c->readBoolEntry( "allow beginning period", false );
   m_ISOrelaxedFilenames = c->readBoolEntry( "relaxed filenames", false );
@@ -992,6 +1000,7 @@ void K3bDataDoc::loadDefaultSettings()
   m_ISOnoIsoTranslate = c->readBoolEntry( "no iSO translation", false );
   m_ISOallowMultiDot = c->readBoolEntry( "allow multible dots", false );
   m_ISOallowLowercase = c->readBoolEntry( "allow lowercase filenames", false );
+  m_ISOomitTrailingPeriod = c->readBoolEntry( "omit trailing period", false );
 }
 
 

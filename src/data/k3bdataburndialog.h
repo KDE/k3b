@@ -101,6 +101,7 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    QCheckBox* m_checkNoISOTrans;
    QCheckBox* m_checkMultiDot;
    QCheckBox* m_checkLowercase;
+   QCheckBox* m_checkOmitTrailingPeriod;
 
    QCheckBox* m_checkForceInputCharset;
    KComboBox* m_comboInputCharset;

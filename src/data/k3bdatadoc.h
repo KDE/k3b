@@ -112,6 +112,7 @@ class K3bDataDoc : public K3bDoc
   bool ISOallowPeriodAtBegin() const { return m_ISOallowPeriodAtBegin; }
   bool ISOallow31charFilenames() const { return m_ISOallow31charFilenames; }
   bool ISOomitVersionNumbers() const { return m_ISOomitVersionNumbers; }
+  bool ISOomitTrailingPeriod() const { return m_ISOomitTrailingPeriod; }
   bool ISOmaxFilenameLength() const { return m_ISOmaxFilenameLength; }
   bool ISOrelaxedFilenames() const { return m_ISOrelaxedFilenames; }
   bool ISOnoIsoTranslate() const { return m_ISOnoIsoTranslate; }
@@ -138,6 +139,7 @@ class K3bDataDoc : public K3bDoc
   void setISOallowPeriodAtBegin( bool b ) {  m_ISOallowPeriodAtBegin = b; }
   void setISOallow31charFilenames( bool b ) {  m_ISOallow31charFilenames = b; }
   void setISOomitVersionNumbers( bool b ) {  m_ISOomitVersionNumbers = b; }
+  void setISOomitTrailingPeriod( bool b ) {  m_ISOomitTrailingPeriod = b; }
   void setISOmaxFilenameLength( bool b ) {  m_ISOmaxFilenameLength = b; }
   void setISOrelaxedFilenames( bool b ) {  m_ISOrelaxedFilenames = b; }
   void setISOnoIsoTranslate( bool b ) {  m_ISOnoIsoTranslate = b; }
@@ -259,6 +261,7 @@ class K3bDataDoc : public K3bDoc
   bool m_ISOallowPeriodAtBegin;   // -L
   bool m_ISOallow31charFilenames;  // -I
   bool m_ISOomitVersionNumbers;   // -N
+  bool m_ISOomitTrailingPeriod;   // -d
   bool m_ISOmaxFilenameLength;     // -max-iso9660-filenames (forces -N)
   bool m_ISOrelaxedFilenames;      // -relaxed-filenames
   bool m_ISOnoIsoTranslate;        // -no-iso-translate

@@ -122,6 +122,18 @@ QString K3bRootItem::jolietPath()
 }
 
 
+const QString& K3bRootItem:: k3bName()
+{
+  return doc()->volumeID();
+}
+
+
+void K3bRootItem::setK3bName( const QString& text )
+{
+  doc()->setVolumeID( text );
+}
+
+
 bool K3bDirItem::alreadyInDirectory( const QString& fileName ) const
 {
   QListIterator<K3bDataItem> it( *m_children );
