@@ -32,7 +32,8 @@
 
 
 K3bFileItem::K3bFileItem( const QString& filePath, K3bDataDoc* doc, K3bDirItem* dir, const QString& k3bName )
-  : KFileItem( 0, 0, KURL::encode_string(filePath) ), K3bDataItem( doc, dir )
+  : KFileItem( 0, 0, KURL::encode_string(filePath) ), K3bDataItem( doc, dir ),
+    m_replacedItemFromOldSession(0)
 {
   if( k3bName.isEmpty() )
     m_k3bName = QFileInfo(filePath).fileName();

@@ -17,6 +17,7 @@
 #include "k3bdatadoc.h"
 #include "k3bfileitem.h"
 #include "k3bdiritem.h"
+#include "k3bsessionimportitem.h"
 #include "k3bdataview.h"
 #include "k3bdatajob.h"
 #include "k3bbootitem.h"
@@ -31,8 +32,7 @@
 #include <k3bdevice.h>
 #include <k3btoc.h>
 #include <k3btrack.h>
-
-//#include <stdlib.h>
+#include <k3bmultichoicedialog.h>
 
 #include <qdir.h>
 #include <qstring.h>
@@ -84,6 +84,7 @@ bool K3bDataDoc::newDocument()
   m_bootImages.clear();
   m_bootCataloge = 0;
   m_oldSessionHackSize = m_oldSessionSize = 0;
+  m_bExistingItemsReplaceAll = m_bExistingItemsIgnoreAll = false;
 
   if( m_root ) {
     while( m_root->children()->first() )
@@ -168,6 +169,7 @@ void K3bDataDoc::slotAddQueuedItems()
     m_queuedToAddItemsTimer->start(0);
   }
   else {
+    m_bExistingItemsIgnoreAll = m_bExistingItemsReplaceAll = false;
     m_numberAddedItems = 0;
     m_queuedToAddItemsTimer->stop();
     emit newFileItems();
@@ -272,24 +274,70 @@ K3bFileItem* K3bDataDoc::createFileItem( QFileInfo& f, K3bDirItem* parent )
 
   // check if we have read access
   if( f.isReadable() ) {
-    if( nameAlreadyInDir( newName, parent ) ) {
-      k3bcore->config()->setGroup("Data project settings");
-      bool dropDoubles = k3bcore->config()->readBoolEntry( "Drop doubles", false );
-      if( dropDoubles )
-	return 0;
 
-      bool ok = true;
-      do {
-	newName = KLineEditDlg::getText( i18n("A file with that name already exists. Please enter a new name."),
-					 newName, &ok, qApp->activeWindow() );
-      } while( ok && nameAlreadyInDir( newName, parent ) );
+    K3bSessionImportItem* oldSessionItem = 0;
 
-      if( !ok )
+    if( K3bDataItem* oldItem = parent->find( newName ) ) {
+
+      if( oldItem->isFromOldSession() ) {
+	// in this case we remove this item from it's parent and save it in the new one
+	// to be able to recover it
+	parent->takeDataItem( oldItem );
+	emit itemRemoved( oldItem );
+	oldSessionItem = (K3bSessionImportItem*)oldItem;
+      }
+      else if( m_bExistingItemsIgnoreAll )
 	return 0;
+      else if( m_bExistingItemsReplaceAll )
+	removeItem( oldItem );
+      else {
+	// TODO: use KGuiItems to add ToolTips
+ 	switch( K3bMultiChoiceDialog::choose( i18n("File already exists"),
+					      i18n("%1 already exists.").arg(newName),
+					      qApp->activeWindow(),
+					      0,
+					      5,
+					      i18n("Replace"),
+					      i18n("Replace All"),
+					      i18n("Ignore"),
+					      i18n("Ignore All"),
+					      i18n("Rename") ) ) {
+	case 1: // replace
+	  removeItem( oldItem );
+	  break;
+	case 2: // replace all
+	  removeItem( oldItem );
+	  m_bExistingItemsReplaceAll = true;
+	  break;
+	case 3: // ignore
+	  return 0;
+	  break;
+	case 4: // ignore all
+	  m_bExistingItemsIgnoreAll = true;
+	  return 0;
+	  break;
+	case 5: // rename
+	  {
+	    bool ok = true;
+	    do {
+	      newName = KLineEditDlg::getText( i18n("A file with that name already exists. Please enter a new name."),
+					       newName, &ok, qApp->activeWindow() );
+	    } while( ok && nameAlreadyInDir( newName, parent ) );
+	    if( !ok )
+	      return 0;
+	  }
+	  break;
+	}
+      }
     }
 
     K3bFileItem* newK3bItem = new K3bFileItem( f.absFilePath(), this, parent, newName );
-    //  m_sizeHandler->addFile( f.absFilePath() );
+
+    if( oldSessionItem ) {
+      oldSessionItem->setReplaceItem( newK3bItem );
+      newK3bItem->setReplacedItemFromOldSession( oldSessionItem );
+    }
+
     return newK3bItem;
   }
   else {
@@ -963,6 +1011,12 @@ void K3bDataDoc::removeItem( K3bDataItem* item )
 	  pi = m_queuedToAddItems.next();
       }
     }
+    else if( item->isFile() ) {
+      // restore the item imported from an old session
+      if( K3bDataItem* oldSessionItem = ((K3bFileItem*)item)->replaceItemFromOldSession() ) {
+	item->parent()->addDataItem( oldSessionItem );
+      }
+    }
 
     delete item;
 
@@ -1249,16 +1303,13 @@ void K3bDataDoc::createSessionImportItems( const KArchiveDirectory* importDir, K
       createSessionImportItems( (KArchiveDirectory*)entry, dir );
     }
     else {
+      const K3bIso9660File* file = (const K3bIso9660File*)entry;
 
-      // TODO: implement file replacing
+      // we overwrite without warning!
+      if( K3bDataItem* oldItem = parent->find( file->name() ) )
+	removeItem( oldItem );
 
-      const KArchiveFile* file = (const KArchiveFile*)entry;
-      K3bSpecialDataItem* item = new K3bSpecialDataItem( this, file->size(), parent, entry->name() );
-      item->setRemoveable(false);
-      item->setRenameable(false);
-      item->setMoveable(false);
-      item->setHideable(false);
-      item->setWriteToCd(false);
+      K3bSessionImportItem* item = new K3bSessionImportItem( file, this, parent );
       item->setExtraInfo( i18n("From previous session") );
       m_oldSession.append( item );
 

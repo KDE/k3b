@@ -51,15 +51,13 @@ void K3bDataItem::setK3bName( const QString& name ) {
     kdDebug() << "(K3bDataItem) name contained invalid characters!" << endl;
     return;
   }
-//   if( parent() ) {
-//     QPtrList<K3bDataItem>* _itemsInDir = parent()->children();
-//     for( K3bDataItem* _it = _itemsInDir->first(); _it; _it = _itemsInDir->next() ) {
-//       if( _it != this && _it->k3bName() == name ) {
-// 	kdDebug() << "(K3bDataItem) already a file with that name in directory: " << _it->k3bName() << endl;
-// 	return;
-//       }
-//     }
-//   }
+   
+  if( parent() ) {
+    if( parent()->find( name ) ) {
+      kdDebug() << "(K3bDataItem) item with that name already exists." << endl;
+      return;
+    }
+  }
 
   m_k3bName = name;
   if( parent() )

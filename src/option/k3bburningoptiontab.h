@@ -48,7 +48,6 @@ Q_OBJECT
  private:
   void setupGui();
 
-  QCheckBox*    m_checkDropDoubles;
   QCheckBox*    m_checkListHiddenFiles;
   QCheckBox*    m_checkListSystemFiles;
 

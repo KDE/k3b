@@ -223,6 +223,9 @@ class K3bDataDoc : public K3bDoc
   K3bDataItem* m_bootCataloge;
   QPtrList<K3bBootItem> m_bootImages;
 
+  bool m_bExistingItemsReplaceAll;
+  bool m_bExistingItemsIgnoreAll;
+
   friend class K3bMixedDoc;
 };
 

@@ -101,7 +101,6 @@ void K3bBurningOptionTab::setupGui()
 
   m_checkListHiddenFiles = new QCheckBox( i18n("List &hidden files"), m_groupData );
   m_checkListSystemFiles = new QCheckBox( i18n("List &system files"), m_groupData );
-  m_checkDropDoubles = new QCheckBox( i18n("&Discard identical names"), m_groupData );
 
   // -----------------------------------------------------------------------
   // vcd settings group
@@ -231,7 +230,6 @@ void K3bBurningOptionTab::setupGui()
   mainTabbed->addTab( projectTab, i18n("&Projects") );
   mainTabbed->addTab( advancedTab, i18n("&Advanced") );
 
-  QToolTip::add( m_checkDropDoubles, i18n("Do not ask to rename already existing files") );
   QToolTip::add( m_checkListHiddenFiles, i18n("Add hidden files in subdirectories") );
   QToolTip::add( m_checkListSystemFiles, i18n("Add system files in subdirectories") );
   QToolTip::add( m_checkAllowWritingAppSelection, i18n("Allow to choose between cdrecord and cdrdao") );
@@ -243,11 +241,6 @@ void K3bBurningOptionTab::setupGui()
   QToolTip::add( m_labelWaitTime, i18n("Time to wait after each sequence/segment by default.") );
   QToolTip::add( m_labelPlayTime, i18n("Play each sequence/segment by default.") );
   
-  QWhatsThis::add( m_checkDropDoubles, i18n("<p>If this option is checked K3b will not ask how to "
-					    "handle a file that already exists in the project "
-					    "but just ignore it."
-					    "<p>The default is off which means that the user is "
-					    "asked to rename or ignore the file." ) );
   QWhatsThis::add( m_checkListHiddenFiles, i18n("<p>If this option is checked, hidden files "
 						"in directories added to a data project will "
 						"also be added.</p>" ) );
@@ -283,7 +276,6 @@ void K3bBurningOptionTab::readSettings()
   m_checkUseNumKey->setChecked( c->readBoolEntry("Use numeric keys to navigate chapters", false) );
   
   c->setGroup( "Data project settings" );
-  m_checkDropDoubles->setChecked( c->readBoolEntry("Drop doubles", false) );
   m_checkListHiddenFiles->setChecked( c->readBoolEntry("List hidden files", false ) );
   m_checkListSystemFiles->setChecked( c->readBoolEntry("List system files", false ) );
 
@@ -317,7 +309,6 @@ void K3bBurningOptionTab::saveSettings()
   c->writeEntry( "Use numeric keys to navigate chapters", m_checkUseNumKey->isChecked() );
   
   c->setGroup( "Data project settings" );
-  c->writeEntry( "Drop doubles", m_checkDropDoubles->isChecked() );
   c->writeEntry( "List hidden files", m_checkListHiddenFiles->isChecked() );
   c->writeEntry( "List system files", m_checkListSystemFiles->isChecked() );
 

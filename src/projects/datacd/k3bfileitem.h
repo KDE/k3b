@@ -60,7 +60,12 @@ public:
    *  if the link's destination is part of the compilation */
   bool isValid() const;
 
+  K3bDataItem* replaceItemFromOldSession() const { return m_replacedItemFromOldSession; }
+  void setReplacedItemFromOldSession( K3bDataItem* item ) { m_replacedItemFromOldSession = item; }
+
  private:
+  K3bDataItem* m_replacedItemFromOldSession;
+
   KIO::filesize_t m_size;
   int m_inode;
 };
