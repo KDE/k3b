@@ -68,6 +68,7 @@ class K3bCddb : public QObject
   void slotQueryFinished( K3bCddbQuery* );
   void slotSubmitFinished( K3bCddbSubmit* );
   void slotMultibleMatches( K3bCddbQuery* );
+  void slotNoEntry();
 
  private:
   K3bCddbQuery* getQuery( const QString& );
