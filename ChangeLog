@@ -1,4 +1,18 @@
 0.8
+changed he option dialog layout -> smaller window
+
+fixed problems with first pregap in audio project:
+  no need to set the first pregap to 0 on some writers anymore
+  no 4 second pregap before first tracks anymore
+
+fixed problems with detecting some audio tracks that had flags like preemp set
+	
+removed cdparanoia dependancy (dynamic linking)
+big internal changes
+split bin/cue writing from iso-image-writing
+better cdcopy (mainly more options)
+customizeable audio ripping
+
 mixed mode cd creation
 video cd creation
 better error handling
