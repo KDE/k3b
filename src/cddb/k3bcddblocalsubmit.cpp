@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -66,10 +66,9 @@ void K3bCddbLocalSubmit::doSubmit()
     QFile entryFile( path );
     if( entryFile.exists() ) {
       kdDebug() << "(K3bCddbLocalSubmit) file already exists: " << path << endl;
-      setError( SUCCESS );
-      emit submitFinished( this );
     }
-    else if( !entryFile.open( IO_WriteOnly ) ) {
+    
+    if( !entryFile.open( IO_WriteOnly ) ) {
       kdDebug() << "(K3bCddbLocalSubmit) could not create file: " << path << endl;
       setError( IO_ERROR );
       emit submitFinished( this );

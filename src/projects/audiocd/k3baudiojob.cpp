@@ -335,6 +335,10 @@ bool K3bAudioJob::prepareWriter()
     if( m_doc->cdText() )
       writer->addArgument( "-text" );
 
+    // we always pad because although K3b makes sure all tracks' lenght are multible of 2352
+    // it seems that normalize sometimes corrupts these lenght
+    writer->addArgument( "-pad" );
+
     // add all the audio tracks
     writer->addArgument( "-audio" );
 

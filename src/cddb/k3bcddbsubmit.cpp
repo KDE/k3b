@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -41,9 +41,44 @@ void K3bCddbSubmit::submit( const K3bCddbResultEntry& entry )
 }
 
 
-void K3bCddbSubmit::createDataStream( K3bCddbResultEntry& )
+void K3bCddbSubmit::createDataStream( K3bCddbResultEntry& entry )
 {
-  // FIXME
+  entry.rawData.truncate(0);
+  
+  QTextStream ts( &entry.rawData, IO_WriteOnly );
+
+  ts << "#" << endl
+     << "# Submitted via: K3b" << endl
+     << "#" << endl;
+
+  ts << "DISCID=" << entry.discid << endl
+     << "DTITLE=" << entry.cdArtist << " / " << entry.cdTitle << endl
+     << "DYEAR=";
+  if( entry.year > 0 )
+    ts << entry.year;
+  ts << endl;
+  ts << "DGENRE=" << entry.genre << endl;
+
+  bool allEqualArtist = true;
+  for( unsigned int i = 0; i < entry.artists.count(); ++i )
+    if( entry.artists[i] != entry.cdArtist &&
+	!entry.artists[i].isEmpty() ) {
+      allEqualArtist = false;
+      break;
+    }
+
+  for( unsigned int i = 0; i < entry.titles.count(); ++i ) {
+    ts << "TTITLE" << i << "=";
+    if( !allEqualArtist )
+      ts << entry.artists[i] << " / ";
+    ts << entry.titles[i] << endl;
+  }
+
+  ts << "EXTD=" << entry.cdExtInfo << endl;
+
+  for( unsigned int i = 0; i < entry.titles.count(); ++i ) {
+    ts << "EXTT" << i << "=" << entry.extInfos[i] << endl;
+  }
 }
 
 #include "k3bcddbsubmit.moc"

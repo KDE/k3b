@@ -763,8 +763,13 @@ void K3bListView::slotEditorLineEditReturnPressed()
 {
   if( renameItem( m_currentEditItem, m_currentEditColumn, m_editorLineEdit->text() ) ) {
     m_currentEditItem->setText( m_currentEditColumn, m_editorLineEdit->text() );
-    hideEditor();
     emit itemRenamed( m_currentEditItem, m_editorLineEdit->text(), m_currentEditColumn );
+    // edit the next line
+    // TODO: add config for this
+    if( K3bListViewItem* nextItem = dynamic_cast<K3bListViewItem*>( m_currentEditItem->nextSibling() ) )
+      editItem( nextItem, currentEditColumn() );
+    else
+      hideEditor();
   }
   else
     m_editorLineEdit->setText( m_currentEditItem->text( m_currentEditColumn ) );

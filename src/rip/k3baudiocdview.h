@@ -61,6 +61,7 @@ class K3bAudioCdView : public K3bCdContentsView
   void slotItemRenamed( QListViewItem*, const QString&, int );
   void slotCddbQueryFinished( int );
   void slotTrackSelectionChanged( QListViewItem* );
+  void slotSaveCddbLocally();
 
   void slotEditTrackCddb();
   void slotEditAlbumCddb();

@@ -186,6 +186,8 @@ void K3bAudioCdView::setDisk( K3bCdDevice::DiskInfoDetector* did )
 
   // initialize cddb info for editing
   m_cddbInfo = K3bCddbResultEntry();
+  m_cddbInfo.discid = QString::number( did->toc().discId(), 16 );
+
   for( int i = 0; i < (int)m_diskInfo.toc.count(); ++i ) {
     m_cddbInfo.titles.append("");
     m_cddbInfo.artists.append("");
@@ -279,6 +281,9 @@ void K3bAudioCdView::initActions()
   KAction* actionQueryCddb = new KAction( i18n("Query cddb"), "reload", 0, this,
 					  SLOT(queryCddb()), actionCollection(), "query_cddb" );
 
+  KAction* actionSaveCddbLocally = new KAction( i18n("Save Cddb entry locally"), "filesave", 0, this,
+						SLOT(slotSaveCddbLocally()), actionCollection(), "save_cddb_local" );
+
   // TODO: set the actions tooltips and whatsthis infos
 
   // setup the popup menu
@@ -296,6 +301,7 @@ void K3bAudioCdView::initActions()
 
   // setup the toolbox
   m_toolBox->addButton( actionQueryCddb );
+  m_toolBox->addButton( actionSaveCddbLocally );
   m_toolBox->addButton( actionEditTrackCddbInfo );
   m_toolBox->addButton( actionEditAlbumCddbInfo );
   m_toolBox->addButton( actionStartRip );
@@ -475,8 +481,10 @@ void K3bAudioCdView::slotCddbQueryFinished( int error )
     m_cddbInfo = m_cddb->result();
 
     // save the entry locally
-    // K3bCddb only saves if it is configured, otherwise does nothing
-    m_cddb->saveEntry( m_cddbInfo );
+    KConfig* c = k3bcore->config();
+    c->setGroup( "Cddb" );
+    if( c->readBoolEntry( "save cddb entries locally", true ) )
+      m_cddb->saveEntry( m_cddbInfo );
 
     //       kdDebug() << "cddb info:" << endl;
     //       kdDebug() << "DTITLE:  '" << m_cddbInfo.cdTitle << "'" << endl;
@@ -507,6 +515,53 @@ void K3bAudioCdView::slotCddbQueryFinished( int error )
   }
 
   enableInteraction(true);
+}
+
+
+void K3bAudioCdView::slotSaveCddbLocally()
+{
+  // check if the minimal info has been inserted
+  if( m_cddbInfo.category.isEmpty() ) {
+    KMessageBox::sorry( this, i18n("Please set the category before saving.") );
+    return;
+  }
+    
+  if( m_cddbInfo.cdTitle.isEmpty() || m_cddbInfo.cdArtist.isEmpty() ) {
+    KMessageBox::sorry( this, i18n("Please set CD artist and title before saving.") );
+    return;
+  }
+
+  bool missingTitle = false;
+  bool missingArtist = false;
+  bool allTrackArtistsEmpty = true;
+  for( unsigned int i = 0; i < m_cddbInfo.titles.count(); ++i ) {
+    if( m_cddbInfo.titles[i].isEmpty() )
+      missingTitle = true;
+    if( m_cddbInfo.artists[i].isEmpty() )
+      missingArtist = true;
+    if( !m_cddbInfo.artists[i].isEmpty() )
+      allTrackArtistsEmpty = false;
+  }
+  
+  if( missingTitle ||
+      ( missingArtist && !allTrackArtistsEmpty ) ) {
+    KMessageBox::sorry( this, i18n("Please set at least artist and title on all tracks before saving.") );
+    return;
+  }
+
+  // make sure the data gets updated (bad design like a lot in the cddb stuff! :(
+  m_cddbInfo.rawData.truncate(0);
+
+  KConfig* c = k3bcore->config();
+  c->setGroup("Cddb");
+
+  m_cddb->readConfig( c );
+
+  m_cddb->saveEntry( m_cddbInfo );
+  KMessageBox::information( this, 
+			    i18n("Saved entry (%1) in category %2.")
+			    .arg(m_cddbInfo.discid)
+			    .arg(m_cddbInfo.category) );
 }
 
 

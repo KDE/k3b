@@ -70,7 +70,6 @@ void K3bCddb::readConfig( KConfig* c )
   m_proxyServer = c->readEntry( "proxy server" );
   m_proxyPort = c->readNumEntry( "proxy port" );
   m_bUseProxyServer = c->readBoolEntry( "use proxy server", false );
-  m_bSaveCddbEntriesLocally = c->readBoolEntry( "save cddb entries locally", true );
   m_bUseManualCgiPath = c->readBoolEntry( "use manual cgi path", false );
   m_cgiPath = c->readEntry( "cgi path", "~cddb/cddb.cgi" );
   m_bUseKdeSettings = ( c->readEntry( "proxy settings type", "kde" ) == "kde" );
@@ -256,17 +255,15 @@ const K3bCddbResultEntry& K3bCddb::result() const
 
 void K3bCddb::saveEntry( const K3bCddbResultEntry& entry )
 {
-  if( m_bSaveCddbEntriesLocally ) {
-    if( !m_localSubmit ) {
-      m_localSubmit = new K3bCddbLocalSubmit( this );
-      connect( m_localSubmit, SIGNAL(submitFinished(K3bCddbSubmit*)),
-	       this, SLOT(slotSubmitFinished(K3bCddbSubmit*)) );
-    }
-    
-    m_localSubmit->setCddbDir( m_localCddbDirs[0] );
-    
-    m_localSubmit->submit( entry );
+  if( !m_localSubmit ) {
+    m_localSubmit = new K3bCddbLocalSubmit( this );
+    connect( m_localSubmit, SIGNAL(submitFinished(K3bCddbSubmit*)),
+	     this, SLOT(slotSubmitFinished(K3bCddbSubmit*)) );
   }
+  
+  m_localSubmit->setCddbDir( m_localCddbDirs[0] );
+  
+  m_localSubmit->submit( entry );
 }
 
 
