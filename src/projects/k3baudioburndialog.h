@@ -41,7 +41,7 @@ class QShowEvent;
   */
 class K3bAudioBurnDialog : public K3bProjectBurnDialog  
 {
-  Q_OBJECT;
+  Q_OBJECT
 
  public:
   K3bAudioBurnDialog(K3bAudioDoc* doc, QWidget *parent=0, const char *name=0, bool modal = true );
