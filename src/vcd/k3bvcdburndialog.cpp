@@ -101,31 +101,31 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
   // What's This info
   // -------------------------------------------------------------------------  
   QWhatsThis::add( m_radioVcd11, i18n("<p>This is the most basic <b>Video CD</b> specification dating back to 1993, which has the following characteristics:"
-                                      "<ul>One mode2 mixed form ISO-9660 track containing file pointers to the information areas.</ul>"
-                                      "<ul>Up to 98 multiplex-ed MPEG-1 audio/video streams or CD-DA audio tracks.</ul>"
-                                      "<ul>Up to 500 MPEG sequence entry points used as chapter divisions.</ul>"
+                                      "<ul><li>One mode2 mixed form ISO-9660 track containing file pointers to the information areas.</li>"
+                                      "<li>Up to 98 multiplex-ed MPEG-1 audio/video streams or CD-DA audio tracks.</li>"
+                                      "<li>Up to 500 MPEG sequence entry points used as chapter divisions.</li></ul>"
                                       "<p>The Video CD specification requires the multiplex-ed MPEG-1 stream to have a CBR of less than 174300 bytes (1394400 bits) per second in order to accommodate single speed CD-ROM drives.<br>"
                                       "The specification allows for the following two resolutions:"
-                                      "<ul>352 x 240 @ 29.97 Hz (NTSC SIF).</ul>"
-                                      "<ul>352 x 240 @ 23.976 Hz (FILM SIF).</ul>"
+                                      "<ul><li>352 x 240 @ 29.97 Hz (NTSC SIF).</li>"
+                                      "<li>352 x 240 @ 23.976 Hz (FILM SIF).</li></ul>"
                                       "<p>The CBR MPEG-1, layer II audio stream is fixed at 224 kbps with 1 stereo or 2 mono channels."
                                       "<p><b>It is recommended to keep the video bit-rate under 1151929.1 bps.</b>") );
   
   QWhatsThis::add( m_radioVcd20, i18n("<p>About two years after the Video CD 1.1 specification came out, an improved <b>Video CD 2.0</b> standard was published in 1995."
                                       "<p>This one added the following items to the features already available in the Video CD 1.1 specification:"
-                                      "<ul>Support for MPEG segment play items (<b>\"SPI\"</b>), consisting of still pictures, motion pictures and/or audio (only) streams was added.</ul>"
-                                      "<ul>Note Segment Items::.</ul>"
-                                      "<ul>Support for interactive playback control (<b>\"PBC\"</b>) was added.</ul>"
-                                      "<ul>Support for playing related access by providing a scan point index file was added. (<b>\"/EXT/SCANDATA.DAT\"</b>)</ul>"
-                                      "<ul>Support for closed captions.</ul>"
-                                      "<ul>Support for mixing NTSC and PAL content.</ul>"
+                                      "<ul><li>Support for MPEG segment play items (<b>\"SPI\"</b>), consisting of still pictures, motion pictures and/or audio (only) streams was added.</li>"
+                                      "<li>Note Segment Items::.</li>"
+                                      "<li>Support for interactive playback control (<b>\"PBC\"</b>) was added.</li>"
+                                      "<li>Support for playing related access by providing a scan point index file was added. (<b>\"/EXT/SCANDATA.DAT\"</b>)</li>"
+                                      "<li>Support for closed captions.</li>"
+                                      "<li>Support for mixing NTSC and PAL content.</li></ul>"
                                       "<p>By adding PAL support to the Video CD 1.1 specification, the following resolutions became available:"
-                                      "<ul>352 x 240 @ 29.97 Hz (NTSC SIF).</ul>"
-                                      "<ul>352 x 240 @ 23.976 Hz (FILM SIF).</ul>"
-                                      "<ul>352 x 288 @ 25 Hz (PAL SIF).</ul>"
+                                      "<ul><li>352 x 240 @ 29.97 Hz (NTSC SIF).</li>"
+                                      "<li>352 x 240 @ 23.976 Hz (FILM SIF).</li>"
+                                      "<li>352 x 288 @ 25 Hz (PAL SIF).</li></ul>"
                                       "<p>For segment play items the following audio encodings became available:"
-                                      "<ul>Joint stereo, stereo or dual channel audio streams at 128, 192, 224 or 384 kbit/sec bit-rate.</ul>"
-                                      "<ul>Mono audio streams at 64, 96 or 192 kbit/sec bit-rate.</ul>"
+                                      "<ul><li>Joint stereo, stereo or dual channel audio streams at 128, 192, 224 or 384 kbit/sec bit-rate.</li>"
+                                      "<li>Mono audio streams at 64, 96 or 192 kbit/sec bit-rate.</li></ul>"
                                       "<p>Also the possibility to have audio only streams and still pictures was provided."
                                       "<p><b>The bit-rate of multiplex-ed streams should be kept under 174300 bytes/sec (except for single still picture items) in order to accommodate single speed drives.</b>") );
 
@@ -133,18 +133,18 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
                                         "<p>In the midst of 2000 a full subset of this <b>Super Video CD</b> specification was published as <b>IEC-62107</b>."
                                         "<p>As the most notable change over Video CD 2.0 is a switch from MPEG-1 CBR to MPEG-2 VBR encoding for the video stream was performed."
                                         "<p>The following new features--building upon the Video CD 2.0 specification--are:"
-                                        "<ul>Use of MPEG-2 encoding instead of MPEG-1 for the video stream.</ul>"
-                                        "<ul>Allowed VBR encoding of MPEG-1 audio stream.</ul>"
-                                        "<ul>Higher resolutions (see below) for video stream resolution.</ul>"
-                                        "<ul>Up to 4 overlay graphics and text (<b>\"OGT\"</b>) sub-channels for user switchable subtitle displaying in addition to the already existing closed caption facility.</ul>"
-                                        "<ul>Command lists for controlling the SVCD virtual machine.</ul>"
+                                        "<ul><li>Use of MPEG-2 encoding instead of MPEG-1 for the video stream.</li>"
+                                        "<li>Allowed VBR encoding of MPEG-1 audio stream.</li>"
+                                        "<li>Higher resolutions (see below) for video stream resolution.</li>"
+                                        "<li>Up to 4 overlay graphics and text (<b>\"OGT\"</b>) sub-channels for user switchable subtitle displaying in addition to the already existing closed caption facility.</li>"
+                                        "<li>Command lists for controlling the SVCD virtual machine.</li></ul>"
                                         "<p>For the <b>Super Video CD</b>, only the following two resolutions are supported for motion video and (low resolution) still pictures:"
-                                        "<ul>480 x 480 @ 29.97 Hz (NTSC 2/3 D-2).</ul>"
-                                        "<ul>480 x 576 @ 25 Hz (PAL 2/3 D-2).</ul>") );
+                                        "<ul><li>480 x 480 @ 29.97 Hz (NTSC 2/3 D-2).</li>"
+                                        "<li>480 x 576 @ 25 Hz (PAL 2/3 D-2).</li></ul>") );
 
-   QWhatsThis::add( m_checkNonCompliant, i18n("<p>Rename <b>\"/MPEG2\"</b> folder on SVCDs to (non-compliant) \"/MPEGAV\".<br>"
-                                              "Enables the use of the (deprecated) signature <b>\"ENTRYSVD\"</b> instead of <b>\"ENTRYVCD\"</b> for the file <b>\"/SVCD/ENTRY.SVD\"</b>.<br>"
-                                              "Enables the use of the (deprecated) chinese <b>\"/SVCD/TRACKS.SVD\"</b> format which differs from the format defined in the <b>IEC-62107</b> specification."
+   QWhatsThis::add( m_checkNonCompliant, i18n("<ul><li>Rename <b>\"/MPEG2\"</b> folder on SVCDs to (non-compliant) \"/MPEGAV\".</li>"
+                                              "<li>Enables the use of the (deprecated) signature <b>\"ENTRYSVD\"</b> instead of <b>\"ENTRYVCD\"</b> for the file <b>\"/SVCD/ENTRY.SVD\"</b>.</li>"
+                                              "<li>Enables the use of the (deprecated) chinese <b>\"/SVCD/TRACKS.SVD\"</b> format which differs from the format defined in the <b>IEC-62107</b> specification.</li></ul>"
                                               "<p><b>The differences are most exposed on SVCDs containing more than one video track.</b>") );
 
    QWhatsThis::add( m_check2336, i18n("<p>though most devices will have problems with such an out-of-specification media."
@@ -181,6 +181,10 @@ void K3bVcdBurnDialog::setupVideoCdTab()
   grid->addWidget( m_groupVcdFormat, 0, 0 );
   grid->addWidget( m_groupOptions, 0, 1 );
 
+  // Only available on SVCD Type
+  m_checkNonCompliant->setEnabled( false );
+  m_checkNonCompliant->setChecked( false );
+  
   // TODO: set enabled to false, k3b canot resample now.
   m_groupVcdFormat->setEnabled(false);
 
@@ -332,6 +336,7 @@ void K3bVcdBurnDialog::readSettings()
     break;
   case K3bVcdDoc::SVCD10:
       m_radioSvcd10->setChecked( true );
+      m_checkNonCompliant->setEnabled( true );
     break;
   // case K3bVcdDoc::HQVCD:
   //   m_radioHqVcd->setChecked( true );
