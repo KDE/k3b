@@ -17,11 +17,22 @@
 #ifndef _K3B_MMC_H_
 #define _K3B_MMC_H_
 
-
+// The symbol defined when compiling under linux varies greatly. 
+// linux, Linux, and __linux__ are all known to be used. Perhaps
+// the best approach is to #include <qglobal.h> and use Q_OS_LINUX
+// instead.
+#ifdef linux
 #include <inttypes.h>
 #include <linux/cdrom.h>
 #include <endian.h>
-
+#else
+// Assume FreeBSD, 4.x
+#include <inttypes.h>
+#include <sys/endian.h>
+#define __BYTE_ORDER BYTE_ORDER
+#define __BIG_ENDIAN BIG_ENDIAN
+#define __LITTLE_ENDIAN LITTLE_ENDIAN
+#endif
 
 namespace K3bCdDevice 
 {
