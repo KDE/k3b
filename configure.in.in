@@ -211,9 +211,14 @@ fi
 dnl === check for id3lib - end ============
 
 dnl === check for resmgr - begin ============
-AC_ARG_WITH(resmgr, AS_HELP_STRING([--without-resmgr], [build without ResMgr support (default=no)]), [ac_cv_use_resmgr=$withval], [ac_cv_use_resmgr=yes])
+AC_ARG_WITH(
+	resmgr, 
+	AS_HELP_STRING([--without-resmgr], [build without ResMgr support (default=no)]), 
+	[ac_cv_use_resmgr=$withval], 
+	[ac_cv_use_resmgr=yes]
+)
 
-if test "$ac_cv_use_regmgr" = "yes"; then
+if test "$ac_cv_use_regmgr" != "no"; then
   RESMGR_LIB=""
   KDE_CHECK_HEADERS(resmgr.h, [
          KDE_CHECK_LIB(resmgr,rsm_open_device,[
@@ -225,9 +230,11 @@ if test "$ac_cv_use_regmgr" = "yes"; then
 fi
 dnl === check for resmgr - end ============
 
-AC_ARG_WITH(external-libsamplerate,
+AC_ARG_WITH(
+	external-libsamplerate,
 	[  --with-external-libsamplerate   use the libsamplerate provided by the system (default=yes)],
-	[external_sampletrate=$withval], [external_sampletrate=yes]
+	[external_sampletrate=$withval], 
+	[external_sampletrate=yes]
 )
 
 LIBSAMPLERATE=""
