@@ -36,8 +36,7 @@
 #include <config.h>
 
 
-static const char *description =
-    I18N_NOOP("K3b is a CD burning program that has two aims:\nusability and as many features as possible.");
+static const char *description = I18N_NOOP("A CD and DVD burning application");
 
 
 static KCmdLineOptions options[] =
@@ -68,7 +67,7 @@ int main(int argc, char *argv[]) {
     aboutData.addAuthor("Sebastian Trueg",I18N_NOOP("Maintainer"), "trueg@k3b.org");
     aboutData.addAuthor("Thomas Froescher",I18N_NOOP("Video-ripping and encoding"), "tfroescher@k3b.org");
     aboutData.addAuthor("Christian Kvasny",I18N_NOOP("VCD Project"), "chris@k3b.org");
-    aboutData.addAuthor("Klaus-Dieter Krannich", I18N_NOOP("Developer "), "kd@k3b.org" );
+    aboutData.addAuthor("Klaus-Dieter Krannich", I18N_NOOP("CD Copy and Device handling"), "kd@k3b.org" );
 
     aboutData.addCredit("Ayo",
 			I18N_NOOP("For his bombastic artwork."),
