@@ -1510,7 +1510,13 @@ bool K3bCdDevice::CdDevice::readRawToc( K3bCdDevice::Toc& toc ) const
 	      toc[toc.count()-1].m_lastSector = sessionLeadOut - 1;
 	    
 	    // this is save since the descriptors are reported in ascending order of the session number
-	    sessionLeadOut = K3b::Msf( tr[i].p_min, tr[i].p_sec, tr[i].p_frame ) - 150; // :( We use 00:00:00 == 0 lba)
+	    // :( We use 00:00:00 == 0 lba)
+	    if( isBcd )
+	      sessionLeadOut = K3b::Msf( K3bCdDevice::fromBcd(tr[i].p_min),
+					 K3bCdDevice::fromBcd(tr[i].p_sec),
+					 K3bCdDevice::fromBcd(tr[i].p_frame) ) - 150;
+	    else
+	      sessionLeadOut = K3b::Msf( tr[i].p_min, tr[i].p_sec, tr[i].p_frame ) - 150;
 	  }
 	}
 
@@ -1543,9 +1549,8 @@ bool K3bCdDevice::CdDevice::rawTocDataWithBcdValues( unsigned char* data, int da
   // (which should be all newer MMC drives)
   //
   for( int i = 0; i < (dataLen-4)/(int)sizeof(toc_raw_track_descriptor); ++i ) {
-    if( tr[i].adr == 1 ) {
-      if( !K3bCdDevice::isValidBcd(tr[i].point) ||
-	  !K3bCdDevice::isValidBcd(tr[i].p_min) ||
+    if( tr[i].adr == 1 && tr[i].point <= 0xa2) {
+      if( !K3bCdDevice::isValidBcd(tr[i].p_min) ||
 	  !K3bCdDevice::isValidBcd(tr[i].p_sec) ||
 	  !K3bCdDevice::isValidBcd(tr[i].p_frame) ) {
 	isBcd = 0;
@@ -1568,7 +1573,7 @@ bool K3bCdDevice::CdDevice::rawTocDataWithBcdValues( unsigned char* data, int da
     // used as bcd. So we also check the HEX values.
     //
     for( int i = 0; i < (dataLen-4)/(int)sizeof(toc_raw_track_descriptor); ++i ) {
-      if( tr[i].adr == 1 ) {
+      if( tr[i].adr == 1 && tr[i].point <= 0xa2 ) {
 	if( (int)tr[i].p_min > 99 ||
 	    (int)tr[i].p_sec >= 60 ||
 	    (int)tr[i].p_frame >= 75 ) {
@@ -1590,7 +1595,7 @@ bool K3bCdDevice::CdDevice::rawTocDataWithBcdValues( unsigned char* data, int da
     if( readFormattedToc( formattedToc, false ) ) {
       for( int i = 0; i < (dataLen-4)/(int)sizeof(toc_raw_track_descriptor); ++i ) {
 	if( tr[i].adr == 1 ) {
-	  if( tr[i].point < 0xa0 ) {
+	  if( tr[i].point < 0x64 ) {
 	    unsigned int track = (int)tr[i].point;
 	    if( track > formattedToc.count() ) {
 	      isBcd = 1;
@@ -3494,9 +3499,9 @@ bool K3bCdDevice::CdDevice::getPerformance( unsigned char** data, int& dataLen,
   cmd[3] = lba >> 16;
   cmd[4] = lba >> 8;
   cmd[5] = lba;
-  cmd[9] = 0;      // first we read only the header
+  cmd[9] = 1;      // first we read only the header and one descriptor
   cmd[10] = type;
-  if( cmd.transport( TR_DIR_READ, header, 8 ) == 0 ) {
+  if( cmd.transport( TR_DIR_READ, header, 8 + 16 ) == 0 ) {
     // again with real length
     dataLen = from4Byte( header ) + 8;
 

@@ -335,6 +335,11 @@ void K3bCdDevice::DeviceManager::clear()
 
 bool K3bCdDevice::DeviceManager::readConfig( KConfig* c )
 {
+  //
+  // New configuration format since K3b 0.11.94
+  // for details see saveConfig()
+  //
+
   m_foundDevices = 0;
 
   if( !c->hasGroup( "Devices" ) )
@@ -342,43 +347,30 @@ bool K3bCdDevice::DeviceManager::readConfig( KConfig* c )
 
   c->setGroup( "Devices" );
 
-  int devNum = 1;
-  QStringList list = c->readListEntry( "Device1" );
-  devNum = 1;
-  while( !list.isEmpty() )
-  {
-    K3bDevice *dev;
-    dev = deviceByName( list[0] );
+  QStringList deviceSearchPath = c->readListEntry( "device_search_path" );
+  for( QStringList::iterator it = deviceSearchPath.begin(); 
+       it != deviceSearchPath.end(); ++it )
+    addDevice( *it );
 
-    if( dev == 0 )
-      dev = addDevice( list[0] );
+  //
+  // Iterate over all devices and check if we have a config entry
+  //
+  for( QPtrListIterator<K3bCdDevice::CdDevice> it( d->allDevices ); *it; ++it ) {
+    K3bCdDevice::CdDevice* dev = *it;
 
-    if( dev != 0 ) {
+    QString configEntryName = dev->vendor() + " " + dev->description();
+    QStringList list = c->readListEntry( configEntryName );
+    if( !list.isEmpty() ) {
+      kdDebug() << "(K3bDeviceManager) found config entry for devicetype: " << configEntryName << endl;
 
-      //
-      // We changed the config style in K3b 0.11. This is covered by the following check
-      // if the saved entry really corresponds to dev
-      //
-      if( dev->vendor() != list[1] || dev->description() != list[2] ) {
-	kdDebug() << "(K3bDeviceManager) found wrong device entry in config." << endl;
-      }
-      else {
-	// device found, apply changes
-	if( list.count() > 3 )
-	  dev->setMaxReadSpeed( list[3].toInt() );
-	if( list.count() > 4 )
-	  dev->setMaxWriteSpeed( list[4].toInt() );
-	if( list.count() > 5 )
-	  dev->setCdrdaoDriver( list[5] );
-	if( list.count() > 6 )
-	  dev->setCdTextCapability( list[6] == "yes" );
-      }
-    }
-    else
-      kdDebug() << "(K3bDeviceManager) Could not detect saved device " << list[0] << "." << endl;
-
-    devNum++;
-    list = c->readListEntry( QString( "Device%1" ).arg( devNum ) );
+      dev->setMaxReadSpeed( list[0].toInt() );
+      if( list.count() > 1 )
+	dev->setMaxWriteSpeed( list[1].toInt() );
+      if( list.count() > 2 )
+	dev->setCdrdaoDriver( list[2] );
+      if( list.count() > 3 )
+	dev->setCdTextCapability( list[3] == "yes" );
+    }      
   }
 
   scanFstab();
@@ -389,28 +381,31 @@ bool K3bCdDevice::DeviceManager::readConfig( KConfig* c )
 
 bool K3bCdDevice::DeviceManager::saveConfig( KConfig* c )
 {
-  //////////////////////////////////
-  // Clear config
-  /////////////////////////////////
-
-  if( c->hasGroup( "Devices" ) )
-  {
-    // remove all old device entries
-    c->deleteGroup("Devices");
-  }
-
+  //
+  // New configuration format since K3b 0.11.94
+  //
+  // We save a device search path which contains all device nodes
+  // where devices could be found including the old search path.
+  // This way also for example a manually added USB device will be
+  // found between sessions.
+  // Then we do not save the device settings (writing speed, cdrdao driver)
+  // for every single device but for every device type.
+  // This also makes sure device settings are kept between sessions
+  //
 
   c->setGroup( "Devices" );
+  QStringList deviceSearchPath = c->readListEntry( "device_search_path" );
 
-  int i = 1;
-  CdDevice* dev = d->allDevices.first();
-  while( dev != 0 )
-  {
+  for( QPtrListIterator<K3bCdDevice::CdDevice> it( d->allDevices ); *it; ++it ) {
+    K3bCdDevice::CdDevice* dev = *it;
+
+    // update device search path
+    deviceSearchPath.append( dev->blockDeviceName() );
+
+    // save the device type settings
+    QString configEntryName = dev->vendor() + " " + dev->description();
     QStringList list;
-    list << dev->blockDeviceName()
-	 << dev->vendor()
-	 << dev->description()
-	 << QString::number(dev->maxReadSpeed())
+    list << QString::number(dev->maxReadSpeed())
 	 << QString::number(dev->maxWriteSpeed())
 	 << dev->cdrdaoDriver();
 
@@ -419,10 +414,7 @@ bool K3bCdDevice::DeviceManager::saveConfig( KConfig* c )
     else
       list << "auto";
 
-    c->writeEntry( QString("Device%1").arg(i), list );
-
-    i++;
-    dev = d->allDevices.next();
+    c->writeEntry( configEntryName, list );
   }
 
   c->sync();

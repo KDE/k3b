@@ -135,7 +135,10 @@ K3bMsf K3bCdDevice::DiskInfo::capacity() const
 
 K3bMsf K3bCdDevice::DiskInfo::size() const
 {
-  return m_usedCapacity;
+  if( empty() )
+    return 0;
+  else
+    return m_usedCapacity;
 }
 
 
