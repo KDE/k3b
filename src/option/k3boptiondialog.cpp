@@ -194,7 +194,7 @@ void K3bOptionDialog::setupCddbPage()
 
 void K3bOptionDialog::setupDevicePage()
 {
-  QFrame* frame = addPage( i18n("Devices"), i18n("Setup CD Devices"),
+  QFrame* frame = addPage( i18n("Devices"), i18n("Setup Devices"),
 			   KGlobal::instance()->iconLoader()->loadIcon( "blockdevice", KIcon::NoGroup, KIcon::SizeMedium ) );
 
   QHBoxLayout* box = new QHBoxLayout( frame );

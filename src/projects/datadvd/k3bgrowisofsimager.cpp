@@ -298,7 +298,7 @@ void K3bGrowisofsImager::slotProcessExited( KProcess* p )
     if( p->exitStatus() == 0 ) {
 
       int av = d->speedEst->average();
-      emit infoMessage( i18n("Average overall write speed: %1 kb/s (%2x)")
+      emit infoMessage( i18n("Average overall write speed: %1 KB/s (%2x)")
 			.arg(av).arg(KGlobal::locale()->formatNumber((double)av/1385.0, 2)), INFO );
 
       if( m_doc->dummy() )

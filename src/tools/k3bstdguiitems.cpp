@@ -75,7 +75,7 @@ QCheckBox* K3bStdGuiItems::onlyCreateImagesCheckbox( QWidget* parent, const char
   QCheckBox* c = new QCheckBox( i18n("Only create image"), parent, name );
   QWhatsThis::add( c, i18n("<p>If this option is checked, K3b will only create an "
 			   "image and not do any actual writing."
-			   "<p>The image can later be written to a CD with most current CD writing "
+			   "<p>The image can later be written to a CD/DVD with most current writing "
 			   "programs (including K3b of course).") );
   QToolTip::add( c, i18n("Only create an image") );
   return c;
@@ -95,11 +95,11 @@ QCheckBox* K3bStdGuiItems::onTheFlyCheckbox( QWidget* parent, const char* name )
 {
   QCheckBox* c = new QCheckBox( i18n("On the fly"), parent, name );
   QWhatsThis::add( c, i18n("<p>If this option is checked, K3b will not create an image first but write "
-			   "the files directly to the CD."
+			   "the files directly to the CD/DVD."
 			   "<p><b>Caution:</b> Although this should work on most systems, make sure "
 			   "the data is sent to the writer fast enough.")
 		   + i18n("<p>It is recommended to try a simulation first.") );
-  QToolTip::add( c, i18n("Write files directly to CD without creating an image") );
+  QToolTip::add( c, i18n("Write files directly to CD/DVD without creating an image") );
   return c;
 }
 

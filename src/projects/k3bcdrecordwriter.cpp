@@ -607,7 +607,7 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	  emit infoMessage( i18n("Writing successfully finished"), K3bJob::SUCCESS );
 	
 	int s = d->speedEst->average();
-	emit infoMessage( i18n("Average overall write speed: %1 kb/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/150.0), 2), INFO );
+	emit infoMessage( i18n("Average overall write speed: %1 KB/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/150.0), 2), INFO );
 	
 	d->running = false;
 	emit finished( true );
