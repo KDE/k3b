@@ -44,23 +44,24 @@ class K3bDiskInfoView::HeaderViewItem : public KListViewItem
 {
 public:
   HeaderViewItem( QListView* parent )
-    : KListViewItem( parent ) {}
+      : KListViewItem( parent ) {}
   HeaderViewItem( QListViewItem* parent )
-    : KListViewItem( parent ) {}
+      : KListViewItem( parent ) {}
   HeaderViewItem( QListView* parent, QListViewItem* after )
-    : KListViewItem( parent, after ) {}
+      : KListViewItem( parent, after ) {}
   HeaderViewItem( QListViewItem* parent, QListViewItem* after )
-    : KListViewItem( parent, after ) {}
+      : KListViewItem( parent, after ) {}
   HeaderViewItem( QListView* parent, const QString& t1 )
-    : KListViewItem( parent, t1 ) {}
+      : KListViewItem( parent, t1 ) {}
   HeaderViewItem( QListViewItem* parent, const QString& t1 )
-    : KListViewItem( parent, t1 ) {}
+      : KListViewItem( parent, t1 ) {}
   HeaderViewItem( QListView* parent, QListViewItem* after, const QString& t1 )
-    : KListViewItem( parent, after, t1 ) {}
+      : KListViewItem( parent, after, t1 ) {}
   HeaderViewItem( QListViewItem* parent, QListViewItem* after, const QString& t1 )
-    : KListViewItem( parent, after, t1 ) {}
+      : KListViewItem( parent, after, t1 ) {}
 
-  void paintCell( QPainter* p, const QColorGroup & cg, int column, int width, int align ) {
+  void paintCell( QPainter* p, const QColorGroup & cg, int column, int width, int align )
+  {
     QFont f ( p->font() );
     f.setBold( true );
     p->setFont( f );
@@ -73,42 +74,42 @@ class K3bDiskInfoView::TwoColumnViewItem : public KListViewItem
 {
 public:
   TwoColumnViewItem( QListView* parent )
-    : KListViewItem( parent ) {}
+      : KListViewItem( parent ) {}
   TwoColumnViewItem( QListViewItem* parent )
-    : KListViewItem( parent ) {}
+      : KListViewItem( parent ) {}
   TwoColumnViewItem( QListView* parent, QListViewItem* after )
-    : KListViewItem( parent, after ) {}
+      : KListViewItem( parent, after ) {}
   TwoColumnViewItem( QListViewItem* parent, QListViewItem* after )
-    : KListViewItem( parent, after ) {}
+      : KListViewItem( parent, after ) {}
   TwoColumnViewItem( QListView* parent, const QString& t1 )
-    : KListViewItem( parent, t1 ) {}
+      : KListViewItem( parent, t1 ) {}
   TwoColumnViewItem( QListViewItem* parent, const QString& t1 )
-    : KListViewItem( parent, t1 ) {}
+      : KListViewItem( parent, t1 ) {}
   TwoColumnViewItem( QListView* parent, QListViewItem* after, const QString& t1 )
-    : KListViewItem( parent, after, t1 ) {}
+      : KListViewItem( parent, after, t1 ) {}
   TwoColumnViewItem( QListViewItem* parent, QListViewItem* after, const QString& t1 )
-    : KListViewItem( parent, after, t1 ) {}
+      : KListViewItem( parent, after, t1 ) {}
 
-  void paintCell( QPainter* p, const QColorGroup & cg, int column, int width, int align ) {
+  void paintCell( QPainter* p, const QColorGroup & cg, int column, int width, int align )
+  {
 
     if( column == 1 ) {
       int newWidth = width;
-      
+
       int i = 2;
       for( ; i < listView()->columns(); ++i ) {
-	newWidth += listView()->columnWidth( i );
+        newWidth += listView()->columnWidth( i );
       }
 
       // TODO: find a way to get the TRUE new width after resizing
 
-//       QRect r = p->clipRegion().boundingRect();
-//       r.setWidth( newWidth );
-//       p->setClipRect( r );
+      //       QRect r = p->clipRegion().boundingRect();
+      //       r.setWidth( newWidth );
+      //       p->setClipRect( r );
       p->setClipping( false );
 
       KListViewItem::paintCell( p, cg, column, newWidth, align );
-    }
-    else if( column == 0 )
+    } else if( column == 0 )
       KListViewItem::paintCell( p, cg, column, width, align );
   }
 };
@@ -116,7 +117,7 @@ public:
 
 
 K3bDiskInfoView::K3bDiskInfoView( QWidget* parent, const char* name )
-  : K3bCdContentsView( parent, name )
+    : K3bCdContentsView( parent, name )
 {
   QVBoxLayout* mainLayout = new QVBoxLayout( this );
   mainLayout->setMargin( 0 );
@@ -162,8 +163,7 @@ K3bDiskInfoView::K3bDiskInfoView( QWidget* parent, const char* name )
 
 
 K3bDiskInfoView::~K3bDiskInfoView()
-{
-}
+{}
 
 
 void K3bDiskInfoView::displayInfo( const K3bDiskInfo& info )
@@ -173,40 +173,36 @@ void K3bDiskInfoView::displayInfo( const K3bDiskInfo& info )
   if( !info.valid ) {
     m_labelTocType->setText( i18n("K3b was unable to retrieve disk information.") );
     m_labelDiskPix->setPixmap( QPixmap(locate( "data", "k3b/pics/diskinfo_nodisk.png" )) );
-  }
-
-  else if( info.noDisk ) {
+  } else if( info.noDisk ) {
     (void)new QListViewItem( m_infoView, i18n("No disk") );
     m_labelTocType->setText( i18n("No disk in drive") );
     m_labelDiskPix->setPixmap( QPixmap(locate( "data", "k3b/pics/diskinfo_nodisk.png" )) );
-  }
-
-  else {
+  } else {
 
     if( info.empty ) {
       m_labelTocType->setText( i18n("Disk is empty") );
       m_labelDiskPix->setPixmap( QPixmap(locate( "data", "k3b/pics/diskinfo_empty.png" )) );
-    }
-    else {
+    } else {
       switch( info.tocType ) {
       case K3bDiskInfo::AUDIO:
-	m_labelTocType->setText( i18n("Audio CD") );
-	m_labelDiskPix->setPixmap( QPixmap(locate( "data", "k3b/pics/diskinfo_audio.png" )) );
-	break;
+        m_labelTocType->setText( i18n("Audio CD") );
+        m_labelDiskPix->setPixmap( QPixmap(locate( "data", "k3b/pics/diskinfo_audio.png" )) );
+        break;
       case K3bDiskInfo::DATA:
-	m_labelTocType->setText( i18n("Data CD") );
-	m_labelDiskPix->setPixmap( QPixmap(locate( "data", "k3b/pics/diskinfo_data.png" )) );
-	break;
+        m_labelTocType->setText( i18n("Data CD") );
+        m_labelDiskPix->setPixmap( QPixmap(locate( "data", "k3b/pics/diskinfo_data.png" )) );
+        break;
       case K3bDiskInfo::MIXED:
-	m_labelTocType->setText( i18n("Mixed mode CD") );
-	m_labelDiskPix->setPixmap( QPixmap(locate( "data", "k3b/pics/diskinfo_mixed.png" )) );
-	break;
+        m_labelTocType->setText( i18n("Mixed mode CD") );
+        m_labelDiskPix->setPixmap( QPixmap(locate( "data", "k3b/pics/diskinfo_mixed.png" )) );
+        break;
       case K3bDiskInfo::DVD:
-	m_labelTocType->setText( i18n("DVD") );
-	m_labelDiskPix->setPixmap( QPixmap(locate( "data", "k3b/pics/diskinfo_dvd.png" )) );
-	break;
+        m_labelTocType->setText( i18n("DVD") );
+        m_labelDiskPix->setPixmap( QPixmap(locate( "data", "k3b/pics/diskinfo_dvd.png" )) );
+        break;
       }
     }
+
 
 
 
@@ -215,37 +211,37 @@ void K3bDiskInfoView::displayInfo( const K3bDiskInfo& info )
 
       KListViewItem* atipItem = new HeaderViewItem( m_infoView, i18n("Disk") );
       KListViewItem* atipChild = 0;
-      
+
       if( info.size > 0 )
-	atipChild = new KListViewItem( atipItem, atipChild,
-				       i18n("Size:"),
-				       i18n("%1 min").arg(info.size.toString()),
-				       i18n("%2 MB").arg((unsigned long)(info.size.mode1Form1Bytes()/1024/1024) ));
+        atipChild = new KListViewItem( atipItem, atipChild,
+                                       i18n("Size:"),
+                                       i18n("%1 min").arg(info.size.toString()),
+                                       i18n("%2 MB").arg((unsigned long)(info.size.mode1Form1Bytes()/1024/1024) ));
 
       if( info.remaining > 0 )
-	atipChild = new KListViewItem( atipItem, atipChild,
-				       i18n("Remaining:"), 
-				       i18n("%1 min").arg( info.remaining.toString() ),
-				       i18n("%2 MB").arg((unsigned long)(info.remaining.mode1Form1Bytes()/1024/1024) ));
+        atipChild = new KListViewItem( atipItem, atipChild,
+                                       i18n("Remaining:"),
+                                       i18n("%1 min").arg( info.remaining.toString() ),
+                                       i18n("%2 MB").arg((unsigned long)(info.remaining.mode1Form1Bytes()/1024/1024) ));
 
       if( !info.mediumManufactor.isEmpty() ) {
-	atipChild = new TwoColumnViewItem( atipItem, atipChild,
-					   i18n("Medium:") );
-	atipChild->setMultiLinesEnabled( true );
-	atipChild->setText( 1, info.mediumManufactor + "\n" + info.mediumType );
+        atipChild = new TwoColumnViewItem( atipItem, atipChild,
+                                           i18n("Medium:") );
+        atipChild->setMultiLinesEnabled( true );
+        atipChild->setText( 1, info.mediumManufactor + "\n" + info.mediumType );
       }
 
       atipChild = new KListViewItem( atipItem, atipChild,
-				     i18n("CDRW:"),
-				     info.cdrw ? i18n("yes") : i18n("no") );
+                                     i18n("CDRW:"),
+                                     info.cdrw ? i18n("yes") : i18n("no") );
 
       atipChild = new KListViewItem( atipItem, atipChild,
-				     i18n("Appendable:"),
-				     info.appendable ? i18n("yes") : i18n("no") );
+                                     i18n("Appendable:"),
+                                     info.appendable ? i18n("yes") : i18n("no") );
 
       atipChild = new KListViewItem( atipItem, atipChild,
-				     i18n("Sessions:"),
-				     QString::number( info.sessions ) );
+                                     i18n("Sessions:"),
+                                     QString::number( info.sessions ) );
 
       atipItem->setOpen( true );
     }
@@ -253,36 +249,36 @@ void K3bDiskInfoView::displayInfo( const K3bDiskInfo& info )
 
     // iso9660 info
     // /////////////////////////////////////////////////////////////////////////////////////
-    if( !info.empty && 
-	( info.tocType == K3bDiskInfo::DATA || info.tocType == K3bDiskInfo::DVD ) ) {
+    if( !info.empty &&
+        ( info.tocType == K3bDiskInfo::DATA || info.tocType == K3bDiskInfo::DVD ) ) {
 
       if( m_infoView->childCount() )
-	(void)new KListViewItem( m_infoView, m_infoView->lastChild() ); // empty spacer item
+        (void)new KListViewItem( m_infoView, m_infoView->lastChild() ); // empty spacer item
 
       KListViewItem* iso9660Item = new HeaderViewItem( m_infoView, m_infoView->lastChild(), i18n("ISO9660 info") );
       KListViewItem* iso9660Child = 0;
 
       iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
-					i18n("Id:"),
-					info.isoId.isEmpty() ? QString("-") : info.isoId );
+                                        i18n("Id:"),
+                                        info.isoId.isEmpty() ? QString("-") : info.isoId );
       iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
-					i18n("System Id:"),
-					info.isoSystemId.isEmpty() ? QString("-") : info.isoSystemId );
+                                        i18n("System Id:"),
+                                        info.isoSystemId.isEmpty() ? QString("-") : info.isoSystemId );
       iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
-					i18n("Volume Id:"),
-					info.isoVolumeId.isEmpty() ? QString("-") : info.isoVolumeId );
+                                        i18n("Volume Id:"),
+                                        info.isoVolumeId.isEmpty() ? QString("-") : info.isoVolumeId );
       iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
-					i18n("Volume Set Id:"),
-					info.isoVolumeSetId.isEmpty() ? QString("-") : info.isoVolumeSetId );
+                                        i18n("Volume Set Id:"),
+                                        info.isoVolumeSetId.isEmpty() ? QString("-") : info.isoVolumeSetId );
       iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
-					i18n("Publisher Id:"),
-					info.isoPublisherId.isEmpty() ? QString("-") : info.isoPublisherId );
+                                        i18n("Publisher Id:"),
+                                        info.isoPublisherId.isEmpty() ? QString("-") : info.isoPublisherId );
       iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
-					i18n("Preparer Id:"),
-					info.isoPreparerId.isEmpty() ? QString("-") : info.isoPreparerId );
+                                        i18n("Preparer Id:"),
+                                        info.isoPreparerId.isEmpty() ? QString("-") : info.isoPreparerId );
       iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
-					i18n("Application Id:"),
-					info.isoApplicationId.isEmpty() ? QString("-") : info.isoApplicationId );
+                                        i18n("Application Id:"),
+                                        info.isoApplicationId.isEmpty() ? QString("-") : info.isoApplicationId );
 
       iso9660Item->setOpen( true );
     }
@@ -298,52 +294,54 @@ void K3bDiskInfoView::displayInfo( const K3bDiskInfo& info )
       (void)new KListViewItem( trackItem, i18n("disk is empty") );
     else {
       // create header item
-      KListViewItem* item = new KListViewItem( trackItem, 
-					       i18n("Type"), 
-					       i18n("First Sector"),
-					       i18n("Last Sector"),
-					       i18n("Length") );
+      KListViewItem* item = new KListViewItem( trackItem,
+                            i18n("Type"),
+                            i18n("First Sector"),
+                            i18n("Last Sector"),
+                            i18n("Length") );
 
       // create items for the tracks
       K3bToc::const_iterator it;
       int index = 1;
       for( it = info.toc.begin(); it != info.toc.end(); ++it ) {
-	const K3bTrack& track = *it;
+        const K3bTrack& track = *it;
 
-	item = new KListViewItem( trackItem, item );
-	QString text;
-	if( track.type() == K3bTrack::AUDIO ) {
-	  item->setPixmap( 0, SmallIcon( "sound" ) );
-	  text = i18n("Audio");
-	}
-	else {
-	  item->setPixmap( 0, SmallIcon( "tar" ) );
-	  if( track.mode() == K3bTrack::MODE1 )
-	    text = i18n("Data/mode1");
-	  else if( track.mode() == K3bTrack::MODE2 )
-	    text = i18n("Data/mode2");
-	  else
-	    text = i18n("Data");
-	}
-	item->setText( 0, i18n("%1 (%2)").arg( QString::number(index).rightJustify( 2, '0' )).arg(text) );
-	item->setText( 1, QString::number( track.firstSector() ) );
-	item->setText( 2, QString::number( track.lastSector() ) );
-	item->setText( 3, QString::number( track.length() ) );
+        item = new KListViewItem( trackItem, item );
+        QString text;
+        if( track.type() == K3bTrack::AUDIO ) {
+          item->setPixmap( 0, SmallIcon( "sound" ) );
+          text = i18n("Audio");
+        } else {
+          item->setPixmap( 0, SmallIcon( "tar" ) );
+          if( track.mode() == K3bTrack::MODE1 )
+            text = i18n("Data/mode1");
+          else if( track.mode() == K3bTrack::MODE2 )
+            text = i18n("Data/mode2");
+          else if( track.mode() == K3bTrack::XA_FORM1 )
+            text = i18n("Data/xa_form1");
+          else if( track.mode() == K3bTrack::XA_FORM2 )
+            text = i18n("Data/xa_form2");
+          else
+            text = i18n("Data");
+        }
+        item->setText( 0, i18n("%1 (%2)").arg( QString::number(index).rightJustify( 2, '0' )).arg(text) );
+        item->setText( 1, QString::number( track.firstSector() ) );
+        item->setText( 2, QString::number( track.lastSector() ) );
+        item->setText( 3, QString::number( track.length() ) );
 
-	++index;
+        ++index;
       }
     }
-
     trackItem->setOpen( true );
-
   }
 }
 
 
+
 void K3bDiskInfoView::reload()
 {
-//   if( m_currentInfo )
-//     m_diskInfoDetector->detect( m_currentInfo.device );
+  //   if( m_currentInfo )
+  //     m_diskInfoDetector->detect( m_currentInfo.device );
 }
 
 
