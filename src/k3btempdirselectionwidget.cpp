@@ -78,7 +78,10 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const cha
 
   kapp->config()->setGroup( "General Options" );
   QString tempdir = kapp->config()->readEntry( "Temp Dir", locateLocal( "appdata", "temp/" ) );
-  m_editDirectory->setText( tempdir );
+  if ( QDir(tempdir).exists() )
+     m_editDirectory->setText( tempdir );
+  else
+     m_editDirectory->setText( locateLocal( "appdata", "temp/" ) );
   slotUpdateFreeTempSpace();
 
   // ToolTips
