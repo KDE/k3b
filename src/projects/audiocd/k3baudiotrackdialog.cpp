@@ -207,8 +207,8 @@ void K3bAudioTrackDialog::setupGui()
 					"This can lead to bad signal quality on noisy "
 					"transmission because the high frequencies might become "
 					"too weak. To avoid this effect, high frequencies are "
-					"beeing amplified before transmission (preemphasis). "
-					"The receiver will then weaken them accordingly for "
+					"amplified before transmission (preemphasis); "
+					"the receiver will then weaken them accordingly for "
 					"playback." ) );
 
   optionsGrid->addWidget( labelPregap, 0, 0 );
