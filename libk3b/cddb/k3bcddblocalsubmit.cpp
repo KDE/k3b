@@ -46,6 +46,13 @@ void K3bCddbLocalSubmit::doSubmit()
   if( path[path.length()-1] != '/' )
     path.append( "/" );
 
+  if( !QFile::exists( path ) && !QDir().mkdir( path ) ) {
+    kdDebug() << "(K3bCddbLocalSubmit) could not create directory: " << path << endl;
+    setError( IO_ERROR );
+    emit submitFinished( this );
+    return;
+  }
+
   if( QFile::exists( path ) ) {
     // if the category dir does not exists
     // create it

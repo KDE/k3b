@@ -56,6 +56,7 @@ void K3bCddbHttpQuery::doMatchQuery()
 {
   setError( WORKING );
   m_state = READ;
+  m_parsingBuffer.truncate(0);
 
   performCommand( QString( "cddb read %1 %2").arg( header().category ).arg( header().discid ) );
 }
