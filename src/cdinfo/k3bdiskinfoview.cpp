@@ -314,17 +314,17 @@ void K3bDiskInfoView::displayInfo( const K3bDiskInfo& info )
         } else {
           item->setPixmap( 0, SmallIcon( "tar" ) );
           if( track.mode() == K3bTrack::MODE1 )
-            text = i18n("Data/mode1");
+            text = i18n("Data/Mode1");
           else if( track.mode() == K3bTrack::MODE2 )
-            text = i18n("Data/mode2");
+            text = i18n("Data/Mode2");
           else if( track.mode() == K3bTrack::XA_FORM1 )
-            text = i18n("Data/xa_form1");
+            text = i18n("Data/Mode2 XA Form1");
           else if( track.mode() == K3bTrack::XA_FORM2 )
-            text = i18n("Data/xa_form2");
-          else
-            text = i18n("Data");
+            text = i18n("Data/Mode2 XA Form2");
+	  else
+	    text = i18n("Data");
         }
-        item->setText( 0, i18n("%1 (%2)").arg( QString::number(index).rightJustify( 2, '0' )).arg(text) );
+        item->setText( 0, i18n("%1 (%2)").arg( QString::number(index).rightJustify( 2, ' ' )).arg(text) );
         item->setText( 1, QString::number( track.firstSector() ) );
         item->setText( 2, QString::number( track.lastSector() ) );
         item->setText( 3, QString::number( track.length() ) );
