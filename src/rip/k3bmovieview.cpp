@@ -133,7 +133,7 @@ QString K3bMovieView::filterAudioList( QStringList *al ){
         if( lang[1].contains("bit") || lang[1].contains("drc") ){
             lang[1] = "??";
         }
-        result += lang[1] + " (" + lang[0] + "/" + lang.last() +"), ";
+        result += "\n" + lang[1] + " (" + lang[0] + "/" + lang.last() +"), ";
         kdDebug() << result << endl;
     }
     return result.left( result.length()-2);
@@ -168,9 +168,14 @@ void K3bMovieView::slotDvdChecked( bool successful ){
                 item->setHiddenTitle( -1 );
                 item->setTitleSet( true );
            }
-           K3bDvdRipListViewItem *titleItem =  new K3bDvdRipListViewItem( m_listView->findItem( mainEntryAndKey, 0), i18n("Title %1").arg(title->getTitleNumber() ),
-           title->getStrTime(), filterAudioList( title->getAudioList() ), QString::number( title->getMaxChapters() ), title->getAngles()->join(",") );
+           K3bDvdRipListViewItem *titleItem =  new K3bDvdRipListViewItem( m_listView->findItem( mainEntryAndKey, 0), 
+									  i18n("Title %1").arg(title->getTitleNumber() ),
+									  title->getStrTime(), 
+									  filterAudioList( title->getAudioList() ), 
+									  QString::number( title->getMaxChapters() ), 
+									  title->getAngles()->join(",") );
            titleItem->setHiddenTitle( title->getTitleNumber( ));
+	   titleItem->setMultiLinesEnabled( true );
            if( title->getFrames() > maxFrames ){
                maxFrames = title->getFrames();
                longestTitle = titleItem;

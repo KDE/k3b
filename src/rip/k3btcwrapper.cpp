@@ -123,7 +123,7 @@ void K3bTcWrapper::slotTcprobeExited( KProcess *p){
         kdDebug() << "(K3bTcWrapper) Found titles " << m_currentTitle << "/" << m_allTitle << ", angles " << m_allAngle << endl;
     }
     if( m_currentTitle <= m_allTitle ){
-        K3bDvdContent con( *parseTcprobe() );
+        K3bDvdContent con( parseTcprobe() );
         QString titles = errorLines[ 1 ];
         kdDebug() << titles << endl;
         int index = titles.find(":");
@@ -156,11 +156,11 @@ void K3bTcWrapper::slotTcprobeExited( KProcess *p){
     }
 }
 
-K3bDvdContent* K3bTcWrapper::parseTcprobe(){
+K3bDvdContent K3bTcWrapper::parseTcprobe(){
     QStringList outputLines = QStringList::split( "\n", m_outputBuffer );
     // check content
     int dvdreaderIndex = 0;
-    K3bDvdContent *title = new K3bDvdContent();
+    K3bDvdContent title;
     for( QStringList::Iterator str = outputLines.begin(); str != outputLines.end(); str++ ) {
         kdDebug() << (*str) << endl;
         if( (*str).contains( "dvd_reader.c" ) ) {
@@ -168,23 +168,28 @@ K3bDvdContent* K3bTcWrapper::parseTcprobe(){
             QString tmp = (*str).mid( index+1 );
             if( dvdreaderIndex > 0 ){
                 // audio channels
-                title->getAudioList()->append( tmp );
+
+	      kdDebug() << "(K3bTcWrapper) audio channels: '" << tmp << "'" << endl;
+	      title.getAudioList()->append( tmp );
+	      kdDebug() << "(K3bTcWrapper) audio channels 2" << endl;
             } else {
-                // input mode
+	      // input mode
+	      kdDebug() << "(K3bTcWrapper) input mode" << endl;
+	      
                 QStringList mode = QStringList::split( " ", tmp );
-                title->setInput( mode[0] );
-                title->setMode( mode[1] );
+                title.setInput( mode[0] );
+                title.setMode( mode[1] );
                 QStringList extension = mode.grep("letterboxed");
                 if ( extension.count() > 0 ) {
-                    title->setAspectExtension( extension[0] );
-                    title->setAspectAnamorph( "anamorph" );
+                    title.setAspectExtension( extension[0] );
+                    title.setAspectAnamorph( "anamorph" );
                 } else {
-                    title->setAspectAnamorph( "" );
+                    title.setAspectAnamorph( "" );
                     extension = mode.grep("scan");
                     if ( extension.count() > 0 ) {
-                        title->setAspectExtension( extension[0] );
+                        title.setAspectExtension( extension[0] );
                     } else {
-                        title->setAspectExtension( "" );
+                        title.setAspectExtension( "" );
                     }
                 }
             } // end input mode
@@ -192,28 +197,28 @@ K3bDvdContent* K3bTcWrapper::parseTcprobe(){
         } else if( (*str).contains("frame size") ){
             int index = (*str).find(": -g");
             int end = (*str).find( " ", index+5);
-            title->setRes( (*str).mid( index+5, end-index-5 ) );
+            title.setRes( (*str).mid( index+5, end-index-5 ) );
         } else if( (*str).contains("aspect") ){
             int index = (*str).find("ratio:");
             int end = (*str).find( " ", index+7);
-            title->setAspect( (*str).mid( index+7, end-index-7 ) );
+            title.setAspect( (*str).mid( index+7, end-index-7 ) );
         } else if( (*str).contains("frame rate") ){
             int index = (*str).find(": -f");
             int end = (*str).find( " ", index+5);
-            title->setFramerate( (*str).mid( index+5, end-index-5 ) );
+            title.setFramerate( (*str).mid( index+5, end-index-5 ) );
         } else if( (*str).contains("[tcprobe] V:") ){
             int index = (*str).find("V:");
             int end = (*str).find( " ", index+3);
-            title->setFrames( (*str).mid( index+3, end-index-3 ) );
+            title.setFrames( (*str).mid( index+3, end-index-3 ) );
             index = (*str).find("frames,");
             end = (*str).find( " ", index+8);
-            title->setTime( (*str).mid( index+8, end-index-8 ) );
+            title.setTime( (*str).mid( index+8, end-index-8 ) );
         } else if( (*str).contains("[tcprobe] A:") ){
             int index = (*str).find("A:");
-            title->setAudio( (*str).mid( index+3 ) );
+            title.setAudio( (*str).mid( index+3 ) );
         } else if( (*str).contains("700 MB |") ){
             int index = (*str).find("700");
-            title->setVideo( (*str).mid( index+13 ) );
+            title.setVideo( (*str).mid( index+13 ) );
         }
     }
     return title;

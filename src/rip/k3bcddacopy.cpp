@@ -23,11 +23,11 @@
 #include "k3bpatternparser.h"
 #include "../device/k3bdevice.h"
 #include "../cdinfo/k3bdiskinfodetector.h"
+#include "k3baudiorip.h"
 
 #include <qptrlist.h>
 #include <qstringlist.h>
 #include <qstring.h>
-#include <qtimer.h>
 #include <qdir.h>
 
 #include <klocale.h>
@@ -36,10 +36,6 @@
 #include <kconfig.h>
 #include <kapplication.h>
 
-void paranoiaCallback(long, int){
-  // Do we want to show info somewhere ?
-  // Not yet.
-}
 
 
 K3bCddaCopy::K3bCddaCopy( QObject* parent ) 
@@ -47,13 +43,15 @@ K3bCddaCopy::K3bCddaCopy( QObject* parent )
     m_bUsePattern( true )
 {
   m_device = 0;
-
+  
+  m_audioRip = new K3bAudioRip( this );
+  connect( m_audioRip, SIGNAL(percent(int)), this, SIGNAL(subPercent(int)) );
+  connect( m_audioRip, SIGNAL(output(const QByteArray&)), this, SLOT(slotTrackOutput(const QByteArray&)) );
+  connect( m_audioRip, SIGNAL(finished(bool)), this, SLOT(slotTrackFinished(bool)) );
+  
   m_diskInfoDetector = new K3bDiskInfoDetector( this );
   connect( m_diskInfoDetector, SIGNAL(diskInfoReady(const K3bDiskInfo&)), 
 	   this, SLOT(slotDiskInfoReady(const K3bDiskInfo&)) );
-
-  m_rippingTimer = new QTimer( this );
-  connect( m_rippingTimer, SIGNAL(timeout()), this, SLOT(slotReadData()) );
 }
 
 K3bCddaCopy::~K3bCddaCopy()
@@ -62,6 +60,8 @@ K3bCddaCopy::~K3bCddaCopy()
 
 void K3bCddaCopy::start()
 {
+  emit started();
+  emit newTask( i18n("Reading Digital Audio")  );
   emit infoMessage( i18n("Retrieving information about disk"), K3bJob::PROCESS );
   m_diskInfoDetector->detect( m_device );
 }
@@ -93,14 +93,8 @@ void K3bCddaCopy::slotDiskInfoReady( const K3bDiskInfo& info )
 
   m_lastOverallPercent = 0;
   m_bytesAll = 0;
-  m_interrupt = false;
-  emit started();
-  emit newTask( i18n("Copy cdrom ")  );
-  infoMessage( i18n("Copying started."), STATUS);
 
   createFilenames();
-
-  m_drive = m_device->open();
 
   if( !startRip( m_currentTrackIndex = 0 ) ) {
     emit finished( false );
@@ -110,8 +104,7 @@ void K3bCddaCopy::slotDiskInfoReady( const K3bDiskInfo& info )
 
 bool K3bCddaCopy::startRip( unsigned int i )
 {
-  infoMessage( i18n("Ripping track: ") + 
-	       QString::number( m_tracksToCopy[i] ), PROCESS );
+  infoMessage( i18n("Reading track %1").arg( m_tracksToCopy[i] ), PROCESS );
 
   infoMessage( i18n("to ") + 
 	       KIO::decodeFileName( m_list[i] ), PROCESS );
@@ -122,143 +115,84 @@ bool K3bCddaCopy::startRip( unsigned int i )
     return false;
   }
   
-  if( !paranoiaRead( m_drive, m_tracksToCopy[i], m_list[i] )) {
-    infoMessage( i18n("Could not rip track %1").arg(i), ERROR );
+  // open a file to write to
+  // create wave file
+  m_currentWrittenFile = m_list[i];
+  bool isOpen = m_waveFileWriter.open( m_list[i] );
+  
+  if( !isOpen ){
+    infoMessage( i18n("Couldn't rip to: %1").arg(m_list[i]), ERROR );
+    m_currentWrittenFile = QString::null;
+
     return false;
   }
+
+  kdDebug() << "(K3bCddaCopy) starting K3bAudioRip" << endl;
+
+  if( !m_audioRip->ripTrack( m_device, m_tracksToCopy[i] ) ) {
+    m_waveFileWriter.close();
+    emit infoMessage( i18n("Could not read track %1").arg(i), ERROR );
+    return false;
+  }
+
+  emit newSubTask( i18n("Reading track %1").arg(m_tracksToCopy[i]) );
 
   return true;
 }
 
-void K3bCddaCopy::finishedRip(){
-    kdDebug() << "(K3bCddaCopy) Finished copying." << endl;
-    infoMessage( "Copying finished.", STATUS);
-    m_device->close();
-    kdDebug() << "(K3bCddaCopy) Exit." << endl;
-   emit finished( true );
+
+void K3bCddaCopy::slotTrackOutput( const QByteArray& data )
+{
+  m_waveFileWriter.write( data.data(), data.size(), K3bWaveFileWriter::LittleEndian );
+
+  m_bytesAll += data.size();
+  int progressBarValue = (int) (((double) m_bytesAll / (double) m_bytes ) * 100);
+
+  // avoid too many gui updates
+  if( m_lastOverallPercent < progressBarValue ) {
+    emit percent( progressBarValue );
+    m_lastOverallPercent = progressBarValue;
+  }
 }
 
 
 void K3bCddaCopy::cancel( ){
-    m_interrupt = true;
+  m_audioRip->cancel();
+  m_interrupt = true;
 }
 
 
-bool K3bCddaCopy::paranoiaRead(struct cdrom_drive *drive, int track, QString dest)
+void K3bCddaCopy::slotTrackFinished( bool success )
 {
-    long firstSector = cdda_track_firstsector(drive, track);
-    m_lastSector = cdda_track_lastsector(drive, track);
-    // track length
-    m_byteCount =  CD_FRAMESIZE_RAW * (m_lastSector - firstSector);
-    m_trackBytesAll = 0;
-    m_lastTrackPercent = 0;
+  m_waveFileWriter.close();
 
-    kdDebug() << "(K3bCddaCopy) paranoia_init" << endl;
-    m_paranoia = paranoia_init(drive);
-
-    if (0 == m_paranoia){
-        infoMessage( i18n("paranoia_init failed."), ERROR);
-        kdDebug() << "(K3bCddaCopy) paranoia_init failed" << endl;
-        return false;
-    }
-
-    int paranoiaLevel = PARANOIA_MODE_FULL ^ PARANOIA_MODE_NEVERSKIP;
-    paranoia_modeset(m_paranoia, paranoiaLevel);
-
-    cdda_verbose_set(drive, CDDA_MESSAGE_PRINTIT, CDDA_MESSAGE_PRINTIT);
-
-    paranoia_seek(m_paranoia, firstSector, SEEK_SET);
-    m_currentSector = firstSector;
-
-    kdDebug() << "(K3bCddaCopy) open files" << endl;
-
-    // create wave file
-    m_currentWrittenFile = dest;
-    bool isOpen = m_waveFileWriter.open( dest );
-
-    if( !isOpen ){
-        infoMessage( i18n("Couldn't rip to: %1").arg(dest), ERROR );
-	m_currentWrittenFile = QString::null;
-        paranoia_free(m_paranoia);
-        m_paranoia = 0;
-        finishedRip();
-        m_interrupt = true;
-        return false;
-    }
-
-    emit newSubTask( i18n("Copy %1").arg(dest) );
-
-    m_rippingTimer->start(0);
-
-    return true;
-}
-
-void K3bCddaCopy::readDataFinished()
-{
-    m_waveFileWriter.close();
-    if( m_interrupt ) {
-        infoMessage( i18n("Interrupted by user"), STATUS);
-        kdDebug() << "(K3bCddaCopy) Interrupted by user!" << endl;
-        if( !QFile::remove( m_currentWrittenFile ) ){
-            infoMessage( i18n("Can't delete part of copied file."), ERROR);
-            kdDebug() << "(K3bCddaCopy) Can't delete copied file <>." << endl;
-        }
-    }
-    m_currentWrittenFile = QString::null;
-
-    paranoia_free(m_paranoia);
-    m_paranoia = 0;
+  if( success ) {
     ++m_currentTrackIndex;
-    kdDebug() << "(K3bCddaCopy) Check index: " << m_currentTrackIndex << ", " << m_tracksToCopy.count() << endl;
-    if( (m_currentTrackIndex < m_tracksToCopy.count()) && !m_interrupt ){
+  
+    if( m_currentTrackIndex < m_tracksToCopy.count() ) {
       if( !startRip( m_currentTrackIndex ) )
 	emit finished( false );
-    } else
-        finishedRip();
-}
-
-void K3bCddaCopy::slotReadData(){
-
-    if( m_interrupt){
-        infoMessage( i18n("Interrupt reading."), PROCESS);
-        kdDebug() << "(K3bCddaCopy) Interrupt reading." << endl;
-        m_rippingTimer->stop();
-        readDataFinished();
     } else {
-        int16_t * buf = paranoia_read(m_paranoia, paranoiaCallback);
-
-        if (0 == buf) {
-            infoMessage( i18n("Unrecoverable error in paranoia_read."), ERROR);
-            kdDebug() << "(K3bCddaCopy) Unrecoverable error in paranoia_read" << endl;
-        } else {
-            ++m_currentSector;
-	    m_waveFileWriter.write( (char*)buf, CD_FRAMESIZE_RAW, K3bWaveFileWriter::LittleEndian );
-        }
-
-      m_bytesAll += CD_FRAMESIZE_RAW;
-      m_trackBytesAll += CD_FRAMESIZE_RAW;
-      int progressBarValue = (int) (((double) m_bytesAll / (double) m_bytes ) * 100);
-      int trackProgressBarValue = (int) (((double) m_trackBytesAll / (double) m_byteCount ) * 100);
-
-//       if( m_progressBarValue > 100)
-//            m_progressBarValue=100;
-
-      // avoid too many gui updates
-      if( m_lastOverallPercent < progressBarValue ) {
-	emit percent( progressBarValue );
-	m_lastOverallPercent = progressBarValue;
-      }
-      if( m_lastTrackPercent < trackProgressBarValue ) {
-	emit subPercent( trackProgressBarValue );
-	m_lastTrackPercent = trackProgressBarValue;
-      }
-
-      if (m_currentSector >= m_lastSector) {
-	m_rippingTimer->stop();
-	readDataFinished();
+      emit infoMessage( i18n("Successfully read all tracks"), STATUS );
+      emit finished( true );
+    }
+  }
+  else {
+    if( m_interrupt ) {
+      infoMessage( i18n("Canceled by user"), ERROR );
+      kdDebug() << "(K3bCddaCopy) Interrupted by user!" << endl;
+      if( !QFile::remove( m_currentWrittenFile ) ){
+	infoMessage( i18n("Can't delete part of copied file."), ERROR );
+	kdDebug() << "(K3bCddaCopy) Can't delete copied file <>." << endl;
       }
     }
-} // end while sector check
+    else {
+      emit infoMessage( i18n("Error while ripping track %1").arg( m_currentTrackIndex ), ERROR );
+    }
+
+    emit finished( false );
+  }
+}
 
 
 void K3bCddaCopy::createFilenames()

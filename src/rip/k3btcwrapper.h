@@ -67,7 +67,7 @@ signals:
   int m_allTitle;
   int m_allAngle;
   K3bDevice*  m_device;
-  K3bDvdContent* parseTcprobe();
+  K3bDvdContent parseTcprobe();
   void runTcprobe();
 };
 

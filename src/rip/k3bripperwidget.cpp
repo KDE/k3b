@@ -38,6 +38,7 @@
 #include <kio/global.h>
 #include <kiconloader.h>
 #include <kstdguiitem.h>
+#include <kdebug.h>
 
 #include <qgroupbox.h>
 #include <qheader.h>
@@ -164,7 +165,7 @@ void K3bRipperWidget::init()
 
 void K3bRipperWidget::slotOk()
 {
-  KConfig* c = k3bMain()->config();
+  KConfig* c = kapp->config();
   c->setGroup( "Ripping" );
 
   c->writeEntry( "last ripping directory", m_editStaticRipPath->text() );
@@ -180,6 +181,7 @@ void K3bRipperWidget::slotOk()
 
 //   // save all entries with artist title, path filename and so on
 //   setSongList();
+
 
   K3bCddaCopy* job = new K3bCddaCopy( this );
   job->setDevice( m_diskInfo.device );
