@@ -839,7 +839,8 @@ void K3bMainWindow::slotNewDataDoc()
 
   m_dataUntitledCount++;
   QString fileName = i18n("Data%1").arg(m_dataUntitledCount);
-  doc->isoOptions().setVolumeID( i18n("Data%1").arg(m_dataUntitledCount) );
+  if( doc->isoOptions().volumeID().isEmpty() )
+    doc->isoOptions().setVolumeID( i18n("Data%1").arg(m_dataUntitledCount) );
   KURL url;
   url.setFileName(fileName);
   doc->setURL(url);
@@ -859,6 +860,8 @@ void K3bMainWindow::slotNewMixedDoc()
 
   m_mixedUntitledCount++;
   QString fileName=i18n("Mixed%1").arg(m_mixedUntitledCount);
+  if( doc->dataDoc()->isoOptions().volumeID().isEmpty() )
+    doc->dataDoc()->isoOptions().setVolumeID( i18n("Mixed%1").arg(m_mixedUntitledCount) );
   KURL url;
   url.setFileName(fileName);
   doc->setURL(url);
@@ -869,15 +872,14 @@ void K3bMainWindow::slotNewMixedDoc()
 
 void K3bMainWindow::slotNewVcdDoc()
 {
-
   if ( !k3bcore->externalBinManager()->foundBin( "vcdxbuild" ) ) {
-      kdDebug() << "(K3bMainWindow) could not find vcdxbuild executable" << endl;
-      KMessageBox::information( this,
-				i18n( "Could not find VcdImager executable. "
-				      "To create VideoCD's you must install VcdImager >= 0.7.12. "
-				      "You can find this on your distribution disks or download "
-				      "it from http://www.vcdimager.org" ),
-				i18n( "Information" ) );
+    kdDebug() << "(K3bMainWindow) could not find vcdxbuild executable" << endl;
+    KMessageBox::information( this,
+			      i18n( "Could not find VcdImager executable. "
+				    "To create VideoCD's you must install VcdImager >= 0.7.12. "
+				    "You can find this on your distribution disks or download "
+				    "it from http://www.vcdimager.org" ),
+			      i18n( "Information" ) );
   }
 
   slotStatusMsg(i18n("Creating new Video Project."));
@@ -887,7 +889,9 @@ void K3bMainWindow::slotNewVcdDoc()
   doc->newDocument();
 
   m_vcdUntitledCount++;
-  QString fileName=i18n("Video%1").arg(m_vcdUntitledCount);
+  QString fileName=i18n("Videocd%1").arg(m_vcdUntitledCount);
+  if( doc->vcdOptions()->volumeId().isEmpty() )
+    doc->vcdOptions()->setVolumeId( i18n("Videocd%1").arg(m_vcdUntitledCount) );
   KURL url;
   url.setFileName(fileName);
   doc->setURL(url);
@@ -907,6 +911,8 @@ void K3bMainWindow::slotNewMovixDoc()
 
   m_movixUntitledCount++;
   QString fileName=i18n("eMovix%1").arg(m_movixUntitledCount);
+  if( doc->isoOptions().volumeID().isEmpty() )
+    doc->isoOptions().setVolumeID( i18n("eMovix%1").arg(m_movixUntitledCount) );
   KURL url;
   url.setFileName(fileName);
   doc->setURL(url);

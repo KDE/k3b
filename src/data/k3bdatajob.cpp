@@ -156,19 +156,19 @@ void K3bDataJob::writeImage()
   }
   else {
     // get image file path
-    if( m_doc->isoImage().isEmpty() )
-      m_doc->setIsoImage( K3b::findUniqueFilePrefix( m_doc->isoOptions().volumeID() ) + ".iso" );
+    if( m_doc->tempDir().isEmpty() )
+      m_doc->setTempDir( K3b::findUniqueFilePrefix( m_doc->isoOptions().volumeID() ) + ".iso" );
     
     // open the file for writing
-    m_imageFile.setName( m_doc->isoImage() );
+    m_imageFile.setName( m_doc->tempDir() );
     if( !m_imageFile.open( IO_WriteOnly ) ) {
-      emit infoMessage( i18n("Could not open %1 for writing").arg(m_doc->isoImage()), ERROR );
+      emit infoMessage( i18n("Could not open %1 for writing").arg(m_doc->tempDir()), ERROR );
       cancelAll();
       emit finished(false);
       return;
     }
 
-    emit infoMessage( i18n("Writing image file to %1").arg(m_doc->isoImage()), INFO );
+    emit infoMessage( i18n("Writing image file to %1").arg(m_doc->tempDir()), INFO );
     emit newSubTask( i18n("Creating image file") );
 
     m_imageFileStream.setDevice( &m_imageFile );
@@ -247,7 +247,7 @@ void K3bDataJob::slotIsoImagerFinished( bool success )
       m_doc->onlyCreateImages() ) {
     m_imageFile.close();
     if( success ) {
-      emit infoMessage( i18n("Image successfully created in %1").arg(m_doc->isoImage()), K3bJob::STATUS );
+      emit infoMessage( i18n("Image successfully created in %1").arg(m_doc->tempDir()), K3bJob::STATUS );
       m_imageFinished = true;
     
       if( m_doc->onlyCreateImages() ) {
@@ -312,9 +312,8 @@ void K3bDataJob::slotWriterJobFinished( bool success )
     return;
 
   if( !m_doc->onTheFly() && m_doc->removeImages() ) {
-    QFile::remove( m_doc->isoImage() );
-    m_doc->setIsoImage("");
-    emit infoMessage( i18n("Removed image file %1").arg(m_doc->isoImage()), K3bJob::STATUS );
+    QFile::remove( m_doc->tempDir() );
+    emit infoMessage( i18n("Removed image file %1").arg(m_doc->tempDir()), K3bJob::STATUS );
   }
 
   if( m_tocFile ) {
@@ -379,7 +378,7 @@ bool K3bDataJob::prepareWriterJob()
       writer->setProvideStdin(true);
     }
     else {
-      writer->addArgument( m_doc->isoImage() );
+      writer->addArgument( m_doc->tempDir() );
     }
 
     m_writerJob = writer;
@@ -416,7 +415,7 @@ bool K3bDataJob::prepareWriterJob()
       if( m_doc->onTheFly() )
 	*s << "DATAFILE \"-\" " << m_isoImager->size()*2048 << "\n";
       else
-	*s << "DATAFILE \"" << m_doc->isoImage() << "\"\n";
+	*s << "DATAFILE \"" << m_doc->tempDir() << "\"\n";
 
       m_tocFile->close();
     }
@@ -530,11 +529,10 @@ void K3bDataJob::cancelAll()
     m_writerJob->cancel();
 
   // remove iso-image if it is unfinished or the user selected to remove image
-  if( QFile::exists( m_doc->isoImage() ) ) {
+  if( QFile::exists( m_doc->tempDir() ) ) {
     if( !m_doc->onTheFly() && (m_doc->removeImages() || !m_imageFinished) ) {
-      emit infoMessage( i18n("Removing ISO image %1").arg(m_doc->isoImage()), K3bJob::STATUS );
-      QFile::remove( m_doc->isoImage() );
-      m_doc->setIsoImage("");
+      emit infoMessage( i18n("Removing ISO image %1").arg(m_doc->tempDir()), K3bJob::STATUS );
+      QFile::remove( m_doc->tempDir() );
     }
   }
 

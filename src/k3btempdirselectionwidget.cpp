@@ -20,9 +20,7 @@
 
 #include <qlabel.h>
 #include <qgroupbox.h>
-#include <qtoolbutton.h>
 #include <qlayout.h>
-#include <qlineedit.h>
 #include <qtimer.h>
 #include <qhbox.h>
 #include <qtooltip.h>
@@ -35,6 +33,7 @@
 #include <kdialog.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
+#include <kurlrequester.h>
 
 #include <sys/vfs.h>
 
@@ -46,15 +45,7 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const cha
   layout()->setMargin( KDialog::marginHint() );
 
   QLabel* imageFileLabel = new QLabel( i18n( "Wri&te image file to:" ), this );
-
-
-  // FIXME: Use KURLRequester!
-
-  QHBox* urlRequesterBox = new QHBox( this );
-  urlRequesterBox->setSpacing( KDialog::spacingHint() );
-  m_editDirectory = new QLineEdit( urlRequesterBox, "m_editDirectory" );
-  m_buttonFindIsoImage = new QToolButton( urlRequesterBox, "m_buttonFindDir" );
-  m_buttonFindIsoImage->setIconSet( SmallIconSet( "fileopen" ) );
+  m_editDirectory = new KURLRequester( this, "m_editDirectory" );
 
   imageFileLabel->setBuddy( m_editDirectory );
 
@@ -70,13 +61,15 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const cha
   m_labelCdSize = new QLabel( "                        ", cdSizeBox, "m_labelCdSize" );
   m_labelCdSize->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
 
-  connect( m_buttonFindIsoImage, SIGNAL(clicked()), this, SLOT(slotTempDirButtonPressed()) );
-  connect( m_editDirectory, SIGNAL(textChanged(const QString&)), this, SLOT(slotUpdateFreeTempSpace()) );
+  connect( m_editDirectory, SIGNAL(openFileDialog(KURLRequester*)), 
+	   this, SLOT(slotTempDirButtonPressed(KURLRequester*)) );
+  connect( m_editDirectory, SIGNAL(textChanged(const QString&)), 
+	   this, SLOT(slotUpdateFreeTempSpace()) );
 
 
   m_mode = DIR;
 
-  m_editDirectory->setText( K3b::defaultTempPath() );
+  m_editDirectory->setURL( K3b::defaultTempPath() );
   slotUpdateFreeTempSpace();
 
   // ToolTips
@@ -114,7 +107,7 @@ void K3bTempDirSelectionWidget::slotFreeTempSpace(const QString&,
 
 void K3bTempDirSelectionWidget::slotUpdateFreeTempSpace()
 {
-  QString path = m_editDirectory->text();
+  QString path = m_editDirectory->url();
 
   if( !QFile::exists( path ) )
     path.truncate( path.findRev('/') );
@@ -131,30 +124,30 @@ void K3bTempDirSelectionWidget::slotUpdateFreeTempSpace()
 }
 
 
-void K3bTempDirSelectionWidget::slotTempDirButtonPressed()
+void K3bTempDirSelectionWidget::slotTempDirButtonPressed( KURLRequester* r )
 {
-  QString path;
-  if( m_mode == DIR )
-    path = KFileDialog::getExistingDirectory( m_editDirectory->text(), this, i18n("Select Temporary Directory") );
-  else
-    path = KFileDialog::getSaveFileName( m_editDirectory->text(), QString::null, this, i18n("Select Temporary File") );
-
-  if( !path.isEmpty() ) {
-    setTempPath( path );
+  // set the correct mode for the filedialog
+  if( m_mode == DIR ) {
+    r->setCaption( i18n("Select Temporary Directory") );
+    r->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
+  }
+  else {
+    r->setCaption( i18n("Select Temporary File") );
+    r->setMode( KFile::File | KFile::LocalOnly );
   }
 }
 
 
 void K3bTempDirSelectionWidget::setTempPath( const QString& dir )
 {
-  m_editDirectory->setText( dir );
+  m_editDirectory->setURL( dir );
   slotUpdateFreeTempSpace();
 }
 
 
 QString K3bTempDirSelectionWidget::tempPath() const
 {
-  return m_editDirectory->text();
+  return m_editDirectory->url();
 }
 
 

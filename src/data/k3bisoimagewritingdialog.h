@@ -22,8 +22,6 @@
 
 class QCheckBox;
 class K3bWriterSelectionWidget;
-class KLineEdit;
-class QToolButton;
 class QLabel;
 class K3bIso9660ImageWritingJob;
 class KURL;
@@ -32,7 +30,7 @@ class KActiveLabel;
 class KProgress;
 class K3bDataModeWidget;
 class K3bWritingModeWidget;
-
+class KURLRequester;
 
 
 /**
@@ -51,7 +49,6 @@ class K3bIsoImageWritingDialog : public K3bInteractionDialog
  protected slots:
   void slotStartClicked();
   void updateImageSize( const QString& );
-  void slotFindImageFile();
   void slotWriterChanged();
   void slotMd5JobFinished( bool );
 
@@ -73,8 +70,7 @@ class K3bIsoImageWritingDialog : public K3bInteractionDialog
   K3bWritingModeWidget* m_writingModeWidget;
 
   QLabel*    m_labelImageSize;
-  KLineEdit* m_editImagePath;
-  QToolButton* m_buttonFindImageFile;
+  KURLRequester* m_editImagePath;
   KProgress* m_md5ProgressWidget;
   KActiveLabel* m_md5Label;
 

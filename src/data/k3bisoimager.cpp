@@ -413,6 +413,11 @@ bool K3bIsoImager::addMkisofsParameters()
     s.truncate(32);  // ensure max length
     *m_process << "-V" << s;
   }
+  else {
+    emit infoMessage( i18n("No volume id specified. Using default."), INFO );
+    *m_process << "-V" << "CDROM";
+  }
+
   QString s = m_doc->isoOptions().volumeSetId();
   s.truncate(128);  // ensure max length
   *m_process << "-volset" << s;
@@ -433,12 +438,9 @@ bool K3bIsoImager::addMkisofsParameters()
   s.truncate(32);  // ensure max length
   *m_process << "-sysid" << s;
   
-  if( m_doc->isoOptions().volumeSetSize() > 0 ) {
-    *m_process << "-volset-size" << QString::number(m_doc->isoOptions().volumeSetSize());
-    if( m_doc->isoOptions().volumeSetNumber() > 0 )
-      *m_process << "-volset-seqno" << QString::number(m_doc->isoOptions().volumeSetNumber());
-  }
-
+  *m_process << "-volset-size" << QString::number(m_doc->isoOptions().volumeSetSize());
+  *m_process << "-volset-seqno" << QString::number(m_doc->isoOptions().volumeSetNumber());
+  
   if( m_doc->isoOptions().createRockRidge() ) {
     if( m_doc->isoOptions().preserveFilePermissions() )
       *m_process << "-R";

@@ -32,7 +32,7 @@
 #include <kapplication.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <klineedit.h>
+#include <kurlrequester.h>
 #include <kfiledialog.h>
 #include <kstdguiitem.h>
 #include <kguiitem.h>
@@ -54,7 +54,6 @@
 #include <qfileinfo.h>
 #include <qfont.h>
 #include <qfontmetrics.h>
-#include <qtoolbutton.h>
 #include <qpushbutton.h>
 #include <qtabwidget.h>
 #include <qtooltip.h>
@@ -83,8 +82,8 @@ K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( QWidget* parent, const char*
   slotLoadUserDefaults();
 
   kapp->config()->setGroup("General Options");
-  m_editImagePath->setText( kapp->config()->readEntry( "last written image", "" ) );
-  updateImageSize( m_editImagePath->text() );
+  m_editImagePath->setURL( kapp->config()->readEntry( "last written image", "" ) );
+  updateImageSize( m_editImagePath->url() );
 
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()),
 	   this, SLOT(slotWriterChanged()) );
@@ -118,9 +117,9 @@ void K3bIsoImageWritingDialog::setupGui()
   groupImageLayout->setSpacing( spacingHint() );
   groupImageLayout->setMargin( marginHint() );
 
-  m_editImagePath = new KLineEdit( groupImage );
-  m_buttonFindImageFile = new QToolButton( groupImage );
-  m_buttonFindImageFile->setIconSet( SmallIconSet( "fileopen" ) );
+  m_editImagePath = new KURLRequester( groupImage );
+  m_editImagePath->setCaption( i18n("Choose ISO Image File or cue/bin Combination") );
+
   m_labelImageSize = new QLabel( groupImage );
 
   QFont f( m_labelImageSize->font() );
@@ -179,12 +178,11 @@ void K3bIsoImageWritingDialog::setupGui()
   m_generalInfoLabel->setFont( f );
 
   groupImageLayout->addWidget( m_editImagePath, 0, 0 );
-  groupImageLayout->addWidget( m_buttonFindImageFile, 0, 1 );
-  groupImageLayout->addWidget( new QLabel( i18n("Size:"), groupImage ), 0, 2 );
-  groupImageLayout->addWidget( m_labelImageSize, 0, 3 );
-  groupImageLayout->addMultiCellWidget( K3bStdGuiItems::horizontalLine(groupImage), 1, 1, 0, 3 );
-  groupImageLayout->addMultiCellWidget( m_isoInfoWidget, 2, 2, 0, 3 );
-  groupImageLayout->addMultiCellWidget( m_generalInfoLabel, 3, 3, 0, 3 );
+  groupImageLayout->addWidget( new QLabel( i18n("Size:"), groupImage ), 0, 1 );
+  groupImageLayout->addWidget( m_labelImageSize, 0, 2 );
+  groupImageLayout->addMultiCellWidget( K3bStdGuiItems::horizontalLine(groupImage), 1, 1, 0, 2 );
+  groupImageLayout->addMultiCellWidget( m_isoInfoWidget, 2, 2, 0, 2 );
+  groupImageLayout->addMultiCellWidget( m_generalInfoLabel, 3, 3, 0, 2 );
 
   m_md5ProgressWidget = new KProgress( 100, groupImage );
   m_md5ProgressWidget->setFormat( i18n("Calculating...") );
@@ -215,15 +213,15 @@ void K3bIsoImageWritingDialog::setupGui()
 
   m_writingModeWidget = new K3bWritingModeWidget( optionTab );
 
-  QGroupBox* groupWriting = new QGroupBox( 2, Qt::Vertical, i18n("Options"), optionTab );
-  m_checkDummy = K3bStdGuiItems::simulateCheckbox( groupWriting );
-  m_checkBurnProof = K3bStdGuiItems::burnproofCheckbox( groupWriting );
+  m_checkDummy = K3bStdGuiItems::simulateCheckbox( optionTab );
+  m_checkBurnProof = K3bStdGuiItems::burnproofCheckbox( optionTab );
 
-  groupOptionsLayout->addWidget( new QLabel( i18n("Writing mode:"), optionTab ), 0, 0 );
-  groupOptionsLayout->addWidget( m_writingModeWidget, 1, 0 );
-  groupOptionsLayout->addMultiCellWidget( groupWriting, 0, 2, 1, 1 );
-  groupOptionsLayout->setRowStretch( 2, 1 );
-  groupOptionsLayout->setColStretch( 1, 1 );
+  groupOptionsLayout->addWidget( new QLabel( i18n("Writing mode:"), optionTab ), 2, 0 );
+  groupOptionsLayout->addWidget( m_writingModeWidget, 2, 1 );
+  groupOptionsLayout->addMultiCellWidget( m_checkDummy, 0, 0, 0, 2 );
+  groupOptionsLayout->addMultiCellWidget( m_checkBurnProof, 1, 1, 0, 2 );
+  groupOptionsLayout->setRowStretch( 3, 1 );
+  groupOptionsLayout->setColStretch( 2, 1 );
 
 
   // advanced ---------------------------------
@@ -259,7 +257,6 @@ void K3bIsoImageWritingDialog::setupGui()
   grid->setRowStretch( 2, 1 );
 
   connect( m_editImagePath, SIGNAL(textChanged(const QString&)), this, SLOT(updateImageSize(const QString&)) );
-  connect( m_buttonFindImageFile, SIGNAL(clicked()), this, SLOT(slotFindImageFile()) );
 
   slotWriterChanged();
 }
@@ -268,8 +265,8 @@ void K3bIsoImageWritingDialog::setupGui()
 void K3bIsoImageWritingDialog::slotStartClicked()
 {
   // check if the image exists
-  if( !QFile::exists( m_editImagePath->text() ) ) {
-    KMessageBox::error( this, i18n("Could not find file %1").arg(m_editImagePath->text()) );
+  if( !QFile::exists( m_editImagePath->url() ) ) {
+    KMessageBox::error( this, i18n("Could not find file %1").arg(m_editImagePath->url()) );
     return;
   }
 
@@ -277,7 +274,7 @@ void K3bIsoImageWritingDialog::slotStartClicked()
 
   // save the path
   kapp->config()->setGroup("General Options");
-  kapp->config()->writeEntry( "last written image", m_editImagePath->text() );
+  kapp->config()->writeEntry( "last written image", m_editImagePath->url() );
 
   // create the job
   if( m_job == 0 )
@@ -291,7 +288,7 @@ void K3bIsoImageWritingDialog::slotStartClicked()
   m_job->setNoFix( m_checkNoFix->isChecked() );
   m_job->setDataMode( m_dataModeWidget->dataMode() );
 
-  m_job->setImagePath( m_editImagePath->text() );
+  m_job->setImagePath( m_editImagePath->url() );
 
   m_job->setWritingApp( m_writerSelectionWidget->writingApp() );
 
@@ -405,14 +402,6 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
 }
 
 
-void K3bIsoImageWritingDialog::slotFindImageFile()
-{
-  QString newPath( KFileDialog::getOpenFileName( m_editImagePath->text(), QString::null, this, i18n("Choose ISO Image File or cue/bin Combination") ) );
-  if( !newPath.isEmpty() )
-    m_editImagePath->setText( newPath );
-}
-
-
 void K3bIsoImageWritingDialog::slotWriterChanged()
 {
   if (m_writerSelectionWidget->writerDevice()) {
@@ -439,7 +428,7 @@ void K3bIsoImageWritingDialog::slotWriterChanged()
 
 void K3bIsoImageWritingDialog::setImage( const KURL& url )
 {
-  m_editImagePath->setText( url.path() );
+  m_editImagePath->setURL( url.path() );
 }
 
 

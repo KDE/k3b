@@ -90,15 +90,15 @@ K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const ch
 
   readSettings();
 
-  QFileInfo fi( m_tempDirSelectionWidget->tempPath() );
-  QString path;
-  if( fi.isFile() )
-    path = fi.dirPath();
-  else
-    path = fi.filePath();
-  if( path[path.length()-1] != '/' )
-    path.append("/");
-  path.append( _doc->isoOptions().volumeID() + ".iso" );
+  m_tempDirSelectionWidget->setSelectionMode( K3bTempDirSelectionWidget::FILE );
+  QString path = _doc->tempDir();
+  if( path.isEmpty() ) {
+    path = K3b::defaultTempPath();
+    if( _doc->isoOptions().volumeID().isEmpty() )
+      path.append( "image.iso" );
+    else
+      path.append( _doc->isoOptions().volumeID() + ".iso" );
+  }
   m_tempDirSelectionWidget->setTempPath( path );
 }
 
@@ -117,7 +117,7 @@ void K3bDataBurnDialog::saveSettings()
 	
 
   // save image file path
-  ((K3bDataDoc*)doc())->setIsoImage( m_tempDirSelectionWidget->tempPath() );  
+  ((K3bDataDoc*)doc())->setTempDir( m_tempDirSelectionWidget->tempPath() );  
 
   // save multisession settings
   if( m_groupMultiSession->selected() == m_radioMultiSessionStart )
@@ -153,8 +153,8 @@ void K3bDataBurnDialog::readSettings()
     break;
   }
 
-  if( !((K3bDataDoc*)doc())->isoImage().isEmpty() )
-    m_tempDirSelectionWidget->setTempPath( ((K3bDataDoc*)doc())->isoImage() );
+  if( !doc()->tempDir().isEmpty() )
+    m_tempDirSelectionWidget->setTempPath( doc()->tempDir() );
 
 
   m_imageSettingsWidget->load( ((K3bDataDoc*)doc())->isoOptions() );

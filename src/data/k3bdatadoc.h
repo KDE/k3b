@@ -92,9 +92,6 @@ class K3bDataDoc : public K3bDoc
       TODO: should be moved to K3bMainWidget or K3bApp (if we ever create and need one) */
   const QString& dummyDir();
 
-  const QString& isoImage() const { return m_isoImage; }
-  void setIsoImage( const QString& s ) { m_isoImage = s; }
-	
   virtual K3bBurnJob* newBurnJob();
 	
   int multiSessionMode() const { return m_multisessionMode; }
@@ -192,7 +189,6 @@ class K3bDataDoc : public K3bDoc
   K3bRootItem* m_root;
   QString m_name;
   QString m_dummyDir;
-  QString m_isoImage;
 
   int m_dataMode;
 

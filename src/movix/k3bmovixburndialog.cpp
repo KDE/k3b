@@ -51,6 +51,8 @@ K3bMovixBurnDialog::K3bMovixBurnDialog( K3bMovixDoc* doc, QWidget* parent, const
 {
   prepareGui();
 
+  m_tempDirSelectionWidget->setSelectionMode( K3bTempDirSelectionWidget::FILE );
+
   setTitle( i18n("eMovix Project"), 
 	    i18n("1 file (%1)", "%n files (%1)", m_doc->movixFileItems().count()).arg(KIO::convertSize(m_doc->size())) );
 
@@ -76,6 +78,17 @@ K3bMovixBurnDialog::K3bMovixBurnDialog( K3bMovixDoc* doc, QWidget* parent, const
 
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
   m_optionGroupLayout->addItem( spacer );
+
+
+  QString path = m_doc->tempDir();
+  if( path.isEmpty() ) {
+    path = K3b::defaultTempPath();
+    if( doc->isoOptions().volumeID().isEmpty() )
+      path.append( "image.iso" );
+    else
+      path.append( doc->isoOptions().volumeID() + ".iso" );
+  }
+  m_tempDirSelectionWidget->setTempPath( path );
 }
 
 
@@ -181,7 +194,7 @@ void K3bMovixBurnDialog::saveSettings()
   m_doc->setDataMode( m_dataModeWidget->dataMode() );
 
   // save image file path
-  m_doc->setIsoImage( m_tempDirSelectionWidget->tempPath() );  
+  m_doc->setTempDir( m_tempDirSelectionWidget->tempPath() );  
 }
  
 

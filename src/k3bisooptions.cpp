@@ -24,7 +24,7 @@
 
 
 K3bIsoOptions::K3bIsoOptions()
-  : m_volumeID( i18n("Project name", "Data") ),
+  : m_volumeID( "CDROM" ),
     m_applicationID( QString("K3B THE CD KREATOR VERSION %1 (C) 2003 THE K3B TEAM").arg(k3bcore->version()) ),
     m_preparer( i18n("K3b - Version %1").arg(k3bcore->version()) ),
     m_systemId( K3b::systemName().upper() ),
@@ -58,8 +58,8 @@ K3bIsoOptions::K3bIsoOptions()
 
   m_whiteSpaceTreatment = noChange;
 
-  m_volumeSetSize = 0; // 0 == unused
-  m_volumeSetNumber = 0;  // 0 == unused
+  m_volumeSetSize = 1;
+  m_volumeSetNumber = 1;
 }
 
 

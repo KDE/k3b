@@ -78,7 +78,6 @@ bool K3bDataDoc::newDocument()
 
 	
   m_name = "Dummyname";
-  m_isoImage = QString::null;
 
   m_multisessionMode = NONE;
   m_dataMode = K3b::AUTO;

@@ -19,12 +19,15 @@
 
 #include <k3binteractiondialog.h>
 #include <kurl.h>
-#include <klineedit.h>
-#include <qcheckbox.h>
-#include <qtoolbutton.h>
-#include <qspinbox.h>
-#include "k3bwriterselectionwidget.h"
-#include "k3bbinimagewritingjob.h"
+
+class K3bMd5Job;
+class KActiveLabel;
+class KProgress;
+class QCheckBox;
+class QSpinBox;
+class KURLRequester;
+class K3bWriterSelectionWidget;
+class K3bBinImageWritingJob;
 
 
 /**
@@ -43,7 +46,6 @@ Q_OBJECT
  protected slots:
   void slotStartClicked();
 
-  void slotFindTocFile();
   void slotWriterChanged();
 
   void slotLoadUserDefaults();
@@ -54,15 +56,18 @@ Q_OBJECT
   void setupGui();
 
   K3bBinImageWritingJob* m_job;
+  K3bMd5Job* m_md5Job;
 
   K3bWriterSelectionWidget* m_writerSelectionWidget;
   QCheckBox* m_checkSimulate;
   QCheckBox* m_checkMulti;
   QCheckBox* m_checkForce;
   QSpinBox*  m_spinCopies;
-  KLineEdit* m_editTocPath;
-  QToolButton* m_buttonFindTocFile;
+  KURLRequester* m_editTocPath;
   QString m_tocPath;
+
+  KProgress* m_md5ProgressWidget;
+  KActiveLabel* m_md5Label;
 };
 
 #endif

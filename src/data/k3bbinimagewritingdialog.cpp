@@ -23,6 +23,7 @@
 #include <k3bburnprogressdialog.h>
 #include <k3bstdguiitems.h>
 #include <k3bcore.h>
+#include <tools/k3bmd5job.h>
 
 #include <kconfig.h>
 #include <kstandarddirs.h>
@@ -35,6 +36,8 @@
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <kapplication.h>
+#include <kurlrequester.h>
+#include <kactivelabel.h>
 
 #include <qgroupbox.h>
 #include <qlayout.h>
@@ -44,6 +47,9 @@
 #include <qtooltip.h>
 #include <qwhatsthis.h>
 #include <qgroupbox.h>
+#include <qcheckbox.h>
+#include <qtoolbutton.h>
+#include <qspinbox.h>
 
 
 
@@ -86,7 +92,7 @@ K3bBinImageWritingDialog::K3bBinImageWritingDialog( QWidget* parent, const char*
    slotLoadUserDefaults();
 
    kapp->config()->setGroup("General Options");
-   m_editTocPath->setText( kapp->config()->readEntry( "last written bin/cue image", "" ) );
+   m_editTocPath->setURL( kapp->config()->readEntry( "last written bin/cue image", "" ) );
 }
 
 
@@ -114,13 +120,10 @@ void K3bBinImageWritingDialog::setupGui()
   groupImageLayout->setSpacing( spacingHint() );
   groupImageLayout->setMargin( marginHint() );
 
-  m_editTocPath = new KLineEdit( groupImage );
+  m_editTocPath = new KURLRequester( groupImage );
+  m_editTocPath->setCaption( i18n("Choose TOC/CUE file") );
   
-  m_buttonFindTocFile = new QToolButton( groupImage );
-  m_buttonFindTocFile->setIconSet( SmallIconSet( "fileopen" ) );
-
   groupImageLayout->addWidget( m_editTocPath, 0, 0 );
-  groupImageLayout->addWidget( m_buttonFindTocFile, 0, 1 );
 
   // options
   // -----------------------------------------------------------------------
@@ -179,8 +182,6 @@ void K3bBinImageWritingDialog::setupGui()
 
   grid->setRowStretch( 2, 1 );
 
-  connect( m_buttonFindTocFile, SIGNAL(clicked()), this, SLOT(slotFindTocFile()) );
-
   QToolTip::add( m_checkForce, i18n("Force writing") );
   QToolTip::add( m_spinCopies, i18n("Number of copies") );
 
@@ -199,17 +200,17 @@ void K3bBinImageWritingDialog::slotStartClicked()
 
   m_job->setWriter( m_writerSelectionWidget->writerDevice() );
   m_job->setSpeed( m_writerSelectionWidget->writerSpeed() );
-  m_job->setTocFile(m_editTocPath->text());
+  m_job->setTocFile(m_editTocPath->url());
   m_job->setSimulate(m_checkSimulate->isChecked());
   m_job->setMulti(m_checkMulti->isChecked());
   m_job->setForce(m_checkForce->isChecked());
   m_job->setCopies(m_spinCopies->value());
 
-  if (!m_editTocPath->text().isEmpty()) {
+  if (!m_editTocPath->url().isEmpty()) {
 
     // save the path
     kapp->config()->setGroup("General Options");
-    kapp->config()->writeEntry( "last written bin/cue image", m_editTocPath->text() );
+    kapp->config()->writeEntry( "last written bin/cue image", m_editTocPath->url() );
 
     K3bBurnProgressDialog d( kapp->mainWidget(), "burnProgress", true );
     
@@ -224,17 +225,9 @@ void K3bBinImageWritingDialog::slotStartClicked()
 void K3bBinImageWritingDialog::setTocFile( const KURL& url )
 {
   m_tocPath = url.path();
-  m_editTocPath->setText(m_tocPath);
+  m_editTocPath->setURL(m_tocPath);
 }
 
-void K3bBinImageWritingDialog::slotFindTocFile()
-{  
-  QString newPath( KFileDialog::getOpenFileName( m_tocPath, 
-                                                 QString::null, this, 
-                                                 i18n("Choose TOC/CUE file") ) );
-  if( !newPath.isEmpty() )
-    m_editTocPath->setText( newPath );
-}
 
 void K3bBinImageWritingDialog::slotWriterChanged()
 {

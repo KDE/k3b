@@ -257,7 +257,7 @@ QString K3bDataRootViewItem::text( int index ) const
 {
   switch( index ) {
   case 0:
-    return m_doc->isoOptions().volumeID();
+    return ( m_doc->isoOptions().volumeID().isEmpty() ? i18n("root") : m_doc->isoOptions().volumeID() );
   default:
     return "";
   }
