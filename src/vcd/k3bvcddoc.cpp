@@ -572,7 +572,7 @@ void K3bVcdDoc::loadDefaultSettings()
   // the group is set in K3bDoc
   KConfig* c = k3bMain() ->config();
 
-  // TODO: load additional video settings  
+  // TODO: load additional video settings
 }
 
 
@@ -603,6 +603,7 @@ bool K3bVcdDoc::loadDocumentData( QDomElement* root )
     for ( uint i = 0; i < vcdNodes.count(); i++ ) {
         QDomNode item = vcdNodes.item( i );
         QString name = item.nodeName();
+				kdDebug() << QString("LoadDocument: name = '%1'").arg(name) << endl;
         if ( name == "volumeId" )
             vcdOptions() ->setVolumeId( item.toElement().text() );
         else if ( name == "albumId" )
@@ -614,8 +615,10 @@ bool K3bVcdDoc::loadDocumentData( QDomElement* root )
         else if ( name == "publisher" )
             vcdOptions() ->setPublisher( item.toElement().text() );
         else if ( name == "vcdType" )
-            setVcdType( item.toElement().text().toInt() );
-        else if ( name == "PreGapLeadout" )
+            setVcdType( vcdTypes(item.toElement().text().toInt()) );
+        else if ( name == "mpegVersion" )
+						vcdOptions() ->setMpegVersion( item.toElement().text().toInt() );
+				else if ( name == "PreGapLeadout" )
             vcdOptions() ->setPreGapLeadout( item.toElement().text().toInt() );
         else if ( name == "PreGapTrack" )
             vcdOptions() ->setPreGapTrack( item.toElement().text().toInt() );
@@ -645,8 +648,16 @@ bool K3bVcdDoc::loadDocumentData( QDomElement* root )
             vcdOptions() ->setRelaxedAps( item.toElement().text().toInt() );
         else if ( name == "UseGaps" )
             vcdOptions() ->setUseGaps( item.toElement().text().toInt() );
+        else if ( name == "PbcEnabled" )
+            vcdOptions() ->setPbcEnabled( item.toElement().text().toInt() );
+        else if ( name == "PbcNumKeys" )
+            vcdOptions() ->setPbcNumKeys( item.toElement().text().toInt() );
+        else if ( name == "SegmentFolder" )
+            vcdOptions() ->setSegmentFolder( item.toElement().text().toInt() );
+        else if ( name == "Restriction" )
+            vcdOptions() ->setRestriction( item.toElement().text().toInt() );
     }
-    
+
     // vcd Tracks
     QDomNodeList trackNodes = nodes.item( 2 ).childNodes();
 
@@ -662,15 +673,9 @@ bool K3bVcdDoc::loadDocumentData( QDomElement* root )
             k.setPath( url );
             if ( K3bVcdTrack* track = createTrack( k ) ) {
                 track ->setPlayTime( trackElem.attribute( "playtime", "1" ).toInt() );
-                track ->setWaitTime( trackElem.attribute( "wait", "2" ).toInt() );
+                track ->setWaitTime( trackElem.attribute( "waittime", "2" ).toInt() );
 
-                QDomNodeList trackNodes = trackElem.childNodes();
-                QDomElement pbcElem = trackNodes.item(0).toElement();
-                for ( int i = 0; i < K3bVcdTrack::_maxPbcTracks; i++ ) {
-                    // TODO: load PBC                    
-                }
-            
-                addTrack( track, m_tracks->count() );
+								addTrack( track, m_tracks->count() );
             }
         }
     }
@@ -679,8 +684,21 @@ bool K3bVcdDoc::loadDocumentData( QDomElement* root )
 
     informAboutNotFoundFiles();
 
-    if ( m_notFoundFiles.isEmpty() )
+    if ( m_notFoundFiles.isEmpty() ) {
+		    for ( uint i = 0; i < trackNodes.length(); i++ ) {
+	        QDomElement trackElem = trackNodes.item( i ).toElement();
+					QDomNodeList trackNodes = trackElem.childNodes();
+					for ( uint type = 0; type < trackNodes.length(); type++ ) {
+						QDomElement trackElem = trackNodes.item( type ).toElement();
+						kdDebug() << "PBC Element Type: " << trackElem.attribute ("type") << endl;
+						kdDebug() << "PBC Element PbcTrack: " << trackElem.attribute ("pbctrack") << endl;
+						kdDebug() << "PBC Element Value: " << trackElem.attribute ("val") << endl;
+						kdDebug() << "------------------------------------" << endl;
+					}
+        }
+
         setModified( false );
+		}
 
     return true;
 }
@@ -719,6 +737,10 @@ bool K3bVcdDoc::saveDocumentData( QDomElement* docElem )
 
     vcdElem = doc.createElement( "vcdType" );
     vcdElem.appendChild( doc.createTextNode( QString::number( vcdType() ) ) );
+    vcdMain.appendChild( vcdElem );
+
+		vcdElem = doc.createElement( "mpegVersion" );
+    vcdElem.appendChild( doc.createTextNode( QString::number( vcdOptions() ->mpegVersion() ) ) );
     vcdMain.appendChild( vcdElem );
 
     vcdElem = doc.createElement( "PreGapLeadout" );
@@ -781,7 +803,23 @@ bool K3bVcdDoc::saveDocumentData( QDomElement* docElem )
     vcdElem.appendChild( doc.createTextNode( QString::number( vcdOptions() ->UseGaps() ) ) );
     vcdMain.appendChild( vcdElem );
 
-    docElem->appendChild( vcdMain );
+    vcdElem = doc.createElement( "PbcEnabled" );
+    vcdElem.appendChild( doc.createTextNode( QString::number( vcdOptions() ->PbcEnabled() ) ) );
+    vcdMain.appendChild( vcdElem );
+
+    vcdElem = doc.createElement( "PbcNumKeys" );
+    vcdElem.appendChild( doc.createTextNode( QString::number( vcdOptions() ->PbcNumKeys() ) ) );
+    vcdMain.appendChild( vcdElem );
+
+    vcdElem = doc.createElement( "SegmentFolder" );
+    vcdElem.appendChild( doc.createTextNode( QString::number( vcdOptions() ->SegmentFolder() ) ) );
+    vcdMain.appendChild( vcdElem );
+
+    vcdElem = doc.createElement( "Restriction" );
+    vcdElem.appendChild( doc.createTextNode( QString::number( vcdOptions() ->Restriction() ) ) );
+    vcdMain.appendChild( vcdElem );
+
+		docElem->appendChild( vcdMain );
 
     // save the tracks
     // -------------------------------------------------------------
@@ -809,7 +847,7 @@ bool K3bVcdDoc::saveDocumentData( QDomElement* docElem )
                 }
                 else {
                     pbcElem.setAttribute( "pbctrack", "no" );
-                    pbcElem.setAttribute( "val", track->getPbcTrack( i )->getNonPbcTrack( i ) );
+                    pbcElem.setAttribute( "val", track->getNonPbcTrack( i ) );
                 }
                 trackElem.appendChild( pbcElem );
             }
