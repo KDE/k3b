@@ -21,7 +21,7 @@
 <ToolBar name="mainToolBar">
 	<Action name="file_burn"/>
 	<Separator/>
-	<Action name="tools_cd_info"/>
+	<Action name="tools_copy_cd"/>
 	<Action name="tools_blank_cdrw"/>
 </ToolBar>
 </kpartgui>

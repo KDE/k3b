@@ -169,7 +169,7 @@ void K3bMainWindow::initActions()
   actionToolsWriteIsoImage = new KAction(i18n("&Write Iso image"), "gear", 0, this, SLOT(slotWriteIsoImage()),
 					 actionCollection(), "tools_write_iso" );
 
-  actionCdCopy = new KAction(i18n("&Copy CD"), "gear", 0, this, SLOT(slotCdCopy()),
+  actionCdCopy = new KAction(i18n("&Copy CD"), "cdcopy", 0, this, SLOT(slotCdCopy()),
 			     actionCollection(), "tools_copy_cd" );
 
   actionSettingsK3bSetup = new KAction(i18n("K3b &Setup"), "configure", 0, this, SLOT(slotK3bSetup()), 
@@ -274,7 +274,7 @@ void K3bMainWindow::initView()
   m_audioPlayerDock = createDockWidget( "K3b Audio Player", SmallIcon("1rightarrow") );
   m_audioPlayer = new K3bAudioPlayer( this, "k3b_audio_player" );
   m_audioPlayerDock->setWidget( m_audioPlayer );
-  m_audioPlayerDock->setEnableDocking( KDockWidget::DockCorner | KDockWidget::DockDesktop );
+  m_audioPlayerDock->setEnableDocking( KDockWidget::DockCorner );
   m_audioPlayerDock->manualDock( mainDock, KDockWidget::DockBottom, m_audioPlayer->height() );
 
   connect( m_audioPlayerDock, SIGNAL(iMBeingClosed()), this, SLOT(slotAudioPlayerHidden()) );

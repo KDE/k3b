@@ -92,7 +92,9 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   QPtrList<K3bDevice> devices = k3bMain()->deviceManager()->allDevices();
   K3bDevice* dev = devices.first();
   while( dev ) {
-    m_comboSourceDevice->insertItem( dev->vendor() + " " + dev->description() + " (" + dev->genericDevice() + ")" );
+    // cdrdao only supports SCSI devices
+    if( dev->interfaceType() == K3bDevice::SCSI )
+      m_comboSourceDevice->insertItem( dev->vendor() + " " + dev->description() + " (" + dev->genericDevice() + ")" );
     dev = devices.next();
   }
 
