@@ -15,6 +15,7 @@ class K3bScsiDevice : public K3bDevice
 
   int isReady() const;
   int isEmpty();
+  bool rewritable();
 
   bool block(bool) const;
 

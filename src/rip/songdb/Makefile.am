@@ -1,6 +1,6 @@
 INCLUDES = $(all_includes)
 
-libsongdb_la_METASOURCES = AUTO
+METASOURCES = AUTO
 
 noinst_LTLIBRARIES = libsongdb.la
 

@@ -43,6 +43,8 @@
 #include <kmessagebox.h>
 #include <kfilemetainfo.h>
 #include <kdebug.h>
+#include <kglobal.h>
+
 
 
 K3bDataDoc::K3bDataDoc( QObject* parent )
@@ -92,6 +94,8 @@ bool K3bDataDoc::newDocument()
   m_hideTRANS_TBL = false;    // -hide-joliet-trans-tbl
   m_padding = false;           // -pad
 
+  m_bForceInputCharset = false;
+  m_inputCharset = "iso8859-1";
 	
   return K3bDoc::newDocument();
 }

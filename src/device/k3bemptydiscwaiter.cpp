@@ -17,6 +17,8 @@
 
 #include "k3bemptydiscwaiter.h"
 #include "k3bdevice.h"
+#include "../k3bblankingjob.h"
+#include "../k3bbusywidget.h"
 
 #include <qtimer.h>
 #include <qlabel.h>
@@ -26,6 +28,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kmessagebox.h>
 
 
 K3bEmptyDiscWaiter::K3bEmptyDiscWaiter( K3bDevice* device, QWidget* parent, const char* name )
@@ -81,6 +84,32 @@ void K3bEmptyDiscWaiter::slotTestForEmptyCd()
     
     done( DISK_READY );
   }
+  else if( x != -1 ) {
+    if( m_device->rewritable() ) {
+      m_timer->stop();
+
+      if( KMessageBox::questionYesNo( this, i18n("K3b found a rewritable disk. Should it be erased?"),
+				      i18n("Found CD-RW") ) == KMessageBox::Yes ) {
+	// start a k3bblankingjob
+	ErasingInfoDialog d;
+
+	K3bBlankingJob job;
+	job.setDevice( m_device );
+	job.setMode( K3bBlankingJob::Fast );
+	job.setForce( true );
+	connect( &job, SIGNAL(finished(bool)), &d, SLOT(slotFinished(bool)) );
+	connect( &d, SIGNAL(cancelClicked()), &job, SLOT(cancel()) );
+	job.start();
+	d.exec();
+
+	m_device->eject();
+      }
+      else
+	m_device->eject();
+
+      m_timer->start(1000);
+    }
+  }
 }
 
 
@@ -97,6 +126,45 @@ void K3bEmptyDiscWaiter::slotUser1()
   m_timer->stop();
 
   done( DISK_READY );
+}
+
+
+
+
+K3bEmptyDiscWaiter::ErasingInfoDialog::ErasingInfoDialog( QWidget* parent, const char* name ) 
+  : KDialogBase( parent, name, true, i18n("Erasing"), Cancel|Ok, Ok, true )
+{
+  QFrame* main = makeMainWidget();
+  QGridLayout* mainLayout = new QGridLayout( main );
+  mainLayout->setMargin( marginHint() );
+  mainLayout->setSpacing( spacingHint() );
+
+  m_label = new QLabel( i18n("Erasing CD-RW"), main );
+  m_busyWidget = new K3bBusyWidget( main );
+
+  mainLayout->addWidget( m_label, 0, 0 );
+  mainLayout->addWidget( m_busyWidget, 1, 0 );
+
+  showButtonOK( false );
+  m_busyWidget->showBusy( true );
+}
+
+
+K3bEmptyDiscWaiter::ErasingInfoDialog::~ErasingInfoDialog()
+{}
+
+
+void K3bEmptyDiscWaiter::ErasingInfoDialog::slotFinished( bool success )
+{
+  m_busyWidget->showBusy( false );
+
+  if( success )
+    slotClose();
+  else {
+    showButtonOK( true );
+    showButtonCancel( false );
+    m_label->setText( i18n("Sorry, K3b was not able to erase the disk.") );
+  }
 }
 
 

@@ -1,6 +1,6 @@
 INCLUDES = $(all_includes)
 
-libinput_la_METASOURCES = AUTO
+METASOURCES = AUTO
 
 noinst_LTLIBRARIES = libinput.la
 

@@ -24,7 +24,6 @@
 #include "k3bisovalidator.h"
 
 #include <qcheckbox.h>
-#include <qcombobox.h>
 #include <qframe.h>
 #include <qgroupbox.h>
 #include <qlabel.h>
@@ -40,6 +39,8 @@
 #include <qbuttongroup.h>
 #include <qfileinfo.h>
 #include <qtabwidget.h>
+#include <qvalidator.h>
+#include <qregexp.h>
 
 #include <kmessagebox.h>
 #include <klineedit.h>
@@ -47,6 +48,45 @@
 #include <kconfig.h>
 #include <kstandarddirs.h>
 #include <kfiledialog.h>
+#include <kcombobox.h>
+
+
+
+static const char * mkisofsCharacterSets[] = { "cp10081",
+					       "cp10079",
+					       "cp10029",
+					       "cp10007",
+					       "cp10006",
+					       "cp10000",
+					       "koi8-r",
+					       "cp874",
+					       "cp869",
+					       "cp866",
+					       "cp865",
+					       "cp864",
+					       "cp863",
+					       "cp862",
+					       "cp861",
+					       "cp860",
+					       "cp857",
+					       "cp855",
+					       "cp852",
+					       "cp850",
+					       "cp775",
+					       "cp737",
+					       "cp437",
+					       "iso8859-15",
+					       "iso8859-14",
+					       "iso8859-9",
+					       "iso8859-8",
+					       "iso8859-7",
+					       "iso8859-6",
+					       "iso8859-5",
+					       "iso8859-4",
+					       "iso8859-3",
+					       "iso8859-2",
+					       "iso8859-1",
+					       0 };  // terminating zero
 
 
 
@@ -60,13 +100,13 @@ K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const ch
   QFrame* f4 = new QFrame( tab );
 
   setupBurnTab( f1 );
-  setupSettingsTab( f2 );
-  setupMultisessionTab( f3 );
+  setupVolumeInfoTab( f2 );
+  setupSettingsTab( f3 );
   setupAdvancedTab( f4 );
 	
   tab->addTab( f1, i18n("Burning") );
-  tab->addTab( f2, i18n("Settings") );
-  tab->addTab( f3, i18n("Multisession") );
+  tab->addTab( f2, i18n("Volume Desc") );
+  tab->addTab( f3, i18n("Settings") );
   tab->addTab( f4, i18n("Advanced") );
 
   readSettings();
@@ -128,6 +168,10 @@ void K3bDataBurnDialog::saveSettings()
   ((K3bDataDoc*)doc())->setPublisher( m_editPublisher->text() );
   ((K3bDataDoc*)doc())->setPreparer( m_editPreparer->text() );
   // ------------------------------------- saving mkisofs-options --
+
+  ((K3bDataDoc*)doc())->setForceInputCharset( m_checkForceInputCharset->isChecked() );
+  if( m_checkForceInputCharset->isChecked() )
+    ((K3bDataDoc*)doc())->setInputCharset( m_comboInputCharset->currentText() );
 
   // save iso-level
   if( m_groupIsoLevel->selected() == m_radioIsoLevel3 )
@@ -215,6 +259,10 @@ void K3bDataBurnDialog::readSettings()
   m_checkHideTRANS_TBL->setChecked( ((K3bDataDoc*)doc())->hideTRANS_TBL() );
   //  m_checkPadding->setChecked( ((K3bDataDoc*)doc())->padding() );
   // ------------------------------------- read mkisofs-options --
+
+
+  m_checkForceInputCharset->setChecked( ((K3bDataDoc*)doc())->forceInputCharset() );
+  m_comboInputCharset->setEditText( ((K3bDataDoc*)doc())->inputCharset() );
 
 
   // read iso-level
@@ -364,24 +412,7 @@ void K3bDataBurnDialog::setupAdvancedTab( QFrame* frame )
   frameLayout->setSpacing( spacingHint() );
   frameLayout->setMargin( marginHint() );
 
-
-//   QLabel* ll = new QLabel( i18n("These are mostly automatically set by K3b. It is recommended "
-// 				"to not change any setting unless you know what you are doing."), 
-// 			   frame );
-//   ll->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
-  m_labelAdvancedInfo = new QLabel( frame );
-  m_labelAdvancedInfo->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
-  m_labelAdvancedInfo->setPaletteForegroundColor( red );
-  m_labelAdvancedInfo->hide();
-
-  QWidget* frameSettings = new QWidget( frame, "frameSettings" );
-  QGridLayout* frameSettingsLayout = new QGridLayout( frameSettings );
-//   frameSettings->layout()->setMargin( 0 );
-//   frameSettings->layout()->setSpacing( 0 );
-  frameSettingsLayout->setSpacing( spacingHint() );
-  frameSettingsLayout->setMargin( 0 );
-
-  m_groupIsoLevel = new QButtonGroup( 3, Qt::Horizontal, i18n( "ISO Level" ), frameSettings, "m_groupIsoLevel" );
+  m_groupIsoLevel = new QButtonGroup( 3, Qt::Vertical, i18n( "ISO Level" ), frame, "m_groupIsoLevel" );
   m_groupIsoLevel->layout()->setSpacing( spacingHint()  );
   m_groupIsoLevel->layout()->setMargin( marginHint() );
 
@@ -390,46 +421,51 @@ void K3bDataBurnDialog::setupAdvancedTab( QFrame* frame )
   m_radioIsoLevel3 = new QRadioButton( i18n("Level 3"), m_groupIsoLevel, "m_radioIsoLevel3" );
 
 
-  m_checkCreateRockRidge   = new QCheckBox( i18n( "Generate rockridge entries" ), frameSettings, "m_checkCreateRockRidge" );
-  m_checkCreateJoliet      = new QCheckBox( i18n( "Generate joilet entries" ), frameSettings, "m_checkCreateJoliet" );
 
-  m_checkNoDeepDirRel      = new QCheckBox( i18n( "No deep directory relocation" ), frameSettings, "m_checkNoDeepDirRel" );
-  m_checkHideRR_MOVED      = new QCheckBox( i18n( "Hide RR_MOVED" ), frameSettings, "m_checkHideRR_MOVED" );
-  m_checkCreateTRANS_TBL   = new QCheckBox( i18n( "Create TRANS_TBL entries" ), frameSettings, "m_checkCreateTRANS_TBL" );
-  m_checkHideTRANS_TBL     = new QCheckBox( i18n( "Hide TRANS_TBL in joliet" ), frameSettings, "m_checkHideTRANS_TBL" );
-  m_checkUntranslatedNames = new QCheckBox( i18n( "Allow untranslated filenames" ), frameSettings, "m_checkUntranslatedNames" );
-  m_checkAllow31           = new QCheckBox( i18n( "Allow 31 character filenames" ), frameSettings, "m_checkAllow31" );
-  m_checkMaxNames          = new QCheckBox( i18n( "Max length (37) filenames" ), frameSettings, "m_checkMaxNames" );
-  m_checkBeginPeriod       = new QCheckBox( i18n( "Allow beginning period" ), frameSettings, "m_checkBeginPeriod" );
-  m_checkRelaxedNames      = new QCheckBox( i18n( "Relaxed filenames" ), frameSettings, "m_checkRelaxedNames" );
-  m_checkOmitVersion       = new QCheckBox( i18n( "Omit version numbers" ), frameSettings, "m_checkOmitVersion" );
-  m_checkNoISOTrans        = new QCheckBox( i18n( "Allow # and ~" ), frameSettings, "m_checkNoISOTrans" );
-  m_checkMultiDot          = new QCheckBox( i18n( "Allow multible dots" ), frameSettings, "m_checkMultiDot" );
-  m_checkLowercase         = new QCheckBox( i18n( "Allow lowercase filenames" ), frameSettings, "m_checkLowercase" );
+  m_checkNoDeepDirRel      = new QCheckBox( i18n( "No deep directory relocation" ), frame, "m_checkNoDeepDirRel" );
+  m_checkHideRR_MOVED      = new QCheckBox( i18n( "Hide RR_MOVED" ), frame, "m_checkHideRR_MOVED" );
+  m_checkCreateTRANS_TBL   = new QCheckBox( i18n( "Create TRANS_TBL entries" ), frame, "m_checkCreateTRANS_TBL" );
+  m_checkHideTRANS_TBL     = new QCheckBox( i18n( "Hide TRANS_TBL in joliet" ), frame, "m_checkHideTRANS_TBL" );
+  m_checkUntranslatedNames = new QCheckBox( i18n( "Allow untranslated filenames" ), frame, "m_checkUntranslatedNames" );
+  m_checkAllow31           = new QCheckBox( i18n( "Allow 31 character filenames" ), frame, "m_checkAllow31" );
+  m_checkMaxNames          = new QCheckBox( i18n( "Max length (37) filenames" ), frame, "m_checkMaxNames" );
+  m_checkBeginPeriod       = new QCheckBox( i18n( "Allow beginning period" ), frame, "m_checkBeginPeriod" );
+  m_checkRelaxedNames      = new QCheckBox( i18n( "Relaxed filenames" ), frame, "m_checkRelaxedNames" );
+  m_checkOmitVersion       = new QCheckBox( i18n( "Omit version numbers" ), frame, "m_checkOmitVersion" );
+  m_checkNoISOTrans        = new QCheckBox( i18n( "Allow # and ~" ), frame, "m_checkNoISOTrans" );
+  m_checkMultiDot          = new QCheckBox( i18n( "Allow multible dots" ), frame, "m_checkMultiDot" );
+  m_checkLowercase         = new QCheckBox( i18n( "Allow lowercase filenames" ), frame, "m_checkLowercase" );
 
 
-  frameSettingsLayout->addWidget( m_checkCreateRockRidge, 0, 0 );
-  frameSettingsLayout->addWidget( m_checkCreateJoliet, 1, 0 );
-  frameSettingsLayout->addWidget( m_checkNoDeepDirRel, 3, 0 );
-  frameSettingsLayout->addWidget( m_checkHideRR_MOVED, 4, 0 );
-  frameSettingsLayout->addWidget( m_checkCreateTRANS_TBL, 5, 0 );
-  frameSettingsLayout->addWidget( m_checkHideTRANS_TBL, 6, 0 );
-  frameSettingsLayout->addWidget( m_checkUntranslatedNames, 0, 1 );
-  frameSettingsLayout->addWidget( m_checkAllow31, 1, 1 );
-  frameSettingsLayout->addWidget( m_checkMaxNames, 2, 1);
-  frameSettingsLayout->addWidget( m_checkBeginPeriod, 3, 1 );
-  frameSettingsLayout->addWidget( m_checkRelaxedNames, 4, 1 );
-  frameSettingsLayout->addWidget( m_checkOmitVersion, 5, 1 );
-  frameSettingsLayout->addWidget( m_checkNoISOTrans, 6, 1 );
-  frameSettingsLayout->addWidget( m_checkMultiDot, 7, 1 );
-  frameSettingsLayout->addWidget( m_checkLowercase, 8, 1 );
-  frameSettingsLayout->addMultiCellWidget( m_groupIsoLevel, 9, 9, 0, 1 );
+  QGroupBox* groupInputCharset = new QGroupBox( 2, Qt::Horizontal, i18n("Input Charset"), frame );
+  groupInputCharset->layout()->setMargin( marginHint() );
+  groupInputCharset->layout()->setSpacing( spacingHint() );
 
-  frameSettingsLayout->setRowStretch( 9, 1 );
+  m_checkForceInputCharset = new QCheckBox( i18n("Force input charset:"), groupInputCharset );
+  m_comboInputCharset = new KComboBox( groupInputCharset );
+  m_comboInputCharset->setEditable( true );
+  m_comboInputCharset->setValidator( new QRegExpValidator( QRegExp("[\\w_-]*"), m_comboInputCharset ) );
 
-  //  frameLayout->addWidget( ll, 0, 0 );
-  frameLayout->addWidget( m_labelAdvancedInfo, 1, 0 );
-  frameLayout->addWidget( frameSettings, 2, 0 );
+  frameLayout->addWidget( m_checkUntranslatedNames, 0, 0 );
+  frameLayout->addWidget( m_checkAllow31, 1, 0 );
+  frameLayout->addWidget( m_checkMaxNames, 2, 0);
+  frameLayout->addWidget( m_checkBeginPeriod, 3, 0 );
+  frameLayout->addWidget( m_checkRelaxedNames, 4, 0 );
+  frameLayout->addWidget( m_checkOmitVersion, 5, 0 );
+  frameLayout->addWidget( m_checkNoISOTrans, 6, 0 );
+  frameLayout->addWidget( m_checkMultiDot, 7, 0 );
+  frameLayout->addWidget( m_checkLowercase, 8, 0 );
+
+  frameLayout->addWidget( m_checkNoDeepDirRel, 0, 1 );
+  frameLayout->addWidget( m_checkHideRR_MOVED, 1, 1 );
+  frameLayout->addWidget( m_checkCreateTRANS_TBL, 2, 1 );
+  frameLayout->addWidget( m_checkHideTRANS_TBL, 3, 1 );
+
+  frameLayout->addMultiCellWidget( m_groupIsoLevel, 4, 8, 1, 1 );
+  frameLayout->addMultiCellWidget( groupInputCharset, 9, 9, 0, 1 );
+
+  frameLayout->setRowStretch( 9, 1 );
+
 
   // signals and slots connections
   connect( m_checkUntranslatedNames, SIGNAL( toggled(bool) ), m_checkAllow31, SLOT( setDisabled(bool) ) );
@@ -440,66 +476,68 @@ void K3bDataBurnDialog::setupAdvancedTab( QFrame* frame )
   connect( m_checkUntranslatedNames, SIGNAL( toggled(bool) ), m_checkNoISOTrans, SLOT( setDisabled(bool) ) );
   connect( m_checkUntranslatedNames, SIGNAL( toggled(bool) ), m_checkMultiDot, SLOT( setDisabled(bool) ) );
   connect( m_checkUntranslatedNames, SIGNAL( toggled(bool) ), m_checkMaxNames, SLOT( setDisabled(bool) ) );
+  connect( m_checkForceInputCharset, SIGNAL( toggled(bool) ), m_comboInputCharset, SLOT( setEnabled(bool) ) );
+
+  // fill charset combo
+  for( int i = 0; mkisofsCharacterSets[i]; i++ ) {
+    m_comboInputCharset->insertItem( QString( mkisofsCharacterSets[i] ) );
+  }
+
+
+  m_comboInputCharset->setDisabled( true );
 }
 
 
-void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
+void K3bDataBurnDialog::setupVolumeInfoTab( QFrame* frame )
 {
   QGridLayout* frameLayout = new QGridLayout( frame );
   frameLayout->setSpacing( spacingHint() );
   frameLayout->setMargin( marginHint() );
 
-  QGroupBox* _groupVolumeInfo = new QGroupBox( 0, Qt::Vertical, i18n( "Information" ), frame, "_groupVolumeInfo" );
-  _groupVolumeInfo->layout()->setSpacing( 0 );
-  _groupVolumeInfo->layout()->setMargin( 0 );
-  QGridLayout* _groupVolumeInfoLayout = new QGridLayout( _groupVolumeInfo->layout() );
-  _groupVolumeInfoLayout->setAlignment( Qt::AlignTop );
-  _groupVolumeInfoLayout->setSpacing( spacingHint() );
-  _groupVolumeInfoLayout->setMargin( marginHint() );
+  QLabel* labelVolumeId = new QLabel( i18n( "&Volume name:" ), frame, "m_labelVolumeID" );
+  QLabel* labelVolumeSetId = new QLabel( i18n( "Volume &set name:" ), frame, "m_labelVolumeSetID" );
+  QLabel* labelPublisher = new QLabel( i18n( "&Publisher:" ), frame, "m_labelPublisher" );
+  QLabel* labelPreparer = new QLabel( i18n( "P&reparer:" ), frame, "m_labelPreparer" );
+  QLabel* labelSystemId = new QLabel( i18n( "S&ystem:" ), frame, "m_labelSystemID" );
+  QLabel* labelApplication = new QLabel( i18n( "&Application:" ), frame, "m_labelApplicationID" );
 
-
-  QLabel* labelVolumeId = new QLabel( i18n( "&Volume name:" ), _groupVolumeInfo, "m_labelVolumeID" );
-  QLabel* labelVolumeSetId = new QLabel( i18n( "Volume &set name:" ), _groupVolumeInfo, "m_labelVolumeSetID" );
-  QLabel* labelPublisher = new QLabel( i18n( "&Publisher:" ), _groupVolumeInfo, "m_labelPublisher" );
-  QLabel* labelPreparer = new QLabel( i18n( "P&reparer:" ), _groupVolumeInfo, "m_labelPreparer" );
-  QLabel* labelSystemId = new QLabel( i18n( "S&ystem:" ), _groupVolumeInfo, "m_labelSystemID" );
-  QLabel* labelApplication = new QLabel( i18n( "&Application:" ), _groupVolumeInfo, "m_labelApplicationID" );
-
-  _groupVolumeInfoLayout->addWidget( labelVolumeId, 0, 0 );
-  _groupVolumeInfoLayout->addWidget( labelVolumeSetId, 1, 0 );
-  _groupVolumeInfoLayout->addWidget( labelPublisher, 2, 0 );
-  _groupVolumeInfoLayout->addWidget( labelPreparer, 3, 0 );
-  _groupVolumeInfoLayout->addWidget( labelSystemId, 4, 0 );
-  _groupVolumeInfoLayout->addWidget( labelApplication, 5, 0 );
+  frameLayout->addWidget( labelVolumeId, 0, 0 );
+  frameLayout->addWidget( labelVolumeSetId, 1, 0 );
+  frameLayout->addWidget( labelPublisher, 2, 0 );
+  frameLayout->addWidget( labelPreparer, 3, 0 );
+  frameLayout->addWidget( labelSystemId, 4, 0 );
+  frameLayout->addWidget( labelApplication, 5, 0 );
 
   // are this really the allowed characters? What about Joliet or UDF?
   K3bIsoValidator* isoValidator = new K3bIsoValidator( this, "isoValidator" );
 
-  m_editVolumeID = new KLineEdit( _groupVolumeInfo, "m_editVolumeID" );
+  m_editVolumeID = new KLineEdit( frame, "m_editVolumeID" );
   m_editVolumeID->setValidator( isoValidator );
   m_editVolumeID->setMaxLength( 32 );
-  m_editVolumeSetId = new KLineEdit( _groupVolumeInfo, "m_editVolumeSetID" );
+  m_editVolumeSetId = new KLineEdit( frame, "m_editVolumeSetID" );
   m_editVolumeSetId->setValidator( isoValidator );
   m_editVolumeSetId->setMaxLength( 128 );
-  m_editPublisher = new KLineEdit( _groupVolumeInfo, "m_editPublisher" );
+  m_editPublisher = new KLineEdit( frame, "m_editPublisher" );
   m_editPublisher->setValidator( isoValidator );
   m_editPublisher->setMaxLength( 128 );
-  m_editPreparer = new KLineEdit( _groupVolumeInfo, "m_editPreparer" );
+  m_editPreparer = new KLineEdit( frame, "m_editPreparer" );
   m_editPreparer->setValidator( isoValidator );
   m_editPreparer->setMaxLength( 128 );
-  m_editSystemId = new KLineEdit( _groupVolumeInfo, "m_editSystemID" );
+  m_editSystemId = new KLineEdit( frame, "m_editSystemID" );
   m_editSystemId->setValidator( isoValidator );
   m_editSystemId->setMaxLength( 32 );
-  m_editApplicationID = new KLineEdit( _groupVolumeInfo, "m_editApplicationID" );
+  m_editApplicationID = new KLineEdit( frame, "m_editApplicationID" );
   m_editApplicationID->setValidator( isoValidator );
   m_editApplicationID->setMaxLength( 128 );
 
-  _groupVolumeInfoLayout->addWidget( m_editVolumeID, 0, 1 );
-  _groupVolumeInfoLayout->addWidget( m_editVolumeSetId, 1, 1 );
-  _groupVolumeInfoLayout->addWidget( m_editPublisher, 2, 1 );
-  _groupVolumeInfoLayout->addWidget( m_editPreparer, 3, 1 );
-  _groupVolumeInfoLayout->addWidget( m_editSystemId, 4, 1 );
-  _groupVolumeInfoLayout->addWidget( m_editApplicationID, 5, 1 );
+  frameLayout->addWidget( m_editVolumeID, 0, 1 );
+  frameLayout->addWidget( m_editVolumeSetId, 1, 1 );
+  frameLayout->addWidget( m_editPublisher, 2, 1 );
+  frameLayout->addWidget( m_editPreparer, 3, 1 );
+  frameLayout->addWidget( m_editSystemId, 4, 1 );
+  frameLayout->addWidget( m_editApplicationID, 5, 1 );
+
+  frameLayout->setRowStretch( 6, 1 );
 
   labelVolumeId->setBuddy( m_editVolumeID );
   labelVolumeSetId->setBuddy( m_editVolumeSetId );
@@ -510,9 +548,61 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
 
 
 
-  m_groupWhiteSpace = new QButtonGroup( frame, "m_groupWhiteSpace" );
-  m_groupWhiteSpace->setTitle( i18n( "Whitespace Treatment" ) );
-  m_groupWhiteSpace->setColumnLayout(0, Qt::Vertical );
+  QToolTip::add( m_editSystemId, i18n("") );
+  QToolTip::add( m_editVolumeID, i18n("") );
+  QToolTip::add( m_editVolumeSetId, i18n("") );
+  QToolTip::add( m_editPublisher, i18n("") );
+  QToolTip::add( m_editPreparer, i18n("") );
+  QToolTip::add( m_editApplicationID, i18n("") );
+
+  QWhatsThis::add( m_editSystemId, i18n("") );
+  QWhatsThis::add( m_editVolumeID, i18n("") );
+  QWhatsThis::add( m_editVolumeSetId, i18n("") );
+  QWhatsThis::add( m_editPublisher, i18n("") );
+  QWhatsThis::add( m_editPreparer, i18n("") );
+  QWhatsThis::add( m_editApplicationID, i18n("") );
+}
+
+
+void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
+{
+  QGridLayout* frameLayout = new QGridLayout( frame );
+  frameLayout->setSpacing( spacingHint() );
+  frameLayout->setMargin( marginHint() );
+
+  QGroupBox* groupFileSystem = new QGroupBox( 2, Qt::Vertical, i18n("File Systems"), frame );
+  groupFileSystem->layout()->setMargin( marginHint() );
+  groupFileSystem->layout()->setSpacing( spacingHint() );
+
+  m_checkCreateRockRidge   = new QCheckBox( i18n( "Generate Rockridge entries" ), groupFileSystem, "m_checkCreateRockRidge" );
+  m_checkCreateJoliet      = new QCheckBox( i18n( "Generate Joilet entries" ), groupFileSystem, "m_checkCreateJoliet" );
+
+
+  // Multisession
+  // ////////////////////////////////////////////////////////////////////////
+  m_groupMultiSession = new QButtonGroup( 0, Qt::Vertical, i18n("Multisession"), frame );
+  m_groupMultiSession->layout()->setSpacing( 0 );
+  m_groupMultiSession->layout()->setMargin( 0 );
+  QGridLayout* m_groupMultiSessionLayout = new QGridLayout( m_groupMultiSession->layout() );
+  m_groupMultiSessionLayout->setAlignment( Qt::AlignTop );
+  m_groupMultiSessionLayout->setSpacing( spacingHint() );
+  m_groupMultiSessionLayout->setMargin( marginHint() );
+
+  m_radioMultiSessionNone = new QRadioButton( i18n("&No multisession"), m_groupMultiSession );
+  m_radioMultiSessionStart = new QRadioButton( i18n("&Start multisession"), m_groupMultiSession );
+  m_radioMultiSessionContinue = new QRadioButton( i18n("&Continue multisession"), m_groupMultiSession );
+  m_radioMultiSessionFinish = new QRadioButton( i18n("&Finish multisession"), m_groupMultiSession );
+
+  m_groupMultiSessionLayout->addWidget( m_radioMultiSessionNone, 0, 0 );
+  m_groupMultiSessionLayout->addWidget( m_radioMultiSessionStart, 1, 0 );
+  m_groupMultiSessionLayout->addWidget( m_radioMultiSessionContinue, 0, 1 );
+  m_groupMultiSessionLayout->addWidget( m_radioMultiSessionFinish, 1, 1 );
+
+
+
+  // Whitespace treatment
+  // ////////////////////////////////////////////////////////////////////////
+  m_groupWhiteSpace = new QButtonGroup( 0, Qt::Vertical, i18n( "Whitespace Treatment" ), frame, "m_groupWhiteSpace" );
   m_groupWhiteSpace->layout()->setSpacing( 0 );
   m_groupWhiteSpace->layout()->setMargin( 0 );
   QGridLayout* m_groupWhiteSpaceLayout = new QGridLayout( m_groupWhiteSpace->layout() );
@@ -531,19 +621,16 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
   m_groupWhiteSpaceLayout->addWidget( m_radioSpaceExtended, 1, 1 );
 
 
-
-  frameLayout->addWidget( _groupVolumeInfo, 0, 0 );
+  frameLayout->addWidget( groupFileSystem, 0, 0 );
   frameLayout->addWidget( m_groupWhiteSpace, 1, 0 );
+  frameLayout->addWidget( m_groupMultiSession, 2, 0 );
+
+
+  frameLayout->setRowStretch( 2, 1 );
 
 
   // ToolTips
   // -------------------------------------------------------------------------
-  QToolTip::add( m_editSystemId, i18n("") );
-  QToolTip::add( m_editVolumeID, i18n("") );
-  QToolTip::add( m_editVolumeSetId, i18n("") );
-  QToolTip::add( m_editPublisher, i18n("") );
-  QToolTip::add( m_editPreparer, i18n("") );
-  QToolTip::add( m_editApplicationID, i18n("") );
   QToolTip::add( m_radioSpaceLeave, i18n("Do not touch spaces in filenames") );
   QToolTip::add( m_radioSpaceReplace, i18n("Replace all spaces with an underscore") );
   QToolTip::add( m_radioSpaceStrip, i18n("Just remove all spaces") );
@@ -552,12 +639,6 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
 
   // What's This info
   // -------------------------------------------------------------------------
-  QWhatsThis::add( m_editSystemId, i18n("") );
-  QWhatsThis::add( m_editVolumeID, i18n("") );
-  QWhatsThis::add( m_editVolumeSetId, i18n("") );
-  QWhatsThis::add( m_editPublisher, i18n("") );
-  QWhatsThis::add( m_editPreparer, i18n("") );
-  QWhatsThis::add( m_editApplicationID, i18n("") );
   QWhatsThis::add( m_radioSpaceLeave, i18n("<p>If this option is checked K3b will leave all spaces in filenames "
 					   "like you know it.") );
   QWhatsThis::add( m_radioSpaceReplace, i18n("<p>If this option is checked K3b will replace all spaces in all filenames "
@@ -568,26 +649,6 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
   QWhatsThis::add( m_radioSpaceExtended, i18n("<p>If this option is checked K3b will remove all spaces in all filenames "
 					      "and convert all letters following a space to an upper one."
 					      "<p>Example: 'my good file.ext' becomes 'myGoodFile.ext'") );
-}
-
-
-void K3bDataBurnDialog::setupMultisessionTab( QFrame* frame )
-{
-  QGridLayout* frameLayout = new QGridLayout( frame );
-  frameLayout->setSpacing( spacingHint() );
-  frameLayout->setMargin( marginHint() );
-
-  m_groupMultiSession = new QButtonGroup( 4, Qt::Vertical, QString::null, frame );
-  m_groupMultiSession->setInsideSpacing( spacingHint() );
-  m_groupMultiSession->setInsideMargin( 0 );
-  m_groupMultiSession->setFrameStyle( QFrame::NoFrame | QFrame::Plain );
-
-  m_radioMultiSessionNone = new QRadioButton( i18n("&No multisession"), m_groupMultiSession );
-  m_radioMultiSessionStart = new QRadioButton( i18n("&Start multisession"), m_groupMultiSession );
-  m_radioMultiSessionContinue = new QRadioButton( i18n("&Continue multisession"), m_groupMultiSession );
-  m_radioMultiSessionFinish = new QRadioButton( i18n("&Finish multisession"), m_groupMultiSession );
-
-  frameLayout->addWidget( m_groupMultiSession, 0, 0 );
 }
 
 

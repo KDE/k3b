@@ -25,6 +25,8 @@ class K3bDevice;
 class QPushButton;
 class QCloseEvent;
 class QLabel;
+class K3bBusyWidget;
+
 
 /**
  * Tests for an empty cd in a given device.
@@ -74,6 +76,26 @@ class K3bEmptyDiscWaiter : public KDialogBase
   bool m_apppendable;
 
   QLabel* m_label;
+
+  class ErasingInfoDialog;
 };
+
+
+class K3bEmptyDiscWaiter::ErasingInfoDialog : public KDialogBase
+{
+  Q_OBJECT
+
+ public:
+  ErasingInfoDialog( QWidget* parent = 0, const char* name = 0 );
+  ~ErasingInfoDialog();
+
+ public slots:
+  void slotFinished( bool success );
+
+ private:
+ QLabel* m_label;
+ K3bBusyWidget* m_busyWidget;
+};
+
 
 #endif

@@ -4,6 +4,8 @@
 
 #include <qobject.h>
 
+typedef Q_INT32 size32;
+
 #include "k3bdiskinfo.h"
 
 

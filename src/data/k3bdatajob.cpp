@@ -858,6 +858,9 @@ bool K3bDataJob::addMkisofsParameters()
 
   *m_process << "-iso-level" << QString::number(m_doc->ISOLevel());
 
+  if( m_doc->forceInputCharset() )
+    *m_process << "-input-charset" << m_doc->inputCharset();
+
   *m_process << "-path-list" << QFile::encodeName(m_pathSpecFile);
 
 

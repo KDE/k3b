@@ -60,7 +60,7 @@ QSize K3bBusyWidget::sizeHint() const
 
 QSize K3bBusyWidget::minimumSizeHint() const
 {
-  return QSize( 2*frameWidth() + 62, -1 );
+  return QSize( 2*frameWidth() + 62, 10 );
 }
 
 

@@ -14,8 +14,8 @@
 
 
 
-K3bBlankingJob::K3bBlankingJob()
-  : K3bJob()
+K3bBlankingJob::K3bBlankingJob( QObject* parent )
+  : K3bJob( parent )
 {
   m_process = new KProcess();
   m_device = 0;

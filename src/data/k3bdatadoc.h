@@ -81,8 +81,10 @@ class K3bDataDoc : public K3bDoc
 	
   /** returns an empty dummy dir for use with K3bDirItems.
       Creates one if nessessary.
-      The dummy dir is used to create empty dirs on the iso-filesystem! */
+      The dummy dir is used to create empty dirs on the iso-filesystem! 
+      TODO: should be moved to K3bMainWidget or K3bApp (if we ever create and need one) */
   const QString& dummyDir();
+
   const QString& isoImage() const { return m_isoImage; }
   void setIsoImage( const QString& s ) { m_isoImage = s; }
 	
@@ -95,6 +97,13 @@ class K3bDataDoc : public K3bDoc
   void setWhiteSpaceTreatment( int i ) { m_whiteSpaceTreatment = i; }
   void setDeleteImage( bool b ) { m_deleteImage = b; }
   void setOnlyCreateImage( bool b ) { m_onlyCreateImage = b; }
+
+  bool forceInputCharset() const { return m_bForceInputCharset; }
+  const QString& inputCharset() const { return m_inputCharset; }
+
+  void setForceInputCharset( bool b ) { m_bForceInputCharset = b; }
+  void setInputCharset( const QString& cs ) { m_inputCharset = cs; }
+
 	
   // -- mkisofs-options ----------------------------------------------------------------------
   bool createRockRidge() const { return m_createRockRidge; }
@@ -239,6 +248,9 @@ class K3bDataDoc : public K3bDoc
   unsigned long m_size;
 		
   int m_whiteSpaceTreatment;
+
+  bool m_bForceInputCharset;
+  QString m_inputCharset;
 	
   // mkisofs options -------------------------------------
   bool m_createRockRidge;    // -r or -R

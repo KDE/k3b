@@ -81,6 +81,34 @@ int K3bScsiDevice::isReady() const
 }
 
 
+bool K3bScsiDevice::rewritable()
+{
+  ScsiIf scsiIf( QFile::encodeName(genericDevice()) );
+  if( scsiIf.init() != 0 ) {
+    kdDebug() << "(K3bScsiDevice) Could not open device " << genericDevice() << endl;
+    return false;
+  }
+
+  unsigned char cmd[10];
+  unsigned long dataLen = 34;
+  unsigned char data[34];
+
+  memset(cmd, 0, 10);
+  memset(data, 0, dataLen);
+
+  cmd[0] = 0x51; // READ DISK INFORMATION
+  cmd[7] = dataLen >> 8;
+  cmd[8] = dataLen;
+
+  if( scsiIf.sendCmd(cmd, 10, NULL, 0, data, dataLen, 0) ) {
+    kdDebug() << "(K3bScsiDevice) scsi command failed." << endl;
+    return false;
+  }
+
+  return (data[2] & 0x10);
+}
+
+
 // reset device to initial state
 // return: 0: OK
 //         1: scsi command failed

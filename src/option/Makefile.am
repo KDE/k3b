@@ -1,6 +1,6 @@
 INCLUDES = $(all_includes)
 
-liboption_la_METASOURCES = AUTO
+METASOURCES = AUTO
 
 noinst_LTLIBRARIES = liboption.la
 

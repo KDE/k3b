@@ -1,6 +1,6 @@
 INCLUDES = $(all_includes)
 
-libcdcopy_la_METASOURCES = AUTO
+METASOURCES = AUTO
 
 noinst_LTLIBRARIES = libcdcopy.la
 

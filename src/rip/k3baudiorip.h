@@ -5,6 +5,9 @@
 #include <qobject.h>
 #include <qcstring.h>
 
+typedef Q_INT32 size32;
+typedef Q_INT16 size16;
+
 extern "C" {
 #include <cdda_interface.h>
 #include <cdda_paranoia.h>

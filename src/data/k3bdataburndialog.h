@@ -21,7 +21,7 @@
 #include "../k3bprojectburndialog.h"
 
 class QCheckBox;
-class QComboBox;
+class KComboBox;
 class QGroupBox;
 class QLabel;
 class QToolButton;
@@ -49,7 +49,7 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    void setupBurnTab( QFrame* frame );
    void setupAdvancedTab( QFrame* frame );
    void setupSettingsTab( QFrame* frame );
-   void setupMultisessionTab( QFrame* frame );
+   void setupVolumeInfoTab( QFrame* frame );
 
    // --- general tab -------------------------	
    QLabel* TextLabel1;
@@ -101,6 +101,9 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    QCheckBox* m_checkNoISOTrans;
    QCheckBox* m_checkMultiDot;
    QCheckBox* m_checkLowercase;
+
+   QCheckBox* m_checkForceInputCharset;
+   KComboBox* m_comboInputCharset;
    // ---------------------------------------------
 	
    // --- multisession tab -------------------------

@@ -1,6 +1,6 @@
 INCLUDES = $(CDPARANOIA_INCS) $(all_includes)
 
-libdevice_la_METASOURCES = AUTO
+METASOURCES = AUTO
 
 noinst_LTLIBRARIES = libdevice.la
 

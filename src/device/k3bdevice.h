@@ -150,6 +150,8 @@ class K3bDevice
    */
   virtual int isEmpty();
 
+  virtual bool rewritable() { return false; }
+
   /**
    * block or unblock the drive's tray
    * returns true on success and false on scsi-error
