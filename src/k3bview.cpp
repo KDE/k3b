@@ -19,6 +19,7 @@
 #include <qprinter.h>
 #include <qpainter.h>
 #include <qdir.h>
+#include <qtabwidget.h>
 // include files for KDE
 
 // application specific includes
@@ -27,9 +28,9 @@
 #include "k3bdoc.h"
 
 K3bView::K3bView(K3bDoc* pDoc, QWidget *parent, const char* name, int wflags)
- : QWidget(parent, name, wflags)
+  : QWidget(parent, name, wflags)
 {
-    doc=pDoc;
+  doc=pDoc;
 }
 
 K3bView::~K3bView()
@@ -38,12 +39,12 @@ K3bView::~K3bView()
 
 K3bDoc *K3bView::getDocument() const
 {
-	return doc;
+  return doc;
 }
 
 void K3bView::update(K3bView* pSender){
-	if(pSender != this)
-		repaint();
+  if(pSender != this)
+    QWidget::update();
 }
 
 

@@ -244,7 +244,15 @@ QString K3bDataFileViewItem::text( int index ) const
   case 1:
     return m_fileItem->mimeComment();
   case 2:
-    return QString::number( m_fileItem->size() );
+    {
+      QString s = QString::number( m_fileItem->size() );
+      int i = s.length() - 3;
+      while( i > 0 ) {
+	s.insert( i, ' ' );
+	i -= 3;
+      }
+      return s;
+    }
   default:
     return "";
   }

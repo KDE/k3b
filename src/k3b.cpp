@@ -439,6 +439,8 @@ void K3bApp::slotFileSaveAs()
 				   i18n("*.k3b|K3b Projects"), this, i18n("Save as..."));
   if(!url.isEmpty())
     {
+      // TODO: if the file exists, ask for owerwrite
+
       K3bView* m = dynamic_cast<K3bView*>(m_documentTab->currentPage() );
       if( m )
 	{
@@ -449,7 +451,8 @@ void K3bApp::slotFileSaveAs()
 	      return;
 	    }
 	  doc->changedViewList();
-	  //      setWndTitle(m);
+	  m_documentTab->changeTab( m, m->caption() );   // does not fit with the multible view architecture !!!
+	  //setWndTitle(m);
 	  fileOpenRecent->addURL(url);
 	}	
     }

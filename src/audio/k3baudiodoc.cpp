@@ -193,7 +193,7 @@ void K3bAudioDoc::removeTrack( int position )
   if( track ) {
     // emit signal before deleteing the track to avoid crashes
     // when the view tries to call some of the tracks' methods
-    //    emit newTracks();
+    emit newTracks();
 
     delete track;
   }
@@ -218,8 +218,13 @@ bool K3bAudioDoc::loadDocumentData( QDomDocument* )
   return true;
 }
 
-bool K3bAudioDoc::saveDocumentData( QDomDocument* )
+bool K3bAudioDoc::saveDocumentData( QDomDocument* doc )
 {
+  saveGeneralDocumentData( doc );
+
+  //  QDomElement mainElem = doc->createElement(   );
+
+
   // TODO: some saving work...
   return true;
 }
