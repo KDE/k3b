@@ -61,17 +61,6 @@ extern "C" {
                                 (M) == IDE8_MAJOR || (M) == IDE9_MAJOR)
 #endif /* #ifndef IDE_DISK_MAJOR */
 
-#ifndef SCSI_DISK_MAJOR
-#define SCSI_DISK_MAJOR(M) ((M) == SCSI_DISK0_MAJOR || \
-  ((M) >= SCSI_DISK1_MAJOR && (M) <= SCSI_DISK7_MAJOR) || \
-  ((M) >= SCSI_DISK8_MAJOR && (M) <= SCSI_DISK15_MAJOR))
-#endif /* #ifndef SCSI_DISK_MAJOR */
-
-#ifndef SCSI_BLK_MAJOR
-#define SCSI_BLK_MAJOR(M) \
-  (SCSI_DISK_MAJOR(M)   \
-   || (M) == SCSI_CDROM_MAJOR)
-#endif /* #ifndef SCSI_BLK_MAJOR */
 
 
 const char* K3bCdDevice::CdDevice::cdrdao_drivers[] =
@@ -1437,17 +1426,22 @@ K3bCdDevice::AlbumCdText K3bCdDevice::CdDevice::readCdText( unsigned int trackCo
 
 
 	  //
+	  // pack.data has a length of 12
+	  //
 	  // id1 tells us the tracknumber of the data (0 for global)
 	  // data may contain multible \0. In that case after every \0 the track number increases 1
-	  //
-	  // QString::fromLocal8Bit stops at the first \0. So we do not need to care about that ourselves
 	  //
 
 	  char* nullPos = (char*)pack[i].data - 1;
 	
 	  unsigned int trackNo = pack[i].id2;
 	  while( nullPos && trackNo <= trackCount ) {
-	    QString txtstr = QString::fromLocal8Bit( (char*)nullPos+1, 11 - (nullPos - (char*)pack[i].data) );
+	    char* nextNullPos = (char*)::memchr( nullPos+1, '\0', 11 - (nullPos - (char*)pack[i].data) );
+	    QString txtstr;	    
+	    if( nextNullPos ) // take all chars up to the next null
+	      txtstr = QString::fromLocal8Bit( (char*)nullPos+1, nextNullPos - nullPos - 1 );
+	    else // take all chars to the end of the pack data (12 bytes)
+	      txtstr = QString::fromLocal8Bit( (char*)nullPos+1, 11 - (nullPos - (char*)pack[i].data) );
 	  
 	    switch( pack[i].id1 ) {
 	    case 0x80: // Title
@@ -1515,7 +1509,7 @@ K3bCdDevice::AlbumCdText K3bCdDevice::CdDevice::readCdText( unsigned int trackCo
 	    }
 	  
 	    trackNo++;
-	    nullPos = (char*)::memchr( nullPos+1, '\0', 11 - (nullPos - (char*)pack[i].data) );
+	    nullPos = nextNullPos;
 	  }
 	}
     
@@ -2215,9 +2209,9 @@ bool K3bCdDevice::CdDevice::readFormatCapacity( K3b::Msf& r ) const
       cmd[8] = realLength & 0xFF;
       if( cmd.transport( TR_DIR_READ, buffer, realLength ) == 0 ) {
 	//
-	// now find the 00h format type since that contains the number of addressable blocks
+	// now find the 00h format type since that contains the number of adressable blocks
 	// and the block size used for formatting the whole media.
-	// There may be multible occurrences of this descriptor (MMC4 says so) but I think it's
+	// There may be multible occurences of this descriptor (MMC4 says so) but I think it's
 	// sufficient to read the first one
 	// 00h may not be supported by the unit (e.g. CD-RW)
 	// for this case we fall back to the first descriptor (the current/maximum descriptor)
