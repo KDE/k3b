@@ -80,7 +80,7 @@ K3bVcdListView::~K3bVcdListView(){
 }
 
 void K3bVcdListView::setupColumns(){
-  addColumn( i18n("No.") );
+  addColumn( i18n("Track") );
   addColumn( i18n("Name") );
   addColumn( i18n("Type") );
   addColumn( i18n("Size") );
