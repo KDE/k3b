@@ -81,9 +81,18 @@ int K3bDevice::isReady() const
 }
 
 
-int K3bDevice::isEmpty() const
+int K3bDevice::isEmpty()
 {
-  return true;
+  // per default we can only differ between empty and complete
+  cdrom_drive* drive = open();
+  if( !drive )
+    return -1;
+
+  int t = drive->tracks;
+
+  close();
+
+  return ( t > 0 ? 2 : 0 );
 }
 
 

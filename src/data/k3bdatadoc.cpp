@@ -630,6 +630,14 @@ K3bBurnJob* K3bDataDoc::newBurnJob()
 
 QString K3bDataDoc::treatWhitespace( const QString& path )
 {
+
+  // TODO:
+  // It could happen that two files with different names
+  // will have the same name after the treatment
+  // Perhaps we should add a number at the end or something
+  // similar
+
+
   if( whiteSpaceTreatment() != K3bDataDoc::normal ) {
     QString _result;
     int _startPos = path.findRev('/');

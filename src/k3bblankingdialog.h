@@ -15,6 +15,7 @@ class QCloseEvent;
 class QTextView;
 class K3bDevice;
 class K3bBlankingJob;
+class KProgress;
 
 
 

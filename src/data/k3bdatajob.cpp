@@ -63,7 +63,7 @@ void K3bDataJob::start()
   }
   if( m_doc->onTheFly() ) {
     m_pathSpecFile = locateLocal( "appdata", "temp/" ) + "k3b_" + QTime::currentTime().toString() + ".mkisofs";
-    if( m_doc->writePathSpec( m_pathSpecFile ) == QString::null ) {
+    if( !writePathSpec( m_pathSpecFile ) ) {
       emit infoMessage( i18n("Could not write to temporary file %1").arg( m_pathSpecFile ) );
       emit finished( this );
     }
@@ -190,7 +190,10 @@ void K3bDataJob::start()
 void K3bDataJob::writeImage()
 {
   m_pathSpecFile = locateLocal( "appdata", "temp/" ) + "k3b_" + QTime::currentTime().toString() + ".mkisofs";
-  m_doc->writePathSpec( m_pathSpecFile );
+  if( !writePathSpec( m_pathSpecFile ) ) {
+    emit infoMessage( i18n("Could not write to temporary file %1").arg( m_pathSpecFile ) );
+    emit finished( this );
+  }
 	
   // get image file path
   if( m_doc->isoImage().isEmpty() )
@@ -730,11 +733,11 @@ void K3bDataJob::slotParseMkisofsSize(KProcess*, char* output, int len)
   QString buffer = QString::fromLatin1( output, len ).stripWhiteSpace();
   qDebug("*** parsing line: " + buffer );
 
-  // this seems to be the format for mkisofs verion < 1.14
+  // this seems to be the format for mkisofs version < 1.14 (to stdout)
   if( buffer.contains( "=" ) )
     m_isoSize = buffer.mid( buffer.find('=') + 1 ).stripWhiteSpace() + "s";
 
-  // and mkisofs >= 1.14 prints only the number
+  // and mkisofs >= 1.14 prints out only the number (to stderr)
   else {
     bool ok;
     buffer.toInt( &ok );
@@ -743,4 +746,28 @@ void K3bDataJob::slotParseMkisofsSize(KProcess*, char* output, int len)
   }
 
   qDebug("ISO-Size should be: " + m_isoSize );
+}
+
+
+bool K3bDataJob::writePathSpec( const QString& filename )
+{
+  QFile file( filename );
+  if( !file.open( IO_WriteOnly ) ) {
+    return false;
+  }
+	
+  QTextStream t(&file);
+
+  // start writing the path-specs
+  // iterate over all the dataItems
+  K3bDataItem* item = m_doc->root()->nextSibling();
+	
+  while( item ) {
+    t << m_doc->treatWhitespace(item->k3bPath()) << "=" << item->localPath() << "\n";
+		
+    item = item->nextSibling();
+  }
+	
+  file.close();
+  return filename;
 }

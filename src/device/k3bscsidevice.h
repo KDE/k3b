@@ -14,7 +14,7 @@ class K3bScsiDevice : public K3bDevice
   ~K3bScsiDevice();
 
   int isReady() const;
-  int isEmpty() const;
+  int isEmpty();
   bool init();
   bool block(bool) const;
 

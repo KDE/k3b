@@ -239,7 +239,7 @@ int K3bScsiDevice::getModePage( ScsiIf *_scsiIf, int pageCode, unsigned char *bu
 // }
 
 
-int K3bScsiDevice::isEmpty() const
+int K3bScsiDevice::isEmpty()
 {
   ScsiIf scsiIf( devicename().latin1() );
   if( scsiIf.init() != 0 ) {

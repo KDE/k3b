@@ -111,7 +111,7 @@ class K3bDevice
    *  <li>-1: not ready, no disk in drive</li>
    * </ul>
    */
-  virtual int isEmpty() const;
+  virtual int isEmpty();
 
   /**
    * This must be reimplemented because

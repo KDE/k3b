@@ -56,6 +56,8 @@ K3bDoc::K3bDoc( QObject* parent )
   m_burner = 0;
   m_dao = true;
   m_onTheFly = true;
+  m_overburn = false;
+  m_burnproof = true;
   m_error = K3b::NOT_STARTED;
   m_speed = 1;
 }
@@ -149,6 +151,8 @@ bool K3bDoc::newDocument()
   m_dummy = false;
   m_dao = true;
   m_onTheFly = true;
+  m_overburn = false;
+  m_burnproof = true;
 	
   modified=false;
   return true;
