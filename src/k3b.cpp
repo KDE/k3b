@@ -101,7 +101,6 @@ K3bApp::K3bApp()
 
 K3bApp::~K3bApp()
 {
-  qDebug( "-- K3bApp destructor" );
   delete pDocList;
 }
 
