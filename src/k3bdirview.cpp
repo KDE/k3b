@@ -18,6 +18,7 @@
 #include <k3bcore.h>
 
 #include "rip/k3baudiocdview.h"
+#include "rip/k3bvideocdview.h"
 #include "k3bfileview.h"
 #include "rip/k3bmovieview.h"
 #include "k3bfiletreeview.h"
@@ -139,6 +140,7 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
 
   m_fileView     = new K3bFileView(m_viewStack, "fileView");
   m_cdView       = new K3bAudioCdView(m_viewStack, "cdview");
+  m_videoView    = new K3bVideoCdView(m_viewStack, "videoview");
   m_movieView    = new K3bMovieView(m_viewStack, "movieview");
   m_infoView     = new K3bDiskInfoView(m_viewStack, "infoView");
 
@@ -266,18 +268,34 @@ void K3bDirView::slotDiskInfoReady( K3bCdDevice::DiskInfoDetector* did )
       slotMountDevice( did->diskInfo().device );
   }
   else if( did->diskInfo().tocType == K3bDiskInfo::DATA  ) {
-    slotMountDevice( did->diskInfo().device );
+    // check for VCD and ask
+    bool mount = true;
+    if( did->diskInfo().isVCD ) {
+      mount = ( KMessageBox::questionYesNo( this,
+					    i18n("Found %1. Do you want K3b to mount the data part "
+						 "or show all the tracks?").arg( i18n("Video CD") ),
+					    i18n("Video CD"),
+					    i18n("Mount CD"),
+					    i18n("Show Video Tracks") ) == KMessageBox::Yes );
+    }
+
+    if( mount )
+      slotMountDevice( did->diskInfo().device );
+    else {
+      m_viewStack->raiseWidget( m_videoView );
+      m_videoView->setDisk( did );
+    }
   }
   else {
     // check for MIXED_MODE and ask
     bool mount = false;
     if( did->diskInfo().tocType == K3bDiskInfo::MIXED  ) {
       mount = ( KMessageBox::questionYesNo( this,
-					    i18n("Found Mixed-mode CD. Do you want K3b to mount the data part "
-						 "or show all the tracks?"),
+					    i18n("Found %1. Do you want K3b to mount the data part "
+						 "or show all the tracks?").arg( i18n("Mixed-Mode CD") ),
 					    i18n("Mixed-Mode CD"),
 					    i18n("Mount CD"),
-					    i18n("Show Tracks") ) == KMessageBox::Yes );
+					    i18n("Show Audio Tracks") ) == KMessageBox::Yes );
     }
 
     if( mount )

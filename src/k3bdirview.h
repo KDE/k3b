@@ -24,6 +24,7 @@
 class QSplitter;
 class KURL;
 class K3bAudioCdView;
+class K3bVideoCdView;
 class K3bFileView;
 class K3bMovieView;
 class KComboBox;
@@ -91,6 +92,7 @@ class K3bDirView : public QVBox
   QScrollView* m_scroll;
 
   K3bAudioCdView*   m_cdView;
+  K3bVideoCdView*   m_videoView;
   K3bMovieView* m_movieView;
   K3bFileView* m_fileView;
   K3bDiskInfoView* m_infoView;
