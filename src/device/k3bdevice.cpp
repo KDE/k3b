@@ -2123,30 +2123,8 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
 	  eda = ( dvdheader[4+9]<<16 | dvdheader[4+10] << 8 | dvdheader[4+11] );
 	  ea0 = ( dvdheader[4+13]<<16 | dvdheader[4+14] << 8 | dvdheader[4+15] );
 
-	  kdDebug() << "First sec data area: " << sda.toString()
-		    << " (LBA " << QString::number(sda.lba())
-		    << ") (" << QString::number(sda.mode1Bytes()) << " Bytes) ("
-		    << KIO::convertSize(sda.mode1Bytes()) << ")" << endl;
-	  kdDebug() << "Last sec data area: " << eda.toString()
-		    << " (LBA " << QString::number(eda.lba())
-		    << ") (" << QString::number(eda.mode1Bytes()) << " Bytes) ("
-		    << KIO::convertSize(eda.mode1Bytes()) << ")" << endl;
-	  kdDebug() << "Last sec layer 1: " << ea0.toString()
-		    << " (LBA " << QString::number(ea0.lba())
-		    << ") (" << QString::number(ea0.mode1Bytes()) << " Bytes) ("
-		    << KIO::convertSize(ea0.mode1Bytes()) << ")" << endl;
-
-
 	  K3b::Msf da0 = ea0 - sda + 1;
 	  K3b::Msf da1 = eda - ea0;
-	  kdDebug() << "Layer 1 length: " << da0.toString()
-		    << " (LBA " << QString::number(da0.lba())
-		    << ") (" << QString::number(da0.mode1Bytes()) << " Bytes) ("
-		    << KIO::convertSize(da0.mode1Bytes()) << ")" << endl;
-	  kdDebug() << "Layer 2 length: " << da1.toString()
-		    << " (LBA " << QString::number(da1.lba())
-		    << ") (" << QString::number(da1.mode1Bytes()) << " Bytes) ("
-		    << KIO::convertSize(da1.mode1Bytes()) << ")" << endl;
 
 	  inf.m_numLayers = ((dvdheader[6]&0x60) == 0 ? 1 : 2);
 	  inf.m_firstLayerSize = da0;
