@@ -30,13 +30,13 @@
 #include <kapp.h>
 #include <kpopupmenu.h>
 #include <kaction.h>
+#include <klineeditdlg.h>
 
 #include <qpixmap.h>
 #include <qsplitter.h>
 #include <qlayout.h>
 #include <qdragobject.h>
 #include <qheader.h>
-#include <qlistview.h>
 
 #include <assert.h>
 
@@ -49,8 +49,8 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
 	
   // --- setup GUI ---------------------------------------------------
   QSplitter* _main = new QSplitter( this );	
-  m_dataDirTree = new K3bPrivateDataDirTree( doc, _main );
-  m_dataFileView = new K3bPrivateDataFileView( doc, _main );
+  m_dataDirTree = new K3bDataDirTreeView( doc, _main );
+  m_dataFileView = new K3bDataFileView( doc, _main );
   m_fillStatusDisplay = new K3bFillStatusDisplay( doc, this );
 	
   QVBoxLayout* _box = new QVBoxLayout( this );
@@ -72,7 +72,14 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
 	   this, SLOT(slotDropped(KListView*, QDropEvent*, QListViewItem*)) );
 
   connect( m_dataDirTree, SIGNAL(dirSelected(K3bDirItem*)), m_dataFileView, SLOT(slotSetCurrentDir(K3bDirItem*)) );
+
+  connect( m_doc, SIGNAL(newFileItems()), m_dataDirTree, SLOT(updateContents()) );
+  connect( m_doc, SIGNAL(newFileItems()), m_dataFileView, SLOT(updateContents()) );
+
+  connect( m_doc, SIGNAL(itemRemoved(K3bDataItem*)), m_fillStatusDisplay, SLOT(update()) );
+  connect( m_doc, SIGNAL(newFileItems()), m_fillStatusDisplay, SLOT(update()) );
 }
+
 
 K3bDataView::~K3bDataView(){
 }
@@ -90,7 +97,7 @@ K3bProjectBurnDialog* K3bDataView::burnDialog()
 void K3bDataView::slotAddFile( K3bFileItem* file )
 {
   if( m_dataFileView->currentDir() == file->parent() )
-    m_dataFileView->reload();
+    m_dataFileView->updateContents();
 	
   m_fillStatusDisplay->repaint();
 }
@@ -101,16 +108,16 @@ void K3bDataView::slotAddDir( K3bDirItem* dirItem )
   K3bDirItem* parentDir = dirItem->parent();
 	
   if( !parentDir ) {
-    (void)new K3bPrivateDataDirViewItem( dirItem, m_dataDirTree->root() );
+    (void)new K3bDataDirViewItem( dirItem, m_dataDirTree->root() );
     parentDir = m_doc->root();
   }
   else {
     QListViewItemIterator _it(m_dataDirTree);
     for( ; _it.current(); ++_it )
       {
-	K3bPrivateDataDirViewItem* _dirViewItem = (K3bPrivateDataDirViewItem*)_it.current();
+	K3bDataDirViewItem* _dirViewItem = (K3bDataDirViewItem*)_it.current();
 	if( _dirViewItem->dirItem() == dirItem->parent() ) {
-	  (void)new K3bPrivateDataDirViewItem( dirItem, _it.current() );
+	  (void)new K3bDataDirViewItem( dirItem, _it.current() );
 	  break;
 	}
       }
@@ -118,13 +125,13 @@ void K3bDataView::slotAddDir( K3bDirItem* dirItem )
     // add to root by default
     if( !_it.current() ) {
       qDebug("(K3bDataView) could not find corresponding listViewItem to %s", dirItem->parent()->k3bName().latin1() );
-      (void)new K3bPrivateDataDirViewItem( dirItem, m_dataDirTree->root() );
+      (void)new K3bDataDirViewItem( dirItem, m_dataDirTree->root() );
       parentDir = m_doc->root();
     }
   }
 
   if( m_dataFileView->currentDir() == parentDir )
-    m_dataFileView->reload();
+    m_dataFileView->updateContents();
 		
   m_fillStatusDisplay->repaint();
 }
@@ -139,15 +146,20 @@ void K3bDataView::slotDropped( KListView* listView, QDropEvent* e, QListViewItem
   QTextDrag::decode( e, droppedText );
   QStringList _urls = QStringList::split("\r\n", droppedText );
 	
+
+  if( listView == m_dataFileView &&
+      m_dataFileView->itemAt( e->pos() ) == 0 )
+    emit dropped( _urls, m_dataFileView->currentDir() );
+
   // get directory from "after"
-  if( after ) {
+  else if( after ) {
     // if dropping on a dirItem: add it to this dir
-    if( dynamic_cast<K3bPrivateDataDirViewItem*>( after ) ) {
-      emit dropped( _urls, ((K3bPrivateDataDirViewItem*)after)->dirItem() );
+    if( dynamic_cast<K3bDataDirViewItem*>( after ) ) {
+      emit dropped( _urls, ((K3bDataDirViewItem*)after)->dirItem() );
     }
     else {
       // add to the parent of the item
-      emit dropped( _urls, ((K3bPrivateDataFileViewItem*)after)->fileItem()->parent() );
+      emit dropped( _urls, ((K3bDataFileViewItem*)after)->fileItem()->parent() );
     }
   }
   else {// after == 0
@@ -157,95 +169,8 @@ void K3bDataView::slotDropped( KListView* listView, QDropEvent* e, QListViewItem
 }
 
 
-K3bDataView::K3bPrivateDataDirTree::K3bPrivateDataDirTree( K3bDataDoc* doc, QWidget* parent )
-  : KListView( parent )
-{
-  setAcceptDrops( true );
-  setDropVisualizer( false );
-  setDropHighlighter( true );
-  setRootIsDecorated( true );
-	
-  addColumn( "Dir" );
-  header()->hide();
-	
-  setItemsRenameable( true );
-	
-  m_root = new K3bDataView::K3bPrivateDataRootViewItem( doc, this );
-	
-  // TODO: read further items... (nessessary when loading a document...)
-	
-  connect( this, SIGNAL(clicked(QListViewItem*)), this, SLOT(slotExecuted(QListViewItem*)) );
-  connect( this, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(slotExecuted(QListViewItem*)) );
-}
-
-
-void K3bDataView::K3bPrivateDataDirTree::slotExecuted( QListViewItem* item )
-{
-  if( item )
-    emit dirSelected( ((K3bDataView::K3bPrivateDataDirViewItem*)item)->dirItem() );
-}
-
-
-bool K3bDataView::K3bPrivateDataDirTree::acceptDrag(QDropEvent* e) const{
-  return ( e->source() == viewport() || QTextDrag::canDecode(e) );
-}
-
-
-K3bDataView::K3bPrivateDataFileView::K3bPrivateDataFileView( K3bDataDoc* doc, QWidget* parent )
-  : KListView( parent )
-{
-  setAcceptDrops( true );
-  setDropVisualizer( false );
-  setDropHighlighter( true );
-	
-  addColumn( i18n("Name") );
-  addColumn( i18n("Type") );
-  addColumn( i18n("Size") );
-
-  setItemsRenameable( true );
-		
-  m_currentDir = doc->root();
-  reload();
-}
-
-
-void K3bDataView::K3bPrivateDataFileView::slotSetCurrentDir( K3bDirItem* dir )
-{
-  if( dir ) {
-    qDebug( "(K3bPrivateDataFileView) setting current dir to " + dir->k3bName() );
-    m_currentDir = dir;
-    reload();
-  }
-}
-
-
-void K3bDataView::K3bPrivateDataFileView::reload()
-{
-  // clear view
-  clear();
-	
-  qDebug( "(K3bPrivateDataFileView) reloading current dir: " + m_currentDir->k3bName() );
-	
-  for( QListIterator<K3bDataItem> _it( *m_currentDir->children() ); _it.current(); ++_it ) {
-    if( K3bDirItem* _item = dynamic_cast<K3bDirItem*>( _it.current() ) ) {
-      (void)new K3bDataView::K3bPrivateDataDirViewItem( _item, this );
-    }
-    else if( K3bFileItem* _item = dynamic_cast<K3bFileItem*>( _it.current() ) ) {
-      (void)new K3bDataView::K3bPrivateDataFileViewItem( _item, this );
-    }
-  }
-	
-  qDebug( "(K3bPrivateDataFileView) reloading finished" );
-}
-
-
-bool K3bDataView::K3bPrivateDataFileView::acceptDrag(QDropEvent* e) const{
-  return ( e->source() == viewport() || QTextDrag::canDecode(e) );
-}
-
-
-K3bDataView::K3bPrivateDataDirViewItem::K3bPrivateDataDirViewItem( K3bDirItem* dir, QListView* parent )
-  : QListViewItem( parent )
+K3bDataDirViewItem::K3bDataDirViewItem( K3bDirItem* dir, QListView* parent )
+  : KListViewItem( parent )
 {
   assert( dir );
 
@@ -254,8 +179,8 @@ K3bDataView::K3bPrivateDataDirViewItem::K3bPrivateDataDirViewItem( K3bDirItem* d
 }
 
 
-K3bDataView::K3bPrivateDataDirViewItem::K3bPrivateDataDirViewItem( K3bDirItem* dir, QListViewItem* parent )
-  : QListViewItem( parent )
+K3bDataDirViewItem::K3bDataDirViewItem( K3bDirItem* dir, QListViewItem* parent )
+  : KListViewItem( parent )
 {
   assert( dir );
 
@@ -263,8 +188,14 @@ K3bDataView::K3bPrivateDataDirViewItem::K3bPrivateDataDirViewItem( K3bDirItem* d
   setPixmap( 0, *(new QPixmap(KMimeType::pixmapForURL( KURL( "/" ), 0, KIcon::Small ) )) );
 }
 
+
+K3bDataDirViewItem::~K3bDataDirViewItem()
+{
+  qDebug( "deleting K3bDataDirViewItem " + dirItem()->k3bName() );
+}
+
 	
-QString K3bDataView::K3bPrivateDataDirViewItem::text( int index ) const
+QString K3bDataDirViewItem::text( int index ) const
 {
   switch( index ) {
   case 0:
@@ -277,17 +208,17 @@ QString K3bDataView::K3bPrivateDataDirViewItem::text( int index ) const
 }
 
 
-void K3bDataView::K3bPrivateDataDirViewItem::setText(int col, const QString& text )
+void K3bDataDirViewItem::setText(int col, const QString& text )
 {
   if( col == 0 )
     dirItem()->setK3bName( text );
 
-  QListViewItem::setText( col, text );
+  KListViewItem::setText( col, text );
 }
 
 	
-K3bDataView::K3bPrivateDataFileViewItem::K3bPrivateDataFileViewItem( K3bFileItem* file, QListView* parent )
-  : QListViewItem( parent )
+K3bDataFileViewItem::K3bDataFileViewItem( K3bFileItem* file, QListView* parent )
+  : KListViewItem( parent )
 {
   assert( file );
 
@@ -296,8 +227,8 @@ K3bDataView::K3bPrivateDataFileViewItem::K3bPrivateDataFileViewItem( K3bFileItem
 }
 
 
-K3bDataView::K3bPrivateDataFileViewItem::K3bPrivateDataFileViewItem( K3bFileItem* file, QListViewItem* parent )
-  : QListViewItem( parent )
+K3bDataFileViewItem::K3bDataFileViewItem( K3bFileItem* file, QListViewItem* parent )
+  : KListViewItem( parent )
 {
   assert( file );
 	
@@ -306,7 +237,7 @@ K3bDataView::K3bPrivateDataFileViewItem::K3bPrivateDataFileViewItem( K3bFileItem
 }
 
 	
-QString K3bDataView::K3bPrivateDataFileViewItem::text( int index ) const
+QString K3bDataFileViewItem::text( int index ) const
 {
   switch( index ) {
   case 0:
@@ -321,42 +252,40 @@ QString K3bDataView::K3bPrivateDataFileViewItem::text( int index ) const
 }
 
 
-void K3bDataView::K3bPrivateDataFileViewItem::setText(int col, const QString& text )
+void K3bDataFileViewItem::setText(int col, const QString& text )
 {
   if( col == 0 )
     fileItem()->setK3bName( text );
 		
-  QListViewItem::setText( col, text );
+  KListViewItem::setText( col, text );
 }
 
 
-K3bDataView::K3bPrivateDataRootViewItem::K3bPrivateDataRootViewItem( K3bDataDoc* doc, QListView* parent )
-  : K3bPrivateDataDirViewItem( doc->root(), parent )
+K3bDataRootViewItem::K3bDataRootViewItem( K3bDataDoc* doc, QListView* parent )
+  : K3bDataDirViewItem( doc->root(), parent )
 {
   m_doc = doc;
   setPixmap( 0, kapp->iconLoader()->loadIcon( "cdrom_unmount", KIcon::Small, 16 ) );
 }
 
 
-QString K3bDataView::K3bPrivateDataRootViewItem::text( int index ) const
+QString K3bDataRootViewItem::text( int index ) const
 {
   switch( index ) {
   case 0:
     return m_doc->volumeID();
-  case 1:
-    return i18n("ISO-CD");
   default:
     return "";
   }
 }
 
 
-void K3bDataView::K3bPrivateDataRootViewItem::setText( int col, const QString& text )
+void K3bDataRootViewItem::setText( int col, const QString& text )
 {
   if( col == 0 )
     m_doc->setVolumeID( text );
 
-  QListViewItem::setText( col, text );
+  KListViewItem::setText( col, text );
 }
 
 
@@ -366,18 +295,44 @@ void K3bDataView::setupPopupMenu()
   //	m_popupMenu->insertTitle( i18n( "File Options" ) );
   actionRename = new KAction( i18n("&Rename"), SmallIcon( "rename" ), CTRL+Key_R, this, SLOT(slotRenameItem()), this );
   actionRemove = new KAction( i18n( "&Remove" ), SmallIcon( "editdelete" ), Key_Delete, this, SLOT(slotRemoveItem()), this );
+  actionNewDir = new KAction( i18n( "&New Directory" ), SmallIcon( "foler_new" ), CTRL+Key_N, this, SLOT(slotNewDir()), this );
   actionRemove->plug( m_popupMenu );
   actionRename->plug( m_popupMenu);
+  actionNewDir->plug( m_popupMenu);
 }
 
 void K3bDataView::showPopupMenu( QListViewItem* _item, const QPoint& _point )
 {
-  // disable popupmenu on dirTree since the removing causes the app to crash !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  if( m_dataFileView->hasFocus() )
-    if( _item )
-      m_popupMenu->popup( _point );
+  if( _item->listView() == m_dataDirTree )
+    actionRemove->setEnabled(false);   // needed since removing directories in treeView causes K3b to crash! FIXME!!!
+  else
+    actionRemove->setEnabled(true);
+
+  if( _item )
+    m_popupMenu->popup( _point );
 }
 
+
+void K3bDataView::slotNewDir()
+{
+  bool ok;
+  QString name = KLineEditDlg::getText( i18n("Please insert the name for the new directory"),
+					"New directory", &ok, k3bMain() );
+  if( !ok )
+    return;
+
+  K3bDirItem* parent;
+  if( m_dataDirTree->hasFocus() ) 
+    {
+      parent = ( (K3bDataDirViewItem*)m_dataDirTree->currentItem() )->dirItem();
+    }
+  else
+    {
+      parent = m_dataFileView->currentDir();
+    }
+
+  m_doc->addEmptyDir( name, parent );
+}
 
 void K3bDataView::slotRenameItem()
 {
@@ -394,21 +349,6 @@ void K3bDataView::slotRenameItem()
 
 void K3bDataView::slotItemRemoved( K3bDataItem* item )
 {
-  qDebug("(K3bDataView) slotItemRemoved");
-
-  // search for deleted item in tree view
-  QListViewItemIterator _it(m_dataDirTree);
-  qDebug("(K3bDataView) seaching in dirTree for viewItems to delete");
-  for( ; _it.current(); ++_it )
-    {
-      K3bPrivateDataDirViewItem* _dirViewItem = (K3bPrivateDataDirViewItem*)_it.current();
-      if( _dirViewItem->dirItem() == item ) {
-	delete _it.current();
-	qDebug( "(K3bDataView) found listViewItem to remove in dirTree: %s", item->k3bName().latin1() );
-	break;
-      }
-    }
-	
   // we only need to search in the fileView if it currently displays the corresponding directory
   if( item == m_dataFileView->currentDir() ) {
     qDebug( "(K3bDataView) fileView currently displays a deleted directory. Setting to parent.");
@@ -419,7 +359,7 @@ void K3bDataView::slotItemRemoved( K3bDataItem* item )
     QListViewItemIterator _it2(m_dataFileView);
     for( ; _it2.current(); ++_it2 )
       {
-	if( K3bPrivateDataDirViewItem* _dirViewItem = dynamic_cast<K3bPrivateDataDirViewItem*>(_it2.current()) ) {
+	if( K3bDataDirViewItem* _dirViewItem = dynamic_cast<K3bDataDirViewItem*>(_it2.current()) ) {
 	  qDebug("   found dirViewItem ... comparing ... ");
 	  if( _dirViewItem->dirItem() == item ) {
 	    delete _it2.current();
@@ -427,7 +367,7 @@ void K3bDataView::slotItemRemoved( K3bDataItem* item )
 	    break;
 	  }
 	}
-	else if( K3bPrivateDataFileViewItem* _fileViewItem = dynamic_cast<K3bPrivateDataFileViewItem*>(_it2.current()) ) {
+	else if( K3bDataFileViewItem* _fileViewItem = dynamic_cast<K3bDataFileViewItem*>(_it2.current()) ) {
 	  qDebug("   found fileViewItem ... comparing ... ");
 	  if( _fileViewItem->fileItem() == item ) {
 	    delete _it2.current();
@@ -447,12 +387,12 @@ void K3bDataView::slotItemRemoved( K3bDataItem* item )
 void K3bDataView::slotRemoveItem()
 {
   if( m_dataDirTree->hasFocus() && m_dataDirTree->currentItem() ) {
-    m_doc->removeItem( ((K3bPrivateDataDirViewItem*)m_dataDirTree->currentItem())->dirItem() );
+    m_doc->removeItem( ((K3bDataDirViewItem*)m_dataDirTree->currentItem())->dirItem() );
   }
   else if( m_dataFileView->hasFocus() && m_dataFileView->currentItem() ) {
-    if( K3bPrivateDataDirViewItem* d = dynamic_cast<K3bPrivateDataDirViewItem*>( m_dataFileView->currentItem() ) )
+    if( K3bDataDirViewItem* d = dynamic_cast<K3bDataDirViewItem*>( m_dataFileView->currentItem() ) )
       m_doc->removeItem( d->dirItem() );
-    else if ( K3bPrivateDataFileViewItem* f = dynamic_cast<K3bPrivateDataFileViewItem*>( m_dataFileView->currentItem() ) )
+    else if ( K3bDataFileViewItem* f = dynamic_cast<K3bDataFileViewItem*>( m_dataFileView->currentItem() ) )
       m_doc->removeItem( f->fileItem() );
   }
   else

@@ -27,41 +27,41 @@
 class K3bDataDoc;
 
 /**
-  *@author Sebastian Trueg
-  */
+ *@author Sebastian Trueg
+ */
 
 class K3bDirItem : public K3bDataItem
 {
-public: 
-	K3bDirItem( const QString& name, K3bDataDoc*, K3bDirItem* parentDir = 0 );
-	~K3bDirItem();
+ public: 
+  K3bDirItem( const QString& name, K3bDataDoc*, K3bDirItem* parentDir = 0 );
+  ~K3bDirItem();
 	
-	QList<K3bDataItem>* children() const { return m_children; }
-	K3bDirItem* addDataItem( K3bDataItem* item );
-	K3bDataItem* takeDataItem( K3bDataItem* item );
-	K3bDataItem* takeDataItem( int index );
-	/** reimplemented from K3bDataItem */
-	virtual QString k3bPath();
+  QList<K3bDataItem>* children() const { return m_children; }
+  K3bDirItem* addDataItem( K3bDataItem* item );
+  K3bDataItem* takeDataItem( K3bDataItem* item );
+  K3bDataItem* takeDataItem( int index );
+  /** reimplemented from K3bDataItem */
+  virtual QString k3bPath();
 	
-	K3bDataItem* nextSibling();
-	K3bDataItem* nextChild( K3bDataItem* );
+  K3bDataItem* nextSibling();
+  K3bDataItem* nextChild( K3bDataItem* );
   /** returns an empty dummy directory */
   QString localPath();
 
-	bool alreadyInDirectory( const QString& fileName );
+  bool alreadyInDirectory( const QString& fileName );
 	
-private:
-	QList<K3bDataItem>* m_children;
+ private:
+  QList<K3bDataItem>* m_children;
 };
 
 
 class K3bRootItem : public K3bDirItem
 {
-public:
-	K3bRootItem( K3bDataDoc* );
-	~K3bRootItem();
+ public:
+  K3bRootItem( K3bDataDoc* );
+  ~K3bRootItem();
 
-	/** reimplemented from K3bDataItem */
-	QString k3bPath();
+  /** reimplemented from K3bDataItem */
+  QString k3bPath();
 };
 #endif

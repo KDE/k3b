@@ -23,6 +23,9 @@ class K3bWavModule : public K3bAudioModule
   KURL writeToWav( const KURL& url );
   void getStream();
 
+  static int waveLength(const char *filename, long offset,
+			long *hdrlen, unsigned long *datalen);
+
  private slots:
   void slotParseStdErrOutput(KProcess*, char*, int);
   void slotOutputData(KProcess*, char*, int);
@@ -41,9 +44,6 @@ class K3bWavModule : public K3bAudioModule
 
   // test stuff
   long m_testRawData;
-
-  static int waveLength(const char *filename, long offset,
-			long *hdrlen, unsigned long *datalen);
 };
 
 

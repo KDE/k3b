@@ -1,7 +1,7 @@
 /***************************************************************************
-                          k3bdataitem.h  -  description
+                          k3bdatafileview.h  -  description
                              -------------------
-    begin                : Wed Apr 25 2001
+    begin                : Sat Oct 20 2001
     copyright            : (C) 2001 by Sebastian Trueg
     email                : trueg@informatik.uni-freiburg.de
  ***************************************************************************/
@@ -15,50 +15,47 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef K3BDATAITEM_H
-#define K3BDATAITEM_H
+#ifndef K3BDATAFILEVIEW_H
+#define K3BDATAFILEVIEW_H
 
+#include <klistview.h>
 
-class K3bDirItem;
 class K3bDataDoc;
+class K3bDirItem;
+class K3bDataView;
+class K3bDataItem;
+class QDropEvent;
 
-#include <qstring.h>
 
 /**
   *@author Sebastian Trueg
   */
 
-class K3bDataItem
+class K3bDataFileView : public KListView  
 {
- public: 
-  K3bDataItem( K3bDataDoc* doc, K3bDataItem* parent = 0 );
-  virtual ~K3bDataItem();
+  friend K3bDataView;
 	
-  K3bDirItem* parent() { return m_parentDir; }
-  //	void setParentDir( K3bDirItem* dir ) { m_parentDir = dir; }
-	
-  K3bDataDoc* doc() const { return m_doc; }
-  const QString& k3bName();
-  void setK3bName( const QString& );
-  /** returns the path as defined by the k3b-hierachy, NOT starting with a slash (since this is used for graft-points!) */
-  virtual QString k3bPath();
+  Q_OBJECT
 
-  virtual K3bDataItem* nextSibling();
+ public:
+  K3bDataFileView( K3bDataDoc*, QWidget* parent );
+  ~K3bDataFileView() {}
 	
-  /** returns the path to the file on the local filesystem */
-  virtual QString localPath() = 0;
-		
-  virtual long k3bSize() const { return 0; }
+  K3bDirItem* currentDir() const { return m_currentDir; }
+	
+ public slots:
+  void slotSetCurrentDir( K3bDirItem* );
+  void updateContents();
+	
+ private slots:
+  void slotDataItemRemoved( K3bDataItem* );
 
-  /** adds the given dataItem to the current parent (can be the item itself if it is a K3bDirItem) */
-  virtual K3bDirItem* addDataItem( K3bDataItem* ) = 0;
-	
  protected:
-  QString m_k3bName;
+  bool acceptDrag(QDropEvent* e) const;
 
  private:
-  K3bDirItem* m_parentDir;
   K3bDataDoc* m_doc;
+  K3bDirItem* m_currentDir;
 };
 
 #endif

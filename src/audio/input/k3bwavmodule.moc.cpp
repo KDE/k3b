@@ -1,7 +1,7 @@
 /****************************************************************************
 ** K3bWavModule meta object code from reading C++ file 'k3bwavmodule.h'
 **
-** Created: Sat Oct 20 15:21:07 2001
+** Created: Sat Oct 20 20:22:41 2001
 **      by: The Qt MOC ($Id$)
 **
 ** WARNING! All changes made in this file will be lost!

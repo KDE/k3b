@@ -70,7 +70,7 @@ QDragObject* K3bDirView::PrivateFileView::dragObject() const
 	QStrList dragstr;
 	
 	for( ; it.current(); ++it )
-		dragstr.append( it.current()->urlString() );
+		dragstr.append( it.current()->url().path(-1) );
 		
 	return new QUriDrag( dragstr, viewport() );
 }

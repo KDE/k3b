@@ -19,6 +19,8 @@
 #define K3BDATAVIEW_H
 
 #include "../k3bview.h"
+#include "k3bdatadirtreeview.h"
+#include "k3bdatafileview.h"
 
 #include <klistview.h>
 
@@ -42,156 +44,99 @@ class K3bDataView : public K3bView
 {
    Q_OBJECT
 
-public:
-	K3bDataView(K3bDataDoc* doc, QWidget *parent=0, const char *name=0);
-	~K3bDataView();
+ public:
+   K3bDataView(K3bDataDoc* doc, QWidget *parent=0, const char *name=0);
+   ~K3bDataView();
 	
-	K3bProjectBurnDialog* burnDialog();
+   K3bProjectBurnDialog* burnDialog();
 	
-public slots:
-	void slotAddFile( K3bFileItem* );
-	void slotAddDir( K3bDirItem* );
-	void slotItemRemoved( K3bDataItem* );
+ public slots:
+   void slotAddFile( K3bFileItem* );
+   void slotAddDir( K3bDirItem* );
+   void slotItemRemoved( K3bDataItem* );
 	
-protected slots:
-	/** generates a dropped signal */
-	void slotDropped( KListView*, QDropEvent* e, QListViewItem* after );
-	void showPopupMenu( QListViewItem* _item, const QPoint& );
-	void slotRenameItem();
-	void slotRemoveItem();
+ protected slots:
+   /** generates a dropped signal */
+   void slotDropped( KListView*, QDropEvent* e, QListViewItem* after );
+   void showPopupMenu( QListViewItem* _item, const QPoint& );
+   void slotRenameItem();
+   void slotRemoveItem();
+   void slotNewDir();
 		
-signals:
-	void dropped(const QStringList&, K3bDirItem* );
+ signals:
+   void dropped(const QStringList&, K3bDirItem* );
 	
-private:
-	class K3bPrivateDataDirTree;
-	class K3bPrivateDataFileView;
-	class K3bPrivateDataDirViewItem;
-	class K3bPrivateDataFileViewItem;
-	class K3bPrivateDataRootViewItem;
-	
-	K3bPrivateDataDirTree* m_dataDirTree;
-	K3bPrivateDataFileView* m_dataFileView;
-	K3bFillStatusDisplay* m_fillStatusDisplay;
+ private:
+   K3bDataDirTreeView* m_dataDirTree;
+   K3bDataFileView* m_dataFileView;
+   K3bFillStatusDisplay* m_fillStatusDisplay;
 		
-	KPopupMenu* m_popupMenu;
-	KAction* actionRemove;
-	KAction* actionRename;
+   KPopupMenu* m_popupMenu;
+   KAction* actionRemove;
+   KAction* actionRename;
+   KAction* actionNewDir;
 		
-	K3bDataDoc* m_doc;
-	K3bDataBurnDialog* m_burnDialog;
+   K3bDataDoc* m_doc;
+   K3bDataBurnDialog* m_burnDialog;
 	
-	void setupPopupMenu();
-};
-
-
-class K3bDataView::K3bPrivateDataDirTree : public KListView
-{
-	friend K3bDataView;
-	
-	Q_OBJECT
-
-public:
-	K3bPrivateDataDirTree( K3bDataDoc*, QWidget* parent );
-	~K3bPrivateDataDirTree() {}
-
-	K3bPrivateDataDirViewItem* root() { return m_root; }
-		
-protected:
-	bool acceptDrag(QDropEvent* e) const;
-	
-private:
-	K3bDataDoc* m_doc;
-	K3bDataView::K3bPrivateDataDirViewItem* m_root;
-	
-private slots:
-	void slotExecuted( QListViewItem* );
-	
-signals:
-	void dirSelected( K3bDirItem* );
+   void setupPopupMenu();
 };
 
 
 
-class K3bDataView::K3bPrivateDataFileView : public KListView
+
+
+class K3bDataDirViewItem : public KListViewItem
 {
-	friend K3bDataView;
+ public:
+  K3bDataDirViewItem( K3bDirItem* dir, QListView* parent );
+  K3bDataDirViewItem( K3bDirItem* dir, QListViewItem* parent );
+  ~K3bDataDirViewItem();
 	
-	Q_OBJECT
-
-public:
-	K3bPrivateDataFileView( K3bDataDoc*, QWidget* parent );
-	~K3bPrivateDataFileView() {}
+  virtual QString text( int ) const;
 	
-	K3bDirItem* currentDir() const { return m_currentDir; }
+  /** reimplemented from QListViewItem */
+  void setText(int col, const QString& text );
+
+  K3bDirItem* dirItem() const { return m_dirItem; }
 	
-	/** reloads the current dir from m_doc **/
-	void reload();
-
-public slots:
-	void slotSetCurrentDir( K3bDirItem* dir );
-			
-protected:
-	bool acceptDrag(QDropEvent* e) const;
-
-private:
-	K3bDataDoc* m_doc;
-	K3bDirItem* m_currentDir;
+ private:
+  K3bDirItem* m_dirItem;
 };
 
 
-
-class K3bDataView::K3bPrivateDataDirViewItem : public QListViewItem
+class K3bDataFileViewItem : public KListViewItem
 {
-public:
-	K3bPrivateDataDirViewItem( K3bDirItem* dir, QListView* parent );
-	K3bPrivateDataDirViewItem( K3bDirItem* dir, QListViewItem* parent );
-	~K3bPrivateDataDirViewItem() {}
+ public:
+  K3bDataFileViewItem( K3bFileItem*, QListView* parent );
+  K3bDataFileViewItem( K3bFileItem*, QListViewItem* parent );
+  ~K3bDataFileViewItem() {}
 	
-	virtual QString text( int ) const;
-	
-	/** reimplemented from QListViewItem */
-	void setText(int col, const QString& text );
+  QString text( int ) const;
 
-	K3bDirItem* dirItem() const { return m_dirItem; }
+  /** reimplemented from QListViewItem */
+  void setText(int col, const QString& text );
+
+  K3bFileItem* fileItem() const { return m_fileItem; }
 	
-private:
-	K3bDirItem* m_dirItem;
+ private:
+  K3bFileItem* m_fileItem;
 };
 
 
-class K3bDataView::K3bPrivateDataFileViewItem : public QListViewItem
+class K3bDataRootViewItem : public K3bDataDirViewItem
 {
-public:
-	K3bPrivateDataFileViewItem( K3bFileItem*, QListView* parent );
-	K3bPrivateDataFileViewItem( K3bFileItem*, QListViewItem* parent );
-	~K3bPrivateDataFileViewItem() {}
+ public:
+  K3bDataRootViewItem( K3bDataDoc*, QListView* parent );
+  ~K3bDataRootViewItem() {}
 	
-	QString text( int ) const;
-
-	/** reimplemented from QListViewItem */
-	void setText(int col, const QString& text );
-
-	K3bFileItem* fileItem() const { return m_fileItem; }
+  QString text( int ) const;
 	
-private:
-	K3bFileItem* m_fileItem;
-};
-
-
-class K3bDataView::K3bPrivateDataRootViewItem : public K3bPrivateDataDirViewItem
-{
-public:
-	K3bPrivateDataRootViewItem( K3bDataDoc*, QListView* parent );
-	~K3bPrivateDataRootViewItem() {}
-	
-	QString text( int ) const;
-	
-	/** reimplemented from QListViewItem */
-	void setText(int col, const QString& text );
+  /** reimplemented from QListViewItem */
+  void setText(int col, const QString& text );
 		
-private:
-	K3bDataDoc* m_doc;
+ private:
+  K3bDataDoc* m_doc;
 };
 
 #endif
