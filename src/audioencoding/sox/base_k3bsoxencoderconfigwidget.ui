@@ -1,0 +1,261 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>base_K3bSoxEncoderConfigWidget</class>
+<author>Sebastian Trueg</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>Form1</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>339</width>
+            <height>157</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>m_checkManual</cstring>
+            </property>
+            <property name="text">
+                <string>Manual settings (used for all filetypes)</string>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout2</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Fixed</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>10</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout1</cstring>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel" row="1" column="0">
+                            <property name="name">
+                                <cstring>textLabel2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Samplerate:</string>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox" row="2" column="1">
+                            <item>
+                                <property name="text">
+                                    <string>Signed linear</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Unsigned linear</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>u-law (logarithmic)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>A-law (logarithmic)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>ADPCM</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>IMA_ADPCM</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>GSM</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Floating-point</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>m_comboEncoding</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>&lt;p&gt;The  sample data encoding is signed linear (2's complement), unsigned linear, u-law (logarithmic), A-law (loga­rithmic), ADPCM, IMA_ADPCM, GSM, or Floating-point.&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;U-law&lt;/b&gt; (actually shorthand for mu-law) and &lt;b&gt;A-law&lt;/b&gt; are the U.S. and international standards for logarithmic  tele­phone  sound compression.   When uncompressed u-law has roughly the precision of 14-byte PCM audio and A-law has roughly the precision of 13-bit PCM audio. A-law and u-law data is sometimes encoded using a reversed bit-ordering (ie. MSB becomes LSB).&lt;br&gt; &lt;b&gt;ADPCM &lt;/b&gt; is  a  form  of  sound compression that has a good compromise between good sound quality and fast encod­ing/decoding time.   It is used for telephone sound compression and places were full fidelity is not  as  impor­tant. When uncompressed it has roughly the precision of 16-bit PCM audio.   Popular version of ADPCM include G.726, MS ADPCM, and IMA ADPCM. It has different meanings in different file handlers. In .wav  files it represents  MS ADPCM files, in all others it means G.726 ADPCM. &lt;br&gt; &lt;b&gt;IMA ADPCM&lt;/b&gt; is a specific form of ADPCM com­pression, slightly simpler and slightly lower fidelity than Microsoft's flavor of ADPCM. IMA  ADPCM  is  also called DVI ADPCM.&lt;br&gt; &lt;b&gt;GSM&lt;/b&gt; is a standard used for telephone sound compression in European countries and its gaining popularity because of its quality. It usually is CPU intensive to work with GSM audio data.&lt;/p&gt; &lt;p&gt;&lt;em&gt;Description based on the Sox manpage&lt;/em&gt;&lt;/p&gt;</string>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit" row="1" column="1">
+                            <property name="name">
+                                <cstring>m_editSamplerate</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                            <property name="text">
+                                <string>14400</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string></string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="3" column="0">
+                            <property name="name">
+                                <cstring>textLabel4</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Data Size:</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="2" column="0">
+                            <property name="name">
+                                <cstring>textLabel3</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Data Encoding:</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="0">
+                            <property name="name">
+                                <cstring>textLabel1</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Channels:</string>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox" row="0" column="1">
+                            <item>
+                                <property name="text">
+                                    <string>1 (mono)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>2 (stereo)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>4 (quad sound)</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>m_comboChannels</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox" row="3" column="1">
+                            <item>
+                                <property name="text">
+                                    <string>Bytes</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>16-bit words</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>32-bit Words</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>m_comboSize</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+            </hbox>
+        </widget>
+        <spacer>
+            <property name="name">
+                <cstring>spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>250</width>
+                    <height>16</height>
+                </size>
+            </property>
+        </spacer>
+    </vbox>
+</widget>
+<connections>
+    <connection>
+        <sender>m_checkManual</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_comboChannels</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_checkManual</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_editSamplerate</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_checkManual</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_comboEncoding</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_checkManual</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_comboSize</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+</connections>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

@@ -3,4 +3,4 @@ if include_OGG
 ENCOGGDIR = ogg
 endif
 
-SUBDIRS =  $(ENCOGGDIR)
+SUBDIRS = sox external $(ENCOGGDIR)

@@ -1,0 +1,231 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>base_K3bExternalEncoderConfigWidget</class>
+<author>Sebastian Trueg</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>Form1</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>483</width>
+            <height>275</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel5</cstring>
+            </property>
+            <property name="text">
+                <string>Setup different external programs to encode audio data ripped from an audio CD.</string>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout9</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout6</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="KListBox">
+                            <property name="name">
+                                <cstring>m_programList</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout1</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <spacer>
+                                    <property name="name">
+                                        <cstring>spacer1</cstring>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Horizontal</enum>
+                                    </property>
+                                    <property name="sizeType">
+                                        <enum>Expanding</enum>
+                                    </property>
+                                    <property name="sizeHint">
+                                        <size>
+                                            <width>51</width>
+                                            <height>21</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                                <widget class="QToolButton">
+                                    <property name="name">
+                                        <cstring>m_buttonNew</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>New</string>
+                                    </property>
+                                    <property name="autoRaise">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>New Program</string>
+                                    </property>
+                                </widget>
+                                <widget class="QToolButton">
+                                    <property name="name">
+                                        <cstring>m_buttonDelete</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Delete</string>
+                                    </property>
+                                    <property name="autoRaise">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>Delete Program</string>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                    </vbox>
+                </widget>
+                <widget class="Line">
+                    <property name="name">
+                        <cstring>line2</cstring>
+                    </property>
+                    <property name="frameShape">
+                        <enum>VLine</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Sunken</enum>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout8</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout4</cstring>
+                            </property>
+                            <grid>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel" row="0" column="0">
+                                    <property name="name">
+                                        <cstring>textLabel1</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Name:</string>
+                                    </property>
+                                </widget>
+                                <widget class="KLineEdit" row="1" column="1">
+                                    <property name="name">
+                                        <cstring>m_editExtension</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="KLineEdit" row="0" column="1">
+                                    <property name="name">
+                                        <cstring>m_editName</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel" row="1" column="0">
+                                    <property name="name">
+                                        <cstring>textLabel3</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Extension:</string>
+                                    </property>
+                                </widget>
+                            </grid>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel4</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&lt;p&gt;&lt;b&gt;Command&lt;/b&gt;&lt;br&gt;
+The command at least has to contain the filename (%f). Metainfo may be set with:&lt;br&gt;
+&lt;b&gt;%t&lt;/b&gt; - Title; &lt;b&gt;%a&lt;/b&gt; - Artist; &lt;b&gt;%c&lt;/b&gt; - Comment; &lt;b&gt;%y&lt;/b&gt; - Year&lt;br&gt;
+Be aware that these values might be empty.&lt;br&gt;
+The program has to read the data from stdin.</string>
+                            </property>
+                        </widget>
+                        <widget class="KLineEdit">
+                            <property name="name">
+                                <cstring>m_editCommand</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>7</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                        </widget>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer2</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Vertical</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>41</width>
+                                    <height>30</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </vbox>
+                </widget>
+            </hbox>
+        </widget>
+    </vbox>
+</widget>
+<tabstops>
+    <tabstop>m_editName</tabstop>
+    <tabstop>m_editExtension</tabstop>
+    <tabstop>m_editCommand</tabstop>
+    <tabstop>m_programList</tabstop>
+</tabstops>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>klistbox.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+</includehints>
+</UI>

@@ -1,0 +1,8 @@
+[K3b Plugin]
+Lib=libk3bexternalencoder
+Group=AudioEncoder
+Name=K3b External Audio Encoder
+Author=Sebastian Trueg
+Email=trueg@k3b.org
+Version=1.0
+Comment=Encoding module that allows specifying an encoding commmand
