@@ -8,11 +8,11 @@ SUBDIRS = libmad data cdinfo audio device option rip tools cdcopy dvd pics icons
 EXTRA_DIST = main.cpp k3b.cpp k3b.h k3bdoc.cpp k3bdoc.h k3bview.cpp k3bview.h k3bui.rc k3b.desktop k3bdirview.cpp k3bdirview.h k3bfillstatusdisplay.cpp k3bfillstatusdisplay.h k3bburnprogressdialog.cpp k3bburnprogressdialog.h k3bjob.cpp k3bjob.h k3bprojectburndialog.cpp k3bprojectburndialog.h kcutlabel.cpp kcutlabel.h kdiskfreesp.h k3bfileview.cpp k3bfileview.h k3bcddb.cpp k3bcddb.h k3bblankingdialog.cpp k3bblankingdialog.h k3bblankingjob.cpp k3bblankingjob.h k3bsplash.h k3bsplash.cpp k3bwriterselectionwidget.cpp k3bwriterselectionwidget.h k3bprojecttabwidget.cpp k3bprojecttabwidget.h k3bprojecttabbar.cpp k3bprojecttabbar.h k3baudioplayer.cpp k3baudioplayer.h k3bcddbmultientriesdialog.cpp k3bcddbmultientriesdialog.h kstringlistdialog.cpp kstringlistdialog.h klistviewlineedit.h k3bfiletreeview.cpp k3bfiletreeview.h k3bcdcontentsview.h k3btempdirselectionwidget.cpp k3btempdirselectionwidget.h kdndfileview.cpp kdndfileview.h k3bdiroperator.cpp k3bdiroperator.h k3bbusywidget.cpp k3bbusywidget.h 
 
 install-data-local:
-	$(mkinstalldirs) $$(kde_appsdir)/Applications/
-	$(INSTALL_DATA) $(srcdir)/k3b.desktop $$(kde_appsdir)/Applications/k3b.desktop
+	$(mkinstalldirs) $(kde_appsdir)/Applications/
+	$(INSTALL_DATA) $(srcdir)/k3b.desktop $(kde_appsdir)/Applications/k3b.desktop
 
 uninstall-local:
-	-rm -f $$(kde_appsdir)/Applications/k3b.desktop
+	-rm -f $(kde_appsdir)/Applications/k3b.desktop
 
 ####### kdevelop will overwrite this part!!! (end)############
 # this 10 paths are KDE specific. Use them:
