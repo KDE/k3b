@@ -28,13 +28,16 @@
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <ktextbrowser.h>
+#include <kgenericfactory.h>
 
 #include <qptrlist.h>
 #include <qfile.h>
 #include <qtextstream.h>
 
 
-K3bDebuggerPlugin::K3bDebuggerPlugin( QObject* parent, const char* name )
+K3bDebuggerPlugin::K3bDebuggerPlugin( QObject* parent, 
+				      const char* name,
+				      const QStringList& )
   : KParts::Plugin( parent, name )
 {
   (void) new KAction( "&Create debugging output (plugin)",
@@ -96,21 +99,7 @@ void K3bDebuggerPlugin::slotDoDebuggerStuff()
 }
 
 
+K_EXPORT_COMPONENT_FACTORY( libk3bdebuggerplugin, KGenericFactory<K3bDebuggerPlugin> )
 
-KPluginFactory::KPluginFactory( QObject* parent, const char* name )
-  : KLibFactory( parent, name )
-{
-  s_instance = new KInstance("KPluginFactory");
-}
-
-QObject* KPluginFactory::createObject( QObject* parent, const char* name, const char*, const QStringList & )
-{
-  return new K3bDebuggerPlugin( parent, name );
-}
-
-
-K_EXPORT_COMPONENT_FACTORY( libk3bdebuggerplugin, KPluginFactory )
-
-KInstance* KPluginFactory::s_instance = 0L;
 
 #include "k3bdebuggerplugin.moc"

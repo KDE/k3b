@@ -32,11 +32,10 @@
 #include <kfilemetainfo.h>
 #include <kcombobox.h>
 #include <kconfig.h>
-//#include <kprogress.h>
+#include <kgenericfactory.h>
 
 #include <qstring.h>
 #include <qfile.h>
-#include <qtextstream.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h>
 #include <qpushbutton.h>
@@ -48,7 +47,6 @@
 #include <qvaluelist.h>
 #include <qlayout.h>
 #include <qptrdict.h>
-#include <qapplication.h>
 
 
 class K3bAudioMetainfoRenamerPluginDialog::Private
@@ -385,7 +383,9 @@ bool K3bAudioMetainfoRenamerPluginDialog::find( K3bDirItem* item, const QString&
 
 
 
-K3bAudioMetainfoRenamerPlugin::K3bAudioMetainfoRenamerPlugin( QObject* parent, const char* name )
+K3bAudioMetainfoRenamerPlugin::K3bAudioMetainfoRenamerPlugin( QObject* parent, 
+							      const char* name,
+							      const QStringList& )
   : KParts::Plugin( parent, name )
 {
   (void) new KAction( "&Rename audio files",
@@ -422,20 +422,6 @@ void K3bAudioMetainfoRenamerPlugin::slotDoRename()
 }
 
 
-KPluginFactory::KPluginFactory( QObject* parent, const char* name )
-  : KLibFactory( parent, name )
-{
-  s_instance = new KInstance("KPluginFactory");
-}
-
-QObject* KPluginFactory::createObject( QObject* parent, const char* name, const char*, const QStringList & )
-{
-  return new K3bAudioMetainfoRenamerPlugin( parent, name );
-}
-
-
-K_EXPORT_COMPONENT_FACTORY( libk3baudiometainforenamerplugin, KPluginFactory )
-
-KInstance* KPluginFactory::s_instance = 0L;
+K_EXPORT_COMPONENT_FACTORY( libk3baudiometainforenamerplugin, KGenericFactory<K3bAudioMetainfoRenamerPlugin> )
 
 #include "k3baudiometainforenamerplugin.moc"

@@ -59,29 +59,11 @@ class K3bAudioMetainfoRenamerPlugin : public KParts::Plugin
   Q_OBJECT
 
  public:
-  K3bAudioMetainfoRenamerPlugin( QObject* parent = 0, const char* name = 0 );
+  K3bAudioMetainfoRenamerPlugin( QObject* parent, const char* name, const QStringList& );
   virtual ~K3bAudioMetainfoRenamerPlugin();
 
  public slots:
   void slotDoRename();
-};
-
-
-class KPluginFactory : public KLibFactory
-{
-  Q_OBJECT
-
- public:
-  KPluginFactory( QObject *parent = 0, const char *name = 0 );
-  ~KPluginFactory() { delete s_instance; };
-
-
-  virtual QObject* createObject( QObject* parent = 0, const char* pname = 0,
-				 const char* name = "QObject",
-				 const QStringList &args = QStringList() );
-
- private:
-  static KInstance* s_instance;
 };
 
 
