@@ -115,8 +115,12 @@ void K3bAudioTrackDialog::updateCopyProtection( int i )
 
 void K3bAudioTrackDialog::updatePregap( int value )
 {
-	if( m_track )
-		m_track->setPregap( value );
+  if( m_track ) {
+    if( m_bPregapSeconds )
+      m_track->setPregap( value*75 );
+    else
+      m_track->setPregap( value );
+  }
 }
 
 

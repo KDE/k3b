@@ -387,10 +387,15 @@ QString K3bAudioDoc::writeTOC( const QString& filename )
 	t << "\"" << _track->bufferFile() << "\"" << " 0" << "\n";
     }
     else {
-      t << "\"-\" ";   // read from stdin
-      t << K3b::framesToString( _trackStart );        // where does the track start in stdin
-      t << " " << K3b::framesToString( _track->length() );
-      t << "\n";
+      if( _track->filetype() == K3b::MP3 ) {
+	t << "\"-\" ";   // read from stdin
+	t << K3b::framesToString( _trackStart );        // where does the track start in stdin
+	t << " " << K3b::framesToString( _track->length() );
+	t << "\n";
+      }
+      else {
+	t << "\"" << _track->absPath() << "\"" << " 0" << "\n";
+      }
       _trackStart += _track->length();
     }
 

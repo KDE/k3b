@@ -44,200 +44,7 @@
 #include <kiconloader.h>
 
 
-// PrivateDirItem
-////////////////////////////////////////////////////////////////////////////////////
-
-K3bDirView::PrivateDirItem::PrivateDirItem( PrivateDirItem* parent, const QString& filename, const QString& altName )
- : QListViewItem( parent ), m_altName(altName), f(filename), pix( 0 )
-{
-    p = parent;
-    readable = QDir( absPath() ).isReadable();
-	
-	setPixmap( new QPixmap(KMimeType::pixmapForURL( KURL( absPath() ), 0, KIcon::Small ) ) );
-}
-
-
-K3bDirView::PrivateDirItem::PrivateDirItem( QListView * parent, const QString& filename, const QString& altName )
- : QListViewItem( parent ), m_altName(altName), f(filename), pix( 0 )
-{
-    p = 0;
-    readable = QDir( absPath() ).isReadable();
-    setPixmap( new QPixmap(KMimeType::pixmapForURL( KURL( absPath() ), 0, KIcon::Small ) ) );
-}
-
-
-void K3bDirView::PrivateDirItem::setPixmap( QPixmap *px )
-{
-    pix = px;
-    setup();
-    widthChanged( 0 );
-    invalidateHeight();
-    repaint();
-}
-
-
-const QPixmap* K3bDirView::PrivateDirItem::pixmap( int i ) const
-{
-	  if ( i )
-			return 0;
-    return pix;
-}
-
-void K3bDirView::PrivateDirItem::setOpen( bool o )
-{
-  if ( o && !childCount() ) {
-		QString s( absPath() );
-		QDir thisDir( s, QString::null, QDir::Name, QDir::Dirs );
-		if ( !thisDir.isReadable() ) {
-	    readable = FALSE;
-	    setExpandable( FALSE );
-	    return;
-		}
-
-		listView()->setUpdatesEnabled( FALSE );
-		const QFileInfoList* files = thisDir.entryInfoList();
-		if ( files ) {
-	    QFileInfoListIterator it( *files );
-	    QFileInfo * fi;
-	    while( (fi=it.current()) != 0 ) {
-				++it;
-				if ( fi->fileName() == "." || fi->fileName() == ".." )
-		    	; // nothing
-				else if ( fi->isDir() ) {
-		    	PrivateDirItem* _item = new PrivateDirItem( this, fi->fileName() );
-		    	
-		    	// check if the directory has subs
-		    	QDir _newDir( _item->absPath(), QString::null, QDir::Name, QDir::Dirs );
-		    	if( _newDir.count() > 2 )
-		    		_item->setExpandable( true );
-		    	else
-		    		_item->setExpandable( false );
-		    }
-	    }
-		}
-		listView()->setUpdatesEnabled( TRUE );
-  }
-  QListViewItem::setOpen( o );
-}
-
-
-void K3bDirView::PrivateDirItem::expandDirItem()
-{
-	// remove all subs and reread them
-	while( QListViewItem* _old = firstChild() )
-		delete _old;
-		
-	QDir _dir( absPath(), QString::null, QDir::Name, QDir::Dirs );
-	if( !_dir.isReadable() )
-		return;
-		
-	QStringList _subs = _dir.entryList();
-	_subs.remove(".");
-	_subs.remove("..");
-	
-	 // add PrivateDirItems for all subsubdirectories
-   for( QStringList::Iterator it = _subs.begin(); it != _subs.end(); it++ ) {
-	   (void)new PrivateDirItem( this, *it );
-   }
-}
-
-
-void K3bDirView::PrivateDirItem::setup()
-{
-    setExpandable( TRUE );
-    QListViewItem::setup();
-}
-
-
-QString K3bDirView::PrivateDirItem::absPath()
-{
-  QString s;
-  if ( p ) {
-		s = p->absPath();
-		s.append( f.name() );
-		s.append( "/" );
-    }
-  else {
-		s = f.name();
-    }
-  return s;
-}
-
-
-QString K3bDirView::PrivateDirItem::text( int i ) const
-{
-	if( i == 0 ) {
-	  if ( m_altName.isEmpty() )
-			return f.name();
-		else
-			return m_altName;
-	}
-	else
-		return "directory";
-}
-
-
-
-// PrivateDirView
-////////////////////////////////////////////////////////////////
-
-K3bDirView::PrivateDirView::PrivateDirView( QWidget *parent, const char *name )
- : KListView( parent, name )
-{
-	setCursor( KCursor::handCursor() );
-
-	addColumn("directory");
-	setColumnWidthMode( 0, QListView::Maximum );
-	setRootIsDecorated( true );
-	header()->hide();
-	
-	// add "/" and home-dir as roots
-	K3bDirView::PrivateDirItem* home = new K3bDirView::PrivateDirItem( this, QDir::home().absPath()+"/", "Home Directory" );
-	(void)new K3bDirView::PrivateDirItem( this, "/", "Root Directory" );
-	home->setOpen( true );
-	
-	connect( this, SIGNAL( executed(QListViewItem*) ), this, SLOT( slotFolderSelected(QListViewItem*) ) );
-}
-
-
-
-
-
-void K3bDirView::PrivateDirView::slotFolderSelected( QListViewItem *i )
-{
-  if ( !i )
-		return;
-
-  K3bDirView::PrivateDirItem* dir = (K3bDirView::PrivateDirItem*)i;
-  emit folderSelected( dir->absPath() );
-}
-
-
-void K3bDirView::PrivateDirView::setDir( const QString &s )
-{
-	qDebug("setdir");
-  QListViewItemIterator it( this );
-  ++it;
-  for ( ; it.current(); ++it ) {
-		it.current()->setOpen( FALSE );
-  }
-
-  QStringList lst( QStringList::split( "/", s ) );
-  QListViewItem *item = firstChild();
-  QStringList::Iterator it2 = lst.begin();
-  for ( ; it2 != lst.end(); ++it2 ) {
-		while ( item ) {
-	    if ( item->text(0) == *it2 ) {
-				item->setOpen( TRUE );
-				break;
-	    }
-	  item = item->itemBelow();
-	  }
-  }
-
-  if ( item )
-		setCurrentItem( item );
-}
+#include "kiotree/kiotree.h"
 
 
 
@@ -248,8 +55,8 @@ K3bDirView::PrivateFileView::PrivateFileView( QWidget* parent, const char* name 
  : KFileDetailView( parent, name )
 {
 	setDragEnabled( true );
-	setSelectionMode( KFile::Extended );
-	setSelectionModeExt( Extended );
+	KFileDetailView::setSelectionMode( KFile::Extended );
+	KListView::setSelectionModeExt( KListView::Extended );
 }
 
 	
@@ -281,7 +88,9 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
 	QGridLayout* _box2Layout = new QGridLayout( box2 );
 	_box2Layout->setSpacing( 0 );
 	
-	m_dirView = new PrivateDirView( box );
+	m_kiotree = new KioTree( box );
+   m_kiotree->addTopLevelDir( KURL( QDir::homeDirPath() ), "Home" );
+   m_kiotree->addTopLevelDir( KURL( "/" ), "Root" );
 
 	m_fileView = new KDirOperator( QDir::home().absPath(), box2 );
 	m_fileView->setView( new PrivateFileView( m_fileView, "fileview" ) );	
@@ -318,9 +127,8 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
 	connect( _buttonUp, SIGNAL(clicked()), _actionUp, SLOT(activate()) );
 	connect( _buttonHome, SIGNAL(clicked()), _actionHome, SLOT(activate()) );
 	connect( _buttonReload, SIGNAL(clicked()), _actionReload, SLOT(activate()) );
-		
-  connect( m_dirView, SIGNAL(folderSelected(const QString&) ), this, SLOT(slotFolderSelected(const QString&) ) );
-  connect( m_fileView, SIGNAL( dirActivated(const KFileViewItem*) ), this, SLOT( slotFileItemSelected(const KFileViewItem*) ) );
+
+	connect( m_kiotree, SIGNAL(urlActivated(const KURL&)), this, SLOT(slotDirActivated(const KURL&)) );	
 }
 
 
@@ -328,15 +136,15 @@ K3bDirView::~K3bDirView(){
 }
 
 
-void K3bDirView::slotFolderSelected( const QString& url )
+void K3bDirView::slotViewChanged( KFileView* newView )
 {
-	m_fileView->setURL( url, true );
+	newView->setSelectionMode( KFile::Extended );
+	if( KListView* _x = dynamic_cast<KListView*>( newView->widget() ) )
+		_x->setDragEnabled( true );
 }
 
 
-void K3bDirView::slotFileItemSelected( const KFileViewItem* _item )
+void K3bDirView::slotDirActivated( const KURL& url )
 {
-	qDebug("slotFileItemSelected()");
-	if( _item && !_item->isFile() )
-		m_dirView->setDir( _item->urlString() );
+	m_fileView->setURL( url, true );
 }

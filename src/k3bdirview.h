@@ -26,6 +26,7 @@
 #include <kdiroperator.h>
 #include <kfiledetailview.h>
 
+class KioTree;
 class KFileViewItem;
 class QDragObject;
 class QSplitter;
@@ -42,18 +43,17 @@ public:
 	K3bDirView(QWidget *parent=0, const char *name=0);
 	~K3bDirView();
 
-public slots:
-	void slotFolderSelected( const QString& );
-	void slotFileItemSelected( const KFileViewItem* );
+protected slots:
+	void slotViewChanged( KFileView* newView );
+  void slotDirActivated( const KURL& );
 	
 private:     	
 	class PrivateFileView;
-	class PrivateDirView;
-	class PrivateDirItem;
-	
-	PrivateDirView* m_dirView;
+
 	KDirOperator* m_fileView;
 	QSplitter* m_mainSplitter;
+
+	KioTree* m_kiotree;
 };
 
 
@@ -65,52 +65,5 @@ public:
 protected:
 	QDragObject* dragObject() const;
 }; // class PrivateFileView
-
-
-class K3bDirView::PrivateDirItem : public QListViewItem
-{
-public:
-   PrivateDirItem( QListView* parent, const QString& filename, const QString& altName = QString::null );
-   PrivateDirItem( PrivateDirItem* parent, const QString& filename, const QString& altName = QString::null );
-
-   QString text( int ) const;
-
-   QString absPath();
-
-   void setOpen( bool );
-   void setup();
-
-   const QPixmap* pixmap( int i ) const;
-   void setPixmap( QPixmap *p );
-
-private:
- /** Reads all subdirectories **/
- void expandDirItem( );
-     	
-	QString m_altName;
-   QFile f;
-   K3bDirView::PrivateDirItem* p;
-   bool readable;
-   QPixmap *pix;
-}; // class PrivateDirItem
-
-
-class K3bDirView::PrivateDirView : public KListView
-{
-   Q_OBJECT
-
-public:
-   PrivateDirView( QWidget *parent = 0, const char *name = 0 );
-
-public slots:
-   void setDir( const QString & );
- 	//void reload();
-     		
-signals:
-   void folderSelected( const QString & );
-
-protected slots:
-   void slotFolderSelected( QListViewItem* );
-}; // class PrivateDirView
 
 #endif

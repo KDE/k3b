@@ -4,7 +4,7 @@
     begin                : Thu Jun 14 2001
     copyright            : (C) 2001 by Sebastian Trueg
     email                : trueg@informatik.uni-freiburg.de
- ***************************************************************************/
+***************************************************************************/
 
 /***************************************************************************
  *                                                                         *
@@ -82,11 +82,11 @@ void K3bMp3Track::readTrackInfo( const QString& fileName )
   unsigned char data[1024];
   unsigned char* datapointer;
 
-//   m_file.open( IO_ReadOnly );
-//   m_file.at(0);
-//   int readbytes = m_file.readBlock( buffer, 1024 );
+  //   m_file.open( IO_ReadOnly );
+  //   m_file.at(0);
+  //   int readbytes = m_file.readBlock( buffer, 1024 );
 
-//   m_file.close();
+  //   m_file.close();
 
   FILE *fd;
   fd = fopen(fileName.latin1(),"r");
@@ -94,13 +94,13 @@ void K3bMp3Track::readTrackInfo( const QString& fileName )
   int readbytes = fread(&data, 1, 1024, fd);
   fclose(fd);
 
-	// some hacking
-	if( data[0] == 'I' && data[1] == 'D' && data[2] == '3' ) {
-		fd = fopen(fileName.latin1(),"r");
-	  fseek(fd, _id3TagSize, SEEK_SET);
-	  readbytes = fread(&data, 1, 1024, fd);
-	  fclose(fd);
-	}
+  // some hacking
+  if( data[0] == 'I' && data[1] == 'D' && data[2] == '3' ) {
+    fd = fopen(fileName.latin1(),"r");
+    fseek(fd, _id3TagSize, SEEK_SET);
+    readbytes = fread(&data, 1, 1024, fd);
+    fclose(fd);
+  }
 
 
   bool found = false;
@@ -112,7 +112,7 @@ void K3bMp3Track::readTrackInfo( const QString& fileName )
   while( !found && (readbytes > 0) ) 
     {
       if( mp3HeaderCheck(_header) ) {
-	qDebug( "   header found: %x", _header );
+	qDebug( "*header found: %x", _header );
 	found = true;
 	break;
       }
@@ -125,10 +125,21 @@ void K3bMp3Track::readTrackInfo( const QString& fileName )
     {
       // calculate length
       if( mp3SampleRate(_header) ) {
-	int _frameSize = 144 * mp3Bitrate(_header) * 1000 / ( mp3SampleRate(_header) + mp3Padding(_header) );
-	qDebug( "**framesize calculated: %i", _frameSize);
-	if( _frameSize ) {
-	  int _frameNumber = (QFileInfo(m_file).size() - _id3TagSize ) / _frameSize;
+
+        double tpf;
+
+        tpf = (double)1152;
+        tpf /= mp3SampleRate(_header) << 1;
+
+	double _frameSize = 144000.0 * (double)mp3Bitrate(_header);
+	_frameSize /= (double)( mp3SampleRate(_header) - mp3Padding(_header) );
+
+// 	if( mp3Protection( _header ) )
+// 	  _frameSize += 16;
+
+	qDebug( "*framesize calculated: %f", _frameSize);
+	if( _frameSize > 0 ) {
+	  int _frameNumber = (int)( (double)(QFileInfo(m_file).size() - _id3TagSize ) / _frameSize );
 	  qDebug( " #frames: %i", _frameNumber );
 
 	  // cdrdao needs the length in frames where 75 frames are 1 second 
@@ -149,8 +160,6 @@ void K3bMp3Track::readTrackInfo( const QString& fileName )
 
 int K3bMp3Track::mp3VersionNumber(unsigned int header) 
 {
-  qDebug(" version number" );
-
   int d = (header & 0x00180000) >> 19;
 
   switch (d) 
@@ -170,23 +179,17 @@ int K3bMp3Track::mp3VersionNumber(unsigned int header)
 
 int K3bMp3Track::mp3LayerNumber(unsigned int header) 
 {
-  qDebug(" layer number" );
-
   int d = (header & 0x00060000) >> 17;
   return 4-d;
 }
 
 bool K3bMp3Track::mp3Protection(unsigned int header) 
 {
-  qDebug(" protection" );
-
   return ((header>>16 & 0x00000001)==1);
 }
 
 int K3bMp3Track::mp3Bitrate(unsigned int header) 
 {
-  qDebug(" bitrate" );
-
   const unsigned int bitrates[3][3][15] =
     {
       {
@@ -209,14 +212,13 @@ int K3bMp3Track::mp3Bitrate(unsigned int header)
   int layer = mp3LayerNumber(header)-1;
   int bitrate = (header & 0x0000f000) >> 12;
 
- if( bitrate == 0 )
-qDebug(" Bitrate is 0");
+  if( bitrate == 0 )
+    qDebug(" Bitrate is 0");
 
-  printf("Header:%x\n",header);
-  printf("version:%x\n",version);
-  printf("layer:%d\n",layer);
-  printf("Bitindex:%d\n",bitrate);
-  printf("Bitrate:%d\n",bitrates[version][layer][bitrate]);
+  printf(" Version:%x\n",version);
+  printf(" Layer:%d\n",layer);
+  printf(" Bitrate:%d\n",bitrates[version][layer][bitrate]);
+
   return bitrates[version][layer][bitrate];
 }
 
@@ -261,11 +263,23 @@ bool K3bMp3Track::mp3HeaderCheck(unsigned int head)
 
 int K3bMp3Track::mp3Padding(unsigned int header)
 {
-  qDebug(" padding" );
-
   if( header & 0x00000200 == 0x00000200 ) {
     // calculate padding
+    qDebug( " padding: 1" );
     return 1;
   }
-  else return 0;
+  else {
+    qDebug( " padding: 0" );
+    return 0;
+  }
 }
+
+//double K3bMp3Track::compute_tpf(struct frame *fr)
+//{
+//        static int bs[4] = { 0,384,1152,1152 };
+//        double tpf;
+//
+//        tpf = (double) bs[fr->lay];
+//        tpf /= freqs[fr->sampling_frequency] << (fr->lsf);
+//        return tpf;
+//}
