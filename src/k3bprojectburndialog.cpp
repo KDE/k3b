@@ -203,9 +203,6 @@ void K3bProjectBurnDialog::slotUser1()
 
   saveSettings();
 
-  // avoid interaction with the document while the job is working
-  m_doc->disable();
-
   m_job = m_doc->newBurnJob();
   //  m_job->setWritingApp( m_writerSelectionWidget->writingApp() );
 
@@ -225,8 +222,6 @@ void K3bProjectBurnDialog::slotUser1()
 
 void K3bProjectBurnDialog::slotJobFinished()
 {
-  m_doc->enable();
-
   delete m_job;
   m_job = 0;
 }

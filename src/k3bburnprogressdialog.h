@@ -72,18 +72,10 @@ class K3bBurnProgressDialog : public KDialog  {
 
   void slotShowDebuggingOutput();
 
-  void slotToBackground();
-
  signals:
   void closed();
 
  protected:
-  /**
-   * only used for filtering out mouseclicks on the
-   * statusbar progress.
-   */
-  bool eventFilter(QObject* object, QEvent* event);
-
   void closeEvent( QCloseEvent* );
 
   void setupGUI();
@@ -94,7 +86,6 @@ class K3bBurnProgressDialog : public KDialog  {
   QPushButton* m_buttonCancel;
   QPushButton* m_buttonClose;
   QPushButton* m_buttonShowDebug;
-  QPushButton* m_buttonBackground;
   QGroupBox* m_groupBuffer;
   KProgress* m_progressBuffer;
   QGroupBox* m_groupProgress;
@@ -110,10 +101,6 @@ class K3bBurnProgressDialog : public KDialog  {
   QHBoxLayout* m_groupInfoLayout;
   QHBoxLayout* m_groupBufferLayout;
   QGridLayout* m_groupProgressLayout;
-
-  // the status bar widget
-  class PrivateStatusBarProgress;
-  PrivateStatusBarProgress* m_statusBarProgress;
 
   // debugging output display
   class PrivateDebugWidget;

@@ -56,16 +56,6 @@ public:
 };
 
 
-class K3bBurnProgressDialog::PrivateStatusBarProgress : public QWidget
-{
-public:
-  PrivateStatusBarProgress( QWidget* parent );
-
-  KProgress* progress;
-  QLabel*    label;
-};
-
-
 K3bBurnProgressDialog::PrivateDebugWidget::PrivateDebugWidget( QMap<QString, QStringList>& map, QWidget* parent )
   : KDialog( parent, "debugViewDialog", true )
 {
@@ -102,31 +92,6 @@ K3bBurnProgressDialog::PrivateDebugWidget::PrivateDebugWidget( QMap<QString, QSt
 
 
 
-K3bBurnProgressDialog::PrivateStatusBarProgress::PrivateStatusBarProgress( QWidget* parent )
-  : QWidget( parent )
-{
-  progress = new KProgress( this, "m_statusBarProgress" );
-
-  label = new KCutLabel( this );
-  label->setText( i18n("Progress") );
-
-  QHBoxLayout* layout = new QHBoxLayout( this );
-  layout->setSpacing( 5 );
-  layout->setMargin( 0 );
-  layout->addWidget( label );
-  layout->addWidget( progress );
-
-  QToolTip::add( progress, i18n("Click to show progress window") );
-
-  setMaximumHeight( k3bMain()->statusBar()->height() );
-  progress->setFixedWidth( 150 );
-  label->setFixedWidth( 150 );
-  setFixedWidth( 305 );
-}
-
-
-
-
 K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name, bool showSubProgress, 
 					      QWidget* extraInfo, bool modal, WFlags wf )
   : KDialog(parent,name, modal, wf)
@@ -153,37 +118,10 @@ K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name,
   m_timer = new QTimer( this );
 
   connect( m_timer, SIGNAL(timeout()), this, SLOT(slotUpdateTime()) );
-
-  // setup the statusbar progress
-  m_statusBarProgress = new PrivateStatusBarProgress( k3bMain()->statusBar() );
-  m_statusBarProgress->progress->installEventFilter( this );
-  m_statusBarProgress->label->installEventFilter( this );
 }
 
 K3bBurnProgressDialog::~K3bBurnProgressDialog()
 {
-  qDebug("(K3bBurnProgressDialog) deleted");
-
-  // this is bad but I really don't know how to handle the case! :-( (check out kmail source!)
-  m_statusBarProgress->reparent( this, 0, QPoint(0,0) );
-  delete m_statusBarProgress;
-}
-
-
-bool K3bBurnProgressDialog::eventFilter(QObject* object, QEvent* event)
-{
-  if( (object == m_statusBarProgress->progress || object == m_statusBarProgress->label) &&
-      event->type() == QEvent::MouseButtonPress ) {
-
-    // remove the statusbar-widgets
-    k3bMain()->statusBar()->removeWidget( m_statusBarProgress );
-    m_statusBarProgress->hide();
-
-    show();
-    return true;
-  }
-  else
-    return KDialog::eventFilter( object, event );
 }
 
 
@@ -230,7 +168,6 @@ void K3bBurnProgressDialog::setupGUI()
   m_buttonClose = new QPushButton( this, "m_buttonClose" );
   m_buttonClose->setText( i18n( "Close" ) );
   m_buttonShowDebug = new QPushButton( i18n("Show Debugging Output"), this, "m_buttonShowDebug" );
-  m_buttonBackground = new QPushButton( i18n("To Background"), this, "m_buttonBackground" );
 
   m_groupBuffer = new QGroupBox( this, "m_groupBuffer" );
   m_groupBuffer->setTitle( i18n( "Buffer Status" ) );
@@ -284,7 +221,6 @@ void K3bBurnProgressDialog::setupGUI()
   mainLayout->addWidget( m_buttonCancel, 4, 1 );
   mainLayout->addWidget( m_buttonClose, 4, 1 );
   mainLayout->addWidget( m_buttonShowDebug, 4, 2 );
-  mainLayout->addWidget( m_buttonBackground, 4, 2 );
   mainLayout->addMultiCellWidget( m_groupProgress, 2, 2, 0, 3 );
   mainLayout->addMultiCellWidget( m_groupBuffer, 3, 3, 0, 3 );
 }
@@ -295,7 +231,6 @@ void K3bBurnProgressDialog::setupConnections()
   connect( m_buttonCancel, SIGNAL(clicked()), this, SLOT(slotCancelPressed()) );
   connect( m_buttonClose, SIGNAL(clicked()), this, SLOT(close()) );
   connect( m_buttonShowDebug, SIGNAL(clicked()), this, SLOT(slotShowDebuggingOutput()) );
-  connect( m_buttonBackground, SIGNAL(clicked()), this, SLOT(slotToBackground()) );
 }
 
 
@@ -328,7 +263,7 @@ void K3bBurnProgressDialog::displayInfo( const QString& infoString, int type )
     currentInfoItem->setPixmap( 0, SmallIcon( "ok" ) );
   }
 
-  m_viewInfo->ensureVisible( 0, m_viewInfo->itemPos(currentInfoItem) + currentInfoItem->height() );
+  m_viewInfo->ensureVisible( 0, currentInfoItem->itemPos() + currentInfoItem->height() );
 }
 
 
@@ -344,7 +279,6 @@ void K3bBurnProgressDialog::finished( bool success )
   m_labelTrackProgress->setText("");
 
   m_buttonCancel->hide();
-  m_buttonBackground->hide();
   m_buttonShowDebug->show();
   m_buttonClose->show();
   m_timer->stop();
@@ -352,12 +286,6 @@ void K3bBurnProgressDialog::finished( bool success )
   m_progressBuffer->setValue(0);
   m_progressCd->setValue(100);
   m_progressTrack->setValue(100);
-
-  // remove the statusbar-widgets
-  k3bMain()->statusBar()->removeWidget( m_statusBarProgress );
-  m_statusBarProgress->hide();
-
-  show();
 }
 
 
@@ -366,7 +294,6 @@ void K3bBurnProgressDialog::setJob( K3bJob* job )
   // clear everything
   m_buttonClose->hide();
   m_buttonShowDebug->hide();
-  m_buttonBackground->show();
   m_buttonCancel->show();
   m_viewInfo->clear();
   m_progressBuffer->setValue(0);
@@ -402,9 +329,6 @@ void K3bBurnProgressDialog::setJob( K3bJob* job )
 	
   connect( job, SIGNAL(debuggingOutput(const QString&, const QString&)), 
 	   this, SLOT(mapDebuggingOutput(const QString&, const QString&)) );
-
-  // setup the connections to the statusbar-progress
-  connect( job, SIGNAL(percent(int)), m_statusBarProgress->progress, SLOT(setValue(int)) );
 
 
   
@@ -445,8 +369,6 @@ void K3bBurnProgressDialog::slotNewSubTask(const QString& name)
   m_labelFileName->setText(name);
   m_labelTrackProgress->setText("");
   m_progressTrack->setValue(0);
-
-  m_statusBarProgress->label->setText( name );
 }
 
 void K3bBurnProgressDialog::slotNewTask(const QString& name)
@@ -487,19 +409,8 @@ void K3bBurnProgressDialog::mapDebuggingOutput( const QString& type, const QStri
 
 void K3bBurnProgressDialog::slotShowDebuggingOutput()
 {
-  PrivateDebugWidget* debugWidget = new PrivateDebugWidget( m_debugOutputMap, this );
-  debugWidget->exec();
-  delete debugWidget;
-}
-
-
-void K3bBurnProgressDialog::slotToBackground()
-{
-  // add the statusbar widgets
-  k3bMain()->statusBar()->addWidget( m_statusBarProgress, 0, true );
-  m_statusBarProgress->show();
-
-  hide();
+  PrivateDebugWidget debugWidget( m_debugOutputMap, this );
+  debugWidget.exec();
 }
 
 
