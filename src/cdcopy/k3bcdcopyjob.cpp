@@ -30,16 +30,17 @@
 #include <kconfig.h>
 #include <kstandarddirs.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 #include <qtimer.h>
 #include <qstringlist.h>
 #include <qfile.h>
-#include <kdebug.h>
+#include <qregexp.h>
 
 #include <sys/types.h>
 #include <sys/socket.h>
 
-
+#include <qurloperator.h>
 
 K3bCdCopyJob::K3bCdCopyJob( QObject* parent )
   : K3bBurnJob( parent ),
@@ -48,19 +49,27 @@ K3bCdCopyJob::K3bCdCopyJob( QObject* parent )
   m_onlyCreateImage = false;
   m_copies = 1;
   m_finishedCopies = 0;
-  m_blocksToCopy = 0;
-  m_process = new K3bProcess();
-  m_process->setSplitStdout(true);
+  m_cdrdaowriter = new K3bCdrdaoWriter(0, this);
+  connect(m_cdrdaowriter,SIGNAL(percent(int)),this,SLOT(copyPercent(int)));
+  connect(m_cdrdaowriter,SIGNAL(subPercent(int)),this,SLOT(copySubPercent(int))); 
+  connect(m_cdrdaowriter,SIGNAL(buffer(int)),this,SIGNAL(bufferStatus(int)));
+  connect(m_cdrdaowriter,SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
+  connect(m_cdrdaowriter,SIGNAL(infoMessage(const QString&, int)), 
+	  this, SIGNAL(infoMessage(const QString&, int)) );
+  connect(m_cdrdaowriter,SIGNAL(debuggingOutput(const QString&, const QString&)),
+              this,SIGNAL(debuggingOutput(const QString&, const QString&)));
+  connect(m_cdrdaowriter,SIGNAL(finished(bool)),this,SLOT(cdrdaoFinished(bool)));
 
-  socketpair(AF_UNIX,SOCK_STREAM,0,cdrdaoComm);
-  qsn = new QSocketNotifier(cdrdaoComm[1],QSocketNotifier::Read,this);
-  connect( qsn, SIGNAL(activated(int)), this, SLOT(getCdrdaoMessage()));
+  m_cdrdaoreader = new K3bCdrdaoReader(this);
+  connect(m_cdrdaoreader,SIGNAL(percent(int)),this,SLOT(copyPercent(int)));
+  connect(m_cdrdaoreader,SIGNAL(subPercent(int)),this,SLOT(copySubPercent(int))); 
+  connect(m_cdrdaoreader,SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
+  connect(m_cdrdaoreader,SIGNAL(infoMessage(const QString&, int)), 
+	  this, SIGNAL(infoMessage(const QString&, int)) );
+  connect(m_cdrdaoreader,SIGNAL(debuggingOutput(const QString&, const QString&)),
+              this,SIGNAL(debuggingOutput(const QString&, const QString&)));
+  connect(m_cdrdaoreader,SIGNAL(finished(bool)),this,SLOT(readFinished(bool)));
 
-  connect( m_process, SIGNAL(stderrLine(const QString&)),
-	   this, SLOT(parseCdrdaoLine(const QString&)) );
-  connect( m_process, SIGNAL(stdoutLine(const QString&)),
-	   this, SLOT(parseCdrdaoLine(const QString&)) );
-  
   m_diskInfoDetector = new K3bDiskInfoDetector( this );
   connect( m_diskInfoDetector, SIGNAL(diskInfoReady(const K3bDiskInfo&)), 
 	   this, SLOT(diskInfoReady(const K3bDiskInfo&)) );
@@ -69,35 +78,26 @@ K3bCdCopyJob::K3bCdCopyJob( QObject* parent )
 
 K3bCdCopyJob::~K3bCdCopyJob()
 {
-  delete m_process;
-}
-
-
-K3bDevice* K3bCdCopyJob::writer() const
-{
-  return m_writer; 
+  delete m_cdrdaowriter;
+  delete m_cdrdaoreader;
+  delete m_diskInfoDetector;
 }
 
 
 void K3bCdCopyJob::start()
 {
-  // audio:
-  // für copy mit images cdda2wav + cdrecord
-  // on-the-fly: cdrdao
-
-  // data:
-  // cdrdao
-
-  // mixed:
-  // cdrdao
-
   if( m_copies < 1 )
     m_copies = 1;
   m_finishedCopies = 0;
-  m_currentTrack = 0;
 
+  m_tempPath = k3bMain()->findTempFile( "img", m_tempPath );
+  m_tocFile  = QString(m_tempPath);
+  m_tocFile  = m_tocFile.replace(QRegExp(".img"),".toc");
+  
+//  m_tempPath = QFile::encodeName(m_tempPath);
+//  m_toc  = QFile::encodeName(m_toc);
   emit infoMessage( i18n("Retrieving information about source disk"), K3bJob::PROCESS );
-  m_diskInfoDetector->detect( m_reader );
+  m_diskInfoDetector->detect( m_cdrdaoreader->readDevice() );
   
 }
 
@@ -139,458 +139,170 @@ void K3bCdCopyJob::diskInfoReady( const K3bDiskInfo& info )
     break;
   }
 
-  // determine length of disk
-  m_blocksToCopy = info.toc.length();
-
-
-  m_tempPath = k3bMain()->findTempFile( "iso", m_tempPath );
-
-
   if( m_onlyCreateImage && !m_onTheFly )
-    emit newTask( i18n("Creating CD image") );
-  else if( m_dummy )
+    emit newTask( i18n("Creating CD image: %1 ").arg( m_tempPath ) );
+  else if( m_cdrdaowriter->simulate() )
     emit newTask( i18n("CD copy simulation") );
   else
     emit newTask( i18n("CD copy") );
-
-  if( m_onTheFly ) {
-    QTimer::singleShot( 0, this, SLOT(cdrdaoCopy()) );
-  }
-  else {
-    QTimer::singleShot( 0, this, SLOT(cdrdaoRead()) );
-  }
+  
+  if ( m_onTheFly )
+    cdrdaoDirectCopy();
+  else
+    cdrdaoRead();
 
   emit started();
 }
 
-
 void K3bCdCopyJob::cancel()
 {
   emit canceled();
-  m_process->disconnect( SIGNAL(processExited(KProcess*)) );
-  cancelAll();
-}
-
-
-void K3bCdCopyJob::cdrdaoCopy()
-{
-  m_process->clearArguments();
-
-  m_process->disconnect( SIGNAL(processExited(KProcess*)) );
-  connect( m_process, SIGNAL(processExited(KProcess*)),
-	   this, SLOT(cdrdaoCopyFinished()) );
-
-
-  // remove toc-file
-  if( QFile::exists( m_tocFile ) )
-    QFile::remove( m_tocFile );
-
-  if( !k3bMain()->externalBinManager()->foundBin( "cdrdao" ) ) {
-    kdDebug() << "(K3bAudioJob) could not find cdrdao executable" << endl;
-    emit infoMessage( i18n("cdrdao executable not found."), K3bJob::ERROR );
-    cancelAll();
-    return;
-  }
-
-  *m_process << k3bMain()->externalBinManager()->binPath( "cdrdao" );
-
-//   if( m_addCddbInfo )
-//     *m_process << "--with-cddb";  // this should be done by K3b with a selection box like in ripping
-
-
-  *m_process << "copy" << "--on-the-fly";
-
-  if( m_fastToc )
-    *m_process << "--fast-toc";
-  
-  *m_process << "--source-device" << m_reader->busTargetLun();
-  
-  if( m_reader->cdrdaoDriver() != "auto" )
-    *m_process << "--source-driver" << m_reader->cdrdaoDriver();
-  
-  addCdrdaoWriteArguments();
-
-
-  K3bEmptyDiscWaiter waiter( m_writer, k3bMain() );
-  if( waiter.waitForEmptyDisc() == K3bEmptyDiscWaiter::CANCELED ) {
-    cancelAll();
-    return;
-  }
-
-
-  if( m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
-    if( m_dummy ) {
-      emit infoMessage( i18n("Starting CD copy simulation at %1x speed...").arg(m_speed), K3bJob::PROCESS );
-    }
-    else {
-      emit infoMessage( i18n("Starting CD copy %1 at %2x speed...").arg(m_finishedCopies+1).arg(m_speed), K3bJob::PROCESS );
-    }
-  }
-  else {
-    kdDebug() << "(K3bCdCopyJob) could not start cdrdao" << endl;
-    emit infoMessage( i18n("Could not start cdrdao!"), K3bJob::ERROR );
-    cancelAll();
-  }
-}
-
-
-
-void K3bCdCopyJob::cdrdaoCopyFinished()
-{
-  if( m_process->normalExit() ) {
-      // TODO: check the process' exitStatus()
-      switch( m_process->exitStatus() ) {
-      case 0:
-
-	if( m_dummy ) {
-	  emit infoMessage( i18n("CD Copy simulation successfully completed"), K3bJob::STATUS );
-	  finishAll();
-	}
-	else {
-	  m_finishedCopies++;
-	  emit infoMessage( i18n("CD Copy %1 successfully completed").arg(m_finishedCopies), K3bJob::STATUS );
-	  if( m_finishedCopies < m_copies )
-	    cdrdaoCopy();
-	  else
-	    finishAll();
-	}
-	break;
-	
-      default:
-	// no recording device and also other errors!! :-(
-	emit infoMessage( i18n("cdrdao returned an error!"), K3bJob::ERROR );
-	emit infoMessage( i18n("Error handling not implemented yet!"), K3bJob::ERROR );
-	emit infoMessage( i18n("Please send an email to the author with the last output..."), K3bJob::ERROR );
-	
-	cancelAll();
-      }
-  }
-  else {
-    emit infoMessage( i18n("cdrdao did not exit cleanly!"), K3bJob::ERROR );
-    cancelAll();
-  }
+  m_cdrdaoreader->cancel();
+  m_cdrdaowriter->cancel();
 }
 
 
 void K3bCdCopyJob::cdrdaoRead()
 {
-  m_process->clearArguments();
-
-  m_process->disconnect( SIGNAL(processExited(KProcess*)) );
-  connect( m_process, SIGNAL(processExited(KProcess*)),
-	   this, SLOT(cdrdaoReadFinished()) );
-
-  // remove toc-file
-  if( QFile::exists( m_tocFile ) )
-    QFile::remove( m_tocFile );
-
-  if( !k3bMain()->externalBinManager()->foundBin( "cdrdao" ) ) {
-    kdDebug() << "(K3bAudioJob) could not find cdrdao executable" << endl;
-    emit infoMessage( i18n("cdrdao executable not found."), K3bJob::ERROR );
-    cancelAll();
-    return;
-  }
-
-  *m_process << k3bMain()->externalBinManager()->binPath( "cdrdao" );
-
-  *m_process << "read-cd";
-  *m_process << "--datafile" << m_tempPath;
+  m_cdrdaoreader->prepareArgumentList();
+  m_cdrdaoreader->addArgument("--source-device")->addArgument(m_cdrdaoreader->readDevice()->busTargetLun());
+  
+  if( m_cdrdaoreader->readDevice()->cdrdaoDriver() != "auto" )
+    m_cdrdaoreader->addArgument("--source-driver")->addArgument(m_cdrdaoreader->readDevice()->cdrdaoDriver());
 
   if( m_fastToc )
-    *m_process << "--fast-toc";
+    m_cdrdaoreader->addArgument("--fast-toc");
 
   if( m_readRaw )
-    *m_process << "--read-raw";
+    m_cdrdaoreader->addArgument("--read-raw");
 
-  *m_process << "--device" << m_reader->busTargetLun();
-  
-  if( m_reader->cdrdaoDriver() != "auto" )
-    *m_process << "--driver" << m_reader->cdrdaoDriver();
+  m_cdrdaoreader->addArgument("--paranoia-mode")->addArgument(QString("%1").arg(m_paranoiaMode));  
 
-  *m_process << "--remote" <<  QString(" %1").arg(cdrdaoComm[0]);
+  m_cdrdaoreader->addArgument("--datafile")->addArgument(m_tempPath);
 
-  // add toc-file
-  m_tocFile = locateLocal( "appdata", "temp/k3btemptoc.toc");
-  *m_process << QFile::encodeName(m_tocFile);
+  m_cdrdaoreader->addArgument(m_tocFile);
 
-
-  if( m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
-    emit infoMessage( i18n("Reading CD to image %1").arg(m_tempPath), K3bJob::PROCESS );
-    emit newSubTask( i18n("Creating image") );
-  }
-  else {
-    kdDebug() << "(K3bCdCopyJob) could not start cdrdao" << endl;
-    emit infoMessage( i18n("Could not start cdrdao!"), K3bJob::ERROR );
-    cancelAll();
-  }
+  m_cdrdaoreader->start();
 }
-
-
-void K3bCdCopyJob::cdrdaoReadFinished()
-{
-  m_reader->eject();
-
-  if( m_process->normalExit() ) {
-      // TODO: check the process' exitStatus()
-      switch( m_process->exitStatus() ) {
-      case 0:
-	emit infoMessage( i18n("Image successfully created."), K3bJob::STATUS );
-
-	if( m_onlyCreateImage ) {
-	  finishAll();
-	}
-	else {
-	  cdrdaoWrite();
-	}
-	break;
-	
-      default:
-	// no recording device and also other errors!! :-(
-	emit infoMessage( i18n("cdrdao returned an error!"), K3bJob::ERROR );
-	emit infoMessage( i18n("Error handling not implemented yet!"), K3bJob::ERROR );
-	emit infoMessage( i18n("Please send an email to the author with the last output..."), K3bJob::ERROR );
-	
-	cancelAll();
-      }
-  }
-  else {
-    emit infoMessage( i18n("cdrdao did not exit cleanly!"), K3bJob::ERROR );
-    cancelAll();
-  }
-}
-
 
 void K3bCdCopyJob::cdrdaoWrite()
-{
-  m_process->clearArguments();
+{ 
+  m_cdrdaowriter->prepareArgumentList();
 
-  m_process->disconnect( SIGNAL(processExited(KProcess*)) );
-  connect( m_process, SIGNAL(processExited(KProcess*)),
-	   this, SLOT(cdrdaoCopyFinished()) );
-
-
-  if( !k3bMain()->externalBinManager()->foundBin( "cdrdao" ) ) {
-    kdDebug() << "(K3bAudioJob) could not find cdrdao executable" << endl;
-    emit infoMessage( i18n("cdrdao executable not found."), K3bJob::ERROR );
+  m_cdrdaowriter->addArgument(m_tocFile);
+ 
+  K3bEmptyDiscWaiter waiter( m_cdrdaowriter->burnDevice(), k3bMain() );
+  if( waiter.waitForEmptyDisc() == K3bEmptyDiscWaiter::CANCELED ) {
     cancelAll();
-    return;
+    return;   
   }
 
-  *m_process << k3bMain()->externalBinManager()->binPath( "cdrdao" );
+  m_cdrdaowriter->start();
+}
 
-  *m_process << "write";
+void K3bCdCopyJob::cdrdaoDirectCopy()
+{
+  m_cdrdaowriter->prepareArgumentList(true);
+  
+  addCdrdaoReadArguments();
+  
+  m_cdrdaowriter->addArgument("--on-the-fly");
 
-  addCdrdaoWriteArguments();
-
-
-  K3bEmptyDiscWaiter waiter( m_writer, k3bMain() );
+  K3bEmptyDiscWaiter waiter( m_cdrdaowriter->burnDevice(), k3bMain() );
   if( waiter.waitForEmptyDisc() == K3bEmptyDiscWaiter::CANCELED ) {
     cancelAll();
     return;
   }
 
+  m_cdrdaowriter->start();
+}
 
-  if( m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
-    if( m_dummy ) {
-      emit infoMessage( i18n("Starting simulation at %1x speed...").arg(m_speed), K3bJob::PROCESS );
-      emit newSubTask( i18n("CD write simulation") );
-    }
-    else {
-      emit infoMessage( i18n("Starting CD copy %1 at %2x speed...").arg(m_finishedCopies+1).arg(m_speed), K3bJob::PROCESS );
-      emit newSubTask( i18n("Writing CD copy %1").arg(m_finishedCopies+1) );
-    }
-  }
-  else {
-    kdDebug() << "(K3bCdCopyJob) could not start cdrdao" << endl;
-    emit infoMessage( i18n("Could not start cdrdao!"), K3bJob::ERROR );
+void K3bCdCopyJob::addCdrdaoReadArguments()
+{
+  m_cdrdaowriter->addArgument("--source-device")->addArgument(m_cdrdaoreader->readDevice()->busTargetLun());
+  
+  if( m_cdrdaoreader->readDevice()->cdrdaoDriver() != "auto" )
+    m_cdrdaowriter->addArgument("--source-driver")->addArgument(m_cdrdaoreader->readDevice()->cdrdaoDriver());
+
+  if( m_fastToc )
+    m_cdrdaowriter->addArgument("--fast-toc");
+
+  if( m_readRaw )
+    m_cdrdaowriter->addArgument("--read-raw");
+
+  m_cdrdaowriter->addArgument("--paranoia-mode")->addArgument(QString("%1").arg(m_paranoiaMode));
+}
+
+void K3bCdCopyJob::copyPercent(int p)
+{
+   int x,y;
+   
+   x = m_onTheFly || m_onlyCreateImage ? m_copies : m_copies + 1;
+   y = m_finishedCopies;
+
+   emit percent((100*y + p)/x);
+}
+
+void K3bCdCopyJob::copySubPercent(int p)
+{
+  emit subPercent(p);
+}
+
+void K3bCdCopyJob::readFinished(bool ok)
+{
+  if (ok) {
+     if ( m_copies > 1) { 
+       QUrlOperator cp;
+       cp.copy(m_tocFile,m_tocFile+QString(".bak"),false,false);
+     }
+     if( m_cdrdaowriter->burnDevice() == m_cdrdaoreader->readDevice() )
+       m_cdrdaoreader->readDevice()->eject();
+     if ( !m_onlyCreateImage ) {
+        m_finishedCopies++;
+        cdrdaoWrite();
+     } 
+     else {
+        emit infoMessage( 
+             i18n("Image '%1' and toc-file '%2' succsessfully created").arg(m_tempPath).arg(m_tocFile), 
+                  K3bJob::INFO );
+        finishAll();
+     }
+ }
+  else
     cancelAll();
-  }
 }
 
-
-void K3bCdCopyJob::cdrdaoWriteFinished()
+void K3bCdCopyJob::cdrdaoFinished(bool ok)
 {
-  if( m_process->normalExit() ) {
-      // TODO: check the process' exitStatus()
-      switch( m_process->exitStatus() ) {
-      case 0:
-	m_finishedCopies++;
-
-	if( m_dummy ) {
-	  emit infoMessage( i18n("CD Copy simulation successfully completed"), K3bJob::STATUS );
-	  finishAll();
-	}
-	else {
-	  emit infoMessage( i18n("CD Copy %1 successfully completed").arg(m_finishedCopies), K3bJob::STATUS );
-	  
-	  if( m_finishedCopies < m_copies )
-	    cdrdaoWrite();
-	  else
-	    finishAll();
-	}
-	break;
-	
-      default:
-	// no recording device and also other errors!! :-(
-	emit infoMessage( i18n("cdrdao returned an error!"), K3bJob::ERROR );
-	emit infoMessage( i18n("Error handling not implemented yet!"), K3bJob::ERROR );
-	emit infoMessage( i18n("Please send an email to the author with the last output..."), K3bJob::ERROR );
-	
-	cancelAll();
-      }
+  if (ok) {
+     m_finishedCopies++;
+     if ( m_finishedCopies <= m_copies && !m_onTheFly ) {
+       QUrlOperator *cp = new QUrlOperator();
+       cp->copy(m_tocFile+QString(".bak"),m_tocFile,false,false);
+       cdrdaoWrite();
+     } 
+     else if ( m_finishedCopies < m_copies && m_onTheFly )
+       cdrdaoDirectCopy();
+     else  
+      finishAll();
   }
-  else {
-    emit infoMessage( i18n("cdrdao did not exit cleanly!"), K3bJob::ERROR );
+  else
     cancelAll();
-  }
 }
-
-
-void K3bCdCopyJob::addCdrdaoWriteArguments()
-{
-  // do not wait 10 seconds before starting
-  *m_process << "-n";
-  
-  // eject cd after finished?
-  if( k3bMain()->eject() )
-    *m_process << "--eject";
-  
-  // writer device
-  *m_process << "--device" << m_writer->busTargetLun();
-  
-  if( m_writer->cdrdaoDriver() != "auto" ) {
-    *m_process << "--driver";
-    if( m_writer->cdTextCapable() == 1 )
-      *m_process << QString("%1:0x00000010").arg( m_writer->cdrdaoDriver() );
-    else
-      *m_process << m_writer->cdrdaoDriver();
-  }
-
-  // writing speed
-  *m_process << "--speed" << QString::number( m_speed );
-
-  // simulate?
-  if( m_dummy )
-    *m_process << "--simulate";
-
-
-  *m_process << "--paranoia-mode" << QString::number( m_paranoiaMode );
-  
-  // additional parameters from config
-  QStringList _params = kapp->config()->readListEntry( "cdrdao parameters" );
-  for( QStringList::Iterator it = _params.begin(); it != _params.end(); ++it )
-    *m_process << *it;
-
-  // manual buffer size
-  k3bMain()->config()->setGroup( "General Options" );
-  bool manualBufferSize = k3bMain()->config()->readBoolEntry( "Manual buffer size", false );
-  if( manualBufferSize ) {
-    *m_process << "--buffers" << QString::number( k3bMain()->config()->readNumEntry( "Cdrdao buffer", 32 ) );
-  }
-  bool overburn = k3bMain()->config()->readBoolEntry( "Allow overburning", false );
-
-  if( overburn )
-    *m_process << "--overburn";
-
-  *m_process << "--remote" <<  QString(" %1").arg(cdrdaoComm[0]);
-  // add toc-file
-  m_tocFile = locateLocal( "appdata", "temp/k3btemptoc.toc");
-  *m_process << QFile::encodeName(m_tocFile);
-}
-
-
-
-void K3bCdCopyJob::parseCdrdaoSpecialLine( const QString& str )
-{
-  emit debuggingOutput( "cdrdao", str );
-
-  if( str.startsWith( "Copying" ) ) {
-    // information about what will be read
-    emit infoMessage( str, K3bJob::PROCESS );
-  }
-//   else if( str.startsWith( "Track" ) ) {
-//     int end = str.find("...");
-//     bool ok;
-//     int trNum = str.mid( 6, end-6 ).toInt( &ok );
-//     if( ok ) {
-//       emit infoMessage( i18n("Reading track %1").arg(trNum), K3bJob::PROCESS );
-//     }
-//     //      emit infoMessage( str, K3bJob::PROCESS );
-//   }
-  else if( str.startsWith( "Found ISRC" ) ) {
-    emit infoMessage( i18n("Found ISRC code"), K3bJob::PROCESS );
-  }
-  else if( str.startsWith( "Found pre-gap" ) ) {
-    emit infoMessage( i18n("Found pregap: %1").arg( str.mid(str.find(":")+1) ), K3bJob::PROCESS );
-  }
-
-}
-
-void K3bCdCopyJob::getCdrdaoMessage()
-{
-  struct ProgressMsg msg;
-  char msgSync[] = { 0xff, 0x00, 0xff, 0x00 };
-  char buf[4];
-  int  state;
-  QString task;
-
-  state = 0;
-  while (state < 4) {
-    if (::read(cdrdaoComm[1], buf, 1) != 1) 
-        continue;
-
-    if (buf[0] == msgSync[state]) 
-      state++;
-    else 
-      state = 0;
-
-  }
-
-  read(cdrdaoComm[1],(void *)&msg,sizeof(msg));
-//   kdDebug() << "Status: " << msg.status 
-//        << " Total:  " << msg.totalTracks
-//        << " Track:  " << msg.track
-//        << " TrackProgress: " << msg.trackProgress/10
-//        << " TotalProgress: " << msg.totalProgress/10
-//        << endl;
-  int x = m_copies;
-  if( !m_onTheFly )
-    x++;
-
-  int y = m_finishedCopies;
-  emit subPercent(msg.trackProgress/10);
-  emit percent( (int) ((100*y+msg.totalProgress/10.0) / x) );
-  emit bufferStatus(msg.bufferFillRate);
-  switch (msg.status) {
-    case PGSMSG_RCD_EXTRACTING: task=i18n("Reading (Track %1 of %2)").arg(msg.track).arg(msg.totalTracks);break;
-    case PGSMSG_WCD_LEADIN:     task=i18n("Writing leadin ");break;
-    case PGSMSG_WCD_DATA:       task=i18n("Writing (Track %1 of %2)").arg(msg.track).arg(msg.totalTracks);break;
-    case PGSMSG_WCD_LEADOUT:    task=i18n("Writing leadout ");break;
-  }
-  if ( msg.track != m_currentTrack) {
-     emit newSubTask( task );  
-     m_currentTrack = msg.track;
-  }
-}
-
-
-void K3bCdCopyJob::startNewCdrdaoTrack()
-{
-  emit newSubTask( i18n("Writing") );
-}
-
 
 void K3bCdCopyJob::finishAll()
 {
-  // remove toc-file
-  if( QFile::exists( m_tocFile ) )
-    QFile::remove( m_tocFile );
-
   if( !m_keepImage && !m_onTheFly ) {
-    QFile::remove( m_tempPath );
-    emit infoMessage( i18n("Removed image files"), K3bJob::STATUS );
+    if (QFile::exists(m_tocFile) ) 
+      QFile::remove(m_tocFile);
+    if (QFile::exists(m_tocFile+QString(".bak")))
+      QFile::remove(m_tocFile+QString(".bak"));
+    if (QFile::exists(m_tempPath))
+      QFile::remove(m_tempPath);
+    emit infoMessage( i18n("Imagefiles removed"), K3bJob::STATUS );
   }
-
+  if( k3bMain()->eject() && m_onTheFly )
+	  m_cdrdaoreader->readDevice()->eject();
 
   emit finished( true );
 }
@@ -598,40 +310,17 @@ void K3bCdCopyJob::finishAll()
 
 void K3bCdCopyJob::cancelAll()
 {
-  if( m_process->isRunning() ) {
-    m_process->kill();
+    if (QFile::exists(m_tocFile) ) 
+      QFile::remove(m_tocFile);
+    if (QFile::exists(m_tocFile+QString(".bak")))
+      QFile::remove(m_tocFile+QString(".bak"));
+    if (QFile::exists(m_tempPath))
+      QFile::remove(m_tempPath);
+     emit infoMessage( i18n("Canceled, temporary files removed"), K3bJob::STATUS );
 
-    // we need to unlock the writer because cdrdao/cdrecord locked it while writing
-    if( !m_reader->block( false ) )
-      emit infoMessage( i18n("Unable to unlock CD reader"), K3bJob::ERROR );
-    if( !m_writer->block( false ) )
-      emit infoMessage( i18n("Unable to unlock CD writer"), K3bJob::ERROR );
-  }
-
-  // remove toc-file
-  if( QFile::exists( m_tocFile ) )
-    QFile::remove( m_tocFile );
-
-  if( !m_onTheFly ) {
-    QFile::remove( m_tempPath );
-    emit infoMessage( i18n("Removed image files"), K3bJob::STATUS );
-  }
 
   emit finished( false );
 }
 
-
-void K3bCdCopyJob::setReadRaw( bool b )
-{
-  m_readRaw = b;
-  if( b )
-    setOnTheFly( false );
-}
-
-
-void K3bCdCopyJob::createCdrdaoProgress( int made, int size )
-{
-  // do nothing
-}
 
 #include "k3bcdcopyjob.moc"
