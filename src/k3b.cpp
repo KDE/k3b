@@ -50,6 +50,16 @@
 #include "k3boptiondialog.h"
 
 
+K3bApp* k3bMain()
+{
+	K3bApp* _app = dynamic_cast<K3bApp*>( kapp->mainWidget() );
+	if( !_app )
+		qDebug( "No K3bApp found!");
+	return _app;
+}
+
+
+
 K3bApp::K3bApp()
 	: KDockMainWindow(0,"K3b")
 {
@@ -94,9 +104,9 @@ void K3bApp::initActions()
 
   fileBurn = new KAction( i18n("&Burn..."), 0, this, SLOT(slotFileBurn()), actionCollection(), "file_burn");
 
-  fileNewMenu = new KActionMenu( i18n("&New Project"), SmallIconSet("filenew"), actionCollection(), "file_new" );
-  fileNewAudio = new KAction(i18n("New &Audio project"), SmallIconSet("filenew"), 0, this, SLOT(newAudioDoc()), actionCollection(), "file_new_audio");
-  fileNewData = new KAction(i18n("New &Data project"), SmallIconSet("filenew"), 0, this, SLOT(newDataDoc()), actionCollection(), "file_new_data");
+  fileNewMenu = new KActionMenu( i18n("&New Project"), BarIconSet("filenew"), actionCollection(), "file_new" );
+  fileNewAudio = new KAction(i18n("New &Audio project"), SmallIconSet("filenew"), 0, this, SLOT(slotNewAudioDoc()), actionCollection(), "file_new_audio");
+  fileNewData = new KAction(i18n("New &Data project"), SmallIconSet("filenew"), 0, this, SLOT(slotNewDataDoc()), actionCollection(), "file_new_data");
   fileNewMenu->insert( fileNewAudio );
   fileNewMenu->insert( fileNewData );
   fileNewMenu->setDelayed( false );
@@ -139,9 +149,6 @@ void K3bApp::initView()
   setView( mainDock );
   setMainDockWidget( mainDock );
   mainDock->setEnableDocking( KDockWidget::DockNone );
-
-//  pWorkspace = new QWorkspace( mainDock );
-//  mainDock->setWidget( pWorkspace );
 
   m_documentTab = new QTabWidget( mainDock );
   mainDock->setWidget( m_documentTab );
@@ -261,13 +268,13 @@ void K3bApp::readOptions()
   }
 }
 
-void K3bApp::saveProperties(KConfig *_cfg)
+void K3bApp::saveProperties(KConfig *)
 {
 
 }
 
 
-void K3bApp::readProperties(KConfig* _cfg)
+void K3bApp::readProperties(KConfig*)
 {
 }
 
@@ -530,45 +537,48 @@ void K3bApp::slotSettingsConfigure()
 void K3bApp::searchExternalProgs()
 {
 	m_config->setGroup("External Programs");
-	
+
+    QString _cdrecord;
+    QString _mpg123;
+
 	if( !m_config->hasKey("cdrecord path") ) {
 		if( QFile::exists( "/usr/bin/cdrecord" ) ) {
-			m_cdrecord = "/usr/bin/cdrecord";
-			qDebug("(K3bApp) found cdrecord in " + m_cdrecord );
+			_cdrecord = "/usr/bin/cdrecord";
+			qDebug("(K3bApp) found cdrecord in " + _cdrecord );
 		}
 		else if( QFile::exists( "/usr/local/bin/cdrecord" ) ) {
-			m_cdrecord = "/usr/local/bin/cdrecord";
-			qDebug("(K3bApp) found cdrecord in " + m_cdrecord );
+			_cdrecord = "/usr/local/bin/cdrecord";
+			qDebug("(K3bApp) found cdrecord in " + _cdrecord );
 		}
 		else {
 			bool ok = true;
-			while( !QFile::exists( m_cdrecord ) && ok )
-				m_cdrecord = KLineEditDlg::getText( "Could not find cdrecord. Please insert the full path...", "cdrecord", &ok, this );
+			while( !QFile::exists( _cdrecord ) && ok )
+				_cdrecord = KLineEditDlg::getText( "Could not find cdrecord. Please insert the full path...", "cdrecord", &ok, this );
 		}
-		m_config->writeEntry( "cdrecord path", m_cdrecord );
+		m_config->writeEntry( "cdrecord path", _cdrecord );
 	}
 	
 	if( !m_config->hasKey( "mpg123 path" ) ) {
 		if( QFile::exists( "/usr/bin/mpg123" ) ) {
-			m_mpg123 = "/usr/bin/mpg123";
-			qDebug("(K3bApp) found mpg123 in " + m_cdrecord );
+			_mpg123 = "/usr/bin/mpg123";
+			qDebug("(K3bApp) found mpg123 in " + _mpg123 );
 		}
 		else if( QFile::exists( "/usr/local/bin/mpg123" ) ) {
-			m_mpg123 = "/usr/local/bin/mpg123";
-			qDebug("(K3bApp) found mpg123 in " + m_cdrecord );
+			_mpg123 = "/usr/local/bin/mpg123";
+			qDebug("(K3bApp) found mpg123 in " + _mpg123 );
 		}
 		else {
 			bool ok = true;
-			while( !QFile::exists( m_mpg123 ) && ok )
-				m_mpg123 = KLineEditDlg::getText( "Could not find mpg123. Please insert the full path...", "mpg123", &ok, this );
+			while( !QFile::exists( _mpg123 ) && ok )
+				_mpg123 = KLineEditDlg::getText( "Could not find mpg123. Please insert the full path...", "mpg123", &ok, this );
 		}
-		m_config->writeEntry( "mpg123 path", m_mpg123 );
+		m_config->writeEntry( "mpg123 path", _mpg123 );
 	}
 	
 	m_config->sync();
 }
 
-void K3bApp::newAudioDoc()
+void K3bApp::slotNewAudioDoc()
 {
   slotStatusMsg(i18n("Creating new Audio Project."));
 
@@ -588,7 +598,7 @@ void K3bApp::newAudioDoc()
   slotStatusMsg(i18n("Ready."));
 }
 
-void K3bApp::newDataDoc()
+void K3bApp::slotNewDataDoc()
 {
 }
 

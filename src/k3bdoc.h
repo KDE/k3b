@@ -61,7 +61,7 @@ class K3bDoc : public QObject
 
 public:
     /** Constructor for the fileclass of the application */
-    K3bDoc( K3bApp* );
+    K3bDoc( QObject* );
     /** Destructor for the fileclass of the application */
     ~K3bDoc();
 
@@ -140,8 +140,6 @@ public:
 
 	bool workInProgress() const;
 
-	K3bApp* k3bMain() const { return m_k3bMain; }
-		
 public slots:
     /** calls repaint() on all views connected to the document object and is called by the view by which the document has been changed.
      * As this view normally repaints itself, it is excluded from the paintEvent.
@@ -206,8 +204,6 @@ private:
 	bool m_dummy;
 	bool m_eject;
 	int  m_speed;
-	
-	K3bApp* m_k3bMain;
 };
 
 #endif // K3BDOC_H

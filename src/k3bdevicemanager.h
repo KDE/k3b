@@ -21,7 +21,7 @@ public:
 				 int _maxReadSpeed,
 				 int _maxBurnSpeed = 0)
 		:id(_id), device(_device), description(_description), vendor(_vendor), version(_version), burner(_burner),
-			maxReadSpeed(_maxReadSpeed), maxBurnSpeed(_maxBurnSpeed) {}
+			maxReadSpeed(_maxReadSpeed), maxWriteSpeed(_maxBurnSpeed) {}
 			
 //	~K3bDevice();
 
@@ -32,7 +32,7 @@ public:
 	QString version;
 	bool burner;
 	int maxReadSpeed;
-	int maxBurnSpeed;
+	int maxWriteSpeed;
 };
 
 
@@ -50,12 +50,12 @@ public:
 	K3bDeviceManager( QObject* parent );
 	~K3bDeviceManager();
 
-	const QList<K3bDevice>& burningDevices();
+	QList<K3bDevice>& burningDevices();
 	/**
 	 * Note that all burning devices can also be used as
 	 * reading device and are not present in this list.
 	 **/
-	const QList<K3bDevice>& readingDevices();
+	QList<K3bDevice>& readingDevices();
 
 	/** writes to stdout **/
 	void printDevices();

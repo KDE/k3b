@@ -33,6 +33,7 @@
 #include <kprocess.h>
 #include <kapp.h>
 #include <kstddirs.h>
+#include <klocale.h>
 
 // application specific includes
 #include "k3b.h"
@@ -40,11 +41,9 @@
 #include "k3bdoc.h"
 #include "k3bglobals.h"
 
-K3bDoc::K3bDoc( K3bApp* _k3bMain )
-	: QObject( _k3bMain )
+K3bDoc::K3bDoc( QObject* parent )
+	: QObject( parent )
 {
-	m_k3bMain = _k3bMain;
-
 	pViewList = new QList<K3bView>;
 	pViewList->setAutoDelete(false);
 
@@ -154,7 +153,7 @@ void K3bDoc::emitProgress( unsigned long _size, unsigned long _processed, int _s
 
 void K3bDoc::emitMessage( const QString& msg )
 {
-	emit infoMessage( msg );
+	emit infoMessage( i18n(msg) );
 }
 
 

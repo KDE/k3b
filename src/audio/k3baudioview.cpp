@@ -161,7 +161,7 @@ void K3bAudioView::showPropertiesDialog()
 {
 	if( !m_propertiesDialog ) {
 		// get an instance from K3bApp
-		m_propertiesDialog = doc->k3bMain()->audioTrackDialog();
+		m_propertiesDialog = k3bMain()->audioTrackDialog();
 		connect( m_songlist, SIGNAL(itemRenamed(QListViewItem*)), m_propertiesDialog, SLOT(updateView()) );
 	}		
 	if( !m_propertiesDialog->isVisible() )

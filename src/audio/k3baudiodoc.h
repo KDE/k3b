@@ -43,7 +43,7 @@ class K3bAudioDoc : public K3bDoc  {
 	Q_OBJECT
 	
 public:
-	K3bAudioDoc( K3bApp* );
+	K3bAudioDoc( QObject* );
 	~K3bAudioDoc();
 	
 	/** reimplemented from K3bDoc */

@@ -12,7 +12,7 @@
 
 
 K3bDeviceManager::K3bDeviceManager( QObject* parent )
-: QObject(parent)
+: QObject(parent), m_reader(), m_writer()
 {
 	if( scanbus() < 1 )
 		qDebug( "(K3bDeviceManager) No SCSI-devices found.");
@@ -27,12 +27,12 @@ K3bDeviceManager::~K3bDeviceManager()
 	m_writer.setAutoDelete( true );
 }
 
-const QList<K3bDevice>& K3bDeviceManager::burningDevices()
+QList<K3bDevice>& K3bDeviceManager::burningDevices()
 {
 	return m_writer;
 }
 
-const QList<K3bDevice>& K3bDeviceManager::readingDevices()
+QList<K3bDevice>& K3bDeviceManager::readingDevices()
 {
 	return m_reader;
 }
@@ -112,4 +112,5 @@ void K3bDeviceManager::printDevices()
 	for( K3bDevice* dev = m_writer.first(); dev != 0; dev = m_writer.next() ) {
 		cout << "  " << dev->id << ": " << dev->device << " " << dev->vendor << " " << dev->description << " " << dev->version << endl;
 	}
+	cout << flush;
 }

@@ -24,6 +24,8 @@ class KListView;
 class QLabel;
 class QListViewItem;
 class QPushButton;
+class QGroupBox;
+
 
 /**
   *@author Sebastian Trueg
@@ -45,11 +47,29 @@ private:
     KListView* m_viewPrograms;
     QPushButton* m_buttonSearch;
     QLabel* m_labelInfo;
+    QLabel* m_labelDevicesInfo;
+    KListView* m_viewDevicesReader;
+	KListView* m_viewDevicesWriter;
+    QGroupBox* m_groupReader;
+    QGroupBox* m_groupWriter;
+    QPushButton* m_buttonNewDevice;
+    QPushButton* m_buttonRemoveDevice;
+    QPushButton* m_buttonRefreshDevices;
 
     void setupProgramsPage();
-
     void readPrograms();
     bool savePrograms();
+	
+	void setupDevicePage();
+	void readDevices();
+	
+	/** If true the devices are written to the KConfig */
+	bool devicesChanged;
+	
+private slots:
+	void slotRefreshDevices();
+	void slotNewDevice();
+	void slotRemoveDevice();
 };
 
 #endif

@@ -16,6 +16,8 @@
  ***************************************************************************/
 
 #include "k3boptiondialog.h"
+#include "k3bdevicemanager.h"
+#include "k3b.h"
 
 #include <qheader.h>
 #include <qlabel.h>
@@ -26,6 +28,8 @@
 #include <qwhatsthis.h>
 #include <qpixmap.h>
 #include <qfile.h>
+#include <qlist.h>
+#include <qgroupbox.h>
 
 #include <klistview.h>
 #include <klocale.h>
@@ -38,9 +42,13 @@
 K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
 	: KDialogBase( IconList, i18n("Options"), Help|Apply|Ok|Cancel, Ok, parent,name, modal, true)
 {
+	devicesChanged = false;
 
+	setupDevicePage();	
 	setupProgramsPage();
+	
 	readPrograms();
+	readDevices();
 }
 
 
@@ -163,4 +171,151 @@ bool K3bOptionDialog::savePrograms()
 	}
 	
 	return true;
+}
+
+
+void K3bOptionDialog::setupDevicePage()
+{
+	QFrame* frame = addPage( i18n("Devices"), i18n("Setup SCSI CD Devices"),
+		KGlobal::instance()->iconLoader()->loadIcon( "disc", KIcon::NoGroup, KIcon::SizeMedium ) );
+
+    QGridLayout* frameLayout = new QGridLayout( frame );
+    frameLayout->setSpacing( spacingHint() );
+    frameLayout->setMargin( marginHint() );
+
+    m_labelDevicesInfo = new QLabel( frame, "m_labelDevicesInfo" );
+    m_labelDevicesInfo->setText( i18n( "Normally K3b should detect all your SCSI-devices properly. If it does not, here you can change or add devices manually." ) );
+    m_labelDevicesInfo->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter | QLabel::AlignLeft ) );
+
+    frameLayout->addMultiCellWidget( m_labelDevicesInfo, 0, 0, 0, 3 );
+
+    m_buttonNewDevice = new QPushButton( frame, "m_buttonNewDevice" );
+    m_buttonNewDevice->setText( i18n( "New" ) );
+
+    frameLayout->addWidget( m_buttonNewDevice, 3, 0 );
+
+    m_buttonRemoveDevice = new QPushButton( frame, "m_buttonRemoveDevice" );
+    m_buttonRemoveDevice->setText( i18n( "Remove" ) );
+
+    frameLayout->addWidget( m_buttonRemoveDevice, 3, 1 );
+
+    m_buttonRefreshDevices = new QPushButton( frame, "m_buttonRefreshDevices" );
+    m_buttonRefreshDevices->setText( i18n( "Refresh" ) );
+    QToolTip::add(  m_buttonRefreshDevices, i18n( "Scan for SCSI-Devices" ) );
+
+    frameLayout->addWidget( m_buttonRefreshDevices, 3, 3 );
+    QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
+    frameLayout->addItem( spacer, 3, 2 );
+
+    m_groupReader = new QGroupBox( frame, "m_groupReader" );
+    m_groupReader->setTitle( i18n( "Reading Devices" ) );
+    m_groupReader->setColumnLayout(0, Qt::Vertical );
+    m_groupReader->layout()->setSpacing( 0 );
+    m_groupReader->layout()->setMargin( 0 );
+    QHBoxLayout* m_groupReaderLayout = new QHBoxLayout( m_groupReader->layout() );
+    m_groupReaderLayout->setAlignment( Qt::AlignTop );
+    m_groupReaderLayout->setSpacing( spacingHint() );
+    m_groupReaderLayout->setMargin( marginHint() );
+
+    m_viewDevicesReader = new KListView( m_groupReader, "m_viewDevicesReader" );
+    m_viewDevicesReader->addColumn( i18n( "Device" ) );
+    m_viewDevicesReader->addColumn( i18n( "Vendor" ) );
+    m_viewDevicesReader->addColumn( i18n( "Description" ) );
+    m_viewDevicesReader->addColumn( i18n( "Version" ) );
+    m_viewDevicesReader->addColumn( i18n( "Max Readspeed" ) );
+    m_viewDevicesReader->setAllColumnsShowFocus( TRUE );
+    m_groupReaderLayout->addWidget( m_viewDevicesReader );
+
+    frameLayout->addMultiCellWidget( m_groupReader, 1, 1, 0, 3 );
+
+    m_groupWriter = new QGroupBox( frame, "m_groupWriter" );
+    m_groupWriter->setTitle( i18n( "Writing Devices" ) );
+    m_groupWriter->setColumnLayout(0, Qt::Vertical );
+    m_groupWriter->layout()->setSpacing( 0 );
+    m_groupWriter->layout()->setMargin( 0 );
+    QHBoxLayout* m_groupWriterLayout = new QHBoxLayout( m_groupWriter->layout() );
+    m_groupWriterLayout->setAlignment( Qt::AlignTop );
+    m_groupWriterLayout->setSpacing( spacingHint() );
+    m_groupWriterLayout->setMargin( marginHint() );
+
+    m_viewDevicesWriter = new KListView( m_groupWriter, "m_viewDevicesWriter" );
+    m_viewDevicesWriter->addColumn( i18n( "Device" ) );
+    m_viewDevicesWriter->addColumn( i18n( "Vendor" ) );
+    m_viewDevicesWriter->addColumn( i18n( "Description" ) );
+    m_viewDevicesWriter->addColumn( i18n( "Version" ) );
+    m_viewDevicesWriter->addColumn( i18n( "Max Readspeed" ) );
+    m_viewDevicesWriter->addColumn( i18n( "Max Writespeed" ) );
+    m_viewDevicesWriter->setAllColumnsShowFocus( TRUE );
+    m_groupWriterLayout->addWidget( m_viewDevicesWriter );
+
+    frameLayout->addMultiCellWidget( m_groupWriter, 2, 2, 0, 3 );
+
+    m_viewDevicesReader->setItemsRenameable( true );
+    m_viewDevicesReader->setRenameable( 0, true );
+	m_viewDevicesReader->setRenameable( 1, true );
+	m_viewDevicesReader->setRenameable( 2, true );
+	m_viewDevicesReader->setRenameable( 3, true );
+	m_viewDevicesReader->setRenameable( 4, true );
+
+	m_viewDevicesWriter->setItemsRenameable( true );
+	m_viewDevicesWriter->setRenameable( 0, true );
+	m_viewDevicesWriter->setRenameable( 1, true );
+	m_viewDevicesWriter->setRenameable( 2, true );
+	m_viewDevicesWriter->setRenameable( 3, true );
+	m_viewDevicesWriter->setRenameable( 4, true );
+	m_viewDevicesWriter->setRenameable( 5, true );
+
+	connect( m_buttonRefreshDevices, SIGNAL(clicked()), this, SLOT(slotRefreshDevices()) );
+	connect( m_buttonNewDevice, SIGNAL(clicked()), this, SLOT(slotNewDevice()) );
+	connect( m_buttonRemoveDevice, SIGNAL(clicked()), this, SLOT(slotRemoveDevice()) );
+}
+
+void K3bOptionDialog::readDevices()
+{
+	K3bDeviceManager* dm = k3bMain()->deviceManager();
+	
+	// add the reading devices
+	m_viewDevicesReader->clear();
+	K3bDevice* dev = dm->readingDevices().first();
+	QListViewItem* item;
+	while( dev ) {
+		// add item to m_viewDevices
+		item = new QListViewItem( m_viewDevicesReader );
+		item->setText( 0, dev->device );
+		item->setText( 1, dev->vendor );
+		item->setText( 2, dev->description );
+		item->setText( 3, dev->version );
+		item->setText( 4, QString::number(dev->maxReadSpeed) );
+		dev = dm->readingDevices().next();
+	}
+	
+	// add the writing devices
+	m_viewDevicesWriter->clear();
+	dev = dm->burningDevices().first();
+	while( dev ) {
+		// add item to m_viewDevices
+		item = new QListViewItem( m_viewDevicesWriter );
+		item->setText( 0, dev->device );
+		item->setText( 1, dev->vendor );
+		item->setText( 2, dev->description );
+		item->setText( 3, dev->version );
+		item->setText( 4, QString::number(dev->maxReadSpeed) );
+		item->setText( 5, QString::number(dev->maxWriteSpeed) );
+		dev = dm->burningDevices().next();
+	}
+}
+
+
+void K3bOptionDialog::slotRefreshDevices()
+{
+}
+
+
+void K3bOptionDialog::slotNewDevice()
+{
+}
+
+
+void K3bOptionDialog::slotRemoveDevice()
+{
 }

@@ -53,6 +53,7 @@ int main(int argc, char *argv[])
   else 
   {
     K3bApp *testmdi = new K3bApp();
+    app.setMainWidget(testmdi);
     testmdi->show();
     testmdi->init();
 

@@ -36,12 +36,13 @@
 #include <kapp.h>
 #include <kmessagebox.h>
 #include <kconfig.h>
+#include <klocale.h>
 
 #include <iostream>
 
 
-K3bAudioDoc::K3bAudioDoc( K3bApp* k3bMain )
-	: K3bDoc( k3bMain )
+K3bAudioDoc::K3bAudioDoc( QObject* parent )
+	: K3bDoc( parent )
 {
 	m_burnDialog = 0L;
 	m_tracks = 0L;
@@ -126,7 +127,7 @@ void K3bAudioDoc::writeImage( const QString& filename )
 	qDebug("(K3bAudioDoc) Image creation not implemented yet!");
 }
 
-void K3bAudioDoc::parseCdrecordOutput( KProcess* process, char* output, int len )
+void K3bAudioDoc::parseCdrecordOutput( KProcess*, char* output, int len )
 {
 	QString buffer = QString::fromLatin1( output, len );
 	
@@ -247,7 +248,7 @@ void K3bAudioDoc::parseCdrecordOutput( KProcess* process, char* output, int len 
 	} // for every line
 }
 
-void K3bAudioDoc::parseMpgTestingOutput( KProcess* process, char* output, int len )
+void K3bAudioDoc::parseMpgTestingOutput( KProcess*, char* output, int len )
 {
 	QString buffer = QString::fromLatin1( output, len );
 	
@@ -297,7 +298,7 @@ void K3bAudioDoc::parseMpgTestingOutput( KProcess* process, char* output, int le
 }
 
 
-void K3bAudioDoc::parseMpgDecodingOutput( KProcess* process, char* output, int len )
+void K3bAudioDoc::parseMpgDecodingOutput( KProcess*, char* output, int len )
 {
 	QString buffer = QString::fromLatin1( output, len );
 	
@@ -340,8 +341,19 @@ void K3bAudioDoc::cdrecordFinished()
 	if( m_process->normalExit() )
 	{
 		// TODO: check the process' exitStatus()
-		m_error = K3b::SUCCESS;
-		emitMessage( "Burning finished" );
+		switch( m_process->exitStatus() )
+		{
+			case 0:
+				m_error = K3b::SUCCESS;
+				emitMessage( "Burning successfully finished" );
+				break;
+				
+			default:
+				// no recording device and also other errors!! :-(
+				emitMessage( "Cdrecord returned some error!" );
+				m_error = K3b::CDRECORD_ERROR;
+				break;
+		}
 	}
 	else
 	{
