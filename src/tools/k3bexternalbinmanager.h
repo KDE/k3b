@@ -13,29 +13,29 @@ class KConfig;
 class KProcess;
 
 
+class K3bExternalProgram;
+
 class K3bExternalBin
 {
  public:
-  K3bExternalBin( const QString& name );
+  K3bExternalBin( K3bExternalProgram* );
 
   QString version;
   QString path;
-  QString parameters;
 
   const QString& name() const;
   bool isEmpty() const;
-  const QStringList& userParameters() const { return m_userParameters; }
+  const QStringList& userParameters() const;
   const QStringList& features() const { return m_features; }
 
   bool hasFeature( const QString& ) const;
   void addFeature( const QString& );
-  void addUserParameter( const QString& );
-  void clearUserParameters() { m_userParameters.clear(); }
+
+  K3bExternalProgram* program() const { return m_program; }
 
  private:
-  QString m_name;
   QStringList m_features;
-  QStringList m_userParameters;
+  K3bExternalProgram* m_program;
 };
 
 

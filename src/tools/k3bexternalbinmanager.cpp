@@ -32,21 +32,21 @@ static const char* binPrograms[] =  { "cdrecord",
 				      0 };
 
 
-K3bExternalBin::K3bExternalBin( const QString& name )
- : m_name( name )
+K3bExternalBin::K3bExternalBin( K3bExternalProgram* p )
+  : m_program(p)
 {
 }
 
 
 bool K3bExternalBin::isEmpty() const
 {
-  return m_name.isEmpty();
+  return version.isEmpty();
 }
 
 
 const QString& K3bExternalBin::name() const
 {
-  return m_name;
+  return m_program->name();
 }
 
 
@@ -62,11 +62,10 @@ void K3bExternalBin::addFeature( const QString& f )
 }
 
 
-void K3bExternalBin::addUserParameter( const QString& p )
+const QStringList& K3bExternalBin::userParameters() const
 {
-  m_userParameters.append( p );
+  return m_program->userParameters();
 }
-
 
 
 
@@ -116,7 +115,7 @@ K3bExternalBin* K3bExternalBinManager::probeCdrecord( const QString& path )
     if( endPos < 0 )
       return 0;
 
-    bin = new K3bExternalBin( "cdrecord" );
+    bin = new K3bExternalBin( program("cdrecord") );
     bin->path = path;
     bin->version = m_gatheredOutput.mid( pos, endPos-pos );
   }
@@ -190,7 +189,7 @@ K3bExternalBin* K3bExternalBinManager::probeMkisofs( const QString& path )
     if( endPos < 0 )
       return 0;
 
-    bin = new K3bExternalBin( "mkisofs" );
+    bin = new K3bExternalBin( program("mkisofs") );
     bin->path = path;
     bin->version = m_gatheredOutput.mid( pos, endPos-pos );
   }
@@ -262,7 +261,7 @@ K3bExternalBin* K3bExternalBinManager::probeCdrdao( const QString& path )
     if( endPos < 0 )
       return 0;
 
-    bin = new K3bExternalBin( "cdrdao" );
+    bin = new K3bExternalBin( program("cdrdao") );
     bin->path = path;
     bin->version = m_gatheredOutput.mid( pos, endPos-pos );
   }
@@ -331,7 +330,7 @@ K3bExternalBin* K3bExternalBinManager::probeTranscode( const QString& path )
     if( endPos < 0 )
       return 0;
 
-    bin = new K3bExternalBin( "transcode" );
+    bin = new K3bExternalBin( program("transcode") );
     bin->path = path;
     bin->version = m_gatheredOutput.mid( pos, endPos-pos );
   }
@@ -360,7 +359,7 @@ K3bExternalBin* K3bExternalBinManager::probeMovix( const QString& path )
   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
     // movix-version just gives us the version number on stdout
     if( !m_gatheredOutput.isEmpty() ) {
-      bin = new K3bExternalBin( "eMovix" );
+      bin = new K3bExternalBin( program("eMovix") );
       bin->version = m_gatheredOutput;
     }
   }
@@ -437,7 +436,7 @@ K3bExternalBin* K3bExternalBinManager::probeVcd( const QString& path )
     if( endPos < 0 )
       return 0;
 
-    bin = new K3bExternalBin( "vcdxgen" );
+    bin = new K3bExternalBin( program("vcdxgen") );
     bin->path = path;
     bin->version = m_gatheredOutput.mid( pos, endPos-pos ).stripWhiteSpace();
   }

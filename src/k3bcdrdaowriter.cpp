@@ -308,10 +308,9 @@ void K3bCdrdaoWriter::setBlankArguments() {
 void K3bCdrdaoWriter::setCommonArguments() {
 
     // additional user parameters from config
-    kapp->config()->setGroup("External Programs");
-    QStringList params = kapp->config()->readListEntry( "cdrdao user parameters" );
-    for( QStringList::Iterator it=params.begin(); it != params.end(); ++it )
-        *m_process << *it;
+  QStringList params = m_cdrdaoBinObject->userParameters();
+  for( QStringList::Iterator it=params.begin(); it != params.end(); ++it )
+    *m_process << *it;
 
 
     // display debug info

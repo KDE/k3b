@@ -197,8 +197,7 @@ void K3bVcdJob::vcdxGen()
   *m_process << k3bMain()->externalBinManager()->binPath( "vcdxgen" );
 
   // additional user parameters from config
-  kapp->config()->setGroup("External Programs");
-  QStringList params = kapp->config()->readListEntry( "vcdxgen user parameters" );
+  QStringList params = k3bMain()->externalBinManager()->program( "vcdxgen" )->userParameters();
   for( QStringList::Iterator it = params.begin(); it != params.end(); ++it )
     *m_process << *it;
 
@@ -351,8 +350,7 @@ void K3bVcdJob::vcdxBuild()
   *m_process << k3bMain()->externalBinManager()->binPath( "vcdxbuild" );
 
   // additional user parameters from config
-  kapp->config()->setGroup("External Programs");
-  QStringList params = kapp->config()->readListEntry( "vcdxbuild user parameters" );
+  QStringList params = k3bMain()->externalBinManager()->program( "vcdxbuild" )->userParameters();
   for( QStringList::Iterator it = params.begin(); it != params.end(); ++it )
     *m_process << *it;
 
