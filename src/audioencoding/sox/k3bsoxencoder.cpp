@@ -31,7 +31,10 @@
 #include <qcombobox.h>
 #include <qcheckbox.h>
 #include <qlayout.h>
-#include <qwaitcondition.h>
+
+#include <sys/types.h>
+#include <sys/wait.h>
+
 
 
 
@@ -96,8 +99,6 @@ public:
 
   K3bProcess* process;
   QString fileName;
-
-  QWaitCondition exitWaiter;
 };
 
 
@@ -123,7 +124,7 @@ void K3bSoxEncoder::finishEncoderInternal()
 
       // this is kind of evil... 
       // but we need to be sure the process exited when this method returnes
-      d->exitWaiter.wait();
+      ::waitpid( d->process->pid(), 0, 0 );
     }
   }
 }
@@ -133,7 +134,6 @@ void K3bSoxEncoder::slotSoxFinished( KProcess* p )
 {
   if( !p->normalExit() || p->exitStatus() != 0 )
     kdDebug() << "(K3bSoxEncoder) sox exited with error." << endl;
-  d->exitWaiter.wakeAll();
 }
 
 

@@ -30,8 +30,9 @@
 #include <qlayout.h>
 #include <qregexp.h>
 #include <qtoolbutton.h>
-#include <qwaitcondition.h>
 
+#include <sys/types.h>
+#include <sys/wait.h>
 
 
 class K3bExternalEncoder::Command
@@ -131,8 +132,6 @@ public:
   QString cdComment;
   QString year;
   QString genre;
-
-  QWaitCondition exitWaiter;
 };
 
 
@@ -192,7 +191,7 @@ void K3bExternalEncoder::finishEncoderInternal()
 
       // this is kind of evil... 
       // but we need to be sure the process exited when this method returnes
-      d->exitWaiter.wait();
+      ::waitpid( d->process->pid(), 0, 0 );
     }
   }
 }
@@ -202,7 +201,6 @@ void K3bExternalEncoder::slotExternalProgramFinished( KProcess* p )
 {
   if( !p->normalExit() || p->exitStatus() != 0 )
     kdDebug() << "(K3bExternalEncoder) program exited with error." << endl;
-  d->exitWaiter.wakeAll();
 }
 
 
