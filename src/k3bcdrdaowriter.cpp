@@ -249,8 +249,12 @@ void K3bCdrdaoWriter::setWriteArguments()
 
   bool overburn =
     k3bMain()->config()->readBoolEntry( "Allow overburning", false );
-  if( overburn && m_cdrdaoBinObject->hasFeature("overburn") )
-    *m_process << "--overburn";
+  if( overburn ) {
+    if( m_cdrdaoBinObject->hasFeature("overburn") )
+      *m_process << "--overburn";
+    else
+      emit infoMessage( i18n("Cdrdao %1 does not support overburning!").arg(m_cdrdaoBinObject->version), INFO );
+  }
 
 }
 
