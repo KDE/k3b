@@ -26,6 +26,7 @@
 K3bProcess::K3bProcess()
   : KProcess()
 {
+  m_bSplitStdout = false;
 }
 
 K3bProcess::~K3bProcess()
@@ -39,31 +40,52 @@ bool K3bProcess::start( RunMode run, Communication com )
     connect( this, SIGNAL(receivedStderr(KProcess*, char*, int)),
 	     this, SLOT(slotSplitStderr(KProcess*, char*, int)) );
   }
+  if( com & Stdout ) {
+    connect( this, SIGNAL(receivedStdout(KProcess*, char*, int)),
+	     this, SLOT(slotSplitStdout(KProcess*, char*, int)) );
+  }
 
   return KProcess::start( run, com );
 }
 
 
+void K3bProcess::slotSplitStdout( KProcess*, char* data, int len )
+{
+  if( m_bSplitStdout )
+    splitOutput( data, len, true );
+}
+
+
 void K3bProcess::slotSplitStderr( KProcess*, char* data, int len )
+{
+  splitOutput( data, len, false );
+}
+
+
+void K3bProcess::splitOutput( char* data, int len, bool stdout )
 {
   QString buffer = QString::fromLatin1( data, len );
   QStringList lines = QStringList::split( "\n", buffer );
 
-  if( !m_notFinishedLine.isEmpty() ) {
-    kdDebug() << "(K3bProcess) joining line: " << (m_notFinishedLine + lines.front()) << endl;
+  QString& unfinishedLine = m_unfinishedStderrLine;
+  if( stdout )
+    unfinishedLine = m_unfinishedStdoutLine;
 
-    lines.first().prepend( m_notFinishedLine );
-    m_notFinishedLine = "";
+  if( !unfinishedLine.isEmpty() ) {
+    kdDebug() << "(K3bProcess) joining line: " << (unfinishedLine + lines.front()) << endl;
+
+    lines.first().prepend( unfinishedLine );
+    unfinishedLine = "";
   }
 
   QStringList::iterator it;
 
   // check if line ends with a newline
   // if not save the last line because it is not finished
-  bool notFinishedLine = ( buffer.right(1) != "\n" && buffer.right(1) != "\r" );
-  if( notFinishedLine ) {
+  bool hasUnfinishedLine = ( buffer.right(1) != "\n" && buffer.right(1) != "\r" );
+  if( hasUnfinishedLine ) {
     kdDebug() << "(K3bProcess) found unfinished line: " << lines.last() << endl;
-    m_notFinishedLine = lines.last();
+    unfinishedLine = lines.last();
     it = lines.end();
     --it;
     lines.remove( it );
@@ -73,7 +95,10 @@ void K3bProcess::slotSplitStderr( KProcess*, char* data, int len )
     QString& str = *it;
     if( str[0] == '\r' )
       str = str.mid( 1 );
-    emit stderrLine( str );
+    if( stdout )
+      emit stdoutLine( str );
+    else
+      emit stderrLine( str );
   }
 }
 

@@ -35,12 +35,19 @@ class K3bProcess : public KProcess
 
  private slots:
   void slotSplitStderr( KProcess*, char*, int );
+  void slotSplitStdout( KProcess*, char*, int );
+  void setSplitStdout( bool b ) { m_bSplitStdout = b; }
 
  signals:
   void stderrLine( const QString& line );
+  void stdoutLine( const QString& line );
 
  private:
-  QString m_notFinishedLine;
+  void splitOutput( char*, int, bool );
+
+  QString m_unfinishedStdoutLine;
+  QString m_unfinishedStderrLine;
+  bool m_bSplitStdout;
 };
 
 
