@@ -221,7 +221,6 @@ void K3bVcdJob::vcdxBuild()
     *m_process << QString( "--bin-file=%1" ).arg( m_doc->vcdImage() );
 
     *m_process << QString( "%1" ).arg( QFile::encodeName( m_xmlFile ) );
-    ;
 
     connect( m_process, SIGNAL( receivedStderr( KProcess*, char*, int ) ),
              this, SLOT( slotParseVcdxBuildOutput( KProcess*, char*, int ) ) );
@@ -327,7 +326,7 @@ void K3bVcdJob::slotParseVcdxBuildOutput( KProcess*, char* output, int len )
                     else {
                         if ( level != "error" ) {
                             kdDebug() << QString( "(K3bVcdJob) vcdxbuild warning, %1" ).arg( text ) << endl;
-                            emit debuggingOutput( "vcdxbuild", text );
+                            parseInformation( text );
                         } else {
                             kdDebug() << QString( "(K3bVcdJob) vcdxbuild error, %1" ).arg( text ) << endl;
                             emit infoMessage( text, K3bJob::ERROR );
@@ -490,6 +489,28 @@ void K3bVcdJob::slotWriterJobFinished( bool success )
     }
 }
 
+void K3bVcdJob::parseInformation( QString text )
+{
+    // parse warning
+    if ( text.contains( "mpeg user scan data: one or more BCD fields out of range for" ) ) {
+        int index = text.find( " for" );
+        emit infoMessage( i18n( "One or more BCD fields out of range for %1" ).arg( text.mid( index + 4 ).stripWhiteSpace() ), K3bJob::WARNING );
+    }
+
+    else if ( text.contains( "mpeg user scan data: from now on, scan information data errors will not be reported anymore" ) ) {
+        emit infoMessage( i18n( "From now on, scan information data errors will not be reported anymore" ), K3bJob::INFO );
+        emit infoMessage( i18n( "Consider enabling the 'update scan offsets' option, if it is not enabled already!" ), K3bJob::INFO );
+    }
+
+    else if ( text.contains( "APS' pts seems out of order (actual pts" ) ) {
+        int index = text.find( "(actual pts" );
+        int index2 = text.find( ", last seen pts" );
+        int endindex = index2;
+        int endindex2 = text.find( ") -- ignoring this aps" );
+        emit infoMessage( i18n( "APS' pts seems out of order (actual pts %1, last seen pts %2)" ).arg( text.mid( index + 12, endindex ).stripWhiteSpace() ).arg( text.mid( index2 + 14, endindex2 ).stripWhiteSpace() ), K3bJob::WARNING );
+        emit infoMessage( i18n( "Ignoring this aps" ), K3bJob::INFO );
+    }
+}
 
 QString K3bVcdJob::jobDescription() const
 {
