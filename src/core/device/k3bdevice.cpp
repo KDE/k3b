@@ -160,18 +160,43 @@ bool K3bCdDevice::CdDevice::init()
 {
   kdDebug() << "(K3bCdDevice) " << blockDeviceName() << ": init()" << endl;
 
+  d->deviceType = 0;
+  d->supportedProfiles = 0;
+
   if(open() < 0)
     return false;
+
+
+  //
+  // inquiry
+  // use a 36 bytes buffer since not all devices return the full inquiry struct
+  //
+  ScsiCommand cmd( this );
+  unsigned char buf[36];
+  cmd.clear();
+  ::memset( buf, 0, sizeof(buf) );
+  struct inquiry* inq = (struct inquiry*)buf;
+  cmd[0] = 0x12;  // INQUIRY
+  cmd[4] = sizeof(buf);
+  cmd[5] = 0;
+  if( cmd.transport( TR_DIR_READ, buf, sizeof(buf) ) ) {
+    kdError() << "(K3bCdDevice) Unable to do inquiry." << endl;
+    close();
+    return false;
+  }
+  else {
+    m_vendor = QString::fromLocal8Bit( (char*)(inq->vendor), 8 ).stripWhiteSpace();
+    m_description = QString::fromLocal8Bit( (char*)(inq->product), 16 ).stripWhiteSpace();
+    m_version = QString::fromLocal8Bit( (char*)(inq->revision), 4 ).stripWhiteSpace();
+  }
+
+
 
   //
   // We probe all features of the device. Since not all devices support the GET CONFIGURATION command
   // we also query the mode page 2A and use the cdrom.h stuff to get as much information as possible
   //
 
-  d->deviceType = 0;
-  d->supportedProfiles = 0;
-
-  ScsiCommand cmd( this );
   unsigned char header[8];
   ::memset( header, 0, 8 );
   cmd[0] = 0x46;	// GET CONFIGURATION
@@ -580,8 +605,10 @@ bool K3bCdDevice::CdDevice::init()
   int mm_cap_len = 0;
   if( modeSense( &mm_cap_buffer, mm_cap_len, 0x2A ) ) {
     mm_cap_page_2A* mm_p = (mm_cap_page_2A*)(mm_cap_buffer+8);
-    if( mm_p->BUF ) d->burnfree = true;
-    if( mm_p->cd_rw_write ) d->deviceType |= CDRW;
+    if( mm_p->BUF )
+      d->burnfree = true;
+    if( mm_p->cd_rw_write )
+      d->deviceType |= CDRW;
     m_maxWriteSpeed = (int)( from2Byte(mm_p->max_write_speed) * 1024.0 / ( 2352.0 * 75.0 ) );
     m_maxReadSpeed = (int)( from2Byte(mm_p->max_read_speed) * 1024.0 / ( 2352.0 * 75.0 ) );
 
@@ -613,8 +640,18 @@ bool K3bCdDevice::CdDevice::init()
     }
   }
 
+
+  //
+  // Check the supported write modes (TAO, SAO, RAW) by trying to set them
+  //
+  checkWriteModes();
+
+
   //
   // This is the backup if the drive does not support the GET CONFIGURATION command
+  // Since all CDR drives at least support TAO, all CDRW drives should support 
+  // mode page 2a and all DVD writer should support mode page 2a or the GET CONFIGURATION
+  // command this is redundant and may be removed for BSD ports or even completely
   //
   int drivetype = ::ioctl(d->deviceFd, CDROM_GET_CAPABILITY, CDSL_CURRENT);
   if( drivetype < 0 ) {
@@ -636,30 +673,6 @@ bool K3bCdDevice::CdDevice::init()
   if (drivetype & CDC_DVD)
     d->deviceType |= DVD;
    
-
-  if( writesCd() )
-    checkWriteModes();
-
-
-  // inquiry
-  // use a 36 bytes buffer since not all devices return the full inquiry struct
-  unsigned char buf[36];
-  cmd.clear();
-  ::memset( buf, 0, sizeof(buf) );
-  struct inquiry* inq = (struct inquiry*)buf;
-  cmd[0] = 0x12;  // GPCMD_INQUIRY
-  cmd[4] = sizeof(buf);
-  cmd[5] = 0;
-  if( cmd.transport( TR_DIR_READ, buf, sizeof(buf) ) ) {
-    kdError() << "(K3bCdDevice) Unable to do inquiry." << endl;
-    close();
-    return false;
-  }
-  else {
-    m_vendor = QString::fromLocal8Bit( (char*)(inq->vendor), 8 ).stripWhiteSpace();
-    m_description = QString::fromLocal8Bit( (char*)(inq->product), 16 ).stripWhiteSpace();
-    m_version = QString::fromLocal8Bit( (char*)(inq->revision), 4 ).stripWhiteSpace();
-  }
 
   close();
 
@@ -711,7 +724,7 @@ bool K3bCdDevice::CdDevice::dao() const
 
 bool K3bCdDevice::CdDevice::writesCd() const
 {
-  return d->deviceType & CDR;
+  return ( d->deviceType & CDR ) && ( m_writeModes & TAO );
 }
 
 
@@ -758,12 +771,6 @@ int K3bCdDevice::CdDevice::type() const
 
 
 const QString& K3bCdDevice::CdDevice::devicename() const
-{
-  return blockDeviceName();
-}
-
-
-const QString& K3bCdDevice::CdDevice::ioctlDevice() const
 {
   return blockDeviceName();
 }
@@ -838,25 +845,11 @@ bool K3bCdDevice::CdDevice::burnfree() const
 
 bool K3bCdDevice::CdDevice::isDVD() const
 {
-  if( d->deviceType & (DVDR | DVDRAM | DVD) ) {
-    // try to read the physical dvd-structure
-    // if this fails, we probably cannot take any further (useful) dvd-action
-
-    unsigned char dvdheader[20];
-    ::memset( dvdheader, 0, 20 );
-    ScsiCommand cmd( this );
-    cmd[0] = 0xad;  // GPCMD_READ_DVD_STRUCTURE;
-    cmd[9] = 20;
-    if( cmd.transport( TR_DIR_READ, dvdheader, 20 ) ) {
-      kdDebug() << "(K3bCdDevice::CdDevice) Unable to read DVD structure." << endl;
-    }
-    else
-      return true;
+  if( d->deviceType & ( DVDR | DVDRAM | DVD ) ) {
+    return ( dvdMediaType() >= 0 );
   }
   else
-    kdDebug() << "(K3bCdDevice::CdDevice) no DVD drive" << endl;
-
-  return false;
+    return false;
 }
 
 
@@ -1089,7 +1082,7 @@ int K3bCdDevice::CdDevice::getTrackDataMode(int lba) const
 //
 //   ::memset(&cmd,0,sizeof (struct cdrom_generic_command));
 //   ::memset(dat,0,8);
-//   cmd.cmd[0] = GPCMD_READ_HEADER;
+//   cmd.cmd[0] = READ HEADER;
 //   cmd.cmd[1] = 0; // lba
 //   cmd.cmd[3] = (lba & 0xFF0000 ) >> 16;
 //   cmd.cmd[4] = (lba & 0x00FF00 ) >> 8;
@@ -2040,7 +2033,7 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
 
 	inf.m_rewritable = dInf->erasable;
 
-	// we set it here so we have the info even if the call to GPCMD_READ_TOC_PMA_ATIP failes
+	// we set it here so we have the info even if the call to READ TOC/PMA/ATIP failes
 	inf.m_numSessions = (dInf->n_sessions_l & 0x00FF) | ((dInf->n_sessions_m << 8) & 0xFF00);
 
 	//	inf.m_numTracks = ( (dInf->last_track_m<<8) | dInf->last_track_l);
@@ -2123,7 +2116,7 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
 	inf.m_numSessions = sessions;
       }
       else {
-	kdDebug() << "(K3bCdDevice) could not get session info via GPCMD_READ_TOC_PMA_ATIP." << endl;
+	kdDebug() << "(K3bCdDevice) could not get session info via READ TOC/PMA/ATIP." << endl;
 	if( inf.empty() ) {
 	  // just to fix the info for empty disks
 	  inf.m_numSessions = 0;
@@ -2167,7 +2160,7 @@ int K3bCdDevice::CdDevice::dvdMediaType() const
   unsigned char dvdheader[20];
   ::memset( dvdheader, 0, 20 );
   ScsiCommand cmd( this );
-  cmd[0] = 0xad;  // GPCMD_READ_DVD_STRUCTURE;
+  cmd[0] = 0xad;  // READ DVD STRUCTURE;
   cmd[9] = 20;
   if( cmd.transport( TR_DIR_READ, dvdheader, 20 ) ) {
     kdDebug() << "(K3bCdDevice::CdDevice) Unable to read DVD structure." << endl;
@@ -2212,7 +2205,7 @@ bool K3bCdDevice::CdDevice::readFormatCapacity( K3b::Msf& r ) const
   ::memset( header, 0, 4 );
 
   ScsiCommand cmd( this );
-  cmd[0] = 0x23;  // GPCMD_READ_FORMAT_CAPACITIES;
+  cmd[0] = 0x23;  // READ FORMAT CAPACITIES;
   cmd[8] = 4;
   if( cmd.transport( TR_DIR_READ, header, 4 ) == 0 ) {
     int realLength = header[3] + 4;
@@ -2373,39 +2366,45 @@ void K3bCdDevice::CdDevice::checkWriteModes()
     //    debugBitfield( buffer, dataLen );
 
 
-    if( modeSelect( buffer, dataLen, 1, 0 ) )
+    //
+    // if a writer does not support TAO it surely does not support SAO or RAW writing since TAO is the minimal
+    // requirement
+    //
+
+    if( modeSelect( buffer, dataLen, 1, 0 ) ) {
       m_writeModes |= TAO;
-    else
-      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": modeSelect with TAO failed." << endl;
+      d->deviceType |= CDR;
 
+      // SAO
+      mp->write_type = 0x02; // Session-at-once
 
-    // SAO
-    mp->write_type = 0x02; // Session-at-once
+      if( modeSelect( buffer, dataLen, 1, 0 ) )
+	m_writeModes |= SAO;
 
-    if( modeSelect( buffer, dataLen, 1, 0 ) )
-      m_writeModes |= SAO;
-    else
-      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": modeSelect with SAO failed." << endl;
+      // RAW
+      mp->write_type = 0x03; // RAW
+      mp->dbtype = 1;        // Raw data with P and Q Sub-channel (2368 bytes)
+      if( modeSelect( buffer, dataLen, 1, 0 ) ) {
+	m_writeModes |= RAW;
+	m_writeModes |= RAW_R16;
+      }
 
-    // RAW
-    mp->write_type = 0x03; // RAW
-    mp->dbtype = 1;        // Raw data with P and Q Sub-channel (2368 bytes)
-    if( modeSelect( buffer, dataLen, 1, 0 ) ) {
-      m_writeModes |= RAW;
-      m_writeModes |= RAW_R16;
+      mp->dbtype = 2;        // Raw data with P-W Sub-channel (2448 bytes)
+      if( modeSelect( buffer, dataLen, 1, 0 ) ) {
+	m_writeModes |= RAW;
+	m_writeModes |= RAW_R96P;
+      }
+
+      mp->dbtype = 3;        // Raw data with P-W raw Sub-channel (2368 bytes)
+      if( modeSelect( buffer, dataLen, 1, 0 ) ) {
+	m_writeModes |= RAW;
+	m_writeModes |= RAW_R96R;
+      }
+    }
+    else {
+      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": modeSelect with TAO failed. No writer" << endl;
     }
 
-    mp->dbtype = 2;        // Raw data with P-W Sub-channel (2448 bytes)
-    if( modeSelect( buffer, dataLen, 1, 0 ) ) {
-      m_writeModes |= RAW;
-      m_writeModes |= RAW_R96P;
-    }
-
-    mp->dbtype = 3;        // Raw data with P-W raw Sub-channel (2368 bytes)
-    if( modeSelect( buffer, dataLen, 1, 0 ) ) {
-      m_writeModes |= RAW;
-      m_writeModes |= RAW_R96R;
-    }
 
     delete [] buffer;
   }
