@@ -696,6 +696,24 @@
         <receiver>m_boxProxyServer</receiver>
         <slot>setEnabled(bool)</slot>
     </connection>
+    <connection>
+        <sender>m_checkUseLocalCddb</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_boxLocalDirectory</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_checkUseLocalCddb</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_checkSaveLocalEntries</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_checkRemoteCddb</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_boxCddbServer</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>m_mainTabbed</tabstop>
