@@ -1045,21 +1045,11 @@ bool mpeg::ParseSystem() {
 // get mpeg infos on stdout
 int mpeg::MpegVersion()
 {
-	if (MpegType == mpeg_SYSTEM ) {
-    if (HasVideo) {
-			if (mpeg_version == 1) {
-				return 1;
-      }
-      else {
-        return 2;
-      }
-	  }
-  }
-	kdDebug() << QString("(mpeg) %1 can not be handled by this program").arg(FileName) << endl;
+  if (MpegType != mpeg_UNKNOWN)
+    return Version();
+    
 	return 0;
 }
-
-
 
 // print mpeg infos on stdout
 void mpeg::PrintInfos() {
