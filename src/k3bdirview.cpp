@@ -176,12 +176,15 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
 					m_actionCollection, "disk_eject");
   KAction* actionUnlock = new KAction( i18n("Un&lock"), "", 0, this, SLOT(slotUnlockDevice()),
 				       m_actionCollection, "unlock" );
+  KAction* actionlock = new KAction( i18n("Lock"), "", 0, this, SLOT(slotLockDevice()),
+				     m_actionCollection, "lock" );
 
   m_devicePopupMenu->insert( actionDiskInfo );
   m_devicePopupMenu->insert( new KActionSeparator( this ) );
   m_devicePopupMenu->insert( actionUnmount );
   m_devicePopupMenu->insert( actionEject );
   m_devicePopupMenu->insert( actionUnlock );
+  m_devicePopupMenu->insert( actionlock );
 
 
 //   connect( m_urlCombo, SIGNAL(returnPressed(const QString&)), this, SLOT(slotDirActivated(const QString&)) );
@@ -311,6 +314,13 @@ void K3bDirView::slotUnlockDevice()
 {
   if( m_lastDevice )
     K3bCdDevice::unblock( m_lastDevice );
+}
+
+
+void K3bDirView::slotLockDevice()
+{
+  if( m_lastDevice )
+    K3bCdDevice::block( m_lastDevice );
 }
 
 

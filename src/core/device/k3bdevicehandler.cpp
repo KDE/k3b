@@ -33,6 +33,7 @@ public:
     success = false;
 
     if( dev ) {
+      dev->open();
       switch( command ) {
       case DISKINFO:
 	info = dev->diskInfo();
@@ -84,15 +85,14 @@ public:
 	success = success && dev->load();
 	break;
       case MEDIUM_STATE:
-	dev->open();
 	//	info.mediaType = dev->mediaType();
 	errorCode = dev->isEmpty();
-	dev->close();
 	success = ( errorCode != K3bCdDevice::CdDevice::NO_INFO );
 	break;
       default:
 	success = false;
       }
+      dev->close();
     }
     emitFinished(success);
   }

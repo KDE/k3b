@@ -1688,12 +1688,12 @@ bool K3bCdDevice::CdDevice::fixupToc( K3bCdDevice::Toc& toc ) const
 }
 
 
-bool K3bCdDevice::CdDevice::block( bool b) const
+bool K3bCdDevice::CdDevice::block( bool b ) const
 {
   if( open() != -1 ) {
     ScsiCommand cmd( open() );
     cmd[0] = 0x1E;   // ALLOW MEDIA REMOVAL
-    cmd[4] = b ? 0x0 : 0x1;
+    cmd[4] = b ? 0x1 : 0x0;
     int r = cmd.transport();
     if( r ) {
       kdDebug() << "(K3bCdDevice::CdDevice) MMC ALLOW MEDIA REMOVAL failed. Falling back to cdrom.h." << endl;
@@ -1825,6 +1825,10 @@ K3bCdDevice::DiskInfo K3bCdDevice::CdDevice::diskInfo()
 {
   kdDebug() << "(K3bCdDevice) DEPRECATED! USE NextGenerationDiskInfo!" << endl;
 
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
   DiskInfo info;
   info.device = this;
 
@@ -1888,7 +1892,9 @@ K3bCdDevice::DiskInfo K3bCdDevice::CdDevice::diskInfo()
     }
   }
 
-  close();
+  if( needToClose )
+    close();
+
   return info;
 }
 
@@ -1901,6 +1907,10 @@ int K3bCdDevice::CdDevice::supportedProfiles() const
 
 int K3bCdDevice::CdDevice::currentProfile() const
 {
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
   unsigned char profileBuf[8];
   ::memset( profileBuf, 0, 8 );
 
@@ -1911,9 +1921,16 @@ int K3bCdDevice::CdDevice::currentProfile() const
 
   if( cmd.transport( TR_DIR_READ, profileBuf, 8 ) ) {
     kdDebug() << "(K3bCdDevice) GET_CONFIGURATION failed." << endl;
+
+    if( needToClose )
+      close();
+
     return -1;
   }
   else {
+    if( needToClose )
+      close();
+
     short profile = from2Byte( &profileBuf[6] );
     switch (profile) {
     case 0x00: return MEDIA_NONE;
@@ -1937,6 +1954,10 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
 {
   NextGenerationDiskInfo inf;
   inf.m_diskState = STATE_UNKNOWN;
+
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
 
   if( open() != -1 ) {
 
@@ -2118,8 +2139,8 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
       }
     }
    
-
-    close();
+    if( needToClose )
+      close();
   }
   
   return inf;
