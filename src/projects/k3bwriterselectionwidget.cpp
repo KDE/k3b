@@ -37,16 +37,19 @@
 #include <qwhatsthis.h>
 #include <qmap.h>
 #include <qptrvector.h>
-#include <qcursor.h>>
+#include <qcursor.h>
 #include <qapplication.h>
+#include <qmap.h>
 
 
 class K3bWriterSelectionWidget::Private
 {
 public:
-  int maxSpeed;
   bool dvd;
   bool forceAutoSpeed;
+
+  QMap<int, int> indexSpeedMap;
+  QMap<int, int> speedIndexMap;
 };
 
 
@@ -197,17 +200,7 @@ void K3bWriterSelectionWidget::init()
 					"<p><b>Auto</b><br>"
 					"Let the DVD writer decide which speed to use for the media. "
 					"This is the recommended selection for most media.</p>"
-					"<p><b>1x</b><br>"
-					"Some DVD writers reportedly fail to determine the optimal speed "
-					"for unbranded media and may use one that is higher than the "
-					"media supports, resulting in corrupted recordings. This option "
-					"forces the writer to switch to 1x speed to be on the safe side. "
-					"When using unbranded media it is recommended to use this option."
-					"</p>"
-					"<p>1x refers to 1385 KB/s.</p>"
-					"<p><b>Caution:</b> Be aware that the speed selection only makes "
-					"sense for DVD-R(W) writers since DVD+R(W) writers always choose "
-					"the speed automatically.") );
+					"<p>1x refers to 1385 KB/s.</p>") );
   }
   else {
     QWhatsThis::add( m_comboWriter, i18n("<p>Select the CD writer that you want to use."
@@ -219,15 +212,16 @@ void K3bWriterSelectionWidget::init()
 					"medium. Be aware that this might not be a good choice when writing "
 					"an Audio-CD on-the-fly since the decoding of the audio files may take "
 					"too long to allow a continuous data stream."
-					"<p>1x refers to 150 KB/s."
+					"<p>1x refers to 175 KB/s."
 					"<p><b>Caution:</b> Make sure your system is able to send the data "
 					"fast enough to prevent buffer underruns.") );
   }
   QWhatsThis::add( m_comboWritingApp, i18n("<p>K3b uses the command line tools cdrecord, growisofs, and cdrdao "
-					   "to actually write a CD/DVD. Normally K3b chooses the best "
-					   "suited application for every task but in some cases it "
-					   "may be possible that one of the applications does not "
-					   "support a writer. In this case one may select the "
+					   "to actually write a CD or DVD."
+					   "<p>Normally K3b chooses the best "
+					   "suited application for every task automatically but in some cases it "
+					   "may be possible that one of the applications does not work as intended "
+					   "with a certain writer. In this case one may select the "
 					   "application manually.") );
 }
 
@@ -251,23 +245,46 @@ void K3bWriterSelectionWidget::slotConfigChanged( KConfig* c )
 
 void K3bWriterSelectionWidget::slotRefreshWriterSpeeds()
 {
-  m_comboSpeed->clear();
+  clearSpeedCombo();
   m_comboSpeed->insertItem( i18n("Auto") );
-  if( !d->forceAutoSpeed ) {
-    m_comboSpeed->insertItem( "1x" );
+  if( !d->forceAutoSpeed && !d->dvd ) {
+    insertSpeedItem( 175 ); // 1x
     
     K3bDevice* dev = writerDevice();
     
-    if( !d->dvd && dev ) {
+    if( dev ) {
       // add speeds to combobox
       int speed = 2;
       while( speed <= dev->maxWriteSpeed() ) {
-	m_comboSpeed->insertItem( QString( "%1x" ).arg(speed) );
+	insertSpeedItem( speed*175 );
 	speed += 2;
       }
-      
-      d->maxSpeed = speed;
     }
+  }
+}
+
+
+void K3bWriterSelectionWidget::clearSpeedCombo()
+{
+  m_comboSpeed->clear();
+  d->indexSpeedMap.clear();
+  d->speedIndexMap.clear();
+}
+
+
+void K3bWriterSelectionWidget::insertSpeedItem( int speed )
+{
+  if( !d->speedIndexMap.contains( speed ) ) {
+    d->indexSpeedMap[m_comboSpeed->count()] = speed;
+    d->speedIndexMap[speed] = m_comboSpeed->count();
+
+    if( d->dvd )
+      m_comboSpeed->insertItem( ( speed%1385 > 0
+				? QString::number( (float)speed/1385.0, 'f', 1 )  // example: DVD+R(W): 2.4x
+				: QString::number( speed/1385 ) ) 
+			      + "x" );
+    else
+      m_comboSpeed->insertItem( QString("%1x").arg(speed/175) );
   }
 }
 
@@ -292,12 +309,10 @@ void K3bWriterSelectionWidget::setWriterDevice( K3bDevice* dev )
 
 void K3bWriterSelectionWidget::setSpeed( int s )
 {
-  if( s == 0 )
-    m_comboSpeed->setCurrentItem( 0 ); // Auto
-  else if( d->dvd )
-    m_comboSpeed->setCurrentItem( 1 ); // 1x
+  if( d->speedIndexMap.contains( s ) )
+    m_comboSpeed->setCurrentItem( d->speedIndexMap[s] );
   else
-    m_comboSpeed->setCurrentItem( QString("%1x").arg(s), false );
+    m_comboSpeed->setCurrentItem( 0 ); // Auto
 }
 
 
@@ -330,14 +345,8 @@ int K3bWriterSelectionWidget::writerSpeed() const
 {
   if( m_comboSpeed->currentItem() == 0 )
     return 0; // Auto
-  else if( d->dvd )
-    return 1;
-  else {
-    QString strSpeed = m_comboSpeed->currentText();
-    strSpeed.truncate( strSpeed.find('x') );
-    
-    return strSpeed.toInt();
-  }
+  else
+    return d->indexSpeedMap[m_comboSpeed->currentItem()];
 }
 
 
@@ -455,13 +464,14 @@ void K3bWriterSelectionWidget::loadDefaults()
 void K3bWriterSelectionWidget::setForceAutoSpeed( bool b )
 {
   d->forceAutoSpeed = b;
+  m_buttonDetermineSpeed->setDisabled(b);
   slotRefreshWriterSpeeds();
 }
 
 
 void K3bWriterSelectionWidget::slotDetermineSupportedWriteSpeeds()
 {
-  if( writerDevice() ) {
+  if( writerDevice() && !d->forceAutoSpeed ) {
     // change the cursor since we block the gui here :(
     QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
 
@@ -472,10 +482,11 @@ void K3bWriterSelectionWidget::slotDetermineSupportedWriteSpeeds()
     else {
       int lastSpeed = writerSpeed();
 
-      m_comboSpeed->clear();
+      clearSpeedCombo();
       m_comboSpeed->insertItem( i18n("Auto") );
+
       for( QValueList<int>::iterator it = speeds.begin(); it != speeds.end(); ++it )
-	m_comboSpeed->insertItem( QString( "%1x" ).arg( d->dvd ? *it/1385 : *it/175 ) );
+	insertSpeedItem( *it );
 
       // try to reload last set speed
       setSpeed( lastSpeed );

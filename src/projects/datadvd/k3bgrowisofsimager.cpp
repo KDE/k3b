@@ -170,8 +170,6 @@ void K3bGrowisofsImager::start()
     // if no option is given
     speed = m_doc->burner()->determineMaximalWriteSpeed();
   }
-  else
-    speed *= 1385;
 
   if( speed != 0 )
     *m_process << QString("-speed=%1").arg( (double)speed/1385.0, 0, 'g', 1 );

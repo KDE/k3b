@@ -191,8 +191,6 @@ bool K3bGrowisofsWriter::prepareProcess()
     // if no option is given
     speed = burnDevice()->determineMaximalWriteSpeed();
   }
-  else
-    speed *= 1385;
 
   if( speed != 0 )
     *d->process << QString("-speed=%1").arg( (double)speed/1385.0, 0, 'g', 1 );

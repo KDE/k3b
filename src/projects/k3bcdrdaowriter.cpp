@@ -490,9 +490,9 @@ void K3bCdrdaoWriter::start()
     // try to determine the writeSpeed
     // if it fails determineMaximalWriteSpeed() will return 0 and
     // the choice is left to cdrdao
-    d->usedSpeed = burnDevice()->determineMaximalWriteSpeed()/175;
+    d->usedSpeed = burnDevice()->determineMaximalWriteSpeed();
   }
-
+  d->usedSpeed /= 175;
 
   switch ( m_command )
     {

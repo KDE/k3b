@@ -168,8 +168,9 @@ void K3bCdrecordWriter::prepareProcess()
     // try to determine the writeSpeed
     // if it fails determineMaximalWriteSpeed() will return 0 and
     // the choice is left to cdrecord
-    d->usedSpeed = burnDevice()->determineMaximalWriteSpeed()/175;
+    d->usedSpeed = burnDevice()->determineMaximalWriteSpeed();
   }
+  d->usedSpeed /= 175;
   if( d->usedSpeed != 0 )
     *m_process << QString("speed=%1").arg(d->usedSpeed);
     
