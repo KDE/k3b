@@ -36,7 +36,7 @@
 #include <qptrlist.h>
 
 
-#define LIBK3B_VERSION "0.11.97"
+#define LIBK3B_VERSION "0.11.98"
 
 
 class K3bCore::Private {
