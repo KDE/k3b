@@ -41,6 +41,7 @@
 #include <krun.h>
 #include <kurl.h>
 #include <ktoolbar.h>
+#include <kstatusbar.h>
 
 #include <stdlib.h>
 
