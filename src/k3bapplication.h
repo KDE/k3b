@@ -19,6 +19,16 @@
 
 #include <kapplication.h>
 
+#define k3bapp K3bApplication::k3bApplication()
+
+class K3bMainWindow;
+class K3bExternalBinManager;
+class K3bSongManager;
+class K3bVersion;
+
+namespace K3bCdDevice {
+  class DeviceManager;
+};
 
 class K3bApplication : public KApplication
 {
@@ -30,8 +40,26 @@ class K3bApplication : public KApplication
 
   void init();
 
+  K3bMainWindow* k3bMainWindow() const;
+  K3bCdDevice::DeviceManager* deviceManager() const;
+  K3bExternalBinManager* externalBinManager() const;
+  K3bSongManager* songManager() const;
+
+  const K3bVersion& version() const;
+
+  static K3bApplication* k3bApplication() { return s_k3bApp; }
+
  signals:
   void initializationInfo( const QString& );
+
+ private slots:
+  void slotShutDown();
+
+ private:
+  class Private;
+  Private* d;
+
+  static K3bApplication* s_k3bApp;
 };
 
 #endif

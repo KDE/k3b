@@ -52,7 +52,9 @@ class K3bBusyWidget;
 class KSystemTray;
 class K3bStatusBarManager;
 
-#include "device/k3bdevicemanager.h"
+namespace K3bCdDevice {
+  class DeviceManager;
+};
 
 /** Access to the "lonely" K3bMainWindow Object */
 K3bMainWindow* k3bMain();
@@ -88,9 +90,8 @@ class K3bMainWindow : public KDockMainWindow
   /** opens a file specified by commandline option */
   void openDocumentFile(const KURL& url=KURL());
 
-  K3bDeviceManager*      deviceManager();
-  K3bExternalBinManager* externalBinManager();
-  K3bSongManager*        songManager()        { return m_songManager; }
+  K3bCdDevice::DeviceManager*      deviceManager() const;
+  K3bExternalBinManager* externalBinManager() const;
   K3bAudioPlayer*        audioPlayer()        { return m_audioPlayer; }
   KConfig*               config()             { return m_config; }
   // return main window with browser/cd/dvd view, used for DND
@@ -296,7 +297,6 @@ class K3bMainWindow : public KDockMainWindow
    * is about to close the application. */
   QList<K3bDoc> *pDocList;
 
-  K3bSongManager*        m_songManager;
   K3bAudioPlayer*        m_audioPlayer;
 
   // KAction pointers to enable/disable actions

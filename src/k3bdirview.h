@@ -55,8 +55,6 @@ class K3bDirView : public QVBox
   K3bDirView(K3bFileTreeView* tree, QWidget *parent=0, const char *name=0);
   ~K3bDirView();
 
-  void setupFinalize( K3bDeviceManager *dm );
-
   K3bCdView* getCdView() { return m_cdView; }
 
  public slots:

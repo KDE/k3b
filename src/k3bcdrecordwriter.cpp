@@ -89,7 +89,7 @@ void K3bCdrecordWriter::prepareArgumentList()
   if( burnproof() ) {
     if( burnDevice()->burnproof() ) {
       // with cdrecord 1.11a02 burnproof was renamed to burnfree
-      if( m_cdrecordBinObject->version < K3bExternalBinVersion( "1.11a02" ) )
+      if( m_cdrecordBinObject->version < K3bVersion( "1.11a02" ) )
 	*m_process << "driveropts=burnproof";
       else
 	*m_process << "driveropts=burnfree";

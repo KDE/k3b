@@ -53,6 +53,7 @@
 
 // application specific includes
 #include "k3b.h"
+#include "k3bapplication.h"
 #include "tools/k3bglobals.h"
 #include "k3bview.h"
 #include "k3bdirview.h"
@@ -73,7 +74,6 @@
 #include "tools/k3bexternalbinmanager.h"
 #include "tools/k3bdefaultexternalprograms.h"
 #include "k3bprojecttabwidget.h"
-#include "rip/songdb/k3bsongmanager.h"
 #include "k3baudioplayer.h"
 #include "cdcopy/k3bcdcopydialog.h"
 #include "videoEncoding/k3bdivxview.h"
@@ -370,7 +370,6 @@ void K3bMainWindow::initView()
   m_contentsDock = createDockWidget( "contents_view", SmallIcon("idea"), 0,
 			      kapp->makeStdCaption( i18n("Contents View") ), i18n("Contents View") );
   m_dirView = new K3bDirView( m_fileTreeView, m_contentsDock );
-  m_dirView->setupFinalize( K3bDeviceManager::self() );
   m_contentsDock->setWidget( m_dirView );
   //  m_contentsDock->setEnableDocking( KDockWidget::DockFullDocking/*DockCorner*/ );
   m_contentsDock->manualDock( m_dirTreeDock, KDockWidget::DockRight, 2000 );
@@ -479,8 +478,6 @@ void K3bMainWindow::saveOptions()
   manager()->writeConfig( m_config, "Docking Config" );
 
   m_config->setGroup( "External Programs" );
-  K3bExternalBinManager::self()->saveConfig( m_config );
-  K3bDeviceManager::self()->saveConfig( m_config );
 
   m_dirView->saveConfig( config() );
 
@@ -1131,15 +1128,15 @@ void K3bMainWindow::slotViewDocumentHeader()
 }
 
 
-K3bExternalBinManager* K3bMainWindow::externalBinManager()
+K3bExternalBinManager* K3bMainWindow::externalBinManager() const
 {
-  return K3bExternalBinManager::self();
+  return k3bapp->externalBinManager();
 }
 
 
-K3bDeviceManager* K3bMainWindow::deviceManager()
+K3bDeviceManager* K3bMainWindow::deviceManager() const
 {
-  return K3bDeviceManager::self();
+  return k3bapp->deviceManager();
 }
 
 

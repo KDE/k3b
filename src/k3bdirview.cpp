@@ -15,6 +15,17 @@
 
 
 #include "k3bdirview.h"
+#include "k3bapplication.h"
+#include "k3b.h"
+
+#include "rip/k3bcdview.h"
+#include "k3bfileview.h"
+#include "device/k3bdevicemanager.h"
+#include "device/k3bdevice.h"
+#include "rip/k3bmovieview.h"
+#include "k3bfiletreeview.h"
+#include "device/k3bdiskinfodetector.h"
+#include "cdinfo/k3bdiskinfoview.h"
 
 #include <unistd.h>
 // QT-includes
@@ -60,15 +71,6 @@
 #include <kstdaction.h>
 #include <kconfig.h>
 
-#include "rip/k3bcdview.h"
-#include "k3bfileview.h"
-#include "device/k3bdevicemanager.h"
-#include "device/k3bdevice.h"
-#include "k3b.h"
-#include "rip/k3bmovieview.h"
-#include "k3bfiletreeview.h"
-#include "device/k3bdiskinfodetector.h"
-#include "cdinfo/k3bdiskinfoview.h"
 
 class K3bNoViewView : public QWidget
 {
@@ -93,13 +95,13 @@ protected:
 
 K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *name )
   : QVBox(parent, name), 
-    m_bViewDiskInfo(false), 
     m_fileTreeView(treeView),
+    m_bViewDiskInfo(false), 
     m_lastDevice(0)
 {
   m_diskInfoDetector = new K3bDiskInfoDetector( this );
   connect( m_diskInfoDetector, SIGNAL(diskInfoReady(const K3bCdDevice::DiskInfo&)),
-	   k3bMain(), SLOT(endBusy()) );
+	   k3bapp->k3bMainWindow(), SLOT(endBusy()) );
   connect( m_diskInfoDetector, SIGNAL(diskInfoReady(const K3bCdDevice::DiskInfo&)),
 	   this, SLOT(slotDiskInfoReady(const K3bCdDevice::DiskInfo&)) );
 
@@ -117,6 +119,7 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
   }
 
   m_fileTreeView->header()->hide();
+  m_fileTreeView->addCdDeviceBranches( k3bapp->deviceManager() );
 
   m_fileView     = new K3bFileView(m_viewStack, "fileView");
   m_cdView       = new K3bCdView(m_viewStack, "cdview");
@@ -181,11 +184,6 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
 
 K3bDirView::~K3bDirView()
 {
-}
-
-void K3bDirView::setupFinalize( K3bDeviceManager *dm )
-{
-  m_fileTreeView->addCdDeviceBranches( dm );
 }
 
 
