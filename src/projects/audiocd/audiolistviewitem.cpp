@@ -19,6 +19,8 @@
 #include "k3baudiotrack.h"
 #include <k3baudiodecoder.h>
 
+#include <qfont.h>
+
 
 K3bAudioListViewItem::K3bAudioListViewItem( K3bAudioTrack* track, K3bListView* parent )
   : K3bListViewItem( parent ), m_track(track)
@@ -33,18 +35,44 @@ K3bAudioListViewItem::K3bAudioListViewItem( K3bAudioTrack* track, K3bListView* p
 }
 
 
+void K3bAudioListViewItem::setup()
+{
+  K3bListViewItem::setup();
+
+  setHeight( height() + 6 );
+}
+
+
 void K3bAudioListViewItem::init()
 {
+  // columns
+  // 0 - No.
+  // 1 - Artist (CD-Text)
+  // 2 - Title (CD-Text)
+  // 3 - Type
+  // 4 - Pregap
+  // 5 - Length
+  // 6 - Filename
+
   animationIconNumber = 1;
   setEditor( 1, LINE );
   setEditor( 2, LINE );
   setEditor( 4, MSF );
+
+  // italic type
+  QFont f(listView()->font());
+  f.setItalic( true );
+  setFont( 3, f );
+
+  // greyed out filename
+  setForegroundColor( 6, listView()->palette().disabled().foreground() );
 }
 
 
 K3bAudioListViewItem::~K3bAudioListViewItem()
 {
 }
+
 
 QString K3bAudioListViewItem::text(int i) const
 {
@@ -62,11 +90,11 @@ QString K3bAudioListViewItem::text(int i) const
     case 2:
       return m_track->title();
     case 3:
-      return m_track->length().toString() + "  ";
+      return " " + m_track->module()->fileType() + " ";
     case 4:
       return m_track->pregap().toString();
     case 5:
-      return m_track->module()->fileType() + "  ";
+      return " " + m_track->length().toString() + " ";
     case 6:
       return m_track->filename();
     default:

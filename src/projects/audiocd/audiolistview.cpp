@@ -43,7 +43,10 @@
 
 
 K3bAudioListView::K3bAudioListView( K3bView* view, K3bAudioDoc* doc, QWidget *parent, const char *name )
-  : K3bListView(parent,name), m_doc(doc), m_view(view)
+  : K3bListView(parent,name), 
+    m_doc(doc), 
+    m_view(view),
+    m_updatingColumnWidths(false)
 {
   setAcceptDrops( true );
   setDropVisualizer( true );
@@ -52,6 +55,7 @@ K3bAudioListView::K3bAudioListView( K3bView* view, K3bAudioDoc* doc, QWidget *pa
   //  setSelectionModeExt( KListView::Konqueror ); // FileManager in KDE3
   setSelectionModeExt( KListView::Extended );
   setItemsMovable( false );
+  setAlternateBackground( QColor() ); // disable alternate colors
 
   setNoItemText( i18n("Use drag'n'drop to add audio files to the project.") + "\n"
 		 + i18n("After that press the burn button to write the CD." ) );
@@ -85,14 +89,28 @@ K3bAudioListView::K3bAudioListView( K3bView* view, K3bAudioDoc* doc, QWidget *pa
 K3bAudioListView::~K3bAudioListView(){
 }
 
-void K3bAudioListView::setupColumns(){
+void K3bAudioListView::setupColumns()
+{
   addColumn( i18n("No.") );
   addColumn( i18n("Artist (CD-Text)") );
   addColumn( i18n("Title (CD-Text)") );
-  addColumn( i18n("Length") );
-  addColumn( i18n("Pregap") );
   addColumn( i18n("Type") );
+  addColumn( i18n("Pregap") );
+  addColumn( i18n("Length") );
   addColumn( i18n("Filename") );
+
+  setColumnAlignment( 3, Qt::AlignHCenter );
+  setColumnAlignment( 4, Qt::AlignHCenter );
+  setColumnAlignment( 5, Qt::AlignHCenter );
+
+  setColumnWidthMode( 1, Manual );
+  setColumnWidthMode( 2, Manual );
+  setColumnWidthMode( 3, Manual );
+  setColumnWidthMode( 4, Manual );
+  setColumnWidthMode( 5, Manual );
+  setColumnWidthMode( 6, Manual );
+
+  header()->setResizeEnabled( false );
 }
 
 
@@ -207,7 +225,7 @@ void K3bAudioListView::slotAnimation()
 	if( item->audioTrack()->length() > 0
 	    || item->audioTrack()->status() != 0 ) {
 	  // set status icon
-	  item->setPixmap( 3, 
+	  item->setPixmap( 5, 
 			   ( item->audioTrack()->status() == 0 
 			     ? SmallIcon( "greenled" )
 			     : SmallIcon( "redled" ) )
@@ -218,7 +236,7 @@ void K3bAudioListView::slotAnimation()
 	else {
 	  int& iconNumber = item->animationIconNumber;
 	  QString icon = QString( "kde%1" ).arg( iconNumber );
-	  item->setPixmap( 3, SmallIcon( icon ) );
+	  item->setPixmap( 5, SmallIcon( icon ) );
 	  iconNumber++;
 	  if ( iconNumber > 6 )
 	    iconNumber = 1;
@@ -347,6 +365,80 @@ void K3bAudioListView::slotUpdateItems()
   }
 
   sort();  // This is so lame!
+  resizeColumns();
+}
+
+
+void K3bAudioListView::resizeEvent( QResizeEvent* e )
+{
+  K3bListView::resizeEvent(e);
+
+  resizeColumns();
+}
+
+
+void K3bAudioListView::resizeColumns()
+{
+  if( m_updatingColumnWidths ) {
+    kdDebug() << "(K3bAudioListView) already updating column widths." << endl;
+    return;
+  }
+
+  m_updatingColumnWidths = true;
+
+  // now properly resize the columns
+  // minimal width for type, length, pregap
+  // fixed for filename
+  // expand for cd-text
+  int titleWidth = header()->fontMetrics().width( header()->label(1) );
+  int artistWidth = header()->fontMetrics().width( header()->label(2) );
+  int typeWidth = header()->fontMetrics().width( header()->label(3) );
+  int lengthWidth = header()->fontMetrics().width( header()->label(4) );
+  int pregapWidth = header()->fontMetrics().width( header()->label(5) );
+  int filenameWidth = header()->fontMetrics().width( header()->label(6) );
+
+  for( QListViewItemIterator it( this ); it.current(); ++it ) {
+    artistWidth = QMAX( artistWidth, it.current()->width( fontMetrics(), this, 1 ) );
+    titleWidth = QMAX( titleWidth, it.current()->width( fontMetrics(), this, 2 ) );
+    typeWidth = QMAX( typeWidth, it.current()->width( fontMetrics(), this, 3 ) );
+    pregapWidth = QMAX( pregapWidth, it.current()->width( fontMetrics(), this, 4 ) );
+    lengthWidth = QMAX( lengthWidth, it.current()->width( fontMetrics(), this, 5 ) );
+    filenameWidth = QMAX( filenameWidth, it.current()->width( fontMetrics(), this, 6 ) );
+  }
+
+  // add a margin
+  typeWidth += 10;
+  pregapWidth += 10;
+  lengthWidth += 10;
+
+  // these always need to be completely visible
+  setColumnWidth( 3, typeWidth );
+  setColumnWidth( 4, pregapWidth );
+  setColumnWidth( 5, lengthWidth );
+
+  int remaining = visibleWidth() - typeWidth - pregapWidth - lengthWidth - columnWidth(0);
+
+  // now let's see if there is enough space for all
+  if( remaining >= artistWidth + titleWidth + filenameWidth ) {
+    remaining -= filenameWidth;
+    remaining -= (titleWidth + artistWidth);
+    setColumnWidth( 1, artistWidth + remaining/2 );
+    setColumnWidth( 2, titleWidth + remaining/2 );
+    setColumnWidth( 6, filenameWidth );
+  }
+  else if( remaining >= artistWidth + titleWidth + 20 ) {
+    setColumnWidth( 1, artistWidth );
+    setColumnWidth( 2, titleWidth );
+    setColumnWidth( 6, remaining - artistWidth - titleWidth );
+  }
+  else {
+    setColumnWidth( 1, remaining/3 );
+    setColumnWidth( 2, remaining/3 );
+    setColumnWidth( 6, remaining/3 );
+  }
+
+  triggerUpdate();
+  m_updatingColumnWidths = false;
 }
 
 #include "audiolistview.moc"
