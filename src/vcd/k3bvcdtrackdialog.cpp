@@ -350,14 +350,15 @@ void K3bVcdTrackDialog::prepareGui()
   fileInfoLine->setFrameStyle( QFrame::HLine | QFrame::Sunken );
 
   groupFileInfoLayout->addWidget( m_labelMimeType, 0, 0 );
-  groupFileInfoLayout->addMultiCellWidget( m_displayFileName, 0, 1, 1, 2 );
-  groupFileInfoLayout->addMultiCellWidget( fileInfoLine, 2, 2, 0, 2 );
+  groupFileInfoLayout->addMultiCellWidget( m_displayFileName, 0, 1, 1, 1 );
+  groupFileInfoLayout->addMultiCellWidget( fileInfoLine, 2, 2, 0, 1 );
   groupFileInfoLayout->addWidget( labelLength, 3, 0 );
   groupFileInfoLayout->addWidget( labelSize, 4, 0 );
-  groupFileInfoLayout->addWidget( m_displayLength, 3, 2 );
-  groupFileInfoLayout->addWidget( m_displaySize, 4, 2 );
+  groupFileInfoLayout->addWidget( m_displayLength, 3, 1 );
+  groupFileInfoLayout->addWidget( m_displaySize, 4, 1 );
 
   groupFileInfoLayout->setRowStretch( 5, 1 );
+  groupFileInfoLayout->setColStretch( 1, 1 );
 
   QFont f( m_displayLength->font() );
   f.setBold( true );
@@ -368,7 +369,7 @@ void K3bVcdTrackDialog::prepareGui()
   mainLayout->addWidget( groupFileInfo, 0, 0 );
   mainLayout->addWidget( m_mainTabbed, 0, 1 );
 
-  mainLayout->setColStretch( 0, 1 );
+  //  mainLayout->setColStretch( 0, 1 );
 
 }
 
