@@ -15,8 +15,8 @@
  
 
 #include "k3baudioripthread.h"
+#include "k3bcdparanoialib.h"
 #include <device/k3bdevice.h>
-#include <tools/k3bcdparanoialib.h>
 #include <k3bjob.h>
 
 #include <qfile.h>

@@ -21,13 +21,13 @@
 #include "k3baudiotrack.h"
 #include "k3baudioburndialog.h"
 #include "k3baudiojob.h"
+#include "k3baudiotitlemetainfo.h"
 #include "input/k3baudiomodulefactory.h"
 #include "input/k3baudiomodule.h"
 #include "../rip/songdb/k3bsong.h"
 #include "../rip/songdb/k3bsongmanager.h"
 #include <k3bthread.h>
 #include <k3bthreadjob.h>
-#include <tools/k3baudiotitlemetainfo.h>
 #include <k3bcore.h>
 
 // QT-includes

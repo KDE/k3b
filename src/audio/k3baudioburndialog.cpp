@@ -23,7 +23,7 @@
 #include "k3baudiocdtextwidget.h"
 #include <k3bglobals.h>
 #include <k3bstdguiitems.h>
-#include <tools/k3bwritingmodewidget.h>
+#include <k3bwritingmodewidget.h>
 #include <k3bexternalbinmanager.h>
 
 #include <qcheckbox.h>

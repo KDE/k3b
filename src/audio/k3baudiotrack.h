@@ -25,7 +25,8 @@
 #include <kio/global.h>
 
 #include <device/k3bmsf.h>
-#include <tools/k3bcdtext.h>
+
+#include "k3bcdtext.h"
 
 class K3bAudioModule;
 

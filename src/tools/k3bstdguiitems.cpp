@@ -137,30 +137,6 @@ QComboBox* K3bStdGuiItems::paranoiaModeComboBox( QWidget* parent, const char* na
 }
 
 
-QComboBox* K3bStdGuiItems::dataModeComboboxBox( QWidget* parent, const char* name )
-{
-  QComboBox* c = new QComboBox( parent, name );
-  c->insertItem( "auto" );
-  c->insertItem( "mode 1" );
-  c->insertItem( "mode 2" );
-  c->setCurrentItem( 0 );
-  QToolTip::add( c, i18n("Set the data sector type") );
-  QWhatsThis::add( c, i18n("<p>Data stored on a CD-ROM is divided into sectors which are equivalent to the audio "
-			   "frames on an audio cd. Normal audio sectors contain of 2352 bytes of audio data. "
-			   "Due to the additional header data and error correction codes needed for the data "
-			   "on a CD-ROM only 2048 bytes can be stored in one sector."
-			   "<p>These sectors can be stored in two different modes:"
-			   "<ul>"
-			   "<li><b>mode 1</b><br>"
-			   "Mode 1 sectors were defined in 1985 as part of the <em>Yellow Book</em> "
-			   "specification.</li>"
-			   "<li><b>mode 2</b><br>"
-			   "</li>"
-			   "</ul>") );
-  return c;
-}
-
-
 QCheckBox* K3bStdGuiItems::startMultisessionCheckBox( QWidget* parent, const char* name )
 {
   QCheckBox* c = new QCheckBox( i18n("Start multisession CD"), parent, name );

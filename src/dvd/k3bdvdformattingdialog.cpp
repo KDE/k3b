@@ -21,7 +21,7 @@
 #include <k3bglobals.h>
 #include <k3bcore.h>
 #include <k3bwriterselectionwidget.h>
-#include <tools/k3bwritingmodewidget.h>
+#include <k3bwritingmodewidget.h>
 #include <k3bjobprogressdialog.h>
 
 #include <klocale.h>

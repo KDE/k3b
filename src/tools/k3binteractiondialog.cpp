@@ -15,10 +15,9 @@
 
 
 #include "k3binteractiondialog.h"
-
-#include <kcutlabel.h>
-#include <k3bstdguiitems.h>
-#include <tools/k3btitlelabel.h>
+#include "k3btitlelabel.h"
+#include "kcutlabel.h"
+#include "k3bstdguiitems.h"
 
 #include <qlabel.h>
 #include <qpushbutton.h>

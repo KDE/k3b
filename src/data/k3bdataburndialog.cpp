@@ -26,9 +26,9 @@
 #include <k3bjob.h>
 #include <k3bcore.h>
 #include <k3bstdguiitems.h>
-#include <tools/k3bdatamodewidget.h>
+#include <k3bdatamodewidget.h>
 #include <k3bglobals.h>
-#include <tools/k3bwritingmodewidget.h>
+#include <k3bwritingmodewidget.h>
 
 #include <qcheckbox.h>
 #include <qframe.h>

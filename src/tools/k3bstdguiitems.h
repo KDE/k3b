@@ -33,7 +33,6 @@ namespace K3bStdGuiItems
   QCheckBox* onTheFlyCheckbox( QWidget* parent = 0, const char* name = 0 );
   QCheckBox* cdTextCheckbox( QWidget* parent = 0, const char* name = 0);
   QComboBox* paranoiaModeComboBox( QWidget* parent = 0, const char* name = 0 );
-  QComboBox* dataModeComboboxBox( QWidget* parent = 0, const char* name = 0 );
   QCheckBox* startMultisessionCheckBox( QWidget* parent = 0, const char* name = 0 );
   QCheckBox* normalizeCheckBox( QWidget* parent = 0, const char* name = 0 );
   QFrame* horizontalLine( QWidget* parent = 0, const char* name = 0 );

@@ -20,14 +20,14 @@
 #include <k3bwriterselectionwidget.h>
 #include <k3btempdirselectionwidget.h>
 #include <k3bcore.h>
-#include <tools/k3bwritingmodewidget.h>
+#include <k3bwritingmodewidget.h>
 #include <k3bglobals.h>
 #include <k3bdataimagesettingswidget.h>
 #include <k3bdataadvancedimagesettingswidget.h>
 #include <k3bdatavolumedescwidget.h>
 #include <k3bisooptions.h>
 #include <k3bglobals.h>
-#include <tools/k3bwritingmodewidget.h>
+#include <k3bwritingmodewidget.h>
 
 #include <kconfig.h>
 #include <klocale.h>

@@ -19,7 +19,7 @@
 
 #include <qobject.h>
 
-#include <tools/k3baudiotitlemetainfo.h>
+#include "../k3baudiotitlemetainfo.h"
 
 #include <kurl.h>
 

@@ -20,7 +20,7 @@
 #include <qstring.h>
 #include <qvaluevector.h>
 
-#include <tools/k3baudiotitlemetainfo.h>
+#include "k3baudiotitlemetainfo.h"
 
 namespace K3bCdDevice
 {

@@ -43,7 +43,7 @@
 #include <k3btempdirselectionwidget.h>
 #include <k3bstdguiitems.h>
 #include <k3bglobals.h>
-#include <tools/k3bwritingmodewidget.h>
+#include <k3bwritingmodewidget.h>
 #include <k3bexternalbinmanager.h>
 #include "tools/k3biso646validator.h"
 

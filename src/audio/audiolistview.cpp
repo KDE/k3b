@@ -19,10 +19,10 @@
 #include "k3baudiotrack.h"
 #include "k3baudiotrackdialog.h"
 #include "k3baudiodoc.h"
+#include "k3baudiotitlemetainfo.h"
 #include <k3b.h>
 #include <k3baudioplayer.h>
 #include <k3bview.h>
-#include <tools/k3baudiotitlemetainfo.h>
 
 #include <qheader.h>
 #include <qtimer.h>
