@@ -248,12 +248,14 @@ K3bListView::~K3bListView()
 
 void K3bListView::slotClicked( QListViewItem* item, const QPoint&, int col )
 {
-  hideEditor();
-
   if( K3bListViewItem* k3bItem = dynamic_cast<K3bListViewItem*>(item) ) {
     if( m_lastClickedItem == item || !m_doubleClickForEdit )
       showEditor( k3bItem, col );
+    else
+      hideEditor();
   }
+  else
+    hideEditor();
 
   m_lastClickedItem = item;
 }
