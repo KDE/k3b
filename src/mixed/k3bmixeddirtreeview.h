@@ -41,7 +41,6 @@ class K3bMixedDirTreeView : public K3bDataDirTreeView
 
  private:
   K3bMixedDoc* m_doc;
-  QListViewItem* m_spacerViewItem;
 
   class PrivateAudioRootViewItem;
   PrivateAudioRootViewItem* m_audioRootItem;

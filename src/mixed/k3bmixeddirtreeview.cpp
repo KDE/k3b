@@ -48,10 +48,7 @@ public:
 K3bMixedDirTreeView::K3bMixedDirTreeView( K3bView* view, K3bMixedDoc* doc, QWidget* parent, const char* )
   : K3bDataDirTreeView( view, doc->dataDoc(), parent ), m_doc(doc)
 {
-  m_spacerViewItem = new QListViewItem( this, root() );
-  m_spacerViewItem->setSelectable(false);
-
-  m_audioRootItem = new PrivateAudioRootViewItem( doc, this, m_spacerViewItem );
+  m_audioRootItem = new PrivateAudioRootViewItem( doc, this, root() );
 
   connect( this, SIGNAL(selectionChanged(QListViewItem*)),
 	   this, SLOT(slotSelectionChanged(QListViewItem*)) );
@@ -84,7 +81,7 @@ void K3bMixedDirTreeView::slotSelectionChanged( QListViewItem* i )
 {
   if( i == m_audioRootItem )
     emit audioTreeSelected();
-  else if( i != m_spacerViewItem )
+  else
     emit dataTreeSelected();
 }
 
