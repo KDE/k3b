@@ -17,10 +17,17 @@
 
 #include "k3bdvdcontent.h"
 
-K3bDvdContent::K3bDvdContent(){
+K3bDvdContent::K3bDvdContent()
+  : m_audioList(),
+    m_selectedAngle(),
+    m_selectedChapters(),
+    m_selectedAudio()
+{
 }
+
 K3bDvdContent::~K3bDvdContent(){
 }
+
 void K3bDvdContent::setRes( const QString& str ){
     m_sres = str;
     QString s = str.stripWhiteSpace();
