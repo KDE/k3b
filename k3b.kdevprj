@@ -658,7 +658,7 @@ install_location=
 type=HEADER
 
 [src/dvd/Makefile.am]
-files=src/dvd/k3bdvdview.cpp,src/dvd/k3bdvdview.h,src/dvd/k3bdvddirectories.cpp,src/dvd/k3bdvddirectories.h,src/dvd/k3bdvdavset.cpp,src/dvd/k3bdvdavset.h,src/dvd/k3bdvdavextend.cpp,src/dvd/k3bdvdavextend.h,src/dvd/k3bdvdbasetab.cpp,src/dvd/k3bdvdbasetab.h,src/dvd/k3bdvdsizetab.cpp,src/dvd/k3bdvdsizetab.h,src/dvd/k3bdvdcodecdata.cpp,src/dvd/k3bdvdcodecdata.h,src/dvd/k3bdvdinfo.cpp,src/dvd/k3bdvdinfo.h,src/dvd/k3bdvdcrop.cpp,src/dvd/k3bdvdcrop.h,src/dvd/k3bdvdpreview.cpp,src/dvd/k3bdvdpreview.h,src/dvd/k3bdvdinfoextend.cpp,src/dvd/k3bdvdinfoextend.h,src/dvd/k3bdvdresize.cpp,src/dvd/k3bdvdresize.h,src/dvd/k3bdivxdatagui.cpp,src/dvd/k3bdivxdatagui.h,src/dvd/k3bdivxprojectparser.cpp,src/dvd/k3bdivxprojectparser.h
+files=src/dvd/k3bdvdview.cpp,src/dvd/k3bdvdview.h,src/dvd/k3bdvddirectories.cpp,src/dvd/k3bdvddirectories.h,src/dvd/k3bdvdavset.cpp,src/dvd/k3bdvdavset.h,src/dvd/k3bdvdavextend.cpp,src/dvd/k3bdvdavextend.h,src/dvd/k3bdvdbasetab.cpp,src/dvd/k3bdvdbasetab.h,src/dvd/k3bdvdsizetab.cpp,src/dvd/k3bdvdsizetab.h,src/dvd/k3bdvdcodecdata.cpp,src/dvd/k3bdvdcodecdata.h,src/dvd/k3bdvdinfo.cpp,src/dvd/k3bdvdinfo.h,src/dvd/k3bdvdcrop.cpp,src/dvd/k3bdvdcrop.h,src/dvd/k3bdvdpreview.cpp,src/dvd/k3bdvdpreview.h,src/dvd/k3bdvdinfoextend.cpp,src/dvd/k3bdvdinfoextend.h,src/dvd/k3bdvdresize.cpp,src/dvd/k3bdvdresize.h,src/dvd/k3bdivxdatagui.cpp,src/dvd/k3bdivxdatagui.h,src/dvd/k3bdivxprojectparser.cpp,src/dvd/k3bdivxprojectparser.h,src/dvd/k3bdivxencodingprocess.cpp,src/dvd/k3bdivxencodingprocess.h
 sharedlib_LDFLAGS=-version-info 0:0:0
 sharedlib_rootname=dvd
 sub_dirs=
@@ -671,6 +671,18 @@ install_location=
 type=SOURCE
 
 [src/dvd/k3bdivxdatagui.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/dvd/k3bdivxencodingprocess.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/dvd/k3bdivxencodingprocess.h]
 dist=true
 install=false
 install_location=
