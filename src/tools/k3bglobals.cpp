@@ -121,7 +121,7 @@ QString K3b::findUniqueFilePrefix( const QString& _prefix, const QString& path )
   int i = 0;
   for( QStringList::iterator it = entries.begin(); 
        it != entries.end(); ++it ) {
-    if( (*it).startsWith( url + prefix + QString::number(i) ) ) {
+    if( (*it).startsWith( prefix + QString::number(i) ) ) {
       i++;
       it = entries.begin();
     }
