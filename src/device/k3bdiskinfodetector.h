@@ -62,7 +62,6 @@ namespace K3bCdDevice
     CdDevice* m_device;
     DiskInfo m_info;
     K3bTcWrapper* m_tcWrapper;
-    int m_cdfd;
     DiskInfoThread* m_thread;
   };
 };

@@ -100,7 +100,7 @@ void K3bCdDevice::DiskInfoDetector::fetchExtraInfo()
 void K3bCdDevice::DiskInfoDetector::fetchIsoInfo()
 {
   char buf[17*2048];
-
+  int m_cdfd;
   if ( (m_cdfd = ::open(m_device->ioctlDevice().latin1(),O_RDONLY | O_NONBLOCK)) == -1 ) {
     kdDebug() << "(K3bDiskInfoDetector) could not open device !" << endl;
     emit diskInfoReady(m_info);
@@ -172,6 +172,7 @@ void K3bCdDevice::DiskInfoDetector::slotIsVideoDvd( bool dvd )
 
   finish(true);
 }
+
 void K3bCdDevice::DiskInfoDetector::customEvent(QCustomEvent *e) {
 kdDebug() << "(K3bDiskInfoDetector) customEvent" << endl;
   if(e->type() == (QEvent::Type)K3bProgressInfoEvent::Finished)

@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003 Klaus-Dieter Krannich <kd@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
@@ -46,7 +46,6 @@ namespace K3bCdDevice
     QObject *m_parent;
     CdDevice *m_device;
     DiskInfo *m_info;
-    int m_cdfd;
   };
 };
 

@@ -221,13 +221,47 @@ namespace K3bCdDevice
      */
     int isEmpty();
 
+    /**
+     *  checks if disk is rewritable
+     */
     bool rewritable();
 
+    /**
+     *  try to read physical DVD structure
+     */
     bool isDVD();
+
+    /**
+     *  checks the disk type, posiible return values:
+     *  <li>K3bDiskInfo::AUDIO</li>
+     *  <li>K3bDiskInfo::DATA</li>
+     *  <li>K3bDiskInfo::MIXED</li>
+     *  <li>K3bDiskInfo::DVD</li>
+     *  <li>K3bDiskInfo::NODISC</li>
+     *  <li>K3bDiskInfo::UNKNOWN</li>
+     * </ul>
+     */
     DiskInfo::type diskType();
+
+    /**
+     *  returns the number of sessions on disk
+     */
     int numSessions();
+
+    /**
+     *  returns the disc size
+     */
     K3b::Msf discSize();
+
+    /**
+     *  returns the remaining disc size
+     */
     K3b::Msf remainingSize();
+
+    /**
+     *  returns the toc of the disc
+     */
+    bool readToc(Toc &);
 
     /**
      * block or unblock the drive's tray

@@ -577,6 +577,82 @@ int K3bCdDevice::CdDevice::numSessions()
   return ret;
 }
 
+bool K3bCdDevice::CdDevice::readToc(Toc &toc) {
+  bool ret = false;
+  struct cdrom_tochdr tochdr;
+  struct cdrom_tocentry tocentry;
+
+  int cdromfd = ::open( devicename().ascii(), O_RDONLY | O_NONBLOCK );
+  if (cdromfd < 0)
+  {
+    kdDebug() << "(K3bCdDevice) Error: could not open device." << endl;
+    return ret;
+  }
+//
+// CDROMREADTOCHDR ioctl returns:
+// cdth_trk0: First Track Number
+// cdth_trk1: Last Track Number
+//
+  if ( ::ioctl(cdromfd,CDROMREADTOCHDR,&tochdr) != 0 )
+  {
+     kdDebug() << "(K3bCdDevice) could not get toc header !" << endl;
+     return ret;
+  }
+
+  Track lastTrack;
+  for (int i = tochdr.cdth_trk0; i <= tochdr.cdth_trk1 + 1; i++) {
+    ::memset(&tocentry,0,sizeof (struct cdrom_tocentry));
+// get Lead-Out Information too
+    tocentry.cdte_track = (i<=tochdr.cdth_trk1) ? i : CDROM_LEADOUT;
+    tocentry.cdte_format = CDROM_LBA;
+//
+// CDROMREADTOCENTRY ioctl returns:
+// cdte_addr.lba: Start Sector Number (LBA Format requested)
+// cdte_ctrl:     4 ctrl bits
+//                   00x0b: 2 audio Channels(no pre-emphasis)
+//                   00x1b: 2 audio Channels(pre-emphasis)
+//                   10x0b: audio Channels(no pre-emphasis),reserved in cd-rw
+//                   10x1b: audio Channels(pre-emphasis),reserved in cd-rw
+//                   01x0b: data track, recorded uninterrupted
+//                   01x1b: data track, recorded incremental
+//                   11xxb: reserved
+//                   xx0xb: digital copy prohibited
+//                   xx1xb: digital copy permitted
+// cdte_addr:     4 addr bits (type of Q-Subchannel data)
+//                   0000b: no Information
+//                   0001b: current position data
+//                   0010b: MCN
+//                   0011b: ISRC
+//                   0100b-1111b:  reserved
+// cdte_datamode:  0: Data Mode1
+//                 1: CD-I
+//                 2: CD-XA Mode2
+//
+
+    if ( ::ioctl(cdromfd,CDROMREADTOCENTRY,&tocentry) != 0)
+      kdDebug() << "(K3bCdDevice) error reading tocentry " << i << endl;
+    int startSec = tocentry.cdte_addr.lba;
+    int control  = tocentry.cdte_ctrl & 0x0f;
+    int mode     = tocentry.cdte_datamode;
+    if( !lastTrack.isEmpty() ) {
+		   toc.append( Track( lastTrack.firstSector(), startSec-1, lastTrack.type(), lastTrack.mode() ) );
+	  }
+    int trackType = 0;
+    int trackMode = Track::UNKNOWN;
+	  if( control & 0x04 ) {
+	  	trackType = Track::DATA;
+		  if( mode == 1 )
+		    trackMode = Track::MODE1;
+		  else if( mode == 2 )
+		    trackMode = Track::MODE2;
+	  } else
+		  trackType = Track::AUDIO;
+
+	  lastTrack = Track( startSec, startSec, trackType, trackMode );
+
+  }
+  return true;
+}
 
 bool K3bCdDevice::CdDevice::block( bool b) const
 {

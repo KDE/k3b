@@ -552,10 +552,10 @@ K3bDevice* K3bCdDevice::DeviceManager::addDevice( const QString& devicename )
   QString resolved = resolveSymLink( devicename );
   kdDebug() << devicename << " resolved to " << resolved << endl;
 
-  if  ( !testForCdrom(devicename) )
+  if  ( !testForCdrom(resolved) )
     return device;
 
-  if ( (device = new K3bDevice(devicename)) )
+  if ( (device = new K3bDevice(resolved)) )
   {
     if( !device->init() )
     {
