@@ -341,8 +341,19 @@ void K3bMixedJob::slotWriterFinished( bool success )
     qApp->processEvents();
     m_doc->burner()->load();
 
-    m_msInfoFetcher->setDevice( m_doc->burner() );
-    m_msInfoFetcher->start();
+    if( m_doc->dummy() ) {
+      // do not try to get ms info in simulation mode since the cd is empty!
+      if( m_doc->onTheFly() ) {
+	m_isoImager->calculateSize();
+      }
+      else {
+	createIsoImage();
+      }
+    }
+    else {
+      m_msInfoFetcher->setDevice( m_doc->burner() );
+      m_msInfoFetcher->start();
+    }
   }
   else {
     if( !m_doc->onTheFly() && m_doc->removeBufferFiles() )
