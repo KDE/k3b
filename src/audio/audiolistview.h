@@ -19,7 +19,7 @@
 #define AUDIOLISTVIEW_H
 
 
-#include <klistview.h>
+#include "../tools/k3blistview.h"
 
 #include <qmap.h>
 
@@ -40,7 +40,7 @@ class QPainter;
 /**
   *@author Sebastian Trueg
   */
-class K3bAudioListView : public KListView  
+class K3bAudioListView : public K3bListView  
 {
   Q_OBJECT
 
@@ -91,12 +91,6 @@ class K3bAudioListView : public KListView
   void slotPlayAll();
 
  protected:
-  /**
-   * calls KListView::drawContentsOffset
-   * and paints a helper text if no item is in the list
-   */
-  virtual void drawContentsOffset ( QPainter * p, int ox, int oy, int cx, int cy, int cw, int ch );
-
   bool acceptDrag(QDropEvent* e) const;
   QDragObject* dragObject();
 };

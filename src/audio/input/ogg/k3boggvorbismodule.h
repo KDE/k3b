@@ -22,7 +22,7 @@
 
 #ifdef OGG_VORBIS
 
-#include "k3baudiomodule.h"
+#include "../k3baudiomodule.h"
 
 class OggVorbis_File;
 class QTimer;
@@ -37,10 +37,10 @@ class K3bOggVorbisModule : public K3bAudioModule
   Q_OBJECT
 
  public: 
-  K3bOggVorbisModule( K3bAudioTrack* );
+  K3bOggVorbisModule( QObject* parent = 0, const char* name = 0 );
   ~K3bOggVorbisModule();
 
-  static bool canDecode( const KURL& url );
+  bool canDecode( const KURL& url );
 
  public slots:
   void cancel();
@@ -49,6 +49,10 @@ class K3bOggVorbisModule : public K3bAudioModule
   void startDecoding();
   void decode();
   void slotConsumerReady();
+
+  void analyseTrack();
+  void stopAnalysingTrack();
+  void slotEmitTrackAnalysed();
 
  private:
   OggVorbis_File* m_oggVorbisFile;

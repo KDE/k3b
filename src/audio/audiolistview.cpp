@@ -47,7 +47,7 @@
 
 
 K3bAudioListView::K3bAudioListView( K3bView* view, K3bAudioDoc* doc, QWidget *parent, const char *name )
-  : KListView(parent,name), m_doc(doc), m_view(view)
+  : K3bListView(parent,name), m_doc(doc), m_view(view)
 {
   setAcceptDrops( true );
   setDropVisualizer( true );
@@ -56,6 +56,9 @@ K3bAudioListView::K3bAudioListView( K3bView* view, K3bAudioDoc* doc, QWidget *pa
   //  setSelectionModeExt( KListView::Konqueror ); // FileManager in KDE3
   setSelectionModeExt( KListView::Extended );
   setItemsMovable( false );
+
+  setNoItemText( i18n("Use drag'n'drop to add audio files to the project.") + "\n"
+		 + i18n("After that press the burn button to write the CD." ) );
 
   setSorting( 0 );
 
@@ -220,13 +223,13 @@ void K3bAudioListView::slotAnimation()
 	  // set status icon
 	  switch( item->audioTrack()->status() ) {
 	  case K3bAudioTrack::OK:
-	    item->setPixmap( 3, SmallIcon( "ok" ) );
+	    item->setPixmap( 3, SmallIcon( "greenled" ) );
 	    break;
 	  case K3bAudioTrack::RECOVERABLE:
-	    item->setPixmap( 3, SmallIcon( "undo" ) );
+	    item->setPixmap( 3, SmallIcon( "yellowled" ) );
 	    break;
 	  case K3bAudioTrack::CORRUPT:
-	    item->setPixmap( 3, SmallIcon( "stop" ) );
+	    item->setPixmap( 3, SmallIcon( "redled" ) );
 	    break;
 	  }
 	  
@@ -387,21 +390,6 @@ void K3bAudioListView::slotPlayAll()
     for( ++it; it.current(); ++it ) {
       k3bMain()->audioPlayer()->enqueueFile( it.current()->absPath() );
     }
-  }
-}
-
-
-void K3bAudioListView::drawContentsOffset ( QPainter * p, int ox, int oy, int cx, int cy, int cw, int ch )
-{
-  KListView::drawContentsOffset( p, ox, oy, cx, cy, cw, ch );
-
-  if( childCount() == 0 ) {
-    // draw some info text
-    p->setPen( Qt::darkGray );
-    p->drawText( ox+20, oy+30, 
-		 i18n("Use drag'n'drop to add audio files to the project.") );
-    p->drawText( ox+20, oy+30+ p->fontMetrics().lineSpacing(), 
-		 i18n("After that press the burn button to write the CD.") );
   }
 }
 

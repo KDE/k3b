@@ -483,7 +483,7 @@ void K3bAudioJob::slotDecodeNextFile()
 	}
       }
 
-      module->start();
+      module->start( m_currentDecodedTrack );
     }
   }
   else {

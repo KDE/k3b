@@ -52,7 +52,8 @@ K3bAudioTrack::K3bAudioTrack( QPtrList<K3bAudioTrack>* parent, const QString& fi
 
 K3bAudioTrack::~K3bAudioTrack()
 {
-  delete m_module;
+  if( m_module )
+    m_module->removeTrackToAnalyse( this );
 }
 
 

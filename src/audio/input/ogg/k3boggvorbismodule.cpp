@@ -22,7 +22,7 @@
 #ifdef OGG_VORBIS
 
 #include "k3boggvorbismodule.h"
-#include "../k3baudiotrack.h"
+#include "../../k3baudiotrack.h"
 
 #include <qtimer.h>
 #include <qfile.h>
@@ -37,8 +37,8 @@
 #include <vorbis/vorbisfile.h>
 
 
-K3bOggVorbisModule::K3bOggVorbisModule( K3bAudioTrack* track )
-  : K3bAudioModule( track )
+K3bOggVorbisModule::K3bOggVorbisModule( QObject* parent, const char* name )
+  : K3bAudioModule( parent, name )
 {
   m_oggVorbisFile = new OggVorbis_File;
   m_outputBuffer  = new char[OUTPUT_BUFFER_SIZE];
@@ -48,56 +48,6 @@ K3bOggVorbisModule::K3bOggVorbisModule( K3bAudioTrack* track )
 
 
   m_bDecodingInProgress = false;
-
-
-  // do some initialization
-  FILE* file = fopen( QFile::encodeName(track->absPath()), "r" );
-  if( !file ) {
-    kdDebug() << "(K3bOggVorbisModule) Could not open file " << track->absPath() << endl;
-    audioTrack()->setStatus( K3bAudioTrack::CORRUPT );
-  }
-  else {
-    if( ov_open( file, m_oggVorbisFile, 0, 0 ) ) {
-      kdDebug() << "(K3bOggVorbisModule) " << track->absPath() << " seems to to be an ogg vorbis file." << endl;
-      audioTrack()->setStatus( K3bAudioTrack::CORRUPT );
-      fclose( file );
-    }
-    else {
-      // check length of track
-      double seconds = ov_time_total( m_oggVorbisFile, -1 );
-      if( seconds == OV_EINVAL ) {
-	kdDebug() << "(K3bOggVorbisModule) Could not determine length of file " << track->absPath() << endl;
-	audioTrack()->setStatus( K3bAudioTrack::CORRUPT );
-      }
-      else {
-	track->setLength( (unsigned long)ceil(seconds * 75.0) );
-	audioTrack()->setStatus( K3bAudioTrack::OK );
-      }
-
-      // search for artist,title information
-      vorbis_comment* vComment = ov_comment( m_oggVorbisFile, -1 );
-      if( !vComment ) {
-	kdDebug() << "(K3bOggVorbisModule) Could not open OggVorbis comment of file " << track->absPath() << endl;
-      }
-      else {
-	for( int i = 0; i < vComment->comments; ++i ) {
-	  QString comment( vComment->user_comments[i] );
-	  QStringList values = QStringList::split( "=", comment );
-	  if( values.count() > 1 ) {
-	    if( values[0] == "title" )
-	      track->setTitle( values[1] );
-	    else if( values[0] == "artist" )
-	      track->setArtist( values[1] );
-	    else if( values[0] == "album" )
-	      track->setAlbum( values[1] );
-	  }
-	}
-      }
-    }
-  
-    ov_clear( m_oggVorbisFile );
-  }
-
 }
 
 
@@ -236,6 +186,72 @@ bool K3bOggVorbisModule::canDecode( const KURL& url )
   ov_clear( &of );
 
   return true;
+}
+
+
+void K3bOggVorbisModule::analyseTrack()
+{
+  // do some initialization
+  FILE* file = fopen( QFile::encodeName(audioTrack()->absPath()), "r" );
+  if( !file ) {
+    kdDebug() << "(K3bOggVorbisModule) Could not open file " << audioTrack()->absPath() << endl;
+    audioTrack()->setStatus( K3bAudioTrack::CORRUPT );
+  }
+  else {
+    if( ov_open( file, m_oggVorbisFile, 0, 0 ) ) {
+      kdDebug() << "(K3bOggVorbisModule) " << audioTrack()->absPath() << " seems to to be an ogg vorbis file." << endl;
+      audioTrack()->setStatus( K3bAudioTrack::CORRUPT );
+      fclose( file );
+    }
+    else {
+      // check length of track
+      double seconds = ov_time_total( m_oggVorbisFile, -1 );
+      if( seconds == OV_EINVAL ) {
+	kdDebug() << "(K3bOggVorbisModule) Could not determine length of file " << audioTrack()->absPath() << endl;
+	audioTrack()->setStatus( K3bAudioTrack::CORRUPT );
+      }
+      else {
+	audioTrack()->setLength( (unsigned long)ceil(seconds * 75.0) );
+	audioTrack()->setStatus( K3bAudioTrack::OK );
+      }
+
+      // search for artist,title information
+      vorbis_comment* vComment = ov_comment( m_oggVorbisFile, -1 );
+      if( !vComment ) {
+	kdDebug() << "(K3bOggVorbisModule) Could not open OggVorbis comment of file " << audioTrack()->absPath() << endl;
+      }
+      else {
+	for( int i = 0; i < vComment->comments; ++i ) {
+	  QString comment( vComment->user_comments[i] );
+	  QStringList values = QStringList::split( "=", comment );
+	  if( values.count() > 1 ) {
+	    if( values[0] == "title" )
+	      audioTrack()->setTitle( values[1] );
+	    else if( values[0] == "artist" )
+	      audioTrack()->setArtist( values[1] );
+	    else if( values[0] == "album" )
+	      audioTrack()->setAlbum( values[1] );
+	  }
+	}
+      }
+    }
+  
+    ov_clear( m_oggVorbisFile );
+  }
+
+  QTimer::singleShot( 0, this, SLOT(slotEmitTrackAnalysed()) );
+}
+
+
+void K3bOggVorbisModule::slotEmitTrackAnalysed()
+{
+  emit trackAnalysed( audioTrack() );
+}
+
+
+void K3bOggVorbisModule::stopAnalysingTrack()
+{
+  // do nothing since all is done syncronously
 }
 
 

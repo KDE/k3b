@@ -1,11 +1,11 @@
 #include <config.h>
 
 #include "k3baudiomodulefactory.h"
-#include "k3bmp3module.h"
+#include "mp3/k3bmp3module.h"
 #include "../k3baudiotrack.h"
 
 #ifdef OGG_VORBIS
-#include "k3boggvorbismodule.h"
+#include "ogg/k3boggvorbismodule.h"
 #endif
 
 #include <qstring.h>
@@ -15,43 +15,59 @@
 #include <kdebug.h>
 
 
+K3bAudioModuleFactory::K3bAudioModuleFactory()
+  : QObject()
+{
+  // create an instance of all available modules 
+  // (This should be plugins in the future)
+  m_modules.append( new K3bMp3Module( this ) );
+  m_modules.append( new K3bOggVorbisModule( this ) );
+}
+
+
+K3bAudioModuleFactory::~K3bAudioModuleFactory()
+{
+  // QObject should make sure the modules get deleted
+}
+
+K3bAudioModuleFactory* K3bAudioModuleFactory::self()
+{
+  static K3bAudioModuleFactory* factoryInstance = 0;
+  if( factoryInstance == 0 ) {
+    factoryInstance = new K3bAudioModuleFactory();
+  }
+
+  return factoryInstance;
+}
+
+
 K3bAudioModule* K3bAudioModuleFactory::createModule( K3bAudioTrack* track )
 {
-  KFileItem fileItem( -1, -1, KURL(track->absPath()) );
+  KURL url;
+  url.setPath( track->absPath() );
 
-  if( fileItem.mimetype() == "audio/x-mp3" ) {
-    kdDebug() << "(K3bAudioModuleFactory) Creating K3bAudioModule for mp3..." << endl;
-    return new K3bMp3Module( track );
+  for( QListIterator<K3bAudioModule> it( m_modules ); it.current(); ++it ) {
+    if( it.current()->canDecode( url ) ) {
+      it.current()->addTrackToAnalyse( track );
+      return it.current();
+    }
   }
 
-#ifdef OGG_VORBIS
-  else if( K3bOggVorbisModule::canDecode( fileItem.url() ) ) {
-    kdDebug() << "(K3bAudioModuleFactory) Creating K3bAudioModule for ogg vorbis..." << endl;
-    return new K3bOggVorbisModule( track );
-  }
-#endif
-
-  else {
-    kdDebug() << "(K3bAudioModuleFactory) No K3bAudioModule availible." << endl;
-    return 0;
-  }
+  kdDebug() << "(K3bAudioModuleFactory) No K3bAudioModule availible." << endl;
+  return 0;
 }
 
 
 bool K3bAudioModuleFactory::moduleAvailable( const KURL& url )
 {
-  KFileItem fileItem( -1, -1, url );
-
-  if( fileItem.mimetype() == "audio/x-mp3" ) {
-    return true;
+  for( QListIterator<K3bAudioModule> it( m_modules ); it.current(); ++it ) {
+    if( it.current()->canDecode( url ) ) {
+      return true;
+    }
   }
 
-#ifdef OGG_VORBIS
-  else if( K3bOggVorbisModule::canDecode( url ) )
-    return true;
-#endif
-
-  else {
-    return false;
-  }
+  return false;
 }
+
+
+#include "k3baudiomodulefactory.moc"

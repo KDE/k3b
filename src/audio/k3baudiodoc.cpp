@@ -205,14 +205,14 @@ bool K3bAudioDoc::readM3uFile( const KURL& url, int pos )
 K3bAudioTrack* K3bAudioDoc::createTrack( const KURL& url )
 {
   unsigned long length = identifyWaveFile( url );
-  if( length > 0 || K3bAudioModuleFactory::moduleAvailable( url ) ) {
+  if( length > 0 || K3bAudioModuleFactory::self()->moduleAvailable( url ) ) {
     K3bAudioTrack* newTrack =  new K3bAudioTrack( m_tracks, url.path() );
     if( length > 0 ) {
       newTrack->setLength( length );  // no module needed for wave files
       newTrack->setStatus( K3bAudioTrack::OK );
     }
     else {
-      K3bAudioModule* module = K3bAudioModuleFactory::createModule( newTrack );
+      K3bAudioModule* module = K3bAudioModuleFactory::self()->createModule( newTrack );
       newTrack->setModule( module );
 
       // connect to the finished signal to ensure the calculated length and status of the file 
@@ -263,6 +263,8 @@ void K3bAudioDoc::addTrack( K3bAudioTrack* track, uint position )
     lastAddedPosition = m_tracks->count();
     m_tracks->insert( m_tracks->count(), track );
   }
+
+  emit newTracks();
   
   setModified( true );
 }

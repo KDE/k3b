@@ -2,10 +2,10 @@
 #define K3BMP3MODULE_H
 
 
-#include "k3baudiomodule.h"
+#include "../k3baudiomodule.h"
 
 extern "C" {
-#include "../../libmad/mad.h"
+#include "libmad/mad.h"
 }
 
 #include <qfile.h>
@@ -18,8 +18,10 @@ class K3bMp3Module : public K3bAudioModule
   Q_OBJECT
 
  public:
-  K3bMp3Module( K3bAudioTrack* track );
+  K3bMp3Module( QObject* parent = 0, const char* name = 0 );
   ~K3bMp3Module();
+
+  bool canDecode( const KURL& url );
 
  public slots:
   void cancel();
@@ -29,6 +31,8 @@ class K3bMp3Module : public K3bAudioModule
   void slotCountFrames();
   void slotConsumerReady();
   void startDecoding();
+  void analyseTrack();
+  void stopAnalysingTrack();
  
  private:
   inline unsigned short linearRound( mad_fixed_t fixed );
@@ -46,6 +50,7 @@ class K3bMp3Module : public K3bAudioModule
   bool m_bOutputFinished;
 
   QTimer* m_decodingTimer;
+  QTimer* m_analysingTimer;
 
   unsigned long m_rawDataLengthToStream;
   unsigned long m_rawDataAlreadyStreamed;

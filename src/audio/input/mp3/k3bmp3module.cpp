@@ -1,5 +1,5 @@
 #include "k3bmp3module.h"
-#include "../k3baudiotrack.h"
+#include "../../k3baudiotrack.h"
 
 #include <kurl.h>
 #include <kapplication.h>
@@ -8,6 +8,7 @@
 #include <klocale.h>
 #include <kfilemetainfo.h>
 #include <kdebug.h>
+#include <kmimemagic.h>
 
 #include <qstring.h>
 #include <qfileinfo.h>
@@ -21,15 +22,17 @@
 typedef unsigned char k3b_mad_char;
 
 
-K3bMp3Module::K3bMp3Module( K3bAudioTrack* track )
-  : K3bAudioModule( track ), m_inputFile( track->absPath() )
+K3bMp3Module::K3bMp3Module( QObject* parent, const char* name )
+  : K3bAudioModule( parent, name )
 {
   // at the beginning the timer is used for counting the frames
   m_decodingTimer = new QTimer( this );
-  connect( m_decodingTimer, SIGNAL(timeout()), this, SLOT(slotCountFrames()) );
+  m_analysingTimer = new QTimer( this );
+  connect( m_analysingTimer, SIGNAL(timeout()), this, SLOT(slotCountFrames()) );
+  connect( m_decodingTimer, SIGNAL(timeout()), this, SLOT(slotDecodeNextFrame()) );
 
 
-  m_bCountingFramesInProgress = true;
+  m_bCountingFramesInProgress = false;
   m_bDecodingInProgress = false;
   m_bEndOfInput = false;
   m_bFrameNeedsResampling = false;
@@ -39,9 +42,6 @@ K3bMp3Module::K3bMp3Module( K3bAudioTrack* track )
 
   m_outputPointer   = m_outputBuffer;
   m_outputBufferEnd = m_outputBuffer + OUTPUT_BUFFER_SIZE;
-
-  memset( m_inputBuffer, 0, INPUT_BUFFER_SIZE );
-  memset( m_outputBuffer, 0, OUTPUT_BUFFER_SIZE );
 
   m_madStream = new mad_stream;
   m_madFrame  = new mad_frame;
@@ -56,27 +56,6 @@ K3bMp3Module::K3bMp3Module( K3bAudioTrack* track )
   // all other resampling needs at most 1152 bytes
   m_madResampledLeftChannel = new mad_fixed_t[1600];
   m_madResampledRightChannel = new mad_fixed_t[1600];
-
-  KFileMetaInfo metaInfo( audioTrack()->absPath() );
-  if( !metaInfo.isEmpty() && metaInfo.isValid() ) {
-    
-    KFileMetaInfoItem artistItem = metaInfo.item( "Artist" );
-    KFileMetaInfoItem titleItem = metaInfo.item( "Title" );
-    
-    if( artistItem.isValid() )
-      audioTrack()->setArtist( artistItem.string() );
-
-    if( titleItem.isValid() )
-      audioTrack()->setTitle( titleItem.string() );
-  }
-
-
-  audioTrack()->setStatus( K3bAudioTrack::OK );
-
-  // check track length
-  initializeDecoding();
-  mad_header_init( m_madHeader );
-  m_decodingTimer->start(0);
 }
 
 
@@ -87,15 +66,16 @@ K3bMp3Module::~K3bMp3Module()
 
   delete [] m_madResampledLeftChannel;
   delete [] m_madResampledRightChannel;
-
-  mad_stream_finish( m_madStream );
 }
 
 
 void K3bMp3Module::initializeDecoding()
 {
-  if( !m_inputFile.isOpen() )
-    m_inputFile.open( IO_ReadOnly );
+  m_inputFile.setName( audioTrack()->absPath() );
+  m_inputFile.open( IO_ReadOnly );
+
+  memset( m_inputBuffer, 0, INPUT_BUFFER_SIZE );
+  memset( m_outputBuffer, 0, OUTPUT_BUFFER_SIZE );
 
   mad_stream_init( m_madStream );
   mad_timer_reset( m_madTimer );
@@ -104,6 +84,8 @@ void K3bMp3Module::initializeDecoding()
   
   m_frameCount = 0;
   m_rawDataAlreadyStreamed = 0;
+  m_rawDataLengthToStream = audioTrack()->size();
+  m_bEndOfInput = false;
 }
 
 
@@ -115,8 +97,6 @@ void K3bMp3Module::startDecoding()
     m_bOutputFinished = false;
     
     initializeDecoding();
-
-    m_inputFile.at(0);
 
     mad_frame_init( m_madFrame );
     mad_synth_init( m_madSynth );
@@ -200,19 +180,14 @@ void K3bMp3Module::slotCountFrames()
       kdDebug() << "(K3bMp3Module) setting length of track " << audioTrack()->index() << " to ceil(" << seconds
 		<< ") seconds = " << frames << " frames" << endl;
       
-      m_rawDataLengthToStream = frames * 2352;
-      
-      // finished. Prepare timer for decoding
-      m_decodingTimer->stop();
-      m_decodingTimer->disconnect();
-      connect( m_decodingTimer, SIGNAL(timeout()), this, SLOT(slotDecodeNextFrame()) );
+      m_analysingTimer->stop();
 
       m_bCountingFramesInProgress = false;
       mad_header_finish( m_madHeader );
 
       clearingUp();
 
-      emit finished( true );
+      emit trackAnalysed( audioTrack() );
       break;
     }
     else { // input ready
@@ -230,12 +205,12 @@ void K3bMp3Module::slotCountFrames()
 	    audioTrack()->setStatus( K3bAudioTrack::CORRUPT );
 	    
 	    m_bCountingFramesInProgress = false;
-	    m_decodingTimer->stop();
+	    m_analysingTimer->stop();
 	    mad_header_finish( m_madHeader );
 
 	    clearingUp();
 
-	    emit finished( false );
+	    emit trackAnalysed( audioTrack() );
 	    break;
 	  }
 	}
@@ -626,7 +601,55 @@ void K3bMp3Module::clearingUp()
     m_consumer->disconnect(this);
 
   m_consumer = 0;
+
+  mad_stream_finish( m_madStream );
 }
 
+
+bool K3bMp3Module::canDecode( const KURL& url )
+{
+  // TODO: is this enough?
+  if( KMimeMagic::self()->findFileType( url.path() )->mimeType() == "audio/x-mp3" )
+    return true;
+  return false;
+}
+
+
+void K3bMp3Module::analyseTrack()
+{
+  KFileMetaInfo metaInfo( audioTrack()->absPath() );
+  if( !metaInfo.isEmpty() && metaInfo.isValid() ) {
+    
+    KFileMetaInfoItem artistItem = metaInfo.item( "Artist" );
+    KFileMetaInfoItem titleItem = metaInfo.item( "Title" );
+    
+    if( artistItem.isValid() )
+      audioTrack()->setArtist( artistItem.string() );
+
+    if( titleItem.isValid() )
+      audioTrack()->setTitle( titleItem.string() );
+  }
+
+
+  audioTrack()->setStatus( K3bAudioTrack::OK );
+
+  // check track length
+  initializeDecoding();
+  mad_header_init( m_madHeader );
+  m_bCountingFramesInProgress = true;
+  m_bDecodingInProgress = false;
+
+  m_analysingTimer->start(0);
+}
+
+
+void K3bMp3Module::stopAnalysingTrack()
+{
+  if( m_bCountingFramesInProgress ) {
+    m_analysingTimer->stop();
+    mad_header_finish( m_madHeader );
+    clearingUp();
+  }
+}
 
 #include "k3bmp3module.moc"

@@ -52,6 +52,7 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
   grid->setRowStretch( 0, 1 );
 
   connect( m_songlist, SIGNAL(lengthReady()), m_fillStatusDisplay, SLOT(update()) );
+  connect( m_doc, SIGNAL(newTracks()), m_fillStatusDisplay, SLOT(update()) );
 }
 
 K3bAudioView::~K3bAudioView(){
