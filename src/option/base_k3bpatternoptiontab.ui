@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>600</width>
-            <height>524</height>
+            <width>734</width>
+            <height>640</height>
         </rect>
     </property>
     <property name="caption">
@@ -30,8 +30,16 @@
             <property name="name">
                 <cstring>m_infoLabel</cstring>
             </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>1</hsizetype>
+                    <vsizetype>1</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
             <property name="text">
-                <string>&lt;p&gt;Here you can setup the audio cd ripping pattern which will state how your ripped tracks will be saved. You can use one of the predefined or define your own. You are free to add any text you want along with some special strings that will be replaced by the values gained from cddb. These special strings are:
+                <string>&lt;qt&gt;Here you can setup the audio cd ripping pattern which will state how your ripped tracks will be saved. You can use one of the predefined or define your own. You are free to add any text you want along with some special strings that will be replaced by the values gained from cddb. These special strings are:
 &lt;ul&gt;
 &lt;li&gt;%a - Will be replaced by the artist of the track&lt;/li&gt;
 &lt;li&gt;%t - Will be replaced by the title of the track&lt;/li&gt;
@@ -43,8 +51,7 @@
 &lt;li&gt;%x - Will be replaced by extended info about the cd&lt;/li&gt;
 &lt;li&gt;%d - Will be replaced by the current date&lt;/li&gt;
 &lt;/ul&gt;
-The directory pattern always describes a relative path which will be appended to the directory you choose in the cd ripping dialog. If you do not want any directory pattern just leave it blank.
-&lt;/p&gt;</string>
+The directory pattern always describes a relative path which will be appended to the directory you choose in the cd ripping dialog. If you do not want any directory pattern just leave it blank.&lt;/qt&gt;</string>
             </property>
             <property name="alignment">
                 <set>WordBreak|AlignTop|AlignLeft</set>
@@ -240,11 +247,28 @@ The directory pattern always describes a relative path which will be appended to
                         <enum>Sunken</enum>
                     </property>
                     <property name="text">
-                        <string></string>
+                        <string>Some sample text for layouting</string>
                     </property>
                 </widget>
             </hbox>
         </widget>
+        <spacer>
+            <property name="name" stdset="0">
+                <cstring>Spacer3</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
     </vbox>
 </widget>
 <connections>

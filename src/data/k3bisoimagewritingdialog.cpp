@@ -48,10 +48,12 @@
 #include <qtoolbutton.h>
 #include <qpushbutton.h>
 #include <qtabwidget.h>
+#include <qtooltip.h>
+#include <qwhatsthis.h>
 
 
 K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( QWidget* parent, const char* name, bool modal )
-  : KDialogBase( parent, name, modal, i18n("Write Image To CD"), User1|User2,
+  : KDialogBase( parent, name, modal, i18n("Write Image to CD"), User1|User2,
 		 User1, false, KGuiItem( i18n("Write"), "write", i18n("Start writing") ), KStdGuiItem::close() )
 {
   setupGui();
@@ -68,6 +70,32 @@ K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( QWidget* parent, const char*
   kapp->config()->setGroup("General Options");
   m_editImagePath->setText( kapp->config()->readEntry( "last written image", "" ) );
   updateImageSize( m_editImagePath->text() );
+
+
+
+  // ToolTips
+  // --------------------------------------------------------------------------------
+  QToolTip::add( m_checkDummy, i18n("Only simulate the writing process") );
+  QToolTip::add( m_checkDao, i18n("Write in disk at once mode") );
+  QToolTip::add( m_checkBurnProof, i18n("Enable BURN-PROOF to avoid buffer underruns") );
+  QToolTip::add( m_checkUseCueFile, i18n("") );
+  QToolTip::add( m_checkNoFix, i18n("") );
+
+  // What's This info
+  // --------------------------------------------------------------------------------
+  QWhatsThis::add( m_checkDummy, i18n("<p>If this option is checked K3b will perform all writing steps with the "
+				      "laser turned off."
+				      "<p>This is useful for example to test a higher writing speed "
+				      " or if your system is able to write on-the-fly.") );
+  QWhatsThis::add( m_checkDao, i18n("<p>If this option is checked K3b will write the cd in disk at once mode as "
+				    "compared to track at once (TAO)."
+				    "<p>It is always recommended to use DAO where possible."
+				    "<p><b>Caution:</b> Only in DAO mode track pregaps other than 2 seconds are "
+				    "supported.") );
+  QWhatsThis::add( m_checkBurnProof, i18n("<p>If this option is checked K3b enables <em>BURN-PROOF</em>. This is "
+					  "a feature of the cd writer which avoids buffer underruns.") );
+  QWhatsThis::add( m_checkUseCueFile, i18n("") );
+  QWhatsThis::add( m_checkNoFix, i18n("") );
 }
 
 

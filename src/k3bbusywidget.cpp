@@ -78,7 +78,7 @@ void K3bBusyWidget::drawContents( QPainter* p )
     pos = 2;
   }
 
-  p->eraseRect( rect );
+  //  p->eraseRect( rect );
   if( m_bBusy )
     p->fillRect( pos, (rect.height() - squareSize)/2, squareSize, squareSize, KGlobalSettings::highlightColor() );
 }

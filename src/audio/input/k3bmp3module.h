@@ -57,6 +57,7 @@ class K3bMp3Module : public K3bAudioModule
   mad_timer_t*  m_madTimer;
 
   // needed for resampling
+  bool m_bFrameNeedsResampling;
   mad_fixed_t m_madResampledStep;
   mad_fixed_t m_madResampledLast;
   mad_fixed_t m_madResampledRatio;

@@ -56,6 +56,7 @@ K3bAudioDoc::K3bAudioDoc( QObject* parent )
 {
   m_tracks = 0L;
   m_cdText = false;
+  m_padding = true;  // padding is enabled forever since there is no use in disabling it!
 	
   m_docType = AUDIO;
 
@@ -890,7 +891,8 @@ void K3bAudioDoc::loadDefaultSettings()
   //  setBurnproof( c->readBoolEntry( "burnproof", true ) );
 
   m_cdText = c->readBoolEntry( "cd_text", false );
-  m_padding = c->readBoolEntry( "padding", true );
+  //  m_padding = c->readBoolEntry( "padding", true );
+  m_padding = true;  // padding is always a good idea!
   m_hideFirstTrack = c->readBoolEntry( "hide_first_track", false );
   m_removeBufferFiles = c->readBoolEntry( "remove_buffer_files", true );
 }

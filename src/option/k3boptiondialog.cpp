@@ -91,6 +91,7 @@ bool K3bOptionDialog::saveSettings()
   m_patternOptionTab->apply();
   m_externalBinOptionTab->saveSettings();
   m_editToolbarWidget->save();
+  k3bMain()->createGUI();
 
   if( !m_miscOptionTab->saveSettings() )
     return false;

@@ -914,8 +914,6 @@ void K3bMainWindow::slotCurrentDocChanged( QWidget* )
 void K3bMainWindow::slotEditToolbars()
 {
   showOptionDialog( 6 );
-
-  createGUI();
 }
 
 

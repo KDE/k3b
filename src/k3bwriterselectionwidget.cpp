@@ -31,6 +31,8 @@
 #include <qlayout.h>
 #include <qradiobutton.h>
 #include <qhbuttongroup.h>
+#include <qtooltip.h>
+#include <qwhatsthis.h>
 
 
 K3bWriterSelectionWidget::K3bWriterSelectionWidget(QWidget *parent, const char *name )
@@ -101,6 +103,23 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget(QWidget *parent, const char *
 
   connect( k3bMain(), SIGNAL(configChanged(KConfig*)), this, SLOT(slotConfigChanged(KConfig*)) );
   connect( m_comboSpeed, SIGNAL(activated(int)), this, SLOT(slotSpeedChanged(int)) );
+
+
+
+  // ToolTips
+  // --------------------------------------------------------------------------------
+  QToolTip::add( m_comboWriter, i18n("The cd writer that will write the cd") );
+  QToolTip::add( m_comboSpeed, i18n("The speed to write the cd with") );
+
+  // What's This info
+  // --------------------------------------------------------------------------------
+  QWhatsThis::add( m_comboWriter, i18n("<p>Select the cd writer that you want to write the cd."
+				       "<p>In most cases there will only be one writer available which "
+				       "does not leave much choice.") );
+  QWhatsThis::add( m_comboSpeed, i18n("<p>Select the speed with which you want the writer to burn."
+				      "<p>1x speed means 150 kb/s."
+				      "<p><b>Caution:</b> Make sure your system is able to send the data "
+				      "fast enough to prevent buffer underruns.") );
 }
 
 
@@ -198,7 +217,7 @@ int K3bWriterSelectionWidget::writingApp() const
 }
 
 
-void K3bWriterSelectionWidget::slotSpeedChanged( int index )
+void K3bWriterSelectionWidget::slotSpeedChanged( int )
 {
   writerDevice()->setCurrentWriteSpeed( writerSpeed() );
 }

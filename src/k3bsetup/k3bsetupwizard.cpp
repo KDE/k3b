@@ -32,6 +32,8 @@ K3bSetupWizard::K3bSetupWizard( K3bSetup* setup, QWidget* parent,  const char* n
   (void)new FstabEntriesTab( 4, 6, this );
   (void)new PermissionTab( 5, 6, this );
   setFinishEnabled( new FinishTab( 6, 6, this ), true );
+
+  setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
 }
 
 

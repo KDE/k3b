@@ -43,7 +43,7 @@ K3bPatternOptionTab::K3bPatternOptionTab( QWidget* parent, const char* name )
 
   base_K3bPatternOptionTabLayout->setMargin( 0 );
   base_K3bPatternOptionTabLayout->setSpacing( KDialog::spacingHint() );
-  base_K3bPatternOptionTabLayout->setStretchFactor( m_infoLabel, 1 );
+  //  base_K3bPatternOptionTabLayout->setStretchFactor( m_infoLabel, 1 );
 
   m_groupDirectoryPattern->layout()->setMargin( 0 );
   m_groupDirectoryPatternLayout->setMargin( KDialog::marginHint() );

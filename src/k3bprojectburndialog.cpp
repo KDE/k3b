@@ -24,6 +24,7 @@
 #include <qstring.h>
 #include <qpushbutton.h>
 #include <qtooltip.h>
+#include <qwhatsthis.h>
 #include <qlayout.h>
 #include <qvbox.h>
 
@@ -58,7 +59,7 @@ K3bProjectBurnDialog::K3bProjectBurnDialog(K3bDoc* doc, QWidget *parent, const c
 
   m_buttonLoadDefaults = new QPushButton( i18n("Defaults"), box );
   m_buttonLoadUserDefaults = new QPushButton( i18n("User Defaults"), box );
-  m_buttonSaveUserDefaults = new QPushButton( i18n("Save user Defaults"), box );
+  m_buttonSaveUserDefaults = new QPushButton( i18n("Save User Defaults"), box );
 
   grid->addMultiCellWidget( m_k3bMainWidget, 0, 0, 0, 3 );
   grid->addWidget( m_buttonLoadDefaults, 1, 0 );
@@ -71,9 +72,22 @@ K3bProjectBurnDialog::K3bProjectBurnDialog(K3bDoc* doc, QWidget *parent, const c
   connect( m_buttonLoadUserDefaults, SIGNAL(clicked()), this, SLOT(loadUserDefaults()) );
   connect( m_buttonSaveUserDefaults, SIGNAL(clicked()), this, SLOT(saveUserDefaults()) );
 
+
+  // ToolTips
+  // -------------------------------------------------------------------------
   QToolTip::add( m_buttonLoadDefaults, i18n("Load K3b default settings") );
   QToolTip::add( m_buttonLoadUserDefaults, i18n("Load user default settings") );
   QToolTip::add( m_buttonSaveUserDefaults, i18n("Save user default settings for new projects") );
+
+  // What's This info
+  // -------------------------------------------------------------------------
+  QWhatsThis::add( m_buttonLoadDefaults, i18n("<p>This sets all options back to K3b defaults.") );
+  QWhatsThis::add( m_buttonLoadUserDefaults, i18n("<p>This loads the settings saved with the <em>Save User Defaults</em> "
+						  "button.") );
+  QWhatsThis::add( m_buttonSaveUserDefaults, i18n("<p>Saves the current settings as the default for all new projects."
+						  "<p>These settings can also be loaded with the <em>User Defaults</em> "
+						  "button."
+						  "<p><b>The K3b defaults are not overwritten by this!</b>") );
 }
 
 

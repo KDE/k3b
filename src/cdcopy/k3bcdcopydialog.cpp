@@ -39,6 +39,7 @@
 #include <qlabel.h>
 #include <qtooltip.h>
 #include <qtabwidget.h>
+#include <qwhatsthis.h>
 
 
 K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal )
@@ -152,7 +153,40 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   m_checkDeleteImages->setChecked( true );
 
 
+  // ToolTips
+  // --------------------------------------------------------------------------------
   QToolTip::add( m_checkFastToc, i18n("Do not extract pre-gaps and index marks") );
+  QToolTip::add( m_checkSimulate, i18n("Only simulate the writing process") );
+  QToolTip::add( m_checkOnTheFly, i18n("Copy directly without creating an image") );
+  QToolTip::add( m_checkDeleteImages, i18n("Remove images from harddisk when finished") );
+  QToolTip::add( m_checkOnlyCreateImage, i18n("Only create an image of the disk, no writing") );
+  QToolTip::add( m_comboSourceDevice, i18n("Select the drive with the cd to copy") );
+  QToolTip::add( m_spinCopies, i18n("Number of copies") );
+
+
+  // What's This info
+  // --------------------------------------------------------------------------------
+  QWhatsThis::add( m_checkFastToc, i18n("<p>If this option is checked K3b will ignore any pregaps and index marks "
+					"on an audio cd."
+					"<p><b>Caution:</b> This may result in faster reading but does not guarantee "
+					"an exact copy.") );
+  QWhatsThis::add( m_checkSimulate, i18n("<p>If this option is checked K3b will perform all writing steps with the "
+					 "laser turned off."
+					 "<p>This is useful for example to test a higher writing speed "
+					 " or if your system is able to write on-the-fly.") );
+  QWhatsThis::add( m_checkOnTheFly, i18n("<p>If this option is checked K3b will copy directly from the reading drive to the "
+					 "writer without creating an image first."
+					 "<p><b>Caution:</b> This may result in buffer underruns on slow systems. "
+					 "It is not recommended to use this if reading "
+					 "and writing drive are connected to the same IDE bus.")
+					 + i18n("<p>It is recommended to try a simulation first.") );
+  QWhatsThis::add( m_checkDeleteImages, i18n("<p>If this option is checked K3b will remove any created images after the "
+					     "writing has finished."
+					     "<p>Uncheck this if you want to keep the images.") );
+  QWhatsThis::add( m_checkOnlyCreateImage, i18n("<p>If this option is checked K3b will only create an image of the disk "
+						"without writing an actual copy.") );
+  QWhatsThis::add( m_comboSourceDevice, i18n("<p>Here you should select the drive which contains the cd to copy.") );
+  QWhatsThis::add( m_spinCopies, i18n("<p>Select how many copies you want K3b to create from the cd.") );
 }
 
 

@@ -24,6 +24,8 @@
 #include <qlineedit.h>
 #include <qtimer.h>
 #include <qhbox.h>
+#include <qtooltip.h>
+#include <qwhatsthis.h>
 
 #include <kapp.h>
 #include <klocale.h>
@@ -52,15 +54,14 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const cha
   QHBox* freeTempSpaceBox = new QHBox( this );
   freeTempSpaceBox->setSpacing( KDialog::spacingHint() );
   (void)new QLabel( i18n( "Free space in temp directory" ), freeTempSpaceBox, "TextLabel2" );
-  m_labelFreeSpace = new QLabel( "                     ", freeTempSpaceBox, "m_labelFreeSpace" );
+  m_labelFreeSpace = new QLabel( "                       ",freeTempSpaceBox, "m_labelFreeSpace" );
   m_labelFreeSpace->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
 
   QHBox* cdSizeBox = new QHBox( this );
   cdSizeBox->setSpacing( KDialog::spacingHint() );
   (void)new QLabel( i18n( "Size of CD" ), cdSizeBox, "TextLabel4" );
-  m_labelCdSize = new QLabel( "                     ", cdSizeBox, "m_labelCdSize" );
+  m_labelCdSize = new QLabel( "                        ", cdSizeBox, "m_labelCdSize" );
   m_labelCdSize->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
-
 
   m_freeTempSpaceTimer = new QTimer( this );
 
@@ -77,6 +78,16 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const cha
   slotUpdateFreeTempSpace();
 
   m_freeTempSpaceTimer->start( 1000 );
+
+
+  // ToolTips
+  // --------------------------------------------------------------------------------
+  QToolTip::add( m_editDirectory, i18n("The directory to save the image files in") );
+
+  // What's This info
+  // --------------------------------------------------------------------------------
+  QWhatsThis::add( m_editDirectory, i18n("<p>This is the directory where K3b will save the <em>image files</em> in."
+					 "<p>Please make sure that it resides on a partition that has enough free space.") );
 }
 
 

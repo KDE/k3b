@@ -66,15 +66,15 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
   advancedTabGrid->setSpacing( spacingHint() );
   advancedTabGrid->setMargin( marginHint() );
 
-  QGroupBox* advancedOptionGroup = new QGroupBox( 1, Qt::Vertical, i18n("Options"), advancedTab );
+  //  QGroupBox* advancedOptionGroup = new QGroupBox( 1, Qt::Vertical, i18n("Options"), advancedTab );
   QGroupBox* advancedGimmickGroup = new QGroupBox( 1, Qt::Vertical, i18n("Gimmicks"), advancedTab );
 
-  m_checkPadding = new QCheckBox( i18n( "Use padding" ), advancedOptionGroup, "m_checkPadding" );
+  //  m_checkPadding = new QCheckBox( i18n( "Use padding" ), advancedOptionGroup, "m_checkPadding" );
   m_checkHideFirstTrack = new QCheckBox( i18n( "Hide first track" ), advancedGimmickGroup, "m_checkHideFirstTrack" );
 
-  advancedTabGrid->addWidget( advancedOptionGroup, 0, 0 );
-  advancedTabGrid->addWidget( advancedGimmickGroup, 1, 0 );
-  advancedTabGrid->setRowStretch( 2, 1 );
+  //  advancedTabGrid->addWidget( advancedOptionGroup, 0, 0 );
+  advancedTabGrid->addWidget( advancedGimmickGroup, 0, 0 );
+  advancedTabGrid->setRowStretch( 1, 1 );
 
   tab->addTab( advancedTab, i18n("Advanced") );
 
@@ -87,6 +87,64 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
 
   m_tempDirSelectionWidget->setNeededSize( doc()->size() );
   readSettings();
+
+
+  // ToolTips
+  // -------------------------------------------------------------------------
+  QToolTip::add( m_checkCdText, i18n("Create CD TEXT entries") );
+  QToolTip::add( m_checkDao, i18n("Write in disk at once mode") );
+  QToolTip::add( m_checkOnTheFly, i18n("Decode audio files while writing") );
+  QToolTip::add( m_checkSimulate, i18n("Only simulate the writing processOnly simulate the writing process") );
+  QToolTip::add( m_checkHideFirstTrack, i18n("Hide the first track in the first pregap") );
+  QToolTip::add( m_checkRemoveBufferFiles, i18n("Remove images from harddisk when finished") );
+  QToolTip::add( m_editDisc_id, i18n("CD-TEXT information field") );
+  QToolTip::add( m_editUpc_ean, i18n("CD-TEXT information field") );
+  QToolTip::add( m_editMessage, i18n("CD-TEXT information field") );
+  QToolTip::add( m_editPerformer, i18n("CD-TEXT information field") );
+  QToolTip::add( m_editArranger, i18n("CD-TEXT information field") );
+  QToolTip::add( m_editTitle, i18n("CD-TEXT information field") );
+  QToolTip::add( m_editSongwriter, i18n("CD-TEXT information field") );
+
+  // What's This info
+  // -------------------------------------------------------------------------
+  QWhatsThis::add( m_checkCdText, i18n("<p>If this option is checked K3b uses some otherwise unused space on the audio "
+				       "cd to store additional information like the artist or the cd title."
+				       "<p>CD-TEXT is an extension to the audio cd standard introduced by Sony."
+				       "<p>CD-TEXT will only be usable on cd players that support this extension "
+				       "(mostly car cd player)."
+				       "<p>Since a CD-TEXT enhanced cd will work in any cd player it is never a bad "
+				       "idea to enable this (if you specified the data).") );
+  QWhatsThis::add( m_checkDao, i18n("<p>If this option is checked K3b will write the cd in disk at once mode as "
+				    "compared to track at once (TAO)."
+				    "<p>It is always recommended to use DAO where possible."
+				    "<p><b>Caution:</b> Only in DAO mode track pregaps other than 2 seconds are "
+				    "supported.") );
+  QWhatsThis::add( m_checkOnTheFly, i18n("<p>If this option is checked K3b will decode the audio files in memory "
+					 "while writing. This saves space on the harddisk and time."
+					 "<p><b>Caution:</b> Make sure your system is able to decode the files fast enough "
+					 "to avoid buffer underruns.")
+					 + i18n("<p>It is recommended to try a simulation first.") );
+  QWhatsThis::add( m_checkSimulate, i18n("<p>If this option is checked K3b will perform all writing steps with the "
+					 "laser turned off."
+					 "<p>This is useful for example to test a higher writing speed "
+					 " or if your system is able to write on-the-fly.") );
+  QWhatsThis::add( m_checkHideFirstTrack, i18n("<p>If this option is checked K3b will <em>hide</em> the first track."
+					       "<p>The audio cd standard uses pregaps before every track on the cd. "
+					       "By default these last for 2 seconds and are still. Anyway in DAO mode it "
+					       "is possible to have longer pregaps that contain some audio. In this case "
+					       "the first pregap will contain the complete first track."
+					       "<p>You will need to seek back from the beginning of the cd to listen to "
+					       "the first track. Try it, it's a funny thing! ;-)") );
+  QWhatsThis::add( m_checkRemoveBufferFiles, i18n("<p>If this option is checked K3b will remove any created images after the "
+						  "writing has finished."
+						  "<p>Uncheck this if you want to keep the images.") );
+  QWhatsThis::add( m_editDisc_id, i18n("") );
+  QWhatsThis::add( m_editUpc_ean, i18n("") );
+  QWhatsThis::add( m_editMessage, i18n("") );
+  QWhatsThis::add( m_editPerformer, i18n("") );
+  QWhatsThis::add( m_editArranger, i18n("") );
+  QWhatsThis::add( m_editTitle, i18n("") );
+  QWhatsThis::add( m_editSongwriter, i18n("") );
 }
 
 K3bAudioBurnDialog::~K3bAudioBurnDialog(){
@@ -99,7 +157,7 @@ void K3bAudioBurnDialog::saveSettings()
   doc()->setDao( m_checkDao->isChecked() );
   doc()->setDummy( m_checkSimulate->isChecked() );
   doc()->setOnTheFly( m_checkOnTheFly->isChecked() );
-  ((K3bAudioDoc*)doc())->setPadding( m_checkPadding->isChecked() );
+  //  ((K3bAudioDoc*)doc())->setPadding( m_checkPadding->isChecked() );
   ((K3bAudioDoc*)doc())->writeCdText( m_checkCdText->isChecked() );
   ((K3bAudioDoc*)doc())->setHideFirstTrack( m_checkHideFirstTrack->isChecked() );
   ((K3bAudioDoc*)doc())->setRemoveBufferFiles( m_checkRemoveBufferFiles->isChecked() );
@@ -125,7 +183,7 @@ void K3bAudioBurnDialog::readSettings()
   m_checkDao->setChecked( doc()->dao() );
   m_checkOnTheFly->setChecked( doc()->onTheFly() );
   m_checkSimulate->setChecked( doc()->dummy() );
-  m_checkPadding->setChecked( ((K3bAudioDoc*)doc())->padding() );
+  //  m_checkPadding->setChecked( ((K3bAudioDoc*)doc())->padding() );
   m_checkCdText->setChecked( ((K3bAudioDoc*)doc())->cdText() );
   m_checkHideFirstTrack->setChecked( ((K3bAudioDoc*)doc())->hideFirstTrack() );
   m_checkRemoveBufferFiles->setChecked( ((K3bAudioDoc*)doc())->removeBufferFiles() );
@@ -170,7 +228,7 @@ void K3bAudioBurnDialog::setupBurnTab( QFrame* frame )
   m_checkOnTheFly->setText( i18n( "Writing on the fly" ) );
 
   m_checkRemoveBufferFiles = new QCheckBox( m_groupOptions, "m_checkRemoveBufferFiles" );
-  m_checkRemoveBufferFiles->setText( i18n("Remove temp files") );
+  m_checkRemoveBufferFiles->setText( i18n("Remove image files") );
 
   m_groupOptionsLayout->addWidget( m_checkSimulate );
   m_groupOptionsLayout->addWidget( m_checkOnTheFly );
@@ -278,7 +336,7 @@ void K3bAudioBurnDialog::loadDefaults()
   //  m_checkBurnProof->setChecked( true );
 
   m_checkCdText->setChecked( true );
-  m_checkPadding->setChecked( true );
+  //  m_checkPadding->setChecked( true );
   m_checkHideFirstTrack->setChecked( false );
   m_checkRemoveBufferFiles->setChecked( true );
 }
@@ -296,7 +354,7 @@ void K3bAudioBurnDialog::loadUserDefaults()
   //  m_checkBurnProof->setChecked( c->readBoolEntry( "burnproof", true ) );
 
   m_checkCdText->setChecked( c->readBoolEntry( "cd_text", true ) );
-  m_checkPadding->setChecked( c->readBoolEntry( "padding", false ) );
+  //  m_checkPadding->setChecked( c->readBoolEntry( "padding", false ) );
   m_checkHideFirstTrack->setChecked( c->readBoolEntry( "hide_first_track", false ) );
   m_checkRemoveBufferFiles->setChecked( c->readBoolEntry( "remove_buffer_files", true ) );
 }
@@ -313,7 +371,7 @@ void K3bAudioBurnDialog::saveUserDefaults()
   c->writeEntry( "on_the_fly", m_checkOnTheFly->isChecked() );
 
   c->writeEntry( "cd_text", m_checkCdText->isChecked() );
-  c->writeEntry( "padding", m_checkPadding->isChecked() );
+  //  c->writeEntry( "padding", m_checkPadding->isChecked() );
   c->writeEntry( "hide_first_track", m_checkHideFirstTrack->isChecked() );
   c->writeEntry( "remove_buffer_files", m_checkRemoveBufferFiles->isChecked() );
 }

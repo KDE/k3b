@@ -318,6 +318,43 @@ void K3bDataBurnDialog::setupBurnTab( QFrame* frame )
 
 
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotWriterChanged()) );
+
+
+  // ToolTips
+  // -------------------------------------------------------------------------
+  QToolTip::add( m_checkDummy, i18n("Only simulate the writing process") );
+  QToolTip::add( m_checkOnTheFly, i18n("Write files directly to cd without creating an image") );
+  QToolTip::add( m_checkOnlyCreateImage, i18n("Only create an ISO9660 image") );
+  QToolTip::add( m_checkDeleteImage, i18n("Remove images from harddisk when finished") );
+  QToolTip::add( m_checkDao, i18n("Write in disk at once mode") );
+  QToolTip::add( m_checkBurnProof, i18n("Enable BURN-PROOF to avoid buffer underruns") );
+
+
+  // What's This info
+  // -------------------------------------------------------------------------
+  QWhatsThis::add( m_checkDummy, i18n("<p>If this option is checked K3b will perform all writing steps with the "
+				      "laser turned off."
+				      "<p>This is useful for example to test a higher writing speed "
+				      " or if your system is able to write on-the-fly.") );
+  QWhatsThis::add( m_checkOnTheFly, i18n("<p>If this option is checked K3b will not create an image first but write "
+					 "the files directly to the cd."
+					 "<p><b>Caution:</b> Although this should work on most systems make sure "
+					 "the data is send to the writer fast enough.")
+					 + i18n("<p>It is recommended to try a simulation first.") );
+  QWhatsThis::add( m_checkOnlyCreateImage, i18n("<p>If this option is checked K3b will only create an ISO9660 "
+						"image and do no actual writing."
+						"<p>The image can later be written to a cd with most current cd writing "
+						"programs (including K3b for sure ;-).") );
+  QWhatsThis::add( m_checkDeleteImage, i18n("<p>If this option is checked K3b will remove any created images after the "
+					    "writing has finished."
+					    "<p>Uncheck this if you want to keep the images.") );
+  QWhatsThis::add( m_checkDao, i18n("<p>If this option is checked K3b will write the cd in disk at once mode as "
+				    "compared to track at once (TAO)."
+				    "<p>It is always recommended to use DAO where possible."
+				    "<p><b>Caution:</b> Only in DAO mode track pregaps other than 2 seconds are "
+				    "supported.") );
+  QWhatsThis::add( m_checkBurnProof, i18n("<p>If this option is checked K3b enables <em>BURN-PROOF</em>. This is "
+					  "a feature of the cd writer which avoids buffer underruns.") );
 }
 
 
@@ -420,12 +457,20 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
   _groupVolumeInfoLayout->setSpacing( spacingHint() );
   _groupVolumeInfoLayout->setMargin( marginHint() );
 
-  _groupVolumeInfoLayout->addWidget( new QLabel( i18n( "Volume id:" ), _groupVolumeInfo, "m_labelVolumeID" ), 0, 0 );
-  _groupVolumeInfoLayout->addWidget( new QLabel( i18n( "Volume set id:" ), _groupVolumeInfo, "m_labelVolumeSetID" ), 1, 0 );
-  _groupVolumeInfoLayout->addWidget( new QLabel( i18n( "Publisher:" ), _groupVolumeInfo, "m_labelPublisher" ), 2, 0 );
-  _groupVolumeInfoLayout->addWidget( new QLabel( i18n( "Preparer:" ), _groupVolumeInfo, "m_labelPreparer" ), 3, 0 );
-  _groupVolumeInfoLayout->addWidget( new QLabel( i18n( "System id:" ), _groupVolumeInfo, "m_labelSystemID" ), 4, 0 );
-  _groupVolumeInfoLayout->addWidget( new QLabel( i18n( "Application id:" ), _groupVolumeInfo, "m_labelApplicationID" ), 5, 0 );
+
+  QLabel* labelVolumeId = new QLabel( i18n( "&Volume name:" ), _groupVolumeInfo, "m_labelVolumeID" );
+  QLabel* labelVolumeSetId = new QLabel( i18n( "Volume &set name:" ), _groupVolumeInfo, "m_labelVolumeSetID" );
+  QLabel* labelPublisher = new QLabel( i18n( "&Publisher:" ), _groupVolumeInfo, "m_labelPublisher" );
+  QLabel* labelPreparer = new QLabel( i18n( "P&reparer:" ), _groupVolumeInfo, "m_labelPreparer" );
+  QLabel* labelSystemId = new QLabel( i18n( "S&ystem:" ), _groupVolumeInfo, "m_labelSystemID" );
+  QLabel* labelApplication = new QLabel( i18n( "&Application:" ), _groupVolumeInfo, "m_labelApplicationID" );
+
+  _groupVolumeInfoLayout->addWidget( labelVolumeId, 0, 0 );
+  _groupVolumeInfoLayout->addWidget( labelVolumeSetId, 1, 0 );
+  _groupVolumeInfoLayout->addWidget( labelPublisher, 2, 0 );
+  _groupVolumeInfoLayout->addWidget( labelPreparer, 3, 0 );
+  _groupVolumeInfoLayout->addWidget( labelSystemId, 4, 0 );
+  _groupVolumeInfoLayout->addWidget( labelApplication, 5, 0 );
 
   // are this really the allowed characters? What about Joliet or UDF?
   K3bIsoValidator* isoValidator = new K3bIsoValidator( this, "isoValidator" );
@@ -456,6 +501,14 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
   _groupVolumeInfoLayout->addWidget( m_editSystemId, 4, 1 );
   _groupVolumeInfoLayout->addWidget( m_editApplicationID, 5, 1 );
 
+  labelVolumeId->setBuddy( m_editVolumeID );
+  labelVolumeSetId->setBuddy( m_editVolumeSetId );
+  labelPublisher->setBuddy( m_editPublisher );
+  labelPreparer->setBuddy( m_editPreparer );
+  labelSystemId->setBuddy( m_editSystemId );
+  labelApplication->setBuddy( m_editApplicationID );
+
+
 
   m_groupWhiteSpace = new QButtonGroup( frame, "m_groupWhiteSpace" );
   m_groupWhiteSpace->setTitle( i18n( "Whitespace Treatment" ) );
@@ -483,10 +536,38 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
   frameLayout->addWidget( m_groupWhiteSpace, 1, 0 );
 
 
-//   connect( m_editVolumeID, SIGNAL(textChanged(const QString&)), this, SLOT(slotConvertAllToUpperCase()) );
-//   connect( m_editApplicationID, SIGNAL(textChanged(const QString&)), this, SLOT(slotConvertAllToUpperCase()) );
-//   connect( m_editPreparer, SIGNAL(textChanged(const QString&)), this, SLOT(slotConvertAllToUpperCase()) );
-//   connect( m_editPublisher, SIGNAL(textChanged(const QString&)), this, SLOT(slotConvertAllToUpperCase()) );
+  // ToolTips
+  // -------------------------------------------------------------------------
+  QToolTip::add( m_editSystemId, i18n("") );
+  QToolTip::add( m_editVolumeID, i18n("") );
+  QToolTip::add( m_editVolumeSetId, i18n("") );
+  QToolTip::add( m_editPublisher, i18n("") );
+  QToolTip::add( m_editPreparer, i18n("") );
+  QToolTip::add( m_editApplicationID, i18n("") );
+  QToolTip::add( m_radioSpaceLeave, i18n("Do not touch spaces in filenames") );
+  QToolTip::add( m_radioSpaceReplace, i18n("Replace all spaces with an underscore") );
+  QToolTip::add( m_radioSpaceStrip, i18n("Just remove all spaces") );
+  QToolTip::add( m_radioSpaceExtended, i18n("Remove all spaces and continue with an upper letter") );
+
+
+  // What's This info
+  // -------------------------------------------------------------------------
+  QWhatsThis::add( m_editSystemId, i18n("") );
+  QWhatsThis::add( m_editVolumeID, i18n("") );
+  QWhatsThis::add( m_editVolumeSetId, i18n("") );
+  QWhatsThis::add( m_editPublisher, i18n("") );
+  QWhatsThis::add( m_editPreparer, i18n("") );
+  QWhatsThis::add( m_editApplicationID, i18n("") );
+  QWhatsThis::add( m_radioSpaceLeave, i18n("<p>If this option is checked K3b will leave all spaces in filenames "
+					   "like you know it.") );
+  QWhatsThis::add( m_radioSpaceReplace, i18n("<p>If this option is checked K3b will replace all spaces in all filenames "
+					     "with an underscore '_'."
+					     "<p>Example: 'my good file.ext' becomes 'my_good_file.ext'") );
+  QWhatsThis::add( m_radioSpaceStrip, i18n("<p>If this option is checked K3b will remove all spaces from all filenames."
+					   "<p>Example: 'my good file.ext' becomes 'mygoodfile.ext'") );
+  QWhatsThis::add( m_radioSpaceExtended, i18n("<p>If this option is checked K3b will remove all spaces in all filenames "
+					      "and convert all letters following a space to an upper one."
+					      "<p>Example: 'my good file.ext' becomes 'myGoodFile.ext'") );
 }
 
 

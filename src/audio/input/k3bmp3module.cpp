@@ -7,6 +7,7 @@
 #include <kprocess.h>
 #include <klocale.h>
 #include <kfilemetainfo.h>
+#include <kdebug.h>
 
 #include <qstring.h>
 #include <qfileinfo.h>
@@ -16,6 +17,8 @@
 #include <stdlib.h>
 #include <cmath>
 #include <cstdlib>
+
+typedef unsigned char k3b_mad_char;
 
 
 K3bMp3Module::K3bMp3Module( K3bAudioTrack* track )
@@ -29,9 +32,10 @@ K3bMp3Module::K3bMp3Module( K3bAudioTrack* track )
   m_bCountingFramesInProgress = true;
   m_bDecodingInProgress = false;
   m_bEndOfInput = false;
+  m_bFrameNeedsResampling = false;
 
-  m_inputBuffer  = new unsigned char[INPUT_BUFFER_SIZE];
-  m_outputBuffer = new unsigned char[OUTPUT_BUFFER_SIZE];
+  m_inputBuffer  = new k3b_mad_char[INPUT_BUFFER_SIZE];
+  m_outputBuffer = new k3b_mad_char[OUTPUT_BUFFER_SIZE];
 
   m_outputPointer   = m_outputBuffer;
   m_outputBufferEnd = m_outputBuffer + OUTPUT_BUFFER_SIZE;
@@ -45,8 +49,13 @@ K3bMp3Module::K3bMp3Module( K3bAudioTrack* track )
   m_madSynth  = new mad_synth;
   m_madTimer  = new mad_timer_t;
 
-  m_madResampledLeftChannel = new mad_fixed_t[1152];
-  m_madResampledRightChannel = new mad_fixed_t[1152];
+
+  // resampling
+  // a 32 kHz frame has 1152 bytes
+  // so to resample it we need about 1587 bytes for resampling
+  // all other resampling needs at most 1152 bytes
+  m_madResampledLeftChannel = new mad_fixed_t[1600];
+  m_madResampledRightChannel = new mad_fixed_t[1600];
 
   KFileMetaInfo metaInfo( audioTrack()->absPath() );
   if( !metaInfo.isEmpty() && metaInfo.isValid() ) {
@@ -117,8 +126,8 @@ void K3bMp3Module::startDecoding()
     
     m_decodingTimer->start(0);
 
-    qDebug("(K3bMp3Module) length of track: %li frames.", audioTrack()->length() );
-    qDebug("(K3bMp3Module) data to decode:  %li bytes.", m_rawDataLengthToStream );
+    kdDebug() << "(K3bMp3Module) length of track: " << audioTrack()->length() << " frames." << endl;
+    kdDebug() << "(K3bMp3Module) data to decode: " << m_rawDataLengthToStream << " bytes." << endl;
   }
 }
 
@@ -133,7 +142,7 @@ void K3bMp3Module::fillInputBuffer()
    */
   if( m_madStream->buffer == 0 || m_madStream->error == MAD_ERROR_BUFLEN )
     {
-      size_t readSize, remaining;
+      long readSize, remaining;
       unsigned char* readStart;
 
       if( m_madStream->next_frame != 0 )
@@ -263,8 +272,11 @@ void K3bMp3Module::slotDecodeNextFrame()
 
     // a mad_synth contains of the data of one mad_frame
     // one mad_frame represents a mp3-frame which is always 1152 samples
-    // for us that means we need 2*1152 bytes of output buffer for every frame
-    if( m_outputBufferEnd - m_outputPointer < 4*1152 ) {
+    // for us that means we need 4*1152 bytes of output buffer for every frame
+    // since one sample has 16 bit
+    // special case: resampling from 32000 Hz: this results 1587 samples per channel
+    // so to always have enough free buffer we use 4*1600 (This is bad, this needs some redesign!)
+    if( m_outputBufferEnd - m_outputPointer < 4*1600 ) {
       bOutputBufferFull = true;
     }
     else {
@@ -280,7 +292,8 @@ void K3bMp3Module::slotDecodeNextFrame()
 	  memset( m_outputPointer, 0, freeBuffer );
 	  m_outputPointer += ( freeBuffer > dataToPad ? dataToPad : freeBuffer );
 
-	  qDebug("(K3bMp3Module) padding data with %li zeros.", ( freeBuffer > dataToPad ? dataToPad : freeBuffer ) );
+	  kdDebug() << "(K3bMp3Module) padding data with " 
+		    << ( freeBuffer > dataToPad ? dataToPad : freeBuffer ) << " zeros." << endl;
 	}
 	else {
 	  break;
@@ -514,7 +527,7 @@ void K3bMp3Module::createPcmSamples( mad_synth* synth )
       // this should not happen since we only decode if the
       // output buffer has enough free space
       if( m_outputPointer == m_outputBufferEnd && i+1 < nsamples ) {
-	qDebug( "(K3bMp3Module) buffer overflow!" );
+	kdDebug() <<  "(K3bMp3Module) buffer overflow!" << endl;
 	exit(1);
       }
     } // pcm conversion
@@ -545,7 +558,8 @@ unsigned int K3bMp3Module::resampleBlock( mad_fixed_t const *source,
 
     while (m_madResampledStep < MAD_F_ONE) {
       *target++ = m_madResampledStep ?
-	m_madResampledLast + mad_f_mul(*source - m_madResampledLast, m_madResampledStep) : m_madResampledLast;
+	m_madResampledLast + mad_f_mul(*source - m_madResampledLast, m_madResampledStep) 
+	: m_madResampledLast;
 
       m_madResampledStep += m_madResampledRatio;
       if (((m_madResampledStep + 0x00000080L) & 0x0fffff00L) == 0)
@@ -561,7 +575,8 @@ unsigned int K3bMp3Module::resampleBlock( mad_fixed_t const *source,
     m_madResampledStep = mad_f_fracpart(m_madResampledStep);
 
     *target++ = m_madResampledStep ?
-      *source + mad_f_mul(source[1] - source[0], m_madResampledStep) : *source;
+      *source + mad_f_mul(source[1] - source[0], m_madResampledStep) 
+      : *source;
 
     m_madResampledStep += m_madResampledRatio;
     if (((m_madResampledStep + 0x00000080L) & 0x0fffff00L) == 0)
