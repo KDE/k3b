@@ -56,15 +56,15 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
 
     QString vcdType;
     switch ( m_vcdDoc->vcdType() ) {
-            case K3bVcdDoc::VCD11:
+        case K3bVcdDoc::VCD11:
             vcdType = i18n( "Video CD (Version 1.1)" );
-            case K3bVcdDoc::VCD20:
+        case K3bVcdDoc::VCD20:
             vcdType = i18n( "Video CD (Version 2.0)" );
-            case K3bVcdDoc::SVCD10:
+        case K3bVcdDoc::SVCD10:
             vcdType = i18n( "Super Video CD" );
-            case K3bVcdDoc::HQVCD:
+        case K3bVcdDoc::HQVCD:
             vcdType = i18n( "High-Quality Video CD" );
-            default:
+        default:
             vcdType = i18n( "Video CD" );
     }
 
@@ -611,19 +611,23 @@ void K3bVcdBurnDialog::loadK3bDefaults()
     m_spinVolumeNumber->setValue( o.volumeNumber() );
 
 
+    // to not use i18n for this, so user can not use unsupported letters in her language pack
     if ( m_radioSvcd10->isChecked() ) {
         m_checkCdiSupport->setEnabled( false );
         m_checkCdiSupport->setChecked( false );
-        m_editVolumeId->setText( i18n( "SUPER VIDEOCD" ) );
+        m_checkUpdateScanOffsets->setEnabled( true );
+        m_editVolumeId->setText( "SUPER_VIDEOCD" );
     } else if ( m_radioHqVcd10->isChecked() ) {
         m_checkCdiSupport->setEnabled( false );
         m_checkCdiSupport->setChecked( false );
-        m_editVolumeId->setText( i18n( "HQ-VIDEOCD" ) );
+        m_checkUpdateScanOffsets->setEnabled( true );
+        m_editVolumeId->setText( "HQ_VIDEOCD" );
     } else {
         m_checkCdiSupport->setEnabled( true );
         m_checkCdiSupport->setChecked( o.CdiSupport() );
         m_groupCdi->setEnabled( o.CdiSupport() );
-        m_editVolumeId->setText( i18n( "VIDEOCD" ) );
+        m_checkUpdateScanOffsets->setEnabled( false );
+        m_editVolumeId->setText( "VIDEOCD" );
     }
 
     m_editPublisher->setText( o.publisher() );
@@ -650,16 +654,8 @@ void K3bVcdBurnDialog::saveSettings()
 {
     K3bProjectBurnDialog::saveSettings();
 
-    // set AlbumID if empty
-    if ( m_editVolumeId->text().length() < 1 ) {
-        if ( m_radioSvcd10->isChecked() )
-            m_editVolumeId->setText( i18n( "SUPER_VIDEOCD" ) );
-        else if ( m_radioHqVcd10->isChecked() )
-            m_editVolumeId->setText( i18n( "HQ_VIDEOCD" ) );
-        else
-            m_editVolumeId->setText( i18n( "VIDEOCD" ) );
-    }
-
+    // set VolumeID if empty
+    setVolumeID();
 
     doc() ->setTempDir( m_tempDirSelectionWidget->tempPath() );
     doc() ->setOnTheFly( false );
@@ -715,21 +711,21 @@ void K3bVcdBurnDialog::readSettings()
 
     // read vcdType
     switch ( ( ( K3bVcdDoc* ) doc() ) ->vcdType() ) {
-            case K3bVcdDoc::VCD11:
+        case K3bVcdDoc::VCD11:
             m_radioVcd11->setChecked( true );
             break;
-            case K3bVcdDoc::VCD20:
+        case K3bVcdDoc::VCD20:
             m_radioVcd20->setChecked( true );
             break;
-            case K3bVcdDoc::SVCD10:
+        case K3bVcdDoc::SVCD10:
             m_radioSvcd10->setChecked( true );
             m_checkNonCompliant->setEnabled( true );
             m_checkVCD30interpretation->setEnabled( true );
             break;
-            case K3bVcdDoc::HQVCD:
+        case K3bVcdDoc::HQVCD:
             m_radioHqVcd10->setChecked( true );
             break;
-            default:
+        default:
             m_radioVcd20->setChecked( true );
             break;
     }
@@ -749,11 +745,13 @@ void K3bVcdBurnDialog::readSettings()
 
     if ( m_radioSvcd10->isChecked() ) {
         m_checkNonCompliant->setChecked( vcdDoc() ->vcdOptions() ->NonCompliantMode() );
+        m_checkUpdateScanOffsets->setEnabled( true );
         m_checkVCD30interpretation->setChecked( vcdDoc() ->vcdOptions() ->VCD30interpretation() );
     } else if ( m_radioHqVcd10->isChecked() ) {
         // NonCompliant only for SVCD
         m_checkNonCompliant->setChecked( false );
         m_checkNonCompliant->setEnabled( false );
+        m_checkUpdateScanOffsets->setEnabled( false );
         m_checkVCD30interpretation->setChecked( false );
         m_checkVCD30interpretation->setEnabled( false );
     } else {
@@ -761,6 +759,7 @@ void K3bVcdBurnDialog::readSettings()
         m_checkNonCompliant->setChecked( false );
         m_checkNonCompliant->setEnabled( false );
         m_checkVCD30interpretation->setChecked( false );
+        m_checkUpdateScanOffsets->setEnabled( false );
         m_checkVCD30interpretation->setEnabled( false );
         // CD-I only for VCD and CD-i application was found :)
         if ( vcdDoc() ->vcdOptions() ->checkCdiFiles() ) {
@@ -769,7 +768,9 @@ void K3bVcdBurnDialog::readSettings()
         }
     }
 
-    m_editVolumeId->setText( vcdDoc() ->vcdOptions() ->volumeId() );
+    // set VolumeID if empty
+    setVolumeID();
+    // m_editVolumeId->setText( vcdDoc() ->vcdOptions() ->volumeId() );
     m_editPublisher->setText( vcdDoc() ->vcdOptions() ->publisher() );
     m_editAlbumId->setText( vcdDoc() ->vcdOptions() ->albumId() );
 
@@ -796,7 +797,7 @@ void K3bVcdBurnDialog::readSettings()
 
 void K3bVcdBurnDialog::loadUserDefaults( KConfigBase* c )
 {
-    K3bProjectBurnDialog::loadUserDefaults(c);
+    K3bProjectBurnDialog::loadUserDefaults( c );
 
     K3bVcdOptions o = K3bVcdOptions::load( c );
 
@@ -848,7 +849,7 @@ void K3bVcdBurnDialog::loadUserDefaults( KConfigBase* c )
 
 void K3bVcdBurnDialog::saveUserDefaults( KConfigBase* c )
 {
-    K3bProjectBurnDialog::saveUserDefaults(c);
+    K3bProjectBurnDialog::saveUserDefaults( c );
 
     K3bVcdOptions o;
 
@@ -954,6 +955,18 @@ void K3bVcdBurnDialog::loadDefaultCdiConfig()
     }
 }
 
+void K3bVcdBurnDialog::setVolumeID()
+{
+    if ( m_editVolumeId->text().length() < 1 ) {
+        if ( m_radioSvcd10->isChecked() )
+            m_editVolumeId->setText( "SUPER_VIDEOCD" );
+        else if ( m_radioHqVcd10->isChecked() )
+            m_editVolumeId->setText( "HQ_VIDEOCD" );
+        else
+            m_editVolumeId->setText( "VIDEOCD" );
+    }
+}
+
 void K3bVcdBurnDialog::slotSpinVolumeCount()
 {
     m_spinVolumeNumber->setMaxValue( m_spinVolumeCount->value() );
@@ -963,7 +976,7 @@ void K3bVcdBurnDialog::slotVcdTypeClicked( int i )
 {
 
     switch ( i ) {
-            case 0:
+        case 0:
             // vcd 1.1 no support for version 3.x.
             // v4 work also for vcd 1.1 but without CD-i menues.
             // Do anybody use vcd 1.1 with cd-i????
@@ -977,7 +990,7 @@ void K3bVcdBurnDialog::slotVcdTypeClicked( int i )
             m_checkUpdateScanOffsets->setEnabled( false );
             m_checkUpdateScanOffsets->setChecked( false );
             break;
-            case 1:
+        case 1:
             //vcd 2.0
             m_checkCdiSupport->setEnabled( vcdDoc() ->vcdOptions() ->checkCdiFiles() );
             m_groupCdi->setEnabled( m_checkCdiSupport->isChecked() );
@@ -989,7 +1002,7 @@ void K3bVcdBurnDialog::slotVcdTypeClicked( int i )
             m_checkUpdateScanOffsets->setEnabled( false );
             m_checkUpdateScanOffsets->setChecked( false );
             break;
-            case 2:
+        case 2:
             //svcd 1.0
             m_checkCdiSupport->setEnabled( false );
             m_checkCdiSupport->setChecked( false );
@@ -999,7 +1012,7 @@ void K3bVcdBurnDialog::slotVcdTypeClicked( int i )
             m_checkVCD30interpretation->setEnabled( true );
             m_checkUpdateScanOffsets->setEnabled( true );
             break;
-            case 3:
+        case 3:
             //hqvcd 1.0
             m_checkCdiSupport->setEnabled( false );
             m_checkCdiSupport->setChecked( false );
@@ -1073,6 +1086,5 @@ void K3bVcdBurnDialog::toggleAllOptions()
     m_writingModeWidget->setSupportedModes( K3b::DAO );
     m_checkRemoveBufferFiles->setDisabled( m_checkOnlyCreateImage->isChecked() );
 }
-
 
 #include "k3bvcdburndialog.moc"

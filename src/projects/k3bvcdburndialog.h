@@ -122,6 +122,7 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
 
     private:
         K3bVcdDoc* m_vcdDoc;
+        void setVolumeID( );
         void MarginChecked( bool );
         void saveCdiConfig();
         void loadCdiConfig();
