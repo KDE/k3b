@@ -124,7 +124,6 @@ void K3bIso9660ImageWritingJob::start()
   }
 
   if( prepareWriter( media ) ) {
-    emit newSubTask( i18n("Writing image") );
     emit burning(true);
     m_writer->start();
   }
@@ -209,6 +208,12 @@ void K3bIso9660ImageWritingJob::slotWriterPercent( int p )
     emit percent( p/2 );
   else
     emit percent( p );
+}
+
+
+void K3bIso9660ImageWritingJob::slotNextTrack( int, int )
+{
+  emit newSubTask( i18n("Writing image") );
 }
 
 
@@ -357,6 +362,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
 
 
   connect( m_writer, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
+  connect( m_writer, SIGNAL(nextTrack(int, int)), this, SLOT(slotNextTrack(int, int)) );
   connect( m_writer, SIGNAL(percent(int)), this, SLOT(slotWriterPercent(int)) );
   connect( m_writer, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSize(int, int)) );
   connect( m_writer, SIGNAL(buffer(int)), this, SIGNAL(bufferStatus(int)) );
