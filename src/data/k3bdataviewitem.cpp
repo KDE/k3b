@@ -169,7 +169,7 @@ QString K3bDataFileViewItem::text( int index ) const
 	return m_fileItem->mimeComment();
     }
   case 2:
-    return KIO::convertSize( m_fileItem->size() );
+    return KIO::convertSize( m_fileItem->k3bSize() );
   case 3:
     return m_fileItem->localPath();
   case 4:

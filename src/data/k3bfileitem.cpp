@@ -24,6 +24,8 @@
 
 #include <kurl.h>
 
+#include <sys/stat.h>
+
 
 K3bFileItem::K3bFileItem( const QString& filePath, K3bDataDoc* doc, K3bDirItem* dir, const QString& k3bName )
   : KFileItem( -1, -1, KURL::encode_string(filePath) ), K3bDataItem( doc, dir )
@@ -34,11 +36,19 @@ K3bFileItem::K3bFileItem( const QString& filePath, K3bDataDoc* doc, K3bDirItem* 
     m_k3bName = k3bName;
 
 
-  // we do this to avoid problems with removed or renamed files
-  m_size = size();
 
-  //	m_isoName = doc()->isoName( this );
-  //	m_joiletName = m_rockRidgeName = m_file.name();
+  // TODO: Use KIO::filesize_t for size instead of long long
+
+  // we determine the size here to avoid problems with removed or renamed files
+  // we need to use lstat here since for symlinks both KDE and QT return the size of the file pointed to
+  // instead the size of the link.
+  struct stat statBuf;
+  if( lstat( filePath.latin1(), &statBuf ) ) {
+    m_size = size();
+  }
+  else {
+    m_size = statBuf.st_size;
+  }
 }
 
 
