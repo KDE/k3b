@@ -18,10 +18,14 @@
 #define K3BPROJECTTABBAR_H
 
 #include <qtabbar.h>
+#include <kurl.h>
 
 class QMouseEvent;
 class KAction;
 class KActionMenu;
+class QDragEnterEvent;
+class QDropEvent;
+
 
 /**
   *@author Sebastian Trueg
@@ -36,8 +40,16 @@ Q_OBJECT
 
   void insertAction( KAction* );
 
+ signals:
+  /**
+   * @param id id of the tab dropped to.
+   */
+  void urlsDropped( int id, const KURL::List& );
+
  protected:
   void mousePressEvent( QMouseEvent* );
+  void dragEnterEvent( QDragEnterEvent* e );
+  void dropEvent( QDropEvent* e );
 
  private:
   KActionMenu* m_projectActionMenu;

@@ -97,3 +97,15 @@ QValueList<DCOPRef> K3bInterface::projects()
 
   return lst;
 }
+
+void K3bInterface::addUrls( const KURL::List& urls )
+{
+  m_main->addUrls( urls );
+}
+
+void K3bInterface::addUrl( const KURL& url )
+{
+  KURL::List l;
+  l.append(url);
+  addUrls( l );
+}
