@@ -46,6 +46,7 @@
 #include <klocale.h>
 #include <kstddirs.h>
 #include <kio/global.h>
+#include <kdebug.h>
 
 #include <iostream>
 
@@ -140,7 +141,7 @@ void K3bAudioDoc::slotWorkUrlQueue()
       lastAddedPosition = m_tracks->count();
 	
     if( !item->url.isLocalFile() ) {
-      qDebug( "%s no local file", item->url.path().latin1() );
+      kdDebug() << item->url.path() << " no local file" << endl;
       return;
     }
 	
@@ -217,7 +218,7 @@ void K3bAudioDoc::addTrack(const KURL& url, uint position )
 void K3bAudioDoc::addTrack( K3bAudioTrack* track, uint position )
 {
   if( m_tracks->count() >= 99 ) {
-    qDebug( "(K3bAudioDoc) Red Book only allows 99 tracks." );
+    kdDebug() << "(K3bAudioDoc) Red Book only allows 99 tracks." << endl;
     // TODO: show some messagebox
     delete track;
     return;
@@ -237,7 +238,7 @@ void K3bAudioDoc::addTrack( K3bAudioTrack* track, uint position )
 void K3bAudioDoc::removeTrack( int position )
 {
   if( position < 0 ) {
-    qDebug( "(K3bAudioDoc) tried to remove track with index < 0!" );
+    kdDebug() << "(K3bAudioDoc) tried to remove track with index < 0!" << endl;
     return;
   }
 	
@@ -513,7 +514,7 @@ bool K3bAudioDoc::writeTOC( const QString& filename )
 {
   QFile file( filename );
   if( !file.open( IO_WriteOnly ) ) {
-    qDebug( "(K3bAudioDoc) Could not open toc-file %s", filename.latin1() );
+    kdDebug() << "(K3bAudioDoc) Could not open toc-file " << filename << endl;
     return false;
   }
 
@@ -687,7 +688,7 @@ bool K3bAudioDoc::addTrackToToc( K3bAudioTrack* track, QTextStream& t, long& std
   }
   else {
     if( track->bufferFile().isEmpty() ) {
-      qDebug( "(K3bAudioDoc) not all files buffered. toc-file cannot be used for writing." );
+      kdDebug() << "(K3bAudioDoc) not all files buffered. toc-file cannot be used for writing." << endl;
       success = false;
     }
     t << "\"" << track->bufferFile() << "\"" << " 0" << "\n";
@@ -741,7 +742,7 @@ unsigned long K3bAudioDoc::identifyWaveFile( const KURL& url )
 
   QFile inputFile( filename );
   if( !inputFile.open(IO_ReadOnly) ) {
-    qDebug("Could not open file: %s", filename.latin1() );
+    kdDebug() << "Could not open file: " << filename << endl;
     return 0;
   }
 
@@ -751,14 +752,14 @@ unsigned long K3bAudioDoc::identifyWaveFile( const KURL& url )
 
   inputStream.readRawBytes( magic, 4 );
   if( inputStream.atEnd() || qstrncmp(magic, "RIFF", 4) ) {
-    qDebug( "%s: not a RIFF file.", filename.latin1());
+    kdDebug() << filename << ": not a RIFF file." << endl;
     return 0;
   }
 
   inputFile.at( 8 );
   inputStream.readRawBytes( magic, 4 );
   if( inputStream.atEnd() || qstrncmp(magic, "WAVE", 4) ) {
-    qDebug( "%s: not a wave file.",  filename.latin1());
+    kdDebug() << filename << ": not a wave file." << endl;
     return 0;
   }
 
@@ -768,7 +769,7 @@ unsigned long K3bAudioDoc::identifyWaveFile( const KURL& url )
 
     inputStream.readRawBytes( magic, 4 );
     if( inputStream.atEnd() ) {
-      qDebug( "%s: could not find format chunk.", filename.latin1());
+      kdDebug() << filename << ": could not find format chunk." << endl;
       return 0;
     }
 
@@ -779,7 +780,7 @@ unsigned long K3bAudioDoc::identifyWaveFile( const KURL& url )
     // skip chunk data of unknown chunk
     if( qstrncmp(magic, "fmt ", 4) )
       if( !inputFile.at( inputFile.at() + chunkLen ) ) {
-	qDebug( "%s: could not seek in file.", filename.latin1());
+	kdDebug() << filename << ": could not seek in file." << endl;
 	return 0;
       }
   }
@@ -791,21 +792,21 @@ unsigned long K3bAudioDoc::identifyWaveFile( const KURL& url )
   Q_INT16 waveFormat;
   inputStream >> waveFormat;
   if (inputStream.atEnd() || K3b::swapByteOrder(waveFormat) != 1) {
-    qDebug( "%s: not in PCM format: %i", filename.latin1(), waveFormat);
+    kdDebug() << filename << ": not in PCM format: " << waveFormat << endl;
     return 0;
   }
 
   Q_INT16 waveChannels;
   inputStream >> waveChannels;
   if (inputStream.atEnd() || K3b::swapByteOrder(waveChannels) != 2) {
-    qDebug( "%s: found %d channel(s), require 2 channels.", filename.latin1(), waveChannels );
+    kdDebug() << filename << ": found " << waveChannels << " channel(s), require 2 channels." << endl;
     return 0;
   }
 
   Q_INT32 waveRate;
   inputStream >> waveRate; 
   if (inputStream.atEnd() || K3b::swapByteOrder(waveRate) != 44100) {
-     qDebug( "%s: found sampling rate %ld, require 44100.", filename.latin1(), waveRate);
+     kdDebug() << filename << ": found sampling rate " << waveRate << "d, require 44100." << endl;
      return 0;
   }
 
@@ -817,14 +818,14 @@ unsigned long K3bAudioDoc::identifyWaveFile( const KURL& url )
   Q_INT16 waveBits;
   inputStream >> waveBits;
   if (inputStream.atEnd() || K3b::swapByteOrder(waveBits) != 16) {
-    qDebug( "%s: found %d bits per sample, require 16.", filename.latin1(), waveBits);
+    kdDebug() << filename << ": found " << waveBits << " bits per sample, require 16." << endl;
     return 0;
   }
 
   chunkLen -= 16;
   // skip all other (unknown) format chunk fields
   if( !inputFile.at( inputFile.at() + chunkLen ) ) {
-    qDebug( "%s: could not seek in file.", filename.latin1());
+    kdDebug() << filename << ": could not seek in file." << endl;
     return 0;
   }
 
@@ -834,21 +835,21 @@ unsigned long K3bAudioDoc::identifyWaveFile( const KURL& url )
 
     inputStream.readRawBytes( magic, 4 );
     if( inputStream.atEnd()  ) {
-      qDebug( "%s: could not find data chunk.", filename.latin1());
+      kdDebug() << filename << ": could not find data chunk." << endl;
       return 0;
     }
 
     inputStream >> chunkLen;
-    qDebug("----before bs: %li", chunkLen );
+    kdDebug() << "----before bs: " << chunkLen << "i" << endl;
     chunkLen = K3b::swapByteOrder( chunkLen );
-    qDebug("----after  bs: %li", chunkLen );
+    kdDebug() << "----after  bs: " << chunkLen << "i" << endl;
     chunkLen += chunkLen & 1; // round to multiple of 2
-    qDebug("----after rnd: %li", chunkLen );
+    kdDebug() << "----after rnd: " << chunkLen << "i" << endl;
 
     // skip chunk data of unknown chunk
     if( qstrncmp(magic, "data", 4) )
       if( !inputFile.at( inputFile.at() + chunkLen ) ) {
-	qDebug( "%s: could not seek in file.", filename.latin1());
+	kdDebug() << filename << ": could not seek in file." << endl;
 	return 0;
       }
   }
@@ -856,8 +857,7 @@ unsigned long K3bAudioDoc::identifyWaveFile( const KURL& url )
   // found data chunk
   int headerLen = inputFile.at();
   if( headerLen + chunkLen > inputFile.size() ) {
-    qDebug( "%s: file length %i does not match length from WAVE header %i + %i - using actual length.",
-	    filename.latin1(), inputFile.size(), headerLen, chunkLen);
+    kdDebug() << filename << ": file length " << inputFile.size() << " does not match length from WAVE header " << headerLen << " + " << chunkLen << " - using actual length." << endl;
     return (inputFile.size() - headerLen)/2352;
   }
   else {

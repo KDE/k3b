@@ -14,6 +14,7 @@
 #include <qtimer.h>
 
 #include <stdlib.h>
+#include <kdebug.h>
 #include <cmath>
 
 
@@ -110,8 +111,8 @@ void K3bMp3Module::startDecoding()
     
     m_decodingTimer->start(0);
 
-    qDebug("(K3bMp3Module) length of track: %li frames.", audioTrack()->length() );
-    qDebug("(K3bMp3Module) data to decode:  %li bytes.", m_rawDataLengthToStream );
+    kdDebug() << "(K3bMp3Module) length of track: " << audioTrack()->length() << "i frames." << endl;
+    kdDebug() << "(K3bMp3Module) data to decode:  " << m_rawDataLengthToStream << "i bytes." << endl;
   }
 }
 
@@ -147,9 +148,9 @@ void K3bMp3Module::fillInputBuffer()
       readSize = m_inputFile.readBlock( (char*)readStart, readSize );
       if( readSize <= 0 ) {
 	if( readSize < 0 )
-	  qDebug("(K3bMp3Module) read error on bitstream)" );
+	  kdDebug() << "(K3bMp3Module) read error on bitstream)" << endl;
 	else
-	  qDebug("(K3bMp3Module) end of input stream" );
+	  kdDebug() << "(K3bMp3Module) end of input stream" << endl;
 
 
 	m_bEndOfInput = true;
@@ -181,8 +182,7 @@ void K3bMp3Module::slotCountFrames()
       float seconds = (float)m_madTimer->seconds + (float)m_madTimer->fraction/(float)MAD_TIMER_RESOLUTION;
       unsigned long frames = (unsigned long)ceil(seconds * 75.0);
       audioTrack()->setLength( frames );
-      qDebug("(K3bMp3Module) setting length of track %i to ceil(%f) seconds = %li frames", 
-	     audioTrack()->index(), seconds, frames );
+      kdDebug() << "(K3bMp3Module) setting length of track " << audioTrack()->index() << " to ceil(" << seconds << ") seconds = " << frames << "i frames" << endl;
       
       m_rawDataLengthToStream = frames * 2352;
       
@@ -203,14 +203,12 @@ void K3bMp3Module::slotCountFrames()
 
       if( mad_header_decode( m_madHeader, m_madStream ) ) {
 	if( MAD_RECOVERABLE( m_madStream->error ) ) {
-	  qDebug( "(K3bMp3Module) recoverable frame level error (%s)",
-		  mad_stream_errorstr(m_madStream) );
+	  kdDebug() << "(K3bMp3Module) recoverable frame level error (" << mad_stream_errorstr(m_madStream) << ")" << endl;
 	  audioTrack()->setStatus( K3bAudioTrack::RECOVERABLE );
 	}
 	else {
 	  if( m_madStream->error != MAD_ERROR_BUFLEN ) {
-	    qDebug( "(K3bMp3Module) unrecoverable frame level error (%s).",
-		    mad_stream_errorstr(m_madStream));
+	    kdDebug() << "(K3bMp3Module) unrecoverable frame level error (" << mad_stream_errorstr(m_madStream) << ")." << endl;
 	    audioTrack()->setStatus( K3bAudioTrack::CORRUPT );
 	    
 	    m_bCountingFramesInProgress = false;
@@ -273,7 +271,7 @@ void K3bMp3Module::slotDecodeNextFrame()
 	  memset( m_outputPointer, 0, freeBuffer );
 	  m_outputPointer += ( freeBuffer > dataToPad ? dataToPad : freeBuffer );
 
-	  qDebug("(K3bMp3Module) padding data with %i zeros.", ( freeBuffer > dataToPad ? dataToPad : freeBuffer ) );
+	  kdDebug() << "(K3bMp3Module) padding data with " << (( freeBuffer > dataToPad ? dataToPad : freeBuffer )) << " zeros." << endl;
 	}
 	else {
 	  break;
@@ -282,14 +280,12 @@ void K3bMp3Module::slotDecodeNextFrame()
       else {
 	if( mad_frame_decode( m_madFrame, m_madStream ) ) {
 	  if( MAD_RECOVERABLE( m_madStream->error ) ) {
-	    qDebug( "(K3bMp3Module) recoverable frame level error (%s)",
-		    mad_stream_errorstr(m_madStream) );
+	    kdDebug() << "(K3bMp3Module) recoverable frame level error (" << mad_stream_errorstr(m_madStream) << ")" << endl;
 	    audioTrack()->setStatus( K3bAudioTrack::RECOVERABLE );
 	  }
 	  else {
 	    if( m_madStream->error != MAD_ERROR_BUFLEN ) {
-	      qDebug( "(K3bMp3Module) unrecoverable frame level error (%s).",
-		      mad_stream_errorstr(m_madStream));
+	      kdDebug() << "(K3bMp3Module) unrecoverable frame level error (" << mad_stream_errorstr(m_madStream) << ")." << endl;
 	      audioTrack()->setStatus( K3bAudioTrack::CORRUPT );
 	
 	      m_bDecodingInProgress = false;
@@ -341,7 +337,7 @@ void K3bMp3Module::slotDecodeNextFrame()
 	      // this should not happen since we only decode if the
 	      // output buffer has enough free space
 	      if( m_outputPointer == m_outputBufferEnd && i+1 < m_madSynth->pcm.length ) {
-		qDebug( "(K3bMp3Module) buffer overflow!" );
+		kdDebug() << "(K3bMp3Module) buffer overflow!" << endl;
 		exit(1);
 	      }
 	    } // pcm conversion
@@ -366,7 +362,7 @@ void K3bMp3Module::slotDecodeNextFrame()
   size_t bytesToOutput = buffersize;
 	    
   if( m_rawDataAlreadyStreamed > m_rawDataLengthToStream ) {
-    qDebug("to much data streamed");
+    kdDebug() << "to much data streamed" << endl;
     exit(1);
   }
 
@@ -374,9 +370,8 @@ void K3bMp3Module::slotDecodeNextFrame()
   // make sure we don't stream to much
   if( m_rawDataAlreadyStreamed + buffersize > m_rawDataLengthToStream ) {
     bytesToOutput = m_rawDataLengthToStream - m_rawDataAlreadyStreamed;
-    qDebug("(K3bMp3Module) decoded data was longer than calculated length. Cutting data." );
-    qDebug("(K3bMp3Module) bytes to stream: %li; bytes already streamed: %li; bytes in buffer: %li.",
-	   m_rawDataLengthToStream, m_rawDataAlreadyStreamed, buffersize );
+    kdDebug() << "(K3bMp3Module) decoded data was longer than calculated length. Cutting data." << endl;
+    kdDebug() << "(K3bMp3Module) bytes to stream: " << m_rawDataLengthToStream << "i; bytes already streamed: " << m_rawDataAlreadyStreamed << "i; bytes in buffer: " << buffersize << "i." << endl;
   }
   
   m_rawDataAlreadyStreamed += bytesToOutput;
@@ -400,7 +395,7 @@ void K3bMp3Module::slotDecodeNextFrame()
 
   if( m_bOutputFinished ) {
 
-    qDebug("(K3bMp3Module) end of output.");
+    kdDebug() << "(K3bMp3Module) end of output." << endl;
 
     m_decodingTimer->stop();
 
@@ -413,7 +408,7 @@ void K3bMp3Module::slotDecodeNextFrame()
 
     emit finished( true );
 
-    qDebug("(K3bMp3Module) finished.");
+    kdDebug() << "(K3bMp3Module) finished." << endl;
   }
   else if( m_consumer ) {
     // the timer will be restarted when the consumer
@@ -442,7 +437,7 @@ unsigned short K3bMp3Module::madFixedToUshort( mad_fixed_t fixed )
 void K3bMp3Module::cancel()
 {
   if( m_bCountingFramesInProgress ) {
-    qDebug( "(K3bMp3Module) length checking cannot be canceled." );
+    kdDebug() << "(K3bMp3Module) length checking cannot be canceled." << endl;
   }
   else if( m_bDecodingInProgress ) {
     m_bDecodingInProgress = false;

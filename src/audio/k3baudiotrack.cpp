@@ -30,6 +30,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <kdebug.h>
 
 
 
@@ -65,7 +66,7 @@ int K3bAudioTrack::index() const
 {
   int i = m_parent->find( this );
   if( i < 0 )
-    qDebug( "(K3bAudioTrack) I'm not part of my parent!");
+    kdDebug() << "(K3bAudioTrack) I'm not part of my parent!" << endl;
   return i;
 }
 

@@ -22,6 +22,8 @@
 #include <qdatastream.h>
 #include <qdatetime.h>
 
+#include <kdebug.h>
+
 #define DEFAULT_CD_DEVICE "/dev/cdrom"
 #define WAVHEADER_SIZE       44
 
@@ -41,7 +43,7 @@ K3bCdda::~K3bCdda(){
 
 bool K3bCdda::closeDrive( struct cdrom_drive *drive ){
     if ( cdda_close(drive) ){
-        qDebug("(K3bCdda) closing drive failed.");
+        kdDebug() << "(K3bCdda) closing drive failed." << endl;
         return false;
     }
     return true;
@@ -49,7 +51,7 @@ bool K3bCdda::closeDrive( struct cdrom_drive *drive ){
 
 bool K3bCdda::openDrive( struct cdrom_drive *drive ){
     if ( cdda_close(drive) ){
-        qDebug("(K3bCdda) opening drive failed.");
+        kdDebug() << "(K3bCdda) opening drive failed." << endl;
         return false;
     }
     return true;
@@ -57,10 +59,10 @@ bool K3bCdda::openDrive( struct cdrom_drive *drive ){
 
 struct cdrom_drive* K3bCdda::pickDrive( QString newPath )
 {
-    qDebug("(K3bCdda) new drive: %s", newPath.latin1());
+    kdDebug() << "(K3bCdda) new drive: " << newPath << endl;
     QCString path( QFile::encodeName( newPath ) );
     struct cdrom_drive *drive = 0;
-    qDebug("(K3bCdda) reformatted path: %s", path.data());
+    kdDebug() << "(K3bCdda) reformatted path: " << path.data() << endl;
 
     if( !path.isEmpty(  ) && path != "/" )
         drive = cdda_identify( path, CDDA_MESSAGE_PRINTIT, 0 );
@@ -71,9 +73,9 @@ struct cdrom_drive* K3bCdda::pickDrive( QString newPath )
                 drive = cdda_identify( DEFAULT_CD_DEVICE, CDDA_MESSAGE_PRINTIT, 0 );
         }
     }
-    qDebug("(K3bCdda) open cdrom");
+    kdDebug() << "(K3bCdda) open cdrom" << endl;
     if ( cdda_open( drive ) ) {
-        qDebug("(K3bCdda) opening cdrom failed.");
+        kdDebug() << "(K3bCdda) opening cdrom failed." << endl;
     }
     return drive;
 }

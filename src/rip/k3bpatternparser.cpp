@@ -106,7 +106,7 @@ QString K3bPatternParser::prepareDirectory( const K3bCddbEntry& entry )
   } else {
     result = QDir::homeDirPath();
   }
-  //qDebug("(K3bPatternParser) Destination directory: "+ result);
+  //kdDebug() << "(K3bPatternParser) Destination directory: " << result << endl;
   return result; //prepareReplaceDirectory( result );
 }
 
@@ -192,7 +192,7 @@ QString K3bPatternParser::prepareParsedName( const QString& title, const QString
         refTitle = title;
         newArtist = artist;
     }
-    //qDebug("Title:" + refTitle);
-    //qDebug("Artist:" + newArtist);
+    //kdDebug() << "Title:" << refTitle << endl;
+    //kdDebug() << "Artist:" << newArtist << endl;
     return refTitle;
 }

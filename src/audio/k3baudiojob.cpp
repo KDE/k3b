@@ -37,6 +37,7 @@
 #include <qdatetime.h>
 #include <qfile.h>
 #include <qtimer.h>
+#include <kdebug.h>
 
 #include <iostream>
 #include <cmath>
@@ -102,62 +103,62 @@ void K3bAudioJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 	      int pos1 = 5;
 	      int pos2 = (*str).find(':');
 	      if( pos1 == -1 ) {
-		qDebug("parsing did not work");
+		kdDebug() << "parsing did not work" << endl;
 		continue;
 	      }
 	      // now pos2 to the first colon :-)
 	      num = (*str).mid(pos1,pos2-pos1).toInt(&ok);				
 	      if(!ok)
-		qDebug("parsing did not work");
+		kdDebug() << "parsing did not work" << endl;
 				
 	      // --- parse already written Megs -----------------------------------				
 	      // ----------------------------------------------------------------------
 	      pos1 = (*str).find(':');
 	      if( pos1 == -1 ) {
-		qDebug("parsing did not work");
+		kdDebug() << "parsing did not work" << endl;
 		continue;
 	      }
 	      pos2 = (*str).find("of");
 	      if( pos2 == -1 ) {
-		qDebug("parsing did not work");
+		kdDebug() << "parsing did not work" << endl;
 		continue;
 	      }
 	      // now pos1 point to the colon and pos2 to the 'o' of 'of' :-)
 	      pos1++;
 	      made = (*str).mid(pos1,pos2-pos1).toInt(&ok);
 	      if(!ok)
-		qDebug("parsing did not work");
+		kdDebug() << "parsing did not work" << endl;
 					
 	      // --- parse total size of track ---------------------------------------
 	      // ------------------------------------------------------------------------
 	      pos1 = (*str).find("MB");
 	      if( pos1 == -1 ) {
-		qDebug("parsing did not work");
+		kdDebug() << "parsing did not work" << endl;
 		continue;
 	      }
 	      // now pos1 point to the 'M' of 'MB' and pos2 to the 'o' of 'of' :-)
 	      pos2 += 2;
 	      size = (*str).mid(pos2,pos1-pos2).toInt(&ok);
 	      if(!ok)
-		qDebug("parsing did not work");
+		kdDebug() << "parsing did not work" << endl;
 				
 	      // --- parse status of fifo --------------------------------------------
 	      // ------------------------------------------------------------------------
 	      pos1 = (*str).find("fifo");
 	      if( pos1 == -1 ) {
-		qDebug("parsing did not work");
+		kdDebug() << "parsing did not work" << endl;
 		continue;
 	      }
 	      pos2 = (*str).find('%');
 	      if( pos2 == -1 ) {
-		qDebug("parsing did not work");
+		kdDebug() << "parsing did not work" << endl;
 		continue;
 	      }
 	      // now pos1 point to the 'f' of 'fifo' and pos2 to the %o'  :-)
 	      pos1+=4;
 	      fifo = (*str).mid(pos1,pos2-pos1).toInt(&ok);
 	      if(!ok)
-		qDebug("parsing did not work");
+		kdDebug() << "parsing did not work" << endl;
 
 	      // -------------------------------------------------------------------
 	      // -------- parsing finished --------------------------------------
@@ -211,7 +212,7 @@ void K3bAudioJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 	}
       else {
 	// debugging
-	qDebug("(cdrecord) %s", (*str).latin1() );
+	kdDebug() << "(cdrecord) " << (*str) << endl;
       }
     } // for every line
 }
@@ -220,7 +221,7 @@ void K3bAudioJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 void K3bAudioJob::createCdrdaoProgress( int made, int size )
 {
   if( size == 0 ) {
-    qDebug("(K3bAudioJob) got progress: %i, %i", made, size );
+    kdDebug() << "(K3bAudioJob) got progress: " << made << ", " << size << endl;
     return;
   }
 
@@ -232,7 +233,7 @@ void K3bAudioJob::createCdrdaoProgress( int made, int size )
   if( trackSize > 0 )
     emit subPercent( 100*trackMade / trackSize );
   else
-    qDebug("(K3bAudioJob) got trackSize %i", trackSize );
+    kdDebug() << "(K3bAudioJob) got trackSize " << trackSize << endl;
   
   emit processedSize( made, size );
   if( !m_onTheFly ) {
@@ -267,7 +268,7 @@ void K3bAudioJob::cancel()
     emit finished( false );
   }
   else {
-    qDebug( "(K3bAudioJob) canceled without starting job." );
+    kdDebug() << "(K3bAudioJob) canceled without starting job." << endl;
   }
 }
 
@@ -288,7 +289,7 @@ void K3bAudioJob::cancelAll()
 
   // remove toc-file
   if( QFile::exists( m_tocFile ) ) {
-     qDebug("(K3bAudioOnTheFlyJob) Removing temporary TOC-file");
+     kdDebug() << "(K3bAudioOnTheFlyJob) Removing temporary TOC-file" << endl;
      QFile::remove( m_tocFile );
   }
   m_tocFile = QString::null;
@@ -333,7 +334,7 @@ void K3bAudioJob::slotTryStart()
   QListIterator<K3bAudioTrack> it( *m_doc->tracks() );
   for( ; it.current(); ++it ) {
     if( it.current()->length() == 0 ) {
-      qDebug("(K3bAudioJob) not all length ready.");
+      kdDebug() << "(K3bAudioJob) not all length ready." << endl;
       if( !m_bLengthInfoEmited ) {
 	emit infoMessage( i18n("Waiting for all tracks' length to be calculated."), STATUS );
 	m_bLengthInfoEmited = true;
@@ -355,7 +356,7 @@ void K3bAudioJob::slotTryStart()
   }
   m_decodingPercentage = (int)( 50.0 * (double)m_dataToDecode / (double)m_doc->size() );
 
-  qDebug("(K3bAudioJob) data to decode: %li", m_dataToDecode );
+  kdDebug() << "(K3bAudioJob) data to decode: " << m_dataToDecode << "i" << endl;
 
   // now decide what to do
   // what program to use (cdrdao or cdrecord)
@@ -446,8 +447,7 @@ void K3bAudioJob::slotDecodeNextFile()
   if( m_currentDecodedTrack ) {
     K3bAudioModule* module = m_currentDecodedTrack->module();
     if( module == 0 ) {
-      qDebug( "(K3bAudioModule) track no. %i is no wave file and has no module.", 
-	      m_currentDecodedTrackNumber );
+      kdDebug() << "(K3bAudioModule) track no. " << m_currentDecodedTrackNumber << " is no wave file and has no module." << endl;
       emit infoMessage( i18n("Internal error: No module. Please report!"), K3bJob::ERROR );
 
       cancelAll();
@@ -462,7 +462,7 @@ void K3bAudioJob::slotDecodeNextFile()
       if( m_onTheFly ) {
 	module->setConsumer( m_process, SIGNAL(wroteStdin(KProcess*)) );
 	connect( m_process, SIGNAL(wroteStdin(KProcess*)), this, SLOT(slotProcessWroteStdin()) );
-	qDebug("(K3bAudioJob) streaming track %i", m_currentDecodedTrackNumber );
+	kdDebug() << "(K3bAudioJob) streaming track " << m_currentDecodedTrackNumber << endl;
       }
       else {
 	module->setConsumer( 0 );
@@ -474,7 +474,7 @@ void K3bAudioJob::slotDecodeNextFile()
 
 	// start the K3bWaveFileWriter
 	if( !m_waveFileWriter.open( bufferFile.path() ) ) {
-	  qDebug( "(K3bAudioModule) Could not open file %s", bufferFile.path().latin1() );
+	  kdDebug() << "(K3bAudioModule) Could not open file " << bufferFile.path() << endl;
 	  emit infoMessage( i18n("Could not open buffer file %1").arg(bufferFile.path()), K3bJob::ERROR );
 	  
 	  cancelAll();
@@ -488,16 +488,16 @@ void K3bAudioJob::slotDecodeNextFile()
   }
   else {
 
-    qDebug("(K3bAudioJob) decoded %li bytes via K3bAudioModules:", m_decodedData );
+    kdDebug() << "(K3bAudioJob) decoded " << m_decodedData << "i bytes via K3bAudioModules:" << endl;
 
     if( m_onTheFly ) {
       // everything streamed. 
-      qDebug("(K3bAudioJob) streaming finished." );
+      kdDebug() << "(K3bAudioJob) streaming finished." << endl;
       m_process->closeStdin();
     }
     else {
       // all tracks buffered
-      qDebug("(K3bAudioJob) all tracks buffered.");
+      kdDebug() << "(K3bAudioJob) all tracks buffered." << endl;
       startWriting();
     }
   }
@@ -531,11 +531,10 @@ void K3bAudioJob::slotModuleFinished( bool success )
     if( success ) {
       // check if the data fits the track's length
       if( m_currentModuleDataLength != m_currentDecodedTrack->size() ) {
-	qDebug("(K3bAudioOnTheFlyJob) track size: %li and module output: %li", 
-	       m_currentDecodedTrack->size(), m_currentModuleDataLength );
+	kdDebug() << "(K3bAudioOnTheFlyJob) track size: " << m_currentDecodedTrack->size() << "i and module output: " << m_currentModuleDataLength << "i" << endl;
       }
       
-      qDebug("(K3bAudioOnTheFlyJob) finished streaming track %i.", m_currentDecodedTrackNumber );
+      kdDebug() << "(K3bAudioOnTheFlyJob) finished streaming track " << m_currentDecodedTrackNumber << "." << endl;
     }
     else {
       emit infoMessage( i18n("Error while streaming file"), K3bJob::ERROR );
@@ -553,11 +552,11 @@ void K3bAudioJob::slotModuleFinished( bool success )
     if( success ) {
       m_currentDecodedTrack->setBufferFile( bufferFilename );
 
-      qDebug( "(K3bAudioJob) Successfully buffered track %s", m_currentDecodedTrack->fileName().latin1() );
+      kdDebug() << "(K3bAudioJob) Successfully buffered track " << m_currentDecodedTrack->fileName() << endl;
       emit infoMessage( i18n("Written buffer file for %1 to %2").arg(m_currentDecodedTrack->fileName()).arg(bufferFilename), STATUS );
     }
     else {
-      qDebug( "(K3bAudioJob) Could not buffer track %s", m_currentDecodedTrack->fileName().latin1() );
+      kdDebug() << "(K3bAudioJob) Could not buffer track " << m_currentDecodedTrack->fileName() << endl;
       emit infoMessage( i18n("Error while buffering track %1").arg( m_currentDecodedTrack->fileName() ), ERROR );
 
       cancelAll();
@@ -568,7 +567,7 @@ void K3bAudioJob::slotModuleFinished( bool success )
 
   m_currentDecodedTrackNumber++;
   m_currentDecodedTrack = m_doc->at(m_currentDecodedTrackNumber);
-  qDebug("(K3bAudioJob) m_currentDecodedTrack = %s", (m_currentDecodedTrack ? "x" : "null") );
+  kdDebug() << "(K3bAudioJob) m_currentDecodedTrack = " << ((m_currentDecodedTrack ? "x" : "null")) << endl;
 
   QTimer::singleShot(0, this, SLOT(slotDecodeNextFile()) );
 }
@@ -581,7 +580,7 @@ void K3bAudioJob::cdrdaoWrite()
   firstTrack = true;
     
   if( !k3bMain()->externalBinManager()->foundBin( "cdrdao" ) ) {
-    qDebug("(K3bAudioJob) could not find cdrdao executable" );
+    kdDebug() << "(K3bAudioJob) could not find cdrdao executable" << endl;
     emit infoMessage( i18n("Cdrdao executable not found."), K3bJob::ERROR );
     cancelAll();
     emit finished( false );
@@ -593,7 +592,7 @@ void K3bAudioJob::cdrdaoWrite()
   m_tocFile = locateLocal( "appdata", "temp/k3btemptoc.toc");
 
   if( !m_doc->writeTOC( m_tocFile ) ) {
-    qDebug( "(K3bAudioJob) Could not write TOC-file." );
+    kdDebug() << "(K3bAudioJob) Could not write TOC-file." << endl;
     emit infoMessage( i18n("Could not write correct TOC-file."), K3bJob::ERROR );
     cancelAll();
     emit finished( false );
@@ -669,7 +668,7 @@ void K3bAudioJob::cdrdaoWrite()
   if( !m_process->start( KProcess::NotifyOnExit, KProcess::All ) ) {
     // something went wrong when starting the program
     // it "should" be the executable
-    qDebug("(K3bAudioJob) could not start cdrdao");
+    kdDebug() << "(K3bAudioJob) could not start cdrdao" << endl;
 
     emit infoMessage( i18n("Could not start cdrdao!"), K3bJob::ERROR );
     cancelAll();
@@ -677,7 +676,7 @@ void K3bAudioJob::cdrdaoWrite()
     return;
   }
 
-  qDebug( "(K3bAudioJob) process started!" );
+  kdDebug() << "(K3bAudioJob) process started!" << endl;
     
   if( m_doc->dummy() )
     emit infoMessage( i18n("Starting simulation at %1x speed...").arg(m_doc->speed()), K3bJob::STATUS );
@@ -690,7 +689,7 @@ void K3bAudioJob::cdrecordWrite()
 {
   // use cdrecord to burn the cd
   if( !k3bMain()->externalBinManager()->foundBin( "cdrecord" ) ) {
-    qDebug("(K3bAudioJob) could not find cdrecord executable" );
+    kdDebug() << "(K3bAudioJob) could not find cdrecord executable" << endl;
     emit infoMessage( i18n("Cdrecord executable not found."), K3bJob::ERROR );
     cancelAll();
     emit finished( false );
@@ -755,7 +754,7 @@ void K3bAudioJob::cdrecordWrite()
 // 	// TODO: implement me
 //       }
       else {
-	qDebug("(K3bAudioJob) missing buffer file");
+	kdDebug() << "(K3bAudioJob) missing buffer file" << endl;
 	emit infoMessage( i18n("Not all files have been buffered."), ERROR );
 	
 	cancelAll();
@@ -785,7 +784,7 @@ void K3bAudioJob::cdrecordWrite()
   if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
     // something went wrong when starting the program
     // it "should" be the executable
-    qDebug("(K3bAudioOnTheFlyJob) could not start cdrecord");
+    kdDebug() << "(K3bAudioOnTheFlyJob) could not start cdrecord" << endl;
       
     emit infoMessage( i18n("Could not start cdrecord!"), K3bJob::ERROR );
 
@@ -879,7 +878,7 @@ void K3bAudioJob::slotCdrdaoFinished()
 
   // remove toc-file
   if( QFile::exists( m_tocFile ) ) {
-     qDebug("(K3bAudioOnTheFlyJob) Removing temporary TOC-file");
+     kdDebug() << "(K3bAudioOnTheFlyJob) Removing temporary TOC-file" << endl;
      QFile::remove( m_tocFile );
   }
   m_tocFile = QString::null;

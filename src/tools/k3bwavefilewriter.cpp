@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include "k3bwavefilewriter.h"
+#include <kdebug.h>
 
 K3bWaveFileWriter::K3bWaveFileWriter()
   : m_outputStream( &m_outputFile )
@@ -90,7 +91,7 @@ void K3bWaveFileWriter::write( const char* data, int len, Endianess e )
     }
     else {
       if( len % 2 > 0 ) {
-	qDebug("(K3bWaveFileWriter) data length is not a multible of 2! Cannot write data.");
+	kdDebug() << "(K3bWaveFileWriter) data length is not a multible of 2! Cannot write data." << endl;
 	return;
       }
 

@@ -169,7 +169,7 @@ K3bDevice* K3bWriterSelectionWidget::writerDevice() const
  
   K3bDevice* dev =  k3bMain()->deviceManager()->deviceByName( strDev );
   if( !dev )
-    qDebug( "(K3bWriterSelectionWidget) could not find device %s", s.latin1() );
+    kdDebug() << "(K3bWriterSelectionWidget) could not find device " << s << endl;
 		
   return dev;
 }

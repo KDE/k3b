@@ -83,7 +83,7 @@ K3bMainWindow* k3bMain()
 {
   K3bMainWindow* _app = dynamic_cast<K3bMainWindow*>( kapp->mainWidget() );
   if( !_app ) {
-    qDebug( "No K3bMainWindow found!");
+    kdDebug() << "No K3bMainWindow found!" << endl;
     exit(1);
   }
   return _app;
@@ -913,7 +913,7 @@ void K3bMainWindow::init()
   m_deviceManager = new K3bDeviceManager( m_externalBinManager, this );
 
   if( !m_deviceManager->scanbus() )
-    qDebug( "No Devices found!" );
+    kdDebug() << "No Devices found!" << endl;
 
   if( globalConfig.hasGroup("Devices") ) {
     globalConfig.setGroup( "Devices" );

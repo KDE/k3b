@@ -49,6 +49,7 @@
 #include <kfile.h>
 #include <kdiroperator.h>
 #include <kurl.h>
+#include <kdebug.h>
 
 #define SPACE_1     1
 #define SPACE_2     3
@@ -478,7 +479,7 @@ void K3bPatternWidget::slotFileReplaceSpace( ){
         m_finalPatternFile[FILE_3] = K3bPatternParser::prepareReplaceName( m_finalPatternFile[FILE_3], m_editFile->text(), on );
     } else {
         // default settings
-        qDebug("slotReplacefile default");
+        kdDebug() << "slotReplacefile default" << endl;
         int index = searchComboIndex( m_list, m_comboFile1->currentText(), m_comboFile1 );
         setFinalPatternFile(index, 0);
         index = searchComboIndex( m_list, m_comboFile2->currentText(), m_comboFile2 );

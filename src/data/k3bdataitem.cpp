@@ -17,6 +17,7 @@
 
 #include "k3bdataitem.h"
 #include "k3bdiritem.h"
+#include <kdebug.h>
 
 
 K3bDataItem::K3bDataItem( K3bDataDoc* doc, K3bDataItem* parent )
@@ -42,14 +43,14 @@ void K3bDataItem::setK3bName( const QString& name ) {
   // test for not-allowed characters
   // TODO: use QRegExp
   if( name.contains('/') || name.contains('?') || name.contains('*') ) {
-    qDebug( "(K3bDataItem) name contained invalid characters!" );
+    kdDebug() << "(K3bDataItem) name contained invalid characters!" << endl;
     return;
   }
 //   if( parent() ) {
 //     QPtrList<K3bDataItem>* _itemsInDir = parent()->children();
 //     for( K3bDataItem* _it = _itemsInDir->first(); _it; _it = _itemsInDir->next() ) {
 //       if( _it != this && _it->k3bName() == name ) {
-// 	qDebug( "(K3bDataItem) already a file with that name in directory: " + _it->k3bName() );
+// 	kdDebug() << "(K3bDataItem) already a file with that name in directory: " << _it->k3bName() << endl;
 // 	return;
 //       }
 //     }

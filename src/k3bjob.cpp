@@ -21,6 +21,7 @@
 #include <kprocess.h>
 
 #include <qstringlist.h>
+#include <kdebug.h>
 
 
 K3bJob::K3bJob( QObject* parent )
@@ -45,7 +46,7 @@ void K3bBurnJob::parseCdrdaoOutput( KProcess*, char* data, int len )
   QStringList lines = QStringList::split( "\n", buffer );
 
   if( !m_notFinishedLine.isEmpty() ) {
-    qDebug("(K3bBurnJob) joining line: %s", (m_notFinishedLine + lines.front()).latin1());
+    kdDebug() << "(K3bBurnJob) joining line: " << (m_notFinishedLine + lines.front()) << endl;
 
     lines.first().prepend( m_notFinishedLine );
     m_notFinishedLine = "";
@@ -57,7 +58,7 @@ void K3bBurnJob::parseCdrdaoOutput( KProcess*, char* data, int len )
   // if not save the last line because it is not finished
   bool notFinishedLine = ( buffer.right(1) != "\n" && buffer.right(1) != "\r" );
   if( notFinishedLine ) {
-    qDebug("(K3bBurnJob) found unfinished line: %s", lines.last().latin1());
+    kdDebug() << "(K3bBurnJob) found unfinished line: " << lines.last() << endl;
     m_notFinishedLine = lines.last();
     it = lines.end();
     --it;
@@ -111,7 +112,7 @@ void K3bBurnJob::parseCdrdaoLine( const QString& str )
     // parse speed
     // compare it to writer()->currentSpeed()
     // if different -> emit infoMessage that requested speed could not be set
-    qDebug("(K3bBurnJob) ------ SPEED -------");
+    kdDebug() << "(K3bBurnJob) ------ SPEED -------" << endl;
   }
   else if( (str).contains( "Writing track" ) ) {
     // a new track has been started
@@ -138,21 +139,21 @@ void K3bBurnJob::parseCdrdaoLine( const QString& str )
 			
     made = (str).mid( 6, pos2-pos1-1 ).toInt( &ok );
     if( !ok )
-      qDebug( "(K3bBurnJob) Parsing did not work for: %s", (str).mid( 6, pos2-pos1-1 ).latin1() );
+      kdDebug() << "(K3bBurnJob) Parsing did not work for: " << (str).mid( 6,  pos2-pos1-1 ) << endl;
 			
     // ---- parse size ---------------------------
     pos1 = pos2 + 2;
     pos2 = (str).find("MB");
     size = (str).mid( pos1, pos2-pos1-1 ).toInt(&ok);
     if( !ok )
-      qDebug( "(K3bBurnJob) Parsing did not work for: %s", (str).mid( pos1, pos2-pos1-1 ).latin1() );
+      kdDebug() << "(K3bBurnJob) Parsing did not work for: " << (str).mid( pos1,  pos2-pos1-1 ) << endl;
 				
     // ----- parsing fifo ---------------------------
     pos1 = (str).findRev(' ');
     pos2 =(str).findRev('%');
     fifo = (str).mid( pos1, pos2-pos1 ).toInt(&ok);
     if( !ok )
-      qDebug( "(K3bBurnJob) Parsing did not work for: %s", (str).mid( pos1, pos2-pos1 ).latin1() );
+      kdDebug() << "(K3bBurnJob) Parsing did not work for: " << (str).mid( pos1, pos2-pos1 ) << endl;
 			
     emit bufferStatus( fifo );
 	
@@ -168,7 +169,7 @@ void K3bBurnJob::parseCdrdaoLine( const QString& str )
 
 void K3bBurnJob::parseCdrdaoSpecialLine( const QString& str )
 {
-  qDebug("(cdrdao) %s", str.latin1() );
+  kdDebug() << "(cdrdao) " << str << endl;
 }
 
 

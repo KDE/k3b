@@ -26,6 +26,7 @@
 #include <qheader.h>
 
 #include "../klistviewlineedit.h"
+#include <kdebug.h>
 
 
 K3bDataDirTreeView::K3bDataDirTreeView( K3bDataView* view, K3bDataDoc* doc, QWidget* parent )
@@ -171,7 +172,7 @@ void K3bDataDirTreeView::setCurrentDir( K3bDirItem* dirItem )
       m_itemMap[dirItem]->parent()->setOpen(true);
   }
   else {
-    qDebug("Tried to set unknown dirItem to current");
+    kdDebug() << "Tried to set unknown dirItem to current" << endl;
   }
 }
 

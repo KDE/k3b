@@ -32,6 +32,7 @@
 #include <qtimer.h>
 #include <qstringlist.h>
 #include <qfile.h>
+#include <kdebug.h>
 
 
 K3bCdCopyJob::K3bCdCopyJob( QObject* parent )
@@ -161,7 +162,7 @@ void K3bCdCopyJob::cdrdaoCopy()
     QFile::remove( m_tocFile );
 
   if( !k3bMain()->externalBinManager()->foundBin( "cdrdao" ) ) {
-    qDebug("(K3bAudioJob) could not find cdrdao executable" );
+    kdDebug() << "(K3bAudioJob) could not find cdrdao executable" << endl;
     emit infoMessage( i18n("Cdrdao executable not found."), K3bJob::ERROR );
     cancelAll();
     return;
@@ -202,7 +203,7 @@ void K3bCdCopyJob::cdrdaoCopy()
     }
   }
   else {
-    qDebug( "(K3bCdCopyJob) could not start cdrdao" );
+    kdDebug() << "(K3bCdCopyJob) could not start cdrdao" << endl;
     emit infoMessage( i18n("Could not start cdrdao!"), K3bJob::ERROR );
     cancelAll();
   }
@@ -261,7 +262,7 @@ void K3bCdCopyJob::cdrdaoRead()
     QFile::remove( m_tocFile );
 
   if( !k3bMain()->externalBinManager()->foundBin( "cdrdao" ) ) {
-    qDebug("(K3bAudioJob) could not find cdrdao executable" );
+    kdDebug() << "(K3bAudioJob) could not find cdrdao executable" << endl;
     emit infoMessage( i18n("Cdrdao executable not found."), K3bJob::ERROR );
     cancelAll();
     return;
@@ -290,7 +291,7 @@ void K3bCdCopyJob::cdrdaoRead()
     emit newSubTask( i18n("Creating image") );
   }
   else {
-    qDebug( "(K3bCdCopyJob) could not start cdrdao" );
+    kdDebug() << "(K3bCdCopyJob) could not start cdrdao" << endl;
     emit infoMessage( i18n("Could not start cdrdao!"), K3bJob::ERROR );
     cancelAll();
   }
@@ -341,7 +342,7 @@ void K3bCdCopyJob::cdrdaoWrite()
 
 
   if( !k3bMain()->externalBinManager()->foundBin( "cdrdao" ) ) {
-    qDebug("(K3bAudioJob) could not find cdrdao executable" );
+    kdDebug() << "(K3bAudioJob) could not find cdrdao executable" << endl;
     emit infoMessage( i18n("Cdrdao executable not found."), K3bJob::ERROR );
     cancelAll();
     return;
@@ -372,7 +373,7 @@ void K3bCdCopyJob::cdrdaoWrite()
     }
   }
   else {
-    qDebug( "(K3bCdCopyJob) could not start cdrdao" );
+    kdDebug() << "(K3bCdCopyJob) could not start cdrdao" << endl;
     emit infoMessage( i18n("Could not start cdrdao!"), K3bJob::ERROR );
     cancelAll();
   }

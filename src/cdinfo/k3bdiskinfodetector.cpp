@@ -6,6 +6,7 @@
 #include "../k3b.h"
 #include "../tools/k3bexternalbinmanager.h"
 
+#include <kdebug.h>
 #include <kprocess.h>
 
 #include <qtimer.h>
@@ -30,7 +31,7 @@ K3bDiskInfoDetector::~K3bDiskInfoDetector()
 void K3bDiskInfoDetector::detect( K3bDevice* device )
 {
   if( !device ) {
-    qDebug("(K3bDiskInfoDetector) detect should really not be called with NULL!");
+    kdDebug() << "(K3bDiskInfoDetector) detect should really not be called with NULL!" << endl;
     return;
   }
 
@@ -74,7 +75,7 @@ void K3bDiskInfoDetector::fetchDiskInfo()
   m_process->disconnect();
 
   if( !k3bMain()->externalBinManager()->foundBin( "cdrdao" ) ) {
-    qDebug("(K3bAudioJob) could not find cdrdao executable. no disk-info..." );
+    kdDebug() << "(K3bAudioJob) could not find cdrdao executable. no disk-info..." << endl;
     testForDvd();
   }
   else {
@@ -97,7 +98,7 @@ void K3bDiskInfoDetector::fetchDiskInfo()
     m_collectedStderr = QString::null;
 
     if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
-      qDebug("(K3bDiskInfoDetector) could not start cdrdao.");
+      kdDebug() << "(K3bDiskInfoDetector) could not start cdrdao." << endl;
       testForDvd();
     }
   }
@@ -108,7 +109,7 @@ void K3bDiskInfoDetector::slotDiskInfoFinished()
 {
   // cdrdao finished, now parse the stdout output to check if it was successfull
   if( m_collectedStdout.isEmpty() ) {
-    qDebug("(K3bDiskInfoDetector) disk-info gave no result... :-(");
+    kdDebug() << "(K3bDiskInfoDetector) disk-info gave no result... :-(" << endl;
   }
   else {
     // this is what we can use:
@@ -144,7 +145,7 @@ void K3bDiskInfoDetector::slotDiskInfoFinished()
 	if( ok )
 	  m_info.size = size;
 	else
-	  qDebug("(K3bDiskInfoDetector) could not parse # of blocks from: %s", m_info.sizeString.mid( start, end-start ).latin1() );
+	  kdDebug() << "(K3bDiskInfoDetector) could not parse # of blocks from: " << m_info.sizeString.mid( start, end-start ) << endl;
       }
 
       else if( str.startsWith("CD-R medium") ) {
@@ -174,7 +175,7 @@ void K3bDiskInfoDetector::slotDiskInfoFinished()
 	if( ok )
 	  m_info.sessions = value;
 	else
-	  qDebug("(K3bDiskInfoDetector) Could not parse # of sessions: %s", str.mid( str.find(":")+1 ).stripWhiteSpace().latin1() );
+	  kdDebug() << "(K3bDiskInfoDetector) Could not parse # of sessions: " << str.mid( str.find(":")+1 ).stripWhiteSpace() << endl;
       }
 
       else if( str.startsWith("Appendable") ) {
@@ -192,11 +193,11 @@ void K3bDiskInfoDetector::slotDiskInfoFinished()
 	if( ok )
 	  m_info.remaining = size;
 	else
-	  qDebug("(K3bDiskInfoDetector) could not parse # of blocks from: %s", m_info.remainingString.mid( start, end-start ).latin1() );
+	  kdDebug() << "(K3bDiskInfoDetector) could not parse # of blocks from: " << m_info.remainingString.mid( start, end-start) << endl;
       }
 
       else {
-	qDebug("(K3bDiskInfoDetector) unusable cdrdao output: %s", str.latin1() );
+	kdDebug() << "(K3bDiskInfoDetector) unusable cdrdao output: " << str << endl;
       }
     }
 
@@ -219,7 +220,7 @@ void K3bDiskInfoDetector::fetchTocInfo()
   m_process->disconnect();
 
   if( !k3bMain()->externalBinManager()->foundBin( "cdrecord" ) ) {
-    qDebug("(K3bAudioJob) could not find cdrecord executable.. not toc info will be available" );
+    kdDebug() << "(K3bAudioJob) could not find cdrecord executable.. not toc info will be available" << endl;
     m_info.valid = false;
     if( !m_bCanceled )
       emit diskInfoReady( m_info );
@@ -241,7 +242,7 @@ void K3bDiskInfoDetector::fetchTocInfo()
     m_collectedStderr = QString::null;
 
     if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
-      qDebug("(K3bDiskInfoDetector) could not start cdrecord. No toc info will be available");
+      kdDebug() << "(K3bDiskInfoDetector) could not start cdrecord. No toc info will be available" << endl;
       m_info.valid = false;
       if( !m_bCanceled )
 	emit diskInfoReady( m_info );
@@ -254,7 +255,7 @@ void K3bDiskInfoDetector::slotTocInfoFinished()
 {
   // cdrecord finished, now parse the stdout output to check if it was successfull
   if( m_collectedStdout.isEmpty() ) {
-    qDebug("(K3bDiskInfoDetector) cdrecord -toc gave no result... :-(");
+    kdDebug() << "(K3bDiskInfoDetector) cdrecord -toc gave no result... :-(" << endl;
     m_info.valid = false;
     if( !m_bCanceled )
       emit diskInfoReady( m_info );
@@ -337,20 +338,20 @@ void K3bDiskInfoDetector::slotTocInfoFinished()
 	      lastTrack = K3bTrack( startSec, startSec, control, mode );
 	    }
 	    else {
-	      qDebug("(K3bDiskInfoDetector) Could not parse mode of track: %s", str.mid( start ).latin1() );
+	      kdDebug() << "(K3bDiskInfoDetector) Could not parse mode of track: " << str.mid( start ) << endl;
 	    }
 	  }
 	  else {
-	    qDebug("(K3bDiskInfoDetector) Could not parse control of track: %s", str.mid( start, end-start ).latin1() );
+	    kdDebug() << "(K3bDiskInfoDetector) Could not parse control of track: " << str.mid( start, end-start ) << endl;
 	  }
 	}
 	else {
-	  qDebug("(K3bDiskInfoDetector) Could not parse start secstor of track: %s", str.mid( start, end-start ).latin1() );
+	  kdDebug() << "(K3bDiskInfoDetector) Could not parse start secstor of track: " << str.mid( start, end-start) << endl;
 	}
       }
 
       else {
-	qDebug("(K3bDiskInfoDetector) unusable cdrecord output: %s", str.latin1() );
+	kdDebug() << "(K3bDiskInfoDetector) unusable cdrecord output: " << str << endl;
       }
     }
 
@@ -420,7 +421,7 @@ void K3bDiskInfoDetector::testForDvd()
     // check if it is a dvd we can display
 
     if( !m_tcWrapper ) {
-      qDebug("(K3bDiskInfoDetector) testForDvd");
+      kdDebug() << "(K3bDiskInfoDetector) testForDvd" << endl;
       m_tcWrapper = new K3bTcWrapper( this );
       connect( m_tcWrapper, SIGNAL(successfulDvdCheck(bool)), this, SLOT(slotIsDvd(bool)) );
     }
@@ -492,7 +493,7 @@ void K3bDiskInfoDetector::calculateDiscId()
   id = ( ( id % 0xff ) << 24 ) | ( l << 8 ) | m_info.toc.count();
   m_info.toc.setDiscId( id );
   
-  qDebug("(K3bDiskInfoDetector) calculated disk id: %08x", id );
+  kdDebug() << "(K3bDiskInfoDetector) calculated disk id: " << id << endl;
 }
 
 #include "k3bdiskinfodetector.moc"

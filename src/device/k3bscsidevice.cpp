@@ -15,6 +15,7 @@ extern "C" {
 #include <sys/ioctl.h>
 
 #include "sg_err.h"
+#include <kdebug.h>
 
 
 K3bScsiDevice::K3bScsiDevice( cdrom_drive* drive )
@@ -42,7 +43,7 @@ int K3bScsiDevice::isReady() const
 {
   ScsiIf scsiIf( genericDevice().latin1() );
   if( scsiIf.init() != 0 ) {
-    qDebug( "(K3bScsiDevice) Could not open device %s", genericDevice().latin1() );
+    kdDebug() << "(K3bScsiDevice) Could not open device " << genericDevice() << endl;
     return 1;
   }
 
@@ -90,7 +91,7 @@ int K3bScsiDevice::isReady() const
 //   cmd[0] = 0x01;
   
 //   if( scsiIf.sendCmd(cmd, 6, NULL, 0, NULL, 0, 0) != 0 ) {
-//     qDebug( "Cannot rezero unit." );
+//     kdDebug() << "Cannot rezero unit." << endl;
 //     return false;
 //   }
 
@@ -152,7 +153,7 @@ int K3bScsiDevice::getModePage( ScsiIf *_scsiIf, int pageCode, unsigned char *bu
     delete[]data;
     return 0;
   } else {
-    qDebug( "No mode page data received." );
+    kdDebug() << "No mode page data received." << endl;
     delete[]data;
     return 1;
   }
@@ -174,7 +175,7 @@ int K3bScsiDevice::getModePage( ScsiIf *_scsiIf, int pageCode, unsigned char *bu
 //   cmd[0] = 0x25; // READ CD-ROM CAPACITY
 
 //   if( m_scsiIf->sendCmd(cmd, 10, NULL, 0, data, 8, 0) != 0 ) {
-//     qDebug("(K3bScsiDevice) Cannot read capacity of device " + m_genericDevice );
+//     kdDebug() << "(K3bScsiDevice) Cannot read capacity of device " << m_genericDevice << endl;
 //     return false;
 //   }
   
@@ -189,7 +190,7 @@ int K3bScsiDevice::isEmpty()
 {
   ScsiIf scsiIf( genericDevice().latin1() );
   if( scsiIf.init() != 0 ) {
-    qDebug( "(K3bScsiDevice) Could not open device %s", genericDevice().latin1() );
+    kdDebug() << "(K3bScsiDevice) Could not open device " << genericDevice() << endl;
     return -1;
   }
 
@@ -206,7 +207,7 @@ int K3bScsiDevice::isEmpty()
   cmd[8] = dataLen;
 
   if (scsiIf.sendCmd(cmd, 10, NULL, 0, data, dataLen, 0) != 0) {
-    qDebug( "(K3bScsiDevice) Could not check if disk in %s is empty.", genericDevice().latin1() );
+    kdDebug() << "(K3bScsiDevice) Could not check if disk in " << genericDevice() << " is empty." << endl;
     return -1;
   }
 
@@ -228,12 +229,12 @@ bool K3bScsiDevice::block( bool block ) const
 
   ScsiIf scsiIf( genericDevice().latin1() );
   if( scsiIf.init() != 0 ) {
-    qDebug( "(K3bScsiDevice) Could not open device %s", genericDevice().latin1() );
+    kdDebug() << "(K3bScsiDevice) Could not open device " << genericDevice() << endl;
     return false;
   }
 
   if (scsiIf.sendCmd(cmd, 6, NULL, 0, NULL, 0) != 0) {
-    qDebug( "(K3bScsiDevice) Cannot block/unblock device %s", genericDevice().latin1() );
+    kdDebug() << "(K3bScsiDevice) Cannot block/unblock device " << genericDevice() << endl;
     return false;
   }
 

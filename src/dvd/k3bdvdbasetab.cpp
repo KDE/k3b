@@ -28,6 +28,7 @@
 
 #include <kdialog.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 K3bDvdBaseTab::K3bDvdBaseTab( K3bDvdCodecData *data, QWidget *parent, const char *name ) : QWidget(parent,name) {
      m_data = data;
@@ -61,7 +62,7 @@ void K3bDvdBaseTab::setupGui(){
 }
 
 void K3bDvdBaseTab::slotUpdateData( K3bDivXDataGui *dataGui ){
-    qDebug("(K3bDvdBaseTab) Update date"); //
+    kdDebug() << "(K3bDvdBaseTab) Update date" << endl;
     dataGui->updateData( m_data );
     updateView();
 }

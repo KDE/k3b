@@ -39,6 +39,7 @@
 
 #include "device/k3btoc.h"
 #include "device/k3btrack.h"
+#include <kdebug.h>
 
 
 
@@ -262,7 +263,7 @@ void K3bCddb::queryCdOnServer()
   // TODO: add cddb over http
 
   if( m_cddbpServer.count() <= m_iCurrentQueriedServer ) {
-    qDebug("(K3bCddb) all server queried.");
+    kdDebug() << "(K3bCddb) all server queried." << endl;
     m_error = NO_ENTRY_FOUND;
     emit queryFinished( this );
     return;
@@ -280,7 +281,7 @@ void K3bCddb::queryCdOnServer()
     emit infoMessage( i18n("Searching %1 on port %2").arg(server).arg(port) );
   }
   else {
-    qDebug( "(K3bCddb) parsing problem: %s", m_cddbpServer[m_iCurrentQueriedServer].latin1() );
+    kdDebug() << "(K3bCddb) parsing problem: " << m_cddbpServer[m_iCurrentQueriedServer] << endl;
     m_iCurrentQueriedServer++;
     queryCdOnServer();
   }
@@ -343,7 +344,7 @@ void K3bCddb::slotReadyRead()
 
 	QString handshake = QString("cddb hello %1 %2 k3b %3").arg(user).arg(host).arg(VERSION);
 
-	qDebug("(K3bCddb) handshake: %s", handshake.latin1() );
+	kdDebug() << "(K3bCddb) handshake: " << handshake << endl;
 
 	QTextStream stream( m_socket );
 	stream << handshake << "\n";
@@ -370,7 +371,7 @@ void K3bCddb::slotReadyRead()
 
 	query.append( QString( " %1" ).arg( m_toc.length() / 75 ) );
 
-	qDebug("(K3bCddb) Query: %s", query.latin1() );
+	kdDebug() << "(K3bCddb) Query: " << query << endl;
 
 	m_state = QUERY;
 
@@ -397,7 +398,7 @@ void K3bCddb::slotReadyRead()
 	buffer = buffer.mid( pos + 1 );
 	QString title = buffer.stripWhiteSpace();
 
-	qDebug("(K3bCddb) Found exact match: '%s' '%s' '%s'", cat.latin1(), discid.latin1(), title.latin1());
+	kdDebug() << "(K3bCddb) Found exact match: '" << cat << "' '" << discid << "' '" << title << "'" << endl;
 
 	emit infoMessage( i18n("Found exact match") );
 
@@ -411,7 +412,7 @@ void K3bCddb::slotReadyRead()
 
       else if( getCode( line ) == 210 ) {
 	// TODO: perhaps add an "exact" field to K3bCddbEntry
-	qDebug("(K3bCddb) Found multiple exact matches");
+	kdDebug() << "(K3bCddb) Found multiple exact matches" << endl;
 
 	emit infoMessage( i18n("Found multiple exact matches") );
 
@@ -420,7 +421,7 @@ void K3bCddb::slotReadyRead()
       }
 
       else if( getCode( line ) == 211 ) {
-	qDebug("(K3bCddb) Found inexact matches");
+	kdDebug() << "(K3bCddb) Found inexact matches" << endl;
 
 	emit infoMessage( i18n("Found inexact matches") );
 
@@ -448,7 +449,7 @@ void K3bCddb::slotReadyRead()
       else {
 	QStringList match = QStringList::split( " ", line );
 
-	qDebug("(K3bCddb) inexact match: %s", line.latin1() );
+	kdDebug() << "(K3bCddb) inexact match: " << line << endl;
 
 	K3bCddbEntry entry;
 	entry.category = match[0];
@@ -473,11 +474,11 @@ void K3bCddb::slotReadyRead()
 
     case READ_DATA:
 
-      qDebug("parsing line: %s", line.latin1() );
+      kdDebug() << "parsing line: " << line << endl;
 
       if( line.startsWith( "." ) ) {
 	
-	qDebug("(K3bCddb) query finished.");
+	kdDebug() << "(K3bCddb) query finished." << endl;
 
 	QTextStream strStream( m_parsingBuffer, IO_ReadOnly );
 	m_query.addEntry( parseEntry( strStream ) );
@@ -513,7 +514,7 @@ bool K3bCddb::readFirstEntry()
   m_state = READ;
   m_parsingBuffer = "";
   
-  qDebug( "(K3bCddb) Read: %s", read.latin1() );
+  kdDebug() << "(K3bCddb) Read: " << read << endl;
   
   QTextStream stream( m_socket );
   stream << read << "\n";
@@ -546,16 +547,16 @@ K3bCddbEntry K3bCddb::parseEntry( QTextStream& stream )
       bool ok;
       int trackNum = line.mid( 6, eqSgnPos - 6 ).toInt( &ok );
       if( !ok )
-	qDebug("(K3bCddb) !!! PARSE ERROR: %s", line.latin1() );
+	kdDebug() << "(K3bCddb) !!! PARSE ERROR: " << line << endl;
       else {
-	qDebug("(K3bCddb) Track title for track %i", trackNum );
+	kdDebug() << "(K3bCddb) Track title for track " << trackNum << endl;
 	
 	// make sure the list is big enough
 	while( entry.titles.count() <= trackNum )
 	  entry.titles.append( "" );
 	
 	entry.titles[trackNum] += line.mid( eqSgnPos+1 );
-	qDebug("set title to: %s is now: %s", line.mid( eqSgnPos+1 ).latin1(), entry.titles[trackNum].latin1() );
+	kdDebug() << "set title to: " << line.mid( eqSgnPos+1 ) << " is now: " << entry.titles[trackNum] << endl;
       }
     }
     
@@ -568,9 +569,9 @@ K3bCddbEntry K3bCddb::parseEntry( QTextStream& stream )
       bool ok;
       int trackNum = line.mid( 4, eqSgnPos - 4 ).toInt( &ok );
       if( !ok )
-	qDebug("(K3bCddb) !!! PARSE ERROR: %s", line.latin1() );
+	kdDebug() << "(K3bCddb) !!! PARSE ERROR: " << line << endl;
       else {
-	qDebug("(K3bCddb) Track extr track %i", trackNum );
+	kdDebug() << "(K3bCddb) Track extr track " << trackNum << endl;
 
 	// make sure the list is big enough
 	while( entry.extInfos.count() <= trackNum )
@@ -581,11 +582,11 @@ K3bCddbEntry K3bCddb::parseEntry( QTextStream& stream )
     }
     
     else if( line.startsWith( "#" ) ) {
-      qDebug( "(K3bCddb) comment: %s", line.latin1() );
+      kdDebug() << "(K3bCddb) comment: " << line << endl;
     }
     
     else {
-      qDebug( "(K3bCddb) Unknown field: %s", line.latin1() );
+      kdDebug() << "(K3bCddb) Unknown field: " << line << endl;
     }
   }
 
@@ -647,15 +648,15 @@ void K3bCddb::slotError( int e )
 {
   switch(e) {
   case QSocket::ErrConnectionRefused:
-    qDebug( "%s", i18n("Connection to %1 refused").arg( m_cddbpServer[m_iCurrentQueriedServer] ).local8Bit().data() );
+    kdDebug() << i18n("Connection to %1 refused").arg( m_cddbpServer[m_iCurrentQueriedServer] ).local8Bit().data() << endl;
     emit infoMessage( i18n("Connection to %1 refused").arg( m_cddbpServer[m_iCurrentQueriedServer] ) );
     break;
   case QSocket::ErrHostNotFound:
-    qDebug( "%s", i18n("Could not find host %1").arg( m_cddbpServer[m_iCurrentQueriedServer] ).local8Bit().data() );
+    kdDebug() << i18n("Could not find host %1").arg( m_cddbpServer[m_iCurrentQueriedServer] ).local8Bit().data() << endl;
     emit infoMessage( i18n("Could not find host %1").arg( m_cddbpServer[m_iCurrentQueriedServer] ) );
     break;
   case QSocket::ErrSocketRead:
-    qDebug( "%s", i18n("Error while reading from %1").arg( m_cddbpServer[m_iCurrentQueriedServer] ).local8Bit().data() );
+    kdDebug() << i18n("Error while reading from %1").arg( m_cddbpServer[m_iCurrentQueriedServer] ).local8Bit().data() << endl;
     emit infoMessage( i18n("Error while reading from %1").arg( m_cddbpServer[m_iCurrentQueriedServer] ) );
     break;
   }
@@ -678,7 +679,7 @@ int K3bCddb::getCode( const QString& line )
 void K3bCddb::searchLocalDir()
 {
   if( m_localCddbDirs.count() <= m_iCurrentLocalDir ) {
-    qDebug("(K3bCddb) all local dirs searched");
+    kdDebug() << "(K3bCddb) all local dirs searched" << endl;
     m_error = NO_ENTRY_FOUND;
     emit queryFinished( this );
     return;
@@ -714,7 +715,7 @@ void K3bCddb::statJobFinished( KIO::Job* job )
 
     QFile f( m_localCddbFile );
     if( !f.open( IO_ReadOnly ) ) {
-      qDebug("(K3bCddb) Could not open file");
+      kdDebug() << "(K3bCddb) Could not open file" << endl;
       m_iCurrentLocalDir++;
       searchLocalDir();
     }
@@ -727,7 +728,7 @@ void K3bCddb::statJobFinished( KIO::Job* job )
     }
   }
   else {
-    qDebug("(K3bCddb) Could not find local entry");
+    kdDebug() << "(K3bCddb) Could not find local entry" << endl;
     m_iCurrentLocalDir++;
     searchLocalDir();
   }

@@ -53,7 +53,7 @@ void K3bDvdRippingProcess::start( ){
     // split of process and view (m_ripJob) due to m_ripJob cannot receive signals,
     // they will always connect to k3bjob instead to k3bdvdcopy. Why ?
     m_maxTitle = m_titles.count();
-    qDebug("(K3bDvdRippingProcess) Starting rip %i titles.", m_maxTitle );
+    kdDebug() << "(K3bDvdRippingProcess) Starting rip " << m_maxTitle << " titles." << endl;
     m_currentRipTitle = 0;
     m_currentRipAngle = 0;
     m_currentVobIndex = 1;
@@ -68,7 +68,7 @@ void K3bDvdRippingProcess::start( ){
     if( m_maxTitle > 0 ){
         checkRippingMode();
     } else {
-        qDebug("(K3bDvdRippingProcess) Nothing to rip.");
+        kdDebug() << "(K3bDvdRippingProcess) Nothing to rip." << endl;
     }
 }
 
@@ -78,10 +78,10 @@ void K3bDvdRippingProcess::checkRippingMode(){
     m_currentRipTitle++;
     m_title = QString::number( (*m_dvd).getTitleNumber() );
     if( (*m_dvd).isAllAngle() ){
-        qDebug("K3bDvdRippingProcess) Rip Title");
+        kdDebug() << "K3bDvdRippingProcess) Rip Title" << endl;
         m_ripMode = "-P";
     } else {
-        qDebug("K3bDvdRippingProcess) Rip Angle");
+        kdDebug() << "K3bDvdRippingProcess) Rip Angle" << endl;
         m_ripMode = "-T";
         QStringList::Iterator titleList = (*m_dvd).getSelectedAngle()->at( m_currentRipAngle );
         m_currentRipAngle++;
@@ -123,7 +123,7 @@ void K3bDvdRippingProcess::startRippingProcess( ){
     if( !m_ripProcess->start( KProcess::NotifyOnExit, KProcess::Stdout ) ) {
         // something went wrong when starting the program
         // it "should" be the executable
-        qDebug("(K3bDvdRippingProcess) Error starting rip.");
+        kdDebug() << "(K3bDvdRippingProcess) Error starting rip." << endl;
         m_outputFile.close();
     }
     // successful start
@@ -135,7 +135,7 @@ void K3bDvdRippingProcess::setDvdTitle( const QValueList<K3bDvdContent> &titles 
 }
 
 void K3bDvdRippingProcess::setRipSize( double size ){
-    //qDebug("RipSize: %f", (float) size );
+    //kdDebug() << "RipSize: " << (float) size << endl;
     m_titleBytes = size;
 }
 
@@ -144,28 +144,28 @@ void K3bDvdRippingProcess::cancel( ){
 }
 
 void K3bDvdRippingProcess::slotExited( KProcess* ){
-    qDebug("(K3bDvdRippingProcess) Ripping task finsihed.");
+    kdDebug() << "(K3bDvdRippingProcess) Ripping task finsihed." << endl;
     m_outputFile.close();
     delete m_ripProcess;
-    qDebug("(K3bDvdRippingProcess) Ripped bytes: %f", m_summaryBytes );
+    kdDebug() << "(K3bDvdRippingProcess) Ripped bytes: " << m_summaryBytes << endl;
     //m_audioProcess->closeStdin();
     if( m_currentRipTitle < m_maxTitle ){
         checkRippingMode();
     } else {
-        qDebug("(K3bDvdRippingProcess) Copy IFO files for audio gain processing.");
+        kdDebug() << "(K3bDvdRippingProcess) Copy IFO files for audio gain processing." << endl;
         postProcessingDvd();
         postProcessingFinished();
     }
 }
 
 void K3bDvdRippingProcess::postProcessingFinished(){
-    qDebug("(K3bDvdRippingProcess) Send finish.");
+    kdDebug() << "(K3bDvdRippingProcess) Send finish." << endl;
     saveConfig();
     emit finished( true );
 }
 
 void K3bDvdRippingProcess::slotAudioProcessFinished(){
-    qDebug("(K3bDvdRippingProcess) Save audio/config data.");
+    kdDebug() << "(K3bDvdRippingProcess) Save audio/config data." << endl;
     delete m_audioProcess;
 }
 
@@ -212,7 +212,7 @@ void K3bDvdRippingProcess::slotParseOutput( KProcess *p, char *text, int len){
 }
 /*
 void K3bDvdRippingProcess::slotParseError( KProcess *p, char *text, int len){
-    qDebug("(K3bDvdRippingProcess) Calculate bytes to rip.");
+    kdDebug() << "(K3bDvdRippingProcess) Calculate bytes to rip." << endl;
     m_titleBytes = tccatParsedBytes( text, len );
     m_ripProcess->disconnect( SIGNAL(receivedStderr(KProcess*, char*, int)), this );
 }
@@ -228,13 +228,13 @@ float K3bDvdRippingProcess::tccatParsedBytes( char *text, int len){
         tmp= tmp.mid( 0, end);
         blocks = (tmp.toFloat())*2048;
     }
-    qDebug("(K3bDvdRippingProcess) Parsed bytes: %s", QString::number(blocks, 'f').latin1() );
+    kdDebug() << "(K3bDvdRippingProcess) Parsed bytes: " << QString::number(blocks, 'f') << endl;
     return blocks;
 }
 
 void K3bDvdRippingProcess::preProcessingDvd( ){
     if( !m_dvdOrgFilenameDetected ){
-        qDebug("(K3bDvdRippingProcess) Mount dvd for filename detection.");
+        kdDebug() << "(K3bDvdRippingProcess) Mount dvd for filename detection." << endl;
         K3bDevice *dev = k3bMain()->deviceManager()->deviceByName( m_device );
         m_mountPoint = dev->mountPoint();
 
@@ -262,7 +262,7 @@ void K3bDvdRippingProcess::slotPreProcessingDvd( ){
              QStringList vobs = video_ts.entryList();
              QStringList::Iterator it = vobs.begin();
              m_baseFilename = (*it).left( (*it).length()-5 );
-             qDebug("(K3bDvdRippingProcess) First entry of vobs used as name: %s", m_baseFilename.latin1() );
+             kdDebug() << "(K3bDvdRippingProcess) First entry of vobs used as name: " << m_baseFilename << endl;
          }
     }
     // copy ifos and video.ifo
@@ -280,7 +280,7 @@ void K3bDvdRippingProcess::postProcessingDvd( ){
         KURL::List ifoList( vobs );
         KURL dest( m_dirtmp );
         connect( KIO::copy( ifoList, dest, false ), SIGNAL( result( KIO::Job *) ), this, SLOT( slotJoDebug( KIO::Job* ) ) );
-        qDebug("(K3bDvdRippingProcess) Copy IFO files to %s", dest.path().latin1() );
+        kdDebug() << "(K3bDvdRippingProcess) Copy IFO files to " << dest.path() << endl;
     }
     QDir dvdtmp( m_dirvob, "*.vob");
     QStringList vobs = dvdtmp.entryList();
@@ -288,13 +288,13 @@ void K3bDvdRippingProcess::postProcessingDvd( ){
         QString target("../vob/"+ (*it));
         KURL dest( m_dirtmp + "/" + *it );
         connect( KIO::symlink( target, dest, false ), SIGNAL( result( KIO::Job *) ), this, SLOT( slotJobDebug( KIO::Job*) ) );
-        qDebug("(K3bDvdRippingProcess) Symlink %s -> %s", dest.path().latin1(), target.latin1());
+        kdDebug() << "(K3bDvdRippingProcess) Symlink " << dest.path() << " -> " << target << endl;
     }
 }
 
 void K3bDvdRippingProcess::slotJobDebug( KIO::Job *job ){
      if( !job->errorString().isEmpty() )
-        qDebug("(K3bDvdRippingProcess) Job error: %s", job->errorString().latin1() );
+        kdDebug() << "(K3bDvdRippingProcess) Job error: " << job->errorString() << endl;
 }
 
 QString K3bDvdRippingProcess::getFilename(){
@@ -320,7 +320,7 @@ void K3bDvdRippingProcess::saveConfig(){
     if( f.exists() ){
         int button = QMessageBox::critical( 0, i18n("Ripping Error"), i18n("Log file already exists."), i18n("Overwrite"), i18n("Cancel") );
         if( button != 0 ){
-            qDebug("(K3bDvdRippingProcess) Couldn't save ripping datas.");
+            kdDebug() << "(K3bDvdRippingProcess) Couldn't save ripping datas." << endl;
             return;
         }
     }
@@ -358,12 +358,12 @@ float K3bDvdRippingProcess::getAudioGain(){
         QString tmp;
         for( int i=0; i < 5; i++ ){
             tmp = t.readLine();
-            qDebug("%s", tmp.latin1());
+            kdDebug() << tmp << endl;
             if( tmp.contains("rescale") ){
                 int index = tmp.find( "rescale=" );
                 tmp = tmp.mid(index+8);
                 result = tmp.stripWhiteSpace().toFloat();
-                qDebug("(K3bDvdRippingProcess) Found audio gain: %f", result );
+                kdDebug() << "(K3bDvdRippingProcess) Found audio gain: " << result << endl;
                 break;
             }
         }

@@ -71,7 +71,7 @@ void K3bTcWrapper::runTcprobe()
   if( !p->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
     // something went wrong when starting the program
     // it "should" be the executable
-    qDebug("(K3bDirView) Error during checking drive for DVD.");
+    kdDebug() << "(K3bDirView) Error during checking drive for DVD." << endl;
   }
 }
 
@@ -84,21 +84,21 @@ void K3bTcWrapper::slotParseTcprobeError( KProcess *p, char *text, int len){
 }
 
 void K3bTcWrapper::slotTcprobeExited( KProcess *p){
-    //qDebug("(K3bTcWrapper) Tcprobe output\n" + m_outputBuffer);
-    //qDebug("(K3bTcWrapper) Tcprobe error\n" + m_errorBuffer);
-    qDebug("(K3bTcWrapper) Tcprobe finished");
+    //kdDebug() << "(K3bTcWrapper) Tcprobe output\n" << m_outputBuffer << endl;
+    //kdDebug() << "(K3bTcWrapper) Tcprobe error\n" << m_errorBuffer << endl;
+    kdDebug() << "(K3bTcWrapper) Tcprobe finished" << endl;
     // split to lines
     QStringList errorLines = QStringList::split( "\n", m_errorBuffer );
     if( !m_firstProbeDone ) {
         // check dvd
         QStringList::Iterator str = errorLines.begin();
         if( !(*str).contains("tcprobe") && !(*str).contains("DVD image/device") ) {
-            qDebug("(K3bTcWrapper) no readable dvd.");
+            kdDebug() << "(K3bTcWrapper) no readable dvd." << endl;
             emit successfulDvdCheck( false );
             return;
         }
         if ( m_runTcProbeCheckOnly ){
-            qDebug("(K3bTcWrapper) DVD check, is DVD.");
+            kdDebug() << "(K3bTcWrapper) DVD check, is DVD." << endl;
             m_runTcProbeCheckOnly = false;
             emit successfulDvdCheck( true );
             return;
@@ -115,19 +115,19 @@ void K3bTcWrapper::slotTcprobeExited( KProcess *p){
         index = titles.find(",");
         titles = titles.mid(index+1).stripWhiteSpace();
         index = titles.find("angle");
-        qDebug("string: %s", titles.latin1());
+        kdDebug() << "string: " << titles << endl;
         m_allAngle = titles.mid(0, index).stripWhiteSpace().toInt();
         m_firstProbeDone = true;
-        qDebug("(K3bTcWrapper) Found titles %i/%i, angles %i", m_currentTitle, m_allTitle, m_allAngle);
+        kdDebug() << "(K3bTcWrapper) Found titles " << m_currentTitle << "/" << m_allTitle << ", angles " << m_allAngle << endl;
     }
     if( m_currentTitle <= m_allTitle ){
         K3bDvdContent con( *parseTcprobe() );
         QString titles = errorLines[ 1 ];
         int index = titles.find(":");
         int end = titles.find("chap");
-        qDebug("Title: %s", titles.mid(index+1, end-index ).latin1());
-        qDebug("Chapters %s", QString::number(titles.mid(index+1, end-index-1 ).stripWhiteSpace().toInt() ).latin1() );
-        con.setMaxChapter( (titles.mid(index+1, end-index-1).stripWhiteSpace()).toInt() );
+        kdDebug() << "Title: " << titles.mid(index+1, end-index) << endl;
+        kdDebug() << "Chapters " << titles.mid(index+1, end-index-1).stripWhiteSpace().toInt() << endl;
+        con.setMaxChapter( titles.mid(index+1, end-index-1).stripWhiteSpace().toInt() );
         con.setTitleNumber( m_currentTitle );
 
         index = titles.find(",");
@@ -135,7 +135,7 @@ void K3bTcWrapper::slotTcprobeExited( KProcess *p){
         index = titles.find("angle");
         m_allAngle = titles.mid(0, index).stripWhiteSpace().toInt();
         con.setMaxAngle( m_allAngle );
-        qDebug("Angles %i", m_allAngle);
+        kdDebug() << "Angles " << m_allAngle << endl;
         m_dvdTitles.append( con );
         m_currentTitle++;
         if( m_currentTitle <= m_allTitle) {

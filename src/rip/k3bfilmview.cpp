@@ -44,6 +44,7 @@
 #include <kapp.h>
 #include <kconfig.h>
 #include <kaction.h>
+#include <kdebug.h>
 
 
 K3bFilmView::K3bFilmView(QWidget *parent, const char *name )
@@ -259,7 +260,7 @@ void K3bFilmView::slotTitleSelected(QListViewItem*item){
             row = item->parent()->text(0).right(1).toInt() - 1;
         }
     }
-    qDebug("(K3bFilmView) Show title information for entry <%i>", row);
+    kdDebug() << "(K3bFilmView) Show title information for entry <" << row << ">" << endl;
     if( row >= 0 ){
         K3bDvdContent *title = &(m_dvdTitles[ row ]);
         // get data from tcwrapper
@@ -312,7 +313,7 @@ void K3bFilmView::slotRip(){
     K3bDvdRipperWidget *ripWidget = new K3bDvdRipperWidget( m_device->devicename(), this, "dvdrip");
     DvdTitle::Iterator dvd;
     int c = m_titleView->childCount();
-    qDebug("(K3bFilmView) titles %i", c);
+    kdDebug() << "(K3bFilmView) titles " << c << endl;
     DvdTitle toRipTitles;
     QCheckListItem *item = dynamic_cast<QCheckListItem*>( m_titleView->firstChild( ) );
     int title = 0;
@@ -321,21 +322,21 @@ void K3bFilmView::slotRip(){
 
     while( item !=0 ){
         if( item->type() == QCheckListItem::Controller ){
-            //qDebug("item " + item->text(0) );
+            //kdDebug() << "item " << item->text(0) << endl;
             dvd = m_dvdTitles.at( title );
             (*dvd).getSelectedAngle()->clear();
             int c  = item->childCount();
             if( c > 0 ){
                 QCheckListItem *child = dynamic_cast<QCheckListItem*>(item->firstChild( ) );
-                //qDebug("child " + child->text() );
+                //kdDebug() << "child " << child->text() << endl;
                 if( child->isOn() ){
-                    qDebug("(K3bDvdFilmView) Add title %i with angle %i.", title+1, 1 );
+                    kdDebug() << "(K3bDvdFilmView) Add title " << title+1 << " with angle " << 1 << "." << endl;
                     ( *dvd ).addAngle( QString::number( 1 ) );
                     addToRipTitles = true;
                 }
                 for( int i=1; i < c; i++){
                     if( dynamic_cast<QCheckListItem*>(item->nextSibling( ) )->isOn() ){
-                        qDebug("(K3bDvdFilmView) Add more title with angle %i.", i+1);
+                        kdDebug() << "(K3bDvdFilmView) Add more title with angle " << i+1 << "." << endl;
                         ( *dvd ).addAngle( QString::number( i+1 ) );
                     }
                 }

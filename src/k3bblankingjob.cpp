@@ -10,6 +10,7 @@
 #include <klocale.h>
 
 #include <qstring.h>
+#include <kdebug.h>
 
 #include <iostream>
 
@@ -55,7 +56,7 @@ void K3bBlankingJob::start()
   m_process->clearArguments();
 
   if( !k3bMain()->externalBinManager()->foundBin( "cdrecord" ) ) {
-    qDebug("(K3bBlankingJob) could not find cdrecord executable" );
+    kdDebug() << "(K3bBlankingJob) could not find cdrecord executable" << endl;
     emit infoMessage( i18n("Cdrecord executable not found."), K3bJob::ERROR );
 
     emit finished( false );
@@ -107,7 +108,7 @@ void K3bBlankingJob::start()
     {
       // something went wrong when starting the program
       // it "should" be the executable
-      qDebug("(K3bBlankingJob) could not start cdrecord");
+      kdDebug() << "(K3bBlankingJob) could not start cdrecord" << endl;
       emit infoMessage( i18n("Could not start cdrecord!"), K3bJob::ERROR );
       emit finished( false );
     }
@@ -138,7 +139,7 @@ void K3bBlankingJob::cancel()
 
 void K3bBlankingJob::slotParseCdrecordOutput( KProcess*, char* data, int len )
 {
-  qDebug( "%s", QString::fromLatin1( data, len ).latin1() );
+  kdDebug() << QString::fromLatin1( data, len) << endl;
 }
 
 

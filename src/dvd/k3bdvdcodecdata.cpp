@@ -19,6 +19,7 @@
 #include "k3bdivxprojectparser.h"
 
 #include "kio/global.h"
+#include <kdebug.h>
 
 K3bDvdCodecData::K3bDvdCodecData(){
     m_iWidth=0;
@@ -38,7 +39,7 @@ void K3bDvdCodecData::setProjectFile( const QString& file ){
     m_projectFile = file;
     int index = file.findRev("/");
     m_projectDir = file.left( index );
-    qDebug("ProjectDir: %s", m_projectDir.latin1() );
+    kdDebug() << "ProjectDir: " << m_projectDir << endl;
     loadData();
 }
 
@@ -54,7 +55,7 @@ void K3bDvdCodecData::loadData( ){
 void K3bDvdCodecData::setLength( const QString& l){
     m_length = l;
     m_timeLength = QTime::fromString( l );
-    qDebug( "Time %s", m_timeLength.toString().latin1() );
+    kdDebug() << "Time " << m_timeLength.toString() << endl;
 }
 void K3bDvdCodecData::setAspectRatio( const QString& a){
     m_aspectRatio = a;
@@ -66,7 +67,7 @@ void K3bDvdCodecData::setAspectRatio( const QString& a){
     if( h > 0 ){
         m_fAspectRatio =  w / h;
     } else{
-         qDebug("(K3bDvdCodecData) error in aspect ratio.");
+         kdDebug() << "(K3bDvdCodecData) error in aspect ratio." << endl;
          m_fAspectRatio = 1.0;
     }
 }
@@ -77,7 +78,7 @@ void K3bDvdCodecData::setWidth( const QString& w){
 void K3bDvdCodecData::setHeight( const QString& h){
      m_height = h;
      m_iHeight = h.toInt();
-    qDebug("Height %d", m_iHeight );
+    kdDebug() << "Height " << m_iHeight << endl;
 }
 void K3bDvdCodecData::addLanguage( const QString& l){
     m_listAudio << l;

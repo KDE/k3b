@@ -49,6 +49,7 @@
 #include <kstatusbar.h>
 #include <kconfig.h>
 #include <ksystemtray.h>
+#include <kdebug.h>
 
 
 class K3bBurnProgressDialog::PrivateDebugWidget : public KDialog 
@@ -298,7 +299,7 @@ void K3bBurnProgressDialog::displayInfo( const QString& infoString, int type )
 
 void K3bBurnProgressDialog::finished( bool success )
 {
-  qDebug( "(K3bBurnProgressDialog) received finished signal!");
+  kdDebug() << "(K3bBurnProgressDialog) received finished signal!" << endl;
 
   m_job = 0;
 

@@ -49,7 +49,7 @@ void K3bSongManager::save(){
             SongList list;
             list = (*con).getSongs();
             if( list.isEmpty() )
-                qDebug("(K3bSongManager) No songs in %s", (*con).getPath().latin1() );
+                kdDebug() << "(K3bSongManager) No songs in " << (*con).getPath() << endl;
             SongList::Iterator it;
             for( it = list.begin(); it != list.end(); ++it ){
                 QString insertTab_2 = "        "; // 8 spaces
@@ -66,7 +66,7 @@ void K3bSongManager::save(){
         t << "</k3b-CDDB-Database>" << endl;
         f.close();
     } else {
-        qDebug("(K3bSongManager) Can't open file %s", m_filename.latin1());
+        kdDebug() << "(K3bSongManager) Can't open file " << m_filename << endl;
     }
 }
 
@@ -92,14 +92,14 @@ const QStringList& K3bSongManager::verify(){
             SongList list;
             list = (*con).getSongs();
             if( list.isEmpty() )
-                qDebug("(K3bSongManager) No songs in %s", (*con).getPath().latin1() );
+                kdDebug() << "(K3bSongManager) No songs in " << (*con).getPath() << endl;
             SongList::Iterator it;
             for( it = list.begin(); it != list.end(); ++it ){
                 QString findSong = (*con).getPath() +"/"+(*it).getFilename();
-                qDebug("(K3bSongManager) Search song: %s", findSong.latin1() );
+                kdDebug() << "(K3bSongManager) Search song: " << findSong << endl;
                 QFile f( findSong );
                 if( !f.exists() ){
-                    qDebug("(K3bSongManager) Add song that are not found: %s", findSong.latin1() );
+                    kdDebug() << "(K3bSongManager) Add song that are not found: " << findSong << endl;
                     m_missingSongList.append( findSong );
                 }
             }
@@ -109,17 +109,17 @@ const QStringList& K3bSongManager::verify(){
 
 K3bSong* K3bSongManager::findSong( const QString& index ){
     QString path = index.left( index.findRev("/") );
-    qDebug("(K3bSongManager) Search container: %s", path.latin1());
+    kdDebug() << "(K3bSongManager) Search container: " << path << endl;
     QString file = index.right( index.length() - 1 - index.findRev("/") );
-    qDebug("(K3bSongManager) Search song: %s", file.latin1());
+    kdDebug() << "(K3bSongManager) Search song: " << file << endl;
     K3bSongContainer *con = findContainer( path );
     if( con != 0 ) {
-      qDebug("Found container %s", con->getPath().latin1() );
+      kdDebug() << "Found container " << con->getPath() << endl;
       K3bSong *song = findSong( file, *con );
       return song;
     }
     else {
-      qDebug( "No container found!" );
+      kdDebug() << "No container found!" << endl;
       return 0;
     }
 }
@@ -130,12 +130,12 @@ void K3bSongManager::addSong( const QString& path, K3bSong& song){
 
 void K3bSongManager::deleteSong( const QString& index ){
     QString path = index.left( index.findRev("/") );
-    qDebug("(K3bSongManager) Search container: %s", path.latin1());
+    kdDebug() << "(K3bSongManager) Search container: " << path << endl;
     QString file = index.right( index.length() - 1 - index.findRev("/") );
-    qDebug("(K3bSongManager) Search song: %s", file.latin1());
+    kdDebug() << "(K3bSongManager) Search song: " << file << endl;
     K3bSongContainer *con = findContainer( path );
     if( con != 0 ) {
-        qDebug("Found container %s", con->getPath().latin1() );
+        kdDebug() << "Found container " << con->getPath() << endl;
         typedef QValueList<K3bSong> SongList;
         SongList list;
         list = con->getSongs();
@@ -143,13 +143,13 @@ void K3bSongManager::deleteSong( const QString& index ){
         for( it = list.begin(); it != list.end(); ++it ){
             QString tmp = (*it).getFilename();
             if( tmp == file ){
-                qDebug("(K3bSongManager) Remove song: %s", file.latin1() );
+                kdDebug() << "(K3bSongManager) Remove song: " << file << endl;
                 con->deleteSong( file );
                 break;
             }
         }
     } else {
-        qDebug( "No container found!" );
+        kdDebug() << "No container found!" << endl;
         //return 0;
     }
     debug();
@@ -159,7 +159,7 @@ K3bSongContainer* K3bSongManager::getContainer( const QString& path ){
     K3bSongContainer *resultCon = findContainer( path );
     if( resultCon == 0 ){
         ContainerList::Iterator it;
-        qDebug("(K3bSongManager) Container doesn't exist, create one. %s", path.latin1());
+        kdDebug() << "(K3bSongManager) Container doesn't exist, create one. " << path << endl;
         resultCon = new K3bSongContainer( path );
         it = m_containers.append( *resultCon );
         return &(*it);
@@ -188,7 +188,7 @@ K3bSong* K3bSongManager::findSong( const QString& filename, const K3bSongContain
     SongList list;
     list = con.getSongs();
     if( list.isEmpty() ){
-        qDebug("(K3bSongManager) Found no song list");
+        kdDebug() << "(K3bSongManager) Found no song list" << endl;
         return 0;
     }
     SongList::Iterator it;
@@ -214,7 +214,7 @@ void K3bSongManager::debug(){
             SongList list;
             list = (*con).getSongs();
             if( list.isEmpty() )
-                qDebug("(K3bSongManager) No songs in %s", (*con).getPath().latin1() );
+                kdDebug() << "(K3bSongManager) No songs in " << (*con).getPath() << endl;
             SongList::Iterator it;
             for( it = list.begin(); it != list.end(); ++it ){
                 QString insertTab_2 = "        "; // 8 spaces

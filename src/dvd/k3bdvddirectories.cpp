@@ -27,6 +27,7 @@
 #include <klocale.h>
 #include <kdialog.h>
 #include <kfiledialog.h>
+#include <kdebug.h>
 
 
 K3bDvdDirectories::K3bDvdDirectories( QWidget *parent, const char *name) : K3bDivXDataGui( parent, name ){
@@ -75,7 +76,7 @@ void K3bDvdDirectories::setupGui(){
 }
 
 void K3bDvdDirectories::updateData( K3bDvdCodecData *data ){
-      qDebug("(K3bDvdDirectories) update data: %s", m_editVideoPath->text().latin1() );
+      kdDebug() << "(K3bDvdDirectories) update data: " << m_editVideoPath->text() << endl;
       data->setProjectFile( m_editVideoPath->text() );
       data->setAviFile( m_editAviPath->text() );
 }

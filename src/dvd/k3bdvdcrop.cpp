@@ -35,6 +35,7 @@
 #include <kcombobox.h>
 #include <knuminput.h>
 #include <kprocess.h>
+#include <kdebug.h>
 
 K3bDvdCrop::K3bDvdCrop(K3bDvdCodecData *data, QWidget *parent, const char *name ) : QGroupBox(parent,name) {
      m_data = data;
@@ -121,7 +122,7 @@ void K3bDvdCrop::initPreview( ){
      previewProcess = new KShellProcess(); // = new KShellProcess;
      *previewProcess << "/usr/local/bin/transcode -i ";
      *previewProcess << m_data->getProjectDir() + "/vob";
-     qDebug("Projectdir: %s/vob", m_data->getProjectDir().latin1());
+     kdDebug() << "Projectdir: " << m_data->getProjectDir() << "/vob" << endl;
      *previewProcess << " -x vob -V -y ppm -w 1200 -a 0 -L 300000 -c 4-5";
      *previewProcess << "-o " + m_data->getProjectDir() + "/preview";
      connect( previewProcess, SIGNAL(receivedStdout(KProcess*, char*, int)),
@@ -129,7 +130,7 @@ void K3bDvdCrop::initPreview( ){
      connect( previewProcess, SIGNAL(receivedStderr(KProcess*, char*, int)),
 	       this, SLOT(slotParseProcess(KProcess*, char*, int)) );
      if( !previewProcess->start( KProcess::Block, KProcess::AllOutput ) ){
-         qDebug("Error process starting");
+         kdDebug() << "Error process starting" << endl;
      }
      delete previewProcess;
      //QCanvasPixmap *pix = new QCanvasPixmap( data->getProjectDir() + "/preview00000.ppm");
@@ -165,7 +166,7 @@ void K3bDvdCrop::slotUpdateFinalSize(){
 
 void K3bDvdCrop::slotParseProcess( KProcess* p, char *data, int len){
     QString tmp = QString::fromLatin1( data, len );
-    qDebug( "%s", tmp.latin1() );
+    kdDebug() << tmp << endl;
 }
 
 void K3bDvdCrop::slotSpinTop( int v){

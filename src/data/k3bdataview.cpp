@@ -44,6 +44,7 @@
 #include <qptrlist.h>
 
 #include <assert.h>
+#include <kdebug.h>
 
 
 K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
@@ -148,7 +149,7 @@ void K3bDataView::slotDropped( KListView* listView, QDropEvent* e, QListViewItem
 	if( dataViewItem )
 	  selectedDataItems.append( dataViewItem->dataItem() );
 	else
-	  qDebug("no dataviewitem");
+	  kdDebug() << "no dataviewitem" << endl;
       }
 
       m_doc->moveItems( selectedDataItems, parent );
@@ -262,7 +263,7 @@ void K3bDataView::slotRenameItem()
     m_dataFileView->rename( m_dataFileView->currentItem(), 0 );
   }
   else
-    qDebug("(K3bDataView) slotRenameItem() without selected item!");
+    kdDebug() << "(K3bDataView) slotRenameItem() without selected item!" << endl;
 }
 
 
@@ -281,7 +282,7 @@ void K3bDataView::slotRemoveItem()
     }
   }
   else
-    qDebug("(K3bDataView) slotRemoveItem() without selected item!");
+    kdDebug() << "(K3bDataView) slotRemoveItem() without selected item!" << endl;
 }
 
 
@@ -511,27 +512,27 @@ void K3bDataRootViewItem::setText( int col, const QString& text )
 // {
 //   // we only need to search in the fileView if it currently displays the corresponding directory
 //   if( item == m_dataFileView->currentDir() ) {
-//     qDebug( "(K3bDataView) fileView currently displays a deleted directory. Setting to parent.");
+//     kdDebug() << "(K3bDataView) fileView currently displays a deleted directory. Setting to parent." << endl;
 //     m_dataFileView->slotSetCurrentDir( item->parent() );
 //   }
 //   else if( item->parent() == m_dataFileView->currentDir() ) {
-//     qDebug("(K3bDataView) seaching in fileView for viewItems to delete");
+//     kdDebug() << "(K3bDataView) seaching in fileView for viewItems to delete" << endl;
 //     QListViewItemIterator _it2(m_dataFileView);
 //     for( ; _it2.current(); ++_it2 )
 //       {
 // 	if( K3bDataDirViewItem* _dirViewItem = dynamic_cast<K3bDataDirViewItem*>(_it2.current()) ) {
-// 	  qDebug("   found dirViewItem ... comparing ... ");
+// 	  kdDebug() << "   found dirViewItem ... comparing ... " << endl;
 // 	  if( _dirViewItem->dirItem() == item ) {
 // 	    delete _it2.current();
-// 	    qDebug( "(K3bDataView) found listViewItem to remove in fileView: %s", item->k3bName().latin1() );
+// 	    kdDebug() << "(K3bDataView) found listViewItem to remove in fileView: " << item->k3bName() << endl;
 // 	    break;
 // 	  }
 // 	}
 // 	else if( K3bDataFileViewItem* _fileViewItem = dynamic_cast<K3bDataFileViewItem*>(_it2.current()) ) {
-// 	  qDebug("   found fileViewItem ... comparing ... ");
+// 	  kdDebug() << "   found fileViewItem ... comparing ... " << endl;
 // 	  if( _fileViewItem->fileItem() == item ) {
 // 	    delete _it2.current();
-// 	    qDebug( "(K3bDataView) found listViewItem to remove in fileView: %s", item->k3bName().latin1() );
+// 	    kdDebug() << "(K3bDataView) found listViewItem to remove in fileView: " << item->k3bName() << endl;
 // 	    break;
 // 	  }
 // 	}

@@ -46,6 +46,7 @@
 #include "device/k3bdevice.h"
 #include "audio/k3baudiodoc.h"
 #include "data/k3bdatadoc.h"
+#include <kdebug.h>
 
 
 K3bDoc::K3bDoc( QObject* parent )
@@ -180,7 +181,7 @@ K3bDoc* K3bDoc::openDocument(const KURL& url )
   KIO::NetAccess::removeTempFile( tmpfile );
 
   if( !success ) {
-    qDebug( "(K3bDoc) could not open file %s", url.path().latin1() );
+    kdDebug() << "(K3bDoc) could not open file " << url.path() << endl;
     return 0;
   }
 
@@ -191,7 +192,7 @@ K3bDoc* K3bDoc::openDocument(const KURL& url )
   else if( xmlDoc.doctype().name() == "k3b_data_project" )
     newDoc = new K3bDataDoc( k3bMain() );
   else
-    qDebug("(K3bDoc) unknown doc type: %s", xmlDoc.doctype().name().latin1() );
+    kdDebug() << "(K3bDoc) unknown doc type: " << xmlDoc.doctype().name() << endl;
       
   // ---------
   // load the data into the document	

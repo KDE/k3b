@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include "../../../../config.h"
+#include <kdebug.h>
 
 
 #ifdef OGG_VORBIS
@@ -51,12 +52,12 @@ K3bOggVorbisModule::K3bOggVorbisModule( K3bAudioTrack* track )
   // do some initialization
   FILE* file = fopen( track->absPath().latin1(), "r" );
   if( !file ) {
-    qDebug("(K3bOggVorbisModule) Could not open file %s", track->absPath().latin1() );
+    kdDebug() << "(K3bOggVorbisModule) Could not open file " << track->absPath() << endl;
     audioTrack()->setStatus( K3bAudioTrack::CORRUPT );
   }
   else {
     if( ov_open( file, m_oggVorbisFile, 0, 0 ) ) {
-      qDebug("(K3bOggVorbisModule) %s seems to to be an ogg vorbis file.", track->absPath().latin1() );
+      kdDebug() << "(K3bOggVorbisModule) " << track->absPath() << " seems to to be an ogg vorbis file." << endl;
       audioTrack()->setStatus( K3bAudioTrack::CORRUPT );
       fclose( file );
     }
@@ -64,7 +65,7 @@ K3bOggVorbisModule::K3bOggVorbisModule( K3bAudioTrack* track )
       // check length of track
       double seconds = ov_time_total( m_oggVorbisFile, -1 );
       if( seconds == OV_EINVAL ) {
-	qDebug( "(K3bOggVorbisModule) Could not determine length of file %s", track->absPath().latin1() );
+	kdDebug() << "(K3bOggVorbisModule) Could not determine length of file " << track->absPath() << endl;
 	audioTrack()->setStatus( K3bAudioTrack::CORRUPT );
       }
       else {
@@ -75,7 +76,7 @@ K3bOggVorbisModule::K3bOggVorbisModule( K3bAudioTrack* track )
       // search for artist,title information
       vorbis_comment* vComment = ov_comment( m_oggVorbisFile, -1 );
       if( !vComment ) {
-	qDebug( "(K3bOggVorbisModule) Could not open OggVorbis comment of file %s", track->absPath().latin1() );
+	kdDebug() << "(K3bOggVorbisModule) Could not open OggVorbis comment of file " << track->absPath() << endl;
       }
       else {
 	for( int i = 0; i < vComment->comments; ++i ) {
@@ -111,12 +112,12 @@ void K3bOggVorbisModule::startDecoding()
   // open the file
   FILE* file = fopen( audioTrack()->absPath().latin1(), "r" );
   if( !file ) {
-    qDebug("(K3bOggVorbisModule) Could not open file %s", audioTrack()->absPath().latin1() );
+    kdDebug() << "(K3bOggVorbisModule) Could not open file " << audioTrack()->absPath() << endl;
     emit finished( false );
   }
   else {
     if( ov_open( file, m_oggVorbisFile, 0, 0 ) ) {
-      qDebug("(K3bOggVorbisModule) %s seems to to be an ogg vorbis file.", audioTrack()->absPath().latin1() );
+      kdDebug() << "(K3bOggVorbisModule) " << audioTrack()->absPath() << " seems to to be an ogg vorbis file." << endl;
       fclose( file );
       emit finished( false );
     }
@@ -151,7 +152,7 @@ void K3bOggVorbisModule::decode()
     long bytesRead = ov_read( m_oggVorbisFile, m_outputBuffer, OUTPUT_BUFFER_SIZE, 1, 2, 1, &m_currentOggVorbisSection );
 
     if( bytesRead == OV_HOLE ) {
-      qDebug( "(K3bOggVorbisModule) OV_HOLE" );
+      kdDebug() << "(K3bOggVorbisModule) OV_HOLE" << endl;
       
       ov_clear( m_oggVorbisFile );
 
@@ -160,7 +161,7 @@ void K3bOggVorbisModule::decode()
     }
 
     else if( bytesRead == OV_EBADLINK ) {
-      qDebug( "(K3bOggVorbisModule) OV_EBADLINK" );
+      kdDebug() << "(K3bOggVorbisModule) OV_EBADLINK" << endl;
 
       ov_clear( m_oggVorbisFile );
 
@@ -173,7 +174,7 @@ void K3bOggVorbisModule::decode()
       // pad if necessary
       if( m_rawDataAlreadyStreamed < m_rawDataLengthToStream ) {
 	unsigned long bytesToPad = m_rawDataLengthToStream - m_rawDataAlreadyStreamed;
-	qDebug("(K3bOggVorbisModule) we have to pad by %li bytes", bytesToPad );
+	kdDebug() << "(K3bOggVorbisModule) we have to pad by " << bytesToPad << "i bytes" << endl;
 
 	memset( m_outputBuffer, 0, OUTPUT_BUFFER_SIZE );
 
@@ -220,7 +221,7 @@ bool K3bOggVorbisModule::canDecode( const KURL& url )
 {
   FILE* file = fopen( url.path().latin1(), "r" );
   if( !file ) {
-    qDebug("(K3bOggVorbisModule) Could not open file %s", url.path().latin1() );
+    kdDebug() << "(K3bOggVorbisModule) Could not open file " << url.path() << endl;
     return false;
   }
 

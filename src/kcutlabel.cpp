@@ -3,6 +3,7 @@
 
 #include <qtooltip.h>
 #include <qstringlist.h>
+#include <kdebug.h>
 
 
 KCutLabel::KCutLabel( const QString &text , QWidget *parent, const char *name )
@@ -76,7 +77,7 @@ QString KCutLabel::cutToWidth( const QString& fullText, int cutWidth )
   }
 
   if( fm.width(fullText.right(1) + "..." ) > cutWidth ) {
-    qDebug("(KCutLabel) not able to cut text to %i!", cutWidth );
+    kdDebug() << "(KCutLabel) not able to cut text to " << cutWidth << "!" << endl;
     return fullText.right(1) + "...";
   }
 

@@ -35,17 +35,17 @@ K3bDvdAudioGain::~K3bDvdAudioGain(){
 bool K3bDvdAudioGain::start(){
     K3bExternalBin *tcextract = k3bMain()->externalBinManager()->binObject("tcextract");
     if( tcextract == 0 ){
-        qDebug("(K3bDvdAudioGain) Fatal Error, couldn't find tcextract tools.");
+        kdDebug() << "(K3bDvdAudioGain) Fatal Error, couldn't find tcextract tools." << endl;
         return false;
     }
     K3bExternalBin *tcdecode = k3bMain()->externalBinManager()->binObject("tcdecode");
     if( tcdecode == 0 ){
-        qDebug("(K3bDvdAudioGain) Fatal Error, couldn't find tcdecode tools.");
+        kdDebug() << "(K3bDvdAudioGain) Fatal Error, couldn't find tcdecode tools." << endl;
         return false;
     }
     K3bExternalBin *tcscan = k3bMain()->externalBinManager()->binObject("tcscan");
     if( tcscan == 0 ){
-        qDebug("(K3bDvdAudioGain) Fatal Error, couldn't find tcscan tools.");
+        kdDebug() << "(K3bDvdAudioGain) Fatal Error, couldn't find tcscan tools." << endl;
         return false;
     }
     m_audioProcess = new KShellProcess();
@@ -53,7 +53,7 @@ bool K3bDvdAudioGain::start(){
     if( !testDir.exists() ){
         bool result = testDir.mkdir( m_dirname );
         if( result ){
-            qDebug("(K3bDvdAudioGain) Fatal Error, couldn't create directory <%s>.", m_dirname.latin1());
+            kdDebug() << "(K3bDvdAudioGain) Fatal Error, couldn't create directory <" << m_dirname << ">." << endl;
             return false;
         }
     }
@@ -65,46 +65,46 @@ bool K3bDvdAudioGain::start(){
     //connect( m_audioProcess, SIGNAL( wroteStdin( KProcess* )), this, SLOT(slotWroteStdin( KProcess* )) );
     connect( m_audioProcess, SIGNAL( processExited(KProcess*)), this, SLOT(slotExited( KProcess* )) );
     if( !m_audioProcess->start( KProcess::NotifyOnExit, KProcess::Stdin ) ){
-        qDebug("(K3bDvdAudioGain) Error starting audio processing.");
+        kdDebug() << "(K3bDvdAudioGain) Error starting audio processing." << endl;
         return false;
     }
     return true;
 }
 
 void K3bDvdAudioGain::writeStdin( const char *buffer, int len ){
-    //qDebug("(K3bDvdAudioGain) Write stdin.");
+    //kdDebug() << "(K3bDvdAudioGain) Write stdin." << endl;
     m_audioProcess->writeStdin( buffer, len );
 }
 
 void K3bDvdAudioGain::kill( ){
-    qDebug("(K3bDvdAudioGain) Kill AudioProcessing.");
+    kdDebug() << "(K3bDvdAudioGain) Kill AudioProcessing." << endl;
     m_audioProcess->kill();
 }
 
 void K3bDvdAudioGain::closeStdin( ){
-    qDebug("(K3bDvdAudioGain) Close Stdin.");
+    kdDebug() << "(K3bDvdAudioGain) Close Stdin." << endl;
     if( !m_audioProcess->closeStdin()){
-        qDebug("(K3bDvdAudioGain) Close failed.");
+        kdDebug() << "(K3bDvdAudioGain) Close failed." << endl;
     }
 }
 
 void K3bDvdAudioGain::slotParseOutput( KProcess *p, char *buffer, int len ){
     QString tmp = QString::fromLatin1( buffer, len );
-    qDebug("(K3bDvdAudioGain) AudioProcessing output: %s", tmp.latin1());
+    kdDebug() << "(K3bDvdAudioGain) AudioProcessing output: " << tmp << endl;
 }
 
 void K3bDvdAudioGain::slotParseError( KProcess *p, char *buffer, int len ){
     QString tmp = QString::fromLatin1( buffer, len );
-    qDebug("(K3bDvdAudioGain) AudioProcessing error: %s", tmp.latin1());
+    kdDebug() << "(K3bDvdAudioGain) AudioProcessing error: " << tmp << endl;
 }
 
 void K3bDvdAudioGain::slotExited( KProcess *p){
-    qDebug("(K3bDvdAudioGain) AudioProcessing finished.");
+    kdDebug() << "(K3bDvdAudioGain) AudioProcessing finished." << endl;
     emit finished();
 }
 
 void K3bDvdAudioGain::slotWroteStdin( KProcess *p){
-    //qDebug("(K3bDvdAudioGain) Wrote Stdin.");
+    //kdDebug() << "(K3bDvdAudioGain) Wrote Stdin." << endl;
 }
 
 #include "k3bdvdaudiogain.moc"

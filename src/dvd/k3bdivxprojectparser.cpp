@@ -19,6 +19,7 @@
 #include "k3bdvdcodecdata.h"
 
 #include <qobject.h>
+#include <kdebug.h>
 
 K3bDivXProjectParser::K3bDivXProjectParser( K3bDvdCodecData *data ) : QXmlDefaultHandler() {
     m_datas = data;
@@ -37,11 +38,11 @@ bool K3bDivXProjectParser::startElement( const QString&, const QString&, const Q
             break;
         case 1: {
             m_datas->setTitle( attr.value("number") );
-            qDebug("(K3bDivXProjectParser) Title number: %s", attr.value("number").latin1() );
+            kdDebug() << "(K3bDivXProjectParser) Title number: " << attr.value("number") << endl;
             break;
         }
         case 2: {
-            qDebug("(K3bDivXProjectParser) Read data of: %s", qName.latin1() );
+            kdDebug() << "(K3bDivXProjectParser) Read data of: " << qName << endl;
             m_contentTag = qName;
             break;
         }
@@ -60,7 +61,7 @@ bool K3bDivXProjectParser::endElement( const QString&, const QString&, const QSt
 bool K3bDivXProjectParser::characters( const QString& content ) {
     QString con = content.stripWhiteSpace();
     if( !con.isEmpty() ){
-        qDebug("(K3bDivXProjectParser) Data: %s", con.latin1() );
+        kdDebug() << "(K3bDivXProjectParser) Data: " << con << endl;
         if( m_contentTag == "frames" ){
             m_datas->setFrames( con );
         } else if( m_contentTag == "time" ){

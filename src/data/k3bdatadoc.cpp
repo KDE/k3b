@@ -42,6 +42,7 @@
 #include <kmimemagic.h>
 #include <kmessagebox.h>
 #include <kfilemetainfo.h>
+#include <kdebug.h>
 
 
 K3bDataDoc::K3bDataDoc( QObject* parent )
@@ -197,7 +198,7 @@ void K3bDataDoc::createDirItem( QFileInfo& f, K3bDirItem* parent )
   QString newName = f.fileName();
 
   if( newName.isEmpty() ) {
-    qDebug("(K3bDataDoc) tried to create dir without name.");
+    kdDebug() << "(K3bDataDoc) tried to create dir without name." << endl;
     return;
   }
 
@@ -268,7 +269,7 @@ void K3bDataDoc::createFileItem( QFileInfo& f, K3bDirItem* parent )
     
     // check if it was a corrupted symlink
     if( !f.exists() ) {
-      qDebug("(K3bDataDoc) corrupted symlink: %s", f.absFilePath().latin1() );
+      kdDebug() << "(K3bDataDoc) corrupted symlink: " << f.absFilePath() << endl;
       m_notFoundFiles.append( f.absFilePath() );
       return;
     }
@@ -327,7 +328,7 @@ bool K3bDataDoc::nameAlreadyInDir( const QString& name, K3bDirItem* dir )
   QListIterator<K3bDataItem> it( *dir->children() );
   for( ; it.current(); ++it ) {
     if( it.current()->k3bName() == name ) {
-      qDebug( "(K3bDataDoc) already a file with that name in directory: %s", name.latin1() );
+      kdDebug() << "(K3bDataDoc) already a file with that name in directory: " << name << endl;
       return true;
     }
   }
@@ -382,7 +383,7 @@ bool K3bDataDoc::loadDocumentData( QDomDocument* doc )
   QDomNodeList nodes = doc->documentElement().childNodes();
 
   if( nodes.item(0).nodeName() != "general" ) {
-    qDebug( "(K3bDataDoc) could not find 'general' section." );
+    kdDebug() << "(K3bDataDoc) could not find 'general' section." << endl;
     return false;
   }
   if( !readGeneralDocumentData( nodes.item(0).toElement() ) )
@@ -392,7 +393,7 @@ bool K3bDataDoc::loadDocumentData( QDomDocument* doc )
   // parse options
   // -----------------------------------------------------------------
   if( nodes.item(1).nodeName() != "options" ) {
-    qDebug( "(K3bDataDoc) could not find 'options' section." );
+    kdDebug() << "(K3bDataDoc) could not find 'options' section." << endl;
     return false;
   }
   QDomNodeList optionList = nodes.item(1).childNodes();
@@ -457,7 +458,7 @@ bool K3bDataDoc::loadDocumentData( QDomDocument* doc )
       setISOLevel( e.text().toInt() );
 
     else
-      qDebug( "(K3bDataDoc) unknown option entry: %s", e.nodeName().latin1() );
+      kdDebug() << "(K3bDataDoc) unknown option entry: " << e.nodeName() << endl;
   }
   // -----------------------------------------------------------------
 
@@ -466,7 +467,7 @@ bool K3bDataDoc::loadDocumentData( QDomDocument* doc )
   // parse header
   // -----------------------------------------------------------------
   if( nodes.item(2).nodeName() != "header" ) {
-    qDebug( "(K3bDataDoc) could not find 'header' section." );
+    kdDebug() << "(K3bDataDoc) could not find 'header' section." << endl;
     return false;
   }
   QDomNodeList headerList = nodes.item(2).childNodes();
@@ -495,7 +496,7 @@ bool K3bDataDoc::loadDocumentData( QDomDocument* doc )
       setSystemId( e.text() );
 
     else
-      qDebug( "(K3bDataDoc) unknown header entry: %s", e.nodeName().latin1() );
+      kdDebug() << "(K3bDataDoc) unknown header entry: " << e.nodeName() << endl;
     
   }
   // -----------------------------------------------------------------
@@ -505,7 +506,7 @@ bool K3bDataDoc::loadDocumentData( QDomDocument* doc )
   // parse files
   // -----------------------------------------------------------------
   if( nodes.item(3).nodeName() != "files" ) {
-    qDebug( "(K3bDataDoc) could not find 'files' section." );
+    kdDebug() << "(K3bDataDoc) could not find 'files' section." << endl;
     return false;
   }
 
@@ -535,7 +536,7 @@ bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
   if( elem.nodeName() == "file" ) {
     QDomElement urlElem = elem.firstChild().toElement();
     if( urlElem.isNull() ) {
-      qDebug( "(K3bDataDoc) file-element without url!" );
+      kdDebug() << "(K3bDataDoc) file-element without url!" << endl;
       return false;
     }
 
@@ -569,7 +570,7 @@ bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
 
   }
   else {
-    qDebug( "(K3bDataDoc) wrong tag in files-section: %s", elem.nodeName().latin1() );
+    kdDebug() << "(K3bDataDoc) wrong tag in files-section: " << elem.nodeName() << endl;
     return false;
   }
 
@@ -752,13 +753,13 @@ void K3bDataDoc::removeItem( K3bDataItem* item )
     return;
 
   if( item == root() )
-    qDebug( "(K3bDataDoc) tried to remove root-entry!");
+    kdDebug() << "(K3bDataDoc) tried to remove root-entry!" << endl;
   else {
     emit itemRemoved( item );
     
     m_size -= item->k3bSize();
     if( m_size < 0 ) {
-      qDebug( "(K3bDataDoc) Size of project is: %i, that CANNOT be! Will exit! PLEASE REPORT!", (int)m_size );
+      kdDebug() << "(K3bDataDoc) Size of project is: " << (int)m_size << ", that CANNOT be! Will exit! PLEASE REPORT!" << endl;
       exit(0);
     }
 
@@ -771,7 +772,7 @@ void K3bDataDoc::removeItem( K3bDataItem* item )
 void K3bDataDoc::moveItem( K3bDataItem* item, K3bDirItem* newParent )
 {
   if( !item || !newParent ) {
-    qDebug("(K3bDataDoc) item or parentitem was NULL while moving.");
+    kdDebug() << "(K3bDataDoc) item or parentitem was NULL while moving." << endl;
     return;
   }
 
@@ -792,7 +793,7 @@ void K3bDataDoc::moveItem( K3bDataItem* item, K3bDirItem* newParent )
 void K3bDataDoc::moveItems( QPtrList<K3bDataItem> itemList, K3bDirItem* newParent )
 {
   if( !newParent ) {
-    qDebug( "(K3bDataDoc) tried to move items to nowhere...!" );
+    kdDebug() << "(K3bDataDoc) tried to move items to nowhere...!" << endl;
     return;
   }
 
@@ -816,7 +817,7 @@ QString K3bDataDoc::writePathSpec( const QString& filename )
 {
   QFile file( filename );
   if( !file.open( IO_WriteOnly ) ) {
-    qDebug( "(K3bDataDoc) Could not open path-spec-file %s", filename.latin1() );
+    kdDebug() << "(K3bDataDoc) Could not open path-spec-file " << filename << endl;
     return QString::null;
   }
 	
@@ -901,7 +902,7 @@ QString K3bDataDoc::treatWhitespace( const QString& path )
       }
     }
 		
-    qDebug( "(K3bDataDoc) converted %s to %s", path.latin1(), _result.latin1() );
+    kdDebug() << "(K3bDataDoc) converted " << path << " to " << _result << endl;
     return _result;
   }
   else

@@ -92,7 +92,7 @@ QString K3bFileItem::absIsoPath()
 //		}
 //	}
 //	else {
-//		qDebug( "(K3bFileItem) ERROR: K3bFileItem without parent dirItem!!");
+//		kdDebug() << "(K3bFileItem) ERROR: K3bFileItem without parent dirItem!!" << endl;
 //		return 0;
 //	}
 //}

@@ -37,6 +37,7 @@
 #include <kapp.h>
 #include <kstddirs.h>
 #include <kfiledialog.h>
+#include <kdebug.h>
 
 #define DEFAULT_SONGLIST_FILE "songlist.xml"
 
@@ -115,7 +116,7 @@ void K3bCddbLocalDBTab::browseDb(){
   }
 }
 void K3bCddbLocalDBTab::clearDb(){
-    qDebug("(K3bCddbLocalDBTab) Clear Database.");
+    kdDebug() << "(K3bCddbLocalDBTab) Clear Database." << endl;
     K3bSongManager *sm = k3bMain()->songManager();
     QStringList::Iterator it;
     for( it = m_missingSongList.begin(); it != m_missingSongList.end(); ++it ){
@@ -125,13 +126,13 @@ void K3bCddbLocalDBTab::clearDb(){
 
 }
 void K3bCddbLocalDBTab::verifyDb(){
-    qDebug("(K3bCddbLocalDBTab) Verify Database.");
+    kdDebug() << "(K3bCddbLocalDBTab) Verify Database." << endl;
     K3bSongManager *sm = k3bMain()->songManager();
     QFile f( m_songListPath->text() );
     if( f.exists() ) {
         sm->load( m_songListPath->text() );
         m_missingSongList = sm->verify();
-        qDebug("(K3bCddbLocalDBTab) Have missing songs.");
+        kdDebug() << "(K3bCddbLocalDBTab) Have missing songs." << endl;
         QStringList::Iterator it;
         for( it = m_missingSongList.begin(); it != m_missingSongList.end(); ++it ){
             m_logOutput->insertLine( (*it).latin1() );
@@ -142,10 +143,10 @@ void K3bCddbLocalDBTab::verifyDb(){
     }
 }
 void K3bCddbLocalDBTab::findDbEntries(){
-    qDebug("(K3bCddbLocalDBTab) find Database.");
+    kdDebug() << "(K3bCddbLocalDBTab) find Database." << endl;
 }
 void K3bCddbLocalDBTab::addDbEntry(){
-    qDebug("(K3bCddbLocalDBTab) add Database.");
+    kdDebug() << "(K3bCddbLocalDBTab) add Database." << endl;
 }
 // reading and writing settings
 // --------------------------------------------------

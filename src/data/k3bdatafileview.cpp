@@ -91,7 +91,7 @@ void K3bDataFileView::updateContents()
 
   // perhaps we should check if the K3bDirItem m_currentDir still exists
 	
-  //  qDebug( "(K3bDataFileView) reloading current dir: " + m_currentDir->k3bName() );
+  //  kdDebug() << "(K3bDataFileView) reloading current dir: " << m_currentDir->k3bName() << endl;
 	
   for( QListIterator<K3bDataItem> it( *m_currentDir->children() ); it.current(); ++it ) {
     if( it.current()->isDir() )
@@ -107,7 +107,7 @@ void K3bDataFileView::updateContents()
 //     }
   }
 	
-  //  qDebug( "(K3bDataFileView) reloading finished" );
+  //  kdDebug() << "(K3bDataFileView) reloading finished" << endl;
 }
 
 

@@ -151,7 +151,7 @@ bool K3bSetup::saveConfig()
 uint K3bSetup::createCdWritingGroup()
 {
   if( m_cdwritingGroup.isEmpty() ) {
-    qDebug("(K3bSetup) setting cd writing group to 'cdrecording'.");
+    kdDebug() << "(K3bSetup) setting cd writing group to 'cdrecording'." << endl;
     m_cdwritingGroup = "cdrecording";
   }
 
@@ -160,7 +160,7 @@ uint K3bSetup::createCdWritingGroup()
   uint groupId;
   if( oldGroup == 0 ) {
 
-    qDebug("(K3bSetup) Could not find group %s", m_cdwritingGroup.latin1() );
+    kdDebug() << "(K3bSetup) Could not find group " << m_cdwritingGroup << endl;
 
     // find new group id
     uint newId = 100;
@@ -172,7 +172,7 @@ uint K3bSetup::createCdWritingGroup()
   }
   else {
 
-    qDebug("(K3bSetup) found group %s", m_cdwritingGroup.latin1() );
+    kdDebug() << "(K3bSetup) found group " << m_cdwritingGroup << endl;
 
     groupId = oldGroup->gr_gid;
   }
@@ -188,7 +188,7 @@ uint K3bSetup::createCdWritingGroup()
   QTextStream oldGroupStream( &oldGroupFile );
   QTextStream newGroupStream( &newGroupFile );
 
-  qDebug("(K3bSetup) created textstreams");
+  kdDebug() << "(K3bSetup) created textstreams" << endl;
 
   QString line = oldGroupStream.readLine();
   while( !line.isNull() ) {
@@ -197,14 +197,14 @@ uint K3bSetup::createCdWritingGroup()
     line = oldGroupStream.readLine();
   }
 
-  qDebug("(K3bSetup) copied all groups except %s", m_cdwritingGroup.latin1() );
+  kdDebug() << "(K3bSetup) copied all groups except " << m_cdwritingGroup << endl;
 
   // add cdwriting group
   QStringList members;
   // save old members of the group
   if( oldGroup != 0 ) {
 
-    qDebug( "(K3bSetup) importing group members..." );
+    kdDebug() << "(K3bSetup) importing group members..." << endl;
 
     int i = 0;
     while( oldGroup->gr_mem[i] != 0 ) {
@@ -212,13 +212,13 @@ uint K3bSetup::createCdWritingGroup()
       i++;
     }
 
-    qDebug( "(K3bSetup) imported group members" );
+    kdDebug() << "(K3bSetup) imported group members" << endl;
 
   }
   members += m_userList;
 
   // remove double entries
-  qDebug("(K3bSetup) removing double entries");
+  kdDebug() << "(K3bSetup) removing double entries" << endl;
 
   QStringList::Iterator i, j;
   for( i = members.begin(); i != members.end(); ++i )
@@ -226,7 +226,7 @@ uint K3bSetup::createCdWritingGroup()
       if( i != j && *i == *j )
 	j = members.remove( j );
 
-  qDebug("(K3bSetup) creating new entry");
+  kdDebug() << "(K3bSetup) creating new entry" << endl;
 
   // write the new entry to the new group file
   QString entry = QString("%1::%2:").arg(m_cdwritingGroup).arg(groupId);
@@ -236,7 +236,7 @@ uint K3bSetup::createCdWritingGroup()
   for( ; i != members.end(); ++i )
     entry.append( QString(",%1").arg(*i) );
 
-  qDebug("(K3bSetup) writing entry to file");
+  kdDebug() << "(K3bSetup) writing entry to file" << endl;
 
   newGroupStream << entry << "\n";
 
@@ -266,7 +266,7 @@ void K3bSetup::doApplyDevicePermissions( uint groupId )
 	chmod( QFile::encodeName(dev->genericDevice()), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP );
       }
       else {
-	qDebug("(K3bSetup) Could not find generic device: %s", dev->genericDevice().latin1() );
+	kdDebug() << "(K3bSetup) Could not find generic device: " << dev->genericDevice() << endl;
 	emit error( i18n("Could not find generic device (%1)").arg(dev->genericDevice()) );
       }
     }
@@ -276,7 +276,7 @@ void K3bSetup::doApplyDevicePermissions( uint groupId )
 	chmod( QFile::encodeName(dev->ioctlDevice()), S_IRUSR|S_IWUSR|S_IRGRP );
       }
       else {
-	qDebug("(K3bSetup) Could not find ioctl device: %s", dev->ioctlDevice().latin1() );
+	kdDebug() << "(K3bSetup) Could not find ioctl device: " << dev->ioctlDevice() << endl;
 	emit error( i18n("Could not find ioctl device (%1)").arg(dev->ioctlDevice()) );
       }
     }
@@ -303,19 +303,19 @@ void K3bSetup::doApplyExternalProgramPermissions( uint groupId )
 
     if( QFile::exists(binObject->path) ) {
       if( !binObject->version.isEmpty() ) {
-	qDebug("(K3bSetup) setting permissions for %s.", programs[i] );
+	kdDebug() << "(K3bSetup) setting permissions for " << programs[i] << "." << endl;
 	chown( QFile::encodeName(binObject->path), 0, groupId );
 	chmod( QFile::encodeName(binObject->path), S_ISUID|S_IRUSR|S_IWUSR|S_IXUSR|S_IXGRP );
 	emit settingWritten( true, i18n("Success") );
       }
       else {
 	emit settingWritten( false, i18n("%1 is no %2 executable.").arg(binObject->path).arg(programs[i]) );
-	qDebug("(K3bSetup) %s is not %s.", binObject->path.latin1(), programs[i] );
+	kdDebug() << "(K3bSetup) " << binObject->path << " is not " << programs[i] << "." << endl;
       }
     }
     else {
       emit settingWritten( false, i18n("Could not find %1.").arg(programs[i]) );
-      qDebug("(K3bSetup) could not find %s.", programs[i] );
+      kdDebug() << "(K3bSetup) could not find " << programs[i] << "." << endl;
     }
   }
 }
@@ -325,8 +325,8 @@ void K3bSetup::doCreateFstabEntries()
 {
   emit writingSetting( i18n("Saving old %1 to %2").arg("/etc/fstab").arg("/etc/fstab.k3bsetup") );
 
-  qDebug("(K3bSetup) creating new /etc/fstab");
-  qDebug("(K3bSetup) saving backup to /etc/fstab.k3bsetup");
+  kdDebug() << "(K3bSetup) creating new /etc/fstab" << endl;
+  kdDebug() << "(K3bSetup) saving backup to /etc/fstab.k3bsetup" << endl;
   
   // move /etc/fstab to /etc/fstab.k3bsetup
   rename( "/etc/fstab", "/etc/fstab.k3bsetup" );

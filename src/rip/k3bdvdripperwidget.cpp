@@ -157,7 +157,7 @@ void K3bDvdRipperWidget::rip(){
 }
 
 void K3bDvdRipperWidget::slotRipJobDeleted(){
-    qDebug("(K3bDvdRipperWidget) Rip job finished/interrupted.");
+    kdDebug() << "(K3bDvdRipperWidget) Rip job finished/interrupted." << endl;
     m_ripJob->ripFinished( true );
     m_ripDialog->close();
     delete m_ripJob;
@@ -218,7 +218,7 @@ void K3bDvdRipperWidget::slotFreeTempSpace( const QString & mountPoint, unsigned
     m_fillDisplay->setKbSize( kBSize );
     m_fillDisplay->setKbAvailable( kBAvail );
     m_fillDisplay->setKbUsed( kBUsed );
-    qDebug("(K3bDvdRipperWidget) DVD VobSize: %.2f", (float) m_vobSize);
+    kdDebug() << "(K3bDvdRipperWidget) DVD VobSize: " << m_vobSize << endl;
     m_fillDisplay->setKbDvd( (unsigned long) (m_vobSize/1000) );
      if( kBAvail > m_vobSize/1000 ) {
         m_enoughSpace = true;
@@ -254,7 +254,7 @@ void K3bDvdRipperWidget::checkSize(  ){
     typedef QValueList<K3bDvdContent> DvdTitle;
     DvdTitle::Iterator dvd;
     int max = m_ripTitles.count();
-    //qDebug(" ripTitles checksite %d", max);
+    //kdDebug() << " ripTitles checksite " << max << endl;
     K3bExternalBin *bin = k3bMain()->externalBinManager()->binObject("tccat");
     for( int i = 0; i < max; i++ ){
         dvd = m_ripTitles.at( i );
@@ -268,9 +268,9 @@ void K3bDvdRipperWidget::checkSize(  ){
             connect( &p, SIGNAL(receivedStderr(KProcess*, char*, int)), this, SLOT(slotParseError(KProcess*, char*, int)) );
             connect( &p, SIGNAL(processExited(KProcess*)), this, SLOT(slotExited( KProcess* )) );
             if( !p.start( KProcess::Block, KProcess::Stderr ) ) {
-                qDebug("(K3bDvdRipperWidget) Can't detect size of title");
+                kdDebug() << "(K3bDvdRipperWidget) Can't detect size of title" << endl;
             }
-            //qDebug("VobSize: %f, titlesize %f", (float) m_vobSize, (float) m_titleSize);
+            //kdDebug() << "VobSize: " << (float) m_vobSize << ", titlesize " << (float) m_titleSize << endl;
 
             m_vobSize += m_titleSize;
         } else {
@@ -288,7 +288,7 @@ void K3bDvdRipperWidget::slotParseError( KProcess *p, char *text, int len ){
         if( tmp.contains("blocks") ){
             m_detectTitleSizeDone = true;
             m_titleSize = (double) K3bDvdRippingProcess::tccatParsedBytes( text, len );
-            qDebug("(K3bDvdRipperWidget) Titlesize to rip: %f", m_titleSize );
+            kdDebug() << "(K3bDvdRipperWidget) Titlesize to rip: " << m_titleSize << endl;
             p->kill();
         }
     }

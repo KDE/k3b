@@ -180,7 +180,7 @@ K3bDevice* K3bCdCopyDialog::readingDevice() const
  
   K3bDevice* dev =  k3bMain()->deviceManager()->deviceByName( strDev );
   if( !dev )
-    qDebug( "(K3bCdCopyDialog) could not find device %s", s );
+    kdDebug() << "(K3bCdCopyDialog) could not find device " << s << endl;
 		
   return dev;
 }

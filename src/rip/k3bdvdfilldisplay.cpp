@@ -54,12 +54,12 @@ void K3bDvdFillDisplay::drawContents( QPainter* p ){
         p->fillRect( rectY, Qt::red );
     } else {
         rect.setWidth ((int)maxWidth * full );
-        //qDebug("full %f", full );
+        //kdDebug() << "full " << full << endl;
         // dvd size
         QRect rectB( (int) maxWidth *full, 0, (int)maxWidth * (m_dvdFull - full) , rect.height() );
         p->fillRect( rectB, Qt::blue );
         // avi Cds size
-        //qDebug("full %f", m_aviFull );
+        //kdDebug() << "full " << m_aviFull << endl;
         QRect rectO( (int)maxWidth *m_dvdFull, 0, (int)maxWidth * ( m_aviFull-m_dvdFull), rect.height() );
         p->fillRect( rectO, Qt::yellow );
     }

@@ -21,6 +21,7 @@
 #include "k3bsong.h"
 
 #include <qobject.h>
+#include <kdebug.h>
 
 K3bSongListParser::K3bSongListParser( K3bSongManager *manager) : QXmlDefaultHandler() {
     m_manager = manager;
@@ -32,15 +33,16 @@ bool K3bSongListParser::startDocument(){
     m_level = 0;
     return TRUE;
 }
+
 bool K3bSongListParser::startElement( const QString&, const QString&, const QString& qName, const QXmlAttributes& attr){
     switch( m_level ) {
         case 0:
-            qDebug("Version: %s", attr.value("version").latin1() ); // printout version
+            kdDebug() << "Version: " << attr.value("version") << endl; // printout version
             break;
         case 1: {
             m_container = m_manager->getContainer( attr.value("basepath") ); // container
             if( m_container == 0 )
-                qDebug("(K3bSongListParser) ERROR: Found no entry for song container %s", attr.value("basepath").latin1());
+                kdDebug() << "(K3bSongListParser) ERROR: Found no entry for song container " << attr.value("basepath") << endl;
             break;
         }
         case 2: {
@@ -52,7 +54,7 @@ bool K3bSongListParser::startElement( const QString&, const QString&, const QStr
                 newSong.setDiscId( attr.value("discid").toInt() );
                 m_song = m_container->addSong( newSong );
             } else {
-                qDebug("(K3bSongListParser) ERROR: Found no song for file %s", attr.value("filename").latin1() );
+                kdDebug() << "(K3bSongListParser) ERROR: Found no song for file " << attr.value("filename") << endl;
             }
             break;
         }

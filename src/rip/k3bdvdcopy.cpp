@@ -60,11 +60,11 @@ void K3bDvdCopy::start(){
     m_ripProcess->start();
     emit started();
     emit newTask( i18n("Copy DVD.")  );
-    qDebug("(K3bDvdCopy) Starting rip.");
+    kdDebug() << "(K3bDvdCopy) Starting rip." << endl;
 }
 
 void K3bDvdCopy::ripFinished( bool result ){
-    qDebug("(K3bDvdCopy) Send finished.");
+    kdDebug() << "(K3bDvdCopy) Send finished." << endl;
     emit finished( result );
 }
 

@@ -194,12 +194,12 @@ void K3bRipperWidget::slotOk(){
 // 	}
 //       } // end directory
 //       (*it) = dest + "/" + KIO::encodeFileName(tmp);
-//       qDebug("(K3bRipperWidget) Final destination" + (*it) );
+//       kdDebug() << "(K3bRipperWidget) Final destination" << (*it) << endl;
 //     } else {
 //       (*it) = m_editStaticRipPath->text() + "/" + tmp;
 //     }
 //     m_bytes += m_size[ index ]; //cdda->getRawTrackSize( m_tracks[ index ], drive);
-//     qDebug("(K3bRipperWidget) KBytes: " + QString::number(m_bytes/1000) );
+//     kdDebug() << "(K3bRipperWidget) KBytes: " << (m_bytes/1024) << endl;
 //     index++;
 //   }
 //   if( index == 0 ){
@@ -301,7 +301,7 @@ void K3bRipperWidget::setSongList(){
 //     sm->addSong( path, song );
 //     index++;
 //     //QString tmpSong = sm.getSong( (*it) ).getFilename();
-//     //qDebug("Song" + tmpSong);
+//     //kdDebug() << "Song" << tmpSong << endl;
 //   }
 //   sm->save();
 }

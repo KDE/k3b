@@ -430,7 +430,7 @@ void ExternalBinTab::slotExternalProgramItemRenamed( QListViewItem* item, const 
     readSettings();
   }
   else {
-    qDebug( "(K3bSetupWizard) Could not find bin %s", bin.latin1() );
+    kdDebug() << "(K3bSetupWizard) Could not find bin " << bin << endl;
   }
 }
 

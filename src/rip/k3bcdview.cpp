@@ -48,6 +48,7 @@
 #include <kaction.h>
 #include <kstdaction.h>
 #include <kmessagebox.h>
+#include <kdebug.h>
 
 
 
@@ -185,23 +186,23 @@ void K3bCdView::slotCddbQueryFinished( K3bCddb* cddb )
 
 
 
-      qDebug("cddb info:" );
-      qDebug("DTITLE:  '%s'", entry.cdTitle.latin1());
-      qDebug("DARTIST: '%s'", entry.cdArtist.latin1());
-      qDebug("DEXT:    '%s'", entry.cdExtInfo.latin1());
-      qDebug("DISCID:  '%s'", entry.discid.latin1());
+      kdDebug() << "cddb info:" << endl;
+      kdDebug() << "DTITLE:  '" << entry.cdTitle << "'" << endl;
+      kdDebug() << "DARTIST: '" << entry.cdArtist << "'" << endl;
+      kdDebug() << "DEXT:    '" << entry.cdExtInfo << "'" << endl;
+      kdDebug() << "DISCID:  '" << entry.discid << "'" << endl;
 
       for( QStringList::const_iterator it = entry.titles.begin();
 	   it != entry.titles.end(); ++it ) {
-	qDebug("TTITLE:  '%s'", (*it).latin1());
+	kdDebug() << "TTITLE:  '" << (*it) << "'" << endl;
       }
       for( QStringList::const_iterator it = entry.artists.begin();
 	   it != entry.artists.end(); ++it ) {
-	qDebug("TARTIST: '%s'", (*it).latin1());
+	kdDebug() << "TARTIST: '" << (*it) << "'" << endl;
       }
       for( QStringList::const_iterator it = entry.extInfos.begin();
 	   it != entry.extInfos.end(); ++it ) {
-	qDebug("TEXT:    '%s'", (*it).latin1());
+	kdDebug() << "TEXT:    '" << (*it) << "'" << endl;
       }
 
       // now update the listview
@@ -299,7 +300,7 @@ void K3bCdView::reload()
 //   int index = hostString.find(":");
 //   QString server = hostString.left(index);
 //   unsigned int port = hostString.right(hostString.length()-index-1).toUInt();
-//   qDebug("(K3bCdView) CddbServer: " + server + ":" + QString::number(port) );
+//   kdDebug() << "(K3bCdView) CddbServer: " << server << ":" << port << endl;
 //   m_cddb->setServer(server);
 //   m_cddb->setPort(port);
 //   m_cddb->setUseCddb(useCddb);

@@ -30,6 +30,7 @@
 
 #include <klocale.h>
 #include <kio/global.h>
+#include <kdebug.h>
 
 void paranoiaCallback(long, int){
   // Do we want to show info somewhere ?
@@ -57,7 +58,7 @@ void K3bCddaCopy::start()
   //bool result = true;
   m_bytesAll = 0;
   m_interrupt = false;
-  qDebug("(K3bCddaCopy) Start copying %ld", m_bytes );
+  kdDebug() << "(K3bCddaCopy) Start copying " << m_bytes << "d" << endl;
   m_drive = m_device->open();
   emit started();
   emit newTask( i18n("Copy cdrom ")  );
@@ -74,10 +75,10 @@ bool K3bCddaCopy::startRip(int i){
 }
 
 void K3bCddaCopy::finishedRip(){
-    qDebug("(K3bCddaCopy) Finished copying." );
+    kdDebug() << "(K3bCddaCopy) Finished copying." << endl;
     infoMessage( "Copying finished.", STATUS);
     m_device->close();
-    qDebug("(K3bCddaCopy) Exit." );
+    kdDebug() << "(K3bCddaCopy) Exit." << endl;
    emit finished( true );
 }
 
@@ -103,12 +104,12 @@ bool K3bCddaCopy::paranoiaRead(struct cdrom_drive *drive, int track, QString des
     m_byteCount =  CD_FRAMESIZE_RAW * (m_lastSector - firstSector);
     m_trackBytesAll = 0;
 
-    qDebug("(K3bCddaCopy) paranoia_init");
+    kdDebug() << "(K3bCddaCopy) paranoia_init" << endl;
     m_paranoia = paranoia_init(drive);
 
     if (0 == m_paranoia){
         infoMessage( i18n("paranoia_init failed."), ERROR);
-        qDebug("(K3bCddaCopy) paranoia_init failed");
+        kdDebug() << "(K3bCddaCopy) paranoia_init failed" << endl;
         return false;
     }
 
@@ -120,7 +121,7 @@ bool K3bCddaCopy::paranoiaRead(struct cdrom_drive *drive, int track, QString des
     paranoia_seek(m_paranoia, firstSector, SEEK_SET);
     m_currentSector = firstSector;
 
-    qDebug("(K3bCddaCopy) open files");
+    kdDebug() << "(K3bCddaCopy) open files" << endl;
 
     // create wave file
     m_currentWrittenFile = dest;
@@ -148,10 +149,10 @@ void K3bCddaCopy::readDataFinished(){
     m_waveFileWriter.close();
     if( m_interrupt ) {
         infoMessage( i18n("Interrupted by user"), STATUS);
-        qDebug("(K3bCddaCopy) Interrupted by user!");
+        kdDebug() << "(K3bCddaCopy) Interrupted by user!" << endl;
         if( !QFile::remove( m_currentWrittenFile ) ){
             infoMessage( i18n("Can't delete part of copied file."), ERROR);
-            qDebug("(K3bCddaCopy) Can't delete copied file <>.");
+            kdDebug() << "(K3bCddaCopy) Can't delete copied file <>." << endl;
         }
     }
     m_currentWrittenFile = QString::null;
@@ -159,7 +160,7 @@ void K3bCddaCopy::readDataFinished(){
     paranoia_free(m_paranoia);
     m_paranoia = 0;
     ++m_currentTrackIndex;
-    qDebug("(K3bCddaCopy) Check index: %i, %i", m_currentTrackIndex, m_count);
+    kdDebug() << "(K3bCddaCopy) Check index: " << m_currentTrackIndex << ", " << m_count << endl;
     if( (m_currentTrackIndex < m_count) && !m_interrupt ){
         startRip( m_currentTrackIndex );
     } else
@@ -170,7 +171,7 @@ void K3bCddaCopy::slotReadData(){
 
     if( m_interrupt){
         infoMessage( i18n("Interrupt reading."), PROCESS);
-        qDebug("(K3bCddaCopy) Interrupt reading.");
+        kdDebug() << "(K3bCddaCopy) Interrupt reading." << endl;
         t->stop();
         readDataFinished();
     } else {
@@ -178,7 +179,7 @@ void K3bCddaCopy::slotReadData(){
 
         if (0 == buf) {
             infoMessage( i18n("Unrecoverable error in paranoia_read."), ERROR);
-            qDebug("(K3bCddaCopy) Unrecoverable error in paranoia_read");
+            kdDebug() << "(K3bCddaCopy) Unrecoverable error in paranoia_read" << endl;
         } else {
             ++m_currentSector;
 	    m_waveFileWriter.write( (char*)buf, CD_FRAMESIZE_RAW, K3bWaveFileWriter::LittleEndian );

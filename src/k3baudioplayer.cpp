@@ -43,6 +43,7 @@
 #include <string.h>
 
 #include <arts/artsflow.h>
+#include <kdebug.h>
 
 
 
@@ -331,7 +332,7 @@ void K3bAudioPlayer::play()
       Arts::PlayObjectFactory factory = Arts::Reference("global:Arts_PlayObjectFactory");
       m_playObject = factory.createPlayObject( string(m_currentItem->filename().latin1()) );
       if( m_playObject.isNull() ) {
-	qDebug( "(K3bAudioPlayer) no aRts module available for: %s", m_currentItem->filename().latin1() );
+	kdDebug() << "(K3bAudioPlayer) no aRts module available for: " << m_currentItem->filename() << endl;
 
 	// play the next if there is any
 	if( m_currentItem->itemBelow() ) {

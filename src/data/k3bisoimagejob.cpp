@@ -23,6 +23,7 @@
 #include "../device/k3bemptydiscwaiter.h"
 #include "../tools/k3bexternalbinmanager.h"
 
+#include <kdebug.h>
 #include <kprocess.h>
 #include <kconfig.h>
 #include <klocale.h>
@@ -155,7 +156,7 @@ void K3bIsoImageJob::slotWrite()
 
   // use cdrecord to burn the cd
   if( !k3bMain()->externalBinManager()->foundBin( "cdrecord" ) ) {
-    qDebug("(K3bAudioJob) could not find cdrecord executable" );
+    kdDebug() << "(K3bAudioJob) could not find cdrecord executable" << endl;
     emit infoMessage( i18n("Cdrecord executable not found."), K3bJob::ERROR );
     emit finished( false );
     return;
@@ -226,7 +227,7 @@ void K3bIsoImageJob::slotWrite()
     {
       // something went wrong when starting the program
       // it "should" be the executable
-      qDebug("(K3bIsoImageJob) could not start cdrecord");
+      kdDebug() << "(K3bIsoImageJob) could not start cdrecord" << endl;
       emit infoMessage( i18n("Could not start cdrecord!"), K3bJob::ERROR );
       emit finished( false );
     }
@@ -248,7 +249,7 @@ void K3bIsoImageJob::slotWriteCueBin()
 
 
   if( !k3bMain()->externalBinManager()->foundBin( "cdrdao" ) ) {
-    qDebug("(K3bAudioJob) could not find cdrdao executable" );
+    kdDebug() << "(K3bAudioJob) could not find cdrdao executable" << endl;
     emit infoMessage( i18n("Cdrdao executable not found."), K3bJob::ERROR );
     emit finished( false );
     return;
@@ -309,7 +310,7 @@ void K3bIsoImageJob::slotWriteCueBin()
     {
       // something went wrong when starting the program
       // it "should" be the executable
-      qDebug("(K3bIsoImageJob) could not start cdrdao");
+      kdDebug() << "(K3bIsoImageJob) could not start cdrdao" << endl;
       emit infoMessage( i18n("Could not start cdrdao!"), K3bJob::ERROR );
       emit finished( false );
     }
@@ -361,7 +362,7 @@ void K3bIsoImageJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
       *str = (*str).stripWhiteSpace();
       if( (*str).startsWith( "Track" ) )
 	{
-	  //			qDebug("Parsing line [[" + *str + "]]" );
+	  //	kdDebug() << "Parsing line [[" << *str << "]]" << endl;
 			
 	  if( (*str).contains( "fifo", false ) > 0 )
 	    {
@@ -374,62 +375,62 @@ void K3bIsoImageJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 	      int pos1 = 5;
 	      int pos2 = (*str).find(':');
 	      if( pos1 == -1 ) {
-		qDebug("parsing did not work");
+		kdDebug() << "parsing did not work" << endl;
 		continue;
 	      }
 	      // now pos2 to the first colon :-)
 	      num = (*str).mid(pos1,pos2-pos1).toInt(&ok);				
 	      if(!ok)
-		qDebug("parsing did not work");
+		kdDebug() << "parsing did not work" << endl;
 				
 	      // --- parse already written Megs -----------------------------------				
 	      // ----------------------------------------------------------------------
 	      pos1 = (*str).find(':');
 	      if( pos1 == -1 ) {
-		qDebug("parsing did not work");
+		kdDebug() << "parsing did not work" << endl;
 		continue;
 	      }
 	      pos2 = (*str).find("of");
 	      if( pos2 == -1 ) {
-		qDebug("parsing did not work");
+		kdDebug() << "parsing did not work" << endl;
 		continue;
 	      }
 	      // now pos1 point to the colon and pos2 to the 'o' of 'of' :-)
 	      pos1++;
 	      made = (*str).mid(pos1,pos2-pos1).toInt(&ok);
 	      if(!ok)
-		qDebug("parsing did not work");
+		kdDebug() << "parsing did not work" << endl;
 					
 	      // --- parse total size of track ---------------------------------------
 	      // ------------------------------------------------------------------------
 	      pos1 = (*str).find("MB");
 	      if( pos1 == -1 ) {
-		qDebug("parsing did not work");
+		kdDebug() << "parsing did not work" << endl;
 		continue;
 	      }
 	      // now pos1 point to the 'M' of 'MB' and pos2 to the 'o' of 'of' :-)
 	      pos2 += 2;
 	      size = (*str).mid(pos2,pos1-pos2).toInt(&ok);
 	      if(!ok)
-		qDebug("parsing did not work");
+		kdDebug() << "parsing did not work" << endl;
 				
 	      // --- parse status of fifo --------------------------------------------
 	      // ------------------------------------------------------------------------
 	      pos1 = (*str).find("fifo");
 	      if( pos1 == -1 ) {
-		qDebug("parsing did not work");
+		kdDebug() << "parsing did not work" << endl;
 		continue;
 	      }
 	      pos2 = (*str).find('%');
 	      if( pos2 == -1 ) {
-		qDebug("parsing did not work");
+		kdDebug() << "parsing did not work" << endl;
 		continue;
 	      }
 	      // now pos1 point to the 'f' of 'fifo' and pos2 to the %o'  :-)
 	      pos1+=4;
 	      fifo = (*str).mid(pos1,pos2-pos1).toInt(&ok);
 	      if(!ok)
-		qDebug("parsing did not work");
+		kdDebug() << "parsing did not work" << endl;
 
 	      // -------------------------------------------------------------------
 	      // -------- parsing finished --------------------------------------
@@ -464,7 +465,7 @@ void K3bIsoImageJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
       }
       else {
 	// debugging
-	qDebug("(cdrecord) %s", (*str).latin1() );
+	kdDebug() << "(cdrecord) " << (*str) << endl;
       }
     } // for every line
 

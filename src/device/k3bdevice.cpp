@@ -4,6 +4,7 @@
 
 #include <qstring.h>
 
+#include <kdebug.h>
 #include <krun.h>
 
 typedef Q_INT16 size16;
@@ -66,7 +67,7 @@ cdrom_drive* K3bDevice::open()
   if( m_cdromStruct == 0 ) {
     m_cdromStruct = cdda_identify( devicename().latin1(), CDDA_MESSAGE_FORGETIT, 0 );
     if( !m_cdromStruct ) {
-      qDebug( "(K3bDevice) Could not open device %s", devicename().latin1() );
+      kdDebug() << "(K3bDevice) Could not open device " << devicename() << endl;
       return 0;
     }
     cdda_open( m_cdromStruct );

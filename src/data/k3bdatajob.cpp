@@ -40,6 +40,7 @@
 #include <qtextstream.h>
 #include <qfile.h>
 #include <qregexp.h>
+#include <kdebug.h>
 
 #include <iostream>
 
@@ -113,7 +114,7 @@ void K3bDataJob::fetchMultiSessionInfo()
   m_process->disconnect();
 
   if( !k3bMain()->externalBinManager()->foundBin( "cdrecord" ) ) {
-    qDebug("(K3bAudioJob) could not find cdrecord executable" );
+    kdDebug() << "(K3bAudioJob) could not find cdrecord executable" << endl;
     emit infoMessage( i18n("Cdrecord executable not found."), K3bJob::ERROR );
     cancelAll();
     return;
@@ -136,7 +137,7 @@ void K3bDataJob::fetchMultiSessionInfo()
   m_collectedOutput = QString::null;
 
   if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
-    qDebug( "(K3bDataJob) could not start cdrecord" );
+    kdDebug() << "(K3bDataJob) could not start cdrecord" << endl;
     emit infoMessage( i18n("Could not start cdrecord!"), K3bJob::ERROR );
     cancelAll();
     return;
@@ -146,7 +147,7 @@ void K3bDataJob::fetchMultiSessionInfo()
 
 void K3bDataJob::slotMsInfoFetched()
 {
-  qDebug("(K3bDataJob) msinfo fetched");
+  kdDebug() << "(K3bDataJob) msinfo fetched" << endl;
 
   // now parse the output
   QStringList list = QStringList::split( ",", m_collectedOutput );
@@ -163,7 +164,7 @@ void K3bDataJob::slotMsInfoFetched()
     m_msInfo = QString::null;
   }
 
-  qDebug("(K3bDataJob) msinfo parsed: %s", m_msInfo.latin1() );
+  kdDebug() << "(K3bDataJob) msinfo parsed: " << m_msInfo << endl;
 		
   if( m_msInfo.isEmpty() ) {
     emit infoMessage( i18n("Could not retrieve multisession information from disk."), K3bJob::ERROR );
@@ -186,12 +187,12 @@ void K3bDataJob::fetchIsoSize()
   m_process->clearArguments();
   m_process->disconnect();
 
-  qDebug("(K3bDataJob) process cleared");
+  kdDebug() << "(K3bDataJob) process cleared" << endl;
 
   if( !addMkisofsParameters() )
     return;
 
-  qDebug("(K3bDataJob) mkisofs arguments set");
+  kdDebug() << "(K3bDataJob) mkisofs arguments set" << endl;
 
   *m_process << "-print-size" << "-quiet";
   // add empty dummy dir since one path-spec is needed
@@ -216,7 +217,7 @@ void K3bDataJob::fetchIsoSize()
   m_isoSize = QString::null;
 			
   if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
-    qDebug( "(K3bDataJob) could not start mkisofs: %s", kapp->config()->readEntry( "mkisofs path" ).latin1() );
+    kdDebug() << "(K3bDataJob) could not start mkisofs: " << kapp->config()->readEntry( "mkisofs path" ) << endl;
     emit infoMessage( i18n("Could not start mkisofs!"), K3bJob::ERROR );
     cancelAll();
     return;
@@ -226,7 +227,7 @@ void K3bDataJob::fetchIsoSize()
 
 void K3bDataJob::slotIsoSizeFetched()
 {
-  qDebug("(K3bDataJob) iso size fetched: %s", m_collectedOutput.latin1() );
+  kdDebug() << "(K3bDataJob) iso size fetched: " << m_collectedOutput << endl;
 
   // now parse the output
   // this seems to be the format for mkisofs version < 1.14 (to stdout)
@@ -243,7 +244,7 @@ void K3bDataJob::slotIsoSizeFetched()
     }
   }
     
-  qDebug("(K3bDataJob) iso size parsed: %s", m_isoSize.latin1() );
+  kdDebug() << "(K3bDataJob) iso size parsed: " << m_isoSize << endl;
 
   if( m_isoSize.isEmpty() ) {
     emit infoMessage( i18n("Could not retrieve size of data. On-the-fly writing did not work."), K3bJob::ERROR );
@@ -290,7 +291,7 @@ void K3bDataJob::writeCD()
 		
   // use cdrecord to burn the cd
   if( !k3bMain()->externalBinManager()->foundBin( "cdrecord" ) ) {
-    qDebug("(K3bAudioJob) could not find cdrecord executable" );
+    kdDebug() << "(K3bAudioJob) could not find cdrecord executable" << endl;
     emit infoMessage( i18n("Cdrecord executable not found."), K3bJob::ERROR );
     cancelAll();
     return;
@@ -379,7 +380,7 @@ void K3bDataJob::writeCD()
     {
       // something went wrong when starting the program
       // it "should" be the executable
-      qDebug("(K3bDataJob) could not start mkisofs/cdrecord");
+      kdDebug() << "(K3bDataJob) could not start mkisofs/cdrecord" << endl;
       emit infoMessage( i18n("Could not start mkisofs/cdrecord!"), K3bJob::ERROR );
       cancelAll();
     }
@@ -435,7 +436,7 @@ void K3bDataJob::writeImage()
     {
       // something went wrong when starting the program
       // it "should" be the executable
-      qDebug("(K3bDataJob) could not start mkisofs");
+      kdDebug() << "(K3bDataJob) could not start mkisofs" << endl;
 				
       emit infoMessage( i18n("Could not start mkisofs!"), K3bJob::ERROR );
       cancelAll();
@@ -480,7 +481,7 @@ void K3bDataJob::slotParseMkisofsOutput( KProcess*, char* output, int len )
 	bool ok;
 	double _percent = _perStr.toDouble( &ok );
 	if( !ok ) {
-	  qDebug( "Parsing did not work for %s", _perStr.latin1() );
+	  kdDebug() << "Parsing did not work for " << _perStr << endl;
 	}
 	else {
 	  emit subPercent( (int)_percent );
@@ -500,7 +501,7 @@ void K3bDataJob::slotParseMkisofsOutput( KProcess*, char* output, int len )
       }
 
       else {
-	qDebug("(mkisofs) %s", (*str).latin1() );
+	kdDebug() << "(mkisofs) " << (*str) << endl;
       }
     }
 }
@@ -523,7 +524,7 @@ void K3bDataJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
       *str = (*str).stripWhiteSpace();
       if( (*str).startsWith( "Track" ) )
 	{
-	  //			qDebug("Parsing line [[" + *str + "]]" );
+	  //			kdDebug() << "Parsing line [[" << *str << "]]"endl;
 			
 	  if( (*str).contains( "fifo", false ) > 0 )
 	    {
@@ -536,62 +537,62 @@ void K3bDataJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 	      int pos1 = 5;
 	      int pos2 = (*str).find(':');
 	      if( pos1 == -1 ) {
-		qDebug("parsing did not work");
+		kdDebug() << "parsing did not work" << endl;
 		continue;
 	      }
 	      // now pos2 to the first colon :-)
 	      num = (*str).mid(pos1,pos2-pos1).toInt(&ok);				
 	      if(!ok)
-		qDebug("parsing did not work");
+		kdDebug() << "parsing did not work" << endl;
 				
 	      // --- parse already written Megs -----------------------------------				
 	      // ----------------------------------------------------------------------
 	      pos1 = (*str).find(':');
 	      if( pos1 == -1 ) {
-		qDebug("parsing did not work");
+		kdDebug() << "parsing did not work" << endl;
 		continue;
 	      }
 	      pos2 = (*str).find("of");
 	      if( pos2 == -1 ) {
-		qDebug("parsing did not work");
+		kdDebug() << "parsing did not work" << endl;
 		continue;
 	      }
 	      // now pos1 point to the colon and pos2 to the 'o' of 'of' :-)
 	      pos1++;
 	      made = (*str).mid(pos1,pos2-pos1).toInt(&ok);
 	      if(!ok)
-		qDebug("parsing did not work");
+		kdDebug() << "parsing did not work" << endl;
 					
 	      // --- parse total size of track ---------------------------------------
 	      // ------------------------------------------------------------------------
 	      pos1 = (*str).find("MB");
 	      if( pos1 == -1 ) {
-		qDebug("parsing did not work");
+		kdDebug() << "parsing did not work" << endl;
 		continue;
 	      }
 	      // now pos1 point to the 'M' of 'MB' and pos2 to the 'o' of 'of' :-)
 	      pos2 += 2;
 	      size = (*str).mid(pos2,pos1-pos2).toInt(&ok);
 	      if(!ok)
-		qDebug("parsing did not work");
+		kdDebug() << "parsing did not work" << endl;
 				
 	      // --- parse status of fifo --------------------------------------------
 	      // ------------------------------------------------------------------------
 	      pos1 = (*str).find("fifo");
 	      if( pos1 == -1 ) {
-		qDebug("parsing did not work");
+		kdDebug() << "parsing did not work" << endl;
 		continue;
 	      }
 	      pos2 = (*str).find('%');
 	      if( pos2 == -1 ) {
-		qDebug("parsing did not work");
+		kdDebug() << "parsing did not work" << endl;
 		continue;
 	      }
 	      // now pos1 point to the 'f' of 'fifo' and pos2 to the %o'  :-)
 	      pos1+=4;
 	      fifo = (*str).mid(pos1,pos2-pos1).toInt(&ok);
 	      if(!ok)
-		qDebug("parsing did not work");
+		kdDebug() << "parsing did not work" << endl;
 
 	      // -------------------------------------------------------------------
 	      // -------- parsing finished --------------------------------------
@@ -646,7 +647,7 @@ void K3bDataJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 	bool ok;
 	int _percent = (int)_perStr.toDouble( &ok );
 	if( !ok ) {
-	  qDebug( "Parsing did not work for %s", _perStr.latin1() );
+	  kdDebug() << "Parsing did not work for " << _perStr << endl;
 	}
 	else
 	  emit subPercent( _percent );
@@ -659,7 +660,7 @@ void K3bDataJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
       }
       else {
 	// debugging
-	qDebug("(cdrecord) %s", (*str).latin1());
+	kdDebug() << "(cdrecord) " << (*str) << endl;
       }
     } // for every line
 
@@ -767,7 +768,7 @@ void K3bDataJob::slotCdrecordFinished()
 bool K3bDataJob::addMkisofsParameters()
 {
   if( !k3bMain()->externalBinManager()->foundBin( "mkisofs" ) ) {
-    qDebug("(K3bAudioJob) could not find mkisofs executable" );
+    kdDebug() << "(K3bAudioJob) could not find mkisofs executable" << endl;
     emit infoMessage( i18n("Mkisofs executable not found."), K3bJob::ERROR );
     return false;
   }
