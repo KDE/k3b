@@ -23,6 +23,7 @@
 class QLabel;
 class K3bBusyWidget;
 class K3bMainWindow;
+class QEvent;
 
 
 class K3bStatusBarManager : public QObject
@@ -42,6 +43,8 @@ class K3bStatusBarManager : public QObject
   void slotFreeTempSpace( const QString&, unsigned long, unsigned long, unsigned long );
 
  private:
+  bool eventFilter( QObject* o, QEvent* e );
+
   QLabel* m_labelInfoMessage;
   QLabel* m_pixFreeTemp;
   QLabel* m_labelFreeTemp;

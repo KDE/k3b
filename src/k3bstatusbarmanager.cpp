@@ -32,6 +32,7 @@
 #include <qhbox.h>
 #include <qfile.h>
 #include <qtimer.h>
+#include <qevent.h>
 
 
 
@@ -46,6 +47,7 @@ K3bStatusBarManager::K3bStatusBarManager( K3bMainWindow* parent )
   (void)new QLabel( i18n("Temp:"), boxFreeTemp );
   m_pixFreeTemp->setPixmap( SmallIcon("folder_green") );
   m_labelFreeTemp = new QLabel( boxFreeTemp );
+  boxFreeTemp->installEventFilter( this );
 
   // busy widget
   m_busyWidget = new K3bBusyWidget( m_mainWindow->statusBar() );
@@ -119,5 +121,15 @@ void K3bStatusBarManager::endBusy()
   m_labelInfoMessage->setText( " " );
   m_busyWidget->showBusy( false );
 }
+
+
+bool K3bStatusBarManager::eventFilter( QObject* o, QEvent* e )
+{
+  if( o == m_labelFreeTemp->parentWidget() && e->type() == QEvent::MouseButtonDblClick )
+    m_mainWindow->showOptionDialog( 7 );  // FIXME: use an enumeration for the option pages
+
+  return QObject::eventFilter( o, e );
+}
+
 
 #include "k3bstatusbarmanager.moc"
