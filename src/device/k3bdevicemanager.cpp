@@ -129,7 +129,7 @@ int K3bDeviceManager::scanbus() {
                if( addDevice(QString("/dev/%1").arg(dev)) )
                    m_foundDevices++;
                else if ( dev.startsWith("sr") ) 
-                  if( addDevice(QString("/dev/%1").arg(dev.replace('r',"cd"))) )
+                  if( addDevice(QString("/dev/%1").arg(dev.replace(QRegExp("r"),"cd"))) )
                       m_foundDevices++;
                ++i;
            }
