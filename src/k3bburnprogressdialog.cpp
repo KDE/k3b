@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -16,9 +16,9 @@
 
 #include "k3bburnprogressdialog.h"
 
-#include <k3bjob.h>
-#include <device/k3bdevice.h>
-#include <k3bstdguiitems.h>
+#include "k3bjob.h"
+#include "device/k3bdevice.h"
+#include "k3bstdguiitems.h"
 
 #include <kglobal.h>
 #include <kprogress.h>
@@ -30,7 +30,7 @@
 #include <qframe.h>
 
 
-K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name, bool showSubProgress, 
+K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name, bool showSubProgress,
 					      bool modal, WFlags wf )
   : K3bJobProgressDialog(parent,name, showSubProgress, modal, wf)
 {
@@ -48,7 +48,7 @@ K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name,
   m_labelWriter->setPaletteBackgroundColor( QColor( 205, 210, 255 ) );
   QFont textLabel14_font( m_labelWriter->font() );
   textLabel14_font.setBold( TRUE );
-  m_labelWriter->setFont( textLabel14_font ); 
+  m_labelWriter->setFont( textLabel14_font );
   m_labelWriter->setMargin( 3 );
 
   m_frameExtraInfoLayout->addMultiCellWidget( headerFrame, 0, 0, 0, 2 );
@@ -85,7 +85,7 @@ void K3bBurnProgressDialog::setBurnJob( K3bBurnJob* burnJob )
   if( burnJob ) {
     connect( burnJob, SIGNAL(bufferStatus(int)), m_progressWritingBuffer, SLOT(setValue(int)) );
     connect( burnJob, SIGNAL(writeSpeed(int)), this, SLOT(slotWriteSpeed(int)) );
-    
+
     m_labelWriter->setText( i18n("Writer: %1 %2").arg(burnJob->writer()->vendor()).
 			    arg(burnJob->writer()->description()) );
   }
@@ -96,5 +96,5 @@ void K3bBurnProgressDialog::slotWriteSpeed( int s )
 {
   m_labelWritingSpeed->setText( QString("%1 kb/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/150.0,2)) );
 }
-  
+
 #include "k3bburnprogressdialog.moc"

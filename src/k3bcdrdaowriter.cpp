@@ -17,11 +17,11 @@
 
 #include "k3bcdrdaowriter.h"
 
-#include <k3b.h>
+#include "k3b.h"
 #include <k3bexternalbinmanager.h>
-#include <device/k3bdevicemanager.h>
-#include <k3bprocess.h>
-#include <device/k3bdevice.h>
+#include "device/k3bdevicemanager.h"
+#include "k3bprocess.h"
+#include "device/k3bdevice.h"
 
 #include <qstring.h>
 #include <qstringlist.h>

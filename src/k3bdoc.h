@@ -19,7 +19,7 @@
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
-#endif 
+#endif
 
 // include files for QT
 #include <qobject.h>
@@ -30,8 +30,8 @@
 // include files for KDE
 #include <kurl.h>
 #include <kio/global.h>
-#include <device/k3bmsf.h>
-#include <device/k3bdevice.h>
+#include "device/k3bmsf.h"
+#include "device/k3bdevice.h"
 
 
 // forward declaration of the K3b classes
@@ -76,7 +76,7 @@ class K3bDoc : public QObject
 
 
   virtual int docType() const { return m_docType; }
-	
+
   /** adds a view to the document which represents the document contents. Usually this is your main view. */
   virtual void addView(K3bView *view);
   /** removes a view from the list of currently connected views */
@@ -100,14 +100,14 @@ class K3bDoc : public QObject
 
   /**
    * saves the document under filename and format.
-   */	
+   */
   bool saveDocument(const KURL &url);
 
   /** returns the KURL of the document */
   const KURL& URL() const;
   /** sets the URL of the document */
   void setURL(const KURL& url);
-	
+
   /** Create a new view */
   virtual K3bView* newView( QWidget* parent ) = 0;
 
@@ -125,9 +125,9 @@ class K3bDoc : public QObject
   const QString& tempDir() const { return m_tempDir; }
 
   virtual int numOfTracks() const { return 1; }
-	
+
   virtual K3bBurnJob* newBurnJob() = 0;
-  
+
   int writingApp() const { return m_writingApp; }
   void setWritingApp( int a ) { m_writingApp = a; }
 
@@ -153,24 +153,24 @@ class K3bDoc : public QObject
 
   virtual void addUrl( const KURL& url ) = 0;
   virtual void addUrls( const KURL::List& urls ) = 0;
-	
+
  signals:
   void errorMessage( const QString& );
   void warningMessage( const QString& );
   void infoMessage( const QString& );
   void result();
   void percent( int percent );
-	 	
+
  protected:
-  /** 
+  /**
    * when deriving from K3bDoc this method really opens the document since
-   * openDocument only opens a tempfile and calls this method. 
+   * openDocument only opens a tempfile and calls this method.
    */
   virtual bool loadDocumentData( QDomElement* root ) = 0;
-	
-  /** 
+
+  /**
    * when deriving from K3bDoc this method really saves the document since
-   * saveDocument only opens the file and calls this method. 
+   * saveDocument only opens the file and calls this method.
    * Append all child elements to docElem.
    * XML header was already created
    */
@@ -191,7 +191,7 @@ class K3bDoc : public QObject
   bool modified;
   KURL doc_url;
   /** the list of the views currently connected to the document */
-  QList<K3bView> *pViewList;	
+  QList<K3bView> *pViewList;
   QString m_projectName;
   QString m_tempDir;
   K3bDevice* m_burner;

@@ -17,7 +17,7 @@
 #ifndef K3B_BLANKING_DIALOG_H
 #define K3B_BLANKING_DIALOG_H
 
-#include <k3binteractiondialog.h>
+#include "k3binteractiondialog.h"
 #include "device/k3bdevice.h"
 
 class QString;
@@ -54,7 +54,7 @@ Q_OBJECT
 
  private:
   void setupGui();
-  
+
   K3bWriterSelectionWidget* m_writerSelectionWidget;
 
   QButtonGroup* m_groupBlankType;

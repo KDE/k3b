@@ -47,7 +47,6 @@
 #include <kedittoolbar.h>
 #include <ksystemtray.h>
 #include <kaboutdata.h>
-#include <kmessagebox.h>
 
 #include <stdlib.h>
 
@@ -254,7 +253,7 @@ void K3bMainWindow::initActions()
   actionDataEditBootImages = new KAction(i18n("&Edit boot images"), "cdtrack", 0, this,
  					 SLOT(slotEditBootImages()), actionCollection(),
  					 "project_data_edit_boot_images" );
-  
+
   m_dataProjectActions.append( actionDataImportSession );
   m_dataProjectActions.append( actionDataClearImportedSession );
   m_dataProjectActions.append( actionDataEditBootImages );
@@ -265,7 +264,7 @@ void K3bMainWindow::initActions()
   connect( m_fileTreeComboBox, SIGNAL(urlExecuted(const KURL&)), m_dirView, SLOT(showUrl(const KURL& )) );
   connect( m_fileTreeComboBox, SIGNAL(deviceExecuted(K3bDevice*)), m_dirView, SLOT(showDevice(K3bDevice* )) );
 
-  KWidgetAction* fileTreeComboAction = new KWidgetAction( m_fileTreeComboBox, 
+  KWidgetAction* fileTreeComboAction = new KWidgetAction( m_fileTreeComboBox,
 							  i18n("&Quick dir selector"),
 							  0, 0, 0,
 							  actionCollection(), "quick_dir_selector" );
@@ -309,7 +308,7 @@ void K3bMainWindow::endBusy()
 void K3bMainWindow::initView()
 {
   // setup main docking things
-  mainDock = createDockWidget( "project_view", SmallIcon("idea"), 0, 
+  mainDock = createDockWidget( "project_view", SmallIcon("idea"), 0,
 			       kapp->makeStdCaption( i18n("Project View") ), i18n("Project View") );
   setView( mainDock );
   setMainDockWidget( mainDock );

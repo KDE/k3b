@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -40,13 +40,13 @@
 // application specific includes
 #include "k3bview.h"
 #include "k3bdoc.h"
-#include <k3b.h>
+#include "k3b.h"
 #include <k3bglobals.h>
-#include <device/k3bdevice.h>
-#include <audio/k3baudiodoc.h>
-#include <data/k3bdatadoc.h>
-#include <vcd/k3bvcddoc.h>
-#include <mixed/k3bmixeddoc.h>
+#include "device/k3bdevice.h"
+#include "audio/k3baudiodoc.h"
+#include "data/k3bdatadoc.h"
+#include "vcd/k3bvcddoc.h"
+#include "mixed/k3bmixeddoc.h"
 
 
 #include <kostore/koStore.h>
