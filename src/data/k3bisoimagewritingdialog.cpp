@@ -194,13 +194,13 @@ void K3bIsoImageWritingDialog::setupGui()
   advancedTabLayout->setSpacing( spacingHint() );
   advancedTabLayout->setMargin( marginHint() );
 
-  m_checkRawWrite = new QCheckBox( i18n("Raw writing"), advancedTab );
+  //  m_checkRawWrite = new QCheckBox( i18n("Raw writing"), advancedTab );
   m_checkUseCueFile = new QCheckBox( i18n("Use cue-file"), advancedTab );
   m_checkNoFix = new QCheckBox( i18n("Do not close session"), advancedTab );
 
   advancedTabLayout->addWidget( m_checkNoFix, 0, 0 );
-  advancedTabLayout->addWidget( m_checkRawWrite, 1, 0 );
-  advancedTabLayout->addWidget( m_checkUseCueFile, 2, 0 );
+  //  advancedTabLayout->addWidget( m_checkRawWrite, 1, 0 );
+  advancedTabLayout->addWidget( m_checkUseCueFile, 1, 0 );
 
 
   optionTabbed->addTab( optionTab, i18n("Options") );
@@ -241,11 +241,11 @@ void K3bIsoImageWritingDialog::slotUser1()
   k3bMain()->config()->setGroup("General Options");
   k3bMain()->config()->writeEntry( "last written image", m_editImagePath->text() );
 
-  if( m_bIsoImage && m_checkRawWrite->isChecked() && !m_checkUseCueFile->isChecked() )
-    if( KMessageBox::warningContinueCancel( this, i18n("Writing an Iso9660 image in raw mode will lead to an unusable disk. "
-						       "Are you sure you want to continue?") )
-	== KMessageBox::Cancel )
-      return;
+//   if( m_bIsoImage && m_checkRawWrite->isChecked() && !m_checkUseCueFile->isChecked() )
+//     if( KMessageBox::warningContinueCancel( this, i18n("Writing an Iso9660 image in raw mode will lead to an unusable disk. "
+// 						       "Are you sure you want to continue?") )
+// 	== KMessageBox::Cancel )
+//       return;
 					  
 
   // create the job
@@ -257,7 +257,7 @@ void K3bIsoImageWritingDialog::slotUser1()
   m_job->setBurnproof( m_checkBurnProof->isChecked() );
   m_job->setDummy( m_checkDummy->isChecked() );
   m_job->setDao( m_checkDao->isChecked() );
-  m_job->setRawWrite( m_checkRawWrite->isChecked() );
+  //  m_job->setRawWrite( m_checkRawWrite->isChecked() );
   m_job->setNoFix( m_checkNoFix->isChecked() );
 
   if( m_checkUseCueFile->isChecked() ) {
@@ -390,7 +390,7 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
       
       m_generalInfoLabel->setText( i18n("Seems to be an iso9660 image") );
       m_checkUseCueFile->setChecked( false );
-      m_checkRawWrite->setChecked( false );
+      //      m_checkRawWrite->setChecked( false );
     }
     else {
       m_isoInfoWidget->hide();
@@ -450,10 +450,10 @@ void K3bIsoImageWritingDialog::slotCueBinChecked( bool c )
   // raw writing is set in the cue-file so there is no use in allowing to set it when using one
   // cdrdao has no option to not fixate a cd (DAO)
   if( c ) {
-    m_checkRawWrite->setChecked( false );
+    //    m_checkRawWrite->setChecked( false );
     m_checkNoFix->setChecked( false );
   }
-  m_checkRawWrite->setDisabled( c );
+  //  m_checkRawWrite->setDisabled( c );
   m_checkNoFix->setDisabled( c );
 }
 

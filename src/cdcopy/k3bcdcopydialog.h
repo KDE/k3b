@@ -44,6 +44,7 @@ class K3bCdCopyDialog : public KDialogBase
 
  private slots:
   void slotSourceSelected();
+  void slotOnlyCreateImageChecked(bool);
   void slotUser1();
   void slotUser2();
 
@@ -54,6 +55,7 @@ class K3bCdCopyDialog : public KDialogBase
   QCheckBox* m_checkOnTheFly;
   QCheckBox* m_checkDeleteImages;
   QCheckBox* m_checkFastToc;
+  QCheckBox* m_checkOnlyCreateImage;
   QComboBox* m_comboSourceDevice;
   QSpinBox* m_spinCopies;
 };

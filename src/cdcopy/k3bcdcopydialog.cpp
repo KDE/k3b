@@ -71,7 +71,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   optionTabGrid->setSpacing( spacingHint() );
   optionTabGrid->setMargin( marginHint() );
 
-  QGroupBox* groupOptions = new QGroupBox( 4, Qt::Vertical, i18n("Options"), optionTab );
+  QGroupBox* groupOptions = new QGroupBox( 5, Qt::Vertical, i18n("Options"), optionTab );
   groupOptions->setInsideSpacing( spacingHint() );
   groupOptions->setInsideMargin( marginHint() );
 
@@ -81,6 +81,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
 
   m_checkSimulate = new QCheckBox( i18n("Simulate writing"), groupOptions );
   m_checkOnTheFly = new QCheckBox( i18n("Writing on the fly"), groupOptions );
+  m_checkOnlyCreateImage = new QCheckBox( i18n("Only create images"),groupOptions );
   m_checkDeleteImages = new QCheckBox( i18n("Delete images"), groupOptions );
 
   QLabel* pixLabel = new QLabel( groupCopies );
@@ -139,6 +140,12 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
 
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_tempDirSelectionWidget, SLOT(setDisabled(bool)) );
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkDeleteImages, SLOT(setDisabled(bool)) );
+  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkOnlyCreateImage, SLOT(setDisabled(bool)) );
+
+  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotOnlyCreateImageChecked(bool)) );
+  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_writerSelectionWidget, SLOT(setDisabled(bool)) );
+  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_spinCopies, SLOT(setDisabled(bool)) );
+  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkSimulate, SLOT(setDisabled(bool)) );
 
   slotSourceSelected();
 
@@ -151,7 +158,6 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
 
 K3bCdCopyDialog::~K3bCdCopyDialog()
 {
-  qDebug("------deleted----");
 }
 
 
@@ -160,9 +166,9 @@ void K3bCdCopyDialog::slotSourceSelected()
   K3bDevice* writer = m_writerSelectionWidget->writerDevice();
   K3bDevice* reader = readingDevice();
 
-  if( writer == reader )
+  if( writer == reader || m_checkOnlyCreateImage->isChecked() )
     m_checkOnTheFly->setChecked( false );
-  m_checkOnTheFly->setDisabled( writer == reader );
+  m_checkOnTheFly->setDisabled( writer == reader || m_checkOnlyCreateImage->isChecked() );
 }
 
 
@@ -190,6 +196,7 @@ void K3bCdCopyDialog::slotUser1()
   job->setDummy( m_checkSimulate->isChecked() );
   job->setOnTheFly( m_checkOnTheFly->isChecked() );
   job->setKeepImage( !m_checkDeleteImages->isChecked() );
+  job->setOnlyCreateImage( m_checkOnlyCreateImage->isChecked() );
   job->setFastToc( m_checkFastToc->isChecked() );
   job->setTempPath( m_tempDirSelectionWidget->tempPath() );
   if( !m_checkSimulate->isChecked() )
@@ -197,7 +204,9 @@ void K3bCdCopyDialog::slotUser1()
 
 
   // create a progresswidget
-  K3bBurnProgressDialog d( k3bMain(), "burnProgress", !m_checkOnTheFly->isChecked() );
+  K3bBurnProgressDialog d( k3bMain(), "burnProgress", 
+			   !m_checkOnTheFly->isChecked() && !m_checkOnlyCreateImage->isChecked(),
+			   false );
 
   d.setJob( job );
 
@@ -213,6 +222,16 @@ void K3bCdCopyDialog::slotUser1()
 void K3bCdCopyDialog::slotUser2()
 {
   slotClose();
+}
+
+
+void K3bCdCopyDialog::slotOnlyCreateImageChecked( bool c )
+{
+  if( c )
+    m_checkDeleteImages->setChecked( false );
+
+  // check if we can enable on-the-fly
+  slotSourceSelected();
 }
 
 

@@ -47,6 +47,7 @@ class K3bCdCopyJob : public K3bBurnJob
   void setSpeed( int s ) { m_speed = s; }
   void setOnTheFly( bool b ) { m_onTheFly = b; }
   void setKeepImage( bool b ) { m_keepImage = b; }
+  void setOnlyCreateImage( bool b ) { m_onlyCreateImage = b; }
   void setDummy( bool b ) { m_dummy = b; }
   /** not usable for cdrdao (enabled by default) */
   void setBurnProof( bool b ) { m_burnProof = b; }
@@ -88,6 +89,7 @@ class K3bCdCopyJob : public K3bBurnJob
 
   bool m_burnProof;
   bool m_keepImage;
+  bool m_onlyCreateImage;
   bool m_onTheFly;
   bool m_dummy;
   bool m_fastToc;

@@ -94,8 +94,8 @@ K3bBurnProgressDialog::PrivateDebugWidget::PrivateDebugWidget( QMap<QString, QSt
 
 
 K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name, bool showSubProgress, 
-					      bool modal, WFlags wf )
-  : KDialog(parent,name, modal, wf)
+					      bool showBuffer, bool modal, WFlags wf )
+  : KDialog(parent,name, modal, wf), m_showBuffer( showBuffer )
 {
   setCaption( i18n("K3b - Progress") );
 
@@ -342,7 +342,7 @@ void K3bBurnProgressDialog::setJob( K3bJob* job )
 
   
   K3bBurnJob* burnJob = dynamic_cast<K3bBurnJob*>( job );
-  if( burnJob ) {
+  if( m_showBuffer && burnJob ) {
     if( burnJob->writer() )
       m_labelWriter->setText( i18n("Writer: ") + burnJob->writer()->vendor() + " " + 
 			      burnJob->writer()->description() );

@@ -49,7 +49,7 @@ class K3bBurnProgressDialog : public KDialog  {
 
  public:
   K3bBurnProgressDialog( QWidget* parent = 0, const char* name = 0, bool showSubProgress = true, 
-			 bool modal = true, WFlags = 0 );
+			 bool showBuffer = true, bool modal = true, WFlags = 0 );
   ~K3bBurnProgressDialog();
 
   void setJob( K3bJob* job );
@@ -107,6 +107,8 @@ class K3bBurnProgressDialog : public KDialog  {
   int m_time;
 
   QMap<QString, QStringList> m_debugOutputMap;
+
+  bool m_showBuffer;
 };
 
 #endif

@@ -62,6 +62,7 @@ K3bIsoImageJob::K3bIsoImageJob()
   m_dao = true;
   m_dummy = false;
   m_burnproof = false;
+  m_rawWrite = false;
   m_device = 0;
   m_speed = 1;
 }

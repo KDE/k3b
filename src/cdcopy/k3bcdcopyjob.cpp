@@ -121,7 +121,9 @@ void K3bCdCopyJob::diskInfoReady( const K3bDiskInfo& info )
   m_tempPath = k3bMain()->findTempFile( "iso", m_tempPath );
 
 
-  if( m_dummy )
+  if( m_onlyCreateImage && !m_onTheFly )
+    emit newTask( i18n("Creating cd image") );
+  else if( m_dummy )
     emit newTask( i18n("CD copy simulation") );
   else
     emit newTask( i18n("CD copy") );
@@ -305,7 +307,12 @@ void K3bCdCopyJob::cdrdaoReadFinished()
       case 0:
 	emit infoMessage( i18n("Image successfully created."), K3bJob::STATUS );
 
-	cdrdaoWrite();
+	if( m_onlyCreateImage ) {
+	  finishAll();
+	}
+	else {
+	  cdrdaoWrite();
+	}
 	break;
 	
       default:
@@ -494,7 +501,11 @@ void K3bCdCopyJob::parseCdrdaoSpecialLine( const QString& str )
 	sec += min*60;
 	
 	emit subPercent( 100*sec*75 / m_blocksToCopy );
-	emit percent( 100*sec*75 / m_blocksToCopy / (m_copies+1) );
+
+	if( !m_onTheFly && m_onlyCreateImage )
+	  emit percent( 100*sec*75 / m_blocksToCopy );
+	else
+	  emit percent( 100*sec*75 / m_blocksToCopy / (m_copies+1) );
       }
     }
   }
