@@ -59,7 +59,6 @@
 #include "audio/k3baudiodoc.h"
 #include "audio/k3baudioview.h"
 #include "device/k3bdevicemanager.h"
-#include "device/k3bdevicewidget.h"
 #include "audio/k3baudiotrackdialog.h"
 #include "option/k3boptiondialog.h"
 #include "k3bprojectburndialog.h"
@@ -77,9 +76,7 @@
 #include "k3btempdirselectionwidget.h"
 #include "k3bbusywidget.h"
 
-#include "data/k3bisoimager.h"
 
-#include "libmad/mad.h"
 
 
 K3bMainWindow* k3bMain()
@@ -316,23 +313,6 @@ void K3bMainWindow::initView()
   connect( m_audioPlayerDock, SIGNAL(iMBeingClosed()), this, SLOT(slotAudioPlayerHidden()) );
   connect( m_audioPlayerDock, SIGNAL(hasUndocked()), this, SLOT(slotAudioPlayerHidden()) );
   // ---------------------------------------------------------------------------------------------
-
-
-  // ///////////////////////////
-  // HACK needed because otherwise I get undefined references ???? :-((
-  // //////////////////////////
-  delete (new K3bDeviceWidget( deviceManager(), 0 ));
-
-  mad_header* m_madHeader = new mad_header;
-  mad_header_init( m_madHeader );
-  mad_header_finish( m_madHeader );
-  delete m_madHeader;
-  mad_synth* m_madSynth  = new mad_synth;
-  mad_synth_init( m_madSynth );
-  mad_synth_finish( m_madSynth );
-  delete m_madSynth;
-
-  K3bIsoImager imager(0,0,0);
 }
 
 

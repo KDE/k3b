@@ -198,12 +198,14 @@ FstabEntriesTab::FstabEntriesTab( int i, int o, K3bSetupWizard* wizard )
   m_viewFstab = new KListView( main, "m_viewFstab" );
   m_viewFstab->addColumn( i18n( "CD drive" ) );
   m_viewFstab->addColumn( i18n( "System device" ) );
+  m_viewFstab->addColumn( i18n( "Mount device (or link)" ) );
   m_viewFstab->addColumn( i18n( "Mount point" ) );
   m_viewFstab->setAllColumnsShowFocus( true );
   m_viewFstab->setItemsRenameable( true );
   m_viewFstab->setRenameable( 0, false );
   m_viewFstab->setRenameable( 1, false );
   m_viewFstab->setRenameable( 2, true );
+  m_viewFstab->setRenameable( 3, true );
 
   m_checkFstab = new QCheckBox( i18n("Let K3b setup create fstab entries"), main );
   m_checkFstab->setChecked( true );
@@ -239,15 +241,16 @@ void FstabEntriesTab::readSettings()
     item->setPixmap( 0, SmallIcon( "cdrom_unmount" ) );
     item->setText( 0, dev->vendor() + " " + dev->description() );
     item->setText( 1, dev->ioctlDevice() );
+    item->setText( 2, dev->mountDevice().isEmpty() ? dev->ioctlDevice() : dev->mountDevice() );
     if( !dev->mountPoint().isEmpty() )
-      item->setText( 2, dev->mountPoint() );
+      item->setText( 3, dev->mountPoint() );
     else {
       if( i == 0 )
-	item->setText( 2, "/cdrom" );
+	item->setText( 3, "/cdrom" );
       else
-	item->setText( 2, QString("/cdrom%1").arg(i) );
+	item->setText( 3, QString("/cdrom%1").arg(i) );
 
-      dev->setMountPoint( item->text(2) );
+      dev->setMountPoint( item->text(3) );
     }
       
     i++;
@@ -261,15 +264,16 @@ void FstabEntriesTab::readSettings()
     item->setPixmap( 0, SmallIcon( "cdwriter_unmount" ) );
     item->setText( 0, dev->vendor() + " " + dev->description() );
     item->setText( 1, dev->ioctlDevice() );
+    item->setText( 2, dev->mountDevice().isEmpty() ? dev->ioctlDevice() : dev->mountDevice() );
     if( !dev->mountPoint().isEmpty() )
-      item->setText( 2, dev->mountPoint() );
+      item->setText( 3, dev->mountPoint() );
     else {
       if( i == 0 )
-	item->setText( 2, "/cdrecorder" );
+	item->setText( 3, "/cdrecorder" );
       else
-	item->setText( 2, QString("/cdrecorder%1").arg(i) );
+	item->setText( 3, QString("/cdrecorder%1").arg(i) );
 
-      dev->setMountPoint( item->text(2) );
+      dev->setMountPoint( item->text(3) );
     }
       
     i++;

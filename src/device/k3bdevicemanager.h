@@ -59,6 +59,8 @@ class K3bDeviceManager : public QObject
    **/
   int scanbus();
 
+  void scanFstab();
+
   /**
    * Reads the device information from the config file.
    */
@@ -90,7 +92,6 @@ class K3bDeviceManager : public QObject
 
   QString m_processOutput;
 
-  void scanFstab();
   K3bDevice* initializeScsiDevice( cdrom_drive* );
   K3bDevice* initializeIdeDevice( cdrom_drive* );
 

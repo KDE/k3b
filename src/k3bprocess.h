@@ -1,8 +1,9 @@
 /***************************************************************************
-                          k3bmixedjob.h  -  Job that creates a mixed mode cd
+                          k3bprocess.h  -  
+                   KProcess with enhanced stderr handling
                              -------------------
-    begin                : Fri Aug 23 2002
-    copyright            : (C) 2002 by Sebastian Trueg
+    begin                : Wed Sep  4 12:01:14 CEST 2002
+    copyright            : (C) 2001 by Sebastian Trueg
     email                : trueg@informatik.uni-freiburg.de
  ***************************************************************************/
 
@@ -15,47 +16,32 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef K3BMIXEDJOB_H
-#define K3BMIXEDJOB_H
-
-#include "../k3bjob.h"
+#ifndef K3B_PROCESS_H
+#define K3B_PROCESS_H
 
 
-class K3bMixedDoc;
-class K3bIsoImager;
-class QFile;
-class QDataStream;
+#include <kprocess.h>
+#include <qstring.h>
 
-
-/**
-  *@author Sebastian Trueg
-  */
-class K3bMixedJob : public K3bBurnJob
+class K3bProcess : public KProcess
 {
   Q_OBJECT
-	
- public:
-  K3bMixedJob( K3bMixedDoc*, QObject* parent = 0 );
-  ~K3bMixedJob();
-	
-  K3bDoc* doc() const;
-/*   K3bDevice* writer() const; */
-		
- public slots:
-  void cancel();
-  void start();
 
- protected slots:
-  void slotSizeCalculationFinished( int, int );
-  void slotReceivedIsoImagerData( char*, int );
-  void slotIsoImagerFinished( bool success );
+ public:
+  K3bProcess();
+  ~K3bProcess();
+
+  bool start( RunMode run = NotifyOnExit, Communication com = NoCommunication );
+
+ private slots:
+  void slotSplitStderr( KProcess*, char*, int );
+
+ signals:
+  void stderrLine( const QString& line );
 
  private:
-  K3bMixedDoc* m_doc;
-  K3bIsoImager* m_isoImager;
-
-  QFile* m_isoImageFile;
-  QDataStream* m_isoImageFileStream;
+  QString m_notFinishedLine;
 };
+
 
 #endif

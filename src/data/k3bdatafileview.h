@@ -18,7 +18,7 @@
 #ifndef K3BDATAFILEVIEW_H
 #define K3BDATAFILEVIEW_H
 
-#include <klistview.h>
+#include "../tools/k3blistview.h"
 
 
 class K3bDataDoc;
@@ -38,7 +38,7 @@ class QPainter;
   *@author Sebastian Trueg
   */
 
-class K3bDataFileView : public KListView  
+class K3bDataFileView : public K3bListView  
 {
   Q_OBJECT
 
@@ -71,11 +71,6 @@ class K3bDataFileView : public KListView
 
  protected:
   bool acceptDrag(QDropEvent* e) const;
-  /**
-   * calls KListView::drawContentsOffset
-   * and paints a helper text if no item is in the list
-   */
-  virtual void drawContentsOffset ( QPainter * p, int ox, int oy, int cx, int cy, int cw, int ch );
 
  private:
   void setupActions();

@@ -1,17 +1,18 @@
 #include "k3bisoimager.h"
 
 #include <kdebug.h>
-#include <kprocess.h>
 #include <kstandarddirs.h>
 #include <klocale.h>
 
 #include <qfile.h>
 #include <qregexp.h>
+#include <qtimer.h>
 
 #include "k3bdatadoc.h"
 #include "../tools/k3bexternalbinmanager.h"
 #include "../device/k3bdevice.h"
 #include "k3bdiritem.h"
+#include "../k3bprocess.h"
 
 
 
@@ -22,9 +23,6 @@ K3bIsoImager::K3bIsoImager( K3bExternalBinManager* exbm, K3bDataDoc* doc, QObjec
     m_noDeepDirectoryRelocation( false ),
     m_importSession( false ),
     m_process( 0 ),
-    m_processFd( 0 ),
-    m_dataLength( 0 ),
-    m_dataBuffer( 0 ),
     m_mkisofsPrintSizeResult( 0 )
 {
 }
@@ -36,58 +34,63 @@ K3bIsoImager::~K3bIsoImager()
 }
 
 
-const char* K3bIsoImager::readData()
+void K3bIsoImager::slotReceivedStdout( KProcess*, char* d, int len )
 {
-  // clear previous buffer
-  if( m_dataBuffer )
-    delete [] m_dataBuffer;
-
-  m_dataBuffer = new char[m_dataLength+1];
-
-  if( m_dataLength <= 0 ) {
-    kdDebug() << "(K3bIsoImager) read without available data!" << endl;
-    return 0;
-  }
-
-  // read the data from the file descriptor
-  QFile f;
-  if( !f.open( IO_Raw | IO_ReadOnly, m_processFd ) ) {
-    kdDebug() << "(K3bIsoImager) could not open process file descriptor" << endl;
-    return 0;
-  }
-
-
-  if( f.readBlock( m_dataBuffer, m_dataLength ) < 0 ) {
-    kdDebug() << "(K3bIsoImager) error while reading from process file descriptor" << endl;
-    return 0;
-  }
-
-  m_dataLength = 0;
-
-  // resume the process
-  m_process->resume();
-
-  return m_dataBuffer;
+  m_process->suspend();
+  emit data( d, len );
 }
 
 
-void K3bIsoImager::slotReceivedStdout( int fd, int& len )
+void K3bIsoImager::resume()
 {
-  m_processFd = fd;
-  m_dataLength = len;
+  if( m_process )
+    if( m_process->isRunning() )
+      m_process->resume();
+}
 
-  emit data( len );
+void K3bIsoImager::slotReceivedStderr( const QString& line )
+{
+  if( line.contains( "done, estimate" ) ) {
+
+    QString perStr = line;
+    perStr.truncate( perStr.find('%') );
+    bool ok;
+    double p = perStr.toDouble( &ok );
+    if( !ok ) {
+      kdDebug() << "(K3bIsoImager) Parsing did not work for " << perStr << endl;
+    }
+    else {
+      emit percent( (int)p );
+    }
+  }
+  else if( line.contains( "extents written" ) ) {
+    emit percent( 100 );
+  }
+
+  else {
+    kdDebug() << "(mkisofs) " << line << endl;
+  }
 }
 
 
-void K3bIsoImager::slotReceivedStderr( KProcess*, char* data, int len )
+void K3bIsoImager::slotProcessExited( KProcess* p )
 {
+  if( p->normalExit() ) {
+    if( p->exitStatus() == 0 ) {
+      emit infoMessage( i18n("mkisofs finished successfully."), STATUS );
+      emit finished( true );
+    }
+    else {
+      emit infoMessage( i18n("mkisofs returned error: %1").arg(p->exitStatus()), ERROR );
+      emit finished( false );
+    }
+  }
+  else {
+    emit infoMessage( i18n("mkisofs exited abnormally."), ERROR );
+    emit finished( false );
+  }
 
-}
-
-
-void K3bIsoImager::slotProcessExited( KProcess* )
-{
+  cleanup();
 }
 
 
@@ -102,7 +105,6 @@ void K3bIsoImager::cleanup()
     QFile::remove( m_jolietHideFile );
   m_pathSpecFile = m_rrHideFile = m_jolietHideFile = QString::null;
 
-  delete [] m_dataBuffer;
   delete m_process;
   m_process = 0;
 }
@@ -110,13 +112,8 @@ void K3bIsoImager::cleanup()
 
 void K3bIsoImager::calculateSize()
 {
-  // write path spec file
-  // ----------------------------------------------------
-  m_pathSpecFile = locateLocal( "appdata", "temp/k3b_path_spec.mkisofs" );
-  if( !writePathSpec( m_pathSpecFile ) ) {
-    emit infoMessage( i18n("Could not write to temporary file %1").arg( m_pathSpecFile ), K3bJob::ERROR );
+  if( !prepareMkisofsFiles() ) {
     cleanup();
-
     emit sizeCalculated( ERROR, 0 );
     return;
   }
@@ -124,7 +121,7 @@ void K3bIsoImager::calculateSize()
 
   // determine iso-size
   delete m_process;
-  m_process = new KProcess();
+  m_process = new K3bProcess();
 
   if( !addMkisofsParameters() ) {
     cleanup();
@@ -227,11 +224,51 @@ void K3bIsoImager::slotMkisofsPrintSizeFinished()
 
 void K3bIsoImager::start()
 {
+  emit started();
+
+  if( !prepareMkisofsFiles() ) {
+    cleanup();
+    emit finished( false );
+    return;
+  }
+
+  delete m_process;
+  m_process = new K3bProcess();
+
+  if( !addMkisofsParameters() ) {
+    cleanup();
+
+    emit finished( false );
+    return;
+  }
+
+  connect( m_process, SIGNAL(processExited(KProcess*)),
+	   this, SLOT(slotProcessExited(KProcess*)) );
+
+//   connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
+// 	   this, SLOT(slotReceivedStderr(KProcess*, char*, int)) );
+
+  connect( m_process, SIGNAL(stderrLine( const QString& )), 
+	   this, SLOT(slotReceivedStderr( const QString& )) );
+
+  connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
+	   this, SLOT(slotReceivedStdout(KProcess*, char*, int)) );
+	
+  if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput) )
+    {
+      // something went wrong when starting the program
+      // it "should" be the executable
+      kdDebug() << "(K3bIsoImager) could not start mkisofs" << endl;
+      emit infoMessage( i18n("Could not start mkisofs."), K3bJob::ERROR );
+      emit finished( false );
+      cleanup();
+    }
 }
 
 
 void K3bIsoImager::cancel()
 {
+  m_process->kill();
 }
 
 
@@ -531,6 +568,36 @@ QString K3bIsoImager::escapeGraftPoint( const QString& str )
   newStr.replace( QRegExp( "=" ), "\\=" );
     
   return newStr;
+}
+
+
+bool K3bIsoImager::prepareMkisofsFiles()
+{
+  // write path spec file
+  // ----------------------------------------------------
+  m_pathSpecFile = locateLocal( "appdata", "temp/path_spec.mkisofs" );
+  if( !writePathSpec( m_pathSpecFile ) ) {
+    emit infoMessage( i18n("Could not write to temporary file %1").arg( m_pathSpecFile ), K3bJob::ERROR );
+    return false;
+  }
+
+  if( m_doc->isoOptions().createRockRidge() ) {
+    m_rrHideFile = locateLocal( "appdata", "temp/rr_hide.mkisofs" );
+    if( !writeRRHideFile( m_rrHideFile ) ) {
+      emit infoMessage( i18n("Could not write to temporary file %1").arg( m_rrHideFile ), K3bJob::ERROR );
+      return false;
+    }
+  }
+
+  if( m_doc->isoOptions().createJoliet() ) {
+    m_jolietHideFile = locateLocal( "appdata", "temp/joliet_hide.mkisofs" );
+    if( !writeJolietHideFile( m_jolietHideFile ) ) {
+      emit infoMessage( i18n("Could not write to temporary file %1").arg( m_rrHideFile ), K3bJob::ERROR );
+      return false ;
+    }
+  }
+
+  return true;
 }
 
 

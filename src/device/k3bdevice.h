@@ -68,6 +68,8 @@ class K3bDevice
    */
   virtual const QString& ioctlDevice() const;
 
+  const QString& mountDevice() const { return m_mountDevice; }
+
   /** makes only sense to use with sg devices */
   virtual QString busTargetLun() const;
 
@@ -117,6 +119,7 @@ class K3bDevice
   virtual void setBufferSize( int b ) { m_bufferSize = b; }
 
   void setMountPoint( const QString& );
+  void setMountDevice( const QString& d ) { m_mountDevice = d; }
 
   /** checks if unit is ready, returns:
    * <ul>
@@ -185,6 +188,7 @@ class K3bDevice
  private:
   QString m_genericDevice;
   QString m_ioctlDevice;
+  QString m_mountDevice;
   QString m_mountPoint;
 
   friend class K3bDeviceManager;

@@ -24,6 +24,11 @@
 
 #include "../k3b.h"
 
+#include <qfile.h>
+#include <qdatastream.h>
+
+#include <kdebug.h>
+#include <klocale.h>
 
 
 K3bMixedJob::K3bMixedJob( K3bMixedDoc* doc, QObject* parent )
@@ -33,6 +38,9 @@ K3bMixedJob::K3bMixedJob( K3bMixedDoc* doc, QObject* parent )
   m_isoImager = new K3bIsoImager( k3bMain()->externalBinManager(), doc->dataDoc(), this );
   connect( m_isoImager, SIGNAL(sizeCalculated(int, int)), this, SLOT(slotSizeCalculationFinished(int, int)) );
   connect( m_isoImager, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
+  connect( m_isoImager, SIGNAL(data(char*, int)), this, SLOT(slotReceivedIsoImagerData(char*, int)) );
+  connect( m_isoImager, SIGNAL(percent(int)), this, SIGNAL(subPercent(int)) );
+  connect( m_isoImager, SIGNAL(finished(bool)), this, SLOT(slotIsoImagerFinished(bool)) );
 }
 
 
@@ -60,8 +68,31 @@ void K3bMixedJob::cancel()
 
 void K3bMixedJob::slotSizeCalculationFinished( int status, int size )
 {
-  emit infoMessage( "Size calculated: " + QString::number(size), status );
-  emit finished( status != ERROR );
+  emit infoMessage( i18n("Size calculated: %1 (%2 Bytes)").arg(size).arg(size*2048), status );
+  if( status != ERROR ) {
+    m_isoImageFile = new QFile( "/home/trueg/tmp/image.iso" );
+    m_isoImageFile->open( IO_WriteOnly );
+    m_isoImageFileStream = new QDataStream( m_isoImageFile );
+    m_isoImager->start();    
+  }
+  else {
+    emit finished(false);
+  }
+}
+
+
+void K3bMixedJob::slotReceivedIsoImagerData( char* data, int len )
+{
+  m_isoImageFileStream->writeRawBytes( data, len );
+  m_isoImager->resume();
+}
+
+
+void K3bMixedJob::slotIsoImagerFinished( bool success )
+{
+  m_isoImageFile->close();
+  emit infoMessage( i18n("Size of iso image: %1").arg(m_isoImageFile->size() ), INFO );
+  emit finished( success );
 }
 
 

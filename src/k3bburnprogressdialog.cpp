@@ -157,6 +157,8 @@ void K3bBurnProgressDialog::closeEvent( QCloseEvent* e )
 
   if( m_buttonClose->isVisible() ) {
     KDialog::closeEvent( e );
+    if( !m_plainCaption.isEmpty() )
+      k3bMain()->setPlainCaption( m_plainCaption );
   }
 }
 
@@ -433,8 +435,9 @@ void K3bBurnProgressDialog::started()
 {
   m_timer->start( 1000 );
   m_startTime = QTime::currentTime();
-  m_lastAnimatedProgress = 0;
-  m_plainCaption = caption();
+  m_lastAnimatedProgress = -1;
+  m_plainCaption = k3bMain()->caption();
+  animateSystemTray( 0 );
 }
 
 
@@ -544,7 +547,7 @@ void K3bBurnProgressDialog::animateSystemTray( int percent )
 
 void K3bBurnProgressDialog::slotUpdateCaption( int percent )
 {
-  setCaption( QString( "(%1%) %2" ).arg(percent).arg(m_plainCaption) );
+  k3bMain()->setPlainCaption( QString( "(%1%) %2" ).arg(percent).arg(m_plainCaption) );
 }
 
 

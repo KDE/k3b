@@ -6,7 +6,7 @@
 class K3bDataDoc;
 class K3bDirItem;
 class QTextStream;
-class KProcess;
+class K3bProcess;
 class K3bExternalBinManager;
 
 
@@ -19,14 +19,6 @@ class K3bIsoImager : public K3bJob
   K3bIsoImager( K3bExternalBinManager*, K3bDataDoc*, QObject* parent = 0, const char* name = 0 );
   ~K3bIsoImager();
 
-  /**
-   * read the current data
-   * copy the data because it will be erased afterwards
-   */
-  const char* readData();
-
-  long dataLength() const { return m_dataLength; }
-
  public slots:
   void start();
   void cancel();
@@ -34,18 +26,24 @@ class K3bIsoImager : public K3bJob
 
   void setMultiSessionInfo( const QString& );
 
+  /**
+   * after data has been emitted image creation will
+   * be suspended until resume() is called
+   */
+  void resume();
+
  signals:
   void sizeCalculated( int exitCode, int size );
 
   /**
-   * After data has been emitted the image creation will be
-   * suspended until readData has been called
+   * after data has been emitted image creation will
+   * be suspended until resume() is called
    */
-  void data( int len );
+  void data( char* data, int len );
 
  private slots:
-  void slotReceivedStdout( int fd, int& len );
-  void slotReceivedStderr( KProcess*, char*, int );
+  void slotReceivedStdout( KProcess*, char*, int );
+  void slotReceivedStderr( const QString& );
   void slotProcessExited( KProcess* );
   void slotCollectMkisofsPrintSizeStderr(KProcess*, char*, int);
   void slotCollectMkisofsPrintSizeStdout(KProcess*, char*, int);
@@ -65,10 +63,7 @@ class K3bIsoImager : public K3bJob
   bool m_importSession;
   QString m_multiSessionInfo;
 
-  KProcess* m_process;
-  int m_processFd;
-  long m_dataLength;
-  char* m_dataBuffer;
+  K3bProcess* m_process;
 
   // used for mkisofs -print-size parsing
   QString m_collectedMkisofsPrintSizeStdout;
@@ -81,6 +76,7 @@ class K3bIsoImager : public K3bJob
   void writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream );
   QString escapeGraftPoint( const QString& str );
   bool addMkisofsParameters();
+  bool prepareMkisofsFiles();
 
   void cleanup();
 };

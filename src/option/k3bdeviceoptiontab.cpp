@@ -1,4 +1,3 @@
-
 #include "k3bdeviceoptiontab.h"
 #include "../device/k3bdevicemanager.h"
 #include "../device/k3bdevicewidget.h"

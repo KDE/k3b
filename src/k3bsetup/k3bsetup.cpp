@@ -37,6 +37,7 @@
 #include <sys/stat.h>
 #include <grp.h>
 #include <unistd.h>
+#include <fstab.h>
 
 
 K3bSetup::K3bSetup( QObject* parent )
@@ -321,23 +322,30 @@ void K3bSetup::doApplyExternalProgramPermissions( uint groupId )
 
 void K3bSetup::doCreateFstabEntries()
 {
-  emit writingSetting( i18n("Saving old %1 to %2").arg("/etc/fstab").arg("/etc/fstab.k3bsetup") );
+  // What this method really should do:
+  // create a fstab entry for every device that
+  // has an empty mountDevice or mountPoint
 
-  kdDebug() << "(K3bSetup) creating new /etc/fstab" << endl;
-  kdDebug() << "(K3bSetup) saving backup to /etc/fstab.k3bsetup" << endl;
+
+  QString fstabPath = QString::fromLatin1( _PATH_FSTAB );
+  QString backupFstabPath = fstabPath + ".k3bsetup";
+  emit writingSetting( i18n("Saving old %1 to %2").arg(fstabPath).arg(backupFstabPath) );
+
+  kdDebug() << "(K3bSetup) creating new " << fstabPath << endl;
+  kdDebug() << "(K3bSetup) saving backup to " << backupFstabPath << endl;
   
   // move /etc/fstab to /etc/fstab.k3bsetup
-  rename( "/etc/fstab", "/etc/fstab.k3bsetup" );
+  rename( fstabPath.latin1(), backupFstabPath.latin1() );
 
   emit settingWritten( true, i18n("Success") );
 
 
   // create fstab entries or update fstab entries
-  QFile oldFstabFile( "/etc/fstab.k3bsetup" );
+  QFile oldFstabFile( backupFstabPath );
   oldFstabFile.open( IO_ReadOnly );
   QTextStream fstabStream( &oldFstabFile );
   
-  QFile newFstabFile( "/etc/fstab" );
+  QFile newFstabFile( fstabPath );
   newFstabFile.open( IO_WriteOnly );
   QTextStream newFstabStream( &newFstabFile );
   
@@ -401,7 +409,7 @@ void K3bSetup::doCreateFstabEntries()
   newFstabFile.close();
 
   // set the correct permissions (although they seem to be correct. Just to be sure!)
-  chmod( "/etc/fstab", S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH );
+  chmod( fstabPath.latin1(), S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH );
 }
 
 

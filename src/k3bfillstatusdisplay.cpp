@@ -113,9 +113,9 @@ void K3bFillStatusDisplay::drawContents( QPainter* p )
 {
   erase( contentsRect() );
 
-  long docSize;
-  long cdSize;
-  long maxValue;
+  long long docSize;
+  long long cdSize;
+  long long maxValue;
   long tolerance;
 
   if( m_showTime ) {
@@ -164,7 +164,7 @@ void K3bFillStatusDisplay::drawContents( QPainter* p )
   // draw the text marks
   rect = contentsRect();
   rect.setLeft( (int)(one*cdSize) );
-  p->drawText( rect, Qt::AlignLeft | Qt::AlignVCenter, " " + QString::number(cdSize) );
+  p->drawText( rect, Qt::AlignLeft | Qt::AlignVCenter, " " + QString::number((long)cdSize) );
 }
 
 

@@ -9,6 +9,7 @@
 #include <qstringlist.h>
 #include <qptrlist.h>
 #include <qfile.h>
+#include <qfileinfo.h>
 
 #include <kprocess.h>
 #include <kapplication.h>
@@ -16,6 +17,7 @@
 
 #include <iostream>
 #include <fstab.h>
+#include <mntent.h>
 #include <stdio.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -100,13 +102,14 @@ void K3bDeviceManager::printDevices()
   kdDebug() << "\nReader:" << endl;
   for( K3bDevice * dev = m_reader.first(); dev != 0; dev = m_reader.next() ) {
     kdDebug() << "  " << ": " << dev->ioctlDevice() << " " << dev->genericDevice() << " " << dev->vendor() << " " 
-	 << dev->description() << " " << dev->version() << endl << "    " << dev->mountPoint() << endl;
+	      << dev->description() << " " << dev->version() << endl << "    " 
+	      << dev->mountDevice() << dev->mountPoint() << endl;
   }
   kdDebug() << "\nWriter:" << endl;
   for( K3bDevice * dev = m_writer.first(); dev != 0; dev = m_writer.next() ) {
     kdDebug() << "  " << ": " << dev->ioctlDevice() << " " << dev->genericDevice() << " " << dev->vendor() << " " 
 	 << dev->description() << " " << dev->version() << " " << dev->maxWriteSpeed() << endl
-	 << "    " << dev->mountPoint() << endl;
+	 << "    " << dev->mountDevice() << dev->mountPoint() << endl;
   }
   kdDebug() << flush;
 }
@@ -419,22 +422,58 @@ K3bDevice* K3bDeviceManager::addDevice( const QString& devicename )
 
 void K3bDeviceManager::scanFstab()
 {
-
-  // for the mountPoints we need to use the ioctl-device name
-  // since sg is no block device and so cannot be mounted
-
-  K3bDevice* dev = m_allDevices.first();
-  while( dev != 0 ) {
-    // mounting only makes sense with a working ioctlDevice
-    // if we do not have permission to read the device ioctlDevice is empty
-    struct fstab* fs = 0;
-    if( !dev->ioctlDevice().isEmpty() ) 
-      fs = getfsspec( QFile::encodeName(dev->ioctlDevice()) );
-    if( fs != 0 )
-      dev->setMountPoint( fs->fs_file );
-
-    dev = m_allDevices.next();
+  FILE* fstabFile = setmntent( _PATH_FSTAB, "r" );
+  if( !fstabFile ) {
+    kdDebug() << "(K3bDeviceManager) could not open " << _PATH_FSTAB << endl;
+    return;
   }
+
+
+  // clear all mount-Infos
+  for( QPtrListIterator<K3bDevice> it( m_allDevices ); it.current(); ++it ) {
+    it.current()->setMountPoint( QString::null );
+    it.current()->setMountDevice( QString::null );
+  }
+
+
+  struct mntent* mountInfo = 0;
+  while( mountInfo = getmntent( fstabFile ) ) {
+    // check if the entry corresponds to a device
+    QPtrListIterator<K3bDevice> it( m_allDevices );
+    while( K3bDevice* dev = *it ) {
+      QFileInfo fi( mountInfo->mnt_fsname );
+      // use the first found entry
+      if( dev->mountDevice().isEmpty() &&
+	  (( fi.absFilePath() == dev->ioctlDevice() ) || 
+	   ( fi.isSymLink() && fi.readLink() == dev->ioctlDevice() ))
+	  ) {
+	dev->setMountPoint( mountInfo->mnt_dir );
+	dev->setMountDevice( fi.absFilePath() );
+      }
+
+      ++it;
+    }
+  }
+
+  endmntent( fstabFile );
+
+//   // for the mountPoints we need to use the ioctl-device name
+//   // since sg is no block device and so cannot be mounted
+
+
+
+//   K3bDevice* dev = m_allDevices.first();
+//   while( dev != 0 ) {
+//     // mounting only makes sense with a working ioctlDevice
+//     // if we do not have permission to read the device ioctlDevice is empty
+//     struct fstab* fs = 0;
+//     if( !dev->ioctlDevice().isEmpty() ) 
+//       fs = getfsspec( QFile::encodeName(dev->ioctlDevice()) );
+//     if( fs != 0 )
+//       dev->setMountPoint( fs->fs_file );
+
+//     dev = m_allDevices.next();
+//   }
 }
 
 

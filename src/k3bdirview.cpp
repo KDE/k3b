@@ -232,14 +232,14 @@ void K3bDirView::slotMountDevice( K3bDevice* device )
 
   if( !mountPoint.isEmpty() ){
     if( KIO::findDeviceMountPoint( device->ioctlDevice() ).isEmpty() )
-      connect( KIO::mount( true, "autofs", device->ioctlDevice(), mountPoint, true ), SIGNAL(result(KIO::Job*)),
+      connect( KIO::mount( true, "autofs", device->mountDevice(), mountPoint, true ), SIGNAL(result(KIO::Job*)),
 	       this, SLOT(reload()) );
     
     KURL url = KURL( mountPoint );
     slotDirActivated( url );
   }
   else {
-    KMessageBox::error( this, i18n("K3b could not mount %1. Please run K3bSetup.").arg(device->ioctlDevice()),
+    KMessageBox::error( this, i18n("K3b could not mount %1. Please run K3bSetup.").arg(device->mountDevice()),
 			i18n("I/O error") );
   }
 }

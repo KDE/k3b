@@ -226,21 +226,26 @@ void K3bDvdRippingProcess::preProcessingDvd( ){
         K3bDevice *dev = k3bMain()->deviceManager()->deviceByName( m_device );
         m_mountPoint = dev->mountPoint();
         if( !m_mountPoint.isEmpty() ){
-             QString mount = KIO::findDeviceMountPoint( dev->ioctlDevice() );
+             QString mount = KIO::findDeviceMountPoint( dev->mountDevice() );
              if( mount.isEmpty() ){
-                connect( KIO::mount( true, "autofs", dev->ioctlDevice(), m_mountPoint, true ), SIGNAL(result(KIO::Job*)), this, SLOT( slotPreProcessingDvd() ) );
+                connect( KIO::mount( true, "autofs", dev->mountDevice(), m_mountPoint, true ), 
+			 SIGNAL(result(KIO::Job*)), this, SLOT( slotPreProcessingDvd() ) );
             } else {
                 m_mountPoint = mount;
                 m_dvdAlreadyMounted = true;
                 slotPreProcessingDvd();
             }
         } else {
-            KMessageBox::error(m_parent, i18n("K3b could not mount %1. Please run K3bSetup.").arg(dev->ioctlDevice()),i18n("I/O error") );
+            KMessageBox::error(m_parent, i18n("K3b could not mount %1. Please run K3bSetup.").arg(dev->mountDevice()),
+			       i18n("I/O error") );
         }
     }
 }
 
 void K3bDvdRippingProcess::slotPreProcessingDvd( ){
+
+  // hier sollte auf jeden Fall getestet werden, ob das mounten erfolgreich war!!!!
+
     // read directory from /dev/dvd
     if( !m_mountPoint.isEmpty() ){
         QDir video_ts( m_mountPoint + "/video_ts", "*.ifo");
