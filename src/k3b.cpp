@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
@@ -99,7 +99,7 @@ K3bMainWindow* k3bMain()
 
 
 K3bMainWindow::K3bMainWindow()
-  : KDockMainWindow(0,"K3b")
+  : DockMainWindow(0,"K3b")
 {
   s_k3bMainWindow = this;
 
@@ -127,7 +127,7 @@ K3bMainWindow::K3bMainWindow()
   initView();
   initStatusBar();
   initActions();
-  createGUI();
+  createShellGUI(true);
 
   // fill the tabs action menu
   m_documentTab->insertAction( actionFileSave );
@@ -728,6 +728,12 @@ void K3bMainWindow::slotFileClose()
 
   if( K3bView* view = activeView() )
     {
+      if (view->getDocument()->docType() == K3bDoc::DATA) {
+        actionDataClearImportedSession->setEnabled(false);
+        actionDataImportSession->setEnabled(false);
+        actionDataEditBootImages->setEnabled(false);
+        unplugActionList( "data_project_actions" );
+      }
       view->close(true);
     }
 
@@ -946,7 +952,7 @@ void K3bMainWindow::slotEditToolbars()
 
 void K3bMainWindow::slotNewToolBarConfig()
 {
-  createGUI();
+//  createGUI();
   slotCurrentDocChanged(0);  // make sure the project-specific actions get activated
   applyMainWindowSettings( m_config, "main_window_settings" );
 }

@@ -30,6 +30,7 @@
 
 // include files for KDE
 #include <kapplication.h>
+#include <kparts/dockmainwindow.h>
 #include <kdockwidget.h>
 #include <kaction.h>
 #include <kurl.h>
@@ -76,7 +77,7 @@ K3bMainWindow* k3bMain();
   *
   * @author Sebastian Trueg
   */
-class K3bMainWindow : public KDockMainWindow
+class K3bMainWindow : public KParts::DockMainWindow
 {
   Q_OBJECT
 
