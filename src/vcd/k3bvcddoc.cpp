@@ -63,7 +63,6 @@ K3bVcdDoc::K3bVcdDoc( QObject* parent )
   : K3bDoc( parent )
 {
   m_tracks = 0L;
-  m_mpegFactory = 0L;
   m_vcdOptions = 0L;
 
   m_docType = VCD;
@@ -83,8 +82,6 @@ K3bVcdDoc::~K3bVcdDoc()
   if ( m_vcdOptions )
     delete m_vcdOptions;
 
-  if ( m_mpegFactory )
-    delete m_mpegFactory;
 }
 
 bool K3bVcdDoc::newDocument()
@@ -98,7 +95,6 @@ bool K3bVcdDoc::newDocument()
   m_tracks->setAutoDelete( false );
 
   m_vcdOptions = new K3bVcdOptions();
-  m_mpegFactory = new K3bVcdMpegFactory();
 
   return K3bDoc::newDocument();
 }
@@ -183,8 +179,7 @@ void K3bVcdDoc::slotWorkUrlQueue()
 K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
 {
   kdDebug() << QString("(K3bVcdDoc) createTrack url.path = %1").arg(url.path()) << endl;
-  int i = identifyMpegFile( url );
-  uint mpeg = m_mpegFactory->getMpegFileType( url );
+  int mpeg = identifyMpegFile( url );
   if (mpeg > 0) {
     if (vcdType() == NONE) {
       setVcdType(vcdTypes(mpeg));
@@ -311,8 +306,7 @@ unsigned int K3bVcdDoc::identifyMpegFile( const KURL& url )
   Tab.PrintInfos();
   Tab.PrintTab();
   // return 0 = Unknown file type, 1 = Mpeg 1, 2 = Mpeg 2
-  // return m_mpegFactory.getMpegFileType( url );
-  return 0;
+  return Tab.MpegVersion();
 }
 
 void K3bVcdDoc::informAboutNotFoundFiles()

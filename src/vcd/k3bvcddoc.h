@@ -19,7 +19,6 @@
 #define K3BVCDDOC_H
 
 #include "k3bvcdoptions.h"
-#include "k3bvcdmpegfactory.h"
 #include "mpeginfo/mpeg.h"
 #include "mpeginfo/chunkTab.h"
 #include "../k3bdoc.h"
@@ -37,7 +36,6 @@ class K3bApp;
 class K3bVcdTrack;
 class K3bVcdJob;
 class K3bView;
-class K3bVcdMpegFactory;
 class QWidget;
 class QTimer;
 class QDomDocument;
@@ -151,7 +149,6 @@ class K3bVcdDoc : public K3bDoc
   unsigned long long calcTotalSize() const;
   K3bVcdTrack* m_lastAddedTrack;
   K3bVcdOptions* m_vcdOptions;
-  K3bVcdMpegFactory* m_mpegFactory;
 
   bool m_deleteImage;
   int m_vcdType;
