@@ -91,7 +91,7 @@
                         <cstring>m_checkAllowMultiDot</cstring>
                     </property>
                     <property name="text">
-                        <string>Allow multible dots</string>
+                        <string>Allow multiple dots</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox" row="3" column="1">
@@ -178,7 +178,7 @@
                         <cstring>m_checkAllowBeginningPeriod</cstring>
                     </property>
                     <property name="text">
-                        <string>Allow beginning period</string>
+                        <string>Allow leading period</string>
                     </property>
                 </widget>
             </grid>
@@ -217,7 +217,7 @@
 &lt;li&gt;Level 2: Files may only consist of one section.&lt;/li&gt;
 &lt;li&gt;Level 3: No restrictions.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;With all ISO-9660 levels all filenames are restricted to upper case letters, numbers and the underscore (_). The maximum filename length is 31 characters, the directory nesting level is restricted to 8 and the maximum path length is limited to 255 characters. (These restrictions may be violated with the additional ISO-9660 K3b offers.)</string>
+&lt;p&gt;With all ISO-9660 levels, all filenames are restricted to upper case letters, numbers and the underscore (_). The maximum filename length is 31 characters, the directory nesting level is restricted to 8 and the maximum path length is limited to 255 characters. (These restrictions may be violated with the additional ISO-9660 K3b offers).</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton">

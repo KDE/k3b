@@ -38,7 +38,7 @@
                 </sizepolicy>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>&lt;p&gt;Here you can setup the audio cd ripping pattern which states how your ripped tracks will be saved. The basic system allows to set some standard pattern. If you want to have full control over the pattern please use the advanced pattern system.</string>
+                <string>&lt;p&gt;Here you can setup the audio CD ripping pattern which states how your ripped tracks will be saved. The basic system allows setting of a standard pattern. If you want to have full control over the pattern please use the advanced pattern system.</string>
             </property>
             <widget class="QWidget">
                 <property name="name">
@@ -249,7 +249,7 @@
                             <cstring>m_groupAdvancedDirectoryPattern</cstring>
                         </property>
                         <property name="title">
-                            <string>Direcory Pattern</string>
+                            <string>Directory Pattern</string>
                         </property>
                         <vbox>
                             <property name="name">
@@ -309,8 +309,8 @@
 &lt;li&gt;%a - Will be replaced by the artist of the track
 &lt;li&gt;%t - Will be replaced by the title of the track
 &lt;li&gt;%n - Will be replaced by the track number
-&lt;li&gt;%e - Will be replaced by extended info about the track
-&lt;li&gt;%g - Will be replaced by the genre of the cd</string>
+&lt;li&gt;%e - Will be replaced by extended information about the track
+&lt;li&gt;%g - Will be replaced by the genre of the CD</string>
                         </property>
                         <property name="alignment">
                             <set>WordBreak|AlignTop</set>
@@ -332,7 +332,7 @@
                             <string>&lt;p&gt;&lt;ul&gt;
 &lt;li&gt;%r - Will be replaced by the album artist (differs from %a only on soundtracks or compilations)
 &lt;li&gt;%m - Will be replaced by the album title
-&lt;li&gt;%x - Will be replaced by extended info about the cd
+&lt;li&gt;%x - Will be replaced by extended information about the CD
 &lt;li&gt;%d - Will be replaced by the current date</string>
                         </property>
                         <property name="alignment">
@@ -352,7 +352,7 @@
                             </sizepolicy>
                         </property>
                         <property name="text">
-                            <string>&lt;p&gt;You can use one of the predefined or define your own. You are free to add any text you want along with some special strings that will be replaced by the values gained from cddb. These special strings are:</string>
+                            <string>&lt;p&gt;You can use one of the predefined ones, or define your own. You are free to add any text you want along with some special strings that will be replaced by the values gained from CDDB. These special strings are:</string>
                         </property>
                         <property name="alignment">
                             <set>WordBreak|AlignTop|AlignLeft</set>
@@ -536,7 +536,7 @@
                         <string>This is how the ripped audio tracks will be saved</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;This is an example for the directory and filenaming when ripping audio tracks from a cd. The used names have nothing to do with your environment. They are set by the author ;-)</string>
+                        <string>&lt;p&gt;This is an example for the directory and file naming when ripping audio tracks from a CD. The names used have nothing to do with your environment. They are set by the author.</string>
                     </property>
                 </widget>
                 <spacer>
