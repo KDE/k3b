@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -159,8 +159,10 @@ void K3bProjectBurnDialog::toggleAllOptions()
   m_checkSimulate->setDisabled( m_checkOnlyCreateImage->isChecked() );
   m_checkOnTheFly->setDisabled( m_checkOnlyCreateImage->isChecked() );
   m_checkRemoveBufferFiles->setDisabled( m_checkOnlyCreateImage->isChecked() || m_checkOnTheFly->isChecked() );
-  if( m_checkOnlyCreateImage->isChecked() )
+  if( m_checkOnlyCreateImage->isChecked() ) {
     m_checkRemoveBufferFiles->setChecked(false);
+    actionButton(Ok)->setDisabled(false);
+  }
   m_tempDirSelectionWidget->setDisabled( m_checkOnTheFly->isChecked() && !m_checkOnlyCreateImage->isChecked() );
 }
 
@@ -291,6 +293,7 @@ void K3bProjectBurnDialog::prepareGui()
   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(toggleAllOptions()) );
 
   m_tempDirSelectionWidget->setNeededSize( doc()->size() );
+  toggleAllOptions();
 }
 
 
