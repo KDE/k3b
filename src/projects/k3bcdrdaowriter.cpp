@@ -52,7 +52,38 @@
 
 
 
-inline bool operator<( const ProgressMsg& m1, const ProgressMsg& m2 )
+#define PGSMSG_MIN PGSMSG_RCD_ANALYZING
+#define PGSMSG_RCD_ANALYZING   1
+#define PGSMSG_RCD_EXTRACTING  2 
+#define PGSMSG_WCD_LEADIN      3
+#define PGSMSG_WCD_DATA        4
+#define PGSMSG_WCD_LEADOUT     5
+#define PGSMSG_BLK             6
+#define PGSMSG_MAX PGSMSG_BLK
+
+struct ProgressMsg {
+  int status;         // see PGSMSG_* constants
+  int totalTracks;    // total number of tracks
+  int track;          // actually written track
+  int trackProgress;  // progress for current track 0..1000
+  int totalProgress;  // total writing progress 0..1000
+  int bufferFillRate; // buffer fill rate 0..100
+};
+
+#define PSGMSG_MINSIZE 24
+
+struct ProgressMsg2 {
+  int status;         // see PGSMSG_* constants
+  int totalTracks;    // total number of tracks
+  int track;          // actually written track
+  int trackProgress;  // progress for current track 0..1000
+  int totalProgress;  // total writing progress 0..1000
+  int bufferFillRate; // buffer fill rate 0..100
+  int writerFillRate; // device write buffer fill rate 0..100
+};
+
+
+inline bool operator<( const ProgressMsg2& m1, const ProgressMsg2& m2 )
 {
   return m1.track < m2.track
          || ( m1.track == m2.track
@@ -61,7 +92,7 @@ inline bool operator<( const ProgressMsg& m1, const ProgressMsg& m2 )
 }
 
 
-inline bool operator==( const ProgressMsg& m1, const ProgressMsg& m2 )
+inline bool operator==( const ProgressMsg2& m1, const ProgressMsg2& m2 )
 {
   return m1.status == m2.status
          && m1.track == m2.track
@@ -71,7 +102,7 @@ inline bool operator==( const ProgressMsg& m1, const ProgressMsg& m2 )
          && m1.bufferFillRate == m2.bufferFillRate;
 }
 
-inline bool operator!=( const ProgressMsg& m1, const ProgressMsg& m2 )
+inline bool operator!=( const ProgressMsg2& m1, const ProgressMsg2& m2 )
 {
   return !( m1 == m2 );
 }
@@ -87,6 +118,9 @@ public:
   K3bThroughputEstimator* speedEst;
 
   int usedSpeed;
+
+  ProgressMsg2 oldMsg;
+  ProgressMsg2 newMsg;
 };
 
 
@@ -119,42 +153,8 @@ K3bCdrdaoWriter::K3bCdrdaoWriter( K3bCdDevice::CdDevice* dev, QObject* parent, c
   k3bcore->config()->setGroup("General Options");
   m_eject = !k3bcore->config()->readBoolEntry( "No cd eject", false );
 
-  QPtrList<K3bCdDevice::CdDevice> devices;
-  K3bCdDevice::CdDevice *d;
-  if ( !dev )
-  {
-    devices = k3bcore->deviceManager()->burningDevices();
-    d = devices.first();
-    while( d )
-    {
-      if( d->interfaceType() == K3bCdDevice::CdDevice::SCSI )
-      {
-        setBurnDevice(d);
-        break;
-      }
-      d = devices.next();
-    }
-  }
-  devices = k3bcore->deviceManager()->readingDevices();
-  d = devices.first();
-  while( d )
-  {
-    if( d->interfaceType() == K3bCdDevice::CdDevice::SCSI )
-    {
-      m_sourceDevice = d;
-      break;
-    }
-    d = devices.next();
-  }
-  if ( !m_sourceDevice )
-    m_sourceDevice = burnDevice();
-
-  m_oldMsg = new ProgressMsg;
-  m_newMsg = new ProgressMsg;
-
-  m_oldMsg->track = 0;
-  m_oldMsg->trackProgress = 0;
-  m_oldMsg->totalProgress = 0;
+  ::memset( &d->oldMsg, 0, sizeof(ProgressMsg2) );
+  ::memset( &d->newMsg, 0, sizeof(ProgressMsg2) );
 
   if( socketpair(AF_UNIX,SOCK_STREAM,0,m_cdrdaoComm) )
   {
@@ -170,7 +170,7 @@ K3bCdrdaoWriter::K3bCdrdaoWriter( K3bCdDevice::CdDevice* dev, QObject* parent, c
     // magic number from Qt documentation
     m_comSock->socketDevice()->setBlocking(false);
     connect( m_comSock, SIGNAL(readyRead()),
-             this, SLOT(getCdrdaoMessage()));
+             this, SLOT(parseCdrdaoMessage()));
   }
 }
 
@@ -186,8 +186,6 @@ K3bCdrdaoWriter::~K3bCdrdaoWriter()
   }
   delete m_process;
   delete m_comSock;
-  delete m_oldMsg;
-  delete m_newMsg;
 }
 
 
@@ -771,11 +769,6 @@ void K3bCdrdaoWriter::slotProcessExited( KProcess* p )
   }
 }
 
-void K3bCdrdaoWriter::getCdrdaoMessage()
-{
-  parseCdrdaoMessage(m_comSock);
-}
-
 
 void K3bCdrdaoWriter::unknownCdrdaoLine( const QString& line )
 {
@@ -796,14 +789,9 @@ void K3bCdrdaoWriter::unknownCdrdaoLine( const QString& line )
 
 void K3bCdrdaoWriter::reinitParser()
 {
-  delete m_oldMsg;
-  delete m_newMsg;
-  m_oldMsg = new ProgressMsg;
-  m_newMsg = new ProgressMsg;
+  ::memset( &d->oldMsg, 0, sizeof(ProgressMsg2) );
+  ::memset( &d->newMsg, 0, sizeof(ProgressMsg2) );
 
-  m_oldMsg->track = 0;
-  m_oldMsg->trackProgress = 0;
-  m_oldMsg->totalProgress = 0;
   m_currentTrack=0;
 }
 
@@ -909,104 +897,92 @@ void K3bCdrdaoWriter::parseCdrdaoWrote( const QString& line )
   emit processedSize( processed, m_size );
 }
 
-void K3bCdrdaoWriter::parseCdrdaoMessage(QSocket *comSock)
+
+void K3bCdrdaoWriter::parseCdrdaoMessage()
 {
-  char msgSync[] = { 0xff, 0x00, 0xff, 0x00 };
-  char buf;
-  int  state;
-  unsigned int  avail,count;
-  QString task;
-  int msgs;
+  unsigned int progressMsgSize = 0;
+  if( m_cdrdaoBinObject->version >= K3bVersion( 1, 1, 8 ) )
+    progressMsgSize = sizeof(ProgressMsg2);
+  else
+    progressMsgSize = sizeof(ProgressMsg);
 
-  avail = comSock->bytesAvailable();
-  count = 0;
+  static const char msgSync[] = { 0xff, 0x00, 0xff, 0x00 };
+  unsigned int avail = m_comSock->bytesAvailable();
+  unsigned int msgs = avail / ( sizeof(msgSync)+progressMsgSize );
+  unsigned int count = 0;
 
-  msgs = avail / ( sizeof(msgSync)+sizeof(struct ProgressMsg) );
   if ( msgs < 1 )
     return;
-  else if ( msgs > 1)
-  {
+  else if ( msgs > 1) {
     // move the read-index forward to the beginnig of the most recent message
-    count = ( msgs-1 ) * ( sizeof(msgSync)+sizeof(struct ProgressMsg) );
-    comSock->at(count);
+    count = ( msgs-1 ) * ( sizeof(msgSync)+progressMsgSize );
+    m_comSock->at(count);
     kdDebug() << "(K3bCdrdaoParser) " << msgs-1 << " message(s) skipped" << endl;
   }
-  while (count < avail)
-  {
-    state = 0;
-    while (state < 4)
-    {
-      buf=comSock->getch();
-      count++;
-      if (count == avail)
-      {
+
+  while( count < avail ) {
+
+    // search for msg sync
+    int state = 0;
+    char buf;
+    while( state < 4 ) {
+      buf = m_comSock->getch();
+      ++count;
+      if( count == avail ) {
         kdDebug() << "(K3bCdrdaoParser) remote message sync not found (" << count << ")" << endl;
         return;
       }
 
-      if (buf == msgSync[state])
-        state++;
+      if( buf == msgSync[state] )
+        ++state;
       else
         state = 0;
     }
 
-    if( (avail - count) < (int)sizeof(struct ProgressMsg) )
-    {
+    if( (avail - count) < progressMsgSize ) {
       kdDebug() << "(K3bCdrdaoParser) could not read complete remote message." << endl;
       return;
     }
 
-    // read one message
-    int size = comSock->readBlock((char *)m_newMsg,sizeof(struct ProgressMsg));
-    if( size == -1 )
+    // read one message (the message size changed in cdrdao 1.1.8)
+    ::memset( &d->newMsg, 0, sizeof(ProgressMsg2) );
+    int size = m_comSock->readBlock( (char*)&d->newMsg, progressMsgSize);
+    if( size == -1 ) {
       kdDebug() << "(K3bCdrdaoParser) read error" << endl;
+      return;
+    }
     count += size;
-
-    //   kdDebug() << "Status: " << msg.status
-    // 	    << " Total:  " << msg.totalTracks
-    // 	    << " Track:  " << msg.track
-    // 	    << " TrackProgress: " << msg.trackProgress/10
-    // 	    << " TotalProgress: " << msg.totalProgress/10
-    // 	    << endl;
 
     // sometimes the progress takes one step back (on my system when using paranoia-level 3)
     // so we just use messages that are greater than the previous or first messages
-    if( *m_oldMsg < *m_newMsg
-        || ( m_newMsg->track == 1 &&
-             m_newMsg->trackProgress <= 10 ))
-    {
-      emit subPercent( m_newMsg->trackProgress/10 );
-      emit percent( m_newMsg->totalProgress/10 );
-      emit buffer(m_newMsg->bufferFillRate);
+    if( d->oldMsg < d->newMsg
+        || ( d->newMsg.track == 1 &&
+             d->newMsg.trackProgress <= 10 )) {
 
-      if ( m_newMsg->track != m_currentTrack)
-      {
-        switch (m_newMsg->status)
-        {
+      emit subPercent( d->newMsg.trackProgress/10 );
+      emit percent( d->newMsg.totalProgress/10 );
+      emit buffer(d->newMsg.bufferFillRate);
+
+      if( d->newMsg.track != m_currentTrack ) {
+        switch( d->newMsg.status ) {
         case PGSMSG_RCD_EXTRACTING:
-          //	task = i18n("Reading (Track %1 of %2)").arg(m_newMsg->track).arg(m_newMsg->totalTracks);
-          emit nextTrack( m_newMsg->track, m_newMsg->totalTracks );
+          emit nextTrack( d->newMsg.track, d->newMsg.totalTracks );
           break;
         case PGSMSG_WCD_LEADIN:
-          task = i18n("Writing leadin ");
-          emit newSubTask( task );
+          emit newSubTask( i18n("Writing leadin ") );
           break;
         case PGSMSG_WCD_DATA:
-          //	task = i18n("Writing (Track %1 of %2)").arg(m_newMsg->track).arg(m_newMsg->totalTracks);
-          emit nextTrack( m_newMsg->track, m_newMsg->totalTracks );
+          emit nextTrack( d->newMsg.track, d->newMsg.totalTracks );
           break;
         case PGSMSG_WCD_LEADOUT:
-          task = i18n("Writing leadout ");
-          emit newSubTask( task );
+          emit newSubTask( i18n("Writing leadout ") );
           break;
         }
 
-        m_currentTrack = m_newMsg->track;
+        m_currentTrack = d->newMsg.track;
       }
 
-      struct ProgressMsg* m = m_newMsg;
-      m_newMsg = m_oldMsg;
-      m_oldMsg = m;
+      ::memcpy( &d->oldMsg, &d->newMsg, sizeof(ProgressMsg2) );
     }
   }
 }

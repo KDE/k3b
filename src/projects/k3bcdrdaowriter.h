@@ -20,7 +20,6 @@
 
 
 #include "k3babstractwriter.h"
-#include "remote.h"
 
 class K3bExternalBin;
 class K3bProcess;
@@ -58,7 +57,6 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
   void parseCdrdaoLine( const QString& line );
   void parseCdrdaoWrote( const QString& line );
   void parseCdrdaoError( const QString& line ); 
-  void parseCdrdaoMessage(QSocket *comSock);	  
 
  public slots:
   void start();
@@ -95,7 +93,7 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
  private slots:
   void slotStdLine( const QString& line );
   void slotProcessExited(KProcess*);
-  void getCdrdaoMessage();
+  void parseCdrdaoMessage();
   void slotThroughput( int t );
 
  private:
@@ -150,8 +148,6 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
 
   int m_size;
   int m_currentTrack;
-  struct ProgressMsg* m_oldMsg;
-  struct ProgressMsg* m_newMsg;
 
   bool m_forceNoEject;
 
