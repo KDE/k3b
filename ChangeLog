@@ -1,5 +1,8 @@
 0.11.3
 fixed features detection with some devices.
+fixed multisession writing on some systems (K3b used to open the device instead of leaving it to mkisofs to
+	prevent permission problems. Sadly this does not work with all systems since it seems that K3b does
+	not close the device early enough so cdrecord cannot open it.)
 
 0.11.2
 K3bProcess now has a clean API and a non-stupid implementation which fixes the kde 3.2 issue
