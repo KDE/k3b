@@ -24,13 +24,13 @@ K3bDiskInfoDetector::K3bDiskInfoDetector( QObject* parent )
   : QObject( parent )
 {
   m_tcWrapper = 0;
-  m_process = new KProcess();
+  QTimer::singleShot(0,this,SLOT(detect()));
 }
 
 
 K3bDiskInfoDetector::~K3bDiskInfoDetector()
 {
-  delete m_process;
+   ::close(m_cdfd);
 }
 
 
@@ -41,349 +41,151 @@ void K3bDiskInfoDetector::detect( K3bDevice* device )
     return;
   }
 
-  cancel();
-
-  m_bCanceled = false;
-
   m_device = device;
 
   // reset
   m_info = K3bDiskInfo();
   m_info.device = m_device;
+  if ( (m_cdfd = ::open(m_device->ioctlDevice().latin1(),O_RDONLY | O_NONBLOCK)) == -1 ) {
+    kdDebug() << "(K3bDiskInfoDetector) could not open device !" << endl;
+    return;
+  }
 
-
-  // since fetchTocInfo could already emit the diskInfoReady signal
-  // and detect needs to return before this happens use the timer
-  if( device->interfaceType() == K3bDevice::SCSI )
-    QTimer::singleShot( 0, this, SLOT(fetchTocInfo()) );
-  else
-    QTimer::singleShot( 0, this, SLOT(fetchIdeInformation()) );
+  fetchTocInfo();
 }
 
 
 void K3bDiskInfoDetector::cancel()
 {
-  m_bCanceled = true;
-  if( m_process->isRunning() )
-    m_process->kill();
+}
+
+void K3bDiskInfoDetector::finish(bool success)
+{
+  m_info.valid=success;
+  ::close(m_cdfd);
+  emit diskInfoReady(m_info);
+
 }
 
 
 void K3bDiskInfoDetector::fetchDiskInfo()
 {
-  if( m_bCanceled )
-    return;
+  struct cdrom_generic_command cmd;
+  unsigned char inf[32];
 
-  m_process->clearArguments();
-  m_process->disconnect();
-
-  if( !k3bMain()->externalBinManager()->foundBin( "cdrdao" ) ) {
-    kdDebug() << "(K3bDiskInfoDetector) could not find cdrdao executable. no disk-info..." << endl;
-    testForDvd();
-  }
-  else {
-    *m_process << k3bMain()->externalBinManager()->binPath( "cdrdao" );
-
-    *m_process << "disk-info";
-    *m_process << "--device" << m_device->busTargetLun();
-
-    if( m_device->cdrdaoDriver() != "auto" )
-      *m_process << "--driver" << m_device->cdrdaoDriver();
-
-    connect( m_process, SIGNAL(processExited(KProcess*)),
-	     this, SLOT(slotDiskInfoFinished()) );
-    connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
-	     this, SLOT(slotCollectStderr(KProcess*, char*, int)) );
-    connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
-	     this, SLOT(slotCollectStdout(KProcess*, char*, int)) );
-
-    m_collectedStdout = QString::null;
-    m_collectedStderr = QString::null;
-
-    if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
-      kdDebug() << "(K3bDiskInfoDetector) could not start cdrdao." << endl;
-      testForDvd();
+  ::memset(&cmd,0,sizeof (struct cdrom_generic_command));
+  ::memset(inf,0,32);
+  cmd.cmd[0] = GPCMD_READ_DISC_INFO;
+  cmd.cmd[8] = 32;
+  cmd.buffer = inf;
+  cmd.buflen = 32;
+  cmd.data_direction = CGC_DATA_READ;
+ 
+  if ( ::ioctl(m_cdfd,CDROM_SEND_PACKET,&cmd) == 0 ) {
+    m_info.appendable = ( (inf[2] & 0x03) < 2 );        // disc state incomplete
+    m_info.empty = ( (inf[2] & 0x03) == 0 );
+    m_info.cdrw =( ((inf[2] >> 4 ) & 0x01) == 1 );      // erasable
+    if ( inf[21] != 0xFF && inf[22] != 0xFF && inf[23] != 0xFF ) {
+      m_info.size = inf[21]*4500 + inf[22]*75 +inf[23] - 150;
+      m_info.sizeString = QString("%1:%2:%3").arg(inf[21]).arg(inf[22]).arg(inf[23]);
     }
-  }
+    if ( inf[17] != 0xFF && inf[18] != 0xFF && inf[19] != 0xFF ) { // start of last leadin - 4650
+      m_info.remaining = m_info.size - inf[17]*4500 - inf[18]*75 - inf[19] - 4650;
+      m_info.remainingString = QString("%1:%2:%3").arg(inf[17]).arg(inf[18]).arg(inf[19]);
+    }
+  } 
 }
-
-
-void K3bDiskInfoDetector::slotDiskInfoFinished()
-{
-  // cdrdao finished, now parse the stdout output to check if it was successfull
-  if( m_collectedStdout.isEmpty() ) {
-    kdDebug() << "(K3bDiskInfoDetector) disk-info gave no result... :-(" << endl;
-  }
-  else {
-    // this is what we can use:
-    // ------------------------
-    // CD-RW
-    // Total Capacity
-    // CD-R medium (2 rows)
-    // CD-R empty
-    // Toc Type
-    // Sessions
-    // Appendable
-    // Remaining Capacity
-    // ------------------------
-
-    // split to lines
-    QStringList lines = QStringList::split( "\n", m_collectedStdout );
-
-    for( QStringList::Iterator it = lines.begin(); it != lines.end(); ++it ) {
-      QString& str = *it;
-
-      if( str.startsWith("CD-RW") ) {
-	QString value = str.mid( str.find(":")+1 ).stripWhiteSpace();
-	m_info.cdrw = (value == "yes");
-      }
-
-      else if( str.startsWith("Total Capacity") ) {
-	m_info.sizeString = str.mid( str.find(":")+1 ).stripWhiteSpace();
-	// now find the # blocks
-	int start = m_info.sizeString.find("(")+1;
-	int end = m_info.sizeString.find("blocks")-1;
-	bool ok;
-	int size = m_info.sizeString.mid( start, end-start ).toInt(&ok);
-	if( ok )
-	  m_info.size = size;
-	else
-	  kdDebug() << "(K3bDiskInfoDetector) could not parse # of blocks from: " << m_info.sizeString.mid( start, end-start ) << endl;
-      }
-
-      else if( str.startsWith("CD-R medium") ) {
-	// here we have to parse two lines if not "n/a"
-	m_info.mediumManufactor = str.mid( str.find(":")+1 ).stripWhiteSpace();
-	if( m_info.mediumManufactor != "n/a" ) {
-	  ++it;
-	  m_info.mediumType = (*it).stripWhiteSpace();
-	}
-	else
-	  m_info.mediumManufactor = "";
-      }
-
-      else if( str.startsWith("CD-R empty") ) {
-	// although this should be known before we parse it (just to be sure)
-	QString value = str.mid( str.find(":")+1 ).stripWhiteSpace();
-	m_info.empty = (value == "yes");
-      }
-
-      else if( str.startsWith("Toc Type") ) {
-	// not used...
-      }
-
-      else if( str.startsWith("Sessions") ) {
-	bool ok;
-	int value = str.mid( str.find(":")+1 ).stripWhiteSpace().toInt(&ok);
-	if( ok )
-	  m_info.sessions = value;
-	else
-	  kdDebug() << "(K3bDiskInfoDetector) Could not parse # of sessions: " << str.mid( str.find(":")+1 ).stripWhiteSpace() << endl;
-      }
-
-      else if( str.startsWith("Appendable") ) {
-	QString value = str.mid( str.find(":")+1 ).stripWhiteSpace();
-	m_info.appendable = (value == "yes");
-      }
-
-      else if( str.startsWith("Remaining Capacity") ) {
-	m_info.remainingString = str.mid( str.find(":")+1 ).stripWhiteSpace();
-	// now find the # blocks
-	int start = m_info.remainingString.find("(")+1;
-	int end = m_info.remainingString.find("blocks")-1;
-	bool ok;
-	int size = m_info.remainingString.mid( start, end-start ).toInt(&ok);
-	if( ok )
-	  m_info.remaining = size;
-	else
-	  kdDebug() << "(K3bDiskInfoDetector) could not parse # of blocks from: " << m_info.remainingString.mid( start, end-start) << endl;
-      }
-
-      else {
-	kdDebug() << "(K3bDiskInfoDetector) unusable cdrdao output: " << str << endl;
-      }
-    }
-
-    if( m_info.empty ) {
-      m_info.remaining = m_info.size;
-      m_info.remainingString = m_info.sizeString;
-    }
-  }
-
-  testForDvd();
-}
-
 
 void K3bDiskInfoDetector::fetchTocInfo()
 {
-  if( m_bCanceled )
-    return;
+  struct cdrom_tochdr tochdr;
+  struct cdrom_tocentry tocentry;
+  int status;
+  
+  if ( (status = ::ioctl(m_cdfd,CDROM_DISC_STATUS)) != 0 )
+    switch (status) {
+      case CDS_AUDIO:  m_info.tocType = K3bDiskInfo::AUDIO;
+                       break;
+      case CDS_DATA_1:
+      case CDS_DATA_2: m_info.tocType = K3bDiskInfo::DATA;
+                       break;
+      case CDS_XA_2_1: 
+      case CDS_XA_2_2: 
+      case CDS_MIXED:  m_info.tocType = K3bDiskInfo::MIXED;
+                       break;
+      case CDS_NO_DISC: m_info.noDisk = true;
+                        finish(true);
+                        return;  
 
-  m_process->clearArguments();
-  m_process->disconnect();
-
-  if( m_device->interfaceType() == K3bDevice::IDE ||
-      !k3bMain()->externalBinManager()->foundBin( "cdrecord" ) ) {
-    kdDebug() << "(K3bDiskInfoDetector) using cdparanoia" << endl;
-    fetchIdeInformation();
   }
-  else {
-    *m_process << k3bMain()->externalBinManager()->binPath( "cdrecord" );
 
-    *m_process << "-toc";// << "-vv";   // -vv gives us atip info and cd-text (with recent cdrecord)
-    *m_process << QString("dev=%1").arg( m_device->busTargetLun() );
+  struct cdrom_generic_command cmd;
+  unsigned char dat[4];
 
-    connect( m_process, SIGNAL(processExited(KProcess*)),
-	     this, SLOT(slotTocInfoFinished()) );
-    connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
-	     this, SLOT(slotCollectStderr(KProcess*, char*, int)) );
-    connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
-	     this, SLOT(slotCollectStdout(KProcess*, char*, int)) );
+  ::memset(&cmd,0,sizeof (struct cdrom_generic_command));
+  ::memset(dat,0,4);
+  cmd.cmd[0] = GPCMD_READ_TOC_PMA_ATIP; 
+  cmd.cmd[2] = 1;
+  cmd.cmd[8] = 4;
+  cmd.buffer = dat;
+  cmd.buflen = 4;
+  cmd.data_direction = CGC_DATA_READ;
+  if ( ::ioctl(m_cdfd,CDROM_SEND_PACKET,&cmd) == 0 )
+     m_info.sessions = dat[3];
 
-    m_collectedStdout = QString::null;
-    m_collectedStderr = QString::null;
-
-    if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
-      kdDebug() << "(K3bDiskInfoDetector) could not start cdrecord. No toc info will be available" << endl;
-      m_info.valid = false;
-      if( !m_bCanceled )
-	emit diskInfoReady( m_info );
-    }
+  if ( ::ioctl(m_cdfd,CDROMREADTOCHDR,&tochdr) != 0 )
+  {
+     kdDebug() << "(K3bDiskInfoDetector) could not get toc header !" << endl;
+     finish(false);
+     return;
   }
-}
-
-
-void K3bDiskInfoDetector::slotTocInfoFinished()
-{
-  // cdrecord finished, now parse the stdout output to check if it was successfull
-  if( m_collectedStdout.isEmpty() ) {
-    kdDebug() << "(K3bDiskInfoDetector) cdrecord -toc gave no result... :-(" << endl;
-    m_info.valid = false;
-    if( !m_bCanceled )
-      emit diskInfoReady( m_info );
-  }
-  else if( m_collectedStderr.contains( "No disk" ) ) {
-    m_info.noDisk = true;
-    m_info.valid = true;
-    if( !m_bCanceled )
-      emit diskInfoReady( m_info );
-  }
-  else {
-    // parse the track list
-    // usable output is:
-    // track:
-
-    // we ignore the rest for now although there might be some atip info. This should be retrieved from cdrdao
-    // TODO: CD-TEXT parsing (find a cd with cd-text or... :-(
-
-    QStringList lines = QStringList::split( "\n", m_collectedStdout );
-
-    K3bTrack lastTrack;
-
-    for( QStringList::Iterator it = lines.begin(); it != lines.end(); ++it ) {
-
-      QString& str = *it;
-      if( str.startsWith("track:") ) {
-	// cdrecord produces the following outout:
-	// <tracknumber> lba: <startSector> (<...>) <startTime> adr: 1 control: <trackType> mode: <trackMode>
-	// the last tracknumber will always be "lout", the leadout of the cd which we only use to determine the
-	// length of the last track
-
-	// we just want the startSector, the trackType, and the trackMode
-	int start = 6; // skip the "track:"
-	start = str.find(":", start )+1;
-	int end = str.find( "(", start )-1;
-
-	bool ok;
-	int startSec = str.mid( start, end-start ).toInt(&ok);
-	if( ok ) {
-	  start = str.find( "control:", start )+8; // skip the "control:"
-	  end = str.find("mode:", start )-1;
-	  int control = str.mid( start, end-start ).toInt(&ok);
-	  if( ok ) {
-	    start = end + 6;
-	    int mode = str.mid( start ).toInt(&ok);
-	    if( ok ) {
-	      // all values have been determined
-	      // since we need the start of the next track to determine the length we save the values
-	      // in lastTrack and append the current lastTrack to the toc
-
-	      // TODO: fix endSector of last audio-track in multisession cds (-11400)
-
-	      if( !lastTrack.isEmpty() ) {
-		m_info.toc.append( K3bTrack( lastTrack.firstSector(), startSec-1, lastTrack.type(), lastTrack.mode() ) );
-	      }
-
-
-	      // now this is the meaning of control and mode:
-	      // control (combination of the following)
-	      // 0x01 - Audio with preemp
-	      // 0x02 - Audio copy permitted
-	      // 0x04 - Data track
-	      // 0x08 - 4 channel audio
-
-	      // mode (only for data tracks)
-	      // 1 - Mode 1
-	      // 2 - Mode 2 
-
-	      int trackType = 0;
-	      int trackMode = K3bTrack::UNKNOWN;
-	      if( control & 0x04 ) {
-		trackType = K3bTrack::DATA;
-		if( mode == 1 )
-		  trackMode = K3bTrack::MODE1;
-		else if( mode == 2 )
-		  trackMode = K3bTrack::MODE2;
-	      }
-	      else
-		trackType = K3bTrack::AUDIO;
-
-	      lastTrack = K3bTrack( startSec, startSec, trackType, trackMode );
-	    }
-	    else {
-	      kdDebug() << "(K3bDiskInfoDetector) Could not parse mode of track: " << str.mid( start ) << endl;
-	    }
+  K3bTrack lastTrack;
+  for (int i = tochdr.cdth_trk0; i <= tochdr.cdth_trk1 + 1; i++) {
+    ::memset(&tocentry,0,sizeof (struct cdrom_tocentry));
+    tocentry.cdte_track = (i<=tochdr.cdth_trk1) ? i : CDROM_LEADOUT;
+    tocentry.cdte_format = CDROM_LBA;
+    ::ioctl(m_cdfd,CDROMREADTOCENTRY,&tocentry);
+    int startSec = tocentry.cdte_addr.lba;
+    int control  = tocentry.cdte_ctrl & 0x0f;
+    int mode     = tocentry.cdte_datamode;
+    if( !lastTrack.isEmpty() ) {
+		   m_info.toc.append( K3bTrack( lastTrack.firstSector(), startSec-1, lastTrack.type(), lastTrack.mode() ) );
 	  }
-	  else {
-	    kdDebug() << "(K3bDiskInfoDetector) Could not parse control of track: " << str.mid( start, end-start ) << endl;
-	  }
-	}
-	else {
-	  kdDebug() << "(K3bDiskInfoDetector) Could not parse start secstor of track: " << str.mid( start, end-start) << endl;
-	}
-      }
+    int trackType = 0;
+    int trackMode = K3bTrack::UNKNOWN;
+	  if( control & 0x04 ) {
+	  	trackType = K3bTrack::DATA;
+		  if( mode == 1 )
+		    trackMode = K3bTrack::MODE1;
+		  else if( mode == 2 )
+		    trackMode = K3bTrack::MODE2;
+	  } else
+		  trackType = K3bTrack::AUDIO;
 
-      else {
-	kdDebug() << "(K3bDiskInfoDetector) unusable cdrecord output: " << str << endl;
-      }
-    }
+	  lastTrack = K3bTrack( startSec, startSec, trackType, trackMode );
 
-    // now determine the toc type
-    determineTocType();
-
-
-    // atip is only readable on cd-writers
-    if( m_device->burner() ) {
-      fetchDiskInfo();
-    }
-    else {
-      testForDvd();
-    }
   }
-}
+  if (m_info.tocType != K3bDiskInfo::AUDIO)
+    fetchIsoInfo();
 
+  if (m_info.device->burner())
+    fetchDiskInfo();
+
+  if (m_info.tocType != K3bDiskInfo::AUDIO)
+    fetchIsoInfo();
+  else
+    calculateDiscId();
+
+  testForDvd();
+  finish(true);
+}
 
 void K3bDiskInfoDetector::fetchIsoInfo()
 {
-  if( m_bCanceled )
-    return;
-
-  QFile f( m_device->ioctlDevice() );
-  f.open( IO_Raw | IO_ReadOnly );
-
   char buf[17*2048];
+  ::lseek( m_cdfd, 0, SEEK_SET );
 
-  if( f.readBlock( buf, 17*2048 ) == 17*2048 ) {
+  if( ::read( m_cdfd, buf, 17*2048 ) == 17*2048 ) {
     m_info.isoId = QString::fromLocal8Bit( &buf[16*2048+1], 5 ).stripWhiteSpace();
     m_info.isoSystemId = QString::fromLocal8Bit( &buf[16*2048+8], 32 ).stripWhiteSpace();
     m_info.isoVolumeId = QString::fromLocal8Bit( &buf[16*2048+40], 32 ).stripWhiteSpace();
@@ -392,15 +194,11 @@ void K3bDiskInfoDetector::fetchIsoInfo()
     m_info.isoPreparerId = QString::fromLocal8Bit( &buf[16*2048+446], 128 ).stripWhiteSpace();
     m_info.isoApplicationId = QString::fromLocal8Bit( &buf[16*2048+574], 128 ).stripWhiteSpace();
   }
-
-  f.close();
 }
 
 
 void K3bDiskInfoDetector::testForDvd()
 {
-  if( m_bCanceled )
-    return;
 
   if( m_info.tocType == K3bDiskInfo::DATA && K3bTcWrapper::supportDvd() ) {
     // check if it is a dvd we can display
@@ -414,12 +212,6 @@ void K3bDiskInfoDetector::testForDvd()
     m_tcWrapper->isDvdInsert( m_device );
 
   }
-  else {
-    // we are finished
-    m_info.valid = true;
-    if( !m_bCanceled )
-      emit diskInfoReady( m_info );
-  }
 }
 
 
@@ -429,173 +221,6 @@ void K3bDiskInfoDetector::slotIsDvd( bool dvd )
     m_info.empty = false;
     m_info.noDisk = false;
     m_info.tocType = K3bDiskInfo::DVD;
-  }
-
-  m_info.valid = true;
-  if( !m_bCanceled )
-    emit diskInfoReady( m_info );
-}
-
-
-void K3bDiskInfoDetector::slotCollectStdout( KProcess*, char* data, int len )
-{
-  m_collectedStdout.append( QString::fromLocal8Bit( data, len ) );
-}
-
-void K3bDiskInfoDetector::slotCollectStderr( KProcess*, char* data, int len )
-{
-  m_collectedStderr.append( QString::fromLocal8Bit( data, len ) );
-}
-
-
-void K3bDiskInfoDetector::fetchIdeInformation()
-{
-  if( m_bCanceled )
-    return;
-
-  int cdromfd = ::open( m_device->blockDeviceName().latin1(), O_RDONLY | O_NONBLOCK );
-  if (cdromfd < 0) {
-    kdDebug() << "(K3bDiskInfoDetector) could not open device" << endl;
-    m_info.valid = false;
-    emit diskInfoReady( m_info );
-    return;
-  }
-
-  int ret = ::ioctl(cdromfd, CDROM_DRIVE_STATUS, CDSL_CURRENT);
-  m_info.valid = true;
-
-  switch(ret) {
-  case CDS_DISC_OK:
-    // read toc
-    struct cdrom_tochdr tocHdr;
-    if( ::ioctl(cdromfd, CDROMREADTOCHDR, &tocHdr ) ) {
-      kdDebug() << "disk empty?" << endl;
-      m_info.noDisk = true;
-      break;
-    }
-    else {
-      struct cdrom_tocentry tocE;
-      tocE.cdte_format = CDROM_LBA;
-      int numTracks = (int)tocHdr.cdth_trk1 - (int)tocHdr.cdth_trk0 + 1;
-
-      // we create this fields to have ending sector info later on
-      int* startSectors = new int[numTracks+1];
-      bool* dataTrack = new bool[numTracks+1];
-
-      // read info for every single track
-      int j = 0;
-      for( int i = (int)tocHdr.cdth_trk0; i <= (int)tocHdr.cdth_trk1; ++i ) {
-	tocE.cdte_track = i;
-	if( ::ioctl(cdromfd, CDROMREADTOCENTRY, &tocE ) ) {
-	  m_info.valid = false;
-	  break;
-	}
-	else {
-
-	  // cdte_ctrl: or'ed combination of the following:
-	  // 0x01 - Audio with preemp
-	  // 0x02 - Audio copy permitted
-	  // 0x04 - Data track
-	  // 0x08 - 4 channel audio
-
-	  // struct cdrom_tocentry 
-	  //  {
-	  //      u_char cdte_track; // required
-	  //      u_char cdte_adr :4; // filled
-	  //      u_char cdte_ctrl :4; // filled
-	  //                                 CDROM_DATA_TRACK 0x04 track is data or audio
-	  //      u_char cdte_format; // required CDROM_MSF or CDROM_LBA
-	  //      union cdrom_addr cdte_addr; // filled;
-	  //      u_char cdte_datamode; // not used
-	  //  };
-  
-	  startSectors[j] = (int)tocE.cdte_addr.lba;
-	  dataTrack[j] = (bool)(tocE.cdte_ctrl & CDROM_DATA_TRACK);
-	  j++;
-	}
-      }
-
-      if( m_info.valid ) {
-	// read leadout info
-	tocE.cdte_track = CDROM_LEADOUT;
-	::ioctl(cdromfd, CDROMREADTOCENTRY, &tocE );
-	startSectors[numTracks] = (int)tocE.cdte_addr.lba;
-
-	// now create the K3b structures	
-	for( int i = 0; i < numTracks; ++i ) {
-	  m_info.toc.append( K3bTrack( startSectors[i], 
-				       startSectors[i+1], 
-				       dataTrack[i] ? K3bTrack::DATA : K3bTrack::AUDIO, 
-				       K3bTrack::UNKNOWN ) );  // no valid mode info as far as I know
-	}
-	
-	m_info.empty = ( numTracks == 0 );
-	m_info.noDisk = false;
-      }
-
-      // cleanup
-      delete [] startSectors;
-      delete [] dataTrack;
-    }
-    break;
-  case CDS_NO_DISC:
-    kdDebug() << "no disk" << endl;
-    m_info.noDisk = true;
-    break;
-  case CDS_TRAY_OPEN:
-    kdDebug() << "tray open" << endl;
-  case CDS_NO_INFO:
-    kdDebug() << "no info" << endl;
-  case CDS_DRIVE_NOT_READY:
-    kdDebug() << "not ready" << endl;
-  default:
-    m_info.valid = false;
-    break;
-  }
-
-  ::close( cdromfd );
-
-  if( !m_info.valid || m_info.empty ) {
-    emit diskInfoReady( m_info );
-    return;
-  }
-
-  determineTocType();
-
-  testForDvd();
-}
-
-
-void K3bDiskInfoDetector::determineTocType()
-{
-  int audioTracks = 0, dataTracks = 0;
-
-  for( K3bToc::const_iterator it = m_info.toc.begin(); it != m_info.toc.end(); ++it ) {
-    if( (*it).type() == K3bTrack::AUDIO )
-      audioTracks++;
-    else
-      dataTracks++;
-  }
-
-  if( audioTracks > 0 ) {
-    if( dataTracks > 0 )
-      m_info.tocType = K3bDiskInfo::MIXED;
-    else
-      m_info.tocType = K3bDiskInfo::AUDIO;
-  }
-  else if( dataTracks > 0 ) {
-    m_info.tocType = K3bDiskInfo::DATA;
-    fetchIsoInfo();
-  }
-
-  if( audioTracks + dataTracks > 0 ) {
-    m_info.empty = false;
-    m_info.noDisk = false;
-
-    calculateDiscId();
-  }
-  else {
-    m_info.empty = true;
   }
 }
 

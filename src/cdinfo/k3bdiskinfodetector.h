@@ -29,32 +29,24 @@ class K3bDiskInfoDetector : public QObject
    * no diskInfoReady signal will be emitted 
    */
   void cancel();
+  void finish(bool success);
 
  signals:
   void diskInfoReady( const K3bDiskInfo& info );
 
  private slots:
   void slotIsDvd( bool );
-  void slotDiskInfoFinished();
-  void slotTocInfoFinished();
-  void slotCollectStdout( KProcess*, char* data, int len );
-  void slotCollectStderr( KProcess*, char* data, int len );
   void fetchDiskInfo();
   void fetchTocInfo();
   void testForDvd();
   void fetchIsoInfo();
-  void fetchIdeInformation();
   void calculateDiscId();
-  void determineTocType();
 
  private:
   K3bDevice* m_device;
   K3bDiskInfo m_info;
   K3bTcWrapper* m_tcWrapper;
-  KProcess* m_process;
-
-  QString m_collectedStdout;
-  QString m_collectedStderr;
+  int m_cdfd;
 
   bool m_bCanceled;
 };
