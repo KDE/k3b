@@ -72,7 +72,14 @@ bool K3bOggVorbisModule::initDecodingInternal( const QString& filename )
 
 int K3bOggVorbisModule::decodeInternal( const char** _data )
 {
-  long bytesRead = ov_read( m_oggVorbisFile, m_outputBuffer, OUTPUT_BUFFER_SIZE, 1, 2, 1, &m_currentOggVorbisSection );
+  int bitStream;
+  long bytesRead = ov_read( m_oggVorbisFile, 
+			    m_outputBuffer, 
+			    OUTPUT_BUFFER_SIZE,  // max length to be read
+			    1,                   // big endian
+			    2,                   // word size: 16-bit samples
+			    1,                   // signed
+			    &bitStream );        // current bitstream
 
   if( bytesRead == OV_HOLE ) {
     // I think we can go on here?
@@ -117,6 +124,11 @@ int K3bOggVorbisModule::decodeInternal( const char** _data )
   else if( bytesRead == 0 ) {
     kdDebug() << "(K3bOggVorbisModule) successfully finished decoding." << endl;
     return 0;
+  }
+
+  else if( bitStream != 0 ) {
+    kdDebug() << "(K3bOggVorbisModule) bitstream != 0. Multible bitstreams not supported." << endl;
+    return -1;
   }
 
   else {

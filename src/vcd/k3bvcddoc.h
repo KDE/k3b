@@ -40,6 +40,8 @@ class QWidget;
 class QTimer;
 class QDomDocument;
 class QDomElement;
+class KConfig;
+
 
 
 class K3bVcdDoc : public K3bDoc
@@ -118,7 +120,7 @@ class K3bVcdDoc : public K3bDoc
 
         QString documentType() const;
 
-        void loadDefaultSettings();
+        void loadDefaultSettings( KConfig* );
 
     private:
         K3bVcdTrack* createTrack( const KURL& url );

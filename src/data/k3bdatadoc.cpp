@@ -47,7 +47,7 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kprogress.h>
-
+#include <kconfig.h>
 
 
 K3bDataDoc::K3bDataDoc( QObject* parent )
@@ -204,22 +204,22 @@ K3bDirItem* K3bDataDoc::createDirItem( QFileInfo& f, K3bDirItem* parent )
 
     // symLink resolved
     if( f.absFilePath().startsWith( link.absFilePath() ) ) {
-      KMessageBox::error( k3bMain(), i18n("Found recursion in directory tree. Omitting\n%1").arg(f.absFilePath()) );
+      KMessageBox::error( firstView(), i18n("Found recursion in directory tree. Omitting\n%1").arg(f.absFilePath()) );
       return 0;
     }
   }
 
 
   if( nameAlreadyInDir( newName, parent ) ) {
-    k3bMain()->config()->setGroup("Data project settings");
-    bool dropDoubles = k3bMain()->config()->readBoolEntry( "Drop doubles", false );
+    k3bcore->config()->setGroup("Data project settings");
+    bool dropDoubles = k3bcore->config()->readBoolEntry( "Drop doubles", false );
     if( dropDoubles )
       return 0;
 
     bool ok = true;
     while( ok && nameAlreadyInDir( newName, parent ) ) {
       newName = KLineEditDlg::getText( i18n("A directory with that name already exists. Please enter a new name."), 
-				       newName, &ok, k3bMain() );
+				       newName, &ok, firstView() );
     }
     if( !ok )
       return 0;
@@ -295,15 +295,15 @@ K3bFileItem* K3bDataDoc::createFileItem( QFileInfo& f, K3bDirItem* parent )
 
 
   if( nameAlreadyInDir( newName, parent ) ) {
-    k3bMain()->config()->setGroup("Data project settings");
-    bool dropDoubles = k3bMain()->config()->readBoolEntry( "Drop doubles", false );
+    k3bcore->config()->setGroup("Data project settings");
+    bool dropDoubles = k3bcore->config()->readBoolEntry( "Drop doubles", false );
     if( dropDoubles )
       return 0;
 
     bool ok = true;
     do {
       newName = KLineEditDlg::getText( i18n("A file with that name already exists. Please enter a new name."), 
-				       newName, &ok, k3bMain() );
+				       newName, &ok, firstView() );
     } while( ok && nameAlreadyInDir( newName, parent ) );
 
     if( !ok )
@@ -1104,7 +1104,7 @@ QString K3bDataDoc::treatWhitespace( const QString& path )
 void K3bDataDoc::informAboutNotFoundFiles()
 {
   if( !m_notFoundFiles.isEmpty() ) {
-    KMessageBox::informationList( k3bMain(), i18n("Could not find the following files:"), 
+    KMessageBox::informationList( firstView(), i18n("Could not find the following files:"), 
  				  m_notFoundFiles, i18n("Not found") );
     m_notFoundFiles.clear();
   }
@@ -1114,7 +1114,7 @@ void K3bDataDoc::informAboutNotFoundFiles()
   // that contain one or more backslashes
   // -----------------------------------------------------------------------
   if( !m_mkisofsBuggyFiles.isEmpty() ) {
-     KMessageBox::informationList( k3bMain(), i18n("Due to a bug in mkisofs, K3b is unable to handle "
+     KMessageBox::informationList( firstView(), i18n("Due to a bug in mkisofs, K3b is unable to handle "
  						  "filenames that contain more than one backslash:"),
 	          				  m_mkisofsBuggyFiles, i18n("Sorry") );
     m_mkisofsBuggyFiles.clear();
@@ -1123,11 +1123,9 @@ void K3bDataDoc::informAboutNotFoundFiles()
 }
 
 
-void K3bDataDoc::loadDefaultSettings()
+void K3bDataDoc::loadDefaultSettings( KConfig* c )
 {
-  K3bDoc::loadDefaultSettings();
-
-  KConfig* c = k3bcore->config();
+  K3bDoc::loadDefaultSettings(c);
 
   m_isoOptions = K3bIsoOptions::load( c );
 

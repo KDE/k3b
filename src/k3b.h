@@ -195,6 +195,13 @@ class K3bMainWindow : public KParts::DockMainWindow
   void createClient(K3bDoc* doc);
 
   /**
+   * Initializes a newly created doc.
+   * loads the default settings and adds
+   * it to the list of documents.
+   */
+  void initializeNewDoc( K3bDoc* doc );
+
+  /**
    * checks if doc is modified and asks the user for saving if so.
    * returns false if the user chose cancel.
    */

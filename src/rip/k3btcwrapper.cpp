@@ -20,7 +20,7 @@
 #include "../device/k3bdevice.h"
 #include "../device/k3bdevicemanager.h"
 #include "../tools/k3bexternalbinmanager.h"
-#include "../k3b.h"
+#include "../k3bcore.h"
 
 #include <qstring.h>
 
@@ -38,7 +38,7 @@ K3bTcWrapper::~K3bTcWrapper(){
 }
 
 bool K3bTcWrapper::supportDvd(){
-    return k3bMain()->externalBinManager()->foundBin("tcprobe");
+    return k3bcore->externalBinManager()->foundBin("tcprobe");
 }
 
 void K3bTcWrapper::isDvdInsert( K3bDevice* device ) {
@@ -59,7 +59,7 @@ void K3bTcWrapper::runTcprobe()
   m_outputBuffer = QString::null;
   m_errorBuffer = QString::null;
 
-  const K3bExternalBin *bin = k3bMain()->externalBinManager()->binObject("tcprobe");
+  const K3bExternalBin *bin = k3bcore->externalBinManager()->binObject("tcprobe");
   KShellProcess *p = new KShellProcess();
   emit tcprobeTitleParsed( m_currentTitle );
 

@@ -38,6 +38,7 @@ class K3bBootItem;
 
 class KProgressDialog;
 class K3bView;
+class KConfig;
 class QString;
 class QStringList;
 class QWidget;
@@ -142,7 +143,7 @@ class K3bDataDoc : public K3bDoc
 
   virtual QString documentType() const;
 
-  void loadDefaultSettings();
+  void loadDefaultSettings( KConfig* );
 
  private:
   void createSessionImportItems( const QString& path, K3bDirItem* parent, KProgressDialog* );

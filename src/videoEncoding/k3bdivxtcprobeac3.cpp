@@ -13,28 +13,12 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-/***************************************************************************
-                          k3bdivxtcprobeac3.cpp  -  description
-                             -------------------
-    begin                : Sun Jul 28 2002
-    copyright            : (C) 2002 by Sebastian Trueg
-    email                : trueg@informatik.uni-freiburg.de
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
 
 #include "k3bdivxtcprobeac3.h"
 #include "k3bdivxcodecdata.h"
 #include "k3bdivxhelper.h"
 #include "../tools/k3bexternalbinmanager.h"
-#include "../k3b.h"
+#include "../k3bcore.h"
 
 #include <kprocess.h>
 #include <kdebug.h>
@@ -56,7 +40,7 @@ void K3bDivXTcprobeAc3::slotInternalParsing(){
      delete m_util;
      m_buffer = "";
      m_process = new KShellProcess;
-     const K3bExternalBin *tcprobeBin = k3bMain()->externalBinManager()->binObject("tcprobe");
+     const K3bExternalBin *tcprobeBin = k3bcore->externalBinManager()->binObject("tcprobe");
 
      *m_process << tcprobeBin->path << " -i" << m_data->getProjectDir() + "/vob";
      kdDebug() << "(K3bDivXTcprobeAc3)" +  tcprobeBin->path + " -i " + m_data->getProjectDir() + "/vob" << endl;

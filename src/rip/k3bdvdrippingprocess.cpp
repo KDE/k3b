@@ -1,19 +1,18 @@
-/***************************************************************************
-                          k3bdvdrippingprocess.cpp  -  description
-                             -------------------
-    begin                : Sun Mar 3 2002
-    copyright            : (C) 2002 by Sebastian Trueg
-    email                : trueg@informatik.uni-freiburg.de
- ***************************************************************************/
+/* 
+ *
+ * $Id$
+ * Copyright (C) 2003 Thomas Froescher <tfroescher@k3b.org>
+ *
+ * This file is part of the K3b project.
+ * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * See the file "COPYING" for the exact licensing terms.
+ */
 
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
 
 #include "k3bdvdrippingprocess.h"
 #include "k3bdvdcontent.h"
@@ -21,7 +20,7 @@
 #include "../tools/k3bexternalbinmanager.h"
 #include "../device/k3bdevicemanager.h"
 #include "../device/k3bdevice.h"
-#include "../k3b.h"
+#include "../k3bcore.h"
 #include "k3bdvdaudiogain.h"
 
 #include <qstring.h>
@@ -115,7 +114,7 @@ void K3bDvdRippingProcess::startRippingProcess( ) {
     connect( m_audioProcess, SIGNAL( finished() ), this, SLOT( slotAudioProcessFinished() ) );
     m_delAudioProcess = true;
     */
-    const K3bExternalBin *m_tccatBin = k3bMain()->externalBinManager()->binObject("tccat");
+    const K3bExternalBin *m_tccatBin = k3bcore->externalBinManager()->binObject("tccat");
     m_ripProcess = new KShellProcess();
     kdDebug() << "(K3bDvdRippingProcess)" << m_tccatBin->path << " -i " << m_device <<" "<< m_ripMode <<" "<< m_title <<",-1," << m_angle << endl;
     //*m_ripProcess << m_tccatBin->path << "-d 1" << "-i" <<  m_device << m_ripMode << m_title << ",-1," << m_angle;
@@ -228,7 +227,7 @@ float K3bDvdRippingProcess::tccatParsedBytes( char *text, int len) {
 void K3bDvdRippingProcess::preProcessingDvd( ) {
     kdDebug() << "(K3bDvdRippingProcess::preProcessingDVD) Copy IFO files from device: <" << m_device << ">."<< endl;
     if( !m_dvdOrgFilenameDetected ) {
-        K3bDevice *dev = k3bMain()->deviceManager()->deviceByName( m_device );
+        K3bDevice *dev = k3bcore->deviceManager()->deviceByName( m_device );
         m_mountPoint = dev->mountPoint();
         kdDebug() << "(K3bDvdRippingProcess) K3bDevice Data mount device: " << dev->mountDevice() << ", mount Point: "<< dev->mountPoint() << endl;
         kdDebug() << "(K3bDvdRippingProcess) K3bDevice Data ioctl device: " << dev->ioctlDevice() << ", generic device: "<< dev->genericDevice() << endl;

@@ -16,7 +16,7 @@
  ***************************************************************************/
 
 #include "k3bdvdaudiogain.h"
-#include "../k3b.h"
+#include "../k3bcore.h"
 #include "../tools/k3bexternalbinmanager.h"
 
 #include <qstring.h>
@@ -33,17 +33,17 @@ K3bDvdAudioGain::~K3bDvdAudioGain(){
 }
 
 bool K3bDvdAudioGain::start(){
-    const K3bExternalBin *tcextract = k3bMain()->externalBinManager()->binObject("tcextract");
+    const K3bExternalBin *tcextract = k3bcore->externalBinManager()->binObject("tcextract");
     if( tcextract == 0 ){
         kdDebug() << "(K3bDvdAudioGain) Fatal Error, couldn't find tcextract tools." << endl;
         return false;
     }
-    const K3bExternalBin *tcdecode = k3bMain()->externalBinManager()->binObject("tcdecode");
+    const K3bExternalBin *tcdecode = k3bcore->externalBinManager()->binObject("tcdecode");
     if( tcdecode == 0 ){
         kdDebug() << "(K3bDvdAudioGain) Fatal Error, couldn't find tcdecode tools." << endl;
         return false;
     }
-    const K3bExternalBin *tcscan = k3bMain()->externalBinManager()->binObject("tcscan");
+    const K3bExternalBin *tcscan = k3bcore->externalBinManager()->binObject("tcscan");
     if( tcscan == 0 ){
         kdDebug() << "(K3bDvdAudioGain) Fatal Error, couldn't find tcscan tools." << endl;
         return false;

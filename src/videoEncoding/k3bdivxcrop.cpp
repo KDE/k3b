@@ -13,27 +13,11 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-/***************************************************************************
-                          k3bdvdcrop.cpp  -  description
-                             -------------------
-    begin                : Tue Apr 2 2002
-    copyright            : (C) 2002 by Sebastian Trueg
-    email                : trueg@informatik.uni-freiburg.de
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
 
 #include "k3bdivxcrop.h"
 #include "k3bdivxpreview.h"
 #include "k3bdivxcodecdata.h"
-#include "../k3b.h"
+#include "../k3bcore.h"
 #include "../tools/k3bexternalbinmanager.h"
 
 #include <stdlib.h>
@@ -213,12 +197,12 @@ void K3bDivxCrop::encodePreview( ){
 void K3bDivxCrop::slotEncodePreview( ){
      kdDebug(  ) << "(K3bDivxCrop::slotEncodePreview)" << endl;
      previewProcess = new KShellProcess(); // = new KShellProcess;
-     *previewProcess << k3bMain()->externalBinManager()->binObject("transcode")->path;
+     *previewProcess << k3bcore->externalBinManager()->binObject("transcode")->path;
      *previewProcess << " -i " + m_data->getProjectDir() + "/vob";
      *previewProcess << " -x vob -y ppm -V -w 1200 -a 0 -c 4-5 "; // -V
      *previewProcess << " -L " + QString::number( m_previewOffset );
      *previewProcess << " -o " + m_data->getProjectDir() + "/preview";
-     kdDebug() << k3bMain()->externalBinManager()->binObject("transcode")->path
+     kdDebug() << k3bcore->externalBinManager()->binObject("transcode")->path
      << " -i " + m_data->getProjectDir() + "/vob -x vob -y ppm -V -w 1200 -a 0 -c 4-5 "
      << " -L " + QString::number( m_previewOffset ) << "-o " + m_data->getProjectDir() + "/preview" << endl;
      connect( previewProcess, SIGNAL(receivedStdout(KProcess*, char*, int)),

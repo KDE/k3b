@@ -426,11 +426,9 @@ void K3bMovixDoc::removeSubTitleItem( K3bMovixFileItem* item )
 }
 
 
-void K3bMovixDoc::loadDefaultSettings()
+void K3bMovixDoc::loadDefaultSettings( KConfig* c )
 {
-  K3bDataDoc::loadDefaultSettings();
-
-  KConfig* c = kapp->config();
+  K3bDataDoc::loadDefaultSettings(c);
 
   setSubtitleFontset( c->readEntry("subtitle_fontset") );
 

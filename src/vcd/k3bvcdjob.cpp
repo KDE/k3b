@@ -34,7 +34,7 @@
 #include "k3bvcddoc.h"
 #include "k3bvcdtrack.h"
 #include "k3bvcdxmlview.h"
-#include <k3b.h>
+#include <k3bcore.h>
 #include <k3bdoc.h>
 #include <k3bprocess.h>
 #include <k3bemptydiscwaiter.h>
@@ -175,7 +175,7 @@ void K3bVcdJob::vcdxBuild()
     m_process = new KProcess();
 
     emit infoMessage( i18n( "Create Cue/Bin files ..." ), K3bJob::INFO );
-    if ( !k3bMain() ->externalBinManager() ->foundBin( "vcdxbuild" ) ) {
+    if ( !k3bcore ->externalBinManager() ->foundBin( "vcdxbuild" ) ) {
         kdDebug() << "(K3bVcdJob) could not find vcdxbuild executable" << endl;
         emit infoMessage( i18n( "vcdxbuild executable not found." ), K3bJob::ERROR );
         emit infoMessage(i18n( "To create VideoCD's you must install VcdImager >= 0.7.12." ), K3bJob::INFO );
@@ -185,10 +185,10 @@ void K3bVcdJob::vcdxBuild()
         return ;
     }
 
-    *m_process << k3bMain() ->externalBinManager() ->binPath( "vcdxbuild" );
+    *m_process << k3bcore ->externalBinManager() ->binPath( "vcdxbuild" );
 
     // additional user parameters from config
-    const QStringList& params = k3bMain()->externalBinManager()->program( "vcdxbuild" )->userParameters();
+    const QStringList& params = k3bcore->externalBinManager()->program( "vcdxbuild" )->userParameters();
     for( QStringList::const_iterator it = params.begin(); it != params.end(); ++it )
       *m_process << *it;
 

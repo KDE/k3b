@@ -32,11 +32,11 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kio/global.h>
+#include <kapplication.h>
 
 #include "k3bvcdburndialog.h"
 #include "k3bvcddoc.h"
 #include "k3bvcdoptions.h"
-#include <k3b.h>
 #include <device/k3bdevice.h>
 #include <k3bwriterselectionwidget.h>
 #include <k3btempdirselectionwidget.h>
@@ -750,7 +750,7 @@ void K3bVcdBurnDialog::slotLoadUserDefaults()
   K3bProjectBurnDialog::slotLoadUserDefaults();
 
   // the group is set in K3bProjectBurnDialog
-    KConfig * c = k3bMain() ->config();
+    KConfig * c = kapp ->config();
 
     K3bVcdOptions o = K3bVcdOptions::load( c );
 
@@ -802,7 +802,7 @@ void K3bVcdBurnDialog::slotSaveUserDefaults()
   K3bProjectBurnDialog::slotSaveUserDefaults();
 
   // the group is set in K3bProjectBurnDialog
-  KConfig * c = k3bMain() ->config();
+  KConfig * c = kapp ->config();
   K3bVcdOptions o;
 
     o.setVolumeId( m_editVolumeId->text() );

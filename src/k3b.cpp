@@ -816,8 +816,7 @@ void K3bMainWindow::slotNewAudioDoc()
   slotStatusMsg(i18n("Creating new Audio Project."));
 
   K3bAudioDoc* doc = new K3bAudioDoc( this );
-  pDocList->append(doc);
-  doc->newDocument();
+  initializeNewDoc( doc );
 
   m_audioUntitledCount++;
   QString fileName = i18n("Audio%1").arg(m_audioUntitledCount);
@@ -834,8 +833,7 @@ void K3bMainWindow::slotNewDataDoc()
   slotStatusMsg(i18n("Creating new Data Project."));
 
   K3bDataDoc* doc = new K3bDataDoc( this );
-  pDocList->append(doc);
-  doc->newDocument();
+  initializeNewDoc( doc );
 
   m_dataUntitledCount++;
   QString fileName = i18n("Data%1").arg(m_dataUntitledCount);
@@ -855,8 +853,7 @@ void K3bMainWindow::slotNewMixedDoc()
   slotStatusMsg(i18n("Creating new Mixed Mode Project."));
 
   K3bMixedDoc* doc = new K3bMixedDoc( this );
-  pDocList->append(doc);
-  doc->newDocument();
+  initializeNewDoc( doc );
 
   m_mixedUntitledCount++;
   QString fileName=i18n("Mixed%1").arg(m_mixedUntitledCount);
@@ -885,8 +882,7 @@ void K3bMainWindow::slotNewVcdDoc()
   slotStatusMsg(i18n("Creating new Video Project."));
 
   K3bVcdDoc* doc = new K3bVcdDoc( this );
-  pDocList->append(doc);
-  doc->newDocument();
+  initializeNewDoc( doc );
 
   m_vcdUntitledCount++;
   QString fileName=i18n("Videocd%1").arg(m_vcdUntitledCount);
@@ -906,8 +902,7 @@ void K3bMainWindow::slotNewMovixDoc()
   slotStatusMsg(i18n("Creating new eMovix Project."));
 
   K3bMovixDoc* doc = new K3bMovixDoc( this );
-  pDocList->append(doc);
-  doc->newDocument();
+  initializeNewDoc( doc );
 
   m_movixUntitledCount++;
   QString fileName=i18n("eMovix%1").arg(m_movixUntitledCount);
@@ -921,10 +916,20 @@ void K3bMainWindow::slotNewMovixDoc()
   createClient(doc);
 }
 
-void K3bMainWindow::slotDivxEncoding(){
-    slotStatusMsg(i18n("Creating new video encoding project."));
-    K3bDivxView d( this, "divx");
-    d.exec();
+
+void K3bMainWindow::initializeNewDoc( K3bDoc* doc )
+{
+  pDocList->append(doc);
+  doc->newDocument();
+  doc->loadDefaultSettings( config() );
+}
+
+
+void K3bMainWindow::slotDivxEncoding()
+{
+  slotStatusMsg(i18n("Creating new video encoding project."));
+  K3bDivxView d( this, "divx");
+  d.exec();
 }
 
 

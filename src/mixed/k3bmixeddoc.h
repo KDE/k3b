@@ -25,6 +25,7 @@ class QDomElement;
 class K3bBurnJob;
 class K3bView;
 class QWidget;
+class KConfig;
 
 
 class K3bMixedDoc : public K3bDoc
@@ -55,25 +56,20 @@ class K3bMixedDoc : public K3bDoc
 
   int mixedType() const { return m_mixedType; }
 
-  const QString& imagePath() const { return m_imagePath; }
-
  public slots:
   void setMixedType( MixedType t ) { m_mixedType = t; }
   void addUrls( const KURL::List& urls );
-  void setImagePath( const QString& );
 
  protected:
   bool loadDocumentData( QDomElement* );
   bool saveDocumentData( QDomElement* );
   QString documentType() const { return "mixed"; }
   
-  void loadDefaultSettings();
+  void loadDefaultSettings( KConfig* );
 
  private:
   K3bDataDoc* m_dataDoc;
   K3bAudioDoc* m_audioDoc;
-
-  QString m_imagePath;
 
   int m_mixedType;
 };

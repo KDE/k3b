@@ -17,13 +17,14 @@
 #include "k3bdivxencodingprocess.h"
 #include "k3bdivxcodecdata.h"
 #include <tools/k3bexternalbinmanager.h>
-#include <k3b.h>
+#include <k3bcore.h>
 
 #include <qdir.h>
 
 #include <kprocess.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kapplication.h>
 
 
 K3bDivXEncodingProcess::K3bDivXEncodingProcess( K3bDivxCodecData *data, QWidget* parent, const char *name )
@@ -62,10 +63,10 @@ void K3bDivXEncodingProcess::slotStartAudioProcessing( KIO::Job *job ) {
   }
   kdDebug() << "(K3bDivXEncodingProcess) Run transcode." << endl;
   m_process = new KShellProcess;
-  const K3bExternalBin *tccatBin = k3bMain() ->externalBinManager() ->binObject( "tccat" );
-  const K3bExternalBin *tcextractBin = k3bMain() ->externalBinManager() ->binObject( "tcextract" );
-  const K3bExternalBin *tcdecodeBin = k3bMain() ->externalBinManager() ->binObject( "tcdecode" );
-  const K3bExternalBin *tcscanBin = k3bMain() ->externalBinManager() ->binObject( "tcscan" );
+  const K3bExternalBin *tccatBin = k3bcore ->externalBinManager() ->binObject( "tccat" );
+  const K3bExternalBin *tcextractBin = k3bcore ->externalBinManager() ->binObject( "tcextract" );
+  const K3bExternalBin *tcdecodeBin = k3bcore ->externalBinManager() ->binObject( "tcdecode" );
+  const K3bExternalBin *tcscanBin = k3bcore ->externalBinManager() ->binObject( "tcscan" );
   // parse audio for   gain to normalize
   *m_process << "nice" << "-10";
   *m_process << tccatBin->path << " -i" << m_data->getProjectDir() + "/vob" << "-t" << "vob" << "-P" << m_data->getTitle();
@@ -99,7 +100,7 @@ void K3bDivXEncodingProcess::slotStartEncoding() {
   m_speedTrigger = 300;
   m_speedInitialFlag = 0;
   kdDebug() << "(K3bDivXEncodingProcess) Run transcode." << endl;
-  const K3bExternalBin *transcodeBin = k3bMain() ->externalBinManager() ->binObject( "transcode" );
+  const K3bExternalBin *transcodeBin = k3bcore ->externalBinManager() ->binObject( "transcode" );
   m_process = new KShellProcess;
 
   *m_process << "nice" << "-10";

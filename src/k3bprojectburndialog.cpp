@@ -44,6 +44,8 @@
 #include <kguiitem.h>
 #include <kstdguiitem.h>
 #include <kdebug.h>
+#include <kglobal.h>
+#include <kstandarddirs.h>
 
 
 
@@ -281,6 +283,10 @@ void K3bProjectBurnDialog::readSettings()
 void K3bProjectBurnDialog::slotSaveUserDefaults()
 {
   KConfig* c = kapp->config();
+
+  c->setGroup( "General Options" );
+  c->writeEntry( "Temp Dir", m_tempDirSelectionWidget->tempPath() );
+
   c->setGroup( "default " + doc()->documentType() + " settings" );
 
   m_writingModeWidget->saveConfig( c );
@@ -296,6 +302,8 @@ void K3bProjectBurnDialog::slotSaveUserDefaults()
 
 void K3bProjectBurnDialog::slotLoadUserDefaults()
 {
+  m_tempDirSelectionWidget->setTempPath( K3b::defaultTempPath() );
+
   KConfig* c = kapp->config();
   c->setGroup( "default " + doc()->documentType() + " settings" );
 
@@ -318,6 +326,8 @@ void K3bProjectBurnDialog::slotLoadK3bDefaults()
   m_checkBurnproof->setChecked( true );
   m_checkRemoveBufferFiles->setChecked( true );
   m_checkOnlyCreateImage->setChecked( false );
+
+  m_tempDirSelectionWidget->setTempPath( KGlobal::dirs()->resourceDirs( "tmp" ).first() );
 }
 
 #include "k3bprojectburndialog.moc"

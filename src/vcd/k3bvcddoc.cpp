@@ -85,7 +85,6 @@ bool K3bVcdDoc::newDocument()
     m_tracks->setAutoDelete( false );
 
     m_vcdOptions = new K3bVcdOptions();
-    loadDefaultSettings();
 
     return K3bDoc::newDocument();
 }
@@ -565,12 +564,9 @@ void K3bVcdDoc::setPbcTracks()
     }
 }
 
-void K3bVcdDoc::loadDefaultSettings()
+void K3bVcdDoc::loadDefaultSettings( KConfig* c )
 {
-  K3bDoc::loadDefaultSettings();
-
-  // the group is set in K3bDoc
-  KConfig* c = k3bMain() ->config();
+  K3bDoc::loadDefaultSettings(c);
 
 	// FIXME: This are userdefined k3b defaults. should this move to general vcd options?
 

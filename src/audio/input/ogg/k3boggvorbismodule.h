@@ -50,7 +50,6 @@ class K3bOggVorbisModule : public K3bAudioModule
 
  private:
   OggVorbis_File* m_oggVorbisFile;
-  int m_currentOggVorbisSection;
   char* m_outputBuffer;
 
   static const int OUTPUT_BUFFER_SIZE = 4096;

@@ -92,8 +92,8 @@ void K3bDivxView::setupGui()
   m_baseTab = new K3bDivxBaseTab( m_codingData, gridBasic, "basetab" );
   m_sizeTab = new K3bDivxSizeTab( m_codingData, gridSize, "sizetab");
   m_advancedTab = new K3bDivxAdvancedTab( m_codingData, gridAdvanced, "advancedtab");
-  m_baseTab->setMinimumWidth( 750 );
-  m_baseTab->setMinimumHeight( 500 );
+//   m_baseTab->setMinimumWidth( 750 );
+//   m_baseTab->setMinimumHeight( 500 );
 
   m_sizeTab->setDisabled( true );
   m_buttonStart->setDisabled( true );

@@ -18,6 +18,7 @@
 #include "k3bcdrdaowriter.h"
 
 #include "k3b.h"
+#include <k3bcore.h>
 #include <k3bexternalbinmanager.h>
 #include "device/k3bdevicemanager.h"
 #include "k3bprocess.h"
@@ -98,7 +99,7 @@ K3bCdrdaoWriter::K3bCdrdaoWriter( K3bDevice* dev, QObject* parent, const char* n
   K3bDevice *d;
   if ( !dev )
   {
-    devices = k3bMain()->deviceManager()->burningDevices();
+    devices = k3bcore->deviceManager()->burningDevices();
     d = devices.first();
     while( d )
     {
@@ -110,7 +111,7 @@ K3bCdrdaoWriter::K3bCdrdaoWriter( K3bDevice* dev, QObject* parent, const char* n
       d = devices.next();
     }
   }
-  devices = k3bMain()->deviceManager()->readingDevices();
+  devices = k3bcore->deviceManager()->readingDevices();
   d = devices.first();
   while( d )
   {
@@ -244,16 +245,16 @@ void K3bCdrdaoWriter::setWriteArguments()
   kapp->config()->setGroup("General Options");
 
   bool manualBufferSize =
-    k3bMain()->config()->readBoolEntry( "Manual buffer size", false );
+    k3bcore->config()->readBoolEntry( "Manual buffer size", false );
   if( manualBufferSize )
   {
     *m_process << "--buffers"
-    << QString::number( k3bMain()->config()->
+    << QString::number( k3bcore->config()->
                         readNumEntry( "Cdrdao buffer", 32 ) );
   }
 
   bool overburn =
-    k3bMain()->config()->readBoolEntry( "Allow overburning", false );
+    k3bcore->config()->readBoolEntry( "Allow overburning", false );
   if( overburn ) {
     if( m_cdrdaoBinObject->hasFeature("overburn") )
       *m_process << "--overburn";

@@ -93,6 +93,7 @@ K3bMixedBurnDialog::K3bMixedBurnDialog( K3bMixedDoc* doc, QWidget *parent, const
 
   connect( m_checkNormalize, SIGNAL(toggled(bool)), this, SLOT(toggleAllOptions()) );
   connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(toggleAllOptions()) );
+  connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)), this, SLOT(toggleAllOptions()) );
 
   readSettings();
 }
@@ -196,7 +197,7 @@ void K3bMixedBurnDialog::saveSettings()
   m_doc->dataDoc()->setDataMode( m_dataModeWidget->dataMode() );	
 
   // save image file path
-  m_doc->setImagePath( m_tempDirSelectionWidget->tempPath() );  
+  m_doc->setTempDir( m_tempDirSelectionWidget->tempPath() );  
 }
 
 
@@ -206,8 +207,8 @@ void K3bMixedBurnDialog::readSettings()
 
   m_checkNormalize->setChecked( m_doc->audioDoc()->normalize() );	
 
-  if( !m_doc->imagePath().isEmpty() )
-    m_tempDirSelectionWidget->setTempPath( m_doc->imagePath() );
+  if( !m_doc->tempDir().isEmpty() )
+    m_tempDirSelectionWidget->setTempPath( m_doc->tempDir() );
 
   switch( m_doc->mixedType() ) {
   case K3bMixedDoc::DATA_FIRST_TRACK:

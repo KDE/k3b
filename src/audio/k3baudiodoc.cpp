@@ -629,11 +629,9 @@ void K3bAudioDoc::informAboutNotFoundFiles()
 }
 
 
-void K3bAudioDoc::loadDefaultSettings()
+void K3bAudioDoc::loadDefaultSettings( KConfig* c )
 {
-  K3bDoc::loadDefaultSettings();
-
-  KConfig* c = k3bMain()->config();
+  K3bDoc::loadDefaultSettings(c);
 
   m_cdText = c->readBoolEntry( "cd_text", false );
   m_padding = true;  // padding is always a good idea!

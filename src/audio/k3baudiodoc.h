@@ -35,6 +35,7 @@ class QTimer;
 class QDomDocument;
 class QDomElement;
 class K3bThreadJob;
+class KConfig;
 
 
 /**Document class for an audio project. 
@@ -148,7 +149,7 @@ class K3bAudioDoc : public K3bDoc
 
   unsigned long isWaveFile( const KURL& url );
 
-  void loadDefaultSettings();
+  void loadDefaultSettings( KConfig* );
 
  private:
   K3bAudioTrack* createTrack( const KURL& url );

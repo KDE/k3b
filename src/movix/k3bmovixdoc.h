@@ -28,6 +28,7 @@ class QDomElement;
 class K3bFileItem;
 class K3bMovixFileItem;
 class K3bDataItem;
+class KConfig;
 
 
 class K3bMovixDoc : public K3bDataDoc
@@ -93,7 +94,7 @@ class K3bMovixDoc : public K3bDataDoc
 
   QString documentType() const { return "movix"; }
 
-  void loadDefaultSettings();
+  void loadDefaultSettings( KConfig* );
 
  private slots:
   void slotDataItemRemoved( K3bDataItem* );

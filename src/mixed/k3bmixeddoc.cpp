@@ -131,7 +131,7 @@ bool K3bMixedDoc::loadDocumentData( QDomElement* rootElem )
     if( e.nodeName() == "remove_buffer_files" )
       setRemoveImages( e.toElement().text() == "yes" );
     else if( e.nodeName() == "image_path" )
-      setImagePath( e.toElement().text() );
+      setTempDir( e.toElement().text() );
     else if( e.nodeName() == "mixed_type" ) {
       QString mt = e.toElement().text();
       if( mt == "last_track" )
@@ -168,7 +168,7 @@ bool K3bMixedDoc::saveDocumentData( QDomElement* docElem )
   mixedElem.appendChild( bufferFilesElem );
 
   QDomElement imagePathElem = doc.createElement( "image_path" );
-  imagePathElem.appendChild( doc.createTextNode( imagePath() ) );
+  imagePathElem.appendChild( doc.createTextNode( tempDir() ) );
   mixedElem.appendChild( imagePathElem );
 
   QDomElement mixedTypeElem = doc.createElement( "mixed_type" );
@@ -191,11 +191,9 @@ bool K3bMixedDoc::saveDocumentData( QDomElement* docElem )
 }
 
   
-void K3bMixedDoc::loadDefaultSettings()
+void K3bMixedDoc::loadDefaultSettings( KConfig* c )
 {
-  K3bDoc::loadDefaultSettings();
-
-  KConfig* c = kapp->config();
+  K3bDoc::loadDefaultSettings(c);
 
   m_audioDoc->writeCdText( c->readBoolEntry( "cd_text", false ) );
   m_audioDoc->setNormalize( c->readBoolEntry( "normalize", false ) );
@@ -218,17 +216,6 @@ void K3bMixedDoc::loadDefaultSettings()
 
   K3bIsoOptions o = K3bIsoOptions::load( c );
   dataDoc()->isoOptions() = o;
-}
-
-
-void K3bMixedDoc::setImagePath( const QString& path )
-{
-  // check if it's a file and if so just take the dir
-  QFileInfo info( path );
-  if( info.isDir() )
-    m_imagePath = path;
-  else
-    m_imagePath = info.dirPath(true);
 }
 
 

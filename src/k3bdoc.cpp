@@ -164,8 +164,6 @@ bool K3bDoc::newDocument()
 {
   modified=false;
 
-  loadDefaultSettings();
-
   return true;
 }
 
@@ -219,15 +217,15 @@ K3bDoc* K3bDoc::openDocument(const KURL& url )
   // check the documents DOCTYPE
   K3bDoc* newDoc = 0;
   if( xmlDoc.doctype().name() == "k3b_audio_project" )
-    newDoc = new K3bAudioDoc( k3bMain() );
+    newDoc = new K3bAudioDoc( 0 );
   else if( xmlDoc.doctype().name() == "k3b_data_project" )
-    newDoc = new K3bDataDoc( k3bMain() );
+    newDoc = new K3bDataDoc( 0 );
   else if( xmlDoc.doctype().name() == "k3b_vcd_project" )
-    newDoc = new K3bVcdDoc( k3bMain() );
+    newDoc = new K3bVcdDoc( 0 );
   else if( xmlDoc.doctype().name() == "k3b_mixed_project" )
-    newDoc = new K3bMixedDoc( k3bMain() );
+    newDoc = new K3bMixedDoc( 0 );
   else if( xmlDoc.doctype().name() == "k3b_movix_project" )
-    newDoc = new K3bMovixDoc( k3bMain() );
+    newDoc = new K3bMovixDoc( 0 );
   else
     kdDebug() << "(K3bDoc) unknown doc type: " << xmlDoc.doctype().name() << endl;
 
@@ -382,9 +380,8 @@ void K3bDoc::enable()
 }
 
 
-void K3bDoc::loadDefaultSettings()
+void K3bDoc::loadDefaultSettings( KConfig* c )
 {
-  KConfig* c = kapp->config();
   c->setGroup( "default " + documentType() + " settings" );
 
   QString mode = c->readEntry( "writing_mode" );

@@ -767,7 +767,7 @@ bool K3bMixedJob::startWriting()
 
     // just to be sure we did not get canceled during the async discWaiting
     if( m_canceled )
-      return;
+      return false;
   }
 	
   m_writer->start();
@@ -883,6 +883,8 @@ void K3bMixedJob::determineWritingMode()
     if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
       if( m_usedAudioWritingMode == K3b::DAO )
 	m_usedAudioWritingApp = K3b::CDRDAO;
+      else
+	m_usedAudioWritingApp = K3b::CDRECORD;
 
       // cdrecord seems to have problems to write multisession in DAO mode
       if( m_usedDataWritingMode == K3b::DAO )
