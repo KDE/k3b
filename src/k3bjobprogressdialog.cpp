@@ -515,6 +515,8 @@ void K3bJobProgressDialog::slotUpdateCaption( int percent )
 
 void K3bJobProgressDialog::keyPressEvent( QKeyEvent *e )
 {
+  e->accept();
+
   switch ( e->key() ) {
   case Key_Enter:
   case Key_Return:
@@ -533,8 +535,6 @@ void K3bJobProgressDialog::keyPressEvent( QKeyEvent *e )
     // nothing
     break;
   }
-
-  e->accept();
 }
 
 
