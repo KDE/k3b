@@ -2,7 +2,7 @@
 #include "kcutlabel.h"
 
 #include <qtooltip.h>
-
+#include <qstringlist.h>
 
 
 KCutLabel::KCutLabel( const QString &text , QWidget *parent, const char *name )
