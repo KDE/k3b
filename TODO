@@ -7,7 +7,7 @@
 - audio cd copy with cdda2wav & cdrecord
 - data cd copy with readcd & cdrecord
 * cd cloning with cdrecord-ProDVD
-- DVD writing with dvdrecord
+* DVD writing with dvdrecord/growisofs
 
 legend:
 - planned
