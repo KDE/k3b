@@ -120,9 +120,6 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
 
   connect( m_fileView, SIGNAL(urlEntered(const KURL&)), m_fileTreeView, SLOT(followUrl(const KURL&)) );
   connect( m_fileView, SIGNAL(urlEntered(const KURL&)), this, SLOT(slotUpdateURLCombo(const KURL&)) );
-
-//   connect( m_cdView, SIGNAL(notSupportedDisc( const QString& ) ), this, SLOT( slotCheckDvd( const QString& )) );
-//   connect( m_filmView, SIGNAL(notSupportedDisc( const QString& ) ), this, SLOT(slotMountDevice( const QString& )) );
 }
 
 K3bDirView::~K3bDirView()
@@ -146,7 +143,6 @@ void K3bDirView::slotDeviceActivated( K3bDevice* dev )
   QLabel* picLabel = new QLabel( infoDialog );
   picLabel->setPixmap( DesktopIcon( "cdwriter_unmount" ) );
   QLabel* infoLabel = new QLabel( i18n("K3b is trying to fetch information about the inserted disk."), infoDialog );
-  //  infoLabel->setIndent( KDialog::marginHint() );
 
 
   K3bDiskInfoDetector* infoD = K3bDiskInfoDetector::detect( dev );
@@ -172,20 +168,7 @@ void K3bDirView::slotDiskInfoReady( const K3bDiskInfo& info )
     m_filmView->reload();
   }
   else if( info.tocType == K3bDiskInfo::DATA  ) {
-
-    // mount the disk
-    const QString& mountPoint = info.device->mountPoint();
-    if( !mountPoint.isEmpty() ){
-      connect( KIO::mount( true, "autofs", info.device->ioctlDevice(), mountPoint, true ), SIGNAL(result(KIO::Job*)),
-	       this, SLOT(reload()) );
-
-      const KURL url = KURL( mountPoint );
-      slotDirActivated( url );
-    }
-    else {
-      KMessageBox::error( this, i18n("K3b could not mount %1. Please run K3bSetup.").arg(info.device->ioctlDevice()),
-			  i18n("I/O error") );
-    }
+    slotMountDevice( info.device );
   }
   else {
     m_viewStack->raiseWidget( m_cdView );
@@ -193,32 +176,24 @@ void K3bDirView::slotDiskInfoReady( const K3bDiskInfo& info )
   }
 }
 
-void K3bDirView::slotMountDevice( const QString& device )
+void K3bDirView::slotMountDevice( K3bDevice* device )
 {
-  K3bDevice* dev = k3bMain()->deviceManager()->deviceByName( device );
-  QString mountPoint = dev->mountPoint();
+  QString mountPoint = device->mountPoint();
+
   if( !mountPoint.isEmpty() ){
-      QDir alreadyMount( mountPoint );
-      qDebug("count: %i", alreadyMount.count() );
-      if( alreadyMount.count() <= 2 ){
-          KIO::mount( true, "autofs", dev->ioctlDevice(), mountPoint, true );
-      }
+    if( KIO::findDeviceMountPoint( device->ioctlDevice() ).isEmpty() )
+      connect( KIO::mount( true, "autofs", device->ioctlDevice(), mountPoint, true ), SIGNAL(result(KIO::Job*)),
+	       this, SLOT(reload()) );
+    
+    KURL url = KURL( mountPoint );
+    slotDirActivated( url );
   }
-  const KURL url = KURL( mountPoint);
-  slotDirActivated( url );
+  else {
+    KMessageBox::error( this, i18n("K3b could not mount %1. Please run K3bSetup.").arg(device->ioctlDevice()),
+			i18n("I/O error") );
+  }
 }
 
-
-void K3bDirView::slotCheckDvd( const QString& device ) 
-{
-  // cdview calls this so hide cd
-  K3bDevice *dev = k3bMain()->deviceManager()->deviceByName( device );
-
-  // if insert disc can't be read a notSupportDisc(string device) signal is emitted -> mount cd and show data
-  m_filmView->setDevice( dev );
-  m_viewStack->raiseWidget( m_filmView );
-  m_filmView->reload();
-}
 
 void K3bDirView::slotUpdateURLCombo( const KURL& url )
 {
