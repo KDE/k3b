@@ -20,13 +20,14 @@
 
 #include "../k3bjob.h"
 #include "../k3bcdrdaowriter.h"
-#include "../k3bcdrdaoreader.h"
-#include <qurloperator.h>
+
 
 class K3bProcess;
 class K3bDevice;
 class K3bDiskInfo;
 class K3bDiskInfoDetector;
+class QUrlOperator;
+
 
 /**
   *@author Sebastian Trueg
