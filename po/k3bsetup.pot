@@ -1,0 +1,423 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2002-07-02 20:02+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8-bit\n"
+
+#: _translatorinfo.cpp:1
+msgid ""
+"_: NAME OF TRANSLATORS\n"
+"Your names"
+msgstr ""
+
+#: _translatorinfo.cpp:3
+msgid ""
+"_: EMAIL OF TRANSLATORS\n"
+"Your emails"
+msgstr ""
+
+#: main.cpp:31 main.cpp:43
+msgid "K3bSetup"
+msgstr ""
+
+#: main.cpp:54
+msgid "K3b Setup must be run as root!"
+msgstr ""
+
+#: k3bsetup.cpp:94
+msgid "Saving CD devices to global configuration."
+msgstr ""
+
+#: k3bsetup.cpp:101 k3bsetup.cpp:113 k3bsetup.cpp:125 k3bsetup.cpp:286
+#: k3bsetup.cpp:307 k3bsetup.cpp:332 k3bsetup.cpp:391
+msgid "Success"
+msgstr ""
+
+#: k3bsetup.cpp:106
+msgid "Writing external program paths to global configuration."
+msgstr ""
+
+#: k3bsetup.cpp:117
+msgid "Writing permission settings to global configuration."
+msgstr ""
+
+#: k3bsetup.cpp:253
+msgid "Changing CD device permissions."
+msgstr ""
+
+#: k3bsetup.cpp:268
+#, ycp-format
+msgid "Could not find generic device (%1)"
+msgstr ""
+
+#: k3bsetup.cpp:278
+#, ycp-format
+msgid "Could not find ioctl device (%1)"
+msgstr ""
+
+#: k3bsetup.cpp:300
+#, c-format, ycp-format
+msgid "Changing permissions for %1."
+msgstr ""
+
+#: k3bsetup.cpp:310
+#, ycp-format
+msgid "%1 is not a %2 executable."
+msgstr ""
+
+#: k3bsetup.cpp:315
+#, c-format, ycp-format
+msgid "Could not find %1."
+msgstr ""
+
+#: k3bsetup.cpp:324
+#, ycp-format
+msgid "Saving old %1 to %2"
+msgstr ""
+
+#: k3bsetup.cpp:366
+#, c-format, ycp-format
+msgid "Creating fstab entry for %1"
+msgstr ""
+
+#: k3bsetup.cpp:376
+#, ycp-format
+msgid "Could not create mount point '%1'"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:44
+msgid "Welcome to K3bSetup"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:49
+msgid ""
+"<h1>Welcome to K3b Setup.</h1><p>This Wizard will help you to prepare your "
+"system for CD writing with K3b. First of all: Don't worry about Linux "
+"permissions, K3b Setup takes care of nearly everything. So if you are new to "
+"Linux and know nothing about things like suid root, don't panic! Just click "
+"next.</p><p>If you know what is needed to write CDs under Linux and think "
+"you don't need a wizard like this, please do not exit, as there are some "
+"things specific to K3b. Also, K3b Setup will not change anything until after "
+"the setup wizard has finished.</p><p><b>Thank you for using K3b.</b></p>"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:73
+msgid "Setup CD Devices"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:84
+msgid ""
+"<p>K3b Setup has detected the following CD drives.</p><p>You can add "
+"additional devices (like /dev/cdrom) if your drive has not been detected.</"
+"p><p>K3b will only detect the capabilities of generic-mmc drives correctly. "
+"For all other drives you need to set them manually."
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:107
+msgid ""
+"K3b Setup did not find any CD devices on your system. K3b is not very useful "
+"without any. Do you really want to continue?"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:109
+msgid "Missing CD Devices"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:133
+msgid "No CD Writer Found"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:138
+msgid ""
+"<p><b>K3b Setup did not find a CD writer on your system.</b></p>\n"
+"<p>If you do not have a CD writer, but just want to use K3b for CD ripping "
+"then this does not matter.</p>\n"
+"<p>If you are sure you have either a SCSI CD writer or have enabled SCSI "
+"emulation, please go back and add the device manually. If that still does "
+"not work, issue a bug report.</p>\n"
+"<p>Otherwise you must enable SCSI emulation for (at least) your ATAPI CD "
+"writer (although it is recommended to enable SCSI emulation for all CD "
+"drives, it is not necessary), since this is the only task K3b Setup is "
+"unable to do for you at the moment.</p>\n"
+"<p><b>How to enable SCSI emulation</b></p>\n"
+"\n"
+"<ol>\n"
+"<li>Make sure your kernel supports SCSI emulation, at least as a module. If "
+"you use a standard kernel from your distribution, this is likely to be the "
+"case. Try loading the module with <pre>modprobe ide-scsi</pre> as root. If "
+"your kernel does not support SCSI emulation you need to build your own "
+"kernel, or at least a module. Unfortunately that goes beyond the scope of "
+"this documentation.</li>\n"
+"<li>If your kernel supports SCSI emulation as a module it is recommended to "
+"add an entry in /etc/modules.conf so that the module is loaded "
+"automatically. Otherwise you have to load it with <pre>modprobe ide-scsi</"
+"pre> every time you need it.\n"
+"</li>\n"
+"<li>The last step is to inform the kernel that you are about to use SCSI "
+"emulation at boot time. If you are using lilo (which is highly recommended), "
+"you need to add <pre>append = \"hdc=ide-scsi hdd=ide-scsi\"</pre> to your /"
+"etc/lilo.conf and re-run lilo as root to install the new configuration.\n"
+"After rebooting your system, your CD writer is ready for action.</li>\n"
+"</ol>\n"
+"<p>If you experience problems, feel free to contact the program author.</p>"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:182
+msgid "Setup Mount Points for the CD Drives"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:192
+msgid ""
+"<p>On Linux, CD devices are mounted into the file tree. Normally only root "
+"has permission to mount drives. K3b Setup can create entries in /etc/fstab "
+"for each of the detected CD drives. Every user, and especially K3b, will "
+"then be able to mount the devices on the given path.</p>"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:199
+msgid "CD drive"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:200
+msgid "System device"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:201
+msgid "Mount point"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:208
+msgid "Let K3b setup create fstab entries"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:211
+msgid "Select Mount Point"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:221 k3bsetupwizardtabs.cpp:369
+msgid "Click twice to change a value"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:311
+#, c-format, ycp-format
+msgid "Select new Mount Point for %1"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:328
+msgid "Setup External Applications Used by K3b"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:338
+msgid ""
+"<p>K3b uses cdrdao, cdrecord and mkisofs to actually write the CDs. It is "
+"recommended to install these programs. K3b will run without them but major "
+"functions (for example CD writing!) will be disabled.</p><p>K3b Setup tries "
+"to find the executables. You can change the paths manually if you want other "
+"versions to be used, or K3b Setup did not find your installation.</p>"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:351
+msgid "Found"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:352
+msgid "Program"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:353
+msgid "Version"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:354
+msgid "Path"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:360
+msgid "Find Program"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:415
+msgid ""
+"<p><b><font color=\"red\">K3bSetup was unable to find cdrecord. You will not "
+"be able to write CDs or get information about your CD drives without it. It "
+"is highly recommended to install cdrecord.</font></b></p>"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:457
+#, ycp-format
+msgid "Please Select %1 Executable"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:471
+msgid "Setup Some Necessary Permissions for K3b"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:482
+msgid ""
+"<p>The external programs need to be run as root, since they need write "
+"access to the CD drives and to run with higher priority. K3b also needs "
+"write access to the CD drives (for extended functionality like detecting the "
+"capacity of a CD).</p><p>If you know what you are doing you can skip this "
+"and setup the permissions for yourself. However, it is recommended to let "
+"K3bSetup make the changes (To learn more about what K3b Setup will do press "
+"<i>Details</i>).</p><p>Please specify the users that will use K3b. You can "
+"also specify an alternative group name. If you do not know what that means "
+"just use the default.</p>"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:493
+msgid "K3b Users"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:503
+msgid "Remove User"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:504
+msgid "Add User..."
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:513
+msgid "Let K3b setup make the required changes for the devices"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:517
+msgid "Let K3b setup make the required changes for the external programs"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:530
+msgid "Details"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:534
+msgid "CD Writing Group"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:589
+msgid "Please specify a CD writing group."
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:589
+msgid "Missing Group Name"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:594
+msgid ""
+"You did not specify any users. Only root will be able to write CDs. Continue?"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:599
+msgid ""
+"You chose not to change device permissions. K3b will not be able to provide "
+"extended features like detection of writer capabilities. Continue?"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:612
+msgid "Please enter a user name:"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:621
+msgid "Not a valid user name. Please enter a user name:"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:639
+msgid ""
+"<p>These are the permission changes K3b Setup will perform and why:</p>\n"
+"<table>\n"
+"<tr>\n"
+" <td>change permission for cdrecord, mksiofs, and cdrdao to 4710</td>\n"
+" <td>cdrecord and cdrdao require write access to all the CD drives and have "
+"all three programs run with higher priority. That is why they need to be run "
+"as root.</td>\n"
+"</tr>\n"
+"<tr>\n"
+" <td>add cdrecord, mkisofs, and cdrdao to group 'cdrecording'</td>\n"
+" <td>not everybody should be allowed to execute these programs since running "
+"a program as suid root is always a security risk.</td>\n"
+"</tr>\n"
+"<tr>\n"
+" <td>add the selected users to group 'cdrecording'</td>\n"
+" <td>these users will be able to run cdrecord, mkisofs, and cdrdao</td>\n"
+"</tr>\n"
+"<tr>\n"
+" <td>change permission for all detected SCSI drives to 660</td>\n"
+" <td>K3b requires write access to the SCSI CD drives in order to detect "
+"writing speed, for example</td>\n"
+"</tr>\n"
+"<tr>\n"
+" <td>change permission for all detected ATAPI drives to 620</td>\n"
+" <td>K3b only requires read access to the ATAPI drives since it is not (yet) "
+"able to detect speed and other parameters for ATAPI devices.</td>\n"
+"</tr>\n"
+"<tr>\n"
+" <td>add all detected devices to group 'cdrecording'</td>\n"
+" <td>since write access to devices is always a security risk (although one "
+"cannot do much harm with writing to a CD device), only the selected users "
+"will be able to access the drives</td>\n"
+"</tr>\n"
+"</table>"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:671
+msgid "K3b Setup Permission Details"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:683
+msgid "Save Your Settings"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:693
+msgid ""
+"<h1>Congratulations.</h1><p>You have completed the K3b Setup. Just click the "
+"Finish button to save your changes and then enjoy the ease of CD writing "
+"with Linux/KDE.</p>"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:698
+msgid "Progress"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:704
+msgid "Setting"
+msgstr ""
+
+#: k3bsetupwizardtabs.cpp:705
+msgid "Value"
+msgstr ""
+
+#: k3bsetupwizard.cpp:21
+msgid "K3b Setup"
+msgstr ""
+
+#: k3bsetupwizard.cpp:54
+msgid "Do you really want to discard all changes?"
+msgstr ""
+
+#: k3bsetupwizard.cpp:88
+msgid "All settings have been saved.\n"
+msgstr ""
+
+#: k3bsetupwizard.cpp:90
+msgid ""
+"If the configuration of your system changes, just run K3b Setup again.\n"
+"Thank you for using K3b. Have a lot of fun!"
+msgstr ""
+
+#: k3bsetupwizard.cpp:94
+msgid "K3b Setup Finished"
+msgstr ""
+
+#: k3bsetuptab.cpp:47
+#, ycp-format
+msgid "Step %1 of %2"
+msgstr ""

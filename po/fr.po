@@ -1,0 +1,2839 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2002-03-27 16:40+0100\n"
+"PO-Revision-Date: 2002-04-02 14:29GMT\n"
+"Last-Translator: Fleury Marc <M.Fleury@wanado.fr>\n"
+"Language-Team: Français\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 0.9.5\n"
+
+#: rip/k3bcddacopy.cpp:55
+msgid "Copy cdrom "
+msgstr "Copier un CD"
+
+#: rip/k3bcddacopy.cpp:56
+msgid "Copying started."
+msgstr "Copie démarrée"
+
+#: rip/k3bcddacopy.cpp:62
+msgid "Copy track: "
+msgstr "Copier piste :"
+
+#: rip/k3bcddacopy.cpp:62
+msgid " to "
+msgstr " vers "
+
+#: rip/k3bcddacopy.cpp:111
+msgid "paranoia_init failed."
+msgstr "lancement de paranoïa échoué"
+
+#: rip/k3bcddacopy.cpp:131
+msgid "Couldn't rip to: "
+msgstr "Impossible d'extraire vers :"
+
+#: rip/k3bcddacopy.cpp:140
+msgid "Copy "
+msgstr "Copier"
+
+#: rip/k3bcddacopy.cpp:151
+msgid "Interrupted by user"
+msgstr "Interrompu par l'utilisateur"
+
+#: rip/k3bcddacopy.cpp:154
+msgid "Can't delete part of copied file."
+msgstr ""
+
+#: rip/k3bcddacopy.cpp:173
+msgid "Interrupt reading."
+msgstr "Interrompre la lecture"
+
+#: rip/k3bcddacopy.cpp:181
+msgid "Unrecoverable error in paranoia_read."
+msgstr "Erreur irrécupérable dans la lecture par paranoïa"
+
+#: rip/k3bcdview.cpp:91 rip/k3bpatternparser.cpp:53
+#: rip/k3bpatternwidget.cpp:95 rip/k3bpatternwidget.cpp:102
+#: rip/k3bpatternwidget.cpp:172 rip/k3bripperwidget.cpp:97
+msgid "Artist"
+msgstr "Artiste"
+
+#: rip/k3bcdview.cpp:92 rip/k3bfilmview.cpp:81 rip/k3bfilmview.cpp:239
+#: rip/k3bpatternparser.cpp:62 rip/k3bpatternwidget.cpp:174
+#: rip/k3bripperwidget.cpp:98
+msgid "Title"
+msgstr "Titre"
+
+#: rip/k3bcdview.cpp:93 rip/k3bfilmview.cpp:134 rip/k3bripperwidget.cpp:99
+msgid "Time"
+msgstr "Durée"
+
+#: audio/k3baudiotrackdialog.cpp:282 data/k3bdatafileview.cpp:48
+#: rip/k3bcdview.cpp:94 rip/k3bripperwidget.cpp:100
+msgid "Size"
+msgstr "Taille"
+
+#: k3baudioplayer.cpp:113 rip/k3bcdview.cpp:95 rip/k3bpatternwidget.cpp:148
+#: rip/k3bripperwidget.cpp:101
+msgid "Filename"
+msgstr "Nom de fichier"
+
+#: rip/k3bcdview.cpp:103
+msgid "&Selection Mode"
+msgstr "Mode de &sélection"
+
+#: k3bfileview.cpp:101 rip/k3bcdview.cpp:105
+msgid "&Play"
+msgstr "&Lire"
+
+#: rip/k3bcdview.cpp:107
+msgid "&Stop"
+msgstr "Ar&rêter"
+
+#: rip/k3bcdview.cpp:146
+msgid "Select View"
+msgstr "Sélectionner vue"
+
+#: rip/k3bcdview.cpp:146
+msgid ""
+"The cd you have insert is a mixed CD. Do you want to show the audio or data "
+"tracks?"
+msgstr "Le CD que vous avez inséré est un CD mixé. Voulez - vous montrer la piste audio ou de données ?"
+
+#: rip/k3bcdview.cpp:146 rip/k3bfilmview.cpp:93 rip/k3bfilmview.cpp:136
+msgid "Audio"
+msgstr "Audio"
+
+#: rip/k3bcdview.cpp:146
+msgid "Data"
+msgstr "Données"
+
+#: rip/k3bcdview.cpp:260
+msgid "Player Error"
+msgstr "Erreur du lecteur"
+
+#: rip/k3bcdview.cpp:260
+msgid "Sorry, this is only a demonstration which may not work."
+msgstr "Désolé, c'est seulement une démonstration qui ne devrait pas marcher."
+
+#: k3bcddb.cpp:237 k3bcddbmultientriesdialog.cpp:74
+#: option/k3bcddblocaldbtab.cpp:141 rip/k3bcdview.cpp:260
+#: rip/k3bcdview.cpp:341 rip/k3bdvdripperwidget.cpp:278
+#: rip/k3bdvdrippingprocess.cpp:287 rip/k3bfilmview.cpp:243
+#: rip/k3bfilmview.cpp:336 rip/k3bripperwidget.cpp:197
+#: rip/k3bripperwidget.cpp:212
+msgid "Ok"
+msgstr "Ok"
+
+#: rip/k3bcdview.cpp:341 rip/k3bdvdripperwidget.cpp:278
+#: rip/k3bdvdrippingprocess.cpp:224 rip/k3bdvdrippingprocess.cpp:236
+#: rip/k3bdvdrippingprocess.cpp:287 rip/k3bfilmview.cpp:336
+#: rip/k3bripperwidget.cpp:197 rip/k3bripperwidget.cpp:212
+msgid "Ripping Error"
+msgstr "Erreur d'extraction"
+
+#: rip/k3bcdview.cpp:341
+msgid "Please select the title to rip."
+msgstr "%Veuillez sélectionner le titre à extraire."
+
+#: rip/k3bdvdcopy.cpp:57
+msgid "Copy DVD."
+msgstr "Copier un DVD."
+
+#: rip/k3bripperwidget.cpp:62
+msgid "Ripping CD"
+msgstr "Extraire ('ripper') un CD"
+
+#: rip/k3bdvdripperwidget.cpp:75 rip/k3bripperwidget.cpp:105
+msgid "Destination Directory"
+msgstr "Répertoire de destination :"
+
+#: rip/k3bripperwidget.cpp:107
+msgid "Use pattern for destination directory and filename."
+msgstr "Utiliser le modèle pour les fichiers et répertoires de destination."
+
+#: rip/k3bripperwidget.cpp:108
+msgid "Use this directory and default filenames."
+msgstr "Utiliser ce répertoire et les fichiers par défaut."
+
+#: option/k3brippingpatternoptiontab.cpp:46 rip/k3bripperwidget.cpp:139
+msgid "General"
+msgstr "Général"
+
+#: rip/k3bripperwidget.cpp:140
+msgid "Close immediatly after ripping is finished."
+msgstr "Fermer immédiatement après la fin de l'extraction."
+
+#: rip/k3bdvdripperwidget.cpp:118 rip/k3bripperwidget.cpp:149
+msgid "Start Ripping"
+msgstr "Démarrer l'extraction ('rip')"
+
+#: rip/k3bripperwidget.cpp:149
+msgid "This starts copying the audio CD."
+msgstr "Cela démarre la copie du Cd-audio."
+
+#: rip/k3bripperwidget.cpp:197
+msgid "Couldn't create directory: "
+msgstr "Impossible de créer le répertoire : "
+
+#: rip/k3bripperwidget.cpp:212
+msgid "There is nothing to rip."
+msgstr "Il n'y a rien à extraire."
+
+#: rip/k3bdvdripperwidget.cpp:185 rip/k3bripperwidget.cpp:224
+msgid "Ripping process"
+msgstr "Processus d'extraction"
+
+#: option/k3bcddblocaldbtab.cpp:112 rip/k3bdvdripperwidget.cpp:207
+#: rip/k3bdvdripperwidget.cpp:215 rip/k3bdvdripperwidget.cpp:222
+#: rip/k3bripperwidget.cpp:361
+msgid "Select Ripping Directory"
+msgstr "Sélectionner le répertoire d'extraction"
+
+#: rip/k3bdvdrippingprocess.cpp:224
+msgid " already exists."
+msgstr " existe déjà."
+
+#: rip/k3bdvdrippingprocess.cpp:224 rip/k3bdvdrippingprocess.cpp:236
+msgid "Overwrite"
+msgstr "Écraser"
+
+#: rip/k3bdvdrippingprocess.cpp:236
+msgid "Log file already exists."
+msgstr "Un fichier journal existe déjà."
+
+#: rip/k3bdvdrippingprocess.cpp:287
+msgid "Couldn't get data for audio normalizeing, use default of 1.0."
+msgstr "Impossible d'obtenir les données pour la normalisation audio, utilisation par défaut de 1.0."
+
+#: rip/k3bpatternparser.cpp:58 rip/k3bpatternwidget.cpp:96
+#: rip/k3bpatternwidget.cpp:103 rip/k3bpatternwidget.cpp:173
+msgid "Album"
+msgstr "Album"
+
+#: rip/k3bpatternparser.cpp:60 rip/k3bpatternwidget.cpp:175
+msgid "Track No"
+msgstr "Piste N°"
+
+#: rip/k3bfilmview.cpp:65
+msgid "&Rip CD"
+msgstr "Ext&raire CD"
+
+#: rip/k3bfilmview.cpp:80 rip/k3bfilmview.cpp:135
+msgid "Video"
+msgstr "Vidéo"
+
+#: rip/k3bfilmview.cpp:82
+msgid "Chapter"
+msgstr "Chapitre"
+
+#: rip/k3bfilmview.cpp:84
+msgid "Titles"
+msgstr "Titres"
+
+#: cdinfo/k3bdiskinfoview.cpp:81 rip/k3bfilmview.cpp:94
+msgid "Tracks"
+msgstr "Pistes"
+
+#: rip/k3bfilmview.cpp:96
+msgid "Language"
+msgstr "Langage"
+
+#: option/k3bcddbemptydbtab.cpp:40 rip/k3bfilmview.cpp:118
+#: rip/k3bfilmview.cpp:122
+msgid "all"
+msgstr "tout"
+
+#: option/k3bcddbemptydbtab.cpp:41 rip/k3bfilmview.cpp:120
+#: rip/k3bfilmview.cpp:124
+msgid "none"
+msgstr "aucun"
+
+#: rip/k3bfilmview.cpp:127
+msgid "General Information"
+msgstr "Informations générales"
+
+#: rip/k3bfilmview.cpp:130
+msgid "Input format"
+msgstr "Format d'entrée"
+
+#: rip/k3bfilmview.cpp:131
+msgid "Video norm"
+msgstr "Norme vidéo"
+
+#: rip/k3bfilmview.cpp:132
+msgid "Resolution"
+msgstr "Résolution"
+
+#: rip/k3bfilmview.cpp:133
+msgid "Aspect ratio"
+msgstr "Proportions"
+
+#: audio/k3baudiotrackdialog.cpp:332 option/k3bburningoptiontab.cpp:59
+#: rip/k3bfilmview.cpp:137
+msgid "Frames"
+msgstr "Cadres"
+
+#: rip/k3bfilmview.cpp:138
+msgid "Framerate"
+msgstr ""
+
+#: rip/k3bfilmview.cpp:217
+msgid "Title "
+msgstr "Titre"
+
+#: rip/k3bfilmview.cpp:221
+msgid "Angle 1"
+msgstr "Angle 1"
+
+#: rip/k3bfilmview.cpp:243
+msgid "DVD Error"
+msgstr "Problème de DVD"
+
+#: rip/k3bfilmview.cpp:243
+msgid "Angle information not supported, title selection always use angle 1."
+msgstr ""
+
+#: rip/k3bfilmview.cpp:271
+msgid "Chapter "
+msgstr "Chapitre "
+
+#: rip/k3bfilmview.cpp:336
+msgid "Select an title/angle to rip."
+msgstr "Sélectionnez un titre/angle à extraire"
+
+#: rip/k3bpatternwidget.cpp:77
+msgid "Directory Pattern"
+msgstr "Format du répertoire"
+
+#: data/k3bdatapropertiesdialog.cpp:92 data/k3bdataview.cpp:400
+#: rip/k3bpatternwidget.cpp:80
+msgid "Directory"
+msgstr "Répertoire"
+
+#: rip/k3bpatternwidget.cpp:87
+msgid ""
+"Directory to that the songs will be ripped to. Directories will be "
+"automatically created ."
+msgstr ""
+"Répertoire vers lequel vont être extraites les musiques. Les répertoires seront "
+"automatiquement crées."
+
+#: rip/k3bpatternwidget.cpp:90
+msgid "Base Directory"
+msgstr "Répertoire de base"
+
+#: rip/k3bpatternwidget.cpp:94
+msgid "Directory group 1"
+msgstr ""
+
+#: rip/k3bpatternwidget.cpp:97 rip/k3bpatternwidget.cpp:104
+msgid "None"
+msgstr "Aucune"
+
+#: rip/k3bpatternwidget.cpp:101
+msgid "Directory group 2"
+msgstr ""
+
+#: rip/k3bpatternwidget.cpp:108 rip/k3bpatternwidget.cpp:156
+msgid "Pattern"
+msgstr "Format"
+
+#: rip/k3bpatternwidget.cpp:115
+msgid "Replace all blanks in artist and album name with "
+msgstr "Remplacer tous les blancs dans les noms d'artistes et d'album par "
+
+#: rip/k3bfilenamepatterndialog.cpp:49 rip/k3bpatternwidget.cpp:145
+msgid "Filename Pattern"
+msgstr "Format de fichier"
+
+#: rip/k3bpatternwidget.cpp:182
+msgid "Splits mixed CDs CDDB title into artist name and title."
+msgstr ""
+
+#: rip/k3bpatternwidget.cpp:187
+msgid "Replace all blanks in artist name and title with "
+msgstr "Remplacer tous les blancs dans les noms d'artistes et d'album par "
+
+#: rip/k3bdvdripperwidget.cpp:53
+msgid "Ripping DVD"
+msgstr "Extraire('ripper') un DVD"
+
+#: rip/k3bdvdripperwidget.cpp:103
+msgid "Available Space"
+msgstr "Espace disponible"
+
+#: rip/k3bdvdripperwidget.cpp:118
+msgid "This starts copying the DVD."
+msgstr "Cela démarrera la copie du DVD."
+
+#: rip/k3bdvdripperwidget.cpp:278
+msgid "Couldn't create directory <"
+msgstr "Impossible de créer le répertoire.<"
+
+#: rip/k3bdvdfilldisplay.cpp:70 rip/k3bdvdfilldisplay.cpp:73
+msgid "(full)"
+msgstr "(rempli)"
+
+#: data/k3bdatadoc.cpp:149
+#, ycp-format
+msgid "Adding files to Project %1..."
+msgstr "Ajoute les fichiers au Projet %1..."
+
+#: data/k3bdatadoc.cpp:200
+msgid "Directory with that name already exists. Please enter new name."
+msgstr "Un répertoire avec ce nom existe déjà. Veuillez entrer un nouveau nom."
+
+#: data/k3bdatadoc.cpp:266
+msgid "File with that name already exists. Please enter new name."
+msgstr "Un fichier avec ce nom existe déjà. Veuillez entrer un nouveau nom."
+
+#: audio/k3baudiodoc.cpp:873 data/k3bdatadoc.cpp:849
+msgid "Not found"
+msgstr "Non trouvé"
+
+#: audio/k3baudiodoc.cpp:873 data/k3bdatadoc.cpp:849
+msgid "Could not find the following files:"
+msgstr "Impossible de trouver les fichiers suivants :"
+
+#: audio/k3baudioburndialog.cpp:52 data/k3bdataburndialog.cpp:56
+msgid "Burning"
+msgstr "Graver"
+
+#: data/k3bdataburndialog.cpp:57
+msgid "Settings"
+msgstr "Paramètres"
+
+#: data/k3bdataburndialog.cpp:58
+msgid "Multisession"
+msgstr "Multisession"
+
+#: data/k3bdataburndialog.cpp:59 option/k3bburningoptiontab.cpp:89
+msgid "Advanced"
+msgstr "Avancé"
+
+#: data/k3bdataburndialog.cpp:62 data/k3bdataburndialog.cpp:333
+#: data/k3bdataburndialog.cpp:627
+msgid "K3b Default"
+msgstr "K3b Défaut"
+
+#: cdcopy/k3bcdcopydialog.cpp:68 data/k3bdataburndialog.cpp:264
+msgid "Simulate writing"
+msgstr "Simuler la gravure"
+
+#: audio/k3baudioburndialog.cpp:140 cdcopy/k3bcdcopydialog.cpp:69
+#: data/k3bdataburndialog.cpp:268
+msgid "Writing on the fly"
+msgstr "Graver 'à-la-volée'"
+
+#: data/k3bdataburndialog.cpp:272
+msgid "Only create image"
+msgstr "Créer seulement une image"
+
+#: data/k3bdataburndialog.cpp:276
+msgid "Delete image"
+msgstr "Supprimer l'image"
+
+#: data/k3bdataburndialog.cpp:280 data/k3bisoimagewritingdialog.cpp:111
+msgid "Disc at once"
+msgstr "Mode 'Disc-at-once'"
+
+#: data/k3bdataburndialog.cpp:284
+msgid "use BURN-PROOF"
+msgstr "Utiliser la technologie BURN-PROOF"
+
+#: data/k3bdataburndialog.cpp:316
+msgid "Save as default"
+msgstr "Enregistrer par défaut"
+
+#: data/k3bdataburndialog.cpp:317
+msgid "Saves the current settings into \"K3b Default\""
+msgstr "Enregistrer les paramètres actuels dans \"K3b Défaut\""
+
+#: data/k3bdataburndialog.cpp:322
+msgid "Predefined Settings"
+msgstr "Paramètres prédéfinis"
+
+#: data/k3bdataburndialog.cpp:332 data/k3bdataburndialog.cpp:665
+msgid "For Win9x/NT use only"
+msgstr "Pour une utilisation Win9x/NT seulement"
+
+#: data/k3bdataburndialog.cpp:334 data/k3bdataburndialog.cpp:647
+msgid "For Linux/UNIX use only"
+msgstr "Pour une utilisation Linux/UNIX seulement"
+
+#: data/k3bdataburndialog.cpp:336
+msgid "Custom"
+msgstr "Personnalisé"
+
+#: data/k3bdataburndialog.cpp:351
+msgid "ISO Level"
+msgstr "Niveau ISO"
+
+#: data/k3bdataburndialog.cpp:380
+msgid "no deep directory relocation"
+msgstr "Pas de relocation de profondeur de répertoire"
+
+#: data/k3bdataburndialog.cpp:384
+msgid "use padding"
+msgstr ""
+
+#: data/k3bdataburndialog.cpp:388
+msgid "hide RR_MOVED"
+msgstr "masquer RR_MOVED"
+
+#: data/k3bdataburndialog.cpp:392
+msgid "create TRANS_TBL entries"
+msgstr "créer des entrées TRANS_TBL"
+
+#: data/k3bdataburndialog.cpp:396
+msgid "hide TRANS_TBL in Joliet"
+msgstr "masquer TRANS_TBL dans Joliet"
+
+#: data/k3bdataburndialog.cpp:412
+msgid "allow untranslated filenames"
+msgstr "autoriser les noms de fichiers non traduits"
+
+#: data/k3bdataburndialog.cpp:418
+msgid "allow 31 character filenames"
+msgstr "autoriser les noms de fichiers de 31 caractères"
+
+#: data/k3bdataburndialog.cpp:422
+msgid "max length (37) filenames"
+msgstr "longueur maximale (37) pour les noms de fichiers"
+
+#: data/k3bdataburndialog.cpp:426
+msgid "allow beginning period"
+msgstr ""
+
+#: data/k3bdataburndialog.cpp:430
+msgid "relaxed filenames"
+msgstr ""
+
+#: data/k3bdataburndialog.cpp:434
+msgid "omit version numbers"
+msgstr "pas de numéro de version"
+
+#: data/k3bdataburndialog.cpp:438
+msgid "allow # and ~"
+msgstr "autoriser # et ~"
+
+#: data/k3bdataburndialog.cpp:442
+msgid "allow multible dots"
+msgstr "autoriser les points multiples"
+
+#: data/k3bdataburndialog.cpp:446
+msgid "allow lowercase filenames"
+msgstr "autoriser les noms de fichiers minimum"
+
+#: data/k3bdataburndialog.cpp:503
+msgid "Volume ID"
+msgstr "Volume ID"
+
+#: data/k3bdataburndialog.cpp:508
+msgid "Application ID"
+msgstr "Application ID"
+
+#: data/k3bdataburndialog.cpp:513
+msgid "Publisher"
+msgstr "Éditeur"
+
+#: data/k3bdataburndialog.cpp:518
+msgid "Preparer"
+msgstr "Préparateur"
+
+#: data/k3bdataburndialog.cpp:555
+msgid "Generate Rockridge Entries"
+msgstr "Générer les entrées RockRidge"
+
+#: data/k3bdataburndialog.cpp:560
+msgid "Generate Joilet entries"
+msgstr "Générer les entrées Joliet"
+
+#: data/k3bdataburndialog.cpp:565
+msgid "Whitespace treatment"
+msgstr "Traitement des espaces blancs"
+
+#: data/k3bdataburndialog.cpp:575
+msgid "leave them"
+msgstr "les laisser"
+
+#: data/k3bdataburndialog.cpp:580
+msgid "replace with underscores"
+msgstr "remplacer par des soulignements (_)"
+
+#: data/k3bdataburndialog.cpp:584
+msgid "strip"
+msgstr ""
+
+#: data/k3bdataburndialog.cpp:588
+msgid "extended strip"
+msgstr ""
+
+#: data/k3bdataburndialog.cpp:613
+msgid "&No Multisession"
+msgstr "&Pas de Multissession"
+
+#: data/k3bdataburndialog.cpp:614
+msgid "&Start Multisession"
+msgstr "&Démarrer une Multissession"
+
+#: data/k3bdataburndialog.cpp:615
+msgid "&Continue Multisession"
+msgstr "&Continuer une Multisession"
+
+#: data/k3bdataburndialog.cpp:616
+msgid "&Finish Multisession"
+msgstr "C&lore une Multisession"
+
+#: data/k3bdataburndialog.cpp:755 k3b.cpp:607
+#, c-format, ycp-format
+msgid "Do you want to overwrite %1"
+msgstr "Voulez - vous remplacer %1"
+
+#: data/k3bdataburndialog.cpp:755 k3b.cpp:607
+msgid "File exists..."
+msgstr "Fichier existant..."
+
+#: audio/k3baudioview.cpp:103 data/k3bdataview.cpp:178
+msgid "Properties..."
+msgstr "Propriétés..."
+
+#: data/k3bdataview.cpp:180
+msgid "New Directory..."
+msgstr "Nouveau répertoire..."
+
+#: data/k3bdataview.cpp:182
+msgid "Rename"
+msgstr "Renommer"
+
+#: data/k3bdataview.cpp:184
+msgid "Parent Directory"
+msgstr "Dossier parent"
+
+#: data/k3bdataview.cpp:251
+msgid "Please insert the name for the new directory"
+msgstr "Veuillez entrer le nom du nouveau répertoire"
+
+#: data/k3bdataview.cpp:255
+msgid ""
+"A file with that name already exists.\n"
+"Please insert the name for the new directory"
+msgstr ""
+"Un fichier avec  ce nom existe déjà.\n"
+"Veuillez entrer le nom du nouveau répertoire"
+
+#: data/k3bisoimagejob.cpp:107
+msgid "Please specify a cd writing device"
+msgstr "Veuillez spécifier un périphérique de gravure"
+
+#: data/k3bisoimagejob.cpp:114
+#, c-format, ycp-format
+msgid "Could not find image %1"
+msgstr "Impossible de trouver l'image %1"
+
+#: audio/k3baudiojob.cpp:501 data/k3bdatajob.cpp:276
+#: data/k3bisoimagejob.cpp:120
+msgid "Preparing write process..."
+msgstr "Prépare le processus d'écriture..."
+
+#: audio/k3baudiojob.cpp:777 data/k3bdatajob.cpp:117 data/k3bdatajob.cpp:299
+#: data/k3bisoimagejob.cpp:127 k3bblankingjob.cpp:59
+msgid "Cdrecord executable not found."
+msgstr "Fichier exécutable 'cdrecord' non trouvé"
+
+#: audio/k3baudiojob.cpp:869 data/k3bdatajob.cpp:141
+#: data/k3bisoimagejob.cpp:190 k3bblankingjob.cpp:111
+msgid "Could not start cdrecord!"
+msgstr "Impossible de démarrer 'cdrecord'"
+
+#: audio/k3baudiojob.cpp:766 audio/k3baudiojob.cpp:877
+#: cdcopy/k3bcdcopyjob.cpp:359 data/k3bdatajob.cpp:402
+#: data/k3bisoimagejob.cpp:196
+#, c-format, ycp-format
+msgid "Starting simulation at %1x speed..."
+msgstr "Démarrer la simulation à la vitesse de %1x..."
+
+#: audio/k3baudiojob.cpp:768 audio/k3baudiojob.cpp:879 data/k3bdatajob.cpp:404
+#: data/k3bisoimagejob.cpp:198
+#, c-format, ycp-format
+msgid "Starting recording at %1x speed..."
+msgstr "Démarrer l'enregistrement à la vitesse de %1x..."
+
+#: data/k3bisoimagejob.cpp:200
+msgid "Writing ISO Image"
+msgstr "Écriture de l'image ISO"
+
+#: audio/k3baudiojob.cpp:371 data/k3bdatajob.cpp:472 data/k3bdatajob.cpp:971
+#: data/k3bisoimagejob.cpp:213 k3bblankingjob.cpp:129
+msgid "Could not unlock cd drive."
+msgstr "Impossible de déverrouiller le lecteur cd."
+
+#: data/k3bdatajob.cpp:497 data/k3bisoimagejob.cpp:218
+msgid "Writing canceled."
+msgstr "Annulation de l'écriture."
+
+#: data/k3bdatajob.cpp:659 data/k3bisoimagejob.cpp:321
+msgid "Writing iso data"
+msgstr "Écriture des données iso"
+
+#: audio/k3baudiojob.cpp:183 data/k3bdatajob.cpp:662
+#: data/k3bisoimagejob.cpp:324
+msgid "Fixating"
+msgstr "Finalise"
+
+#: audio/k3baudiojob.cpp:189 data/k3bdatajob.cpp:668
+#: data/k3bisoimagejob.cpp:330
+msgid "Writing pregap"
+msgstr "Écriture de la plage de début (?)"
+
+#: audio/k3baudiojob.cpp:192 data/k3bdatajob.cpp:671
+#: data/k3bisoimagejob.cpp:333
+msgid "Performing OPC"
+msgstr "Sauvegarde OPC"
+
+#: audio/k3baudiojob.cpp:195 data/k3bdatajob.cpp:674
+#: data/k3bisoimagejob.cpp:336
+msgid "Sending CUE sheet"
+msgstr "Envoyer la couche CUE"
+
+#: audio/k3baudiojob.cpp:198 data/k3bdatajob.cpp:677
+#: data/k3bisoimagejob.cpp:339
+msgid "Enabled BURN-Proof"
+msgstr "BURN-Proof utilisé"
+
+#: data/k3bdatajob.cpp:769 data/k3bisoimagejob.cpp:359
+msgid "Simulation successfully finished"
+msgstr "Simulation terminée avec succès"
+
+#: data/k3bdatajob.cpp:771 data/k3bisoimagejob.cpp:361
+msgid "Writing successfully finished"
+msgstr "Écriture terminée avec succès"
+
+#: data/k3bdatajob.cpp:778 data/k3bisoimagejob.cpp:368
+#, ycp-format
+msgid "Cdrecord returned some error! (code %1)"
+msgstr "Cdrecord a renvoyé des erreurs ! (code %1)"
+
+#: data/k3bdatajob.cpp:738 data/k3bdatajob.cpp:779 data/k3bisoimagejob.cpp:369
+#: k3bblankingjob.cpp:160
+msgid "Sorry, no error handling yet! :-(("
+msgstr ""
+
+#: audio/k3baudiojob.cpp:903 audio/k3baudiojob.cpp:943
+#: cdcopy/k3bcdcopyjob.cpp:237 cdcopy/k3bcdcopyjob.cpp:315
+#: cdcopy/k3bcdcopyjob.cpp:401 data/k3bdatajob.cpp:739 data/k3bdatajob.cpp:780
+#: data/k3bisoimagejob.cpp:370
+msgid "Please send me a mail with the last output..."
+msgstr "Veuillez m'envoyer un mail avec la dernière sortie..."
+
+#: data/k3bdatajob.cpp:787 data/k3bisoimagejob.cpp:377 k3bblankingjob.cpp:167
+msgid "Cdrecord did not exit cleanly."
+msgstr "Cdrecord ne s'est pas arrêté correctement."
+
+#: data/k3bdatapropertiesdialog.cpp:37
+msgid "File properties"
+msgstr "Propriétés du fichier"
+
+#: data/k3bdatapropertiesdialog.cpp:59
+msgid "Type:"
+msgstr "Type :"
+
+#: data/k3bdatapropertiesdialog.cpp:60
+msgid "Location:"
+msgstr "Emplacement :"
+
+#: data/k3bdatapropertiesdialog.cpp:61 data/k3bisoimagewritingdialog.cpp:89
+msgid "Size:"
+msgstr "Taille :"
+
+#: data/k3bdatapropertiesdialog.cpp:68
+msgid "Local name:"
+msgstr "Nom local :"
+
+#: data/k3bdatapropertiesdialog.cpp:70
+msgid "Local location:"
+msgstr "Emplacement local :"
+
+#: data/k3bdatapropertiesdialog.cpp:100
+#, ycp-format
+msgid ""
+"\n"
+"(in %1 files and %2 directories)"
+msgstr ""
+"\n"
+"(dans %1 fichiers et %2 répertoires)"
+
+#: data/k3bisoimagewritingdialog.cpp:49
+msgid "Write ISO image to cd"
+msgstr "Graver l'image ISO sur le cd"
+
+#: data/k3bisoimagewritingdialog.cpp:50 k3bprojectburndialog.cpp:36
+msgid "Write"
+msgstr "Graver"
+
+#: data/k3bisoimagewritingdialog.cpp:50
+msgid "Start writing"
+msgstr "Démarrer la gravure"
+
+#: data/k3bisoimagewritingdialog.cpp:73
+msgid "Image to write"
+msgstr "Image à graver"
+
+#: data/k3bisoimagewritingdialog.cpp:109 k3bsetup/k3bsetupwizardtabs.cpp:206
+#: k3bsetup/k3bsetupwizardtabs.cpp:266
+msgid "Burnproof"
+msgstr "Burnproof"
+
+#: data/k3bisoimagewritingdialog.cpp:110
+msgid "Simulate"
+msgstr "Simuler"
+
+#: data/k3bisoimagewritingdialog.cpp:145
+#, c-format, ycp-format
+msgid "Could not find file %1"
+msgstr "Impossible de trouver le fichier %1"
+
+#: data/k3bisoimagewritingdialog.cpp:204
+msgid "Choose iso image file"
+msgstr "Choisissez un fichier image iso"
+
+#: data/k3bdatafileview.cpp:46
+msgid "Name"
+msgstr "Nom"
+
+#: data/k3bdatafileview.cpp:47
+msgid "Type"
+msgstr "Type"
+
+#: data/k3bdatajob.cpp:81
+#, c-format, ycp-format
+msgid "Could not write to temporary file %1"
+msgstr "Impossible d'écrire dans le fichier temporaire %1"
+
+#: data/k3bdatajob.cpp:109
+msgid "Searching previous session"
+msgstr "Cherche la session précédente"
+
+#: data/k3bdatajob.cpp:171
+msgid "Could not retrieve multisession information from disk."
+msgstr "Impossible de charger les informations de multisession du cd."
+
+#: data/k3bdatajob.cpp:172
+msgid "The disk is either empty or not appendable."
+msgstr "Le cd est vide ou ne peut être continué."
+
+#: data/k3bdatajob.cpp:223 data/k3bdatajob.cpp:450
+msgid "Could not start mkisofs!"
+msgstr "Impossible de démarrer 'mkisofs' !"
+
+#: data/k3bdatajob.cpp:252
+msgid "Could not retrieve size of data. On-the-fly writing did not work."
+msgstr "Impossible d'établir la taille des données. La gravure 'à-la-volée' ne peut fonctionner."
+
+#: data/k3bdatajob.cpp:253
+msgid "Please create an image first!"
+msgstr "Veuillez créer une image d'abord !"
+
+#: data/k3bdatajob.cpp:387
+msgid "Could not start mkisofs/cdrecord!"
+msgstr "Impossible de démarrer 'mkisofs'/'cdrecord' !"
+
+#: data/k3bdatajob.cpp:394
+msgid "Starting multi session disk."
+msgstr "Crée le disque multisession"
+
+#: data/k3bdatajob.cpp:396
+msgid "Appending session"
+msgstr "Ajoute la session"
+
+#: data/k3bdatajob.cpp:398
+msgid "Finishing multi session disk"
+msgstr "Termine le disque multisession"
+
+#: data/k3bdatajob.cpp:406
+msgid "Writing ISO"
+msgstr "Écriture ISO"
+
+#: data/k3bdatajob.cpp:457
+#, c-format, ycp-format
+msgid "Creating ISO-image in %1"
+msgstr "Crée l'image ISO dans %1"
+
+#: data/k3bdatajob.cpp:458
+msgid "Creating ISO-image"
+msgstr "Crée l'image ISO"
+
+#: data/k3bdatajob.cpp:486
+#, c-format, ycp-format
+msgid "Removing iso-image %1"
+msgstr "Supprime l'image ISO %1"
+
+#: data/k3bdatajob.cpp:492 data/k3bdatajob.cpp:717
+#, c-format, ycp-format
+msgid "Image successfully created in %1"
+msgstr "Image crée avec succès dans %1"
+
+#: data/k3bdatajob.cpp:726
+#, c-format, ycp-format
+msgid "Removed image file %1"
+msgstr "Fichier image %1 supprimé"
+
+#: data/k3bdatajob.cpp:737
+#, ycp-format
+msgid "Mkisofs returned some error. (code %1)"
+msgstr "'Mkisofs' a renvoyé des erreurs (code %1)"
+
+#: data/k3bdatajob.cpp:746
+msgid "Mkisofs did not exit cleanly."
+msgstr "Mkisofs ne s'est pas arrêté correctement"
+
+#: data/k3bdatajob.cpp:811
+msgid "Mkisofs executable not found."
+msgstr "Fichier exécutable 'mkisofs' non trouvé."
+
+#: k3bblankingdialog.cpp:31
+msgid "Blanking CD-RW"
+msgstr "Effacement du CD réinscriptible ('CD-RW')"
+
+#: k3bblankingdialog.cpp:32
+msgid "Blank"
+msgstr "Effacer"
+
+#: k3bblankingdialog.cpp:32
+msgid "Start blanking"
+msgstr "Démarrer l'effacement"
+
+#: k3bblankingdialog.cpp:57
+msgid "Blanking type"
+msgstr "Type d'effacement"
+
+#: k3bblankingdialog.cpp:67
+msgid "Fast"
+msgstr "Rapide"
+
+#: k3bblankingdialog.cpp:68
+msgid "Complete"
+msgstr "Complet"
+
+#: k3bblankingdialog.cpp:69
+msgid "Blank last track"
+msgstr "Effacer la dernière piste"
+
+#: k3bblankingdialog.cpp:70
+msgid "Unclose last session"
+msgstr "Rouvrir la dernière session"
+
+#: k3bblankingdialog.cpp:71
+msgid "Blank last session"
+msgstr "Effacer la dernière session"
+
+#: k3bblankingdialog.cpp:82
+msgid "Output"
+msgstr "Sortie"
+
+#: k3bblankingdialog.cpp:109
+msgid ""
+"Force\n"
+"(Try this if K3b\n"
+"is not able to\n"
+"blank a cdrw in\n"
+"normal mode)"
+msgstr ""
+"Forcer\n"
+"(à essayer si K3b\n"
+"ne peut effacer un\n "
+"cdrw en mode normal)"
+
+#: k3btempdirselectionwidget.cpp:48 k3btempdirselectionwidget.cpp:180
+msgid "Temp directory"
+msgstr "Répertoire temporaire"
+
+#: k3btempdirselectionwidget.cpp:58
+msgid "Write Image file to"
+msgstr "Écrire le fichier image vers"
+
+#: k3btempdirselectionwidget.cpp:63
+msgid "Free space on device"
+msgstr "Espace libre sur le périphérique"
+
+#: k3btempdirselectionwidget.cpp:68
+msgid "Size of CD"
+msgstr "Taille du CD"
+
+#: k3btempdirselectionwidget.cpp:87
+msgid "..."
+msgstr "..."
+
+#: k3btempdirselectionwidget.cpp:152
+msgid "Select temp directory"
+msgstr "Sélectionner le répertoire temporaire"
+
+#: k3btempdirselectionwidget.cpp:154
+msgid "Select temp file"
+msgstr "Sélectionner le fichier temporaire"
+
+#: k3btempdirselectionwidget.cpp:182
+msgid "Temp file"
+msgstr "Fichier temporaire"
+
+#: k3bburnprogressdialog.cpp:63
+msgid "Debugging output"
+msgstr "Sortie de débuggage"
+
+#: k3bburnprogressdialog.cpp:100
+msgid "K3b - Progress"
+msgstr "K3b - Progression"
+
+#: k3bburnprogressdialog.cpp:169
+msgid "Show Debugging Output"
+msgstr "Montrer la sortie de débuggage"
+
+#: k3bburnprogressdialog.cpp:172
+msgid "Buffer Status"
+msgstr "Statut du tampon"
+
+#: k3bburnprogressdialog.cpp:181
+msgid "Writer"
+msgstr "Graveur"
+
+#: k3bburnprogressdialog.cpp:189 k3bburnprogressdialog.cpp:309
+#: k3bsetup/k3bsetupwizardtabs.cpp:813
+msgid "Progress"
+msgstr "Avancement"
+
+#: k3bburnprogressdialog.cpp:242 k3bburnprogressdialog.cpp:248
+#, ycp-format
+msgid "%1 of %2 MB written"
+msgstr "%1 de %2 Mo gravés"
+
+#: k3bburnprogressdialog.cpp:280
+msgid "Process finished"
+msgstr "Processus terminé"
+
+#: k3bburnprogressdialog.cpp:341
+msgid "Writer: "
+msgstr "Graveur : "
+
+#: k3bburnprogressdialog.cpp:358
+msgid "Do you really want to cancel?"
+msgstr "Voulez - vous vraiment annuler ?"
+
+#: k3bburnprogressdialog.cpp:398
+#, ycp-format
+msgid "Overall progress (%1)"
+msgstr "Progression totale (%1)"
+
+#: k3bblankingjob.cpp:116
+#, ycp-format
+msgid "Start blanking disc at speed %1..."
+msgstr "Démarrer l'effacement du disque à la vitesse de %1..."
+
+#: k3bblankingjob.cpp:153
+msgid "Process successfully finished"
+msgstr "Processus terminé avec succès"
+
+#: audio/k3baudiojob.cpp:901 k3bblankingjob.cpp:159
+msgid "Cdrecord returned some error!"
+msgstr "'Cdrecord' a renvoyé des erreurs !"
+
+#: audio/k3baudiojob.cpp:210 audio/k3baudiojob.cpp:279
+#, ycp-format
+msgid "Writing track %1: '%2'"
+msgstr "Gravure de la piste %1 : '%2'"
+
+#: audio/k3baudiojob.cpp:246 k3bjob.cpp:41
+msgid "Executing Power calibration"
+msgstr "Exécution de la calibration de la puissance"
+
+#: audio/k3baudiojob.cpp:249 k3bjob.cpp:44
+msgid "Power calibration successful"
+msgstr "Calibration de la puissance réussie"
+
+#: audio/k3baudiojob.cpp:250 k3bjob.cpp:45
+msgid "Preparing burn process..."
+msgstr "Prépare le processus de gravure..."
+
+#: audio/k3baudiojob.cpp:253 k3bjob.cpp:48
+msgid "Flushing cache"
+msgstr "Vidange du cache"
+
+#: audio/k3baudiojob.cpp:256 k3bjob.cpp:51
+msgid "Writing CD-Text leadin..."
+msgstr "Gravure de l'entête du CD-Text"
+
+#: audio/k3baudiojob.cpp:259 k3bjob.cpp:54
+msgid "Turning BURN-Proof on"
+msgstr "Activation du mode BURN-Proof"
+
+#: audio/k3baudiojob.cpp:353
+msgid "Writing canceled by user."
+msgstr "Gravure annulée par l'utilisateur."
+
+#: audio/k3baudiojob.cpp:425
+msgid "Waiting for all tracks' length to be calculated."
+msgstr "Attente du calcul de la longueur de toutes les pistes"
+
+#: audio/k3baudiojob.cpp:434
+msgid "All tracks' length ready."
+msgstr "Calcul terminé."
+
+#: audio/k3baudiojob.cpp:465
+msgid "On the fly writing not supported with cdrecord."
+msgstr "Gravure 'à-la-volée' non supporté par 'cdrecord."
+
+#: audio/k3baudiojob.cpp:469
+msgid "Hiding first track not supported by cdrecord"
+msgstr "Masquage de la première piste non supporté par 'cdrecord'."
+
+#: audio/k3baudiojob.cpp:472
+msgid "CD-TEXT not supported by cdrecord."
+msgstr "CD-TEXT non supporté par 'cdrecord'."
+
+#: audio/k3baudiojob.cpp:482 audio/k3baudiojob.cpp:483
+msgid "Buffering files"
+msgstr "Fichiers tampons"
+
+#: audio/k3baudiojob.cpp:500 option/k3boptiondialog.cpp:118
+msgid "Writing"
+msgstr "Gravure"
+
+#: audio/k3baudiojob.cpp:538
+msgid "Internal error: No module. Please report!"
+msgstr "Problème interne : 'No module'. Veuillez le signaler !"
+
+#: audio/k3baudiojob.cpp:558
+#, c-format, ycp-format
+msgid "Buffering file %1"
+msgstr "Fichier tampon %1"
+
+#: audio/k3baudiojob.cpp:565
+#, c-format, ycp-format
+msgid "Could not open buffer file %1"
+msgstr "Impossible d'ouvrir le fichier tampon %1"
+
+#: audio/k3baudiojob.cpp:628
+msgid "Error while streaming file"
+msgstr ""
+
+#: audio/k3baudiojob.cpp:644
+#, ycp-format
+msgid "Written buffer file for %1 to %2"
+msgstr "Fichier tampon écrit pour %1 à %2"
+
+#: audio/k3baudiojob.cpp:648
+#, c-format, ycp-format
+msgid "Error while buffering track %1"
+msgstr "Erreur durant la mise en tampon de la piste %1"
+
+#: audio/k3baudiojob.cpp:672 cdcopy/k3bcdcopyjob.cpp:163
+#: cdcopy/k3bcdcopyjob.cpp:263 cdcopy/k3bcdcopyjob.cpp:338
+msgid "Cdrdao executable not found."
+msgstr "Exécutable 'cdrdao' non trouvé."
+
+#: audio/k3baudiojob.cpp:679
+msgid "Writing TOC-file"
+msgstr "Écriture de la table des matières (TOC)"
+
+#: audio/k3baudiojob.cpp:684
+msgid "Could not write correct TOC-file."
+msgstr "Impossible d'écrire la table des matières (TOC)."
+
+#: audio/k3baudiojob.cpp:757 cdcopy/k3bcdcopyjob.cpp:204
+#: cdcopy/k3bcdcopyjob.cpp:292 cdcopy/k3bcdcopyjob.cpp:369
+msgid "Could not start cdrdao!"
+msgstr "Impossible de démarrer 'cdrdao\" !"
+
+#: audio/k3baudiojob.cpp:838
+msgid "Not all files have been buffered."
+msgstr "Tous les fichiers n'ont pas été mis en tampon."
+
+#: audio/k3baudiojob.cpp:892 audio/k3baudiojob.cpp:932
+msgid "Simulation successfully completed"
+msgstr "Simulation terminée avec succès"
+
+#: audio/k3baudiojob.cpp:894 audio/k3baudiojob.cpp:934
+msgid "Writing successfully completed"
+msgstr "Gravure terminée avec succès"
+
+#: audio/k3baudiojob.cpp:902 audio/k3baudiojob.cpp:942
+#: cdcopy/k3bcdcopyjob.cpp:236 cdcopy/k3bcdcopyjob.cpp:314
+#: cdcopy/k3bcdcopyjob.cpp:400
+msgid "Sorry, no error handling yet!"
+msgstr ""
+
+#: audio/k3baudiojob.cpp:912
+msgid "Cdrecord did not exit cleanly!"
+msgstr "'Cdrecord' ne s'est pas arrêté correctement !"
+
+#: audio/k3baudiojob.cpp:941 cdcopy/k3bcdcopyjob.cpp:235
+#: cdcopy/k3bcdcopyjob.cpp:313 cdcopy/k3bcdcopyjob.cpp:399
+msgid "Cdrdao returned some error!"
+msgstr "'Cdrdao' a renvoyé des erreurs !"
+
+#: audio/k3baudiojob.cpp:952 cdcopy/k3bcdcopyjob.cpp:243
+#: cdcopy/k3bcdcopyjob.cpp:321 cdcopy/k3bcdcopyjob.cpp:407
+msgid "Cdrdao did not exit cleanly!"
+msgstr "'Cdrdao' ne s'est pas arrêté correctement !"
+
+#: audio/k3baudiojob.cpp:987
+msgid "Removing temporary files!"
+msgstr "Suppression des fichiers temporaires !"
+
+#: audio/k3baudiojob.cpp:992
+#, c-format, ycp-format
+msgid "Removing file %1"
+msgstr "Suppression du fichier %1"
+
+#: audio/k3baudiodoc.cpp:206
+msgid "Only mp3 and wav audio files are supported."
+msgstr "Seulement les fichiers audio MP3 et Wav sont supportés."
+
+#: audio/k3baudiodoc.cpp:207
+msgid "Wrong file format"
+msgstr "Format de fichier non valide"
+
+#: audio/k3baudioview.cpp:107
+msgid "Play"
+msgstr "Lecture"
+
+#: audio/k3baudioview.cpp:110
+msgid "Play all"
+msgstr "Tout lire"
+
+#: audio/k3baudiotrackdialog.cpp:40
+msgid "Audio track"
+msgstr "Piste audio"
+
+#: audio/k3baudioburndialog.cpp:53 audio/k3baudiotrackdialog.cpp:180
+msgid "CD-Text"
+msgstr "CD-Text"
+
+#: audio/k3baudioburndialog.cpp:258 audio/k3baudiotrackdialog.cpp:190
+msgid "&Performer"
+msgstr "E&xécutant"
+
+#: audio/k3baudioburndialog.cpp:268 audio/k3baudiotrackdialog.cpp:204
+msgid "&Title"
+msgstr "&Titre"
+
+#: audio/k3baudioburndialog.cpp:215 audio/k3baudiotrackdialog.cpp:214
+msgid "&Message"
+msgstr "&Message"
+
+#: audio/k3baudiotrackdialog.cpp:224
+msgid "&ISRC"
+msgstr "&ISRC"
+
+#: audio/k3baudioburndialog.cpp:253 audio/k3baudiotrackdialog.cpp:231
+msgid "&Songwriter"
+msgstr "&Auteur"
+
+#: audio/k3baudioburndialog.cpp:244 audio/k3baudiotrackdialog.cpp:244
+msgid "&Arranger"
+msgstr "A&rrangements"
+
+#: audio/k3baudiotrackdialog.cpp:254
+msgid "File Info"
+msgstr "Info Fichier"
+
+#: audio/k3baudiotrackdialog.cpp:269
+msgid "filename"
+msgstr "Nom du fichier"
+
+#: audio/k3baudiotrackdialog.cpp:287
+msgid "Length     "
+msgstr "Longueur     "
+
+#: audio/k3baudiotrackdialog.cpp:292
+msgid "0.0 MB"
+msgstr "0.0 Mo"
+
+#: audio/k3baudiotrackdialog.cpp:298
+msgid "0:0:0"
+msgstr "0:0:0"
+
+#: audio/k3baudiotrackdialog.cpp:318
+msgid "Pre&gap"
+msgstr ""
+
+#: audio/k3baudiotrackdialog.cpp:331 audio/k3baudiotrackdialog.cpp:380
+#: option/k3bburningoptiontab.cpp:58 option/k3bburningoptiontab.cpp:199
+msgid "Seconds"
+msgstr "Secondes"
+
+#: audio/k3baudiotrackdialog.cpp:337
+msgid "Preemphasis"
+msgstr "Préamplification"
+
+#: audio/k3baudiotrackdialog.cpp:342
+msgid "Copy protected"
+msgstr "Copie protégée"
+
+#: audio/k3baudioburndialog.cpp:131
+msgid "Write CD-Text"
+msgstr "Graver Cd-Text"
+
+#: audio/k3baudioburndialog.cpp:134
+msgid "DiscAtOnce"
+msgstr "Mode 'Disc-At-Once'"
+
+#: audio/k3baudioburndialog.cpp:137
+msgid "Simulate Writing"
+msgstr "Simuler la gravure"
+
+#: audio/k3baudioburndialog.cpp:143
+msgid "Use Padding"
+msgstr ""
+
+#: audio/k3baudioburndialog.cpp:146
+msgid "Hide first track"
+msgstr "Masquer la première piste"
+
+#: audio/k3baudioburndialog.cpp:149
+msgid "Remove temp files"
+msgstr "Supprimer les fichiers temporaires"
+
+#: audio/k3baudioburndialog.cpp:195
+msgid "International Standard Recording Code"
+msgstr ""
+
+#: audio/k3baudioburndialog.cpp:200
+msgid "&Disc ID"
+msgstr "&Disque ID"
+
+#: audio/k3baudioburndialog.cpp:221
+msgid "&UPC EAN"
+msgstr "&UPC EAN"
+
+#: kdiskfreesp.moc.cpp:34 kdiskfreesp.moc.cpp:42
+msgid "KDiskFreeSp"
+msgstr ""
+
+#: klistviewlineedit.moc.cpp:34 klistviewlineedit.moc.cpp:42
+msgid "KListViewLineEdit"
+msgstr ""
+
+#: k3bdirview.cpp:114
+msgid "Location"
+msgstr "Emplacement"
+
+#: k3bdirview.cpp:121
+msgid "&Disk info"
+msgstr "Info &Disque"
+
+#: k3bdirview.cpp:123
+msgid "&Unmount"
+msgstr "Dé&monter"
+
+#: k3bdirview.cpp:153
+msgid "Please wait..."
+msgstr "Veuillez patienter..."
+
+#: k3bdirview.cpp:160
+msgid "K3b is trying to fetch information about the inserted disk."
+msgstr "K3b essaie de récupérer des informations sur le disque inséré."
+
+#: k3bdirview.cpp:206
+#, ycp-format
+msgid "K3b could not mount %1. Please run K3bSetup."
+msgstr "K3b ne peut monter %1. Veuillez lancer la configuration de K3b."
+
+#: k3bdirview.cpp:207
+msgid "I/O error"
+msgstr "Erreur d'E/S"
+
+#: _translatorinfo.cpp:1
+#, fuzzy
+msgid ""
+"_: NAME OF TRANSLATORS\n"
+"Your names"
+msgstr "Fleury Marc"
+
+#: _translatorinfo.cpp:3
+msgid ""
+"_: EMAIL OF TRANSLATORS\n"
+"Your emails"
+msgstr "M.Fleury@wanadoo.fr"
+
+#: main.cpp:35
+msgid ""
+"K3b is a cd burning program that has two aims:\n"
+"usability and as much features as possible."
+msgstr ""
+"K3b est un logiciel de gravure de cd qui a deux buts :\n"
+"facilité d'utilisation et le plus de fonctionnalités possibles."
+
+#: main.cpp:40
+msgid "file to open"
+msgstr "fichier à ouvrir"
+
+#: main.cpp:48
+msgid "K3b"
+msgstr "K3b"
+
+#: main.cpp:51
+msgid "Maintainer"
+msgstr "Mainteneur"
+
+#: main.cpp:52
+msgid "Developer"
+msgstr "Développeur"
+
+#: main.cpp:65
+msgid ""
+"It seems as if you have not run K3bSetup yet. It is recommended to do so. "
+"Should K3bSetup be started?"
+msgstr ""
+"Il semble que vous n'avez pas encore lancé K3b auparavant. Il est recommandé de faire ainsi. "
+"La configuration de K3b doit - elle être lancée ?"
+
+#: k3bsetup/k3bsetupwizard.cpp:21 main.cpp:67
+msgid "K3b Setup"
+msgstr "Configuration de K3b"
+
+#: main.cpp:68
+msgid "Don't bother me again."
+msgstr "Ne plus me le demander"
+
+#: k3bsetup/main.cpp:30 k3bsetup/main.cpp:42
+msgid "K3bSetup"
+msgstr "Configuration de K3b"
+
+#: k3bsetup/main.cpp:53
+msgid "K3b Setup needs to be run as root!"
+msgstr "La configuration de K3b doit être lancée en tant que root !"
+
+#: k3bsetup/k3bsetup.cpp:94
+msgid "Saving cd devices to global configuration."
+msgstr "Enregistrer les périphériques cd dans la configuration globale."
+
+#: k3bsetup/k3bsetup.cpp:101 k3bsetup/k3bsetup.cpp:113
+#: k3bsetup/k3bsetup.cpp:125 k3bsetup/k3bsetup.cpp:282
+#: k3bsetup/k3bsetup.cpp:303 k3bsetup/k3bsetup.cpp:328
+#: k3bsetup/k3bsetup.cpp:387
+msgid "Success"
+msgstr "Succès"
+
+#: k3bsetup/k3bsetup.cpp:106
+msgid "Writing external program paths to global configuration."
+msgstr "Écrire les chemins des programmes externes dans la configuration globale."
+
+#: k3bsetup/k3bsetup.cpp:117
+msgid "Writing permission settings to global configuration."
+msgstr "Écrire les paramètres de permissions dans la configuration globale."
+
+#: k3bsetup/k3bsetup.cpp:252
+msgid "Changing cd device permissions."
+msgstr "Change les permissions des périphériques cd."
+
+#: k3bsetup/k3bsetup.cpp:266
+#, ycp-format
+msgid "Could not find generic device (%1)"
+msgstr "Impossible de trouver le périphérique générique (%1)"
+
+#: k3bsetup/k3bsetup.cpp:275
+#, ycp-format
+msgid "Could not find ioctl device (%1)"
+msgstr "Impossible de trouver le périphérique iotcl (%1)"
+
+#: k3bsetup/k3bsetup.cpp:296
+#, c-format, ycp-format
+msgid "Changing permissions for %1."
+msgstr "Change les permissions pour %1"
+
+#: k3bsetup/k3bsetup.cpp:306
+#, ycp-format
+msgid "%1 is no %2 executable."
+msgstr "%1 n'est pas %2 exécutable."
+
+#: k3bsetup/k3bsetup.cpp:311
+#, c-format, ycp-format
+msgid "Could not find %1."
+msgstr "Impossible de trouver %1."
+
+#: k3bsetup/k3bsetup.cpp:320
+#, ycp-format
+msgid "Saving old %1 to %2"
+msgstr "Enregistre ancien %1 en %2."
+
+#: k3bsetup/k3bsetup.cpp:362
+#, c-format, ycp-format
+msgid "Creating fstab entry for %1"
+msgstr "Crée une entrée 'fstab' pour %1"
+
+#: k3bsetup/k3bsetup.cpp:372
+#, ycp-format
+msgid "Could not create mount point '%1'"
+msgstr "Impossible de créer le point de montage '%1'"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:42
+msgid "Welcome to K3bSetup"
+msgstr "Bienvenue dans la configuration de K3b"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:45
+msgid ""
+"<h1>Welcome to K3b Setup.</h1><p>This Wizard will help you to prepare your "
+"system for cd writing with K3b. First of all: DO NOT fear linux permissions "
+"anymore. K3b Setup takes care of nearly everything. So if you are new to "
+"linux and know nothing about things like suid root don't panic! Just click "
+"next.</p><p>If you know what is needed to write cds under linux and think "
+"you do not need a wizard like this please do not exit since there are some "
+"things special to K3b and K3b Setup will not change anything on your system "
+"before you finished the setup.</p><p><b>Thanx for using K3b.</b></p>"
+msgstr ""
+"<h1>Bienvenue dans la configuration de K3b.</h1><p> Cet assistant vous aidera à préparer votre "
+"système pour graver des CD avec K3b. Avant tout : NE craignez PAS plus longtemps les permissions "
+"Linux. Le module de configuration K3b prend soin d'à peu près tout. Ainsi, si vous êtes nouveau sous "
+"Linux, et que vous ne savez rien sur des choses comme 'suid root'; ne paniquez pas ! Cliquez "
+"simplement sur Suivant.</p><p> Si vous savez ce qui est requis pour graver des CD sous Linux et "
+"estimez que vous n'avez pas besoin d'un assistant comme celui-ci, merci de ne pas quittez, puisque"
+"certaines choses spécifiques à K3b et à la configuration de K3b ne seront pas changées avant "
+"que vous n'ayez fini la configuration.</p><p><b> Merci d'utiliser K3b.</b></p>"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:69
+msgid "Setup CD devices"
+msgstr "Configurer les périphériques CD"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:76
+msgid "Add device"
+msgstr "Ajouter un périphérique"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:79
+msgid ""
+"<p>K3b Setup has detected the following CD drives. It tries hard to detect "
+"capabilities like the maximum read and write speed but does sometimes fail.</"
+"p><p>Please check if all capabilities are detected correctly and change them "
+"manually if not by clicking twice on the value you want to change.</p><p>You "
+"can add additional devices (like /dev/cdrom) if your drive has not been "
+"detected.</p>"
+msgstr ""
+"<p>La configuration de K3b a détecté les périphériques CD suivants. Il tente de détecter "
+"des capacités comme la vitesse maximale de lecture et d'écriture mais échoue parfois.</p><p> "
+"Veuillez vérifier si toutes les capacités sont détectées correctement et changez - les manuellement "
+"en cliquant deux fois sur la valeur que vous voulez changer.</p><p> Vous pouvez ajouter des "
+"périphériques additionnels (comme /dev/CD-ROM) si votre lecteur n'a pas été détecté.</p>"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:88
+msgid "Reading devices"
+msgstr "Périphériques de lecture"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:94 k3bsetup/k3bsetupwizardtabs.cpp:111
+msgid "system device"
+msgstr "Périphérique système"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:95 k3bsetup/k3bsetupwizardtabs.cpp:112
+msgid "value"
+msgstr "valeur"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:105
+msgid "Writing devices"
+msgstr "Périphériques de gravure"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:133 k3bsetup/k3bsetupwizardtabs.cpp:134
+#: k3bsetup/k3bsetupwizardtabs.cpp:372 k3bsetup/k3bsetupwizardtabs.cpp:512
+msgid "Click twice to change a value"
+msgstr "Cliquez deux fois pour changer une valeur"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:158 k3bsetup/k3bsetupwizardtabs.cpp:186
+#: option/k3bdeviceoptiontab.cpp:119 option/k3bdeviceoptiontab.cpp:143
+msgid "Vendor"
+msgstr "Vendeur"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:162 k3bsetup/k3bsetupwizardtabs.cpp:190
+msgid "Model"
+msgstr "Modèle"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:166 k3bsetup/k3bsetupwizardtabs.cpp:194
+msgid "Firmware"
+msgstr "Constructeur"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:170 k3bsetup/k3bsetupwizardtabs.cpp:198
+#: k3bsetup/k3bsetupwizardtabs.cpp:250
+msgid "Max read speed"
+msgstr "Vitesse maximale de lecture"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:202 k3bsetup/k3bsetupwizardtabs.cpp:258
+msgid "Max write speed"
+msgstr "Vitesse maximale d'écriture"
+
+#: cdinfo/k3bdiskinfoview.cpp:143 cdinfo/k3bdiskinfoview.cpp:145
+#: k3bsetup/k3bsetupwizardtabs.cpp:207 k3bsetup/k3bsetupwizardtabs.cpp:267
+#: k3bsetup/k3bsetupwizardtabs.cpp:272
+msgid "yes"
+msgstr "Oui"
+
+#: cdinfo/k3bdiskinfoview.cpp:143 cdinfo/k3bdiskinfoview.cpp:145
+#: k3bsetup/k3bsetupwizardtabs.cpp:207 k3bsetup/k3bsetupwizardtabs.cpp:269
+#: k3bsetup/k3bsetupwizardtabs.cpp:272
+msgid "no"
+msgstr "Non"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:219
+msgid ""
+"K3b Setup did not find any cd devices on your system. K3b is not of much use "
+"without any. Do you really want to continue?"
+msgstr ""
+"La configuration de K3b n'a trouvé aucun périphérique CD sur votre système. K3b "
+"ne peut fonctionner pleinement sans. Voulez - vous réellement continuer ?"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:221
+msgid "Missing cd devices"
+msgstr "Périphériques cd manquants"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:288
+msgid "No cd writer found"
+msgstr "Aucun graveur trouvé"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:291
+msgid ""
+"<p><b>K3b Setup did not find a cd writer on your system.</b></p>\n"
+"<p>If you have no cd writer and want to use K3b only for cd ripping "
+"everything is fine.</p>\n"
+"<p>If you are sure you have either a SCSI cd writer or enabled SCSI "
+"emulation please go back and add the device manually. If that does not "
+"work... well... please report!</p>\n"
+"<p>Otherwise you need to enable SCSI emulation for (at least) your ATAPI cd "
+"writer (although it is recommended to enable SCSI emulation for all cd "
+"drives it is not nessesary) since this is the only thing K3b Setup is not "
+"able to do for you (yet).</p>\n"
+"<p><b>How to enable SCSI emulation</b></p>\n"
+"\n"
+"<ol>\n"
+"<li>Make sure your kernel supports SCSI emulation at least as a module. If "
+"you use a standard kernel from your distribution this likely is the case. "
+"Try loading the module with <pre>modprobe ide-scsi</pre> as root. If your "
+"kernel does not support SCSI emulation you need to build your own kernel or "
+"at least a module. Sorry but that goes beyond the scope of this "
+"documentation.</li>\n"
+"<li>If your kernel supports SCSI emulation as a module it is recommended to "
+"add an entry in /etc/modules.conf so that the module is loaded "
+"automagically. Otherwise you have to load it with <pre>modprobe ide-scsi</"
+"pre> everytime you need it.\n"
+"</li>\n"
+"<li>The last step is to inform the kernel that you are about to use SCSI "
+"emulation at boottime. If you are using lilo (what is highly recommended) "
+"you need to add <pre>append = \"hdc=ide-scsi hdd=ide-scsi\"</pre> to your /"
+"etc/lilo.conf and rerun lilo as root to install the new configuration.\n"
+"After rebooting your system your cd writer is ready for action.</li>\n"
+"</ol>\n"
+"<p>If you experience problems feel free to contact me.</p>"
+msgstr ""
+"<p><b>La configuration de K3b n'a pas trouvé de graveur dans votre système.</b></p>\n"
+"<p>Si vous n'avez pas de graveur et voulez utiliser K3b uniquement pour extraire ('ripper') des CDs, "
+"tout est correct.</p>\n"
+"<p>Si vous êtes sûrs que vous avez soit graveur SCSI ou le mode simulation SCSI activé, "
+"veuillez retourner en arrière et ajouter le périphérique manuellement. Si cela ne marche pas, ... "
+"eh bien... signalez - le !</p>\n"
+"<p>Sinon vous avez besoin d'activer l'émulation SCSI pour (au moins) votre graveur ATAPI "
+"(bien qu'il soit recommandé de l'activer pour tous les lecteurs, ce n'est pas nécessaire) "
+"puisque c'est la seule chose que K3b ne peut faire à votre place (pour l'instant).</p>\n"
+"\n"
+"<ol>\n"
+"<li>Assurez - vous que votre noyau ('kernel') supporte l'émulation SCSI au moins comme module. Si "
+"vous utilisez un 'kernel' standard venant de votre distribution, c'est souvent le cas. "
+"Essayez de charger le module avec <pre>modprobe-ide-scsi</pre> en tant qu'administrateur ('root'). "
+"Si votre 'kernel' ne supporte pas l'émulation SCSI, vous devrez compiler votre propre 'kernel' ou "
+"au moins le module. Désolé, mais à partir d'ici, cela dépasse le champ de la documentation.</li>\n"
+"<li>La dernière étape est d'informer le 'kernel' que vous voulez utiliser l'émulation SCSI au moment "
+"du démarrage. Si vous utilisez Lilo (ce qui est fortement recommandé) vous devez ajoutez "
+"<pre>append = \"hdc=ide-scsi hdd=ide-scsi\"</pre> dans votre fichier /etc/lilo.conf et relancer Lilo "
+"en tant que root pour mettre en place la nouvelle configuration.\n"
+"Après le redémarrage de votre système, votre graveur est prêt à fonctionner.</li>\n"
+"</ol>\n"
+"<p>Si vous rencontrez des problèmes, contactez - moi.</p>"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:335
+msgid "Setup mount points for the cd drives"
+msgstr "Configuration des points de montage pour les lecteurs"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:343
+msgid ""
+"<p>On Linux cd devices are mounted into the file tree. Normally only root "
+"has permission to mount drives. K3b Setup can create entries in /etc/fstab "
+"for each of the detected cd drives. Every user and especially K3b will then "
+"be able to mount the devices on the given path.</p>"
+msgstr ""
+"<p>Sous Linux, les lecteurs sont 'montés' dans l'arborescence des fichiers. Normalement, "
+"seul l'administrateur a la permission de monter des lecteurs. La configuration de K3b peut "
+"créer les entrées dans '/etc/fstab' pour chacun des lecteurs détectés. Chaque utilisateur "
+"et spécialement K3b sera capable de monter les périphériques sur le chemin donné.</p>"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:350
+msgid "CD drive"
+msgstr "Lecteur CD"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:351
+msgid "System device"
+msgstr "Périphérique système"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:352
+msgid "Mount point"
+msgstr "Point de montage"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:359
+msgid "Let K3b Setup create fstab entries."
+msgstr "Laisser K3b créer les entrées dans 'fstab'"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:362
+msgid "Select mount point"
+msgstr "Sélectionner le point de montage"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:462
+#, c-format, ycp-format
+msgid "Select new mount point for %1"
+msgstr "Sélectionner le nouveau point de montage pour %1"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:479
+msgid "Setup external applications used by K3b"
+msgstr "Configurer les applications externes utilisées par K3b"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:487
+msgid ""
+"<p>K3b uses cdrdao, cdrecord and mkisofs to actually write the cds. It is "
+"recommended to install these programs. K3b will run without them but major "
+"functions (for example cd writing ;-) will be disabled.</p><p>K3b Setup "
+"tries to find the executables. You can change the paths manually if you want "
+"other versions to be used or K3b Setup did not find your installation.</p>"
+msgstr ""
+"<p>K3b utilise 'cdrdao', 'cdrecord' et 'mkisofs' pour graver les CDs. Il est "
+"recommandé d'installer ces programmes. K3b peut fonctionner sans eux, mais les "
+"fonctions majeurs (comme par exemple la gravure ;-) seront désactivées.</p><p> La "
+"configuration de K3b essaie de trouver les exécutables. Vous pouvez changer les chemins "
+"manuellement si vous voulez utiliser d'autres versions ou si K3b ne les trouve pas.</p>"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:495 option/k3bexternalbinoptiontab.cpp:35
+msgid "found"
+msgstr "trouvé"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:496
+msgid "program"
+msgstr "programme"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:497 option/k3bexternalbinoptiontab.cpp:37
+msgid "version"
+msgstr "version"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:498 option/k3bexternalbinoptiontab.cpp:38
+msgid "path"
+msgstr "chemin"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:504
+msgid "Find program"
+msgstr "Trouver programme"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:579
+#, ycp-format
+msgid "Please select %1 executable"
+msgstr "Veuillez sélectionner l'exécutable %1"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:593
+msgid "Setup some nesseccary permissions for K3b"
+msgstr "Configurer quelques permissions pour K3b"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:601
+msgid ""
+"<p>The external programs need to be run as root since they need write access "
+"to the cd drives and run with higher priority. K3b also needs write access "
+"to the cd drives (for extended functionality like detecting the capacity of "
+"a cd).</p><p>If you know what you are doing you can skip this and setup the "
+"permissions for yourself. But it is recommended to let K3bSetup make the "
+"changes (To learn more about what K3b Setup will do press <i>Details</i>).</"
+"p><p>Please specify the users that will use K3b. You can also specify an "
+"alternative group name. If you do not know what that means just leave the "
+"default.</p>"
+msgstr ""
+"<p>Les programmes externes ont besoin d'être lancés en tant que 'root' puisque "
+"ils ont besoin des accès d'écriture aux lecteurs et d'être lancés avec une haute priorité. "
+"K3b nécessite aussi les accès d'écriture aux lecteurs (pour des fonctions étendues "
+"comme détecter la capacité d'un CD).</p><p> Si vous savez ce qu'il faut faire, vous pouvez "
+"sauter cette étape et configurer les permissions vous-mêmes. Mais il est recommandé de "
+"laisser faire K3b (Pour en apprendre plus sur la configuration, cliquez sur <i> Détails</i>).</p> "
+"<p> Veuillez spécifiez les utilisateurs susceptibles de se servir de K3b. vous pouvez aussi "
+"spécifier un nom de groupe alternatif. Si vous ne savez pas laisser par défaut.</p>"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:612
+msgid "K3b users"
+msgstr "Utilisateurs de K3b"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:622
+msgid "Remove user"
+msgstr "Enlever utilisateur"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:623
+msgid "Add user"
+msgstr "Ajouter utilisateur"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:632
+msgid "let K3b Setup do the needed changes for the devices"
+msgstr "Laisser la configuration de K3b faire les changements nécessaires pour les périphériques"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:636
+msgid "let K3b Setup do the needed changes for the external programs"
+msgstr "Laisser la configuration de K3b faire les changements nécessaires pour les programmes externes"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:649
+msgid "Details"
+msgstr "Détails"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:653
+msgid "cd writing group"
+msgstr "groupe de graveurs"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:706
+msgid "Please specify a cd writing group."
+msgstr "Veuillez spécifier un groupe de graveurs."
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:706
+msgid "Missing group name"
+msgstr "Nom de groupe manquant"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:711
+msgid "You specified no users. Only root will be able to write cds. Continue?"
+msgstr "Vous n'avez pas spécifié d'utilisateurs. Seul l'administrateur pourra graver des CDs. Continuer ?"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:716
+msgid ""
+"You chose not to change device permissions. K3b will not be able to provide "
+"extended features like detection of writer capabilities. Continue?"
+msgstr ""
+"Vous avez choisi de ne pas changer les permissions des périphériques. K3b ne pourra "
+"fournir des fonctions étendues comme la détection de la capacité du graveur. Continuer ?"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:729
+msgid "Please enter a user name"
+msgstr "Veuillez entrer un nom d'utilisateur"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:738
+msgid "No valid user name. Please enter a user name"
+msgstr "Nom d'utilisateur non valide. Veuillez entrer un nom d'utilisateur"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:756
+msgid ""
+"<p>These are the permission changes K3b Setup will perform and why:</p>\n"
+"<table>\n"
+"<tr>\n"
+" <td>change permission for cdrecord, mksiofs, and cdrdao to 4710</td>\n"
+" <td>cdrecord and cdrdao need write access to all the cd drives and all "
+"three programs run with higher priority. That is why they need to be run as "
+"root.</td>\n"
+"</tr>\n"
+"<tr>\n"
+" <td>add cdrecord, mkisofs, and cdrdao to group 'cdrecording'</td>\n"
+" <td>not everybody shall be allowed to execute these programs since running "
+"a program as suid root always is a security risk.</td>\n"
+"</tr>\n"
+"<tr>\n"
+" <td>add the selected users to group 'cdrecording'</td>\n"
+" <td>these users will be able to run cdrecord, mkisofs, and cdrdao</td>\n"
+"</tr>\n"
+"<tr>\n"
+" <td>change permission for all detected SCSI drives to 660</td>\n"
+" <td>K3b needs write access to the SCSI cd drives in order to detect writing "
+"speed and things like that</td>\n"
+"</tr>\n"
+"<tr>\n"
+" <td>change permission for all detected ATAPI drives to 620</td>\n"
+" <td>K3b needs only read access to the ATAPI drives since it is not (yet) "
+"able to detect speed and stuff for ATAPI devices.</td>\n"
+"</tr>\n"
+"<tr>\n"
+" <td>add all detected devices to group 'cdrecording'</td>\n"
+" <td>since write access to devices is always a security risk (although one "
+"can not do much bad with writing to a cdrom device) only the selcted users "
+"will be able to access the drives</td>\n"
+"</tr>\n"
+"</table>"
+msgstr ""
+"<p>Voici les changements de permission que la configuration de K3b va effectuer et pourquoi : </p>\n"
+"<table>\n"
+"<tr>\n"
+"<td>changements de permission pour 'cdrecord', 'mkisofs' et 'cdrdao' en 4710</td>\n"
+"<td>'cdrecord' et 'cdrdao' nécessitent des accès d'écriture pour tous les lecteurs et ces trois "
+"programmes s'exécutent avec une haute priorité. C'est pourquoi ils doivent être lancés en tant que 'root'.</td>\n"
+"</tr>\n"
+"<tr>\n"
+" <td>ajouts de 'cdrecord', 'mkisofs' et 'cdrdao' au groupe 'cdrecording'</td>\n"
+" <td>autoriser tout le monde à exécuter ces programmes en tant que 'suid-root' peut-être un risque "
+"pour la sécurité.</td>\n"
+"</tr>\n"
+"<tr>\n"
+" <td>ajout des utilisateurs sélectionnés au groupe 'cdrecording'</td>\n"
+" <td>ces utilisateurs pourront lancer 'cdrecord', 'mkisofs' et 'cdrdao'</td>\n"
+"</tr>\n"
+"<tr>\n"
+" <td>changements de permission pour tous les lecteurs SCSI détectés en 660</td>\n"
+" <td>K3b nécessite les accès d'écriture pour les lecteurs SCSI afin de détecter la vitesse d'écriture et d'autres "
+"choses comme celles-ci.</td>\n"
+"</tr>\n"
+"<tr>\n"
+" <td>changements de permission pour tous les lecteurs ATAPI détectés en 620</td>\n"
+" <td>K3b a besoin seulement d'un accès en lecture aux lecteurs ATAPI puisqu'il n'est pas (encore) "
+"capable de détecter la vitesse et le type pour les périphériques ATAPI.</td>\n"
+"</tr>\n"
+"<tr>\n"
+" <td>ajout de tous les périphériques détectés au groupe 'cdrecording'</td>\n"
+" <td>puisque l'accès en écriture à ces périphériques présente toujours des risques de sécurité, "
+"(bien qu'on ne puisse pas faire grand chose de mal en gravant un CD-ROM) seulement les utilisateurs "
+"sélectionnés pourront accéder aux lecteurs.</td>\\n"
+"</tr>\n"
+"</table>"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:788
+msgid "K3b Setup Permission Details"
+msgstr "Configuration de K3b : détails des permissions"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:800
+msgid "Save your settings"
+msgstr "Enregistrer vos paramètres"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:808
+msgid ""
+"<h1>Congratulations.</h1><p>You completed the K3b Setup. Just press the "
+"Finish button to save your changes and then enjoy the new ease of cd writing "
+"with Linux/KDE.</p>"
+msgstr ""
+"<h1>Félicitations.</h1><p>Vous avez terminé la configuration de K3b. Cliquez "
+"simplement sur le bouton 'Terminer' pour enregistrer vos changements. Vous "
+"pouvez dès à présent graver facilement vos CDs sous Linux/KDE.</p>"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:819
+msgid "Setting"
+msgstr "Paramètres"
+
+#: k3bsetup/k3bsetupwizardtabs.cpp:820
+msgid "Value"
+msgstr "Valeur"
+
+#: k3bsetup/k3bsetupwizard.cpp:82
+msgid "All settings have been saved.\n"
+msgstr "Tous les paramètres ont été enregistrés.\n"
+
+#: k3bsetup/k3bsetupwizard.cpp:84
+msgid ""
+"If the configuration of your system changes just run K3b Setup again.\n"
+"Thanx for using K3b. Have a lot of fun!"
+msgstr ""
+"Si la configuration de votre système change, lancez simplement une nouvelle "
+"fois la configuration de K3b.\n"
+"Merci d'utiliser K3b. Amusez - vous bien !"
+
+#: k3bsetup/k3bsetupwizard.cpp:88
+msgid "K3b Setup finished"
+msgstr "Configuration de K3b terminée"
+
+#: k3bsetup/k3bsetuptab.cpp:20
+#, ycp-format
+msgid "Step %1 of %2"
+msgstr "Étape %1 de %2"
+
+#: k3b.cpp:91
+msgid "K3b - The CD Kreator"
+msgstr "K3b - Kréation de CD"
+
+#: k3b.cpp:142
+msgid "&Burn..."
+msgstr "&Graver..."
+
+#: k3b.cpp:144
+msgid "E&xport..."
+msgstr "E&xporter..."
+
+#: k3b.cpp:147
+msgid "&New Project"
+msgstr "&Nouveau projet"
+
+#: k3b.cpp:148
+msgid "New &Audio project"
+msgstr "Nouveau projet &Audio"
+
+#: k3b.cpp:150
+msgid "New &Data project"
+msgstr "Nouveau projet de &Données"
+
+#: k3b.cpp:157
+msgid "&Add Files..."
+msgstr "&Ajouter Fichiers..."
+
+#: k3b.cpp:160
+msgid "Show Directories"
+msgstr "Afficher les répertoires"
+
+#: k3b.cpp:163
+msgid "Show Audio Player"
+msgstr "Afficher le lecteur audio"
+
+#: k3b.cpp:166
+msgid "&Blank CD-RW"
+msgstr "&Effacer un CD-RW"
+
+#: k3b.cpp:169
+msgid "&Write Iso image"
+msgstr "G&raver une image ISO"
+
+#: k3b.cpp:172
+msgid "&Copy CD"
+msgstr "&Copier un CD"
+
+#: k3b.cpp:175
+msgid "K3b &Setup"
+msgstr "C&onfiguration de K3b"
+
+#: k3b.cpp:179
+msgid "Creates a new project"
+msgstr "Créer un nouveau projet"
+
+#: k3b.cpp:180
+msgid "Creates a new data project"
+msgstr "Créer un nouveau projet de données"
+
+#: k3b.cpp:181
+msgid "Creates a new audio project"
+msgstr "Créer un nouveau projet audio"
+
+#: k3b.cpp:182
+msgid "Opens CD-blanking dialog"
+msgstr "Ouvre la fenêtre d'effacement du CD"
+
+#: k3b.cpp:183
+msgid "Opens an existing project"
+msgstr "Ouvre un projet existant"
+
+#: k3b.cpp:184
+msgid "Opens a recently used file"
+msgstr "Ouvre un fichier récent"
+
+#: k3b.cpp:185
+msgid "Saves the actual project"
+msgstr "Enregistrer le projet actuel"
+
+#: k3b.cpp:186
+msgid "Saves the actual project as..."
+msgstr "Enregistrer le projet actuel sous..."
+
+#: k3b.cpp:187
+msgid "Closes the actual project"
+msgstr "Fermer le projet en cours"
+
+#: k3b.cpp:188
+msgid "Quits the application"
+msgstr "Quitter l'application"
+
+#: k3b.cpp:190
+msgid "Enables/disables the toolbar"
+msgstr "Affiche ou masque la barre d'outils."
+
+#: k3b.cpp:191
+msgid "Enables/disables the statusbar"
+msgstr "Affiche ou masque la barre d'état."
+
+#: k3b.cpp:227
+msgid "Current Projects"
+msgstr "Projets courants"
+
+#: k3b.cpp:330 k3b.cpp:530 k3b.cpp:543
+msgid "Opening file..."
+msgstr "Ouverture du fichier..."
+
+#: k3b.cpp:347
+msgid "Could not open document !"
+msgstr "Impossible d'ouvrir le document !"
+
+#: k3b.cpp:347
+msgid "Error !"
+msgstr " Problème !"
+
+#: k3b.cpp:495
+#, ycp-format
+msgid "%1 has unsaved data."
+msgstr "%1 a des données non sauvegardées."
+
+#: k3b.cpp:496
+msgid "Closing project..."
+msgstr "Fermeture du projet..."
+
+#: k3b.cpp:523
+msgid "Creating new document..."
+msgstr "Création d'un nouveau document..."
+
+#: k3b.cpp:533 k3b.cpp:592
+msgid "*.k3b|K3b Projects"
+msgstr "*.k3b|Projets K3b"
+
+#: k3b.cpp:533
+msgid "Open File..."
+msgstr "Ouvrir un document"
+
+#: k3b.cpp:558
+msgid "Saving file..."
+msgstr "Enregistrement du fichier..."
+
+#: k3b.cpp:568 k3b.cpp:612
+msgid "Could not save the current document !"
+msgstr "Impossible d'enregistrer le document courant !"
+
+#: k3b.cpp:568 k3b.cpp:612
+msgid "I/O Error !"
+msgstr "Erreur d'E/S"
+
+#: k3b.cpp:583
+msgid "Saving file with a new filename..."
+msgstr "Enregistrement du fichier sous un nouveau nom..."
+
+#: k3b.cpp:629
+msgid "Export to cdrdao-toc-file"
+msgstr ""
+
+#: k3b.cpp:632 k3b.cpp:639
+#, c-format, ycp-format
+msgid "Could not write to file %1"
+msgstr "Impossible d'écrire dans le fichier %1"
+
+#: k3b.cpp:632 k3b.cpp:639
+msgid "I/O Error"
+msgstr "Erreur d'E/S"
+
+#: k3b.cpp:636
+msgid "Export to mkisofs-pathspec-file"
+msgstr ""
+
+#: k3b.cpp:647
+msgid "Closing file..."
+msgstr "Fermeture du fichier..."
+
+#: k3b.cpp:737
+msgid "Creating new Audio Project."
+msgstr "Crée un nouveau Projet Audio"
+
+#: k3b.cpp:744 k3b.cpp:762
+#, c-format, ycp-format
+msgid "Untitled%1"
+msgstr "Sans nom%1"
+
+#: k3b.cpp:755
+msgid "Creating new Data Project."
+msgstr "Crée un nouveau Projet de Données"
+
+#: k3b.cpp:797
+msgid "Reading Options..."
+msgstr "Options de lecture..."
+
+#: k3b.cpp:810
+msgid "Searching for external programs..."
+msgstr "Recherche des programmes externes..."
+
+#: k3b.cpp:832
+msgid "Scanning for cd devices..."
+msgstr "Analyse des périphériques externes..."
+
+#: k3b.cpp:852
+msgid "Initializing cd view..."
+msgstr "Initialisation de la vue cd"
+
+#: k3b.cpp:857
+msgid "Reading local CDDB database..."
+msgstr "Lecture de la base de données CDDB..."
+
+#: k3b.cpp:863
+msgid "Ready"
+msgstr "Prêt"
+
+#: k3b.cpp:927
+msgid "Select files to add to the project"
+msgstr "Sélectionner fichiers à ajouter au projet"
+
+#: k3b.cpp:932 k3bfileview.cpp:211
+msgid "Please create a project before adding files"
+msgstr "Veuillez créer un projet avant d'ajouter des fichiers"
+
+#: k3b.cpp:932 k3bfileview.cpp:211
+msgid "No active Project"
+msgstr "Pas de projet actif"
+
+#: cdcopy/k3bcdcopydialog.cpp:44
+msgid "K3b Cd Copy"
+msgstr "K3b Copie de CD"
+
+#: cdcopy/k3bcdcopydialog.cpp:45
+msgid "Start cd copy"
+msgstr "Démarrer la copie de cd"
+
+#: cdcopy/k3bcdcopydialog.cpp:57
+msgid "Reading Device"
+msgstr "Lecture Périphérique"
+
+#: cdcopy/k3bcdcopydialog.cpp:63
+msgid "Copies"
+msgstr "Copies"
+
+#: cdcopy/k3bcdcopydialog.cpp:70
+msgid "Delete images"
+msgstr "Supprimer images"
+
+#: cdcopy/k3bcdcopydialog.cpp:71
+msgid "Fast toc"
+msgstr ""
+
+#: cdcopy/k3bcdcopydialog.cpp:110
+msgid "Do not extract pre-gaps and index marks"
+msgstr ""
+
+#: cdcopy/k3bcdcopyjob.cpp:75
+msgid "Retrieving information about source disk"
+msgstr "Récupère les informations sur le disque-source"
+
+#: cdcopy/k3bcdcopyjob.cpp:83
+msgid "No disk in reading drive"
+msgstr "Pas de disque dans le lecteur"
+
+#: cdcopy/k3bcdcopyjob.cpp:89
+msgid "Source disk is empty"
+msgstr "Le disque-source est vide"
+
+#: cdcopy/k3bcdcopyjob.cpp:95
+msgid "Source disk seems to be a DVD."
+msgstr "Le disque-source semble être un DVD."
+
+#: cdcopy/k3bcdcopyjob.cpp:96
+msgid "K3b is not able to copy DVDs yet."
+msgstr "K3b n'est pas encore capable de copier des Dvd."
+
+#: cdcopy/k3bcdcopyjob.cpp:107
+msgid "Source disk seems to be data cd"
+msgstr "Le disque-source semble un cd de données"
+
+#: cdcopy/k3bcdcopyjob.cpp:110
+msgid "Source disk seems to be audio cd"
+msgstr "Le disque-source semble un cd audio"
+
+#: cdcopy/k3bcdcopyjob.cpp:113
+msgid "Source disk seems to be mixed mode cd"
+msgstr "Le disque-source semble un cd mixé"
+
+#: cdcopy/k3bcdcopyjob.cpp:125
+msgid "CD copy simulation"
+msgstr "Simulation de copie de CD"
+
+#: cdcopy/k3bcdcopyjob.cpp:127
+msgid "CD copy"
+msgstr "Copie de CD"
+
+#: cdcopy/k3bcdcopyjob.cpp:196
+#, c-format, ycp-format
+msgid "Starting CD copy simulation at %1x speed..."
+msgstr "Lancement de la simulation de copie de CD à la vitesse de %1x..."
+
+#: cdcopy/k3bcdcopyjob.cpp:199 cdcopy/k3bcdcopyjob.cpp:363
+#, ycp-format
+msgid "Starting CD copy %1 at %2x speed..."
+msgstr "Lancement de la copie de CD %1 à la vitesse de %2x..."
+
+#: cdcopy/k3bcdcopyjob.cpp:220 cdcopy/k3bcdcopyjob.cpp:384
+msgid "CD Copy simulation successfully completed"
+msgstr "La simulation de copie de CD s'est terminée avec succès"
+
+#: cdcopy/k3bcdcopyjob.cpp:224 cdcopy/k3bcdcopyjob.cpp:388
+#, ycp-format
+msgid "CD Copy %1 successfully completed"
+msgstr "La copie de CD %1 s'est terminée avec succès"
+
+#: cdcopy/k3bcdcopyjob.cpp:287
+#, c-format, ycp-format
+msgid "Reading CD to image %1"
+msgstr "Lecture du CD vers l'image %1"
+
+#: cdcopy/k3bcdcopyjob.cpp:288
+msgid "Creating image"
+msgstr "Crée l'image"
+
+#: cdcopy/k3bcdcopyjob.cpp:306
+msgid "Image successfully created."
+msgstr "Image crée avec succès."
+
+#: cdcopy/k3bcdcopyjob.cpp:360
+msgid "CD write simulation"
+msgstr "Simulation d'écriture de CD"
+
+#: cdcopy/k3bcdcopyjob.cpp:364
+#, c-format, ycp-format
+msgid "Writing CD copy %1"
+msgstr "Gravure de la copie du CD%1"
+
+#: cdcopy/k3bcdcopyjob.cpp:478
+#, c-format, ycp-format
+msgid "Reading track %1"
+msgstr "Lecture de la piste %1"
+
+#: cdcopy/k3bcdcopyjob.cpp:483
+msgid "Found ISRC code"
+msgstr "Code ISCR trouvé"
+
+#: cdcopy/k3bcdcopyjob.cpp:486
+#, c-format, ycp-format
+msgid "Found pregap: %1"
+msgstr ""
+
+#: cdcopy/k3bcdcopyjob.cpp:547 cdcopy/k3bcdcopyjob.cpp:573
+msgid "Removed image files"
+msgstr "Fichiers image supprimés"
+
+#: cdcopy/k3bcdcopyjob.cpp:562
+msgid "Could not unlock cd reader."
+msgstr "Impossible de déverrouiller le lecteur"
+
+#: cdcopy/k3bcdcopyjob.cpp:564
+msgid "Could not unlock cd writer."
+msgstr "Impossible de déverrouiller le graveur."
+
+#: cdinfo/k3bdiskinfoview.cpp:62
+msgid "Total Capacity of medium:"
+msgstr "Capacité totale du médium :"
+
+#: cdinfo/k3bdiskinfoview.cpp:63
+msgid "Remaining Capacity:"
+msgstr "Capacité restante :"
+
+#: cdinfo/k3bdiskinfoview.cpp:64
+msgid "Medium type:"
+msgstr "Type de médium :"
+
+#: cdinfo/k3bdiskinfoview.cpp:70
+msgid "Is rewritable:"
+msgstr "Est réinscriptible :"
+
+#: cdinfo/k3bdiskinfoview.cpp:71
+msgid "Is appendable:"
+msgstr "Est continuable :"
+
+#: cdinfo/k3bdiskinfoview.cpp:72
+msgid "Number of Sessions:"
+msgstr "Nombre de Sessions :"
+
+#: cdinfo/k3bdiskinfoview.cpp:82
+msgid "First Sector"
+msgstr "Premier Secteur"
+
+#: cdinfo/k3bdiskinfoview.cpp:83
+msgid "Last Sector"
+msgstr "Dernier Secteur"
+
+#: cdinfo/k3bdiskinfoview.cpp:84 k3baudioplayer.cpp:114
+msgid "Length"
+msgstr "Longueur"
+
+#: cdinfo/k3bdiskinfoview.cpp:113
+msgid "No disk"
+msgstr "Pas de disque"
+
+#: cdinfo/k3bdiskinfoview.cpp:114
+msgid "No disk in drive"
+msgstr "Pas de disque dans le lecteur"
+
+#: cdinfo/k3bdiskinfoview.cpp:155
+msgid "Disk is empty"
+msgstr "Disque vide"
+
+#: cdinfo/k3bdiskinfoview.cpp:161
+msgid "Audio CD"
+msgstr "CD Audio"
+
+#: cdinfo/k3bdiskinfoview.cpp:165
+msgid "Data CD"
+msgstr "Cd de Données"
+
+#: cdinfo/k3bdiskinfoview.cpp:169
+msgid "Mixed mode CD"
+msgstr "CD Mixé"
+
+#: cdinfo/k3bdiskinfoview.cpp:173
+msgid "DVD"
+msgstr "DVD"
+
+#: cdinfo/k3bdiskinfoview.cpp:181
+msgid "disk is empty"
+msgstr "le disque est vide"
+
+#: cdinfo/k3bdiskinfoview.cpp:191
+msgid "audio"
+msgstr "audio"
+
+#: cdinfo/k3bdiskinfoview.cpp:196
+msgid "data/mode1"
+msgstr "données/mode1"
+
+#: cdinfo/k3bdiskinfoview.cpp:198
+msgid "data/mode2"
+msgstr "données/mode2"
+
+#: cdinfo/k3bdiskinfoview.cpp:200
+msgid "data"
+msgstr "données"
+
+#: device/k3bemptydiscwaiter.cpp:32
+msgid "Waiting for disk"
+msgstr "Attente du disque"
+
+#: device/k3bemptydiscwaiter.cpp:33
+msgid "Force"
+msgstr "Forcer"
+
+#: device/k3bemptydiscwaiter.cpp:52
+msgid "Force K3b to continue if it seems not to detect your empty cdr"
+msgstr "Forcer K3b à continuer si il semble ne pas détecter votre cdr vide"
+
+#: device/k3bemptydiscwaiter.cpp:65
+#, ycp-format
+msgid "Please insert an appendable cdr medium into drive<p><b>%1 %2 (%3)</b>."
+msgstr "Veuillez insérer un CD continuable dans le lecteur<p><b>%1 %2 (%3)</b>."
+
+#: device/k3bemptydiscwaiter.cpp:67
+#, ycp-format
+msgid "Please insert an empty cdr medium into drive<p><b>%1 %2 (%3)</b>."
+msgstr "Veuillez insérer un CD vide dans le lecteur<p><b>%1 %2 (%3)</b>."
+
+#: k3bwriterselectionwidget.cpp:40
+msgid "Burning Device"
+msgstr "Périphérique de gravure"
+
+#: k3bwriterselectionwidget.cpp:51
+msgid "Burning Speed"
+msgstr "Vitesse de gravure"
+
+#: k3bwriterselectionwidget.cpp:60
+msgid "Device"
+msgstr "Périphérique"
+
+#: k3bwriterselectionwidget.cpp:69
+msgid "Writing Application"
+msgstr ""
+
+#: k3bwriterselectionwidget.cpp:72
+msgid "Cdrecord"
+msgstr "Cdrecord"
+
+#: k3bwriterselectionwidget.cpp:73
+msgid "Cdrdao"
+msgstr "Cdrdao"
+
+#: option/k3bmiscoptiontab.cpp:39
+msgid "Show splash screen"
+msgstr "Afficher l'écran d'accueil"
+
+#: option/k3bmiscoptiontab.cpp:52
+msgid "Default temp directory:"
+msgstr "Répertoire temporaire par défaut :"
+
+#: option/k3bmiscoptiontab.cpp:93
+msgid "Directory does not exist. Create?"
+msgstr "Le répertoire n'existe pas. Le créer ?"
+
+#: option/k3bmiscoptiontab.cpp:94
+msgid "Create Directory"
+msgstr "Créer répertoire"
+
+#: option/k3bmiscoptiontab.cpp:96
+#, ycp-format
+msgid ""
+"Could not create directory\n"
+"(%1)"
+msgstr ""
+"Impossible de créer le répertoire\n"
+"(%1)"
+
+#: option/k3bmiscoptiontab.cpp:107
+msgid ""
+"You specified a file as temp directory. K3b will use it's base path as temp "
+"directory."
+msgstr ""
+"Vous avez spécifié un fichier comme répertoire temporaire. K3b utilisera son répertoire "
+"comme répertoire temporaire."
+
+#: option/k3bmiscoptiontab.cpp:107
+msgid "Don't show again."
+msgstr "Ne plus afficher."
+
+#: option/k3bmiscoptiontab.cpp:113
+#, c-format, ycp-format
+msgid "You don't have permission to write to %1."
+msgstr "Vous n'avez pas la permission d'écrire sur %1."
+
+#: option/k3bcddbemptydbtab.moc.cpp:34 option/k3bcddbemptydbtab.moc.cpp:42
+msgid "K3bCddbEmptyDbTab"
+msgstr ""
+
+#: option/k3bdeviceoptiontab.cpp:83
+msgid ""
+"K3b tries to detect all your devices properly. Sometimes this does not work "
+"for the read or the write speed. In this case you can change them manually. "
+"You can add not detected devices and change the cdrdao driver for the "
+"generic scsi drives."
+msgstr ""
+"K3b tente de détecter tous vos périphériques correctement. Parfois cela ne marche pas "
+"pour la vitesse de lecture ou d'écriture. Dans ce cas, vous pouvez les changer manuellement. "
+"Vous pouvez ajouter des périphériques non détectés et changer le pilote 'cdrdao' pour les "
+"pilotes génériques scsi."
+
+#: option/k3bdeviceoptiontab.cpp:94
+msgid "Refresh"
+msgstr "Actualiser"
+
+#: option/k3bdeviceoptiontab.cpp:95
+msgid "Add Device"
+msgstr "Ajouter périphérique"
+
+#: option/k3bdeviceoptiontab.cpp:96
+msgid "Rescan the Devices"
+msgstr "Scanner à nouveau les périphériques"
+
+#: option/k3bdeviceoptiontab.cpp:108
+msgid "Reading Devices"
+msgstr "Périphériques de lecture"
+
+#: option/k3bdeviceoptiontab.cpp:120 option/k3bdeviceoptiontab.cpp:144
+msgid "Description"
+msgstr "Description"
+
+#: option/k3bdeviceoptiontab.cpp:132
+msgid "Writing Devices"
+msgstr "Périphériques de gravure"
+
+#: option/k3bdeviceoptiontab.cpp:156
+msgid "Device Info"
+msgstr "Infos périphérique"
+
+#: option/k3bdeviceoptiontab.cpp:165
+msgid "System devicename:"
+msgstr "Nom système du périphérique :"
+
+#: option/k3bdeviceoptiontab.cpp:167
+msgid "Interface type:"
+msgstr "Type d'interface :"
+
+#: option/k3bdeviceoptiontab.cpp:169
+msgid "Firmware version:"
+msgstr "Version du constructeur :"
+
+#: option/k3bdeviceoptiontab.cpp:171
+msgid "Vendor:"
+msgstr "Fabricant :"
+
+#: option/k3bdeviceoptiontab.cpp:174
+msgid "Model:"
+msgstr "Modèle :"
+
+#: option/k3bdeviceoptiontab.cpp:178
+msgid "Max read speed:"
+msgstr "Vitesse maximale de lecture :"
+
+#: option/k3bdeviceoptiontab.cpp:181
+msgid "Max write speed:"
+msgstr "Vitesse maximale de gravure :"
+
+#: option/k3bdeviceoptiontab.cpp:184
+msgid "Cdrdao driver:"
+msgstr "Pilote 'cdrdao' :"
+
+#: option/k3bdeviceoptiontab.cpp:186
+msgid "BURN-Proof:"
+msgstr "BURN-Proof :"
+
+#: option/k3bdeviceoptiontab.cpp:188
+msgid "Write CD-Text:"
+msgstr "Graver CD-Text :"
+
+#: option/k3bcddboptiontab.cpp:63
+msgid "Enable CDDB Lockups"
+msgstr ""
+
+#: option/k3bcddboptiontab.cpp:68
+msgid "Remote CDDB Access"
+msgstr "Accès distant CDDB"
+
+#: option/k3bcddboptiontab.cpp:78
+msgid "Hostname:"
+msgstr "Hôte :"
+
+#: option/k3bcddboptiontab.cpp:80
+msgid "Port:"
+msgstr "Port :"
+
+#: option/k3boptiondialog.cpp:118
+msgid "Writing Settings"
+msgstr "Paramètres de gravure"
+
+#: option/k3boptiondialog.cpp:132
+msgid "Programs"
+msgstr "Programmes"
+
+#: option/k3boptiondialog.cpp:132
+msgid "Setup external programs"
+msgstr "Configure les programmes externes"
+
+#: option/k3boptiondialog.cpp:146
+msgid "CDDB"
+msgstr "CDDB"
+
+#: option/k3boptiondialog.cpp:146
+msgid "Setup the cddb server"
+msgstr "Configure le serveur cddb"
+
+#: option/k3boptiondialog.cpp:155
+msgid "Remote"
+msgstr "Distant"
+
+#: option/k3boptiondialog.cpp:156
+msgid "Local"
+msgstr "Local"
+
+#: option/k3boptiondialog.cpp:164
+msgid "Devices"
+msgstr "Périphériques"
+
+#: option/k3boptiondialog.cpp:164
+msgid "Setup CD Devices"
+msgstr "Configure les périphériques CD"
+
+#: option/k3boptiondialog.cpp:177
+msgid "Ripping"
+msgstr "Extraction"
+
+#: option/k3boptiondialog.cpp:177
+msgid "Setup Ripping Patterns"
+msgstr "Configure les formats d'extraction"
+
+#: option/k3boptiondialog.cpp:193
+msgid "Misc"
+msgstr "Divers"
+
+#: option/k3boptiondialog.cpp:193
+msgid "Miscellaneous Settings"
+msgstr "Réglages divers"
+
+#: option/k3brippingpatternoptiontab.cpp:47
+msgid "Use pattern per default."
+msgstr "Utiliser le format par défaut."
+
+#: option/k3bcddblocaldbtab.cpp:63
+msgid "Local Database"
+msgstr "Base de données locale"
+
+#: option/k3bcddblocaldbtab.cpp:67
+msgid "File to save cddb entries of ripped 'wavs'."
+msgstr "Fichier de sortie des entrées CDDB pour les fichiers extraits 'wavs'."
+
+#: option/k3bcddblocaldbtab.cpp:76
+msgid "Database Handling"
+msgstr ""
+
+#: option/k3bcddblocaldbtab.cpp:84
+msgid "Log"
+msgstr "Détails"
+
+#: option/k3bcddblocaldbtab.cpp:86
+msgid "Verify"
+msgstr "Vérifier"
+
+#: option/k3bcddblocaldbtab.cpp:87
+msgid "Find"
+msgstr "Chercher"
+
+#: option/k3bcddblocaldbtab.cpp:140
+msgid "Database Error"
+msgstr "Problème avec la base de données"
+
+#: option/k3bcddblocaldbtab.cpp:141
+#, ycp-format
+msgid "File doesn't exists <%1>."
+msgstr "Fichier inexistant <%1>."
+
+#: option/k3bexternalbinoptiontab.cpp:36
+msgid "Program"
+msgstr "Programme"
+
+#: option/k3bexternalbinoptiontab.cpp:39
+msgid "additional parameters"
+msgstr "paramètres additionnels"
+
+#: option/k3bexternalbinoptiontab.cpp:52
+msgid "Search"
+msgstr "Chercher"
+
+#: option/k3bexternalbinoptiontab.cpp:57
+msgid ""
+"Please specify the paths to the external programs that K3b needs to work "
+"properly or press \"Search\" to let K3b search for the programs."
+msgstr ""
+"Veuillez spécifier les chemins des programmes externes dont a besoin K3b "
+"pour fonctionner correctement ou cliquez sur \"Trouver\" pour laisser K3b chercher les programmes."
+
+#: option/k3bburningoptiontab.cpp:40
+msgid "Audio project"
+msgstr "Projet audio"
+
+#: option/k3bburningoptiontab.cpp:52
+msgid "Default pregap:"
+msgstr ""
+
+#: option/k3bburningoptiontab.cpp:69
+msgid "Data project"
+msgstr "Projet de données"
+
+#: option/k3bburningoptiontab.cpp:78
+msgid "Use audio tags for filenames"
+msgstr "Utiliser les tags audio pour les noms de fichiers."
+
+#: option/k3bburningoptiontab.cpp:79
+msgid "Discard identical names"
+msgstr "Détruire les noms identiques"
+
+#: option/k3bburningoptiontab.cpp:98
+msgid "Do not eject CD after write process"
+msgstr "Ne pas éjecter le CD après la gravure"
+
+#: option/k3bburningoptiontab.cpp:99
+msgid "Manual writing buffer size"
+msgstr "Taille du tampon d'écriture manuelle"
+
+#: option/k3bburningoptiontab.cpp:110
+msgid "MB"
+msgstr "Mo"
+
+#: option/k3bburningoptiontab.cpp:111
+msgid "blocks"
+msgstr "Blocs"
+
+#: option/k3bburningoptiontab.cpp:115
+msgid "Manual writing app selection"
+msgstr ""
+
+#: k3bprojecttabbar.cpp:28
+msgid "Project"
+msgstr "Projet"
+
+#: rc.cpp:1
+msgid "&Project"
+msgstr "&Projet"
+
+#: k3bcddbmultientriesdialog.cpp:31
+msgid "CDDB Database Entry"
+msgstr "Entrée CDDB"
+
+#: k3bcddbmultientriesdialog.cpp:46
+msgid "Inexact cddb requests"
+msgstr "Requête CDDB inexacte"
+
+#: k3bcddb.cpp:237 k3bcddbmultientriesdialog.cpp:74
+msgid "CDDB Error"
+msgstr "Erreur CDDB"
+
+#: k3bcddbmultientriesdialog.cpp:74
+msgid "You must choose an entry."
+msgstr "Vous devez choisir une entrée."
+
+#: k3bfileview.cpp:103
+msgid "&Enqueue"
+msgstr "M&ettre en queue"
+
+#: k3bfileview.cpp:105
+msgid "&Add to project"
+msgstr "&Ajouter au projet"
+
+#: k3bfileview.cpp:128
+msgid "&Filter:"
+msgstr "&Filtre :"
+
+#: k3bfileview.cpp:132
+msgid "*|All files"
+msgstr "*|Tous les fichiers"
+
+#: k3bfileview.cpp:133
+msgid "audio/x-mp3 application/x-ogg audio/wav |Sound files"
+msgstr "audio/x-mp3 application/x-ogg audio/wav |Fichiers audios"
+
+#: k3bfileview.cpp:134
+msgid "audio/x-mp3 |MP3 sound files"
+msgstr "audio/x-mp3 |Fichiers audios MP3 "
+
+#: k3bfileview.cpp:135
+msgid "application/x-ogg |Ogg Vorbis sound files"
+msgstr "application/x-ogg |Fichiers audios Ogg Vorbis"
+
+#: k3baudioplayer.cpp:142 k3baudioplayer.cpp:495
+msgid "no file"
+msgstr "pas de fichier"
+
+#: k3baudioplayer.cpp:203
+msgid "Clear list"
+msgstr "Effacer la liste"
+
+#: k3baudioplayer.cpp:537
+msgid "playing"
+msgstr "lecture"
+
+#: k3baudioplayer.cpp:540
+msgid "paused"
+msgstr "interrompu"
+
+#: k3baudioplayer.cpp:543
+msgid "stopped"
+msgstr "arrêté"
+
+#: cddb.cpp:289 k3bcddb.cpp:180
+msgid "No Title"
+msgstr "Pas de Titre"
+
+#: cddb.cpp:293
+msgid "Unknown"
+msgstr "Inconnu"
+
+#: cddb.cpp:300
+#, c-format, ycp-format
+msgid "Track %1"
+msgstr "Piste %1"
+
+#: k3bfiletreeview.cpp:34
+msgid "Drive: "
+msgstr "Lecteur : "
+
+#: k3bfiletreeview.cpp:57
+msgid "Directories"
+msgstr "Répertoires"
+
+#: k3bfiletreeview.cpp:81
+msgid "Home"
+msgstr "Début"
+
+#: k3bfiletreeview.cpp:84
+msgid "Root"
+msgstr "Racine"
+
+#: k3bfillstatusdisplay.cpp:54
+msgid "Show size in..."
+msgstr "Afficher la taille en..."
+
+#: k3bfillstatusdisplay.cpp:55
+msgid "&Minutes"
+msgstr "&Minutes"
+
+#: k3bfillstatusdisplay.cpp:56
+msgid "&Megabytes"
+msgstr "&Megaoctets"
+
+#: k3bprojectburndialog.cpp:35
+msgid "Write CD"
+msgstr "Graver CD"
+
+#: k3bprojectburndialog.cpp:87
+msgid "Sorry, K3b is already working on this project!"
+msgstr "Désolé, K3b travaille déjà sur ce projet !"
+
+#: k3bcddb.cpp:237
+msgid "Can't read CDDB data."
+msgstr "Impossible de lire la base CDDB"
+
