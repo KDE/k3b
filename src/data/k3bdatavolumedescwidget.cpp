@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -24,10 +24,10 @@
 K3bDataVolumeDescWidget::K3bDataVolumeDescWidget( QWidget* parent, const char* name )
   : base_K3bDataVolumeDescWidget( parent, name )
 {
+  // the maximal number of characters that can be inserted are set in the ui file!
+
   // are this really the allowed characters? What about Joliet or UDF?
   K3bIsoValidator* isoValidator = new K3bIsoValidator( this, "isoValidator" );
-
-  // TODO: no whitespaces! They get converted to "_" in the DataJob and the IsoImager
 
   m_editVolumeName->setValidator( isoValidator );
   m_editVolumeSetName->setValidator( isoValidator );

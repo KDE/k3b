@@ -41,6 +41,9 @@
             <property name="name">
                 <cstring>m_editApplication</cstring>
             </property>
+            <property name="maxLength">
+                <number>128</number>
+            </property>
         </widget>
         <spacer row="8" column="1">
             <property name="name">
@@ -63,15 +66,24 @@
             <property name="name">
                 <cstring>m_editVolumeName</cstring>
             </property>
+            <property name="maxLength">
+                <number>32</number>
+            </property>
         </widget>
         <widget class="QLineEdit" row="3" column="1">
             <property name="name">
                 <cstring>m_editVolumeSetName</cstring>
             </property>
+            <property name="maxLength">
+                <number>128</number>
+            </property>
         </widget>
         <widget class="QLineEdit" row="6" column="1">
             <property name="name">
                 <cstring>m_editSystem</cstring>
+            </property>
+            <property name="maxLength">
+                <number>32</number>
             </property>
         </widget>
         <widget class="QLabel" row="5" column="0">
@@ -111,6 +123,9 @@
             <property name="name">
                 <cstring>m_editPreparer</cstring>
             </property>
+            <property name="maxLength">
+                <number>128</number>
+            </property>
         </widget>
         <widget class="QLabel" row="4" column="0">
             <property name="name">
@@ -137,6 +152,9 @@
         <widget class="QLineEdit" row="4" column="1">
             <property name="name">
                 <cstring>m_editPublisher</cstring>
+            </property>
+            <property name="maxLength">
+                <number>128</number>
             </property>
         </widget>
     </grid>

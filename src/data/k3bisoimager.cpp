@@ -400,26 +400,32 @@ bool K3bIsoImager::addMkisofsParameters()
 
   if( !m_doc->isoOptions().volumeID().isEmpty() ) {
     QString s = m_doc->isoOptions().volumeID();
+    s.truncate(32);  // ensure max length
     *m_process << "-V" << s;
   }
   if( !m_doc->isoOptions().volumeSetId().isEmpty() ) {
     QString s = m_doc->isoOptions().volumeSetId();
+    s.truncate(128);  // ensure max length
     *m_process << "-volset" << s;
   }
   if( !m_doc->isoOptions().applicationID().isEmpty() ) {
     QString s = m_doc->isoOptions().applicationID();
+    s.truncate(128);  // ensure max length
     *m_process << "-A" << s;
   }
   if( !m_doc->isoOptions().publisher().isEmpty() ) {
     QString s = m_doc->isoOptions().publisher();
+    s.truncate(128);  // ensure max length
     *m_process << "-P" << s;
   }
   if( !m_doc->isoOptions().preparer().isEmpty() ) {
     QString s = m_doc->isoOptions().preparer();
+    s.truncate(128);  // ensure max length
     *m_process << "-p" << s;
   }
   if( !m_doc->isoOptions().systemId().isEmpty() ) {
     QString s = m_doc->isoOptions().systemId();
+    s.truncate(32);  // ensure max length
     *m_process << "-sysid" << s;
   }
 
