@@ -84,7 +84,7 @@ void K3bStatusBarManager::update()
   if( K3b::kbFreeOnFs( path, size, avail ) )
     slotFreeTempSpace( path, size, 0, avail );
   else
-    m_labelFreeTemp->setText("No info");
+    m_labelFreeTemp->setText(i18n("No info"));
 }
 
 
