@@ -52,7 +52,7 @@ K3bEmptyDiscWaiter::K3bEmptyDiscWaiter( K3bDevice* device, QWidget* parent, cons
   box->addWidget( m_label );
   box->setStretchFactor( m_label, 1 );
 
-  QToolTip::add( actionButton(KDialogBase::User1), i18n("Force K3b to continue if it seems not to detect your empty cdr") );
+  QToolTip::add( actionButton(KDialogBase::User1), i18n("Force K3b to continue if it seems not to detect your empty CDR.") );
 }
 
 
@@ -164,7 +164,7 @@ void K3bEmptyDiscWaiter::ErasingInfoDialog::slotFinished( bool success )
   if( success )
     m_label->setText( i18n("Disk successfully erased. Please reload the disk.") );
   else
-    m_label->setText( i18n("Sorry, K3b was not able to erase the disk.") );
+    m_label->setText( i18n("K3b was unable to erase the disk.") );
 }
 
 

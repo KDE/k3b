@@ -50,7 +50,7 @@ WelcomeTab::WelcomeTab( int i, int o, K3bSetupWizard* wizard )
 			"<p>This Wizard will help you to prepare your system for CD writing with K3b. "
 			"First of all: Don't worry about Linux permissions, K3b Setup takes care of nearly everything."
 			" So if you are new to Linux and know nothing about things like suid root, don't panic!"
-			" Just click next.</p>"
+			" Just click Next.</p>"
 			"<p>If you know what is needed to write CDs under Linux and think you don't need a wizard like this,"
 			" please do not exit, as there are some things specific to K3b. Also, K3b Setup will not change anything"
 			" until after the setup wizard has finished.</p>"
