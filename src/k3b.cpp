@@ -862,13 +862,14 @@ void K3bMainWindow::slotNewMixedDoc()
 void K3bMainWindow::slotNewVcdDoc()
 {
 
-  if ( !k3bMain() ->externalBinManager() ->foundBin( "vcdxbuild" ) ) {
+  if ( !k3bcore->externalBinManager()->foundBin( "vcdxbuild" ) ) {
       kdDebug() << "(K3bMainWindow) could not find vcdxbuild executable" << endl;
       KMessageBox::information( this,
-                          i18n( "Could not find VcdImager executable.") + "\n" +
-                          i18n( "To create VideoCD's you must install VcdImager >= 0.7.12.") + " " +
-                          i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ),
-                          i18n( "Information" ) );
+				i18n( "Could not find VcdImager executable. "
+				      "To create VideoCD's you must install VcdImager >= 0.7.12. "
+				      "You can find this on your distribution disks or download "
+				      "it from http://www.vcdimager.org" ),
+				i18n( "Information" ) );
   }
 
   slotStatusMsg(i18n("Creating new Video Project."));
