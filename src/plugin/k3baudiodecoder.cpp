@@ -295,58 +295,53 @@ int K3bAudioDecoder::resample( char* data, int maxLen )
 
 void K3bAudioDecoder::from16bitBeSignedToFloat( char* src, float* dest, int samples )
 {
-  for( int i = 0; i < samples; ++i ) {
-    Q_INT16 val = ((src[2*i]<<8)&0xff00)|(src[2*i+1]&0x00ff);
-    if( val <= 0 )
-      dest[i] = (float)val / 32768.0;
-    else
-      dest[i] = (float)val / 32767.0;
+  while( samples ) {
+    samples--;
+    dest[samples] = static_cast<float>( Q_INT16(((src[2*samples]<<8)&0xff00)|(src[2*samples+1]&0x00ff)) / 32768.0 );
   }
 }
 
 
 void K3bAudioDecoder::fromFloatTo16BitBeSigned( float* src, char* dest, int samples )
 {
-  for( int i = 0; i < samples; ++i ) {
+  while( samples ) {
+    samples--;
+
+    float scaled = src[samples] * 32768.0;
     Q_INT16 val = 0;
 
     // clipping
-    if( src[i] > 1.0 )
+    if( scaled >= ( 1.0 * 0x7FFF ) )
       val = 32767;
-    else if( src[i] < -1.0 )
+    else if( scaled <= ( -8.0 * 0x1000 ) )
       val = -32768;
-
-    else if( src[i] <= 0 )
-      val = (Q_INT16)lrintf(src[i] * 32768.0);
     else
-      val = (Q_INT16)lrintf(src[i] * 32767.0);
+      val = lrintf(scaled);
 
-    dest[2*i]   = val>>8;
-    dest[2*i+1] = val;
+    dest[2*samples]   = val>>8;
+    dest[2*samples+1] = val;
   }
 }
 
 
 void K3bAudioDecoder::from8BitTo16BitBeSigned( char* src, char* dest, int samples )
 {
-  for( int i = 0; i < samples; ++i ) {
-    float fval = (float)(Q_UINT8(src[i])-128)/128.0;
+  while( samples ) {
+    samples--;
 
+    float scaled = static_cast<float>(Q_UINT8(src[samples])-128) / 128.0 * 32768.0;
     Q_INT16 val = 0;
       
     // clipping
-    if( fval > 1.0 )
+    if( scaled >= ( 1.0 * 0x7FFF ) )
       val = 32767;
-    else if( fval < -1.0 )
+    else if( scaled <= ( -8.0 * 0x1000 ) )
       val = -32768;
-
-    else if( fval <= 0 )
-      val = (Q_INT16)lrintf(fval * 32768.0);
     else
-      val = (Q_INT16)lrintf(fval * 32767.0);
+      val = lrintf(scaled);
 
-    dest[2*i]   = val>>8;
-    dest[2*i+1] = val;
+    dest[2*samples]   = val>>8;
+    dest[2*samples+1] = val;
   }
 }
 
