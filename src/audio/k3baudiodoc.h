@@ -124,6 +124,8 @@ class K3bAudioDoc : public K3bDoc
   void setUpc_ean( const QString& v ) { m_cdTextUpc_Ean = v; }
   void setCdTextMessage( const QString& v ) { m_cdTextMessage = v; }
 
+  void removeCorruptTracks();
+
  protected slots:
   /** processes queue "urlsToAdd" **/
   void slotWorkUrlQueue();

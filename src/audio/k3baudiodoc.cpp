@@ -91,7 +91,7 @@ bool K3bAudioDoc::newDocument()
 unsigned long long K3bAudioDoc::size() const 
 {
   unsigned long long size = 0;
-  for( QListIterator<K3bAudioTrack> it(*m_tracks); it.current(); ++it ) {
+  for( QPtrListIterator<K3bAudioTrack> it(*m_tracks); it.current(); ++it ) {
     size += it.current()->size();
   }	
 
@@ -102,7 +102,7 @@ unsigned long long K3bAudioDoc::size() const
 unsigned long long K3bAudioDoc::length() const
 {
   unsigned long long length = 0;
-  for( QListIterator<K3bAudioTrack> it(*m_tracks); it.current(); ++it ) {
+  for( QPtrListIterator<K3bAudioTrack> it(*m_tracks); it.current(); ++it ) {
     length += it.current()->length() + it.current()->pregap();
   }	
 
@@ -607,5 +607,18 @@ void K3bAudioDoc::loadDefaultSettings()
   m_removeBufferFiles = c->readBoolEntry( "remove_buffer_files", true );
 }
 
+
+void K3bAudioDoc::removeCorruptTracks()
+{
+  K3bAudioTrack* track = m_tracks->first();
+  while( track ) {
+    if( track->status() == K3bAudioTrack::CORRUPT ) {
+      removeTrack(track);
+      track = m_tracks->current();
+    }
+    else
+      track = m_tracks->next();
+  }
+}
 
 #include "k3baudiodoc.moc"

@@ -216,7 +216,8 @@ void K3bAudioListView::slotAnimation()
       K3bAudioListViewItem* item = (K3bAudioListViewItem*)it.current();
 
       if( item->animationIconNumber > 0 ) {
-	if( item->audioTrack()->length() > 0 ) {
+	if( item->audioTrack()->length() > 0
+	    || item->audioTrack()->status() == K3bAudioTrack::CORRUPT ) {
 	  // set status icon
 	  switch( item->audioTrack()->status() ) {
 	  case K3bAudioTrack::OK:

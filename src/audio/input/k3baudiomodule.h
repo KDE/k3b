@@ -62,7 +62,7 @@ class K3bAudioModule : public QObject
   void trackAnalysed( K3bAudioTrack* );
 
  protected slots:
-  virtual void slotConsumerReady() = 0;
+  virtual void slotConsumerReady() {}
   virtual void startDecoding() = 0;
 
   /**
