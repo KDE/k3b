@@ -18,6 +18,11 @@
 #define _K3B_INTERFACE_H_
 
 #include <dcopobject.h>
+#include <dcopref.h>
+#include <qvaluelist.h>
+
+#include <kurl.h>
+
 
 class K3bMainWindow;
 
@@ -31,9 +36,18 @@ class K3bInterface : public DCOPObject
 
  k_dcop:
   /**
-   * This should return a DCOPRef to a K3bDataProjectInterface in the future.
+   * returns a DCOPRef to a K3bProjectInterface
    */
-  void createDataProject();
+  DCOPRef createDataCDProject();
+  DCOPRef createAudioCDProject();
+  DCOPRef createMixedCDProject();
+  DCOPRef createVideoCDProject();
+  DCOPRef createMovixCDProject();
+  DCOPRef createDataDVDProject();
+
+  DCOPRef openDocument( const KURL& url );
+
+  QValueList<DCOPRef> projects();
 
  private:
   K3bMainWindow* m_main;

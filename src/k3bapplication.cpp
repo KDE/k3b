@@ -100,40 +100,42 @@ void K3bApplication::init()
 
   if( args->isSet( "data" ) ) {
     // create new data project and add all arguments
-    m_mainWindow->slotNewDataDoc();
-    K3bDoc* doc = m_mainWindow->activeDoc();
+    K3bDoc* doc = m_mainWindow->slotNewDataDoc();
     for( int i = 0; i < args->count(); i++ ) {
       doc->addUrl( args->url(i) );
     }
   }
   else if( args->isSet( "audio" ) ) {
     // create new audio project and add all arguments
-    m_mainWindow->slotNewAudioDoc();
-    K3bDoc* doc = m_mainWindow->activeDoc();
+    K3bDoc* doc = m_mainWindow->slotNewAudioDoc();
     for( int i = 0; i < args->count(); i++ ) {
       doc->addUrl( args->url(i) );
     }
   }
   else if( args->isSet( "mixed" ) ) {
     // create new audio project and add all arguments
-    m_mainWindow->slotNewMixedDoc();
-    K3bDoc* doc = m_mainWindow->activeDoc();
+    K3bDoc* doc = m_mainWindow->slotNewMixedDoc();
     for( int i = 0; i < args->count(); i++ ) {
       doc->addUrl( args->url(i) );
     }
   }
   else if( args->isSet( "vcd" ) ) {
     // create new audio project and add all arguments
-    m_mainWindow->slotNewVcdDoc();
-    K3bDoc* doc = m_mainWindow->activeDoc();
+    K3bDoc* doc = m_mainWindow->slotNewVcdDoc();
     for( int i = 0; i < args->count(); i++ ) {
       doc->addUrl( args->url(i) );
     }
   }
   else if( args->isSet( "emovix" ) ) {
     // create new audio project and add all arguments
-    m_mainWindow->slotNewMovixDoc();
-    K3bDoc* doc = m_mainWindow->activeDoc();
+    K3bDoc* doc = m_mainWindow->slotNewMovixDoc();
+    for( int i = 0; i < args->count(); i++ ) {
+      doc->addUrl( args->url(i) );
+    }
+  }
+  else if( args->isSet( "datadvd" ) ) {
+    // create new audio project and add all arguments
+    K3bDoc* doc = m_mainWindow->slotNewDvdDoc();
     for( int i = 0; i < args->count(); i++ ) {
       doc->addUrl( args->url(i) );
     }
@@ -152,12 +154,14 @@ void K3bApplication::init()
   }
   else if(args->count()) {
     for( int i = 0; i < args->count(); i++ ) {
-      m_mainWindow->openDocumentFile( args->url(i) );
+      m_mainWindow->openDocument( args->url(i) );
     }
   }
 
   if( args->isSet("copy") )
     m_mainWindow->slotCdCopy();
+  else if( args->isSet("clone") )
+    m_mainWindow->slotCdClone();
   else if( args->isSet("erase") )
     m_mainWindow->slotBlankCdrw();
 

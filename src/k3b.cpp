@@ -476,28 +476,25 @@ K3bDoc* K3bMainWindow::activeDoc() const
 }
 
 
-void K3bMainWindow::openDocumentFile(const KURL& url)
+K3bDoc* K3bMainWindow::openDocument(const KURL& url)
 {
   slotStatusMsg(i18n("Opening file..."));
   K3bDoc* doc;
   // check, if document already open. If yes, set the focus to the first view
-  for(doc=pDocList->first(); doc > 0; doc=pDocList->next())
-    {
-      if(doc->URL()==url)
-	{
-	  K3bView* view=doc->firstView();
-	  view->setFocus();
-	  return;
-	}
+  for( doc = pDocList->first(); doc > 0; doc = pDocList->next() ) {
+    if( doc->URL() == url ) {
+      K3bView* view = doc->firstView();
+      view->setFocus();
+      return doc;
     }
+  }
 
   doc = K3bDoc::openDocument( url );
 
-  if( doc == 0 )
-    {
-      KMessageBox::error (this,i18n("Could not open document!"), i18n("Error!"));
-      return;
-    }
+  if( doc == 0 ) {
+    KMessageBox::error (this,i18n("Could not open document!"), i18n("Error!"));
+    return 0;
+  }
 
   actionFileOpenRecent->addURL(url);
 
@@ -505,6 +502,8 @@ void K3bMainWindow::openDocumentFile(const KURL& url)
 
   // create the window
   createClient(doc);
+
+  return doc;
 }
 
 
@@ -660,31 +659,23 @@ bool K3bMainWindow::queryExit()
 /////////////////////////////////////////////////////////////////////
 
 
-void K3bMainWindow::slotFileNew()
-{
-  slotStatusMsg(i18n("Creating new document..."));
-
-  openDocumentFile();
-}
-
 void K3bMainWindow::slotFileOpen()
 {
   slotStatusMsg(i18n("Opening file..."));
 
   KURL url=KFileDialog::getOpenURL(QString::null,
 				   i18n("*.k3b|K3b Projects"), this, i18n("Open File"));
-  if(!url.isEmpty())
-    {
-      openDocumentFile(url);
-      actionFileOpenRecent->addURL( url );
-    }
+  if(!url.isEmpty()) {
+    openDocument(url);
+    actionFileOpenRecent->addURL( url );
+  }
 }
 
 void K3bMainWindow::slotFileOpenRecent(const KURL& url)
 {
   slotStatusMsg(i18n("Opening file..."));
 
-  openDocumentFile(url);
+  openDocument(url);
 }
 
 
@@ -840,7 +831,7 @@ void K3bMainWindow::showOptionDialog( int index )
 }
 
 
-void K3bMainWindow::slotNewAudioDoc()
+K3bDoc* K3bMainWindow::slotNewAudioDoc()
 {
   slotStatusMsg(i18n("Creating new Audio CD Project."));
 
@@ -855,9 +846,11 @@ void K3bMainWindow::slotNewAudioDoc()
 
   // create the window
   createClient(doc);
+
+  return doc;
 }
 
-void K3bMainWindow::slotNewDataDoc()
+K3bDoc* K3bMainWindow::slotNewDataDoc()
 {
   slotStatusMsg(i18n("Creating new Data CD Project."));
 
@@ -874,10 +867,12 @@ void K3bMainWindow::slotNewDataDoc()
 
   // create the window
   createClient(doc);
+
+  return doc;
 }
 
 
-void K3bMainWindow::slotNewDvdDoc()
+K3bDoc* K3bMainWindow::slotNewDvdDoc()
 {
   slotStatusMsg(i18n("Creating new Data DVD Project."));
 
@@ -894,10 +889,12 @@ void K3bMainWindow::slotNewDvdDoc()
 
   // create the window
   createClient(doc);
+
+  return doc;
 }
 
 
-void K3bMainWindow::slotNewMixedDoc()
+K3bDoc* K3bMainWindow::slotNewMixedDoc()
 {
   slotStatusMsg(i18n("Creating new Mixed Mode CD Project."));
 
@@ -914,9 +911,11 @@ void K3bMainWindow::slotNewMixedDoc()
 
   // create the window
   createClient(doc);
+
+  return doc;
 }
 
-void K3bMainWindow::slotNewVcdDoc()
+K3bDoc* K3bMainWindow::slotNewVcdDoc()
 {
   if ( !k3bcore->externalBinManager()->foundBin( "vcdxbuild" ) ) {
     kdDebug() << "(K3bMainWindow) could not find vcdxbuild executable" << endl;
@@ -943,10 +942,12 @@ void K3bMainWindow::slotNewVcdDoc()
 
   // create the window
   createClient(doc);
+
+  return doc;
 }
 
 
-void K3bMainWindow::slotNewMovixDoc()
+K3bDoc* K3bMainWindow::slotNewMovixDoc()
 {
   slotStatusMsg(i18n("Creating new eMovix CD Project."));
 
@@ -963,6 +964,8 @@ void K3bMainWindow::slotNewMovixDoc()
 
   // create the window
   createClient(doc);
+
+  return doc;
 }
 
 

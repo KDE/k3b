@@ -16,6 +16,11 @@
 
 #include "k3binterface.h"
 #include "k3b.h"
+#include "k3bdoc.h"
+
+#include <dcopclient.h>
+#include <qptrlist.h>
+
 
 
 K3bInterface::K3bInterface( K3bMainWindow* w )
@@ -24,7 +29,58 @@ K3bInterface::K3bInterface( K3bMainWindow* w )
 {
 }
 
-void K3bInterface::createDataProject()
+DCOPRef K3bInterface::createDataCDProject()
 {
-  m_main->slotNewDataDoc();
+  return DCOPRef( kapp->dcopClient()->appId(),
+		  m_main->slotNewDataDoc()->dcopId() );
+}
+
+DCOPRef K3bInterface::createAudioCDProject()
+{
+  return DCOPRef( kapp->dcopClient()->appId(),
+		  m_main->slotNewAudioDoc()->dcopId() );
+}
+
+DCOPRef K3bInterface::createMixedCDProject()
+{
+  return DCOPRef( kapp->dcopClient()->appId(),
+		  m_main->slotNewMixedDoc()->dcopId() );
+}
+
+DCOPRef K3bInterface::createVideoCDProject()
+{
+  return DCOPRef( kapp->dcopClient()->appId(),
+		  m_main->slotNewVcdDoc()->dcopId() );
+}
+
+DCOPRef K3bInterface::createMovixCDProject()
+{
+  return DCOPRef( kapp->dcopClient()->appId(),
+		  m_main->slotNewMovixDoc()->dcopId() );
+}
+
+DCOPRef K3bInterface::createDataDVDProject()
+{
+  return DCOPRef( kapp->dcopClient()->appId(),
+		  m_main->slotNewDvdDoc()->dcopId() );
+}
+
+DCOPRef K3bInterface::openDocument( const KURL& url )
+{
+  K3bDoc* doc = m_main->openDocument( url );
+  if( doc )
+    return DCOPRef( kapp->dcopClient()->appId(),
+		    doc->dcopId() );
+  else
+    return DCOPRef();
+}
+
+QValueList<DCOPRef> K3bInterface::projects()
+{
+  QValueList<DCOPRef> lst;
+  QPtrList<K3bDoc>* docs = m_main->projects();
+  for( QPtrListIterator<K3bDoc> it( *docs ); it.current(); ++it )
+    lst.append( DCOPRef( kapp->dcopClient()->appId(), it.current()->dcopId() ) );
+
+  return lst;
 }

@@ -89,7 +89,7 @@ class K3bMainWindow : public KParts::DockMainWindow
   ~K3bMainWindow();
 
   /** opens a file specified by commandline option */
-  void openDocumentFile(const KURL& url=KURL());
+  K3bDoc* openDocument( const KURL& url = KURL() );
 
   K3bCdDevice::DeviceManager*      deviceManager() const;
   K3bExternalBinManager* externalBinManager() const;
@@ -106,6 +106,8 @@ class K3bMainWindow : public KParts::DockMainWindow
    */
   K3bDoc* activeDoc() const;
 
+  QPtrList<K3bDoc>* projects() { return pDocList; }
+
   bool eject();
   void showOptionDialog( int = 0 );
   bool useID3TagForMp3Renaming() const { return m_useID3TagForMp3Renaming; }
@@ -121,12 +123,12 @@ class K3bMainWindow : public KParts::DockMainWindow
 
 
  public slots:
-  void slotNewAudioDoc();
-  void slotNewDataDoc();
-  void slotNewMixedDoc();
-  void slotNewVcdDoc();
-  void slotNewMovixDoc();
-  void slotNewDvdDoc();
+  K3bDoc* slotNewAudioDoc();
+  K3bDoc* slotNewDataDoc();
+  K3bDoc* slotNewMixedDoc();
+  K3bDoc* slotNewVcdDoc();
+  K3bDoc* slotNewMovixDoc();
+  K3bDoc* slotNewDvdDoc();
 
   void slotBlankCdrw();
   void slotFormatDvd();
@@ -217,8 +219,6 @@ class K3bMainWindow : public KParts::DockMainWindow
   virtual void showEvent( QShowEvent* e );
 
  private slots:
-  /** clears the document in the actual view to reuse it as the new document */
-  void slotFileNew();
   /** open a file and load it into the document*/
   void slotFileOpen();
   /** opens a file from the recent files menu */
