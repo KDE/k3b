@@ -28,6 +28,7 @@
 #include <qvaluelist.h>
 #include <qregexp.h>
 #include <qfile.h>
+#include <qfileinfo.h>
 #include <qdir.h>
 #include <qurl.h>
 #include <klocale.h>
@@ -577,18 +578,25 @@ bool K3bCdrdaoWriter::cueSheet()
                     return false;
 
                 line = line.mid( pos, endPos-pos );
+                QFileInfo fi( QFileInfo( m_tocFile ).dirPath() + "/" + QFileInfo( line ).fileName() );
+                QString binpath = fi.filePath();
+                kdDebug() << QString("K3bCdrdaoWriter::cueSheet() BinFilePath from CueFile: %1").arg( line ) << endl;
+                kdDebug() << QString("K3bCdrdaoWriter::cueSheet() absolute BinFilePath: %1").arg( binpath ) << endl;
+
+                if ( !fi.exists() )
+                    return false;
 
                 KTempFile tempF;
                 QString tempFile = tempF.name();
                 tempF.unlink();
 
-                if ( symlink(line.latin1(), (tempFile + ".bin").latin1() ) == -1 )
+                if ( symlink(binpath.latin1(), (tempFile + ".bin").latin1() ) == -1 )
                     return false;
                 if ( symlink(m_tocFile.latin1(), (tempFile + ".cue").latin1() ) == -1 )
                     return false;
 
-                kdDebug() << QString("K3bCdrdaoWriter::cueSheet() BinFile: %1.bin").arg( tempFile ) << endl;
-                kdDebug() << QString("K3bCdrdaoWriter::cueSheet() CueFile: %1.cue").arg( tempFile ) << endl;
+                kdDebug() << QString("K3bCdrdaoWriter::cueSheet() symlink BinFileName: %1.bin").arg( tempFile ) << endl;
+                kdDebug() << QString("K3bCdrdaoWriter::cueSheet() symlink CueFileName: %1.cue").arg( tempFile ) << endl;
                 m_binFileLnk = tempFile + ".bin";
                 m_cueFileLnk = tempFile + ".cue";
                 return true;
@@ -613,8 +621,8 @@ void K3bCdrdaoWriter::slotProcessExited( KProcess* p )
   case WRITE:
   case COPY:
     if ( !m_binFileLnk.isEmpty() ) {
-        // KIO::NetAccess::del(m_cueFileLnk);
-        // KIO::NetAccess::del(m_binFileLnk);
+        KIO::NetAccess::del(m_cueFileLnk);
+        KIO::NetAccess::del(m_binFileLnk);
     }
     else if( !QFile::exists( m_tocFile ) && !m_onTheFly )
     {
