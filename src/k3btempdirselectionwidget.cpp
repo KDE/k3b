@@ -44,6 +44,9 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const cha
 
   QLabel* imageFileLabel = new QLabel( i18n( "Wri&te image file to:" ), this );
 
+
+  // FIXME: Use KURLRequester!
+
   QHBox* urlRequesterBox = new QHBox( this );
   urlRequesterBox->setSpacing( KDialog::spacingHint() );
   m_editDirectory = new QLineEdit( urlRequesterBox, "m_editDirectory" );

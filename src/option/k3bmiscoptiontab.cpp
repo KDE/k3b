@@ -45,6 +45,9 @@ K3bMiscOptionTab::K3bMiscOptionTab(QWidget *parent, const char *name )
   groupTempDir->layout()->setMargin( KDialog::marginHint() );
   groupTempDir->layout()->setSpacing( KDialog::spacingHint() );
 
+
+  // FIXME: Use KURLRequester!
+
   m_editTempDir = new QLineEdit( groupTempDir );
   m_buttonTempDir = new QToolButton( groupTempDir );
   m_buttonTempDir->setIconSet( SmallIconSet( "fileopen" ) );

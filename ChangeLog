@@ -1,4 +1,8 @@
-next version:
+0.8
+mixed mode cd creation
+video cd creation
+better error handling
+bootable cds
 
 indivdual selection of final size for encoded movie
 clean vob dir before start and restore it (i.e playing wiht PowerDVD stores
@@ -6,6 +10,7 @@ config files in the directory)
 
 AC3-passthrough mode for DIVX Encoding
 DND for AudioCD-Ripping to harddisc.
+
 
 0.7.5
 Added session import

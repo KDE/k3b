@@ -1,4 +1,3 @@
-<<<<<<< k3b.spec
 %define name    k3b
 %define version 0.8
 %define release 1asp

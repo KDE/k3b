@@ -1,4 +1,5 @@
 audio ripping to mp3 (ogg)
-bootable cds
+bootable cds (work in progress)
 mixed-mode cds (work in progress)
 video cd (work in progress)
+make audio decoding pluggable
