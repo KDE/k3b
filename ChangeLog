@@ -1,3 +1,6 @@
+0.11.10
+Support Mp3 files starting with multiple ID3 tags.
+
 0.11.9
 Fixed data project size calculation (for good this time).
 	
