@@ -2124,32 +2124,38 @@ bool K3bCdDevice::CdDevice::readFormatCapacity( K3b::Msf& r ) const
 
     int realLength = buffer[3] + 4;
 
+    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << " READ FORMAT CAPACITY: Current/Max "
+	      << (int)(buffer[8]&0x3) << " " << from4Byte( &buffer[4] ) << endl;
+
     //
-    // now find the 00h format type since that contains the number of adressable blocks
-    // and the block size used for formatting the whole media.
-    // There may be multible occurences of this descriptor (MMC4 says so).We use the max.
-    // 00h may not be supported by the unit (e.g. CD-RW)
-    // for this case we fall back to the first descriptor (the current/maximum descriptor)
+    // Descriptor Type:
+    // 0 - reserved
+    // 1 - unformatted :)
+    // 2 - formatted. Here we get the used capacity (lead-in to last lead-out/border-out)
+    // 3 - No media present
     //
-    for( int i = 12; i < realLength-4; ++i ) {
-      if( (buffer[i+4]>>2) == 0 ) {
-	// found the descriptor
-	r = QMAX( (int)from4Byte( &buffer[i] ), r.lba() );
-	success = true;
-      }
+    int descType = buffer[8] & 0x03;
+    if( descType == 1 ) {
+      r = from4Byte( &buffer[4] );
+      success = true;
     }
+    else {
+      //
+      // now find the 00h format type since that contains the number of adressable blocks
+      // and the block size used for formatting the whole media.
+      // There may be multible occurences of this descriptor (MMC4 says so).We use the max.
+      // 00h may not be supported by the unit (e.g. CD-RW)
+      // for this case we fall back to the first descriptor (the current/maximum descriptor)
+      //
+      for( int i = 12; i < realLength-4; ++i ) {
+	kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << " READ FORMAT CAPACITY: "
+		  << (int)(buffer[i+4]>>2) << " " << from4Byte( &buffer[i] ) << endl;
 
-    if( !success ) {
-      // try the current/maximum descriptor
-      int descType = buffer[8] & 0x03;
-      if( descType == 1 || descType == 2 ) {
-	// 1: unformatted :)
-	// 2: formatted. Here we get the used capacity (lead-in to last lead-out/border-out)
-	r = from4Byte( &buffer[4] );
-	success = true;
-
-	// FIXME: we assume a blocksize of 2048 here. Is that correct? Wouldn' it be better to use
-	//        the blocksize from the descriptor?
+	if( (buffer[i+4]>>2) == 0 ) {
+	  // found the descriptor
+	  r = QMAX( (int)from4Byte( &buffer[i] ), r.lba() );
+	  success = true;
+	}
       }
     }
   }
