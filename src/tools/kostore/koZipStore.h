@@ -22,7 +22,7 @@
 
 #include "koStore.h"
 
-class KZip;
+class KoZip;
 class KArchiveDirectory;
 
 class KoZipStore : public KoStore
@@ -44,7 +44,7 @@ protected:
     virtual bool fileExists( const QString& absPath );
 
     // The archive
-    KZip * m_pZip;
+    KoZip * m_pZip;
 
     // In "Read" mode this pointer is pointing to the
     // current directory in the archive to speed up the verification process
