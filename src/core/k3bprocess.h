@@ -74,12 +74,12 @@ class K3bProcess : public KProcess
   /**
    * @deprecated use writeToFd
    */
-  void dupStdout( int fd ) KDE_DEPRECATED;
+  void dupStdout( int fd );
 
   /**
    * @deprecated use readFromFd
    */
-  void dupStdin( int fd ) KDE_DEPRECATED;
+  void dupStdin( int fd );
 
   /**
    * Make the process write to @fd instead of Stdout.
