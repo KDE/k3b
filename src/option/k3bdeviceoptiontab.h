@@ -71,8 +71,8 @@ Q_OBJECT
   QLabel*       m_labelBurnProof;
   QLabel*       m_labelWriteSpeed;
   QFrame*       m_line3;
-  KIntNumInput* m_spinReadSpeed;
-  KIntNumInput* m_spinWriteSpeed;
+  QLabel*       m_spinReadSpeed;
+  QLabel*       m_spinWriteSpeed;
   QComboBox*    m_comboDriver;
   QComboBox*    m_comboCdText;
   QLabel*    m_checkBurnProof;

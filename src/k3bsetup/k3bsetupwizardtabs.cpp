@@ -76,10 +76,7 @@ DeviceTab::DeviceTab( int i, int o, K3bSetupWizard* wizard )
   m_buttonAddDevice = new QPushButton( i18n( "Add device" ), main, "m_buttonAddDevice" );
 
   m_labelSetupDrives = new QLabel( main, "m_labelSetupDrives" );
-  m_labelSetupDrives->setText( i18n( "<p>K3b Setup has detected the following CD drives. It tries hard to detect "
-				     "capabilities like the maximum read and write speed but does sometimes fail.</p>"
-				     "<p>Please check if all capabilities are detected correctly and change them "
-				     "manually if not by clicking twice on the value you want to change.</p>"
+  m_labelSetupDrives->setText( i18n( "<p>K3b Setup has detected the following CD drives.</p>"
 				     "<p>You can add additional devices (like /dev/cdrom) if your drive has not "
 				     "been detected.</p>" ) );
   m_labelSetupDrives->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
@@ -96,9 +93,9 @@ DeviceTab::DeviceTab( int i, int o, K3bSetupWizard* wizard )
   m_viewSetupReader->header()->hide();
   m_viewSetupReader->setSorting( -1 );
   m_viewSetupReader->setAllColumnsShowFocus( true );
-  m_viewSetupReader->setItemsRenameable( true );
-  m_viewSetupReader->setRenameable( 0, false );
-  m_viewSetupReader->setRenameable( 1, true );
+//   m_viewSetupReader->setItemsRenameable( true );
+//   m_viewSetupReader->setRenameable( 0, false );
+//   m_viewSetupReader->setRenameable( 1, true );
 
 
 
@@ -113,9 +110,9 @@ DeviceTab::DeviceTab( int i, int o, K3bSetupWizard* wizard )
   m_viewSetupWriter->header()->hide();
   m_viewSetupWriter->setSorting( -1 );
   m_viewSetupWriter->setAllColumnsShowFocus( true );
-  m_viewSetupWriter->setItemsRenameable( true );
-  m_viewSetupWriter->setRenameable( 0, false );
-  m_viewSetupWriter->setRenameable( 1, true );
+//   m_viewSetupWriter->setItemsRenameable( true );
+//   m_viewSetupWriter->setRenameable( 0, false );
+//   m_viewSetupWriter->setRenameable( 1, true );
 
 
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
@@ -130,8 +127,8 @@ DeviceTab::DeviceTab( int i, int o, K3bSetupWizard* wizard )
   mainGrid->addWidget( groupReader, 1, 0 );
   mainGrid->addWidget( groupWriter, 1, 1 );
 
-  QToolTip::add( m_viewSetupWriter, i18n("Click twice to change a value") );
-  QToolTip::add( m_viewSetupReader, i18n("Click twice to change a value") );
+//   QToolTip::add( m_viewSetupWriter, i18n("Click twice to change a value") );
+//   QToolTip::add( m_viewSetupReader, i18n("Click twice to change a value") );
 
   setMainWidget( main );
 

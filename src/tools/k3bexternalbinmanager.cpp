@@ -97,6 +97,8 @@ void K3bExternalBinManager::checkVersions()
     binO->version = QString::null;
     if( QFile::exists( binO->path ) ) {
 
+      delete m_process;
+      m_process = new KProcess();
       m_process->clearArguments();
       m_process->disconnect();
       *m_process << binO->path << "--version";
@@ -114,6 +116,8 @@ void K3bExternalBinManager::checkVersions()
     binO->version = QString::null;
     if( QFile::exists( binO->path ) ) {
 
+      delete m_process;
+      m_process = new KProcess();
       m_process->clearArguments();
       m_process->disconnect();
       *m_process << binO->path << "--version";
@@ -131,6 +135,8 @@ void K3bExternalBinManager::checkVersions()
     binO->version = QString::null;
     if( QFile::exists( binO->path ) ) {
 
+      delete m_process;
+      m_process = new KProcess();
       m_process->clearArguments();
       m_process->disconnect();
       *m_process << binO->path;

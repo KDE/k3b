@@ -23,6 +23,9 @@
 
 #include <qstring.h>
 #include <qpushbutton.h>
+#include <qtooltip.h>
+#include <qlayout.h>
+#include <qvbox.h>
 
 #include <klocale.h>
 #include <kconfig.h>
@@ -33,19 +36,44 @@
 
 
 K3bProjectBurnDialog::K3bProjectBurnDialog(K3bDoc* doc, QWidget *parent, const char *name, bool modal )
-  : KDialogBase( KDialogBase::Tabbed, i18n("Write CD"), Ok|User1|User2|User3|Cancel, 
-		 User1, parent, name, modal, true, 
+  : KDialogBase( parent, name, modal, i18n("Write CD"), Ok|User1|User2, User1, true, 
 		 KGuiItem( i18n("Save"), "filesave", i18n("Save Settings and close"), 
-			   i18n("Saves the settings to the project and closes the burn dialog.") ), 
-		 KStdGuiItem::defaults(), 
-		 KGuiItem( i18n("Save Defaults"), QString::null, i18n("Save current settings as default"),
-			   i18n("Saves the current project settings as the default that will be loaded ehen creating a new project.") ) )
+			   i18n("Saves the settings to the project and closes the burn dialog.") ),
+		 KStdGuiItem::cancel() )
 {
   m_doc = doc;
 	
   setButtonBoxOrientation( Vertical );
   setButtonText( Ok, i18n("Write") );
   m_job = 0;
+
+  QWidget* box = new QWidget( this );
+  setMainWidget( box );
+
+  m_k3bMainWidget = new QVBox( box );
+
+  QGridLayout* grid = new QGridLayout( box );
+  grid->setSpacing( spacingHint() );
+  grid->setMargin( marginHint() );
+
+  m_buttonLoadDefaults = new QPushButton( i18n("Defaults"), box );
+  m_buttonLoadUserDefaults = new QPushButton( i18n("User Defaults"), box );
+  m_buttonSaveUserDefaults = new QPushButton( i18n("Save user Defaults"), box );
+
+  grid->addMultiCellWidget( m_k3bMainWidget, 0, 0, 0, 3 );
+  grid->addWidget( m_buttonLoadDefaults, 1, 0 );
+  grid->addWidget( m_buttonLoadUserDefaults, 1, 2 );
+  grid->addWidget( m_buttonSaveUserDefaults, 1, 3 );
+  grid->setRowStretch( 0, 1 );
+  grid->setColStretch( 1, 1 );
+
+  connect( m_buttonLoadDefaults, SIGNAL(clicked()), this, SLOT(loadDefaults()) );
+  connect( m_buttonLoadUserDefaults, SIGNAL(clicked()), this, SLOT(loadUserDefaults()) );
+  connect( m_buttonSaveUserDefaults, SIGNAL(clicked()), this, SLOT(saveUserDefaults()) );
+
+  QToolTip::add( m_buttonLoadDefaults, i18n("Load K3b default settings") );
+  QToolTip::add( m_buttonLoadUserDefaults, i18n("Load user default settings") );
+  QToolTip::add( m_buttonSaveUserDefaults, i18n("Save user default settings for new projects") );
 }
 
 
@@ -84,13 +112,7 @@ void K3bProjectBurnDialog::slotUser1()
 
 void K3bProjectBurnDialog::slotUser2()
 {
-  loadDefaults();
-}
-
-
-void K3bProjectBurnDialog::slotUser3()
-{
-  saveDefaults();
+  done( Canceled );
 }
 
 

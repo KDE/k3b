@@ -39,6 +39,7 @@
 #include <qptrlist.h>
 #include <qstringlist.h>
 #include <qpoint.h>
+#include <qtabwidget.h>
 
 #include <klocale.h>
 #include <kstddirs.h>
@@ -49,12 +50,25 @@
 K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const char *name, bool modal )
   : K3bProjectBurnDialog( _doc, parent, name, modal )
 {
-  setupBurnTab( addPage( i18n("Burning") ) );
-  setupCdTextTab( addPage( i18n("CD-Text") ) );
+  QTabWidget* tab = new QTabWidget( k3bMainWidget() );
+  QFrame* f1 = new QFrame( tab );
+  QFrame* f2 = new QFrame( tab );
+
+  setupBurnTab( f1 );
+  setupCdTextTab( f2 );
+
+  tab->addTab( f1, i18n("Burning") );
+  tab->addTab( f2, i18n("CD-Text") );
 	
   readSettings();
 
   m_tempDirSelectionWidget->setNeededSize( doc()->size() );
+
+
+  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_tempDirSelectionWidget, SLOT(setDisabled(bool)) );
+  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkRemoveBufferFiles, SLOT(setDisabled(bool)) );
+  connect( m_checkDao, SIGNAL(toggled(bool)), m_checkHideFirstTrack, SLOT(setEnabled(bool)) );
+  connect( m_checkDao, SIGNAL(toggled(bool)), m_checkCdText, SLOT(setEnabled(bool)) );
 }
 
 K3bAudioBurnDialog::~K3bAudioBurnDialog(){
@@ -128,9 +142,6 @@ void K3bAudioBurnDialog::setupBurnTab( QFrame* frame )
   m_groupOptionsLayout->setSpacing( spacingHint() );
   m_groupOptionsLayout->setMargin( marginHint() );
 
-  m_checkCdText = new QCheckBox( m_groupOptions, "m_checkCdText" );
-  m_checkCdText->setText( i18n( "Write CD-Text" ) );
-
   m_checkDao = new QCheckBox( m_groupOptions, "m_checkDao" );
   m_checkDao->setText( i18n( "DiscAtOnce" ) );
 
@@ -152,7 +163,6 @@ void K3bAudioBurnDialog::setupBurnTab( QFrame* frame )
   m_groupOptionsLayout->addWidget( m_checkSimulate );
   m_groupOptionsLayout->addWidget( m_checkOnTheFly );
   m_groupOptionsLayout->addWidget( m_checkRemoveBufferFiles );
-  m_groupOptionsLayout->addWidget( m_checkCdText );
   m_groupOptionsLayout->addWidget( m_checkPadding );
   m_groupOptionsLayout->addWidget( m_checkDao );
   m_groupOptionsLayout->addWidget( m_checkHideFirstTrack );
@@ -167,11 +177,6 @@ void K3bAudioBurnDialog::setupBurnTab( QFrame* frame )
 
   frameLayout->setRowStretch( 1, 1 );
   frameLayout->setColStretch( 1, 1 );
-
-  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_tempDirSelectionWidget, SLOT(setDisabled(bool)) );
-  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkRemoveBufferFiles, SLOT(setDisabled(bool)) );
-  connect( m_checkDao, SIGNAL(toggled(bool)), m_checkHideFirstTrack, SLOT(setEnabled(bool)) );
-  connect( m_checkDao, SIGNAL(toggled(bool)), m_checkCdText, SLOT(setEnabled(bool)) );
 }
 
 
@@ -181,6 +186,8 @@ void K3bAudioBurnDialog::setupCdTextTab( QFrame* frame )
   mainGrid->setSpacing( spacingHint() );
   mainGrid->setMargin( marginHint() );
 
+
+  m_checkCdText = new QCheckBox( i18n( "Write CD-Text" ), frame, "m_checkCdText" );
 
   QLabel* labelDisc_id = new QLabel( i18n( "&Disc ID" ), frame, "labelDisc_id" );
   QLabel* labelMessage = new QLabel( i18n( "&Message" ), frame, "labelMessage" );
@@ -202,23 +209,28 @@ void K3bAudioBurnDialog::setupCdTextTab( QFrame* frame )
   m_editSongwriter = new QLineEdit( frame, "m_editSongwriter" );
 
 
-  mainGrid->addWidget( labelPerformer, 0, 0 );
-  mainGrid->addWidget( m_editPerformer, 0, 1 );
-  mainGrid->addWidget( labelTitle, 1, 0 );
-  mainGrid->addWidget( m_editTitle, 1, 1 );
-  mainGrid->addWidget( labelArranger, 2, 0 );
-  mainGrid->addWidget( m_editArranger, 2, 1 );
-  mainGrid->addWidget( labelSongwriter, 3, 0 );
-  mainGrid->addWidget( m_editSongwriter, 3, 1 );
-  mainGrid->addWidget( labelUpc_ean, 5, 0 );
-  mainGrid->addWidget( m_editUpc_ean, 5, 1 );
-  mainGrid->addWidget( labelDisc_id, 6, 0 );
-  mainGrid->addWidget( m_editDisc_id, 6, 1 );
-  mainGrid->addWidget( labelMessage, 7, 0 );
-  mainGrid->addWidget( m_editMessage, 7, 1 );
+  QFrame* line = new QFrame( frame );
+  line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
 
-  mainGrid->addRowSpacing( 4, 20 );
-  mainGrid->setRowStretch( 7, 1 );
+  mainGrid->addMultiCellWidget( m_checkCdText, 0, 0, 0, 1 );
+  mainGrid->addMultiCellWidget( line, 1, 1, 0, 1 );
+  mainGrid->addWidget( labelTitle, 2, 0 );
+  mainGrid->addWidget( m_editTitle, 2, 1 );
+  mainGrid->addWidget( labelPerformer, 3, 0 );
+  mainGrid->addWidget( m_editPerformer, 3, 1 );
+  mainGrid->addWidget( labelArranger, 4, 0 );
+  mainGrid->addWidget( m_editArranger, 4, 1 );
+  mainGrid->addWidget( labelSongwriter, 5, 0 );
+  mainGrid->addWidget( m_editSongwriter, 5, 1 );
+  mainGrid->addWidget( labelUpc_ean, 7, 0 );
+  mainGrid->addWidget( m_editUpc_ean, 7, 1 );
+  mainGrid->addWidget( labelDisc_id, 8, 0 );
+  mainGrid->addWidget( m_editDisc_id, 8, 1 );
+  mainGrid->addWidget( labelMessage, 9, 0 );
+  mainGrid->addWidget( m_editMessage, 9, 1 );
+
+  mainGrid->addRowSpacing( 6, 20 );
+  mainGrid->setRowStretch( 9, 1 );
 
   // buddies
   labelDisc_id->setBuddy( m_editDisc_id );
@@ -252,6 +264,20 @@ void K3bAudioBurnDialog::slotOk()
 
 void K3bAudioBurnDialog::loadDefaults()
 {
+  m_checkSimulate->setChecked( false );
+  m_checkDao->setChecked( true );
+  m_checkOnTheFly->setChecked( true );
+  //  m_checkBurnProof->setChecked( true );
+
+  m_checkCdText->setChecked( true );
+  m_checkPadding->setChecked( false );
+  m_checkHideFirstTrack->setChecked( false );
+  m_checkRemoveBufferFiles->setChecked( true );
+}
+
+
+void K3bAudioBurnDialog::loadUserDefaults()
+{
   KConfig* c = k3bMain()->config();
 
   c->setGroup( "default audio settings" );
@@ -268,7 +294,7 @@ void K3bAudioBurnDialog::loadDefaults()
 }
 
 
-void K3bAudioBurnDialog::saveDefaults()
+void K3bAudioBurnDialog::saveUserDefaults()
 {
   KConfig* c = k3bMain()->config();
 

@@ -40,6 +40,7 @@
 #include <qfileinfo.h>
 #include <qvalidator.h>
 #include <qregexp.h>
+#include <qtabwidget.h>
 
 #include <kmessagebox.h>
 #include <klineedit.h>
@@ -53,11 +54,22 @@
 K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const char *name, bool modal )
   : K3bProjectBurnDialog( _doc, parent, name, modal )
 {
-  setupBurnTab( addPage( i18n("Burning") ) );
-  setupSettingsTab( addPage( i18n("Settings") ) );
-  setupMultisessionTab( addPage( i18n("Multisession") ) );
-  setupAdvancedTab( addPage( i18n("Advanced") ) );
+  QTabWidget* tab = new QTabWidget( k3bMainWidget() );
+  QFrame* f1 = new QFrame( tab );
+  QFrame* f2 = new QFrame( tab );
+  QFrame* f3 = new QFrame( tab );
+  QFrame* f4 = new QFrame( tab );
+
+  setupBurnTab( f1 );
+  setupSettingsTab( f2 );
+  setupMultisessionTab( f3 );
+  setupAdvancedTab( f4 );
 	
+  tab->addTab( f1, i18n("Burning") );
+  tab->addTab( f2, i18n("Settings") );
+  tab->addTab( f3, i18n("Multisession") );
+  tab->addTab( f4, i18n("Advanced") );
+
   readSettings();
 
   if( K3bDevice* dev = m_writerSelectionWidget->writerDevice() )
@@ -548,6 +560,39 @@ void K3bDataBurnDialog::slotOnlyCreateImageToggled( bool on )
 
 void K3bDataBurnDialog::loadDefaults()
 {
+  m_checkDummy->setChecked( false );
+  m_checkDao->setChecked( true );
+  m_checkOnTheFly->setChecked( true );
+  m_checkBurnProof->setChecked( true );
+
+  m_checkCreateRockRidge->setChecked( true );
+  m_checkCreateJoliet->setChecked( false );
+  m_checkDeleteImage->setChecked( true );
+  m_checkOnlyCreateImage->setChecked( false );
+
+  m_radioIsoLevel1->setChecked(true);
+
+  m_radioSpaceLeave->setChecked(true);
+
+
+  m_checkNoDeepDirRel->setChecked( false );
+  m_checkHideRR_MOVED->setChecked( false );
+  m_checkCreateTRANS_TBL->setChecked( false );
+  m_checkHideTRANS_TBL->setChecked( false );
+  m_checkUntranslatedNames->setChecked( false );
+  m_checkAllow31->setChecked( false );
+  m_checkMaxNames->setChecked( false );
+  m_checkBeginPeriod->setChecked( false );
+  m_checkRelaxedNames->setChecked( false );
+  m_checkOmitVersion->setChecked( false );
+  m_checkNoISOTrans->setChecked( false );
+  m_checkMultiDot->setChecked( false );
+  m_checkLowercase->setChecked( false ); 
+}
+
+
+void K3bDataBurnDialog::loadUserDefaults()
+{
   KConfig* c = k3bMain()->config();
 
   c->setGroup( "default data settings" );
@@ -603,7 +648,7 @@ void K3bDataBurnDialog::loadDefaults()
 }
 
 
-void K3bDataBurnDialog::saveDefaults()
+void K3bDataBurnDialog::saveUserDefaults()
 {
   KConfig* c = k3bMain()->config();
 

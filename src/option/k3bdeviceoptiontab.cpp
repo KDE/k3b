@@ -80,7 +80,7 @@ K3bDeviceOptionTab::K3bDeviceOptionTab( QWidget* parent, const char* name )
   // ------------------------------------------------
   m_labelDevicesInfo = new QLabel( this, "m_labelDevicesInfo" );
   m_labelDevicesInfo->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter | QLabel::AlignLeft ) );
-  m_labelDevicesInfo->setText( i18n( "K3b tries to detect all your devices properly. Sometimes this does not work for the read or the write speed. In this case you can change them manually. You can add not detected devices and change the cdrdao driver for the generic scsi drives." ) );
+  m_labelDevicesInfo->setText( i18n( "K3b tries to detect all your devices properly. You can add not detected devices and change the cdrdao driver for the generic scsi drives. If K3b is not able to detect your drive please run K3bSetup to set the correct permissions." ) );
 
   frameLayout->addMultiCellWidget( m_labelDevicesInfo, 0, 0, 0, 1 );
   // ------------------------------------------------
@@ -174,12 +174,12 @@ K3bDeviceOptionTab::K3bDeviceOptionTab( QWidget* parent, const char* name )
   QLabel* TextLabel6 = new QLabel( i18n( "Model:" ), m_groupDeviceInfo, "TextLabel6" );
   QFrame* line1 = new QFrame( m_groupDeviceInfo, "line1" );
   line1->setFrameStyle( QFrame::HLine | QFrame::Sunken );
-  m_spinReadSpeed = new KIntNumInput( m_groupDeviceInfo, "m_spinReadSpeed" );
+  m_spinReadSpeed = new QLabel( m_groupDeviceInfo, "m_spinReadSpeed" );
   QLabel* labelReadSpeed = new QLabel( i18n( "Max read speed:" ), m_groupDeviceInfo, "labelReadSpeed" );
   QFrame* line2 = new QFrame( m_groupDeviceInfo, "line2" );
   line2->setFrameStyle( QFrame::HLine | QFrame::Sunken );
   m_labelWriteSpeed = new QLabel( i18n( "Max write speed:" ), m_groupDeviceInfo, "labelWriteSpeed" );
-  m_spinWriteSpeed = new KIntNumInput( m_groupDeviceInfo, "m_spinWriteSpeed" );
+  m_spinWriteSpeed = new QLabel( m_groupDeviceInfo, "m_spinWriteSpeed" );
   m_comboDriver = new QComboBox( FALSE, m_groupDeviceInfo, "m_comboDriver" );
   m_labelDriver = new QLabel( i18n( "Cdrdao driver:" ), m_groupDeviceInfo, "labelDriver" );
   m_comboCdText = new QComboBox( false, m_groupDeviceInfo, "m_comboCdText" );
@@ -197,6 +197,8 @@ K3bDeviceOptionTab::K3bDeviceOptionTab( QWidget* parent, const char* name )
   m_labelVendor->setBackgroundColor( Qt::white );
   m_labelDescription->setBackgroundColor( Qt::white );
   m_checkBurnProof->setBackgroundColor( Qt::white );
+  m_spinReadSpeed->setBackgroundColor( Qt::white );
+  m_spinWriteSpeed->setBackgroundColor( Qt::white );
 
 
   m_labelDevicename->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
@@ -205,6 +207,8 @@ K3bDeviceOptionTab::K3bDeviceOptionTab( QWidget* parent, const char* name )
   m_labelVendor->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
   m_labelDescription->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
   m_checkBurnProof->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
+  m_spinReadSpeed->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
+  m_spinWriteSpeed->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
 
 
 
@@ -257,8 +261,8 @@ K3bDeviceOptionTab::K3bDeviceOptionTab( QWidget* parent, const char* name )
 
   connect( m_comboDriver, SIGNAL(activated(const QString&)), this, SLOT(slotCdrdaoDriverChanged(const QString&)) );
   connect( m_comboCdText, SIGNAL(activated(const QString&)), this, SLOT(slotCdTextCapabilityChanged(const QString&)) );
-  connect( m_spinWriteSpeed, SIGNAL(valueChanged(int)), this, SLOT(slotWriteSpeedChanged(int)) );
-  connect( m_spinReadSpeed, SIGNAL(valueChanged(int)), this, SLOT(slotReadSpeedChanged(int)) );
+//   connect( m_spinWriteSpeed, SIGNAL(valueChanged(int)), this, SLOT(slotWriteSpeedChanged(int)) );
+//   connect( m_spinReadSpeed, SIGNAL(valueChanged(int)), this, SLOT(slotReadSpeedChanged(int)) );
   // ------------------------------------------------
 
   // fill the driver-combo-box
@@ -357,7 +361,7 @@ void K3bDeviceOptionTab::updateDeviceInfoBox( PrivateTempDevice* tempDev )
     m_labelVendor->setText( dev->vendor() );
     m_labelDescription->setText( dev->description() );
     m_labelVersion->setText( dev->version() );
-    m_spinReadSpeed->setValue( tempDev->maxReadSpeed );
+    m_spinReadSpeed->setText( QString::number(tempDev->maxReadSpeed) );
     m_comboDriver->setEnabled( true );
 
     int i = 0;
@@ -383,7 +387,7 @@ void K3bDeviceOptionTab::updateDeviceInfoBox( PrivateTempDevice* tempDev )
     }
     
     if( dev->burner() ) {
-      m_spinWriteSpeed->setValue( tempDev->maxWriteSpeed );
+      m_spinWriteSpeed->setText( QString::number(tempDev->maxWriteSpeed) );
       m_checkBurnProof->setText( dev->burnproof() ? "yes" : "no" );
 
       m_comboCdText->clear();
@@ -410,7 +414,7 @@ void K3bDeviceOptionTab::updateDeviceInfoBox( PrivateTempDevice* tempDev )
     m_labelVendor->setText( "" );
     m_labelDescription->setText( "" );
     m_labelVersion->setText( "" );
-    m_spinReadSpeed->setValue( 0 );
+    m_spinReadSpeed->setText( "0" );
     m_comboDriver->setDisabled( true );
   }    
 }

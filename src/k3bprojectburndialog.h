@@ -48,12 +48,11 @@ class K3bProjectBurnDialog : public KDialogBase
    virtual void slotOk();
    virtual void slotUser1();
    virtual void slotUser2();
-   virtual void slotUser3();
    virtual void slotCancel();
 
- protected:
    virtual void loadDefaults() = 0;
-   virtual void saveDefaults() = 0;
+   virtual void loadUserDefaults() = 0;
+   virtual void saveUserDefaults() = 0;
 
  signals:
    void writerChanged();
@@ -61,10 +60,20 @@ class K3bProjectBurnDialog : public KDialogBase
  protected:
    virtual void saveSettings() {};
    virtual void readSettings() {};
+
+   /**
+    * The widget to add new stuff. Use instead of mainWidget()
+    */
+   QWidget* k3bMainWidget() { return m_k3bMainWidget; }
 	
  private:
    K3bDoc* m_doc;
    K3bBurnJob* m_job;
+   QWidget* m_k3bMainWidget;
+
+   QPushButton* m_buttonLoadDefaults;
+   QPushButton* m_buttonSaveUserDefaults;
+   QPushButton* m_buttonLoadUserDefaults;
 };
 
 #endif

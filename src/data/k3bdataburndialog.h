@@ -51,9 +51,6 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    void setupSettingsTab( QFrame* frame );
    void setupMultisessionTab( QFrame* frame );
 
-   void loadDefaults();
-   void saveDefaults();
-
    // --- general tab -------------------------	
    QLabel* TextLabel1;
    QLabel* TextLabel1_2;
@@ -119,6 +116,10 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    void saveSettings();
    void readSettings();
    void slotWriterChanged();
+
+   void loadDefaults();
+   void loadUserDefaults();
+   void saveUserDefaults();
 
    /**
     * converts all the ISO-header field strings
