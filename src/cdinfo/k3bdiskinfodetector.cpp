@@ -24,13 +24,11 @@ K3bDiskInfoDetector::K3bDiskInfoDetector( QObject* parent )
   : QObject( parent )
 {
   m_tcWrapper = 0;
-  QTimer::singleShot(0,this,SLOT(detect()));
 }
 
 
 K3bDiskInfoDetector::~K3bDiskInfoDetector()
 {
-   ::close(m_cdfd);
 }
 
 
@@ -46,12 +44,8 @@ void K3bDiskInfoDetector::detect( K3bDevice* device )
   // reset
   m_info = K3bDiskInfo();
   m_info.device = m_device;
-  if ( (m_cdfd = ::open(m_device->ioctlDevice().latin1(),O_RDONLY | O_NONBLOCK)) == -1 ) {
-    kdDebug() << "(K3bDiskInfoDetector) could not open device !" << endl;
-    return;
-  }
 
-  fetchTocInfo();
+  QTimer::singleShot(0,this,SLOT(fetchTocInfo()));
 }
 
 
@@ -101,6 +95,12 @@ void K3bDiskInfoDetector::fetchTocInfo()
   struct cdrom_tochdr tochdr;
   struct cdrom_tocentry tocentry;
   int status;
+  if ( (m_cdfd = ::open(m_device->ioctlDevice().latin1(),O_RDONLY | O_NONBLOCK)) == -1 ) {
+    kdDebug() << "(K3bDiskInfoDetector) could not open device !" << endl;
+    m_info.valid=false;
+    emit diskInfoReady(m_info);
+    return;
+  }
   
   if ( (status = ::ioctl(m_cdfd,CDROM_DISC_STATUS)) != 0 )
     switch (status) {
