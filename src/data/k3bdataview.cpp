@@ -115,7 +115,7 @@ K3bDirItem* K3bDataView::currentDir() const
 }
 
 
-void K3bDataView::slotDropped( KListView* listView, QDropEvent* e, QListViewItem* after, QListViewItem* parentViewItem )
+void K3bDataView::slotDropped( KListView* listView, QDropEvent* e, QListViewItem*, QListViewItem* parentViewItem )
 {
   if( !e->isAccepted() )
     return;

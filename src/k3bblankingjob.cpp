@@ -12,9 +12,7 @@
 #include <qstring.h>
 #include <kdebug.h>
 
-#include <iostream>
 
-using namespace std;
 
 K3bBlankingJob::K3bBlankingJob()
   : K3bJob()
@@ -95,12 +93,12 @@ void K3bBlankingJob::start()
 
 
   // debugging output
-  cout << "***** cdrecord parameters:\n";
+  kdDebug() << "***** cdrecord parameters:\n";
   for( QValueList<QCString>::const_iterator it = m_process->args().begin();
        it != m_process->args().end(); ++it ) {  
-    cout << *it << " ";
+    kdDebug() << *it << " ";
   }
-  cout << endl << flush;
+  kdDebug() << endl << flush;
 
 
 

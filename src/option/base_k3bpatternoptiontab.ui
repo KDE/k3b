@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>706</width>
-            <height>811</height>
+            <width>541</width>
+            <height>613</height>
         </rect>
     </property>
     <property name="caption">
@@ -47,6 +47,14 @@
         <widget class="QTabWidget">
             <property name="name">
                 <cstring>m_mainTabbed</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
             </property>
             <widget class="QWidget">
                 <property name="name">
@@ -174,20 +182,14 @@
                         </grid>
                     </widget>
                     <spacer>
-                        <property name="name" stdset="0">
-                            <cstring>Spacer10</cstring>
+                        <property name="name">
+                            <cstring>Spacer7</cstring>
                         </property>
                         <property name="orientation">
                             <enum>Vertical</enum>
                         </property>
                         <property name="sizeType">
                             <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
                         </property>
                     </spacer>
                 </vbox>
@@ -209,23 +211,6 @@
                     <property name="spacing">
                         <number>6</number>
                     </property>
-                    <spacer row="4" column="1">
-                        <property name="name" stdset="0">
-                            <cstring>Spacer9</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
                     <widget class="QGroupBox" row="3" column="0" rowspan="1" colspan="2">
                         <property name="name">
                             <cstring>m_groupAdvancedFilenamePattern</cstring>
@@ -326,7 +311,7 @@
                                 <hsizetype>1</hsizetype>
                                 <vsizetype>1</vsizetype>
                                 <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
+                                <verstretch>1</verstretch>
                             </sizepolicy>
                         </property>
                         <property name="text">
@@ -350,7 +335,7 @@
                                 <hsizetype>1</hsizetype>
                                 <vsizetype>1</vsizetype>
                                 <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
+                                <verstretch>1</verstretch>
                             </sizepolicy>
                         </property>
                         <property name="text">
@@ -407,7 +392,7 @@
                     <number>6</number>
                 </property>
                 <spacer row="0" column="2">
-                    <property name="name" stdset="0">
+                    <property name="name">
                         <cstring>Spacer2</cstring>
                     </property>
                     <property name="orientation">
@@ -416,15 +401,9 @@
                     <property name="sizeType">
                         <enum>Expanding</enum>
                     </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
-                    </property>
                 </spacer>
                 <spacer row="1" column="2">
-                    <property name="name" stdset="0">
+                    <property name="name">
                         <cstring>Spacer1</cstring>
                     </property>
                     <property name="orientation">
@@ -432,12 +411,6 @@
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
                     </property>
                 </spacer>
                 <widget class="KLineEdit" row="0" column="1">
@@ -484,8 +457,19 @@
             <property name="name">
                 <cstring>m_groupExample</cstring>
             </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>1</verstretch>
+                </sizepolicy>
+            </property>
             <property name="title">
                 <string>Example</string>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter</set>
             </property>
             <vbox>
                 <property name="name">
@@ -498,7 +482,7 @@
                     <number>6</number>
                 </property>
                 <spacer>
-                    <property name="name" stdset="0">
+                    <property name="name">
                         <cstring>Spacer8</cstring>
                     </property>
                     <property name="orientation">
@@ -507,16 +491,18 @@
                     <property name="sizeType">
                         <enum>Expanding</enum>
                     </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
-                    </property>
                 </spacer>
                 <widget class="KSqueezedTextLabel">
                     <property name="name">
                         <cstring>m_labelExample</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
                     </property>
                     <property name="font">
                         <font>
@@ -546,20 +532,14 @@
                     </property>
                 </widget>
                 <spacer>
-                    <property name="name" stdset="0">
-                        <cstring>Spacer9_2</cstring>
+                    <property name="name">
+                        <cstring>Spacer9</cstring>
                     </property>
                     <property name="orientation">
                         <enum>Vertical</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
                     </property>
                 </spacer>
             </vbox>

@@ -40,6 +40,8 @@
 #include <qfontmetrics.h>
 #include <qtimer.h>
 #include <qfont.h>
+#include <qpainter.h>
+#include <qpixmap.h>
 
 #include <kprogress.h>
 #include <klocale.h>
@@ -102,7 +104,7 @@ K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name,
   setCaption( i18n("K3b - Progress") );
 
   m_systemTray = new KSystemTray( this );
-  m_systemTray->setPixmap( kapp->iconLoader()->loadIcon( "k3b", KIcon::Panel, 24 ) );
+  //  m_systemTray->setPixmap( kapp->iconLoader()->loadIcon( "k3b", KIcon::Panel, 24 ) );
 
   setupGUI();
   setupConnections();
@@ -428,6 +430,7 @@ void K3bBurnProgressDialog::started()
 {
   m_timer->start( 1000 );
   m_startTime = QTime::currentTime();
+  m_lastAnimatedProgress = 0;
 }
 
 
@@ -455,8 +458,24 @@ void K3bBurnProgressDialog::slotShowDebuggingOutput()
 void K3bBurnProgressDialog::animateSystemTray( int percent )
 {
   if( m_bShowSystemTrayProgress ) {
-    //    QPixmap p = kapp->iconLoader()->loadIcon( "k3b", KIcon::Panel, 24 );
-    // TODO: show <percent> percent of the icon
+    if( m_lastAnimatedProgress < percent ) {
+      m_lastAnimatedProgress = percent;
+
+      QPixmap oldPix = kapp->iconLoader()->loadIcon( "k3b", KIcon::Panel, 24 );
+      
+      QPixmap newPix( 24, 24 );
+      QPainter p( &newPix );
+      p.fillRect( 0, 0, 24, 24, QColor(201, 208, 255) );
+
+      int size = 24*percent/100;
+
+      p.setClipRect( (24-size)/2, (24-size)/2, size, size );
+
+      p.drawPixmap( 0, 0, oldPix );
+      p.end();
+
+      m_systemTray->setPixmap( newPix );
+    }
   }
 }
 

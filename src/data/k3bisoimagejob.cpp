@@ -33,7 +33,6 @@
 #include <qfile.h>
 #include <qtimer.h>
 
-#include <iostream>
 
 
 

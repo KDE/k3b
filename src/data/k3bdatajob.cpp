@@ -42,7 +42,6 @@
 #include <qregexp.h>
 #include <kdebug.h>
 
-#include <iostream>
 
 
 
