@@ -68,7 +68,7 @@ class K3bFileCompilationSizeHandler::Private
 {
 public:
   /**
-   * This maps from inodes to the number of occurences of the inode.
+   * This maps from inodes to the number of occurrences of the inode.
    */
   QMap<ino_t, InodeInfo> inodeMap;
 

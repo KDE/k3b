@@ -18,7 +18,7 @@ Mostly you will like to set the kde3 directory via:
 ./configure --prefix=<mykde3base>
 
 
-If configure was successfull just compile K3b:
+If configure was successful just compile K3b:
 
 make
 

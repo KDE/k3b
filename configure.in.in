@@ -80,7 +80,7 @@ AC_SUBST(ARCH_CFLAGS)
 save_AS=$AS
 unset AS
 ifdef([AM_PROG_AS],[AM_PROG_AS],[])
-#if the macro did set something usefull fallback.
+#if the macro did set something useful fallback.
 test -z "$AS" && AS=$save_AS
 #and if AS was set to as by the macro, and we have a saved value,
 #it's likely it contains a better guess (or it's also as)
