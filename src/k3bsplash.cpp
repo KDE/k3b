@@ -20,7 +20,7 @@ K3bSplash::K3bSplash( QWidget* parent, const char* name )
 
   QLabel* picLabel = new QLabel( this );
   QPixmap pixmap;
-  if( pixmap.load( locate( "appdata", "pics/k3bsplash.png" ) ) )
+  if( pixmap.load( locate( "appdata", "pics/k3b_splash.png" ) ) )
     picLabel->setPixmap( pixmap );
 
   m_infoBox = new QLabel( this );

@@ -1,0 +1,14 @@
+# KDE Config File  
+[Desktop Entry]
+Type=Application
+Exec=kdesu k3bsetup  
+Icon=k3b.png
+MiniIcon=k3b.png
+DocPath=k3b/index.html
+Comment=Prepares the system for CD writing
+Comment[sv/messages/kdeextragear/desktop_kdeextragear.po]=Förbereder systemet för att skriva en cd
+Terminal=0
+Name=K3b Setup
+Name[es/messages/kdeextragear/desktop_kdeextragear.po]=Configuración de K3b
+Name[he/messages/kdeextragear/desktop_kdeextragear.po]=התקנת K3b
+Name[sv/messages/kdeextragear/desktop_kdeextragear.po]=K3b-inställning

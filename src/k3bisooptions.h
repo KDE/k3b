@@ -3,32 +3,13 @@
 
 #include <qstring.h>
 
+class KConfig;
+
+
 class K3bIsoOptions
 {
  public:
-  K3bIsoOptions()
-    : m_inputCharset( "iso8859-1" ) {
-    m_bForceInputCharset = false;
-
-    m_createRockRidge = true;
-    m_createJoliet = false;
-    m_ISOallowLowercase = false;
-    m_ISOallowPeriodAtBegin = false;
-    m_ISOallow31charFilenames = true;
-    m_ISOomitVersionNumbers = false;
-    m_ISOomitTrailingPeriod = false;
-    m_ISOmaxFilenameLength = false;
-    m_ISOrelaxedFilenames = false;
-    m_ISOnoIsoTranslate = false;
-    m_ISOallowMultiDot = false;
-    m_ISOuntranslatedFilenames = false;
-    m_noDeepDirectoryRelocation = false;
-    m_followSymbolicLinks = false;
-    m_hideRR_MOVED = false;
-    m_createTRANS_TBL = false;
-    m_hideTRANS_TBL = false;
-    m_isoLevel = 3;
-  }
+  K3bIsoOptions();
 
   bool forceInputCharset() const { return m_bForceInputCharset; }
   const QString& inputCharset() const { return m_inputCharset; }
@@ -50,11 +31,11 @@ class K3bIsoOptions
   bool ISOnoIsoTranslate() const { return m_ISOnoIsoTranslate; }
   bool ISOallowMultiDot() const { return m_ISOallowMultiDot; }
   bool ISOuntranslatedFilenames() const { return m_ISOuntranslatedFilenames; }
-  bool noDeepDirectoryRelocation() const { return m_noDeepDirectoryRelocation; }
   bool followSymbolicLinks() const { return m_followSymbolicLinks; }
-  bool hideRR_MOVED() const { return m_hideRR_MOVED; }
   bool createTRANS_TBL() const { return m_createTRANS_TBL; }
   bool hideTRANS_TBL() const { return m_hideTRANS_TBL; }
+
+  bool preserveFilePermissions() const { return m_preserveFilePermissions; }
 
   int ISOLevel() const { return m_isoLevel; }
   const QString& systemId() const { return m_systemId; }
@@ -76,9 +57,7 @@ class K3bIsoOptions
   void setISOnoIsoTranslate( bool b ) {  m_ISOnoIsoTranslate = b; }
   void setISOallowMultiDot( bool b ) {  m_ISOallowMultiDot = b; }
   void setISOuntranslatedFilenames( bool b ) {  m_ISOuntranslatedFilenames = b; }
-  void setNoDeepDirectoryRelocation( bool b ) {  m_noDeepDirectoryRelocation = b; }
   void setFollowSymbolicLinks( bool b ) {  m_followSymbolicLinks = b; }
-  void setHideRR_MOVED( bool b ) {  m_hideRR_MOVED = b; }
   void setCreateTRANS_TBL( bool b ) {  m_createTRANS_TBL = b; }
   void setHideTRANS_TBL( bool b ) {  m_hideTRANS_TBL = b; }
 	
@@ -89,8 +68,28 @@ class K3bIsoOptions
   void setVolumeSetId( const QString& s ) { m_volumeSetId = s; }
   void setPublisher( const QString& s ) { m_publisher = s; }
   void setPreparer( const QString& s ) { m_preparer = s; }
-	
+
+  void setPreserveFilePermissions( bool b ) { m_preserveFilePermissions = b; }
   // ----------------------------------------------------------------- mkisofs-options -----------
+
+  enum whiteSpaceTreatments { noChange = 0, replace = 1, strip = 2, extended = 3 };
+
+  void setWhiteSpaceTreatment( int i ) { m_whiteSpaceTreatment = i; }
+  int whiteSpaceTreatment() const { return m_whiteSpaceTreatment; }
+  const QString& whiteSpaceTreatmentReplaceString() const { return m_whiteSpaceTreatmentReplaceString; }
+  void setWhiteSpaceTreatmentReplaceString( const QString& s ) { m_whiteSpaceTreatmentReplaceString = s; }
+
+  bool discardSymlinks() const { return m_discardSymlinks; }
+  void setDiscardSymlinks( bool b ) { m_discardSymlinks = b; }
+
+  bool discardBrokenSymlinks() const { return m_discardBrokenSymlinks; }
+  void setDiscardBrokenSymlinks( bool b ) { m_discardBrokenSymlinks = b; }
+
+
+  void save( KConfig* c );
+
+  static K3bIsoOptions load( KConfig* c );
+  static K3bIsoOptions defaults();
 
  private:
   // volume descriptor
@@ -118,13 +117,20 @@ class K3bIsoOptions
   bool m_ISOnoIsoTranslate;        // -no-iso-translate
   bool m_ISOallowMultiDot;          // -allow-multidot
   bool m_ISOuntranslatedFilenames;   // -U (forces -d, -I, -L, -N, -relaxed-filenames, -allow-lowercase, -allow-multidot, -no-iso-translate)
-  bool m_noDeepDirectoryRelocation;   // -D
   bool m_followSymbolicLinks;       // -f
-  bool m_hideRR_MOVED;  // -hide-rr-moved
   bool m_createTRANS_TBL;    // -T
   bool m_hideTRANS_TBL;    // -hide-joliet-trans-tbl
+
+  bool m_preserveFilePermissions;   // if true -R instead of -r is used
 	
   int m_isoLevel;
+
+
+  int m_whiteSpaceTreatment;
+  QString m_whiteSpaceTreatmentReplaceString;
+
+  bool m_discardSymlinks;
+  bool m_discardBrokenSymlinks;
 };
 
 #endif

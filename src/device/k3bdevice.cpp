@@ -33,6 +33,7 @@ K3bDevice::K3bDevice( cdrom_drive* drive )
   m_maxReadSpeed = 0;
   m_burnproof = false;
   m_burner = false;
+  m_bWritesCdrw = false;
 
   m_bus = m_target = m_lun = -1;
 

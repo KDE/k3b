@@ -21,14 +21,10 @@ class K3bScsiDevice : public K3bDevice
 
   int interfaceType() const { return K3bDevice::SCSI; }
 
-  bool cdrecordDriver() const { return m_bCdrecordDriver; }
-
  private:
   int getModePage( ScsiIf *_scsiIf, int pageCode, unsigned char *buf,
 		   long bufLen, unsigned char *modePageHeader,
 		   unsigned char *blockDesc, int showErrorMsg );
-
-  bool m_bCdrecordDriver;
 
   friend class K3bDeviceManager;
 };

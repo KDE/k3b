@@ -245,6 +245,7 @@ class K3bMainWindow : public KDockMainWindow
 
   void slotNewAudioDoc();
   void slotNewDataDoc();
+  void slotNewMixedDoc();
 
   void slotProjectAddFiles();
 
@@ -290,6 +291,7 @@ class K3bMainWindow : public KDockMainWindow
   KActionMenu* actionFileNewMenu;
   KAction* actionFileNewAudio;
   KAction* actionFileNewData;
+  KAction* actionFileNewMixed;
   KAction* actionFileOpen;
   KRecentFilesAction* actionFileOpenRecent;
   KAction* actionFileSave;

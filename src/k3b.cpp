@@ -65,7 +65,7 @@
 #include "k3bprojectburndialog.h"
 #include "data/k3bdatadoc.h"
 #include "data/k3bdataview.h"
-#include "data/k3bdatajob.h"
+#include "mixed/k3bmixeddoc.h"
 #include "k3bblankingdialog.h"
 #include "data/k3bisoimagewritingdialog.h"
 #include "tools/k3bexternalbinmanager.h"
@@ -165,9 +165,12 @@ void K3bMainWindow::initActions()
 			     actionCollection(), "file_new_audio");
   actionFileNewData = new KAction(i18n("New &Data Project"),"tar", 0, this, SLOT(slotNewDataDoc()),
 			    actionCollection(), "file_new_data");
+  actionFileNewMixed = new KAction(i18n("New &Mixed Mode Project"),"tar", 0, this, SLOT(slotNewMixedDoc()),
+				   actionCollection(), "file_new_mixed");
 
   actionFileNewMenu->insert( actionFileNewAudio );
   actionFileNewMenu->insert( actionFileNewData );
+  actionFileNewMenu->insert( actionFileNewMixed );
   actionFileNewMenu->setDelayed( false );
 
   actionProjectAddFiles = new KAction( i18n("&Add Files..."), "filenew", 0, this, SLOT(slotProjectAddFiles()), 
@@ -808,6 +811,26 @@ void K3bMainWindow::slotNewDataDoc()
   // create the window
   createClient(doc);
 }
+
+
+void K3bMainWindow::slotNewMixedDoc()
+{
+  slotStatusMsg(i18n("Creating new Mixed Mode Project."));
+
+  K3bMixedDoc* doc = new K3bMixedDoc( this );
+  pDocList->append(doc);
+  doc->newDocument();
+
+  untitledCount+=1;
+  QString fileName=QString(i18n("Untitled%1")).arg(untitledCount);
+  KURL url;
+  url.setFileName(fileName);
+  doc->setURL(url);
+
+  // create the window
+  createClient(doc);
+}
+
 
 void K3bMainWindow::slotDivxEncoding(){
     slotStatusMsg(i18n("Creating new video encoding project."));
