@@ -11,3 +11,5 @@ kcm_k3bsetup2_la_LDFLAGS = -module -avoid-version $(all_libraries) -no-undefined
 
 k3bsetup2_DATA = k3bsetup2.desktop
 k3bsetup2dir = $(kde_appsdir)/Settings/System
+
+bin_SCRIPTS = k3bsetup

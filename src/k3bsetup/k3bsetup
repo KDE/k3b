@@ -1,0 +1,5 @@
+#/usr/bin/sh
+
+#TODO: if kdesu not found and not currently root use kdialog to display an error message
+
+kdesu kcmshell k3bsetup2
