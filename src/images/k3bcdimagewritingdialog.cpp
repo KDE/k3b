@@ -130,7 +130,7 @@ K3bCdImageWritingDialog::K3bCdImageWritingDialog( QWidget* parent, const char* n
 
 K3bCdImageWritingDialog::~K3bCdImageWritingDialog()
 {
-  kdDebug() << "(K3bCdImageWritingDialog) destrcution" << endl;
+  kdDebug() << "(K3bCdImageWritingDialog) destruction" << endl;
   delete d;
 }
 
