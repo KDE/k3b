@@ -273,7 +273,7 @@ void K3bSetup::doApplyDevicePermissions( uint groupId )
     else {
       if( QFile::exists( dev->ioctlDevice() ) ) {
 	chown( QFile::encodeName(dev->ioctlDevice()), 0, groupId );
-	chmod( QFile::encodeName(dev->ioctlDevice()), S_IRUSR|S_IWUSR|S_IRGRP );
+	chmod( QFile::encodeName(dev->ioctlDevice()), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP );
       }
       else {
 	kdDebug() << "(K3bSetup) Could not find ioctl device: " << dev->ioctlDevice() << endl;
