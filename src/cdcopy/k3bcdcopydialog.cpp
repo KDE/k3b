@@ -218,7 +218,9 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   // What's This info
   // --------------------------------------------------------------------------------
   QWhatsThis::add( m_checkFastToc, i18n("<p>If this option is checked, K3b will ignore any pregaps and index marks "
-					"on an audio CD."
+					"on an audio CD. "
+					"The copy will sound exactly like the original. The only difference is that "
+					"the display of your audio cd player might show different values."
 					"<p><b>Caution:</b> This may result in faster reading but does not guarantee "
 					"an exact copy.") );
   QWhatsThis::add( m_comboSourceDevice, i18n("<p>Here you should select the drive which contains the CD to copy.") );
