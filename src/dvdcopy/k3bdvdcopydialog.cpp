@@ -276,8 +276,7 @@ void K3bDvdCopyDialog::slotSaveUserDefaults()
 {
   KConfig* c = k3bcore->config();
 
-  c->setGroup( "General Options" );
-  c->writePathEntry( "Temp Dir", m_tempDirSelectionWidget->tempPath() );
+  m_tempDirSelectionWidget->saveConfig();
 
   c->setGroup( "default dvd copy settings" );
 

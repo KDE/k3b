@@ -4,4 +4,4 @@ METASOURCES = AUTO
 
 noinst_LTLIBRARIES = libdvdcopy.la
 
-libdvdcopy_la_SOURCES = k3bdvdcopyjob.cpp k3bdvdcopydialog.cpp
+libdvdcopy_la_SOURCES = k3bdvdcopyjob.cpp k3bdvdcopydialog.cpp k3blibdvdcss.cpp

@@ -14,6 +14,7 @@
  */
 
 #include "k3bdvdcopyjob.h"
+#include "k3blibdvdcss.h"
 
 #include <k3breadcdreader.h>
 #include <k3bdatatrackreader.h>
@@ -137,6 +138,17 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
     d->running = false;
   }
   else {
+    // TODO: only do this if the source is a video dvd
+    kdDebug() << "(K3bDvdCopyJob) trying to open libdvdcss." << endl;
+    if( K3bLibDvdCss* libcss = K3bLibDvdCss::create() ) {
+      kdDebug() << "(K3bLibDvdCss) succeeded." << endl;
+      kdDebug() << "(K3bLibDvdCss) dvdcss_open(" << m_readerDevice->blockDeviceName() << ") = "
+		<< libcss->open(m_readerDevice) << endl;
+      delete libcss;
+    }
+    else
+      kdDebug() << "(K3bLibDvdCss) failed." << endl;
+
     //
     // We cannot rely on the kernel to determine the size of the DVD for some reason
     // On the other hand it is not always a good idea to rely on the size from the ISO9660
@@ -158,19 +170,21 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
     switch( dh->diskInfo().mediaType() ) {
     case K3bDevice::MEDIA_DVD_ROM:
     case K3bDevice::MEDIA_DVD_PLUS_R_DL:
-      if( dh->diskInfo().numLayers() > 1 ) {
-	if( !(m_writerDevice->supportedProfiles() & K3bDevice::MEDIA_DVD_PLUS_R_DL) ) {
-	  emit infoMessage( i18n("The writer does not support writing double layer DVDs."), ERROR );
-	  d->running = false;
-	  emit finished(false);
-	  return;
-	}
-	else if( k3bcore->externalBinManager()->binObject( "growisofs" ) && 
-		 k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3bVersion( 5, 20 ) ) {
-	  emit infoMessage( i18n("Growisofs >= 5.20 is needed to write double layer DVDs."), ERROR );
-	  d->running = false;
-	  emit finished(false);
-	  return;
+      if( !m_onlyCreateImage ) {
+	if( dh->diskInfo().numLayers() > 1 ) {
+	  if( !(m_writerDevice->supportedProfiles() & K3bDevice::MEDIA_DVD_PLUS_R_DL) ) {
+	    emit infoMessage( i18n("The writer does not support writing double layer DVDs."), ERROR );
+	    d->running = false;
+	    emit finished(false);
+	    return;
+	  }
+	  else if( k3bcore->externalBinManager()->binObject( "growisofs" ) && 
+		   k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3bVersion( 5, 20 ) ) {
+	    emit infoMessage( i18n("Growisofs >= 5.20 is needed to write double layer DVDs."), ERROR );
+	    d->running = false;
+	    emit finished(false);
+	    return;
+	  }
 	}
       }
     case K3bDevice::MEDIA_DVD_R:
@@ -252,6 +266,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
 	  m_imagePath += ".iso";
 
 	emit infoMessage( i18n("Writing image file to %1.").arg(m_imagePath), INFO );
+	emit newSubTask( i18n("Reading source media.") );
       }
 
       //
@@ -397,6 +412,7 @@ void K3bDvdCopyJob::prepareWriter()
   d->writerJob->setSimulate( m_simulate );
   d->writerJob->setBurnSpeed( m_speed );
   d->writerJob->setWritingMode( d->usedWritingMode );
+  d->writerJob->setCloseDvd( true );
  
   if( d->sourceDiskInfo.numLayers() > 1 ) {
     d->writerJob->setLayerBreak( d->sourceDiskInfo.firstLayerSize().lba() );
@@ -480,6 +496,9 @@ void K3bDvdCopyJob::slotReaderFinished( bool success )
 	  emit newTask( i18n("Writing DVD copy %1").arg(d->doneCopies+1) );
 	else
 	  emit newTask( i18n("Writing DVD copy") );
+
+	emit burning(true);
+
 	d->writerRunning = true;
 	d->writerJob->start();
       }
@@ -527,6 +546,9 @@ void K3bDvdCopyJob::slotWriterFinished( bool success )
       if( waitForDvd() ) {
 	prepareWriter();
 	emit newTask( i18n("Writing DVD copy %1").arg(d->doneCopies+1) );
+
+	emit burning(true);
+
 	d->writerRunning = true;
 	d->writerJob->start();
       }
@@ -594,7 +616,6 @@ bool K3bDvdCopyJob::waitForDvd()
   else {
     if( m & (K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_PLUS_R|K3bDevice::MEDIA_DVD_PLUS_R_DL) ) {
 
-      // just for a clean code
       d->usedWritingMode = K3b::WRITING_MODE_RES_OVWR;
 
       if( m_simulate ) {
@@ -607,7 +628,7 @@ bool K3bDvdCopyJob::waitForDvd()
 	  return false;
 	}
 
-	m_simulate = false;
+//	m_simulate = false;
       }
       
       if( m_writingMode != K3b::WRITING_MODE_AUTO && m_writingMode != K3b::WRITING_MODE_RES_OVWR )
@@ -633,7 +654,7 @@ bool K3bDvdCopyJob::waitForDvd()
 	  return false;
 	}
 
-	m_simulate = false;
+//	m_simulate = false;
       }
 
       //
