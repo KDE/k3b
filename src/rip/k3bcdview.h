@@ -55,7 +55,7 @@ class QLabel;
 class KAction;
 class KPopupMenu;
 
-static const char* CD_DRAG="cdDrag";
+const char* CD_DRAG = "cdDrag";
 
 /**
   *@author Sebastian Trueg
