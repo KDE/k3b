@@ -651,6 +651,7 @@ bool K3bCdDevice::CdDevice::readToc(Toc &toc) {
 	  lastTrack = Track( startSec, startSec, trackType, trackMode );
 
   }
+  ::close(cdromfd);
   return true;
 }
 
