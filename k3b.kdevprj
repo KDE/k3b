@@ -26,14 +26,14 @@ ldadd=$(ID3LIB_LIBS) $(CDPARANOIA_LIBS) $(OGG_VORBISLIBS) -lmad -lartskde -lqt-m
 ldflags=\s    \s
 
 [General]
-AMChanged=false
+AMChanged=true
 author=Sebastian Trueg
 configure_args=\s--build=i386-linux --host=i386-linux --target=i386-linux --prefix=/opt/kde3\s
 email=trueg@informatik.uni-freiburg.de
 kdevprj_version=1.3
 lfv_open_groups=GNU,Translations
 make_options=\s-j1
-makefiles=Makefile.am,src/Makefile.am,doc/Makefile.am,doc/en/Makefile.am,po/Makefile.am,src/data/Makefile.am,src/cdinfo/Makefile.am,src/audio/Makefile.am,src/device/Makefile.am,src/audio/input/Makefile.am,src/option/Makefile.am,src/rip/Makefile.am,src/libwm/Makefile.am,src/libwm/include/Makefile.am,src/rip/songdb/Makefile.am,src/tools/Makefile.am,src/cdcopy/Makefile.am,src/dvd/Makefile.am
+makefiles=Makefile.am,src/Makefile.am,doc/Makefile.am,doc/en/Makefile.am,po/Makefile.am,src/data/Makefile.am,src/cdinfo/Makefile.am,src/audio/Makefile.am,src/device/Makefile.am,src/audio/input/Makefile.am,src/option/Makefile.am,src/rip/Makefile.am,src/libwm/Makefile.am,src/libwm/include/Makefile.am,src/rip/songdb/Makefile.am,src/tools/Makefile.am,src/cdcopy/Makefile.am,src/dvd/Makefile.am,src/pics/Makefile.am,src/icons/Makefile.am
 modifyMakefiles=true
 project_name=K3b
 project_type=mdi_kde2
@@ -118,8 +118,8 @@ install_location=
 type=PO
 
 [src/Makefile.am]
-files=src/main.cpp,src/k3b.cpp,src/k3b.h,src/k3bdoc.cpp,src/k3bdoc.h,src/k3bview.cpp,src/k3bview.h,src/k3bui.rc,src/k3b.desktop,src/lo32-app-k3b.png,src/lo16-app-k3b.png,src/k3bdirview.cpp,src/k3bdirview.h,src/k3bfillstatusdisplay.cpp,src/k3bfillstatusdisplay.h,src/k3bburnprogressdialog.cpp,src/k3bburnprogressdialog.h,src/k3bjob.cpp,src/k3bjob.h,src/k3bprojectburndialog.cpp,src/k3bprojectburndialog.h,src/kcutlabel.cpp,src/kcutlabel.h,src/hi16-app-k3b.png,src/hi32-app-k3b.png,src/hi48-app-k3b.png,src/kdiskfreesp.h,src/k3bfileview.cpp,src/k3bfileview.h,src/cddb.h,src/cddb.cpp,src/k3bcddb.cpp,src/k3bcddb.h,src/k3bblankingdialog.cpp,src/k3bblankingdialog.h,src/k3bblankingjob.cpp,src/k3bblankingjob.h,src/k3bsplash.h,src/k3bsplash.cpp,src/k3b-splash-naive.png,src/hi16-tools-cdinfo.png,src/hi22-tools-cdinfo.png,src/hi16-tools-cdrwblank.png,src/hi22-tools-cdrwblank.png,src/k3bwriterselectionwidget.cpp,src/k3bwriterselectionwidget.h,src/k3bprojecttabwidget.cpp,src/k3bprojecttabwidget.h,src/k3bprojecttabbar.cpp,src/k3bprojecttabbar.h,src/k3baudioplayer.cpp,src/k3baudioplayer.h,src/k3bcddbmultientriesdialog.cpp,src/k3bcddbmultientriesdialog.h,src/kstringlistdialog.cpp,src/kstringlistdialog.h,src/klistviewlineedit.h,src/k3bfiletreeview.cpp,src/k3bfiletreeview.h,src/k3bcdcontentsview.h,src/k3b_cd_copy.png,src/k3btempdirselectionwidget.cpp,src/k3btempdirselectionwidget.h,src/hi22-tools-cdcopy.png,src/hi32-tools-cdcopy.png,src/kdndfileview.cpp,src/kdndfileview.h,src/k3bdiroperator.cpp,src/k3bdiroperator.h
-sub_dirs=data,cdinfo,audio,device,option,rip,libwm,tools,cdcopy,dvd
+files=src/main.cpp,src/k3b.cpp,src/k3b.h,src/k3bdoc.cpp,src/k3bdoc.h,src/k3bview.cpp,src/k3bview.h,src/k3bui.rc,src/k3b.desktop,src/k3bdirview.cpp,src/k3bdirview.h,src/k3bfillstatusdisplay.cpp,src/k3bfillstatusdisplay.h,src/k3bburnprogressdialog.cpp,src/k3bburnprogressdialog.h,src/k3bjob.cpp,src/k3bjob.h,src/k3bprojectburndialog.cpp,src/k3bprojectburndialog.h,src/kcutlabel.cpp,src/kcutlabel.h,src/kdiskfreesp.h,src/k3bfileview.cpp,src/k3bfileview.h,src/k3bcddb.cpp,src/k3bcddb.h,src/k3bblankingdialog.cpp,src/k3bblankingdialog.h,src/k3bblankingjob.cpp,src/k3bblankingjob.h,src/k3bsplash.h,src/k3bsplash.cpp,src/k3bwriterselectionwidget.cpp,src/k3bwriterselectionwidget.h,src/k3bprojecttabwidget.cpp,src/k3bprojecttabwidget.h,src/k3bprojecttabbar.cpp,src/k3bprojecttabbar.h,src/k3baudioplayer.cpp,src/k3baudioplayer.h,src/k3bcddbmultientriesdialog.cpp,src/k3bcddbmultientriesdialog.h,src/kstringlistdialog.cpp,src/kstringlistdialog.h,src/klistviewlineedit.h,src/k3bfiletreeview.cpp,src/k3bfiletreeview.h,src/k3bcdcontentsview.h,src/k3btempdirselectionwidget.cpp,src/k3btempdirselectionwidget.h,src/kdndfileview.cpp,src/kdndfileview.h,src/k3bdiroperator.cpp,src/k3bdiroperator.h,src/k3bbusywidget.cpp,src/k3bbusywidget.h
+sub_dirs=data,cdinfo,audio,device,option,rip,libwm,tools,cdcopy,dvd,pics,icons
 type=prog_main
 
 [src/audio/Makefile.am]
@@ -305,18 +305,6 @@ install_location=
 type=SOURCE
 
 [src/cdcopy/k3bcdcopyjob.h]
-dist=true
-install=false
-install_location=
-type=HEADER
-
-[src/cddb.cpp]
-dist=true
-install=false
-install_location=
-type=SOURCE
-
-[src/cddb.h]
 dist=true
 install=false
 install_location=
@@ -796,18 +784,6 @@ install=false
 install_location=
 type=HEADER
 
-[src/dvd/k3bdvdinfoextend.cpp]
-dist=true
-install=false
-install_location=
-type=SOURCE
-
-[src/dvd/k3bdvdinfoextend.h]
-dist=true
-install=false
-install_location=
-type=HEADER
-
 [src/dvd/k3bdvdpreview.cpp]
 dist=true
 install=false
@@ -856,64 +832,69 @@ install=false
 install_location=
 type=HEADER
 
-[src/hi16-app-k3b.png]
+[src/icons/Makefile.am]
+files=src/icons/hi16-app-k3b.png,src/icons/hi16-tools-cdinfo.png,src/icons/hi16-tools-cdrwblank.png,src/icons/hi22-tools-cdcopy.png,src/icons/hi22-tools-cdinfo.png,src/icons/hi22-tools-cdrwblank.png,src/icons/hi32-app-k3b.png,src/icons/hi32-tools-cdcopy.png,src/icons/hi48-app-k3b.png,src/icons/hi64-app-k3b.png
+sub_dirs=
+type=normal
+
+[src/icons/hi16-app-k3b.png]
 dist=true
 install=true
-install_location=$$(kde_icondir)/hicolor/16x16/apps/k3b.png
+install_location=$$$$(kde_icondir)/hicolor/16x16/apps/k3b.png
 type=DATA
 
-[src/hi16-tools-cdinfo.png]
+[src/icons/hi16-tools-cdinfo.png]
 dist=true
 install=true
-install_location=$$(kde_datadir)/k3b/icons/hicolor/16x16/actions/cdinfo.png
+install_location=$$$$(kde_datadir)/k3b/icons/hicolor/16x16/actions/cdinfo.png
 type=DATA
 
-[src/hi16-tools-cdrwblank.png]
+[src/icons/hi16-tools-cdrwblank.png]
 dist=true
 install=true
-install_location=$$(kde_datadir)/k3b/icons/hicolor/16x16/actions/cdrwblank.png
+install_location=$$$$(kde_datadir)/k3b/icons/hicolor/16x16/actions/cdrwblank.png
 type=DATA
 
-[src/hi22-tools-cdcopy.png]
+[src/icons/hi22-tools-cdcopy.png]
 dist=true
 install=true
-install_location=$$(kde_datadir)/k3b/icons/hicolor/22x22/actions/cdcopy.png
+install_location=$$$$(kde_datadir)/k3b/icons/hicolor/22x22/actions/cdcopy.png
 type=DATA
 
-[src/hi22-tools-cdinfo.png]
+[src/icons/hi22-tools-cdinfo.png]
 dist=true
 install=true
-install_location=$$(kde_datadir)/k3b/icons/hicolor/22x22/actions/cdinfo.png
+install_location=$$$$(kde_datadir)/k3b/icons/hicolor/22x22/actions/cdinfo.png
 type=DATA
 
-[src/hi22-tools-cdrwblank.png]
+[src/icons/hi22-tools-cdrwblank.png]
 dist=true
 install=true
-install_location=$$(kde_datadir)/k3b/icons/hicolor/22x22/actions/cdrwblank.png
+install_location=$$$$(kde_datadir)/k3b/icons/hicolor/22x22/actions/cdrwblank.png
 type=DATA
 
-[src/hi32-app-k3b.png]
+[src/icons/hi32-app-k3b.png]
 dist=true
 install=true
-install_location=$$(kde_icondir)/hicolor/32x32/apps/k3b.png
+install_location=$$$$(kde_icondir)/hicolor/32x32/apps/k3b.png
 type=DATA
 
-[src/hi32-tools-cdcopy.png]
+[src/icons/hi32-tools-cdcopy.png]
 dist=true
 install=true
-install_location=$$(kde_datadir)/k3b/icons/hicolor/32x32/actions/cdcopy.png
+install_location=$$$$(kde_datadir)/k3b/icons/hicolor/32x32/actions/cdcopy.png
 type=DATA
 
-[src/hi48-app-k3b.png]
+[src/icons/hi48-app-k3b.png]
 dist=true
 install=true
-install_location=$$(kde_icondir)/hicolor/48x48/apps/k3b.png
+install_location=$$$$(kde_icondir)/hicolor/48x48/apps/k3b.png
 type=DATA
 
-[src/k3b-splash-naive.png]
+[src/icons/hi64-app-k3b.png]
 dist=true
 install=true
-install_location=$$(kde_datadir)/k3b/pics/k3bsplash.png
+install_location=$$$$(kde_icondir)/hicolor/64x64/apps/k3b.png
 type=DATA
 
 [src/k3b.cpp]
@@ -925,7 +906,7 @@ type=SOURCE
 [src/k3b.desktop]
 dist=true
 install=true
-install_location=$$(kde_appsdir)/Applications/k3b.desktop
+install_location=$$$$(kde_appsdir)/Applications/k3b.desktop
 type=DATA
 
 [src/k3b.h]
@@ -933,12 +914,6 @@ dist=true
 install=false
 install_location=
 type=HEADER
-
-[src/k3b_cd_copy.png]
-dist=true
-install=true
-install_location=$$(kde_datadir)/k3b/pics/k3b_cd_copy.png
-type=DATA
 
 [src/k3baudioburninfodialog.cpp]
 dist=true
@@ -1031,6 +1006,18 @@ install_location=
 type=SOURCE
 
 [src/k3bburnprogressdialog.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/k3bbusywidget.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/k3bbusywidget.h]
 dist=true
 install=false
 install_location=
@@ -1555,18 +1542,6 @@ install=false
 install_location=
 type=SOURCE
 
-[src/lo16-app-k3b.png]
-dist=true
-install=true
-install_location=$$(kde_icondir)/locolor/16x16/apps/k3b.png
-type=DATA
-
-[src/lo32-app-k3b.png]
-dist=true
-install=true
-install_location=$$(kde_icondir)/locolor/32x32/apps/k3b.png
-type=DATA
-
 [src/main.cpp]
 dist=true
 install=false
@@ -1574,11 +1549,17 @@ install_location=
 type=SOURCE
 
 [src/option/Makefile.am]
-files=src/option/k3bdeviceoptiontab.h,src/option/k3bdeviceoptiontab.cpp,src/option/k3boptiondialog.cpp,src/option/k3boptiondialog.h,src/option/k3bburningoptiontab.h,src/option/k3bburningoptiontab.cpp,src/option/k3bcddboptiontab.cpp,src/option/k3bcddboptiontab.h,src/option/k3brippingpatternoptiontab.cpp,src/option/k3brippingpatternoptiontab.h,src/option/k3bexternalbinoptiontab.cpp,src/option/k3bexternalbinoptiontab.h,src/option/k3bmiscoptiontab.cpp,src/option/k3bmiscoptiontab.h,src/option/k3bcddblocaldbtab.cpp,src/option/k3bcddblocaldbtab.h,src/option/k3bcddbemptydbtab.cpp,src/option/k3bcddbemptydbtab.h
+files=src/option/k3bdeviceoptiontab.h,src/option/k3bdeviceoptiontab.cpp,src/option/k3boptiondialog.cpp,src/option/k3boptiondialog.h,src/option/k3bburningoptiontab.h,src/option/k3bburningoptiontab.cpp,src/option/k3bcddboptiontab.cpp,src/option/k3bcddboptiontab.h,src/option/k3brippingpatternoptiontab.cpp,src/option/k3brippingpatternoptiontab.h,src/option/k3bexternalbinoptiontab.cpp,src/option/k3bexternalbinoptiontab.h,src/option/k3bmiscoptiontab.cpp,src/option/k3bmiscoptiontab.h,src/option/k3bcddblocaldbtab.cpp,src/option/k3bcddblocaldbtab.h,src/option/k3bcddbemptydbtab.cpp,src/option/k3bcddbemptydbtab.h,src/option/base_k3bcddboptiontab.ui
 sharedlib_LDFLAGS=-version-info 0:5:0
 sharedlib_rootname=option
 sub_dirs=
 type=static_library
+
+[src/option/base_k3bcddboptiontab.ui]
+dist=true
+install=false
+install_location=
+type=SOURCE
 
 [src/option/k3bburningoptiontab.cpp]
 dist=true
@@ -1687,6 +1668,35 @@ dist=true
 install=false
 install_location=
 type=HEADER
+
+[src/pics/Makefile.am]
+files=src/pics/k3bsetup_1.png,src/pics/k3bsetup_2.png,src/pics/k3b_splash.png,src/pics/k3b_cd_copy.png
+sub_dirs=
+type=normal
+
+[src/pics/k3b_cd_copy.png]
+dist=true
+install=true
+install_location=$$$$(kde_datadir)/k3b/pics/k3b_cd_copy.png
+type=DATA
+
+[src/pics/k3b_splash.png]
+dist=true
+install=true
+install_location=$$$$(kde_datadir)/k3b/pics/k3bsplash.png
+type=DATA
+
+[src/pics/k3bsetup_1.png]
+dist=true
+install=true
+install_location=$$$$(kde_datadir)/k3b/pics/k3bsetup_1.png
+type=DATA
+
+[src/pics/k3bsetup_2.png]
+dist=true
+install=true
+install_location=$$$$(kde_datadir)/k3b/pics/k3bsetup_2.png
+type=DATA
 
 [src/rip/Makefile.am]
 files=src/rip/k3bcdda.cpp,src/rip/k3bcdda.h,src/rip/k3bcdview.cpp,src/rip/k3bcdview.h,src/rip/k3bfilenamepatterndialog.cpp,src/rip/k3bfilenamepatterndialog.h,src/rip/k3bripperwidget.cpp,src/rip/k3bcddacopy.cpp,src/rip/k3bcddacopy.h,src/rip/k3bripperwidget.h,src/rip/k3bpatternparser.cpp,src/rip/k3bpatternparser.h,src/rip/k3bpatternwidget.cpp,src/rip/k3bpatternwidget.h,src/rip/k3bfilmview.cpp,src/rip/k3bfilmview.h,src/rip/k3btcwrapper.cpp,src/rip/k3btcwrapper.h,src/rip/k3bdvdcontent.cpp,src/rip/k3bdvdcontent.h,src/rip/k3bdvdripperwidget.cpp,src/rip/k3bdvdripperwidget.h,src/rip/k3bdvdrippingprocess.cpp,src/rip/k3bdvdrippingprocess.h,src/rip/k3bdvdcopy.cpp,src/rip/k3bdvdcopy.h,src/rip/k3bdvdaudiogain.cpp,src/rip/k3bdvdaudiogain.h,src/rip/k3bdvdfilldisplay.cpp,src/rip/k3bdvdfilldisplay.h,src/rip/k3bdvdextraripstatus.cpp,src/rip/k3bdvdextraripstatus.h
