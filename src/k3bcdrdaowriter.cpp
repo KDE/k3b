@@ -6,7 +6,7 @@
                                        Klaus-Dieter Krannich
     email                : trueg@informatik.uni-freiburg.de
                            kd@math.tu-cottbus.de
- ***************************************************************************/
+***************************************************************************/
 
 /***************************************************************************
  *                                                                         *
@@ -108,6 +108,8 @@ K3bCdrdaoWriter::K3bCdrdaoWriter( K3bDevice* dev, QObject* parent, const char* n
             this,SIGNAL(nextTrack(int, int)));
     connect(m_parser,SIGNAL(processedSize(int, int)),
             this,SIGNAL(processedSize(int, int)));
+    connect(m_parser,SIGNAL(processedSize(int, int)),
+            this, SLOT(slotProcessedSize(int, int)));
 
             
     if( socketpair(AF_UNIX,SOCK_STREAM,0,m_cdrdaoComm) ) {
@@ -419,6 +421,10 @@ void K3bCdrdaoWriter::start() {
             emit infoMessage(i18n("Start blanking..."), K3bJob::STATUS );
             emit newTask( i18n("Blanking") );
         }
+
+	// initialize estimation
+	createEstimatedWriteSpeed( 0, true );
+
         emit started();
     }
 }
@@ -504,6 +510,9 @@ void K3bCdrdaoWriter::slotProcessExited( KProcess* p ) {
                     break;
                 }
 
+	    if( m_command == WRITE || m_command == COPY )
+	      createAverageWriteSpeedInfoMessage();
+
             emit finished( true );
             break;
 
@@ -542,6 +551,12 @@ void K3bCdrdaoWriter::slotUnknownCdrdaoLine( const QString& line ) {
             emit infoMessage( i18n("Switching down burn speed to %1x").arg(speed), K3bJob::PROCESS );
         }
     }
+}
+
+
+void K3bCdrdaoWriter::slotProcessedSize( int s, int )
+{
+  createEstimatedWriteSpeed( s );
 }
 
 #include "k3bcdrdaowriter.moc"

@@ -75,7 +75,7 @@ void K3bCdrdaoParser::parseCdrdaoLine( const QString& str ) {
   // -----------------------------------------------------------------------------------------
   if( (str).startsWith( "Warning" ) || (str).startsWith( "WARNING" ) || (str).startsWith( "ERROR" ) ) {
     parseCdrdaoError( str );
-  } else if( (str).startsWith( "Wrote" ) ) {
+  } else if( (str).startsWith( "Wrote" ) && !str.contains("blocks") ) {
     parseCdrdaoWrote( str );
   } else if( (str).startsWith( "Executing power" ) ) {
     emit newSubTask( i18n("Executing Power calibration") );

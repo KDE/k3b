@@ -63,7 +63,7 @@ void K3bStatusBarManager::update()
 
   struct statfs fs;
   if ( ::statfs(tempdir.latin1(),&fs) == 0 ) {
-     slotFreeTempSpace(tempdir,fs.f_blocks*fs.f_bsize,0L,fs.f_bavail*fs.f_bsize);
+     slotFreeTempSpace( tempdir, fs.f_blocks*fs.f_bsize, 0L, fs.f_bavail*fs.f_bsize );
   }   
   else {
      m_labelFreeTemp->setText("No info");

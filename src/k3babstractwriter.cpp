@@ -19,17 +19,15 @@
 
 #include <k3bdevicemanager.h>
 
+#include <klocale.h>
 
 K3bAbstractWriter::K3bAbstractWriter( K3bDevice* dev, QObject* parent, const char* name )
   : K3bJob( parent, name ),
     m_burnDevice(dev),
     m_burnSpeed(1),
     m_burnproof(false),
-    m_simulate(false),
-    m_started(false)
+    m_simulate(false)
 {
-  connect( this, SIGNAL(finished(bool)), this, SLOT(slotFinished(bool)) );
-  connect( this, SIGNAL(processedSize(int, int)), this, SLOT(slotProcessedSize(int, int)) );
 }
 
 
@@ -47,12 +45,12 @@ K3bDevice* K3bAbstractWriter::burnDevice() const
 }
 
 
-void K3bAbstractWriter::slotProcessedSize( int made, int )
+void K3bAbstractWriter::createEstimatedWriteSpeed( int made, bool firstCall )
 {
-  if (!m_started) {
+  if (firstCall) {
     m_lastWriteSpeedCalcTime = QTime::currentTime();
+    m_firstWriteSpeedCalcTime = QTime::currentTime();
     m_lastWrittenBytes = made;
-    m_started = true;
   }
   else {
     int elapsed = m_lastWriteSpeedCalcTime.msecsTo( QTime::currentTime() );
@@ -66,9 +64,10 @@ void K3bAbstractWriter::slotProcessedSize( int made, int )
 }
 
 
-void K3bAbstractWriter::slotFinished( bool )
+void K3bAbstractWriter::createAverageWriteSpeedInfoMessage()
 {
-  m_started = false;
+  double speed = (double)m_lastWrittenBytes * 1024.0 / (double)m_firstWriteSpeedCalcTime.secsTo( m_lastWriteSpeedCalcTime );
+  emit infoMessage( i18n("Average overall write speed: %1 kb/s (%2x)").arg((int)speed).arg(speed/150.0, 0, 'g', 2), INFO );
 }
 
 #include "k3babstractwriter.moc"

@@ -62,10 +62,8 @@ class K3bAbstractWriter : public K3bJob
  protected:
   K3bAbstractWriter( K3bDevice* dev, QObject* parent = 0, const char* name = 0 );
 
- private slots:
-  /** calculates the current write speed */
-  void slotProcessedSize(int, int);
-  void slotFinished(bool);
+  void createEstimatedWriteSpeed( int writtenMb, bool firstCall = false );
+  void createAverageWriteSpeedInfoMessage();
 
  private:
   K3bDevice* m_burnDevice;
@@ -75,8 +73,8 @@ class K3bAbstractWriter : public K3bJob
 
   // used for write speed calculation
   QTime m_lastWriteSpeedCalcTime;
+  QTime m_firstWriteSpeedCalcTime;
   int m_lastWrittenBytes;
-  bool m_started;
 };
 
 
