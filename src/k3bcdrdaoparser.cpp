@@ -167,19 +167,23 @@ void K3bCdrdaoParser::parseCdrdaoMessage(int fd)
     if ( m_newMsg->track != m_currentTrack) {
       switch (m_newMsg->status) {
       case PGSMSG_RCD_EXTRACTING: 
-	task = i18n("Reading (Track %1 of %2)").arg(m_newMsg->track).arg(m_newMsg->totalTracks);
+	//	task = i18n("Reading (Track %1 of %2)").arg(m_newMsg->track).arg(m_newMsg->totalTracks);
+	emit nextTrack( m_newMsg->track, m_newMsg->totalTracks );
 	break;
       case PGSMSG_WCD_LEADIN:
 	task = i18n("Writing leadin ");
+	emit newSubTask( task );
 	break;
       case PGSMSG_WCD_DATA:
-	task = i18n("Writing (Track %1 of %2)").arg(m_newMsg->track).arg(m_newMsg->totalTracks);
+	//	task = i18n("Writing (Track %1 of %2)").arg(m_newMsg->track).arg(m_newMsg->totalTracks);
+	emit nextTrack( m_newMsg->track, m_newMsg->totalTracks );
 	break;
       case PGSMSG_WCD_LEADOUT:
 	task = i18n("Writing leadout ");
+	emit newSubTask( task );
 	break;
       }
-      emit newSubTask( task );
+
       m_currentTrack = m_newMsg->track;
     }
 

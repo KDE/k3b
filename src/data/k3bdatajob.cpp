@@ -261,11 +261,14 @@ void K3bDataJob::slotReceivedIsoImagerData( char* data, int len )
 
 void K3bDataJob::slotIsoImagerPercent( int p )
 {
-  emit subPercent( p );
-  if( m_doc->onlyCreateImage() )
+  if( m_doc->onlyCreateImage() ) {
     emit percent( p  );
-  else if( !m_doc->onTheFly() )
+    emit subPercent( p );
+  }
+  else if( !m_doc->onTheFly() ) {
+    emit subPercent( p );
     emit percent( p/2 );
+  }
 }
 
 
@@ -330,9 +333,14 @@ void K3bDataJob::slotWriterJobPercent( int p )
   if( m_doc->onTheFly() )
     emit percent( p );
   else {
-    emit subPercent( p );
     emit percent( 50 + p/2 );
   }
+}
+
+
+void K3bDataJob::slotWriterNextTrack( int t, int tt )
+{
+  emit newSubTask( i18n("Writing Track %1 of %2").arg(t).arg(tt) );
 }
 
 
@@ -445,6 +453,9 @@ bool K3bDataJob::prepareWriterJob()
   connect( m_writerJob, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
   connect( m_writerJob, SIGNAL(percent(int)), this, SLOT(slotWriterJobPercent(int)) );
   connect( m_writerJob, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSize(int, int)) );
+  connect( m_writerJob, SIGNAL(subPercent(int)), this, SIGNAL(subPercent(int)) );
+  connect( m_writerJob, SIGNAL(processedSubSize(int, int)), this, SIGNAL(processedSubSize(int, int)) );
+  connect( m_writerJob, SIGNAL(nextTrack(int, int)), this, SLOT(slotWriterNextTrack(int, int)) );
   connect( m_writerJob, SIGNAL(buffer(int)), this, SIGNAL(bufferStatus(int)) );
   connect( m_writerJob, SIGNAL(finished(bool)), this, SLOT(slotWriterJobFinished(bool)) );
   connect( m_writerJob, SIGNAL(dataWritten()), this, SLOT(slotDataWritten()) );

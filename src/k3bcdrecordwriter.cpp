@@ -140,6 +140,10 @@ void K3bCdrecordWriter::start()
 
   m_currentTrack = 0;
   m_cdrecordError = UNKNOWN;
+  m_totalTracksParsed = false;
+  m_alreadyWritten = 0;
+  m_trackSize = 0;
+  m_totalSize = 0;
 
   emit newSubTask( i18n("Preparing write process...") );
 
@@ -197,9 +201,21 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
 
   if( line.startsWith( "Track" ) )
     {
-      //			kdDebug() << "Parsing line [[" << line << "]]"endl;
+      if( !m_totalTracksParsed ) {
+	// this is not the progress display but the list of tracks that will get written
+	// we always extract the tracknumber to get the highest at last
+	bool ok;
+	int tt = line.mid( 6, 2 ).toInt(&ok);
+	if( ok )
+	  m_totalTracks = tt;
 
-      if( line.contains( "fifo", false ) > 0 )
+	int sizeStart = line.find( QRegExp("\\d"), 10 );
+	int sizeEnd = line.find( "MB", sizeStart );
+	int ts = line.mid( sizeStart, sizeEnd-sizeStart ).toInt();
+	m_totalSize += ts;
+      }
+
+      else if( line.contains( "fifo", false ) > 0 )
 	{
 	  // parse progress
 	  int num, made, size, fifo;
@@ -271,8 +287,14 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
 	  // -------- parsing finished --------------------------------------
 
 	  emit buffer( fifo );
-	  emit processedSize( made, size );
-	  emit percent( 100*made/size );
+	  emit processedSubSize( made, size );
+	  emit subPercent( 100*made/size );
+	  if( m_totalSize > 0 ) {
+	    emit processedSize( m_alreadyWritten+made, m_totalSize );
+	    emit percent( 100*(m_alreadyWritten+made)/m_totalSize );
+	  }
+
+	  m_trackSize = size;
 	}
     }
   else if( line.contains( "at speed" ) ) {
@@ -287,8 +309,12 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   }
   else if( line.startsWith( "Starting new" ) )
     {
+      m_totalTracksParsed = true;
+      m_alreadyWritten += m_trackSize;
+      kdDebug() << "(K3bCdrecordWriter) writing " << m_totalTracks << " tracks." << endl;
       m_currentTrack++;
-      emit newSubTask( i18n("Writing track %1").arg(m_currentTrack) );
+      emit nextTrack( m_currentTrack, m_totalTracks );
+      //      emit newSubTask( i18n("Writing track %1").arg(m_currentTrack) );
     }
   else if( line.startsWith( "Fixating" ) ) {
     emit newSubTask( i18n("Fixating") );
@@ -312,7 +338,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
     emit infoMessage( i18n("Reloading of media required"), K3bJob::PROCESS );
   }
   else if( line.contains( "Drive does not support SAO" ) ) {
-    emit infoMessage( i18n("SAO, DAO recording not supported by the writer"), K3bJob::ERROR );
+    emit infoMessage( i18n("SAO, DAO recording not supported with this writer"), K3bJob::ERROR );
     emit infoMessage( i18n("Please turn off DAO (disk at once) and try again"), K3bJob::ERROR );
   }
   else if( line.contains("Data may not fit") ) {

@@ -191,4 +191,9 @@ void K3bBurnJob::startNewCdrdaoTrack()
 {}
 
 
+int K3bBurnJob::supportedWritingApps() const
+{
+  return K3b::DEFAULT | K3b::CDRDAO | K3b::CDRECORD;
+}
+
 #include "k3bjob.moc"

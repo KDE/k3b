@@ -48,6 +48,7 @@ class K3bCdrdaoParser : public QObject
   void percent( int p );
   void subPercent( int p );
   void buffer( int );
+  void nextTrack( int, int );
 
  private:
   int m_currentTrack;

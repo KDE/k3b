@@ -49,6 +49,13 @@ class K3bAbstractWriter : public K3bJob
   void buffer( int );
   void dataWritten();
 
+  /** 
+   * writer will emit subTasks for all prewriting and postwriting stuff
+   * between that only nextTrack is emitted for the job to create it's own 
+   * subTasks
+   */
+  void nextTrack( int, int );
+
  protected:
   K3bAbstractWriter( K3bDevice* dev, QObject* parent = 0, const char* name = 0 );
 

@@ -73,6 +73,8 @@ class K3bCdCopyJob : public K3bBurnJob
 
   void copyPercent(int p);
   void copySubPercent(int p);
+  void slotReaderNextTrack( int, int );
+  void slotWriterNextTrack( int, int );
 
  private:
   int m_copies;

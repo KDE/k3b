@@ -20,11 +20,10 @@
 
 #include <qstring.h>
 
-class QDataStream;
 
 namespace K3b
 {
-  enum WritingApp { DEFAULT, CDRECORD, CDRDAO };
+  enum WritingApp { DEFAULT = 1, CDRECORD = 2, CDRDAO = 3 };
   
   QString framesToString( int h, bool showFrames = true );
   QString sizeToTime( long size );

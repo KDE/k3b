@@ -42,6 +42,7 @@ class K3bAbstractReader : public K3bJob
 
  signals:
   void buffer( int );
+  void nextTrack( int, int );
 
  protected:
   K3bAbstractReader( QObject* parent = 0, const char* name = 0 );

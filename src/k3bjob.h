@@ -57,7 +57,6 @@ class K3bJob : public QObject
   void finished( bool success );
   void processedSize( int processed, int size );
   void processedSubSize( int processed, int size );
-  void newTrack();
   void newTask( const QString& job );
   void newSubTask( const QString& job );
   void debuggingOutput(const QString&, const QString&);
@@ -78,6 +77,11 @@ class K3bBurnJob : public K3bJob
    * use K3b::WritingApp
    */
   int writingApp() const { return m_writeMethod; }
+
+  /**
+   * K3b::WritingApp "ored" together
+   */
+  virtual int supportedWritingApps() const;
 
  public slots:
   /**

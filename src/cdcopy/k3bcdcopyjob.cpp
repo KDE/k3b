@@ -57,8 +57,9 @@ K3bCdCopyJob::K3bCdCopyJob( QObject* parent )
   connect(m_cdrdaowriter,SIGNAL(infoMessage(const QString&, int)), 
 	  this, SIGNAL(infoMessage(const QString&, int)) );
   connect(m_cdrdaowriter,SIGNAL(debuggingOutput(const QString&, const QString&)),
-              this,SIGNAL(debuggingOutput(const QString&, const QString&)));
+	  this,SIGNAL(debuggingOutput(const QString&, const QString&)));
   connect(m_cdrdaowriter,SIGNAL(finished(bool)),this,SLOT(cdrdaoFinished(bool)));
+  connect(m_cdrdaowriter, SIGNAL(nextTrack(int, int)), this, SLOT(slotWriterNextTrack(int, int)) );
 
   m_cdrdaoreader = new K3bCdrdaoReader(this);
   connect(m_cdrdaoreader,SIGNAL(percent(int)),this,SLOT(copyPercent(int)));
@@ -69,6 +70,7 @@ K3bCdCopyJob::K3bCdCopyJob( QObject* parent )
   connect(m_cdrdaoreader,SIGNAL(debuggingOutput(const QString&, const QString&)),
               this,SIGNAL(debuggingOutput(const QString&, const QString&)));
   connect(m_cdrdaoreader,SIGNAL(finished(bool)),this,SLOT(readFinished(bool)));
+  connect(m_cdrdaoreader, SIGNAL(nextTrack(int, int)), this, SLOT(slotReaderNextTrack(int, int)) );
 
   m_diskInfoDetector = new K3bDiskInfoDetector( this );
   connect( m_diskInfoDetector, SIGNAL(diskInfoReady(const K3bDiskInfo&)), 
@@ -322,5 +324,16 @@ void K3bCdCopyJob::cancelAll()
   emit finished( false );
 }
 
+
+void K3bCdCopyJob::slotReaderNextTrack( int t, int tt )
+{
+  emit newSubTask( i18n("Reading track %1 of %2").arg(t).arg(tt) );
+}
+
+
+void K3bCdCopyJob::slotWriterNextTrack( int t, int tt )
+{
+  emit newSubTask( i18n("Writing track %1 of %2").arg(t).arg(tt) );
+}
 
 #include "k3bcdcopyjob.moc"

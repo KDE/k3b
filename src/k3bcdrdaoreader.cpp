@@ -61,17 +61,19 @@ K3bCdrdaoReader::K3bCdrdaoReader( QObject* parent, const char* name )
 
   m_parser = new K3bCdrdaoParser();
   connect(m_parser,SIGNAL(newSubTask(const QString&)),
-	        this,SIGNAL(newSubTask(const QString&)));
+	  this,SIGNAL(newSubTask(const QString&)));
   connect(m_parser,SIGNAL(debuggingOutput( const QString&, const QString& )), 
           this,SIGNAL(debuggingOutput( const QString&, const QString& )));
   connect(m_parser,SIGNAL(infoMessage(const QString &, int)),
-         this,SIGNAL(infoMessage(const QString &,int)));
+	  this,SIGNAL(infoMessage(const QString &,int)));
   connect(m_parser,SIGNAL(percent(int)),
-	        this,SIGNAL(percent(int)));
+	  this,SIGNAL(percent(int)));
   connect(m_parser,SIGNAL(buffer(int)),
-	        this,SIGNAL(buffer(int)));
+	  this,SIGNAL(buffer(int)));
   connect(m_parser,SIGNAL(subPercent(int)),
-	        this,SIGNAL(subPercent(int)));
+	  this,SIGNAL(subPercent(int)));
+  connect(m_parser,SIGNAL(nextTrack(int, int)),
+	  this,SIGNAL(nextTrack(int, int)));
 }
 
 

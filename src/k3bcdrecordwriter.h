@@ -67,8 +67,13 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   bool m_dao;
   bool m_rawWrite;
   bool m_stdin;
+  bool m_totalTracksParsed;
 
   int m_currentTrack;
+  int m_totalTracks;
+  int m_totalSize;
+  int m_trackSize;
+  int m_alreadyWritten;
 
   enum CdrecordError { UNKNOWN, OVERSIZE };
   int m_cdrecordError;

@@ -74,6 +74,8 @@ K3bCdrdaoWriter::K3bCdrdaoWriter( K3bDevice* dev, QObject* parent, const char* n
 	  this,SIGNAL(subPercent(int)));
   connect( m_parser, SIGNAL(unknownCdrdaoLine(const QString&)),
 	   this, SLOT(slotUnknownCdrdaoLine(const QString&)) );
+  connect(m_parser,SIGNAL(nextTrack(int, int)),
+	  this,SIGNAL(nextTrack(int, int)));
 }
 
 K3bCdrdaoWriter::~K3bCdrdaoWriter()
