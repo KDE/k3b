@@ -63,8 +63,21 @@ class K3bProjectBurnDialog : public KDialogBase
    virtual void loadUserDefaults() = 0;
    virtual void saveUserDefaults() = 0;
 
+   /**
+    * gets called if the user changed the writer
+    * default implementation just calls 
+    * toggleAllOptions()
+    */
    virtual void slotWriterChanged();
+
+   /**
+    * gets called if the user changed the writing app
+    * default implementation just calls 
+    * toggleAllOptions()
+    */
    virtual void slotWritingAppChanged( int );
+
+   void toggleAllOptions();
 
  signals:
    void writerChanged();

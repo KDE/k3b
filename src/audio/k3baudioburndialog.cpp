@@ -133,7 +133,7 @@ void K3bAudioBurnDialog::readSettings()
   // read CD-Text ------------------------------------------------------------
   m_cdtextWidget->load( m_doc );
 
-  slotWriterChanged();
+  slotToggleEverything();
 }
 
 
@@ -148,7 +148,6 @@ void K3bAudioBurnDialog::loadDefaults()
   m_checkHideFirstTrack->setChecked( false );
   m_checkRemoveBufferFiles->setChecked( true );
 
-  slotWriterChanged();
   slotToggleEverything();
 }
 
@@ -168,7 +167,6 @@ void K3bAudioBurnDialog::loadUserDefaults()
   m_checkHideFirstTrack->setChecked( c->readBoolEntry( "hide_first_track", false ) );
   m_checkRemoveBufferFiles->setChecked( c->readBoolEntry( "remove_buffer_files", true ) );
 
-  slotWriterChanged();
   slotToggleEverything();
 }
 
@@ -195,6 +193,8 @@ void K3bAudioBurnDialog::saveUserDefaults()
 
 void K3bAudioBurnDialog::slotToggleEverything()
 {
+  toggleAllOptions();
+
   // currently we do not support writing on the fly with cdrecord
   if( !m_checkDao->isChecked() || m_writerSelectionWidget->writingApp() == K3b::CDRECORD ) {
     m_checkOnTheFly->setEnabled( false );

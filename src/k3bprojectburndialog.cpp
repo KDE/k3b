@@ -109,41 +109,53 @@ K3bProjectBurnDialog::~K3bProjectBurnDialog(){
 
 void K3bProjectBurnDialog::slotWriterChanged()
 {
-  if( K3bDevice* dev = m_writerSelectionWidget->writerDevice() ) {
-    if( dev->burnproof() )
-      m_checkBurnproof->setEnabled( true );
-    else {
-      m_checkBurnproof->setEnabled( false );
-      m_checkBurnproof->setChecked( false );
-    }
-    if( dev->dao() )
-      m_checkDao->setEnabled( true );
-    else {
-      m_checkDao->setEnabled( false );
-      m_checkDao->setChecked( false );
-    }
-    actionButton(Ok)->setDisabled(false);
-  }
-  else
-    actionButton(Ok)->setDisabled(true);
+  toggleAllOptions();
 }
 
 
-void K3bProjectBurnDialog::slotWritingAppChanged( int app )
+void K3bProjectBurnDialog::slotWritingAppChanged( int )
 {
-  if( app == K3b::CDRDAO ) {
-    // no possibility to disable burnfree yet
-    m_checkBurnproof->setEnabled(false);
-    m_checkBurnproof->setChecked(true);
+  toggleAllOptions();
+}
 
-    // cdrdao only writes in DAO mode
-    m_checkDao->setEnabled(false);
-    m_checkDao->setChecked(true);
-  }
-  else {
-    m_checkBurnproof->setEnabled(true);
-    m_checkDao->setEnabled(true);
-  }
+
+void K3bProjectBurnDialog::toggleAllOptions()
+{
+ if( K3bDevice* dev = m_writerSelectionWidget->writerDevice() ) {
+   if( dev->burnproof() ) {
+     if( m_writerSelectionWidget->writingApp() == K3b::CDRDAO ) {
+       // no possibility to disable burnfree yet
+       m_checkBurnproof->setEnabled(false);
+       m_checkBurnproof->setChecked(true);
+     }
+     else {
+       m_checkBurnproof->setEnabled(true);
+     }
+   }
+   else {
+     m_checkBurnproof->setEnabled( false );
+     m_checkBurnproof->setChecked( false );
+   }
+ 
+   if( dev->dao() ) {
+     if( m_writerSelectionWidget->writingApp() == K3b::CDRDAO ) {
+       // cdrdao only writes in DAO mode
+       m_checkDao->setEnabled(false);
+       m_checkDao->setChecked(true);
+     }
+     else {
+       m_checkDao->setEnabled(true);
+     }
+   }
+   else {
+     m_checkDao->setEnabled( false );
+     m_checkDao->setChecked( false );
+   }
+
+   actionButton(Ok)->setDisabled(false);
+ }
+ else
+   actionButton(Ok)->setDisabled(true);
 }
 
 

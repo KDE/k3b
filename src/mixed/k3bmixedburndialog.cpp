@@ -201,7 +201,6 @@ void K3bMixedBurnDialog::readSettings()
   m_advancedImageSettingsWidget->load( m_doc->dataDoc()->isoOptions() );
   m_volumeDescWidget->load( m_doc->dataDoc()->isoOptions() );
 
-  slotWriterChanged();
   slotToggleEverything();
 }
 
@@ -221,7 +220,6 @@ void K3bMixedBurnDialog::loadDefaults()
    m_advancedImageSettingsWidget->load( K3bIsoOptions::defaults() );
    m_volumeDescWidget->load( K3bIsoOptions::defaults() );
 
-   slotWriterChanged();
    slotToggleEverything();
 }
 
@@ -252,7 +250,6 @@ void K3bMixedBurnDialog::loadUserDefaults()
   m_advancedImageSettingsWidget->load( o );
   m_volumeDescWidget->load( o );
 
-  slotWriterChanged();
   slotToggleEverything();
 }
 
@@ -299,6 +296,8 @@ void K3bMixedBurnDialog::slotOk()
 
 void K3bMixedBurnDialog::slotToggleEverything()
 {
+  toggleAllOptions();
+
   // currently we do not support writing on the fly with cdrecord
   if( !m_checkDao->isChecked() || m_writerSelectionWidget->writingApp() == K3b::CDRECORD ) {
     m_checkOnTheFly->setEnabled( false );
