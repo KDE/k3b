@@ -168,8 +168,8 @@ void K3bOggVorbisModule::decode()
 	long bytesToOutput = ( bytesToPad < OUTPUT_BUFFER_SIZE ? bytesToPad : OUTPUT_BUFFER_SIZE );
 
 	emit output( (const unsigned char*)m_outputBuffer, bytesToOutput );
-	emit percent( 100 * m_rawDataAlreadyStreamed / m_rawDataLengthToStream );
 	m_rawDataAlreadyStreamed += bytesToOutput;
+	emit percent( (int)(100.0 * ((double)m_rawDataAlreadyStreamed / (double)m_rawDataLengthToStream)) );
       }
       else {
 	kdDebug() << "(K3bOggVorbisModule) successfully finished decoding file " << audioTrack()->absPath() << endl;
@@ -189,8 +189,8 @@ void K3bOggVorbisModule::decode()
       // TODO: check if too much output
 
       emit output( (const unsigned char*)m_outputBuffer, bytesRead );
-      emit percent( 100 * m_rawDataAlreadyStreamed / m_rawDataLengthToStream );
       m_rawDataAlreadyStreamed += bytesRead;
+      emit percent( (int)(100.0 * ((double)m_rawDataAlreadyStreamed / (double)m_rawDataLengthToStream)) );
     }
 
     if( m_consumer )

@@ -41,6 +41,12 @@ void K3bAudioModule::setConsumer( QObject* c, const char* goOnSignal )
 }
 
 
+void K3bAudioModule::resume()
+{
+  slotConsumerReady();
+}
+
+
 void K3bAudioModule::addTrackToAnalyse( K3bAudioTrack* track )
 {
   if( m_tracksToAnalyse.containsRef( track ) <= 0 ) {

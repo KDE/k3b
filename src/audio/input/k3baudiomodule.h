@@ -44,7 +44,9 @@ class K3bAudioModule : public QObject
  public slots:
   virtual void cancel() = 0;
 
- /** 
+  virtual void resume();
+ 
+  /** 
   * add a track that should be analysed by 
   * this module
   */
