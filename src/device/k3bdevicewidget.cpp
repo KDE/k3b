@@ -218,6 +218,9 @@ public:
 
 private:
   void init() {
+    static QStringList l;
+    static QStringList l2;
+
     switch(m_type) {
     case t_maxReadSpeed:
       setEditor( 1, SPIN );
@@ -226,7 +229,6 @@ private:
       setEditor( 1, SPIN );
       break;
     case t_cdrdaoDriver:
-      static QStringList l;
       if( l.isEmpty() )
 	for( int i = 0; i < 13; i++ )
 	  l.append(K3bDevice::cdrdao_drivers[i]);
@@ -237,7 +239,6 @@ private:
       setEditor( 1, SPIN );
       break;
     case t_cdTextCapable:
-      static QStringList l2;
       if( l2.isEmpty() ) {
 	l2.append(i18n("auto"));
 	l2.append(i18n("yes"));
