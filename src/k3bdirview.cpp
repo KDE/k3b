@@ -207,7 +207,7 @@ void K3bDirView::slotDetectDiskInfo( K3bDevice* dev )
   k3bMain()->showBusyInfo( i18n("Trying to fetch information about the inserted disk.") );
   if ( m_fileView->Url().path().startsWith( dev->mountPoint()) ) {
     home();
-    K3bCdDevice::unmount(dev);
+    dev->unmount();
   }
   m_diskInfoDetector->detect( dev );
 }
