@@ -28,10 +28,9 @@ namespace K3b
     DEFAULT = 1, 
     CDRECORD = 2, 
     CDRDAO = 4,
-    CDRECORD_PRODVD = 8,
-    DVDRECORD = 16,
-    GROWISOFS = 32,
-    DVD_RW_FORMAT = 64
+    DVDRECORD = 8,
+    GROWISOFS = 16,
+    DVD_RW_FORMAT = 32
   };
 
   /**

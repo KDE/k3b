@@ -27,7 +27,7 @@ class QString;
 class QSpinBox;
 class KIntNumInput;
 class QRadioButton;
-class KLineEdit;
+
 
 
 class K3bBurningOptionTab : public QWidget
@@ -63,7 +63,6 @@ Q_OBJECT
   KIntNumInput* m_editWritingBufferSizeCdrecord;
   KIntNumInput* m_editWritingBufferSizeCdrdao;
   QCheckBox*    m_checkAllowWritingAppSelection;
-  KLineEdit*     m_editCdrecordProDVDKey;
 
   QCheckBox* m_checkUsePbc;
   QLabel* m_labelPlayTime;

@@ -56,10 +56,7 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   void setProvideStdin( bool b ) { m_stdin = b; }
   void setWritingMode( int );
   void setCueFile( const QString& s);
-  
-  /** this will enable ProDVD */
   void setClone( bool b );
-  void setUseProDVD( bool b );
 
  protected slots:
   void slotStdLine( const QString& line );
@@ -76,7 +73,6 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   bool m_stdin;
   bool m_totalTracksParsed;
   bool m_clone;
-  bool m_useCdrecordProDVD;
   bool m_cue;
 
   QString m_cueFile;

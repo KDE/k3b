@@ -43,8 +43,7 @@ K3bCdrecordWriter::K3bCdrecordWriter( K3bDevice* dev, QObject* parent, const cha
   : K3bAbstractWriter( dev, parent, name ),
     m_rawWrite(false),
     m_stdin(false),
-    m_clone(false),
-    m_useCdrecordProDVD(false)
+    m_clone(false)
 {
   m_process = 0;
   m_writingMode = K3b::TAO;
@@ -80,16 +79,6 @@ void K3bCdrecordWriter::setCueFile( const QString& s)
 void K3bCdrecordWriter::setClone( bool b )
 {
   m_clone = b;
-  if( b )
-    m_useCdrecordProDVD = true;
-}
-
-
-void K3bCdrecordWriter::setUseProDVD( bool b )
-{
-  m_useCdrecordProDVD = b;
-  if(b)
-    m_clone = false;
 }
 
 
@@ -115,21 +104,12 @@ void K3bCdrecordWriter::prepareProcess()
   connect( m_process, SIGNAL(processExited(KProcess*)), this, SLOT(slotProcessExited(KProcess*)) );
   connect( m_process, SIGNAL(wroteStdin(KProcess*)), this, SIGNAL(dataWritten()) );
 
-  if( m_useCdrecordProDVD )
-    m_cdrecordBinObject = k3bcore->externalBinManager()->binObject("cdrecord-prodvd");
-  else
-    m_cdrecordBinObject = k3bcore->externalBinManager()->binObject("cdrecord");
+  m_cdrecordBinObject = k3bcore->externalBinManager()->binObject("cdrecord");
 
   if( !m_cdrecordBinObject )
     return;
 
   k3bcore->config()->setGroup("General Options");
-
-  if( m_useCdrecordProDVD ) {
-    QString proDvdKey = k3bcore->config()->readEntry( "cdrecord-prodvd_key" );
-    if( !proDvdKey.isEmpty() )
-      m_process->setEnvironment( "CDR_SECURITY", proDvdKey );
-  }
 
   *m_process << m_cdrecordBinObject->path;
 

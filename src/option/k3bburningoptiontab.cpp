@@ -192,21 +192,6 @@ void K3bBurningOptionTab::setupGui()
   m_editWritingBufferSizeCdrecord = new KIntNumInput( 4, groupWritingApp );
   m_editWritingBufferSizeCdrdao = new KIntNumInput( 32, groupWritingApp );
 
-  QLabel* labelProDVDKey = new QLabel( i18n("Cdrecord-ProDVD key:"), groupWritingApp );
-  m_editCdrecordProDVDKey = new KLineEdit( groupWritingApp );
-  QHBoxLayout* proDvdKeyLayout = new QHBoxLayout;
-  proDvdKeyLayout->setSpacing( KDialog::spacingHint() );
-  proDvdKeyLayout->addWidget( labelProDVDKey );
-  proDvdKeyLayout->addWidget( m_editCdrecordProDVDKey );
-
-  //
-  // not used yet
-  // ----------------------
-  labelProDVDKey->hide();
-  m_editCdrecordProDVDKey->hide();
-  // ----------------------
-  //
-
   bufferLayout->addMultiCellWidget( m_checkOverburn, 0, 0, 0, 3 );
   bufferLayout->addMultiCellWidget( m_checkManualWritingBufferSize, 1, 1, 0, 3 );
   bufferLayout->addWidget( new QLabel( "Cdrecord:", groupWritingApp ), 2, 1 );
@@ -216,7 +201,6 @@ void K3bBurningOptionTab::setupGui()
   bufferLayout->addWidget( new QLabel( i18n("MB"), groupWritingApp ), 2, 3 );
   bufferLayout->addWidget( new QLabel( i18n("blocks"), groupWritingApp ), 3, 3 );
   bufferLayout->addMultiCellWidget( m_checkAllowWritingAppSelection, 4, 4, 0, 3 );
-  bufferLayout->addMultiCellLayout( proDvdKeyLayout, 5, 5, 0, 3 );
   bufferLayout->addMultiCell( new QSpacerItem( 30, 10, QSizePolicy::Fixed, QSizePolicy::Minimum ), 1, 2, 0, 0 );
   bufferLayout->setColStretch( 3, 1 );
 
@@ -316,8 +300,6 @@ void K3bBurningOptionTab::readSettings()
     m_editWritingBufferSizeCdrdao->setValue( c->readNumEntry( "Cdrdao buffer", 32 ) );
   }
   m_checkAllowWritingAppSelection->setChecked( c->readBoolEntry( "Manual writing app selection", false ) );
-
-  m_editCdrecordProDVDKey->setText( c->readEntry( "cdrecord-prodvd_key" ) );
 }
 
 
@@ -349,8 +331,6 @@ void K3bBurningOptionTab::saveSettings()
   c->writeEntry( "Cdrecord buffer", m_editWritingBufferSizeCdrecord->value() );
   c->writeEntry( "Cdrdao buffer", m_editWritingBufferSizeCdrdao->value() );
   c->writeEntry( "Manual writing app selection", m_checkAllowWritingAppSelection->isChecked() );
-
-  c->writeEntry( "cdrecord-prodvd_key", m_editCdrecordProDVDKey->text() );
 }
 
 

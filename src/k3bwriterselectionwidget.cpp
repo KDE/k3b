@@ -282,9 +282,6 @@ void K3bWriterSelectionWidget::setWritingApp( int app )
   case K3b::CDRECORD:
     m_comboWritingApp->setCurrentItem( "cdrecord" );
     break;
-  case K3b::CDRECORD_PRODVD:
-    m_comboWritingApp->setCurrentItem( "cdrecord-prodvd" );
-    break;
   case K3b::CDRDAO:
     m_comboWritingApp->setCurrentItem( "cdrdao" );
     break;
@@ -347,8 +344,6 @@ int K3bWriterSelectionWidget::writingAppFromString( const QString& s )
     return K3b::CDRDAO;
   else if( s == "cdrecord" )
     return K3b::CDRECORD;
-  else if( s == "cdrecord-prodvd" )
-    return K3b::CDRECORD_PRODVD;
   else if( s == "dvdrecord" )
     return K3b::DVDRECORD;
   else if( s == "growisofs" )
@@ -389,8 +384,6 @@ void K3bWriterSelectionWidget::setSupportedWritingApps( int i )
     m_comboWritingApp->insertItem( "cdrdao" );
   if( i & K3b::CDRECORD )
     m_comboWritingApp->insertItem( "cdrecord" );
-  if( i & K3b::CDRECORD_PRODVD )
-    m_comboWritingApp->insertItem( "cdrecord-prodvd" );
   if( i & K3b::DVDRECORD )
     m_comboWritingApp->insertItem( "dvdrecord" );
   if( i & K3b::GROWISOFS )
