@@ -187,7 +187,7 @@ int ReadBootTable(readfunc *read,int sector, boot_head *head, void *udata) {
 			be += 0x20;
 		}
 
-		while (!end && (be < (&buf+1))) {
+		while (!end && (be < (buf+1))) {
 			switch (isonum_711(be)) {
 				case 0x88:
 					defcur=CreateBootEntry(be);
@@ -317,7 +317,7 @@ static int str_nappend(char **d,char *s,int n) {
 	return 0;
 }
 
-static int str_append(char **d,char *s) {
+static int str_append(char **d, const char *s) {
 	int i;
 	char *c;
 	
