@@ -21,8 +21,6 @@
 
 #include <tools/k3baudiotitlemetainfo.h>
 
-#include <qcstring.h>
-
 #include <kurl.h>
 
 
@@ -58,7 +56,7 @@ class K3bAudioModule : public QObject
    * takes care of padding
    * calls decodeInternal() to actually decode data
    */
-  int decode( const char** _data );
+  int decode( char* _data, int maxLen );
 
   /**
    * cleanup after decoding like closing files.
@@ -67,12 +65,15 @@ class K3bAudioModule : public QObject
 
  protected:
   virtual bool initDecodingInternal( const QString& filename ) = 0;
-  virtual int decodeInternal( const char** data ) = 0;
+
+  /**
+   * fill the already allocated data with maximal maxLen bytes of decoded samples.
+   */
+  virtual int decodeInternal( char* data, int maxLen ) = 0;
 
  private:
   unsigned long m_size;
   unsigned long m_alreadyDecoded;
-  QByteArray m_data;
 };
 
 

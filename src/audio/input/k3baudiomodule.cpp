@@ -39,12 +39,12 @@ bool K3bAudioModule::initDecoding( const QString& filename, unsigned long trackS
 }
 
 
-int K3bAudioModule::decode( const char** _data )
+int K3bAudioModule::decode( char* _data, int maxLen )
 {
   if( m_alreadyDecoded >= m_size )
     return 0;
 
-  int len = decodeInternal( _data );
+  int len = decodeInternal( _data, maxLen );
   if( len < 0 )
     return -1;
 
@@ -55,9 +55,11 @@ int K3bAudioModule::decode( const char** _data )
       kdDebug() << "(K3bAudioModule) track length: " << m_size
 		<< "; decoded module data: " << m_alreadyDecoded
 		<< "; we need to pad " << bytesToPad << " bytes." << endl;
-      m_data.resize( bytesToPad );
-      m_data.fill(0);
-      *_data = m_data.data();
+
+      ::memset( _data, 0, maxLen );
+      if( maxLen < bytesToPad )
+	bytesToPad = maxLen;
+
       m_alreadyDecoded += bytesToPad;
       return bytesToPad;
     }

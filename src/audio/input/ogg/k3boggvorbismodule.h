@@ -46,13 +46,10 @@ class K3bOggVorbisModule : public K3bAudioModule
 
  protected:
   bool initDecodingInternal( const QString& filename );
-  int decodeInternal( const char** _data );
+  int decodeInternal( char* _data, int maxLen );
 
  private:
   OggVorbis_File* m_oggVorbisFile;
-  char* m_outputBuffer;
-
-  static const int OUTPUT_BUFFER_SIZE = 4096;
 };
 
 #endif

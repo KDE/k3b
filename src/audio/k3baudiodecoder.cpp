@@ -52,7 +52,8 @@ public:
     m_canceled = false;
     kdDebug() << "(K3bAudioDecoder::DecoderThread) run()" << endl;
 
-    const char* data = 0;
+    int dataLen = 2352*10;
+    char* data = new char[dataLen];
     int length = 0;
     bool finished = false;
     bool success = true;
@@ -88,7 +89,7 @@ public:
 	    kdDebug() << "(K3bAudioDecoder::DecoderThread) module successfully initialized." << endl;
 
 	    // now decode the track
-	    while( !finished && (length = module->decode( &data )) > 0 ) {
+	    while( !finished && (length = module->decode( data, dataLen )) > 0 ) {
 	      if( m_canceled ) {
 		finished = true;
 		success = false;
@@ -139,6 +140,8 @@ public:
 	}
       }
     }
+
+    delete [] data;
 
     if( !success )
       if( !m_canceled )

@@ -46,20 +46,18 @@ K3bWaveModule::K3bWaveModule( QObject* parent, const char* name )
   : K3bAudioModule( parent, name )
 {
   m_file = new QFile();
-  m_data = new QByteArray( 10*4096 );
 }
 
 
 K3bWaveModule::~K3bWaveModule()
 {
-  delete m_data;
   delete m_file;
 }
 
 
-int K3bWaveModule::decodeInternal( const char** _data )
+int K3bWaveModule::decodeInternal( char* _data, int maxLen )
 {
-  int read = m_file->readBlock( m_data->data(), m_data->size() );
+  int read = m_file->readBlock( _data, maxLen );
   if( read > 0 ) {
     if( read % 2 > 0 ) {
       kdDebug() << "(K3bWaveModule) data length is not a multible of 2! Cannot write data." << endl;
@@ -69,12 +67,11 @@ int K3bWaveModule::decodeInternal( const char** _data )
     // swap bytes
     char buf;
     for( int i = 0; i < read-1; i+=2 ) {
-      buf = m_data->at(i);
-      m_data->at(i) = m_data->at(i+1);
-      m_data->at(i+1) = buf;
+      buf = _data[i];
+      _data[i] = _data[i+1];
+      _data[i+1] = buf;
     }
 
-    *_data = m_data->data();
     return read;
   }
   else if( read == 0 ) {
@@ -101,7 +98,6 @@ bool K3bWaveModule::initDecodingInternal( const QString& filename )
     return false;
   }
 
-  m_data->resize( 10*4096 );
   return true;
 }
 

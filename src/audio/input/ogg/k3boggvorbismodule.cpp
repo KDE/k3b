@@ -41,14 +41,12 @@ K3bOggVorbisModule::K3bOggVorbisModule( QObject* parent, const char* name )
   : K3bAudioModule( parent, name )
 {
   m_oggVorbisFile = new OggVorbis_File;
-  m_outputBuffer  = new char[OUTPUT_BUFFER_SIZE];
 }
 
 
 K3bOggVorbisModule::~K3bOggVorbisModule()
 {
   delete m_oggVorbisFile;
-  delete [] m_outputBuffer;
 }
 
 
@@ -70,12 +68,12 @@ bool K3bOggVorbisModule::initDecodingInternal( const QString& filename )
 }
 
 
-int K3bOggVorbisModule::decodeInternal( const char** _data )
+int K3bOggVorbisModule::decodeInternal( char* _data, int maxLen )
 {
   int bitStream;
   long bytesRead = ov_read( m_oggVorbisFile, 
-			    m_outputBuffer, 
-			    OUTPUT_BUFFER_SIZE,  // max length to be read
+			    _data,
+			    maxLen,  // max length to be read
 			    1,                   // big endian
 			    2,                   // word size: 16-bit samples
 			    1,                   // signed
@@ -87,7 +85,7 @@ int K3bOggVorbisModule::decodeInternal( const char** _data )
     kdDebug() << "(K3bOggVorbisModule) OV_HOLE" << endl;
 
     // recursive new try
-    return decodeInternal(_data);
+    return decodeInternal( _data, maxLen );
   }
 
   else if( bytesRead == OV_EBADLINK ) {
@@ -132,8 +130,6 @@ int K3bOggVorbisModule::decodeInternal( const char** _data )
   }
 
   else {
-    // correct data
-    *_data = m_outputBuffer;
     return bytesRead;
   }
 }

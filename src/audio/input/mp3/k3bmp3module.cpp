@@ -43,10 +43,6 @@ K3bMp3Module::K3bMp3Module( QObject* parent, const char* name )
   : K3bAudioModule( parent, name )
 {
   m_inputBuffer  = new k3b_mad_char[INPUT_BUFFER_SIZE];
-  m_outputBuffer = new k3b_mad_char[OUTPUT_BUFFER_SIZE];
-
-  m_outputPointer   = m_outputBuffer;
-  m_outputBufferEnd = m_outputBuffer + OUTPUT_BUFFER_SIZE;
 
   m_madStream = new mad_stream;
   m_madFrame  = new mad_frame;
@@ -67,7 +63,6 @@ K3bMp3Module::K3bMp3Module( QObject* parent, const char* name )
 K3bMp3Module::~K3bMp3Module()
 {
   delete [] m_inputBuffer;
-  delete [] m_outputBuffer;
 
   delete [] m_madResampledLeftChannel;
   delete [] m_madResampledRightChannel;
@@ -96,7 +91,6 @@ bool K3bMp3Module::initDecodingInternal( const QString& filename )
   }
 
   memset( m_inputBuffer, 0, INPUT_BUFFER_SIZE );
-  memset( m_outputBuffer, 0, OUTPUT_BUFFER_SIZE );
 
   mad_stream_init( m_madStream );
   mad_timer_reset( m_madTimer );
@@ -104,8 +98,6 @@ bool K3bMp3Module::initDecodingInternal( const QString& filename )
   mad_header_init( m_madHeader );
   mad_synth_init( m_madSynth );
 
-  m_outputPointer = m_outputBuffer;
-  
   m_frameCount = 0;
 
   // reset the resampling status structures
@@ -210,9 +202,14 @@ int K3bMp3Module::countFrames( unsigned long& frames )
 }
 
 
-int K3bMp3Module::decodeInternal( const char** _data )
+int K3bMp3Module::decodeInternal( char* _data, int maxLen )
 {
+  m_outputBuffer = _data;
+  m_outputBufferEnd = m_outputBuffer + maxLen;
+  m_outputPointer = m_outputBuffer;
+
   bool bOutputBufferFull = false;
+
 
   while( !bOutputBufferFull ) {
 
@@ -281,9 +278,6 @@ int K3bMp3Module::decodeInternal( const char** _data )
   // flush the output buffer
   size_t buffersize = m_outputPointer - m_outputBuffer;
 	    
-  *_data = (char*)m_outputBuffer;
-  m_outputPointer = m_outputBuffer;
-
   return buffersize;
 }
 

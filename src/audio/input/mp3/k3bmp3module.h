@@ -44,7 +44,7 @@ class K3bMp3Module : public K3bAudioModule
 
  protected:
   bool initDecodingInternal( const QString& filename );
-  int decodeInternal( const char** _data );
+  int decodeInternal( char* _data, int maxLen );
  
  private:
   int countFrames( unsigned long& frames );
@@ -86,14 +86,13 @@ class K3bMp3Module : public K3bAudioModule
   unsigned long m_frameCount;
 
   unsigned char* m_inputBuffer;
-  unsigned char* m_outputBuffer;
-  unsigned char* m_outputPointer;
-  unsigned char* m_outputBufferEnd;
+  char* m_outputBuffer;
+  char* m_outputPointer;
+  char* m_outputBufferEnd;
 
   QFile m_inputFile;
 
   static const int INPUT_BUFFER_SIZE = 5*8192;
-  static const int OUTPUT_BUFFER_SIZE = 5*8192;
 
   static int MaxAllowedRecoverableErrors;
 };

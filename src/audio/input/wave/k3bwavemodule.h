@@ -47,7 +47,7 @@ class K3bWaveModule : public K3bAudioModule
 
  protected:
   bool initDecodingInternal( const QString& filename );
-  int decodeInternal( const char** _data );
+  int decodeInternal( char* _data, int maxLen );
 
  private:
   unsigned long identifyWaveFile( QFile* );
@@ -56,7 +56,6 @@ class K3bWaveModule : public K3bAudioModule
   static unsigned long le_a_to_u_long( unsigned char* a );
 
   QFile* m_file;
-  QByteArray* m_data;
 };
 
 
