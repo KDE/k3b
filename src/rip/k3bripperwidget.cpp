@@ -319,7 +319,7 @@ void K3bRipperWidget::refresh()
 
     QString filename, directory;
 
-    if( m_checkUsePattern->isChecked() && m_cddbEntry.titles.count() >= *it ) {
+    if( m_checkUsePattern->isChecked() && (int)m_cddbEntry.titles.count() >= *it ) {
       filename = K3bPatternParser::parsePattern( m_cddbEntry, *it,
 						 c->readEntry( "filename pattern", "%a - %t" ),
 						 c->readBoolEntry( "replace blank in filename", false ),
