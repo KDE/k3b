@@ -23,6 +23,7 @@
 #include <tools/k3bdefaultexternalprograms.h>
 #include <device/k3bdevicemanager.h>
 #include <tools/k3bversion.h>
+#include <k3bcore.h>
 
 #include <qpushbutton.h>
 #include <qcheckbox.h>
