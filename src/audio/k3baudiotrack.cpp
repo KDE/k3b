@@ -74,7 +74,7 @@ int K3bAudioTrack::index() const
   return i;
 }
 
-void K3bAudioTrack::setBufferFile( const QString& file )
+void K3bAudioTrack::setBufferFile( const QString& )
 {
   qDebug( "(K3bAudioTrack) cannot set bufferFile since I'm abstract!" );
 }

@@ -67,7 +67,7 @@ class KioTree : public KListView/*, public KDirNotify*/  // we do not need kdirn
    */
   KioTreeItem * currentItem() const;
 
-  void startAnimation( KioTreeItem * item, const char * iconBaseName = "kde", uint iconCount = 6 );
+  void startAnimation( KioTreeItem * item, const char * iconBaseName = "kiotreework", uint iconCount = 6 );
   void stopAnimation( KioTreeItem * item );
 
   // Reimplemented from KDirNotify
