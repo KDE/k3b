@@ -118,6 +118,7 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
     private:
         K3bVcdDoc* m_vcdDoc;
         void MarginChecked( bool );
+        void SetImagePath();
         void saveCdiConfig();
         void loadCdiConfig();
         void loadDefaultCdiConfig();
@@ -131,12 +132,11 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
 
         void slotGapsChecked( bool );
         void slotSpinVolumeCount();
-        void slotSetImagePath();
         void slotVcdTypeClicked( int );
         void slotCdiSupportChecked( bool );
         void slotAutoDetect( bool );
 
-	void toggleAllOptions();
+        void toggleAllOptions();
 };
 
 #endif

@@ -18,6 +18,7 @@
 #include <qspinbox.h>
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
+#include <qregexp.h>
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qlayout.h>
@@ -26,6 +27,7 @@
 #include <qgrid.h>
 #include <qtoolbutton.h>
 #include <qfileinfo.h>
+#include <qvalidator.h>
 
 #include <klocale.h>
 #include <kconfig.h>
@@ -79,12 +81,11 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
     setupLabelTab();
     setupAdvancedTab();
 
-    slotSetImagePath();
+    SetImagePath();
 
     readSettings();
 
     connect( m_spinVolumeCount, SIGNAL( valueChanged( int ) ), this, SLOT( slotSpinVolumeCount() ) );
-    connect( m_editVolumeId, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotSetImagePath() ) );
     connect( m_groupVcdFormat, SIGNAL( clicked( int ) ), this, SLOT( slotVcdTypeClicked( int ) ) );
     connect( m_checkCdiSupport, SIGNAL( toggled( bool ) ), this, SLOT( slotCdiSupportChecked( bool ) ) );
     connect( m_checkAutoDetect, SIGNAL( toggled( bool ) ), this, SLOT( slotAutoDetect( bool ) ) );
@@ -458,8 +459,16 @@ void K3bVcdBurnDialog::setupLabelTab()
     m_spinVolumeNumber = new QSpinBox( w, "m_editVolumeNumber" );
     m_spinVolumeCount = new QSpinBox( w, "m_editVolumeCount" );
 
-    m_editVolumeId->setMaxLength( 31 );
-
+    // only ISO646 d-Characters ( 0-9 A-Z _ )
+    m_editVolumeId->setValidator( new QRegExpValidator( QRegExp("[a-zA-Z0-9_]*"), m_editVolumeId ) );
+    m_editAlbumId->setValidator( new QRegExpValidator( QRegExp("[a-zA-Z0-9_]*"), m_editVolumeId ) );
+        
+    m_editVolumeId->setMaxLength( 32 );
+    m_editAlbumId->setMaxLength( 16 );
+    // only ISO646 a-Characters ( [0-9A-Z!" %&'()*+,-./:;<=>?_] )
+    m_editPublisher->setValidator( new QRegExpValidator( QRegExp("[a-zA-Z0-9!\" %&'()*+,-./:;<=>?_]*"), m_editVolumeId ) );
+    m_editPublisher->setMaxLength( 128 );
+    
     m_spinVolumeNumber->setMinValue( 1 );
     m_spinVolumeNumber->setMaxValue( 1 );
     m_spinVolumeCount->setMinValue( 1 );
@@ -581,7 +590,18 @@ void K3bVcdBurnDialog::slotLoadK3bDefaults()
 
 void K3bVcdBurnDialog::saveSettings()
 {
-    slotSetImagePath();
+    SetImagePath();
+
+    // set AlbumID if empty
+    if ( m_editVolumeId->text().length() < 1 ) {
+        if ( m_radioSvcd10->isChecked() )
+            m_editVolumeId->setText( i18n( "SUPER_VIDEOCD" ) );
+        else if ( m_radioHqVcd10->isChecked() )
+            m_editVolumeId->setText( i18n( "HQ_VIDEOCD" ) );
+        else
+            m_editVolumeId->setText( i18n( "VIDEOCD" ) );
+    }
+    
 
     doc() ->setTempDir( m_tempDirSelectionWidget->tempPath() );
     doc() ->setDummy( m_checkSimulate->isChecked() );
@@ -878,7 +898,7 @@ void K3bVcdBurnDialog::loadDefaultCdiConfig()
     }
 }
 
-void K3bVcdBurnDialog::slotSetImagePath()
+void K3bVcdBurnDialog::SetImagePath()
 {
     QFileInfo fi( m_tempDirSelectionWidget->tempPath() );
     QString path;
@@ -891,19 +911,8 @@ void K3bVcdBurnDialog::slotSetImagePath()
     if ( path[ path.length() - 1 ] != '/' )
         path.append( "/" );
 
-    if ( vcdDoc() ->vcdOptions() ->volumeId().length() < 1 ) {
-        if ( m_radioSvcd10->isChecked() )
-            vcdDoc() ->vcdOptions() ->setVolumeId( i18n( "SUPER VIDEOCD" ) );
-        else if ( m_radioHqVcd10->isChecked() )
-            vcdDoc() ->vcdOptions() ->setVolumeId( i18n( "HQ-VIDEOCD" ) );
-        else
-            vcdDoc() ->vcdOptions() ->setVolumeId( i18n( "VIDEOCD" ) );
-    }
-
-    // path.append( vcdDoc()->vcdOptions()->volumeId() + ".bin" );
     m_tempDirSelectionWidget->setTempPath( path );
 }
-
 
 void K3bVcdBurnDialog::slotSpinVolumeCount()
 {
