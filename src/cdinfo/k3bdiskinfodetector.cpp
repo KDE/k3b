@@ -120,7 +120,9 @@ void K3bDiskInfoDetector::fetchTocInfo()
 
   } else 
      kdDebug() << "(K3bDiskInfoDetector) disc status is " << status << " !" << endl;   
-
+  
+  m_info.noDisk = false;
+  
   struct cdrom_generic_command cmd;
   unsigned char dat[4];
 
