@@ -356,13 +356,13 @@ void K3bDataJob::cancel()
     // remove iso-image if it is unfinished or the user selected to remove image
     if( QFile::exists( m_doc->isoImage() ) ) {
       if( m_doc->deleteImage() || !m_imageFinished ) {
-	emit infoMessage( i18n("Removing iso-image %s", m_doc->isoImage().latin1() ), K3bJob::STATUS );
+	emit infoMessage( i18n("Removing iso-image %1").arg(m_doc->isoImage()), K3bJob::STATUS );
 	QFile::remove( m_doc->isoImage() );
 	m_doc->setIsoImage("");
 	m_pathSpecFile = QString::null;
       }
       else {
-	emit infoMessage( i18n("Image successfully created in ") + m_doc->isoImage(), K3bJob::STATUS );	
+	emit infoMessage( i18n("Image successfully created in %1").arg(m_doc->isoImage()), K3bJob::STATUS );
       }
     }
 				
