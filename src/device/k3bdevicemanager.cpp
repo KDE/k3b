@@ -231,10 +231,10 @@ bool K3bDeviceManager::saveConfig( KConfig* c )
 
 K3bDevice* K3bDeviceManager::initializeScsiDevice( cdrom_drive* drive )
 {
-  K3bScsiDevice* dev = new K3bScsiDevice( drive );
+  K3bScsiDevice* dev = 0;
 
   // determine bus, target, lun
-  int devFile = ::open( dev->genericDevice().latin1(), O_RDONLY | O_NONBLOCK);
+  int devFile = ::open( drive->cdda_device_name, O_RDONLY | O_NONBLOCK);
   if( devFile ) {
     struct ScsiIdLun {
       int id;
@@ -243,11 +243,12 @@ K3bDevice* K3bDeviceManager::initializeScsiDevice( cdrom_drive* drive )
     ScsiIdLun idLun;
 
     if ( ioctl( devFile, SCSI_IOCTL_GET_IDLUN, &idLun ) < 0) {
-      qDebug( "(K3bDeviceManager) %s: Need a filename that resolves to a SCSI device (2).", dev->genericDevice().latin1() );
+      qDebug( "(K3bDeviceManager) %s: Need a filename that resolves to a SCSI device (2).", drive->cdda_device_name );
       ::close( devFile );
       return 0;
     }
     else {
+      dev = new K3bScsiDevice( drive );
       dev->m_target = idLun.id & 0xff;
       dev->m_lun    = (idLun.id >> 8) & 0xff;
       dev->m_bus    = (idLun.id >> 16) & 0xff;
@@ -257,7 +258,6 @@ K3bDevice* K3bDeviceManager::initializeScsiDevice( cdrom_drive* drive )
   }
   else {
     qDebug("(K3bDeviceManager) ERROR: Could not open device " + dev->genericDevice() );
-    delete dev;
     return 0;
   }
 
