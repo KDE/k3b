@@ -102,7 +102,7 @@ K3bDvdBurnDialog::~K3bDvdBurnDialog()
 void K3bDvdBurnDialog::setupSettingsTab()
 {
   QWidget* frame = new QWidget( this );
-  QGridLayout* frameLayout = new QGridLayout( frame );
+  QHBoxLayout* frameLayout = new QHBoxLayout( frame );
   frameLayout->setSpacing( spacingHint() );
   frameLayout->setMargin( marginHint() );
 
@@ -139,9 +139,7 @@ void K3bDvdBurnDialog::setupSettingsTab()
   m_groupMultiSessionLayout->addWidget( m_radioMultiSessionFinish, 2, 1 );
 
 
-  frameLayout->addWidget( m_groupMultiSession, 0, 0 );
-
-  frameLayout->setRowStretch( 1, 1 );
+  frameLayout->addWidget( m_groupMultiSession );
 
   addPage( frame, i18n("Settings") );
 
