@@ -481,7 +481,6 @@ void K3bDiskInfoDetector::fetchIdeInformation()
       // we create this fields to have ending sector info later on
       int* startSectors = new int[numTracks+1];
       bool* dataTrack = new bool[numTracks+1];
-      int* modes = new int[numTracks+1];
 
       // read info for every single track
       int j = 0;
@@ -499,9 +498,19 @@ void K3bDiskInfoDetector::fetchIdeInformation()
 	  // 0x04 - Data track
 	  // 0x08 - 4 channel audio
 
+	  // struct cdrom_tocentry 
+	  //  {
+	  //      u_char cdte_track; // required
+	  //      u_char cdte_adr :4; // filled
+	  //      u_char cdte_ctrl :4; // filled
+	  //                                 CDROM_DATA_TRACK 0x04 track is data or audio
+	  //      u_char cdte_format; // required CDROM_MSF or CDROM_LBA
+	  //      union cdrom_addr cdte_addr; // filled;
+	  //      u_char cdte_datamode; // not used
+	  //  };
+  
 	  startSectors[j] = (int)tocE.cdte_addr.lba;
 	  dataTrack[j] = (bool)(tocE.cdte_ctrl & CDROM_DATA_TRACK);
-	  modes[j] = (int)tocE.cdte_datamode; // this does not seem to provide valid data mode (1/2) info
 	  j++;
 	}
       }
@@ -527,7 +536,6 @@ void K3bDiskInfoDetector::fetchIdeInformation()
       // cleanup
       delete [] startSectors;
       delete [] dataTrack;
-      delete [] modes;
     }
     break;
   case CDS_NO_DISC:
