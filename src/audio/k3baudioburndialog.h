@@ -38,46 +38,39 @@ class K3bAudioDoc;
   *@author Sebastian Trueg
   */
 
-class K3bAudioBurnDialog : public K3bProjectBurnDialog  {
-
+class K3bAudioBurnDialog : public K3bProjectBurnDialog  
+{
    Q_OBJECT
 
-public:
-	K3bAudioBurnDialog(K3bAudioDoc* doc, QWidget *parent=0, const char *name=0, bool modal = true );
-	~K3bAudioBurnDialog();
+ public:
+   K3bAudioBurnDialog(K3bAudioDoc* doc, QWidget *parent=0, const char *name=0, bool modal = true );
+   ~K3bAudioBurnDialog();
 
-protected:
-	void setupBurnTab( QFrame* frame );
-	void setupCdTextTab( QFrame* frame );
-	void saveSettings();
-	void readSettings();
+ protected:
+   void setupBurnTab( QFrame* frame );
+   void setupCdTextTab( QFrame* frame );
+   void saveSettings();
+   void readSettings();
 
-  	// the burn tab
-	// ---------------------------------------------------------
-    QLabel* m_labelCdSize;
-    QLabel* m_labelFreeSpace;
-    QLineEdit* m_editDirectory;
-    QToolButton* m_buttonFindDir;
-    QCheckBox* m_checkCdText;
-    QCheckBox* m_checkDao;
-    QCheckBox* m_checkOnTheFly;
-    QCheckBox* m_checkPadding;
-    QCheckBox* m_checkSimulate;
-	// -----------------------------------------------------------
+   // the burn tab
+   // ---------------------------------------------------------
+   QCheckBox* m_checkCdText;
+   QCheckBox* m_checkDao;
+   QCheckBox* m_checkOnTheFly;
+   QCheckBox* m_checkPadding;
+   QCheckBox* m_checkSimulate;
+   // -----------------------------------------------------------
 	
-	// the cd-text-tab
-	// -----------------------------------------------------------
-    QLineEdit* m_editDisc_id;
-    QLineEdit* m_editUpc_ean;
-    QMultiLineEdit* m_editMessage;
-    QLineEdit* m_editPerformer;
-    QLineEdit* m_editArranger;
-    QLineEdit* m_editTitle;
-    QLineEdit* m_editSongwriter;
-	// -----------------------------------------------------------
-
-protected slots:
-  void slotFindDir();
+   // the cd-text-tab
+   // -----------------------------------------------------------
+   QLineEdit* m_editDisc_id;
+   QLineEdit* m_editUpc_ean;
+   QMultiLineEdit* m_editMessage;
+   QLineEdit* m_editPerformer;
+   QLineEdit* m_editArranger;
+   QLineEdit* m_editTitle;
+   QLineEdit* m_editSongwriter;
+   // -----------------------------------------------------------
 };
 
 #endif

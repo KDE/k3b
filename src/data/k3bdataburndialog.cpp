@@ -122,14 +122,6 @@ void K3bDataBurnDialog::readSettings()
 {
   // we do not read the mkisofs-options!!!
 
-  m_labelCdSize->setText( QString().sprintf( " %.2f MB", ((float)doc()->size())/1024.0/1024.0 ) );
-	
-  // read temp dir
-  k3bMain()->config()->setGroup( "General Options" );
-  QString tempdir = k3bMain()->config()->readEntry( "Temp Dir", locateLocal( "appdata", "temp/" ) );
-  m_editDirectory->setText( tempdir + "image.iso" );
-  slotUpdateFreeTempSpace( tempdir );
-	
   m_checkDao->setChecked( doc()->dao() );
   m_checkDummy->setChecked( doc()->dummy() );
   m_checkBurnProof->setChecked( doc()->burnProof() );
@@ -150,58 +142,9 @@ void K3bDataBurnDialog::setupBurnTab( QFrame* frame )
   frameLayout->setSpacing( spacingHint() );
   frameLayout->setMargin( marginHint() );
 
-  writerBox()->reparent( frame, QPoint(0,0) );
-  frameLayout->addMultiCellWidget( writerBox(), 0, 0, 0, 1 );
+  frameLayout->addMultiCellWidget( writerBox( frame ), 0, 0, 0, 1 );
 
-  m_groupTempDir = new QGroupBox( frame, "m_groupTempDir" );
-  m_groupTempDir->setFrameShape( QGroupBox::Box );
-  m_groupTempDir->setFrameShadow( QGroupBox::Sunken );
-  m_groupTempDir->setTitle( i18n( "Temp Directory" ) );
-  m_groupTempDir->setColumnLayout(0, Qt::Vertical );
-  m_groupTempDir->layout()->setSpacing( 0 );
-  m_groupTempDir->layout()->setMargin( 0 );
-  QGridLayout* m_groupTempDirLayout = new QGridLayout( m_groupTempDir->layout() );
-  m_groupTempDirLayout->setAlignment( Qt::AlignTop );
-  m_groupTempDirLayout->setSpacing( spacingHint() );
-  m_groupTempDirLayout->setMargin( marginHint() );
-
-  TextLabel1_3 = new QLabel( m_groupTempDir, "TextLabel1_3" );
-  TextLabel1_3->setText( i18n( "Write Image file to" ) );
-
-  m_groupTempDirLayout->addWidget( TextLabel1_3, 0, 0 );
-
-  TextLabel2 = new QLabel( m_groupTempDir, "TextLabel2" );
-  TextLabel2->setText( i18n( "Free space on device" ) );
-
-  m_groupTempDirLayout->addWidget( TextLabel2, 2, 0 );
-
-  TextLabel4 = new QLabel( m_groupTempDir, "TextLabel4" );
-  TextLabel4->setText( i18n( "Size of CD" ) );
-
-  m_groupTempDirLayout->addWidget( TextLabel4, 3, 0 );
-
-  m_labelCdSize = new QLabel( m_groupTempDir, "m_labelCdSize" );
-  m_labelCdSize->setText( i18n( "0.0 MB" ) );
-  m_labelCdSize->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
-
-  m_groupTempDirLayout->addMultiCellWidget( m_labelCdSize, 3, 3, 1, 2 );
-
-  m_labelFreeSpace = new QLabel( m_groupTempDir, "m_labelFreeSpace" );
-  m_labelFreeSpace->setText( i18n( "0.0 MB" ) );
-  m_labelFreeSpace->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
-
-  m_groupTempDirLayout->addMultiCellWidget( m_labelFreeSpace, 2, 2, 1, 2 );
-
-  m_editDirectory = new QLineEdit( m_groupTempDir, "m_editDirectory" );
-
-  m_groupTempDirLayout->addMultiCellWidget( m_editDirectory, 1, 1, 0, 1 );
-
-  m_buttonFindIsoImage = new QToolButton( m_groupTempDir, "m_buttonFindDir" );
-  m_buttonFindIsoImage->setText( i18n( "..." ) );
-
-  m_groupTempDirLayout->addWidget( m_buttonFindIsoImage, 1, 2 );
-
-  frameLayout->addWidget( m_groupTempDir, 1, 1 );
+  frameLayout->addWidget( tempDirBox( frame ), 1, 1 );
 
   m_groupOptions = new QGroupBox( frame, "m_groupOptions" );
   m_groupOptions->setTitle( i18n( "Options" ) );
@@ -241,18 +184,15 @@ void K3bDataBurnDialog::setupBurnTab( QFrame* frame )
 
   // signals and slots connections
   connect( m_checkOnTheFly, SIGNAL( toggled(bool) ), m_checkDeleteImage, SLOT( setDisabled(bool) ) );
-  connect( m_checkOnTheFly, SIGNAL( toggled(bool) ), m_groupTempDir, SLOT( setDisabled(bool) ) );
+  connect( m_checkOnTheFly, SIGNAL( toggled(bool) ), tempDirBox(), SLOT( setDisabled(bool) ) );
   connect( m_checkOnTheFly, SIGNAL( toggled(bool) ), m_checkOnlyCreateImage, SLOT( setDisabled(bool) ) );
 
 
-  m_groupTempDirLayout->setColStretch( 1 , 1);
   frameLayout->setRowStretch( 1, 1 );
   frameLayout->setColStretch( 1, 1 );
 
 
-  connect( m_buttonFindIsoImage, SIGNAL(clicked()), this, SLOT(slotFindIsoImage()) );
   connect( this, SIGNAL(writerChanged()), this, SLOT(slotWriterChanged()) );
-  connect( m_editDirectory, SIGNAL(textChanged(const QString&)), this, SLOT(slotUpdateFreeTempSpace(const QString&)) );
 
   m_checkBurnProof->setEnabled( writerDevice()->burnproof );
 }
@@ -527,12 +467,12 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
 }
 
 
-void K3bDataBurnDialog::slotFindIsoImage()
+void K3bDataBurnDialog::slotTempDirButtonPressed()
 {
   // TODO: ask for confirmation if already exists
-  QString dir = KFileDialog::getSaveFileName( m_editDirectory->text(), QString::null, k3bMain(), "Select Iso Image" );
+  QString dir = KFileDialog::getSaveFileName( tempDir(), QString::null, k3bMain(), "Select Iso Image" );
   if( !dir.isEmpty() ) {
-    m_editDirectory->setText( dir );
+    setTempDir( dir );
   }
 }
 
@@ -647,20 +587,4 @@ void K3bDataBurnDialog::slotSelectCustom()
 void K3bDataBurnDialog::slotWriterChanged()
 {
   m_checkBurnProof->setEnabled( writerDevice()->burnproof );
-}
-
-
-void K3bDataBurnDialog::slotFreeTempSpace(const QString&, unsigned long, unsigned long, unsigned long kbAvail)
-{
-  m_labelFreeSpace->setText( QString().sprintf( "%.2f MB", (float)kbAvail/1024.0 ) );
-}
-
-
-void K3bDataBurnDialog::slotUpdateFreeTempSpace( const QString& path )
-{
-  if( QFile::exists( path ) ) {
-    connect( KDiskFreeSp::findUsageInfo( path ), 
-	     SIGNAL(foundMountPoint(const QString&, unsigned long, unsigned long, unsigned long)),
-	     this, SLOT(slotFreeTempSpace(const QString&, unsigned long, unsigned long, unsigned long)) );
-  }
 }

@@ -52,14 +52,6 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    // --- general tab -------------------------	
    QLabel* TextLabel1;
    QLabel* TextLabel1_2;
-   QGroupBox* m_groupTempDir;
-   QLabel* TextLabel1_3;
-   QLabel* TextLabel2;
-   QLabel* TextLabel4;
-   QLabel* m_labelCdSize;
-   QLabel* m_labelFreeSpace;
-   QLineEdit* m_editDirectory;
-   QToolButton* m_buttonFindIsoImage;
    QGroupBox* m_groupOptions;
    QCheckBox* m_checkDummy;
    QCheckBox* m_checkOnTheFly;
@@ -110,13 +102,11 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
  protected slots:
    void saveSettings();
    void readSettings();
-   void slotFindIsoImage();
+   void slotTempDirButtonPressed();
    void slotLoadPreSettings( const QString& );
    void slotSaveDefaults();
    void slotSelectCustom();
    void slotWriterChanged();
-   void slotUpdateFreeTempSpace( const QString& );
-   void slotFreeTempSpace(const QString&, unsigned long, unsigned long, unsigned long);
 };
 
 #endif
