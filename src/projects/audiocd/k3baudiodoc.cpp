@@ -77,8 +77,25 @@ public:
 
 protected:
   void run() {
-    if( m_track->module()->analyseFile() )
+    if( m_track->module()->analyseFile() ) {
       m_track->setStatus( 0 );
+
+      // first search the songdb
+      K3bSong *song = K3bSongManager::instance()->findSong( m_track->path() );
+      if( song != 0 ){
+	m_track->setArtist( song->getArtist() );
+	//      newM_Track->setAlbum( song->getAlbum() );
+	m_track->setTitle( song->getTitle() );
+      }
+      else {
+	// no song found, try the module
+	m_track->setTitle( m_track->module()->metaInfo( K3bAudioDecoder::META_TITLE ) );
+	m_track->setPerformer( m_track->module()->metaInfo( K3bAudioDecoder::META_ARTIST ) );
+	m_track->setComposer( m_track->module()->metaInfo( K3bAudioDecoder::META_COMPOSER ) );
+	m_track->setSongwriter( m_track->module()->metaInfo( K3bAudioDecoder::META_SONGWRITER ) );
+	m_track->setCdTextMessage( m_track->module()->metaInfo( K3bAudioDecoder::META_COMMENT ) );
+      }
+    }
     else
       m_track->setStatus( -1 );
     emitFinished(true);
@@ -215,7 +232,6 @@ void K3bAudioDoc::slotWorkUrlQueue()
     if( !readM3uFile( item->url, lastAddedPosition ) )
       if( K3bAudioTrack* newTrack = createTrack( item->url ) ) {
         addTrack( newTrack, lastAddedPosition );
-	determineAudioMetaInfo( newTrack );
 	slotDetermineTrackStatus();
       }
 
@@ -671,26 +687,6 @@ void K3bAudioDoc::slotDetermineTrackStatus()
   else
     kdDebug() << "(K3bAudioDoc) AudioTrackStatusThread running." << endl;
   kdDebug() << "(K3bAudioDoc) slotDetermineTrackStatus() end" << endl;
-}
-
-
-void K3bAudioDoc::determineAudioMetaInfo( K3bAudioTrack* track )
-{
-  // first search the songdb
-  K3bSong *song = K3bSongManager::instance()->findSong( track->path() );
-  if( song != 0 ){
-    track->setArtist( song->getArtist() );
-    //      newTrack->setAlbum( song->getAlbum() );
-    track->setTitle( song->getTitle() );
-  }
-  else {
-    // no song found, try the module
-    track->setTitle( track->module()->metaInfo( "Title" ) );
-    track->setPerformer( track->module()->metaInfo( "Artist" ) );
-    track->setComposer( track->module()->metaInfo( "Composer" ) );
-    track->setSongwriter( track->module()->metaInfo( "Songwriter" ) );
-    track->setCdTextMessage( track->module()->metaInfo( "Comment" ) );
-  }
 }
 
 

@@ -367,24 +367,7 @@ int K3bWriterSelectionWidget::writingApp() const
 
 int K3bWriterSelectionWidget::selectedWritingApp() const
 {
-  return writingAppFromString( m_comboWritingApp->currentText() );
-}
-
-// static
-int K3bWriterSelectionWidget::writingAppFromString( const QString& s )
-{
-  if( s == "cdrdao" )
-    return K3b::CDRDAO;
-  else if( s == "cdrecord" )
-    return K3b::CDRECORD;
-  else if( s == "dvdrecord" )
-    return K3b::DVDRECORD;
-  else if( s == "growisofs" )
-    return K3b::GROWISOFS;
-  else if( s == "dvd+rw-format" )
-    return K3b::DVD_RW_FORMAT;
-  else
-    return K3b::DEFAULT;
+  return K3b::writingAppFromString( m_comboWritingApp->currentText() );
 }
 
 
@@ -436,7 +419,7 @@ void K3bWriterSelectionWidget::loadConfig( KConfig* c )
 {
   setWriterDevice( k3bcore->deviceManager()->findDevice( c->readEntry( "writer_device" ) ) );
   setSpeed( c->readNumEntry( "writing_speed",  0 ) );
-  setWritingApp( writingAppFromString( c->readEntry( "writing_app" ) ) );
+  setWritingApp( K3b::writingAppFromString( c->readEntry( "writing_app" ) ) );
 }
 
 

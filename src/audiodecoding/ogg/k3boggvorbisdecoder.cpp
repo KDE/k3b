@@ -95,16 +95,38 @@ bool K3bOggVorbisDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate
     }
     else {
 
-      QStringList ti = supportedTechnicalInfos();
-      for( QStringList::iterator it = ti.begin(); it != ti.end(); ++it )
-	kdDebug() << "OGG: " << *it << ": " << technicalInfo( *it ) << endl;
+      d->vInfo = ov_info( &d->oggVorbisFile, -1 /* current bitstream */ );
+      d->vComment = ov_comment( &d->oggVorbisFile, -1 );
 
-      if( !d->vInfo )
-	d->vInfo = ov_info( &d->oggVorbisFile, -1 /* current bitstream */ );
+      // add meta tags
+      for( int i = 0; i < d->vComment->comments; ++i ) {
+	QString comment = QString::fromUtf8( d->vComment->user_comments[i] );
+	QStringList values = QStringList::split( "=", comment );
+	if( values.count() > 1 ) {
+	  if( values[0].lower() == "title" )
+	    addMetaInfo( META_TITLE, values[1] );
+	  else if( values[0].lower() == "artist" )
+	    addMetaInfo( META_ARTIST, values[1] );
+	  else if( values[0].lower() == "description" )
+	    addMetaInfo( META_COMMENT, values[1] );
+	}
+      }
+
+
+      // add technical infos
+      addTechnicalInfo( i18n("Version"), QString::number(d->vInfo->version) );
+      addTechnicalInfo( i18n("Channels"), QString::number(d->vInfo->channels) );
+      addTechnicalInfo( i18n("Sampling Rate"), i18n("%1 Hz").arg(d->vInfo->rate) );
+      addTechnicalInfo( i18n("Bitrate Upper"), QString::number(d->vInfo->bitrate_upper) );
+      addTechnicalInfo( i18n("Bitrate Nominal"), QString::number(d->vInfo->bitrate_nominal) );
+      addTechnicalInfo( i18n("Bitrate Lower"), QString::number(d->vInfo->bitrate_lower) );
 
       frames = (unsigned long)ceil(seconds * 75.0);
       samplerate = d->vInfo->rate;
       ch = d->vInfo->channels;
+
+      cleanup();
+
       return true;
     }
   }
@@ -158,33 +180,6 @@ int K3bOggVorbisDecoder::decodeInternal( char* data, int maxLen )
 }
 
 
-QString K3bOggVorbisDecoder::metaInfo( const QString& tag )
-{
-  if( openOggVorbisFile() ) {
-
-    // search for artist,title information
-    if( !d->vComment )
-      d->vComment = ov_comment( &d->oggVorbisFile, -1 );
-
-    if( !d->vComment ) {
-      kdDebug() << "(K3bOggVorbisDecoder) Could not open OggVorbis comment of file "
-		<< filename() << endl;
-    }
-    else {
-      for( int i = 0; i < d->vComment->comments; ++i ) {
-	QString comment( d->vComment->user_comments[i] );
-	QStringList values = QStringList::split( "=", comment );
-	if( values.count() > 1 )
-	  if( values[0].lower() == tag.lower() )
-	    return values[1];
-      }
-    }
-  }
-
-  return QString::null;
-}
-
-
 void K3bOggVorbisDecoder::cleanup()
 {
   if( d->isOpen )
@@ -205,43 +200,6 @@ QString K3bOggVorbisDecoder::fileType() const
 {
   return i18n("Ogg-Vorbis");
 }
-
-
-QStringList K3bOggVorbisDecoder::supportedTechnicalInfos() const
-{
-  return QStringList::split( ";", 
-			     i18n("Channels") + ";" +
-			     i18n("Sampling Rate") + ";" +
-			     i18n("Bitrate Upper") + ";" +
-			     i18n("Bitrate Nominal") + ";" +
-			     i18n("Bitrate Lower") + ";" +
-			     i18n("Version") );
-}
-
-
-QString K3bOggVorbisDecoder::technicalInfo( const QString& info ) const
-{
-  if( !d->vInfo )
-    d->vInfo = ov_info( &d->oggVorbisFile, -1 /* current bitstream */ );
-    
-  if( d->vInfo ) {
-    if( info == i18n("Version") )
-      return QString::number(d->vInfo->version);
-    else if( info == i18n("Channels") )
-      return QString::number(d->vInfo->channels);
-    else if( info == i18n("Sampling Rate") )
-      return i18n("%1 Hz").arg(d->vInfo->rate);
-    else if( info == i18n("Bitrate Upper") )
-      return QString::number(d->vInfo->bitrate_upper);
-    else if( info == i18n("Bitrate Nominal") )
-      return QString::number(d->vInfo->bitrate_nominal);
-    else if( info == i18n("Bitrate Lower") )
-      return QString::number(d->vInfo->bitrate_lower);
-  }
-
-  return QString::null;
-}
-
 
 
 K3bOggVorbisDecoderFactory::K3bOggVorbisDecoderFactory( QObject* parent, const char* name )

@@ -95,12 +95,21 @@ class K3bAudioDecoder : public K3bPlugin
    */
   bool initDecoder( const K3b::Msf& startOffset, const K3b::Msf& length );
 
-  // TODO: use an enumeration like the K3bAudioEncoder instead of string keys
+  enum MetaDataField {
+    META_TITLE,
+    META_ARTIST,
+    META_SONGWRITER,
+    META_COMPOSER,
+    META_COMMENT
+  };
+
   /**
    * This should at least support "Title" and "Artist"
-   * The default implementation uses KFileMetaInfo
+   *
+   * the default implementation returns the infos set via @p addMetaInfo
+   * and uses KFileMetaInfo if none was set
    */ 
-  virtual QString metaInfo( const QString& );
+  virtual QString metaInfo( MetaDataField );
 
   /**
    * The filetype is only used for informational purposes.
@@ -165,6 +174,11 @@ class K3bAudioDecoder : public K3bPlugin
   static void from8BitTo16BitBeSigned( char* src, char* dest, int samples );
 
  protected:
+  /**
+   * Use this method if using the default implementation of @p metaInfo
+   */
+  void addMetaInfo( MetaDataField, const QString& );
+
   /**
    * Use this method if using the default implementation of @p technicalInfo
    * and @p supportedTechnicalInfos.

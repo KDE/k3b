@@ -55,19 +55,14 @@ class K3bOggVorbisDecoder : public K3bAudioDecoder
   K3bOggVorbisDecoder( QObject* parent = 0, const char* name = 0 );
   ~K3bOggVorbisDecoder();
 
-  QString metaInfo( const QString& );
-
   void cleanup();
 
-  bool seekInternal( const K3b::Msf& );
-
   QString fileType() const;
-  QStringList supportedTechnicalInfos() const;
-  QString technicalInfo( const QString& ) const;
 
  protected:
   bool analyseFileInternal( K3b::Msf& frames, int& samplerate, int& ch );
   bool initDecoderInternal();
+  bool seekInternal( const K3b::Msf& );
 
   int decodeInternal( char* _data, int maxLen );
 

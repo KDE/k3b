@@ -203,6 +203,23 @@ bool K3bFLACDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate, int
   samplerate = d->rate;
   ch = d->channels;
 
+  // add meta info
+  if( d->comments != 0 ) {
+    for( unsigned int i = 0; i < d->comments->get_num_comments(); ++i ) {
+      QString key = QString::fromUtf8( d->comments->get_comment(i).get_field_name(),
+				       d->comments->get_comment(i).get_field_name_length() );
+      QString value = QString::fromUtf8( d->comments->get_comment(i).get_field_value(),
+					 d->comments->get_comment(i).get_field_value_length() );
+
+      if( key.upper() == "TITLE" )
+	addMetaInfo( META_TITLE, value );
+      else if( key.upper() == "ARTIST" )
+	addMetaInfo( META_ARTIST, value );
+      else if( key.upper() == "DESCRIPTION" )
+	addMetaInfo( META_COMMENT, value );
+    }
+  }
+
   return true;
 }
 
@@ -247,27 +264,6 @@ int K3bFLACDecoder::decodeInternal( char* _data, int maxLen )
   }
 
   return bytesCopied;
-}
-
-
-QString K3bFLACDecoder::metaInfo( const QString& tag )
-{
-  if(d == 0)
-    d = new Private(new QFile(filename()));
-
-  if(d->comments == 0)
-    return QString::null;
-
-  for( unsigned int i = 0; i < d->comments->get_num_comments(); i++ ) {
-	QString comment = QString::fromUtf8( d->comments->get_comment(i).get_field(),
-					     d->comments->get_comment(i).get_field_length() );
-	QStringList values = QStringList::split( "=", comment );
-	if( values.count() > 1 )
-	  if( values[0].lower() == tag.lower() )
-	    return values[1];
-  }
-
-  return QString::null;
 }
 
 

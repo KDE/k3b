@@ -125,7 +125,7 @@ K3bMadDecoder::~K3bMadDecoder()
 }
 
 
-QString K3bMadDecoder::metaInfo( const QString& tag )
+QString K3bMadDecoder::metaInfo( MetaDataField f )
 {
 #ifdef HAVE_LIBID3
   // use id3 stuff
@@ -133,22 +133,24 @@ QString K3bMadDecoder::metaInfo( const QString& tag )
     d->id3Tag = new ID3_Tag( QFile::encodeName(filename()) );
   }
 
-
   char* str = 0;
-  if( tag == "Title" )
+
+  switch( f ) {
+  case META_TITLE:
     str = ID3_GetTitle( d->id3Tag );
-  else if( tag == "Artist" )
+    break;
+  case META_ARTIST:
     str = ID3_GetArtist( d->id3Tag );
-  else if( tag == "Album" )
-    str = ID3_GetAlbum( d->id3Tag );
-  else if( tag == "Year" )
-    str = ID3_GetYear( d->id3Tag );
-  else if( tag == "Songwriter" )
+    break;
+  case META_SONGWRITER:
     str = ID3_GetLyricist( d->id3Tag );
-  else if( tag == "Genre" )
-    str = ID3_GetGenre( d->id3Tag );
-  else if( tag == "Comment" )
+    break;
+  case META_COMMENT:
     str = ID3_GetComment( d->id3Tag );
+    break;
+  default:
+    break;
+  }
 
   if( str != 0 ) {
     QString s(str);
@@ -159,7 +161,7 @@ QString K3bMadDecoder::metaInfo( const QString& tag )
   return QString::null;
 
 #else
-  return K3bAudioDecoder::metaInfo( tag );
+  return K3bAudioDecoder::metaInfo( f );
 #endif
 }
 

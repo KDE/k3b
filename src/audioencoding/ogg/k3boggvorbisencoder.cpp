@@ -29,6 +29,7 @@
 #include <qslider.h>
 #include <qlcdnumber.h>
 #include <qcheckbox.h>
+#include <qcstring.h>
 
 #include <vorbis/vorbisenc.h>
 
@@ -154,7 +155,7 @@ bool K3bOggVorbisEncoder::initEncoderInternal( const QString& )
   vorbis_comment_init( d->vorbisComment );
 
   // add the encoder tag (so everybody knows we did it! ;)
-  vorbis_comment_add_tag( d->vorbisComment, "ENCODER", "K3bOggVorbisEncoderPlugin" );
+  vorbis_comment_add_tag( d->vorbisComment, QCString("ENCODER").data(), QCString("K3bOggVorbisEncoderPlugin").data() );
 
   // set up the analysis state and auxiliary encoding storage
   d->vorbisDspState = new vorbis_dsp_state;
@@ -291,8 +292,7 @@ void K3bOggVorbisEncoder::finishEncoderInternal()
 void K3bOggVorbisEncoder::setMetaDataInternal( K3bAudioEncoder::MetaDataField f, const QString& value )
 {
   if( d->vorbisComment ) {
-    char* value_ = qstrdup( value.local8Bit() );
-    char* key = 0;
+    QCString key;
 
     switch( f ) {
     case META_TRACK_TITLE:
@@ -320,7 +320,7 @@ void K3bOggVorbisEncoder::setMetaDataInternal( K3bAudioEncoder::MetaDataField f,
       return;
     }
 
-    vorbis_comment_add_tag( d->vorbisComment, key, value_ );
+    vorbis_comment_add_tag( d->vorbisComment, key.data(), value.utf8().data() );
   }
   else
     kdDebug() << "(K3bOggVorbisEncoder) call to setMetaDataInternal without init." << endl;

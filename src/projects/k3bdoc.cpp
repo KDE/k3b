@@ -436,6 +436,8 @@ void K3bDoc::loadDefaultSettings( KConfig* c )
 
   // Default = 0 (Auto)
   setSpeed( c->readNumEntry( "writing_speed", burner() ? burner()->currentWriteSpeed() : 0 ) );
+
+  setWritingApp( K3b::writingAppFromString( c->readEntry( "writing_app" ) ) );
 }
 
 

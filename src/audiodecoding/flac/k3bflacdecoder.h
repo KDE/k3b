@@ -50,8 +50,6 @@ class K3bFLACDecoder : public K3bAudioDecoder
   K3bFLACDecoder( QObject* parent = 0, const char* name = 0 );
   ~K3bFLACDecoder();
 
-  QString metaInfo( const QString& );
-
   void cleanup();
 
   bool seekInternal( const K3b::Msf& );

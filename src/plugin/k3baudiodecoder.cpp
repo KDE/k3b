@@ -81,6 +81,7 @@ public:
   int monoBufferSize;
 
   QMap<QString, QString> technicalInfoMap;
+  QMap<MetaDataField, QString> metaInfoMap;
 };
 
 
@@ -116,7 +117,12 @@ void K3bAudioDecoder::setFilename( const QString& filename )
 bool K3bAudioDecoder::analyseFile()
 {
   d->technicalInfoMap.clear();
+  d->metaInfoMap.clear();
+  delete d->metaInfo;
+  d->metaInfo = 0;
+
   cleanup();
+
   bool ret = analyseFileInternal( m_length, d->samplerate, d->channels );
   if( ret ) {
     return ( ( d->channels == 1 || d->channels == 2 ) && m_length > 0 );
@@ -255,7 +261,8 @@ int K3bAudioDecoder::decode( char* _data, int maxLen )
 
     // check if we decoded too much
     if( d->alreadyDecoded + read > lengthToDecode ) {
-      kdDebug() << "(K3bAudioDecoder) we decoded too much. Cutting output." << endl;
+      kdDebug() << "(K3bAudioDecoder) we decoded too much. Cutting output by " 
+		<< (read + d->alreadyDecoded - lengthToDecode) << endl;
       read = lengthToDecode - d->alreadyDecoded;
     }
 
@@ -387,18 +394,50 @@ void K3bAudioDecoder::cleanup()
 }
 
 
-QString K3bAudioDecoder::metaInfo( const QString& tag )
+QString K3bAudioDecoder::metaInfo( MetaDataField f )
 {
+  if( d->metaInfoMap.contains( f ) )
+    return d->metaInfoMap[f];
+
+  // fall back to KFileMetaInfo
   if( !d->metaInfo )
     d->metaInfo = new KFileMetaInfo( filename() );
 
   if( d->metaInfo->isValid() ) {
+    QString tag;
+    switch( f ) {
+    case META_TITLE:
+      tag = "Title";
+      break;
+    case META_ARTIST:
+      tag = "Artist";
+      break;
+    case META_SONGWRITER:
+      tag = "Songwriter";
+      break;
+    case META_COMPOSER:
+      tag = "Composer";
+      break;
+    case META_COMMENT:
+      tag = "Comment";
+      break;
+    }
+
     KFileMetaInfoItem item = d->metaInfo->item( tag );
     if( item.isValid() )
       return item.string();
   }
 
   return QString::null;
+}
+
+
+void K3bAudioDecoder::addMetaInfo( MetaDataField f, const QString& value )
+{
+  if( !value.isEmpty() )
+    d->metaInfoMap[f] = value;
+  else
+    kdDebug() << "(K3bAudioDecoder) empty meta data field." << endl;
 }
 
 

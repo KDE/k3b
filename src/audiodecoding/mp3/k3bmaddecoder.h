@@ -53,7 +53,7 @@ class K3bMadDecoder : public K3bAudioDecoder
   K3bMadDecoder( QObject* parent = 0, const char* name = 0 );
   ~K3bMadDecoder();
 
-  QString metaInfo( const QString& );
+  QString metaInfo( MetaDataField );
 
   void cleanup();
 

@@ -130,8 +130,6 @@ class K3bAudioDoc : public K3bDoc
   void slotWorkUrlQueue();
   void slotDetermineTrackStatus();
 
-  void determineAudioMetaInfo( K3bAudioTrack* );
-
   void slotTrackChanged();
 	
  signals:
