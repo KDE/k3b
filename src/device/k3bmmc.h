@@ -21,7 +21,8 @@
 // linux, Linux, and __linux__ are all known to be used. Perhaps
 // the best approach is to #include <qglobal.h> and use Q_OS_LINUX
 // instead.
-#ifdef linux
+#include <qglobal.h>
+#ifdef Q_OS_LINUX
 #include <inttypes.h>
 #include <linux/cdrom.h>
 #include <endian.h>
