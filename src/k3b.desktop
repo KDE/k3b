@@ -6,7 +6,7 @@ Icon=k3b
 DocPath=k3b/index.html
 Comment=CD writing program
 Comment[da]=CD-skriveprogram
-Comment[de]=de]=CD-Schreibprogramm
+Comment[de]=CD-Schreibprogramm
 Comment[el]=Πρόγραμμα εγγραφής CD
 Comment[es]=Programa de escritura de CDs
 Comment[fr]=Programme de gravure de CD
@@ -18,11 +18,13 @@ Comment[pt_BR]=Programa de escrita em CD
 Comment[sk]=Preogram pre zápis CD
 Comment[sv]=Cd-brännprogram
 Comment[xh]=Ubhalo lwe Cd lodweiso Iwenkqubo
+Comment[xx]=xxCD writing programxx
 Comment[zh_CN]=CD 刻录程序
 Comment[zh_TW]=CD 燒錄程式
 Comment[zu]=Uhlelo lwemisebenzi olubhala i-CD
 Terminal=0
 Name=K3b
-Name[de]=de]=K3b
+Name[xx]=xxK3bxx
 MimeType=application/x-k3b
 X-KDE-NativeMimeType=application/x-k3b
+Categories=Qt;KDE;AudioVideo

@@ -10,8 +10,7 @@ k3b_LDADD   = ./cdinfo/libcdinfo.la ./option/liboption.la ./rip/librip.la ./cdco
 
 SUBDIRS = core tools plugin projects cddb cdinfo option rip cdcopy cdclone images dvdcopy videoEncoding pics icons konqi mimetypes tests audiodecoding audioencoding $(K3BSETUP1_BUILD)
 
-apps_DATA = k3b.desktop
-appsdir = $(kde_appsdir)/Multimedia
+xdg_apps_DATA = k3b.desktop
 
 silent_DATA = k3b-iso.desktop k3b-cue.desktop
 silentdir = $(kde_appsdir)/.hidden/
