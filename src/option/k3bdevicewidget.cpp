@@ -337,7 +337,7 @@ void K3bDeviceWidget::updateDeviceListViews()
 
     // WE DO NOT USE THE READ SPEED YET SO IT WOULD JUST DISTRACT THE USER
 
-    PrivateDeviceViewItem1* maxReadSpeedItem = dynamic_cast<PrivateDeviceViewItem1 *>(typeItem);
+    PrivateDeviceViewItem1* maxReadSpeedItem = static_cast<PrivateDeviceViewItem1 *>( typeItem );
 //                                             new PrivateDeviceViewItem1( PrivateDeviceViewItem1::t_maxReadSpeed,
 // 									   dev,
 // 									   devRoot,
