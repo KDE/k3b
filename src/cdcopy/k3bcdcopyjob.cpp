@@ -789,7 +789,7 @@ bool K3bCdCopyJob::writeNextSession()
     //
     // add all the audio tracks
     //
-    d->cdrecordWriter->addArgument( "-audio" );
+    d->cdrecordWriter->addArgument( "-audio" )->addArgument( "-shorttrack" );
 
     for( unsigned int i = 0; i < d->infNames.count(); ++i ) {
       if( m_onTheFly )
