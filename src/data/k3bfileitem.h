@@ -42,15 +42,6 @@ public:
 	K3bFileItem( const QString& fileName, K3bDataDoc* doc, K3bDirItem* dir );
 	~K3bFileItem();
 	
-	K3bFileItem* next() const { return m_next; }
-	K3bFileItem* prev() const { return m_prev; }
-	
-	void setDir( K3bDirItem* );
-	/** Caution: The prev of the former next item is set to 0 */
-	void setNext( K3bFileItem* );
-	/** Caution: The next of the former prev item is set to 0 */
-	void setPrev( K3bFileItem* );
-	
 	bool exists() const;
 	
 	const QString& isoName() const { return m_isoName; }
@@ -60,13 +51,6 @@ public:
 	QString absIsoPath();
 	
 private:
-	K3bDataDoc* doc;
-
-	/** the next item on the same level */
-	K3bFileItem* m_next;
-	/** the previous item on the same level */
-	K3bFileItem* m_prev;
-	
 	QString m_isoName;
 	QString m_joiletName;
 	QString m_rockRidgeName;

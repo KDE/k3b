@@ -20,21 +20,26 @@
 
 
 class K3bDirItem;
+class K3bDataDoc;
 
 /**
   *@author Sebastian Trueg
   */
 
-class K3bDataItem {
+class K3bDataItem
+{
 public: 
-	K3bDataItem( K3bDirItem* parent = 0 );
-	~K3bDataItem();
+	K3bDataItem( K3bDataDoc* doc, K3bDirItem* parent = 0 );
+	virtual ~K3bDataItem();
 	
 	K3bDirItem* parent() { return m_parentDir; }
-	void setParentDir( K3bDirItem* dir ) { m_parentDir = dir; }
+//	void setParentDir( K3bDirItem* dir ) { m_parentDir = dir; }
+	
+	K3bDataDoc* doc() const { return m_doc; }
 	
 private:
 	K3bDirItem* m_parentDir;
+	K3bDataDoc* m_doc;
 };
 
 #endif

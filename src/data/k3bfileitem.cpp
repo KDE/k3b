@@ -26,13 +26,9 @@
 
 
 K3bFileItem::K3bFileItem( const QString& fileName, K3bDataDoc* doc, K3bDirItem* dir )
-	: KFileItem( -1, -1, fileName ), K3bDataItem( dir )
+	: KFileItem( -1, -1, fileName ), K3bDataItem( doc, dir )
 {
-	this->doc = doc;
-	m_next = 0;
-	m_prev = 0;
-	
-//	m_isoName = doc->isoName( this );
+//	m_isoName = doc()->isoName( this );
 //	m_joiletName = m_rockRidgeName = m_file.name();
 }
 

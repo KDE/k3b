@@ -16,12 +16,121 @@
  ***************************************************************************/
 
 #include "k3bdatadoc.h"
+#include "k3bfileitem.h"
+#include "k3bdiritem.h"
+#include "k3bdataview.h"
+
+#include <qdir.h>
+#include <qstring.h>
+#include <qstringlist.h>
+#include <qfileinfo.h>
 
 K3bDataDoc::K3bDataDoc( QObject* parent )
 	: K3bDoc( parent )
 {
+	m_docType = DATA;
+	m_root = 0;
+	
+//	connect( this, SIGNAL(signalAddDirectory(const QString&, K3bDirItem*)),
+//					this, SLOT(slotAddDirectory( const QString&, K3bDirItem*)) );
 }
 
 K3bDataDoc::~K3bDataDoc()
 {
+	delete m_root;	
+}
+
+bool K3bDataDoc::newDocument()
+{
+	if( m_root )
+		delete m_root;
+		
+	m_root = new K3bDirItem( "/", this, 0 );
+	
+	return K3bDoc::newDocument();
+}
+
+
+K3bView* K3bDataDoc::newView( QWidget* parent )
+{
+	return new K3bDataView( this, parent );
+}
+
+
+void K3bDataDoc::addView(K3bView* view)
+{
+	K3bDataView* v = (K3bDataView*)view;
+	connect( v, SIGNAL(dropped(const QStringList&, K3bDirItem*)), this, SLOT(slotAddURLs(const QStringList&, K3bDirItem*)) );
+	connect( this, SIGNAL(newDir(K3bDirItem*)), v, SLOT(slotAddDir(K3bDirItem*)) );
+	connect( this, SIGNAL(newFile(K3bFileItem*)), v, SLOT(slotAddFile(K3bFileItem*)) );
+	
+	K3bDoc::addView( view );
+}
+
+void K3bDataDoc::slotAddURLs( const QStringList& urls, K3bDirItem* dirItem )
+{
+	if( !dirItem )
+		dirItem = m_root;
+
+	qDebug( "(K3bDataDoc) adding urls to %s", dirItem->name().latin1() );
+				
+	for( QStringList::ConstIterator _it = urls.begin(); _it != urls.end(); ++_it ) {
+		// test if url directory or file
+		if( (*_it).right(1) == "/" ) {
+			qDebug("       -dir-");
+			KURL k( *_it );
+			slotAddDirectory( k.path(), dirItem );
+		}
+		else {
+			qDebug("       -file-");
+			emit newFile( new K3bFileItem( *_it, this, dirItem ) );
+		}
+	}
+}
+
+
+void K3bDataDoc::slotAddDirectory( const QString& url, K3bDirItem* parent )
+{
+	qDebug( "(K3bDataDoc) slotAddDirectory: %s", url.latin1() );
+
+	QFileInfo _info( url );
+	if( !_info.isDir() ) {
+		qDebug( "(K3bDataDoc) tried to add url %s as directory which is no directory!", url.latin1() );
+		return;
+	}
+		
+	K3bDirItem* _newDirItem = new K3bDirItem( QDir(url).dirName(), this, parent );
+	emit newDir( _newDirItem );
+	
+	QDir _d( url );
+	QStringList _dlist = _d.entryList();
+	_dlist.remove(".");
+	_dlist.remove("..");
+	
+	for( QStringList::Iterator _it = _dlist.begin(); _it != _dlist.end(); ++_it ) {
+		if( QFileInfo( _d.absPath() + "/" + *_it ).isDir() )
+			slotAddDirectory(  _d.absPath() + "/" + *_it, _newDirItem );
+		else
+			emit newFile( new K3bFileItem( _d.absPath() + "/" + *_it, this, _newDirItem ) );
+	}
+}
+
+
+int K3bDataDoc::size()
+{
+	return 650;
+}
+
+
+bool K3bDataDoc::loadDocumentData( QFile& )
+{
+	// TODO: so what? load the shit! ;-)
+	return true;
+}
+
+
+bool K3bDataDoc::saveDocumentData( QFile& )
+{
+	// TODO: some saving work...
+	return true;
 }

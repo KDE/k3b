@@ -19,10 +19,17 @@
 #include "k3bdiritem.h"
 
 
-K3bDataItem::K3bDataItem( K3bDirItem* parent )
+K3bDataItem::K3bDataItem( K3bDataDoc* doc, K3bDirItem* parent )
 {
 	m_parentDir = parent;
+	m_doc = doc;
+	
+	// add automagically like a qlistviewitem
+	if( parent )
+		parent->addDataItem( this );
 }
 
-K3bDataItem::~K3bDataItem(){
+K3bDataItem::~K3bDataItem()
+{
+	// TODO: inform doc so that it can emit a signal (not nessessary if only one view)
 }

@@ -18,13 +18,36 @@
 #include "k3bdiritem.h"
 
 #include <qstring.h>
+#include <qlist.h>
 
-
-K3bDirItem::K3bDirItem(const QString& name, K3bDirItem* parentDir)
-	: K3bDataItem( parentDir ), m_name( name )
+K3bDirItem::K3bDirItem(const QString& name, K3bDataDoc* doc, K3bDirItem* parentDir)
+	: K3bDataItem( doc, parentDir ), m_name( name )
 {
+	m_children = new QList<K3bDataItem>();
 }
 
 K3bDirItem::~K3bDirItem()
 {
+	// delete all children
+	m_children->setAutoDelete( true );
+	delete m_children;
+}
+
+void K3bDirItem::addDataItem( K3bDataItem* item )
+{
+	m_children->append( item );
+}
+
+K3bDataItem* K3bDirItem::takeDataItem( K3bDataItem* item )
+{
+	int x = m_children->find( item );
+	if( x > -1 )
+		return m_children->take( x );
+	else
+		return 0;
+}
+
+K3bDataItem* K3bDirItem::takeDataItem( int index )
+{
+	return m_children->take( index );
 }
