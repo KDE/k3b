@@ -65,6 +65,7 @@ class K3bCddaCopy : public K3bJob
   void setParanoiaMode( int mode ) { m_audioRip->setParanoiaMode(mode); }
   void setMaxRetries( int r ) { m_audioRip->setMaxRetries(r); }
   void setNeverSkip( bool b ) { m_audioRip->setNeverSkip(b); }
+  void setSingleFile( bool b ) { m_singleFile = b; }
 
   void start();
   void cancel();
@@ -97,6 +98,7 @@ class K3bCddaCopy : public K3bJob
 #endif
 
   bool m_bUsePattern;
+  bool m_singleFile;
 
   K3bDiskInfoDetector* m_diskInfoDetector;
 

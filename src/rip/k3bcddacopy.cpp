@@ -43,7 +43,8 @@
 
 K3bCddaCopy::K3bCddaCopy( QObject* parent ) 
   : K3bJob( parent ),
-    m_bUsePattern( true )
+    m_bUsePattern( true ),
+    m_singleFile(false)
 {
   m_device = 0;
   
@@ -127,8 +128,9 @@ bool K3bCddaCopy::startRip( unsigned int i )
 {
   infoMessage( i18n("Reading track %1").arg( m_tracksToCopy[i] ), PROCESS );
 
-  infoMessage( i18n("to ") + 
-	       KIO::decodeFileName( m_list[i] ), PROCESS );
+  // if we are writing a single file we only need the first filename
+  if( !m_singleFile || i == 0 )
+    infoMessage( i18n("to ") + KIO::decodeFileName( m_list[i] ), PROCESS );
 
   QString dir = m_list[i].left( m_list[i].findRev("/") );
   if( !createDirectory( dir ) ) {
@@ -139,7 +141,11 @@ bool K3bCddaCopy::startRip( unsigned int i )
   // open a file to write to
   // create wave file
   m_currentWrittenFile = m_list[i];
-  bool isOpen = m_waveFileWriter.open( m_list[i] );
+
+  bool isOpen = true;
+  // if we write a single file we only need to open the writer once
+  if( !m_singleFile || i == 0 )
+    isOpen = m_waveFileWriter.open( m_list[i] );
   
   if( !isOpen ){
     infoMessage( i18n("Unable to rip to: %1").arg(m_list[i]), ERROR );
@@ -186,7 +192,8 @@ void K3bCddaCopy::cancel( ){
 
 void K3bCddaCopy::slotTrackFinished( bool success )
 {
-  m_waveFileWriter.close();
+  if( !m_singleFile || !success )
+    m_waveFileWriter.close();
 
   if( success ) {
     ++m_currentTrackIndex;
@@ -196,6 +203,10 @@ void K3bCddaCopy::slotTrackFinished( bool success )
 	emit finished( false );
     } else {
       emit infoMessage( i18n("Successfully read all tracks"), STATUS );
+      // close the single file
+      if( m_singleFile )
+	m_waveFileWriter.close();
+
       emit finished( true );
     }
   }

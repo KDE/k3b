@@ -149,12 +149,15 @@ void K3bRipperWidget::setupGui()
 
   m_checkNeverSkip = new QCheckBox( i18n("Never skip"), advancedPage );
 
+  m_checkSingleFile = new QCheckBox( i18n("Create single file"), advancedPage );
+
   advancedPageLayout->addWidget( new QLabel( i18n("Paranoia mode:"), advancedPage ), 0, 0 );
   advancedPageLayout->addWidget( m_comboParanoiaMode, 0, 1 );
   advancedPageLayout->addWidget( new QLabel( i18n("Read retries:"), advancedPage ), 1, 0 );
   advancedPageLayout->addWidget( m_spinRetries, 1, 1 );
   advancedPageLayout->addMultiCellWidget( m_checkNeverSkip, 2, 2, 0, 1 );
-  advancedPageLayout->setRowStretch( 3, 1 );
+  advancedPageLayout->addMultiCellWidget( m_checkSingleFile, 3, 3, 0, 1 );
+  advancedPageLayout->setRowStretch( 4, 1 );
   advancedPageLayout->setColStretch( 2, 1 );
 
 
@@ -185,6 +188,12 @@ void K3bRipperWidget::setupContextHelp()
 					  "an audio sector if it was not readable (see retries)."
 					  "<p>K3b will stop the ripping process if a read error "
 					  "occurs.") );
+  QToolTip::add( m_checkSingleFile, i18n("Rip all tracks to a single file") );
+  QWhatsThis::add( m_checkSingleFile, i18n("<p>If this option is checked K3b will create only one "
+					   "audio file no matter how many tracks are ripped. This "
+					   "file will contain all tracks one after the other."
+					   "<p>This might be useful to rip a live album or a radio play."
+					   "<p><b>Caution:</b> The file will have the name of the first track.") ); 
 }
 
 
@@ -245,6 +254,7 @@ void K3bRipperWidget::slotOk()
   job->setParanoiaMode( m_comboParanoiaMode->currentText().toInt() );
   job->setMaxRetries( m_spinRetries->value() );
   job->setNeverSkip( m_checkNeverSkip->isChecked() );
+  job->setSingleFile( m_checkSingleFile->isChecked() );
 
   K3bBurnProgressDialog ripDialog( this, "Ripping" );
   ripDialog.setJob( job );
