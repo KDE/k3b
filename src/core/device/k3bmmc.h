@@ -28,6 +28,11 @@
 
 /* Fix definitions for 2.5 kernels */
 #include <linux/version.h>
+
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,4,21) 
+typedef unsigned long long __u64; 
+#endif
+
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,5,50)
 typedef unsigned long long __u64;
 typedef unsigned char u8;
