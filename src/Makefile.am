@@ -10,7 +10,11 @@ k3b_LDADD   = ./cdinfo/libcdinfo.la ./option/liboption.la ./rip/librip.la ./cdco
 
 SUBDIRS = core tools plugin projects cddb cdinfo option rip cdcopy cdclone images dvdcopy videoEncoding pics icons konqi mimetypes tests audiodecoding audioencoding sounds $(K3BSETUP1_BUILD)
 
-xdg_apps_DATA = k3b.desktop
+# TODO: enable when we go KDE 3.2
+#xdg_apps_DATA = k3b.desktop
+# remove the following then
+appsdir = $(kde_appsdir)/Multimedia
+apps_DATA = k3b.desktop
 
 silent_DATA = k3b-iso.desktop k3b-cue.desktop
 silentdir = $(kde_appsdir)/.hidden/
