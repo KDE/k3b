@@ -259,7 +259,8 @@ void K3bIsoImageWritingDialog::slotStartClicked()
 
   m_job->setImagePath( m_editImagePath->url() );
 
-  m_job->setWritingApp( m_writerSelectionWidget->writingApp() );
+  // HACK (needed since if the medium is forced the stupid K3bIso9660ImageWritingJob defaults to cd writing)
+  m_job->setWritingApp( d->dvd ? K3b::GROWISOFS : m_writerSelectionWidget->writingApp() );
 
   // create a progresswidget
   K3bBurnProgressDialog dlg( kapp->mainWidget(), "burnProgress", true );
