@@ -4,7 +4,7 @@
 
 #include <qwidget.h>
 #include <qlist.h>
-#include <klistview.h>
+
 
 class QComboBox;
 class QLabel;
@@ -42,34 +42,15 @@ Q_OBJECT
 
  private:
   /** list to save changes to the devices before applying */
-  class PrivateTempDevice {
-  public:
-    PrivateTempDevice( K3bDevice* d );
+  class PrivateTempDevice;
+  class PrivateDeviceViewItem;
 
-    K3bDevice* device;
-    int maxReadSpeed;
-    int maxWriteSpeed;
-    QString cdrdaoDriver;
-    bool cdTextCapable;
-  };
-
-  QList<K3bDeviceOptionTab::PrivateTempDevice> m_tempReader;
-  QList<K3bDeviceOptionTab::PrivateTempDevice> m_tempWriter;
-  K3bDeviceOptionTab::PrivateTempDevice* m_currentTempDevice;
-
-  class PrivateDeviceViewItem : public KListViewItem {
-  public:
-    PrivateDeviceViewItem( K3bDeviceOptionTab::PrivateTempDevice* dev, KListView* view )
-      : KListViewItem( view ) { device = dev; }
-    PrivateDeviceViewItem( K3bDeviceOptionTab::PrivateTempDevice* dev, QListViewItem* item )
-      : KListViewItem( item ) { device = dev; }
-
-    K3bDeviceOptionTab::PrivateTempDevice* device;
-  };
-
+  QList<PrivateTempDevice> m_tempReader;
+  QList<PrivateTempDevice> m_tempWriter;
+  PrivateTempDevice* m_currentTempDevice;
 
   void updateDeviceListViews();
-  void updateDeviceInfoBox( K3bDeviceOptionTab::PrivateTempDevice* dev = 0 );
+  void updateDeviceInfoBox( PrivateTempDevice* dev = 0 );
   void showWriterSpecificProps( bool );
 
   QGroupBox*    m_groupDeviceInfo;

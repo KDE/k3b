@@ -13,6 +13,7 @@
 #include <ksimpleconfig.h>
 #include <kiconloader.h>
 #include <kstddirs.h>
+#include <klistview.h>
 
 #include <qcombobox.h>
 #include <qcheckbox.h>
@@ -26,6 +27,32 @@
 #include <qframe.h>
 #include <qheader.h>
 #include <qstring.h>
+
+
+
+class K3bDeviceOptionTab::PrivateTempDevice 
+{
+public:
+  PrivateTempDevice( K3bDevice* d );
+  
+  K3bDevice* device;
+  int maxReadSpeed;
+  int maxWriteSpeed;
+  QString cdrdaoDriver;
+  bool cdTextCapable;
+};
+
+
+class K3bDeviceOptionTab::PrivateDeviceViewItem : public KListViewItem 
+{
+public:
+  PrivateDeviceViewItem( PrivateTempDevice* dev, KListView* view )
+    : KListViewItem( view ) { device = dev; }
+  PrivateDeviceViewItem( PrivateTempDevice* dev, QListViewItem* item )
+    : KListViewItem( item ) { device = dev; }
+  
+  PrivateTempDevice* device;
+};
 
 
 K3bDeviceOptionTab::PrivateTempDevice::PrivateTempDevice( K3bDevice* d )
