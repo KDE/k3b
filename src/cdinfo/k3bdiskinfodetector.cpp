@@ -12,6 +12,10 @@
 #include <qtimer.h>
 #include <qfile.h>
 
+extern "C" {
+#include <cdda_interface.h>
+}
+
 
 
 K3bDiskInfoDetector::K3bDiskInfoDetector( QObject* parent )
@@ -46,15 +50,9 @@ void K3bDiskInfoDetector::detect( K3bDevice* device )
   m_info.device = m_device;
 
 
-  if( device->interfaceType() == K3bDevice::SCSI ) {
-    // since fetchTocInfo could already emit the diskInfoReady signal
-    // and detect needs to return before this happens use the timer
-    QTimer::singleShot( 0, this, SLOT(fetchTocInfo()) );
-  }
-  else {
-    // IDE device
-    QTimer::singleShot( 0, this, SLOT(fetchIdeInformation()) );
-  }
+  // since fetchTocInfo could already emit the diskInfoReady signal
+  // and detect needs to return before this happens use the timer
+  QTimer::singleShot( 0, this, SLOT(fetchTocInfo()) );
 }
 
 
@@ -219,11 +217,10 @@ void K3bDiskInfoDetector::fetchTocInfo()
   m_process->clearArguments();
   m_process->disconnect();
 
-  if( !k3bMain()->externalBinManager()->foundBin( "cdrecord" ) ) {
-    kdDebug() << "(K3bAudioJob) could not find cdrecord executable.. not toc info will be available" << endl;
-    m_info.valid = false;
-    if( !m_bCanceled )
-      emit diskInfoReady( m_info );
+  if( m_device->interfaceType() == K3bDevice::IDE || 
+      !k3bMain()->externalBinManager()->foundBin( "cdrecord" ) ) {
+    kdDebug() << "(K3bAudioJob) using cdparanoia" << endl;
+    fetchIdeInformation();
   }
   else {
     *m_process << k3bMain()->externalBinManager()->binPath( "cdrecord" );
@@ -277,7 +274,6 @@ void K3bDiskInfoDetector::slotTocInfoFinished()
     QStringList lines = QStringList::split( "\n", m_collectedStdout );
 
     K3bTrack lastTrack;
-    int audioTracks = 0, dataTracks = 0;
 
     for( QStringList::Iterator it = lines.begin(); it != lines.end(); ++it ) {
 
@@ -306,12 +302,11 @@ void K3bDiskInfoDetector::slotTocInfoFinished()
 	      // all values have been determined
 	      // since we need the start of the next track to determine the length we save the values
 	      // in lastTrack and append the current lastTrack to the toc
+
+	      // TODO: fix endSector of last audio-track in multisession cds (-11400)
+
 	      if( !lastTrack.isEmpty() ) {
 		m_info.toc.append( K3bTrack( lastTrack.firstSector(), startSec-1, lastTrack.type(), lastTrack.mode() ) );
-		if( lastTrack.type() == K3bTrack::AUDIO )
-		  audioTracks++;
-		else
-		  dataTracks++;
 	      }
 
 	      switch( control ) {
@@ -356,26 +351,8 @@ void K3bDiskInfoDetector::slotTocInfoFinished()
     }
 
     // now determine the toc type
-    if( audioTracks > 0 ) {
-      if( dataTracks > 0 )
-	m_info.tocType = K3bDiskInfo::MIXED;
-      else
-	m_info.tocType = K3bDiskInfo::AUDIO;
-    }
-    else if( dataTracks > 0 ) {
-      m_info.tocType = K3bDiskInfo::DATA;
-      fetchIsoInfo();
-    }
+    determineTocType();
 
-    if( audioTracks + dataTracks > 0 ) {
-      m_info.empty = false;
-      m_info.noDisk = false;
-
-      calculateDiscId();
-    }
-    else {
-      m_info.empty = true;
-    }
   
     // atip is only readable on cd-writers
     if( m_device->burner() ) {
@@ -468,11 +445,82 @@ void K3bDiskInfoDetector::fetchIdeInformation()
   if( m_bCanceled )
     return;
 
-  // TODO: use cdparanoia-lib to retrieve toc
+  // use cdparanoia-lib to retrieve toc
 
-  m_info.valid = false;
-  if( !m_bCanceled )
+  struct cdrom_drive* drive = m_device->open();
+  if( !drive ) {
+    kdDebug() << "(K3bDiskInfoDetector) Could not open drive." << endl;
+    // perhaps this is only the case if there is no disk in drive ??
+    m_info.valid = false;
     emit diskInfoReady( m_info );
+    return;
+  }
+  
+  m_info.noDisk = false;
+  m_info.empty = ( drive->tracks == 0 );
+
+
+  // populate the toc
+  for( int i = 1; i <= drive->tracks; ++i ) {
+    long startSec = cdda_track_firstsector( drive, i );
+    long endSec = cdda_track_lastsector( drive, i );
+    int type = ( cdda_track_audiop( drive, i ) ? K3bTrack::AUDIO : K3bTrack::DATA );
+    int mode = K3bTrack::UNKNOWN;   // no idea
+
+    // due to an error in cdda_lib we need to fix the toc for multisession cds
+    // I hope this will do it.
+    if( cdda_track_audiop( drive, i-1 ) && !cdda_track_audiop( drive, i ) )
+      startSec += 11400;
+
+    m_info.toc.append( K3bTrack( startSec, endSec, type, mode ) );
+  }
+
+  m_device->close();
+
+  determineTocType();
+
+
+  // atip is only readable on cd-writers
+  if( m_device->burner() ) {
+    fetchDiskInfo();
+  }
+  else {
+    testForDvd();
+  }
+}
+
+
+void K3bDiskInfoDetector::determineTocType()
+{
+  int audioTracks = 0, dataTracks = 0;
+
+  for( K3bToc::const_iterator it = m_info.toc.begin(); it != m_info.toc.end(); ++it ) {
+    if( (*it).type() == K3bTrack::AUDIO )
+      audioTracks++;
+    else
+      dataTracks++;
+  }
+
+  if( audioTracks > 0 ) {
+    if( dataTracks > 0 )
+      m_info.tocType = K3bDiskInfo::MIXED;
+    else
+      m_info.tocType = K3bDiskInfo::AUDIO;
+  }
+  else if( dataTracks > 0 ) {
+    m_info.tocType = K3bDiskInfo::DATA;
+    fetchIsoInfo();
+  }
+
+  if( audioTracks + dataTracks > 0 ) {
+    m_info.empty = false;
+    m_info.noDisk = false;
+    
+    calculateDiscId();
+  }
+  else {
+    m_info.empty = true;
+  }
 }
 
 

@@ -43,6 +43,7 @@ class K3bDiskInfoDetector : public QObject
   void fetchIsoInfo();
   void fetchIdeInformation();
   void calculateDiscId();
+  void determineTocType();
 
  private:
   K3bDevice* m_device;
