@@ -31,6 +31,7 @@
 #include <klocale.h>
 #include <krestrictedline.h>
 #include <kcombobox.h>
+#include <kdebug.h>
 
 K3bDivxAVExtend::K3bDivxAVExtend( K3bDivxCodecData *data, QWidget *parent, const char *name ) : QGroupBox( parent,name) {
      m_data =  data;
@@ -130,10 +131,11 @@ also has YUV colorspace and it is twice fast as RGB. You only need RGB colorspac
 }
 
 void K3bDivxAVExtend::updateView( ){
-    m_comboLanguage->clear();
-    m_comboLanguage->insertStringList( m_data->getAudioLanguages() );
+    //kdDebug() << "(K3bDivxAVExtend::updateView) Readd languages." << endl;
+    //m_comboLanguage->clear();
+    //m_comboLanguage->insertStringList( m_data->getAudioLanguages() );
 }
-void K3bDivxAVExtend::init(){
+void K3bDivxAVExtend::initView(){
      m_editKeyframes->setText( m_data->getKeyframes() );
      //m_editAudioGain->setText( m_data->getAudioGain() );
      m_data->setCrispness( m_sliderCrispness->value() );
@@ -142,6 +144,8 @@ void K3bDivxAVExtend::init(){
      m_checkResample->setChecked( true );
      m_data->setAudioResample( 2 );
      m_data->setDeinterlace( m_comboDeinterlace->currentItem() );
+     m_comboLanguage->clear();
+     m_comboLanguage->insertStringList( m_data->getAudioLanguages() );
      m_data->setAudioLanguage( m_comboLanguage->currentItem() );
 }
 
@@ -173,6 +177,7 @@ void K3bDivxAVExtend::slotResample( int state ){
 
 void K3bDivxAVExtend::slotAudioLanguage( int index ){
     m_data->setAudioLanguage( index );
+    emit dataChanged();
 }
 
 #include "k3bdivxavextend.moc"

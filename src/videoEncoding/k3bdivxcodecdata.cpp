@@ -37,8 +37,8 @@ K3bDivxCodecData::K3bDivxCodecData(){
     m_anamorph = false;
     m_mp3CodecMode = 0; // cbr
     m_audioLanguage=0;
-    m_listAudioAc3Bitrate = 0;
     m_useNormalize = true;
+    m_shutdown = false;
 }
 
 K3bDivxCodecData::~K3bDivxCodecData(){
@@ -103,7 +103,6 @@ void K3bDivxCodecData::setWidth( const QString& w){
 void K3bDivxCodecData::setHeight( const QString& h){
      m_height = h;
      m_iHeight = h.toInt();
-    kdDebug() << "Height " << m_iHeight << endl;
 }
 void K3bDivxCodecData::addLanguage( const QString& l){
     m_listAudio << l;
@@ -112,6 +111,10 @@ void K3bDivxCodecData::addLanguage( const QString& l){
 void K3bDivxCodecData::addLanguageAc3Bitrate ( const QString& l){
     m_listAudioAc3Bitrate << l;
     m_useAc3 = true;
+}
+
+const QString& K3bDivxCodecData::getAudioLanguageAc3Bitrate( int i ) const{
+   return m_listAudioAc3Bitrate[ i ]; 
 }
 
 QString K3bDivxCodecData::getSize(){
@@ -178,7 +181,6 @@ void K3bDivxCodecData::resetAudioLanguages(){
     m_listAudio.clear();
     m_audioLanguage=0;
     m_listAudioAc3Bitrate.clear();
-    m_listAudioAc3Bitrate = 0;
     m_useAc3 = false;
 }
 

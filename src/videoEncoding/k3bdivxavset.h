@@ -27,6 +27,8 @@ class QHButtonGroup;
 class QLabel;
 class QString;
 class K3bDivxCodecData;
+class K3bDivXTcprobeAc3;
+class QSpinBox;
 /**
   *@author Sebastian Trueg
   */
@@ -38,14 +40,16 @@ public:
     ~K3bDivxAVSet();
     void updateView();
     void init();
-signals:
-    void dataChanged();
+
+public slots:
+    void slotViewAc3Bitrate();
+
 private:
     KComboBox *m_comboCd;
     KComboBox *m_comboMp3;
     KComboBox *m_comboCodec;
     QLabel *m_vBitrate;
-    QString m_vBitrateDesc;
+    QLabel *m_aAC3Bitrate;
     QRadioButton *m_buttonOnePass;
     QRadioButton *m_buttonTwoPass;
     QRadioButton *m_buttonCbr;
@@ -53,14 +57,21 @@ private:
     QCheckBox *m_checkAc3Passthrough;
     QHButtonGroup *m_mp3modeGroup;
     K3bDivxCodecData *m_data;
+    K3bDivXTcprobeAc3 *m_parser;
+    QSpinBox *m_vBitrateCustom;
     int m_lengthSecs;
+    bool m_fixedCDSize;
     void setupGui();
+
 private slots:
     void slotCalcBitrate();
     void slotCodecChanged( int );
     void slotModeChanged( int );
     void slotMp3ModeChanged( int );
     void slotAc3Passthrough( int );
+    void slotAc3Scaned();
+    void slotCustomBitrate( int );
+    void slotCDSize();
 };
 
 #endif

@@ -38,7 +38,11 @@ public:
     K3bDivxAVExtend( K3bDivxCodecData *data, QWidget *parent=0, const char *name=0);
     ~K3bDivxAVExtend();
     void updateView();
-    void init();
+    void initView();
+
+signals:
+    void dataChanged();
+    
 private:
     QCheckBox *m_checkResample;
     KRestrictedLine *m_editKeyframes;

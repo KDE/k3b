@@ -24,6 +24,7 @@
 class KShellProcess;
 class KProcess;
 class K3bDivxCodecData;
+class K3bDivxHelper;
 
 /**
   *@author Sebastian Trueg
@@ -36,14 +37,17 @@ public:
     K3bDivXTcprobeAc3();
     ~K3bDivXTcprobeAc3();
     void parseAc3Bitrate( K3bDivxCodecData*);
+signals:
+    void finished();
 private:
     KShellProcess *m_process;
     K3bDivxCodecData *m_data;
+    K3bDivxHelper *m_util;
     QString m_buffer;
 private slots:
     void slotParseOutput( KProcess*, char *buffer, int length );
-    void slotParseError( KProcess*, char *buffer, int length );
     void slotParsingExited( KProcess* );
+    void slotInternalParsing();
 };
 
 #endif

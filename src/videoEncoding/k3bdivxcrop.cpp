@@ -282,7 +282,7 @@ void K3bDivxCrop::slotPreviewChanged( int v ){
     slotAutoCropMode( m_autoCrop->state() );  // update auto cropping
 }
 
-void K3bDivxCrop::slotParseProcess( KProcess* p, char *data, int len){
+void K3bDivxCrop::slotParseProcess( KProcess*, char *data, int len){
     QString tmp = QString::fromLocal8Bit( data, len );
     kdDebug() << tmp << endl;
 }

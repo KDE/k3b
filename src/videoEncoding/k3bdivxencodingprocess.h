@@ -46,17 +46,25 @@ private slots:
     void slotStartAudioProcessing( KIO::Job *job );
     void slotStartEncoding();
     void slotShutdown( bool );
+    void slotFinishedCheckVobDirectory( );
+    void slotFinishedRestoreBackup();
     //void slotPercent( unsigned int );
 private:
     K3bDivxCodecData *m_data;
     KShellProcess *m_process;
     QString m_debugBuffer;
+    QStringList m_movefiles;
+ 
     int m_speedFlag;
     int m_speedTrigger;
     int m_pass;
     int m_speedInitialFlag;
+    bool m_interalInterrupt; // true if error detected starting encoding process
     void copyIfos();
     void deleteIfos();
+    bool shutdown();
+    void checkVobDirectory();
+    void restoreBackupFiles();
 };
 
 #endif

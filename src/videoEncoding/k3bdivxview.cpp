@@ -114,8 +114,6 @@ int K3bDivxView::checkSettings(){
 void K3bDivxView::slotEnableSizeTab(){
     kdDebug() << "(K3bDivxView::slotEnableSizeTab)" << endl;
     m_sizeTab->setEnabled( true );
-    //m_sizeTab->resetView();
-    //m_sizeTab->updateView();
     m_advancedTab->slotUpdateView();
     enableButton( KDialogBase::User1, true );
 }

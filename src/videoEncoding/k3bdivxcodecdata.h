@@ -15,8 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef K3BDVDCODECDATA_H
-#define K3BDVDCODECDATA_H
+#ifndef K3BDIVXCODECDATA_H
+#define K3BDIVXCODECDATA_H
 
 #include <qstring.h>
 #include <qstringlist.h>
@@ -63,7 +63,7 @@ public:
     QString getFrames(){ return m_frames; }
     long getFramesValue();
     QStringList getAudioLanguages(){ return m_listAudio; };
-    QStringList getAudioLanguagesAc3Bitrate(){ return m_listAudioAc3Bitrate; };
+    const QString& getAudioLanguageAc3Bitrate( int i ) const;
     QString getSize();
     QString getAspectRatio(){ return m_aspectRatio;};
     float getAspectRatioValue(){ return m_fAspectRatio; }
@@ -114,10 +114,13 @@ public:
     void setCrispness( int value );
     QString getCrispness() { return m_crispness; }
     QString getParaAudioGain();
+    int getAudioLanguage() { return m_audioLanguage; };
+
     // ac3 settings
     void setAc3( int );
     QString getParaAc3() { return m_ac3; }
     bool isAc3Set(){ return m_useAc3; }
+
     // advanced/debug stuff
     void setNormalize( bool b ){ m_useNormalize = b; }
     bool isNormalize() { return m_useNormalize; }

@@ -53,7 +53,7 @@ The shutdown command must be setuid to use it as normal user.") );
     m_lineTwoPassLog = new KLineEdit( m_data->getProjectDir()+"/tmp/divx4.log", this);
 
     // TODO
-    m_checkShutdown->setEnabled( false );
+    //m_checkShutdown->setEnabled( true );
     m_checkOnlyFirstPass->setEnabled( false );
     m_checkOnlySecondPass->setEnabled( false );
     m_lineTwoPassLog->setEnabled( false );

@@ -36,6 +36,7 @@ public:
     ~K3bDivxBaseTab();
 public slots:
     void slotUpdateView(  );
+    void slotInitView(  );
 signals:
     void projectLoaded();
 private:

@@ -30,8 +30,8 @@
 #include <kdebug.h>
 
 K3bDivxBaseTab::K3bDivxBaseTab( K3bDivxCodecData *data, QWidget *parent, const char *name ) : QWidget(parent,name) {
-     m_data = data;
-     setupGui();
+    m_data = data;
+    setupGui();
 }
 
 K3bDivxBaseTab::~K3bDivxBaseTab(){
@@ -57,20 +57,25 @@ void K3bDivxBaseTab::setupGui(){
     mainLayout->setRowStretch( 2, 20 );
 
     m_avsettings->init();
-    m_avextended->init();
+    //m_avextended->initView();
     m_avsettings->setDisabled( true );
     m_avextended->setDisabled( true );
-    connect( m_avsettings, SIGNAL( dataChanged( ) ), this, SLOT( slotUpdateView(  ) ));
-    connect( m_directories, SIGNAL( dataChanged( ) ), this, SLOT( slotUpdateView(  ) ));
+    connect( m_directories, SIGNAL( dataChanged( ) ), this, SLOT( slotInitView(  ) ));
+    connect( m_avextended, SIGNAL( dataChanged( ) ), this, SLOT( slotUpdateView(  ) ));
 }
 
 void K3bDivxBaseTab::slotUpdateView(){
+    m_avsettings->updateView(  );
+}   
+
+void K3bDivxBaseTab::slotInitView(){
+    kdDebug() << "(K3bDivxBaseTab::slotUpdateView)" << endl;
     if( m_data->getProjectDir().length() > 1 ){
         m_avsettings->setDisabled( false );
         m_avextended->setDisabled( false );
         m_info->updateData( m_data );
         m_avsettings->updateView(  );
-        m_avextended->updateView( );
+        m_avextended->initView( );
     }
     if( (m_data->getAviFile().length() > 1) && (m_data->getProjectDir().length() > 1) ){
         emit projectLoaded();
