@@ -39,11 +39,11 @@
 
 
 K3bDeviceBranch::K3bDeviceBranch( KFileTreeView* view, K3bDevice* dev, KFileTreeViewItem* item )
-  : KFileTreeBranch( view, KURL(dev->mountPoint()), i18n("%1 - %2").arg(dev->vendor()).arg(dev->description()),
+  : KFileTreeBranch( view, KURL(dev->mountPoint()), QString("%1 - %2").arg(dev->vendor()).arg(dev->description()),
 		     ( dev->burner()
 		       ? SmallIcon("cdwriter_unmount")
 		       : SmallIcon("cdrom_unmount") ),
-		     false, item ), m_device( dev ) 
+		     false, item ), m_device( dev )
 {
   root()->setExpandable(false);
 }
@@ -298,7 +298,7 @@ KURL K3bFileTreeView::selectedUrl() const
 
 void K3bFileTreeView::setSelectedDevice(K3bDevice* dev)
 {
-  for(QMap<KFileTreeBranch*, K3bDevice*>::iterator it = m_deviceBranchesMap.begin(); 
+  for(QMap<KFileTreeBranch*, K3bDevice*>::iterator it = m_deviceBranchesMap.begin();
       it != m_deviceBranchesMap.end(); ++it)
   {
     kdDebug() << "Select " << dev->devicename() << endl;

@@ -185,7 +185,7 @@ int K3bCdDevice::DeviceManager::scanbus()
 
   // try to find symlinks
   QString cmd = QString("find /dev -type l -printf \"%p\t%l\n\" | egrep '%1cdrom|dvd|cdwriter|cdrecorder' | cut -f1").arg(devstring);
-  FILE *fd = popen(cmd.ascii(),"r");
+  FILE *fd = popen(QFile::encodeName(cmd),"r");
   if (fd) {
      QFile links;
      QString device;
@@ -439,7 +439,7 @@ bool K3bCdDevice::DeviceManager::saveConfig( KConfig* c )
 
 void K3bCdDevice::DeviceManager::determineCapabilities(K3bDevice *dev)
 {
-  // we do not use the user configured cdrecord here since we want to make sure 
+  // we do not use the user configured cdrecord here since we want to make sure
   // to get all the capabilities of the system
 
   const K3bExternalBin* cdrecordBin = m_externalBinManager->mostRecentBinObject( "cdrecord" );

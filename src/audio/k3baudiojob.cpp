@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -132,7 +132,7 @@ void K3bAudioJob::start()
     }
     else {
       // startWriting() already did the cleanup
-      return; 
+      return;
     }
   }
   else {
@@ -286,7 +286,7 @@ bool K3bAudioJob::prepareWriter()
     QPtrListIterator<K3bAudioTrack> it( *m_doc->tracks() );
     for( ; it.current(); ++it ) {
       K3bAudioTrack* track = it.current();
-    
+
       if( !track->copyProtection() )
 	writer->addArgument( "-copy" );
       else
@@ -315,7 +315,7 @@ bool K3bAudioJob::prepareWriter()
     if( !writeTocFile() ) {
       kdDebug() << "(K3bDataJob) could not write tocfile." << endl;
       emit infoMessage( i18n("IO Error"), ERROR );
-    
+
       return false;
     }
 
@@ -342,7 +342,7 @@ bool K3bAudioJob::prepareWriter()
   connect( m_writer, SIGNAL(dataWritten()), this, SLOT(slotDataWritten()) );
   //  connect( m_writer, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
   connect( m_writer, SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
-  connect( m_writer, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+  connect( m_writer, SIGNAL(debuggingOutput(const QString&, const QString&)),
 	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
 
   return true;
@@ -358,14 +358,14 @@ bool K3bAudioJob::writeTocFile()
   // write the toc-file
   if( QTextStream* s = m_tocFile->textStream() ) {
     *s << "CD_DA" << "\n\n";
-    
+
     K3bAudioTocfileWriter::writeAudioToc( m_doc, *s );
-  
+
     m_tocFile->close();
-    
+
     return true;
   }
-  else 
+  else
     return false;
 }
 
@@ -422,7 +422,7 @@ bool K3bAudioJob::startWriting()
     cancel();
     return false;
   }
-	
+
   // just to be sure we did not get canceled during the async discWaiting
   if( m_canceled )
     return false;
@@ -466,14 +466,14 @@ void K3bAudioJob::normalizeFiles()
 {
   if( !m_normalizeJob ) {
     m_normalizeJob = new K3bAudioNormalizeJob( this );
-    
-    connect( m_normalizeJob, SIGNAL(infoMessage(const QString&, int)), 
+
+    connect( m_normalizeJob, SIGNAL(infoMessage(const QString&, int)),
 	     this, SIGNAL(infoMessage(const QString&, int)) );
     connect( m_normalizeJob, SIGNAL(percent(int)), this, SLOT(slotNormalizeProgress(int)) );
     connect( m_normalizeJob, SIGNAL(subPercent(int)), this, SLOT(slotNormalizeSubProgress(int)) );
     connect( m_normalizeJob, SIGNAL(finished(bool)), this, SLOT(slotNormalizeJobFinished(bool)) );
     connect( m_normalizeJob, SIGNAL(newTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
-    connect( m_normalizeJob, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+    connect( m_normalizeJob, SIGNAL(debuggingOutput(const QString&, const QString&)),
 	     this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
   }
 
@@ -534,15 +534,15 @@ void K3bAudioJob::slotNormalizeSubProgress( int p )
 QString K3bAudioJob::jobDescription() const
 {
   if( m_doc->title().isEmpty() )
-    return i18n("Writing audio cd");
+    return i18n("Writing audio CD");
   else
-    return i18n("Writing audio cd (%1)").arg(m_doc->title());
+    return i18n("Writing audio CD (%1)").arg(m_doc->title());
 }
 
 
 QString K3bAudioJob::jobDetails() const
 {
-  return i18n("1 track (%2 minutes)", "%n track (%2 minutes)", m_doc->numOfTracks()).arg(m_doc->length().toString());
+  return i18n("1 track (%1 minutes)", "%n track (%1 minutes)", m_doc->numOfTracks()).arg(m_doc->length().toString());
 }
 
 #include "k3baudiojob.moc"

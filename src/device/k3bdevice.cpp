@@ -446,7 +446,7 @@ int K3bCdDevice::CdDevice::isEmpty()
         ret = NO_INFO;
         break;
       }
-    } 
+    }
     else {
       kdDebug() << "(K3bCdDevice) could not get disk info !" << endl;
       ret = NO_INFO;
@@ -889,7 +889,7 @@ int K3bCdDevice::CdDevice::mount()
 
   QString cmd("/bin/mount ");
   cmd += KProcess::quote(d->mountPoint);
-  if ( ::system(cmd.ascii()) == 0 )
+  if ( ::system(QFile::encodeName(cmd)) == 0 )
     ret = 1;
 
   return ret;
@@ -903,7 +903,7 @@ int K3bCdDevice::CdDevice::unmount()
 
   QString cmd("/bin/umount ");
   cmd += KProcess::quote(d->mountPoint);
-  if (::system(cmd.ascii()) == 0)
+  if (::system(QFile::encodeName(cmd)) == 0)
     ret = 0;
 
   return ret;
@@ -931,7 +931,7 @@ bool K3bCdDevice::CdDevice::supportsWriteMode( WriteMode w )
 int K3bCdDevice::CdDevice::open() const
 {
   if( d->deviceFd == -1 )
-    d->deviceFd = openDevice( devicename().ascii() );
+    d->deviceFd = openDevice( QFile::encodeName(devicename()) );
   if (d->deviceFd < 0)
   {
     kdDebug() << "(K3bCdDevice) Error: could not open device." << endl;

@@ -46,7 +46,7 @@ K3bBinImageWritingJob::~K3bBinImageWritingJob()
 {
 }
 
-void K3bBinImageWritingJob::start() 
+void K3bBinImageWritingJob::start()
 {
   m_canceled =  false;
 
@@ -56,7 +56,7 @@ void K3bBinImageWritingJob::start()
 
   emit started();
   emit newTask( i18n("Write Binary Image") );
-  
+
   if( prepareWriter() )
     writerStart();
   else
@@ -64,7 +64,7 @@ void K3bBinImageWritingJob::start()
 
 }
 
-void K3bBinImageWritingJob::cancel() 
+void K3bBinImageWritingJob::cancel()
 {
   m_canceled = true;
   m_writer->cancel();
@@ -107,7 +107,7 @@ bool K3bBinImageWritingJob::prepareWriter()
     writer->setSimulate( m_simulate );
     writer->setBurnproof( m_burnproof );
     writer->setBurnSpeed( m_speed );
-    writer->setProvideStdin( false );    
+    writer->setProvideStdin( false );
     writer->setCueFile ( m_tocFile );
     writer->prepareArgumentList();
 
@@ -138,7 +138,7 @@ bool K3bBinImageWritingJob::prepareWriter()
 }
 
 
-void K3bBinImageWritingJob::writerStart() 
+void K3bBinImageWritingJob::writerStart()
 {
 
   if( K3bEmptyDiscWaiter::wait( m_device ) == K3bEmptyDiscWaiter::CANCELED ) {
@@ -160,7 +160,7 @@ void K3bBinImageWritingJob::copySubPercent(int p)
   emit subPercent(p);
 }
 
-void K3bBinImageWritingJob::writerFinished(bool ok) 
+void K3bBinImageWritingJob::writerFinished(bool ok)
 {
   if( m_canceled )
     return;
@@ -168,9 +168,9 @@ void K3bBinImageWritingJob::writerFinished(bool ok)
   if (ok) {
     m_finishedCopies++;
     if ( m_finishedCopies == m_copies ) {
-      emit infoMessage( i18n("%1 copies succsessfully created").arg(m_copies),K3bJob::INFO );
+      emit infoMessage( i18n("%n copy successfully created", "%n copies successfully created", m_copies),K3bJob::INFO );
       emit finished( true );
-    } 
+    }
     else {
       writerStart();
     }
@@ -200,8 +200,8 @@ QString K3bBinImageWritingJob::jobDetails() const
 
 
 void K3bBinImageWritingJob::setTocFile(const QString& s)
-{ 
-  m_tocFile = s; 
+{
+  m_tocFile = s;
 }
 
 #include "k3bbinimagewritingjob.moc"

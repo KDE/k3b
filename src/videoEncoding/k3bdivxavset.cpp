@@ -79,7 +79,7 @@ void K3bDivxAVSet::setupGui() {
     QString wt_mp3( i18n( "Select bitrate of the audio track. MP3 can be encoded with constant or variable bitrate and joint stereo. AC3 passthrough must be disabled to use MP3." ) );
     QWhatsThis::add( m_mp3bitrate, wt_mp3 );
     QLabel *codec = new QLabel( i18n( "Video codec:" ), this );
-    
+
     QLabel *codecmode = new QLabel( i18n( "Codec mode:" ), this );
     QString wt_codecmode( i18n( "Select the mode for video encoding. 1-pass encoding has lower quality than 2-pass, but requires half the time to encode a video. \
 In 2-pass mode the video will be encoded twice. The first time, the video will only be analyzed to get the best quality in the second encoding pass." ) );
@@ -102,7 +102,7 @@ In 2-pass mode the video will be encoded twice. The first time, the video will o
     QWhatsThis::add( m_vBitrateCustom, wt_custombitrate );
 
     m_checkAc3Passthrough = new QCheckBox( i18n( "AC3 pass-through mode" ), this );
-    QWhatsThis::add( m_checkAc3Passthrough, i18n( "Enable this if you want the orginal digital sound (AC3)." ) );
+    QWhatsThis::add( m_checkAc3Passthrough, i18n( "Enable this if you want the original digital sound (AC3)." ) );
     m_aAC3Bitrate = new QLabel( "", this );
 
     m_comboMp3 = new KComboBox( false, this );
@@ -113,7 +113,7 @@ In 2-pass mode the video will be encoded twice. The first time, the video will o
     m_comboMp3->insertItem( i18n( "160 kbits" ) );
     m_comboMp3->insertItem( i18n( "192 kbits" ) );
     QWhatsThis::add( m_comboMp3, wt_mp3 );
-    
+
     m_comboCodec = new KComboBox( false, this );
     initGuiFactoryCodec( *m_comboCodec );
     QHButtonGroup *modeGroup = new QHButtonGroup( this );
@@ -245,7 +245,7 @@ void K3bDivxAVSet::slotAc3Passthrough( int mode ) {
         m_mp3bitrate->setEnabled( true );
         m_data->setNormalize( true );  // use mp3 audio, check for maximum gain
     } else {
-        m_data->setNormalize( false );  
+        m_data->setNormalize( false );
         m_mp3bitrate->setEnabled( false );
         m_mp3modeGroup->setEnabled( false );
         m_comboMp3->setEnabled( false );

@@ -214,7 +214,7 @@ void K3bCdCopyThread::cdrdaoFinished(bool ok) {
     if (ok) {
         if ( m_onlyCreateImage ) {
             emitInfoMessage(
-                i18n("Image '%1' and toc-file '%2' succsessfully created").arg(m_tempPath).arg(m_tocFile),
+                i18n("Image '%1' and toc-file '%2' successfully created").arg(m_tempPath).arg(m_tocFile),
                 K3bJob::INFO );
             if ( ++m_finishedSessions == m_sessions )
                 finishAll();
@@ -235,7 +235,7 @@ void K3bCdCopyThread::cdrdaoFinished(bool ok) {
                cdrdaoDirectCopy();
             } else if ( ++m_finishedCopies == m_copies ) {
                 emitInfoMessage(
-                    i18n("%1 copies succsessfully created").arg(m_copies),K3bJob::INFO );
+                    i18n("%1 copies successfully created").arg(m_copies),K3bJob::INFO );
                 finishAll();
             } else {
                m_cdrdaowriter->burnDevice()->eject();
@@ -282,7 +282,7 @@ void K3bCdCopyThread::cdrdaoFinished(bool ok) {
                     cdrdaoWrite();
                 } else if ( ++m_finishedCopies > m_copies ) {
                     emitInfoMessage(
-                        i18n("%1 copies succsessfully created").arg(m_copies),K3bJob::INFO );
+                        i18n("%1 copies successfully created").arg(m_copies),K3bJob::INFO );
                     finishAll();
                 } else {
                     m_cdrdaowriter->burnDevice()->eject();
@@ -307,7 +307,7 @@ void K3bCdCopyThread::cdrdaoFinished(bool ok) {
 void K3bCdCopyThread::finishAll() {
     if( !m_keepImage && !m_onTheFly ) {
         removeImages();
-        emitInfoMessage( i18n("Imagefiles removed"), K3bJob::STATUS );
+        emitInfoMessage( i18n("Image files removed"), K3bJob::STATUS );
     }
 
     if( k3bMain()->eject() ) {

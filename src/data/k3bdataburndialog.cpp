@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -114,10 +114,10 @@ void K3bDataBurnDialog::saveSettings()
   m_imageSettingsWidget->save( ((K3bDataDoc*)doc())->isoOptions() );
   m_advancedImageSettingsWidget->save( ((K3bDataDoc*)doc())->isoOptions() );
   m_volumeDescWidget->save( ((K3bDataDoc*)doc())->isoOptions() );
-	
+
 
   // save image file path
-  ((K3bDataDoc*)doc())->setTempDir( m_tempDirSelectionWidget->tempPath() );  
+  ((K3bDataDoc*)doc())->setTempDir( m_tempDirSelectionWidget->tempPath() );
 
   // save multisession settings
   if( m_groupMultiSession->selected() == m_radioMultiSessionStart )
@@ -137,7 +137,7 @@ void K3bDataBurnDialog::readSettings()
 {
   K3bProjectBurnDialog::readSettings();
 
-  // read multisession 
+  // read multisession
   switch( ((K3bDataDoc*)doc())->multiSessionMode() ) {
   case K3bDataDoc::START:
     m_radioMultiSessionStart->setChecked(true);
@@ -222,11 +222,11 @@ void K3bDataBurnDialog::slotStartClicked()
     QFileInfo fi( m_tempDirSelectionWidget->tempPath() );
     if( fi.isDir() )
       m_tempDirSelectionWidget->setTempPath( fi.filePath() + "/image.iso" );
-    
+
     if( QFile::exists( m_tempDirSelectionWidget->tempPath() ) ) {
-      if( KMessageBox::warningYesNo( this, 
-				     i18n("Do you want to overwrite %1").arg(m_tempDirSelectionWidget->tempPath()), 
-				     i18n("File exists...") ) 
+      if( KMessageBox::warningYesNo( this,
+				     i18n("Do you want to overwrite %1?").arg(m_tempDirSelectionWidget->tempPath()),
+				     i18n("File exists...") )
 	  != KMessageBox::Yes )
 	return;
     }
@@ -237,11 +237,11 @@ void K3bDataBurnDialog::slotStartClicked()
       m_writerSelectionWidget->writingApp() == K3b::CDRECORD )
     if( KMessageBox::warningContinueCancel( this,
 					    i18n("Most writers do not support writing "
-						 "multisession cds in DAO mode.") )
+						 "multisession CDs in DAO mode.") )
 	== KMessageBox::Cancel )
       return;
-				    
-    
+
+
   K3bProjectBurnDialog::slotStartClicked();
 }
 

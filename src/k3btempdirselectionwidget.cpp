@@ -36,9 +36,10 @@
 #include <kurlrequester.h>
 
 #include <sys/vfs.h>
+#include <qfile.h>
 
 
-K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const char *name ) 
+K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const char *name )
   : QGroupBox( 4, Qt::Vertical, i18n( "Temp Directory" ), parent, name )
 {
   layout()->setSpacing( KDialog::spacingHint() );
@@ -61,9 +62,9 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const cha
   m_labelCdSize = new QLabel( "                        ", cdSizeBox, "m_labelCdSize" );
   m_labelCdSize->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
 
-  connect( m_editDirectory, SIGNAL(openFileDialog(KURLRequester*)), 
+  connect( m_editDirectory, SIGNAL(openFileDialog(KURLRequester*)),
 	   this, SLOT(slotTempDirButtonPressed(KURLRequester*)) );
-  connect( m_editDirectory, SIGNAL(textChanged(const QString&)), 
+  connect( m_editDirectory, SIGNAL(textChanged(const QString&)),
 	   this, SLOT(slotUpdateFreeTempSpace()) );
 
 
@@ -88,9 +89,9 @@ K3bTempDirSelectionWidget::~K3bTempDirSelectionWidget()
 }
 
 
-void K3bTempDirSelectionWidget::slotFreeTempSpace(const QString&, 
-						  unsigned long, 
-						  unsigned long, 
+void K3bTempDirSelectionWidget::slotFreeTempSpace(const QString&,
+						  unsigned long,
+						  unsigned long,
 						  unsigned long kbAvail)
 {
   m_labelFreeSpace->setText( KIO::convertSizeFromKB(kbAvail) );
@@ -114,10 +115,10 @@ void K3bTempDirSelectionWidget::slotUpdateFreeTempSpace()
 
   struct statfs fs;
 
-  if ( ::statfs(path.latin1(),&fs) == 0 ) {
+  if ( ::statfs(QFile::encodeName(path),&fs) == 0 ) {
      unsigned int kBfak = fs.f_bsize/1024;
      slotFreeTempSpace(path,fs.f_blocks*kBfak,0L,fs.f_bavail*kBfak);
-  }   
+  }
   else {
      m_labelFreeSpace->setText("-");
   }
@@ -176,7 +177,7 @@ void K3bTempDirSelectionWidget::saveConfig()
   QString path = tempPath();
   if( m_mode == FILE )
     path.truncate( path.findRev("/") );
-  
+
   kapp->config()->writeEntry( "Temp Dir", K3b::prepareDir(path) );
 
   //  k3bMain()->configChanged(kapp->config());

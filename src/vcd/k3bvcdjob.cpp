@@ -214,7 +214,7 @@ void K3bVcdJob::vcdxBuild()
     connect( m_process, SIGNAL( processExited( KProcess* ) ),
              this, SLOT( slotVcdxBuildFinished() ) );
 
-    // vcdxbuild comandline parameters 
+    // vcdxbuild comandline parameters
     kdDebug() << "***** vcdxbuild parameters:" << endl;;
     const QValueList<QCString>& args = m_process->args();
     QString s;
@@ -342,7 +342,7 @@ void K3bVcdJob::slotVcdxBuildFinished()
                 return ;
         }
     } else {
-        emit infoMessage( i18n( "vcdxbuild not exit cleanly." ), K3bJob::ERROR );
+        emit infoMessage( i18n( "vcdxbuild did not exit cleanly." ), K3bJob::ERROR );
         cancelAll();
         emit finished( false );
         return ;
@@ -380,7 +380,7 @@ bool K3bVcdJob::prepareWriterJob()
     const K3bExternalBin* cdrecordBin = k3bcore->externalBinManager()->binObject("cdrecord");
     if ( writingApp() == K3b::DEFAULT && cdrecordBin->hasFeature("cuefile") )
         setWritingApp( K3b::CDRECORD );
-        
+
     if ( writingApp() == K3b::CDRDAO || writingApp() == K3b::DEFAULT ) {
         K3bCdrdaoWriter * writer = new K3bCdrdaoWriter( m_doc->burner(), this );
         // create cdrdao job

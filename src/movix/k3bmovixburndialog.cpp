@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -53,7 +53,7 @@ K3bMovixBurnDialog::K3bMovixBurnDialog( K3bMovixDoc* doc, QWidget* parent, const
 
   m_tempDirSelectionWidget->setSelectionMode( K3bTempDirSelectionWidget::FILE );
 
-  setTitle( i18n("eMovix Project"), 
+  setTitle( i18n("eMovix Project"),
 	    i18n("1 file (%1)", "%n files (%1)", m_doc->movixFileItems().count()).arg(KIO::convertSize(m_doc->size())) );
 
   m_movixOptionsWidget = new K3bMovixOptionsWidget( this );
@@ -190,13 +190,13 @@ void K3bMovixBurnDialog::saveSettings()
   m_imageSettingsWidget->save( m_doc->isoOptions() );
   m_advancedImageSettingsWidget->save( m_doc->isoOptions() );
   m_volumeDescWidget->save( m_doc->isoOptions() );
-	
+
   m_doc->setDataMode( m_dataModeWidget->dataMode() );
 
   // save image file path
-  m_doc->setTempDir( m_tempDirSelectionWidget->tempPath() );  
+  m_doc->setTempDir( m_tempDirSelectionWidget->tempPath() );
 }
- 
+
 
 void K3bMovixBurnDialog::readSettings()
 {
@@ -231,11 +231,11 @@ void K3bMovixBurnDialog::slotStartClicked()
     QFileInfo fi( m_tempDirSelectionWidget->tempPath() );
     if( fi.isDir() )
       m_tempDirSelectionWidget->setTempPath( fi.filePath() + "/image.iso" );
-    
+
     if( QFile::exists( m_tempDirSelectionWidget->tempPath() ) ) {
-      if( KMessageBox::warningYesNo( this, 
-				     i18n("Do you want to overwrite %1").arg(m_tempDirSelectionWidget->tempPath()), 
-				     i18n("File exists...") ) 
+      if( KMessageBox::warningYesNo( this,
+				     i18n("Do you want to overwrite %1?").arg(m_tempDirSelectionWidget->tempPath()),
+				     i18n("File exists...") )
 	  != KMessageBox::Yes )
 	return;
     }
@@ -249,8 +249,8 @@ void K3bMovixBurnDialog::slotStartClicked()
 						 "multisession cds in DAO mode.") )
 	== KMessageBox::Cancel )
       return;
-				    
-    
+
+
   K3bProjectBurnDialog::slotStartClicked();
 }
 

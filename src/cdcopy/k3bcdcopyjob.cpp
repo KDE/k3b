@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -243,10 +243,10 @@ void K3bCdCopyJob::cdrdaoFinished(bool ok) {
         } else if( m_onTheFly ) {
             if ( ++m_finishedSessions < m_sessions) {
                m_cdrdaowriter->setSession(m_finishedSessions+1);
-               cdrdaoDirectCopy(); 
+               cdrdaoDirectCopy();
             } else if ( ++m_finishedCopies == m_copies ) {
-	      emit infoMessage( i18n("1 copy succsessfully created", 
-				     "%n copies succsessfully created", 
+	      emit infoMessage( i18n("1 copy succsessfully created",
+				     "%n copies succsessfully created",
 				     m_copies),
 				K3bJob::INFO );
                 finishAll();
@@ -270,7 +270,7 @@ void K3bCdCopyJob::cdrdaoFinished(bool ok) {
                    emit infoMessage(
                         i18n("Reading session %1").arg(m_finishedSessions+1),
                         K3bJob::INFO );
-                   cdrdaoRead(); 
+                   cdrdaoRead();
                } else {
                    ++m_finishedCopies;
                    m_finishedSessions = 0;
@@ -283,7 +283,7 @@ void K3bCdCopyJob::cdrdaoFinished(bool ok) {
                   }
                    if( m_cdrdaowriter->burnDevice() == m_cdrdaowriter->sourceDevice() )
                         m_cdrdaowriter->sourceDevice()->eject();
-                   cdrdaoWrite();                   
+                   cdrdaoWrite();
                }
             } else {
                 if ( ++m_finishedSessions < m_sessions) {
@@ -294,8 +294,8 @@ void K3bCdCopyJob::cdrdaoFinished(bool ok) {
                          K3bJob::INFO );
                     cdrdaoWrite();
                 } else if ( ++m_finishedCopies > m_copies ) {
-		  emit infoMessage( i18n("1 copy succsessfully created", 
-					 "%n copies succsessfully created", 
+		  emit infoMessage( i18n("1 copy successfully created",
+					 "%n copies successfully created",
 					 m_copies),
 				    K3bJob::INFO );
                     finishAll();
@@ -309,8 +309,8 @@ void K3bCdCopyJob::cdrdaoFinished(bool ok) {
                             i18n("Start writing session %1").arg(m_finishedSessions+1),
                             K3bJob::INFO );
                     }
-                    cdrdaoWrite();                   
-                }       
+                    cdrdaoWrite();
+                }
            }
         }
     } else
@@ -322,15 +322,15 @@ void K3bCdCopyJob::cdrdaoFinished(bool ok) {
 void K3bCdCopyJob::finishAll() {
     if( !m_keepImage && !m_onTheFly ) {
         removeImages();
-        emit infoMessage( i18n("Imagefiles removed"), K3bJob::STATUS );
+        emit infoMessage( i18n("Image files removed"), K3bJob::STATUS );
     }
 
     if( k3bMain()->eject() ) {
         m_cdrdaowriter->sourceDevice()->eject();
-        if ( !m_onlyCreateImage ) 
+        if ( !m_onlyCreateImage )
             m_cdrdaowriter->burnDevice()->eject();
     }
- 
+
     emit finished( true );
 }
 
@@ -377,13 +377,13 @@ void K3bCdCopyJob::slotNextTrack( int t, int tt ) {
 }
 
 
-	
+
 QString K3bCdCopyJob::jobDescription() const
 {
   if( m_onTheFly )
-    return i18n("Copying cd on-the-fly");
+    return i18n("Copying CD on-the-fly");
   else
-    return i18n("Copying cd");
+    return i18n("Copying CD");
 }
 
 

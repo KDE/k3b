@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -40,7 +40,7 @@ K3bApplication::K3bApplication()
   : KApplication()
 {
   m_core = new K3bCore( aboutData(), this );
-  connect( m_core, SIGNAL(initializationInfo(const QString&)), 
+  connect( m_core, SIGNAL(initializationInfo(const QString&)),
 	   SIGNAL(initializationInfo(const QString&)) );
   s_k3bApp = this;
 
@@ -63,7 +63,7 @@ void K3bApplication::init()
 {
   m_core->init();
 
-  emit initializationInfo( i18n("Creating Gui...") );
+  emit initializationInfo( i18n("Creating GUI...") );
 
   K3bMainWindow *k3bMainWidget = new K3bMainWindow();
   setMainWidget( k3bMainWidget );

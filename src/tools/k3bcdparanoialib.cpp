@@ -1,6 +1,6 @@
-/* 
+/*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -18,6 +18,7 @@
 #include <kdebug.h>
 
 #include <dlfcn.h>
+#include <qfile.h>
 
 void* K3bCdparanoiaLib::s_libInterface = 0;
 void* K3bCdparanoiaLib::s_libParanoia = 0;
@@ -90,7 +91,7 @@ bool K3bCdparanoiaLib::paranoiaInit( const QString& devicename )
   if( d->drive )
     paranoiaFree();
 
-  d->drive = cdda_cdda_identify( devicename.latin1(), 0, 0 );
+  d->drive = cdda_cdda_identify( QFile::encodeName(devicename), 0, 0 );
   if( d->drive == 0 )
     return false;
 
@@ -126,7 +127,7 @@ void K3bCdparanoiaLib::setParanoiaMode( int mode )
 {
   // from cdrdao 1.1.7
   d->paranoiaMode = PARANOIA_MODE_FULL^PARANOIA_MODE_NEVERSKIP;
-  
+
   switch (mode) {
   case 0:
     d->paranoiaMode = PARANOIA_MODE_DISABLE;
@@ -174,7 +175,7 @@ int16_t* K3bCdparanoiaLib::paranoiaRead( void(*callback)(long,int) )
 }
 
 
-long K3bCdparanoiaLib::firstSector( int track ) 
+long K3bCdparanoiaLib::firstSector( int track )
 {
   if( d->drive )
     return cdda_cdda_track_firstsector( d->drive, track );
@@ -182,7 +183,7 @@ long K3bCdparanoiaLib::firstSector( int track )
     return -1;
 }
 
-long K3bCdparanoiaLib::lastSector( int track ) 
+long K3bCdparanoiaLib::lastSector( int track )
 {
   if( d->drive )
     return cdda_cdda_track_lastsector(d->drive, track );

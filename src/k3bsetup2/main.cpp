@@ -1,6 +1,6 @@
-/* 
+/*
  *
- * $Id: $
+ * $Id$
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
@@ -41,9 +41,9 @@
 #include "k3bsetup2.h"
 
 
-static const char *description = I18N_NOOP("K3bSetup prepares the system for cd writing with K3b.");
-	
-	
+static const char *description = I18N_NOOP("K3bSetup prepares the system for CD writing with K3b.");
+
+
 static KCmdLineOptions options[] =
 {
   { "lang <language>", I18N_NOOP("Specify a particular language"), 0 },
@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
   K3bSetup2 setup;
 
   a.setMainWidget(&setup);
-  setup.show();  
+  setup.show();
   setup.init();
 
   return a.exec();
