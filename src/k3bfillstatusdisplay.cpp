@@ -127,7 +127,7 @@ void K3bFillStatusDisplay::drawSize(QPainter* p)
 
 void K3bFillStatusDisplay::drawTime(QPainter* p)
 {
-  int value = doc->length() / 6000;
+  int value = doc->length() / 75 / 60;
 
   // the maximum is 100
   // so split width() in 100 pieces!

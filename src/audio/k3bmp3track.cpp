@@ -94,6 +94,14 @@ void K3bMp3Track::readTrackInfo( const QString& fileName )
   int readbytes = fread(&data, 1, 1024, fd);
   fclose(fd);
 
+	// some hacking
+	if( data[0] == 'I' && data[1] == 'D' && data[2] == '3' ) {
+		fd = fopen(fileName.latin1(),"r");
+	  fseek(fd, _id3TagSize, SEEK_SET);
+	  readbytes = fread(&data, 1, 1024, fd);
+	  fclose(fd);
+	}
+
 
   bool found = false;
 
@@ -109,7 +117,7 @@ void K3bMp3Track::readTrackInfo( const QString& fileName )
 	break;
       }
   
-      _header = _header<<4 | *datapointer;
+      _header = _header<<8 | *datapointer;
       datapointer++;
       readbytes--;
     }
@@ -172,7 +180,7 @@ bool K3bMp3Track::mp3Protection(unsigned int header)
 {
   qDebug(" protection" );
 
-  return ((header & 0x00010000)==1);
+  return ((header>>16 & 0x00000001)==1);
 }
 
 int K3bMp3Track::mp3Bitrate(unsigned int header) 

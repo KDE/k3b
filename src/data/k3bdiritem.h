@@ -47,6 +47,8 @@ public:
 	K3bDataItem* nextChild( K3bDataItem* );
   /** returns an empty dummy directory */
   QString localPath();
+
+	bool alreadyInDirectory( const QString& fileName );
 	
 private:
 	QList<K3bDataItem>* m_children;

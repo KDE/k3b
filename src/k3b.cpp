@@ -793,3 +793,14 @@ void K3bApp::slotJobFinished( K3bJob* job )
 	delete job;
 }
 
+
+void K3bApp::slotErrorMessage(const QString& message)
+{
+	KMessageBox::error( this, message );
+}
+
+
+void K3bApp::slotWarningMessage(const QString& message)
+{
+	KMessageBox::sorry( this, message );
+}

@@ -132,6 +132,7 @@ void K3bOptionDialog::setupProgramsPage()
     frameLayout->addItem( spacer, 2, 0 );
 
     // TODO: connect the search button to a suitable slot
+	m_buttonSearch->setDisabled( true );
 }
 
 
@@ -153,20 +154,20 @@ void K3bOptionDialog::readPrograms()
     item->setText( 1, config->readEntry( "cdrecord path", "/usr/bin/cdrecord" ) );
     item->setText( 2, config->readListEntry( "cdrecord parameters" ).join(" ") );
 
-    item = new QListViewItem( m_viewPrograms );
-    item->setText( 0, "readcd"  );
-    item->setText( 1,  config->readEntry( "readcd path", "/usr/bin/readcd" ) );
-    item->setText( 2,  config->readListEntry( "readcd parameters" ).join(" ") );
+//    item = new QListViewItem( m_viewPrograms );
+//    item->setText( 0, "readcd"  );
+//    item->setText( 1,  config->readEntry( "readcd path", "/usr/bin/readcd" ) );
+//    item->setText( 2,  config->readListEntry( "readcd parameters" ).join(" ") );
 
     item = new QListViewItem( m_viewPrograms );
     item->setText( 0, "mpg123"  );
     item->setText( 1,  config->readEntry( "mpg123 path", "/usr/bin/mpg123" ) );
     item->setText( 2,  config->readListEntry( "mpg123 parameters" ).join(" ") );
 
-    item = new QListViewItem( m_viewPrograms );
-    item->setText( 0, "cdparanoia"  );
-    item->setText( 1,  config->readEntry( "cdparanoia path", "/usr/bin/cdparanoia" ) );
-    item->setText( 2,  config->readListEntry( "cdparanoia parameters" ).join(" ") );
+//    item = new QListViewItem( m_viewPrograms );
+//    item->setText( 0, "cdparanoia"  );
+//    item->setText( 1,  config->readEntry( "cdparanoia path", "/usr/bin/cdparanoia" ) );
+//    item->setText( 2,  config->readListEntry( "cdparanoia parameters" ).join(" ") );
 
     item = new QListViewItem( m_viewPrograms );
     item->setText( 0, "cdrdao"  );

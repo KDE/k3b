@@ -153,6 +153,9 @@ void K3bDataDoc::slotAddDirectory( const QString& url, K3bDirItem* parent )
 
 void K3bDataDoc::addNewFile( const QString& path, K3bDirItem* dir )
 {
+	// TODO: erst filename erstellen (id3tag), dann mithilfe von K3bDirItem::alreadyInDir testen, dann eventuelles umbenennen anbieten
+	//             und dann ein neues item anlegen
+
 	if( !dir)
 		dir = m_root;
 

@@ -109,3 +109,12 @@ QString K3bRootItem::k3bPath()
 	// graft-points have to start with the name of the directory or the file, not with a slash or anything!
 	return "";
 }
+
+bool K3bDirItem::alreadyInDirectory( const QString& fileName )
+{
+	for( K3bDataItem* _it = m_children->first(); _it; _it = m_children->next() ) {
+		if( _it->k3bName() == fileName )
+			return true;
+	}
+	return false;
+}

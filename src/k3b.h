@@ -250,6 +250,11 @@ class K3bApp : public KDockMainWindow
 	K3bBurnProgressDialog* m_burnProgressDialog;
 	
 	bool m_useID3TagForMp3Renaming;
+public slots: // Public slots
+  /** No descriptions */
+  void slotErrorMessage(const QString&);
+  /** No descriptions */
+  void slotWarningMessage(const QString&);
 };
 
 #endif // K3B_H

@@ -99,7 +99,7 @@ int K3bAudioDoc::length() const
   // TODO: sum the sizes of all tracks, the pregaps, and leadin/leadout stuff
   int size = 0;
   for( K3bAudioTrack* _t = m_tracks->first(); _t; _t = m_tracks->next() ) {
-    size += _t->length();
+    size += _t->length() + _t->pregap();
   }	
 
   return size;

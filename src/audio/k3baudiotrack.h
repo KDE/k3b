@@ -95,7 +95,7 @@ class K3bAudioTrack
   QFile m_file;
 
  private:	
-  /** length of track in 1/100sec **/
+  /** length of track in frames (1/75sec) **/
   int m_length;
 
   /** frames: 75 frames are one second **/
