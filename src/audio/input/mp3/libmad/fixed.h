@@ -149,7 +149,7 @@ mad_fixed_t mad_f_mul_inline(mad_fixed_t x, mad_fixed_t y)
     fracbits = MAD_F_FRACBITS
   };
 
-  __asm {
+  __asm__ {
     mov eax, x
     imul y
     shrd eax, edx, fracbits
@@ -167,7 +167,7 @@ mad_fixed_t mad_f_mul_inline(mad_fixed_t x, mad_fixed_t y)
  * significant bit depends on OPT_ACCURACY via mad_f_scale64().
  */
 #   define MAD_F_MLX(hi, lo, x, y)  \
-    asm ("imull %3"  \
+    __asm__ ("imull %3"  \
 	 : "=a" (lo), "=d" (hi)  \
 	 : "%a" (x), "rm" (y)  \
 	 : "cc")
@@ -180,7 +180,7 @@ mad_fixed_t mad_f_mul_inline(mad_fixed_t x, mad_fixed_t y)
     ({ mad_fixed64hi_t __hi;  \
        mad_fixed64lo_t __lo;  \
        MAD_F_MLX(__hi, __lo, (x), (y));  \
-       asm ("addl %2,%0\n\t"  \
+       __asm__ ("addl %2,%0\n\t"  \
 	    "adcl %3,%1"  \
 	    : "=rm" (lo), "=rm" (hi)  \
 	    : "r" (__lo), "r" (__hi), "0" (lo), "1" (hi)  \
@@ -196,13 +196,13 @@ mad_fixed_t mad_f_mul_inline(mad_fixed_t x, mad_fixed_t y)
     ({ mad_fixed64hi_t __hi_;  \
        mad_fixed64lo_t __lo_;  \
        mad_fixed_t __result;  \
-       asm ("addl %4,%2\n\t"  \
+       __asm__ ("addl %4,%2\n\t"  \
 	    "adcl %5,%3"  \
 	    : "=rm" (__lo_), "=rm" (__hi_)  \
 	    : "0" (lo), "1" (hi),  \
 	      "ir" (1L << (MAD_F_SCALEBITS - 1)), "ir" (0)  \
 	    : "cc");  \
-       asm ("shrdl %3,%2,%1"  \
+       __asm__ ("shrdl %3,%2,%1"  \
 	    : "=rm" (__result)  \
 	    : "0" (__lo_), "r" (__hi_), "I" (MAD_F_SCALEBITS)  \
 	    : "cc");  \
@@ -211,7 +211,7 @@ mad_fixed_t mad_f_mul_inline(mad_fixed_t x, mad_fixed_t y)
 #   else
 #    define mad_f_scale64(hi, lo)  \
     ({ mad_fixed_t __result;  \
-       asm ("shrdl %3,%2,%1"  \
+       __asm__ ("shrdl %3,%2,%1"  \
 	    : "=rm" (__result)  \
 	    : "0" (lo), "r" (hi), "I" (MAD_F_SCALEBITS)  \
 	    : "cc");  \
@@ -243,7 +243,7 @@ mad_fixed_t mad_f_mul_inline(mad_fixed_t x, mad_fixed_t y)
     ({ mad_fixed64hi_t __hi;  \
        mad_fixed64lo_t __lo;  \
        mad_fixed_t __result;  \
-       asm ("smull	%0, %1, %3, %4\n\t"  \
+       __asm__ ("smull	%0, %1, %3, %4\n\t"  \
 	    "movs	%0, %0, lsr %5\n\t"  \
 	    "adc	%2, %0, %1, lsl %6"  \
 	    : "=&r" (__lo), "=&r" (__hi), "=r" (__result)  \
@@ -255,17 +255,17 @@ mad_fixed_t mad_f_mul_inline(mad_fixed_t x, mad_fixed_t y)
 # endif
 
 #  define MAD_F_MLX(hi, lo, x, y)  \
-    asm ("smull	%0, %1, %2, %3"  \
+    __asm__ ("smull	%0, %1, %2, %3"  \
 	 : "=&r" (lo), "=&r" (hi)  \
 	 : "%r" (x), "r" (y))
 
 #  define MAD_F_MLA(hi, lo, x, y)  \
-    asm ("smlal	%0, %1, %2, %3"  \
+    __asm__ ("smlal	%0, %1, %2, %3"  \
 	 : "+r" (lo), "+r" (hi)  \
 	 : "%r" (x), "r" (y))
 
 #  define MAD_F_MLN(hi, lo)  \
-    asm ("rsbs	%0, %2, #0\n\t"  \
+    __asm__ ("rsbs	%0, %2, #0\n\t"  \
 	 "rsc	%1, %3, #0"  \
 	 : "=r" (lo), "=r" (hi)  \
 	 : "0" (lo), "1" (hi)  \
@@ -273,7 +273,7 @@ mad_fixed_t mad_f_mul_inline(mad_fixed_t x, mad_fixed_t y)
 
 #  define mad_f_scale64(hi, lo)  \
     ({ mad_fixed_t __result;  \
-       asm ("movs	%0, %1, lsr %3\n\t"  \
+       __asm__ ("movs	%0, %1, lsr %3\n\t"  \
 	    "adc	%0, %0, %2, lsl %4"  \
 	    : "=r" (__result)  \
 	    : "r" (lo), "r" (hi),  \
@@ -293,13 +293,13 @@ mad_fixed_t mad_f_mul_inline(mad_fixed_t x, mad_fixed_t y)
  * significant bit depends on OPT_ACCURACY via mad_f_scale64().
  */
 #  define MAD_F_MLX(hi, lo, x, y)  \
-    asm ("mult	%2,%3"  \
+    __asm__ ("mult	%2,%3"  \
 	 : "=l" (lo), "=h" (hi)  \
 	 : "%r" (x), "r" (y))
 
 # if defined(HAVE_MADD_ASM)
 #  define MAD_F_MLA(hi, lo, x, y)  \
-    asm ("madd	%2,%3"  \
+    __asm__ ("madd	%2,%3"  \
 	 : "+l" (lo), "+h" (hi)  \
 	 : "%r" (x), "r" (y))
 # elif defined(HAVE_MADD16_ASM)
@@ -308,11 +308,11 @@ mad_fixed_t mad_f_mul_inline(mad_fixed_t x, mad_fixed_t y)
  * multiply/accumulate instruction.
  */
 #  define MAD_F_ML0(hi, lo, x, y)  \
-    asm ("mult	%2,%3"  \
+    __asm__ ("mult	%2,%3"  \
 	 : "=l" (lo), "=h" (hi)  \
 	 : "%r" ((x) >> 12), "r" ((y) >> 16))
 #  define MAD_F_MLA(hi, lo, x, y)  \
-    asm ("madd16	%2,%3"  \
+    __asm__ ("madd16	%2,%3"  \
 	 : "+l" (lo), "+h" (hi)  \
 	 : "%r" ((x) >> 12), "r" ((y) >> 16))
 #  define MAD_F_MLZ(hi, lo)  ((mad_fixed_t) (lo))
@@ -333,7 +333,7 @@ mad_fixed_t mad_f_mul_inline(mad_fixed_t x, mad_fixed_t y)
  * significant bit depends on OPT_ACCURACY via mad_f_scale64().
  */
 #  define MAD_F_MLX(hi, lo, x, y)  \
-    asm ("smul %2, %3, %0\n\t"  \
+    __asm__ ("smul %2, %3, %0\n\t"  \
 	 "rd %%y, %1"  \
 	 : "=r" (lo), "=r" (hi)  \
 	 : "%r" (x), "rI" (y))
@@ -349,7 +349,7 @@ mad_fixed_t mad_f_mul_inline(mad_fixed_t x, mad_fixed_t y)
  * OPT_ACCURACY via mad_f_scale64().
  */
 #  define MAD_F_MLX(hi, lo, x, y)  \
-    asm ("mulhw %1, %2, %3\n\t"  \
+    __asm__ ("mulhw %1, %2, %3\n\t"  \
 	 "mullw %0, %2, %3"  \
 	 : "=&r" (lo), "=&r" (hi)  \
 	 : "%r" (x), "r" (y))
@@ -358,7 +358,7 @@ mad_fixed_t mad_f_mul_inline(mad_fixed_t x, mad_fixed_t y)
     ({ mad_fixed64hi_t __hi;  \
        mad_fixed64lo_t __lo;  \
        MAD_F_MLX(__hi, __lo, (x), (y));  \
-       asm ("addc %0, %2, %3\n\t"  \
+       __asm__ ("addc %0, %2, %3\n\t"  \
 	    "adde %1, %4, %5"  \
 	    : "=r" (lo), "=r" (hi)  \
 	    : "%r" (__lo), "0" (lo), "%r" (__hi), "1" (hi));  \
@@ -375,11 +375,11 @@ mad_fixed_t mad_f_mul_inline(mad_fixed_t x, mad_fixed_t y)
     ({ mad_fixed_t __result;  \
        mad_fixed64hi_t __hi_;  \
        mad_fixed64lo_t __lo_;  \
-       asm __volatile__ ("addc %0, %2, %4\n\t"  \
+       __asm__ __volatile__ ("addc %0, %2, %4\n\t"  \
 			 "addze %1, %3"  \
 	    : "=r" (__lo_), "=r" (__hi_)  \
 	    : "r" (lo), "r" (hi), "r" (1 << (MAD_F_SCALEBITS - 1)));  \
-       asm __volatile__ ("rlwinm %0, %2,32-%3,0,%3-1\n\t"  \
+       __asm__ __volatile__ ("rlwinm %0, %2,32-%3,0,%3-1\n\t"  \
 			 "rlwimi %0, %1,32-%3,%3,31"  \
 	    : "=&r" (__result)  \
 	    : "r" (__lo_), "r" (__hi_), "I" (MAD_F_SCALEBITS));  \
@@ -388,7 +388,7 @@ mad_fixed_t mad_f_mul_inline(mad_fixed_t x, mad_fixed_t y)
 #  else
 #   define mad_f_scale64(hi, lo)  \
     ({ mad_fixed_t __result;  \
-       asm ("rlwinm %0, %2,32-%3,0,%3-1\n\t"  \
+       __asm__ ("rlwinm %0, %2,32-%3,0,%3-1\n\t"  \
 	    "rlwimi %0, %1,32-%3,%3,31"  \
 	    : "=r" (__result)  \
 	    : "r" (lo), "r" (hi), "I" (MAD_F_SCALEBITS));  \
