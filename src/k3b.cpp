@@ -37,6 +37,7 @@
 #include <kstdaction.h>
 #include <klineeditdlg.h>
 #include <kstddirs.h>
+#include <krun.h>
 
 #include <stdlib.h>
 
@@ -143,6 +144,9 @@ void K3bMainWindow::initActions()
 
   actionToolsWriteIsoImage = new KAction(i18n("&Write Iso image"), "gear", 0, this, SLOT(slotWriteIsoImage()),
 					 actionCollection(), "tools_write_iso" );
+
+  actionSettingsK3bSetup = new KAction(i18n("K3b &Setup"), "configure", 0, this, SLOT(slotK3bSetup()), 
+				       actionCollection(), "settings_k3bsetup" );
 
   actionFileNewMenu->setStatusText(i18n("Creates a new project"));
   actionFileNewData->setStatusText( i18n("Creates a new data project") );
@@ -912,6 +916,12 @@ void K3bMainWindow::slotWriteIsoImage()
 {
   K3bIsoImageWritingDialog* d = new K3bIsoImageWritingDialog( this, "isodialog" );
   d->show();
+}
+
+
+void K3bMainWindow::slotK3bSetup()
+{
+  KRun::runCommand( "kdesu k3bsetup" );
 }
 
 
