@@ -50,6 +50,7 @@ class K3bSongManager;
 class K3bAudioPlayer;
 class K3bBusyWidget;
 class KSystemTray;
+class K3bStatusBarManager;
 
 
 /** Access to the "lonely" K3bMainWindow Object */
@@ -149,12 +150,6 @@ class K3bMainWindow : public KDockMainWindow
  signals:
   void initializationInfo( const QString& );
   void configChanged( KConfig* c );
-
-  /**
-   * if there is some config stuff to save connect to this signal
-   */
-  void saveConfig( KConfig* c );
-
 
  protected:
   /** queryClose is called by KTMainWindow on each closeEvent of a window. Against the
@@ -340,7 +335,8 @@ class K3bMainWindow : public KDockMainWindow
   K3bDirView* m_dirView;
   K3bOptionDialog* m_optionDialog;
 
-  K3bBusyWidget* m_busyWidget;
+  K3bStatusBarManager* m_statusBarManager;
+
   KSystemTray* m_systemTray;
 
   bool m_useID3TagForMp3Renaming;

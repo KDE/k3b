@@ -54,6 +54,7 @@ class K3bFileView : public K3bCdContentsView
   void slotAudioFilePlay();
   void slotAudioFileEnqueue();
   void slotAddFilesToProject();
+  void saveConfig( KConfig* c );
 
  private:
   class PrivateFileView;
@@ -66,7 +67,6 @@ class K3bFileView : public K3bCdContentsView
   void slotFilterChanged();
   void slotFileHighlighted( const KFileItem* item );
   void slotCheckActions();
-  void saveConfig( KConfig* c );
 };
 
 

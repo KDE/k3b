@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include "k3btempdirselectionwidget.h"
+#include "k3b.h"
 
 #include <qlabel.h>
 #include <qgroupbox.h>
@@ -26,14 +27,16 @@
 #include <qhbox.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
+#include <qfileinfo.h>
 
-#include <kapplication.h>
+#include <kconfig.h>
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <kdialog.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 #include <kdiskfreesp.h>
+#include <kio/global.h>
 
 
 K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const char *name ) 
@@ -105,11 +108,11 @@ void K3bTempDirSelectionWidget::slotFreeTempSpace(const QString&,
 						  unsigned long, 
 						  unsigned long kbAvail)
 {
-  m_labelFreeSpace->setText( QString().sprintf( "%.2f MB", (float)kbAvail/1024.0 ) );
+  m_labelFreeSpace->setText( KIO::convertSizeFromKB(kbAvail) );
 
   m_freeTempSpace = kbAvail;
 
-  if( m_freeTempSpace * 1024 < m_requestedSize )
+  if( m_freeTempSpace < m_requestedSize/1024 )
     m_labelCdSize->setPaletteForegroundColor( red );
   else
     m_labelCdSize->setPaletteForegroundColor( m_labelFreeSpace->paletteForegroundColor() );
@@ -120,20 +123,17 @@ void K3bTempDirSelectionWidget::slotUpdateFreeTempSpace()
 {
   QString path = m_editDirectory->text();
 
-  if( QFile::exists( path ) ) {
+  if( !QFile::exists( path ) )
+    path.truncate( path.findRev('/') );
+
+  path = KIO::findPathMountPoint( m_editDirectory->text() );
+
+  if( QFile::exists( path ) )
     connect( KDiskFreeSp::findUsageInfo( path ), 
 	     SIGNAL(foundMountPoint(const QString&, unsigned long, unsigned long, unsigned long)),
-	     this, SLOT(slotFreeTempSpace(const QString&, unsigned long, unsigned long, unsigned long)) );
-  }
-  else {
-    path.truncate( path.findRev( '/' ) );
-    if( QFile::exists( path ) )
-      connect( KDiskFreeSp::findUsageInfo( path ), 
-	       SIGNAL(foundMountPoint(const QString&, unsigned long, unsigned long, unsigned long)),
-	       this, SLOT(slotFreeTempSpace(const QString&, unsigned long, unsigned long, unsigned long)) );    
-    else
-      m_labelFreeSpace->setText( "-" );
-  }
+	     this, SLOT(slotFreeTempSpace(const QString&, unsigned long, unsigned long, unsigned long)) );    
+  else
+    m_labelFreeSpace->setText( "-" );
 }
 
 
@@ -181,5 +181,20 @@ void K3bTempDirSelectionWidget::setNeededSize( unsigned long bytes )
   m_labelCdSize->setText( QString().sprintf( " %.2f MB", ((float)bytes)/1024.0/1024.0 ) );
 }
 
+
+void K3bTempDirSelectionWidget::saveConfig()
+{
+  kapp->config()->setGroup( "General Options" );
+  QFileInfo fi( tempPath() );
+  QString path;
+  if( fi.isFile() )
+    path = fi.dirPath();
+  else
+    path = fi.filePath();
+  
+  kapp->config()->writeEntry( "Temp Dir", path );
+
+  //  k3bMain()->configChanged(kapp->config());
+}
 
 #include "k3btempdirselectionwidget.moc"

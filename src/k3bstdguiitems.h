@@ -18,6 +18,7 @@ class K3bStdGuiItems
   static QCheckBox* onTheFlyCheckbox( QWidget* parent = 0, const char* name = 0 );
   static QCheckBox* cdTextCheckbox( QWidget* parent = 0, const char* name = 0);
   static QComboBox* paranoiaModeComboBox( QWidget* parent = 0, const char* name = 0 );
+  static QComboBox* dataModeComboboxBox( QWidget* parent = 0, const char* name = 0 );
 
  private:
   K3bStdGuiItems() {}

@@ -131,7 +131,7 @@ void K3bIsoImageWritingDialog::setupGui()
   isoInfoLayout->setSpacing( spacingHint() );
   isoInfoLayout->setMargin( 0 );
 
-  m_labelIsoId = new KCutLabel( m_isoInfoWidget );
+  //  m_labelIsoId = new KCutLabel( m_isoInfoWidget );
   m_labelIsoSystemId = new KCutLabel( m_isoInfoWidget );
   m_labelIsoVolumeId = new KCutLabel( m_isoInfoWidget );
   m_labelIsoVolumeSetId = new KCutLabel( m_isoInfoWidget );
@@ -139,14 +139,14 @@ void K3bIsoImageWritingDialog::setupGui()
   m_labelIsoPreparerId = new KCutLabel( m_isoInfoWidget );
   m_labelIsoApplicationId = new KCutLabel( m_isoInfoWidget );
 
-  isoInfoLayout->addWidget( new QLabel( i18n("Id:"), m_isoInfoWidget ), 0, 0 );
-  isoInfoLayout->addWidget( m_labelIsoId, 0, 1 );
-  isoInfoLayout->addWidget( new QLabel( i18n("System Id:"), m_isoInfoWidget ), 1, 0 );
-  isoInfoLayout->addWidget( m_labelIsoSystemId, 1, 1 );
-  isoInfoLayout->addWidget( new QLabel( i18n("Volume Id:"), m_isoInfoWidget ), 2, 0 );
-  isoInfoLayout->addWidget( m_labelIsoVolumeId, 2, 1 );
-  isoInfoLayout->addWidget( new QLabel( i18n("Volume Set Id:"), m_isoInfoWidget ), 3, 0 );
-  isoInfoLayout->addWidget( m_labelIsoVolumeSetId, 3, 1 );
+//   isoInfoLayout->addWidget( new QLabel( i18n("Id:"), m_isoInfoWidget ), 0, 0 );
+//   isoInfoLayout->addWidget( m_labelIsoId, 0, 1 );
+  isoInfoLayout->addWidget( new QLabel( i18n("System Id:"), m_isoInfoWidget ), 0, 0 );
+  isoInfoLayout->addWidget( m_labelIsoSystemId, 0, 1 );
+  isoInfoLayout->addWidget( new QLabel( i18n("Volume Id:"), m_isoInfoWidget ), 1, 0 );
+  isoInfoLayout->addWidget( m_labelIsoVolumeId, 1, 1 );
+  isoInfoLayout->addWidget( new QLabel( i18n("Volume Set Id:"), m_isoInfoWidget ), 2, 0 );
+  isoInfoLayout->addWidget( m_labelIsoVolumeSetId, 2, 1 );
   isoInfoLayout->addWidget( new QLabel( i18n("Publisher Id:"), m_isoInfoWidget ), 0, 3 );
   isoInfoLayout->addWidget( m_labelIsoPublisherId, 0, 4 );
   isoInfoLayout->addWidget( new QLabel( i18n("Preparer Id:"), m_isoInfoWidget ), 1, 3 );
@@ -163,7 +163,7 @@ void K3bIsoImageWritingDialog::setupGui()
 
   f = m_labelIsoApplicationId->font();
   f.setBold( true );
-  m_labelIsoId->setFont( f );
+  //  m_labelIsoId->setFont( f );
   m_labelIsoSystemId->setFont( f );
   m_labelIsoVolumeId->setFont( f );
   m_labelIsoVolumeSetId->setFont( f );
@@ -342,7 +342,7 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
 
     if( m_bIsoImage ) {
       QString str = QString::fromLocal8Bit( &buf[16*2048+1], 5 ).stripWhiteSpace();
-      m_labelIsoId->setText( str.isEmpty() ? QString("-") : str );
+//       m_labelIsoId->setText( str.isEmpty() ? QString("-") : str );
       str = QString::fromLocal8Bit( &buf[16*2048+8], 32 ).stripWhiteSpace();
       m_labelIsoSystemId->setText( str.isEmpty() ? QString("-") : str );
       str = QString::fromLocal8Bit( &buf[16*2048+40], 32 ).stripWhiteSpace();

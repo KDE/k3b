@@ -304,6 +304,8 @@ void K3bVcdBurnDialog::saveUserDefaults()
   c->writeEntry( "dummy_mode", m_checkSimulate->isChecked() );
 
   c->writeEntry( "remove_image", m_checkRemoveBufferFiles->isChecked() );
+
+  m_tempDirSelectionWidget->saveConfig();
 }
 
 #include "k3bvcdburndialog.moc"

@@ -402,6 +402,10 @@ void K3bAudioBurnDialog::saveUserDefaults()
   //  c->writeEntry( "padding", m_checkPadding->isChecked() );
   c->writeEntry( "hide_first_track", m_checkHideFirstTrack->isChecked() );
   c->writeEntry( "remove_buffer_files", m_checkRemoveBufferFiles->isChecked() );
+
+  if( m_tempDirSelectionWidget->isEnabled() ) {
+    m_tempDirSelectionWidget->saveConfig();
+  }
 }
 
 

@@ -59,6 +59,7 @@
 #include <kdialog.h>
 #include <kmessagebox.h>
 #include <kstdaction.h>
+#include <kconfig.h>
 
 #include "rip/k3bcdview.h"
 #include "k3bfileview.h"
@@ -330,6 +331,12 @@ void K3bDirView::reload()
 void K3bDirView::home()
 {
   slotDirActivated( QDir::homeDirPath() );
+}
+
+
+void K3bDirView::saveConfig( KConfig* c )
+{
+  m_fileView->saveConfig(c);
 }
 
 

@@ -43,6 +43,7 @@ class K3bDiskInfoDetector;
 class KActionMenu;
 class QScrollView;
 class QLabel;
+class KConfig;
 
 
 /**
@@ -58,6 +59,9 @@ class K3bDirView : public QVBox
   void setupFinalize( K3bDeviceManager *dm );
   //K3bFileTreeView* getFileTreeView() { return m_fileTreeView; }
   K3bCdView* getCdView() { return m_cdView; }
+
+ public slots:
+  void saveConfig( KConfig* c );
   
  protected slots:
   void slotDirActivated( const KURL& );

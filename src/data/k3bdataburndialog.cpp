@@ -500,17 +500,8 @@ void K3bDataBurnDialog::saveUserDefaults()
   m_volumeDescWidget->save( o );
   o.save( c );
 
-
   if( m_tempDirSelectionWidget->isEnabled() ) {
-    kapp->config()->setGroup( "General Options" );
-    QFileInfo fi( m_tempDirSelectionWidget->tempPath() );
-    QString path;
-    if( fi.isFile() )
-      path = fi.dirPath();
-    else
-      path = fi.filePath();
-
-    kapp->config()->writeEntry( "Temp Dir", path );
+    m_tempDirSelectionWidget->saveConfig();
   }
 }
 

@@ -44,26 +44,28 @@
 
 
 K3bCdrdaoWriter::K3bCdrdaoWriter( K3bDevice* dev, QObject* parent, const char* name )
-        : K3bAbstractWriter( dev, parent, name ),
-        m_command(WRITE),
-        m_blankMode(MINIMAL),
-        m_sourceDevice(0),
-        m_dataFile(QString("")),
-        m_tocFile(QString("")),
-        m_readRaw(false),
-        m_multi(false),
-        m_force(false),
-        m_onTheFly(false),
-        m_fastToc(false),
-        m_readSubchan(None),
-        m_taoSource(false),
-        m_taoSourceAdjust(-1),
-        m_paranoiaMode(-1),
-        m_session(-1),
-        m_cdrdaoBinObject(K3bExternalBinManager::self()->binObject("cdrdao")),
-        m_process(0),
-        m_comSock(0),
-m_parser(new K3bCdrdaoParser()) {
+  : K3bAbstractWriter( dev, parent, name ),
+    m_command(WRITE),
+    m_blankMode(MINIMAL),
+    m_sourceDevice(0),
+    m_sourceDriver("auto"),
+    m_dataFile(QString("")),
+    m_tocFile(QString("")),
+    m_readRaw(false),
+    m_multi(false),
+    m_force(false),
+    m_onTheFly(false),
+    m_fastToc(false),
+    m_readSubchan(None),
+    m_taoSource(false),
+    m_taoSourceAdjust(-1),
+    m_paranoiaMode(-1),
+    m_session(-1),
+    m_cdrdaoBinObject( K3bExternalBinManager::self()->binObject("cdrdao") ),
+    m_process(0),
+    m_comSock(0),
+    m_parser(new K3bCdrdaoParser())
+{
     QPtrList<K3bDevice> devices;
     K3bDevice *d;
     if ( !dev ) {

@@ -77,7 +77,7 @@
 #include "videoEncoding/k3bdivxview.h"
 #include "k3btempdirselectionwidget.h"
 #include "tools/k3bbusywidget.h"
-
+#include "k3bstatusbarmanager.h"
 
 
 
@@ -250,27 +250,19 @@ void K3bMainWindow::initActions()
 
 void K3bMainWindow::initStatusBar()
 {
-  m_busyWidget = new K3bBusyWidget( statusBar() );
-
-  statusBar()->insertItem( "               ", 100, 1 ); // for showing some info
-  statusBar()->addWidget( m_busyWidget, 0, true );
-  statusBar()->insertFixedItem( QString("K3b %1").arg(kapp->aboutData()->version()), 0, true );
-
-  statusBar()->setItemAlignment( 100, Qt::AlignVCenter|AlignLeft );
+  m_statusBarManager = new K3bStatusBarManager( this );
 }
 
 
 void K3bMainWindow::showBusyInfo( const QString& str )
 {
-  statusBar()->changeItem( str, 100 );
-  m_busyWidget->showBusy( true );
+  m_statusBarManager->showBusyInfo(str);
 }
 
 
 void K3bMainWindow::endBusy()
 {
-  statusBar()->changeItem( "               ", 100 );
-  m_busyWidget->showBusy( false );
+  m_statusBarManager->endBusy();
 }
 
 
@@ -444,7 +436,7 @@ void K3bMainWindow::saveOptions()
   K3bExternalBinManager::self()->saveConfig( m_config );
   K3bDeviceManager::self()->saveConfig( m_config );
 
-  emit saveConfig( config() );
+  m_dirView->saveConfig( config() );
 }
 
 

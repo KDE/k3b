@@ -47,6 +47,7 @@ class K3bTempDirSelectionWidget : public QGroupBox
   void setTempPath( const QString& );
   void setSelectionMode( int mode );
   void setNeededSize( unsigned long kb );
+  void saveConfig();
 
  private slots:
   void slotUpdateFreeTempSpace();

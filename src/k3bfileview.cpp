@@ -49,8 +49,6 @@ K3bFileView::K3bFileView(QWidget *parent, const char *name )
   : K3bCdContentsView(parent,name) 
 {
   setupGUI();
-
-  connect( k3bMain(), SIGNAL(saveConfig(KConfig*)), this, SLOT(saveConfig(KConfig*)) );
 }
 
 
