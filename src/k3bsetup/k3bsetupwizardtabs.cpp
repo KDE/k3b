@@ -491,6 +491,11 @@ ExternalBinTab::ExternalBinTab( int i, int o, K3bSetupWizard* wizard )
 					  " want other versions to be used or K3b Setup did not find your installation.</p>" ) );
   m_labelExternalPrograms->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
 
+
+  m_labelWarning = new QLabel( main );
+  m_labelWarning->setPaletteForegroundColor( red );
+  m_labelWarning->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
+
   m_viewExternalPrograms = new KListView( main, "m_viewExternalPrograms" );
   m_viewExternalPrograms->addColumn( i18n( "found" ) );
   m_viewExternalPrograms->addColumn( i18n( "program" ) );
@@ -504,8 +509,9 @@ ExternalBinTab::ExternalBinTab( int i, int o, K3bSetupWizard* wizard )
   m_buttonSelectExternalBin = new QPushButton( i18n("Find program"), main );
 
   mainGrid->addMultiCellWidget( m_labelExternalPrograms, 0, 0, 0, 1 );
-  mainGrid->addMultiCellWidget( m_viewExternalPrograms, 1, 1, 0, 1 );
-  mainGrid->addWidget( m_buttonSelectExternalBin, 2, 1 );
+  mainGrid->addMultiCellWidget( m_labelWarning, 1, 1, 0, 1 );
+  mainGrid->addMultiCellWidget( m_viewExternalPrograms, 2, 2, 0, 1 );
+  mainGrid->addWidget( m_buttonSelectExternalBin, 3, 1 );
 
   mainGrid->setColStretch( 0, 1 );
 
@@ -516,6 +522,15 @@ ExternalBinTab::ExternalBinTab( int i, int o, K3bSetupWizard* wizard )
   connect( m_buttonSelectExternalBin, SIGNAL(clicked()), this, SLOT(slotSelectExternalBin()) );
   connect( m_viewExternalPrograms, SIGNAL(itemRenamed(QListViewItem*, const QString&, int)), 
 	   this, SLOT(slotExternalProgramItemRenamed(QListViewItem*, const QString&, int)) );
+}
+
+
+void ExternalBinTab::aboutToShow()
+{
+  // search for programs
+  setup()->externalBinManager()->checkVersions();
+
+  readSettings();
 }
 
 
@@ -542,12 +557,24 @@ void ExternalBinTab::readSettings()
   item->setText( 1, "cdrdao" );
   item->setText( 2, setup()->externalBinManager()->binObject( "cdrdao" )->version );
   item->setText( 3, setup()->externalBinManager()->binPath( "cdrdao" ) );
+
+
+  // check if cdrecord was found
+  if( !setup()->externalBinManager()->foundBin( "cdrecord" ) ) {
+    m_labelWarning->setText( i18n("<p><b><font color=\"red\">K3bSetup was not able to find cdrecord. You will not be able to write cds or get "
+				  "information about your CD drives without it. It is highly recommended to install "
+				  "cdrecord.</font></b></p>") );
+    m_labelWarning->show();
+  }
+  else {
+    //  m_labelWarning->setText("");
+    m_labelWarning->hide();
+  }
 }
 
 
 bool ExternalBinTab::saveSettings()
 {
-  // TODO: perhaps warn if no cd writing prog was found AND a cd writer was found
   return true;
 }
 

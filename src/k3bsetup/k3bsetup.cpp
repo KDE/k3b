@@ -42,24 +42,14 @@ K3bSetup::K3bSetup( QObject* parent )
   : QObject( parent )
 {
   // create a K3bDeviceManager
-  m_deviceManager = new K3bDeviceManager( this );
   m_externalBinManager = new K3bExternalBinManager( this );
+  m_deviceManager = new K3bDeviceManager( m_externalBinManager, this );
+
 
   // this is a little not to hard hack to ensure that we get the "global" k3b appdir
   // k3bui.rc should always be in $KDEDIR/share/apps/k3b/
   m_configPath = KGlobal::dirs()->findResourceDir( "data", "k3b/k3bui.rc" ) + "k3b/k3bsetup";
   m_config = new KSimpleConfig( m_configPath );
-
-
-  // initialize devices
-  // ================================================
-  m_deviceManager->scanbus();
-
-  if( m_config->hasGroup("Devices") ) {
-    m_config->setGroup( "Devices" );
-    m_deviceManager->readConfig( m_config );
-  }
-  // ================================================
 
 
   // initialize external programs
@@ -71,6 +61,18 @@ K3bSetup::K3bSetup( QObject* parent )
     m_externalBinManager->readConfig( m_config );
   }
   // ================================================
+
+
+  // initialize devices
+  // ================================================
+  m_deviceManager->scanbus();
+
+//   if( m_config->hasGroup("Devices") ) {
+//     m_config->setGroup( "Devices" );
+//     m_deviceManager->readConfig( m_config );
+//   }
+  // ================================================
+
 
   if( m_config->hasGroup( "Permissions" ) ) {
     m_config->setGroup( "Permissions" );

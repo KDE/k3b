@@ -26,20 +26,24 @@ K3bSetupWizard::K3bSetupWizard( K3bSetup* setup, QWidget* parent,  const char* n
 
 
   (void)new WelcomeTab( 1, 6, this );
-  (void)new DeviceTab( 2, 6, this );
-  (void)new NoWriterTab( 2, 6, this );
-  (void)new FstabEntriesTab( 3, 6, this );
-  (void)new ExternalBinTab( 4, 6, this );
+  (void)new ExternalBinTab( 2, 6, this );
+  (void)new DeviceTab( 3, 6, this );
+  (void)new NoWriterTab( 3, 6, this );
+  (void)new FstabEntriesTab( 4, 6, this );
   (void)new PermissionTab( 5, 6, this );
   setFinishEnabled( new FinishTab( 6, 6, this ), true );
-
-  for( int i = 0; i < 6; ++i )
-    ((K3bSetupTab*)page(i))->readSettings();
 }
 
 
 K3bSetupWizard::~K3bSetupWizard()
 {
+}
+
+
+void K3bSetupWizard::showPage( QWidget* page )
+{
+  ((K3bSetupTab*)page)->aboutToShow();
+  KWizard::showPage( page );
 }
 
 							    

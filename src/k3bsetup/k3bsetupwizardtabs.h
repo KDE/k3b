@@ -106,12 +106,15 @@ class ExternalBinTab : public K3bSetupTab
   void readSettings();
   bool saveSettings();
 
+  void aboutToShow();
+
  private slots:
   void slotExternalProgramItemRenamed( QListViewItem*, const QString&, int );
   void slotSelectExternalBin();
 
  private:
   QLabel*      m_labelExternalPrograms;
+  QLabel*      m_labelWarning;
   KListView*   m_viewExternalPrograms;
   QPushButton* m_buttonSelectExternalBin;
 };

@@ -52,7 +52,7 @@
 
 // application specific includes
 #include "k3b.h"
-#include "k3bglobals.h"
+#include "tools/k3bglobals.h"
 #include "k3bview.h"
 #include "k3bdirview.h"
 #include "audio/k3baudiodoc.h"
@@ -854,7 +854,7 @@ void K3bMainWindow::init()
   // ===============================================================================
   emit initializationInfo( i18n("Scanning for cd devices...") );
 
-  m_deviceManager = new K3bDeviceManager( this );
+  m_deviceManager = new K3bDeviceManager( m_externalBinManager, this );
 
   if( !m_deviceManager->scanbus() )
     qDebug( "No Devices found!" );

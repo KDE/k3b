@@ -33,7 +33,7 @@
 #include "k3baudiotrackdialog.h"
 #include "k3baudiotrack.h"
 #include "../kcutlabel.h"
-#include "../k3bglobals.h"
+#include "../tools/k3bglobals.h"
 
 
 K3bAudioTrackDialog::K3bAudioTrackDialog( QPtrList<K3bAudioTrack>& tracks, QWidget *parent, const char *name )

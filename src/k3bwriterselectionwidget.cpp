@@ -20,7 +20,7 @@
 #include "device/k3bdevice.h"
 #include "device/k3bdevicemanager.h"
 #include "k3b.h"
-#include "k3bglobals.h"
+#include "tools/k3bglobals.h"
 
 #include <klocale.h>
 #include <kdialog.h>

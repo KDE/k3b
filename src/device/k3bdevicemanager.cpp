@@ -2,6 +2,8 @@
 #include "k3bidedevice.h"
 #include "k3bscsidevice.h"
 
+#include "../tools/k3bexternalbinmanager.h"
+#include "../tools/k3bglobals.h"
 
 #include <qstring.h>
 #include <qstringlist.h>
@@ -13,6 +15,12 @@
 
 #include <iostream>
 #include <fstab.h>
+#include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/ioctl.h>
+#include <linux/../scsi/scsi.h> /* cope with silly includes */
+
 
 typedef Q_INT16 size16;
 typedef Q_INT32 size32;
@@ -30,8 +38,8 @@ const char* K3bDeviceManager::deviceNames[] =
 
 
 
-K3bDeviceManager::K3bDeviceManager( QObject * parent )
-  :  QObject( parent )
+K3bDeviceManager::K3bDeviceManager( K3bExternalBinManager* exM, QObject * parent )
+  : QObject( parent ), m_externalBinManager( exM )
 {
   m_reader.setAutoDelete( true );
   m_writer.setAutoDelete( true );
@@ -76,18 +84,8 @@ int K3bDeviceManager::scanbus()
 {
   m_foundDevices = 0;
   for( int i = 0; i < DEV_ARRAY_SIZE; i++ ) {
-    if( K3bDevice *dev = scanDevice( deviceNames[i] ) ) {
-      if( dev->burner() ) {
-	m_writer.append( dev );
-      } 
-      else {
-	m_reader.append( dev );
-      }
-
-      m_allDevices.append( dev );
-
+    if( addDevice( deviceNames[i] ) )
       m_foundDevices++;
-    }
   }
 
   scanFstab();
@@ -141,15 +139,7 @@ bool K3bDeviceManager::readConfig( KConfig* c )
     dev = deviceByName( list[0] );
 
     if( dev == 0 )
-      if( (dev = scanDevice( list[0] )) != 0 ) {
-	// new device found, add to list
-	if( dev->burner() )
-	  m_writer.append( dev );
-	else
-	  m_reader.append( dev );
-
-	m_allDevices.append( dev );
-      }
+      dev = addDevice( list[0] );
 
     if( dev != 0 ) {
       // device found, apply changes
@@ -175,15 +165,7 @@ bool K3bDeviceManager::readConfig( KConfig* c )
     dev = deviceByName( list[0] );
 
     if( dev == 0 )
-      if( (dev = scanDevice( list[0] )) != 0 ) {
-	// new device found, add to list
-	if( dev->burner() )
-	  m_writer.append( dev );
-	else
-	  m_reader.append( dev );
-
-	m_allDevices.append( dev );
-      }
+      dev = addDevice( list[0] );
 
     if( dev != 0 ) {
       // device found, apply changes
@@ -247,53 +229,129 @@ bool K3bDeviceManager::saveConfig( KConfig* c )
 }
 
 
-K3bDevice* K3bDeviceManager::scanDevice( const char *dev )
+K3bDevice* K3bDeviceManager::initializeScsiDevice( cdrom_drive* drive )
 {
-  cdrom_drive *drive = cdda_identify( dev, CDDA_MESSAGE_FORGETIT, 0 );
-  if( drive == 0 ) {
-    qDebug( "(K3bDeviceManager) %s could not be opened.", dev );
-    return 0;
-  }
+  K3bScsiDevice* dev = new K3bScsiDevice( drive );
 
-  if( deviceByName( drive->cdda_device_name ) != 0 ) {
-    qDebug( "(K3bDeviceManager) %s already detected as %s.", dev, drive->cdda_device_name );
-    cdda_close( drive );
-    return 0;
-  }
+  // determine bus, target, lun
+  int devFile = ::open( dev->genericDevice().latin1(), O_RDONLY | O_NONBLOCK);
+  if( devFile ) {
+    struct ScsiIdLun {
+      int id;
+      int lun;
+    };
+    ScsiIdLun idLun;
 
-  if( drive->interface == GENERIC_SCSI ) {
-    K3bScsiDevice* newDevice = new K3bScsiDevice( drive );
-    cdda_close( drive );
-    if( newDevice->init() )
-      return newDevice;
-    else {
-      qDebug("(K3bDeviceManager) Could not initialize device %s.", newDevice->devicename().latin1() );
-      delete newDevice;
-      return 0;
+    if ( ioctl( devFile, SCSI_IOCTL_GET_IDLUN, &idLun ) < 0) {
+      qDebug( "(K3bDeviceManager) %s: Need a filename that resolves to a SCSI device (2).", dev->genericDevice().latin1() );
     }
-  }
-  else if( drive->interface == COOKED_IOCTL ) {
-    K3bIdeDevice* newDevice = new K3bIdeDevice( drive );
-    cdda_close( drive );
-    if( newDevice->init() )
-      return newDevice;
     else {
-      qDebug("(K3bDeviceManager) Could not initialize device %s.", newDevice->devicename().latin1() );
-      delete newDevice;
-      return 0;
+      dev->m_target = idLun.id & 0xff;
+      dev->m_lun    = (idLun.id >> 8) & 0xff;
+      dev->m_bus    = (idLun.id >> 16) & 0xff;
+      qDebug( "(K3bDeviceManager) bus: %i, id: %i, lun: %i", dev->m_bus, dev->m_target, dev->m_lun );
     }
+    ::close( devFile );
   }
   else {
-    qDebug( "(K3bDeviceManager) %s is not generic-scsi or cooked-ioctl.", dev );
-    cdda_close( drive );
+    qDebug("(K3bDeviceManager) ERROR: Could not open device " + dev->genericDevice() );
+    delete dev;
     return 0;
   }
+
+  // now scan with cdrecord for a driver
+  if( m_externalBinManager->foundBin( "cdrecord" ) ) {
+    qDebug("(K3bDeviceManager) probing capabilities for device " + dev->genericDevice() );
+
+    KProcess driverProc;
+    
+      // check drive capabilities
+    driverProc << m_externalBinManager->binPath( "cdrecord" );
+    driverProc << QString("dev=%1").arg(dev->busTargetLun());
+    driverProc << "-prcap";
+    
+    connect( &driverProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
+	     this, SLOT(slotCollectStdout(KProcess*, char*, int)) );
+    
+    m_processOutput.clear();
+    
+    driverProc.start( KProcess::Block, KProcess::Stdout );
+    
+    // parse output
+    for( QStringList::const_iterator it = m_processOutput.begin(); it != m_processOutput.end(); ++it ) {
+      const QString& line = *it;
+      
+      if( line.startsWith("  ") ) {
+	if( line.contains("write CD-R media") )
+	  dev->m_burner = !line.contains( "not" );
+	
+	else if( line.contains("write CD-RW media") )
+	  dev->m_bWritesCdrw = !line.contains( "not" );
+	
+	else if( line.contains("Buffer-Underrun-Free recording") )
+	  dev->m_burnproof = !line.contains( "not" );
+	
+	else if( line.contains( "Maximum read  speed" ) )
+	  dev->m_maxReadSpeed = K3b::round( line.mid( line.find(":")+1 ).toDouble() * 1000.0 / ( 2352.0 * 75.0 ) );
+	
+	else if( line.contains( "Maximum write speed" ) )
+	  dev->m_maxWriteSpeed = K3b::round( line.mid( line.find(":")+1 ).toDouble() * 1000.0 / ( 2352.0 * 75.0 ) );
+	
+	else if( line.contains( "Buffer size" ) )
+	  dev->m_bufferSize = K3b::round( line.mid( line.find(":")+1 ).toDouble() * 1024.0 / ( 2352.0 * 75.0 ) );
+	
+      }
+      else if( line.startsWith("Vendor_info") )
+	dev->m_vendor = line.mid( line.find(":")+3, 8 ).stripWhiteSpace();
+      else if( line.startsWith("Identifikation") )
+	dev->m_description = line.mid( line.find(":")+3, 16 ).stripWhiteSpace();
+      else if( line.startsWith("Revision") )
+	dev->m_version = line.mid( line.find(":")+3, 4 ).stripWhiteSpace();
+      else
+	qDebug("(K3bDeviceManager) unusable cdrecord output: " + line );
+      
+    }
+    
+  }
+
+
+  return dev;
+}
+
+
+K3bDevice* K3bDeviceManager::initializeIdeDevice( cdrom_drive* drive )
+{
+  K3bIdeDevice* newDevice = new K3bIdeDevice( drive );
+  return newDevice;
 }
 
 
 K3bDevice* K3bDeviceManager::addDevice( const QString& devicename )
 {
-  K3bDevice *dev = scanDevice( devicename.latin1() );
+  cdrom_drive *drive = cdda_identify( devicename, CDDA_MESSAGE_FORGETIT, 0 );
+  if( drive == 0 ) {
+    qDebug( "(K3bDeviceManager) %s could not be opened.", devicename.latin1() );
+    return 0;
+  }
+
+  K3bDevice* dev = 0;
+  if( deviceByName( drive->cdda_device_name ) != 0 ) {
+    qDebug( "(K3bDeviceManager) %s already detected as %s.", devicename.latin1(), drive->cdda_device_name );
+  }
+  else {
+    if( drive->interface == GENERIC_SCSI ) {
+      dev = initializeScsiDevice( drive );
+    }
+    else if( drive->interface == COOKED_IOCTL ) {
+      dev = initializeIdeDevice( drive );
+    }
+    else {
+      qDebug( "(K3bDeviceManager) %s is not generic-scsi or cooked-ioctl.", devicename.latin1() );
+    }
+  }
+    
+  cdda_close( drive );
+
 
   if( dev == 0 )
     return 0;
@@ -327,6 +385,12 @@ void K3bDeviceManager::scanFstab()
 
     dev = m_allDevices.next();
   }
+}
+
+
+void K3bDeviceManager::slotCollectStdout( KProcess*, char* data, int len )
+{
+  m_processOutput += QStringList::split( "\n", QString::fromLatin1( data, len ) );
 }
 
 

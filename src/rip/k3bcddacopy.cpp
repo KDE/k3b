@@ -16,7 +16,7 @@
  ***************************************************************************/
 
 
-#include "../k3bglobals.h"
+#include "../tools/k3bglobals.h"
 #include "k3bcdda.h"
 #include "k3bcddacopy.h"
 #include "k3bcdview.h"

@@ -19,7 +19,7 @@
 
 #include "audiolistviewitem.h"
 #include "k3baudiotrack.h"
-#include "../k3bglobals.h"
+#include "../tools/k3bglobals.h"
 
 
 K3bAudioListViewItem::K3bAudioListViewItem( K3bAudioTrack* track, QListView* parent )

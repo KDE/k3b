@@ -31,6 +31,8 @@ namespace K3b
 
   Q_INT16 swapByteOrder( Q_INT16 i );
   Q_INT32 swapByteOrder( Q_INT32 i );
+
+  int round( double );
 };
 
 #endif

@@ -4,12 +4,15 @@
 
 #include <qobject.h>
 #include <qstring.h>
+#include <qstringlist.h>
 #include <qarray.h>
 #include <qlist.h>
 
 class KProcess;
 class K3bDevice;
 class KConfig;
+class K3bExternalBinManager;
+class cdrom_drive;
 
 
 class K3bDeviceManager : public QObject 
@@ -23,7 +26,7 @@ class K3bDeviceManager : public QObject
    * a machine is equal, so having multible instances
    * does not make sense.
    **/
-  K3bDeviceManager( QObject * parent );
+  K3bDeviceManager( K3bExternalBinManager*, QObject * parent );
   ~K3bDeviceManager();
 
   K3bDevice* deviceByName( const QString& );
@@ -71,14 +74,22 @@ class K3bDeviceManager : public QObject
    */
   K3bDevice* addDevice( const QString& );
 
+ private slots:
+  void slotCollectStdout( KProcess*, char* data, int len );
+
  private:
+ K3bExternalBinManager* m_externalBinManager;
+
   QList<K3bDevice> m_reader;
   QList<K3bDevice> m_writer;
   QList<K3bDevice> m_allDevices;;
   int m_foundDevices;
 
+  QStringList m_processOutput;
+
   void scanFstab();
-  K3bDevice* scanDevice( const char *dev );
+  K3bDevice* initializeScsiDevice( cdrom_drive* );
+  K3bDevice* initializeIdeDevice( cdrom_drive* );
 
   static const int DEV_ARRAY_SIZE = 19;
   static const char* deviceNames[DEV_ARRAY_SIZE];

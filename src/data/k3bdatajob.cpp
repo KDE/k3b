@@ -21,7 +21,7 @@
 #include "k3bdataitem.h"
 #include "k3bdiritem.h"
 #include "../k3b.h"
-#include "../k3bglobals.h"
+#include "../tools/k3bglobals.h"
 #include "../device/k3bdevice.h"
 #include "../device/k3bemptydiscwaiter.h"
 #include "k3bdiritem.h"

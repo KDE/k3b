@@ -17,10 +17,12 @@
 
 
 #include "k3bglobals.h"
-#include "device/Sample.h"
-#include "device/util.h"
+#include "../device/Sample.h"
+#include "../device/util.h"
 
 #include <qdatastream.h>
+
+#include <cmath>
 
 
 QString K3b::framesToString( int h, bool showFrames )
@@ -58,3 +60,8 @@ Q_INT32 K3b::swapByteOrder( Q_INT32 i )
   return (i << 24) | ((i << 8) & 0xff0000) | ((i >> 8) & 0xff00) | (i >> 24);
 }
 
+
+int K3b::round( double d )
+{
+  return (int)( floor(d) + 0.5 <= d ? ceil(d) : floor(d) );
+}

@@ -16,7 +16,7 @@
  ***************************************************************************/
 
 #include "k3baudioplayer.h"
-#include "k3bglobals.h"
+#include "tools/k3bglobals.h"
 #include "kcutlabel.h"
 
 #include <qlabel.h>

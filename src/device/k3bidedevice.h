@@ -14,8 +14,6 @@ class K3bIdeDevice : public K3bDevice
   K3bIdeDevice( cdrom_drive* );
   ~K3bIdeDevice();
 
-  bool init();
-
   int interfaceType() const { return K3bDevice::IDE; }
 
   bool burnproof() const { return false; }
@@ -25,6 +23,8 @@ class K3bIdeDevice : public K3bDevice
 
  private:
   QString m_emptyString;  // only used for returning an empty genericDevice
+
+  friend class K3bDeviceManager;
 };
 
 

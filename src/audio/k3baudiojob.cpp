@@ -18,7 +18,7 @@
 #include "k3baudiojob.h"
 
 #include "../k3b.h"
-#include "../k3bglobals.h"
+#include "../tools/k3bglobals.h"
 #include "../k3bdoc.h"
 #include "k3baudiodoc.h"
 #include "k3baudiotrack.h"

@@ -45,8 +45,11 @@ class K3bDevice
   virtual const QString& description() const { return m_description; }
   virtual const QString& version() const { return m_version; }
   virtual bool           burner() const { return m_burner; }
+  virtual bool           writesCdrw() const { return m_bWritesCdrw; }
   virtual bool           burnproof() const { return m_burnproof; }
   virtual int            maxReadSpeed() const { return m_maxReadSpeed; }
+
+  virtual int            bufferSize() const { return m_bufferSize; }
 
   /**
    * returns genericDevice if not null
@@ -69,6 +72,7 @@ class K3bDevice
 
   virtual int            maxWriteSpeed() const { return m_maxWriteSpeed; }
   virtual const QString& cdrdaoDriver() const { return m_cdrdaoDriver; }
+  virtual bool           cdrecordDriver() const { return false; }
 
   const QString& mountPoint() const { return m_mountPoint; }
 
@@ -138,13 +142,6 @@ class K3bDevice
   virtual int isEmpty();
 
   /**
-   * This must be reimplemented because
-   * it is called by K3bDeviceManager
-   * to initialize the device.
-   */
-  virtual bool init() = 0;
-
-  /**
    * block or unblock the drive's tray
    * returns true on success and false on scsi-error
    */
@@ -157,6 +154,7 @@ class K3bDevice
   QString m_description;
   QString m_version;
   bool m_burner;
+  bool m_bWritesCdrw;
   bool m_burnproof;
   QString m_cdrdaoDriver;
   int m_cdTextCapable;
@@ -170,10 +168,14 @@ class K3bDevice
   int m_target;
   int m_lun;
 
+  int m_bufferSize;
+
  private:
   QString m_genericDevice;
   QString m_ioctlDevice;
   QString m_mountPoint;
+
+  friend class K3bDeviceManager;
 };
 
 

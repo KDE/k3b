@@ -41,7 +41,7 @@
 #include "k3b.h"
 #include "k3bview.h"
 #include "k3bdoc.h"
-#include "k3bglobals.h"
+#include "tools/k3bglobals.h"
 #include "device/k3bdevice.h"
 #include "audio/k3baudiodoc.h"
 #include "data/k3bdatadoc.h"

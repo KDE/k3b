@@ -29,6 +29,8 @@ class K3bSetupWizard : public KWizard
 
   K3bSetup* setup() const { return m_setup; }
 
+  void showPage( QWidget* );
+
  protected slots:
   void accept();
   void next();

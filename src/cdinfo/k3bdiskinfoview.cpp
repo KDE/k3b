@@ -3,7 +3,7 @@
 
 #include "k3bdiskinfo.h"
 #include "k3bdiskinfodetector.h"
-#include "../k3bglobals.h"
+#include "../tools/k3bglobals.h"
 #include "../kcutlabel.h"
 
 #include <qlabel.h>

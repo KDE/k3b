@@ -18,7 +18,7 @@
 #include "k3bisoimagejob.h"
 
 #include "../k3b.h"
-#include "../k3bglobals.h"
+#include "../tools/k3bglobals.h"
 #include "../device/k3bdevice.h"
 #include "../device/k3bemptydiscwaiter.h"
 #include "../tools/k3bexternalbinmanager.h"

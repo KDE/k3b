@@ -16,7 +16,7 @@
  ***************************************************************************/
 
 #include "k3baudiotrack.h"
-#include "../k3bglobals.h"
+#include "../tools/k3bglobals.h"
 
 // ID3lib-includes
 #include <id3/tag.h>

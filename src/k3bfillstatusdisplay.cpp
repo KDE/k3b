@@ -17,7 +17,7 @@
 
 #include "k3bfillstatusdisplay.h"
 #include "audio/k3baudiodoc.h"
-#include "k3bglobals.h"
+#include "tools/k3bglobals.h"
 
 #include <qevent.h>
 #include <qpainter.h>

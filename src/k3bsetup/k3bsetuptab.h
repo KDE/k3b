@@ -29,6 +29,8 @@ class K3bSetupTab : public QWidget
 
   virtual bool appropriate();
 
+  virtual void aboutToShow();
+
  protected:
   void setMainWidget( QWidget* );
   K3bSetup* setup() { return m_setup; }

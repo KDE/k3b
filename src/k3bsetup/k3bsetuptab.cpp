@@ -78,4 +78,10 @@ bool K3bSetupTab::appropriate()
 }
 
 
+void K3bSetupTab::aboutToShow()
+{
+  readSettings();
+}
+
+
 #include "k3bsetuptab.moc"

@@ -1,7 +1,7 @@
 #include "k3bblankingjob.h"
 
 #include "k3b.h"
-#include "k3bglobals.h"
+#include "tools/k3bglobals.h"
 #include "device/k3bdevice.h"
 #include "tools/k3bexternalbinmanager.h"
 

@@ -22,7 +22,7 @@
 #include "../k3b.h"
 #include "../device/k3bdevicemanager.h"
 #include "../device/k3bdevice.h"
-#include "../k3bglobals.h"
+#include "../tools/k3bglobals.h"
 #include "k3bripperwidget.h"
 #include "k3bfilenamepatterndialog.h"
 #include "k3bpatternparser.h"
