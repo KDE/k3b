@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -21,6 +21,9 @@
 #include <kfileiconview.h>
 
 class QMouseEvent;
+class QListViewItem;
+class QIconViewItem;
+class QKeyEvent;
 
 
 /**
@@ -34,9 +37,17 @@ class KDndFileDetailView : public KFileDetailView
  public: 
   KDndFileDetailView( QWidget* parent, const char* name );
   ~KDndFileDetailView();
-  
+
+ protected slots:
+   void slotSelected( QListViewItem* item );
+
  protected:
+  void keyPressEvent( QKeyEvent* e );
+  void keyReleaseEvent( QKeyEvent* );
   QDragObject* dragObject();
+
+ private:
+  bool m_notEnterDir;
 };
 
 
@@ -48,8 +59,16 @@ class KDndFileIconView : public KFileIconView
   KDndFileIconView( QWidget* parent = 0, const char* name = 0);
   ~KDndFileIconView();
 
+ protected slots:
+   void slotSelected( QIconViewItem* item );
+
  protected:
+  void keyPressEvent( QKeyEvent* e );
+  void keyReleaseEvent( QKeyEvent* );
   QDragObject* dragObject();
+
+ private:
+  bool m_notEnterDir;
 };
 
 #endif
