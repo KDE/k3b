@@ -88,7 +88,7 @@ void K3bCdCopyJob::start() {
 
     m_tempPath = k3bMain()->findTempFile( "img", m_tempPath );
     m_tocFile  = QString(m_tempPath);
-    m_tocFile  = m_tocFile.replace(QRegExp(".img"),".toc");
+    m_tocFile  = m_tocFile.replace(m_tocFile.findRev(".img"),4,".toc");
 
     //  m_tempPath = QFile::encodeName(m_tempPath);
     //  m_toc  = QFile::encodeName(m_toc);
