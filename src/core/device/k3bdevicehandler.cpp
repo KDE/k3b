@@ -19,6 +19,9 @@
 #include <k3bthread.h>
 #include <device/k3bdevice.h>
 
+#include <qtimer.h>
+
+
 class K3bCdDevice::DeviceHandler::DeviceHandlerThread : public K3bThread
 {
 public:
@@ -197,7 +200,9 @@ void K3bCdDevice::DeviceHandler::setDevice( CdDevice* dev )
 void K3bCdDevice::DeviceHandler::sendCommand( int command )
 {
   m_thread->command = command;
-  start();
+  // we use a QTimer to make sure that this method returnes before the thread finishes
+  // otherwise the default usage of this method is... well.. useless...
+  QTimer::singleShot( 0, this, SLOT(start()) );
 }
 
 void K3bCdDevice::DeviceHandler::getToc()

@@ -40,7 +40,7 @@
 #include <klocale.h>
 #include <kfileitem.h>
 #include <kmessagebox.h>
-
+#include <kdirlister.h>
 
 
 
@@ -154,7 +154,7 @@ KURL K3bFileView::url()
   return m_dirOp->url();
 }
 
-void K3bFileView::setAutoUpdate(bool b)
+void K3bFileView::setAutoUpdate( bool b )
 {
   m_dirOp->dirLister()->setAutoUpdate( b );
 }

@@ -41,9 +41,9 @@ class K3bFileView : public K3bCdContentsView
  public:
   K3bFileView(QWidget *parent=0, const char *name=0);
   ~K3bFileView();
+
   void setUrl( const KURL &url, bool forward = true );
   KURL url();
-  void setAutoUpdate(bool);
 
   KActionCollection* actionCollection() const;
 
@@ -58,6 +58,7 @@ class K3bFileView : public K3bCdContentsView
   void slotAudioFileEnqueue();
   void slotAddFilesToProject();
   void saveConfig( KConfig* c );
+  void setAutoUpdate( bool );
 
  private:
   K3bToolBox* m_toolBox;

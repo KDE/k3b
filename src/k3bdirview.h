@@ -79,9 +79,9 @@ class K3bDirView : public QVBox
   void slotShowDiskInfo();
   void slotUnlockDevice();
   void slotUnmountDisk();
-  void slotUnmountFinished(KIO::Job*);
+  void slotUnmountFinished( K3bDeviceBranch*, bool );
   void slotEjectDisk();
-  void slotEjectFinished();
+  //  void slotEjectFinished();
   void slotFileTreeContextMenu( K3bCdDevice::CdDevice* dev, const QPoint& p );
 
  private:
@@ -107,6 +107,9 @@ class K3bDirView : public QVBox
   bool m_bViewDiskInfo;
   KActionMenu* m_devicePopupMenu;
   K3bCdDevice::CdDevice* m_lastDevice;
+
+  class Private;
+  Private* d;
 };
 
 #endif

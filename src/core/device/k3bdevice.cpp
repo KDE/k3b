@@ -1963,7 +1963,7 @@ bool K3bCdDevice::CdDevice::readSectorsRaw(unsigned char *buf, int start, int co
 bool K3bCdDevice::CdDevice::readModePage2A( struct mm_cap_page_2A* p ) const
 {
   unsigned char data[22+8]; // MMC-1: 22 byte, header: 8 byte
-  ::memset( data, 0, sizeof(struct mm_cap_page_2A) );
+  ::memset( data, 0, 22+8 );
 
   // to be as compatible as posiible we just use the MMC-1 part of the
   // mode page. Since we do not use the new stuff yet this is not a problem at all.

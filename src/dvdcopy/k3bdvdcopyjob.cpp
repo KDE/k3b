@@ -114,6 +114,8 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
   }
   else {
     if( dh->ngDiskInfo().capacity() > K3b::Msf( 510*60*75 ) ) {
+      kdDebug() << "(K3bDvdCopyJob) DVD too large." << endl;
+
       if( KMessageBox::warningYesNo( qApp->activeWindow(), 
 				     i18n("The source DVD seems to be too large (%1) to make it's contents fit on "
 					  "a normal writable DVD media which have a capacity of approximately "
@@ -123,43 +125,43 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
 	d->running = false;
 	return;
       }
-
-      // now we may really start.
-
-      //      if( m_onlyCreateImage || !m_onTheFly ) {
-      //        emit newTask( i18n("Reading image") );
-      //        d->bufferFile.setName( m_imagePath );
-      //        if( !d->bufferFile.open( IO_ReadOnly ) {
-      //          emit infoMessage( i18n("Could not open %1 for writing").arg(m_imagePath), ERROR );
-      //          emit finished(false);
-      //          d->running = false;
-      //          return;
-      //        }
-      //      }
-
-      if( m_onlyCreateImage || !m_onTheFly ) {
-	emit newTask( i18n("Creating DVD image") );
-      }
-      else if( m_onTheFly ) {
-	prepareWriter();
-	if( waitForDvd() ) {
-	  if( m_simulate )
-	    emit newTask( i18n("Simulating DVD copy") );
-	  else
-	    emit newTask( i18n("Writing DVD copy %1").arg(d->doneCopies+1) );
-
-	  d->writerJob->start();
-	}
-	else {
-	  emit finished(false);
-	  d->running = false;
-	  return;
-	}
-      }
-
-      prepareReader();
-      d->readcdReader->start();
     }
+
+    // now we may really start.
+
+    //      if( m_onlyCreateImage || !m_onTheFly ) {
+    //        emit newTask( i18n("Reading image") );
+    //        d->bufferFile.setName( m_imagePath );
+    //        if( !d->bufferFile.open( IO_ReadOnly ) {
+    //          emit infoMessage( i18n("Could not open %1 for writing").arg(m_imagePath), ERROR );
+    //          emit finished(false);
+    //          d->running = false;
+    //          return;
+    //        }
+    //      }
+
+    if( m_onlyCreateImage || !m_onTheFly ) {
+      emit newTask( i18n("Creating DVD image") );
+    }
+    else if( m_onTheFly && !m_onlyCreateImage ) {
+      prepareWriter();
+      if( waitForDvd() ) {
+	if( m_simulate )
+	  emit newTask( i18n("Simulating DVD copy") );
+	else
+	  emit newTask( i18n("Writing DVD copy %1").arg(d->doneCopies+1) );
+
+	d->writerJob->start();
+      }
+      else {
+	emit finished(false);
+	d->running = false;
+	return;
+      }
+    }
+
+    prepareReader();
+    d->readcdReader->start();
   }
 }
 
@@ -196,7 +198,7 @@ void K3bDvdCopyJob::prepareReader()
   d->readcdReader->setReadDevice( m_readerDevice );
   d->readcdReader->setReadSpeed( 0 ); // MAX
 
-  if( m_onTheFly )
+  if( m_onTheFly && !m_onlyCreateImage )
     d->readcdReader->writeToFd( d->writerJob->fd() );
   else {
     d->readcdReader->writeToFd( -1 );

@@ -93,12 +93,22 @@ protected:
 
 
 
+class K3bDirView::Private
+{
+public:
+  bool ejectRequested;
+};
+
+
+
 K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *name )
   : QVBox(parent, name), 
     m_fileTreeView(treeView),
     m_bViewDiskInfo(false), 
     m_lastDevice(0)
 {
+  d = new Private;
+
   m_diskInfoDetector = new K3bDiskInfoDetector( this );
   connect( m_diskInfoDetector, SIGNAL(diskInfoReady(const K3bCdDevice::DiskInfo&)),
 	   k3bcore, SLOT(requestBusyFinish()) );
@@ -185,12 +195,15 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
 	   this, SLOT(slotFileTreeContextMenu(K3bCdDevice::CdDevice*, const QPoint&)) );
   connect( m_fileTreeView, SIGNAL(mountFinished(K3bDeviceBranch*, const QString&)),
 	   this, SLOT(slotMountFinished(K3bDeviceBranch*, const QString&)) );
+  connect( m_fileTreeView, SIGNAL(unmountFinished(K3bDeviceBranch*, bool)),
+	   this, SLOT(slotUnmountFinished(K3bDeviceBranch*, bool)) );
   connect( m_fileView, SIGNAL(urlEntered(const KURL&)), m_fileTreeView, SLOT(followUrl(const KURL&)) );
   connect( m_fileView, SIGNAL(urlEntered(const KURL&)), this, SLOT(slotUpdateURLCombo(const KURL&)) );
 }
 
 K3bDirView::~K3bDirView()
 {
+  delete d;
 }
 
 
@@ -305,8 +318,8 @@ void K3bDirView::slotUnmountDisk()
   k3bcore->requestBusyInfo( i18n("Unmounting disk.") );
   K3bDeviceBranch* branch = m_fileTreeView->branch( m_lastDevice );
   if( branch ) {
-    if( m_fileView->url().isParentOf( branch->rootUrl() ) )
-      m_fileView->setUrl( QDir::homeDirPath() );
+    m_fileView->setAutoUpdate( false ); // in case we look at the mounted path
+    d->ejectRequested = false;
     branch->unmount();
   }
   else {
@@ -314,21 +327,26 @@ void K3bDirView::slotUnmountDisk()
   }
 }
 
-void K3bDirView::slotUnmountFinished( KIO::Job* job )
+void K3bDirView::slotUnmountFinished( K3bDeviceBranch*, bool success )
 {
-  if( job->error() ) {
-    job->showErrorDialog( this );
-  }
   k3bcore->requestBusyFinish();
+
+  if( success ) {
+    m_fileView->setAutoUpdate( true );
+
+    if( d->ejectRequested )
+      K3bCdDevice::eject( m_lastDevice );
+  }
 }
 
 void K3bDirView::slotEjectDisk()
 {
+  k3bcore->requestBusyInfo( i18n("Ejecting disk.") );
   K3bDeviceBranch *branch = m_fileTreeView->branch( m_lastDevice );
   if( branch ) {
-    //    branch->setAutoUpdate(false);
-    connect( KIO::unmount( branch->device()->mountPoint(), false ), SIGNAL(result(KIO::Job*)),
-	     this, SLOT( slotEjectFinished() ) );
+    m_fileView->setAutoUpdate( false ); // in case we look at the mounted path
+    d->ejectRequested = true;
+    branch->unmount();
   }
   else {
     KMessageBox::sorry( this, i18n("No device selected.") );
@@ -336,18 +354,18 @@ void K3bDirView::slotEjectDisk()
 }
 
 
-void K3bDirView::slotEjectFinished()
-{
-  K3bDeviceBranch *branch = m_fileTreeView->branch( m_lastDevice );
-  if( branch ) {
-    branch->setAutoUpdate(true);
+// void K3bDirView::slotEjectFinished()
+// {
+//   K3bDeviceBranch *branch = m_fileTreeView->branch( m_lastDevice );
+//   if( branch ) {
+//     branch->setAutoUpdate(true);
     
-    K3bCdDevice::eject( branch->device() );
-  }
-  else {
-    KMessageBox::sorry( this, i18n("No device selected.") );
-  }
-}
+//     K3bCdDevice::eject( branch->device() );
+//   }
+//   else {
+//     KMessageBox::sorry( this, i18n("No device selected.") );
+//   }
+// }
 
 void K3bDirView::slotUpdateURLCombo( const KURL& )
 {
