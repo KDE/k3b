@@ -121,6 +121,8 @@ void K3bAudioBurnDialog::saveSettings()
 
   // -- save Cd-Text ------------------------------------------------
   m_cdtextWidget->save( m_doc );
+
+  doc()->setTempDir( m_tempDirSelectionWidget->tempPath() );
 }
 
 
@@ -133,6 +135,9 @@ void K3bAudioBurnDialog::readSettings()
 
   // read CD-Text ------------------------------------------------------------
   m_cdtextWidget->load( m_doc );
+
+  if( !doc()->tempDir().isEmpty() )
+    m_tempDirSelectionWidget->setTempPath( doc()->tempDir() );
 
   toggleAllOptions();
 }
