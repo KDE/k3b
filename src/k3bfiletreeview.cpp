@@ -39,7 +39,7 @@
 
 
 K3bDeviceBranch::K3bDeviceBranch( KFileTreeView* view, K3bDevice* dev, KFileTreeViewItem* item )
-  : KFileTreeBranch( view, KURL(), i18n("Drive: %1 - %2").arg(dev->vendor()).arg(dev->description()),
+  : KFileTreeBranch( view, KURL(dev->mountPoint()), i18n("%1 - %2").arg(dev->vendor()).arg(dev->description()),
 		     ( dev->burner()
 		       ? SmallIcon("cdwriter_unmount")
 		       : SmallIcon("cdrom_unmount") ),
@@ -74,6 +74,7 @@ K3bFileTreeView::K3bFileTreeView( QWidget *parent, const char *name )
   setAlternateBackground( QColor() );
   setFullWidth();
   setRootIsDecorated(true);
+  setSorting(-1);
 
   m_dirOnlyMode = true;
   m_menuEnabled = false;
@@ -298,16 +299,15 @@ KURL K3bFileTreeView::selectedUrl() const
 
 void K3bFileTreeView::setSelectedDevice(K3bDevice* dev)
 {
-  for(QMap<KFileTreeBranch*, K3bDevice*>::iterator it=m_deviceBranchesMap.begin(); it != m_deviceBranchesMap.end(); ++it)
+  for(QMap<KFileTreeBranch*, K3bDevice*>::iterator it = m_deviceBranchesMap.begin(); 
+      it != m_deviceBranchesMap.end(); ++it)
   {
     kdDebug() << "Select " << dev->devicename() << endl;
-    if ( *it == dev )
-     {
-        setCurrentItem( it.key()->root() );
-        setSelected( it.key()->root(), true);
-        repaint();
-        return;
-     }
+    if ( *it == dev ) {
+      setCurrentItem( it.key()->root() );
+      setSelected( it.key()->root(), true);
+      return;
+    }
   }
 }
 
