@@ -138,16 +138,23 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
     d->running = false;
   }
   else {
-    // TODO: only do this if the source is a video dvd
-    kdDebug() << "(K3bDvdCopyJob) trying to open libdvdcss." << endl;
-    if( K3bLibDvdCss* libcss = K3bLibDvdCss::create() ) {
-      kdDebug() << "(K3bLibDvdCss) succeeded." << endl;
-      kdDebug() << "(K3bLibDvdCss) dvdcss_open(" << m_readerDevice->blockDeviceName() << ") = "
-		<< libcss->open(m_readerDevice) << endl;
-      delete libcss;
+    if( m_readerDevice->featureCurrent( K3bDevice::FEATURE_DVD_CSS ) ) {
+      emit infoMessage( i18n("Found encrypted DVD."), ERROR );
+      emit infoMessage( i18n("Cannot copy encrypted DVDs."), ERROR );
+      d->running = false;
+      emit finished( false );
+      return;
     }
-    else
-      kdDebug() << "(K3bLibDvdCss) failed." << endl;
+
+//     kdDebug() << "(K3bDvdCopyJob) trying to open libdvdcss." << endl;
+//     if( K3bLibDvdCss* libcss = K3bLibDvdCss::create() ) {
+//       kdDebug() << "(K3bLibDvdCss) succeeded." << endl;
+//       kdDebug() << "(K3bLibDvdCss) dvdcss_open(" << m_readerDevice->blockDeviceName() << ") = "
+// 		<< libcss->open(m_readerDevice) << endl;
+//       delete libcss;
+//     }
+//     else
+//       kdDebug() << "(K3bLibDvdCss) failed." << endl;
 
     //
     // We cannot rely on the kernel to determine the size of the DVD for some reason

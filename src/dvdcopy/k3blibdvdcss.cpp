@@ -67,6 +67,7 @@ K3bLibDvdCss::~K3bLibDvdCss()
 
 bool K3bLibDvdCss::open( K3bDevice::Device* dev )
 {
+  dev->close();
   d->dvd = dvdcss_open( const_cast<char*>( QFile::encodeName(dev->blockDeviceName()).data() ) );
   return ( d->dvd != 0 );
 }
