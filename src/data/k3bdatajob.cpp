@@ -44,6 +44,7 @@
 
 #include <iostream>
 
+using namespace std;
 
 K3bDataJob::K3bDataJob( K3bDataDoc* doc )
   : K3bBurnJob()

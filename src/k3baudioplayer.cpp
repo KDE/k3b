@@ -45,7 +45,7 @@
 #include <arts/artsflow.h>
 #include <kdebug.h>
 
-
+using namespace std;
 
 K3bPlayListViewItem::K3bPlayListViewItem( const QString& filename, QListView* parent )
   : KListViewItem( parent ), m_filename( filename )

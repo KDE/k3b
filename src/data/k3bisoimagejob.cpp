@@ -35,6 +35,7 @@
 
 #include <iostream>
 
+using namespace std;
 
 K3bIsoImageJob::K3bIsoImageJob()
   : K3bBurnJob()

@@ -14,6 +14,7 @@
 
 #include <iostream>
 
+using namespace std;
 
 K3bBlankingJob::K3bBlankingJob()
   : K3bJob()
