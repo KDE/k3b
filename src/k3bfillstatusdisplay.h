@@ -1,6 +1,7 @@
+
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -19,10 +20,14 @@
 
 #include <qframe.h>
 
+#include <device/k3bmsf.h>
+
 class QPaintEvent;
 class QMouseEvent;
 class K3bDoc;
 class KToggleAction;
+class KAction;
+class KActionCollection;
 class KPopupMenu;
 class QToolButton;
 
@@ -42,11 +47,11 @@ class K3bFillStatusDisplayWidget : public QWidget
   QSize sizeHint() const;
   QSize minimumSizeHint() const;
 
-  long cdSize() const { return m_cdSize; }
+  const K3b::Msf& cdSize() const { return m_cdSize; }
 
  public slots:
   void setShowTime( bool b );
-  void setCdSize( long );
+  void setCdSize( const K3b::Msf& );
 
  signals:
   void contextMenu( const QPoint& );
@@ -56,7 +61,7 @@ class K3bFillStatusDisplayWidget : public QWidget
   void paintEvent(QPaintEvent*);
 
  private:
-  long m_cdSize;
+  K3b::Msf m_cdSize;
   bool m_showTime;
   K3bDoc* m_doc;
 };
@@ -85,14 +90,17 @@ class K3bFillStatusDisplay : public QFrame  {
   void slotCustomSize();
   void slotMenuButtonClicked();
   void slotPopupMenu(const QPoint&);
+  void slotDetermineSize();
 
  private:
+  KActionCollection* m_actionCollection;
   KToggleAction* m_actionShowMinutes;
   KToggleAction* m_actionShowMegs;
   KToggleAction* m_action74Min;
   KToggleAction* m_action80Min;
   KToggleAction* m_action100Min;
   KToggleAction* m_actionCustomSize;
+  KAction* m_actionDetermineSize;
 
   KPopupMenu* m_popup;
 

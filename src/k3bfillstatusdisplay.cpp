@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -16,8 +16,11 @@
 
 #include "k3bfillstatusdisplay.h"
 #include "audio/k3baudiodoc.h"
-#include "tools/k3bglobals.h"
 #include "k3b.h"
+
+#include <tools/k3bdeviceselectiondialog.h>
+#include <device/k3bdevice.h>
+#include <device/k3bmsf.h>
 
 #include <qevent.h>
 #include <qpainter.h>
@@ -38,6 +41,7 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <kio/global.h>
+#include <kmessagebox.h>
 
 
 K3bFillStatusDisplayWidget::K3bFillStatusDisplayWidget( K3bDoc* doc, QWidget* parent )
@@ -45,7 +49,7 @@ K3bFillStatusDisplayWidget::K3bFillStatusDisplayWidget( K3bDoc* doc, QWidget* pa
     m_doc(doc)
 {
   k3bMain()->config()->setGroup( "General Options" );
-  m_cdSize = k3bMain()->config()->readNumEntry( "Default cd size", 74 );
+  m_cdSize.setMinutes( k3bMain()->config()->readNumEntry( "Default cd size", 74 ) );
 
   setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred ) );	
 }
@@ -63,7 +67,7 @@ void K3bFillStatusDisplayWidget::setShowTime( bool b )
 }
 
 
-void K3bFillStatusDisplayWidget::setCdSize( long size )
+void K3bFillStatusDisplayWidget::setCdSize( const K3b::Msf& size )
 {
   m_cdSize = size;
   update();
@@ -104,13 +108,13 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
 
   if( m_showTime ) {
     docSize = m_doc->length() / 75 / 60;
-    cdSize = m_cdSize;
+    cdSize = m_cdSize.totalFrames() / 75 / 60;
     maxValue = (cdSize > docSize ? cdSize : docSize) + 10;
     tolerance = 1;
   }
   else {
     docSize = m_doc->size()/1024/1024;
-    cdSize = m_cdSize*60*75*2048/1024/1024;
+    cdSize = m_cdSize.mode1Form1Bytes()/1024/1024;
     maxValue = (cdSize > docSize ? cdSize : docSize) + 100;
     tolerance = 10;
   }
@@ -124,7 +128,7 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
 
   if( m_showTime )
     p.drawText( rect(), Qt::AlignLeft | Qt::AlignVCenter, 
-		 " " + K3b::framesToString( m_doc->length(), false ) + " min" );
+		 " " + K3b::Msf( m_doc->length() ).toString(false) + " min" );
   else
     p.drawText( rect(), Qt::AlignLeft | Qt::AlignVCenter, 
 		 " " + KIO::convertSize( m_doc->size() ) );
@@ -180,7 +184,7 @@ K3bFillStatusDisplay::K3bFillStatusDisplay(K3bDoc* doc, QWidget *parent, const c
   m_displayWidget->setShowTime(false);
   m_actionShowMegs->setChecked( true );
 
-  switch( m_displayWidget->cdSize() ) {
+  switch( m_displayWidget->cdSize().totalFrames()/75/60 ) {
   case 74:
     m_action74Min->setChecked( true );
     break;
@@ -210,22 +214,34 @@ void K3bFillStatusDisplay::paintEvent(QPaintEvent* e)
 
 void K3bFillStatusDisplay::setupPopupMenu()
 {
+  m_actionCollection = new KActionCollection( this );
+
   m_popup = new KPopupMenu( this, "popup" );
-  m_actionShowMinutes = new KToggleAction( i18n("Minutes"), "kmidi", 0, this, SLOT(showTime()), this );
-  m_actionShowMegs = new KToggleAction( i18n("Megabytes"), "kwikdisk", 0, this, SLOT(showSize()), this );
+  m_actionShowMinutes = new KToggleAction( i18n("Minutes"), "kmidi", 0, this, SLOT(showTime()), 
+					   m_actionCollection, "fillstatus_show_minutes" );
+  m_actionShowMegs = new KToggleAction( i18n("Megabytes"), "kwikdisk", 0, this, SLOT(showSize()), 
+					m_actionCollection, "fillstatus_show_megabytes" );
 
   m_actionShowMegs->setExclusiveGroup( "show_size_in" );
   m_actionShowMinutes->setExclusiveGroup( "show_size_in" );
 
-  m_action74Min = new KToggleAction( i18n("%1 MB").arg(650), 0, this, SLOT(slot74Minutes()), this );
-  m_action80Min = new KToggleAction( i18n("%1 MB").arg(700), 0, this, SLOT(slot80Minutes()), this );
-  m_action100Min = new KToggleAction( i18n("%1 MB").arg(880), 0, this, SLOT(slot100Minutes()), this );
-  m_actionCustomSize = new KToggleAction( i18n("custom..."), 0, this, SLOT(slotCustomSize()), this );
+  m_action74Min = new KToggleAction( i18n("%1 MB").arg(650), 0, this, SLOT(slot74Minutes()), 
+				     m_actionCollection, "fillstatus_74minutes" );
+  m_action80Min = new KToggleAction( i18n("%1 MB").arg(700), 0, this, SLOT(slot80Minutes()), 
+				     m_actionCollection, "fillstatus_80minutes" );
+  m_action100Min = new KToggleAction( i18n("%1 MB").arg(880), 0, this, SLOT(slot100Minutes()), 
+				      m_actionCollection, "fillstatus_100minutes" );
+  m_actionCustomSize = new KToggleAction( i18n("custom..."), 0, this, SLOT(slotCustomSize()), 
+					  m_actionCollection, "fillstatus_custom_size" );
 
   m_action74Min->setExclusiveGroup( "cd_size" );
   m_action80Min->setExclusiveGroup( "cd_size" );
   m_action100Min->setExclusiveGroup( "cd_size" );
   m_actionCustomSize->setExclusiveGroup( "cd_size" );
+
+  m_actionDetermineSize = new KAction( i18n("From disk..."), "cdrom_unmount", 0,
+				       this, SLOT(slotDetermineSize()), 
+				       m_actionCollection, "fillstatus_size_from_disk" );
  
   m_popup->insertTitle( i18n("Show size in...") );
   m_actionShowMinutes->plug( m_popup );
@@ -235,6 +251,7 @@ void K3bFillStatusDisplay::setupPopupMenu()
   m_action80Min->plug( m_popup );
   m_action100Min->plug( m_popup );
   m_actionCustomSize->plug( m_popup );
+  m_actionDetermineSize->plug( m_popup );
 
   connect( m_displayWidget, SIGNAL(contextMenu(const QPoint&)), this, SLOT(slotPopupMenu(const QPoint&)) );
 }
@@ -267,19 +284,19 @@ void K3bFillStatusDisplay::showTime()
 
 void K3bFillStatusDisplay::slot74Minutes()
 {
-  m_displayWidget->setCdSize( 74 );
+  m_displayWidget->setCdSize( 74*60*75 );
 }
 
 
 void K3bFillStatusDisplay::slot80Minutes()
 {
-  m_displayWidget->setCdSize( 80 );
+  m_displayWidget->setCdSize( 80*60*75 );
 }
 
 
 void K3bFillStatusDisplay::slot100Minutes()
 {
-  m_displayWidget->setCdSize( 100 );
+  m_displayWidget->setCdSize( 100*60*75 );
 }
 
 
@@ -289,7 +306,7 @@ void K3bFillStatusDisplay::slotCustomSize()
   QString size = KLineEditDlg::getText( i18n("Custom CD size"), i18n("Please specify the size of your CD in minutes:"), 
 					   "74", &ok, this, new QIntValidator( this ) );
   if( ok ) {
-    m_displayWidget->setCdSize( size.toInt() );
+    m_displayWidget->setCdSize( size.toInt()*60*75 );
     update();
   }
 }
@@ -305,6 +322,22 @@ void K3bFillStatusDisplay::slotMenuButtonClicked()
 void K3bFillStatusDisplay::slotPopupMenu( const QPoint& p )
 {
   m_popup->popup(p);
+}
+
+
+void K3bFillStatusDisplay::slotDetermineSize()
+{
+  K3bDevice* dev = K3bDeviceSelectionDialog::selectWriter( parentWidget() );
+  if( dev ) {
+    K3b::Msf size = dev->discSize();
+    if( size == 0 )
+      KMessageBox::error( parentWidget(), i18n("Could not get size of disk in %1").arg(dev->devicename()) );
+    else {
+      m_displayWidget->setCdSize( size );
+      m_actionCustomSize->setChecked(true);
+      update();
+    }
+  }
 }
 
 #include "k3bfillstatusdisplay.moc"
