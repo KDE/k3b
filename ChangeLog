@@ -16,6 +16,15 @@ fixed temp-dir problems with nfs-mounted home directories
    K3b now uses the default kde tempdir
 Resmgr support
 added user datamode selection (mode1, mode2(form1))
+videocd:
+   add customizing of Gaps and Margins
+   add HQ-VIDEOCD support
+   add relaxed APS support (this controls whether APS constraints are strict or relaxed)
+   add category restriction support
+   add an option to create allways an empty `/SEGMENT' directory (some Players need this)
+   fixed load and saveUserDefaults
+   fixed autodetection VCD Typ (now the user can turn off this feature)
+   
 
 0.8.1
 fixed compiling problems with kernel < 2.4.3
