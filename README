@@ -25,6 +25,8 @@ These are the features so far:
 
  - writing existing iso-images to cd
 
+ - cd copy (data, audio, mixed mode)
+
  - blanking of cdrws
 
  - cd ripping to wav

@@ -125,16 +125,15 @@ void K3bIsoImageWritingDialog::setupGui()
   grid->addWidget( groupImage, 1, 0 );
   grid->addWidget( groupOptions, 2, 0 );
 
+  grid->setRowStretch( 2, 1 );
+
   connect( m_editImagePath, SIGNAL(textChanged(const QString&)), this, SLOT(updateImageSize(const QString&)) );
   connect( m_buttonFindImageFile, SIGNAL(clicked()), this, SLOT(slotFindImageFile()) );
 
-
-  if( m_writerSelectionWidget->writerDevice()->burnproof() )
-    m_checkBurnProof->setChecked( true );
-  else
-    m_checkBurnProof->setDisabled( true );
   m_checkDao->setChecked( true );
   m_checkDummy->setChecked( false );
+
+  slotWriterChanged();
 }
 
 
