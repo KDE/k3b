@@ -18,7 +18,7 @@
 #include "k3bemptydiscwaiter.h"
 #include "k3bdevice.h"
 #include "../k3bblankingjob.h"
-#include "../k3bbusywidget.h"
+#include "../tools/k3bbusywidget.h"
 #include "../k3bdiskerasinginfodialog.h"
 
 #include <qtimer.h>
