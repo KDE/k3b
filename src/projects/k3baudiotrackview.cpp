@@ -366,7 +366,7 @@ void K3bAudioTrackView::slotDropped( QDropEvent* e, QListViewItem* parent, QList
     }
     else {
       // add as new tracks
-      m_doc->addTracks( urls, trackAfter ? trackAfter->index()+1 : 0 );
+      m_doc->addTracks( urls, trackAfter ? trackAfter->trackNumber() : 0 );
     }
   }
 

@@ -171,7 +171,7 @@ void K3bAudioTrackPlayer::playTrack( K3bAudioTrack* track )
     // we show the currently playing track as a tooltip on the slider
     QToolTip::remove( d->seekSlider );
     QToolTip::add( d->seekSlider, i18n("Playing track %1: %2 - %3")
-		   .arg(track->index()+1)
+		   .arg(track->trackNumber())
 		   .arg(track->artist())
 		   .arg(track->title()) );
     d->seekSlider->setMaxValue( track->length().totalFrames() );

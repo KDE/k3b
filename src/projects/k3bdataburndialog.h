@@ -34,6 +34,8 @@ class K3bDataImageSettingsWidget;
 class K3bDataAdvancedImageSettingsWidget;
 class K3bDataVolumeDescWidget;
 class K3bDataModeWidget;
+class K3bDataMultiSessionCombobox;
+
 
 /**
   *@author Sebastian Trueg
@@ -63,16 +65,9 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    K3bDataAdvancedImageSettingsWidget* m_advancedImageSettingsWidget;
    // ---------------------------------------------
 	
-   // --- multisession tab -------------------------
-   QButtonGroup* m_groupMultiSession;
-   QRadioButton* m_radioMultiSessionNone;
-   QRadioButton* m_radioMultiSessionStart;
-   QRadioButton* m_radioMultiSessionContinue;
-   QRadioButton* m_radioMultiSessionFinish;
-   // ---------------------------------------------
-
    QGroupBox* m_groupDataMode;
    K3bDataModeWidget* m_dataModeWidget;
+   K3bDataMultiSessionCombobox* m_comboMultisession;
 
    QCheckBox* m_checkVerify;
 

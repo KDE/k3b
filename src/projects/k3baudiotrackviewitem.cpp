@@ -95,7 +95,7 @@ QString K3bAudioTrackViewItem::text(int i) const
   switch( i )
     {
     case 0:
-      return QString::number( m_track->index() +1 ).rightJustify( 2, ' ' );
+      return QString::number( m_track->trackNumber() ).rightJustify( 2, ' ' );
     case 1:
       return m_track->artist();
     case 2:

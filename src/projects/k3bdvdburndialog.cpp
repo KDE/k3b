@@ -15,6 +15,7 @@
 
 #include "k3bdvdburndialog.h"
 #include "k3bdvddoc.h"
+#include "k3bdatamultisessioncombobox.h"
 
 #include <k3bdevice.h>
 #include <k3bwriterselectionwidget.h>
@@ -106,52 +107,26 @@ void K3bDvdBurnDialog::setupSettingsTab()
 
   // Multisession
   // ////////////////////////////////////////////////////////////////////////
-  m_groupMultiSession = new QButtonGroup( 0, Qt::Vertical, i18n("Multisession"), frame );
-  m_groupMultiSession->layout()->setSpacing( 0 );
-  m_groupMultiSession->layout()->setMargin( 0 );
-  QGridLayout* m_groupMultiSessionLayout = new QGridLayout( m_groupMultiSession->layout() );
-  m_groupMultiSessionLayout->setAlignment( Qt::AlignTop );
-  m_groupMultiSessionLayout->setSpacing( spacingHint() );
-  m_groupMultiSessionLayout->setMargin( marginHint() );
+  QGroupBox* groupMultiSession = new QGroupBox( 2, Qt::Vertical, i18n("Multisession Mode"), frame );
+  (void)new QLabel( i18n("<p>For DVD-R(W) in sequential incremental mode and "
+			 "DVD+R it behaves like multisession CDs.<br> "
+			 "<b>Caution:</b> Most DVD-ROM drives are only able "
+			 "to read the first session and most likely even on "
+			 "DVD writers only the first session will be mounted.</p>"
+			 "<p>For DVD+RW and DVD-RW in restricted overwrite mode "
+			 "K3b will utilize growisofs to <em>grow</em> the ISO9660 "
+			 "filesystem in the first session.</p>"
+			 "<p><b>Be aware that K3b needs to write multisession "
+			 "DVDs on-the-fly.</b>"), groupMultiSession );
+  m_comboMultisession = new K3bDataMultiSessionCombobox( groupMultiSession );
 
-  QLabel* msInfoLabel = new QLabel( i18n("<p>For DVD-R(W) in sequential incremental mode and "
-					 "DVD+R it behaves like multisession CDs.<br> "
-					 "<b>Caution:</b> Most DVD-ROM drives are only able "
-					 "to read the first session and most likely even on "
-					 "DVD writers only the first session will be mounted.</p>"
-					 "<p>For DVD+RW and DVD-RW in restricted overwrite mode "
-					 "K3b will utilize growisofs to <em>grow</em> the ISO9660 "
-					 "filesystem in the first session.</p>"
-					 "<p><b>Be aware that K3b needs to write multisession "
-					 "DVDs on-the-fly.</b>"), m_groupMultiSession );
-
-  m_radioMultiSessionNone = new QRadioButton( i18n("&No multisession"), m_groupMultiSession );
-  m_radioMultiSessionStart = new QRadioButton( i18n("&Start multisession"), m_groupMultiSession );
-  m_radioMultiSessionContinue = new QRadioButton( i18n("&Continue multisession"), m_groupMultiSession );
-  m_radioMultiSessionFinish = new QRadioButton( i18n("&Finish multisession"), m_groupMultiSession );
-
-  m_groupMultiSessionLayout->addMultiCellWidget( msInfoLabel, 0, 0, 0, 1 );
-  m_groupMultiSessionLayout->addWidget( m_radioMultiSessionNone, 1, 0 );
-  m_groupMultiSessionLayout->addWidget( m_radioMultiSessionStart, 2, 0 );
-  m_groupMultiSessionLayout->addWidget( m_radioMultiSessionContinue, 1, 1 );
-  m_groupMultiSessionLayout->addWidget( m_radioMultiSessionFinish, 2, 1 );
-
-
-  frameLayout->addWidget( m_groupMultiSession, 0, 0 );
-
+  frameLayout->addWidget( groupMultiSession, 0, 0 );
   frameLayout->setRowStretch( 1, 1 );
 
   addPage( frame, i18n("Settings") );
 
-  connect( m_groupMultiSession, SIGNAL(clicked(int)),
+  connect( m_comboMultisession, SIGNAL(activated(int)),
 	   this, SLOT(toggleAllOptions()) );
-
-  // ToolTips
-  // -------------------------------------------------------------------------
-
-
-  // What's This info
-  // -------------------------------------------------------------------------
 }
 
 
@@ -164,19 +139,11 @@ void K3bDvdBurnDialog::saveSettings()
   m_advancedImageSettingsWidget->save( m_doc->isoOptions() );
   m_volumeDescWidget->save( m_doc->isoOptions() );
 
-
   // save image file path
   m_doc->setTempDir( m_tempDirSelectionWidget->tempPath() );
 
   // save multisession settings
-  if( m_groupMultiSession->selected() == m_radioMultiSessionStart )
-    m_doc->setMultiSessionMode( K3bDataDoc::START );
-  else if( m_groupMultiSession->selected() == m_radioMultiSessionContinue )
-    m_doc->setMultiSessionMode( K3bDataDoc::CONTINUE );
-  else if( m_groupMultiSession->selected() == m_radioMultiSessionFinish )
-    m_doc->setMultiSessionMode( K3bDataDoc::FINISH );
-  else
-    m_doc->setMultiSessionMode( K3bDataDoc::NONE );
+  m_doc->setMultiSessionMode( m_comboMultisession->multiSessionMode() );
 
   m_doc->setVerifyData( m_checkVerify->isChecked() );
 }
@@ -187,20 +154,7 @@ void K3bDvdBurnDialog::readSettings()
   K3bProjectBurnDialog::readSettings();
 
   // read multisession
-  switch( m_doc->multiSessionMode() ) {
-  case K3bDataDoc::START:
-    m_radioMultiSessionStart->setChecked(true);
-    break;
-  case K3bDataDoc::CONTINUE:
-    m_radioMultiSessionContinue->setChecked(true);
-    break;
-  case K3bDataDoc::FINISH:
-    m_radioMultiSessionFinish->setChecked(true);
-    break;
-  default:
-    m_radioMultiSessionNone->setChecked(true);
-    break;
-  }
+  m_comboMultisession->setMultiSessionMode( m_doc->multiSessionMode() );
 
   if( !doc()->tempDir().isEmpty() )
     m_tempDirSelectionWidget->setTempPath( doc()->tempDir() );
@@ -221,42 +175,43 @@ void K3bDvdBurnDialog::toggleAllOptions()
 
   // Multisession in DAO is not possible
   if( m_writingModeWidget->writingMode() == K3b::DAO ) {
-    if( !m_radioMultiSessionNone->isChecked() )
+    if( m_comboMultisession->multiSessionMode() == K3bDataDoc::START ||
+	m_comboMultisession->multiSessionMode() == K3bDataDoc::CONTINUE ||
+	m_comboMultisession->multiSessionMode() == K3bDataDoc::FINISH )
       KMessageBox::information( this, i18n("It is not possible to write multisession DVDs in DAO mode."
 					   "Multisession has been disabled."),
 				i18n("DVD multisession"),
 				"dvd_multisession_no_dao" );
 
-    m_radioMultiSessionNone->setChecked(true);
-    m_groupMultiSession->setEnabled(false);
+    m_comboMultisession->setEnabled(false);
   }
   else {
-    // for some reason I don't know yet when writing multisession volume set size needs to be 1
-    if( m_groupMultiSession->selected() != m_radioMultiSessionNone ) {
-      m_volumeDescWidget->m_spinVolumeSetSize->setValue( 1 );
-      m_volumeDescWidget->m_spinVolumeSetSize->setEnabled( false );
-    }
-    else {
-      m_volumeDescWidget->m_spinVolumeSetSize->setEnabled( true );
-    }
+//     // for some reason I don't know yet when writing multisession volume set size needs to be 1
+//     if( m_comboMultisession->multiSessionMode() != K3bDataDoc::NONE ) {
+//       m_volumeDescWidget->m_spinVolumeSetSize->setValue( 1 );
+//       m_volumeDescWidget->m_spinVolumeSetSize->setEnabled( false );
+//     }
+//     else {
+//       m_volumeDescWidget->m_spinVolumeSetSize->setEnabled( true );
+//     }
 
-    m_groupMultiSession->setEnabled(true);
+    m_comboMultisession->setEnabled(true);
+
     if( !m_checkOnTheFly->isChecked() ) {
       // no continue and finish multisession in non-the-fly mode since
       // we can only continue ms with growisofsimager
-      if( m_radioMultiSessionFinish->isChecked() || m_radioMultiSessionContinue->isChecked() ) {
+      if( m_comboMultisession->multiSessionMode() == K3bDataDoc::START ||
+	  m_comboMultisession->multiSessionMode() == K3bDataDoc::FINISH ||
+	  m_comboMultisession->multiSessionMode() == K3bDataDoc::CONTINUE ) {
 	KMessageBox::information( this, i18n("K3b does only support writing multisession DVDs on-the-fly. "
 					     "Multisession has been disabled."),
 				  i18n("DVD multisession"),
 				  "dvd_multisession_only_on_the_fly" );
-	m_radioMultiSessionNone->setChecked(true);
       }
-      m_radioMultiSessionContinue->setEnabled(false);
-      m_radioMultiSessionFinish->setEnabled(false);
+      m_comboMultisession->setForceNoMultisession( true );
     }
     else {
-      m_radioMultiSessionContinue->setEnabled(true);
-      m_radioMultiSessionFinish->setEnabled(true);
+      m_comboMultisession->setForceNoMultisession( false );
     }
   }
 
@@ -276,8 +231,9 @@ void K3bDvdBurnDialog::loadK3bDefaults()
   m_imageSettingsWidget->load( K3bIsoOptions::defaults() );
   m_advancedImageSettingsWidget->load( K3bIsoOptions::defaults() );
   m_volumeDescWidget->load( K3bIsoOptions::defaults() );
-  m_radioMultiSessionNone->setChecked(true);
   m_checkVerify->setChecked( false );
+
+  m_comboMultisession->setMultiSessionMode( K3bDataDoc::AUTO );
 
   toggleAllOptions();
 }
@@ -291,6 +247,8 @@ void K3bDvdBurnDialog::loadUserDefaults( KConfig* c )
   m_imageSettingsWidget->load( o );
   m_advancedImageSettingsWidget->load( o );
   m_volumeDescWidget->load( o );
+
+  m_comboMultisession->loadConfig( c );
 
   m_checkVerify->setChecked( c->readBoolEntry( "verify data", false ) );
 
@@ -307,6 +265,8 @@ void K3bDvdBurnDialog::saveUserDefaults( KConfig* c )
   m_advancedImageSettingsWidget->save( o );
   m_volumeDescWidget->save( o );
   o.save( c );
+
+  m_comboMultisession->saveConfig( c );
 
   c->writeEntry( "verify data", m_checkVerify->isChecked() );
 }

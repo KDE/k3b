@@ -28,6 +28,7 @@ class QGroupBox;
 class QRadioButton;
 class QButtonGroup;
 class QCheckBox;
+class K3bDataMultiSessionCombobox;
 
 
 class K3bDvdBurnDialog : public K3bProjectBurnDialog
@@ -63,11 +64,7 @@ class K3bDvdBurnDialog : public K3bProjectBurnDialog
    // ---------------------------------------------
 	
    // --- multisession tab -------------------------
-   QButtonGroup* m_groupMultiSession;
-   QRadioButton* m_radioMultiSessionNone;
-   QRadioButton* m_radioMultiSessionStart;
-   QRadioButton* m_radioMultiSessionContinue;
-   QRadioButton* m_radioMultiSessionFinish;
+   K3bDataMultiSessionCombobox* m_comboMultisession;
    // ---------------------------------------------
 
    QCheckBox* m_checkVerify;

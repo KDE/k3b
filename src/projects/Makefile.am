@@ -73,4 +73,5 @@ libprojects_la_SOURCES = k3baudioburndialog.cpp \
 			 k3bview.cpp \
 			 k3bprojectburndialog.cpp \
 			 k3bprojectplugindialog.cpp \
-			 k3baudiotracktrmlookupdialog.cpp
+			 k3baudiotracktrmlookupdialog.cpp \
+			 k3bdatamultisessioncombobox.cpp

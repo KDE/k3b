@@ -119,7 +119,6 @@ void K3bDataView::importSession()
 void K3bDataView::clearImportedSession()
 {
   m_doc->clearImportedSession();
-  m_doc->setMultiSessionMode( K3bDataDoc::NONE );
 }
 
 

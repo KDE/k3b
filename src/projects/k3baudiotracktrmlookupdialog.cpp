@@ -87,7 +87,7 @@ void K3bAudioTrackTRMLookupDialog::lookup( K3bAudioTrack* track )
 {
   if( track ) {
     if( dynamic_cast<K3bAudioFile*>( track->firstSource() ) ) {
-      m_infoLabel->setText( i18n("Querying MusicBrainz for track %1").arg(track->index()+1) );
+      m_infoLabel->setText( i18n("Querying MusicBrainz for track %1").arg(track->trackNumber()) );
   
       K3bTRMLookup* l = new K3bTRMLookup( static_cast<K3bAudioFile*>(track->firstSource())->filename() );
       connect( l, SIGNAL(lookupFinished(K3bTRMLookup*)), this, SLOT(slotLookupFinished(K3bTRMLookup*)) );
@@ -132,7 +132,7 @@ void K3bAudioTrackTRMLookupDialog::slotLookupFinished( K3bTRMLookup* l )
     if( resultStringsUnique.count() > 1 )
       s = KInputDialog::getItem( i18n("MusicBrainz Query"),
 				 i18n("Found multiple matches for track %1 (%2). Please select one.")
-				 .arg(m_tracks.current()->index()+1)
+				 .arg(m_tracks.current()->trackNumber())
 				 .arg(static_cast<K3bAudioFile*>(m_tracks.current()->firstSource())->filename().section( '/', -1 )),
 				 resultStringsUnique,
 				 0,
@@ -152,13 +152,13 @@ void K3bAudioTrackTRMLookupDialog::slotLookupFinished( K3bTRMLookup* l )
 
   case K3bTRMLookup::UNRECOGNIZED:
     KMessageBox::error( this, i18n("Track %1 was not found in the MusicBrainz database.")
-			.arg( m_tracks.current()->index()+1) );
+			.arg( m_tracks.current()->trackNumber()) );
     break;
 
   case K3bTRMLookup::ERROR:
     KMessageBox::error( this, i18n("Failed to query track %1. Be aware that tag guessing with MusicBrainz "
 				   "does not work with all audio formats supported by K3b.")
-			.arg(m_tracks.current()->index()+1) );
+			.arg(m_tracks.current()->trackNumber()) );
     break;
   }
 

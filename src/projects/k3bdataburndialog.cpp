@@ -15,11 +15,13 @@
 
 
 #include "k3bdataburndialog.h"
-#include "k3bdatadoc.h"
 #include "k3bdataimagesettingswidget.h"
 #include "k3bdataadvancedimagesettingswidget.h"
 #include "k3bdatavolumedescwidget.h"
-#include "k3bisooptions.h"
+#include "k3bdatamultisessioncombobox.h"
+
+#include <k3bisooptions.h>
+#include <k3bdatadoc.h>
 #include <k3bdevice.h>
 #include <k3bwriterselectionwidget.h>
 #include <k3btempdirselectionwidget.h>
@@ -92,7 +94,7 @@ K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const ch
   m_advancedImageSettingsWidget->layout()->setMargin( marginHint() );
   addPage( m_advancedImageSettingsWidget, i18n("Advanced") );
 
-  connect( m_groupMultiSession, SIGNAL(clicked(int)),
+  connect( m_comboMultisession, SIGNAL(activated(int)),
 	   this, SLOT(toggleAllOptions()) );
 
   readSettings();
@@ -122,19 +124,11 @@ void K3bDataBurnDialog::saveSettings()
   m_advancedImageSettingsWidget->save( ((K3bDataDoc*)doc())->isoOptions() );
   m_volumeDescWidget->save( ((K3bDataDoc*)doc())->isoOptions() );
 
-
   // save image file path
   ((K3bDataDoc*)doc())->setTempDir( m_tempDirSelectionWidget->tempPath() );
 
   // save multisession settings
-  if( m_groupMultiSession->selected() == m_radioMultiSessionStart )
-    ((K3bDataDoc*)doc())->setMultiSessionMode( K3bDataDoc::START );
-  else if( m_groupMultiSession->selected() == m_radioMultiSessionContinue )
-    ((K3bDataDoc*)doc())->setMultiSessionMode( K3bDataDoc::CONTINUE );
-  else if( m_groupMultiSession->selected() == m_radioMultiSessionFinish )
-    ((K3bDataDoc*)doc())->setMultiSessionMode( K3bDataDoc::FINISH );
-  else
-    ((K3bDataDoc*)doc())->setMultiSessionMode( K3bDataDoc::NONE );
+  ((K3bDataDoc*)doc())->setMultiSessionMode( m_comboMultisession->multiSessionMode() );
 
   ((K3bDataDoc*)doc())->setDataMode( m_dataModeWidget->dataMode() );
 
@@ -147,20 +141,7 @@ void K3bDataBurnDialog::readSettings()
   K3bProjectBurnDialog::readSettings();
 
   // read multisession
-  switch( ((K3bDataDoc*)doc())->multiSessionMode() ) {
-  case K3bDataDoc::START:
-    m_radioMultiSessionStart->setChecked(true);
-    break;
-  case K3bDataDoc::CONTINUE:
-    m_radioMultiSessionContinue->setChecked(true);
-    break;
-  case K3bDataDoc::FINISH:
-    m_radioMultiSessionFinish->setChecked(true);
-    break;
-  default:
-    m_radioMultiSessionNone->setChecked(true);
-    break;
-  }
+  m_comboMultisession->setMultiSessionMode( ((K3bDataDoc*)doc())->multiSessionMode() );
 
   if( !doc()->tempDir().isEmpty() )
     m_tempDirSelectionWidget->setTempPath( doc()->tempDir() );
@@ -187,41 +168,14 @@ void K3bDataBurnDialog::setupSettingsTab()
   m_groupDataMode = new QGroupBox( 1, Qt::Vertical, i18n("Datatrack Mode"), frame );
   m_dataModeWidget = new K3bDataModeWidget( m_groupDataMode );
 
-  // Multisession
-  // ////////////////////////////////////////////////////////////////////////
-  m_groupMultiSession = new QButtonGroup( 0, Qt::Vertical, i18n("Multisession"), frame );
-  m_groupMultiSession->layout()->setSpacing( 0 );
-  m_groupMultiSession->layout()->setMargin( 0 );
-  QGridLayout* m_groupMultiSessionLayout = new QGridLayout( m_groupMultiSession->layout() );
-  m_groupMultiSessionLayout->setAlignment( Qt::AlignTop );
-  m_groupMultiSessionLayout->setSpacing( spacingHint() );
-  m_groupMultiSessionLayout->setMargin( marginHint() );
-
-  m_radioMultiSessionNone = new QRadioButton( i18n("&No multisession"), m_groupMultiSession );
-  m_radioMultiSessionStart = new QRadioButton( i18n("&Start multisession"), m_groupMultiSession );
-  m_radioMultiSessionContinue = new QRadioButton( i18n("&Continue multisession"), m_groupMultiSession );
-  m_radioMultiSessionFinish = new QRadioButton( i18n("&Finish multisession"), m_groupMultiSession );
-
-  m_groupMultiSessionLayout->addWidget( m_radioMultiSessionNone, 0, 0 );
-  m_groupMultiSessionLayout->addWidget( m_radioMultiSessionStart, 1, 0 );
-  m_groupMultiSessionLayout->addWidget( m_radioMultiSessionContinue, 0, 1 );
-  m_groupMultiSessionLayout->addWidget( m_radioMultiSessionFinish, 1, 1 );
-
+  QGroupBox* groupMultiSession = new QGroupBox( 1, Qt::Vertical, i18n("Multisession Mode"), frame );
+  m_comboMultisession = new K3bDataMultiSessionCombobox( groupMultiSession );
 
   frameLayout->addWidget( m_groupDataMode, 0, 0 );
-  frameLayout->addWidget( m_groupMultiSession, 1, 0 );
-
-
+  frameLayout->addWidget( groupMultiSession, 1, 0 );
   frameLayout->setRowStretch( 2, 1 );
 
   addPage( frame, i18n("Settings") );
-
-  // ToolTips
-  // -------------------------------------------------------------------------
-
-
-  // What's This info
-  // -------------------------------------------------------------------------
 }
 
 
@@ -243,7 +197,7 @@ void K3bDataBurnDialog::slotStartClicked()
   }
 
   if( m_writingModeWidget->writingMode() == K3b::DAO &&
-      !m_radioMultiSessionNone->isChecked() &&
+      m_comboMultisession->multiSessionMode() != K3bDataDoc::NONE &&
       m_writerSelectionWidget->writingApp() == K3b::CDRECORD )
     if( KMessageBox::warningContinueCancel( this,
 					    i18n("Most writers do not support writing "
@@ -265,7 +219,7 @@ void K3bDataBurnDialog::loadK3bDefaults()
   m_imageSettingsWidget->load( K3bIsoOptions::defaults() );
   m_advancedImageSettingsWidget->load( K3bIsoOptions::defaults() );
   m_volumeDescWidget->load( K3bIsoOptions::defaults() );
-  m_radioMultiSessionNone->setChecked(true);
+  m_comboMultisession->setMultiSessionMode( K3bDataDoc::AUTO );
   m_checkVerify->setChecked( false );
 
   toggleAllOptions();
@@ -277,6 +231,7 @@ void K3bDataBurnDialog::loadUserDefaults( KConfig* c )
   K3bProjectBurnDialog::loadUserDefaults(c);
 
   m_dataModeWidget->loadConfig(c);
+  m_comboMultisession->loadConfig( c );
 
   K3bIsoOptions o = K3bIsoOptions::load( c );
   m_imageSettingsWidget->load( o );
@@ -294,6 +249,7 @@ void K3bDataBurnDialog::saveUserDefaults( KConfig* c )
   K3bProjectBurnDialog::saveUserDefaults(c);
 
   m_dataModeWidget->saveConfig(c);
+  m_comboMultisession->saveConfig( c );
 
   K3bIsoOptions o;
   m_imageSettingsWidget->save( o );
@@ -316,18 +272,18 @@ void K3bDataBurnDialog::toggleAllOptions()
   else
     m_checkVerify->setEnabled(true);
 
-  if( m_groupMultiSession->selected() == m_radioMultiSessionContinue ||
-      m_groupMultiSession->selected() == m_radioMultiSessionFinish )
+  if( m_comboMultisession->multiSessionMode() == K3bDataDoc::CONTINUE ||
+      m_comboMultisession->multiSessionMode() == K3bDataDoc::FINISH )
     m_spinCopies->setEnabled(false);
 
   // for some reason I don't know yet when writing multisession volume set size needs to be 1
-  if( m_groupMultiSession->selected() != m_radioMultiSessionNone ) {
-    m_volumeDescWidget->m_spinVolumeSetSize->setValue( 1 );
-    m_volumeDescWidget->m_spinVolumeSetSize->setEnabled( false );
-  }
-  else {
-    m_volumeDescWidget->m_spinVolumeSetSize->setEnabled( true );
-  }
+//   if( m_groupMultiSession->selected() != m_radioMultiSessionNone ) {
+//     m_volumeDescWidget->m_spinVolumeSetSize->setValue( 1 );
+//     m_volumeDescWidget->m_spinVolumeSetSize->setEnabled( false );
+//   }
+//   else {
+//     m_volumeDescWidget->m_spinVolumeSetSize->setEnabled( true );
+//   }
 }
 
 
