@@ -20,8 +20,10 @@
 
 #include "k3bdoc.h"
 
+#include <qqueue.h>
 #include <qfile.h>
 #include <qstring.h>
+#include <qstringlist.h>
 #include <qdatetime.h>
 
 #include <kurl.h>
@@ -54,14 +56,20 @@ public slots:
 	 * the process is finished and check error()
 	 * to know about the result.
 	 **/
-	void slotAddTrack( const QString&, uint );
+	void addTrack( const QString&, uint );
+	void addTracks( const QStringList&, uint );
 	/** adds a track without any testing */
 	void addTrack( K3bAudioTrack* track, uint position = 0 );
 //	void addTracks( QList<K3bAudioTrack>& tracks );
-	void removeTrack( uint position );
+	void removeTrack( int position );
 	void moveTrack( uint oldPos, uint newPos );
 
 protected slots:
+ 	/** processes queue "urlsToAdd" **/
+ 	void addNextTrack();
+ 	void addMp3File( const QString& fileName, uint position );
+	void addWavFile( const QString& fileName, uint position );
+	
 	void slotTestOutput( const QString& text );
 	/** Convert mp3 into wav since cdrecord is used **/
 	void prepareTracks();
@@ -102,10 +110,19 @@ protected:
  	bool loadDocumentData( QFile& f );
  	/** reimplemented from K3bDoc */
  	bool saveDocumentData( QFile& f );
-	void addMp3File( const QString& fileName, uint position );
-	void addWavFile( const QString& fileName, uint position );
 
-private: 	
+private:
+	class PrivateUrlToAdd
+	{
+	public:
+		PrivateUrlToAdd( const QString& _url, int _pos )
+			: url( _url ), position(_pos) {}
+		QString url;
+		int position;
+	};
+	/** Holds all the urls that have to be added to the list of tracks. **/
+	QQueue<PrivateUrlToAdd> urlsToAdd;
+	
 	/** The last added file. This is saved even if the file not exists or
 	the url is malformed. */
 	KURL addedFile;
@@ -119,11 +136,12 @@ private:
 	QString m_mpg123;
 
  	QString lastTempFile;
- 	int lastAddedPosition;
+ 	uint lastAddedPosition;
 
  	// settings
  	/** if true the adding of files will take longer */
  	bool testFiles;
 };
+
 
 #endif

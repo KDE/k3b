@@ -20,6 +20,7 @@
 
 #include "k3bview.h"
 
+#include <qstringlist.h>
 
 class AudioListView;
 class QWidget;
@@ -28,7 +29,9 @@ class K3bAudioTrack;
 class QDropEvent;
 class QListViewItem;
 class KListView;
-
+class KPopupMenu;
+class KAction;
+class K3bAudioTrackDialog;
 
 /**
   *@author Sebastian Trueg
@@ -43,10 +46,16 @@ public:
 	~K3bAudioView();
 	
 private:
+	void setupPopupMenu();
+	
+	KAction* actionProperties;
+	KAction* actionRemove;
 	AudioListView* m_songlist;
-
+	KPopupMenu* m_popupMenu;
+	K3bAudioTrackDialog* m_propertiesDialog;
+	
 signals:
- 	void dropped(const QString&, uint position);
+ 	void dropped(const QStringList&, uint position);
 	 /** the item at position oldPos should be removed and reinserted at newPos */
 	void itemMoved( uint oldPos, uint newPos );
 
@@ -55,10 +64,15 @@ public slots:
   void addItem( K3bAudioTrack* _track );
 
 protected slots:
-  /** generates a dropped signal */
-  void slotDropped( KListView*, QDropEvent* e, QListViewItem* after );
-  /** emits a signal to move an item */
-  void slotItemMoved( QListViewItem*, QListViewItem*, QListViewItem* );
+	/** generates a dropped signal */
+	void slotDropped( KListView*, QDropEvent* e, QListViewItem* after );
+	/** emits a signal to move an item */
+	void slotItemMoved( QListViewItem*, QListViewItem*, QListViewItem* );
+	void showPopupMenu( QListViewItem* _item, const QPoint& );
+	void showPropertiesDialog();
+	void itemClicked( QListViewItem* _item );
+	void updatePropertiesDialog( QListViewItem* _item );
+	void removeTrack();
 };
 
 #endif

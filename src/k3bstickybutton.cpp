@@ -1,7 +1,7 @@
 /***************************************************************************
-                          audiolistviewitem.h  -  description
+                          k3bstickybutton.cpp  -  description
                              -------------------
-    begin                : Tue Mar 27 2001
+    begin                : Sun Apr 1 2001
     copyright            : (C) 2001 by Sebastian Trueg
     email                : trueg@informatik.uni-freiburg.de
  ***************************************************************************/
@@ -15,36 +15,24 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef AUDIOLISTVIEWITEM_H
-#define AUDIOLISTVIEWITEM_H
+#include <kiconloader.h>
 
-#include <qlistview.h>
-#include <qstring.h>
+#include "k3bstickybutton.h"
 
-class K3bAudioTrack;
+K3bStickyButton::K3bStickyButton(QWidget *parent, const char *name )
+	: QToolButton(parent,name)
+{
+	setToggleButton( true );
+	setOnIconSet( SmallIconSet( "encrypted" ) );
+	setOffIconSet( SmallIconSet( "decrypted" ) );
+	connect( this, SIGNAL(toggled(bool)), this, SLOT(setOn(bool)) );
+}
 
+K3bStickyButton::~K3bStickyButton(){
+}
 
-/**
-  *@author Sebastian Trueg
-  */
-
-class AudioListViewItem : public QListViewItem  {
-
-public:
-	AudioListViewItem( K3bAudioTrack* track, QListView* parent );
-	AudioListViewItem( K3bAudioTrack* track, QListView* parent, QListViewItem* after );
-	~AudioListViewItem();
-
-	/** reimplemented from QListViewItem */
-	QString text(int i) const;
-	
-	/** reimplemented from QListViewItem */
-	QString key( int column, bool a ) const;
-	
-	K3bAudioTrack* audioTrack() { return m_track; }
-	
-private:
-	K3bAudioTrack* m_track;
-};
-
-#endif
+void K3bStickyButton::setOn( bool on )
+{
+	setDown( on );
+	QToolButton::setOn( on );
+}

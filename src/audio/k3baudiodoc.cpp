@@ -33,6 +33,8 @@
 #include <kapp.h>
 #include <kmessagebox.h>
 
+#include <iostream>
+
 
 K3bAudioDoc::K3bAudioDoc( const QString& cdrecord, const QString& mpg123 )
 	: K3bDoc( cdrecord ), m_mpg123( mpg123 )
@@ -293,46 +295,69 @@ int K3bAudioDoc::size(){
 }
 
 
-void K3bAudioDoc::slotAddTrack(const QString& url, uint position )
+void K3bAudioDoc::addTracks(const QStringList& urls, uint position )
+{
+	// TODO: addNextTrack() should be called whenever there is nothing else to do and urlsToAdd is not empty!
+	
+	for( QStringList::ConstIterator it = urls.begin(); it != urls.end(); it++ ) {
+		// for now we add all at the same index (so they finally will stay in reverted order!)
+		QString buffer( *it );
+		urlsToAdd.enqueue( new PrivateUrlToAdd( buffer, position ) );
+		cerr <<  "adding url to queue: " << buffer;
+	}
+	addNextTrack();
+}
+
+void K3bAudioDoc::addNextTrack()
 {
 	if( workInProgress() )
 		return;
 
-	// TODO: parse multible urls
-	
-	// append at the end by default
-	if( position > m_tracks.count() )
-		position = m_tracks.count();
-	
-	addedFile = KURL( url );
+	if( !urlsToAdd.isEmpty() ) {
+		PrivateUrlToAdd* _item = urlsToAdd.dequeue();
+		lastAddedPosition = _item->position;
 		
-	if( !addedFile.isValid() ) {
-		qDebug( addedFile.path() + " not valid" );
-		return;
-	}
+		// append at the end by default
+		if( lastAddedPosition > m_tracks.count() )
+			lastAddedPosition = m_tracks.count();
 	
-	if( !QFile::exists( addedFile.path() ) ) {
-		KMessageBox::information( kapp->mainWidget(), "File not found: " + addedFile.fileName(), "Error", QString::null, false );
-		return;
-	}
+		addedFile = KURL( _item->url );
+		delete _item;
+		
+		if( !addedFile.isValid() ) {
+			qDebug( addedFile.path() + " not valid" );
+			return;
+		}
 	
-	K3bProgressDialog* a = new K3bProgressDialog( addedFile.fileName(), kapp->mainWidget()  );
-	connect( this, SIGNAL(result()), a, SLOT(close()) );
-	connect( this, SIGNAL(percent(int)), a, SLOT(setPercent(int)) );
-	connect( a, SIGNAL(canceled()), this, SLOT(cancel()) );
-	a->show();
+		if( !QFile::exists( addedFile.path() ) ) {
+			KMessageBox::information( kapp->mainWidget(), "File not found: " + addedFile.fileName(), "Error", QString::null, false );
+			return;
+		}
 	
-	QString ending = addedFile.fileName().right( 7 );
-	if( ending.contains("wav") ) {
-		addWavFile( addedFile.path(), position );
+		K3bProgressDialog* a = new K3bProgressDialog( addedFile.fileName(), kapp->mainWidget()  );
+		connect( this, SIGNAL(result()), a, SLOT(close()) );
+		connect( this, SIGNAL(percent(int)), a, SLOT(setPercent(int)) );
+		connect( a, SIGNAL(canceled()), this, SLOT(cancel()) );
+		a->show();
+	
+		QString ending = addedFile.fileName().right( 7 );
+		if( ending.contains("wav") ) {
+			addWavFile( addedFile.path(), lastAddedPosition );
+		}
+		else if( ending.contains( "mp3" ) ) {
+			addMp3File(  addedFile.path(), lastAddedPosition );
+		}
+		else {
+			emitResult();
+			KMessageBox::information( kapp->mainWidget(), "Only mp3 and wav audio files are supported!", "Wrong file format", QString::null, false );		
+		}
 	}
-	else if( ending.contains( "mp3" ) ) {
-		addMp3File(  addedFile.path(), position );
-	}
-	else {
-		emitResult();
-		KMessageBox::information( kapp->mainWidget(), "Only mp3 and wav audio files are supported!", "Wrong file format", QString::null, false );		
-	}
+}
+
+void K3bAudioDoc::addTrack(const QString& url, uint position )
+{
+	urlsToAdd.enqueue( new PrivateUrlToAdd( url, position ) );
+	addNextTrack();
 }
 
 void K3bAudioDoc::addWavFile( const QString& fileName, uint position )
@@ -346,6 +371,7 @@ void K3bAudioDoc::addWavFile( const QString& fileName, uint position )
 	addTrack( new K3bAudioTrack( &m_tracks, fileName ), lastAddedPosition );
 	emitProgress( 100, 100 );
 	emitResult();
+	addNextTrack();
 }
 
 void K3bAudioDoc::addMp3File( const QString& fileName, uint position )
@@ -376,6 +402,7 @@ void K3bAudioDoc::addMp3File( const QString& fileName, uint position )
 		qDebug("Could not start mpg123.");
 		m_error = K3b::MPG123_ERROR;
 		emitResult();
+		addNextTrack();
 	}
 	else
 	{
@@ -406,11 +433,9 @@ void K3bAudioDoc::mp3FileTestingFinished()
 		emitMessage( "mpg123 did exit with errors." );
 		KMessageBox::information( kapp->mainWidget(), "mpg123 did exit with errors and returned: "
 													+ QString::number(m_process->exitStatus() ), "Error", QString::null, false );		
-		return;
 	}
 	
-	// check the process' errorlevel
-	if( !(m_process->exitStatus() == 0 ) ) {
+	else if( !(m_process->exitStatus() == 0 ) ) {
 		delete m_lastAddedTrack;
 		m_lastAddedTrack = 0;
 		qDebug( "Mp3-File " + addedFile.path() + " is corrupt." );
@@ -418,17 +443,19 @@ void K3bAudioDoc::mp3FileTestingFinished()
 		emitResult();
 		emitMessage( "Mp3-File " + addedFile.path() + " is corrupt." );
 		KMessageBox::information( kapp->mainWidget(), "Could not decode mp3-file " + addedFile.fileName(), "Error", QString::null, false );		
-		return;
+	}
+	else {	
+		// here the file should be valid!
+		addTrack( m_lastAddedTrack, lastAddedPosition );
+	
+		// some debugging shit...
+		qDebug( m_lastAddedTrack->fileName() + " title: " + m_lastAddedTrack->artist() + " " + m_lastAddedTrack->title() );
+	
+		m_error = K3b::SUCCESS;
+		emitResult();
 	}
 	
-	// here the file should be valid!
-	addTrack( m_lastAddedTrack, lastAddedPosition );
-	
-	// some debugging shit...
-	qDebug( m_lastAddedTrack->fileName() + " title: " + m_lastAddedTrack->artist() + " " + m_lastAddedTrack->title() );
-	
-	m_error = K3b::SUCCESS;
-	emitResult();
+	addNextTrack();
 }
 
 
@@ -444,8 +471,13 @@ void K3bAudioDoc::addTrack( K3bAudioTrack* _track, uint position )
 	emit newTrack( _track );
 }
 
-void K3bAudioDoc::removeTrack( uint position )
+void K3bAudioDoc::removeTrack( int position )
 {
+	if( position < 0 ) {
+		qDebug( "(K3bAudioDoc) tried to remove track with index < 0!" );
+		return;
+	}
+	
 	K3bAudioTrack* _track = take( position );
 	if( _track ) {
 		emitMessage( "removed track " + _track->fileName() );
@@ -483,7 +515,7 @@ bool K3bAudioDoc::saveDocumentData( QFile& f )
 void K3bAudioDoc::addView(K3bView* view)
 {
 	K3bAudioView* v = (K3bAudioView*)view;
-	connect( v, SIGNAL(dropped(const QString&, uint)), this, SLOT(slotAddTrack(const QString&, uint)) );
+	connect( v, SIGNAL(dropped(const QStringList&, uint)), this, SLOT(addTracks(const QStringList&, uint)) );
 	connect( this, SIGNAL(newTrack(K3bAudioTrack*)), v, SLOT(addItem(K3bAudioTrack*)) );
 	connect( v, SIGNAL(itemMoved(uint,uint)), this, SLOT(moveTrack(uint,uint)) );
 }

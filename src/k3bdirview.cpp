@@ -38,6 +38,8 @@
 #include <kfiledetailview.h>
 #include <kfileviewitem.h>
 #include <ktoolbar.h>
+#include <kiconloader.h>
+
 
 // PrivateDirItem
 ////////////////////////////////////////////////////////////////////////////////////
@@ -47,8 +49,8 @@ K3bDirView::PrivateDirItem::PrivateDirItem( PrivateDirItem* parent, const QStrin
 {
     p = parent;
     readable = QDir( absPath() ).isReadable();
-
-		setPixmap( new QPixmap(KMimeType::pixmapForURL( KURL( absPath() ), 0, KIcon::Small ) ) );
+	
+	setPixmap( new QPixmap(KMimeType::pixmapForURL( KURL( absPath() ), 0, KIcon::Small ) ) );
 }
 
 
