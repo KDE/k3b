@@ -109,7 +109,7 @@ K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name,
 {
   setCaption( i18n("Progress") );
 
-  m_systemTray = new KSystemTray( this );
+  m_systemTray = new KSystemTray( parent );
 
   setupGUI();
   setupConnections();
