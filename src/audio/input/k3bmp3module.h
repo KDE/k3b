@@ -4,11 +4,10 @@
 
 #include "k3baudiomodule.h"
 
-
 class KProcess;
 class KShellProcess;
 class QTimer;
-
+class QFile;
 
 class K3bMp3Module : public K3bAudioModule
 {
@@ -22,11 +21,14 @@ class K3bMp3Module : public K3bAudioModule
 //  bool valid() const;
 
   KURL writeToWav( const KURL& url );
-  void getStream();
+  bool getStream();
+
+  int readData( char*, int );
+
+ public slots:
+  void cancel();
 
  private:
-  /** read info from ID3 Tag and calculate length **/
-  void readTrackInfo( const QString& fileName );
   //  bool findFrameHeader( unsigned int );
   bool mp3HeaderCheck(unsigned int header);
 
@@ -47,12 +49,18 @@ class K3bMp3Module : public K3bAudioModule
   void slotCountRawDataFinished();
   void slotParseStdErrOutput(KProcess*, char*, int);
   void slotDecodingFinished();
-  void slotOutputData(KProcess*, char*, int);
+  void slotReceivedStdout(KProcess*, char*, int);
+
+  void slotClearData();
+  void slotWriteToWavFinished();
 
  private:
   QTimer* m_infoTimer;
+  QTimer* m_clearDataTimer;
 
   KShellProcess* m_decodingProcess;
+  char* m_currentData;
+  int m_currentDataLength;
 
   /**
    * Since we do not want to run several mpg123 
@@ -62,6 +70,10 @@ class K3bMp3Module : public K3bAudioModule
   static bool staticIsDataBeingEncoded;
 
   long m_rawData;
+
+  bool m_finished;
+
+  // QFile* m_testFile;
 };
 
 

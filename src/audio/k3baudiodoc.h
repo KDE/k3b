@@ -4,7 +4,7 @@
     begin                : Tue Mar 27 2001
     copyright            : (C) 2001 by Sebastian Trueg
     email                : trueg@informatik.uni-freiburg.de
- ***************************************************************************/
+***************************************************************************/
 
 /***************************************************************************
  *                                                                         *
@@ -31,12 +31,13 @@
 class K3bApp;
 class K3bAudioTrack;
 class QWidget;
+class QTimer;
 class QDomDocument;
 
 
 /**Document class for an audio project. 
-  *@author Sebastian Trueg
-  */
+ *@author Sebastian Trueg
+ */
 
 class K3bAudioDoc : public K3bDoc  
 {
@@ -52,9 +53,6 @@ class K3bAudioDoc : public K3bDoc
   void addView(K3bView* view);
 
   bool newDocument();
-
-  /** obsolet! USE length() ! **/
-  QTime audioSize() const;
 
   bool padding() const;
   int numberOfTracks() const { return m_tracks->count(); }
@@ -81,8 +79,6 @@ class K3bAudioDoc : public K3bDoc
 
   QString writeTOC( const QString& filename );
   int numOfTracks() const;
-  int allMp3Decoded() const;
-  K3bAudioTrack* nextTrackToDecode() const;
 
   K3bBurnJob* newBurnJob();
 		
@@ -97,7 +93,9 @@ class K3bAudioDoc : public K3bDoc
   void addTracks( const QStringList&, uint );
   /** adds a track without any testing */
   void addTrack( K3bAudioTrack* track, uint position = 0 );
-  //	void addTracks( QList<K3bAudioTrack>& tracks );
+
+
+  // --- TODO: this should read: removeTrack( K3bAudioTrack* )
   void removeTrack( int position );
   void moveTrack( uint oldPos, uint newPos );
 
@@ -116,14 +114,10 @@ class K3bAudioDoc : public K3bDoc
 
  protected slots:
   /** processes queue "urlsToAdd" **/
-  void addNextTrack();
-  void addMp3File( const QString& fileName, uint position );
-  void addWavFile( const QString& fileName, uint position );
+  void slotWorkUrlQueue();
 	
-  void mp3FileTestingFinished();
-
  signals:
-  void newTrack( K3bAudioTrack* );
+  void newTracks();
   void trackRemoved( uint );
 
  protected:
@@ -143,6 +137,7 @@ class K3bAudioDoc : public K3bDoc
     };
   /** Holds all the urls that have to be added to the list of tracks. **/
   QQueue<PrivateUrlToAdd> urlsToAdd;
+  QTimer* m_urlAddingTimer;
 	
   /** The last added file. This is saved even if the file not exists or
 	the url is malformed. */
@@ -157,7 +152,6 @@ class K3bAudioDoc : public K3bDoc
   /** if true the adding of files will take longer */
   bool testFiles;
   bool m_padding;
-  bool m_fileDecodingSuccessful;
  	
   // CD-Text
   // --------------------------------------------------

@@ -15,32 +15,31 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef K3BAUDIOJOB_H
-#define K3BAUDIOJOB_H
+#ifndef K3BAUDIO_ONTHEFLY_JOB_H
+#define K3BAUDIO_ONTHEFLY_JOB_H
 
 #include "../k3bjob.h"
 
 class K3bAudioDoc;
 class K3bAudioTrack;
 class QString;
+class QTimer;
 
 
-#include <qlist.h>
 #include <kprocess.h>
-#include <kurl.h>
-
+#include <qfile.h>
 
 /**
   *@author Sebastian Trueg
   */
 
-class K3bAudioJob : public K3bBurnJob  {
+class K3bAudioOnTheFlyJob : public K3bBurnJob  {
 
   Q_OBJECT
 
  public:
-  K3bAudioJob( K3bAudioDoc* doc );
-  ~K3bAudioJob();
+  K3bAudioOnTheFlyJob( K3bAudioDoc* doc );
+  ~K3bAudioOnTheFlyJob();
 
   K3bDoc* doc() const;
 	
@@ -49,44 +48,44 @@ class K3bAudioJob : public K3bBurnJob  {
   void cancel();
 	
  protected slots:
-  void slotParseCdrecordOutput( KProcess*, char*, int );
   void slotParseCdrdaoOutput( KProcess*, char* output, int len );
-  void slotCdrecordFinished();
   void slotCdrdaoFinished();
   void slotEmitProgress( int trackMade, int TrackSize );
-  void slotDecodingFinished();
-	
+
+  void slotWroteData();
+  void slotModuleOutput( int );
+  void slotModuleFinished( bool );
+  void slotTryWritingToProcess();
+
  private:
-  class SAudioTrackInfo {
-  public:
-    SAudioTrackInfo( const K3bAudioTrack* t, const KURL& url )
-      :urlToDecodedWav( url )
-      {
-	track = t;
-	decoded = false;
-      }
-    const K3bAudioTrack* track;
-    KURL urlToDecodedWav;
-    bool decoded;
-  };
-  QList<SAudioTrackInfo> m_trackInfoList;
-
-  void createTrackInfo();
-
-  void decodeNextFile();
-  void startWriting();
-	
-  KShellProcess m_process;
+  QTimer* m_streamingTimer;
+  KProcess m_process;
   K3bAudioDoc* m_doc;
   const K3bAudioTrack* m_currentProcessedTrack;
   bool firstTrack;
   QString m_tocFile;
   int m_iNumTracksAlreadyWritten;
-  int m_iNumFilesToDecode;
-  int m_iNumFilesAlreadyDecoded;
   int m_iTracksAlreadyWrittenSize;
   int m_iDocSize;
 
+  int m_overallSize;
+  int m_alreadyWritten;
+
+  char* m_currentWrittenData;
+  long m_currentModuleDataLength;
+  bool m_streamingStarted;
+
+  // buffer --------------------
+/*   char* m_ringBuffer; */
+/*   long m_bufferReader; */
+/*   long m_bufferWriter; */
+/*   long m_bufferSize; */
+  // ---------------------------
+
+
+  // testing
+  QFile* m_testFile;
+		
  signals:
   void writingLeadOut();
 };

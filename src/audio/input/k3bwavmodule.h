@@ -21,29 +21,34 @@ class K3bWavModule : public K3bAudioModule
 //  bool valid() const;
 
   KURL writeToWav( const KURL& url );
-  void getStream();
+  bool getStream();
 
   static int waveLength(const char *filename, long offset,
 			long *hdrlen, unsigned long *datalen);
+
+  int readData( char*, int );
+
+ public slots:
+  void cancel();
 
  private slots:
   void slotParseStdErrOutput(KProcess*, char*, int);
   void slotOutputData(KProcess*, char*, int);
   //  void slotCountRawData(KProcess*, char*, int);
   void slotConvertingFinished();
-
-  // test stuff
-  void slotTestCountOutput(char*, int);
-  void slotTestOutputFinished();
+  void slotClearData();
 
  private:
   QTimer* m_streamingTimer;
+  QTimer* m_clearDataTimer;
   KShellProcess* m_convertingProcess;
+
+  char* m_currentData;
+  int m_currentDataLength;
 
   long m_rawData;
 
-  // test stuff
-  long m_testRawData;
+  bool m_finished;
 };
 
 

@@ -22,14 +22,15 @@
 #include "../k3bdoc.h"
 #include "k3baudiodoc.h"
 #include "k3baudiotrack.h"
-#include "k3bmp3decodingjob.h"
 #include "../device/k3bdevice.h"
 
 #include <kprocess.h>
 #include <klocale.h>
 #include <kconfig.h>
+#include <kstddirs.h>
 
 #include <qstring.h>
+#include <qdatetime.h>
 
 #include <iostream>
 #include <cmath>
@@ -42,20 +43,14 @@ K3bAudioJob::K3bAudioJob( K3bAudioDoc* doc )
   : K3bBurnJob( )
 {
   m_doc = doc;
-  m_mp3Job = 0L;
 	
   m_iDocSize = doc->size();
   m_iTracksAlreadyWrittenSize = 0;
-
-  m_onTheFlyStartTimer = new QTimer( this );
-  connect( m_onTheFlyStartTimer, SIGNAL(timeout()), this, SLOT(slotTryToStartOnTheFlyBurning()) );
 }
 
 
 K3bAudioJob::~K3bAudioJob()
 {
-  if( m_mp3Job )
-    delete m_mp3Job;
 }
 
 
@@ -310,9 +305,6 @@ void K3bAudioJob::cancel()
   if( error() == K3b::WORKING ) {
     m_process.kill();
     emit infoMessage("Writing canceled.");
-    if( m_mp3Job )
-      if( m_mp3Job->error() == K3b::WORKING )
-	m_mp3Job->cancel();
 	
     // remove toc-file
     if( QFile::exists( m_tocFile ) ) {
@@ -336,20 +328,9 @@ void K3bAudioJob::start()
 	
   m_error = K3b::WORKING;
 
-  if( !m_doc->onTheFly() ){
-    if( (m_iNumFilesToDecode = m_doc->allMp3Decoded()) > 0 ) {
-      emit infoMessage( i18n("There are %1 files to decode...").arg(m_iNumFilesToDecode) );
-		
-      // now use K3bMp3DecodingJob to decode all files
-      emit newTask( "Decoding files" );
-      decodeNextFile();
-    }
-  }
-  else {
-    emit infoMessage( "Waiting for all tracks' length to calculated accurately..." );
-    emit infoMessage( "...this could take some time..." );
-    m_onTheFlyStartTimer->start(100);
-  }
+  emit newTask( "Decoding files" );
+  createTrackInfo();
+  decodeNextFile();
 }
 
 
@@ -426,32 +407,24 @@ void K3bAudioJob::slotCdrdaoFinished()
 
 void K3bAudioJob::decodeNextFile()
 {
-  // to decode the next mp3-file first get the next track from the doc
-  m_currentProcessedTrack = m_doc->nextTrackToDecode();
-  if( !m_currentProcessedTrack ) {
-    emit infoMessage( i18n("Start writing...") );
-    startWriting();
+  // find next track to decode
+  SAudioTrackInfo* info = m_trackInfoList.getFirst();
+  while( info != 0 && info->decoded )
+    info = m_trackInfoList.next();
+   
+  if( info == 0 ) {
+    // all files have been decoded
+    // we can start the burnprocess...
+
+    // TODO: start burning
   }
   else {
-    // here we start a K3bMp3DecodingJob
-    if( !m_mp3Job ) {
-      m_mp3Job = new K3bMp3DecodingJob( m_currentProcessedTrack->absPath() );
-			
-      // connect the signals
-      connect( m_mp3Job, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSubSize(int, int)) );
-      connect( m_mp3Job, SIGNAL(percent(int)), this, SIGNAL(subPercent(int)) );
-      connect( m_mp3Job, SIGNAL(infoMessage(const QString&)), this, SIGNAL(infoMessage(const QString&)) );
-      connect( m_mp3Job, SIGNAL(debuggingOutput(const QString&, const QString&)), 
-	       this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
-      connect( m_mp3Job, SIGNAL(finished(K3bJob*)), this, SLOT(slotMp3JobFinished()) );
-    }
-    else
-      m_mp3Job->setSourceFile( m_currentProcessedTrack->absPath() );
-
-    emit newSubTask( i18n("Decoding file '%1'").arg( m_currentProcessedTrack->fileName() ) );
-    m_mp3Job->start();
+    // decode info->track
+    // TODO: connect to some module-signals: percent(int) and finished()
+    //    info->urlToDecodedWav = info->track->module()->writeToWav( /* get default save position from config!*/);
   }
 }
+
 
 void K3bAudioJob::startWriting()
 {
@@ -465,7 +438,7 @@ void K3bAudioJob::startWriting()
 	
   firstTrack = true;
 	
-  if( m_doc->onTheFly() || m_doc->cdText() ) {
+  if( m_doc->dao() || m_doc->cdText() ) {
     // write in dao-mode
     if( m_doc->cdText() && !m_doc->dao() ) {
       emit infoMessage( "CD-Text is only supported in DAO-mode.");
@@ -475,7 +448,8 @@ void K3bAudioJob::startWriting()
 		
     // use cdrdao to burn the cd
     emit infoMessage( "Writing TOC-file" );
-    m_tocFile = m_doc->writeTOC( k3bMain()->findTempFile( "toc" ) );
+    m_tocFile = m_doc->writeTOC( locateLocal( "appdata", "temp/" ) + "k3b_" + QTime::currentTime().toString() + ".toc" );
+
     if( m_tocFile.isEmpty() ) {
       emit infoMessage( "Could not write TOC-file." );
       m_error = K3b::IO_ERROR;
@@ -485,59 +459,10 @@ void K3bAudioJob::startWriting()
       // start a new cdrdao process
       kapp->config()->setGroup("External Programs");
 
-      if( m_doc->onTheFly() )
-	{
-	  // ******** on-the-fly *********************************************************************
-	  // *****************************************************************************************
-	  // on the fly burning needs a mpg123-process
-
-	  emit infoMessage( "Warning: Burning on-the-fly could cause buffer-underruns!" );
-			
-	  m_process << kapp->config()->readEntry( "mpg123 path" );
-
-	  // switch on buffer
-	  // TODO: let the user specify the buffer-size
-	  m_process << "-b" << "2048";  // 2 Mb
-
-	  m_process << "-s";    // stdout
-			
-	  // add all the files to the command line
-	  for( K3bAudioTrack* _track = m_doc->at(0); _track != 0; _track = m_doc->next() ) {
-	    if( _track->filetype() == K3b::MP3 )
-	      m_process << QString("%1%2%3").arg("\"").arg(_track->absPath()).arg("\"");
-	  }
-
-	  m_process << "|";
-
-	  // convert the stream to big endian with sox
-	  m_process << kapp->config()->readEntry( "sox path", "/usr/bin/sox" );
-	  // input options
-	  m_process << "-t" << "raw";    // filetype raw
-	  m_process << "-r" << "44100";  // samplerate
-	  m_process << "-c" << "2";      // channels
-	  m_process << "-s";             // signed linear data
-	  m_process << "-w";             // 16-bit words
-	  m_process << "-";              // input from stdin
-
-	  // output options
-	  m_process << "-t" << "raw";    // filetype raw 
-	  m_process << "-r" << "44100";  // samplerate
-	  m_process << "-c" << "2";      // channels
-	  m_process << "-s";             // signed linear data
-	  m_process << "-w";             // 16-bit words
-	  m_process << "-x";             // swap byte order
-	  m_process << "-";              // output to stdout
-          
-	  m_process << "|";
-
-	  // ************************************************************** on-the-fly ***************
-	  // *****************************************************************************************
-	}
-
       m_process << kapp->config()->readEntry( "cdrdao path" );
       m_process << "write";
 
-      // device (e.g. /dev/sg1)
+      // device
       m_process << "--device" << m_doc->burner()->devicename();
 			
       // additional parameters from config
@@ -620,7 +545,7 @@ void K3bAudioJob::startWriting()
     QString s = QString("-speed=%1").arg( m_doc->speed() );
     m_process << s;
 
-    // add the device (e.g. /dev/sg1)
+    // add the device
     s = QString("-dev=%1").arg( m_doc->burner()->devicename() );
     m_process << s;
 	
@@ -636,7 +561,7 @@ void K3bAudioJob::startWriting()
 
 				
     // add all the tracks
-    for( K3bAudioTrack* i = m_doc->at(0); i != 0; i = m_doc->next() )
+    for( const K3bAudioTrack* i = m_doc->at(0); i != 0; i = m_doc->next() )
       {
 	s = QString("-pregap=%1").arg( i->pregap() );
 	m_process << s;
@@ -685,24 +610,6 @@ void K3bAudioJob::startWriting()
 }
 
 
-void K3bAudioJob::slotMp3JobFinished()
-{
-  // if the mp3-decoding failed stop the main job
-  if( m_mp3Job->error() != K3b::SUCCESS ) {
-    emit infoMessage( i18n("Decoding failed! Process canceled!") );
-    m_error = K3b::CORRUPT_MP3;
-    emit finished( this );
-  }
-  else {
-    m_currentProcessedTrack->setBufferFile( m_mp3Job->decodedFile() );
-    m_iNumFilesAlreadyDecoded++;
-		
-    // continue with the decoding
-    decodeNextFile();
-  }
-}
-
-
 void K3bAudioJob::slotEmitProgress( int trackMade, int trackSize )
 {
   double _trackPercent;
@@ -723,19 +630,21 @@ void K3bAudioJob::slotEmitProgress( int trackMade, int trackSize )
 }
 
 
-void K3bAudioJob::slotTryToStartOnTheFlyBurning()
+void K3bAudioJob::createTrackInfo()
 {
-  bool ableToStart = true;
-  for( K3bAudioTrack* track = m_doc->at(0); 
-       track != 0 && ableToStart;
-       track = m_doc->next() ) {
-    if( !track->isAccurateLength() )
-      ableToStart = false;
+  m_trackInfoList.setAutoDelete( true );
+  m_trackInfoList.clear();
+
+  const K3bAudioTrack* track = m_doc->at(0);
+  while( track != 0 ) {
+    m_trackInfoList.append( new SAudioTrackInfo( track, KURL() ) );
+    track = m_doc->next();
   }
+}
+
+
+void K3bAudioJob::slotDecodingFinished()
+{
+  // we test if there are still tracks to decode 
   
-  if( ableToStart ) {
-    emit infoMessage( "All tracks' length are calculated." );
-    m_onTheFlyStartTimer->stop();
-    startWriting();
-  }
 }

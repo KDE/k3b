@@ -4,7 +4,8 @@
 
 #include <qobject.h>
 
-class KURL;
+#include <kurl.h>
+
 class K3bAudioTrack;
 
 
@@ -29,14 +30,28 @@ class K3bAudioModule : public QObject
 
   /** has to be async. returns the url the data
       will actually be written (wav files should not be copied!) **/
-  virtual KURL writeToWav( const KURL& url ) = 0;
+  virtual KURL writeToWav( const KURL& url = KURL() ) = 0;
   /** has to be async. Uses signal output() **/
-  virtual void getStream() = 0;
+  virtual bool getStream() = 0;
+
+  /**
+   * must return the number of actually read bytes
+   */
+  virtual int readData( char*, int ) = 0;
+
+ public slots:
+  virtual void cancel() = 0;
 
  signals:
-  void output( char*, int );
+  /**
+   * when this signal is emmited new output is availible and can be read
+   * with readData().
+   * Note that the module stops working until readData() is called.
+   * @param len The length of the data being available.
+   */
+  void output( int len );
   void percent( int );
-  void finished();
+  void finished( bool );
 
  private:
   K3bAudioTrack* m_track;

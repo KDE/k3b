@@ -72,6 +72,8 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
 	   this, SLOT(itemClicked(QListViewItem*)) );
 
 
+  connect( pDoc, SIGNAL(newTracks()), this, SLOT(slotUpdateItems()) );
+
   m_displayRefreshTimer = new QTimer( this );
   connect( m_displayRefreshTimer, SIGNAL(timeout()), this, SLOT(update()) );
   m_displayRefreshTimer->start(1000);
@@ -101,12 +103,12 @@ void K3bAudioView::setupPopupMenu()
 }
 
 
-void K3bAudioView::addItem( K3bAudioTrack* _track )
-{
-  //  qDebug( "(K3bAudioView) adding new item to list: " + _track->fileName() );
-  (void)new AudioListViewItem( _track, m_songlist );
-  m_fillStatusDisplay->repaint();
-}
+// void K3bAudioView::addItem( K3bAudioTrack* _track )
+// {
+//   //  qDebug( "(K3bAudioView) adding new item to list: " + _track->fileName() );
+//   (void)new AudioListViewItem( _track, m_songlist );
+//   m_fillStatusDisplay->repaint();
+// }
 
 void K3bAudioView::slotDropped( KListView*, QDropEvent* e, QListViewItem* after )
 {
@@ -197,4 +199,10 @@ void K3bAudioView::removeTrack()
     // not best, I think we should connect to doc.removedTrack (but while there is only one view this is not important!)
     delete _track;
   }
+}
+
+
+void K3bAudioView::slotUpdateItems()
+{
+  
 }

@@ -35,20 +35,21 @@ class K3bAudioTrack
 {
  public:
   K3bAudioTrack( QList<K3bAudioTrack>* parent, const QString& filename );
-  virtual ~K3bAudioTrack();
+  ~K3bAudioTrack();
 
   /** returns true if K3b is able to handle the file
    *  which means that it can calculate the length of the track
    *  and the file can be written to a cd.
    **/
-  //virtual bool isValid() = 0;
+  //  bool isValid();
+
+  K3bAudioModule* module() const { return m_module; }
 
   QString fileName() const { return QFileInfo(m_file).fileName(); }
   QString absPath() const { return QFileInfo(m_file).absFilePath(); }
 
-  virtual QString bufferFile() const { return absPath(); }
+  QString bufferFile() const { return m_bufferFile; }
 
-  int filetype() const { return m_filetype; }
   int pregap() const { return m_pregap; }
 
   /** returns length of track in frames **/
@@ -88,7 +89,7 @@ class K3bAudioTrack
 	
   void setLength( int time, bool accurate = false ) { m_length = time; m_isAccurateLength = accurate; }
 	
-  virtual void setBufferFile( const QString& file );
+  void setBufferFile( const QString& file );
   /** returns the filesize of the track */
   uint size() const;
   /** returns the index in the list */
@@ -103,6 +104,8 @@ class K3bAudioTrack
   K3bAudioModule* m_module;
 
  private:	
+  QString m_bufferFile;
+
   /** length of track in frames (1/75sec) **/
   int m_length;
   bool m_isAccurateLength;

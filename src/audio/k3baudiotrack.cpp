@@ -50,12 +50,6 @@ K3bAudioTrack::K3bAudioTrack( QList<K3bAudioTrack>* parent, const QString& filen
   kapp->config()->setGroup( "Audio Defaults" );
   m_pregap = kapp->config()->readNumEntry( "Pregap", 150 );
   
-  if( QFileInfo(m_file).extension(false).contains("mp3", false) )
-    m_filetype = K3b::MP3;
-  else
-    m_filetype = K3b::WAV;
-
-
 
   // create a module for decoding and so on
   // we do not know which type of module it will be
@@ -87,7 +81,7 @@ int K3bAudioTrack::index() const
   return i;
 }
 
-void K3bAudioTrack::setBufferFile( const QString& )
+void K3bAudioTrack::setBufferFile( const QString& path )
 {
-  qDebug( "(K3bAudioTrack) cannot set bufferFile since I'm abstract!" );
+  m_bufferFile = path;
 }

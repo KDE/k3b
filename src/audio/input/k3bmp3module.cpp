@@ -34,36 +34,45 @@ K3bMp3Module::K3bMp3Module( K3bAudioTrack* track )
   : K3bAudioModule( track )
 {
   m_infoTimer = new QTimer( this );
+  m_clearDataTimer = new QTimer( this );
+
   connect( m_infoTimer, SIGNAL(timeout()), this, SLOT(slotGatherInformation()) );
   m_infoTimer->start(0);
 
   m_decodingProcess = new KShellProcess();
 
   m_rawData = 0;
+
+  m_currentData = 0;
+  m_currentDataLength = 0;
+  m_finished = true;
+
+  // testing
+//   m_testFile = new QFile( "/home/trueg/download/test_k3b_module.cd" );
+//   m_testFile->open( IO_WriteOnly );
+  //-----------------
 }
 
 
 K3bMp3Module::~K3bMp3Module()
 {
   delete m_decodingProcess;
+  delete m_currentData;
 }
 
 
-void K3bMp3Module::getStream()
+bool K3bMp3Module::getStream()
 {
   if( m_decodingProcess->isRunning() )
-    return;
-
-  m_rawData = 0;
+    return false;
 
   m_decodingProcess->clearArguments();
   m_decodingProcess->disconnect();
   connect( m_decodingProcess, SIGNAL(receivedStdout(KProcess*, char*, int)),
-	   this, SLOT(slotOutputData(KProcess*,char*, int)) );
-  connect( m_decodingProcess, SIGNAL(receivedStdout(KProcess*, char*, int)), 
-	   this, SLOT(slotCountRawData(KProcess*, char*, int)) );
-//   connect( m_decodingProcess, SIGNAL(receivedStderr(KProcess*, char*, int)), 
-// 	   this, SLOT(slotParseStdErrOutput(KProcess*, char*, int)) );
+	   this, SLOT(slotReceivedStdout(KProcess*,char*, int)) );
+
+  connect( m_decodingProcess, SIGNAL(receivedStderr(KProcess*, char*, int)), 
+	   this, SLOT(slotParseStdErrOutput(KProcess*, char*, int)) );
   connect( m_decodingProcess, SIGNAL(processExited(KProcess*)),
 	   this, SLOT(slotDecodingFinished()) );
 
@@ -106,36 +115,151 @@ void K3bMp3Module::getStream()
   *m_decodingProcess << "-";              // output to stdout
 
 
-  if( !m_decodingProcess->start( KProcess::NotifyOnExit, KProcess::Stdout ) )
+  m_clearDataTimer->disconnect();
+  connect( m_clearDataTimer, SIGNAL(timeout()), this, SLOT(slotClearData()) );
+
+  if( !m_decodingProcess->start( KProcess::NotifyOnExit, KProcess::Stdout ) ) {
     qDebug( "(K3bMp3Module) could not start mpg123 process." );
+    return false;
+  }
+  else {
+    qDebug( "(K3bMp3Module) Started mpg123 process." );
+    m_rawData = 0;
+    m_currentDataLength = 0;
+    m_currentData = 0;
+    m_finished = false;
+    return true;
+  }
 }
 
 
-void K3bMp3Module::slotOutputData(KProcess*, char* data, int len)
+void K3bMp3Module::slotReceivedStdout( KProcess*, char* data, int len )
 {
-  emit output(data, len);
+  if( m_currentDataLength != 0 ) {
+    qDebug( "(K3bMp3Module) received stdout and current data was not 0!" );
+    qDebug( "(K3bMp3Module) also this is NOT supposed to happen, we will work around it! ;-)" );
+
+    // only expand the current data
+    char* buffer = m_currentData;
+    m_currentData = new char[m_currentDataLength + len];
+    memcpy( m_currentData, buffer, m_currentDataLength );
+    memcpy( &m_currentData[m_currentDataLength], data, len );
+    delete buffer;
+
+    m_currentDataLength += len;
+  }
+  else {
+    m_currentData = new char[len];
+    m_currentDataLength = len;
+    memcpy( m_currentData, data, len );
+
+    emit output(len);
+  }
+
+  m_rawData += len;
+
+  m_decodingProcess->suspend();
+
+  // testing
+//   m_testFile->writeBlock( data, len );
+//   m_testFile->flush();
+  //----------------
+
 }
 
 
 void K3bMp3Module::slotDecodingFinished()
 {
+  qDebug( "(K3bMp3Module) mpg123 finished. padding to multible of 2352 bytes!" );
+
+  m_finished = true;
+
   // mpg123 does not ensure it's output to be a multible of blocks (2352 bytes)
   // since we round up the number of frames in slotCountRawDataFinished
   // we need to pad by ourself to ensure cdrdao splits our data stream
   // correcty
   int diff = m_rawData % 2352;
+  
+  if( diff > 0 )
+    {
+      int bytesToPad = 2352 - diff;
 
- if( diff > 0 )
-   {
-     int bytesToPad = 2352 - diff;
-     char data[bytesToPad];
-     for( int i = 0; i < bytesToPad; i++ )
-       data[i] = 0;
-     
-     emit output( data, bytesToPad );
-   }
+      if( m_currentDataLength == 0 ) {
+	m_currentData = new char[bytesToPad];
+	m_currentDataLength = bytesToPad;
+	memset( m_currentData, bytesToPad, 0 );
 
-  emit finished();
+	emit output( bytesToPad );
+      }
+      else {
+	// only expand the current data
+	char* buffer = m_currentData;
+	m_currentData = new char[m_currentDataLength + bytesToPad];
+	memcpy( m_currentData, buffer, m_currentDataLength );
+	memset( &m_currentData[m_currentDataLength], bytesToPad, 0 );
+
+	m_currentDataLength += bytesToPad;
+
+	// no need to emit output signal since we still waint for data to be read
+      }
+
+      // testing
+//       m_testFile->writeBlock( m_currentData, bytesToPad );
+//       m_testFile->flush();
+      //----------------
+
+    }
+}
+
+
+int K3bMp3Module::readData( char* data, int len )
+{
+  m_clearDataTimer->start(0, true);
+
+  if( m_currentDataLength == 0 ) {
+    return 0;
+  }
+  else if( len >= m_currentDataLength ) {
+    int i = m_currentDataLength;
+    m_currentDataLength = 0;
+
+    memcpy( data, m_currentData, i );
+
+    delete m_currentData;
+    m_currentData = 0;
+    m_decodingProcess->resume();
+
+    return i;
+  }
+  else {
+    qDebug("(K3bMp3Module) readData: %i bytes available but only %i requested!", 
+	   m_currentDataLength, len );
+
+    memcpy( data, m_currentData, len );
+
+    char* buffer = m_currentData;
+    m_currentData = new char[m_currentDataLength - len];
+    memcpy( m_currentData, &buffer[len], m_currentDataLength - len );
+    delete buffer;
+
+    m_currentDataLength -= len;
+
+    return len;
+  }
+}
+
+
+void K3bMp3Module::slotClearData()
+{
+  if( m_finished && m_currentDataLength == 0 ) {
+//     m_testFile->close();
+    emit finished( true );
+  }
+
+  else if( m_currentDataLength > 0 )
+    emit output( m_currentDataLength );
+
+  m_clearDataTimer->stop();
 }
 
 
@@ -147,7 +271,7 @@ KURL K3bMp3Module::writeToWav( const KURL& url )
   m_decodingProcess->clearArguments();
   m_decodingProcess->disconnect();
   connect( m_decodingProcess, SIGNAL(processExited(KProcess*)),
-	   this, SIGNAL(finished()) );
+	   this, SIGNAL(slotWriteToWavFinished()) );
   connect( m_decodingProcess, SIGNAL(receivedStderr(KProcess*, char*, int)), 
 	   this, SLOT(slotParseStdErrOutput(KProcess*, char*, int)) );
   // TODO: we need some error shit: parse some error messages like "disc full"
@@ -170,6 +294,14 @@ KURL K3bMp3Module::writeToWav( const KURL& url )
   return url;
 }
 
+
+void K3bMp3Module::slotWriteToWavFinished()
+{
+  if( m_decodingProcess->normalExit() && m_decodingProcess->exitStatus() == 0 )
+    emit finished( true );
+  else
+    emit finished( false );
+}
 
 
 void K3bMp3Module::slotGatherInformation()
@@ -335,7 +467,7 @@ void K3bMp3Module::slotCountRawDataFinished()
   m_decodingProcess->disconnect();
   m_decodingProcess->clearArguments();
 
-  audioTrack()->setLength( m_rawData / 2352 /* here we need bytesPerFrame */, 
+  audioTrack()->setLength( (int)(ceil((float)m_rawData / 2352.0) ) /* here we need bytesPerFrame */, 
 			   true /* this indicates that the length is perfect and so useful for on-the-fly-burning */ );
 
   qDebug( "(K3bMp3Module) bytes in raw data: %ld,  frames: %f, ceil: %d", 
@@ -367,9 +499,26 @@ void K3bMp3Module::slotParseStdErrOutput(KProcess*, char* output, int len)
 			
 	emit percent( 100 * made / (made+togo) );
       }
-//       else
-// 	qDebug( *str );
+      else
+	qDebug( *str );
     }
+}
+
+
+void K3bMp3Module::cancel()
+{
+  // cancel whatever in process
+  m_decodingProcess->disconnect();
+  if( m_decodingProcess->isRunning() )
+    m_decodingProcess->kill();
+
+  m_clearDataTimer->stop();
+  m_infoTimer->stop();
+
+  delete m_currentData;
+  m_currentDataLength = 0;
+
+  emit finished( false );
 }
 
 
