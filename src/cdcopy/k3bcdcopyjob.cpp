@@ -117,7 +117,7 @@ void K3bCdCopyJob::diskInfoReady( const K3bDiskInfo& info ) {
         cancelAll();
         return;
     }
-
+    m_sessions = info.sessions;
     if( m_sessions < 2 ) {
         m_tempPath = k3bMain()->findTempFile( "img", m_tempPath );
         m_tocFile  = m_tempPath;
