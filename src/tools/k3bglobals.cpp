@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -16,8 +16,6 @@
 
 
 #include "k3bglobals.h"
-#include "../device/Sample.h"
-#include "../device/util.h"
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -26,6 +24,24 @@
 
 #include <cmath>
 
+struct Sample {
+    unsigned char msbLeft;
+    unsigned char lsbLeft;
+    unsigned char msbRight;
+    unsigned char lsbRight;
+
+    short left (  ) const {
+        return ( msbLeft << 8 ) | lsbLeft;
+    } short right (  ) const {
+        return ( msbRight << 8 ) | lsbRight;
+    } void left ( short d ) {
+        msbLeft = d >> 8;
+        lsbLeft = d;
+    } void right ( short d ) {
+        msbRight = d >> 8;
+        lsbRight = d;
+    }
+};
 
 QString K3b::framesToString( int h, bool showFrames )
 {
