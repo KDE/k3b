@@ -31,6 +31,7 @@ class KProgress;
 class K3bDataModeWidget;
 class K3bWritingModeWidget;
 class KURLRequester;
+class K3bListView;
 
 
 /**
@@ -50,11 +51,16 @@ class K3bIsoImageWritingDialog : public K3bInteractionDialog
   void slotStartClicked();
   void updateImageSize( const QString& );
   void slotWriterChanged();
+  void slotMd5JobPercent( int );
   void slotMd5JobFinished( bool );
+  void slotMd5SumCompare();
 
   void slotLoadUserDefaults();
   void slotSaveUserDefaults();
   void slotLoadK3bDefaults();
+
+ protected:
+  void calculateMd5Sum( const QString& );
 
  private:
   void setupGui();
@@ -70,26 +76,11 @@ class K3bIsoImageWritingDialog : public K3bInteractionDialog
   K3bDataModeWidget* m_dataModeWidget;
   K3bWritingModeWidget* m_writingModeWidget;
 
-  QLabel*    m_labelImageSize;
   KURLRequester* m_editImagePath;
-  KProgress* m_md5ProgressWidget;
-  KActiveLabel* m_md5Label;
+  K3bListView* m_infoView;
 
-  QWidget* m_isoInfoWidget;
-  QLabel* m_labelIsoId;
-  QLabel* m_labelIsoSystemId;
-  QLabel* m_labelIsoVolumeId;
-  QLabel* m_labelIsoVolumeSetId;
-  QLabel* m_labelIsoPublisherId;
-  QLabel* m_labelIsoPreparerId;
-  QLabel* m_labelIsoApplicationId;
-
-  QLabel* m_generalInfoLabel;
-
-  bool m_bIsoImage;
-  QString m_lastCheckedFile;
-
-  bool m_dvd;
+  class Private;
+  Private* d;
 };
 
 #endif
