@@ -310,7 +310,7 @@ QString K3bFLACDecoder::technicalInfo( const QString& info ) const
   if( d->comments != 0 ) {
     if( info == i18n("Vendor") )
 #ifdef FLAC_NEWER_THAN_1_1_1
-      return QString::fromUtf8(d->comments->get_vendor_string());
+      return QString::fromUtf8( (char*)d->comments->get_vendor_string() );
 #else
       return QString::fromUtf8(d->comments->get_vendor_string().get_field());
 #endif
