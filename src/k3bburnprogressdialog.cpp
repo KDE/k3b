@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -141,6 +141,9 @@ void K3bBurnProgressDialog::show()
     m_systemTray->show();
   }
 
+  if( c->readBoolEntry( "hide main window while writing" ), true )
+    k3bMain()->hide();
+
   KDialog::show();
 }
 
@@ -157,6 +160,7 @@ void K3bBurnProgressDialog::closeEvent( QCloseEvent* e )
 
   if( m_buttonClose->isVisible() ) {
     KDialog::closeEvent( e );
+    k3bMain()->show();
     if( !m_plainCaption.isEmpty() )
       k3bMain()->setPlainCaption( m_plainCaption );
   }
