@@ -236,34 +236,37 @@ void K3bAudioDoc::addTrack( K3bAudioTrack* track, uint position )
 }
 
 
-void K3bAudioDoc::removeTrack( int position )
+void K3bAudioDoc::removeTrack( K3bAudioTrack* track )
 {
-  if( position < 0 ) {
-    kdDebug() << "(K3bAudioDoc) tried to remove track with index < 0!" << endl;
+  if( !track ) {
     return;
   }
 	
-  K3bAudioTrack* track = take( position );
-  if( track ) {
+  // set the current item to track
+  if( m_tracks->findRef( track ) >= 0 ) {
+    // take the current item
+    track = m_tracks->take();
+
     // emit signal before deleting the track to avoid crashes
     // when the view tries to call some of the tracks' methods
     emit newTracks();
-
+      
     delete track;
   }
 }
 
-void K3bAudioDoc::moveTrack( int oldPos, int newPos )
+void K3bAudioDoc::moveTrack( const K3bAudioTrack* track, const K3bAudioTrack* after )
 {
-  // newPos is the nwe position in the current list,
-  // so if oldPos < newPos we have to add the track at newPos-1
-  // after it was removed
+  // set the current item to track
+  m_tracks->findRef( track );
+  // take the current item
+  track = m_tracks->take();
 
-  K3bAudioTrack* track = m_tracks->take( oldPos );
-  if(track) {
-    m_tracks->insert( (oldPos < newPos) ? newPos-1 : newPos, track );
-  }
+  // if after == 0 findRef returnes -1
+  int pos = m_tracks->findRef( after );
+  m_tracks->insert( pos+1, track );
 }
+
 
 K3bView* K3bAudioDoc::newView( QWidget* parent )
 {

@@ -106,8 +106,8 @@ class K3bAudioDoc : public K3bDoc
 
 
   // --- TODO: this should read: removeTrack( K3bAudioTrack* )
-  void removeTrack( int position );
-  void moveTrack( int oldPos, int newPos );
+  void removeTrack( K3bAudioTrack* );
+  void moveTrack( const K3bAudioTrack* track, const K3bAudioTrack* after );
 
   void setPadding( bool p ) { m_padding = p; }
   //	void cancel();

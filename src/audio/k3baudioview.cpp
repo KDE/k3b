@@ -43,7 +43,7 @@
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kurldrag.h>
-
+#include <kdebug.h>
 
 
 K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name )
@@ -69,8 +69,8 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
 
   connect( m_songlist, SIGNAL(dropped(KListView*, QDropEvent*, QListViewItem*)),
 	   this, SLOT(slotDropped(KListView*, QDropEvent*, QListViewItem*)) );
-  connect( m_songlist, SIGNAL(moved( QPtrList<QListViewItem>&, QPtrList<QListViewItem>&, QPtrList<QListViewItem>& )),
-	   this, SLOT(slotItemsMoved( QPtrList<QListViewItem>&, QPtrList<QListViewItem>&, QPtrList<QListViewItem>& )) );
+//   connect( m_songlist, SIGNAL(moved( QPtrList<QListViewItem>&, QPtrList<QListViewItem>&, QPtrList<QListViewItem>& )),
+// 	   this, SLOT(slotItemsMoved( QPtrList<QListViewItem>&, QPtrList<QListViewItem>&, QPtrList<QListViewItem>& )) );
   connect( m_songlist, SIGNAL(lengthReady()), m_fillStatusDisplay, SLOT(update()) );
 	
   connect( m_songlist, SIGNAL(rightButtonClicked(QListViewItem*, const QPoint&, int)),
@@ -136,35 +136,51 @@ void K3bAudioView::slotDropped( KListView*, QDropEvent* e, QListViewItem* after 
   if( !e->isAccepted() )
     return;
 
-  KURL::List urls;
-  KURLDrag::decode( e, urls );
-  uint pos;
+  int pos;
   if( after == 0L )
     pos = 0;
   else
-    pos = after->text(0).toInt();
+    pos = ((K3bAudioListViewItem*)after)->audioTrack()->index() + 1;
+
+  if( e->source() == m_songlist->viewport() ) {
+    QPtrList<QListViewItem> sel = m_songlist->selectedItems();
+    QPtrListIterator<QListViewItem> it(sel);
+    K3bAudioTrack* trackAfter = ( after ? ((K3bAudioListViewItem*)after)->audioTrack() : 0 );
+    while( it.current() ) {
+      K3bAudioTrack* track = ((K3bAudioListViewItem*)it.current())->audioTrack();
+      m_doc->moveTrack( track, trackAfter );
+      trackAfter = track;
+      ++it;
+    }
+
+    m_songlist->sort();  // This is so lame!
+  }
+  else {
+    KURL::List urls;
+    KURLDrag::decode( e, urls );
 		
-  m_doc->addTracks( urls, pos );
-}
-
-
-void K3bAudioView::slotItemsMoved( QPtrList<QListViewItem>& items, 
-				   QPtrList<QListViewItem>&, 
-				   QPtrList<QListViewItem>& afterNow )
-{
-  // move the tracks one after the other
- 
-  QListIterator<QListViewItem> itI(items);
-  QListIterator<QListViewItem> itAN(afterNow);
-  while( itI.current() && itAN.current() ) {
-    K3bAudioTrack* track           = ((K3bAudioListViewItem*)*itI)->audioTrack();
-    K3bAudioTrack* trackAfterNow   = ((K3bAudioListViewItem*)*itAN)->audioTrack();
-
-    m_doc->moveTrack( track->index(), trackAfterNow->index()+1 );
-
-    ++itI, ++itAN;
+    m_doc->addTracks( urls, pos );
   }
 }
+
+
+// void K3bAudioView::slotItemsMoved( QPtrList<QListViewItem>& items, 
+// 				   QPtrList<QListViewItem>&, 
+// 				   QPtrList<QListViewItem>& afterNow )
+// {
+//   // move the tracks one after the other
+ 
+//   QListIterator<QListViewItem> itI(items);
+//   QListIterator<QListViewItem> itAN(afterNow);
+//   while( itI.current() && itAN.current() ) {
+//     K3bAudioTrack* track           = ((K3bAudioListViewItem*)*itI)->audioTrack();
+//     K3bAudioTrack* trackAfterNow   = ((K3bAudioListViewItem*)*itAN)->audioTrack();
+//     kdDebug() << "-------------- " << trackAfterNow->index() << endl;
+//     m_doc->moveTrack( track->index(), trackAfterNow->index()+1 );
+
+//     ++itI, ++itAN;
+//   }
+// }
 
 void K3bAudioView::showPopupMenu( QListViewItem* _item, const QPoint& _point )
 {
@@ -216,7 +232,7 @@ void K3bAudioView::slotRemoveTracks()
   if( !selected.isEmpty() ) {
 
     for( K3bAudioTrack* track = selected.first(); track != 0; track = selected.next() ) {
-      ((K3bAudioDoc*)doc)->removeTrack( track->index() );
+      ((K3bAudioDoc*)doc)->removeTrack( track );
 		
       // not best, I think we should connect to doc.removedTrack (but while there is only one view this is not important!)
       QListViewItem* viewItem = m_itemMap[track];

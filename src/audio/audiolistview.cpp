@@ -39,8 +39,9 @@ K3bAudioListView::K3bAudioListView(QWidget *parent, const char *name )
   setDragEnabled( true );
   //  setSelectionModeExt( KListView::Konqueror ); // FileManager in KDE3
   setSelectionModeExt( KListView::Extended );
+  setItemsMovable( false );
 
-  setSorting( -1 );
+  setSorting( 0 );
 		
   setupColumns();
   header()->setClickEnabled( false );
