@@ -65,7 +65,6 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
   void setTocFile( const QString& s ) { m_tocFile = s; }
 
   void setSourceDevice( K3bDevice* dev ) { m_sourceDevice = dev; }
-  void setSourceDriver(QString& s) { m_sourceDriver=s; }
   void setFastToc( bool b ) { m_fastToc = b; }
   void setReadRaw( bool b ) { m_readRaw = b; }
   void setReadSubchan(SubMode m) { m_readSubchan=m; };
@@ -96,7 +95,6 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
   int        m_command;
   int        m_blankMode;
   K3bDevice* m_sourceDevice;
-  QString    m_sourceDriver; 
   QString    m_dataFile;
   QString    m_tocFile;
   bool       m_readRaw;
