@@ -27,6 +27,8 @@
 #include <qfile.h>
 #include <qtimer.h>
 
+#include <stdlib.h>
+
 #include "k3b.h"
 #include "k3bsplash.h"
 
