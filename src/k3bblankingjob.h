@@ -33,8 +33,6 @@ class K3bBlankingJob : public K3bJob
 
   enum blank_mode { Fast, Complete, Track, Unclose, Session };
 
-  bool active() const;
-
  public slots:
   void start();
   void cancel();
@@ -42,18 +40,21 @@ class K3bBlankingJob : public K3bJob
   void setDevice( K3bDevice* d );
   void setSpeed( int s ) { m_speed = s; }
   void setMode( int m ) { m_mode = m; }
+  void setWritingApp (int app) { m_writingApp = app; }
 
  private slots:
-  void slotParseCdrecordOutput( KProcess*, char*, int );
-  void slotCdrecordFinished();
+  void slotFinished(bool);
   void slotStartErasing();
+  void slotUseCdrecord();
+  void slotUseCdrdao();
 
  private:
-  KProcess* m_process;
+  K3bJob* m_blankingJob;
   bool m_force;
   K3bDevice* m_device;
   int m_speed;
   int m_mode;
+  int m_writingApp;
 };
 
 #endif

@@ -48,6 +48,7 @@ Q_OBJECT
   void slotInfoMessage( const QString& msg, int type );
   void slotJobFinished( bool );
   void slotWriterChanged();
+  void slotWritingAppChanged( int );
 
  protected:
   void closeEvent( QCloseEvent* );

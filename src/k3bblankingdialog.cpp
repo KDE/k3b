@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -21,6 +21,7 @@
 #include "k3bblankingjob.h"
 #include "k3bwriterselectionwidget.h"
 #include "k3bdiskerasinginfodialog.h"
+#include "tools/k3bglobals.h"
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -54,7 +55,7 @@ K3bBlankingDialog::K3bBlankingDialog( QWidget* parent, const char* name )
   m_job = 0;
 
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotWriterChanged()) );
-
+  connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(slotWritingAppChanged(int)) );
   slotWriterChanged();
 }
 
@@ -109,6 +110,7 @@ void K3bBlankingDialog::setupGui()
   groupOutputLayout->setMargin( marginHint() );
 
   m_viewOutput = new KListView( m_groupOutput );
+  m_viewOutput->setSorting(-1);
   m_viewOutput->addColumn( i18n("type") );
   m_viewOutput->addColumn( i18n("message") );
   m_viewOutput->header()->hide();
@@ -160,6 +162,7 @@ void K3bBlankingDialog::slotUser1()
   m_job->setDevice( m_writerSelectionWidget->writerDevice() );
   m_job->setSpeed( m_writerSelectionWidget->writerSpeed() );
   m_job->setForce( m_checkForce->isChecked() );
+  m_job->setWritingApp(m_writerSelectionWidget->writingApp());
 
   if( m_radioCompleteBlank->isChecked() )
     m_job->setMode( K3bBlankingJob::Complete );
@@ -249,11 +252,23 @@ void K3bBlankingDialog::slotWriterChanged()
     actionButton( KDialogBase::User1 )->setEnabled( true );
   else {
     actionButton( KDialogBase::User1 )->setEnabled( false );
-    QListViewItem* item = new QListViewItem( m_viewOutput, m_viewOutput->lastItem(), 
+    QListViewItem* item = new QListViewItem( m_viewOutput, m_viewOutput->lastItem(),
 					     i18n("%1 does not support CD-RW writing.").arg(dev->devicename()) );
     item->setPixmap( 0, SmallIcon( "stop" ) );
   }
 }
 
+void K3bBlankingDialog::slotWritingAppChanged(int app)
+{
+  if ( app == K3b::CDRDAO ) {
+    m_radioBlankTrack->setEnabled(false);
+    m_radioUncloseSession->setEnabled(false);
+    m_radioBlankSession->setEnabled(false);
+  } else {
+    m_radioBlankTrack->setEnabled(true);
+    m_radioUncloseSession->setEnabled(true);
+    m_radioBlankSession->setEnabled(true);
+  }
+}
 
 #include "k3bblankingdialog.moc"
