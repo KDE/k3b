@@ -1,0 +1,10 @@
+[Desktop Entry]
+Actions=CreateK3bAudioProject
+Encoding=UTF-8
+ServiceTypes=audio/x-mp3,audio/x-vorbis,application/x-ogg,audio/x-mp2,audio/x-mpegurl,audio/x-wav
+
+[Desktop Action CreateK3bAudioProject]
+Exec=k3b --audio %U
+Name=Create Audio CD with K3b...
+Name[de]=Audio CD mit K3b erstellen...
+Icon=k3b

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Actions=CreateK3bDataProject
+Encoding=UTF-8
+ServiceTypes=inode/directory,inode/file
+
+[Desktop Action CreateK3bDataProject]
+Exec=k3b --data %U
+Name=Create Data CD with K3b...
+Name[de]=Daten CD mit K3b erstellen...
+Icon=k3b

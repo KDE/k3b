@@ -113,7 +113,7 @@ int main(int argc, char *argv[])
 	  doc->addUrl( args->url(i) );
 	}
       }
-      else if( args->isSet( "data" ) ) {
+      else if( args->isSet( "audio" ) ) {
 	// create new audio project and add all arguments
 	k3bMainWidget->slotNewAudioDoc();
 	K3bDoc* doc = k3bMainWidget->activeDoc();
