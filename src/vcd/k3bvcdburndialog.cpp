@@ -87,17 +87,17 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
         
   // ToolTips
   // -------------------------------------------------------------------------
-  QToolTip::add( m_radioVcd11, i18n("Select Video CD Typ %1").arg("(VCD 1.1)") );
-  QToolTip::add( m_radioVcd20, i18n("Select Video CD Typ %1").arg("(VCD 2.0)") );
-  QToolTip::add( m_radioSvcd10, i18n("Select Video CD Typ %1").arg("(SVCD 1.0)") );
+  QToolTip::add( m_radioVcd11, i18n("Select Video CD type %1").arg("(VCD 1.1)") );
+  QToolTip::add( m_radioVcd20, i18n("Select Video CD type %1").arg("(VCD 2.0)") );
+  QToolTip::add( m_radioSvcd10, i18n("Select Video CD type %1").arg("(SVCD 1.0)") );
   QToolTip::add( m_checkNonCompliant, i18n("Non-compliant compatibility mode for broken devices") );
   QToolTip::add( m_check2336, i18n("Use 2336 byte sectors for output") );
 
-  QToolTip::add(m_checkApplicationId, i18n("write ISO application id for video cd") );
-  QToolTip::add(m_editVolumeId, i18n("specify ISO volume label for video cd") );
-  QToolTip::add(m_editAlbumId, i18n("specify album id for video cd set") );
-  QToolTip::add(m_spinVolumeNumber, i18n("specify album set sequence number ( < volume-count )") );
-  QToolTip::add(m_spinVolumeCount, i18n("specify number of volumes in album set") );
+  QToolTip::add(m_checkApplicationId, i18n("Write ISO application id for Video CD") );
+  QToolTip::add(m_editVolumeId, i18n("Specify ISO volume label for Video CD") );
+  QToolTip::add(m_editAlbumId, i18n("Specify album id for VideoCD set") );
+  QToolTip::add(m_spinVolumeNumber, i18n("Specify album set sequence number ( <= volume-count )") );
+  QToolTip::add(m_spinVolumeCount, i18n("Specify number of volumes in album set") );
 
   // What's This info
   // -------------------------------------------------------------------------  
@@ -199,10 +199,10 @@ void K3bVcdBurnDialog::setupLabelTab()
   m_checkApplicationId = new QCheckBox( i18n( "Write Application Id" ), w, "m_checkApplicationId" );
 
   // ----------------------------------------------------------------------
-  QLabel* labelVolumeId = new QLabel( i18n( "&Volume Label:" ), w, "labelVolumeId" );
+  QLabel* labelVolumeId = new QLabel( i18n( "Volume &Label:" ), w, "labelVolumeId" );
   QLabel* labelAlbumId = new QLabel( i18n( "&Album Id:" ), w, "labelAlbumId" );
-  QLabel* labelVolumeCount = new QLabel( i18n( "Number of CDs in &Album:" ), w, "labelVolumeCount" );
-  QLabel* labelVolumeNumber = new QLabel( i18n( "CD is &Number:" ), w, "labelVolumeNumber" );
+  QLabel* labelVolumeCount = new QLabel( i18n( "Number of &Volumes in Album:" ), w, "labelVolumeCount" );
+  QLabel* labelVolumeNumber = new QLabel( i18n( "This is &Sequence Number:" ), w, "labelVolumeNumber" );
 
   m_editVolumeId = new QLineEdit( w, "m_editVolumeId" );
   m_editAlbumId = new QLineEdit( w, "m_editAlbumId" );
@@ -310,7 +310,8 @@ void K3bVcdBurnDialog::saveSettings()
   doc()->setDao( true );
   doc()->setDummy( m_checkSimulate->isChecked() );
   doc()->setOnTheFly( false );
-
+  doc()->setBurnproof( m_checkBurnproof->isChecked() );
+  
   // -- saving current speed --------------------------------------
   doc()->setSpeed( m_writerSelectionWidget->writerSpeed() );
 
@@ -336,7 +337,7 @@ void K3bVcdBurnDialog::readSettings()
   m_checkSimulate->setChecked( doc()->dummy() );
   m_checkRemoveBufferFiles->setChecked( vcdDoc()->deleteImage() );
   m_checkBurnproof->setChecked( doc()->burnproof() );
-
+  
   // read vcdType
   switch( ((K3bVcdDoc*)doc())->vcdType() ) {
   case K3bVcdDoc::VCD11:
