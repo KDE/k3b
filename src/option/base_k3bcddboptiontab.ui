@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>base_K3bCddbOptionTab</class>
 <author>Sebastian Trueg</author>
 <widget class="QWidget">
@@ -424,12 +424,6 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <property name="margin">
-                        <number>11</number>
-                    </property>
-                    <property name="spacing">
-                        <number>6</number>
-                    </property>
                     <widget class="QGroupBox">
                         <property name="name">
                             <cstring>m_groupCgi</cstring>
@@ -487,184 +481,30 @@
                             </widget>
                         </grid>
                     </widget>
-                    <widget class="QGroupBox">
+                    <spacer>
                         <property name="name">
-                            <cstring>m_groupProxy</cstring>
+                            <cstring>spacer5</cstring>
                         </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>5</hsizetype>
-                                <vsizetype>5</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>1</verstretch>
-                            </sizepolicy>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
                         </property>
-                        <property name="title">
-                            <string>Proxy Settings</string>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
                         </property>
-                        <vbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <property name="margin">
-                                <number>11</number>
-                            </property>
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
-                            <widget class="QButtonGroup">
-                                <property name="name">
-                                    <cstring>m_groupProxySettingsSource</cstring>
-                                </property>
-                                <property name="enabled">
-                                    <bool>true</bool>
-                                </property>
-                                <property name="frameShape">
-                                    <enum>NoFrame</enum>
-                                </property>
-                                <property name="frameShadow">
-                                    <enum>Plain</enum>
-                                </property>
-                                <property name="lineWidth">
-                                    <number>0</number>
-                                </property>
-                                <property name="title">
-                                    <string></string>
-                                </property>
-                                <grid>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <property name="margin">
-                                        <number>0</number>
-                                    </property>
-                                    <property name="spacing">
-                                        <number>6</number>
-                                    </property>
-                                    <widget class="QRadioButton" row="0" column="0">
-                                        <property name="name">
-                                            <cstring>m_radioUseKdeProxy</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Use KDE proxy settings</string>
-                                        </property>
-                                        <property name="checked">
-                                            <bool>true</bool>
-                                        </property>
-                                    </widget>
-                                    <spacer row="0" column="1">
-                                        <property name="name">
-                                            <cstring>Spacer4</cstring>
-                                        </property>
-                                        <property name="orientation">
-                                            <enum>Horizontal</enum>
-                                        </property>
-                                        <property name="sizeType">
-                                            <enum>Expanding</enum>
-                                        </property>
-                                        <property name="sizeHint">
-                                            <size>
-                                                <width>20</width>
-                                                <height>20</height>
-                                            </size>
-                                        </property>
-                                    </spacer>
-                                    <widget class="QPushButton" row="0" column="2">
-                                        <property name="name">
-                                            <cstring>m_buttonKdeProxySettings</cstring>
-                                        </property>
-                                        <property name="enabled">
-                                            <bool>true</bool>
-                                        </property>
-                                        <property name="text">
-                                            <string>Change...</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="QRadioButton" row="1" column="0" rowspan="1" colspan="3">
-                                        <property name="name">
-                                            <cstring>m_radioUseManualProxy</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Use manual proxy settings</string>
-                                        </property>
-                                    </widget>
-                                </grid>
-                            </widget>
-                            <widget class="QCheckBox">
-                                <property name="name">
-                                    <cstring>m_checkUseProxy</cstring>
-                                </property>
-                                <property name="enabled">
-                                    <bool>false</bool>
-                                </property>
-                                <property name="text">
-                                    <string>Use proxy for HTTP access</string>
-                                </property>
-                            </widget>
-                            <widget class="QFrame">
-                                <property name="name">
-                                    <cstring>m_boxProxyServer</cstring>
-                                </property>
-                                <property name="enabled">
-                                    <bool>false</bool>
-                                </property>
-                                <property name="frameShape">
-                                    <enum>NoFrame</enum>
-                                </property>
-                                <property name="frameShadow">
-                                    <enum>Raised</enum>
-                                </property>
-                                <property name="lineWidth">
-                                    <number>0</number>
-                                </property>
-                                <hbox>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <property name="margin">
-                                        <number>0</number>
-                                    </property>
-                                    <property name="spacing">
-                                        <number>6</number>
-                                    </property>
-                                    <widget class="QLabel">
-                                        <property name="name">
-                                            <cstring>TextLabel1_3</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Server:</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="KLineEdit">
-                                        <property name="name">
-                                            <cstring>m_editProxyServer</cstring>
-                                        </property>
-                                    </widget>
-                                    <widget class="QLabel">
-                                        <property name="name">
-                                            <cstring>TextLabel2_2</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Port:</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="KIntNumInput">
-                                        <property name="name">
-                                            <cstring>m_editProxyPort</cstring>
-                                        </property>
-                                        <property name="value">
-                                            <number>8080</number>
-                                        </property>
-                                    </widget>
-                                </hbox>
-                            </widget>
-                        </vbox>
-                    </widget>
+                        <property name="sizeHint">
+                            <size>
+                                <width>31</width>
+                                <height>151</height>
+                            </size>
+                        </property>
+                    </spacer>
                 </vbox>
             </widget>
         </widget>
     </vbox>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>m_checkManualCgiPath</sender>
@@ -673,27 +513,9 @@
         <slot>setEnabled(bool)</slot>
     </connection>
     <connection>
-        <sender>m_radioUseKdeProxy</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>m_buttonKdeProxySettings</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
         <sender>m_checkManualCgiPath</sender>
         <signal>toggled(bool)</signal>
         <receiver>TextLabel3</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>m_radioUseManualProxy</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>m_checkUseProxy</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>m_checkUseProxy</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>m_boxProxyServer</receiver>
         <slot>setEnabled(bool)</slot>
     </connection>
     <connection>
@@ -719,24 +541,11 @@
     <tabstop>m_mainTabbed</tabstop>
     <tabstop>m_checkManualCgiPath</tabstop>
     <tabstop>m_editManualCgiPath</tabstop>
-    <tabstop>m_radioUseKdeProxy</tabstop>
-    <tabstop>m_buttonKdeProxySettings</tabstop>
-    <tabstop>m_radioUseManualProxy</tabstop>
-    <tabstop>m_checkUseProxy</tabstop>
-    <tabstop>m_editProxyServer</tabstop>
-    <tabstop>m_editProxyPort</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>klistview.h</includehint>
-    <includehint>klineedit.h</includehint>
     <includehint>klistview.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
 </includehints>
 </UI>

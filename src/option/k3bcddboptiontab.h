@@ -32,8 +32,6 @@ class K3bCddbOptionTab : public base_K3bCddbOptionTab
   void apply();
 
  private slots:
-  void slotKdeProxySettings();
-  
   void slotLocalDirAdd();
   void slotLocalDirRemove();
   void slotLocalDirDown();

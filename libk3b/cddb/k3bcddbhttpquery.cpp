@@ -22,41 +22,24 @@
 #include <qstringlist.h>
 #include <qregexp.h>
 #include <qtextstream.h>
-#include <qsocket.h>
 
-#include <kextsock.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kprotocolmanager.h>
+#include <kio/global.h>
+#include <kio/job.h>
 
 
 K3bCddbHttpQuery::K3bCddbHttpQuery( QObject* parent, const char* name )
   : K3bCddbQuery( parent, name )
 {
-  m_socket = new QSocket(this);
-//   m_socket = new KExtendedSocket();
-//   m_socket->enableRead(true);
-//   m_socket->setSocketFlags( KExtendedSocket::inetSocket|KExtendedSocket::bufferedSocket );
-
-//   connect( m_socket, SIGNAL(connectionSuccess()), this, SLOT(slotConnected()) );
-//   connect( m_socket, SIGNAL(closed(int)), this, SLOT(slotConnectionClosed()) );
-//   connect( m_socket, SIGNAL(connectionFailed(int)), this, SLOT(slotConnectionFailed(int)) );
-  connect( m_socket, SIGNAL(readyRead()), this, SLOT(slotReadyRead()) );
-  connect( m_socket, SIGNAL(error(int)), this, SLOT(slotError(int)) );
-  connect( m_socket, SIGNAL(connectionClosed()), this, SLOT(slotConnectionClosed()) );
-  connect( m_socket, SIGNAL(connected()), this, SLOT(slotConnected()) );
-
   m_server = "freedb.org";
   m_port = 80;
-  m_cgiPath = "~cddb/cddb.cgi";
-  m_bUseProxyServer = false;
-  m_bUseKdeSettings = true;
+  m_cgiPath = "/~cddb/cddb.cgi";
 }
 
 
 K3bCddbHttpQuery::~K3bCddbHttpQuery()
 {
-  delete m_socket;
 }
 
 
@@ -65,13 +48,7 @@ void K3bCddbHttpQuery::doQuery()
   setError( WORKING );
   m_state = QUERY;
 
-  emit infoMessage( i18n("Searching %1 on port %2").arg(m_server).arg(m_port) );
-
-  if( !connectToServer() ) {
-    setError( CONNECTION_ERROR );
-    emit infoMessage( i18n("Could not connect to host %1").arg(m_server) );
-    emitQueryFinished();
-  }
+  performCommand( queryString() );
 }
 
 
@@ -80,76 +57,63 @@ void K3bCddbHttpQuery::doMatchQuery()
   setError( WORKING );
   m_state = READ;
 
-  if( !connectToServer() ) {
+  performCommand( QString( "cddb read %1 %2").arg( header().category ).arg( header().discid ) );
+}
+
+
+void K3bCddbHttpQuery::performCommand( const QString& cmd )
+{
+  KURL url;
+  url.setProtocol( "http" );
+  url.setHost( m_server );
+  url.setPort( m_port );
+  url.setPath( m_cgiPath );
+
+  url.addQueryItem( "cmd", cmd );
+  url.addQueryItem( "hello", handshakeString() );
+  url.addQueryItem( "proto", "5" );
+
+  m_data.truncate(0);
+
+  kdDebug() << "(K3bCddbHttpQuery) getting url: " << url.prettyURL() << endl;
+
+  KIO::TransferJob* job = KIO::get( url, false, false );
+
+  if( !job ) {
     setError( CONNECTION_ERROR );
     emit infoMessage( i18n("Could not connect to host %1").arg(m_server) );
     emitQueryFinished();
+    return;
   }
+
+  connect( job, SIGNAL(data(KIO::Job*, const QByteArray&)),
+	   SLOT(slotData(KIO::Job*, const QByteArray&)) );
+  connect( job, SIGNAL(result(KIO::Job*)),
+	   SLOT(slotResult(KIO::Job*)) );
 }
 
 
-void K3bCddbHttpQuery::slotConnected()
+
+void K3bCddbHttpQuery::slotData( KIO::Job*, const QByteArray& data )
 {
-  emit infoMessage( i18n("Connected") );
-
-  if( m_state == QUERY ) {
-    // set query
-    QString query = createHttpUrl();
-    query.append( "?cmd=" );
-    query.append( queryString().replace( QRegExp( "\\s" ), "+" ) );
-    query.append( "&hello=" );
-    query.append( handshakeString().replace( QRegExp( "\\s" ), "+" ) );
-    query.append( "&proto=5" );
-
-    query.prepend( "GET " );
-
-    kdDebug() << "(K3bCddbHttpQuery) Query: " + query << endl;
-
-    QTextStream stream( m_socket );
-    stream << query << endl;
-    m_socket->flush();
-  }
-  else if( m_state == READ ) {
-    // send read command for first entry
-    QString query = createHttpUrl();
-    query.append( QString( "?cmd=cddb+read+%1+%2").arg( header().category ).arg( header().discid ) );
-    query.append( "&hello=" );
-    query.append( handshakeString().replace( QRegExp( "\\s" ), "+" ) );
-    query.append( "&proto=5" );
-      
-    query.prepend( "GET " );
-
-    m_parsingBuffer = "";
-      
-    kdDebug() <<  "(K3bCddbHttpQuery) Read: " << query << endl;
-
-    QTextStream stream( m_socket );
-    stream << query << endl;
-    m_socket->flush();
-  }
-  else 
-    kdDebug() << "(K3bCddbHttpQuery) Wrong state in http mode" << endl;
+  if( data.size() )
+    m_data += data;
 }
 
 
-void K3bCddbHttpQuery::slotConnectionClosed()
+void K3bCddbHttpQuery::slotResult( KIO::Job* job )
 {
-  emit infoMessage( i18n("Connection closed") );
-
-  if( m_state != FINISHED ) {
-    // some error occurred
-    setError( FAILURE );
+  if( job->error() ) {
+    emit infoMessage( job->errorString() );
+    setError( CONNECTION_ERROR );
     emitQueryFinished();
+    return;
   }
-}
 
+  QStringList lines = QStringList::split( "\n", m_data );
 
-void K3bCddbHttpQuery::slotReadyRead()
-{
-  QTextStream stream( m_socket );
-
-  while( m_socket->canReadLine() ) {
-    QString line = stream.readLine();
+  for( QStringList::const_iterator it = lines.begin(); it != lines.end(); ++it ) {
+    QString line = *it;
 
     //    kdDebug() << "(K3bCddbHttpQuery) line: " << line << endl;
 
@@ -187,7 +151,6 @@ void K3bCddbHttpQuery::slotReadyRead()
 	setError(NO_ENTRY_FOUND);
 	m_state = FINISHED;
 	emitQueryFinished();
-	m_socket->close();
 	return;
       }
 
@@ -197,7 +160,6 @@ void K3bCddbHttpQuery::slotReadyRead()
 	setError(QUERY_ERROR);
 	m_state = FINISHED;
 	emitQueryFinished();
-	m_socket->close();
 	return;
       }
       break;
@@ -234,7 +196,6 @@ void K3bCddbHttpQuery::slotReadyRead()
 	setError(READ_ERROR);
 	m_state = FINISHED;
 	emitQueryFinished();
-	m_socket->close();
 	return;
       }
       break;
@@ -254,7 +215,6 @@ void K3bCddbHttpQuery::slotReadyRead()
 	setError(SUCCESS);
 	m_state = FINISHED;
 	emitQueryFinished();
-	m_socket->close();
 	return;
       }
 
@@ -266,92 +226,5 @@ void K3bCddbHttpQuery::slotReadyRead()
   }
 }
 
-
-
-QString K3bCddbHttpQuery::createHttpUrl()
-{
-  return QString( "http://%1/%2" ).arg(m_server).arg( m_cgiPath );
-}
-
-
-bool K3bCddbHttpQuery::connectToServer()
-{
-  QString server = m_server;
-  int port = m_port;
-
-  if( m_bUseProxyServer ) {
-    if( m_bUseKdeSettings ) {
-      if( KProtocolManager::useProxy() ) {
-	KURL u( KProtocolManager::proxyFor( "http" ) );
-	
-	server = u.host();
-	port = u.port();
-      }
-    }
-    else {
-      server = m_proxyServer;
-      port = m_proxyPort;
-    }
-  }
-
-  m_currentlyConnectingServer = server;
-
-  m_socket->connectToHost( server, port );
-  //  m_socket->setAddress( server, port );
-  //  return ( m_socket->startAsyncConnect() == 0 );
-  return true;
-}
-
-
-void K3bCddbHttpQuery::setTimeout( int )
-{
-  //m_socket->setTimeout(t);
-}
-
-
-void K3bCddbHttpQuery::slotConnectionFailed( int )
-{
-//   switch(e) {
-//   case QSocket::ErrConnectionRefused:
-//     kdDebug() <<  i18n("Connection to %1 refused").arg( m_currentlyConnectingServer ) << endl;
-//     emit infoMessage( i18n("Connection to %1 refused").arg( m_currentlyConnectingServer ) );
-//     break;
-//   case QSocket::ErrHostNotFound:
-//     kdDebug() <<  i18n("Could not find host %1").arg( m_currentlyConnectingServer ) << endl;
-//     emit infoMessage( i18n("Could not find host %1").arg( m_currentlyConnectingServer ) );
-//     break;
-//   case QSocket::ErrSocketRead:
-//     kdDebug() <<  i18n("Error while reading from %1").arg( m_currentlyConnectingServer ) << endl;
-//     emit infoMessage( i18n("Error while reading from %1").arg( m_currentlyConnectingServer ) );
-//     break;
-//   }
-
-  setError( CONNECTION_ERROR );
-  emitQueryFinished();
-}
-
-
-void K3bCddbHttpQuery::slotError( int e )
-{
-  switch(e) {
-  case QSocket::ErrConnectionRefused:
-    kdDebug() <<  i18n("Connection to %1 refused").arg( m_currentlyConnectingServer ) << endl;
-    emit infoMessage( i18n("Connection to %1 refused").arg( m_currentlyConnectingServer ) );
-    setError( CONNECTION_ERROR );
-    break;
-  case QSocket::ErrHostNotFound:
-    kdDebug() <<  i18n("Could not find host %1").arg( m_currentlyConnectingServer ) << endl;
-    emit infoMessage( i18n("Could not find host %1").arg( m_currentlyConnectingServer ) );
-    setError( CONNECTION_ERROR );
-    break;
-  case QSocket::ErrSocketRead:
-    kdDebug() <<  i18n("Error while reading from %1").arg( m_currentlyConnectingServer ) << endl;
-    emit infoMessage( i18n("Error while reading from %1").arg( m_currentlyConnectingServer ) );
-    break;
-  }
-
-  m_socket->close();
-  emitQueryFinished();
-}
 
 #include "k3bcddbhttpquery.moc"

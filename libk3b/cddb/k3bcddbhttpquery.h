@@ -22,8 +22,9 @@
 
 #include <qvaluelist.h>
 
-class KExtendedSocket;
-class QSocket;
+namespace KIO {
+  class Job;
+}
 
 class K3bCddbHttpQuery : public K3bCddbQuery
 {
@@ -35,41 +36,28 @@ class K3bCddbHttpQuery : public K3bCddbQuery
 
  public slots:
   void setServer( const QString& s, int port = 80 ) { m_server = s; m_port = port; }
-  void setProxy( const QString& server, int port = 8080 ) { m_proxyServer = server; m_proxyPort = port; }
-  void setTimeout( int t );
   void setCgiPath( const QString& p ) { m_cgiPath = p; }
-  void setUseProxy( bool b ) { m_bUseProxyServer = b; }
-  void setUseKdeProxySettings( bool b ) { m_bUseKdeSettings = b; }
 
  protected slots:
   void doQuery();
- void doMatchQuery();
-  void slotConnected();
-  void slotConnectionClosed();
-  void slotReadyRead();
-  void slotConnectionFailed( int e );
-  void slotError( int e );
+  void doMatchQuery();
+  void slotResult( KIO::Job* );
+  void slotData( KIO::Job*, const QByteArray& data );
 
  private:
-  bool connectToServer();
-  QString createHttpUrl();
+  void performCommand( const QString& );
 
   enum State { QUERY, QUERY_DATA, READ, READ_DATA, FINISHED };
 
   int m_state;
   QString m_server;
   int m_port;
-  QString m_proxyServer;
-  int m_proxyPort;
   QString m_cgiPath;
 
   QString m_currentlyConnectingServer;
 
-  QSocket* m_socket;
-  //KExtendedSocket* m_socket;
+  QString m_data;
   QString m_parsingBuffer;
-  bool m_bUseProxyServer;
-  bool m_bUseKdeSettings;
 };
 
 #endif

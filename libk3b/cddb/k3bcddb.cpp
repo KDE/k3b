@@ -69,12 +69,8 @@ void K3bCddb::readConfig( KConfig* c )
 
   m_localCddbDirs = c->readPathListEntry( "local cddb dirs" );
 
-  m_proxyServer = c->readEntry( "proxy server" );
-  m_proxyPort = c->readNumEntry( "proxy port" );
-  m_bUseProxyServer = c->readBoolEntry( "use proxy server", false );
   m_bUseManualCgiPath = c->readBoolEntry( "use manual cgi path", false );
-  m_cgiPath = c->readEntry( "cgi path", "~cddb/cddb.cgi" );
-  m_bUseKdeSettings = ( c->readEntry( "proxy settings type", "kde" ) == "kde" );
+  m_cgiPath = c->readEntry( "cgi path", "/~cddb/cddb.cgi" );
 
   if( m_localCddbDirs.isEmpty() )
     m_localCddbDirs.append( "~/.cddb/" );
@@ -184,11 +180,7 @@ K3bCddbQuery* K3bCddb::getQuery( const QString& s )
     }
 
     m_httpQuery->setServer( server, port );
-    m_httpQuery->setUseProxy( m_bUseProxyServer );
-    m_httpQuery->setProxy( m_proxyServer, m_proxyPort );
-    m_httpQuery->setUseKdeProxySettings( m_bUseKdeSettings );
-    m_httpQuery->setCgiPath( m_bUseManualCgiPath ? m_cgiPath : QString::fromLatin1("~cddb/cddb.cgi") );
-    //    m_httpQuery->setTimeout( m_timeout );
+    m_httpQuery->setCgiPath( m_bUseManualCgiPath ? m_cgiPath : QString::fromLatin1("/~cddb/cddb.cgi") );
 
     return m_httpQuery;
   }

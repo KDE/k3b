@@ -63,18 +63,10 @@ K3bCddbOptionTab::K3bCddbOptionTab( QWidget* parent,  const char* name )
 //   m_groupCddbServerLayout->setMargin( KDialog::marginHint() );
 //   m_groupCddbServerLayout->setSpacing( KDialog::spacingHint() );
 
-  m_groupProxy->layout()->setMargin( 0 );
-  m_groupProxyLayout->setMargin( KDialog::marginHint() );
-  m_groupProxyLayout->setSpacing( KDialog::spacingHint() );
-
-  m_groupProxySettingsSource->layout()->setMargin( 0 );
-  m_groupProxySettingsSourceLayout->setSpacing( KDialog::spacingHint() );
-
   m_groupCgi->layout()->setMargin( 0 );
   m_groupCgiLayout->setMargin( KDialog::marginHint() );
   m_groupCgiLayout->setSpacing( KDialog::spacingHint() );
 
-  m_boxProxyServerLayout->setSpacing( KDialog::spacingHint() );
   m_boxLocalDirectoryLayout->setSpacing( KDialog::spacingHint() );
   m_boxCddbServerLayout->setSpacing( KDialog::spacingHint() );
   // -----------------------------------------------------------------------------
@@ -107,8 +99,6 @@ K3bCddbOptionTab::K3bCddbOptionTab( QWidget* parent,  const char* name )
 
   // setup connections
   // -----------------------------------------------------------------------------
-  connect( m_buttonKdeProxySettings, SIGNAL(clicked()), this, SLOT(slotKdeProxySettings()) );
-
   connect( m_buttonAddLocalDir, SIGNAL(clicked()), this, SLOT(slotLocalDirAdd()) );
   connect( m_buttonRemoveLocalDir, SIGNAL(clicked()), this, SLOT(slotLocalDirRemove()) );
   connect( m_buttonLocalDirUp, SIGNAL(clicked()), this, SLOT(slotLocalDirUp()) );
@@ -119,7 +109,6 @@ K3bCddbOptionTab::K3bCddbOptionTab( QWidget* parent,  const char* name )
   connect( m_buttonCddbServerUp, SIGNAL(clicked()), this, SLOT(slotCddbServerUp()) );
   connect( m_buttonCddbServerDown, SIGNAL(clicked()), this, SLOT(slotCddbServerDown()) );
 
-  connect( m_radioUseManualProxy, SIGNAL(toggled(bool)), this, SLOT(enDisableButtons()) );
   connect( m_editLocalDir, SIGNAL(textChanged(const QString&)), this, SLOT(enDisableButtons()) );
   connect( m_editCddbServer, SIGNAL(textChanged(const QString&)), this, SLOT(enDisableButtons()) );
   connect( m_viewLocalDir, SIGNAL(selectionChanged()), this, SLOT(enDisableButtons()) );
@@ -158,20 +147,10 @@ void K3bCddbOptionTab::readSettings()
   m_checkUseLocalCddb->setChecked( c->readBoolEntry( "use local cddb query", true ) );
   m_checkSaveLocalEntries->setChecked( c->readBoolEntry( "save cddb entries locally", true ) );
   m_checkManualCgiPath->setChecked( c->readBoolEntry( "use manual cgi path", false ) );
-  m_editManualCgiPath->setText( c->readEntry( "cgi path", "~cddb/cddb.cgi" ) );
-  m_editProxyServer->setText( c->readEntry( "proxy server" ) );
-  m_editProxyPort->setValue( c->readNumEntry( "proxy port", 8080 ) );
+  m_editManualCgiPath->setText( c->readEntry( "cgi path", "/~cddb/cddb.cgi" ) );
 
   if( localCddbDirs.isEmpty() )
     localCddbDirs.append( "~/.cddb/" );
-
-  if( c->readEntry( "proxy settings type", "kde" ) == "kde" )
-    m_radioUseKdeProxy->setChecked( true );
-  else {
-    m_radioUseManualProxy->setChecked( true );
-    m_checkUseProxy->setChecked( c->readBoolEntry( "use proxy server", false ) );
-  }
-
 
   for( QStringList::const_iterator it = localCddbDirs.begin(); it != localCddbDirs.end(); ++it )
     (void)new KListViewItem( m_viewLocalDir, m_viewLocalDir->lastItem(), *it );
@@ -215,14 +194,9 @@ void K3bCddbOptionTab::apply()
 
   c->writeEntry( "use remote cddb", m_checkRemoteCddb->isChecked() );
   c->writeEntry( "use local cddb query", m_checkUseLocalCddb->isChecked() );
-  c->writeEntry( "use proxy server", m_checkUseProxy->isChecked() );
   c->writeEntry( "save cddb entries locally", m_checkSaveLocalEntries->isChecked() );
   c->writeEntry( "use manual cgi path", m_checkManualCgiPath->isChecked() );
   c->writeEntry( "cgi path", m_editManualCgiPath->text() );
-  c->writeEntry( "proxy server", m_editProxyServer->text() );
-  c->writeEntry( "proxy port", m_editProxyPort->value() );
-
-  c->writeEntry( "proxy settings type", m_radioUseKdeProxy->isChecked() ? "kde" : "manual" );
 
   QStringList cddbServer;
   QStringList localCddbDirs;
@@ -249,12 +223,6 @@ void K3bCddbOptionTab::apply()
     c->deleteEntry( "cddbp server" );
 
   c->writePathEntry( "local cddb dirs", localCddbDirs );
-}
-
-
-void K3bCddbOptionTab::slotKdeProxySettings()
-{
-  KRun::runCommand( "kcmshell proxy" );
 }
 
 
@@ -315,8 +283,6 @@ void K3bCddbOptionTab::enDisableButtons()
 				     m_viewCddbServer->selectedItem() == m_viewCddbServer->firstChild() );
   m_buttonCddbServerDown->setDisabled( m_viewCddbServer->selectedItem() == 0 ||
 				       m_viewCddbServer->selectedItem() == m_viewCddbServer->lastItem() );
-
-  m_boxProxyServer->setEnabled( m_radioUseManualProxy->isChecked() && m_checkUseProxy->isChecked() );
 
   if( m_viewLocalDir->childCount() <= 0 ) {
     m_checkSaveLocalEntries->setChecked(false);
