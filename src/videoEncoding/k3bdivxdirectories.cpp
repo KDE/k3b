@@ -86,8 +86,8 @@ void K3bDivxDirectories::setupGui(){
     KCompletion *comp = m_editVideoPath->completionObject();
     connect( m_buttonVideoDir, SIGNAL( clicked() ), this, SLOT( slotVideoClicked() ) );
     connect( m_buttonAviDir, SIGNAL( clicked() ), this, SLOT( slotAviClicked() ) );
-    connect( m_editVideoPath, SIGNAL( returnPressed( const QString& )), this, SLOT( slotVideoEdited( const QString& ) ) );
-    connect( m_editAviPath, SIGNAL( returnPressed( const QString& ) ), this, SLOT( slotAviEdited( const QString& ) ) );
+    connect( m_editVideoPath, SIGNAL( textChanged( const QString& )), this, SLOT( slotVideoEdited( const QString& ) ) );
+    connect( m_editAviPath, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotAviEdited( const QString& ) ) );
 
     connect( m_buttonAudioDir, SIGNAL( clicked() ), this, SLOT( slotAudioClicked() ) );
 }
@@ -114,14 +114,17 @@ void K3bDivxDirectories::slotAudioClicked(){
 }
 
 void K3bDivxDirectories::slotVideoEdited( const QString& text){
-    m_data->setProjectFile( text );
-    if( !m_data->projectLoaded() ){
-        KMessageBox::error( this, i18n("Error loading project"), i18n("Error while parsing file: %1").arg(text));
-        m_data->setProjectDir( "" );
-        return;
+    if( QFile::exists( text )){
+        m_data->setProjectFile( text );
+        if( !m_data->projectLoaded() ){
+            KMessageBox::error( this, i18n("Error loading project"), i18n("Error while parsing file: ") + text);
+            m_data->setProjectDir( "" );
+            return;
+        }
+        emit dataChanged( );
     }
-    emit dataChanged( );
 }
+
 void K3bDivxDirectories::slotAviEdited( const QString& text){
     m_data->setAviFile( text );
     if( m_data->getProjectDir().length() > 1 ){

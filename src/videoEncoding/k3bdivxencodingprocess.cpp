@@ -33,8 +33,9 @@ K3bDivXEncodingProcess::~K3bDivXEncodingProcess(){
 
 void K3bDivXEncodingProcess::start(){
      m_pass = 0;
-     m_speedFlag = 0;
-     m_speedTrigger = 30;
+     m_speedFlag = 1;
+     m_speedTrigger = 0;
+     m_speedInitialFlag = 0;
      kdDebug() << "(K3bDivXEncodingProcess) Run transcode." << endl;
      m_process = new KShellProcess;
      K3bExternalBin *tccatBin = k3bMain()->externalBinManager()->binObject("tccat");
@@ -42,6 +43,7 @@ void K3bDivXEncodingProcess::start(){
      K3bExternalBin *tcdecodeBin = k3bMain()->externalBinManager()->binObject("tcdecode");
      K3bExternalBin *tcscanBin = k3bMain()->externalBinManager()->binObject("tcscan");
 
+     *m_process << "nice -10 ";
      *m_process << tccatBin->path + " -i " + m_data->getProjectDir() + "/tmp -t vob -P " + m_data->getTitle();
      *m_process << " | " + tcextractBin->path + m_data->getParaAudioLanguage() + " -x ac3  -t vob ";
      *m_process << " | " + tcdecodeBin->path + " -x ac3 ";
@@ -62,18 +64,21 @@ void K3bDivXEncodingProcess::start(){
          kdDebug() << "Error audio process starting" << endl;
      }
      //emit started();
-     emit newTask( i18n("Generating video")  );
+     //emit newTask( i18n("Generating video")  );
      emit newSubTask( i18n("Preprocessing audio")  );
-     infoMessage( i18n("Start audio parsing "), INFO );
+     infoMessage( i18n("Search for maximum audio gain to get normalize parameter."), INFO );
      kdDebug() <<"(K3bDivXEncodingProcess) Starting get audio gain." << endl;
 }
 
 void K3bDivXEncodingProcess::startEncoding(){
      m_speedFlag = 301;
+     m_speedTrigger = 300;
+     m_speedInitialFlag = 0;
      kdDebug() << "(K3bDivXEncodingProcess) Run transcode." << endl;
      K3bExternalBin *transcodeBin = k3bMain()->externalBinManager()->binObject("transcode");
      m_process = new KShellProcess;
 
+     *m_process << "nice -10 ";
      *m_process << transcodeBin->path; //"/usr/local/bin/transcode -i ";
      *m_process << " -i " + m_data->getProjectDir() + "/vob ";
 
@@ -126,10 +131,13 @@ void K3bDivXEncodingProcess::startEncoding(){
      }
      //emit started();
      if( m_pass == 1 ){
+         infoMessage( i18n("Start first pass of video encoding."), PROCESS );
          emit newSubTask( i18n("Encoding video (Pass 1)")  );
      } else if( m_pass == 2 ) {
+         infoMessage( i18n("Start second pass of video encoding."), PROCESS );
          emit newSubTask( i18n("Encoding video (Pass 2)")  );
      } else {
+         infoMessage( i18n("Start video encoding."), PROCESS );
          emit newSubTask( i18n("Encoding video")  );
      }
      kdDebug() << "(K3bDivXEncodingProcess) Starting encoding." << endl;
@@ -140,7 +148,13 @@ void K3bDivXEncodingProcess::cancel( ){
 }
 
 void K3bDivXEncodingProcess::slotParseEncoding( KProcess *p, char *buffer, int len){
-    if( m_speedFlag > 300 ){
+    if( m_speedFlag > m_speedTrigger ){
+        if( m_speedInitialFlag < 50 ){
+            m_speedTrigger = 0;
+            m_speedInitialFlag++;
+            if( m_speedInitialFlag == 50)
+               m_speedTrigger = 400;
+        }
         m_speedFlag = 0;
         QString tmp = QString::fromLatin1( buffer, len );
         kdDebug() << tmp << endl;
@@ -163,6 +177,7 @@ void K3bDivXEncodingProcess::slotParseEncoding( KProcess *p, char *buffer, int l
 void K3bDivXEncodingProcess::slotEncodingExited( KProcess *p ){
     kdDebug() << "(K3bDivxEncodingProcess) Encoding finished" << endl;
     if( !p->normalExit() ){
+        infoMessage( i18n("Video generating aborted by user."), STATUS );
         kdDebug() << "(K3bDivxEncodingProcess) Aborted encoding" << endl;
         delete m_process;
         emit finished( true );
@@ -172,13 +187,21 @@ void K3bDivXEncodingProcess::slotEncodingExited( KProcess *p ){
             kdDebug() << "(K3bDivxEncodingProcess) Start second pass." << endl;
             startEncoding();
         } else {
+            infoMessage( i18n("Video generating successful finished."), STATUS );
             emit finished( true );
         }
     }
 }
+
 void K3bDivXEncodingProcess::slotParseAudio( KProcess *p, char *buffer, int len){
     if( m_speedFlag > m_speedTrigger ){
         m_speedFlag = 0;
+        if( m_speedInitialFlag < 50 ){
+            m_speedTrigger = 0;
+            m_speedInitialFlag++;
+            if( m_speedInitialFlag == 50)
+               m_speedTrigger = 40;
+        }
         QString tmp = QString::fromLatin1( buffer, len );
         if( tmp.contains("rescale") ){
             int scale = tmp.find( "rescale" );
@@ -186,6 +209,7 @@ void K3bDivXEncodingProcess::slotParseAudio( KProcess *p, char *buffer, int len)
             float f = tmp.toFloat();
             m_data->setAudioGain( QString::number( f, 'f', 3 ) );
             kdDebug() << "K3bDivxEncodingProcess) Audio gain: " + m_data->getAudioGain() << endl;
+            infoMessage( i18n("Gain for normalizing is: ") + m_data->getAudioGain(), INFO );
         }
         kdDebug() <<  tmp << endl;
         int index = tmp.find( "%" );
@@ -200,7 +224,8 @@ void K3bDivXEncodingProcess::slotParseAudio( KProcess *p, char *buffer, int len)
     m_speedFlag++;
 }
 void K3bDivXEncodingProcess::slotAudioExited( KProcess *p ){
-    kdDebug() << "(K3bDivxEncodingProcess) Audio gain detection finsihed" << endl;
+    infoMessage( i18n("Preprocessing audio finished."), STATUS );
+    kdDebug() << "(K3bDivxEncodingProcess) Audio gain detection finished" << endl;
     if( p->normalExit() ){
         delete m_process;
         startEncoding( );

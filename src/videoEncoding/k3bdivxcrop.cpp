@@ -30,6 +30,7 @@
 #include <qframe.h>
 #include <qimage.h>
 #include <qcanvas.h>
+#include <qwhatsthis.h>
 
 #include <kdialog.h>
 #include <klocale.h>
@@ -56,16 +57,18 @@ void K3bDivxCrop::setupGui(){
     mainLayout->setSpacing( KDialog::spacingHint() );
     mainLayout->setMargin( 0 );// KDialog::marginHint() );
 
-    QCanvas *c = new QCanvas(380, 300);
+    QCanvas *c = new QCanvas(380, 300);  //image 360x288
     //c->setAdvancePeriod(30);
     m_preview = new K3bDivxPreview( c, this );
-
+    QWhatsThis::add( m_preview, i18n("Preview picture off the video to crop it properly. The colors and the quality are NOT the final state, so use this \
+picture only to cut of black borders"));
     m_sliderPreview = new QSlider( Horizontal,  this );
-
+    QWhatsThis::add( m_sliderPreview, i18n("Move through to video to find a light picture to do a proper cut of the black bars"));
     QVButtonGroup *modeGroup = new QVButtonGroup( i18n("Resize mode"), this );
     modeGroup->layout()->setMargin( KDialog::marginHint() );
     m_buttonFast = new QRadioButton( i18n("Fast (-B)"), modeGroup );
     m_buttonExactly = new QRadioButton( i18n("Exact (-Z)"), modeGroup );
+    QWhatsThis::add( modeGroup, i18n("\"Fast\" resizing is much faster than the \"Exact\" resizing but is limit to a resize step multiple of 8 pixels."));
 
     QGroupBox *groupCrop = new QGroupBox( this );
     groupCrop->setColumnLayout(0, Qt::Vertical );
@@ -74,11 +77,11 @@ void K3bDivxCrop::setupGui(){
     cropLayout->setSpacing( KDialog::spacingHint() );
     cropLayout->setMargin( KDialog::marginHint() );
     groupCrop->setTitle( i18n( "Crop parameters" ) );
-    m_spinBottom = new KIntSpinBox( groupCrop );
-    m_spinTop = new KIntSpinBox( groupCrop );
-    m_spinLeft = new KIntSpinBox( groupCrop );
-    m_spinRight = new KIntSpinBox( groupCrop );
-
+    m_spinBottom = new KIntSpinBox( 0, 100, 8, 0, 10, groupCrop );
+    m_spinTop = new KIntSpinBox( 0, 100, 8, 0, 10, groupCrop );
+    m_spinLeft = new KIntSpinBox( 0, 100, 8, 0, 10, groupCrop );
+    m_spinRight = new KIntSpinBox( 0, 100, 8, 0, 10, groupCrop );
+    QWhatsThis::add( groupCrop, i18n("Cut of the black borders of the movie"));
     QFrame* line = new QFrame( groupCrop, "line" );
     line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
     m_autoCrop = new QCheckBox( i18n("Automatically crop"), groupCrop );
@@ -109,6 +112,11 @@ void K3bDivxCrop::setupGui(){
     finalLayout->addWidget( m_finalSize, 0, 1);
     finalLayout->addWidget( m_finalAspect, 1, 1);
     finalLayout->addWidget( m_finalQuality, 2, 1 );
+    QWhatsThis::add( groupFinal, i18n("This is the final size of the movie. Verify that the final size of your movie have the right aspect ratio \
+1:1.333 for a 4:3 movie, 1:1.77 for a 16:9 movie, and 1:2.35 for a letterbox movie. If you are using cropping you can ignore the aspect ratio error shown \
+in the resizing box. The \"Video quality\" is an value to ESTIMATE the final video quality. (The value is calculate as \"<video bitrate>/(<framerate>*<height>*<width>)\", \
+you may know this from GordianKnot (www.doom9.net)). The higher the value the better the quality.\nThe following values are ok if you look the movies on TV. \
+Values > 0.15 are ok for letterbox movie, for 16:9 you should use better values > 0.16 and for 4:3 > 0.17-0.18, but that depends on you, try it."));
 
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
 
@@ -128,9 +136,17 @@ void K3bDivxCrop::setupGui(){
     // resize mode
     connect( modeGroup, SIGNAL( clicked( int )), this, SLOT( slotResizeMode( int )) );
     connect( m_sliderPreview, SIGNAL( valueChanged( int )), this, SLOT( slotPreviewChanged( int ) ));
+    // autocrop
+    connect( m_autoCrop, SIGNAL( stateChanged( int )), this, SLOT( slotAutoCropMode( int ) ));
     // some init stuff
     modeGroup->setButton( 0  );
-    setSpinBoxMode( 8 );
+}
+
+void K3bDivxCrop::updateView(){
+    m_spinBottom->setMaxValue( m_data->getHeightValue()/2 - 50 );
+    m_spinTop->setMaxValue( m_data->getHeightValue()/2 - 50 );
+    m_spinLeft->setMaxValue( m_data->getWidthValue()/2 - 100 );
+    m_spinRight->setMaxValue( m_data->getWidthValue()/2 - 100 );
 }
 
 void K3bDivxCrop::resetView(){
@@ -152,7 +168,7 @@ void K3bDivxCrop::encodePreview( ){
     previewProcess = new KShellProcess(); // = new KShellProcess;
      *previewProcess << k3bMain()->externalBinManager()->binObject("transcode")->path;
      *previewProcess << " -i " + m_data->getProjectDir() + "/vob";
-     *previewProcess << " -x vob -V -y ppm -w 1200 -a 0 -c 4-5";
+     *previewProcess << " -x vob -y ppm -V -w 1200 -a 0 -c 4-5"; // -V
      *previewProcess << " -L " + QString::number( m_previewOffset );
      *previewProcess << "-o " + m_data->getProjectDir() + "/preview";
      connect( previewProcess, SIGNAL(receivedStdout(KProcess*, char*, int)),
@@ -181,6 +197,30 @@ void K3bDivxCrop::setCorrectedSpinValue( KIntSpinBox *box, int step ){
     int error =  value % step;
     box->setValue( value + (( 8-error )% 8 ) );
 }
+int K3bDivxCrop::checkMaxValidSpinValue( KIntSpinBox *box, int v ){
+    if( m_buttonFast->isChecked() ){
+        if( v > box->maxValue() ){
+            v =  box->maxValue() - (box->maxValue() % 8);
+            box->setValue( v );
+        }
+    }
+    return v;
+}
+
+void K3bDivxCrop::enableManuelCrop( bool state ){
+      m_spinBottom->setEnabled( state );
+      m_spinLeft->setEnabled( state );
+      m_spinTop->setEnabled( state );
+      m_spinRight->setEnabled( state );
+}
+void K3bDivxCrop::slotAutoCropMode( int buttonStatus ){
+      if( buttonStatus == 0 ){
+          enableManuelCrop( true );
+      } else if( buttonStatus == 2 ){
+          enableManuelCrop( false );
+      }
+}
+
 void K3bDivxCrop::slotUpdateFinalSize(){
     int h = m_data->getHeightValue() - 8* m_data->getResizeHeight();
     h = h - m_data->getCropTop() - m_data->getCropBottom();
@@ -205,22 +245,26 @@ void K3bDivxCrop::slotParseProcess( KProcess* p, char *data, int len){
     kdDebug() << tmp << endl;
 }
 
-void K3bDivxCrop::slotSpinTop( int v){
+void K3bDivxCrop::slotSpinTop( int value){
+    int v = checkMaxValidSpinValue( m_spinTop, value );
     m_preview->setTopLine( v );
     m_data->setCropTop( v );
     slotUpdateFinalSize();
 }
-void K3bDivxCrop::slotSpinLeft( int v){
+void K3bDivxCrop::slotSpinLeft( int value){
+    int v = checkMaxValidSpinValue( m_spinLeft, value );
     m_preview->setLeftLine( v );
     m_data->setCropLeft( v );
     slotUpdateFinalSize();
 }
-void K3bDivxCrop::slotSpinBottom( int v){
+void K3bDivxCrop::slotSpinBottom( int value){
+    int v = checkMaxValidSpinValue( m_spinBottom, value );
     m_preview->setBottomLine( v );
     m_data->setCropBottom( v );
     slotUpdateFinalSize();
 }
-void K3bDivxCrop::slotSpinRight( int v){
+void K3bDivxCrop::slotSpinRight( int value){
+    int v = checkMaxValidSpinValue( m_spinRight, value );
     m_preview->setRightLine( v );
     m_data->setCropRight( v );
     slotUpdateFinalSize();

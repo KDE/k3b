@@ -63,6 +63,10 @@ void K3bDivxSizeTab::show(){
     }
 }
 
+void K3bDivxSizeTab::updateView(){
+    m_crop->updateView();
+}
+
 void K3bDivxSizeTab::resetView(){
     m_crop->resetView();
     m_resize->resetView();

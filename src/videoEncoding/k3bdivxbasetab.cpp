@@ -56,10 +56,10 @@ void K3bDivxBaseTab::setupGui(){
     mainLayout->setColStretch( 0, 20 );
     mainLayout->setRowStretch( 2, 20 );
 
-    m_avsettings->setDisabled( true );
-    m_avextended->setDisabled( true );
     m_avsettings->init();
     m_avextended->init();
+    m_avsettings->setDisabled( true );
+    m_avextended->setDisabled( true );
     connect( m_avsettings, SIGNAL( dataChanged( ) ), this, SLOT( slotUpdateView(  ) ));
     connect( m_directories, SIGNAL( dataChanged( ) ), this, SLOT( slotUpdateView(  ) ));
 }

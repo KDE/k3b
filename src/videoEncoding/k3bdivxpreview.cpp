@@ -109,7 +109,6 @@ void K3bDivxPreview::setPreviewPicture( const QString &image ){
     QImage preview = i.scale( 720/m_imageScale, 576/m_imageScale );
     m_previewPixmap = new QCanvasPixmap( preview );
     m_previewPixmapArray = new QCanvasPixmapArray();
-    kdDebug() << "Canvasarray count " <<  m_previewPixmapArray->count() << endl;
     m_previewPixmapArray->setImage(0, m_previewPixmap);
     m_sprite = new QCanvasSprite ( m_previewPixmapArray, can );
     m_sprite->setX( visibleWidth()/2 - 360/m_imageScale);
@@ -117,6 +116,8 @@ void K3bDivxPreview::setPreviewPicture( const QString &image ){
     m_sprite->show();
     if( !m_initialized ) {
         setCroppingLines();
+    } else {
+        updateLines();
     }
     repaintContents( 0,0, visibleWidth(), visibleHeight() );
     m_initialized = true;
