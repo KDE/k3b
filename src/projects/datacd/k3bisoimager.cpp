@@ -102,8 +102,8 @@ void K3bIsoImager::slotReceivedStderr( const QString& line )
 
     if( line.contains( "done, estimate" ) ) {
 
-      if( m_device )
-	m_device->close();  // release the device for cdrecord
+//       if( m_device )
+// 	m_device->close();  // release the device for cdrecord
 
       int p = parseProgress( line );
       if( p != -1 )
@@ -152,8 +152,8 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
   if( d->imageFile.isOpen() )
     d->imageFile.close();
 
-  if( m_device )
-    m_device->close();
+//   if( m_device )
+//     m_device->close();
 
   if( !m_canceled ) {
 
@@ -452,8 +452,8 @@ void K3bIsoImager::cancel()
     if( !m_processExited ) {
       disconnect(m_process);
       m_process->kill();
-      if( m_device )
-	m_device->close();
+//       if( m_device )
+// 	m_device->close();
     }
 
   if( !m_processExited ) {
