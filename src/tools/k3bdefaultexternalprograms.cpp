@@ -49,8 +49,8 @@ void K3b::addDefaultPrograms( K3bExternalBinManager* m )
   for( int i = 0; transcodeTools[i]; ++i )
     m->addProgram( new K3bTranscodeProgram( transcodeTools[i] ) );
   m->addProgram( new K3bCdrecordProgram(false) );
-  m->addProgram( new K3bCdrecordProgram(true) );
-  m->addProgram( new K3bDvdrecordProgram() );
+  //  m->addProgram( new K3bCdrecordProgram(true) );
+  //  m->addProgram( new K3bDvdrecordProgram() );
   m->addProgram( new K3bMkisofsProgram() );
   m->addProgram( new K3bReadcdProgram() );
   m->addProgram( new K3bCdrdaoProgram() );

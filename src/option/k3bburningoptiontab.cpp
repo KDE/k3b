@@ -231,6 +231,14 @@ void K3bBurningOptionTab::setupGui()
   proDvdKeyLayout->addWidget( labelProDVDKey );
   proDvdKeyLayout->addWidget( m_editCdrecordProDVDKey );
 
+  //
+  // not used yet
+  // ----------------------
+  labelProDVDKey->hide();
+  m_editCdrecordProDVDKey->hide();
+  // ----------------------
+  //
+
   bufferLayout->addMultiCellWidget( m_checkOverburn, 0, 0, 0, 3 );
   bufferLayout->addMultiCellWidget( m_checkManualWritingBufferSize, 1, 1, 0, 3 );
   bufferLayout->addWidget( new QLabel( "Cdrecord:", groupWritingApp ), 2, 1 );
