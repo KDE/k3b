@@ -23,6 +23,10 @@
 #include "k3bisoimagejob.h"
 #include "../kcutlabel.h"
 
+// md5sum stuff
+#include "../tools/md5sum/md5.hh"
+#include <fstream>
+
 #include <kapplication.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -418,7 +422,18 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
 
       m_isoInfoWidget->show();
 
-      m_generalInfoLabel->setText( i18n("Seems to be an ISO9660 image") );
+      ifstream md5sumFile;
+      md5sumFile.open( path.latin1(), ios::binary|ios::in );
+      QString md5sumString;
+      if( md5sumFile ) {
+	MD5 md5sumTester( md5sumFile );
+	md5sumFile.close();
+	md5sumString = QString::fromLatin1( md5sumTester.hex_digest(), 33 );
+      }
+      else
+	md5sumString = "-";
+
+      m_generalInfoLabel->setText( i18n("Seems to be an ISO9660 image (MD5 Sum: %1 )").arg(md5sumString) );
       m_checkUseCueFile->setChecked( false );
       //      m_checkRawWrite->setChecked( false );
     }

@@ -321,13 +321,13 @@ bool K3bIsoImager::addMkisofsParameters()
     else
       *m_process << "-r";
     if( QFile::exists( m_rrHideFile ) )
-      *m_process << "-hide-list" << m_rrHideFile;
+      *m_process << "-hide-list" << "\"" << m_rrHideFile << "\"";
   }
 
   if( m_doc->isoOptions().createJoliet() ) {
     *m_process << "-J";
     if( QFile::exists( m_jolietHideFile ) )
-      *m_process << "-hide-joliet-list" << m_jolietHideFile;
+      *m_process << "-hide-joliet-list" << "\"" << m_jolietHideFile << "\"";
   }
 
   if( m_doc->isoOptions().ISOuntranslatedFilenames()  ) {
