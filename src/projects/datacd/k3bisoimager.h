@@ -56,7 +56,7 @@ class K3bIsoImager : public K3bJob
  public slots:
   virtual void start();
   virtual void cancel();
-  void calculateSize();
+  virtual void calculateSize();
 
   /**
    * lets the isoimager write directly into fd instead of writing
@@ -81,7 +81,7 @@ class K3bIsoImager : public K3bJob
   void sizeCalculated( int exitCode, int size );
 
  protected:
-  virtual bool addMkisofsParameters();
+  virtual bool addMkisofsParameters( bool printSize = false );
 
   /**
    * calls writePathSpec, writeRRHideFile, and writeJolietHideFile

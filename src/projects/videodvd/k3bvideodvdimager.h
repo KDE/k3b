@@ -39,9 +39,10 @@ class K3bVideoDvdImager : public K3bIsoImager
 
  public slots:
   virtual void start();
+  virtual void calculateSize();
 
  protected:
-  bool addMkisofsParameters();
+  bool addMkisofsParameters( bool printSize = false );
   int writePathSpec();
   void cleanup();
 

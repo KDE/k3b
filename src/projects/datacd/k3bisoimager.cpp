@@ -251,13 +251,12 @@ void K3bIsoImager::calculateSize()
   m_doc->prepareFilenames();
 
   if( !prepareMkisofsFiles() || 
-      !addMkisofsParameters() ) {
+      !addMkisofsParameters( true ) ) {
     cleanup();
     emit sizeCalculated( ERROR, 0 );
     return;
   }
 
-  *m_process << "-print-size" << "-quiet";
   // add empty dummy dir since one path-spec is needed
   *m_process << dummyDir();
 
@@ -470,7 +469,7 @@ void K3bIsoImager::setMultiSessionInfo( const QString& info, K3bDevice* dev )
 }
 
 
-bool K3bIsoImager::addMkisofsParameters()
+bool K3bIsoImager::addMkisofsParameters( bool printSize )
 {
   // add multisession info
   if( !m_multiSessionInfo.isEmpty() ) {
@@ -483,6 +482,9 @@ bool K3bIsoImager::addMkisofsParameters()
   // add the arguments
   *m_process << "-gui";
   *m_process << "-graft-points";
+
+  if( printSize )
+    *m_process << "-print-size" << "-quiet";
 
   if( !m_doc->isoOptions().volumeID().isEmpty() ) {
     QString s = m_doc->isoOptions().volumeID();

@@ -183,7 +183,17 @@ void K3bCdrecordWriter::prepareProcess()
     }
   }
   else if( m_writingMode == K3b::RAW ) {
-    *m_process << "-raw";
+    if( burnDevice()->supportsWriteMode( K3bCdDevice::CdDevice::RAW_R96R ) )
+      *m_process << "-raw96r";
+    else if( burnDevice()->supportsWriteMode( K3bCdDevice::CdDevice::RAW_R16 ) )
+      *m_process << "-raw16";
+    else if( burnDevice()->supportsWriteMode( K3bCdDevice::CdDevice::RAW_R96P ) )
+      *m_process << "-raw96p";
+    else {
+      emit infoMessage( i18n("Writer does not support raw writing."), WARNING );
+      if( m_cdrecordBinObject->hasFeature( "tao" ) )
+	*m_process << "-tao";
+    }
   }
   else if( m_cdrecordBinObject->hasFeature( "tao" ) )
     *m_process << "-tao";

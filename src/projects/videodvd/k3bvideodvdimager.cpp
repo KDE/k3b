@@ -64,6 +64,15 @@ void K3bVideoDvdImager::start()
 }
 
 
+void K3bVideoDvdImager::calculateSize()
+{
+  // we need this for the VIDEO_TS HACK
+  d->doc->isoOptions().setFollowSymbolicLinks(true);
+
+  K3bIsoImager::calculateSize();
+}
+
+
 int K3bVideoDvdImager::writePathSpec()
 {
   //
@@ -127,11 +136,11 @@ int K3bVideoDvdImager::writePathSpec()
 }
 
 
-bool K3bVideoDvdImager::addMkisofsParameters()
+bool K3bVideoDvdImager::addMkisofsParameters( bool printSize )
 {
   // Here is another bad design: we assume that K3bIsoImager::start does not add additional 
   // parameters to the process. :(
-  if( K3bIsoImager::addMkisofsParameters() ) {
+  if( K3bIsoImager::addMkisofsParameters( printSize ) ) {
     *m_process << "-dvd-video";
     *m_process << d->tempPath;
     return true;

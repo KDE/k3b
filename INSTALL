@@ -2,10 +2,22 @@ Installing K3b 0.11
 -------------------
 
 
-Before installing K3b please make sure you have at least the following installed on your system:
+What you need to run K3b:
+ - since K3b is a CD writing program a cd writer would be a good thing to have ;-)
  - the QT3 library (at least version 3.1)
  - the KDE3 libraries (at least version 3.1)
- 
+ - optionally the kdemultimedia package is needed for the K3b audioplayer to work.
+ - the cdparanoia library for cd ripping from Monty
+ - the cdrtools (cdrecord, mkisofs) from Joerg Schilling
+ - cdrdao, the other linux cd writing program from Andreas Mueller
+ - the dvd+rw-tools by Andy Polyakov for DVD writing
+ - optional the transcode tools for DVD ripping and DivX/XviD encoding from Thomas Oestreich
+ - optional vcdimager >= 0.7 for creating video cds
+ - optional libmad for mp3 decoding
+ - optional ogg-vorbis libraries for encoding and decoding
+ - optional the FLAC++ libraries for flac-decoding
+ - optional the eMovix package
+
 
 
 After that it's all the same:
@@ -23,9 +35,39 @@ Now you are ready to install:
 make install (as root)
 
 
+
+Setting the proper permissions
+------------------------------
+
 K3b needs some special permission settings to work properly.
-With K3b comes the K3bSetup2 KControlModule ehich can perform all the necessary steps.
-Just give it a try.
+
+With K3b comes the K3bSetup2 KControlModule which can perform all the necessary steps
+on systems which do not use devfs/udev or where devfs/udev are configured to save permission
+changes.
+
+In case you want to setup the permissions manually here is what needs to be done.
+1. K3b needs write access to all the CD/DVD drives' block devices.
+   The most simple way is to do a
+      chmod 666 /dev/...
+   on all CD/DVD block devices.
+   For IDE/ATAPI drives the block devices are /dev/hdX or /dev/ide/hostX/busX/targetX/lunX/cd when
+   using devfs/udev.
+   For SCSI drives the block devices are /dev/scdX (or /dev/srX) or /dev/scsi/hostX/busX/targetX/lunX/cd
+   when using devfs/udev.
+
+2. In case you have scsi devices or use the ide-scsi emulation make sure you also have write
+   access to the generic devices /dev/sgX or /dev/scsi/hostX/busX/targetX/lunX/generic when using devfs/udev
+   which belong to your writers.
+   (These permission are not needed by K3b directly but by cdrecord.)
+
+3. Although it is not nessessary it is recommended to run cdrecord suid root. That way cdrecord 
+   will run with a high priority which increases the burning process stability. Additionally it is
+   only possible to change the fifo buffer when cdrecord is run with root privileges.
+   The most simple way is
+      chmod 4711 /usr/bin/cdrecord
+   (You may also create a special cdwriting group and restrict all the above permissions to that group.)
+
+
 
 
 Have fun
