@@ -69,7 +69,7 @@ class K3bMixedJob : public K3bBurnJob
  private:
   bool prepareWriter();
   bool writeTocFile();
-  void startWriting();
+  bool startWriting();
   void addAudioTracks( K3bCdrecordWriter* writer );
   void addDataTrack( K3bCdrecordWriter* writer );
   void cleanupAfterError();

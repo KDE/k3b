@@ -151,8 +151,8 @@ void K3bMixedJob::start()
 	return;
       }
       
-      startWriting();
-      m_audioDecoder->start();
+      if( startWriting() )
+	m_audioDecoder->start();
     }
   }
   else {
@@ -242,7 +242,8 @@ void K3bMixedJob::slotSizeCalculationFinished( int status, int size )
       return;
     }
 
-    startWriting();
+    if( !startWriting() )
+      return;
 
     if( m_doc->mixedType() == K3bMixedDoc::DATA_LAST_TRACK ) {
       m_audioDecoder->start();
@@ -674,10 +675,10 @@ void K3bMixedJob::slotWriterJobPercent( int p )
   else {
     if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
       if( m_currentAction == WRITING_AUDIO_IMAGE )
-	emit percent( 50 + (int)((double)p*m_audioDocPartOfProcess*0.5) );
+	emit percent( (int)(50.0*m_audioDocPartOfProcess) + (int)((double)p*m_audioDocPartOfProcess*0.5) );
       else
-	emit percent( 50 + (int)( 50.0*m_audioDocPartOfProcess 
-				  + (double)p*(1.0-m_audioDocPartOfProcess)*0.5 ) );
+	emit percent( (int)( 100.0*m_audioDocPartOfProcess + 50.0*(1.0-m_audioDocPartOfProcess)
+			     + (double)p*(1.0-m_audioDocPartOfProcess)*0.5 ) );
     }
     else {
       emit percent( 50 + p/2 );
@@ -689,8 +690,13 @@ void K3bMixedJob::slotWriterJobPercent( int p )
 void K3bMixedJob::slotAudioDecoderPercent( int p )
 {
   if( !m_doc->onTheFly() ) {
-    // the iso imager already finished
-    emit percent( (int)((1.0-m_audioDocPartOfProcess)*50.0 + (double)p*m_audioDocPartOfProcess*0.5) );
+    if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
+      emit percent( (int)( (double)p*m_audioDocPartOfProcess*0.5 ) );
+    }
+    else {
+      // the iso imager already finished
+      emit percent( (int)((1.0-m_audioDocPartOfProcess)*50.0 + (double)p*m_audioDocPartOfProcess*0.5) );
+    }
   }
 }
 
@@ -707,12 +713,18 @@ void K3bMixedJob::slotIsoImagerPercent( int p )
 {
   if( !m_doc->onTheFly() ) {
     emit subPercent( p );
-    emit percent( (int)((double)p*(1.0-m_audioDocPartOfProcess)*0.5) );
+    if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
+      emit percent( (int)( 100.0*m_audioDocPartOfProcess
+			   + (double)p*(1.0-m_audioDocPartOfProcess)*0.5 ) );
+    }
+    else {
+      emit percent( (int)((double)p*(1.0-m_audioDocPartOfProcess)*0.5) );
+    }
   }
 }
 
 
-void K3bMixedJob::startWriting()
+bool K3bMixedJob::startWriting()
 {
   if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
     if( m_currentAction == WRITING_ISO_IMAGE) {
@@ -741,11 +753,12 @@ void K3bMixedJob::startWriting()
     K3bEmptyDiscWaiter waiter( m_doc->burner(), k3bMain() );
     if( waiter.waitForEmptyDisc() == K3bEmptyDiscWaiter::CANCELED ) {
       cancel();
-      return;
+      return false;
     }
   }
 	
   m_writer->start();
+  return true;
 }
 
 
