@@ -362,7 +362,7 @@ void K3bDataJob::prepareWriterJob()
 {
   //  if( use cdrecordjob ) {
 
-    K3bCdrecordWriter* writer = new K3bCdrecordWriter( this );
+    K3bCdrecordWriter* writer = new K3bCdrecordWriter( m_doc->burner(), this );
     connect( writer, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
     connect( writer, SIGNAL(percent(int)), this, SLOT(slotWriterJobPercent(int)) );
     connect( writer, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSize(int, int)) );
@@ -377,7 +377,6 @@ void K3bDataJob::prepareWriterJob()
     writer->setDao( m_doc->multiSessionMode() == K3bDataDoc::NONE && m_doc->dao() );
     writer->setSimulate( m_doc->dummy() );
     writer->setBurnSpeed( m_doc->speed() );
-    writer->setBurnDevice( m_doc->burner() );
     writer->prepareArgumentList();
 
     // multisession

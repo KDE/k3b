@@ -34,8 +34,8 @@
 #include <string.h>
 
 
-K3bCdrecordWriter::K3bCdrecordWriter( QObject* parent, const char* name )
-  : K3bAbstractWriter( parent, name ),
+K3bCdrecordWriter::K3bCdrecordWriter( K3bDevice* dev, QObject* parent, const char* name )
+  : K3bAbstractWriter( dev, parent, name ),
     m_dao(false),
     m_rawWrite(false),
     m_stdin(false)

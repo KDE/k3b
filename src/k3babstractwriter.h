@@ -31,7 +31,7 @@ class K3bAbstractWriter : public K3bJob
  public:
   virtual ~K3bAbstractWriter();
 
-  K3bDevice* burnDevice() const { return m_burnDevice; }
+  K3bDevice* burnDevice() const;
   int burnSpeed() const { return m_burnSpeed; }
   bool burnproof() const { return m_burnproof; }
   bool simulate() const { return m_simulate; }
@@ -50,7 +50,7 @@ class K3bAbstractWriter : public K3bJob
   void dataWritten();
 
  protected:
-  K3bAbstractWriter( QObject* parent = 0, const char* name = 0 );
+  K3bAbstractWriter( K3bDevice* dev, QObject* parent = 0, const char* name = 0 );
 
  private:
   K3bDevice* m_burnDevice;

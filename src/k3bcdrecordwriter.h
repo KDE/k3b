@@ -23,13 +23,15 @@
 
 class K3bExternalBin;
 class K3bProcess;
+class K3bDevice;
+
 
 class K3bCdrecordWriter : public K3bAbstractWriter
 {
   Q_OBJECT
 
  public:
-  K3bCdrecordWriter( QObject* parent = 0, const char* name = 0 );
+  K3bCdrecordWriter( K3bDevice*, QObject* parent = 0, const char* name = 0 );
   ~K3bCdrecordWriter();
 
   /**

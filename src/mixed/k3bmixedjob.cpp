@@ -79,7 +79,7 @@ void K3bMixedJob::slotSizeCalculationFinished( int status, int size )
 //     m_isoImageFile = new QFile( "/home/trueg/tmp/image.iso" );
 //     m_isoImageFile->open( IO_WriteOnly );
 //     m_isoImageFileStream = new QDataStream( m_isoImageFile );
-    K3bCdrecordWriter* writer = new K3bCdrecordWriter( this );
+    K3bCdrecordWriter* writer = new K3bCdrecordWriter( 0 /* use default*/, this );
     connect( writer, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
     connect( writer, SIGNAL(percent(int)), this, SIGNAL(percent(int)) );
     connect( writer, SIGNAL(buffer(int)), this, SIGNAL(bufferStatus(int)) );
@@ -91,7 +91,6 @@ void K3bMixedJob::slotSizeCalculationFinished( int status, int size )
     writer->setDao(true);
     writer->setSimulate(false);
     writer->setBurnSpeed(10);
-    writer->setBurnDevice(K3bDeviceManager::self()->findDevice(0,0,0));
     writer->prepareArgumentList();
     writer->addArgument("-waiti")->addArgument( QString("-tsize=%1s").arg(size) )->addArgument("-");
     writer->setProvideStdin(true);

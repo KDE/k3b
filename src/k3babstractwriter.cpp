@@ -17,9 +17,12 @@
 
 #include "k3babstractwriter.h"
 
-K3bAbstractWriter::K3bAbstractWriter( QObject* parent, const char* name )
+#include <k3bdevicemanager.h>
+
+
+K3bAbstractWriter::K3bAbstractWriter( K3bDevice* dev, QObject* parent, const char* name )
   : K3bJob( parent, name ),
-    m_burnDevice(0),
+    m_burnDevice(dev),
     m_burnSpeed(1),
     m_burnproof(false),
     m_simulate(false)
@@ -29,6 +32,15 @@ K3bAbstractWriter::K3bAbstractWriter( QObject* parent, const char* name )
 
 K3bAbstractWriter::~K3bAbstractWriter()
 {
+}
+
+
+K3bDevice* K3bAbstractWriter::burnDevice() const
+{
+  if( m_burnDevice )
+    return m_burnDevice; 
+  else
+    return K3bDeviceManager::self()->burningDevices().first();
 }
 
 #include "k3babstractwriter.moc"
