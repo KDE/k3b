@@ -246,7 +246,7 @@ void K3bMixedBurnDialog::slotLoadK3bDefaults()
   
   m_radioMixedTypeFirstTrack->setChecked(true);
   
-  m_dataModeWidget->setDataMode( K3b::AUTO );
+  m_dataModeWidget->setDataMode( K3b::DATA_MODE_AUTO );
   
   m_imageSettingsWidget->load( K3bIsoOptions::defaults() );
   m_advancedImageSettingsWidget->load( K3bIsoOptions::defaults() );

@@ -481,7 +481,7 @@ void K3bIsoImageWritingDialog::slotLoadK3bDefaults()
   m_checkDummy->setChecked( false );
   m_checkBurnProof->setChecked( true );
   m_checkNoFix->setChecked( false );
-  m_dataModeWidget->setDataMode( K3b::AUTO );
+  m_dataModeWidget->setDataMode( K3b::DATA_MODE_AUTO );
 }
 
 #include "k3bisoimagewritingdialog.moc"

@@ -212,7 +212,7 @@ void K3bMixedDoc::loadDefaultSettings( KConfig* c )
   else if( datamode == "mode2" )
     m_dataDoc->setDataMode( K3b::MODE2 );
   else
-    m_dataDoc->setDataMode( K3b::AUTO );
+    m_dataDoc->setDataMode( K3b::DATA_MODE_AUTO );
 
   K3bIsoOptions o = K3bIsoOptions::load( c );
   dataDoc()->isoOptions() = o;

@@ -59,7 +59,7 @@ K3bDataModeWidget::~K3bDataModeWidget()
 int K3bDataModeWidget::dataMode() const
 {
   if( currentItem() == s_autoIndex )
-    return K3b::AUTO;
+    return K3b::DATA_MODE_AUTO;
   else if( currentItem() == s_mode1Index )
     return K3b::MODE1;
   else
@@ -99,7 +99,7 @@ void K3bDataModeWidget::loadConfig( KConfig* c )
   else if( datamode == "mode2" )
     setDataMode( K3b::MODE2 );
   else
-    setDataMode( K3b::AUTO );
+    setDataMode( K3b::DATA_MODE_AUTO );
 }
 
 #include "k3bdatamodewidget.moc"

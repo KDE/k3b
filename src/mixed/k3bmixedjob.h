@@ -83,6 +83,8 @@ class K3bMixedJob : public K3bBurnJob
   void slotNormalizeProgress( int );
   void slotNormalizeSubProgress( int );
 
+  void slotMediaReloadedForSecondSession( bool );
+
  private:
   bool prepareWriter();
   bool writeTocFile();
@@ -124,9 +126,6 @@ class K3bMixedJob : public K3bBurnJob
 
   bool m_canceled;
   bool m_errorOccuredAndAlreadyReported;
-
-  int m_fifo;
-  bool m_usingFifo;
 
   int m_usedDataMode;
   int m_usedDataWritingApp;

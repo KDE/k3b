@@ -43,7 +43,7 @@ K3bIso9660ImageWritingJob::K3bIso9660ImageWritingJob()
     m_device(0),
     m_noFix(false),
     m_speed(2),
-    m_dataMode(K3b::AUTO),
+    m_dataMode(K3b::DATA_MODE_AUTO),
     m_writer(0),
     m_tocFile(0)
 {
@@ -153,7 +153,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter()
     else if( usedWriteMode == K3b::RAW )
       writer->addArgument( "-raw" );
 
-    if( (m_dataMode == K3b::AUTO && m_noFix) ||
+    if( (m_dataMode == K3b::DATA_MODE_AUTO && m_noFix) ||
 	m_dataMode == K3b::MODE2 ) {
       if( k3bcore->externalBinManager()->binObject("cdrecord")->version >= K3bVersion( 2, 1, -1, "a12" ) )
 	writer->addArgument( "-xa" );
@@ -181,7 +181,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter()
     m_tocFile->setAutoDelete(true);
 
     if( QTextStream* s = m_tocFile->textStream() ) {
-      if( (m_dataMode == K3b::AUTO && m_noFix) ||
+      if( (m_dataMode == K3b::DATA_MODE_AUTO && m_noFix) ||
 	  m_dataMode == K3b::MODE2 ) {
 	*s << "CD_ROM_XA" << "\n";
 	*s << "\n";

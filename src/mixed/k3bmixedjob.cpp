@@ -29,6 +29,7 @@
 #include <audio/k3baudiojobtempdata.h>
 #include <device/k3bdevicemanager.h>
 #include <device/k3bdevice.h>
+#include <device/k3bdevicehandler.h>
 #include <device/k3bmsf.h>
 #include <tools/k3bwavefilewriter.h>
 #include <tools/k3bglobals.h>
@@ -48,14 +49,7 @@
 #include <ktempfile.h>
 #include <kio/netaccess.h>
 #include <kio/global.h>
-
-
-// for the fifo
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <errno.h>
+#include <kmessagebox.h>
 
 
 K3bMixedJob::K3bMixedJob( K3bMixedDoc* doc, QObject* parent )
@@ -345,33 +339,38 @@ void K3bMixedJob::slotWriterFinished( bool success )
 
   if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION && m_currentAction == WRITING_AUDIO_IMAGE ) {
     // reload the media
-
-    // FIXME: use DeviceHandler::reload
-
     emit infoMessage( i18n("Reloading the media"), INFO );
-    m_doc->burner()->eject();
-    qApp->processEvents();
-    m_doc->burner()->load();
-
-    if( m_doc->dummy() ) {
-      // do not try to get ms info in simulation mode since the cd is empty!
-      if( m_doc->onTheFly() ) {
-	m_isoImager->calculateSize();
-      }
-      else {
-	createIsoImage();
-      }
-    }
-    else {
-      m_msInfoFetcher->setDevice( m_doc->burner() );
-      m_msInfoFetcher->start();
-    }
+    connect( K3bCdDevice::reload( m_doc->burner() ), SIGNAL(finished(bool)),
+	     this, SLOT(slotMediaReloadedForSecondSession(bool)) );
   }
   else {
     if( !m_doc->onTheFly() && m_doc->removeImages() )
       removeBufferFiles();
 
     emit finished(true);
+  }
+}
+
+
+void K3bMixedJob::slotMediaReloadedForSecondSession( bool success )
+{
+  if( !success )
+    KMessageBox::information( 0, i18n("Please reload the medium and press 'ok'"),
+			      i18n("Unable to close the tray") );
+
+  // start the next session
+  if( m_doc->dummy() ) {
+    // do not try to get ms info in simulation mode since the cd is empty!
+    if( m_doc->onTheFly() ) {
+      m_isoImager->calculateSize();
+    }
+    else {
+      createIsoImage();
+    }
+  }
+  else {
+    m_msInfoFetcher->setDevice( m_doc->burner() );
+    m_msInfoFetcher->start();
   }
 }
 
@@ -423,9 +422,7 @@ void K3bMixedJob::slotAudioDecoderFinished( bool success )
 void K3bMixedJob::slotReceivedAudioDecoderData( const char* data, int len )
 {
   if( m_doc->onTheFly() ) {
-    if( m_usingFifo )
-      ::write( m_fifo, data, len );
-    else if( !m_writer->write( (char*)data, len ) ) {
+    if( !m_writer->write( (char*)data, len ) ) {
       kdDebug() << "(K3bMixedJob) Error while writing data to Writer" << endl;
       emit infoMessage( i18n("IO error"), ERROR );
       cleanupAfterError();
@@ -506,8 +503,6 @@ bool K3bMixedJob::prepareWriter()
     m_writer = writer;
   }
   else {  // DEFAULT
-    m_usingFifo = false;
-
     if( !writeTocFile() ) {
       kdDebug() << "(K3bDataJob) could not write tocfile." << endl;
       emit infoMessage( i18n("IO Error"), ERROR );
@@ -589,6 +584,7 @@ bool K3bMixedJob::writeTocFile()
       if( m_doc->mixedType() != K3bMixedDoc::DATA_SECOND_SESSION &&
 	  m_doc->audioDoc()->cdText() ) {
 	// insert fake cdtext
+	// cdrdao does not work without it and it seems not to do any harm.
 	*s << "CD_TEXT {" << endl
 	   << "  LANGUAGE 0 {" << endl
 	   << "    TITLE " << "\"\"" << endl
@@ -865,7 +861,7 @@ void K3bMixedJob::determineWritingMode()
 {
   // at first we determine the data mode
   // --------------------------------------------------------------
-  if( m_doc->dataDoc()->dataMode() == K3b::AUTO ) {
+  if( m_doc->dataDoc()->dataMode() == K3b::DATA_MODE_AUTO ) {
     if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION )
       m_usedDataMode = K3b::MODE2;
     else
@@ -900,7 +896,7 @@ void K3bMixedJob::determineWritingMode()
   if( writingApp() == K3b::DEFAULT ) {
     if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
       if( m_doc->writingMode() == K3b::DAO ||
-	  ( m_doc->writingMode() == K3b::AUTO && !cdrecordUsable ) ) {
+	  ( m_doc->writingMode() == K3b::WRITING_MODE_AUTO && !cdrecordUsable ) ) {
 	m_usedAudioWritingApp = K3b::CDRDAO;
 	m_usedDataWritingApp = K3b::CDRDAO;
       }
@@ -928,13 +924,15 @@ void K3bMixedJob::determineWritingMode()
 
   // Writing Mode (TAO/DAO/RAW)
   // --------------------------------------------------------------
-  if( m_doc->writingMode() == K3b::AUTO ) {
+  if( m_doc->writingMode() == K3b::WRITING_MODE_AUTO ) {
+
     if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
       if( m_usedDataWritingApp == K3b::CDRECORD )
 	m_usedDataWritingMode = K3b::TAO;
       else
 	m_usedDataWritingMode = K3b::DAO;
-      // default to Session at once
+
+      // default to Session at once for the audio part
       m_usedAudioWritingMode = K3b::DAO;
     }
     else {

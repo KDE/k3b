@@ -80,7 +80,7 @@ bool K3bDataDoc::newDocument()
   m_name = "Dummyname";
 
   m_multisessionMode = NONE;
-  m_dataMode = K3b::AUTO;
+  m_dataMode = K3b::DATA_MODE_AUTO;
 
   m_isoOptions = K3bIsoOptions();
 
@@ -524,7 +524,7 @@ bool K3bDataDoc::loadDocumentDataOptions( QDomElement elem )
       else if( e.text() == "mode2" )
 	m_dataMode = K3b::MODE2;
       else
-	m_dataMode = K3b::AUTO;
+	m_dataMode = K3b::DATA_MODE_AUTO;
     }
 
     else if( e.nodeName() == "multisession" ) {
@@ -1107,7 +1107,7 @@ void K3bDataDoc::loadDefaultSettings( KConfig* c )
   else if( datamode == "mode2" )
     setDataMode( K3b::MODE2 );
   else
-    setDataMode( K3b::AUTO );
+    setDataMode( K3b::DATA_MODE_AUTO );
 }
 
 

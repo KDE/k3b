@@ -33,12 +33,12 @@ namespace K3b
   };
 
   /**
-   * AUTO - let K3b determine the best mode
+   * DATA_MODE_AUTO - let K3b determine the best mode
    * MODE1 - refers to the default Yellow book mode1
    * MODE2 - refers to CDROM XA mode2 form1
    */
   enum DataMode { 
-    AUTO, 
+    DATA_MODE_AUTO,
     MODE1, 
     MODE2
   };

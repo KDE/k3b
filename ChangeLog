@@ -38,8 +38,10 @@ user commands for external programs are seperated by space now since the comma j
 support for newer versions of cdrecord which have a slighly changed user interface
 support for cuefile writing with cdrecord > 2.01a14
 support for writing CD-Text with cdrecord
-support for writing audio CDs on-the-fly with cdrecord >= 2.01a13
-
+support for writing audio and mixed-mode CDs on-the-fly with cdrecord >= 2.01a13
+no gui blocking when reloading the media while writing a two-session mixed-mode cd
+K3b now allows automatic writing mode selection to be sure to always use the best writing mode (DAO, TAO)
+    
 0.8.1
 fixed compiling problems with kernel < 2.4.3
 fixed onlyCreateImage in data project

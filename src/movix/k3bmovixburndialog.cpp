@@ -125,7 +125,7 @@ void K3bMovixBurnDialog::slotLoadK3bDefaults()
   K3bProjectBurnDialog::slotLoadK3bDefaults();
 
   m_checkStartMultiSesssion->setChecked( false );
-  m_dataModeWidget->setDataMode( K3b::AUTO );
+  m_dataModeWidget->setDataMode( K3b::DATA_MODE_AUTO );
 
   m_imageSettingsWidget->load( K3bIsoOptions::defaults() );
   m_advancedImageSettingsWidget->load( K3bIsoOptions::defaults() );

@@ -463,7 +463,7 @@ bool K3bDataJob::prepareWriterJob()
 void K3bDataJob::determineWritingMode()
 {
   // first of all we determine the data mode
-  if( m_doc->dataMode() == K3b::AUTO ) {
+  if( m_doc->dataMode() == K3b::DATA_MODE_AUTO ) {
     if( !m_doc->onlyCreateImages() && 
 	( m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
 	  m_doc->multiSessionMode() == K3bDataDoc::FINISH ) ) {
