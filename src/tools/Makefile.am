@@ -1,6 +1,6 @@
 INCLUDES = $(all_includes)
 
-libtools_a_METASOURCES = AUTO
+libtools_la_METASOURCES = AUTO
 
 noinst_LTLIBRARIES = libtools.la
 

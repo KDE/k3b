@@ -1,6 +1,6 @@
 INCLUDES = $(all_includes)
 
-libaudio_a_METASOURCES = AUTO
+libaudio_la_METASOURCES = AUTO
 
 noinst_LTLIBRARIES = libaudio.la
 
