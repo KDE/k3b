@@ -115,6 +115,9 @@ void K3bCddb::query( const K3bToc& toc )
     m_iCurrentQueriedServer = 0;
     remoteQuery();
   }
+  else {
+    emit queryFinished( K3bCddbQuery::NO_ENTRY_FOUND );
+  }
 }
 
 
