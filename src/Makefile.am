@@ -8,7 +8,7 @@ k3b_SOURCES = k3bwelcomewidget.cpp k3bapplication.cpp k3bdiroperator.cpp kdndfil
 
 k3b_LDADD   = ./cdinfo/libcdinfo.la ./option/liboption.la ./rip/librip.la ./cdcopy/libcdcopy.la ./dvdcopy/libdvdcopy.la ./cdclone/libcdclone.la ./videoEncoding/libvideoEncoding.la ./plugin/libk3bplugin.la $(ARTS_LIBS) -lkio -lkparts ./core/libk3bcore.la ./tools/libk3btools.la ./projects/libk3bproject.la ./images/libimagewriting.la
 
-SUBDIRS = core tools plugin projects cddb cdinfo option rip cdcopy cdclone images dvdcopy videoEncoding pics icons konqi mimetypes tests audiodecoding audioencoding $(K3BSETUP1_BUILD)
+SUBDIRS = core tools plugin projects cddb cdinfo option rip cdcopy cdclone images dvdcopy videoEncoding pics icons konqi mimetypes tests audiodecoding audioencoding sounds $(K3BSETUP1_BUILD)
 
 xdg_apps_DATA = k3b.desktop
 
