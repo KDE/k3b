@@ -29,7 +29,7 @@ public:
 };
 
 
-K3bLameLib::K3bLameLib( QLibrary* lib )
+K3bLameLib::K3bLameLib()
 {
   d = new Private();
   d->lib = lib;
@@ -72,28 +72,22 @@ int K3bLameLib::getVersion()
 }
 
 
-K3bLameLib* K3bLameLib::self()
+K3bLameLib* K3bLameLib::create()
 {
-  static K3bLameLib* lib = 0;
-
-  if( !lib ) {
-    // check if lamelib is avalilable
-    QLibrary* lameLib = new QLibrary( "mp3lame" );
-    if( !lameLib->load() ) {
-      kdDebug() << "(K3bLameLib) Error while loading libLame. " << endl;
-      delete lameLib;
+  // check if lamelib is avalilable
+  QLibrary* lameLib = new QLibrary( "mp3lame" );
+  if( !lameLib->load() ) {
+    kdDebug() << "(K3bLameLib) Error while loading libLame. " << endl;
+    delete lameLib;
+    return 0;
+  }
+  else {
+    K3bLameLib* lib = new K3bLameLib( lameLib );
+    if( !lib->load() ) {
+      kdDebug() << "(K3bLameLib) Error: could not resolve all symbols!" << endl;
+      delete lib;
       return 0;
     }
-    else {
-      lib = new K3bLameLib( lameLib );
-      if( !lib->load() ) {
-	kdDebug() << "(K3bLameLib) Error: could not resolve all symbols!" << endl;
-	delete lib;
-	return 0;
-      }
-	
-    }
+    return lib;
   }
-  
-  return lib;
 }
