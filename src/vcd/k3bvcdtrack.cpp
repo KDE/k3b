@@ -1,20 +1,17 @@
 /*
- *
- * $Id$
- * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
- *
- * This file is part of the K3b project.
- * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- * See the file "COPYING" for the exact licensing terms.
- */
-
-#include "k3bvcdtrack.h"
-#include "../tools/k3bglobals.h"
+*
+* $Id$
+* Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
+*
+* This file is part of the K3b project.
+* Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or
+* (at your option) any later version.
+* See the file "COPYING" for the exact licensing terms.
+*/
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -28,179 +25,180 @@
 #include <unistd.h>
 #include <kdebug.h>
 
+// K3b Includes
+#include "k3bvcdtrack.h"
+#include "../tools/k3bglobals.h"
 
 K3bVcdTrack::K3bVcdTrack( QPtrList<K3bVcdTrack>* parent, const QString& filename )
-: m_file(filename)
+        : m_file( filename )
 {
-  m_parent = parent;
-  m_title = QFileInfo(m_file).baseName(true);
+    m_parent = parent;
+    m_title = QFileInfo( m_file ).baseName( true );
 
-  m_pbcprevious = 0L;
-  m_pbcnext = 0L;
-  m_pbcreturn = 0L;
-  m_pbcdefault = 0L;
+    m_pbcprevious = 0L;
+    m_pbcnext = 0L;
+    m_pbcreturn = 0L;
+    m_pbcdefault = 0L;
 
-  m_pbcprevious_enabled = false;
-  m_pbcnext_enabled = false;
-  m_pbcreturn_enabled = false;
-  m_pbcdefault_enabled = false;
+    m_pbcprevious_enabled = false;
+    m_pbcnext_enabled = false;
+    m_pbcreturn_enabled = false;
+    m_pbcdefault_enabled = false;
 
-  m_pbcuserdefined = false;
-  m_segment = false;
+    m_pbcuserdefined = false;
+    m_segment = false;
 }
 
 
 K3bVcdTrack::~K3bVcdTrack()
-{
-}
+{}
 
 
 KIO::filesize_t K3bVcdTrack::size() const
 {
-  return m_file.size();
+    return m_file.size();
 }
 
-void K3bVcdTrack::setMpegType(const int& mt)
+void K3bVcdTrack::setMpegType( const int& mt )
 {
-  m_mpegtype = mt;
+    m_mpegtype = mt;
 }
 
-void K3bVcdTrack::setMpegVideoVersion(const int& version)
+void K3bVcdTrack::setMpegVideoVersion( const int& version )
 {
-m_mpegvideoversion = version;
+    m_mpegvideoversion = version;
 }
 
-void K3bVcdTrack::setMpegVersion(const QString& version)
+void K3bVcdTrack::setMpegVersion( const QString& version )
 {
-  m_mpegversion = version;
+    m_mpegversion = version;
 }
 
-void K3bVcdTrack::setMpegMuxRate(const int& mux)
+void K3bVcdTrack::setMpegMuxRate( const int& mux )
 {
-  m_mpegmuxrate = mux;
+    m_mpegmuxrate = mux;
 }
 
-void K3bVcdTrack::setMpegFormat(const int& format)
+void K3bVcdTrack::setMpegFormat( const int& format )
 {
-  m_mpegformat = format;  
+    m_mpegformat = format;
 }
 
-void K3bVcdTrack::setMpegDuration(const QString& time)
+void K3bVcdTrack::setMpegDuration( const QString& time )
 {
-  m_mpegduration = time;
+    m_mpegduration = time;
 }
 
-void K3bVcdTrack::setMpegSize(const QString& size)
+void K3bVcdTrack::setMpegSize( const QString& size )
 {
-  m_mpegsize = size;
+    m_mpegsize = size;
 }
 
-void K3bVcdTrack::setMpegDisplaySize(const QString& size)
+void K3bVcdTrack::setMpegDisplaySize( const QString& size )
 {
-  m_mpegdisplaysize = size;
+    m_mpegdisplaysize = size;
 }
 
-void K3bVcdTrack::setMpegFps(const QString& fps)
+void K3bVcdTrack::setMpegFps( const QString& fps )
 {
-  m_mpegfps = fps;
+    m_mpegfps = fps;
 }
 
-void K3bVcdTrack::setMpegMbps(const QString& mbps)
+void K3bVcdTrack::setMpegMbps( const QString& mbps )
 {
-  m_mpegmbps = mbps;
+    m_mpegmbps = mbps;
 }
 
-void K3bVcdTrack::setMpegAspectRatio(const int& ratio)
+void K3bVcdTrack::setMpegAspectRatio( const int& ratio )
 {
-  m_mpegaspect_ratio = ratio;
+    m_mpegaspect_ratio = ratio;
 }
 
-void K3bVcdTrack::setMpegSExt(const bool& sext)
+void K3bVcdTrack::setMpegSExt( const bool& sext )
 {
-  m_mpegsext = sext;  
+    m_mpegsext = sext;
 }
 
-void K3bVcdTrack::setMpegDExt(const bool& dext)
+void K3bVcdTrack::setMpegDExt( const bool& dext )
 {
-  m_mpegdext = dext;    
+    m_mpegdext = dext;
 }
 
-void K3bVcdTrack::setMpegProgressive(const bool& progressive)
+void K3bVcdTrack::setMpegProgressive( const bool& progressive )
 {
-  m_mpegprogressive = progressive;
+    m_mpegprogressive = progressive;
 }
 
-void K3bVcdTrack::setMpegChromaFormat(const int& chromaformat)
+void K3bVcdTrack::setMpegChromaFormat( const int& chromaformat )
 {
-  m_mpegchroma_format = chromaformat;
+    m_mpegchroma_format = chromaformat;
 }
 
 // audio
-void K3bVcdTrack::setHasAudio(const bool& audio)
+void K3bVcdTrack::setHasAudio( const bool& audio )
 {
-  m_hasaudio = audio;
+    m_hasaudio = audio;
 }
 
-void K3bVcdTrack::setMpegAudioType(const int& type)
+void K3bVcdTrack::setMpegAudioType( const int& type )
 {
-  m_mpegaudiotype = type;
+    m_mpegaudiotype = type;
 }
 
-void K3bVcdTrack::setMpegAudioCopyright(const bool& copyright)
+void K3bVcdTrack::setMpegAudioCopyright( const bool& copyright )
 {
-  m_mpegaudiocopyright = copyright;  
+    m_mpegaudiocopyright = copyright;
 }
 
-void K3bVcdTrack::setMpegAudioOriginal(const bool& original)
+void K3bVcdTrack::setMpegAudioOriginal( const bool& original )
 {
-  m_mpegaudiooriginal = original;  
+    m_mpegaudiooriginal = original;
 }
 
-void K3bVcdTrack::setMpegAudioLayer(const int& layer)
+void K3bVcdTrack::setMpegAudioLayer( const int& layer )
 {
-  m_mpegaudiolayer = layer;
+    m_mpegaudiolayer = layer;
 }
 
-void K3bVcdTrack::setMpegAudioDuration(const QString& duration)
+void K3bVcdTrack::setMpegAudioDuration( const QString& duration )
 {
-  m_mpegaudioduration = duration;
+    m_mpegaudioduration = duration;
 }
 
-void K3bVcdTrack::setMpegAudioKbps(const QString& kbps)
+void K3bVcdTrack::setMpegAudioKbps( const QString& kbps )
 {
-  m_mpegaudiokbps = kbps;
+    m_mpegaudiokbps = kbps;
 }
 
-void K3bVcdTrack::setMpegAudioHz(const QString& hz)
+void K3bVcdTrack::setMpegAudioHz( const QString& hz )
 {
-  m_mpegaudiohz = hz;
+    m_mpegaudiohz = hz;
 }
 
-void K3bVcdTrack::setMpegAudioFrame(const QString& frame)
+void K3bVcdTrack::setMpegAudioFrame( const QString& frame )
 {
-  m_mpegaudioframe = frame;
+    m_mpegaudioframe = frame;
 }
 
-void K3bVcdTrack::setMpegAudioMode(const int& mode)
+void K3bVcdTrack::setMpegAudioMode( const int& mode )
 {
-  m_mpegaudiomode = mode;
+    m_mpegaudiomode = mode;
 }
 
-void K3bVcdTrack::setMpegAudioModeExt(const int& modeext)
+void K3bVcdTrack::setMpegAudioModeExt( const int& modeext )
 {
-  m_mpegaudiomodeext = modeext;
+    m_mpegaudiomodeext = modeext;
 }
 
-void K3bVcdTrack::setMpegAudioEmphasis(const int& e)
+void K3bVcdTrack::setMpegAudioEmphasis( const int& e )
 {
-  m_mpegaudioemphasis = e;
+    m_mpegaudioemphasis = e;
 }
 
 int K3bVcdTrack::index() const
 {
-  int i = m_parent->find( this );
-  if( i < 0 )
-    kdDebug() << "(K3bVcdTrack) I'm not part of my parent!" << endl;
-  return i;
+    int i = m_parent->find( this );
+    if ( i < 0 )
+        kdDebug() << "(K3bVcdTrack) I'm not part of my parent!" << endl;
+    return i;
 }
-

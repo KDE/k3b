@@ -1,17 +1,17 @@
 /*
- *
- * $Id: $
- * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
- *
- * This file is part of the K3b project.
- * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- * See the file "COPYING" for the exact licensing terms.
- */
+*
+* $Id$
+* Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
+*
+* This file is part of the K3b project.
+* Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or
+* (at your option) any later version.
+* See the file "COPYING" for the exact licensing terms.
+*/
 
 #ifndef CoMmOn
 #define CoMmOn
@@ -59,12 +59,12 @@
 #define mpeg_TRANSPORT 6
 
 // #define BUFFERSIZE   512
-#define BUFFERSIZE   16384
+#define BUFFERSIZE   16384 
 //16k buffer
 //#define COPYBUFFERSIZE 512
 //#define COPYBUFFERSIZE 65536
 //64k buffer
-#define COPYBUFFERSIZE 2097152
+#define COPYBUFFERSIZE 2097152 
 //2meg buffer
 
 //#define ENABLE_OPTIMIZATION 1
@@ -80,8 +80,8 @@
 #define N_FUNCTIONS 5
 
 double Clock_Now();
-void   AddTime(double timestart, int function);
-extern double functions_cummulated_time[N_FUNCTIONS];
+void AddTime( double timestart, int function );
+extern double functions_cummulated_time[ N_FUNCTIONS ];
 void init_cummulated_time();
 void PrintTime();
 
@@ -96,96 +96,110 @@ extern double MainClockStart;
 
 
 #define MAX_ID3_GENRE 148
-extern const char *genre[MAX_ID3_GENRE];
+extern const char *genre[ MAX_ID3_GENRE ];
 
 typedef unsigned char byte;
 typedef unsigned char marker;
 typedef const char* c_char;
 
-typedef struct {
-	char name[30];
-	char artist[30];
-	char album [30];
-	char year [4];
-	char comment [30];
-	unsigned char genre;
-} id3;
+typedef struct
+{
+    char name[ 30 ];
+    char artist[ 30 ];
+    char album [ 30 ];
+    char year [ 4 ];
+    char comment [ 30 ];
+    unsigned char genre;
+}
+id3;
 
-typedef struct {
-	int mpeg_ver;
-	int layer;
-	int protect;
-	int bitrate;
-	float byte_rate;
-	int sampling_rate;
-	int mode;
-	int padding;
-	int modext;
-	int emphasis_index;
-	bool copyright;
-	bool original;
-	double duration;
-	int frame_length;
-	id3* tag;
-	off_t first_frame_offset;
-} mpgtx_audio;
+typedef struct
+{
+    int mpeg_ver;
+    int layer;
+    int protect;
+    int bitrate;
+    float byte_rate;
+    int sampling_rate;
+    int mode;
+    int padding;
+    int modext;
+    int emphasis_index;
+    bool copyright;
+    bool original;
+    double duration;
+    int frame_length;
+    id3* tag;
+    off_t first_frame_offset;
+}
+mpgtx_audio;
 
-typedef struct {
-	unsigned long hsize,vsize;
-	double frame_rate;
-	unsigned long bitrate;
-	double duration;
-	byte aspect_ratio;
-	byte* video_header;
-	int   video_header_size;
+typedef struct
+{
+    unsigned long hsize, vsize;
+    double frame_rate;
+    unsigned long bitrate;
+    double duration;
+    byte aspect_ratio;
+    byte* video_header;
+    int video_header_size;
 
-	off_t first_gop_offset;
-} mpgtx_video;
+    off_t first_gop_offset;
+}
+mpgtx_video;
 
-typedef struct {
-	byte* video_system_header;
-	off_t  video_system_header_length;
+typedef struct
+{
+    byte* video_system_header;
+    off_t video_system_header_length;
 
-	byte* audio_system_header;
-	off_t  audio_system_header_length;
+    byte* audio_system_header;
+    off_t audio_system_header_length;
 
-	byte* first_video_packet;
-	off_t   first_video_packet_length;
-	//initial timestamp
-	double initial_TS;
-	unsigned long muxrate;
-} mpgtx_system;
+    byte* first_video_packet;
+    off_t first_video_packet_length;
+    //initial timestamp
+    double initial_TS;
+    unsigned long muxrate;
+}
+mpgtx_system;
 
 
-typedef struct {
-	bool progressive;
-	byte  chroma_format;
-	bool low_delay;
-} sequence_ext;
+typedef struct
+{
+    bool progressive;
+    byte chroma_format;
+    bool low_delay;
+}
+sequence_ext;
 
-typedef struct {
-	byte video_format;
-	byte colour_prim;
-	byte transfer_char;
-	byte matrix_coef;
-	unsigned long h_display_size;
-	unsigned long v_display_size;
-}display_ext;
+typedef struct
+{
+    byte video_format;
+    byte colour_prim;
+    byte transfer_char;
+    byte matrix_coef;
+    unsigned long h_display_size;
+    unsigned long v_display_size;
+}
+display_ext;
 
-typedef struct {
-	char* ud;
-	int ud_length;
-}user_data;
+typedef struct
+{
+    char* ud;
+    int ud_length;
+}
+user_data;
 
 
 /*  The following Macros ensure compatibility for glibc < 2.2+ and kernel < 2.4
     It also gives opportunity to support large files (>4 Go) such as DVDs
 	_OFF_d and _OFF_x are used in format strings of printf. They refer to the off_t type
 	and substitute to %lld %llx resp, whith large file support and %ld %lx otherwise.
-
+ 
 	FSEEK substitutes to the new fseeko function if possible or becomes standard fseek otherwise
 	FTELL does the same with ftello and ftell
-
+ 
 */
 
 
@@ -195,7 +209,7 @@ typedef struct {
 	#define   _OFF_x   "%qx"
 #else
 	#define   _OFF_d   "%lld"
-        #define   _OFF_x   "%llx"
+ #define   _OFF_x   "%llx"
 #endif
 	#define   FSEEK    fseeko
 	#define   FTELL    ftello
