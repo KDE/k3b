@@ -546,6 +546,7 @@ void K3bVcdBurnDialog::loadCdiConfig()
 
       cdi.close();
       m_editCdiCfg->setEdited(false);
+      m_editCdiCfg->setCursorPosition(0,0,false);
     }
     else
       loadDefaultCdiConfig();
@@ -569,7 +570,8 @@ void K3bVcdBurnDialog::loadDefaultCdiConfig()
             m_editCdiCfg->insertLine( s.readLine() );
 
       cdi.close();
-      m_editCdiCfg->setEdited(true);
+      m_editCdiCfg->setEdited(false);
+      m_editCdiCfg->setCursorPosition(0,0,false);
     }
 }
 
