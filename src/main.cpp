@@ -80,6 +80,15 @@ int main(int argc, char *argv[]) {
     aboutData.addCredit("Roberto De Leo",
 			I18N_NOOP("For the very cool eMovix package and his accommodating work."),
 			"peggish@users.sf.net" );
+    aboutData.addCredit("John Steele Scott",
+			I18N_NOOP("For the flac decoding plugin."),
+			"toojays@toojays.net" );
+    aboutData.addCredit("György Szombathelyi",
+			I18N_NOOP("For the very useful isofslib."),
+			"gyurco@users.sourceforge.net" );
+    aboutData.addCredit("Erik de Castro Lopo",
+			I18N_NOOP("For libsamplerate which is used for generic resampling in the audio decoder framework."),
+			"erikd@mega-nerd.com" );
 
 
     KCmdLineArgs::init( argc, argv, &aboutData );
