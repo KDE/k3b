@@ -3,7 +3,7 @@
 # the error to ian geiser <geiseri@msoe.edu>
 Summary:   
 Name:      k3b
-Version:   0.6
+Version:   0.7
 Release:   0.1
 Copyright: GPL
 Vendor:    Sebastian Trueg <trueg@informatik.uni-freiburg.de>
@@ -11,11 +11,11 @@ Url:       http://k3b.sourceforge.net
 Icon:     k3b.xpm
 Packager:  Sebastian Trueg <trueg@informatik.uni-freiburg.de>
 Group:     Archiving/Cd burning
-Source:    k3b-0.6.tar.gz
+Source:    k3b-0.7.tar.gz
 BuildRoot: 
 
 %description
-K3b - The CD Creator - The best software to write cds under linux.
+K3b - The CD Creator - Writing cds under linux made easy.
 
 %prep
 %setup

@@ -35,6 +35,8 @@ These are the features so far:
 
  - dvd ripping with the transcode tools
 
+ - DivX/XviD encoding
+
  - K3b checks if the user inserted an empty disk
 
  - Retrieving cd info and toc
@@ -50,7 +52,7 @@ What you need to run K3b:
  - the cdparanoia library for cd ripping from Monty
  - the cdrtools (cdrecord, mkisofs) from Joerg Schilling
  - cdrdao, the other linux cd writing program from Andreas Mueller
- - optional the transcode tools for DVD ripping from Thomas Oestreich
+ - optional the transcode tools for DVD ripping and DivX/XviD encoding from Thomas Oestreich
 
 See INSTALL for further information
 

@@ -1,3 +1,13 @@
+0.7
+DivX/XviD encoding
+enhanced cddb support
+new artwork from Ayo
+fixed some device detection problems
+fixed problems with long filenames and Joliet
+some gui enhancements
+added libmad to the sources
+removed id3lib
+
 0.6pre2
 added ogg-vorbis support
 added iso ids to diskInfo
