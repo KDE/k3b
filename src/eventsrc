@@ -1,6 +1,7 @@
 [!Global!]
 IconName=k3b
 Comment=K3b
+Comment[xx]=xxK3bxx
 
 [SuccessfullyFinished]
 Name=Process successful
@@ -13,6 +14,7 @@ Name[nl]=Proces was successvol
 Name[pt]=Processo com sucesso
 Name[pt_BR]=Processo bem-sucedido
 Name[sv]=Processen lyckades
+Name[xx]=xxProcess successfulxx
 Comment=Process successfully finished
 Comment[da]=Processen afsluttedes korrekt
 Comment[de]=Prozess erfolgreich abgeschlossen
@@ -23,6 +25,7 @@ Comment[nl]=Proces met succes voltooid
 Comment[pt]=O processo terminou com sucesso
 Comment[pt_BR]=Processo finalizado com sucesso
 Comment[sv]=Processen avslutades med lyckat resultat
+Comment[xx]=xxProcess successfully finishedxx
 default_sound=
 default_presentation=1
 # None = 0, Sound = 1, Messagebox = 2, Logfile = 4, Stderr = 8, PassivePopup = 16, Execute = 32
@@ -38,6 +41,7 @@ Name[nl]=Procesfout
 Name[pt]=Erro no processo
 Name[pt_BR]=Erro no Processo
 Name[sv]=Processfel
+Name[xx]=xxProcess errorxx
 Comment=Process finished with errors
 Comment[da]=Processen afsluttede med fejl
 Comment[de]=Prozess mit Fehlern beendet
@@ -48,6 +52,7 @@ Comment[nl]=Proces voltooid met fouten
 Comment[pt]=O processo terminou com erros
 Comment[pt_BR]=Processo finalizado com erros
 Comment[sv]=Processen avslutades med fel
+Comment[xx]=xxProcess finished with errorsxx
 default_sound=
 default_presentation=1
 
@@ -62,6 +67,7 @@ Name[nl]=Onbekend formaat
 Name[pt]=Formato desconhecido
 Name[pt_BR]=Formato desconhecido
 Name[sv]=Okänt format
+Name[xx]=xxUnknown formatxx
 Comment=Unknown audiofile format
 Comment[da]=Ukendt lydfil-format
 Comment[de]=Unbekanntes Audiodateiformat
@@ -72,4 +78,5 @@ Comment[nl]=Onbekend audiobestandformaat
 Comment[pt]=Formato desconhecido de ficheiro áudio
 Comment[pt_BR]=Formato de arquivo de áudio desconhecido
 Comment[sv]=Okänt ljudfilsformat
+Comment[xx]=xxUnknown audiofile formatxx
 default_presentation=2
