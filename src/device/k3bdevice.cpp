@@ -410,7 +410,7 @@ bool K3bCdDevice::CdDevice::init()
 	case 0x02A: // DVD+RW
 	  {
 	    kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "DVD+RW" << endl;
-#if __BYTE_ORDER == __BIG_ENDIAN
+#ifdef WORDS_BIGENDIAN
 	    struct dvd_plus_rw_feature {
 	      unsigned char reserved1   : 7;
 	      unsigned char write       : 1;
@@ -438,7 +438,7 @@ bool K3bCdDevice::CdDevice::init()
 	case 0x02B: // DVD+R
 	  {
 	    kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "DVD+R" << endl;
-#if __BYTE_ORDER == __BIG_ENDIAN
+#ifdef WORDS_BIGENDIAN
 	    struct dvd_plus_r_feature {
 	      unsigned char reserved1      : 7;
 	      unsigned char write          : 1;
@@ -471,7 +471,7 @@ bool K3bCdDevice::CdDevice::init()
 	case 0x02D: // CD Track At Once
 	  {
 	    kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "CD Track At Once" << endl;
-#if __BYTE_ORDER == __BIG_ENDIAN
+#ifdef WORDS_BIGENDIAN
 	    struct cd_track_at_once_feature {
 	      unsigned char reserved1 : 1;
 	      unsigned char BUF       : 1;  // Burnfree
@@ -510,7 +510,7 @@ bool K3bCdDevice::CdDevice::init()
 	case 0x02E: // CD Mastering
 	  {
 	    kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "CD Mastering" << endl;
-#if __BYTE_ORDER == __BIG_ENDIAN
+#ifdef WORDS_BIGENDIAN
 	    struct cd_mastering_feature {
 	      unsigned char reserved1 : 1;
 	      unsigned char BUF       : 1;  // Burnfree
@@ -548,7 +548,7 @@ bool K3bCdDevice::CdDevice::init()
 	case 0x02F: // DVD-R/-RW Write
 	  {
 	    kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "DVD-R/-RW Write" << endl;
-#if __BYTE_ORDER == __BIG_ENDIAN
+#ifdef WORDS_BIGENDIAN
 	    struct dvd_r_rw_write_feature {
 	      unsigned char reserved1 : 1;
 	      unsigned char BUF       : 1;  // Burnfree
