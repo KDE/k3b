@@ -313,7 +313,7 @@ void K3bGrowisofsWriter::start()
       s += *it + " ";
     }
     kdDebug() << s << flush << endl;
-    emit debuggingOutput( d->growisofsBin->name() + " comand:", s);
+    emit debuggingOutput( d->growisofsBin->name() + " command:", s);
 
 
     emit newSubTask( i18n("Preparing write process...") );

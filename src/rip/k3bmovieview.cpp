@@ -128,7 +128,7 @@ void K3bMovieView::reload()
     emit notSupportedDisc( m_device->devicename() );
     return;
   }
-  KDialog* infoDialog = new KDialog( this, "waitForDiskInfoDialog", true, WDestructiveClose );
+  KDialog* infoDialog = new KDialog( this, "waitForDiskInfoDialog", true, WType_Popup|WDestructiveClose );
   infoDialog->setCaption( i18n("Please Wait...") );
   QHBoxLayout* infoLayout = new QHBoxLayout( infoDialog );
   infoLayout->setSpacing( KDialog::spacingHint() );

@@ -105,7 +105,7 @@ void K3bMovixView::showPropertiesDialog()
     d.exec();
   }
   else
-    m_doc->slotProperties();
+    m_doc->view()->slotProperties();
 }
 
 
@@ -155,6 +155,12 @@ void K3bMovixView::slotAddSubTitleFile()
 	KMessageBox::error( 0, i18n("K3b currently only supports local files.") );
     }
   }
+}
+
+
+K3bProjectBurnDialog* K3bMovixView::newBurnDialog( QWidget* parent, const char* name )
+{
+  return new K3bMovixBurnDialog( m_doc, parent, name, true );
 }
 
 #include "k3bmovixview.moc"

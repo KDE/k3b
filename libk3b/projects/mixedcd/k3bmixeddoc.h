@@ -30,24 +30,6 @@ class QWidget;
 class KConfig;
 
 
-class K3bMixedDataDoc : public K3bDataDoc
-{
- public:
-  K3bMixedDataDoc( K3bMixedDoc* parent );
-
-  K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
-};
-
-
-class K3bMixedAudioDoc : public K3bAudioDoc
-{
- public:
-  K3bMixedAudioDoc( K3bMixedDoc* parent );
-
-  K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
-};
-
-
 class K3bMixedDoc : public K3bDoc
 {
   Q_OBJECT
@@ -87,7 +69,6 @@ class K3bMixedDoc : public K3bDoc
   K3bDevice::Toc toToc( int dataMode, const K3b::Msf& dataTrackLength = 0 ) const;
 
  public slots:
-  void slotBurn();
   void setMixedType( MixedType t ) { m_mixedType = t; }
   void addUrls( const KURL::List& urls );
 
@@ -98,7 +79,6 @@ class K3bMixedDoc : public K3bDoc
   
   void loadDefaultSettings( KConfig* );
 
-  K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
   K3bView* newView( QWidget* parent );
 
  private:

@@ -3,7 +3,7 @@
  * $Id$
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2005 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,7 +72,7 @@ int main( int argc, char* argv[] )
 {
   KAboutData aboutData( "k3b", I18N_NOOP("K3b"),
 			"0.11.96", description, KAboutData::License_GPL,
-			I18N_NOOP("(c) 1999 - 2004, Sebastian Trüg and the K3b Team"), 0, "http://www.k3b.org" );
+			I18N_NOOP("(c) 1999 - 2005, Sebastian Trüg and the K3b Team"), 0, "http://www.k3b.org" );
   aboutData.addAuthor("Sebastian Trüg",I18N_NOOP("Maintainer"), "trueg@k3b.org");
   aboutData.addAuthor("Thomas Froescher",I18N_NOOP("VideoDVD ripping and video encoding"), "tfroescher@k3b.org");
   aboutData.addAuthor("Christian Kvasny",I18N_NOOP("VideoCD Project and VideoCD ripping"), "chris@k3b.org");
@@ -99,10 +99,6 @@ int main( int argc, char* argv[] )
   aboutData.addCredit("Erik de Castro Lopo",
 		      I18N_NOOP("For libsamplerate which is used for generic resampling in the audio decoder framework."),
 		      "erikd@mega-nerd.com" );
-  aboutData.addCredit("Peter Osterlund",
-		      I18N_NOOP("For writing pipebuf2 on which the ringbuffer used for DVD writing is based on."),
-		      "petero2@telia.com" );
-
 
 
   KCmdLineArgs::init( argc, argv, &aboutData );

@@ -42,12 +42,6 @@ K3bView* K3bMovixDvdDoc::newView( QWidget* parent )
 }
 
 
-K3bProjectBurnDialog* K3bMovixDvdDoc::newBurnDialog( QWidget* parent, const char* name )
-{
-  return new K3bMovixDvdBurnDialog( this, parent, name, true );
-}
-
-
 void K3bMovixDvdDoc::loadDefaultSettings( KConfig* c )
 {
   K3bMovixDoc::loadDefaultSettings(c);

@@ -303,7 +303,7 @@ QByteArray K3bDevice::CdText::rawPackData() const
   // create the CD-Text packs
   //
   QByteArray data(0);
-  for( int i = 0; i < 6; ++i ) {
+  for( int i = 0; i <= 6; ++i ) {
     if( textLengthForPackType( 0x80 | i ) ) {
       appendByteArray( data, createPackData( 0x80 | i, pc ) );
       tsize.pack_count[i] = pc - alreadyCountedPacks;
@@ -500,6 +500,12 @@ const QString& K3bDevice::CdText::textForPackType( int packType, unsigned int tr
       return message();
     else
       return at(track-1).message();
+
+  case 0x86:
+    if( track == 0 )
+      return discId();
+    else 
+      return QString::null;
 
 //   case 0x87:
 //     if( track == 0 )

@@ -16,7 +16,6 @@
 #include "k3bmixeddoc.h"
 #include "k3bmixedjob.h"
 #include "k3bmixedview.h"
-#include "k3bmixedburndialog.h"
 
 #include <k3bdatadoc.h>
 #include <k3baudiodoc.h>
@@ -33,34 +32,11 @@
 
 
 
-K3bMixedDataDoc::K3bMixedDataDoc( K3bMixedDoc* parent )
-  : K3bDataDoc( parent )
-{
-}
-
-
-K3bProjectBurnDialog* K3bMixedDataDoc::newBurnDialog( QWidget* p, const char* name )
-{
-  return new K3bMixedBurnDialog( static_cast<K3bMixedDoc*>(parent()), p, name, true );
-}
-
-K3bMixedAudioDoc::K3bMixedAudioDoc( K3bMixedDoc* parent )
-  : K3bAudioDoc( parent )
-{
-}
-
-K3bProjectBurnDialog* K3bMixedAudioDoc::newBurnDialog( QWidget* p, const char* name )
-{
-  return new K3bMixedBurnDialog( static_cast<K3bMixedDoc*>(parent()), p, name, true );
-}
-
-
-
 K3bMixedDoc::K3bMixedDoc( QObject* parent )
   : K3bDoc( parent )
 {
-  m_dataDoc = new K3bMixedDataDoc( this );
-  m_audioDoc = new K3bMixedAudioDoc( this );
+  m_dataDoc = new K3bDataDoc( this );
+  m_audioDoc = new K3bAudioDoc( this );
 
   connect( m_dataDoc, SIGNAL(changed()),
 	   this, SIGNAL(changed()) );
@@ -102,7 +78,12 @@ K3b::Msf K3bMixedDoc::length() const
 
 K3bView* K3bMixedDoc::newView( QWidget* parent )
 {
-  return new K3bMixedView( this, parent );
+  // HACK since the docs need to know our view to be able to
+  // open the proper burn dialog
+  K3bMixedView* view = new K3bMixedView( this, parent );
+  m_dataDoc->setView( view );
+  m_audioDoc->setView( view );
+  return view;
 }
 
 
@@ -254,31 +235,6 @@ void K3bMixedDoc::loadDefaultSettings( KConfig* c )
 
   K3bIsoOptions o = K3bIsoOptions::load( c );
   dataDoc()->isoOptions() = o;
-}
-
-
-void K3bMixedDoc::slotBurn()
-{
-  if( m_audioDoc->numOfTracks() == 0 || m_dataDoc->size() == 0 ) {
-    KMessageBox::information( qApp->activeWindow(), i18n("Please add files and audio titles to your project first."),
-			      i18n("No Data to Burn"), QString::null, false );
-  }
-  else {
-    K3bProjectBurnDialog* dlg = newBurnDialog( qApp->activeWindow() );
-    if( dlg ) {
-      dlg->exec(true);
-      delete dlg;
-    }
-    else {
-      kdDebug() << "(K3bDoc) Error: no burndialog available." << endl;
-    }
-  }
-}
-
-
-K3bProjectBurnDialog* K3bMixedDoc::newBurnDialog( QWidget* parent, const char* name )
-{
-  return new K3bMixedBurnDialog( this, parent, name, true );
 }
 
 

@@ -118,7 +118,8 @@ bool K3bMad::fillStreamBuffer()
     else {
       readStart += result;
 
-      if( m_inputFile.atEnd() ) {
+      if( eof() ) {
+	kdDebug() << "(K3bMad::fillStreamBuffer) MAD_BUFFER_GUARD" << endl;
 	memset( readStart, 0, MAD_BUFFER_GUARD );
 	result += MAD_BUFFER_GUARD;
       }

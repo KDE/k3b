@@ -311,7 +311,7 @@ void K3bCdrecordWriter::start()
     s += *it + " ";
   }
   kdDebug() << s << flush << endl;
-  emit debuggingOutput( m_cdrecordBinObject->name() + " comand:", s);
+  emit debuggingOutput( m_cdrecordBinObject->name() + " command:", s);
 
   m_currentTrack = 0;
   m_cdrecordError = UNKNOWN;

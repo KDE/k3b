@@ -64,9 +64,32 @@ class K3bInteractionDialog : public KDialog
   void setDefaultButton( int b );
 
   /**
+   * Reimplemented for internal reasons. The API does not change.
+   */
+  int exec();
+
+  /**
+   * @param returnOnHide if false the dialog can be hidden and shown without being closed.
+   *        one needs to call close() to actually close the dialog.
+   */
+  int exec( bool returnOnHide );
+
+  /**
    * reimplemented to allow initialization after the dialog has been opened.
    */
   void show();
+
+  /**
+   * Reimplemented for internal reasons. The API does not change.
+   */
+  void hide();
+
+  /**
+   * Reimplemented for internal reasons. The API does not change.
+   */
+  bool close( bool alsoDelete );
+
+  inline bool close() { return close( false ); }
 
   /**
    * If no mainWidget has been set a plain page will be created.
@@ -168,6 +191,9 @@ class K3bInteractionDialog : public KDialog
   QGridLayout* mainGrid;
   int m_defaultButton;
   QString m_configGroup;
+
+  bool m_exitLoopOnHide;
+  bool m_inLoop;
 };
 
 #endif

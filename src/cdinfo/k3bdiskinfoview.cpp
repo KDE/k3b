@@ -299,6 +299,7 @@ void K3bDiskInfoView::displayInfo( K3bDevice::DiskInfoDetector* did )
     // CD-TEXT
     // /////////////////////////////////////////////////////////////////////////////////////
     if( !did->cdText().isEmpty() ) {
+      did->cdText().debug();
       if( m_infoView->childCount() )
 	(void)new KListViewItem( m_infoView, m_infoView->lastChild() ); // empty spacer item
 

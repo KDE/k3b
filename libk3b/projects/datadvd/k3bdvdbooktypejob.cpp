@@ -334,7 +334,7 @@ void K3bDvdBooktypeJob::startBooktypeChange()
     s += *it + " ";
   }
   kdDebug() << s << endl << flush;
-  emit debuggingOutput( "dvd+rw-booktype comand:", s );
+  emit debuggingOutput( "dvd+rw-booktype command:", s );
 
 
   if( !d->process->start( KProcess::NotifyOnExit, KProcess::All ) ) {

@@ -159,7 +159,7 @@ bool K3bMadDecoder::initDecoderInternal()
 
 unsigned long K3bMadDecoder::countFrames()
 {
-  kdDebug() << "(K3bMadDecoder::countFrames)" << endl << flush;
+  kdDebug() << "(K3bMadDecoder::countFrames)" << endl;
 
   unsigned long frames = 0;
   bool error = false;

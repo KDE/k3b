@@ -195,7 +195,7 @@ void K3bReadcdReader::start()
   }
   kdDebug() << s << endl << flush;
 
-  emit debuggingOutput("readcd comand:", s);
+  emit debuggingOutput("readcd command:", s);
 
   d->canceled = false;
 

@@ -1,10 +1,10 @@
 /*
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2005 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2005 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -98,8 +98,6 @@ K3bAudioRippingDialog::K3bAudioRippingDialog(const K3bDevice::Toc& toc,
 
   setupGui();
   setupContextHelp();
-
-  init();
 
   K3b::Msf length;
   for( QValueList<int>::const_iterator it = m_trackNumbers.begin();
@@ -296,6 +294,7 @@ void K3bAudioRippingDialog::slotStartClicked()
 
 void K3bAudioRippingDialog::refresh()
 {
+  QString oldGroup = k3bcore->config()->group();
   KConfig* c = k3bcore->config();
   c->setGroup( "Audio Ripping" );
 
@@ -417,6 +416,8 @@ void K3bAudioRippingDialog::refresh()
     
     d->playlistFilename = K3b::fixupPath( baseDir + "/" + filename );
   }
+
+  k3bcore->config()->setGroup( oldGroup );
 }
 
 

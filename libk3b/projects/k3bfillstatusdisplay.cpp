@@ -34,6 +34,7 @@
 #include <qtoolbutton.h>
 #include <qtooltip.h>
 #include <qlayout.h>
+#include <qwhatsthis.h>
 
 #include <kaction.h>
 #include <kpopupmenu.h>
@@ -328,6 +329,10 @@ void K3bFillStatusDisplay::setupPopupMenu()
 					   this, SLOT(slotSaveUserDefaults()),
 					   d->actionCollection, "save_user_defaults" );
 
+  KAction* dvdSizeInfoAction = new KAction( i18n("Why 4.4 instead of 4.7?"), "", 0,
+					    this, SLOT(slotWhy44()),
+					    d->actionCollection, "why_44_gb" );
+
   d->popup->insertTitle( i18n("Show Size In") );
   d->actionShowMinutes->plug( d->popup );
   d->actionShowMegs->plug( d->popup );
@@ -342,6 +347,7 @@ void K3bFillStatusDisplay::setupPopupMenu()
   d->actionSaveUserDefaults->plug( d->popup );
 
   d->dvdPopup->insertTitle( i18n("DVD Size") );
+  dvdSizeInfoAction->plug( d->dvdPopup );
   d->actionDvd4_7GB->plug( d->dvdPopup );
   d->actionDvdDoubleLayer->plug( d->dvdPopup );
   d->actionCustomSize->plug( d->dvdPopup );
@@ -413,6 +419,17 @@ void K3bFillStatusDisplay::slotDvd4_7GB()
 void K3bFillStatusDisplay::slotDvdDoubleLayer()
 {
   d->displayWidget->setCdSize( 4173824 );
+}
+
+
+void K3bFillStatusDisplay::slotWhy44()
+{
+  QWhatsThis::display( i18n("<p><b>Why does K3b offer 4.4 GB and 8.0 GB instead of 4.7 and 8.5 like "
+			    "it says on the media?</b>"
+			    "<p>A single layer DVD media has a capacity of approximately "
+			    "4.4 GB which equals 4.4*1024<sup>3</sup> bytes. Media producers just "
+			    "calculate with 1000 instead of 1024 for advertising reasons.<br>"
+			    "This results in 4.4*1024<sup>3</sup>/1000<sup>3</sup> = 4.7 GB.") );
 }
 
 

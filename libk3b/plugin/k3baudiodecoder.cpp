@@ -164,7 +164,10 @@ bool K3bAudioDecoder::analyseFile()
 bool K3bAudioDecoder::initDecoder( const K3b::Msf& startOffset )
 {
   if( initDecoder() ) {
-    return seek( startOffset );
+    if( startOffset > 0 )
+      return seek( startOffset );
+    else
+      return true;
   }
   else
     return false;

@@ -15,8 +15,8 @@
 
 
 #include "k3bprojectinterface.h"
-#include "k3bdoc.h"
-
+#include <k3bdoc.h>
+#include <k3bview.h>
 
 
 //static
@@ -53,5 +53,5 @@ void K3bProjectInterface::addUrl( const KURL& url )
 
 void K3bProjectInterface::burn()
 {
-  m_doc->slotBurn();
+  m_doc->view()->slotBurn();
 }

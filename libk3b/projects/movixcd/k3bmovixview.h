@@ -44,6 +44,8 @@ class K3bMovixView : public K3bView
   void slotAddSubTitleFile();
 
  protected:
+  virtual K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
+
   K3bMovixListView* m_listView;
 
  private:

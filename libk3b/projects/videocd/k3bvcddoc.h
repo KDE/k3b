@@ -4,7 +4,7 @@
 * Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
 *
 * This file is part of the K3b project.
-* Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
+* Copyright (C) 1998-2005 Sebastian Trueg <trueg@k3b.org>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -152,8 +152,6 @@ class K3bVcdDoc : public K3bDoc
         QString documentType() const;
 
         void loadDefaultSettings( KConfig* );
-
-        K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
 
         /** reimplemented from K3bDoc */
         K3bView* newView( QWidget* parent );

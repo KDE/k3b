@@ -481,7 +481,7 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* d
 	s += *it + " ";
       }
       kdDebug() << s << endl << flush;
-      emit debuggingOutput( "dvd+rw-format comand:", s );
+      emit debuggingOutput( "dvd+rw-format command:", s );
 
 
       if( !d->process->start( KProcess::NotifyOnExit, KProcess::All ) ) {

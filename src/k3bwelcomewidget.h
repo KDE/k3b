@@ -100,5 +100,4 @@ class K3bWelcomeWidget::Display : public QWidget
   friend class K3bWelcomeWidget;
 };
 
-
 #endif

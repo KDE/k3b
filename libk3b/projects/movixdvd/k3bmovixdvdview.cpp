@@ -39,4 +39,10 @@ K3bMovixDvdView::~K3bMovixDvdView()
 {
 }
 
+
+K3bProjectBurnDialog* K3bMovixDvdView::newBurnDialog( QWidget* parent, const char* name )
+{
+  return new K3bMovixDvdBurnDialog( m_doc, parent, name, true );
+}
+
 #include "k3bmovixdvdview.moc"

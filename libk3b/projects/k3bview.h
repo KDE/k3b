@@ -29,6 +29,7 @@
 class K3bDoc;
 class KActionCollection;
 class K3bFillStatusDisplay;
+class K3bProjectBurnDialog;
 
 
 /** 
@@ -43,7 +44,7 @@ class K3bView : public QWidget, public KXMLGUIClient
    *
    */
   K3bView( K3bDoc* pDoc, QWidget* parent, const char *name = 0 );
-  ~K3bView();
+  virtual ~K3bView();
 	
   /** 
    * returns a pointer to the document connected to the view
@@ -56,7 +57,23 @@ class K3bView : public QWidget, public KXMLGUIClient
 
   void setMainWidget( QWidget* );
 
+ public slots:
+  /**
+   * Default impl. brings up the burnDialog via newBurnDialog() with writing
+   */
+  virtual void slotBurn();
+
+  /**
+   * Default impl. brings up the burnDialog via newBurnDialog() without writing
+   */
+  virtual void slotProperties();
+
  protected:
+  /**
+   * Protected since the BurnDialog is not part of the API.
+   */
+  virtual K3bProjectBurnDialog* newBurnDialog( QWidget* = 0, const char* = 0 ) = 0;
+
   K3bFillStatusDisplay* fillStatusDisplay() const { return m_fillStatusDisplay; }
 
  private:

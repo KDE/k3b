@@ -18,7 +18,6 @@
 #include "k3baudiodoc.h"
 #include "k3baudioview.h"
 #include "k3baudiotrack.h"
-#include "k3baudioburndialog.h"
 #include "k3baudiojob.h"
 #include "k3baudiofile.h"
 #include "k3baudiozerodata.h"
@@ -868,12 +867,6 @@ void K3bAudioDoc::removeCorruptTracks()
 //     else
 //       track = m_tracks->next();
 //   }
-}
-
-
-K3bProjectBurnDialog* K3bAudioDoc::newBurnDialog( QWidget* parent, const char* name )
-{
-  return new K3bAudioBurnDialog( this, parent, name, true );
 }
 
 

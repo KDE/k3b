@@ -30,6 +30,9 @@ class K3bMovixDvdView : public K3bMovixView
   K3bMovixDvdView( K3bMovixDvdDoc* doc, QWidget *parent = 0, const char *name = 0 );
   ~K3bMovixDvdView();
 
+ protected:
+  K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
+
  private:
   K3bMovixDvdDoc* m_doc;
 };

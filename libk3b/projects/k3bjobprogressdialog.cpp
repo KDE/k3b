@@ -1,10 +1,10 @@
 /*
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2005 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2005 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,9 @@
 #include <k3bjob.h>
 #include <kcutlabel.h>
 #include <k3bdevice.h>
+#include <k3bdevicemanager.h>
+#include <k3bdeviceglobals.h>
+#include <k3bglobals.h>
 #include <k3bstdguiitems.h>
 #include <k3bcore.h>
 #include <k3bversion.h>
@@ -28,7 +31,7 @@
 #include <qgroupbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <qtextview.h>
+#include <qtextedit.h>
 #include <qlayout.h>
 #include <qvariant.h>
 #include <qtooltip.h>
@@ -65,7 +68,7 @@
 #include <kstdguiitem.h>
 #include <kpushbutton.h>
 #include <kfiledialog.h>
-
+#include <kglobalsettings.h>
 
 
 class K3bJobProgressDialog::PrivateDebugWidget : public KDialogBase
@@ -77,7 +80,7 @@ private:
   void slotUser1();
   void slotUser2();
 
-  QTextView* debugView;
+  QTextEdit* debugView;
 };
 
 
@@ -90,15 +93,13 @@ K3bJobProgressDialog::PrivateDebugWidget::PrivateDebugWidget( QMap<QString, QStr
   setButtonTip( User1, i18n("Save to file") );
   setButtonTip( User2, i18n("Copy to clipboard") );
 
-  debugView = new QTextView( this );
-  setMainWidget( debugView );
+  debugView = new QTextEdit( this );
+  debugView->setReadOnly(true);
+  debugView->setTextFormat( QTextEdit::PlainText );
+  debugView->setCurrentFont( KGlobalSettings::fixedFont() );
+  debugView->setWordWrap( QTextEdit::NoWrap );
 
-  debugView->append( "System\n" );
-  debugView->append( "-----------------------\n" );
-  debugView->append( "K3b Version: " + k3bcore->version() + "\n" );
-  debugView->append( "KDE Version: " + QString(KDE::versionString()) + "\n" );
-  debugView->append( "QT Version:  " + QString(qVersion()) + "\n" );
-  debugView->append( "\n" );
+  setMainWidget( debugView );
 
   // the following may take some time
   QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
@@ -573,14 +574,26 @@ void K3bJobProgressDialog::slotStarted()
 
   // open the log file
   m_logFile.setName( locateLocal( "appdata", "lastlog.log", true ) );
-  if( m_logFile.open( IO_WriteOnly ) ) {
-    QTextStream s( &m_logFile );
-    s << "System" << endl;
-    s << "-----------------------" << endl;
-    s << "K3b Version: " + k3bcore->version() << endl;
-    s << "KDE Version: " + QString(KDE::versionString()) << endl;
-    s << "QT Version:  " + QString(qVersion()) << endl;
-    s << endl << flush;
+  m_logFile.open( IO_WriteOnly );
+
+  // system info in the log file
+  slotDebuggingOutput( "System", "K3b Version: " + k3bcore->version() );
+  slotDebuggingOutput( "System", "KDE Version: " + QString(KDE::versionString()) );
+  slotDebuggingOutput( "System", "QT Version:  " + QString(qVersion()) );
+  slotDebuggingOutput( "System", "Kernel:      " + K3b::kernelVersion() );
+  
+  // devices in the logfile
+  for( QPtrListIterator<K3bDevice::Device> it( k3bcore->deviceManager()->allDevices() ); *it; ++it ) {
+    K3bDevice::Device* dev = *it;
+    slotDebuggingOutput( "Devices", 
+			 QString( "%1 (%2, %3) at %4 [%5] [%6] [%7]" )
+			 .arg( dev->vendor() + " " + dev->description() + " " + dev->version() )
+			 .arg( dev->blockDeviceName() )
+			 .arg( dev->genericDevice() )
+			 .arg( dev->mountPoint() )
+			 .arg( K3bDevice::deviceTypeString( dev->type() ) )
+			 .arg( K3bDevice::mediaTypeString( dev->supportedProfiles() ) )
+			 .arg( K3bDevice::writingModeString( dev->writingModes() ) ) );
   }
 }
 

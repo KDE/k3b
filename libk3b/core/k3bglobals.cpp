@@ -211,6 +211,14 @@ K3bVersion K3b::kernelVersion()
 }
 
 
+K3bVersion K3b::simpleKernelVersion()
+{
+  K3bVersion v = kernelVersion();
+  v.setVersion( v.majorVersion(), v.minorVersion(), v.patchLevel() );
+  return v;
+}
+
+
 QString K3b::systemName()
 {
   QString v;

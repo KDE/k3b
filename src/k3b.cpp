@@ -1151,28 +1151,28 @@ void K3bMainWindow::slotWarningMessage(const QString& message)
 void K3bMainWindow::slotBlankCdrw()
 {
   K3bBlankingDialog d( this, "blankingdialog" );
-  d.exec();
+  d.exec(false);
 }
 
 
 void K3bMainWindow::slotFormatDvd()
 {
   K3bDvdFormattingDialog d( this );
-  d.exec();
+  d.exec(false);
 }
 
 
 void K3bMainWindow::slotWriteCdImage()
 {
   K3bCdImageWritingDialog d( this );
-  d.exec();
+  d.exec(false);
 }
 
 
 void K3bMainWindow::slotWriteDvdIsoImage()
 {
   K3bIsoImageWritingDialog d( this );
-  d.exec();
+  d.exec(false);
 }
 
 
@@ -1180,7 +1180,7 @@ void K3bMainWindow::slotWriteDvdIsoImage( const KURL& url )
 {
   K3bIsoImageWritingDialog d( this );
   d.setImage( url );
-  d.exec();
+  d.exec(false);
 }
 
 
@@ -1188,7 +1188,7 @@ void K3bMainWindow::slotWriteCdImage( const KURL& url )
 {
   K3bCdImageWritingDialog d( this );
   d.setImage( url );
-  d.exec();
+  d.exec(false);
 }
 
 
@@ -1229,14 +1229,14 @@ void K3bMainWindow::slotK3bSetup()
 void K3bMainWindow::slotCdCopy()
 {
   K3bCdCopyDialog d( this );
-  d.exec();
+  d.exec(false);
 }
 
 
 void K3bMainWindow::slotDvdCopy()
 {
   K3bDvdCopyDialog d( this );
-  d.exec();
+  d.exec(false);
 }
 
 

@@ -227,7 +227,7 @@ void K3bGrowisofsImager::start()
     s += *it + " ";
   }
   kdDebug() << s << endl << flush;
-  emit debuggingOutput("growisofs comand:", s);
+  emit debuggingOutput("growisofs command:", s);
 
 
   if( m_doc->needToCutFilenames() )

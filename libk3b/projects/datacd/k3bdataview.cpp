@@ -102,45 +102,6 @@ K3bDirItem* K3bDataView::currentDir() const
 }
 
 
-
-
-
-// void K3bDataView::slotItemRemoved( K3bDataItem* item )
-// {
-//   // we only need to search in the fileView if it currently displays the corresponding directory
-//   if( item == m_dataFileView->currentDir() ) {
-//     kdDebug() << "(K3bDataView) fileView currently displays a deleted directory. Setting to parent." << endl;
-//     m_dataFileView->slotSetCurrentDir( item->parent() );
-//   }
-//   else if( item->parent() == m_dataFileView->currentDir() ) {
-//     kdDebug() << "(K3bDataView) seaching in fileView for viewItems to delete" << endl;
-//     QListViewItemIterator _it2(m_dataFileView);
-//     for( ; _it2.current(); ++_it2 )
-//       {
-// 	if( K3bDataDirViewItem* _dirViewItem = dynamic_cast<K3bDataDirViewItem*>(_it2.current()) ) {
-// 	  kdDebug() << "   found dirViewItem ... comparing ... " << endl;
-// 	  if( _dirViewItem->dirItem() == item ) {
-// 	    delete _it2.current();
-// 	    kdDebug() << "(K3bDataView) found listViewItem to remove in fileView: " << item->k3bName() << endl;
-// 	    break;
-// 	  }
-// 	}
-// 	else if( K3bDataFileViewItem* _fileViewItem = dynamic_cast<K3bDataFileViewItem*>(_it2.current()) ) {
-// 	  kdDebug() << "   found fileViewItem ... comparing ... " << endl;
-// 	  if( _fileViewItem->fileItem() == item ) {
-// 	    delete _it2.current();
-// 	    kdDebug() << "(K3bDataView) found listViewItem to remove in fileView: " << item->k3bName() << endl;
-// 	    break;
-// 	  }
-// 	}
-
-//       } // for _it2
-//   }
-
-//   m_fillStatusDisplay->repaint();
-// }
-
-
 void K3bDataView::importSession()
 {
   // get the writer
@@ -167,6 +128,26 @@ void K3bDataView::editBootImages()
   d->setMainWidget( new K3bBootImageView( m_doc, d ) );
   d->exec();
   delete d;
+}
+
+
+K3bProjectBurnDialog* K3bDataView::newBurnDialog( QWidget* parent, const char* name )
+{
+  return new K3bDataBurnDialog( m_doc, parent, name, true );
+}
+
+
+void K3bDataView::slotBurn()
+{
+  if( m_doc->burningSize() == 0 ) {
+    KMessageBox::information( this, i18n("Please add files to your project first."),
+			      i18n("No Data to Burn"), QString::null, false );
+  }
+  else {
+    K3bProjectBurnDialog* dlg = newBurnDialog( this );
+    dlg->exec(true);
+    delete dlg;
+  }
 }
 
 #include "k3bdataview.moc"

@@ -23,7 +23,6 @@
 #include "k3bbootitem.h"
 #include "k3bspecialdataitem.h"
 #include "k3bfilecompilationsizehandler.h"
-#include "k3bdataburndialog.h"
 #include <k3bcore.h>
 #include <k3bglobals.h>
 #include <k3bmsf.h>
@@ -1554,24 +1553,5 @@ void K3bDataDoc::removeBootItem( K3bBootItem* item )
   }
 }
 
-
-K3bProjectBurnDialog* K3bDataDoc::newBurnDialog( QWidget* parent, const char* name )
-{
-  return new K3bDataBurnDialog( this, parent, name, true );
-}
-
-
-void K3bDataDoc::slotBurn()
-{
-  if( burningSize() == 0 ) {
-    KMessageBox::information( qApp->activeWindow(), i18n("Please add files to your project first."),
-			      i18n("No Data to Burn"), QString::null, false );
-  }
-  else {
-    K3bProjectBurnDialog* dlg = newBurnDialog( qApp->activeWindow() );
-    dlg->exec(true);
-    delete dlg;
-  }
-}
 
 #include "k3bdatadoc.moc"

@@ -218,7 +218,7 @@ void K3bSetup2::updatePrograms()
 	  wantedGroup = burningGroup();
 
 	int wantedPerm = 0;
-	if( K3b::kernelVersion() >= K3bVersion( 2, 6, 8 ) ) {
+	if( K3b::simpleKernelVersion() >= K3bVersion( 2, 6, 8 ) ) {
 	  if( w->m_checkUseBurningGroup->isChecked() )
 	    wantedPerm = 0000750;
 	  else
@@ -424,7 +424,7 @@ void K3bSetup2::save()
 	  success = false;
 
 	int perm = 0;
-	if( K3b::kernelVersion() >= K3bVersion( 2, 6, 8 ) )
+	if( K3b::simpleKernelVersion() >= K3bVersion( 2, 6, 8 ) )
 	  perm = S_IRWXU|S_IXGRP|S_IRGRP;
 	else
 	  perm = S_ISUID|S_IRWXU|S_IXGRP;
@@ -437,7 +437,7 @@ void K3bSetup2::save()
 	  success = false;
 
 	int perm = 0;
-	if( K3b::kernelVersion() >= K3bVersion( 2, 6, 8 ) )
+	if( K3b::simpleKernelVersion() >= K3bVersion( 2, 6, 8 ) )
 	  perm = S_IRWXU|S_IXGRP|S_IRGRP|S_IXOTH|S_IROTH;
 	else
 	  perm = S_ISUID|S_IRWXU|S_IXGRP|S_IXOTH;

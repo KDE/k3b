@@ -16,7 +16,7 @@
 
 #include "k3bvideodvddoc.h"
 #include "k3bvideodvdjob.h"
-//#include "k3bvideodvdview.h"
+#include "k3bvideodvdview.h"
 #include "k3bvideodvdburndialog.h"
 
 #include <k3bdiritem.h>
@@ -65,21 +65,15 @@ K3bBurnJob* K3bVideoDvdDoc::newBurnJob( K3bJobHandler* hdl, QObject* parent )
 }
 
 
-// K3bView* K3bVideoDvdDoc::newView( QWidget* parent )
-// {
-//   return new K3bVideoDvdView( this, parent );
-// }
+K3bView* K3bVideoDvdDoc::newView( QWidget* parent )
+{
+  return new K3bVideoDvdView( this, parent );
+}
 
 
 void K3bVideoDvdDoc::loadDefaultSettings( KConfig* c )
 {
   K3bDvdDoc::loadDefaultSettings(c);
-}
-
-
-K3bProjectBurnDialog* K3bVideoDvdDoc::newBurnDialog( QWidget* parent, const char* name )
-{
-  return new K3bVideoDvdBurnDialog( this, parent, name, true );
 }
 
 //#include "k3bdvddoc.moc"

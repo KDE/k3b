@@ -1,10 +1,10 @@
 /*
 *
 * $Id$
-* Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
+* Copyright (C) 2003-2005 Christian Kvasny <chris@k3b.org>
 *
 * This file is part of the K3b project.
-* Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
+* Copyright (C) 1998-2005 Sebastian Trueg <trueg@k3b.org>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,6 @@
 #include "k3bvcddoc.h"
 #include "k3bvcdview.h"
 #include "k3bvcdtrack.h"
-#include "k3bvcdburndialog.h"
 #include "k3bvcdjob.h"
 #include <k3bglobals.h>
 #include <k3bmsf.h>
@@ -901,12 +900,6 @@ bool K3bVcdDoc::saveDocumentData( QDomElement * docElem )
     docElem->appendChild( contentsElem );
 
     return true;
-}
-
-
-K3bProjectBurnDialog* K3bVcdDoc::newBurnDialog( QWidget * parent, const char * name )
-{
-    return new K3bVcdBurnDialog( this, parent, name, true );
 }
 
 #include "k3bvcddoc.moc"

@@ -158,7 +158,7 @@ void K3bVideoCdRip::vcdxRip()
 
     m_process->setWorkingDirectory( QUrl( m_videooptions ->getVideoCdDestination() ).dirPath() );
 
-    // vcdxrip comandline parameters
+    // vcdxrip commandline parameters
     kdDebug() << "***** vcdxrip parameters:" << endl;
     ;
     const QValueList<QCString>& args = m_process->args();

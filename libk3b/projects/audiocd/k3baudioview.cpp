@@ -19,6 +19,7 @@
 #include "k3baudiotrackview.h"
 #include "k3baudioburndialog.h"
 #include "k3baudiotrackplayer.h"
+#include "k3baudioburndialog.h"
 
 #include <k3bfillstatusdisplay.h>
 #include <k3bmsf.h>
@@ -63,5 +64,10 @@ K3bAudioView::~K3bAudioView()
 {
 }
 
+
+K3bProjectBurnDialog* K3bAudioView::newBurnDialog( QWidget* parent, const char* name )
+{
+  return new K3bAudioBurnDialog( m_doc, parent, name, true );
+}
 
 #include "k3baudioview.moc"

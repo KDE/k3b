@@ -22,11 +22,14 @@
 #include <kaction.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kmessagebox.h>
+#include <kdebug.h>
 
 // application specific includes
 #include "k3bview.h"
 #include "k3bdoc.h"
 #include "k3bfillstatusdisplay.h"
+#include "k3bprojectburndialog.h"
 
 
 
@@ -47,7 +50,7 @@ K3bView::K3bView( K3bDoc* pDoc, QWidget *parent, const char* name )
   m_buttonBurn->setTextPosition( QToolButton::Right ); // TODO: QT 3.2: QToolButton::BesideIcon
   m_buttonBurn->setUsesTextLabel( true );
   connect( m_buttonBurn, SIGNAL(clicked()),
-	   m_doc, SLOT(slotBurn()) );
+	   this, SLOT(slotBurn()) );
 
   grid->addWidget( m_fillStatusDisplay, 1, 0 );
   grid->addWidget( m_buttonBurn, 1, 1 );
@@ -58,12 +61,16 @@ K3bView::K3bView( K3bDoc* pDoc, QWidget *parent, const char* name )
 
   QToolTip::add( m_buttonBurn, i18n("Open the burning dialog") );
 
+  (void)new KAction( i18n("&Burn..."), "cdburn", CTRL + Key_B, this, SLOT(slotBurn()),
+		     actionCollection(), "project_burn");
+  (void)new KAction( i18n("&Properties"), "edit", CTRL + Key_P, this, SLOT(slotProperties()),
+		     actionCollection(), "project_properties");
 
-  // merge doc actions
-  actionCollection()->addDocCollection( pDoc->actionCollection() );
 
   // this is just for testing (or not?)
   // most likely every project type will have it's rc file in the future
+  // TODO: remove the toolbar since it only confuses with it's not-proper-configurability. Instead
+  //       use the view's toolbox (which has to be added like in the audio view)
   setXML( "<!DOCTYPE kpartgui SYSTEM \"kpartgui.dtd\">"
 	  "<kpartgui name=\"k3bproject\" version=\"1\">"
 	  "<MenuBar>"
@@ -87,6 +94,38 @@ K3bView::~K3bView()
 void K3bView::setMainWidget( QWidget* w )
 {
   ((QGridLayout*)layout())->addMultiCellWidget( w, 0, 0, 0, 1 );
+}
+
+
+void K3bView::slotBurn()
+{
+  if( m_doc->numOfTracks() == 0 || m_doc->size() == 0 ) {
+    KMessageBox::information( this, i18n("Please add files to your project first."),
+			      i18n("No Data to Burn"), QString::null, false );
+  }
+  else {
+    K3bProjectBurnDialog* dlg = newBurnDialog( this );
+    if( dlg ) {
+      dlg->exec(true);
+      delete dlg;
+    }
+    else {
+      kdDebug() << "(K3bDoc) Error: no burndialog available." << endl;
+    }
+  }
+}
+
+
+void K3bView::slotProperties()
+{
+  K3bProjectBurnDialog* dlg = newBurnDialog( this );
+  if( dlg ) {
+    dlg->exec(false);
+    delete dlg;
+  }
+  else {
+    kdDebug() << "(K3bDoc) Error: no burndialog available." << endl;
+  }
 }
 
 

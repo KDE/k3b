@@ -36,13 +36,11 @@
 #include <kstandarddirs.h>
 #include <kconfig.h>
 #include <kdebug.h>
-#include <kaction.h>
 
 
 // application specific includes
 #include "k3bview.h"
 #include "k3bdoc.h"
-#include "k3bprojectburndialog.h"
 #include "k3bprojectmanager.h"
 //#include "k3bprojectinterface.h"
 #include <k3bglobals.h>
@@ -66,7 +64,6 @@
 K3bDoc::K3bDoc( QObject* parent )
   : QObject( parent ),
     m_view(0)
-    //    m_dcopInterface( 0 )
 {
   // register the project with the manager
   k3bprojectmanager->addProject( this );
@@ -81,13 +78,6 @@ K3bDoc::K3bDoc( QObject* parent )
   m_saved = false;
 
   m_copies = 1;
-
-  m_actionCollection = new KActionCollection( this );
-
-  (void)new KAction( i18n("&Burn..."), "cdburn", CTRL + Key_B, this, SLOT(slotBurn()),
-		     actionCollection(), "project_burn");
-  (void)new KAction( i18n("&Properties"), "edit", CTRL + Key_P, this, SLOT(slotProperties()),
-		     actionCollection(), "project_properties");
 }
 
 
@@ -95,24 +85,7 @@ K3bDoc::~K3bDoc()
 {
   // remove the project from the manager
   k3bprojectmanager->removeProject( this );
-
-//   if( m_dcopInterface )
-//     delete m_dcopInterface;
 }
-
-
-// K3bProjectInterface* K3bDoc::dcopInterface()
-// {
-//   if( !m_dcopInterface )
-//     m_dcopInterface = new K3bProjectInterface( this );
-//   return m_dcopInterface;
-// }
-
-
-// QCString K3bDoc::dcopId()
-// {
-//   return dcopInterface()->objId();
-// }
 
 
 void K3bDoc::setDummy( bool b )
@@ -406,26 +379,7 @@ bool K3bDoc::readGeneralDocumentData( const QDomElement& elem )
 }
 
 
-// void K3bDoc::disable()
-// {
-//   K3bView* view = pViewList->first();
-//   while( view ) {
-//     view->setDisabled( true );
-//     view = pViewList->next();
-//   }
-// }
-
-
-// void K3bDoc::enable()
-// {
-//   K3bView* view = pViewList->first();
-//   while( view ) {
-//     view->setEnabled( true );
-//     view = pViewList->next();
-//   }
-// }
-
-
+// TODO: this seems not to be the right place for this. Better put this in K3bView
 void K3bDoc::loadDefaultSettings( KConfig* c )
 {
   c->setGroup( "default " + documentType() + " settings" );
@@ -453,36 +407,5 @@ void K3bDoc::loadDefaultSettings( KConfig* c )
   setWritingApp( K3b::writingAppFromString( c->readEntry( "writing_app" ) ) );
 }
 
-
-void K3bDoc::slotBurn()
-{
-  if( numOfTracks() == 0 || size() == 0 ) {
-    KMessageBox::information( qApp->activeWindow(), i18n("Please add files to your project first."),
-			      i18n("No Data to Burn"), QString::null, false );
-  }
-  else {
-    K3bProjectBurnDialog* dlg = newBurnDialog( qApp->activeWindow() );
-    if( dlg ) {
-      dlg->exec(true);
-      delete dlg;
-    }
-    else {
-      kdDebug() << "(K3bDoc) Error: no burndialog available." << endl;
-    }
-  }
-}
-
-
-void K3bDoc::slotProperties()
-{
-  K3bProjectBurnDialog* dlg = newBurnDialog( qApp->activeWindow() );
-  if( dlg ) {
-    dlg->exec(false);
-    delete dlg;
-  }
-  else {
-    kdDebug() << "(K3bDoc) Error: no burndialog available." << endl;
-  }
-}
 
 #include "k3bdoc.moc"

@@ -41,6 +41,9 @@ class K3bAudioView : public K3bView
 
   K3bAudioTrackPlayer* player() const { return m_songlist->player(); }
 
+ protected:
+  K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
+
  private:
   K3bAudioDoc* m_doc;
 	

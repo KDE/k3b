@@ -49,4 +49,9 @@ K3bVcdView::~K3bVcdView()
 {}
 
 
+K3bProjectBurnDialog* K3bVcdView::newBurnDialog( QWidget * parent, const char * name )
+{
+  return new K3bVcdBurnDialog( m_doc, parent, name, true );
+}
+
 #include "k3bvcdview.moc"

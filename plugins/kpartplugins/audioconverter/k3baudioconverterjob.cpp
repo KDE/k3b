@@ -90,7 +90,7 @@ public:
       bool isOpen = true;
       if( m_encoder ) {
 	isOpen = m_encoder->openFile( m_encoderExtension, destFilename, converterItem->decoder()->length() );
-      
+
  	m_encoder->setMetaData( K3bAudioEncoder::META_TRACK_ARTIST,
 				converterItem->decoder()->metaInfo(K3bAudioDecoder::META_ARTIST) );
  	m_encoder->setMetaData( K3bAudioEncoder::META_TRACK_TITLE,

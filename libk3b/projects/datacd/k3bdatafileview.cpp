@@ -268,7 +268,7 @@ void K3bDataFileView::setupActions()
   m_popupMenu->insert( new KActionSeparator( this ) );
   m_popupMenu->insert( m_actionProperties );
   m_popupMenu->insert( new KActionSeparator( this ) );
-  m_popupMenu->insert( m_doc->actionCollection()->action("project_burn") );
+  m_popupMenu->insert( m_view->actionCollection()->action("project_burn") );
 }
 
 
@@ -364,7 +364,7 @@ void K3bDataFileView::slotProperties()
     d.exec();
   }
   else
-    m_doc->slotProperties();
+    m_view->slotProperties();
 }
 
 

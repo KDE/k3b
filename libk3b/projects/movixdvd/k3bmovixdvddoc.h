@@ -38,7 +38,6 @@ class K3bMovixDvdDoc : public K3bMovixDoc
 
   void loadDefaultSettings( KConfig* );
 
-  K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
   K3bView* newView( QWidget* parent = 0 );
 };
 

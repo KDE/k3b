@@ -500,7 +500,7 @@ void K3bDvdJob::slotVerificationFinished( bool success )
 
 void K3bDvdJob::cleanup()
 {
-  if( d->imageError || m_canceled || m_doc->removeImages() ) {
+  if( !m_doc->onTheFly() && ( d->imageError || m_canceled || m_doc->removeImages() ) ) {
     if( QFile::exists( m_doc->tempDir() ) ) {
       QFile::remove( m_doc->tempDir() );
       emit infoMessage( i18n("Removed image file %1").arg(m_doc->tempDir()), K3bJob::SUCCESS );

@@ -15,6 +15,7 @@
 
 #include "k3bdvdview.h"
 #include "k3bdvddoc.h"
+#include "k3bdvdburndialog.h"
 #include <k3bfillstatusdisplay.h>
 #include <k3bdatafileview.h>
 
@@ -38,5 +39,10 @@ K3bDvdView::~K3bDvdView()
 {
 }
 
+
+K3bProjectBurnDialog* K3bDvdView::newBurnDialog( QWidget* parent, const char* name )
+{
+  return new K3bDvdBurnDialog( m_doc, parent, name, true );
+}
 
 #include "k3bdvdview.moc"

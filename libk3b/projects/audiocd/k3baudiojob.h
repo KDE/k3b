@@ -30,6 +30,7 @@ class K3bCdrecordWriter;
 class K3bAudioNormalizeJob;
 class K3bAudioJobTempData;
 class K3bDevice::Device;
+class K3bAudioMaxSpeedJob;
 
 /**
   *@author Sebastian Trueg
@@ -69,6 +70,9 @@ class K3bAudioJob : public K3bBurnJob
   void slotNormalizeProgress( int );
   void slotNormalizeSubProgress( int );
 
+  // max speed
+  void slotMaxSpeedJobFinished( bool );
+
  private:
   bool prepareWriter();
   bool startWriting();
@@ -83,6 +87,7 @@ class K3bAudioJob : public K3bBurnJob
   K3bAbstractWriter* m_writer;
   K3bAudioNormalizeJob* m_normalizeJob;
   K3bAudioJobTempData* m_tempData;
+  K3bAudioMaxSpeedJob* m_maxSpeedJob;
 
   KTempFile* m_tocFile;
 

@@ -22,6 +22,7 @@
 #include "k3baudiodatasource.h"
 #include "k3baudionormalizejob.h"
 #include "k3baudiojobtempdata.h"
+#include "k3baudiomaxspeedjob.h"
 #include <k3bdevicemanager.h>
 #include <k3bdevicehandler.h>
 #include <k3bdevice.h>
@@ -54,15 +55,18 @@ class K3bAudioJob::Private
 
   int copies;
   int copiesDone;
+  int usedSpeed;
 
   bool useCdText;
+  bool maxSpeed;
 };
 
 
 K3bAudioJob::K3bAudioJob( K3bAudioDoc* doc, K3bJobHandler* hdl, QObject* parent )
   : K3bBurnJob( hdl, parent ),
     m_doc( doc ),
-    m_normalizeJob(0)
+    m_normalizeJob(0),
+    m_maxSpeedJob(0)
 {
   d = new Private;
 
@@ -111,6 +115,8 @@ void K3bAudioJob::start()
   d->copies = m_doc->copies();
   d->copiesDone = 0;
   d->useCdText = m_doc->cdText();
+  d->usedSpeed = m_doc->speed();
+  d->maxSpeed = false;
 
   if( m_doc->dummy() )
     d->copies = 1;
@@ -189,24 +195,37 @@ void K3bAudioJob::start()
 
 
   if( !m_doc->onlyCreateImages() && m_doc->onTheFly() ) {
-    if( !prepareWriter() ) {
-      cleanupAfterError();
-      emit finished(false);
+    if( m_doc->speed() == 0 ) {
+      // try to determine the max possible speed
+      emit newSubTask( i18n("Determining maximum writing speed") );
+      if( !m_maxSpeedJob ) {
+	m_maxSpeedJob = new K3bAudioMaxSpeedJob( m_doc, this, this );
+	connect( m_maxSpeedJob, SIGNAL(finished(bool)), 
+		 this, SLOT(slotMaxSpeedJobFinished(bool)) );
+      }
+      m_maxSpeedJob->start();
       return;
-    }
-
-    if( startWriting() ) {
-
-      // now the writer is running and we can get it's stdin
-      // we only use this method when writing on-the-fly since
-      // we cannot easily change the audioDecode fd while it's working
-      // which we would need to do since we write into several
-      // image files.
-      m_audioImager->writeToFd( m_writer->fd() );
     }
     else {
-      // startWriting() already did the cleanup
-      return;
+      if( !prepareWriter() ) {
+	cleanupAfterError();
+	emit finished(false);
+	return;
+      }
+      
+      if( startWriting() ) {
+	
+	// now the writer is running and we can get it's stdin
+	// we only use this method when writing on-the-fly since
+	// we cannot easily change the audioDecode fd while it's working
+	// which we would need to do since we write into several
+	// image files.
+	m_audioImager->writeToFd( m_writer->fd() );
+      }
+      else {
+	// startWriting() already did the cleanup
+	return;
+      }
     }
   }
   else {
@@ -219,6 +238,27 @@ void K3bAudioJob::start()
       filenames += m_tempData->bufferFileName( i );
     m_audioImager->setImageFilenames( filenames );
   }
+
+  m_audioImager->start();
+}
+
+
+void K3bAudioJob::slotMaxSpeedJobFinished( bool success )
+{
+  d->maxSpeed = success;
+  if( !success )
+    emit infoMessage( i18n("Unable to determine maximum speed for some reason. Ignoring."), WARNING );
+
+  // now start the writing
+  // same code as above. See the commecnts there
+  if( !prepareWriter() ) {
+    cleanupAfterError();
+    emit finished(false);
+    return;
+  }
+  
+  if( startWriting() )
+    m_audioImager->writeToFd( m_writer->fd() );
 
   m_audioImager->start();
 }
@@ -342,7 +382,7 @@ bool K3bAudioJob::prepareWriter()
 
     writer->setWritingMode( m_usedWritingMode );
     writer->setSimulate( m_doc->dummy() );
-    writer->setBurnSpeed( m_doc->speed() );
+    writer->setBurnSpeed( d->usedSpeed );
 
     writer->addArgument( "-useinfo" );
 
@@ -387,7 +427,7 @@ bool K3bAudioJob::prepareWriter()
     K3bCdrdaoWriter* writer = new K3bCdrdaoWriter( m_doc->burner(), this, this );
     writer->setCommand( K3bCdrdaoWriter::WRITE );
     writer->setSimulate( m_doc->dummy() );
-    writer->setBurnSpeed( m_doc->speed() );
+    writer->setBurnSpeed( d->usedSpeed );
     writer->setTocFile( m_tempData->tocFileName() );
 
     m_writer = writer;
@@ -416,6 +456,8 @@ void K3bAudioJob::slotWriterNextTrack( int t, int tt )
 {
   K3bAudioTrack* track = m_doc->getTrack(t-1);
   // t is in range 1..tt
+  if( m_doc->hideFirstTrack() )
+    track = m_doc->getTrack(t);
   emit newSubTask( i18n("Writing track %1 of %2%3")
 		   .arg(t)
 		   .arg(tt)
@@ -493,6 +535,12 @@ bool K3bAudioJob::startWriting()
   // just to be sure we did not get canceled during the async discWaiting
   if( m_canceled )
     return false;
+
+  // in case we determined the max possible writing speed we have to reset the speed on the writer job
+  // here since an inserted media is neccessary
+  // the Max speed job will compare the max speed value with the supported values of the writer
+  if( d->maxSpeed )
+    m_writer->setBurnSpeed( m_maxSpeedJob->maxSpeed() );
 
   emit burning(true);
   m_writer->start();

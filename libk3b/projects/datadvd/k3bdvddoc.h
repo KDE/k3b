@@ -34,7 +34,6 @@ class K3bDvdDoc : public K3bDataDoc
   virtual QString documentType() const { return "dvd"; }
   virtual void loadDefaultSettings( KConfig* );
 
-  virtual K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
   virtual K3bView* newView( QWidget* parent );
 };
 

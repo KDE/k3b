@@ -32,6 +32,8 @@
 #include <qpoint.h>
 #include <qfont.h>
 #include <qpopupmenu.h>
+#include <qeventloop.h>
+#include <qapplication.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -54,7 +56,8 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
   : KDialog( parent, name, modal, fl ),
     m_mainWidget(0),
     m_defaultButton(defaultButton),
-    m_configGroup(configGroup)
+    m_configGroup(configGroup),
+    m_inLoop(false)
 {
   mainGrid = new QGridLayout( this );
   mainGrid->setSpacing( spacingHint() );
@@ -300,7 +303,7 @@ void K3bInteractionDialog::slotStartClicked()
 void K3bInteractionDialog::slotCancelClicked()
 {
   emit canceled();
-  close();
+  close( false );
 }
 
 void K3bInteractionDialog::slotSaveClicked()
@@ -406,6 +409,72 @@ void K3bInteractionDialog::loadUserDefaults( KConfig* )
 
 void K3bInteractionDialog::loadK3bDefaults()
 {
+}
+
+
+int K3bInteractionDialog::exec()
+{
+  return exec( true );
+}
+
+
+int K3bInteractionDialog::exec( bool returnOnHide )
+{
+  m_exitLoopOnHide = returnOnHide;
+
+  // the following code is mainly taken from QDialog::exec
+
+  if( m_inLoop ) {
+    kdError() << "(K3bInteractionDialog::exec) Recursive call detected." << endl;
+    return -1;
+  }
+  
+  bool destructiveClose = testWFlags( WDestructiveClose );
+  clearWFlags( WDestructiveClose );
+  
+  bool wasShowModal = testWFlags( WShowModal );
+  setWFlags( WShowModal );
+  setResult( 0 );
+
+  show();
+  
+  m_inLoop = true;
+  QApplication::eventLoop()->enterLoop();
+  
+  if( !wasShowModal )
+    clearWFlags( WShowModal );
+  
+  int res = result();
+  
+  if( destructiveClose )
+    delete this;
+  
+  return res;
+}
+
+
+void K3bInteractionDialog::hide()
+{
+  if( isHidden() )
+    return;
+  
+  KDialog::hide();
+  
+  if( m_inLoop && m_exitLoopOnHide ) {
+    m_inLoop = false;
+    QApplication::eventLoop()->exitLoop();
+  }
+}
+
+
+bool K3bInteractionDialog::close( bool alsoDelete )
+{
+  if( m_inLoop && !m_exitLoopOnHide ) {
+    m_inLoop = false;
+    QApplication::eventLoop()->exitLoop();
+  }
+
+  return KDialog::close( alsoDelete );
 }
 
 

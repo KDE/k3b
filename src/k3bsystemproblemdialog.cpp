@@ -196,7 +196,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
     // Since kernel 2.6.8 cdrecord is not able to use the SCSI subsystem when running suid root anymore
     // So for now (until cdrecord has been properly patched) we ignore the suid root issue with kernel >= 2.6.8
     //
-    if( K3b::kernelVersion() >= K3bVersion( 2, 6, 8 ) ) {
+    if( K3b::simpleKernelVersion() >= K3bVersion( 2, 6, 8 ) ) {
       if( k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "suidroot" ) )
 	problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
 					   i18n("%1 will be run with root privileges on kernel >= 2.6.8").arg("cdrecord"),
@@ -229,7 +229,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
   }
   else {
 #ifdef Q_OS_LINUX
-    if( K3b::kernelVersion() < K3bVersion( 2, 6, 8 ) &&
+    if( K3b::simpleKernelVersion() < K3bVersion( 2, 6, 8 ) &&
 	!k3bcore->externalBinManager()->binObject( "cdrdao" )->hasFeature( "suidroot" ) && getuid() != 0 )
       problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
 					 i18n("%1 will be run without root privileges").arg("cdrdao"),
@@ -363,7 +363,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 						  "SCSI emulation and there is at least one writer "
 						  "in your system not configured to use "
 						  "SCSI emulation.").arg("cdrdao"),
-					     K3b::kernelVersion() > K3bVersion( 2, 5, 0 )
+					     K3b::simpleKernelVersion() > K3bVersion( 2, 5, 0 )
 					     ? i18n("Install cdrdao >= 1.1.8 which supports writing to "
 						    "ATAPI devices directly.")
 					     : i18n("The best, and recommended, solution is to use "

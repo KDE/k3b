@@ -46,6 +46,8 @@ class K3bIsoImager::Private
 public:
   QString imagePath;
   QFile imageFile;
+  const K3bExternalBin* mkisofsBin;
+  bool readError;
 };
 
 
@@ -99,7 +101,16 @@ void K3bIsoImager::slotReceivedStderr( const QString& line )
   if( !line.isEmpty() ) {
     emit debuggingOutput( "mkisofs", line );
 
-    if( line.contains( "done, estimate" ) ) {
+    if( line.startsWith( d->mkisofsBin->path ) ) {
+      // error or warning
+      QString errorLine = line.mid( d->mkisofsBin->path.length() + 2 );
+      if( errorLine.startsWith( "Input/output error. cannot read from" ) ) {
+	emit infoMessage( i18n("Read error from file '%1'").arg( errorLine.mid( 38, errorLine.length()-40 ) ), 
+			  ERROR );
+	d->readError = true;
+      }
+    }
+    else if( line.contains( "done, estimate" ) ) {
       int p = parseProgress( line );
       if( p != -1 )
 	emit percent( p );
@@ -177,10 +188,12 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
 	  // otherwise just fall through
 
 	default:
-	  emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg("mkisofs").arg(p->exitStatus()),
-			    K3bJob::ERROR );
-	  emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
-	  emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
+	  if( !d->readError ) {
+	    emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg("mkisofs").arg(p->exitStatus()),
+			      K3bJob::ERROR );
+	    emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
+	    emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
+	  }
 	}
 
 	emit finished( false );
@@ -225,8 +238,8 @@ void K3bIsoImager::calculateSize()
   m_process = new K3bProcess();
   m_process->setRunPrivileged(true);
 
-  const K3bExternalBin* mkisofsBin = k3bcore->externalBinManager()->binObject( "mkisofs" );
-  if( !mkisofsBin ) {
+  d->mkisofsBin = k3bcore->externalBinManager()->binObject( "mkisofs" );
+  if( !d->mkisofsBin ) {
     kdDebug() << "(K3bIsoImager) could not find mkisofs executable" << endl;
     emit infoMessage( i18n("Mkisofs executable not found."), K3bJob::ERROR );
     cleanup();
@@ -234,12 +247,13 @@ void K3bIsoImager::calculateSize()
     return;
   }
 
-  emit debuggingOutput( "Used versions", "mkisofs: " + mkisofsBin->version );
+  emit debuggingOutput( "Used versions", "mkisofs: " + d->mkisofsBin->version );
 
-  if( !mkisofsBin->copyright.isEmpty() )
-    emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3").arg("mkisofs").arg(mkisofsBin->version).arg(mkisofsBin->copyright), INFO );
+  if( !d->mkisofsBin->copyright.isEmpty() )
+    emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3")
+		      .arg("mkisofs").arg(d->mkisofsBin->version).arg(d->mkisofsBin->copyright), INFO );
 
-  *m_process << mkisofsBin;
+  *m_process << d->mkisofsBin;
 
   // prepare the filenames as written to the image
   m_doc->prepareFilenames();
@@ -352,6 +366,7 @@ void K3bIsoImager::init()
   m_firstProgressValue = -1;
   m_processExited = false;
   m_canceled = false;
+  d->readError = false;
 }
 
 
@@ -365,8 +380,8 @@ void K3bIsoImager::start()
   m_process = new K3bProcess();
   m_process->setRunPrivileged(true);
 
-  const K3bExternalBin* mkisofsBin = k3bcore->externalBinManager()->binObject( "mkisofs" );
-  if( !mkisofsBin ) {
+  d->mkisofsBin = k3bcore->externalBinManager()->binObject( "mkisofs" );
+  if( !d->mkisofsBin ) {
     kdDebug() << "(K3bIsoImager) could not find mkisofs executable" << endl;
     emit infoMessage( i18n("Could not find %1 executable.").arg("mkisofs"), K3bJob::ERROR );
     cleanup();
@@ -374,11 +389,12 @@ void K3bIsoImager::start()
     return;
   }
 
-  if( !mkisofsBin->copyright.isEmpty() )
-    emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3").arg("mkisofs").arg(mkisofsBin->version).arg(mkisofsBin->copyright), INFO );
+  if( !d->mkisofsBin->copyright.isEmpty() )
+    emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3")
+		      .arg("mkisofs").arg(d->mkisofsBin->version).arg(d->mkisofsBin->copyright), INFO );
 
 
-  *m_process << mkisofsBin;
+  *m_process << d->mkisofsBin;
 
   // prepare the filenames as written to the image
   m_doc->prepareFilenames();
@@ -418,7 +434,7 @@ void K3bIsoImager::start()
     s += *it + " ";
   }
   kdDebug() << s << endl << flush;
-  emit debuggingOutput("mkisofs comand:", s);
+  emit debuggingOutput("mkisofs command:", s);
 
   if( m_doc->needToCutFilenames() )
     emit infoMessage( i18n("Some filenames need to be shortened due to the %1 char restriction "

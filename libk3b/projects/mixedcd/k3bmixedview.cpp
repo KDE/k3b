@@ -35,6 +35,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdebug.h>
+#include <kmessagebox.h>
 
 
 K3bMixedView::K3bMixedView( K3bMixedDoc* doc, QWidget* parent, const char* name )
@@ -99,5 +100,29 @@ K3bDirItem* K3bMixedView::currentDir() const
     return 0;
 }
 
+
+void K3bMixedView::slotBurn()
+{
+  if( m_doc->audioDoc()->numOfTracks() == 0 || m_doc->dataDoc()->size() == 0 ) {
+    KMessageBox::information( this, i18n("Please add files and audio titles to your project first."),
+			      i18n("No Data to Burn"), QString::null, false );
+  }
+  else {
+    K3bProjectBurnDialog* dlg = newBurnDialog( this );
+    if( dlg ) {
+      dlg->exec(true);
+      delete dlg;
+    }
+    else {
+      kdDebug() << "(K3bDoc) Error: no burndialog available." << endl;
+    }
+  }
+}
+
+
+K3bProjectBurnDialog* K3bMixedView::newBurnDialog( QWidget* parent, const char* name )
+{
+  return new K3bMixedBurnDialog( m_doc, parent, name, true );
+}
 
 #include "k3bmixedview.moc"

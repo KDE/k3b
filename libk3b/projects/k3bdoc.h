@@ -37,7 +37,6 @@ class K3bView;
 class QTimer;
 class KTempFile;
 class K3bBurnJob;
-class K3bProjectBurnDialog;
 class QDomDocument;
 class QDomElement;
 class KConfig;
@@ -75,7 +74,7 @@ class K3bDoc : public QObject
     VIDEODVD 
   };
 
-  virtual KActionCollection* actionCollection() const { return m_actionCollection; }
+  //  virtual KActionCollection* actionCollection() const { return m_actionCollection; }
 
   virtual int docType() const { return m_docType; }
 
@@ -89,6 +88,8 @@ class K3bDoc : public QObject
    * returns the K3bView created by newView() or null if none has been created
    */
   K3bView* view() const { return m_view; }
+
+  void setView( K3bView* v ) { m_view = v; }
 
   /** 
    * sets the modified flag for the document after a modifying action on the view connected to the document.
@@ -166,16 +167,6 @@ class K3bDoc : public QObject
   void changed();
 
  public slots:
-  /**
-   * Default impl. brings up the burnDialog via newBurnDialog() with writing
-   */
-  virtual void slotBurn();
-
-  /**
-   * Default impl. brings up the burnDialog via newBurnDialog() without writing
-   */
-  virtual void slotProperties();
-
   void setDummy( bool d );
   void setWritingMode( int m ) { m_writingMode = m; }
   void setOnTheFly( bool b ) { m_onTheFly = b; }
@@ -236,10 +227,6 @@ class K3bDoc : public QObject
 
   //  K3bProjectInterface* m_dcopInterface;
 
-  /**
-   * Protected since the BurnDialog is not part of the API.
-   */
-  virtual K3bProjectBurnDialog* newBurnDialog( QWidget* = 0, const char* = 0 ) = 0;
   virtual K3bView* newView( QWidget* parent = 0 ) = 0;
 
  private:
@@ -267,7 +254,7 @@ class K3bDoc : public QObject
 
   bool m_saved;
 
-  KActionCollection* m_actionCollection;
+  //  KActionCollection* m_actionCollection;
 };
 
 #endif // K3BDOC_H

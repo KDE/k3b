@@ -104,7 +104,7 @@ void K3bMsInfoFetcher::getMsInfo()
     s += *it + " ";
   }
   kdDebug() << s << flush << endl;
-  emit debuggingOutput( "msinfo comand:", s );
+  emit debuggingOutput( "msinfo command:", s );
 
 
 //   connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),

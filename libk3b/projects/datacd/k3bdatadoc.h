@@ -129,8 +129,6 @@ class K3bDataDoc : public K3bDoc
   bool needToCutFilenames() const { return m_needToCutFilenames; }
 
  public slots:
-  void slotBurn();
-
   /** add urls to the compilation.
    * @param dir the directory where to add the urls, by default this is the root directory.
    **/
@@ -166,8 +164,6 @@ class K3bDataDoc : public K3bDoc
   K3bFileCompilationSizeHandler* m_sizeHandler;
   //  K3bFileCompilationSizeHandler* m_oldSessionSizeHandler;
   KIO::filesize_t m_oldSessionSize;
-
-  virtual K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
 
   /** reimplemented from K3bDoc */
   virtual K3bView* newView( QWidget* parent );

@@ -129,6 +129,12 @@ namespace K3b
   QString fixupPath( const QString& );
 
   K3bVersion kernelVersion();
+
+  /**
+   * Kernel version stripped of all suffixes
+   */
+  K3bVersion simpleKernelVersion();
+
   QString systemName();
 
   /**

@@ -94,6 +94,7 @@ class K3bFillStatusDisplay : public QFrame  {
   void slot100Minutes();
   void slotDvd4_7GB();
   void slotDvdDoubleLayer();
+  void slotWhy44();
   void slotCustomSize();
   void slotMenuButtonClicked();
   void slotPopupMenu(const QPoint&);

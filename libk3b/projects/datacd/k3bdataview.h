@@ -50,6 +50,7 @@ class K3bDataView : public K3bView
    K3bDirItem* currentDir() const;
 
  public slots:
+   void slotBurn();
    void importSession();
    void clearImportedSession();
    void editBootImages();
@@ -57,6 +58,8 @@ class K3bDataView : public K3bView
  protected:
    K3bDataDirTreeView* m_dataDirTree;
    K3bDataFileView* m_dataFileView;
+
+   virtual K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
 		
  private:
    K3bDataDoc* m_doc;

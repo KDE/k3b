@@ -1,10 +1,10 @@
 /* 
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2005 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2005 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
 #include <kcombobox.h>
 #include <klineedit.h>
 #include <kurllabel.h>
+#include <kdebug.h>
 
 #include <qregexp.h>
 #include <qvalidator.h>
@@ -44,6 +45,15 @@ K3bCddbPatternWidget::K3bCddbPatternWidget( QWidget* parent, const char* name )
   m_comboFilenamePattern->setValidator( dirValidator );
   m_comboPlaylistPattern->setValidator( dirValidator );
   m_editBlankReplace->setValidator( dirValidator );
+
+  // default pattern
+  m_comboFilenamePattern->insertItem( i18n( "%r/%m/%a - %t" ) );
+  m_comboFilenamePattern->insertItem( i18n( "%g/%r - %m/Track%n" ) );
+  m_comboFilenamePattern->insertItem( i18n( "music/ripped-tracks/%a - %t" ) );
+  
+  m_comboPlaylistPattern->insertItem( i18n( "%r - %m" ) );
+  m_comboPlaylistPattern->insertItem( i18n( "Playlist" ) );
+  m_comboPlaylistPattern->insertItem( i18n( "playlists/%r/%m" ) );
 
   connect( m_comboFilenamePattern, SIGNAL(textChanged(const QString&)),
 	   this, SIGNAL(changed()) );
@@ -89,7 +99,7 @@ bool K3bCddbPatternWidget::replaceBlanks() const
 
 void K3bCddbPatternWidget::loadConfig( KConfig* c )
 {
-  m_comboPlaylistPattern->setEditText( c->readEntry( "playlist pattern", "%r - %m.m3u" ) );
+  m_comboPlaylistPattern->setEditText( c->readEntry( "playlist pattern", "%r - %m" ) );
   m_comboFilenamePattern->setEditText( c->readEntry( "filename pattern", "%r - %m/%a - %t" ) );
   m_checkBlankReplace->setChecked( c->readBoolEntry( "replace blanks", false ) );
   m_editBlankReplace->setText( c->readEntry( "blank replace string", "_" ) );

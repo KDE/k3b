@@ -544,7 +544,7 @@ void K3bCdrdaoWriter::start()
       s += *it + " ";
     }
   kdDebug() << s << flush << endl;
-  emit debuggingOutput("cdrdao comand:", s);
+  emit debuggingOutput("cdrdao command:", s);
 
   m_currentTrack = 0;
   reinitParser();
@@ -769,7 +769,7 @@ void K3bCdrdaoWriter::slotProcessExited( KProcess* p )
         emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg(m_cdrdaoBinObject->name()).arg(p->exitStatus()), 
 			  K3bJob::ERROR );
 	emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
-	emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
+	emit infoMessage( i18n("Please include the debugging output in your problem report."), K3bJob::ERROR );
       }
 
       emit finished( false );

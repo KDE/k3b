@@ -42,6 +42,12 @@ class K3bMixedView : public K3bView
 
   K3bAudioTrackPlayer* player() const;
 
+ public slots:
+  void slotBurn();
+
+ protected:
+  K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
+
  private slots:
   void slotAudioTreeSelected();
   void slotDataTreeSelected();

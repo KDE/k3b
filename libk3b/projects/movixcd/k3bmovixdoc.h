@@ -96,7 +96,6 @@ class K3bMovixDoc : public K3bDataDoc
 
   virtual void loadDefaultSettings( KConfig* );
 
-  virtual K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
   virtual K3bView* newView( QWidget* parent = 0);
 
  private slots:
