@@ -126,7 +126,7 @@ void K3bAudioConverterPluginDialog::loadAudioEncoder()
 void K3bAudioConverterPluginDialog::slotAddFiles()
 {
   KURL::List urls = KFileDialog::getOpenURLs( QString::null,
-					      "*|All Files",
+					      i18n("*|All Files"),
 					      this,
 					      i18n("Select Audio Files to Convert") );
   addFiles( urls );
