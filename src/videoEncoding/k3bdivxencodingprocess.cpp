@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Thomas Froescher <tfroescher@k3b.org>
@@ -33,7 +33,7 @@ K3bDivXEncodingProcess::K3bDivXEncodingProcess( K3bDivxCodecData *data, QWidget*
   m_data = data;
 }
 
-K3bDivXEncodingProcess::~K3bDivXEncodingProcess() 
+K3bDivXEncodingProcess::~K3bDivXEncodingProcess()
 {
   if( m_process ) delete m_process;
 }
@@ -63,7 +63,7 @@ void K3bDivXEncodingProcess::slotFinishedCopyIfos(KIO::Job* job){
     if ( m_data->getParaAc3().length() > 1 ) {
         // use ac3
         //deleteIfos(); // for using with transcode -x vob
-        slotStartEncoding(); 
+        slotStartEncoding();
     } else if ( m_data->isNormalize() ) {
         infoMessage( i18n( "Copy IFO files to vob directory." ), INFO );
         slotStartAudioProcessing(); // -> deleteIfos -> slotStartEncoding
@@ -124,10 +124,10 @@ void K3bDivXEncodingProcess::slotStartEncoding() {
     if( m_data->isTcDvdMode() ){
   	*m_process << "-x" << "dvd";
 	debugPass +="-x dvd ";
-    } else {	
+    } else {
 	*m_process << "-x" << "vob";
 	debugPass +="-x vob ";
-    }	
+    }
     *m_process << "-T" << m_data->getTitle() + ",-1,1" << m_data->getParaVideoBitrate() + "," + m_data->getKeyframes() + "," + m_data->getCrispness();
     kdDebug() << "(K3bDivXEncodingProcess) Video: " + m_data->getParaVideoBitrate() + "," + m_data->getKeyframes() + "," + m_data->getCrispness() << endl;
     *m_process << m_data->getParaYuv() << m_data->getParaAudioLanguage();
@@ -172,9 +172,9 @@ void K3bDivXEncodingProcess::slotStartEncoding() {
     "/vob -T" + m_data->getTitle() + ",-1,1" +
     m_data->getParaVideoBitrate() + "," + m_data->getKeyframes() + "," + m_data->getCrispness() +
     m_data->getParaYuv() + m_data->getParaAudioLanguage() +
-    m_data->getParaDeinterlace() + " -j " + QString::number( top ) + "," + QString::number( left ) + "," + QString::number( bottom ) + 
+    m_data->getParaDeinterlace() + " -j " + QString::number( top ) + "," + QString::number( left ) + "," + QString::number( bottom ) +
     "," + QString::number( right ) + " -B " + QString::number( m_data->getResizeHeight() ) + "," + QString::number( m_data->getResizeWidth() ) + ",8" + debugPass << endl;
-    
+
     connect( m_process, SIGNAL( receivedStdout( KProcess*, char*, int ) ),
              this, SLOT( slotParseEncoding( KProcess*, char*, int ) ) );
     connect( m_process, SIGNAL( receivedStderr( KProcess*, char*, int ) ),
@@ -354,8 +354,8 @@ void K3bDivXEncodingProcess::slotAudioExited( KProcess * p ) {
 
 bool K3bDivXEncodingProcess::shutdown() {
   // not sure if KApplication::ShutdownModeSchedule is the one to use...
-  return kapp->requestShutDown( KApplication::ShutdownConfirmNo, 
-				KApplication::ShutdownTypeHalt, 
+  return kapp->requestShutDown( KApplication::ShutdownConfirmNo,
+				KApplication::ShutdownTypeHalt,
 				KApplication::ShutdownModeInteractive );
 }
 

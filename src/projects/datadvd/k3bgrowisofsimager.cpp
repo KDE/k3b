@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -104,10 +104,10 @@ void K3bGrowisofsImager::start()
     emit finished( false );
     return;
   }
-  
+
   if( m_growisofsBin->version < K3bVersion( 5, 10 ) ) {
     emit infoMessage( i18n("Growisofs version %1 is too old. "
-			   "K3b needs at least version 5.10.").arg(m_growisofsBin->version), 
+			   "K3b needs at least version 5.10.").arg(m_growisofsBin->version),
 		      ERROR );
     emit finished( false );
     return;
@@ -116,7 +116,7 @@ void K3bGrowisofsImager::start()
     if( m_mkisofsBin->version < K3bVersion( 2, 0 ) ) {
       emit infoMessage( i18n("Mkisofs version %1 is too old. "
 			     "For writing multisession DVDs "
-			     "K3b needs at least version 2.0.").arg(m_mkisofsBin->version), 
+			     "K3b needs at least version 2.0.").arg(m_mkisofsBin->version),
 			ERROR );
       emit finished( false );
       return;
@@ -201,7 +201,7 @@ void K3bGrowisofsImager::start()
   // now add the mkisofs options
   //
 
-  if( !prepareMkisofsFiles() || 
+  if( !prepareMkisofsFiles() ||
       !addMkisofsParameters() ) {
     cleanup();
     emit finished( false );
@@ -245,7 +245,7 @@ void K3bGrowisofsImager::start()
   else {
     if( m_doc->dummy() ) {
       emit newTask( i18n("Simulating") );
-      emit infoMessage( i18n("Starting simulation..."), 
+      emit infoMessage( i18n("Starting simulation..."),
 			K3bJob::INFO );
       //
       // TODO: info message that DVD+R(W) has no dummy mode and the speed setting is not used
@@ -340,9 +340,9 @@ void K3bGrowisofsImager::slotProcessExited( KProcess* p )
     emit finished(d->success);
   else {
     emit newSubTask( i18n("Ejecting DVD") );
-    connect( K3bCdDevice::eject( m_doc->burner() ), 
+    connect( K3bCdDevice::eject( m_doc->burner() ),
 	     SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
-	     this, 
+	     this,
 	     SLOT(slotEjectingFinished(K3bCdDevice::DeviceHandler*)) );
   }
 }
@@ -351,7 +351,7 @@ void K3bGrowisofsImager::slotProcessExited( KProcess* p )
 void K3bGrowisofsImager::slotEjectingFinished( K3bCdDevice::DeviceHandler* dh )
 {
   if( !dh->success() )
-    emit infoMessage( "Unable to eject media.", ERROR );
+    emit infoMessage( i18n( "Unable to eject media." ), ERROR );
 
   emit finished(d->success);
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -40,7 +40,7 @@
 class K3bGrowisofsWriter::Private
 {
 public:
-  Private() 
+  Private()
     : writingMode( 0 ),
       process( 0 ),
       growisofsBin( 0 ),
@@ -131,10 +131,10 @@ bool K3bGrowisofsWriter::prepareProcess()
     emit infoMessage( i18n("Could not find %1 executable.").arg("growisofs"), ERROR );
     return false;
   }
-  
+
   if( d->growisofsBin->version < K3bVersion( 5, 10 ) ) {
     emit infoMessage( i18n("Growisofs version %1 is too old. "
-			   "K3b needs at least version 5.10.").arg(d->growisofsBin->version), 
+			   "K3b needs at least version 5.10.").arg(d->growisofsBin->version),
 		      ERROR );
     return false;
   }
@@ -253,7 +253,7 @@ void K3bGrowisofsWriter::start()
     else {
       if( simulate() ) {
 	emit newTask( i18n("Simulating") );
-	emit infoMessage( i18n("Starting simulation..."), 
+	emit infoMessage( i18n("Starting simulation..."),
 			  K3bJob::INFO );
       }
       else {
@@ -303,7 +303,7 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
       d->writingStarted = true;
       emit newSubTask( i18n("Writing data") );
     }
-    
+
     // parse progress
     int pos = line.find( "/" );
     unsigned long long done = K3b::toULongLong( line.left( pos ) );  // TODO: for QT 3.2: toULongLong
@@ -331,7 +331,7 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
 	  d->lastWritingSpeed = speed;
 	}
 	else
-	  kdDebug() << "(K3bGrowisofsWriter) speed parsing failed: '" 
+	  kdDebug() << "(K3bGrowisofsWriter) speed parsing failed: '"
 		    << line.mid( pos, line.find( 'x', pos ) - pos ) << "'" << endl;
       }
       else {
@@ -339,10 +339,9 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
       }
     }
     else
-      kdDebug() << "(K3bGrowisofsWriter) progress parsing failed: '" 
+      kdDebug() << "(K3bGrowisofsWriter) progress parsing failed: '"
 		<< line.mid( pos+1, line.find( "(", pos ) - pos - 1 ).stripWhiteSpace() << "'" << endl;
   }
-
   else
     d->gh->handleLine( line );
 }
@@ -385,9 +384,9 @@ void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
     emit finished(d->success);
   else {
     emit newSubTask( i18n("Ejecting DVD") );
-    connect( K3bCdDevice::eject( burnDevice() ), 
+    connect( K3bCdDevice::eject( burnDevice() ),
 	     SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
-	     this, 
+	     this,
 	     SLOT(slotEjectingFinished(K3bCdDevice::DeviceHandler*)) );
   }
 }
@@ -396,7 +395,7 @@ void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
 void K3bGrowisofsWriter::slotEjectingFinished( K3bCdDevice::DeviceHandler* dh )
 {
   if( !dh->success() )
-    emit infoMessage( "Unable to eject media.", ERROR );
+    emit infoMessage( i18n( "Unable to eject media." ), ERROR );
 
   emit finished(d->success);
 }

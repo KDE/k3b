@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -42,7 +42,7 @@ K3bView::K3bView( K3bDoc* pDoc, QWidget *parent, const char* name )
 
   QToolButton* m_buttonBurn = new QToolButton( this );
   m_buttonBurn->setIconSet( SmallIcon("cdburn") );
-  m_buttonBurn->setTextLabel( i18n("Burn") + "..." );
+  m_buttonBurn->setTextLabel( i18n("Burn...") );
   m_buttonBurn->setAutoRaise(true);
   m_buttonBurn->setTextPosition( QToolButton::Right ); // TODO: QT 3.2: QToolButton::BesideIcon
   m_buttonBurn->setUsesTextLabel( true );
@@ -92,7 +92,7 @@ void K3bView::setMainWidget( QWidget* w )
 
 // KActionCollection* K3bView::actionCollection() const
 // {
-//   return m_actionCollection; 
+//   return m_actionCollection;
 // }
 
 

@@ -738,7 +738,7 @@ void K3bMainWindow::fileSaveAs( K3bDoc* doc )
 
       if( !QFile::exists(url) ||
 	  ( QFile::exists(url) &&
-	    KMessageBox::questionYesNo( this, i18n("Do you want to overwrite %1").arg(url), i18n("File Exists") )
+	    KMessageBox::questionYesNo( this, i18n("Do you want to overwrite %1?").arg(url), i18n("File Exists") )
 	    == KMessageBox::Yes ) ) {
 
 	if( !doc->saveDocument(url) ) {
@@ -1203,7 +1203,8 @@ void K3bMainWindow::slotProjectAddFiles()
   K3bDoc* doc = activeDoc();
 
   if( doc ) {
-    QStringList urls = KFileDialog::getOpenFileNames( ".", "*|All Files", this, i18n("Select Files to Add to Project") );
+    QStringList urls = KFileDialog::getOpenFileNames( ".", i18n("*|All Files"), this,
+                                                      i18n("Select Files to Add to Project") );
     if( !urls.isEmpty() )
       doc->addUrls( urls );
   }
