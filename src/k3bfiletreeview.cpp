@@ -63,6 +63,7 @@ K3bFileTreeView::K3bFileTreeView( QWidget *parent, const char *name )
   : KFileTreeView( parent,  name )
 {
   addColumn( i18n("Directories") );
+  setDragEnabled( true );
   setAcceptDrops( true );
   setDropVisualizer( true );
   setAlternateBackground( QColor() );
@@ -71,7 +72,8 @@ K3bFileTreeView::K3bFileTreeView( QWidget *parent, const char *name )
 
   m_dirOnlyMode = true;
 
-  connect( this, SIGNAL(currentChanged(QListViewItem*)), this, SLOT(slotItemExecuted(QListViewItem*)) );
+  //connect( this, SIGNAL(currentChanged(QListViewItem*)), this, SLOT(slotItemExecuted(QListViewItem*)) );
+  connect( this, SIGNAL(executed(QListViewItem*)), this, SLOT(slotItemExecuted(QListViewItem*)) );
   connect( this, SIGNAL(contextMenu(KListView*, QListViewItem* , const QPoint& )),
 	   this, SLOT(slotContextMenu(KListView*, QListViewItem* , const QPoint& )) );
 }
@@ -110,13 +112,12 @@ void K3bFileTreeView::contentsDropEvent(QDropEvent* event) {
 void K3bFileTreeView::contentsDragMoveEvent ( QDragMoveEvent *e ){
    QString text;
    QTextDrag::decode( e, text );
-   if ( text == CD_DRAG) {
+   if ( text == CD_DRAG ) {
        KFileTreeView::contentsDragMoveEvent( e );
    } else {
        e->ignore();
    }
 }
-
 /*
 * overwrite original to support K3b DND Objects. That will enable autoOpenFolder in the tree.
 */

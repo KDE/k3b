@@ -83,14 +83,10 @@ class K3bFileTreeView : public KFileTreeView
   void urlExecuted( const KURL& url );
   void deviceExecuted( K3bDevice* dev );
   void contextMenu( K3bDevice*, const QPoint& );
-  //void startAudioCDRip( QString );
   
  private slots:
   void slotItemExecuted( QListViewItem* item );
   void slotContextMenu( KListView*, QListViewItem*, const QPoint& );
-
-  //void slotDropped();
-
 
  private:
   bool m_dirOnlyMode;
