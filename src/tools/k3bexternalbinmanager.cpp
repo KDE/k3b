@@ -11,6 +11,7 @@
 
 #include <unistd.h>
 #include <sys/stat.h>
+#include <stdlib.h>
 
 
 
@@ -555,7 +556,23 @@ void K3bExternalBinManager::search()
     it.data()->clear();
   }
 
-  for( QStringList::const_iterator it = m_searchPath.begin(); it != m_searchPath.end(); ++it ) {
+  // do not search one path twice
+  QStringList paths;
+  for( QStringList::const_iterator it = m_searchPath.begin(); it != m_searchPath.end(); ++it )
+    if( !paths.contains( *it ) && !paths.contains( *it + "/" ) )
+      paths.append(*it);
+
+  // get the environment path variable
+  char* env_path = ::getenv("PATH");
+  if( env_path ) {
+    QStringList env_pathList = QStringList::split(":", QString::fromLocal8Bit(env_path));
+    for( QStringList::const_iterator it = env_pathList.begin(); it != env_pathList.end(); ++it )
+      if( !paths.contains( *it ) && !paths.contains( *it + "/" ) )
+	paths.append(*it);
+  }
+
+
+  for( QStringList::const_iterator it = paths.begin(); it != paths.end(); ++it ) {
     QString path = *it;
     if( path[path.length()-1] == '/' )
       path.truncate( path.length()-1 );
@@ -640,7 +657,7 @@ void K3bExternalBinManager::loadDefaultSearchPath()
 					      "/usr/sbin/",
 					      "/usr/local/sbin/",
 					      "/opt/schily/bin/",
-                          "/sbin",
+					      "/sbin",
 					      0 };
 
   m_searchPath.clear();
