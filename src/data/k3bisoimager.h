@@ -19,9 +19,11 @@
 #include "../k3bjob.h"
 
 #include <qptrqueue.h>
+#include <qmap.h>
 
 class K3bDataDoc;
 class K3bDirItem;
+class K3bDataItem;
 class QTextStream;
 class K3bProcess;
 class K3bDevice;
@@ -103,11 +105,14 @@ class K3bIsoImager : public K3bJob
   QString escapeGraftPoint( const QString& str );
   bool addMkisofsParameters();
   bool prepareMkisofsFiles();
+  bool backupBootImages();
   void outputData();
 
   void cleanup();
 
   bool m_canceled;
+
+  QMap<K3bDataItem*,KTempFile*> m_bootImageBackupMap;
 };
 
 

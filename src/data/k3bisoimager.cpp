@@ -19,6 +19,7 @@
 #include <kstandarddirs.h>
 #include <klocale.h>
 #include <ktempfile.h>
+#include <kio/netaccess.h>
 
 #include <qfile.h>
 #include <qregexp.h>
@@ -171,6 +172,11 @@ void K3bIsoImager::cleanup()
   if( m_rrHideFile ) delete m_rrHideFile;
   if( m_jolietHideFile ) delete m_jolietHideFile;
 
+  for( QMap<K3bDataItem*, KTempFile*>::iterator it = m_bootImageBackupMap.begin();
+       it != m_bootImageBackupMap.end(); ++it )
+    delete it.data();
+  m_bootImageBackupMap.clear();
+
   m_pathSpecFile = m_jolietHideFile = m_rrHideFile = 0;
 
   delete m_process;
@@ -296,18 +302,13 @@ void K3bIsoImager::start()
 {
   emit started();
 
-  if( !prepareMkisofsFiles() ) {
-    cleanup();
-    emit finished( false );
-    return;
-  }
-
   delete m_process;
   m_process = new K3bProcess();
 
-  if( !addMkisofsParameters() ) {
+  if( !prepareMkisofsFiles() || 
+      !addMkisofsParameters() ||
+      !backupBootImages() ) {
     cleanup();
-
     emit finished( false );
     return;
   }
@@ -628,8 +629,11 @@ void K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream
 	    continue;
 	}
 	
-	stream << escapeGraftPoint( m_doc->treatWhitespace(item->jolietPath()) )
-	       << "=" << escapeGraftPoint( item->localPath() ) << "\n";
+	stream << escapeGraftPoint( m_doc->treatWhitespace(item->jolietPath()) ) << "=";
+	if( m_bootImageBackupMap.find( item ) == m_bootImageBackupMap.end() )  // boot-image-backup-hack
+	  stream << escapeGraftPoint( item->localPath() ) << "\n";
+	else
+	  stream << escapeGraftPoint( m_bootImageBackupMap[item]->name() ) << "\n";
       }
     }
   }
@@ -648,8 +652,11 @@ void K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream
 	    continue;
 	}
 	
-	stream << escapeGraftPoint( m_doc->treatWhitespace(item->k3bPath()) )
-	       << "=" << escapeGraftPoint( item->localPath() ) << "\n";
+	stream << escapeGraftPoint( m_doc->treatWhitespace(item->k3bPath()) ) << "=";
+	if( m_bootImageBackupMap.find( item ) == m_bootImageBackupMap.end() )  // boot-image-backup-hack
+	  stream << escapeGraftPoint( item->localPath() ) << "\n";
+	else
+	  stream << escapeGraftPoint( m_bootImageBackupMap[item]->name() ) << "\n";
       }
     }
   }
@@ -757,6 +764,24 @@ bool K3bIsoImager::prepareMkisofsFiles()
       emit infoMessage( i18n("Could not write temporary file"), K3bJob::ERROR );
       return false ;
     }
+  }
+
+  return true;
+}
+
+
+bool K3bIsoImager::backupBootImages()
+{
+  const QPtrList<K3bBootItem>& bootImages = m_doc->bootImages();
+  for( QPtrListIterator<K3bBootItem> it( bootImages ); *it; ++it ) {
+    KTempFile* temp = new KTempFile();
+    temp->setAutoDelete(true);
+
+    if( !KIO::NetAccess::copy( it.current()->localPath(), temp->name() ) ) {
+      emit infoMessage( i18n("Could not write to temporary file %1").arg(temp->name()), ERROR );
+      return false;
+    }
+    m_bootImageBackupMap[*it] = temp;
   }
 
   return true;
