@@ -49,6 +49,8 @@ public:
 
   int lastPercent;
   int lastProcessedSize;
+
+  bool dao;
 };
 
 
@@ -147,8 +149,12 @@ void K3bGrowisofsImager::start()
   if( m_doc->dummy() )
     *m_process << "-use-the-force-luke=dummy";
   if( ( m_doc->writingMode() == K3b::DAO || m_doc->writingMode() == K3b::WRITING_MODE_AUTO )
-      && m_doc->multiSessionMode() == K3bDataDoc::NONE )
-    *m_process << "-use-the-force-luke=dao";  // does DAO apply to DVD+R?
+      && m_doc->multiSessionMode() == K3bDataDoc::NONE ) {
+    *m_process << "-use-the-force-luke=dao";  // does DAO apply to DVD+R? no.
+    d->dao = true;
+  }
+  else
+    d->dao = false;
 
   int speed = m_doc->speed();
   if( speed == 0 ) {
@@ -291,8 +297,10 @@ void K3bGrowisofsImager::slotReceivedStderr( const QString& line )
     emit infoMessage( i18n("Modifying Iso9660 volume descriptor"), INFO );
   }
   else if( line.contains( "FEATURE 21h is not on" ) ) {
-    emit infoMessage( i18n("Writer does not support Incremental Streaming"), WARNING );
-    emit infoMessage( i18n("Engaging DAO"), WARNING );
+    if( !d->dao ) {
+      emit infoMessage( i18n("Writer does not support Incremental Streaming"), WARNING );
+      emit infoMessage( i18n("Engaging DAO"), WARNING );
+    }
   }
   else if( ( pos = line.find( "Current Write Speed" ) ) > 0 ) {
     // parse write speed

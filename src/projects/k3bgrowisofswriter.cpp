@@ -350,8 +350,10 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
     emit infoMessage( i18n("Writing the lead-out may take a while."), INFO );
   }
   else if( line.contains( "FEATURE 21h is not on" ) ) {
-    emit infoMessage( i18n("Writer does not support Incremental Streaming"), WARNING );
-    emit infoMessage( i18n("Engaging DAO"), WARNING );
+    if( d->writingMode != K3b::DAO ) {
+      emit infoMessage( i18n("Writer does not support Incremental Streaming"), WARNING );
+      emit infoMessage( i18n("Engaging DAO"), WARNING );
+    }
   }
   else if( ( pos = line.find( "Current Write Speed" ) ) > 0 ) {
     // parse write speed
