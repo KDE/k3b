@@ -41,6 +41,7 @@ class K3bThreadJob;
 class KConfig;
 class K3bAudioDataSource;
 class K3bAudioDecoder;
+class K3bAudioFile;
 
 /**Document class for an audio project. 
  *@author Sebastian Trueg
