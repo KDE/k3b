@@ -26,7 +26,7 @@ ldadd=$(ID3LIB_LIBS) $(CDPARANOIA_LIBS) -lmad -lartskde -lqt-mt $(LIB_KFILE) $(L
 ldflags=\s
 
 [General]
-AMChanged=false
+AMChanged=true
 author=Sebastian Trueg
 configure_args=\s--build=i386-linux --host=i386-linux --target=i386-linux --prefix=/opt/kde3\s
 email=trueg@informatik.uni-freiburg.de
@@ -118,7 +118,7 @@ install_location=
 type=PO
 
 [src/Makefile.am]
-files=src/main.cpp,src/k3b.cpp,src/k3b.h,src/k3bdoc.cpp,src/k3bdoc.h,src/k3bview.cpp,src/k3bview.h,src/k3bui.rc,src/k3b.desktop,src/lo32-app-k3b.png,src/lo16-app-k3b.png,src/k3bdirview.cpp,src/k3bdirview.h,src/k3bglobals.h,src/k3bfillstatusdisplay.cpp,src/k3bfillstatusdisplay.h,src/k3bburnprogressdialog.cpp,src/k3bburnprogressdialog.h,src/k3bjob.cpp,src/k3bjob.h,src/k3bprojectburndialog.cpp,src/k3bprojectburndialog.h,src/kcutlabel.cpp,src/kcutlabel.h,src/k3bglobals.cpp,src/hi16-app-k3b.png,src/hi32-app-k3b.png,src/hi48-app-k3b.png,src/kdiskfreesp.h,src/k3bfileview.cpp,src/k3bfileview.h,src/cddb.h,src/cddb.cpp,src/k3bcddb.cpp,src/k3bcddb.h,src/k3bblankingdialog.cpp,src/k3bblankingdialog.h,src/k3bblankingjob.cpp,src/k3bblankingjob.h,src/k3bsplash.h,src/k3bsplash.cpp,src/k3b-splash-naive.png,src/hi16-tools-cdinfo.png,src/hi22-tools-cdinfo.png,src/hi16-tools-cdrwblank.png,src/hi22-tools-cdrwblank.png,src/k3bwriterselectionwidget.cpp,src/k3bwriterselectionwidget.h,src/k3bprojecttabwidget.cpp,src/k3bprojecttabwidget.h,src/k3bprojecttabbar.cpp,src/k3bprojecttabbar.h,src/k3baudioplayer.cpp,src/k3baudioplayer.h,src/k3bcddbmultientriesdialog.cpp,src/k3bcddbmultientriesdialog.h,src/kstringlistdialog.cpp,src/kstringlistdialog.h,src/klistviewlineedit.h,src/k3bfiletreeview.cpp,src/k3bfiletreeview.h,src/k3bcdcontentsview.h
+files=src/main.cpp,src/k3b.cpp,src/k3b.h,src/k3bdoc.cpp,src/k3bdoc.h,src/k3bview.cpp,src/k3bview.h,src/k3bui.rc,src/k3b.desktop,src/lo32-app-k3b.png,src/lo16-app-k3b.png,src/k3bdirview.cpp,src/k3bdirview.h,src/k3bglobals.h,src/k3bfillstatusdisplay.cpp,src/k3bfillstatusdisplay.h,src/k3bburnprogressdialog.cpp,src/k3bburnprogressdialog.h,src/k3bjob.cpp,src/k3bjob.h,src/k3bprojectburndialog.cpp,src/k3bprojectburndialog.h,src/kcutlabel.cpp,src/kcutlabel.h,src/k3bglobals.cpp,src/hi16-app-k3b.png,src/hi32-app-k3b.png,src/hi48-app-k3b.png,src/kdiskfreesp.h,src/k3bfileview.cpp,src/k3bfileview.h,src/cddb.h,src/cddb.cpp,src/k3bcddb.cpp,src/k3bcddb.h,src/k3bblankingdialog.cpp,src/k3bblankingdialog.h,src/k3bblankingjob.cpp,src/k3bblankingjob.h,src/k3bsplash.h,src/k3bsplash.cpp,src/k3b-splash-naive.png,src/hi16-tools-cdinfo.png,src/hi22-tools-cdinfo.png,src/hi16-tools-cdrwblank.png,src/hi22-tools-cdrwblank.png,src/k3bwriterselectionwidget.cpp,src/k3bwriterselectionwidget.h,src/k3bprojecttabwidget.cpp,src/k3bprojecttabwidget.h,src/k3bprojecttabbar.cpp,src/k3bprojecttabbar.h,src/k3baudioplayer.cpp,src/k3baudioplayer.h,src/k3bcddbmultientriesdialog.cpp,src/k3bcddbmultientriesdialog.h,src/kstringlistdialog.cpp,src/kstringlistdialog.h,src/klistviewlineedit.h,src/k3bfiletreeview.cpp,src/k3bfiletreeview.h,src/k3bcdcontentsview.h,src/k3b_cd_copy.png,src/k3btempdirselectionwidget.cpp,src/k3btempdirselectionwidget.h
 sub_dirs=data,cdinfo,audio,device,option,rip,libwm,tools,cdcopy
 type=prog_main
 
@@ -699,6 +699,12 @@ install=false
 install_location=
 type=HEADER
 
+[src/k3b_cd_copy.png]
+dist=true
+install=true
+install_location=$$(kde_datadir)/k3b/pics/k3b_cd_copy.png
+type=DATA
+
 [src/k3baudioburninfodialog.cpp]
 dist=true
 install=false
@@ -952,6 +958,18 @@ install_location=
 type=SOURCE
 
 [src/k3bsplash.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/k3btempdirselectionwidget.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/k3btempdirselectionwidget.h]
 dist=true
 install=false
 install_location=

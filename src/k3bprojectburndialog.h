@@ -20,15 +20,8 @@
 
 #include <kdialogbase.h>
 
-class QComboBox;
-class QGroupBox;
-class QLineEdit;
-class QToolButton;
-class QTimer;
 class K3bDoc;
 class K3bBurnJob;
-class K3bDevice;
-class K3bWriterSelectionWidget;
 
 
 
@@ -50,46 +43,23 @@ class K3bProjectBurnDialog : public KDialogBase
    int exec( bool burn );
 
    K3bDoc* doc() const { return m_doc; }
-
-   QString tempPath() const;
 	
  protected slots:
    virtual void slotUser1();
    virtual void slotUser2();
    virtual void slotCancel();
-   virtual void slotTempDirButtonPressed();
-   void setTempPath( const QString& );
 
  private slots:
-   void slotUpdateFreeTempSpace();
-   void slotFreeTempSpace(const QString&, unsigned long, unsigned long, unsigned long);
    void slotJobFinished();
 
  signals:
    void writerChanged();
 
  protected:
-   QWidget* writerBox( QWidget* parent = 0 );
-   QWidget* tempDirBox( QWidget* parent = 0 );
-
-   int writerSpeed() const;
-   unsigned long freeTempSpace() const { return m_freeTempSpace; }
-   K3bDevice* writerDevice() const;
-	
-   virtual void saveSettings() = 0;
-   virtual void readSettings();
+   virtual void saveSettings() {};
+   virtual void readSettings() {};
 	
  private:
-   K3bWriterSelectionWidget* m_writerSelectionWidget;
-
-   QGroupBox* m_groupTempDir;
-   QLabel* m_labelCdSize;
-   QLabel* m_labelFreeSpace;
-   QLineEdit* m_editDirectory;
-   QToolButton* m_buttonFindIsoImage;
-   QTimer* m_freeTempSpaceTimer;
-   unsigned long m_freeTempSpace;
-
    K3bDoc* m_doc;
    K3bBurnJob* m_job;
 };

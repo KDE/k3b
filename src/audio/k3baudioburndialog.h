@@ -31,13 +31,14 @@ class QLabel;
 class QLineEdit;
 class QToolButton;
 class QMultiLineEdit;
-
-
+class K3bWriterSelectionWidget;
+class K3bTempDirSelectionWidget;
 class K3bAudioDoc;
+
+
 /**
   *@author Sebastian Trueg
   */
-
 class K3bAudioBurnDialog : public K3bProjectBurnDialog  
 {
    Q_OBJECT
@@ -61,6 +62,8 @@ class K3bAudioBurnDialog : public K3bProjectBurnDialog
    QCheckBox* m_checkSimulate;
    QCheckBox* m_checkHideFirstTrack;
    QCheckBox* m_checkRemoveBufferFiles;
+   K3bWriterSelectionWidget* m_writerSelectionWidget;
+   K3bTempDirSelectionWidget* m_tempDirSelectionWidget;
    // -----------------------------------------------------------
 	
    // the cd-text-tab

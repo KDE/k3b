@@ -19,6 +19,8 @@
 #include "k3bdatadoc.h"
 #include "../k3b.h"
 #include "../device/k3bdevice.h"
+#include "../k3bwriterselectionwidget.h"
+#include "../k3btempdirselectionwidget.h"
 
 #include <qcheckbox.h>
 #include <qcombobox.h>
@@ -59,14 +61,16 @@ K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const ch
   readSettings();
   slotLoadPreSettings( i18n("K3b Default" ) );
 
-  if( K3bDevice* dev = writerDevice() )
+  if( K3bDevice* dev = m_writerSelectionWidget->writerDevice() )
     m_checkBurnProof->setEnabled( dev->burnproof() );
 
-  QFileInfo fi( tempPath() );
+  QFileInfo fi( m_tempDirSelectionWidget->tempPath() );
   if( fi.isFile() )
-    setTempPath( fi.dirPath() + "/image.iso" );
+    m_tempDirSelectionWidget->setTempPath( fi.dirPath() + "image.iso" );
   else
-    setTempPath( fi.filePath() + "/image.iso" );
+    m_tempDirSelectionWidget->setTempPath( fi.filePath() + "image.iso" );
+
+  m_tempDirSelectionWidget->setNeededSize( doc()->size() );
 }
 
 K3bDataBurnDialog::~K3bDataBurnDialog(){
@@ -83,10 +87,10 @@ void K3bDataBurnDialog::saveSettings()
   ((K3bDataDoc*)doc())->setDeleteImage( m_checkDeleteImage->isChecked() );
 			
   // -- saving current speed --------------------------------------
-  doc()->setSpeed( writerSpeed() );
+  doc()->setSpeed( m_writerSelectionWidget->writerSpeed() );
 	
   // -- saving current device --------------------------------------
-  doc()->setBurner( writerDevice() );
+  doc()->setBurner( m_writerSelectionWidget->writerDevice() );
 	
   // -- saving mkisofs-options -------------------------------------
   ((K3bDataDoc*)doc())->setCreateRockRidge( m_checkCreateRR->isChecked() );
@@ -132,7 +136,7 @@ void K3bDataBurnDialog::saveSettings()
     ((K3bDataDoc*)doc())->setWhiteSpaceTreatment( K3bDataDoc::normal );
 
   // save image file path
-  ((K3bDataDoc*)doc())->setIsoImage( tempPath() );  
+  ((K3bDataDoc*)doc())->setIsoImage( m_tempDirSelectionWidget->tempPath() );  
 
   // save multisession settings
   if( m_groupMultiSession->selected() == m_radioMultiSessionStart )
@@ -239,9 +243,12 @@ void K3bDataBurnDialog::setupBurnTab( QFrame* frame )
   frameLayout->setSpacing( spacingHint() );
   frameLayout->setMargin( marginHint() );
 
-  frameLayout->addMultiCellWidget( writerBox( frame ), 0, 0, 0, 1 );
+  m_writerSelectionWidget = new K3bWriterSelectionWidget( frame );
+  m_tempDirSelectionWidget = new K3bTempDirSelectionWidget( frame );
+  m_tempDirSelectionWidget->setSelectionMode( K3bTempDirSelectionWidget::FILE );
 
-  frameLayout->addWidget( tempDirBox( frame ), 1, 1 );
+  frameLayout->addMultiCellWidget( m_writerSelectionWidget, 0, 0, 0, 1 );
+  frameLayout->addWidget( m_tempDirSelectionWidget, 1, 1 );
 
   m_groupOptions = new QGroupBox( frame, "m_groupOptions" );
   m_groupOptions->setTitle( i18n( "Options" ) );
@@ -281,11 +288,11 @@ void K3bDataBurnDialog::setupBurnTab( QFrame* frame )
 
   // we do not need a tempdir or image settings when writing on-the-fly
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkDeleteImage, SLOT(setDisabled(bool)) );
-  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), tempDirBox(), SLOT(setDisabled(bool)) );
+  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_tempDirSelectionWidget, SLOT(setDisabled(bool)) );
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkOnlyCreateImage, SLOT(setDisabled(bool)) );
 
   // we do not need writer settings when only creating the image
-  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), writerBox(), SLOT(setDisabled(bool)) );
+  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_writerSelectionWidget, SLOT(setDisabled(bool)) );
   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkOnTheFly, SLOT(setDisabled(bool)) );
   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkBurnProof, SLOT(setDisabled(bool)) );
   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkDao, SLOT(setDisabled(bool)) );
@@ -295,7 +302,7 @@ void K3bDataBurnDialog::setupBurnTab( QFrame* frame )
   frameLayout->setColStretch( 1, 1 );
 
 
-  connect( this, SIGNAL(writerChanged()), this, SLOT(slotWriterChanged()) );
+  connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotWriterChanged()) );
 }
 
 
@@ -612,15 +619,6 @@ void K3bDataBurnDialog::setupMultisessionTab( QFrame* frame )
 }
 
 
-void K3bDataBurnDialog::slotTempDirButtonPressed()
-{
-  QString dir = KFileDialog::getSaveFileName( tempPath(), QString::null, k3bMain(), "Select Iso Image" );
-  if( !dir.isEmpty() ) {
-    setTempPath( dir );
-  }
-}
-
-
 void K3bDataBurnDialog::slotLoadPreSettings( const QString& pre )
 {
 
@@ -736,7 +734,7 @@ void K3bDataBurnDialog::slotSelectCustom()
 
 void K3bDataBurnDialog::slotWriterChanged()
 {
-  if( K3bDevice* dev = writerDevice() )
+  if( K3bDevice* dev = m_writerSelectionWidget->writerDevice() )
     m_checkBurnProof->setEnabled( dev->burnproof() );
 }
 
@@ -744,17 +742,17 @@ void K3bDataBurnDialog::slotWriterChanged()
 void K3bDataBurnDialog::slotUser1()
 {
   // check if enough space in tempdir if not on-the-fly
-  if( !m_checkOnTheFly->isChecked() && doc()->size()/1024 > freeTempSpace() ) {
+  if( !m_checkOnTheFly->isChecked() && doc()->size()/1024 > m_tempDirSelectionWidget->freeTempSpace() ) {
     KMessageBox::sorry( this, "Not enough space in temp directory. Either change the directory or select on-the-fly burning." );
     return;
   }
   else if( !m_checkOnTheFly->isChecked() ) {
-    QFileInfo fi(tempPath());
+    QFileInfo fi( m_tempDirSelectionWidget->tempPath() );
     if( fi.isDir() )
-      setTempPath( fi.filePath() + "/image.iso" );
+      m_tempDirSelectionWidget->setTempPath( fi.filePath() + "/image.iso" );
 
-    if( QFile::exists( tempPath() ) ) {
-      if( KMessageBox::questionYesNo( this, i18n("Do you want to overwrite %1").arg(tempPath()), i18n("File exists...") ) 
+    if( QFile::exists( m_tempDirSelectionWidget->tempPath() ) ) {
+      if( KMessageBox::questionYesNo( this, i18n("Do you want to overwrite %1").arg(m_tempDirSelectionWidget->tempPath()), i18n("File exists...") ) 
 	  != KMessageBox::Yes )
 	return;
     }

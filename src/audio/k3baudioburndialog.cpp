@@ -19,6 +19,8 @@
 #include "../k3b.h"
 #include "k3baudiodoc.h"
 #include "../device/k3bdevice.h"
+#include "../k3bwriterselectionwidget.h"
+#include "../k3btempdirselectionwidget.h"
 
 #include <qcheckbox.h>
 #include <qcombobox.h>
@@ -51,6 +53,8 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
   setupCdTextTab( addPage( i18n("CD-Text") ) );
 	
   readSettings();
+
+  m_tempDirSelectionWidget->setNeededSize( doc()->size() );
 }
 
 K3bAudioBurnDialog::~K3bAudioBurnDialog(){
@@ -59,7 +63,7 @@ K3bAudioBurnDialog::~K3bAudioBurnDialog(){
 
 void K3bAudioBurnDialog::saveSettings()
 {
-  doc()->setTempDir( tempPath() );
+  doc()->setTempDir( m_tempDirSelectionWidget->tempPath() );
   doc()->setDao( m_checkDao->isChecked() );
   doc()->setDummy( m_checkSimulate->isChecked() );
   doc()->setOnTheFly( m_checkOnTheFly->isChecked() );
@@ -69,10 +73,10 @@ void K3bAudioBurnDialog::saveSettings()
   ((K3bAudioDoc*)doc())->setRemoveBufferFiles( m_checkRemoveBufferFiles->isChecked() );
 	
   // -- saving current speed --------------------------------------
-  doc()->setSpeed( writerSpeed() );
+  doc()->setSpeed( m_writerSelectionWidget->writerSpeed() );
 	
   // -- saving current device --------------------------------------
-  doc()->setBurner( writerDevice() );
+  doc()->setBurner( m_writerSelectionWidget->writerDevice() );
 	
   // -- save Cd-Text ------------------------------------------------
   ((K3bAudioDoc*)doc())->setTitle( m_editTitle->text() );
@@ -153,14 +157,17 @@ void K3bAudioBurnDialog::setupBurnTab( QFrame* frame )
   m_groupOptionsLayout->addWidget( m_checkHideFirstTrack );
   // --------------------------------------------------- options group ---
 
-  frameLayout->addWidget( tempDirBox( frame ), 1, 1 );
+  m_tempDirSelectionWidget = new K3bTempDirSelectionWidget( frame );
+  m_writerSelectionWidget = new K3bWriterSelectionWidget( frame );
+
+  frameLayout->addWidget( m_tempDirSelectionWidget, 1, 1 );
   frameLayout->addWidget( m_groupOptions, 1, 0 );
-  frameLayout->addMultiCellWidget( writerBox( frame ), 0, 0, 0, 1 );
+  frameLayout->addMultiCellWidget( m_writerSelectionWidget, 0, 0, 0, 1 );
 
   frameLayout->setRowStretch( 1, 1 );
   frameLayout->setColStretch( 1, 1 );
 
-  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), tempDirBox(), SLOT(setDisabled(bool)) );
+  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_tempDirSelectionWidget, SLOT(setDisabled(bool)) );
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkRemoveBufferFiles, SLOT(setDisabled(bool)) );
   connect( m_checkDao, SIGNAL(toggled(bool)), m_checkHideFirstTrack, SLOT(setEnabled(bool)) );
   connect( m_checkDao, SIGNAL(toggled(bool)), m_checkCdText, SLOT(setEnabled(bool)) );
@@ -294,7 +301,7 @@ void K3bAudioBurnDialog::setupCdTextTab( QFrame* frame )
 void K3bAudioBurnDialog::slotUser1()
 {
   // check if enough space in tempdir if not on-the-fly
-  if( !m_checkOnTheFly->isChecked() && doc()->size()/1024 > freeTempSpace() )
+  if( !m_checkOnTheFly->isChecked() && doc()->size()/1024 > m_tempDirSelectionWidget->freeTempSpace() )
     KMessageBox::sorry( this, "Not enough space in temp directory." );
   else
     K3bProjectBurnDialog::slotUser1();

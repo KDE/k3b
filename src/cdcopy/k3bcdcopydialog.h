@@ -22,6 +22,7 @@
 #include <kdialogbase.h>
 
 class K3bWriterSelectionWidget;
+class K3bTempDirSelectionWidget;
 class QCheckBox;
 class QSpinBox;
 class QComboBox;
@@ -48,8 +49,10 @@ class K3bCdCopyDialog : public KDialogBase
 
  private:
   K3bWriterSelectionWidget* m_writerSelectionWidget;
+  K3bTempDirSelectionWidget* m_tempDirSelectionWidget;
   QCheckBox* m_checkSimulate;
   QCheckBox* m_checkOnTheFly;
+  QCheckBox* m_checkDeleteImages;
   QComboBox* m_comboSourceDevice;
   QSpinBox* m_spinCopies;
 };

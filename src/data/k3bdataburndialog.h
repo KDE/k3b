@@ -27,7 +27,8 @@ class QLabel;
 class QToolButton;
 class QRadioButton;
 class QButtonGroup;
-
+class K3bWriterSelectionWidget;
+class K3bTempDirSelectionWidget;
 class K3bDataDoc;
 class KLineEdit;
 
@@ -60,6 +61,8 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    QCheckBox* m_checkDeleteImage;
    QCheckBox* m_checkDao;
    QCheckBox* m_checkBurnProof;
+   K3bTempDirSelectionWidget* m_tempDirSelectionWidget;
+   K3bWriterSelectionWidget* m_writerSelectionWidget;
    // ----------------------------------------------
 
    // --- settings tab ---------------------------
@@ -113,7 +116,6 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    void slotUser1();
    void saveSettings();
    void readSettings();
-   void slotTempDirButtonPressed();
    void slotLoadPreSettings( const QString& );
    void slotSaveDefaults();
    void slotSelectCustom();
