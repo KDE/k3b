@@ -18,6 +18,7 @@
 #include <k3bcore.h>
 #include <k3bversion.h>
 #include <k3bdevicemanager.h>
+#include <k3brichtextlabel.h>
 
 #include <qlabel.h>
 #include <qspinbox.h>
@@ -34,7 +35,7 @@ K3bWriterSpeedVerificationDialog::K3bWriterSpeedVerificationDialog( QPtrList<K3b
   grid->setSpacing( spacingHint() );
   grid->setMargin( marginHint() );
 
-  QLabel* infoLabel = new QLabel( i18n("<p>It seems this is the first time you start K3b %1 "
+  QLabel* infoLabel = new K3BRichTextLabel( i18n("<p>It seems this is the first time you start K3b %1 "
 				       "with this device configuration. Please verify if the writing "
 				       "speeds have been detected properly and correct them if necessary.").arg(k3bcore->version()),
 				  plainPage() );
