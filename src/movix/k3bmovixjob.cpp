@@ -14,6 +14,7 @@
 
 #include <klocale.h>
 #include <kdebug.h>
+#include <ktempfile.h>
 
 
 K3bMovixJob::K3bMovixJob( K3bMovixDoc* doc, QObject* parent )
