@@ -20,20 +20,26 @@
 
 
 K3bWavModule::K3bWavModule( K3bAudioTrack* track )
-  : K3bAudioModule( track )
+  : K3bExternalBinModule( track )
 {
-  m_convertingProcess = new KShellProcess();
   m_streamingTimer = new QTimer( this );
-  m_clearDataTimer = new QTimer( this );
+}
 
-  m_rawData = 0;
 
-  track->setBufferFile( track->absPath() );
+K3bWavModule::~K3bWavModule()
+{
+}
+
+
+
+void K3bWavModule::slotGatherInformation()
+{
+  audioTrack()->setBufferFile( audioTrack()->absPath() );
 
   // try to determine the track length
   unsigned long dataLength;
   long buffy;
-  if( waveLength( track->absPath().latin1(),
+  if( waveLength( audioTrack()->absPath().latin1(),
 		  0,
 		  &buffy,
 		  &dataLength ) == 0 )
@@ -49,211 +55,48 @@ K3bWavModule::K3bWavModule( K3bAudioTrack* track )
 }
 
 
-K3bWavModule::~K3bWavModule()
-{
-  delete m_convertingProcess;
-}
-
-
 KURL K3bWavModule::writeToWav( const KURL& url )
 {
   // we need an asynronous finished signal
   m_streamingTimer->disconnect();
-  connect( m_streamingTimer, SIGNAL(timeout()), this, SIGNAL(finished()) );
+  connect( m_streamingTimer, SIGNAL(timeout()), this, SLOT(slotWavFinished()) );
   m_streamingTimer->start(0, true);
 
   return url;
 }
 
 
-bool K3bWavModule::getStream()
+void K3bWavModule::slotWavFinished()
 {
-  if( m_convertingProcess->isRunning() )
-    return false;
-
-  m_convertingProcess->clearArguments();
-  m_convertingProcess->disconnect();
-  connect( m_convertingProcess, SIGNAL(receivedStdout(KProcess*, char*, int)),
-	   this, SLOT(slotOutputData(KProcess*,char*, int)) );
-//   connect( m_convertingProcess, SIGNAL(receivedStdout(KProcess*, char*, int)), 
-// 	   this, SLOT(slotCountRawData(KProcess*, char*, int)) );
-//   connect( m_convertingProcess, SIGNAL(receivedStderr(KProcess*, char*, int)), 
-// 	   this, SLOT(slotParseStdErrOutput(KProcess*, char*, int)) );
-  connect( m_convertingProcess, SIGNAL(processExited(KProcess*)),
-	   this, SLOT(slotConvertingFinished()) );
+  emit finished( true );
+}
 
 
+void K3bWavModule::addArguments()
+{
   kapp->config()->setGroup( "External Programs");
   
   // convert the file to big endian with sox
-  *m_convertingProcess << kapp->config()->readEntry( "sox path", "/usr/bin/sox" );
+  *m_process << kapp->config()->readEntry( "sox path", "/usr/bin/sox" );
 
-  *m_convertingProcess << "-V";
+  *m_process << "-V";
   // input
-  *m_convertingProcess << QString( "\"%1\"" ).arg( audioTrack()->absPath() );
+  *m_process << QString( "\"%1\"" ).arg( audioTrack()->absPath() );
 
   // output options
-  *m_convertingProcess << "-t" << "raw";    // filetype raw 
-  *m_convertingProcess << "-r" << "44100";  // samplerate
-  *m_convertingProcess << "-c" << "2";      // channels
-  *m_convertingProcess << "-s";             // signed linear data
-  *m_convertingProcess << "-w";             // 16-bit words
-  *m_convertingProcess << "-x";             // swap byte order
-  *m_convertingProcess << "-";              // output to stdout
-
-  m_clearDataTimer->disconnect();
-  connect( m_clearDataTimer, SIGNAL(timeout()), this, SLOT(slotClearData()) );
-
-  if( !m_convertingProcess->start( KProcess::NotifyOnExit, KProcess::Stdout ) ) {
-    qDebug( "(K3bWavModule) could not start sox process." );
-    return false;
-  }
-  else {
-    m_rawData = 0;
-    m_currentDataLength = 0;
-    m_currentData = 0;
-    m_finished = false;
-
-    qDebug( "(K3bWavModule) started sox" );
-    return true;
-  }
-}
-
-
-void K3bWavModule::slotOutputData(KProcess*, char* data, int len)
-{
-  if( m_currentDataLength != 0 ) {
-    qDebug( "(K3bWavModule) received stdout and current data was not 0!" );
-    qDebug( "(K3bWavModule) also this is NOT supposed to happen, we will work around it! ;-)" );
-
-    // only expand the current data
-    char* buffer = m_currentData;
-    m_currentData = new char[m_currentDataLength + len];
-    memcpy( m_currentData, buffer, m_currentDataLength );
-    memcpy( &m_currentData[m_currentDataLength], data, len );
-    delete buffer;
-
-    m_currentDataLength += len;
-  }
-  else {
-    m_currentData = new char[len];
-    m_currentDataLength = len;
-    memcpy( m_currentData, data, len );
-
-    emit output(len);
-  }
-
-  m_rawData += len;
-
-  m_convertingProcess->suspend();
-}
-
-
-void K3bWavModule::slotConvertingFinished()
-{
-  qDebug( "(K3bWavModule) sox finished. padding to multible of 2352 bytes!" );
-
-  m_finished = true;
-
-  // sox does not ensure it's output to be a multible of blocks (2352 bytes)
-  // since we round up the number of frames in slotCountRawDataFinished
-  // we need to pad by ourself to ensure cdrdao splits our data stream
-  // correcty
-  int diff = m_rawData % 2352;
-  
-  if( diff > 0 )
-    {
-      int bytesToPad = 2352 - diff;
-
-      if( m_currentDataLength == 0 ) {
-	m_currentData = new char[bytesToPad];
-	m_currentDataLength = bytesToPad;
-	memset( m_currentData, bytesToPad, 0 );
-
-	emit output( bytesToPad );
-      }
-      else {
-	// only expand the current data
-	char* buffer = m_currentData;
-	m_currentData = new char[m_currentDataLength + bytesToPad];
-	memcpy( m_currentData, buffer, m_currentDataLength );
-	memset( &m_currentData[m_currentDataLength], bytesToPad, 0 );
-
-	m_currentDataLength += bytesToPad;
-
-	// no need to emit output signal since we still waint for data to be read
-      }
-
-    }
-}
-
-
-int K3bWavModule::readData( char* data, int len )
-{
-  m_clearDataTimer->start(0, true);
-
-  if( m_currentDataLength == 0 ) {
-    return 0;
-  }
-  else if( len >= m_currentDataLength ) {
-    int i = m_currentDataLength;
-    m_currentDataLength = 0;
-
-    memcpy( data, m_currentData, i );
-
-    delete m_currentData;
-    m_currentData = 0;
-    m_convertingProcess->resume();
-
-    return i;
-  }
-  else {
-    qDebug("(K3bWavModule) readData: %i bytes available but only %i requested!", 
-	   m_currentDataLength, len );
-
-    memcpy( data, m_currentData, len );
-
-    char* buffer = m_currentData;
-    m_currentData = new char[m_currentDataLength - len];
-    memcpy( m_currentData, &buffer[len], m_currentDataLength - len );
-    delete buffer;
-
-    m_currentDataLength -= len;
-
-    return len;
-  }
-}
-
-
-void K3bWavModule::slotClearData()
-{
-  if( m_finished && m_currentDataLength == 0 ) {
-    emit finished( true );
-  }
-
-  else if( m_currentDataLength > 0 )
-    emit output( m_currentDataLength );
-
-  m_clearDataTimer->stop();
+  *m_process << "-t" << "raw";    // filetype raw 
+  *m_process << "-r" << "44100";  // samplerate
+  *m_process << "-c" << "2";      // channels
+  *m_process << "-s";             // signed linear data
+  *m_process << "-w";             // 16-bit words
+  *m_process << "-x";             // swap byte order
+  *m_process << "-";              // output to stdout
 }
 
 
 void K3bWavModule::slotParseStdErrOutput(KProcess*, char* output, int len)
 {
   qDebug( QString::fromLatin1( output, len ) );
-}
-
-
-void K3bWavModule::cancel()
-{
-  m_convertingProcess->disconnect();
-  if( m_convertingProcess->isRunning() )
-    m_convertingProcess->kill();
-
-  delete m_currentData;
-  m_currentDataLength = 0;
-
-  emit finished( false );
 }
 
 

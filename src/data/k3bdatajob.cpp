@@ -26,9 +26,11 @@
 #include <kapp.h>
 #include <kconfig.h>
 #include <klocale.h>
+#include <kstddirs.h>
 
 #include <qstring.h>
 #include <qstringlist.h>
+#include <qdatetime.h>
 
 #include <iostream>
 
@@ -60,7 +62,7 @@ void K3bDataJob::start()
     m_process = 0;
   }
   if( m_doc->onTheFly() ) {
-    m_pathSpecFile = k3bMain()->findTempFile( "mkisofs" );
+    m_pathSpecFile = locateLocal( "appdata", "temp/" ) + "k3b_" + QTime::currentTime().toString() + ".mkisofs";
     m_doc->writePathSpec( m_pathSpecFile );
 		
     // determine iso-size
@@ -175,7 +177,7 @@ void K3bDataJob::writeImage()
 {
   emit newTask( "Writing ISO-image" );
 	
-  m_pathSpecFile = k3bMain()->findTempFile( "mkisofs" );
+  m_pathSpecFile = locateLocal( "appdata", "temp/" ) + "k3b_" + QTime::currentTime().toString() + ".mkisofs";
   m_doc->writePathSpec( m_pathSpecFile );
 	
   // get image file path

@@ -21,8 +21,10 @@
 #include "../k3bview.h"
 
 #include <qstringlist.h>
+#include <qmap.h>
 
 class AudioListView;
+class AudioListViewItem;
 class QWidget;
 class K3bAudioDoc;
 class K3bAudioTrack;
@@ -54,6 +56,8 @@ class K3bAudioView : public K3bView  {
 		
  private:
   void setupPopupMenu();
+
+  K3bAudioDoc* m_doc;
 	
   KAction* actionProperties;
   KAction* actionRemove;
@@ -64,6 +68,8 @@ class K3bAudioView : public K3bView  {
   K3bAudioBurnDialog* m_burnDialog;
 
   QTimer* m_displayRefreshTimer;
+
+  QMap<K3bAudioTrack*, AudioListViewItem*> m_itemMap;
 		
  signals:
   void dropped(const QStringList&, uint position);

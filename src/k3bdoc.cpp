@@ -54,6 +54,7 @@ K3bDoc::K3bDoc( QObject* parent )
   m_process = new KProcess();
   m_burner = 0;
   m_dao = true;
+  m_onTheFly = true;
   m_error = K3b::NOT_STARTED;
   m_speed = 1;
 }

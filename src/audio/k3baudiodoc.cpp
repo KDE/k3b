@@ -189,11 +189,13 @@ void K3bAudioDoc::removeTrack( int position )
     return;
   }
 	
-  K3bAudioTrack* _track = take( position );
-  if( _track ) {
-    //		emitMessage( "removed track " + _track->fileName() );
-    delete _track;
-    emit trackRemoved( position );
+  K3bAudioTrack* track = take( position );
+  if( track ) {
+    // emit signal before deleteing the track to avoid crashes
+    // when the view tries to call some of the tracks' methods
+    //    emit newTracks();
+
+    delete track;
   }
 }
 
@@ -227,7 +229,6 @@ void K3bAudioDoc::addView(K3bView* view)
 {
   K3bAudioView* v = (K3bAudioView*)view;
   connect( v, SIGNAL(dropped(const QStringList&, uint)), this, SLOT(addTracks(const QStringList&, uint)) );
-  connect( v, SIGNAL(itemMoved(uint,uint)), this, SLOT(moveTrack(uint,uint)) );
 	
   K3bDoc::addView( view );
 }

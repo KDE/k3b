@@ -266,6 +266,15 @@ void K3bAudioBurnDialog::setupCdTextTab( QFrame* frame )
   _labelSongwriter->setBuddy( m_editSongwriter );
   _labelPerformer->setBuddy( m_editPerformer );
   _labelTitle->setBuddy( m_editTitle );
+
+
+  // tab order
+  setTabOrder( m_editTitle, m_editPerformer );
+  setTabOrder( m_editPerformer, m_editArranger);
+  setTabOrder( m_editArranger, m_editSongwriter );
+  setTabOrder( m_editSongwriter, m_editUpc_ean );
+  setTabOrder( m_editUpc_ean, m_editDisc_id );
+  setTabOrder( m_editDisc_id, m_editMessage );
 }
 
 

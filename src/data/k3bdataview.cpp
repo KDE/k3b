@@ -242,7 +242,7 @@ QString K3bDataFileViewItem::text( int index ) const
   case 0:
     return m_fileItem->k3bName();   // TODO: add the ability to show ISO, Joilet, or RockRidge
   case 1:
-    return m_fileItem->mimetype();
+    return m_fileItem->mimeComment();
   case 2:
     return QString::number( m_fileItem->size() );
   default:

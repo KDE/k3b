@@ -49,6 +49,7 @@ class K3bProjectBurnDialog : public KDialogBase
    K3bDoc* doc() const { return m_doc; }
 
    QString tempDir() const;
+   QString tempPath() const;
 	
  protected slots:
    virtual void slotUser1();

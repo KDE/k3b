@@ -32,6 +32,7 @@
 #include <qstring.h>
 #include <qlineedit.h>
 #include <qfile.h>
+#include <qfileinfo.h>
 #include <qdir.h>
 #include <qtimer.h>
 
@@ -317,10 +318,21 @@ void K3bProjectBurnDialog::setTempDir( const QString& dir )
 }
 
 
+QString K3bProjectBurnDialog::tempPath() const
+{
+  if( m_groupTempDir ) {
+    return m_editDirectory->text();
+  }
+  else
+    return "";
+}
+
+
 QString K3bProjectBurnDialog::tempDir() const
 {
-  if( m_groupTempDir )
-    return m_editDirectory->text();
+  if( m_groupTempDir ) {
+    return QFileInfo( m_editDirectory->text() ).dirPath() + "/";
+  }
   else
     return "";
 }

@@ -30,24 +30,24 @@ class K3bAudioTrack;
 
 class AudioListViewItem : public QListViewItem  {
 
-public:
-	AudioListViewItem( K3bAudioTrack* track, QListView* parent );
-	AudioListViewItem( K3bAudioTrack* track, QListView* parent, QListViewItem* after );
-	~AudioListViewItem();
+ public:
+  AudioListViewItem( K3bAudioTrack* track, QListView* parent );
+  AudioListViewItem( K3bAudioTrack* track, QListView* parent, QListViewItem* after );
+  ~AudioListViewItem();
 
-	/** reimplemented from QListViewItem */
-	QString text(int i) const;
+  /** reimplemented from QListViewItem */
+  QString text(int i) const;
 	
-	/** reimplemented from QListViewItem */
-	void setText(int col, const QString& text );
+  /** reimplemented from QListViewItem */
+  void setText(int col, const QString& text );
 	
-	/** reimplemented from QListViewItem */
-	QString key( int column, bool a ) const;
+  /** reimplemented from QListViewItem */
+  QString key( int column, bool a ) const;
 	
-	K3bAudioTrack* audioTrack() { return m_track; }
+  K3bAudioTrack* audioTrack() { return m_track; }
 		
-private:
-	K3bAudioTrack* m_track;
+ private:
+  K3bAudioTrack* m_track;
 };
 
 #endif

@@ -56,6 +56,8 @@ K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const ch
 
   if( K3bDevice* dev = writerDevice() )
     m_checkBurnProof->setEnabled( dev->burnproof() );
+
+  setTempDir( tempDir() + "image.iso" );
 }
 
 K3bDataBurnDialog::~K3bDataBurnDialog(){
@@ -120,6 +122,9 @@ void K3bDataBurnDialog::saveSettings()
     ((K3bDataDoc*)doc())->setWhiteSpaceTreatment( K3bDataDoc::convertToUnderScore );
   else
     ((K3bDataDoc*)doc())->setWhiteSpaceTreatment( K3bDataDoc::normal );
+
+  // save image file path
+  ((K3bDataDoc*)doc())->setIsoImage( tempPath() );  
 }
 
 
@@ -466,14 +471,13 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
   frameLayout->addWidget( m_groupWhiteSpace, 3, 0 );
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
   frameLayout->addItem( spacer, 2, 0 );
-
 }
 
 
 void K3bDataBurnDialog::slotTempDirButtonPressed()
 {
   // TODO: ask for confirmation if already exists
-  QString dir = KFileDialog::getSaveFileName( tempDir(), QString::null, k3bMain(), "Select Iso Image" );
+  QString dir = KFileDialog::getSaveFileName( tempDir() + "image.iso", QString::null, k3bMain(), "Select Iso Image" );
   if( !dir.isEmpty() ) {
     setTempDir( dir );
   }

@@ -22,12 +22,14 @@
 #include "../k3bdoc.h"
 #include "k3baudiodoc.h"
 #include "k3baudiotrack.h"
+#include "input/k3baudiomodule.h"
 #include "../device/k3bdevice.h"
 
 #include <kprocess.h>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kstddirs.h>
+#include <kurl.h>
 
 #include <qstring.h>
 #include <qdatetime.h>
@@ -361,6 +363,10 @@ void K3bAudioJob::slotCdrecordFinished()
       emit infoMessage( "cdrecord did not exit cleanly!" );
     }
 
+
+  clearBufferFiles();
+
+
   emit finished( this );
 
   m_process.disconnect();
@@ -398,7 +404,9 @@ void K3bAudioJob::slotCdrdaoFinished()
   qDebug("(K3bAudioJob) Removing temporary TOC-file");
   QFile::remove( m_tocFile );
   m_tocFile = QString::null;
-	
+  
+  clearBufferFiles();
+
   emit finished( this );
 
   m_process.disconnect();
@@ -408,23 +416,42 @@ void K3bAudioJob::slotCdrdaoFinished()
 void K3bAudioJob::decodeNextFile()
 {
   // find next track to decode
-  SAudioTrackInfo* info = m_trackInfoList.getFirst();
-  while( info != 0 && info->decoded )
-    info = m_trackInfoList.next();
+  m_currentTrackInfo = m_trackInfoList.getFirst();
+  while( m_currentTrackInfo != 0 && m_currentTrackInfo->decoded )
+    m_currentTrackInfo = m_trackInfoList.next();
    
-  if( info == 0 ) {
+  if( m_currentTrackInfo == 0 ) {
     // all files have been decoded
     // we can start the burnprocess...
 
-    // TODO: start burning
+    startWriting();
   }
   else {
-    // decode info->track
-    // TODO: connect to some module-signals: percent(int) and finished()
-    //    info->urlToDecodedWav = info->track->module()->writeToWav( /* get default save position from config!*/);
+    K3bAudioModule* audioModule = m_currentTrackInfo->track->module();
+    connect( audioModule, SIGNAL(percent(int)), this, SIGNAL(subPercent(int)) );
+    connect( audioModule, SIGNAL(finished(bool)), this, SLOT(slotModuleFinished(bool)) );
+    KURL bufferFile = audioModule->writeToWav( k3bMain()->findTempFile( "wav" ) );
+    if( bufferFile.isEmpty() )
+      qDebug( "(K3bAudioJob) Could not buffer track: " + m_currentTrackInfo->track->fileName() );
+    else
+      m_currentTrackInfo->urlToDecodedWav = bufferFile;
   }
 }
 
+
+void K3bAudioJob::slotModuleFinished( bool success )
+{
+  if( !success ) {
+    qDebug( "(K3bAudioJob) Could not buffer track " + m_currentTrackInfo->track->fileName() );
+  }
+  else {
+    qDebug( "(K3bAudioJob) Successfull buffered track " + m_currentTrackInfo->track->fileName() );
+    m_currentTrackInfo->decoded = true;
+    m_currentTrackInfo->track->module()->disconnect( this );
+
+    decodeNextFile();
+  }
+}
 
 void K3bAudioJob::startWriting()
 {
@@ -432,11 +459,22 @@ void K3bAudioJob::startWriting()
   emit newSubTask( i18n("Preparing write process...") );
 
   m_iDocSize = m_doc->size();
+
+
+  // this should be replaced by something better
+  // -----------------------------------------------------
+  for( SAudioTrackInfo* info = m_trackInfoList.first(); info != 0; info = m_trackInfoList.next() ) {
+    info->track->setBufferFile( info->urlToDecodedWav.path() );
+  }
+  // -----------------------------------------------------
 	
   m_process.clearArguments();
   m_process.disconnect();
 	
   firstTrack = true;
+
+  if( m_doc->onTheFly() )
+    m_doc->setOnTheFly( false );
 	
   if( m_doc->dao() || m_doc->cdText() ) {
     // write in dao-mode
@@ -635,7 +673,7 @@ void K3bAudioJob::createTrackInfo()
   m_trackInfoList.setAutoDelete( true );
   m_trackInfoList.clear();
 
-  const K3bAudioTrack* track = m_doc->at(0);
+  K3bAudioTrack* track = m_doc->at(0);
   while( track != 0 ) {
     m_trackInfoList.append( new SAudioTrackInfo( track, KURL() ) );
     track = m_doc->next();
@@ -643,8 +681,14 @@ void K3bAudioJob::createTrackInfo()
 }
 
 
-void K3bAudioJob::slotDecodingFinished()
+void K3bAudioJob::clearBufferFiles()
 {
-  // we test if there are still tracks to decode 
-  
+  // TODO: add option to not delete the buffer files!
+
+  emit infoMessage( i18n("Removing temporary files!") );
+
+  for( SAudioTrackInfo* info = m_trackInfoList.first(); info != 0; info = m_trackInfoList.next() ) {
+    info->track->setBufferFile( QString::null );
+    QFile::remove( info->urlToDecodedWav.path() );
+  }
 }

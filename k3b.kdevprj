@@ -155,7 +155,7 @@ install_location=
 type=HEADER
 
 [src/audio/input/Makefile.am]
-files=src/audio/input/k3baudiomodule.h,src/audio/input/k3baudiomodulefactory.cpp,src/audio/input/k3baudiomodulefactory.h,src/audio/input/k3bmp3module.cpp,src/audio/input/k3bmp3module.h,src/audio/input/k3bwavmodule.cpp,src/audio/input/k3bwavmodule.h
+files=src/audio/input/k3baudiomodule.h,src/audio/input/k3baudiomodulefactory.cpp,src/audio/input/k3baudiomodulefactory.h,src/audio/input/k3bmp3module.cpp,src/audio/input/k3bmp3module.h,src/audio/input/k3bwavmodule.cpp,src/audio/input/k3bwavmodule.h,src/audio/input/k3bexternalbinmodule.h,src/audio/input/k3bexternalbinmodule.cpp
 sub_dirs=
 type=static_library
 
@@ -172,6 +172,18 @@ install_location=
 type=SOURCE
 
 [src/audio/input/k3baudiomodulefactory.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/audio/input/k3bexternalbinmodule.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/audio/input/k3bexternalbinmodule.h]
 dist=true
 install=false
 install_location=

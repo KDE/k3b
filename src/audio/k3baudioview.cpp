@@ -45,6 +45,8 @@
 K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name, int wflags )
   : K3bView( pDoc, parent, name, wflags )
 {
+  m_doc = pDoc;
+
   QGridLayout* grid = new QGridLayout( this );
   grid->setSpacing( 5 );
   grid->setMargin( 2 );
@@ -74,6 +76,7 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
 
   connect( pDoc, SIGNAL(newTracks()), this, SLOT(slotUpdateItems()) );
 
+
   m_displayRefreshTimer = new QTimer( this );
   connect( m_displayRefreshTimer, SIGNAL(timeout()), this, SLOT(update()) );
   m_displayRefreshTimer->start(1000);
@@ -96,8 +99,10 @@ void K3bAudioView::setupPopupMenu()
 {
   m_popupMenu = new KPopupMenu( m_songlist, "AudioViewPopupMenu" );
   m_popupMenu->insertTitle( i18n( "Track Options" ) );
-  actionProperties = new KAction( i18n("&Properties"), SmallIcon( "edit" ), CTRL+Key_P, this, SLOT(showPropertiesDialog()), this );
-  actionRemove = new KAction( i18n( "&Remove" ), SmallIcon( "editdelete" ), Key_Delete, this, SLOT(removeTrack()), this );
+  actionProperties = new KAction( i18n("&Properties"), SmallIcon( "edit" ), 
+				  CTRL+Key_P, this, SLOT(showPropertiesDialog()), this );
+  actionRemove = new KAction( i18n( "&Remove" ), SmallIcon( "editdelete" ), 
+			      Key_Delete, this, SLOT(removeTrack()), this );
   actionRemove->plug( m_popupMenu );
   actionProperties->plug( m_popupMenu);
 }
@@ -148,8 +153,8 @@ void K3bAudioView::slotItemMoved( QListViewItem* item, QListViewItem*, QListView
   }
   else
     after = 0;
-	
-  emit itemMoved( before, after );
+
+  m_doc->moveTrack( before, after );
 }
 
 void K3bAudioView::showPopupMenu( QListViewItem* _item, const QPoint& _point )
@@ -190,6 +195,9 @@ void K3bAudioView::showPropertiesDialog()
   updatePropertiesDialog( m_songlist->selectedItem() );
 }
 
+
+
+
 void K3bAudioView::removeTrack()
 {
   AudioListViewItem* _track = (AudioListViewItem*)m_songlist->selectedItem();
@@ -197,6 +205,7 @@ void K3bAudioView::removeTrack()
     ((K3bAudioDoc*)doc)->removeTrack( _track->audioTrack()->index() );
 		
     // not best, I think we should connect to doc.removedTrack (but while there is only one view this is not important!)
+    m_itemMap.remove( _track->audioTrack() );
     delete _track;
   }
 }
@@ -204,5 +213,36 @@ void K3bAudioView::removeTrack()
 
 void K3bAudioView::slotUpdateItems()
 {
-  
+  // iterate through all viewItems and check if the track is still there
+//   QListViewItemIterator it( m_songlist );
+//   for( ; it.current(); ++it ) {
+//     AudioListViewItem* item = (AudioListViewItem*)it.current();
+//     bool stillThere = false;
+
+//     for( K3bAudioTrack* track = m_doc->first(); track != 0; track = m_doc->next() ) {
+//       if( track == item->audioTrack() ) {
+// 	stillThere = true;
+// 	break;
+//       }
+//     }
+
+//     if( !stillThere ) {
+//       m_itemMap.remove( item->audioTrack() );
+//       delete item;
+//     }
+//   }
+
+
+  // iterate through all doc-tracks and test if we have a listItem, if not, create one
+  K3bAudioTrack* track = m_doc->first();
+  K3bAudioTrack* lastTrack = 0;
+  while( track != 0 ) {
+    if( !m_itemMap.contains( track ) )
+      m_itemMap.insert( track, new AudioListViewItem( track, m_songlist, m_itemMap[lastTrack] ) );
+
+    lastTrack = track;
+    track = m_doc->next();
+  }
+
+   m_fillStatusDisplay->update();
 }

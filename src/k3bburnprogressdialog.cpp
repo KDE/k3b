@@ -16,11 +16,10 @@
  ***************************************************************************/
 
 #include "k3bburnprogressdialog.h"
-#include "audio/k3baudiodoc.h"
-#include "audio/k3baudiotrack.h"
-#include "audio/k3baudiojob.h"
 #include "kcutlabel.h"
 #include "device/k3bdevice.h"
+#include "k3bjob.h"
+#include "k3bdoc.h"
 
 #include <qgroupbox.h>
 #include <qlabel.h>
@@ -260,6 +259,8 @@ void K3bBurnProgressDialog::setJob( K3bBurnJob* job )
   m_labelCdProgress->setText("");
   m_labelTrackProgress->setText("");
   m_groupProgress->setTitle( i18n( "Progress" ) );
+
+  m_debugOutputMap.clear();
 
   //	m_progressTrack->hide();
   //	m_labelFileName->hide();

@@ -317,7 +317,7 @@ void K3bApp::readProperties(KConfig*)
 bool K3bApp::queryClose()
 {
   QStringList saveFiles;
-  K3bDoc* doc;
+  //  K3bDoc* doc;
   if(pDocList->isEmpty())
     return true;
 

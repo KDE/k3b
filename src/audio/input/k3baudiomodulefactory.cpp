@@ -17,20 +17,20 @@ K3bAudioModule* K3bAudioModuleFactory::createModule( K3bAudioTrack* track )
   QString _extension = QFileInfo( track->fileName() ).extension(false);
 
   // ==============
-  // for now we do do deep filetype-checking but select the module
+  // for now we do no deep filetype-checking but select the module
   // according to the extension
   // ==============
 
   if( _extension.contains("mp3", false) ) {
-    qDebug( "Creating K3bAudioModule for mp3..." );
+    qDebug( "(K3bAudioModuleFactory) Creating K3bAudioModule for mp3..." );
     return new K3bMp3Module( track );
   }
   else if( _extension.contains("wav", false) ) {
-    qDebug( "Creating K3bAudioModule for wav..." );
+    qDebug( "(K3bAudioModuleFactory) Creating K3bAudioModule for wav..." );
     return new K3bWavModule( track );
   }
   else {
-    qDebug( "No K3bAudioModule availible." );
+    qDebug( "(K3bAudioModuleFactory) No K3bAudioModule availible." );
     return 0;
   }
 }
@@ -41,7 +41,7 @@ bool K3bAudioModuleFactory::moduleAvailable( const KURL& url )
   QString _extension = QFileInfo( url.path() ).extension(false);
 
   // ==============
-  // for now we do do deep filetype-checking but select the module
+  // for now we do no deep filetype-checking but select the module
   // according to the extension
   // ==============
 

@@ -50,7 +50,6 @@ class K3bAudioOnTheFlyJob : public K3bBurnJob  {
  protected slots:
   void slotParseCdrdaoOutput( KProcess*, char* output, int len );
   void slotCdrdaoFinished();
-  void slotEmitProgress( int trackMade, int TrackSize );
 
   void slotWroteData();
   void slotModuleOutput( int );
@@ -61,15 +60,15 @@ class K3bAudioOnTheFlyJob : public K3bBurnJob  {
   QTimer* m_streamingTimer;
   KProcess m_process;
   K3bAudioDoc* m_doc;
-  const K3bAudioTrack* m_currentProcessedTrack;
+
+  K3bAudioTrack* m_currentProcessedTrack;
+  int m_currentProcessedTrackNumber;
+
   bool firstTrack;
   QString m_tocFile;
   int m_iNumTracksAlreadyWritten;
   int m_iTracksAlreadyWrittenSize;
   int m_iDocSize;
-
-  int m_overallSize;
-  int m_alreadyWritten;
 
   char* m_currentWrittenData;
   long m_currentModuleDataLength;

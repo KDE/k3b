@@ -54,25 +54,26 @@ class K3bAudioJob : public K3bBurnJob  {
   void slotCdrecordFinished();
   void slotCdrdaoFinished();
   void slotEmitProgress( int trackMade, int TrackSize );
-  void slotDecodingFinished();
+  void slotModuleFinished( bool );
 	
  private:
   class SAudioTrackInfo {
   public:
-    SAudioTrackInfo( const K3bAudioTrack* t, const KURL& url )
+    SAudioTrackInfo( K3bAudioTrack* t, const KURL& url )
       :urlToDecodedWav( url )
       {
 	track = t;
 	decoded = false;
       }
-    const K3bAudioTrack* track;
+    K3bAudioTrack* track;
     KURL urlToDecodedWav;
     bool decoded;
   };
   QList<SAudioTrackInfo> m_trackInfoList;
+  SAudioTrackInfo* m_currentTrackInfo;
 
   void createTrackInfo();
-
+  void clearBufferFiles();
   void decodeNextFile();
   void startWriting();
 	

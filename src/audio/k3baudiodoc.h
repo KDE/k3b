@@ -57,6 +57,7 @@ class K3bAudioDoc : public K3bDoc
   bool padding() const;
   int numberOfTracks() const { return m_tracks->count(); }
 
+  K3bAudioTrack* first() { return m_tracks->first(); }
   K3bAudioTrack* current() const { return m_tracks->current(); }
   K3bAudioTrack* next() { return m_tracks->next(); }
   K3bAudioTrack* prev() { return m_tracks->prev(); }

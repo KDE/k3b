@@ -2,14 +2,12 @@
 #define K3BWAVMODULE_H
 
 
-#include "k3baudiomodule.h"
+#include "k3bexternalbinmodule.h"
 
 class QTimer;
-class KShellProcess;
-class KProcess;
 
 
-class K3bWavModule : public K3bAudioModule
+class K3bWavModule : public K3bExternalBinModule
 {
   Q_OBJECT
 
@@ -21,34 +19,20 @@ class K3bWavModule : public K3bAudioModule
 //  bool valid() const;
 
   KURL writeToWav( const KURL& url );
-  bool getStream();
 
   static int waveLength(const char *filename, long offset,
 			long *hdrlen, unsigned long *datalen);
 
-  int readData( char*, int );
+ protected:
+  void addArguments();
 
- public slots:
-  void cancel();
-
- private slots:
+ protected slots:
+  void slotGatherInformation();
   void slotParseStdErrOutput(KProcess*, char*, int);
-  void slotOutputData(KProcess*, char*, int);
-  //  void slotCountRawData(KProcess*, char*, int);
-  void slotConvertingFinished();
-  void slotClearData();
+  void slotWavFinished();
 
  private:
   QTimer* m_streamingTimer;
-  QTimer* m_clearDataTimer;
-  KShellProcess* m_convertingProcess;
-
-  char* m_currentData;
-  int m_currentDataLength;
-
-  long m_rawData;
-
-  bool m_finished;
 };
 
 

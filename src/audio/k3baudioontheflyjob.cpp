@@ -51,9 +51,6 @@ K3bAudioOnTheFlyJob::K3bAudioOnTheFlyJob( K3bAudioDoc* doc )
   m_currentWrittenData = 0;
   m_streamingStarted = false;
   
-  m_overallSize = m_doc->length();
-  m_alreadyWritten = 0;
-
   m_streamingTimer = new QTimer( this );
   connect( m_streamingTimer, SIGNAL(timeout()), this, SLOT(slotTryWritingToProcess()) );
 
@@ -92,6 +89,10 @@ void K3bAudioOnTheFlyJob::slotParseCdrdaoOutput( KProcess*, char* output, int le
     {
       *str = (*str).stripWhiteSpace();
 
+
+      emit debuggingOutput( "cdrdao", *str );
+
+
       bool _debug = false;
 
       // find some messages from cdrdao
@@ -102,7 +103,7 @@ void K3bAudioOnTheFlyJob::slotParseCdrdaoOutput( KProcess*, char* output, int le
       }
       else if( (*str).startsWith( "Executing power" ) ) {
 	//emit infoMessage( i18n( *str ) );
-	emit newSubTask( i18n(*str) );
+	emit newSubTask( i18n("Executing Power calibration") );
       }
       else if( (*str).startsWith( "Power calibration successful" ) ) {
 	emit infoMessage( i18n("Power calibration successful") );
@@ -202,12 +203,14 @@ void K3bAudioOnTheFlyJob::slotParseCdrdaoOutput( KProcess*, char* output, int le
 void K3bAudioOnTheFlyJob::cancel()
 {
   if( error() == K3b::WORKING ) {
-    emit infoMessage("Writing canceled.");
+    emit infoMessage( i18n("Writing canceled.") );
 
 
     // cancel the module!!!
-    m_currentProcessedTrack->module()->cancel();
+    if( m_currentProcessedTrack != 0 )
+      m_currentProcessedTrack->module()->cancel();
 
+    m_process.closeStdin();
     m_process.kill();
 	
     // remove toc-file
@@ -226,13 +229,13 @@ void K3bAudioOnTheFlyJob::cancel()
 void K3bAudioOnTheFlyJob::start()
 {
   m_iNumTracksAlreadyWritten = 0;
+  m_currentProcessedTrackNumber = 0;
 	
   emit started();
 	
   m_error = K3b::WORKING;
 
   emit newTask( i18n("Writing on the fly") );
-  emit infoMessage( i18n("Warning: Burning on-the-fly could cause buffer-underruns!") );
   emit newSubTask( i18n("Preparing write process...") );
 
   m_iDocSize = m_doc->size();
@@ -242,6 +245,8 @@ void K3bAudioOnTheFlyJob::start()
 	
   firstTrack = true;
 	
+  m_doc->setOnTheFly( true );
+
   // write in dao-mode
   if( !m_doc->dao() ) {
     emit infoMessage( i18n("On-the-fly writing is only supported in DAO-mode.") );
@@ -325,7 +330,8 @@ void K3bAudioOnTheFlyJob::start()
 	     this, SLOT(slotWroteData()) );
 
     // first try to start the audiomodule
-    m_currentProcessedTrack = m_doc->at(0);
+    m_currentProcessedTrackNumber = 0;
+    m_currentProcessedTrack = m_doc->first();
     m_currentProcessedTrack->module()->disconnect( this );
 
     connect( m_currentProcessedTrack->module(), SIGNAL(output(int)), 
@@ -360,9 +366,6 @@ void K3bAudioOnTheFlyJob::start()
 
 	  m_currentModuleDataLength = 0;
 	  m_streamingStarted = false;
-
-	  m_overallSize = m_doc->length();
-	  m_alreadyWritten = 0;
 	}
     }
   }
@@ -415,11 +418,12 @@ void K3bAudioOnTheFlyJob::slotModuleFinished( bool success )
   if( success ) {
     // start the next module
     m_currentProcessedTrack->module()->disconnect( this );
-    
-    m_currentProcessedTrack = m_doc->next();
+
+    m_currentProcessedTrackNumber++;
+
+    m_currentProcessedTrack = m_doc->at( m_currentProcessedTrackNumber );
     if( m_currentProcessedTrack != 0 ) {
-      m_currentProcessedTrack->module()->disconnect( this );
-      
+
       connect( m_currentProcessedTrack->module(), SIGNAL(output(int)), 
 	       this, SLOT(slotModuleOutput(int)) );
       connect( m_currentProcessedTrack->module(), SIGNAL(finished(bool)),
@@ -431,13 +435,13 @@ void K3bAudioOnTheFlyJob::slotModuleFinished( bool success )
       }
       else {
 	// error
-	qDebug( "Error" );
+	qDebug( "(K3bAudioOnTheFlyJob) Could not start streaming for track: " + m_currentProcessedTrack->fileName() );
 	m_process.closeStdin();
       }
     }
     else {
       emit infoMessage( i18n("All tracks streamed") );
-      qDebug("(K3bAudioOnTheFlyJob) closing stdin." );
+      qDebug("(K3bAudioOnTheFlyJob) All tracks streamed. Closing cdrdao's Stdin."  );
       m_process.closeStdin();
     }
   }
@@ -457,14 +461,17 @@ void K3bAudioOnTheFlyJob::slotCdrdaoFinished()
 	{
 	case 0:
 	  m_error = K3b::SUCCESS;
-	  emit infoMessage( "Burning successfully finished" );
+	  if( doc()->dummy() )
+	    emit infoMessage( i18n("Simulation successfully completed") );
+	  else
+	    emit infoMessage( i18n("Writing successfully completed") );
 	  break;
 				
 	default:
 	  // no recording device and also other errors!! :-(
-	  emit infoMessage( "Cdrdao returned some error!" );
-	  emit infoMessage( "Sorry, no error handling yet! :-((" );
-	  emit infoMessage( "Please send me a mail with the last output..." );
+	  emit infoMessage( i18n("Cdrdao returned some error!") );
+	  emit infoMessage( i18n("Sorry, no error handling yet! :-((") );
+	  emit infoMessage( i18n("Please send me a mail with the last output...") );
 	  m_error = K3b::CDRDAO_ERROR;
 	  break;
 	}
@@ -472,7 +479,7 @@ void K3bAudioOnTheFlyJob::slotCdrdaoFinished()
   else
     {
       m_error = K3b::CDRDAO_ERROR;
-      emit infoMessage( "cdrdao did not exit cleanly!" );
+      emit infoMessage( i18n("Cdrdao did not exit cleanly!") );
     }
 
   // remove toc-file
@@ -483,23 +490,4 @@ void K3bAudioOnTheFlyJob::slotCdrdaoFinished()
   emit finished( this );
 
   m_process.disconnect();
-}
-
-
-void K3bAudioOnTheFlyJob::slotEmitProgress( int trackMade, int trackSize )
-{
-  double trackPercent;
-  if( trackSize > 0 )
-    trackPercent = 100.0 * (double)trackMade/(double)trackSize;
-  else
-    trackPercent = 0;
-
-
-  int alreadyWritten = m_alreadyWritten + (int)((double)m_currentProcessedTrack->length() * trackPercent);
-
-  int overallPercent = 100 * alreadyWritten / m_overallSize;
-	
-  emit processedSubSize( trackMade, trackSize );
-  emit subPercent( (int)trackPercent  );
-  emit percent( overallPercent );
 }
