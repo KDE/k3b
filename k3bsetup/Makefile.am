@@ -15,5 +15,4 @@ k3bsetup2dir = $(kde_appsdir)/Settings/System
 bin_SCRIPTS = k3bsetup
 
 messages: rc.cpp
-	$(EXTRACTRC) `find . -name "*.ui"` > rc.cpp
-	$(XGETTEXT) `find -name "*.cpp" -or -name "*.h"` -o $(podir)/k3bsetup.pot
+	$(XGETTEXT) *.cpp -o $(podir)/k3bsetup.pot

@@ -70,8 +70,8 @@ public:
 
 
 
-K3bSetup2::K3bSetup2( QWidget *parent, const char *name, const QStringList& )
-  : KCModule( parent, name )
+K3bSetup2::K3bSetup2( QWidget *parent, const char *, const QStringList& )
+  : KCModule( parent, "k3bsetup" )
 {
   d = new Private();
   d->config = new KConfig( "k3bsetup2rc" );
