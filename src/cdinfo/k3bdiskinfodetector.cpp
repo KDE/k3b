@@ -7,11 +7,9 @@
 #include "../tools/k3bexternalbinmanager.h"
 
 #include <kdebug.h>
-#include <kprocess.h>
 
 #include <qtimer.h>
 #include <qfile.h>
-
 
 #include <sys/ioctl.h>		// ioctls
 #include <unistd.h>		// lseek, read. etc
@@ -23,7 +21,6 @@
 K3bDiskInfoDetector::K3bDiskInfoDetector( QObject* parent )
   : QObject( parent )
 {
-  m_tcWrapper = 0;
 }
 
 
@@ -48,10 +45,6 @@ void K3bDiskInfoDetector::detect( K3bDevice* device )
   QTimer::singleShot(0,this,SLOT(fetchTocInfo()));
 }
 
-
-void K3bDiskInfoDetector::cancel()
-{
-}
 
 void K3bDiskInfoDetector::finish(bool success)
 {
@@ -262,7 +255,25 @@ void K3bDiskInfoDetector::fetchTocInfo()
   else
     calculateDiscId();
 
-  testForDvd();
+  int caps;
+
+// get capabilities
+  if ( (caps=::ioctl(m_cdfd,CDROM_GET_CAPABILITY)) >= 0 ) 
+// is the device dvd capable ?
+    if ( caps & (CDC_DVD | CDC_DVD_R | CDC_DVD_RAM) ) {
+//     try to read the physical dvd-structure
+//     if this fails, we probably cannot take any further (usefull) dvd-action
+       dvd_struct dvdinfo;
+       ::memset(&dvdinfo,0,sizeof(dvd_struct));
+       dvdinfo.type = DVD_STRUCT_PHYSICAL;
+       if ( ::ioctl(m_cdfd,DVD_READ_STRUCT,&dvdinfo) == 0 ) {
+          m_info.empty = false;
+          m_info.noDisk = false;
+          m_info.tocType = K3bDiskInfo::DVD;
+       }
+    }
+
+  finish(true);
 }
 
 void K3bDiskInfoDetector::fetchIsoInfo()
@@ -279,37 +290,6 @@ void K3bDiskInfoDetector::fetchIsoInfo()
     m_info.isoPreparerId = QString::fromLocal8Bit( &buf[16*2048+446], 128 ).stripWhiteSpace();
     m_info.isoApplicationId = QString::fromLocal8Bit( &buf[16*2048+574], 128 ).stripWhiteSpace();
   }
-}
-
-
-void K3bDiskInfoDetector::testForDvd()
-{
-
-  if( m_info.tocType == K3bDiskInfo::DATA && K3bTcWrapper::supportDvd() ) {
-    // check if it is a dvd we can display
-
-    if( !m_tcWrapper ) {
-      kdDebug() << "(K3bDiskInfoDetector) testForDvd" << endl;
-      m_tcWrapper = new K3bTcWrapper( this );
-      connect( m_tcWrapper, SIGNAL(successfulDvdCheck(bool)), this, SLOT(slotIsDvd(bool)) );
-    }
-
-    m_tcWrapper->isDvdInsert( m_device );
-
-  } else {
-    finish(true);
-  }
-}
-
-
-void K3bDiskInfoDetector::slotIsDvd( bool dvd )
-{
-  if( dvd ) {
-    m_info.empty = false;
-    m_info.noDisk = false;
-    m_info.tocType = K3bDiskInfo::DVD;
-  }
-  finish(true);
 }
 
 
