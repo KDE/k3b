@@ -173,10 +173,6 @@ bool K3bCdDevice::CdDevice::init()
 {
   kdDebug() << "(K3bCdDevice) " << blockDeviceName() << ": init()" << endl;
 
-  bool attemptopen = true;
-#ifdef Q_OS_FREEBSD
-  attemptopen = false;
-#endif
   //
   // they all should read CD-ROM.
   //
@@ -184,9 +180,10 @@ bool K3bCdDevice::CdDevice::init()
 
   d->supportedProfiles = 0;
 
-  if(attemptopen && (open() < 0))
+#ifndef Q_OS_FREEBSD
+  if( open() < 0 )
     return false;
-
+#endif
 
   //
   // inquiry
