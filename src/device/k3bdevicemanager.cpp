@@ -80,6 +80,10 @@ K3bDevice* K3bDeviceManager::findDevice( int bus, int id, int lun )
 
 K3bDevice* K3bDeviceManager::findDevice( const QString& devicename )
 {
+  if( devicename.isEmpty() ) {
+    kdDebug() << "(K3bDeviceManager) request for empty device!" << endl;
+    return 0;
+  }
   QPtrListIterator<K3bDevice> it( m_allDevices );
   while( it.current() ) {
     if( it.current()->ioctlDevice() == devicename ||
@@ -474,6 +478,7 @@ void K3bDeviceManager::scanFstab()
     kdDebug() << "(K3bDeviceManager) scanning fstab: " << md << endl;
     
     if( K3bDevice* dev = findDevice( resolveSymLink(md) ) ) {
+      kdDebug() << "(K3bDeviceManager) found device for " << md << ": " << resolveSymLink(md) << endl;
       if( dev->mountDevice().isEmpty() ) {
 	dev->setMountPoint( mountInfo->mnt_dir );
 	dev->setMountDevice( md );
@@ -482,7 +487,7 @@ void K3bDeviceManager::scanFstab()
     else {
       // compare bus, id, lun since the same device can for example be
       // determined as /dev/srX or /dev/scdX
-      int cdromfd = ::open( md.latin1(), O_RDONLY | O_NONBLOCK );
+      int cdromfd = ::open( mountInfo->mnt_fsname, O_RDONLY | O_NONBLOCK );
       if (cdromfd != -1) {
 	int bus = -1, id = -1, lun = -1;
 	if( determineBusIdLun( cdromfd, bus, id, lun ) ) {
@@ -548,7 +553,7 @@ QString K3bDeviceManager::resolveSymLink( const QString& path )
     return path;
   }
 
-  return QString::null;
+  return QString::fromLatin1( resolved );
 }
 
 
