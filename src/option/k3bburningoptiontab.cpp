@@ -66,6 +66,7 @@ void K3bBurningOptionTab::setupGui()
   m_comboPregapFormat = new QComboBox( m_groupAudio );
 
   QLabel* labelDefaultPregap = new QLabel( i18n("&Default pregap:"), m_groupAudio );
+  labelDefaultPregap->setBuddy( m_editDefaultPregap );
 
   groupAudioLayout->addWidget( labelDefaultPregap, 0, 0 );
   groupAudioLayout->addWidget( m_editDefaultPregap, 0, 1 );

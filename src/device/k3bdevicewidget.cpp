@@ -58,6 +58,7 @@ public:
   bool writer;
   bool cdrw;
   bool burnproof;
+  bool dao;
   int bufferSize;
 };
 
@@ -92,6 +93,7 @@ K3bDeviceWidget::PrivateTempDevice::PrivateTempDevice( K3bDevice* d )
   cdrw = d->writesCdrw();
   burnproof = d->burnproof();
   bufferSize = d->bufferSize();
+  dao = d->dao();
 }
 
 
@@ -172,6 +174,8 @@ K3bDeviceWidget::K3bDeviceWidget( K3bDeviceManager* manager, QWidget *parent, co
   m_checkBurnProof = new QCheckBox( m_groupDeviceInfo, "m_checkBurnProof" );
   m_labelCdrw = new QLabel( i18n( "Write CDRW:" ), m_groupDeviceInfo, "labelCdrw" );
   m_checkCdrw = new QCheckBox( m_groupDeviceInfo, "m_checkCdrw" );
+  m_labelDao = new QLabel( i18n("Disk At Once:"), m_groupDeviceInfo );
+  m_checkDao = new QCheckBox( m_groupDeviceInfo );
   m_labelCdText = new QLabel( i18n( "Write CD-Text:" ), m_groupDeviceInfo, "labelCdText" );
   m_line3 = new QFrame( m_groupDeviceInfo, "line3" );
   m_line3->setFrameStyle( QFrame::HLine | QFrame::Sunken );
@@ -217,6 +221,8 @@ K3bDeviceWidget::K3bDeviceWidget( K3bDeviceManager* manager, QWidget *parent, co
   groupDeviceInfoLayout->addWidget( m_checkBurnProof, 12, 1 );
   groupDeviceInfoLayout->addWidget( m_labelCdrw, 13, 0 );
   groupDeviceInfoLayout->addWidget( m_checkCdrw, 13, 1 );
+  groupDeviceInfoLayout->addWidget( m_labelDao, 14, 0 );
+  groupDeviceInfoLayout->addWidget( m_checkDao, 14, 1 );
 
 
   frameLayout->addWidget( groupDevices, 0, 0 );
@@ -249,6 +255,7 @@ K3bDeviceWidget::K3bDeviceWidget( K3bDeviceManager* manager, QWidget *parent, co
   connect( m_spinReadSpeed, SIGNAL(valueChanged(int)), this, SLOT(slotReadSpeedChanged(int)) );
   connect( m_checkCdrw, SIGNAL(toggled(bool)), this, SLOT(slotCdrwChanged(bool)) );
   connect( m_checkBurnProof, SIGNAL(toggled(bool)), this, SLOT(slotBurnproofChanged(bool)) );
+  connect( m_checkDao, SIGNAL(toggled(bool)), this, SLOT(slotDaoChanged(bool)) );
   // ------------------------------------------------
 
   // fill the driver-combo-box
@@ -370,7 +377,7 @@ void K3bDeviceWidget::updateDeviceInfoBox( PrivateTempDevice* tempDev )
       m_spinWriteSpeed->setValue( tempDev->maxWriteSpeed );
       m_checkBurnProof->setChecked( tempDev->burnproof );
       m_checkCdrw->setChecked( tempDev->cdrw );
-       
+      m_checkDao->setChecked( tempDev->dao );       
       slotCdrdaoDriverChanged( tempDev->cdrdaoDriver );
 
       showWriterSpecificProps( true );
@@ -422,6 +429,7 @@ void K3bDeviceWidget::apply()
     tempDev->device->setIsWriter( tempDev->writer );
     tempDev->device->setBurnproof( tempDev->burnproof );
     tempDev->device->setWritesCdrw( tempDev->cdrw );
+    tempDev->device->setDao( tempDev->dao );
     tempDev->device->setBufferSize( tempDev->bufferSize );
     
     tempDev = m_tempDevices.next();
@@ -508,6 +516,14 @@ void K3bDeviceWidget::slotBurnproofChanged( bool b )
 }
 
 
+void K3bDeviceWidget::slotDaoChanged( bool b )
+{
+  if( m_currentTempDevice != 0 ) {
+    m_currentTempDevice->dao = b;
+  }
+}
+
+
 void K3bDeviceWidget::showWriterSpecificProps( bool b )
 {
   if( b ) {
@@ -519,6 +535,8 @@ void K3bDeviceWidget::showWriterSpecificProps( bool b )
     m_checkBurnProof->show();
     m_labelCdrw->show();
     m_checkCdrw->show();
+    m_labelDao->show();
+    m_checkDao->show();
   }
   else {
     m_labelWriteSpeed->hide();
@@ -529,6 +547,8 @@ void K3bDeviceWidget::showWriterSpecificProps( bool b )
     m_checkBurnProof->hide();
     m_labelCdrw->hide();
     m_checkCdrw->hide();
+    m_labelDao->hide();
+    m_checkDao->hide();
   }
 }
 

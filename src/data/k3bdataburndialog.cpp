@@ -132,6 +132,8 @@ K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const ch
   m_tempDirSelectionWidget->setTempPath( path );
 
   m_tempDirSelectionWidget->setNeededSize( doc()->size() );
+
+  slotWriterChanged();
 }
 
 K3bDataBurnDialog::~K3bDataBurnDialog(){
@@ -209,6 +211,8 @@ void K3bDataBurnDialog::readSettings()
   m_volumeDescWidget->load( ((K3bDataDoc*)doc())->isoOptions() );
 
   K3bProjectBurnDialog::readSettings();
+
+  slotWriterChanged();
 }
 
 
@@ -312,7 +316,7 @@ void K3bDataBurnDialog::setupBurnTab( QFrame* frame )
   QWhatsThis::add( m_checkDao, i18n("<p>If this option is checked, K3b will write the CD in 'disk at once' mode as "
 				    "compared to 'track at once' (TAO)."
 				    "<p>It is always recommended to use DAO where possible."
-				    "<p><b>Caution:</b> Track pregaps other than 2 seconds long are only supported "
+				    "<p><b>Caution:</b> Track pregaps with a length other than 2 seconds are only supported "
 				    "in DAO mode.") );
   QWhatsThis::add( m_checkBurnProof, i18n("<p>If this option is checked, K3b enables <em>BURN-PROOF</em>. This is "
 					  "a feature of the CD writer which avoids buffer underruns.") );
@@ -395,8 +399,14 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
 
 void K3bDataBurnDialog::slotWriterChanged()
 {
-  if( K3bDevice* dev = m_writerSelectionWidget->writerDevice() )
+  if( K3bDevice* dev = m_writerSelectionWidget->writerDevice() ) {
     m_checkBurnProof->setEnabled( dev->burnproof() );
+    m_checkDao->setEnabled( dev->dao() );
+    if( !dev->burnproof() )
+      m_checkBurnProof->setChecked(false);
+    if( !dev->dao() )
+      m_checkDao->setChecked(false);
+  }
 }
 
 
@@ -442,6 +452,8 @@ void K3bDataBurnDialog::loadDefaults()
   m_imageSettingsWidget->load( K3bIsoOptions::defaults() );
   m_advancedImageSettingsWidget->load( K3bIsoOptions::defaults() );
   m_volumeDescWidget->load( K3bIsoOptions::defaults() );
+
+  slotWriterChanged();
 }
 
 
@@ -462,6 +474,8 @@ void K3bDataBurnDialog::loadUserDefaults()
   m_imageSettingsWidget->load( o );
   m_advancedImageSettingsWidget->load( o );
   m_volumeDescWidget->load( o );
+
+  slotWriterChanged();
 }
 
 

@@ -83,6 +83,7 @@ class K3bAudioBurnDialog : public K3bProjectBurnDialog
    void loadDefaults();
    void loadUserDefaults();
    void saveUserDefaults();
+   void slotWriterChanged();
 };
 
 #endif

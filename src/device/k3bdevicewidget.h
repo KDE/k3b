@@ -64,6 +64,7 @@ class K3bDeviceWidget : public QWidget
   void slotReadSpeedChanged( int );
   void slotCdrwChanged(bool);
   void slotBurnproofChanged(bool);
+  void slotDaoChanged(bool);
 
  private:
   /** list to save changes to the devices before applying */
@@ -96,6 +97,7 @@ class K3bDeviceWidget : public QWidget
   QLabel*       m_labelCdText;
   QLabel*       m_labelBurnProof;
   QLabel*       m_labelCdrw;
+  QLabel*       m_labelDao;
   QLabel*       m_labelWriteSpeed;
   QFrame*       m_line3;
   KIntNumInput* m_spinReadSpeed;
@@ -104,6 +106,7 @@ class K3bDeviceWidget : public QWidget
   QComboBox*    m_comboCdText;
   QCheckBox*    m_checkBurnProof;
   QCheckBox*    m_checkCdrw;
+  QCheckBox*    m_checkDao;
 };
 
 #endif

@@ -74,18 +74,26 @@ void K3bCdrecordWriter::prepareArgumentList()
   *m_process << QString("dev=%1").arg(burnDevice()->busTargetLun());
   *m_process << QString("speed=%1").arg(burnSpeed());
 
-  if( m_dao )
-    *m_process << "-dao";
+  if( m_dao ) {
+    if( burnDevice()->dao() )
+      *m_process << "-dao";
+    else
+      emit infoMessage( i18n("Writer does not support disk at once (DAO) recording"), INFO );
+  }
 
   if( simulate() )
     *m_process << "-dummy";
 
   if( burnproof() ) {
-    // with cdrecord 1.11a02 burnproof was renamed to burnfree
-    if( m_cdrecordBinObject->version >= "1.11a02" )
-      *m_process << "driveropts=burnfree";
+    if( burnDevice()->burnproof() ) {
+      // with cdrecord 1.11a02 burnproof was renamed to burnfree
+      if( m_cdrecordBinObject->version >= "1.11a02" )
+	*m_process << "driveropts=burnfree";
+      else
+	*m_process << "driveropts=burnproof";
+    }
     else
-      *m_process << "driveropts=burnproof";
+      emit infoMessage( i18n("Writer does not support buffer underrun free recording (BURNPROOF)"), INFO );
   }
 
   if( k3bMain()->eject() )
@@ -288,6 +296,10 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   }
   else if( line.contains( "Drive needs to reload the media" ) ) {
     emit infoMessage( i18n("Reloading of media required"), K3bJob::PROCESS );
+  }
+  else if( line.contains( "Drive does not support SAO" ) ) {
+    emit infoMessage( i18n("SAO, DAO recording not supported by the writer"), K3bJob::ERROR );
+    emit infoMessage( i18n("Please turn off DAO (disk at once) and try again"), K3bJob::ERROR );
   }
   else {
     // debugging

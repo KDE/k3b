@@ -85,9 +85,12 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
   connect( m_checkDao, SIGNAL(toggled(bool)), m_checkHideFirstTrack, SLOT(setEnabled(bool)) );
   connect( m_checkDao, SIGNAL(toggled(bool)), m_checkCdText, SLOT(setEnabled(bool)) );
 
+  connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotWriterChanged()) );
+
   m_tempDirSelectionWidget->setNeededSize( doc()->size() );
   readSettings();
 
+  slotWriterChanged();
 
   // ToolTips
   // -------------------------------------------------------------------------
@@ -118,7 +121,7 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
   QWhatsThis::add( m_checkDao, i18n("<p>If this option is checked K3b will write the CD in 'disk at once mode' as "
 				    "compared to 'track at once' (TAO)."
 				    "<p>It is always recommended to use DAO where possible."
-				    "<p><b>Caution:</b> Track pregaps other than 2 seconds long are only supported "
+				    "<p><b>Caution:</b> Track pregaps with a length other than 2 seconds are only supported "
 				    "in DAO mode.") );
   QWhatsThis::add( m_checkOnTheFly, i18n("<p>If this option is checked K3b will decode the audio files in memory "
 					 "while writing. This saves space on the harddisk and time."
@@ -200,6 +203,8 @@ void K3bAudioBurnDialog::readSettings()
   m_editComposer->setText( ((K3bAudioDoc*)doc())->composer() );
 	
   K3bProjectBurnDialog::readSettings();
+
+  slotWriterChanged();
 }
 
 
@@ -337,6 +342,16 @@ void K3bAudioBurnDialog::slotOk()
 }
 
 
+void K3bAudioBurnDialog::slotWriterChanged()
+{
+  if( K3bDevice* dev = m_writerSelectionWidget->writerDevice() ) {
+    m_checkDao->setEnabled( dev->dao() );
+    if( !dev->dao() )
+      m_checkDao->setChecked(false);
+  }
+}
+
+
 void K3bAudioBurnDialog::loadDefaults()
 {
   m_checkSimulate->setChecked( false );
@@ -348,6 +363,8 @@ void K3bAudioBurnDialog::loadDefaults()
   //  m_checkPadding->setChecked( true );
   m_checkHideFirstTrack->setChecked( false );
   m_checkRemoveBufferFiles->setChecked( true );
+
+  slotWriterChanged();
 }
 
 
@@ -366,6 +383,8 @@ void K3bAudioBurnDialog::loadUserDefaults()
   //  m_checkPadding->setChecked( c->readBoolEntry( "padding", false ) );
   m_checkHideFirstTrack->setChecked( c->readBoolEntry( "hide_first_track", false ) );
   m_checkRemoveBufferFiles->setChecked( c->readBoolEntry( "remove_buffer_files", true ) );
+
+  slotWriterChanged();
 }
 
 

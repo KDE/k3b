@@ -42,13 +42,15 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const cha
   layout()->setSpacing( KDialog::spacingHint() );
   layout()->setMargin( KDialog::marginHint() );
 
-  (void)new QLabel( i18n( "Wri&te image file to:" ), this, "TextLabel1_3" );
+  QLabel* imageFileLabel = new QLabel( i18n( "Wri&te image file to:" ), this );
 
   QHBox* urlRequesterBox = new QHBox( this );
   urlRequesterBox->setSpacing( KDialog::spacingHint() );
   m_editDirectory = new QLineEdit( urlRequesterBox, "m_editDirectory" );
   m_buttonFindIsoImage = new QToolButton( urlRequesterBox, "m_buttonFindDir" );
   m_buttonFindIsoImage->setIconSet( SmallIconSet( "fileopen" ) );
+
+  imageFileLabel->setBuddy( m_editDirectory );
 
   QHBox* freeTempSpaceBox = new QHBox( this );
   freeTempSpaceBox->setSpacing( KDialog::spacingHint() );

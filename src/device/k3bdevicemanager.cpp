@@ -226,6 +226,8 @@ bool K3bDeviceManager::readConfig( KConfig* c )
 	dev->setBufferSize( list[7].toInt() );
       if( list.count() > 8 )
 	dev->setCurrentWriteSpeed( list[8].toInt() );
+      if( list.count() > 9 )
+	dev->setDao( list[9] == "yes" );
     }
 
     if( dev == 0 )
@@ -286,7 +288,8 @@ bool K3bDeviceManager::saveConfig( KConfig* c )
     list << ( dev->writesCdrw() ? "yes" : "no" )
 	 << ( dev->burnproof() ? "yes" : "no" )
 	 << QString::number( dev->bufferSize() )
-	 << QString::number( dev->currentWriteSpeed() );
+	 << QString::number( dev->currentWriteSpeed() )
+	 << ( dev->dao() ? "yes" : "no" );
 
     c->writeEntry( QString("Writer%1").arg(i), list );
 
@@ -342,10 +345,17 @@ K3bDevice* K3bDeviceManager::initializeScsiDevice( cdrom_drive* drive )
     driverProc << m_externalBinManager->binPath( "cdrecord" );
     driverProc << QString("dev=%1").arg(dev->busTargetLun());
     driverProc << "-checkdrive";
+    connect( &driverProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
+	     this, SLOT(slotCollectStdout(KProcess*, char*, int)) );
+
+    m_processOutput = "";
+
     driverProc.start( KProcess::Block, KProcess::Stdout );
     // this should work for all drives
     // so we are always able to say if a drive is a writer or not
     dev->m_burner = ( driverProc.exitStatus() == 0 );
+
+    dev->setDao( m_processOutput.contains("SAO") );
 
     // check drive capabilities
     // does only work for generic-mmc drives
@@ -377,7 +387,7 @@ K3bDevice* K3bDeviceManager::initializeScsiDevice( cdrom_drive* drive )
 		 line.contains("support BURN-Proof") )
 	  dev->m_burnproof = !line.contains( "not" );
 
-	else if( line.contains( "Maximum read  speed" ) ) //lukas: are there really two spaces?
+	else if( line.contains( "Maximum read  speed" ) ) //lukas: are there really two spaces? trueg: Yes, there are! ;)
 	  dev->m_maxReadSpeed = K3b::round( line.mid( line.find(":")+1 ).toDouble() * 1000.0 / ( 2352.0 * 75.0 ) );
 
 	else if( line.contains( "Maximum write speed" ) )

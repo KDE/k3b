@@ -117,6 +117,8 @@ K3bAudioTrackDialog::K3bAudioTrackDialog( QPtrList<K3bAudioTrack>& tracks, QWidg
 
     m_labelMimeType->setPixmap( KMimeType::pixmapForURL( KURL(m_tracks.first()->absPath()), 0, KIcon::Desktop, 48 ) );
   }
+
+  m_editTitle->setFocus();
 }
 
 K3bAudioTrackDialog::~K3bAudioTrackDialog()

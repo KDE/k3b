@@ -47,6 +47,7 @@ class K3bDevice
   virtual bool           burner() const { return m_burner; }
   virtual bool           writesCdrw() const { return m_bWritesCdrw; }
   virtual bool           burnproof() const { return m_burnproof; }
+  virtual bool           dao() const { return m_dao; }
   virtual int            maxReadSpeed() const { return m_maxReadSpeed; }
   virtual int            currentWriteSpeed() const { return m_currentWriteSpeed; }
 
@@ -119,6 +120,7 @@ class K3bDevice
 
   virtual void setBurnproof( bool );
   virtual void setWritesCdrw( bool b ) { m_bWritesCdrw = b; }
+  virtual void setDao( bool b ) { m_dao = b; }
   virtual void setBufferSize( int b ) { m_bufferSize = b; }
 
   void setMountPoint( const QString& );
@@ -173,6 +175,7 @@ class K3bDevice
   bool m_burner;
   bool m_bWritesCdrw;
   bool m_burnproof;
+  bool m_dao;
   QString m_cdrdaoDriver;
   int m_cdTextCapable;
   int m_maxReadSpeed;
