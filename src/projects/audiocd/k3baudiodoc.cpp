@@ -439,53 +439,89 @@ bool K3bAudioDoc::loadDocumentData( QDomElement* root )
       writeCdText( e.attributeNode( "activated" ).value() == "yes" );
     
       QDomNodeList cdTextNodes = e.childNodes();
-      setTitle( cdTextNodes.item(0).toElement().text() );
-      setArtist( cdTextNodes.item(1).toElement().text() );
-      setArranger( cdTextNodes.item(2).toElement().text() );
-      setSongwriter( cdTextNodes.item(3).toElement().text() );
-      setDisc_id( cdTextNodes.item(4).toElement().text() );
-      setUpc_ean( cdTextNodes.item(5).toElement().text() );
-      setCdTextMessage( cdTextNodes.item(6).toElement().text() );
+      for( uint j = 0; j < cdTextNodes.length(); j++ ) {
+	if( cdTextNodes.item(j).nodeName() == "title" )
+	  setTitle( cdTextNodes.item(j).toElement().text() );
+
+	else if( cdTextNodes.item(j).nodeName() == "artist" )
+	  setArtist( cdTextNodes.item(j).toElement().text() );
+
+	else if( cdTextNodes.item(j).nodeName() == "arranger" )
+	  setArranger( cdTextNodes.item(j).toElement().text() );
+
+	else if( cdTextNodes.item(j).nodeName() == "songwriter" )
+	  setSongwriter( cdTextNodes.item(j).toElement().text() );
+
+	else if( cdTextNodes.item(j).nodeName() == "composer" )
+	  setComposer( cdTextNodes.item(j).toElement().text() );
+
+	else if( cdTextNodes.item(j).nodeName() == "disc_id" )
+	  setDisc_id( cdTextNodes.item(j).toElement().text() );
+
+	else if( cdTextNodes.item(j).nodeName() == "upc_ean" )
+	  setUpc_ean( cdTextNodes.item(j).toElement().text() );
+
+	else if( cdTextNodes.item(j).nodeName() == "message" )
+	  setCdTextMessage( cdTextNodes.item(j).toElement().text() );
+      }
     }
 
     else if( e.nodeName() == "contents" ) {
 	
-      QDomNodeList trackNodes = e.childNodes();
+      QDomNodeList contentNodes = e.childNodes();
 
-      for( uint j = 0; j< trackNodes.length(); j++ ) {
+      for( uint j = 0; j< contentNodes.length(); j++ ) {
 
 	// check if url is available
-	QDomElement trackElem = trackNodes.item(j).toElement();
+	QDomElement trackElem = contentNodes.item(j).toElement();
+
 	QString url = trackElem.attributeNode( "url" ).value();
-	if( !QFile::exists( url ) )
+	if( !QFile::exists( url ) ) {
 	  m_notFoundFiles.append( url );
+	}
 	else {
 	  KURL k;
 	  k.setPath( url );
 	  if( K3bAudioTrack* track = createTrack( k ) ) {
-	    
 	    QDomNodeList trackNodes = trackElem.childNodes();
-	    // set cd-text
-	    QDomElement cdTextElem = trackNodes.item(0).toElement();
-	    QDomNodeList cdTextNodes = cdTextElem.childNodes();
-	    track->setTitle( cdTextNodes.item(0).toElement().text() );
-	    track->setArtist( cdTextNodes.item(1).toElement().text() );
-	    track->setArranger( cdTextNodes.item(2).toElement().text() );
-	    track->setSongwriter( cdTextNodes.item(3).toElement().text() );
-	    track->setIsrc( cdTextNodes.item(4).toElement().text() );
-	    track->setCdTextMessage( cdTextNodes.item(5).toElement().text() );
 	    
-	    // set pregap
-	    QDomElement pregapElem = trackNodes.item(1).toElement();
-	    track->setPregap( pregapElem.text().toInt() );
-	    
-	    // set copy-protection
-	    QDomElement copyProtectElem = trackNodes.item(2).toElement();
-	    track->setCopyProtection( copyProtectElem.text() == "yes" );
-	    
-	    // set pre-emphasis
-	    QDomElement preEmpElem = trackNodes.item(3).toElement();
-	    track->setPreEmp( preEmpElem.text() == "yes" );
+	    for( uint trackJ = 0; trackJ < trackNodes.length(); trackJ++ ) {
+	      if( trackNodes.item(trackJ).nodeName() == "cd-text" ) {
+
+		QDomNodeList cdTextNodes = e.childNodes();
+		for( uint trackCdTextJ = 0; trackCdTextJ < cdTextNodes.length(); trackCdTextJ++ ) {
+		  if( cdTextNodes.item(trackCdTextJ).nodeName() == "title" )
+		    track->setTitle( cdTextNodes.item(trackCdTextJ).toElement().text() );
+
+		  else if( cdTextNodes.item(trackCdTextJ).nodeName() == "artist" )
+		    track->setArtist( cdTextNodes.item(trackCdTextJ).toElement().text() );
+
+		  else if( cdTextNodes.item(trackCdTextJ).nodeName() == "arranger" )
+		    track->setArranger( cdTextNodes.item(trackCdTextJ).toElement().text() );
+
+		  else if( cdTextNodes.item(trackCdTextJ).nodeName() == "songwriter" )
+		    track->setSongwriter( cdTextNodes.item(trackCdTextJ).toElement().text() );
+
+		  else if( cdTextNodes.item(trackCdTextJ).nodeName() == "composer" )
+		    track->setComposer( cdTextNodes.item(trackCdTextJ).toElement().text() );
+
+		  else if( cdTextNodes.item(trackCdTextJ).nodeName() == "isrc" )
+		    track->setIsrc( cdTextNodes.item(trackCdTextJ).toElement().text() );
+
+		  else if( cdTextNodes.item(trackCdTextJ).nodeName() == "message" )
+		    track->setCdTextMessage( cdTextNodes.item(trackCdTextJ).toElement().text() );
+		}
+	      }
+
+	      else if( trackNodes.item(trackJ).nodeName() == "pregap" )
+		track->setPregap( trackNodes.item(trackJ).toElement().text().toInt() );
+
+	      else if( trackNodes.item(trackJ).nodeName() == "copy_protection" )
+		track->setCopyProtection( trackNodes.item(trackJ).toElement().text() == "yes" );
+
+	      else if( trackNodes.item(trackJ).nodeName() == "pre_emphasis" )
+		track->setPreEmp( trackNodes.item(trackJ).toElement().text() == "yes" );
+	    }
 	    
 	    addTrack( track, m_tracks->count() );
 	  }
@@ -537,6 +573,10 @@ bool K3bAudioDoc::saveDocumentData( QDomElement* docElem )
   cdTextElem.appendChild( doc.createTextNode( (arranger())) );
   cdTextMain.appendChild( cdTextElem );
 
+  cdTextElem = doc.createElement( "composer" );
+  cdTextElem.appendChild( doc.createTextNode( composer()) );
+  cdTextMain.appendChild( cdTextElem );
+
   cdTextElem = doc.createElement( "songwriter" );
   cdTextElem.appendChild( doc.createTextNode( (songwriter())) );
   cdTextMain.appendChild( cdTextElem );
@@ -581,6 +621,10 @@ bool K3bAudioDoc::saveDocumentData( QDomElement* docElem )
     
     cdTextElem = doc.createElement( "songwriter" );
     cdTextElem.appendChild( doc.createTextNode( (track->songwriter()) ) );
+    cdTextMain.appendChild( cdTextElem );
+
+    cdTextElem = doc.createElement( "composer" );
+    cdTextElem.appendChild( doc.createTextNode( (track->composer()) ) );
     cdTextMain.appendChild( cdTextElem );
     
     cdTextElem = doc.createElement( "isrc" );

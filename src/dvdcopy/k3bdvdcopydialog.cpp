@@ -249,6 +249,8 @@ void K3bDvdCopyDialog::slotLoadUserDefaults()
   m_spinRetries->setValue( c->readNumEntry( "retries", 128 ) );
   m_spinCopies->setValue( c->readNumEntry( "copies", 1 ) );
 
+  m_comboSourceDevice->setSelectedDevice( k3bcore->deviceManager()->findDevice( c->readEntry( "source_device" ) ) );
+
   m_writerSelectionWidget->loadConfig( c );
 
   slotToggleAll();
@@ -265,6 +267,8 @@ void K3bDvdCopyDialog::slotSaveUserDefaults()
   c->setGroup( "default dvd copy settings" );
 
   m_writingModeWidget->saveConfig( c );
+
+  c->writeEntry( "source_device", m_comboSourceDevice->selectedDevice()->devicename() );
 
   c->writeEntry( "simulate", m_checkSimulate->isChecked() );
   c->writeEntry( "on_the_fly", m_checkOnTheFly->isChecked() );

@@ -199,7 +199,16 @@ void K3bFileTreeComboBox::slotGoUrl()
   }
 
   // no device -> select url
-  p.replace( "~", QDir::homeDirPath() );
+  if( p.startsWith( "~/" ) || p == "~" )
+    p.replace( "~", QDir::homeDirPath() );
+  else if( p.startsWith( "~" ) ) {
+    int i = p.find( '/' );
+    if( i < 0 )
+      i = p.length();
+    QString userName = p.mid( 1, i-1 );
+    p = "/home/" + userName + p.mid( i );
+  }
+
   lineEdit()->setText( p );
   KURL url;
   url.setPath( p );
