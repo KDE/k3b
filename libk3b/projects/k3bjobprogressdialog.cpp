@@ -444,8 +444,6 @@ void K3bJobProgressDialog::slotFinished( bool success )
 {
   kdDebug() << "(K3bJobProgressDialog) received finished signal!" << endl;
 
-  m_job = 0;
-
   m_logFile.close();
 
   if( success ) {

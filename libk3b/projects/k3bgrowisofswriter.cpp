@@ -194,14 +194,22 @@ bool K3bGrowisofsWriter::prepareProcess()
 
   *d->process << d->growisofsBin;
 
-  // we always read from stdin since the ringbuffer does the actual reading from the source
-  QString s = burnDevice()->blockDeviceName() + "=" + "/dev/fd/0";
-  d->usingRingBuffer = true;
+  // set this var to true to enable the ringbuffer
+  d->usingRingBuffer = false;
+
+  QString s = burnDevice()->blockDeviceName() + "=";
+  if( d->usingRingBuffer || d->image.isEmpty() ) {
+    // we always read from stdin since the ringbuffer does the actual reading from the source
+    s += "/dev/fd/0";
+  }
+  else
+    s += d->image;
 
   // for now we do not support multisession
   *d->process << "-Z" << s;
 
-  if( !d->image.isEmpty() ) {
+
+  if( !d->image.isEmpty() && d->usingRingBuffer ) {
     d->inputFile.setName( d->image );
     d->trackSize = (K3b::filesize( d->image ) + 1024) / 2048;
     if( !d->inputFile.open( IO_ReadOnly ) ) {

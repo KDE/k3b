@@ -92,6 +92,7 @@ class K3bWriterSelectionWidget : public QWidget
   void clearSpeedCombo();
   void insertSpeedItem( int );
   int selectedWritingApp() const;
+  void insertWritingSpeedsUpTo( int max );
 
   KComboBox* m_comboSpeed;
   K3bDeviceComboBox* m_comboWriter;
