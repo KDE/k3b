@@ -203,18 +203,6 @@ namespace K3bCdDevice
     bool isDVD() const;
 
     /**
-     *  checks the disk type, posiible return values:
-     *  <li>K3bDiskInfo::AUDIO</li>
-     *  <li>K3bDiskInfo::DATA</li>
-     *  <li>K3bDiskInfo::MIXED</li>
-     *  <li>K3bDiskInfo::DVD</li>
-     *  <li>K3bDiskInfo::NODISC</li>
-     *  <li>K3bDiskInfo::UNKNOWN</li>
-     * </ul>
-     */
-    DiskInfo::type diskType();
-
-    /**
      * returnes the complete diskinfo. This includes the toc.
      */
     DiskInfo diskInfo();
@@ -330,6 +318,12 @@ namespace K3bCdDevice
      * deleted after using.
      */
     bool readTocPmaAtip( unsigned char** data, int& dataLen, int format, bool time, int track ) const;
+
+    /**
+     * if true is returned dataLen specifies the actual length of *data which needs to be
+     * deleted after using.
+     */
+    bool mechanismStatus( unsigned char** data, int& dataLen ) const;
 
     /**
      * Fallback method that uses the evil cdrom.h stuff

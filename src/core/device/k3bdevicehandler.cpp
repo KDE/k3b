@@ -55,7 +55,7 @@ public:
 	success = (info.remaining != 0);
 	break;
       case TOCTYPE:
-	info.tocType = dev->diskType();
+	info.tocType = dev->readToc().contentType();
 	success = ( info.tocType != DiskInfo::UNKNOWN );
 	break;
       case NUMSESSIONS:

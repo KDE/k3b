@@ -519,6 +519,74 @@ namespace K3bCdDevice
     unsigned char s4[3];
     unsigned char res10;
   };
+
+
+  struct mechanism_status_header {
+#ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
+    unsigned char fault         : 1;
+    unsigned char changer_state : 2;
+    unsigned char slot_low      : 5;
+#else
+    unsigned char slot_low      : 5;
+    unsigned char changer_state : 2;
+    unsigned char fault         : 1;
+#endif
+#ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
+    unsigned char mech_state    : 3;
+    unsigned char door_open     : 1;
+    unsigned char res1          : 1;
+    unsigned char slot_high     : 3;
+#else
+    unsigned char slot_high     : 3;
+    unsigned char res1          : 1;
+    unsigned char door_open     : 1;
+    unsigned char mech_state    : 3;
+#endif
+    unsigned char current_lba[3];
+    unsigned char num_slots;
+    unsigned char slot_len[2];
+  };
+
+  struct mechanism_status_slot {
+#ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
+    unsigned char disc_present  : 1;
+    unsigned char res1          : 6;
+    unsigned char change        : 1;
+#else
+    unsigned char change        : 1;
+    unsigned char res1          : 6;
+    unsigned char disc_present  : 1;
+#endif
+#ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
+    unsigned char res2          : 6;
+    unsigned char cwp_v         : 1;
+    unsigned char cwp           : 1;
+#else
+    unsigned char cwp           : 1;
+    unsigned char cwp_v         : 1;
+    unsigned char res2          : 6;
+#endif
+    unsigned char res3;
+    unsigned char res4;
+  };
+
+
+  struct cdtext_pack {
+    unsigned char id1;
+    unsigned char id2;
+    unsigned char id3;
+#ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
+    unsigned char charpos:    4;
+    unsigned char blocknum:   3;
+    unsigned char dbcc:       1;
+#else
+    unsigned char dbcc:       1;
+    unsigned char blocknum:   3;
+    unsigned char charpos:    4;
+#endif
+    unsigned char data[12];
+    unsigned char crc[2];
+  };
 }
 
 

@@ -788,42 +788,6 @@ bool K3bCdDevice::CdDevice::burnfree() const
 }
 
 
-K3bDiskInfo::type  K3bCdDevice::CdDevice::diskType()
-{
-  // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
-  bool needToClose = !isOpen();
-
-  int status;
-  K3bDiskInfo::type ret = K3bDiskInfo::UNKNOWN;
-  if (open() < 0)
-    return K3bDiskInfo::UNKNOWN;
-
-  if ( (status = ::ioctl(d->deviceFd,CDROM_DISC_STATUS)) >= 0 ) {
-    switch (status) {
-    case CDS_AUDIO:   ret = K3bDiskInfo::AUDIO;
-      break;
-    case CDS_DATA_1:
-    case CDS_DATA_2:  ret = K3bDiskInfo::DATA;
-      break;
-    case CDS_MIXED:   ret = K3bDiskInfo::MIXED;
-      break;
-    case CDS_NO_DISC: ret = K3bDiskInfo::NODISC;
-      break;
-    case CDS_NO_INFO: ret = K3bDiskInfo::UNKNOWN;
-    }
-  }
-  if ( isDVD() )
-    ret =  K3bDiskInfo::DVD;
-
-  if (tocType() == 0x20)
-    kdDebug() << "(K3bCdDevice) CD_XA disc found !" << endl;
-
-  if( needToClose )
-    close();
-  return ret;
-}
-
 bool K3bCdDevice::CdDevice::isDVD() const
 {
   // if the device is already opened we do not close it
@@ -865,26 +829,60 @@ int K3bCdDevice::CdDevice::isReady() const
   bool needToClose = !isOpen();
 
   if( open() != -1 ) {
-    int drive_status,ret;
-    ret = 1;
+    int ret = 2;
 
-    if( (drive_status = ::ioctl(d->deviceFd,CDROM_DRIVE_STATUS)) < 0 ) {
-      kdDebug() << "(K3bCdDevice) Error: could not get drive status" << endl;
-      ret = 1;
-    } 
-    else if( drive_status == CDS_DISC_OK )
-      ret = 0;
-    else if( drive_status == CDS_NO_DISC )
-      ret = 3;
-    else if( drive_status == CDS_TRAY_OPEN )
-      ret = 4;
-  
+    // THIS DOES NOT WORK. AS MMC4 SAYS: THE DISC_PRESENT FIELD IS OPTIONAL
+
+//     unsigned char* data = 0;
+//     int dataLen = 0;
+//     if( mechanismStatus( &data, dataLen ) ) {
+//       mechanism_status_header* header = (mechanism_status_header*)data;
+//       if( header->door_open ) {
+// 	kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+// 		  << ": MECHANISM STATUS: door open." << endl;
+// 	ret = 4;
+//       }
+//       else if( dataLen >= 12 ) {
+// 	// we ignore changer...
+// 	mechanism_status_slot* slot = (mechanism_status_slot*)&data[8];
+// 	if( slot->disc_present ) {
+// 	  kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+// 		    << ": MECHANISM STATUS: disc present." << endl;
+// 	  ret = 0;
+// 	}
+// 	else {
+// 	  kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+// 		    << ": MECHANISM STATUS: no disc present." << endl;
+// 	  ret = 3;
+// 	}
+//       }
+
+//       delete [] data;
+//     }
+//     else {
+//       kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+// 		<< ": MECHANISM STATUS failed. falling back to cdrom.h" << endl;
+
+      int drive_status = 0;
+      if( (drive_status = ::ioctl(d->deviceFd,CDROM_DRIVE_STATUS)) < 0 ) {
+	kdDebug() << "(K3bCdDevice) Error: could not get drive status" << endl;
+	ret = 1;
+      } 
+      else if( drive_status == CDS_DISC_OK )
+	ret = 0;
+      else if( drive_status == CDS_NO_DISC )
+	ret = 3;
+      else if( drive_status == CDS_TRAY_OPEN )
+	ret = 4;
+      //    }
+
     if( needToClose )
       close();
+
     return ret;
   }
   else
-    return false;
+    return 2;
 }
 
 
@@ -1171,20 +1169,29 @@ int K3bCdDevice::CdDevice::getTrackDataMode(int lba)
   bool needToClose = !isOpen();
 
   int ret = Track::UNKNOWN;
+
   if (open() < 0)
     return ret;
 
-  // FIXME: use the raw-reading method
-
-  K3b::Msf msf(lba + CD_MSF_OFFSET);
   unsigned char data[CD_FRAMESIZE_RAW];
-  data[0] = msf.minutes();
-  data[1] = msf.seconds();
-  data[2] = msf.frames();
+  bool readSuccess = true;
 
-  if ( ::ioctl(d->deviceFd,CDROMREADRAW,data) == -1 )
-    kdDebug() << "(K3bCdDevice) could not get track header, (lba " << lba << ") ! "  << strerror(errno) << endl;
-  else {
+  if( !readSectorsRaw( data, lba, 1 ) ) {
+    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName()
+	      << ": MMC RAW READ failed. falling back to cdrom.h." << endl;
+
+    K3b::Msf msf(lba + CD_MSF_OFFSET);
+    data[0] = msf.minutes();
+    data[1] = msf.seconds();
+    data[2] = msf.frames();
+    if( ::ioctl(d->deviceFd,CDROMREADRAW,data) == -1 ) {
+      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName()
+		<< ": could not get track header, (lba " << lba << ") ! "  << strerror(errno) << endl;
+      readSuccess = false;
+    }
+  }
+
+  if( readSuccess ) {
     if ( data[15] == 1 )
       ret = Track::MODE1;
     else if ( data[15] == 2 )
@@ -1194,13 +1201,14 @@ int K3bCdDevice::CdDevice::getTrackDataMode(int lba)
            data[17] == data[21] &&
            data[18] == data[22] &&
            data[19] == data[23] ) {
-          if ( data[18] & 0x20 )
-            ret = Track::XA_FORM2;
-          else
-            ret = Track::XA_FORM1;
-       }
+	if ( data[18] & 0x20 )
+	  ret = Track::XA_FORM2;
+	else
+	  ret = Track::XA_FORM1;
+      }
     }
   }
+
   if( needToClose )
     close();
 
@@ -1521,9 +1529,6 @@ bool K3bCdDevice::CdDevice::rewritable() const
   if( !burner() )  // no chance to detect empty discs in readers
     return false;
 
-  if( isReady() != 0 )
-    return false;
-
   unsigned char* data = 0;
   int dataLen = 0;
 
@@ -1638,7 +1643,24 @@ K3bCdDevice::DiskInfo K3bCdDevice::CdDevice::diskInfo()
     info.mediaType = 0;  // removed the mediaType method. use ngDiskInfo
     int ready = isReady();
     if( ready == 0 ) {
-      info.tocType = diskType();
+      info.toc = readToc();
+      switch( info.toc.contentType() ) {
+      case AUDIO:
+	info.tocType = DiskInfo::AUDIO;
+	break;
+      case DATA:
+	if( isDVD() )
+	  info.tocType = DiskInfo::DVD;
+	else
+	  info.tocType = DiskInfo::DATA;
+	break;
+      case MIXED:
+	  info.tocType = DiskInfo::MIXED;
+	  break;
+      default:
+	info.tocType = DiskInfo::UNKNOWN;
+	break;
+      }
       info.valid = true;
 
       if( info.tocType == DiskInfo::NODISC ) {
@@ -1647,7 +1669,6 @@ K3bCdDevice::DiskInfo K3bCdDevice::CdDevice::diskInfo()
       } else if( info.tocType != DiskInfo::UNKNOWN ) {
         kdDebug() << "(K3bCdDevice::CdDevice::diskInfo) valid disk." << endl;
         info.noDisk = false;
-        info.toc = readToc();
         info.sessions = numSessions();
         if( burner() ) {
           kdDebug() << "(K3bCdDevice::CdDevice::diskInfo) burner." << endl;
@@ -1670,7 +1691,8 @@ K3bCdDevice::DiskInfo K3bCdDevice::CdDevice::diskInfo()
           }
         }
       }
-    } else if( ready >= 3 ) {  // no disk or tray open
+    }
+    else if( ready >= 3 ) {  // no disk or tray open
       kdDebug() << "(K3bCdDevice::CdDevice::diskInfo) no disk or tray open." << endl;
       info.valid = true;
       info.noDisk = true;
@@ -2302,6 +2324,54 @@ bool K3bCdDevice::CdDevice::readTocPmaAtip( unsigned char** data, int& dataLen, 
   }
   else
     kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ TOC/PMA/ATIP length det failed." << endl;
+
+  if( needToClose )
+    close();
+
+  return ret;
+}
+
+
+bool K3bCdDevice::CdDevice::mechanismStatus( unsigned char** data, int& dataLen ) const
+{
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
+  if( open() < 0 )
+    return false;
+
+  bool ret = false;
+
+  unsigned char header[8];
+  ::memset( header, 0, 8 );
+
+  ScsiCommand cmd( open() );
+  cmd[0] = 0xbd;  // MECHANISM STATUS
+  cmd[8] = 8;  // first we read the header
+  if( cmd.transport( TR_DIR_READ, header, 8 ) == 0 ) {
+    // again with real length
+    dataLen = from4Byte( &header[6] ) + 8;
+
+    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": MECHANISM STATUS " 
+	      << (int)header[5] << " slots." << endl;
+
+    *data = new unsigned char[dataLen];
+    ::memset( *data, 0, dataLen );
+
+    cmd[8] = dataLen>>8;
+    cmd[9] = dataLen;
+    if( cmd.transport( TR_DIR_READ, *data, 8 ) == 0 ) {
+      ret = true;
+    }
+    else {
+      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": MECHANISM STATUS with real length "
+		<< dataLen << " failed." << endl;
+      delete [] *data;
+    }
+  }
+  else
+    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": MECHANISM STATUS length det failed." << endl;
 
   if( needToClose )
     close();

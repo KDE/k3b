@@ -101,34 +101,35 @@ void K3bCdCopyJob::getSourceDiskInfo(K3bDevice *dev) {
         cancelAll();
         return;
     }
-    K3bDiskInfo::type diskType = dev->diskType();
+    K3bCdDevice::Toc toc = dev->readToc();
 
-    if( diskType == K3bDiskInfo::NODISC  ) {
-        emit infoMessage( i18n("No disk in CD reader"), K3bJob::ERROR );
+    if( toc.isEmpty() ) {
+        emit infoMessage( i18n("Could not read table of contents"), K3bJob::ERROR );
         cancelAll();
         return;
     }
 
-    if( diskType == K3bDiskInfo::DVD ) {
+    if( dev->isDVD() ) {
         emit infoMessage( i18n("Source disk seems to be a DVD."), K3bJob::ERROR );
-        emit infoMessage( i18n("K3b is not able to copy DVDs yet."), K3bJob::ERROR );
+	emit infoMessage( i18n("Please use K3b's DVD copy functionality."), ERROR );
         cancelAll();
         return;
     }
+
     m_sessions = dev->numSessions();
     if( m_sessions < 2 ) {
         m_tempPath = K3b::findTempFile( "img", m_tempPath );
         m_tocFile  = m_tempPath;
         m_tocFile  = m_tocFile.replace(m_tocFile.findRev(".img"),4,".toc");;
 
-        switch( diskType ) {
-	case K3bDiskInfo::DATA:
+        switch( toc.contentType() ) {
+	case K3bCdDevice::DATA:
 	  emit infoMessage( i18n("Source disk seems to be a data CD"), K3bJob::INFO );
 	  break;
-	case K3bDiskInfo::AUDIO:
+	case K3bCdDevice::AUDIO:
 	  emit infoMessage( i18n("Source disk seems to be an audio CD"), K3bJob::INFO );
 	  break;
-	case K3bDiskInfo::MIXED:
+	case K3bCdDevice::MIXED:
 	  emit infoMessage( i18n("Source disk seems to be a mixed mode CD"), K3bJob::INFO );
 	  break;
 	default:
