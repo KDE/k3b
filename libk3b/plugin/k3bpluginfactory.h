@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -20,7 +20,7 @@
 #include <klibloader.h>
 #include <kinstance.h>
 #include <kglobal.h>
-
+#include <klocale.h>
 
 /**
  * Template based on KGenericFactory. This is just here to avoid using the QStringList args parameter
@@ -50,13 +50,13 @@ class K3bPluginFactory : public KLibFactory
   }
 
   static KInstance* instance();
- 
+
  protected:
   virtual void setupTranslations( void ) {
     if( instance() )
       KGlobal::locale()->insertCatalogue( instance()->instanceName() );
   }
-  
+
   void initializeMessageCatalogue() {
     if( !m_catalogueInitialized ) {
       m_catalogueInitialized = true;
