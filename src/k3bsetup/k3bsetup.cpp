@@ -22,6 +22,11 @@
 #include "../tools/k3bexternalbinmanager.h"
 
 #include <kconfig.h>
+#include <ksimpleconfig.h>
+#include <klocale.h>
+#include <kglobal.h>
+#include <kstandarddirs.h>
+#include <kmessagebox.h>
 
 #include <qstring.h>
 #include <qfile.h>
@@ -33,27 +38,91 @@
 #include <unistd.h>
 
 
-K3bSetup::K3bSetup()
+K3bSetup::K3bSetup( QObject* parent )
+  : QObject( parent )
 {
+  // create a K3bDeviceManager
+  m_deviceManager = new K3bDeviceManager( this );
+  m_externalBinManager = new K3bExternalBinManager( this );
+
+  // this is a little not to hard hack to ensure that we get the "global" k3b appdir
+  // k3bui.rc should always be in $KDEDIR/share/apps/k3b/
+  m_configPath = KGlobal::dirs()->findResourceDir( "data", "k3b/k3bui.rc" ) + "k3b/k3bsetup";
+  m_config = new KSimpleConfig( m_configPath );
+
+
+  // initialize devices
+  // ================================================
+  m_deviceManager->scanbus();
+
+  if( m_config->hasGroup("Devices") ) {
+    m_config->setGroup( "Devices" );
+    m_deviceManager->readConfig( m_config );
+  }
+  // ================================================
+
+
+  // initialize external programs
+  // ================================================
+  m_externalBinManager->search();
+
+  if( m_config->hasGroup("External Programs") ) {
+    m_config->setGroup( "External Programs" );
+    m_externalBinManager->readConfig( m_config );
+  }
+  // ================================================
+
+  if( m_config->hasGroup( "Permissions" ) ) {
+    m_config->setGroup( "Permissions" );
+    m_cdwritingGroup = m_config->readEntry( "cdwriting_group", "cdrecording" );
+    m_userList = m_config->readListEntry( "users" );
+  }
 }
+
 
 K3bSetup::~K3bSetup()
 {
 }
 
 
-bool K3bSetup::loadConfig( KConfig* c )
+bool K3bSetup::saveConfig()
 {
-  m_cdwritingGroup = c->readEntry( "cdwriting_group", "cdrecording" );
-  m_userList = c->readListEntry( "users" );
-  return true;
-}
+  // save devices
+  // -----------------------------------------------------------------------
+  if( m_config->hasGroup( "Devices" ) )
+    m_config->deleteGroup( "Devices" );
+  m_config->setGroup( "Devices" );
+  m_deviceManager->saveConfig( m_config );
+  // -----------------------------------------------------------------------
+
+  // save external programs
+  // -----------------------------------------------------------------------
+  if( m_config->hasGroup( "External Programs" ) )
+    m_config->deleteGroup( "External Programs" );
+  m_config->setGroup( "External Programs" );
+  m_externalBinManager->saveConfig( m_config );
+  // -----------------------------------------------------------------------
+
+  if( m_config->hasGroup( "Permissions" ) )
+    m_config->deleteGroup( "Permissions" );
+  m_config->setGroup( "Permissions" );
+  m_config->writeEntry( "cdwriting_group", m_cdwritingGroup );
+  m_config->writeEntry( "users", m_userList );
 
 
-bool K3bSetup::saveConfig( KConfig* c )
-{
-  c->writeEntry( "cdwriting_group", m_cdwritingGroup );
-  c->writeEntry( "users", m_userList );
+  if( m_applyDevicePermissions )
+    applyDevicePermissions();
+  if( m_applyExternalBinPermission )
+    applyExternalProgramPermissions();
+  if( m_createFstabEntries )
+    createFstabEntries();
+
+  m_config->sync();
+
+  // let everybody read the global K3b config file
+  chmod( m_configPath.latin1(), S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH );
+
+
   return true;
 }
 
@@ -160,14 +229,14 @@ uint K3bSetup::createCdWritingGroup()
 }
 
 
-void K3bSetup::applyDevicePermissions( K3bDeviceManager* deviceManager )
+void K3bSetup::applyDevicePermissions()
 {
   uint groupId = createCdWritingGroup();
 
   // change owner for all devices and
   // change permissions for all devices
 
-  K3bDevice* dev = deviceManager->allDevices().first();
+  K3bDevice* dev = m_deviceManager->allDevices().first();
   while( dev != 0 ) {
 
     if( QFile::exists( dev->genericDevice() ) ) {
@@ -187,12 +256,12 @@ void K3bSetup::applyDevicePermissions( K3bDeviceManager* deviceManager )
     }
 
 
-    dev = deviceManager->allDevices().next();
+    dev = m_deviceManager->allDevices().next();
   }
 }
 
 
-void K3bSetup::applyExternalProgramPermissions( K3bExternalBinManager* manager )
+void K3bSetup::applyExternalProgramPermissions()
 {
   uint groupId = createCdWritingGroup();
 
@@ -202,7 +271,7 @@ void K3bSetup::applyExternalProgramPermissions( K3bExternalBinManager* manager )
   static const int NUM_PROGRAMS = 3;
 
   for( int i = 0; i < NUM_PROGRAMS; ++i ) {
-    K3bExternalBin* binObject = manager->binObject( programs[i] );
+    K3bExternalBin* binObject = m_externalBinManager->binObject( programs[i] );
     if( QFile::exists(binObject->path) ) {
       if( !binObject->version.isEmpty() ) {
 	qDebug("(K3bSetup) setting permissions for %s.", programs[i] );
@@ -215,6 +284,82 @@ void K3bSetup::applyExternalProgramPermissions( K3bExternalBinManager* manager )
     else
       qDebug("(K3bSetup) could not find %s.", programs[i] );
   }
+}
+
+
+void K3bSetup::createFstabEntries()
+{
+  qDebug("(K3bSetup) creating new /etc/fstab");
+  qDebug("(K3bSetup) saving backup to /etc/fstab.k3bsetup");
+  
+  // move /etc/fstab to /etc/fstab.k3bsetup
+  rename( "/etc/fstab", "/etc/fstab.k3bsetup" );
+
+
+  // create fstab entries or update fstab entries
+  QFile oldFstabFile( "/etc/fstab.k3bsetup" );
+  oldFstabFile.open( IO_ReadOnly );
+  QTextStream fstabStream( &oldFstabFile );
+  
+  QFile newFstabFile( "/etc/fstab" );
+  newFstabFile.open( IO_WriteOnly );
+  QTextStream newFstabStream( &newFstabFile );
+  
+  QString line = fstabStream.readLine();
+  while( !line.isNull() ) {
+    bool write = true;
+
+    K3bDevice* dev = m_deviceManager->allDevices().first();
+    while( dev != 0 ) {
+      if( line.startsWith( dev->ioctlDevice() ) )
+	write = false;
+      dev = m_deviceManager->allDevices().next();
+    }
+
+    if( write ) {
+      newFstabStream << line << "\n";
+    }
+
+    line = fstabStream.readLine();
+  }
+
+  // create entries for the devices
+  K3bDevice* dev = m_deviceManager->allDevices().first();
+  while( dev != 0 ) {
+
+    bool createMountPoint = true;
+
+    // TODO: check if mountpoint is empty
+    // TODO: check if device mounted (unmount by default) KIO::findDeviceMountPoint
+
+    // create mountpoint if it does not exist
+    if( !QFile::exists( dev->mountPoint() ) ) {
+      if( mkdir( dev->mountPoint().latin1(), S_IRUSR|S_IWUSR|S_IXUSR|S_IRGRP|S_IXGRP|S_IROTH|S_IXOTH ) != 0 ) {
+	KMessageBox::error( 0, i18n("Could not create mount point '%1'\nNo fstab entry will be created for device %2").arg(dev->mountPoint()).arg(dev->ioctlDevice()) );
+	createMountPoint = false;
+      }
+    }
+
+    if( createMountPoint ) {
+      // set the correct permissions for the mountpoint
+      chmod( dev->mountPoint().latin1(), S_IRUSR|S_IWUSR|S_IXUSR|S_IRGRP|S_IXGRP|S_IROTH|S_IXOTH );
+	
+      newFstabStream << dev->ioctlDevice() << "\t" 
+		     << dev->mountPoint() << "\t"
+		     << "auto" << "\t"
+		     << "ro,noauto,user,exec" << "\t"
+		     << "0 0" << "\n";
+    }
+
+    dev = m_deviceManager->allDevices().next();
+  }
+    
+    
+  newFstabFile.close();
+  newFstabFile.close();
+
+  // set the correct permissions (although they seem to be correct. Just to be sure!)
+  chmod( "/etc/fstab", S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH );
 }
 
 

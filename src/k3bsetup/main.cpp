@@ -23,7 +23,7 @@
 
 #include <unistd.h>
 
-
+#include "k3bsetup.h"
 #include "k3bsetupwizard.h"
 
 static const char *description =
@@ -54,12 +54,11 @@ int main(int argc, char *argv[])
     exit(1);
   }
 
+  K3bSetup setup;
 
-  K3bSetupWizard *k3bsetup = new K3bSetupWizard();
+  K3bSetupWizard *k3bsetup = new K3bSetupWizard( &setup );
   a.setMainWidget(k3bsetup);
   k3bsetup->show();  
-
-  k3bsetup->init();
 
   return a.exec();
 }

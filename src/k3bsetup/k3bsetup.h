@@ -21,28 +21,30 @@
 
 class KConfig;
 
+#include <qobject.h>
 #include <qstring.h>
 #include <qstringlist.h>
 
 
 class K3bDeviceManager;
 class K3bExternalBinManager;
+class KSimpleConfig;
+
 
 /**
  * K3bSetup represents the setup status.
- * This status can be applied by applyPermissions()
  */
-class K3bSetup
+class K3bSetup : public QObject
 {
  public:
-  K3bSetup();
+  K3bSetup( QObject* = 0 );
   ~K3bSetup();
 
-  bool loadConfig( KConfig* );
-  bool saveConfig( KConfig* );
+  bool saveConfig();
 
-  void applyDevicePermissions( K3bDeviceManager* );
-  void applyExternalProgramPermissions( K3bExternalBinManager* );
+  void setApplyDevicePermissions( bool b ) { m_applyDevicePermissions = b; }
+  void setApplyExternalBinPermissions( bool b ) { m_applyExternalBinPermission = b; }
+  void setCreateFstabEntries( bool b ) { m_createFstabEntries = b; }
 
   void setCdWritingGroup( const QString& );
   void addUser( const QString& );
@@ -51,11 +53,27 @@ class K3bSetup
   const QString& cdWritingGroup() const;
   const QStringList& users() const;
 
+  K3bDeviceManager* deviceManager() const { return m_deviceManager; }
+  K3bExternalBinManager* externalBinManager() const { return m_externalBinManager; }
+
  private:
   uint createCdWritingGroup();
+  void applyExternalProgramPermissions();
+  void applyDevicePermissions();
+  void createFstabEntries();
 
   QString m_cdwritingGroup;
   QStringList m_userList;
+
+  K3bDeviceManager* m_deviceManager;
+  K3bExternalBinManager* m_externalBinManager;
+
+  bool m_applyDevicePermissions;
+  bool m_applyExternalBinPermission;
+  bool m_createFstabEntries;
+
+  QString m_configPath;
+  KSimpleConfig* m_config;
 };
 
 #endif
