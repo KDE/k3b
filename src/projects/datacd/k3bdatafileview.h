@@ -86,6 +86,7 @@ class K3bDataFileView : public K3bListView
   K3bDataDoc* m_doc;
   K3bDirItem* m_currentDir;
   K3bDataDirTreeView* m_treeView;
+  bool m_updatesEnabled;
 };
 
 #endif

@@ -40,7 +40,7 @@
 
 
 K3bDataFileView::K3bDataFileView( K3bView* view, K3bDataDirTreeView* dirTreeView, K3bDataDoc* doc, QWidget* parent )
-  : K3bListView( parent ), m_view(view)
+  : K3bListView( parent ), m_view(view), m_updatesEnabled(true)
 {
   m_treeView = dirTreeView;
 
@@ -100,6 +100,9 @@ void K3bDataFileView::slotSetCurrentDir( K3bDirItem* dir )
 
 void K3bDataFileView::updateContents()
 {
+  if (!m_updatesEnabled)
+    return;
+    
   hideEditor();
 
   // clear view
@@ -200,6 +203,9 @@ void K3bDataFileView::slotDropped( QDropEvent* e, QListViewItem*, QListViewItem*
 
 void K3bDataFileView::slotDataItemRemoved( K3bDataItem* item )
 {
+  if (!m_updatesEnabled)
+    return;
+
   if( item->isDir() ) {
     if( ((K3bDirItem*)item)->isSubItem( currentDir() ) ) {
       slotSetCurrentDir( item->parent() );
@@ -308,12 +314,16 @@ void K3bDataFileView::slotRenameItem()
 
 void K3bDataFileView::slotRemoveItem()
 {
+  bool oldUpdatesEnabled = m_updatesEnabled;
+  m_updatesEnabled = false;
   QPtrList<QListViewItem> items = selectedItems();
   QPtrListIterator<QListViewItem> it( items );
   for(; it.current(); ++it ) {
     if( K3bDataViewItem* d = dynamic_cast<K3bDataViewItem*>( it.current() ) )
       m_doc->removeItem( d->dataItem() );
   }
+  m_updatesEnabled = oldUpdatesEnabled;
+  updateContents();
 }
 
 
