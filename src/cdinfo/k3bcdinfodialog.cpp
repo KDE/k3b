@@ -59,14 +59,14 @@ K3bCdInfoDialog::K3bCdInfoDialog( QWidget* parent, const char* name, bool modal 
   QList<K3bDevice> devices = k3bMain()->deviceManager()->burningDevices();
   K3bDevice* dev = devices.first();
   while( dev ) {
-    m_comboDevice->insertItem( dev->vendor() + " " + dev->description() + " (" + dev->genericDevice() + ")" );
+    m_comboDevice->insertItem( dev->vendor() + " " + dev->description() + " (" + dev->devicename() + ")" );
     dev = devices.next();
   }
   
   devices = k3bMain()->deviceManager()->readingDevices();
   dev = devices.first();
   while( dev ) {
-    m_comboDevice->insertItem( dev->vendor() + " " + dev->description() + " (" + dev->genericDevice() + ")" );
+    m_comboDevice->insertItem( dev->vendor() + " " + dev->description() + " (" + dev->devicename() + ")" );
     dev = devices.next();
   }
   // ------------------------------------------------------------------
