@@ -123,17 +123,17 @@ int K3bDevice::isReady()
       
       if( code == 0x02 ) {
 	// not ready
-	  delete _scsiIf;
-     return 2;
+	delete _scsiIf;
+	return 2;
       }
       else if( code != 0x06 ) {
 	_scsiIf->printError();
-	  delete _scsiIf;
-     return 1;
+	delete _scsiIf;
+	return 1;
       }
       else {
-	  delete _scsiIf;
-     return 0;
+	delete _scsiIf;
+	return 0;
       }
     }
   delete _scsiIf;
