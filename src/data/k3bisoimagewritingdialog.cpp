@@ -78,18 +78,6 @@ K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( QWidget* parent, const char*
   kapp->config()->setGroup("General Options");
   m_editImagePath->setText( kapp->config()->readEntry( "last written image", "" ) );
   updateImageSize( m_editImagePath->text() );
-
-
-
-  // ToolTips
-  // --------------------------------------------------------------------------------
-  QToolTip::add( m_checkNoFix, i18n("Allow further sessions to be appended") );
-
-  // What's This info
-  // --------------------------------------------------------------------------------
-  QWhatsThis::add( m_checkNoFix, i18n("<p>If this option is checked, K3b will not close the CD, meaning "
-				      "it will only write a temporary table of contents.</p>"
-				      "<p>This allows further sessions to be appended to the CD.</p>") );
 }
 
 
@@ -231,7 +219,7 @@ void K3bIsoImageWritingDialog::setupGui()
   advancedTabLayout->setSpacing( spacingHint() );
   advancedTabLayout->setMargin( marginHint() );
 
-  m_checkNoFix = new QCheckBox( i18n("Do not close CD"), advancedTab );
+  m_checkNoFix = K3bStdGuiItems::startMultisessionCheckBox( advancedTab );
 
   advancedTabLayout->addWidget( m_checkNoFix, 0, 0 );
 

@@ -1,6 +1,6 @@
 /*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
  *
  * This file is part of the K3b project.
@@ -40,7 +40,7 @@ QString K3bVcdListViewItem::text(int i) const
   switch( i )
     {
     case 0:
-      return QString::number( m_track->index() +1 ).rightJustify( 2, '0' );
+      return QString::number( m_track->index() +1 ).rightJustify( 2, ' ' );
     case 1:
       return m_track->fileName();
     case 2:

@@ -1,6 +1,6 @@
 /*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
  *
  * This file is part of the K3b project.
@@ -78,8 +78,8 @@ K3bVcdListView::~K3bVcdListView(){
 }
 
 void K3bVcdListView::setupColumns(){
-  addColumn( i18n("Position") );
-  addColumn( i18n("Name") );
+  addColumn( i18n("No.") );
+  addColumn( i18n("Filename") );
   addColumn( i18n("Type") );
   addColumn( i18n("Size") );
   addColumn( i18n("Display") );  

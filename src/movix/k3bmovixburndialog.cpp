@@ -25,6 +25,7 @@
 #include <tools/k3bexternalbinmanager.h>
 #include <k3bwriterselectionwidget.h>
 #include <k3btempdirselectionwidget.h>
+#include <k3bstdguiitems.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -58,7 +59,7 @@ K3bMovixBurnDialog::K3bMovixBurnDialog( K3bMovixDoc* doc, QWidget* parent, const
   wl->setSpacing( spacingHint() );
   m_imageSettingsWidget = new K3bDataImageSettingsWidget( w );
   QGroupBox* groupMultisession = new QGroupBox( 1, Qt::Vertical, i18n("Multisession"), w );
-  m_checkStartMultiSesssion = new QCheckBox( i18n("&Start multisession"), groupMultisession );
+  m_checkStartMultiSesssion = K3bStdGuiItems::startMultisessionCheckBox( groupMultisession );
 
   addPage( w, i18n("Data Settings") );
 

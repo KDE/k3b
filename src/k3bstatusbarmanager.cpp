@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -73,7 +73,7 @@ K3bStatusBarManager::~K3bStatusBarManager()
 void K3bStatusBarManager::update()
 {
   kapp->config()->setGroup( "General Options" );
-  QString tempdir = kapp->config()->readEntry( "Temp Dir", locateLocal( "appdata", "temp/" ) );
+  QString tempdir = kapp->config()->readEntry( "Temp Dir", KGlobal::dirs()->resourceDirs( "tmp" ).first() );
 
   struct statfs fs;
   if ( ::statfs(tempdir.latin1(),&fs) == 0 ) {

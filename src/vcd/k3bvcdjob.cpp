@@ -1,6 +1,6 @@
 /*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
  *
  * This file is part of the K3b project.
@@ -32,6 +32,7 @@
 #include <kconfig.h>
 #include <kstandarddirs.h>
 #include <kurl.h>
+#include <ktempfile.h>
 
 #include <qstring.h>
 #include <qdatetime.h>
@@ -171,7 +172,10 @@ void K3bVcdJob::vcdxGen()
   delete m_process;
   m_process = new KProcess();
 
-  m_xmlFile = locateLocal( "appdata", "temp/k3btempvcd.xml");
+  KTempFile tempF;
+  m_xmlFile = tempF.name();
+  tempF.unlink();
+
   // remove old xml-file
   if( QFile::exists( m_xmlFile ) )
     QFile::remove( m_xmlFile );

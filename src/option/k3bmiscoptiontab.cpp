@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -77,7 +77,7 @@ void K3bMiscOptionTab::readSettings()
   m_checkShowSplash->setChecked( c->readBoolEntry("Show splash", true) );
   m_checkShowSystemTrayProgress->setChecked( c->readBoolEntry( "Show progress in system tray", true ) );
 
-  QString tempdir = c->readEntry( "Temp Dir", locateLocal( "appdata", "temp/" ) );
+  QString tempdir = c->readEntry( "Temp Dir", KGlobal::dirs()->resourceDirs( "tmp" ).first() );
   m_editTempDir->setText( tempdir );
 }
 

@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Klaus-Dieter Krannich <kd@k3b.org>
  *
  * This file is part of the K3b project.
@@ -78,8 +78,6 @@ K3bBinImageWritingDialog::K3bBinImageWritingDialog( QWidget* parent, const char*
    m_job = 0;
    k3bMain()->config()->setGroup( "General Options" );
 
-   // TODO: use KTempFile
-   m_tocPath=k3bMain()->config()->readEntry( "Temp Dir", locateLocal( "appdata", "temp/" ) );
    setupGui();
    setButtonBoxOrientation( Qt::Vertical );
 }
@@ -131,7 +129,7 @@ void K3bBinImageWritingDialog::setupGui()
   groupOptions->setInsideMargin( marginHint() );
 
   m_checkSimulate = K3bStdGuiItems::simulateCheckbox( groupOptions );
-  m_checkMulti    = new QCheckBox( i18n("Multisession"), groupOptions );
+  m_checkMulti    = K3bStdGuiItems::startMultisessionCheckBox( groupOptions );
 
   QGroupBox* groupCopies = new QGroupBox( 2, Qt::Horizontal, i18n("Copies"), optionTab );
   groupCopies->setInsideSpacing( spacingHint() );
@@ -176,13 +174,9 @@ void K3bBinImageWritingDialog::setupGui()
 
   connect( m_buttonFindTocFile, SIGNAL(clicked()), this, SLOT(slotFindTocFile()) );
 
-  QToolTip::add( m_checkMulti, i18n("Write Multisession CD, don't close") );
   QToolTip::add( m_checkForce, i18n("Force Writing") );
   QToolTip::add( m_spinCopies, i18n("Number of copies") );
 
-  QWhatsThis::add( m_checkMulti, i18n("<p>If this option is checked, the Image is written as the first "
-					 "session of a multisession CD "
-				      "<p>It is possible to append another session on such disks.") );
   QWhatsThis::add( m_checkForce, i18n("<p>Forces the execution of an operation that otherwise would not be "
 				      "performed. ") );
   QWhatsThis::add( m_spinCopies, i18n("<p>Select how many copies you want K3b to create from the Image.") );

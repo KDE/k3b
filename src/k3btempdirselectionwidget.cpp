@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -76,11 +76,11 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const cha
   m_mode = DIR;
 
   kapp->config()->setGroup( "General Options" );
-  QString tempdir = kapp->config()->readEntry( "Temp Dir", locateLocal( "appdata", "temp/" ) );
+  QString tempdir = kapp->config()->readEntry( "Temp Dir", KGlobal::dirs()->resourceDirs( "tmp" ).first() );
   if ( QDir(tempdir).exists() )
      m_editDirectory->setText( tempdir );
   else
-     m_editDirectory->setText( locateLocal( "appdata", "temp/" ) );
+     m_editDirectory->setText( KGlobal::dirs()->resourceDirs( "tmp" ).first() );
   slotUpdateFreeTempSpace();
 
   // ToolTips
