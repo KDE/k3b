@@ -1,20 +1,17 @@
-/***************************************************************************
-                          k3bvcdoptions.cpp  -  description
-                             -------------------
-    begin                : Sam Nov 23 2002
-    copyright            : (C) 2002 by Sebastian Trueg & Christian Kvasny
-    email                : trueg@informatik.uni-freiburg.de
-                           chris@ckvsoft.at
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+/*
+ *
+ * $Id: $
+ * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
+ *
+ * This file is part of the K3b project.
+ * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * See the file "COPYING" for the exact licensing terms.
+ */
 
 #include "k3bvcdoptions.h"
 
@@ -33,6 +30,7 @@ K3bVcdOptions::K3bVcdOptions()
     m_systemId( "CD-RTOS CD-BRIDGE" ),
     m_volumeCount( 1 ),
     m_volumeNumber( 1 ),
+    m_autodetect( true ),
     m_cdisupport( false ),
     m_brokensvcdmode( false ),
     m_sector2336( false )
@@ -64,6 +62,7 @@ void K3bVcdOptions::save( KConfig* c )
   c->writeEntry( "publisher", m_publisher );
   c->writeEntry( "volume_count", m_volumeCount );
   c->writeEntry( "volume_number", m_volumeNumber );
+  c->writeEntry( "autodetect", m_autodetect );
   c->writeEntry( "cdi_support", m_cdisupport );
   c->writeEntry( "broken_svcd_mode", m_brokensvcdmode );
   c->writeEntry( "2336_sectors", m_sector2336 );
@@ -81,6 +80,7 @@ K3bVcdOptions K3bVcdOptions::load( KConfig* c )
   options.setPublisher( c->readEntry( "publisher", options.publisher() ) );
   options.setVolumeCount( ( c->readEntry( "volume_count", QString("%1").arg(options.volumeCount()) )).toInt() );
   options.setVolumeNumber( ( c->readEntry( "volume_number", QString("%1").arg(options.volumeNumber()) )).toInt() );
+  options.setAutoDetect( c->readBoolEntry( "autodetect", options.AutoDetect() ) );
   options.setCdiSupport( c->readBoolEntry( "cdi_support", options.CdiSupport() ) );
   options.setBrokenSVcdMode( c->readBoolEntry( "broken_svcd_mode", options.BrokenSVcdMode() ) );
   options.setSector2336( c->readBoolEntry( "2336_sectors", options.Sector2336() ) );

@@ -1,20 +1,17 @@
-/***************************************************************************
-                          k3bvcdoptions.h  -  description
-                             -------------------
-    begin                : Sam Nov 23 2002
-    copyright            : (C) 2002 by Sebastian Trueg & Christian Kvasny
-    email                : trueg@informatik.uni-freiburg.de
-                           chris@ckvsoft.at
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+/*
+ *
+ * $Id: $
+ * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
+ *
+ * This file is part of the K3b project.
+ * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * See the file "COPYING" for the exact licensing terms.
+ */
 
 #ifndef K3B_VCD_OPTIONS_H
 #define K3B_VCD_OPTIONS_H
@@ -41,6 +38,7 @@ class K3bVcdOptions
   const int volumeCount() const { return m_volumeCount; }
   const int volumeNumber()const { return m_volumeNumber; }
 
+  const bool AutoDetect() const { return m_autodetect; }
   const bool CdiSupport() const { return m_cdisupport; }
   const bool BrokenSVcdMode() const { return m_brokensvcdmode; }
   const bool Sector2336() const { return m_sector2336; }
@@ -55,6 +53,7 @@ class K3bVcdOptions
   void setVolumeCount( const int c ) { m_volumeCount = c; }
   void setVolumeNumber( const int n ) { m_volumeNumber = n; }
   
+  void setAutoDetect( const bool& b ) { m_autodetect = b; }
   void setCdiSupport( const bool& b ) { m_cdisupport = b; }
   void setBrokenSVcdMode( const bool& b ) { m_brokensvcdmode = b; }
   void setSector2336( const bool& b ) { m_sector2336 = b; }
@@ -80,6 +79,7 @@ class K3bVcdOptions
   int m_volumeCount;
   int m_volumeNumber;
     
+  bool m_autodetect;
   bool m_cdisupport;
   bool m_brokensvcdmode;
   bool m_sector2336;

@@ -1,20 +1,17 @@
-/***************************************************************************
-                          k3bvcdburndialog.cpp  -  description
-                             -------------------
-    begin                : Son Nov 10 2002
-    copyright            : (C) 2002 by Sebastian Trueg & Christian Kvasny
-    email                : trueg@informatik.uni-freiburg.de
-                           chris@ckvsoft.at
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+/*
+ *
+ * $Id: $
+ * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
+ *
+ * This file is part of the K3b project.
+ * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * See the file "COPYING" for the exact licensing terms.
+ */
 
 #include "k3bvcdburndialog.h"
 #include "../k3b.h"
@@ -71,12 +68,14 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
   connect( m_editVolumeId, SIGNAL(textChanged(const QString&)), this, SLOT(slotSetImagePath()) );
   connect( m_groupVcdFormat, SIGNAL(clicked(int)), this, SLOT(slotVcdTypeClicked(int)) );
   connect( m_checkCdiSupport, SIGNAL(toggled(bool)), this, SLOT(slotCdiSupportChecked(bool)) );
+  connect( m_checkAutoDetect, SIGNAL(toggled(bool)), this, SLOT(slotAutoDetect(bool)) );
 
   // ToolTips
   // -------------------------------------------------------------------------
   QToolTip::add( m_radioVcd11, i18n("Select Video CD type %1").arg("(VCD 1.1)") );
   QToolTip::add( m_radioVcd20, i18n("Select Video CD type %1").arg("(VCD 2.0)") );
   QToolTip::add( m_radioSvcd10, i18n("Select Video CD type %1").arg("(SVCD 1.0)") );
+  QToolTip::add( m_checkAutoDetect, i18n("Automatic video type recognition.") );
   QToolTip::add( m_checkNonCompliant, i18n("Non-compliant compatibility mode for broken devices") );
   QToolTip::add( m_check2336, i18n("Use 2336 byte sectors for output") );
 
@@ -132,6 +131,12 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
                                         "<ul><li>480 x 480 @ 29.97 Hz (NTSC 2/3 D-2).</li>"
                                         "<li>480 x 576 @ 25 Hz (PAL 2/3 D-2).</li></ul>") );
 
+   QWhatsThis::add( m_checkAutoDetect, i18n("<p>If Autodetect is:</p>"
+                                            "<ul><li>ON, than k3b will set the right VideoCD Type.</li>"
+                                            "<li>OFF then the User must set the right VideoCD type himself.</li></ul>"
+					    "<p>You are not sure about the right VideoCD Type? In this case it is a good option to turn Autodetect ON.</p>"
+					    "<p>You will force the VideoCD Type? Then you must turn Autodetect OFF. Usefull for some standalone DVD Players without SVCD support</p>") );
+   
    QWhatsThis::add( m_checkNonCompliant, i18n("<ul><li>Rename <b>\"/MPEG2\"</b> folder on SVCDs to (non-compliant) \"/MPEGAV\".</li>"
                                               "<li>Enables the use of the (deprecated) signature <b>\"ENTRYSVD\"</b> instead of <b>\"ENTRYVCD\"</b> for the file <b>\"/SVCD/ENTRY.SVD\"</b>.</li>"
                                               "<li>Enables the use of the (deprecated) chinese <b>\"/SVCD/TRACKS.SVD\"</b> format which differs from the format defined in the <b>IEC-62107</b> specification.</li></ul>"
@@ -175,7 +180,6 @@ void K3bVcdBurnDialog::setupVideoCdTab()
   m_groupOptions = new QGroupBox( 4, Qt::Vertical, i18n("Options"), w );
   m_checkAutoDetect = new QCheckBox( i18n( "Autodetect VideoCD type" ), m_groupOptions );
   m_checkAutoDetect->setChecked( true );
-  m_checkAutoDetect->setEnabled( false );
   
   m_checkNonCompliant = new QCheckBox( i18n( "Enable Broken SVCD mode" ), m_groupOptions );
   // Only available on SVCD Type
@@ -308,6 +312,7 @@ void K3bVcdBurnDialog::loadDefaults()
   m_editVolumeId->setText( "VIDEOCD" );
   m_editAlbumId->setText( "" );
 
+  m_checkAutoDetect->setChecked( true );
   m_check2336->setChecked( false );
   m_checkNonCompliant->setChecked( false );
 
@@ -357,6 +362,7 @@ void K3bVcdBurnDialog::saveSettings()
   vcdDoc()->vcdOptions()->setVolumeId( m_editVolumeId->text() );
   vcdDoc()->vcdOptions()->setAlbumId( m_editAlbumId->text() );
 
+  vcdDoc()->vcdOptions()->setAutoDetect(m_checkAutoDetect->isChecked());
   vcdDoc()->vcdOptions()->setBrokenSVcdMode(m_checkNonCompliant->isChecked());
   vcdDoc()->vcdOptions()->setSector2336(m_check2336->isChecked());
 
@@ -401,6 +407,7 @@ void K3bVcdBurnDialog::readSettings()
   m_spinVolumeCount->setValue( vcdDoc()->vcdOptions()->volumeCount() );
   m_spinVolumeNumber->setValue( vcdDoc()->vcdOptions()->volumeNumber() );
 
+  m_checkAutoDetect->setChecked( vcdDoc()->vcdOptions()->AutoDetect() );
   m_check2336->setChecked( vcdDoc()->vcdOptions()->Sector2336() );
 
   m_checkCdiSupport->setEnabled( false );
@@ -435,6 +442,7 @@ void K3bVcdBurnDialog::loadUserDefaults()
 
   K3bVcdOptions o = K3bVcdOptions::load( c );
   
+  m_checkAutoDetect->setChecked( o.AutoDetect() );
   m_check2336->setChecked( o.Sector2336() );
     
   m_checkCdiSupport->setChecked( false );
@@ -482,6 +490,7 @@ void K3bVcdBurnDialog::saveUserDefaults()
 
   o.setVolumeId( m_editVolumeId->text() );
   o.setAlbumId( m_editAlbumId->text() );
+  o.setAutoDetect(m_checkAutoDetect->isChecked());
   o.setBrokenSVcdMode(m_checkNonCompliant->isChecked());
   o.setSector2336(m_check2336->isChecked());
   o.setVolumeCount(m_spinVolumeCount->value());
@@ -605,13 +614,19 @@ void K3bVcdBurnDialog::slotVcdTypeClicked( int i)
       // Do anybody use vcd 1.1 with cd-i????
     case 1:
       //vcd 2.0
-      m_checkCdiSupport->setEnabled( true );
+      m_checkCdiSupport->setEnabled( vcdDoc()->vcdOptions()->checkCdiFiles() );
       m_groupCdi->setEnabled( m_checkCdiSupport->isChecked() );
+      
+      m_checkNonCompliant->setEnabled( false );
+      m_checkNonCompliant->setChecked( false );
       break;
     case 2:
       //svcd 1.0
       m_checkCdiSupport->setEnabled( false );
+      m_checkCdiSupport->setChecked( false );
       m_groupCdi->setEnabled( false );
+      
+      m_checkNonCompliant->setEnabled( true );
       break;
   }
   
@@ -622,4 +637,13 @@ void K3bVcdBurnDialog::slotCdiSupportChecked( bool b)
   m_groupCdi->setEnabled( b );
 }
 
+void K3bVcdBurnDialog::slotAutoDetect( bool b)
+{
+	if (b) {
+	// TODO: here i must check for the Mpeg Filetype to set the right VCD Type
+	// in Autodetection Mode
+	}
+	m_groupVcdFormat->setDisabled( b );
+
+}
 #include "k3bvcdburndialog.moc"
