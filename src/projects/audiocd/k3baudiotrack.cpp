@@ -145,4 +145,4 @@ void K3bAudioTrack::setTrackEnd( const K3b::Msf& msf )
   }
 }
 
-#include "k3baudiotrack.moc"
+//#include "k3baudiotrack.moc"
