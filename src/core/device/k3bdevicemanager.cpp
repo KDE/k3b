@@ -59,9 +59,6 @@ typedef unsigned char u8;
 #include <linux/limits.h>
 
 
-typedef Q_INT16 size16;
-typedef Q_INT32 size32;
-
 
 #ifndef IDE_DISK_MAJOR
 /*

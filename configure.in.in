@@ -102,6 +102,11 @@ AC_TRY_COMPILE([
 AC_MSG_RESULT($linux_scsi)
 
 
+dnl - check the byte order -
+dnl this will define WORDS_BIGENDIAN or do nothing
+AC_C_BIGENDIAN()
+
+
 OGG_VORBISLIBS=""
 AC_MSG_CHECKING(for ogg/vorbis headers)
 ogg_vorbis=no

@@ -23,14 +23,11 @@
 
 #include <qstringlist.h>
 #include <qfile.h>
+#include <qglobal.h>
 
 #include <kdebug.h>
 #include <kprocess.h>
 #include <klocale.h>
-
-typedef Q_INT16 size16;
-typedef Q_INT32 size32;
-
 
 #include <sys/types.h>
 #include <sys/ioctl.h>

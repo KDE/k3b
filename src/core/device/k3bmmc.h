@@ -17,37 +17,9 @@
 #ifndef _K3B_MMC_H_
 #define _K3B_MMC_H_
 
-// The symbol defined when compiling under linux varies greatly. 
-// linux, Linux, and __linux__ are all known to be used. Perhaps
-// the best approach is to #include <qglobal.h> and use Q_OS_LINUX
-// instead.
-#include <qglobal.h>
 
-#ifdef Q_OS_LINUX
-#include <inttypes.h>
+#include <config.h>
 
-/* Fix definitions for 2.5 kernels */
-#include <linux/version.h>
-
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,4,21) 
-typedef unsigned long long __u64; 
-#endif
-
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,5,50)
-typedef unsigned char u8;
-#endif
-
-#include <linux/cdrom.h>
-#include <endian.h>
-
-#else
-// Assume FreeBSD, 4.x
-#include <inttypes.h>
-#include <sys/endian.h>
-#define __BYTE_ORDER BYTE_ORDER
-#define __BIG_ENDIAN BIG_ENDIAN
-#define __LITTLE_ENDIAN LITTLE_ENDIAN
-#endif
 
 namespace K3bCdDevice 
 {
@@ -69,32 +41,30 @@ namespace K3bCdDevice
    */
 
   typedef struct disc_info {
-    uint16_t length;
-#if __BYTE_ORDER == __BIG_ENDIAN
+    Q_UINT16 length;
+#ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
     unsigned char reserved1 : 3;
     unsigned char erasable  : 1;
     unsigned char border    : 2;
     unsigned char status    : 2;
-#elif __BYTE_ORDER == __LITTLE_ENDIAN
-    unsigned char status    : 2;
-    unsigned char border    : 2;
-    unsigned char erasable  : 1;
-    unsigned char reserved1 : 3;
 #else
-#error "<bits/endian.h> is wack"
+    unsigned char status    : 2;
+    unsigned char border    : 2;
+    unsigned char erasable  : 1;
+    unsigned char reserved1 : 3;
 #endif
-    uint8_t n_first_track;
-    uint8_t n_sessions_l;
-    uint8_t first_track_l;
-    uint8_t last_track_l;
-#if __BYTE_ORDER == __BIG_ENDIAN
+    unsigned char n_first_track;
+    unsigned char n_sessions_l;
+    unsigned char first_track_l;
+    unsigned char last_track_l;
+#ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
     unsigned char did_v     : 1;
     unsigned char dbc_v     : 1;
     unsigned char uru       : 1;
     unsigned char reserved2 : 2;
     unsigned char dbit      : 1;
     unsigned char bg_f_status : 1;
-#elif __BYTE_ORDER == __LITTLE_ENDIAN
+#else
     unsigned char bg_f_status : 1;
     unsigned char dbit      : 1;
     unsigned char reserved2 : 2;
@@ -111,31 +81,31 @@ namespace K3bCdDevice
      *    FFh - Undefined
      *    All other values are reserved
      */
-    uint8_t disc_type;
-    uint8_t n_sessions_m;
-    uint8_t first_track_m;
-    uint8_t last_track_m;
-    uint32_t disc_id;
+    unsigned char disc_type;
+    unsigned char n_sessions_m;
+    unsigned char first_track_m;
+    unsigned char last_track_m;
+    Q_UINT32 disc_id;
 
     /*
      * Last session lead-in start time
      * if the disc is complete this shall be FF/FF/FF
      */
-    uint8_t lead_in_r;
-    uint8_t lead_in_m;
-    uint8_t lead_in_s;
-    uint8_t lead_in_f;
+    unsigned char lead_in_r;
+    unsigned char lead_in_m;
+    unsigned char lead_in_s;
+    unsigned char lead_in_f;
 
     /*
      * Last possible start time for start of lead-in
      * if the disc is complete this shall be FF/FF/FF
      */
-    uint8_t lead_out_r;
-    uint8_t lead_out_m;
-    uint8_t lead_out_s;
-    uint8_t lead_out_f;
+    unsigned char lead_out_r;
+    unsigned char lead_out_m;
+    unsigned char lead_out_s;
+    unsigned char lead_out_f;
 
-    uint8_t disc_bar_code[8];
+    unsigned char disc_bar_code[8];
 
     //
     // We need to make sure the structure has a proper size
@@ -144,8 +114,8 @@ namespace K3bCdDevice
     // GPCMD_READ_DISC_INFO command failes if the size is 34
     //
 
-/*     uint8_t reserved3; */
-/*     uint8_t opc_entries; */
+/*     unsigned char reserved3; */
+/*     unsigned char opc_entries; */
   } disc_info_t;
 
 
@@ -154,47 +124,47 @@ namespace K3bCdDevice
    * struct track_info taken from cdrwtool.h
    */
   typedef struct track_info {
-    uint16_t info_length;
-    uint8_t track_number_l;
-    uint8_t session_number_l;
-    uint8_t reserved1;
-#if __BYTE_ORDER == __BIG_ENDIAN
-    uint8_t reserved2               : 2;
-    uint8_t damage          : 1;
-    uint8_t copy            : 1;
-    uint8_t track_mode              : 4;
-    uint8_t rt                      : 1;
-    uint8_t blank           : 1;
-    uint8_t packet          : 1;
-    uint8_t fp                      : 1;
-    uint8_t data_mode               : 4;
-    uint8_t reserved3               : 6;
-    uint8_t lra_v           : 1;
-    uint8_t nwa_v           : 1;
-#elif __BYTE_ORDER == __LITTLE_ENDIAN
-    uint8_t track_mode              : 4;
-    uint8_t copy            : 1;
-    uint8_t damage          : 1;
-    uint8_t reserved2               : 2;
-    uint8_t data_mode               : 4;
-    uint8_t fp                      : 1;
-    uint8_t packet          : 1;
-    uint8_t blank           : 1;
-    uint8_t rt                      : 1;
-    uint8_t nwa_v           : 1;
-    uint8_t lra_v           : 1;
-    uint8_t reserved3               : 6;
+    Q_UINT16 info_length;
+    unsigned char track_number_l;
+    unsigned char session_number_l;
+    unsigned char reserved1;
+#ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
+    unsigned char reserved2               : 2;
+    unsigned char damage          : 1;
+    unsigned char copy            : 1;
+    unsigned char track_mode              : 4;
+    unsigned char rt                      : 1;
+    unsigned char blank           : 1;
+    unsigned char packet          : 1;
+    unsigned char fp                      : 1;
+    unsigned char data_mode               : 4;
+    unsigned char reserved3               : 6;
+    unsigned char lra_v           : 1;
+    unsigned char nwa_v           : 1;
+#else
+    unsigned char track_mode              : 4;
+    unsigned char copy            : 1;
+    unsigned char damage          : 1;
+    unsigned char reserved2               : 2;
+    unsigned char data_mode               : 4;
+    unsigned char fp                      : 1;
+    unsigned char packet          : 1;
+    unsigned char blank           : 1;
+    unsigned char rt                      : 1;
+    unsigned char nwa_v           : 1;
+    unsigned char lra_v           : 1;
+    unsigned char reserved3               : 6;
 #endif
-    uint32_t track_start;
-    uint32_t next_writable;
-    uint32_t free_blocks;
-    uint32_t packet_size;
-    uint32_t track_size;
-    uint32_t last_recorded;
-    uint8_t track_number_m;
-    uint8_t session_number_m;
-    uint8_t reserved4;
-    uint8_t reserved5;
+    Q_UINT32 track_start;
+    Q_UINT32 next_writable;
+    Q_UINT32 free_blocks;
+    Q_UINT32 packet_size;
+    Q_UINT32 track_size;
+    Q_UINT32 last_recorded;
+    unsigned char track_number_m;
+    unsigned char session_number_m;
+    unsigned char reserved4;
+    unsigned char reserved5;
   } track_info_t;
 
 
@@ -203,23 +173,23 @@ namespace K3bCdDevice
    * where format is set to 2 (Full TOC)
    */
   typedef struct toc_track_descriptor {
-    uint8_t session_number;
-#if __BYTE_ORDER == __BIG_ENDIAN
+    unsigned char session_number;
+#ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
     unsigned char adr     : 4;
     unsigned char control : 4;
-#elif __BYTE_ORDER == __LITTLE_ENDIAN
+#else
     unsigned char control : 4;
     unsigned char adr     : 4;
 #endif
-    uint8_t tno;
-    uint8_t point;
-    uint8_t min;
-    uint8_t sec;
-    uint8_t frame;
-    uint8_t zero;
-    uint8_t p_min;
-    uint8_t p_sec;
-    uint8_t p_frame;
+    unsigned char tno;
+    unsigned char point;
+    unsigned char min;
+    unsigned char sec;
+    unsigned char frame;
+    unsigned char zero;
+    unsigned char p_min;
+    unsigned char p_sec;
+    unsigned char p_frame;
   } toc_track_descriptor_t;
 
 
@@ -227,26 +197,26 @@ namespace K3bCdDevice
    * Use this with the GPCMD_READ_TOC_PMA_ATIP command
    */
   typedef struct toc_pma_atip {
-    uint16_t length;
-    uint8_t first;
-    uint8_t last;
+    Q_UINT16 length;
+    unsigned char first;
+    unsigned char last;
     toc_track_descriptor_t descriptor;
   } toc_pma_atip_t;
 
 
-#if __BYTE_ORDER == __BIG_ENDIAN
+#ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
   struct cd_wr_speed_performance {
     unsigned char res0;                   /* Reserved                          */
     unsigned char rot_ctl_sel     : 2;    /* Rotational control selected       */
     unsigned char res_1_27        : 6;    /* Reserved                          */
-    unsigned char wr_speed_supp[2];       /* Supported write speed             */
+    Q_UINT16 wr_speed_supp;               /* Supported write speed             */
   };
 #else
   struct cd_wr_speed_performance {
     unsigned char res0;                   /* Reserved                          */
     unsigned char res_1_27        : 6;    /* Reserved                          */
     unsigned char rot_ctl_sel     : 2;    /* Rotational control selected       */
-    unsigned char wr_speed_supp[2];       /* Supported write speed             */
+    Q_UINT16 wr_speed_supp;               /* Supported write speed             */
   };
 #endif
 
@@ -255,7 +225,7 @@ namespace K3bCdDevice
    * Based on the cdrecord struct cd_mode_page_2A
    * MM Capabilities and Mechanical Status Page
    */
-#if __BYTE_ORDER == __BIG_ENDIAN
+#ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
 
   struct mm_cap_page_2A {
     unsigned char PS               : 1;
@@ -432,7 +402,7 @@ namespace K3bCdDevice
    * Based on the cdrecord struct cd_mode_page_05
    * Write Parameters Mode Page
    */
-#if __BYTE_ORDER == __BIG_ENDIAN
+#ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
   struct wr_param_page_05 {                /* write parameters */
     unsigned char PS               : 1;
     unsigned char res_1            : 1;
