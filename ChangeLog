@@ -4,6 +4,7 @@ Mkisofs 2.02 obsoletes the use of -L, -H, and -P. Replaced them by the long vers
 Fixed GET PERFORMANCE command which caused crashes on some systems and DMA problems on other.
 Default to RAW writing mode for Audio CDs which contain zero length pregaps since there are
     so many buggy CD writers out there failing to create proper CDs in that case.
+Backported new device configuration format fixing all issues with removable devices (USB,...)
 
 0.11.11
 Qt 3.1 compile fix
