@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
 
 
   if (getuid()) {
-    KMessageBox::error(0, i18n("K3b Setup needs to be run as root!"));
+    KMessageBox::error(0, i18n("K3b Setup must be run as root!"));
     exit(1);
   }
 

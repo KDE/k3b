@@ -136,30 +136,30 @@ NoWriterTab::NoWriterTab( int i, int o, K3bSetupWizard* wizard )
 
   QLabel* label = new QLabel( this, "m_labelNoWriter" );
   label->setText( i18n( "<p><b>K3b Setup did not find a CD writer on your system.</b></p>\n"
-			"<p>If you do not have a CD writer, but just want to use K3b for CD ripping, everything is fine.</p>\n"
-			"<p>If you are sure you have either a SCSI CD writer or enabled SCSI emulation, please go back "
-			"and add the device manually. If that still does not work... well... please report!</p>\n"
-			"<p>Otherwise you need to enable SCSI emulation for (at least) your ATAPI cd writer (although "
-			"it is recommended to enable SCSI emulation for all cd drives it is not nessesary) since this "
-			"is the only thing K3b Setup is not able to do for you (yet).</p>\n"
+			"<p>If you do not have a CD writer, but just want to use K3b for CD ripping then this does not matter.</p>\n"
+			"<p>If you are sure you have either a SCSI CD writer or have enabled SCSI emulation, please go back "
+			"and add the device manually. If that still does not work, issue a bug report.</p>\n"
+			"<p>Otherwise you must enable SCSI emulation for (at least) your ATAPI CD writer (although "
+			"it is recommended to enable SCSI emulation for all CD drives, it is not necessary), since this "
+			"is the only task K3b Setup is unable to do for you at the moment.</p>\n"
 			"<p><b>How to enable SCSI emulation</b></p>\n"
 			"\n"
 			"<ol>\n"
-			"<li>Make sure your kernel supports SCSI emulation at least as a module. If you use a standard "
-			"kernel from your distribution this likely is the case. Try loading the module with <pre>modprobe "
+			"<li>Make sure your kernel supports SCSI emulation, at least as a module. If you use a standard "
+			"kernel from your distribution, this is likely to be the case. Try loading the module with <pre>modprobe "
 			"ide-scsi</pre> as root. If your kernel does not support SCSI emulation you need to build your own "
-			"kernel or at least a module. Sorry but that goes beyond the scope of this documentation.</li>\n"
+			"kernel, or at least a module. Unfortunately that goes beyond the scope of this documentation.</li>\n"
 			"<li>If your kernel supports SCSI emulation as a module it is recommended to add an entry in "
-			"/etc/modules.conf so that the module is loaded automagically. Otherwise you have to load it "
-			"with <pre>modprobe ide-scsi</pre> everytime you need it.\n"
+			"/etc/modules.conf so that the module is loaded automatically. Otherwise you have to load it "
+			"with <pre>modprobe ide-scsi</pre> every time you need it.\n"
 			"</li>\n"
-			"<li>The last step is to inform the kernel that you are about to use SCSI emulation at boottime. "
-			"If you are using lilo (what is highly recommended) you need to add "
-			"<pre>append = \"hdc=ide-scsi hdd=ide-scsi\"</pre> to your /etc/lilo.conf and rerun lilo as "
+			"<li>The last step is to inform the kernel that you are about to use SCSI emulation at boot time. "
+			"If you are using lilo (which is highly recommended), you need to add "
+			"<pre>append = \"hdc=ide-scsi hdd=ide-scsi\"</pre> to your /etc/lilo.conf and re-run lilo as "
 			"root to install the new configuration.\n"
-			"After rebooting your system your cd writer is ready for action.</li>\n"
+			"After rebooting your system, your CD writer is ready for action.</li>\n"
 			"</ol>\n"
-			"<p>If you experience problems feel free to contact me.</p>" ) );
+			"<p>If you experience problems, feel free to contact the program author.</p>" ) );
   label->setAlignment( QLabel::WordBreak );
 
   setMainWidget( label );
@@ -189,9 +189,9 @@ FstabEntriesTab::FstabEntriesTab( int i, int o, K3bSetupWizard* wizard )
   mainGrid->setMargin( 0 );
 
   m_labelFstab = new QLabel( main );
-  m_labelFstab->setText( i18n( "<p>On Linux cd devices are mounted into the file tree. Normally only root has "
+  m_labelFstab->setText( i18n( "<p>On Linux, CD devices are mounted into the file tree. Normally only root has "
 			       "permission to mount drives. K3b Setup can create entries in /etc/fstab for each of "
-			       "the detected cd drives. Every user and especially K3b will then be able to mount "
+			       "the detected CD drives. Every user, and especially K3b, will then be able to mount "
 			       "the devices on the given path.</p>" ) );
   m_labelFstab->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
 
@@ -335,11 +335,11 @@ ExternalBinTab::ExternalBinTab( int i, int o, K3bSetupWizard* wizard )
   mainGrid->setMargin( 0 );
 
   m_labelExternalPrograms = new QLabel( main, "m_labelExternalPrograms" );
-  m_labelExternalPrograms->setText( i18n( "<p>K3b uses cdrdao, cdrecord and mkisofs to actually write the cds. "
+  m_labelExternalPrograms->setText( i18n( "<p>K3b uses cdrdao, cdrecord and mkisofs to actually write the CDs. "
 					  "It is recommended to install these programs. K3b will run without them but major"
-					  " functions (for example cd writing ;-) will be disabled.</p>"
+					  " functions (for example CD writing!) will be disabled.</p>"
 					  "<p>K3b Setup tries to find the executables. You can change the paths manually if you"
-					  " want other versions to be used or K3b Setup did not find your installation.</p>" ) );
+					  " want other versions to be used, or K3b Setup did not find your installation.</p>" ) );
   m_labelExternalPrograms->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
 
 
@@ -412,7 +412,7 @@ void ExternalBinTab::readSettings()
 
   // check if cdrecord was found
   if( !setup()->externalBinManager()->foundBin( "cdrecord" ) ) {
-    m_labelWarning->setText( i18n("<p><b><font color=\"red\">K3bSetup was not able to find cdrecord. You will not be able to write cds or get "
+    m_labelWarning->setText( i18n("<p><b><font color=\"red\">K3bSetup was unable to find cdrecord. You will not be able to write CDs or get "
 				  "information about your CD drives without it. It is highly recommended to install "
 				  "cdrecord.</font></b></p>") );
     m_labelWarning->show();
@@ -479,14 +479,14 @@ PermissionTab::PermissionTab( int i, int o, K3bSetupWizard* wizard )
   mainGrid->setMargin( 0 );
 
   m_labelPermissions1 = new QLabel( main, "m_labelPermissions1" );
-  m_labelPermissions1->setText( i18n( "<p>The external programs need to be run as root since they need write access to "
-				      "the cd drives and run with higher priority. K3b also needs write access to the "
-				      "cd drives (for extended functionality like detecting the capacity of a cd).</p>"
+  m_labelPermissions1->setText( i18n( "<p>The external programs need to be run as root, since they need write access to "
+				      "the CD drives and to run with higher priority. K3b also needs write access to the "
+				      "CD drives (for extended functionality like detecting the capacity of a CD).</p>"
 				      "<p>If you know what you are doing you can skip this and setup the permissions "
-				      "for yourself. But it is recommended to let K3bSetup make the changes "
+				      "for yourself. However, it is recommended to let K3bSetup make the changes "
 				      "(To learn more about what K3b Setup will do press <i>Details</i>).</p>"
 				      "<p>Please specify the users that will use K3b. You can also specify an alternative "
-				      "group name. If you do not know what that means just leave the default.</p>" ) );
+				      "group name. If you do not know what that means just use the default.</p>" ) );
   m_labelPermissions1->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
 
   m_groupUsers = new QGroupBox( main, "m_groupUsers" );
@@ -510,11 +510,11 @@ PermissionTab::PermissionTab( int i, int o, K3bSetupWizard* wizard )
   groupUsersLayout->addItem( spacer_2, 2, 1 );
 
   m_checkPermissionsDevices = new QCheckBox( main, "m_checkPermissionsDevices" );
-  m_checkPermissionsDevices->setText( i18n( "Let K3b Setup do the needed changes for the devices" ) );
+  m_checkPermissionsDevices->setText( i18n( "Let K3b Setup make the required changes for the devices" ) );
   m_checkPermissionsDevices->setChecked( TRUE );
 
   m_checkPermissionsExternalPrograms = new QCheckBox( main, "m_checkPermissionsExternalPrograms" );
-  m_checkPermissionsExternalPrograms->setText( i18n( "Let K3b Setup do the needed changes for the external programs" ) );
+  m_checkPermissionsExternalPrograms->setText( i18n( "Let K3b Setup make the required changes for the external programs" ) );
   m_checkPermissionsExternalPrograms->setChecked( TRUE );
 
 //   QFrame* Line1 = new QFrame( main, "Line1" );
@@ -591,7 +591,7 @@ bool PermissionTab::saveSettings()
   }
 
   if( m_boxUsers->count() == 0 && m_checkPermissionsExternalPrograms->isChecked() )
-    if( KMessageBox::warningYesNo( this, i18n("You specified no users. Only root will be able to write CDs. Continue?") )
+    if( KMessageBox::warningYesNo( this, i18n("You did not specify any users. Only root will be able to write CDs. Continue?") )
 	== KMessageBox::No )
       return false;
 
@@ -618,7 +618,7 @@ void PermissionTab::slotAddUser()
       validUser = ( getpwnam( user.local8Bit() ) != 0 );
     else
       validUser = false;
-    text = i18n("No valid user name. Please enter a user name");
+    text = i18n("Not a valid user name. Please enter a user name");
   }
 
   if( ok )
@@ -640,13 +640,13 @@ void PermissionTab::slotPermissionsDetails()
 		      "<table>\n"
 		      "<tr>\n"
 		      " <td>change permission for cdrecord, mksiofs, and cdrdao to 4710</td>\n"
-		      " <td>cdrecord and cdrdao need write access to all the cd drives and all three programs run with higher "
+		      " <td>cdrecord and cdrdao require write access to all the CD drives and have all three programs run with higher "
 		      "priority. That is why they need to be run as root.</td>\n"
 		      "</tr>\n"
 		      "<tr>\n"
 		      " <td>add cdrecord, mkisofs, and cdrdao to group 'cdrecording'</td>\n"
-		      " <td>not everybody shall be allowed to execute these programs since running a program as suid root "
-		      "always is a security risk.</td>\n"
+		      " <td>not everybody should be allowed to execute these programs since running a program as suid root "
+		      "is always a security risk.</td>\n"
 		      "</tr>\n"
 		      "<tr>\n"
 		      " <td>add the selected users to group 'cdrecording'</td>\n"
@@ -654,17 +654,17 @@ void PermissionTab::slotPermissionsDetails()
 		      "</tr>\n"
 		      "<tr>\n"
 		      " <td>change permission for all detected SCSI drives to 660</td>\n"
-		      " <td>K3b needs write access to the SCSI cd drives in order to detect writing speed and things like that</td>\n"
+		      " <td>K3b requires write access to the SCSI CD drives in order to detect writing speed, for example</td>\n"
 		      "</tr>\n"
 		      "<tr>\n"
 		      " <td>change permission for all detected ATAPI drives to 620</td>\n"
-		      " <td>K3b needs only read access to the ATAPI drives since it is not (yet) able to detect speed and stuff "
+		      " <td>K3b only requires read access to the ATAPI drives since it is not (yet) able to detect speed and other parameters "
 		      "for ATAPI devices.</td>\n"
 		      "</tr>\n"
 		      "<tr>\n"
 		      " <td>add all detected devices to group 'cdrecording'</td>\n"
-		      " <td>since write access to devices is always a security risk (although one can not do much bad with writing "
-		      "to a cdrom device) only the selcted users will be able to access the drives</td>\n"
+		      " <td>since write access to devices is always a security risk (although one cannot do much harm with writing "
+		      "to a CD device), only the selected users will be able to access the drives</td>\n"
 		      "</tr>\n"
 		      "</table>");
 
@@ -691,8 +691,8 @@ FinishTab::FinishTab( int i, int o, K3bSetupWizard* wizard )
 
   QLabel* finishedLabel = new QLabel( main, "finishedLabel" );
   finishedLabel->setText( i18n("<h1>Congratulations.</h1>"
-			       "<p>You completed the K3b Setup. Just press the Finish button to save your changes "
-			       "and then enjoy the new ease of cd writing with Linux/KDE.</p>") );
+			       "<p>You have completed the K3b Setup. Just click the Finish button to save your changes "
+			       "and then enjoy the ease of CD writing with Linux/KDE.</p>") );
   finishedLabel->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
 
   QGroupBox* groupChanges = new QGroupBox( i18n("Progress"), main );
