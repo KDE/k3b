@@ -238,6 +238,15 @@ bool K3bAudioStreamer::writeData( long len )
   d->writtenTrackData += len;
   d->bufferDataLen = len;
 
+  if( d->overallDataToWrite <= 0 ) {
+    kdDebug() << "(K3bAudioStreamer) ERROR: overallDataToWrite <= 0!" << endl;
+    d->overallDataToWrite = 1;
+  }
+  if( d->trackDataToWrite <= 0 ) {
+    kdDebug() << "(K3bAudioStreamer) ERROR: trackDataToWrite <= 0!" << endl;
+    d->trackDataToWrite = 1;
+  }
+
   // this includes the pregap data
   emit percent( (int)( (double)d->writtenOverallData 
 		       * 100.0 

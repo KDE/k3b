@@ -70,18 +70,18 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( bool dvd, QWidget *parent, c
 
   m_comboWriter = new K3bDeviceComboBox( groupWriter, "m_comboWriter" );
 
-  QLabel* labelDevice = new QLabel( groupWriter, "TextLabel1_2" );
-  labelDevice->setText( i18n( "Device:" ) );
+//   QLabel* labelDevice = new QLabel( groupWriter, "TextLabel1_2" );
+//   labelDevice->setText( i18n( "Device:" ) );
 
   m_writingAppLabel = new QLabel( i18n("Writing app:"), groupWriter );
   m_comboWritingApp = new KComboBox( groupWriter );
 
-  groupWriterLayout->addWidget( labelDevice, 0, 0 );
+  //  groupWriterLayout->addWidget( labelDevice, 0, 0 );
   groupWriterLayout->addWidget( labelSpeed, 0, 1 );
-  groupWriterLayout->addWidget( m_writingAppLabel, 0, 2 );
-  groupWriterLayout->addWidget( m_comboWriter, 1, 0 );
-  groupWriterLayout->addWidget( m_comboSpeed, 1, 1 );
-  groupWriterLayout->addWidget( m_comboWritingApp, 1, 2 );
+  groupWriterLayout->addWidget( m_writingAppLabel, 0, 3 );
+  groupWriterLayout->addWidget( m_comboWriter, 0, 0 );
+  groupWriterLayout->addWidget( m_comboSpeed, 0, 2 );
+  groupWriterLayout->addWidget( m_comboWritingApp, 0, 4 );
   groupWriterLayout->setColStretch( 0, 1 );
 
 
