@@ -6,7 +6,7 @@ These are the features so far:
  - the most userfriendly interface ever ;-)
 
  - writing audio-cds
-   - from mp3 and wav files (on-the-fly or with images)
+   - from mp3, ogg vorbis, and wav files (on-the-fly or with images)
    - cd-text support
    - ID3-tag support
    - little gimmick: hide the first track (so that you have to search back from the beginning of the cd to find it)

@@ -1,4 +1,9 @@
-0.6
+0.6pre2
+added ogg-vorbis support
+added iso ids to diskInfo
+fixed iso project input fields
+
+0.6pre1
 well... I don't know.. everything?
 
 0.5.1
