@@ -436,6 +436,7 @@ void K3bJobProgressDialog::slotFinished( bool success )
 
     m_progressPercent->setValue(100);
     m_progressSubPercent->setValue(100);
+    slotUpdateCaption(100);
 
     KNotifyClient::event( "SuccessfullyFinished" );
   }
