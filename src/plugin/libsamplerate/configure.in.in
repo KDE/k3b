@@ -1,0 +1,31 @@
+AC_MSG_CHECKING(for lrint)
+ac_save_libs="$LIBS"
+LIBS="-lm"
+AC_TRY_LINK([
+	#include <math.h>
+	],
+	[
+	lrint(0.0);
+	],
+	[got_lrint=yes],
+	[]
+	)
+AC_MSG_RESULT($got_lrint)
+if test "x$got_lrint" = "xyes" ; then
+        AC_DEFINE(HAVE_LRINT,1,[Define if lrint is supported])
+fi
+
+AC_MSG_CHECKING(for lrintf)
+AC_TRY_LINK([
+        #include <math.h>
+       	],
+        [
+        lrintf(0.0);
+	],
+        [got_lrintf=yes],
+	[])
+AC_MSG_RESULT($got_lrintf)
+if test "x$got_lrintf" = "xyes" ; then
+        AC_DEFINE(HAVE_LRINTF,1,[Define if lrintf is supported])
+fi
+LIBS="$ac_save_libs"
