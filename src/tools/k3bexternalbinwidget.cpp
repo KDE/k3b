@@ -16,24 +16,25 @@
 #include "k3bexternalbinwidget.h"
 #include "k3bexternalbinmanager.h"
 
-#include <klistview.h>
-
 #include <qpushbutton.h>
 #include <kdebug.h>
-#include <klocale.h>
-#include <keditlistbox.h>
 #include <qtabwidget.h>
 #include <qlayout.h>
-#include <kdialog.h>
 #include <qheader.h>
 #include <qlabel.h>
 #include <qstringlist.h>
 #include <qmap.h>
-#include <kiconloader.h>
+#include <qregexp.h>
 #include <qfont.h>
 #include <qpainter.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
+
+#include <kdialog.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <keditlistbox.h>
+#include <klistview.h>
 
 
 class K3bExternalBinViewItem;
@@ -168,7 +169,7 @@ K3bExternalBinWidget::K3bExternalBinWidget( K3bExternalBinManager* manager, QWid
   parametersTabLayout->setSpacing( KDialog::spacingHint() );
   m_parameterView = new KListView( parametersTab );
   parametersTabLayout->addWidget( m_parameterView, 1, 0 );
-  parametersTabLayout->addWidget( new QLabel( i18n("User Parameters have to be separated by comma."), parametersTab ), 0, 0 );
+  parametersTabLayout->addWidget( new QLabel( i18n("User Parameters have to be separated by space."), parametersTab ), 0, 0 );
 
   parametersTabLayout->setRowStretch( 1, 1 );
 
@@ -251,7 +252,7 @@ void K3bExternalBinWidget::load()
     // load user parameters
     if( p->supportsUserParameters() ) {
       K3bExternalProgramViewItem* paraV = new K3bExternalProgramViewItem( p, m_parameterView );
-      paraV->setText( 1, p->userParameters().join( ", " ) );
+      paraV->setText( 1, p->userParameters().join( " " ) );
       paraV->setRenameEnabled( 1, true );
     }
   }
@@ -283,9 +284,10 @@ void K3bExternalBinWidget::save()
 
   // save the user parameters
   QListViewItemIterator paraIt( m_parameterView );
+  QRegExp reSpace( "\\s" );
   while( paraIt.current() ) {
     K3bExternalProgramViewItem* pV = (K3bExternalProgramViewItem*)paraIt.current();
-    pV->program()->setUserParameters( QStringList::split(",", pV->text(1) ) );
+    pV->program()->setUserParameters( QStringList::split( reSpace, pV->text(1) ) );
 
     ++paraIt;
   }
