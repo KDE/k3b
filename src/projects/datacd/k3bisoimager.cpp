@@ -63,8 +63,7 @@ K3bIsoImager::K3bIsoImager( K3bDataDoc* doc, QObject* parent, const char* name )
     m_importSession( false ),
     m_device(0),
     m_mkisofsPrintSizeResult( 0 ),
-    m_fdToWriteTo(-1),
-    m_dvdVideo(false)
+    m_fdToWriteTo(-1)
 {
   d = new Private;
 }
@@ -156,52 +155,52 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
   if( m_device )
     m_device->close();
 
-  cleanup();
+  if( !m_canceled ) {
 
-  if( m_canceled )
-    return;
-
-  if( p->normalExit() ) {
-    if( p->exitStatus() == 0 ) {
-      emit finished( true );
-    }
-    else  {
-      switch( p->exitStatus() ) {
-      case 104:
-	// connection reset by peer
-	// This only happens if cdrecord does not finish successfully
-	// so we may leave the error handling to it meaning we handle this
-	// as a known error
-	break;
-
-      case 2:
-	// mkisofs seems to have a bug that prevents to use filenames
-	// that contain one or more backslashes
-	// mkisofs 1.14 has the bug, 1.15a40 not
-	// TODO: find out the version that fixed the bug
-	if( m_containsFilesWithMultibleBackslashes &&
-	    k3bcore->externalBinManager()->binObject( "mkisofs" )->version < K3bVersion( 1, 15, -1, "a40" ) ) {
-	  emit infoMessage( i18n("Due to a bug in mkisofs <= 1.15a40, K3b is unable to handle "
-				 "filenames that contain more than one backslash:"), ERROR );
-
-	  break;
-	}
-	// otherwise just fall through
-
-      default:
-	emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg("mkisofs").arg(p->exitStatus()),
-			  K3bJob::ERROR );
-	emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
-	emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
+    if( p->normalExit() ) {
+      if( p->exitStatus() == 0 ) {
+	emit finished( true );
       }
+      else  {
+	switch( p->exitStatus() ) {
+	case 104:
+	  // connection reset by peer
+	  // This only happens if cdrecord does not finish successfully
+	  // so we may leave the error handling to it meaning we handle this
+	  // as a known error
+	  break;
 
+	case 2:
+	  // mkisofs seems to have a bug that prevents to use filenames
+	  // that contain one or more backslashes
+	  // mkisofs 1.14 has the bug, 1.15a40 not
+	  // TODO: find out the version that fixed the bug
+	  if( m_containsFilesWithMultibleBackslashes &&
+	      k3bcore->externalBinManager()->binObject( "mkisofs" )->version < K3bVersion( 1, 15, -1, "a40" ) ) {
+	    emit infoMessage( i18n("Due to a bug in mkisofs <= 1.15a40, K3b is unable to handle "
+				   "filenames that contain more than one backslash:"), ERROR );
+
+	    break;
+	  }
+	  // otherwise just fall through
+
+	default:
+	  emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg("mkisofs").arg(p->exitStatus()),
+			    K3bJob::ERROR );
+	  emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
+	  emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
+	}
+
+	emit finished( false );
+      }
+    }
+    else {
+      emit infoMessage( i18n("%1 did not exit cleanly.").arg("mkisofs"), ERROR );
       emit finished( false );
     }
   }
-  else {
-    emit infoMessage( i18n("%1 did not exit cleanly.").arg("mkisofs"), ERROR );
-    emit finished( false );
-  }
+
+  cleanup();
 }
 
 
@@ -371,6 +370,8 @@ void K3bIsoImager::start()
   init();
 
   m_process = new K3bProcess();
+  m_process->setRunPrivileged(true);
+
   const K3bExternalBin* mkisofsBin = k3bcore->externalBinManager()->binObject( "mkisofs" );
   if( !mkisofsBin ) {
     kdDebug() << "(K3bIsoImager) could not find mkisofs executable" << endl;
@@ -564,9 +565,6 @@ bool K3bIsoImager::addMkisofsParameters()
 
   if( m_doc->isoOptions().createUdf() )
     *m_process << "-udf";
-
-  if( m_dvdVideo )
-    *m_process << "-dvd-video";
 
   if( m_doc->isoOptions().ISOuntranslatedFilenames()  ) {
     *m_process << "-U";

@@ -27,6 +27,10 @@ class K3bGrowisofsWriter;
 class K3bIsoImager;
 
 
+/**
+ * Some of this classes methods are made virtual since the K3bVideoDvdJob
+ * is derived from this one. This is no clean API at all!
+ */
 class K3bDvdJob : public K3bBurnJob
 {
   Q_OBJECT
@@ -50,15 +54,19 @@ class K3bDvdJob : public K3bBurnJob
 
  protected:
   virtual bool prepareWriterJob();
-  void prepareIsoImager();
+  virtual void prepareIsoImager();
   void prepareGrowisofsImager();
   void cleanup();
   void writeImage();
 
-  /**
-   * Only used by the VideoDvdJob
-   */
-  void setVideoDvd( bool b ) { m_videoDvd = b; }
+  bool waitForDvd();
+
+  K3bIsoImager* m_isoImager;
+  K3bGrowisofsImager* m_growisofsImager;
+  K3bGrowisofsWriter* m_writerJob;
+
+  bool m_canceled;
+  bool m_writingStarted;
 
  protected slots:
   void slotIsoImagerFinished( bool success );
@@ -73,16 +81,6 @@ class K3bDvdJob : public K3bBurnJob
 
  private:
   K3bDataDoc* m_doc;
-  K3bIsoImager* m_isoImager;
-  K3bGrowisofsImager* m_growisofsImager;
-  K3bGrowisofsWriter* m_writerJob;
-
-  bool m_canceled;
-  bool m_writingStarted;
-
-  bool m_videoDvd;
-
-  bool waitForDvd();
 
   class Private;
   Private* d;

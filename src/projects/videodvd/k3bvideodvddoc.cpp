@@ -39,11 +39,12 @@ K3bVideoDvdDoc::~K3bVideoDvdDoc()
 bool K3bVideoDvdDoc::newDocument()
 {
   if( K3bDataDoc::newDocument() ) {
-    K3bDirItem* videoTsDir = new K3bDirItem( "VIDEO_TS", this, root() );
-    videoTsDir->setRemoveable(false);
-    videoTsDir->setRenameable(false);
-    videoTsDir->setMoveable(false);
-    videoTsDir->setHideable(false);
+    // K3bDataDoc::newDocument already deleted m_videoTsDir (again: bad design!)
+    m_videoTsDir = new K3bDirItem( "VIDEO_TS", this, root() );
+    m_videoTsDir->setRemoveable(false);
+    m_videoTsDir->setRenameable(false);
+    m_videoTsDir->setMoveable(false);
+    m_videoTsDir->setHideable(false);
 
     K3bDirItem* audioTsDir = new K3bDirItem( "AUDIO_TS", this, root() );
     audioTsDir->setRemoveable(false);

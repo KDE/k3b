@@ -6,6 +6,7 @@ noinst_LTLIBRARIES = libvideodvd.la
 
 libvideodvd_la_SOURCES = 	k3bvideodvddoc.cpp \
 				k3bvideodvdjob.cpp \
+				k3bvideodvdimager.cpp \
 				k3bvideodvdburndialog.cpp
 
 include_HEADERS = k3bvideodvddoc.h k3bvideodvdjob.h

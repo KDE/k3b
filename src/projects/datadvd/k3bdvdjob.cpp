@@ -45,16 +45,16 @@ public:
   }
 
   K3bDataVerifyingJob* verificationJob;
+  bool imageError;
 };
 
 
 K3bDvdJob::K3bDvdJob( K3bDataDoc* doc, QObject* parent )
   : K3bBurnJob( parent ),
-    m_doc( doc ),
     m_isoImager( 0 ),
     m_growisofsImager( 0 ),
     m_writerJob( 0 ),
-    m_videoDvd(false)
+    m_doc( doc )
 {
   d = new Private();
 }
@@ -136,7 +136,6 @@ void K3bDvdJob::prepareIsoImager()
 {
   if( !m_isoImager ) {
     m_isoImager = new K3bIsoImager( m_doc, this );
-    m_isoImager->setVideoDvd( m_videoDvd );
     connect( m_isoImager, SIGNAL(infoMessage(const QString&, int)), 
 	     this, SIGNAL(infoMessage(const QString&, int)) );
     connect( m_isoImager, SIGNAL(percent(int)), this, SLOT(slotIsoImagerPercent(int)) );
@@ -151,7 +150,6 @@ void K3bDvdJob::prepareGrowisofsImager()
 {
   if( !m_growisofsImager ) {
     m_growisofsImager = new K3bGrowisofsImager( m_doc, this );
-    m_growisofsImager->setVideoDvd( m_videoDvd );
     connect( m_growisofsImager, SIGNAL(infoMessage(const QString&, int)), 
 	     this, SIGNAL(infoMessage(const QString&, int)) );
     connect( m_growisofsImager, SIGNAL(percent(int)), this, SLOT(slotGrowisofsImagerPercent(int)) );
@@ -168,14 +166,17 @@ void K3bDvdJob::prepareGrowisofsImager()
 
 void K3bDvdJob::slotIsoImagerPercent( int p )
 {
-  emit subPercent( p );
+  if( !m_doc->onTheFly() || m_doc->onlyCreateImages() )
+    emit subPercent( p );
 
   if( m_doc->onlyCreateImages() )
     emit percent( p );
-  else if( m_doc->verifyData() ) 
-    emit percent( p/3 );
-  else
-    emit percent( p/2 );
+  else if( !m_doc->onTheFly() ) {
+    if( m_doc->verifyData() ) 
+      emit percent( p/3 );
+    else
+      emit percent( p/2 );
+  }
 }
 
 
@@ -203,23 +204,30 @@ void K3bDvdJob::slotIsoImagerFinished( bool success )
     return;
   }
 
+  d->imageError = success;
+
+  if( m_doc->onTheFly() && m_writerJob )
+    m_writerJob->closeFd();
+
   if( success ) {
-    emit infoMessage( i18n("Image successfully created in %1").arg(m_doc->tempDir()), K3bJob::SUCCESS );
-    
-    if( m_doc->onlyCreateImages() ) {
-      emit finished( true );
-    }
-    else {
-      if( prepareWriterJob() ) {
-	if( waitForDvd() ) {
-	  emit burning(true);
-	  m_writerJob->start();
-	}
-	else
-	  emit finished(false);
+    if( m_doc->onlyCreateImages() || !m_doc->onTheFly() ) {
+      emit infoMessage( i18n("Image successfully created in %1").arg(m_doc->tempDir()), K3bJob::SUCCESS );
+      
+      if( m_doc->onlyCreateImages() ) {
+	emit finished( true );
       }
       else {
-	emit finished(false);
+	if( prepareWriterJob() ) {
+	  if( waitForDvd() ) {
+	    emit burning(true);
+	    m_writerJob->start();
+	  }
+	  else
+	    emit finished(false);
+	}
+	else {
+	  emit finished(false);
+	}
       }
     }
   }
@@ -259,13 +267,11 @@ bool K3bDvdJob::prepareWriterJob()
   writer->setBurnSpeed( m_doc->speed() );
   writer->setWritingMode( m_doc->writingMode() );
   
-  //
-  // for now we only use the K3bGrowisofsWriter for writing images
-  // in every other case we use the K3bGrowisofsImager.
-  //
-  
-  writer->setImageToWrite( m_doc->tempDir() );
-  
+  if( m_doc->onTheFly() )
+    writer->setImageToWrite( QString::null );  // read from stdin
+  else
+    writer->setImageToWrite( m_doc->tempDir() );
+
   m_writerJob = writer;
 
 
@@ -290,11 +296,19 @@ bool K3bDvdJob::prepareWriterJob()
 
 void K3bDvdJob::slotWriterJobPercent( int p )
 {
-  // we only use the writer when creating an image first
-  if( m_doc->verifyData() )
-    emit percent( 33 + p/3 ); 
-  else
-    emit percent( 50 + p/2 );
+  if( m_doc->onTheFly() ) {
+    emit subPercent( p );
+    if( m_doc->verifyData() )
+      emit percent( 50 + p/2 ); 
+    else
+      emit percent( p );
+  }
+  else {
+    if( m_doc->verifyData() )
+      emit percent( 33 + p/3 ); 
+    else
+      emit percent( 50 + p/2 );
+  }
 }
 
 
@@ -373,7 +387,7 @@ void K3bDvdJob::slotVerificationFinished( bool success )
 
 void K3bDvdJob::cleanup()
 {
-  if( m_canceled || m_doc->removeImages() ) {
+  if( d->imageError || m_canceled || m_doc->removeImages() ) {
     if( QFile::exists( m_doc->tempDir() ) ) {
       QFile::remove( m_doc->tempDir() );
       emit infoMessage( i18n("Removed image file %1").arg(m_doc->tempDir()), K3bJob::SUCCESS );

@@ -74,11 +74,6 @@ class K3bIsoImager : public K3bJob
    */
   void setMultiSessionInfo( const QString&, K3bCdDevice::CdDevice* dev = 0 );
 
-  /**
-   * Set to true to pass -dvd-video to mkisofs
-   */
-  void setVideoDvd( bool b ) { m_dvdVideo = b; }
-
   K3bCdDevice::CdDevice* device() const { return m_device; }
   K3bDataDoc* doc() const { return m_doc; }
 
@@ -86,7 +81,7 @@ class K3bIsoImager : public K3bJob
   void sizeCalculated( int exitCode, int size );
 
  protected:
-  bool addMkisofsParameters();
+  virtual bool addMkisofsParameters();
 
   /**
    * calls writePathSpec, writeRRHideFile, and writeJolietHideFile
@@ -100,7 +95,7 @@ class K3bIsoImager : public K3bJob
   /**
    * @returns The number of entries written or -1 on error
    */
-  int writePathSpec();
+  virtual int writePathSpec();
   bool writeRRHideFile();
   bool writeJolietHideFile();
   bool writeSortWeightFile();
@@ -155,8 +150,6 @@ class K3bIsoImager : public K3bJob
   bool m_containsFilesWithMultibleBackslashes;
 
   double m_firstProgressValue;
-
-  bool m_dvdVideo;
 };
 
 

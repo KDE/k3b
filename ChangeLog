@@ -2,7 +2,6 @@
 K3bProcess now has a clean API and a non-stupid implementation which fixes the kde 3.2 issue
 way better than the hotfix from 0.11.1.
 Fixed a crash at K3b start which happened with ROM drives that return zero length modepage 0x05 data.
-Bugfix: added the -dvd-video option to growisofs in on-the-fly mode for VideoDVD
 fixed onthefly DVD copy issues
 K3b now uses the internal reader for DVD copy instead of readcd
 added read retries and "ignore read error" options to the dvd copy dialog
@@ -11,6 +10,8 @@ fixed the bug that made K3b try to use cdrdao for DVD iso image writing.
 add files to a project by dropping them on the corresponding tab
 removed the "query cddb" option from the copy dialog since this is configured globally anyway.
 fixed loading of VideoDVD projects
+Fixed VideoDVD project with a HACK. mkisofs is not able to create a VideoDVD using graft-points which
+	is the default in K3b. So now K3b links all VIDEO_TS files in a temp directory.
 	
 0.11.1
 fixed an issue introduced with KDE 3.2rc1 which caused on-the-fly data writing to fail all the time.
