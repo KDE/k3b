@@ -143,26 +143,37 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
 	
   p.fillRect( crect, Qt::green );
 
-  // FIXME: localize the "min" string
-  if( d->showTime )
-    p.drawText( rect(), Qt::AlignLeft | Qt::AlignVCenter, 
-		 " " + K3b::Msf( d->doc->length() ).toString(false) + " min" );
-  else
-    p.drawText( rect(), Qt::AlignLeft | Qt::AlignVCenter, 
-		 " " + KIO::convertSize( d->doc->size() ) );
-	
+  QRect oversizeRect(crect);
   // draw yellow if cdSize - tolerance < docSize
   if( docSize > cdSize - tolerance ) {
-    crect.setLeft( crect.left() + (int)(one * (cdSize - tolerance)) );
-    p.fillRect( crect, Qt::yellow );
+    oversizeRect.setLeft( oversizeRect.left() + (int)(one * (cdSize - tolerance)) );
+    p.fillRect( oversizeRect, Qt::yellow );
   }
 	
   // draw red if docSize > cdSize + tolerance
   if( docSize > cdSize + tolerance ) {
-    crect.setLeft( crect.left() + (int)(one * tolerance*2) );
-    p.fillRect( crect, Qt::red );
+    oversizeRect.setLeft( oversizeRect.left() + (int)(one * tolerance*2) );
+    p.fillRect( oversizeRect, Qt::red );
   }
-	
+
+
+  QString docSizeText;
+  if( d->showTime )
+    docSizeText = K3b::Msf( d->doc->length() ).toString(false) + " " + i18n("min");
+  else
+    docSizeText = KIO::convertSize( d->doc->size() );
+
+  //
+  // we want to draw the docSizeText centered in the filled area
+  // if there is not enough space we just align it left
+  //
+  int docSizeTextLength = fontMetrics().width(docSizeText);
+  if( docSizeTextLength + 8 > crect.width() )
+    p.drawText( rect(), Qt::AlignLeft | Qt::AlignVCenter, 
+		" " + docSizeText );
+  else
+    p.drawText( crect, Qt::AlignHCenter | Qt::AlignVCenter, docSizeText );
+		
 
   p.drawLine( rect().left() + (int)(one*cdSize), rect().bottom(), 
 	       rect().left() + (int)(one*cdSize), rect().top() + ((rect().bottom()-rect().top())/2) );
@@ -170,9 +181,17 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
   // draw the text marks
   crect = rect();
   QString text = d->showTime 
-    ? K3b::Msf( cdSize*60*75 ).toString(false) + " min"
+    ? K3b::Msf( cdSize*60*75 ).toString(false) + " " + i18n("min")
     : KIO::convertSizeFromKB( cdSize * 1024 );
-  int textLength = fontMetrics().width(text);
+  text = i18n("Available") + ": " + text;
+
+  QFont fnt(font());
+  fnt.setPointSize(8);
+  fnt.setBold(false);
+  p.setPen( Qt::gray );
+  p.setFont(fnt);
+
+  int textLength = QFontMetrics(fnt).width(text);
   if( textLength+4 > crect.width() - (int)(one*cdSize) ) {
     // we don't have enough space on the right, so we paint to the left of the line
     crect.setLeft( (int)(one*cdSize) - textLength -4 );
@@ -225,17 +244,17 @@ K3bFillStatusDisplay::K3bFillStatusDisplay(K3bDoc* doc, QWidget *parent, const c
   setFrameStyle( Panel | Sunken );
 
   d->displayWidget = new K3bFillStatusDisplayWidget( doc, this );
-  d->buttonMenu = new QToolButton( this );
-  d->buttonMenu->setIconSet( SmallIconSet("cdrom_unmount") );
-  d->buttonMenu->setAutoRaise(true);
-  QToolTip::add( d->buttonMenu, i18n("Fill display properties") );
-  connect( d->buttonMenu, SIGNAL(clicked()), this, SLOT(slotMenuButtonClicked()) );
+//   d->buttonMenu = new QToolButton( this );
+//   d->buttonMenu->setIconSet( SmallIconSet("cdrom_unmount") );
+//   d->buttonMenu->setAutoRaise(true);
+//   QToolTip::add( d->buttonMenu, i18n("Fill display properties") );
+//   connect( d->buttonMenu, SIGNAL(clicked()), this, SLOT(slotMenuButtonClicked()) );
 
   QGridLayout* layout = new QGridLayout( this );
   layout->setSpacing(5);
   layout->setMargin(frameWidth());
   layout->addWidget( d->displayWidget, 0, 0 );
-  layout->addWidget( d->buttonMenu, 0, 1 );
+  //  layout->addWidget( d->buttonMenu, 0, 1 );
   layout->setColStretch( 0, 1 );
 
   setupPopupMenu();
