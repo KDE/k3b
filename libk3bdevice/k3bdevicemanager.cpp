@@ -68,9 +68,6 @@ typedef unsigned char u8;
 #include <scsi/scsi.h>
 #include <linux/major.h>
 
-// stupid stupid rat creaturs! (defines)
-#undef INQUIRY
-
 
 #ifndef SCSI_DISK_MAJOR
 #define SCSI_DISK_MAJOR(M) ((M) == SCSI_DISK0_MAJOR || \
@@ -606,7 +603,7 @@ bool K3bCdDevice::DeviceManager::testForCdrom(const QString& devicename)
     ::memset( buf, 0, sizeof(buf) );
 
     ScsiCommand cmd( cdromfd );
-    cmd[0] = MMC::INQUIRY;
+    cmd[0] = MMC_INQUIRY;
     cmd[4] = sizeof(buf);
     cmd[5] = 0;
 

@@ -150,16 +150,12 @@ K3bCdDevice::ScsiCommand::ScsiCommand( int fd )
     m_device(0)
 {
   clear();
-#ifdef Q_OS_FREEBSD
-  bool freebsd_incompatible_constructor = false;
-  assert(freebsd_incompatible_constructor);
-#endif
 }
 
 
 K3bCdDevice::ScsiCommand::ScsiCommand( const K3bCdDevice::CdDevice* dev )
   : d(new Private),
-    m_fd(-1), // Reinitted later
+    m_fd(-1),
     m_device(dev)
 {
   // if the device is already opened we do not close it
@@ -173,7 +169,8 @@ K3bCdDevice::ScsiCommand::ScsiCommand( const K3bCdDevice::CdDevice* dev )
 #ifdef Q_OS_FREEBSD
   d->closecam = true;
   d->cam = cam_open_pass (m_device->m_passDevice.latin1(),O_RDWR,0 /* NULL */);
-  kdDebug() << "(K3bCdDevice::ScsiCommand) open device " << m_device->m_passDevice << ((d->cam)?" succeeded.":" failed.") << endl;
+  kdDebug() << "(K3bCdDevice::ScsiCommand) open device " << m_device->m_passDevice
+	    << ((d->cam)?" succeeded.":" failed.") << endl;
   m_fd = 0;
 #endif
 
@@ -243,7 +240,7 @@ int K3bCdDevice::ScsiCommand::transport( TransportDirection dir,
   if( ::ioctl( m_fd, CDROM_SEND_PACKET, &d->cmd ) ) {
     kdDebug() << "(K3bCdDevice::ScsiCommand) failed: fd: " << m_fd << endl
 	      << "                           command:    " << QString("%1 (%2)")
-      .arg( MMC::commandString( d->cmd.cmd[0] ) )
+      .arg( commandString( d->cmd.cmd[0] ) )
       .arg( QString::number(d->cmd.cmd[0], 16) ) << endl
 	      << "                           errorcode:  " << QString::number((int)d->sense.error_code, 16) << endl
 	      << "                           sense key:  " << senseKeyToString(d->sense.sense_key) << endl
@@ -326,7 +323,7 @@ int K3bCdDevice::ScsiCommand::transport( TransportDirection dir,
  dump_error:
   kdDebug() << "(K3bCdDevice::ScsiCommand) failed: " << endl
 	    << "                           command:    " << QString("%1 (%2)")
-    .arg( MMC::commandString( d->ccb.csio.cdb_io.cdb_bytes[0] ) )
+    .arg( commandString( d->ccb.csio.cdb_io.cdb_bytes[0] ) )
     .arg( QString::number(d->ccb.csio.cdb_io.cdb_bytes[0], 16) ) << endl
 	    << "                           errorcode:  " << QString::number(((struct scsi_sense_data *)sense)->error_code & SSD_ERRCODE, 16) << endl
 	    << "                           sense key:  " << senseKeyToString(((struct scsi_sense_data *)sense)->flags & SSD_KEY) << endl
@@ -338,111 +335,111 @@ int K3bCdDevice::ScsiCommand::transport( TransportDirection dir,
 }
 
 
-QString K3bCdDevice::MMC::commandString( const unsigned char& command )
+QString K3bCdDevice::commandString( const unsigned char& command )
 {
-  if( command == MMC::BLANK )
+  if( command == MMC_BLANK )
     return "BLANK";
-  if( command == MMC::CLOSE_TRACK_SESSION )
+  if( command == MMC_CLOSE_TRACK_SESSION )
     return "CLOSE TRACK/SESSION";
-  if( command == MMC::ERASE )
+  if( command == MMC_ERASE )
     return "ERASE";
-  if( command == MMC::FORMAT_UNIT )
+  if( command == MMC_FORMAT_UNIT )
     return "FORMAT UNIT";
-  if( command == MMC::GET_CONFIGURATION )
+  if( command == MMC_GET_CONFIGURATION )
     return "GET CONFIGURATION";
-  if( command == MMC::GET_EVENT_STATUS_NOTIFICATION )
+  if( command == MMC_GET_EVENT_STATUS_NOTIFICATION )
     return "GET EVENT STATUS NOTIFICATION";
-  if( command == MMC::GET_PERFORMANCE )
+  if( command == MMC_GET_PERFORMANCE )
     return "GET PERFORMANCE";
-  if( command == MMC::INQUIRY )
+  if( command == MMC_INQUIRY )
     return "INQUIRY";
-  if( command == MMC::LOAD_UNLOAD_MEDIUM )
+  if( command == MMC_LOAD_UNLOAD_MEDIUM )
     return "LOAD/UNLOAD MEDIUM";
-  if( command == MMC::MECHANISM_STATUS )
+  if( command == MMC_MECHANISM_STATUS )
     return "MECHANISM STATUS";
-  if( command == MMC::MODE_SELECT )
+  if( command == MMC_MODE_SELECT )
     return "MODE SELECT";
-  if( command == MMC::MODE_SENSE )
+  if( command == MMC_MODE_SENSE )
     return "MODE SENSE";
-  if( command == MMC::PAUSE_RESUME )
+  if( command == MMC_PAUSE_RESUME )
     return "PAUSE/RESUME";
-  if( command == MMC::PLAY_AUDIO_10 )
+  if( command == MMC_PLAY_AUDIO_10 )
     return "PLAY AUDIO (10)";
-  if( command == MMC::PLAY_AUDIO_12 )
+  if( command == MMC_PLAY_AUDIO_12 )
     return "PLAY AUDIO (12)";
-  if( command == MMC::PLAY_AUDIO_MSF )
+  if( command == MMC_PLAY_AUDIO_MSF )
     return "PLAY AUDIO (MSF)";
-  if( command == MMC::PREVENT_ALLOW_MEDIUM_REMOVAL )
+  if( command == MMC_PREVENT_ALLOW_MEDIUM_REMOVAL )
     return "PREVENT ALLOW MEDIUM REMOVAL";
-  if( command == MMC::READ_10 )
+  if( command == MMC_READ_10 )
     return "READ (10)";
-  if( command == MMC::READ_12 )
+  if( command == MMC_READ_12 )
     return "READ (12)";
-  if( command == MMC::READ_BUFFER )
+  if( command == MMC_READ_BUFFER )
     return "READ BUFFER";
-  if( command == MMC::READ_BUFFER_CAPACITY )
+  if( command == MMC_READ_BUFFER_CAPACITY )
     return "READ BUFFER CAPACITY";
-  if( command == MMC::READ_CAPACITY )
+  if( command == MMC_READ_CAPACITY )
     return "READ CAPACITY";
-  if( command == MMC::READ_CD )
+  if( command == MMC_READ_CD )
     return "READ CD";
-  if( command == MMC::READ_CD_MSF )
+  if( command == MMC_READ_CD_MSF )
     return "READ CD MSF";
-  if( command == MMC::READ_DISK_INFORMATION )
+  if( command == MMC_READ_DISK_INFORMATION )
     return "READ DISK INFORMATION";
-  if( command == MMC::READ_DVD_STRUCTURE )
+  if( command == MMC_READ_DVD_STRUCTURE )
     return "READ DVD STRUCTURE";
-  if( command == MMC::READ_FORMAT_CAPACITIES )
+  if( command == MMC_READ_FORMAT_CAPACITIES )
     return "READ FORMAT CAPACITIES";
-  if( command == MMC::READ_SUB_CHANNEL )
+  if( command == MMC_READ_SUB_CHANNEL )
     return "READ SUB-CHANNEL";
-  if( command == MMC::READ_TOC_PMA_ATIP )
+  if( command == MMC_READ_TOC_PMA_ATIP )
     return "READ TOC/PMA/ATIP";
-  if( command == MMC::READ_TRACK_INFORMATION )
+  if( command == MMC_READ_TRACK_INFORMATION )
     return "READ TRACK INFORMATION";
-  if( command == MMC::REPAIR_TRACK )
+  if( command == MMC_REPAIR_TRACK )
     return "REPAIR TRACK";
-  if( command == MMC::REPORT_KEY )
+  if( command == MMC_REPORT_KEY )
     return "REPORT KEY";
-  if( command == MMC::REQUEST_SENSE )
+  if( command == MMC_REQUEST_SENSE )
     return "REQUEST SENSE";
-  if( command == MMC::RESERVE_TRACK )
+  if( command == MMC_RESERVE_TRACK )
     return "RESERVE TRACK";
-  if( command == MMC::SCAN )
+  if( command == MMC_SCAN )
     return "SCAN";
-  if( command == MMC::SEEK_10 )
+  if( command == MMC_SEEK_10 )
     return "SEEK (10)";
-  if( command == MMC::SEND_CUE_SHEET )
+  if( command == MMC_SEND_CUE_SHEET )
     return "SEND CUE SHEET";
-  if( command == MMC::SEND_DVD_STRUCTURE )
+  if( command == MMC_SEND_DVD_STRUCTURE )
     return "SEND DVD STRUCTURE";
-  if( command == MMC::SEND_KEY )
+  if( command == MMC_SEND_KEY )
     return "SEND KEY";
-  if( command == MMC::SEND_OPC_INFORMATION )
+  if( command == MMC_SEND_OPC_INFORMATION )
     return "SEND OPC INFORMATION";
-  if( command == MMC::SET_SPEED )
+  if( command == MMC_SET_SPEED )
     return "SET SPEED";
-  if( command == MMC::SET_READ_AHEAD )
+  if( command == MMC_SET_READ_AHEAD )
     return "SET READ AHEAD";
-  if( command == MMC::SET_STREAMING )
+  if( command == MMC_SET_STREAMING )
     return "SET STREAMING";
-  if( command == MMC::START_STOP_UNIT )
+  if( command == MMC_START_STOP_UNIT )
     return "START STOP UNIT";
-  if( command == MMC::STOP_PLAY_SCAN )
+  if( command == MMC_STOP_PLAY_SCAN )
     return "STOP PLAY/SCAN";
-  if( command == MMC::SYNCHRONIZE_CACHE )
+  if( command == MMC_SYNCHRONIZE_CACHE )
     return "SYNCHRONIZE CACHE";
-  if( command == MMC::TEST_UNIT_READY )
+  if( command == MMC_TEST_UNIT_READY )
     return "TEST UNIT READY";
-  if( command == MMC::VERIFY_10 )
+  if( command == MMC_VERIFY_10 )
     return "VERIFY (10)";
-  if( command == MMC::WRITE_10 )
+  if( command == MMC_WRITE_10 )
     return "WRITE (10)";
-  if( command == MMC::WRITE_12 )
+  if( command == MMC_WRITE_12 )
     return "WRITE (12)";
-  if( command == MMC::WRITE_AND_VERIFY_10 )
+  if( command == MMC_WRITE_AND_VERIFY_10 )
     return "WRITE AND VERIFY (10)";
-  if( command == MMC::WRITE_BUFFER )
+  if( command == MMC_WRITE_BUFFER )
     return "WRITE BUFFER";
 
   return "unknown";
