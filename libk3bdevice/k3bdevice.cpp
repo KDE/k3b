@@ -60,8 +60,6 @@ typedef unsigned char u8;
 #ifdef Q_OS_FREEBSD
 #include <stdio.h>
 #include <camlib.h>
-#define __BYTE_ORDER BYTE_ORDER
-#define __BIG_ENDIAN BIG_ENDIAN
 #define CD_FRAMESIZE_RAW 2352
 #endif
 
@@ -2171,7 +2169,7 @@ void K3bDevice::Device::checkFeatures()
     int len = from4Byte( header );
     if( len == 12 ) {
       kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD Mastering" << endl;
-#if __BYTE_ORDER == __BIG_ENDIAN
+#ifdef WORDS_BIGENDIAN
       struct cd_mastering_feature {
 	unsigned char reserved1 : 1;
 	unsigned char BUF       : 1;  // Burnfree
@@ -2214,7 +2212,7 @@ void K3bDevice::Device::checkFeatures()
     int len = from4Byte( header );
     if( len == 12 ) {
       kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD Track At Once" << endl;
-#if __BYTE_ORDER == __BIG_ENDIAN
+#ifdef WORDS_BIGENDIAN
       struct cd_track_at_once_feature {
 	unsigned char reserved1 : 1;
 	unsigned char BUF       : 1;  // Burnfree
@@ -2299,7 +2297,7 @@ void K3bDevice::Device::checkFeatures()
     int len = from4Byte( header );
     if( len == 12 ) {
       kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD+RW" << endl;
-#if __BYTE_ORDER == __BIG_ENDIAN
+#ifdef WORDS_BIGENDIAN
       struct dvd_plus_rw_feature {
 	unsigned char reserved1   : 7;
 	unsigned char write       : 1;
@@ -2350,7 +2348,7 @@ void K3bDevice::Device::checkFeatures()
     int len = from4Byte( header );
     if( len == 12 ) {
       kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD-R/-RW Write" << endl;
-#if __BYTE_ORDER == __BIG_ENDIAN
+#ifdef WORDS_BIGENDIAN
       struct dvd_r_rw_write_feature {
 	unsigned char reserved1 : 1;
 	unsigned char BUF       : 1;  // Burnfree
@@ -2603,7 +2601,7 @@ void K3bDevice::Device::checkFeatures()
       case FEATURE_DVD_PLUS_RW:
 	{
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD+RW" << endl;
-#if __BYTE_ORDER == __BIG_ENDIAN
+#ifdef WORDS_BIGENDIAN
 	  struct dvd_plus_rw_feature {
 	    unsigned char reserved1   : 7;
 	    unsigned char write       : 1;
@@ -2631,7 +2629,7 @@ void K3bDevice::Device::checkFeatures()
       case FEATURE_DVD_PLUS_R:
 	{
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD+R" << endl;
-#if __BYTE_ORDER == __BIG_ENDIAN
+#ifdef WORDS_BIGENDIAN
 	  struct dvd_plus_r_feature {
 	    unsigned char reserved1      : 7;
 	    unsigned char write          : 1;
@@ -2671,7 +2669,7 @@ void K3bDevice::Device::checkFeatures()
       case FEATURE_CD_TRACK_AT_ONCE:
 	{
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD Track At Once" << endl;
-#if __BYTE_ORDER == __BIG_ENDIAN
+#ifdef WORDS_BIGENDIAN
 	  struct cd_track_at_once_feature {
 	    unsigned char reserved1 : 1;
 	    unsigned char BUF       : 1;  // Burnfree
@@ -2710,7 +2708,7 @@ void K3bDevice::Device::checkFeatures()
       case FEATURE_CD_MASTERING:
 	{
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD Mastering" << endl;
-#if __BYTE_ORDER == __BIG_ENDIAN
+#ifdef WORDS_BIGENDIAN
 	  struct cd_mastering_feature {
 	    unsigned char reserved1 : 1;
 	    unsigned char BUF       : 1;  // Burnfree
@@ -2748,7 +2746,7 @@ void K3bDevice::Device::checkFeatures()
       case FEATURE_DVD_R_RW_WRITE:
 	{
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD-R/-RW Write" << endl;
-#if __BYTE_ORDER == __BIG_ENDIAN
+#ifdef WORDS_BIGENDIAN
 	  struct dvd_r_rw_write_feature {
 	    unsigned char reserved1 : 1;
 	    unsigned char BUF       : 1;  // Burnfree
