@@ -80,8 +80,8 @@ void K3bBinImageWritingJob::start() {
 }
 
 void K3bBinImageWritingJob::cancel() {
-    emit canceled();
     m_cdrdaowriter->cancel();
+    emit canceled();
 }
 
 
@@ -132,7 +132,6 @@ void K3bBinImageWritingJob::finishAll() {
 
 void K3bBinImageWritingJob::cancelAll() {
     emit infoMessage( i18n("Canceled"), K3bJob::STATUS );
-
     emit finished( false );
 }
 
