@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -38,26 +38,26 @@
 
 
 
-K3bInteractionDialog::K3bInteractionDialog( QWidget* parent, 
-					    const char* name, 
+K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
+					    const char* name,
 					    const QString& title,
 					    const QString& subTitle,
 					    int buttonMask,
 					    int defaultButton,
-					    bool modal, 
+					    bool modal,
 					    WFlags fl )
   : KDialog( parent, name, modal, fl ),
     m_mainWidget(0),
     m_defaultButton(defaultButton)
 {
-  mainGrid = new QGridLayout( this ); 
+  mainGrid = new QGridLayout( this );
   mainGrid->setSpacing( spacingHint() );
   mainGrid->setMargin( marginHint() );
 
   // header
   // ---------------------------------------------------------------------------------------------------
   QFrame* headerFrame = K3bStdGuiItems::purpleFrame( this );
-  QHBoxLayout* layout4 = new QHBoxLayout( headerFrame ); 
+  QHBoxLayout* layout4 = new QHBoxLayout( headerFrame );
   layout4->setMargin( 2 ); // to make sure the frame gets displayed
   layout4->setSpacing( 0 );
   QLabel* pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabelLeft" );
@@ -84,7 +84,7 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
 
   // action buttons
   // ---------------------------------------------------------------------------------------------------
-  QVBoxLayout* layout5 = new QVBoxLayout( 0, 0, spacingHint(), "layout5"); 
+  QVBoxLayout* layout5 = new QVBoxLayout( 0, 0, spacingHint(), "layout5");
 
   if( buttonMask & START_BUTTON ) {
     KGuiItem startItem = KStdGuiItem::ok();
@@ -114,7 +114,7 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
 
   // settings buttons
   // ---------------------------------------------------------------------------------------------------
-  QHBoxLayout* layout2 = new QHBoxLayout( 0, 0, spacingHint(), "layout2"); 
+  QHBoxLayout* layout2 = new QHBoxLayout( 0, 0, spacingHint(), "layout2");
   m_buttonK3bDefaults = new QPushButton( i18n("K3b Defaults"), this, "m_buttonK3bDefaults" );
   layout2->addWidget( m_buttonK3bDefaults );
   QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
@@ -273,36 +273,42 @@ void K3bInteractionDialog::keyPressEvent( QKeyEvent* e )
 }
 
 
-void K3bInteractionDialog::setStartButtonText( const QString& text, 
-					       const QString& tooltip, 
+void K3bInteractionDialog::setStartButtonText( const QString& text,
+					       const QString& tooltip,
 					       const QString& whatsthis )
 {
   if( m_buttonStart ) {
     m_buttonStart->setText( text );
+    QToolTip::remove( m_buttonStart );
+    QWhatsThis::remove( m_buttonStart );
     QToolTip::add( m_buttonStart, tooltip );
     QWhatsThis::add( m_buttonStart, whatsthis );
   }
 }
 
 
-void K3bInteractionDialog::setCancelButtonText( const QString& text, 
-						const QString& tooltip, 
+void K3bInteractionDialog::setCancelButtonText( const QString& text,
+						const QString& tooltip,
 						const QString& whatsthis )
 {
   if( m_buttonCancel ) {
     m_buttonCancel->setText( text );
+    QToolTip::remove( m_buttonCancel );
+    QWhatsThis::remove( m_buttonCancel );
     QToolTip::add( m_buttonCancel, tooltip );
     QWhatsThis::add( m_buttonCancel, whatsthis );
   }
 }
 
 
-void K3bInteractionDialog::setSaveButtonText( const QString& text, 
-					      const QString& tooltip, 
+void K3bInteractionDialog::setSaveButtonText( const QString& text,
+					      const QString& tooltip,
 					      const QString& whatsthis )
 {
   if( m_buttonSave ) {
     m_buttonSave->setText( text );
+    QToolTip::remove( m_buttonSave );
+    QWhatsThis::remove( m_buttonSave );
     QToolTip::add( m_buttonSave, tooltip );
     QWhatsThis::add( m_buttonSave, whatsthis );
   }
