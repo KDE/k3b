@@ -228,9 +228,9 @@ void K3bMainWindow::initActions()
   actionDataClearImportedSession = new KAction(i18n("&Clear imported Session"), "gear", 0, this,
 					       SLOT(slotDataClearImportedSession()), actionCollection(),
 					       "project_data_clear_imported_session" );
-//   actionDataEditBootImages = new KAction(i18n("&Edit boot images"), "cdtrack", 0, this,
-// 					 SLOT(slotEditBootImages()), actionCollection(),
-// 					 "project_data_edit_boot_images" );
+   actionDataEditBootImages = new KAction(i18n("&Edit boot images"), "cdtrack", 0, this,
+ 					 SLOT(slotEditBootImages()), actionCollection(),
+ 					 "project_data_edit_boot_images" );
 
   // ==============================================================================================================
 
@@ -275,7 +275,7 @@ void K3bMainWindow::endBusy()
 void K3bMainWindow::initView()
 {
   // setup main docking things
-  mainDock = createDockWidget( i18n("Workspace"), SmallIcon("idea") );
+  mainDock = createDockWidget( "Workspace", SmallIcon("idea") );
   setView( mainDock );
   setMainDockWidget( mainDock );
   mainDock->setDockSite( KDockWidget::DockCorner );
@@ -331,7 +331,7 @@ void K3bMainWindow::initView()
 
 
   // --- Directory Dock --------------------------------------------------------------------------
-  dirDock = createDockWidget( i18n("K3b Dir View"), SmallIcon("idea") );
+  dirDock = createDockWidget( "K3b Dir View", SmallIcon("idea") );
   m_dirView = new K3bDirView( dirDock );
   dirDock->setWidget( m_dirView );
   dirDock->setEnableDocking( KDockWidget::DockCorner );
@@ -343,7 +343,7 @@ void K3bMainWindow::initView()
 
 
   // --- Audioplayer Dock ------------------------------------------------------------------------
-  m_audioPlayerDock = createDockWidget( i18n("K3b Audio Player"), SmallIcon("1rightarrow") );
+  m_audioPlayerDock = createDockWidget( "K3b Audio Player", SmallIcon("1rightarrow") );
   m_audioPlayer = new K3bAudioPlayer( this, "k3b_audio_player" );
   m_audioPlayerDock->setWidget( m_audioPlayer );
   m_audioPlayerDock->setEnableDocking( KDockWidget::DockCorner );
