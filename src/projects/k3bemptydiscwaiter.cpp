@@ -1,7 +1,7 @@
 /*
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2004 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
@@ -69,21 +69,17 @@ public:
   QLabel* pixLabel;
 
   K3bErasingInfoDialog* erasingInfoDialog;
-  //  K3bCdDevice::DeviceHandler* deviceHandler;
 };
 
 
 
 K3bEmptyDiscWaiter::K3bEmptyDiscWaiter( K3bDevice* device, QWidget* parent, const char* name )
-  : KDialogBase( KDialogBase::Plain, i18n("Waiting for disk"), KDialogBase::Cancel|KDialogBase::User1|KDialogBase::User2, 
-		 KDialogBase::Cancel, parent, name, true, true, i18n("Force"), i18n("Eject") )
+  : KDialogBase( KDialogBase::Plain, i18n("Waiting for disk"), 
+		 KDialogBase::Cancel|KDialogBase::User1|KDialogBase::User2|KDialogBase::User3, 
+		 KDialogBase::Cancel, parent, name, true, true, i18n("Force"), i18n("Eject"), i18n("Load") )
 {
   d = new Private();
   d->device = device;
-
-//   d->deviceHandler = new K3bCdDevice::DeviceHandler( device, this );
-//   connect( d->deviceHandler, SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
-// 	   this, SLOT(slotDeviceHandlerFinished(K3bCdDevice::DeviceHandler*)) );
 
   // setup the gui
   // -----------------------------
@@ -219,7 +215,6 @@ void K3bEmptyDiscWaiter::startDeviceHandler()
 	   SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
 	   this, 
 	   SLOT(slotDeviceHandlerFinished(K3bCdDevice::DeviceHandler*)) );
-  //  d->deviceHandler->sendCommand( K3bCdDevice::DeviceHandler::NG_DISKINFO );
 }
 
 
@@ -274,7 +269,7 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
 	bool hasIso = isoF.open();
 	d->device->close();
 
-	if( !hasIso || KMessageBox::questionYesNo( qApp->activeWindow(),
+	if( !hasIso || KMessageBox::questionYesNo( parentWidgetToUse(),
 						   i18n("Found %1 media in %2 - %3. "
 							"Should it be overwritten?")
 						   .arg("DVD+RW")
@@ -357,7 +352,7 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
 	bool hasIso = isoF.open();
 	d->device->close();
 
-	if( !hasIso || KMessageBox::questionYesNo( qApp->activeWindow(),
+	if( !hasIso || KMessageBox::questionYesNo( parentWidgetToUse(),
 						   i18n("Found %1 media in %2 - %3. "
 							"Should it be overwritten?")
 						   .arg(K3bCdDevice::mediaTypeString(dh->ngDiskInfo().currentProfile()))
@@ -393,7 +388,7 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
 	KConfig* c = k3bcore->config();
 	c->setGroup( "General Options" );
 	if( c->readBoolEntry( "auto rewritable erasing", false ) ||
-	    KMessageBox::questionYesNo( qApp->activeWindow(),
+	    KMessageBox::questionYesNo( parentWidgetToUse(),
 					i18n("Found %1 media in %2 - %3. "
 					     "Should it be formatted?")
 					.arg( K3bCdDevice::mediaTypeString(dh->ngDiskInfo().currentProfile()) )
@@ -475,7 +470,7 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
       c->setGroup( "General Options" );
 
       if( c->readBoolEntry( "auto rewritable erasing", false ) ||
-	  KMessageBox::questionYesNo( qApp->activeWindow(),
+	  KMessageBox::questionYesNo( parentWidgetToUse(),
 				      i18n("Found rewritable media in %1 - %2. "
 					   "Should it be erased?").arg(d->device->vendor()).arg(d->device->description()),
 				      i18n("Found rewritable disk") ) == KMessageBox::Yes ) {
@@ -557,10 +552,15 @@ void K3bEmptyDiscWaiter::slotUser2()
 }
 
 
+void K3bEmptyDiscWaiter::slotUser3()
+{
+  K3bCdDevice::load( d->device );
+}
+
+
 void K3bEmptyDiscWaiter::finishWaiting( int code )
 {
   kdDebug() << "(K3bEmptyDiscWaiter) finishWaiting() " << endl;
-  //  d->deviceHandler->cancel();
 
   d->result = code;
   if( d->dialogVisible )
@@ -585,7 +585,7 @@ void K3bEmptyDiscWaiter::slotErasingFinished( bool success )
   else {
     K3bCdDevice::eject( d->device );
     d->erasingInfoDialog->hide();
-    KMessageBox::error( qApp->activeWindow(), i18n("Erasing failed.") );
+    KMessageBox::error( parentWidgetToUse(), i18n("Erasing failed.") );
     kdDebug() << "(K3bEmptyDiscWaiter) starting devicehandler: erasing finished." << endl;
     QTimer::singleShot( 0, this, SLOT(startDeviceHandler()) );
   }
@@ -597,7 +597,7 @@ void K3bEmptyDiscWaiter::slotReloadingAfterErasingFinished( K3bCdDevice::DeviceH
   d->erasingInfoDialog->hide();
 
   if( !dh->success() ) {
-    KMessageBox::error( qApp->activeWindow(), i18n("Unable to reload media. Please reload manually."),
+    KMessageBox::error( parentWidgetToUse(), i18n("Unable to reload media. Please reload manually."),
 			i18n("Reload failed") );
   }
   
@@ -607,9 +607,9 @@ void K3bEmptyDiscWaiter::slotReloadingAfterErasingFinished( K3bCdDevice::DeviceH
 }
 
 
-int K3bEmptyDiscWaiter::wait( K3bDevice* device, bool appendable, int mediaType )
+int K3bEmptyDiscWaiter::wait( K3bDevice* device, bool appendable, int mediaType, QWidget* parent )
 {
-  K3bEmptyDiscWaiter d( device, qApp->activeWindow() );
+  K3bEmptyDiscWaiter d( device, parent ? parent : qApp->activeWindow() );
   int mediaState = K3bCdDevice::STATE_EMPTY;
   if( appendable ) mediaState |= K3bCdDevice::STATE_INCOMPLETE;
   return d.waitForDisc( mediaState, mediaType );
@@ -619,9 +619,10 @@ int K3bEmptyDiscWaiter::wait( K3bDevice* device, bool appendable, int mediaType 
 int K3bEmptyDiscWaiter::wait( K3bCdDevice::CdDevice* device,
 			      int mediaState,
 			      int mediaType,
-			      const QString& message )
+			      const QString& message,
+			      QWidget* parent )
 {
-  K3bEmptyDiscWaiter d( device, qApp->activeWindow() );
+  K3bEmptyDiscWaiter d( device, parent ? parent : qApp->activeWindow() );
   return d.waitForDisc( mediaState, mediaType, message );
 }
 
@@ -630,7 +631,7 @@ void K3bEmptyDiscWaiter::prepareErasingDialog()
 {
   // we hide the emptydiskwaiter so the info dialog needs to have the same parent
   if( !d->erasingInfoDialog )
-    d->erasingInfoDialog = new K3bErasingInfoDialog( QString::null, qApp->activeWindow() );
+    d->erasingInfoDialog = new K3bErasingInfoDialog( QString::null, parentWidget() );
 
   //
   // hide the dialog 
@@ -640,4 +641,14 @@ void K3bEmptyDiscWaiter::prepareErasingDialog()
     d->dialogVisible = false;
   }
 }
+
+
+QWidget* K3bEmptyDiscWaiter::parentWidgetToUse()
+{
+  if( d->dialogVisible )
+    return this;
+  else
+    return parentWidget();
+}
+
 #include "k3bemptydiscwaiter.moc"

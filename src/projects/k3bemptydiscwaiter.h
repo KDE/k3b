@@ -1,7 +1,7 @@
 /*
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2004 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
@@ -29,9 +29,8 @@ namespace K3bCdDevice {
 
 /**
  * Tests for an empty cd in a given device.
- * emits signal discReady if an empty disc was found.
- * K3bEmptyDiscWaiter will go on testing until the
- * slot canceled was called or an empty disc was found.
+ *
+ * Use the static wait methods.
  *
  * @author Sebastian Trueg
  */
@@ -40,7 +39,6 @@ class K3bEmptyDiscWaiter : public KDialogBase
  Q_OBJECT
 
  public: 
-  K3bEmptyDiscWaiter( K3bCdDevice::CdDevice* device, QWidget* parent = 0, const char* name = 0 );
   ~K3bEmptyDiscWaiter();
 
   /**
@@ -70,21 +68,20 @@ class K3bEmptyDiscWaiter : public KDialogBase
    */
   static int wait( K3bCdDevice::CdDevice* device, 
 		   bool appendable = false, 
-		   int mediaType = K3bCdDevice::MEDIA_WRITABLE_CD );
+		   int mediaType = K3bCdDevice::MEDIA_WRITABLE_CD,
+		   QWidget* parent = 0 );
 
   static int wait( K3bCdDevice::CdDevice*,
 		   int mediaState,
 		   int mediaType = K3bCdDevice::MEDIA_WRITABLE_CD,
-		   const QString& message = QString::null );
-
- signals:
-  void canceled();
-  void discReady();
+		   const QString& message = QString::null,
+		   QWidget* parent = 0 );
 
  protected slots:
   void slotCancel();
   void slotUser1();
   void slotUser2();
+  void slotUser3();
   void startDeviceHandler();
   void slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* );
   void showDialog();
@@ -92,11 +89,21 @@ class K3bEmptyDiscWaiter : public KDialogBase
   void slotReloadingAfterErasingFinished( K3bCdDevice::DeviceHandler* );
 
  protected:
+  /**
+   * Use the static wait methods.
+   */
+  explicit K3bEmptyDiscWaiter( K3bCdDevice::CdDevice* device, QWidget* parent = 0, const char* name = 0 );
+
+  /**
+   * Nobody closes this dialog but itself!
+   */
   void closeEvent( QCloseEvent* ) {}
 
  private:
   void finishWaiting( int );
   void prepareErasingDialog();
+
+  QWidget* parentWidgetToUse();
 
   class Private;
   Private* d;

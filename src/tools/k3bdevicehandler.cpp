@@ -102,6 +102,9 @@ public:
       case EJECT:
 	success = dev->eject();
 	break;
+      case LOAD:
+	success = dev->load();
+	break;
       case RELOAD:
 	success = dev->eject();
 	success = success && dev->load();
