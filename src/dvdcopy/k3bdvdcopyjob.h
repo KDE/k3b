@@ -24,7 +24,7 @@
 namespace K3bCdDevice {
   class CdDevice;
   class DeviceHandler;
-};
+}
 
 
 class K3bDvdCopyJob : public K3bBurnJob

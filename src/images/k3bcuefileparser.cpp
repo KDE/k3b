@@ -30,11 +30,6 @@ K3bCueFileParser::K3bCueFileParser( const QString& filename )
 }
 
 
-K3bCueFileParser::~K3bCueFileParser()
-{
-}
-
-
 void K3bCueFileParser::readFile()
 {
   QFile f( filename() );

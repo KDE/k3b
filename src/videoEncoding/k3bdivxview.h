@@ -33,7 +33,7 @@ class K3bDivxAdvancedTab;
 
 class K3bDivxView : public K3bInteractionDialog
 {
-  Q_OBJECT;
+  Q_OBJECT
 
  public:
   K3bDivxView( QWidget* parent=0, const char *name=0 );

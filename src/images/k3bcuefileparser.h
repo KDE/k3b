@@ -28,7 +28,6 @@ class K3bCueFileParser : public K3bImageFileReader
 {
  public:
   K3bCueFileParser( const QString& filename = QString::null );
-  ~K3bCueFileParser();
 
  private:
   void readFile();

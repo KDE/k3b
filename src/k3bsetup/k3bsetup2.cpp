@@ -116,7 +116,7 @@ K3bSetup2::K3bSetup2( QWidget *parent, const char *name, const QStringList& )
   if (getuid() != 0 /*|| !d->config->checkConfigFilesWritable( true )*/) {
       makeReadOnly();
   }
-};
+}
 
 
 K3bSetup2::~K3bSetup2()
@@ -462,7 +462,7 @@ void K3bSetup2::makeReadOnly()
 
 
 typedef KGenericFactory<K3bSetup2, QWidget> K3bSetup2Factory;
-K_EXPORT_COMPONENT_FACTORY( kcm_k3bsetup2, K3bSetup2Factory("k3b") );
+K_EXPORT_COMPONENT_FACTORY( kcm_k3bsetup2, K3bSetup2Factory("k3b") )
 
 
 #include "k3bsetup2.moc"

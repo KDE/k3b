@@ -25,7 +25,7 @@ class KProcess;
 class K3bExternalBin;
 namespace K3bCdDevice {
   class CdDevice;
-};
+}
 namespace K3b {
   class Msf;
 }

@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -26,7 +26,7 @@ class QTimer;
 
 class K3bBusyWidget : public QFrame
 {
-  Q_OBJECT;
+  Q_OBJECT
 
  public:
   K3bBusyWidget( QWidget* parent = 0, const char* name = 0 );

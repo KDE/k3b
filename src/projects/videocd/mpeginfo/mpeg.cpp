@@ -2538,7 +2538,7 @@ transport::transport()
         n_PMT_PIDs( 0 ),
         read_pmts( 0 )
 {}
-;
+
 
 transport::~transport()
 {

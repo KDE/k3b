@@ -23,7 +23,7 @@
 
 namespace K3bCdDevice {
   class CdDevice;
-};
+}
 class K3bCdrecordWriter;
 class K3bReadcdReader;
 

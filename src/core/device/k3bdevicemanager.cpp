@@ -81,7 +81,7 @@ typedef unsigned char u8;
 class K3bCdDevice::DeviceManager::Private
 {
 public:
-  QPtrList<K3bDevice> allDevices;;
+  QPtrList<K3bDevice> allDevices;
   QPtrList<K3bDevice> cdReader;
   QPtrList<K3bDevice> cdWriter;
   QPtrList<K3bDevice> dvdReader;
