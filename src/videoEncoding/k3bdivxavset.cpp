@@ -70,9 +70,9 @@ has similar features to DivX5. DivX4 is the predecessor to DivX5. All three code
 XviD (CVS) is support for the latest nightly snapshots of XviD. \
 Regarding quality, try all the different codecs to find out which you prefer. Secondly, read the various forums about MPEG-4 Encoding \
 (www.doom9.org, www.xvid.org, www.divx.net, ... ). The difference between a DivX4 and XviD 2-pass encoded movie \
-is quite small. Sometimes DivX4 (smoother) is better and other times XviD (sharper).\
-If the encoding process crashes you probably haven't used the codec you have installed. Due to the same name of the codec libraries you \
-can only use Divx4 or Divx5 and Xvid or Xvid (CVS). This will be fixed in a future version so the codecs will auto dectect and \
+is quite small. Sometimes DivX4 (smoother) is better and other times XviD (sharper). \
+If the encoding process crashes then you probably haven't used the codec you have installed. Due to the codec libraries having the same name, you \
+can only use DivX4 or DivX5 and Xvid or Xvid (CVS). This will be fixed in a future version, so the codecs will auto dectect and \
 can be used with different install locations."));
     QWhatsThis::add( codec, wt_codec );
     QLabel *codecmode = new QLabel( i18n("Codec mode:"), this );
