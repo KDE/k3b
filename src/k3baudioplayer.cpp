@@ -42,7 +42,10 @@
 
 #include <string.h>
 
+#ifdef HAVE_ARTS_KMEDIA2_H
 #include <arts/artsflow.h>
+#endif
+
 #include <kdebug.h>
 
 using namespace std;
