@@ -49,6 +49,13 @@ class K3bThreadJob : public K3bJob
   void setThread( K3bThread* t );
   K3bThread* thread() const { return m_thread; }
 
+  /**
+   * This is not the same as QThread::running.
+   * It is true if the job has been started and has not yet
+   * emitted the finished signal
+   */
+  bool running() const { return m_running; }
+
   virtual QString jobDescription() const;
   virtual QString jobDetails() const;
 
@@ -64,6 +71,7 @@ class K3bThreadJob : public K3bJob
 
  private:
   K3bThread* m_thread;
+  bool m_running;
 };
 
 #endif

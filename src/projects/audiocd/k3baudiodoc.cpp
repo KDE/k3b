@@ -77,6 +77,7 @@ public:
 
 protected:
   void run() {
+    kdDebug() << "(AudioTrackStatusThread) run" << endl;
     if( m_track->module()->analyseFile() ) {
       m_track->setStatus( 0 );
 
@@ -91,13 +92,15 @@ protected:
 	// no song found, try the module
 	m_track->setTitle( m_track->module()->metaInfo( K3bAudioDecoder::META_TITLE ) );
 	m_track->setPerformer( m_track->module()->metaInfo( K3bAudioDecoder::META_ARTIST ) );
-	m_track->setComposer( m_track->module()->metaInfo( K3bAudioDecoder::META_COMPOSER ) );
-	m_track->setSongwriter( m_track->module()->metaInfo( K3bAudioDecoder::META_SONGWRITER ) );
-	m_track->setCdTextMessage( m_track->module()->metaInfo( K3bAudioDecoder::META_COMMENT ) );
       }
+	
+      m_track->setComposer( m_track->module()->metaInfo( K3bAudioDecoder::META_COMPOSER ) );
+      m_track->setSongwriter( m_track->module()->metaInfo( K3bAudioDecoder::META_SONGWRITER ) );
+      m_track->setCdTextMessage( m_track->module()->metaInfo( K3bAudioDecoder::META_COMMENT ) );
     }
     else
       m_track->setStatus( -1 );
+    kdDebug() << "(AudioTrackStatusThread) finished" << endl;
     emitFinished(true);
   }
 
@@ -673,9 +676,9 @@ void K3bAudioDoc::removeCorruptTracks()
 void K3bAudioDoc::slotDetermineTrackStatus()
 {
   kdDebug() << "(K3bAudioDoc) slotDetermineTrackStatus()" << endl;
-  if( !m_trackStatusThread->running() ) {
+  if( !m_trackMetaInfoJob->running() ) {
     kdDebug() << "(K3bAudioDoc) AudioTrackStatusThread not running." << endl;
-    // find the next track to meta-info
+    // find the next track
     for( QPtrListIterator<K3bAudioTrack> it( *m_tracks ); it.current(); ++it ) {
       if( it.current()->length() == 0 && it.current()->status() == 0 ) {
 	kdDebug() << "(K3bAudioDoc) starting AudioTrackStatusThread for " << it.current()->path() << endl;

@@ -24,13 +24,15 @@
 
 
 K3bThreadJob::K3bThreadJob( QObject* parent, const char* name )
-  : K3bJob( parent, name )
+  : K3bJob( parent, name ),
+    m_running(false)
 {
 }
 
 
 K3bThreadJob::K3bThreadJob( K3bThread* thread, QObject* parent, const char* name )
-  : K3bJob( parent, name )
+  : K3bJob( parent, name ),
+    m_running(false)
 {
   setThread(thread);
 }
@@ -69,8 +71,13 @@ void K3bThreadJob::setThread( K3bThread* t )
 void K3bThreadJob::start()
 {
   if( m_thread ) {
-    m_thread->setProgressInfoEventHandler(this);
-    m_thread->start();
+    if( !m_running ) {
+      m_thread->setProgressInfoEventHandler(this);
+      m_running = true;
+      m_thread->start();
+    }
+    else
+      kdDebug() << "(K3bThreadJob) thread not finished yet." << endl;
   }
   else {
     kdError() << "(K3bThreadJob) no job set." << endl;
@@ -124,6 +131,7 @@ void K3bThreadJob::customEvent( QCustomEvent* e )
       kdDebug() << "(K3bThreadJob) waiting for the thread to finish." << endl;
       m_thread->wait();
       kdDebug() << "(K3bThreadJob) thread finished." << endl;
+      m_running = false;
       emit finished( be->firstValue() );
       break;
     case K3bProgressInfoEvent::NewTask:
