@@ -74,7 +74,7 @@ void K3bBlankingDialog::setupGui()
 {
   QWidget* frame = mainWidget();
 
-  m_writerSelectionWidget = new K3bWriterSelectionWidget( frame );
+  m_writerSelectionWidget = new K3bWriterSelectionWidget( false, frame );
 
 
   // --- setup the blanking type button group -----------------------------

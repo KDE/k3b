@@ -143,7 +143,7 @@ class K3bDataDoc : public K3bDoc
 
   virtual QString documentType() const;
 
-  void loadDefaultSettings( KConfig* );
+  virtual void loadDefaultSettings( KConfig* );
 
  private:
   void createSessionImportItems( const QString& path, K3bDirItem* parent, KProgressDialog* );

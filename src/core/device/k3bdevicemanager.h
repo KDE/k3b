@@ -49,7 +49,8 @@ namespace K3bCdDevice {
 
       /**
        * Before getting the devices do a @ref scanbus().
-       * @return List of all writer devices.
+       * @return List of all cd writer devices.
+       * @deprecated use cdWriter
        */
       QPtrList<K3bDevice>& burningDevices();
 
@@ -58,18 +59,22 @@ namespace K3bCdDevice {
        * reading device and are not present in this list.
        * Before getting the devices do a @ref scanbus().
        * @return List of all reader devices without writer devices.
+       * @deprecated use cdReader
        **/
       QPtrList<K3bDevice>& readingDevices();
 
       QPtrList<K3bDevice>& allDevices();
 
+      QPtrList<K3bDevice>& cdWriter();
+      QPtrList<K3bDevice>& cdReader();
+      QPtrList<K3bDevice>& dvdWriter();
+      QPtrList<K3bDevice>& dvdReader();
 
       /** writes to stderr **/
       void printDevices();
 
       /**
-       * Returns number of found devices and constructs
-       * the lists m_burner and m_reader.
+       * Returns number of found devices
        **/
       int scanbus();
 
@@ -104,13 +109,12 @@ namespace K3bCdDevice {
 
       K3bExternalBinManager* m_externalBinManager;
 
-      QPtrList<K3bDevice> m_reader;
-      QPtrList<K3bDevice> m_writer;
-      QPtrList<K3bDevice> m_allDevices;;
       int m_foundDevices;
 
       QString m_processOutput;
 
+      class Private;
+      Private* d;
     };
 
   /**

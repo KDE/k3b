@@ -65,7 +65,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   mainGrid->setSpacing( spacingHint() );
   mainGrid->setMargin( 0 );
 
-  m_writerSelectionWidget = new K3bWriterSelectionWidget( main );
+  m_writerSelectionWidget = new K3bWriterSelectionWidget( false, main );
   m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRDAO );
   QGroupBox* groupSource = new QGroupBox( 1, Qt::Vertical, i18n("CD Reader Device"), main );
   groupSource->setInsideSpacing( spacingHint() );
@@ -252,7 +252,7 @@ void K3bCdCopyDialog::initReadingDevices()
   const K3bExternalBin* cdrdaoBin = k3bcore->externalBinManager()->binObject("cdrdao");
 
   if( cdrdaoBin ) {
-    QPtrList<K3bDevice> devices = k3bcore->deviceManager()->allDevices();
+    QPtrList<K3bDevice> devices = k3bcore->deviceManager()->cdReader();
     K3bDevice* dev = devices.first();
     while( dev ) {
       if( dev->interfaceType() == K3bDevice::SCSI ||

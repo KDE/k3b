@@ -67,12 +67,15 @@ void K3bWritingModeWidget::init()
 			      "<em>Disk At Once</em> or more properly <em>Session At Once</em>. "
 			      "The laser is never turned off while writing the cd. "
 			      "This is the preferred mode to write audio cds since it allows "
-			      "pregaps other than 2 seconds. Not all writers support DAO.</p>"
+			      "pregaps other than 2 seconds. Not all writers support DAO.<br>"
+			      "DVDs can only be written in DAO mode (and in Packet mode but "
+			      "K3b does not support this).</p>"
 			      "<p><b>TAO</b><br>"
 			      "<em>Track At Once</em> should be supported by every writer. "
 			      "The laser will be turned off after every track.</p>"
 			      "<p><b>RAW</b><br>"
-			      "RAW writing mode</p>") );
+			      "RAW writing mode. The error correction data is created by the "
+			      "software instead of the writer device.</p>") );
 }
 
 

@@ -40,13 +40,13 @@ class K3bDataJob : public K3bBurnJob
 	
  public:
   K3bDataJob( K3bDataDoc*, QObject* parent = 0 );
-  ~K3bDataJob();
+  virtual ~K3bDataJob();
 	
   K3bDoc* doc() const;
   K3bCdDevice::CdDevice* writer() const;
 
-  QString jobDescription() const;
-  QString jobDetails() const;
+  virtual QString jobDescription() const;
+  virtual QString jobDetails() const;
 		
  public slots:
   void cancel();
@@ -65,8 +65,14 @@ class K3bDataJob : public K3bBurnJob
   void writeImage();
   void cancelAll();
 		
+ protected:
+  virtual bool prepareWriterJob();
+
+  K3bAbstractWriter* m_writerJob;
+  K3bIsoImager* m_isoImager;
+  K3bMsInfoFetcher* m_msInfoFetcher;
+
  private:
-  bool prepareWriterJob();
   bool startWriting();
   void determineWritingMode();
 
@@ -79,9 +85,6 @@ class K3bDataJob : public K3bBurnJob
 
   QFile m_imageFile;
   QDataStream m_imageFileStream;
-  K3bAbstractWriter* m_writerJob;
-  K3bIsoImager* m_isoImager;
-  K3bMsInfoFetcher* m_msInfoFetcher;
 
   int m_usedDataMode;
   int m_usedWritingApp;

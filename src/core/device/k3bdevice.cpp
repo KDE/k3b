@@ -184,7 +184,7 @@ bool K3bCdDevice::CdDevice::init()
     d->deviceType |= DVDRAM;
   }
   if (drivetype & CDC_DVD) {
-    d->deviceType |= DVDROM;
+    d->deviceType |= DVD;
   }
 
   close();
@@ -242,6 +242,35 @@ K3bCdDevice::CdDevice::interface K3bCdDevice::CdDevice::interfaceType()
   }
   return d->interfaceType;
 }
+
+
+bool K3bCdDevice::CdDevice::dao() const 
+{
+  return m_writeModes & SAO;
+}
+
+
+bool K3bCdDevice::CdDevice::burner() const
+{
+  return d->deviceType & CDR;
+}
+
+
+bool K3bCdDevice::CdDevice::writesCdrw() const
+{
+  return d->deviceType & CDRW;
+}
+
+bool K3bCdDevice::CdDevice::writesDvd() const
+{
+  return d->deviceType & DVDR;
+}
+
+bool K3bCdDevice::CdDevice::readsDvd() const
+{
+  return d->deviceType & (DVD|DVDR|DVDRAM);
+}
+
 
 int K3bCdDevice::CdDevice::type() const
 {
@@ -367,7 +396,7 @@ bool K3bCdDevice::CdDevice::isDVD()
   if (open() < 0)
     return ret;
 
-  if( d->deviceType & (DVDR | DVDRAM | DVDROM) ) {
+  if( d->deviceType & (DVDR | DVDRAM | DVD) ) {
     //     try to read the physical dvd-structure
     //     if this fails, we probably cannot take any further (usefull) dvd-action
     dvd_struct dvdinfo;

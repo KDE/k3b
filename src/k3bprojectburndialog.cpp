@@ -128,6 +128,8 @@ int K3bProjectBurnDialog::exec( bool burn )
   if( burn && m_job == 0 ) {
     m_buttonStart->show();
     setDefaultButton( START_BUTTON );
+    if( !m_writerSelectionWidget->writerDevice() )
+      KMessageBox::sorry( this, i18n("No Writer available.") );
   }
   else {
     m_buttonStart->hide();
@@ -194,7 +196,7 @@ void K3bProjectBurnDialog::prepareGui()
   setMainWidget( m_tabWidget );
   QWidget* w = new QWidget( m_tabWidget );
   m_tabWidget->addTab( w, i18n("Writing") );
-  m_writerSelectionWidget = new K3bWriterSelectionWidget( w );
+  m_writerSelectionWidget = new K3bWriterSelectionWidget( false, w );
   m_tempDirSelectionWidget = new K3bTempDirSelectionWidget( w );
 
   QGroupBox* groupWritingMode = new QGroupBox( 1, Qt::Vertical, i18n("Writing Mode"), w );

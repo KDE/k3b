@@ -43,7 +43,7 @@ namespace K3bCdDevice
     enum DeviceType    { CDR = 1,
                          CDRW = 2,
                          CDROM = 4,
-                         DVDROM = 8,
+                         DVD = 8,
                          DVDRAM = 16,
                          DVDR = 32,
                          DVDRW = 64,
@@ -78,10 +78,12 @@ namespace K3bCdDevice
     const QString& vendor() const { return m_vendor; }
     const QString& description() const { return m_description; }
     const QString& version() const { return m_version; }
-    bool           burner() const { return m_burner; }
-    bool           writesCdrw() const { return m_bWritesCdrw; }
+    bool           burner() const;
+    bool           writesCdrw() const;
+    bool           writesDvd() const;
+    bool           readsDvd() const;
     bool           burnproof() const { return m_burnproof; }
-    bool           dao() const { return m_dao; }
+    bool           dao() const;
     int            maxReadSpeed() const { return m_maxReadSpeed; }
     int            currentWriteSpeed() const { return m_currentWriteSpeed; }
 
@@ -142,9 +144,6 @@ namespace K3bCdDevice
     /** internally K3b value. */
     void setCurrentWriteSpeed( int s ) { m_currentWriteSpeed = s; }
 
-
-    void setIsWriter( bool b ) { m_burner = b; }
-
     /**
      * Use this if the speed was not detected correctly.
      */
@@ -169,7 +168,6 @@ namespace K3bCdDevice
 
     void setBurnproof( bool );
     void setWritesCdrw( bool b ) { m_bWritesCdrw = b; }
-    void setDao( bool b ) { m_dao = b; }
     void setBufferSize( int b ) { m_bufferSize = b; }
 
     void setMountPoint( const QString& );
@@ -290,7 +288,6 @@ namespace K3bCdDevice
     bool m_burner;
     bool m_bWritesCdrw;
     bool m_burnproof;
-    bool m_dao;
     QString m_cdrdaoDriver;
     int m_cdTextCapable;
     int m_maxReadSpeed;
