@@ -721,25 +721,27 @@ void K3bMainWindow::fileSaveAs( K3bDoc* doc )
 
   if( doc != 0 ) {
 
-    QString url = KFileDialog::getSaveFileName(QDir::currentDirPath(),
+    QString file = KFileDialog::getSaveFileName(QDir::currentDirPath(),
 					       i18n("*.k3b|K3b Projects"), this, i18n("Save As"));
 
 
-    if( !url.isEmpty() ) {
+    if( !file.isEmpty() ) {
 
       // default to ending ".k3b"
-      if( url.mid( url.findRev('.')+1 ) != "k3b" ) {
-	if( url[ url.length()-1 ] != '.' )
-	  url += ".";
-	url += "k3b";
+      if( file.mid( file.findRev('.')+1 ) != "k3b" ) {
+	if( file[ file.length()-1 ] != '.' )
+	  file += ".";
+	file += "k3b";
       }
 
-      if( !QFile::exists(url) ||
-	  ( QFile::exists(url) &&
-	    KMessageBox::questionYesNo( this, i18n("Do you want to overwrite %1?").arg(url), i18n("File Exists") )
+      if( !QFile::exists(file) ||
+	  ( QFile::exists(file) &&
+	    KMessageBox::questionYesNo( this, i18n("Do you want to overwrite %1?").arg(file), i18n("File Exists") )
 	    == KMessageBox::Yes ) ) {
 
-	if( !doc->saveDocument(KURL(url)) ) {
+        KURL url;
+        url.setPath(file);
+	if( !doc->saveDocument(url) ) {
 	  KMessageBox::error (this,i18n("Could not save the current document!"), i18n("I/O Error"));
 	  return;
 	}
@@ -747,7 +749,7 @@ void K3bMainWindow::fileSaveAs( K3bDoc* doc )
 	K3bView* view = doc->view();
 	m_documentTab->changeTab( view, view->caption() );
 
-	actionFileOpenRecent->addURL(KURL(url));
+	actionFileOpenRecent->addURL(url);
       }
     }
   }
@@ -1209,7 +1211,17 @@ void K3bMainWindow::slotProjectAddFiles()
   K3bDoc* doc = activeDoc();
 
   if( doc ) {
-    QStringList urls = KFileDialog::getOpenFileNames( ".", "*|All Files", this, i18n("Select Files to Add to Project") );
+    QStringList files = KFileDialog::getOpenFileNames( ".", "*|All Files", this, i18n("Select Files to Add to Project") );
+
+    KURL::List urls;
+    for (QStringList::ConstIterator it = files.begin();
+         it != files.end(); it++)
+    {
+      KURL url;
+      url.setPath(*it);
+      urls.append( url );
+    }
+
     if( !urls.isEmpty() )
       doc->addUrls( urls );
   }
