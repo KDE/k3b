@@ -70,6 +70,7 @@ void K3bFileView::setupGUI()
   m_dirOp           = new K3bDirOperator( QDir::home().absPath(), this );
 
   m_dirOp->readConfig( k3bMain()->config(), "file view" );
+  m_dirOp->setMode( KFile::Files );
   m_dirOp->setView( KFile::Default );
 
   KToolBar* toolBar = new KToolBar( this, "fileviewtoolbar" );

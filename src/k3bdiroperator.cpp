@@ -82,7 +82,7 @@ KFileView* K3bDirOperator::createView( QWidget* parent, KFile::FileView view )
     pView->setOnlyDoubleClickSelectsFiles( onlyDoubleClickSelectsFiles() );
     new_view = pView;
   }
-  
+
   return new_view;
 }
 
