@@ -45,6 +45,25 @@ K3b::Msf::Msf( int i )
   makeValid();
 }
 
+
+void K3b::Msf::addMinutes( int m )
+{
+  m_minutes += m;
+  makeValid();
+}
+
+void K3b::Msf::addSeconds( int s )
+{
+  m_seconds += s;
+  makeValid();
+}
+
+void K3b::Msf::addFrames( int f )
+{
+  m_frames += f;
+  makeValid();
+}
+
 K3b::Msf& K3b::Msf::operator=( const K3b::Msf& m )
 {
   m_frames = m.frames();
@@ -73,8 +92,7 @@ K3b::Msf& K3b::Msf::operator+=( const K3b::Msf& m )
 
 K3b::Msf& K3b::Msf::operator+=( int i )
 {
-  m_frames += i;
-  makeValid();
+  addFrames(i);
   return *this;
 }
 

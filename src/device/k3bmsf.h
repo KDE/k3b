@@ -50,9 +50,9 @@ namespace K3b
 
       int totalFrames() const { return ( m_minutes*60 + m_seconds )*75 + m_frames; }
 
-      void setMinutes( int m ) { m_minutes = m < 0 ? 0 : m; }
-      void setSeconds( int s ) { m_seconds = s < 0 ? 0 : s; }
-      void setFrames( int f ) { m_frames = f < 0 ? 0 : f; }
+      void addMinutes( int m );
+      void addSeconds( int s );
+      void addFrames( int f );
 
       QString toString( bool showFrames = true ) const;
       KIO::filesize_t mode1Form1Bytes() const;
