@@ -1,6 +1,6 @@
 /*
 *
-* $Id$
+* $Id: $
 * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
 *             THX to Manfred Odenstein <odix@chello.at>
 *
@@ -63,6 +63,16 @@ bool K3bVcdXmlView::write( const QString& fname )
         elemOption.setAttribute( "name", "svcd vcd30 entrysvd" );
         elemOption.setAttribute( "value", "true" );
     }
+
+/*
+    // VCD3.0 track interpretation
+    if ( m_doc->vcdOptions() ->VCD30interpretation() ) {
+        QDomElement elemOption;
+        elemOption = addSubElement( xmlDoc, root, "option" );
+        elemOption.setAttribute( "name", "svcd vcd30 tracksvd" );
+        elemOption.setAttribute( "value", "true" );
+    }
+*/
 
     // Relaxed aps
     if ( m_doc->vcdOptions() ->RelaxedAps() ) {
@@ -183,9 +193,6 @@ bool K3bVcdXmlView::write( const QString& fname )
             if ( m_doc->vcdOptions() ->PbcEnabled() ) {
                  if ( elemPbc.isNull() ) {
                     elemPbc = addSubElement( xmlDoc, root, "pbc" );
-                    QDomElement elemEndlist = addSubElement( xmlDoc, elemPbc, "endlist" );
-                    elemEndlist.setAttribute( "id", "end");
-                    elemEndlist.setAttribute( "rejected", "true");
                  }
                 doPbc(xmlDoc, elemPbc, it.current() );
             }
@@ -201,13 +208,16 @@ bool K3bVcdXmlView::write( const QString& fname )
             if ( m_doc->vcdOptions() ->PbcEnabled() ) {
                  if ( elemPbc.isNull() ) {
                     elemPbc = addSubElement( xmlDoc, root, "pbc" );
-                    QDomElement elemEndlist = addSubElement( xmlDoc, elemPbc, "endlist" );
-                    elemEndlist.setAttribute( "id", "end");
-                    elemEndlist.setAttribute( "rejected", "true");
                  }
                 doPbc(xmlDoc, elemPbc, it.current() );
             }
         }
+    }
+    
+    if ( ! elemPbc.isNull() ) {
+    	QDomElement elemEndlist = addSubElement( xmlDoc, elemPbc, "endlist" );
+	elemEndlist.setAttribute( "id", "end");
+	elemEndlist.setAttribute( "rejected", "true");
     }
 
     m_xmlstring = xmlDoc.toString();
