@@ -80,7 +80,7 @@ int K3bEmptyDiscWaiter::waitForEmptyDisc( bool appendable )
 void K3bEmptyDiscWaiter::slotTestForEmptyCd()
 {
   int x = m_device->isEmpty();
-  if( x == 0 || ( x == 1 && m_apppendable ) ) {
+  if( x == K3bDevice::EMPTY || ( x == K3bDevice::APPENDABLE && m_apppendable ) ) {
     m_timer->stop();
     
     done( DISK_READY );
