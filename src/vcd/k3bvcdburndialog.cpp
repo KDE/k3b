@@ -197,28 +197,28 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
                                         "<p>It can be used by playing devices for implementing fast forward & fast reverse scanning."
                                         "<p>The already existing scan information data can be updated by enabling the update scan offsets option.") );
 
-   QWhatsThis::add( m_spinRestriction, i18n("<p>Viewing Restriction may be interpreted by the playing device."
+   QWhatsThis::add( m_labelRestriction, i18n("<p>Viewing Restriction may be interpreted by the playing device."
                                         "<p>The allowed range goes from 0 to 3."
                                         "<ul><li>0 = unrestricted, free to view for all</li>"
                                         "<li>3 = restricted, content not suitable for ages under 18</li></ul>"
                                         "<p>Actually the exact meaning is not defined and is player dependant!"
                                         "<p><b>Most players ignore that value.<b>") );
 
-   // QWhatsThis::add( m_checkGaps, i18n("<p>This option enable customizing of Gaps and Margins.") );
-   QWhatsThis::add( m_spinPreGapLeadout, i18n("<p>This option allows to set the amount of empty sectors added before the lead-out area begins, i.e. the amount of post-gap sectors."
+   QWhatsThis::add( m_checkGaps, i18n("<p>This option enable customizing of Gaps and Margins.") );
+   QWhatsThis::add( m_labelPreGapLeadout, i18n("<p>This option allows to set the amount of empty sectors added before the lead-out area begins, i.e. the amount of post-gap sectors."
                                          "<p>The ECMA-130 specification requires the last data track before the lead-out to carry a post-gap of at least 150 sectors, which is used as default for this parameter."
                                          "<p>Some operating systems may encounter I/O errors due to read-ahead issues when reading the last mpeg track if this parameter is set to low."
                                          "<p>Allowed value content: [0..300]. Default: 150.") );
 
-   QWhatsThis::add( m_spinPreGapTrack, i18n("<p>Used to set the track pre-gap for all tracks in sectors globally."
+   QWhatsThis::add( m_labelPreGapTrack, i18n("<p>Used to set the track pre-gap for all tracks in sectors globally."
                                         "<p>The specification requires the pre-gaps to be at least 150 sectors long."
                                         "<p>Allowed value content: [1..300]. Default: 150.") );
 
-   QWhatsThis::add( m_spinFrontMarginTrack, i18n("<p>Set's the front margin for sequence items."
+   QWhatsThis::add( m_labelFrontMarginTrack, i18n("Margins seem to be used, in order to compensate for inaccurate sector addressing issues on CD-ROM media. Interestingly, they have been abandoned for the Super Video CD."
                                         "<p>For Video CD 1.0/1.1/2.0 this margin should be at least 15 sectors long."
                                         "<p>Allowed value content: [0..150]. Default: 30 for Video CD 1.0/1.1/2.0, otherwise (i.e. Super Video CD 1.0 and HQ-VCD 1.0) 0.") );
 
-   QWhatsThis::add( m_spinRearMarginTrack, i18n("<p>Set's the rear margin for sequence items."
+   QWhatsThis::add( m_labelRearMarginTrack, i18n("<p>Margins seem to be used, in order to compensate for inaccurate sector addressing issues on CD-ROM media. Interestingly, they have been abandoned for the Super Video CD."
                                         "<p>For Video CD 1.0/1.1/2.0 this margin should be at least 15 sectors long."
                                         "<p>Allowed value content: [0..150]. Default: 45 for Video CD 1.0/1.1/2.0, otherwise 0.") );
 }
@@ -292,12 +292,12 @@ void K3bVcdBurnDialog::setupAdvancedTab()
   QGridLayout*  groupMiscLayout = new QGridLayout( m_groupMisc->layout() );
   groupMiscLayout->setAlignment( Qt::AlignTop );
 
-  QLabel* labelRestriction = new QLabel( i18n( "Restriction Category (0..3)" ), m_groupMisc, "labelRestriction" );
+  m_labelRestriction = new QLabel( i18n( "Restriction Category (0..3)" ), m_groupMisc, "m_labelRestriction" );
   m_spinRestriction = new QSpinBox( m_groupMisc, "m_spinRestriction" );
   m_spinRestriction->setMinValue(0);
   m_spinRestriction->setMaxValue(3);
 
-  groupMiscLayout->addWidget( labelRestriction, 1, 0);
+  groupMiscLayout->addWidget( m_labelRestriction, 1, 0);
   groupMiscLayout->addMultiCellWidget( m_spinRestriction, 1, 1, 1, 4);
   groupMiscLayout->setRowStretch( 2, 0 );
 

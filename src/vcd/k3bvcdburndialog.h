@@ -102,6 +102,7 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
    QSpinBox* m_spinFrontMarginTrack;
    QSpinBox* m_spinRearMarginTrack;
 
+   QLabel* m_labelRestriction;
    QLabel* m_labelPreGapLeadout;
    QLabel* m_labelPreGapTrack;
    QLabel* m_labelFrontMarginTrack;
