@@ -27,7 +27,7 @@
 #include <qtooltip.h>
 #include <qwhatsthis.h>
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <kdialog.h>

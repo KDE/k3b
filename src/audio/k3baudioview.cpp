@@ -41,7 +41,7 @@
 #include <kaction.h>
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kurldrag.h>
 
 

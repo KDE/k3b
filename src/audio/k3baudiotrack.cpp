@@ -20,7 +20,7 @@
 
 #include "input/k3baudiomodule.h"
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <kconfig.h>
 
 #include <qstring.h>

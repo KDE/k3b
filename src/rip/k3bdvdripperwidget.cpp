@@ -44,7 +44,7 @@
 #include <kaction.h>
 #include <kconfig.h>
 #include <klocale.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kdialog.h>
 #include <kfiledialog.h>
 #include <klineedit.h>

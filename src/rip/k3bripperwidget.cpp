@@ -30,7 +30,7 @@
 
 #include <kcombobox.h>
 #include <klocale.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kconfig.h>
 #include <klistview.h>
 #include <klineedit.h>

@@ -21,7 +21,7 @@
 #include <klocale.h>
 #include <knuminput.h>
 #include <kconfig.h>
-#include <kapp.h>
+#include <kapplication.h>
 
 
 K3bCddbOptionTab::K3bCddbOptionTab( QWidget* parent,  const char* name )

@@ -11,7 +11,7 @@
 #include <qfile.h>
 
 #include <kprocess.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kconfig.h>
 
 #include <iostream>

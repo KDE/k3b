@@ -40,7 +40,7 @@
 // KDE-includes
 #include <kprocess.h>
 #include <kurl.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kmessagebox.h>
 #include <kconfig.h>
 #include <klocale.h>

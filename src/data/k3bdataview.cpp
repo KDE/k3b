@@ -29,7 +29,7 @@
 #include <klocale.h>
 #include <kmimetype.h>
 #include <kurl.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kpopupmenu.h>
 #include <kaction.h>
 #include <klineeditdlg.h>

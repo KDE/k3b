@@ -41,7 +41,7 @@
 #include <klocale.h>
 #include <klistview.h>
 #include <kdialog.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kconfig.h>
 #include <kaction.h>
 #include <kdebug.h>

@@ -22,7 +22,7 @@
 #include <qlayout.h>
 
 #include <klocale.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kdialog.h>
 
 K3bCddbEmptyDbTab::K3bCddbEmptyDbTab(QWidget *parent, const char *name ) : QWidget(parent,name) {

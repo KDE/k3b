@@ -38,7 +38,7 @@
 #include <kiconloader.h>
 // #include <ktoolbar.h>
 // #include <ktoolbarbutton.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kconfig.h>
 #include <klocale.h>
 #include <kaction.h>

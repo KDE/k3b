@@ -23,7 +23,7 @@
 #include "k3bisoimagejob.h"
 #include "../kcutlabel.h"
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <klineedit.h>

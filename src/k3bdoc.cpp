@@ -33,7 +33,7 @@
 #include <kio/job.h>
 #include <kio/netaccess.h>
 #include <kprocess.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kstddirs.h>
 #include <klocale.h>
 #include <kconfig.h>

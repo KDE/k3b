@@ -28,7 +28,7 @@
 #include <qworkspace.h>
 
 // include files for KDE
-#include <kapp.h>
+#include <kapplication.h>
 #include <kdockwidget.h>
 #include <kaction.h>
 #include <kurl.h>
