@@ -278,10 +278,8 @@ bool K3bDevice::Device::init()
 	// now i indexes the first byte of the feature dependant data
 	//
 
-	// FIXME: use the FEATURE_ constants
-
 	switch( feature ) {
-	case 0x000: // Profile List
+	case FEATURE_PROFILE_LIST:
 	  for( int j = 0; j < featureLen; j+=4 ) {
 	    short profile = from2Byte( &profiles[i+j] );
 
@@ -304,87 +302,87 @@ bool K3bDevice::Device::init()
 	  }
 	  break;
 
-	case 0x001: // Core
+	case FEATURE_CORE:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Core" << endl;
 	  break;
 
-	case 0x002: // Morphing
+	case FEATURE_MORPHING:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Morphing" << endl;
 	  break;
 
-	case 0x003: // Removable Medium
+	case FEATURE_REMOVABLE_MEDIA:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Removable Medium" << endl;
 	  break;
 
-	case 0x004: // Write Protect
+	case FEATURE_WRITE_PROTECT:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Write Protect" << endl;
 	  break;
 
 	  // 0x05 - 0x0F reserved
 
-	case 0x010: // Random Readable
+	case FEATURE_RANDOM_READABLE:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Random Readable" << endl;
 	  break;
 
 	  // 0x11 - 0x1C reserved
 
-	case 0x01D: // Multi-Read
+	case FEATURE_MULTI_READ:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Multi-Read" << endl;
 	  d->deviceType |= CDROM;
 	  break;
 
-	case 0x01E: // CD Read
+	case FEATURE_CD_READ:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD Read" << endl;
 	  d->deviceType |= CDROM;
 	  break;
 
-	case 0x01F: // DVD Read
+	case FEATURE_DVD_READ:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD Read" << endl;
 	  d->deviceType |= DVD;
 	  break;
 
-	case 0x020: // Random Writable
+	case FEATURE_RANDOM_WRITABLE:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Random Writable" << endl;
 	  break;
 
-	case 0x021: // Incremental Streaming Writable
+	case FEATURE_INCREMENTAL_STREAMING_WRITABLE:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Incremental Streaming Writable" << endl;
 	  break;
 
-	case 0x022: // Sector Erasable
+	case FEATURE_SECTOR_ERASABLE:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Sector Erasable" << endl;
 	  break;
 
-	case 0x023: // Formattable
+	case FEATURE_FORMATTABLE:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Formattable" << endl;
 	  break;
 
-	case 0x024: // Defect Management
+	case FEATURE_DEFECT_MANAGEMENT:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Defect Management" << endl;
 	  break;
 
-	case 0x025: // Write Once
+	case FEATURE_WRITE_ONCE:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Write Once" << endl;
 	  break;
 
-	case 0x026: // Restricted Overwrite
+	case FEATURE_RESTRICTED_OVERWRITE:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Restricted Overwrite" << endl;
 	  break;
 
-	case 0x027: // CD-RW CAV Write
+	case FEATURE_CD_RW_CAV_WRITE:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD-RW CAV Write" << endl;
 	  d->deviceType |= CDRW;
 	  break;
 
-	case 0x028: // MRW
+	case FEATURE_MRW:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "MRW" << endl;
 	  break;
 
-	case 0x029: // Enhanced Defect Reporting
+	case FEATURE_ENHANCED_DEFECT_REPORTING:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Enhanced Defect Reporting" << endl;
 	  break;
 
-	case 0x02A: // DVD+RW
+	case FEATURE_DVD_PLUS_RW:
 	  {
 	    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD+RW" << endl;
 #if __BYTE_ORDER == __BIG_ENDIAN
@@ -412,7 +410,7 @@ bool K3bDevice::Device::init()
 	    break;
 	  }
 
-	case 0x02B: // DVD+R
+	case FEATURE_DVD_PLUS_R:
 	  {
 	    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD+R" << endl;
 #if __BYTE_ORDER == __BIG_ENDIAN
@@ -441,11 +439,11 @@ bool K3bDevice::Device::init()
 	    break;
 	  }
 
-	case 0x02C: // Rigid Restricted Overwrite
+	case FEATURE_RIGID_RESTRICTED_OVERWRITE:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Rigid Restricted Overwrite" << endl;
 	  break;
 
-	case 0x02D: // CD Track At Once
+	case FEATURE_CD_TRACK_AT_ONCE:
 	  {
 	    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD Track At Once" << endl;
 #if __BYTE_ORDER == __BIG_ENDIAN
@@ -484,7 +482,7 @@ bool K3bDevice::Device::init()
 	    break;
 	  }
 
-	case 0x02E: // CD Mastering
+	case FEATURE_CD_MASTERING:
 	  {
 	    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD Mastering" << endl;
 #if __BYTE_ORDER == __BIG_ENDIAN
@@ -522,7 +520,7 @@ bool K3bDevice::Device::init()
 	    break;
 	  }
 
-	case 0x02F: // DVD-R/-RW Write
+	case FEATURE_DVD_R_RW_WRITE:
 	  {
 	    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD-R/-RW Write" << endl;
 #if __BYTE_ORDER == __BIG_ENDIAN
@@ -556,74 +554,74 @@ bool K3bDevice::Device::init()
 	    break;
 	  }
 
-	case 0x030: // DDCD Read
+	case FEATURE_DDCD_READ:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DDCD Read" << endl;
 	  break;
 
-	case 0x031: // DDCD-R Write
+	case FEATURE_DDCD_R_WRITE:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DDCD-R Write" << endl;
 	  break;
 
-	case 0x032: // DDCD-RW Write
+	case FEATURE_DDCD_RW_WRITE:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DDCD-RW Write" << endl;
 	  break;
 
 	  // 0x33 0x38
 
-	case 0x037: // CD-RW Media Write Support
+	case FEATURE_CD_RW_MEDIA_WRITE_SUPPORT:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD-RW Media Write Support" << endl;
 	  d->deviceType |= CDRW;
 	  break;
 
 	  // 0x38- 0xFF reserved
 
-	case 0x100: // Power Management
+	case FEATURE_POWER_MANAGEMENT:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Power Management" << endl;
 	  break;
 
 	  // 0x101 reserved
 
-	case 0x102: // Embedded Changer
+	case FEATURE_EMBEDDED_CHANGER:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Embedded Changer" << endl;
 	  break;
 
-	case 0x103: // CD Audio analog play
+	case FEATURE_CD_AUDIO_ANALOG_PLAY:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD Audio analog play" << endl;
 	  break;
 
-	case 0x104: // Microcode Upgrade
+	case FEATURE_MICROCODE_UPGRADE:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Microcode Upgrade" << endl;
 	  break;
 
-	case 0x105: // Timeout
+	case FEATURE_TIMEOUT:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Timeout" << endl;
 	  break;
 
-	case 0x106: // DVD-CSS
+	case FEATURE_DVD_CSS:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD-CSS" << endl;
 	  break;
 
-	case 0x107: // Read Time Streaming
+	case FEATURE_REAL_TIME_STREAMING:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Read Time Streaming" << endl;
 	  break;
 
-	case 0x108: // Logical Unit Serial Number
+	case FEATURE_LOGICAL_UNIT_SERIAL_NUMBER:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Logical Unit Serial Number" << endl;
 	  break;
 
 	  // 0x109 reserved
 
-	case 0x10A: // Disc Control Blocks
+	case FEATURE_DISC_CONTROL_BLOCKS:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Disc Control Blocks" << endl;
 	  break;
 
-	case 0x10B: // DVD CPRM
+	case FEATURE_DVD_CPRM:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD CPRM" << endl;
 	  break;
 
 	  //  0x10C - 0x1FE reserved
 
-	case 0x1FF: // Firmware Date
+	case FEATURE_FIRMWARE_DATE:
 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Firmware Date" << endl;
 	  break;
 
