@@ -135,7 +135,7 @@ AC_MSG_RESULT($ogg_vorbis)
 if test x$ogg_vorbis = xyes; then
    dnl we need the ogg_vorbis_lib because otherwise we override LIBS !
    AC_CHECK_LIB(vorbisfile,ov_open,ogg_vorbis_lib=yes,
-                ogg_vorbis=no,[-lvorbisfile -lvorbis -logg])
+                ogg_vorbis=no,[$all_libraries -lvorbisfile -lvorbis -logg])
 fi
 if test x$ogg_vorbis = xyes; then
 	AC_DEFINE(OGG_VORBIS,1,[Define if you have ogg/vorbis installed])
@@ -149,8 +149,10 @@ MAD_LIB=""
 AC_CHECK_HEADER(mad.h, [
 	AC_CHECK_LIB(mad, mad_synth_frame, [
 		MAD_LIB="-lmad"
-		AC_DEFINE(HAVE_LIBMAD,1,[defined if you have libmad headers and libraries])
-	])
+		AC_DEFINE(HAVE_LIBMAD,1,[defined if you have libmad headers and libraries])],
+		[],
+		$all_libraries
+	)
 ])
 AC_SUBST(MAD_LIB)
 
@@ -207,7 +209,7 @@ dnl === test for FLAC++ and FLAC ====
 have_flac=no
 KDE_CHECK_HEADERS(FLAC++/decoder.h, [
    AC_CHECK_LIB(FLAC,FLAC__seekable_stream_decoder_process_single,
-	        have_flac=yes)])
+	        have_flac=yes,[],$all_libraries)])
 AM_CONDITIONAL(include_FLAC, [test x$have_flac = xyes])
 
 
@@ -216,7 +218,7 @@ AC_CHECK_HEADERS(lame/lame.h, [
 	AC_CHECK_LIB(mp3lame, lame_init, [
 		have_lame=yes
 		AC_DEFINE(HAVE_LAME,1,[defined if you have the lame header and lib])
-		], [], -lm)
+		], [], $all_libraries -lm)
 ])
 AM_CONDITIONAL(include_LAME, [test x$have_lame = xyes])
 
