@@ -8,6 +8,8 @@ class K3bDiskInfo;
 class QLabel;
 class KListView;
 class QWidget;
+class QFrame;
+
 
 class K3bDiskInfoView : public K3bCdContentsView
 {
@@ -25,6 +27,8 @@ class K3bDiskInfoView : public K3bCdContentsView
  private:
  QLabel* m_labelDiskPix;
  QLabel* m_labelTocType;
+
+ QWidget* m_infoWidget;
  QLabel* m_labelSize;
  QLabel* m_labelRemaining;
  QLabel* m_labelMediumManufactor;
@@ -32,8 +36,19 @@ class K3bDiskInfoView : public K3bCdContentsView
  QLabel* m_labelCdrw;
  QLabel* m_labelAppendable;
  QLabel* m_labelSessions;
+
+ QWidget* m_isoInfoWidget;
+ QLabel* m_labelIsoId;
+ QLabel* m_labelIsoSystemId;
+ QLabel* m_labelIsoVolumeId;
+ QLabel* m_labelIsoVolumeSetId;
+ QLabel* m_labelIsoPublisherId;
+ QLabel* m_labelIsoPreparerId;
+ QLabel* m_labelIsoApplicationId;
+
+ QFrame* m_line;
+
  KListView* m_trackView;
- QWidget* m_infoWidget;
 };
 
 

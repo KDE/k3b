@@ -35,6 +35,7 @@ class K3bDiskInfoDetector : public QObject
   void fetchDiskInfo();
   void fetchTocInfo();
   void testForDvd();
+  void fetchIsoInfo();
 
  private:
   K3bDevice* m_device;

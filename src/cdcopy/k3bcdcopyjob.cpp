@@ -104,13 +104,13 @@ void K3bCdCopyJob::diskInfoReady( const K3bDiskInfo& info )
 
   switch( info.tocType ) {
   case K3bDiskInfo::DATA:
-    emit infoMessage( i18n("Source disk seems to be data cd"), K3bJob::STATUS );
+    emit infoMessage( i18n("Source disk seems to be data cd"), K3bJob::INFO );
     break;
   case K3bDiskInfo::AUDIO:
-    emit infoMessage( i18n("Source disk seems to be audio cd"), K3bJob::STATUS );
+    emit infoMessage( i18n("Source disk seems to be audio cd"), K3bJob::INFO );
     break;
   case K3bDiskInfo::MIXED:
-    emit infoMessage( i18n("Source disk seems to be mixed mode cd"), K3bJob::STATUS );
+    emit infoMessage( i18n("Source disk seems to be mixed mode cd"), K3bJob::INFO );
     break;
   }
 
@@ -477,7 +477,7 @@ void K3bCdCopyJob::parseCdrdaoStdout( KProcess*, char* data, int len )
       if( ok ) {
 	emit infoMessage( i18n("Reading track %1").arg(trNum), K3bJob::PROCESS );
       }
-      emit infoMessage( str, K3bJob::PROCESS );
+      //      emit infoMessage( str, K3bJob::PROCESS );
     }
     else if( str.startsWith( "Found ISRC" ) ) {
       emit infoMessage( i18n("Found ISRC code"), K3bJob::PROCESS );
@@ -519,14 +519,14 @@ void K3bCdCopyJob::createCdrdaoProgress( int made, int size )
   if( !m_onTheFly )
     y++;
 
-  emit percent( 100*(y+(made/size))/x );
+  emit percent( 100 * ( (double)y + ((double)made/(double)size) ) / x );
   emit subPercent( 100 * made / size );
 }
 
 
 void K3bCdCopyJob::startNewCdrdaoTrack()
 {
-
+  emit newSubTask( i18n("Writing") );
 }
 
 

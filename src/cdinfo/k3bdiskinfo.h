@@ -42,6 +42,15 @@ class K3bDiskInfo
   bool empty;
   int tocType;
 
+  // iso stuff
+  QString isoId;
+  QString isoSystemId;
+  QString isoVolumeId;
+  QString isoVolumeSetId;
+  QString isoPublisherId;
+  QString isoPreparerId;
+  QString isoApplicationId;
+
   bool valid;
 
   K3bDevice* device;

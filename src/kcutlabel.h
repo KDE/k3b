@@ -20,6 +20,8 @@ class KCutLabel : public QLabel
   KCutLabel( QWidget *parent = 0, const char *name = 0);
   KCutLabel( const QString &text, QWidget *parent = 0, const char *name = 0 );
 
+  virtual QSize minimumSizeHint() const;
+
  public slots:
   void setText( const QString & );
 

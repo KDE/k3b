@@ -91,7 +91,7 @@ void K3bFileView::setupGUI()
   layout->setAutoAdd( true );
 
   m_dirOp           = new KDirOperator( QDir::home().absPath(), this );
-  KToolBar* toolBar = new KToolBar( k3bMain(), this, "fileviewtoolbar" );
+  KToolBar* toolBar = new KToolBar( this, "fileviewtoolbar" );
 
   // PrivateFileView just adds d'n'd support (can hopefully be replaced with default detailView in KDE3)
   PrivateFileView* fileView = new PrivateFileView( m_dirOp, "fileview" );

@@ -45,7 +45,6 @@
 
 
 
-
 K3bPlayListViewItem::K3bPlayListViewItem( const QString& filename, QListView* parent )
   : KListViewItem( parent ), m_filename( filename )
 {

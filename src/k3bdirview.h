@@ -41,7 +41,7 @@ class K3bDiskInfoView;
 class KActionCollection;
 class K3bDiskInfoDetector;
 class KActionMenu;
-
+class QScrollView;
 
 /**
   *@author Sebastian Trueg
@@ -66,10 +66,12 @@ class K3bDirView : public QVBox
   void slotDetectDiskInfo( K3bDevice* dev );
   void slotShowDiskInfo();
   void slotUnmountDisk();
+  void slotEjectDisk();
   void slotFileTreeContextMenu( K3bDevice* dev, const QPoint& p );
 
  private:
   QWidgetStack* m_viewStack;
+  QScrollView* m_scroll;
 
   K3bCdView*   m_cdView;
   K3bFilmView* m_filmView;

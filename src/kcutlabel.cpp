@@ -19,6 +19,14 @@ KCutLabel::KCutLabel( QWidget *parent, const char *name )
   setSizePolicy(myLabelSizePolicy);
 }
 
+QSize KCutLabel::minimumSizeHint() const
+{
+  QSize sh = QLabel::minimumSizeHint();
+  sh.setWidth(-1);
+  return sh;
+}
+
+
 void KCutLabel::resizeEvent( QResizeEvent * ) {
   cutTextToLabel();
 }

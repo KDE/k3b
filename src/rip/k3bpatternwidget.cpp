@@ -37,6 +37,7 @@
 #include <qstringlist.h>
 #include <qfont.h>
 #include <qtooltip.h>
+#include <qheader.h>
 
 #include <klocale.h>
 #include <kdialog.h>
@@ -89,6 +90,7 @@ void K3bPatternWidget::setup(){
     QVGroupBox *groupPatternDirTree = new QVGroupBox(m_groupPatternDir, "filename_patterndir" );
     groupPatternDirTree->setTitle( i18n( "Base Directory" ) );
     m_kioTree = new K3bFileTreeView( groupPatternDirTree );
+    m_kioTree->header()->hide();
     m_kioTree->addDefaultBranches();
     //QToolTip::add( m_kioTree, i18n("Basic directory where the songs will be ripped to."));
     m_dirs1 = new QVButtonGroup( i18n("Directory group 1"), m_groupPatternDir );

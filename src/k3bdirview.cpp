@@ -38,6 +38,7 @@
 #include <qvaluelist.h>
 #include <qlabel.h>
 #include <qwidgetstack.h>
+#include <qscrollview.h>
 
 // KDE-includes
 #include <kmimetype.h>
@@ -79,10 +80,11 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
   connect( m_diskInfoDetector, SIGNAL(diskInfoReady(const K3bDiskInfo&)),
 	   this, SLOT(slotDiskInfoReady(const K3bDiskInfo&)) );
 
-  KToolBar* toolBar = new KToolBar( k3bMain(), this, "dirviewtoolbar" );
+  KToolBar* toolBar = new KToolBar( this, "dirviewtoolbar" );
 
   m_mainSplitter = new QSplitter( this );
   m_fileTreeView = new K3bFileTreeView( m_mainSplitter );
+
   m_viewStack    = new QWidgetStack( m_mainSplitter );
   m_fileView     = new K3bFileView(m_viewStack, "fileView");
   m_cdView       = new K3bCdView(m_viewStack, "cdview");
@@ -92,7 +94,6 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
   m_viewStack->raiseWidget( m_fileView );
 
   m_fileTreeView->addDefaultBranches();
-
 
   // split
   QValueList<int> sizes = m_mainSplitter->sizes();
@@ -122,8 +123,13 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
 					 this, "disk_info");
   KAction* actionUnmount = new KAction( i18n("&Unmount"), "cdrom_unmount", 0, this, SLOT(slotUnmountDisk()), 
 					this, "disk_unmount");
+  KAction* actionEject = new KAction( i18n("&Eject"), "", 0, this, SLOT(slotEjectDisk()), 
+					this, "disk_eject");
+
   m_devicePopupMenu->insert( actionDiskInfo );
+  m_devicePopupMenu->insert( new KActionSeparator( this ) );
   m_devicePopupMenu->insert( actionUnmount );
+  m_devicePopupMenu->insert( actionEject );
 
 
   connect( m_urlCombo, SIGNAL(returnPressed(const QString&)), this, SLOT(slotDirActivated(const QString&)) );
@@ -192,7 +198,7 @@ void K3bDirView::slotDiskInfoReady( const K3bDiskInfo& info )
 
 void K3bDirView::slotMountDevice( K3bDevice* device )
 {
-  QString mountPoint = device->mountPoint();
+  const QString& mountPoint = device->mountPoint();
 
   if( !mountPoint.isEmpty() ){
     if( KIO::findDeviceMountPoint( device->ioctlDevice() ).isEmpty() )
@@ -229,6 +235,14 @@ void K3bDirView::slotUnmountDisk()
 {
   if( m_lastDevice ) {
     KIO::unmount( m_lastDevice->mountPoint() );    
+  }
+}
+
+
+void K3bDirView::slotEjectDisk()
+{
+  if( m_lastDevice ) {
+    m_lastDevice->eject();
   }
 }
 

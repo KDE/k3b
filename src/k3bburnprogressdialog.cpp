@@ -262,8 +262,11 @@ void K3bBurnProgressDialog::displayInfo( const QString& infoString, int type )
     currentInfoItem->setPixmap( 0, SmallIcon( "cdwriter_unmount" ) );
     break;
   case K3bJob::STATUS:
-  default:
     currentInfoItem->setPixmap( 0, SmallIcon( "ok" ) );
+    break;
+  case K3bJob::INFO:
+  default:
+    currentInfoItem->setPixmap( 0, SmallIcon( "info" ) );
   }
 
   m_viewInfo->ensureVisible( 0, currentInfoItem->itemPos() + currentInfoItem->height() );

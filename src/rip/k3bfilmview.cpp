@@ -61,8 +61,8 @@ K3bFilmView::~K3bFilmView(){
 
 void K3bFilmView::setupGui(){
     KToolBar *toolBar = new KToolBar( k3bMain(), this, "filmviewtoolbar" );
-    KIconLoader *_il = new KIconLoader("k3b");
-    KAction *grab = new KAction(i18n("&Rip CD"), _il->iconPath("editcopy", KIcon::Toolbar), 0, this,
+
+    KAction *grab = new KAction(i18n("&Rip CD"), "editcopy", 0, this,
                                SLOT( slotRip()), this);
     grab->plug( toolBar );
 
@@ -72,6 +72,7 @@ void K3bFilmView::setupGui(){
     QGridLayout *_mainLayout = new QGridLayout( this );
     _mainLayout->addMultiCellWidget( toolBar, 0, 0, 0, 0 );
     _mainLayout->addMultiCellWidget( mainAVGroup, 1, 1, 0, 0 );
+
 
     QGridLayout *_layout = new QGridLayout( mainAVGroup->layout() );
     _layout->setSpacing( KDialog::spacingHint() );

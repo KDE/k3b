@@ -9,10 +9,7 @@
 #include <kprocess.h>
 
 #include <qtimer.h>
-
-extern "C" {
-#include <cdda_interface.h>
-}
+#include <qfile.h>
 
 
 
@@ -327,12 +324,17 @@ void K3bDiskInfoDetector::slotTocInfoFinished()
       else
 	m_info.tocType = K3bDiskInfo::AUDIO;
     }
-    else
+    else if( dataTracks > 0 ) {
       m_info.tocType = K3bDiskInfo::DATA;
+      fetchIsoInfo();
+    }
 
     if( audioTracks + dataTracks > 0 ) {
       m_info.empty = false;
       m_info.noDisk = false;
+    }
+    else {
+      m_info.empty = true;
     }
   
     // atip is only readable on cd-writers
@@ -340,9 +342,30 @@ void K3bDiskInfoDetector::slotTocInfoFinished()
       fetchDiskInfo();
     }
     else {
-      testForDvd();      
+      testForDvd();
     }
   }
+}
+
+
+void K3bDiskInfoDetector::fetchIsoInfo()
+{
+  QFile f( m_device->ioctlDevice() );
+  f.open( IO_Raw | IO_ReadOnly );
+
+  char buf[17*2048];
+
+  if( f.readBlock( buf, 17*2048 ) == 17*2048 ) {
+    m_info.isoId = QString::fromLatin1( &buf[16*2048+1], 6 ).stripWhiteSpace();
+    m_info.isoSystemId = QString::fromLatin1( &buf[16*2048+8], 32 ).stripWhiteSpace();
+    m_info.isoVolumeId = QString::fromLatin1( &buf[16*2048+40], 32 ).stripWhiteSpace();
+    m_info.isoVolumeSetId = QString::fromLatin1( &buf[16*2048+190], 128 ).stripWhiteSpace();
+    m_info.isoPublisherId = QString::fromLatin1( &buf[16*2048+318], 128 ).stripWhiteSpace();
+    m_info.isoPreparerId = QString::fromLatin1( &buf[16*2048+446], 128 ).stripWhiteSpace();
+    m_info.isoApplicationId = QString::fromLatin1( &buf[16*2048+574], 128 ).stripWhiteSpace();
+  }
+
+  f.close();
 }
 
 

@@ -20,6 +20,7 @@
 
 #include <klistview.h>
 #include <arts/kmedia2.h>
+#include <arts/kartsdispatcher.h>
 
 
 class QTimer;
@@ -168,7 +169,7 @@ Q_OBJECT
 
  private:
   Arts::PlayObject m_playObject;
-  Arts::Dispatcher m_dispatcher;
+  KArtsDispatcher m_dispatcher;
 
   QString m_filename;
 

@@ -4,12 +4,15 @@
 #include "k3bdiskinfo.h"
 #include "k3bdiskinfodetector.h"
 #include "../k3bglobals.h"
+#include "../kcutlabel.h"
 
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qfont.h>
 #include <qcolor.h>
 #include <qheader.h>
+#include <qgroupbox.h>
+#include <qstring.h>
 
 #include <kdialog.h>
 #include <klocale.h>
@@ -31,10 +34,6 @@ K3bDiskInfoView::K3bDiskInfoView( QWidget* parent, const char* name )
   f.setPointSize( f.pointSize() + 2 );
   m_labelTocType->setFont( f );
 
-  QFrame* line = new QFrame( this );
-  line->setMargin( 0 );
-  line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
-
   m_infoWidget            = new QWidget( this );
 
   QGridLayout* infoLayout = new QGridLayout( m_infoWidget );
@@ -48,16 +47,6 @@ K3bDiskInfoView::K3bDiskInfoView( QWidget* parent, const char* name )
   m_labelCdrw             = new QLabel( m_infoWidget );
   m_labelAppendable       = new QLabel( m_infoWidget );
   m_labelSessions         = new QLabel( m_infoWidget );
-  f = m_labelSize->font();
-  f.setBold( true );
-  m_labelSize->setFont( f );
-  m_labelRemaining->setFont( f );
-  m_labelMediumManufactor->setFont( f );
-  m_labelMediumType->setFont( f );
-  m_labelCdrw->setFont( f );
-  m_labelAppendable->setFont( f );
-  m_labelSessions->setFont( f );
-
 
   infoLayout->addWidget( new QLabel( i18n("Total Capacity of medium:"), m_infoWidget ), 0, 0 );
   infoLayout->addWidget( new QLabel( i18n("Remaining Capacity:"), m_infoWidget ), 1, 0 );
@@ -77,6 +66,66 @@ K3bDiskInfoView::K3bDiskInfoView( QWidget* parent, const char* name )
   infoLayout->addColSpacing( 2, 10 );
   infoLayout->setColStretch( 5, 1 );
 
+
+  m_isoInfoWidget = new QWidget( this );
+  QGridLayout* isoInfoLayout = new QGridLayout( m_isoInfoWidget );
+  isoInfoLayout->setMargin( 0 );
+  isoInfoLayout->setSpacing( KDialog::spacingHint() );
+
+  // we use KCutLabels here since some of the values go up to 128 characters
+  // disabled because K3b hangs when text is set (probably some endless loop with resizing)
+//   m_labelIsoId            = new KCutLabel( m_isoInfoWidget );
+//   m_labelIsoSystemId      = new KCutLabel( m_isoInfoWidget );
+//   m_labelIsoVolumeId      = new KCutLabel( m_isoInfoWidget );
+//   m_labelIsoVolumeSetId   = new KCutLabel( m_isoInfoWidget );
+//   m_labelIsoPublisherId   = new KCutLabel( m_isoInfoWidget );
+//   m_labelIsoPreparerId    = new KCutLabel( m_isoInfoWidget );
+//   m_labelIsoApplicationId = new KCutLabel( m_isoInfoWidget );
+
+  m_labelIsoId            = new QLabel( m_isoInfoWidget );
+  m_labelIsoSystemId      = new QLabel( m_isoInfoWidget );
+  m_labelIsoVolumeId      = new QLabel( m_isoInfoWidget );
+  m_labelIsoVolumeSetId   = new QLabel( m_isoInfoWidget );
+  m_labelIsoPublisherId   = new QLabel( m_isoInfoWidget );
+  m_labelIsoPreparerId    = new QLabel( m_isoInfoWidget );
+  m_labelIsoApplicationId = new QLabel( m_isoInfoWidget );
+
+
+  isoInfoLayout->addWidget( new QLabel( i18n("Id:"), m_isoInfoWidget ), 0, 0 );
+  isoInfoLayout->addWidget( m_labelIsoId, 0, 1 );
+  isoInfoLayout->addWidget( new QLabel( i18n("System Id:"), m_isoInfoWidget ), 1, 0 );
+  isoInfoLayout->addWidget( m_labelIsoSystemId, 1, 1 );
+  isoInfoLayout->addWidget( new QLabel( i18n("Volume Id:"), m_isoInfoWidget ), 2, 0 );
+  isoInfoLayout->addWidget( m_labelIsoVolumeId, 2, 1 );
+  isoInfoLayout->addWidget( new QLabel( i18n("Volume Set Id:"), m_isoInfoWidget ), 3, 0 );
+  isoInfoLayout->addWidget( m_labelIsoVolumeSetId, 3, 1 );
+  isoInfoLayout->addWidget( new QLabel( i18n("Publisher Id:"), m_isoInfoWidget ), 0, 3 );
+  isoInfoLayout->addWidget( m_labelIsoPublisherId, 0, 4 );
+  isoInfoLayout->addWidget( new QLabel( i18n("Preparer Id:"), m_isoInfoWidget ), 1, 3 );
+  isoInfoLayout->addWidget( m_labelIsoPreparerId, 1, 4 );
+  isoInfoLayout->addWidget( new QLabel( i18n("Application Id:"), m_isoInfoWidget ), 2, 3 );
+  isoInfoLayout->addWidget( m_labelIsoApplicationId, 2, 4 );
+
+  isoInfoLayout->addColSpacing( 2, 10 );
+  isoInfoLayout->setColStretch( 5, 1 );
+
+  f = m_labelSize->font();
+  f.setBold( true );
+  m_labelSize->setFont( f );
+  m_labelRemaining->setFont( f );
+  m_labelMediumManufactor->setFont( f );
+  m_labelMediumType->setFont( f );
+  m_labelCdrw->setFont( f );
+  m_labelAppendable->setFont( f );
+  m_labelSessions->setFont( f );
+  m_labelIsoId->setFont( f );
+  m_labelIsoSystemId->setFont( f );
+  m_labelIsoVolumeId->setFont( f );
+  m_labelIsoVolumeSetId->setFont( f );
+  m_labelIsoPublisherId->setFont( f );
+  m_labelIsoPreparerId->setFont( f );
+  m_labelIsoApplicationId->setFont( f );
+
   m_trackView = new KListView( this );
   m_trackView->addColumn( i18n("Tracks") );
   m_trackView->addColumn( i18n("First Sector") );
@@ -88,12 +137,22 @@ K3bDiskInfoView::K3bDiskInfoView( QWidget* parent, const char* name )
   m_trackView->header()->setClickEnabled( false );
 
 
+  QFrame* line = new QFrame( this );
+  line->setMargin( 0 );
+  line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+
+  m_line = new QFrame( this );
+  m_line->setMargin( 0 );
+  m_line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+
   mainLayout->addWidget( m_labelDiskPix, 0, 0 );
   mainLayout->addWidget( m_labelTocType, 0, 1 );
   mainLayout->addMultiCellWidget( line, 1, 1, 0, 1 );
   mainLayout->addMultiCellWidget( m_infoWidget, 2, 2, 0, 1 );
-  mainLayout->addRowSpacing( 3, 10 );
-  mainLayout->addMultiCellWidget( m_trackView, 4, 4, 0, 1 );
+  mainLayout->addMultiCellWidget( m_line, 3, 3, 0, 1 );
+  mainLayout->addMultiCellWidget( m_isoInfoWidget, 4, 4, 0, 1 );
+  mainLayout->addRowSpacing( 5, 10 );
+  mainLayout->addMultiCellWidget( m_trackView, 6, 6, 0, 1 );
   mainLayout->setColStretch( 1, 1 );
 }
 
@@ -110,6 +169,8 @@ void K3bDiskInfoView::displayInfo( const K3bDiskInfo& info )
   // first check if there is a cd
   if( info.noDisk ) {
     m_infoWidget->hide();
+    m_isoInfoWidget->hide();
+    m_line->hide();
     (void)new QListViewItem( m_trackView, i18n("No disk") );
     m_labelTocType->setText( i18n("No disk in drive") );
     m_labelDiskPix->setPixmap( SmallIcon( "stop" ) );
@@ -117,9 +178,12 @@ void K3bDiskInfoView::displayInfo( const K3bDiskInfo& info )
 
 
   else {
+    bool showLine = false;
+
     // check if we have some atip info
     if( info.size > 0 || !info.mediumManufactor.isEmpty() || info.sessions > 0 ) {
       m_infoWidget->show();
+      showLine = true;
 
       if( info.size > 0 )
 	m_labelSize->setText( QString("%1 (%2 MB)").arg( K3b::framesToString(info.size) ).arg(info.size*2048/1024/1024) );
@@ -150,6 +214,29 @@ void K3bDiskInfoView::displayInfo( const K3bDiskInfo& info )
       m_infoWidget->hide();
     }
 
+    if( !info.empty && info.tocType == K3bDiskInfo::DATA ) {
+      m_isoInfoWidget->show();
+      if( showLine ) showLine = true;
+
+      m_labelIsoId->setText( info.isoId.isEmpty() ? QString("-") : info.isoId );
+      m_labelIsoSystemId->setText( info.isoSystemId.isEmpty() ? QString("-") : info.isoSystemId );
+      m_labelIsoVolumeId->setText( info.isoVolumeId.isEmpty() ? QString("-") : info.isoVolumeId );
+      m_labelIsoVolumeSetId->setText( info.isoVolumeSetId.isEmpty() ? QString("-") : info.isoVolumeSetId );
+      m_labelIsoPublisherId->setText( info.isoPublisherId.isEmpty() ? QString("-") : info.isoPublisherId );
+      m_labelIsoPreparerId->setText( info.isoPreparerId.isEmpty() ? QString("-") : info.isoPreparerId );
+      m_labelIsoApplicationId->setText( info.isoApplicationId.isEmpty() ? QString("-") : info.isoApplicationId );
+    }
+    else {
+      m_isoInfoWidget->hide();
+      showLine = false;
+    }
+       
+    if( showLine ) {
+      m_line->show();
+    }
+    else
+      m_line->hide();
+    
 
     if( info.empty ) {
       m_labelTocType->setText( i18n("Disk is empty") );

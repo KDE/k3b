@@ -39,7 +39,7 @@ class K3bJob : public QObject
 
   virtual bool active() const { return false; }
 
-  enum MessageType { STATUS, PROCESS, ERROR };
+  enum MessageType { STATUS, PROCESS, ERROR, INFO };
 
  protected:
   K3bJob( QObject* parent = 0 );
