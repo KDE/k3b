@@ -170,7 +170,7 @@ void K3bDiskInfoView::displayInfo( K3bDevice::DiskInfoDetector* did )
   else {
 
     if( ngInfo.empty() ) {
-      setTitle( i18n("Empty %1 media").arg(K3bDevice::mediaTypeString( ngInfo.mediaType(), true )) );
+      setTitle( i18n("Empty %1 Media").arg(K3bDevice::mediaTypeString( ngInfo.mediaType(), true )) );
       setRightPixmap( K3bTheme::MEDIA_EMPTY );
     } 
     else {
@@ -194,7 +194,7 @@ void K3bDiskInfoView::displayInfo( K3bDevice::DiskInfoDetector* did )
 	setRightPixmap( K3bTheme::MEDIA_MIXED );
         break;
       default:
-	setTitle( i18n("Unknown disk type") );
+	setTitle( i18n("Unknown Disk Type") );
 	setRightPixmap( K3bTheme::MEDIA_NONE );
       }
     }

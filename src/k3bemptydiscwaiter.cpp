@@ -638,7 +638,7 @@ void K3bEmptyDiscWaiter::slotReloadingAfterErasingFinished( K3bDevice::DeviceHan
 
   if( !dh->success() ) {
     KMessageBox::error( parentWidgetToUse(), i18n("Unable to reload media. Please reload manually."),
-			i18n("Reload failed") );
+			i18n("Reload Failed") );
   }
   
   // now just check the disk for the last time

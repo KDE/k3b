@@ -663,7 +663,7 @@ bool K3bDvdCopyJob::waitForDvd()
 					    "for real.")
 				       .arg(m_writerDevice->vendor())
 				       .arg(m_writerDevice->description()),
-				       i18n("No simulation with DVD-R(W)") ) == KMessageBox::No ) {
+				       i18n("No Simulation with DVD-R(W)") ) == KMessageBox::No ) {
 	  cancel();
 	  return false;
 	}

@@ -615,7 +615,7 @@ bool K3bDvdJob::waitForDvd()
 				       i18n("K3b does not support simulation with DVD+R(W) media. "
 					    "Do you really want to continue? The media will be written "
 					    "for real."),
-				       i18n("No simulation with DVD+R(W)") ) == KMessageBox::No ) {
+				       i18n("No Simulation with DVD+R(W)") ) == KMessageBox::No ) {
 	  cancel();
 	  return false;
 	}
@@ -646,7 +646,7 @@ bool K3bDvdJob::waitForDvd()
 					    "for real.")
 				       .arg(m_doc->burner()->vendor())
 				       .arg(m_doc->burner()->description()),
-				       i18n("No simulation with DVD-R(W)") ) == KMessageBox::No ) {
+				       i18n("No Simulation with DVD-R(W)") ) == KMessageBox::No ) {
 	  cancel();
 	  return false;
 	}

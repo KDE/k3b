@@ -236,7 +236,7 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
             if ( numOfTracks() > 0 && vcdOptions() ->mpegVersion() != mpegVersion ) {
                 KMessageBox::error( kapp->mainWidget(), "(" + url.path() + ")\n" +
                                     i18n( "You cannot mix MPEG1 and MPEG2 video files.\nPlease start a new Project for this filetype.\nResample not implemented in K3b yet." ),
-                                    i18n( "Wrong File Type for this Project" ) );
+                                    i18n( "Wrong File Type for This Project" ) );
 
                 delete Mpeg;
                 return 0;

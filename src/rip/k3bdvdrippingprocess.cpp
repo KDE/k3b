@@ -398,7 +398,7 @@ QString K3bDvdRippingProcess::getFilename() {
 
     QFile destFile( result );
     if( destFile.exists() ) {
-        int button = QMessageBox::critical( 0, i18n("Ripping Error"), i18n("%1 already exists." ).arg(result), i18n("Overwrite"), i18n("Cancel") );
+        int button = QMessageBox::critical( 0, i18n("Ripping Error"), i18n("%1 already exists." ).arg(result), i18n("Overwrite"), i18n("&Cancel") );
         if( button == 0 )
             return result;
         else

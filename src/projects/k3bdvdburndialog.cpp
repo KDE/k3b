@@ -205,7 +205,7 @@ void K3bDvdBurnDialog::toggleAllOptions()
 	  m_comboMultisession->multiSessionMode() == K3bDataDoc::CONTINUE ) {
 	KMessageBox::information( this, i18n("K3b does only support writing multisession DVDs on-the-fly. "
 					     "Multisession has been disabled."),
-				  i18n("DVD multisession"),
+				  i18n("DVD Multisession"),
 				  "dvd_multisession_only_on_the_fly" );
       }
       m_comboMultisession->setForceNoMultisession( true );

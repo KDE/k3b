@@ -108,7 +108,7 @@ void K3bIsoImageVerificationJob::slotMediaReloaded( bool success )
 {
   if( !success )
     KMessageBox::information( qApp->activeWindow(), i18n("Please reload the medium and press 'ok'"),
-			      i18n("Unable to close the tray") );
+			      i18n("Unable to Close the Tray") );
 
   emit newTask( i18n("Calculating the image's md5sum") );
   
