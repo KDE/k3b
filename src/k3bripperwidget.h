@@ -20,28 +20,36 @@
 
 #include <qwidget.h>
 #include <qvariant.h>
+#include <qarray.h>
+#include <qthread.h>
 
+class K3bCddaCopy;
+class K3bCdView;
 class QVBoxLayout;
 class QHBoxLayout;
 class QGridLayout;
 class KComboBox;
 class KListView;
+class KProgress;
 class QGroupBox;
 class QLabel;
 class QLineEdit;
 class QListViewItem;
 class QPushButton;
+class QString;
+class QStringList;
+class QCloseEvent;
 
 /**
   *@author Sebastian Trueg
   */
 
-class K3bRipperWidget : public QWidget  {
+class K3bRipperWidget : public QWidget {
    Q_OBJECT
 
 public: 
-	K3bRipperWidget(QWidget *parent=0, const char *name=0);
-	~K3bRipperWidget();
+    K3bRipperWidget(QString device, K3bCdView *parent, const char *name=0);
+    ~K3bRipperWidget();
 
     QGroupBox* GroupBox3;
     KComboBox* m_comboSource;
@@ -50,10 +58,27 @@ public:
     QLabel* TextLabel2;
     QLineEdit* m_editRipPath;
     QPushButton* m_buttonStart;
+    KProgress *m_progress;
+    K3bCdView *m_cdview;
+    long m_bytes;
+    void addTrack(QListViewItem *item);
+    void setTrackNumbers(QArray<int> tracks);
+    void setFileList(QStringList files);
 
 protected:
     QGridLayout* Form1Layout;
     QGridLayout* GroupBox3Layout;
+
+    void closeEvent( QCloseEvent *e);
+
+private:
+    QString m_device;
+    QArray<int> m_tracks;
+    QStringList m_list;
+    K3bCddaCopy *m_copy;
+private slots:
+    void rip();
+    void waitForClose();
 };
 
 #endif
