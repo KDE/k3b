@@ -2,9 +2,6 @@
 <kpartgui name="k3b" version="0.6">
 <MenuBar>
   <Action name="window_menu"/>
-  <Menu name="file"><text>&amp;Project</text>
-  	<Action name="file_export" append="save_merge"/>
-  </Menu>
   <Menu name="tools"><text>&amp;Tools</text>
   	<Action name="tools_copy_cd"/>
 	<Action name="tools_blank_cdrw"/>

@@ -222,7 +222,6 @@ class K3bMainWindow : public KDockMainWindow
   /** asks for saving if the file is modified, then closes the actual file and window*/
   void slotFileClose();
 
-  void slotFileExport();
   void slotFileBurn();
   void slotDirDockHidden();
   void slotSettingsConfigure();
@@ -314,7 +313,6 @@ class K3bMainWindow : public KDockMainWindow
   KAction* actionFileBurn;
   KAction* actionSettingsConfigure;
   KAction* actionSettingsK3bSetup;
-  KAction* actionFileExport;
   KAction* actionToolsBlankCdrw;
   KAction* actionToolsDivxEncoding;
   KAction* actionToolsWriteIsoImage;

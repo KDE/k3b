@@ -123,7 +123,6 @@ K3bMainWindow::K3bMainWindow()
   actionFileSave->setEnabled(false);
   actionFileSaveAs->setEnabled(false);
   actionFileBurn->setEnabled( false );
-  actionFileExport->setEnabled( false );
   actionProjectAddFiles->setEnabled( false );
 
   actionDataImportSession->setEnabled( false );
@@ -166,8 +165,6 @@ void K3bMainWindow::initActions()
 
   actionFileBurn = new KAction( i18n("&Burn..."), "cdwriter_unmount", CTRL + Key_B, this, SLOT(slotFileBurn()),
 			  actionCollection(), "file_burn");
-  actionFileExport = new KAction( i18n("E&xport..."), "revert", 0, this, SLOT(slotFileExport()),
-			    actionCollection(), "file_export" );
 
   actionFileNewMenu = new KActionMenu( i18n("&New Project"), "filenew", actionCollection(), "file_new" );
   actionFileNewAudio = new KAction(i18n("New &Audio Project"), "sound", 0, this, SLOT(slotNewAudioDoc()),
@@ -366,7 +363,6 @@ void K3bMainWindow::createClient(K3bDoc* doc)
   m_documentTab->showPage( w );
 
   actionFileBurn->setEnabled( true );
-  actionFileExport->setEnabled( true );
   actionFileSave->setEnabled( true );
   actionFileSaveAs->setEnabled( true );
   actionProjectAddFiles->setEnabled( true );
@@ -684,25 +680,6 @@ void K3bMainWindow::fileSaveAs( K3bDoc* doc )
 }
 
 
-void K3bMainWindow::slotFileExport()
-{
-  if( K3bAudioView* m = dynamic_cast<K3bAudioView*>( activeView() ) ) {
-    QString file = KFileDialog::getSaveFileName( QDir::home().absPath(), "*.toc", k3bMain(), i18n("Export to cdrdao-toc File") );
-    if( !file.isEmpty() ) {
-      if( !((K3bAudioDoc*)m->getDocument())->writeTOC( file ) )
-	KMessageBox::error( this, i18n("Could not write to file %1").arg( file ), i18n("I/O Error") );
-    }
-  }
-  else if( K3bDataView* m = dynamic_cast<K3bDataView*>( activeView() ) ) {
-    QString file = KFileDialog::getSaveFileName( QDir::home().absPath(), "*.mkisofs", k3bMain(), i18n("Export to mkisofs-pathspec File") );
-    if( !file.isEmpty() ) {
-      if( ((K3bDataDoc*)m->getDocument())->writePathSpec( file ).isEmpty() )
-	KMessageBox::error( this, i18n("Could not write to file %1").arg( file ), i18n("I/O Error") );
-    }
-  }
-}
-
-
 void K3bMainWindow::slotFileClose()
 {
   slotStatusMsg(i18n("Closing file..."));
@@ -716,7 +693,6 @@ void K3bMainWindow::slotFileClose()
     actionFileSave->setEnabled(false);
     actionFileSaveAs->setEnabled(false);
     actionFileBurn->setEnabled( false );
-    actionFileExport->setEnabled( false );
     actionProjectAddFiles->setEnabled( false );
   }
 }
