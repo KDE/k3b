@@ -120,6 +120,8 @@ void K3bCdCopyJob::diskInfoReady( const K3bDiskInfo& info ) {
     return;
   }
 
+  if( info.sessions > 1 ) 
+    m_cdrdaowriter->setSession(1);
 
   // TODO: check size and free space on disk
 
