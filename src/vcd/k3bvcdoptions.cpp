@@ -29,6 +29,7 @@ K3bVcdOptions::K3bVcdOptions()
   : m_restriction( 0 ),
     m_pbcenabled( false ),
     m_volumeID( i18n("Project name", "VIDEOCD") ),
+    m_albumID( "" ),
     m_volumeSetId( "" ),
     m_publisher( QString("K3b - Version %1").arg(k3bcore->version()) ),
     m_applicationId( "CDI/CDI_VCD.APP;1" ),
@@ -98,7 +99,7 @@ K3bVcdOptions K3bVcdOptions::load( KConfig* c )
   options.setVolumeNumber( ( c->readEntry( "volume_number", QString("%1").arg(options.volumeNumber()) )).toInt() );
   options.setAutoDetect( c->readBoolEntry( "autodetect", options.AutoDetect() ) );
   options.setCdiSupport( c->readBoolEntry( "cdi_support", options.CdiSupport() ) );
-  options.setBrokenSVcdMode( c->readBoolEntry( "broken_svcd_mode", options.BrokenSVcdMode() ) );
+  options.setNonCompliantMode( c->readBoolEntry( "broken_svcd_mode", options.NonCompliantMode() ) );
   options.setSector2336( c->readBoolEntry( "2336_sectors", options.Sector2336() ) );
   options.setUpdateScanOffsets( c->readBoolEntry( "UpdateScanOffsets", options.UpdateScanOffsets() ) );
   options.setRelaxedAps( c->readBoolEntry( "RelaxedAps", options.RelaxedAps() ) );

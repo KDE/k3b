@@ -92,6 +92,7 @@ class K3bVcdTrackDialog : public KDialogBase
 
   void prepareGui();
   void setupPbcTab();
+  void setupPbcKeyTab();
   void setupAudioTab();
   void setupVideoTab();
   void fillGui();

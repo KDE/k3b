@@ -89,37 +89,45 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
 
   QToolTip::add(m_checkCdiSupport, i18n("Enable CD-i Application Support for VideoCD Type 1.1 & 2.0") );
   QToolTip::add(m_editCdiCfg, i18n("Configuration parameters (only for VCD 2.0)") );
-  
+
+  /* TODO
+  QToolTip::add(m_checkPbc, i18n("") );
+  QToolTip::add(m_checkSegmentFolder, i18n("") );
+  QToolTip::add(m_checkRelaxedAps, i18n("") );
+  QToolTip::add(m_checkUpdateScanOffsets, i18n("") );
+  QToolTip::add(m_spinRestriction, i18n("") );
+  */
+    
   // What's This info
   // -------------------------------------------------------------------------  
   QWhatsThis::add( m_radioVcd11, i18n("<p>This is the most basic <b>Video CD</b> specification dating back to 1993, which has the following characteristics:"
-                                      "<ul><li>One mode2 mixed form ISO-9660 track containing file pointers to the information areas.</li>"
-                                      "<li>Up to 98 multiplex-ed MPEG-1 audio/video streams or CD-DA audio tracks.</li>"
-                                      "<li>Up to 500 MPEG sequence entry points used as chapter divisions.</li></ul>"
-                                      "<p>The Video CD specification requires the multiplex-ed MPEG-1 stream to have a CBR of less than 174300 bytes (1394400 bits) per second in order to accommodate single speed CD-ROM drives.<br>"
-                                      "The specification allows for the following two resolutions:"
-                                      "<ul><li>352 x 240 @ 29.97 Hz (NTSC SIF).</li>"
-                                      "<li>352 x 240 @ 23.976 Hz (FILM SIF).</li></ul>"
-                                      "<p>The CBR MPEG-1, layer II audio stream is fixed at 224 kbps with 1 stereo or 2 mono channels."
-                                      "<p><b>It is recommended to keep the video bit-rate under 1151929.1 bps.</b>") );
+                                        "<ul><li>One mode2 mixed form ISO-9660 track containing file pointers to the information areas.</li>"
+                                        "<li>Up to 98 multiplex-ed MPEG-1 audio/video streams or CD-DA audio tracks.</li>"
+                                        "<li>Up to 500 MPEG sequence entry points used as chapter divisions.</li></ul>"
+                                        "<p>The Video CD specification requires the multiplex-ed MPEG-1 stream to have a CBR of less than 174300 bytes (1394400 bits) per second in order to accommodate single speed CD-ROM drives.<br>"
+                                        "The specification allows for the following two resolutions:"
+                                        "<ul><li>352 x 240 @ 29.97 Hz (NTSC SIF).</li>"
+                                        "<li>352 x 240 @ 23.976 Hz (FILM SIF).</li></ul>"
+                                        "<p>The CBR MPEG-1, layer II audio stream is fixed at 224 kbps with 1 stereo or 2 mono channels."
+                                        "<p><b>It is recommended to keep the video bit-rate under 1151929.1 bps.</b>") );
   
   QWhatsThis::add( m_radioVcd20, i18n("<p>About two years after the Video CD 1.1 specification came out, an improved <b>Video CD 2.0</b> standard was published in 1995."
-                                      "<p>This one added the following items to the features already available in the Video CD 1.1 specification:"
-                                      "<ul><li>Support for MPEG segment play items (<b>\"SPI\"</b>), consisting of still pictures, motion pictures and/or audio (only) streams was added.</li>"
-                                      "<li>Note Segment Items::.</li>"
-                                      "<li>Support for interactive playback control (<b>\"PBC\"</b>) was added.</li>"
-                                      "<li>Support for playing related access by providing a scan point index file was added. (<b>\"/EXT/SCANDATA.DAT\"</b>)</li>"
-                                      "<li>Support for closed captions.</li>"
-                                      "<li>Support for mixing NTSC and PAL content.</li></ul>"
-                                      "<p>By adding PAL support to the Video CD 1.1 specification, the following resolutions became available:"
-                                      "<ul><li>352 x 240 @ 29.97 Hz (NTSC SIF).</li>"
-                                      "<li>352 x 240 @ 23.976 Hz (FILM SIF).</li>"
-                                      "<li>352 x 288 @ 25 Hz (PAL SIF).</li></ul>"
-                                      "<p>For segment play items the following audio encodings became available:"
-                                      "<ul><li>Joint stereo, stereo or dual channel audio streams at 128, 192, 224 or 384 kbit/sec bit-rate.</li>"
-                                      "<li>Mono audio streams at 64, 96 or 192 kbit/sec bit-rate.</li></ul>"
-                                      "<p>Also the possibility to have audio only streams and still pictures was provided."
-                                      "<p><b>The bit-rate of multiplex-ed streams should be kept under 174300 bytes/sec (except for single still picture items) in order to accommodate single speed drives.</b>") );
+                                        "<p>This one added the following items to the features already available in the Video CD 1.1 specification:"
+                                        "<ul><li>Support for MPEG segment play items (<b>\"SPI\"</b>), consisting of still pictures, motion pictures and/or audio (only) streams was added.</li>"
+                                        "<li>Note Segment Items::.</li>"
+                                        "<li>Support for interactive playback control (<b>\"PBC\"</b>) was added.</li>"
+                                        "<li>Support for playing related access by providing a scan point index file was added. (<b>\"/EXT/SCANDATA.DAT\"</b>)</li>"
+                                        "<li>Support for closed captions.</li>"
+                                        "<li>Support for mixing NTSC and PAL content.</li></ul>"
+                                        "<p>By adding PAL support to the Video CD 1.1 specification, the following resolutions became available:"
+                                        "<ul><li>352 x 240 @ 29.97 Hz (NTSC SIF).</li>"
+                                        "<li>352 x 240 @ 23.976 Hz (FILM SIF).</li>"
+                                        "<li>352 x 288 @ 25 Hz (PAL SIF).</li></ul>"
+                                        "<p>For segment play items the following audio encodings became available:"
+                                        "<ul><li>Joint stereo, stereo or dual channel audio streams at 128, 192, 224 or 384 kbit/sec bit-rate.</li>"
+                                        "<li>Mono audio streams at 64, 96 or 192 kbit/sec bit-rate.</li></ul>"
+                                        "<p>Also the possibility to have audio only streams and still pictures was provided."
+                                        "<p><b>The bit-rate of multiplex-ed streams should be kept under 174300 bytes/sec (except for single still picture items) in order to accommodate single speed drives.</b>") );
 
    QWhatsThis::add( m_radioSvcd10, i18n("<p>With the upcoming of the DVD-V media, a new VCD standard had to be published in order to be able to keep up with technology, so the Super Video CD specification was called into life 1999."
                                         "<p>In the midst of 2000 a full subset of this <b>Super Video CD</b> specification was published as <b>IEC-62107</b>."
@@ -135,30 +143,42 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
                                         "<li>480 x 576 @ 25 Hz (PAL 2/3 D-2).</li></ul>") );
 
    QWhatsThis::add( m_checkAutoDetect, i18n("<p>If Autodetect is:</p>"
-                                            "<ul><li>ON, than k3b will set the right VideoCD Type.</li>"
-                                            "<li>OFF then the User must set the right VideoCD type himself.</li></ul>"
-					    "<p>You are not sure about the right VideoCD Type? In this case it is a good option to turn Autodetect ON.</p>"
-					    "<p>You will force the VideoCD Type? Then you must turn Autodetect OFF. Usefull for some standalone DVD Players without SVCD support</p>") );
+                                        "<ul><li>ON, than k3b will set the right VideoCD Type.</li>"
+                                        "<li>OFF then the User must set the right VideoCD type himself.</li></ul>"
+                                        "<p>You are not sure about the right VideoCD Type? In this case it is a good option to turn Autodetect ON.</p>"
+                                        "<p>You will force the VideoCD Type? Then you must turn Autodetect OFF. Usefull for some standalone DVD Players without SVCD support</p>") );
    
    QWhatsThis::add( m_checkNonCompliant, i18n("<ul><li>Rename <b>\"/MPEG2\"</b> folder on SVCDs to (non-compliant) \"/MPEGAV\".</li>"
-                                              "<li>Enables the use of the (deprecated) signature <b>\"ENTRYSVD\"</b> instead of <b>\"ENTRYVCD\"</b> for the file <b>\"/SVCD/ENTRY.SVD\"</b>.</li>"
-                                              "<li>Enables the use of the (deprecated) chinese <b>\"/SVCD/TRACKS.SVD\"</b> format which differs from the format defined in the <b>IEC-62107</b> specification.</li></ul>"
-                                              "<p><b>The differences are most exposed on SVCDs containing more than one video track.</b>") );
+                                        "<li>Enables the use of the (deprecated) signature <b>\"ENTRYSVD\"</b> instead of <b>\"ENTRYVCD\"</b> for the file <b>\"/SVCD/ENTRY.SVD\"</b>.</li>"
+                                        "<li>Enables the use of the (deprecated) chinese <b>\"/SVCD/TRACKS.SVD\"</b> format which differs from the format defined in the <b>IEC-62107</b> specification.</li></ul>"
+                                        "<p><b>The differences are most exposed on SVCDs containing more than one video track.</b>") );
 
    QWhatsThis::add( m_check2336, i18n("<p>though most devices will have problems with such an out-of-specification media."
-                                      "<p><b>You may want use this option for images longer than 80 minutes</b>") );
+                                        "<p><b>You may want use this option for images longer than 80 minutes</b>") );
                                               
    QWhatsThis::add( m_checkCdiSupport, i18n("<p>To allow the play of Video-CD's on a CD-i player, the Video-CD standard requires that a CD-i application program must be present."
-                                            "<p>This program is designed to:"
-                                            "<ul><li>provide full play back control as defined in the PSD of the standard</l>"
-                                            "<li>be extremely simple to use and easy-to-learn for the end-user</li></ul>"
-                                            "<p>The program runs on CD-i players equipped with the CDRTOS 1.1(.1) operating system and a Digital Video extension cartridge.") );
+                                        "<p>This program is designed to:"
+                                        "<ul><li>provide full play back control as defined in the PSD of the standard</l>"
+                                        "<li>be extremely simple to use and easy-to-learn for the end-user</li></ul>"
+                                        "<p>The program runs on CD-i players equipped with the CDRTOS 1.1(.1) operating system and a Digital Video extension cartridge.") );
 
    QWhatsThis::add( m_editCdiCfg, i18n("Configuration parameters only available for VideoCD 2.0"
-                                       "<p>The engine works perfectly well when used as is."
-                                       "<p>You have the option to configure the VCD application."
-                                       "<p>You can adapt the colour and / or the shape of the cursor and lots more.") );
+                                        "<p>The engine works perfectly well when used as is."
+                                        "<p>You have the option to configure the VCD application."
+                                        "<p>You can adapt the colour and / or the shape of the cursor and lots more.") );
 
+   /* TODO
+   QWhatsThis::add( m_checkPbc, i18n(""
+                                        "") );
+   QWhatsThis::add( m_checkSegmentFolder, i18n(""
+                                        "") );
+   QWhatsThis::add( m_checkRelaxedAps, i18n(""
+                                        "") );
+   QWhatsThis::add( m_checkUpdateScanOffsets, i18n(""
+                                        "") );
+   QWhatsThis::add( m_spinRestriction, i18n(""
+                                        "") );
+   */
 }
 
 
@@ -179,8 +199,7 @@ void K3bVcdBurnDialog::setupAdvancedTab()
   m_checkUpdateScanOffsets = new QCheckBox( i18n( "Update Scan Offsets" ), m_groupGeneric );
 
   // ------------------------------------------------------- misc group ----
-  m_groupMisc = new QGroupBox( i18n("Misc"), w );
-  m_groupMisc->setColumnLayout(0, Qt::Vertical );
+  m_groupMisc = new QGroupBox( 0, Qt::Vertical, i18n("Misc"), w );
   m_groupMisc->layout()->setSpacing( spacingHint() );
   m_groupMisc->layout()->setMargin( marginHint() );
 
@@ -193,8 +212,8 @@ void K3bVcdBurnDialog::setupAdvancedTab()
   m_spinRestriction->setMaxValue(3);
 
   groupMiscLayout->addWidget( labelRestriction, 1, 0);
-  groupMiscLayout->addMultiCellWidget( m_spinRestriction, 1, 1, 1, 1);
-  groupMiscLayout->setRowStretch( 2, 2 );
+  groupMiscLayout->addMultiCellWidget( m_spinRestriction, 1, 1, 1, 4);
+  groupMiscLayout->setRowStretch( 2, 0 );
 
   // ----------------------------------------------------------------------
   QGridLayout* grid = new QGridLayout( w );
@@ -351,36 +370,45 @@ void K3bVcdBurnDialog::slotOk()
 
 void K3bVcdBurnDialog::loadDefaults()
 {
+
+  K3bVcdOptions o = K3bVcdOptions::defaults();
+  
   m_checkDao->setChecked( true );
   m_checkSimulate->setChecked( false );
   m_checkBurnproof->setChecked( true );
   m_checkRemoveBufferFiles->setChecked( true );
   m_checkOnlyCreateImage->setChecked( false );
 
-  m_editVolumeId->setText( "VIDEOCD" );
-  m_editPublisher->setText( "" );
-  m_editAlbumId->setText( "" );
+  m_checkAutoDetect->setChecked( o.AutoDetect() );
+  m_groupVcdFormat->setDisabled( o.AutoDetect() );
   
-  m_checkAutoDetect->setChecked( true );
-  m_groupVcdFormat->setDisabled( true );
-  
-  m_check2336->setChecked( false );
-  m_checkNonCompliant->setChecked( false );
+  m_check2336->setChecked( o.Sector2336() );
+  m_checkNonCompliant->setChecked( o.NonCompliantMode() );
 
-  m_spinVolumeNumber->setValue( 1 );
-  m_spinVolumeCount->setValue( 1 );
-
-  m_groupCdi->setEnabled( false );
+  m_spinVolumeNumber->setValue( o.volumeNumber() );
+  m_spinVolumeCount->setValue( o.volumeCount() );
 
   if (!m_radioSvcd10->isChecked()) {
-    m_checkCdiSupport->setEnabled(vcdDoc()->vcdOptions()->checkCdiFiles());
-    m_checkCdiSupport->setChecked(m_checkCdiSupport->isEnabled());
+    m_checkCdiSupport->setEnabled( true );
+    m_checkCdiSupport->setChecked( o.CdiSupport() );
+    m_groupCdi->setEnabled( o.CdiSupport() );
+    m_editVolumeId->setText( i18n("VIDEOCD") );
   }
   else {
     m_checkCdiSupport->setEnabled(false);
     m_checkCdiSupport->setChecked(false);
+    m_editVolumeId->setText( i18n("SUPER VIDEOCD") );
   }
 
+  m_editPublisher->setText( o.publisher() );
+  m_editAlbumId->setText( o.albumId() );
+  
+  m_checkPbc->setChecked( o.PbcEnabled() );
+  m_checkSegmentFolder->setChecked( o.SegmentFolder() );
+  m_checkRelaxedAps->setChecked( o.RelaxedAps() );
+  m_checkUpdateScanOffsets->setChecked( o.UpdateScanOffsets() );
+  m_spinRestriction->setValue( o.Restriction() );
+  
   loadDefaultCdiConfig();    
 }
 
@@ -411,7 +439,7 @@ void K3bVcdBurnDialog::saveSettings()
   vcdDoc()->vcdOptions()->setAlbumId( m_editAlbumId->text() );
   
   vcdDoc()->vcdOptions()->setAutoDetect(m_checkAutoDetect->isChecked());
-  vcdDoc()->vcdOptions()->setBrokenSVcdMode(m_checkNonCompliant->isChecked());
+  vcdDoc()->vcdOptions()->setNonCompliantMode(m_checkNonCompliant->isChecked());
   vcdDoc()->vcdOptions()->setSector2336(m_check2336->isChecked());
 
   vcdDoc()->vcdOptions()->setCdiSupport( m_checkCdiSupport->isChecked() );
@@ -419,6 +447,12 @@ void K3bVcdBurnDialog::saveSettings()
 
   vcdDoc()->vcdOptions()->setVolumeNumber(m_spinVolumeNumber->value());
   vcdDoc()->vcdOptions()->setVolumeCount(m_spinVolumeCount->value());
+  
+  vcdDoc()->vcdOptions()->setPbcEnabled(  m_checkPbc->isChecked() );
+  vcdDoc()->vcdOptions()->setSegmentFolder(  m_checkSegmentFolder->isChecked() );
+  vcdDoc()->vcdOptions()->setRelaxedAps(  m_checkRelaxedAps->isChecked() );
+  vcdDoc()->vcdOptions()->setUpdateScanOffsets(  m_checkUpdateScanOffsets->isChecked() );
+  vcdDoc()->vcdOptions()->setRestriction( m_spinRestriction->value() );
 
   if (m_editCdiCfg->edited())
     saveCdiConfig();
@@ -465,7 +499,7 @@ void K3bVcdBurnDialog::readSettings()
   m_groupCdi->setEnabled( false );
 
   if ( m_radioSvcd10->isChecked() ) {
-    m_checkNonCompliant->setChecked( vcdDoc()->vcdOptions()->BrokenSVcdMode() );
+    m_checkNonCompliant->setChecked( vcdDoc()->vcdOptions()->NonCompliantMode() );
   }
   else {
     m_checkNonCompliant->setChecked( false );
@@ -480,6 +514,12 @@ void K3bVcdBurnDialog::readSettings()
   m_editPublisher->setText( vcdDoc()->vcdOptions()->publisher() );  
   m_editAlbumId->setText( vcdDoc()->vcdOptions()->albumId() );
 
+  m_checkPbc->setChecked( vcdDoc()->vcdOptions()->PbcEnabled() );
+  m_checkSegmentFolder->setChecked( vcdDoc()->vcdOptions()->SegmentFolder() );
+  m_checkRelaxedAps->setChecked( vcdDoc()->vcdOptions()->RelaxedAps() );
+  m_checkUpdateScanOffsets->setChecked( vcdDoc()->vcdOptions()->UpdateScanOffsets() );
+  m_spinRestriction->setValue( vcdDoc()->vcdOptions()->Restriction() );
+  
   K3bProjectBurnDialog::readSettings();
 
   loadCdiConfig();
@@ -495,13 +535,13 @@ void K3bVcdBurnDialog::loadUserDefaults()
   
   m_checkAutoDetect->setChecked( o.AutoDetect() );
   m_check2336->setChecked( o.Sector2336() );
-    
+
   m_checkCdiSupport->setChecked( false );
   m_checkCdiSupport->setEnabled( false );
   m_groupCdi->setEnabled( false );
 
   if ( m_radioSvcd10->isChecked() ) {
-    m_checkNonCompliant->setChecked( o.BrokenSVcdMode() );
+    m_checkNonCompliant->setChecked( o.NonCompliantMode() );
   }
   else {
     m_checkNonCompliant->setChecked( false );
@@ -518,7 +558,12 @@ void K3bVcdBurnDialog::loadUserDefaults()
   m_editVolumeId->setText( o.volumeId() );
   m_editPublisher->setText( o.publisher() );
   m_editAlbumId->setText( o.albumId() );
-        
+  m_checkPbc->setChecked( o.PbcEnabled() );
+  m_checkSegmentFolder->setChecked( o.SegmentFolder() );
+  m_checkRelaxedAps->setChecked( o.RelaxedAps() );
+  m_checkUpdateScanOffsets->setChecked( o.UpdateScanOffsets() );
+  m_spinRestriction->setValue( o.Restriction() );
+
   m_checkSimulate->setChecked( c->readBoolEntry( "dummy_mode", false ) );
   m_checkBurnproof->setChecked( c->readBoolEntry( "burnproof", true ) );
   m_checkRemoveBufferFiles->setChecked( c->readBoolEntry( "remove_image", true ) );
@@ -544,11 +589,17 @@ void K3bVcdBurnDialog::saveUserDefaults()
   o.setPublisher( m_editPublisher->text() );  
   o.setAlbumId( m_editAlbumId->text() );
   o.setAutoDetect(m_checkAutoDetect->isChecked());
-  o.setBrokenSVcdMode(m_checkNonCompliant->isChecked());
+  o.setNonCompliantMode(m_checkNonCompliant->isChecked());
   o.setSector2336(m_check2336->isChecked());
   o.setVolumeCount(m_spinVolumeCount->value());
   o.setVolumeNumber(m_spinVolumeNumber->value());  
   o.setCdiSupport(m_checkCdiSupport->isChecked());
+  o.setPbcEnabled( m_checkPbc->isChecked() );
+  o.setSegmentFolder( m_checkSegmentFolder->isChecked() );
+  o.setRelaxedAps( m_checkRelaxedAps->isChecked() );
+  o.setUpdateScanOffsets(m_checkUpdateScanOffsets->isChecked() );
+  o.setRestriction( m_spinRestriction->value() );
+
   o.save( c );
 
   m_tempDirSelectionWidget->saveConfig();
@@ -644,7 +695,10 @@ void K3bVcdBurnDialog::slotSetImagePath()
     path.append("/");
 
   if ( vcdDoc()->vcdOptions()->volumeId().length() < 1 ) {
-    vcdDoc()->vcdOptions()->setVolumeId("VIDEOCD");
+    if (m_radioSvcd10->isChecked())
+      vcdDoc()->vcdOptions()->setVolumeId( i18n("VIDEOCD") );
+    else
+      vcdDoc()->vcdOptions()->setVolumeId( i18n("SUPER VIDEOCD") );    
   }
 
   // path.append( vcdDoc()->vcdOptions()->volumeId() + ".bin" );
@@ -672,6 +726,7 @@ void K3bVcdBurnDialog::slotVcdTypeClicked( int i)
       
       m_checkNonCompliant->setEnabled( false );
       m_checkNonCompliant->setChecked( false );
+      m_checkUpdateScanOffsets->setEnabled( false );
       break;
     case 2:
       //svcd 1.0
@@ -680,6 +735,7 @@ void K3bVcdBurnDialog::slotVcdTypeClicked( int i)
       m_groupCdi->setEnabled( false );
       
       m_checkNonCompliant->setEnabled( true );
+      m_checkUpdateScanOffsets->setEnabled( true );      
       break;
   }
   

@@ -207,7 +207,7 @@ void K3bVcdJob::vcdxBuild()
     *m_process << *it;
 
 
-  if ( vcdDoc()->vcdOptions()->BrokenSVcdMode() ) {
+  if ( vcdDoc()->vcdOptions()->Sector2336() ) {
     kdDebug() << "(K3bVcdJob) Write 2336 Sectors = on" << endl;
     *m_process << "--sector-2336";
   }

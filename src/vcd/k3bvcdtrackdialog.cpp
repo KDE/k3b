@@ -50,6 +50,7 @@ K3bVcdTrackDialog::K3bVcdTrackDialog( QPtrList<K3bVcdTrack>& tracks, QPtrList<K3
   prepareGui();
   
   setupPbcTab();
+  setupPbcKeyTab();
   setupVideoTab();
   setupAudioTab();
 
@@ -136,7 +137,7 @@ void K3bVcdTrackDialog::fillGui()
     case 2: m_rate_video->setText(i18n("Aspect ratio 4/3 (TV)")); break;
     case 3: m_rate_video->setText(i18n("Aspect ratio 16/9 (large TV)")); break;
     case 4: m_rate_video->setText(i18n("Aspect ratio 2.21/1 (Cinema)")); break;
-    default: m_rate_video->setText(i18n("Invalid Aspect ratio (reserved)"));
+    default: m_rate_video->setText(i18n("n/a"));
   }
 
   m_chromaformat_video->setText(i18n("n/a"));
@@ -209,10 +210,10 @@ void K3bVcdTrackDialog::fillGui()
     m_mode_audio->setText(tmp);
 
     switch (selectedTrack->MpegAudioEmphasis()){
-      case 0: m_emphasis_audio->setText(i18n("No emphasis")); break;
-      case 1: m_emphasis_audio->setText(i18n("Emphasis 50/15 microsecs")); break;
-      case 2: m_emphasis_audio->setText(i18n("Emphasis Unknown")); break;
-      case 3: m_emphasis_audio->setText(i18n("Emphasis CCITT J 17")); break;
+      case 0: m_emphasis_audio->setText(i18n("None")); break;
+      case 1: m_emphasis_audio->setText(i18n("50/15 microsecs")); break;
+      case 2: m_emphasis_audio->setText(i18n("Unknown")); break;
+      case 3: m_emphasis_audio->setText(i18n("CCITT J 17")); break;
     }
 
     tmp = "";
@@ -239,7 +240,8 @@ void K3bVcdTrackDialog::fillGui()
   K3bListViewItem* item;
   for( track = m_tracks.first(); track; track = m_tracks.next() ) {
     QPixmap pm = KMimeType::pixmapForURL( KURL(track->absPath()), 0, KIcon::Desktop, 16 );
-    QString s = i18n("%1 - Sequence-%2").arg(track->title()).arg(track->index() +1);
+    // TODO: Mpeg Stills are Segments :)
+    QString s = i18n("%1 - Sequence-%2").arg(track->title()).arg( QString::number(track->index() +1).rightJustify(3, '0') );
     m_pbc_previous->insertItem(pm, s);
     if (track == selectedTrack->Previous())
       iPrevious = m_pbc_previous->count() -1;
@@ -380,8 +382,7 @@ void K3bVcdTrackDialog::setupPbcTab()
   grid->setMargin( marginHint() );
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  QGroupBox* groupPlay = new QGroupBox(i18n("Options"), w );
-  groupPlay->setColumnLayout(0, Qt::Vertical );
+  QGroupBox* groupPlay = new QGroupBox(0, Qt::Vertical, i18n("Options"), w );
   groupPlay->layout()->setSpacing( spacingHint() );
   groupPlay->layout()->setMargin( marginHint() );
 
@@ -405,24 +406,19 @@ void K3bVcdTrackDialog::setupPbcTab()
   m_spin_waittime->setSpecialValueText(i18n("infinite"));
   
   m_labelAfterTimeout = new QLabel( i18n( "after timeout playing" ), groupPlay, "m_labelTimeout" );
-
+  m_labelAfterTimeout->setEnabled(false);
   m_comboAfterTimeout = new QComboBox( groupPlay, "m_comboAfterTimeout" );
-  m_comboAfterTimeout->setMaximumWidth(280);
   m_comboAfterTimeout->setEnabled(false);
   
   groupPlayLayout->addWidget( labelPlaying, 1, 0 );
   groupPlayLayout->addWidget( m_spin_times, 1, 1 );
   groupPlayLayout->addWidget( m_labelWait, 1, 2);
   groupPlayLayout->addWidget( m_spin_waittime, 1, 3);
-  groupPlayLayout->addMultiCellWidget( m_labelAfterTimeout, 2, 2, 2, 3);
-  groupPlayLayout->addMultiCellWidget( m_comboAfterTimeout, 3, 3, 2, 3);
-
-  groupPlayLayout->setRowStretch( 4, 1 );
-
+  groupPlayLayout->addMultiCellWidget( m_labelAfterTimeout, 2, 2, 1, 3);
+  groupPlayLayout->addMultiCellWidget( m_comboAfterTimeout, 3, 3, 1, 3);
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  QGroupBox* groupPbc = new QGroupBox(i18n("Key pressed interaction"), w );
-  groupPbc->setColumnLayout(0, Qt::Vertical );
+  QGroupBox* groupPbc = new QGroupBox(0, Qt::Vertical, i18n("Key pressed interaction"), w );
   groupPbc->layout()->setSpacing( spacingHint() );
   groupPbc->layout()->setMargin( marginHint() );
 
@@ -439,34 +435,49 @@ void K3bVcdTrackDialog::setupPbcTab()
   m_pbc_return = new QComboBox( groupPbc, "m_pbc_return" );
   m_pbc_default = new QComboBox( groupPbc, "m_pbc_default" );
 
-  m_pbc_previous->setMaximumWidth(280);
-  m_pbc_next->setMaximumWidth(280);
-  m_pbc_return->setMaximumWidth(280);
-  m_pbc_default->setMaximumWidth(280);
-  
-  groupPbcLayout->addWidget(labelPbc_previous, 2, 0);
-  groupPbcLayout->addWidget(m_pbc_previous, 3, 0);
+  groupPbcLayout->addWidget(labelPbc_previous, 1, 0);
+  groupPbcLayout->addMultiCellWidget(m_pbc_previous, 1, 1, 1, 3);
 
-  groupPbcLayout->addWidget(labelPbc_next, 4, 0);
-  groupPbcLayout->addWidget(m_pbc_next, 5, 0);
+  groupPbcLayout->addWidget(labelPbc_next, 2, 0);
+  groupPbcLayout->addMultiCellWidget(m_pbc_next, 2, 2, 1, 3);
 
-  groupPbcLayout->addWidget(labelPbc_return, 6, 0);
-  groupPbcLayout->addWidget(m_pbc_return, 7, 0);
+  groupPbcLayout->addWidget(labelPbc_return, 3, 0);
+  groupPbcLayout->addMultiCellWidget(m_pbc_return, 3, 3, 1, 3);
 
-  groupPbcLayout->addWidget(labelPbc_default, 8, 0);
-  groupPbcLayout->addWidget(m_pbc_default, 9, 0);
+  groupPbcLayout->addWidget(labelPbc_default, 4, 0);
+  groupPbcLayout->addMultiCellWidget(m_pbc_default, 4, 4, 1, 3);
 
 
-  //////////////////////////////////////////////////////////////////////////////////////////
-  QGroupBox* groupKey = new QGroupBox( 6, Qt::Vertical, i18n("Numeric keys"), w );
+  grid->addWidget( groupPlay, 0, 0 );
+  grid->addWidget( groupPbc, 1, 0 );
+
+  grid->setRowStretch( 9, 1 );
+
+  m_mainTabbed->addTab( w, i18n("Playback Control") );
+
+  connect( m_spin_times, SIGNAL(valueChanged(int)), this, SLOT(slotPlayTimeChanged(int)) );
+  connect( m_spin_waittime, SIGNAL(valueChanged(int)), this, SLOT(slotWaitTimeChanged(int)) );
+}
+
+void K3bVcdTrackDialog::setupPbcKeyTab()
+{
+  // /////////////////////////////////////////////////
+  // Playback Control Numeric Key's TAB
+  // /////////////////////////////////////////////////
+  QWidget* w = new QWidget( m_mainTabbed );
+
+  QGridLayout* grid = new QGridLayout( w );
+  grid->setAlignment( Qt::AlignTop );
+  grid->setSpacing( spacingHint() );
+  grid->setMargin( marginHint() );
+
+  QGroupBox* groupKey = new QGroupBox( 4, Qt::Vertical, i18n("Numeric keys"), w );
   groupKey->setEnabled( false );
   groupKey->layout()->setSpacing( spacingHint() );
   groupKey->layout()->setMargin( marginHint() );
 
   m_check_usekeys = new QCheckBox( i18n("Use numeric keys"), groupKey, "m_check_usekeys" );
-  // m_list_keys = new QListView( groupKey, "m_list_keys" );
   m_list_keys = new K3bListView( groupKey, "m_list_keys" );
-  m_list_keys->setMaximumWidth(280);
   m_list_keys->setSorting(0);
   m_list_keys->addColumn(i18n("Key"));
   m_list_keys->addColumn(i18n("Playing"));
@@ -474,17 +485,11 @@ void K3bVcdTrackDialog::setupPbcTab()
 
   m_check_overwritekeys = new QCheckBox( i18n("Overwrite default assignment"), groupKey, "m_check_overwritekeys" );
 
-  //////////////////////////////////////////////////////////////////////////////////////////
-  grid->addMultiCellWidget( groupPlay, 0, 0, 0, 1 );
-  grid->addWidget( groupPbc, 1, 0 );
-  grid->addWidget( groupKey, 1, 1 );
+  grid->addWidget( groupKey, 1, 0 );
 
-  grid->setRowStretch( 2, 0 );
+  grid->setRowStretch( 9, 4 );
 
-  m_mainTabbed->addTab( w, i18n("Playback Control") );
-
-  connect( m_spin_times, SIGNAL(valueChanged(int)), this, SLOT(slotPlayTimeChanged(int)) );
-  connect( m_spin_waittime, SIGNAL(valueChanged(int)), this, SLOT(slotWaitTimeChanged(int)) );
+  m_mainTabbed->addTab( w, i18n("Numeric keys") );
 }
 
 void K3bVcdTrackDialog::setupAudioTab()
@@ -517,31 +522,49 @@ void K3bVcdTrackDialog::setupAudioTab()
   m_emphasis_audio = new QLabel( w, "m_emphasis_audio" );
   m_copyright_audio = new QLabel( w, "m_copyright_audio" );
 
+  m_mpegver_audio->setFrameShape( QLabel::LineEditPanel );
+  m_duration_audio->setFrameShape( QLabel::LineEditPanel );
+  m_rate_audio->setFrameShape( QLabel::LineEditPanel );
+  m_framesize_audio->setFrameShape( QLabel::LineEditPanel );
+  m_mode_audio->setFrameShape( QLabel::LineEditPanel );
+  m_extmode_audio->setFrameShape( QLabel::LineEditPanel );
+  m_emphasis_audio->setFrameShape( QLabel::LineEditPanel );
+  m_copyright_audio->setFrameShape( QLabel::LineEditPanel );
+
+  m_mpegver_audio->setFrameShadow( QLabel::Sunken );
+  m_duration_audio->setFrameShadow( QLabel::Sunken );
+  m_rate_audio->setFrameShadow( QLabel::Sunken );
+  m_framesize_audio->setFrameShadow( QLabel::Sunken );
+  m_mode_audio->setFrameShadow( QLabel::Sunken );
+  m_extmode_audio->setFrameShadow( QLabel::Sunken );
+  m_emphasis_audio->setFrameShadow( QLabel::Sunken );
+  m_copyright_audio->setFrameShadow( QLabel::Sunken );
+    
   grid->addWidget( labelMpegVer_Audio, 1, 0 );
-  grid->addWidget( m_mpegver_audio, 1, 1 );
+  grid->addMultiCellWidget( m_mpegver_audio, 1, 1, 1, 4 );
     
   grid->addWidget( labelDuration_Audio, 2, 0 );
-  grid->addWidget( m_duration_audio, 2, 1 );
+  grid->addMultiCellWidget( m_duration_audio, 2, 2, 1, 4 );
     
   grid->addWidget( labelRate_Audio, 3, 0 );
-  grid->addWidget( m_rate_audio, 3, 1 );
+  grid->addMultiCellWidget( m_rate_audio, 3, 3, 1, 4 );
     
   grid->addWidget( labelFramesize_Audio, 4, 0 );
-  grid->addWidget( m_framesize_audio, 4, 1 );
+  grid->addMultiCellWidget( m_framesize_audio, 4, 4, 1, 4 );
     
   grid->addWidget( labelMode_Audio, 5, 0 );
-  grid->addWidget( m_mode_audio, 5, 1 );
+  grid->addMultiCellWidget( m_mode_audio, 5, 5, 1, 4 );
     
   grid->addWidget( labelExtMode_Audio, 6, 0 );
-  grid->addWidget( m_extmode_audio, 6, 1 );
+  grid->addMultiCellWidget( m_extmode_audio, 6, 6, 1, 4 );
     
   grid->addWidget( labelEmphasis_Audio, 7, 0 );
-  grid->addWidget( m_emphasis_audio, 7, 1 );  
+  grid->addMultiCellWidget( m_emphasis_audio, 7, 7, 1, 4 );
 
   grid->addWidget( labelCopyright_Audio, 8, 0 );
-  grid->addWidget( m_copyright_audio, 8, 1 );  
+  grid->addMultiCellWidget( m_copyright_audio, 8, 8, 1, 4 );
 
-  grid->setRowStretch( 9, 1 );
+  grid->setRowStretch( 9, 4 );
 
   m_mainTabbed->addTab( w, i18n("Audio") );
 
@@ -575,28 +598,44 @@ void K3bVcdTrackDialog::setupVideoTab()
   m_size_video = new QLabel( w, "m_size_video" );
   m_displaysize_video = new QLabel( w, "m_displaysize_video" );
 
+  m_mpegver_video->setFrameShape( QLabel::LineEditPanel );
+  m_duration_video->setFrameShape( QLabel::LineEditPanel );
+  m_rate_video->setFrameShape( QLabel::LineEditPanel );
+  m_chromaformat_video->setFrameShape( QLabel::LineEditPanel );
+  m_format_video->setFrameShape( QLabel::LineEditPanel );
+  m_size_video->setFrameShape( QLabel::LineEditPanel );
+  m_displaysize_video->setFrameShape( QLabel::LineEditPanel );
+  
+  m_mpegver_video->setFrameShadow( QLabel::Sunken );
+  m_duration_video->setFrameShadow( QLabel::Sunken );
+  m_rate_video->setFrameShadow( QLabel::Sunken );
+  m_chromaformat_video->setFrameShadow( QLabel::Sunken );
+  m_format_video->setFrameShadow( QLabel::Sunken );
+  m_size_video->setFrameShadow( QLabel::Sunken );
+  m_displaysize_video->setFrameShadow( QLabel::Sunken );
+
   grid->addWidget( labelMpegVer_Video, 1, 0 );
-  grid->addWidget( m_mpegver_video, 1, 1 );
+  grid->addMultiCellWidget( m_mpegver_video, 1, 1, 1, 4 );
 
   grid->addWidget( labelDuration_Video, 2, 0 );
-  grid->addWidget( m_duration_video, 2, 1 );
+  grid->addMultiCellWidget( m_duration_video, 2, 2, 1, 4 );
 
   grid->addWidget( labelRate_Video, 3, 0 );
-  grid->addWidget( m_rate_video, 3, 1 );
+  grid->addMultiCellWidget( m_rate_video, 3, 3, 1, 4 );
 
   grid->addWidget( labelChromaFormat_Video, 4, 0 );
-  grid->addWidget( m_chromaformat_video, 4, 1 );
+  grid->addMultiCellWidget( m_chromaformat_video, 4, 4, 1, 4 );
 
   grid->addWidget( labelFormat_Video, 5, 0 );
-  grid->addWidget( m_format_video, 5, 1 );
+  grid->addMultiCellWidget( m_format_video, 5, 5, 1, 4 );
 
   grid->addWidget( labelSize_Video, 6, 0 );
-  grid->addWidget( m_size_video, 6, 1 );
+  grid->addMultiCellWidget( m_size_video, 6, 6, 1, 4 );
 
   grid->addWidget( labelDisplaySize_Video, 7, 0 );
-  grid->addWidget( m_displaysize_video, 7, 1 );
+  grid->addMultiCellWidget( m_displaysize_video, 7, 7, 1, 4 );
 
-  grid->setRowStretch( 9, 1 );
+  grid->setRowStretch( 9, 4 );
   
   m_mainTabbed->addTab( w, i18n("Video") );
 }

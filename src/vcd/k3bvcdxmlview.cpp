@@ -52,8 +52,8 @@ bool K3bVcdXmlView::write(const QString& fname)
   
   // create option elements
   
-  // Broken SVCD mode
-  if (m_doc->vcdOptions()->BrokenSVcdMode()) {
+  // Broken SVCD mode - NonCompliantMode
+  if (m_doc->vcdOptions()->NonCompliantMode()) {
     QDomElement elemOption;
     elemOption = addSubElement(xmlDoc, root, "option");
     elemOption.setAttribute("name", "svcd vcd30 mpegav");
