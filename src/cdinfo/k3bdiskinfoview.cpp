@@ -11,12 +11,92 @@
 #include <qcolor.h>
 #include <qheader.h>
 #include <qstring.h>
+#include <qpainter.h>
+#include <qpalette.h>
+#include <qpixmap.h>
+#include <qregion.h>
 
 #include <kdialog.h>
 #include <klocale.h>
 #include <klistview.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
+#include <kdebug.h>
+
+
+
+class K3bDiskInfoView::HeaderViewItem : public KListViewItem
+{
+public:
+  HeaderViewItem( QListView* parent )
+    : KListViewItem( parent ) {}
+  HeaderViewItem( QListViewItem* parent )
+    : KListViewItem( parent ) {}
+  HeaderViewItem( QListView* parent, QListViewItem* after )
+    : KListViewItem( parent, after ) {}
+  HeaderViewItem( QListViewItem* parent, QListViewItem* after )
+    : KListViewItem( parent, after ) {}
+  HeaderViewItem( QListView* parent, const QString& t1 )
+    : KListViewItem( parent, t1 ) {}
+  HeaderViewItem( QListViewItem* parent, const QString& t1 )
+    : KListViewItem( parent, t1 ) {}
+  HeaderViewItem( QListView* parent, QListViewItem* after, const QString& t1 )
+    : KListViewItem( parent, after, t1 ) {}
+  HeaderViewItem( QListViewItem* parent, QListViewItem* after, const QString& t1 )
+    : KListViewItem( parent, after, t1 ) {}
+
+  void paintCell( QPainter* p, const QColorGroup & cg, int column, int width, int align ) {
+    QFont f ( p->font() );
+    f.setBold( true );
+    p->setFont( f );
+    KListViewItem::paintCell( p, cg, column, width, align );
+  }
+};
+
+
+class K3bDiskInfoView::TwoColumnViewItem : public KListViewItem
+{
+public:
+  TwoColumnViewItem( QListView* parent )
+    : KListViewItem( parent ) {}
+  TwoColumnViewItem( QListViewItem* parent )
+    : KListViewItem( parent ) {}
+  TwoColumnViewItem( QListView* parent, QListViewItem* after )
+    : KListViewItem( parent, after ) {}
+  TwoColumnViewItem( QListViewItem* parent, QListViewItem* after )
+    : KListViewItem( parent, after ) {}
+  TwoColumnViewItem( QListView* parent, const QString& t1 )
+    : KListViewItem( parent, t1 ) {}
+  TwoColumnViewItem( QListViewItem* parent, const QString& t1 )
+    : KListViewItem( parent, t1 ) {}
+  TwoColumnViewItem( QListView* parent, QListViewItem* after, const QString& t1 )
+    : KListViewItem( parent, after, t1 ) {}
+  TwoColumnViewItem( QListViewItem* parent, QListViewItem* after, const QString& t1 )
+    : KListViewItem( parent, after, t1 ) {}
+
+  void paintCell( QPainter* p, const QColorGroup & cg, int column, int width, int align ) {
+
+    if( column == 1 ) {
+      int newWidth = width;
+      
+      int i = 2;
+      for( ; i < listView()->columns(); ++i ) {
+	newWidth += listView()->columnWidth( i );
+      }
+
+      // TODO: find a way to get the TRUE new width after resizing
+
+//       QRect r = p->clipRegion().boundingRect();
+//       r.setWidth( newWidth );
+//       p->setClipRect( r );
+      p->setClipping( false );
+
+      KListViewItem::paintCell( p, cg, column, newWidth, align );
+    }
+    else if( column == 0 )
+      KListViewItem::paintCell( p, cg, column, width, align );
+  }
+};
 
 
 
@@ -118,24 +198,24 @@ void K3bDiskInfoView::displayInfo( const K3bDiskInfo& info )
     // check if we have some atip info
     if( info.size > 0 || !info.mediumManufactor.isEmpty() || info.sessions > 0 ) {
 
-      KListViewItem* atipItem = new KListViewItem( m_infoView, i18n("Disk") );
+      KListViewItem* atipItem = new HeaderViewItem( m_infoView, i18n("Disk") );
       KListViewItem* atipChild = 0;
       
       if( info.size > 0 )
 	atipChild = new KListViewItem( atipItem, atipChild,
 				       i18n("Size:"),
 				       i18n("%1 min").arg( K3b::framesToString(info.size) ),
-				       i18n("%2 MB)").arg(info.size*2048/1024/1024) );
+				       i18n("%2 MB").arg(info.size*2048/1024/1024) );
 
       if( info.remaining > 0 )
 	atipChild = new KListViewItem( atipItem, atipChild,
 				       i18n("Remaining:"), 
 				       i18n("%1 min").arg( K3b::framesToString(info.remaining) ),
-				       i18n("%2 MB)").arg(info.remaining*2048/1024/1024) );
+				       i18n("%2 MB").arg(info.remaining*2048/1024/1024) );
 
       if( !info.mediumManufactor.isEmpty() ) {
-	atipChild = new KListViewItem( atipItem, atipChild,
-				       i18n("Medium:") );
+	atipChild = new TwoColumnViewItem( atipItem, atipChild,
+					   i18n("Medium:") );
 	atipChild->setMultiLinesEnabled( true );
 	atipChild->setText( 1, info.mediumManufactor + "\n" + info.mediumType );
       }
@@ -164,7 +244,7 @@ void K3bDiskInfoView::displayInfo( const K3bDiskInfo& info )
       if( m_infoView->childCount() )
 	(void)new KListViewItem( m_infoView, m_infoView->lastChild() ); // empty spacer item
 
-      KListViewItem* iso9660Item = new KListViewItem( m_infoView, m_infoView->lastChild(), i18n("ISO9660 info") );
+      KListViewItem* iso9660Item = new HeaderViewItem( m_infoView, m_infoView->lastChild(), i18n("ISO9660 info") );
       KListViewItem* iso9660Child = 0;
 
       iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
@@ -198,7 +278,7 @@ void K3bDiskInfoView::displayInfo( const K3bDiskInfo& info )
     if( m_infoView->childCount() )
       (void)new KListViewItem( m_infoView, m_infoView->lastChild() ); // empty spacer item
 
-    KListViewItem* trackItem = new KListViewItem( m_infoView, m_infoView->lastChild(), i18n("Tracks") );
+    KListViewItem* trackItem = new HeaderViewItem( m_infoView, m_infoView->lastChild(), i18n("Tracks") );
     if( info.toc.isEmpty() )
       (void)new KListViewItem( trackItem, i18n("disk is empty") );
     else {

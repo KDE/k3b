@@ -71,6 +71,9 @@ K3bRipperWidget::K3bRipperWidget(const K3bDiskInfo& diskInfo, const K3bCddbEntry
   setupGui();
 
   init();
+
+  m_radioMp3->hide(); // not implemented yet
+  m_radioOgg->hide(); // not implemented yet
 }
 
 

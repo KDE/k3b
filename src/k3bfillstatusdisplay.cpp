@@ -33,6 +33,7 @@
 #include <klocale.h>
 #include <klineeditdlg.h>
 #include <kconfig.h>
+#include <kdebug.h>
 
 
 K3bFillStatusDisplay::K3bFillStatusDisplay(K3bDoc* doc, QWidget *parent, const char *name )
@@ -90,7 +91,7 @@ void K3bFillStatusDisplay::setupPopupMenu()
   m_action100Min->setExclusiveGroup( "cd_size" );
   m_actionCustomSize->setExclusiveGroup( "cd_size" );
  
-  m_popup->insertTitle( i18n("Show size in...") );  
+  m_popup->insertTitle( i18n("Show size in...") );
   m_actionShowMinutes->plug( m_popup );
   m_actionShowMegs->plug( m_popup );
   m_popup->insertTitle( i18n("CD size") );
@@ -144,7 +145,7 @@ void K3bFillStatusDisplay::drawContents( QPainter* p )
     p->drawText( contentsRect(), Qt::AlignLeft | Qt::AlignVCenter, 
 		 QString().sprintf( " %.2f MB", ((float)m_doc->size())/1024.0/1024.0 ) );
 	
-  // draw yellow if m_cdSize - tolerance < docSize
+  // draw yellow if cdSize - tolerance < docSize
   if( docSize > cdSize - tolerance ) {
     rect.setLeft( rect.left() + (int)(one * (cdSize - tolerance)) );
     p->fillRect( rect, Qt::yellow );

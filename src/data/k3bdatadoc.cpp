@@ -152,7 +152,7 @@ void K3bDataDoc::slotAddUrlsToDir( const KURL::List& urls, K3bDirItem* dirItem )
     }
 
   m_queuedToAddItemsTimer->start(0);
-  k3bMain()->statusBar()->message( i18n( "Adding files to Project %1..." ).arg( volumeID() ) );
+  k3bMain()->showBusyInfo( i18n( "Adding files to Project %1..." ).arg( volumeID() ) );
 }
 
 
@@ -187,7 +187,7 @@ void K3bDataDoc::slotAddQueuedItems()
     m_numberAddedItems = 0;
     m_queuedToAddItemsTimer->stop();
     emit newFileItems();
-    k3bMain()->statusBar()->clear();
+    k3bMain()->endBusy();
     informAboutNotFoundFiles();
   }
 }

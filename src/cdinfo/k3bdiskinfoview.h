@@ -27,6 +27,9 @@ class K3bDiskInfoView : public K3bCdContentsView
   QLabel* m_labelTocType;
 
   KListView* m_infoView;
+
+  class HeaderViewItem;
+  class TwoColumnViewItem;
 };
 
 
