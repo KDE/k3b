@@ -79,6 +79,11 @@ class K3bProcess : public KProcess
 
  public slots:
   void setSplitStdout( bool b ) { m_bSplitStdout = b; }
+ 
+  /**
+   * default is true
+   */
+  void setSuppressEmptyLines( bool b ) { m_suppressEmptyLines = b; }
 
  private slots:
   void slotSplitStderr( KProcess*, char*, int );
@@ -116,6 +121,8 @@ class K3bProcess : public KProcess
   bool m_rawStdout;
 
   int m_dupStdoutFd;
+
+  bool m_suppressEmptyLines;
 };
 
 

@@ -19,6 +19,7 @@
 
 #include <qstringlist.h>
 #include <qsocketnotifier.h>
+
 #include <kdebug.h>
 
 #include <sys/types.h>
@@ -32,7 +33,8 @@ K3bProcess::K3bProcess()
   : KProcess(),
     m_rawStdin(false),
     m_rawStdout(false),
-    m_dupStdoutFd(-1)
+    m_dupStdoutFd(-1),
+    m_suppressEmptyLines(true)
 {
   m_bSplitStdout = false;
 }
@@ -73,7 +75,9 @@ void K3bProcess::slotSplitStderr( KProcess*, char* data, int len )
 void K3bProcess::splitOutput( char* data, int len, bool stdout )
 {
   QString buffer = QString::fromLocal8Bit( data, len );
-  QStringList lines = QStringList::split( "\n", buffer, true );
+  buffer.replace( "\r\n", "\n" );
+  buffer.replace( "\r", "\n" );
+  QStringList lines = QStringList::split( "\n", buffer, !m_suppressEmptyLines );
 
   QString* unfinishedLine = ( stdout ? &m_unfinishedStdoutLine : &m_unfinishedStderrLine );
 
