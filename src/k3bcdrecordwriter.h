@@ -81,7 +81,8 @@ class K3bCdrecordWriter : public K3bAbstractWriter
 		       BAD_OPTION, 
 		       SHMGET_FAILED, 
 		       OPC_FAILED,
-		       CANNOT_SET_SPEED };
+		       CANNOT_SET_SPEED,
+		       CANNOT_SEND_CUE_SHEET };
   int m_cdrecordError;
 
   bool m_writeSpeedInitialized;

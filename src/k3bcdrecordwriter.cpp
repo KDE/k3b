@@ -388,6 +388,9 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   else if( line.contains("Cannot set speed/dummy") ) {
     m_cdrecordError = CANNOT_SET_SPEED;
   }
+  else if( line.contains("Cannot send CUE sheet") ) {
+    m_cdrecordError = CANNOT_SEND_CUE_SHEET;
+  }
   else {
     // debugging
     kdDebug() << "(cdrecord) " << line << endl;
@@ -410,8 +413,10 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
       break;
 
     default:
+      kdDebug() << "(K3bCdrecordWriter) error: " << p->exitStatus() << endl;
+
       switch( m_cdrecordError ) {
-      case OVERSIZE:  // It seems as if this is error code 254 but I'm not sure...
+      case OVERSIZE:
 	if( k3bMain()->config()->readBoolEntry( "Allow overburning", false ) &&
 	    m_cdrecordBinObject->hasFeature("overburn") )
 	  emit infoMessage( i18n("Data did not fit on disk."), ERROR );
@@ -431,6 +436,10 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
       case CANNOT_SET_SPEED:
 	emit infoMessage( i18n("Unable to set write speed to %1.").arg(burnSpeed()), ERROR );
 	emit infoMessage( i18n("Probably this is lower than your writer's lowest writing speed."), ERROR );
+	break;
+      case CANNOT_SEND_CUE_SHEET:
+	emit infoMessage( i18n("Unable to send CUE sheet."), ERROR );
+	emit infoMessage( i18n("This may be caused by a wrong data mode."), ERROR );
 	break;
       case UNKNOWN:
 	// no recording device and also other errors!! :-(
