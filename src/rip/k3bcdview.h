@@ -94,14 +94,16 @@ class K3bCdView : public K3bCdContentsView
   //QString prepareFilename(QString);
   void setupGUI();
   void applyOptions();
-  void checkView();
-  void askForView();
+  void checkTitlesOnCd( );
+  //void askForView();
   int checkCDType(QStringList titles);
   void readSettings();
   //QString prepareDirectory( QListViewItem *item );
   //QString getRealDirectory(int, QListViewItem* );
 
  private slots:
+  // reads title from cddb after cddb is ready, user select of mulit entries
+  void slotCheckView();
   /** No descriptions */
   // Toolbar Button actions
   void prepareRipping();

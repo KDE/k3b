@@ -45,7 +45,7 @@ public:
     //void setJob( K3bDvdCopy *job );
     void start( );
     void cancel();
-    static long tccatParsedBytes( char *text, int len);
+    static float tccatParsedBytes( char *text, int len);
 
 signals:
     void interrupted();
@@ -75,9 +75,9 @@ private:
     int m_currentRipAngle;
     int m_currentVobIndex;
     int m_maxTitle;
-    long m_rippedBytes;
-    long m_titleBytes;
-    long m_summaryBytes;
+    double m_rippedBytes;
+    double m_titleBytes;
+    double m_summaryBytes;
     QString m_ripMode;
     bool m_processAudio;
     bool m_delAudioProcess;

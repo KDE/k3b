@@ -119,13 +119,20 @@ void K3bCdView::setupGUI()
   m_parser = new K3bPatternParser( &m_dirPatternList, &m_filePatternList, m_cddb );
   connect( m_listView, SIGNAL(rightButtonClicked ( QListViewItem *, const QPoint &, int )),
 	   this, SLOT(slotMenuActivated(QListViewItem*, const QPoint &, int) ) );
+  connect( m_cddb, SIGNAL( updatedCD() ), this, SLOT( slotCheckView() ));
 }
 
 
-void K3bCdView::checkView( ){
+void K3bCdView::checkTitlesOnCd( ){
   // read cddb settings each time to get changes in optiondialog
   applyOptions();
+  // wait for signal updatedCD, to get really all information with getTitles()
+  qDebug("(K3bCdView) Read CD content.");
   m_cddb->updateCD( m_drive );
+}
+
+void K3bCdView::slotCheckView(){
+  qDebug("(K3bCdView) Check CD type (Audio, Audio/Data).");
   m_titles = m_cddb->getTitles();
   int type = checkCDType( m_titles );
   switch( type ){
@@ -135,26 +142,18 @@ void K3bCdView::checkView( ){
   case 1:
     emit notSupportedDisc(m_device);
     break;
-  case 2:
-    askForView();
-    break;
+  case 2: {
+      int result = QMessageBox::information( this, i18n("Select View"), i18n("The cd you have insert is a mixed CD. Do you want to show the audio or data tracks?"), i18n("Audio"), i18n("Data") );
+      if( result == 0 )
+          showCdContent();
+      else
+          emit notSupportedDisc( m_device );
+  }
   default:
     break;
   }
 }
 
-void K3bCdView::askForView(){
-  switch( QMessageBox::information( this, i18n("Select View"), i18n("The cd you have insert is a mixed CD. Do you want to show the audio or data tracks?"), i18n("Audio"), i18n("Data") ) ) {
-  case 0:
-    showCdContent();
-    break;
-  case 1:
-    emit notSupportedDisc( m_device );
-    break;
-  default:
-    break;
-  }
-}
 void K3bCdView::showCdContent( ){
     m_listView->clear();
     m_album = m_cddb->getAlbum();
@@ -208,7 +207,7 @@ void K3bCdView::reload(){
   qDebug("(K3bCdView) CD type: (Audio=0, Data/DVD=1, Audio/Data=2) %i", result );
   if( result == 0 || result == 2 ){
         qDebug("(K3bCdView) Reload");
-        checkView();
+        checkTitlesOnCd();
         m_cdda->closeDrive( m_drive);
   } else {
     m_cdda->closeDrive( m_drive);

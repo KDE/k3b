@@ -32,7 +32,7 @@ class K3bCddbMultiEntriesDialog : public KDialogBase
 {
   Q_OBJECT
 
- public: 
+public:
   K3bCddbMultiEntriesDialog( QStringList &entries, const char name=0);
   ~K3bCddbMultiEntriesDialog();
   

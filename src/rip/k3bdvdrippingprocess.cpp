@@ -96,10 +96,19 @@ void K3bDvdRippingProcess::rip( ){
     }
     connect( m_audioProcess, SIGNAL( finished() ), this, SLOT( slotAudioProcessFinished() ) );
     m_delAudioProcess = true;
-    K3bExternalBin *bin = k3bMain()->externalBinManager()->binObject("tccat");
+
+    K3bExternalBin *bin;
+    //if( k3bMain()->externalBinManager()->foundBin("tccat") ){
+   qDebug("binpath" );
+   bin = k3bMain()->externalBinManager()->binObject("tccat");
+
+    //} else {
+    //    qDebug("K3bDvdRipppingProcess) FATAL Error: could not found tccat");
+    //}
     m_ripProcess = new KShellProcess();
     qDebug("(K3bDvdRippingProcess) tccat -d 1 -i " + m_device +" "+ m_ripMode +" "+ m_title +",-1," +m_angle);
-    *m_ripProcess << bin->path << "-d 1" << "-i" <<  m_device << m_ripMode << m_title << ",-1," << m_angle;
+    //*m_ripProcess << bin->path << "-d 1" << "-i" <<  m_device << m_ripMode << m_title << ",-1," << m_angle;
+    *m_ripProcess << "tccat" << "-d 1" << "-i" <<  m_device << m_ripMode << m_title << ",-1," << m_angle;
     connect( m_ripProcess, SIGNAL(receivedStdout(KProcess*, char*, int)), this, SLOT(slotParseOutput(KProcess*, char*, int)) );
     connect( m_ripProcess, SIGNAL(receivedStderr(KProcess*, char*, int)), this, SLOT(slotParseError(KProcess*, char*, int)) );
     connect( m_ripProcess, SIGNAL(processExited(KProcess*)), this, SLOT(slotExited( KProcess* )) );
@@ -109,7 +118,6 @@ void K3bDvdRippingProcess::rip( ){
         qDebug("(K3bDvdRippingProcess) Error starting rip.");
         m_outputFile.close();
     }
-    delete bin;
     // successful start
     m_parent->close();
 }
@@ -155,11 +163,12 @@ void K3bDvdRippingProcess::slotParseOutput( KProcess *p, char *text, int len){
         return;
     }
     m_stream->writeRawBytes( text, len );
-    m_audioProcess->writeStdin( text, len );
+    QString audiotext( text );
+    m_audioProcess->writeStdin( audiotext.latin1(), len );
     m_rippedBytes += len;
     m_summaryBytes += len;
     if( m_titleBytes > 0 ){
-        int pc = (int) ((((double) m_rippedBytes / (double) m_titleBytes) *100)+0.5);
+        int pc = (int) ((( m_rippedBytes / m_titleBytes) *100)+0.5);
         //qDebug("percent %i" , pc );
         emit progressPercent( pc );
     }
@@ -185,21 +194,21 @@ void K3bDvdRippingProcess::slotParseOutput( KProcess *p, char *text, int len){
 }
 
 void K3bDvdRippingProcess::slotParseError( KProcess *p, char *text, int len){
-    qDebug("(K3bDvdRippingProcess) Calculate bytes to rip.");
-    m_titleBytes = tccatParsedBytes( text, len );
+    qDebug("(K3bDvdRippingProcess) Calculate bytes to rip.");    m_titleBytes = tccatParsedBytes( text, len );
     m_ripProcess->disconnect( SIGNAL(receivedStderr(KProcess*, char*, int)), this );
 }
 
-long K3bDvdRippingProcess::tccatParsedBytes( char *text, int len){
+float K3bDvdRippingProcess::tccatParsedBytes( char *text, int len){
     QString tmp = QString::fromLatin1( text, len );
-    long blocks = 0;
+    float blocks = 0;
     if( tmp.contains("blocks (0") ){
         int index = tmp.find("blocks (0");
         tmp = tmp.mid(index +10);
         int end = tmp.find( ")" );
         tmp= tmp.mid( 0, end);
-        blocks = tmp.toLong()*2048;
+        blocks = (tmp.toFloat())*2048;
     }
+    qDebug("(K3bDvdRippingProcess) Parsed bytes: " + QString::number(blocks, 'f') );
     return blocks;
 }
 

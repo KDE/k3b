@@ -66,8 +66,8 @@ private:
     K3bDvdRippingProcess *m_ripProcess;
     K3bDvdCopy *m_ripJob;
     bool m_enoughSpace;
-    long m_vobSize;
-    long m_titleSize;
+    double m_vobSize;
+    double m_titleSize;
     KDiskFreeSp *m_df;
     bool m_supportSizeDetection;
 

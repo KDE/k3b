@@ -24,7 +24,7 @@ ldadd=$(ID3LIB_LIBS) $(CDPARANOIA_LIBS) -lmad -lartskde -lqt-mt $(LIB_KFILE) $(L
 ldflags=
 
 [General]
-AMChanged=true
+AMChanged=false
 author=Sebastian Trueg
 configure_args=--prefix=/opt/kde3
 email=trueg@informatik.uni-freiburg.de

@@ -196,9 +196,11 @@ void K3bCddb::updateCD( struct cdrom_drive *drive )
             connect( dialog, SIGNAL( chosenId( unsigned int )), this, SLOT( prepareQuery( unsigned int ) ) );
             connect( dialog, SIGNAL( cancelClicked( )), this, SLOT( queryTracks(  ) ) );
             dialog->show();
-            return;
         }
+    } else {
+        queryTracks();
     }
+
 }
 
 bool K3bCddb::appendCddbInfo( K3bToc& toc )
@@ -283,12 +285,14 @@ QValueList<int>* K3bCddb::getTrackList( ) {
 
 void K3bCddb::readQuery(){
     m_titles.clear(  );
-    m_based_on_cddb = true;
+    //m_based_on_cddb = true;
     m_cd_album = m_cddb->title(  );
     m_cd_artist = m_cddb->artist(  );
     for( int i = 0; i < m_tracks; i++ ) {
         m_titles.append( m_cddb->track( i ) );
     }
+    // titlelist updated
+    emit updatedCD();
 }
 // ------------------------  Slots  -------------------------
 void K3bCddb::prepareQuery( int unsigned cddbId ){
@@ -301,7 +305,7 @@ void K3bCddb::prepareQuery( int unsigned cddbId ){
 }
 void K3bCddb::queryTracks(){
     m_titles.clear(  );
-    m_based_on_cddb = false;
+    //m_based_on_cddb = false;
     m_cd_album = "";
     m_cd_artist = "";
     m_s_track = "";
@@ -314,9 +318,10 @@ void K3bCddb::queryTracks(){
             s = num.stripWhiteSpace(); //s_track.arg( num );
         else
             s.sprintf( "data%02d", ti );
-        qDebug("Track:" + s + "end");
+        qDebug("Track:" + s + " end");
         m_titles.append( s );
     }
+    emit updatedCD();
 }
 
 #include "k3bcddb.moc"

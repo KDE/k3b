@@ -78,6 +78,9 @@ class K3bCddb : public QObject {
 
     static bool appendCddbInfo( K3bToc& );
 
+ signals:
+   void updatedCD();
+
   private:
     bool m_useCddb;
     CDDB *m_cddb;
@@ -92,7 +95,7 @@ class K3bCddb : public QObject {
     QString m_cd_artist;
     QStringList m_titles;
     bool m_is_audio[100];
-    bool m_based_on_cddb;
+    //bool m_based_on_cddb;
     QString m_s_track;
 
     QValueList<int>* getTrackList( );
@@ -101,6 +104,7 @@ class K3bCddb : public QObject {
 private slots:
     void prepareQuery( unsigned int );
     void queryTracks( );
+
 };
 
 #endif
