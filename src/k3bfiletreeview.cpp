@@ -71,7 +71,7 @@ void K3bDeviceBranch::mount()
     else {
       kdDebug() << "(K3bDeviceBranch) device already mounted on " << mp << endl;
       emit clear();
-      populate( mp, root() );
+      populate( KURL::fromPathOrURL(mp), root() );
       emit mountFinished( this, mp );
     }
   }
@@ -102,7 +102,7 @@ void K3bDeviceBranch::slotMountFinished( KIO::Job* job )
   }
   else {
     emit clear();
-    populate( m_device->mountPoint(), root() );
+    populate( KURL::fromPathOrURL(m_device->mountPoint()), root() );
     emit mountFinished( this, m_device->mountPoint() );
   }
 }

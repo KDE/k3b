@@ -479,7 +479,7 @@ void K3bCdImageWritingDialog::createIso9660InfoItems( K3bIso9660* isoF )
   isoRootItem->setPixmap( 0, SmallIcon( "cdimage") );
 
   K3bListViewItem* item = new K3bListViewItem( isoRootItem, m_infoView->lastItem(),
-					       i18n("Filesize:"), KIO::convertSize( K3b::filesize(isoF->fileName()) ) );
+					       i18n("Filesize:"), KIO::convertSize( K3b::filesize(KURL::fromPathOrURL(isoF->fileName())) ) );
   item->setForegroundColor( 0, Qt::gray );
 
   item = new K3bListViewItem( isoRootItem, 
@@ -542,7 +542,7 @@ void K3bCdImageWritingDialog::createCdrecordCloneItems( const QString& tocFile, 
   isoRootItem->setPixmap( 0, SmallIcon( "cdimage") );
 
   K3bListViewItem* item = new K3bListViewItem( isoRootItem, m_infoView->lastItem(),
-					       i18n("Filesize:"), KIO::convertSize( K3b::filesize(imageFile) ) );
+					       i18n("Filesize:"), KIO::convertSize( K3b::filesize(KURL::fromPathOrURL(imageFile)) ) );
   item->setForegroundColor( 0, Qt::gray );
 
   item = new K3bListViewItem( isoRootItem, 
@@ -570,7 +570,7 @@ void K3bCdImageWritingDialog::createCueBinItems( const QString& cueFile, const Q
   isoRootItem->setPixmap( 0, SmallIcon( "cdimage") );
 
   K3bListViewItem* item = new K3bListViewItem( isoRootItem, m_infoView->lastItem(),
-					       i18n("Filesize:"), KIO::convertSize( K3b::filesize(imageFile) ) );
+					       i18n("Filesize:"), KIO::convertSize( K3b::filesize(KURL::fromPathOrURL(imageFile)) ) );
   item->setForegroundColor( 0, Qt::gray );
 
   item = new K3bListViewItem( isoRootItem, 

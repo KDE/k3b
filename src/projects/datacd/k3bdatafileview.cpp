@@ -144,7 +144,7 @@ QDragObject* K3bDataFileView::dragObject()
     if( dataViewItem )
       if( dataViewItem->dataItem()->isFile()
 	  &&  !dataViewItem->dataItem()->localPath().isEmpty() )
-	urls.append( dataViewItem->dataItem()->localPath() );
+	urls.append( KURL::fromPathOrURL(dataViewItem->dataItem()->localPath()) );
     else
       kdDebug() << "no dataviewitem" << endl;
   }

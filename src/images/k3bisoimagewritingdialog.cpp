@@ -253,7 +253,7 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
   QFileInfo info( path );
   if( info.isFile() ) {
 
-    KIO::filesize_t imageSize = K3b::filesize( path );
+    KIO::filesize_t imageSize = K3b::filesize( KURL::fromPathOrURL(path) );
 
     // ------------------------------------------------
     // Test for iso9660 image

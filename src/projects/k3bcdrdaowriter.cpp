@@ -507,7 +507,7 @@ void K3bCdrdaoWriter::start()
 	    m_backupTocFile = m_tocFile + ".k3bbak";
 
 	    // workaround, cdrdao deletes the tocfile when --remote parameter is set
-	    if ( !KIO::NetAccess::copy(m_tocFile,m_backupTocFile) )
+	    if ( !KIO::NetAccess::copy(KURL(m_tocFile),KURL(m_backupTocFile)) )
 	      {
 		kdDebug() << "(K3bCdrdaoWriter) could not backup " << m_tocFile << " to " << m_backupTocFile << endl;
 		emit infoMessage( i18n("Could not backup tocfile."), ERROR );
@@ -694,20 +694,20 @@ void K3bCdrdaoWriter::slotProcessExited( KProcess* p )
   case WRITE:
   case COPY:
     if ( !m_binFileLnk.isEmpty() ) {
-        KIO::NetAccess::del(m_cueFileLnk);
-        KIO::NetAccess::del(m_binFileLnk);
+        KIO::NetAccess::del(KURL::fromPathOrURL(m_cueFileLnk));
+        KIO::NetAccess::del(KURL::fromPathOrURL(m_binFileLnk));
     }
-    else if( (!QFile::exists( m_tocFile ) || K3b::filesize( m_tocFile ) == 0 ) && !m_onTheFly )
+    else if( (!QFile::exists( m_tocFile ) || K3b::filesize( KURL::fromPathOrURL(m_tocFile) ) == 0 ) && !m_onTheFly )
     {
       // cdrdao removed the tocfile :(
       // we need to recover it
-      if ( !KIO::NetAccess::copy(m_backupTocFile, m_tocFile) )
+      if ( !KIO::NetAccess::copy(KURL::fromPathOrURL(m_backupTocFile), KURL::fromPathOrURL(m_tocFile)) )
       {
         kdDebug() << "(K3bCdrdaoWriter) restoring tocfile " << m_tocFile << " failed." << endl;
         emit infoMessage( i18n("Due to a bug in cdrdao the toc/cue file %1 has been deleted. "
                                "K3b was unable to restore it from the backup %2.").arg(m_tocFile).arg(m_backupTocFile), ERROR );
       }
-      else if ( !KIO::NetAccess::del(m_backupTocFile) )
+      else if ( !KIO::NetAccess::del(KURL::fromPathOrURL(m_backupTocFile)) )
       {
         kdDebug() << "(K3bCdrdaoWriter) delete tocfile backkup " << m_backupTocFile << " failed." << endl;
       }

@@ -339,8 +339,8 @@ void K3bDvdRippingProcess::slotIfoCopyFinished( KIO::Job *job ) {
     }
     kdDebug() << "(K3bDvdRippingProcess) Chmod: " << m_dirtmp << "/" << m_videoCaseSensitive << endl;
     kdDebug() << "(K3bDvdRippingProcess) Chmod: " << m_dirtmp << "/" << m_vobCaseSensitive << endl;
-    KIO::chmod( m_dirtmp + "/" + m_videoCaseSensitive, 0644 );
-    KIO::chmod( m_dirtmp + "/" + m_vobCaseSensitive, 0644 );
+    KIO::chmod( KURL::fromPathOrURL(m_dirtmp + "/" + m_videoCaseSensitive), 0644 );
+    KIO::chmod( KURL::fromPathOrURL(m_dirtmp + "/" + m_vobCaseSensitive), 0644 );
     connect( KIO::unmount( m_mountPoint, true ), SIGNAL(result(KIO::Job*)), this, SLOT( slotPreProcessingFinished( KIO::Job* )) );
 }
 

@@ -148,7 +148,7 @@ void K3bIsoImageVerificationJob::slotMd5JobFinished( bool success )
       // a wrong result
       //
       KIO::UDSEntry entry;
-      if( !KIO::NetAccess::stat( d->imageFileName, entry ) ) {
+      if( !KIO::NetAccess::stat( KURL::fromPathOrURL(d->imageFileName), entry ) ) {
 	emit infoMessage( i18n("Unable to read file %1.").arg(d->imageFileName), ERROR );
 	finishVerification(false);
       }

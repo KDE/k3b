@@ -66,7 +66,7 @@ void K3bFileView::setupGUI()
   QVBoxLayout* layout = new QVBoxLayout( this );
   //  layout->setAutoAdd( true );
 
-  m_dirOp = new K3bDirOperator( QDir::home().absPath(), this );
+  m_dirOp = new K3bDirOperator( KURL::fromPathOrURL(QDir::home().absPath()), this );
   m_dirOp->readConfig( k3bMain()->config(), "file view" );
   m_dirOp->setMode( KFile::Files );
   m_dirOp->setView( KFile::Default );

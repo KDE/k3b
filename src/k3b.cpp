@@ -741,7 +741,7 @@ void K3bMainWindow::fileSaveAs( K3bDoc* doc )
 	    KMessageBox::questionYesNo( this, i18n("Do you want to overwrite %1").arg(url), i18n("File Exists") )
 	    == KMessageBox::Yes ) ) {
 
-	if( !doc->saveDocument(url) ) {
+	if( !doc->saveDocument(KURL(url)) ) {
 	  KMessageBox::error (this,i18n("Could not save the current document!"), i18n("I/O Error"));
 	  return;
 	}
@@ -749,7 +749,7 @@ void K3bMainWindow::fileSaveAs( K3bDoc* doc )
 	K3bView* view = doc->view();
 	m_documentTab->changeTab( view, view->caption() );
 
-	actionFileOpenRecent->addURL(url);
+	actionFileOpenRecent->addURL(KURL(url));
       }
     }
   }
