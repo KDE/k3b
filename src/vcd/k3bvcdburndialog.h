@@ -27,6 +27,8 @@
 class QCheckBox;
 class QComboBox;
 class QGroupBox;
+class QSpinBox;
+class QRadioButton;
 class QLabel;
 class QLineEdit;
 class QToolButton;
@@ -45,6 +47,8 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
 
  protected:
    void setupBurnTab( QFrame* frame );
+   void setupVideoCdTab( QFrame* frame );
+   void setupLabelTab( QFrame* frame );
    void saveSettings();
    void readSettings();
 
@@ -54,8 +58,30 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
    QCheckBox* m_checkOnTheFly;
    QCheckBox* m_checkSimulate;
    QCheckBox* m_checkRemoveBufferFiles;
+   QCheckBox* m_checkApplicationId;
    K3bWriterSelectionWidget* m_writerSelectionWidget;
    K3bTempDirSelectionWidget* m_tempDirSelectionWidget;
+
+   // -----------------------------------------------------------
+   // the video-cd-tab
+   // -----------------------------------------------------------
+
+   QRadioButton* m_checkVcd11;
+   QRadioButton* m_checkVcd20;
+   QRadioButton* m_checkSvcd10;
+
+   QCheckBox* m_checkNonCompliant;
+   QCheckBox* m_check2336;
+      
+   // -----------------------------------------------------------
+   // the video-label-tab
+   // -----------------------------------------------------------
+
+   QLineEdit* m_editVolume;
+   QLineEdit* m_editAlbumId;
+
+   QSpinBox* m_spinVolumeCount;
+   QSpinBox* m_spinVolumeNumber;
    // -----------------------------------------------------------
 
  protected slots:

@@ -25,6 +25,9 @@
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qgroupbox.h>
+#include <qspinbox.h>
+#include <qbuttongroup.h>
+#include <qradiobutton.h>
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qmultilineedit.h>
@@ -52,31 +55,23 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
 {
   QTabWidget* tab = new QTabWidget( k3bMainWidget() );
   QFrame* f1 = new QFrame( tab );
-
-  setupBurnTab( f1 );
-
+  QFrame* f2 = new QFrame( tab );
+  QFrame* f3 = new QFrame( tab );
+  
   tab->addTab( f1, i18n("Burning") );
-
-  // create advanced tab
-  QWidget* advancedTab = new QWidget( tab );
-  QGridLayout* advancedTabGrid = new QGridLayout( advancedTab );
-  advancedTabGrid->setSpacing( spacingHint() );
-  advancedTabGrid->setMargin( marginHint() );
-
-  QGroupBox* advancedOptionGroup = new QGroupBox( 1, Qt::Vertical, i18n("Options"), advancedTab );
-
-  advancedTabGrid->addWidget( advancedOptionGroup, 0, 0 );
-  advancedTabGrid->setRowStretch( 1, 1 );
-
-  tab->addTab( advancedTab, i18n("Advanced") );
-
-
+  tab->addTab( f2, i18n("VideoCD") );
+  tab->addTab( f3, i18n("Label") );
+  
+  setupBurnTab( f1 );
+  setupVideoCdTab( f2 );
+  setupLabelTab( f3 );
+    
   // connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_tempDirSelectionWidget, SLOT(setDisabled(bool)) );
   // connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkRemoveBufferFiles, SLOT(setDisabled(bool)) );
 
   m_tempDirSelectionWidget->setNeededSize( doc()->size() );
 
-  // loadDefaults();
+  loadDefaults();
   readSettings();
 }
 
@@ -133,6 +128,117 @@ void K3bVcdBurnDialog::setupBurnTab( QFrame* frame )
   frameLayout->setColStretch( 1, 1 );
 }
 
+void K3bVcdBurnDialog::setupVideoCdTab( QFrame* frame )
+{
+
+  QGridLayout* frameLayout = new QGridLayout( frame );
+  frameLayout->setSpacing( spacingHint() );
+  frameLayout->setMargin( marginHint() );
+
+  // ---- VcdFormat group ------------------------------------------------
+  QGroupBox* m_groupVcdFormat = new QButtonGroup( frame, "m_groupVcdFormat" );
+  m_groupVcdFormat->setTitle( i18n( "Format" ) );
+  m_groupVcdFormat->setColumnLayout(0, Qt::Vertical );
+  m_groupVcdFormat->layout()->setSpacing( 0 );
+  m_groupVcdFormat->layout()->setMargin( 0 );
+  QVBoxLayout* m_groupVcdFormatLayout = new QVBoxLayout( m_groupVcdFormat->layout() );
+  m_groupVcdFormatLayout->setAlignment( Qt::AlignTop );
+  m_groupVcdFormatLayout->setSpacing( spacingHint() );
+  m_groupVcdFormatLayout->setMargin( marginHint() );
+
+  m_checkVcd11 = new QRadioButton( m_groupVcdFormat, "m_checkVcd11" );
+  m_checkVcd11->setText( i18n( "VideoCD 1.1" ) );
+  m_checkVcd20 = new QRadioButton( m_groupVcdFormat, "m_checkVcd20" );
+  m_checkVcd20->setText( i18n( "VideoCD 2.0" ) );
+  m_checkSvcd10 = new QRadioButton( m_groupVcdFormat, "m_checkSvcd10" );
+  m_checkSvcd10->setText( i18n( "Super-VideoCD" ) );
+
+  m_groupVcdFormatLayout->addWidget( m_checkVcd11 );
+  m_groupVcdFormatLayout->addWidget( m_checkVcd20 );
+  m_groupVcdFormatLayout->addWidget( m_checkSvcd10 );    
+  // --------------------------------------------------- VcdFormat group ---
+
+  // ---- option group ------------------------------------------------
+  QGroupBox* m_groupOptions = new QGroupBox( frame, "m_groupOptions" );
+  m_groupOptions->setTitle( i18n( "Options" ) );
+  m_groupOptions->setColumnLayout(0, Qt::Vertical );
+  m_groupOptions->layout()->setSpacing( 0 );
+  m_groupOptions->layout()->setMargin( 0 );
+  QVBoxLayout* m_groupOptionsLayout = new QVBoxLayout( m_groupOptions->layout() );
+  m_groupOptionsLayout->setAlignment( Qt::AlignTop );
+  m_groupOptionsLayout->setSpacing( spacingHint() );
+  m_groupOptionsLayout->setMargin( marginHint() );
+
+  m_checkNonCompliant = new QCheckBox( m_groupOptions, "m_checkNonCompliant" );
+  m_checkNonCompliant->setText( i18n( "Non-compliant compatibility mode for broken devices" ) );
+  m_check2336 = new QCheckBox( m_groupOptions, "m_check2336" );
+  m_check2336->setText( i18n( "Use 2336 byte sectors for output" ) );
+
+  m_groupOptionsLayout->addWidget( m_checkNonCompliant );
+  m_groupOptionsLayout->addWidget( m_check2336 );
+  // --------------------------------------------------- Options group ---
+
+  // ---------------------------------------------------------------------
+
+  frameLayout->addWidget( m_groupVcdFormat, 0, 0 );
+  frameLayout->addWidget( m_groupOptions, 0, 1 );
+
+  frameLayout->setRowStretch( 1, 1 );
+  frameLayout->setColStretch( 1, 1 );
+
+ 
+}
+
+void K3bVcdBurnDialog::setupLabelTab( QFrame* frame )
+{
+
+  QGridLayout* mainGrid = new QGridLayout( frame );
+  mainGrid->setSpacing( spacingHint() );
+  mainGrid->setMargin( marginHint() );
+
+  m_checkApplicationId = new QCheckBox( i18n( "Write Application Id" ), frame, "m_checkApplicationId" );
+
+  QLabel* labelVolume = new QLabel( i18n( "ISO &Volume Label:" ), frame, "labelVolume" );
+  QLabel* labelAlbumId = new QLabel( i18n( "&Album Id:" ), frame, "labelAlbumId" );
+  QLabel* labelVolumeCount = new QLabel( i18n( "Number of CDs in &Album:" ), frame, "labelVolumeCount" );
+  QLabel* labelVolumeNumber = new QLabel( i18n( "CD is &Number:" ), frame, "labelVolumeNumber" );
+
+  m_editVolume = new QLineEdit( frame, "m_editDisc_id" );
+  m_editAlbumId = new QLineEdit( frame, "m_editAlbumId" );
+  m_spinVolumeCount = new QSpinBox( frame, "m_editVolumeCount" );
+  m_spinVolumeNumber = new QSpinBox( frame, "m_editVolumeNumber" );
+  
+  QFrame* line = new QFrame( frame );
+  line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+
+  mainGrid->addMultiCellWidget( m_checkApplicationId, 0, 0, 0, 1 );
+  mainGrid->addMultiCellWidget( line, 1, 1, 0, 1 );
+
+  mainGrid->addWidget( labelVolume, 2, 0 );
+  mainGrid->addWidget( m_editVolume, 2, 1 );
+  mainGrid->addWidget( labelAlbumId, 3, 0 );
+  mainGrid->addWidget( m_editAlbumId, 3, 1 );
+  mainGrid->addWidget( labelVolumeCount, 4, 0 );
+  mainGrid->addWidget( m_spinVolumeCount, 4, 1 );
+  mainGrid->addWidget( labelVolumeNumber, 5, 0 );
+  mainGrid->addWidget( m_spinVolumeNumber, 5, 1 );
+
+  mainGrid->addRowSpacing( 5, 15 );
+  mainGrid->setRowStretch( 5, 1 );
+
+  // buddies
+  labelVolume->setBuddy( m_editVolume );
+  labelAlbumId->setBuddy( m_editAlbumId );
+  labelVolumeCount->setBuddy( m_spinVolumeCount );
+  labelVolumeNumber->setBuddy( m_spinVolumeNumber );
+
+  // tab order
+  setTabOrder( m_editVolume, m_editAlbumId);
+  setTabOrder( m_editAlbumId, m_spinVolumeCount );
+  setTabOrder( m_spinVolumeCount, m_spinVolumeNumber );
+
+}
+
 
 void K3bVcdBurnDialog::slotOk()
 {
@@ -151,6 +257,11 @@ void K3bVcdBurnDialog::loadDefaults()
   // m_checkOnTheFly->setChecked( false );
   // m_checkBurnProof->setChecked( true );
   m_checkRemoveBufferFiles->setChecked( true );
+
+  m_checkApplicationId->setChecked( true );
+  m_editVolume->setText( "VIDEOCD" );
+  m_checkVcd20->setChecked( true );
+  
 }
 
 void K3bVcdBurnDialog::saveSettings()
@@ -178,6 +289,7 @@ void K3bVcdBurnDialog::readSettings()
   m_checkSimulate->setChecked( doc()->dummy() );
   // m_checkRemoveBufferFiles->setChecked( ((K3bVcdDoc*)doc())->removeBufferFiles() );
 
+ 
   K3bProjectBurnDialog::readSettings();
 }
 
