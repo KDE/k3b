@@ -90,16 +90,14 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
   QToolTip::add(m_checkCdiSupport, i18n("Enable CD-i Application Support for VideoCD Type 1.1 & 2.0") );
   QToolTip::add(m_editCdiCfg, i18n("Configuration parameters (only for VCD 2.0)") );
 
-  /* TODO
-  QToolTip::add(m_checkPbc, i18n("") );
-  QToolTip::add(m_checkSegmentFolder, i18n("") );
-  QToolTip::add(m_checkRelaxedAps, i18n("") );
-  QToolTip::add(m_checkUpdateScanOffsets, i18n("") );
-  QToolTip::add(m_spinRestriction, i18n("") );
-  */
-    
+  QToolTip::add(m_checkPbc, i18n("Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 disc formats.") );
+  QToolTip::add(m_checkSegmentFolder, i18n("Add allways an empty `/SEGMENT' directory") );
+  QToolTip::add(m_checkRelaxedAps, i18n("This controls whether APS constraints are strict or relaxed. ") );
+  QToolTip::add(m_checkUpdateScanOffsets, i18n("This controls whether to update the scan data information contained in the MPEG-2 video streams.") );
+  QToolTip::add(m_spinRestriction, i18n("This element allows to set viewing restrictions which may be interpreted by the playing device.") );
+
   // What's This info
-  // -------------------------------------------------------------------------  
+  // -------------------------------------------------------------------------
   QWhatsThis::add( m_radioVcd11, i18n("<p>This is the most basic <b>Video CD</b> specification dating back to 1993, which has the following characteristics:"
                                         "<ul><li>One mode2 mixed form ISO-9660 track containing file pointers to the information areas.</li>"
                                         "<li>Up to 98 multiplex-ed MPEG-1 audio/video streams or CD-DA audio tracks.</li>"
@@ -155,30 +153,42 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
 
    QWhatsThis::add( m_check2336, i18n("<p>though most devices will have problems with such an out-of-specification media."
                                         "<p><b>You may want use this option for images longer than 80 minutes</b>") );
-                                              
+
    QWhatsThis::add( m_checkCdiSupport, i18n("<p>To allow the play of Video-CD's on a CD-i player, the Video-CD standard requires that a CD-i application program must be present."
                                         "<p>This program is designed to:"
                                         "<ul><li>provide full play back control as defined in the PSD of the standard</l>"
                                         "<li>be extremely simple to use and easy-to-learn for the end-user</li></ul>"
                                         "<p>The program runs on CD-i players equipped with the CDRTOS 1.1(.1) operating system and a Digital Video extension cartridge.") );
 
-   QWhatsThis::add( m_editCdiCfg, i18n("Configuration parameters only available for VideoCD 2.0"
+   QWhatsThis::add( m_editCdiCfg, i18n("<p>Configuration parameters only available for VideoCD 2.0"
                                         "<p>The engine works perfectly well when used as is."
                                         "<p>You have the option to configure the VCD application."
                                         "<p>You can adapt the colour and / or the shape of the cursor and lots more.") );
 
-   /* TODO
-   QWhatsThis::add( m_checkPbc, i18n(""
-                                        "") );
-   QWhatsThis::add( m_checkSegmentFolder, i18n(""
-                                        "") );
-   QWhatsThis::add( m_checkRelaxedAps, i18n(""
-                                        "") );
-   QWhatsThis::add( m_checkUpdateScanOffsets, i18n(""
-                                        "") );
-   QWhatsThis::add( m_spinRestriction, i18n(""
-                                        "") );
-   */
+
+   QWhatsThis::add( m_checkPbc, i18n("<p>Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 disc formats."
+                                        "<p>PBC allows control of the playback of play items and the possibility of interaction with the user through the remote control or some other input device available.") );
+   // TODO: Don' know what i should write here :)
+   // QWhatsThis::add( m_checkSegmentFolder, i18n(""
+   //                                     "") );
+
+   QWhatsThis::add( m_checkRelaxedAps, i18n("<p>An Access Point Sector, APS, is an MPEG video sector on the VCD/SVCD which is suitable to be jumped to directly."
+                                         "<p>APS are required for entry points and scantables. APS have to fulfill the requirement to precede every I-frame by a GOP header which shall be preceded by a sequence header in its turn."
+                                         "<p>The start codes of these 3 items are required to be contained all in the same mpeg pack/sector, thus forming a so-called access point sector."
+                                         "<p>This requirement can be relaxed by enabling the relaxed aps option, i.e. every sector containing an I-frame will be regarded as an APS."
+                                         "<p><b>Warning:</b> The sequence header is needed for a playing device to figure out display parameters, such as display resolution and frame rate, relaxing the aps requirement may lead to non-working entry points.") );
+
+   QWhatsThis::add( m_checkUpdateScanOffsets, i18n("<p>According to the specification, it is mandatory for Super Video CD's to encode scan information data into user data blocks in the picture layer of all intra coded picture."
+                                         "<p>It can be used by playing devices for implementing fast forward & fast reverse scanning."
+                                         "<p>The already existing scan information data can be updated by enabling the update scan offsets option.") );
+
+   QWhatsThis::add( m_spinRestriction, i18n("<p>Viewing Restriction may be interpreted by the playing device."
+                                         "<p>The allowed range goes from 0 to 3."
+                                         "<ul><li>0 = unrestricted, free to view for all</li>"
+                                         "<li>3 = restricted, content not suitable for ages under 18</li></ul>"
+                                         "<p>Actually the exact meaning is not defined and is player dependant!"
+                                         "<p><b>Most players ignore that value.<b>") );
+
 }
 
 
