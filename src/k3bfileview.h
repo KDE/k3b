@@ -38,12 +38,13 @@ class K3bFileView : public K3bCdContentsView
 {
   Q_OBJECT
 
- public: 
+ public:
   K3bFileView(QWidget *parent=0, const char *name=0);
   ~K3bFileView();
   void setUrl(const KURL &url, bool forward);
   KURL Url();
-  
+  void setAutoUpdate(bool);
+
   KActionCollection* actionCollection() const;
 
   void reload();

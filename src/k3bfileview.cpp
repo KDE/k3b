@@ -147,6 +147,10 @@ KURL K3bFileView::Url()
   return m_dirOp->url();
 }
 
+void K3bFileView::setAutoUpdate(bool b)
+{
+  m_dirOp->dirLister()->setAutoUpdate( b );
+}
 
 void K3bFileView::slotFileHighlighted( const KFileItem* )
 {
