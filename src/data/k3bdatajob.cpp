@@ -378,7 +378,8 @@ bool K3bDataJob::prepareWriterJob()
   if( m_writerJob )
     delete m_writerJob;
 
-  if( writingApp() == K3b::CDRECORD || writingApp() == K3b::DEFAULT ) {
+  // It seems as if cdrecord is not able to append sessions in dao mode whereas cdrdao is
+  if( writingApp() == K3b::CDRECORD || (writingApp() == K3b::DEFAULT && !m_doc->dao() )) {
     K3bCdrecordWriter* writer = new K3bCdrecordWriter( m_doc->burner(), this );
 
     // cdrecord manpage says that "not all" writers are able to write
