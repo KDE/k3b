@@ -6,6 +6,9 @@
   	<Action name="file_burn"/>
   	<Action name="file_export" append="save_merge"/>
   </Menu>
+  <Menu name="tools">
+  	<Action name="tools_cd_info"/>
+  </Menu>
   <Menu name="settings">
   	<Action name="view_dir" append="show_merge"/>
   </Menu>

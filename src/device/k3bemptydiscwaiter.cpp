@@ -55,15 +55,14 @@ void K3bEmptyDiscWaiter::slotTestForEmptyCd()
   if( m_device->isReady() == 0 ) // OK
     {
       long length;
-      if( m_device->cdCapacity( &length ) )
-	  if( length > 0 ) {
-	    m_timer->stop();
-	    m_timer->disconnect();
-	    connect( m_timer, SIGNAL(timeout()), this, SLOT(slotDelayedDestruction()) );
-	    m_timer->start(0);
-
-	    emit discReady();
-	  }
+      if( m_device->isEmpty() == 0 ) {
+	m_timer->stop();
+	m_timer->disconnect();
+	connect( m_timer, SIGNAL(timeout()), this, SLOT(slotDelayedDestruction()) );
+	m_timer->start(0);
+	
+	emit discReady();
+      }
     }
 }
 

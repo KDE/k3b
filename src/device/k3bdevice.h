@@ -8,34 +8,6 @@
 class ScsiIf;
 
 
-/* struct K3bDiskInfo { */
-/*   long capacity;          // recordable capacity of medium */
-/*   Msf  manufacturerId;    // disk identification */
-/*   int  recSpeedLow;       // lowest recording speed */
-/*   int  recSpeedHigh;      // highest recording speed */
-  
-/*   int sessionCnt;         // number of closed sessions */
-/*   int lastTrackNr;        // number of last track on disk */
-  
-/*   long lastSessionLba;    // start lba of first track of last closed session */
-/*   long thisSessionLba;    // start lba of this session */
-  
-/*   int diskTocType;        // type of CD TOC, only valid if CD-R is not empty */
-  
-/*   unsigned int empty  : 1; // 1 for empty disk, else 0 */
-/*   unsigned int append : 1; // 1 if CD-R is appendable, else 0 */
-/*   unsigned int cdrw   : 1; // 1 if disk is a CD-RW */
-  
-/*   struct { */
-/*     unsigned int empty : 1; */
-/*     unsigned int append : 1; */
-/*     unsigned int cdrw : 1; */
-/*     unsigned int capacity : 1; */
-/*     unsigned int manufacturerId : 1; */
-/*       unsigned int recSpeed : 1; */
-/*   } valid; */
-/* }; */
-
 
 class K3bDevice 
 {
@@ -77,8 +49,20 @@ class K3bDevice
   /**
    * Saves the cd's total number of available blocks in "length"
    * returns false if capacity could not be retrieved.
+   * DOES NOT WORK SO FAR!
    */
-  bool cdCapacity( long* );
+/*   bool cdCapacity( long* ); */
+
+
+  /**
+   *  checks if disk is empty, returns:
+   *  <li> 0: disk is empty</li>
+   *  <li> 1: disk is not empty, but appendable</li>
+   *  <li> 2: disk is complete</li>
+   *  <li>-1: not ready, no disk in drive</li>
+   * </ul>
+   */
+  int isEmpty();
 
   bool init();
 

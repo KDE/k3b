@@ -181,6 +181,8 @@ class K3bApp : public KDockMainWindow
 
 	void slotShowDirView();
 
+	void slotCdInfo();
+
 	void slotNewAudioDoc();
 	void slotNewDataDoc();
 
@@ -225,7 +227,7 @@ class K3bApp : public KDockMainWindow
     // KAction pointers to enable/disable actions
     KActionMenu* fileNewMenu;
     KAction* fileNewAudio;
-	KAction* fileNewData;
+    KAction* fileNewData;
     KAction* fileOpen;
     KRecentFilesAction* fileOpenRecent;
     KAction* fileSave;
@@ -233,15 +235,16 @@ class K3bApp : public KDockMainWindow
     KAction* fileClose;
     KAction* fileQuit;
     KAction* fileBurn;
-	KAction* settingsConfigure;
-	KAction* fileExport;
+    KAction* settingsConfigure;
+    KAction* fileExport;
+    KAction* toolsCdInfo;
 	
     KToggleAction* viewToolBar;
     KToggleAction* viewStatusBar;
     KToggleAction* viewDirView;
 
-	KDockWidget* mainDock;
-	KDockWidget* dirDock;
+    KDockWidget* mainDock;
+    KDockWidget* dirDock;
 		
     // The K3b-specific widgets
     K3bDirView* m_dirView;

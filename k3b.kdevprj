@@ -24,7 +24,7 @@ ldadd=-lid3 $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT)
 ldflags=
 
 [General]
-AMChanged=false
+AMChanged=true
 author=Sebastian Trueg
 configure_args=
 email=trueg@informatik.uni-freiburg.de
@@ -322,7 +322,7 @@ install_location=
 type=HEADER
 
 [src/cdinfo/Makefile.am]
-files=src/cdinfo/k3bcdinfowidget.cpp,src/cdinfo/k3bcdinfowidget.h,src/cdinfo/k3bcdinfosession.cpp,src/cdinfo/k3bcdinfosession.h,src/cdinfo/k3bcdinfotrack.cpp,src/cdinfo/k3bcdinfotrack.h,src/cdinfo/k3bcdinfo.cpp,src/cdinfo/k3bcdinfo.h
+files=src/cdinfo/k3bcdinfo.cpp,src/cdinfo/k3bcdinfo.h,src/cdinfo/k3bcdinfodialog.cpp,src/cdinfo/k3bcdinfodialog.h
 sub_dirs=
 type=static_library
 
@@ -338,37 +338,13 @@ install=false
 install_location=
 type=HEADER
 
-[src/cdinfo/k3bcdinfosession.cpp]
+[src/cdinfo/k3bcdinfodialog.cpp]
 dist=true
 install=false
 install_location=
 type=SOURCE
 
-[src/cdinfo/k3bcdinfosession.h]
-dist=true
-install=false
-install_location=
-type=HEADER
-
-[src/cdinfo/k3bcdinfotrack.cpp]
-dist=true
-install=false
-install_location=
-type=SOURCE
-
-[src/cdinfo/k3bcdinfotrack.h]
-dist=true
-install=false
-install_location=
-type=HEADER
-
-[src/cdinfo/k3bcdinfowidget.cpp]
-dist=true
-install=false
-install_location=
-type=SOURCE
-
-[src/cdinfo/k3bcdinfowidget.h]
+[src/cdinfo/k3bcdinfodialog.h]
 dist=true
 install=false
 install_location=

@@ -56,6 +56,8 @@
 #include "data/k3bdatadoc.h"
 #include "data/k3bdataview.h"
 #include "data/k3bdatajob.h"
+#include "cdinfo/k3bcdinfodialog.h"
+
 
 
 K3bApp* k3bMain()
@@ -132,6 +134,9 @@ void K3bApp::initActions()
 
   viewDirView = new KToggleAction(i18n("Show Directories"), "view_sidetree", 0, this, SLOT(slotShowDirView()), 
 				  actionCollection(), "view_dir");
+
+  toolsCdInfo = new KAction(i18n("CD &Info"), "cdrom_unmount", 0, this, SLOT(slotCdInfo()), 
+			    actionCollection(), "tools_cd_info" );
 
   fileNewMenu->setStatusText(i18n("Creates a new project"));
   fileOpen->setStatusText(i18n("Opens an existing project"));
@@ -848,4 +853,12 @@ void K3bApp::slotErrorMessage(const QString& message)
 void K3bApp::slotWarningMessage(const QString& message)
 {
   KMessageBox::sorry( this, message );
+}
+
+
+void K3bApp::slotCdInfo()
+{
+  K3bCdInfoDialog* d = new K3bCdInfoDialog( this, "cdinfod", true );
+  d->exec();
+  delete d;
 }
