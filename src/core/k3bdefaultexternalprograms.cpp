@@ -61,6 +61,7 @@ void K3b::addDefaultPrograms( K3bExternalBinManager* m )
   m->addProgram( new K3bNormalizeProgram() );
   m->addProgram( new K3bGrowisofsProgram() );
   m->addProgram( new K3bDvdformatProgram() );
+  m->addProgram( new K3bDvdBooktypeProgram() );
 //  m->addProgram( new K3bCdda2wavProgram() );
 }
 
@@ -881,6 +882,54 @@ bool K3bDvdformatProgram::scan( const QString& p )
       if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
 	bin->addFeature( "suidroot" );
     }
+  }
+
+  addBin( bin );
+  return true;
+}
+
+
+K3bDvdBooktypeProgram::K3bDvdBooktypeProgram()
+  : K3bExternalProgram( "dvd+rw-booktype" )
+{
+}
+
+bool K3bDvdBooktypeProgram::scan( const QString& p )
+{
+  if( p.isEmpty() )
+    return false;
+
+  QString path = p;
+  QFileInfo fi( path );
+  if( fi.isDir() ) {
+    if( path[path.length()-1] != '/' )
+      path.append("/");
+    path.append("dvd+rw-booktype");
+  }
+
+  if( !QFile::exists( path ) )
+    return false;
+
+  K3bExternalBin* bin = 0;
+
+  // probe version
+  KProcess vp;
+  K3bProcess::OutputCollector out( &vp );
+
+  vp << path;
+  if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
+    int pos = out.output().find( "dvd+rw-booktype" );
+    if( pos < 0 )
+      return false;
+
+    bin = new K3bExternalBin( this );
+    bin->path = path;
+    // No version information. Create dummy version
+    bin->version = K3bVersion( 1, 0, 0 );
+  }
+  else {
+    kdDebug() << "(K3bDvdBooktypeProgram) could not start " << path << endl;
+    return false;
   }
 
   addBin( bin );

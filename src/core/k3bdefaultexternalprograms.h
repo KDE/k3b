@@ -130,6 +130,15 @@ class K3bDvdformatProgram : public K3bExternalProgram
 };
 
 
+class K3bDvdBooktypeProgram : public K3bExternalProgram
+{
+ public:
+  K3bDvdBooktypeProgram();
+
+  bool scan( const QString& );
+};
+
+
 class K3bCdda2wavProgram : public K3bExternalProgram
 {
  public:
