@@ -1,1 +1,14 @@
+K3b Version 0.3
 
+Thanx for downloading my very first KDE-project.
+
+Things that should work so far:
+
+- burning audio cds from wav and mp3-files (cd-text seems not to work since there is still a problem with cdrdao)
+- Configuring external programs
+- Configuring devices
+
+I hope this little :-) program will help you to create some cds under KDE.
+
+Sebastian Trueg
+  contact: trueg@informatik.uni-freiburg.de
