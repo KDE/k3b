@@ -1,4 +1,4 @@
-K3b Version 0.9
+K3b Version 0.10
 
 Thanx for downloading K3b - The CD Kreator
 
@@ -35,9 +35,15 @@ These are the features so far:
 
  - writing eMovix cds
    
+ - writing data DVDs (support for DVD-R(W) and DVD+R(W) with the dvd+rw-tools)
+
+ - formatting DVD-RWs and DVD+RWs
+
  - writing existing iso-images and cue/bin images to cd
 
  - cd copy (data, audio, mixed mode)
+
+ - cd cloning with cdrecord >=2.01a17
 
  - blanking of cdrws
 
@@ -62,7 +68,7 @@ These are the features so far:
 
 What you need to run K3b:
  - since K3b is a CD writing program a cd writer would be a good thing to have ;-)
- - the QT3 and KDE3 (at least kdlibs and kdemultimedia) libraries from the good guys
+ - the QT3 and KDE3 (at least kdelibs and kdemultimedia) libraries from the good guys
  - the cdparanoia library for cd ripping from Monty
  - the cdrtools (cdrecord, mkisofs) from Joerg Schilling
  - cdrdao, the other linux cd writing program from Andreas Mueller
