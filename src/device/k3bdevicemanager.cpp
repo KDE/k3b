@@ -165,7 +165,13 @@ int K3bCdDevice::DeviceManager::scanbus()
           devstring += dev + "|";
           m_foundDevices++;
         }
-        else if ( dev.startsWith("sr") )
+// according to the LINUX ALLOCATED DEVICES document (http://www.lanana.org/docs/device-list/),
+// the official device names for SCSI-CDROM's (block major 11) are /dev/sr*, the
+// prefix /dev/scd instead of /dev/sr has been used as well, and might make more sense.
+// Since there should be one and only one device node (and maybe several symbolic links) for
+// each physical device the next line should be better
+//      else if ( dev.startsWith("sr") )
+        if ( dev.startsWith("sr") )
           if( addDevice(QString("/dev/%1").arg(dev.replace(QRegExp("r"),"cd"))) ) {
             devstring += dev + "|";
             m_foundDevices++;
