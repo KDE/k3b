@@ -93,16 +93,18 @@ bool K3bDataDirTreeView::acceptDrag(QDropEvent* e) const{
 }
 
 
-void K3bDataDirTreeView::slotDropped( QDropEvent* e, QListViewItem*, QListViewItem* parentViewItem )
+void K3bDataDirTreeView::slotDropped( QDropEvent* e, QListViewItem*, QListViewItem* )
 {
   if( !e->isAccepted() )
     return;
 
   // determine K3bDirItem to add the items to
   K3bDirItem* parent = 0;
-  if( K3bDataDirViewItem* dirViewItem = dynamic_cast<K3bDataDirViewItem*>( parentViewItem ) ) {
+  if( K3bDataDirViewItem* dirViewItem = dynamic_cast<K3bDataDirViewItem*>( itemAt(e->pos()) ) ) {
     parent = dirViewItem->dirItem();
   }
+  else
+    parent = m_doc->root();
 
   if( parent ) {
 
@@ -134,12 +136,6 @@ void K3bDataDirTreeView::slotDropped( QDropEvent* e, QListViewItem*, QListViewIt
       if( KURLDrag::decode( e, urls ) )
 	m_doc->slotAddUrlsToDir( urls, parent );
     }
-  }
-
-  else if( QUriDrag::canDecode(e) ) {
-    KURL::List urls;
-    if( KURLDrag::decode( e, urls ) )
-      emit urlsDropped( urls, parentViewItem );
   }
 }
 
@@ -186,7 +182,8 @@ void K3bDataDirTreeView::updateContents()
 	{
 	  if( !m_itemMap.contains(dirItem) ) {
 	    K3bDataDirViewItem* parentViewItem = m_itemMap[dirItem->parent()];
-	    m_itemMap.insert( dirItem, new K3bDataDirViewItem( dirItem, parentViewItem ) );
+	    K3bDataDirViewItem* newDirItem = new K3bDataDirViewItem( dirItem, parentViewItem );
+	    m_itemMap.insert( dirItem, newDirItem );
 	  }
 	  else {
 	    // check if parent still correct (to get moved items)
