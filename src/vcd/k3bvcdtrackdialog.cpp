@@ -24,8 +24,8 @@
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qhbox.h>
-#include <qtabwidget.h>
 #include <qradiobutton.h>
+#include <qbuttongroup.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -45,7 +45,11 @@ K3bVcdTrackDialog::K3bVcdTrackDialog( QPtrList<K3bVcdTrack>& tracks, QWidget *pa
   : KDialogBase( KDialogBase::Plain, i18n("Video Track Properties"), KDialogBase::Ok,
 		 KDialogBase::Ok, parent, name )
 {
-  setupGui();
+  prepareGui();
+  
+  setupNavigationTab();
+  setupVideoTab();
+  setupAudioTab();
 
   m_tracks = tracks;
 
@@ -192,7 +196,7 @@ void K3bVcdTrackDialog::fillGui()
   }
 }
 
-void K3bVcdTrackDialog::setupGui()
+void K3bVcdTrackDialog::prepareGui()
 {
   QFrame* frame = plainPage();
 
@@ -200,174 +204,11 @@ void K3bVcdTrackDialog::setupGui()
   mainLayout->setSpacing( spacingHint() );
   mainLayout->setMargin( 0 );
 
-  QTabWidget* mainTabbed = new QTabWidget( frame );
+  m_mainTabbed = new QTabWidget( frame );
 
-  // /////////////////////////////////////////////////
-  // NAVIGATION TAB
-  // /////////////////////////////////////////////////
-  QWidget* navigationTab = new QWidget( mainTabbed );
-
-  QGridLayout* navGrid = new QGridLayout( navigationTab );
-  navGrid->setAlignment( Qt::AlignTop );
-  navGrid->setSpacing( spacingHint() );
-  navGrid->setMargin( marginHint() );
-
-  m_radio_playtime = new QRadioButton( i18n("Play"), navigationTab, "m_radio_playtime" );
-  m_radio_playforever = new QRadioButton( i18n("Play forever"), navigationTab, "m_radio_playforever" );
-  m_radio_waittime = new QRadioButton( i18n("Wait"), navigationTab, "m_radio_waittime" );
-  m_radio_waitinfinite = new QRadioButton( i18n("Wait infinite"), navigationTab, "m_radio_waitinfinite" );
-    
-  QLabel* labelNav_previous = new QLabel( i18n( "Privious:" ), navigationTab, "labelNav_previous" );
-  QLabel* labelNav_next  = new QLabel( i18n( "Next:" ), navigationTab, "labelNav_next" );
-  QLabel* labelNav_return  = new QLabel( i18n( "Return:" ), navigationTab, "labelNav_return" );
-  QLabel* labelNav_default  = new QLabel( i18n( "Default:" ), navigationTab, "labelNav_default" );
-
-  m_nav_previous = new QComboBox( navigationTab, "m_nav_previous" );
-  m_nav_next = new QComboBox( navigationTab, "m_nav_next" );
-  m_nav_return = new QComboBox( navigationTab, "m_nav_return" );
-  m_nav_default = new QComboBox( navigationTab, "m_nav_default" );
-
-  m_check_usekeys = new QCheckBox( i18n("Use numeric keys"), navigationTab, "m_check_usekeys" );
-  m_list_keys = new QListView( navigationTab, "m_list_keys" );
-  
-  QFrame* line1 = new QFrame( navigationTab );
-  line1->setFrameStyle( QFrame::HLine | QFrame::Sunken );
-  QFrame* line2 = new QFrame( navigationTab );
-  line2->setFrameStyle( QFrame::VLine | QFrame::Sunken );
-
-  navGrid->addMultiCellWidget( m_radio_playtime, 1, 1, 0, 1 );
-  navGrid->addMultiCellWidget( m_radio_waitinfinite, 1, 1, 3, 5 );
-  navGrid->addMultiCellWidget( m_radio_playforever, 2, 2, 0, 1 );
-  navGrid->addMultiCellWidget( m_radio_waittime, 2, 2, 3, 5 );
-  
-  navGrid->addMultiCellWidget( line1, 3, 3, 0, 5 );
-  
-  navGrid->addWidget( labelNav_previous, 4, 0 );
-  navGrid->addMultiCellWidget( m_nav_previous, 4, 4, 1, 2 );
-
-  navGrid->addWidget( labelNav_next, 5, 0 );
-  navGrid->addMultiCellWidget( m_nav_next, 5, 5, 1, 2 );
-
-  navGrid->addWidget( labelNav_return, 6, 0 );
-  navGrid->addMultiCellWidget( m_nav_return, 6, 6, 1, 2 );
-
-  navGrid->addWidget( labelNav_default, 7, 0 );
-  navGrid->addMultiCellWidget( m_nav_default, 7, 7, 1, 2 );
-
-  navGrid->addMultiCellWidget( line2, 4, 7, 3, 3 );
-  
-  navGrid->addMultiCellWidget( m_check_usekeys, 4, 4, 3, 5 );
-  navGrid->addMultiCellWidget( m_list_keys, 5, 7, 3, 5 );
-  
-  navGrid->setRowStretch( 9, 1 );
-  
-  
-  // /////////////////////////////////////////////////
-  // AUDIO TAB
-  // /////////////////////////////////////////////////
-  QWidget* audioTab = new QWidget( mainTabbed );
-
-  QGridLayout* audioGrid = new QGridLayout( audioTab );
-  audioGrid->setAlignment( Qt::AlignTop );
-  audioGrid->setSpacing( spacingHint() );
-  audioGrid->setMargin( marginHint() );
-
-  QLabel* labelMpegVer_Audio = new QLabel( i18n( "Type:" ), audioTab, "labelMpegVer_Audio" );
-  QLabel* labelDuration_Audio  = new QLabel( i18n( "Estimated Duration:" ), audioTab, "labelDuration_Audio" );
-  QLabel* labelRate_Audio  = new QLabel( i18n( "Rate:" ), audioTab, "labelRate_Audio" );
-  QLabel* labelFramesize_Audio  = new QLabel( i18n( "Frame size:" ), audioTab, "labelFramesize_Audio" );
-  QLabel* labelMode_Audio  = new QLabel( i18n( "Mode:" ), audioTab, "labelMode_Audio" );
-  QLabel* labelExtMode_Audio  = new QLabel( i18n( "Ext. Mode:" ), audioTab, "labelExtMode_Audio" );
-  QLabel* labelEmphasis_Audio  = new QLabel( i18n( "Emphasis:" ), audioTab, "labelEmphasis_Audio" );
-  QLabel* labelCopyright_Audio  = new QLabel( i18n( "Copyright:" ), audioTab, "labelCopyright_Audio" );
-
-  m_mpegver_audio = new QLabel( audioTab, "m_mpegver_audio" );
-  m_duration_audio = new QLabel( audioTab, "m_duration_audio" );
-  m_rate_audio = new QLabel( audioTab, "m_rate_audio" );
-  m_framesize_audio = new QLabel( audioTab, "m_framesize_audio" );
-  m_mode_audio = new QLabel( audioTab, "m_mode_audio" );
-  m_extmode_audio = new QLabel( audioTab, "m_extmode_audio" );
-  m_emphasis_audio = new QLabel( audioTab, "m_emphasis_audio" );
-  m_copyright_audio = new QLabel( audioTab, "m_copyright_audio" );
-
-  audioGrid->addWidget( labelMpegVer_Audio, 1, 0 );
-  audioGrid->addWidget( m_mpegver_audio, 1, 1 );
-    
-  audioGrid->addWidget( labelDuration_Audio, 2, 0 );
-  audioGrid->addWidget( m_duration_audio, 2, 1 );
-    
-  audioGrid->addWidget( labelRate_Audio, 3, 0 );
-  audioGrid->addWidget( m_rate_audio, 3, 1 );
-    
-  audioGrid->addWidget( labelFramesize_Audio, 4, 0 );
-  audioGrid->addWidget( m_framesize_audio, 4, 1 );
-    
-  audioGrid->addWidget( labelMode_Audio, 5, 0 );
-  audioGrid->addWidget( m_mode_audio, 5, 1 );
-    
-  audioGrid->addWidget( labelExtMode_Audio, 6, 0 );
-  audioGrid->addWidget( m_extmode_audio, 6, 1 );
-    
-  audioGrid->addWidget( labelEmphasis_Audio, 7, 0 );
-  audioGrid->addWidget( m_emphasis_audio, 7, 1 );  
-
-  audioGrid->addWidget( labelCopyright_Audio, 8, 0 );
-  audioGrid->addWidget( m_copyright_audio, 8, 1 );  
-
-  audioGrid->setRowStretch( 9, 1 );
-
-  // /////////////////////////////////////////////////
-  // VIDEO TAB
-  // /////////////////////////////////////////////////
-  QWidget* videoTab = new QWidget( mainTabbed );
-
-  QGridLayout* videoGrid = new QGridLayout( videoTab );
-  videoGrid->setAlignment( Qt::AlignTop );
-  videoGrid->setSpacing( spacingHint() );
-  videoGrid->setMargin( marginHint() );
-
-  QLabel* labelMpegVer_Video = new QLabel( i18n( "Type:" ), videoTab, "labelMpegVer_Video" );
-  QLabel* labelDuration_Video  = new QLabel( i18n( "Estimated Duration:" ), videoTab, "labelDuration_Video" );
-  QLabel* labelRate_Video  = new QLabel( i18n( "Rate:" ), videoTab, "labelRate_Video" );
-  QLabel* labelChromaFormat_Video  = new QLabel( i18n( "Chroma Format:" ), videoTab, "labelChromaFormat_Video" );
-  QLabel* labelFormat_Video  = new QLabel( i18n( "Video Format:" ), videoTab, "labelFormat_Video" );
-  QLabel* labelSize_Video  = new QLabel( i18n( "Size:" ), videoTab, "labelSize_Video" );
-  QLabel* labelDisplaySize_Video  = new QLabel( i18n( "Display Size:" ), videoTab, "labelDisplaySize_Video" );
-
-  m_mpegver_video = new QLabel( videoTab, "m_mpegver_video" );
-  m_duration_video = new QLabel( videoTab, "m_duration_video" );
-  m_rate_video = new QLabel( videoTab, "m_rate_video" );
-  m_chromaformat_video = new QLabel( videoTab, "m_chromaformat_video" );
-  m_format_video = new QLabel( videoTab, "m_format_video" );
-  m_size_video = new QLabel( videoTab, "m_size_video" );
-  m_displaysize_video = new QLabel( videoTab, "m_displaysize_video" );
-
-  videoGrid->addWidget( labelMpegVer_Video, 1, 0 );
-  videoGrid->addWidget( m_mpegver_video, 1, 1 );
-
-  videoGrid->addWidget( labelDuration_Video, 2, 0 );
-  videoGrid->addWidget( m_duration_video, 2, 1 );
-
-  videoGrid->addWidget( labelRate_Video, 3, 0 );
-  videoGrid->addWidget( m_rate_video, 3, 1 );
-
-  videoGrid->addWidget( labelChromaFormat_Video, 4, 0 );
-  videoGrid->addWidget( m_chromaformat_video, 4, 1 );
-
-  videoGrid->addWidget( labelFormat_Video, 5, 0 );
-  videoGrid->addWidget( m_format_video, 5, 1 );
-
-  videoGrid->addWidget( labelSize_Video, 6, 0 );
-  videoGrid->addWidget( m_size_video, 6, 1 );
-
-  videoGrid->addWidget( labelDisplaySize_Video, 7, 0 );
-  videoGrid->addWidget( m_displaysize_video, 7, 1 );
-
-  videoGrid->setRowStretch( 9, 1 );
-  
-  // /////////////////////////////////////////////////
+  ///////////////////////////////////////////////////
   // FILE-INFO BOX
-  // /////////////////////////////////////////////////
+  ///////////////////////////////////////////////////
   QGroupBox* groupFileInfo = new QGroupBox( 0, Qt::Vertical, i18n( "File Info" ), frame, "groupFileInfo" );
   groupFileInfo->layout()->setSpacing( 0 );
   groupFileInfo->layout()->setMargin( 0 );
@@ -411,17 +252,222 @@ void K3bVcdTrackDialog::setupGui()
   f.setBold( true );
   m_displayLength->setFont( f );
   m_displaySize->setFont( f );
-  // /////////////////////////////////////////////////
-
-  mainTabbed->addTab( navigationTab, i18n("Navigation") );  
-  mainTabbed->addTab( videoTab, i18n("Video") );
-  mainTabbed->addTab( audioTab, i18n("Audio") );
+  ///////////////////////////////////////////////////
 
   mainLayout->addWidget( groupFileInfo, 0, 0 );
-  mainLayout->addWidget( mainTabbed, 0, 1 );
+  mainLayout->addWidget( m_mainTabbed, 0, 1 );
 
   mainLayout->setColStretch( 0, 1 );
 
+}
+
+void K3bVcdTrackDialog::setupNavigationTab()
+{
+  // /////////////////////////////////////////////////
+  // NAVIGATION TAB
+  // /////////////////////////////////////////////////
+  QWidget* w = new QWidget( m_mainTabbed );
+
+  QGridLayout* grid = new QGridLayout( w );
+  grid->setAlignment( Qt::AlignTop );
+  grid->setSpacing( spacingHint() );
+  grid->setMargin( marginHint() );
+
+  //////////////////////////////////////////////////////////////////////////////////////////
+  QButtonGroup* groupPlay = new QButtonGroup( 4, Qt::Vertical, i18n("Play track ..."), w );
+  QGridLayout*  groupPlayLayout = new QGridLayout( groupPlay );
+  groupPlayLayout->setAlignment( Qt::AlignTop );
+  groupPlayLayout->setSpacing( spacingHint() );
+  groupPlayLayout->setMargin( marginHint() );
+  
+  m_radio_playtime = new QRadioButton( i18n("%1 times").arg(1), groupPlay, "m_radio_playtime" );
+  groupPlayLayout->addWidget( m_radio_playtime, 0, 0 );
+  
+  QSpinBox* spinTimes = new QSpinBox( groupPlay, "m_spinTimes" );
+  groupPlayLayout->addWidget( spinTimes, 0, 1 );
+  
+  m_radio_playforever = new QRadioButton( i18n("forever"), groupPlay, "m_radio_playforever" );
+  groupPlayLayout->addWidget( m_radio_playforever, 1, 0 );
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  QButtonGroup* groupWait = new QButtonGroup( 4, Qt::Vertical, i18n("than wait ..."), w );
+  QGridLayout*  groupWaitLayout = new QGridLayout( groupWait );
+  groupWaitLayout->setAlignment( Qt::AlignTop );
+  groupWaitLayout->setSpacing( spacingHint() );
+  groupWaitLayout->setMargin( marginHint() );
+  
+  m_radio_waitinfinite = new QRadioButton( i18n("infinite"), groupWait, "m_radio_waitinfinite" );
+  groupWaitLayout->addWidget(m_radio_waitinfinite, 0, 0);
+  
+  m_radio_waittime = new QRadioButton( i18n("%1 seconds").arg(0), groupWait, "m_radio_waittime" );
+  groupWaitLayout->addWidget(m_radio_waittime, 1, 0);
+  
+  QSpinBox* spinSeconds = new QSpinBox( groupWait, "m_spinSeconds" );
+  groupWaitLayout->addWidget(spinSeconds, 1, 1);
+  
+  QLabel* labelAfterTimeout = new QLabel( i18n( "after timeout play" ), groupWait, "labelTimeout" );
+  groupWaitLayout->addWidget(labelAfterTimeout, 2, 1);
+  
+  QComboBox* comboAfterTimeout = new QComboBox( groupWait, "comboAfterTimeout" );
+  groupWaitLayout->addWidget(comboAfterTimeout, 3, 1);  
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  QGroupBox* groupNav = new QGroupBox( 4, Qt::Vertical, i18n("Navigation"), w );
+  QGridLayout*  groupNavLayout = new QGridLayout( groupNav );
+  groupNavLayout->setAlignment( Qt::AlignTop );
+  groupNavLayout->setSpacing( spacingHint() );
+  groupNavLayout->setMargin( marginHint() );
+  
+  QLabel* labelNav_previous = new QLabel( i18n( "Privious:" ), groupNav, "labelNav_previous" );
+  QLabel* labelNav_next  = new QLabel( i18n( "Next:" ), groupNav, "labelNav_next" );
+  QLabel* labelNav_return  = new QLabel( i18n( "Return:" ), groupNav, "labelNav_return" );
+  QLabel* labelNav_default  = new QLabel( i18n( "Default:" ), groupNav, "labelNav_default" );
+
+  m_nav_previous = new QComboBox( groupNav, "m_nav_previous" );
+  m_nav_next = new QComboBox( groupNav, "m_nav_next" );
+  m_nav_return = new QComboBox( groupNav, "m_nav_return" );
+  m_nav_default = new QComboBox( groupNav, "m_nav_default" );
+  
+  groupNavLayout->addWidget(labelNav_previous, 0, 0);
+  groupNavLayout->addWidget(m_nav_previous, 0, 1);
+
+  groupNavLayout->addWidget(labelNav_next, 1, 0);
+  groupNavLayout->addWidget(m_nav_next, 1, 1);
+
+  groupNavLayout->addWidget(labelNav_return, 2, 0);
+  groupNavLayout->addWidget(m_nav_return, 2, 1);
+
+  groupNavLayout->addWidget(labelNav_default, 3, 0);
+  groupNavLayout->addWidget(m_nav_default, 3, 1);
+  
+  groupNavLayout->setRowStretch( 4, 1 );
+      
+  QGroupBox* groupKey = new QGroupBox( 4, Qt::Vertical, i18n("numeric keys"), w );
+  m_check_usekeys = new QCheckBox( i18n("Use numeric keys"), groupKey, "m_check_usekeys" );
+  m_list_keys = new QListView( groupKey, "m_list_keys" );
+  
+  grid->addWidget( groupPlay, 0, 0 );
+  grid->addWidget( groupWait, 0, 1 );
+  grid->addWidget( groupNav, 1, 0 );
+  grid->addWidget( groupKey, 1, 1 );
+  
+  grid->setRowStretch( 2, 1 );
+
+  m_mainTabbed->addTab( w, i18n("Navigation") );  
+}
+
+void K3bVcdTrackDialog::setupAudioTab()
+{
+  // /////////////////////////////////////////////////
+  // AUDIO TAB
+  // /////////////////////////////////////////////////
+  QWidget* w = new QWidget( m_mainTabbed );
+
+  QGridLayout* grid = new QGridLayout( w );
+  grid->setAlignment( Qt::AlignTop );
+  grid->setSpacing( spacingHint() );
+  grid->setMargin( marginHint() );
+
+  QLabel* labelMpegVer_Audio = new QLabel( i18n( "Type:" ), w, "labelMpegVer_Audio" );
+  QLabel* labelDuration_Audio  = new QLabel( i18n( "Estimated Duration:" ), w, "labelDuration_Audio" );
+  QLabel* labelRate_Audio  = new QLabel( i18n( "Rate:" ), w, "labelRate_Audio" );
+  QLabel* labelFramesize_Audio  = new QLabel( i18n( "Frame size:" ), w, "labelFramesize_Audio" );
+  QLabel* labelMode_Audio  = new QLabel( i18n( "Mode:" ), w, "labelMode_Audio" );
+  QLabel* labelExtMode_Audio  = new QLabel( i18n( "Ext. Mode:" ), w, "labelExtMode_Audio" );
+  QLabel* labelEmphasis_Audio  = new QLabel( i18n( "Emphasis:" ), w, "labelEmphasis_Audio" );
+  QLabel* labelCopyright_Audio  = new QLabel( i18n( "Copyright:" ), w, "labelCopyright_Audio" );
+
+  m_mpegver_audio = new QLabel( w, "m_mpegver_audio" );
+  m_duration_audio = new QLabel( w, "m_duration_audio" );
+  m_rate_audio = new QLabel( w, "m_rate_audio" );
+  m_framesize_audio = new QLabel( w, "m_framesize_audio" );
+  m_mode_audio = new QLabel( w, "m_mode_audio" );
+  m_extmode_audio = new QLabel( w, "m_extmode_audio" );
+  m_emphasis_audio = new QLabel( w, "m_emphasis_audio" );
+  m_copyright_audio = new QLabel( w, "m_copyright_audio" );
+
+  grid->addWidget( labelMpegVer_Audio, 1, 0 );
+  grid->addWidget( m_mpegver_audio, 1, 1 );
+    
+  grid->addWidget( labelDuration_Audio, 2, 0 );
+  grid->addWidget( m_duration_audio, 2, 1 );
+    
+  grid->addWidget( labelRate_Audio, 3, 0 );
+  grid->addWidget( m_rate_audio, 3, 1 );
+    
+  grid->addWidget( labelFramesize_Audio, 4, 0 );
+  grid->addWidget( m_framesize_audio, 4, 1 );
+    
+  grid->addWidget( labelMode_Audio, 5, 0 );
+  grid->addWidget( m_mode_audio, 5, 1 );
+    
+  grid->addWidget( labelExtMode_Audio, 6, 0 );
+  grid->addWidget( m_extmode_audio, 6, 1 );
+    
+  grid->addWidget( labelEmphasis_Audio, 7, 0 );
+  grid->addWidget( m_emphasis_audio, 7, 1 );  
+
+  grid->addWidget( labelCopyright_Audio, 8, 0 );
+  grid->addWidget( m_copyright_audio, 8, 1 );  
+
+  grid->setRowStretch( 9, 1 );
+
+  m_mainTabbed->addTab( w, i18n("Audio") );
+
+}
+
+void K3bVcdTrackDialog::setupVideoTab()
+{
+  // /////////////////////////////////////////////////
+  // VIDEO TAB
+  // /////////////////////////////////////////////////
+  QWidget* w = new QWidget( m_mainTabbed );
+
+  QGridLayout* grid = new QGridLayout( w );
+  grid->setAlignment( Qt::AlignTop );
+  grid->setSpacing( spacingHint() );
+  grid->setMargin( marginHint() );
+
+  QLabel* labelMpegVer_Video = new QLabel( i18n( "Type:" ), w, "labelMpegVer_Video" );
+  QLabel* labelDuration_Video  = new QLabel( i18n( "Estimated Duration:" ), w, "labelDuration_Video" );
+  QLabel* labelRate_Video  = new QLabel( i18n( "Rate:" ), w, "labelRate_Video" );
+  QLabel* labelChromaFormat_Video  = new QLabel( i18n( "Chroma Format:" ), w, "labelChromaFormat_Video" );
+  QLabel* labelFormat_Video  = new QLabel( i18n( "Video Format:" ), w, "labelFormat_Video" );
+  QLabel* labelSize_Video  = new QLabel( i18n( "Size:" ), w, "labelSize_Video" );
+  QLabel* labelDisplaySize_Video  = new QLabel( i18n( "Display Size:" ), w, "labelDisplaySize_Video" );
+
+  m_mpegver_video = new QLabel( w, "m_mpegver_video" );
+  m_duration_video = new QLabel( w, "m_duration_video" );
+  m_rate_video = new QLabel( w, "m_rate_video" );
+  m_chromaformat_video = new QLabel( w, "m_chromaformat_video" );
+  m_format_video = new QLabel( w, "m_format_video" );
+  m_size_video = new QLabel( w, "m_size_video" );
+  m_displaysize_video = new QLabel( w, "m_displaysize_video" );
+
+  grid->addWidget( labelMpegVer_Video, 1, 0 );
+  grid->addWidget( m_mpegver_video, 1, 1 );
+
+  grid->addWidget( labelDuration_Video, 2, 0 );
+  grid->addWidget( m_duration_video, 2, 1 );
+
+  grid->addWidget( labelRate_Video, 3, 0 );
+  grid->addWidget( m_rate_video, 3, 1 );
+
+  grid->addWidget( labelChromaFormat_Video, 4, 0 );
+  grid->addWidget( m_chromaformat_video, 4, 1 );
+
+  grid->addWidget( labelFormat_Video, 5, 0 );
+  grid->addWidget( m_format_video, 5, 1 );
+
+  grid->addWidget( labelSize_Video, 6, 0 );
+  grid->addWidget( m_size_video, 6, 1 );
+
+  grid->addWidget( labelDisplaySize_Video, 7, 0 );
+  grid->addWidget( m_displaysize_video, 7, 1 );
+
+  grid->setRowStretch( 9, 1 );
+  
+  m_mainTabbed->addTab( w, i18n("Video") );
 }
 
 #include "k3bvcdtrackdialog.moc"

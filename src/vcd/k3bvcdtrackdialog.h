@@ -19,6 +19,7 @@
 
 #include <kdialogbase.h>
 #include <qptrlist.h>
+#include <qtabwidget.h>
 
 class K3bVcdTrack;
 class QLabel;
@@ -42,7 +43,8 @@ class K3bVcdTrackDialog : public KDialogBase
 
  private:
   QList<K3bVcdTrack> m_tracks;
-
+  QTabWidget* m_mainTabbed;
+  
   KCutLabel* m_displayFileName;
   QLabel* m_labelMimeType;  
   QLabel* m_displaySize;
@@ -78,7 +80,10 @@ class K3bVcdTrackDialog : public KDialogBase
   QCheckBox* m_check_usekeys;
   QListView* m_list_keys;
   
-  void setupGui();
+  void prepareGui();
+  void setupNavigationTab();
+  void setupAudioTab();
+  void setupVideoTab();
   void fillGui();
 };
 
