@@ -665,7 +665,7 @@ bool K3bCdCopyJob::writeNextSession()
 	}
 
 	if( m_onTheFly ) {
-	  d->infFileWriter->setBigEndian( true );
+	  d->infFileWriter->setBigEndian( false );
 
 	  // we let KTempFile choose a temp file but delete it on our own
 	  // the same way we delete them when writing with images
