@@ -187,7 +187,6 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   connect( m_radioCloneCopy, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
   connect( m_radioNormalCopy, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
 
-  // TODO: add tooltips and whatsthis
 
   QToolTip::add( m_radioNormalCopy, i18n("Normal copy for most CD types") );
   QToolTip::add( m_radioCloneCopy, i18n("Raw clone copy") );
@@ -210,6 +209,14 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
 					  "not care about the content but simply copies the CD bit by bit. It may be used "
 					  "to copy VideoCDs or CDs which contain erroneous sectors."
 					  "<p><b>Caution:</b> Only single session CDs can be cloned.") );
+  QWhatsThis::add( m_checkQueryCddb, i18n("<p>If this option is checked K3b will query the Cddb database for audio track titles "
+					  "and add them to the resulting CD copy."
+					  "<p>If K3b finds a Cddb entry it will overwrite any CD-TEXT data found on the source "
+					  "unless <em>Prefer CD-Text</em> is checked.") );
+  QWhatsThis::add( m_checkPrefereCdText, i18n("<p>If this option is checked and K3b finds CD-Text on the source media it will be "
+					      "copied to the resulting CD ignoring any potentially existing Cddb entries.") );
+  QWhatsThis::add( m_checkIgnoreReadErrors, i18n("<p>If this option is checked and K3b is not able to read a sector from the "
+						 "source CD it will replace it with zeros on the resulting copy.") );
 
   slotLoadUserDefaults();
 }
