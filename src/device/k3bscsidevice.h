@@ -5,12 +5,12 @@
 #include "k3bdevice.h"
 
 class ScsiIf;
-struct cdrom_drive;
+
 
 class K3bScsiDevice : public K3bDevice
 {
  public:
-  K3bScsiDevice( cdrom_drive* );
+  K3bScsiDevice( const QString& );
   ~K3bScsiDevice();
 
   int isReady() const;

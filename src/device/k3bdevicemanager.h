@@ -101,8 +101,8 @@ class K3bDeviceManager : public QObject
 
   QString m_processOutput;
 
-  K3bDevice* initializeScsiDevice( cdrom_drive* );
-  K3bDevice* initializeIdeDevice( cdrom_drive* );
+  K3bDevice* initializeScsiDevice( const QString& devname, int bus, int target, int lun );
+  K3bDevice* initializeIdeDevice( const QString& );
 
   static const int DEV_ARRAY_SIZE = 19;
   static const char* deviceNames[DEV_ARRAY_SIZE];

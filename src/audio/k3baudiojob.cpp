@@ -26,6 +26,9 @@
 #include "../device/k3bdevice.h"
 #include "../k3bemptydiscwaiter.h"
 #include "../tools/k3bexternalbinmanager.h"
+#include <k3bcdrecordwriter.h>
+#include <k3bcdrdaowriter.h>
+
 
 #include <kprocess.h>
 #include <klocale.h>
@@ -728,7 +731,7 @@ void K3bAudioJob::cdrecordWrite()
   *m_process << s;
 
   // add the device
-  s = QString("dev=%1").arg( m_doc->burner()->genericDevice() );
+  s = QString("dev=%1").arg( m_doc->burner()->busTargetLun() );
   *m_process << s;
 
   if( m_doc->padding() )
@@ -926,5 +929,16 @@ void K3bAudioJob::slotProcessWroteStdin()
   m_processWroteStdin = true;
 }
 
+
+void K3bAudioJob::prepareWriterJob()
+{
+  if( ( m_doc->dao() && writingApp() == K3b::DEFAULT )
+      || writingApp() == K3b::CDRDAO ) {
+
+  }
+  else {
+
+  }
+}
 
 #include "k3baudiojob.moc"

@@ -27,6 +27,8 @@ class K3bAudioTrack;
 class QString;
 class KProcess;
 class QDataStream;
+class K3bAbstractWriter;
+
 
 #include <qptrlist.h>
 #include <kurl.h>
@@ -76,6 +78,8 @@ class K3bAudioJob : public K3bBurnJob  {
   void cdrdaoWrite();
   void cdrecordWrite();
 
+  void prepareWriterJob();
+
   K3bWaveFileWriter m_waveFileWriter;
 	
   KProcess* m_process;
@@ -104,6 +108,8 @@ class K3bAudioJob : public K3bBurnJob  {
   int m_writingApp;
 
   bool m_processWroteStdin;
+
+  K3bAbstractWriter* m_writerJob;
 
  signals:
   void writingLeadOut();

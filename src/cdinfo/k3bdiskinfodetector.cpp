@@ -447,7 +447,7 @@ void K3bDiskInfoDetector::fetchIdeInformation()
 
   // use cdparanoia-lib to retrieve toc
 
-  struct cdrom_drive* drive = m_device->open();
+  struct cdrom_drive* drive = cdda_identify( QFile::encodeName(m_device->devicename()), CDDA_MESSAGE_FORGETIT, 0 );
   if( !drive ) {
     kdDebug() << "(K3bDiskInfoDetector) Could not open drive." << endl;
     // perhaps this is only the case if there is no disk in drive ??
@@ -455,6 +455,8 @@ void K3bDiskInfoDetector::fetchIdeInformation()
     emit diskInfoReady( m_info );
     return;
   }
+
+  cdda_open( drive );
 
   m_info.noDisk = false;
   m_info.empty = ( drive->tracks == 0 );
@@ -475,7 +477,7 @@ void K3bDiskInfoDetector::fetchIdeInformation()
     m_info.toc.append( K3bTrack( startSec, endSec, type, mode ) );
   }
 
-  m_device->close();
+  cdda_close( drive );
 
   determineTocType();
 

@@ -1,15 +1,14 @@
 #include "k3bidedevice.h"
 
-typedef Q_INT16 size16;
-typedef Q_INT32 size32;
+#include <stdlib.h>
+#include <fcntl.h>		// O_RDONLY etc.
+#include <linux/hdreg.h>
+#include <sys/ioctl.h>		// ioctls
 
-extern "C" {
-#include <cdda_interface.h>
-}
+#include <kdebug.h>
 
 
-
-K3bIdeDevice::K3bIdeDevice( cdrom_drive* drive )
+K3bIdeDevice::K3bIdeDevice( const QString& drive )
   : K3bDevice( drive )
 {
   m_burner = false;
@@ -25,7 +24,20 @@ K3bIdeDevice::~K3bIdeDevice()
 }
 
 
-const QString& K3bIdeDevice::genericDevice() const
+bool K3bIdeDevice::furtherInit()
 {
-  return m_emptyString;
+  int cdromfd = ::open( devicename().latin1(), O_RDONLY | O_NONBLOCK );
+  if (cdromfd < 0) {
+    kdDebug() << "(K3bIdeDevice) Error: could not open device." << endl;
+    return false;
+  }
+  else {
+    struct hd_driveid hdId;
+    ::ioctl( cdromfd, HDIO_GET_IDENTITY, &hdId );
+    
+    m_description = QString::fromLatin1((const char*)hdId.model, 40).stripWhiteSpace();
+    m_version = QString::fromLatin1((const char*)hdId.fw_rev, 8).stripWhiteSpace();
+
+    return true;
+  }
 }

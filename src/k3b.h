@@ -153,6 +153,8 @@ class K3bMainWindow : public KDockMainWindow
   void showBusyInfo( const QString& str );
   void endBusy();
 
+  void slotViewAudioPlayer();
+
  protected:
   /** queryClose is called by KTMainWindow on each closeEvent of a window. Against the
    * default implementation (only returns true), this overridden function retrieves all modified documents
@@ -241,7 +243,6 @@ class K3bMainWindow : public KDockMainWindow
 
   void slotViewDocumentHeader();
 
-  void slotViewAudioPlayer();
   void slotAudioPlayerHidden();
   void slotCheckDockWidgetStatus();
 

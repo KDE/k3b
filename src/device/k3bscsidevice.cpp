@@ -5,9 +5,6 @@
 typedef Q_INT16 size16;
 typedef Q_INT32 size32;
 
-extern "C" {
-#include <cdda_interface.h>
-}
 
 #include <stdio.h>
 #include <fcntl.h>
@@ -19,8 +16,8 @@ extern "C" {
 #include <qfile.h>
 
 
-K3bScsiDevice::K3bScsiDevice( cdrom_drive* drive )
-  : K3bDevice( drive )
+K3bScsiDevice::K3bScsiDevice( const QString& devname )
+  : K3bDevice( devname )
 {
   m_burnproof     = false;
   m_maxReadSpeed  = 1;

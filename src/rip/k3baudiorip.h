@@ -42,7 +42,11 @@ class K3bAudioRip : public QObject
   void slotParanoiaFinished();
 
  private:
+  cdrom_drive* open();
+  bool close();
+
   cdrom_paranoia* m_paranoia;
+  cdrom_drive* m_cdromDrive;
   K3bDevice* m_device;
   QTimer* m_rippingTimer;
 

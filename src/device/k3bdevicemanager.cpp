@@ -33,10 +33,6 @@
 typedef Q_INT16 size16;
 typedef Q_INT32 size32;
 
-extern "C" {
-#include <cdda_interface.h>
-}
-
 
 const char* K3bDeviceManager::deviceNames[] =
   { "/dev/cdrom", 
@@ -102,10 +98,9 @@ K3bDevice* K3bDeviceManager::findDevice( const QString& devicename )
   }
   QPtrListIterator<K3bDevice> it( m_allDevices );
   while( it.current() ) {
-    if( it.current()->ioctlDevice() == devicename ||
-	it.current()->genericDevice() == devicename )
+    if( it.current()->deviceNodes().contains(devicename) )
       return it.current();
-
+    
     ++it;
   }
 
@@ -319,43 +314,20 @@ bool K3bDeviceManager::saveConfig( KConfig* c )
 }
 
 
-K3bDevice* K3bDeviceManager::initializeScsiDevice( cdrom_drive* drive )
+K3bDevice* K3bDeviceManager::initializeScsiDevice( const QString& devname, int bus, int target, int lun )
 {
   K3bScsiDevice* dev = 0;
 
-  // determine bus, target, lun
-  int devFile = ::open( drive->cdda_device_name, O_RDONLY | O_NONBLOCK);
-  if( devFile < 0 ) {
-    kdDebug() << "(K3bDeviceManager) ERROR: Could not open device " << dev->genericDevice() << endl;
-    return 0;
-  }
-
-  int bus = -1, id = -1, lun = -1;
-  if( determineBusIdLun( devFile, bus, id, lun ) ) {
-    ::close( devFile );
-
-    if( K3bDevice* oldDev = findDevice( bus, id, lun ) ) {
-      kdDebug() << "(K3bDeviceManager) " << drive->cdda_device_name << " already detected as "
-		<<  oldDev->genericDevice() << "." << endl;
-      return 0;
-    }
-    else {
-      dev = new K3bScsiDevice( drive );
-      dev->m_target = id & 0xff;
-      dev->m_lun    = (id >> 8) & 0xff;
-      dev->m_bus    = bus;
-      kdDebug() << "(K3bDeviceManager) bus: " << dev->m_bus << ", id: " << dev->m_target << ", lun: " << dev->m_lun << endl;
-    }
-  }
-  else {
-    kdDebug() << "(K3bDeviceManager) ERROR: could not determine bus, id, lun of " << drive->cdda_device_name << endl;
-    ::close( devFile );
-    return 0;
-  }
+  dev = new K3bScsiDevice( devname );
+  dev->m_target = target;
+  dev->m_lun    = lun;
+  dev->m_bus    = bus;
+  kdDebug() << "(K3bDeviceManager) bus: " << dev->m_bus << ", id: " << dev->m_target << ", lun: " << dev->m_lun << endl;
+    
 
   // now scan with cdrecord for a driver
   if( m_externalBinManager->foundBin( "cdrecord" ) ) {
-    kdDebug() << "(K3bDeviceManager) probing capabilities for device " << dev->genericDevice() << endl;
+    kdDebug() << "(K3bDeviceManager) probing capabilities for device " << dev->blockDeviceName() << endl;
 
     KProcess driverProc, capProc;
     driverProc << m_externalBinManager->binPath( "cdrecord" );
@@ -425,14 +397,13 @@ K3bDevice* K3bDeviceManager::initializeScsiDevice( cdrom_drive* drive )
 	kdDebug() << "(K3bDeviceManager) unusable cdrecord output: " << line << endl;
 
     }
-
   }
 
   return dev;
 }
 
 
-K3bDevice* K3bDeviceManager::initializeIdeDevice( cdrom_drive* drive )
+K3bDevice* K3bDeviceManager::initializeIdeDevice( const QString& drive )
 {
   K3bIdeDevice* newDevice = new K3bIdeDevice( drive );
   return newDevice;
@@ -441,42 +412,77 @@ K3bDevice* K3bDeviceManager::initializeIdeDevice( cdrom_drive* drive )
 
 K3bDevice* K3bDeviceManager::addDevice( const QString& devicename )
 {
-  cdrom_drive *drive = cdda_identify( QFile::encodeName(devicename), CDDA_MESSAGE_FORGETIT, 0 );
-  if( drive == 0 ) {
-    kdDebug() << "(K3bDeviceManager) " << devicename << " could not be opened." << endl;
+  int cdromfd = ::open( devicename.latin1(), O_RDONLY | O_NONBLOCK );
+  if (cdromfd < 0) {
+    kdDebug() << "could not open device " << devicename << " (" << strerror(errno) << ")" << endl;
     return 0;
   }
 
-  K3bDevice* dev = 0;
-  if( deviceByName( drive->cdda_device_name ) != 0 ) {
-    kdDebug() << "(K3bDeviceManager) " << devicename << " already detected as " << drive->cdda_device_name << "." << endl;
-  }
-  else {
-    if( drive->interface == GENERIC_SCSI ) {
-      dev = initializeScsiDevice( drive );
-    }
-    else if( drive->interface == COOKED_IOCTL ) {
-      dev = initializeIdeDevice( drive );
-    }
-    else {
-      kdDebug() << "(K3bDeviceManager) " << devicename << " is not generic-scsi or cooked-ioctl." << endl;
-    }
-  }
+  // stat the device
+  struct stat cdromStat;
+  ::fstat( cdromfd, &cdromStat );
 
-  cdda_close( drive );
-
-
-  if( dev == 0 )
+  if( /*!S_ISCHR( cdromStat.st_mode) && */!S_ISBLK( cdromStat.st_mode) ) {
+    kdDebug() << devicename << " is no "/* << "character or " */ << "block device" << endl;
+    ::close( cdromfd );
     return 0;
-
-  if( dev->burner() )
-    m_writer.append( dev );
+  }
   else
-    m_reader.append( dev );
+    kdDebug() << devicename << " is block device (" << (int)cdromStat.st_ino << ")" << endl;
 
-  m_allDevices.append( dev );
+  // resolve all symlinks
+  QString resolved = resolveSymLink( devicename );
+  kdDebug() << devicename << " resolved to " << resolved << endl;
 
-  return dev;
+
+  if( ::ioctl(cdromfd, CDROM_CLEAR_OPTIONS, CDO_AUTO_CLOSE) < 0 ) {
+    kdDebug() << devicename << " seems not to be a cdrom device: " << strerror(errno) << endl;
+    ::close( cdromfd );
+    return 0;
+  }
+  kdDebug() << devicename << " seems to be cdrom" << endl;
+
+
+  K3bDevice* device = 0;
+
+  if( IDE_DISK_MAJOR( cdromStat.st_rdev>>8 ) ) {
+    kdDebug() << devicename << " is ide device" << endl;
+
+    // check if device has already been found
+    if( !findDevice( resolved ) )
+      device = initializeIdeDevice( resolved );
+  }
+  else if( SCSI_BLK_MAJOR( cdromStat.st_rdev>>8 ) ) {
+    kdDebug() << devicename << " is scsi device" << endl;
+
+    int bus = -1, target = -1, lun = -1;
+    if( determineBusIdLun( cdromfd, bus, target, lun ) ) {
+      if( K3bDevice* oldDev = findDevice( bus, target, lun ) )
+	oldDev->addDeviceNode( resolved );
+      else
+	device = initializeScsiDevice( resolved, bus, target, lun );
+    }
+  }
+
+
+  ::close( cdromfd );
+
+  if( device ) {
+    if( !device->init() ) {
+      kdDebug() << "Could not initialize device " << devicename << endl;
+      delete device;
+      return 0;
+    }
+  }
+  
+  if( device->burner() )
+    m_writer.append( device );
+  else
+    m_reader.append( device );
+  
+  m_allDevices.append( device );
+  
+  return device;
 }
 
 
@@ -545,9 +551,8 @@ bool K3bDeviceManager::determineBusIdLun( int cdromfd, int& bus, int& id, int& l
   struct stat cdromStat;
   ::fstat( cdromfd, &cdromStat );
 
-  // check diabled since it seems not to work if a cdparanoia drive is opened
-//   if( SCSI_BLK_MAJOR( cdromStat.st_rdev>>8 ) )
-//     {
+  if( SCSI_BLK_MAJOR( cdromStat.st_rdev>>8 ) )
+    {
       struct ScsiIdLun {
 	int id;
 	int lun;
@@ -565,9 +570,9 @@ bool K3bDeviceManager::determineBusIdLun( int cdromfd, int& bus, int& id, int& l
       lun = (idLun.id >> 8) & 0xff;
       kdDebug() << "bus: " << bus << ", id: " << id << ", lun: " << lun << endl;
       return true;
-      //    }
-//   else
-//     return false;
+    }
+  else
+    return false;
 }
 
 

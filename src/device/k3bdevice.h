@@ -3,9 +3,8 @@
 #define K3BDEVICE_H
 
 
-#include <qstring.h>
+#include <qstringlist.h>
 
-struct cdrom_drive;
 class K3bToc;
 
 
@@ -15,31 +14,34 @@ class K3bDevice
   /**
    * The available cdrdao drivers
    */
-  static const char* cdrdao_drivers[13];
+  static const char* cdrdao_drivers[];
   enum interface { SCSI, IDE };
+  enum DeviceType    { CDR = 1, 
+		       CDRW = 2, 
+		       CDROM = 4, 
+		       DVDROM = 8, 
+		       DVDRAM = 16, 
+		       DVDR = 32, 
+		       DVDRW = 64, 
+		       DVDPR = 128,
+		       DVDPRW = 256 };
+  enum DiskStatus { EMPTY = 0,
+		    APPENDABLE = 1,
+		    COMPLETE = 2,
+		    NO_DISK = -1,
+		    NO_INFO = -2 };
 
   /**
    * create a K3bDevice from a cdrom_drive struct
    * (cdparanoia-lib)
    */
-  K3bDevice( cdrom_drive* );
+  K3bDevice( const QString& devname );
   virtual ~K3bDevice();
 
-  /**
-   * opens a cdrom_drive which then can be used
-   * for cdparanoia-methods like if it was opened
-   * with cdda_open().
-   * It must be closed with K3bDevice::close() after
-   * using it!
-   * This is somewhat buggy since it does not work anymore
-   * if someone calls cdda_close after opening the drive
-   * with this method! So please do NOT use cdda_open and
-   * cdda_close!!!
-   */
-  virtual cdrom_drive* open();
-  virtual bool close();
+  bool init();
 
   virtual int interfaceType() const = 0;
+  virtual int type() const;
 
   virtual const QString& vendor() const { return m_vendor; }
   virtual const QString& description() const { return m_description; }
@@ -54,22 +56,37 @@ class K3bDevice
   virtual int            bufferSize() const { return m_bufferSize; }
 
   /**
-   * returns genericDevice if not null
-   * otherwise ioctlDevice is returned
+   * ioctlDevice is returned
    */
   const QString& devicename() const;
 
   /**
-   * needed for the external programs
+   * compatibility
    */
   virtual const QString& genericDevice() const;
 
   /**
-   * needed for mounting the drive
+   * returnes blockDeviceName()
    */
-  virtual const QString& ioctlDevice() const;
+  const QString& ioctlDevice() const;
 
-  const QString& mountDevice() const { return m_mountDevice; }
+  /**
+   * for SCSI devices this should be something like /dev/scd0 or /dev/sr0
+   * for ide device this should be something like /dev/hdb1
+   */
+  virtual const QString& blockDeviceName() const;
+
+  /**
+   * returnes all device nodes for this drive
+   * this mainly makes sense with scsi devices which 
+   * can be accessed through /dev/scdX or /dev/srX
+   * and is useful for fstab scanning
+   */
+  const QStringList& deviceNodes() const;
+
+  void addDeviceNode( const QString& );
+
+  const QString& mountDevice() const;
 
   /** makes only sense to use with sg devices */
   virtual QString busTargetLun() const;
@@ -80,7 +97,7 @@ class K3bDevice
   virtual int            maxWriteSpeed() const { return m_maxWriteSpeed; }
   virtual const QString& cdrdaoDriver() const { return m_cdrdaoDriver; }
 
-  const QString& mountPoint() const { return m_mountPoint; }
+  const QString& mountPoint() const;
 
   /**
    * returns: 0 auto (no cdrdao-driver selected)
@@ -124,7 +141,7 @@ class K3bDevice
   virtual void setBufferSize( int b ) { m_bufferSize = b; }
 
   void setMountPoint( const QString& );
-  void setMountDevice( const QString& d ) { m_mountDevice = d; }
+  void setMountDevice( const QString& d );
 
   /** checks if unit is ready, returns:
    * <ul>
@@ -145,7 +162,7 @@ class K3bDevice
    * returns false if capacity could not be retrieved.
    * DOES NOT WORK SO FAR!
    */
-/*   bool cdCapacity( long* ); */
+  /*   bool cdCapacity( long* ); */
 
 
   /**
@@ -167,8 +184,11 @@ class K3bDevice
   virtual bool block( bool ) const;
 
   void eject() const;
+  void load() const;
 
  protected:
+  bool furtherInit();
+
   QString m_vendor;
   QString m_description;
   QString m_version;
@@ -182,8 +202,6 @@ class K3bDevice
   int m_maxWriteSpeed;
   int m_currentWriteSpeed;
 
-  cdrom_drive* m_cdromStruct;
-
   // only needed for scsi devices
   int m_bus;
   int m_target;
@@ -192,10 +210,8 @@ class K3bDevice
   int m_bufferSize;
 
  private:
-  QString m_genericDevice;
-  QString m_ioctlDevice;
-  QString m_mountDevice;
-  QString m_mountPoint;
+  class Private;
+  Private* d;
 
   friend class K3bDeviceManager;
 };

@@ -4,14 +4,14 @@
 
 #include "k3bdevice.h"
 
-struct cdrom_drive;
+
 class QString;
 
 
 class K3bIdeDevice : public K3bDevice
 {
  public:
-  K3bIdeDevice( cdrom_drive* );
+  K3bIdeDevice( const QString& );
   ~K3bIdeDevice();
 
   int interfaceType() const { return K3bDevice::IDE; }
@@ -19,11 +19,11 @@ class K3bIdeDevice : public K3bDevice
   bool burnproof() const { return false; }
   bool writer() const { return false; }
   int maxWriteSpeed() const { return 0; }
-  const QString& genericDevice() const;
+
+ protected:
+  bool furtherInit();
 
  private:
-  QString m_emptyString;  // only used for returning an empty genericDevice
-
   friend class K3bDeviceManager;
 };
 

@@ -178,8 +178,11 @@ void K3bFileView::slotAudioFilePlay()
     }
   }
 
-  if( !files.isEmpty() )
+  if( !files.isEmpty() ) {
+    if( !k3bMain()->audioPlayer()->isVisible() )
+      k3bMain()->slotViewAudioPlayer();
     k3bMain()->audioPlayer()->playFiles( files );
+  }
 }
 
 
