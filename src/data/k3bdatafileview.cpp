@@ -190,7 +190,7 @@ void K3bDataFileView::slotDataItemRemoved( K3bDataItem* item )
   if( item->parent() == currentDir() ) {
     QListViewItemIterator it(this);
     for( ; it.current(); ++it ) {
-      if( ((K3bDataViewItem*)*it)->dataItem() == item ) {
+      if( ((K3bDataViewItem*)it.current())->dataItem() == item ) {
 	delete it.current();
 	break;
       }
