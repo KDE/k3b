@@ -53,7 +53,7 @@ K3bDataDirTreeView::K3bDataDirTreeView( K3bView* view, K3bDataDoc* doc, QWidget*
   setItemsMovable( false );
   setAlternateBackground( QColor() );
 
-  addColumn( i18n("Dir") );
+  addColumn( i18n("Directory") );
   header()->hide();
 	
   setItemsRenameable( true );
