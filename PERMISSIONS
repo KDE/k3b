@@ -1,0 +1,29 @@
+K3b needs some special permissions to work properly. Most distrobutions come with permissions that I don't like
+very much and make problems when adding new CD/DVD devices to your system.
+If you set up your system as follows you can be sure to never have K3b permission problems again.
+
+1. Disable pam authentication for cdrom and burner devices in /etc/security/console.perm. Otherwise your permissions
+   will be overwritten when loggin in and it's not possible for two users to use K3b at the same time.
+   In my opinion one should disable this completely and create a proper configuration instead. The most annoying
+   issue with this pam stuff is that you cannot have two sessions with two different users running because the first 
+   one owns all the sound and cd devices.
+
+2. Create a cdrom or cdrw or whatever group (if it not already exists) and add all users that should be able to
+   use K3b to that group. You may also skip this step and let everybody use K3b. In that case simply use root as
+   the group and permissions 4711 and 666 instead of 4710 and 660 in the following steps.
+
+3. Change the permissions of cdrecord and cdrdao to 4710 root.cdrom (substitute cdrom with the group from 2).
+   This way both will run suid root which allows them to increase their scheduling priority resulting in a more
+   stable burning process.
+
+4. Change the permissions of all your cdrom device to 660 root.cdrom (substitute cdrom with the group from 2)
+   With devfs you may do this with lines like this (the first changes all ide cd devices while the second takes
+   care of the scsi cd devices):
+     REGISTER        ^ide/host.*/bus.*/target.*/lun.*/cd          PERMISSIONS root.cdrom 660
+     REGISTER        ^scsi/host.*/bus.*/target.*/lun.*/cd         PERMISSIONS root.cdrom 660
+
+5. Change the permissions of the generic SCSI devices to 660 root.cdrom (substitute cdrom with the group from 2)
+   both cdrecord and cdrdao use the generic devices to access the scsi drives. So you don't need to perform this step
+   if you only have IDE devices.
+   Again use a line like the following for devfs:
+     REGISTER        ^scsi/host.*/bus.*/target.*/lun.*/generic    PERMISSIONS root.cdrom 660
