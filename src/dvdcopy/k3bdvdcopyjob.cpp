@@ -417,6 +417,9 @@ bool K3bDvdCopyJob::waitForDvd()
 	emit infoMessage( i18n("The K3b writing speed setting is ignored for DVD+R(W) media."), INFO );
       }
 
+      if( m_writingMode != K3b::WRITING_MODE_AUTO && m_writingMode != K3b::WRITING_MODE_RES_OVWR )
+	emit infoMessage( i18n("Writing mode ignored when writing DVD+R(W) media."), INFO );
+
       if( m & K3bCdDevice::MEDIA_DVD_PLUS_RW ) {
 	emit infoMessage( i18n("Writing DVD+RW."), INFO );
       }
@@ -435,8 +438,11 @@ bool K3bDvdCopyJob::waitForDvd()
 		  K3bCdDevice::MEDIA_DVD_R) ) {
       if( m_writingMode == K3b::WRITING_MODE_INCR_SEQ )
 	emit infoMessage( i18n("Writing DVD-R in sequential mode."), INFO );
-      else
+      else {
+	if( m_writingMode == K3b::WRITING_MODE_RES_OVWR )
+	  emit infoMessage( i18n("Restricted Overwrite is not possible with DVD-R media."), INFO );
 	emit infoMessage( i18n("Writing DVD-R in DAO mode."), INFO );
+      }
     }
   }
 

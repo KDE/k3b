@@ -300,10 +300,15 @@ void K3bGrowisofsImager::slotReceivedStderr( const QString& line )
     else
       kdDebug() << "(K3bGrowisofsWriter) parsing error: '" << line.mid( pos, endPos-pos ) << "'" << endl;
   }
-  else if( line.contains( ":-[" ) ) {
+  else if( line.startsWith( ":-[" ) ) {
     // Error
+
+    // :-[ PERFORM OPC failed with SK=3h/ASC=73h/ASCQ=03h
+    if( line.contains( "PERFORM OPC" ) )
+      emit infoMessage( i18n("OPC failed. Please try writing speed 1x."), ERROR );
+
     // :-[ attempt -blank=full or re-run with -dvd-compat -dvd-compat to engage DAO ]
-    if( line.contains( "engage DAO" ) || line.contains( "media is not formatted or unsupported" ) )
+    else if( line.contains( "engage DAO" ) || line.contains( "media is not formatted or unsupported" ) )
       emit infoMessage( i18n("Please try again with writing mode DAO."), ERROR );
   }
   else {
