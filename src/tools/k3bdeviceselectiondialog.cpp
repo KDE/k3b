@@ -90,6 +90,11 @@ K3bCdDevice::CdDevice* K3bDeviceSelectionDialog::selectDevice( QWidget* parent,
 							       const QPtrList<K3bCdDevice::CdDevice>& devices,
 							       const QString& text )
 {
+  if( devices.isEmpty() )
+    return 0;
+  if( devices.count() == 1 )
+    return devices.getFirst();
+
   K3bDeviceSelectionDialog dlg( parent, 0, text );
   for( QPtrListIterator<K3bCdDevice::CdDevice> it( devices ); it.current(); ++it )
     dlg.addDevice( it.current() );
