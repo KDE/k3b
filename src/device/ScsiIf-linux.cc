@@ -14,10 +14,16 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 /*
  * $Log$
+ * Revision 1.2  2001/10/19 03:18:56  trueg
+ * removed the lun,bus,target system
+ * there are only sgX devices now
+ * merged K3bDeviceChecker into K3bDeviceManager
+ * fixed a memory hole
+ *
  * Revision 1.1  2001/10/15 21:38:15  trueg
  * new added
  *

@@ -14,10 +14,13 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 /*
  * $Log$
+ * Revision 1.1  2001/10/15 21:38:15  trueg
+ * new added
+ *
  * Revision 1.1.1.1  2000/02/05 01:35:11  llanero
  * Uploaded cdrdao 1.1.3 with pre10 patch applied.
  *
