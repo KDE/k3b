@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -42,8 +42,10 @@ K3bThreadJob::~K3bThreadJob()
 
 void K3bThreadJob::start()
 {
-  if( m_thread )
+  if( m_thread ) {
+    m_thread->setProgressInfoEventHandler(this);
     m_thread->start();
+  }
   else {
     kdError() << "(K3bThreadJob) no job set." << endl;
     emit finished(false);

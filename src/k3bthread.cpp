@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -136,8 +136,25 @@ void K3bThread::emitNewSubTask( const QString& job )
 
 void K3bThread::emitDebuggingOutput(const QString& group, const QString& text)
 {
-  if( m_eventHandler ) 
+  if( m_eventHandler )
     qApp->postEvent( m_eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::DebuggingOutput, group, text ) );
   else
     kdWarning() << "(K3bThread) call to emitDebuggingOutput() without eventHandler." << endl;
 }
+
+void K3bThread::emitWriteSpeed(int s)
+{
+  if( m_eventHandler )
+    qApp->postEvent( m_eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::WriteSpeed, s ) );
+  else
+    kdWarning() << "(K3bThread) call to emitWriteSpeed() without eventHandler." << endl;
+}
+
+void K3bThread::emitBufferStatus(int s)
+{
+  if( m_eventHandler )
+    qApp->postEvent( m_eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::BufferStatus, s ) );
+  else
+    kdWarning() << "(K3bThread) call to emitBufferStatus() without eventHandler." << endl;
+}
+

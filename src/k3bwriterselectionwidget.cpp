@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -145,7 +145,7 @@ void K3bWriterSelectionWidget::init()
   K3bDevice* dev = devices.first();
   int i = 0;
   while( dev ) {
-    m_comboWriter->insertItem( dev->vendor() + " " + dev->description() + " (" + dev->ioctlDevice() + ")", i );
+    m_comboWriter->insertItem( dev->vendor() + " " + dev->description() + " (" + dev->blockDeviceName() + ")", i );
     d->indexMap[dev->devicename()] = i;
     d->devices.insert(i, dev);
     ++i;

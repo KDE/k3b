@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -61,6 +61,9 @@ class K3bThread : public QThread
   void emitNewTask( const QString& job );
   void emitNewSubTask( const QString& job );
   void emitDebuggingOutput(const QString&, const QString&);
+
+  void emitWriteSpeed(int s);
+  void emitBufferStatus(int s);
 
  private:
   QObject* m_eventHandler;
