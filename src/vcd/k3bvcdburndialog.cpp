@@ -63,7 +63,6 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
   m_optionGroupLayout->addItem( spacer );
 
   setupVideoCdTab();
-  setupAdvancedTab();
   setupLabelTab();
 
   slotSetImagePath();
@@ -178,65 +177,54 @@ void K3bVcdBurnDialog::setupVideoCdTab()
   QWidget* w = new QWidget( k3bMainWidget() );
 
   // ---------------------------------------------------- Format group ----
-  m_groupVcdFormat = new QButtonGroup( 4, Qt::Vertical, i18n("Format"), w );
-  QCheckBox* m_checkAutoDetect = new QCheckBox( i18n( "Autodetect" ), m_groupVcdFormat );
-  m_checkAutoDetect->setChecked( true );
-
+  m_groupVcdFormat = new QButtonGroup( 4, Qt::Vertical, i18n("Type"), w );
   m_radioVcd11 = new QRadioButton( i18n( "VideoCD 1.1" ), m_groupVcdFormat );
   m_radioVcd20 = new QRadioButton( i18n( "VideoCD 2.0" ), m_groupVcdFormat );
   m_radioSvcd10 = new QRadioButton( i18n( "Super-VideoCD" ), m_groupVcdFormat );
-
-
   m_groupVcdFormat->setExclusive(true);
 
   // ---------------------------------------------------- Options group ---
-  m_groupOptions = new QGroupBox( 4, Qt::Vertical, i18n("Options"), w );
-  m_checkNonCompliant = new QCheckBox( i18n( "Enable Broken SVCD mode" ), m_groupOptions );
-  m_check2336 = new QCheckBox( i18n( "Use 2336 byte Sectors" ), m_groupOptions );
 
+  m_groupOptions = new QGroupBox( 4, Qt::Vertical, i18n("Options"), w );
+  m_checkAutoDetect = new QCheckBox( i18n( "Autodetect VideoCD type" ), m_groupOptions );
+  m_checkAutoDetect->setChecked( true );
+  m_checkAutoDetect->setEnabled( false );
+  
+  m_checkNonCompliant = new QCheckBox( i18n( "Enable Broken SVCD mode" ), m_groupOptions );
   // Only available on SVCD Type
   m_checkNonCompliant->setEnabled( false );
   m_checkNonCompliant->setChecked( false );
+
+  m_check2336 = new QCheckBox( i18n( "Use 2336 byte Sectors" ), m_groupOptions );
+
+  m_checkCdiSupport = new QCheckBox( i18n( "Enable CD-i support" ), m_groupOptions );
+  m_checkCdiSupport->setEnabled( false );
   
-  // ----------------------------------------------------------------------
-  QGridLayout* grid = new QGridLayout( w );
-  grid->setMargin( marginHint() );
-  grid->setSpacing( spacingHint() );
-  // grid->addMultiCellWidget( m_groupVcdFormat, 0, 1, 0, 0 );
-  grid->addWidget( m_groupVcdFormat, 0, 0 );
-  grid->addMultiCellWidget( m_groupOptions, 0, 0, 1, 3 );
-
-  // TODO: enable this in the future, k3b canot resample now.
-  m_groupVcdFormat->setEnabled(false);
-
-  addPage( w, i18n("Settings") );
-}
-
-void K3bVcdBurnDialog::setupAdvancedTab()
-{
-  QWidget* w = new QWidget( k3bMainWidget() );
-
   // ------------------------------------------------- CD-i Application ---
-  m_groupCdi = new QGroupBox( 4, Qt::Vertical, i18n("VideoCD on CD-i"), w );
-  m_checkCdiSupport = new QCheckBox( i18n( "Enable CD-i Support" ), m_groupCdi );
+  m_groupCdi = new QGroupBox( 4, Qt::Vertical, i18n("Video on CD-i"), w );
   m_editCdiCfg = new QMultiLineEdit( m_groupCdi, "m_editCdiCfg" );
-
+  m_editCdiCfg->setFrameShape( QTextEdit::NoFrame );
   // Only available on VCD Type 1.1 or 2.0
   m_groupCdi->setEnabled( false );
-
   // Only available on VCD Type 2.0
   m_editCdiCfg->setEnabled( false );
   m_editCdiCfg->insertLine("CURCOL=GREEN");
   m_editCdiCfg->insertLine("PSDCURCOL=YELLOW");
   m_editCdiCfg->insertLine("PSDCURSHAPE=STAR");
 
+
   // ----------------------------------------------------------------------
   QGridLayout* grid = new QGridLayout( w );
   grid->setMargin( marginHint() );
   grid->setSpacing( spacingHint() );
-  grid->addWidget( m_groupCdi, 0, 0 );
+  grid->addMultiCellWidget( m_groupVcdFormat, 0, 1, 0, 0 );
+  grid->addWidget( m_groupOptions, 0, 1 );
+  grid->addWidget( m_groupCdi, 1, 1 );
+  
+  // TODO: enable this in the future, k3b canot resample now.
+  m_groupVcdFormat->setEnabled(false);
 
-  addPage( w, i18n("Advanced") );
+  addPage( w, i18n("Settings") );
 }
 
 void K3bVcdBurnDialog::setupLabelTab()
@@ -246,16 +234,16 @@ void K3bVcdBurnDialog::setupLabelTab()
   // ----------------------------------------------------------------------
   // noEdit
   QLabel* labelSystemId = new QLabel( i18n( "System Id:" ), w, "labelSystemId" );
-  QLabel* labelApplicationId = new QLabel( i18n( "Aplication Id:" ), w, "labelApplicationId" );
-  QLineEdit* editSystemId = new QLineEdit( w, "editSystemId" );
-  QLineEdit* editApplicationId = new QLineEdit( w, "editApplicationId" );
+  QLabel* labelApplicationId = new QLabel( i18n( "Application Id:" ), w, "labelApplicationId" );
+  QLabel* labelInfoSystemId = new QLabel( vcdDoc()->vcdOptions()->systemId(), w, "labelInfoSystemId" );
+  QLabel* labelInfoApplicationId = new QLabel( vcdDoc()->vcdOptions()->applicationId(), w, "labelInfoApplicationId" );
 
-  editSystemId->setText( vcdDoc()->vcdOptions()->systemId() );
-  editSystemId->setReadOnly( true );
+  labelInfoSystemId->setFrameShape( QLabel::LineEditPanel );
+  labelInfoSystemId->setFrameShadow( QLabel::Sunken );
 
-  editApplicationId->setText( vcdDoc()->vcdOptions()->applicationId() );
-  editApplicationId->setReadOnly( true );
-  QToolTip::add(editApplicationId, i18n("ISO application id for Video CD") );
+  labelInfoApplicationId->setFrameShape( QLabel::LineEditPanel );
+  labelInfoApplicationId->setFrameShadow( QLabel::Sunken );
+  QToolTip::add(labelInfoApplicationId, i18n("ISO application id for VideoCD") );
 
   // ----------------------------------------------------------------------
 
@@ -284,9 +272,9 @@ void K3bVcdBurnDialog::setupLabelTab()
   grid->setSpacing( spacingHint() );
 
   grid->addWidget( labelSystemId, 1, 0 );
-  grid->addWidget( editSystemId, 1, 1 );
+  grid->addWidget( labelInfoSystemId, 1, 1 );
   grid->addWidget( labelApplicationId, 2, 0 );
-  grid->addWidget( editApplicationId, 2, 1 );
+  grid->addWidget( labelInfoApplicationId, 2, 1 );
 
   grid->addMultiCellWidget( line, 3, 3, 0, 1 );
 
@@ -319,6 +307,9 @@ void K3bVcdBurnDialog::setupLabelTab()
 
 void K3bVcdBurnDialog::slotOk()
 {
+  // Add imagename to path when the user has changed the path in m_tempDirSelectionWidget
+  slotSetImagePath();
+  
   if( QFile::exists( m_tempDirSelectionWidget->tempPath() ) ) {
     if( KMessageBox::questionYesNo( this, i18n("Do you want to overwrite %1").arg(m_tempDirSelectionWidget->tempPath()), i18n("File exists...") )
         != KMessageBox::Yes )

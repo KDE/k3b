@@ -48,7 +48,6 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
  
  protected:
    void setupVideoCdTab();
-   void setupAdvancedTab();
    void setupLabelTab();
    void saveSettings();
    void readSettings();
@@ -65,6 +64,7 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
    QRadioButton* m_radioSvcd10;
 
    QGroupBox* m_groupOptions;
+   QCheckBox* m_checkAutoDetect;
    QCheckBox* m_checkNonCompliant;
    QCheckBox* m_check2336;
 
