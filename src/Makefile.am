@@ -1,7 +1,7 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 bin_PROGRAMS = k3b
 k3b_SOURCES = k3bfileview.cpp k3bglobals.cpp kcutlabel.cpp k3bprojectburndialog.cpp k3bjob.cpp k3bburnprogressdialog.cpp k3boptiondialog.cpp k3bfillstatusdisplay.cpp k3bstickybutton.cpp k3bprogressdialog.cpp k3bripperwidget.cpp k3bcopywidget.cpp k3bdirview.cpp k3bview.cpp k3bdoc.cpp k3b.cpp main.cpp 
-k3b_LDADD   = ./data/libdata.a ./cdinfo/libcdinfo.a ./audio/libaudio.a ./device/libdevice.a ./kiotree/libkiotree.a ./audio/input/libinput.a ./option/liboption.la -lid3 -lcdda_interface -lcdda_paranoia $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT) $(LIBSOCKET)
+k3b_LDADD   = ./data/libdata.a ./cdinfo/libcdinfo.a ./audio/libaudio.a ./device/libdevice.a ./kiotree/libkiotree.a ./audio/input/libinput.a ./option/liboption.a -lid3 -lcdda_interface -lcdda_paranoia $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT) $(LIBSOCKET)
 
 SUBDIRS = data cdinfo audio device kiotree option 
 

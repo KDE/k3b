@@ -1016,7 +1016,7 @@ files=src/option/k3boptioncddb.cpp,src/option/k3boptioncddb.h
 sharedlib_LDFLAGS=-version-info 0:0:1
 sharedlib_rootname=option
 sub_dirs=
-type=shared_library
+type=static_library
 
 [src/option/k3boptioncddb.cpp]
 dist=true
