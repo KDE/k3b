@@ -65,7 +65,6 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
 
   QGroupBox* advancedOptionGroup = new QGroupBox( 1, Qt::Vertical, i18n("Options"), advancedTab );
 
-
   advancedTabGrid->addWidget( advancedOptionGroup, 0, 0 );
   advancedTabGrid->setRowStretch( 1, 1 );
 
@@ -73,11 +72,13 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
 
 
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_tempDirSelectionWidget, SLOT(setDisabled(bool)) );
-  // connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkRemoveBufferFiles, SLOT(setDisabled(bool)) );
+  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkRemoveBufferFiles, SLOT(setDisabled(bool)) );
   // connect( m_checkDao, SIGNAL(toggled(bool)), m_checkHideFirstTrack, SLOT(setEnabled(bool)) );
   // connect( m_checkDao, SIGNAL(toggled(bool)), m_checkCdText, SLOT(setEnabled(bool)) );
 
   m_tempDirSelectionWidget->setNeededSize( doc()->size() );
+
+  // loadDefaults();
   readSettings();
 }
 
@@ -105,8 +106,8 @@ void K3bVcdBurnDialog::setupBurnTab( QFrame* frame )
   m_groupOptionsLayout->setSpacing( spacingHint() );
   m_groupOptionsLayout->setMargin( marginHint() );
 
-  // m_checkDao = new QCheckBox( m_groupOptions, "m_checkDao" );
-  // m_checkDao->setText( i18n( "Disk at once" ) );
+  m_checkDao = new QCheckBox( m_groupOptions, "m_checkDao" );
+  m_checkDao->setText( i18n( "Disk at once" ) );
 
   m_checkSimulate = new QCheckBox( m_groupOptions, "m_checkSimulate" );
   m_checkSimulate->setText( i18n( "Simulate Writing" ) );
@@ -120,7 +121,7 @@ void K3bVcdBurnDialog::setupBurnTab( QFrame* frame )
   m_groupOptionsLayout->addWidget( m_checkSimulate );
   m_groupOptionsLayout->addWidget( m_checkOnTheFly );
   m_groupOptionsLayout->addWidget( m_checkRemoveBufferFiles );
-  // m_groupOptionsLayout->addWidget( m_checkDao );
+  m_groupOptionsLayout->addWidget( m_checkDao );
   // --------------------------------------------------- options group ---
 
   m_tempDirSelectionWidget = new K3bTempDirSelectionWidget( frame );
@@ -138,9 +139,9 @@ void K3bVcdBurnDialog::setupBurnTab( QFrame* frame )
 void K3bVcdBurnDialog::slotOk()
 {
   // check if enough space in tempdir if not on-the-fly
-//  if( doc()->size()/1024 > m_tempDirSelectionWidget->freeTempSpace() )
-//    KMessageBox::sorry( this, i18n("Not enough space in temporary directory.") );
-//  else
+  if( doc()->size()/1024 > m_tempDirSelectionWidget->freeTempSpace() )
+    KMessageBox::sorry( this, i18n("Not enough space in temporary directory.") );
+  else
     K3bProjectBurnDialog::slotOk();
 }
 
@@ -149,20 +150,37 @@ void K3bVcdBurnDialog::loadDefaults()
 {
   m_checkSimulate->setChecked( false );
   m_checkDao->setChecked( true );
-  // m_checkOnTheFly->setChecked( true );
   m_checkOnTheFly->setChecked( false );
-  //  m_checkBurnProof->setChecked( true );
-
+  // m_checkBurnProof->setChecked( true );
   m_checkRemoveBufferFiles->setChecked( true );
-}
-
-void K3bVcdBurnDialog::readSettings()
-{
 }
 
 void K3bVcdBurnDialog::saveSettings()
 {
+  doc()->setTempDir( m_tempDirSelectionWidget->tempPath() );
+  doc()->setDao( m_checkDao->isChecked() );
+  doc()->setDummy( m_checkSimulate->isChecked() );
+  doc()->setOnTheFly( m_checkOnTheFly->isChecked() );
+//  ((K3bVcdDoc*)doc())->setRemoveBufferFiles( m_checkRemoveBufferFiles->isChecked() );
+
+  // -- saving current speed --------------------------------------
+  doc()->setSpeed( m_writerSelectionWidget->writerSpeed() );
+
+  // -- saving current device --------------------------------------
+  doc()->setBurner( m_writerSelectionWidget->writerDevice() );
 }
+
+
+void K3bVcdBurnDialog::readSettings()
+{
+  m_checkDao->setChecked( doc()->dao() );
+  m_checkOnTheFly->setChecked( doc()->onTheFly() );
+  m_checkSimulate->setChecked( doc()->dummy() );
+  // m_checkRemoveBufferFiles->setChecked( ((K3bVcdDoc*)doc())->removeBufferFiles() );
+
+  K3bProjectBurnDialog::readSettings();
+}
+
 
 void K3bVcdBurnDialog::loadUserDefaults()
 {
