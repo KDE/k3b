@@ -20,7 +20,7 @@ type=DATA
 addcxxflags=
 bin_program=k3b
 cxxflags=\s-O2 -g3 -Wall
-ldadd=-lid3 -lcdda_interface -lcdda_paranoia -lmad -lartskde $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT)
+ldadd=$(ID3LIB_LIBS) $(CDPARANOIA_LIBS) -lmad -lartskde $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT)
 ldflags=
 
 [General]
