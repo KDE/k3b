@@ -2,5 +2,8 @@
 <kpartgui name="k3b" version="0.1">
 <MenuBar>
   <Action name="window_menu"/>
+  <Menu name="view"><text>View</text>
+  	<Action name="view_dir"/>
+  </Menu>
 </MenuBar>
 </kpartgui>

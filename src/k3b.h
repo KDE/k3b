@@ -35,6 +35,7 @@
 // forward declaration of the K3b classes
 class K3bDoc;
 class K3bView;
+class K3bDirView;
 
 /**
   * The base class for K3b application windows. It sets up the main
@@ -122,31 +123,14 @@ class K3bApp : public KMainWindow
     /** asks for saving if the file is modified, then closes the actual file and window*/
     void slotFileClose();
     /** print the actual file */
-    void slotFilePrint();
-		/** closes all documents and quits the application.*/
     void slotFileQuit();
-		/** reverts the last user action for the active window */
-    void slotEditUndo();
-    /** put the marked text/object into the clipboard and remove
-     *	it from the document
-     */
-    void slotEditCut();
-    /** put the marked text/object into the clipboard
-     */
-    void slotEditCopy();
-    /** paste the clipboard into the document
-     */
-    void slotEditPaste();
+
     /** toggles the toolbar
      */
     void slotViewToolBar();
     /** toggles the statusbar
      */
     void slotViewStatusBar();
-    /** creates a new view for the document in the active child window and adds the new view to the
-     * list of views the document maintains.
-     */
-    void slotWindowNewWindow();
     /** changes the statusbar contents for the standard label permanently, used to indicate current actions.
      * @param text the text that is displayed in the statusbar
      */
@@ -155,10 +139,12 @@ class K3bApp : public KMainWindow
     void windowMenuAboutToShow();
     /** activates the MDI child widget when it gets selected from the window menu. */
     void windowMenuActivated( int id );
-  /**  */
-  void slotWindowTile();
-  /**  */
-  void slotWindowCascade();
+  	/**  */
+	  void slotWindowTile();
+	
+	  void slotWindowCascade();
+
+	  void slotShowDirView();
 
   private:
     /** save general Options like all bar positions and status as well as the geometry and the recent file list to the configuration
@@ -186,8 +172,7 @@ class K3bApp : public KMainWindow
      * initView()
      */
     QWorkspace *pWorkspace;
-    /** the printer instance */
-    QPrinter *printer;
+
     /** a counter that gets increased each time the user creates a new document with "File"->"New" */
     int untitledCount;
     /** a list of all open documents. If the last window of a document gets closed, the installed eventFilter
@@ -202,18 +187,18 @@ class K3bApp : public KMainWindow
     KAction* fileSave;
     KAction* fileSaveAs;
     KAction* fileClose;
-    KAction* filePrint;
     KAction* fileQuit;
-    KAction* editCut;
-    KAction* editCopy;
-    KAction* editPaste;
-    KAction* windowNewWindow;
     KAction* windowTile;
     KAction* windowCascade;
 
     KToggleAction* viewToolBar;
     KToggleAction* viewStatusBar;
     KActionMenu* windowMenu;
+
+    KToggleAction* viewDirView;
+
+    // The DirView Widget
+    K3bDirView* m_dirView;
 };
  
 #endif // K3B_H

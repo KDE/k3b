@@ -1,7 +1,7 @@
 /***************************************************************************
-                          k3bview.cpp  -  description
+                          audiolistview.cpp  -  description
                              -------------------
-    begin                : Mon Mar 26 15:30:59 CEST 2001
+    begin                : Tue Mar 27 2001
     copyright            : (C) 2001 by Sebastian Trueg
     email                : trueg@informatik.uni-freiburg.de
  ***************************************************************************/
@@ -15,43 +15,34 @@
  *                                                                         *
  ***************************************************************************/
 
-// include files for Qt
-#include <qprinter.h>
-#include <qpainter.h>
-#include <qdir.h>
-// include files for KDE
+#include "audiolistview.h"
 
-// application specific includes
-#include "k3b.h"
-#include "k3bview.h"
-#include "k3bdoc.h"
+#include <qevent.h>
+#include <qdragobject.h>
 
-K3bView::K3bView(K3bDoc* pDoc, QWidget *parent, const char* name, int wflags)
- : QWidget(parent, name, wflags)
+
+AudioListView::AudioListView(QWidget *parent, const char *name )
+ : KListView(parent,name)
 {
-    doc=pDoc;
+ 	setAcceptDrops( true );
+	setDropVisualizer( true );
+	setAllColumnsShowFocus( true );
+	
+	setupColumns();
 }
 
-K3bView::~K3bView()
-{
+AudioListView::~AudioListView(){
 }
 
-K3bDoc *K3bView::getDocument() const
-{
-	return doc;
+void AudioListView::setupColumns(){
+	addColumn( "No" );
+	addColumn( "Trackname" );
+	addColumn( "Length" );
+	addColumn( "Pregap" );
+	addColumn( "Start" );
+	addColumn( "End" );
 }
 
-void K3bView::update(K3bView* pSender){
-	if(pSender != this)
-		repaint();
-}
-
-
-void K3bView::closeEvent(QCloseEvent* e){
-
-// DO NOT CALL QWidget::closeEvent(e) here !!
-// This will accept the closing by QCloseEvent::accept() by default.
-// The installed eventFilter() in K3bApp takes care for closing the widget
-// or ignoring the close event
-		
+bool AudioListView::acceptDrag(QDropEvent* e) const{
+	return QTextDrag::canDecode(e);
 }

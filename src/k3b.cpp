@@ -23,6 +23,8 @@
 #include <qtooltip.h>
 #include <qtoolbutton.h>
 #include <qstring.h>
+#include <qsplitter.h>
+#include <qevent.h>
 
 // include files for KDE
 #include <kiconloader.h>
@@ -36,13 +38,13 @@
 // application specific includes
 #include "k3b.h"
 #include "k3bview.h"
-#include "k3bdoc.h"
+#include "k3bdirview.h"
+#include "k3baudiodoc.h"
 
 
 K3bApp::K3bApp():KMainWindow(0,"K3b")
 {
   config=kapp->config();
-  printer = new QPrinter;
   untitledCount=0;
   pDocList = new QList<K3bDoc>();
   pDocList->setAutoDelete(true);
@@ -59,15 +61,10 @@ K3bApp::K3bApp():KMainWindow(0,"K3b")
   // disable actions at startup
   fileSave->setEnabled(false);
   fileSaveAs->setEnabled(false);
-  filePrint->setEnabled(false);
-  editCut->setEnabled(false);
-  editCopy->setEnabled(false);
-  editPaste->setEnabled(false);
 }
 
 K3bApp::~K3bApp()
 {
-  delete printer;
 }
 
 void K3bApp::initActions()
@@ -78,15 +75,12 @@ void K3bApp::initActions()
   fileSave = KStdAction::save(this, SLOT(slotFileSave()), actionCollection());
   fileSaveAs = KStdAction::saveAs(this, SLOT(slotFileSaveAs()), actionCollection());
   fileClose = KStdAction::close(this, SLOT(slotFileClose()), actionCollection());
-  filePrint = KStdAction::print(this, SLOT(slotFilePrint()), actionCollection());
   fileQuit = KStdAction::quit(this, SLOT(slotFileQuit()), actionCollection());
-  editCut = KStdAction::cut(this, SLOT(slotEditCut()), actionCollection());
-  editCopy = KStdAction::copy(this, SLOT(slotEditCopy()), actionCollection());
-  editPaste = KStdAction::paste(this, SLOT(slotEditPaste()), actionCollection());
   viewToolBar = KStdAction::showToolbar(this, SLOT(slotViewToolBar()), actionCollection());
   viewStatusBar = KStdAction::showStatusbar(this, SLOT(slotViewStatusBar()), actionCollection());
 
-  windowNewWindow = new KAction(i18n("New &Window"), 0, this, SLOT(slotWindowNewWindow()), actionCollection(),"window_new_window");
+  viewDirView = new KToggleAction(i18n("Show Directories"), 0, this, SLOT(slotShowDirView()), actionCollection(), "view_dir");
+
   windowTile = new KAction(i18n("&Tile"), 0, this, SLOT(slotWindowTile()), actionCollection(),"window_tile");
   windowCascade = new KAction(i18n("&Cascade"), 0, this, SLOT(slotWindowCascade()), actionCollection(),"window_cascade");
 
@@ -96,15 +90,12 @@ void K3bApp::initActions()
   fileSave->setStatusText(i18n("Saves the actual document"));
   fileSaveAs->setStatusText(i18n("Saves the actual document as..."));
   fileClose->setStatusText(i18n("Closes the actual document"));
-  filePrint ->setStatusText(i18n("Prints out the actual document"));
   fileQuit->setStatusText(i18n("Quits the application"));
-
-  editCut->setStatusText(i18n("Cuts the selected section and puts it to the clipboard"));
-  editCopy->setStatusText(i18n("Copies the selected section to the clipboard"));
-  editPaste->setStatusText(i18n("Pastes the clipboard contents to actual position"));
 
   viewToolBar->setStatusText(i18n("Enables/disables the toolbar"));
   viewStatusBar->setStatusText(i18n("Enables/disables the statusbar"));
+
+  viewDirView->setChecked( true );
 
   windowMenu = new KActionMenu(i18n("&Window"), actionCollection(), "window_menu");
   connect(windowMenu->popupMenu(), SIGNAL(aboutToShow()), this, SLOT(windowMenuAboutToShow()));
@@ -128,23 +119,21 @@ void K3bApp::initView()
   ////////////////////////////////////////////////////////////////////
   // here the main view of the KMainWindow is created by a background box and
   // the QWorkspace instance for MDI view.
-  QVBox* view_back = new QVBox( this );
+  QSplitter* view_back = new QSplitter( this );
   view_back->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
   pWorkspace = new QWorkspace( view_back );
+  m_dirView = new K3bDirView( view_back );
   setCentralWidget(view_back);
 }
 
 
 void K3bApp::createClient(K3bDoc* doc)
 {
-  K3bView* w = new K3bView(doc, pWorkspace,0,WDestructiveClose);
+  K3bView* w = doc->newView( pWorkspace );
   w->installEventFilter(this);
   doc->addView(w);
   w->setIcon(kapp->miniIcon());
-  if ( pWorkspace->windowList().isEmpty() ) // show the very first window in maximized mode
-    w->showMaximized();
-  else
-    w->show();
+  w->show();
 }
 
 void K3bApp::openDocumentFile(const KURL& url)
@@ -161,7 +150,8 @@ void K3bApp::openDocumentFile(const KURL& url)
       return;
     }
   }
-  doc = new K3bDoc();
+
+  doc = new K3bAudioDoc();
   pDocList->append(doc);
   doc->newDocument();
   // Creates an untitled window if file is 0	
@@ -327,7 +317,7 @@ void K3bApp::slotFileOpen()
   slotStatusMsg(i18n("Opening file..."));
 	
   KURL url=KFileDialog::getOpenURL(QString::null,
-      i18n("*|All files"), this, i18n("Open File..."));
+      i18n("*.k3b|K3b Projects"), this, i18n("Open File..."));
   if(!url.isEmpty())
   {
     openDocumentFile(url);
@@ -358,7 +348,7 @@ void K3bApp::slotFileSave()
       slotFileSaveAs();
     else
       if(!doc->saveDocument(doc->URL()))
-    KMessageBox::error (this,i18n("Could not save the current document !"), i18n("I/O Error !"));
+    		KMessageBox::error (this,i18n("Could not save the current document !"), i18n("I/O Error !"));
   }
 
   slotStatusMsg(i18n("Ready."));
@@ -369,7 +359,7 @@ void K3bApp::slotFileSaveAs()
   slotStatusMsg(i18n("Saving file with a new filename..."));
 
   KURL url=KFileDialog::getSaveURL(QDir::currentDirPath(),
-        i18n("*|All files"), this, i18n("Save as..."));
+        i18n("*.k3b|K3b Projects"), this, i18n("Save as..."));
   if(!url.isEmpty())
   {
     K3bView* m = (K3bView*)pWorkspace->activeWindow();
@@ -403,16 +393,6 @@ void K3bApp::slotFileClose()
   slotStatusMsg(i18n("Ready."));
 }
 
-void K3bApp::slotFilePrint()
-{
-  slotStatusMsg(i18n("Printing..."));
-	
-  K3bView* m = (K3bView*) pWorkspace->activeWindow();
-  if ( m )
-    m->print( printer );
-
-  slotStatusMsg(i18n("Ready."));
-}
 
 void K3bApp::slotFileQuit()
 {
@@ -434,49 +414,6 @@ void K3bApp::slotFileQuit()
   slotStatusMsg(i18n("Ready."));
 }
 
-void K3bApp::slotEditUndo()
-{
-  slotStatusMsg(i18n("Reverting last action..."));
-	
-  K3bView* m = (K3bView*) pWorkspace->activeWindow();
-  if ( m )
-//  m->undo();
-
-  slotStatusMsg(i18n("Ready."));
-}
-
-void K3bApp::slotEditCut()
-{
-  slotStatusMsg(i18n("Cutting selection..."));
-	
-  K3bView* m = (K3bView*) pWorkspace->activeWindow();
-  if ( m )
-//    m->cut();	
-
-  slotStatusMsg(i18n("Ready."));
-}
-
-void K3bApp::slotEditCopy()
-{
-  slotStatusMsg(i18n("Copying selection to clipboard..."));
-	
-  K3bView* m = (K3bView*) pWorkspace->activeWindow();
-  if ( m )
-//    m->copy();
-		
-  slotStatusMsg(i18n("Ready."));
-}
-
-void K3bApp::slotEditPaste()
-{
-  slotStatusMsg(i18n("Inserting clipboard contents..."));
-	
-  K3bView* m = (K3bView*) pWorkspace->activeWindow();
-  if ( m )
-//    m->paste();
-		
-  slotStatusMsg(i18n("Ready."));
-}
 
 void K3bApp::slotViewToolBar()
 {
@@ -512,19 +449,6 @@ void K3bApp::slotViewStatusBar()
   slotStatusMsg(i18n("Ready."));
 }
 
-void K3bApp::slotWindowNewWindow()
-{
-  slotStatusMsg(i18n("Opening a new application window..."));
-
-  K3bView* m = (K3bView*) pWorkspace->activeWindow();
-  if ( m )
-  {
-    K3bDoc* doc = m->getDocument();
-    createClient(doc);
-  }
-
-  slotStatusMsg(i18n("Ready."));
-}
 
 void K3bApp::slotWindowTile(){
   pWorkspace->tile();
@@ -546,17 +470,14 @@ void K3bApp::slotStatusMsg(const QString &text)
 void K3bApp::windowMenuAboutToShow()
 {
   windowMenu->popupMenu()->clear();
-  windowMenu->insert(windowNewWindow);
   windowMenu->insert(windowCascade);
   windowMenu->insert(windowTile);
 
   if ( pWorkspace->windowList().isEmpty() ){
-    windowNewWindow->setEnabled(false);
     windowCascade->setEnabled(false);
     windowTile->setEnabled(false);
   }
   else{
-    windowNewWindow->setEnabled(true);
     windowCascade->setEnabled(true);
     windowTile->setEnabled(true);
   }
@@ -578,3 +499,10 @@ void K3bApp::windowMenuActivated( int id )
     w->setFocus();
 }
 
+
+void K3bApp::slotShowDirView(){
+	if( !m_dirView->isVisible() )
+		m_dirView->show();
+	else
+		m_dirView->hide();
+}

@@ -26,6 +26,7 @@
 #include <qobject.h>
 #include <qstring.h>
 #include <qlist.h>
+#include <qfile.h>
 
 // include files for KDE
 #include <kurl.h>
@@ -57,8 +58,10 @@ class K3bDoc : public QObject
     /** Destructor for the fileclass of the application */
     ~K3bDoc();
 
+		enum ProjectType { AUDIO = 1, DATA = 2 };
+
     /** adds a view to the document which represents the document contents. Usually this is your main view. */
-    void addView(K3bView *view);
+    virtual void addView(K3bView *view);
     /** removes a view from the list of currently connected views */
     void removeView(K3bView *view);
 		/** gets called if a view is removed or added */
@@ -77,9 +80,9 @@ class K3bDoc : public QObject
     /** returns if the document is modified or not. Use this to determine if your document needs saving by the user on closing.*/
     bool isModified(){ return modified; };
     /** deletes the document's contents */
-    void deleteContents();
-    /** initializes the document generally */
-    bool newDocument();
+    virtual void deleteContents();
+    /** this virtual version only sets the modified flag */
+    virtual bool newDocument();
     /** closes the acutal document */
     void closeDocument();
     /** loads the document by filename and format and emits the updateViews() signal */
@@ -90,6 +93,9 @@ class K3bDoc : public QObject
     const KURL& URL() const;
     /** sets the URL of the document */
 	  void setURL(const KURL& url);
+	
+	  /** Create a new view */
+  	virtual K3bView* newView( QWidget* parent ) = 0;
 	
   public slots:
     /** calls repaint() on all views connected to the document object and is called by the view by which the document has been changed.
@@ -104,6 +110,14 @@ class K3bDoc : public QObject
     /** the list of the views currently connected to the document */
     QList<K3bView> *pViewList;	
 
+	protected:
+  	/** when deriving from K3bDoc this method really opens the document since
+	      openDocument only opens a tempfile and calls this method. */
+	  virtual bool loadDocumentData( QFile& f ) = 0;
+	
+	  /** when deriving from K3bDoc this method really saves the document since
+	      saveDocument only opens the file and calls this method. */
+  	virtual bool saveDocumentData( QFile& f ) = 0;
 };
 
 #endif // K3BDOC_H

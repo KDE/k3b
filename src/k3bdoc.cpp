@@ -124,9 +124,8 @@ bool K3bDoc::newDocument()
   return true;
 }
 
-bool K3bDoc::openDocument(const KURL &url, const char *format /*=0*/)
+bool K3bDoc::openDocument(const KURL &url, const char *format )
 {
-
   QString tmpfile;
   KIO::NetAccess::download( url, tmpfile );
 
@@ -134,9 +133,10 @@ bool K3bDoc::openDocument(const KURL &url, const char *format /*=0*/)
 	QFile f( tmpfile );
 	if ( !f.open( IO_ReadOnly ) )
 		return false;
-  /////////////////////////////////////////////////
-  // TODO: Add your document opening code here
-  /////////////////////////////////////////////////
+	
+	// load the data into the document	
+	bool success = loadDocumentData( f );
+	
 	f.close();
 
   /////////////////////////////////////////////////
@@ -144,24 +144,24 @@ bool K3bDoc::openDocument(const KURL &url, const char *format /*=0*/)
   doc_url=url;
 	
   modified=false;
-  return true;
+  return success;
 }
 
-bool K3bDoc::saveDocument(const KURL &url, const char *format /*=0*/)
+bool K3bDoc::saveDocument(const KURL &url, const char *format )
 {
+//  KTempFile( locateLocal( "tmp", "k3b"
 //	QFile f( filename );
 //	if ( !f.open( IO_WriteOnly ) )
 //		return false;
 //
-//  /////////////////////////////////////////////////
-//  // TODO: Add your document saving code here
-//  /////////////////////////////////////////////////
+//  bool success = saveDocumentData( f );
 //
 //  f.close();
 //
 //  modified=false;
 //	m_filename=filename;
 //	m_title=QFileInfo(f).fileName();
+//  return success;
   return true;
 }
 

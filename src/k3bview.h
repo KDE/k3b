@@ -60,8 +60,6 @@ class K3bView : public QWidget
     K3bDoc *getDocument() const;
     /** gets called to redraw the document contents if it has been modified */
 		void update(K3bView* pSender);
-    /** contains the implementation for printing functionality and gets called by K3bApp::slotFilePrint() */
-    void print(QPrinter *pPrinter);
 		
   protected:
     /** overwritten QWidget::closeEvent() to catch closing views. Does nothing, as the closeEvents for

@@ -1,7 +1,7 @@
 /***************************************************************************
-                          k3bview.cpp  -  description
+                          audiolistview.h  -  description
                              -------------------
-    begin                : Mon Mar 26 15:30:59 CEST 2001
+    begin                : Tue Mar 27 2001
     copyright            : (C) 2001 by Sebastian Trueg
     email                : trueg@informatik.uni-freiburg.de
  ***************************************************************************/
@@ -15,43 +15,30 @@
  *                                                                         *
  ***************************************************************************/
 
-// include files for Qt
-#include <qprinter.h>
-#include <qpainter.h>
-#include <qdir.h>
-// include files for KDE
-
-// application specific includes
-#include "k3b.h"
-#include "k3bview.h"
-#include "k3bdoc.h"
-
-K3bView::K3bView(K3bDoc* pDoc, QWidget *parent, const char* name, int wflags)
- : QWidget(parent, name, wflags)
-{
-    doc=pDoc;
-}
-
-K3bView::~K3bView()
-{
-}
-
-K3bDoc *K3bView::getDocument() const
-{
-	return doc;
-}
-
-void K3bView::update(K3bView* pSender){
-	if(pSender != this)
-		repaint();
-}
+#ifndef AUDIOLISTVIEW_H
+#define AUDIOLISTVIEW_H
 
 
-void K3bView::closeEvent(QCloseEvent* e){
+#include <klistview.h>
 
-// DO NOT CALL QWidget::closeEvent(e) here !!
-// This will accept the closing by QCloseEvent::accept() by default.
-// The installed eventFilter() in K3bApp takes care for closing the widget
-// or ignoring the close event
-		
-}
+class QDragEnterEvent;
+
+/**
+  *@author Sebastian Trueg
+  */
+
+class AudioListView : public KListView  {
+   Q_OBJECT
+
+public:
+	AudioListView(QWidget *parent=0, const char *name=0);
+	~AudioListView();
+
+private:
+  void setupColumns();
+
+protected:
+  bool acceptDrag(QDropEvent* e) const;
+};
+
+#endif
