@@ -34,7 +34,9 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qfile.h>
+#include <qfileinfo.h>
 #include <qdatastream.h>
+#include <qdir.h>
 #include <qdom.h>
 #include <qdatetime.h>
 #include <qtimer.h>
@@ -182,11 +184,29 @@ void K3bAudioDoc::slotWorkUrlQueue()
     if( !item->url.isLocalFile() ) {
       kdDebug() << item->url.path() << " no local file" << endl;
       m_notFoundFiles.append( item->url.path() );
+      delete item;
       return;
     }
 
-    if( !QFile::exists( item->url.path() ) ) {
+    QFileInfo fi( item->url.path() );
+    if( !fi.exists() ) {
       m_notFoundFiles.append( item->url.path() );
+      delete item;
+      return;
+    }
+
+    if( fi.isDir() ) {
+      // add all files in the dir
+      QDir dir(fi.filePath());
+      QStringList entries = dir.entryList( QDir::Files );
+      KURL::List urls;
+      for( QStringList::iterator it = entries.begin();
+	   it != entries.end(); ++it )
+	urls.append( KURL::fromPathOrURL( dir.absPath() + "/" + *it ) );
+
+      addTracks( urls, lastAddedPosition++ );
+
+      delete item;
       return;
     }
 
