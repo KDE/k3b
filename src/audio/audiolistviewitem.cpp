@@ -40,6 +40,7 @@ void K3bAudioListViewItem::init()
   animationIconNumber = 1;
   setEditor( 1, LINE );
   setEditor( 2, LINE );
+  setEditor( 4, MSF );
 }
 
 
@@ -79,6 +80,13 @@ void K3bAudioListViewItem::setText(int col, const QString& text )
   else if( col == 2 ) {
     // this is the cd-text title field
     m_track->setTitle( text );
+  }
+  else if( col == 4 ) {
+    bool ok;
+    int f = text.toInt(&ok);
+    if( ok )
+      m_track->setPregap( f );
+    return;
   }
 
   KListViewItem::setText( col, text );
