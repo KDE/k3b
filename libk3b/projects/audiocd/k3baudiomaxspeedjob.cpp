@@ -205,3 +205,4 @@ int K3bAudioMaxSpeedJob::maxSpeed() const
 {
   return m_thread->maxSpeedByMedia();
 }
+#include "k3baudiomaxspeedjob.moc"
