@@ -20,7 +20,6 @@
 
 #include <kdialogbase.h>
 
-#include "k3bdocsettings.h"
 
 class K3bDoc;
 class K3bBurnJob;
@@ -59,9 +58,6 @@ class K3bProjectBurnDialog : public KDialogBase
    virtual void loadDefaults() = 0;
    virtual void loadUserDefaults() = 0;
    virtual void saveUserDefaults() = 0;
-
-/*    virtual void loadSettings( const K3bDocSettings& ) {} // this will be pure vitual in the future */
-/*    virtual K3bDocSettings settings() { return K3bDocSettings(); } // this will be pure vitual in the future */
 
  signals:
    void writerChanged();
