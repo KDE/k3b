@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -27,13 +27,16 @@ class QToolButton;
 class QLabel;
 class K3bIso9660ImageWritingJob;
 class KURL;
+class K3bMd5Job;
+class KActiveLabel;
+class KProgress;
 
 /**
   *@author Sebastian Trueg
   */
 class K3bIsoImageWritingDialog : public KDialogBase
 {
-Q_OBJECT
+  Q_OBJECT
 
  public: 
   K3bIsoImageWritingDialog( QWidget* = 0, const char* = 0, bool = true );
@@ -47,12 +50,13 @@ Q_OBJECT
   void updateImageSize( const QString& );
   void slotFindImageFile();
   void slotWriterChanged();
-  void slotCheckMd5Sum();
+  void slotMd5JobFinished( bool );
 
  private:
   void setupGui();
 
   K3bIso9660ImageWritingJob* m_job;
+  K3bMd5Job* m_md5Job;
 
   K3bWriterSelectionWidget* m_writerSelectionWidget;
   QCheckBox* m_checkDummy;
@@ -63,7 +67,8 @@ Q_OBJECT
   QLabel*    m_labelImageSize;
   KLineEdit* m_editImagePath;
   QToolButton* m_buttonFindImageFile;
-
+  KProgress* m_md5ProgressWidget;
+  KActiveLabel* m_md5Label;
 
   QWidget* m_isoInfoWidget;
   QLabel* m_labelIsoId;
@@ -77,6 +82,7 @@ Q_OBJECT
   QLabel* m_generalInfoLabel;
 
   bool m_bIsoImage;
+  QString m_lastCheckedFile;
 };
 
 #endif

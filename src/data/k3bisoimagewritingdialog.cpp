@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -22,10 +22,7 @@
 #include "k3biso9660imagewritingjob.h"
 #include "../kcutlabel.h"
 #include <k3bstdguiitems.h>
-
-// md5sum stuff
-#include "../tools/md5sum/md5.hh"
-#include <fstream>
+#include <tools/k3bmd5job.h>
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -38,6 +35,8 @@
 #include <kconfig.h>
 #include <kio/global.h>
 #include <kurl.h>
+#include <kactivelabel.h>
+#include <kprogress.h>
 
 #include <qgroupbox.h>
 #include <qcheckbox.h>
@@ -65,6 +64,12 @@ K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( QWidget* parent, const char*
   setButtonBoxOrientation( Qt::Vertical );
 
   m_job = 0;
+  m_md5Job = new K3bMd5Job( this );
+  connect( m_md5Job, SIGNAL(finished(bool)),
+	   this, SLOT(slotMd5JobFinished(bool)) );
+  connect( m_md5Job, SIGNAL(percent(int)),
+	   m_md5ProgressWidget, SLOT(setProgress(int)) );
+
 
   m_checkBurnProof->setChecked( true ); // enabled by default
 
@@ -183,11 +188,22 @@ void K3bIsoImageWritingDialog::setupGui()
   groupImageLayout->addWidget( m_labelImageSize, 0, 3 );
   groupImageLayout->addMultiCellWidget( imageSpacerLine, 1, 1, 0, 3 );
   groupImageLayout->addMultiCellWidget( m_isoInfoWidget, 2, 2, 0, 3 );
-  groupImageLayout->addMultiCellWidget( m_generalInfoLabel, 3, 3, 0, 2 );
-  QPushButton* b = new QPushButton( i18n("MD5 Sum..."), groupImage );
-  groupImageLayout->addWidget( b, 3, 3 );
-  connect( b, SIGNAL(clicked()), this, SLOT(slotCheckMd5Sum()) );
-  QToolTip::add( b, i18n("Calculate the MD5 Sum. Be aware: this blocks K3b!") );
+  groupImageLayout->addMultiCellWidget( m_generalInfoLabel, 3, 3, 0, 3 );
+
+  m_md5ProgressWidget = new KProgress( 100, groupImage );
+  m_md5ProgressWidget->setFormat( i18n("Calculating...") );
+  m_md5Label = new KActiveLabel( groupImage );
+
+  QHBoxLayout* infoBox = new QHBoxLayout;
+  infoBox->setMargin(0);
+  infoBox->setSpacing( spacingHint() );
+  infoBox->addWidget( new QLabel( i18n("MD5 sum:"), groupImage ) );
+  infoBox->addWidget( m_md5ProgressWidget );
+  infoBox->addWidget( m_md5Label );
+
+  groupImageLayout->addMultiCellLayout( infoBox, 4, 4, 0, 3 );
+
+  m_md5ProgressWidget->hide();
   // -----------------------------------------------------------------------
 
 
@@ -254,6 +270,8 @@ void K3bIsoImageWritingDialog::slotUser1()
     return;
   }
 
+  m_md5Job->cancel();
+
   // save the path
   kapp->config()->setGroup("General Options");
   kapp->config()->writeEntry( "last written image", m_editImagePath->text() );
@@ -299,6 +317,18 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
 
   QFileInfo info( path );
   if( info.isFile() ) {
+
+    if( m_lastCheckedFile != path ) {
+      // recalculate the md5sum
+      m_md5Job->setFile( path );
+      m_md5Job->start();
+      m_md5Label->hide();
+      m_md5ProgressWidget->show();
+    }
+    else
+      slotMd5JobFinished(true);
+
+    m_lastCheckedFile = path;
 
     // do not show the size here since path could be a cue file
     long imageSize = info.size();
@@ -371,6 +401,7 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
     m_isoInfoWidget->hide();
     m_labelImageSize->setText( "0 kb" );
     m_generalInfoLabel->setText( i18n("No file") );
+    m_md5Label->setText( "" );
 
     // Disable the Write-Button
     actionButton( User1 )->setDisabled( true );
@@ -405,23 +436,18 @@ void K3bIsoImageWritingDialog::setImage( const KURL& url )
 }
 
 
-void K3bIsoImageWritingDialog::slotCheckMd5Sum()
+void K3bIsoImageWritingDialog::slotMd5JobFinished( bool success )
 {
-  // TODO: make this async
-
-  if( QFile::exists( m_editImagePath->text() ) ) {
-    ifstream md5sumFile;
-    md5sumFile.open( QFile::encodeName(m_editImagePath->text()), ios::binary|ios::in );
-    QString md5sumString;
-    if( md5sumFile ) {
-      MD5 md5sumTester( md5sumFile );
-      md5sumFile.close();
-      md5sumString = QString::fromLatin1( md5sumTester.hex_digest(), 33 );
-    }
-
-    KMessageBox::information( this, i18n("MD5 sum of %1: %2").arg(m_editImagePath->text()).arg(md5sumString),
-			      i18n("MD5 Sum") );
+  if( success ) {
+    m_md5Label->setText( m_md5Job->hexDigest() );
   }
+  else {
+    m_md5Label->setText( "" );
+    m_lastCheckedFile = "";
+  }
+
+  m_md5Label->show();
+  m_md5ProgressWidget->hide();
 }
 
 #include "k3bisoimagewritingdialog.moc"
