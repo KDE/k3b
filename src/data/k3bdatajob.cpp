@@ -434,12 +434,16 @@ bool K3bDataJob::prepareWriterJob()
 
     if( QTextStream* s = m_tocFile->textStream() ) {
       if( m_doc->multiSessionMode() == K3bDataDoc::START ||
-	  m_doc->multiSessionMode() == K3bDataDoc::CONTINUE )
+	  m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ) {
 	*s << "CD_ROM_XA" << "\n";
-      else
+	*s << "\n";
+	*s << "TRACK MODE2" << "\n";
+      }
+      else {
 	*s << "CD_ROM" << "\n";
-      *s << "\n";
-      *s << "TRACK MODE1" << "\n";
+	*s << "\n";
+	*s << "TRACK MODE1" << "\n";
+      }
       if( m_doc->onTheFly() )
 	*s << "DATAFILE \"-\" " << m_isoImager->size()*2048 << "\n";
       else
