@@ -21,7 +21,7 @@
 #include <qwidget.h>
 
 class QFrame;
-class QRadioButton;
+class QCheckBox;
 class QGroupBox;
 class QPushButton;
 class QListBoxItem;
@@ -29,31 +29,33 @@ class QString;
 
 class KLineEdit;
 class KListBox;
+class KDialogBase;
 /**
   *@author Sebastian Trueg
   */
 
 class K3bOptionCddb : public QWidget {
-	Q_OBJECT
+    Q_OBJECT
 public: 
-	K3bOptionCddb(QFrame *parent, const char *name);
-	~K3bOptionCddb();
-   void apply();
-   void readSettings();
+    K3bOptionCddb(KDialogBase *dialog, QFrame *parent, const char *name);
+    ~K3bOptionCddb();
+    void apply();
+    void readSettings();
 private slots:
-	void toggled(bool);
-	void addCddbServer();
-	void delCddbServer();
-	void serverSelected(QListBoxItem*);
+    void toggled(bool);
+    void addCddbServer();
+    void delCddbServer();
+    void serverSelected(QListBoxItem*);
 private:
-   QFrame *m_frame;
-	QRadioButton *m_cddbLockup;
-	QPushButton *m_addButton;
-	QPushButton *m_delButton;
-	KLineEdit *m_cddbServerInput;
-	KLineEdit *m_cddbPortInput;
-	KListBox *m_cddbServerList;
-	QGroupBox *m_groupCddbServer;
+    QFrame *m_frame;
+    QCheckBox *m_cddbLockup;
+    QPushButton *m_addButton;
+    QPushButton *m_delButton;
+    KLineEdit *m_cddbServerInput;
+    KLineEdit *m_cddbPortInput;
+    KListBox *m_cddbServerList;
+    QGroupBox *m_groupCddbServer;
+    KDialogBase *m_dialog;
    void setup();
    void fillInputFields(QString hostString);
 

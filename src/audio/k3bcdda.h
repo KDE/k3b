@@ -19,6 +19,7 @@
 #define K3BCDDA_H
 
 class QString;
+class QDataStream;
 struct cdrom_drive;
 
 /**
@@ -27,17 +28,20 @@ struct cdrom_drive;
 
 class K3bCdda {
 public: 
-	K3bCdda();
-	~K3bCdda();
-	void closeDrive( struct cdrom_drive *drive );
-   struct cdrom_drive* pickDrive( QString newPath );
-   long getRawTrackSize(int track, struct cdrom_drive *drive);
-   //void paranoiaRead(struct cdrom_drive * drive,  long firstSector, long lastSector);
-   void paranoiaRead(struct cdrom_drive * drive,  int track);
+    K3bCdda();
+    ~K3bCdda();
+    bool openDrive( struct cdrom_drive *drive );
+    bool closeDrive( struct cdrom_drive *drive );
+    struct cdrom_drive* pickDrive( QString newPath );
+    long getRawTrackSize(int track, struct cdrom_drive *drive);
+    /**
+    * Copys the track to the filename specified by dest. The drive must already be opened.
+    * Reimplemented as threaded version in K3bcddacopy
+    */
+    //bool paranoiaRead(struct cdrom_drive * drive,  int track, QString dest);
+    void writeWavHeader(QDataStream *s, long byteCount);
 
 private:
-  //void paranoiaCallback(long, int);
-
 };
 
 #endif

@@ -19,7 +19,7 @@
 
 #include <qwidget.h>
 #include <qframe.h>
-#include <qradiobutton.h>
+#include <qcheckbox.h>
 #include <qpushbutton.h>
 #include <qgroupbox.h>
 #include <qlayout.h>
@@ -33,12 +33,14 @@
 #include <klocale.h>
 #include <kconfig.h>
 #include <kapp.h>
+#include <kdialogbase.h>
 
 #define DEFAULT_CDDB_HOST  "localhost:888"
 
-K3bOptionCddb::K3bOptionCddb(QFrame *parent, const char *name)
+K3bOptionCddb::K3bOptionCddb(KDialogBase *dialog, QFrame *parent, const char *name)
 : QWidget(parent, name) {
 	m_frame = parent;
+	m_dialog = dialog;
 	setup();
 }
 
@@ -49,29 +51,29 @@ void K3bOptionCddb::setup(){
 
   // add all to frame
   QGridLayout* frameLayout = new QGridLayout( m_frame );
-  frameLayout->setSpacing( 10 );
-  frameLayout->setMargin( 10 );
+  frameLayout->setSpacing( m_dialog->spacingHint() );
+  frameLayout->setMargin(  m_dialog->marginHint() );
 
   QGroupBox *groupCddbOptions = new QGroupBox( m_frame, "cddb_settings_options" );
   groupCddbOptions->setColumnLayout(0, Qt::Vertical );
   groupCddbOptions->setTitle( i18n( "Options" ) );
   QHBoxLayout *optionsLayout = new QHBoxLayout( groupCddbOptions->layout() );
-  optionsLayout->setSpacing( 5 );
-  optionsLayout->setMargin( 10 );
-  m_cddbLockup = new QRadioButton(i18n("Enable CDDB Lockups"), groupCddbOptions, "cddb_settings_lockup");
+  optionsLayout->setSpacing(  m_dialog->spacingHint() );
+  optionsLayout->setMargin(  m_dialog->marginHint() );
+  m_cddbLockup = new QCheckBox(i18n("Enable CDDB Lockups"), groupCddbOptions, "cddb_settings_lockup");
   optionsLayout->addWidget(m_cddbLockup);
 
   // edit settings
   m_groupCddbServer = new QGroupBox( m_frame, "cddb_settings_server" );
   m_groupCddbServer->setTitle( i18n( "Remote Access" ) );
   m_groupCddbServer->setColumnLayout(0, Qt::Vertical );
-  m_groupCddbServer->layout()->setSpacing( 0 );
-  m_groupCddbServer->layout()->setMargin( 0 );
+  m_groupCddbServer->layout()->setSpacing( m_dialog->spacingHint() );
+  m_groupCddbServer->layout()->setMargin( m_dialog->marginHint() );
   m_groupCddbServer->setDisabled(true);
 	
   QGridLayout* serverLayout = new QGridLayout( m_groupCddbServer->layout() );
-  serverLayout->setSpacing( 5 );
-  serverLayout->setMargin( 10 );
+  serverLayout->setSpacing( m_dialog->spacingHint() );
+  serverLayout->setMargin( m_dialog->marginHint() );
   QHBox *serverSettings = new QHBox(m_groupCddbServer);
   QLabel *host = new QLabel(i18n("Hostname:"), serverSettings );
   m_cddbServerInput = new KLineEdit(serverSettings, "cddb_settings_serverInput");
