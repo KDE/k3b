@@ -845,8 +845,8 @@ void K3bMainWindow::init()
   emit initializationInfo( i18n("Reading local CDDB database...") );
   config()->setGroup("Cddb");
   QString filename = config()->readEntry("songlistPath", locateLocal("data", "k3b") + "/songlist.xml");
-  m_songManager = new K3bSongManager(filename );
-  //  m_songManager->load( filename );
+  m_songManager = new K3bSongManager( );
+  m_songManager->load( filename );
 
   emit initializationInfo( i18n("Ready") );
 }

@@ -24,9 +24,9 @@ ldadd=$(ID3LIB_LIBS) $(CDPARANOIA_LIBS) -lmad -lartskde $(LIB_KFILE) $(LIB_KDEUI
 ldflags=
 
 [General]
-AMChanged=true
+AMChanged=false
 author=Sebastian Trueg
-configure_args=
+configure_args=--prefix=/opt/kde2
 email=trueg@informatik.uni-freiburg.de
 kdevprj_version=1.3
 lfv_open_groups=GNU,Translations
@@ -1685,7 +1685,7 @@ install_location=
 type=HEADER
 
 [src/tools/Makefile.am]
-files=src/tools/k3bexternalbinmanager.cpp,src/tools/k3bexternalbinmanager.h
+files=src/tools/k3bexternalbinmanager.cpp,src/tools/k3bexternalbinmanager.h,src/tools/k3bwavefilewriter.cpp,src/tools/k3bwavefilewriter.h
 sharedlib_LDFLAGS=-version-info 0:0:1
 sharedlib_rootname=tools
 sub_dirs=

@@ -385,8 +385,10 @@ void K3bAudioPlayer::seek( long pos )
       }
     }
   }
-  else
+  else {
     m_seekSlider->setValue(0);
+    slotUpdateCurrentTime(0);
+  }
 }
 
 
@@ -470,7 +472,14 @@ void K3bAudioPlayer::slotCheckEnd()
 {
   if( !m_playObject.isNull() ) {
     if( m_playObject.state() == Arts::posIdle ) {
-      m_updateTimer->stop();
+      if( m_currentItem->nextSibling() ) {
+	setCurrentItem( m_currentItem->nextSibling() );
+	play();
+      }
+      else {
+	m_updateTimer->stop();
+	seek(0);
+      }
       emit ended();
     }
   }
