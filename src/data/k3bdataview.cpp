@@ -137,6 +137,9 @@ void K3bDataView::importSession()
 
   // TODO: check if it's a data cd and appendable and show some dialog
 
+  m_doc->disable();
+
+  k3bMain()->showBusyInfo( i18n("Mounting disk...") );
 
   // mount the cd
   connect( KIO::mount( true, 0L, m_device->mountDevice(), m_device->mountPoint(), false ), SIGNAL(result(KIO::Job*)),
@@ -150,12 +153,16 @@ void K3bDataView::slotMountFinished( KIO::Job* job )
     KMessageBox::error( this, KIO::buildErrorString( job->error(), m_device->vendor() + " " + m_device->description() ) );
   }
   else {
+    k3bMain()->showBusyInfo( i18n("Importing old session...") );
     m_doc->setBurner( m_device );
     m_doc->importSession( m_device->mountPoint() );
 
     // unmount the cd
     KIO::unmount( m_device->mountPoint(), false );
   }
+
+  k3bMain()->endBusy();
+  m_doc->enable();
 }
 
 

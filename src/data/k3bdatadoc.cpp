@@ -1069,6 +1069,8 @@ void K3bDataDoc::importSession( const QString& path )
 
 void K3bDataDoc::createSessionImportItems( const QString& path, K3bDirItem* parent )
 {
+  kapp->processEvents();
+
   QFileInfo newF(path);
   K3bDataItem* oldItem = parent->find( newF.fileName() );
   if( oldItem ) {
@@ -1082,8 +1084,6 @@ void K3bDataDoc::createSessionImportItems( const QString& path, K3bDirItem* pare
   }
 
   if( newF.isDir() && !newF.isSymLink() ) {
-    kdDebug() << "(K3bDataDoc) sessionimport: new diritem: " << newF.filePath() << endl;
-
     K3bDirItem* dir = 0;
     if( !oldItem ) {
       dir = new K3bDirItem( newF.fileName(), this, parent );
@@ -1108,8 +1108,6 @@ void K3bDataDoc::createSessionImportItems( const QString& path, K3bDirItem* pare
     }
   }
   else {
-    kdDebug() << "(K3bDataDoc) sessionimport: new fileitem: " << newF.filePath() << endl;
-
     K3bFileItem* item = new K3bFileItem( newF.absFilePath(), this, parent, newF.fileName() );
     item->setRemoveable(false);
     item->setRenameable(false);
