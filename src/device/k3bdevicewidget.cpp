@@ -293,6 +293,8 @@ K3bDeviceWidget::K3bDeviceWidget( K3bDeviceManager* manager, QWidget *parent, co
   m_viewDevices->setSorting( -1 );
   m_viewDevices->setDoubleClickForEdit(false);
   m_viewDevices->setAlternateBackground( QColor() );
+  m_viewDevices->setSelectionMode( QListView::NoSelection );
+  m_viewDevices->setFullWidth();
   // ------------------------------------------------
 
 
@@ -352,6 +354,8 @@ void K3bDeviceWidget::updateDeviceListViews()
   // -----------------------------------------
   m_writerParentViewItem = new QListViewItem( m_viewDevices, i18n("Writer") );
   m_writerParentViewItem->setPixmap( 0, SmallIcon( "cdwriter_unmount" ) );
+  // spacer item
+  (void)new QListViewItem( m_viewDevices );
   m_readerParentViewItem = new QListViewItem( m_viewDevices, i18n("Reader") );
   m_readerParentViewItem->setPixmap( 0, SmallIcon( "cdrom_unmount" ) );
   // -----------------------------------------
@@ -360,30 +364,39 @@ void K3bDeviceWidget::updateDeviceListViews()
   PrivateTempDevice* dev = m_tempDevices.first();
   while( dev ) {
     // create the root device item
-    QListViewItem* devRoot = new QListViewItem( (dev->writer ? m_writerParentViewItem : m_readerParentViewItem),
-						dev->device->vendor() + " " + dev->device->description() );
+    K3bListViewItem* devRoot = new K3bListViewItem( (dev->writer ? m_writerParentViewItem : m_readerParentViewItem),
+						    dev->device->vendor() + " " + dev->device->description() );
+    QFont f( m_viewDevices->font() );
+    f.setBold(true);
+    devRoot->setFont( 0, f );
+
     // create the read-only info items
-    QListViewItem* systemDeviceItem = new QListViewItem( devRoot, i18n("System device name:") );
+    K3bListViewItem* systemDeviceItem = new K3bListViewItem( devRoot, i18n("System device name:") );
     if( dev->device->interfaceType() == K3bDevice::SCSI )
       systemDeviceItem->setText( 1, QString("%1 (%2)").arg(dev->device->devicename()).arg(dev->device->busTargetLun()) );
     else
       systemDeviceItem->setText( 1, dev->device->devicename() );
+    systemDeviceItem->setForegroundColor( 1, gray );
 
-    QListViewItem* interfaceItem = new QListViewItem( devRoot, systemDeviceItem, 
-						      i18n("Interface type:"),
-						      ( dev->device->interfaceType() == K3bDevice::SCSI ? 
-							i18n("Generic SCSI") : 
-							i18n("ATAPI") ) );
+    K3bListViewItem* interfaceItem = new K3bListViewItem( devRoot, systemDeviceItem, 
+							  i18n("Interface type:"),
+							  ( dev->device->interfaceType() == K3bDevice::SCSI ? 
+							    i18n("Generic SCSI") : 
+							    i18n("ATAPI") ) );
+    interfaceItem->setForegroundColor( 1, gray );
 
-    QListViewItem* vendorItem = new QListViewItem( devRoot, interfaceItem, 
+    K3bListViewItem* vendorItem = new K3bListViewItem( devRoot, interfaceItem, 
 						   i18n("Vendor:"),
 						   dev->device->vendor() );
-    QListViewItem* modelItem = new QListViewItem( devRoot, vendorItem, 
+    vendorItem->setForegroundColor( 1, gray );
+    K3bListViewItem* modelItem = new K3bListViewItem( devRoot, vendorItem, 
 						   i18n("Description:"),
 						   dev->device->description() );
-    QListViewItem* versionItem = new QListViewItem( devRoot, modelItem, 
+    modelItem->setForegroundColor( 1, gray );
+    K3bListViewItem* versionItem = new K3bListViewItem( devRoot, modelItem, 
 						   i18n("Version:"),
 						   dev->device->version() );
+    versionItem->setForegroundColor( 1, gray );
 
 
     // now add the reader (both interfaces) items
@@ -446,7 +459,7 @@ void K3bDeviceWidget::updateDeviceListViews()
 	if( dev->device->supportsWriteMode( K3bDevice::RAW_R96P ) )
 	  wm += "RAW/R96P ";
 
-	(void)new QListViewItem( devRoot, daoItem, i18n("Write modes:"), wm );
+	(new K3bListViewItem( devRoot, daoItem, i18n("Write modes:"), wm ))->setForegroundColor( 1, gray );
       }
 
       devRoot->setOpen(true);

@@ -65,7 +65,7 @@
                             <bool>false</bool>
                         </property>
                         <property name="text">
-                            <string>Save entries in local directory (entries are saved to the first directory in the list)</string>
+                            <string>Save entries in local directory (the first directory in the list)</string>
                         </property>
                     </widget>
                     <widget class="QFrame" row="2" column="0">
