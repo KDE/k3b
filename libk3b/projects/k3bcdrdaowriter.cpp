@@ -480,6 +480,8 @@ void K3bCdrdaoWriter::start()
     return;
   }
 
+  emit debuggingOutput( "Used versions", "cdrdao: " + m_cdrdaoBinObject->version );
+
   if( !m_cdrdaoBinObject->copyright.isEmpty() )
     emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3").arg(m_cdrdaoBinObject->name()).arg(m_cdrdaoBinObject->version).arg(m_cdrdaoBinObject->copyright), INFO );
 

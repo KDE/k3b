@@ -19,6 +19,7 @@
 #include <klocale.h>
 #include <kcombobox.h>
 #include <klineedit.h>
+#include <kurllabel.h>
 
 #include <qregexp.h>
 #include <qvalidator.h>
@@ -52,6 +53,8 @@ K3bCddbPatternWidget::K3bCddbPatternWidget( QWidget* parent, const char* name )
 	   this, SIGNAL(changed()) );
   connect( m_checkBlankReplace, SIGNAL(toggled(bool)),
 	   this, SIGNAL(changed()) );
+  connect( m_specialStringsLabel, SIGNAL(leftClickedURL()), 
+	   this, SLOT(slotSeeSpecialStrings()) );
 }
 
 
@@ -108,6 +111,24 @@ void K3bCddbPatternWidget::loadDefaults()
   m_comboFilenamePattern->setEditText( "%r - %m/%a - %t" );
   m_checkBlankReplace->setChecked( false );
   m_editBlankReplace->setText( "_" );
+}
+
+
+void K3bCddbPatternWidget::slotSeeSpecialStrings()
+{
+  QWhatsThis::display( i18n( "<p><b>Pattern special strings:</b>"
+			     "<ul>\n"
+			     "<li>%a - artist of the track\n"
+			     "<li>%t - title of the track\n"
+			     "<li>%n - track number\n"
+			     "<li>%y - year of the CD\n"
+			     "<li>%e - extended information about the track\n"
+			     "<li>%g - genre of the CD\n"
+			     "<li>%r - album artist (differs from %a only on soundtracks or compilations)\n"
+			     "<li>%m - album title\n"
+			     "<li>%x - extended information about the CD\n"
+			     "<li>%d - current date\n"
+			     "</ul>" ) );
 }
 
 #include "k3bcddbpatternwidget.moc"

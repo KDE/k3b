@@ -310,7 +310,7 @@ void K3bCdCopyDialog::slotStartClicked()
     job->setOnTheFly( m_checkOnTheFly->isChecked() );
     job->setKeepImage( !m_checkDeleteImages->isChecked() );
     job->setOnlyCreateImage( m_checkOnlyCreateImage->isChecked() );
-    job->setTempPath( m_tempDirSelectionWidget->tempPath() );
+    job->setTempPath( m_tempDirSelectionWidget->plainTempPath() );
     job->setCopies( m_checkSimulate->isChecked() ? 1 : m_spinCopies->value() );
     job->setParanoiaMode( m_comboParanoiaMode->currentText().toInt() );
     job->setReadRetries( m_spinRetries->value() );
@@ -340,6 +340,7 @@ void K3bCdCopyDialog::slotToggleAll()
   m_tempDirSelectionWidget->setDisabled( m_checkOnTheFly->isChecked() );
   m_checkOnlyCreateImage->setEnabled( !m_checkOnTheFly->isChecked() );
   m_writerSelectionWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
+  m_checkOnTheFly->setEnabled( !m_checkOnlyCreateImage->isChecked() );
 
   if ( m_checkOnlyCreateImage->isChecked() )
     m_checkDeleteImages->setChecked( false );

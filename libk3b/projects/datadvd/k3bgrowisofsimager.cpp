@@ -126,6 +126,9 @@ void K3bGrowisofsImager::start()
     }
   }
 
+  emit debuggingOutput( "Used versions", "growisofs: " + m_growisofsBin->version );
+  emit debuggingOutput( "Used versions", "mkisofs: " + m_mkisofsBin->version );
+
   if( !m_growisofsBin->copyright.isEmpty() )
     emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3").arg("growisofs").arg(m_growisofsBin->version).arg(m_growisofsBin->copyright), INFO );
   if( !m_mkisofsBin->copyright.isEmpty() )

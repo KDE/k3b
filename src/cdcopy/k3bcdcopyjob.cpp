@@ -493,9 +493,17 @@ bool K3bCdCopyJob::prepareImageFiles()
     // create a directory which contains all the images and inf and stuff
     // and save it in some cool structure
 
+    bool tempDirReady = false;
     if( !fi.isDir() ) {
-      if( QFileInfo( m_tempPath.section( '/', 0, -1 ) ).isDir() )
-	m_tempPath = m_tempPath.section( '/', 0, -1 );
+      if( QFileInfo( m_tempPath.section( '/', 0, -2 ) ).isDir() ) {
+	if( !QFile::exists( m_tempPath ) ) {
+	  QDir dir( m_tempPath.section( '/', 0, -2 ) );
+	  dir.mkdir( m_tempPath.section( '/', -1 ) );
+	  tempDirReady = true;
+	}
+	else
+	  m_tempPath = m_tempPath.section( '/', 0, -2 );
+      }
       else {
 	emit infoMessage( i18n("Specified an unusable temporary path. Using default."), WARNING );
 	m_tempPath = K3b::defaultTempPath();
@@ -503,15 +511,19 @@ bool K3bCdCopyJob::prepareImageFiles()
     }
 
     // create temp dir
-    QDir dir( m_tempPath );
-    m_tempPath = K3b::findUniqueFilePrefix( "k3bCdCopy", m_tempPath );
-    kdDebug() << "(K3bCdCopyJob) creating temp dir: " << m_tempPath << endl;
-    if( !dir.mkdir( m_tempPath, true ) ) {
-      emit infoMessage( i18n("Unable to create temporary directory '%1'.").arg(m_tempPath), ERROR );
-      return false;
+    if( !tempDirReady ) {
+      QDir dir( m_tempPath );
+      m_tempPath = K3b::findUniqueFilePrefix( "k3bCdCopy", m_tempPath );
+      kdDebug() << "(K3bCdCopyJob) creating temp dir: " << m_tempPath << endl;
+      if( !dir.mkdir( m_tempPath, true ) ) {
+	emit infoMessage( i18n("Unable to create temporary directory '%1'.").arg(m_tempPath), ERROR );
+	return false;
+      }
+      d->deleteTempDir = true;
     }
-    d->deleteTempDir = true;
+
     m_tempPath = K3b::prepareDir( m_tempPath );
+    emit infoMessage( i18n("Using temporary directory %1.").arg(m_tempPath), INFO );
 
     // create temp filenames
     int i = 1;
@@ -537,15 +549,21 @@ bool K3bCdCopyJob::prepareImageFiles()
 	KMessageBox::warningYesNo( qApp->activeWindow(),
 				   i18n("Do you want to overwrite %1?").arg(m_tempPath),
 				   i18n("File Exists") )
-	!= KMessageBox::Yes) {
+	== KMessageBox::Yes) {
       if( fi.isDir() )
 	m_tempPath = K3b::findTempFile( "iso", m_tempPath );
-      else if( !QFileInfo( m_tempPath.section( '/', 0, -1 ) ).isDir() ) {
+      else if( !QFileInfo( m_tempPath.section( '/', 0, -2 ) ).isDir() ) {
 	emit infoMessage( i18n("Specified an unusable temporary path. Using default."), WARNING );
 	m_tempPath = K3b::findTempFile( "iso" );
       }
       // else the user specified a file in an existing dir
+      if( m_tempPath.right( 4 ) != ".iso" )
+	m_tempPath += ".iso";
+
+      emit infoMessage( i18n("Writing image file to %1.").arg(m_tempPath), INFO );
     }
+    else
+      return false;
 
     d->imageNames.append( m_tempPath );
 

@@ -117,7 +117,7 @@ void K3bMovieView::setupActions()
 }
 
 
-void K3bMovieView::setDevice( K3bDevice* device )
+void K3bMovieView::setDevice( K3bCdDevice::CdDevice* device )
 {
   m_device = device;
 }

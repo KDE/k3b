@@ -125,7 +125,7 @@ void K3bDoc::setSpeed( int speed )
   m_speed = speed;
 }
 
-void K3bDoc::setBurner( K3bDevice* dev )
+void K3bDoc::setBurner( K3bCdDevice::CdDevice* dev )
 {
   m_burner = dev;
 }

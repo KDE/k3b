@@ -242,8 +242,10 @@ void K3bDvdJob::slotGrowisofsImagerPercent( int p )
 void K3bDvdJob::slotIsoImagerFinished( bool success )
 {
   if( m_canceled ) {
-    emit canceled();
-    emit finished(false);
+    if( !numRunningSubJobs() ) {
+      emit canceled();
+      emit finished(false);
+    }
     return;
   }
 
@@ -388,8 +390,10 @@ void K3bDvdJob::slotWriterJobPercent( int p )
 void K3bDvdJob::slotWritingFinished( bool success )
 {
   if( m_canceled ) {
-    emit canceled();
-    emit finished(false);
+    if( !numRunningSubJobs() ) {
+      emit canceled();
+      emit finished(false);
+    }
     return;
   }
 
@@ -460,8 +464,10 @@ void K3bDvdJob::slotVerificationProgress( int p )
 void K3bDvdJob::slotVerificationFinished( bool success )
 {
   if( m_canceled ) {
-    emit canceled();
-    emit finished(false);
+    if( !numRunningSubJobs() ) {
+      emit canceled();
+      emit finished(false);
+    }
     return;
   }
 
@@ -509,6 +515,10 @@ bool K3bDvdJob::waitForDvd()
     mt = K3bCdDevice::MEDIA_DVD_RW_OVWR|K3bCdDevice::MEDIA_DVD_PLUS_RW|K3bCdDevice::MEDIA_DVD_PLUS_R;
   else
     mt = K3bCdDevice::MEDIA_WRITABLE_DVD;
+
+  // double layer media
+  if( m_doc->size() > 4700372992LL )
+    mt = K3bCdDevice::MEDIA_DVD_PLUS_R_DL;
 
   d->foundMedia = waitForMedia( m_doc->burner(), 
 				m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||

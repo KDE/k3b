@@ -82,7 +82,8 @@ void K3bGrowisofsHandler::handleLine( const QString& line )
     else  
       emit infoMessage( line, K3bJob::ERROR );
   }
- else if( line.contains( "flushing cache" ) ) {
+  else if( line.contains( "flushing cache" ) ) {
+    emit flushingCache();
     emit newSubTask( i18n("Flushing Cache")  );
     emit infoMessage( i18n("Flushing the cache may take some time."), K3bJob::INFO );
   }

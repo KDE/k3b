@@ -25,7 +25,7 @@
 #include <kconfig.h>
 
 
-K3bAbstractWriter::K3bAbstractWriter( K3bDevice* dev, K3bJobHandler* jh, QObject* parent, const char* name )
+K3bAbstractWriter::K3bAbstractWriter( K3bCdDevice::CdDevice* dev, K3bJobHandler* jh, QObject* parent, const char* name )
   : K3bJob( jh, parent, name ),
     m_burnDevice(dev),
     m_burnSpeed(1),
@@ -40,7 +40,7 @@ K3bAbstractWriter::~K3bAbstractWriter()
 }
 
 
-K3bDevice* K3bAbstractWriter::burnDevice() const
+K3bCdDevice::CdDevice* K3bAbstractWriter::burnDevice() const
 {
   if( m_burnDevice )
     return m_burnDevice; 

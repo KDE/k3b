@@ -56,6 +56,11 @@ class K3bGrowisofsHandler : public QObject
   void newSubTask( const QString& );
   void deviceBuffer( int );
 
+  /**
+   * We need this to know when the writing finished to update the progress
+   */
+  void flushingCache();
+
  private:
   int m_error;
   bool m_dao;

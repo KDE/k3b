@@ -72,6 +72,7 @@
 #include <kstdaction.h>
 #include <kconfig.h>
 #include <kaction.h>
+#include <kinputdialog.h>
 
 
 class K3bNoViewView : public QWidget
@@ -191,14 +192,19 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
 				       m_actionCollection, "unlock" );
   KAction* actionlock = new KAction( i18n("Loc&k"), "", 0, this, SLOT(slotLockDevice()),
 				     m_actionCollection, "lock" );
+  KAction* actionSetReadSpeed = new KAction( i18n("Set Read Speed"), "", 0, this, SLOT(slotSetReadSpeed()),
+					     m_actionCollection, "set_read_speed" );
 
   m_devicePopupMenu->insert( actionDiskInfo );
   m_devicePopupMenu->insert( new KActionSeparator( this ) );
   m_devicePopupMenu->insert( actionUnmount );
   m_devicePopupMenu->insert( actionEject );
   m_devicePopupMenu->insert( actionLoad );
+  m_devicePopupMenu->insert( new KActionSeparator( this ) );
   m_devicePopupMenu->insert( actionUnlock );
   m_devicePopupMenu->insert( actionlock );
+  m_devicePopupMenu->insert( new KActionSeparator( this ) );
+  m_devicePopupMenu->insert( actionSetReadSpeed );
 
 
 //   connect( m_urlCombo, SIGNAL(returnPressed(const QString&)), this, SLOT(slotDirActivated(const QString&)) );
@@ -393,6 +399,35 @@ void K3bDirView::slotLoadDisk()
 {
   if( m_lastDevice )
     K3bCdDevice::reload( m_lastDevice );
+}
+
+
+void K3bDirView::slotSetReadSpeed()
+{
+  if( m_lastDevice ) {
+    bool ok = false;
+    int s = KInputDialog::getInteger( i18n("CD Read Speed"),
+				      i18n("<p>Please enter the preferred read speed for <b>%1</b>. "
+					   "This speed will be used for the currently mounted "
+					   "medium."
+					   "<p>This is especially useful to slow down the drive when "
+					   "watching movies which are read directly from the drive "
+					   "and the spinning noise is way too loud."
+					   "<p>Be aware that this has no influence on K3b since it will "
+					   "change the reading speed again when copying CDs or DVDs.")
+				      .arg(m_lastDevice->vendor() + " " + m_lastDevice->description()),
+				      12,
+				      1,
+				      m_lastDevice->maxReadSpeed(),
+				      1,
+				      10,
+				      &ok,
+				      this );
+    if( ok ) {
+      if( !m_lastDevice->setSpeed( s*175, 0xFFFF ) )
+	KMessageBox::error( this, i18n("Setting the read speed failed.") );
+    }
+  }
 }
 
 

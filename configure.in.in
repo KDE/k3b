@@ -204,16 +204,22 @@ AC_SUBST(LIBSAMPLERATE)
 AM_CONDITIONAL(compile_libsamplerate, [test -z "$LIBSAMPLERATE"])
 
 
-dnl Find aRts
 ARTS_LIBS=""
-KDE_CHECK_HEADERS(arts/artsflow.h,
-	[KDE_CHECK_HEADERS(arts/kmedia2.h,
-		[arts_available=yes
-	 	 ARTS_LIBS="-lartskde"],
-		[arts_available=no]
-	)]
-)
+if test "$build_arts" == "yes"; then
+	dnl Find aRts
+	KDE_CHECK_HEADERS(arts/artsflow.h,
+		[KDE_CHECK_HEADERS(arts/kmedia2.h,
+			[arts_available=yes
+		 	 ARTS_LIBS="-lartskde"],
+			[arts_available=no]
+		)]
+	)
+fi
 AC_SUBST(ARTS_LIBS)
+AM_CONDITIONAL(include_arts, [test -n "$ARTS_LIBS"])
+if test "$build_arts" == "yes"; and test x$arts_available = xyes; then
+	AC_DEFINE(WITH_ARTS,1,[defined if arts support is compiled in])
+fi
 
 KDE_CHECK_THREADING
 

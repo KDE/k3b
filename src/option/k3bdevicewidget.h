@@ -44,7 +44,7 @@ class K3bDeviceWidget : public QWidget
   Q_OBJECT
 
  public:
-  K3bDeviceWidget( K3bDeviceManager*, QWidget *parent = 0, const char *name = 0 );
+  K3bDeviceWidget( K3bCdDevice::DeviceManager*, QWidget *parent = 0, const char *name = 0 );
   ~K3bDeviceWidget();
 
  public slots:
@@ -69,7 +69,7 @@ class K3bDeviceWidget : public QWidget
   QListViewItem* m_writerParentViewItem;
   QListViewItem* m_readerParentViewItem;
 
-  K3bDeviceManager* m_deviceManager;
+  K3bCdDevice::DeviceManager* m_deviceManager;
 
   K3bListView*    m_viewDevices;
   QPushButton* m_buttonRefreshDevices;

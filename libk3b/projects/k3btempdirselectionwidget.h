@@ -43,6 +43,12 @@ class K3bTempDirSelectionWidget : public QGroupBox
   QString tempPath() const;
   QString tempDirectory() const;
 
+  /**
+   * Use this if you don't want K3bTempDirSelectionWidget to modify the
+   * user input based on the mode.
+   */
+  QString plainTempPath() const;
+
  public slots:
   void setTempPath( const QString& );
   void setSelectionMode( int mode );

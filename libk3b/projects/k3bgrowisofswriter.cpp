@@ -33,7 +33,7 @@
 #include <kglobal.h>
 
 #include <qvaluelist.h>
-//#include <qdatetime.h>
+#include <qfile.h>
 
 #include <unistd.h>
 
@@ -46,7 +46,7 @@ public:
       process( 0 ),
       growisofsBin( 0 ),
       trackSize(-1),
-      trackSizePadding(0),
+      layerBreak(0),
       usingRingBuffer(false),
       ringBuffer(0) {
   }
@@ -72,9 +72,12 @@ public:
 
   // used in DAO with growisofs >= 5.15
   long trackSize;
-  long trackSizePadding;
+
+  long layerBreak;
 
   unsigned long long overallSizeFromOutput;
+
+  QFile inputFile;
 
   bool usingRingBuffer;
   K3bPipeBuffer* ringBuffer;
@@ -97,6 +100,8 @@ K3bGrowisofsWriter::K3bGrowisofsWriter( K3bCdDevice::CdDevice* dev, K3bJobHandle
 	   this, SIGNAL(newSubTask(const QString&)) );
   connect( d->gh, SIGNAL(deviceBuffer(int)),
 	   this, SIGNAL(deviceBuffer(int)) );
+  connect( d->gh, SIGNAL(flushingCache()),
+	   this, SLOT(slotFlushingCache()) );
 }
 
 
@@ -128,35 +133,12 @@ int K3bGrowisofsWriter::fd() const
 
 bool K3bGrowisofsWriter::closeFd()
 {
-  //
-  // do the padding
-  // In case we use the ring buffer the padded bytes will also be written to the buffer
-  // and the buffer will close the process' stdin fd anyway.
-  //
-  if( !d->canceled && d->trackSizePadding > 0 ) {
-    kdDebug() << "(K3bGrowisofsWriter) padding with " << d->trackSizePadding << " blocks." << endl;
-    char buf[d->trackSizePadding*2048];
-    ::memset( buf, 0, d->trackSizePadding*2048 );
-    if( ::write( fd(), buf, d->trackSizePadding*2048 ) < d->trackSizePadding*2048 )
-      kdDebug() << "(K3bGrowisofsWriter) FAILED to pad." << endl;
-  }
-
   return ( !::close( fd() ) );
 }
 
 
 bool K3bGrowisofsWriter::prepareProcess()
 {
-  delete d->process;
-  d->process = new K3bProcess();
-  d->process->setRunPrivileged(true);
-  //  d->process->setPriority( KProcess::PrioHighest );
-  d->process->setSplitStdout(true);
-  d->process->setRawStdin(true);
-  connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotReceivedStderr(const QString&)) );
-  connect( d->process, SIGNAL(stdoutLine(const QString&)), this, SLOT(slotReceivedStderr(const QString&)) );
-  connect( d->process, SIGNAL(processExited(KProcess*)), this, SLOT(slotProcessExited(KProcess*)) );
-
   d->growisofsBin = k3bcore->externalBinManager()->binObject( "growisofs" );
   if( !d->growisofsBin ) {
     emit infoMessage( i18n("Could not find %1 executable.").arg("growisofs"), ERROR );
@@ -170,27 +152,61 @@ bool K3bGrowisofsWriter::prepareProcess()
     return false;
   }
 
+  emit debuggingOutput( "Used versions", "growisofs: " + d->growisofsBin->version );
+
   if( !d->growisofsBin->copyright.isEmpty() )
-    emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3").arg("growisofs").arg(d->growisofsBin->version).arg(d->growisofsBin->copyright), INFO );
+    emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3").arg("growisofs")
+		      .arg(d->growisofsBin->version).arg(d->growisofsBin->copyright), INFO );
+
 
   //
   // The growisofs bin is ready. Now we add the parameters
   //
+  delete d->process;
+  d->process = new K3bProcess();
+  d->process->setRunPrivileged(true);
+  //  d->process->setPriority( KProcess::PrioHighest );
+  d->process->setSplitStdout(true);
+  d->process->setRawStdin(true);
+  connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotReceivedStderr(const QString&)) );
+  connect( d->process, SIGNAL(stdoutLine(const QString&)), this, SLOT(slotReceivedStderr(const QString&)) );
+  connect( d->process, SIGNAL(processExited(KProcess*)), this, SLOT(slotProcessExited(KProcess*)) );
+
+
+  //
+  // growisofs < 5.20 wants the tracksize to be a multiple of 16 (1 ECC block: 16*2048 bytes)
+  // we simply pad ourselves.
+  //
+  // But since the writer itself properly pads or writes a longer lead-out we don't really need
+  // to write zeros. We just tell growisofs to reserve a multiple of 16 blocks.
+  // This is only releveant in DAO mode anyway.
+  //
+  int trackSizePadding = 0;
+  if( d->trackSize > 0 && d->growisofsBin->version < K3bVersion( 5, 20 ) ) {
+    if( d->trackSize % 16 ) {
+      trackSizePadding = (16 - d->trackSize%16);
+      kdDebug() << "(K3bGrowisofsWriter) need to pad " << trackSizePadding << " blocks." << endl;
+    }
+  }
+
 
   *d->process << d->growisofsBin;
 
-  QString s = burnDevice()->blockDeviceName() + "=";
-  if( d->image.isEmpty() ) {
-    s += "/dev/fd/0";
-    d->usingRingBuffer = true;
-  }
-  else {
-    s += d->image;
-    d->usingRingBuffer = false;
-  }
+  // we always read from stdin since the ringbuffer does the actual reading from the source
+  QString s = burnDevice()->blockDeviceName() + "=" + "/dev/fd/0";
+  d->usingRingBuffer = true;
 
   // for now we do not support multisession
   *d->process << "-Z" << s;
+
+  if( !d->image.isEmpty() ) {
+    d->inputFile.setName( d->image );
+    if( !d->inputFile.open( IO_ReadOnly ) ) {
+      emit infoMessage( i18n("Could not open file %1.").arg(d->image), ERROR );
+      return false;
+    }
+    d->trackSize = (d->inputFile.size()+1024) / 2048;
+  }
 
   // now we use the force (luke ;) do not reload the dvd, K3b does that.
   *d->process << "-use-the-force-luke=notray";
@@ -198,17 +214,20 @@ bool K3bGrowisofsWriter::prepareProcess()
   // we check for existing filesystems ourselves, so we always force the overwrite...
   *d->process << "-use-the-force-luke=tty";
 
-  // if reading from an image let growisofs use the size of the image
-  if( d->growisofsBin->version > K3bVersion( 5, 17, -1 ) && d->trackSize > 0 && d->image.isEmpty() )
-    *d->process << "-use-the-force-luke=tracksize:" + QString::number(d->trackSize);
+  // DL writing with forced layer break
+  if( d->layerBreak > 0 )
+    *d->process << "-use-the-force-luke=break:" + QString::number(d->layerBreak);
 
-  // this only makes sense for DVD-R(W) media
+  // the tracksize parameter takes priority over the dao:tracksize parameter since growisofs 5.18
+  else if( d->growisofsBin->version > K3bVersion( 5, 17 ) && d->trackSize > 0 )
+    *d->process << "-use-the-force-luke=tracksize:" + QString::number(d->trackSize + trackSizePadding);
+  
   if( simulate() )
     *d->process << "-use-the-force-luke=dummy";
+
   if( d->writingMode == K3b::DAO ) {
-    // if reading from an image let growisofs use the size of the image
-    if( d->growisofsBin->version >= K3bVersion( 5, 15, -1 ) && d->trackSize > 0 && d->image.isEmpty() )
-      *d->process << "-use-the-force-luke=dao:" + QString::number(d->trackSize);
+    if( d->growisofsBin->version >= K3bVersion( 5, 15 ) && d->trackSize > 0 )
+      *d->process << "-use-the-force-luke=dao:" + QString::number(d->trackSize + trackSizePadding);
     else
       *d->process << "-use-the-force-luke=dao";
     d->gh->reset(true);
@@ -230,10 +249,11 @@ bool K3bGrowisofsWriter::prepareProcess()
       // if no option is given
       speed = burnDevice()->determineMaximalWriteSpeed();
     }
-    
+
+    // speed may be a float number. example: DVD+R(W): 2.4x    
     if( speed != 0 )
       *d->process << QString("-speed=%1").arg( speed%1385 > 0
-					      ? QString::number( (float)speed/1385.0, 'f', 1 )  // example: DVD+R(W): 2.4x
+					      ? QString::number( (float)speed/1385.0, 'f', 1 )
 					      : QString::number( speed/1385 ) );
   }
 
@@ -304,6 +324,7 @@ void K3bGrowisofsWriter::start()
 	if( !d->ringBuffer ) {
 	  d->ringBuffer = new K3bPipeBuffer( this, this );
 	  connect( d->ringBuffer, SIGNAL(percent(int)), this, SIGNAL(buffer(int)) );
+	  connect( d->ringBuffer, SIGNAL(finished(bool)), this, SLOT(slotRingBufferFinished(bool)) );
 	}
 
 	d->ringBuffer->writeToFd( d->process->stdinFd() );
@@ -311,6 +332,10 @@ void K3bGrowisofsWriter::start()
 	bool manualBufferSize = k3bcore->config()->readBoolEntry( "Manual buffer size", false );
 	int bufSize = ( manualBufferSize ? k3bcore->config()->readNumEntry( "Fifo buffer", 4 ) : 4 );
 	d->ringBuffer->setBufferSize( bufSize );
+
+	if( !d->image.isEmpty() )
+	  d->ringBuffer->readFromFd( d->inputFile.handle() );
+
 	d->ringBuffer->start();
       }
     }
@@ -323,9 +348,9 @@ void K3bGrowisofsWriter::cancel()
   if( active() ) {
     d->canceled = true;
     closeFd();
-    d->process->kill();
     if( d->usingRingBuffer && d->ringBuffer )
       d->ringBuffer->cancel();
+    d->process->kill();
   }
 }
 
@@ -338,17 +363,13 @@ void K3bGrowisofsWriter::setWritingMode( int m )
 
 void K3bGrowisofsWriter::setTrackSize( long size )
 {
-  // for now growisofs want it to be a multiple of 16 (1 ECC block: 16*2048 bytes)
-  // although I don't think it's necessary we simply pad
-  if( size % 16 ) {
-    d->trackSizePadding = (16 - size%16);
-    d->trackSize = size + d->trackSizePadding;
-  }
-  else {
-    d->trackSizePadding = 0;
-    d->trackSize = size;
-  }
-  kdDebug() << "(K3bGrowisofsWriter) need to pad " << d->trackSizePadding << " blocks." << endl;
+  d->trackSize = size;
+}
+
+
+void K3bGrowisofsWriter::setLayerBreak( long lb )
+{
+  d->layerBreak = lb;
 }
 
 
@@ -415,20 +436,18 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
 
 void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
 {
+  d->inputFile.close();
+
   if( d->canceled ) {
-    // this will unblock and eject the drive and emit the finished/canceled signals
-    K3bAbstractWriter::cancel();
+    if( !d->usingRingBuffer || !d->ringBuffer->running() ) {
+      // this will unblock and eject the drive and emit the finished/canceled signals
+      K3bAbstractWriter::cancel();
+    }
     return;
   }
 
   if( p->normalExit() ) {
     if( p->exitStatus() == 0 ) {
-
-      // the output stops before 100%, so we do it manually
-      // TODO: this should be done when flushing the cache
-      emit percent( 100 );
-      emit processedSize( d->overallSizeFromOutput/1024/1024,
-			  d->overallSizeFromOutput/1024/1024 );
 
       int s = d->speedEst->average();
       if( s > 0 )
@@ -465,6 +484,15 @@ void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
 }
 
 
+void K3bGrowisofsWriter::slotRingBufferFinished( bool )
+{
+  if( d->canceled && !d->process->isRunning() ) {
+    // this will unblock and eject the drive and emit the finished/canceled signals
+    K3bAbstractWriter::cancel();
+  }
+}
+
+
 void K3bGrowisofsWriter::slotEjectingFinished( K3bCdDevice::DeviceHandler* dh )
 {
   if( !dh->success() )
@@ -477,6 +505,19 @@ void K3bGrowisofsWriter::slotEjectingFinished( K3bCdDevice::DeviceHandler* dh )
 void K3bGrowisofsWriter::slotThroughput( int t )
 {
   emit writeSpeed( t, 1385 );
+}
+
+
+void K3bGrowisofsWriter::slotFlushingCache()
+{
+  if( !d->canceled ) {
+    //
+    // growisofs's progress output stops before 100%, so we do it manually
+    //
+    emit percent( 100 );
+    emit processedSize( d->overallSizeFromOutput/1024/1024,
+			d->overallSizeFromOutput/1024/1024 );
+  }
 }
 
 #include "k3bgrowisofswriter.moc"

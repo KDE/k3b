@@ -380,6 +380,11 @@ void K3bDiskInfoView::createMediaInfoItems( const K3bCdDevice::DiskInfo& info )
 				 i18n("Empty:"),
 				 info.empty() ? i18n("yes") : i18n("no") );
 
+  if( info.isDvdMedia() )
+    atipChild = new KListViewItem( atipItem, atipChild,
+				   i18n("Layers:"),
+				   QString::number( info.numLayers() ) );
+    
   if( info.mediaType() == K3bCdDevice::MEDIA_DVD_PLUS_RW ) {
     atipChild = new KListViewItem( atipItem, atipChild,
 				   i18n("Background Format:") );

@@ -35,7 +35,7 @@ class QSpinBox;
 class QComboBox;
 class K3bCddbPatternWidget;
 class QToolButton;
-class base_K3bAudioRippingOptionWidget;
+class K3bAudioConvertingOptionWidget;
 
 
 /**
@@ -73,8 +73,7 @@ class K3bAudioRippingDialog : public K3bInteractionDialog
   QCheckBox* m_checkUseIndex0;
 
   K3bCddbPatternWidget* m_patternWidget;
-
-  base_K3bAudioRippingOptionWidget* m_optionWidget;
+  K3bAudioConvertingOptionWidget* m_optionWidget;
 
   void setupGui();
   void setupContextHelp();
@@ -88,12 +87,6 @@ class K3bAudioRippingDialog : public K3bInteractionDialog
   void slotLoadK3bDefaults();
   void slotLoadUserDefaults();
   void slotSaveUserDefaults();
-
-  void slotConfigurePlugin();
-  void slotToggleAll();
-  void slotSeeSpecialStrings();
-
-  void slotUpdateFreeTempSpace();
 };
 
 #endif

@@ -87,6 +87,8 @@ void K3bVideoDvdJob::prepareIsoImager()
     connect( m_isoImager, SIGNAL(finished(bool)), this, SLOT(slotIsoImagerFinished(bool)) );
     connect( m_isoImager, SIGNAL(debuggingOutput(const QString&, const QString&)), 
 	     this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
+    connect( m_isoImager, SIGNAL(sizeCalculated(int, int)), 
+	     this, SLOT(slotSizeCalculationFinished(int, int)) );
   }
 }
 

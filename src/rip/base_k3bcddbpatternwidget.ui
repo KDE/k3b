@@ -118,17 +118,17 @@
         <widget class="KComboBox" row="1" column="1">
             <item>
                 <property name="text">
-                    <string>%r - %m.m3u</string>
+                    <string>%r - %m</string>
                 </property>
             </item>
             <item>
                 <property name="text">
-                    <string>Playlist.m3u</string>
+                    <string>Playlist</string>
                 </property>
             </item>
             <item>
                 <property name="text">
-                    <string>playlists/%r/%m.m3u</string>
+                    <string>playlists/%r/%m</string>
                 </property>
             </item>
             <property name="name">

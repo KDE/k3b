@@ -94,6 +94,10 @@ int main( int argc, char* argv[] )
   aboutData.addCredit("Erik de Castro Lopo",
 		      I18N_NOOP("For libsamplerate which is used for generic resampling in the audio decoder framework."),
 		      "erikd@mega-nerd.com" );
+  aboutData.addCredit("Peter Osterlund",
+		      I18N_NOOP("For writing pipebuf2 on which the ringbuffer used for DVD writing is based on."),
+		      "petero2@telia.com" );
+
 
 
   KCmdLineArgs::init( argc, argv, &aboutData );

@@ -109,6 +109,15 @@ int K3bCdDevice::DiskInfo::numTracks() const
 }
 
 
+int K3bCdDevice::DiskInfo::numLayers() const
+{
+  if( isDvdMedia() )
+    return m_numLayers;
+  else
+    return 1;
+}
+
+
 K3bMsf K3bCdDevice::DiskInfo::remainingSize() const
 {
   if( empty() )
@@ -142,6 +151,15 @@ K3bMsf K3bCdDevice::DiskInfo::size() const
 }
 
 
+K3b::Msf K3bCdDevice::DiskInfo::firstLayerSize() const
+{
+  if( numLayers() > 1 )
+    return m_firstLayerSize;
+  else
+    return size();
+}
+
+
 void K3bCdDevice::DiskInfo::debug() const
 {
   kdDebug() << "DiskInfo:" << endl
@@ -161,6 +179,7 @@ void K3bCdDevice::DiskInfo::debug() const
 	    << "Appendable:      " << appendable() << endl
 	    << "Sessions:        " << numSessions() << endl
 	    << "Tracks:          " << numTracks() << endl
+	    << "Layers:          " << numLayers() << endl
 	    << "Capacity:        " << capacity().toString() 
 	    << " (LBA " << QString::number(capacity().lba())
 	    << ") (" << QString::number(capacity().mode1Bytes()) << " Bytes) (" 

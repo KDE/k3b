@@ -26,7 +26,7 @@ class K3bDeviceComboBox::Private
 {
 public:
   QMap<QString, int> deviceIndexMap;
-  QPtrVector<K3bDevice> devices;
+  QPtrVector<K3bCdDevice::CdDevice> devices;
 };
 
 

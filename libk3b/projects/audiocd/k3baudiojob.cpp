@@ -87,7 +87,7 @@ K3bAudioJob::~K3bAudioJob()
 }
 
 
-K3bDevice* K3bAudioJob::writer() const
+K3bCdDevice::CdDevice* K3bAudioJob::writer() const
 {
   return m_doc->burner();
 }
@@ -398,7 +398,6 @@ bool K3bAudioJob::prepareWriter()
   connect( m_writer, SIGNAL(deviceBuffer(int)), this, SIGNAL(deviceBuffer(int)) );
   connect( m_writer, SIGNAL(writeSpeed(int, int)), this, SIGNAL(writeSpeed(int, int)) );
   connect( m_writer, SIGNAL(finished(bool)), this, SLOT(slotWriterFinished(bool)) );
-  connect( m_writer, SIGNAL(dataWritten()), this, SLOT(slotDataWritten()) );
   //  connect( m_writer, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
   connect( m_writer, SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
   connect( m_writer, SIGNAL(debuggingOutput(const QString&, const QString&)),

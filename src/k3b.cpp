@@ -33,6 +33,7 @@
 #include <qmap.h>
 #include <qwidgetstack.h>
 
+#include <kdockwidget.h>
 #include <kkeydialog.h>
 // include files for KDE
 #include <kiconloader.h>
@@ -93,6 +94,7 @@
 #include "k3bstatusbarmanager.h"
 #include "k3bfiletreecombobox.h"
 #include "k3bfiletreeview.h"
+#include "k3bsidepanel.h"
 #include "k3bstdguiitems.h"
 #include "datadvd/k3bdvdformattingdialog.h"
 #include "dvdcopy/k3bdvdcopydialog.h"
@@ -171,9 +173,9 @@ K3bMainWindow::K3bMainWindow()
 
   ///////////////////////////////////////////////////////////////////
   // call inits to invoke all other construction parts
+  initActions();
   initView();
   initStatusBar();
-  initActions();
   createGUI(0L);
 
   // we need the actions for the welcomewidget
@@ -314,21 +316,6 @@ void K3bMainWindow::initActions()
 #endif
 
 
-  // --- filetreecombobox-toolbar -------------------------------------------------------------------
-  K3bFileTreeComboBox* m_fileTreeComboBox = new K3bFileTreeComboBox( 0 );
-  connect( m_fileTreeComboBox, SIGNAL(urlExecuted(const KURL&)), m_dirView, SLOT(showUrl(const KURL& )) );
-  connect( m_fileTreeComboBox, SIGNAL(deviceExecuted(K3bCdDevice::CdDevice*)), m_dirView,
-	   SLOT(showDevice(K3bCdDevice::CdDevice* )) );
-
-  KWidgetAction* fileTreeComboAction = new KWidgetAction( m_fileTreeComboBox,
-							  i18n("&Quick Dir Selector"),
-							  0, 0, 0,
-							  actionCollection(), "quick_dir_selector" );
-  fileTreeComboAction->setAutoSized(true);
-  (void)new KAction( i18n("Go"), "key_enter", 0, m_fileTreeComboBox, SLOT(slotGoUrl()), actionCollection(), "go_url" );
-  // ---------------------------------------------------------------------------------------------
-
-
 
   actionFileNewMenu->setToolTip(i18n("Creates a new project"));
   actionFileNewData->setToolTip( i18n("Creates a new data CD project") );
@@ -457,16 +444,16 @@ void K3bMainWindow::initView()
 
   // --- Directory Dock --------------------------------------------------------------------------
   m_dirTreeDock = createDockWidget( "directory_tree", SmallIcon("folder"), 0,
-				    kapp->makeStdCaption( i18n("Directory Tree") ), i18n("Directory Tree") );
-  K3bFileTreeView* m_fileTreeView = new K3bFileTreeView( m_dirTreeDock );
-  m_dirTreeDock->setWidget( m_fileTreeView );
+				    kapp->makeStdCaption( i18n("Sidepanel") ), i18n("Sidepanel") );
+  K3bSidePanel* sidePanel = new K3bSidePanel( this, m_dirTreeDock, "sidePanel" );
+  m_dirTreeDock->setWidget( sidePanel );
   m_dirTreeDock->manualDock( mainDock, KDockWidget::DockTop, 4000 );
   connect( m_dirTreeDock, SIGNAL(iMBeingClosed()), this, SLOT(slotDirTreeDockHidden()) );
   connect( m_dirTreeDock, SIGNAL(hasUndocked()), this, SLOT(slotDirTreeDockHidden()) );
 
   m_contentsDock = createDockWidget( "contents_view", SmallIcon("idea"), 0,
 			      kapp->makeStdCaption( i18n("Contents View") ), i18n("Contents View") );
-  m_dirView = new K3bDirView( m_fileTreeView, m_contentsDock );
+  m_dirView = new K3bDirView( sidePanel->fileTreeView(), m_contentsDock );
   m_contentsDock->setWidget( m_dirView );
   //  m_contentsDock->setEnableDocking( KDockWidget::DockFullDocking/*DockCorner*/ );
   m_contentsDock->manualDock( m_dirTreeDock, KDockWidget::DockRight, 2000 );
@@ -486,6 +473,20 @@ void K3bMainWindow::initView()
 
   connect( m_audioPlayerDock, SIGNAL(iMBeingClosed()), this, SLOT(slotAudioPlayerHidden()) );
   connect( m_audioPlayerDock, SIGNAL(hasUndocked()), this, SLOT(slotAudioPlayerHidden()) );
+  // ---------------------------------------------------------------------------------------------
+
+  // --- filetreecombobox-toolbar -------------------------------------------------------------------
+  K3bFileTreeComboBox* m_fileTreeComboBox = new K3bFileTreeComboBox( 0 );
+  connect( m_fileTreeComboBox, SIGNAL(urlExecuted(const KURL&)), m_dirView, SLOT(showUrl(const KURL& )) );
+  connect( m_fileTreeComboBox, SIGNAL(deviceExecuted(K3bCdDevice::CdDevice*)), m_dirView,
+	   SLOT(showDevice(K3bCdDevice::CdDevice* )) );
+
+  KWidgetAction* fileTreeComboAction = new KWidgetAction( m_fileTreeComboBox,
+							  i18n("&Quick Dir Selector"),
+							  0, 0, 0,
+							  actionCollection(), "quick_dir_selector" );
+  fileTreeComboAction->setAutoSized(true);
+  (void)new KAction( i18n("Go"), "key_enter", 0, m_fileTreeComboBox, SLOT(slotGoUrl()), actionCollection(), "go_url" );
   // ---------------------------------------------------------------------------------------------
 }
 
@@ -1350,7 +1351,7 @@ K3bExternalBinManager* K3bMainWindow::externalBinManager() const
 }
 
 
-K3bDeviceManager* K3bMainWindow::deviceManager() const
+K3bCdDevice::DeviceManager* K3bMainWindow::deviceManager() const
 {
   return k3bcore->deviceManager();
 }

@@ -122,5 +122,4 @@ namespace K3bCdDevice {
     };
 }
 
-typedef K3bCdDevice::DeviceManager K3bDeviceManager;
 #endif

@@ -142,18 +142,18 @@ void K3bWriterSelectionWidget::init()
   m_comboWriter->clear();
 
   // -- read cd-writers ----------------------------------------------
-  QPtrList<K3bDevice>& devices = ( d->dvd 
+  QPtrList<K3bCdDevice::CdDevice>& devices = ( d->dvd 
 				   ? k3bcore->deviceManager()->dvdWriter() 
 				   : k3bcore->deviceManager()->cdWriter() );
 
-  K3bDevice* dev = devices.first();
+  K3bCdDevice::CdDevice* dev = devices.first();
   while( dev ) {
     m_comboWriter->addDevice( dev );
     dev = devices.next();
   }
 
   k3bcore->config()->setGroup( "General Options" );
-  K3bDevice *current = k3bcore->deviceManager()->deviceByName( k3bcore->config()->readEntry( "current_writer" ) );
+  K3bCdDevice::CdDevice *current = k3bcore->deviceManager()->deviceByName( k3bcore->config()->readEntry( "current_writer" ) );
 
   if ( current == 0 )
     current = devices.first();
@@ -254,7 +254,7 @@ void K3bWriterSelectionWidget::slotRefreshWriterSpeeds()
   if( d->dvd )
     m_comboSpeed->insertItem( i18n("Ignore") );
   if( !d->forceAutoSpeed ) {
-    if( K3bDevice* dev = writerDevice() ) {
+    if( K3bCdDevice::CdDevice* dev = writerDevice() ) {
       // add speeds to combobox
       int i = 1;
       int speed = ( d->dvd ? 1385 : 175 );
@@ -298,13 +298,13 @@ void K3bWriterSelectionWidget::slotWritingAppSelected( int )
 }
 
 
-K3bDevice* K3bWriterSelectionWidget::writerDevice() const
+K3bCdDevice::CdDevice* K3bWriterSelectionWidget::writerDevice() const
 {
   return m_comboWriter->selectedDevice();
 }
 
 
-void K3bWriterSelectionWidget::setWriterDevice( K3bDevice* dev )
+void K3bWriterSelectionWidget::setWriterDevice( K3bCdDevice::CdDevice* dev )
 {
   m_comboWriter->setSelectedDevice( dev );
 }
@@ -390,7 +390,7 @@ void K3bWriterSelectionWidget::slotWriterChanged()
   slotRefreshWriterSpeeds();
 
   // save last selected writer
-  if( K3bDevice* dev = writerDevice() ) {
+  if( K3bCdDevice::CdDevice* dev = writerDevice() ) {
     QString oldGroup = k3bcore->config()->group();
     k3bcore->config()->setGroup( "General Options" );
     k3bcore->config()->writeEntry( "current_writer", dev->devicename() );

@@ -103,7 +103,7 @@ K3bMixedJob::~K3bMixedJob()
 }
 
 
-K3bDevice* K3bMixedJob::writer() const
+K3bCdDevice::CdDevice* K3bMixedJob::writer() const
 {
   return m_doc->burner();
 }

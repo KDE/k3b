@@ -79,7 +79,7 @@ void K3bDeviceSelectionDialog::addDevices( const QPtrList<K3bCdDevice::CdDevice>
 }
 
 
-K3bDevice* K3bDeviceSelectionDialog::selectedDevice() const
+K3bCdDevice::CdDevice* K3bDeviceSelectionDialog::selectedDevice() const
 {
   return d->comboDevices->selectedDevice();
 }
@@ -118,7 +118,7 @@ K3bCdDevice::CdDevice* K3bDeviceSelectionDialog::selectDevice( QWidget* parent,
 }
 
 
-K3bDevice* K3bDeviceSelectionDialog::selectWriter( QWidget* parent, const QString& text )
+K3bCdDevice::CdDevice* K3bDeviceSelectionDialog::selectWriter( QWidget* parent, const QString& text )
 {
   return selectDevice( parent, k3bcore->deviceManager()->burningDevices(), text );
 }

@@ -21,7 +21,7 @@
 
 #include <config.h>
 
-#ifdef HAVE_ARTS_KMEDIA2_H
+#ifdef WITH_ARTS
 #include <arts/kmedia2.h>
 #include <arts/kartsdispatcher.h>
 #endif
@@ -173,7 +173,7 @@ Q_OBJECT
   void slotShowContextMenu( KListView*, QListViewItem* item, const QPoint& p );
 
  private:
-#ifdef HAVE_ARTS_KMEDIA2_H
+#ifdef WITH_ARTS
   Arts::PlayObject m_playObject;
   KArtsDispatcher m_dispatcher;
 #endif

@@ -53,6 +53,7 @@ public:
   bool init() {
     if( inFd == -1 ) {
       if( ::socketpair(AF_UNIX, SOCK_STREAM, 0, inFdPair) ) {
+      //      if( ::pipe( inFdPair ) ) {
 	kdDebug() << "(K3bPipeBuffer::WorkThread) unable to create socketpair" << endl;
 	inFdPair[0] = inFdPair[1] = -1;
 	return false;
@@ -113,7 +114,7 @@ public:
       //
       // Do the buffering
       //
-      if( ret > 0 ) {
+      if( !canceled && ret > 0 ) {
 
 	//
 	// Read into the buffer
@@ -171,7 +172,7 @@ public:
 	  }
 	}
       }
-      else {
+      else if( !canceled ) {
 	error = true;
 	kdDebug() << "(K3bPipeBuffer::WorkThread) select: " << ::strerror(errno) << endl;
       }

@@ -88,7 +88,7 @@ void K3bProjectBurnDialog::slotWritingAppChanged( int )
 
 void K3bProjectBurnDialog::toggleAllOptions()
 {
-  if( K3bDevice* dev = m_writerSelectionWidget->writerDevice() ) {
+  if( K3bCdDevice::CdDevice* dev = m_writerSelectionWidget->writerDevice() ) {
     if( m_dvd ) {
       if( (dev->type() & (K3bCdDevice::CdDevice::DVDPR|K3bCdDevice::CdDevice::DVDPRW)) &&
 	  !(dev->type() & (K3bCdDevice::CdDevice::DVDR|K3bCdDevice::CdDevice::DVDRW)) ) {

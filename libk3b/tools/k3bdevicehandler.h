@@ -34,8 +34,8 @@ namespace K3bCdDevice
 
 
   /**
-   * The K3bDevicehandler is a threaded wrapper around K3bDevice.
-   * It allows async access to the time comsuming blocking K3bDevice methods.
+   * The K3bCdDevice::CdDevicehandler is a threaded wrapper around K3bCdDevice::CdDevice.
+   * It allows async access to the time comsuming blocking K3bCdDevice::CdDevice methods.
    * Since it's a K3bJob it is very easy to handle. Just use one of the methods and
    * connect to the finished signal.
    * Be aware that all methods only return valid values if the corresponding info has

@@ -51,7 +51,7 @@ K3bBlankingJob::~K3bBlankingJob()
 }
 
 
-void K3bBlankingJob::setDevice( K3bDevice* dev )
+void K3bBlankingJob::setDevice( K3bCdDevice::CdDevice* dev )
 {
   m_device = dev;
 }

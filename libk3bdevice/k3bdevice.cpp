@@ -64,7 +64,28 @@ extern "C" {
 }
 #endif
 
-#define ROUND(f) ((int)(f + 0.5))
+
+//
+// Very evil hacking: force the speed values to be acurate
+// as long as "they" do not introduce other "broken" DVD
+// speeds like 2.4 this works fine
+//
+static int fixupDvdWritingSpeed( int speed )
+{
+  //
+  // Some writers report their speeds in 1000 bytes per second instead of 1024.
+  //
+  if( speed % 1385 == 0 )
+    return speed;
+
+  else if( speed % 1352 == 0 )
+    return speed*1385/1352;
+
+  // has to be 2.4x speed
+  else
+    return 3324;
+}
+
 
 const char* K3bCdDevice::CdDevice::cdrdao_drivers[] =
   { "auto", "plextor", "plextor-scan", "cdd2600", "generic-mmc",
@@ -138,6 +159,7 @@ K3bCdDevice::CdDevice::CdDevice( const QString& devname )
 
 K3bCdDevice::CdDevice::~CdDevice()
 {
+  close();
   delete d;
 }
 
@@ -249,6 +271,7 @@ bool K3bCdDevice::CdDevice::init()
 	    case 0x14: d->supportedProfiles |= MEDIA_DVD_RW_SEQ; break;
 	    case 0x1A: d->supportedProfiles |= MEDIA_DVD_PLUS_RW; break;
 	    case 0x1B: d->supportedProfiles |= MEDIA_DVD_PLUS_R; break;
+	    case 0x2B: d->supportedProfiles |= MEDIA_DVD_PLUS_R_DL; break;
 	    case 0x08: d->supportedProfiles |= MEDIA_CD_ROM; break;
 	    case 0x09: d->supportedProfiles |= MEDIA_CD_R; break;
 	    case 0x0A: d->supportedProfiles |= MEDIA_CD_RW; break;
@@ -2101,6 +2124,55 @@ K3bCdDevice::DiskInfo K3bCdDevice::CdDevice::diskInfo() const
 	else
 	  inf.m_mediaType = MEDIA_CD_ROM;
       }
+      else {
+	// FIXME: introduce a proper readDvdStructure method
+	// 4 bytes header + 2048 bytes layer descriptor
+	unsigned char dvdheader[4+2048];
+	::memset( dvdheader, 0, 4+2048 );
+	ScsiCommand cmd( this );
+	cmd[0] = MMC::READ_DVD_STRUCTURE;
+	cmd[8] = (4+2048)>>8;
+	cmd[9] = 4+2048;
+	if( cmd.transport( TR_DIR_READ, dvdheader, 4+2048 ) ) {
+	  kdDebug() << "(K3bCdDevice::CdDevice) Unable to read DVD structure." << endl;
+	  inf.m_numLayers = 1;
+	}
+	else {
+	  // some debugging stuff
+	  K3b::Msf sda, eda, ea0;
+	  sda = ( dvdheader[4+5]<<16 | dvdheader[4+6] << 8 | dvdheader[4+7] );
+	  eda = ( dvdheader[4+9]<<16 | dvdheader[4+10] << 8 | dvdheader[4+11] );
+	  ea0 = ( dvdheader[4+13]<<16 | dvdheader[4+14] << 8 | dvdheader[4+15] );
+
+	  kdDebug() << "First sec data area: " << sda.toString() 
+		    << " (LBA " << QString::number(sda.lba())
+		    << ") (" << QString::number(sda.mode1Bytes()) << " Bytes) (" 
+		    << KIO::convertSize(sda.mode1Bytes()) << ")" << endl;
+	  kdDebug() << "Last sec data area: " << eda.toString() 
+		    << " (LBA " << QString::number(eda.lba())
+		    << ") (" << QString::number(eda.mode1Bytes()) << " Bytes) (" 
+		    << KIO::convertSize(eda.mode1Bytes()) << ")" << endl;
+	  kdDebug() << "Last sec layer 1: " << ea0.toString() 
+		    << " (LBA " << QString::number(ea0.lba())
+		    << ") (" << QString::number(ea0.mode1Bytes()) << " Bytes) (" 
+		    << KIO::convertSize(ea0.mode1Bytes()) << ")" << endl;
+
+
+	  K3b::Msf da0 = ea0 - sda + 1;
+	  K3b::Msf da1 = eda - ea0;
+	  kdDebug() << "Layer 1 length: " << da0.toString() 
+		    << " (LBA " << QString::number(da0.lba())
+		    << ") (" << QString::number(da0.mode1Bytes()) << " Bytes) (" 
+		    << KIO::convertSize(da0.mode1Bytes()) << ")" << endl;
+	  kdDebug() << "Layer 2 length: " << da1.toString() 
+		    << " (LBA " << QString::number(da1.lba())
+		    << ") (" << QString::number(da1.mode1Bytes()) << " Bytes) (" 
+		    << KIO::convertSize(da1.mode1Bytes()) << ")" << endl;
+
+	  inf.m_numLayers = ((dvdheader[6]&0x60) == 0 ? 1 : 2);
+	  inf.m_firstLayerSize = da0;
+	}
+      }
     
 
       //
@@ -2195,7 +2267,9 @@ K3bCdDevice::DiskInfo K3bCdDevice::CdDevice::diskInfo() const
 	break;
       }
 
+	// FIXME: test this for Double layer
       case MEDIA_DVD_PLUS_R:
+      case MEDIA_DVD_PLUS_R_DL:
 	if( inf.appendable() || inf.empty() ) {
 	  //
 	  // get remaining space via the invisible track
@@ -2397,6 +2471,7 @@ int K3bCdDevice::CdDevice::dvdMediaType() const
 	case 0x30: m = MEDIA_DVD_RW; break;
 	case 0x90: m = MEDIA_DVD_PLUS_RW; break;
 	case 0xA0: m = MEDIA_DVD_PLUS_R; break;
+	case 0xE0: m = MEDIA_DVD_PLUS_R_DL; break;
 	default: break; // unknown
 	}
       }
@@ -2814,7 +2889,7 @@ QValueList<int> K3bCdDevice::CdDevice::determineSupportedWriteSpeeds() const
 	  // If that is the case we cannot rely on the reported speeds
 	  // and need to use the values gained from GET PERFORMANCE.
 	  //
-	  if( dvd && s < 1385 ) {
+	  if( dvd && s < 1352 ) {
 	    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
 		      << " Invalid DVD speed: " << s << " KB/s" << endl;
 	    ret.clear();
@@ -2824,17 +2899,8 @@ QValueList<int> K3bCdDevice::CdDevice::determineSupportedWriteSpeeds() const
 	    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
 		      << " : " << s << " KB/s" << endl;
 
-	    //
-	    // Very evil hacking: force the speed values to be acurate
-	    // as long as "they" do not introduce other "broken" DVD
-	    // speeds like 2.4 this works fine
-	    //
-	    if( dvd && s > 2770 && s < 4155 )
-	      s = 3324; // 2.4x
-	    else if( dvd )
-	      s = 1385*(int)ROUND( (double)s/1385.0 );
-	    else
-	      s = 175*(int)ROUND( (double)s/175.0 );
+	    if( dvd )
+	      s = fixupDvdWritingSpeed( s );
 
 	    // sort the list
 	    QValueList<int>::iterator it = ret.begin();
@@ -2860,7 +2926,7 @@ QValueList<int> K3bCdDevice::CdDevice::determineSupportedWriteSpeeds() const
       
       for( int i = 0; i < numDesc; ++i ) {
 	int s = from4Byte( &data[20+i*16] );
-	if( dvd && s < 1385 ) {
+	if( dvd && s < 1352 ) {
 	  //
 	  // Does this ever happen?
 	  //
@@ -2871,17 +2937,8 @@ QValueList<int> K3bCdDevice::CdDevice::determineSupportedWriteSpeeds() const
 	  kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
 		      << " : " << s << " KB/s" << endl;
 
-	  //
-	  // Very evil hacking: force the speed values to be acurate
-	  // as long as "they" do not introduce other "broken" DVD
-	  // speeds like 2.4 this works fine
-	  //
-	  if( dvd && s > 2770 && s < 4155 )
-	    s = 3324; // 2.4x
-	  else if( dvd )
-	    s = 1385*(int)ROUND( (double)s/1385.0 );
-	  else
-	    s = 175*(int)ROUND( (double)s/175.0 );
+	  if( dvd )
+	    s = fixupDvdWritingSpeed( s );
 	  
 	  QValueList<int>::iterator it = ret.begin();
 	  while( it != ret.end() && *it < s )
@@ -3543,4 +3600,19 @@ bool K3bCdDevice::CdDevice::getPerformance( unsigned char** data, int& dataLen,
 	      << ": GET PERFORMANCE length det failed." << endl;
 
   return false;
+}
+
+
+bool K3bCdDevice::CdDevice::setSpeed( unsigned int readingSpeed, 
+				      unsigned int writingSpeed,
+				      bool cav ) const
+{
+  ScsiCommand cmd( this );
+  cmd[0] = MMC::SET_SPEED;
+  cmd[1] = ( cav ? 0x1 : 0x0 );
+  cmd[2] = readingSpeed >> 8;
+  cmd[3] = readingSpeed;
+  cmd[4] = writingSpeed >> 8;
+  cmd[5] = writingSpeed;
+  return ( cmd.transport() == 0 );
 }

@@ -85,6 +85,7 @@ class K3bDirView : public QVBox
   void slotUnmountFinished( K3bDeviceBranch*, bool );
   void slotEjectDisk();
   void slotLoadDisk();
+  void slotSetReadSpeed();
   //  void slotEjectFinished();
   void slotFileTreeContextMenu( K3bCdDevice::CdDevice* dev, const QPoint& p );
 

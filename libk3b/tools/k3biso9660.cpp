@@ -263,7 +263,7 @@ public:
   int fd;
   bool closeFd;
 
-  // only used for direkt K3bDevice access
+  // only used for direkt K3bCdDevice::CdDevice access
   unsigned int startSector;
 };
 
@@ -495,6 +495,9 @@ bool K3bIso9660::open()
   else if( d->cdDevice ) {
     if( d->cdDevice->open() < 0 )
       return false;
+
+    // set optimal reading speed
+    d->cdDevice->setSpeed( 0xffff, 0xffff );
   }
   else if( d->fd < 0 )
     return false;

@@ -42,7 +42,7 @@
 
 #include <string.h>
 
-#ifdef HAVE_ARTS_KMEDIA2_H
+#ifdef WITH_ARTS
 #include <arts/artsflow.h>
 #endif
 
@@ -157,7 +157,7 @@ QDragObject* K3bPlayListView::dragObject()
 
 K3bAudioPlayer::K3bAudioPlayer( QWidget* parent, const char* name )
   : QWidget( parent, name )
-#ifdef HAVE_ARTS_KMEDIA2_H
+#ifdef WITH_ARTS
 , m_playObject( Arts::PlayObject::null() )
 #endif
 {
@@ -269,7 +269,7 @@ K3bAudioPlayer::~K3bAudioPlayer()
 {
   // we remove the reference to the play object
   // if we don't do this it won't be removed and K3b will crash (not sure why)
-#ifdef HAVE_ARTS_KMEDIA2_H
+#ifdef WITH_ARTS
   m_playObject = Arts::PlayObject::null();
 #endif
 }
@@ -277,7 +277,7 @@ K3bAudioPlayer::~K3bAudioPlayer()
 
 int K3bAudioPlayer::state()
 {
-#ifdef HAVE_ARTS_KMEDIA2_H
+#ifdef WITH_ARTS
   if( !m_playObject.isNull() ) {
     switch( m_playObject.state() ) {
     case Arts::posIdle:
@@ -336,7 +336,7 @@ void K3bAudioPlayer::enqueueFiles( const QStringList& files )
 
 void K3bAudioPlayer::play()
 {
-#ifdef HAVE_ARTS_KMEDIA2_H
+#ifdef WITH_ARTS
   if( !m_currentItem ) {
     setCurrentItem( m_viewPlayList->firstChild() );
   }
@@ -384,7 +384,7 @@ void K3bAudioPlayer::slotPlayItem( QListViewItem* item )
 
 void K3bAudioPlayer::stop()
 {
-#ifdef HAVE_ARTS_KMEDIA2_H
+#ifdef WITH_ARTS
   if( !m_playObject.isNull() ) {
     m_updateTimer->stop();
     m_playObject.halt();
@@ -403,7 +403,7 @@ void K3bAudioPlayer::stop()
 
 void K3bAudioPlayer::pause()
 {
-#ifdef HAVE_ARTS_KMEDIA2_H
+#ifdef WITH_ARTS
   if( !m_playObject.isNull() ) {
     if( m_playObject.state() == Arts::posPlaying ) {
       m_updateTimer->stop();
@@ -419,7 +419,7 @@ void K3bAudioPlayer::pause()
 
 void K3bAudioPlayer::seek( long pos )
 {
-#ifdef HAVE_ARTS_KMEDIA2_H
+#ifdef WITH_ARTS
   if( !m_playObject.isNull() ) {
     if( m_playObject.state() != Arts::posIdle ) {
       if( pos < 0 ) {
@@ -491,7 +491,7 @@ void K3bAudioPlayer::clear()
 
 long K3bAudioPlayer::length()
 {
-#ifdef HAVE_ARTS_KMEDIA2_H
+#ifdef WITH_ARTS
   if( !m_playObject.isNull() ) {
     return m_playObject.overallTime().seconds;
   }
@@ -502,7 +502,7 @@ long K3bAudioPlayer::length()
 
 long K3bAudioPlayer::position()
 {
-#ifdef HAVE_ARTS_KMEDIA2_H
+#ifdef WITH_ARTS
   if( !m_playObject.isNull() ) {
     return m_playObject.currentTime().seconds;
   }
@@ -523,7 +523,7 @@ bool K3bAudioPlayer::supportsMimetype( const QString& mimetype )
 
 void K3bAudioPlayer::slotCheckEnd()
 {
-#ifdef HAVE_ARTS_KMEDIA2_H
+#ifdef WITH_ARTS
   if( !m_playObject.isNull() ) {
     if( m_playObject.state() == Arts::posIdle ) {
       if( m_currentItem->nextSibling() ) {

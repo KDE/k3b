@@ -259,7 +259,7 @@ float K3bDvdRippingProcess::tccatParsedBytes( char *text, int len) {
 void K3bDvdRippingProcess::preProcessingDvd( ) {
     kdDebug() << "(K3bDvdRippingProcess::preProcessingDVD) Copy IFO files from device: <" << m_device << ">."<< endl;
     if( !m_dvdOrgFilenameDetected ) {
-        K3bDevice *dev = k3bcore->deviceManager()->deviceByName( m_device );
+        K3bCdDevice::CdDevice *dev = k3bcore->deviceManager()->deviceByName( m_device );
         m_mountPoint = dev->mountPoint();
         if( !m_mountPoint.isEmpty() ) {
             QString mount = KIO::findDeviceMountPoint( m_device );

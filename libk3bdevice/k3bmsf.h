@@ -59,6 +59,8 @@ namespace K3b
 
       //      operator int () const { return lba(); }
 
+      void setValue( int m, int s, int f );
+
       void addMinutes( int m );
       void addSeconds( int s );
       void addFrames( int f );

@@ -7,8 +7,7 @@ libk3b_la_LIBADD = 	core/libk3bcore.la \
 			projects/libk3bproject.la \
 			plugin/libk3bplugin.la \
 			tools/libk3btools.la \
-			../libk3bdevice/libk3bdevice.la \
-			-lartsc
+			../libk3bdevice/libk3bdevice.la
 
 libk3b_la_LDFLAGS = $(all_libraries) -version-info 1:0:0 -no-undefined
 

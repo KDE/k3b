@@ -13,6 +13,7 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#include <config.h>
 
 #include "k3bcore.h"
 
@@ -22,7 +23,8 @@
 #include <k3bglobals.h>
 #include <k3bversion.h>
 #include <k3bjob.h>
-#include <k3bartsaudioserver.h>
+#include <k3baudioserver.h>
+#include <k3bpluginmanager.h>
 
 #include <klocale.h>
 #include <kconfig.h>
@@ -42,7 +44,7 @@ public:
 
   KConfig* config;
   K3bVersion version;
-  K3bDeviceManager* deviceManager;
+  K3bCdDevice::DeviceManager* deviceManager;
   K3bExternalBinManager* externalBinManager;
   K3bAudioServer* audioServer;
 
@@ -77,6 +79,7 @@ K3bCore::K3bCore( const K3bVersion& version, KConfig* c, QObject* parent, const 
 
 K3bCore::~K3bCore()
 {
+  delete d->audioServer;
   delete d;
 }
 
@@ -97,11 +100,31 @@ K3bAudioServer* K3bCore::audioServer() const
 {
   if( !d->audioServer ) {
     K3bCore* that = const_cast<K3bCore*>(this);
-    if( K3bArtsAudioServer::artsAvailable() )
-      d->audioServer = new K3bArtsAudioServer( that );
-    else
-      kdDebug() << "(K3bCore) arts unavailable. No other server implemented yet." << endl;
+
+    QPtrList<K3bPluginFactory> fl = k3bpluginmanager->factories( "AudioServer" );
+
+    // we always prefere the arts audio server so we need a little hacking
+    for( QPtrListIterator<K3bPluginFactory> it( fl ); it.current(); ++it ) {
+      K3bAudioServerFactory* f = dynamic_cast<K3bAudioServerFactory*>( it.current() );
+      if( f && f->isA( "K3bArtsAudioServerFactory" ) && f->isAvailable() ) {
+	that->d->audioServer = static_cast<K3bAudioServer*>(f->createPlugin());
+	return d->audioServer;
+      }
+    }
+
+    // arts was not available. so search for another one
+    for( QPtrListIterator<K3bPluginFactory> it( fl ); it.current(); ++it ) {
+      K3bAudioServerFactory* f = dynamic_cast<K3bAudioServerFactory*>( it.current() );
+      if( f && f->isAvailable() ) {
+	that->d->audioServer = static_cast<K3bAudioServer*>(f->createPlugin());
+	return d->audioServer;
+      }
+    }
+
+    // nothing found
+    kdDebug() << "(K3bCore) arts unavailable. No other server implemented yet." << endl;
   }
+
   return d->audioServer;
 }
 

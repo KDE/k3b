@@ -42,6 +42,9 @@ class K3bCddbPatternWidget : public base_K3bCddbPatternWidget
   void loadConfig( KConfig* );
   void saveConfig( KConfig* );
   void loadDefaults();
+
+ private slots:
+  void slotSeeSpecialStrings();
 };
 
 #endif

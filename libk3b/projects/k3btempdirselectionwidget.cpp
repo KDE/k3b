@@ -162,6 +162,12 @@ QString K3bTempDirSelectionWidget::tempPath() const
 }
 
 
+QString K3bTempDirSelectionWidget::plainTempPath() const
+{
+  return m_editDirectory->url();
+}
+
+
 QString K3bTempDirSelectionWidget::tempDirectory() const
 {
   QString td( m_editDirectory->url() );

@@ -71,18 +71,6 @@ These are the features so far:
  - integrated full featured audio player
 
 
-What you need to run K3b:
- - since K3b is a CD writing program a cd writer would be a good thing to have ;-)
- - the QT3 and KDE3 (at least kdelibs and kdemultimedia) libraries from the good guys
- - the cdparanoia library for cd ripping from Monty
- - the cdrtools (cdrecord, mkisofs) from Joerg Schilling
- - cdrdao, the other linux cd writing program from Andreas Mueller
- - optional the transcode tools for DVD ripping and DivX/XviD encoding from Thomas Oestreich
- - optional vcdimager >= 0.7 for creating video cds
- - optional libmad for mp3 decoding
- - optional ogg-vorbis libraries for encoding and decoding
- - optional the FLAC++ libraries for flac-decoding
- - optional the eMovix package
  
 See INSTALL for further information
 

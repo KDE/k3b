@@ -73,7 +73,7 @@ public:
 
 
 
-K3bEmptyDiscWaiter::K3bEmptyDiscWaiter( K3bDevice* device, QWidget* parent, const char* name )
+K3bEmptyDiscWaiter::K3bEmptyDiscWaiter( K3bCdDevice::CdDevice* device, QWidget* parent, const char* name )
   : KDialogBase( KDialogBase::Plain, i18n("Waiting for disk"), 
 		 KDialogBase::Cancel|KDialogBase::User1|KDialogBase::User2|KDialogBase::User3, 
 		 KDialogBase::Cancel, parent, name, true, true, i18n("Force"), i18n("Eject"), i18n("Load") )
@@ -628,7 +628,7 @@ void K3bEmptyDiscWaiter::slotReloadingAfterErasingFinished( K3bCdDevice::DeviceH
 }
 
 
-int K3bEmptyDiscWaiter::wait( K3bDevice* device, bool appendable, int mediaType, QWidget* parent )
+int K3bEmptyDiscWaiter::wait( K3bCdDevice::CdDevice* device, bool appendable, int mediaType, QWidget* parent )
 {
   K3bEmptyDiscWaiter d( device, parent ? parent : qApp->activeWindow() );
   int mediaState = K3bCdDevice::STATE_EMPTY;

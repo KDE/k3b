@@ -190,7 +190,7 @@ public:
   QPtrDict<K3bDeviceBranch> deviceBranchDict;
   QMap<KFileTreeBranch*, K3bCdDevice::CdDevice*> branchDeviceMap;
 
-  K3bDeviceManager* deviceManager;
+  K3bCdDevice::DeviceManager* deviceManager;
 };
 
 K3bFileTreeView::K3bFileTreeView( QWidget *parent, const char *name )
@@ -326,7 +326,7 @@ void K3bFileTreeView::addDefaultBranches()
 }
 
 
-void K3bFileTreeView::addCdDeviceBranches( K3bDeviceManager* dm )
+void K3bFileTreeView::addCdDeviceBranches( K3bCdDevice::DeviceManager* dm )
 {
   kdDebug() << "(K3bFileTreeView::addCdDeviceBranches)" << endl;
 

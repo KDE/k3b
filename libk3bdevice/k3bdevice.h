@@ -446,6 +446,19 @@ namespace K3bCdDevice
     // MMC commands
 
     /**
+     * SET SPEED command
+     *
+     * @param readingSpeed The preferred reading speed (0x0000-0xFFFE). 0xFFFF requests
+     *                     fot the logical unit to select the optimal speed.
+     * @param writingSpeed The preferred writing speed (0x0000-0xFFFE). 0xFFFF requests
+     *                     fot the logical unit to select the optimal speed.
+     * @param cav Is the speed pure CAV?
+     */
+    bool setSpeed( unsigned int readingSpeed, 
+		   unsigned int writingSpeed,
+		   bool cav = false ) const;
+
+    /**
      * if true is returned dataLen specifies the actual length of *data which needs to be
      * deleted after using.
      */
@@ -682,7 +695,5 @@ namespace K3bCdDevice
    */
   int openDevice( const char* name );
 }
-
-typedef K3bCdDevice::CdDevice K3bDevice;
 
 #endif

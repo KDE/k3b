@@ -234,6 +234,8 @@ void K3bIsoImager::calculateSize()
     return;
   }
 
+  emit debuggingOutput( "Used versions", "mkisofs: " + mkisofsBin->version );
+
   if( !mkisofsBin->copyright.isEmpty() )
     emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3").arg("mkisofs").arg(mkisofsBin->version).arg(mkisofsBin->copyright), INFO );
 
@@ -243,13 +245,12 @@ void K3bIsoImager::calculateSize()
   m_doc->prepareFilenames();
 
   if( !prepareMkisofsFiles() || 
-      !addMkisofsParameters() ) {
+      !addMkisofsParameters(true) ) {
     cleanup();
     emit sizeCalculated( ERROR, 0 );
     return;
   }
 
-  *m_process << "-print-size" << "-quiet";
   // add empty dummy dir since one path-spec is needed
   *m_process << dummyDir();
 
@@ -452,14 +453,14 @@ void K3bIsoImager::cancel()
 }
 
 
-void K3bIsoImager::setMultiSessionInfo( const QString& info, K3bDevice* dev )
+void K3bIsoImager::setMultiSessionInfo( const QString& info, K3bCdDevice::CdDevice* dev )
 {
   m_multiSessionInfo = info;
   m_device = dev;
 }
 
 
-bool K3bIsoImager::addMkisofsParameters()
+bool K3bIsoImager::addMkisofsParameters( bool printSize )
 {
   // add multisession info
   if( !m_multiSessionInfo.isEmpty() ) {
@@ -471,6 +472,9 @@ bool K3bIsoImager::addMkisofsParameters()
   // add the arguments
   *m_process << "-gui";
   *m_process << "-graft-points";
+
+  if( printSize )
+    *m_process << "-print-size" << "-quiet";
 
   if( !m_doc->isoOptions().volumeID().isEmpty() ) {
     QString s = m_doc->isoOptions().volumeID();

@@ -18,6 +18,7 @@
 #define K3BJOB_H
 
 #include <qobject.h>
+#include <qptrlist.h>
 #include "k3bjobhandler.h"
 
 
@@ -27,10 +28,15 @@ namespace K3bCdDevice {
 }
 
 
-/**This is the baseclass for all the jobs in K3b which actually do the work like burning a cd!
-  *@author Sebastian Trueg
-  */
-
+/**
+ * This is the baseclass for all the jobs in K3b which actually do the work like burning a cd!
+ * The K3bJob object takes care of registering with the k3bcore or with a parent K3bJob.
+ *
+ * A K3bJob ALWAYS has to emit the signals started() and finished(bool). All other signals are
+ * optional but without these two the whole registering mechanism won't work.
+ *
+ * @author Sebastian Trueg
+ */
 class K3bJob : public QObject, public K3bJobHandler
 {
   Q_OBJECT
@@ -42,6 +48,13 @@ class K3bJob : public QObject, public K3bJobHandler
 
   virtual QString jobDescription() const { return "K3bJob"; }
   virtual QString jobDetails() const { return QString::null; }
+
+  /**
+   * @returns the number of running subjobs.
+   * this is useful for proper canceling of jobs.
+   */
+  unsigned int numRunningSubJobs() const;
+
 
   /**
    * Setup the following connections:
@@ -101,12 +114,25 @@ class K3bJob : public QObject, public K3bJobHandler
    */
   void slotNewSubTask( const QString& str );
 
+  /**
+   * Register a subjob. Do not call this directly. The Job takes care of it
+   * itself.
+   */
+  void registerSubJob( K3bJob* );
+
+  /**
+   * Unregister a subjob. Do not call this directly. The Job takes care of it
+   * itself.
+   */
+  void unregisterSubJob( K3bJob* );
+
  private slots:
   void slotStarted();
   void slotFinished( bool );
 
  private:
   K3bJobHandler* m_jobHandler;
+  QPtrList<K3bJob> m_runningSubJobs;
 };
 
 

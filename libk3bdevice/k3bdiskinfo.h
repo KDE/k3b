@@ -47,7 +47,7 @@ namespace K3bCdDevice
 
   /**
    * Defines the different media types as retured by 
-   * K3bDevice::mediaType()
+   * K3bCdDevice::CdDevice::mediaType()
    */
   enum MediaType { MEDIA_NONE = 0,
 		   MEDIA_DVD_ROM = 1,
@@ -59,18 +59,20 @@ namespace K3bCdDevice
 		   MEDIA_DVD_RW_SEQ = 64,
 		   MEDIA_DVD_PLUS_RW = 128,
 		   MEDIA_DVD_PLUS_R = 256,
+		   MEDIA_DVD_PLUS_R_DL = 4096,
 		   MEDIA_CD_ROM = 512,
 		   MEDIA_CD_R = 1024,
 		   MEDIA_CD_RW = 2048,
 		   MEDIA_WRITABLE_CD = MEDIA_CD_R | 
 		                       MEDIA_CD_RW,
 		   MEDIA_WRITABLE_DVD = MEDIA_DVD_R | 
-      		                        MEDIA_DVD_R_SEQ | 
+		                        MEDIA_DVD_R_SEQ | 
 		                        MEDIA_DVD_RW |
 		                        MEDIA_DVD_RW_OVWR |
 		                        MEDIA_DVD_RW_SEQ |
 		                        MEDIA_DVD_PLUS_RW |
-		   MEDIA_DVD_PLUS_R,
+		                        MEDIA_DVD_PLUS_R |
+		                        MEDIA_DVD_PLUS_R_DL,
 		   MEDIA_UNKNOWN = 32768
   };
 
@@ -82,7 +84,8 @@ namespace K3bCdDevice
 	     mediaType == MEDIA_DVD_RW_OVWR || 
 	     mediaType == MEDIA_DVD_RW_SEQ || 
 	     mediaType == MEDIA_DVD_PLUS_RW || 
-	     mediaType == MEDIA_DVD_PLUS_R );
+	     mediaType == MEDIA_DVD_PLUS_R ||
+	     mediaType == MEDIA_DVD_PLUS_R_DL );
   }
 
   inline bool isRewritableMedia( int mediaType ) {
@@ -175,7 +178,16 @@ namespace K3bCdDevice
        */
       int numSessions() const;
 
+      /**
+       * The number of finished tracks.
+       * This does not include the empty track.
+       */
       int numTracks() const;
+
+      /**
+       * Number of layers on a DVD media. For CD media this is always 1.
+       */
+      int numLayers() const;
 
       /**
        * Does only make sense for appendable disks.
@@ -194,6 +206,15 @@ namespace K3bCdDevice
        */
       K3b::Msf size() const;
 
+      /**
+       * Returns the size of Data area in the first layer for DL DVD media.
+       * Otherwise size() is returned.
+       *
+       * This does not specify the layer change sector as the data area on DVD media does
+       * not start at sector 0 but at sector 30000h or 31000h depending on the type.
+       */
+      K3b::Msf firstLayerSize() const;
+
       void debug() const;
 
     private:
@@ -205,10 +226,12 @@ namespace K3bCdDevice
       int m_bgFormatState;
       int m_numSessions;
       int m_numTracks;
+      int m_numLayers;  // only for DVD media
       int m_rewritable;
 
       K3b::Msf m_capacity;
       K3b::Msf m_usedCapacity;
+      K3b::Msf m_firstLayerSize;
 
       friend class CdDevice;
     };

@@ -47,13 +47,19 @@ K3bJob::~K3bJob()
 
 void K3bJob::slotStarted()
 {
-  k3bcore->registerJob( this );
+  if( parent() && parent()->inherits( "K3bJob" ) )
+    static_cast<K3bJob*>(parent())->registerSubJob( this );
+  else
+    k3bcore->registerJob( this );
 }
 
 
 void K3bJob::slotFinished( bool )
 {
-  k3bcore->unregisterJob( this );
+  if( parent() && parent()->inherits( "K3bJob" ) )
+    static_cast<K3bJob*>(parent())->unregisterSubJob( this );
+  else
+    k3bcore->unregisterJob( this );
 }
 
 
@@ -103,10 +109,29 @@ void K3bJob::connectSubJob( K3bJob* subJob,
 }
 
 
+unsigned int K3bJob::numRunningSubJobs() const
+{
+  return m_runningSubJobs.count(); 
+}
+
+
 void K3bJob::slotNewSubTask( const QString& str )
 {
   emit infoMessage( str, INFO );
 }
+
+
+void K3bJob::registerSubJob( K3bJob* job )
+{
+  m_runningSubJobs.append( job );
+}
+
+
+void K3bJob::unregisterSubJob( K3bJob* job )
+{
+  m_runningSubJobs.removeRef( job );
+}
+
 
 
 K3bBurnJob::K3bBurnJob( K3bJobHandler* handler, QObject* parent, const char* name )

@@ -50,6 +50,15 @@ K3b::Msf::Msf( int i )
 }
 
 
+void K3b::Msf::setValue( int m, int s, int f )
+{
+  m_minutes = m;
+  m_seconds = s;
+  m_frames = f;
+  makeValid();
+}
+
+
 void K3b::Msf::addMinutes( int m )
 {
   m_minutes += m;

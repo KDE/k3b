@@ -135,18 +135,16 @@ bool K3bMad::skipTag()
     return false;
   }
 
-  int offset = 0;
+  if( ( buf[0] == 'I' && buf[1] == 'D' && buf[2] == '3' ) &&
+      ( (unsigned short)buf[3] < 0xff && (unsigned short)buf[4] < 0xff ) ) {
+    // do we have a footer?
+    bool footer = (buf[5] & 0x10);
 
-  //
-  // We use a loop here since an mp3 file may contain multible id3 tags
-  //
-  while( ( buf[0] == 'I' && buf[1] == 'D' && buf[2] == '3' ) &&
-	 ( (unsigned short)buf[3] < 0xff && (unsigned short)buf[4] < 0xff ) ) {
-    kdDebug() << "(K3bMad) found id3 magic: ID3 " 
-	      << (unsigned short)buf[3] << "." << (unsigned short)buf[4] 
-	      << " at offset " << offset << endl;
-
-    offset = ((buf[6]<<21)|(buf[7]<<14)|(buf[8]<<7)|buf[9]) + 10;
+    // the size is saved as a synched int meaning bit 7 is always cleared to 0
+    int size = (buf[6]<<21) | (buf[7]<<14) | (buf[8]<<7) | buf[9];
+    int offset = size + 10;
+    if( footer )
+      offset += 10;
 
     kdDebug() << "(K3bMad) skipping past ID3 tag to " << offset << endl;
 
@@ -156,20 +154,6 @@ bool K3bMad::skipTag()
 		<< ": couldn't seek to " << offset << endl;
       return false;
     }
-
-    // read further to check for additional id3 tags
-    if( m_inputFile.readBlock( buf, bufLen ) < bufLen ) {
-      kdDebug() << "(K3bMad) unable to read " << bufLen 
-		<< " bytes from " << m_inputFile.name() << endl;
-      return false;
-    }
-  }
-
-  // skip any id3 stuff
-  if( !m_inputFile.at(offset) ) {
-    kdDebug() << "(K3bMad) " << m_inputFile.name()
-	      << ": couldn't seek to " << offset << endl;
-    return false;
   }
 
   return true;

@@ -42,12 +42,12 @@ bool K3bTcWrapper::supportDvd(){
     return k3bcore->externalBinManager()->foundBin("tcprobe");
 }
 
-void K3bTcWrapper::isDvdInsert( K3bDevice* device ) {
+void K3bTcWrapper::isDvdInsert( K3bCdDevice::CdDevice* device ) {
     m_runTcProbeCheckOnly = true;
     checkDvdContent( device );
 }
 
-void K3bTcWrapper::checkDvdContent( K3bDevice* device ) {
+void K3bTcWrapper::checkDvdContent( K3bCdDevice::CdDevice* device ) {
     m_firstProbeDone = false;
     m_currentTitle = 1;
     m_device = device;

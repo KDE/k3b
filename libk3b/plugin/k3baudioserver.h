@@ -16,9 +16,30 @@
 #ifndef _K3B_AUDIO_SERVER_H_
 #define _K3B_AUDIO_SERVER_H_
 
-#include <qobject.h>
+#include <k3bplugin.h>
+#include <k3bpluginfactory.h>
 
 class K3bAudioClient;
+
+
+class K3bAudioServerFactory : public K3bPluginFactory
+{
+ public:
+  K3bAudioServerFactory( QObject* parent = 0, const char* name = 0 )
+    : K3bPluginFactory( parent, name ) {
+  }
+
+  ~K3bAudioServerFactory() {
+  }
+
+  QString group() const { return "AudioServer"; }
+
+  /**
+   * Is the sound system available on this sytem.
+   */
+  virtual bool isAvailable() const = 0;
+};
+
 
 
 /**
@@ -26,7 +47,7 @@ class K3bAudioClient;
  * the K3bArtsAudioServer) take care of playing 4100 Hz 16bit stereo audio
  * data which is provided by a K3bAudioClient
  */
-class K3bAudioServer : public QObject
+class K3bAudioServer : public K3bPlugin
 {
   Q_OBJECT
 
@@ -44,7 +65,7 @@ class K3bAudioServer : public QObject
 
  protected:
   K3bAudioServer( QObject* parent = 0, const char* name = 0 )
-    : QObject( parent, name ) {
+    : K3bPlugin( parent, name ) {
   }
 };
 

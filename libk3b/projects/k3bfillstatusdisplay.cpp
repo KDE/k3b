@@ -219,6 +219,7 @@ public:
   KToggleAction* action80Min;
   KToggleAction* action100Min;
   KToggleAction* actionDvd4_7GB;
+  KToggleAction* actionDvdDoubleLayer;
   KToggleAction* actionCustomSize;
   KAction* actionDetermineSize;
   KAction* actionSaveUserDefaults;
@@ -305,6 +306,8 @@ void K3bFillStatusDisplay::setupPopupMenu()
 				      d->actionCollection, "fillstatus_100minutes" );
   d->actionDvd4_7GB = new KToggleAction( i18n("4.4 GB"), 0, this, SLOT(slotDvd4_7GB()), 
 					 d->actionCollection, "fillstatus_dvd_4_7gb" );
+  d->actionDvdDoubleLayer = new KToggleAction( i18n("8.5 GB"), 0, this, SLOT(slotDvdDoubleLayer()), 
+					 d->actionCollection, "fillstatus_dvd_double_layer" );
   d->actionCustomSize = new KToggleAction( i18n("Custom..."), 0, this, SLOT(slotCustomSize()),
 					  d->actionCollection, "fillstatus_custom_size" );
 
@@ -340,6 +343,7 @@ void K3bFillStatusDisplay::setupPopupMenu()
 
   d->dvdPopup->insertTitle( i18n("DVD Size") );
   d->actionDvd4_7GB->plug( d->dvdPopup );
+  d->actionDvdDoubleLayer->plug( d->dvdPopup );
   d->actionCustomSize->plug( d->dvdPopup );
   d->actionDetermineSize->plug( d->dvdPopup );
   d->dvdPopup->insertSeparator();
@@ -402,8 +406,16 @@ void K3bFillStatusDisplay::slot100Minutes()
 
 void K3bFillStatusDisplay::slotDvd4_7GB()
 {
-  d->displayWidget->setCdSize( 510*60*75 );
+  d->displayWidget->setCdSize( 2295104 );
 }
+
+
+void K3bFillStatusDisplay::slotDvdDoubleLayer()
+{
+  // FIXME
+  d->displayWidget->setCdSize( 2295104*2 );
+}
+
 
 void K3bFillStatusDisplay::slotCustomSize()
 {
@@ -437,7 +449,7 @@ void K3bFillStatusDisplay::slotPopupMenu( const QPoint& p )
 
 void K3bFillStatusDisplay::slotDetermineSize()
 {
-  K3bDevice* dev = K3bDeviceSelectionDialog::selectDevice( parentWidget(), 
+  K3bCdDevice::CdDevice* dev = K3bDeviceSelectionDialog::selectDevice( parentWidget(), 
 							   d->showDvdSizes 
 							   ? k3bcore->deviceManager()->dvdWriter() 
 							   : k3bcore->deviceManager()->cdWriter() );

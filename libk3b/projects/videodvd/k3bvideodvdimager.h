@@ -41,7 +41,7 @@ class K3bVideoDvdImager : public K3bIsoImager
   virtual void start();
 
  protected:
-  bool addMkisofsParameters();
+  bool addMkisofsParameters( bool printSize = false );
   int writePathSpec();
   void cleanup();
   int writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream );

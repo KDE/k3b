@@ -68,7 +68,7 @@ public:
 };
 
 
-K3bCdrecordWriter::K3bCdrecordWriter( K3bDevice* dev, K3bJobHandler* hdl, 
+K3bCdrecordWriter::K3bCdrecordWriter( K3bCdDevice::CdDevice* dev, K3bJobHandler* hdl, 
 				      QObject* parent, const char* name )
   : K3bAbstractWriter( dev, hdl, parent, name ),
     m_clone(false),
@@ -147,7 +147,6 @@ void K3bCdrecordWriter::prepareProcess()
   //  m_process->setPriority( KProcess::PrioHighest );
   m_process->setSplitStdout(true);
   m_process->setSuppressEmptyLines(true);
-  m_process->setThreadedStderr(true);
   m_process->setRawStdin(true);  // we only use stdin when writing on-the-fly
   connect( m_process, SIGNAL(stdoutLine(const QString&)), this, SLOT(slotStdLine(const QString&)) );
   connect( m_process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotStdLine(const QString&)) );
@@ -288,6 +287,8 @@ void K3bCdrecordWriter::start()
     emit finished(false);
     return;
   }
+
+  emit debuggingOutput( "Used versions", "cdrecord: " + m_cdrecordBinObject->version );
 
   if( !m_cdrecordBinObject->copyright.isEmpty() )
     emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3").arg(m_cdrecordBinObject->name()).arg(m_cdrecordBinObject->version).arg(m_cdrecordBinObject->copyright), INFO );

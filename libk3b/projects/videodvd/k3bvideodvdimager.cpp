@@ -120,11 +120,11 @@ int K3bVideoDvdImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& st
 }
 
 
-bool K3bVideoDvdImager::addMkisofsParameters()
+bool K3bVideoDvdImager::addMkisofsParameters( bool printSize )
 {
   // Here is another bad design: we assume that K3bIsoImager::start does not add additional 
   // parameters to the process. :(
-  if( K3bIsoImager::addMkisofsParameters() ) {
+  if( K3bIsoImager::addMkisofsParameters( printSize ) ) {
     *m_process << "-dvd-video";
     *m_process << d->tempPath;
     return true;

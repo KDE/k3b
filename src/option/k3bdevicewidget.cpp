@@ -46,7 +46,7 @@
 class K3bDeviceWidget::PrivateTempDevice
 {
 public:
-  PrivateTempDevice( K3bDevice* d ) {
+  PrivateTempDevice( K3bCdDevice::CdDevice* d ) {
     device = d;
     cdrdaoDriver = d->cdrdaoDriver();
     maxReadSpeed = d->maxReadSpeed() / 175;
@@ -55,7 +55,7 @@ public:
     writer = d->burner();
   }
 
-  K3bDevice* device;
+  K3bCdDevice::CdDevice* device;
   int maxReadSpeed;
   int maxWriteSpeed;
   QString cdrdaoDriver;
@@ -143,7 +143,7 @@ private:
     case t_cdrdaoDriver:
       if( l.isEmpty() )
 	for( int i = 0; i < 13; i++ )
-	  l.append(K3bDevice::cdrdao_drivers[i]);
+	  l.append(K3bCdDevice::CdDevice::cdrdao_drivers[i]);
 
       setEditor( 1, COMBO, l );
       break;
@@ -166,7 +166,7 @@ private:
 
 
 
-K3bDeviceWidget::K3bDeviceWidget( K3bDeviceManager* manager, QWidget *parent, const char *name )
+K3bDeviceWidget::K3bDeviceWidget( K3bCdDevice::DeviceManager* manager, QWidget *parent, const char *name )
   : QWidget( parent, name ), m_deviceManager( manager )
 {
   QGridLayout* frameLayout = new QGridLayout( this );
@@ -239,7 +239,7 @@ void K3bDeviceWidget::init()
   m_tempDevices.clear();
 
   // add the reading devices
-  K3bDevice* dev = m_deviceManager->allDevices().first();
+  K3bCdDevice::CdDevice* dev = m_deviceManager->allDevices().first();
   while( dev ) {
     m_tempDevices.append( new PrivateTempDevice( dev ) );
     dev = m_deviceManager->allDevices().next();
@@ -275,7 +275,7 @@ void K3bDeviceWidget::updateDeviceListViews()
 
     // create the read-only info items
     K3bListViewItem* systemDeviceItem = new K3bListViewItem( devRoot, i18n("System device name:") );
-    if( dev->device->interfaceType() == K3bDevice::SCSI )
+    if( dev->device->interfaceType() == K3bCdDevice::CdDevice::SCSI )
       systemDeviceItem->setText( 1, QString("%1 (%2)").arg(dev->device->devicename()).arg(dev->device->busTargetLun()) );
     else
       systemDeviceItem->setText( 1, dev->device->devicename() );
@@ -283,7 +283,7 @@ void K3bDeviceWidget::updateDeviceListViews()
 
     K3bListViewItem* interfaceItem = new K3bListViewItem( devRoot, systemDeviceItem,
 							  i18n("Interface type:"),
-							  ( dev->device->interfaceType() == K3bDevice::SCSI ?
+							  ( dev->device->interfaceType() == K3bCdDevice::CdDevice::SCSI ?
 							    i18n("Generic SCSI") :
 							    i18n("ATAPI") ) );
     interfaceItem->setForegroundColor( 1, gray );
@@ -391,7 +391,7 @@ void K3bDeviceWidget::slotNewDevice()
 						 "/dev/", &ok, this );
 
   if( ok ) {
-    if( K3bDevice* dev = m_deviceManager->addDevice( newDevicename ) ) {
+    if( K3bCdDevice::CdDevice* dev = m_deviceManager->addDevice( newDevicename ) ) {
       m_tempDevices.append( new PrivateTempDevice( dev ) );
 
       updateDeviceListViews();

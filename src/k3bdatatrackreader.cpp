@@ -102,6 +102,10 @@ public:
       }
     }
 
+    //
+    // Let the drive determine the optimal reading speed
+    //
+    m_device->setSpeed( 0xffff, 0xffff );
 
     //
     // As long as we do not know how to determine th emax read buffer properly we simply determine it

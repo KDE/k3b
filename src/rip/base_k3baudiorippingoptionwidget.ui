@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>base_K3bAudioRippingOptionWidget</class>
 <author>Sebastian Trueg</author>
 <widget class="QWidget">
@@ -10,8 +10,11 @@
             <x>0</x>
             <y>0</y>
             <width>436</width>
-            <height>180</height>
+            <height>181</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
     </property>
     <grid>
         <property name="name">
@@ -65,14 +68,6 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QCheckBox">
-                    <property name="name">
-                        <cstring>m_checkUsePattern</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Use filename pattern for ripped files</string>
-                    </property>
-                </widget>
                 <widget class="QCheckBox">
                     <property name="name">
                         <cstring>m_checkCreatePlaylist</cstring>
@@ -227,20 +222,39 @@ file will contain all tracks one after the other.
                         <string>Free space in directory:</string>
                     </property>
                 </widget>
+                <widget class="KURLRequester" row="0" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>m_editBaseDir</cstring>
+                    </property>
+                </widget>
                 <widget class="QLabel" row="1" column="1">
                     <property name="name">
                         <cstring>m_labelFreeSpace</cstring>
                     </property>
                     <property name="text">
-                        <string>0</string>
+                        <string>-</string>
                     </property>
                     <property name="alignment">
                         <set>AlignVCenter|AlignRight</set>
                     </property>
                 </widget>
-                <widget class="KURLRequester" row="0" column="0" rowspan="1" colspan="2">
+                <widget class="QLabel" row="2" column="0">
                     <property name="name">
-                        <cstring>m_editBaseDir</cstring>
+                        <cstring>textLabel1_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Space needed:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="1">
+                    <property name="name">
+                        <cstring>m_labelNeededSpace</cstring>
+                    </property>
+                    <property name="text">
+                        <string>-</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
                     </property>
                 </widget>
             </grid>

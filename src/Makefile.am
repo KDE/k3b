@@ -1,6 +1,6 @@
 bin_PROGRAMS = k3b
 
-k3b_SOURCES = k3bwelcomewidget.cpp k3bapplication.cpp k3bdiroperator.cpp kdndfileview.cpp k3bfiletreeview.cpp k3baudioplayer.cpp k3bprojecttabbar.cpp k3bprojecttabwidget.cpp k3bsplash.cpp k3bblankingdialog.cpp k3bfileview.cpp k3bdirview.cpp k3btoolbox.cpp k3b.cpp main.cpp k3bstatusbarmanager.cpp k3bfiletreecombobox.cpp k3breadcdreader.cpp k3binterface.cpp k3binterface.skel k3bprojectinterface.cpp k3bprojectinterface.skel k3bsystemproblemdialog.cpp k3bcdcontentsview.cpp k3bwriterspeedverificationdialog.cpp k3bdatatrackreader.cpp k3bsmartinstancereuser.cpp
+k3b_SOURCES = k3bwelcomewidget.cpp k3bapplication.cpp k3bdiroperator.cpp kdndfileview.cpp k3bfiletreeview.cpp k3baudioplayer.cpp k3bprojecttabbar.cpp k3bprojecttabwidget.cpp k3bsplash.cpp k3bblankingdialog.cpp k3bfileview.cpp k3bdirview.cpp k3btoolbox.cpp k3b.cpp main.cpp k3bstatusbarmanager.cpp k3bfiletreecombobox.cpp k3breadcdreader.cpp k3binterface.cpp k3binterface.skel k3bprojectinterface.cpp k3bprojectinterface.skel k3bsystemproblemdialog.cpp k3bcdcontentsview.cpp k3bwriterspeedverificationdialog.cpp k3bdatatrackreader.cpp k3bsmartinstancereuser.cpp k3bsidepanel.cpp
 
 k3b_LDADD   = ./cdinfo/libcdinfo.la ./option/liboption.la ./rip/librip.la ./cdcopy/libcdcopy.la ./dvdcopy/libdvdcopy.la ./videoEncoding/libvideoEncoding.la ./images/libimagewriting.la ../libk3bdevice/libk3bdevice.la ../libk3b/libk3b.la $(ARTS_LIBS) -lkio -lkparts
 
@@ -51,5 +51,6 @@ rc_DATA = k3bui.rc eventsrc tips
 messages: rc.cpp
 	$(EXTRACTRC) `find . -name "*.rc" -o -name "*.ui"` > rc.cpp
 	$(PREPARETIPS) tips > tips.cpp
-	$(XGETTEXT) --from-code=UTF-8 `find -name "*.cpp" -or -name "*.h"` -o $(podir)/k3b.pot
+	$(XGETTEXT) --from-code=UTF-8 `find . -name "*.cpp" -or -name "*.h"` -o $(podir)/k3b.pot
+	$(XGETTEXT) --from-code=UTF-8 `find ../plugins -name "*.cpp" -or -name "*.h"` -j -o $(podir)/k3b.pot
 	rm -f tips.cpp 
