@@ -101,7 +101,7 @@ K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name,
 					      bool showBuffer, bool modal, WFlags wf )
   : KDialog(parent,name, modal, wf), m_showBuffer( showBuffer )
 {
-  setCaption( i18n("K3b - Progress") );
+  setCaption( i18n("Progress") );
 
   m_systemTray = new KSystemTray( this );
   //  m_systemTray->setPixmap( kapp->iconLoader()->loadIcon( "k3b", KIcon::Panel, 24 ) );

@@ -9,6 +9,26 @@
 #include <qfile.h>
 
 
+// binary program name without path
+// to add a new one add the name at the end of the array and implement your own
+// version of checkVersions and add a case in slotParseOutputVersion.
+//static const char* binPrograms[] =  { "mkisofs", "cdrecord", "cdrdao", "mpg123", "sox", "transcode", "tccat", "tcprobe", "tcscan", "tcextract", "tcdecode" };
+// command argument to show the version number of the programs to check
+//static const char* binVersionFlag[] =  { "--version", "--version", "--version", "--version", "-h", "-version", "--version", "-version", "-version", "-version", "-v" };
+// minimum version of the programs
+//static const char* binVersions[] =  { "1.13", "1.9", "1.1.3", "unknown", "unknown", "0.6.0pre3", "0.6.0pre3", "0.6.0pre3", "0.6.0pre3", "0.6.0pre3", "0.6.0pre3" };
+
+static const char* binPrograms[] =  { "mkisofs", "cdrecord", "cdrdao",
+                    "transcode", "tcprobe", "tccat", "tcscan", "tcextract", "tcdecode" };
+static const char* binVersions[] =  { "1.13", "1.9", "1.1.3",
+                    "0.6.0pre3", "0.6.0pre3", "0.6.0pre3", "0.6.0pre3", "0.6.0pre3", "0.6.0pre3" };
+static const char* binVersionFlag[] =  { "--version", "--version", "--version", "-version", "-version", "-version", "-version", "-version", "-version" };
+
+static const char* searchPaths[] = { "/usr/bin/", "/usr/local/bin/",
+				       "/usr/sbin/", "/usr/local/sbin/",
+				       "/opt/schily/bin/" };
+
+
 
 K3bExternalBin::K3bExternalBin( const QString& name )
  : m_name( name )

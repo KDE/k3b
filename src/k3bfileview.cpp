@@ -20,6 +20,7 @@
 #include "k3baudioplayer.h"
 #include "k3bdoc.h"
 #include "k3bdiroperator.h"
+#include "k3btoolbox.h"
 
 #include <qwidget.h>
 #include <qdragobject.h>
@@ -74,13 +75,10 @@ void K3bFileView::setupGUI()
   m_dirOp->setMode( KFile::Files );
   m_dirOp->setView( KFile::Default );
 
-  QFrame* toolBar = new QFrame( this );
-  QHBoxLayout* toolBarLayout = new QHBoxLayout( toolBar );
-  toolBarLayout->setMargin( 1 );
-  toolBarLayout->setSpacing( 0 );
+  K3bToolBox* toolBox = new K3bToolBox( this );
 
   layout->addWidget( m_dirOp );
-  layout->addWidget( toolBar );
+  layout->addWidget( toolBox );
   layout->setStretchFactor( m_dirOp, 1 );
 
 
@@ -96,46 +94,13 @@ void K3bFileView::setupGUI()
   KAction* actionHome = m_dirOp->actionCollection()->action("up");
   KAction* actionReload = m_dirOp->actionCollection()->action("reload");
 
-  // setup the toolBar buttons
-  QToolButton* buttonUp = new QToolButton( toolBar );
-  buttonUp->setIconSet( actionUp->iconSet() );
-  buttonUp->setTextLabel( actionUp->toolTip(), true );
-  buttonUp->setTextLabel( actionUp->text() );
-  buttonUp->setAutoRaise( true );
-  connect( buttonUp, SIGNAL(clicked()), actionUp, SLOT(activate()) );
-  connect( actionUp, SIGNAL(enabled(bool)), buttonUp, SLOT(setEnabled(bool)) );
 
-  QToolButton* buttonHome = new QToolButton( toolBar );
-  buttonHome->setIconSet( actionHome->iconSet() );
-  buttonHome->setTextLabel( actionHome->toolTip(), true );
-  buttonHome->setTextLabel( actionHome->text() );
-  buttonHome->setAutoRaise( true );
-  connect( buttonHome, SIGNAL(clicked()), actionHome, SLOT(activate()) );
-  connect( actionHome, SIGNAL(enabled(bool)), buttonHome, SLOT(setEnabled(bool)) );
-
-  QToolButton* buttonReload = new QToolButton( toolBar );
-  buttonReload->setIconSet( actionReload->iconSet() );
-  buttonReload->setTextLabel( actionReload->toolTip(), true );
-  buttonReload->setTextLabel( actionReload->text() );
-  buttonReload->setAutoRaise( true );
-  connect( buttonReload, SIGNAL(clicked()), actionReload, SLOT(activate()) );
-  connect( actionReload, SIGNAL(enabled(bool)), buttonReload, SLOT(setEnabled(bool)) );
-
-  QToolButton* buttonPlay = new QToolButton( toolBar );
-  buttonPlay->setIconSet( actionPlay->iconSet() );
-  buttonPlay->setTextLabel( i18n("Play audio file"), true );
-  buttonPlay->setTextLabel( actionPlay->text() );
-  buttonPlay->setAutoRaise( true );
-  connect( buttonPlay, SIGNAL(clicked()), actionPlay, SLOT(activate()) );
-  connect( actionPlay, SIGNAL(enabled(bool)), buttonPlay, SLOT(setEnabled(bool)) );
-
-
-  toolBarLayout->addWidget( buttonUp );
-  toolBarLayout->addWidget( buttonHome );
-  toolBarLayout->addWidget( buttonReload );
-  toolBarLayout->addSpacing( 5 );
-  toolBarLayout->addWidget( buttonPlay );
-  toolBarLayout->addSpacing( 5 );
+  toolBox->addButton( actionUp );
+  toolBox->addButton( actionHome );
+  toolBox->addButton( actionReload );
+  toolBox->addSpacing();
+  toolBox->addButton( actionPlay );
+  toolBox->addSpacing();
 
 
   // insert actions into diroperator menu
@@ -150,12 +115,9 @@ void K3bFileView::setupGUI()
   connect( dirOpMenu, SIGNAL(activated()), this, SLOT(slotCheckActions()) );
 
   // create filter selection combobox
-  QLabel* filterLabel = new QLabel( i18n("Filter:"), toolBar, "filterLabel" );
-  m_filterWidget = new KFileFilterCombo( toolBar, "filterwidget" );
-
-  toolBarLayout->addWidget( filterLabel );
-  toolBarLayout->addWidget( m_filterWidget );
-  toolBarLayout->setStretchFactor( m_filterWidget, 1 );
+  toolBox->addLabel( i18n("Filter:") );
+  m_filterWidget = new KFileFilterCombo( toolBox, "filterwidget" );
+  toolBox->addWidget( m_filterWidget );
 
   m_filterWidget->setEditable( true );
   QString filter = i18n("*|All files");
@@ -164,7 +126,6 @@ void K3bFileView::setupGUI()
   filter += "\n" + i18n("application/x-ogg |Ogg Vorbis sound files");
   m_filterWidget->setFilter(filter);
 
-  filterLabel->setBuddy(m_filterWidget);
   connect( m_filterWidget, SIGNAL(filterChanged()), SLOT(slotFilterChanged()) );
 
   connect( m_dirOp, SIGNAL(fileHighlighted(const KFileItem*)), this, SLOT(slotFileHighlighted(const KFileItem*)) );

@@ -73,7 +73,7 @@ void K3bDiskInfoDetector::fetchDiskInfo()
   m_process->disconnect();
 
   if( !k3bMain()->externalBinManager()->foundBin( "cdrdao" ) ) {
-    kdDebug() << "(K3bAudioJob) could not find cdrdao executable. no disk-info..." << endl;
+    kdDebug() << "(K3bDiskInfoDetector) could not find cdrdao executable. no disk-info..." << endl;
     testForDvd();
   }
   else {
@@ -219,13 +219,13 @@ void K3bDiskInfoDetector::fetchTocInfo()
 
   if( m_device->interfaceType() == K3bDevice::IDE || 
       !k3bMain()->externalBinManager()->foundBin( "cdrecord" ) ) {
-    kdDebug() << "(K3bAudioJob) using cdparanoia" << endl;
+    kdDebug() << "(K3bDiskInfoDetector) using cdparanoia" << endl;
     fetchIdeInformation();
   }
   else {
     *m_process << k3bMain()->externalBinManager()->binPath( "cdrecord" );
 
-    *m_process << "-toc" << "-vv";   // -vv gives us atip info and cd-text (with recent cdrecord)
+    *m_process << "-toc";// << "-vv";   // -vv gives us atip info and cd-text (with recent cdrecord)
     *m_process << QString("dev=%1").arg( m_device->busTargetLun() );
 
     connect( m_process, SIGNAL(processExited(KProcess*)),
