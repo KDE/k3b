@@ -1,6 +1,6 @@
 /*
 *
-* $Id: $
+* $Id$
 * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
 *             THX to Manfred Odenstein <odix@chello.at>
 *
@@ -250,7 +250,7 @@ QDomElement K3bVcdXmlView::addSubElement( QDomDocument& doc, QDomElement& parent
 {
     QDomElement element = doc.createElement( name );
     parent.appendChild( element );
-    if ( value >= 0 ) {
+    if ( value >= -1 ) {
         QDomText t = doc.createTextNode( QString( "%1" ).arg( value ) );
         element.appendChild( t );
     }
@@ -306,8 +306,10 @@ void K3bVcdXmlView::doPbc(QDomDocument& doc, QDomElement& parent, K3bVcdTrack* t
                     elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustify( 3, '0' ) ) );
                     break;
                 case K3bVcdTrack::AFTERTIMEOUT:
-                    elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "timeout" );
-                    elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustify( 3, '0' ) ) );
+		    if ( track->getWaitTime() >= 0 )
+                        elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "timeout" );
+                        elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustify( 3, '0' ) ) );
+		    }
                     break;
             }
         } else {
@@ -331,8 +333,10 @@ void K3bVcdXmlView::doPbc(QDomDocument& doc, QDomElement& parent, K3bVcdTrack* t
                         elemPbcSelectionPNRDT.setAttribute( "ref", "end");
                         break;
                     case K3bVcdTrack::AFTERTIMEOUT:
-                        elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "timeout" );
-                        elemPbcSelectionPNRDT.setAttribute( "ref", "end");
+		        if ( track->getWaitTime() >= 0 )
+                    	    elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "timeout" );
+                            elemPbcSelectionPNRDT.setAttribute( "ref", "end");
+			}
                         break;
                 }
             }
