@@ -59,11 +59,11 @@ class K3bDataJob : public K3bBurnJob
   void slotWriterJobFinished( bool success );
   void slotMsInfoFetched(bool);
   void writeImage();
-  void startWriting();
   void cancelAll();
 		
  private:
   bool prepareWriterJob();
+  bool startWriting();
 
   K3bDataDoc* m_doc;
 

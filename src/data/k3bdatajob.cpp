@@ -185,8 +185,8 @@ void K3bDataJob::slotSizeCalculationFinished( int status, int size )
   if( status != ERROR ) {
     // this only happens in on-the-fly mode
     if( prepareWriterJob() ) {
-      startWriting();
-      m_isoImager->start();
+      if( startWriting() )
+	m_isoImager->start();
     }
   }
   else {
@@ -265,7 +265,7 @@ void K3bDataJob::slotIsoImagerFinished( bool success )
 }
 
 
-void K3bDataJob::startWriting()
+bool K3bDataJob::startWriting()
 {
   // if we append a new session we asked for an appendable cd already
   if( m_doc->multiSessionMode() == K3bDataDoc::NONE ||
@@ -274,11 +274,12 @@ void K3bDataJob::startWriting()
     K3bEmptyDiscWaiter waiter( m_doc->burner(), k3bMain() );
     if( waiter.waitForEmptyDisc() == K3bEmptyDiscWaiter::CANCELED ) {
       cancel();
-      return;
+      return false;
     }
   }
 	
   m_writerJob->start();
+  return true;
 }
 
 
