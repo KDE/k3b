@@ -147,6 +147,8 @@ K3bCdDevice::CdDevice::~CdDevice()
 
 bool K3bCdDevice::CdDevice::init()
 {
+  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << ": init()" << endl;
+
   if(open() < 0)
     return false;
 
@@ -167,7 +169,10 @@ bool K3bCdDevice::CdDevice::init()
   cmd.buffer = header;
   cmd.buflen = 8;
   cmd.data_direction = CGC_DATA_READ;
-  if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) == 0 ) {
+  if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) ) {
+    kdDebug() << "(K3bCdDevice) " << blockDeviceName() << ": GET_CONFIGURATION failed." << endl;
+  }
+  else {
 
     //
     // Now that we know the length of the returned data we just do it again with the
@@ -182,8 +187,10 @@ bool K3bCdDevice::CdDevice::init()
     cmd.cmd[8] = len;
     cmd.buffer = profiles;
     cmd.buflen = len;
-    if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) == 0 ) {
-
+    if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) ) {
+      kdDebug() << "(K3bCdDevice) " << blockDeviceName() << ": GET_CONFIGURATION with correct size failed." << endl;
+    }
+    else {
       for( int i = 8; i < len; ) {
 	short feature = profiles[i]<<8 | profiles[i+1];
 	int featureLen = profiles[i+3];
