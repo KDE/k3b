@@ -41,6 +41,7 @@
 #include <qtooltip.h>
 #include <qtabwidget.h>
 #include <qwhatsthis.h>
+#include <qhbox.h>
 
 
 K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal )
@@ -112,41 +113,49 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   advancedTabGrid->setSpacing( spacingHint() );
   advancedTabGrid->setMargin( marginHint() );
 
-  m_checkFastToc = new QCheckBox( i18n("Fast TOC"), advancedTab );
-  m_checkRawCopy = new QCheckBox( i18n("Raw Copy"), advancedTab );
-  m_checkTaoSource = new QCheckBox( i18n("TAO Source"), advancedTab );
-  m_checkForce = new QCheckBox( i18n("Force Write"), advancedTab );
+  QGroupBox* groupAudio = new QGroupBox( 2, Qt::Vertical, i18n("Audio Extraction"), advancedTab ); 
+  groupAudio->setInsideSpacing( spacingHint() );
+  groupAudio->setInsideMargin( marginHint() );
+  m_checkFastToc = new QCheckBox( i18n("Fast TOC"), groupAudio );
+  QHBox *p = new QHBox( groupAudio );
+  p->setStretchFactor(new QLabel( i18n("Paranoia Mode:"), p ), 1 );
+  m_comboParanoiaMode = K3bStdGuiItems::paranoiaModeComboBox( p );
 
-  m_spinTaoSourceAdjust = new QSpinBox( advancedTab );
-  m_spinTaoSourceAdjust->setMinValue( 1 );
-  m_spinTaoSourceAdjust->setMaxValue( 99 );
-  m_spinTaoSourceAdjust->setValue( 2 );
-  m_spinTaoSourceAdjust->setDisabled(true);
-
-  m_comboParanoiaMode = K3bStdGuiItems::paranoiaModeComboBox( advancedTab );
-
-  m_comboSubchanMode = new QComboBox( advancedTab );
+  QGroupBox* groupRaw   = new QGroupBox( 2, Qt::Vertical, i18n("Read Raw"), advancedTab ); 
+  groupRaw->setInsideSpacing( spacingHint() );
+  groupRaw->setInsideMargin( marginHint() );
+  m_checkRawCopy = new QCheckBox( i18n("Raw Copy"), groupRaw );
+  QHBox *s = new QHBox( groupRaw );
+  s->setStretchFactor(new QLabel( i18n("Read Subchan Mode:"), s ), 1 );
+  m_comboSubchanMode = new QComboBox( s );
   m_comboSubchanMode->insertItem( "none" );
   m_comboSubchanMode->insertItem( "rw" );
   m_comboSubchanMode->insertItem( "rw_raw" );
-  
-  advancedTabGrid->addMultiCellWidget( m_checkFastToc, 0, 0, 0, 2 );
-  advancedTabGrid->addMultiCellWidget( m_checkTaoSource, 2, 2, 0, 2 );
-  advancedTabGrid->addMultiCellWidget( m_checkRawCopy, 1, 1, 0, 2 );
-  advancedTabGrid->addWidget( new QLabel( i18n("TAO Source Adjust"), advancedTab ), 2, 3 );  
-  advancedTabGrid->addWidget(m_spinTaoSourceAdjust, 2, 4);
-  advancedTabGrid->addWidget( new QLabel( i18n("Paranoia Mode:"), advancedTab ), 0, 3 );
-  advancedTabGrid->addWidget( m_comboParanoiaMode, 0, 4 );
-  advancedTabGrid->addWidget( new QLabel( i18n("Read Subchan Mode:"), advancedTab ), 1, 3 );
-  advancedTabGrid->addWidget( m_comboSubchanMode, 1, 4 );
-  advancedTabGrid->addMultiCellWidget( m_checkForce, 3, 3, 0, 2 ); 
+ 
+  QGroupBox* groupTao   = new QGroupBox( 2, Qt::Vertical, i18n("Track at Once Source"), advancedTab ); 
+  groupTao->setInsideSpacing( spacingHint() );
+  groupTao->setInsideMargin( marginHint() );
+  m_checkTaoSource = new QCheckBox( i18n("TAO Source"), groupTao );
+  QHBox *t = new QHBox( groupTao );
+  t->setStretchFactor(new QLabel( i18n("Tao Source Adjust:"), t ), 1 );
+  m_spinTaoSourceAdjust = new QSpinBox( t );
+  m_spinTaoSourceAdjust->setMinValue( 1 );
+  m_spinTaoSourceAdjust->setMaxValue( 99 );
+  m_spinTaoSourceAdjust->setValue( 2 );
+  m_spinTaoSourceAdjust->setDisabled( true );
 
-  advancedTabGrid->setRowStretch( 4, 1 );
-  advancedTabGrid->setColStretch( 2, 1 );
+  QGroupBox* groupOther = new QGroupBox( 2, Qt::Vertical, i18n("Other"), advancedTab ); 
+  groupOther->setInsideSpacing( spacingHint() );
+  groupOther->setInsideMargin( marginHint() );
+  m_checkForce = new QCheckBox( i18n("Force Write"), groupOther );
+
+  advancedTabGrid->addWidget( groupAudio, 0, 0 );  
+  advancedTabGrid->addWidget( groupRaw,   0, 1 );
+  advancedTabGrid->addWidget( groupTao,   1, 0 );
+  advancedTabGrid->addWidget( groupOther, 1, 1 );
+
 
   tabWidget->addTab( advancedTab, i18n("&Advanced") );
-
-
 
   mainGrid->addWidget( groupSource, 0, 0  );
   mainGrid->addWidget( m_writerSelectionWidget, 1, 0  );
