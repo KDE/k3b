@@ -178,7 +178,7 @@ void K3bThemeOptionTab::slotRemoveTheme()
 			  "This will delete the files installed by this theme.</qt>").
       arg(item->text(0));
 
-    if( KMessageBox::questionYesNo( this, question, i18n("Confirmation")) != KMessageBox::Yes )
+    if( KMessageBox::warningContinueCancel( this, question, i18n("Confirmation"), KStdGuiItem::del()) != KMessageBox::Continue )
       return;
 
     K3bTheme* theme = item->theme;
