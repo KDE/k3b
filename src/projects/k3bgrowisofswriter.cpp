@@ -55,8 +55,10 @@ public:
   QTime lastSpeedCalculationTime;
   int lastSpeedCalculationBytes;
   int lastProgress;
-  int lastProgressed;
-  int lastWritingSpeed;
+  unsigned int lastProgressed;
+  double lastWritingSpeed;
+
+  bool writingStarted;
 };
 
 
@@ -175,6 +177,7 @@ void K3bGrowisofsWriter::start()
   d->lastProgress = 0;
   d->lastSpeedCalculationTime = QTime::currentTime();
   d->lastSpeedCalculationBytes = 0;
+  d->writingStarted = false;
 
   if( !prepareProcess() ) {
     emit finished( false );
@@ -255,11 +258,17 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
   int pos = 0;
 
   if( line.contains( "remaining" ) ) {
+
+    if( !d->writingStarted ) {
+      d->writingStarted = true;
+      emit newSubTask( i18n("Writing data") );
+    }
+    
     // parse progress
     int pos = line.find( "/" );
-    int done = line.left( pos ).toInt();
+    unsigned long long done = line.left( pos ).toULongLong();
     bool ok = true;
-    int size = line.mid( pos+1, line.find( "(", pos ) - pos - 1 ).toInt(&ok);
+    unsigned long long size = line.mid( pos+1, line.find( "(", pos ) - pos - 1 ).stripWhiteSpace().toULongLong(&ok);
     if( ok ) {
       int p = 100 * done / size;
       if( p > d->lastProgress ) {
@@ -276,8 +285,11 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
       if( pos != -1 ) {
 	pos += 1;
 	double speed = line.mid( pos, line.find( 'x', pos ) - pos ).toDouble(&ok);
-	if( ok )
-	  emit writeSpeed( (int)(speed*1385.0), 1385 );
+	if( ok ) {
+	  if( d->lastWritingSpeed != speed )
+	    emit writeSpeed( (int)(speed*1385.0), 1385 );
+	  d->lastWritingSpeed = speed;
+	}
 	else
 	  kdDebug() << "(K3bGrowisofsWriter) speed parsing failed: '" 
 		    << line.mid( pos, line.find( 'x', pos ) - pos ) << "'" << endl;
@@ -297,7 +309,8 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
       }
     }
     else
-      kdDebug() << "(K3bGrowisofsWriter) progress parsing failed: '" << line.mid( pos+1, line.find( "(", pos ) - pos - 1 ) << "'" << endl;
+      kdDebug() << "(K3bGrowisofsWriter) progress parsing failed: '" 
+		<< line.mid( pos+1, line.find( "(", pos ) - pos - 1 ).stripWhiteSpace() << "'" << endl;
   }
   else if( line.contains( "flushing cache" ) ) {
     emit newSubTask( i18n("Flushing Cache")  );

@@ -156,6 +156,8 @@ class K3bMainWindow : public KParts::DockMainWindow
   void slotShowTips();
   void slotCheckSystem();
 
+  void addUrls( const KURL::List& urls );
+
  signals:
   void initializationInfo( const QString& );
   void configChanged( KConfig* c );

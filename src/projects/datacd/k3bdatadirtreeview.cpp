@@ -27,6 +27,7 @@
 
 #include <qdragobject.h>
 #include <qheader.h>
+#include <qtimer.h>
 
 #include <klocale.h>
 #include <kaction.h>
@@ -37,9 +38,24 @@
 #include <kdebug.h>
 
 
+class K3bDataDirTreeView::Private
+{
+public:
+  Private() 
+    : animatedDirItem(0) {
+  }
+
+  K3bDataDirViewItem* animatedDirItem;
+  int animationCounter;
+  QPixmap beforeAniPixmap;
+};
+
+
 K3bDataDirTreeView::K3bDataDirTreeView( K3bView* view, K3bDataDoc* doc, QWidget* parent )
   : K3bListView( parent ), m_view(view)
 {
+  d = new Private();
+
   m_fileView = 0;
 
   setAcceptDrops( true );
@@ -77,6 +93,7 @@ K3bDataDirTreeView::K3bDataDirTreeView( K3bView* view, K3bDataDoc* doc, QWidget*
 
 K3bDataDirTreeView::~K3bDataDirTreeView()
 {
+  delete d;
 }
 
 
@@ -108,6 +125,8 @@ void K3bDataDirTreeView::slotDropped( QDropEvent* e, QListViewItem*, QListViewIt
   }
 
   if( parent ) {
+
+    startDropAnimation( parent );
 
     // check if items have been moved
     if( m_fileView &&
@@ -360,6 +379,63 @@ void K3bDataDirTreeView::slotProperties()
   }
   else
     m_doc->slotProperties();
+}
+
+
+void K3bDataDirTreeView::startDropAnimation( K3bDirItem* dir )
+{
+  stopDropAnimation();
+
+  K3bDataDirViewItem* vI = m_itemMap[dir];
+  if( vI ) {
+    d->animationCounter = 0;
+    d->animatedDirItem = vI;
+    d->beforeAniPixmap = QPixmap( *vI->pixmap(0) );
+    QTimer::singleShot( 0, this, SLOT(slotDropAnimate()) );
+  }
+}
+
+
+void K3bDataDirTreeView::slotDropAnimate()
+{
+  if( d->animatedDirItem ) {
+    if( d->animationCounter > 5 )
+      stopDropAnimation();
+    else {
+      switch(d->animationCounter) {
+      case 0:
+	d->animatedDirItem->setPixmap( 0, SmallIcon( "folder_cyan" ) );
+	break;
+      case 1:
+	d->animatedDirItem->setPixmap( 0, SmallIcon( "folder_green" ) );
+	break;
+      case 2:
+	d->animatedDirItem->setPixmap( 0, SmallIcon( "folder_yellow" ) );
+	break;
+      case 3:
+	d->animatedDirItem->setPixmap( 0, SmallIcon( "folder_orange" ) );
+	break;
+      case 4:
+	d->animatedDirItem->setPixmap( 0, SmallIcon( "folder_red" ) );
+	break;
+      case 5:
+	d->animatedDirItem->setPixmap( 0, SmallIcon( "folder_violet" ) );
+	break;
+      }
+
+      d->animationCounter++;
+      QTimer::singleShot( 300, this, SLOT(slotDropAnimate()) );
+    }
+  }
+}
+
+
+void K3bDataDirTreeView::stopDropAnimation()
+{
+  if( d->animatedDirItem ) {
+    d->animatedDirItem->setPixmap( 0, d->beforeAniPixmap );
+    d->animatedDirItem = 0;
+  }
 }
 
 #include "k3bdatadirtreeview.moc"

@@ -46,6 +46,8 @@ public:
   QTime lastWriteSpeedCalcTime;
   QTime firstWriteSpeedCalcTime;
   int lastWrittenSpeedCalcBytes;
+
+  bool writingStarted;
 };
 
 
@@ -72,6 +74,7 @@ void K3bGrowisofsImager::start()
   init();
 
   d->speedCalcStarted = false;
+  d->writingStarted = false;
 
   m_process = new K3bProcess();
   m_growisofsBin = k3bcore->externalBinManager()->binObject( "growisofs" );
@@ -222,6 +225,12 @@ void K3bGrowisofsImager::slotReceivedStderr( const QString& line )
   int pos = 0;
 
   if( line.contains( "done, estimate" ) ) {
+
+    if( !d->writingStarted ) {
+      d->writingStarted = true;
+      emit newSubTask( i18n("Writing data") );
+    }
+
     int p = K3bIsoImager::parseProgress( line );
     if( p != -1 ) {
       createEstimatedWriteSpeed( p*size()/100 );

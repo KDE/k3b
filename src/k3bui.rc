@@ -51,7 +51,7 @@
 	<Action name="tools_format_dvd" />
 </ToolBar>
 	
-<ToolBar name="quickDirSelector" newline="true" fullWidth="true"><text>Quick Dir Selector</text>
+<ToolBar name="quickDirSelector" fullWidth="true"><text>Quick Dir Selector</text>
 	<Action name="quick_dir_selector" />
 	<Action name="go_url" />
 </ToolBar>

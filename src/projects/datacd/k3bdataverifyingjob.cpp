@@ -31,7 +31,7 @@
 #include <kmessagebox.h>
 
 #include <qcstring.h>
-
+#include <qapplication.h>
 
 
 class K3bDataVerifyingJob::Private
@@ -76,6 +76,8 @@ K3bDataVerifyingJob::~K3bDataVerifyingJob()
 
 void K3bDataVerifyingJob::start()
 {
+  d->canceled = false;
+
   emit started();
 
   // we cannot compare files if no rockridge has been created since we do not know the
@@ -101,7 +103,7 @@ void K3bDataVerifyingJob::start()
 void K3bDataVerifyingJob::slotMediaReloaded( bool success )
 {
   if( !success )
-    KMessageBox::information( 0, i18n("Please reload the medium and press 'ok'"),
+    KMessageBox::information( qApp->activeWindow(), i18n("Please reload the medium and press 'ok'"),
 			      i18n("Unable to close the tray") );
 
   emit newTask( i18n("Mounting media") );

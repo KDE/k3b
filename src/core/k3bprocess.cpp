@@ -214,8 +214,9 @@ int K3bProcess::commSetupDoneC()
   if (communication & Stderr)
     close(err[0]);
 
-  if (communication & Stdin)
-    ok &= dup2(in[0],  STDIN_FILENO) != -1;
+  if (communication & Stdin) {
+    ok &= (dup2( in[0], STDIN_FILENO ) != -1);
+  }
   else {
     int null_fd = open( "/dev/null", O_RDONLY );
     ok &= dup2( null_fd, STDIN_FILENO ) != -1;

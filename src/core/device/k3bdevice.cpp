@@ -634,6 +634,9 @@ bool K3bCdDevice::CdDevice::init()
 
   d->interfaceType = interfaceType();
 
+  // default to the max write speed
+  m_currentWriteSpeed = m_maxWriteSpeed;
+
   return furtherInit();
 }
 

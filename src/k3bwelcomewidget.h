@@ -20,6 +20,8 @@
 #include <qwidget.h>
 
 class K3bMainWindow;
+class QDropEvent;
+class QDragEnterEvent;
 
 
 class K3bWelcomeWidget : public QWidget
@@ -33,6 +35,10 @@ class K3bWelcomeWidget : public QWidget
  private slots:
   void slotUrlClick( const QString& );
   void slotMailClick( const QString& adress, const QString& );
+
+ protected:
+  void dropEvent( QDropEvent* event );
+  void dragEnterEvent( QDragEnterEvent* event );
 
  private:
   K3bMainWindow* m_mainWindow;

@@ -76,6 +76,8 @@ class K3bDataDirTreeView : public K3bListView
 
  private:
   void setupActions();
+  void startDropAnimation( K3bDirItem* );
+  void stopDropAnimation();
 
   K3bView* m_view;
 
@@ -89,6 +91,9 @@ class K3bDataDirTreeView : public K3bListView
    */
   QMap<K3bDirItem*, K3bDataDirViewItem*> m_itemMap;
 
+  class Private;
+  Private* d;
+
  private slots:
   void slotExecuted( QListViewItem* );
   void slotDataItemRemoved( K3bDataItem* );
@@ -97,6 +102,7 @@ class K3bDataDirTreeView : public K3bListView
   void slotRemoveItem();
   void slotNewDir();
   void slotProperties();
+  void slotDropAnimate();
 };
 
 #endif

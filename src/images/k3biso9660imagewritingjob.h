@@ -25,11 +25,12 @@ class KTempFile;
 namespace K3bCdDevice {
   class CdDevice;
 }
+class K3bIsoImageVerificationJob;
+
 
 /**
   *@author Sebastian Trueg
   */
-
 class K3bIso9660ImageWritingJob : public K3bBurnJob
 {
   Q_OBJECT
@@ -55,10 +56,14 @@ class K3bIso9660ImageWritingJob : public K3bBurnJob
   void setSimulate( bool b ) { m_simulate = b; }
   void setNoFix( bool b ) { m_noFix = b; }
   void setDataMode( int m ) { m_dataMode = m; }
+  void setVerifyData( bool b ) { m_verifyData = b; }
 
  protected slots:
   void slotWriterJobFinished( bool );
-		
+  void slotVerificationFinished( bool );
+  void slotVerificationProgress( int );
+  void slotWriterPercent( int );
+	
  private:
   bool prepareWriter( int mediaType );
 
@@ -69,6 +74,7 @@ class K3bIso9660ImageWritingJob : public K3bBurnJob
   bool m_noFix;
   int m_speed;
   int m_dataMode;
+  bool m_verifyData;
 
   QString m_imagePath;
 
@@ -76,6 +82,9 @@ class K3bIso9660ImageWritingJob : public K3bBurnJob
   KTempFile* m_tocFile;
 
   bool m_canceled;
+  bool m_finished;
+
+  K3bIsoImageVerificationJob* m_verifyJob;
 };
 
 #endif

@@ -20,12 +20,15 @@ Pluggable audio decoding
 Pluggable audio encoding and completely rewritten audio ripping
 	much faster now due to a much better threading
 Check for read permission when adding files to a project
-file filter in binimagewritingdialog and isoimagewritingdialog (thanx to DAvid Maciejak)
+file filter in binimagewritingdialog and isoimagewritingdialog (thanx to David Maciejak)
 Verification of written data (compares md5 sums of all written files).
 K3bSetup is not longer compiled unless explicit activated (K3bSetup is outdated and K3bSetup2 is still not ready)
 K3b now also compiles without aRts. In this case the audioplayer will be useless (but still there)
 no need for special mkisofs permissons anymore. K3b now openes the device itself when importing
 	an old session.
+added a little color animation when dropping files onto a directory in data projects
+	it is always hard to tell if one dropped on the correct dir. If some one has a better animation 
+	I would be interested in replacing this simple one.
 	
 0.9
 support for eMovix 0.8.0rc2

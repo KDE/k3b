@@ -16,6 +16,8 @@
 #include "k3bwelcomewidget.h"
 #include "k3b.h"
 #include <k3bstdguiitems.h>
+#include <k3bcore.h>
+#include <k3bversion.h>
 
 #include <qlayout.h>
 #include <qlabel.h>
@@ -23,6 +25,8 @@
 #include <qtextstream.h>
 #include <qpixmap.h>
 
+#include <kurl.h>
+#include <kurldrag.h>
 #include <klocale.h>
 #include <ktextbrowser.h>
 #include <kstandarddirs.h>
@@ -34,23 +38,27 @@ K3bWelcomeWidget::K3bWelcomeWidget( K3bMainWindow* mw, QWidget* parent, const ch
   : QWidget( parent, name ),
     m_mainWindow( mw )
 {
+  setAcceptDrops( true );
+
   // header
   QFrame* headerFrame = K3bStdGuiItems::purpleFrame( this );
   QLabel* topPixLabel = new QLabel( headerFrame );
+  QLabel* topLeftPixLabel = new QLabel( headerFrame );
+  QLabel* headerLabel = new QLabel( i18n("Welcome to K3b %1 - The CD/DVD burning facility").arg(k3bcore->version()),
+				    headerFrame );
+  QFont fnt(headerLabel->font());
+  fnt.setBold(true);
+  fnt.setPointSize( 14 );
+  headerLabel->setFont( fnt );
+  headerLabel->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
+  headerLabel->setIndent( 5 );
   QGridLayout* headerGrid = new QGridLayout( headerFrame );
   headerGrid->setMargin( 2 );
   headerGrid->setSpacing( 0 );
-  headerGrid->addWidget( topPixLabel, 0, 0 );
+  headerGrid->addWidget( topLeftPixLabel, 0, 0 );
+  headerGrid->addWidget( headerLabel, 0, 1 );
+  headerGrid->addWidget( topPixLabel, 0, 2 );
   headerGrid->setColStretch( 1, 1 );
-
-  // footer
-  QFrame* footerFrame = K3bStdGuiItems::purpleFrame( this );
-  QLabel* bottomPixLabel = new QLabel( footerFrame );
-  QGridLayout* footerGrid = new QGridLayout( footerFrame );
-  footerGrid->setMargin( 2 );
-  footerGrid->setSpacing( 0 );
-  footerGrid->addWidget( bottomPixLabel, 0, 1 );
-  footerGrid->setColStretch( 0, 1 );
 
   // text browser
   KTextBrowser* browser = new KTextBrowser( this );
@@ -62,17 +70,21 @@ K3bWelcomeWidget::K3bWelcomeWidget( K3bMainWindow* mw, QWidget* parent, const ch
   mainGrid->setSpacing( 0 );
   mainGrid->addWidget( headerFrame, 0, 0 );
   mainGrid->addWidget( browser, 1, 0 );
-  mainGrid->addWidget( footerFrame, 2, 0 );
   mainGrid->setRowStretch( 1, 1 );
 
 
-  topPixLabel->setPixmap( QPixmap(locate( "appdata", "pics/k3bprojectview_left.png" )) );
-  bottomPixLabel->setPixmap( QPixmap(locate( "appdata", "pics/k3bprojectview_right.png" )) );
+  topPixLabel->setPixmap( QPixmap(locate( "appdata", "pics/k3bprojectview_right.png" )) );
+  topLeftPixLabel->setPixmap( QPixmap(locate( "appdata", "pics/k3bprojectview_left_short.png" )) );
+
   QFile f( locate( "appdata", "k3bwelcomemessage.html" ) );
   if( f.open( IO_ReadOnly ) ) {
     QTextStream s( &f );
     browser->setText( s.read()
-		      .arg( i18n("Welcome to K3b - The CD/DVD burning facility") )
+		      .arg( i18n("Use the following links to access the most often used actions:") )
+		      .arg( i18n("Create Audio CD") )
+  		      .arg( i18n("Create Data DVD") )
+    		      .arg( i18n("Create Data CD") )
+     		      .arg( i18n("Copy CD") )
 		      .arg( i18n("K3b basicly consits of three parts:") )
 		      .arg( i18n("The projects:") )
 		      .arg( i18n("Projects are created from the <em>file</em> menu and then filled with data to burn.") )
@@ -82,14 +94,10 @@ K3bWelcomeWidget::K3bWelcomeWidget( K3bMainWindow* mw, QWidget* parent, const ch
 		      .arg( i18n("When clicking on the Icon representing a CD/DVD drive K3b will present "
 				 "it's contents and allow some further action. This is for example the way "
 				 "to rip audio CDs.") )
-		      .arg( i18n("Use the following links to access the most often used actions:") )
-		      .arg( i18n("Create Audio CD") )
-  		      .arg( i18n("Create Data DVD") )
-    		      .arg( i18n("Create Data CD") )
-     		      .arg( i18n("Copy CD") ) );
+		      );
   }
   else
-    browser->setText( i18n("k3bwelcomeheader.html not found") );
+    browser->setText( i18n("File %1 not found").arg("k3bwelcomemessage.h") );
 
   connect( browser, SIGNAL(mailClick(const QString&, const QString&)),
 	   this, SLOT(slotMailClick(const QString&, const QString&)) );
@@ -121,5 +129,17 @@ void K3bWelcomeWidget::slotMailClick( const QString& adress, const QString& )
   kapp->invokeMailer( adress, "K3b: " );
 }
 
+void K3bWelcomeWidget::dragEnterEvent( QDragEnterEvent* event )
+{
+  event->accept( KURLDrag::canDecode(event) );
+}
+
+
+void K3bWelcomeWidget::dropEvent( QDropEvent* e )
+{
+  KURL::List urls;
+  KURLDrag::decode( e, urls );
+  m_mainWindow->addUrls( urls );
+}
 
 #include "k3bwelcomewidget.moc"

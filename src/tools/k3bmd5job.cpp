@@ -23,21 +23,29 @@
 #include <qfile.h>
 #include <qtimer.h>
 
+#include <unistd.h>
+
 
 class K3bMd5Job::K3bMd5JobPrivate
 {
 public:
-  K3bMd5JobPrivate() {
-    finished = true;
-    data = 0;
+  K3bMd5JobPrivate()
+    : fileDes(-1),
+      finished(true),
+      data(0),
+      maxSize(0) {
   }
 
   KMD5 md5;
   QFile file;
   QTimer timer;
   QString filename;
+  int fileDes;
   bool finished;
   char* data;
+
+  unsigned long long maxSize;
+  unsigned long long readData;
 
   static const int BUFFERSIZE = 1024*20;
 };
@@ -64,24 +72,27 @@ void K3bMd5Job::start()
 {
   cancel();
 
-  if( !QFile::exists( d->filename ) ) {
-    emit infoMessage( i18n("Could not find file %1").arg(d->filename), ERROR );
-    emit finished(false);
-  }
-  else {
+  emit started();
+  d->readData = 0;
+
+  if( d->fileDes < 0 ) {
+    if( !QFile::exists( d->filename ) ) {
+      emit infoMessage( i18n("Could not find file %1").arg(d->filename), ERROR );
+      emit finished(false);
+      return;
+    }
+
     d->file.setName( d->filename );
     if( !d->file.open( IO_ReadOnly ) ) {
       emit infoMessage( i18n("Could not open file %1").arg(d->filename), ERROR );
       emit finished(false);
-    }
-    else {
-      emit started();
-
-      d->md5.reset();
-      d->finished = false;
-      d->timer.start(0);
+      return;
     }
   }
+    
+  d->md5.reset();
+  d->finished = false;
+  d->timer.start(0);
 }
 
 
@@ -102,24 +113,51 @@ void K3bMd5Job::setFile( const QString& filename )
 }
 
 
+void K3bMd5Job::setFd( int fd )
+{
+  d->fileDes = fd;
+}
+
+
+void K3bMd5Job::setMaxReadSize( unsigned long long size )
+{
+  d->maxSize = size;
+}
+
+
 void K3bMd5Job::slotUpdate()
 {
   if( !d->finished ) {
-    if( d->file.atEnd() ) {
+
+    if( d->readData >= d->maxSize && d->maxSize > 0 ) {
       stop();
       emit percent( 100 );
       emit finished(true);
     }
     else {
-      int read = d->file.readBlock( d->data, K3bMd5JobPrivate::BUFFERSIZE );
+      int read = 0;
+      if( d->fileDes < 0 )
+	read = d->file.readBlock( d->data, K3bMd5JobPrivate::BUFFERSIZE );
+      else
+	read = ::read( d->fileDes, d->data, K3bMd5JobPrivate::BUFFERSIZE );
+
       if( read < 0 ) {
 	emit infoMessage( i18n("Error while reading from file %1").arg(d->filename), ERROR );
 	stop();
 	emit finished(false);
       }
+      else if( read == 0 ) {
+	stop();
+	emit percent( 100 );
+	emit finished(true);
+      }
       else {
+	d->readData += read;
 	d->md5.update( d->data, read );
-	emit percent( (int)((double)d->file.at() * 100.0 / (double)d->file.size()) );
+	if( d->fileDes < 0 )
+	  emit percent( (int)((double)d->file.at() * 100.0 / (double)d->file.size()) );
+	else if( d->maxSize > 0 )
+	  emit percent( (int)((double)d->readData * 100.0 / (double)d->maxSize) );
       }
     }
   }
@@ -147,7 +185,8 @@ QCString K3bMd5Job::base64Digest()
 
 void K3bMd5Job::stop()
 {
-  d->file.close();
+  if( d->file.isOpen() )
+    d->file.close();
   d->timer.stop();
   d->finished = true;
 }

@@ -13,48 +13,39 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-
-#ifndef _K3B_MD5_JOB_H_
-#define _K3B_MD5_JOB_H_
+#ifndef _K3B_ISOIMAGE_VERIFICATION_JOB_H_
+#define _K3B_ISOIMAGE_VERIFICATION_JOB_H_
 
 #include <k3bjob.h>
-#include <qcstring.h>
+
+namespace K3bCdDevice {
+  class CdDevice;
+}
 
 
-class K3bMd5Job : public K3bJob
+class K3bIsoImageVerificationJob : public K3bJob
 {
   Q_OBJECT
 
  public:
-  K3bMd5Job( QObject* parent = 0, const char* name = 0 );
-  ~K3bMd5Job();
-
-  QCString hexDigest();
-  QCString base64Digest();
+  K3bIsoImageVerificationJob( QObject* parent = 0, const char* name = 0 );
+  ~K3bIsoImageVerificationJob();
 
  public slots:
   void start();
   void cancel();
-
-  void setFile( const QString& filename );
-
-  /**
-   * read from the opened file descriptor
-   */
-  void setFd( int fd );
-
-  /**
-   * Set the maximum bytes to read.
-   */
-  void setMaxReadSize( unsigned long long );
+  void setDevice( K3bCdDevice::CdDevice* dev );
+  void setImageFileName( const QString& f );
 
  private slots:
-  void slotUpdate();
-  void stop();
+  void slotMediaReloaded( bool success );
+  void slotMd5JobFinished( bool success );
+  void slotMd5JobProgress( int p );
+  void finishVerification( bool success );
 
  private:
-  class K3bMd5JobPrivate;
-  K3bMd5JobPrivate* d;
+  class Private;
+  Private* d;
 };
 
 #endif

@@ -548,7 +548,7 @@ void K3bEmptyDiscWaiter::prepareErasingDialog()
 {
   // we hide the emptydiskwaiter so the info dialog needs to have the same parent
   if( !d->erasingInfoDialog )
-    d->erasingInfoDialog = new K3bErasingInfoDialog( QString::null, parentWidget() );
+    d->erasingInfoDialog = new K3bErasingInfoDialog( QString::null, qApp->activeWindow() );
 
   //
   // hide the dialog 

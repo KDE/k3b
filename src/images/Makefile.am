@@ -4,4 +4,4 @@ METASOURCES = AUTO
 
 noinst_LTLIBRARIES = libimagewriting.la
 
-libimagewriting_la_SOURCES = k3bisoimagewritingdialog.cpp k3biso9660imagewritingjob.cpp k3bbinimagewritingdialog.cpp k3bbinimagewritingjob.cpp
+libimagewriting_la_SOURCES = k3bisoimagewritingdialog.cpp k3biso9660imagewritingjob.cpp k3bbinimagewritingdialog.cpp k3bbinimagewritingjob.cpp k3bisoimageverificationjob.cpp

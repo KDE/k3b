@@ -15,9 +15,11 @@
 
 
 #include "k3biso9660imagewritingjob.h"
+#include "k3bisoimageverificationjob.h"
 
 #include <device/k3bdevice.h>
 #include <device/k3bdiskinfo.h>
+#include <device/k3bdevicehandler.h>
 #include <k3bcdrecordwriter.h>
 #include <k3bcdrdaowriter.h>
 #include <k3bgrowisofswriter.h>
@@ -49,7 +51,8 @@ K3bIso9660ImageWritingJob::K3bIso9660ImageWritingJob()
     m_speed(2),
     m_dataMode(K3b::DATA_MODE_AUTO),
     m_writer(0),
-    m_tocFile(0)
+    m_tocFile(0),
+    m_verifyJob(0)
 {
 }
 
@@ -61,9 +64,12 @@ K3bIso9660ImageWritingJob::~K3bIso9660ImageWritingJob()
 
 void K3bIso9660ImageWritingJob::start()
 {
-  m_canceled = false;
+  m_canceled = m_finished = false;
 
   emit started();
+
+  if( m_simulate )
+    m_verifyData = false;
 
   if( !QFile::exists( m_imagePath ) ) {
     emit infoMessage( i18n("Could not find image %1").arg(m_imagePath), K3bJob::ERROR );
@@ -111,40 +117,104 @@ void K3bIso9660ImageWritingJob::start()
   // wait for the media
   int media = K3bEmptyDiscWaiter::wait( m_device, false, mt );
   if( media == K3bEmptyDiscWaiter::CANCELED ) {
-    cancel();
+    m_finished = true;
+    emit canceled();
+    emit finished(false);
+    return;
   }
 
   if( prepareWriter( media ) ) {
     m_writer->start();
+  }
+  else {
+    m_finished = true;
+    emit finished(false);
   }
 }
 
 
 void K3bIso9660ImageWritingJob::slotWriterJobFinished( bool success )
 {
-    delete m_tocFile;
-    m_tocFile = 0;
+  if( m_canceled ) {
+    m_finished = true;
+    emit canceled();
+    emit finished(false);
+    return;
+  }
 
   if( success ) {
     // allright
     // the writerJob should have emited the "simulation/writing successful" signal
-    emit finished(true);
+
+    if( m_verifyData ) {
+      if( !m_verifyJob ) {
+	m_verifyJob = new K3bIsoImageVerificationJob( this );
+	connectSubJob( m_verifyJob,
+		       SLOT(slotVerificationFinished(bool)),
+		       true,
+		       SLOT(slotVerificationProgress(int)),
+		       SIGNAL(subPercent(int)) );
+      }
+      m_verifyJob->setDevice( m_device );
+      m_verifyJob->setImageFileName( m_imagePath );
+      emit newTask( i18n("Verifying written data") );
+      emit burning(false);
+      m_verifyJob->start();
+    }
+    else {
+      m_finished = true;
+      emit finished(true);
+    }
   }
   else {
+    m_finished = true;
     emit finished(false);
   }
 }
 
 
+void K3bIso9660ImageWritingJob::slotVerificationFinished( bool success )
+{
+  if( m_canceled ) {
+    m_finished = true;
+    emit canceled();
+    emit finished(false);
+    return;
+  }
+
+  k3bcore->config()->setGroup("General Options");
+  if( !k3bcore->config()->readBoolEntry( "No cd eject", false ) )
+    K3bCdDevice::eject( m_device );
+
+  m_finished = true;
+  emit finished( success );
+}
+
+
+void K3bIso9660ImageWritingJob::slotVerificationProgress( int p )
+{
+  emit percent( p/2 + 50 );
+}
+
+
+void K3bIso9660ImageWritingJob::slotWriterPercent( int p )
+{
+  if( m_verifyData )
+    emit percent( p/2 );
+  else
+    emit percent( p );
+}
+
+
 void K3bIso9660ImageWritingJob::cancel()
 {
-  m_canceled = true;
+  if( !m_finished ) {
+    m_canceled = true;
 
-  if( m_writer ) {
-    emit infoMessage( i18n("Writing canceled."), K3bJob::ERROR );
-    emit canceled();
-
-    m_writer->cancel();
+    if( m_writer )
+      m_writer->cancel();
+    if( m_verifyData && m_verifyJob )
+      m_verifyJob->cancel();
   }
 }
 
@@ -243,7 +313,6 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
       else {
 	kdDebug() << "(K3bDataJob) could not write tocfile." << endl;
 	emit infoMessage( i18n("IO Error"), ERROR );
-	emit finished(false);
 	return false;
       }
 
@@ -281,8 +350,8 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
 
 
   connect( m_writer, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
-  connect( m_writer, SIGNAL(percent(int)), this, SIGNAL(percent(int)) );
-  //  connect( m_writer, SIGNAL(subPercent(int)), this, SIGNAL(subPercent(int)) );
+  connect( m_writer, SIGNAL(percent(int)), this, SLOT(slotWriterPercent(int)) );
+  connect( m_writer, SIGNAL(subPercent(int)), this, SIGNAL(subPercent(int)) );
   connect( m_writer, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSize(int, int)) );
   connect( m_writer, SIGNAL(buffer(int)), this, SIGNAL(bufferStatus(int)) );
   connect( m_writer, SIGNAL(writeSpeed(int, int)), this, SIGNAL(writeSpeed(int, int)) );

@@ -66,6 +66,7 @@ class K3bIsoImageWritingDialog : public K3bInteractionDialog
   QCheckBox* m_checkDummy;
   QCheckBox* m_checkBurnProof;
   QCheckBox* m_checkNoFix;
+  QCheckBox* m_checkVerify;
   K3bDataModeWidget* m_dataModeWidget;
   K3bWritingModeWidget* m_writingModeWidget;
 

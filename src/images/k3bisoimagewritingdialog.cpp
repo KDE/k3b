@@ -227,7 +227,7 @@ void K3bIsoImageWritingDialog::setupGui()
   writingModeGroup->setInsideMargin( marginHint() );
   m_writingModeWidget = new K3bWritingModeWidget( writingModeGroup );
 
-  QGroupBox* optionGroup = new QGroupBox( 2, Vertical, i18n("Options"), optionTab );
+  QGroupBox* optionGroup = new QGroupBox( 3, Vertical, i18n("Options"), optionTab );
   optionGroup->setInsideMargin( marginHint() );
   optionGroup->setInsideSpacing( spacingHint() );
   m_checkDummy = K3bStdGuiItems::simulateCheckbox( optionGroup );
@@ -235,6 +235,8 @@ void K3bIsoImageWritingDialog::setupGui()
     m_checkBurnProof = 0;
   else
     m_checkBurnProof = K3bStdGuiItems::burnproofCheckbox( optionGroup );
+
+  m_checkVerify = K3bStdGuiItems::verifyCheckBox( optionGroup );
 
   groupOptionsLayout->addWidget( writingModeGroup, 0, 0 );
   groupOptionsLayout->addWidget( optionGroup, 0, 1 );
@@ -302,6 +304,7 @@ void K3bIsoImageWritingDialog::slotStartClicked()
   m_job->setSpeed( m_writerSelectionWidget->writerSpeed() );
   m_job->setSimulate( m_checkDummy->isChecked() );
   m_job->setWritingMode( m_writingModeWidget->writingMode() );
+  m_job->setVerifyData( m_checkVerify->isChecked() );
   if( !m_dvd ) {
     m_job->setBurnproof( m_checkBurnProof->isChecked() );
     m_job->setNoFix( m_checkNoFix->isChecked() );
@@ -313,7 +316,7 @@ void K3bIsoImageWritingDialog::slotStartClicked()
   m_job->setWritingApp( m_writerSelectionWidget->writingApp() );
 
   // create a progresswidget
-  K3bBurnProgressDialog d( kapp->mainWidget(), "burnProgress", false );
+  K3bBurnProgressDialog d( kapp->mainWidget(), "burnProgress", true );
 
   hide();
 
@@ -483,6 +486,8 @@ void K3bIsoImageWritingDialog::slotLoadUserDefaults()
     m_checkNoFix->setChecked( c->readBoolEntry("multisession", false ) );
     m_dataModeWidget->loadConfig(c);
   }
+ 
+  m_checkVerify->setChecked( c->readBoolEntry( "verify_data", false ) );
 
   m_writerSelectionWidget->loadConfig( c );
 }
@@ -500,6 +505,8 @@ void K3bIsoImageWritingDialog::slotSaveUserDefaults()
     m_dataModeWidget->saveConfig(c);
   }
 
+  c->writeEntry( "verify_data", m_checkVerify->isChecked() );
+
   m_writerSelectionWidget->saveConfig( c );
 }
 
@@ -508,6 +515,7 @@ void K3bIsoImageWritingDialog::slotLoadK3bDefaults()
   m_writerSelectionWidget->loadDefaults();
   m_writingModeWidget->setWritingMode( K3b::WRITING_MODE_AUTO );
   m_checkDummy->setChecked( false );
+  m_checkVerify->setChecked( false );
   if( !m_dvd ) {
     m_checkBurnProof->setChecked( true );
     m_checkNoFix->setChecked( false );

@@ -13,6 +13,8 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#include <config.h>
+
 
 // include files for QT
 #include <qdir.h>
@@ -99,6 +101,8 @@
 #include "plugin/k3bpluginmanager.h"
 #include "plugin/k3bpluginfactory.h"
 #include <k3bsystemproblemdialog.h>
+#include <k3baudiodecoder.h>
+#include <k3bpluginmanager.h>
 
 
 static K3bMainWindow* s_k3bMainWindow = 0;
@@ -291,12 +295,13 @@ void K3bMainWindow::initActions()
   (void)new KAction(i18n("Copy &DVD..."), "cdcopy", 0, this, SLOT(slotDvdCopy()),
 		    actionCollection(), "tools_copy_dvd" );
 
-  (void)new KAction( i18n("System Check"), 0, 0, SLOT(slotCheckSystem()),
+  (void)new KAction( i18n("System Check"), 0, 0, this, SLOT(slotCheckSystem()),
 		     actionCollection(), "help_check_system" );
 
+#ifdef HAVE_K3BSETUP
   actionSettingsK3bSetup = new KAction(i18n("K3b &Setup"), "configure", 0, this, SLOT(slotK3bSetup()),
 				       actionCollection(), "settings_k3bsetup" );
-
+#endif
 
   // Project actions (TODO: these should go into K3bDoc and it's subclasses)
   // ==============================================================================================================
@@ -405,7 +410,7 @@ void K3bMainWindow::initView()
   QLabel* centerDocLabel = new QLabel( m_documentHeader );
   QLabel* rightDocPicLabel = new QLabel( m_documentHeader );
 
-  leftDocPicLabel->setPixmap( QPixmap(locate( "data", "k3b/pics/k3bprojectview_left.png" )) );
+  leftDocPicLabel->setPixmap( QPixmap(locate( "data", "k3b/pics/k3bprojectview_left_short.png" )) );
   rightDocPicLabel->setPixmap( QPixmap(locate( "data", "k3b/pics/k3bprojectview_right.png" )) );
   centerDocLabel->setText( i18n("Current Projects") );
   centerDocLabel->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
@@ -476,7 +481,7 @@ void K3bMainWindow::initView()
   m_audioPlayer = new K3bAudioPlayer( this, "k3b_audio_player" );
   m_audioPlayerDock->setWidget( m_audioPlayer );
   //  m_audioPlayerDock->setEnableDocking( KDockWidget::DockFullDocking/*DockCorner*/ );
-  m_audioPlayerDock->manualDock( mainDock, KDockWidget::DockRight, 8000 );
+  //  m_audioPlayerDock->manualDock( mainDock, KDockWidget::DockRight, 8000 );
 
   connect( m_audioPlayerDock, SIGNAL(iMBeingClosed()), this, SLOT(slotAudioPlayerHidden()) );
   connect( m_audioPlayerDock, SIGNAL(hasUndocked()), this, SLOT(slotAudioPlayerHidden()) );
@@ -1348,5 +1353,44 @@ void K3bMainWindow::slotCheckSystem()
 {
   K3bSystemProblemDialog::checkSystem();
 }
+
+
+void K3bMainWindow::addUrls( const KURL::List& urls )
+{
+  if( activeDoc() ) {
+    activeDoc()->addUrls( urls );
+  }
+  else {
+    // check if the files are all audio we can handle. If so create an audio project
+    bool audio = true;
+    QPtrList<K3bPluginFactory> fl = k3bpluginmanager->factories( "AudioDecoder" );
+    for( KURL::List::const_iterator it = urls.begin(); it != urls.end(); ++it ) {
+      const KURL& url = *it;
+
+      if( QFileInfo(url.path()).isDir() ) {
+	audio = false;
+	break;
+      }
+
+      bool a = false;
+      for( QPtrListIterator<K3bPluginFactory> it( fl ); it.current(); ++it ) {
+	if( ((K3bAudioDecoderFactory*)it.current())->canDecode( url ) ) {
+	  a = true;
+	  break;
+	}
+      }
+      if( !a ) {
+	audio = a;
+	break;
+      }
+    }
+
+    if( audio )
+      slotNewAudioDoc()->addUrls( urls );
+    else
+      slotNewDataDoc()->addUrls( urls );
+  }
+}
+
 
 #include "k3b.moc"

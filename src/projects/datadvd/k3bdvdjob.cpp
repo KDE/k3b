@@ -90,6 +90,9 @@ void K3bDvdJob::start()
   m_canceled = false;
   m_writingStarted = false;
 
+  if( m_doc->dummy() )
+    m_doc->setVerifyData( false );
+
   if( !m_doc->onTheFly() || m_doc->onlyCreateImages() ) {
     emit newTask( i18n("Writing data") );
     writeImage();
