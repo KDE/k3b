@@ -48,7 +48,7 @@ K3bDataDirTreeView::K3bDataDirTreeView( K3bDataView* view, K3bDataDoc* doc, QWid
   setItemsRenameable( true );
 
   m_editor = new KListViewLineEdit( this );
-  m_editor->setValidator( new QRegExpValidator( QRegExp("^[\\/;:*$]"), m_editor ) );
+  m_editor->setValidator( new QRegExpValidator( QRegExp("([a-z]|[A-Z]|[0-9]|_|-)*"), m_editor ) );
 
   m_doc = doc;	
   m_root = new K3bDataRootViewItem( doc, this );

@@ -76,7 +76,7 @@ void K3bDataJob::start()
 {
   // write path spec file
   // ----------------------------------------------------
-  m_pathSpecFile = locateLocal( "appdata", "temp/" ) + "k3b_" + QTime::currentTime().toString() + ".mkisofs";
+  m_pathSpecFile = locateLocal( "appdata", "temp/k3b_path_spec.mkisofs" );
   if( !writePathSpec( m_pathSpecFile ) ) {
     emit infoMessage( i18n("Could not write to temporary file %1").arg( m_pathSpecFile ), K3bJob::ERROR );
     cancelAll();
@@ -828,13 +828,17 @@ bool K3bDataJob::addMkisofsParameters()
   *m_process << "-graft-points";
 
   if( !m_doc->volumeID().isEmpty() )
-    *m_process << "-V \"" + m_doc->volumeID() + "\"";
+    *m_process << "-V" << "\"" + m_doc->volumeID() + "\"";
+  if( !m_doc->volumeSetId().isEmpty() )
+    *m_process << "-volset" << "\"" + m_doc->volumeSetId() + "\"";
   if( !m_doc->applicationID().isEmpty() )
-    *m_process << "-A \"" + m_doc->applicationID() + "\"";
+    *m_process << "-A" << "\"" + m_doc->applicationID() + "\"";
   if( !m_doc->publisher().isEmpty() )
-    *m_process << "-P \"" + m_doc->publisher() + "\"";
+    *m_process << "-P" << "\"" + m_doc->publisher() + "\"";
   if( !m_doc->preparer().isEmpty() )
-    *m_process << "-p \"" + m_doc->preparer() + "\"";
+    *m_process << "-p" << "\"" + m_doc->preparer() + "\"";
+  if( !m_doc->systemId().isEmpty() )
+    *m_process << "-sysid" << "\"" + m_doc->systemId() + "\"";
 		
   if( m_doc->createRockRidge() )
     *m_process << "-r";

@@ -116,8 +116,10 @@ class K3bDataDoc : public K3bDoc
   bool padding() const { return m_padding; }
 
   int ISOLevel() const { return m_isoLevel; }
+  const QString& systemId() const { return m_systemId; }
   const QString& applicationID() const { return m_applicationID; }
   const QString& volumeID() const { return m_volumeID; }
+  const QString& volumeSetId() const { return m_volumeSetId; }
   const QString& publisher() const { return m_publisher; }
   const QString& preparer() const { return m_preparer; }
 	
@@ -140,8 +142,10 @@ class K3bDataDoc : public K3bDoc
   void setPadding( bool b ) {  m_padding = b; }
 	
   void setISOLevel( int i ) { m_isoLevel = i; }
+  void setSystemId( const QString& s ) { m_systemId = s; }
   void setApplicationID( const QString& s ) { m_applicationID = s; }
   void setVolumeID( const QString& s ) { m_volumeID = s; }
+  void setVolumeSetId( const QString& s ) { m_volumeSetId = s; }
   void setPublisher( const QString& s ) { m_publisher = s; }
   void setPreparer( const QString& s ) { m_preparer = s; }
 	
@@ -215,6 +219,8 @@ class K3bDataDoc : public K3bDoc
   QString m_applicationID;
   QString m_preparer;
   QString m_publisher;
+  QString m_systemId;
+  QString m_volumeSetId;
 	
   bool m_deleteImage;
   bool m_onlyCreateImage;

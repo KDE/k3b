@@ -66,10 +66,12 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    // ----------------------------------------------
 
    // --- settings tab ---------------------------
-   KLineEdit* m_editApplicationID;
+   KLineEdit* m_editSystemId;
    KLineEdit* m_editVolumeID;
+   KLineEdit* m_editVolumeSetId;
    KLineEdit* m_editPublisher;
    KLineEdit* m_editPreparer;
+   KLineEdit* m_editApplicationID;
    QCheckBox* m_checkCreateRR;
    QCheckBox* m_checkCreateJoliet;
    QButtonGroup* m_groupWhiteSpace;

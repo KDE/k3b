@@ -112,7 +112,9 @@ void K3bDataBurnDialog::saveSettings()
   ((K3bDataDoc*)doc())->setPadding( m_checkPadding->isChecked() );
 	
   ((K3bDataDoc*)doc())->setVolumeID( m_editVolumeID->text() );
+  ((K3bDataDoc*)doc())->setVolumeSetId( m_editVolumeSetId->text() );
   ((K3bDataDoc*)doc())->setApplicationID( m_editApplicationID->text() );
+  ((K3bDataDoc*)doc())->setSystemId( m_editSystemId->text() );
   ((K3bDataDoc*)doc())->setPublisher( m_editPublisher->text() );
   ((K3bDataDoc*)doc())->setPreparer( m_editPreparer->text() );
   // ------------------------------------- saving mkisofs-options --
@@ -160,7 +162,9 @@ void K3bDataBurnDialog::readSettings()
   m_checkDeleteImage->setChecked( ((K3bDataDoc*)doc())->deleteImage() );
 	
   m_editVolumeID->setText(  ((K3bDataDoc*)doc())->volumeID() );
+  m_editVolumeSetId->setText(  ((K3bDataDoc*)doc())->volumeSetId() );
   m_editApplicationID->setText(  ((K3bDataDoc*)doc())->applicationID() );
+  m_editSystemId->setText(  ((K3bDataDoc*)doc())->systemId() );
   m_editPublisher->setText(  ((K3bDataDoc*)doc())->publisher() );
   m_editPreparer->setText(  ((K3bDataDoc*)doc())->preparer() );
 
@@ -489,9 +493,7 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
   frameLayout->setSpacing( spacingHint() );
   frameLayout->setMargin( marginHint() );
 
-  QGroupBox* _groupVolumeInfo = new QGroupBox( frame, "_groupVolumeInfo" );
-  _groupVolumeInfo->setTitle( i18n( "Information" ) );
-  _groupVolumeInfo->setColumnLayout(0, Qt::Vertical );
+  QGroupBox* _groupVolumeInfo = new QGroupBox( 0, Qt::Vertical, i18n( "Information" ), frame, "_groupVolumeInfo" );
   _groupVolumeInfo->layout()->setSpacing( 0 );
   _groupVolumeInfo->layout()->setMargin( 0 );
   QGridLayout* _groupVolumeInfoLayout = new QGridLayout( _groupVolumeInfo->layout() );
@@ -499,55 +501,41 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
   _groupVolumeInfoLayout->setSpacing( spacingHint() );
   _groupVolumeInfoLayout->setMargin( marginHint() );
 
-  QLabel* _labelVolumeID = new QLabel( _groupVolumeInfo, "m_labelVolumeID" );
-  _labelVolumeID->setText( i18n( "Volume ID" ) );
+  _groupVolumeInfoLayout->addWidget( new QLabel( i18n( "Volume ID" ), _groupVolumeInfo, "m_labelVolumeID" ), 0, 0 );
+  _groupVolumeInfoLayout->addWidget( new QLabel( i18n( "Volume Set ID" ), _groupVolumeInfo, "m_labelVolumeSetID" ), 1, 0 );
+  _groupVolumeInfoLayout->addWidget( new QLabel( i18n( "Publisher" ), _groupVolumeInfo, "m_labelPublisher" ), 2, 0 );
+  _groupVolumeInfoLayout->addWidget( new QLabel( i18n( "Preparer" ), _groupVolumeInfo, "m_labelPreparer" ), 3, 0 );
+  _groupVolumeInfoLayout->addWidget( new QLabel( i18n( "System ID" ), _groupVolumeInfo, "m_labelSystemID" ), 4, 0 );
+  _groupVolumeInfoLayout->addWidget( new QLabel( i18n( "Application ID" ), _groupVolumeInfo, "m_labelApplicationID" ), 5, 0 );
 
-  _groupVolumeInfoLayout->addWidget( _labelVolumeID, 0, 0 );
-
-  QLabel* _labelApplicationID = new QLabel( _groupVolumeInfo, "m_labelApplicationID" );
-  _labelApplicationID->setText( i18n( "Application ID" ) );
-
-  _groupVolumeInfoLayout->addWidget( _labelApplicationID, 1, 0 );
-
-  QLabel* _labelPublisher = new QLabel( _groupVolumeInfo, "m_labelPublisher" );
-  _labelPublisher->setText( i18n( "Publisher" ) );
-
-  _groupVolumeInfoLayout->addWidget( _labelPublisher, 2, 0 );
-
-  QLabel* _labelPreparer = new QLabel( _groupVolumeInfo, "m_labelPreparer" );
-  _labelPreparer->setText( i18n( "Preparer" ) );
-
-  _groupVolumeInfoLayout->addWidget( _labelPreparer, 3, 0 );
-
-  QRegExpValidator* isoValidator = new QRegExpValidator( QRegExp("^[\\/;:*$\"]"), this, "isoValidator" );
+  // are this really the allowed characters?
+  QRegExpValidator* isoValidator = new QRegExpValidator( QRegExp("([a-z]|[A-Z]|[0-9]|_|-)*"), this, "isoValidator" );
 
   m_editVolumeID = new KLineEdit( _groupVolumeInfo, "m_editVolumeID" );
-  // are this really the allowed characters?
   m_editVolumeID->setValidator( isoValidator );
   m_editVolumeID->setMaxLength( 32 );
-
-  _groupVolumeInfoLayout->addWidget( m_editVolumeID, 0, 1 );
-
+  m_editVolumeSetId = new KLineEdit( _groupVolumeInfo, "m_editVolumeSetID" );
+  m_editVolumeSetId->setValidator( isoValidator );
+  m_editVolumeSetId->setMaxLength( 128 );
+  m_editPublisher = new KLineEdit( _groupVolumeInfo, "m_editPublisher" );
+  m_editPublisher->setValidator( isoValidator );
+  m_editPublisher->setMaxLength( 128 );
+  m_editPreparer = new KLineEdit( _groupVolumeInfo, "m_editPreparer" );
+  m_editPreparer->setValidator( isoValidator );
+  m_editPreparer->setMaxLength( 128 );
+  m_editSystemId = new KLineEdit( _groupVolumeInfo, "m_editSystemID" );
+  m_editSystemId->setValidator( isoValidator );
+  m_editSystemId->setMaxLength( 32 );
   m_editApplicationID = new KLineEdit( _groupVolumeInfo, "m_editApplicationID" );
-  // are this really the allowed characters?
   m_editApplicationID->setValidator( isoValidator );
   m_editApplicationID->setMaxLength( 128 );
 
-  _groupVolumeInfoLayout->addWidget( m_editApplicationID, 1, 1 );
-
-  m_editPublisher = new KLineEdit( _groupVolumeInfo, "m_editPublisher" );
-  // are this really the allowed characters?
-  m_editPublisher->setValidator( isoValidator );
-  m_editPublisher->setMaxLength( 128 );
-
+  _groupVolumeInfoLayout->addWidget( m_editVolumeID, 0, 1 );
+  _groupVolumeInfoLayout->addWidget( m_editVolumeSetId, 1, 1 );
   _groupVolumeInfoLayout->addWidget( m_editPublisher, 2, 1 );
-
-  m_editPreparer = new KLineEdit( _groupVolumeInfo, "m_editPreparer" );
-  // are this really the allowed characters?
-  m_editPreparer->setValidator( isoValidator );
-  m_editPreparer->setMaxLength( 128 );
-
   _groupVolumeInfoLayout->addWidget( m_editPreparer, 3, 1 );
+  _groupVolumeInfoLayout->addWidget( m_editSystemId, 4, 1 );
+  _groupVolumeInfoLayout->addWidget( m_editApplicationID, 5, 1 );
 
   frameLayout->addMultiCellWidget( _groupVolumeInfo, 0, 3, 1, 1 );
 
@@ -765,7 +753,9 @@ void K3bDataBurnDialog::slotUser1()
 void K3bDataBurnDialog::slotConvertAllToUpperCase()
 {
   m_editApplicationID->setText( m_editApplicationID->text().upper() );
+  m_editSystemId->setText( m_editSystemId->text().upper() );
   m_editVolumeID->setText( m_editVolumeID->text().upper() );
+  m_editVolumeSetId->setText( m_editVolumeSetId->text().upper() );
   m_editPublisher->setText( m_editPublisher->text().upper() );
   m_editPreparer->setText( m_editPreparer->text().upper() );
 }
