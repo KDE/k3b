@@ -58,7 +58,7 @@ typedef unsigned char u8;
 #include <asm/types.h>
 #define __STRICT_ANSI__
 
-#include <linux/../scsi/scsi.h> /* cope with silly includes */
+#include <scsi/scsi.h>
 #include <linux/major.h>
 
 

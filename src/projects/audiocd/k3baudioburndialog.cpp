@@ -201,8 +201,8 @@ void K3bAudioBurnDialog::toggleAllOptions()
       m_checkOnTheFly->setChecked( false );
     m_checkHideFirstTrack->setChecked(false);
     m_checkHideFirstTrack->setEnabled(false);
-    m_cdtextWidget->setEnabled( cdrecordCdText );
-    if( !cdrecordCdText )
+    m_cdtextWidget->setEnabled( cdrecordCdText && m_writingModeWidget->writingMode() != K3b::TAO );
+    if( !cdrecordCdText || m_writingModeWidget->writingMode() == K3b::TAO )
       m_cdtextWidget->setChecked(false);
   }
   else {

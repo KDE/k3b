@@ -442,37 +442,33 @@ unsigned short K3bMadDecoder::linearRound( mad_fixed_t fixed )
 
 bool K3bMadDecoder::createPcmSamples( mad_synth* synth )
 {
-  mad_fixed_t* leftChannel = synth->pcm.samples[0];
-  mad_fixed_t* rightChannel = synth->pcm.samples[1];
   unsigned short nsamples = synth->pcm.length;
 
-  // now create the output
-  for( int i = 0; i < nsamples; i++ )
-    {
-      unsigned short	sample;
-      
-      /* Left channel */
-      sample = linearRound( leftChannel[i] );
-      *(d->outputPointer++) = (sample >> 8) & 0xff;
-      *(d->outputPointer++) = sample & 0xff;
-      
-      /* Right channel. If the decoded stream is monophonic then
-       * the right output channel is the same as the left one.
-       */
-      if( synth->pcm.channels == 2 )
-	sample = linearRound( rightChannel[i] );
-      
-      *(d->outputPointer++) = (sample >> 8) & 0xff;
-      *(d->outputPointer++) = sample & 0xff;
-      
-      // this should not happen since we only decode if the
-      // output buffer has enough free space
-      if( d->outputPointer == d->outputBufferEnd && i+1 < nsamples ) {
-	kdDebug() <<  "(K3bMadDecoder) buffer overflow!" << endl;
-	return false;
-      }
-    } // pcm conversion
+  // this should not happen since we only decode if the
+  // output buffer has enough free space
+  if( d->outputBufferEnd - d->outputPointer < nsamples*4 ) {
+    kdDebug() <<  "(K3bMadDecoder) buffer overflow!" << endl;
+    return false;
+  }
 
+  // now create the output
+  for( int i = 0; i < nsamples; i++ ) {
+
+    /* Left channel */
+    unsigned short sample = linearRound( synth->pcm.samples[0][i] );
+    *(d->outputPointer++) = (sample >> 8) & 0xff;
+    *(d->outputPointer++) = sample & 0xff;
+    
+    /* Right channel. If the decoded stream is monophonic then
+     * the right output channel is the same as the left one.
+     */
+    if( synth->pcm.channels == 2 )
+      sample = linearRound( synth->pcm.samples[1][i] );
+      
+    *(d->outputPointer++) = (sample >> 8) & 0xff;
+    *(d->outputPointer++) = sample & 0xff;
+  } // pcm conversion
+  
   return true;
 }
 

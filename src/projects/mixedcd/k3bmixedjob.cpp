@@ -975,6 +975,9 @@ void K3bMixedJob::determineWritingMode()
 	    m_doc->audioDoc()->writeCdText( false );
 	    emit infoMessage( i18n("Cdrecord %1 does not support CD-Text writing.").arg(k3bcore->externalBinManager()->binObject("cdrecord")->version), ERROR );
 	  }
+	  else if( m_usedAudioWritingMode == K3b::TAO ) {
+	    emit infoMessage( i18n("It is not possible to write CD-Text in TAO mode. Try DAO or RAW."), WARNING );
+	  }
 	  else {
 	    if( !m_doc->audioDoc()->arranger().isEmpty() )
 	      emit infoMessage( i18n("K3b does not support Album arranger CD-Text with cdrecord."), ERROR );

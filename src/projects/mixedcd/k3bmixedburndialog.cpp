@@ -334,8 +334,8 @@ void K3bMixedBurnDialog::toggleAllOptions()
     if( !cdrecordOnTheFly || m_checkNormalize->isChecked() )
       m_checkOnTheFly->setChecked( false );
 
-    m_cdtextWidget->setEnabled( cdrecordCdText );
-    if( !cdrecordCdText )
+    m_cdtextWidget->setEnabled( cdrecordCdText && m_writingModeWidget->writingMode() != K3b::TAO );
+    if( !cdrecordCdText || m_writingModeWidget->writingMode() == K3b::TAO  )
       m_cdtextWidget->setChecked( false );
   }
   else {
