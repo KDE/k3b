@@ -102,17 +102,23 @@ void K3bIsoImager::outputData()
 
 void K3bIsoImager::resume()
 {
-  // check if there is data left
-  if( m_data.count() > 0 ) {
-    outputData();
-  }
-  else {
-    if( m_processExited ) {
-      slotProcessExited( m_process );
+  // if mkisofs is writing directly to another fd the
+  // process never gets suspended since we are not connected to it's 
+  // (non active anyway) stdout signal and m_data is always empty
+
+  if( m_fdToWriteTo == -1 ) {
+    // check if there is data left
+    if( m_data.count() > 0 ) {
+      outputData();
     }
     else {
-      m_processSuspended = false;
-      m_process->resume();
+      if( m_processExited ) {
+	slotProcessExited( m_process );
+      }
+      else {
+	m_processSuspended = false;
+	m_process->resume();
+      }
     }
   }
 }
