@@ -330,6 +330,8 @@ K3bApplication::Core::Core( QObject* parent )
 {
   s_k3bAppCore = this;
   m_themeManager = new K3bThemeManager( this );
+  // we need the themes on startup (loading them is fast anyway :)
+  m_themeManager->loadThemes();
 }
 
 
@@ -348,9 +350,6 @@ void K3bApplication::Core::init()
 {
   emit initializationInfo( i18n("Loading all plugins...") );
   pluginManager()->loadAll();
-
-  emit initializationInfo( i18n("Loading all themes...") );
-  m_themeManager->loadThemes();
 
   emit initializationInfo( i18n("Searching for external programs...") );
 
