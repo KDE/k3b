@@ -413,7 +413,7 @@ void K3bDirView::slotSetReadSpeed()
 					   "medium."
 					   "<p>This is especially useful to slow down the drive when "
 					   "watching movies which are read directly from the drive "
-					   "and the spinning noise is way too loud."
+					   "and the spinning noise is intrusive."
 					   "<p>Be aware that this has no influence on K3b since it will "
 					   "change the reading speed again when copying CDs or DVDs.")
 				      .arg(m_lastDevice->vendor() + " " + m_lastDevice->description()),
