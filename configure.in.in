@@ -399,19 +399,56 @@ dnl ---------- END TAGLIB CHECK ----------
 
 dnl ----------- TUNEPIMP/MUSICBRAINZ CHECK -----------
 
+AC_ARG_WITH(
+	musicbrainz, 
+	AS_HELP_STRING(
+		[--without-musicbrainz], 
+		[build without Musicbrainz support (default=no)]),
+	[ac_cv_use_musicbrainz=$withval], 
+	[ac_cv_use_musicbrainz=yes]
+)
+
 have_mb=false
 MUSICBRAINZ_LIBS=""
-KDE_CHECK_HEADER(musicbrainz/mb_c.h,
-[
+if test "$ac_cv_use_musicbrainz" = "yes"; then
+  KDE_CHECK_HEADER(musicbrainz/mb_c.h,
+  [
 	KDE_CHECK_LIB(musicbrainz,mb_New,[
         	AC_DEFINE(HAVE_MUSICBRAINZ, 1, [have MusicBrainz])
         	MUSICBRAINZ_LIBS="-lmusicbrainz"
 		have_mb=true
         ])
-], [])
+  ], [])
+fi
 AC_SUBST(MUSICBRAINZ_LIBS)
 
 dnl --------- TUNEPIMP/MUSICBRAINZ CHECK END -----------
+
+
+
+dnl --------- MUSEPACK CHECK ---------------
+
+AC_ARG_WITH(
+	musepack, 
+	AS_HELP_STRING(
+		[--without-musepack], 
+		[build without Musepack audio support (default=no)]),
+	[ac_cv_use_mpc=$withval], 
+	[ac_cv_use_mpc=yes]
+)
+
+have_mpc=no
+if test "$ac_cv_use_mpc" = "yes"; then
+  KDE_CHECK_HEADERS(musepack/musepack.h, [
+  	AC_CHECK_LIB(musepack, mpc_decoder_setup, [
+  		have_mpc=yes
+  		], [], [])
+  ])
+fi
+
+AM_CONDITIONAL(include_MPC, [test x$have_mpc = xyes])
+
+dnl --------- MUSEPACK CHECK END -----------
 
 
 #AC_DEFINE(LIBK3B_VERSION, "0.11.98", [k3b library version])

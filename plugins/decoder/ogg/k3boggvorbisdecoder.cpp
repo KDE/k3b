@@ -27,7 +27,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 #include <vorbis/codec.h>
 #include <vorbis/vorbisfile.h>
 
@@ -128,7 +127,7 @@ bool K3bOggVorbisDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate
       if( d->vInfo->bitrate_lower > 0 )
 	addTechnicalInfo( i18n("Bitrate Lower"), i18n( "%1 bps" ).arg(d->vInfo->bitrate_lower) );
 
-      frames = (unsigned long)ceil(seconds * 75.0);
+      frames = K3b::Msf::fromSeconds(seconds);
       samplerate = d->vInfo->rate;
       ch = d->vInfo->channels;
 

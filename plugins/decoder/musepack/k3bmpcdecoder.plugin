@@ -1,0 +1,9 @@
+[K3b Plugin]
+Lib=libk3bmpcdecoder
+Group=AudioDecoder
+Name=K3b Musepack Decoder
+Author=Sebastian Trueg
+Email=trueg@k3b.org
+Version=1.0
+Comment=Decoding module to decode Musepack audio files
+Licence=GPL

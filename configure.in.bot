@@ -53,6 +53,16 @@ fi
 
 echo ""
 
+if test x$have_mpc = xyes; then
+	echo "Musepack support:                      yes"
+else
+	echo "Musepack support:                       no"
+	echo "    You are missing the Musepack headers and libraries >= 1.1."
+	echo "    The Musepack decoding plugin won't be compiled."
+fi
+
+echo ""
+
 if test x$have_lame = xyes; then
 	echo "Lame Mp3 encoder plugin:               yes"
 else
