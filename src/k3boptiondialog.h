@@ -44,6 +44,7 @@ public:
 protected slots:
 	void slotOk();
 	void slotApply();
+	void slotDefault();
 	
 private:
 	// programs Tab
@@ -78,7 +79,6 @@ private slots:
 	void slotRemoveDevice();
 	void slotDevicesChanged();
 	void slotDevicesPopup( QListViewItem*, const QPoint& );
-
 };
 
 #endif

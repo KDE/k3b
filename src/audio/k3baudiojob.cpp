@@ -413,7 +413,13 @@ void K3bAudioJob::startWriting()
 
 			// device
 			m_process << "--device" << m_doc->burner()->device();
-			m_process << "--driver" << "generic-mmc";    // !! use generic-mmc as default, TODO: give the option to choose
+			
+			// additional parameters from config
+			QStringList _params = kapp->config()->readListEntry( "cdrdao parameters" );
+			for( QStringList::Iterator it = _params.begin(); it != _params.end(); ++it )
+				m_process << *it;
+			if( _params.isEmpty() ) // default
+				m_process << "--driver" << "generic-mmc";    // !! use generic-mmc as default, TODO: give the option to choose
 			
 			// supress the 10 seconds gap to the writing
 			m_process << "-n";
@@ -498,7 +504,13 @@ void K3bAudioJob::startWriting()
 	// padding is enabled by default if any mp3 files have been converted!
 	if( m_doc->padding() )
 		m_process << "-pad";
-		
+
+	// additional parameters from config
+	QStringList _params = kapp->config()->readListEntry( "cdrecord parameters" );
+	for( QStringList::Iterator it = _params.begin(); it != _params.end(); ++it )
+		m_process << *it;
+
+				
 	// add all the tracks
 	for( K3bAudioTrack* i = m_doc->at(0); i != 0; i = m_doc->next() )
 	{

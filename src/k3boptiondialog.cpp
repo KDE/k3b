@@ -45,7 +45,7 @@
 
 
 K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
-	: KDialogBase( IconList, i18n("Options"), Help|Apply|Ok|Cancel, Ok, parent,name, modal, true)
+	: KDialogBase( IconList, i18n("Options"), Help|Apply|Ok|Cancel|Default, Ok, parent,name, modal, true)
 {
 	devicesChanged = false;
 
@@ -98,11 +98,13 @@ void K3bOptionDialog::setupProgramsPage()
     m_viewPrograms = new KListView( frame, "m_viewPrograms" );
     m_viewPrograms->addColumn( i18n( "Program" ) );
     m_viewPrograms->addColumn( i18n( "path" ) );
-
+	m_viewPrograms->addColumn( i18n( "additional parameters" ) );
+	
     // set the second column renameable
 	m_viewPrograms->setItemsRenameable( true );
 	m_viewPrograms->setRenameable( 0, false );
 	m_viewPrograms->setRenameable( 1, true );
+	m_viewPrograms->setRenameable( 2, true );
 
     frameLayout->addMultiCellWidget( m_viewPrograms, 1, 1, 0, 1 );
 
@@ -135,26 +137,35 @@ void K3bOptionDialog::readPrograms()
     QListViewItem * item = new QListViewItem( m_viewPrograms );
     item->setText( 0, "mkisofs" );
     item->setText( 1, config->readEntry( "mkisofs path", "/usr/bin/mkisofs" ) );
+    item->setText( 2, config->readListEntry( "mkisofs parameters" ).join(" ") );
 
     item = new QListViewItem( m_viewPrograms );
     item->setText( 0, "cdrecord"  );
     item->setText( 1, config->readEntry( "cdrecord path", "/usr/bin/cdrecord" ) );
+    item->setText( 2, config->readListEntry( "cdrecord parameters" ).join(" ") );
 
     item = new QListViewItem( m_viewPrograms );
     item->setText( 0, "readcd"  );
     item->setText( 1,  config->readEntry( "readcd path", "/usr/bin/readcd" ) );
+    item->setText( 2,  config->readListEntry( "readcd parameters" ).join(" ") );
 
     item = new QListViewItem( m_viewPrograms );
     item->setText( 0, "mpg123"  );
     item->setText( 1,  config->readEntry( "mpg123 path", "/usr/bin/mpg123" ) );
+    item->setText( 2,  config->readListEntry( "mpg123 parameters" ).join(" ") );
 
     item = new QListViewItem( m_viewPrograms );
     item->setText( 0, "cdda2wav"  );
     item->setText( 1,  config->readEntry( "cdda2wav path", "/usr/bin/cdda2wav" ) );
+    item->setText( 2,  config->readListEntry( "cdda2wav parameters" ).join(" ") );
 
     item = new QListViewItem( m_viewPrograms );
     item->setText( 0, "cdrdao"  );
     item->setText( 1,  config->readEntry( "cdrdao path", "/usr/bin/cdrdao" ) );
+    QString _entry = config->readListEntry( "cdrdao parameters" ).join(" ");
+    if( _entry.isEmpty() )
+    	_entry = "--driver generic-mmc";
+    item->setText( 2,  _entry );
 }
 
 bool K3bOptionDialog::savePrograms()
@@ -173,6 +184,8 @@ bool K3bOptionDialog::savePrograms()
 		else {
 			QString entryName = _item->text(0) + " path";
 			config->writeEntry( entryName, _item->text(1) );
+			entryName = _item->text(0) + " parameters";
+			config->writeEntry( entryName, QStringList::split(' ', _item->text(2)) );
 		}
 		_item = _item->nextSibling();
 	}
@@ -470,4 +483,27 @@ void K3bOptionDialog::slotDevicesPopup( QListViewItem* item, const QPoint& p )
 		m_menuDevices->insert( m_actionRemoveDevice, 1 );
 	
 	m_menuDevices->popup(p);	
+}
+
+
+void K3bOptionDialog::slotDefault()
+{
+	switch( activePageIndex() )
+	{
+		case 0: // device page
+			slotRefreshDevices();
+			break;
+		case 1: // programs page
+			QListViewItem* _item = m_viewPrograms->firstChild();
+			while( _item ) {
+				QString entryName = "/usr/bin/" + _item->text(0);
+				_item->setText( 1, entryName );
+				if( _item->text(0) == "cdrdao" )
+					_item->setText( 2, "--driver generic-mmc" );
+				else
+					_item->setText( 2, "" );
+				_item = _item->nextSibling();
+			}
+			break;
+	}
 }
