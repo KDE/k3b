@@ -409,8 +409,9 @@ void K3bCdDevice::DeviceManager::BSDDeviceScan()
 				break;
 			}
 			case DEV_MATCH_BUS : {
-				bool cannotmatchbus = false;
-				assert(cannotmatchbus);
+				// bool cannotmatchbus = false;
+				// assert(cannotmatchbus);
+				break;
 			}
 			}
 		}
