@@ -418,6 +418,7 @@ K3bExternalEncoderSettingsWidget::~K3bExternalEncoderSettingsWidget()
 void K3bExternalEncoderSettingsWidget::slotDeleteCommand()
 {
   if( w->m_programList->currentItem() != -1 ) {
+    d->currentCommandIndex = -1; // disable update
     // remove the command and update all indices
     unsigned int i = w->m_programList->currentItem();
     w->m_programList->removeItem( i );
