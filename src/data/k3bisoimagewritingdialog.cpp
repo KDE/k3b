@@ -82,7 +82,7 @@ K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( QWidget* parent, const char*
   slotLoadUserDefaults();
 
   kapp->config()->setGroup("General Options");
-  m_editImagePath->setURL( kapp->config()->readEntry( "last written image" ) );
+  m_editImagePath->setURL( kapp->config()->readPathEntry( "last written image" ) );
   updateImageSize( m_editImagePath->url() );
 
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()),
@@ -274,7 +274,7 @@ void K3bIsoImageWritingDialog::slotStartClicked()
 
   // save the path
   kapp->config()->setGroup("General Options");
-  kapp->config()->writeEntry( "last written image", m_editImagePath->url() );
+  kapp->config()->writePathEntry( "last written image", m_editImagePath->url() );
 
   // create the job
   if( m_job == 0 )

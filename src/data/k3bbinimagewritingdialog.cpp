@@ -109,7 +109,7 @@ K3bBinImageWritingDialog::K3bBinImageWritingDialog( QWidget* parent, const char*
    slotLoadUserDefaults();
 
    kapp->config()->setGroup("General Options");
-   m_editTocPath->setURL( kapp->config()->readEntry( "last written bin/cue image", "" ) );
+   m_editTocPath->setURL( kapp->config()->readPathEntry( "last written bin/cue image", "" ) );
 
    connect( m_writerSelectionWidget, SIGNAL(writingAppChanged( int )), this, SLOT(slotWritingAppChanged( int )) );
 
@@ -236,7 +236,7 @@ void K3bBinImageWritingDialog::slotStartClicked()
 
     // save the path
     kapp->config()->setGroup("General Options");
-    kapp->config()->writeEntry( "last written bin/cue image", m_editTocPath->url() );
+    kapp->config()->writePathEntry( "last written bin/cue image", m_editTocPath->url() );
 
     K3bBurnProgressDialog d( kapp->mainWidget(), "burnProgress", true );
     
