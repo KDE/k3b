@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -16,8 +16,8 @@
 
 #include "k3bdiskinfoview.h"
 
-#include "k3bdiskinfo.h"
-#include "k3bdiskinfodetector.h"
+#include "../device/k3bdiskinfo.h"
+#include "../device/k3bdiskinfodetector.h"
 #include "../tools/k3bglobals.h"
 
 #include <qlabel.h>

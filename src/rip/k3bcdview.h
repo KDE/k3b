@@ -23,7 +23,7 @@
 #define DEFAULT_TITLE      "title"
 
 #include "../k3bcdcontentsview.h"
-#include "../cdinfo/k3bdiskinfo.h"
+#include "../device/k3bdiskinfo.h"
 
 #include <cddb/k3bcddbquery.h>
 
@@ -49,7 +49,7 @@ class QListViewItem;
 //class QPoint;
 class KActionCollection;
 class K3bCdDevice::CdDevice;
-class K3bDiskInfo;
+class K3bCdDevice::DiskInfo;
 class K3bCddbResult;
 class QLabel;
 class KAction;
