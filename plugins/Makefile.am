@@ -1,1 +1,1 @@
-SUBDIRS = decoder encoder kpartplugins audioserver
+SUBDIRS = decoder encoder kpartplugins 
