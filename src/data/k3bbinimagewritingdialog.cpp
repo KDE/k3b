@@ -1,19 +1,18 @@
-/***************************************************************************
-                          k3bbinimagewritingdialog.cpp  -  description
-                             -------------------
-    begin                : Mon Jan 13 2003
-    copyright            : (C) 2003 by Klaus-Dieter Krannich
-    email                : kd@math.tu-cottbus.de
- ***************************************************************************/
+/* 
+ *
+ * $Id: $
+ * Copyright (C) 2003 Klaus-Dieter Krannich <kd@k3b.org>
+ *
+ * This file is part of the K3b project.
+ * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * See the file "COPYING" for the exact licensing terms.
+ */
 
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
 
 #include "k3b.h"
 #include "k3bbinimagewritingdialog.h"
@@ -78,6 +77,8 @@ K3bBinImageWritingDialog::K3bBinImageWritingDialog( QWidget* parent, const char*
 {
    m_job = 0;
    k3bMain()->config()->setGroup( "General Options" );
+
+   // TODO: use KTempFile
    m_tocPath=k3bMain()->config()->readEntry( "Temp Dir", locateLocal( "appdata", "temp/" ) );
    setupGui();
    setButtonBoxOrientation( Qt::Vertical );
