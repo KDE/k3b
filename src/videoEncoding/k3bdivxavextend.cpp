@@ -65,7 +65,7 @@ Probably you may choose ac3 6ch, ac3 2ch, mpeg2 stereo in descending order accor
     QLabel *deinterlace = new QLabel( i18n("De-interlace mode:"), this );
     QString wt_deinterlace( i18n("Select a deinterlace mode if you have interlaced material. \"Fast\" is the standard deinterlace mode, \"Encoder based\" uses \
 the internal deinterlace of the codec (be aware codecs could have no deinterlacer), \"Zoom to full frame\" no matter how it works but it is rather good and slow, use this if \"Fast\" produces still interlace \
-stripes or color artefacts (red shadow or so), \"Drop field / half height\" uses only one field and scales it." ));
+stripes or color artefacts (red shadow or so), \"Drop field/half height\" uses only one field and scales it." ));
     QWhatsThis::add( deinterlace, wt_deinterlace);
     QGroupBox *groupCrispness = new QGroupBox( this );
     groupCrispness->setColumnLayout(0, Qt::Horizontal );
@@ -91,9 +91,9 @@ has also YUV colorspace and its twice fast as RGB. You only need RGB colorspace 
     m_comboDeinterlace = new KComboBox( this );
     m_comboDeinterlace->insertItem(i18n("0 - None"));
     m_comboDeinterlace->insertItem(i18n("1 - Fast"));
-    m_comboDeinterlace->insertItem(i18n("2 - Encoder based"));
-    m_comboDeinterlace->insertItem(i18n("3 - Zoom to full frame"));
-    m_comboDeinterlace->insertItem(i18n("4 - Drop field / half height"));
+    m_comboDeinterlace->insertItem(i18n("2 - Encoder Based"));
+    m_comboDeinterlace->insertItem(i18n("3 - Zoom to Full Frame"));
+    m_comboDeinterlace->insertItem(i18n("4 - Drop Field/Half Height"));
     QWhatsThis::add( m_comboDeinterlace, wt_deinterlace);
     m_comboLanguage = new KComboBox( this );
     QWhatsThis::add( m_comboLanguage, wt_language);
