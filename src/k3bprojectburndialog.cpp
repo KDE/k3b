@@ -31,6 +31,7 @@
 #include <qlineedit.h>
 #include <qfile.h>
 #include <qdir.h>
+#include <qtimer.h>
 
 #include <klocale.h>
 #include <kconfig.h>
@@ -50,6 +51,7 @@ K3bProjectBurnDialog::K3bProjectBurnDialog(K3bDoc* doc, QWidget *parent, const c
   m_groupTempDir = 0;
   m_labelCdSize = 0;
   m_labelFreeSpace = 0;
+  m_freeTempSpace = 0;
 }
 
 
@@ -153,8 +155,13 @@ QGroupBox* K3bProjectBurnDialog::tempDirBox( QWidget* parent )
 
       m_groupTempDirLayout->setColStretch( 1 , 1);
 
+      m_freeTempSpaceTimer = new QTimer( this );
+
+      connect( m_freeTempSpaceTimer, SIGNAL(timeout()), this, SLOT(slotUpdateFreeTempSpace()) );
       connect( m_buttonFindIsoImage, SIGNAL(clicked()), this, SLOT(slotTempDirButtonPressed()) );
-      connect( m_editDirectory, SIGNAL(textChanged(const QString&)), this, SLOT(slotUpdateFreeTempSpace(const QString&)) );
+      connect( m_editDirectory, SIGNAL(textChanged(const QString&)), this, SLOT(slotUpdateFreeTempSpace()) );
+
+      m_freeTempSpaceTimer->start( 1000 );
     }
   
   return m_groupTempDir;
@@ -261,7 +268,7 @@ void K3bProjectBurnDialog::readSettings()
     k3bMain()->config()->setGroup( "General Options" );
     QString tempdir = k3bMain()->config()->readEntry( "Temp Dir", locateLocal( "appdata", "temp/" ) );
     m_editDirectory->setText( tempdir + "image.iso" );
-    slotUpdateFreeTempSpace( tempdir );
+    slotUpdateFreeTempSpace();
     m_labelCdSize->setText( QString().sprintf( " %.2f MB", ((float)doc()->size())/1024.0/1024.0 ) );
   }
 }
@@ -271,21 +278,24 @@ void K3bProjectBurnDialog::slotFreeTempSpace(const QString&, unsigned long, unsi
 {
   if( m_labelFreeSpace )
     m_labelFreeSpace->setText( QString().sprintf( "%.2f MB", (float)kbAvail/1024.0 ) );
+
+  m_freeTempSpace = kbAvail;
 }
 
 
-void K3bProjectBurnDialog::slotUpdateFreeTempSpace( const QString& path )
+void K3bProjectBurnDialog::slotUpdateFreeTempSpace()
 {
+  QString path = m_editDirectory->text();
+  
   if( QFile::exists( path ) ) {
     connect( KDiskFreeSp::findUsageInfo( path ), 
 	     SIGNAL(foundMountPoint(const QString&, unsigned long, unsigned long, unsigned long)),
 	     this, SLOT(slotFreeTempSpace(const QString&, unsigned long, unsigned long, unsigned long)) );
   }
   else {
-    QString dir = path;
-    dir.truncate( dir.findRev( '/' ) );
-    if( QFile::exists( dir ) )
-      connect( KDiskFreeSp::findUsageInfo( dir ), 
+    path.truncate( path.findRev( '/' ) );
+    if( QFile::exists( path ) )
+      connect( KDiskFreeSp::findUsageInfo( path ), 
 	       SIGNAL(foundMountPoint(const QString&, unsigned long, unsigned long, unsigned long)),
 	       this, SLOT(slotFreeTempSpace(const QString&, unsigned long, unsigned long, unsigned long)) );    
   }

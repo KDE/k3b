@@ -100,6 +100,7 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    // ---------------------------------------------
 	
  protected slots:
+   void slotUser1();
    void saveSettings();
    void readSettings();
    void slotTempDirButtonPressed();

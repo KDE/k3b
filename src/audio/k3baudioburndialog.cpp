@@ -41,6 +41,7 @@
 #include <klocale.h>
 #include <kstddirs.h>
 #include <kconfig.h>
+#include <kmessagebox.h>
 
 
 K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const char *name, bool modal )
@@ -151,8 +152,7 @@ void K3bAudioBurnDialog::setupBurnTab( QFrame* frame )
   frameLayout->setRowStretch( 1, 1 );
   frameLayout->setColStretch( 1, 1 );
 
-  // tab order
-
+  m_checkOnTheFly->setEnabled( false );
 }
 
 
@@ -268,4 +268,14 @@ void K3bAudioBurnDialog::setupCdTextTab( QFrame* frame )
   _labelSongwriter->setBuddy( m_editSongwriter );
   _labelPerformer->setBuddy( m_editPerformer );
   _labelTitle->setBuddy( m_editTitle );
+}
+
+
+void K3bAudioBurnDialog::slotUser1()
+{
+  // check if enough space in tempdir if not on-the-fly
+  if( !m_checkOnTheFly->isChecked() && doc()->size()/1024 > freeTempSpace() )
+    KMessageBox::sorry( this, "Not enough space in temp directory." );
+  else
+    K3bProjectBurnDialog::slotUser1();
 }

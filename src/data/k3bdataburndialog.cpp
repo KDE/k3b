@@ -35,6 +35,7 @@
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
 
+#include <kmessagebox.h>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kstddirs.h>
@@ -587,4 +588,14 @@ void K3bDataBurnDialog::slotSelectCustom()
 void K3bDataBurnDialog::slotWriterChanged()
 {
   m_checkBurnProof->setEnabled( writerDevice()->burnproof );
+}
+
+
+void K3bDataBurnDialog::slotUser1()
+{
+  // check if enough space in tempdir if not on-the-fly
+  if( !m_checkOnTheFly->isChecked() && doc()->size()/1024 > freeTempSpace() )
+    KMessageBox::sorry( this, "Not enough space in temp directory. Either change the directory or select on-the-fly burning." );
+  else
+    K3bProjectBurnDialog::slotUser1();
 }

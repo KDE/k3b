@@ -24,6 +24,7 @@ class QComboBox;
 class QGroupBox;
 class QLineEdit;
 class QToolButton;
+class QTimer;
 class K3bDoc;
 class K3bDevice;
 
@@ -55,7 +56,7 @@ class K3bProjectBurnDialog : public KDialogBase
    virtual void slotCancel();
    void slotRefreshWriterSpeeds();
    virtual void slotTempDirButtonPressed();
-   void slotUpdateFreeTempSpace( const QString& );
+   void slotUpdateFreeTempSpace();
    void slotFreeTempSpace(const QString&, unsigned long, unsigned long, unsigned long);
    void setTempDir( const QString& );
 
@@ -67,6 +68,7 @@ class K3bProjectBurnDialog : public KDialogBase
    QGroupBox* tempDirBox( QWidget* parent = 0 );
 
    int writerSpeed() const;
+   int freeTempSpace() const { return m_freeTempSpace; }
    K3bDevice* writerDevice() const;
 	
    virtual void saveSettings() = 0;
@@ -82,6 +84,8 @@ class K3bProjectBurnDialog : public KDialogBase
    QLabel* m_labelFreeSpace;
    QLineEdit* m_editDirectory;
    QToolButton* m_buttonFindIsoImage;
+   QTimer* m_freeTempSpaceTimer;
+   int m_freeTempSpace;
 
    K3bDoc* m_doc;
 };
