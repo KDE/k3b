@@ -1,7 +1,7 @@
 /*
 *
 * $Id$
-* Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
+* Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
 *
 * This file is part of the K3b project.
 * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
@@ -29,8 +29,8 @@
 #include <kurl.h>
 
 // K3b Includes
-#include "k3bvcdoptions.h"
-#include "mpeginfo/mpeg.h"
+#include "k3bvcdoptions.h" 
+#include "mpeginfo/k3bmpeginfo.h"
 #include <k3bdoc.h>
 
 class K3bApp;
@@ -56,28 +56,64 @@ class K3bVcdDoc : public K3bDoc
         enum vcdTypes { VCD11, VCD20, SVCD10, HQVCD, NONE};
 
         bool newDocument();
-        int numOfTracks() const { return m_tracks->count(); }
+        int numOfTracks() const
+        {
+            return m_tracks->count();
+        }
 
-        const QString& vcdImage() const { return m_vcdImage; }
-        void setVcdImage( const QString& s ) { m_vcdImage = s; }
+        const QString& vcdImage() const
+        {
+            return m_vcdImage;
+        }
+        void setVcdImage( const QString& s )
+        {
+            m_vcdImage = s;
+        }
 
-        K3bVcdTrack* first() { return m_tracks->first(); }
-        K3bVcdTrack* current() const { return m_tracks->current(); }
-        K3bVcdTrack* next() { return m_tracks->next(); }
-        K3bVcdTrack* prev() { return m_tracks->prev(); }
-        K3bVcdTrack* at( uint i ) { return m_tracks->at( i ); }
-        K3bVcdTrack* take( uint i ) { return m_tracks->take( i ); }
+        K3bVcdTrack* first()
+        {
+            return m_tracks->first();
+        }
+        K3bVcdTrack* current() const
+        {
+            return m_tracks->current();
+        }
+        K3bVcdTrack* next()
+        {
+            return m_tracks->next();
+        }
+        K3bVcdTrack* prev()
+        {
+            return m_tracks->prev();
+        }
+        K3bVcdTrack* at( uint i )
+        {
+            return m_tracks->at( i );
+        }
+        K3bVcdTrack* take( uint i )
+        {
+            return m_tracks->take( i );
+        }
 
-        const QPtrList<K3bVcdTrack>* tracks() const { return m_tracks; }
+        const QPtrList<K3bVcdTrack>* tracks() const
+        {
+            return m_tracks;
+        }
 
         /** get the current size of the project */
         KIO::filesize_t size() const;
         K3b::Msf length() const;
 
         K3bBurnJob* newBurnJob( K3bJobHandler* hdl, QObject* parent );
-        K3bVcdOptions* vcdOptions() const { return m_vcdOptions; }
+        K3bVcdOptions* vcdOptions() const
+        {
+            return m_vcdOptions;
+        }
 
-        int vcdType() const { return m_vcdType; }
+        int vcdType() const
+        {
+            return m_vcdType;
+        }
         void setVcdType( int type );
         void setPbcTracks();
 
@@ -117,7 +153,7 @@ class K3bVcdDoc : public K3bDoc
 
         void loadDefaultSettings( KConfig* );
 
-	K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
+        K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
 
         /** reimplemented from K3bDoc */
         K3bView* newView( QWidget* parent );
@@ -148,7 +184,7 @@ class K3bVcdDoc : public K3bDoc
         KIO::filesize_t ISOsize() const;
 
         bool isImage( const KURL& url );
-        
+
         K3bVcdTrack* m_lastAddedTrack;
         K3bVcdOptions* m_vcdOptions;
 

@@ -1,7 +1,7 @@
 /*
 *
 * $Id$
-* Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
+* Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
 *
 * This file is part of the K3b project.
 * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
@@ -58,8 +58,7 @@ K3bVcdOptions::K3bVcdOptions()
         m_relaxedaps( false ),
         m_segmentfolder( true ),
         m_usegaps( false )
-{
-}
+{}
 
 bool K3bVcdOptions::checkCdiFiles()
 {
@@ -117,7 +116,7 @@ K3bVcdOptions K3bVcdOptions::load( KConfig* c )
     options.setVolumeSetId( c->readEntry( "volume_set_id", options.volumeSetId() ) );
     options.setPreparer( c->readEntry( "preparer", options.preparer() ) );
     options.setPublisher( c->readEntry( "publisher", options.publisher() ) );
-    options.setVolumeCount( c->readNumEntry( "volume_count",  options.volumeCount() ) );
+    options.setVolumeCount( c->readNumEntry( "volume_count", options.volumeCount() ) );
     options.setVolumeNumber( c->readNumEntry( "volume_number", options.volumeNumber() ) );
     options.setAutoDetect( c->readBoolEntry( "autodetect", options.AutoDetect() ) );
     options.setCdiSupport( c->readBoolEntry( "cdi_support", options.CdiSupport() ) );

@@ -1,7 +1,7 @@
 /*
 *
 * $Id$
-* Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
+* Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
 *             THX to Manfred Odenstein <odix@chello.at>
 *
 * This file is part of the K3b project.
@@ -35,17 +35,20 @@ class K3bVcdXmlView
         ~K3bVcdXmlView();
 
         bool write( const QString& );
-        QString xmlString() { return m_xmlstring; }
+        QString xmlString()
+        {
+            return m_xmlstring;
+        }
 
     private:
         QString m_xmlstring;
-        
+
         QDomElement addSubElement( QDomDocument&, QDomElement&, const QString& name, const QString& value = QString::null );
         QDomElement addSubElement( QDomDocument&, QDomElement&, const QString& name, const int& value );
 
         QDomElement addFolderElement( QDomDocument&, QDomElement&, const QString& name );
         void addFileElement( QDomDocument&, QDomElement&, const QString& src, const QString& name, bool mixed = false );
-        void doPbc(QDomDocument&, QDomElement&, K3bVcdTrack*);
+        void doPbc( QDomDocument&, QDomElement&, K3bVcdTrack* );
 
         K3bVcdDoc* m_doc;
 };

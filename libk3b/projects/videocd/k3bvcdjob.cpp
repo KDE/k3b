@@ -1,7 +1,7 @@
 /*
 *
 * $Id$
-* Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
+* Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
 *
 * This file is part of the K3b project.
 * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
@@ -128,7 +128,7 @@ void K3bVcdJob::start()
     kdDebug() << "(K3bVcdJob) starting job" << endl;
 
     emit started();
-    emit burning(false);
+    emit burning( false );
     m_canceled = false;
 
     int pos = QString( m_doc->vcdImage() ).find( ".bin", QString( m_doc->vcdImage() ).length() - 4 );
@@ -163,7 +163,7 @@ void K3bVcdJob::xmlGen()
     }
 
     //    emit infoMessage( i18n( "XML-file successfully created" ), K3bJob::SUCCESS );
-    emit debuggingOutput("K3bVcdXml:", xmlView.xmlString() );
+    emit debuggingOutput( "K3bVcdXml:", xmlView.xmlString() );
 
     vcdxBuild();
 
@@ -171,7 +171,7 @@ void K3bVcdJob::xmlGen()
 
 void K3bVcdJob::vcdxBuild()
 {
-    emit newTask( i18n("Creating image files") );
+    emit newTask( i18n( "Creating image files" ) );
 
     m_stage = stageUnknown;
     firstTrack = true;
@@ -182,15 +182,15 @@ void K3bVcdJob::vcdxBuild()
     const K3bExternalBin* bin = k3bcore ->externalBinManager() ->binObject( "vcdxbuild" );
     if ( !bin ) {
         kdDebug() << "(K3bVcdJob) could not find vcdxbuild executable" << endl;
-        emit infoMessage( i18n("Could not find %1 executable.").arg("vcdxbuild"), K3bJob::ERROR );
-        emit infoMessage(i18n( "To create VideoCDs you must install VcdImager Version %1." ).arg(">= 0.7.12"), K3bJob::INFO );
-        emit infoMessage(i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ),K3bJob::INFO );
+        emit infoMessage( i18n( "Could not find %1 executable." ).arg( "vcdxbuild" ), K3bJob::ERROR );
+        emit infoMessage( i18n( "To create VideoCDs you must install VcdImager Version %1." ).arg( ">= 0.7.12" ), K3bJob::INFO );
+        emit infoMessage( i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ), K3bJob::INFO );
         cancelAll();
         emit finished( false );
         return ;
     }
 
-    if( bin->version < K3bVersion("0.7.12") ) {
+    if ( bin->version < K3bVersion( "0.7.12" ) ) {
         kdDebug() << "(K3bVcdJob) vcdxbuild executable too old!" << endl;
         emit infoMessage( i18n( "%1 executable too old: need version %2 or greater." ).arg( "Vcdxbuild" ).arg( "0.7.12" ), K3bJob::ERROR );
         emit infoMessage( i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ), K3bJob::INFO );
@@ -199,15 +199,15 @@ void K3bVcdJob::vcdxBuild()
         return ;
     }
 
-    if( !bin->copyright.isEmpty() )
-        emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3").arg(bin->name()).arg(bin->version).arg(bin->copyright), INFO );
+    if ( !bin->copyright.isEmpty() )
+        emit infoMessage( i18n( "Using %1 %2 - Copyright (C) %3" ).arg( bin->name() ).arg( bin->version ).arg( bin->copyright ), INFO );
 
     *m_process << bin;
 
     // additional user parameters from config
-    const QStringList& params = k3bcore->externalBinManager()->program( "vcdxbuild" )->userParameters();
-    for( QStringList::const_iterator it = params.begin(); it != params.end(); ++it )
-      *m_process << *it;
+    const QStringList& params = k3bcore->externalBinManager() ->program( "vcdxbuild" ) ->userParameters();
+    for ( QStringList::const_iterator it = params.begin(); it != params.end(); ++it )
+        *m_process << *it;
 
 
     if ( vcdDoc() ->vcdOptions() ->Sector2336() ) {
@@ -231,18 +231,19 @@ void K3bVcdJob::vcdxBuild()
              this, SLOT( slotVcdxBuildFinished() ) );
 
     // vcdxbuild comandline parameters
-    kdDebug() << "***** vcdxbuild parameters:" << endl;;
+    kdDebug() << "***** vcdxbuild parameters:" << endl;
+    ;
     const QValueList<QCString>& args = m_process->args();
     QString s;
-    for( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
+    for ( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
         s += *it + " ";
     }
     kdDebug() << s << flush << endl;
-    emit debuggingOutput("vcdxbuild comand:", s);
+    emit debuggingOutput( "vcdxbuild comand:", s );
 
     if ( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
         kdDebug() << "(K3bVcdJob) could not start vcdxbuild" << endl;
-        emit infoMessage( i18n( "Could not start %1." ).arg("vcdxbuild"), K3bJob::ERROR );
+        emit infoMessage( i18n( "Could not start %1." ).arg( "vcdxbuild" ), K3bJob::ERROR );
         cancelAll();
         emit finished( false );
     }
@@ -345,21 +346,21 @@ void K3bVcdJob::slotVcdxBuildFinished()
     if ( m_process->normalExit() ) {
         // TODO: check the process' exitStatus()
         switch ( m_process->exitStatus() ) {
-            case 0:
-	      emit infoMessage( i18n( "Cue/Bin files successfully created." ), K3bJob::SUCCESS );
-	      m_imageFinished = true;
-	      break;
-            default:
-	      emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg("vcdxbuild").arg(m_process->exitStatus()), 
-				K3bJob::ERROR );
-	      emit infoMessage( strerror(m_process->exitStatus()), K3bJob::ERROR );
-	      emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
-	      cancelAll();
-	      emit finished( false );
-	      return ;
+                case 0:
+                emit infoMessage( i18n( "Cue/Bin files successfully created." ), K3bJob::SUCCESS );
+                m_imageFinished = true;
+                break;
+                default:
+                emit infoMessage( i18n( "%1 returned an unknown error (code %2)." ).arg( "vcdxbuild" ).arg( m_process->exitStatus() ),
+                                  K3bJob::ERROR );
+                emit infoMessage( strerror( m_process->exitStatus() ), K3bJob::ERROR );
+                emit infoMessage( i18n( "Please send me an email with the last output." ), K3bJob::ERROR );
+                cancelAll();
+                emit finished( false );
+                return ;
         }
     } else {
-        emit infoMessage( i18n( "%1 did not exit cleanly." ).arg("Vcdxbuild"), K3bJob::ERROR );
+        emit infoMessage( i18n( "%1 did not exit cleanly." ).arg( "Vcdxbuild" ), K3bJob::ERROR );
         cancelAll();
         emit finished( false );
         return ;
@@ -377,21 +378,22 @@ void K3bVcdJob::slotVcdxBuildFinished()
         emit finished( true );
 }
 
-void K3bVcdJob::startWriterjob() {
-    kdDebug() << QString("(K3bVcdJob) writing copy %1 of %2").arg( m_currentcopy ).arg( m_doc->copies() ) << endl;
+void K3bVcdJob::startWriterjob()
+{
+    kdDebug() << QString( "(K3bVcdJob) writing copy %1 of %2" ).arg( m_currentcopy ).arg( m_doc->copies() ) << endl;
     if ( prepareWriterJob() ) {
-        if( K3bEmptyDiscWaiter::wait( m_doc->burner() ) == K3bEmptyDiscWaiter::CANCELED ) {
+        if ( K3bEmptyDiscWaiter::wait( m_doc->burner() ) == K3bEmptyDiscWaiter::CANCELED ) {
             cancel();
-	    return ;
+            return ;
         }
         // just to be sure we did not get canceled during the async discWaiting
-        if( m_canceled )
-            return;
-            
-        if ( m_doc->copies() > 1 ) 
-            emit newTask( i18n("Writing Copy %1 of %2").arg( m_currentcopy ).arg( m_doc->copies() ) );
-        
-        emit burning(true);
+        if ( m_canceled )
+            return ;
+
+        if ( m_doc->copies() > 1 )
+            emit newTask( i18n( "Writing Copy %1 of %2" ).arg( m_currentcopy ).arg( m_doc->copies() ) );
+
+        emit burning( true );
         m_writerJob->start();
     }
 }
@@ -401,14 +403,14 @@ bool K3bVcdJob::prepareWriterJob()
     if ( m_writerJob )
         delete m_writerJob;
 
-    const K3bExternalBin* cdrecordBin = k3bcore->externalBinManager()->binObject("cdrecord");
-    if ( writingApp() == K3b::DEFAULT && cdrecordBin->hasFeature("cuefile") && m_doc->burner()->dao() )
+    const K3bExternalBin* cdrecordBin = k3bcore->externalBinManager() ->binObject( "cdrecord" );
+    if ( writingApp() == K3b::DEFAULT && cdrecordBin->hasFeature( "cuefile" ) && m_doc->burner() ->dao() )
         setWritingApp( K3b::CDRECORD );
 
     if ( writingApp() == K3b::CDRDAO || writingApp() == K3b::DEFAULT ) {
         K3bCdrdaoWriter * writer = new K3bCdrdaoWriter( m_doc->burner(), this, this );
         // create cdrdao job
-	writer->setCommand( K3bCdrdaoWriter::WRITE );
+        writer->setCommand( K3bCdrdaoWriter::WRITE );
         writer->setSimulate( m_doc->dummy() );
         writer->setBurnSpeed( m_doc->speed() );
 
@@ -451,8 +453,9 @@ void K3bVcdJob::slotWriterJobPercent( int p )
     emit percent( ( int ) ( ( m_createimageonlypercent * ( m_currentcopy + 1 ) ) + p / ( m_doc->copies() + 2 ) ) );
 }
 
-void K3bVcdJob::slotProcessedSize( int cs, int ts ) {
-    emit processedSize( cs + (ts * ( m_currentcopy -1 )) , ts * m_doc->copies() );
+void K3bVcdJob::slotProcessedSize( int cs, int ts )
+{
+    emit processedSize( cs + ( ts * ( m_currentcopy - 1 ) ) , ts * m_doc->copies() );
 }
 
 void K3bVcdJob::slotWriterNextTrack( int t, int tt )
@@ -475,7 +478,7 @@ void K3bVcdJob::slotWriterJobFinished( bool success )
                 m_doc->setVcdImage( "" );
             }
         }
-    
+
         // remove cue-file if it is unfinished or the user selected to remove image
         if ( QFile::exists( m_cueFile ) ) {
             if ( !m_doc->onTheFly() && m_doc->removeImages() || !m_imageFinished ) {
@@ -509,12 +512,10 @@ void K3bVcdJob::parseInformation( QString text )
         int index = text.find( " for" );
         emit infoMessage( i18n( "One or more BCD fields out of range for %1" ).arg( text.mid( index + 4 ).stripWhiteSpace() ), K3bJob::WARNING );
     }
-
     else if ( text.contains( "mpeg user scan data: from now on, scan information data errors will not be reported anymore" ) ) {
         emit infoMessage( i18n( "From now on, scan information data errors will not be reported anymore" ), K3bJob::INFO );
         emit infoMessage( i18n( "Consider enabling the 'update scan offsets' option, if it is not enabled already." ), K3bJob::INFO );
     }
-
     else if ( text.contains( "APS' pts seems out of order (actual pts" ) ) {
         int index = text.find( "(actual pts" );
         int index2 = text.find( ", last seen pts" );
@@ -528,15 +529,15 @@ void K3bVcdJob::parseInformation( QString text )
 QString K3bVcdJob::jobDescription() const
 {
     switch ( m_doc->vcdType() ) {
-        case K3bVcdDoc::VCD11:
+            case K3bVcdDoc::VCD11:
             return i18n( "Writing Video CD (Version 1.1)" );
-        case K3bVcdDoc::VCD20:
+            case K3bVcdDoc::VCD20:
             return i18n( "Writing Video CD (Version 2.0)" );
-        case K3bVcdDoc::SVCD10:
+            case K3bVcdDoc::SVCD10:
             return i18n( "Writing Super Video CD" );
-        case K3bVcdDoc::HQVCD:
+            case K3bVcdDoc::HQVCD:
             return i18n( "Writing High-Quality Video CD" );
-        default:
+            default:
             return i18n( "Writing Video CD" );
     }
 }
@@ -545,11 +546,11 @@ QString K3bVcdJob::jobDescription() const
 QString K3bVcdJob::jobDetails() const
 {
     return ( i18n( "1 MPEG (%1)",
-		   "%n MPEGs (%1)", 
-		   m_doc->tracks() ->count() ).arg( KIO::convertSize( m_doc->size() ) )
-	     + ( m_doc->copies() > 1 
-		 ? i18n(" - %n copy", " - %n copies", m_doc->copies()) 
-		 : QString::null ) );
+                   "%n MPEGs (%1)",
+                   m_doc->tracks() ->count() ).arg( KIO::convertSize( m_doc->size() ) )
+             + ( m_doc->copies() > 1
+                 ? i18n( " - %n copy", " - %n copies", m_doc->copies() )
+                 : QString::null ) );
 }
 
 #include "k3bvcdjob.moc"

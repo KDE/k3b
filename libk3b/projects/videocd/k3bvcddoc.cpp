@@ -1,17 +1,17 @@
 /*
- *
- * $Id$
- * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
- *
- * This file is part of the K3b project.
- * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- * See the file "COPYING" for the exact licensing terms.
- */
+*
+* $Id$
+* Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
+*
+* This file is part of the K3b project.
+* Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or
+* (at your option) any later version.
+* See the file "COPYING" for the exact licensing terms.
+*/
 
 // QT-includes
 #include <qstring.h>
@@ -63,9 +63,9 @@ K3bVcdDoc::K3bVcdDoc( QObject* parent )
     m_urlAddingTimer = new QTimer( this );
     connect( m_urlAddingTimer, SIGNAL( timeout() ), this, SLOT( slotWorkUrlQueue() ) );
 
-  // FIXME: remove the newTracks() signal and replace it with the changed signal
-  connect( this, SIGNAL(newTracks()), this, SIGNAL(changed()) );
-  connect( this, SIGNAL(trackRemoved(K3bVcdTrack*)), this, SIGNAL(changed()) );
+    // FIXME: remove the newTracks() signal and replace it with the changed signal
+    connect( this, SIGNAL( newTracks() ), this, SIGNAL( changed() ) );
+    connect( this, SIGNAL( trackRemoved( K3bVcdTrack* ) ), this, SIGNAL( changed() ) );
 }
 
 K3bVcdDoc::~K3bVcdDoc()
@@ -80,21 +80,21 @@ K3bVcdDoc::~K3bVcdDoc()
 
 bool K3bVcdDoc::newDocument()
 {
-  if( m_tracks )
-    while( m_tracks->first() )
-      removeTrack( m_tracks->first() );
-  else
-    m_tracks = new QPtrList<K3bVcdTrack>;
-  m_tracks->setAutoDelete( false );
+    if ( m_tracks )
+        while ( m_tracks->first() )
+            removeTrack( m_tracks->first() );
+    else
+        m_tracks = new QPtrList<K3bVcdTrack>;
+    m_tracks->setAutoDelete( false );
 
-  return K3bDoc::newDocument();
+    return K3bDoc::newDocument();
 }
 
 KIO::filesize_t K3bVcdDoc::calcTotalSize() const
 {
     unsigned long long sum = 0;
     if ( m_tracks ) {
-        for ( K3bVcdTrack* track = m_tracks->first(); track; track = m_tracks->next() ) {
+        for ( K3bVcdTrack * track = m_tracks->first(); track; track = m_tracks->next() ) {
             sum += track->size();
         }
     }
@@ -134,8 +134,8 @@ bool K3bVcdDoc::isImage( const KURL& url )
 
 void K3bVcdDoc::addUrls( const KURL::List& urls )
 {
-  // make sure we add them at the end even if urls are in the queue
-  addTracks( urls, 99 );
+    // make sure we add them at the end even if urls are in the queue
+    addTracks( urls, 99 );
 }
 
 void K3bVcdDoc::addTracks( const KURL::List& urls, uint position )
@@ -150,7 +150,7 @@ void K3bVcdDoc::addTracks( const KURL::List& urls, uint position )
 void K3bVcdDoc::slotWorkUrlQueue()
 {
     if ( !urlsToAdd.isEmpty() ) {
-        PrivateUrlToAdd* item = urlsToAdd.dequeue();
+        PrivateUrlToAdd * item = urlsToAdd.dequeue();
         lastAddedPosition = item->position;
 
         // append at the end by default
@@ -163,12 +163,12 @@ void K3bVcdDoc::slotWorkUrlQueue()
         }
 
         if ( !QFile::exists( item->url.path() ) ) {
-	  kdDebug() << "(K3bVcdDoc) file not found: " << item->url.path() << endl;
+            kdDebug() << "(K3bVcdDoc) file not found: " << item->url.path() << endl;
             m_notFoundFiles.append( item->url.path() );
             return ;
         }
 
-        if ( K3bVcdTrack* newTrack = createTrack( item->url ) )
+        if ( K3bVcdTrack * newTrack = createTrack( item->url ) )
             addTrack( newTrack, lastAddedPosition );
 
         delete item;
@@ -186,17 +186,15 @@ void K3bVcdDoc::slotWorkUrlQueue()
     }
 }
 
-
 K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
 {
     char filename[ 255 ];
     strcpy( filename, QFile::encodeName( url.path() ) );
-    mpeg* Mpeg = new mpeg( filename, 0 );
+    K3bMpegInfo* Mpeg = new K3bMpegInfo( filename );
 
     if ( Mpeg ) {
-        int mpegVersion = Mpeg->MpegVersion();
-        // no mpeg audio files at this time!!
-        if ( mpegVersion > 0 && Mpeg->has_video() ) {
+        int mpegVersion = Mpeg->version();
+        if ( mpegVersion > 0 ) {
 
             if ( vcdType() == NONE && mpegVersion < 2 ) {
                 m_urlAddingTimer->stop();
@@ -204,10 +202,10 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
                 vcdOptions() ->setMpegVersion( mpegVersion );
                 KMessageBox::information( kapp->mainWidget(),
                                           i18n( "K3b will create a %1 image from the given MPEG "
-                                          "files, but these files must already be in %2 "
-                                          "format. K3b performs no resampling on MPEG files." )
-                                          .arg(i18n("VCD"))
-                                          .arg(i18n("VCD")),
+                                                "files, but these files must already be in %2 "
+                                                "format. K3b performs no resample on MPEG files." )
+                                          .arg( i18n( "VCD" ) )
+                                          .arg( i18n( "VCD" ) ),
                                           i18n( "Information" ) );
                 m_urlAddingTimer->start( 0 );
             } else if ( vcdType() == NONE ) {
@@ -216,13 +214,13 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
                 bool force = false;
                 force = ( KMessageBox::questionYesNo( kapp->mainWidget(),
                                                       i18n( "K3b will create a %1 image from the given MPEG "
-                                                      "files, but these files must already be in %2 "
-                                                      "format. K3b performs no resampling on MPEG files yet." )
-                                                      .arg(i18n("SVCD"))
-                                                      .arg(i18n("SVCD"))
+                                                            "files, but these files must already be in %2 "
+                                                            "format. K3b performs no resample on MPEG files yet." )
+                                                      .arg( i18n( "SVCD" ) )
+                                                      .arg( i18n( "SVCD" ) )
                                                       + "\n\n"
-                                                      + i18n( "Note: Forcing MPEG2 as VCD is not supported by "
-                                                      "some standalone DVD players." ),
+                                                      + i18n( "Note: Forcing mpeg2 as VCD is not supported by "
+                                                              "some standalone DVD players." ),
                                                       i18n( "Information" ),
                                                       KStdGuiItem::ok().text(),
                                                       i18n( "Forcing VCD" ) ) == KMessageBox::No );
@@ -245,96 +243,31 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
                 return 0;
             }
             K3bVcdTrack* newTrack = new K3bVcdTrack( m_tracks, url.path() );
-            char HMS[ 30 ];
-            QString mt;
-            Mpeg->SecsToHMS( HMS, Mpeg->Video->duration );
-            newTrack->setMpegType( Mpeg->MpegType );
-            newTrack->setMpegVideoVersion( Mpeg->mpeg_version );
-
-            mt.append( " " + i18n( "MPEG%1" ).arg( mpegVersion ) );
-
-            newTrack->setMpegDisplaySize( QString( " %1 x %2" ).arg( Mpeg->Video->hsize ).arg( Mpeg->Video->vsize ) );
-            if ( Mpeg->DExt ) {
-                newTrack->setMpegDExt( true );
-                newTrack->setMpegFormat( Mpeg->DExt->video_format );
-                switch ( Mpeg->DExt->video_format ) {
-                    case 0 :
-                        mt.append( "  " + i18n( "Component" ) );
-                        break;
-                    case 1 :
-                        mt.append( "  " + i18n("PAL") );
-                        break;
-                    case 2 :
-                        mt.append( "  " + i18n("NTSC") );
-                        break;
-                    case 3 :
-                        mt.append( "  " + i18n("SECAM") );
-                        break;
-                    case 4 :
-                        mt.append( "  " + i18n("MAC") );
-                        break;
-                    case 5 :
-                        mt.append( "  " + i18n( "Unspecified" ) );
-                        break;
-                }
-                if ( ( Mpeg->DExt->h_display_size != Mpeg->Video->hsize ) || ( Mpeg->DExt->v_display_size != Mpeg->Video->vsize ) )
-                    newTrack->setMpegDisplaySize( QString( " %1 x %2" ).arg( Mpeg->DExt->h_display_size ).arg( Mpeg->DExt->v_display_size ) );
-            }
-
-            newTrack->setMpegSize( QString( " %1 x %2" ).arg( Mpeg->Video->hsize ).arg( Mpeg->Video->vsize ) );
-            newTrack->setMpegFps( QString( " %1" ).arg( Mpeg->Video->frame_rate ) );
-            newTrack->setMpegMbps( QString( " %1" ).arg( Mpeg->Video->bitrate / 2500.0 ) );
-
-            newTrack->setMpegDuration( HMS );
-            newTrack->setMpegVersion( mt );
-
-            newTrack->setMpegAspectRatio( Mpeg->Video->aspect_ratio );
-
-            if ( Mpeg->SExt ) {
-                newTrack->setMpegSExt( true );
-                newTrack->setMpegProgressive( Mpeg->SExt->progressive );
-                newTrack->setMpegChromaFormat( Mpeg->SExt->chroma_format );
-            }
-            // audio
-            if ( Mpeg->has_audio() ) {
-                Mpeg->SecsToHMS( HMS, Mpeg->Audio->duration );
-                newTrack->setHasAudio( true );
-                newTrack->setMpegAudioCopyright( Mpeg->Audio->copyright );
-                newTrack->setMpegAudioOriginal( Mpeg->Audio->original );
-                newTrack->setMpegAudioEmphasis( Mpeg->Audio->emphasis_index );
-                newTrack->setMpegAudioType( Mpeg->Audio->mpeg_ver );
-                newTrack->setMpegAudioLayer( Mpeg->Audio->layer );
-                newTrack->setMpegAudioDuration( HMS );
-                newTrack->setMpegAudioKbps( QString( "%1" ).arg( Mpeg->Audio->bitrate ) );
-                newTrack->setMpegAudioHz( QString( "%1" ).arg( Mpeg->Audio->sampling_rate ) );
-                newTrack->setMpegAudioFrame( QString( "%1" ).arg( Mpeg->Audio->frame_length ) );
-                newTrack->setMpegAudioMode( Mpeg->Audio->mode );
-                newTrack->setMpegAudioModeExt( Mpeg->Audio->modext );
-            }
+            *( newTrack->mpeg_info ) = *( Mpeg->mpeg_info );
 
             // set defaults;
-            newTrack->setPlayTime( vcdOptions()->PbcPlayTime() );
-            newTrack->setWaitTime( vcdOptions()->PbcWaitTime() );
-
-            // for debugging
-            Mpeg->PrintInfos();
+            newTrack->setPlayTime( vcdOptions() ->PbcPlayTime() );
+            newTrack->setWaitTime( vcdOptions() ->PbcWaitTime() );
             delete Mpeg;
+
+            // debugging output
+            newTrack->PrintInfo();
+
             return newTrack;
         }
     } else if ( isImage( url ) ) { // image track
-            // for future use
-            // photoalbum starts here
-            // return here the new photoalbum track
-     }
+        // for future use
+        // photoalbum starts here
+        // return here the new photoalbum track
+    }
 
-     // error (unsupported files)
-     KMessageBox::error( kapp->mainWidget(), "(" + url.path() + ")\n" +
-                         i18n( "Only MPEG1 and MPEG2 video files are supported." ),
-                         i18n( "Wrong File Format" ) );
+    // error (unsupported files)
+    KMessageBox::error( kapp->mainWidget(), "(" + url.path() + ")\n" +
+                        i18n( "Only MPEG1 and MPEG2 video files are supported." ),
+                        i18n( "Wrong File Format" ) );
 
-     return 0;
+    return 0;
 }
-
 
 void K3bVcdDoc::addTrack( const KURL& url, uint position )
 {
@@ -386,7 +319,7 @@ void K3bVcdDoc::removeTrack( K3bVcdTrack* track )
 
         // emit signal before deleting the track to avoid crashes
         // when the view tries to call some of the tracks' methods
-        emit trackRemoved(track);
+        emit trackRemoved( track );
 
         delete track;
 
@@ -452,22 +385,22 @@ void K3bVcdDoc::setVcdType( int type )
 {
     m_vcdType = type;
     switch ( type ) {
-        case 0:
+            case 0:
             //vcd 1.1
             vcdOptions() ->setVcdClass( "vcd" );
             vcdOptions() ->setVcdVersion( "1.1" );
             break;
-        case 1:
+            case 1:
             //vcd 2.0
             vcdOptions() ->setVcdClass( "vcd" );
             vcdOptions() ->setVcdVersion( "2.0" );
             break;
-        case 2:
+            case 2:
             //svcd 1.0
             vcdOptions() ->setVcdClass( "svcd" );
             vcdOptions() ->setVcdVersion( "1.0" );
             break;
-        case 3:
+            case 3:
             //hqvcd 1.0
             vcdOptions() ->setVcdClass( "hqvcd" );
             vcdOptions() ->setVcdVersion( "1.0" );
@@ -504,7 +437,7 @@ void K3bVcdDoc::setPbcTracks()
                     // we are the last track
                     if ( index == count - 1 ) {
                         switch ( i ) {
-                            case K3bVcdTrack::PREVIOUS:
+                                case K3bVcdTrack::PREVIOUS:
                                 // we are not alone :)
                                 if ( count > 1 ) {
                                     t = at( index - 1 );
@@ -515,16 +448,16 @@ void K3bVcdDoc::setPbcTracks()
                                     track->setPbcNonTrack( i, K3bVcdTrack::VIDEOEND );
                                 }
                                 break;
-                            case K3bVcdTrack::AFTERTIMEOUT:
-                            case K3bVcdTrack::NEXT:
+                                case K3bVcdTrack::AFTERTIMEOUT:
+                                case K3bVcdTrack::NEXT:
                                 track->setPbcTrack( i );
                                 track->setPbcNonTrack( i, K3bVcdTrack::VIDEOEND );
                                 break;
-                            case K3bVcdTrack::RETURN:
+                                case K3bVcdTrack::RETURN:
                                 track->setPbcTrack( i );
                                 track->setPbcNonTrack( i, K3bVcdTrack::VIDEOEND );
                                 break;
-                            case K3bVcdTrack::DEFAULT:
+                                case K3bVcdTrack::DEFAULT:
                                 track->setPbcTrack( i );
                                 track->setPbcNonTrack( i, K3bVcdTrack::DISABLED );
                                 break;
@@ -533,21 +466,21 @@ void K3bVcdDoc::setPbcTracks()
                     // we are the first track
                     else if ( index == 0 ) {
                         switch ( i ) {
-                            case K3bVcdTrack::PREVIOUS:
+                                case K3bVcdTrack::PREVIOUS:
                                 track->setPbcTrack( i );
                                 track->setPbcNonTrack( i, K3bVcdTrack::VIDEOEND );
                                 break;
-                            case K3bVcdTrack::AFTERTIMEOUT:
-                            case K3bVcdTrack::NEXT:
+                                case K3bVcdTrack::AFTERTIMEOUT:
+                                case K3bVcdTrack::NEXT:
                                 t = at( index + 1 );
                                 t->addToRevRefList( track );
                                 track->setPbcTrack( i, t );
                                 break;
-                            case K3bVcdTrack::RETURN:
+                                case K3bVcdTrack::RETURN:
                                 track->setPbcTrack( i );
                                 track->setPbcNonTrack( i, K3bVcdTrack::VIDEOEND );
                                 break;
-                            case K3bVcdTrack::DEFAULT:
+                                case K3bVcdTrack::DEFAULT:
                                 track->setPbcTrack( i );
                                 track->setPbcNonTrack( i, K3bVcdTrack::DISABLED );
                                 break;
@@ -556,22 +489,22 @@ void K3bVcdDoc::setPbcTracks()
                     // we are one of the other tracks and have PREVIOUS and NEXT Track
                     else {
                         switch ( i ) {
-                            case K3bVcdTrack::PREVIOUS:
+                                case K3bVcdTrack::PREVIOUS:
                                 t = at( index - 1 );
                                 t->addToRevRefList( track );
                                 track->setPbcTrack( i, t );
                                 break;
-                            case K3bVcdTrack::AFTERTIMEOUT:
-                            case K3bVcdTrack::NEXT:
+                                case K3bVcdTrack::AFTERTIMEOUT:
+                                case K3bVcdTrack::NEXT:
                                 t = at( index + 1 );
                                 t->addToRevRefList( track );
                                 track->setPbcTrack( i, t );
                                 break;
-                            case K3bVcdTrack::RETURN:
+                                case K3bVcdTrack::RETURN:
                                 track->setPbcTrack( i );
                                 track->setPbcNonTrack( i, K3bVcdTrack::VIDEOEND );
                                 break;
-                            case K3bVcdTrack::DEFAULT:
+                                case K3bVcdTrack::DEFAULT:
                                 track->setPbcTrack( i );
                                 track->setPbcNonTrack( i, K3bVcdTrack::DISABLED );
                                 break;
@@ -585,15 +518,15 @@ void K3bVcdDoc::setPbcTracks()
 
 void K3bVcdDoc::loadDefaultSettings( KConfig* c )
 {
-  K3bDoc::loadDefaultSettings(c);
+    K3bDoc::loadDefaultSettings( c );
 
-  // FIXME: This are userdefined k3b defaults. should this move to general vcd options?
+    // FIXME: This are userdefined k3b defaults. should this move to general vcd options?
 
-  c->setGroup( "Video project settings" );
-  vcdOptions()->setPbcEnabled( c->readBoolEntry("Use Playback Control", false) );
-  vcdOptions()->setPbcNumKeys( c->readBoolEntry("Use numeric keys to navigate chapters", false) );
-  vcdOptions()->setPbcPlayTime( c->readNumEntry( "Play each Sequence/Segment", 1 ) );
-  vcdOptions()->setPbcWaitTime( c->readNumEntry( "Time to wait after each Sequence/Segment", 2 ) );
+    c->setGroup( "Video project settings" );
+    vcdOptions() ->setPbcEnabled( c->readBoolEntry( "Use Playback Control", false ) );
+    vcdOptions() ->setPbcNumKeys( c->readBoolEntry( "Use numeric keys to navigate chapters", false ) );
+    vcdOptions() ->setPbcPlayTime( c->readNumEntry( "Play each Sequence/Segment", 1 ) );
+    vcdOptions() ->setPbcWaitTime( c->readNumEntry( "Time to wait after each Sequence/Segment", 2 ) );
 }
 
 
@@ -625,7 +558,7 @@ bool K3bVcdDoc::loadDocumentData( QDomElement* root )
         QDomNode item = vcdNodes.item( i );
         QString name = item.nodeName();
 
-        kdDebug() << QString("(K3bVcdDoc::loadDocumentData) nodeName = '%1'").arg( name ) << endl;
+        kdDebug() << QString( "(K3bVcdDoc::loadDocumentData) nodeName = '%1'" ).arg( name ) << endl;
 
         if ( name == "volumeId" )
             vcdOptions() ->setVolumeId( item.toElement().text() );
@@ -638,7 +571,7 @@ bool K3bVcdDoc::loadDocumentData( QDomElement* root )
         else if ( name == "publisher" )
             vcdOptions() ->setPublisher( item.toElement().text() );
         else if ( name == "vcdType" )
-            setVcdType( vcdTypes(item.toElement().text().toInt()) );
+            setVcdType( vcdTypes( item.toElement().text().toInt() ) );
         else if ( name == "mpegVersion" )
             vcdOptions() ->setMpegVersion( item.toElement().text().toInt() );
         else if ( name == "PreGapLeadout" )
@@ -694,7 +627,7 @@ bool K3bVcdDoc::loadDocumentData( QDomElement* root )
         else {
             KURL k;
             k.setPath( url );
-            if ( K3bVcdTrack* track = createTrack( k ) ) {
+            if ( K3bVcdTrack * track = createTrack( k ) ) {
                 track ->setPlayTime( trackElem.attribute( "playtime", "1" ).toInt() );
                 track ->setWaitTime( trackElem.attribute( "waittime", "2" ).toInt() );
                 track ->setReactivity( trackElem.attribute( "reactivity", "0" ).toInt() );
@@ -715,18 +648,18 @@ bool K3bVcdDoc::loadDocumentData( QDomElement* root )
         for ( uint trackId = 0; trackId < trackNodes.length(); trackId++ ) {
             QDomElement trackElem = trackNodes.item( trackId ).toElement();
             QDomNodeList trackNodes = trackElem.childNodes();
-            kdDebug() << "PBC Element Type: " << trackElem.attribute ("type") << endl;
-            kdDebug() << "PBC Element PbcTrack: " << trackElem.attribute ("pbctrack") << endl;
-            kdDebug() << "PBC Element Value: " << trackElem.attribute ("val") << endl;
+            kdDebug() << "PBC Element Type: " << trackElem.attribute ( "type" ) << endl;
+            kdDebug() << "PBC Element PbcTrack: " << trackElem.attribute ( "pbctrack" ) << endl;
+            kdDebug() << "PBC Element Value: " << trackElem.attribute ( "val" ) << endl;
             kdDebug() << "------------------------------------" << endl;
             for ( uint i = 0; i < trackNodes.length(); i++ ) {
                 QDomElement trackElem = trackNodes.item( i ).toElement();
-                if ( trackElem.hasAttribute ("type") ) {
-                    type = trackElem.attribute ("type").toInt();
-                    if ( trackElem.hasAttribute ("pbctrack") ) {
-                        pbctrack = ( trackElem.attribute ("pbctrack") == "yes" );
-                        if ( trackElem.hasAttribute ("val") ) {
-                            val = trackElem.attribute ("val").toInt();
+                if ( trackElem.hasAttribute ( "type" ) ) {
+                    type = trackElem.attribute ( "type" ).toInt();
+                    if ( trackElem.hasAttribute ( "pbctrack" ) ) {
+                        pbctrack = ( trackElem.attribute ( "pbctrack" ) == "yes" );
+                        if ( trackElem.hasAttribute ( "val" ) ) {
+                            val = trackElem.attribute ( "val" ).toInt();
                             K3bVcdTrack* track = m_tracks->at( trackId );
                             K3bVcdTrack* pbcTrack = m_tracks->at( val );
                             if ( pbctrack ) {
@@ -781,8 +714,8 @@ bool K3bVcdDoc::saveDocumentData( QDomElement* docElem )
     vcdElem.appendChild( doc.createTextNode( vcdOptions() ->publisher() ) );
     vcdMain.appendChild( vcdElem );
 
-// applicationId()
-// systemId()
+    // applicationId()
+    // systemId()
 
     vcdElem = doc.createElement( "vcdType" );
     vcdElem.appendChild( doc.createTextNode( QString::number( vcdType() ) ) );
@@ -893,9 +826,8 @@ bool K3bVcdDoc::saveDocumentData( QDomElement* docElem )
                 pbcElem.setAttribute( "type", i );
                 if ( track->getPbcTrack( i ) ) {
                     pbcElem.setAttribute( "pbctrack", "yes" );
-                    pbcElem.setAttribute( "val", track->getPbcTrack( i )->index() );
-                }
-                else {
+                    pbcElem.setAttribute( "val", track->getPbcTrack( i ) ->index() );
+                } else {
                     pbcElem.setAttribute( "pbctrack", "no" );
                     pbcElem.setAttribute( "val", track->getNonPbcTrack( i ) );
                 }
@@ -915,7 +847,7 @@ bool K3bVcdDoc::saveDocumentData( QDomElement* docElem )
 
 K3bProjectBurnDialog* K3bVcdDoc::newBurnDialog( QWidget* parent, const char* name )
 {
-  return new K3bVcdBurnDialog( this, parent, name, true );
+    return new K3bVcdBurnDialog( this, parent, name, true );
 }
 
 #include "k3bvcddoc.moc"

@@ -1,7 +1,7 @@
 /*
 *
 * $Id$
-* Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
+* Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
 *
 * This file is part of the K3b project.
 * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
@@ -48,7 +48,10 @@ class K3bVcdListView : public K3bListView
          */
         void insertItem( QListViewItem* );
 
-        KActionCollection* actionCollection() const { return m_actionCollection; }
+        KActionCollection* actionCollection() const
+        {
+            return m_actionCollection;
+        }
 
         QPtrList<K3bVcdTrack> selectedTracks();
 
@@ -77,7 +80,7 @@ class K3bVcdListView : public K3bListView
         void showPopupMenu( KListView*, QListViewItem* item, const QPoint& );
         void showPropertiesDialog();
         void slotRemoveTracks();
-	void slotTrackRemoved( K3bVcdTrack* );
+        void slotTrackRemoved( K3bVcdTrack* );
 
     protected:
         bool acceptDrag( QDropEvent* e ) const;

@@ -1292,7 +1292,7 @@ void mpeg::PrintInfos()
                     ( DExt->v_display_size != Video->vsize ) )
                 dbg.append( QString( "  Display Size [%1 x %2]\n" ).arg( DExt->h_display_size ).arg( DExt->v_display_size ) );
         }
-        dbg.append( QString( "  Size [%1 x %2]     %3 fps    %4 Mbps\n" ).arg( Video->hsize ).arg( Video->vsize ).arg( Video->frame_rate ).arg( Video->bitrate / 2500.0 ) );
+        dbg.append( QString( "  Size [%1 x %2]     %3 frame/s    %4 bit/s\n" ).arg( Video->hsize ).arg( Video->vsize ).arg( Video->frame_rate ).arg( Video->bitrate / 2500.0 ) );
         if ( UData ) {
             dbg.append( QString( "\nUser Data:\n------------\n%1------------\n\n" ).arg( UData->ud ) );
         }
@@ -2578,7 +2578,7 @@ void transport::PrintInfos()
 
     QString dbg;
     for ( int i = 0; i < n_progs; i++ ) {
-        kdDebug() << QString( "    Program N° %1 contains %2 Elementary Streams:" ).arg( programs[ i ].prog_num ).arg( programs[ i ].nstreams ) << endl;
+        kdDebug() << QString( "    Program N %1 contains %2 Elementary Streams:" ).arg( programs[ i ].prog_num ).arg( programs[ i ].nstreams ) << endl;
         programs[ i ].descs.PrintInfos( "      " );
         current = programs[ i ].TStreams;
         int stream_count = 1;

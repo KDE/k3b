@@ -1,7 +1,7 @@
 /*
 *
 * $Id$
-* Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
+* Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
 *
 * This file is part of the K3b project.
 * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
@@ -39,7 +39,7 @@ K3bVcdView::K3bVcdView( K3bVcdDoc* pDoc, QWidget* parent, const char *name )
 
     m_vcdlist = new K3bVcdListView( this, pDoc, this );
     setMainWidget( m_vcdlist );
-    fillStatusDisplay()->showSize();
+    fillStatusDisplay() ->showSize();
 
     connect( m_vcdlist, SIGNAL( lengthReady() ), fillStatusDisplay(), SLOT( update() ) );
     connect( m_doc, SIGNAL( newTracks() ), fillStatusDisplay(), SLOT( update() ) );

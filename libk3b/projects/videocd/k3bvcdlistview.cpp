@@ -1,7 +1,7 @@
 /*
 *
 * $Id$
-* Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
+* Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
 *
 * This file is part of the K3b project.
 * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
@@ -68,7 +68,7 @@ K3bVcdListView::K3bVcdListView( K3bView* view, K3bVcdDoc* doc, QWidget *parent, 
              this, SLOT( showPropertiesDialog() ) );
 
     connect( m_doc, SIGNAL( changed() ), this, SLOT( slotUpdateItems() ) );
-    connect( m_doc, SIGNAL(trackRemoved(K3bVcdTrack*)), this, SLOT(slotTrackRemoved(K3bVcdTrack*)) );
+    connect( m_doc, SIGNAL( trackRemoved( K3bVcdTrack* ) ), this, SLOT( slotTrackRemoved( K3bVcdTrack* ) ) );
 
     slotUpdateItems();
 }
@@ -81,10 +81,10 @@ void K3bVcdListView::setupColumns()
     addColumn( i18n( "No." ) );
     addColumn( i18n( "Title" ) );
     addColumn( i18n( "Type" ) );
-    addColumn( i18n( "Size" ) );
-    addColumn( i18n( "Display" ) );
-    addColumn( i18n( "Fps" ) );
-    addColumn( i18n( "Mbps" ) );
+    addColumn( i18n( "Resolution" ) );
+    addColumn( i18n( "High Resolution" ) );
+    addColumn( i18n( "Framerate" ) );
+    addColumn( i18n( "Bitrate" ) );
     addColumn( i18n( "Duration" ) );
     addColumn( i18n( "File Size" ) );
     addColumn( i18n( "Filename" ) );
@@ -109,7 +109,7 @@ void K3bVcdListView::setupPopupMenu()
     m_popupMenu->insertSeparator();
     m_actionProperties->plug( m_popupMenu );
     m_popupMenu->insertSeparator();
-    m_doc->actionCollection()->action( "project_burn" ) ->plug( m_popupMenu );
+    m_doc->actionCollection() ->action( "project_burn" ) ->plug( m_popupMenu );
 }
 
 
@@ -235,9 +235,9 @@ void K3bVcdListView::slotRemoveTracks()
 
 void K3bVcdListView::slotTrackRemoved( K3bVcdTrack* track )
 {
-  QListViewItem* viewItem = m_itemMap[ track ];
-  m_itemMap.remove( track );
-  delete viewItem;
+    QListViewItem * viewItem = m_itemMap[ track ];
+    m_itemMap.remove( track );
+    delete viewItem;
 }
 
 
@@ -248,7 +248,7 @@ void K3bVcdListView::slotUpdateItems()
     K3bVcdTrack* lastTrack = 0;
     while ( track != 0 ) {
         if ( !m_itemMap.contains( track ) )
-	  m_itemMap.insert( track, new K3bVcdListViewItem( track, this, m_itemMap[ lastTrack ] ) );
+            m_itemMap.insert( track, new K3bVcdListViewItem( track, this, m_itemMap[ lastTrack ] ) );
 
         lastTrack = track;
         track = m_doc->next();

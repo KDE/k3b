@@ -1,7 +1,7 @@
 /*
 *
 * $Id$
-* Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
+* Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
 *
 * This file is part of the K3b project.
 * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
@@ -37,7 +37,10 @@ class K3bVcdJob : public K3bBurnJob
         ~K3bVcdJob();
 
         K3bDoc* doc() const;
-        K3bVcdDoc* vcdDoc() const { return m_doc; }
+        K3bVcdDoc* vcdDoc() const
+        {
+            return m_doc;
+        }
         K3bDevice::Device* writer() const;
 
         QString jobDescription() const;
@@ -84,7 +87,7 @@ class K3bVcdJob : public K3bBurnJob
 
         int m_speed;
         int m_stage;
-	int m_currentcopy;
+        int m_currentcopy;
         int m_currentWrittenTrackNumber;
 
         double m_createimageonlypercent;

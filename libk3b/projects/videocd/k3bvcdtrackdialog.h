@@ -1,7 +1,7 @@
 /*
 *
 * $Id$
-* Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
+* Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
 *
 * This file is part of the K3b project.
 * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
@@ -46,7 +46,7 @@ class K3bVcdTrackDialog : public KDialogBase
         void slotOk();
         void slotApply();
         void slotItemRenamed( QListViewItem*, const QString&, int );
-                
+
     private slots:
         void slotPlayTimeChanged( int );
         void slotWaitTimeChanged( int );
@@ -65,21 +65,17 @@ class K3bVcdTrackDialog : public KDialogBase
         QLabel* m_displayLength;
 
         QLabel* m_mpegver_audio;
-        QLabel* m_duration_audio;
         QLabel* m_rate_audio;
-        QLabel* m_framesize_audio;
+        QLabel* m_sampling_frequency_audio;
         QLabel* m_mode_audio;
-        QLabel* m_extmode_audio;
-        QLabel* m_emphasis_audio;
         QLabel* m_copyright_audio;
 
         QLabel* m_mpegver_video;
-        QLabel* m_duration_video;
         QLabel* m_rate_video;
         QLabel* m_chromaformat_video;
         QLabel* m_format_video;
-        QLabel* m_size_video;
-        QLabel* m_displaysize_video;
+        QLabel* m_resolution_video;
+        QLabel* m_highresolution_video;
 
         QLabel* m_labelAfterTimeout;
         QLabel* m_labelWait;
@@ -111,8 +107,11 @@ class K3bVcdTrackDialog : public KDialogBase
         void fillGui();
         void fillPbcGui();
 
-        void setPbcTrack(K3bVcdTrack*, K3bCutComboBox*, int);
-        K3bVcdOptions* VcdOptions() { return m_vcdDoc->vcdOptions(); }
+        void setPbcTrack( K3bVcdTrack*, K3bCutComboBox*, int );
+        K3bVcdOptions* VcdOptions()
+        {
+            return m_vcdDoc->vcdOptions();
+        }
 };
 
 #endif

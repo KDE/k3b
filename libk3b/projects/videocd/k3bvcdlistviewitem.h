@@ -1,7 +1,7 @@
 /*
 *
 * $Id$
-* Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
+* Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
 *
 * This file is part of the K3b project.
 * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
@@ -36,8 +36,12 @@ class K3bVcdListViewItem : public K3bListViewItem
 
         /** reimplemented from QListViewItem */
         QString key( int column, bool a ) const;
+        bool animate();
 
-        K3bVcdTrack* vcdTrack() { return m_track; }
+        K3bVcdTrack* vcdTrack()
+        {
+            return m_track;
+        }
 
     private:
         K3bVcdTrack* m_track;

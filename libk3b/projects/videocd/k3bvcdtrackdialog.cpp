@@ -1,7 +1,7 @@
 /*
 *
 * $Id$
-* Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
+* Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
 *
 * This file is part of the K3b project.
 * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
@@ -65,10 +65,10 @@ K3bVcdTrackDialog::K3bVcdTrackDialog( K3bVcdDoc* _doc, QPtrList<K3bVcdTrack>& tr
 
     if ( !m_selectedTracks.isEmpty() ) {
 
-        K3bVcdTrack* selectedTrack = m_selectedTracks.first();
+        K3bVcdTrack * selectedTrack = m_selectedTracks.first();
 
         m_displayFileName->setText( selectedTrack->fileName() );
-        m_displayLength->setText( selectedTrack->mpegDuration() );
+        m_displayLength->setText( selectedTrack->duration() );
         m_displaySize->setText( KIO::convertSize( selectedTrack->size() ) );
 
         m_labelMimeType->setPixmap( KMimeType::pixmapForURL( KURL( selectedTrack->absPath() ), 0, KIcon::Desktop, 48 ) );
@@ -117,7 +117,7 @@ void K3bVcdTrackDialog::setPbcTrack( K3bVcdTrack* selected, K3bCutComboBox* box,
 
 void K3bVcdTrackDialog::slotApply()
 {
-    K3bVcdTrack* selectedTrack = m_selectedTracks.first();
+    K3bVcdTrack * selectedTrack = m_selectedTracks.first();
 
     setPbcTrack( selectedTrack, m_pbc_previous, K3bVcdTrack::PREVIOUS );
     setPbcTrack( selectedTrack, m_pbc_next, K3bVcdTrack::NEXT );
@@ -130,7 +130,7 @@ void K3bVcdTrackDialog::slotApply()
     selectedTrack->setReactivity( m_check_reactivity->isChecked() );
     // TODO: selectedTrack->setPbcNumKeys( m_check_pbc->isChecked() );
 
-    VcdOptions()->setPbcEnabled( m_check_pbc->isChecked() );
+    VcdOptions() ->setPbcEnabled( m_check_pbc->isChecked() );
 
 }
 
@@ -139,212 +139,74 @@ void K3bVcdTrackDialog::fillGui()
     QString tmp;
     K3bVcdTrack* selectedTrack = m_selectedTracks.first();
 
-    if ( selectedTrack->mpegVideoVersion() == 1 ) {
-        if ( selectedTrack->hasAudio() )
-            m_mpegver_video->setText( i18n( "MPEG 1 System File [Video/Audio]" ) );
-        else
-            m_mpegver_video->setText( i18n( "MPEG 1 System File [Video]" ) );
-    } else {
-        if ( selectedTrack->hasAudio() )
-            m_mpegver_video->setText( i18n( "MPEG Program Stream File [Video/Audio]" ) );
-        else
-            m_mpegver_video->setText( i18n( "MPEG Program Stream File [Video]" ) );
-    }
+    m_mpegver_video->setText( selectedTrack->mpegTypeS() );
+    m_rate_video->setText( i18n( "%1 bit/s" ).arg( selectedTrack->video_bitrate() ) );
+    m_chromaformat_video->setText( "todo" );
+    m_format_video->setText( "todo" );
+    m_highresolution_video->setText( selectedTrack->highresolution() );
+    m_resolution_video->setText( selectedTrack->resolution() );
 
-    m_rate_video->setText( i18n( "%1 Mbps" ).arg( selectedTrack->mpegMbps() ) );
-
-    m_duration_video->setText( selectedTrack->mpegDuration() );
-
-    switch ( selectedTrack->MpegAspectRatio() ) {
-        case 0:
-            m_rate_video->setText( i18n( "Invalid aspect ratio (forbidden)" ) );
-            break;
-        case 1:
-            m_rate_video->setText( i18n( "Aspect ratio 1/1 (VGA)" ) );
-            break;
-        case 2:
-            m_rate_video->setText( i18n( "Aspect ratio 4/3 (TV)" ) );
-            break;
-        case 3:
-            m_rate_video->setText( i18n( "Aspect ratio 16/9 (large TV)" ) );
-            break;
-        case 4:
-            m_rate_video->setText( i18n( "Aspect ratio 2.21/1 (Cinema)" ) );
-            break;
-        default:
-            m_rate_video->setText( i18n( "n/a" ) );
-    }
-
-    m_chromaformat_video->setText( i18n( "n/a" ) );
-
-    if ( selectedTrack->MpegSExt() ) {
-        if ( selectedTrack->MpegProgressive() )
-            tmp = i18n( "Not interlaced" );
-        else
-            tmp = i18n( "Interlaced" );
-
-        switch ( selectedTrack->MpegChromaFormat() ) {
-            case 1 :
-                tmp.append( ", 4:2:0" );
-                break;
-            case 2 :
-                tmp.append( ", 4:2:2" );
-                break;
-            case 3 :
-                tmp.append( ", 4:4:4" );
-                break;
-        }
-        m_chromaformat_video->setText( tmp );
-    }
-
-    m_format_video->setText( i18n( "n/a" ) );
-    if ( selectedTrack->MpegDExt() ) {
-        switch ( selectedTrack->MpegFormat() ) {
-            case 0 :
-                m_format_video->setText( i18n( "Component" ) );
-                break;
-            case 1 :
-                m_format_video->setText( "PAL" );
-                break;
-            case 2 :
-                m_format_video->setText( "NTSC" );
-                break;
-            case 3 :
-                m_format_video->setText( "SECAM" );
-                break;
-            case 4 :
-                m_format_video->setText( "MAC" );
-                break;
-            case 5 :
-                m_format_video->setText( i18n( "Unspecified" ) );
-                break;
-        }
-    }
-
-    m_displaysize_video->setText( selectedTrack->mpegDisplaySize() );
-    m_size_video->setText( i18n( "%1 %2 fps %3 Mbps" ).arg( selectedTrack->mpegSize() ).arg( selectedTrack->mpegFps() ).arg( selectedTrack->mpegMbps() ) );
-
-
-    if ( selectedTrack->hasAudio() ) {
-        if ( selectedTrack->MpegAudioType() != 3 )
-            m_mpegver_audio->setText( i18n( "MPEG %1 layer %2" ).arg( selectedTrack->MpegAudioType() ).arg( selectedTrack->MpegAudioLayer() ) );
-        else
-            m_mpegver_audio->setText( i18n( "MPEG 2.5 (rare) layer %1" ).arg( selectedTrack->MpegAudioLayer() ) );
-
-        if ( !selectedTrack->MpegAudioKbps().isNull() )
-            m_rate_audio->setText( i18n( "%1 kbps %2 Hz" ).arg( selectedTrack->MpegAudioKbps() ).arg( selectedTrack->MpegAudioHz() ) );
-        else
-            m_rate_audio->setText( i18n( "free bitrate %1 Hz" ).arg( selectedTrack->MpegAudioHz() ) );
-
-        switch ( selectedTrack->MpegAudioMode() ) {
-            case 0:
-                tmp = i18n( "Stereo" );
-                break;
-            case 1:
-                tmp = i18n( "Joint Stereo" );
-                if ( selectedTrack->MpegAudioLayer() == 1 || selectedTrack->MpegAudioLayer() == 2 ) {
-                    switch ( selectedTrack->MpegAudioModeExt() ) {
-                        case 0:
-                            tmp.append( " " + i18n( "(Intensity stereo on bands 4-31/32)" ) );
-                            break;
-                        case 1:
-                            tmp.append( " " + i18n( "(Intensity stereo on bands 8-31/32)" ) );
-                            break;
-                        case 2:
-                            tmp.append( " " + i18n( "(Intensity stereo on bands 12-31/32)" ) );
-                            break;
-                        case 3:
-                            tmp.append( " " + i18n( "(Intensity stereo on bands 16-31/32)" ) );
-                            break;
-                    }
-                } else {
-                    //mp3
-                    switch ( selectedTrack->MpegAudioModeExt() ) {
-                        case 0:
-                            tmp.append( " " + i18n( "(Intensity stereo off, M/S stereo off)" ) );
-                            break;
-                        case 1:
-                            tmp.append( " " + i18n( "(Intensity stereo on, M/S stereo off)" ) );
-                            break;
-                        case 2:
-                            tmp.append( " " + i18n( "(Intensity stereo off, M/S stereo on)" ) );
-                            break;
-                        case 3:
-                            tmp.append( " " + i18n( "(Intensity stereo on, M/S stereo on)" ) );
-                            break;
-                    }
-                }
-                break;
-            case 2:
-                tmp = i18n( "Dual Channel" );
-                break;
-            case 3:
-                tmp = i18n( "Mono" );
-                break;
-        }
-        m_mode_audio->setText( tmp );
-
-        switch ( selectedTrack->MpegAudioEmphasis() ) {
-            case 0:
-                m_emphasis_audio->setText( i18n( "None" ) );
-                break;
-            case 1:
-                m_emphasis_audio->setText( i18n( "50/15 microsecs" ) );
-                break;
-            case 2:
-                m_emphasis_audio->setText( i18n( "Unknown" ) );
-                break;
-            case 3:
-                m_emphasis_audio->setText( i18n( "CCITT J 17" ) );
-                break;
-        }
-
-        tmp = "";
-        if ( selectedTrack->MpegAudioCopyright() )
-            tmp.append( "(c) " );
-        if ( selectedTrack->MpegAudioOriginal() )
-            tmp.append( i18n( "original" ) );
-        else
-            tmp.append( i18n( "duplicate" ) );
-
-        m_copyright_audio->setText( tmp );
-    }
+    m_mpegver_audio->setText( selectedTrack->mpegTypeS( true ) );
+    m_rate_audio->setText( selectedTrack->audio_bitrate() );
+    
+    m_sampling_frequency_audio->setText( "todo" );
+    m_mode_audio->setText( "todo" );
+    m_copyright_audio->setText( "todo" );
 
     fillPbcGui();
 
 
-    QToolTip::add( m_pbc_previous, i18n( "May also look like |<< on the remote control. " ) );
-    QToolTip::add( m_pbc_next, i18n( "May also look like >>| on the remote control." ) );
-    QToolTip::add( m_pbc_return, i18n( "This key may be mapped to the STOP key." ) );
-    QToolTip::add( m_pbc_default, i18n( "This key is usually mapped to the > or PLAY key." ) );
-    QToolTip::add( m_comboAfterTimeout, i18n( "Target to be jumped on time-out of <wait>." ) );
-                QToolTip::add( m_check_reactivity, i18n( "Delay reactivity of keys." ) );
-                QToolTip::add( m_check_pbc, i18n( "Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 disc formats." ) );
-    QToolTip::add( m_check_usekeys, i18n( "Activate the use of numeric keys." ) );
-    QToolTip::add( m_check_overwritekeys, i18n( "Overwrite default numeric keys." ) );
-    QToolTip::add( m_list_keys, i18n( "Numeric keys." ) );
-    QToolTip::add( m_spin_times, i18n( "Times to repeat the playback of 'play track'." ) );
-    QToolTip::add( m_spin_waittime, i18n( "Time in seconds to wait after playback of 'play track'." ) );
+    QToolTip::add
+        ( m_pbc_previous, i18n( "May also look like |<< on the remote control. " ) );
+    QToolTip::add
+        ( m_pbc_next, i18n( "May also look like >>| on the remote control." ) );
+    QToolTip::add
+        ( m_pbc_return, i18n( "This key may be mapped to the STOP key." ) );
+    QToolTip::add
+        ( m_pbc_default, i18n( "This key is usually mapped to the > or PLAY key." ) );
+    QToolTip::add
+        ( m_comboAfterTimeout, i18n( "Target to be jumped on time-out of <wait>." ) );
+    QToolTip::add
+        ( m_check_reactivity, i18n( "Delay reactivity of keys." ) );
+    QToolTip::add
+        ( m_check_pbc, i18n( "Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 disc formats." ) );
+    QToolTip::add
+        ( m_check_usekeys, i18n( "Activate the use of numeric keys." ) );
+    QToolTip::add
+        ( m_check_overwritekeys, i18n( "Overwrite default numeric keys." ) );
+    QToolTip::add
+        ( m_list_keys, i18n( "Numeric keys." ) );
+    QToolTip::add
+        ( m_spin_times, i18n( "Times to repeat the playback of 'play track'." ) );
+    QToolTip::add
+        ( m_spin_waittime, i18n( "Time in seconds to wait after playback of 'play track'." ) );
 
-                QWhatsThis::add( m_comboAfterTimeout, i18n( "<p>Target to be jumped on time-out of <wait>."
-                                                "<p>If omitted (and <wait> is not set to an infinite time) one of the targets is selected at random!" ) );
-                QWhatsThis::add( m_check_reactivity, i18n( "<p>When reactivity is set to delayed, it is recommended that the length of the referenced 'play track' is not more than 5 seconds."
-                                                "<p>The recommended setting for a play item consisting of one still picture and no audio is to loop once and have a delayed reactivity." ) );
-                QWhatsThis::add( m_check_pbc, i18n( "<p>Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 disc formats."
-                                    "<p>PBC allows control of the playback of play items and the possibility of interaction with the user through the remote control or some other input device available." ) );
-    QWhatsThis::add( m_check_usekeys, i18n( "These are actually pseudo keys, representing the numeric keys 0, 1, ..., 9." ) );
-    QWhatsThis::add( m_check_overwritekeys, i18n( "<p>If numeric keys enabled, you can overwrite the default settings." ) );
-    QWhatsThis::add( m_spin_times, i18n( "<p>Times to repeat the playback of 'play track'."
-                                                "<p>The reactivity attribute controls whether the playback of 'play track' is finished, thus delayed, before executing user triggered action or an immediate jump is performed."
-                                                                                                                                                "<p>After the specified amount of repetitions are completed, the <wait> time begins to count down, unless set to an infinite wait time."
-                                                                                                                                                "<p>If this element is omitted, a default of `1' is used, i.e. the 'play track' will be displayed once." ) );
-    QWhatsThis::add( m_spin_waittime, i18n( "Time in seconds to wait after playback of 'play track' before triggering the <timeout> action (unless the user triggers some action before time ran up)." ) );
+    QWhatsThis::add
+        ( m_comboAfterTimeout, i18n( "<p>Target to be jumped on time-out of <wait>."
+                                     "<p>If omitted (and <wait> is not set to an infinite time) one of the targets is selected at random!" ) );
+    QWhatsThis::add
+        ( m_check_reactivity, i18n( "<p>When reactivity is set to delayed, it is recommended that the length of the referenced 'play track' is not more than 5 seconds."
+                                    "<p>The recommended setting for a play item consisting of one still picture and no audio is to loop once and have a delayed reactivity." ) );
+    QWhatsThis::add
+        ( m_check_pbc, i18n( "<p>Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 disc formats."
+                             "<p>PBC allows control of the playback of play items and the possibility of interaction with the user through the remote control or some other input device available." ) );
+    QWhatsThis::add
+        ( m_check_usekeys, i18n( "These are actually pseudo keys, representing the numeric keys 0, 1, ..., 9." ) );
+    QWhatsThis::add
+        ( m_check_overwritekeys, i18n( "<p>If numeric keys enabled, you can overwrite the default settings." ) );
+    QWhatsThis::add
+        ( m_spin_times, i18n( "<p>Times to repeat the playback of 'play track'."
+                              "<p>The reactivity attribute controls whether the playback of 'play track' is finished, thus delayed, before executing user triggered action or an immediate jump is performed."
+                              "<p>After the specified amount of repetitions are completed, the <wait> time begins to count down, unless set to an infinite wait time."
+                              "<p>If this element is omitted, a default of `1' is used, i.e. the 'play track' will be displayed once." ) );
+    QWhatsThis::add
+        ( m_spin_waittime, i18n( "Time in seconds to wait after playback of 'play track' before triggering the <timeout> action (unless the user triggers some action before time ran up)." ) );
 
 }
 
 void K3bVcdTrackDialog::fillPbcGui()
 {
-    K3bVcdTrack* selectedTrack = m_selectedTracks.first();
+    K3bVcdTrack * selectedTrack = m_selectedTracks.first();
     // add tracktitles to combobox
     int iPrevious = -1;
     int iNext = -1;
@@ -414,7 +276,7 @@ void K3bVcdTrackDialog::fillPbcGui()
     m_comboAfterTimeout->insertItem( pmEnd, txtEnd );
     numkeys_list << txtEnd;
 
-    for (int i = 99; i > 1; i--) {
+    for ( int i = 99; i > 1; i-- ) {
         item = new K3bListViewItem( m_list_keys, QString::number( i ) + " ", "" );
         item->setEditor( 1, K3bListViewItem::COMBO , numkeys_list );
     }
@@ -454,17 +316,17 @@ void K3bVcdTrackDialog::fillPbcGui()
     m_spin_times->setValue( selectedTrack->getPlayTime() );
 
     m_check_reactivity->setChecked( selectedTrack->Reactivity() );
-    m_check_pbc->setChecked( VcdOptions()->PbcEnabled() );
+    m_check_pbc->setChecked( VcdOptions() ->PbcEnabled() );
 
     // not implemented yet
-    m_check_usekeys->setChecked( VcdOptions()->PbcNumKeys() );
+    m_check_usekeys->setChecked( VcdOptions() ->PbcNumKeys() );
     // m_mainTabbed->setTabEnabled( m_widgetnumkeys, m_check_usekeys->isChecked() );
     m_mainTabbed->setTabEnabled( m_widgetnumkeys, true );
 }
 
 void K3bVcdTrackDialog::prepareGui()
 {
-    QFrame* frame = plainPage();
+    QFrame * frame = plainPage();
 
     QGridLayout* mainLayout = new QGridLayout( frame );
     mainLayout->setSpacing( spacingHint() );
@@ -533,7 +395,7 @@ void K3bVcdTrackDialog::setupPbcTab()
     // /////////////////////////////////////////////////
     // Playback Control TAB
     // /////////////////////////////////////////////////
-    QWidget* w = new QWidget( m_mainTabbed );
+    QWidget * w = new QWidget( m_mainTabbed );
 
     QGridLayout* grid = new QGridLayout( w );
     grid->setAlignment( Qt::AlignTop );
@@ -656,7 +518,7 @@ void K3bVcdTrackDialog::setupPbcKeyTab()
 
     m_list_keys = new K3bListView( groupKey, "m_list_keys" );
     m_list_keys->setAllColumnsShowFocus( true );
-    m_list_keys->setDoubleClickForEdit(false);
+    m_list_keys->setDoubleClickForEdit( false );
     m_list_keys->setColumnAlignment( 0, Qt::AlignRight );
     m_list_keys->setSelectionMode( QListView::NoSelection );
     m_list_keys->setSorting( -1 );
@@ -669,7 +531,7 @@ void K3bVcdTrackDialog::setupPbcKeyTab()
 
     m_mainTabbed->addTab( m_widgetnumkeys, i18n( "Numeric Keys" ) );
 
-    connect( m_list_keys, SIGNAL( itemRenamed( QListViewItem*, const QString&, int ) ), this, SLOT( slotItemRenamed( QListViewItem*, const QString&, int) ) );
+    connect( m_list_keys, SIGNAL( itemRenamed( QListViewItem*, const QString&, int ) ), this, SLOT( slotItemRenamed( QListViewItem*, const QString&, int ) ) );
 
 }
 
@@ -678,7 +540,7 @@ void K3bVcdTrackDialog::setupAudioTab()
     // /////////////////////////////////////////////////
     // AUDIO TAB
     // /////////////////////////////////////////////////
-    QWidget* w = new QWidget( m_mainTabbed );
+    QWidget * w = new QWidget( m_mainTabbed );
 
     QGridLayout* grid = new QGridLayout( w );
     grid->setAlignment( Qt::AlignTop );
@@ -686,64 +548,43 @@ void K3bVcdTrackDialog::setupAudioTab()
     grid->setMargin( marginHint() );
 
     QLabel* labelMpegVer_Audio = new QLabel( i18n( "Type:" ), w, "labelMpegVer_Audio" );
-    QLabel* labelDuration_Audio = new QLabel( i18n( "Estimated duration:" ), w, "labelDuration_Audio" );
     QLabel* labelRate_Audio = new QLabel( i18n( "Rate:" ), w, "labelRate_Audio" );
-    QLabel* labelFramesize_Audio = new QLabel( i18n( "Frame size:" ), w, "labelFramesize_Audio" );
+    QLabel* labelSampling_Frequency_Audio = new QLabel( i18n( "Sampling frequency:" ), w, "labelSampling_Frequency_Audio" );
     QLabel* labelMode_Audio = new QLabel( i18n( "Mode:" ), w, "labelMode_Audio" );
-    QLabel* labelExtMode_Audio = new QLabel( i18n( "Ext. mode:" ), w, "labelExtMode_Audio" );
-    QLabel* labelEmphasis_Audio = new QLabel( i18n( "Emphasis:" ), w, "labelEmphasis_Audio" );
     QLabel* labelCopyright_Audio = new QLabel( i18n( "Copyright:" ), w, "labelCopyright_Audio" );
 
     m_mpegver_audio = new QLabel( w, "m_mpegver_audio" );
-    m_duration_audio = new QLabel( w, "m_duration_audio" );
     m_rate_audio = new QLabel( w, "m_rate_audio" );
-    m_framesize_audio = new QLabel( w, "m_framesize_audio" );
+    m_sampling_frequency_audio = new QLabel( w, "m_sampling_frequency_audio" );
     m_mode_audio = new QLabel( w, "m_mode_audio" );
-    m_extmode_audio = new QLabel( w, "m_extmode_audio" );
-    m_emphasis_audio = new QLabel( w, "m_emphasis_audio" );
     m_copyright_audio = new QLabel( w, "m_copyright_audio" );
 
     m_mpegver_audio->setFrameShape( QLabel::LineEditPanel );
-    m_duration_audio->setFrameShape( QLabel::LineEditPanel );
     m_rate_audio->setFrameShape( QLabel::LineEditPanel );
-    m_framesize_audio->setFrameShape( QLabel::LineEditPanel );
+    m_sampling_frequency_audio->setFrameShape( QLabel::LineEditPanel );
     m_mode_audio->setFrameShape( QLabel::LineEditPanel );
-    m_extmode_audio->setFrameShape( QLabel::LineEditPanel );
-    m_emphasis_audio->setFrameShape( QLabel::LineEditPanel );
     m_copyright_audio->setFrameShape( QLabel::LineEditPanel );
 
     m_mpegver_audio->setFrameShadow( QLabel::Sunken );
-    m_duration_audio->setFrameShadow( QLabel::Sunken );
     m_rate_audio->setFrameShadow( QLabel::Sunken );
-    m_framesize_audio->setFrameShadow( QLabel::Sunken );
+    m_sampling_frequency_audio->setFrameShadow( QLabel::Sunken );
     m_mode_audio->setFrameShadow( QLabel::Sunken );
-    m_extmode_audio->setFrameShadow( QLabel::Sunken );
-    m_emphasis_audio->setFrameShadow( QLabel::Sunken );
     m_copyright_audio->setFrameShadow( QLabel::Sunken );
 
     grid->addWidget( labelMpegVer_Audio, 1, 0 );
     grid->addMultiCellWidget( m_mpegver_audio, 1, 1, 1, 4 );
 
-    grid->addWidget( labelDuration_Audio, 2, 0 );
-    grid->addMultiCellWidget( m_duration_audio, 2, 2, 1, 4 );
+    grid->addWidget( labelRate_Audio, 2, 0 );
+    grid->addMultiCellWidget( m_rate_audio, 2, 2, 1, 4 );
 
-    grid->addWidget( labelRate_Audio, 3, 0 );
-    grid->addMultiCellWidget( m_rate_audio, 3, 3, 1, 4 );
+    grid->addWidget( labelSampling_Frequency_Audio, 3, 0 );
+    grid->addMultiCellWidget( m_sampling_frequency_audio, 3, 3, 1, 4 );
 
-    grid->addWidget( labelFramesize_Audio, 4, 0 );
-    grid->addMultiCellWidget( m_framesize_audio, 4, 4, 1, 4 );
+    grid->addWidget( labelMode_Audio, 4, 0 );
+    grid->addMultiCellWidget( m_mode_audio, 4, 4, 1, 4 );
 
-    grid->addWidget( labelMode_Audio, 5, 0 );
-    grid->addMultiCellWidget( m_mode_audio, 5, 5, 1, 4 );
-
-    grid->addWidget( labelExtMode_Audio, 6, 0 );
-    grid->addMultiCellWidget( m_extmode_audio, 6, 6, 1, 4 );
-
-    grid->addWidget( labelEmphasis_Audio, 7, 0 );
-    grid->addMultiCellWidget( m_emphasis_audio, 7, 7, 1, 4 );
-
-    grid->addWidget( labelCopyright_Audio, 8, 0 );
-    grid->addMultiCellWidget( m_copyright_audio, 8, 8, 1, 4 );
+    grid->addWidget( labelCopyright_Audio, 5, 0 );
+    grid->addMultiCellWidget( m_copyright_audio, 5, 5, 1, 4 );
 
     grid->setRowStretch( 9, 4 );
 
@@ -756,7 +597,7 @@ void K3bVcdTrackDialog::setupVideoTab()
     // /////////////////////////////////////////////////
     // VIDEO TAB
     // /////////////////////////////////////////////////
-    QWidget* w = new QWidget( m_mainTabbed );
+    QWidget * w = new QWidget( m_mainTabbed );
 
     QGridLayout* grid = new QGridLayout( w );
     grid->setAlignment( Qt::AlignTop );
@@ -764,57 +605,50 @@ void K3bVcdTrackDialog::setupVideoTab()
     grid->setMargin( marginHint() );
 
     QLabel* labelMpegVer_Video = new QLabel( i18n( "Type:" ), w, "labelMpegVer_Video" );
-    QLabel* labelDuration_Video = new QLabel( i18n( "Estimated duration:" ), w, "labelDuration_Video" );
     QLabel* labelRate_Video = new QLabel( i18n( "Rate:" ), w, "labelRate_Video" );
     QLabel* labelChromaFormat_Video = new QLabel( i18n( "Chroma format:" ), w, "labelChromaFormat_Video" );
     QLabel* labelFormat_Video = new QLabel( i18n( "Video format:" ), w, "labelFormat_Video" );
-    QLabel* labelSize_Video = new QLabel( i18n( "Size:" ), w, "labelSize_Video" );
-    QLabel* labelDisplaySize_Video = new QLabel( i18n( "Display size:" ), w, "labelDisplaySize_Video" );
+    QLabel* labelResolution_Video = new QLabel( i18n( "Resolution:" ), w, "labelSize_Video" );
+    QLabel* labelHighResolution_Video = new QLabel( i18n( "High Resolution:" ), w, "labelHighResolution_Video" );
 
     m_mpegver_video = new QLabel( w, "m_mpegver_video" );
-    m_duration_video = new QLabel( w, "m_duration_video" );
     m_rate_video = new QLabel( w, "m_rate_video" );
     m_chromaformat_video = new QLabel( w, "m_chromaformat_video" );
     m_format_video = new QLabel( w, "m_format_video" );
-    m_size_video = new QLabel( w, "m_size_video" );
-    m_displaysize_video = new QLabel( w, "m_displaysize_video" );
+    m_resolution_video = new QLabel( w, "m_resolution_video" );
+    m_highresolution_video = new QLabel( w, "m_highresolution_video" );
 
     m_mpegver_video->setFrameShape( QLabel::LineEditPanel );
-    m_duration_video->setFrameShape( QLabel::LineEditPanel );
     m_rate_video->setFrameShape( QLabel::LineEditPanel );
     m_chromaformat_video->setFrameShape( QLabel::LineEditPanel );
     m_format_video->setFrameShape( QLabel::LineEditPanel );
-    m_size_video->setFrameShape( QLabel::LineEditPanel );
-    m_displaysize_video->setFrameShape( QLabel::LineEditPanel );
+    m_resolution_video->setFrameShape( QLabel::LineEditPanel );
+    m_highresolution_video->setFrameShape( QLabel::LineEditPanel );
 
     m_mpegver_video->setFrameShadow( QLabel::Sunken );
-    m_duration_video->setFrameShadow( QLabel::Sunken );
     m_rate_video->setFrameShadow( QLabel::Sunken );
     m_chromaformat_video->setFrameShadow( QLabel::Sunken );
     m_format_video->setFrameShadow( QLabel::Sunken );
-    m_size_video->setFrameShadow( QLabel::Sunken );
-    m_displaysize_video->setFrameShadow( QLabel::Sunken );
+    m_resolution_video->setFrameShadow( QLabel::Sunken );
+    m_highresolution_video->setFrameShadow( QLabel::Sunken );
 
     grid->addWidget( labelMpegVer_Video, 1, 0 );
     grid->addMultiCellWidget( m_mpegver_video, 1, 1, 1, 4 );
 
-    grid->addWidget( labelDuration_Video, 2, 0 );
-    grid->addMultiCellWidget( m_duration_video, 2, 2, 1, 4 );
+    grid->addWidget( labelRate_Video, 2, 0 );
+    grid->addMultiCellWidget( m_rate_video, 2, 2, 1, 4 );
 
-    grid->addWidget( labelRate_Video, 3, 0 );
-    grid->addMultiCellWidget( m_rate_video, 3, 3, 1, 4 );
+    grid->addWidget( labelChromaFormat_Video, 3, 0 );
+    grid->addMultiCellWidget( m_chromaformat_video, 3, 3, 1, 4 );
 
-    grid->addWidget( labelChromaFormat_Video, 4, 0 );
-    grid->addMultiCellWidget( m_chromaformat_video, 4, 4, 1, 4 );
+    grid->addWidget( labelFormat_Video, 4, 0 );
+    grid->addMultiCellWidget( m_format_video, 4, 4, 1, 4 );
 
-    grid->addWidget( labelFormat_Video, 5, 0 );
-    grid->addMultiCellWidget( m_format_video, 5, 5, 1, 4 );
+    grid->addWidget( labelResolution_Video, 5, 0 );
+    grid->addMultiCellWidget( m_resolution_video, 5, 5, 1, 4 );
 
-    grid->addWidget( labelSize_Video, 6, 0 );
-    grid->addMultiCellWidget( m_size_video, 6, 6, 1, 4 );
-
-    grid->addWidget( labelDisplaySize_Video, 7, 0 );
-    grid->addMultiCellWidget( m_displaysize_video, 7, 7, 1, 4 );
+    grid->addWidget( labelHighResolution_Video, 6, 0 );
+    grid->addMultiCellWidget( m_highresolution_video, 6, 6, 1, 4 );
 
     grid->setRowStretch( 9, 4 );
 
@@ -854,11 +688,12 @@ void K3bVcdTrackDialog::slotPbcToggled( bool b )
     m_groupPlay->setEnabled( b );
     m_groupPbc->setEnabled( b );
     m_check_reactivity->setEnabled( b );
-    if (b)
+    if ( b )
         slotWaitTimeChanged( m_spin_waittime->value() );
 }
 
-void K3bVcdTrackDialog::slotItemRenamed( QListViewItem* item, const QString &text, int col ) {
+void K3bVcdTrackDialog::slotItemRenamed( QListViewItem* item, const QString &text, int col )
+{
     kdDebug() << "K3bvcdTrackDialog::slotItemRenamed Text:" << text << endl;
 }
 

@@ -1,17 +1,17 @@
 /*
- *
- * $Id$
- * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
- *
- * This file is part of the K3b project.
- * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- * See the file "COPYING" for the exact licensing terms.
- */
+*
+* $Id$
+* Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
+*
+* This file is part of the K3b project.
+* Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or
+* (at your option) any later version.
+* See the file "COPYING" for the exact licensing terms.
+*/
 
 #include <qcheckbox.h>
 #include <qgroupbox.h>
@@ -56,24 +56,24 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
 
     QString vcdType;
     switch ( m_vcdDoc->vcdType() ) {
-        case K3bVcdDoc::VCD11:
+            case K3bVcdDoc::VCD11:
             vcdType = i18n( "Video CD (Version 1.1)" );
-        case K3bVcdDoc::VCD20:
+            case K3bVcdDoc::VCD20:
             vcdType = i18n( "Video CD (Version 2.0)" );
-        case K3bVcdDoc::SVCD10:
+            case K3bVcdDoc::SVCD10:
             vcdType = i18n( "Super Video CD" );
-        case K3bVcdDoc::HQVCD:
+            case K3bVcdDoc::HQVCD:
             vcdType = i18n( "High-Quality Video CD" );
-        default:
+            default:
             vcdType = i18n( "Video CD" );
     }
 
     setTitle( vcdType, i18n( "1 MPEG (%1)", "%n MPEGs (%1)",
                              m_vcdDoc->tracks() ->count() ).arg( KIO::convertSize( m_vcdDoc->size() ) ) );
 
-    const K3bExternalBin* cdrecordBin = k3bcore->externalBinManager()->binObject("cdrecord");
-    if ( cdrecordBin && cdrecordBin->hasFeature("cuefile") )
-        m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRDAO|K3b::CDRECORD );
+    const K3bExternalBin* cdrecordBin = k3bcore->externalBinManager() ->binObject( "cdrecord" );
+    if ( cdrecordBin && cdrecordBin->hasFeature( "cuefile" ) )
+        m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRDAO | K3b::CDRECORD );
     else
         m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRDAO );
 
@@ -216,7 +216,7 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
                                      "<li>Enables the use of the (deprecated) signature <b>\"ENTRYSVD\"</b> instead of <b>\"ENTRYVCD\"</b> for the file <b>\"/SVCD/ENTRY.SVD\"</b>.</li></ul>" ) );
     QWhatsThis::add
         ( m_checkVCD30interpretation, i18n( "<ul><li>Enables the use of the (deprecated) Chinese <b>\"/SVCD/TRACKS.SVD\"</b> format which differs from the format defined in the <b>IEC-62107</b> specification.</li></ul>"
-                                     "<p><b>The differences are most exposed on SVCDs containing more than one video track.</b>" ) );
+                                            "<p><b>The differences are most exposed on SVCDs containing more than one video track.</b>" ) );
 
     QWhatsThis::add
         ( m_check2336, i18n( "<p>though most devices will have problems with such an out-of-specification media."
@@ -457,7 +457,7 @@ void K3bVcdBurnDialog::setupVideoCdTab()
     // Only available on SVCD Type
     m_checkVCD30interpretation->setEnabled( false );
     m_checkVCD30interpretation->setChecked( false );
-    
+
     m_check2336 = new QCheckBox( i18n( "Use 2336 byte sectors" ), m_groupOptions );
 
     m_checkCdiSupport = new QCheckBox( i18n( "Enable CD-i support" ), m_groupOptions );
@@ -649,7 +649,7 @@ void K3bVcdBurnDialog::slotLoadK3bDefaults()
 void K3bVcdBurnDialog::saveSettings()
 {
     K3bProjectBurnDialog::saveSettings();
-    
+
     // set AlbumID if empty
     if ( m_editVolumeId->text().length() < 1 ) {
         if ( m_radioSvcd10->isChecked() )
@@ -679,14 +679,14 @@ void K3bVcdBurnDialog::saveSettings()
     vcdDoc() ->vcdOptions() ->setSector2336( m_check2336->isChecked() );
 
     vcdDoc() ->vcdOptions() ->setCdiSupport( m_checkCdiSupport->isChecked() );
-//    vcdDoc() ->setOnlyCreateImages( m_checkOnlyCreateImage->isChecked() );
+    //    vcdDoc() ->setOnlyCreateImages( m_checkOnlyCreateImage->isChecked() );
 
     vcdDoc() ->vcdOptions() ->setVolumeNumber( m_spinVolumeNumber->value() );
     vcdDoc() ->vcdOptions() ->setVolumeCount( m_spinVolumeCount->value() );
 
     vcdDoc() ->vcdOptions() ->setPbcEnabled( m_checkPbc->isChecked() );
     if ( m_checkPbc->isChecked() )
-        vcdDoc()-> setPbcTracks();
+        vcdDoc() -> setPbcTracks();
 
     vcdDoc() ->vcdOptions() ->setSegmentFolder( m_checkSegmentFolder->isChecked() );
     vcdDoc() ->vcdOptions() ->setRelaxedAps( m_checkRelaxedAps->isChecked() );
@@ -708,28 +708,28 @@ void K3bVcdBurnDialog::saveSettings()
 
 void K3bVcdBurnDialog::readSettings()
 {
-    K3bProjectBurnDialog::readSettings();    
+    K3bProjectBurnDialog::readSettings();
 
     m_checkNonCompliant->setEnabled( false );
     m_checkVCD30interpretation->setEnabled( false );
-    
+
     // read vcdType
     switch ( ( ( K3bVcdDoc* ) doc() ) ->vcdType() ) {
-        case K3bVcdDoc::VCD11:
+            case K3bVcdDoc::VCD11:
             m_radioVcd11->setChecked( true );
             break;
-        case K3bVcdDoc::VCD20:
+            case K3bVcdDoc::VCD20:
             m_radioVcd20->setChecked( true );
             break;
-        case K3bVcdDoc::SVCD10:
+            case K3bVcdDoc::SVCD10:
             m_radioSvcd10->setChecked( true );
             m_checkNonCompliant->setEnabled( true );
             m_checkVCD30interpretation->setEnabled( true );
             break;
-        case K3bVcdDoc::HQVCD:
+            case K3bVcdDoc::HQVCD:
             m_radioHqVcd10->setChecked( true );
             break;
-        default:
+            default:
             m_radioVcd20->setChecked( true );
             break;
     }
@@ -756,8 +756,7 @@ void K3bVcdBurnDialog::readSettings()
         m_checkNonCompliant->setEnabled( false );
         m_checkVCD30interpretation->setChecked( false );
         m_checkVCD30interpretation->setEnabled( false );
-    }
-    else {
+    } else {
         // NonCompliant only for SVCD
         m_checkNonCompliant->setChecked( false );
         m_checkNonCompliant->setEnabled( false );
@@ -789,7 +788,7 @@ void K3bVcdBurnDialog::readSettings()
     m_spinFrontMarginTrackSVCD->setValue( vcdDoc() ->vcdOptions() ->FrontMarginTrackSVCD() );
     m_spinRearMarginTrackSVCD->setValue( vcdDoc() ->vcdOptions() ->RearMarginTrackSVCD() );
 
-    if ( !doc()->tempDir().isEmpty() )
+    if ( !doc() ->tempDir().isEmpty() )
         m_tempDirSelectionWidget->setTempPath( doc() ->tempDir() );
 
     loadCdiConfig();
@@ -797,9 +796,9 @@ void K3bVcdBurnDialog::readSettings()
 
 void K3bVcdBurnDialog::slotLoadUserDefaults()
 {
-  K3bProjectBurnDialog::slotLoadUserDefaults();
+    K3bProjectBurnDialog::slotLoadUserDefaults();
 
-  // the group is set in K3bProjectBurnDialog
+    // the group is set in K3bProjectBurnDialog
     KConfig * c = kapp ->config();
 
     K3bVcdOptions o = K3bVcdOptions::load( c );
@@ -852,11 +851,11 @@ void K3bVcdBurnDialog::slotLoadUserDefaults()
 
 void K3bVcdBurnDialog::slotSaveUserDefaults()
 {
-  K3bProjectBurnDialog::slotSaveUserDefaults();
+    K3bProjectBurnDialog::slotSaveUserDefaults();
 
-  // the group is set in K3bProjectBurnDialog
-  KConfig * c = kapp ->config();
-  K3bVcdOptions o;
+    // the group is set in K3bProjectBurnDialog
+    KConfig * c = kapp ->config();
+    K3bVcdOptions o;
 
     o.setVolumeId( m_editVolumeId->text() );
     o.setPublisher( m_editPublisher->text() );
@@ -969,7 +968,7 @@ void K3bVcdBurnDialog::slotVcdTypeClicked( int i )
 {
 
     switch ( i ) {
-        case 0:
+            case 0:
             // vcd 1.1 no support for version 3.x.
             // v4 work also for vcd 1.1 but without CD-i menues.
             // Do anybody use vcd 1.1 with cd-i????
@@ -983,7 +982,7 @@ void K3bVcdBurnDialog::slotVcdTypeClicked( int i )
             m_checkUpdateScanOffsets->setEnabled( false );
             m_checkUpdateScanOffsets->setChecked( false );
             break;
-        case 1:
+            case 1:
             //vcd 2.0
             m_checkCdiSupport->setEnabled( vcdDoc() ->vcdOptions() ->checkCdiFiles() );
             m_groupCdi->setEnabled( m_checkCdiSupport->isChecked() );
@@ -995,7 +994,7 @@ void K3bVcdBurnDialog::slotVcdTypeClicked( int i )
             m_checkUpdateScanOffsets->setEnabled( false );
             m_checkUpdateScanOffsets->setChecked( false );
             break;
-        case 2:
+            case 2:
             //svcd 1.0
             m_checkCdiSupport->setEnabled( false );
             m_checkCdiSupport->setChecked( false );
@@ -1005,7 +1004,7 @@ void K3bVcdBurnDialog::slotVcdTypeClicked( int i )
             m_checkVCD30interpretation->setEnabled( true );
             m_checkUpdateScanOffsets->setEnabled( true );
             break;
-        case 3:
+            case 3:
             //hqvcd 1.0
             m_checkCdiSupport->setEnabled( false );
             m_checkCdiSupport->setChecked( false );
@@ -1074,10 +1073,10 @@ void K3bVcdBurnDialog::slotAutoDetect( bool b )
 
 void K3bVcdBurnDialog::toggleAllOptions()
 {
-  K3bProjectBurnDialog::toggleAllOptions();
+    K3bProjectBurnDialog::toggleAllOptions();
 
-  m_writingModeWidget->setSupportedModes( K3b::DAO );
-  m_checkRemoveBufferFiles->setDisabled( m_checkOnlyCreateImage->isChecked() );
+    m_writingModeWidget->setSupportedModes( K3b::DAO );
+    m_checkRemoveBufferFiles->setDisabled( m_checkOnlyCreateImage->isChecked() );
 }
 
 
