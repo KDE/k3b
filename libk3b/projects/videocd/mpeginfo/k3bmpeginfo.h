@@ -81,6 +81,8 @@ class audio_info
         float byterate;
         unsigned long sampfreq;
         int mode;
+        bool copyright;
+        bool original;
 };
 
 class Mpeginfo
@@ -118,20 +120,22 @@ class K3bMpegInfo
     public:
         K3bMpegInfo( const char* filename );
         ~K3bMpegInfo();
+        enum mpeg_version { MPEG_VERS_INVALID = 0, MPEG_VERS_MPEG1 = 1, MPEG_VERS_MPEG2 = 2 };
+        enum mode { MPEG_STEREO = 1, MPEG_JOINT_STEREO, MPEG_DUAL_CHANNEL, MPEG_SINGLE_CHANNEL };
 
         const int version()
         {
             return mpeg_info->version;
         };
+        const QString error_string()
+        {
+            return m_error_string;
+        };
         Mpeginfo* mpeg_info;
 
+
     private:
-
-        enum mpeg_version { MPEG_VERS_INVALID = 0, MPEG_VERS_MPEG1 = 1, MPEG_VERS_MPEG2 = 2 };
-        //        enum mode { MPEG_STEREO = 1, MPEG_JOINT_STEREO, MPEG_DUAL_CHANNEL, MPEG_SINGLE_CHANNEL };
-
         //  General ToolBox
-        //        byte Byte( off_t offset );
         byte GetByte( llong offset );
         byte bdGetByte( llong offset );
         llong GetNBytes( llong, int );
@@ -154,10 +158,6 @@ class K3bMpegInfo
 
         double ReadTS( llong offset );
         double ReadTSMpeg2( llong offset );
-        //        off_t bdFindNextMarker( off_t from, marker mark );
-
-        //        long Read12bitLength( off_t offset );
-        //        long Read2Bytes( off_t offset );
 
         FILE* m_mpegfile;
 
@@ -170,6 +170,7 @@ class K3bMpegInfo
         llong m_buffend;
         byte* m_buffer;
         double m_initial_TS;
+        QString m_error_string;
 
 };
 

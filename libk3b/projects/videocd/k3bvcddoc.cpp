@@ -189,6 +189,7 @@ void K3bVcdDoc::slotWorkUrlQueue()
 K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
 {
     char filename[ 255 ];
+    QString error_string = "";
     strcpy( filename, QFile::encodeName( url.path() ) );
     K3bMpegInfo* Mpeg = new K3bMpegInfo( filename );
 
@@ -261,10 +262,16 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
         // return here the new photoalbum track
     }
 
+    if ( Mpeg ) {
+        error_string = Mpeg->error_string();
+        delete Mpeg;
+    }
+
     // error (unsupported files)
     KMessageBox::error( kapp->mainWidget(), "(" + url.path() + ")\n" +
-                        i18n( "Only MPEG1 and MPEG2 video files are supported." ),
+                        i18n( "Only MPEG1 and MPEG2 video files are supported.\n" ) + error_string ,
                         i18n( "Wrong File Format" ) );
+
 
     return 0;
 }
@@ -385,22 +392,22 @@ void K3bVcdDoc::setVcdType( int type )
 {
     m_vcdType = type;
     switch ( type ) {
-            case 0:
+        case 0:
             //vcd 1.1
             vcdOptions() ->setVcdClass( "vcd" );
             vcdOptions() ->setVcdVersion( "1.1" );
             break;
-            case 1:
+        case 1:
             //vcd 2.0
             vcdOptions() ->setVcdClass( "vcd" );
             vcdOptions() ->setVcdVersion( "2.0" );
             break;
-            case 2:
+        case 2:
             //svcd 1.0
             vcdOptions() ->setVcdClass( "svcd" );
             vcdOptions() ->setVcdVersion( "1.0" );
             break;
-            case 3:
+        case 3:
             //hqvcd 1.0
             vcdOptions() ->setVcdClass( "hqvcd" );
             vcdOptions() ->setVcdVersion( "1.0" );
@@ -437,7 +444,7 @@ void K3bVcdDoc::setPbcTracks()
                     // we are the last track
                     if ( index == count - 1 ) {
                         switch ( i ) {
-                                case K3bVcdTrack::PREVIOUS:
+                            case K3bVcdTrack::PREVIOUS:
                                 // we are not alone :)
                                 if ( count > 1 ) {
                                     t = at( index - 1 );
@@ -448,16 +455,16 @@ void K3bVcdDoc::setPbcTracks()
                                     track->setPbcNonTrack( i, K3bVcdTrack::VIDEOEND );
                                 }
                                 break;
-                                case K3bVcdTrack::AFTERTIMEOUT:
-                                case K3bVcdTrack::NEXT:
+                            case K3bVcdTrack::AFTERTIMEOUT:
+                            case K3bVcdTrack::NEXT:
                                 track->setPbcTrack( i );
                                 track->setPbcNonTrack( i, K3bVcdTrack::VIDEOEND );
                                 break;
-                                case K3bVcdTrack::RETURN:
+                            case K3bVcdTrack::RETURN:
                                 track->setPbcTrack( i );
                                 track->setPbcNonTrack( i, K3bVcdTrack::VIDEOEND );
                                 break;
-                                case K3bVcdTrack::DEFAULT:
+                            case K3bVcdTrack::DEFAULT:
                                 track->setPbcTrack( i );
                                 track->setPbcNonTrack( i, K3bVcdTrack::DISABLED );
                                 break;
@@ -466,21 +473,21 @@ void K3bVcdDoc::setPbcTracks()
                     // we are the first track
                     else if ( index == 0 ) {
                         switch ( i ) {
-                                case K3bVcdTrack::PREVIOUS:
+                            case K3bVcdTrack::PREVIOUS:
                                 track->setPbcTrack( i );
                                 track->setPbcNonTrack( i, K3bVcdTrack::VIDEOEND );
                                 break;
-                                case K3bVcdTrack::AFTERTIMEOUT:
-                                case K3bVcdTrack::NEXT:
+                            case K3bVcdTrack::AFTERTIMEOUT:
+                            case K3bVcdTrack::NEXT:
                                 t = at( index + 1 );
                                 t->addToRevRefList( track );
                                 track->setPbcTrack( i, t );
                                 break;
-                                case K3bVcdTrack::RETURN:
+                            case K3bVcdTrack::RETURN:
                                 track->setPbcTrack( i );
                                 track->setPbcNonTrack( i, K3bVcdTrack::VIDEOEND );
                                 break;
-                                case K3bVcdTrack::DEFAULT:
+                            case K3bVcdTrack::DEFAULT:
                                 track->setPbcTrack( i );
                                 track->setPbcNonTrack( i, K3bVcdTrack::DISABLED );
                                 break;
@@ -489,22 +496,22 @@ void K3bVcdDoc::setPbcTracks()
                     // we are one of the other tracks and have PREVIOUS and NEXT Track
                     else {
                         switch ( i ) {
-                                case K3bVcdTrack::PREVIOUS:
+                            case K3bVcdTrack::PREVIOUS:
                                 t = at( index - 1 );
                                 t->addToRevRefList( track );
                                 track->setPbcTrack( i, t );
                                 break;
-                                case K3bVcdTrack::AFTERTIMEOUT:
-                                case K3bVcdTrack::NEXT:
+                            case K3bVcdTrack::AFTERTIMEOUT:
+                            case K3bVcdTrack::NEXT:
                                 t = at( index + 1 );
                                 t->addToRevRefList( track );
                                 track->setPbcTrack( i, t );
                                 break;
-                                case K3bVcdTrack::RETURN:
+                            case K3bVcdTrack::RETURN:
                                 track->setPbcTrack( i );
                                 track->setPbcNonTrack( i, K3bVcdTrack::VIDEOEND );
                                 break;
-                                case K3bVcdTrack::DEFAULT:
+                            case K3bVcdTrack::DEFAULT:
                                 track->setPbcTrack( i );
                                 track->setPbcNonTrack( i, K3bVcdTrack::DISABLED );
                                 break;

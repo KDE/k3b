@@ -53,14 +53,12 @@ class K3bVcdTrack
         {
             m_title = t;
         }
-        void setSegment( bool segment )
-        {
-            m_segment = segment;
-        }
         bool isSegment()
         {
-            return m_segment;
-        }
+            return mpegType() == 1;
+        };
+
+
 
         // PBC
         enum PbcTracks { PREVIOUS, NEXT, RETURN, DEFAULT, AFTERTIMEOUT, _maxPbcTracks };
@@ -127,6 +125,7 @@ class K3bVcdTrack
         const QString video_format( );
         const QString video_chroma( );
         const QString audio_mode( );
+        const QString audio_copyright( );
         const QString mpegTypeS( bool audio = false );
         const int mpegType();
 
@@ -154,7 +153,6 @@ class K3bVcdTrack
         int m_pbcwaittime;
         /*********************************************************************************************/
 
-        bool m_segment;
         bool m_reactivity;
         int m_filetype;
         QFile m_file;

@@ -44,7 +44,6 @@ K3bVcdTrack::K3bVcdTrack( QPtrList<K3bVcdTrack>* parent, const QString& filename
         m_pbcusrdefmap.insert( i, false );
     }
 
-    m_segment = false;
     m_reactivity = false;
 
     mpeg_info = new Mpeginfo();
@@ -192,7 +191,7 @@ const QString K3bVcdTrack::video_bitrate()
     if ( mpeg_info->has_video ) {
         for ( int i = 0; i < 2; i++ ) {
             if ( mpeg_info->video[ i ].seen ) {
-                return QString::number( mpeg_info->video[ i ].bitrate ) ;
+                return i18n( "%1 bit/s" ).arg( mpeg_info->video[ i ].bitrate ) ;
             }
         }
     }
@@ -224,19 +223,24 @@ const QString K3bVcdTrack::video_format()
                         return "MAC";
                         break;
                     case 5 :
+                    default:
                         return i18n( "Unspecified" );
+                        kdDebug() << "K3bVcdTrack::video_format() :" << mpeg_info->video[ i ].video_format << endl;
                         break;
                 }
             }
         }
-
-        return i18n( "n/a" );
     }
+    return i18n( "n/a" );
 }
 
 const QString K3bVcdTrack::video_chroma()
 {
     if ( mpeg_info->has_video ) {
+        // MPEG1 only supports 4:2:0 Format
+        if ( version() == MPEG_VERS_MPEG1 )
+            return QString( "4:2:0" );
+
         for ( int i = 0; i < 2; i++ ) {
             if ( mpeg_info->video[ i ].seen ) {
                 switch ( mpeg_info->video[ i ].chroma_format ) {
@@ -276,7 +280,7 @@ const QString K3bVcdTrack::audio_bitrate()
     if ( mpeg_info->has_audio ) {
         for ( int i = 0; i < 2; i++ ) {
             if ( mpeg_info->audio[ i ].seen ) {
-                return QString::number( mpeg_info->audio[ i ].bitrate ) ;
+                return i18n( "%1 bit/s" ).arg( mpeg_info->audio[ i ].bitrate ) ;
             }
         }
     }
@@ -304,6 +308,20 @@ const QString K3bVcdTrack::audio_mode( )
             if ( mpeg_info->audio[ i ].seen )
                 return QString( audio_type2str( mpeg_info->audio[ i ].version, mpeg_info->audio[ i ].mode, i ) );
 
+    }
+
+    return i18n( "n/a" );
+}
+
+const QString K3bVcdTrack::audio_copyright( )
+{
+    if ( mpeg_info->has_audio ) {
+        for ( int i = 2; i >= 0; i-- )
+            if ( mpeg_info->audio[ i ].seen )
+                if ( mpeg_info->audio[ i ].copyright )
+                    return QString( "(c) " ) + ( mpeg_info->audio[ i ].original ? i18n( "original" ) : i18n( "duplicate" ) );
+                else
+                    return ( mpeg_info->audio[ i ].original ? i18n( "original" ) : i18n( "duplicate" ) );
     }
 
     return i18n( "n/a" );
@@ -355,7 +373,7 @@ const int K3bVcdTrack::mpegType( )
 const QString K3bVcdTrack::audio_type2str( unsigned int version, unsigned int audio_mode, unsigned int audio_type )
 {
     kdDebug() << "K3bVcdTrack::audio_type2str() version:" << version << " audio_mode:" << audio_mode << " audio_type:" << audio_type << endl;
-    
+
     const QString audio_types[ 3 ][ 5 ] = {
                                               {
                                                   i18n( "unknown" ),

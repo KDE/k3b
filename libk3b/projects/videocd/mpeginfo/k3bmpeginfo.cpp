@@ -13,6 +13,10 @@
 * See the file "COPYING" for the exact licensing terms.
 */
 
+// kde includes
+#include <klocale.h>
+
+// k3b includes
 #include "k3bmpeginfo.h"
 
 static const double frame_rates[ 16 ] =
@@ -58,6 +62,7 @@ K3bMpegInfo::K3bMpegInfo( const char* filename )
     // nothing to do on an empty file
     if ( !m_filesize ) {
         kdDebug() << QString( "File %1 is empty." ).arg( m_filename ) << endl;
+        m_error_string = i18n( "File %1 is empty." ).arg( m_filename );
         return ;
     }
 
@@ -65,13 +70,6 @@ K3bMpegInfo::K3bMpegInfo( const char* filename )
 
     MpegParsePacket ( );
 
-    /*    if ( ParseMpeg() ) {
-            kdDebug() << QString( "%1 is a valid MPEG file" ).arg( filename ) << endl;
-        } else {
-            // can not handle this mpeg file
-            kdDebug() << QString( "%1 is not a valid MPEG file (can't handle it)" ).arg( filename ) << endl;
-        }
-    */
 }
 
 K3bMpegInfo::~K3bMpegInfo()
@@ -333,7 +331,7 @@ llong K3bMpegInfo::SkipPacketHeader( llong offset )
         while ( tmp_byte & 0x80 )
             tmp_byte = GetByte( ++offset );
 
-        if ( ( tmp_byte & 0xC0 ) == 0x40 )           // next two bits are 01
+        if ( ( tmp_byte & 0xC0 ) == 0x40 )            // next two bits are 01
             offset += 2;
 
         tmp_byte = GetByte( offset );
@@ -358,7 +356,7 @@ void K3bMpegInfo::ParseAudio ( llong offset, byte marker )
 
     const int a_idx = GetAudioIdx( marker );
 
-    if ( mpeg_info->audio[ a_idx ].seen )           /* we have it already */
+    if ( mpeg_info->audio[ a_idx ].seen )            /* we have it already */
         return ;
 
     if ( ( GetByte( offset ) != 0xFF ) || ( ( GetByte( offset + 1 ) & 0xF0 ) != 0xF0 ) ) {
@@ -373,7 +371,7 @@ void K3bMpegInfo::ParseAudio ( llong offset, byte marker )
     }
 
     // Find mpeg version 1.0 or 2.0
-    if ( GetByte( offset ) & 0x08 ) {
+    if ( GetByte( offset + 1 ) & 0x08 ) {
         if ( !mpeg2_5 )
             mpeg_info->audio[ a_idx ].version = 1;
         else
@@ -390,7 +388,7 @@ void K3bMpegInfo::ParseAudio ( llong offset, byte marker )
     switch ( mpeg_info->audio[ a_idx ].layer ) {
         case 0:
             mpeg_info->audio[ a_idx ].layer = 0;
-            return ;
+            break;
         case 1:
             mpeg_info->audio[ a_idx ].layer = 3;
             break;
@@ -442,8 +440,8 @@ void K3bMpegInfo::ParseAudio ( llong offset, byte marker )
                 {
                     0,
                 },
-                {44100, 48000, 32000, 0},           //mpeg 1
-                {22050, 24000, 16000, 0},           //mpeg 2
+                {44100, 48000, 32000, 0},            //mpeg 1
+                {22050, 24000, 16000, 0},            //mpeg 2
                 {11025, 12000, 8000, 0}   //mpeg 2.5
             };
 
@@ -457,8 +455,20 @@ void K3bMpegInfo::ParseAudio ( llong offset, byte marker )
     mpeg_info->audio[ a_idx ].sampfreq = sampling_rates[ mpeg_info->audio[ a_idx ].version ][ srate ];
 
     // Audio mode
-    kdDebug() << QString( "ParseAudio() GetByte for mode: %1 (%2)" ).arg( GetByte( offset + 3 ) >> 6 ).arg( 1 + ( GetByte( offset + 3 ) >> 6 ) ) << endl;
     mpeg_info->audio[ a_idx ].mode = 1 + ( GetByte( offset + 3 ) >> 6 ) ;
+
+    // Copyright bit
+    if ( GetByte( offset + 3 ) & 0x08 )
+        mpeg_info->audio[ a_idx ].copyright = true;
+    else
+        mpeg_info->audio[ a_idx ].copyright = false;
+
+    // Original/Copy bit
+    if ( GetByte( offset + 3 ) & 0x04 )
+        mpeg_info->audio[ a_idx ].original = true;
+    else
+        mpeg_info->audio[ a_idx ].original = false;
+
 
     mpeg_info->audio[ a_idx ].seen = true;
 }
@@ -476,11 +486,14 @@ void K3bMpegInfo::ParseVideo ( llong offset, byte marker )
                                            1.1250, 1.1575, 1.2015, 0.0000
                                        };
 
-    if ( mpeg_info->video[ v_idx ].seen )           /* we have it already */
+    if ( mpeg_info->video[ v_idx ].seen )            /* we have it already */
         return ;
 
     offset = FindNextMarker( offset + 1, MPEG_SEQUENCE_CODE );
-    kdDebug() << QString( "K3bMpegInfo::ParseVideo - FindNextMarker - offset:%1" ).arg( offset ) << endl;
+
+    if ( !offset )
+        return ;
+
     offset += 4;
 
     mpeg_info->video[ v_idx ].hsize = GetSize( offset ) >> 4;
@@ -549,16 +562,23 @@ bool K3bMpegInfo::MpegParsePacket ()
     /* verify the packet begins with a pack header */
     if ( !EnsureMPEG( 0, MPEG_PACK_HEADER_CODE ) ) {
         llong code = GetNBytes( 0, 4 );
-        kdDebug() << QString( "(K3bMpegInfo::mpeg_parse_packet ()) pack header code (0x%1) expected, but 0x%2 found" ).arg( 0x00000100 + MPEG_PACK_HEADER_CODE, 0, 16 ).arg( code, 0, 16 ) << endl;
 
-        if ( code == 0x00000100 + MPEG_SEQUENCE_CODE )
+        kdDebug() << QString( "(K3bMpegInfo::mpeg_parse_packet ()) pack header code 0x%1 expected, but 0x%2 found" ).arg( 0x00000100 + MPEG_PACK_HEADER_CODE, 0, 16 ).arg( code, 0, 16 ) << endl;
+
+        if ( code == 0x00000100 + MPEG_SEQUENCE_CODE ) {
             kdDebug() << "...this looks like a elementary video stream but a multiplexed program stream was required." << endl;
+            m_error_string = i18n( "This looks like a elementary video stream but a multiplexed program stream was required." );
+        }
 
-        if ( ( 0xfff00000 & code ) == 0xfff00000 )
+        if ( ( 0xfff00000 & code ) == 0xfff00000 ) {
             kdDebug() << "...this looks like a elementary audio stream but a multiplexed program stream was required." << endl;
+            m_error_string = i18n( "This looks like a elementary audio stream but a multiplexed program stream was required." );
+        }
 
-        if ( code == 0x52494646 )
+        if ( code == 0x52494646 ) {
             kdDebug() << "...this looks like a RIFF header but a plain multiplexed program stream was required." << endl;
+            m_error_string = i18n( "This looks like a RIFF header but a plain multiplexed program stream was required." );
+        }
 
         return false;
     }
@@ -594,7 +614,7 @@ bool K3bMpegInfo::MpegParsePacket ()
 
                 bits = GetByte( offset ) >> 4;
 
-                if ( bits == 0x2 )           /* %0010 ISO11172-1 */
+                if ( bits == 0x2 )            /* %0010 ISO11172-1 */
                 {
                     mpeg_info->version = MPEG_VERS_MPEG1;
 
@@ -607,10 +627,12 @@ bool K3bMpegInfo::MpegParsePacket ()
                     mpeg_info->muxrate = muxrate * 50 * 8;
 
                     if ( m_initial_TS == 0.0 )
+                    {
                         m_initial_TS = ReadTS( offset );
-                    kdDebug() << QString( "Initial TS = %1" ).arg( m_initial_TS ) << endl;
+                        kdDebug() << QString( "Initial TS = %1" ).arg( m_initial_TS ) << endl;
+                    }
 
-                } else if ( bits >> 2 == 0x1 )           /* %01xx ISO13818-1 */
+                } else if ( bits >> 2 == 0x1 )            /* %01xx ISO13818-1 */
                 {
                     mpeg_info->version = MPEG_VERS_MPEG2;
 
@@ -622,8 +644,10 @@ bool K3bMpegInfo::MpegParsePacket ()
                     mpeg_info->muxrate = muxrate * 50 * 8;
 
                     if ( m_initial_TS == 0.0 )
+                    {
                         m_initial_TS = ReadTSMpeg2( offset );
-                    kdDebug() << QString( "Initial TS = %1" ).arg( m_initial_TS ) << endl;
+                        kdDebug() << QString( "Initial TS = %1" ).arg( m_initial_TS ) << endl;
+                    }
 
                 } else {
                     kdDebug() << QString( "packet not recognized as either version 1 or 2 (%1)" ).arg( bits ) << endl;
@@ -647,13 +671,9 @@ bool K3bMpegInfo::MpegParsePacket ()
                 offset += 2;
                 // kdDebug() << QString( "offset = %1, size = %2" ).arg( offset ).arg( size ) << endl;
 
-                /*
-                          _register_streamid (code & 0xff, ctx);
-                */
                 switch ( mark ) {
                     case MPEG_SYSTEM_HEADER_CODE:
                         // kdDebug() << QString( "Systemheader: %1" ).arg( m_code, 0, 16 ) << endl;
-                        // _analyze_system_header (buf + pos, size, ctx);
                         break;
 
                     case MPEG_VIDEO_E0_CODE:
@@ -671,7 +691,7 @@ bool K3bMpegInfo::MpegParsePacket ()
                     case MPEG_AUDIO_C0_CODE:
                     case MPEG_AUDIO_C1_CODE:
                     case MPEG_AUDIO_C2_CODE:
-                        offset = SkipPacketHeader( offset );
+                        offset = SkipPacketHeader( offset - 6 );
                         ParseAudio( offset, mark );
                         // audio packet doesn't begin with 0xFFF
                         if ( !mpeg_info->audio[ GetAudioIdx( mark ) ].seen ) {
@@ -692,14 +712,12 @@ bool K3bMpegInfo::MpegParsePacket ()
 
                     case MPEG_PRIVATE_1_CODE:
                         kdDebug() << QString( "PrivateCode: %1" ).arg( mark, 0, 16 ) << endl;
-                        //_analyze_private_1_stream (buf + pos, size, ctx);
                         break;
                 }
                 break;
 
             case MPEG_PROGRAM_END_CODE:
                 kdDebug() << QString( "ProgramEndCode: %1" ).arg( mark, 0, 16 ) << endl;
-                // ctx->packet.pem = true;
                 offset += 4;
                 break;
 
@@ -725,10 +743,10 @@ bool K3bMpegInfo::MpegParsePacket ()
     last_pack += 4;
     int bits = GetByte( last_pack ) >> 4;
 
-    if ( bits == 0x2 )           /* %0010 ISO11172-1 */
+    if ( bits == 0x2 )            /* %0010 ISO11172-1 */
     {
         duration = ReadTS( last_pack );
-    } else if ( bits >> 2 == 0x1 )           /* %01xx ISO13818-1 */
+    } else if ( bits >> 2 == 0x1 )            /* %01xx ISO13818-1 */
     {
         duration = ReadTSMpeg2( last_pack );
     } else {

@@ -138,7 +138,7 @@ bool K3bVcdXmlView::write( const QString& fname )
 
     // create filesystem element
     QDomElement elemFileSystem = addSubElement( xmlDoc, root, "filesystem" );
-
+    
     // SEGMENT folder, some standalone DVD-Player need this
     if ( m_doc->vcdOptions() ->SegmentFolder() )
         addFolderElement( xmlDoc, elemFileSystem, "SEGMENT" );
@@ -287,23 +287,23 @@ void K3bVcdXmlView::doPbc( QDomDocument& doc, QDomElement& parent, K3bVcdTrack* 
             ref = ( track->getPbcTrack( i ) ->isSegment() ) ? "segment" : "sequence";
 
             switch ( i ) {
-                    case K3bVcdTrack::PREVIOUS:
+                case K3bVcdTrack::PREVIOUS:
                     elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "prev" );
                     elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustify( 3, '0' ) ) );
                     break;
-                    case K3bVcdTrack::NEXT:
+                case K3bVcdTrack::NEXT:
                     elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "next" );
                     elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustify( 3, '0' ) ) );
                     break;
-                    case K3bVcdTrack::RETURN:
+                case K3bVcdTrack::RETURN:
                     elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "return" );
                     elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustify( 3, '0' ) ) );
                     break;
-                    case K3bVcdTrack::DEFAULT:
+                case K3bVcdTrack::DEFAULT:
                     elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "default" );
                     elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustify( 3, '0' ) ) );
                     break;
-                    case K3bVcdTrack::AFTERTIMEOUT:
+                case K3bVcdTrack::AFTERTIMEOUT:
                     if ( track->getWaitTime() >= 0 ) {
                         elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "timeout" );
                         elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustify( 3, '0' ) ) );
@@ -314,23 +314,23 @@ void K3bVcdXmlView::doPbc( QDomDocument& doc, QDomElement& parent, K3bVcdTrack* 
             // jump to <endlist> otherwise do noop while disabled
             if ( track->getNonPbcTrack( i ) == K3bVcdTrack::VIDEOEND ) {
                 switch ( i ) {
-                        case K3bVcdTrack::PREVIOUS:
+                    case K3bVcdTrack::PREVIOUS:
                         elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "prev" );
                         elemPbcSelectionPNRDT.setAttribute( "ref", "end" );
                         break;
-                        case K3bVcdTrack::NEXT:
+                    case K3bVcdTrack::NEXT:
                         elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "next" );
                         elemPbcSelectionPNRDT.setAttribute( "ref", "end" );
                         break;
-                        case K3bVcdTrack::RETURN:
+                    case K3bVcdTrack::RETURN:
                         elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "return" );
                         elemPbcSelectionPNRDT.setAttribute( "ref", "end" );
                         break;
-                        case K3bVcdTrack::DEFAULT:
+                    case K3bVcdTrack::DEFAULT:
                         elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "default" );
                         elemPbcSelectionPNRDT.setAttribute( "ref", "end" );
                         break;
-                        case K3bVcdTrack::AFTERTIMEOUT:
+                    case K3bVcdTrack::AFTERTIMEOUT:
                         if ( track->getWaitTime() >= 0 ) {
                             elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "timeout" );
                             elemPbcSelectionPNRDT.setAttribute( "ref", "end" );

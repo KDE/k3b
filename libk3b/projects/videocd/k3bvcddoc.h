@@ -29,7 +29,7 @@
 #include <kurl.h>
 
 // K3b Includes
-#include "k3bvcdoptions.h" 
+#include "k3bvcdoptions.h"
 #include "mpeginfo/k3bmpeginfo.h"
 #include <k3bdoc.h>
 

@@ -136,11 +136,10 @@ void K3bVcdTrackDialog::slotApply()
 
 void K3bVcdTrackDialog::fillGui()
 {
-    QString tmp;
-    K3bVcdTrack* selectedTrack = m_selectedTracks.first();
+    K3bVcdTrack * selectedTrack = m_selectedTracks.first();
 
     m_mpegver_video->setText( selectedTrack->mpegTypeS() );
-    m_rate_video->setText( i18n( "%1 bit/s" ).arg( selectedTrack->video_bitrate() ) );
+    m_rate_video->setText( selectedTrack->video_bitrate() );
     m_chromaformat_video->setText( selectedTrack->video_chroma() );
     m_format_video->setText( selectedTrack->video_format() );
     m_highresolution_video->setText( selectedTrack->highresolution() );
@@ -151,7 +150,7 @@ void K3bVcdTrackDialog::fillGui()
 
     m_sampling_frequency_audio->setText( selectedTrack->audio_sampfreq() );
     m_mode_audio->setText( selectedTrack->audio_mode() );
-    m_copyright_audio->setText( "todo" );
+    m_copyright_audio->setText( selectedTrack->audio_copyright() );
 
     fillPbcGui();
 
