@@ -23,6 +23,25 @@
 
 namespace K3bCdDevice
 {
+
+  struct cdtext_pack {
+    unsigned char id1;
+    unsigned char id2;
+    unsigned char id3;
+#ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
+    unsigned char dbcc:       1;
+    unsigned char blocknum:   3;
+    unsigned char charpos:    4;
+#else
+    unsigned char charpos:    4;
+    unsigned char blocknum:   3;
+    unsigned char dbcc:       1;
+#endif
+    unsigned char data[12];
+    unsigned char crc[2];
+  };
+
+
   // TODO: add language stuff
 
   class TrackCdText
@@ -156,11 +175,17 @@ namespace K3bCdDevice
       const TrackCdText& trackCdText( int i ) const { return m_trackCdText[i]; }
       void addTrackCdText( const TrackCdText& t ) { m_trackCdText.append(t); }
 
-      void debug();
+      void debug() const;
 	
     private:
       // TODO: remove this (see above)
       void fixup( QString& s ) { s.replace( '/', "_" ); s.replace( '\"', "_" ); }
+
+      const QString& textForPackType( int packType, unsigned int track ) const;
+      unsigned int textLengthForPackType( int packType ) const;
+      QByteArray createPackData( int packType, unsigned int& ) const;
+      void savePack( cdtext_pack* pack, QByteArray& data, unsigned int& dataFill ) const;
+      void appendByteArray( QByteArray& a, const QByteArray& b ) const;
 
       QString m_title;
       QString m_performer;
@@ -173,6 +198,8 @@ namespace K3bCdDevice
 
       QValueVector<TrackCdText> m_trackCdText;
     };
+
+  QCString encodeCdText( const QString& s, bool* illegalChars = 0 );
 }
 
 #endif
