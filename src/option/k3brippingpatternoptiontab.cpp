@@ -30,7 +30,7 @@
 #include <kapp.h>
 #include <kconfig.h>
 
-K3bRippingPatternOptionTab::K3bRippingPatternOptionTab(QWidget *parent, const char *name=0 ) : QWidget(parent,name) {
+K3bRippingPatternOptionTab::K3bRippingPatternOptionTab(QWidget *parent, const char *name ) : QWidget(parent,name) {
     setup();
 }
 K3bRippingPatternOptionTab::~K3bRippingPatternOptionTab(){
