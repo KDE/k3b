@@ -122,6 +122,7 @@ K3bCdCopyJob::K3bCdCopyJob( K3bJobHandler* hdl, QObject* parent )
     m_onlyCreateImages(false),
     m_onTheFly(true),
     m_ignoreReadErrors(false),
+    m_noCorrection(false),
     m_readRetries(128),
     m_preferCdText(false),
     m_copyCdText(true),
@@ -623,6 +624,7 @@ void K3bCdCopyJob::readNextSession()
 
     d->dataTrackReader->setDevice( m_readerDevice );
     d->dataTrackReader->setIgnoreErrors( m_ignoreReadErrors );
+    d->dataTrackReader->setNoCorrection( m_noCorrection );
     d->dataTrackReader->setRetries( m_readRetries );
     
     K3bTrack* track = 0;

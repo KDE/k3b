@@ -891,6 +891,12 @@ void K3bCdrdaoWriter::parseCdrdaoError( const QString& line )
 		      ERROR );
     m_knownError = true;
   }
+  else if( line.contains( "exceeds capacity" ) ) {
+    emit infoMessage( i18n("Data does not fit on disk."), ERROR );
+    if( m_cdrdaoBinObject->hasFeature("overburn") )
+      emit infoMessage( i18n("Enable overburning in the advanced K3b settings to burn anyway."), INFO );
+    m_knownError = true;
+  }
  //  else if( !line.contains( "remote progress message" ) )
 //     emit infoMessage( line, K3bJob::ERROR );
 }

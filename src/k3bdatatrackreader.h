@@ -58,6 +58,8 @@ class K3bDataTrackReader : public K3bThreadJob
    */
   void setIgnoreErrors( bool b );
 
+  void setNoCorrection( bool b );
+
   /**
    * the data gets written directly into fd instead of the imagefile.
    * Be aware that this only makes sense before starting the job.

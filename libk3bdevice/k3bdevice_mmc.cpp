@@ -649,6 +649,9 @@ bool K3bDevice::Device::modeSelect( unsigned char* page, int pageLen, bool pf, b
   page[6] = 0;
   page[7] = 0;
 
+  // PS bit reserved
+  page[8] &= 0x3F;
+
   ScsiCommand cmd( this );
   cmd[0] = MMC_MODE_SELECT;
   cmd[1] = ( sp ? 1 : 0 ) | ( pf ? 0x10 : 0 );

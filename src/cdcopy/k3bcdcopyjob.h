@@ -62,6 +62,7 @@ class K3bCdCopyJob : public K3bBurnJob
   void setReadRetries( int i ) { m_readRetries = i; }
   void setPreferCdText( bool b ) { m_preferCdText = b; }
   void setCopyCdText( bool b ) { m_copyCdText = b; }
+  void setNoCorrection( bool b ) { m_noCorrection = b; }
 
  private slots:
   void slotDiskInfoReady( K3bDevice::DeviceHandler* );
@@ -97,6 +98,7 @@ class K3bCdCopyJob : public K3bBurnJob
   bool m_onlyCreateImages;
   bool m_onTheFly;
   bool m_ignoreReadErrors;
+  bool m_noCorrection;
   int m_readRetries;
   bool m_preferCdText;
   bool m_copyCdText;

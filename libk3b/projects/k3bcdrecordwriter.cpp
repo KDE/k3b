@@ -667,8 +667,11 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	if( k3bcore->config()->readBoolEntry( "Allow overburning", false ) &&
 	    m_cdrecordBinObject->hasFeature("overburn") )
 	  emit infoMessage( i18n("Data did not fit on disk."), ERROR );
-	else
+	else {
 	  emit infoMessage( i18n("Data does not fit on disk."), ERROR );
+	  if( m_cdrecordBinObject->hasFeature("overburn") )
+	    emit infoMessage( i18n("Enable overburning in the advanced K3b settings to burn anyway."), INFO );
+	}
 	break;
       case BAD_OPTION:
 	// error message has already been emited earlier since we needed the actual line

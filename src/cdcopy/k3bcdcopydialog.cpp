@@ -177,7 +177,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   m_checkReadCdText = new QCheckBox( i18n("Copy CD-Text"), groupAudio );
   m_checkPrefereCdText = new QCheckBox( i18n("Prefer CD-Text"), groupAudio );
 
-  QGroupBox* groupData = new QGroupBox( 1, Qt::Vertical, i18n("Cloning"), advancedTab ); 
+  QGroupBox* groupData = new QGroupBox( 1, Qt::Vertical, i18n("Data"), advancedTab ); 
   groupData->setInsideSpacing( spacingHint() );
   groupData->setInsideMargin( marginHint() );
   m_checkNoCorrection = new QCheckBox( i18n("No error correction"), groupData );
@@ -315,6 +315,7 @@ void K3bCdCopyDialog::slotStartClicked()
     job->setCopyCdText( m_checkReadCdText->isChecked() );
     job->setPreferCdText( m_checkPrefereCdText->isChecked() );
     job->setIgnoreReadErrors( m_checkIgnoreReadErrors->isChecked() );
+    job->setNoCorrection( m_checkNoCorrection->isChecked() );
     job->setWritingMode( m_writingModeWidget->writingMode() );
 
     burnJob = job;
@@ -372,7 +373,7 @@ void K3bCdCopyDialog::slotToggleAll()
 
    m_checkIgnoreReadErrors->setDisabled( m_comboCopyMode->currentItem() == 1 );
 
-   m_checkNoCorrection->setEnabled( m_comboCopyMode->currentItem() == 1 );
+   //   m_checkNoCorrection->setEnabled( m_comboCopyMode->currentItem() == 1 );
 
    m_writingModeWidget->setEnabled( !m_checkOnlyCreateImage->isChecked() );
 

@@ -453,6 +453,9 @@ namespace K3bDevice
      */
     bool readDiscInfo( unsigned char** data, int& dataLen ) const;
 
+    /**
+     * @param pf If false all fields in the descriptor data is vendor specific. Default should be true.
+     */
     bool modeSelect( unsigned char* page, int pageLen, bool pf, bool sp ) const;
 
     /**

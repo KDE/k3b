@@ -41,6 +41,7 @@ public:
     : K3bThread(),
       m_canceled(false),
       m_ignoreReadErrors(false),
+      m_noCorrection(false),
       m_retries(10),
       m_device(0),
       m_fd(-1),
@@ -65,6 +66,7 @@ public:
     // 1. determine sector size by checking the first sectors mode
     //    if impossible or MODE2 (mode2 formless) finish(false)
 
+    m_useLibdvdcss = false;
     m_sectorSize = 0;
     if( m_device->isDVD() ) {
       m_sectorSize = 2048;
@@ -72,7 +74,6 @@ public:
       //
       // In case of an encrypted VideoDVD we read with libdvdcss which takes care of decrypting the vobs
       //
-      m_useLibdvdcss = false;
       if( m_device->copyrightProtectionSystemType() > 0 ) {
 	
 	// close the device for libdvdcss
@@ -142,11 +143,27 @@ public:
     }
 
     //
+    // set the error recovery mode to 0x21 or 0x20 depending on m_ignoreReadErrors
+    // TODO: should we also set RC=1 in m_ignoreReadErrors mode (0x11 because TB is ignored)
+    //
+    setErrorRecovery( m_device, m_noCorrection ? 0x21 : 0x20 );
+
+    //
     // Let the drive determine the optimal reading speed
     //
     m_device->setSpeed( 0xffff, 0xffff );
 
-    s_bufferSizeSectors = K3bDevice::determineMaxReadingBufferSize( m_device, m_firstSector );
+    s_bufferSizeSectors = 128;
+    unsigned char* buffer = new unsigned char[m_sectorSize*s_bufferSizeSectors];
+    while( read( buffer, m_firstSector.lba(), s_bufferSizeSectors ) < 0 ) {
+      kdDebug() << "(K3bDataTrackReader) determine max read sectors: "
+		<< s_bufferSizeSectors << " too high." << endl;
+      s_bufferSizeSectors--;
+    }
+    kdDebug() << "(K3bDataTrackReader) determine max read sectors: " 
+	      << s_bufferSizeSectors << " is max." << endl;
+
+    //    s_bufferSizeSectors = K3bDevice::determineMaxReadingBufferSize( m_device, m_firstSector );
     if( s_bufferSizeSectors <= 0 ) {
       emitInfoMessage( i18n("Error while reading sector %1.").arg(m_firstSector.lba()), K3bJob::ERROR );
       emitFinished(false);
@@ -154,8 +171,6 @@ public:
     }
 
     kdDebug() << "(K3bDataTrackReader) using buffer size of " << s_bufferSizeSectors << " blocks." << endl;
-
-    unsigned char* buffer = new unsigned char[m_sectorSize*s_bufferSizeSectors];
 
     // 2. get it on
     K3b::Msf currentSector = m_firstSector;
@@ -224,6 +239,9 @@ public:
       emitInfoMessage( i18n("Ignored %n erroneous sector.", "Ignored a total of %n erroneous sectors.", m_errorSectorCount ),
 		       K3bJob::ERROR );
 
+    // reset the error recovery mode
+    setErrorRecovery( m_device, m_oldErrorRecoveryMode );
+
     // cleanup
     m_device->close();
     delete [] buffer;
@@ -244,12 +262,12 @@ public:
       return m_libcss->readWrapped( reinterpret_cast<void*>(buffer), sector, len );
     }
 
-
     //
     // Standard reading
     //
     else {
       bool success = false;
+      //      setErrorRecovery( m_device, m_ignoreReadErrors ? 0x21 : 0x20 );
       if( m_sectorSize == 2048 )
 	success = m_device->read10( buffer, len*2048, sector, len );
       else
@@ -298,7 +316,7 @@ public:
 	if( m_ignoreReadErrors ) {
 	  emitInfoMessage( i18n("Ignoring read error in sector %1.").arg(sector), K3bJob::ERROR );
 	  ++m_errorSectorCount;
-	  ::memset( &buffer[i], 0, 1 );
+	  //	  ::memset( &buffer[i], 0, 1 );
 	  success = true;
 	}
 	else {
@@ -314,12 +332,40 @@ public:
   }
 
 
+  bool setErrorRecovery( K3bDevice::Device* dev, int code ) {
+    unsigned char* data = 0;
+    int dataLen = 0;
+    if( !dev->modeSense( &data, dataLen, 0x01 ) )
+      return false;
+    
+    // in MMC1 the page has 8 bytes (12 in MMC4 but we only need the first 3 anyway)
+    if( dataLen < 8+8 ) {
+      kdDebug() << "(K3bDataTrackReader) modepage 0x01 data too small: " << dataLen << endl;
+      delete [] data;
+      return false;
+    }
+
+    m_oldErrorRecoveryMode = data[8+2];
+    data[8+2] = code;
+
+    if( m_oldErrorRecoveryMode != code )
+      kdDebug() << "(K3bDataTrackReader) changing data recovery mode from " << m_oldErrorRecoveryMode << " to " << code << endl;
+
+    bool success = dev->modeSelect( data, dataLen, true, false );
+
+    delete [] data;
+
+    return success;
+  }
+
+
   void cancel() {
     m_canceled = true;
   }
 
   bool m_canceled;
   bool m_ignoreReadErrors;
+  bool m_noCorrection;
   int m_retries;
   K3bDevice::Device* m_device;
   K3b::Msf m_firstSector;
@@ -330,6 +376,8 @@ public:
   int m_sectorSize;
   bool m_useLibdvdcss;
   K3bLibDvdCss* m_libcss;
+
+  int m_oldErrorRecoveryMode;
 
   int m_errorSectorCount;
 };
@@ -371,6 +419,12 @@ void K3bDataTrackReader::setRetries( int r )
 void K3bDataTrackReader::setIgnoreErrors( bool b )
 {
   m_thread->m_ignoreReadErrors = b;
+}
+
+
+void K3bDataTrackReader::setNoCorrection( bool b )
+{
+  m_thread->m_noCorrection = b;
 }
 
 

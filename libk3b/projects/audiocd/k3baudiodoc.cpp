@@ -882,6 +882,7 @@ void K3bAudioDoc::slotTrackChanged( K3bAudioTrack* track )
     kdDebug() << "(K3bAudioDoc::slotTrackChanged) track " << track << " empty. Deleting." << endl;
     delete track; // this will emit the proper signal
   }
+  kdDebug() << "(K3bAudioDoc::slotTrackChanged done" << track << endl;
 }
 
 
