@@ -32,6 +32,7 @@
 #include "k3b.h"
 #include "k3bsplash.h"
 #include "tools/k3bglobals.h"
+#include "k3bdoc.h"
 
 
 static const char *description = 
@@ -41,6 +42,9 @@ I18N_NOOP("K3b is a CD burning program that has two aims:\nusability and as many
 static KCmdLineOptions options[] =
   {
     { "+[File]", I18N_NOOP("file to open"), 0 },
+    { "data", I18N_NOOP("Create a new data project and add all given files"), 0 },
+    { "audio", I18N_NOOP("Create a new audio project and add all given files"), 0 },
+    { "copy", I18N_NOOP("Open the cd copy dialog"), 0 },
     { 0, 0, 0 }
     // INSERT YOUR COMMANDLINE OPTIONS HERE
   };
@@ -100,14 +104,31 @@ int main(int argc, char *argv[])
       k3bMainWidget->show();
 
       KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-		
-      if (args->count())
-	{
-	  for(int i=0;i<args->count();i++)
-	    {
-	      k3bMainWidget->openDocumentFile(args->arg(i));
-	    }
+
+      if( args->isSet( "data" ) ) {
+	// create new data project and add all arguments
+	k3bMainWidget->slotNewDataDoc();
+	K3bDoc* doc = k3bMainWidget->activeDoc();
+	for( int i = 0; i < args->count(); i++ ) {
+	  doc->addUrl( args->url(i) );
 	}
+      }
+      else if( args->isSet( "data" ) ) {
+	// create new audio project and add all arguments
+	k3bMainWidget->slotNewAudioDoc();
+	K3bDoc* doc = k3bMainWidget->activeDoc();
+	for( int i = 0; i < args->count(); i++ ) {
+	  doc->addUrl( args->url(i) );
+	}
+      }
+      else if(args->count()) {
+	for( int i = 0; i < args->count(); i++ ) {
+	  k3bMainWidget->openDocumentFile( args->url(i) );
+	}
+      }
+
+      if( args->isSet("copy") )
+	k3bMainWidget->slotCdCopy();
 		
       args->clear();
       //    }

@@ -1,0 +1,13 @@
+# KDE Config File
+[Desktop Entry]
+Encoding=UTF-8
+MimeType=application/x-k3b
+Comment=K3b Project
+Comment[de]=K3b Projekt
+Icon=k3b
+Type=MimeType
+Patterns=*.k3b;
+X-KDE-AutoEmbed=false
+[Property::X-KDE-NativeExtension]
+Type=QString
+Value=.k3b

@@ -1,12 +1,24 @@
 # KDE Config File  
 [Desktop Entry]
 Type=Application
-Exec=k3b -caption "%c" %i %m  
-Icon=k3b.png
-MiniIcon=k3b.png
+Exec=k3b
+Icon=k3b
 DocPath=k3b/index.html
 Comment=CD writing program
-Comment[de]=CD Brenn Programm
+Comment[da]=CD-skriveprogram
+Comment[de]=CD-Schreibprogramm
+Comment[es]=Programa de escritura de CDs
+Comment[fr]=Programme de gravure de CD
+Comment[he]=תוכנית צריבת תקליטורים
+Comment[it]=Programma di masterizzazione
+Comment[pt]=Um programa de gravação de CDs
+Comment[pt_BR]=Programa de escrita em CD
+Comment[sk]=Preogram pre zápis CD
+Comment[sv]=Cd-brännprogram
+Comment[xh]=Ubhalo lwe Cd lodweiso Iwenkqubo
+Comment[zh_TW]=CD 燒錄程式
+Comment[zu]=Uhlelo lwemisebenzi olubhala i-CD
 Terminal=0
 Name=K3b
-Name[de]=K3b
+MimeType=application/x-k3b
+X-KDE-NativeMimeType=application/x-k3b

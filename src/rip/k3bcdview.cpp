@@ -98,7 +98,7 @@ void K3bCdView::setupGUI()
   m_listView->addColumn(i18n( "No.") );
   m_listView->addColumn(i18n( "Artist") );
   m_listView->addColumn(i18n( "Title") );
-  m_listView->addColumn(i18n( "Time") );
+  m_listView->addColumn(i18n( "Length") );
   m_listView->addColumn(i18n( "Size") );
   m_listView->addColumn(i18n( "Type") );
   m_listView->addColumn(i18n( "Extended info") );

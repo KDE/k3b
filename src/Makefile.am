@@ -10,6 +10,9 @@ EXTRA_DIST = main.cpp k3b.cpp k3b.h k3bdoc.cpp k3bdoc.h k3bview.cpp k3bview.h k3
 apps_DATA = k3b.desktop
 appsdir = $(kde_appsdir)/Multimedia
 
+kdemime_DATA = x-k3b.desktop
+kdemimedir = $(kde_mimedir)/application
+
 ####### kdevelop will overwrite this part!!! (end)############
 # this 10 paths are KDE specific. Use them:
 # kde_htmldir       Where your docs should go to. (contains lang subdirs)

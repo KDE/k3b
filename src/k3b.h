@@ -126,6 +126,12 @@ class K3bMainWindow : public KDockMainWindow
   void slotNewAudioDoc();
   void slotNewDataDoc();
   void slotNewMixedDoc();
+  void slotBlankCdrw();
+  void slotWriteIsoImage();
+  // encoding dialog for transcode encoding utility
+  void slotDivxEncoding();
+  void slotCdCopy();
+  void slotK3bSetup();
 
  signals:
   void initializationInfo( const QString& );
@@ -243,13 +249,6 @@ class K3bMainWindow : public KDockMainWindow
   void slotStatusMsg(const QString &text);
 
   void slotShowDirView();
-
-  void slotBlankCdrw();
-  void slotWriteIsoImage();
-  // encoding dialog for transcode encoding utility
-  void slotDivxEncoding();
-  void slotCdCopy();
-  void slotK3bSetup();
 
   void slotProjectAddFiles();
 
