@@ -1,6 +1,6 @@
 
 #include "k3bexternalbinoptiontab.h"
-#include "../k3bexternalbinmanager.h"
+#include "../tools/k3bexternalbinmanager.h"
 
 #include <kmessagebox.h>
 #include <kdialog.h>

@@ -62,7 +62,7 @@
 #include "cdinfo/k3bcdinfodialog.h"
 #include "k3bblankingdialog.h"
 #include "data/k3bisoimagewritingdialog.h"
-#include "k3bexternalbinmanager.h"
+#include "tools/k3bexternalbinmanager.h"
 #include "k3bprojecttabwidget.h"
 #include "rip/songdb/k3bsongmanager.h"
 #include "k3baudioplayer.h"
@@ -826,10 +826,10 @@ QString K3bMainWindow::findTempFile( const QString& ending, const QString& d )
 	
   // find a free filename
   int num = 1;
-  while( QFile::exists( url.path() + "k3b-" + QString::number( num ) + "." + ending ) )
+  while( QFile::exists( url.path(1) + "k3b-" + QString::number( num ) + "." + ending ) )
     num++;
 
-  return url.path() + "k3b-" + QString::number( num ) + "." + ending;
+  return url.path(1) + "k3b-" + QString::number( num ) + "." + ending;
 }
 
 

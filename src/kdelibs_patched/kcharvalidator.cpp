@@ -2,6 +2,7 @@
 #include "kcharvalidator.h"
 
 #include <qregexp.h>
+#include <qwidget.h>
 
 
 KCharValidator::KCharValidator( QWidget* parent, const char* name,

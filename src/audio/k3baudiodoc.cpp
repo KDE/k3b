@@ -150,7 +150,8 @@ void K3bAudioDoc::slotWorkUrlQueue()
     if( length > 0 || K3bAudioModuleFactory::moduleAvailable( addedFile ) ) {
       K3bAudioTrack* newTrack =  new K3bAudioTrack( m_tracks, addedFile.path() );
       if( length > 0 ) {
-	newTrack->setLength( length );  // no module needed for wave files
+	newTrack->setLength( length / 576 );  // no module needed for wave files
+	newTrack->setStatus( K3bAudioTrack::OK );
       }
       else {
 	K3bAudioModule* module = K3bAudioModuleFactory::createModule( newTrack );

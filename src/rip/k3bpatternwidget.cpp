@@ -25,6 +25,7 @@
 #include <qgroupbox.h>
 #include <qvgroupbox.h>
 #include <qhgroupbox.h>
+#include <qbuttongroup.h>
 #include <qvbox.h>
 #include <qhbox.h>
 #include <qcheckbox.h>

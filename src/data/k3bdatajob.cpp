@@ -177,14 +177,14 @@ void K3bDataJob::slotStartWritingOnTheFly()
   *m_process << "-";
 			
   // debugging output
-  cout << "***** mkisofs parameters:\n";
-  QStrList* _args = m_process->args();
-  QStrListIterator _it(*_args);
-  while( _it ) {
-    cout << *_it << " ";
-    ++_it;
-  }
-  cout << endl << flush;
+//   cout << "***** mkisofs parameters:\n";
+//   QStrList* _args = m_process->args();
+//   QStrListIterator _it(*_args);
+//   while( _it ) {
+//     cout << *_it << " ";
+//     ++_it;
+//   }
+//   cout << endl << flush;
 
 			
   // connect to the cdrecord slots
@@ -322,14 +322,14 @@ void K3bDataJob::slotStartWriting()
     *m_process << *it;
 			
   // debugging output
-  cout << "***** cdrecord parameters:\n";
-  QStrList* _args = m_process->args();
-  QStrListIterator _it(*_args);
-  while( _it ) {
-    cout << *_it << " ";
-    ++_it;
-  }
-  cout << endl << flush;
+//   cout << "***** cdrecord parameters:\n";
+//   QStrList* _args = m_process->args();
+//   QStrListIterator _it(*_args);
+//   while( _it ) {
+//     cout << *_it << " ";
+//     ++_it;
+//   }
+//   cout << endl << flush;
 
   *m_process << m_doc->isoImage();
 				

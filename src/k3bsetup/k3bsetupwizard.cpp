@@ -4,7 +4,7 @@
 
 #include "../device/k3bdevicemanager.h"
 #include "../device/k3bdevice.h"
-#include "../k3bexternalbinmanager.h"
+#include "../tools/k3bexternalbinmanager.h"
 
 #include <pwd.h>
 #include <stdio.h>

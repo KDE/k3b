@@ -33,6 +33,8 @@
 #include <kmimetype.h>
 #include <kstddirs.h>
 #include <kurldrag.h>
+#include <kiconloader.h>
+
 #include <stdlib.h>
 #include <assert.h>
 

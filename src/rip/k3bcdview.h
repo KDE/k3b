@@ -25,8 +25,9 @@
 #include <qwidget.h>
 #include <qvbox.h>
 #include <qarray.h>
-class QString;
-class QStringList;
+#include <qstringlist.h>
+
+
 struct cdrom_drive;
 class K3bCddb;
 class K3bCdda;

@@ -25,7 +25,7 @@
 #include "input/k3baudiomodule.h"
 #include "../device/k3bdevice.h"
 #include "../device/k3bemptydiscwaiter.h"
-#include "../k3bexternalbinmanager.h"
+#include "../tools/k3bexternalbinmanager.h"
 
 #include <kprocess.h>
 #include <klocale.h>
@@ -35,7 +35,8 @@
 
 #include <qstring.h>
 #include <qdatetime.h>
-#include <qfile.h>
+//#include <qfile.h>
+#include <qtimer.h>
 
 #include <iostream>
 #include <cmath>
@@ -361,7 +362,7 @@ void K3bAudioJob::cancel()
 void K3bAudioJob::cancelAll()
 {
   if( m_process->isRunning() ) {
-    m_process->disconnect();
+    m_process->disconnect(this);
     m_process->kill();
 
     // we need to unlock the writer because cdrdao/cdrecord locked it while writing
@@ -379,13 +380,13 @@ void K3bAudioJob::cancelAll()
 
   if( m_currentDecodedTrack )
     if( m_currentDecodedTrack->module() ) {
-      m_currentDecodedTrack->module()->disconnect();
+      m_currentDecodedTrack->module()->disconnect(this);
       m_currentDecodedTrack->module()->cancel();
 
       // remove unfinished wav files
-      if( m_currentWrittenWavFile->exists() ) {
-	m_currentWrittenWavFile->remove();
-	m_currentWrittenWavFile->setName( QString::null );
+      if( m_currentWrittenWavFile.exists() ) {
+	m_currentWrittenWavFile.remove();
+	m_currentWrittenWavFile.setName( QString::null );
       }
     }
   
@@ -403,6 +404,8 @@ void K3bAudioJob::start()
   m_bLengthInfoEmited = false;
   m_currentWrittenTrackNumber = 0;
   m_currentWrittenTrack = m_doc->at(0);
+  m_currentDecodedTrack = m_currentWrittenTrack;
+  m_currentDecodedTrackNumber = 0;
 
   emit started();
 
@@ -417,11 +420,11 @@ void K3bAudioJob::slotTryStart()
   for( ; it.current(); ++it ) {
     if( it.current()->length() == 0 ) {
       qDebug("(K3bAudioJob) not all length ready.");
-      QTimer::singleShot( 1000, this, SLOT(slotTryStart()) );
       if( !m_bLengthInfoEmited ) {
 	emit infoMessage( i18n("Waiting for all tracks' length to be calculated."), STATUS );
 	m_bLengthInfoEmited = true;
       }
+      QTimer::singleShot( 1000, this, SLOT(slotTryStart()) );
       return;
     }
   }
@@ -470,23 +473,14 @@ void K3bAudioJob::slotTryStart()
 
   m_onTheFly = m_doc->onTheFly();
 
+  QTimer::singleShot(0, this, SLOT(slotDecodeNextFile()) );
+
   if( m_onTheFly ) {
-    if( decodeNextFile() ) {
-      startWriting();
-    }
-    else {
-      cancelAll();
-      emit finished( false );
-    }
-  } 
+    startWriting();
+  }
   else {
     emit infoMessage( i18n("Buffering files"), K3bJob::STATUS );
     emit newTask( i18n("Buffering files") );
-
-    if( !decodeNextFile() ) {
-      cancelAll();
-      emit finished( false );
-    }
   }
 }
 
@@ -509,7 +503,7 @@ void K3bAudioJob::slotStartWriting()
     m_process->kill();
   
   m_process->clearArguments();
-  m_process->disconnect();
+  m_process->disconnect(this);
 
   if( m_onTheFly )
     connect( m_process, SIGNAL(wroteStdin(KProcess*)), this, SLOT(slotWroteData()) );
@@ -521,7 +515,7 @@ void K3bAudioJob::slotStartWriting()
 }
 
 
-bool K3bAudioJob::decodeNextFile()
+void K3bAudioJob::slotDecodeNextFile()
 {
   // find next file to decode
   while( m_currentDecodedTrack && 
@@ -529,14 +523,17 @@ bool K3bAudioJob::decodeNextFile()
     m_currentDecodedTrackNumber++;
     m_currentDecodedTrack = m_doc->at(m_currentDecodedTrackNumber);
   }
-
+  qDebug("(K3bAudioJob) next decoder");
   if( m_currentDecodedTrack ) {
     K3bAudioModule* module = m_currentDecodedTrack->module();
     if( module == 0 ) {
       qDebug( "(K3bAudioModule) track no. %i is no wave file and has no module.", 
 	      m_currentDecodedTrackNumber );
       emit infoMessage( i18n("Internal error: No module. Please report!"), K3bJob::ERROR );
-      return false;
+
+      cancelAll();
+      emit finished( false );
+      return;
     }
     else {
       m_currentModuleDataLength = 0;
@@ -544,18 +541,24 @@ bool K3bAudioJob::decodeNextFile()
       connect( module, SIGNAL(output(const unsigned char*, int)), this, SLOT(slotModuleOutput(const unsigned char*, int)) );
 
       if( m_onTheFly ) {
-	qDebug("(K3bAudioOnTheFlyJob) streaming track %i", m_currentDecodedTrackNumber );
+	module->setConsumer( m_process, SIGNAL(wroteStdin()) );
+	qDebug("(K3bAudioJob) streaming track %i", m_currentDecodedTrackNumber );
       }
       else {
+	module->setConsumer( 0 );
 	connect( module, SIGNAL(percent(int)), this, SLOT(slotModuleProgress(int)) );
+
+	emit newSubTask( i18n("Buffering file %1").arg(m_currentDecodedTrack->fileName()) );
 
 	KURL bufferFile = k3bMain()->findTempFile( "wav", doc()->tempDir() );
 
-	m_currentWrittenWavFile->setName( bufferFile.path() );
-	m_currentWrittenWavFile->open( IO_WriteOnly );
-	m_currentWrittenWavStream->setDevice( m_currentWrittenWavFile );
+	if( m_currentWrittenWavFile.isOpen() )
+	  m_currentWrittenWavFile.close();
+	m_currentWrittenWavFile.setName( bufferFile.path() );
+	m_currentWrittenWavFile.open( IO_WriteOnly );
+	m_currentWrittenWavStream.setDevice( &m_currentWrittenWavFile );
 
-	K3b::writeWavHeader( m_currentWrittenWavStream, m_currentDecodedTrack->length() * 2352 );
+	K3b::writeWavHeader( &m_currentWrittenWavStream, m_currentDecodedTrack->length() * 2352 );
       }
 
       module->start();
@@ -564,15 +567,14 @@ bool K3bAudioJob::decodeNextFile()
   else {
     if( m_onTheFly ) {
       // everything streamed. Should we close stdin?
-      qDebug("(K3bAudioOnTheFlyJob) streaming finished." );
+      qDebug("(K3bAudioJob) streaming finished." );
     }
     else {
       // all tracks buffered
+      qDebug("(K3bAudioJob) all tracks buffered.");
       startWriting();
     }
   }
-
-  return true;
 }
 
 
@@ -584,30 +586,20 @@ void K3bAudioJob::slotModuleOutput( const unsigned char* data, int len )
     
     m_currentModuleDataLength += len;  //only for debugging
     m_process->writeStdin( (const char*)data, len );
-    m_currentDecodedTrack->module()->pause();
   }
   else {
-    // What is the difference between writeRawBytes and writeBytes? is the latter buffered? If yes there
-    // is no reason why we should not use buffered io!
-
-    m_currentWrittenWavStream->writeRawBytes( (const char*)data, len );
+    m_currentWrittenWavStream.writeBytes( reinterpret_cast<const char*>(data), len );
   }
-}
-
-
-void K3bAudioJob::slotWroteData()
-{
-  // the decoded data has been written to the process
-  // so we can resume decoding
-  m_currentDecodedTrack->module()->resume();
 }
 
 
 void K3bAudioJob::slotModuleFinished( bool success )
 {
-  m_currentDecodedTrack->module()->disconnect();
-
+  qDebug("(K3bAudioJob) module finished");
+  m_currentDecodedTrack->module()->disconnect(this);
+  qDebug("(K3bAudioJob) module disconnected");
   m_decodedData += m_currentDecodedTrack->size();
+  qDebug("(K3bAudioJob) m_decodedData updated");
 
   if( m_onTheFly ) {
     if( success ) {
@@ -629,13 +621,15 @@ void K3bAudioJob::slotModuleFinished( bool success )
   }
   else {
     // close the written file which is open even if the module did not succeed
-    m_currentWrittenWavFile->close();
+    m_currentWrittenWavFile.close();
+    qDebug("(K3bAudioJob) wave file closed");
   
     if( success ) {
-      m_currentDecodedTrack->setBufferFile( m_currentWrittenWavFile->name() );
+      m_currentDecodedTrack->setBufferFile( m_currentWrittenWavFile.name() );
+      qDebug("(K3bAudioJob) buffer file set");
 
       qDebug( "(K3bAudioJob) Successfully buffered track " + m_currentDecodedTrack->fileName() );
-      emit infoMessage( i18n("Written buffer file for %1 to %2").arg(m_currentDecodedTrack->fileName()).arg(m_currentDecodedTrack->bufferFile()), STATUS );
+      emit infoMessage( i18n("Written buffer file for %1 to %2").arg(m_currentDecodedTrack->fileName()).arg(m_currentWrittenWavFile.name()), STATUS );
     }
     else {
       qDebug( "(K3bAudioJob) Could not buffer track " + m_currentDecodedTrack->fileName() );
@@ -648,10 +642,10 @@ void K3bAudioJob::slotModuleFinished( bool success )
   }
 
   m_currentDecodedTrackNumber++;
-  if( !decodeNextFile() ) {
-    cancelAll();
-    emit finished( false );
-  }
+  m_currentDecodedTrack = m_doc->at(m_currentDecodedTrackNumber);
+  qDebug("(K3bAudioJob) m_currentDecodedTrack = %s", (m_currentDecodedTrack ? "x" : "null") );
+
+  QTimer::singleShot(0, this, SLOT(slotDecodeNextFile()) );
 }
 
 
@@ -724,13 +718,13 @@ void K3bAudioJob::cdrdaoWrite()
   *m_process << QString("\"%1\"").arg(QFile::encodeName(m_tocFile));
     
   // debugging output
-  QStrList* _args = m_process->args();
-  QStrListIterator _it(*_args);
-  while( _it ) {
-    cout << *_it << " ";
-    ++_it;
-  }
-  cout << endl << flush;
+//   QStrList* _args = m_process->args();
+//   QStrListIterator _it(*_args);
+//   while( _it ) {
+//     cout << *_it << " ";
+//     ++_it;
+//   }
+//   cout << endl << flush;
     
     
     
@@ -839,13 +833,13 @@ void K3bAudioJob::cdrecordWrite()
 
 	
   // debugging output
-  QStrList* _args = m_process->args();
-  QStrListIterator _it(*_args);
-  while( _it ) {
-    cout << *_it << " ";
-    ++_it;
-  }
-  cout << flush;
+//   QStrList* _args = m_process->args();
+//   QStrListIterator _it(*_args);
+//   while( _it ) {
+//     cout << *_it << " ";
+//     ++_it;
+//   }
+//   cout << flush;
 	
   // connect to the cdrecord slots
   connect( m_process, SIGNAL(processExited(KProcess*)),
@@ -910,7 +904,7 @@ void K3bAudioJob::slotCdrecordFinished()
     }
 
   clearBufferFiles();
-  m_process->disconnect();
+  m_process->disconnect(this);
 }
 
 
@@ -959,7 +953,7 @@ void K3bAudioJob::slotCdrdaoFinished()
   
   clearBufferFiles();
 
-  m_process->disconnect();
+  m_process->disconnect(this);
 }
 
 

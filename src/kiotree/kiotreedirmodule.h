@@ -22,6 +22,7 @@
 #include <kiotreemodule.h>
 #include <kfileitem.h>
 #include <qpixmap.h>
+#include <qdict.h>
 
 class KioTree;
 class KioTreeItem;

@@ -166,14 +166,14 @@ void K3bIsoImageJob::slotStartWriting()
     *m_process << *it;
 			
   // debugging output
-  cout << "***** cdrecord parameters:\n";
-  QStrList* _args = m_process->args();
-  QStrListIterator _it(*_args);
-  while( _it ) {
-    cout << *_it << " ";
-    ++_it;
-  }
-  cout << endl << flush;
+//   cout << "***** cdrecord parameters:\n";
+//   QStrList* _args = m_process->args();
+//   QStrListIterator _it(*_args);
+//   while( _it ) {
+//     cout << *_it << " ";
+//     ++_it;
+//   }
+//   cout << endl << flush;
 
   *m_process << QString("\"%1\"").arg(QFile::encodeName(m_imagePath));
 				

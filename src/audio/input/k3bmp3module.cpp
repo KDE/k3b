@@ -93,25 +93,24 @@ void K3bMp3Module::initializeDecoding()
 
   mad_stream_init( m_madStream );
   mad_timer_reset( m_madTimer );
+
+  m_outputPointer = m_outputBuffer;
   
   m_frameCount = 0;
   m_rawDataAlreadyStreamed = 0;
 }
 
 
-void K3bMp3Module::start( double offset )
+void K3bMp3Module::start()
 {
   if( !m_bCountingFramesInProgress && !m_bDecodingInProgress ) {
     m_bDecodingInProgress = true;
     m_bEndOfInput = false;
+    m_bOutputFinished = false;
     
     initializeDecoding();
 
-    if( offset > 0 && offset < 1 ) {
-      fseek( m_inputFile, (long)(offset*(double)audioTrack()->size()), SEEK_SET );
-    }
-    else
-      rewind( m_inputFile );
+    rewind( m_inputFile );
 
     mad_frame_init( m_madFrame );
     mad_synth_init( m_madSynth );    
@@ -123,6 +122,9 @@ void K3bMp3Module::start( double offset )
 
 void K3bMp3Module::fillInputBuffer()
 {
+  if( m_bEndOfInput )
+    return;
+
   /* The input bucket must be filled if it becomes empty or if
    * it's the first execution of the loop.
    */
@@ -199,6 +201,9 @@ void K3bMp3Module::slotCountFrames()
       m_bCountingFramesInProgress = false;
       mad_header_finish( m_madHeader );
 
+      fclose( m_inputFile );
+      m_inputFile = 0;
+
       emit finished( true );
       break;
     }
@@ -220,6 +225,9 @@ void K3bMp3Module::slotCountFrames()
 	    m_decodingTimer->stop();
 	    mad_header_finish( m_madHeader );
 
+	    fclose( m_inputFile );
+	    m_inputFile = 0;
+
 	    emit finished( false );
 	    break;
 	  }
@@ -234,114 +242,139 @@ void K3bMp3Module::slotCountFrames()
 }
 
 
+void K3bMp3Module::slotConsumerReady()
+{
+  if( m_bDecodingInProgress )
+    m_decodingTimer->start(0);
+}
+
+
 void K3bMp3Module::slotDecodeNextFrame()
 {
-  if( m_bEndOfInput ) {
+  if( !m_bDecodingInProgress || m_bOutputFinished ) {
     // nothing to do anymore (but perhaps there are some zombie timer events)
     return;
   }
 
+  bool bOutputBufferFull = false;
 
-  fillInputBuffer();
-
-  // if no input is available anymore test if we need to pad
-  if( m_bEndOfInput ) {
-    if( m_rawDataLengthToStream > m_rawDataAlreadyStreamed ) {
-      qDebug( "(K3bMp3Module) data needs to be padded by %li bytes.", 
-	      m_rawDataLengthToStream - m_rawDataAlreadyStreamed );
-
+  while( !bOutputBufferFull ) {
+    // a mad_synth can consist of at most 1152 frames per channel
+    // so we need to make sure to have always 2*1152 byte of output buffer free
+    // otherwise we would need to flush the buffer while decoding of a frame is in 
+    // process which will end in a lot of checking overhead since we cannot go on immediately
+    if( m_outputBufferEnd - m_outputPointer < 4*1152 ) {
+      bOutputBufferFull = true;
     }
+    else {
+      fillInputBuffer();
 
-    finishDecoding();
-  }
-  else {
-    if( mad_frame_decode( m_madFrame, m_madStream ) ) {
-      if( MAD_RECOVERABLE( m_madStream->error ) ) {
-	qDebug( "(K3bMp3Module) recoverable frame level error (%s)",
-		mad_stream_errorstr(m_madStream) );
-	audioTrack()->setStatus( K3bAudioTrack::RECOVERABLE );
-	return;
-      }
-      else {
-	if( m_madStream->error == MAD_ERROR_BUFLEN )
-	  return;
+      if( m_bEndOfInput ) {
+	// now check if we need to pad with zeros
+	size_t bufferSize = m_outputPointer - m_outputBuffer;
+	if( m_rawDataLengthToStream > m_rawDataAlreadyStreamed + bufferSize ) {
+	  // pad as much as possible
+	  size_t freeBuffer = m_outputBufferEnd-m_outputPointer;
+	  unsigned long dataToPad = m_rawDataLengthToStream - m_rawDataAlreadyStreamed - bufferSize;
+	  memset( m_outputPointer, 0, OUTPUT_BUFFER_SIZE - freeBuffer );
+	  m_outputPointer += ( freeBuffer > dataToPad ? dataToPad : freeBuffer );
+
+	  qDebug("(K3bMp3Module) padding data with %i zeros.", ( freeBuffer > dataToPad ? dataToPad : freeBuffer ) );
+	}
 	else {
-	  qDebug( "(K3bMp3Module) unrecoverable frame level error (%s).",
-		  mad_stream_errorstr(m_madStream));
-	  audioTrack()->setStatus( K3bAudioTrack::CORRUPT );
-	
-	  m_bDecodingInProgress = false;
-	  m_decodingTimer->stop();
-	  emit finished( false );
-	  return;
+	  break;
 	}
       }
-    }
-  
-    m_frameCount++;
-
-    mad_timer_add( m_madTimer, m_madFrame->header.duration );
-
-    /* Once decoded the frame is synthesized to PCM samples. No errors
-     * are reported by mad_synth_frame();
-     */
-    mad_synth_frame( m_madSynth, m_madFrame );
-
-    
-    /* Synthesized samples must be converted from mad's fixed
-     * point number to the consumer format. Here we use unsigned
-     * 16 bit big endian integers on two channels. Integer samples
-     * are temporarily stored in a buffer that is flushed when
-     * full.
-     */
-    for( int i = 0; i < m_madSynth->pcm.length; i++ )
-      {
-	unsigned short	sample;
-	  
-	/* Left channel */
-	sample = madFixedToUshort( m_madSynth->pcm.samples[0][i] );
-	*(m_outputPointer++) = sample >> 8;
-	*(m_outputPointer++) = sample & 0xff;
-	  
-	/* Right channel. If the decoded stream is monophonic then
-	 * the right output channel is the same as the left one.
-	 */
-	if( MAD_NCHANNELS( &m_madFrame->header ) == 2 )
-	  sample = madFixedToUshort( m_madSynth->pcm.samples[1][i] );
-	  
-	*(m_outputPointer++) = sample >> 8;
-	*(m_outputPointer++) = sample & 0xff;
+      else {
+	if( mad_frame_decode( m_madFrame, m_madStream ) ) {
+	  if( MAD_RECOVERABLE( m_madStream->error ) ) {
+	    qDebug( "(K3bMp3Module) recoverable frame level error (%s)",
+		    mad_stream_errorstr(m_madStream) );
+	    audioTrack()->setStatus( K3bAudioTrack::RECOVERABLE );
+	  }
+	  else {
+	    if( m_madStream->error != MAD_ERROR_BUFLEN ) {
+	      qDebug( "(K3bMp3Module) unrecoverable frame level error (%s).",
+		      mad_stream_errorstr(m_madStream));
+	      audioTrack()->setStatus( K3bAudioTrack::CORRUPT );
 	
-	/* Flush the buffer if it is full. */
-	if( m_outputPointer == m_outputBufferEnd )
+	      m_bDecodingInProgress = false;
+	      m_decodingTimer->stop();
+
+	      fclose( m_inputFile );
+	      m_inputFile = 0;
+
+	      if( m_consumer )
+		m_consumer->disconnect(this);
+
+	      emit finished( false );
+	      return;
+	    }
+	  }
+	}
+  
+	m_frameCount++;
+
+	mad_timer_add( m_madTimer, m_madFrame->header.duration );
+
+	/* Once decoded the frame is synthesized to PCM samples. No errors
+	 * are reported by mad_synth_frame();
+	 */
+	mad_synth_frame( m_madSynth, m_madFrame );
+
+	/* Synthesized samples must be converted from mad's fixed
+	 * point number to the consumer format. Here we use unsigned
+	 * 16 bit little endian integers on two channels. Integer samples
+	 * are temporarily stored in a buffer that is flushed when
+	 * full.
+	 */
+	for( int i = 0; i < m_madSynth->pcm.length; i++ )
 	  {
-	    flushOutputBuffer();
+	    unsigned short	sample;
+	  
+	    /* Left channel */
+	    sample = madFixedToUshort( m_madSynth->pcm.samples[0][i] );
+	    *(m_outputPointer++) = sample & 0xff;
+	    *(m_outputPointer++) = sample >> 8;
+	  
+	    /* Right channel. If the decoded stream is monophonic then
+	     * the right output channel is the same as the left one.
+	     */
+	    if( MAD_NCHANNELS( &m_madFrame->header ) == 2 )
+	      sample = madFixedToUshort( m_madSynth->pcm.samples[1][i] );
+	  
+	    *(m_outputPointer++) = sample & 0xff;
+	    *(m_outputPointer++) = sample >> 8;
+
+	    // this should not happen since we only decode if the
+	    // output buffer has enough free space
+	    if( m_outputPointer == m_outputBufferEnd && i+1 < m_madSynth->pcm.length )
+	      {
+		qDebug( "(K3bMp3Module) buffer overflow!" );
+		exit(1);
+	      }
 	  }
       }
-  } // output the synth
-}
+    }
+  }
 
+  // now the buffer is full and needs to be streamed to
+  // the consumer
+  // if no consumer is set decoding will continue after
+  // the output signal has been emitted
+  // otherwise it will be stopped until the consumer
+  // emitted the ready signal
 
-
-void K3bMp3Module::finishDecoding()
-{
-  flushOutputBuffer();
-
-  m_bDecodingInProgress = false;
-
-  mad_synth_finish( m_madSynth );
-  mad_frame_finish( m_madFrame );
-
-  emit finished( true );
-}
-
-
-void K3bMp3Module::flushOutputBuffer()
-{
   // flush the output buffer
   size_t buffersize = m_outputPointer - m_outputBuffer;
   size_t bytesToOutput = buffersize;
 	    
+  if( m_rawDataAlreadyStreamed > m_rawDataLengthToStream ) {
+    qDebug("to much data streamed");
+    exit(1);
+  }
+
+
   // make sure we don't stream to much
   if( m_rawDataAlreadyStreamed + buffersize > m_rawDataLengthToStream ) {
     bytesToOutput = m_rawDataLengthToStream - m_rawDataAlreadyStreamed;
@@ -351,10 +384,45 @@ void K3bMp3Module::flushOutputBuffer()
   
   m_rawDataAlreadyStreamed += bytesToOutput;
 
-  if( bytesToOutput > 0 )  
+  if( bytesToOutput > 0 ) {
     emit output( m_outputBuffer, bytesToOutput );
+  }
+  else {
+    m_bOutputFinished = true;
+  }
 
   m_outputPointer = m_outputBuffer;
+
+  emit percent( (int)(100.0* (double)m_rawDataAlreadyStreamed / (double)m_rawDataLengthToStream) );
+
+  if( m_rawDataLengthToStream == m_rawDataAlreadyStreamed )
+    m_bOutputFinished = true;
+
+  if( m_bOutputFinished ) {
+
+    qDebug("(K3bMp3Module) end of output.");
+
+    m_decodingTimer->stop();
+
+    m_bDecodingInProgress = false;
+
+    mad_synth_finish( m_madSynth );
+    mad_frame_finish( m_madFrame );
+
+    fclose( m_inputFile );
+    m_inputFile = 0;
+    if( m_consumer )
+      m_consumer->disconnect(this);
+
+    emit finished( true );
+
+    qDebug("(K3bMp3Module) finished.");
+  }
+  else if( m_consumer ) {
+    // the timer will be restarted when the consumer
+    // emits the corresponding signal (s.a.)
+    m_decodingTimer->stop();
+  }
 }
 
 
@@ -392,24 +460,18 @@ void K3bMp3Module::cancel()
     m_bDecodingInProgress = false;
     m_decodingTimer->stop();
 
+    fclose( m_inputFile );
+    m_inputFile = 0;
+
+    if( m_consumer )
+      m_consumer->disconnect(this);
+
+    mad_synth_finish( m_madSynth );
+    mad_frame_finish( m_madFrame );
+
     emit canceled();
     emit finished( false );
   }
-}
-
-
-void K3bMp3Module::pause()
-{
-  if( m_bDecodingInProgress )
-    m_decodingTimer->stop();
-}
-
-void K3bMp3Module::resume()
-{
-  if( m_bDecodingInProgress )
-    m_decodingTimer->start(0);
-  else
-    qDebug("(K3bMp3Module) tried to resume without decoding process.");
 }
 
 

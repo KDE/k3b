@@ -24,6 +24,8 @@
 #include <qcursor.h>
 #include <qstack.h>
 #include <qtooltip.h>
+#include <qpainter.h>
+#include <qstyle.h>
 
 #include <kglobalsettings.h>
 #include <kcursor.h>

@@ -31,6 +31,7 @@
 #include <kapp.h>
 #include <kdockwidget.h>
 #include <kaction.h>
+#include <kurl.h>
 
 class QVBox;
 
@@ -82,7 +83,7 @@ class K3bMainWindow : public KDockMainWindow
   ~K3bMainWindow();
 
   /** opens a file specified by commandline option */
-  void openDocumentFile(const KURL& url=0);
+  void openDocumentFile(const KURL& url=KURL());
 
   K3bDeviceManager*      deviceManager()      { return m_deviceManager; }
   K3bExternalBinManager* externalBinManager() { return m_externalBinManager; }

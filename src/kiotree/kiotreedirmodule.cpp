@@ -28,6 +28,8 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kfileitem.h>
+#include <kiconloader.h>
+
 
 
 KioTreeDirModule::KioTreeDirModule( KioTree * parentTree )
@@ -171,7 +173,7 @@ void KioTreeDirModule::openSubFolder( KioTreeItem *item )
 //         m_pProps = new KonqPropsView( KioTreeFactory::instance(), s_defaultViewProps );
 //     }
 
-    if ( m_dirLister->job() == 0 )
+    if ( m_dirLister->isFinished() )
         listDirectory( item );
     else if ( ! m_lstPendingOpenings.contains( item ) )
         m_lstPendingOpenings.append( item );

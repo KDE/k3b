@@ -18,9 +18,7 @@
 #ifndef K3BDATAFILEVIEW_H
 #define K3BDATAFILEVIEW_H
 
-//#include <klistview.h>
-#include "../kdelibs_patched/klistview.h"    // patched version with the ability to set invalid chars and 
-                                             // set certain KListViewItems unrenamable
+#include "../kdelibs_patched/klistview.h"
 
 
 class K3bDataDoc;

@@ -18,30 +18,25 @@ class K3bMp3Module : public K3bAudioModule
   K3bMp3Module( K3bAudioTrack* track );
   ~K3bMp3Module();
 
-  /**
-   * start decoding from relative position
-   */
-  void start( double offset = 0.0 );
+  void start();
 
  public slots:
   void cancel();
-  void pause();
-  void resume();
 
  private slots:
   void slotDecodeNextFrame();
   void slotCountFrames();
+  void slotConsumerReady();
  
  private:
   unsigned short madFixedToUshort( mad_fixed_t fixed );
   void initializeDecoding();
-  void finishDecoding();
-  void flushOutputBuffer();
   void fillInputBuffer();
 
   bool m_bDecodingInProgress;
   bool m_bCountingFramesInProgress;
   bool m_bEndOfInput;
+  bool m_bOutputFinished;
 
   QTimer* m_decodingTimer;
 
@@ -64,7 +59,7 @@ class K3bMp3Module : public K3bAudioModule
   FILE* m_inputFile;
 
   static const int INPUT_BUFFER_SIZE = 5*8192;
-  static const int OUTPUT_BUFFER_SIZE = 8192;
+  static const int OUTPUT_BUFFER_SIZE = 10*8192;
 };
 
 

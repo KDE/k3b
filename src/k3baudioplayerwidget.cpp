@@ -29,6 +29,12 @@
 #include <kiconloader.h>
 #include <klocale.h>
 
+// #include <vector>
+// #include <map>
+// #include <klistview.h>
+
+
+
 
 K3bAudioPlayerWidget::K3bAudioPlayerWidget( K3bAudioPlayer* player, bool skipButtons, QWidget *parent, const char *name )
   : QWidget( parent, name ), m_bLengthReady( false )
@@ -101,6 +107,35 @@ K3bAudioPlayerWidget::K3bAudioPlayerWidget( K3bAudioPlayer* player, bool skipBut
 
   grid->setRowStretch( 2, 1 );
   // ------------------------------------------------------------------------
+
+
+//         KListView *listView = new KListView(this);
+// 	grid->addMultiCellWidget( listView, 3, 3, 0, 7 );
+//         listView->addColumn(i18n("Media Type"));
+
+//         Arts::TraderQuery q;
+//         std::vector<Arts::TraderOffer> *results = q.query();
+//         std::map<std::string, bool> done;
+//         QString str;
+
+//         for(std::vector<Arts::TraderOffer>::iterator i = results->begin(); i != results->end(); i++)
+//         {
+//                 std::vector<string> *ext = (*i).getProperty("Extension");
+
+//                 for(vector<string>::iterator it = ext->begin(); it != ext->end(); it++)
+//                 {
+//                         if(!(*it).length() || done[*it])
+//                             continue;
+
+//                         done[*it] = true;
+//                         (void) new QListViewItem(listView, (*it).c_str());
+//                 }
+//                 delete ext;
+//         }
+//         delete results;
+
+
+
 
 
   // connections

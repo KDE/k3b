@@ -22,6 +22,7 @@
 #include <qvbox.h>
 #include <qarray.h>
 #include <qthread.h>
+#include <qstringlist.h>
 
 class K3bCddaCopy;
 class K3bCdView;
@@ -36,8 +37,6 @@ class QLabel;
 class QLineEdit;
 class QListViewItem;
 class QPushButton;
-class QString;
-class QStringList;
 class QCloseEvent;
 class QCheckBox;
 class QListViewItem;
@@ -45,10 +44,11 @@ class KLineEdit;
 class K3bCddb;
 class K3bPatternParser;
 class K3bBurnProgressDialog;
+
+
 /**
   *@author Sebastian Trueg
   */
-
 class K3bRipperWidget : public QWidget {
    Q_OBJECT
 

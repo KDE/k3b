@@ -26,20 +26,31 @@ class K3bAudioModule : public QObject
 //  virtual bool valid() const = 0;
 
   /**
-   * start decoding from relative position
+   * The consumer is the object that will handle the output
+   * Since we need async streaming the AudioModule will
+   * produce some output and then wait for the goOnSignal to
+   * be emitted by the consumer. When it receives the signal
+   * it will produce the next portion of output
+   * if consumer is set to null output will be streamed without
+   * waiting for the signal (used when writing to a file)
    */
-  virtual void start( double offset = 0.0 ) = 0;
+  virtual void setConsumer( QObject* c = 0, const char* goOnSignal = 0 );
+  virtual void start() = 0;
 
  public slots:
   virtual void cancel() = 0;
-  virtual void pause() = 0;
-  virtual void resume() = 0;
 
  signals:
   void output( const unsigned char* data, int len );
   void percent( int );
   void canceled();
   void finished( bool );
+
+ protected slots:
+  virtual void slotConsumerReady() = 0;
+
+ protected:
+  QObject* m_consumer;
 
  private:
   K3bAudioTrack* m_track;

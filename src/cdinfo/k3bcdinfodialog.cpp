@@ -24,6 +24,7 @@
 #include <qlayout.h>
 #include <qcombobox.h>
 #include <qlist.h>
+#include <qlabel.h>
 #include <klocale.h>
 #include <qpushbutton.h>
 

@@ -22,6 +22,7 @@
 #include <qlayout.h>
 #include <qlineedit.h>
 #include <qtoolbutton.h>
+#include <qlabel.h>
 
 #include <klocale.h>
 #include <kconfig.h>

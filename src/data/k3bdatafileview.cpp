@@ -21,7 +21,6 @@
 #include "k3bdataitem.h"
 #include "k3bdiritem.h"
 #include "k3bfileitem.h"
-
 #include "../kdelibs_patched/kcharvalidator.h"
 
 #include <qdragobject.h>

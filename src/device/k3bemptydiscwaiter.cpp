@@ -22,6 +22,7 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qtooltip.h>
+#include <qpushbutton.h>
 
 #include <klocale.h>
 #include <kiconloader.h>

@@ -24,11 +24,12 @@ class K3bAudioDoc;
 class K3bAudioTrack;
 class QString;
 class KProcess;
-class QFile;
 class QDataStream;
 
 #include <qlist.h>
 #include <kurl.h>
+#include <qfile.h>
+#include <qdatastream.h>
 
 
 /**
@@ -57,14 +58,13 @@ class K3bAudioJob : public K3bBurnJob  {
   void slotCdrdaoFinished();
   void slotModuleProgress( int percent );
   void slotModuleFinished( bool success );
-  void slotWroteData();
   void slotModuleOutput( const unsigned char* data, int len );
   void slotStartWriting();
   void slotTryStart();
+  void slotDecodeNextFile();
 	
  private:
   void clearBufferFiles();
-  bool decodeNextFile();
   void startWriting();
   void cancelAll();
   void cdrdaoWrite();
@@ -81,8 +81,8 @@ class K3bAudioJob : public K3bBurnJob  {
   int m_currentDecodedTrackNumber;
   int m_currentWrittenTrackNumber;
 
-  QFile* m_currentWrittenWavFile;
-  QDataStream* m_currentWrittenWavStream;
+  QFile m_currentWrittenWavFile;
+  QDataStream m_currentWrittenWavStream;
 
   unsigned long m_writtenData;
   unsigned long m_dataToDecode;

@@ -18,9 +18,9 @@
 #ifndef K3BDATADIRTREEVIEW_H
 #define K3BDATADIRTREEVIEW_H
 
-//#include <klistview.h>
-#include "../kdelibs_patched/klistview.h"    // patched version with the ability to set invalid chars and 
-                                             // set certain KListViewItems unrenamable
+
+#include "../kdelibs_patched/klistview.h"
+
 
 #include <qmap.h>
 

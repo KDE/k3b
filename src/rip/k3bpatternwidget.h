@@ -29,6 +29,7 @@ class KComboBox;
 class QGroupBox;
 class QRadioButton;
 class QVButtonGroup;
+class QButtonGroup;
 class KLineEdit;
 class KioTree;
 class KURL;
