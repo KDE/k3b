@@ -246,7 +246,7 @@ namespace K3bCdDevice
     /**
      *  returns the toc of the disc
      */
-    bool readToc(Toc &);
+    Toc readToc();
 
     /**
      * block or unblock the drive's tray

@@ -200,6 +200,10 @@ K3bCdDevice::CdDevice::interface K3bCdDevice::CdDevice::interfaceType()
 {
   if (d->interfaceType == OTHER)
   {
+    // if the device is already opened we do not close it
+    // to allow fast multible method calls in a row
+    bool needToClose = !isOpen();
+
     if (open() < 0)
       return OTHER;
 
@@ -214,7 +218,8 @@ K3bCdDevice::CdDevice::interface K3bCdDevice::CdDevice::interfaceType()
       d->interfaceType = SCSI;
     }
 
-    close();
+    if( needToClose )
+      close();
   }
   return d->interfaceType;
 }
@@ -304,6 +309,10 @@ void K3bCdDevice::CdDevice::setBurnproof( bool b )
 
 K3bDiskInfo::type  K3bCdDevice::CdDevice::diskType()
 {
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
   int status;
   K3bDiskInfo::type ret = K3bDiskInfo::UNKNOWN;
   if (open() < 0)
@@ -330,12 +339,17 @@ K3bDiskInfo::type  K3bCdDevice::CdDevice::diskType()
   if ( isDVD() )
     ret =  K3bDiskInfo::DVD;
 
-  close();
+  if( needToClose )
+    close();
   return ret;
 }
 
 bool K3bCdDevice::CdDevice::isDVD()
 {
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
   bool ret = false;
   if (open() < 0)
     return ret;
@@ -350,12 +364,17 @@ bool K3bCdDevice::CdDevice::isDVD()
       ret = true;
   }
 
-  close();
+  if( needToClose )
+    close();
   return ret;
 }
 
 int K3bCdDevice::CdDevice::isReady() const
 {
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
   int drive_status,ret;
   ret = 1;
   if(open() < 0)
@@ -370,13 +389,18 @@ int K3bCdDevice::CdDevice::isReady() const
   else if ( drive_status == CDS_NO_DISC || drive_status == CDS_TRAY_OPEN )
     ret = 3;
 
-  close();
+  if( needToClose )
+    close();
   return ret;
 }
 
 
 int K3bCdDevice::CdDevice::isEmpty()
 {
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
   int ret = NO_INFO;
   if (open() < 0)
     return NO_INFO;
@@ -438,13 +462,18 @@ int K3bCdDevice::CdDevice::isEmpty()
     }
   }
 
-  close();
+  if( needToClose )
+    close();
   return ret;
 
 }
 
 K3b::Msf K3bCdDevice::CdDevice::discSize()
 {
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
   K3b::Msf ret(0);
   if (open() < 0)
     return ret;
@@ -469,13 +498,18 @@ K3b::Msf K3bCdDevice::CdDevice::discSize()
   else
     kdDebug() << "(K3bCdDevice) could not get disk info !" << endl;
 
-  close();
+  if( needToClose )
+    close();
   return ret;
 
 }
 
 K3b::Msf K3bCdDevice::CdDevice::remainingSize()
 {
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
   K3b::Msf ret(0);
   K3b::Msf size(0);
   if (open() < 0)
@@ -505,13 +539,17 @@ K3b::Msf K3bCdDevice::CdDevice::remainingSize()
   else
     kdDebug() << "(K3bCdDevice) could not get disk info !" << endl;
 
-  close();
+  if( needToClose )
+    close();
   return size-ret;
-
 }
 
 int K3bCdDevice::CdDevice::numSessions()
 {
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
   int ret=-1;
   if (open() < 0)
     return ret;
@@ -540,83 +578,92 @@ int K3bCdDevice::CdDevice::numSessions()
   else
     kdDebug() << "(K3bCdDevice) could not get session info !" << endl;
 
-  close();
+  if( needToClose )
+    close();
   return ret;
 }
 
-bool K3bCdDevice::CdDevice::readToc(Toc &toc)
+K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc()
 {
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
+  Toc toc;
+
   bool ret = false;
   struct cdrom_tochdr tochdr;
   struct cdrom_tocentry tocentry;
 
-  if (open() < 0)
-    return ret;
-
-//
-// CDROMREADTOCHDR ioctl returns:
-// cdth_trk0: First Track Number
-// cdth_trk1: Last Track Number
-//
-  if( ::ioctl(d->deviceFd,CDROMREADTOCHDR,&tochdr) != 0 ) {
-     kdDebug() << "(K3bCdDevice) could not get toc header !" << endl;
-     return ret;
-  }
-
-  Track lastTrack;
-  for (int i = tochdr.cdth_trk0; i <= tochdr.cdth_trk1 + 1; i++) {
-    ::memset(&tocentry,0,sizeof (struct cdrom_tocentry));
-// get Lead-Out Information too
-    tocentry.cdte_track = (i<=tochdr.cdth_trk1) ? i : CDROM_LEADOUT;
-    tocentry.cdte_format = CDROM_LBA;
-//
-// CDROMREADTOCENTRY ioctl returns:
-// cdte_addr.lba: Start Sector Number (LBA Format requested)
-// cdte_ctrl:     4 ctrl bits
-//                   00x0b: 2 audio Channels(no pre-emphasis)
-//                   00x1b: 2 audio Channels(pre-emphasis)
-//                   10x0b: audio Channels(no pre-emphasis),reserved in cd-rw
-//                   10x1b: audio Channels(pre-emphasis),reserved in cd-rw
-//                   01x0b: data track, recorded uninterrupted
-//                   01x1b: data track, recorded incremental
-//                   11xxb: reserved
-//                   xx0xb: digital copy prohibited
-//                   xx1xb: digital copy permitted
-// cdte_addr:     4 addr bits (type of Q-Subchannel data)
-//                   0000b: no Information
-//                   0001b: current position data
-//                   0010b: MCN
-//                   0011b: ISRC
-//                   0100b-1111b:  reserved
-// cdte_datamode:  0: Data Mode1
-//                 1: CD-I
-//                 2: CD-XA Mode2
-//
-
-    if( ::ioctl(d->deviceFd,CDROMREADTOCENTRY,&tocentry) != 0)
-      kdDebug() << "(K3bCdDevice) error reading tocentry " << i << endl;
-    int startSec = tocentry.cdte_addr.lba;
-    int control  = tocentry.cdte_ctrl & 0x0f;
-    int mode     = tocentry.cdte_datamode;
-    if( !lastTrack.isEmpty() ) {
-      toc.append( Track( lastTrack.firstSector(), startSec-1, lastTrack.type(), lastTrack.mode() ) );
+  if (open() != -1) {
+    //
+    // CDROMREADTOCHDR ioctl returns:
+    // cdth_trk0: First Track Number
+    // cdth_trk1: Last Track Number
+    //
+    if( ::ioctl(d->deviceFd,CDROMREADTOCHDR,&tochdr) ) {
+      kdDebug() << "(K3bCdDevice) could not get toc header !" << endl;
     }
-    int trackType = 0;
-    int trackMode = Track::UNKNOWN;
-    if( control & 0x04 ) {
-      trackType = Track::DATA;
-      if( mode == 1 )
-	trackMode = Track::MODE1;
-      else if( mode == 2 )
-	trackMode = Track::MODE2;
-    } else
-      trackType = Track::AUDIO;
-    
-    lastTrack = Track( startSec, startSec, trackType, trackMode );
-  }
+    else {
+      Track lastTrack;
+      for (int i = tochdr.cdth_trk0; i <= tochdr.cdth_trk1 + 1; i++) {
+	::memset(&tocentry,0,sizeof (struct cdrom_tocentry));
+	// get Lead-Out Information too
+	tocentry.cdte_track = (i<=tochdr.cdth_trk1) ? i : CDROM_LEADOUT;
+	tocentry.cdte_format = CDROM_LBA;
+	//
+	// CDROMREADTOCENTRY ioctl returns:
+	// cdte_addr.lba: Start Sector Number (LBA Format requested)
+	// cdte_ctrl:     4 ctrl bits
+	//                   00x0b: 2 audio Channels(no pre-emphasis)
+	//                   00x1b: 2 audio Channels(pre-emphasis)
+	//                   10x0b: audio Channels(no pre-emphasis),reserved in cd-rw
+	//                   10x1b: audio Channels(pre-emphasis),reserved in cd-rw
+	//                   01x0b: data track, recorded uninterrupted
+	//                   01x1b: data track, recorded incremental
+	//                   11xxb: reserved
+	//                   xx0xb: digital copy prohibited
+	//                   xx1xb: digital copy permitted
+	// cdte_addr:     4 addr bits (type of Q-Subchannel data)
+	//                   0000b: no Information
+	//                   0001b: current position data
+	//                   0010b: MCN
+	//                   0011b: ISRC
+	//                   0100b-1111b:  reserved
+	// cdte_datamode:  0: Data Mode1
+	//                 1: CD-I
+	//                 2: CD-XA Mode2
+	//
 
-  close();
-  return true;
+	if( ::ioctl(d->deviceFd,CDROMREADTOCENTRY,&tocentry) )
+	  kdDebug() << "(K3bCdDevice) error reading tocentry " << i << endl;
+
+	int startSec = tocentry.cdte_addr.lba;
+	int control  = tocentry.cdte_ctrl & 0x0f;
+	int mode     = tocentry.cdte_datamode;
+	if( !lastTrack.isEmpty() ) {
+	  toc.append( Track( lastTrack.firstSector(), startSec-1, lastTrack.type(), lastTrack.mode() ) );
+	}
+	int trackType = 0;
+	int trackMode = Track::UNKNOWN;
+	if( control & 0x04 ) {
+	  trackType = Track::DATA;
+	  if( mode == 1 )
+	    trackMode = Track::MODE1;
+	  else if( mode == 2 )
+	    trackMode = Track::MODE2;
+	} else
+	  trackType = Track::AUDIO;
+	
+	lastTrack = Track( startSec, startSec, trackType, trackMode );
+      }
+    }
+
+    if( needToClose )
+      close();
+  }
+  
+  return toc;
 }
 
 bool K3bCdDevice::CdDevice::block( bool b) const
@@ -636,6 +683,10 @@ bool K3bCdDevice::CdDevice::block( bool b) const
 
 bool K3bCdDevice::CdDevice::rewritable()
 {
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
   bool ret = false;
   if ( !burner() )  // no chance to detect empty discs in readers
     return false;
@@ -661,7 +712,8 @@ bool K3bCdDevice::CdDevice::rewritable()
   else
     kdDebug() << "(K3bCdDevice) could not get disk info !" << endl;
 
-  close();
+  if( needToClose )
+    close();
   return ret;
 }
 

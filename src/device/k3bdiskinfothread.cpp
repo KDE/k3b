@@ -42,8 +42,7 @@ K3bCdDevice::DiskInfoThread::~DiskInfoThread()
 
 void K3bCdDevice::DiskInfoThread::run()
 {
-
-    fetchInfo();
+  fetchInfo();
 }
 
 void K3bCdDevice::DiskInfoThread::finish(bool success){
@@ -54,6 +53,12 @@ void K3bCdDevice::DiskInfoThread::finish(bool success){
 
 void K3bCdDevice::DiskInfoThread::fetchInfo()
 {
+  if( m_device->open() == -1 ) {
+    m_info->valid = false;
+    finish(false);
+    return;
+  }
+
   int ready = m_device->isReady();
   if (ready == 3) {  // no disk or tray open
     m_info->valid=true;
@@ -76,11 +81,12 @@ void K3bCdDevice::DiskInfoThread::fetchInfo()
 
   m_info->sessions = m_device->numSessions();
 
-  m_device->readToc(m_info->toc);
+  m_info->toc = m_device->readToc();
 
   if (m_device->burner())
     fetchSizeInfo();
 
+  m_device->close();
   finish (true);
 }
 
