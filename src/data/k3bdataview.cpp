@@ -31,6 +31,7 @@
 #include <kpopupmenu.h>
 #include <kaction.h>
 #include <klineeditdlg.h>
+#include <kio/global.h>
 
 #include <qpixmap.h>
 #include <qsplitter.h>
@@ -50,8 +51,8 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
 	
   // --- setup GUI ---------------------------------------------------
   QSplitter* _main = new QSplitter( this );	
-  m_dataDirTree = new K3bDataDirTreeView( doc, _main );
-  m_dataFileView = new K3bDataFileView( doc, _main );
+  m_dataDirTree = new K3bDataDirTreeView( this, doc, _main );
+  m_dataFileView = new K3bDataFileView( this, doc, _main );
   m_fillStatusDisplay = new K3bFillStatusDisplay( doc, this );
 	
   QVBoxLayout* _box = new QVBoxLayout( this );
@@ -67,10 +68,10 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
 	   this, SLOT(showPopupMenu(QListViewItem*, const QPoint&)) );
 
   // connect to the dropped signals
-  connect( m_dataDirTree, SIGNAL(dropped(KListView*, QDropEvent*, QListViewItem*)),
-	   this, SLOT(slotDropped(KListView*, QDropEvent*, QListViewItem*)) );
-  connect( m_dataFileView, SIGNAL(dropped(KListView*, QDropEvent*, QListViewItem*)),
-	   this, SLOT(slotDropped(KListView*, QDropEvent*, QListViewItem*)) );
+  connect( m_dataDirTree, SIGNAL(dropped(KListView*, QDropEvent*, QListViewItem*, QListViewItem*)),
+	   this, SLOT(slotDropped(KListView*, QDropEvent*, QListViewItem*,QListViewItem*)) );
+  connect( m_dataFileView, SIGNAL(dropped(KListView*, QDropEvent*, QListViewItem*, QListViewItem*)),
+	   this, SLOT(slotDropped(KListView*, QDropEvent*, QListViewItem*, QListViewItem*)) );
 
   connect( m_dataDirTree, SIGNAL(dirSelected(K3bDirItem*)), m_dataFileView, SLOT(slotSetCurrentDir(K3bDirItem*)) );
 
@@ -93,41 +94,73 @@ K3bProjectBurnDialog* K3bDataView::burnDialog()
 {
   if( !m_burnDialog ) {
     m_burnDialog = new K3bDataBurnDialog( m_doc, k3bMain(), "databurndialog", true );
-    connect( m_burnDialog, SIGNAL(finished()), this, SLOT(update()) );  // get changes
+    connect( m_burnDialog, SIGNAL(finished()), m_dataDirTree, SLOT(update()) );  // get changes
   }
 		
   return m_burnDialog;
 }
 
 
-void K3bDataView::slotDropped( KListView* listView, QDropEvent* e, QListViewItem* after )
+void K3bDataView::slotDropped( KListView* listView, QDropEvent* e, QListViewItem* after, QListViewItem* parentViewItem )
 {
   if( !e->isAccepted() )
     return;
 
-  QString droppedText;
-  QTextDrag::decode( e, droppedText );
-  QStringList _urls = QStringList::split("\r\n", droppedText );
-	
-
-  if( listView == m_dataFileView && m_dataFileView->itemAt( e->pos() ) == 0 )
-    m_doc->slotAddURLs( _urls, m_dataFileView->currentDir() );
-
-  // get directory from "after"
-  else if( after ) {
-    // if dropping on a dirItem: add it to this dir
-    if( dynamic_cast<K3bDataDirViewItem*>( after ) ) {
-      m_doc->slotAddURLs( _urls, ((K3bDataDirViewItem*)after)->dirItem() );
+  // determine K3bDirItem to add the items to
+  K3bDirItem* parent = 0;
+  if( listView == m_dataFileView ) {
+    if( K3bDataDirViewItem* dirViewItem = dynamic_cast<K3bDataDirViewItem*>( after ) ) {
+      parent = dirViewItem->dirItem();
     }
     else {
-      // add to the parent of the item
-      m_doc->slotAddURLs( _urls, ((K3bDataFileViewItem*)after)->fileItem()->parent() );
+      parent = m_dataFileView->currentDir();
     }
   }
-  else {// after == 0
-    if( listView == m_dataFileView )
-      m_doc->slotAddURLs( _urls, m_dataFileView->currentDir() );
+  else if( listView == m_dataDirTree ) {
+    if( K3bDataDirViewItem* dirViewItem = dynamic_cast<K3bDataDirViewItem*>( parentViewItem ) ) {
+      parent = dirViewItem->dirItem();
+    }
   }
+
+  if( parent ) {
+
+    // check if items have been moved
+    if( e->source() == m_dataFileView->viewport() ) {
+      // move all selected items
+      QList<QListViewItem> selectedViewItems = m_dataFileView->selectedItems();
+      QList<K3bDataItem> selectedDataItems;
+      QListIterator<QListViewItem> it( selectedViewItems );
+      for( ; it.current(); ++it ) {
+	K3bDataViewItem* dataViewItem = dynamic_cast<K3bDataViewItem*>( it.current() );
+	if( dataViewItem )
+	  selectedDataItems.append( dataViewItem->dataItem() );
+	else
+	  qDebug("no dataviewitem");
+      }
+
+      m_doc->moveItems( selectedDataItems, parent );
+    }
+    else if( e->source() == m_dataDirTree->viewport() ) {
+      // move the selected dir
+      K3bDirItem* dirItem = ((K3bDataDirViewItem*)m_dataDirTree->selectedItem())->dirItem();
+      m_doc->moveItem( dirItem, parent );
+    }
+
+    // seems that new items have been dropped
+    else if( QTextDrag::canDecode( e ) ) {
+      QString droppedText;
+      QTextDrag::decode( e, droppedText );
+      QStringList urls = QStringList::split("\r\n", droppedText );
+    
+      m_doc->slotAddURLs( urls, parent );
+    }
+  }
+}
+
+
+bool K3bDataView::acceptDrag( QDropEvent* e ) const
+{
+  return( e->source() == m_dataFileView->viewport() || e->source() == m_dataDirTree->viewport() );
 }
 
 
@@ -193,10 +226,8 @@ void K3bDataView::slotRemoveItem()
     QList<QListViewItem> items = m_dataFileView->selectedItems();
     QListIterator<QListViewItem> it( items );
     for(; it.current(); ++it ) {
-      if( K3bDataDirViewItem* d = dynamic_cast<K3bDataDirViewItem*>( it.current() ) )
-	m_doc->removeItem( d->dirItem() );
-      else if ( K3bDataFileViewItem* f = dynamic_cast<K3bDataFileViewItem*>( it.current() ) )
-	m_doc->removeItem( f->fileItem() );
+      if( K3bDataViewItem* d = dynamic_cast<K3bDataViewItem*>( it.current() ) )
+	m_doc->removeItem( d->dataItem() );
     }
   }
   else
@@ -211,8 +242,21 @@ void K3bDataView::slotRemoveItem()
 // ViewItems
 // =================================================================================
 
-K3bDataDirViewItem::K3bDataDirViewItem( K3bDirItem* dir, QListView* parent )
+K3bDataViewItem::K3bDataViewItem( QListView* parent )
   : KListViewItem( parent )
+{
+}
+
+K3bDataViewItem::K3bDataViewItem( QListViewItem* parent )
+  : KListViewItem( parent )
+{
+}
+
+K3bDataViewItem::~K3bDataViewItem()
+{}
+
+K3bDataDirViewItem::K3bDataDirViewItem( K3bDirItem* dir, QListView* parent )
+  : K3bDataViewItem( parent )
 {
   assert( dir );
 
@@ -222,12 +266,18 @@ K3bDataDirViewItem::K3bDataDirViewItem( K3bDirItem* dir, QListView* parent )
 
 
 K3bDataDirViewItem::K3bDataDirViewItem( K3bDirItem* dir, QListViewItem* parent )
-  : KListViewItem( parent )
+  : K3bDataViewItem( parent )
 {
   assert( dir );
 
   m_dirItem = dir;
   setPixmap( 0, *(new QPixmap(KMimeType::pixmapForURL( KURL( "/" ), 0, KIcon::Small ) )) );
+}
+
+
+K3bDataItem* K3bDataDirViewItem::dataItem() const
+{
+  return m_dirItem; 
 }
 
 
@@ -259,7 +309,7 @@ void K3bDataDirViewItem::setText(int col, const QString& text )
 
 	
 K3bDataFileViewItem::K3bDataFileViewItem( K3bFileItem* file, QListView* parent )
-  : KListViewItem( parent )
+  : K3bDataViewItem( parent )
 {
   assert( file );
 
@@ -269,12 +319,18 @@ K3bDataFileViewItem::K3bDataFileViewItem( K3bFileItem* file, QListView* parent )
 
 
 K3bDataFileViewItem::K3bDataFileViewItem( K3bFileItem* file, QListViewItem* parent )
-  : KListViewItem( parent )
+  : K3bDataViewItem( parent )
 {
   assert( file );
 	
   m_fileItem = file;
   setPixmap( 0, file->pixmap(16) );
+}
+
+
+K3bDataItem* K3bDataFileViewItem::dataItem() const
+{
+  return m_fileItem; 
 }
 
 	
@@ -286,15 +342,7 @@ QString K3bDataFileViewItem::text( int index ) const
   case 1:
     return m_fileItem->mimeComment();
   case 2:
-    {
-      QString s = QString::number( m_fileItem->size() );
-      int i = s.length() - 3;
-      while( i > 0 ) {
-	s.insert( i, ' ' );
-	i -= 3;
-      }
-      return s;
-    }
+    return KIO::convertSize( m_fileItem->size() );
   default:
     return "";
   }

@@ -110,10 +110,11 @@ QString K3bRootItem::k3bPath()
   return "";
 }
 
-bool K3bDirItem::alreadyInDirectory( const QString& fileName )
+bool K3bDirItem::alreadyInDirectory( const QString& fileName ) const
 {
-  for( K3bDataItem* _it = m_children->first(); _it; _it = m_children->next() ) {
-    if( _it->k3bName() == fileName )
+  QListIterator<K3bDataItem> it( *m_children );
+  for( ; it.current(); ++it ) {
+    if( it.current()->k3bName() == fileName )
       return true;
   }
   return false;
@@ -128,4 +129,21 @@ long K3bDirItem::k3bSize() const
     size += it.current()->k3bSize();
 
   return size;
+}
+
+
+bool K3bDirItem::isSubItem( K3bDataItem* item ) const
+{
+  if( dynamic_cast<K3bDirItem*>(item) == this )
+    return true;
+
+  K3bDirItem* d = item->parent();
+  while( d ) {
+    if( d == this ) {
+      return true;
+    }
+    d = d->parent();
+  }
+
+  return false;
 }

@@ -48,9 +48,16 @@ class K3bDirItem : public K3bDataItem
   /** returns an empty dummy directory */
   QString localPath();
 
-  bool alreadyInDirectory( const QString& fileName );
+  bool alreadyInDirectory( const QString& fileName ) const;
 
   long k3bSize() const;
+
+  /**
+   * returns true if item is a subItem of 
+   * this dir item 
+   * (returns also true if item == this
+   */
+  bool isSubItem( K3bDataItem* item ) const;
 	
  private:
   QList<K3bDataItem>* m_children;

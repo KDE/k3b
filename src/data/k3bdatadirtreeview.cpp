@@ -27,15 +27,19 @@
 #include <qheader.h>
 
 
-K3bDataDirTreeView::K3bDataDirTreeView( K3bDataDoc* doc, QWidget* parent )
+K3bDataDirTreeView::K3bDataDirTreeView( K3bDataView* view, K3bDataDoc* doc, QWidget* parent )
   : KListView( parent )
 {
+  m_view = view;
+
   setAcceptDrops( true );
   setDropVisualizer( false );
   setDropHighlighter( true );
   setRootIsDecorated( true );
   setAlternateBackground( QColor() );  // disable alternate bg
   setFullWidth();
+  setDragEnabled( true );
+  setItemsMovable( false );
 
   addColumn( "Dir" );
   header()->hide();
@@ -62,7 +66,7 @@ void K3bDataDirTreeView::slotExecuted( QListViewItem* item )
 
 
 bool K3bDataDirTreeView::acceptDrag(QDropEvent* e) const{
-  return ( e->source() == viewport() || QTextDrag::canDecode(e) );
+  return ( e->source() == viewport() || QTextDrag::canDecode(e) || m_view->acceptDrag(e) );
 }
 
 
@@ -109,12 +113,26 @@ void K3bDataDirTreeView::updateContents()
 	  if( !m_itemMap.contains(dirItem) ) {
 	    K3bDataDirViewItem* parentViewItem = m_itemMap[dirItem->parent()];
 	    m_itemMap.insert( dirItem, new K3bDataDirViewItem( dirItem, parentViewItem ) );
-	    parentViewItem->setOpen( true );
+	  }
+	  else {
+	    // check if parent still correct (to get moved items)
+	    K3bDataDirViewItem* dirViewItem = m_itemMap[dirItem];
+	    K3bDataDirViewItem* parentViewItem = (K3bDataDirViewItem*)dirViewItem->parent();
+	    if( dirItem->parent() != parentViewItem->dirItem() ) {
+	      // get the new parent view item
+	      K3bDataDirViewItem* newParentViewItem = m_itemMap[dirItem->parent()];
+	      // reparent it
+	      parentViewItem->takeItem( dirViewItem );
+	      newParentViewItem->insertItem( dirViewItem );
+	    }
 	  }
 	}
 
       item = item->nextSibling();
     }
+
+  // always show the first level
+  m_root->setOpen( true );
 }
 
 

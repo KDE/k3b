@@ -28,13 +28,16 @@
 #include <klocale.h>
 
 
-K3bDataFileView::K3bDataFileView( K3bDataDoc* doc, QWidget* parent )
+K3bDataFileView::K3bDataFileView( K3bDataView* view, K3bDataDoc* doc, QWidget* parent )
   : KListView( parent )
 {
+  m_view = view;
+
   setAcceptDrops( true );
   setDropVisualizer( false );
   setDropHighlighter( true );
   setDragEnabled( true );
+  setItemsMovable( false );
 	
   addColumn( i18n("Name") );
   addColumn( i18n("Type") );
@@ -85,7 +88,7 @@ void K3bDataFileView::updateContents()
 
 
 bool K3bDataFileView::acceptDrag(QDropEvent* e) const{
-  return ( e->source() == viewport() || QTextDrag::canDecode(e) );
+  return ( e->source() == viewport() || QTextDrag::canDecode(e) || m_view->acceptDrag(e) );
 }
 
 

@@ -37,12 +37,10 @@ class K3bDataItem;
 
 class K3bDataDirTreeView : public KListView  
 {
-  friend K3bDataView;
-	
   Q_OBJECT
 
  public:
-  K3bDataDirTreeView( K3bDataDoc*, QWidget* parent );
+  K3bDataDirTreeView( K3bDataView*, K3bDataDoc*, QWidget* parent );
   ~K3bDataDirTreeView() {}
 
   K3bDataDirViewItem* root() { return m_root; }
@@ -53,6 +51,7 @@ class K3bDataDirTreeView : public KListView
  private:
   K3bDataDoc* m_doc;
   K3bDataDirViewItem* m_root;
+  K3bDataView* m_view;
 
   /**
    * We save the dirItems in a map to have a fast way

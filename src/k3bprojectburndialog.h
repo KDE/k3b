@@ -56,7 +56,7 @@ class K3bProjectBurnDialog : public KDialogBase
 	
  protected slots:
    virtual void slotUser1();
-   virtual void slotOk();
+   virtual void slotUser2();
    virtual void slotCancel();
    virtual void slotTempDirButtonPressed();
    void setTempDir( const QString& );

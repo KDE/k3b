@@ -50,7 +50,7 @@ class K3bDataDoc : public K3bDoc
   ~K3bDataDoc();
 
   enum whiteSpaceTreatments { normal = 0, convertToUnderScore = 1, strip = 2, extendedStrip = 3 };
-		
+
   K3bRootItem* root() const { return m_root; }
 
   /** reimplemented from K3bDoc */
@@ -61,10 +61,12 @@ class K3bDataDoc : public K3bDoc
   bool newDocument();	
   long size() const;
   int length() const;
-	
+
   const QString& name() const { return m_name; }
-	
+
   void removeItem( K3bDataItem* item );
+  void moveItem( K3bDataItem* item, K3bDirItem* newParent );
+  void moveItems( QList<K3bDataItem> itemList, K3bDirItem* newParent );
 
   K3bDirItem* addEmptyDir( const QString& name, K3bDirItem* parent );
 	

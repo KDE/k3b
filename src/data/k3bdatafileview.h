@@ -36,12 +36,10 @@ class QDropEvent;
 
 class K3bDataFileView : public KListView  
 {
-  friend K3bDataView;
-	
   Q_OBJECT
 
  public:
-  K3bDataFileView( K3bDataDoc*, QWidget* parent );
+  K3bDataFileView( K3bDataView*, K3bDataDoc*, QWidget* parent );
   ~K3bDataFileView() {}
 	
   K3bDirItem* currentDir() const { return m_currentDir; }
@@ -59,6 +57,7 @@ class K3bDataFileView : public KListView
  private:
   K3bDataDoc* m_doc;
   K3bDirItem* m_currentDir;
+  K3bDataView* m_view;
 };
 
 #endif

@@ -560,6 +560,9 @@ void K3bDataDoc::saveDataItem( K3bDataItem* item, QDomDocument* doc, QDomElement
 
 void K3bDataDoc::removeItem( K3bDataItem* item )
 {
+  if( !item )
+    return;
+
   if( item == root() )
     qDebug( "(K3bDataDoc) tried to remove root-entry!");
   else {
@@ -574,6 +577,50 @@ void K3bDataDoc::removeItem( K3bDataItem* item )
     // the item takes care about it's parent!
     delete item;
   }
+}
+
+
+void K3bDataDoc::moveItem( K3bDataItem* item, K3bDirItem* newParent )
+{
+  if( !item || !newParent ) {
+    qDebug("(K3bDataDoc) item or parentitem was NULL while moving.");
+    return;
+  }
+
+  // check if newParent is subdir of item
+  if( K3bDirItem* dirItem = dynamic_cast<K3bDirItem*>(item) ) {
+    if( dirItem->isSubItem( newParent ) ) {
+      return;
+    }
+  }
+
+
+  item->reparent( newParent );
+
+  emit newFileItems();
+}
+
+
+void K3bDataDoc::moveItems( QList<K3bDataItem> itemList, K3bDirItem* newParent )
+{
+  if( !newParent ) {
+    qDebug( "(K3bDataDoc) tried to move items to nowhere...!" );
+    return;
+  }
+
+  QListIterator<K3bDataItem> it( itemList );
+  for( ; it.current(); ++it ) {
+    // check if newParent is subdir of item
+    if( K3bDirItem* dirItem = dynamic_cast<K3bDirItem*>( it.current() ) ) {
+      if( dirItem->isSubItem( newParent ) ) {
+	continue;
+      }
+    }
+
+    it.current()->reparent( newParent );
+  }
+
+  emit newFileItems();
 }
 
 

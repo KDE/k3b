@@ -750,6 +750,8 @@ void K3bDataJob::addMkisofsParameters()
   if( m_doc->padding()  )
     *m_process << "-pad";	
 
+  *m_process << "-iso-level" << QString::number(m_doc->ISOLevel());
+
   *m_process << "-path-list" << QFile::encodeName(m_pathSpecFile);
 	
   // additional parameters from config

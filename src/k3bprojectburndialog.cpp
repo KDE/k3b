@@ -48,7 +48,8 @@
 
 
 K3bProjectBurnDialog::K3bProjectBurnDialog(K3bDoc* doc, QWidget *parent, const char *name, bool modal )
-  : KDialogBase( KDialogBase::Tabbed, i18n("Write CD"), User1|Ok|Cancel, Ok, parent, name, modal, true, i18n("Write") )
+  : KDialogBase( KDialogBase::Tabbed, i18n("Write CD"), User1|User2|Cancel, 
+		 User1, parent, name, modal, true, i18n("Write"), i18n("Save") )
 {
   m_doc = doc;
 	
@@ -149,20 +150,26 @@ K3bProjectBurnDialog::~K3bProjectBurnDialog(){
 
 int K3bProjectBurnDialog::exec( bool burn )
 {
-  if( burn && m_job == 0 )
-    actionButton(User1)->show();
-  else
-    actionButton(User1)->hide();
+  if( burn && m_job == 0 ) {
+    showButton(User1, true );
+    actionButton(User1)->setDefault(true);
+    actionButton(User2)->setDefault(false);
+    actionButton(User2)->clearFocus();
+  }
+  else {
+    showButton(User1, false );
+    actionButton(User2)->setDefault(false);
+    actionButton(User1)->setDefault(true);
+  }
+
 
   readSettings();
 		
-  KDialogBase::show();
-
-  return 0;
+  return KDialogBase::exec();
 }
 
 
-void K3bProjectBurnDialog::slotOk()
+void K3bProjectBurnDialog::slotUser2()
 {
   saveSettings();
   done( Saved );
@@ -260,6 +267,8 @@ void K3bProjectBurnDialog::slotUpdateFreeTempSpace()
       connect( KDiskFreeSp::findUsageInfo( path ), 
 	       SIGNAL(foundMountPoint(const QString&, unsigned long, unsigned long, unsigned long)),
 	       this, SLOT(slotFreeTempSpace(const QString&, unsigned long, unsigned long, unsigned long)) );    
+    else
+      m_labelFreeSpace->setText( "-" );
   }
 }
 

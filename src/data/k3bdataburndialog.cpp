@@ -107,7 +107,6 @@ void K3bDataBurnDialog::saveSettings()
   // ------------------------------------- saving mkisofs-options --
 
   // save iso-level
-  qDebug("(K3bDataBurnDialog) saving iso-level");
   if( m_groupIsoLevel->selected() == m_radioIsoLevel3 )
     ((K3bDataDoc*)doc())->setISOLevel( 3 );
   else if( m_groupIsoLevel->selected() == m_radioIsoLevel2 )
@@ -116,7 +115,6 @@ void K3bDataBurnDialog::saveSettings()
     ((K3bDataDoc*)doc())->setISOLevel( 1 );
 	
   // save whitespace-treatment
-  qDebug("(K3bDataBurnDialog) saving whitespace-treatment");
   if( m_groupWhiteSpace->selected() == m_radioSpaceStrip )
     ((K3bDataDoc*)doc())->setWhiteSpaceTreatment( K3bDataDoc::strip );
   else if( m_groupWhiteSpace->selected() == m_radioSpaceExtended )
@@ -521,6 +519,9 @@ void K3bDataBurnDialog::slotTempDirButtonPressed()
 
 void K3bDataBurnDialog::slotLoadPreSettings( const QString& pre )
 {
+
+  // TODO: load/save iso level
+
   if( pre == i18n("K3b Default") ) {
     // load defaults from config
     kapp->config()->setGroup( "Default ISO Settings" );
@@ -600,6 +601,9 @@ void K3bDataBurnDialog::slotLoadPreSettings( const QString& pre )
 
 void K3bDataBurnDialog::slotSaveDefaults()
 {
+
+  // TODO: load/save iso level
+
   kapp->config()->setGroup( "Default ISO Settings" );
   kapp->config()->writeEntry( "create Joliet", m_checkCreateJoliet->isChecked( ) );
   kapp->config()->writeEntry( "create Rockridge", m_checkCreateRR->isChecked( ) );

@@ -49,10 +49,15 @@ class K3bDataView : public K3bView
    ~K3bDataView();
 	
    K3bProjectBurnDialog* burnDialog();
-	
+
+   /**
+    * only tests if the drag's source is either the fileview or the dirview
+    */
+   bool acceptDrag( QDropEvent* e ) const;
+
  protected slots:
    /** generates a dropped signal */
-   void slotDropped( KListView*, QDropEvent* e, QListViewItem* after );
+   void slotDropped( KListView*, QDropEvent* e, QListViewItem* after, QListViewItem* parent );
    void showPopupMenu( QListViewItem* _item, const QPoint& );
    void slotRenameItem();
    void slotRemoveItem();
@@ -77,8 +82,18 @@ class K3bDataView : public K3bView
 
 
 
+class K3bDataViewItem : public KListViewItem
+{
+ public:
+  K3bDataViewItem( QListView* parent );
+  K3bDataViewItem( QListViewItem* parent );
+  ~K3bDataViewItem();
+	
+  virtual K3bDataItem* dataItem() const { return 0; }
+};
 
-class K3bDataDirViewItem : public KListViewItem
+
+class K3bDataDirViewItem : public K3bDataViewItem
 {
  public:
   K3bDataDirViewItem( K3bDirItem* dir, QListView* parent );
@@ -91,13 +106,14 @@ class K3bDataDirViewItem : public KListViewItem
   void setText(int col, const QString& text );
 
   K3bDirItem* dirItem() const { return m_dirItem; }
-	
+  K3bDataItem* dataItem() const;
+
  private:
   K3bDirItem* m_dirItem;
 };
 
 
-class K3bDataFileViewItem : public KListViewItem
+class K3bDataFileViewItem : public K3bDataViewItem
 {
  public:
   K3bDataFileViewItem( K3bFileItem*, QListView* parent );
@@ -110,6 +126,7 @@ class K3bDataFileViewItem : public KListViewItem
   void setText(int col, const QString& text );
 
   K3bFileItem* fileItem() const { return m_fileItem; }
+  K3bDataItem* dataItem() const;
 	
  private:
   K3bFileItem* m_fileItem;
