@@ -286,7 +286,7 @@ QString K3bSpecialDataViewItem::text( int col ) const
   case 0:
     return m_dataItem->k3bName();
   case 1:
-    return "-";
+    return m_dataItem->mimeType();
   case 2:
     return KIO::convertSize( m_dataItem->k3bSize() );
   default:
@@ -321,4 +321,10 @@ QString K3bSpecialDataViewItem::key( int col, bool a ) const
     return "1" + text(col);
   else
     return "0" + text(col);
+}
+
+
+K3bDataItem* K3bSpecialDataViewItem::dataItem() const
+{
+  return m_dataItem;
 }

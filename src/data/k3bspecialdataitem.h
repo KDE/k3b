@@ -52,7 +52,11 @@ class K3bSpecialDataItem : public K3bDataItem
 
   virtual K3bDirItem* getDirItem() { return parent(); }
 
+  void setMimeType( const QString& s ) { m_mimeType = s; }
+  const QString& mimeType() const { return m_mimeType; }
+
  private:
+  QString m_mimeType;
   KIO::filesize_t m_k3bSize;
 };
 

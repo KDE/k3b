@@ -579,9 +579,25 @@ bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
       }
       // -----------------------------------------------------------------------
 
+      else if( !elem.attribute( "bootimage" ).isEmpty() ) {
+	K3bBootItem* bootItem = new K3bBootItem( urlElem.text(), this, parent, elem.attributeNode( "name" ).value() );
+	if( elem.attribute( "bootimage" ) == "floppy" )
+	  bootItem->setImageType( K3bBootItem::FLOPPY );
+	else if( elem.attribute( "bootimage" ) == "harddisk" )
+	  bootItem->setImageType( K3bBootItem::HARDDISK );
+	else
+	  bootItem->setImageType( K3bBootItem::NONE );
+	bootItem->setNoBoot( elem.attribute( "no_boot" ) == "yes" );
+	bootItem->setBootInfoTable( elem.attribute( "boot_info_table" ) == "yes" );
+	bootItem->setLoadSegment( elem.attribute( "load_segment" ).toInt() );
+	bootItem->setLoadSize( elem.attribute( "load_size" ).toInt() );
+
+	m_bootImages.append(bootItem);
+
+	createBootCatalogeItem();
+      }
       else {
 	(void)new K3bFileItem( urlElem.text(), this, parent, elem.attributeNode( "name" ).value() );
-	//	m_size += newK3bItem->k3bSize();
       }
     }
   }
@@ -789,6 +805,21 @@ void K3bDataDoc::saveDataItem( K3bDataItem* item, QDomDocument* doc, QDomElement
     topElem.appendChild( subElem );
 
     parent->appendChild( topElem );
+
+    // add boot options as attributes to preserve compatibility to older K3b versions
+    if( K3bBootItem* bootItem = dynamic_cast<K3bBootItem*>( fileItem ) ) {
+      if( bootItem->imageType() == K3bBootItem::FLOPPY )
+	topElem.setAttribute( "bootimage", "floppy" );
+      else if( bootItem->imageType() == K3bBootItem::HARDDISK )
+	topElem.setAttribute( "bootimage", "harddisk" );
+      else
+	topElem.setAttribute( "bootimage", "none" );
+
+      topElem.setAttribute( "no_boot", bootItem->noBoot() ? "yes" : "no" );
+      topElem.setAttribute( "boot_info_table", bootItem->bootInfoTable() ? "yes" : "no" );
+      topElem.setAttribute( "load_segment", QString::number( bootItem->loadSegment() ) );
+      topElem.setAttribute( "load_size", QString::number( bootItem->loadSize() ) );
+    }
   }
   else if( K3bDirItem* dirItem = dynamic_cast<K3bDirItem*>( item ) ) {
     QDomElement topElem = doc->createElement( "directory" );
@@ -1198,22 +1229,33 @@ K3bDirItem* K3bDataDoc::bootImageDir()
 
 K3bFileItem* K3bDataDoc::createBootItem( const QString& filename )
 {
+  // TODO: check if a file with the same name already exists
   K3bBootItem* boot = new K3bBootItem( filename, 
 				       this, bootImageDir() );
 
   m_bootImages.append(boot);
 
-  if( !m_bootCataloge ) {
-    m_bootCataloge = new K3bSpecialDataItem( this, 0, bootImageDir(), "boot.cataloge" );
-    m_bootCataloge->setRemoveable(false);
-    m_bootCataloge->setHideable(false);
-    m_bootCataloge->setWriteToCd(false);
-    m_bootCataloge->setExtraInfo( i18n("El Torito boot cataloge file") );
-  }
+  createBootCatalogeItem();
 
   emit newFileItems();
 
   return boot;
+}
+
+
+K3bDataItem* K3bDataDoc::createBootCatalogeItem()
+{
+  if( !m_bootCataloge ) {
+    K3bSpecialDataItem* b = new K3bSpecialDataItem( this, 0, bootImageDir(), "boot.cataloge" );
+    m_bootCataloge = b;
+    m_bootCataloge->setRemoveable(false);
+    m_bootCataloge->setHideable(false);
+    m_bootCataloge->setWriteToCd(false);
+    m_bootCataloge->setExtraInfo( i18n("El Torito boot cataloge file") );
+    b->setMimeType( i18n("Boot cataloge") );
+  }
+
+  return m_bootCataloge;
 }
 
 

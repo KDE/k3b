@@ -124,7 +124,7 @@ class K3bSpecialDataViewItem : public K3bDataViewItem
   /** reimplemented from QListViewItem */
   void setText(int col, const QString& text );
 
-  K3bDataItem* dataItem() const { return m_dataItem; }
+  K3bDataItem* dataItem() const;
 
   /**
    * reimplemented to have directories always sorted before files
@@ -132,7 +132,7 @@ class K3bSpecialDataViewItem : public K3bDataViewItem
   QString key( int, bool ) const;
 
  private:
-  K3bDataItem* m_dataItem;
+  K3bSpecialDataItem* m_dataItem;
 };
 
 #endif

@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -29,6 +29,7 @@
 #include <qwhatsthis.h>
 
 #include <klineedit.h>
+#include <kiconloader.h>
 #include <klocale.h>
 #include <kmimetype.h>
 #include <kurl.h>
@@ -94,7 +95,7 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( K3bDataItem* dataItem, QWidget
     m_labelLocalLocation->setText( localLocation );
     m_labelSize->setText( KIO::convertSize(dataItem->k3bSize()) );
   }
-  else {
+  else if( K3bDirItem* dirItem = dynamic_cast<K3bDirItem*>(dataItem) ) {
     labelMimeType->setPixmap( KMimeType::pixmapForURL( KURL( "/" )) );
     m_labelType->setText( i18n("Directory") );
     label1->hide();
@@ -102,10 +103,19 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( K3bDataItem* dataItem, QWidget
     m_labelLocalName->hide();
     m_labelLocalLocation->hide();
     line->hide();
-    K3bDirItem* dirItem = (K3bDirItem*)dataItem;
     m_labelSize->setText( KIO::convertSize(dataItem->k3bSize()) + "\n(" +
 			  i18n("in 1 file", "in %n files", dirItem->numFiles()) + " " +
 			  i18n("and 1 directory", "and %n directories", dirItem->numDirs()) + ")" );
+  }
+  else {
+    labelMimeType->setPixmap( DesktopIcon("unknown", KIcon::SizeLarge) );
+    m_labelType->setText( i18n("Special file") );
+    m_labelLocalName->hide();
+    m_labelLocalLocation->hide();
+    label1->hide();
+    label2->hide();
+    line->hide();
+    m_labelSize->setText( KIO::convertSize(dataItem->k3bSize()) );
   }
 
   m_editName->setText( dataItem->k3bName() );

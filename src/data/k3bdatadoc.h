@@ -149,6 +149,7 @@ class K3bDataDoc : public K3bDoc
 
  private:
   void createSessionImportItems( const QString& path, K3bDirItem* parent, KProgressDialog* );
+  K3bDataItem* createBootCatalogeItem();
 
   /**
    * load recursivly
