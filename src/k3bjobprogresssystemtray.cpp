@@ -57,8 +57,8 @@ K3bJobProgressSystemTray::K3bJobProgressSystemTray( QWidget* parent, const char*
 {
   d = new Private();
 
-  d->popupMenu = new KPopupMenu( this );
-  d->popupMenu->insertTitle( kapp->miniIcon(), i18n("K3b - The CD Kreator") );
+  // d->popupMenu = new KPopupMenu( this );
+//   d->popupMenu->insertTitle( kapp->miniIcon(), i18n("K3b - The CD Kreator") );
 
   KWin::setSystemTrayWindowFor( winId(), parent->winId() );
 }
@@ -83,7 +83,7 @@ void K3bJobProgressSystemTray::setJob( K3bJob* j )
 	   this, SLOT(slotFinished(bool)) );
 
   QToolTip::remove( this );
-  QToolTip::add( this, d->job->jobDescription() );
+  QToolTip::add( this, "K3b - " + d->job->jobDescription() );
 
   update();
 }
@@ -100,9 +100,9 @@ void K3bJobProgressSystemTray::slotFinished( bool success )
 {
   QToolTip::remove( this );
   if( success )
-    QToolTip::add( this, i18n("Successfully finished") );
+    QToolTip::add( this, "K3b - " + i18n("Successfully finished") );
   else
-    QToolTip::add( this, i18n("Finished with errors") );
+    QToolTip::add( this, "K3b - " + i18n("Finished with errors") );
 }
 
 
@@ -187,6 +187,14 @@ void K3bJobProgressSystemTray::paintEvent( QPaintEvent* )
 
   QPainter p(this);
   p.drawPixmap( 0, 0, d->pixmap );
+}
+
+
+void K3bJobProgressSystemTray::mousePressEvent( QMouseEvent* e )
+{
+  if( rect().contains( e->pos() ) ) {
+    KWin::setActiveWindow( parentWidget()->winId() );
+  }
 }
 
 

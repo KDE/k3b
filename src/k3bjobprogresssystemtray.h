@@ -19,6 +19,7 @@
 #include <qwidget.h>
 
 class QPaintEvent;
+class QMouseEvent;
 class K3bJob;
 
 
@@ -39,6 +40,7 @@ class K3bJobProgressSystemTray : public QWidget
 
  protected:
   void paintEvent( QPaintEvent* );
+  void mousePressEvent( QMouseEvent* );
 
  private:
   class Private;

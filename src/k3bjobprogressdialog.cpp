@@ -109,8 +109,6 @@ K3bJobProgressDialog::K3bJobProgressDialog( QWidget* parent,
     in_loop(false),
     m_systemTray(0)
 {
-  setCaption( i18n("Progress") );
-
   setupGUI();
   setupConnections();
 
@@ -451,6 +449,8 @@ void K3bJobProgressDialog::setJob( K3bJob* job )
 
     m_labelJob->setText( m_job->jobDescription() );
     m_labelJobDetails->setText( m_job->jobDetails() );
+
+    setCaption( m_job->jobDescription() );
   }
 }
 
