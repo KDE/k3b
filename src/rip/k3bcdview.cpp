@@ -61,6 +61,8 @@ K3bCdView::K3bCdView( QWidget* parent, const char *name )
 
   setupActions();
   setupGUI();
+
+  m_copyAction->setEnabled( !m_listView->selectedItems().isEmpty() );
 }
 
 
@@ -72,9 +74,6 @@ void K3bCdView::setupGUI()
 {
   QVBoxLayout* layout = new QVBoxLayout( this );
   layout->setAutoAdd( true );
-
-  K3bToolBox* toolBox = new K3bToolBox( this );
-  toolBox->addButton( m_copyAction );
 
   m_actionCollection = new KActionCollection( this );
 
@@ -107,6 +106,9 @@ void K3bCdView::setupGUI()
 	   this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
   connect( m_listView, SIGNAL(selectionChanged()),
 	   this, SLOT(slotSelectionChanged()) );
+
+  K3bToolBox* toolBox = new K3bToolBox( this );
+  toolBox->addButton( m_copyAction );
 }
 
 
