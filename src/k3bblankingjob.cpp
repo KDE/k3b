@@ -20,6 +20,7 @@
 #include "k3b.h"
 #include "tools/k3bglobals.h"
 #include "device/k3bdevice.h"
+#include "device/k3bdevicehandler.h"
 #include "tools/k3bexternalbinmanager.h"
 
 #include <kprocess.h>
@@ -63,9 +64,9 @@ void K3bBlankingJob::start()
 
   if( !KIO::findDeviceMountPoint( m_device->mountDevice() ).isEmpty() ) {
     // TODO: enable me after message freeze
-    // emit infoMessage( i18n("Unmounting disk"), INFO );
+    emit infoMessage( i18n("Unmounting disk"), INFO );
     // unmount the cd
-    connect( KIO::unmount( m_device->mountPoint(), false ), SIGNAL(result(KIO::Job*)),
+    connect( K3bCdDevice::unmount(m_device),SIGNAL(finished(K3bCdDevice::DeviceHandler *)),
 	     this, SLOT(slotStartErasing()) );
   }
   else {
@@ -87,11 +88,12 @@ void K3bBlankingJob::slotStartErasing()
 void K3bBlankingJob::slotUseCdrecord()
 {
   m_blankingJob = new K3bCdrecordWriter(m_device,this);
-  connect(m_blankingJob, SIGNAL(finished(bool)), this, SLOT(slotFinished(bool)));
-  connect(m_blankingJob, SIGNAL(infoMessage( const QString&, int)),
+  K3bCdrecordWriter *writer = dynamic_cast<K3bCdrecordWriter *>(m_blankingJob);
+  connect(writer, SIGNAL(finished(bool)), this, SLOT(slotFinished(bool)));
+  connect(writer, SIGNAL(infoMessage( const QString&, int)),
           this,SIGNAL(infoMessage( const QString&, int)));
 
-  ((K3bCdrecordWriter *)m_blankingJob)->prepareArgumentList();
+  writer->prepareArgumentList();
 
   QString mode;
   switch( m_mode ) {
@@ -112,24 +114,25 @@ void K3bBlankingJob::slotUseCdrecord()
     break;
   }
 
-  ((K3bCdrecordWriter *)m_blankingJob)->addArgument("blank="+ mode);
+  writer->addArgument("blank="+ mode);
 
   if (m_force)
-    ((K3bCdrecordWriter *)m_blankingJob)->addArgument("-force");
-  ((K3bCdrecordWriter *)m_blankingJob)->setBurnSpeed(m_speed);
+    writer->addArgument("-force");
+  writer->setBurnSpeed(m_speed);
 
-  ((K3bCdrecordWriter *)m_blankingJob)->start();
+  writer->start();
 
 }
 
 void K3bBlankingJob::slotUseCdrdao()
 {
   m_blankingJob = new K3bCdrdaoWriter(m_device,this);
-  connect(m_blankingJob, SIGNAL(finished(bool)), this, SLOT(slotFinished(bool)));
-  connect(m_blankingJob, SIGNAL(infoMessage( const QString&, int)),
+  K3bCdrdaoWriter *writer = dynamic_cast<K3bCdrdaoWriter *>(m_blankingJob);
+  connect(writer, SIGNAL(finished(bool)), this, SLOT(slotFinished(bool)));
+  connect(writer, SIGNAL(infoMessage( const QString&, int)),
           this,SIGNAL(infoMessage( const QString&, int)));
 
-  ((K3bCdrdaoWriter *)m_blankingJob)->setCommand(K3bCdrdaoWriter::BLANK);
+  writer->setCommand(K3bCdrdaoWriter::BLANK);
 
   int mode = K3bCdrdaoWriter::MINIMAL;
   switch( m_mode ) {
@@ -141,21 +144,21 @@ void K3bBlankingJob::slotUseCdrdao()
     break;
   }
 
-  ((K3bCdrdaoWriter *)m_blankingJob)->setBlankMode(mode);
-  ((K3bCdrdaoWriter *)m_blankingJob)->setForce(m_force);
-  ((K3bCdrdaoWriter *)m_blankingJob)->setBurnSpeed(m_speed);
+  writer->setBlankMode(mode);
+  writer->setForce(m_force);
+  writer->setBurnSpeed(m_speed);
 
-  ((K3bCdrdaoWriter *)m_blankingJob)->start();
+  writer->start();
 }
 
 void K3bBlankingJob::cancel()
 {
    switch ( m_writingApp )
   {
-     case K3b::CDRDAO:  ((K3bCdrdaoWriter *)m_blankingJob)->cancel(); break;
+     case K3b::CDRDAO:  dynamic_cast<K3bCdrdaoWriter *>(m_blankingJob)->cancel(); break;
      case K3b::DEFAULT:
      case K3b::CDRECORD:
-     default:           ((K3bCdrecordWriter *)m_blankingJob)->cancel(); break;
+     default:           dynamic_cast<K3bCdrecordWriter *>(m_blankingJob)->cancel(); break;
   }
   emit canceled();
   emit finished( false );
