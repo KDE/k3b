@@ -181,30 +181,21 @@ void K3bDataFileView::slotDropped( QDropEvent* e, QListViewItem*, QListViewItem*
 
 void K3bDataFileView::slotDataItemRemoved( K3bDataItem* item )
 {
-  if( item == currentDir() )
-    {
+  if( item->isDir() ) {
+    if( ((K3bDirItem*)item)->isSubItem( currentDir() ) ) {
       slotSetCurrentDir( item->parent() );
-
     }
-  if( item->parent() == currentDir() )
-    {
-      QListViewItemIterator it(this);
-      for( ; it.current(); ++it )
-	{
-	  if( K3bDataDirViewItem* dirViewItem = dynamic_cast<K3bDataDirViewItem*>(it.current()) ) {
-	    if( dirViewItem->dirItem() == item ) {
-	      delete it.current();
-	      break;
-	    }
-	  }
-	  else if( K3bDataFileViewItem* fileViewItem = dynamic_cast<K3bDataFileViewItem*>(it.current()) ) {
-	    if( fileViewItem->fileItem() == item ) {
-	      delete it.current();
-	      break;
-	    }
-	  }
-	} // for it
-    }
+  }
+  
+  if( item->parent() == currentDir() ) {
+    QListViewItemIterator it(this);
+    for( ; it.current(); ++it ) {
+      if( ((K3bDataViewItem*)*it)->dataItem() == item ) {
+	delete it.current();
+	break;
+      }
+    } // for it
+  }
 }
 
 
