@@ -158,13 +158,13 @@ void K3bEmptyDiscWaiter::ErasingInfoDialog::slotFinished( bool success )
 {
   m_busyWidget->showBusy( false );
 
+  showButtonOK( true );
+  showButtonCancel( false );
+  
   if( success )
-    slotClose();
-  else {
-    showButtonOK( true );
-    showButtonCancel( false );
+    m_label->setText( i18n("Disk successfully erased. Please reload the disk.") );
+  else
     m_label->setText( i18n("Sorry, K3b was not able to erase the disk.") );
-  }
 }
 
 

@@ -10,6 +10,8 @@
 #include <qradiobutton.h>
 #include <qvalidator.h>
 #include <qbuttongroup.h>
+#include <qtooltip.h>
+#include <qwhatsthis.h>
 
 #include <knuminput.h>
 #include <kconfig.h>
@@ -85,6 +87,8 @@ void K3bBurningOptionTab::setupGui()
 
   m_checkUseID3Tag = new QCheckBox( i18n("Use audio tags for filenames"), m_groupData );
   m_checkDropDoubles = new QCheckBox( i18n("Discard identical names"), m_groupData );
+  m_checkListHiddenFiles = new QCheckBox( i18n("List hidden files"), m_groupData );
+  m_checkListSystemFiles = new QCheckBox( i18n("List system files"), m_groupData );
   // -----------------------------------------------------------------------
 
   // default cd size group
@@ -182,6 +186,18 @@ void K3bBurningOptionTab::setupGui()
   // -----------------------------------------------------------------------
   mainTabbed->addTab( projectTab, i18n("Projects") );
   mainTabbed->addTab( advancedTab, i18n("Advanced") );
+
+
+  QToolTip::add( m_checkListHiddenFiles, i18n("Add hidden files in subdirectories") );
+  QToolTip::add( m_checkListSystemFiles, i18n("Add system files in subdirectories") );
+
+  QWhatsThis::add( m_checkListHiddenFiles, i18n("<p>If this option is checked hidden files "
+						"in directories added to a data project will "
+						"also be added.</p>" ) );
+  QWhatsThis::add( m_checkListSystemFiles, i18n("<p>If this option is checked system files "
+						"(fifos, devices, sockets) "
+						"in directories added to a data project will "
+						"also be added.</p>" ) );
 }
 
 
@@ -192,6 +208,8 @@ void K3bBurningOptionTab::readSettings()
   c->setGroup( "Data project settings" );
   m_checkUseID3Tag->setChecked( c->readBoolEntry("Use ID3 Tag for mp3 renaming", false) );
   m_checkDropDoubles->setChecked( c->readBoolEntry("Drop doubles", false) );
+  m_checkListHiddenFiles->setChecked( c->readBoolEntry("List hidden files", false ) );
+  m_checkListSystemFiles->setChecked( c->readBoolEntry("List system files", false ) );
 
   c->setGroup( "Audio project settings" );
   m_editDefaultPregap->setValue( c->readNumEntry( "default pregap", 150 ) );
@@ -235,6 +253,8 @@ void K3bBurningOptionTab::saveSettings()
   c->setGroup( "Data project settings" );
   c->writeEntry( "Use ID3 Tag for mp3 renaming", m_checkUseID3Tag->isChecked() );
   c->writeEntry( "Drop doubles", m_checkDropDoubles->isChecked() );
+  c->writeEntry( "List hidden files", m_checkListHiddenFiles->isChecked() );
+  c->writeEntry( "List system files", m_checkListSystemFiles->isChecked() );
 
   k3bMain()->setUseID3TagForMp3Renaming( m_checkUseID3Tag->isChecked() );
 

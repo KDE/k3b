@@ -343,8 +343,9 @@ bool K3bAudioDoc::loadDocumentData( QDomDocument* doc )
     if( !QFile::exists( url ) )
       m_notFoundFiles.append( url );
     else {
-
-      if( K3bAudioTrack* track = createTrack( url ) ) {
+      KURL k;
+      k.setPath( url );
+      if( K3bAudioTrack* track = createTrack( k ) ) {
       
 	QDomNodeList trackNodes = trackElem.childNodes();
 

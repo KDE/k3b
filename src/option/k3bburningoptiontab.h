@@ -34,6 +34,8 @@ Q_OBJECT
 
   QCheckBox*    m_checkUseID3Tag;
   QCheckBox*    m_checkDropDoubles;
+  QCheckBox*    m_checkListHiddenFiles;
+  QCheckBox*    m_checkListSystemFiles;
 
   QComboBox*    m_comboPregapFormat;
   KIntNumInput* m_editDefaultPregap;
