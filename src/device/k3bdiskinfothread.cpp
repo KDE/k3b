@@ -48,7 +48,7 @@ void K3bCdDevice::DiskInfoThread::run()
 
 void K3bCdDevice::DiskInfoThread::finish(bool success){
   m_info->valid=success;
-  QCustomEvent* ready = new QCustomEvent(K3bProgressInfoEvent::Finished);
+  K3bProgressInfoEvent* ready = new K3bProgressInfoEvent(K3bProgressInfoEvent::Finished);
   QApplication::postEvent(m_parent, ready);
 }
 

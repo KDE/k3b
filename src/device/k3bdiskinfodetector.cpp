@@ -174,8 +174,8 @@ void K3bCdDevice::DiskInfoDetector::slotIsVideoDvd( bool dvd )
 }
 
 void K3bCdDevice::DiskInfoDetector::customEvent(QCustomEvent *e) {
-kdDebug() << "(K3bDiskInfoDetector) customEvent" << endl;
-  if(e->type() == (QEvent::Type)K3bProgressInfoEvent::Finished)
+  K3bProgressInfoEvent* be = static_cast<K3bProgressInfoEvent*>(e);
+  if(be->type() == K3bProgressInfoEvent::Finished)
      fetchExtraInfo();
 }
 
