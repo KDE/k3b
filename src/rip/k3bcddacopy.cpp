@@ -348,7 +348,8 @@ void K3bCddaCopy::slotCheckIfThreadStillRunning()
   if( m_audioRip->running() ) {
     // this could happen if the thread is stuck in paranoia_read
     // because of an unreadable cd
-    ((QThread*)m_audioRip)->terminate();
+    // ((QThread*)m_audioRip)->terminate(); // only QT 3.1.1
+    ((QThread*)m_audioRip)->exit();
     slotTrackFinished( false );
   }
 }
