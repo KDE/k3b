@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -22,7 +22,7 @@
 
 #include "device/k3bdevicemanager.h"
 #include "device/k3bdevice.h"
-#include "cdinfo/k3bdiskinfo.h"
+#include "device/k3bdiskinfo.h"
 
 #include <kiconloader.h>
 #include <klocale.h>

@@ -26,6 +26,7 @@
 #include <kfiledetailview.h>
 #include "device/k3bdevice.h"
 #include "device/k3bdevicemanager.h"
+#include "device/k3bdiskinfodetector.h"
 
 class QSplitter;
 class KURL;
@@ -35,10 +36,8 @@ class K3bMovieView;
 class KComboBox;
 class K3bFileTreeView;
 class QWidgetStack;
-class K3bDiskInfo;
 class K3bDiskInfoView;
 class KActionCollection;
-class K3bDiskInfoDetector;
 class KActionMenu;
 class QScrollView;
 class QLabel;
@@ -70,7 +69,7 @@ class K3bDirView : public QVBox
   void slotDirActivated( const QString& );
   void slotUpdateURLCombo( const KURL& url );
   void slotMountDevice( K3bDevice* dev );
-  void slotDiskInfoReady( const K3bDiskInfo& info );
+  void slotDiskInfoReady( const K3bCdDevice::DiskInfo& info );
   void reload();
   void home();
   void slotDetectDiskInfo( K3bDevice* dev );

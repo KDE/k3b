@@ -56,10 +56,12 @@ typedef Q_INT32 size32;
 
 
 
-const char* K3bCdDevice::CdDevice::cdrdao_drivers[] = { "auto", "plextor", "plextor-scan", "cdd2600", "generic-mmc",
-					    "generic-mmc-raw", "ricoh-mp6200", "sony-cdu920",
-					    "sony-cdu948", "taiyo-yuden", "teac-cdr55", "toshiba",
-					    "yamaha-cdr10x", 0};
+const char* K3bCdDevice::CdDevice::cdrdao_drivers[] =
+  { "auto", "plextor", "plextor-scan", "cdd2600", "generic-mmc",
+    "generic-mmc-raw", "ricoh-mp6200", "sony-cdu920",
+    "sony-cdu948", "taiyo-yuden", "teac-cdr55", "toshiba",
+    "yamaha-cdr10x", 0
+  };
 
 
 
@@ -82,24 +84,24 @@ K3bCdDevice::CdDevice::CdDevice( const QString& devname )
   m_bWritesCdrw = false;
   m_bus = m_target = m_lun = -1;
 
-//   QString model( drive->drive_model );
+  //   QString model( drive->drive_model );
 
-//   // the cd_paranoia-lib puts vendor, model, and version in one string
-//   // we need to split it
-//   int i;
-//   if( (i = model.find("ATAPI")) != -1 )
-//     model.remove( i, 5 );
-//   if( (i = model.find("compatible")) != -1 )
-//     model.remove( i, 10 );
+  //   // the cd_paranoia-lib puts vendor, model, and version in one string
+  //   // we need to split it
+  //   int i;
+  //   if( (i = model.find("ATAPI")) != -1 )
+  //     model.remove( i, 5 );
+  //   if( (i = model.find("compatible")) != -1 )
+  //     model.remove( i, 10 );
 
-//   model = model.stripWhiteSpace();
+  //   model = model.stripWhiteSpace();
 
-//   // we assume that all letters up to the first white space
-//   // belong to the vendor string and the rest is the model
-//   // description
+  //   // we assume that all letters up to the first white space
+  //   // belong to the vendor string and the rest is the model
+  //   // description
 
-//   m_vendor = model.left( model.find(' ') ).stripWhiteSpace();
-//   m_description = model.mid( model.find(' ') ).stripWhiteSpace();
+  //   m_vendor = model.left( model.find(' ') ).stripWhiteSpace();
+  //   m_description = model.mid( model.find(' ') ).stripWhiteSpace();
 }
 
 
@@ -112,13 +114,15 @@ K3bCdDevice::CdDevice::~CdDevice()
 bool K3bCdDevice::CdDevice::init()
 {
   int cdromfd = ::open( blockDeviceName().ascii(), O_RDONLY | O_NONBLOCK );
-  if(cdromfd < 0) {
+  if(cdromfd < 0)
+  {
     kdDebug() << "could not open device " << blockDeviceName() << " (" << strerror(errno) << ")" << endl;
     return false;
   }
 
   int drivetype = ::ioctl(cdromfd, CDROM_GET_CAPABILITY, CDSL_CURRENT);
-  if( drivetype < 0 ) {
+  if( drivetype < 0 )
+  {
     kdDebug() << "Error while retrieving capabilities." << endl;
     ::close( cdromfd );
     return false;
@@ -126,19 +130,24 @@ bool K3bCdDevice::CdDevice::init()
 
   d->deviceType = CDROM;  // all drives should be able to read cdroms
 
-  if (drivetype & CDC_CD_R) {
+  if (drivetype & CDC_CD_R)
+  {
     d->deviceType |= CDR;
   }
-  if (drivetype & CDC_CD_RW) {
+  if (drivetype & CDC_CD_RW)
+  {
     d->deviceType |= CDRW;
   }
-  if (drivetype & CDC_DVD_R){
+  if (drivetype & CDC_DVD_R)
+  {
     d->deviceType |= DVDR;
   }
-  if (drivetype & CDC_DVD_RAM) {
+  if (drivetype & CDC_DVD_RAM)
+  {
     d->deviceType |= DVDRAM;
   }
-  if (drivetype & CDC_DVD) {
+  if (drivetype & CDC_DVD)
+  {
     d->deviceType |= DVDROM;
   }
 
@@ -152,13 +161,16 @@ bool K3bCdDevice::CdDevice::init()
 
 bool K3bCdDevice::CdDevice::furtherInit()
 {
-  if (d->interfaceType == IDE) {
+  if (d->interfaceType == IDE)
+  {
     int cdromfd = ::open( devicename().ascii(), O_RDONLY | O_NONBLOCK );
-    if (cdromfd < 0) {
+    if (cdromfd < 0)
+    {
       kdDebug() << "(K3bIdeDevice) Error: could not open device." << endl;
       return false;
     }
-    else {
+    else
+    {
       struct hd_driveid hdId;
       ::ioctl( cdromfd, HDIO_GET_IDENTITY, &hdId );
 
@@ -169,31 +181,38 @@ bool K3bCdDevice::CdDevice::furtherInit()
 
       return true;
     }
-  } else
+  }
+  else
     return true;
 }
 
-K3bCdDevice::CdDevice::interface K3bCdDevice::CdDevice::interfaceType() {
-    if (d->interfaceType == OTHER) {
-      int cdromfd = ::open( devicename().ascii(), O_RDONLY | O_NONBLOCK );
-      if (cdromfd < 0) {
-        kdDebug() << "could not open device " << devicename() << " (" << strerror(errno) << ")" << endl;
-        return OTHER;
-      }
-
-      // stat the device
-      struct stat cdromStat;
-      ::fstat( cdromfd, &cdromStat );
-
-      if( IDE_DISK_MAJOR( cdromStat.st_rdev>>8 ) ) {
-        d->interfaceType = IDE;
-      } else if ( SCSI_BLK_MAJOR( cdromStat.st_rdev>>8 ) ) {
-        d->interfaceType = SCSI;
-      }
-
-      ::close(cdromfd);
+K3bCdDevice::CdDevice::interface K3bCdDevice::CdDevice::interfaceType()
+{
+  if (d->interfaceType == OTHER)
+  {
+    int cdromfd = ::open( devicename().ascii(), O_RDONLY | O_NONBLOCK );
+    if (cdromfd < 0)
+    {
+      kdDebug() << "could not open device " << devicename() << " (" << strerror(errno) << ")" << endl;
+      return OTHER;
     }
-    return d->interfaceType;
+
+    // stat the device
+    struct stat cdromStat;
+    ::fstat( cdromfd, &cdromStat );
+
+    if( IDE_DISK_MAJOR( cdromStat.st_rdev>>8 ) )
+    {
+      d->interfaceType = IDE;
+    }
+    else if ( SCSI_BLK_MAJOR( cdromStat.st_rdev>>8 ) )
+    {
+      d->interfaceType = SCSI;
+    }
+
+    ::close(cdromfd);
+  }
+  return d->interfaceType;
 }
 
 int K3bCdDevice::CdDevice::type() const
@@ -279,30 +298,34 @@ void K3bCdDevice::CdDevice::setBurnproof( bool b )
   m_burnproof = b;
 }
 
-K3bDiskInfo::type  K3bCdDevice::CdDevice::diskType() {
+K3bDiskInfo::type  K3bCdDevice::CdDevice::diskType()
+{
 
   int status;
   K3bDiskInfo::type ret = K3bDiskInfo::UNKNOWN;
   int cdromfd = ::open( devicename().ascii(), O_RDONLY | O_NONBLOCK );
-  if (cdromfd < 0) {
+  if (cdromfd < 0)
+  {
     kdDebug() << "(K3bCdDevice) Error: could not open device." << endl;
     return K3bDiskInfo::UNKNOWN;
   }
 
-  if ( (status = ::ioctl(cdromfd,CDROM_DISC_STATUS)) >= 0 ) {
-    switch (status) {
-      case CDS_AUDIO:   ret = K3bDiskInfo::AUDIO;
-                        break;
-      case CDS_DATA_1:
-      case CDS_DATA_2:  ret = K3bDiskInfo::DATA;
-                        break;
-      case CDS_XA_2_1:
-      case CDS_XA_2_2:
-      case CDS_MIXED:   ret = K3bDiskInfo::MIXED;
-                        break;
-      case CDS_NO_DISC: ret = K3bDiskInfo::NODISC;
-                        break;
-      case CDS_NO_INFO: ret = K3bDiskInfo::UNKNOWN;
+  if ( (status = ::ioctl(cdromfd,CDROM_DISC_STATUS)) >= 0 )
+  {
+    switch (status)
+    {
+    case CDS_AUDIO:   ret = K3bDiskInfo::AUDIO;
+      break;
+    case CDS_DATA_1:
+    case CDS_DATA_2:  ret = K3bDiskInfo::DATA;
+      break;
+    case CDS_XA_2_1:
+    case CDS_XA_2_2:
+    case CDS_MIXED:   ret = K3bDiskInfo::MIXED;
+      break;
+    case CDS_NO_DISC: ret = K3bDiskInfo::NODISC;
+      break;
+    case CDS_NO_INFO: ret = K3bDiskInfo::UNKNOWN;
     }
   }
   if ( isDVD() )
@@ -313,21 +336,24 @@ K3bDiskInfo::type  K3bCdDevice::CdDevice::diskType() {
 
 }
 
-bool K3bCdDevice::CdDevice::isDVD() {
+bool K3bCdDevice::CdDevice::isDVD()
+{
   bool ret = false;
   int cdromfd = ::open( devicename().ascii(), O_RDONLY | O_NONBLOCK );
-  if (cdromfd < 0) {
+  if (cdromfd < 0)
+  {
     kdDebug() << "(K3bCdDevice) Error: could not open device." << endl;
     return ret;
   }
-  if ( d->deviceType & (DVDR | DVDRAM | DVDROM) ) {
-//     try to read the physical dvd-structure
-//     if this fails, we probably cannot take any further (usefull) dvd-action
-     dvd_struct dvdinfo;
-     ::memset(&dvdinfo,0,sizeof(dvd_struct));
-     dvdinfo.type = DVD_STRUCT_PHYSICAL;
-     if ( ::ioctl(cdromfd,DVD_READ_STRUCT,&dvdinfo) == 0 )
-       ret = true;
+  if ( d->deviceType & (DVDR | DVDRAM | DVDROM) )
+  {
+    //     try to read the physical dvd-structure
+    //     if this fails, we probably cannot take any further (usefull) dvd-action
+    dvd_struct dvdinfo;
+    ::memset(&dvdinfo,0,sizeof(dvd_struct));
+    dvdinfo.type = DVD_STRUCT_PHYSICAL;
+    if ( ::ioctl(cdromfd,DVD_READ_STRUCT,&dvdinfo) == 0 )
+      ret = true;
   }
   ::close(cdromfd);
   return ret;
@@ -338,12 +364,14 @@ int K3bCdDevice::CdDevice::isReady() const
   int drive_status,ret;
   ret = 1;
   int cdromfd = ::open( devicename().ascii(), O_RDONLY | O_NONBLOCK );
-  if (cdromfd < 0) {
+  if (cdromfd < 0)
+  {
     kdDebug() << "(K3bCdDevice) Error: could not open device." << endl;
     return ret;
   }
 
-  if ( (drive_status = ::ioctl(cdromfd,CDROM_DRIVE_STATUS)) < 0 ) {
+  if ( (drive_status = ::ioctl(cdromfd,CDROM_DRIVE_STATUS)) < 0 )
+  {
     kdDebug() << "(K3bCdDevice) Error: could not get drive status" << endl;
     ret = 1;
   }
@@ -361,19 +389,25 @@ int K3bCdDevice::CdDevice::isEmpty()
 {
   int ret = NO_INFO;
   int cdromfd = ::open( devicename().ascii(), O_RDONLY | O_NONBLOCK );
-  if (cdromfd < 0) {
+  if (cdromfd < 0)
+  {
     kdDebug() << "(K3bCdDevice) Error: could not open device." << endl;
     return NO_INFO;
   }
 
   int drive_status;
-  if ( (drive_status = ::ioctl(cdromfd,CDROM_DRIVE_STATUS)) < 0 ) {
+  if ( (drive_status = ::ioctl(cdromfd,CDROM_DRIVE_STATUS)) < 0 )
+  {
     kdDebug() << "(K3bCdDevice) Error: could not get drive status" << endl;
     ret = NO_INFO;
-  } else if ( drive_status == CDS_NO_DISC || drive_status == CDS_TRAY_OPEN ) { // kernel bug ?? never seen CDS_NO_DISC
+  }
+  else if ( drive_status == CDS_NO_DISC || drive_status == CDS_TRAY_OPEN )
+  { // kernel bug ?? never seen CDS_NO_DISC
     kdDebug() << "(K3bCdDevice)  Error: No disk in drive" << endl;
     ret = NO_DISK;
-  } else {
+  }
+  else
+  {
     struct cdrom_generic_command cmd;
 
     unsigned char inf[32];
@@ -385,35 +419,38 @@ int K3bCdDevice::CdDevice::isEmpty()
     cmd.buffer = inf;
     cmd.buflen = 32;
     cmd.data_direction = CGC_DATA_READ;
-//
-// Disc Information Block
-// ======================
-// Byte   0-1: Disk Information Length
-// Byte     2: Bits 0-1 Disc Status: 0-empty,1-appendable,2-complete,3-other
-//             Bits 2-3 State of last Session: 0-empty,1-incomplete,2-reserved,3-complete
-//             Bit    4 Erasable, 1-cd-rw present
-//             Bits 5-7 Reserved
-// Byte     3: Number of first Track on Disk
-// Byte     4: Number of Sessions (LSB)
-// Byte     5: First Track in Last Session (LSB)
-// Byte     6: Last Track in Last Session (LSB)
-// Byte     7: Bits 0-4 Reserved
-//             Bit    5 URU Unrestricted Use Bit
-//             Bit    6 DBC_V Disc Bar Code Field is Valid
-//             Bit    7 DID_V Disc Id Field is valid
-// Byte     8: Disc Type: 0x00 CD-DA or CD-ROM, 0x10 CD-I, 0x20 CD-ROM XA, 0xFF undefined
-//                        all other values reserved
-// Byte     9: Number of Sessions (MSB)
-// Byte    10: First Track in Last Session (MSB)
-// Byte    11: Last Track in Last Session (MSB)
-// Byte 12-15: Disc Identification
-// Byte 16-19: Last Session Lead-In Start Time MSF (16-MSB 19-LSB)
-// Byte 20-23: Last Possible Start Time for Start of Lead-Out MSF (20-MSB 23-LSB)
-// Byte 24-31: Disc Bar Code
-//
-    if ( ::ioctl(cdromfd,CDROM_SEND_PACKET,&cmd) == 0 ) {
+    //
+    // Disc Information Block
+    // ======================
+    // Byte   0-1: Disk Information Length
+    // Byte     2: Bits 0-1 Disc Status: 0-empty,1-appendable,2-complete,3-other
+    //             Bits 2-3 State of last Session: 0-empty,1-incomplete,2-reserved,3-complete
+    //             Bit    4 Erasable, 1-cd-rw present
+    //             Bits 5-7 Reserved
+    // Byte     3: Number of first Track on Disk
+    // Byte     4: Number of Sessions (LSB)
+    // Byte     5: First Track in Last Session (LSB)
+    // Byte     6: Last Track in Last Session (LSB)
+    // Byte     7: Bits 0-4 Reserved
+    //             Bit    5 URU Unrestricted Use Bit
+    //             Bit    6 DBC_V Disc Bar Code Field is Valid
+    //             Bit    7 DID_V Disc Id Field is valid
+    // Byte     8: Disc Type: 0x00 CD-DA or CD-ROM, 0x10 CD-I, 0x20 CD-ROM XA, 0xFF undefined
+    //                        all other values reserved
+    // Byte     9: Number of Sessions (MSB)
+    // Byte    10: First Track in Last Session (MSB)
+    // Byte    11: Last Track in Last Session (MSB)
+    // Byte 12-15: Disc Identification
+    // Byte 16-19: Last Session Lead-In Start Time MSF (16-MSB 19-LSB)
+    // Byte 20-23: Last Possible Start Time for Start of Lead-Out MSF (20-MSB 23-LSB)
+    // Byte 24-31: Disc Bar Code
+    //
+    if ( ::ioctl(cdromfd,CDROM_SEND_PACKET,&cmd) == 0 )
+    {
       ret = (inf[2] & 0x03);
-    } else {
+    }
+    else
+    {
       kdDebug() << "(K3bCdDevice) could not get disk info !" << endl;
       ret = NO_INFO;
     }
@@ -424,10 +461,12 @@ int K3bCdDevice::CdDevice::isEmpty()
 
 }
 
-K3b::Msf K3bCdDevice::CdDevice::discSize() {
+K3b::Msf K3bCdDevice::CdDevice::discSize()
+{
   K3b::Msf ret(0);
   int cdromfd = ::open( devicename().ascii(), O_RDONLY | O_NONBLOCK );
-  if (cdromfd < 0) {
+  if (cdromfd < 0)
+  {
     kdDebug() << "(K3bCdDevice) Error: could not open device." << endl;
     return ret;
   }
@@ -443,12 +482,14 @@ K3b::Msf K3bCdDevice::CdDevice::discSize() {
   cmd.buffer = inf;
   cmd.buflen = 32;
   cmd.data_direction = CGC_DATA_READ;
-  if ( ::ioctl(cdromfd,CDROM_SEND_PACKET,&cmd) == 0 ) {
+  if ( ::ioctl(cdromfd,CDROM_SEND_PACKET,&cmd) == 0 )
+  {
     if ( inf[21] != 0xFF && inf[22] != 0xFF && inf[23] != 0xFF )
       ret.setMinutes((int)inf[21]);
-      ret.setSeconds((int)inf[22]);
-      ret.setFrames((int)inf[23]);
-  } else
+    ret.setSeconds((int)inf[22]);
+    ret.setFrames((int)inf[23]);
+  }
+  else
     kdDebug() << "(K3bCdDevice) could not get disk info !" << endl;
 
   ::close( cdromfd );
@@ -456,11 +497,13 @@ K3b::Msf K3bCdDevice::CdDevice::discSize() {
 
 }
 
-K3b::Msf K3bCdDevice::CdDevice::remainingSize() {
+K3b::Msf K3bCdDevice::CdDevice::remainingSize()
+{
   K3b::Msf ret(0);
   K3b::Msf size(0);
   int cdromfd = ::open( devicename().ascii(), O_RDONLY | O_NONBLOCK );
-  if (cdromfd < 0) {
+  if (cdromfd < 0)
+  {
     kdDebug() << "(K3bCdDevice) Error: could not open device." << endl;
     return ret;
   }
@@ -476,16 +519,18 @@ K3b::Msf K3bCdDevice::CdDevice::remainingSize() {
   cmd.buffer = inf;
   cmd.buflen = 32;
   cmd.data_direction = CGC_DATA_READ;
-  if ( ::ioctl(cdromfd,CDROM_SEND_PACKET,&cmd) == 0 ) {
+  if ( ::ioctl(cdromfd,CDROM_SEND_PACKET,&cmd) == 0 )
+  {
     if ( inf[17] != 0xFF && inf[18] != 0xFF && inf[19] != 0xFF )
       ret.setMinutes((int)inf[17]);
-      ret.setSeconds((int)inf[18]);
-      ret.setFrames((int)inf[19]);
+    ret.setSeconds((int)inf[18]);
+    ret.setFrames((int)inf[19]);
     if ( inf[21] != 0xFF && inf[22] != 0xFF && inf[23] != 0xFF )
       size.setMinutes((int)inf[21]);
-      size.setSeconds((int)inf[22]);
-      size.setFrames((int)inf[23]);
-  } else
+    size.setSeconds((int)inf[22]);
+    size.setFrames((int)inf[23]);
+  }
+  else
     kdDebug() << "(K3bCdDevice) could not get disk info !" << endl;
 
   ::close( cdromfd );
@@ -493,11 +538,13 @@ K3b::Msf K3bCdDevice::CdDevice::remainingSize() {
 
 }
 
-int K3bCdDevice::CdDevice::numSessions() {
+int K3bCdDevice::CdDevice::numSessions()
+{
 
   int ret=-1;
   int cdromfd = ::open( devicename().ascii(), O_RDONLY | O_NONBLOCK );
-  if (cdromfd < 0) {
+  if (cdromfd < 0)
+  {
     kdDebug() << "(K3bCdDevice) Error: could not open device." << endl;
     return ret;
   }
@@ -508,21 +555,21 @@ int K3bCdDevice::CdDevice::numSessions() {
   ::memset(&cmd,0,sizeof (struct cdrom_generic_command));
   ::memset(dat,0,4);
   cmd.cmd[0] = GPCMD_READ_TOC_PMA_ATIP;
-// Format Field: 0-TOC, 1-Session Info, 2-Full TOC, 3-PMA, 4-ATIP, 5-CD-TEXT
+  // Format Field: 0-TOC, 1-Session Info, 2-Full TOC, 3-PMA, 4-ATIP, 5-CD-TEXT
   cmd.cmd[2] = 1;
   cmd.cmd[8] = 4;
   cmd.buffer = dat;
   cmd.buflen = 4;
   cmd.data_direction = CGC_DATA_READ;
-//
-// Session Info
-// ============
-// Byte 0-1: Data Length
-// Byte   2: First Complete Session Number (Hex) - always 1
-// Byte   3: Last Complete Session Number (Hex)
-//
+  //
+  // Session Info
+  // ============
+  // Byte 0-1: Data Length
+  // Byte   2: First Complete Session Number (Hex) - always 1
+  // Byte   3: Last Complete Session Number (Hex)
+  //
   if ( ::ioctl(cdromfd,CDROM_SEND_PACKET,&cmd) == 0 )
-     ret = dat[3];
+    ret = dat[3];
   else
     kdDebug() << "(K3bCdDevice) could not get session info !" << endl;
 
@@ -535,7 +582,8 @@ bool K3bCdDevice::CdDevice::block( bool b) const
 {
   bool ret = false;
   int cdromfd = ::open( devicename().ascii(), O_RDONLY | O_NONBLOCK );
-  if (cdromfd < 0) {
+  if (cdromfd < 0)
+  {
     kdDebug() << "(K3bCdDevice) Error: could not open device." << endl;
     return ret;
   }
@@ -549,7 +597,8 @@ bool K3bCdDevice::CdDevice::block( bool b) const
   return ret;
 }
 
-bool K3bCdDevice::CdDevice::rewritable() {
+bool K3bCdDevice::CdDevice::rewritable()
+{
   bool ret = false;
   if ( !burner() )  // no chance to detect empty discs in readers
     return false;
@@ -557,7 +606,8 @@ bool K3bCdDevice::CdDevice::rewritable() {
     return false;
 
   int cdromfd = ::open( devicename().ascii(), O_RDONLY | O_NONBLOCK );
-  if (cdromfd < 0) {
+  if (cdromfd < 0)
+  {
     kdDebug() << "(K3bCdDevice) Error: could not open device." << endl;
     return false;
   }
@@ -585,10 +635,12 @@ bool K3bCdDevice::CdDevice::rewritable() {
 void K3bCdDevice::CdDevice::eject() const
 {
   int cdromfd = ::open( devicename().ascii(), O_RDONLY | O_NONBLOCK );
-  if (cdromfd < 0) {
+  if (cdromfd < 0)
+  {
     kdDebug() << "(K3bCdDevice) Error: could not open device." << endl;
   }
-  else {
+  else
+  {
     ::ioctl( cdromfd, CDROMEJECT );
     ::close( cdromfd );
   }
@@ -598,10 +650,12 @@ void K3bCdDevice::CdDevice::eject() const
 void K3bCdDevice::CdDevice::load() const
 {
   int cdromfd = ::open( devicename().ascii(), O_RDONLY | O_NONBLOCK );
-  if (cdromfd < 0) {
+  if (cdromfd < 0)
+  {
     kdDebug() << "(K3bCdDevice) Error: could not open device." << endl;
   }
-  else {
+  else
+  {
     ::ioctl( cdromfd, CDROMCLOSETRAY );
     ::close( cdromfd );
   }
