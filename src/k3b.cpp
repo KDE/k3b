@@ -53,7 +53,7 @@
 
 // application specific includes
 #include "k3b.h"
-#include "k3bapplication.h"
+#include "k3bcore.h"
 #include "tools/k3bglobals.h"
 #include "k3bview.h"
 #include "k3bdirview.h"
@@ -1130,13 +1130,13 @@ void K3bMainWindow::slotViewDocumentHeader()
 
 K3bExternalBinManager* K3bMainWindow::externalBinManager() const
 {
-  return k3bapp->externalBinManager();
+  return k3bcore->externalBinManager();
 }
 
 
 K3bDeviceManager* K3bMainWindow::deviceManager() const
 {
-  return k3bapp->deviceManager();
+  return k3bcore->deviceManager();
 }
 
 

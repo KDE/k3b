@@ -16,6 +16,7 @@
 
 #include "k3bapplication.h"
 #include "k3b.h"
+#include "k3bcore.h"
 
 #include <device/k3bdevicemanager.h>
 #include <tools/k3bexternalbinmanager.h>
@@ -23,23 +24,12 @@
 #include <tools/k3bglobals.h>
 #include <tools/k3bversion.h>
 #include <rip/songdb/k3bsongmanager.h>
+#include <k3bdoc.h>
 
 #include <klocale.h>
 #include <kconfig.h>
 #include <kaboutdata.h>
-
-
-class K3bApplication::Private {
-public:
-  Private()
-    : version( kapp->aboutData()->version() ) {
-    songManager = 0;
-  }
-
-  K3bVersion version;
-  K3bSongManager* songManager;
-};
-
+#include <kcmdlineargs.h>
 
 
 K3bApplication* K3bApplication::s_k3bApp = 0;
@@ -49,7 +39,9 @@ K3bApplication* K3bApplication::s_k3bApp = 0;
 K3bApplication::K3bApplication()
   : KApplication()
 {
-  d = new Private();
+  m_core = new K3bCore( aboutData(), this );
+  connect( m_core, SIGNAL(initializationInfo(const QString&)), 
+	   SIGNAL(initializationInfo(const QString&)) );
   s_k3bApp = this;
 
   connect( this, SIGNAL(shutDown()), SLOT(slotShutDown()) );
@@ -58,7 +50,6 @@ K3bApplication::K3bApplication()
 
 K3bApplication::~K3bApplication()
 {
-  delete d;
 }
 
 
@@ -68,93 +59,83 @@ K3bMainWindow* K3bApplication::k3bMainWindow() const
 }
 
 
-K3bCdDevice::DeviceManager* K3bApplication::deviceManager() const
-{
-  return K3bCdDevice::DeviceManager::self();
-}
-
-
-K3bExternalBinManager* K3bApplication::externalBinManager() const
-{
-  return K3bExternalBinManager::self();
-}
-
-
-K3bSongManager* K3bApplication::songManager() const
-{
-  return d->songManager;
-}
-
-
-const K3bVersion& K3bApplication::version() const
-{
-  return d->version;
-}
-
-
 void K3bApplication::init()
 {
-  emit initializationInfo( i18n("Reading Options...") );
+  m_core->init();
 
-  KConfig globalConfig( K3b::globalConfig() );
+  emit initializationInfo( i18n("Creating Gui...") );
 
-  // external bin manager
-  // ===============================================================================
-  emit initializationInfo( i18n("Searching for external programs...") );
+  K3bMainWindow *k3bMainWidget = new K3bMainWindow();
+  setMainWidget( k3bMainWidget );
 
-  K3b::addDefaultPrograms( K3bExternalBinManager::self() );
-  K3bExternalBinManager::self()->search();
-
-  if( globalConfig.hasGroup("External Programs") ) {
-    globalConfig.setGroup( "External Programs" );
-    K3bExternalBinManager::self()->readConfig( &globalConfig );
-  }
-
-  if( config()->hasGroup("External Programs") ) {
-    config()->setGroup( "External Programs" );
-    K3bExternalBinManager::self()->readConfig( config() );
-  }
-
-  // ===============================================================================
-
-
-  // device manager
-  // ===============================================================================
-  emit initializationInfo( i18n("Scanning for CD devices...") );
-
-  if( !K3bDeviceManager::self()->scanbus() )
-    kdDebug() << "No Devices found!" << endl;
-
-  if( globalConfig.hasGroup("Devices") ) {
-    globalConfig.setGroup( "Devices" );
-    K3bDeviceManager::self()->readConfig( &globalConfig );
-  }
-
-  if( config()->hasGroup("Devices") ) {
-    config()->setGroup( "Devices" );
-    K3bDeviceManager::self()->readConfig( config() );
-  }
-
-  K3bDeviceManager::self()->printDevices();
-  // ===============================================================================
-
-  //  emit initializationInfo( i18n("Initializing CD view...") );
-
-  // ===============================================================================
-//   emit initializationInfo( i18n("Reading local CDDB database...") );
-//   config()->setGroup("Cddb");
-//   QString filename = config()->readEntry("songlistPath", locateLocal("data", "k3b") + "/songlist.xml");
-//   d->songManager = new K3bSongManager();
-//   d->songManager->load( filename );
+  k3bMainWidget->show();
 
   emit initializationInfo( i18n("Ready.") );
+
+  KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+
+  if( args->isSet( "data" ) ) {
+    // create new data project and add all arguments
+    k3bMainWidget->slotNewDataDoc();
+    K3bDoc* doc = k3bMainWidget->activeDoc();
+    for( int i = 0; i < args->count(); i++ ) {
+      doc->addUrl( args->url(i) );
+    }
+  } else if( args->isSet( "audio" ) ) {
+    // create new audio project and add all arguments
+    k3bMainWidget->slotNewAudioDoc();
+    K3bDoc* doc = k3bMainWidget->activeDoc();
+    for( int i = 0; i < args->count(); i++ ) {
+      doc->addUrl( args->url(i) );
+    }
+  } else if( args->isSet( "mixed" ) ) {
+    // create new audio project and add all arguments
+    k3bMainWidget->slotNewMixedDoc();
+    K3bDoc* doc = k3bMainWidget->activeDoc();
+    for( int i = 0; i < args->count(); i++ ) {
+      doc->addUrl( args->url(i) );
+    }
+  } else if( args->isSet( "vcd" ) ) {
+    // create new audio project and add all arguments
+    k3bMainWidget->slotNewVcdDoc();
+    K3bDoc* doc = k3bMainWidget->activeDoc();
+    for( int i = 0; i < args->count(); i++ ) {
+      doc->addUrl( args->url(i) );
+    }
+  } else if( args->isSet( "emovix" ) ) {
+    // create new audio project and add all arguments
+    k3bMainWidget->slotNewMovixDoc();
+    K3bDoc* doc = k3bMainWidget->activeDoc();
+    for( int i = 0; i < args->count(); i++ ) {
+      doc->addUrl( args->url(i) );
+    }
+  } else if( args->isSet( "isoimage" ) ) {
+    if ( args->count() == 1 )
+      k3bMainWidget->slotWriteIsoImage( args->url(0) );
+    else
+      k3bMainWidget->slotWriteIsoImage();
+  } else if( args->isSet( "binimage" ) ) {
+    if ( args->count() == 1 )
+      k3bMainWidget->slotWriteBinImage( args->url(0) );
+    else
+      k3bMainWidget->slotWriteBinImage();
+  } else if(args->count()) {
+    for( int i = 0; i < args->count(); i++ ) {
+      k3bMainWidget->openDocumentFile( args->url(i) );
+    }
+  }
+
+  if( args->isSet("copy") )
+    k3bMainWidget->slotCdCopy();
+
+  args->clear();
 }
 
 
 void K3bApplication::slotShutDown()
 {
-  externalBinManager()->saveConfig( config() );
-  deviceManager()->saveConfig( config() );
+  m_core->externalBinManager()->saveConfig( config() );
+  m_core->deviceManager()->saveConfig( config() );
 }
 
 #include "k3bapplication.moc"

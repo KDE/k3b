@@ -14,7 +14,7 @@
  */
 
 #include "k3bstatusbarmanager.h"
-#include "k3bapplication.h"
+#include "k3bcore.h"
 #include "k3bbusywidget.h"
 #include "k3b.h"
 #include <tools/k3bversion.h>
@@ -53,7 +53,7 @@ K3bStatusBarManager::K3bStatusBarManager( K3bMainWindow* parent )
   m_labelInfoMessage = new QLabel( " ", m_mainWindow->statusBar() );
 
   // setup version info
-  QLabel* versionBox = new QLabel( QString("K3b %1").arg(k3bapp->version()), m_mainWindow->statusBar() );
+  QLabel* versionBox = new QLabel( QString("K3b %1").arg(k3bcore->version()), m_mainWindow->statusBar() );
 
   // setup the statusbar
   m_mainWindow->statusBar()->addWidget( m_labelInfoMessage, 1 ); // for showing some info

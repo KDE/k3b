@@ -27,11 +27,10 @@
 
 #include <stdlib.h>
 
-#include "k3b.h"
 #include "k3bapplication.h"
 #include "k3bsplash.h"
 #include "tools/k3bglobals.h"
-#include "k3bdoc.h"
+
 
 
 static const char *description =
@@ -113,72 +112,8 @@ int main(int argc, char *argv[]) {
         splash->show();
     }
 
-    // this will init the devicemanager and stuff
+    // this will init everything
     app.init();
-
-    K3bMainWindow *k3bMainWidget = new K3bMainWindow();
-    app.setMainWidget( k3bMainWidget );
-
-    k3bMainWidget->show();
-
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-
-    if( args->isSet( "data" ) ) {
-        // create new data project and add all arguments
-        k3bMainWidget->slotNewDataDoc();
-        K3bDoc* doc = k3bMainWidget->activeDoc();
-        for( int i = 0; i < args->count(); i++ ) {
-            doc->addUrl( args->url(i) );
-        }
-    } else if( args->isSet( "audio" ) ) {
-        // create new audio project and add all arguments
-        k3bMainWidget->slotNewAudioDoc();
-        K3bDoc* doc = k3bMainWidget->activeDoc();
-        for( int i = 0; i < args->count(); i++ ) {
-            doc->addUrl( args->url(i) );
-        }
-    } else if( args->isSet( "mixed" ) ) {
-        // create new audio project and add all arguments
-        k3bMainWidget->slotNewMixedDoc();
-        K3bDoc* doc = k3bMainWidget->activeDoc();
-        for( int i = 0; i < args->count(); i++ ) {
-            doc->addUrl( args->url(i) );
-        }
-    } else if( args->isSet( "vcd" ) ) {
-        // create new audio project and add all arguments
-        k3bMainWidget->slotNewVcdDoc();
-        K3bDoc* doc = k3bMainWidget->activeDoc();
-        for( int i = 0; i < args->count(); i++ ) {
-            doc->addUrl( args->url(i) );
-        }
-    } else if( args->isSet( "emovix" ) ) {
-        // create new audio project and add all arguments
-        k3bMainWidget->slotNewMovixDoc();
-        K3bDoc* doc = k3bMainWidget->activeDoc();
-        for( int i = 0; i < args->count(); i++ ) {
-            doc->addUrl( args->url(i) );
-        }
-    } else if( args->isSet( "isoimage" ) ) {
-        if ( args->count() == 1 )
-           k3bMainWidget->slotWriteIsoImage( args->url(0) );
-        else
-           k3bMainWidget->slotWriteIsoImage();
-    } else if( args->isSet( "binimage" ) ) {
-        if ( args->count() == 1 )
-            k3bMainWidget->slotWriteBinImage( args->url(0) );
-        else
-            k3bMainWidget->slotWriteBinImage();
-    } else if(args->count()) {
-        for( int i = 0; i < args->count(); i++ ) {
-            k3bMainWidget->openDocumentFile( args->url(i) );
-        }
-    }
-
-    if( args->isSet("copy") )
-        k3bMainWidget->slotCdCopy();
-
-    args->clear();
-    //    }
 
     return app.exec();
 }

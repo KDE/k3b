@@ -16,7 +16,7 @@
 
 #include "k3bcddblocaldbtab.h"
 #include <rip/songdb/k3bsongmanager.h>
-#include <k3bapplication.h>
+#include <k3bcore.h>
 
 #include <qframe.h>
 #include <qlayout.h>
@@ -116,7 +116,7 @@ void K3bCddbLocalDBTab::browseDb(){
 }
 void K3bCddbLocalDBTab::clearDb(){
     kdDebug() << "(K3bCddbLocalDBTab) Clear Database." << endl;
-    K3bSongManager *sm = k3bapp->songManager();
+    K3bSongManager *sm = k3bcore->songManager();
     QStringList::Iterator it;
     for( it = m_missingSongList.begin(); it != m_missingSongList.end(); ++it ){
         sm->deleteSong( (*it) );
@@ -126,7 +126,7 @@ void K3bCddbLocalDBTab::clearDb(){
 }
 void K3bCddbLocalDBTab::verifyDb(){
     kdDebug() << "(K3bCddbLocalDBTab) Verify Database." << endl;
-    K3bSongManager *sm = k3bapp->songManager();
+    K3bSongManager *sm = k3bcore->songManager();
     QFile f( m_songListPath->text() );
     if( f.exists() ) {
         sm->load( m_songListPath->text() );

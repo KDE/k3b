@@ -17,6 +17,7 @@
 #include "k3bdirview.h"
 #include "k3bapplication.h"
 #include "k3b.h"
+#include "k3bcore.h"
 
 #include "rip/k3bcdview.h"
 #include "k3bfileview.h"
@@ -119,7 +120,7 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
   }
 
   m_fileTreeView->header()->hide();
-  m_fileTreeView->addCdDeviceBranches( k3bapp->deviceManager() );
+  m_fileTreeView->addCdDeviceBranches( k3bcore->deviceManager() );
 
   m_fileView     = new K3bFileView(m_viewStack, "fileView");
   m_cdView       = new K3bCdView(m_viewStack, "cdview");

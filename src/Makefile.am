@@ -1,7 +1,7 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 bin_PROGRAMS = k3b
 
-k3b_SOURCES = k3bapplication.cpp k3bdiroperator.cpp kdndfileview.cpp k3btempdirselectionwidget.cpp k3bfiletreeview.cpp k3bcddbmultientriesdialog.cpp k3baudioplayer.cpp k3bprojecttabbar.cpp k3bprojecttabwidget.cpp k3bwriterselectionwidget.cpp k3bsplash.cpp k3bblankingjob.cpp k3bblankingdialog.cpp k3bfileview.cpp kcutlabel.cpp k3bprojectburndialog.cpp k3bfillstatusdisplay.cpp k3bdirview.cpp k3btoolbox.cpp k3bisooptions.cpp k3b.cpp k3bprocess.cpp k3bwritingjob.cpp main.cpp k3bdiskerasinginfodialog.cpp k3bemptydiscwaiter.cpp k3bstdguiitems.cpp k3bstatusbarmanager.cpp k3bfiletreecombobox.cpp k3bburnprogressdialog.cpp k3bjob.cpp \
+k3b_SOURCES = k3bcore.cpp k3bapplication.cpp k3bdiroperator.cpp kdndfileview.cpp k3btempdirselectionwidget.cpp k3bfiletreeview.cpp k3bcddbmultientriesdialog.cpp k3baudioplayer.cpp k3bprojecttabbar.cpp k3bprojecttabwidget.cpp k3bwriterselectionwidget.cpp k3bsplash.cpp k3bblankingjob.cpp k3bblankingdialog.cpp k3bfileview.cpp kcutlabel.cpp k3bprojectburndialog.cpp k3bfillstatusdisplay.cpp k3bdirview.cpp k3btoolbox.cpp k3bisooptions.cpp k3b.cpp k3bprocess.cpp k3bwritingjob.cpp main.cpp k3bdiskerasinginfodialog.cpp k3bemptydiscwaiter.cpp k3bstdguiitems.cpp k3bstatusbarmanager.cpp k3bfiletreecombobox.cpp k3bburnprogressdialog.cpp k3bjob.cpp \
 			k3bdoc.cpp \
 			k3bview.cpp \
 			k3bcdrecordwriter.cpp \
