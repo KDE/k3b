@@ -187,7 +187,7 @@ void K3bExternalEncoder::finishEncoderInternal()
 {
   if( d->process ) {
     if( d->process->isRunning() ) {
-      d->process->closeStdin();
+      ::close( d->process->stdinFd() );
 
       // this is kind of evil... 
       // but we need to be sure the process exited when this method returnes
@@ -235,6 +235,7 @@ bool K3bExternalEncoder::initEncoderInternal( const QString& extension )
   delete d->process;
   d->process = new K3bProcess();
   d->process->setSplitStdout(true);
+  d->process->setRawStdin(true);
   
   connect( d->process, SIGNAL(processExited(KProcess*)),
 	   this, SLOT(slotExternalProgramFinished(KProcess*)) );
@@ -294,13 +295,20 @@ long K3bExternalEncoder::encodeInternal( const char* data, Q_ULONG len )
 
       delete [] buffer;
 
+      if( written < 0 )
+	kdDebug() << "(K3bExternalEncoder::encodeInternal) writing to stdin failed." << endl;
+
       return written;
     }
-    else
+    else {
+      kdDebug() << "(K3bExternalEncoder::encodeInternal) process not running." << endl;
       return -1;
+    }
   }
-  else
+  else {
+    kdDebug() << "(K3bExternalEncoder::encodeInternal) null process." << endl;
     return -1;
+  }
 }
 
 
