@@ -244,6 +244,14 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
 					   "Should it be erased?").arg(d->device->vendor()).arg(d->device->description()),
 				      i18n("Found rewritable disk") ) == KMessageBox::Yes ) {
 	
+	//
+	// hide the dialog 
+	//
+	if( d->dialogVisible ) {
+	  hide();
+	  d->dialogVisible = false;
+	}
+
 	if( dh->ngDiskInfo().mediaType() == K3bCdDevice::MEDIA_CD_RW ) {
 	  // start a k3bblankingjob
 	  K3bErasingInfoDialog infoDialog( false, i18n("Erasing CD-RW"), qApp->activeWindow() );
