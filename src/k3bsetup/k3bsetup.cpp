@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -28,6 +28,7 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
+#include <kprocess.h>
 
 #include <qstring.h>
 #include <qfile.h>
@@ -76,7 +77,7 @@ K3bSetup::K3bSetup( QObject* parent )
 
   if( m_config->hasGroup( "Permissions" ) ) {
     m_config->setGroup( "Permissions" );
-    m_cdwritingGroup = m_config->readEntry( "cdwriting_group", "cdrecording" );
+    m_cdwritingGroup = m_config->readEntry( "cdwriting_group", "cdrw" );
     m_userList = m_config->readListEntry( "users" );
   }
 }
@@ -135,8 +136,8 @@ bool K3bSetup::saveConfig()
     if( m_applyExternalBinPermission )
       doApplyExternalProgramPermissions(groupid);
   }
-  if( m_createFstabEntries )
-    doCreateFstabEntries();
+//   if( m_createFstabEntries )
+//     doCreateFstabEntries();
 
   m_config->sync();
 
@@ -151,108 +152,74 @@ bool K3bSetup::saveConfig()
 uint K3bSetup::createCdWritingGroup()
 {
   if( m_cdwritingGroup.isEmpty() ) {
-    kdDebug() << "(K3bSetup) setting cd writing group to 'cdrecording'." << endl;
-    m_cdwritingGroup = "cdrecording";
+    kdDebug() << "(K3bSetup) setting cd writing group to 'cdrw'." << endl;
+    m_cdwritingGroup = "cdrw";
   }
 
   // search group and create new if not found
   struct group* oldGroup = getgrnam( m_cdwritingGroup.local8Bit() );
-  uint groupId;
+  uint gid = 0;
+
   if( oldGroup == 0 ) {
-
     kdDebug() << "(K3bSetup) Could not find group " << m_cdwritingGroup << endl;
+    kdDebug() << "(K3bSetup) trying to run 'groupadd'" << endl;
 
-    // find new group id
-    uint newId = 100;
-    while( struct group* g = getgrent() ) {
-      if( g->gr_gid == newId )
-	newId = g->gr_gid + 1;
-    }
-    groupId = newId;
-  }
-  else {
-
-    kdDebug() << "(K3bSetup) found group " << m_cdwritingGroup << endl;
-
-    groupId = oldGroup->gr_gid;
-  }
-
-  endgrent();
-
-  rename( "/etc/group", "/etc/group.k3bsetup" );
-
-  QFile oldGroupFile( "/etc/group.k3bsetup" );
-  QFile newGroupFile( "/etc/group" );
-  oldGroupFile.open( IO_ReadOnly );
-  newGroupFile.open( IO_WriteOnly );
-  QTextStream oldGroupStream( &oldGroupFile );
-  QTextStream newGroupStream( &newGroupFile );
-
-  kdDebug() << "(K3bSetup) created textstreams" << endl;
-
-  QString line = oldGroupStream.readLine();
-  while( !line.isNull() ) {
-    if( !line.startsWith( QString("%1:").arg(m_cdwritingGroup) ) )
-      newGroupStream << line << "\n";
-    line = oldGroupStream.readLine();
-  }
-
-  kdDebug() << "(K3bSetup) copied all groups except " << m_cdwritingGroup << endl;
-
-  // add cdwriting group
-  QStringList members;
-  // save old members of the group
-  if( oldGroup != 0 ) {
-
-    kdDebug() << "(K3bSetup) importing group members..." << endl;
-
-    int i = 0;
-    while( oldGroup->gr_mem[i] != 0 ) {
-      members.append( oldGroup->gr_mem[i] );
-      i++;
+    // create new group
+    KProcess proc;
+    proc << "groupadd" << m_cdwritingGroup;
+    if( !proc.start( KProcess::Block ) ) {
+      kdError() << "(K3bSetup) could not start groupadd." << endl;
+      return 0;
     }
 
-    kdDebug() << "(K3bSetup) imported group members" << endl;
-
+    oldGroup = getgrnam( m_cdwritingGroup.local8Bit() );
   }
-  members += m_userList;
 
-  // remove double entries
-  kdDebug() << "(K3bSetup) removing double entries" << endl;
+  if( oldGroup ) {
+    // add all the members
+    for( QStringList::Iterator it = m_userList.begin(); it != m_userList.end(); ++it ) {
+      // get the current groups
+      KProcess gproc;
+      K3bExternalProgram::OutputCollector out( &gproc );
+      gproc << "id" << "-Gn" << *it;
+      if( !gproc.start( KProcess::Block, KProcess::AllOutput ) ) {
+	kdDebug() << "(K3bSetup) could not start id." << endl;
+	return 0;
+      }
+      if( gproc.exitStatus() ) {
+	kdDebug() << "(K3bSetup) error while executing id." << endl;
+	return 0;
+      }
+      QStringList oldGroups = QStringList::split( " ", out.output().simplifyWhiteSpace() );
+      oldGroups.append( m_cdwritingGroup );
 
-  QStringList::Iterator i, j;
-  for( i = members.begin(); i != members.end(); ++i )
-    for( j = i; j != members.end(); ++j )
-      if( i != j && *i == *j )
-	j = members.remove( j );
+      KProcess proc;
+      proc << "usermod" << "-G" << oldGroups.join( "," ) << *it;
+      kdDebug() << "(K3bSetup) running command: usermod -G " << oldGroups.join( "," ) << " " << *it << endl;
+      if( !proc.start( KProcess::Block ) ) {
+	kdError() << "(K3bSetup) could not start usermod." << endl;
+	return 0;
+      }
+      if( gproc.exitStatus() ) {
+	kdDebug() << "(K3bSetup) error while executing usermod." << endl;
+	return 0;
+      }
+    }
+    gid = oldGroup->gr_gid;
+  }
 
-  kdDebug() << "(K3bSetup) creating new entry" << endl;
-
-  // write the new entry to the new group file
-  QString entry = QString("%1::%2:").arg(m_cdwritingGroup).arg(groupId);
-  i = members.begin();
-  entry.append( *i );
-  i++;
-  for( ; i != members.end(); ++i )
-    entry.append( QString(",%1").arg(*i) );
-
-  kdDebug() << "(K3bSetup) writing entry to file" << endl;
-
-  newGroupStream << entry << "\n";
-
-  oldGroupFile.close();
-  newGroupFile.close();
-
-  // set the correct permissions (although they seem to be correct. Just to be sure!)
-  chmod( "/etc/group", S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH );
-
-  return groupId;
+  return gid;
 }
 
 
 void K3bSetup::doApplyDevicePermissions( uint groupId )
 {
   emit writingSetting( i18n("Changing CD device permissions.") );
+
+  if( groupId == 0 ) {
+    emit settingWritten( false, i18n("Unable to create new group.") );
+    return;
+  }
 
   // change owner for all devices and
   // change permissions for all devices
@@ -302,6 +269,11 @@ void K3bSetup::doApplyExternalProgramPermissions( uint groupId )
     const K3bExternalProgram* p = m_externalBinManager->program( programs[i] );
 
     emit writingSetting( i18n("Changing permissions for %1.").arg( programs[i] ) );
+
+    if( groupId == 0 ) {
+      emit settingWritten( false, i18n("Unable to create new group.") );
+      continue;
+    }
 
     for( QPtrListIterator<K3bExternalBin> it( p->bins() ); it.current(); ++it ) {
       const K3bExternalBin* binObject = *it;

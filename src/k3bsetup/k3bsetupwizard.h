@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
@@ -26,6 +26,7 @@ class QKeyEvent;
 
 class K3bSetup;
 class KSimpleConfig;
+class FstabEntriesTab;
 
 
 class K3bSetupWizard : public KWizard
@@ -55,6 +56,7 @@ class K3bSetupWizard : public KWizard
 
  private:
   K3bSetup* m_setup;
+  FstabEntriesTab* m_fstabTab;
 };
 
 #endif // K3BSETUPWIZARD_H

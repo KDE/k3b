@@ -21,6 +21,7 @@
 #include "../device/k3bdevicewidget.h"
 #include "../tools/k3bexternalbinmanager.h"
 #include "../tools/k3bexternalbinwidget.h"
+#include "../tools/k3blistview.h"
 
 #include <qlabel.h>
 #include <qcheckbox.h>
@@ -44,12 +45,15 @@
 #include <klistview.h>
 #include <kdialog.h>
 #include <kfiledialog.h>
+#include <kactivelabel.h>
+#include <kio/netaccess.h>
+#include <ktextedit.h>
 
 #include <pwd.h>
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-
+#include <fstab.h>
 
 
 // == WELCOME-TAB ===========================================================================================================
@@ -192,147 +196,236 @@ bool NoWriterTab::appropriate()
 
 // == FSTAB-TAB ===========================================================================================================
 
+class FstabEntriesTab::FstabViewItem
+  : public K3bListViewItem
+{
+public:
+  FstabViewItem( K3bDevice* dev, K3bListView* view )
+    : K3bListViewItem( view ),
+      m_device( dev ) {
+    setText( 0, dev->vendor() + " " + dev->description() );
+    if( dev->burner() )
+      setPixmap( 0, SmallIcon( "cdwriter_unmount" ) );
+    else
+      setPixmap( 0, SmallIcon( "cdrom_unmount" ) );
+  }
+
+  K3bDevice* device() const { return m_device; }
+
+  QString mountDevice;
+  QString mountPoint;
+
+private:
+  K3bDevice* m_device;
+};
+
+
+
 FstabEntriesTab::FstabEntriesTab( int i, int o, K3bSetupWizard* wizard )
   : K3bSetupTab( i, o, i18n("Setup Mount Points for the CD Drives"), wizard )
 {
   setPixmap( QPixmap(locate( "data", "k3b/pics/k3bsetup_fstab.png" )) );
 
-  QWidget* main = new QWidget( this, "main" );
-  QGridLayout* mainGrid = new QGridLayout( main );
-  mainGrid->setSpacing( KDialog::spacingHint() );
-  mainGrid->setMargin( 0 );
+  QWidget* mainWidget = new QWidget( this );
+  setMainWidget( mainWidget );
 
-  m_labelFstab = new QLabel( main );
-  m_labelFstab->setText( i18n( "<p>On Linux, CD devices are mounted into the file tree. Normally only root has "
-			       "permission to mount drives. K3b Setup can create entries in /etc/fstab for each of "
-			       "the detected CD drives. Every user, and especially K3b, will then be able to mount "
-			       "the devices on the given path.</p>" ) );
-  m_labelFstab->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
+  QVBoxLayout* layout = new QVBoxLayout( mainWidget );
+  layout->setMargin( 0 );
+  layout->setSpacing( KDialog::spacingHint() );
 
-  m_viewFstab = new KListView( main, "m_viewFstab" );
-  m_viewFstab->addColumn( i18n( "CD Drive" ) );
-  m_viewFstab->addColumn( i18n( "System Device" ) );
-  m_viewFstab->addColumn( i18n( "Mount Device (or link)" ) );
-  m_viewFstab->addColumn( i18n( "Mount Point" ) );
-  m_viewFstab->setAllColumnsShowFocus( true );
-  m_viewFstab->setItemsRenameable( true );
-  m_viewFstab->setRenameable( 0, false );
-  m_viewFstab->setRenameable( 1, false );
-  m_viewFstab->setRenameable( 2, true );
-  m_viewFstab->setRenameable( 3, true );
+  KActiveLabel* infoLabel = new KActiveLabel( i18n("K3b needs to mount the devices to perform certain steps. "
+						   "For this an entry in the fstab file is nessesary. "
+						   "K3bSetup allows you to create missing entries for "
+						   "your devices. You can change the values by clicking "
+						   "twice on an entry and edit it directly in the list."), 
+					      mainWidget );
 
-  m_checkFstab = new QCheckBox( i18n("Let K3b setup create fstab entries"), main );
-  m_checkFstab->setChecked( true );
+  QGroupBox* groupWithEntry = new QGroupBox( 1, Qt::Vertical, i18n("Found Entries"), mainWidget );
+  QGroupBox* groupNoEntry = new QGroupBox( 1, Qt::Vertical, i18n("Entries to Be Created"), mainWidget );
 
-  m_buttonSelectMountPoint = new QPushButton( i18n("Select Mount Point..."), main );
+  m_viewWithEntry = new K3bListView( groupWithEntry );
+  m_viewNoEntry = new K3bListView( groupNoEntry );
+
+  m_checkCreateNewEntries = new QCheckBox( i18n("Let K3bSetup create the missing fstab entries."), mainWidget );
+
+  layout->addWidget( infoLabel );
+  layout->addWidget( groupWithEntry );
+  layout->addWidget( groupNoEntry );
+  layout->addWidget( m_checkCreateNewEntries );
+
+  layout->setStretchFactor( groupNoEntry, 1 );
+  layout->setStretchFactor( groupWithEntry, 1 );
 
 
-  mainGrid->addMultiCellWidget( m_labelFstab, 0, 0, 0, 1 );
-  mainGrid->addMultiCellWidget( m_viewFstab, 1, 1, 0, 1 );
-  mainGrid->addWidget( m_checkFstab, 2, 0 );
-  mainGrid->addWidget( m_buttonSelectMountPoint, 2, 1 );
+  m_viewWithEntry->addColumn( i18n("Drive") );
+  m_viewWithEntry->addColumn( i18n("Mount Device") );
+  m_viewWithEntry->addColumn( i18n("Mount Point") );
 
-  mainGrid->setColStretch( 0, 1 );
+  m_viewNoEntry->addColumn( i18n("Drive") );
+  m_viewNoEntry->addColumn( i18n("Mount Device") );
+  m_viewNoEntry->addColumn( i18n("Mount Point") );
 
-  QToolTip::add( m_viewFstab, i18n("Click twice to change a value") );
+  m_viewNoEntry->setItemsRenameable( true );
+  m_viewNoEntry->setRenameable( 0, false );
+  m_viewNoEntry->setRenameable( 1, true );
+  m_viewNoEntry->setRenameable( 2, true );
 
-  setMainWidget( main );
+  m_viewNoEntry->setNoItemText( i18n("K3bSetup found fstab entries for all your drives.\n"
+				"No need to change the current setup.") );
 
-  connect( m_buttonSelectMountPoint, SIGNAL(clicked()), this, SLOT(slotSelectMountPoint()) );
-  connect( m_viewFstab, SIGNAL(itemRenamed(QListViewItem*, const QString&, int)),
-	   this, SLOT(slotMountPointChanged(QListViewItem*, const QString&, int)) );
+  connect( m_viewNoEntry, SIGNAL(itemRenamed(QListViewItem*, const QString&, int)),
+	   this, SLOT(slotItemRenamed(QListViewItem*, const QString&, int)) );
 }
 
 
 void FstabEntriesTab::readSettings()
 {
-  m_viewFstab->clear();
+  // clear all views
+  m_viewNoEntry->clear();
+  m_viewWithEntry->clear();
 
-  K3bDevice* dev = setup()->deviceManager()->readingDevices().first();
-  int i = 0;
-  while( dev != 0 ) {
-    K3bDeviceViewItem* item = new K3bDeviceViewItem( dev, m_viewFstab );
-    item->setPixmap( 0, SmallIcon( "cdrom_unmount" ) );
-    item->setText( 0, dev->vendor() + " " + dev->description() );
-    item->setText( 1, dev->ioctlDevice() );
-    item->setText( 2, dev->mountDevice().isEmpty() ? dev->ioctlDevice() : dev->mountDevice() );
-    if( !dev->mountPoint().isEmpty() )
-      item->setText( 3, dev->mountPoint() );
-    else {
-      if( i == 0 )
-	item->setText( 3, "/cdrom" );
+  QListIterator<K3bDevice> it( setup()->deviceManager()->allDevices() );
+  int cdromCount = 0;
+  int cdwriterCount = 0;
+  while( K3bDevice* dev = *it ) {
+    if( dev->mountDevice().isEmpty() || dev->mountPoint().isEmpty() ) {
+      FstabViewItem* item = new FstabViewItem( dev, m_viewNoEntry );
+      item->setText( 1, dev->ioctlDevice() );
+
+      QString newMountPoint = ( dev->burner() ? "/cdwriter" : "/cdrom" );
+      int& count = ( dev->burner() ? cdwriterCount : cdromCount );
+      if( count == 0 )
+	item->setText( 2, newMountPoint );
       else
-	item->setText( 3, QString("/cdrom%1").arg(i) );
+	item->setText( 2, newMountPoint + QString::number(count++) );
 
-      dev->setMountPoint( item->text(3) );
+      item->mountDevice = item->text( 1 );
+      item->mountPoint = item->text( 2 );
+    }
+    else {
+      FstabViewItem* item = new FstabViewItem( dev, m_viewWithEntry );
+      item->setText( 1, dev->mountDevice() );
+      item->setText( 2, dev->mountPoint() );
+
+      item->setEditor( 2, K3bListViewItem::LINE );
+      item->setButton( 2, true );
+
     }
 
-    i++;
-    dev = setup()->deviceManager()->readingDevices().next();
+    ++it;
   }
 
-  dev = setup()->deviceManager()->burningDevices().first();
-  i = 0;
-  while( dev != 0 ) {
-    K3bDeviceViewItem* item = new K3bDeviceViewItem( dev, m_viewFstab );
-    item->setPixmap( 0, SmallIcon( "cdwriter_unmount" ) );
-    item->setText( 0, dev->vendor() + " " + dev->description() );
-    item->setText( 1, dev->ioctlDevice() );
-    item->setText( 2, dev->mountDevice().isEmpty() ? dev->ioctlDevice() : dev->mountDevice() );
-    if( !dev->mountPoint().isEmpty() )
-      item->setText( 3, dev->mountPoint() );
-    else {
-      if( i == 0 )
-	item->setText( 3, "/cdrecorder" );
-      else
-	item->setText( 3, QString("/cdrecorder%1").arg(i) );
+  m_checkCreateNewEntries->setEnabled( m_viewNoEntry->childCount() > 0 );
+}
 
-      dev->setMountPoint( item->text(3) );
+
+void FstabEntriesTab::slotItemRenamed( QListViewItem* item, const QString& str, int col )
+{
+  FstabViewItem* fv = (FstabViewItem*)item;
+  
+  if( col == 1 ) {
+    QString resolved = QFileInfo(str).readLink();
+    if( str == fv->device()->ioctlDevice() ||
+	resolved == fv->device()->ioctlDevice() ||
+	( !resolved.startsWith("/") && resolved == fv->device()->ioctlDevice().section( '/', -1 ) )
+	) {
+      fv->mountDevice = str;
     }
-
-    i++;
-    dev = setup()->deviceManager()->burningDevices().next();
+    else {
+      KMessageBox::sorry( this, i18n("The path you specified does not resolve to the device "
+				     "or a symlink pointing to it!" ) );
+      fv->setText( 1, fv->mountDevice );
+    }
+  }
+  else if( col == 2 ) {
+    QFileInfo f( str );
+    if( f.exists() ) {
+      if( f.isDir() ) {
+	if( QDir(f.absFilePath()).count() > 2 ) {
+	  KMessageBox::sorry( this, i18n("The directory you specified is not empty." ) );
+	  fv->setText( 2, fv->mountPoint );
+	}
+	else
+	  fv->mountPoint = str;
+      }
+      else {
+	KMessageBox::sorry( this, i18n("The path you specified does not resolve to a directory. "
+				       "Please specify a directory" ) );
+	fv->setText( 2, fv->mountPoint );
+      }
+    }
+    else {
+      if( f.isRelative() ) {
+	KMessageBox::sorry( this, i18n("You specified a relative path." ) );
+	fv->setText( 2, fv->mountPoint );
+      }
+      else
+	fv->mountPoint = str;
+    }
   }
 }
 
 
 bool FstabEntriesTab::saveSettings()
 {
-  setup()->setCreateFstabEntries( m_checkFstab->isChecked() );
   return true;
 }
 
-
-void FstabEntriesTab::slotMountPointChanged( QListViewItem* item, const QString& str, int )
+void FstabEntriesTab::writeFstabEntries()
 {
-  QString newMp(str);
-  K3bDeviceViewItem* deviceItem = dynamic_cast<K3bDeviceViewItem*>( item );
-  if( deviceItem != 0 ) {
-    // check if newMp is an absolute path
-    if( !newMp.startsWith("/") )
-      newMp.prepend("/");
+  if( m_checkCreateNewEntries->isChecked() ) {
 
-    item->setText( 2, newMp );
-    deviceItem->device->setMountPoint( newMp );
-  }
-}
+    if( m_viewNoEntry->childCount() > 0 ) {
+      // remove the old backup file
+      KURL fstabPath; 
+      fstabPath.setPath( QString::fromLatin1( _PATH_FSTAB ) );
+      KURL fstabBackupPath; 
+      fstabBackupPath.setPath( fstabPath.path() + ".k3bsetup" );
+
+      KIO::NetAccess::del( fstabBackupPath );
+
+      // save the old fstab file
+      if( !KIO::NetAccess::copy( fstabPath, fstabBackupPath ) )
+	kdDebug() << "(K3bSetup2FstabWidget) could not create backup file." << endl;
+
+      // create the new entries
+      QFile newFstabFile( fstabPath.path() );
+      if( !newFstabFile.open( IO_Raw | IO_WriteOnly | IO_Append ) ) {
+	kdDebug() << "(K3bSetup2FstabWidget) could not open file " << fstabPath.path() << endl;
+	return;
+      }
+      QTextStream newFstabStream( &newFstabFile );
+
+      for( QListViewItemIterator it( m_viewNoEntry ); it.current(); ++it ) {
+	FstabViewItem* fv = (FstabViewItem*)it.current();
+
+	setup()->writingSetting( i18n("Creating fstab entry for %1").arg(fv->mountDevice) );
+
+	// create mount point
+	KStandardDirs::makeDir( fv->text(2) );
+
+	// write fstab entry
+	newFstabStream << fv->mountDevice << "\t" 
+		       << fv->mountPoint << "\t"
+		       << "auto" << "\t"
+		       << "ro,noauto,user,exec" << "\t"
+		       << "0 0" << "\n";
+	
+	setup()->settingWritten( true, i18n("Success") );
+      }
+
+      newFstabFile.close();
 
 
-void FstabEntriesTab::slotSelectMountPoint()
-{
-  if( m_viewFstab->selectedItem() == 0 )
-    return;
-
-  K3bDeviceViewItem* deviceItem = dynamic_cast<K3bDeviceViewItem*>( m_viewFstab->selectedItem() );
-  if( deviceItem != 0 ) {
-    QString newMp = KFileDialog::getExistingDirectory( deviceItem->device->mountPoint(), this,
-						       i18n("Select New Mount Point for %1").arg(deviceItem->device->ioctlDevice()) );
-    if( !newMp.isEmpty() ) {
-      deviceItem->setText( 2, newMp );
-      deviceItem->device->setMountPoint( newMp );
+      // reread fstab
+      setup()->deviceManager()->scanFstab();
+      
+      // reload new entries
+      readSettings();
     }
   }
 }
+
 
 // ========================================================================================================== FSTAB-TAB ==
 
@@ -596,7 +689,15 @@ void PermissionTab::slotPermissionsDetails()
 		      "</tr>\n"
 		      "</table>");
 
-  KMessageBox::information( this, info, i18n("K3b Setup Permission Details") );
+  KDialogBase d( this, 0, true, i18n("K3b Setup Permission Details"),
+		 KDialogBase::Ok );
+  KTextEdit* view = new KTextEdit( &d );
+  view->setReadOnly(true);
+  view->setTextFormat(RichText);
+  view->setText(info);
+  d.setMainWidget(view);
+  d.resize( 400, 400 );
+  d.exec();
 }
 
 
@@ -663,7 +764,7 @@ void FinishTab::slotWritingSetting( const QString& s )
 void FinishTab::slotSettingWritten( bool success, const QString& comment )
 {
   if( m_currentInfoViewItem ) {
-    m_currentInfoViewItem->setPixmap( 1, (success ? SmallIcon("apply") : SmallIcon("cancel")) );
+    m_currentInfoViewItem->setPixmap( 1, (success ? SmallIcon("ok") : SmallIcon("cancel")) );
     m_currentInfoViewItem->setText( 2, comment );
   }
 }

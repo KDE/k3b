@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
@@ -43,7 +43,7 @@ K3bSetupWizard::K3bSetupWizard( K3bSetup* setup, QWidget* parent,  const char* n
   (void)new ExternalBinTab( 2, 6, this );
   (void)new DeviceTab( 3, 6, this );
   (void)new NoWriterTab( 3, 6, this );
-  (void)new FstabEntriesTab( 4, 6, this );
+  m_fstabTab = new FstabEntriesTab( 4, 6, this );
   (void)new PermissionTab( 5, 6, this );
   setFinishEnabled( new FinishTab( 6, 6, this ), true );
 
@@ -98,9 +98,12 @@ void K3bSetupWizard::next()
 void K3bSetupWizard::accept()
 {
   m_setup->saveConfig();
+  // HACK
+  m_fstabTab->writeFstabEntries();
 
   QString finishMessage = i18n("All settings have been saved.\n");
-
+  finishMessage.append( i18n("If you added new user to your config you may "
+			     "need to login again to let the changes take effect.\n") );
   finishMessage.append( i18n("If the configuration of your system changes, "
 			     "just run K3b Setup again.\n"
 			     "Thank you for using K3b. Have a lot of fun!") );

@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
@@ -20,6 +20,7 @@
 #include "k3bsetuptab.h"
 
 #include <klistview.h>
+#include <qmap.h>
 
 #include "../device/k3bdevice.h"
 
@@ -32,6 +33,7 @@ class QLineEdit;
 class QListViewItem;
 class K3bDeviceWidget;
 class K3bExternalBinWidget;
+class K3bListView;
 
 
 class K3bDeviceViewItem : public KListViewItem
@@ -95,15 +97,17 @@ class FstabEntriesTab : public K3bSetupTab
   void readSettings();
   bool saveSettings();
 
+  void writeFstabEntries();
+
  private slots:
-  void slotMountPointChanged( QListViewItem*, const QString&, int );
-  void slotSelectMountPoint();
+  void slotItemRenamed( QListViewItem*, const QString&, int );
 
  private:
-  QLabel*      m_labelFstab;
-  KListView*   m_viewFstab;
-  QCheckBox*   m_checkFstab;
-  QPushButton* m_buttonSelectMountPoint;
+  K3bListView* m_viewWithEntry;
+  K3bListView* m_viewNoEntry;
+  QCheckBox* m_checkCreateNewEntries;
+ 
+  class FstabViewItem;
 };
 
 

@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
@@ -101,6 +101,8 @@ Q_OBJECT
 
   QString m_configPath;
   KSimpleConfig* m_config;
+
+  friend class FstabEntriesTab;
 };
 
 #endif
