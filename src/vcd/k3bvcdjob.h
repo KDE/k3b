@@ -20,12 +20,12 @@
 
 #include "../k3bjob.h"
 
-class KProcess;
-class K3bDevice;
-class K3bDiskInfo;
-class K3bDiskInfoDetector;
 class K3bVcdDoc;
 class K3bVcdTrack;
+class QString;
+class KProcess;
+class QDataStream;
+
 
 class K3bVcdJob : public K3bBurnJob
 {
@@ -38,6 +38,7 @@ class K3bVcdJob : public K3bBurnJob
   K3bDoc* doc() const;
   K3bDevice* writer() const;
 
+  
  public slots:
   void start();
   void cancel();
@@ -47,21 +48,18 @@ class K3bVcdJob : public K3bBurnJob
 
   void cancelAll();
 
-  /** reimplemented from K3bBurnJob */
-  void parseCdrdaoSpecialLine( const QString& line );
-
  protected slots:
   void slotCollectOutput( KProcess*, char*, int );
   void slotVcdxGenFinished();
   void slotVcdxBuildFinished();
   void slotParseVcdxBuildOutput( KProcess*, char* output, int len );
+  void slotCdrdaoFinished();
         
  private:
   void createCdrdaoProgress( int made, int size );
   void startNewCdrdaoTrack();
   void vcdxGen();
   void vcdxBuild();
-  void parseVcdxBuild( const QString& line );
   
   int m_copies;
   int m_finishedCopies;
@@ -81,11 +79,12 @@ class K3bVcdJob : public K3bBurnJob
   K3bDevice* m_writer;
   K3bDevice* m_reader;
   K3bVcdTrack* m_currentWrittenTrack;
-  
+    
   int m_speed;
   int m_stage;
   int m_currentWrittenTrackNumber;
   
+  bool m_writeProcess;
   bool firstTrack;
   bool m_burnProof;
   bool m_keepImage;
@@ -99,10 +98,9 @@ class K3bVcdJob : public K3bBurnJob
   QString m_tocFile;
   QString m_xmlFile;
   QString m_collectedOutput;
-  
+    
   KProcess* m_process;
 
-  K3bDiskInfoDetector* m_diskInfoDetector;
 };
 
 #endif
