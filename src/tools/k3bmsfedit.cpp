@@ -38,7 +38,7 @@ K3bMsfEdit::K3bMsfEdit( QWidget* parent, const char* name )
 {
   setValidator( new K3bMsfValidator( this ) );
   setMinValue( 0 );
-  setMaxValue( (60*60*75) + (60*75) + 75 );
+  setMaxValue( (10000*60*75) + (60*75) + 75 );
 
   connect( this, SIGNAL(valueChanged(int)),
 	   this, SLOT(slotValueChanged(int)) );
