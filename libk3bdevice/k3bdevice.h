@@ -670,6 +670,13 @@ namespace K3bDevice
       bool readMcn( QCString& mcn ) const;
 
       /**
+       * MMC command Read Buffer Capacity
+       *
+       * \return \see K3bScsiCommand::transport()
+       */
+      int readBufferCapacity( long long& bufferLength, long long& bufferAvail ) const;
+
+      /**
        * @returns the index number on success
        *          -1 on general error
        *          and -2 if there is no index info in that frame

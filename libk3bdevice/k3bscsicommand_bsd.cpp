@@ -97,9 +97,14 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
 		  senset->flags & SSD_KEY,
 		  senset->add_sense_code,
 		  senset->add_sense_code_qual );
+
       if( needToClose )
 	m_device->close();
-      return ret;
+
+      return( ((senset->error_code & SSD_ERRCODE)<<24) & 0xF000 |
+	      ((senset->flags & SSD_KEY)<<16)          & 0x0F00 |
+	      (senset->add_sense_code<<8)              & 0x00F0 |
+	      (senset->add_sense_code_qual)            & 0x000F );
     }
   if ((d->ccb.ccb_h.status & CAM_STATUS_MASK) == CAM_REQ_CMP) {
     if( needToClose )

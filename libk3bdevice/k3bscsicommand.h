@@ -79,7 +79,6 @@ namespace K3bDevice
 
   QString commandString( const unsigned char& command );
 
-
   enum TransportDirection {
     TR_DIR_NONE,
     TR_DIR_READ,
@@ -99,6 +98,12 @@ namespace K3bDevice
 
       unsigned char& operator[]( size_t );
 
+      /**
+       * \return 0 on success, -1 if the device could not be opened, and
+       *         an error code otherwise. The error code is constructed from
+       *         the scsi error code, the sense key, asc, and ascq. These four values are 
+       *         combined into the lower 32 bit of an integer in the order used above.
+       */
       int transport( TransportDirection dir = TR_DIR_NONE,
 		     void* = 0,
 		     size_t len = 0 );

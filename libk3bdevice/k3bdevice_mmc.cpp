@@ -806,3 +806,29 @@ bool K3bDevice::Device::readDvdStructure( unsigned char** data, int& dataLen,
 
   return false;
 }
+
+
+int K3bDevice::Device::readBufferCapacity( long long& bufferLength, long long& bufferAvail ) const
+{
+  unsigned char data[12];
+  ::memset( data, 0, 12 );
+
+  ScsiCommand cmd( this );
+  cmd[0] = MMC_READ_BUFFER_CAPACITY;
+  cmd[8] = 12;
+  int r = cmd.transport( TR_DIR_READ, data, 12 );
+  if( r )
+    return r;
+
+  int dataLength = from2Byte( data );
+
+  if( dataLength >= 10 ) {
+    bufferLength = from4Byte( &data[4] );
+    bufferAvail = from4Byte( &data[8] );
+  }
+  else {
+    bufferAvail = bufferLength = 0;
+  }
+
+  return 0;
+}

@@ -1429,7 +1429,8 @@ bool K3bDevice::Device::block( bool b ) const
 {
   ScsiCommand cmd( this );
   cmd[0] = MMC_PREVENT_ALLOW_MEDIUM_REMOVAL;
-  cmd[4] = b ? 0x1 : 0x0;
+  if( b )
+    cmd[4] = 0x01;
   int r = cmd.transport();
 
   if( r )
@@ -1457,8 +1458,6 @@ bool K3bDevice::Device::rewritable() const
 
 bool K3bDevice::Device::eject() const
 {
-  block(false);
-
   ScsiCommand cmd( this );
   cmd[0] = MMC_START_STOP_UNIT;
 
